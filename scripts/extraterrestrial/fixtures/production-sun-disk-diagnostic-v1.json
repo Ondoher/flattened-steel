@@ -1,0 +1,33 @@
+{
+	"schemaVersion": "production-sun-disk-diagnostic-v1",
+	"location": {
+		"label": "San Jose",
+		"latitudeDegrees": 37.3382,
+		"longitudeDegrees": -121.8863
+	},
+	"observerHeightMeters": 5,
+	"sunAngularRadiusRadians": 0.004675,
+	"conditions": [
+		{
+			"id": "solar-noon",
+			"instant": "2024-06-20T20:08:00.000Z"
+		},
+		{
+			"id": "sunset-minus-30-minutes",
+			"instant": "2024-06-21T02:56:03.503Z"
+		},
+		{
+			"id": "sunset-minus-20-minutes",
+			"instant": "2024-06-21T03:06:03.503Z"
+		},
+		{
+			"id": "sunset-minus-10-minutes",
+			"instant": "2024-06-21T03:16:03.503Z"
+		},
+		{
+			"id": "sunset",
+			"instant": "2024-06-21T03:26:03.503Z"
+		}
+	],
+	"acceptanceConeRadiusDegrees": 1
+}

@@ -1,0 +1,7 @@
+{
+  "schemaId": "spectral-color-corrected-bruneton-presentations-fixture-v1",
+  "outputMode": "corrected-bruneton-presentations",
+  "conditions": ["noon", "sunset-minus-30", "sunset-minus-10", "sunset"],
+  "viewport": {"widthPixels": 481, "heightPixels": 271, "verticalFieldOfViewDegrees": 90},
+  "tolerances": {"rgbBoundsAbsolute": 0.000001, "gpuReadbackNegativeAbsolute": 0.000001}
+}

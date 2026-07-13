@@ -1,0 +1,867 @@
+{
+  "schemaVersion": 1,
+  "managedBy": "production-core-v1",
+  "sourceSnapshotId": "SNAPSHOT-REPO-000001",
+  "auditScope": {
+    "title": "Mark I records 448 through 687 individual physics-scope review",
+    "reviewedRoots": [
+      "tmp/atmosphere/reconciliation_mark_i"
+    ],
+    "includedRecordRange": "Every numbered Mark I record 448-687 inclusive was reviewed individually. Record 454 contributes one new in-scope gap fact; records 533-537 were already cataloged by mark-i.json; every other record is enumerated below as a scoped exclusion or duplicate-evidence disposition.",
+    "authorityBoundary": "Only Algorithm32 physics, frozen CPU Reference realization or validation, and shader conformance to an exact pinned CPU Reference are fact scope. Renderer, browser, scene-light, endpoint-material, antialiasing, camera, image, stack-composition, and subjective gallery mechanics are excluded. A GPU-only or display-byte result cannot establish physics or shader-to-Reference conformance.",
+    "lineageRule": "The completed Mark I code identity remains commit cf3e00afbec1e81da66a062642dc233c32b54194 and scripts/flat/reconciliation/POC tree e5dbe65ed75fd0cd5ad144adadad3bc306d2f68c. Current working-tree POC bytes must not substitute. The missing record-414 bundle remains an explicit log-only provenance gap rather than being silently erased.",
+    "explicitExclusions": [
+      {
+        "paths": [
+          "tmp/atmosphere/reconciliation_mark_i/533-m4-local-cache-texture-prep",
+          "tmp/atmosphere/reconciliation_mark_i/534-m4-local-cache-texture-prep",
+          "tmp/atmosphere/reconciliation_mark_i/535-m4-local-gpu-cache-texture-lookup",
+          "tmp/atmosphere/reconciliation_mark_i/536-m4-flat-geometry-gpu-selected-ray-parity",
+          "tmp/atmosphere/reconciliation_mark_i/537-m4-local-flat-gpu-integrated-selected-pixel-parity"
+        ],
+        "referenceIds": [
+          "mark-i-record-533",
+          "mark-i-record-534",
+          "mark-i-record-535",
+          "mark-i-record-536",
+          "mark-i-record-537"
+        ],
+        "reason": "Already reviewed and cataloged by mark-i.json; this remainder audit does not duplicate their cache, geometry, or unpinned selected-pixel facts and experiments."
+      },
+      {
+        "paths": [
+          "tmp/atmosphere/reconciliation_mark_i/450-m3-node-cpu-colored-ideal-shadowed-midpoint-456x256",
+          "tmp/atmosphere/reconciliation_mark_i/453-m3-cpu-gpu-ideal-comparison-456x256"
+        ],
+        "referenceIds": [
+          "mark-i-record-450",
+          "mark-i-record-453"
+        ],
+        "reason": "Artifact-only interrupted placeholders with no result, criteria, or reviewable Algorithm32 claim bundle; retained as archive membership, not promoted as facts or experiments."
+      },
+      {
+        "paths": [
+          "tmp/atmosphere/reconciliation_mark_i/448-m3-cpu-colored-ideal-shadowed-midpoint-456x256",
+          "tmp/atmosphere/reconciliation_mark_i/449-m3-node-cpu-colored-ideal-shadowed-midpoint-456x256",
+          "tmp/atmosphere/reconciliation_mark_i/455-m3-cpu-integrated-flat-local-sun-96x54",
+          "tmp/atmosphere/reconciliation_mark_i/457-m3-cpu-integrated-flat-local-sun-l2-96x54",
+          "tmp/atmosphere/reconciliation_mark_i/481-m3-cpu-integrated-flat-local-sun-045deg-shaded-no-shadows-240x135",
+          "tmp/atmosphere/reconciliation_mark_i/506-m3-cpu-integrated-flat-local-sun-000deg-camera-toward-sun-water-js-ground-240x135",
+          "tmp/atmosphere/reconciliation_mark_i/508-m3-cpu-integrated-flat-local-sun-000deg-camera-toward-sun-water-js-ground-1m-240x135",
+          "tmp/atmosphere/reconciliation_mark_i/510-m3-cpu-integrated-flat-local-sun-ocean-matte-150m-160km-300m-box-240x135",
+          "tmp/atmosphere/reconciliation_mark_i/523-m3-cpu-integrated-flat-local-sun-union-glacier-2021-dec14-far-side-orbit-reference-boxes-camera-at-sun-228x128",
+          "tmp/atmosphere/reconciliation_mark_i/525-m3-cpu-integrated-flat-local-sun-union-glacier-2021-dec14-closest-approach-reference-boxes-camera-at-sun-228x128",
+          "tmp/atmosphere/reconciliation_mark_i/605-m4-gpu-union-glacier-2021-dec14-180deg-source-direction-falloff-fill-456x256",
+          "tmp/atmosphere/reconciliation_mark_i/619-m4-gpu-union-glacier-2021-dec14-observer-scaled-ambient-r100-phase-stack-180-to-000-456x256",
+          "tmp/atmosphere/reconciliation_mark_i/637-m4-gpu-spherical-distant-union-review-000deg-5m-912x512",
+          "tmp/atmosphere/reconciliation_mark_i/638-m4-gpu-spherical-distant-union-review-000deg-5m-912x512",
+          "tmp/atmosphere/reconciliation_mark_i/641-m4-gpu-spherical-distant-union-review-solar-noon-clock-045deg-5m-912x512",
+          "tmp/atmosphere/reconciliation_mark_i/642-m4-gpu-spherical-distant-union-review-solar-noon-clock-090deg-5m-912x512",
+          "tmp/atmosphere/reconciliation_mark_i/643-m4-gpu-spherical-distant-union-review-solar-noon-clock-135deg-5m-912x512",
+          "tmp/atmosphere/reconciliation_mark_i/654-m4-gpu-spherical-distant-union-review-no-ambient-solar-noon-clock-phase-stack-180-to-000-912x512",
+          "tmp/atmosphere/reconciliation_mark_i/664-m4-gpu-spherical-distant-unlit-close-building-10m-scale-1-000deg-5m-912x512",
+          "tmp/atmosphere/reconciliation_mark_i/666-m4-gpu-spherical-distant-unlit-blue-cabin-30m-scale-1-000deg-5m-912x512",
+          "tmp/atmosphere/reconciliation_mark_i/680-m4-gpu-spherical-distant-shadowed-blue-cabin-left-mid-distance-cyan-shadow-region-r025-135deg-5m-912x512"
+        ],
+        "referenceIds": [
+          "mark-i-record-448",
+          "mark-i-record-449",
+          "mark-i-record-455",
+          "mark-i-record-457",
+          "mark-i-record-481",
+          "mark-i-record-506",
+          "mark-i-record-508",
+          "mark-i-record-510",
+          "mark-i-record-523",
+          "mark-i-record-525",
+          "mark-i-record-605",
+          "mark-i-record-619",
+          "mark-i-record-637",
+          "mark-i-record-638",
+          "mark-i-record-641",
+          "mark-i-record-642",
+          "mark-i-record-643",
+          "mark-i-record-654",
+          "mark-i-record-664",
+          "mark-i-record-666",
+          "mark-i-record-680"
+        ],
+        "reason": "Rejected execution attempts. Their accepted criteria are setup or partial renderer observations, while the record-level result is rejected; they establish neither a Reference validation result nor shader conformance."
+      },
+      {
+        "paths": [
+          "tmp/atmosphere/reconciliation_mark_i/451-m3-cpu-integrated-colored-ideal-shadowed-midpoint-456x256",
+          "tmp/atmosphere/reconciliation_mark_i/452-m3-gpu-integrated-colored-ideal-shadowed-midpoint-456x256"
+        ],
+        "referenceIds": [
+          "mark-i-record-451",
+          "mark-i-record-452"
+        ],
+        "reason": "CPU and GPU display-image component runs consumed by record 454. Their constructed-scene, browser, hit-mask, and image-write mechanics are not separate physics facts; the comparison's authority defect and bounded numeric result are cataloged once through record 454."
+      },
+      {
+        "paths": [
+          "tmp/atmosphere/reconciliation_mark_i/492-m3-cpu-integrated-flat-local-sun-tilted-up-phase-stack-240x135",
+          "tmp/atmosphere/reconciliation_mark_i/498-m3-cpu-integrated-flat-local-sun-tilted-up-source-scaled-light-phase-stack-240x135",
+          "tmp/atmosphere/reconciliation_mark_i/504-m3-cpu-integrated-flat-local-sun-camera-toward-180sun-source-scaled-light-phase-stack-240x135",
+          "tmp/atmosphere/reconciliation_mark_i/532-m3-cpu-integrated-flat-local-sun-union-glacier-2021-dec14-reference-boxes-phase-stack-180-to-000-228x128",
+          "tmp/atmosphere/reconciliation_mark_i/543-m4-gpu-integrated-flat-local-sun-union-glacier-2021-dec14-reference-boxes-phase-stack-180-to-000-228x128",
+          "tmp/atmosphere/reconciliation_mark_i/549-m4-gpu-union-glacier-2021-dec14-denali-200km-phase-stack-180-to-000-228x128",
+          "tmp/atmosphere/reconciliation_mark_i/555-m4-cpu-integrated-flat-local-sun-union-glacier-2021-dec14-endpoint-material-shading-phase-stack-180-to-000-228x128",
+          "tmp/atmosphere/reconciliation_mark_i/562-m4-cpu-union-glacier-2021-dec14-denali-200km-right-offset-phase-stack-180-to-000-228x128",
+          "tmp/atmosphere/reconciliation_mark_i/568-m4-gpu-union-glacier-2021-dec14-denali-200km-right-offset-phase-stack-180-to-000-228x128",
+          "tmp/atmosphere/reconciliation_mark_i/598-m4-gpu-union-glacier-2021-dec14-current-lighting-phase-stack-180-to-000-456x256",
+          "tmp/atmosphere/reconciliation_mark_i/604-m4-gpu-union-glacier-2021-dec14-opposite-backlight-phase-stack-180-to-000-456x256",
+          "tmp/atmosphere/reconciliation_mark_i/616-m4-gpu-union-glacier-2021-dec14-observer-scaled-ambient-phase-stack-180-to-000-456x256",
+          "tmp/atmosphere/reconciliation_mark_i/624-m4-gpu-union-glacier-2021-dec14-observer-scaled-ambient-r100-phase-stack-180-to-000-456x256",
+          "tmp/atmosphere/reconciliation_mark_i/630-m4-gpu-union-glacier-2021-dec14-observer-scaled-ambient-r100-phase-stack-180-to-000-912x512",
+          "tmp/atmosphere/reconciliation_mark_i/636-m4-gpu-union-glacier-2021-dec14-observer-scaled-ambient-r100-5m-phase-stack-180-to-000-912x512",
+          "tmp/atmosphere/reconciliation_mark_i/648-m4-gpu-spherical-distant-union-review-solar-noon-clock-phase-stack-180-to-000-912x512",
+          "tmp/atmosphere/reconciliation_mark_i/655-m4-gpu-spherical-distant-no-ambient-stack-912x512",
+          "tmp/atmosphere/reconciliation_mark_i/661-m4-gpu-spherical-distant-unlit-stack-912x512",
+          "tmp/atmosphere/reconciliation_mark_i/687-m4-gpu-spherical-distant-union-review-distant-cyan-clock-synced-phase-stack-180-to-000-912x512"
+        ],
+        "referenceIds": [
+          "mark-i-record-492",
+          "mark-i-record-498",
+          "mark-i-record-504",
+          "mark-i-record-532",
+          "mark-i-record-543",
+          "mark-i-record-549",
+          "mark-i-record-555",
+          "mark-i-record-562",
+          "mark-i-record-568",
+          "mark-i-record-598",
+          "mark-i-record-604",
+          "mark-i-record-616",
+          "mark-i-record-624",
+          "mark-i-record-630",
+          "mark-i-record-636",
+          "mark-i-record-648",
+          "mark-i-record-655",
+          "mark-i-record-661",
+          "mark-i-record-687"
+        ],
+        "reason": "Accepted phase-stack and review-stack assembly records preserve and label already-rendered display pixels. Image concatenation, labels, dimensions, and row order are presentation mechanics and add no Algorithm32 physics or pre-display Reference evidence."
+      },
+      {
+        "paths": [
+          "tmp/atmosphere/reconciliation_mark_i/456-m3-cpu-integrated-flat-local-sun-96x54",
+          "tmp/atmosphere/reconciliation_mark_i/458-m3-cpu-integrated-flat-local-sun-l2-more-boxes-96x54",
+          "tmp/atmosphere/reconciliation_mark_i/459-m3-cpu-integrated-flat-local-sun-l2-distance-ladder-160x90",
+          "tmp/atmosphere/reconciliation_mark_i/460-m3-cpu-integrated-flat-local-sun-l2-distance-ladder-ground-rgb-160x90",
+          "tmp/atmosphere/reconciliation_mark_i/461-m3-cpu-integrated-flat-local-sun-planet-scale-pitched-flat-scene-160x90",
+          "tmp/atmosphere/reconciliation_mark_i/462-m3-cpu-integrated-flat-local-sun-planet-scale-high-observer-160x90",
+          "tmp/atmosphere/reconciliation_mark_i/463-m3-cpu-integrated-flat-local-sun-planet-scale-high-observer-depth-range-160x90",
+          "tmp/atmosphere/reconciliation_mark_i/464-m3-cpu-integrated-flat-local-sun-planet-scale-high-observer-final-160x90",
+          "tmp/atmosphere/reconciliation_mark_i/465-m3-cpu-integrated-flat-local-sun-planet-scale-high-observer-final-320x180",
+          "tmp/atmosphere/reconciliation_mark_i/466-m3-cpu-integrated-flat-local-sun-planet-scale-high-observer-shaded-320x180",
+          "tmp/atmosphere/reconciliation_mark_i/467-m3-cpu-integrated-flat-local-sun-planet-scale-150m-shaded-320x180",
+          "tmp/atmosphere/reconciliation_mark_i/468-m3-cpu-integrated-flat-local-sun-planet-scale-150m-close-boxes-shaded-320x180",
+          "tmp/atmosphere/reconciliation_mark_i/469-m3-cpu-integrated-flat-local-sun-planet-scale-150m-rotated-close-boxes-shaded-320x180",
+          "tmp/atmosphere/reconciliation_mark_i/470-m3-cpu-integrated-flat-local-sun-source-driven-light-rotated-close-boxes-480x270",
+          "tmp/atmosphere/reconciliation_mark_i/471-m3-cpu-integrated-flat-local-sun-source-owned-three-light-smoke-160x90",
+          "tmp/atmosphere/reconciliation_mark_i/472-m3-cpu-integrated-flat-local-sun-wide-box-layout-smoke-160x90",
+          "tmp/atmosphere/reconciliation_mark_i/473-m3-cpu-integrated-flat-local-sun-wide-box-layout-480x270",
+          "tmp/atmosphere/reconciliation_mark_i/474-m3-cpu-integrated-flat-local-sun-even-box-layout-smoke-160x90",
+          "tmp/atmosphere/reconciliation_mark_i/475-m3-cpu-integrated-flat-local-sun-even-box-layout-480x270",
+          "tmp/atmosphere/reconciliation_mark_i/476-m3-cpu-integrated-flat-local-sun-shadows-smoke-160x90",
+          "tmp/atmosphere/reconciliation_mark_i/477-m3-cpu-integrated-flat-local-sun-shadows-480x270",
+          "tmp/atmosphere/reconciliation_mark_i/478-m3-cpu-integrated-flat-local-sun-045deg-shadows-480x270",
+          "tmp/atmosphere/reconciliation_mark_i/479-m3-cpu-integrated-flat-local-sun-045deg-contact-shadows-480x270",
+          "tmp/atmosphere/reconciliation_mark_i/480-m3-cpu-integrated-flat-local-sun-045deg-compact-shadow-camera-480x270",
+          "tmp/atmosphere/reconciliation_mark_i/482-m3-cpu-integrated-flat-local-sun-045deg-shaded-no-shadows-240x135",
+          "tmp/atmosphere/reconciliation_mark_i/483-m3-cpu-integrated-flat-local-sun-090deg-shadows-480x270",
+          "tmp/atmosphere/reconciliation_mark_i/484-m3-cpu-integrated-flat-local-sun-090deg-fixed-endpoint-light-240x135",
+          "tmp/atmosphere/reconciliation_mark_i/485-m3-cpu-integrated-flat-local-sun-135deg-fixed-endpoint-light-240x135",
+          "tmp/atmosphere/reconciliation_mark_i/486-m3-cpu-integrated-flat-local-sun-180deg-fixed-endpoint-light-240x135",
+          "tmp/atmosphere/reconciliation_mark_i/487-m3-cpu-integrated-flat-local-sun-000deg-tilted-up-fixed-endpoint-light-240x135",
+          "tmp/atmosphere/reconciliation_mark_i/488-m3-cpu-integrated-flat-local-sun-045deg-tilted-up-fixed-endpoint-light-240x135",
+          "tmp/atmosphere/reconciliation_mark_i/489-m3-cpu-integrated-flat-local-sun-090deg-tilted-up-fixed-endpoint-light-240x135",
+          "tmp/atmosphere/reconciliation_mark_i/490-m3-cpu-integrated-flat-local-sun-135deg-tilted-up-fixed-endpoint-light-240x135",
+          "tmp/atmosphere/reconciliation_mark_i/491-m3-cpu-integrated-flat-local-sun-180deg-tilted-up-fixed-endpoint-light-240x135",
+          "tmp/atmosphere/reconciliation_mark_i/493-m3-cpu-integrated-flat-local-sun-000deg-tilted-up-source-scaled-light-240x135",
+          "tmp/atmosphere/reconciliation_mark_i/494-m3-cpu-integrated-flat-local-sun-045deg-tilted-up-source-scaled-light-240x135",
+          "tmp/atmosphere/reconciliation_mark_i/495-m3-cpu-integrated-flat-local-sun-090deg-tilted-up-source-scaled-light-240x135",
+          "tmp/atmosphere/reconciliation_mark_i/496-m3-cpu-integrated-flat-local-sun-135deg-tilted-up-source-scaled-light-240x135",
+          "tmp/atmosphere/reconciliation_mark_i/497-m3-cpu-integrated-flat-local-sun-180deg-tilted-up-source-scaled-light-240x135",
+          "tmp/atmosphere/reconciliation_mark_i/499-m3-cpu-integrated-flat-local-sun-180deg-camera-toward-180sun-source-scaled-light-240x135",
+          "tmp/atmosphere/reconciliation_mark_i/500-m3-cpu-integrated-flat-local-sun-000deg-camera-toward-180sun-source-scaled-light-240x135",
+          "tmp/atmosphere/reconciliation_mark_i/501-m3-cpu-integrated-flat-local-sun-045deg-camera-toward-180sun-source-scaled-light-240x135",
+          "tmp/atmosphere/reconciliation_mark_i/502-m3-cpu-integrated-flat-local-sun-090deg-camera-toward-180sun-source-scaled-light-240x135",
+          "tmp/atmosphere/reconciliation_mark_i/503-m3-cpu-integrated-flat-local-sun-135deg-camera-toward-180sun-source-scaled-light-240x135",
+          "tmp/atmosphere/reconciliation_mark_i/505-m3-cpu-integrated-flat-local-sun-000deg-camera-toward-sun-ocean-flat-ground-240x135",
+          "tmp/atmosphere/reconciliation_mark_i/507-m3-cpu-integrated-flat-local-sun-000deg-camera-toward-sun-water-js-ground-240x135",
+          "tmp/atmosphere/reconciliation_mark_i/509-m3-cpu-integrated-flat-local-sun-000deg-camera-toward-sun-ocean-matte-ground-150m-240x135",
+          "tmp/atmosphere/reconciliation_mark_i/511-m3-cpu-integrated-flat-local-sun-ocean-matte-150m-160km-500m-box-240x135",
+          "tmp/atmosphere/reconciliation_mark_i/512-m3-cpu-integrated-flat-local-sun-ocean-matte-150m-160km-20kmx100kmx100km-box-240x135",
+          "tmp/atmosphere/reconciliation_mark_i/513-m3-cpu-integrated-flat-local-sun-ocean-matte-150m-160km-6p2kmx100kmx100km-box-240x135",
+          "tmp/atmosphere/reconciliation_mark_i/514-m3-cpu-integrated-flat-local-sun-ocean-matte-150m-160km-6p2kmx100kmx100km-box-455x256",
+          "tmp/atmosphere/reconciliation_mark_i/515-m3-cpu-integrated-flat-local-sun-ocean-matte-150m-two-denali-review-boxes-228x128",
+          "tmp/atmosphere/reconciliation_mark_i/516-m3-cpu-integrated-flat-local-sun-ocean-matte-150m-two-denali-review-boxes-455x256",
+          "tmp/atmosphere/reconciliation_mark_i/517-m3-cpu-integrated-flat-local-sun-ocean-matte-150m-two-denali-review-boxes-180deg-228x128",
+          "tmp/atmosphere/reconciliation_mark_i/518-m3-cpu-integrated-flat-local-sun-ocean-matte-500m-two-denali-review-boxes-180deg-228x128",
+          "tmp/atmosphere/reconciliation_mark_i/519-m3-cpu-integrated-flat-local-sun-ocean-matte-500m-two-denali-review-boxes-winter-solstice-2025-180deg-228x128",
+          "tmp/atmosphere/reconciliation_mark_i/520-m3-cpu-integrated-flat-local-sun-ocean-matte-500m-two-denali-review-boxes-winter-solstice-2025-180deg-camera-toward-180-228x128",
+          "tmp/atmosphere/reconciliation_mark_i/521-m3-cpu-integrated-flat-local-sun-ground-many-boxes-winter-solstice-2025-180deg-camera-toward-180-228x128",
+          "tmp/atmosphere/reconciliation_mark_i/522-m3-cpu-integrated-flat-local-sun-union-glacier-2021-dec14-far-side-orbit-plain-ground-camera-at-sun-228x128",
+          "tmp/atmosphere/reconciliation_mark_i/524-m3-cpu-integrated-flat-local-sun-union-glacier-2021-dec14-far-side-orbit-reference-boxes-accepted-camera-at-sun-228x128",
+          "tmp/atmosphere/reconciliation_mark_i/526-m3-cpu-integrated-flat-local-sun-union-glacier-2021-dec14-closest-approach-reference-boxes-current-camera-228x128",
+          "tmp/atmosphere/reconciliation_mark_i/527-m3-cpu-integrated-flat-local-sun-union-glacier-2021-dec14-180deg-reference-boxes-current-camera-228x128",
+          "tmp/atmosphere/reconciliation_mark_i/528-m3-cpu-integrated-flat-local-sun-union-glacier-2021-dec14-135deg-reference-boxes-current-camera-228x128",
+          "tmp/atmosphere/reconciliation_mark_i/529-m3-cpu-integrated-flat-local-sun-union-glacier-2021-dec14-090deg-reference-boxes-current-camera-228x128",
+          "tmp/atmosphere/reconciliation_mark_i/530-m3-cpu-integrated-flat-local-sun-union-glacier-2021-dec14-045deg-reference-boxes-current-camera-228x128",
+          "tmp/atmosphere/reconciliation_mark_i/531-m3-cpu-integrated-flat-local-sun-union-glacier-2021-dec14-000deg-reference-boxes-current-camera-228x128",
+          "tmp/atmosphere/reconciliation_mark_i/550-m4-cpu-integrated-flat-local-sun-union-glacier-2021-dec14-180deg-endpoint-material-shading-228x128",
+          "tmp/atmosphere/reconciliation_mark_i/551-m4-cpu-integrated-flat-local-sun-union-glacier-2021-dec14-135deg-endpoint-material-shading-228x128",
+          "tmp/atmosphere/reconciliation_mark_i/552-m4-cpu-integrated-flat-local-sun-union-glacier-2021-dec14-090deg-endpoint-material-shading-228x128",
+          "tmp/atmosphere/reconciliation_mark_i/553-m4-cpu-integrated-flat-local-sun-union-glacier-2021-dec14-045deg-endpoint-material-shading-228x128",
+          "tmp/atmosphere/reconciliation_mark_i/554-m4-cpu-integrated-flat-local-sun-union-glacier-2021-dec14-000deg-endpoint-material-shading-228x128",
+          "tmp/atmosphere/reconciliation_mark_i/556-m4-cpu-union-glacier-2021-dec14-180deg-denali-200km-endpoint-material-shading-228x128",
+          "tmp/atmosphere/reconciliation_mark_i/557-m4-cpu-union-glacier-2021-dec14-180deg-denali-200km-right-offset-endpoint-material-shading-228x128",
+          "tmp/atmosphere/reconciliation_mark_i/558-m4-cpu-union-glacier-2021-dec14-135deg-denali-200km-right-offset-endpoint-material-shading-228x128",
+          "tmp/atmosphere/reconciliation_mark_i/559-m4-cpu-union-glacier-2021-dec14-090deg-denali-200km-right-offset-endpoint-material-shading-228x128",
+          "tmp/atmosphere/reconciliation_mark_i/560-m4-cpu-union-glacier-2021-dec14-045deg-denali-200km-right-offset-endpoint-material-shading-228x128",
+          "tmp/atmosphere/reconciliation_mark_i/561-m4-cpu-union-glacier-2021-dec14-000deg-denali-200km-right-offset-endpoint-material-shading-228x128",
+          "tmp/atmosphere/reconciliation_mark_i/569-m4-cpu-union-glacier-2021-dec14-180deg-denali-200km-right-offset-no-antialias-228x128",
+          "tmp/atmosphere/reconciliation_mark_i/570-m4-cpu-union-glacier-2021-dec14-180deg-denali-200km-right-offset-no-antialias-nearest-output-228x128",
+          "tmp/atmosphere/reconciliation_mark_i/579-m4-cpu-union-glacier-2021-dec14-180deg-opposite-directional-endpoint-fill-r025-no-antialias-228x128"
+        ],
+        "referenceIds": [
+          "mark-i-record-456",
+          "mark-i-record-458",
+          "mark-i-record-459",
+          "mark-i-record-460",
+          "mark-i-record-461",
+          "mark-i-record-462",
+          "mark-i-record-463",
+          "mark-i-record-464",
+          "mark-i-record-465",
+          "mark-i-record-466",
+          "mark-i-record-467",
+          "mark-i-record-468",
+          "mark-i-record-469",
+          "mark-i-record-470",
+          "mark-i-record-471",
+          "mark-i-record-472",
+          "mark-i-record-473",
+          "mark-i-record-474",
+          "mark-i-record-475",
+          "mark-i-record-476",
+          "mark-i-record-477",
+          "mark-i-record-478",
+          "mark-i-record-479",
+          "mark-i-record-480",
+          "mark-i-record-482",
+          "mark-i-record-483",
+          "mark-i-record-484",
+          "mark-i-record-485",
+          "mark-i-record-486",
+          "mark-i-record-487",
+          "mark-i-record-488",
+          "mark-i-record-489",
+          "mark-i-record-490",
+          "mark-i-record-491",
+          "mark-i-record-493",
+          "mark-i-record-494",
+          "mark-i-record-495",
+          "mark-i-record-496",
+          "mark-i-record-497",
+          "mark-i-record-499",
+          "mark-i-record-500",
+          "mark-i-record-501",
+          "mark-i-record-502",
+          "mark-i-record-503",
+          "mark-i-record-505",
+          "mark-i-record-507",
+          "mark-i-record-509",
+          "mark-i-record-511",
+          "mark-i-record-512",
+          "mark-i-record-513",
+          "mark-i-record-514",
+          "mark-i-record-515",
+          "mark-i-record-516",
+          "mark-i-record-517",
+          "mark-i-record-518",
+          "mark-i-record-519",
+          "mark-i-record-520",
+          "mark-i-record-521",
+          "mark-i-record-522",
+          "mark-i-record-524",
+          "mark-i-record-526",
+          "mark-i-record-527",
+          "mark-i-record-528",
+          "mark-i-record-529",
+          "mark-i-record-530",
+          "mark-i-record-531",
+          "mark-i-record-550",
+          "mark-i-record-551",
+          "mark-i-record-552",
+          "mark-i-record-553",
+          "mark-i-record-554",
+          "mark-i-record-556",
+          "mark-i-record-557",
+          "mark-i-record-558",
+          "mark-i-record-559",
+          "mark-i-record-560",
+          "mark-i-record-561",
+          "mark-i-record-569",
+          "mark-i-record-570",
+          "mark-i-record-579"
+        ],
+        "reason": "Accepted browser-integrated CPU local/flat gallery runs repeat already-cataloged finite-hit, no-hit, endpoint-composition, flat/local input, and cache-participation observations. Their changing cameras, endpoint RGB proxies, ground materials, lights, shadows, boxes, dates, antialiasing, and display pixels are renderer/review policy; self-generated positive outputs do not add independent physics validation."
+      },
+      {
+        "paths": [
+          "tmp/atmosphere/reconciliation_mark_i/538-m4-gpu-integrated-flat-local-sun-union-glacier-2021-dec14-180deg-reference-boxes-228x128",
+          "tmp/atmosphere/reconciliation_mark_i/539-m4-gpu-integrated-flat-local-sun-union-glacier-2021-dec14-135deg-reference-boxes-228x128",
+          "tmp/atmosphere/reconciliation_mark_i/540-m4-gpu-integrated-flat-local-sun-union-glacier-2021-dec14-090deg-reference-boxes-228x128",
+          "tmp/atmosphere/reconciliation_mark_i/541-m4-gpu-integrated-flat-local-sun-union-glacier-2021-dec14-045deg-reference-boxes-228x128",
+          "tmp/atmosphere/reconciliation_mark_i/542-m4-gpu-integrated-flat-local-sun-union-glacier-2021-dec14-000deg-reference-boxes-228x128",
+          "tmp/atmosphere/reconciliation_mark_i/544-m4-gpu-union-glacier-2021-dec14-180deg-denali-200km-228x128",
+          "tmp/atmosphere/reconciliation_mark_i/545-m4-gpu-union-glacier-2021-dec14-135deg-denali-200km-228x128",
+          "tmp/atmosphere/reconciliation_mark_i/546-m4-gpu-union-glacier-2021-dec14-090deg-denali-200km-228x128",
+          "tmp/atmosphere/reconciliation_mark_i/547-m4-gpu-union-glacier-2021-dec14-045deg-denali-200km-228x128",
+          "tmp/atmosphere/reconciliation_mark_i/548-m4-gpu-union-glacier-2021-dec14-000deg-denali-200km-228x128",
+          "tmp/atmosphere/reconciliation_mark_i/563-m4-gpu-union-glacier-2021-dec14-180deg-denali-200km-right-offset-228x128",
+          "tmp/atmosphere/reconciliation_mark_i/564-m4-gpu-union-glacier-2021-dec14-135deg-denali-200km-right-offset-228x128",
+          "tmp/atmosphere/reconciliation_mark_i/565-m4-gpu-union-glacier-2021-dec14-090deg-denali-200km-right-offset-228x128",
+          "tmp/atmosphere/reconciliation_mark_i/566-m4-gpu-union-glacier-2021-dec14-045deg-denali-200km-right-offset-228x128",
+          "tmp/atmosphere/reconciliation_mark_i/567-m4-gpu-union-glacier-2021-dec14-000deg-denali-200km-right-offset-228x128",
+          "tmp/atmosphere/reconciliation_mark_i/571-m4-gpu-union-glacier-2021-dec14-000deg-denali-200km-right-offset-path-only-228x128",
+          "tmp/atmosphere/reconciliation_mark_i/572-m4-gpu-union-glacier-2021-dec14-180deg-denali-200km-right-offset-path-only-228x128",
+          "tmp/atmosphere/reconciliation_mark_i/573-m4-gpu-union-glacier-2021-dec14-180deg-denali-200km-right-offset-endpoint-indirect-fill-smoke-228x128",
+          "tmp/atmosphere/reconciliation_mark_i/574-m4-gpu-union-glacier-2021-dec14-180deg-review-box-cluster-endpoint-indirect-fill-228x128",
+          "tmp/atmosphere/reconciliation_mark_i/575-m4-gpu-union-glacier-2021-dec14-180deg-review-box-cluster-endpoint-indirect-fill-no-antialias-228x128",
+          "tmp/atmosphere/reconciliation_mark_i/576-m4-gpu-union-glacier-2021-dec14-180deg-review-box-camera-side-endpoint-indirect-fill-no-antialias-228x128",
+          "tmp/atmosphere/reconciliation_mark_i/577-m4-gpu-union-glacier-2021-dec14-180deg-general-ambient-endpoint-fill-r025-no-antialias-228x128",
+          "tmp/atmosphere/reconciliation_mark_i/578-m4-gpu-union-glacier-2021-dec14-180deg-opposite-directional-endpoint-fill-r025-no-antialias-228x128",
+          "tmp/atmosphere/reconciliation_mark_i/580-m4-gpu-union-glacier-2021-dec14-180deg-renderer-distance-depth-opposite-fill-no-antialias-228x128",
+          "tmp/atmosphere/reconciliation_mark_i/581-m4-gpu-union-glacier-2021-dec14-180deg-renderer-distance-depth-endpoint-distance-scale-no-antialias-228x128",
+          "tmp/atmosphere/reconciliation_mark_i/582-m4-gpu-union-glacier-2021-dec14-090deg-renderer-distance-depth-endpoint-distance-scale-no-antialias-228x128",
+          "tmp/atmosphere/reconciliation_mark_i/583-m4-gpu-union-glacier-2021-dec14-045deg-renderer-distance-depth-endpoint-distance-scale-no-antialias-228x128",
+          "tmp/atmosphere/reconciliation_mark_i/584-m4-gpu-san-jose-2025-winter-090deg-looking-180-renderer-distance-depth-endpoint-distance-scale-no-antialias-228x128",
+          "tmp/atmosphere/reconciliation_mark_i/585-m4-gpu-san-jose-2025-winter-000deg-looking-180-renderer-distance-depth-endpoint-distance-scale-no-antialias-228x128",
+          "tmp/atmosphere/reconciliation_mark_i/586-m4-gpu-san-jose-2025-winter-000deg-looking-180-renderer-distance-depth-no-endpoint-distance-scale-no-antialias-228x128",
+          "tmp/atmosphere/reconciliation_mark_i/587-m4-gpu-san-jose-2025-winter-000deg-looking-180-renderer-distance-depth-endpoint-distance-additive-no-antialias-228x128",
+          "tmp/atmosphere/reconciliation_mark_i/588-m4-gpu-san-jose-2025-winter-180deg-looking-180-renderer-distance-depth-endpoint-distance-additive-no-antialias-228x128",
+          "tmp/atmosphere/reconciliation_mark_i/589-m4-gpu-san-jose-2025-winter-090deg-looking-180-renderer-distance-depth-endpoint-distance-additive-no-antialias-228x128",
+          "tmp/atmosphere/reconciliation_mark_i/590-m4-gpu-san-jose-2025-winter-090deg-looking-180-renderer-distance-depth-no-endpoint-distance-scale-no-antialias-228x128",
+          "tmp/atmosphere/reconciliation_mark_i/591-m4-gpu-san-jose-2025-winter-090deg-looking-180-renderer-distance-depth-low-ambient-no-endpoint-distance-scale-no-antialias-228x128",
+          "tmp/atmosphere/reconciliation_mark_i/592-m4-gpu-san-jose-2025-winter-090deg-looking-180-renderer-distance-depth-low-ambient-no-fill-no-endpoint-distance-scale-no-antialias-228x128",
+          "tmp/atmosphere/reconciliation_mark_i/593-m4-gpu-union-glacier-2021-dec14-180deg-current-lighting-456x256",
+          "tmp/atmosphere/reconciliation_mark_i/594-m4-gpu-union-glacier-2021-dec14-135deg-current-lighting-456x256",
+          "tmp/atmosphere/reconciliation_mark_i/595-m4-gpu-union-glacier-2021-dec14-090deg-current-lighting-456x256",
+          "tmp/atmosphere/reconciliation_mark_i/596-m4-gpu-union-glacier-2021-dec14-045deg-current-lighting-456x256",
+          "tmp/atmosphere/reconciliation_mark_i/597-m4-gpu-union-glacier-2021-dec14-000deg-current-lighting-456x256",
+          "tmp/atmosphere/reconciliation_mark_i/599-m4-gpu-union-glacier-2021-dec14-180deg-opposite-backlight-456x256",
+          "tmp/atmosphere/reconciliation_mark_i/600-m4-gpu-union-glacier-2021-dec14-135deg-opposite-backlight-456x256",
+          "tmp/atmosphere/reconciliation_mark_i/601-m4-gpu-union-glacier-2021-dec14-090deg-opposite-backlight-456x256",
+          "tmp/atmosphere/reconciliation_mark_i/602-m4-gpu-union-glacier-2021-dec14-045deg-opposite-backlight-456x256",
+          "tmp/atmosphere/reconciliation_mark_i/603-m4-gpu-union-glacier-2021-dec14-000deg-opposite-backlight-456x256",
+          "tmp/atmosphere/reconciliation_mark_i/606-m4-gpu-union-glacier-2021-dec14-180deg-source-direction-falloff-fill-456x256",
+          "tmp/atmosphere/reconciliation_mark_i/607-m4-gpu-union-glacier-2021-dec14-135deg-source-direction-falloff-fill-456x256",
+          "tmp/atmosphere/reconciliation_mark_i/608-m4-gpu-union-glacier-2021-dec14-090deg-source-direction-falloff-fill-456x256",
+          "tmp/atmosphere/reconciliation_mark_i/609-m4-gpu-union-glacier-2021-dec14-045deg-source-direction-falloff-fill-456x256",
+          "tmp/atmosphere/reconciliation_mark_i/610-m4-gpu-union-glacier-2021-dec14-000deg-source-direction-falloff-fill-456x256",
+          "tmp/atmosphere/reconciliation_mark_i/611-m4-gpu-union-glacier-2021-dec14-180deg-observer-scaled-ambient-456x256",
+          "tmp/atmosphere/reconciliation_mark_i/612-m4-gpu-union-glacier-2021-dec14-135deg-observer-scaled-ambient-456x256",
+          "tmp/atmosphere/reconciliation_mark_i/613-m4-gpu-union-glacier-2021-dec14-090deg-observer-scaled-ambient-456x256",
+          "tmp/atmosphere/reconciliation_mark_i/614-m4-gpu-union-glacier-2021-dec14-045deg-observer-scaled-ambient-456x256",
+          "tmp/atmosphere/reconciliation_mark_i/615-m4-gpu-union-glacier-2021-dec14-000deg-observer-scaled-ambient-456x256",
+          "tmp/atmosphere/reconciliation_mark_i/617-m4-gpu-union-glacier-2021-dec14-000deg-observer-scaled-ambient-r020-456x256",
+          "tmp/atmosphere/reconciliation_mark_i/618-m4-gpu-union-glacier-2021-dec14-000deg-observer-scaled-ambient-r100-456x256",
+          "tmp/atmosphere/reconciliation_mark_i/620-m4-gpu-union-glacier-2021-dec14-180deg-observer-scaled-ambient-r100-456x256",
+          "tmp/atmosphere/reconciliation_mark_i/621-m4-gpu-union-glacier-2021-dec14-135deg-observer-scaled-ambient-r100-456x256",
+          "tmp/atmosphere/reconciliation_mark_i/622-m4-gpu-union-glacier-2021-dec14-090deg-observer-scaled-ambient-r100-456x256",
+          "tmp/atmosphere/reconciliation_mark_i/623-m4-gpu-union-glacier-2021-dec14-045deg-observer-scaled-ambient-r100-456x256",
+          "tmp/atmosphere/reconciliation_mark_i/625-m4-gpu-union-glacier-2021-dec14-180deg-observer-scaled-ambient-r100-912x512",
+          "tmp/atmosphere/reconciliation_mark_i/626-m4-gpu-union-glacier-2021-dec14-135deg-observer-scaled-ambient-r100-912x512",
+          "tmp/atmosphere/reconciliation_mark_i/627-m4-gpu-union-glacier-2021-dec14-090deg-observer-scaled-ambient-r100-912x512",
+          "tmp/atmosphere/reconciliation_mark_i/628-m4-gpu-union-glacier-2021-dec14-045deg-observer-scaled-ambient-r100-912x512",
+          "tmp/atmosphere/reconciliation_mark_i/629-m4-gpu-union-glacier-2021-dec14-000deg-observer-scaled-ambient-r100-912x512",
+          "tmp/atmosphere/reconciliation_mark_i/631-m4-gpu-union-glacier-2021-dec14-180deg-observer-scaled-ambient-r100-5m-912x512",
+          "tmp/atmosphere/reconciliation_mark_i/632-m4-gpu-union-glacier-2021-dec14-135deg-observer-scaled-ambient-r100-5m-912x512",
+          "tmp/atmosphere/reconciliation_mark_i/633-m4-gpu-union-glacier-2021-dec14-090deg-observer-scaled-ambient-r100-5m-912x512",
+          "tmp/atmosphere/reconciliation_mark_i/634-m4-gpu-union-glacier-2021-dec14-045deg-observer-scaled-ambient-r100-5m-912x512",
+          "tmp/atmosphere/reconciliation_mark_i/635-m4-gpu-union-glacier-2021-dec14-000deg-observer-scaled-ambient-r100-5m-912x512"
+        ],
+        "referenceIds": [
+          "mark-i-record-538",
+          "mark-i-record-539",
+          "mark-i-record-540",
+          "mark-i-record-541",
+          "mark-i-record-542",
+          "mark-i-record-544",
+          "mark-i-record-545",
+          "mark-i-record-546",
+          "mark-i-record-547",
+          "mark-i-record-548",
+          "mark-i-record-563",
+          "mark-i-record-564",
+          "mark-i-record-565",
+          "mark-i-record-566",
+          "mark-i-record-567",
+          "mark-i-record-571",
+          "mark-i-record-572",
+          "mark-i-record-573",
+          "mark-i-record-574",
+          "mark-i-record-575",
+          "mark-i-record-576",
+          "mark-i-record-577",
+          "mark-i-record-578",
+          "mark-i-record-580",
+          "mark-i-record-581",
+          "mark-i-record-582",
+          "mark-i-record-583",
+          "mark-i-record-584",
+          "mark-i-record-585",
+          "mark-i-record-586",
+          "mark-i-record-587",
+          "mark-i-record-588",
+          "mark-i-record-589",
+          "mark-i-record-590",
+          "mark-i-record-591",
+          "mark-i-record-592",
+          "mark-i-record-593",
+          "mark-i-record-594",
+          "mark-i-record-595",
+          "mark-i-record-596",
+          "mark-i-record-597",
+          "mark-i-record-599",
+          "mark-i-record-600",
+          "mark-i-record-601",
+          "mark-i-record-602",
+          "mark-i-record-603",
+          "mark-i-record-606",
+          "mark-i-record-607",
+          "mark-i-record-608",
+          "mark-i-record-609",
+          "mark-i-record-610",
+          "mark-i-record-611",
+          "mark-i-record-612",
+          "mark-i-record-613",
+          "mark-i-record-614",
+          "mark-i-record-615",
+          "mark-i-record-617",
+          "mark-i-record-618",
+          "mark-i-record-620",
+          "mark-i-record-621",
+          "mark-i-record-622",
+          "mark-i-record-623",
+          "mark-i-record-625",
+          "mark-i-record-626",
+          "mark-i-record-627",
+          "mark-i-record-628",
+          "mark-i-record-629",
+          "mark-i-record-631",
+          "mark-i-record-632",
+          "mark-i-record-633",
+          "mark-i-record-634",
+          "mark-i-record-635"
+        ],
+        "reason": "Accepted M4 GPU local/flat gallery records vary renderer distance/depth, endpoint fills, lighting, shadows, cameras, review objects, and display resolution. They perform no numeric comparison to an exact pinned CPU Reference. Their GPU-ideal/reference language and unpinned evidence defect are already owned by mark-i:m3:gpu-quality-comparison-uses-gpu-oracle, mark-i:m4:integrated-selected-pixel-result-not-conformance, and CONTRADICTION-A32-000022; no duplicate facts are created."
+      },
+      {
+        "paths": [
+          "tmp/atmosphere/reconciliation_mark_i/639-m4-gpu-spherical-distant-union-review-000deg-5m-912x512",
+          "tmp/atmosphere/reconciliation_mark_i/640-m4-gpu-spherical-distant-union-review-solar-noon-clock-000deg-5m-912x512",
+          "tmp/atmosphere/reconciliation_mark_i/644-m4-gpu-spherical-distant-union-review-solar-noon-clock-180deg-5m-912x512",
+          "tmp/atmosphere/reconciliation_mark_i/645-m4-gpu-spherical-distant-union-review-solar-noon-clock-045deg-5m-912x512",
+          "tmp/atmosphere/reconciliation_mark_i/646-m4-gpu-spherical-distant-union-review-solar-noon-clock-090deg-5m-912x512",
+          "tmp/atmosphere/reconciliation_mark_i/647-m4-gpu-spherical-distant-union-review-solar-noon-clock-135deg-5m-912x512",
+          "tmp/atmosphere/reconciliation_mark_i/649-m4-gpu-spherical-distant-union-review-no-ambient-solar-noon-clock-180deg-5m-912x512",
+          "tmp/atmosphere/reconciliation_mark_i/650-m4-gpu-spherical-distant-union-review-no-ambient-solar-noon-clock-135deg-5m-912x512",
+          "tmp/atmosphere/reconciliation_mark_i/651-m4-gpu-spherical-distant-union-review-no-ambient-solar-noon-clock-090deg-5m-912x512",
+          "tmp/atmosphere/reconciliation_mark_i/652-m4-gpu-spherical-distant-union-review-no-ambient-solar-noon-clock-045deg-5m-912x512",
+          "tmp/atmosphere/reconciliation_mark_i/653-m4-gpu-spherical-distant-union-review-no-ambient-solar-noon-clock-000deg-5m-912x512",
+          "tmp/atmosphere/reconciliation_mark_i/656-m4-gpu-spherical-distant-unlit-union-review-solar-noon-clock-180deg-5m-912x512",
+          "tmp/atmosphere/reconciliation_mark_i/657-m4-gpu-spherical-distant-unlit-union-review-solar-noon-clock-135deg-5m-912x512",
+          "tmp/atmosphere/reconciliation_mark_i/658-m4-gpu-spherical-distant-unlit-union-review-solar-noon-clock-090deg-5m-912x512",
+          "tmp/atmosphere/reconciliation_mark_i/659-m4-gpu-spherical-distant-unlit-union-review-solar-noon-clock-045deg-5m-912x512",
+          "tmp/atmosphere/reconciliation_mark_i/660-m4-gpu-spherical-distant-unlit-union-review-solar-noon-clock-000deg-5m-912x512",
+          "tmp/atmosphere/reconciliation_mark_i/662-m4-gpu-spherical-distant-unlit-endpoint-scale-1-000deg-5m-912x512",
+          "tmp/atmosphere/reconciliation_mark_i/663-m4-gpu-spherical-distant-unlit-close-building-scale-1-000deg-5m-912x512",
+          "tmp/atmosphere/reconciliation_mark_i/665-m4-gpu-spherical-distant-unlit-close-building-100m-scale-1-000deg-5m-912x512",
+          "tmp/atmosphere/reconciliation_mark_i/667-m4-gpu-spherical-distant-unlit-blue-cabin-left-30m-scale-1-000deg-5m-912x512",
+          "tmp/atmosphere/reconciliation_mark_i/668-m4-gpu-spherical-distant-shadowed-blue-cabin-left-30m-scale-1-000deg-5m-912x512",
+          "tmp/atmosphere/reconciliation_mark_i/669-m4-gpu-spherical-distant-shadowed-blue-cabin-left-fill-r025-30m-scale-1-000deg-5m-912x512",
+          "tmp/atmosphere/reconciliation_mark_i/670-m4-gpu-spherical-distant-shadowed-blue-cabin-left-local-shadow-frame-fill-r025-30m-scale-1-000deg-5m-912x512",
+          "tmp/atmosphere/reconciliation_mark_i/671-m4-gpu-spherical-distant-shadowed-blue-cabin-left-local-shadow-frame-fill-r025-45deg-5m-912x512",
+          "tmp/atmosphere/reconciliation_mark_i/672-m4-gpu-spherical-distant-shadowed-blue-cabin-left-local-shadow-frame-fill-r010-45deg-5m-912x512",
+          "tmp/atmosphere/reconciliation_mark_i/673-m4-gpu-spherical-distant-shadowed-blue-cabin-left-active-shadow-frame-fill-r010-45deg-5m-912x512",
+          "tmp/atmosphere/reconciliation_mark_i/674-m4-gpu-spherical-distant-shadowed-blue-cabin-left-active-shadow-frame-fill-r010-000deg-5m-912x512",
+          "tmp/atmosphere/reconciliation_mark_i/675-m4-gpu-spherical-distant-shadowed-blue-cabin-left-shadow-region-r010-000deg-5m-912x512",
+          "tmp/atmosphere/reconciliation_mark_i/676-m4-gpu-spherical-distant-shadowed-blue-cabin-left-shadow-region-r025-000deg-5m-912x512",
+          "tmp/atmosphere/reconciliation_mark_i/677-m4-gpu-spherical-distant-shadowed-blue-cabin-left-shadow-region-r025-45deg-5m-912x512",
+          "tmp/atmosphere/reconciliation_mark_i/678-m4-gpu-spherical-distant-shadowed-blue-cabin-left-shadow-region-r025-090deg-5m-912x512",
+          "tmp/atmosphere/reconciliation_mark_i/679-m4-gpu-spherical-distant-shadowed-blue-cabin-left-shadow-region-r025-135deg-5m-912x512",
+          "tmp/atmosphere/reconciliation_mark_i/681-m4-gpu-spherical-distant-shadowed-blue-cabin-left-distant-cyan-r025-135deg-5m-912x512",
+          "tmp/atmosphere/reconciliation_mark_i/682-m4-gpu-spherical-distant-shadowed-blue-cabin-left-distant-cyan-right-r025-135deg-5m-912x512",
+          "tmp/atmosphere/reconciliation_mark_i/683-m4-gpu-spherical-distant-shadowed-blue-cabin-left-distant-cyan-right-r025-180deg-5m-912x512",
+          "tmp/atmosphere/reconciliation_mark_i/684-m4-gpu-spherical-distant-shadowed-blue-cabin-left-distant-cyan-right-r025-090deg-5m-912x512",
+          "tmp/atmosphere/reconciliation_mark_i/685-m4-gpu-spherical-distant-shadowed-blue-cabin-left-distant-cyan-right-r025-045deg-5m-912x512",
+          "tmp/atmosphere/reconciliation_mark_i/686-m4-gpu-spherical-distant-shadowed-blue-cabin-left-distant-cyan-right-r025-000deg-5m-912x512"
+        ],
+        "referenceIds": [
+          "mark-i-record-639",
+          "mark-i-record-640",
+          "mark-i-record-644",
+          "mark-i-record-645",
+          "mark-i-record-646",
+          "mark-i-record-647",
+          "mark-i-record-649",
+          "mark-i-record-650",
+          "mark-i-record-651",
+          "mark-i-record-652",
+          "mark-i-record-653",
+          "mark-i-record-656",
+          "mark-i-record-657",
+          "mark-i-record-658",
+          "mark-i-record-659",
+          "mark-i-record-660",
+          "mark-i-record-662",
+          "mark-i-record-663",
+          "mark-i-record-665",
+          "mark-i-record-667",
+          "mark-i-record-668",
+          "mark-i-record-669",
+          "mark-i-record-670",
+          "mark-i-record-671",
+          "mark-i-record-672",
+          "mark-i-record-673",
+          "mark-i-record-674",
+          "mark-i-record-675",
+          "mark-i-record-676",
+          "mark-i-record-677",
+          "mark-i-record-678",
+          "mark-i-record-679",
+          "mark-i-record-681",
+          "mark-i-record-682",
+          "mark-i-record-683",
+          "mark-i-record-684",
+          "mark-i-record-685",
+          "mark-i-record-686"
+        ],
+        "reason": "Accepted M4 GPU spherical/distant gallery records vary clocks, phase, endpoint scale, scene objects, shadow regions, fill, lighting, and display resolution. They retain renderer and GPU-image observations but no exact CPU Reference identity, input packet, pre-display comparison, or independent criterion. The existing GPU-oracle gap and CONTRADICTION-A32-000022 own that defect; these records do not become shader-conformance facts."
+      }
+    ]
+  },
+  "experiments": [
+    {
+      "id": "EXPERIMENT-A32-000074",
+      "title": "Mark I M3 CPU versus GPU-ideal display-image comparison",
+      "kind": "historical-reversed-authority-display-image-comparison",
+      "historicalSourceIdentity": {
+        "commit": "cf3e00afbec1e81da66a062642dc233c32b54194",
+        "tree": "e5dbe65ed75fd0cd5ad144adadad3bc306d2f68c",
+        "sourcePath": "scripts/flat/reconciliation/POC",
+        "relationshipToCurrentSnapshot": "historical-code-identity-current-working-tree-must-not-substitute"
+      },
+      "recordPath": "tmp/atmosphere/reconciliation_mark_i/454-m3-cpu-gpu-ideal-comparison-456x256",
+      "historicalLocators": [
+        "tmp/atmosphere/reconciliation/454-m3-cpu-gpu-ideal-comparison-456x256"
+      ],
+      "runner": {
+        "status": "mutable-current-path-found-executed-byte-identity-unverified",
+        "paths": [
+          "scripts/flat/reconciliation/POC/src/runners/m3CpuGpuIdealImageComparison.js"
+        ],
+        "pathRoles": [
+          {
+            "path": "scripts/flat/reconciliation/POC/src/runners/m3CpuGpuIdealImageComparison.js",
+            "role": "same-named-current-runner-candidate"
+          }
+        ],
+        "recordedHistoricalPath": "scripts/flat/reconciliation/POC/src/runners/m3CpuGpuIdealImageComparison.js",
+        "recordedHistoricalPathStatus": "record-names-runner-but-does-not-pin-executed-file-or-import-closure-hash",
+        "contentRelationship": "The mutable same-named runner survives, but the record does not pin its executed bytes, imported comparison helpers, or either component run's complete CPU/GPU module closure."
+      },
+      "contractParts": {
+        "importedModules": {
+          "status": "surviving-repository-paths-inventoried-but-historical-executed-closure-not-record-pinned",
+          "files": [
+            {
+              "path": "scripts/flat/reconciliation/POC/src/index.js",
+              "role": "historical named-export barrel used to reach ImageComparison; the current mutable file differs from the selected historical tree and no longer exports ImageComparison"
+            },
+            {
+              "path": "scripts/flat/reconciliation/POC/src/comparison/ImageComparison.js",
+              "role": "decoded-RGBA image comparison implementation reached through the historical barrel; the same-path current file matches the selected historical tree, but the record does not pin its executed bytes"
+            },
+            {
+              "path": "scripts/flat/reconciliation/POC/src/runners/recordWriter.js",
+              "role": "direct runner helper for record-argument parsing, JSON and text writes, run-log appends, and timestamps; the current mutable file differs from the selected historical tree"
+            }
+          ],
+          "nonRepositoryImports": [
+            "node:fs/promises",
+            "node:path",
+            "sharp"
+          ],
+          "closureQualification": "These are the surviving repository files on the runner's direct selected runtime path. Their current catalog hashes and the independently selected historical POC tree do not establish which complete byte closure was executed to create ignored record 454."
+        },
+        "inputs": {
+          "status": "component-record-paths-and-diff-scale-recorded-but-historical-component-and-record-byte-identities-not-frozen",
+          "paths": [
+            "tmp/atmosphere/reconciliation_mark_i/454-m3-cpu-gpu-ideal-comparison-456x256/inputs.json"
+          ],
+          "files": [
+            {
+              "path": "tmp/atmosphere/reconciliation_mark_i/451-m3-cpu-integrated-colored-ideal-shadowed-midpoint-456x256/inputs.json",
+              "role": "CPU component serialized scene, dimensions, shader backend, and quality-profile inputs read by readSceneRecord and parity criteria"
+            },
+            {
+              "path": "tmp/atmosphere/reconciliation_mark_i/451-m3-cpu-integrated-colored-ideal-shadowed-midpoint-456x256/diagnostics.json",
+              "role": "CPU component diagnostics read as the fallback source for the shader quality-profile identity"
+            },
+            {
+              "path": "tmp/atmosphere/reconciliation_mark_i/451-m3-cpu-integrated-colored-ideal-shadowed-midpoint-456x256/result.json",
+              "role": "CPU component result status and canvas-image locator read by the comparison runner"
+            },
+            {
+              "path": "tmp/atmosphere/reconciliation_mark_i/451-m3-cpu-integrated-colored-ideal-shadowed-midpoint-456x256/images/canvas-image.png",
+              "role": "CPU component actual decoded display image read for comparison, visual diff, and composite output"
+            },
+            {
+              "path": "tmp/atmosphere/reconciliation_mark_i/452-m3-gpu-integrated-colored-ideal-shadowed-midpoint-456x256/inputs.json",
+              "role": "GPU component serialized scene, dimensions, shader backend, and quality-profile inputs read by readSceneRecord and parity criteria"
+            },
+            {
+              "path": "tmp/atmosphere/reconciliation_mark_i/452-m3-gpu-integrated-colored-ideal-shadowed-midpoint-456x256/diagnostics.json",
+              "role": "GPU component diagnostics read as the fallback source for the shader quality-profile identity"
+            },
+            {
+              "path": "tmp/atmosphere/reconciliation_mark_i/452-m3-gpu-integrated-colored-ideal-shadowed-midpoint-456x256/result.json",
+              "role": "GPU component result status and canvas-image locator read by the comparison runner"
+            },
+            {
+              "path": "tmp/atmosphere/reconciliation_mark_i/452-m3-gpu-integrated-colored-ideal-shadowed-midpoint-456x256/images/canvas-image.png",
+              "role": "GPU component expected decoded display image read for comparison, visual diff, and composite output"
+            }
+          ],
+          "componentRecordIds": [451, 452],
+          "diffVisualScale": 4
+        },
+        "environment": {
+          "status": "component-browser-environments-not-pinned",
+          "paths": [
+            "tmp/atmosphere/reconciliation_mark_i/454-m3-cpu-gpu-ideal-comparison-456x256/provenance.json"
+          ]
+        },
+        "criteria": {
+          "status": "recorded-criteria-check-input-availability-and-image-production-not-a-predeclared-conformance-bound",
+          "paths": [
+            "tmp/atmosphere/reconciliation_mark_i/454-m3-cpu-gpu-ideal-comparison-456x256/criteria-results.json"
+          ]
+        },
+        "controls": {
+          "status": "gpu-image-declared-expected-with-no-independent-error-budget",
+          "expectedRole": "gpu-ideal-shader",
+          "actualRole": "cpu-integrated-shader",
+          "predeclaredTolerance": "unknown"
+        },
+        "results": {
+          "status": "historical-display-byte-result-present",
+          "paths": [
+            "tmp/atmosphere/reconciliation_mark_i/454-m3-cpu-gpu-ideal-comparison-456x256/result.json"
+          ],
+          "comparisonBoundary": "decoded-display-rgba-bytes"
+        },
+        "reports": {
+          "status": "historical-report-present",
+          "paths": [
+            "tmp/atmosphere/reconciliation_mark_i/454-m3-cpu-gpu-ideal-comparison-456x256/report.md"
+          ]
+        }
+      },
+      "claimBoundary": {
+        "status": "historical-display-correspondence-with-reversed-reference-role",
+        "supports": [
+          "For one 456 by 256 constructed scene, the retained decoded display images differ by at most one RGBA byte and the record reports 9861 mismatched pixels."
+        ],
+        "doesNotProve": [
+          "Shader-to-CPU-Reference conformance, pre-display spectral agreement, physical validity, broad scene coverage, or suitability of any error tolerance."
+        ]
+      },
+      "independence": {
+        "status": "shared-poc-display-comparison",
+        "oracle": "GPU ideal image declared expected while CPU integrated image is actual",
+        "sharedCodeRisk": "high"
+      },
+      "historicalAcceptance": "accepted-for-component-record-status-dimensions-and-artifact-writing-without-a-numeric-conformance-threshold",
+      "rederivationReasons": [
+        "The authority direction is reversed: the GPU image is the expected value and the CPU image is actual.",
+        "Neither an exact independently proved CPU Reference revision nor complete serialized physical inputs are pinned.",
+        "The comparison occurs after display encoding and has no predeclared independent tolerance.",
+        "The surviving record is ignored mutable workspace evidence; its current key metadata bytes can be hash-pinned by this catalog run, but the historical executed artifact bundle has no immutable recorded hash."
+      ],
+      "rederivation": {
+        "required": true,
+        "status": "cataloged-not-rederived",
+        "requiredInputs": [
+          "independently-proved-pinned-cpu-reference",
+          "serialized-physical-and-cache-input-packet",
+          "pinned-gpu-source-and-import-closure",
+          "pre-display-spectral-readback",
+          "predeclared-error-budget",
+          "independent-comparison-runner"
+        ],
+        "futureVerificationLayer": "gpu-pre-display"
+      },
+      "decisionStatus": "rejected",
+      "disposition": "must-rederive",
+      "reviewStatus": "inventory-reviewed-claim-boundary-curated",
+      "sourceIds": [],
+      "materialIds": [],
+      "relatedExperimentIds": [
+        "EXPERIMENT-A32-000068",
+        "EXPERIMENT-A32-000069",
+        "EXPERIMENT-A32-000073"
+      ],
+      "blockers": [
+        "The retained result cannot qualify as shader-to-Reference conformance under the catalog authority rule.",
+        "No prior immutable hash baseline proves that the current ignored record bytes equal the originally executed record."
+      ],
+      "nextAction": "Rebuild the comparison around an exact independently proved CPU Reference oracle, frozen inputs, pre-display quantities, and a predeclared tolerance."
+    }
+  ],
+  "manualFacts": [
+    {
+      "semanticKey": "mark-i:m3:record-454-gpu-expected-display-image-gap",
+      "statement": "Mark I record 454 compares 456 by 256 decoded display images, reports maximum RGBA byte delta 1 and 9861 mismatched pixels, and explicitly treats the GPU-ideal image as expected and the CPU-integrated image as actual.",
+      "kind": "historical-shader-conformance-evidence-gap",
+      "domain": "shader-to-reference-conformance",
+      "owner": "algorithm32-shader-validation",
+      "authorityRole": "physics-provenance-gap",
+      "structuredValue": {
+        "widthPixels": 456,
+        "heightPixels": 256,
+        "exactMatch": false,
+        "maxRgbaByteDelta": 1,
+        "meanRgbaByteDelta": 0.021899842379385966,
+        "meanDisplayLumaByteDelta": 0.029355295709979506,
+        "mismatchedPixelCount": 9861,
+        "expectedRole": "gpu-ideal-shader",
+        "actualRole": "cpu-integrated-shader",
+        "cpuReferenceRevision": "unknown",
+        "comparisonBoundary": "decoded-display-rgba-bytes"
+      },
+      "scope": {
+        "sourceLane": "reconciliation_mark_i",
+        "record": "454",
+        "geometry": "spherical-earth",
+        "sourceFamily": "distant-sun",
+        "layer": "historical-cpu-gpu-display-comparison"
+      },
+      "supportStatus": "experiment-backed-historical",
+      "implementationStatus": "quarantined",
+      "decisionStatus": "rejected",
+      "verificationLayer": "selected-pixel-display",
+      "citations": [
+        {
+          "path": "tmp/atmosphere/reconciliation_mark_i/454-m3-cpu-gpu-ideal-comparison-456x256/report.md",
+          "lineStart": 3,
+          "lineEnd": 19,
+          "role": "records-display-byte-result-and-reversed-expected-role"
+        },
+        {
+          "path": "tmp/atmosphere/reconciliation_mark_i/454-m3-cpu-gpu-ideal-comparison-456x256/result.json",
+          "jsonPointer": "/comparison",
+          "role": "records-full-historical-comparison-metrics"
+        }
+      ],
+      "repositoryStateCitations": [
+        {
+          "path": "tmp/atmosphere/reconciliation_mark_i/454-m3-cpu-gpu-ideal-comparison-456x256/report.md",
+          "role": "pins-current-ignored-report-bytes-without-claiming-historical-executed-identity",
+          "observedSha256": "104aaf0edde0f603e4d033b6b57b9ea8be651d3bf9a45bd578182bd223d299f4",
+          "note": "Current ignored-workspace bytes only; the historical record did not retain an immutable artifact hash."
+        },
+        {
+          "path": "tmp/atmosphere/reconciliation_mark_i/454-m3-cpu-gpu-ideal-comparison-456x256/result.json",
+          "role": "pins-current-ignored-result-bytes-without-claiming-historical-executed-identity",
+          "observedSha256": "a5960393036ab01b91dffa5f198cc3750f26e6373a0ed116474a1b6d74121e84",
+          "note": "Current ignored-workspace bytes only; the historical record did not retain an immutable artifact hash."
+        }
+      ],
+      "experimentIds": [
+        "EXPERIMENT-A32-000074"
+      ],
+      "contradictionIds": [
+        "CONTRADICTION-A32-000022"
+      ],
+      "nonClaims": [
+        "The GPU image is not a physics oracle or CPU Reference authority.",
+        "A display-byte comparison is not pre-display spectral conformance.",
+        "The record does not validate the Reference or shader against independent physics."
+      ],
+      "blockers": [
+        "The exact CPU Reference revision, complete physical inputs, cache payload, pre-display boundary, and independently justified tolerance are missing."
+      ],
+      "nextAction": "Recreate only after the CPU Reference is independently proved and all Reference, input, GPU, pre-display, and tolerance identities are frozen before execution."
+    },
+    {
+      "semanticKey": "mark-i:archive:record-414-log-only-missing-bundle",
+      "statement": "The Mark I running log contains record 414 only as a design/status note, while no numbered record-414 evidence directory survives in the frozen source snapshot; its setup/configuration-versus-per-pixel-evaluate discussion therefore lacks a reconstructable record bundle.",
+      "kind": "historical-record-bundle-provenance-gap",
+      "domain": "historical-evidence-completeness",
+      "owner": "algorithm32-reference-catalog",
+      "authorityRole": "physics-provenance-gap",
+      "structuredValue": {
+        "recordNumber": 414,
+        "runningLogStatus": "design-status-note-only",
+        "recordDirectoryStatus": "not-found-in-frozen-source-snapshot",
+        "experimentBundleStatus": "missing"
+      },
+      "scope": {
+        "sourceLane": "reconciliation_mark_i",
+        "record": "414",
+        "layer": "historical-design-note"
+      },
+      "supportStatus": "derived-from-source",
+      "implementationStatus": "absent",
+      "decisionStatus": "deferred",
+      "verificationLayer": "static-code-observation",
+      "citations": [
+        {
+          "path": "tmp/atmosphere/reconciliation_mark_i/running-log.md",
+          "lineStart": 3053,
+          "lineEnd": 3070,
+          "role": "retains-log-only-record-414-design-note"
+        }
+      ],
+      "repositoryStateCitations": [
+        {
+          "path": "tmp/atmosphere/reconciliation_mark_i/running-log.md",
+          "role": "pins-current-ignored-running-log-bytes-without-claiming-record-bundle-identity",
+          "observedSha256": "af9fbd67540c954841942af0df471a42c594bf8f09cf988804b9a1990d7957fa",
+          "note": "Current ignored-workspace running-log bytes only; no record-414 artifact directory or immutable historical bundle hash survives."
+        }
+      ],
+      "nonClaims": [
+        "The log language is historical context, not current architecture authority.",
+        "The log note does not establish physics correctness, CPU Reference validation, shader conformance, or an executed experiment."
+      ],
+      "blockers": [
+        "No record-local inputs, runner identity, criteria, results, report, artifacts, or hashes survive for record 414.",
+        "The current ignored running log is hash-pinned as observed metadata but cannot prove an immutable historical record bundle."
+      ],
+      "nextAction": "If the boundary remains relevant, derive it from current accepted requirements and reconstruct an independently reviewable experiment or contract test rather than treating the historical log as authority."
+    }
+  ],
+  "contradictionUpdates": [
+    {
+      "id": "CONTRADICTION-A32-000022",
+      "experimentIds": [
+        "EXPERIMENT-A32-000064",
+        "EXPERIMENT-A32-000065",
+        "EXPERIMENT-A32-000068",
+        "EXPERIMENT-A32-000069",
+        "EXPERIMENT-A32-000072",
+        "EXPERIMENT-A32-000073",
+        "EXPERIMENT-A32-000074"
+      ]
+    }
+  ]
+}

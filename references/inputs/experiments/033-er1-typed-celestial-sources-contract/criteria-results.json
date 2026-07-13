@@ -1,0 +1,74 @@
+{
+  "status": "accepted",
+  "mechanicalStatus": "accepted",
+  "physicalSourceContractStatus": "accepted",
+  "lunarCalibrationStatus": "sealed-research-candidate-not-executed-or-calibrated",
+  "observationalStatus": "not-applicable",
+  "humanReviewStatus": "not-applicable",
+  "criteria": [
+    {
+      "name": "canonical-basis-is-contiguous-360-to-830-nm-density",
+      "status": "accepted"
+    },
+    {
+      "name": "color-path-declares-the-same-density-bin-width-contract",
+      "status": "accepted"
+    },
+    {
+      "name": "canonical-solar-owner-reconstructs-bounded-integral",
+      "status": "accepted"
+    },
+    {
+      "name": "constant-and-linear-analytic-binning-pass",
+      "status": "accepted"
+    },
+    {
+      "name": "pinned-calspec-sirius-fits-identity-and-units-pass",
+      "status": "accepted"
+    },
+    {
+      "name": "sirius-independent-channel-integrals-pass",
+      "status": "accepted"
+    },
+    {
+      "name": "sirius-represented-integral-reconstructs",
+      "status": "accepted"
+    },
+    {
+      "name": "gaia-version2-g-passband-and-sentinel-policy-pass",
+      "status": "accepted"
+    },
+    {
+      "name": "high-resolution-gaia-ab-magnitude-round-trip-passes",
+      "status": "accepted"
+    },
+    {
+      "name": "sirius-15-channel-clipped-gaia-approximation-passes",
+      "status": "accepted"
+    },
+    {
+      "name": "point-and-extended-source-dispatch-is-typed",
+      "status": "accepted"
+    },
+    {
+      "name": "all-negative-cases-fail-with-predeclared-error-codes",
+      "status": "accepted"
+    },
+    {
+      "name": "fingerprints-cover-basis-radiometry-provenance-uncertainty-and-geometry",
+      "status": "accepted"
+    },
+    {
+      "name": "pinned-fixture-payloads-match-manifest-hashes",
+      "status": "accepted"
+    },
+    {
+      "name": "lime-candidate-bytes-and-embedded-references-are-sealed",
+      "status": "accepted"
+    },
+    {
+      "name": "er1-produced-no-camera-atmosphere-response-display-or-image",
+      "status": "accepted"
+    }
+  ]
+}

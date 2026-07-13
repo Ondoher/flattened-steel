@@ -1,0 +1,1722 @@
+{
+  "schemaVersion": 1,
+  "managedBy": "production-core-v1",
+  "sourceSnapshotId": "SNAPSHOT-REPO-000001",
+  "sources": [
+    {
+      "id": "SOURCE-EXT-000003",
+      "kind": "external-solar-reference-dataset",
+      "identity": {
+        "title": "ASTM G173-03 Reference Spectra Derived from SMARTS v. 2.9.2",
+        "organization": "National Renewable Energy Laboratory",
+        "sourcePage": "https://www.nrel.gov/grid/solar-resource/spectra-am1.5",
+        "tableEntry": "ASTMG173.csv",
+        "selectedColumn": "Etr W*m-2*nm-1"
+      },
+      "authority": {
+        "role": "third-party-solar-spectral-irradiance-source",
+        "status": "candidate-external-authority",
+        "limitations": [
+          "The retained archive is provenance for the accepted Algorithm32 solar packet and is not a second runtime spectrum owner.",
+          "Atomic derivation from the table to each retained Algorithm32 channel remains to be reconstructed."
+        ]
+      },
+      "availability": {
+        "status": "retained-payload-observed-in-frozen-source-snapshot",
+        "onlineStatus": "not-verified-by-this-metadata-pass"
+      },
+      "license": {
+        "status": "unverified",
+        "redistributionStatus": "blocked-pending-license-review"
+      },
+      "reviewStatus": "metadata-reviewed",
+      "disposition": "link-only",
+      "links": {
+        "locations": [],
+        "facts": [],
+        "experiments": [],
+        "materials": [],
+        "contradictions": []
+      },
+      "blockers": [
+        "Payload license and redistribution terms have not been verified."
+      ]
+    },
+    {
+      "id": "SOURCE-EXT-000004",
+      "kind": "external-solar-reference-dataset",
+      "identity": {
+        "title": "TSIS-1 Hybrid Solar Reference Spectrum v2",
+        "organization": "Laboratory for Atmospheric and Space Physics",
+        "version": "HSRS-v2-2022EA002637",
+        "datasetUrl": "https://lasp.colorado.edu/lisird/latis/dap/tsis1_hsrs_1nm.csv",
+        "datasetDoi": "10.25980/ta3f-7h90",
+        "paperDoi": "10.1029/2022EA002637"
+      },
+      "authority": {
+        "role": "independent-third-party-solar-absolute-scale-source",
+        "status": "candidate-external-authority",
+        "limitations": [
+          "It is an independent closure source on common 360--830 nm support, not a replacement or recalibration owner for the canonical Sun packet.",
+          "The accepted historical comparison treated published uncertainty density as fully correlated; that choice must be cataloged and rederived separately."
+        ]
+      },
+      "availability": {
+        "status": "retained-payload-observed-in-frozen-source-snapshot",
+        "onlineStatus": "not-verified-by-this-metadata-pass"
+      },
+      "license": {
+        "status": "unverified",
+        "redistributionStatus": "blocked-pending-license-review"
+      },
+      "reviewStatus": "metadata-reviewed",
+      "disposition": "link-only",
+      "links": {
+        "locations": [],
+        "facts": [],
+        "experiments": [],
+        "materials": [],
+        "contradictions": []
+      },
+      "blockers": [
+        "Payload license and redistribution terms have not been verified."
+      ]
+    },
+    {
+      "id": "SOURCE-EXT-000005",
+      "kind": "external-stellar-calibration-dataset",
+      "identity": {
+        "title": "STScI CALSPEC Sirius sirius_stis_005",
+        "organization": "Space Telescope Science Institute",
+        "version": "sirius_stis_005",
+        "doi": "10.17909/t9-khb7-4049",
+        "pinnedUrl": "https://archive.stsci.edu/hlsps/reference-atlases/cdbs/calspec/sirius_stis_005.fits",
+        "documentationUrl": "https://www.stsci.edu/hst/instrumentation/reference-data-for-calibration-and-tools/astronomical-catalogs/calspec",
+        "prohibitedMutableAlias": "https://archive.stsci.edu/hlsps/reference-atlases/cdbs/current_calspec/sirius_stis_005.fits"
+      },
+      "authority": {
+        "role": "third-party-absolute-sirius-spectrum-source",
+        "status": "candidate-external-authority",
+        "limitations": [
+          "This source owns the retained Sirius spectral irradiance fixture only; it does not define a general star-catalog policy.",
+          "No second visual-magnitude scaling may be inferred from this source."
+        ]
+      },
+      "availability": {
+        "status": "retained-payload-and-http-sidecar-observed-in-frozen-source-snapshot",
+        "onlineStatus": "not-verified-by-this-metadata-pass"
+      },
+      "license": {
+        "status": "unverified",
+        "redistributionStatus": "blocked-pending-license-review"
+      },
+      "reviewStatus": "metadata-reviewed",
+      "disposition": "link-only",
+      "links": {
+        "locations": [],
+        "facts": [],
+        "experiments": [],
+        "materials": [],
+        "contradictions": []
+      },
+      "blockers": [
+        "Payload license and redistribution terms have not been verified."
+      ]
+    },
+    {
+      "id": "SOURCE-EXT-000006",
+      "kind": "external-photometric-passband-dataset",
+      "identity": {
+        "title": "Gaia EDR3/DR3 passbands and zero points version 2",
+        "organization": "European Space Agency Gaia mission",
+        "version": "2",
+        "landingUrl": "https://www.cosmos.esa.int/web/gaia/edr3-passbands",
+        "pinnedUrl": "https://www.cosmos.esa.int/documents/29201/4226701/GaiaEDR3_passbands_zeropoints.zip/b03ab6ac-8b02-9850-7586-7dd7cdbc84c9?t=1603980987171",
+        "releasePaperDoi": "10.1051/0004-6361/202039587"
+      },
+      "authority": {
+        "role": "third-party-photometric-passband-validation-source",
+        "status": "candidate-external-authority",
+        "limitations": [
+          "The retained passbands support synthetic-AB validation on identical clipped support only.",
+          "Packaged catalog zero points do not rescale CALSPEC physical flux and Gaia is not the Sirius spectrum owner."
+        ]
+      },
+      "availability": {
+        "status": "retained-payload-and-http-sidecar-observed-in-frozen-source-snapshot",
+        "onlineStatus": "not-verified-by-this-metadata-pass"
+      },
+      "license": {
+        "status": "unverified",
+        "redistributionStatus": "blocked-pending-license-review"
+      },
+      "reviewStatus": "metadata-reviewed",
+      "disposition": "link-only",
+      "links": {
+        "locations": [],
+        "facts": [],
+        "experiments": [],
+        "materials": [],
+        "contradictions": []
+      },
+      "blockers": [
+        "Payload license and redistribution terms have not been verified."
+      ]
+    },
+    {
+      "id": "SOURCE-EXT-000007",
+      "kind": "external-peer-reviewed-paper",
+      "identity": {
+        "title": "Absolute Calibration. III. Improved Absolute Calibration for the Visible through the Mid-infrared",
+        "authors": [
+          "Rieke et al."
+        ],
+        "year": 2023,
+        "doi": "10.3847/1538-3881/ac9f1b",
+        "retainedInstitutionalUrl": "https://openresearch-repository.anu.edu.au/bitstreams/7566b264-4d1e-48c6-92db-871815597356/download"
+      },
+      "authority": {
+        "role": "independent-third-party-sirius-absolute-calibration-source",
+        "status": "candidate-external-authority",
+        "limitations": [
+          "The selected visible and MSX-transferred anchors do not validate every Algorithm32 spectral channel.",
+          "Use requires exact table, wavelength-window, unit, and uncertainty locators."
+        ]
+      },
+      "availability": {
+        "status": "retained-payload-observed-in-frozen-source-snapshot",
+        "onlineStatus": "not-verified-by-this-metadata-pass"
+      },
+      "license": {
+        "status": "verified",
+        "licenseName": "Creative Commons Attribution 4.0 International",
+        "shortName": "CC BY 4.0",
+        "redistributionStatus": "permitted-with-attribution"
+      },
+      "reviewStatus": "metadata-reviewed",
+      "disposition": "link-only",
+      "links": {
+        "locations": [],
+        "facts": [],
+        "experiments": [],
+        "materials": [],
+        "contradictions": []
+      },
+      "blockers": [
+        "Any retained PDF must preserve complete CC BY 4.0 attribution."
+      ]
+    },
+    {
+      "id": "SOURCE-EXT-000008",
+      "kind": "external-instrument-response-dataset",
+      "identity": {
+        "title": "MSX SPIRIT III relative spectral responses",
+        "organization": "NASA/IPAC Infrared Science Archive",
+        "version": "MSX point-source catalog v1.2",
+        "baseUrl": "https://irsa.ipac.caltech.edu/data/MSX/docs/rsr/",
+        "bands": [
+          "A",
+          "C",
+          "D",
+          "E"
+        ]
+      },
+      "authority": {
+        "role": "third-party-instrument-response-provenance-source",
+        "status": "candidate-external-authority",
+        "limitations": [
+          "The response tables provide instrument provenance for the Rieke MSX anchor.",
+          "The historical POC did not refit the published MSX transfer from these tables."
+        ]
+      },
+      "availability": {
+        "status": "retained-payload-collection-observed-in-frozen-source-snapshot",
+        "onlineStatus": "not-verified-by-this-metadata-pass"
+      },
+      "license": {
+        "status": "unverified",
+        "redistributionStatus": "blocked-pending-license-review"
+      },
+      "reviewStatus": "metadata-reviewed",
+      "disposition": "link-only",
+      "links": {
+        "locations": [],
+        "facts": [],
+        "experiments": [],
+        "materials": [],
+        "contradictions": []
+      },
+      "blockers": [
+        "Payload license and redistribution terms have not been verified."
+      ]
+    },
+    {
+      "id": "SOURCE-EXT-000009",
+      "kind": "external-lunar-model-stack",
+      "identity": {
+        "title": "ESA LIME lunar irradiance model stack",
+        "toolboxVersion": "v1.4.1",
+        "toolboxReleaseUrl": "https://github.com/LIME-ESA/lime_tbx/releases/tag/v1.4.1",
+        "toolboxTagArchiveUrl": "https://github.com/LIME-ESA/lime_tbx/archive/refs/tags/v1.4.1.zip",
+        "toolboxCommit": "82edc07dfdc6a0de2e7a6bd73a8674cd33c2edd1",
+        "selectedModel": "20251010_v1",
+        "spectralReferenceVersion": "ASD-v2.0.0",
+        "spectralReferenceDoi": "10.5281/zenodo.17332582",
+        "atbdVersion": "3.3"
+      },
+      "authority": {
+        "role": "third-party-disk-integrated-lunar-model-source",
+        "status": "candidate-external-authority",
+        "limitations": [
+          "The selected model stack supports disk-integrated lunar reflectance and irradiance only within its declared phase and spectral qualifications.",
+          "It does not supply a resolved lunar texture, spatial BRDF, Earthshine, eclipse behavior, or textured 3D Moon.",
+          "The unsigned tag is not treated as immutable; retained file and embedded-entry hashes define the observed identity."
+        ]
+      },
+      "availability": {
+        "status": "retained-stack-observed-in-frozen-source-snapshot",
+        "onlineStatus": "not-verified-by-this-metadata-pass"
+      },
+      "license": {
+        "status": "mixed-stack-requires-component-review",
+        "componentDeclarations": [
+          "Toolbox repository: LGPL-3.0",
+          "ASD v2.0.0: CC BY 4.0",
+          "Coefficient NetCDF: repository declaration only; no separate file-level statement observed",
+          "ATBD PDF: unverified"
+        ],
+        "redistributionStatus": "blocked-pending-component-license-review"
+      },
+      "reviewStatus": "metadata-reviewed",
+      "disposition": "link-only",
+      "links": {
+        "locations": [],
+        "facts": [],
+        "experiments": [],
+        "materials": [],
+        "contradictions": []
+      },
+      "blockers": [
+        "Each retained component needs an independent license and attribution decision before import."
+      ]
+    },
+    {
+      "id": "SOURCE-EXT-000010",
+      "kind": "external-lunar-measurement-dataset",
+      "identity": {
+        "title": "NIST Air-LUSI 2022 lunar spectral irradiance open data",
+        "organization": "National Institute of Standards and Technology",
+        "doi": "10.18434/mds2-3397",
+        "landingUrl": "https://data.nist.gov/od/id/mds2-3397",
+        "repositoryUrl": "https://github.com/usnistgov/air-lusi",
+        "payloadCommit": "098c63aaee0b197054721eb7dcc4f73bfde10871",
+        "pinnedUrl": "https://media.githubusercontent.com/media/usnistgov/air-lusi/098c63aaee0b197054721eb7dcc4f73bfde10871/data/air_lusi_spectra.nc"
+      },
+      "authority": {
+        "role": "independent-third-party-lunar-spectral-irradiance-measurement-source",
+        "status": "candidate-external-authority",
+        "limitations": [
+          "The pinned repository-commit payload, not an older DOI-site direct endpoint, defines the retained bytes.",
+          "The measurement supplies disk-integrated irradiance and no resolved lunar surface radiance.",
+          "Canonical bin 1 is only partially sampled."
+        ]
+      },
+      "availability": {
+        "status": "retained-payload-observed-in-frozen-source-snapshot",
+        "onlineStatus": "not-verified-by-this-metadata-pass"
+      },
+      "license": {
+        "status": "verified-from-embedded-notice",
+        "recordedTerms": "NIST public-service/open-data terms embedded in the NetCDF; acknowledge NIST, retain the notice, and mark modifications.",
+        "redistributionStatus": "permitted-with-notice-and-attribution"
+      },
+      "reviewStatus": "metadata-reviewed",
+      "disposition": "link-only",
+      "links": {
+        "locations": [],
+        "facts": [],
+        "experiments": [],
+        "materials": [],
+        "contradictions": []
+      },
+      "blockers": [
+        "Any retained copy must preserve the embedded NIST notice and acknowledgment and mark modifications."
+      ]
+    },
+    {
+      "id": "SOURCE-EXT-000011",
+      "kind": "external-peer-reviewed-paper",
+      "identity": {
+        "title": "ROLO 311g lunar irradiance model",
+        "authors": [
+          "Hugh H. Kieffer",
+          "Thomas C. Stone"
+        ],
+        "year": 2005,
+        "doi": "10.1086/430185",
+        "retainedNasaUrl": "https://oceancolor.gsfc.nasa.gov/SeaWiFS/On_Orbit/lcal/docs/kieffer_stone_irradiance_moon_aj.pdf",
+        "selectedLocators": [
+          "equation 10",
+          "table 4"
+        ]
+      },
+      "authority": {
+        "role": "qualified-third-party-lunar-model-reference",
+        "status": "candidate-external-authority",
+        "limitations": [
+          "This is a qualified complement for canonical blue bin 1, not the decisive measured lunar reference.",
+          "It does not supply resolved lunar surface radiance."
+        ]
+      },
+      "availability": {
+        "status": "retained-payload-observed-in-frozen-source-snapshot",
+        "onlineStatus": "not-verified-by-this-metadata-pass"
+      },
+      "license": {
+        "status": "copyright-notice-observed",
+        "copyrightNotice": "Copyright 2005 The American Astronomical Society; all rights reserved.",
+        "redistributionStatus": "not-permitted-by-observed-terms"
+      },
+      "reviewStatus": "metadata-reviewed",
+      "disposition": "link-only",
+      "links": {
+        "locations": [],
+        "facts": [],
+        "experiments": [],
+        "materials": [],
+        "contradictions": []
+      },
+      "blockers": [
+        "Use the paper by link and citation only unless separate redistribution permission is obtained."
+      ]
+    },
+    {
+      "id": "SOURCE-EXT-000012",
+      "kind": "external-software-package",
+      "identity": {
+        "title": "comet-maths",
+        "version": "1.0.8",
+        "packageIndex": "https://pypi.org/project/comet-maths/1.0.8/",
+        "pinnedSourceArchiveUrl": "https://files.pythonhosted.org/packages/fb/48/feda1a53693f790b23e9e80550d7a269b9c1d2e01d605944e6a3b02f7ad0/comet_maths-1.0.8.tar.gz",
+        "implementationEntry": "comet_maths/interpolation/interpolation.py"
+      },
+      "authority": {
+        "role": "independent-interpolation-uncertainty-oracle-source",
+        "status": "candidate-external-authority",
+        "limitations": [
+          "The package is a historical experiment oracle for interpolation-model uncertainty semantics, not a production runtime dependency.",
+          "It does not prescribe Algorithm32 cache interpolation."
+        ]
+      },
+      "availability": {
+        "status": "retained-source-archive-observed-in-frozen-source-snapshot",
+        "onlineStatus": "not-verified-by-this-metadata-pass"
+      },
+      "license": {
+        "status": "verified-from-embedded-license",
+        "licenseName": "GNU Lesser General Public License v3.0",
+        "shortName": "LGPL-3.0",
+        "redistributionStatus": "permitted-with-license-compliance"
+      },
+      "reviewStatus": "metadata-reviewed",
+      "disposition": "link-only",
+      "links": {
+        "locations": [],
+        "facts": [],
+        "experiments": [],
+        "materials": [],
+        "contradictions": []
+      },
+      "blockers": [
+        "Any retained copy must preserve the LGPL-3.0 license and source/notice obligations."
+      ]
+    },
+    {
+      "id": "SOURCE-EXT-000013",
+      "kind": "external-peer-reviewed-paper",
+      "identity": {
+        "title": "Bruneton clear-sky model comparison paper",
+        "author": "Eric Bruneton",
+        "sourceYearLabel": 2016,
+        "projectUrl": "https://ebruneton.github.io/clear-sky-models/",
+        "retainedIdentity": "bruneton-2016-clear-sky-models.pdf"
+      },
+      "authority": {
+        "role": "third-party-clear-sky-model-comparison-source",
+        "status": "candidate-external-authority",
+        "limitations": [
+          "The paper is relevant only within each precisely located comparison assumption; broad paper citation is insufficient for atomic production facts.",
+          "Extracted page-4 images and display matching are excluded from this material catalog slice."
+        ]
+      },
+      "availability": {
+        "status": "retained-payload-observed-in-frozen-source-snapshot",
+        "onlineStatus": "not-verified-by-this-metadata-pass"
+      },
+      "license": {
+        "status": "restricted-author-version-notice-observed",
+        "copyrightNotice": "Copyright 2016 IEEE; personal use permitted, other reuse requires permission.",
+        "redistributionStatus": "not-permitted-without-separate-permission"
+      },
+      "reviewStatus": "metadata-reviewed",
+      "disposition": "link-only",
+      "links": {
+        "locations": [],
+        "facts": [],
+        "experiments": [],
+        "materials": [],
+        "contradictions": []
+      },
+      "blockers": [
+        "Use the paper by link and citation only unless separate redistribution permission is obtained.",
+        "Atomic physics citations still need exact page, equation, and table locators."
+      ]
+    },
+    {
+      "id": "SOURCE-EXT-000014",
+      "kind": "external-source-code-collection",
+      "identity": {
+        "title": "Bruneton precomputed atmospheric scattering implementation source",
+        "author": "Eric Bruneton",
+        "year": 2017,
+        "projectUrl": "https://ebruneton.github.io/precomputed_atmospheric_scattering/",
+        "repositoryUrl": "https://github.com/ebruneton/precomputed_atmospheric_scattering",
+        "retainedFiles": [
+          "atmosphere/demo/demo.cc",
+          "atmosphere/demo/demo.glsl",
+          "atmosphere/model.cc"
+        ]
+      },
+      "authority": {
+        "role": "third-party-atmospheric-model-implementation-source",
+        "status": "candidate-external-authority",
+        "limitations": [
+          "The retained files support only facts with exact source locators and their stated model assumptions.",
+          "The local collection is incomplete: functions.glsl, model.h, constants.h, and clear-sky-models comparisons.cc were cited historically but are not retained here.",
+          "No upstream revision is established by filename alone; the frozen local file hashes define this observed collection."
+        ]
+      },
+      "availability": {
+        "status": "retained-partial-source-collection-observed-in-frozen-source-snapshot",
+        "onlineStatus": "not-verified-by-this-metadata-pass"
+      },
+      "license": {
+        "status": "license-text-observed-in-retained-files",
+        "licenseName": "BSD 3-Clause License",
+        "redistributionStatus": "blocked-until-notice-preservation-and-import-review"
+      },
+      "reviewStatus": "metadata-reviewed",
+      "disposition": "link-only",
+      "links": {
+        "locations": [],
+        "facts": [],
+        "experiments": [],
+        "materials": [],
+        "contradictions": []
+      },
+      "blockers": [
+        "The exact upstream revision and missing cited source files remain unresolved."
+      ]
+    },
+    {
+      "id": "SOURCE-EXT-000015",
+      "kind": "external-ephemeris-api",
+      "identity": {
+        "title": "NASA/JPL Horizons API",
+        "organization": "NASA Jet Propulsion Laboratory Solar System Dynamics",
+        "apiVersion": "1.2",
+        "documentationUrl": "https://ssd-api.jpl.nasa.gov/doc/horizons.html",
+        "endpoint": "https://ssd.jpl.nasa.gov/api/horizons.api",
+        "manualUrl": "https://ssd.jpl.nasa.gov/horizons/manual.html"
+      },
+      "authority": {
+        "role": "third-party-solar-system-ephemeris-and-geometry-source",
+        "status": "candidate-external-authority",
+        "limitations": [
+          "This source supports exact returned-epoch Sun and Moon geometry within retained record-054 query identities only.",
+          "It does not support celestial radiometry, live production acquisition, display behavior, or shader conformance.",
+          "The authoritative historical query URLs and response hashes belong to reconciliation record 054 rather than this source metadata record."
+        ]
+      },
+      "availability": {
+        "status": "online-api-identity-recorded-no-material-bytes-cataloged",
+        "onlineStatus": "not-verified-by-this-metadata-pass"
+      },
+      "license": {
+        "status": "review-required",
+        "redistributionStatus": "retained-response-redistribution-review-required"
+      },
+      "reviewStatus": "metadata-reviewed",
+      "disposition": "link-only",
+      "links": {
+        "locations": [],
+        "facts": [],
+        "experiments": [],
+        "materials": [],
+        "contradictions": []
+      },
+      "blockers": [
+        "Exact record-054 query locators and response hashes must be linked by the experiment record.",
+        "API response retention and redistribution terms require review."
+      ]
+    }
+  ],
+  "materials": [
+    {
+      "id": "MATERIAL-EXT-000001",
+      "kind": "external-data-archive",
+      "title": "Retained ASTM G173-03 reference spectra archive",
+      "sourceId": "SOURCE-EXT-000003",
+      "identity": {
+        "fileName": "astmg173.zip",
+        "containedTable": "ASTMG173.csv",
+        "selectedColumn": "Etr W*m-2*nm-1",
+        "quantity": "spectral irradiance density",
+        "units": "W m^-2 nm^-1"
+      },
+      "availability": {
+        "status": "retained-in-frozen-source-snapshot"
+      },
+      "repositoryPaths": [
+        "scripts/flat/reconciliation/POC/src/external-celestial-sources/fixtures/astmg173.zip"
+      ],
+      "sidecarPaths": [],
+      "expectedRepositoryFiles": [
+        {
+          "path": "scripts/flat/reconciliation/POC/src/external-celestial-sources/fixtures/astmg173.zip",
+          "byteLength": 25833,
+          "sha256": "de6ed831cd7426d9a7147d5c0a48b1e67a483cb7f8ecd6d3ae846848154a5657"
+        }
+      ],
+      "expectedSidecarFiles": [],
+      "intendedClaims": [
+        "Provenance for the accepted 15-channel Algorithm32 canonical solar packet."
+      ],
+      "nonClaims": [
+        "The archive is not a second runtime Sun-spectrum owner.",
+        "Cataloging the archive does not prove the channel-reduction derivation."
+      ],
+      "license": {
+        "status": "unverified",
+        "redistributionStatus": "blocked-pending-license-review"
+      },
+      "authenticity": {
+        "status": "retained-file-hash-pinned",
+        "expectedByteLength": 25833,
+        "expectedSha256": "de6ed831cd7426d9a7147d5c0a48b1e67a483cb7f8ecd6d3ae846848154a5657"
+      },
+      "duplicates": [],
+      "transformations": [],
+      "proposedTargetPath": "references/MATERIAL-EXT-000001/astmg173.zip",
+      "canonicalOwner": "MATERIAL-EXT-000001",
+      "disposition": "blocked",
+      "blockers": [
+        "The global import gate is closed.",
+        "License and redistribution terms require review."
+      ],
+      "relatedMaterialIds": [],
+      "citations": [
+        {
+          "path": "agents/topics/apps/flat/algorithm32/celestial-contribution-cache-references.md",
+          "lineStart": 68,
+          "lineEnd": 78,
+          "role": "records-retained-identity-role-and-claim-boundary"
+        }
+      ]
+    },
+    {
+      "id": "MATERIAL-EXT-000002",
+      "kind": "external-tabular-dataset",
+      "title": "Retained TSIS-1 HSRS v2 one-nanometer spectrum",
+      "sourceId": "SOURCE-EXT-000004",
+      "identity": {
+        "fileName": "tsis1_hsrs_1nm.csv",
+        "version": "HSRS-v2-2022EA002637",
+        "quantity": "spectral irradiance density and uncertainty density",
+        "units": "W m^-2 nm^-1",
+        "wavelengthSupportNanometers": [
+          202,
+          2730
+        ],
+        "sampleCount": 25281
+      },
+      "availability": {
+        "status": "retained-in-frozen-source-snapshot"
+      },
+      "repositoryPaths": [
+        "scripts/flat/reconciliation/POC/src/external-celestial-sources/fixtures/tsis1_hsrs_1nm.csv"
+      ],
+      "sidecarPaths": [],
+      "expectedRepositoryFiles": [
+        {
+          "path": "scripts/flat/reconciliation/POC/src/external-celestial-sources/fixtures/tsis1_hsrs_1nm.csv",
+          "byteLength": 1298915,
+          "sha256": "1cf3b07e6ac9669c429ad7ce9e92d50dfd741422efcfffa3d1e0eeb5f901616f"
+        }
+      ],
+      "expectedSidecarFiles": [],
+      "intendedClaims": [
+        "Independent modern absolute-scale comparison for the canonical Sun on common 360--830 nm support."
+      ],
+      "nonClaims": [
+        "The dataset does not replace or recalibrate the canonical Sun packet.",
+        "The dataset does not select Algorithm32's uncertainty-correlation policy."
+      ],
+      "license": {
+        "status": "unverified",
+        "redistributionStatus": "blocked-pending-license-review"
+      },
+      "authenticity": {
+        "status": "retained-file-hash-pinned",
+        "expectedByteLength": 1298915,
+        "expectedSha256": "1cf3b07e6ac9669c429ad7ce9e92d50dfd741422efcfffa3d1e0eeb5f901616f"
+      },
+      "duplicates": [],
+      "transformations": [],
+      "proposedTargetPath": "references/MATERIAL-EXT-000002/tsis1_hsrs_1nm.csv",
+      "canonicalOwner": "MATERIAL-EXT-000002",
+      "disposition": "blocked",
+      "blockers": [
+        "The global import gate is closed.",
+        "License and redistribution terms require review."
+      ],
+      "relatedMaterialIds": [],
+      "citations": [
+        {
+          "path": "agents/topics/apps/flat/algorithm32/celestial-contribution-cache-references.md",
+          "lineStart": 80,
+          "lineEnd": 94,
+          "role": "records-retained-identity-role-and-claim-boundary"
+        }
+      ]
+    },
+    {
+      "id": "MATERIAL-EXT-000003",
+      "kind": "external-calibration-spectrum",
+      "title": "Retained STScI CALSPEC Sirius spectrum",
+      "sourceId": "SOURCE-EXT-000005",
+      "identity": {
+        "fileName": "sirius_stis_005.fits",
+        "version": "sirius_stis_005",
+        "target": "SIRIUS",
+        "quantity": "absolute Earth-observer spectral irradiance density",
+        "originalUnits": "erg s^-1 cm^-2 Angstrom^-1",
+        "convertedUnits": "W m^-2 nm^-1"
+      },
+      "availability": {
+        "status": "retained-in-frozen-source-snapshot-with-http-sidecar"
+      },
+      "repositoryPaths": [
+        "scripts/flat/reconciliation/POC/src/external-celestial-sources/fixtures/sirius_stis_005.fits"
+      ],
+      "sidecarPaths": [
+        "scripts/flat/reconciliation/POC/src/external-celestial-sources/fixtures/sirius_stis_005.http-headers.txt"
+      ],
+      "expectedRepositoryFiles": [
+        {
+          "path": "scripts/flat/reconciliation/POC/src/external-celestial-sources/fixtures/sirius_stis_005.fits",
+          "byteLength": 282240,
+          "sha256": "1349da7b8b59ad035aefea8d7948f552b41b3897d07e5ad82ca162a53af97271"
+        }
+      ],
+      "expectedSidecarFiles": [
+        {
+          "path": "scripts/flat/reconciliation/POC/src/external-celestial-sources/fixtures/sirius_stis_005.http-headers.txt",
+          "byteLength": 349,
+          "sha256": "e1ffee189be77885ac1c1bffcd9a0b8076c5620a8b578998e87757a95765ddcf"
+        }
+      ],
+      "intendedClaims": [
+        "Sole retained absolute spectral-irradiance fixture for the Sirius point source."
+      ],
+      "nonClaims": [
+        "This fixture does not define a general catalog-star policy.",
+        "This fixture must not receive an additional magnitude normalization."
+      ],
+      "license": {
+        "status": "unverified",
+        "redistributionStatus": "blocked-pending-license-review"
+      },
+      "authenticity": {
+        "status": "pinned-url-and-retained-file-hash",
+        "expectedByteLength": 282240,
+        "expectedSha256": "1349da7b8b59ad035aefea8d7948f552b41b3897d07e5ad82ca162a53af97271",
+        "mutableAliasProhibited": true
+      },
+      "duplicates": [],
+      "transformations": [],
+      "proposedTargetPath": "references/MATERIAL-EXT-000003/sirius_stis_005.fits",
+      "canonicalOwner": "MATERIAL-EXT-000003",
+      "disposition": "blocked",
+      "blockers": [
+        "The global import gate is closed.",
+        "License and redistribution terms require review."
+      ],
+      "relatedMaterialIds": [
+        "MATERIAL-EXT-000005",
+        "MATERIAL-EXT-000006"
+      ],
+      "citations": [
+        {
+          "path": "agents/topics/apps/flat/algorithm32/celestial-contribution-cache-references.md",
+          "lineStart": 98,
+          "lineEnd": 113,
+          "role": "records-retained-identity-role-and-claim-boundary"
+        }
+      ]
+    },
+    {
+      "id": "MATERIAL-EXT-000004",
+      "kind": "external-passband-archive",
+      "title": "Retained Gaia EDR3/DR3 passbands and zero points version 2",
+      "sourceId": "SOURCE-EXT-000006",
+      "identity": {
+        "fileName": "GaiaEDR3_passbands_zeropoints_version2.zip",
+        "version": "2",
+        "selectedBand": "G",
+        "responseUnits": "dimensionless",
+        "missingSentinel": 99.99
+      },
+      "availability": {
+        "status": "retained-in-frozen-source-snapshot-with-http-sidecar"
+      },
+      "repositoryPaths": [
+        "scripts/flat/reconciliation/POC/src/external-celestial-sources/fixtures/GaiaEDR3_passbands_zeropoints_version2.zip"
+      ],
+      "sidecarPaths": [
+        "scripts/flat/reconciliation/POC/src/external-celestial-sources/fixtures/GaiaEDR3_passbands_zeropoints_version2.http-headers.txt"
+      ],
+      "expectedRepositoryFiles": [
+        {
+          "path": "scripts/flat/reconciliation/POC/src/external-celestial-sources/fixtures/GaiaEDR3_passbands_zeropoints_version2.zip",
+          "byteLength": 27941,
+          "sha256": "d22a1d765a2e3e6815a9cb7e9bf0cf999c4bd1473148c0b031e57e6aac0e3b8f"
+        }
+      ],
+      "expectedSidecarFiles": [
+        {
+          "path": "scripts/flat/reconciliation/POC/src/external-celestial-sources/fixtures/GaiaEDR3_passbands_zeropoints_version2.http-headers.txt",
+          "byteLength": 439,
+          "sha256": "8ce92ace3d1d3e16c9b805a5d952fe98c778af2149ca668650ac4ee8918f63ce"
+        }
+      ],
+      "intendedClaims": [
+        "Synthetic-AB validation on identical clipped 360--830 nm support."
+      ],
+      "nonClaims": [
+        "Packaged Gaia catalog zero points do not rescale CALSPEC physical flux.",
+        "Gaia is not the Sirius spectrum owner."
+      ],
+      "license": {
+        "status": "unverified",
+        "redistributionStatus": "blocked-pending-license-review"
+      },
+      "authenticity": {
+        "status": "pinned-url-and-retained-file-hash",
+        "expectedByteLength": 27941,
+        "expectedSha256": "d22a1d765a2e3e6815a9cb7e9bf0cf999c4bd1473148c0b031e57e6aac0e3b8f"
+      },
+      "duplicates": [],
+      "transformations": [],
+      "proposedTargetPath": "references/MATERIAL-EXT-000004/GaiaEDR3_passbands_zeropoints_version2.zip",
+      "canonicalOwner": "MATERIAL-EXT-000004",
+      "disposition": "blocked",
+      "blockers": [
+        "The global import gate is closed.",
+        "License and redistribution terms require review."
+      ],
+      "relatedMaterialIds": [],
+      "citations": [
+        {
+          "path": "agents/topics/apps/flat/algorithm32/celestial-contribution-cache-references.md",
+          "lineStart": 115,
+          "lineEnd": 129,
+          "role": "records-retained-identity-role-and-claim-boundary"
+        }
+      ]
+    },
+    {
+      "id": "MATERIAL-EXT-000005",
+      "kind": "external-paper-pdf",
+      "title": "Retained Rieke et al. 2023 Sirius absolute-calibration paper",
+      "sourceId": "SOURCE-EXT-000007",
+      "identity": {
+        "fileName": "rieke-2023-absolute-calibration-iii.pdf",
+        "doi": "10.3847/1538-3881/ac9f1b",
+        "selectedLocators": [
+          "Table 1 visible Sirius anchor",
+          "Table 3 MSX-transferred Sirius anchor"
+        ]
+      },
+      "availability": {
+        "status": "retained-in-frozen-source-snapshot"
+      },
+      "repositoryPaths": [
+        "scripts/flat/reconciliation/POC/src/external-celestial-sources/fixtures/rieke-2023-absolute-calibration-iii.pdf"
+      ],
+      "sidecarPaths": [],
+      "expectedRepositoryFiles": [
+        {
+          "path": "scripts/flat/reconciliation/POC/src/external-celestial-sources/fixtures/rieke-2023-absolute-calibration-iii.pdf",
+          "byteLength": 1262848,
+          "sha256": "752967e0ca7d13997824bbe2894b8bc625ddc9c4b81c02ef43545fb01039280c"
+        }
+      ],
+      "expectedSidecarFiles": [],
+      "intendedClaims": [
+        "Independent visible and MSX-transferred absolute-scale anchors for CALSPEC Sirius."
+      ],
+      "nonClaims": [
+        "The selected anchors do not validate every Algorithm32 spectral channel."
+      ],
+      "license": {
+        "status": "verified",
+        "licenseName": "Creative Commons Attribution 4.0 International",
+        "shortName": "CC BY 4.0",
+        "redistributionStatus": "permitted-with-attribution"
+      },
+      "authenticity": {
+        "status": "institutional-url-and-retained-file-hash",
+        "expectedByteLength": 1262848,
+        "expectedSha256": "752967e0ca7d13997824bbe2894b8bc625ddc9c4b81c02ef43545fb01039280c"
+      },
+      "duplicates": [],
+      "transformations": [],
+      "proposedTargetPath": "references/MATERIAL-EXT-000005/rieke-2023-absolute-calibration-iii.pdf",
+      "canonicalOwner": "MATERIAL-EXT-000005",
+      "disposition": "candidate-after-gate",
+      "blockers": [
+        "The global import gate is closed.",
+        "Any retained copy must preserve complete author, title, journal, DOI, and CC BY 4.0 attribution."
+      ],
+      "relatedMaterialIds": [
+        "MATERIAL-EXT-000003",
+        "MATERIAL-EXT-000006"
+      ],
+      "citations": [
+        {
+          "path": "agents/topics/apps/flat/algorithm32/celestial-contribution-cache-references.md",
+          "lineStart": 131,
+          "lineEnd": 146,
+          "role": "records-retained-identity-role-and-claim-boundary"
+        }
+      ]
+    },
+    {
+      "id": "MATERIAL-EXT-000006",
+      "kind": "external-response-table-collection",
+      "title": "Retained MSX SPIRIT III relative spectral response tables",
+      "sourceId": "SOURCE-EXT-000008",
+      "identity": {
+        "version": "MSX point-source catalog v1.2",
+        "bands": [
+          "A",
+          "C",
+          "D",
+          "E"
+        ],
+        "wavelengthUnits": "micrometer",
+        "responseUnits": "dimensionless"
+      },
+      "availability": {
+        "status": "retained-file-collection-in-frozen-source-snapshot"
+      },
+      "repositoryPaths": [
+        "scripts/flat/reconciliation/POC/src/external-celestial-sources/fixtures/msx_rsr_a.tbl",
+        "scripts/flat/reconciliation/POC/src/external-celestial-sources/fixtures/msx_rsr_c.tbl",
+        "scripts/flat/reconciliation/POC/src/external-celestial-sources/fixtures/msx_rsr_d.tbl",
+        "scripts/flat/reconciliation/POC/src/external-celestial-sources/fixtures/msx_rsr_e.tbl"
+      ],
+      "sidecarPaths": [],
+      "expectedRepositoryFiles": [
+        {
+          "path": "scripts/flat/reconciliation/POC/src/external-celestial-sources/fixtures/msx_rsr_a.tbl",
+          "byteLength": 13697,
+          "sha256": "dcdb6d607ecd983fa0e8fbdac12c31cc2f4cd92175d77b718a9cfd18ea170f99"
+        },
+        {
+          "path": "scripts/flat/reconciliation/POC/src/external-celestial-sources/fixtures/msx_rsr_c.tbl",
+          "byteLength": 6282,
+          "sha256": "55abc0027286771e674245da3d6efcffc78ba9648927daa8cc0ad5f6da36ad83"
+        },
+        {
+          "path": "scripts/flat/reconciliation/POC/src/external-celestial-sources/fixtures/msx_rsr_d.tbl",
+          "byteLength": 8682,
+          "sha256": "935461d3c1dc7c54d0cd52c23d7acc4d6cb5699eb7ed18ec391f353ad56ab3a0"
+        },
+        {
+          "path": "scripts/flat/reconciliation/POC/src/external-celestial-sources/fixtures/msx_rsr_e.tbl",
+          "byteLength": 24018,
+          "sha256": "fff30ea8aa95316e2a1613f54b2b2b860f03597eb56845ab2bd8db3f4452b795"
+        }
+      ],
+      "expectedSidecarFiles": [],
+      "intendedClaims": [
+        "Instrument-response provenance for the Rieke Table-3 MSX Sirius anchor."
+      ],
+      "nonClaims": [
+        "The response tables do not independently reconstruct or refit the published MSX transfer in the current evidence."
+      ],
+      "license": {
+        "status": "unverified",
+        "redistributionStatus": "blocked-pending-license-review"
+      },
+      "authenticity": {
+        "status": "retained-file-collection-hash-pinned",
+        "expectedFiles": [
+          {
+            "fileName": "msx_rsr_a.tbl",
+            "byteLength": 13697,
+            "sha256": "dcdb6d607ecd983fa0e8fbdac12c31cc2f4cd92175d77b718a9cfd18ea170f99"
+          },
+          {
+            "fileName": "msx_rsr_c.tbl",
+            "byteLength": 6282,
+            "sha256": "55abc0027286771e674245da3d6efcffc78ba9648927daa8cc0ad5f6da36ad83"
+          },
+          {
+            "fileName": "msx_rsr_d.tbl",
+            "byteLength": 8682,
+            "sha256": "935461d3c1dc7c54d0cd52c23d7acc4d6cb5699eb7ed18ec391f353ad56ab3a0"
+          },
+          {
+            "fileName": "msx_rsr_e.tbl",
+            "byteLength": 24018,
+            "sha256": "fff30ea8aa95316e2a1613f54b2b2b860f03597eb56845ab2bd8db3f4452b795"
+          }
+        ]
+      },
+      "duplicates": [],
+      "transformations": [],
+      "proposedTargetPath": "references/MATERIAL-EXT-000006",
+      "canonicalOwner": "MATERIAL-EXT-000006",
+      "disposition": "blocked",
+      "blockers": [
+        "The global import gate is closed.",
+        "License and redistribution terms require review."
+      ],
+      "relatedMaterialIds": [
+        "MATERIAL-EXT-000003",
+        "MATERIAL-EXT-000005"
+      ],
+      "citations": [
+        {
+          "path": "agents/topics/apps/flat/algorithm32/celestial-contribution-cache-references.md",
+          "lineStart": 148,
+          "lineEnd": 159,
+          "role": "records-retained-identity-role-and-claim-boundary"
+        }
+      ]
+    },
+    {
+      "id": "MATERIAL-EXT-000007",
+      "kind": "external-lunar-measurement-dataset",
+      "title": "Retained NIST Air-LUSI 2022 lunar spectra",
+      "sourceId": "SOURCE-EXT-000010",
+      "identity": {
+        "fileName": "air_lusi_spectra.nc",
+        "doi": "10.18434/mds2-3397",
+        "payloadCommit": "098c63aaee0b197054721eb7dcc4f73bfde10871",
+        "quantity": "disk-integrated lunar spectral irradiance density",
+        "originalUnits": "microW m^-2 nm^-1",
+        "convertedUnits": "W m^-2 nm^-1"
+      },
+      "availability": {
+        "status": "retained-in-frozen-source-snapshot"
+      },
+      "repositoryPaths": [
+        "scripts/flat/reconciliation/POC/src/external-celestial-sources/fixtures/air_lusi_spectra.nc"
+      ],
+      "sidecarPaths": [],
+      "expectedRepositoryFiles": [
+        {
+          "path": "scripts/flat/reconciliation/POC/src/external-celestial-sources/fixtures/air_lusi_spectra.nc",
+          "byteLength": 471191,
+          "sha256": "ab428b8e91ca02cbcd4f154cb5e524dada87514447bb3384af318d255bb9459a"
+        }
+      ],
+      "expectedSidecarFiles": [],
+      "intendedClaims": [
+        "Decisive SI-traceable disk-integrated comparison for fully covered canonical lunar bins 2--15."
+      ],
+      "nonClaims": [
+        "Canonical bin 1 is only partially sampled.",
+        "The dataset supplies no resolved lunar surface radiance."
+      ],
+      "license": {
+        "status": "verified-from-embedded-notice",
+        "recordedTerms": "NIST public-service/open-data terms embedded in the NetCDF; acknowledge NIST, retain the notice, and mark modifications.",
+        "redistributionStatus": "permitted-with-notice-and-attribution"
+      },
+      "authenticity": {
+        "status": "pinned-commit-url-and-retained-file-hash",
+        "expectedByteLength": 471191,
+        "expectedSha256": "ab428b8e91ca02cbcd4f154cb5e524dada87514447bb3384af318d255bb9459a",
+        "doiDirectEndpointQualification": "An older prepublication payload was observed at the DOI site's direct file endpoint; it is not this material identity."
+      },
+      "duplicates": [],
+      "transformations": [],
+      "proposedTargetPath": "references/MATERIAL-EXT-000007/air_lusi_spectra.nc",
+      "canonicalOwner": "MATERIAL-EXT-000007",
+      "disposition": "candidate-after-gate",
+      "blockers": [
+        "The global import gate is closed.",
+        "Any retained copy must preserve the embedded NIST notice and acknowledgment and mark modifications."
+      ],
+      "relatedMaterialIds": [
+        "MATERIAL-EXT-000008",
+        "MATERIAL-EXT-000010",
+        "MATERIAL-EXT-000011",
+        "MATERIAL-EXT-000012",
+        "MATERIAL-EXT-000013"
+      ],
+      "citations": [
+        {
+          "path": "agents/topics/apps/flat/algorithm32/celestial-contribution-cache-references.md",
+          "lineStart": 193,
+          "lineEnd": 210,
+          "role": "records-retained-identity-role-and-claim-boundary"
+        }
+      ]
+    },
+    {
+      "id": "MATERIAL-EXT-000008",
+      "kind": "external-paper-pdf",
+      "title": "Retained ROLO 311g lunar irradiance model paper",
+      "sourceId": "SOURCE-EXT-000011",
+      "identity": {
+        "fileName": "kieffer-stone-2005-rolo-311g.pdf",
+        "doi": "10.1086/430185",
+        "selectedLocators": [
+          "equation 10",
+          "table 4"
+        ]
+      },
+      "availability": {
+        "status": "retained-in-frozen-source-snapshot"
+      },
+      "repositoryPaths": [
+        "scripts/flat/reconciliation/POC/src/external-celestial-sources/fixtures/kieffer-stone-2005-rolo-311g.pdf"
+      ],
+      "sidecarPaths": [],
+      "expectedRepositoryFiles": [
+        {
+          "path": "scripts/flat/reconciliation/POC/src/external-celestial-sources/fixtures/kieffer-stone-2005-rolo-311g.pdf",
+          "byteLength": 461609,
+          "sha256": "1666a5414916c2e38fcf34097aad3794cc1aae9d4a7d090bef2a049219316e96"
+        }
+      ],
+      "expectedSidecarFiles": [],
+      "intendedClaims": [
+        "Qualified model-reference complement for canonical lunar bin 1."
+      ],
+      "nonClaims": [
+        "The paper does not displace Air-LUSI as the decisive measured reference.",
+        "The paper does not supply resolved lunar surface radiance."
+      ],
+      "license": {
+        "status": "copyright-notice-observed",
+        "copyrightNotice": "Copyright 2005 The American Astronomical Society; all rights reserved.",
+        "redistributionStatus": "not-permitted-by-observed-terms"
+      },
+      "authenticity": {
+        "status": "nasa-hosted-url-and-retained-file-hash",
+        "expectedByteLength": 461609,
+        "expectedSha256": "1666a5414916c2e38fcf34097aad3794cc1aae9d4a7d090bef2a049219316e96"
+      },
+      "duplicates": [],
+      "transformations": [],
+      "proposedTargetPath": "references/MATERIAL-EXT-000008/kieffer-stone-2005-rolo-311g.pdf",
+      "canonicalOwner": "MATERIAL-EXT-000008",
+      "disposition": "link-only",
+      "blockers": [
+        "Do not copy the retained PDF into the permanent reference store without separate permission."
+      ],
+      "relatedMaterialIds": [
+        "MATERIAL-EXT-000007",
+        "MATERIAL-EXT-000010",
+        "MATERIAL-EXT-000011",
+        "MATERIAL-EXT-000012",
+        "MATERIAL-EXT-000013"
+      ],
+      "citations": [
+        {
+          "path": "agents/topics/apps/flat/algorithm32/celestial-contribution-cache-references.md",
+          "lineStart": 212,
+          "lineEnd": 224,
+          "role": "records-retained-identity-role-and-claim-boundary"
+        }
+      ]
+    },
+    {
+      "id": "MATERIAL-EXT-000009",
+      "kind": "external-software-source-archive",
+      "title": "Retained comet-maths 1.0.8 source archive",
+      "sourceId": "SOURCE-EXT-000012",
+      "identity": {
+        "fileName": "comet_maths-1.0.8.tar.gz",
+        "version": "1.0.8",
+        "implementationEntry": "comet_maths/interpolation/interpolation.py"
+      },
+      "availability": {
+        "status": "retained-in-frozen-source-snapshot"
+      },
+      "repositoryPaths": [
+        "scripts/flat/reconciliation/POC/src/external-celestial-sources/fixtures/comet_maths-1.0.8.tar.gz"
+      ],
+      "sidecarPaths": [],
+      "expectedRepositoryFiles": [
+        {
+          "path": "scripts/flat/reconciliation/POC/src/external-celestial-sources/fixtures/comet_maths-1.0.8.tar.gz",
+          "byteLength": 46748,
+          "sha256": "d8c245e45b62d1be79c209257018110af0c866d60016c95e0bf88b940d618e4c"
+        }
+      ],
+      "expectedSidecarFiles": [],
+      "intendedClaims": [
+        "Independent interpolation-model uncertainty semantics and a SciPy-compatible quadratic/cubic experiment oracle."
+      ],
+      "nonClaims": [
+        "The package is not a production runtime dependency.",
+        "The package does not prescribe Algorithm32 cache interpolation."
+      ],
+      "license": {
+        "status": "verified-from-embedded-license",
+        "licenseName": "GNU Lesser General Public License v3.0",
+        "shortName": "LGPL-3.0",
+        "redistributionStatus": "permitted-with-license-compliance"
+      },
+      "authenticity": {
+        "status": "pinned-package-file-url-and-retained-file-hash",
+        "expectedByteLength": 46748,
+        "expectedSha256": "d8c245e45b62d1be79c209257018110af0c866d60016c95e0bf88b940d618e4c"
+      },
+      "duplicates": [],
+      "transformations": [],
+      "proposedTargetPath": "references/MATERIAL-EXT-000009/comet_maths-1.0.8.tar.gz",
+      "canonicalOwner": "MATERIAL-EXT-000009",
+      "disposition": "candidate-after-gate",
+      "blockers": [
+        "The global import gate is closed.",
+        "Any retained copy must preserve the LGPL-3.0 license and source/notice obligations."
+      ],
+      "relatedMaterialIds": [],
+      "citations": [
+        {
+          "path": "agents/topics/apps/flat/algorithm32/celestial-contribution-cache-references.md",
+          "lineStart": 226,
+          "lineEnd": 238,
+          "role": "records-retained-identity-role-and-claim-boundary"
+        }
+      ]
+    },
+    {
+      "id": "MATERIAL-EXT-000010",
+      "kind": "external-software-archive",
+      "title": "Retained ESA LIME-TBX v1.4.1 tag archive",
+      "sourceId": "SOURCE-EXT-000009",
+      "identity": {
+        "fileName": "lime_tbx-v1.4.1.zip",
+        "version": "v1.4.1",
+        "annotatedTagObject": "4d31ca31249562269686514e2fdec15c41f784b1",
+        "commit": "82edc07dfdc6a0de2e7a6bd73a8674cd33c2edd1"
+      },
+      "availability": {
+        "status": "retained-in-frozen-source-snapshot-with-http-sidecar"
+      },
+      "repositoryPaths": [
+        "scripts/flat/reconciliation/POC/src/external-celestial-sources/fixtures/lime_tbx-v1.4.1.zip"
+      ],
+      "sidecarPaths": [
+        "scripts/flat/reconciliation/POC/src/external-celestial-sources/fixtures/lime_tbx-v1.4.1.zip.http-headers.txt"
+      ],
+      "expectedRepositoryFiles": [
+        {
+          "path": "scripts/flat/reconciliation/POC/src/external-celestial-sources/fixtures/lime_tbx-v1.4.1.zip",
+          "byteLength": 132331903,
+          "sha256": "2731da32927c9933a0ff728719069f4b75099ff33fe1b8c48ab5e39f9a7926b5"
+        }
+      ],
+      "expectedSidecarFiles": [
+        {
+          "path": "scripts/flat/reconciliation/POC/src/external-celestial-sources/fixtures/lime_tbx-v1.4.1.zip.http-headers.txt",
+          "byteLength": 4897,
+          "sha256": "886c452dd2004309951bf5f798a94fdbabc7e5dc3e2f308881c603b928878b7c"
+        }
+      ],
+      "intendedClaims": [
+        "Release implementation and changelog semantics for the selected disk-integrated LIME lunar model stack."
+      ],
+      "nonClaims": [
+        "The unsigned upstream tag is not treated as immutable.",
+        "The toolbox does not supply resolved lunar surface radiance or a textured Moon."
+      ],
+      "license": {
+        "status": "verified-from-archive-license",
+        "licenseName": "GNU Lesser General Public License v3.0",
+        "shortName": "LGPL-3.0",
+        "redistributionStatus": "permitted-with-license-compliance"
+      },
+      "authenticity": {
+        "status": "retained-archive-hash-is-authoritative",
+        "expectedByteLength": 132331903,
+        "expectedSha256": "2731da32927c9933a0ff728719069f4b75099ff33fe1b8c48ab5e39f9a7926b5",
+        "tagQualification": "Unsigned and not guaranteed immutable."
+      },
+      "duplicates": [
+        {
+          "relationship": "contains-byte-identical-entry",
+          "materialId": "MATERIAL-EXT-000011",
+          "entryPath": "lime_tbx-1.4.1/coeff_data/versions/LIME_MODEL_COEFS_20251010_V01.nc"
+        },
+        {
+          "relationship": "contains-only-retained-copy",
+          "materialId": "MATERIAL-EXT-000012",
+          "entryPath": "lime_tbx-1.4.1/lime_tbx/business/interpolation/interp_data/assets/ds_ASD_32.nc"
+        }
+      ],
+      "transformations": [],
+      "proposedTargetPath": "references/MATERIAL-EXT-000010/lime_tbx-v1.4.1.zip",
+      "canonicalOwner": "MATERIAL-EXT-000010",
+      "disposition": "archive-after-gate",
+      "blockers": [
+        "The global import gate is closed.",
+        "Any retained archive must preserve the LGPL-3.0 license and must not make every embedded data component active authority."
+      ],
+      "relatedMaterialIds": [
+        "MATERIAL-EXT-000007",
+        "MATERIAL-EXT-000008",
+        "MATERIAL-EXT-000011",
+        "MATERIAL-EXT-000012",
+        "MATERIAL-EXT-000013"
+      ],
+      "citations": [
+        {
+          "path": "agents/topics/apps/flat/algorithm32/celestial-contribution-cache-references.md",
+          "lineStart": 163,
+          "lineEnd": 191,
+          "role": "records-retained-lime-stack-identity-role-and-claim-boundary"
+        }
+      ]
+    },
+    {
+      "id": "MATERIAL-EXT-000011",
+      "kind": "external-model-coefficient-dataset",
+      "title": "Retained LIME model coefficients 20251010_v1",
+      "sourceId": "SOURCE-EXT-000009",
+      "identity": {
+        "fileName": "LIME_MODEL_COEFS_20251010_V01.nc",
+        "modelId": "20251010_v1",
+        "gitBlobSha1": "e4844ee96f6b308eff9d61b4bce76b6cd5bc570b",
+        "variables": [
+          "coeff",
+          "u_coeff",
+          "err_corr_coeff",
+          "wavelength"
+        ]
+      },
+      "availability": {
+        "status": "retained-in-frozen-source-snapshot-with-http-sidecar-and-embedded-duplicate"
+      },
+      "repositoryPaths": [
+        "scripts/flat/reconciliation/POC/src/external-celestial-sources/fixtures/LIME_MODEL_COEFS_20251010_V01.nc"
+      ],
+      "sidecarPaths": [
+        "scripts/flat/reconciliation/POC/src/external-celestial-sources/fixtures/LIME_MODEL_COEFS_20251010_V01.nc.http-headers.txt"
+      ],
+      "expectedRepositoryFiles": [
+        {
+          "path": "scripts/flat/reconciliation/POC/src/external-celestial-sources/fixtures/LIME_MODEL_COEFS_20251010_V01.nc",
+          "byteLength": 154366,
+          "sha256": "8e6839d95315eb2d797484be559ad70b69010cc1eb9b614770f61bb5ce2cf691"
+        }
+      ],
+      "expectedSidecarFiles": [
+        {
+          "path": "scripts/flat/reconciliation/POC/src/external-celestial-sources/fixtures/LIME_MODEL_COEFS_20251010_V01.nc.http-headers.txt",
+          "byteLength": 902,
+          "sha256": "ff1868be661ca0a64353fb7fe054ccc8d2a01c4f2ef9fcd34e24f5448ce7b3b3"
+        }
+      ],
+      "intendedClaims": [
+        "Coefficients, uncertainties, correlation terms, and wavelengths for the explicitly selected LIME model 20251010_v1."
+      ],
+      "nonClaims": [
+        "A pinned listv.txt default naming an older model does not override the explicit selected model.",
+        "The coefficient file alone does not define complete LIME evaluation semantics."
+      ],
+      "license": {
+        "status": "repository-declaration-only-review-required",
+        "declaredLicense": "LGPL-3.0",
+        "qualification": "No separate file-level license statement was observed in the coefficient NetCDF.",
+        "redistributionStatus": "blocked-pending-component-license-review"
+      },
+      "authenticity": {
+        "status": "pinned-url-and-retained-file-hash",
+        "expectedByteLength": 154366,
+        "expectedSha256": "8e6839d95315eb2d797484be559ad70b69010cc1eb9b614770f61bb5ce2cf691",
+        "embeddedEntry": "lime_tbx-1.4.1/coeff_data/versions/LIME_MODEL_COEFS_20251010_V01.nc",
+        "byteIdenticalToEmbeddedEntry": true
+      },
+      "duplicates": [
+        {
+          "relationship": "byte-identical-to-entry-in-material",
+          "materialId": "MATERIAL-EXT-000010",
+          "entryPath": "lime_tbx-1.4.1/coeff_data/versions/LIME_MODEL_COEFS_20251010_V01.nc"
+        }
+      ],
+      "transformations": [],
+      "proposedTargetPath": "references/MATERIAL-EXT-000011/LIME_MODEL_COEFS_20251010_V01.nc",
+      "canonicalOwner": "MATERIAL-EXT-000011",
+      "disposition": "blocked",
+      "blockers": [
+        "The global import gate is closed.",
+        "Component-level license treatment requires review."
+      ],
+      "relatedMaterialIds": [
+        "MATERIAL-EXT-000007",
+        "MATERIAL-EXT-000008",
+        "MATERIAL-EXT-000010",
+        "MATERIAL-EXT-000012",
+        "MATERIAL-EXT-000013"
+      ],
+      "citations": [
+        {
+          "path": "agents/topics/apps/flat/algorithm32/celestial-contribution-cache-references.md",
+          "lineStart": 163,
+          "lineEnd": 191,
+          "role": "records-retained-lime-stack-identity-role-and-claim-boundary"
+        }
+      ]
+    },
+    {
+      "id": "MATERIAL-EXT-000012",
+      "kind": "embedded-external-spectral-dataset",
+      "title": "LIME ASD v2.0.0 spectral reference embedded in the retained toolbox archive",
+      "sourceId": "SOURCE-EXT-000009",
+      "identity": {
+        "version": "ASD-v2.0.0",
+        "zenodoDoi": "10.5281/zenodo.17332582",
+        "zenodoUrl": "https://zenodo.org/records/17332582/files/LIME_ASD.nc?download=1",
+        "archiveEntry": "lime_tbx-1.4.1/lime_tbx/business/interpolation/interp_data/assets/ds_ASD_32.nc"
+      },
+      "availability": {
+        "status": "available-only-as-entry-in-retained-toolbox-archive",
+        "containerMaterialId": "MATERIAL-EXT-000010",
+        "standaloneRepositoryFile": false
+      },
+      "repositoryPaths": [],
+      "sidecarPaths": [
+        "scripts/flat/reconciliation/POC/src/external-celestial-sources/fixtures/LIME_ASD-v2.0.0.nc.http-headers.txt"
+      ],
+      "expectedRepositoryFiles": [],
+      "expectedSidecarFiles": [
+        {
+          "path": "scripts/flat/reconciliation/POC/src/external-celestial-sources/fixtures/LIME_ASD-v2.0.0.nc.http-headers.txt",
+          "byteLength": 974,
+          "sha256": "18ee24508f61b50e44b69936b702d1c0f1f6e0da6dc8bf7df5fe18d2c1ec035d"
+        }
+      ],
+      "intendedClaims": [
+        "Spectral reference used by the selected LIME model stack, with its stated model-assisted spectral-region qualifications."
+      ],
+      "nonClaims": [
+        "This metadata record does not claim that a standalone ASD payload exists in the frozen repository.",
+        "The ASD dataset does not supply resolved lunar surface radiance."
+      ],
+      "license": {
+        "status": "verified-from-zenodo-record",
+        "licenseName": "Creative Commons Attribution 4.0 International",
+        "shortName": "CC BY 4.0",
+        "redistributionStatus": "permitted-with-attribution"
+      },
+      "authenticity": {
+        "status": "embedded-entry-identity-recorded",
+        "expectedByteLength": 43488052,
+        "expectedSha256": "360044078e42d31ff5e9dffb085f5b3bd455db30a7b46a82c4f68c96fc4b522d",
+        "expectedMd5": "77996dac3ef0c29edc5b965993df0d2b",
+        "embeddedAndZenodoByteIdentical": true,
+        "verificationBasis": "Frozen fixture manifest and prior archive-entry audit; this catalog input does not extract the entry."
+      },
+      "duplicates": [
+        {
+          "relationship": "embedded-in-material",
+          "materialId": "MATERIAL-EXT-000010",
+          "entryPath": "lime_tbx-1.4.1/lime_tbx/business/interpolation/interp_data/assets/ds_ASD_32.nc"
+        },
+        {
+          "relationship": "reported-byte-identical-to-external-zenodo-payload",
+          "externalIdentity": "https://doi.org/10.5281/zenodo.17332582"
+        }
+      ],
+      "transformations": [
+        "No extraction or transformation was performed for this metadata record."
+      ],
+      "proposedTargetPath": "references/MATERIAL-EXT-000012/ds_ASD_32.nc",
+      "canonicalOwner": "MATERIAL-EXT-000012",
+      "disposition": "candidate-after-gate",
+      "blockers": [
+        "The global import gate is closed.",
+        "The standalone payload is absent from the source snapshot.",
+        "Any later standalone acquisition must use the pinned Zenodo identity and preserve CC BY 4.0 attribution."
+      ],
+      "relatedMaterialIds": [
+        "MATERIAL-EXT-000007",
+        "MATERIAL-EXT-000008",
+        "MATERIAL-EXT-000010",
+        "MATERIAL-EXT-000011",
+        "MATERIAL-EXT-000013"
+      ],
+      "citations": [
+        {
+          "path": "agents/topics/apps/flat/algorithm32/celestial-contribution-cache-references.md",
+          "lineStart": 163,
+          "lineEnd": 191,
+          "role": "records-embedded-lime-asd-identity-role-and-claim-boundary"
+        }
+      ]
+    },
+    {
+      "id": "MATERIAL-EXT-000013",
+      "kind": "external-technical-document-pdf",
+      "title": "Retained LIME Model ATBD v3.3",
+      "sourceId": "SOURCE-EXT-000009",
+      "identity": {
+        "fileName": "LIME-Model-ATBD-v3.3.pdf",
+        "version": "3.3",
+        "documentDate": "2025-11-02",
+        "pinnedUrl": "https://lime.uva.es/wp-content/uploads/2025/11/D5_LIME_ModelATBD_final.pdf"
+      },
+      "availability": {
+        "status": "retained-in-frozen-source-snapshot-with-http-sidecar"
+      },
+      "repositoryPaths": [
+        "scripts/flat/reconciliation/POC/src/external-celestial-sources/fixtures/LIME-Model-ATBD-v3.3.pdf"
+      ],
+      "sidecarPaths": [
+        "scripts/flat/reconciliation/POC/src/external-celestial-sources/fixtures/LIME-Model-ATBD-v3.3.pdf.http-headers.txt"
+      ],
+      "expectedRepositoryFiles": [
+        {
+          "path": "scripts/flat/reconciliation/POC/src/external-celestial-sources/fixtures/LIME-Model-ATBD-v3.3.pdf",
+          "byteLength": 3809214,
+          "sha256": "fc3c8e88f7c9821aa81e856cea0e5aa61e2ac43bd55b09d5b01a7758fc706598"
+        }
+      ],
+      "expectedSidecarFiles": [
+        {
+          "path": "scripts/flat/reconciliation/POC/src/external-celestial-sources/fixtures/LIME-Model-ATBD-v3.3.pdf.http-headers.txt",
+          "byteLength": 196,
+          "sha256": "76f184ea4e1886eb0fed5f72831d28f2a4c14aea1e4a4c1652776ce752628fdd"
+        }
+      ],
+      "intendedClaims": [
+        "Governing document for the selected LIME disk-integrated lunar model stack."
+      ],
+      "nonClaims": [
+        "The ATBD does not supply resolved lunar surface radiance or a textured Moon."
+      ],
+      "license": {
+        "status": "no-redistribution-grant-found",
+        "redistributionStatus": "not-permitted-without-separate-permission"
+      },
+      "authenticity": {
+        "status": "pinned-url-and-retained-file-hash",
+        "expectedByteLength": 3809214,
+        "expectedSha256": "fc3c8e88f7c9821aa81e856cea0e5aa61e2ac43bd55b09d5b01a7758fc706598"
+      },
+      "duplicates": [],
+      "transformations": [],
+      "proposedTargetPath": "references/MATERIAL-EXT-000013/LIME-Model-ATBD-v3.3.pdf",
+      "canonicalOwner": "MATERIAL-EXT-000013",
+      "disposition": "link-only",
+      "blockers": [
+        "Do not copy the retained ATBD into the permanent reference store without separate permission."
+      ],
+      "relatedMaterialIds": [
+        "MATERIAL-EXT-000007",
+        "MATERIAL-EXT-000008",
+        "MATERIAL-EXT-000010",
+        "MATERIAL-EXT-000011",
+        "MATERIAL-EXT-000012"
+      ],
+      "citations": [
+        {
+          "path": "agents/topics/apps/flat/algorithm32/celestial-contribution-cache-references.md",
+          "lineStart": 163,
+          "lineEnd": 191,
+          "role": "records-retained-lime-stack-identity-role-and-claim-boundary"
+        }
+      ]
+    },
+    {
+      "id": "MATERIAL-EXT-000014",
+      "kind": "external-paper-pdf",
+      "title": "Retained Bruneton clear-sky model comparison paper",
+      "sourceId": "SOURCE-EXT-000013",
+      "identity": {
+        "fileName": "bruneton-2016-clear-sky-models.pdf",
+        "sourceYearLabel": 2016,
+        "identityQualification": "The frozen local file hash is the retained identity; final bibliographic metadata remains to be tightened."
+      },
+      "availability": {
+        "status": "retained-in-frozen-source-snapshot"
+      },
+      "repositoryPaths": [
+        "tmp/atmosphere/bruneton_start_fresh/external_sources/bruneton-2016-clear-sky-models.pdf"
+      ],
+      "sidecarPaths": [],
+      "expectedRepositoryFiles": [
+        {
+          "path": "tmp/atmosphere/bruneton_start_fresh/external_sources/bruneton-2016-clear-sky-models.pdf",
+          "byteLength": 9751196,
+          "sha256": "a1220d40bc0ed6fd35e8fe728365fb5b371a615051d505dcd611f61ff22dd5c5"
+        }
+      ],
+      "expectedSidecarFiles": [],
+      "intendedClaims": [
+        "Candidate primary source for precisely located Bruneton clear-sky comparison assumptions used by the Mark-I lineage."
+      ],
+      "nonClaims": [
+        "A broad paper citation is not sufficient authority for any atomic production fact.",
+        "Page-4 image extraction and display matching are excluded from this material record."
+      ],
+      "license": {
+        "status": "restricted-author-version-notice-observed",
+        "copyrightNotice": "Copyright 2016 IEEE; personal use permitted, other reuse requires permission.",
+        "redistributionStatus": "not-permitted-without-separate-permission"
+      },
+      "authenticity": {
+        "status": "retained-file-hash-pinned",
+        "expectedByteLength": 9751196,
+        "expectedSha256": "a1220d40bc0ed6fd35e8fe728365fb5b371a615051d505dcd611f61ff22dd5c5"
+      },
+      "duplicates": [],
+      "transformations": [],
+      "proposedTargetPath": "references/MATERIAL-EXT-000014/bruneton-2016-clear-sky-models.pdf",
+      "canonicalOwner": "MATERIAL-EXT-000014",
+      "disposition": "link-only",
+      "blockers": [
+        "Do not copy the retained PDF into the permanent reference store without separate permission.",
+        "Atomic physics citations still need exact page, equation, and table locators."
+      ],
+      "relatedMaterialIds": [
+        "MATERIAL-EXT-000015"
+      ],
+      "citations": [
+        {
+          "path": "agents/topics/apps/flat/reconciliation/archive/mark-i-bruneton-start-fresh-source-audit.md",
+          "lineStart": 34,
+          "lineEnd": 49,
+          "role": "records-retained-external-file-identity"
+        }
+      ]
+    },
+    {
+      "id": "MATERIAL-EXT-000015",
+      "kind": "external-source-code-collection",
+      "title": "Retained Bruneton 2017 atmospheric-model source subset",
+      "sourceId": "SOURCE-EXT-000014",
+      "identity": {
+        "year": 2017,
+        "upstreamPaths": [
+          "atmosphere/demo/demo.cc",
+          "atmosphere/demo/demo.glsl",
+          "atmosphere/model.cc"
+        ],
+        "collectionQualification": "Partial retained subset; exact upstream revision is not established."
+      },
+      "availability": {
+        "status": "retained-partial-file-collection-in-frozen-source-snapshot"
+      },
+      "repositoryPaths": [
+        "tmp/atmosphere/bruneton_start_fresh/external_sources/bruneton-2017-demo.cc",
+        "tmp/atmosphere/bruneton_start_fresh/external_sources/bruneton-2017-demo.glsl",
+        "tmp/atmosphere/bruneton_start_fresh/external_sources/bruneton-2017-model.cc"
+      ],
+      "sidecarPaths": [],
+      "expectedRepositoryFiles": [
+        {
+          "path": "tmp/atmosphere/bruneton_start_fresh/external_sources/bruneton-2017-demo.cc",
+          "byteLength": 21699,
+          "sha256": "7e3659cdd8c23feca988b49801029e36e201ff0701e693fee2069b441ffa40d2"
+        },
+        {
+          "path": "tmp/atmosphere/bruneton_start_fresh/external_sources/bruneton-2017-demo.glsl",
+          "byteLength": 17314,
+          "sha256": "9267398e301b9ed6a356ef24c2a0ea2eeec346448b361b72c2cc500af7e9b296"
+        },
+        {
+          "path": "tmp/atmosphere/bruneton_start_fresh/external_sources/bruneton-2017-model.cc",
+          "byteLength": 52165,
+          "sha256": "5ae93aa940787f0d20dcecdefde3ff512d4f228c4111aa5df3ebfdd0f952aff2"
+        }
+      ],
+      "expectedSidecarFiles": [],
+      "intendedClaims": [
+        "Candidate exact-source support for Bruneton demo atmosphere constants, spectral sampling construction, solar table provenance, ground behavior, and implementation semantics when cited by line."
+      ],
+      "nonClaims": [
+        "The subset is not a complete copy of the Bruneton implementation.",
+        "functions.glsl, model.h, constants.h, and clear-sky-models comparisons.cc are not present in this retained collection.",
+        "Source implementation agreement does not by itself prove the CPU Reference."
+      ],
+      "license": {
+        "status": "license-text-observed-in-retained-files",
+        "licenseName": "BSD 3-Clause License",
+        "redistributionStatus": "blocked-until-notice-preservation-and-import-review"
+      },
+      "authenticity": {
+        "status": "retained-file-collection-hash-pinned",
+        "expectedFiles": [
+          {
+            "fileName": "bruneton-2017-demo.cc",
+            "byteLength": 21699,
+            "sha256": "7e3659cdd8c23feca988b49801029e36e201ff0701e693fee2069b441ffa40d2"
+          },
+          {
+            "fileName": "bruneton-2017-demo.glsl",
+            "byteLength": 17314,
+            "sha256": "9267398e301b9ed6a356ef24c2a0ea2eeec346448b361b72c2cc500af7e9b296"
+          },
+          {
+            "fileName": "bruneton-2017-model.cc",
+            "byteLength": 52165,
+            "sha256": "5ae93aa940787f0d20dcecdefde3ff512d4f228c4111aa5df3ebfdd0f952aff2"
+          }
+        ],
+        "identityRule": "The frozen local file hashes identify the collection because the exact upstream revision has not been recovered."
+      },
+      "duplicates": [],
+      "transformations": [],
+      "proposedTargetPath": "references/MATERIAL-EXT-000015",
+      "canonicalOwner": "MATERIAL-EXT-000015",
+      "disposition": "blocked",
+      "blockers": [
+        "The global import gate is closed.",
+        "The exact upstream revision and missing cited source files remain unresolved.",
+        "Any later retention must preserve the observed BSD license notices."
+      ],
+      "relatedMaterialIds": [
+        "MATERIAL-EXT-000014"
+      ],
+      "citations": [
+        {
+          "path": "agents/topics/apps/flat/reconciliation/archive/mark-i-bruneton-start-fresh-source-audit.md",
+          "lineStart": 34,
+          "lineEnd": 49,
+          "role": "records-retained-external-file-identities"
+        },
+        {
+          "path": "agents/topics/apps/flat/reconciliation/archive/mark-i-bruneton-start-fresh-source-audit.md",
+          "lineStart": 114,
+          "lineEnd": 121,
+          "role": "records-missing-cited-source-files-and-provenance-gap"
+        }
+      ]
+    }
+  ],
+  "experiments": [],
+  "manualFacts": [],
+  "contradictions": []
+}

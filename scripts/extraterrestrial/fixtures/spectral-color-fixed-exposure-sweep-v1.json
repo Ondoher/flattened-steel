@@ -1,0 +1,8 @@
+{
+  "schemaId": "spectral-color-fixed-exposure-sweep-fixture-v1",
+  "conditions": ["noon", "sunset-minus-30", "sunset-minus-10", "sunset"],
+  "viewport": { "widthPixels": 481, "heightPixels": 271, "verticalFieldOfViewDegrees": 15 },
+  "localLightRecord": { "runId": "000302-spectral-color-local-light-record", "artifactSetSha256": "dedb03462344654252096e9879972bfa21a3328ba0b18b5c6db9dfd4bc4cb9c1" },
+  "exposures": [0.000001, 0.000003162277660168379, 0.00001, 0.00003162277660168379, 0.0001],
+  "tolerances": { "fullyVisibleCenterSpectrumRelative": 0.001, "horizonCenterSpectrumMaximumRelative": 0.005, "rgbBoundsAbsolute": 1e-12, "gpuReadbackNegativeAbsolute": 0.000001 }
+}

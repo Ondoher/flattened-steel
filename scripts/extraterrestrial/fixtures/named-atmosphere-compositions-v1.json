@@ -1,0 +1,69 @@
+{
+	"schemaId": "named-atmosphere-compositions-v1",
+	"claimBoundary": "Controlled compositions for testing how aerosol loading changes accepted Algorithm32 transport and later Color input. These are not reconstructions of named weather, climate, visibility, pollution, or historical San Jose conditions.",
+	"parameterization": {
+		"aerosolModel": "one sea-level-normalized exponential Mie profile",
+		"verticalOpticalDepth": "tau_mie(lambda_um) = mieAngstromBeta * lambda_um^(-mieAngstromAlpha)",
+		"invariantFields": [
+			"bottomRadius",
+			"topRadius",
+			"rayleighScaleHeight",
+			"mieScaleHeight",
+			"rayleighCoefficientScale",
+			"mieAngstromAlpha",
+			"mieSingleScatteringAlbedo",
+			"miePhaseFunctionG",
+			"ozoneAbsorptionEnabled"
+		],
+		"variedField": "mieAngstromBeta",
+		"referenceWavelengthMicrometers": 0.55
+	},
+	"executable": [
+		{
+			"id": "molecular-only",
+			"name": "Molecular only",
+			"description": "Rayleigh atmosphere with the Mie column removed.",
+			"mieLoadingMultiplier": 0
+		},
+		{
+			"id": "canonical-aerosol-1x",
+			"name": "Canonical aerosol 1x",
+			"description": "The current canonical Algorithm32 atmosphere, unchanged.",
+			"mieLoadingMultiplier": 1
+		},
+		{
+			"id": "canonical-aerosol-2x",
+			"name": "Canonical aerosol 2x",
+			"description": "The canonical Mie column doubled with spectral slope, scale height, albedo, and phase asymmetry held fixed.",
+			"mieLoadingMultiplier": 2
+		},
+		{
+			"id": "canonical-aerosol-4x",
+			"name": "Canonical aerosol 4x",
+			"description": "The canonical Mie column quadrupled with spectral slope, scale height, albedo, and phase asymmetry held fixed.",
+			"mieLoadingMultiplier": 4
+		}
+	],
+	"declaredUnsupported": [
+		{
+			"id": "ozone-reference",
+			"name": "Ozone reference",
+			"reason": "The current atmosphere returns zero absorption; its ozone flag does not implement a density profile or wavelength-dependent cross sections.",
+			"requiredCapabilities": [
+				"ozone density profile",
+				"wavelength-dependent ozone absorption",
+				"ozone contribution to path radiance and direct transmittance"
+			]
+		},
+		{
+			"id": "elevated-aerosol-layer",
+			"name": "Elevated aerosol layer",
+			"reason": "The current atmosphere supports one ground-anchored exponential Mie density profile and cannot place a bounded or elevated aerosol layer.",
+			"requiredCapabilities": [
+				"owned aerosol density profile",
+				"layer base and top altitude",
+				"the same profile in scattering, extinction, and direct transmittance"
+			]
+		}
+	]
+}

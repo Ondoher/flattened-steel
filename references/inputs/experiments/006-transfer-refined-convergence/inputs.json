@@ -1,0 +1,708 @@
+{
+  "schemaVersion": 1,
+  "runId": "2026-06-22T18:35:54.668Z-transfer-refined-convergence",
+  "stateGoal": "Compare the refined doubled-sample baseline against an 80/40/68/96 high-sample convergence run.",
+  "sourceBoundary": {
+    "allowedLocalCode": [
+      "scripts/flat/experimental/bruneton-start-fresh.js"
+    ],
+    "forbiddenLocalSources": [
+      "scripts/flat/atmosphere_rejected/",
+      "older Flat atmosphere code",
+      "older local atmosphere docs",
+      "previous local atmosphere logs and generated images"
+    ]
+  },
+  "atmosphereProfile": {
+    "id": "experiment-032-source-k-no-ground-profile",
+    "geometry": "spherical Earth atmosphere",
+    "noOzone": true,
+    "noGroundCoupling": true,
+    "noDirectSolarDiscCameraRadiance": true,
+    "constants": {
+      "bottomRadiusMeters": 6360000,
+      "topRadiusMeters": 6420000,
+      "observerHeightMeters": 2,
+      "rayleighScaleHeightMeters": 8000,
+      "mieScaleHeightMeters": 1200,
+      "rayleighCoefficientScale": 0.00000124062,
+      "mieAngstromAlpha": 0.8,
+      "mieAngstromBeta": 0.04,
+      "mieSingleScatteringAlbedo": 0.8,
+      "miePhaseFunctionG": 0.7,
+      "ozoneAbsorption": 0
+    }
+  },
+  "geometryProfile": {
+    "id": "spherical-earth-ground-observer",
+    "coordinateFrame": "local-tangent-east-north-up",
+    "bottomRadiusMeters": 6360000,
+    "topRadiusMeters": 6420000,
+    "observerHeightMeters": 2
+  },
+  "sourceProfile": {
+    "id": "bruneton-figure1-directional-sun",
+    "type": "directional",
+    "sunCases": [
+      {
+        "id": "figure1-06h00-z87",
+        "sourceTimeOfDay": "06h00",
+        "sourceSunZenithDegrees": 87,
+        "sunAltitudeDegrees": 3,
+        "sunAzimuthDegrees": -25.83454348280912,
+        "role": "sunrise/sunset stress case"
+      },
+      {
+        "id": "figure1-13h15-z21",
+        "sourceTimeOfDay": "13h15",
+        "sourceSunZenithDegrees": 21,
+        "sunAltitudeDegrees": 69,
+        "sunAzimuthDegrees": 85.31410016049729,
+        "role": "highest-Sun stress case"
+      }
+    ]
+  },
+  "spectralGrid": {
+    "wavelengthCount": 15,
+    "rangeNanometers": [
+      360,
+      830
+    ],
+    "samplePolicy": "15 centered wavelength samples",
+    "deltaNanometers": 31.333333333333332,
+    "wavelengthsNm": [
+      375.666666666667,
+      407,
+      438.333333333333,
+      469.666666666667,
+      501,
+      532.333333333333,
+      563.666666666667,
+      595,
+      626.333333333333,
+      657.666666666667,
+      689,
+      720.333333333333,
+      751.666666666667,
+      783,
+      814.333333333333
+    ],
+    "channels": [
+      {
+        "wavelengthNanometers": 375.666666666667,
+        "solarIrradiance": 1.068866666667,
+        "cie": [
+          0.00082512,
+          0.000024284,
+          0.00388120013333
+        ],
+        "wavelengthBinWidthNanometers": 31.333333333333332
+      },
+      {
+        "wavelengthNanometers": 407,
+        "solarIrradiance": 1.729673,
+        "cie": [
+          0.031318,
+          0.000868,
+          0.14908
+        ],
+        "wavelengthBinWidthNanometers": 31.333333333333332
+      },
+      {
+        "wavelengthNanometers": 438.333333333333,
+        "solarIrradiance": 1.862071666667,
+        "cie": [
+          0.341686666667,
+          0.0209466666667,
+          1.70569333333
+        ],
+        "wavelengthBinWidthNanometers": 31.333333333333332
+      },
+      {
+        "wavelengthNanometers": 469.666666666667,
+        "solarIrradiance": 2.022063333333,
+        "cie": [
+          0.199076,
+          0.0898413333333,
+          1.30367066667
+        ],
+        "wavelengthBinWidthNanometers": 31.333333333333332
+      },
+      {
+        "wavelengthNanometers": 501,
+        "solarIrradiance": 1.908154,
+        "cie": [
+          0.0044,
+          0.33986,
+          0.26006
+        ],
+        "wavelengthBinWidthNanometers": 31.333333333333332
+      },
+      {
+        "wavelengthNanometers": 532.333333333333,
+        "solarIrradiance": 1.883391,
+        "cie": [
+          0.19361662,
+          0.88666338,
+          0.0364106666667
+        ],
+        "wavelengthBinWidthNanometers": 31.333333333333332
+      },
+      {
+        "wavelengthNanometers": 563.666666666667,
+        "solarIrradiance": 1.834246666667,
+        "cie": [
+          0.656026666667,
+          0.982973333333,
+          0.00305666593333
+        ],
+        "wavelengthBinWidthNanometers": 31.333333333333332
+      },
+      {
+        "wavelengthNanometers": 595,
+        "solarIrradiance": 1.76744,
+        "cie": [
+          1.0567,
+          0.6949,
+          0.001
+        ],
+        "wavelengthBinWidthNanometers": 31.333333333333332
+      },
+      {
+        "wavelengthNanometers": 626.333333333333,
+        "solarIrradiance": 1.65952,
+        "cie": [
+          0.722333333333,
+          0.306066666667,
+          0.000086666664
+        ],
+        "wavelengthBinWidthNanometers": 31.333333333333332
+      },
+      {
+        "wavelengthNanometers": 657.666666666667,
+        "solarIrradiance": 1.548102333333,
+        "cie": [
+          0.190006666667,
+          0.0706133333333,
+          0
+        ],
+        "wavelengthBinWidthNanometers": 31.333333333333332
+      },
+      {
+        "wavelengthNanometers": 689,
+        "solarIrradiance": 1.45078,
+        "cie": [
+          0.02474,
+          0.008952,
+          0
+        ],
+        "wavelengthBinWidthNanometers": 31.333333333333332
+      },
+      {
+        "wavelengthNanometers": 720.333333333333,
+        "solarIrradiance": 1.340960333333,
+        "cie": [
+          0.0028426512,
+          0.00102653333333,
+          0
+        ],
+        "wavelengthBinWidthNanometers": 31.333333333333332
+      },
+      {
+        "wavelengthNanometers": 751.666666666667,
+        "solarIrradiance": 1.262433333333,
+        "cie": [
+          0.000299809433333,
+          0.000108266666667,
+          0
+        ],
+        "wavelengthBinWidthNanometers": 31.333333333333332
+      },
+      {
+        "wavelengthNanometers": 783,
+        "solarIrradiance": 1.175208,
+        "cie": [
+          0.000034215932,
+          0.000012356,
+          0
+        ],
+        "wavelengthBinWidthNanometers": 31.333333333333332
+      },
+      {
+        "wavelengthNanometers": 814.333333333333,
+        "solarIrradiance": 1.090824,
+        "cie": [
+          0.00000378221413333,
+          0.00000136582666667,
+          0
+        ],
+        "wavelengthBinWidthNanometers": 31.333333333333332
+      }
+    ]
+  },
+  "numericalControls": {
+    "viewRayScatteringIntervals": 80,
+    "sampleToSunTransmittanceIntervals": 40,
+    "secondOrderIncomingDirections": 68,
+    "secondOrderIncidentAltitudeBins": 96
+  },
+  "camera": {
+    "id": "ground-camera",
+    "originMetersENU": [
+      0,
+      0,
+      2
+    ],
+    "forwardMetersENU": [
+      1,
+      0,
+      0
+    ],
+    "upMetersENU": [
+      0,
+      0,
+      1
+    ]
+  },
+  "sunCases": [
+    {
+      "id": "figure1-06h00-z87",
+      "sourceTimeOfDay": "06h00",
+      "sourceSunZenithDegrees": 87,
+      "sunAltitudeDegrees": 3,
+      "sunAzimuthDegrees": -25.83454348280912,
+      "role": "sunrise/sunset stress case"
+    },
+    {
+      "id": "figure1-13h15-z21",
+      "sourceTimeOfDay": "13h15",
+      "sourceSunZenithDegrees": 21,
+      "sunAltitudeDegrees": 69,
+      "sunAzimuthDegrees": 85.31410016049729,
+      "role": "highest-Sun stress case"
+    }
+  ],
+  "environmentTargets": [
+    {
+      "id": "target-0m",
+      "shape": "spectral-card",
+      "centerMetersENU": [
+        0,
+        0,
+        2
+      ],
+      "normalMetersENU": [
+        -1,
+        0,
+        0
+      ],
+      "widthMeters": 0,
+      "heightMeters": 0,
+      "distanceMeters": 0
+    },
+    {
+      "id": "target-100m",
+      "shape": "spectral-card",
+      "centerMetersENU": [
+        100,
+        0,
+        2
+      ],
+      "normalMetersENU": [
+        -1,
+        0,
+        0
+      ],
+      "widthMeters": 1,
+      "heightMeters": 1,
+      "distanceMeters": 100
+    },
+    {
+      "id": "target-1000m",
+      "shape": "spectral-card",
+      "centerMetersENU": [
+        1000,
+        0,
+        2
+      ],
+      "normalMetersENU": [
+        -1,
+        0,
+        0
+      ],
+      "widthMeters": 1,
+      "heightMeters": 1,
+      "distanceMeters": 1000
+    },
+    {
+      "id": "target-5000m",
+      "shape": "spectral-card",
+      "centerMetersENU": [
+        5000,
+        0,
+        2
+      ],
+      "normalMetersENU": [
+        -1,
+        0,
+        0
+      ],
+      "widthMeters": 1,
+      "heightMeters": 1,
+      "distanceMeters": 5000
+    },
+    {
+      "id": "target-20000m",
+      "shape": "spectral-card",
+      "centerMetersENU": [
+        20000,
+        0,
+        2
+      ],
+      "normalMetersENU": [
+        -1,
+        0,
+        0
+      ],
+      "widthMeters": 1,
+      "heightMeters": 1,
+      "distanceMeters": 20000
+    },
+    {
+      "id": "target-50000m",
+      "shape": "spectral-card",
+      "centerMetersENU": [
+        50000,
+        0,
+        2
+      ],
+      "normalMetersENU": [
+        -1,
+        0,
+        0
+      ],
+      "widthMeters": 1,
+      "heightMeters": 1,
+      "distanceMeters": 50000
+    },
+    {
+      "id": "target-100000m",
+      "shape": "spectral-card",
+      "centerMetersENU": [
+        100000,
+        0,
+        2
+      ],
+      "normalMetersENU": [
+        -1,
+        0,
+        0
+      ],
+      "widthMeters": 1,
+      "heightMeters": 1,
+      "distanceMeters": 100000
+    }
+  ],
+  "objectSpectra": [
+    {
+      "id": "black",
+      "title": "Black object, zero caller radiance",
+      "valuesByWavelength": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "units": "algorithmic unit spectral-radiance scale"
+    },
+    {
+      "id": "neutral_unit",
+      "title": "Neutral unit radiance",
+      "valuesByWavelength": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "units": "algorithmic unit spectral-radiance scale"
+    },
+    {
+      "id": "neutral_high",
+      "title": "Neutral high radiance",
+      "valuesByWavelength": [
+        10,
+        10,
+        10,
+        10,
+        10,
+        10,
+        10,
+        10,
+        10,
+        10,
+        10,
+        10,
+        10,
+        10,
+        10
+      ],
+      "units": "algorithmic unit spectral-radiance scale"
+    },
+    {
+      "id": "blue_step",
+      "title": "Blue-biased step radiance",
+      "valuesByWavelength": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        0.05,
+        0.05,
+        0.05,
+        0.05,
+        0.05,
+        0.05,
+        0.05,
+        0.05,
+        0.05,
+        0.05
+      ],
+      "units": "algorithmic unit spectral-radiance scale"
+    },
+    {
+      "id": "green_peak",
+      "title": "Green middle-spectrum peak radiance",
+      "valuesByWavelength": [
+        0.05,
+        0.05,
+        0.05,
+        0.21666666666666712,
+        0.4777777777777753,
+        0.7388888888888838,
+        1,
+        0.7388888888888914,
+        0.47777777777778285,
+        0.21666666666666667,
+        0.05,
+        0.05,
+        0.05,
+        0.05,
+        0.05
+      ],
+      "units": "algorithmic unit spectral-radiance scale"
+    },
+    {
+      "id": "red_step",
+      "title": "Red-biased step radiance",
+      "valuesByWavelength": [
+        0.05,
+        0.05,
+        0.05,
+        0.05,
+        0.05,
+        0.05,
+        0.05,
+        0.05,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "units": "algorithmic unit spectral-radiance scale"
+    }
+  ],
+  "outputProducts": [
+    "state-goal.md",
+    "inputs.json",
+    "provenance.json",
+    "equations-and-constants.json",
+    "transfer-cases.json",
+    "criteria-results.json",
+    "report.md",
+    "contact-sheet.png",
+    "run.log",
+    "script-snapshot.js"
+  ],
+  "algorithmicStressDecisions": [
+    {
+      "id": "synthetic-object-radiance",
+      "value": "black, neutral_unit, neutral_high, blue_step, green_peak, red_step",
+      "reason": "Stress the transfer equation without introducing material-reflectance ownership."
+    },
+    {
+      "id": "baseline-distances",
+      "value": [
+        0,
+        100,
+        1000,
+        5000,
+        20000,
+        50000,
+        100000
+      ],
+      "reason": "Cover zero identity, near-field, mid-distance, and long finite path stress cases."
+    },
+    {
+      "id": "target-card-size",
+      "value": {
+        "widthMeters": 1,
+        "heightMeters": 1
+      },
+      "reason": "Visualization metadata only; baseline criteria use center-ray transfer packets."
+    },
+    {
+      "id": "baseline-numerical-controls",
+      "value": {
+        "viewRayScatteringIntervals": 20,
+        "sampleToSunTransmittanceIntervals": 10,
+        "secondOrderIncomingDirections": 17,
+        "secondOrderIncidentAltitudeBins": 24
+      },
+      "reason": "Inherited experiment 032 controls pending the 002 convergence pass."
+    },
+    {
+      "id": "contact-sheet-layout",
+      "value": "Sun case and object-spectrum blocks, distance rows, source/attenuated/path/final columns.",
+      "reason": "Expose the transfer components without using image pixels as the proof data."
+    },
+    {
+      "id": "ratio-epsilon",
+      "value": 1e-30,
+      "reason": "Avoid divide-by-zero diagnostics for path-radiance fraction summaries."
+    }
+  ],
+  "references": [
+    {
+      "id": "bruneton-functions-glsl",
+      "title": "Eric Bruneton, Precomputed Atmospheric Scattering, atmosphere/functions.glsl",
+      "url": "https://github.com/ebruneton/precomputed_atmospheric_scattering/blob/master/atmosphere/functions.glsl#L41-L53",
+      "usedFor": [
+        "top-atmosphere boundary distance",
+        "optical-length integration",
+        "Beer-Lambert transmittance"
+      ]
+    },
+    {
+      "id": "bruneton-demo-constants",
+      "title": "Eric Bruneton, Precomputed Atmospheric Scattering, atmosphere/demo/demo.cc",
+      "url": "https://github.com/ebruneton/precomputed_atmospheric_scattering/blob/master/atmosphere/demo/demo.cc#L12-L20",
+      "usedFor": [
+        "Earth radii",
+        "Rayleigh and Mie scale heights",
+        "Rayleigh coefficient law",
+        "solar irradiance source table carried by the cleanroom script"
+      ]
+    },
+    {
+      "id": "bruneton-single-scattering",
+      "title": "Eric Bruneton, Precomputed Atmospheric Scattering, atmosphere/functions.glsl",
+      "url": "https://github.com/ebruneton/precomputed_atmospheric_scattering/blob/master/atmosphere/functions.glsl#L82-L109",
+      "usedFor": [
+        "single-scattering integrand",
+        "Rayleigh phase function",
+        "Cornette-Shanks Mie phase function"
+      ]
+    },
+    {
+      "id": "bruneton-2016-clear-sky-parameters",
+      "title": "Eric Bruneton, A Qualitative and Quantitative Evaluation of 8 Clear Sky Models",
+      "url": "https://arxiv.org/abs/1612.04336",
+      "usedFor": [
+        "aerosol Angstrom alpha 0.8",
+        "aerosol Angstrom beta 0.04",
+        "aerosol single-scattering albedo 0.8",
+        "Mie phase asymmetry g 0.7"
+      ]
+    },
+    {
+      "id": "bruneton-2016-no-ozone-comparison-policy",
+      "title": "Eric Bruneton, A Qualitative and Quantitative Evaluation of 8 Clear Sky Models",
+      "url": "https://arxiv.org/abs/1612.04336",
+      "usedFor": [
+        "no-ozone comparison policy"
+      ]
+    },
+    {
+      "id": "bruneton-2016-nishita96-double-scattering",
+      "title": "Eric Bruneton, A Qualitative and Quantitative Evaluation of 8 Clear Sky Models",
+      "url": "https://arxiv.org/abs/1612.04336",
+      "usedFor": [
+        "incoming-direction integration requirement for double scattering"
+      ]
+    },
+    {
+      "id": "gonzalez-2009-fibonacci-sphere-lattice",
+      "title": "Alvaro Gonzalez, Measurement of areas on a sphere using Fibonacci and latitude-longitude lattices",
+      "url": "https://arxiv.org/abs/0912.4540",
+      "usedFor": [
+        "full-sphere Fibonacci direction set for second-order sampling"
+      ]
+    },
+    {
+      "id": "bruneton-color-constants",
+      "title": "Eric Bruneton, Precomputed Atmospheric Scattering, atmosphere/constants.h",
+      "url": "https://github.com/ebruneton/precomputed_atmospheric_scattering/blob/master/atmosphere/constants.h",
+      "usedFor": [
+        "CIE color matching functions",
+        "XYZ to linear sRGB matrix",
+        "maximum luminous efficacy 683"
+      ]
+    },
+    {
+      "id": "bruneton-2016-comparison-source-tone-map",
+      "title": "Eric Bruneton, clear-sky-models comparison source, atmosphere/comparisons.cc",
+      "url": "https://github.com/ebruneton/clear-sky-models/blob/master/atmosphere/comparisons.cc#L148-L153",
+      "usedFor": [
+        "display-only k = 1 / (5 * 683) tone map"
+      ]
+    },
+    {
+      "id": "bruneton-2016-figure1-four-view-layout",
+      "title": "Eric Bruneton, A Qualitative and Quantitative Evaluation of 8 Clear Sky Models, Figure 1",
+      "url": "https://arxiv.org/abs/1612.04336",
+      "usedFor": [
+        "required 06h00 / 87 degree low-Sun case",
+        "required 13h15 / 21 degree highest-Sun case"
+      ]
+    },
+    {
+      "id": "bruneton-demo-finite-object-composition",
+      "title": "Eric Bruneton, Precomputed Atmospheric Scattering, atmosphere/demo/demo.glsl",
+      "url": "https://github.com/ebruneton/precomputed_atmospheric_scattering/blob/master/atmosphere/demo/demo.glsl",
+      "usedFor": [
+        "finite object radiance composed as radiance * transmittance + in-scatter"
+      ]
+    }
+  ],
+  "convergenceReferenceArtifact": {
+    "folderName": "005-transfer-refined-baseline",
+    "artifactFolder": "tmp/atmosphere/cleanroom_environment/005-transfer-refined-baseline",
+    "status": "accepted"
+  }
+}

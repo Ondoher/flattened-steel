@@ -1,0 +1,68 @@
+{
+	"schemaVersion": "opencolorio-2.4.2-cross-check-provenance-v1",
+	"role": "Executable bounded-grid cross-check and exhaustive evaluator only after that cross-check passes; pinned Academy CTL remains the source-identity oracle.",
+	"release": {
+		"version": "2.4.2",
+		"commit": "6918fad3f5d22ac3ef2397c754bf4268c2b58dd0",
+		"releasePage": "https://github.com/AcademySoftwareFoundation/OpenColorIO/releases/tag/v2.4.2",
+		"claim": "The upstream release removes the Preview label and officially releases ACES 2 support."
+	},
+	"wheel": {
+		"name": "opencolorio-2.4.2-cp310-cp310-win_amd64.whl",
+		"url": "https://files.pythonhosted.org/packages/40/2f/9f763120753746ceb6d57acc6d4bdb1c6a22b9447501136d7121d990ffa6/opencolorio-2.4.2-cp310-cp310-win_amd64.whl",
+		"sizeBytes": 3899897,
+		"sha256": "82752ca049b91fcbf939655a15926044af8a15593a32e9cbc38a58ea59873574",
+		"pythonAbi": "CPython 3.10 / Windows x86-64",
+		"installedGeneratedPath": "tmp/extraterrestrial/tools/opencolorio-2.4.2"
+	},
+	"installedExecutionClosure": [
+		{
+			"path": "PyOpenColorIO/__init__.py",
+			"sizeBytes": 1792,
+			"sha256": "af4992f6fc0bddd0ce4e4b1184108b055fe485c435361dc887f2004f6efa6683"
+		},
+		{
+			"path": "PyOpenColorIO/PyOpenColorIO.pyd",
+			"sizeBytes": 2164736,
+			"sha256": "227d784e55a3285dfa0b0a210e4f2861807e4e9ddd5265787934bdaa34178ba2"
+		},
+		{
+			"path": "PyOpenColorIO/bin/OpenColorIO_2_4.dll",
+			"sizeBytes": 4656128,
+			"sha256": "2be76e8772c6d6265bad217838155c7cdd5e4fdb5effb457de7df1e24686018d"
+		}
+	],
+	"completeInstallInventory": {
+		"fileCount": 48,
+		"totalBytes": 14207701,
+		"aggregateSha256": "779d30bf283a200f116dbb8d9f8402943187b6647d716b8f70a0be8d61b638f4",
+		"policy": "Every file below the generated installation root is sealed before execution; every reported imported module or cache file must be a matching member."
+	},
+	"pythonRuntime": {
+		"implementation": "CPython 3.10.1 Windows x86-64",
+		"installRoot": "C:/Users/gande/AppData/Local/Programs/Python/Python310",
+		"executable": "python.exe",
+		"executableSha256": "8eaa62b6ca393ac1b8651b39f51de8e8bf8d22aca2627222d078e1c98ed875ad",
+		"inventoryPolicy": "every file below the CPython runtime root except Lib/site-packages, which isolated no-site execution never searches; pinned OCIO files are sealed separately. The complete aggregate therefore seals both the presence and absence of root search-path archives, path-configuration files, modules, packages, extensions, and DLLs before launch.",
+		"fileCount": 4037,
+		"totalBytes": 81172155,
+		"aggregateSha256": "d0d6ce28ac511ae330a761c3550e05c12ce4e970ffb16dfe158ea3a8c9ed5f9c",
+		"execution": "Invoke the absolute executable with -I -S -B, insert only the sealed OCIO installation in the bootstrap, disable ambient PATH DLL loading, and use a constructed environment with no inherited PYTHON* variables."
+	},
+	"license": {
+		"installedPath": "tmp/extraterrestrial/tools/opencolorio-2.4.2/opencolorio-2.4.2.dist-info/LICENSE",
+		"sizeBytes": 1511,
+		"sha256": "8850b0c83cd41d26ad0e080861d47ee00afb685386a459a1cbe8c347555621a7"
+	},
+	"requiredStyles": {
+		"rendering": "ACES-OUTPUT - ACES2065-1_to_CIE-XYZ-D65 - SDR-100nit-REC709_2.0",
+		"srgbPiecewise": "DISPLAY - CIE-XYZ-D65_to_sRGB",
+		"bt1886": "DISPLAY - CIE-XYZ-D65_to_REC.1886-REC.709"
+	},
+	"executionPolicy": {
+		"authoritySubset": "Every sealed paired scalar diagnostic input plus frozen signed, neutral, clamp, seam, and hue/saturation anchors is run through both CTL and OCIO.",
+		"exhaustiveUse": "Only after bounded CTL-to-OCIO float and exact-Q8 parity passes, the sealed OCIO implementation may evaluate frame-derived probes, the exhaustive synthetic grid, and the 2,754 matched Bruneton rows.",
+		"claimLimit": "Passing the bounded authority subset authorizes this one sealed exhaustive decision; it does not establish universal interchangeability between CTL and OCIO."
+	},
+	"acceptance": "OCIO exhaustive evaluation is unauthorized until the bounded source-identity subset passes the declared CTL-to-OCIO float and exact-Q8 gates."
+}

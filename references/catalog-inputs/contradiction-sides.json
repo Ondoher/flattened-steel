@@ -1,0 +1,416 @@
+{
+  "schemaVersion": 1,
+  "managedBy": "production-core-v1",
+  "sourceSnapshotId": "SNAPSHOT-REPO-000001",
+  "auditScope": {
+    "title": "Atomic side completion for four one-sided production and reconciliation contradictions",
+    "reviewedRoots": [
+      "shared/algorithm32/production/references.md",
+      "shared/algorithm32/production/constants/Algorithm32CanonicalData.js",
+      "agents/topics/apps/flat/algorithm32/requirements.md",
+      "shared/algorithm32/production/Algorithm32.js",
+      "shared/algorithm32/production/implementation/Reference.js",
+      "shared/algorithm32/production/implementation/ShaderBuilder.js",
+      "shared/algorithm32/production/light-sources/DistantSunIncidentRadianceCache.js",
+      "shared/algorithm32/production/light-sources/LocalSunIncidentRadianceCache.js",
+      "shared/algorithm32/production/implementation/SpectralCalculator.js",
+      "shared/algorithm32/production/light-sources/_tests/LocalSunIncidentRadianceCache.spec.js",
+      "tmp/atmosphere/reconciliation/042-er4-frozen-atmosphere-cpu-integration/report.md",
+      "tmp/atmosphere/reconciliation/049-er5-lunar-physical-reference-calibration/report.md"
+    ],
+    "includedRecordRange": "The exact frozen-source slices that distinguish both sides of CONTRADICTION-A32-000006, CONTRADICTION-A32-000007, CONTRADICTION-A32-000009, and CONTRADICTION-A32-000010 were reviewed. Existing synthesis facts remain intact; this fragment relates the existing atomic provenance rule and adds only the six missing atomic implementation or historical-report observations.",
+    "authorityBoundary": "Requirements and historical report labels are retained as policy or document observations, not external physics or newly executed proof. Shader/cache observations stop at physics-relevant conformance-prerequisite configuration and exclude Three.js mechanics."
+  },
+  "factUpdates": [
+    {
+      "semanticKey": "production-short-code:a32-poc-color-032:workspace-identity",
+      "citations": [
+        {
+          "path": "shared/algorithm32/production/references.md",
+          "lineStart": 38,
+          "lineEnd": 44,
+          "role": "defines-broad-short-code-lineage"
+        },
+        {
+          "path": "shared/algorithm32/production/constants/Algorithm32CanonicalData.js",
+          "lineStart": 1,
+          "lineEnd": 3,
+          "role": "applies-broad-short-code-at-canonical-data-file-scope"
+        }
+      ],
+      "relatedFactSemanticKeys": [
+        "production-governance:per-fact-physics-provenance-requirement"
+      ]
+    },
+    {
+      "semanticKey": "production-governance:per-fact-physics-provenance-requirement",
+      "contradictionIds": [
+        "CONTRADICTION-A32-000006"
+      ],
+      "relatedFactSemanticKeys": [
+        "production-short-code:a32-poc-color-032:workspace-identity"
+      ]
+    },
+    {
+      "semanticKey": "reference-vs-shader:default-incident-cache-authority-mismatch",
+      "relatedFactSemanticKeys": [
+        "reference:facade-default:incident-radiance-sampling-is-null",
+        "shader-conformance-prerequisite:automatic-path-builds-configured-incident-cache"
+      ]
+    },
+    {
+      "semanticKey": "reference:incident-cache:missing-value-fallback-diverges-by-cache-kind",
+      "verificationLayer": "static-code-observation",
+      "relatedFactSemanticKeys": [
+        "reference:distant-cache:invalid-or-missing-access-throws",
+        "reference:local-cache:invalid-or-missing-access-empty-zero-fallback"
+      ]
+    },
+    {
+      "semanticKey": "reconciliation-record-042:frozen-atmosphere-composition-rejected",
+      "verificationLayer": "not-verified",
+      "experimentIds": [
+        "EXPERIMENT-A32-000014",
+        "EXPERIMENT-A32-000018"
+      ],
+      "relatedFactSemanticKeys": [
+        "reconciliation-record-042:self-reports-five-of-five-criteria-accepted",
+        "reconciliation-record-049:rejects-record-042-dimensional-composition"
+      ]
+    }
+  ],
+  "manualFacts": [
+    {
+      "semanticKey": "reference:facade-default:incident-radiance-sampling-is-null",
+      "statement": "The frozen Algorithm32 facade constructs its CPU Reference without an incidentRadianceSampling dependency; Reference defaults that omitted dependency to null, so a facade evaluation without a request override supplies null incident-radiance sampling to the CPU calculation.",
+      "kind": "cpu-reference-default-incident-sampling-realization",
+      "domain": "reference-shader-conformance-prerequisite",
+      "owner": "production-algorithm32-reference",
+      "authorityRole": "reference-realization",
+      "structuredValue": {
+        "facadeDependency": "omitted",
+        "referenceDefault": "null",
+        "requestOverride": "supported"
+      },
+      "scope": {
+        "area": "A32",
+        "application": "production-algorithm32",
+        "layer": "cpu-reference",
+        "comparisonBoundary": "default-facade-configuration-before-pre-display-conformance"
+      },
+      "supportStatus": "source-backed",
+      "implementationStatus": "implemented",
+      "decisionStatus": "provisional",
+      "verificationLayer": "static-code-observation",
+      "citations": [
+        {
+          "path": "shared/algorithm32/production/Algorithm32.js",
+          "lineStart": 197,
+          "lineEnd": 207,
+          "role": "constructs-facade-reference-without-incident-sampling-dependency"
+        },
+        {
+          "path": "shared/algorithm32/production/implementation/Reference.js",
+          "lineStart": 46,
+          "lineEnd": 61,
+          "role": "defaults-omitted-incident-sampling-to-null"
+        },
+        {
+          "path": "shared/algorithm32/production/implementation/Reference.js",
+          "lineStart": 119,
+          "lineEnd": 136,
+          "role": "resolves-null-default-unless-request-overrides-it"
+        },
+        {
+          "path": "shared/algorithm32/production/implementation/Reference.js",
+          "lineStart": 173,
+          "lineEnd": 189,
+          "role": "passes-resolved-incident-sampling-into-cpu-calculation"
+        }
+      ],
+      "contradictionIds": [
+        "CONTRADICTION-A32-000007"
+      ],
+      "relatedFactSemanticKeys": [
+        "shader-conformance-prerequisite:automatic-path-builds-configured-incident-cache",
+        "reference-vs-shader:default-incident-cache-authority-mismatch"
+      ],
+      "nonClaims": [
+        "This static observation does not establish that cache-free default evaluation is physically sufficient or accepted.",
+        "It does not report a shader result, GPU execution, or renderer behavior."
+      ],
+      "blockers": [
+        "The default CPU Reference state is not the cache-active state prepared by automatic shader configuration."
+      ],
+      "nextAction": "Fixture one explicit incident-radiance sampling packet for both the pinned CPU Reference and every later pre-display shader conformance case."
+    },
+    {
+      "semanticKey": "shader-conformance-prerequisite:automatic-path-builds-configured-incident-cache",
+      "statement": "For an automatic build request over a model with the required contribution and cache factories, the frozen ShaderBuilder creates the source-owned incident-radiance cache and builds it from the configured geometry, atmosphere, light source, spectral basis, and execution controls.",
+      "kind": "shader-cache-configuration-observation",
+      "domain": "reference-shader-conformance-prerequisite",
+      "owner": "production-algorithm32-shader-configuration",
+      "authorityRole": "physics-provenance-gap",
+      "structuredValue": {
+        "automaticCacheBuild": true,
+        "configuredPhysicsInputs": [
+          "geometry",
+          "atmosphere",
+          "light-source",
+          "spectral-basis",
+          "execution-controls"
+        ]
+      },
+      "scope": {
+        "area": "A32",
+        "application": "production-algorithm32",
+        "layer": "shader-configuration",
+        "comparisonBoundary": "physics-input-state-before-pre-display-conformance"
+      },
+      "supportStatus": "source-backed",
+      "implementationStatus": "implemented",
+      "decisionStatus": "provisional",
+      "verificationLayer": "static-code-observation",
+      "citations": [
+        {
+          "path": "shared/algorithm32/production/implementation/ShaderBuilder.js",
+          "lineStart": 233,
+          "lineEnd": 245,
+          "role": "selects-automatic-path-and-creates-incident-cache-build"
+        },
+        {
+          "path": "shared/algorithm32/production/implementation/ShaderBuilder.js",
+          "lineStart": 252,
+          "lineEnd": 276,
+          "role": "defines-required-configured-model-contribution-and-cache-factories"
+        },
+        {
+          "path": "shared/algorithm32/production/implementation/ShaderBuilder.js",
+          "lineStart": 287,
+          "lineEnd": 318,
+          "role": "builds-cache-from-configured-model-and-execution-state"
+        }
+      ],
+      "contradictionIds": [
+        "CONTRADICTION-A32-000007"
+      ],
+      "relatedFactSemanticKeys": [
+        "reference:facade-default:incident-radiance-sampling-is-null",
+        "reference-vs-shader:default-incident-cache-authority-mismatch"
+      ],
+      "nonClaims": [
+        "This fact stops at physics-relevant configuration state and makes no Three.js resource, upload, binding, renderer, or browser claim.",
+        "Static shader setup is not a shader-to-Reference conformance result and cannot supply physical authority.",
+        "No GPU or pre-display execution was observed."
+      ],
+      "blockers": [
+        "No conformance record pins this automatic cache state to an equivalent CPU Reference sampling packet."
+      ],
+      "nextAction": "Expose the built cache as an exact Reference sampling packet and compare both paths only after revision, inputs, and pre-display boundary are pinned."
+    },
+    {
+      "semanticKey": "reference:distant-cache:invalid-or-missing-access-throws",
+      "statement": "The frozen distant incident-radiance sampler throws a TypeError when its altitude-bin coordinate is not an integer and throws an Error when any requested direction key lacks a generated radiance value.",
+      "kind": "cpu-reference-cache-failure-realization",
+      "domain": "incident-radiance-cache-runtime-access",
+      "owner": "production-distant-incident-radiance-cache",
+      "authorityRole": "reference-realization",
+      "structuredValue": {
+        "invalidCoordinateOutcome": "throws-TypeError",
+        "missingGeneratedValueOutcome": "throws-Error"
+      },
+      "scope": {
+        "area": "A32",
+        "application": "production-algorithm32",
+        "layer": "cpu-reference"
+      },
+      "supportStatus": "source-backed",
+      "implementationStatus": "implemented",
+      "decisionStatus": "provisional",
+      "verificationLayer": "static-code-observation",
+      "citations": [
+        {
+          "path": "shared/algorithm32/production/light-sources/DistantSunIncidentRadianceCache.js",
+          "lineStart": 155,
+          "lineEnd": 182,
+          "role": "throws-for-invalid-coordinate-or-missing-generated-value"
+        }
+      ],
+      "contradictionIds": [
+        "CONTRADICTION-A32-000009"
+      ],
+      "relatedFactSemanticKeys": [
+        "reference:local-cache:invalid-or-missing-access-empty-zero-fallback",
+        "reference:incident-cache:missing-value-fallback-diverges-by-cache-kind"
+      ],
+      "nonClaims": [
+        "This is a static observation of frozen code, not an executed negative test.",
+        "The current loud behavior is not an external physics claim and does not prove coverage of every invalid cache state."
+      ],
+      "blockers": [
+        "The local cache does not implement the same operation-boundary failure behavior."
+      ],
+      "nextAction": "Retain loud failure as the candidate cache-kind-independent Reference contract and verify it with assembled negative tests."
+    },
+    {
+      "semanticKey": "reference:local-cache:invalid-or-missing-access-empty-zero-fallback",
+      "statement": "The frozen local incident-radiance sampler records an in-memory error diagnostic and returns an empty array for invalid bin coordinates or a missing generated value; SpectralCalculator maps that empty sample array to a zero spectral incident in-scattering contribution.",
+      "kind": "cpu-reference-cache-fallback-realization",
+      "domain": "incident-radiance-cache-runtime-access",
+      "owner": "production-local-incident-radiance-cache",
+      "authorityRole": "reference-realization",
+      "structuredValue": {
+        "invalidCoordinateOutcome": "diagnostic-and-empty-array",
+        "missingGeneratedValueOutcome": "diagnostic-and-empty-array",
+        "downstreamEmptySampleOutcome": "zero-spectral-incident-in-scattering"
+      },
+      "scope": {
+        "area": "A32",
+        "application": "production-algorithm32",
+        "layer": "cpu-reference"
+      },
+      "supportStatus": "source-backed",
+      "implementationStatus": "implemented",
+      "decisionStatus": "provisional",
+      "verificationLayer": "static-code-observation",
+      "citations": [
+        {
+          "path": "shared/algorithm32/production/light-sources/LocalSunIncidentRadianceCache.js",
+          "lineStart": 150,
+          "lineEnd": 187,
+          "role": "records-diagnostic-and-returns-empty-array"
+        },
+        {
+          "path": "shared/algorithm32/production/implementation/SpectralCalculator.js",
+          "lineStart": 459,
+          "lineEnd": 486,
+          "role": "converts-empty-incident-samples-to-zero-contribution"
+        },
+        {
+          "path": "shared/algorithm32/production/light-sources/_tests/LocalSunIncidentRadianceCache.spec.js",
+          "lineStart": 104,
+          "lineEnd": 118,
+          "role": "declares-empty-array-and-diagnostic-expectations-without-execution-evidence"
+        }
+      ],
+      "contradictionIds": [
+        "CONTRADICTION-A32-000009"
+      ],
+      "relatedFactSemanticKeys": [
+        "reference:distant-cache:invalid-or-missing-access-throws",
+        "reference:incident-cache:missing-value-fallback-diverges-by-cache-kind"
+      ],
+      "nonClaims": [
+        "A diagnostic retained in memory is not a loud failure at the CPU Reference operation boundary.",
+        "The cited spec statically declares the fallback expectation; this cataloging did not execute it.",
+        "A zero fallback is current implementation behavior, not evidence that a missing cache value is physically dark."
+      ],
+      "blockers": [
+        "The fallback can conceal invalid or incomplete cache state as zero physical contribution."
+      ],
+      "nextAction": "Replace the empty-array fallback with operation-boundary failure and separately execute negative Reference tests against a pinned revision."
+    },
+    {
+      "semanticKey": "reconciliation-record-042:self-reports-five-of-five-criteria-accepted",
+      "statement": "The surviving record 042 report labels its own status accepted and states that 5 of 5 criteria were accepted across three atmosphere cases.",
+      "kind": "historical-validation-report-self-assessment",
+      "domain": "pre-display-radiometric-composition",
+      "owner": "algorithm32-reference-validation",
+      "authorityRole": "reference-validation",
+      "structuredValue": {
+        "reportStatusLabel": "accepted",
+        "acceptedCriterionCount": 5,
+        "criterionCount": 5,
+        "atmosphereCaseCount": 3,
+        "evidenceBoundary": "surviving-report-self-assessment"
+      },
+      "scope": {
+        "area": "A32",
+        "application": "production-algorithm32",
+        "record": "042",
+        "evidenceRole": "historical-report-claim"
+      },
+      "supportStatus": "source-backed",
+      "implementationStatus": "not-applicable",
+      "decisionStatus": "rejected",
+      "verificationLayer": "not-verified",
+      "citations": [
+        {
+          "path": "tmp/atmosphere/reconciliation/042-er4-frozen-atmosphere-cpu-integration/report.md",
+          "lineStart": 3,
+          "lineEnd": 5,
+          "role": "records-self-reported-status-criterion-count-and-case-count"
+        }
+      ],
+      "experimentIds": [
+        "EXPERIMENT-A32-000014"
+      ],
+      "contradictionIds": [
+        "CONTRADICTION-A32-000010"
+      ],
+      "relatedFactSemanticKeys": [
+        "reconciliation-record-049:rejects-record-042-dimensional-composition",
+        "reconciliation-record-042:frozen-atmosphere-composition-rejected"
+      ],
+      "nonClaims": [
+        "This fact records the surviving report's labels; it does not establish that the criteria were executed, passed independently, or ran against a pinned target CPU Reference.",
+        "The self-assessment does not establish dimensional validity or external physics authority."
+      ],
+      "blockers": [
+        "Later record 049 rejects inheritance of this result because the composition is dimensionally invalid."
+      ],
+      "nextAction": "Retain the self-assessment only as rejected historical evidence; do not use it as a CPU Reference oracle."
+    },
+    {
+      "semanticKey": "reconciliation-record-049:rejects-record-042-dimensional-composition",
+      "statement": "The surviving record 049 report says record 042 is not inherited because later review found its dimensional composition physically invalid.",
+      "kind": "historical-review-rejection-observation",
+      "domain": "pre-display-radiometric-composition",
+      "owner": "algorithm32-reference-validation",
+      "authorityRole": "physics-provenance-gap",
+      "structuredValue": {
+        "reviewingRecord": "049",
+        "rejectedRecord": "042",
+        "inheritanceDecision": "not-inherited",
+        "reportedReason": "dimensional-composition-physically-invalid",
+        "evidenceBoundary": "surviving-report-review-statement"
+      },
+      "scope": {
+        "area": "A32",
+        "application": "production-algorithm32",
+        "record": "049",
+        "evidenceRole": "historical-review-claim"
+      },
+      "supportStatus": "source-backed",
+      "implementationStatus": "not-applicable",
+      "decisionStatus": "accepted",
+      "verificationLayer": "not-verified",
+      "citations": [
+        {
+          "path": "tmp/atmosphere/reconciliation/049-er5-lunar-physical-reference-calibration/report.md",
+          "lineStart": 20,
+          "lineEnd": 20,
+          "role": "records-non-inheritance-and-dimensional-rejection"
+        }
+      ],
+      "experimentIds": [
+        "EXPERIMENT-A32-000018"
+      ],
+      "contradictionIds": [
+        "CONTRADICTION-A32-000010"
+      ],
+      "relatedFactSemanticKeys": [
+        "reconciliation-record-042:self-reports-five-of-five-criteria-accepted",
+        "reconciliation-record-042:frozen-atmosphere-composition-rejected"
+      ],
+      "nonClaims": [
+        "This fact records the later report's review statement; it is not a newly executed dimensional derivation.",
+        "Rejecting record 042 does not prove a corrected transport equation or the target CPU Reference."
+      ],
+      "blockers": [
+        "No fresh target CPU Reference experiment using an independently sourced, dimensionally valid composition exists."
+      ],
+      "nextAction": "Preserve the non-inheritance decision and create a fresh unit-bearing transport proof rather than rerunning record 042."
+    }
+  ]
+}

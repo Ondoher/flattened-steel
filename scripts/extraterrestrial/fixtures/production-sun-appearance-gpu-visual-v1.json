@@ -1,0 +1,211 @@
+{
+	"id": "production-sun-appearance-gpu-visual-v1",
+	"schemaVersion": "production-sun-appearance-gpu-visual-v1",
+	"proofId": "production-sun-appearance-gpu-visual-evidence-v1",
+	"claimBoundary": "Provisional GPU-only normal-path visual evidence. This fixture does not replace the paired CPU/GPU diagnostic, does not establish refined source-path convergence, and does not authorize production changes or display-parameter tuning.",
+	"executionBackend": "gpu",
+	"productionProfileId": "algorithm32-native-production-default-v1",
+	"finalVerificationDeferred": {
+		"cpuReferenceAuthority": true,
+		"sourcePathConvergence20Through1280": true,
+		"gpuCpuResidualQualification": true,
+		"reason": "CPU generation and refined convergence are reserved for final verification; ordinary visual iteration uses the production GPU cache and shader path."
+	},
+	"fixedSceneScale": {
+		"owner": "BrunetonColorDisplayModel.DISPLAY_TONE_MAP_K",
+		"luminousEfficacyLumensPerWatt": 683,
+		"referenceLuminanceMultiplier": 5,
+		"value": 0.00029282576866764276,
+		"variable": false
+	},
+	"distant": {
+		"family": "spherical-distant",
+		"location": {
+			"label": "San Jose",
+			"latitudeDegrees": 37.3382,
+			"longitudeDegrees": -121.8863,
+			"observerHeightMeters": 5
+		},
+		"sunAngularRadiusRadians": 0.004675,
+		"conditions": [
+			{
+				"id": "solar-noon",
+				"instant": "2024-06-20T20:08:00.000Z",
+				"partition": "calibration",
+				"radialOrientations": ["zenithward"]
+			},
+			{
+				"id": "sunset-minus-30-minutes",
+				"instant": "2024-06-21T02:56:03.503Z",
+				"partition": "holdout",
+				"radialOrientations": ["zenithward", "equal-elevation"]
+			},
+			{
+				"id": "sunset-minus-20-minutes",
+				"instant": "2024-06-21T03:06:03.503Z",
+				"partition": "calibration",
+				"radialOrientations": ["zenithward", "equal-elevation"]
+			},
+			{
+				"id": "sunset-minus-10-minutes",
+				"instant": "2024-06-21T03:16:03.503Z",
+				"partition": "holdout",
+				"radialOrientations": ["zenithward", "equal-elevation"],
+				"requiredPreview": true
+			},
+			{
+				"id": "sunset",
+				"instant": "2024-06-21T03:26:03.503Z",
+				"partition": "calibration",
+				"radialOrientations": ["zenithward", "equal-elevation"]
+			}
+		]
+	},
+	"flat": {
+		"family": "flat-local",
+		"claimBoundary": "Union Glacier labels identify frozen Flat32 presentation states only; they are not geographic, ephemeris, or observational validation.",
+		"sourceFixture": {
+			"path": "scripts/extraterrestrial/fixtures/union-glacier-flat-local-closest-approach-v1.json",
+			"schemaVersion": "union-glacier-flat-local-closest-approach-v1",
+			"sha256": "d49b904c5c1aa8a14002b5e9a47e5fb68fea00cd0a5edea32a372e59f0d51287",
+			"stateMappings": {
+				"flat-close": "flat-0",
+				"flat-medium": "flat-90",
+				"flat-long": "flat-180"
+			}
+		},
+		"location": {
+			"label": "Union Glacier",
+			"latitudeDegrees": -79.768036,
+			"longitudeDegrees": -83.261666,
+			"dateBasis": "2024-12-14T12:00:00.000Z",
+			"observerMeters": [0, 0, 5]
+		},
+		"source": {
+			"sourceId": "flat-local-sun",
+			"spectralBasisHash": "sha256:a03a3c7f45d9bd4ff8adf6482e9d1aac1acd72423758ecf797ac24f6dffba891",
+			"radiusMeters": 25749.504,
+			"heightMeters": 4828032,
+			"surfaceRadianceValues": [
+				11822.66204572723, 19131.796290730832, 20596.24900510576, 22365.90602980418, 21105.962583299384,
+				20832.06071193563, 20288.478558443545, 19549.534528254357, 18355.838693437217, 17123.45540373146,
+				16046.979644514584, 14832.271724935203, 13963.689878931815, 12998.896355112902, 12065.530627488644
+			]
+		},
+		"geometry": {
+			"topAltitudeMeters": 100000,
+			"observerDomeApexMeters": 100000,
+			"observerDomeMaximumViewRayMeters": 1926774,
+			"referenceDistanceMeters": 4800000
+		},
+		"conditions": [
+			{
+				"id": "flat-close",
+				"flatAngleDegrees": 0,
+				"expectedCenterMeters": [0, 6283427.593407407, 4828032],
+				"expectedCacheRadialMaximumMeters": 6283427.593407407,
+				"distanceClass": "close",
+				"partition": "calibration",
+				"radialOrientations": ["zenithward"]
+			},
+			{
+				"id": "flat-medium",
+				"flatAngleDegrees": 90,
+				"expectedCenterMeters": [-12561323.593082156, 18844750.419161934, 4828032],
+				"expectedCacheRadialMaximumMeters": 22647548.846853744,
+				"distanceClass": "medium",
+				"partition": "holdout",
+				"radialOrientations": ["zenithward"]
+			},
+			{
+				"id": "flat-long",
+				"flatAngleDegrees": 180,
+				"expectedCenterMeters": [-24595.66610387899, 31412707.263672166, 4828032],
+				"expectedCacheRadialMaximumMeters": 31412716.886663348,
+				"distanceClass": "long",
+				"partition": "calibration",
+				"radialOrientations": ["zenithward"],
+				"requiredPreview": true
+			}
+		]
+	},
+	"viewports": [
+		{
+			"id": "camera-a-wide",
+			"widthPixels": 641,
+			"heightPixels": 401,
+			"devicePixelRatio": 1,
+			"verticalFovDegrees": 78
+		},
+		{
+			"id": "camera-b-tight",
+			"widthPixels": 961,
+			"heightPixels": 541,
+			"devicePixelRatio": 1,
+			"verticalFovDegrees": 50
+		}
+	],
+	"sampling": {
+		"centerPixelMustBeOpticalAxis": true,
+		"rasterSubsamplesPerPixel": 4,
+		"insideLimbRadiusFactor": 0.95,
+		"circumsolarOffsetsDegrees": [0.5, 1, 2],
+		"requiredConditionCount": 8,
+		"requiredViewportCount": 2,
+		"requiredSampleCount": 104,
+		"requiredRawOrderingPairCount": 144
+	},
+	"outputContract": {
+		"sentinelLinearValues": [0, 0.00392156862745098, 0.0031308, 0.018, 0.18, 0.5, 0.75, 1],
+		"candidateEncodings": ["identity", "srgb-piecewise"],
+		"classificationRoute": "deterministic default-framebuffer and PNG probes with WebGL DITHER disabled and restored afterward",
+		"normalFramebufferPolicy": "production DITHER state restored; framebuffer and PNG must be byte-identical and remain within the declared code envelope of deterministic Q8",
+		"normalizedUnsignedQuantizer": "round((2^b-1)*clamp(x,0,1))/(2^b-1)",
+		"requiredStages": [
+			"gpu-completed-native-spectrum",
+			"gpu-path-radiance-spectrum",
+			"gpu-celestial-radiance-spectrum",
+			"gpu-pre-display-radiance-spectrum",
+			"gpu-signed-scene-linear-rgb",
+			"gpu-mapper-rgba32f-offscreen",
+			"gpu-mapper-rgba16f-production-like-offscreen",
+			"deterministic-no-dither-default-framebuffer",
+			"deterministic-no-dither-png-code-values",
+			"default-framebuffer",
+			"png-code-values",
+			"full-frame-signed-linear-rgba32f",
+			"full-frame-production-mapper-png"
+		],
+		"requireExactCodeClassification": true,
+		"requireDeterministicNoDitherClassification": true,
+		"requireNormalFramebufferPngIdentity": true
+	},
+	"diagnosticTolerances": {
+		"sentinelRgba32fMaximumUlp": 0,
+		"float32CompositionMaximumUlp": 0,
+		"float32CompositionOperation": "f32(f32(path)+f32(celestial))",
+		"rayAngularResidualRadiansMaximum": 0.00001,
+		"rgba16fVersusRgba32f": {
+			"absolute": 0.001,
+			"relative": 0.001
+		},
+		"deterministicQuantizedCodesMustMatchExactly": true,
+		"normalFramebufferMaximumCodeResidual": 1,
+		"flatObservationPlacementMeters": 1,
+		"flatDerivedRadialIdentityMeters": 0.000001,
+		"coverageAbsolute": 0.00001,
+		"crossViewportSpectrum": {
+			"absolute": 0.0005,
+			"relative": 0.00005
+		}
+	},
+	"provisionalGates": {
+		"productionGpuPathOnly": true,
+		"rawDiskYStrictlyGreaterThanCircumsolarY": true,
+		"requiredPreviewConditionIds": ["sunset-minus-10-minutes", "flat-long"],
+		"requiredOutputStagesComplete": true,
+		"noGeneratedInputReuse": true,
+		"oneChromeProcessAtATime": true,
+		"inactivityWatchdogOnly": true
+	}
+}

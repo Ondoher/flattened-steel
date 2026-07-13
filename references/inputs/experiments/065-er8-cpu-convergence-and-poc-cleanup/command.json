@@ -1,0 +1,10 @@
+{
+  "commands": [
+    {
+      "command": "node scripts/flat/reconciliation/POC/src/runners/er8CpuConvergenceAndPocCleanup.js --record tmp/atmosphere/reconciliation/065-er8-cpu-convergence-and-poc-cleanup",
+      "timestamp": "2026-07-12T22:57:44.290Z",
+      "writesRecord": true,
+      "networkAcquisition": false
+    }
+  ]
+}

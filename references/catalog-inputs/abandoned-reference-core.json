@@ -1,0 +1,1349 @@
+{
+  "schemaVersion": 1,
+  "managedBy": "production-core-v1",
+  "sourceSnapshotId": "SNAPSHOT-REPO-000001",
+  "auditScope": {
+    "title": "Abandoned CPU spectral Reference core implementation and selected validation expectations",
+    "reviewedRoots": [
+      "scripts/flat/atmosphere_rejected/reference/CpuSpectralReferenceIntegrator.js",
+      "scripts/flat/atmosphere_rejected/reference/pipeline-stages.js",
+      "scripts/flat/atmosphere_rejected/reference/phase-functions.js",
+      "scripts/flat/atmosphere_rejected/reference/utils.js",
+      "scripts/flat/atmosphere_rejected/reference/types.d.ts",
+      "scripts/flat/atmosphere_rejected/reference/stages/ValidateRequestStage.js",
+      "scripts/flat/atmosphere_rejected/reference/stages/ResolveRayPathStage.js",
+      "scripts/flat/atmosphere_rejected/reference/stages/SampleViewPathStage.js",
+      "scripts/flat/atmosphere_rejected/reference/stages/EvaluateMediumStage.js",
+      "scripts/flat/atmosphere_rejected/reference/stages/IntegrateViewOpticalDepthStage.js",
+      "scripts/flat/atmosphere_rejected/reference/stages/IntegrateSolarTransmittanceStage.js",
+      "scripts/flat/atmosphere_rejected/reference/stages/EvaluateScatteringPhaseStage.js",
+      "scripts/flat/atmosphere_rejected/reference/stages/IntegrateSingleScatteringStage.js",
+      "scripts/flat/atmosphere_rejected/reference/stages/ResolveSurfaceRadianceStage.js",
+      "scripts/flat/atmosphere_rejected/reference/stages/ComposeSpectralRadianceStage.js",
+      "scripts/flat/atmosphere_rejected/reference/_tests/CpuSpectralReferenceIntegrator.spec.js",
+      "scripts/flat/atmosphere_rejected/reference/stages/_tests/fixtures/aerosol-phase-contracts.json",
+      "scripts/flat/atmosphere_rejected/reference/stages/_tests/fixtures/analytic-invariants.json",
+      "scripts/flat/atmosphere_rejected/reference/stages/_tests/fixtures/medium-contracts.json",
+      "scripts/flat/atmosphere_rejected/reference/stages/_tests/fixtures/ray-path-contracts.json",
+      "scripts/flat/atmosphere_rejected/reference/stages/_tests/fixtures/solar-transmittance-contracts.json",
+      "scripts/flat/atmosphere_rejected/reference/stages/_tests/fixtures/view-optical-depth-hardening.json",
+      "scripts/flat/atmosphere_rejected/reference/stages/_tests/fixtures/view-samples-contracts.json"
+    ],
+    "includedRecordRange": "A bounded physics-focused pass over 15 implementation/type paths, one declared expectation in one integrator spec, 46 atomic expectations selected from 28 of 123 rows across all seven structured fixture files, and eight visible provenance gaps. Presence in reviewedRoots means the path supplied one or more selected facts; it does not claim exhaustive fact extraction from that path. The 21 source-tree files listed below were not reviewed by this core fragment, and their global coverage status is not asserted here; review of the 95 unselected fixture rows listed below is delegated to references/catalog-inputs/abandoned-reference-fixtures.json. Neither accounting group is excluded from the global catalog scope.",
+    "explicitExclusions": [
+      {
+        "paths": [
+          "scripts/flat/atmosphere_rejected/reference/index.js",
+          "scripts/flat/atmosphere_rejected/reference/light-extent-probe.js",
+          "scripts/flat/atmosphere_rejected/reference/README.md",
+          "scripts/flat/atmosphere_rejected/reference/_tests/expectation-fixtures.spec.js",
+          "scripts/flat/atmosphere_rejected/reference/_tests/pipeline-handoffs.spec.js",
+          "scripts/flat/atmosphere_rejected/reference/_tests/pipeline-stages.spec.js",
+          "scripts/flat/atmosphere_rejected/reference/_tests/README.md",
+          "scripts/flat/atmosphere_rejected/reference/_tests/test-expectations.js",
+          "scripts/flat/atmosphere_rejected/reference/_tests/test-pipeline-stages.js",
+          "scripts/flat/atmosphere_rejected/reference/_tests/trace-ray.integration.spec.js",
+          "scripts/flat/atmosphere_rejected/reference/_tests/utils.spec.js",
+          "scripts/flat/atmosphere_rejected/reference/stages/_tests/ComposeSpectralRadianceStage.spec.js",
+          "scripts/flat/atmosphere_rejected/reference/stages/_tests/EvaluateMediumStage.spec.js",
+          "scripts/flat/atmosphere_rejected/reference/stages/_tests/EvaluateScatteringPhaseStage.spec.js",
+          "scripts/flat/atmosphere_rejected/reference/stages/_tests/IntegrateSingleScatteringStage.spec.js",
+          "scripts/flat/atmosphere_rejected/reference/stages/_tests/IntegrateSolarTransmittanceStage.spec.js",
+          "scripts/flat/atmosphere_rejected/reference/stages/_tests/IntegrateViewOpticalDepthStage.spec.js",
+          "scripts/flat/atmosphere_rejected/reference/stages/_tests/ResolveRayPathStage.spec.js",
+          "scripts/flat/atmosphere_rejected/reference/stages/_tests/ResolveSurfaceRadianceStage.spec.js",
+          "scripts/flat/atmosphere_rejected/reference/stages/_tests/SampleViewPathStage.spec.js",
+          "scripts/flat/atmosphere_rejected/reference/stages/_tests/ValidateRequestStage.spec.js"
+        ],
+        "reason": "Not reviewed by this bounded core fragment. This accounts for the 21 files omitted from its reviewedRoots; other catalog inputs may cover them, and any residual physics-scope review remains pending. This is not a global scope exclusion or completeness claim."
+      },
+      {
+        "referenceIds": [
+          "phase.cornette-shanks.invalid-g-rejects"
+        ],
+        "reason": "The remaining one of three aerosol-phase-contracts.json expectation rows was not reviewed by this bounded core fragment; its review is delegated to references/catalog-inputs/abandoned-reference-fixtures.json."
+      },
+      {
+        "referenceIds": [
+          "view-transmittance.split-path.multiplicative-0p2-plus-0p4",
+          "view-transmittance.empty-path.explicit-output",
+          "view-transmittance.homogeneous.two-sample-monotonic",
+          "view-transmittance.homogeneous.multi-wavelength",
+          "view-transmittance.negative-extinction-rejects",
+          "view-transmittance.coefficient-wavelength-shape-rejects",
+          "view-transmittance.invalid-sample-weight-rejects",
+          "single-scattering.source-weight.missing-rejects",
+          "single-scattering.source-weight.invalid-rejects"
+        ],
+        "reason": "The remaining nine of 21 analytic-invariants.json expectation rows were not reviewed by this bounded core fragment; their review is delegated to references/catalog-inputs/abandoned-reference-fixtures.json."
+      },
+      {
+        "referenceIds": [
+          "medium.empty-view-samples.no-medium-samples",
+          "medium.position.multiple-samples-ordered",
+          "medium.model-call.wavelength-grid",
+          "medium.sample-fields.preserved",
+          "medium.vacuum.zero-coefficients",
+          "medium.homogeneous.single-wavelength",
+          "medium.homogeneous.multi-wavelength",
+          "medium.species.diagnostics-preserved",
+          "medium.diagnostics.altitude-from-world",
+          "medium.diagnostics.density-from-atmosphere",
+          "medium.outside-atmosphere.vacuum",
+          "medium.invalid.negative-extinction-rejects",
+          "medium.invalid.negative-scattering-rejects",
+          "medium.invalid.negative-absorption-rejects",
+          "medium.invalid.nonfinite-coefficients-reject",
+          "medium.invalid.wavelength-shape-rejects",
+          "medium.invalid.density-rejects",
+          "medium.earth-profile.sea-level-density-checkpoint",
+          "medium.earth-profile.high-altitude-density-checkpoint",
+          "medium.earth-profile.upper-supported-density-checkpoint",
+          "medium.earth-composition.standard-dry-air-major-fractions",
+          "medium.earth-composition.homosphere-consistency",
+          "medium.earth-profile.visible-wavelength-grid-alignment",
+          "medium.extreme.profile.dense-near-surface",
+          "medium.extreme.profile.low-density-upper-supported",
+          "medium.extreme.profile.invalid-density-boundaries",
+          "medium.extreme.profile.zero-density-vacuum",
+          "medium.extreme.profile.vacuum-contradictory-coefficients-rejects",
+          "medium.extreme.wavelength-grid.visible-full-range",
+          "medium.extreme.wavelength-grid.visible-full-range-mismatch-rejects",
+          "medium.extreme.composition.listed-standard-residual",
+          "medium.extreme.composition.invalid-fraction-boundaries",
+          "medium.extreme.coefficient.zero-and-positive-finite",
+          "medium.extreme.coefficient.invalid-boundaries"
+        ],
+        "reason": "The remaining 34 of 37 medium-contracts.json expectation rows were not reviewed by this bounded core fragment; their review is delegated to references/catalog-inputs/abandoned-reference-fixtures.json."
+      },
+      {
+        "referenceIds": [
+          "ray-path.atmosphere.inside-exits-top",
+          "ray-path.surface-hit.before-atmosphere-entry-empty",
+          "ray-path.atmosphere.outside-entry-to-exit",
+          "ray-path.atmosphere.forward-clips-negative-entry",
+          "ray-path.atmosphere.behind-observer-empty-path",
+          "ray-path.atmosphere.zero-length-boundary-path",
+          "ray-path.atmosphere.inverted-intersection-rejects",
+          "ray-path.atmosphere.nonfinite-intersection-rejects",
+          "ray-path.flat.named-lateral-boundary",
+          "ray-path.flat.unbounded-horizontal-rejects",
+          "ray-path.boundary-metadata.preserved",
+          "ray-path.surface-hit.after-atmosphere-exit-ignored",
+          "ray-path.surface-hit.at-atmosphere-entry-empty",
+          "ray-path.surface-hit.at-atmosphere-exit-surface-precedence",
+          "ray-path.surface-hit.nonfinite-distance-rejects",
+          "ray-path.surface-hit.negative-distance-ignored",
+          "ray-path.atmosphere.malformed-finite-interval-rejects",
+          "ray-path.model-call.validated-transport-ray"
+        ],
+        "reason": "The remaining 18 of 20 ray-path-contracts.json expectation rows were not reviewed by this bounded core fragment; their review is delegated to references/catalog-inputs/abandoned-reference-fixtures.json."
+      },
+      {
+        "referenceIds": [
+          "solar-transmittance.empty-medium-samples.no-output",
+          "solar-transmittance.vacuum.directional-unity",
+          "solar-transmittance.homogeneous.beer-lambert",
+          "solar-transmittance.source-samples.preserve-metadata",
+          "solar-transmittance.invalid.negative-extinction-rejects",
+          "solar-transmittance.invalid.wavelength-shape-rejects",
+          "solar-transmittance.invalid.nonfinite-weight-rejects",
+          "solar-transmittance.visible-grid.cie-full-range-aligns"
+        ],
+        "reason": "The remaining eight of 11 solar-transmittance-contracts.json expectation rows were not reviewed by this bounded core fragment; their review is delegated to references/catalog-inputs/abandoned-reference-fixtures.json."
+      },
+      {
+        "referenceIds": [
+          "view-transmittance.path-end.finite-interval-endpoint",
+          "view-transmittance.path-end.nonfinite-interval-endpoint-rejects",
+          "view-transmittance.packet-ownership.medium-samples-own-geometry",
+          "view-transmittance.species-diagnostics.cumulative-through-sample",
+          "view-transmittance.visible-grid.cie-full-range-aligns",
+          "view-transmittance.visible-grid.cie-shape-mismatch-rejects",
+          "view-transmittance.solar-grid.astm-g173-range-aligns",
+          "view-transmittance.solar-grid.astm-g173-shape-mismatch-rejects",
+          "view-transmittance.clear-air.unpinned-assumptions-rejects",
+          "view-transmittance.slant-path.unsourced-multiplier-rejects",
+          "view-transmittance.flat-large-lateral-boundary.unbounded-cap-rejects",
+          "view-transmittance.species-count.selected-clear-air-model",
+          "view-transmittance.species-count.invalid-selected-model-species-rejects",
+          "view-transmittance.convergence.sample-count-selected-profile",
+          "view-transmittance.convergence.unsourced-max-sample-count-rejects"
+        ],
+        "reason": "The remaining 15 of 18 view-optical-depth-hardening.json expectation rows were not reviewed by this bounded core fragment; their review is delegated to references/catalog-inputs/abandoned-reference-fixtures.json."
+      },
+      {
+        "referenceIds": [
+          "view-samples.empty-path.no-samples",
+          "view-samples.zero-length.no-samples",
+          "view-samples.midpoint.weights-sum-to-length",
+          "view-samples.midpoint.monotonic-sample-order",
+          "view-samples.ray-path-diagnostics.preserved",
+          "view-samples.invalid.negative-length-rejects",
+          "view-samples.invalid.inconsistent-length-rejects",
+          "view-samples.invalid.nonfinite-distance-rejects",
+          "view-samples.invalid.view-steps-rejects",
+          "view-samples.midpoint.integration-metadata"
+        ],
+        "reason": "The remaining ten of 13 view-samples-contracts.json expectation rows were not reviewed by this bounded core fragment; their review is delegated to references/catalog-inputs/abandoned-reference-fixtures.json."
+      }
+    ],
+    "authorityBoundary": "The abandoned lane is evidence of a historical Reference realization and declared validation expectations; its code and fixtures do not establish physics or target-Reference acceptance.",
+    "lineageRule": "Every local citation is resolved through frozen source snapshot SNAPSHOT-REPO-000001 at revision 514d5f6080d2dd485efdb07b5da9a203357a40c0; only tracked-unmodified cited files are used by this fragment."
+  },
+  "defaultFactScope": {
+    "area": "A32",
+    "application": "reference-catalog-source-mining",
+    "sourceLane": "scripts/flat/atmosphere_rejected/reference",
+    "layer": "cpu-reference",
+    "evidenceRole": "abandoned-source-mining",
+    "authorityBoundary": "abandoned-realization-not-target-reference-authority",
+    "referenceRevision": "514d5f6080d2dd485efdb07b5da9a203357a40c0"
+  },
+  "factSeries": [
+    {
+      "seriesKey": "abandoned-core-pipeline-and-input-realizations",
+      "shared": {
+        "kind": "abandoned-reference-realization",
+        "domain": "spectral-transport-pipeline",
+        "owner": "abandoned-cpu-spectral-reference",
+        "authorityRole": "reference-realization",
+        "supportStatus": "transitional-unsourced",
+        "implementationStatus": "implemented-in-abandoned-lane",
+        "decisionStatus": "provisional",
+        "verificationLayer": "static-code-observation",
+        "experimentIds": ["EXPERIMENT-A32-000100"],
+        "nonClaims": [
+          "The cited code proves only the frozen abandoned-lane realization, not the physical validity of the policy or target CPU Reference behavior.",
+          "No shader, browser, renderer, color-conversion, or display behavior is claimed."
+        ],
+        "blockers": ["The target Reference must rederive or independently justify this behavior before adoption."],
+        "nextAction": "Compare this atomic realization with independently sourced physics and the future pinned target Reference."
+      },
+      "entries": [
+        {
+          "semanticKey": "abandoned-core:pipeline:canonical-stage-order",
+          "statement": "The abandoned CPU Reference defines the canonical transport order as validate request, resolve ray path, sample view path, evaluate medium, integrate view optical depth, integrate solar transmittance, evaluate scattering phase, integrate single scattering, resolve surface radiance, then compose spectral radiance.",
+          "structuredValue": {
+            "stageIds": ["validateRequest", "resolveRayPath", "sampleViewPath", "evaluateMedium", "integrateViewOpticalDepth", "integrateSolarTransmittance", "evaluateScatteringPhase", "integrateSingleScattering", "resolveSurfaceRadiance", "composeSpectralRadiance"]
+          },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/pipeline-stages.js", "lineStart": 31, "lineEnd": 57, "symbol": "CANONICAL_STAGES", "role": "implements-abandoned-stage-order" }]
+        },
+        {
+          "semanticKey": "abandoned-core:pipeline:trace-ray-runs-every-configured-stage",
+          "statement": "The abandoned traceRay facade runs every configured stage sequentially and returns the resulting packet.",
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/CpuSpectralReferenceIntegrator.js", "lineStart": 514, "lineEnd": 523, "symbol": "CpuSpectralReferenceIntegrator.traceRay", "role": "implements-full-pipeline-facade" }],
+          "relatedFactSemanticKeys": ["abandoned-core:pipeline:canonical-stage-order"]
+        },
+        {
+          "semanticKey": "abandoned-core:request:ray-direction-normalized-for-kilometer-parameter",
+          "statement": "Request validation normalizes the ray direction so the ray parameter t is interpreted as path distance in kilometers.",
+          "structuredValue": { "relationship": "r(t) = originKm + tKm * normalizedDirection", "parameterUnits": "km" },
+          "supportStatus": "derived-from-source",
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/ValidateRequestStage.js", "lineStart": 97, "lineEnd": 104, "symbol": "ValidateRequestStage.run", "role": "implements-normalized-ray-distance-convention" }],
+          "externalCitations": [{ "sourceId": "SOURCE-EXT-000001", "role": "supports-ray-parameter-relationship", "locator": { "section": "Rays", "detail": "parametric ray origin plus direction times t" } }]
+        },
+        {
+          "semanticKey": "abandoned-core:numerics:normalize-vector-minimum-length",
+          "statement": "The abandoned vector normalizer rejects a direction whose length is below 1e-12 before normalization.",
+          "structuredValue": { "quantity": "minimumAcceptedVectorLength", "value": 1e-12, "comparison": "length >= threshold" },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/utils.js", "lineStart": 1, "lineEnd": 52, "symbol": "normalizeVector3", "role": "implements-local-vector-normalization-guard" }]
+        },
+        {
+          "semanticKey": "abandoned-core:request:wavelength-grid-positive",
+          "statement": "The abandoned request boundary requires every wavelength sample to be greater than zero nanometers.",
+          "structuredValue": { "quantity": "wavelengthNm", "constraint": "> 0", "units": "nm" },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/ValidateRequestStage.js", "lineStart": 192, "lineEnd": 207, "symbol": "ValidateRequestStage.validateWavelengthGrid", "role": "implements-spectral-grid-value-contract" }]
+        },
+        {
+          "semanticKey": "abandoned-core:request:wavelength-grid-finite",
+          "statement": "The abandoned request boundary requires every wavelength sample to be finite.",
+          "structuredValue": { "quantity": "wavelengthNm", "constraint": "finite", "units": "nm" },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/ValidateRequestStage.js", "lineStart": 192, "lineEnd": 207, "symbol": "ValidateRequestStage.validateWavelengthGrid", "role": "implements-spectral-grid-finiteness-contract" }]
+        },
+        {
+          "semanticKey": "abandoned-core:request:wavelength-grid-strictly-increasing",
+          "statement": "The abandoned request boundary requires wavelength samples to be strictly increasing and does not sort them.",
+          "structuredValue": { "relationship": "wavelengthNm[i] > wavelengthNm[i-1]" },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/ValidateRequestStage.js", "lineStart": 199, "lineEnd": 214, "symbol": "ValidateRequestStage.validateWavelengthGrid", "role": "implements-spectral-grid-order-contract" }]
+        },
+        {
+          "semanticKey": "abandoned-core:numerics:sample-counts-positive-integers",
+          "statement": "Every recognized numerical sample-count control in the abandoned request boundary must be a positive integer.",
+          "structuredValue": { "constraint": "integer and > 0" },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/ValidateRequestStage.js", "lineStart": 255, "lineEnd": 264, "symbol": "ValidateRequestStage.validateNumericalControls", "role": "implements-sample-count-domain" }]
+        },
+        {
+          "semanticKey": "abandoned-core:numerics:view-steps-default-one",
+          "statement": "When viewSteps is absent, the abandoned view-path sampler uses one midpoint partition.",
+          "structuredValue": { "quantity": "defaultViewSteps", "value": 1, "units": "count" },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/SampleViewPathStage.js", "lineStart": 127, "lineEnd": 145, "symbol": "SampleViewPathStage.resolveViewSteps", "role": "implements-default-view-sample-count" }],
+          "relatedFactSemanticKeys": ["abandoned-reference:gap:max-sample-count-requires-convergence"]
+        }
+      ]
+    },
+    {
+      "seriesKey": "abandoned-core-ray-path-and-midpoint-realizations",
+      "shared": {
+        "kind": "abandoned-reference-realization",
+        "domain": "ray-path-and-quadrature",
+        "owner": "abandoned-cpu-spectral-reference",
+        "authorityRole": "reference-realization",
+        "supportStatus": "transitional-unsourced",
+        "implementationStatus": "implemented-in-abandoned-lane",
+        "decisionStatus": "provisional",
+        "verificationLayer": "static-code-observation",
+        "experimentIds": ["EXPERIMENT-A32-000100"],
+        "nonClaims": ["The local branch policy is a frozen implementation observation, not independent geometry or numerical authority."],
+        "blockers": ["Target geometry and quadrature contracts remain to be independently selected and proved."],
+        "nextAction": "Rederive the boundary and quadrature policy, then test it against a pinned target Reference."
+      },
+      "entries": [
+        {
+          "semanticKey": "abandoned-core:ray-path:atmosphere-miss-explicit-empty",
+          "statement": "A null atmosphere intersection becomes an explicit empty zero-length ray path.",
+          "citations": [
+            { "path": "scripts/flat/atmosphere_rejected/reference/stages/ResolveRayPathStage.js", "lineStart": 105, "lineEnd": 110, "symbol": "ResolveRayPathStage.resolveRayPath", "role": "selects-atmosphere-miss-branch" },
+            { "path": "scripts/flat/atmosphere_rejected/reference/stages/ResolveRayPathStage.js", "lineStart": 288, "lineEnd": 303, "symbol": "ResolveRayPathStage.createEmptyRayPath", "role": "implements-explicit-empty-path" }
+          ]
+        },
+        {
+          "semanticKey": "abandoned-core:ray-path:unbounded-interval-rejected",
+          "statement": "The abandoned ray-path stage rejects every atmosphere interval whose unbounded marker is true.",
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/ResolveRayPathStage.js", "lineStart": 113, "lineEnd": 117, "symbol": "ResolveRayPathStage.resolveRayPath", "role": "rejects-unbounded-path" }]
+        },
+        {
+          "semanticKey": "abandoned-core:ray-path:inverted-interval-rejected",
+          "statement": "The abandoned ray-path stage rejects an atmosphere interval whose maximum distance is less than its minimum distance.",
+          "structuredValue": { "constraint": "tMinKm <= tMaxKm" },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/ResolveRayPathStage.js", "lineStart": 119, "lineEnd": 132, "symbol": "ResolveRayPathStage.resolveRayPath", "role": "implements-ordered-interval-contract" }]
+        },
+        {
+          "semanticKey": "abandoned-core:ray-path:entirely-behind-observer-empty",
+          "statement": "An atmosphere interval whose maximum ray parameter is negative becomes an empty forward transport path.",
+          "structuredValue": { "condition": "tMaxKm < 0", "result": "empty" },
+          "supportStatus": "derived-from-source",
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/ResolveRayPathStage.js", "lineStart": 134, "lineEnd": 138, "symbol": "ResolveRayPathStage.resolveRayPath", "role": "implements-forward-ray-domain" }],
+          "externalCitations": [{ "sourceId": "SOURCE-EXT-000001", "role": "supports-forward-ray-domain", "locator": { "section": "Rays", "detail": "forward ray parameter domain" } }]
+        },
+        {
+          "semanticKey": "abandoned-core:ray-path:entry-clipped-to-observer",
+          "statement": "An atmosphere interval crossing the observer is clipped to start at ray parameter zero.",
+          "structuredValue": { "equation": "startKm = max(0, tMinKm)", "units": "km" },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/ResolveRayPathStage.js", "lineStart": 140, "lineEnd": 144, "symbol": "ResolveRayPathStage.resolveRayPath", "role": "implements-forward-entry-clipping" }]
+        },
+        {
+          "semanticKey": "abandoned-core:ray-path:surface-before-entry-empty",
+          "statement": "A finite nonnegative opaque-surface hit before atmosphere entry makes the selected atmosphere transport path empty.",
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/ResolveRayPathStage.js", "lineStart": 146, "lineEnd": 159, "symbol": "ResolveRayPathStage.resolveRayPath", "role": "implements-surface-before-entry-precedence" }]
+        },
+        {
+          "semanticKey": "abandoned-core:ray-path:surface-at-positive-entry-empty",
+          "statement": "A surface exactly at a positive atmosphere-entry distance is treated as blocking the interval and yields an empty path.",
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/ResolveRayPathStage.js", "lineStart": 161, "lineEnd": 174, "symbol": "ResolveRayPathStage.resolveRayPath", "role": "implements-surface-at-entry-precedence" }]
+        },
+        {
+          "semanticKey": "abandoned-core:ray-path:surface-inside-interval-clips-end",
+          "statement": "A surface hit inside the atmosphere interval clips the view segment endpoint to the surface distance.",
+          "structuredValue": { "condition": "startKm <= surfaceDistanceKm < tMaxKm", "result": "endKm = surfaceDistanceKm" },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/ResolveRayPathStage.js", "lineStart": 176, "lineEnd": 190, "symbol": "ResolveRayPathStage.resolveRayPath", "role": "implements-surface-clipping" }]
+        },
+        {
+          "semanticKey": "abandoned-core:ray-path:surface-at-exit-has-visible-precedence",
+          "statement": "When a surface and atmosphere exit have the same ray parameter, the surface is the visible endpoint and the atmosphere boundary is retained only as coincident metadata.",
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/ResolveRayPathStage.js", "lineStart": 193, "lineEnd": 212, "symbol": "ResolveRayPathStage.resolveRayPath", "role": "implements-coincident-boundary-precedence" }]
+        },
+        {
+          "semanticKey": "abandoned-core:ray-path:atmosphere-exit-used-without-nearer-surface",
+          "statement": "Without a nearer surface, the model-provided atmosphere exit is the selected segment endpoint.",
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/ResolveRayPathStage.js", "lineStart": 215, "lineEnd": 225, "symbol": "ResolveRayPathStage.resolveRayPath", "role": "implements-atmosphere-endpoint-fallback" }]
+        },
+        {
+          "semanticKey": "abandoned-core:ray-path:empty-path-no-epsilon",
+          "statement": "The abandoned ray-path stage represents an empty path with start, end, and length all exactly zero and invents no epsilon segment.",
+          "structuredValue": { "startKm": 0, "endKm": 0, "lengthKm": 0 },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/ResolveRayPathStage.js", "lineStart": 288, "lineEnd": 303, "symbol": "ResolveRayPathStage.createEmptyRayPath", "role": "implements-zero-measure-empty-path" }],
+          "relatedFactSemanticKeys": ["analytic-invariants:transmittance.zero-length-path:expected:opticalDepth"]
+        },
+        {
+          "semanticKey": "abandoned-core:ray-path:zero-length-finite-path-marked-empty",
+          "statement": "A finite selected interval is marked empty exactly when its endpoint difference is zero.",
+          "structuredValue": { "relationship": "isEmpty = (endKm - startKm === 0)" },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/ResolveRayPathStage.js", "lineStart": 320, "lineEnd": 335, "symbol": "ResolveRayPathStage.createRayPath", "role": "implements-zero-length-classification" }]
+        },
+        {
+          "semanticKey": "abandoned-core:ray-path:segment-length-consistency-tolerance",
+          "statement": "A supplied ray-segment length must agree with end minus start within an absolute tolerance of 1e-12 km.",
+          "structuredValue": { "quantity": "segmentLengthConsistencyTolerance", "value": 1e-12, "units": "km", "relationship": "abs(lengthKm - (endKm - startKm)) <= tolerance" },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/utils.js", "lineStart": 2, "lineEnd": 103, "symbol": "normalizeRayPathSegment", "role": "implements-segment-length-consistency-policy" }]
+        },
+        {
+          "semanticKey": "abandoned-core:ray-path:endpoint-derived-length-is-canonical",
+          "statement": "After validating a ray segment, the abandoned segment normalizer replaces its stored length with end minus start.",
+          "structuredValue": { "equation": "canonicalLengthKm = endKm - startKm", "units": "km" },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/utils.js", "lineStart": 92, "lineEnd": 103, "symbol": "normalizeRayPathSegment", "role": "implements-endpoint-derived-canonical-length" }]
+        },
+        {
+          "semanticKey": "abandoned-core:quadrature:empty-or-zero-path-has-no-view-samples",
+          "statement": "An empty or zero-length view segment produces no midpoint samples.",
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/SampleViewPathStage.js", "lineStart": 34, "lineEnd": 55, "symbol": "SampleViewPathStage.run", "role": "implements-zero-measure-sampling-policy" }]
+        },
+        {
+          "semanticKey": "abandoned-core:quadrature:uniform-midpoint-sample-location",
+          "statement": "For N view steps over a finite segment, the abandoned sampler evaluates each equal subinterval at its center.",
+          "structuredValue": { "equation": "t_i = startKm + (i + 0.5) * lengthKm / N", "units": "km", "method": "composite midpoint" },
+          "supportStatus": "transitional-unsourced",
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/SampleViewPathStage.js", "lineStart": 58, "lineEnd": 80, "symbol": "SampleViewPathStage.run", "role": "implements-composite-midpoint-locations" }],
+          "externalCitations": [{ "sourceId": "SOURCE-EXT-000090", "role": "records-unqualified-midpoint-breadcrumb-not-authority", "locator": { "detail": "missing precise numerical-analysis source for the composite midpoint rule" } }]
+        },
+        {
+          "semanticKey": "abandoned-core:quadrature:uniform-midpoint-weight",
+          "statement": "Every abandoned view-path midpoint sample carries integration weight equal to segment length divided by viewSteps.",
+          "structuredValue": { "equation": "weightKm = lengthKm / N", "units": "km" },
+          "supportStatus": "transitional-unsourced",
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/SampleViewPathStage.js", "lineStart": 58, "lineEnd": 80, "symbol": "SampleViewPathStage.run", "role": "implements-composite-midpoint-weights" }],
+          "externalCitations": [{ "sourceId": "SOURCE-EXT-000090", "role": "records-unqualified-midpoint-breadcrumb-not-authority", "locator": { "detail": "missing precise numerical-analysis source for equal-subinterval quadrature weights" } }]
+        }
+      ]
+    },
+    {
+      "seriesKey": "abandoned-core-medium-and-view-transmittance-realizations",
+      "shared": {
+        "kind": "abandoned-reference-realization",
+        "domain": "participating-medium-transport",
+        "owner": "abandoned-cpu-spectral-reference",
+        "authorityRole": "reference-realization",
+        "supportStatus": "transitional-unsourced",
+        "implementationStatus": "implemented-in-abandoned-lane",
+        "decisionStatus": "provisional",
+        "verificationLayer": "static-code-observation",
+        "experimentIds": ["EXPERIMENT-A32-000100"],
+        "nonClaims": ["The abandoned implementation is not an independent source for medium physics, atmospheric composition, or target numerical tolerances."],
+        "blockers": ["Physical coefficient, profile, and composition provenance must be checked separately from this implementation observation."],
+        "nextAction": "Prove the corresponding target behavior from independent coefficient and transport sources."
+      },
+      "entries": [
+        {
+          "semanticKey": "abandoned-core:medium:sample-position-parametric-ray",
+          "statement": "The abandoned medium stage evaluates each sample position as observer position plus normalized ray direction times distance from the observer.",
+          "structuredValue": { "equation": "positionKm = observer.positionKm + ray.direction * distanceFromObserverKm", "units": "km" },
+          "supportStatus": "derived-from-source",
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/EvaluateMediumStage.js", "lineStart": 207, "lineEnd": 220, "symbol": "EvaluateMediumStage.evaluateRayPositionKm", "role": "implements-parametric-sample-position" }],
+          "externalCitations": [{ "sourceId": "SOURCE-EXT-000001", "role": "supports-parametric-ray-position", "locator": { "section": "Rays", "detail": "ray evaluation at parameter t" } }]
+        },
+        {
+          "semanticKey": "abandoned-core:medium:outside-membership-zero-coefficients",
+          "statement": "When the atmosphere adapter reports that a sample is outside the volume, the abandoned stage emits wavelength-aligned zero extinction, scattering, and absorption coefficients.",
+          "structuredValue": {
+            "quantity": "wavelength-aligned extinction, scattering, and absorption coefficients",
+            "value": { "extinction": 0, "scattering": 0, "absorption": 0 },
+            "units": "1 / km",
+            "constancyScope": "Every active wavelength when the atmosphere adapter reports that the sample is outside the modeled volume."
+          },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/EvaluateMediumStage.js", "lineStart": 87, "lineEnd": 103, "symbol": "EvaluateMediumStage.evaluateSample", "role": "implements-outside-volume-vacuum" }]
+        },
+        {
+          "semanticKey": "abandoned-core:medium:model-vacuum-zero-coefficients",
+          "statement": "A model-declared vacuum sample is emitted with zero extinction, scattering, and absorption at every active wavelength.",
+          "structuredValue": {
+            "quantity": "wavelength-aligned extinction, scattering, and absorption coefficients",
+            "value": { "extinction": 0, "scattering": 0, "absorption": 0 },
+            "units": "1 / km",
+            "constancyScope": "Every active wavelength when the atmosphere model declares the sample to be vacuum."
+          },
+          "supportStatus": "derived-from-source",
+          "citations": [
+            { "path": "scripts/flat/atmosphere_rejected/reference/stages/EvaluateMediumStage.js", "lineStart": 106, "lineEnd": 125, "symbol": "EvaluateMediumStage.evaluateSample", "role": "selects-model-vacuum-branch" },
+            { "path": "scripts/flat/atmosphere_rejected/reference/stages/EvaluateMediumStage.js", "lineStart": 665, "lineEnd": 678, "symbol": "EvaluateMediumStage.createZeroCoefficients", "role": "implements-vacuum-coefficient-arrays" }
+          ],
+          "relatedFactSemanticKeys": ["analytic-invariants:transmittance.vacuum.finite-path:expected:opticalDepth"]
+        },
+        {
+          "semanticKey": "abandoned-core:medium:contradictory-vacuum-coefficients-rejected",
+          "statement": "The abandoned medium stage rejects a vacuum marker accompanied by any nonzero extinction, scattering, or absorption coefficient.",
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/EvaluateMediumStage.js", "lineStart": 615, "lineEnd": 655, "symbol": "EvaluateMediumStage.validateVacuumMediumState", "role": "implements-vacuum-consistency-check" }]
+        },
+        {
+          "semanticKey": "abandoned-core:medium:species-coefficients-precede-model-totals",
+          "statement": "When one or more species records are present, the abandoned medium stage derives transport totals from species and ignores model-level coefficient totals for that sample.",
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/EvaluateMediumStage.js", "lineStart": 232, "lineEnd": 239, "symbol": "EvaluateMediumStage.resolveCoefficients", "role": "implements-species-precedence" }]
+        },
+        {
+          "semanticKey": "abandoned-core:medium:species-coefficients-add-by-wavelength",
+          "statement": "The abandoned medium stage sums extinction, scattering, and absorption independently across species at each wavelength.",
+          "structuredValue": { "relationship": "totalCoefficient(lambda) = sum_species coefficient_species(lambda)" },
+          "supportStatus": "transitional-unsourced",
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/EvaluateMediumStage.js", "lineStart": 327, "lineEnd": 359, "symbol": "EvaluateMediumStage.sumSpeciesCoefficients", "role": "implements-additive-species-coefficients" }]
+        },
+        {
+          "semanticKey": "abandoned-core:medium:extinction-derived-from-scattering-plus-absorption",
+          "statement": "If direct extinction is absent but both scattering and absorption are supplied, the abandoned stage sets extinction to their wavelength-wise sum.",
+          "structuredValue": { "equation": "sigma_t(lambda) = sigma_s(lambda) + sigma_a(lambda)", "coefficientUnits": "1 / km" },
+          "supportStatus": "derived-from-source",
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/EvaluateMediumStage.js", "lineStart": 249, "lineEnd": 277, "symbol": "EvaluateMediumStage.resolveCoefficients", "role": "implements-extinction-derivation" }],
+          "relatedFactSemanticKeys": ["physics:pbrt:extinction:coefficient-sum"]
+        },
+        {
+          "semanticKey": "abandoned-core:medium:extinction-required-without-both-components",
+          "statement": "Without both scattering and absorption arrays, the abandoned stage requires a direct extinction array rather than inventing the missing total.",
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/EvaluateMediumStage.js", "lineStart": 280, "lineEnd": 288, "symbol": "EvaluateMediumStage.resolveCoefficients", "role": "implements-required-extinction-input" }]
+        },
+        {
+          "semanticKey": "abandoned-core:medium:missing-scattering-diagnostic-becomes-zero",
+          "statement": "When direct extinction is supplied without a scattering array, the abandoned stage emits a zero scattering array.",
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/EvaluateMediumStage.js", "lineStart": 290, "lineEnd": 316, "symbol": "EvaluateMediumStage.resolveCoefficients", "role": "implements-missing-scattering-diagnostic-policy" }]
+        },
+        {
+          "semanticKey": "abandoned-core:medium:missing-absorption-diagnostic-becomes-zero",
+          "statement": "When direct extinction is supplied without an absorption array, the abandoned stage emits a zero absorption array.",
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/EvaluateMediumStage.js", "lineStart": 290, "lineEnd": 316, "symbol": "EvaluateMediumStage.resolveCoefficients", "role": "implements-missing-absorption-diagnostic-policy" }]
+        },
+        {
+          "semanticKey": "abandoned-core:medium:duplicate-extinction-consistency-tolerance",
+          "statement": "When direct extinction and both components are supplied, direct extinction must agree with scattering plus absorption within 1e-12 at each wavelength.",
+          "structuredValue": { "quantity": "duplicateExtinctionAbsoluteTolerance", "value": 1e-12, "coefficientUnits": "1 / km" },
+          "citations": [
+            { "path": "scripts/flat/atmosphere_rejected/reference/stages/EvaluateMediumStage.js", "lineStart": 6, "lineEnd": 7, "symbol": "EVALUATE_MEDIUM_DUPLICATE_SUM_TOLERANCE", "role": "defines-local-consistency-tolerance" },
+            { "path": "scripts/flat/atmosphere_rejected/reference/stages/EvaluateMediumStage.js", "lineStart": 746, "lineEnd": 765, "symbol": "EvaluateMediumStage.validateExtinctionConsistency", "role": "implements-duplicate-extinction-check" }
+          ]
+        },
+        {
+          "semanticKey": "abandoned-core:medium:coefficient-arrays-wavelength-aligned",
+          "statement": "Every required medium coefficient array must have exactly one value per active wavelength; the abandoned stage does not broadcast, truncate, or pad.",
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/EvaluateMediumStage.js", "lineStart": 688, "lineEnd": 696, "symbol": "EvaluateMediumStage.validateCoefficientArray", "role": "implements-coefficient-grid-alignment" }]
+        },
+        {
+          "semanticKey": "abandoned-core:medium:coefficients-nonnegative",
+          "statement": "The abandoned medium stage requires every extinction, scattering, and absorption coefficient to be nonnegative.",
+          "structuredValue": { "constraint": ">= 0", "units": "1 / km" },
+          "supportStatus": "derived-from-source",
+          "citations": [
+            { "path": "scripts/flat/atmosphere_rejected/reference/stages/EvaluateMediumStage.js", "lineStart": 698, "lineEnd": 715, "symbol": "EvaluateMediumStage.validateCoefficientArray", "role": "implements-coefficient-domain" },
+            { "path": "scripts/flat/atmosphere_rejected/reference/types.d.ts", "lineStart": 288, "lineEnd": 335, "symbol": "AtmosphereReferenceMediumCoefficients", "role": "declares-inverse-kilometer-coefficient-units-and-grid-alignment" }
+          ],
+          "externalCitations": [{ "sourceId": "SOURCE-EXT-000001", "role": "supports-nonnegative-medium-rates", "locator": { "section": "Volume Scattering Processes", "detail": "absorption, scattering, and extinction coefficients" } }]
+        },
+        {
+          "semanticKey": "abandoned-core:medium:coefficients-finite",
+          "statement": "The abandoned medium stage requires every extinction, scattering, and absorption coefficient to be finite.",
+          "structuredValue": { "constraint": "finite", "units": "1 / km" },
+          "citations": [
+            { "path": "scripts/flat/atmosphere_rejected/reference/stages/EvaluateMediumStage.js", "lineStart": 698, "lineEnd": 703, "symbol": "EvaluateMediumStage.validateCoefficientArray", "role": "implements-coefficient-finiteness-domain" },
+            { "path": "scripts/flat/atmosphere_rejected/reference/types.d.ts", "lineStart": 288, "lineEnd": 335, "symbol": "AtmosphereReferenceMediumCoefficients", "role": "declares-inverse-kilometer-coefficient-units-and-grid-alignment" }
+          ]
+        },
+        {
+          "semanticKey": "abandoned-core:medium:derived-coefficient-sums-rounded-15-significant-digits",
+          "statement": "The abandoned stage rounds each derived coefficient sum to 15 significant decimal digits.",
+          "structuredValue": { "quantity": "derivedCoefficientReviewSignificantDigits", "value": 15, "units": "decimal significant digits" },
+          "citations": [
+            { "path": "scripts/flat/atmosphere_rejected/reference/stages/EvaluateMediumStage.js", "lineStart": 6, "lineEnd": 7, "symbol": "EVALUATE_MEDIUM_REVIEW_SIGNIFICANT_DIGITS", "role": "defines-rounding-policy" },
+            { "path": "scripts/flat/atmosphere_rejected/reference/stages/EvaluateMediumStage.js", "lineStart": 774, "lineEnd": 784, "symbol": "EvaluateMediumStage.addCoefficientArrays", "role": "implements-rounding-policy" }
+          ]
+        },
+        {
+          "semanticKey": "abandoned-core:medium:composition-fractions-unit-interval",
+          "statement": "Each composition fraction exposed by the abandoned medium stage must be finite and lie in the closed interval from zero to one.",
+          "structuredValue": { "constraint": "0 <= fraction <= 1", "units": "dimensionless" },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/EvaluateMediumStage.js", "lineStart": 453, "lineEnd": 485, "symbol": "EvaluateMediumStage.validateComposition", "role": "implements-composition-fraction-domain" }]
+        },
+        {
+          "semanticKey": "abandoned-core:medium:listed-composition-not-over-one",
+          "statement": "The recomputed sum of listed composition fractions may not exceed one by more than 1e-12, and malformed values are rejected rather than normalized.",
+          "structuredValue": { "constraint": "listedSum <= 1 + 1e-12", "units": "dimensionless" },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/EvaluateMediumStage.js", "lineStart": 469, "lineEnd": 500, "symbol": "EvaluateMediumStage.validateComposition", "role": "implements-no-repair-composition-upper-bound" }]
+        },
+        {
+          "semanticKey": "abandoned-core:medium:listed-composition-duplicate-sum-tolerance",
+          "statement": "A supplied listedFractionSum must match the recomputed listed fractions within an absolute tolerance of 1e-12.",
+          "structuredValue": { "quantity": "compositionDuplicateSumAbsoluteTolerance", "value": 1e-12, "units": "dimensionless" },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/EvaluateMediumStage.js", "lineStart": 502, "lineEnd": 526, "symbol": "EvaluateMediumStage.validateComposition", "role": "implements-duplicate-composition-sum-check" }]
+        },
+        {
+          "semanticKey": "abandoned-core:medium:listed-plus-residual-account-for-one",
+          "statement": "When both listedFractionSum and unlistedResidual are supplied, their sum must equal one within 1e-12 and is not repaired by the stage.",
+          "structuredValue": { "relationship": "abs(listedFractionSum + unlistedResidual - 1) <= 1e-12", "units": "dimensionless" },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/EvaluateMediumStage.js", "lineStart": 529, "lineEnd": 578, "symbol": "EvaluateMediumStage.validateComposition", "role": "implements-composition-accounting-check" }]
+        },
+        {
+          "semanticKey": "abandoned-core:view-optical-depth:weighted-extinction-sum",
+          "statement": "The abandoned view integrator accumulates optical depth at each wavelength as the sum of extinction per kilometer times sample weight in kilometers.",
+          "structuredValue": { "equation": "tau(lambda) = sum_i sigma_t_i(lambda) * weightKm_i", "units": "dimensionless" },
+          "supportStatus": "derived-from-source",
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/IntegrateViewOpticalDepthStage.js", "lineStart": 54, "lineEnd": 78, "symbol": "IntegrateViewOpticalDepthStage.run", "role": "implements-discrete-optical-depth-integral" }],
+          "relatedFactSemanticKeys": ["physics:pbrt:transmittance:equation-11.5", "analytic-invariants:transmittance.weighted-samples.piecewise-constant:expected:opticalDepth"]
+        },
+        {
+          "semanticKey": "abandoned-core:view-optical-depth:beer-lambert-transmittance",
+          "statement": "The abandoned view integrator converts optical depth to transmittance independently at each wavelength using exp(-tau).",
+          "structuredValue": { "equation": "T(lambda) = exp(-tau(lambda))", "units": "dimensionless" },
+          "supportStatus": "derived-from-source",
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/IntegrateViewOpticalDepthStage.js", "lineStart": 309, "lineEnd": 319, "symbol": "IntegrateViewOpticalDepthStage.transmittanceFromOpticalDepth", "role": "implements-beer-lambert-transmittance" }],
+          "relatedFactSemanticKeys": ["physics:pbrt:transmittance:equation-11.5"]
+        }
+      ]
+    },
+    {
+      "seriesKey": "abandoned-core-source-phase-scattering-surface-realizations",
+      "shared": {
+        "kind": "abandoned-reference-realization",
+        "domain": "single-scattering-and-boundary-radiance",
+        "owner": "abandoned-cpu-spectral-reference",
+        "authorityRole": "reference-realization",
+        "supportStatus": "transitional-unsourced",
+        "implementationStatus": "implemented-in-abandoned-lane",
+        "decisionStatus": "provisional",
+        "verificationLayer": "static-code-observation",
+        "experimentIds": ["EXPERIMENT-A32-000100"],
+        "nonClaims": ["The code citation establishes the abandoned realization only; external physics and target-Reference proof remain separate."],
+        "blockers": ["Source-energy interpretation, phase convention, boundary response, and missing transport orders require independent target decisions."],
+        "nextAction": "Rederive and test this bounded realization at the target CPU Reference pre-display spectral boundary."
+      },
+      "entries": [
+        {
+          "semanticKey": "abandoned-core:solar-optical-depth:weighted-extinction-sum",
+          "statement": "For a visible source segment, the abandoned solar stage accumulates optical depth as extinction per kilometer times source-path sample weight in kilometers.",
+          "structuredValue": { "equation": "tau_source(lambda) = sum_j sigma_t_j(lambda) * weightKm_j", "units": "dimensionless" },
+          "supportStatus": "derived-from-source",
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/IntegrateSolarTransmittanceStage.js", "lineStart": 345, "lineEnd": 373, "symbol": "IntegrateSolarTransmittanceStage.integrateSegmentSamples", "role": "implements-source-path-optical-depth" }],
+          "relatedFactSemanticKeys": ["physics:pbrt:transmittance:equation-11.5"]
+        },
+        {
+          "semanticKey": "abandoned-core:solar-optical-depth:beer-lambert-transmittance",
+          "statement": "For a visible source segment, the abandoned solar stage computes source transmittance as exp(-source optical depth) per wavelength.",
+          "structuredValue": { "equation": "T_source(lambda) = exp(-tau_source(lambda))", "units": "dimensionless" },
+          "supportStatus": "derived-from-source",
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/IntegrateSolarTransmittanceStage.js", "lineStart": 376, "lineEnd": 385, "symbol": "IntegrateSolarTransmittanceStage.transmittanceFromOpticalDepth", "role": "implements-source-beer-lambert-transmittance" }],
+          "relatedFactSemanticKeys": ["physics:pbrt:transmittance:equation-11.5"]
+        },
+        {
+          "semanticKey": "abandoned-core:solar-visibility:occluded-source-transmittance-zero",
+          "statement": "A model-declared occluded source segment produces zero source transmittance at every wavelength.",
+          "structuredValue": { "sourceTransmittance": 0, "units": "dimensionless" },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/IntegrateSolarTransmittanceStage.js", "lineStart": 171, "lineEnd": 182, "symbol": "IntegrateSolarTransmittanceStage.evaluateSourceSample", "role": "implements-occluded-source-output" }]
+        },
+        {
+          "semanticKey": "abandoned-core:solar-visibility:occluded-source-optical-depth-null",
+          "statement": "A model-declared occluded source segment records null optical depth rather than a synthetic finite optical-depth value.",
+          "structuredValue": { "opticalDepth": null },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/IntegrateSolarTransmittanceStage.js", "lineStart": 171, "lineEnd": 182, "symbol": "IntegrateSolarTransmittanceStage.evaluateSourceSample", "role": "implements-occluded-optical-depth-policy" }]
+        },
+        {
+          "semanticKey": "abandoned-core:solar-visibility:occluded-source-path-length-zero",
+          "statement": "A model-declared occluded source segment records path length zero.",
+          "structuredValue": { "pathLength": 0, "units": "km" },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/IntegrateSolarTransmittanceStage.js", "lineStart": 171, "lineEnd": 182, "symbol": "IntegrateSolarTransmittanceStage.evaluateSourceSample", "role": "implements-occluded-path-length-policy" }]
+        },
+        {
+          "semanticKey": "abandoned-core:source-spectrum:accepted-kinds",
+          "statement": "The abandoned solar stage accepts source spectra labeled either spectral-radiance or spectral-irradiance.",
+          "structuredValue": { "acceptedKinds": ["spectral-radiance", "spectral-irradiance"] },
+          "citations": [
+            { "path": "scripts/flat/atmosphere_rejected/reference/stages/IntegrateSolarTransmittanceStage.js", "lineStart": 526, "lineEnd": 543, "symbol": "IntegrateSolarTransmittanceStage.validateSourceSpectrum", "role": "implements-source-spectrum-kind-domain" },
+            { "path": "scripts/flat/atmosphere_rejected/reference/types.d.ts", "lineStart": 593, "lineEnd": 616, "symbol": "AtmosphereReferenceSourceSpectrum", "role": "declares-radiance-or-irradiance-spectrum-kinds" }
+          ]
+        },
+        {
+          "semanticKey": "abandoned-core:source-spectrum:units-required",
+          "statement": "Every accepted source spectrum in the abandoned solar stage must carry a nonempty units string.",
+          "citations": [
+            { "path": "scripts/flat/atmosphere_rejected/reference/stages/IntegrateSolarTransmittanceStage.js", "lineStart": 545, "lineEnd": 553, "symbol": "IntegrateSolarTransmittanceStage.validateSourceSpectrum", "role": "implements-source-spectrum-units-requirement" },
+            { "path": "scripts/flat/atmosphere_rejected/reference/types.d.ts", "lineStart": 593, "lineEnd": 616, "symbol": "AtmosphereReferenceSourceSpectrum", "role": "declares-source-spectrum-units-field" }
+          ]
+        },
+        {
+          "semanticKey": "abandoned-core:source-spectrum:derivation-label-required",
+          "statement": "Every accepted source spectrum in the abandoned solar stage must carry a nonempty derivation string.",
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/IntegrateSolarTransmittanceStage.js", "lineStart": 555, "lineEnd": 573, "symbol": "IntegrateSolarTransmittanceStage.validateSourceSpectrum", "role": "implements-source-spectrum-derivation-label-requirement" }]
+        },
+        {
+          "semanticKey": "abandoned-core:source-spectrum:values-wavelength-aligned",
+          "statement": "A source-spectrum value array must have exactly one entry per active wavelength; the abandoned solar stage performs no interpolation, broadcast, or truncation.",
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/IntegrateSolarTransmittanceStage.js", "lineStart": 584, "lineEnd": 596, "symbol": "IntegrateSolarTransmittanceStage.validateSourceSpectrumValues", "role": "implements-source-spectrum-grid-alignment" }]
+        },
+        {
+          "semanticKey": "abandoned-core:source-spectrum:values-nonnegative",
+          "statement": "Every abandoned source-spectrum value must be nonnegative.",
+          "structuredValue": { "constraint": ">= 0" },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/IntegrateSolarTransmittanceStage.js", "lineStart": 598, "lineEnd": 612, "symbol": "IntegrateSolarTransmittanceStage.validateSourceSpectrumValues", "role": "implements-source-spectrum-value-domain" }]
+        },
+        {
+          "semanticKey": "abandoned-core:source-spectrum:values-finite",
+          "statement": "Every abandoned source-spectrum value must be finite.",
+          "structuredValue": { "constraint": "finite" },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/IntegrateSolarTransmittanceStage.js", "lineStart": 598, "lineEnd": 612, "symbol": "IntegrateSolarTransmittanceStage.validateSourceSpectrumValues", "role": "implements-source-spectrum-finiteness-domain" }]
+        },
+        {
+          "semanticKey": "abandoned-core:source-quadrature:weight-required",
+          "statement": "Every abandoned source sample must supply a quadrature weight.",
+          "structuredValue": { "required": true },
+          "citations": [
+            { "path": "scripts/flat/atmosphere_rejected/reference/stages/IntegrateSolarTransmittanceStage.js", "lineStart": 834, "lineEnd": 848, "symbol": "IntegrateSolarTransmittanceStage.validateRequiredNonnegativeFinite", "role": "implements-source-weight-domain" },
+            { "path": "scripts/flat/atmosphere_rejected/reference/types.d.ts", "lineStart": 618, "lineEnd": 645, "symbol": "AtmosphereReferenceSolarSourceSample", "role": "declares-required-source-quadrature-weight" }
+          ]
+        },
+        {
+          "semanticKey": "abandoned-core:source-quadrature:weight-nonnegative",
+          "statement": "Every abandoned source-sample quadrature weight must be nonnegative.",
+          "structuredValue": { "constraint": ">= 0" },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/IntegrateSolarTransmittanceStage.js", "lineStart": 834, "lineEnd": 848, "symbol": "IntegrateSolarTransmittanceStage.validateRequiredNonnegativeFinite", "role": "implements-source-weight-nonnegative-domain" }]
+        },
+        {
+          "semanticKey": "abandoned-core:source-quadrature:weight-finite",
+          "statement": "Every abandoned source-sample quadrature weight must be finite.",
+          "structuredValue": { "constraint": "finite" },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/IntegrateSolarTransmittanceStage.js", "lineStart": 834, "lineEnd": 848, "symbol": "IntegrateSolarTransmittanceStage.validateRequiredNonnegativeFinite", "role": "implements-source-weight-finiteness-domain" }]
+        },
+        {
+          "semanticKey": "abandoned-core:source-quadrature:solid-angle-optional-metadata",
+          "statement": "Source-sample solidAngleSr is optional metadata in the abandoned solar stage.",
+          "structuredValue": { "quantity": "solidAngleSr", "required": false, "units": "sr" },
+          "citations": [
+            { "path": "scripts/flat/atmosphere_rejected/reference/stages/IntegrateSolarTransmittanceStage.js", "lineStart": 803, "lineEnd": 824, "symbol": "IntegrateSolarTransmittanceStage.validateOptionalNonnegativeFinite", "role": "implements-solid-angle-metadata-domain" },
+            { "path": "scripts/flat/atmosphere_rejected/reference/types.d.ts", "lineStart": 618, "lineEnd": 645, "symbol": "AtmosphereReferenceSolarSourceSample", "role": "declares-optional-solid-angle-in-steradians" }
+          ]
+        },
+        {
+          "semanticKey": "abandoned-core:source-quadrature:solid-angle-nonnegative",
+          "statement": "When supplied, abandoned source-sample solidAngleSr must be nonnegative.",
+          "structuredValue": { "quantity": "solidAngleSr", "constraint": ">= 0", "units": "sr" },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/IntegrateSolarTransmittanceStage.js", "lineStart": 810, "lineEnd": 824, "symbol": "IntegrateSolarTransmittanceStage.validateOptionalNonnegativeFinite", "role": "implements-solid-angle-nonnegative-domain" }]
+        },
+        {
+          "semanticKey": "abandoned-core:source-quadrature:solid-angle-finite",
+          "statement": "When supplied, abandoned source-sample solidAngleSr must be finite.",
+          "structuredValue": { "quantity": "solidAngleSr", "constraint": "finite", "units": "sr" },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/IntegrateSolarTransmittanceStage.js", "lineStart": 810, "lineEnd": 824, "symbol": "IntegrateSolarTransmittanceStage.validateOptionalNonnegativeFinite", "role": "implements-solid-angle-finiteness-domain" }]
+        },
+        {
+          "semanticKey": "abandoned-core:phase:stage-cosine-convention",
+          "statement": "The abandoned phase stage defines cosTheta as the dot product of the direction from the sample toward the source and the direction from the sample toward the camera.",
+          "structuredValue": { "equation": "cosTheta = dot(sourceDirectionFromSample, directionFromSampleToCamera)" },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/EvaluateScatteringPhaseStage.js", "lineStart": 3, "lineEnd": 4, "symbol": "SCATTERING_PHASE_CONVENTION", "role": "defines-abandoned-phase-angle-convention" }]
+        },
+        {
+          "semanticKey": "abandoned-core:phase:camera-direction-negates-ray",
+          "statement": "The abandoned phase stage obtains the direction from a sample to the camera by negating the validated camera-ray direction.",
+          "structuredValue": { "equation": "directionFromSampleToCamera = -ray.direction" },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/EvaluateScatteringPhaseStage.js", "lineStart": 44, "lineEnd": 56, "symbol": "EvaluateScatteringPhaseStage.run", "role": "implements-sample-to-camera-direction" }]
+        },
+        {
+          "semanticKey": "abandoned-core:phase:cosine-clamped-before-angle",
+          "statement": "The abandoned phase stage clamps the computed scattering cosine to the closed interval [-1, 1].",
+          "structuredValue": { "relationship": "cosTheta = max(-1, min(1, dot))" },
+          "citations": [
+            { "path": "scripts/flat/atmosphere_rejected/reference/stages/EvaluateScatteringPhaseStage.js", "lineStart": 258, "lineEnd": 268, "symbol": "EvaluateScatteringPhaseStage.clampCosTheta", "role": "implements-cosine-clamp" }
+          ]
+        },
+        {
+          "semanticKey": "abandoned-core:phase:angle-diagnostic-arccos",
+          "statement": "The abandoned phase stage records scatteringAngleRad as arccos of the clamped stage cosTheta.",
+          "structuredValue": { "equation": "scatteringAngleRad = acos(cosTheta)", "units": "rad" },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/EvaluateScatteringPhaseStage.js", "lineStart": 104, "lineEnd": 121, "symbol": "EvaluateScatteringPhaseStage.evaluateSourceSample", "role": "implements-scattering-angle-diagnostic" }]
+        },
+        {
+          "semanticKey": "abandoned-core:phase:isotropic-formula",
+          "statement": "The abandoned isotropic phase realization returns 1 divided by 4 pi steradians.",
+          "structuredValue": { "equation": "p = 1 / (4 * pi)", "units": "1 / sr" },
+          "supportStatus": "derived-from-source",
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/phase-functions.js", "lineStart": 29, "lineEnd": 31, "symbol": "evaluatePhaseValue", "role": "implements-isotropic-phase" }],
+          "relatedFactSemanticKeys": ["physics:pbrt:phase-function:normalization-equation-11.2", "analytic-invariants:phase.isotropic.constant-over-solid-angle:expected:phase"]
+        },
+        {
+          "semanticKey": "abandoned-core:phase:rayleigh-formula",
+          "statement": "The abandoned Rayleigh phase realization returns 3 times one plus cosTheta squared divided by 16 pi steradians.",
+          "structuredValue": { "equation": "p(cosTheta) = 3 * (1 + cosTheta^2) / (16 * pi)", "units": "1 / sr" },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/phase-functions.js", "lineStart": 33, "lineEnd": 35, "symbol": "evaluatePhaseValue", "role": "implements-rayleigh-phase" }]
+        },
+        {
+          "semanticKey": "abandoned-core:phase:henyey-greenstein-local-sign-formula",
+          "statement": "The abandoned Henyey-Greenstein realization evaluates the normalized formula with physical phase cosine mu equal to negative stage cosTheta.",
+          "structuredValue": { "equation": "mu = -cosTheta; p = (1 - g^2) / (4*pi*(1 + g^2 - 2*g*mu)^(3/2))", "units": "1 / sr" },
+          "supportStatus": "derived-from-source",
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/phase-functions.js", "lineStart": 48, "lineEnd": 58, "symbol": "henyeyGreensteinPhase", "role": "implements-henyey-greenstein-with-local-sign" }],
+          "externalCitations": [{ "sourceId": "SOURCE-EXT-000001", "role": "supports-henyey-greenstein-formula-and-direction-convention", "locator": { "section": "Phase Functions", "detail": "Henyey-Greenstein phase function" } }],
+          "relatedFactSemanticKeys": ["physics:pbrt:phase-function:away-pointing-direction-convention"]
+        },
+        {
+          "semanticKey": "abandoned-core:phase:cornette-shanks-local-sign-formula",
+          "statement": "The abandoned Cornette-Shanks realization evaluates its normalized formula with physical phase cosine mu equal to negative stage cosTheta.",
+          "structuredValue": { "equation": "mu = -cosTheta; p = 3/(8*pi) * (1-g^2)/(2+g^2) * (1+mu^2)/(1+g^2-2*g*mu)^(3/2)", "units": "1 / sr" },
+          "supportStatus": "candidate-source",
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/phase-functions.js", "lineStart": 60, "lineEnd": 73, "symbol": "cornetteShanksPhase", "role": "implements-cornette-shanks-with-local-sign" }],
+          "externalCitations": [{ "sourceId": "SOURCE-EXT-000093", "role": "candidate-source-implementation", "locator": { "symbol": "MiePhaseFunction", "detail": "unpinned clear-sky-model source breadcrumb" } }],
+          "relatedFactSemanticKeys": ["abandoned-reference:aerosol-phase:cornette-shanks-g070-costheta-zero"]
+        },
+        {
+          "semanticKey": "abandoned-core:phase:aerosol-g-open-unit-interval",
+          "statement": "The abandoned Henyey-Greenstein and Cornette-Shanks evaluators require the asymmetry parameter strictly inside (-1, 1).",
+          "structuredValue": { "constraint": "-1 < g < 1", "units": "dimensionless" },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/phase-functions.js", "lineStart": 75, "lineEnd": 80, "symbol": "validateAerosolPhaseG", "role": "implements-aerosol-asymmetry-domain" }]
+        },
+        {
+          "semanticKey": "abandoned-core:phase:aerosol-g-finite",
+          "statement": "The abandoned Henyey-Greenstein and Cornette-Shanks evaluators require a finite asymmetry parameter.",
+          "structuredValue": { "constraint": "finite", "units": "dimensionless" },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/phase-functions.js", "lineStart": 75, "lineEnd": 80, "symbol": "validateAerosolPhaseG", "role": "implements-aerosol-asymmetry-finiteness-domain" }]
+        },
+        {
+          "semanticKey": "abandoned-core:phase:wavelength-independent-value-replicated",
+          "statement": "The abandoned phase helper evaluates one scalar phase value and copies it to every wavelength in the active grid.",
+          "structuredValue": {
+            "expression": "phaseByWavelength[lambdaIndex] = evaluatePhaseValue(phaseKind, parameters, cosTheta) for every active lambdaIndex",
+            "namedInputs": ["phaseKind", "phase parameters", "cosTheta", "active wavelength grid"],
+            "output": { "name": "phaseByWavelength", "units": "1 / sr" },
+            "dimensionalContract": "The scalar phase value and every replicated output entry have inverse-steradian units; wavelength selects no additional factor.",
+            "domainOfApplicability": "Supported abandoned-lane phase kinds and every wavelength in the supplied active grid."
+          },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/phase-functions.js", "lineStart": 6, "lineEnd": 21, "symbol": "evaluatePhaseByWavelength", "role": "implements-wavelength-independent-phase-array" }]
+        },
+        {
+          "semanticKey": "abandoned-core:phase:species-without-phase-metadata-omitted",
+          "statement": "A scattering species without explicit supported phase metadata is omitted from the abandoned phase output.",
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/EvaluateScatteringPhaseStage.js", "lineStart": 133, "lineEnd": 165, "symbol": "EvaluateScatteringPhaseStage.evaluateSpeciesPhase", "role": "implements-missing-phase-omission" }]
+        },
+        {
+          "semanticKey": "abandoned-core:single-scattering:discrete-contribution-product",
+          "statement": "For each wavelength, species, source sample, and view sample, the abandoned single-scattering contribution multiplies view transmittance, scattering coefficient, phase, source-spectrum value, source transmittance, source weight, and view-sample length.",
+          "structuredValue": { "equation": "dL = T_view * beta_s * p * sourceSpectrum * T_source * sourceWeight * ds", "coefficientUnits": "1 / km", "distanceUnits": "km" },
+          "supportStatus": "derived-from-source",
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/IntegrateSingleScatteringStage.js", "lineStart": 106, "lineEnd": 150, "symbol": "IntegrateSingleScatteringStage.integrateSourceSample", "role": "implements-discrete-single-scattering-product" }],
+          "relatedFactSemanticKeys": ["physics:pbrt:volume-scattering:source-function-equation-11.3", "analytic-invariants:in-scattering.one-sample.scalar-product:expected:spectralRadiance"]
+        },
+        {
+          "semanticKey": "abandoned-core:single-scattering:adds-species-source-and-view-samples",
+          "statement": "The abandoned single-scattering stage adds each wavelength-aligned contribution across species, source samples, and view samples into its final in-scattered radiance.",
+          "structuredValue": {
+            "expression": "L_scattered(lambda) = sum_viewSamples sum_sourceSamples sum_species contribution(lambda, viewSample, sourceSample, species)",
+            "namedInputs": ["wavelength-aligned per-species contribution", "view samples", "source samples", "species"],
+            "output": { "name": "inScatteredRadianceByWavelength", "units": "spectral-radiance" },
+            "dimensionalContract": "All summands and the accumulated result share spectral-radiance units.",
+            "domainOfApplicability": "The abandoned single-scattering packet after its medium, view-transmittance, source-transmittance, and phase stages have produced aligned samples."
+          },
+          "citations": [
+            { "path": "scripts/flat/atmosphere_rejected/reference/stages/IntegrateSingleScatteringStage.js", "lineStart": 32, "lineEnd": 86, "symbol": "IntegrateSingleScatteringStage.run", "role": "implements-view-and-source-aggregation" },
+            { "path": "scripts/flat/atmosphere_rejected/reference/stages/IntegrateSingleScatteringStage.js", "lineStart": 127, "lineEnd": 168, "symbol": "IntegrateSingleScatteringStage.integrateSourceSample", "role": "implements-species-aggregation" }
+          ]
+        },
+        {
+          "semanticKey": "abandoned-core:surface:no-hit-radiance-zero",
+          "statement": "Without a selected visible surface hit, the abandoned surface stage contributes zero view-attenuated radiance at every wavelength.",
+          "structuredValue": {
+            "quantity": "view-attenuated surface-radiance contribution",
+            "value": 0,
+            "units": "spectral-radiance",
+            "constancyScope": "Every active wavelength when no visible surface hit is selected."
+          },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/ResolveSurfaceRadianceStage.js", "lineStart": 32, "lineEnd": 47, "symbol": "ResolveSurfaceRadianceStage.run", "role": "implements-no-surface-zero-term" }],
+          "relatedFactSemanticKeys": ["reference:surface-boundary-radiance-term-is-absent"]
+        },
+        {
+          "semanticKey": "abandoned-core:surface:direct-source-energy-sum",
+          "statement": "At a surface point, the abandoned stage sums source-spectrum value times source transmittance times source weight across source samples at each wavelength.",
+          "structuredValue": { "equation": "direct(lambda) = sum_s spectrum_s(lambda) * T_s(lambda) * weight_s" },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/ResolveSurfaceRadianceStage.js", "lineStart": 130, "lineEnd": 155, "symbol": "ResolveSurfaceRadianceStage.resolveDirectIrradiance", "role": "implements-direct-source-energy-sum" }]
+        },
+        {
+          "semanticKey": "abandoned-core:surface:incident-cosine-clamped-nonnegative",
+          "statement": "The abandoned surface stage computes its direct incident cosine as max(0, normal dot source direction).",
+          "structuredValue": { "equation": "directCosTheta = max(0, dot(normal, direction))", "units": "dimensionless" },
+          "supportStatus": "derived-from-source",
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/ResolveSurfaceRadianceStage.js", "lineStart": 165, "lineEnd": 175, "symbol": "ResolveSurfaceRadianceStage.resolveDirectCosTheta", "role": "implements-nonnegative-incident-cosine" }],
+          "relatedFactSemanticKeys": ["physics:pbrt:lambertian:reflectance-over-pi"]
+        },
+        {
+          "semanticKey": "abandoned-core:surface:diffuse-sky-irradiance-zero",
+          "statement": "The abandoned surface stage hard-codes diffuse-sky irradiance to zero at every wavelength.",
+          "structuredValue": { "diffuseSkyIrradiance": 0 },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/ResolveSurfaceRadianceStage.js", "lineStart": 50, "lineEnd": 70, "symbol": "ResolveSurfaceRadianceStage.run", "role": "implements-zero-diffuse-sky-input" }]
+        },
+        {
+          "semanticKey": "abandoned-core:surface:emitted-radiance-zero",
+          "statement": "The abandoned surface-stage component ledger hard-codes emitted surface radiance to zero at every wavelength.",
+          "structuredValue": { "emittedRadiance": 0 },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/ResolveSurfaceRadianceStage.js", "lineStart": 82, "lineEnd": 100, "symbol": "ResolveSurfaceRadianceStage.run", "role": "implements-zero-emitted-component" }]
+        },
+        {
+          "semanticKey": "abandoned-core:surface:leaving-radiance-delegated-to-model",
+          "statement": "The abandoned core delegates surface leaving radiance to model.surface.radianceAt and validates only the returned wavelength-aligned array.",
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/ResolveSurfaceRadianceStage.js", "lineStart": 192, "lineEnd": 212, "symbol": "ResolveSurfaceRadianceStage.resolveSurfaceLeavingRadiance", "role": "implements-model-owned-surface-response" }]
+        },
+        {
+          "semanticKey": "abandoned-core:surface:view-attenuation-product",
+          "statement": "The abandoned surface stage multiplies surface leaving radiance by path-end view transmittance wavelength by wavelength.",
+          "structuredValue": { "equation": "L_surface_to_camera(lambda) = L_surface_leaving(lambda) * T_view_path_end(lambda)" },
+          "supportStatus": "derived-from-source",
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/ResolveSurfaceRadianceStage.js", "lineStart": 72, "lineEnd": 80, "symbol": "ResolveSurfaceRadianceStage.run", "role": "implements-surface-view-attenuation" }],
+          "relatedFactSemanticKeys": ["physics:pbrt:transmittance:multiplicative-equation-11.6"]
+        },
+        {
+          "semanticKey": "abandoned-core:compose:single-scattering-plus-surface",
+          "statement": "The abandoned final spectral radiance is the wavelength-wise sum of single in-scattered radiance and view-attenuated surface radiance.",
+          "structuredValue": { "equation": "L_final(lambda) = L_single_scattered(lambda) + L_surface_to_camera(lambda)" },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/ComposeSpectralRadianceStage.js", "lineStart": 32, "lineEnd": 62, "symbol": "ComposeSpectralRadianceStage.run", "role": "implements-final-spectral-component-sum" }]
+        },
+        {
+          "semanticKey": "abandoned-core:compose:no-radiance-clamp",
+          "statement": "The abandoned composition stage marks its spectral radiance output as unclamped.",
+          "structuredValue": { "clamped": false },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/ComposeSpectralRadianceStage.js", "lineStart": 54, "lineEnd": 67, "symbol": "ComposeSpectralRadianceStage.run", "role": "records-unclamped-pre-display-output" }]
+        },
+        {
+          "semanticKey": "abandoned-core:compose:no-color-conversion",
+          "statement": "The abandoned composition stage marks its spectral radiance output as not color-converted.",
+          "structuredValue": { "colorConverted": false },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/ComposeSpectralRadianceStage.js", "lineStart": 54, "lineEnd": 67, "symbol": "ComposeSpectralRadianceStage.run", "role": "records-pre-color-spectral-boundary" }]
+        }
+      ]
+    },
+    {
+      "seriesKey": "abandoned-core-selected-validation-expectations",
+      "shared": {
+        "kind": "abandoned-reference-declared-validation-expectation",
+        "domain": "reference-validation-expectations",
+        "owner": "abandoned-reference-validation-expectation-ledger",
+        "authorityRole": "reference-validation",
+        "supportStatus": "derived-from-source",
+        "implementationStatus": "fixture-only",
+        "decisionStatus": "provisional",
+        "verificationLayer": "static-code-observation",
+        "experimentIds": ["EXPERIMENT-A32-000100"],
+        "nonClaims": [
+          "The cited test or fixture source proves that an expectation was declared, not that a test executed or passed.",
+          "No identified execution record ties this expectation to the frozen revision, and no target CPU Reference result is proved."
+        ],
+        "blockers": ["A pinned runner, environment, execution result, and target Reference comparison are absent."],
+        "nextAction": "Independently verify the expected value, then execute an equivalent test against the pinned target CPU Reference."
+      },
+      "entries": [
+        {
+          "semanticKey": "abandoned-core:validation:pipeline-canonical-history-declared",
+          "statement": "An abandoned integrator specification declares that a basic full trace returns the canonical stage history.",
+          "supportStatus": "source-backed",
+          "implementationStatus": "implemented-in-abandoned-lane",
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/_tests/CpuSpectralReferenceIntegrator.spec.js", "lineStart": 379, "lineEnd": 392, "symbol": "returns the current public result packet shape", "role": "declares-full-trace-stage-history-expectation" }],
+          "relatedFactSemanticKeys": ["abandoned-core:pipeline:canonical-stage-order"]
+        },
+        {
+          "semanticKey": "abandoned-core:validation:ray-path-surface-clips-at-four-km",
+          "statement": "For atmosphere interval 0 to 10 km and a surface hit at 4 km, the abandoned ray-path fixture declares the selected view segment to be 0 to 4 km.",
+          "structuredValue": { "atmosphereIntervalKm": [0, 10], "surfaceDistanceKm": 4, "expectedViewSegmentKm": [0, 4], "expectedLengthKm": 4, "tolerance": "exact" },
+          "supportStatus": "source-backed",
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/_tests/fixtures/ray-path-contracts.json", "lineStart": 77, "lineEnd": 154, "role": "declares-abandoned-validation-expectation", "structuredLocator": { "expectationId": "ray-path.surface-hit.clips-atmosphere-segment", "field": "expected.rayPath.viewSegment" } }],
+          "relatedFactSemanticKeys": ["abandoned-core:ray-path:surface-inside-interval-clips-end"]
+        },
+        {
+          "semanticKey": "abandoned-core:validation:ray-path-atmosphere-miss-empty",
+          "statement": "For a null atmosphere intersection and no surface hit, the abandoned ray-path fixture declares an explicit empty segment with zero start, end, and length.",
+          "structuredValue": { "atmosphereIntersection": null, "expectedIsEmpty": true, "expectedViewSegmentKm": [0, 0], "expectedLengthKm": 0, "tolerance": "exact" },
+          "supportStatus": "source-backed",
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/_tests/fixtures/ray-path-contracts.json", "lineStart": 227, "lineEnd": 283, "role": "declares-abandoned-validation-expectation", "structuredLocator": { "expectationId": "ray-path.atmosphere.miss-empty-path", "field": "expected.rayPath" } }],
+          "relatedFactSemanticKeys": ["abandoned-core:ray-path:atmosphere-miss-explicit-empty"]
+        },
+        {
+          "semanticKey": "abandoned-core:validation:medium-parametric-position-1-7-3",
+          "statement": "For observer [1, 2, 3] km, direction [0, 1, 0], and distance 5 km, the abandoned medium fixture declares sample position [1, 7, 3] km.",
+          "structuredValue": { "observerPositionKm": [1, 2, 3], "rayDirection": [0, 1, 0], "distanceKm": 5, "expectedPositionKm": [1, 7, 3], "tolerance": "exact" },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/_tests/fixtures/medium-contracts.json", "lineStart": 54, "lineEnd": 129, "role": "declares-abandoned-validation-expectation", "structuredLocator": { "expectationId": "medium.position.single-sample-from-observer-ray", "field": "expected.mediumSamples.positionKm" } }],
+          "relatedFactSemanticKeys": ["abandoned-core:medium:sample-position-parametric-ray"]
+        },
+        {
+          "semanticKey": "abandoned-core:validation:medium-species-total-extinction-sum",
+          "statement": "For species extinction arrays [0.1, 0.2] and [0.03, 0.04] per kilometer, the abandoned medium fixture declares total extinction [0.13, 0.24] per kilometer.",
+          "structuredValue": { "speciesExtinctionPerKm": [[0.1, 0.2], [0.03, 0.04]], "expectedTotalExtinctionPerKm": [0.13, 0.24], "tolerance": "exact" },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/_tests/fixtures/medium-contracts.json", "lineStart": 484, "lineEnd": 540, "role": "declares-abandoned-validation-expectation", "structuredLocator": { "expectationId": "medium.species.total-extinction-sum", "field": "expected.coefficients.extinctionByWavelength" } }],
+          "relatedFactSemanticKeys": ["abandoned-core:medium:species-coefficients-add-by-wavelength"]
+        },
+        {
+          "semanticKey": "abandoned-core:validation:medium-extinction-derived-from-components",
+          "statement": "For scattering [0.09, 0.18] and absorption [0.01, 0.02] per kilometer, the abandoned medium fixture declares derived extinction [0.1, 0.2] per kilometer.",
+          "structuredValue": { "scatteringPerKm": [0.09, 0.18], "absorptionPerKm": [0.01, 0.02], "expectedExtinctionPerKm": [0.1, 0.2], "tolerance": "exact" },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/_tests/fixtures/medium-contracts.json", "lineStart": 542, "lineEnd": 592, "role": "declares-abandoned-validation-expectation", "structuredLocator": { "expectationId": "medium.coefficients.absorption-scattering-extinction-consistency", "field": "expected.coefficients.extinctionByWavelength" } }],
+          "relatedFactSemanticKeys": ["abandoned-core:medium:extinction-derived-from-scattering-plus-absorption", "physics:pbrt:extinction:coefficient-sum"]
+        },
+        {
+          "semanticKey": "abandoned-core:validation:vacuum-finite-path-tau-zero",
+          "statement": "The abandoned analytic fixture declares optical depth zero for vacuum extinction over a finite 3 km path.",
+          "structuredValue": { "distanceKm": 3, "extinctionPerKm": 0, "expectedOpticalDepth": 0, "tolerance": "exact" },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/_tests/fixtures/analytic-invariants.json", "lineStart": 10, "lineEnd": 50, "role": "declares-abandoned-validation-expectation", "structuredLocator": { "expectationId": "view-transmittance.vacuum.finite-path", "field": "expected.tau" } }],
+          "relatedFactSemanticKeys": ["analytic-invariants:transmittance.vacuum.finite-path:expected:opticalDepth"]
+        },
+        {
+          "semanticKey": "abandoned-core:validation:vacuum-finite-path-transmittance-one",
+          "statement": "The abandoned analytic fixture declares transmittance one for vacuum extinction over a finite 3 km path.",
+          "structuredValue": { "distanceKm": 3, "extinctionPerKm": 0, "expectedTransmittance": 1, "tolerance": "exact" },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/_tests/fixtures/analytic-invariants.json", "lineStart": 10, "lineEnd": 50, "role": "declares-abandoned-validation-expectation", "structuredLocator": { "expectationId": "view-transmittance.vacuum.finite-path", "field": "expected.transmittance" } }],
+          "relatedFactSemanticKeys": ["analytic-invariants:transmittance.vacuum.finite-path:expected:transmittance"]
+        },
+        {
+          "semanticKey": "abandoned-core:validation:zero-length-nonvacuum-tau-zero",
+          "statement": "The abandoned analytic fixture declares optical depth zero for a zero-length path even when local extinction is 0.2 per kilometer.",
+          "structuredValue": { "distanceKm": 0, "extinctionPerKm": 0.2, "expectedOpticalDepth": 0, "tolerance": "exact" },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/_tests/fixtures/analytic-invariants.json", "lineStart": 52, "lineEnd": 92, "role": "declares-abandoned-validation-expectation", "structuredLocator": { "expectationId": "view-transmittance.nonvacuum.zero-length-path", "field": "expected.tau" } }],
+          "relatedFactSemanticKeys": ["analytic-invariants:transmittance.zero-length-path:expected:opticalDepth"]
+        },
+        {
+          "semanticKey": "abandoned-core:validation:zero-length-nonvacuum-transmittance-one",
+          "statement": "The abandoned analytic fixture declares transmittance one for a zero-length path even when local extinction is 0.2 per kilometer.",
+          "structuredValue": { "distanceKm": 0, "extinctionPerKm": 0.2, "expectedTransmittance": 1, "tolerance": "exact" },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/_tests/fixtures/analytic-invariants.json", "lineStart": 52, "lineEnd": 92, "role": "declares-abandoned-validation-expectation", "structuredLocator": { "expectationId": "view-transmittance.nonvacuum.zero-length-path", "field": "expected.transmittance" } }],
+          "relatedFactSemanticKeys": ["analytic-invariants:transmittance.zero-length-path:expected:transmittance"]
+        },
+        {
+          "semanticKey": "abandoned-core:validation:homogeneous-tau-0p6",
+          "statement": "For extinction 0.2 per kilometer over 3 km, the abandoned analytic fixture declares optical depth 0.6 with absolute tolerance 1e-12.",
+          "structuredValue": { "extinctionPerKm": 0.2, "distanceKm": 3, "expectedOpticalDepth": 0.6, "absoluteTolerance": 1e-12 },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/_tests/fixtures/analytic-invariants.json", "lineStart": 94, "lineEnd": 134, "role": "declares-abandoned-validation-expectation", "structuredLocator": { "expectationId": "view-transmittance.homogeneous.beer-lambert-0p6", "field": "expected.tau" } }],
+          "relatedFactSemanticKeys": ["analytic-invariants:transmittance.homogeneous.beer-lambert:expected:opticalDepth"]
+        },
+        {
+          "semanticKey": "abandoned-core:validation:homogeneous-transmittance-exp-minus-0p6",
+          "statement": "For optical depth 0.6, the abandoned analytic fixture declares transmittance 0.5488116360940264 with absolute tolerance 1e-12.",
+          "structuredValue": { "opticalDepth": 0.6, "expectedTransmittance": 0.5488116360940264, "absoluteTolerance": 1e-12 },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/_tests/fixtures/analytic-invariants.json", "lineStart": 94, "lineEnd": 134, "role": "declares-abandoned-validation-expectation", "structuredLocator": { "expectationId": "view-transmittance.homogeneous.beer-lambert-0p6", "field": "expected.transmittance" } }],
+          "relatedFactSemanticKeys": ["analytic-invariants:transmittance.homogeneous.beer-lambert:expected:transmittance"]
+        },
+        {
+          "semanticKey": "abandoned-core:validation:multi-species-rayleigh-tau-0p3",
+          "statement": "The abandoned multi-species fixture declares Rayleigh optical depth 0.3 for 0.1 per kilometer over 3 km.",
+          "structuredValue": { "species": "rayleigh", "extinctionPerKm": 0.1, "distanceKm": 3, "expectedOpticalDepth": 0.3, "absoluteTolerance": 1e-12 },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/_tests/fixtures/analytic-invariants.json", "lineStart": 332, "lineEnd": 390, "role": "declares-abandoned-validation-expectation", "structuredLocator": { "expectationId": "view-transmittance.homogeneous.multi-species-sum", "field": "expected.rayleighTauByWavelength" } }],
+          "relatedFactSemanticKeys": ["analytic-invariants:transmittance.homogeneous.multi-species-sum:expected:speciesOpticalDepth"]
+        },
+        {
+          "semanticKey": "abandoned-core:validation:multi-species-mie-tau-0p6",
+          "statement": "The abandoned multi-species fixture declares Mie optical depth 0.6 for 0.2 per kilometer over 3 km.",
+          "structuredValue": { "species": "mie", "extinctionPerKm": 0.2, "distanceKm": 3, "expectedOpticalDepth": 0.6, "absoluteTolerance": 1e-12 },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/_tests/fixtures/analytic-invariants.json", "lineStart": 332, "lineEnd": 390, "role": "declares-abandoned-validation-expectation", "structuredLocator": { "expectationId": "view-transmittance.homogeneous.multi-species-sum", "field": "expected.mieTauByWavelength" } }],
+          "relatedFactSemanticKeys": ["analytic-invariants:transmittance.homogeneous.multi-species-sum:expected:speciesOpticalDepth"]
+        },
+        {
+          "semanticKey": "abandoned-core:validation:multi-species-total-tau-0p9",
+          "statement": "The abandoned multi-species fixture declares total optical depth 0.9 from Rayleigh 0.3 plus Mie 0.6.",
+          "structuredValue": { "speciesOpticalDepths": [0.3, 0.6], "expectedTotalOpticalDepth": 0.9, "absoluteTolerance": 1e-12 },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/_tests/fixtures/analytic-invariants.json", "lineStart": 332, "lineEnd": 390, "role": "declares-abandoned-validation-expectation", "structuredLocator": { "expectationId": "view-transmittance.homogeneous.multi-species-sum", "field": "expected.totalTauByWavelength" } }],
+          "relatedFactSemanticKeys": ["analytic-invariants:transmittance.homogeneous.multi-species-sum:expected:totalOpticalDepth"]
+        },
+        {
+          "semanticKey": "abandoned-core:validation:multi-species-transmittance-exp-minus-0p9",
+          "statement": "The abandoned multi-species fixture declares transmittance 0.4065696597405991 for total optical depth 0.9.",
+          "structuredValue": { "opticalDepth": 0.9, "expectedTransmittance": 0.4065696597405991, "absoluteTolerance": 1e-12 },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/_tests/fixtures/analytic-invariants.json", "lineStart": 332, "lineEnd": 390, "role": "declares-abandoned-validation-expectation", "structuredLocator": { "expectationId": "view-transmittance.homogeneous.multi-species-sum", "field": "expected.transmittanceByWavelength" } }],
+          "relatedFactSemanticKeys": ["analytic-invariants:transmittance.homogeneous.multi-species-sum:expected:transmittance"]
+        },
+        {
+          "semanticKey": "abandoned-core:validation:weighted-samples-tau-0p45",
+          "statement": "For weights [0.25, 0.75, 2] km and extinctions [0.4, 0.2, 0.1] per kilometer, the abandoned analytic fixture declares optical depth 0.45.",
+          "structuredValue": { "sampleWeightsKm": [0.25, 0.75, 2], "extinctionPerKm": [0.4, 0.2, 0.1], "expectedOpticalDepth": 0.45, "absoluteTolerance": 1e-12 },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/_tests/fixtures/analytic-invariants.json", "lineStart": 427, "lineEnd": 467, "role": "declares-abandoned-validation-expectation", "structuredLocator": { "expectationId": "view-transmittance.weighted-samples.piecewise-constant", "field": "expected.tauByWavelength" } }],
+          "relatedFactSemanticKeys": ["analytic-invariants:transmittance.weighted-samples.piecewise-constant:expected:opticalDepth"]
+        },
+        {
+          "semanticKey": "abandoned-core:validation:weighted-samples-transmittance",
+          "statement": "For optical depth 0.45, the abandoned weighted-sample fixture declares transmittance 0.6376281516217733.",
+          "structuredValue": { "opticalDepth": 0.45, "expectedTransmittance": 0.6376281516217733, "absoluteTolerance": 1e-12 },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/_tests/fixtures/analytic-invariants.json", "lineStart": 427, "lineEnd": 467, "role": "declares-abandoned-validation-expectation", "structuredLocator": { "expectationId": "view-transmittance.weighted-samples.piecewise-constant", "field": "expected.transmittanceByWavelength" } }],
+          "relatedFactSemanticKeys": ["analytic-invariants:transmittance.weighted-samples.piecewise-constant:expected:transmittance"]
+        },
+        {
+          "semanticKey": "abandoned-core:validation:isotropic-phase-one-over-four-pi",
+          "statement": "The abandoned isotropic-phase fixture declares 0.07957747154594767 inverse steradians with absolute tolerance 1e-14.",
+          "structuredValue": { "expectedPhaseSrInverse": 0.07957747154594767, "units": "1 / sr", "absoluteTolerance": 1e-14 },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/_tests/fixtures/analytic-invariants.json", "lineStart": 532, "lineEnd": 569, "role": "declares-abandoned-validation-expectation", "structuredLocator": { "expectationId": "phase.isotropic.constant-over-solid-angle", "field": "expected.phaseSrInverse" } }],
+          "relatedFactSemanticKeys": ["analytic-invariants:phase.isotropic.constant-over-solid-angle:expected:phase"]
+        },
+        {
+          "semanticKey": "abandoned-core:validation:isotropic-phase-integral-one",
+          "statement": "The abandoned isotropic-phase fixture declares that the phase integral over the sphere is one with absolute tolerance 1e-12.",
+          "structuredValue": { "expectedIntegralOverSphere": 1, "units": "dimensionless", "absoluteTolerance": 1e-12 },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/_tests/fixtures/analytic-invariants.json", "lineStart": 532, "lineEnd": 569, "role": "declares-abandoned-validation-expectation", "structuredLocator": { "expectationId": "phase.isotropic.constant-over-solid-angle", "field": "expected.integralOverSphere" } }],
+          "relatedFactSemanticKeys": ["analytic-invariants:phase.isotropic.constant-over-solid-angle:expected:integralOverSphere"]
+        },
+        {
+          "semanticKey": "abandoned-core:validation:single-scattering-scalar-product-0p16",
+          "statement": "The abandoned one-sample fixture declares spectral radiance 0.16 for factors 0.5, 0.2, 0.25, 4, 0.8, source weight 1, and step length 2 km.",
+          "structuredValue": { "factors": [0.5, 0.2, 0.25, 4, 0.8, 1, 2], "expectedSpectralRadiance": 0.16, "absoluteTolerance": 1e-12 },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/_tests/fixtures/analytic-invariants.json", "lineStart": 571, "lineEnd": 611, "role": "declares-abandoned-validation-expectation", "structuredLocator": { "expectationId": "single-scattering.one-sample.scalar-product", "field": "expected.spectralRadiance" } }],
+          "relatedFactSemanticKeys": ["analytic-invariants:in-scattering.one-sample.scalar-product:expected:spectralRadiance"]
+        },
+        {
+          "semanticKey": "abandoned-core:validation:single-scattering-two-half-weights-0p16",
+          "statement": "The abandoned source-quadrature fixture declares that two otherwise identical source samples weighted 0.5 each sum to spectral radiance 0.16.",
+          "structuredValue": { "sourceWeights": [0.5, 0.5], "expectedSpectralRadiance": 0.16, "absoluteTolerance": 1e-12 },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/_tests/fixtures/analytic-invariants.json", "lineStart": 613, "lineEnd": 654, "role": "declares-abandoned-validation-expectation", "structuredLocator": { "expectationId": "single-scattering.source-weight.two-half-samples", "field": "expected.spectralRadiance" } }],
+          "relatedFactSemanticKeys": ["analytic-invariants:in-scattering.source-weight.two-half-samples:expected:spectralRadiance"]
+        },
+        {
+          "semanticKey": "abandoned-core:validation:single-scattering-zero-extra-weight-0p16",
+          "statement": "The abandoned source-quadrature fixture declares that adding an otherwise identical zero-weight source sample leaves spectral radiance at 0.16.",
+          "structuredValue": { "sourceWeights": [1, 0], "expectedSpectralRadiance": 0.16, "absoluteTolerance": 1e-12 },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/_tests/fixtures/analytic-invariants.json", "lineStart": 656, "lineEnd": 697, "role": "declares-abandoned-validation-expectation", "structuredLocator": { "expectationId": "single-scattering.source-weight.zero-extra-sample", "field": "expected.spectralRadiance" } }],
+          "relatedFactSemanticKeys": ["analytic-invariants:in-scattering.source-weight.zero-extra-sample:expected:spectralRadiance"]
+        },
+        {
+          "semanticKey": "abandoned-core:validation:single-scattering-weighted-phase-sum-0p28",
+          "statement": "The abandoned source-quadrature fixture declares spectral radiance 0.28 for source weights [0.25, 0.75] and phase values [0.25, 0.5] inverse steradians.",
+          "structuredValue": { "sourceWeights": [0.25, 0.75], "phaseSrInverse": [0.25, 0.5], "expectedSpectralRadiance": 0.28, "absoluteTolerance": 1e-12 },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/_tests/fixtures/analytic-invariants.json", "lineStart": 699, "lineEnd": 740, "role": "declares-abandoned-validation-expectation", "structuredLocator": { "expectationId": "single-scattering.source-weight.weighted-phase-sum", "field": "expected.spectralRadiance" } }],
+          "relatedFactSemanticKeys": ["analytic-invariants:in-scattering.source-weight.weighted-phase-sum:expected:spectralRadiance"]
+        },
+        {
+          "semanticKey": "abandoned-core:validation:black-lambertian-leaving-zero",
+          "statement": "The abandoned black-Lambertian fixture declares zero surface leaving radiance under unit normal direct illumination.",
+          "structuredValue": { "reflectance": 0, "expectedSurfaceLeavingRadiance": 0, "tolerance": "exact" },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/_tests/fixtures/analytic-invariants.json", "lineStart": 798, "lineEnd": 844, "role": "declares-abandoned-validation-expectation", "structuredLocator": { "expectationId": "surface.lambertian.black-direct-normal", "field": "expected.surfaceLeavingRadiance" } }],
+          "relatedFactSemanticKeys": ["analytic-invariants:surface.lambertian.black-direct-normal:expected:surfaceLeavingRadiance"]
+        },
+        {
+          "semanticKey": "abandoned-core:validation:white-lambertian-leaving-one",
+          "statement": "The abandoned white-Lambertian fixture declares surface leaving radiance one when the controlled normal-incidence irradiance is pi.",
+          "structuredValue": { "reflectance": 1, "directIrradiance": 3.141592653589793, "expectedSurfaceLeavingRadiance": 1, "tolerance": "exact" },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/_tests/fixtures/analytic-invariants.json", "lineStart": 846, "lineEnd": 893, "role": "declares-abandoned-validation-expectation", "structuredLocator": { "expectationId": "surface.lambertian.white-direct-normal-equals-one", "field": "expected.surfaceLeavingRadiance" } }],
+          "relatedFactSemanticKeys": ["analytic-invariants:surface.lambertian.white-direct-normal-equals-one:expected:surfaceLeavingRadiance"]
+        },
+        {
+          "semanticKey": "abandoned-core:validation:midpoint-one-step-center-five",
+          "statement": "For a 0-to-10 km segment and one step, the abandoned view-sample fixture declares a midpoint at 5 km.",
+          "structuredValue": { "segmentKm": [0, 10], "viewSteps": 1, "expectedCentersKm": [5] },
+          "supportStatus": "source-backed",
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/_tests/fixtures/view-samples-contracts.json", "lineStart": 133, "lineEnd": 200, "role": "declares-abandoned-validation-expectation", "structuredLocator": { "expectationId": "view-samples.midpoint.one-step-0-to-10", "field": "expected.samples.distanceFromObserverKm" } }],
+          "relatedFactSemanticKeys": ["abandoned-core:quadrature:uniform-midpoint-sample-location"]
+        },
+        {
+          "semanticKey": "abandoned-core:validation:midpoint-one-step-weight-ten",
+          "statement": "For a 0-to-10 km segment and one step, the abandoned view-sample fixture declares quadrature weight 10 km.",
+          "structuredValue": { "segmentKm": [0, 10], "viewSteps": 1, "expectedWeightsKm": [10] },
+          "supportStatus": "source-backed",
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/_tests/fixtures/view-samples-contracts.json", "lineStart": 133, "lineEnd": 200, "role": "declares-abandoned-validation-expectation", "structuredLocator": { "expectationId": "view-samples.midpoint.one-step-0-to-10", "field": "expected.samples.weightKm" } }],
+          "relatedFactSemanticKeys": ["abandoned-core:quadrature:uniform-midpoint-weight"]
+        },
+        {
+          "semanticKey": "abandoned-core:validation:midpoint-two-step-centers",
+          "statement": "For a 0-to-10 km segment and two steps, the abandoned fixture declares centers at 2.5 and 7.5 km.",
+          "structuredValue": { "segmentKm": [0, 10], "viewSteps": 2, "expectedCentersKm": [2.5, 7.5] },
+          "supportStatus": "source-backed",
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/_tests/fixtures/view-samples-contracts.json", "lineStart": 202, "lineEnd": 277, "role": "declares-abandoned-validation-expectation", "structuredLocator": { "expectationId": "view-samples.midpoint.two-steps-0-to-10", "field": "expected.samples.distanceFromObserverKm" } }],
+          "relatedFactSemanticKeys": ["abandoned-core:quadrature:uniform-midpoint-sample-location"]
+        },
+        {
+          "semanticKey": "abandoned-core:validation:midpoint-two-step-weights-five",
+          "statement": "For a 0-to-10 km segment and two steps, the abandoned fixture declares quadrature weights 5 km each.",
+          "structuredValue": { "segmentKm": [0, 10], "viewSteps": 2, "expectedWeightsKm": [5, 5] },
+          "supportStatus": "source-backed",
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/_tests/fixtures/view-samples-contracts.json", "lineStart": 202, "lineEnd": 277, "role": "declares-abandoned-validation-expectation", "structuredLocator": { "expectationId": "view-samples.midpoint.two-steps-0-to-10", "field": "expected.samples.weightKm" } }],
+          "relatedFactSemanticKeys": ["abandoned-core:quadrature:uniform-midpoint-weight"]
+        },
+        {
+          "semanticKey": "abandoned-core:validation:midpoint-offset-centers",
+          "statement": "For a 2-to-12 km segment and two steps, the abandoned fixture declares centers at 4.5 and 9.5 km.",
+          "structuredValue": { "segmentKm": [2, 12], "viewSteps": 2, "expectedCentersKm": [4.5, 9.5] },
+          "supportStatus": "source-backed",
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/_tests/fixtures/view-samples-contracts.json", "lineStart": 279, "lineEnd": 354, "role": "declares-abandoned-validation-expectation", "structuredLocator": { "expectationId": "view-samples.midpoint.two-steps-2-to-12", "field": "expected.samples.distanceFromObserverKm" } }],
+          "relatedFactSemanticKeys": ["abandoned-core:quadrature:uniform-midpoint-sample-location"]
+        },
+        {
+          "semanticKey": "abandoned-core:validation:cornette-shanks-g070-costheta-minus1",
+          "statement": "At stage cosTheta -1 and g 0.7, the abandoned Cornette-Shanks fixture declares phase 1.8110000218 inverse steradians with absolute tolerance 1e-11.",
+          "structuredValue": { "stageCosTheta": -1, "g": 0.7, "expectedPhaseSrInverse": 1.8110000218, "absoluteTolerance": 1e-11 },
+          "supportStatus": "candidate-source",
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/_tests/fixtures/aerosol-phase-contracts.json", "lineStart": 10, "lineEnd": 49, "role": "declares-abandoned-validation-expectation", "structuredLocator": { "expectationId": "phase.cornette-shanks.bruneton-g070-local-convention", "arrayIndex": 0 } }],
+          "relatedFactSemanticKeys": ["abandoned-core:phase:cornette-shanks-local-sign-formula", "abandoned-reference:aerosol-phase:cornette-shanks-g070-costheta-minus1"]
+        },
+        {
+          "semanticKey": "abandoned-core:validation:cornette-shanks-g070-costheta-zero",
+          "statement": "At stage cosTheta zero and g 0.7, the abandoned Cornette-Shanks fixture declares phase 0.0134422764093 inverse steradians with absolute tolerance 1e-11.",
+          "structuredValue": { "stageCosTheta": 0, "g": 0.7, "expectedPhaseSrInverse": 0.0134422764093, "absoluteTolerance": 1e-11 },
+          "supportStatus": "candidate-source",
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/_tests/fixtures/aerosol-phase-contracts.json", "lineStart": 10, "lineEnd": 49, "role": "declares-abandoned-validation-expectation", "structuredLocator": { "expectationId": "phase.cornette-shanks.bruneton-g070-local-convention", "arrayIndex": 1 } }],
+          "relatedFactSemanticKeys": ["abandoned-core:phase:cornette-shanks-local-sign-formula", "abandoned-reference:aerosol-phase:cornette-shanks-g070-costheta-zero"]
+        },
+        {
+          "semanticKey": "abandoned-core:validation:cornette-shanks-g070-costheta-plus1",
+          "statement": "At stage cosTheta one and g 0.7, the abandoned Cornette-Shanks fixture declares phase 0.00995257492133 inverse steradians with absolute tolerance 1e-11.",
+          "structuredValue": { "stageCosTheta": 1, "g": 0.7, "expectedPhaseSrInverse": 0.00995257492133, "absoluteTolerance": 1e-11 },
+          "supportStatus": "candidate-source",
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/_tests/fixtures/aerosol-phase-contracts.json", "lineStart": 10, "lineEnd": 49, "role": "declares-abandoned-validation-expectation", "structuredLocator": { "expectationId": "phase.cornette-shanks.bruneton-g070-local-convention", "arrayIndex": 2 } }],
+          "relatedFactSemanticKeys": ["abandoned-core:phase:cornette-shanks-local-sign-formula", "abandoned-reference:aerosol-phase:cornette-shanks-g070-costheta-plus1"]
+        },
+        {
+          "semanticKey": "abandoned-core:validation:henyey-greenstein-g070-costheta-minus1",
+          "statement": "At stage cosTheta -1 and g 0.7, the abandoned Henyey-Greenstein control fixture declares phase 1.50313001809 inverse steradians with absolute tolerance 1e-11.",
+          "structuredValue": { "stageCosTheta": -1, "g": 0.7, "expectedPhaseSrInverse": 1.50313001809, "absoluteTolerance": 1e-11 },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/_tests/fixtures/aerosol-phase-contracts.json", "lineStart": 51, "lineEnd": 90, "role": "declares-abandoned-validation-expectation", "structuredLocator": { "expectationId": "phase.henyey-greenstein.bruneton-g070-control-local-convention", "arrayIndex": 0 } }],
+          "relatedFactSemanticKeys": ["abandoned-core:phase:henyey-greenstein-local-sign-formula", "physics:pbrt:phase-function:away-pointing-direction-convention"]
+        },
+        {
+          "semanticKey": "abandoned-core:validation:henyey-greenstein-g070-costheta-zero",
+          "statement": "At stage cosTheta zero and g 0.7, the abandoned Henyey-Greenstein control fixture declares phase 0.0223141788394 inverse steradians with absolute tolerance 1e-11.",
+          "structuredValue": { "stageCosTheta": 0, "g": 0.7, "expectedPhaseSrInverse": 0.0223141788394, "absoluteTolerance": 1e-11 },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/_tests/fixtures/aerosol-phase-contracts.json", "lineStart": 51, "lineEnd": 90, "role": "declares-abandoned-validation-expectation", "structuredLocator": { "expectationId": "phase.henyey-greenstein.bruneton-g070-control-local-convention", "arrayIndex": 1 } }],
+          "relatedFactSemanticKeys": ["abandoned-core:phase:henyey-greenstein-local-sign-formula", "physics:pbrt:phase-function:away-pointing-direction-convention"]
+        },
+        {
+          "semanticKey": "abandoned-core:validation:henyey-greenstein-g070-costheta-plus1",
+          "statement": "At stage cosTheta one and g 0.7, the abandoned Henyey-Greenstein control fixture declares phase 0.0082606371847 inverse steradians with absolute tolerance 1e-11.",
+          "structuredValue": { "stageCosTheta": 1, "g": 0.7, "expectedPhaseSrInverse": 0.0082606371847, "absoluteTolerance": 1e-11 },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/_tests/fixtures/aerosol-phase-contracts.json", "lineStart": 51, "lineEnd": 90, "role": "declares-abandoned-validation-expectation", "structuredLocator": { "expectationId": "phase.henyey-greenstein.bruneton-g070-control-local-convention", "arrayIndex": 2 } }],
+          "relatedFactSemanticKeys": ["abandoned-core:phase:henyey-greenstein-local-sign-formula", "physics:pbrt:phase-function:away-pointing-direction-convention"]
+        },
+        {
+          "semanticKey": "abandoned-core:validation:solar-multiwavelength-optical-depths",
+          "statement": "For a 2 km source path with extinction [0.3, 0.1] per kilometer, the abandoned solar fixture declares optical depths [0.6, 0.2].",
+          "structuredValue": { "pathLengthKm": 2, "extinctionPerKm": [0.3, 0.1], "expectedOpticalDepths": [0.6, 0.2], "absoluteTolerance": 1e-12 },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/_tests/fixtures/solar-transmittance-contracts.json", "lineStart": 190, "lineEnd": 266, "role": "declares-abandoned-validation-expectation", "structuredLocator": { "expectationId": "solar-transmittance.homogeneous.multi-wavelength", "field": "expected.opticalDepthByWavelength" } }],
+          "relatedFactSemanticKeys": ["analytic-invariants:transmittance.homogeneous.multi-wavelength:expected:opticalDepth"]
+        },
+        {
+          "semanticKey": "abandoned-core:validation:solar-multiwavelength-transmittances",
+          "statement": "For source optical depths [0.6, 0.2], the abandoned solar fixture declares transmittances [0.5488116360940264, 0.8187307530779818].",
+          "structuredValue": { "opticalDepths": [0.6, 0.2], "expectedTransmittances": [0.5488116360940264, 0.8187307530779818], "absoluteTolerance": 1e-12 },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/_tests/fixtures/solar-transmittance-contracts.json", "lineStart": 190, "lineEnd": 266, "role": "declares-abandoned-validation-expectation", "structuredLocator": { "expectationId": "solar-transmittance.homogeneous.multi-wavelength", "field": "expected.sourceTransmittanceByWavelength" } }],
+          "relatedFactSemanticKeys": ["analytic-invariants:transmittance.homogeneous.multi-wavelength:expected:transmittance"]
+        },
+        {
+          "semanticKey": "abandoned-core:validation:occluded-source-transmittance-zero",
+          "statement": "The abandoned occlusion fixture declares source transmittance zero for a model-owned invisible source segment.",
+          "structuredValue": { "visible": false, "expectedSourceTransmittance": [0], "absoluteTolerance": 1e-12 },
+          "supportStatus": "source-backed",
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/_tests/fixtures/solar-transmittance-contracts.json", "lineStart": 386, "lineEnd": 458, "role": "declares-abandoned-validation-expectation", "structuredLocator": { "expectationId": "solar-transmittance.visibility.occluded-zero", "field": "expected.sourceTransmittanceByWavelength" } }],
+          "relatedFactSemanticKeys": ["abandoned-core:solar-visibility:occluded-source-transmittance-zero"]
+        },
+        {
+          "semanticKey": "abandoned-core:validation:surface-point-position-0-4-0",
+          "statement": "For an observer at the origin, a +Y ray, and a surface hit at 4 km, the abandoned solar fixture declares surface position [0, 4, 0] km.",
+          "structuredValue": { "observerPositionKm": [0, 0, 0], "rayDirection": [0, 1, 0], "surfaceDistanceKm": 4, "expectedSurfacePositionKm": [0, 4, 0] },
+          "supportStatus": "source-backed",
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/_tests/fixtures/solar-transmittance-contracts.json", "lineStart": 628, "lineEnd": 732, "role": "declares-abandoned-validation-expectation", "structuredLocator": { "expectationId": "solar-transmittance.surface-point.visible-surface", "field": "expected.surfacePointPositionKm" } }],
+          "relatedFactSemanticKeys": ["abandoned-core:medium:sample-position-parametric-ray"]
+        },
+        {
+          "semanticKey": "abandoned-core:validation:surface-point-source-transmittance-exp-minus-0p3",
+          "statement": "For extinction 0.15 per kilometer over a 2 km source segment, the abandoned surface-point fixture declares transmittance 0.7408182206817179.",
+          "structuredValue": { "extinctionPerKm": 0.15, "pathLengthKm": 2, "expectedTransmittance": 0.7408182206817179, "absoluteTolerance": 1e-12 },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/_tests/fixtures/solar-transmittance-contracts.json", "lineStart": 628, "lineEnd": 732, "role": "declares-abandoned-validation-expectation", "structuredLocator": { "expectationId": "solar-transmittance.surface-point.visible-surface", "field": "expected.surfacePointSourceTransmittanceByWavelength" } }],
+          "relatedFactSemanticKeys": ["analytic-invariants:transmittance.homogeneous.beer-lambert:expected:transmittance"]
+        },
+        {
+          "semanticKey": "abandoned-core:validation:bucholtz-1000nm-rayleigh-tau",
+          "statement": "The abandoned hardening fixture declares Rayleigh optical depth 0.008645 for the Bucholtz 1962 U.S. Standard atmosphere row at 1000 nm.",
+          "structuredValue": { "atmosphere": "1962 U.S. Standard", "wavelengthNm": 1000, "expectedRayleighOpticalDepth": 0.008645, "absoluteTolerance": 1e-12 },
+          "supportStatus": "candidate-source",
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/_tests/fixtures/view-optical-depth-hardening.json", "lineStart": 344, "lineEnd": 378, "role": "declares-abandoned-validation-expectation", "structuredLocator": { "expectationId": "view-transmittance.clear-air.rayleigh-bucholtz-thin-row" } }],
+          "relatedFactSemanticKeys": ["abandoned-reference:rayleigh:bucholtz-table4-1962-us-standard-1000nm"]
+        },
+        {
+          "semanticKey": "abandoned-core:validation:kasten-young-horizon-relative-air-mass",
+          "statement": "The abandoned hardening fixture declares relative optical air mass 38.0868 at zero-degree elevation under the Kasten-Young convention.",
+          "structuredValue": { "elevationDeg": 0, "expectedRelativeOpticalAirMass": 38.0868, "tolerance": "exact" },
+          "supportStatus": "candidate-source",
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/_tests/fixtures/view-optical-depth-hardening.json", "lineStart": 411, "lineEnd": 444, "role": "declares-abandoned-validation-expectation", "structuredLocator": { "expectationId": "view-transmittance.slant-path.kasten-young-horizon-row", "field": "expected.airMassRow.relativeOpticalAirMass" } }],
+          "relatedFactSemanticKeys": ["abandoned-reference:air-mass:kasten-young-horizon-relative"]
+        },
+        {
+          "semanticKey": "abandoned-core:validation:kasten-young-horizon-absolute-air-mass",
+          "statement": "The abandoned hardening fixture declares absolute optical air mass 394428 kilograms per square meter at zero-degree elevation under the Kasten-Young convention.",
+          "structuredValue": { "elevationDeg": 0, "expectedAbsoluteOpticalAirMass": 394428, "units": "kg / m^2", "tolerance": "exact" },
+          "supportStatus": "candidate-source",
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/_tests/fixtures/view-optical-depth-hardening.json", "lineStart": 411, "lineEnd": 444, "role": "declares-abandoned-validation-expectation", "structuredLocator": { "expectationId": "view-transmittance.slant-path.kasten-young-horizon-row", "field": "expected.airMassRow.absoluteOpticalAirMassKgPerM2" } }],
+          "relatedFactSemanticKeys": ["abandoned-reference:air-mass:kasten-young-horizon-absolute"]
+        },
+        {
+          "semanticKey": "abandoned-core:validation:finite-flat-lateral-path-tau-0p2",
+          "statement": "For a named finite 10 km flat lateral path with extinction 0.02 per kilometer, the abandoned hardening fixture declares optical depth 0.2.",
+          "structuredValue": { "pathLengthKm": 10, "extinctionPerKm": 0.02, "expectedOpticalDepth": 0.2, "absoluteTolerance": 1e-12 },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/_tests/fixtures/view-optical-depth-hardening.json", "lineStart": 476, "lineEnd": 535, "role": "declares-abandoned-validation-expectation", "structuredLocator": { "expectationId": "view-transmittance.flat-large-lateral-boundary.finite-homogeneous", "field": "expected.tauByWavelength" } }],
+          "relatedFactSemanticKeys": ["analytic-invariants:transmittance.homogeneous.beer-lambert:expected:opticalDepth"]
+        },
+        {
+          "semanticKey": "abandoned-core:validation:finite-flat-lateral-path-transmittance",
+          "statement": "For optical depth 0.2 on a named finite flat lateral path, the abandoned hardening fixture declares transmittance 0.8187307530779818.",
+          "structuredValue": { "opticalDepth": 0.2, "expectedTransmittance": 0.8187307530779818, "absoluteTolerance": 1e-12 },
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/_tests/fixtures/view-optical-depth-hardening.json", "lineStart": 476, "lineEnd": 535, "role": "declares-abandoned-validation-expectation", "structuredLocator": { "expectationId": "view-transmittance.flat-large-lateral-boundary.finite-homogeneous", "field": "expected.transmittanceByWavelength" } }],
+          "relatedFactSemanticKeys": ["analytic-invariants:transmittance.homogeneous.beer-lambert:expected:transmittance"]
+        }
+      ]
+    },
+    {
+      "seriesKey": "abandoned-core-physics-provenance-gaps",
+      "shared": {
+        "kind": "abandoned-reference-physics-provenance-gap",
+        "domain": "transport-model-completeness",
+        "owner": "abandoned-cpu-spectral-reference",
+        "authorityRole": "physics-provenance-gap",
+        "supportStatus": "unsourced",
+        "implementationStatus": "partial",
+        "decisionStatus": "provisional",
+        "verificationLayer": "static-code-observation",
+        "experimentIds": ["EXPERIMENT-A32-000100"],
+        "nonClaims": ["The gap observation does not by itself select the correct replacement physics or numerical policy."],
+        "blockers": ["No independent target-Reference derivation resolves this gap."],
+        "nextAction": "Choose an authoritative physical contract, implement it in the target Reference, and add independent analytic validation."
+      },
+      "entries": [
+        {
+          "semanticKey": "abandoned-core:gap:source-radiance-and-irradiance-share-one-product",
+          "statement": "Although the abandoned handoff distinguishes spectral-radiance from spectral-irradiance, single scattering multiplies either value array by the same factors without a kind-dependent unit conversion or solid-angle relationship.",
+          "citations": [
+            { "path": "scripts/flat/atmosphere_rejected/reference/stages/IntegrateSolarTransmittanceStage.js", "lineStart": 526, "lineEnd": 573, "symbol": "IntegrateSolarTransmittanceStage.validateSourceSpectrum", "role": "shows-distinct-source-spectrum-kinds" },
+            { "path": "scripts/flat/atmosphere_rejected/reference/stages/IntegrateSingleScatteringStage.js", "lineStart": 106, "lineEnd": 150, "symbol": "IntegrateSingleScatteringStage.integrateSourceSample", "role": "shows-kind-agnostic-source-spectrum-product" }
+          ]
+        },
+        {
+          "semanticKey": "abandoned-core:gap:solid-angle-preserved-but-not-consumed",
+          "statement": "The abandoned source handoff preserves optional solidAngleSr, but the single-scattering and surface contribution products consume only source weight and never relate that weight to solid angle.",
+          "citations": [
+            { "path": "scripts/flat/atmosphere_rejected/reference/stages/IntegrateSolarTransmittanceStage.js", "lineStart": 143, "lineEnd": 167, "symbol": "IntegrateSolarTransmittanceStage.evaluateSourceSample", "role": "preserves-weight-and-solid-angle" },
+            { "path": "scripts/flat/atmosphere_rejected/reference/stages/IntegrateSingleScatteringStage.js", "lineStart": 116, "lineEnd": 149, "symbol": "IntegrateSingleScatteringStage.integrateSourceSample", "role": "consumes-weight-without-solid-angle" },
+            { "path": "scripts/flat/atmosphere_rejected/reference/stages/ResolveSurfaceRadianceStage.js", "lineStart": 130, "lineEnd": 155, "symbol": "ResolveSurfaceRadianceStage.resolveDirectIrradiance", "role": "surface-sum-consumes-weight-without-solid-angle" }
+          ]
+        },
+        {
+          "semanticKey": "abandoned-core:gap:extended-source-surface-cosine-uses-first-direction",
+          "statement": "The abandoned surface stage sums energy from every source sample but computes one incident cosine using only the first source-sample direction, leaving extended-source angular response undefined.",
+          "citations": [
+            { "path": "scripts/flat/atmosphere_rejected/reference/stages/ResolveSurfaceRadianceStage.js", "lineStart": 130, "lineEnd": 155, "symbol": "ResolveSurfaceRadianceStage.resolveDirectIrradiance", "role": "sums-all-source-samples" },
+            { "path": "scripts/flat/atmosphere_rejected/reference/stages/ResolveSurfaceRadianceStage.js", "lineStart": 165, "lineEnd": 175, "symbol": "ResolveSurfaceRadianceStage.resolveDirectCosTheta", "role": "uses-only-first-source-direction" }
+          ],
+          "relatedFactSemanticKeys": ["abandoned-core:surface:direct-source-energy-sum", "abandoned-core:surface:incident-cosine-clamped-nonnegative"]
+        },
+        {
+          "semanticKey": "abandoned-core:gap:diffuse-sky-surface-term-absent",
+          "statement": "The abandoned surface stage has no diffuse-sky irradiance realization and always supplies zero for that term.",
+          "implementationStatus": "absent",
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/ResolveSurfaceRadianceStage.js", "lineStart": 50, "lineEnd": 100, "symbol": "ResolveSurfaceRadianceStage.run", "role": "shows-disabled-diffuse-sky-term" }],
+          "relatedFactSemanticKeys": ["abandoned-core:surface:diffuse-sky-irradiance-zero"]
+        },
+        {
+          "semanticKey": "abandoned-core:gap:multiple-scattering-term-absent",
+          "statement": "The abandoned final composition contains single scattering and surface radiance only, with no multiple-scattering radiance term.",
+          "implementationStatus": "absent",
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/ComposeSpectralRadianceStage.js", "lineStart": 32, "lineEnd": 67, "symbol": "ComposeSpectralRadianceStage.run", "role": "shows-final-component-set-without-multiple-scattering" }],
+          "relatedFactSemanticKeys": ["abandoned-core:compose:single-scattering-plus-surface"]
+        },
+        {
+          "semanticKey": "abandoned-core:gap:scattering-species-without-phase-silently-contributes-none",
+          "statement": "A species can carry nonzero scattering coefficients yet contribute no in-scattering when it lacks phase metadata, because the abandoned phase stage omits it and the integrator iterates phase species only.",
+          "citations": [
+            { "path": "scripts/flat/atmosphere_rejected/reference/stages/EvaluateScatteringPhaseStage.js", "lineStart": 133, "lineEnd": 165, "symbol": "EvaluateScatteringPhaseStage.evaluateSpeciesPhase", "role": "omits-species-without-phase" },
+            { "path": "scripts/flat/atmosphere_rejected/reference/stages/IntegrateSingleScatteringStage.js", "lineStart": 127, "lineEnd": 161, "symbol": "IntegrateSingleScatteringStage.integrateSourceSample", "role": "integrates-only-phase-output-species" }
+          ],
+          "relatedFactSemanticKeys": ["abandoned-core:phase:species-without-phase-metadata-omitted"]
+        },
+        {
+          "semanticKey": "abandoned-core:gap:surface-brdf-physics-not-verified-by-core",
+          "statement": "The abandoned core accepts any finite, nonnegative, wavelength-aligned array returned by model.surface.radianceAt and contains no core-level BRDF, reciprocity, energy-conservation, or provenance check.",
+          "implementationStatus": "absent",
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/ResolveSurfaceRadianceStage.js", "lineStart": 192, "lineEnd": 231, "symbol": "ResolveSurfaceRadianceStage.resolveSurfaceLeavingRadiance", "role": "shows-delegated-unproved-surface-response" }],
+          "relatedFactSemanticKeys": ["abandoned-core:surface:leaving-radiance-delegated-to-model", "physics:pbrt:lambertian:reflectance-over-pi"]
+        },
+        {
+          "semanticKey": "abandoned-core:gap:midpoint-default-and-counts-lack-convergence-proof",
+          "statement": "The abandoned sampler defaults to one midpoint step and accepts positive integer viewSteps, but the core implementation supplies no convergence criterion proving a sufficient sample count for a selected atmosphere profile.",
+          "implementationStatus": "absent",
+          "citations": [{ "path": "scripts/flat/atmosphere_rejected/reference/stages/SampleViewPathStage.js", "lineStart": 127, "lineEnd": 145, "symbol": "SampleViewPathStage.resolveViewSteps", "role": "shows-local-default-without-convergence-selection" }],
+          "relatedFactSemanticKeys": ["abandoned-reference:gap:max-sample-count-requires-convergence", "abandoned-core:numerics:view-steps-default-one"]
+        }
+      ]
+    }
+  ]
+}

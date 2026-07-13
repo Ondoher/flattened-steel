@@ -1,0 +1,95 @@
+{
+	"schema": "algorithm32-production-gpu-cache-parity-policy-v1",
+	"status": "predeclared-before-production-gpu-output",
+	"comparison": {
+		"oracle": "production-binary64-cpu-cache",
+		"candidate": "production-r32f-gpu-cache",
+		"allowedError": "absolute + relative * abs(oracle)"
+	},
+	"bounds": {
+		"pureRadiance": {
+			"absolute": 2e-9,
+			"relative": 0.005
+		},
+		"pureScatteringDensity": {
+			"absolute": 2e-12,
+			"relative": 0.005
+		},
+		"cumulativeScatteringDensity": {
+			"absolute": 8e-12,
+			"relative": 0.005
+		},
+		"exactCopy": {
+			"absolute": 0,
+			"relative": 0
+		}
+	},
+	"wavelengthIndices": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
+	"scatteringDensityQueries": [
+		{
+			"positionIndex": 0,
+			"altitude": {"value": 2, "units": "meters"},
+			"directionIndex": 364,
+			"cacheDirection": [1, 0, 0]
+		},
+		{
+			"positionIndex": 0,
+			"altitude": {"value": 2, "units": "meters"},
+			"directionIndex": 1093,
+			"cacheDirection": [-1, 0, 0]
+		},
+		{
+			"positionIndex": 12,
+			"altitude": {"value": 15625.000000000002, "units": "meters"},
+			"directionIndex": 0,
+			"cacheDirection": [0.5773502691896258, -0.5773502691896258, -0.5773502691896258]
+		},
+		{
+			"positionIndex": 24,
+			"altitude": {"value": 30624.999999999996, "units": "meters"},
+			"directionIndex": 2551,
+			"cacheDirection": [0, -1, 0]
+		},
+		{
+			"positionIndex": 47,
+			"altitude": {"value": 59375, "units": "meters"},
+			"directionIndex": 4373,
+			"cacheDirection": [-0.5773502691896258, 0.5773502691896258, -0.5773502691896258]
+		}
+	],
+	"radianceQueries": [
+		{
+			"positionIndex": 0,
+			"altitude": {"value": 2, "units": "meters"},
+			"directionIndex": 34,
+			"cacheDirection": [1, 0, 0]
+		},
+		{
+			"positionIndex": 12,
+			"altitude": {"value": 15625.000000000002, "units": "meters"},
+			"directionIndex": 0,
+			"cacheDirection": [-6.118005084603635e-17, 2.5299871800168635e-18, -1]
+		},
+		{
+			"positionIndex": 24,
+			"altitude": {"value": 30624.999999999996, "units": "meters"},
+			"directionIndex": 16,
+			"cacheDirection": [-0.784182423271093, 0.3236991047619375, -0.5294117647058824]
+		},
+		{
+			"positionIndex": 36,
+			"altitude": {"value": 45625, "units": "meters"},
+			"directionIndex": 50,
+			"cacheDirection": [0.8288129085212791, -0.3026811448889182, 0.47058823529411775]
+		},
+		{
+			"positionIndex": 47,
+			"altitude": {"value": 59375, "units": "meters"},
+			"directionIndex": 66,
+			"cacheDirection": [0.2583867092358571, -0.21776859209109395, 0.9411764705882353]
+		}
+	],
+	"evidence": {
+		"use": "The field-family R32F bounds are a predeclared production hypothesis. The explicit Native-48/frozen-40 comparison execution must pass independently; production defaults remain 15."
+	}
+}

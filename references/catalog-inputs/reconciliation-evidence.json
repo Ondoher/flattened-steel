@@ -1,0 +1,1962 @@
+{
+  "schemaVersion": 1,
+  "managedBy": "production-core-v1",
+  "sourceSnapshotId": "SNAPSHOT-REPO-000001",
+  "sources": [],
+  "materials": [],
+  "experiments": [
+    {
+      "id": "EXPERIMENT-A32-000011",
+      "title": "Reconciliation ER1 typed celestial source contract",
+      "kind": "reconciliation-typed-source-contract-evidence",
+      "recordPath": "tmp/atmosphere/reconciliation/033-er1-typed-celestial-sources-contract",
+      "historicalLocators": [],
+      "runner": {
+        "status": "maintained-poc-runner-identified-executed-byte-identity-must-be-verified",
+        "paths": [
+          "scripts/flat/reconciliation/POC/src/runners/er1TypedCelestialSourcesContract.js"
+        ],
+        "pathRoles": [
+          {
+            "path": "scripts/flat/reconciliation/POC/src/runners/er1TypedCelestialSourcesContract.js",
+            "role": "identified-er1-runner"
+          }
+        ]
+      },
+      "contractParts": {
+        "importedModules": {
+          "status": "recorded-by-source-content-hashes-review-pending",
+          "paths": []
+        },
+        "inputs": {
+          "status": "recorded-with-source-payloads"
+        },
+        "environment": {
+          "status": "command-and-provenance-present"
+        },
+        "criteria": {
+          "status": "recorded-16-of-16-historically-accepted"
+        },
+        "controls": {
+          "status": "recorded-in-inputs-and-runner-review-pending"
+        },
+        "results": {
+          "status": "result-and-diagnostics-present"
+        },
+        "reports": {
+          "status": "report-and-run-log-present"
+        }
+      },
+      "claimBoundary": {
+        "status": "historically-accepted-quantity-contract-only",
+        "supports": [
+          "A historical typed, quantity-bearing 15-channel celestial-source packet and spectral-binning contract over 360 through 830 nanometers.",
+          "Historical fixture parsing and bounded binning diagnostics for the canonical Sun and CALSPEC Sirius inputs retained by the record."
+        ],
+        "doesNotProve": [
+          "Camera, realized geometry, atmosphere transport, point response, display conversion, image output, or observer visibility.",
+          "That the POC source wrappers or binning implementation are independent of the diagnostics that accepted them.",
+          "That the current CPU Reference implements the same unit-bearing packet contract."
+        ]
+      },
+      "independence": {
+        "status": "partial-self-validation",
+        "oracle": "record-local analytic and photometric diagnostics",
+        "sharedCodeRisk": "high because the source readers, wrappers, binning code, and diagnostics belong to the same POC lane"
+      },
+      "historicalAcceptance": "accepted-by-record-033-with-16-of-16-criteria",
+      "rederivationReasons": [
+        "The target CPU Reference has not been evaluated with this typed quantity contract.",
+        "Independent bin integration and photometry are required because the historical diagnostics share the POC source pipeline."
+      ],
+      "rederivation": {
+        "required": true,
+        "status": "cataloged-not-rederived",
+        "requiredInputs": [
+          "pinned-source-payload-identities-and-hashes",
+          "canonical-bin-edge-and-density-measure-contract",
+          "independent-bin-integration-oracle",
+          "independent-photometry-check",
+          "source-input-validation-cases",
+          "target-reference-source-packet-adapter"
+        ],
+        "futureVerificationLayer": "analytic"
+      },
+      "decisionStatus": "provisional",
+      "disposition": "must-rederive",
+      "reviewStatus": "inventory-reviewed-claim-boundary-curated",
+      "sourceIds": [
+        "SOURCE-EXT-000003",
+        "SOURCE-EXT-000005",
+        "SOURCE-EXT-000006",
+        "SOURCE-EXT-000009"
+      ],
+      "materialIds": [
+        "MATERIAL-EXT-000001",
+        "MATERIAL-EXT-000003",
+        "MATERIAL-EXT-000004",
+        "MATERIAL-EXT-000010",
+        "MATERIAL-EXT-000011",
+        "MATERIAL-EXT-000012",
+        "MATERIAL-EXT-000013"
+      ],
+      "relatedExperimentIds": [],
+      "blockers": [
+        "Cataloged source and material identities still need independent source-input and binning verification.",
+        "No independent target-repository reproduction exists."
+      ],
+      "nextAction": "Recreate the quantity and binning contract with independently implemented bin integration and photometry before adapting it to the CPU Reference."
+    },
+    {
+      "id": "EXPERIMENT-A32-000012",
+      "title": "Reconciliation ER2 point-source conservation",
+      "kind": "reconciliation-point-source-conservation-evidence",
+      "recordPath": "tmp/atmosphere/reconciliation/034-er2-point-source-conservation",
+      "historicalLocators": [],
+      "runner": {
+        "status": "maintained-poc-runner-identified-executed-byte-identity-must-be-verified",
+        "paths": [
+          "scripts/flat/reconciliation/POC/src/runners/er2PointSourceConservation.js"
+        ],
+        "pathRoles": [
+          {
+            "path": "scripts/flat/reconciliation/POC/src/runners/er2PointSourceConservation.js",
+            "role": "identified-er2-runner"
+          }
+        ]
+      },
+      "contractParts": {
+        "importedModules": {
+          "status": "provenance-present-import-closure-review-pending",
+          "paths": []
+        },
+        "inputs": {
+          "status": "recorded"
+        },
+        "environment": {
+          "status": "command-and-provenance-present"
+        },
+        "criteria": {
+          "status": "recorded-15-of-15-historically-accepted"
+        },
+        "controls": {
+          "status": "recorded-in-inputs-and-runner-review-pending"
+        },
+        "results": {
+          "status": "result-and-diagnostics-present"
+        },
+        "reports": {
+          "status": "report-and-run-log-present"
+        }
+      },
+      "claimBoundary": {
+        "status": "historically-accepted-analytic-flux-accounting-only",
+        "supports": [
+          "Point-source flux accounting and normalized ideal bilinear-response conservation over the recorded camera and source cases.",
+          "Recorded additivity, magnitude-ratio, pixel-solid-angle, and direction-to-raster checks within the POC contract."
+        ],
+        "doesNotProve": [
+          "Physical camera or eye response, source geometry, coverage, opacity, atmosphere transport, display output, or an image claim.",
+          "Independence from the camera, response, and rasterization implementation shared by the runner and its expected accounting."
+        ]
+      },
+      "independence": {
+        "status": "shared-analytic-implementation",
+        "oracle": "analytic flux sums and response invariants computed inside the POC lane",
+        "sharedCodeRisk": "high because camera solid angle, raster mapping, and bilinear response are exercised by the same runner"
+      },
+      "historicalAcceptance": "accepted-by-record-034-with-15-of-15-criteria",
+      "rederivationReasons": [
+        "The accepted record is a POC analytic lane rather than target CPU Reference evidence.",
+        "Pixel solid angle and response normalization need an independently implemented oracle."
+      ],
+      "rederivation": {
+        "required": true,
+        "status": "cataloged-not-rederived",
+        "requiredInputs": [
+          "typed-source-packet-contract",
+          "camera-projection-contract",
+          "independent-pixel-solid-angle-derivation",
+          "independent-normalized-tent-response-oracle",
+          "point-additivity-and-magnitude-ratio-cases"
+        ],
+        "futureVerificationLayer": "analytic"
+      },
+      "decisionStatus": "provisional",
+      "disposition": "must-rederive",
+      "reviewStatus": "inventory-reviewed-claim-boundary-curated",
+      "sourceIds": [
+        "SOURCE-EXT-000001"
+      ],
+      "materialIds": [],
+      "relatedExperimentIds": [
+        "EXPERIMENT-A32-000011"
+      ],
+      "blockers": [
+        "No independent solid-angle or response oracle has been reconstructed in the target repository."
+      ],
+      "nextAction": "Reimplement the solid-angle and normalized point-response oracle independently, then compare bounded flux accounting without display or observer claims."
+    },
+    {
+      "id": "EXPERIMENT-A32-000013",
+      "title": "Reconciliation ER3 extended-source conservation",
+      "kind": "reconciliation-extended-source-conservation-evidence",
+      "recordPath": "tmp/atmosphere/reconciliation/040-er3-extended-source-conservation",
+      "historicalLocators": [],
+      "runner": {
+        "status": "maintained-poc-runner-identified-executed-byte-identity-must-be-verified",
+        "paths": [
+          "scripts/flat/reconciliation/POC/src/runners/er3ExtendedSourceConservation.js"
+        ],
+        "pathRoles": [
+          {
+            "path": "scripts/flat/reconciliation/POC/src/runners/er3ExtendedSourceConservation.js",
+            "role": "identified-er3-runner"
+          }
+        ]
+      },
+      "contractParts": {
+        "importedModules": {
+          "status": "provenance-present-import-closure-review-pending",
+          "paths": []
+        },
+        "inputs": {
+          "status": "recorded"
+        },
+        "environment": {
+          "status": "command-and-provenance-present"
+        },
+        "criteria": {
+          "status": "recorded-10-of-10-historically-accepted"
+        },
+        "controls": {
+          "status": "recorded-in-inputs-and-runner-review-pending"
+        },
+        "results": {
+          "status": "result-and-diagnostics-present"
+        },
+        "reports": {
+          "status": "report-and-run-log-present"
+        }
+      },
+      "claimBoundary": {
+        "status": "historically-accepted-analytic-extended-integration-only",
+        "supports": [
+          "Conservative integration of the recorded uniform disks, normalized limb profiles, disk-equivalent Lambert phase fixture, and explicit edge-loss cases.",
+          "Recorded small-angle and resolved-versus-collapsed convergence checks within the POC quadrature."
+        ],
+        "doesNotProve": [
+          "Atmosphere transport, physical lunar calibration, resolved-radiance correctness, display output, or observer visibility.",
+          "Independence from the shared extended-source integrator and quadrature implementation."
+        ]
+      },
+      "independence": {
+        "status": "shared-analytic-implementation",
+        "oracle": "analytic conservation checks around the POC extended-source integrator",
+        "sharedCodeRisk": "high because expected conservation and sampled integration share the POC camera and quadrature lane"
+      },
+      "historicalAcceptance": "accepted-by-record-040-with-10-of-10-criteria-and-retained-later-only-as-analytic-evidence",
+      "rederivationReasons": [
+        "Later record 049 explicitly retains record 040 only as analytic extended-integration evidence.",
+        "An independent cap quadrature and clipping oracle is needed before using the result to prove the CPU Reference."
+      ],
+      "rederivation": {
+        "required": true,
+        "status": "cataloged-not-rederived",
+        "requiredInputs": [
+          "uniform-angular-disk-cases",
+          "normalized-limb-profile-cases",
+          "lambert-phase-conservation-fixture",
+          "independent-spherical-cap-quadrature",
+          "edge-clipping-and-small-angle-cases"
+        ],
+        "futureVerificationLayer": "analytic"
+      },
+      "decisionStatus": "provisional",
+      "disposition": "must-rederive",
+      "reviewStatus": "inventory-reviewed-claim-boundary-curated",
+      "sourceIds": [
+        "SOURCE-EXT-000001"
+      ],
+      "materialIds": [],
+      "relatedExperimentIds": [
+        "EXPERIMENT-A32-000012"
+      ],
+      "blockers": [
+        "The old quadrature and its validation logic share POC code.",
+        "No target Reference comparison exists."
+      ],
+      "nextAction": "Recreate the extended-source conservation matrix with an independent cap quadrature and explicit resolved/collapsed claim boundary."
+    },
+    {
+      "id": "EXPERIMENT-A32-000014",
+      "title": "Reconciliation ER4 frozen-atmosphere CPU integration",
+      "kind": "reconciliation-rejected-atmosphere-composition-evidence",
+      "recordPath": "tmp/atmosphere/reconciliation/042-er4-frozen-atmosphere-cpu-integration",
+      "historicalLocators": [],
+      "runner": {
+        "status": "maintained-poc-runner-identified-executed-byte-identity-must-be-verified",
+        "paths": [
+          "scripts/flat/reconciliation/POC/src/runners/er4FrozenAtmosphereCpuIntegration.js"
+        ],
+        "pathRoles": [
+          {
+            "path": "scripts/flat/reconciliation/POC/src/runners/er4FrozenAtmosphereCpuIntegration.js",
+            "role": "identified-er4-runner-for-rejected-record"
+          }
+        ]
+      },
+      "contractParts": {
+        "importedModules": {
+          "status": "provenance-present-import-closure-review-pending",
+          "paths": []
+        },
+        "inputs": {
+          "status": "recorded"
+        },
+        "environment": {
+          "status": "command-and-provenance-present"
+        },
+        "criteria": {
+          "status": "recorded-5-of-5-internally-accepted-but-physically-invalid"
+        },
+        "controls": {
+          "status": "recorded-in-inputs-and-runner-review-pending"
+        },
+        "results": {
+          "status": "result-and-selected-pixels-present"
+        },
+        "reports": {
+          "status": "report-and-run-log-present"
+        }
+      },
+      "claimBoundary": {
+        "status": "rejected-dimensional-composition",
+        "supports": [
+          "Historical evidence that the record's own five mechanical criteria passed over three cases."
+        ],
+        "doesNotProve": [
+          "Physically valid composition of source spectral irradiance with atmosphere spectral radiance.",
+          "A valid CPU radiance oracle, target Reference correctness, display correctness, or production readiness."
+        ]
+      },
+      "independence": {
+        "status": "invalid-claim-cannot-serve-as-oracle",
+        "oracle": "self-consistency checks around a dimensionally invalid POC composition",
+        "sharedCodeRisk": "high and secondary to the rejected physical equation"
+      },
+      "historicalAcceptance": "internally-accepted-by-record-042-then-explicitly-not-inherited-by-record-049",
+      "rederivationReasons": [
+        "The record adds spectral irradiance to radiance without the required angular conversion and omits other physical response terms.",
+        "Later review explicitly rejected inheritance of this record; a fresh Reference proof must use a dimensionally valid equation."
+      ],
+      "rederivation": {
+        "required": false,
+        "status": "rejected-do-not-rerun-as-proof",
+        "requiredInputs": [],
+        "futureVerificationLayer": "not-verified"
+      },
+      "decisionStatus": "rejected",
+      "disposition": "archive-after-gate",
+      "reviewStatus": "inventory-reviewed-claim-boundary-rejected",
+      "sourceIds": [],
+      "materialIds": [],
+      "relatedExperimentIds": [
+        "EXPERIMENT-A32-000013",
+        "EXPERIMENT-A32-000019"
+      ],
+      "blockers": [
+        "The composition equation is physically invalid and cannot be repaired by rerunning the same record."
+      ],
+      "nextAction": "Preserve the record as rejected historical evidence only; use a fresh dimensionally valid transport proof derived from the CPU Reference."
+    },
+    {
+      "id": "EXPERIMENT-A32-000015",
+      "title": "Reconciliation ER5 physical source calibration ownership checkpoint",
+      "kind": "reconciliation-source-ownership-evidence",
+      "recordPath": "tmp/atmosphere/reconciliation/044-er5-physical-source-calibration",
+      "historicalLocators": [],
+      "runner": {
+        "status": "maintained-poc-runner-identified-record-lacks-command-and-provenance",
+        "paths": [
+          "scripts/flat/reconciliation/POC/src/runners/er5PhysicalSourceCalibration.js"
+        ],
+        "pathRoles": [
+          {
+            "path": "scripts/flat/reconciliation/POC/src/runners/er5PhysicalSourceCalibration.js",
+            "role": "candidate-er5-source-ownership-runner-not-sealed-by-record"
+          }
+        ]
+      },
+      "contractParts": {
+        "importedModules": {
+          "status": "not-recorded",
+          "paths": []
+        },
+        "inputs": {
+          "status": "recorded"
+        },
+        "environment": {
+          "status": "command-and-provenance-absent"
+        },
+        "criteria": {
+          "status": "recorded-4-of-4-historically-accepted"
+        },
+        "controls": {
+          "status": "not-fully-reconstructable-from-record"
+        },
+        "results": {
+          "status": "result-and-source-descriptors-present"
+        },
+        "reports": {
+          "status": "minimal-report-and-run-log-present"
+        }
+      },
+      "claimBoundary": {
+        "status": "historical-source-ownership-and-presence-only",
+        "supports": [
+          "A historical ownership/presence checkpoint for the Sun and Sirius source inputs used by the POC."
+        ],
+        "doesNotProve": [
+          "Physical calibration accuracy, dimensional transport composition, atmosphere integration, or target Reference behavior.",
+          "The exact executed runner or environment because command and provenance artifacts are absent."
+        ]
+      },
+      "independence": {
+        "status": "not-demonstrated",
+        "oracle": "source descriptor presence and ownership checks",
+        "sharedCodeRisk": "unknown-to-high because the record omits command, provenance, and imported-module closure"
+      },
+      "historicalAcceptance": "accepted-by-record-044-but-narrowed-by-record-049-to-source-ownership-only",
+      "rederivationReasons": [
+        "The record's executed runner, environment, and module closure are not sealed.",
+        "Later review limits its retained value to source ownership rather than calibration or transport."
+      ],
+      "rederivation": {
+        "required": true,
+        "status": "cataloged-incomplete-record",
+        "requiredInputs": [
+          "source-descriptor-identities",
+          "pinned-payload-hashes",
+          "fresh-source-ownership-check",
+          "target-reference-source-owner-mapping"
+        ],
+        "futureVerificationLayer": "contract-unit"
+      },
+      "decisionStatus": "provisional",
+      "disposition": "must-rederive",
+      "reviewStatus": "inventory-reviewed-claim-boundary-curated-record-incomplete",
+      "sourceIds": [
+        "SOURCE-EXT-000003",
+        "SOURCE-EXT-000005",
+        "SOURCE-EXT-000006"
+      ],
+      "materialIds": [
+        "MATERIAL-EXT-000001",
+        "MATERIAL-EXT-000003",
+        "MATERIAL-EXT-000004"
+      ],
+      "relatedExperimentIds": [
+        "EXPERIMENT-A32-000011",
+        "EXPERIMENT-A32-000019"
+      ],
+      "blockers": [
+        "Command and provenance artifacts are absent.",
+        "The cataloged source identities establish ownership and presence only, not calibrated physical closure."
+      ],
+      "nextAction": "Reconfirm source ownership from pinned material identities and map one unit-bearing Sun and Sirius packet contract into the CPU Reference."
+    },
+    {
+      "id": "EXPERIMENT-A32-000016",
+      "title": "Reconciliation ER5 lunar phase calibration scaffold",
+      "kind": "reconciliation-lunar-phase-scaffold-evidence",
+      "recordPath": "tmp/atmosphere/reconciliation/046-er5-lunar-phase-calibration",
+      "historicalLocators": [],
+      "runner": {
+        "status": "maintained-poc-runner-identified-record-lacks-state-command-and-provenance",
+        "paths": [
+          "scripts/flat/reconciliation/POC/src/runners/er5LunarPhaseCalibration.js"
+        ],
+        "pathRoles": [
+          {
+            "path": "scripts/flat/reconciliation/POC/src/runners/er5LunarPhaseCalibration.js",
+            "role": "candidate-lunar-phase-runner-not-sealed-by-record"
+          }
+        ]
+      },
+      "contractParts": {
+        "importedModules": {
+          "status": "not-recorded",
+          "paths": []
+        },
+        "inputs": {
+          "status": "recorded"
+        },
+        "environment": {
+          "status": "state-goal-command-and-provenance-absent"
+        },
+        "criteria": {
+          "status": "recorded-but-detailed-diagnostics-absent"
+        },
+        "controls": {
+          "status": "not-fully-reconstructable-from-record"
+        },
+        "results": {
+          "status": "result-present-detailed-diagnostics-absent"
+        },
+        "reports": {
+          "status": "minimal-report-and-run-log-present"
+        }
+      },
+      "claimBoundary": {
+        "status": "historically-accepted-with-independent-calibration-deferred",
+        "supports": [
+          "The retained LIME candidate was pinned and treated as domain-compatible by the record.",
+          "A Lambert phase-law conservation scaffold was staged pending physical lunar calibration."
+        ],
+        "doesNotProve": [
+          "Parsed LIME coefficients in the canonical spectral basis, independent lunar calibration, or physical resolved lunar radiance.",
+          "The exact historical execution environment or module closure."
+        ]
+      },
+      "independence": {
+        "status": "calibration-explicitly-deferred",
+        "oracle": "LIME pin/domain checks plus an internal Lambert conservation scaffold",
+        "sharedCodeRisk": "high and the independent physical benchmark is absent"
+      },
+      "historicalAcceptance": "accepted-with-deferred-independent-calibration-by-record-046",
+      "rederivationReasons": [
+        "The coefficients were not parsed into the canonical basis and no independent calibration was performed.",
+        "The record lacks state-goal, command, provenance, and detailed diagnostic artifacts."
+      ],
+      "rederivation": {
+        "required": true,
+        "status": "cataloged-incomplete-record",
+        "requiredInputs": [
+          "pinned-lime-release-coefficients-asd-and-atbd-identities",
+          "explicit-lime-domain-and-quantity-contract",
+          "canonical-bin-coefficient-evaluation",
+          "independent-disk-integrated-lunar-reference",
+          "fresh-command-environment-and-module-manifest"
+        ],
+        "futureVerificationLayer": "analytic"
+      },
+      "decisionStatus": "deferred",
+      "disposition": "must-rederive",
+      "reviewStatus": "inventory-reviewed-claim-boundary-curated-record-incomplete",
+      "sourceIds": [
+        "SOURCE-EXT-000009"
+      ],
+      "materialIds": [
+        "MATERIAL-EXT-000010",
+        "MATERIAL-EXT-000011",
+        "MATERIAL-EXT-000012",
+        "MATERIAL-EXT-000013"
+      ],
+      "relatedExperimentIds": [
+        "EXPERIMENT-A32-000011",
+        "EXPERIMENT-A32-000017",
+        "EXPERIMENT-A32-000018"
+      ],
+      "blockers": [
+        "The historical record is incomplete.",
+        "Independent lunar calibration was explicitly deferred."
+      ],
+      "nextAction": "Reconstruct the pinned LIME evaluation and benchmark it independently; retain Lambert behavior only as a conservation scaffold."
+    },
+    {
+      "id": "EXPERIMENT-A32-000017",
+      "title": "Reconciliation ER5 lunar coefficient calibration",
+      "kind": "reconciliation-deferred-lunar-coefficient-evidence",
+      "recordPath": "tmp/atmosphere/reconciliation/048-er5-lunar-coefficient-calibration",
+      "historicalLocators": [],
+      "runner": {
+        "status": "maintained-poc-runner-identified-executed-byte-identity-must-be-verified",
+        "paths": [
+          "scripts/flat/reconciliation/POC/src/runners/er5LunarPhaseCalibration.js"
+        ],
+        "pathRoles": [
+          {
+            "path": "scripts/flat/reconciliation/POC/src/runners/er5LunarPhaseCalibration.js",
+            "role": "identified-runner-shared-with-lunar-phase-lane"
+          }
+        ]
+      },
+      "contractParts": {
+        "importedModules": {
+          "status": "provenance-present-import-closure-review-pending",
+          "paths": []
+        },
+        "inputs": {
+          "status": "recorded"
+        },
+        "environment": {
+          "status": "command-and-provenance-present"
+        },
+        "criteria": {
+          "status": "recorded-12-accepted-and-4-deferred"
+        },
+        "controls": {
+          "status": "recorded-in-inputs-and-runner-review-pending"
+        },
+        "results": {
+          "status": "result-coefficient-and-ambiguity-diagnostics-present"
+        },
+        "reports": {
+          "status": "report-and-run-log-present"
+        }
+      },
+      "claimBoundary": {
+        "status": "mechanical-parsing-accepted-physical-calibration-deferred",
+        "supports": [
+          "Mechanical parsing of the retained coefficient and ASD payloads into the 15 canonical bins.",
+          "A bounded zero-libration central prediction with named qualifications."
+        ],
+        "doesNotProve": [
+          "General lunar physical calibration, authoritative coefficient order, authoritative interpolation, complete joint uncertainty, or an independent lunar benchmark.",
+          "Resolved lunar radiance, observer visibility, GPU behavior, or production behavior."
+        ]
+      },
+      "independence": {
+        "status": "partial-mechanical-only",
+        "oracle": "record-local coefficient parsing and bounded central prediction",
+        "sharedCodeRisk": "high; authority, interpolation, covariance, and independent benchmark conflicts remained unresolved"
+      },
+      "historicalAcceptance": "12-criteria-accepted-and-4-explicitly-deferred-by-record-048-later-superseded-for-physical-authority-by-record-049",
+      "rederivationReasons": [
+        "Coefficient order, interpolation method, SRF sign, and joint uncertainty were unresolved in the record.",
+        "Record 049 supersedes the physical-authority decision but independent binning and covariance checks remain necessary."
+      ],
+      "rederivation": {
+        "required": true,
+        "status": "cataloged-superseded-physical-decision-components-must-be-rederived",
+        "requiredInputs": [
+          "pinned-lime-release-coefficients-asd-and-atbd-identities",
+          "release-evaluator-coefficient-order",
+          "independent-canonical-bin-evaluation",
+          "interpolation-and-srf-model-form-branches",
+          "joint-phase-channel-covariance",
+          "independent-lunar-benchmark"
+        ],
+        "futureVerificationLayer": "analytic"
+      },
+      "decisionStatus": "superseded",
+      "disposition": "must-rederive",
+      "reviewStatus": "inventory-reviewed-claim-boundary-curated",
+      "sourceIds": [
+        "SOURCE-EXT-000003",
+        "SOURCE-EXT-000004",
+        "SOURCE-EXT-000009",
+        "SOURCE-EXT-000012"
+      ],
+      "materialIds": [
+        "MATERIAL-EXT-000001",
+        "MATERIAL-EXT-000002",
+        "MATERIAL-EXT-000009",
+        "MATERIAL-EXT-000010",
+        "MATERIAL-EXT-000011",
+        "MATERIAL-EXT-000012",
+        "MATERIAL-EXT-000013"
+      ],
+      "relatedExperimentIds": [
+        "EXPERIMENT-A32-000016",
+        "EXPERIMENT-A32-000018"
+      ],
+      "blockers": [
+        "The historical record explicitly deferred the physical-reference decision.",
+        "The cataloged material identities do not resolve interpolation authority, table order, or joint covariance."
+      ],
+      "nextAction": "Use record 049 only as historical guidance, then independently reconstruct binning, covariance, and physical-reference comparisons."
+    },
+    {
+      "id": "EXPERIMENT-A32-000018",
+      "title": "Reconciliation ER5 lunar physical reference calibration",
+      "kind": "reconciliation-lunar-physical-reference-evidence",
+      "recordPath": "tmp/atmosphere/reconciliation/049-er5-lunar-physical-reference-calibration",
+      "historicalLocators": [],
+      "runner": {
+        "status": "maintained-poc-runner-identified-executed-byte-identity-must-be-verified",
+        "paths": [
+          "scripts/flat/reconciliation/POC/src/runners/er5LunarPhysicalReferenceCalibration.js"
+        ],
+        "pathRoles": [
+          {
+            "path": "scripts/flat/reconciliation/POC/src/runners/er5LunarPhysicalReferenceCalibration.js",
+            "role": "identified-lunar-physical-reference-runner"
+          }
+        ]
+      },
+      "contractParts": {
+        "importedModules": {
+          "status": "provenance-present-import-closure-review-pending",
+          "paths": []
+        },
+        "inputs": {
+          "status": "recorded"
+        },
+        "environment": {
+          "status": "command-and-provenance-present"
+        },
+        "criteria": {
+          "status": "recorded-physical-reference-slice-historically-accepted"
+        },
+        "controls": {
+          "status": "recorded-in-inputs-and-runner-review-pending"
+        },
+        "results": {
+          "status": "result-benchmark-covariance-and-authority-diagnostics-present"
+        },
+        "reports": {
+          "status": "report-and-run-log-present"
+        }
+      },
+      "claimBoundary": {
+        "status": "historically-accepted-disk-integrated-lunar-reference-slice",
+        "supports": [
+          "The selected LIME release-executable branch for disk-integrated lunar irradiance over the recorded canonical-bin cases.",
+          "Recorded AIR-LUSI and qualified ROLO comparisons plus model-form and covariance qualifications."
+        ],
+        "doesNotProve": [
+          "Resolved lunar radiance, observer visibility, atmosphere transport, GPU behavior, or production behavior.",
+          "Independent correctness of the POC implementation that parses and evaluates the selected LIME branch."
+        ]
+      },
+      "independence": {
+        "status": "external-benchmarks-present-shared-model-pipeline",
+        "oracle": "AIR-LUSI disk-integrated measurements with a qualified ROLO blue complement",
+        "sharedCodeRisk": "medium-to-high because model parsing, interpolation, binning, covariance, and comparisons are orchestrated by the POC runner"
+      },
+      "historicalAcceptance": "accepted-by-record-049-for-a-bounded-disk-integrated-lunar-physical-reference-slice",
+      "rederivationReasons": [
+        "Strong external comparison evidence exists, but the target repository has not independently implemented the model evaluation or binning.",
+        "The accepted branch and covariance treatment need independent reconstruction before they can prove the CPU Reference."
+      ],
+      "rederivation": {
+        "required": true,
+        "status": "cataloged-not-rederived",
+        "requiredInputs": [
+          "pinned-lime-release-coefficients-asd-and-atbd-identities",
+          "air-lusi-comparison-dataset-and-locators",
+          "rolo-blue-reference-and-qualification",
+          "independent-release-evaluator-reconstruction",
+          "independent-canonical-bin-integration",
+          "joint-model-form-and-measurement-covariance"
+        ],
+        "futureVerificationLayer": "analytic"
+      },
+      "decisionStatus": "provisional",
+      "disposition": "must-rederive",
+      "reviewStatus": "inventory-reviewed-claim-boundary-curated",
+      "sourceIds": [
+        "SOURCE-EXT-000004",
+        "SOURCE-EXT-000009",
+        "SOURCE-EXT-000010",
+        "SOURCE-EXT-000011",
+        "SOURCE-EXT-000012"
+      ],
+      "materialIds": [
+        "MATERIAL-EXT-000002",
+        "MATERIAL-EXT-000007",
+        "MATERIAL-EXT-000008",
+        "MATERIAL-EXT-000009",
+        "MATERIAL-EXT-000010",
+        "MATERIAL-EXT-000011",
+        "MATERIAL-EXT-000012",
+        "MATERIAL-EXT-000013"
+      ],
+      "relatedExperimentIds": [
+        "EXPERIMENT-A32-000017"
+      ],
+      "blockers": [
+        "Cataloged source and material links still require an independently implemented binning and covariance reconstruction.",
+        "No independent target implementation has reproduced the benchmark matrix."
+      ],
+      "nextAction": "Reconstruct the selected disk-integrated lunar reference independently and reproduce AIR-LUSI and qualified ROLO comparisons before using it as Reference input authority."
+    },
+    {
+      "id": "EXPERIMENT-A32-000019",
+      "title": "Reconciliation ER4C Sun and Sirius physical transport closure",
+      "kind": "reconciliation-sun-sirius-transport-closure-evidence",
+      "recordPath": "tmp/atmosphere/reconciliation/050-er4c-sun-sirius-physical-transport-closure",
+      "historicalLocators": [],
+      "runner": {
+        "status": "maintained-poc-runner-identified-and-hashed-by-record-provenance",
+        "paths": [
+          "scripts/flat/reconciliation/POC/src/runners/er4cSunSiriusPhysicalTransportClosure.js"
+        ],
+        "pathRoles": [
+          {
+            "path": "scripts/flat/reconciliation/POC/src/runners/er4cSunSiriusPhysicalTransportClosure.js",
+            "role": "identified-and-record-hashed-er4c-runner"
+          }
+        ]
+      },
+      "contractParts": {
+        "importedModules": {
+          "status": "module-graph-and-hashes-recorded-review-pending",
+          "paths": []
+        },
+        "inputs": {
+          "status": "recorded-with-source-reference-identities"
+        },
+        "environment": {
+          "status": "command-provenance-and-dependency-hashes-present"
+        },
+        "criteria": {
+          "status": "recorded-39-of-39-historically-accepted"
+        },
+        "controls": {
+          "status": "recorded-in-inputs-equations-and-runner"
+        },
+        "results": {
+          "status": "point-extended-full-frame-and-source-reference-results-present"
+        },
+        "reports": {
+          "status": "report-and-run-log-present"
+        }
+      },
+      "claimBoundary": {
+        "status": "historically-accepted-bounded-poc-cpu-physical-transport",
+        "supports": [
+          "Recorded point, extended-source, and full-frame pre-display CPU transport closure for the Sun and Sirius source packets over the declared POC cases.",
+          "Recorded closure against the retained solar and Sirius reference comparisons within the experiment tolerances."
+        ],
+        "doesNotProve": [
+          "Observer visibility, human review, observational detection, GPU conformance, production integration, or current CPU Reference correctness.",
+          "Independent correctness of the shared POC transport, source, camera, and composition modules."
+        ]
+      },
+      "independence": {
+        "status": "external-reference-closure-with-shared-poc-transport",
+        "oracle": "retained solar and Sirius reference comparisons plus internal conservation",
+        "sharedCodeRisk": "high because the runner and expected full-frame accounting share the POC transport and composition graph"
+      },
+      "historicalAcceptance": "accepted-by-record-050-with-39-of-39-criteria",
+      "rederivationReasons": [
+        "The strongest old transport closure remains a POC result rather than a test of the frozen production CPU Reference.",
+        "Source/reference parsing and transport composition must be separated from an independent expected-value lane."
+      ],
+      "rederivation": {
+        "required": true,
+        "status": "cataloged-not-rederived",
+        "requiredInputs": [
+          "accepted-unit-bearing-sun-and-sirius-source-packets",
+          "pinned-source-reference-materials-and-hashes",
+          "dimensionally-valid-pre-display-composition-equations",
+          "independent-selected-ray-and-frame-oracles",
+          "pinned-cpu-reference-revision-and-input-packets"
+        ],
+        "futureVerificationLayer": "cpu-oracle"
+      },
+      "decisionStatus": "provisional",
+      "disposition": "must-rederive",
+      "reviewStatus": "inventory-reviewed-claim-boundary-curated",
+      "sourceIds": [
+        "SOURCE-EXT-000003",
+        "SOURCE-EXT-000004",
+        "SOURCE-EXT-000005",
+        "SOURCE-EXT-000006",
+        "SOURCE-EXT-000007",
+        "SOURCE-EXT-000008",
+        "SOURCE-EXT-000009",
+        "SOURCE-EXT-000010",
+        "SOURCE-EXT-000011",
+        "SOURCE-EXT-000012"
+      ],
+      "materialIds": [
+        "MATERIAL-EXT-000001",
+        "MATERIAL-EXT-000002",
+        "MATERIAL-EXT-000003",
+        "MATERIAL-EXT-000004",
+        "MATERIAL-EXT-000005",
+        "MATERIAL-EXT-000006",
+        "MATERIAL-EXT-000007",
+        "MATERIAL-EXT-000008",
+        "MATERIAL-EXT-000009",
+        "MATERIAL-EXT-000010",
+        "MATERIAL-EXT-000011",
+        "MATERIAL-EXT-000012",
+        "MATERIAL-EXT-000013"
+      ],
+      "relatedExperimentIds": [
+        "EXPERIMENT-A32-000012",
+        "EXPERIMENT-A32-000013",
+        "EXPERIMENT-A32-000015",
+        "EXPERIMENT-A32-000018"
+      ],
+      "blockers": [
+        "No target CPU Reference reproduction exists.",
+        "The cataloged external evidence still needs independent expected-value ownership outside the shared POC transport graph."
+      ],
+      "nextAction": "Recreate the bounded Sun and Sirius transport closure against the pinned CPU Reference using independently generated expected values and no display claims."
+    },
+    {
+      "id": "EXPERIMENT-A32-000020",
+      "title": "Reconciliation ER6 globe-state acquisition",
+      "kind": "reconciliation-ephemeris-geometry-acquisition-evidence",
+      "recordPath": "tmp/atmosphere/reconciliation/054-er6-globe-state-acquisition",
+      "historicalLocators": [],
+      "runner": {
+        "status": "maintained-poc-acquisition-runner-identified-executed-byte-identity-must-be-verified",
+        "paths": [
+          "scripts/flat/reconciliation/POC/src/runners/acquireEr6GlobeCaseMatrix.js"
+        ],
+        "pathRoles": [
+          {
+            "path": "scripts/flat/reconciliation/POC/src/runners/acquireEr6GlobeCaseMatrix.js",
+            "role": "identified-er6-network-acquisition-runner"
+          }
+        ]
+      },
+      "contractParts": {
+        "importedModules": {
+          "status": "provenance-present-import-closure-review-pending",
+          "paths": []
+        },
+        "inputs": {
+          "status": "recorded-with-query-and-source-reference-metadata"
+        },
+        "environment": {
+          "status": "command-and-provenance-present-network-acquisition-recorded"
+        },
+        "criteria": {
+          "status": "recorded-13-of-13-historically-accepted"
+        },
+        "controls": {
+          "status": "recorded-query-matrix-review-pending"
+        },
+        "results": {
+          "status": "physical-state-acquisition-and-descriptor-present"
+        },
+        "reports": {
+          "status": "report-and-run-log-present"
+        }
+      },
+      "claimBoundary": {
+        "status": "historically-accepted-geometry-and-ephemeris-acquisition-only",
+        "supports": [
+          "Acquisition and reconstruction of the recorded eight-case, forty-query globe geometry and ephemeris state matrix.",
+          "Recorded attachment integrity and observer reconstruction residual checks."
+        ],
+        "doesNotProve": [
+          "Physical radiometry, atmosphere transport, automated or human reviewability, observational visibility, or production behavior.",
+          "Continued availability or immutability of the remote query service."
+        ]
+      },
+      "independence": {
+        "status": "external-state-source-with-shared-acquisition-parser",
+        "oracle": "retained remote response attachments and geometry reconstruction checks",
+        "sharedCodeRisk": "medium because acquisition and offline parsing are handled by the same POC lane"
+      },
+      "historicalAcceptance": "accepted-by-record-054-with-13-of-13-criteria-for-geometry-acquisition-only",
+      "rederivationReasons": [
+        "The raw request URLs, payload hashes, response bytes, and offline parse contract must be independently inventoried before reuse.",
+        "The target Reference has not consumed or verified this case matrix."
+      ],
+      "rederivation": {
+        "required": true,
+        "status": "cataloged-not-rederived",
+        "requiredInputs": [
+          "exact-query-urls-and-api-identities",
+          "retained-response-payload-hashes",
+          "offline-response-parser",
+          "observer-and-body-frame-reconstruction-equations",
+          "eight-case-geometry-matrix"
+        ],
+        "futureVerificationLayer": "analytic"
+      },
+      "decisionStatus": "provisional",
+      "disposition": "must-rederive",
+      "reviewStatus": "inventory-reviewed-claim-boundary-curated",
+      "sourceIds": [
+        "SOURCE-EXT-000015"
+      ],
+      "materialIds": [],
+      "relatedExperimentIds": [],
+      "blockers": [
+        "The external ephemeris source is linked, but the exact request/response identities remain record artifacts rather than separately retained materials.",
+        "Network reacquisition is outside the closed import gate."
+      ],
+      "nextAction": "Preserve exact request and payload identities in the material catalog, then reconstruct and verify the case matrix from retained bytes before any optional reacquisition."
+    },
+    {
+      "id": "EXPERIMENT-A32-000021",
+      "title": "Reconciliation ER6 physical globe scene validation",
+      "kind": "reconciliation-physical-globe-scene-evidence",
+      "recordPath": "tmp/atmosphere/reconciliation/056-er6-physical-globe-scene-validation",
+      "historicalLocators": [],
+      "runner": {
+        "status": "maintained-poc-runner-identified-executed-byte-identity-must-be-verified",
+        "paths": [
+          "scripts/flat/reconciliation/POC/src/runners/er6PhysicalGlobeSceneValidation.js"
+        ],
+        "pathRoles": [
+          {
+            "path": "scripts/flat/reconciliation/POC/src/runners/er6PhysicalGlobeSceneValidation.js",
+            "role": "identified-er6-physical-scene-runner"
+          }
+        ]
+      },
+      "contractParts": {
+        "importedModules": {
+          "status": "provenance-present-import-closure-review-pending",
+          "paths": []
+        },
+        "inputs": {
+          "status": "recorded-with-sealed-acquisition-dependency"
+        },
+        "environment": {
+          "status": "command-and-provenance-present"
+        },
+        "criteria": {
+          "status": "recorded-22-of-22-historically-accepted"
+        },
+        "controls": {
+          "status": "recorded-in-inputs-equations-and-runner"
+        },
+        "results": {
+          "status": "scene-matrix-and-reconstructed-attachments-present"
+        },
+        "reports": {
+          "status": "report-and-run-log-present"
+        }
+      },
+      "claimBoundary": {
+        "status": "historically-accepted-poc-pre-display-physical-scene",
+        "supports": [
+          "The recorded eight-case POC globe-scene geometry, source integrity, physical radiometry, and mechanical self-consistency checks.",
+          "Use of the sealed record-054 acquisition dependency for the historical cases."
+        ],
+        "doesNotProve": [
+          "Automated reviewability, human review, observational visibility, display correctness, GPU conformance, or production Reference correctness.",
+          "Independence of expected radiometry from the shared POC scene and transport implementation."
+        ]
+      },
+      "independence": {
+        "status": "sealed-inputs-but-shared-poc-scene-transport",
+        "oracle": "POC physical-scene invariants over sealed acquisition attachments",
+        "sharedCodeRisk": "high because geometry, transport, source composition, and expected invariants share the POC module graph"
+      },
+      "historicalAcceptance": "accepted-by-record-056-with-22-of-22-criteria",
+      "rederivationReasons": [
+        "The record validates a POC scene lane rather than the current production CPU Reference.",
+        "Selected-ray and case-level expected radiance must be derived independently from the implementation under test."
+      ],
+      "rederivation": {
+        "required": true,
+        "status": "cataloged-not-rederived",
+        "requiredInputs": [
+          "verified-er6-geometry-case-matrix",
+          "accepted-unit-bearing-source-packets",
+          "dimensionally-valid-pre-display-transport-contract",
+          "independent-selected-ray-or-case-oracles",
+          "pinned-cpu-reference-revision-and-inputs"
+        ],
+        "futureVerificationLayer": "cpu-oracle"
+      },
+      "decisionStatus": "provisional",
+      "disposition": "must-rederive",
+      "reviewStatus": "inventory-reviewed-claim-boundary-curated",
+      "sourceIds": [
+        "SOURCE-EXT-000003",
+        "SOURCE-EXT-000004",
+        "SOURCE-EXT-000005",
+        "SOURCE-EXT-000006",
+        "SOURCE-EXT-000007",
+        "SOURCE-EXT-000008",
+        "SOURCE-EXT-000009",
+        "SOURCE-EXT-000010",
+        "SOURCE-EXT-000011",
+        "SOURCE-EXT-000012",
+        "SOURCE-EXT-000015"
+      ],
+      "materialIds": [
+        "MATERIAL-EXT-000001",
+        "MATERIAL-EXT-000002",
+        "MATERIAL-EXT-000003",
+        "MATERIAL-EXT-000004",
+        "MATERIAL-EXT-000005",
+        "MATERIAL-EXT-000006",
+        "MATERIAL-EXT-000007",
+        "MATERIAL-EXT-000008",
+        "MATERIAL-EXT-000009",
+        "MATERIAL-EXT-000010",
+        "MATERIAL-EXT-000011",
+        "MATERIAL-EXT-000012",
+        "MATERIAL-EXT-000013"
+      ],
+      "relatedExperimentIds": [
+        "EXPERIMENT-A32-000019",
+        "EXPERIMENT-A32-000020"
+      ],
+      "blockers": [
+        "The target CPU Reference has not been run on the sealed cases.",
+        "Independent expected-value ownership is not established."
+      ],
+      "nextAction": "Recreate the eight bounded pre-display cases as CPU Reference fixtures with independently owned expected values and explicit units."
+    },
+    {
+      "id": "EXPERIMENT-A32-000022",
+      "title": "Reconciliation ER7 pre-display claim-boundary decision",
+      "kind": "reconciliation-pre-display-scope-decision-evidence",
+      "recordPath": "tmp/atmosphere/reconciliation/059-er7-pre-display-claim-boundary",
+      "historicalLocators": [],
+      "runner": {
+        "status": "maintained-poc-decision-runner-identified-executed-byte-identity-must-be-verified",
+        "paths": [
+          "scripts/flat/reconciliation/POC/src/runners/er7PreDisplayClaimBoundaryDecision.js"
+        ],
+        "pathRoles": [
+          {
+            "path": "scripts/flat/reconciliation/POC/src/runners/er7PreDisplayClaimBoundaryDecision.js",
+            "role": "identified-er7-claim-boundary-runner"
+          }
+        ]
+      },
+      "contractParts": {
+        "importedModules": {
+          "status": "active-module-graph-recorded-review-pending",
+          "paths": []
+        },
+        "inputs": {
+          "status": "recorded-with-sealed-er6-dependency"
+        },
+        "environment": {
+          "status": "command-and-provenance-present"
+        },
+        "criteria": {
+          "status": "recorded-13-of-13-historically-accepted"
+        },
+        "controls": {
+          "status": "claim-boundary-decision-not-a-numerical-control-study"
+        },
+        "results": {
+          "status": "claim-boundary-and-result-present"
+        },
+        "reports": {
+          "status": "report-and-run-log-present"
+        }
+      },
+      "claimBoundary": {
+        "status": "historically-accepted-scope-decision",
+        "supports": [
+          "A historical decision that the retained reset claim ends at pre-display spectral radiance."
+        ],
+        "doesNotProve": [
+          "Observer or background validation, automated reviewability, human review, numerical detection, observational visibility, or display-model correctness.",
+          "Any numerical CPU Reference result by itself."
+        ]
+      },
+      "independence": {
+        "status": "scope-decision-not-numerical-oracle",
+        "oracle": "not applicable; the record classifies claim boundaries",
+        "sharedCodeRisk": "module-graph evidence supports scope inspection but does not independently prove physics"
+      },
+      "historicalAcceptance": "accepted-by-record-059-with-13-of-13-scope-criteria",
+      "rederivationReasons": [
+        "The target repository must adopt an explicit Reference output quantity and units contract rather than inherit a POC decision implicitly.",
+        "The current production Reference and shader conformance boundary have not yet been reconciled to this scope."
+      ],
+      "rederivation": {
+        "required": true,
+        "status": "cataloged-contract-adoption-pending",
+        "requiredInputs": [
+          "cpu-reference-output-quantity-and-units-contract",
+          "pre-display-boundary-definition",
+          "explicit-display-and-observer-exclusions",
+          "target-contract-tests"
+        ],
+        "futureVerificationLayer": "contract-unit"
+      },
+      "decisionStatus": "provisional",
+      "disposition": "must-rederive",
+      "reviewStatus": "inventory-reviewed-claim-boundary-curated",
+      "sourceIds": [],
+      "materialIds": [],
+      "relatedExperimentIds": [
+        "EXPERIMENT-A32-000021"
+      ],
+      "blockers": [
+        "The CPU Reference output units and shader-to-Reference comparison boundary are not yet accepted in the target repository."
+      ],
+      "nextAction": "Make retained pre-display spectral radiance and its units the explicit Reference output contract, with display and observer claims kept separate."
+    },
+    {
+      "id": "EXPERIMENT-A32-000023",
+      "title": "Reconciliation ER8 CPU convergence and POC cleanup",
+      "kind": "reconciliation-poc-cpu-convergence-evidence",
+      "recordPath": "tmp/atmosphere/reconciliation/065-er8-cpu-convergence-and-poc-cleanup",
+      "historicalLocators": [],
+      "runner": {
+        "status": "maintained-poc-runner-identified-executed-byte-identity-must-be-verified",
+        "paths": [
+          "scripts/flat/reconciliation/POC/src/runners/er8CpuConvergenceAndPocCleanup.js"
+        ],
+        "pathRoles": [
+          {
+            "path": "scripts/flat/reconciliation/POC/src/runners/er8CpuConvergenceAndPocCleanup.js",
+            "role": "identified-er8-convergence-runner"
+          }
+        ]
+      },
+      "contractParts": {
+        "importedModules": {
+          "status": "active-module-graph-and-sealed-identity-recorded-review-pending",
+          "paths": []
+        },
+        "inputs": {
+          "status": "recorded-with-sealed-er6-and-er8-dependencies"
+        },
+        "environment": {
+          "status": "command-and-provenance-present"
+        },
+        "criteria": {
+          "status": "recorded-26-of-26-historically-accepted"
+        },
+        "controls": {
+          "status": "runtime-192-128-and-reference-384-256-profiles-recorded"
+        },
+        "results": {
+          "status": "runtime-reference-and-convergence-results-present"
+        },
+        "reports": {
+          "status": "report-and-run-log-present"
+        }
+      },
+      "claimBoundary": {
+        "status": "historically-accepted-poc-numerical-convergence-only",
+        "supports": [
+          "Recorded numerical agreement of the POC runtime path/source interval profile 192/128 against the POC reference profile 384/256 over the declared ER6 attachments and tolerances.",
+          "Historical evidence that the incident cache was inactive for this convergence lane."
+        ],
+        "doesNotProve": [
+          "Physical accuracy of either profile, incident-cache convergence, current CPU Reference convergence, GPU behavior, observer behavior, network acquisition, or production readiness."
+        ]
+      },
+      "independence": {
+        "status": "same-poc-implementation-at-two-resolutions",
+        "oracle": "higher-sample POC execution",
+        "sharedCodeRisk": "high because runtime and reference profiles execute the same POC physics and scene code"
+      },
+      "historicalAcceptance": "accepted-by-record-065-with-26-of-26-criteria-and-cache-inactive",
+      "rederivationReasons": [
+        "Same-code convergence is not physical validation and does not establish target CPU Reference controls.",
+        "The historical lane did not exercise the incident cache."
+      ],
+      "rederivation": {
+        "required": true,
+        "status": "cataloged-not-rederived",
+        "requiredInputs": [
+          "accepted-cpu-reference-input-fixtures",
+          "runtime-and-higher-resolution-control-profiles",
+          "per-quantity-convergence-metrics-and-tolerances",
+          "independent-physical-or-analytic-oracles",
+          "separate-cache-active-convergence-cases"
+        ],
+        "futureVerificationLayer": "cpu-oracle"
+      },
+      "decisionStatus": "provisional",
+      "disposition": "must-rederive",
+      "reviewStatus": "inventory-reviewed-claim-boundary-curated",
+      "sourceIds": [],
+      "materialIds": [],
+      "relatedExperimentIds": [
+        "EXPERIMENT-A32-000021",
+        "EXPERIMENT-A32-000022"
+      ],
+      "blockers": [
+        "The target Reference has not been run at either profile.",
+        "No cache-active convergence result exists."
+      ],
+      "nextAction": "Design target CPU Reference convergence using independent fixtures, then test cache-inactive and cache-active controls separately."
+    },
+    {
+      "id": "EXPERIMENT-A32-000024",
+      "title": "Reconciliation ER9 production promotion proof",
+      "kind": "reconciliation-rolled-back-production-promotion-evidence",
+      "recordPath": "tmp/atmosphere/reconciliation/067-er9-production-promotion-proof",
+      "historicalLocators": [],
+      "runner": {
+        "status": "record-provenance-hashes-runner-but-current-production-status-rolls-back-result",
+        "paths": [
+          "scripts/flat/reconciliation/POC/src/runners/er9ProductionPromotionProof.js"
+        ],
+        "pathRoles": [
+          {
+            "path": "scripts/flat/reconciliation/POC/src/runners/er9ProductionPromotionProof.js",
+            "role": "identified-and-record-hashed-er9-runner-for-rolled-back-proof"
+          }
+        ]
+      },
+      "contractParts": {
+        "importedModules": {
+          "status": "module-graphs-manifests-and-file-hashes-recorded"
+        },
+        "inputs": {
+          "status": "verification-input-and-selection-manifests-present"
+        },
+        "environment": {
+          "status": "provenance-dependency-and-test-logs-present"
+        },
+        "criteria": {
+          "status": "recorded-23-of-23-internally-accepted-before-rollback"
+        },
+        "controls": {
+          "status": "recorded-in-governing-decision-selection-and-manifests"
+        },
+        "results": {
+          "status": "conformance-production-suite-and-mapping-results-present"
+        },
+        "reports": {
+          "status": "report-run-log-and-production-suite-report-present"
+        }
+      },
+      "claimBoundary": {
+        "status": "rolled-back-historical-selected-scope-proof",
+        "supports": [
+          "Historical evidence that record 067 internally accepted its selected CPU source, seam, graph, and verification scope."
+        ],
+        "doesNotProve": [
+          "The correctness or acceptance of the current production tree or any selected successor cache.",
+          "GPU parity, network acquisition, image output, or a fresh proof of the current Reference."
+        ]
+      },
+      "independence": {
+        "status": "promotion-proof-shares-selected-production-and-poc-lineage",
+        "oracle": "production suite, manifests, module graphs, and selected-scope conformance checks",
+        "sharedCodeRisk": "high; the proof was constructed around the promoted implementation and was later rolled back"
+      },
+      "historicalAcceptance": "internally-accepted-by-record-067-then-rolled-back-and-rejected-for-current-successor-acceptance",
+      "rederivationReasons": [
+        "Current production status says the record does not describe the present tree and cannot accept the successor cache.",
+        "The durable schema and physical unit boundary now required are different from the historical promotion target."
+      ],
+      "rederivation": {
+        "required": false,
+        "status": "rejected-do-not-amend-or-rerun",
+        "requiredInputs": [],
+        "futureVerificationLayer": "cpu-oracle"
+      },
+      "decisionStatus": "rejected",
+      "disposition": "archive-after-gate",
+      "reviewStatus": "inventory-reviewed-claim-boundary-rejected",
+      "sourceIds": [],
+      "materialIds": [],
+      "relatedExperimentIds": [
+        "EXPERIMENT-A32-000023"
+      ],
+      "blockers": [
+        "The historical proof targets rolled-back code and cannot be reused for the current Reference.",
+        "A new unit-bearing physical contract and fresh successor proof are required."
+      ],
+      "nextAction": "Archive record 067 without amendment; after the CPU Reference is independently proved, create a new promotion record with a new identity and current unit-bearing contract."
+    }
+  ],
+  "manualFacts": [
+    {
+      "semanticKey": "reconciliation-record-033:typed-celestial-source-contract-boundary",
+      "statement": "Historical record 033 accepted a quantity-bearing 15-channel celestial-source contract over 360 through 830 nanometers while explicitly excluding camera, geometry, atmosphere, response, display, and image claims.",
+      "kind": "historical-experiment-boundary-observation",
+      "domain": "celestial-source-quantity-contract",
+      "owner": "algorithm32-reference-validation",
+      "authorityRole": "reference-validation",
+      "structuredValue": {
+        "channelCount": 15,
+        "spectralSupportNanometers": [
+          360,
+          830
+        ],
+        "channelMeasure": "bin-average-density",
+        "acceptedCriterionCount": 16,
+        "criterionCount": 16
+      },
+      "supportStatus": "experiment-backed-historical",
+      "implementationStatus": "not-applicable",
+      "decisionStatus": "provisional",
+      "verificationLayer": "analytic",
+      "citations": [
+        {
+          "path": "tmp/atmosphere/reconciliation/033-er1-typed-celestial-sources-contract/report.md",
+          "lineStart": 3,
+          "lineEnd": 9,
+          "role": "records-accepted-quantity-contract-and-boundary"
+        },
+        {
+          "path": "tmp/atmosphere/reconciliation/033-er1-typed-celestial-sources-contract/report.md",
+          "lineStart": 24,
+          "lineEnd": 27,
+          "role": "records-lime-nonacceptance-and-criteria-count"
+        }
+      ],
+      "experimentIds": [
+        "EXPERIMENT-A32-000011"
+      ],
+      "materialIds": [
+        "MATERIAL-EXT-000001",
+        "MATERIAL-EXT-000003",
+        "MATERIAL-EXT-000004",
+        "MATERIAL-EXT-000010",
+        "MATERIAL-EXT-000011",
+        "MATERIAL-EXT-000012",
+        "MATERIAL-EXT-000013"
+      ],
+      "nonClaims": [
+        "Historical acceptance is not target CPU Reference proof.",
+        "The catalog has not independently reproduced the binning or photometry."
+      ],
+      "blockers": [
+        "Independent bin integration, photometry, and target packet validation remain pending."
+      ],
+      "nextAction": "Reproduce the bounded quantity contract independently and map it to explicit CPU Reference input units."
+    },
+    {
+      "semanticKey": "reconciliation-record-034:point-source-flux-accounting-boundary",
+      "statement": "Historical record 034 accepted point-source flux accounting over its declared cases while explicitly excluding physical camera response, source geometry, atmosphere, display, and image claims.",
+      "kind": "historical-experiment-boundary-observation",
+      "domain": "point-source-flux-accounting",
+      "owner": "algorithm32-reference-validation",
+      "authorityRole": "reference-validation",
+      "structuredValue": {
+        "cameraCount": 9,
+        "pointCaseCount": 252,
+        "acceptedCriterionCount": 15,
+        "criterionCount": 15
+      },
+      "supportStatus": "experiment-backed-historical",
+      "implementationStatus": "not-applicable",
+      "decisionStatus": "provisional",
+      "verificationLayer": "analytic",
+      "citations": [
+        {
+          "path": "tmp/atmosphere/reconciliation/034-er2-point-source-conservation/report.md",
+          "lineStart": 3,
+          "lineEnd": 10,
+          "role": "records-flux-accounting-claim-boundary"
+        },
+        {
+          "path": "tmp/atmosphere/reconciliation/034-er2-point-source-conservation/report.md",
+          "lineStart": 16,
+          "lineEnd": 22,
+          "role": "records-accounting-results-and-criteria-count"
+        }
+      ],
+      "experimentIds": [
+        "EXPERIMENT-A32-000012"
+      ],
+      "nonClaims": [
+        "The shared POC camera and response code are not an independent oracle.",
+        "No target CPU Reference result is established."
+      ],
+      "blockers": [
+        "Independent pixel-solid-angle and normalized-response derivations are pending."
+      ],
+      "nextAction": "Recreate point-source conservation with independent analytic solid-angle and response oracles."
+    },
+    {
+      "semanticKey": "reconciliation-record-040:extended-source-conservation-boundary",
+      "statement": "Historical record 040 accepted conservative extended-source integration for its disk, limb, Lambert-scaffold, clipping, and convergence cases before atmosphere, display, or image work.",
+      "kind": "historical-experiment-boundary-observation",
+      "domain": "extended-source-conservation",
+      "owner": "algorithm32-reference-validation",
+      "authorityRole": "reference-validation",
+      "structuredValue": {
+        "uniformMatrixCaseCount": 36,
+        "acceptedCriterionCount": 10,
+        "criterionCount": 10
+      },
+      "supportStatus": "experiment-backed-historical",
+      "implementationStatus": "not-applicable",
+      "decisionStatus": "provisional",
+      "verificationLayer": "analytic",
+      "citations": [
+        {
+          "path": "tmp/atmosphere/reconciliation/040-er3-extended-source-conservation/report.md",
+          "lineStart": 3,
+          "lineEnd": 15,
+          "role": "records-extended-source-scope-and-acceptance"
+        }
+      ],
+      "experimentIds": [
+        "EXPERIMENT-A32-000013"
+      ],
+      "nonClaims": [
+        "The Lambert result is a conservation scaffold, not physical lunar calibration.",
+        "Record 049 later retains this result only as analytic integration evidence."
+      ],
+      "blockers": [
+        "Independent cap quadrature and clipping checks remain pending."
+      ],
+      "nextAction": "Recreate the bounded extended-source matrix with an independent integration oracle."
+    },
+    {
+      "semanticKey": "reconciliation-record-042:frozen-atmosphere-composition-rejected",
+      "statement": "Historical record 042 reported five accepted criteria, but later record 049 explicitly refused to inherit it because its radiometric composition was found dimensionally invalid.",
+      "kind": "historical-experiment-rejection-observation",
+      "domain": "pre-display-radiometric-composition",
+      "owner": "algorithm32-reference-validation",
+      "authorityRole": "physics-provenance-gap",
+      "supportStatus": "contradicted",
+      "implementationStatus": "quarantined",
+      "decisionStatus": "rejected",
+      "verificationLayer": "analytic",
+      "citations": [
+        {
+          "path": "tmp/atmosphere/reconciliation/042-er4-frozen-atmosphere-cpu-integration/report.md",
+          "lineStart": 3,
+          "lineEnd": 5,
+          "role": "records-original-internal-acceptance"
+        },
+        {
+          "path": "tmp/atmosphere/reconciliation/049-er5-lunar-physical-reference-calibration/report.md",
+          "lineStart": 20,
+          "lineEnd": 20,
+          "role": "records-later-dimensional-rejection"
+        }
+      ],
+      "experimentIds": [
+        "EXPERIMENT-A32-000014"
+      ],
+      "contradictionIds": [
+        "CONTRADICTION-A32-000010"
+      ],
+      "nonClaims": [
+        "Passing the record's internal criteria does not make the composition physical.",
+        "The record must not be used as a CPU Reference oracle."
+      ],
+      "blockers": [
+        "The record's source irradiance and atmosphere radiance terms do not share a valid dimensional composition."
+      ],
+      "nextAction": "Retain record 042 only as rejected evidence and recreate the transport equation from independently sourced radiometric quantities."
+    },
+    {
+      "semanticKey": "reconciliation-record-044:source-ownership-only-boundary",
+      "statement": "Historical record 044 is retained only as a Sun and Sirius source-ownership checkpoint; later review does not retain it as physical calibration or transport evidence.",
+      "kind": "historical-experiment-boundary-observation",
+      "domain": "physical-source-ownership",
+      "owner": "algorithm32-reference-validation",
+      "authorityRole": "reference-validation",
+      "supportStatus": "experiment-backed-historical",
+      "implementationStatus": "not-applicable",
+      "decisionStatus": "provisional",
+      "verificationLayer": "contract-unit",
+      "citations": [
+        {
+          "path": "tmp/atmosphere/reconciliation/044-er5-physical-source-calibration/report.md",
+          "lineStart": 3,
+          "lineEnd": 5,
+          "role": "records-minimal-original-acceptance"
+        },
+        {
+          "path": "tmp/atmosphere/reconciliation/049-er5-lunar-physical-reference-calibration/report.md",
+          "lineStart": 20,
+          "lineEnd": 20,
+          "role": "narrows-retained-claim-to-source-ownership"
+        }
+      ],
+      "experimentIds": [
+        "EXPERIMENT-A32-000015"
+      ],
+      "materialIds": [
+        "MATERIAL-EXT-000001",
+        "MATERIAL-EXT-000003",
+        "MATERIAL-EXT-000004"
+      ],
+      "nonClaims": [
+        "The missing command and provenance prevent an exact execution reconstruction from this record alone.",
+        "Source ownership does not prove source values or transport correctness."
+      ],
+      "blockers": [
+        "Command, provenance, and imported-module closure are absent."
+      ],
+      "nextAction": "Verify source ownership afresh from pinned material identities and the target Reference input contract."
+    },
+    {
+      "semanticKey": "reconciliation-record-046:lunar-calibration-deferred-scaffold",
+      "statement": "Historical record 046 pinned a domain-compatible LIME candidate but left its coefficients unparsed in the canonical basis, so its Lambert phase law remained only a conservation scaffold and independent lunar calibration was deferred.",
+      "kind": "historical-experiment-boundary-observation",
+      "domain": "lunar-source-calibration",
+      "owner": "algorithm32-reference-validation",
+      "authorityRole": "physics-provenance-gap",
+      "supportStatus": "experiment-backed-historical",
+      "implementationStatus": "scaffold",
+      "decisionStatus": "deferred",
+      "verificationLayer": "analytic",
+      "citations": [
+        {
+          "path": "tmp/atmosphere/reconciliation/046-er5-lunar-phase-calibration/report.md",
+          "lineStart": 3,
+          "lineEnd": 5,
+          "role": "records-pinned-candidate-and-deferred-calibration"
+        }
+      ],
+      "experimentIds": [
+        "EXPERIMENT-A32-000016"
+      ],
+      "materialIds": [
+        "MATERIAL-EXT-000010",
+        "MATERIAL-EXT-000011",
+        "MATERIAL-EXT-000012",
+        "MATERIAL-EXT-000013"
+      ],
+      "nonClaims": [
+        "The scaffold is not physical lunar calibration.",
+        "The incomplete record does not seal the exact execution environment."
+      ],
+      "blockers": [
+        "Canonical coefficient evaluation and an independent lunar benchmark are absent."
+      ],
+      "nextAction": "Reconstruct the pinned LIME model and compare it with independent disk-integrated lunar references."
+    },
+    {
+      "semanticKey": "reconciliation-record-048:lunar-physical-reference-explicitly-deferred",
+      "statement": "Historical record 048 accepted mechanical coefficient parsing and a bounded central prediction but explicitly deferred physical lunar calibration because model-order, interpolation, covariance, and independent-reference conflicts remained unresolved.",
+      "kind": "historical-experiment-boundary-observation",
+      "domain": "lunar-source-calibration",
+      "owner": "algorithm32-reference-validation",
+      "authorityRole": "physics-provenance-gap",
+      "structuredValue": {
+        "acceptedCriterionCount": 12,
+        "deferredCriterionCount": 4,
+        "criterionCount": 16
+      },
+      "supportStatus": "experiment-backed-historical",
+      "implementationStatus": "partial",
+      "decisionStatus": "superseded",
+      "verificationLayer": "analytic",
+      "citations": [
+        {
+          "path": "tmp/atmosphere/reconciliation/048-er5-lunar-coefficient-calibration/report.md",
+          "lineStart": 3,
+          "lineEnd": 14,
+          "role": "records-mechanical-acceptance-and-physical-deferral"
+        }
+      ],
+      "experimentIds": [
+        "EXPERIMENT-A32-000017"
+      ],
+      "materialIds": [
+        "MATERIAL-EXT-000001",
+        "MATERIAL-EXT-000002",
+        "MATERIAL-EXT-000009",
+        "MATERIAL-EXT-000010",
+        "MATERIAL-EXT-000011",
+        "MATERIAL-EXT-000012",
+        "MATERIAL-EXT-000013"
+      ],
+      "nonClaims": [
+        "The record does not select a complete physical lunar-reference authority.",
+        "Record 049 later supersedes its physical-authority decision."
+      ],
+      "blockers": [
+        "Independent binning, interpolation-authority, and joint covariance reconstruction remain pending."
+      ],
+      "nextAction": "Reconstruct the model mechanics independently and use separately cataloged physical references to resolve the authority boundary."
+    },
+    {
+      "semanticKey": "reconciliation-record-049:disk-integrated-lunar-reference-boundary",
+      "statement": "Historical record 049 accepted a bounded disk-integrated lunar physical-reference slice using the selected LIME release-executable branch with AIR-LUSI comparisons and a qualified ROLO blue complement, while excluding resolved-radiance and observer claims.",
+      "kind": "historical-reference-validation-observation",
+      "domain": "lunar-disk-integrated-reference",
+      "owner": "algorithm32-reference-validation",
+      "authorityRole": "reference-validation",
+      "structuredValue": {
+        "airLusiAcceptedComparisonCount": 56,
+        "roloQualifiedAcceptedComparisonCount": 4,
+        "selectedAuthorityBranch": "release-positional-native-linear"
+      },
+      "supportStatus": "experiment-backed-historical",
+      "implementationStatus": "not-applicable",
+      "decisionStatus": "provisional",
+      "verificationLayer": "analytic",
+      "citations": [
+        {
+          "path": "tmp/atmosphere/reconciliation/049-er5-lunar-physical-reference-calibration/report.md",
+          "lineStart": 3,
+          "lineEnd": 18,
+          "role": "records-accepted-lunar-reference-and-benchmarks"
+        },
+        {
+          "path": "tmp/atmosphere/reconciliation/049-er5-lunar-physical-reference-calibration/report.md",
+          "lineStart": 20,
+          "lineEnd": 20,
+          "role": "records-explicit-nonclaims-and-predecessor-dispositions"
+        }
+      ],
+      "experimentIds": [
+        "EXPERIMENT-A32-000018"
+      ],
+      "materialIds": [
+        "MATERIAL-EXT-000002",
+        "MATERIAL-EXT-000007",
+        "MATERIAL-EXT-000008",
+        "MATERIAL-EXT-000009",
+        "MATERIAL-EXT-000010",
+        "MATERIAL-EXT-000011",
+        "MATERIAL-EXT-000012",
+        "MATERIAL-EXT-000013"
+      ],
+      "nonClaims": [
+        "Historical external comparison strength does not prove the target CPU Reference.",
+        "Resolved lunar radiance, observer visibility, GPU, and production claims are excluded."
+      ],
+      "blockers": [
+        "The linked LIME, AIR-LUSI, and ROLO computations must be independently reproduced against their pinned material identities."
+      ],
+      "nextAction": "Independently reconstruct the disk-integrated lunar reference and its covariance before using it to prove Reference inputs."
+    },
+    {
+      "semanticKey": "reconciliation-record-050:sun-sirius-pre-display-transport-boundary",
+      "statement": "Historical record 050 accepted bounded POC CPU point, extended, and full-frame physical transport closure for the Sun and Sirius with 39 of 39 criteria, but made no observer, reviewability, observational, GPU, or production claim.",
+      "kind": "historical-reference-validation-observation",
+      "domain": "sun-sirius-pre-display-transport",
+      "owner": "algorithm32-reference-validation",
+      "authorityRole": "reference-validation",
+      "structuredValue": {
+        "acceptedCriterionCount": 39,
+        "criterionCount": 39
+      },
+      "supportStatus": "experiment-backed-historical",
+      "implementationStatus": "not-applicable",
+      "decisionStatus": "provisional",
+      "verificationLayer": "cpu-oracle",
+      "citations": [
+        {
+          "path": "tmp/atmosphere/reconciliation/050-er4c-sun-sirius-physical-transport-closure/report.md",
+          "lineStart": 3,
+          "lineEnd": 21,
+          "role": "records-accepted-transport-scope-and-nonclaims"
+        }
+      ],
+      "experimentIds": [
+        "EXPERIMENT-A32-000019"
+      ],
+      "materialIds": [
+        "MATERIAL-EXT-000001",
+        "MATERIAL-EXT-000002",
+        "MATERIAL-EXT-000003",
+        "MATERIAL-EXT-000004",
+        "MATERIAL-EXT-000005",
+        "MATERIAL-EXT-000006",
+        "MATERIAL-EXT-000007",
+        "MATERIAL-EXT-000008",
+        "MATERIAL-EXT-000009",
+        "MATERIAL-EXT-000010",
+        "MATERIAL-EXT-000011",
+        "MATERIAL-EXT-000012",
+        "MATERIAL-EXT-000013"
+      ],
+      "nonClaims": [
+        "The POC transport graph is not the current CPU Reference.",
+        "The shared POC code creates substantial oracle-independence risk."
+      ],
+      "blockers": [
+        "No independently expected target CPU Reference run reproduces the closure."
+      ],
+      "nextAction": "Recreate the bounded closure against the pinned CPU Reference with independent expected values."
+    },
+    {
+      "semanticKey": "reconciliation-record-054:globe-geometry-acquisition-only-boundary",
+      "statement": "Historical record 054 accepted an eight-case, forty-query globe-state acquisition and geometry reconstruction contract while explicitly making no physical-radiometry or observational claim.",
+      "kind": "historical-reference-validation-observation",
+      "domain": "ephemeris-and-globe-geometry",
+      "owner": "algorithm32-reference-validation",
+      "authorityRole": "reference-validation",
+      "structuredValue": {
+        "caseCount": 8,
+        "queryCount": 40,
+        "maximumObserverResidualKilometers": 7.907148569157234e-8,
+        "acceptedCriterionCount": 13,
+        "criterionCount": 13
+      },
+      "supportStatus": "experiment-backed-historical",
+      "implementationStatus": "not-applicable",
+      "decisionStatus": "provisional",
+      "verificationLayer": "analytic",
+      "citations": [
+        {
+          "path": "tmp/atmosphere/reconciliation/054-er6-globe-state-acquisition/report.md",
+          "lineStart": 3,
+          "lineEnd": 19,
+          "role": "records-geometry-acquisition-results-and-nonclaims"
+        }
+      ],
+      "experimentIds": [
+        "EXPERIMENT-A32-000020"
+      ],
+      "nonClaims": [
+        "The record does not validate radiometry or transport.",
+        "Linking the external ephemeris source identity does not independently validate the retained responses or their redistribution terms."
+      ],
+      "blockers": [
+        "Exact remote request, response, hash, and offline parser provenance must be curated before reconstruction."
+      ],
+      "nextAction": "Reconstruct the case matrix from pinned retained responses and independently verify frame and observer equations."
+    },
+    {
+      "semanticKey": "reconciliation-record-056:physical-globe-scene-pre-display-boundary",
+      "statement": "Historical record 056 accepted its eight-case POC physical globe-scene geometry and pre-display radiometry checks with 22 of 22 criteria while explicitly excluding reviewability, human, and observational claims.",
+      "kind": "historical-reference-validation-observation",
+      "domain": "physical-globe-scene-transport",
+      "owner": "algorithm32-reference-validation",
+      "authorityRole": "reference-validation",
+      "structuredValue": {
+        "caseCount": 8,
+        "acceptedCriterionCount": 22,
+        "criterionCount": 22
+      },
+      "supportStatus": "experiment-backed-historical",
+      "implementationStatus": "not-applicable",
+      "decisionStatus": "provisional",
+      "verificationLayer": "cpu-oracle",
+      "citations": [
+        {
+          "path": "tmp/atmosphere/reconciliation/056-er6-physical-globe-scene-validation/report.md",
+          "lineStart": 3,
+          "lineEnd": 18,
+          "role": "records-scene-scope-acceptance-and-nonclaims"
+        }
+      ],
+      "experimentIds": [
+        "EXPERIMENT-A32-000021"
+      ],
+      "materialIds": [
+        "MATERIAL-EXT-000001",
+        "MATERIAL-EXT-000002",
+        "MATERIAL-EXT-000003",
+        "MATERIAL-EXT-000004",
+        "MATERIAL-EXT-000005",
+        "MATERIAL-EXT-000006",
+        "MATERIAL-EXT-000007",
+        "MATERIAL-EXT-000008",
+        "MATERIAL-EXT-000009",
+        "MATERIAL-EXT-000010",
+        "MATERIAL-EXT-000011",
+        "MATERIAL-EXT-000012",
+        "MATERIAL-EXT-000013"
+      ],
+      "nonClaims": [
+        "The POC scene lane is not the production CPU Reference.",
+        "No observer visibility or display claim is retained."
+      ],
+      "blockers": [
+        "Independent expected radiance and target Reference execution are absent."
+      ],
+      "nextAction": "Turn the bounded cases into unit-bearing CPU Reference fixtures with independently owned expected values."
+    },
+    {
+      "semanticKey": "reconciliation-record-059:retained-claim-ends-at-pre-display-radiance",
+      "statement": "Historical record 059 accepted a claim boundary ending at retained pre-display spectral radiance and classified Figure-1 RGB as a review transfer rather than an eye, camera, or visibility model.",
+      "kind": "historical-claim-boundary-decision",
+      "domain": "reference-output-claim-boundary",
+      "owner": "algorithm32-reference-validation",
+      "authorityRole": "reference-validation",
+      "supportStatus": "experiment-backed-historical",
+      "implementationStatus": "not-applicable",
+      "decisionStatus": "provisional",
+      "verificationLayer": "contract-unit",
+      "citations": [
+        {
+          "path": "tmp/atmosphere/reconciliation/059-er7-pre-display-claim-boundary/report.md",
+          "lineStart": 3,
+          "lineEnd": 14,
+          "role": "records-pre-display-claim-boundary-and-exclusions"
+        }
+      ],
+      "experimentIds": [
+        "EXPERIMENT-A32-000022"
+      ],
+      "nonClaims": [
+        "A scope decision is not numerical physics proof.",
+        "Display, observer, and visibility mechanisms remain out of the physics catalog."
+      ],
+      "blockers": [
+        "The target CPU Reference output quantity and units contract has not yet adopted this boundary."
+      ],
+      "nextAction": "Define and test the CPU Reference output as unit-bearing retained pre-display spectral radiance."
+    },
+    {
+      "semanticKey": "reconciliation-record-065:poc-cpu-convergence-cache-inactive",
+      "statement": "Historical record 065 accepted same-POC numerical convergence of path/source interval controls 192/128 against 384/256 while the incident cache was inactive and while making no network, observer, GPU, or production claim.",
+      "kind": "historical-convergence-observation",
+      "domain": "cpu-reference-numerical-convergence",
+      "owner": "algorithm32-reference-validation",
+      "authorityRole": "reference-validation",
+      "structuredValue": {
+        "runtimePathIntervalCount": 192,
+        "runtimeSourceTransmittanceIntervalCount": 128,
+        "referencePathIntervalCount": 384,
+        "referenceSourceTransmittanceIntervalCount": 256,
+        "incidentCacheStatus": "inactive",
+        "acceptedCriterionCount": 26,
+        "criterionCount": 26
+      },
+      "supportStatus": "experiment-backed-historical",
+      "implementationStatus": "not-applicable",
+      "decisionStatus": "provisional",
+      "verificationLayer": "cpu-oracle",
+      "citations": [
+        {
+          "path": "tmp/atmosphere/reconciliation/065-er8-cpu-convergence-and-poc-cleanup/report.md",
+          "lineStart": 3,
+          "lineEnd": 13,
+          "role": "records-historical-convergence-and-nonclaims"
+        },
+        {
+          "path": "tmp/atmosphere/reconciliation/065-er8-cpu-convergence-and-poc-cleanup/convergence-results.json",
+          "jsonPointer": "/runtimeProfile/atmosphereControls",
+          "role": "records-runtime-controls"
+        },
+        {
+          "path": "tmp/atmosphere/reconciliation/065-er8-cpu-convergence-and-poc-cleanup/convergence-results.json",
+          "jsonPointer": "/referenceProfile/atmosphereControls",
+          "role": "records-reference-controls"
+        }
+      ],
+      "experimentIds": [
+        "EXPERIMENT-A32-000023"
+      ],
+      "nonClaims": [
+        "Same-code convergence does not establish physical accuracy.",
+        "The result says nothing about cache-active convergence or current production controls."
+      ],
+      "blockers": [
+        "Target Reference and cache-active convergence studies have not been run."
+      ],
+      "nextAction": "Recreate convergence against independently sourced fixtures and add separate cache-active sensitivity cases."
+    }
+  ],
+  "contradictions": [
+    {
+      "id": "CONTRADICTION-A32-000010",
+      "kind": "historical-internal-acceptance-versus-dimensional-invalidity",
+      "summary": "Record 042 internally reports five accepted criteria, while later record 049 explicitly rejects inheritance of record 042 because its physical composition is dimensionally invalid.",
+      "scope": "pre-display composition of direct celestial-source input with frozen-atmosphere CPU output",
+      "currentObservation": "The old record labels itself accepted, but later reconciliation review found that it combines incompatible spectral irradiance and radiance quantities and therefore cannot serve as Reference evidence.",
+      "desiredState": "A fresh experiment must use one explicit unit-bearing radiometric equation, keep irradiance-to-radiance angular conversion explicit, and compare the pinned CPU Reference only within a declared pre-display boundary.",
+      "resolutionStatus": "historical-result-rejected-fresh-reference-proof-required",
+      "requiredAction": "Do not inherit or rerun record 042 as proof; retain it as rejected evidence and recreate the corrected transport relationship independently against the CPU Reference, using record 050 only as historical guidance.",
+      "citations": [
+        {
+          "path": "tmp/atmosphere/reconciliation/042-er4-frozen-atmosphere-cpu-integration/report.md",
+          "lineStart": 3,
+          "lineEnd": 5,
+          "role": "records-original-internal-acceptance"
+        },
+        {
+          "path": "tmp/atmosphere/reconciliation/049-er5-lunar-physical-reference-calibration/report.md",
+          "lineStart": 20,
+          "lineEnd": 20,
+          "role": "records-later-rejection-as-dimensionally-invalid"
+        }
+      ],
+      "experimentIds": [
+        "EXPERIMENT-A32-000014",
+        "EXPERIMENT-A32-000018",
+        "EXPERIMENT-A32-000019"
+      ],
+      "blockers": [
+        "No fresh target CPU Reference experiment with the corrected, independently sourced unit equation exists."
+      ]
+    }
+  ]
+}

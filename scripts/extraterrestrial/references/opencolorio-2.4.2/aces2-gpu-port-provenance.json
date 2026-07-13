@@ -1,0 +1,58 @@
+{
+	"schemaVersion": "opencolorio-2.4.2-aces2-gpu-port-provenance-v1",
+	"role": "Pinned analytic ACES 2 GPU implementation authority used to translate the fixed Rec.709/D65 100-nit path to contained WebGL2 GLSL. Official ACES CTL remains the numerical source-identity authority.",
+	"release": {
+		"version": "2.4.2",
+		"commit": "6918fad3f5d22ac3ef2397c754bf4268c2b58dd0",
+		"tagArchiveUrl": "https://github.com/AcademySoftwareFoundation/OpenColorIO/archive/refs/tags/v2.4.2.zip"
+	},
+	"sourceRoot": "references/opencolorio-2.4.2/source",
+	"authoredSources": [
+		{
+			"path": "src/OpenColorIO/ops/fixedfunction/FixedFunctionOpGPU.cpp",
+			"repositoryPath": "references/opencolorio-2.4.2/source/src/OpenColorIO/ops/fixedfunction/FixedFunctionOpGPU.cpp",
+			"url": "https://raw.githubusercontent.com/AcademySoftwareFoundation/OpenColorIO/6918fad3f5d22ac3ef2397c754bf4268c2b58dd0/src/OpenColorIO/ops/fixedfunction/FixedFunctionOpGPU.cpp",
+			"sizeBytes": 95702,
+			"sha256": "878164fc61129ee1e90e0bc03756c4a7b6bfaca041203e476be054d997e8255f",
+			"mapping": "WebGL helper and per-pixel operation ordering for RGB/JMh, tone/chroma compression, table lookup, gamut compression, and JMh/RGB."
+		},
+		{
+			"path": "src/OpenColorIO/ops/fixedfunction/ACES2/Transform.cpp",
+			"repositoryPath": "references/opencolorio-2.4.2/source/src/OpenColorIO/ops/fixedfunction/ACES2/Transform.cpp",
+			"url": "https://raw.githubusercontent.com/AcademySoftwareFoundation/OpenColorIO/6918fad3f5d22ac3ef2397c754bf4268c2b58dd0/src/OpenColorIO/ops/fixedfunction/ACES2/Transform.cpp",
+			"sizeBytes": 57228,
+			"sha256": "36c16956138862bcf38a579397850cdc70a06a1ff668f4ed7ea69a712c1f5782",
+			"mapping": "Analytic parameter and 362-row reach/cusp/upper-hull table construction, shared constants, CAM operations, and CPU/GPU semantic cross-map."
+		}
+	],
+	"officialAcesSources": [
+		"references/aces-v2.0.0-2025.04.04/package/aces-core/lib/Lib.Academy.OutputTransform.ctl",
+		"references/aces-v2.0.0-2025.04.04/package/aces-core/lib/Lib.Academy.Tonescale.ctl",
+		"references/aces-v2.0.0-2025.04.04/package/aces-core/lib/Lib.Academy.DisplayEncoding.ctl",
+		"references/aces-v2.0.0-2025.04.04/package/aces-output/d65/srgb/Output.Academy.Rec709-D65_100nit_in_Rec709-D65_sRGB-Piecewise.ctl"
+	],
+	"containedPort": [
+		"harness/lib/aces2-rec709-100nit-parameters.js",
+		"harness/lib/aces2-rec709-100nit-gpu.js",
+		"harness/production-sun-appearance-aces2-gpu-browser-entry.js"
+	],
+	"semanticLimits": {
+		"fixedProfileOnly": "100-nit Rec.709/D65 limiting and encoding primaries with sRGB piecewise encoding and the frozen scene scale.",
+		"tablePolicy": "The 362-row reach and cusp/gamma tables are internal analytic acceleration structures rebuilt from pinned authored equations inside each browser execution. They are not an output-transform LUT and are not loaded from generated run output.",
+		"generatedInputReuse": false,
+		"tuning": false,
+		"exposure": false,
+		"sourceSpecificRule": false
+	},
+	"license": {
+		"spdx": "BSD-3-Clause",
+		"notice": "Copyright Contributors to the OpenColorIO Project.",
+		"repositoryLicensePath": "references/opencolorio-2.4.2/LICENSE-BSD-3-Clause.txt",
+		"repositoryLicenseSizeBytes": 1485,
+		"repositoryLicenseSha256": "82a40c52065ee968aa62015735e84378ac11425db7a233e6a2dcd2c83fc24276",
+		"upstreamWheelMember": "opencolorio-2.4.2.dist-info/LICENSE",
+		"upstreamWheelMemberSizeBytes": 1511,
+		"upstreamWheelMemberSha256": "8850b0c83cd41d26ad0e080861d47ee00afb685386a459a1cbe8c347555621a7",
+		"repositoryNormalization": "The tracked copy preserves the exact notice text with repository-standard LF line endings; the upstream wheel-member identity records its original CRLF bytes."
+	}
+}

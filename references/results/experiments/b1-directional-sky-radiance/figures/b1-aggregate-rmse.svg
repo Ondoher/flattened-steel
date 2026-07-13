@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="980" viewBox="0 0 1200 980" role="img" aria-labelledby="title description">
+<title id="title">B1 aggregate spectral-radiance RMSE with Algorithm32 profiles</title>
+<desc id="description">Selected order-4 Algorithm32 aggregate RMSE against Kider measurements beside the nine displayed aggregate values in the Bruneton comparison paper and optional local cross-checks.</desc>
+<metadata id="provenance">{&quot;generator&quot;:&quot;scripts/experiments/generate-benchmark-figures.js&quot;,&quot;observable&quot;:&quot;B1 aggregate spectral-radiance RMSE&quot;,&quot;status&quot;:&quot;Algorithm32 is the selected J4 result and is included beside primary published aggregate values and optional local cross-checks&quot;,&quot;profileFamily&quot;:&quot;paper&quot;,&quot;candidateLabel&quot;:&quot;Algorithm32&quot;,&quot;selectedMaximumScatteringOrder&quot;:4,&quot;measurements&quot;:{&quot;path&quot;:&quot;references/results/experiments/b1-directional-sky-radiance/measurement-boundary.tsv&quot;,&quot;sha256&quot;:&quot;a751d56dc0d8deb87958cbc9e811204a38f2b86101c732109c3503dfcfedad74&quot;},&quot;publishedModels&quot;:{&quot;path&quot;:&quot;references/results/experiments/b1-directional-sky-radiance/published-models.tsv&quot;,&quot;sha256&quot;:&quot;4e11e9ebc6c8cf2eb85e608d86a750b827a17d13582f4b89f035b71824b204f4&quot;},&quot;algorithm32Boundary&quot;:{&quot;path&quot;:&quot;references/results/experiments/b1-directional-sky-radiance/algorithm32-paper-j4-proposed.tsv&quot;,&quot;sha256&quot;:&quot;84916e87161d8ce7ba52eab15e7c053bd9cc39242bd72ae6fd5a014790ecc3c6&quot;,&quot;provenance&quot;:{&quot;path&quot;:&quot;references/results/experiments/b1-directional-sky-radiance/algorithm32-paper-j4-boundary-provenance.json&quot;,&quot;sha256&quot;:&quot;03d00239777291eb4e0a161210873afee06cc361b3f1f3f7ac333b36e9a07c5f&quot;,&quot;label&quot;:&quot;Algorithm32 Paper J4&quot;,&quot;identity&quot;:&quot;Algorithm32 Paper J4&quot;,&quot;controls&quot;:{&quot;pathIntervalCount&quot;:40,&quot;sourceTransmittanceIntervalCount&quot;:20,&quot;incidentDirectionCount&quot;:34,&quot;incidentAltitudeBinCount&quot;:48,&quot;incomingDirectionDomain&quot;:&quot;source-oriented-fibonacci-pinned-34&quot;,&quot;scatteringOutputDomain&quot;:&quot;source-aligned-boundary-inclusive-gnomonic-cubed-sphere-w27&quot;,&quot;scatteringOutputFaceWidth&quot;:27,&quot;scatteringOutputDirectionCount&quot;:4374,&quot;positionNodeCount&quot;:48,&quot;positionLookup&quot;:&quot;view-only-linear-physical-altitude-over-actual-nodes&quot;,&quot;maximumScatteringOrder&quot;:4},&quot;runId&quot;:&quot;000166-algorithm32-paper-n-order-j4-kider-b1-b2-b3-boundary&quot;},&quot;identity&quot;:&quot;Algorithm32 Paper J4; direct 40-coordinate point-sample transport; no native-15 projection&quot;}}</metadata>
+<style>
+text{font-family:Arial,Helvetica,sans-serif;fill:#202124}
+.title{font-size:24px;font-weight:700}
+.subtitle{font-size:14px;fill:#4d5156}
+.panel-title{font-size:16px;font-weight:700}
+.axis{stroke:#303134;stroke-width:1}
+.grid{stroke:#dadce0;stroke-width:1}
+.tick{font-size:11px;fill:#5f6368}
+.axis-label{font-size:13px;font-weight:600}
+.legend{font-size:12px}
+.note{font-size:11px;fill:#5f6368}
+</style>
+<rect width="100%" height="100%" fill="#ffffff"/>
+<text class="title" x="60" y="42">B1 - Algorithm32 profile aggregate RMSE beside published models</text>
+<text class="subtitle" x="60" y="70">Colored diamonds are paper values; open circles are optional local reproductions; the colored square is Algorithm32 at cumulative order 4.</text>
+<line class="grid" x1="180" y1="94" x2="180" y2="626"/>
+<text class="tick" x="180" y="104" text-anchor="middle">0</text>
+<line class="grid" x1="334" y1="94" x2="334" y2="626"/>
+<text class="tick" x="334" y="104" text-anchor="middle">20</text>
+<line class="grid" x1="488" y1="94" x2="488" y2="626"/>
+<text class="tick" x="488" y="104" text-anchor="middle">40</text>
+<line class="grid" x1="642" y1="94" x2="642" y2="626"/>
+<text class="tick" x="642" y="104" text-anchor="middle">60</text>
+<line class="grid" x1="796" y1="94" x2="796" y2="626"/>
+<text class="tick" x="796" y="104" text-anchor="middle">80</text>
+<line class="grid" x1="950" y1="94" x2="950" y2="626"/>
+<text class="tick" x="950" y="104" text-anchor="middle">100</text>
+<text class="legend" x="164" y="137" text-anchor="end">Nishita93</text>
+<line x1="384.82" y1="128" x2="384.983" y2="138" stroke="#9aa0a6" stroke-width="1.5"/>
+<path d="M384.82,122 L390.82,128 L384.82,134 L378.82,128 Z" fill="#0072b2" stroke="#0072b2" stroke-width="1.5"/>
+<circle cx="384.983" cy="139" r="4" fill="#ffffff" stroke="#202124" stroke-width="1.5" opacity="1"/>
+<text class="tick" x="982" y="137">26.6 / 26.6212 / +0.0212</text>
+<text class="legend" x="164" y="189" text-anchor="end">Nishita96</text>
+<line x1="320.91" y1="180" x2="318.636" y2="190" stroke="#9aa0a6" stroke-width="1.5"/>
+<path d="M320.91,174 L326.91,180 L320.91,186 L314.91,180 Z" fill="#56b4e9" stroke="#56b4e9" stroke-width="1.5"/>
+<circle cx="318.636" cy="191" r="4" fill="#ffffff" stroke="#202124" stroke-width="1.5" opacity="1"/>
+<text class="tick" x="982" y="189">18.3 / 18.0047 / -0.2953</text>
+<text class="legend" x="164" y="241" text-anchor="end">Preetham</text>
+<line x1="858.37" y1="232" x2="858.648" y2="242" stroke="#9aa0a6" stroke-width="1.5"/>
+<path d="M858.37,226 L864.37,232 L858.37,238 L852.37,232 Z" fill="#d55e00" stroke="#d55e00" stroke-width="1.5"/>
+<circle cx="858.648" cy="243" r="4" fill="#ffffff" stroke="#202124" stroke-width="1.5" opacity="1"/>
+<text class="tick" x="982" y="241">88.1 / 88.1361 / +0.0361</text>
+<text class="legend" x="164" y="293" text-anchor="end">O&apos;Neal</text>
+<line x1="561.15" y1="284" x2="561.271" y2="294" stroke="#9aa0a6" stroke-width="1.5"/>
+<path d="M561.15,278 L567.15,284 L561.15,290 L555.15,284 Z" fill="#e69f00" stroke="#e69f00" stroke-width="1.5"/>
+<circle cx="561.271" cy="295" r="4" fill="#ffffff" stroke="#202124" stroke-width="1.5" opacity="1"/>
+<text class="tick" x="982" y="293">49.5 / 49.5157 / +0.0157</text>
+<text class="legend" x="164" y="345" text-anchor="end">Haber</text>
+<line x1="293.19" y1="336" x2="293.556" y2="346" stroke="#9aa0a6" stroke-width="1.5"/>
+<path d="M293.19,330 L299.19,336 L293.19,342 L287.19,336 Z" fill="#009e73" stroke="#009e73" stroke-width="1.5"/>
+<circle cx="293.556" cy="347" r="4" fill="#ffffff" stroke="#202124" stroke-width="1.5" opacity="1"/>
+<text class="tick" x="982" y="345">14.7 / 14.7475 / +0.0475</text>
+<text class="legend" x="164" y="397" text-anchor="end">Bruneton</text>
+<line x1="267.01" y1="388" x2="266.881" y2="398" stroke="#9aa0a6" stroke-width="1.5"/>
+<path d="M267.01,382 L273.01,388 L267.01,394 L261.01,388 Z" fill="#cc79a7" stroke="#cc79a7" stroke-width="1.5"/>
+<circle cx="266.881" cy="399" r="4" fill="#ffffff" stroke="#202124" stroke-width="1.5" opacity="1"/>
+<text class="tick" x="982" y="397">11.3 / 11.2832 / -0.0168</text>
+<text class="legend" x="164" y="449" text-anchor="end">Elek</text>
+<line x1="267.01" y1="440" x2="266.881" y2="450" stroke="#9aa0a6" stroke-width="1.5"/>
+<path d="M267.01,434 L273.01,440 L267.01,446 L261.01,440 Z" fill="#6f4c9b" stroke="#6f4c9b" stroke-width="1.5"/>
+<circle cx="266.881" cy="451" r="4" fill="#ffffff" stroke="#202124" stroke-width="1.5" opacity="1"/>
+<text class="tick" x="982" y="449">11.3 / 11.2832 / -0.0168</text>
+<text class="legend" x="164" y="501" text-anchor="end">Hosek</text>
+<line x1="499.55" y1="492" x2="499.237" y2="502" stroke="#9aa0a6" stroke-width="1.5"/>
+<path d="M499.55,486 L505.55,492 L499.55,498 L493.55,492 Z" fill="#a58b00" stroke="#a58b00" stroke-width="1.5"/>
+<circle cx="499.237" cy="503" r="4" fill="#ffffff" stroke="#202124" stroke-width="1.5" opacity="1"/>
+<text class="tick" x="982" y="501">41.5 / 41.4593 / -0.0407</text>
+<text class="legend" x="164" y="553" text-anchor="end">libRadtran</text>
+<line x1="268.55" y1="544" x2="268.4" y2="554" stroke="#9aa0a6" stroke-width="1.5"/>
+<path d="M268.55,538 L274.55,544 L268.55,550 L262.55,544 Z" fill="#222222" stroke="#222222" stroke-width="1.5"/>
+<circle cx="268.4" cy="555" r="4" fill="#ffffff" stroke="#202124" stroke-width="1.5" opacity="1"/>
+<text class="tick" x="982" y="553">11.5 / 11.4805 / -0.0195</text>
+<rect x="18" y="581" width="1115" height="42" rx="5" fill="#fff5f6"/>
+<text class="legend" x="164" y="605" text-anchor="end" font-weight="700">Algorithm32</text>
+<rect x="266.829" y="596" width="10" height="10" fill="#b00020"/>
+<text class="tick" x="982" y="605">11.925783 / scored against Kider</text>
+<text class="axis-label" x="565" y="667" text-anchor="middle">Aggregate spectral-radiance RMSE (mW m^-2 sr^-1 nm^-1)</text>
+<path d="M184,690 L190,696 L184,702 L178,696 Z" fill="#0072b2" stroke="#0072b2" stroke-width="1.5"/>
+<text class="legend" x="198" y="700">Published display value (primary)</text>
+<circle cx="425" cy="696" r="4" fill="#ffffff" stroke="#202124" stroke-width="1.5" opacity="1"/>
+<text class="legend" x="439" y="700">Local cross-check</text>
+<text class="note" x="600" y="700">published / local / difference; Algorithm32 is scored directly against Kider</text>
+<text class="note" x="60" y="726">Paper aggregates are displayed to one decimal except the separately reported 11.48 libRadTran fit; Algorithm32 uses the unchanged published scoring metric.</text>
+</svg>

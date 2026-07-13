@@ -1,0 +1,8 @@
+{
+  "commands": [
+    {
+      "command": "node scripts/flat/reconciliation/POC/src/runners/er1TypedCelestialSourcesContract.js --record tmp/atmosphere/reconciliation/033-er1-typed-celestial-sources-contract",
+      "timestamp": "2026-07-12T15:28:39.526Z"
+    }
+  ]
+}

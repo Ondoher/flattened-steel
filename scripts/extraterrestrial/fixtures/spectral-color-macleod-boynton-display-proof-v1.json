@@ -1,0 +1,55 @@
+{
+  "schemaId": "spectral-color-macleod-boynton-display-proof-fixture-v1",
+  "input": {
+    "runId": "000258-spectral-color-stage1-ledger",
+    "artifactSetSha256": "abe89535535f523d4d04a0a5e9fe5cef86bff441f274cd998103e0121a7cacd5",
+    "ledgerPath": "evidence/spectral-ledger.json",
+    "ledgerSha256": "a1574e12645f3f0c5eff1694d609f9e73cc39ec2661cf131ad0356a09f1c55d0"
+  },
+  "reference": {
+    "id": "CIE-170-2-2015-MacLeod-Boynton-2deg",
+    "source": "CIE 170-2:2015, physiologically based MacLeod-Boynton chromaticity diagram",
+    "datasetDoi": "10.25039/CIE.DS.qhaz5si9",
+    "scaledConeCoefficients": [0.68990272, 0.34832189, 0.0371597],
+    "equations": {
+      "Y_F": "0.68990272 * L + 0.34832189 * M",
+      "l_MB": "0.68990272 * L / Y_F",
+      "s_MB": "0.0371597 * S / Y_F"
+    }
+  },
+  "display": {
+    "id": "cie170-2-macleod-boynton-separated-brightness-rec709-v1",
+    "peakLuminanceCdPerSquareMeter": 100,
+    "white": "D65",
+    "primaries": "Rec.709",
+    "encoding": "IEC 61966-2-1 sRGB piecewise",
+    "brightness": "Naka-Rushton n=0.74 with the frozen CAM16-F_L half-saturation placement, applied once to Y_F",
+    "chromaticity": "preserve source l_MB and s_MB before same-Y D65-neutral Rec.709 containment",
+    "exposure": null
+  },
+  "measuredRows": [
+    "spherical-distant/noon-minus-60",
+    "spherical-distant/noon",
+    "spherical-distant/noon-plus-60",
+    "spherical-distant/sunset-minus-60",
+    "spherical-distant/sunset-minus-30",
+    "spherical-distant/sunset-minus-10",
+    "spherical-distant/sunset",
+    "flat-local/closest",
+    "flat-local/farthest-minus-30",
+    "flat-local/farthest-plus-10"
+  ],
+  "synthetic": {
+    "neutralSteps": 1001,
+    "scaleFactors": [0.000001, 0.001, 1, 1000, 1000000]
+  },
+  "tolerances": {
+    "boundsAbsolute": 2e-12,
+    "neutralAbsolute": 2e-12,
+    "chromaticityRoundTripAbsolute": 2e-12,
+    "chromaticityScaleInvariantAbsolute": 2e-12,
+    "strictMonotonicAbsolute": 1e-14,
+    "minimumMeasuredEncodedDistance": 1e-8,
+    "minimumWarmOrderingDelta": 1e-8
+  }
+}

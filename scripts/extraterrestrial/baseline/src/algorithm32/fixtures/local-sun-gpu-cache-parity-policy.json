@@ -1,0 +1,366 @@
+{
+  "schema": "algorithm32-flat-local-gpu-cache-parity-policy-v3",
+  "status": "stage-9.6-implemented-omitted-ground-star-validated-reflective-validation-pending",
+  "promotionState": "stage-9.6-public-runtime-enabled-omitted-ground-star-validated-reflective-implemented-validation-pending",
+  "claimBoundary": "This is the sole production comparison policy for the selected paired-Fibonacci-34, N=2048 shell-held-J1, continuous-direct-L1 flat/local contract. Stage 9.6 GPU construction, lifecycle, public publication, Flat32 runtime cutover, resource reporting, and containment pass. Explicit-zero and nonzero reflective output is implemented and production-CPU/GPU checked but remains unaccepted until independent physical Star validation.",
+  "supersededPolicies": [
+    {
+      "path": "src/algorithm32/fixtures/local-sun-gpu-cache-parity-policy.json",
+      "schema": "algorithm32-flat-local-gpu-cache-parity-policy-v2",
+      "sha256": "6277936ecfd510ccde250fc779d6b41a44d9fd14c9935a6488629075c7cd9968",
+      "reason": "The authorized Stage 9 baseline used Fibonacci-34, continuous J1, and stored J1-to-L1 transport."
+    },
+    {
+      "path": "src/algorithm32/light-sources/fixtures/local-sun-shell-gpu-parity-policy.json",
+      "schema": "algorithm32-flat-local-shell-held-gpu-parity-policy-v1",
+      "sha256": "4bcf68c299e2d4b5f9fa6dff294e5737dab4eb5d05dd3af443182a3e4dcc4ac8",
+      "reason": "The interrupted experiment policy was production-backed, optional, and contradicted the selected continuous-L1 recurrence."
+    }
+  ],
+  "authority": {
+    "acceptedImplementation": {
+      "path": "scripts/algorithm32-star/cases/local-sun-shell-cache-accepted-implementation-v1.json",
+      "sha256": "6a27106bce134174309a59908c6bcbb278a22989f74c64274347840ccc8abeb6",
+      "implementationId": "local-sun-shell-cache-accepted-implementation-v1-sha256:457bc753c9c3814560a8af0aaeeabaf3ea6efe64718e75e36b09a8bc863ee00e"
+    },
+    "starCpuGold": {
+      "path": "src/algorithm32/light-sources/fixtures/algorithm32-star-local-sun-shell-cpu-gold.json",
+      "sha256": "61532368d7efa2d4a60fc932a901097a8e583ccb0eb3593eb9b26d29c2674985",
+      "fixtureId": "algorithm32-star-local-sun-shell-cpu-gold-v3-sha256:bb3a1f871a375e53d9c180899003041afc4dda93cbe3fe69e62080481bd8d0c9",
+      "claimBoundary": "independent-star-only-bounded-binary64-omitted-ground"
+    },
+    "cpuComparisonReport": {
+      "path": "src/algorithm32/light-sources/fixtures/algorithm32-star-local-sun-shell-cpu-comparison-report.json",
+      "sha256": "d5fa37c70729eec944f59a7802f51b3a66dfb875969f0f1d076ab9ab0ea2c399",
+      "reportId": "algorithm32-star-local-sun-shell-cpu-comparison-report-v3-sha256:358f1abbbc910774be040baae85d240c2d2d0ca14c9eb4f51bb96af5ceaddd5a",
+      "state": "passed",
+      "fieldComparedScalarCount": 40560,
+      "fieldMismatchCount": 0,
+      "coreExactComparedLeafCount": 26900,
+      "inputAuthenticationComparedLeafCount": 224,
+      "exactComparedLeafCount": 27124,
+      "exactMismatchCount": 0,
+      "behavioralEdgeRecordCount": 29,
+      "residentSampledScalarCount": 9720
+    },
+    "starGpuMethodAuthority": {
+      "runId": "000335-local-sun-shell-cache-phase2-star-gpu-conformance",
+      "scope": "selected-shader-graph-r32f-tolerance-and-resource-method-only",
+      "controlDifference": "Run 000335 used 4 path and 4 source-transmittance intervals. Its scalar values are not gold for the selected production 15/15 controls; the authenticated v3 Star CPU gold supplies those expected field values."
+    },
+    "cpuOracle": "production-binary64-star-validated-for-omitted-ground-only",
+    "gpuCandidate": "production-r32f-flat-local-stage-9.6.3-cache",
+    "allowedError": "absolute + relative * abs(authority)"
+  },
+  "selectedContract": {
+    "shellCount": 2048,
+    "boundaryCount": 2049,
+    "shellOwnership": "higher-index-at-exact-internal-boundary-last-shell-at-maximum",
+    "heldScale": "arithmetic-mean-of-continuous-inverse-square-boundary-scales",
+    "shellApplication": "primary-j1-amplitude-only",
+    "primaryRadiance": "continuous-direct-l1",
+    "storedFieldTransport": [
+      "j2-to-l2",
+      "j3-to-l3"
+    ],
+    "queryTimeShellScaleCount": 0,
+    "recurrence": "J1(shell-held); L1(continuous); J2=scatter(L1); L2=transport(J2); J3=scatter(L2); L3=transport(J3); J4=scatter(L3); JthroughN=sum(pure J1..JN)"
+  },
+  "productionDomain": {
+    "position": {
+      "kind": "source-subpoint-z-rho-scaled-profile",
+      "id": "profile-z19-rho15-add-50km-4p5mm",
+      "zNodeCount": 19,
+      "rhoNodeCount": 15,
+      "positionCount": 285,
+      "interpolation": "clamped-bilinear-z-rho"
+    },
+    "incoming": {
+      "kind": "paired-fibonacci-34",
+      "id": "algorithm32-paired-fibonacci-34-incoming-v1",
+      "contentHash": "sha256:9cc84ee3f5509e8935b5ea4352e4f194ea2ecef02ade136afc47dc642ba1c0b9",
+      "directionCount": 34,
+      "pairCount": 17,
+      "weightSteradians": 0.36959913571644626,
+      "frame": "source-subpoint-radial-tangent-vertical"
+    },
+    "outgoing": {
+      "kind": "cubed-sphere-w27",
+      "contentHash": "sha256:b27c677bb8527d77fe7a50a2caa7f7a2af16c99ccf37138e1f75e9e4085047a0",
+      "directionCount": 4374,
+      "interpolation": "dominant-face-bilinear"
+    },
+    "spectralBasis": "native-15",
+    "spectralChannelCount": 15,
+    "sourceTransmittanceIntervalCount": 15,
+    "transportIntervalCount": 15
+  },
+  "boundedComparisonDomain": {
+    "position": {
+      "kind": "source-subpoint-z2-rho2",
+      "zNodeCount": 2,
+      "rhoNodeCount": 2,
+      "positionCount": 4,
+      "positionFlattening": "z-major-rho-minor"
+    },
+    "incoming": {
+      "kind": "paired-fibonacci-34",
+      "directionCount": 34
+    },
+    "outgoing": {
+      "kind": "cubed-sphere-w3",
+      "directionCount": 54
+    },
+    "spectralChannelCount": 15,
+    "sourceTransmittanceIntervalCount": 15,
+    "transportIntervalCount": 15,
+    "fieldScalarCount": 22320
+  },
+  "binary64Bounds": {
+    "shellBoundaries": {
+      "absolute": 0,
+      "relative": 0
+    },
+    "heldIncidentScales": {
+      "absolute": 0,
+      "relative": 0
+    },
+    "pairedDirectionComponents": {
+      "absolute": 0,
+      "relative": 0
+    },
+    "pureRadiance": {
+      "absolute": 1e-15,
+      "relative": 1e-12
+    },
+    "pureScatteringDensity": {
+      "absolute": 1e-18,
+      "relative": 1e-12
+    },
+    "cumulativeScatteringDensity": {
+      "absolute": 1e-18,
+      "relative": 1e-12
+    },
+    "exactPrefix": {
+      "absolute": 0,
+      "relative": 0
+    }
+  },
+  "r32fBounds": {
+    "uploadedBoundaryRadiusMeters": {
+      "absolute": 4,
+      "relative": 2e-7
+    },
+    "sourceDirectionComponent": {
+      "absolute": 0.000002,
+      "relative": 0.000002
+    },
+    "stencilWeight": {
+      "absolute": 0.000002,
+      "relative": 0.000002
+    },
+    "pureRadiance": {
+      "absolute": 2e-9,
+      "relative": 0.005
+    },
+    "pureScatteringDensity": {
+      "absolute": 2e-12,
+      "relative": 0.005
+    },
+    "cumulativeScatteringDensity": {
+      "absolute": 8e-12,
+      "relative": 0.005
+    },
+    "completeRayRadiance": {
+      "absolute": 2e-9,
+      "relative": 0.005
+    },
+    "transmittance": {
+      "absolute": 0.000002,
+      "relative": 0.00002
+    },
+    "exactCopy": {
+      "absolute": 0,
+      "relative": 0
+    }
+  },
+  "requestedOrders": [
+    1,
+    2,
+    4
+  ],
+  "expectedPassGraphs": {
+    "n1": [
+      "local-sun-primary-j1",
+      "local-sun-copy-j1-to-jthrough1"
+    ],
+    "n2": [
+      "local-sun-primary-j1",
+      "local-sun-direct-l1",
+      "local-sun-scatter-l1-to-j2",
+      "local-sun-add-j1-j2-to-jthrough2"
+    ],
+    "n4": [
+      "local-sun-primary-j1",
+      "local-sun-direct-l1",
+      "local-sun-scatter-l1-to-j2",
+      "local-sun-add-j1-j2-to-jthrough2",
+      "local-sun-transport-j2-to-l2",
+      "local-sun-scatter-l2-to-j3",
+      "local-sun-add-jthrough2-j3-to-jthrough3",
+      "local-sun-transport-j3-to-l3",
+      "local-sun-scatter-l3-to-j4",
+      "local-sun-add-jthrough3-j4-to-jthrough4"
+    ]
+  },
+  "groundCases": {
+    "required": [
+      "omitted-canonical-black",
+      "explicit-zero-lambertian",
+      "nonzero-lambertian"
+    ],
+    "explicitZeroAlbedo": {
+      "kind": "uniform-native-15-spectral-reflectance",
+      "channelCount": 15,
+      "value": 0
+    },
+    "nonzeroAlbedo": {
+      "kind": "uniform-native-15-spectral-reflectance",
+      "channelCount": 15,
+      "value": 0.25
+    },
+    "boundedProbeIndices": {
+      "position": [0, 1, 2, 3],
+      "outgoingW3": [0, 4, 13, 22, 31, 40, 49, 53],
+      "incomingPairedFibonacci34": [0, 8, 17, 25, 33],
+      "wavelength": "all-native-15",
+      "scalarCountPerCase": 3300
+    },
+    "implementationComparison": "production-r32f-gpu-against-corresponding-production-binary64-cpu-plus-pure-order-cumulative-and-zero-brdf-isolation",
+    "implementationState": "implemented-and-production-cpu-gpu-checked-independent-star-validation-pending",
+    "currentIndependentLocalAuthority": [
+      "omitted-canonical-black"
+    ],
+    "acceptanceBoundary": "Explicit-zero and nonzero local reflective output is implemented and checked against production CPU, but remains unaccepted and not Star-validated until an independent physical Star producer is pinned and compared."
+  },
+  "stage963Gate": {
+    "state": "passed",
+    "browserLane": "npm run test:algorithm32:local-sun:three",
+    "requestedOrders": [1, 2, 4],
+    "omittedGroundComparedScalarCount": 40560,
+    "n4FieldScalarCount": 22320,
+    "fieldMismatchCount": 0,
+    "reflectiveComparedScalarCountPerCase": 3300,
+    "reflectiveCases": [
+      "explicit-zero-lambertian",
+      "nonzero-lambertian"
+    ],
+    "sharedPrefixes": "bit-identical-r32f",
+    "boundaryUploadScalarCount": 2049,
+    "boundaryUploadBytes": 8196,
+    "cpuFieldUploadCount": 0,
+    "maximumProbeScalarCount": 4096,
+    "webGlErrorCount": 0,
+    "reflectiveClaim": "implemented-validation-pending",
+    "publicLifecycle": "enabled-and-passed-stage-9.6.4"
+  },
+  "stage964Gate": {
+    "state": "passed",
+    "publicController": "enabled",
+    "publication": "complete-result-only",
+    "activeCachePreservedOnFailure": true,
+    "exactReuse": true,
+    "replacement": true,
+    "supersession": true,
+    "callerCancellation": true,
+    "idempotentDisposal": true,
+    "declaredInvalidationInputsRebuild": true,
+    "cameraAndDisplayInvalidate": false,
+    "resourceReport": "source-facts-boundary-texture-logical-packed-transport-and-observed-executor-storage"
+  },
+  "stage965Gate": {
+    "state": "passed",
+    "applicationLane": "npm run karma:flat32",
+    "selectedLocalStrategy": "fixed-paired-fibonacci-34-source-derived-shell-facts",
+    "maximumScatteringOrder": 4,
+    "observerCenteredFinalViewDome": true,
+    "transactionalPublication": true,
+    "failurePreservesLastPublishedRuntime": true,
+    "unownedCandidateCleanup": true,
+    "fixedCameraSourceIndependence": true,
+    "sourceUpdateInvalidation": true,
+    "sharpHorizonDiscontinuityPresent": false
+  },
+  "stage966Gate": {
+    "state": "passed",
+    "nodeSpecs": "507/507",
+    "localSunBrowserSpecs": "3/3",
+    "broadAlgorithm32BrowserSpecs": "13/13",
+    "groundBrowserSpecs": "5/5",
+    "flat32BrowserSpecs": "3/3",
+    "algorithm32Typecheck": "passed",
+    "flat32Typecheck": "passed",
+    "productionBuild": "passed",
+    "authenticatedGoldVerification": "passed",
+    "authenticatedComparisonVerification": "passed",
+    "sourceAndBuiltOutputContainment": "passed",
+    "syntaxChecks": "passed",
+    "diffCheck": "passed",
+    "supportedHardwareQualification": "open"
+  },
+  "resourceCriteria": {
+    "factBoundaryTextureScalarCount": 2049,
+    "factBoundaryTextureBytes": 8196,
+    "starModeledFactBlockBytes": 17552,
+    "productionRetainedBinary64BoundaryBytes": 16392,
+    "productionRetainedBinary64HeldScaleBytes": 16384,
+    "productionRetainedSourceFactBytes": 32776,
+    "oneLogicalN4PackedTransportBytes": 164652480,
+    "oneJFieldBytes": 74795400,
+    "oneLFieldBytes": 581400,
+    "fourJPlusThreeLComponentBytes": 300925800,
+    "observedN4PeakFieldStorageBytes": 224967600,
+    "observedN4PeakPackedDataStorageBytes": 164707792,
+    "observedN4PeakTrackedStorageBytes": 389675392,
+    "observedN4ResidentFieldStorageBytes": 74795400,
+    "productionResidentFieldBytesMaximum": 83886080,
+    "productionPeakTrackedLogicalBytesMaximum": 469762048,
+    "boundedBrowserBuildMillisecondsMaximum": 120000,
+    "runtimeCumulativeQueriesPerPathPointAndSource": 1,
+    "readback": "declared-bounded-probes-only",
+    "qualificationBoundary": "Selected-domain supported-hardware allocation, timing, staged responsiveness, and performance remain unqualified."
+  },
+  "lifecycleCases": [
+    "exact-request-reuse",
+    "source-and-shell-fact-rebuild",
+    "paired-domain-rebuild",
+    "geometry-state-rebuild",
+    "atmosphere-state-rebuild",
+    "ground-content-rebuild",
+    "camera-noninvalidation",
+    "display-noninvalidation",
+    "supersession",
+    "failure-preserves-last-published-cache",
+    "cancellation",
+    "idempotent-disposal"
+  ],
+  "invariants": {
+    "fixedPairedIncomingDomain": true,
+    "higherIndexShellOwnership": true,
+    "continuousDirectL1ReadsShellFacts": false,
+    "storedTransportAcceptsJ1": false,
+    "cumulativeFieldFeedsRecurrence": false,
+    "queryTimeShellScaleCount": 0,
+    "cpuFieldUploadCount": 0,
+    "scalarSpectralGpuStorage": true
+  },
+  "rejectionRules": [
+    "Any production or application switch between continuous and shell-held J1 rejects the cutover.",
+    "Any shell symbol or fact binding outside primary J1 rejects the GPU graph.",
+    "Any stored J1-to-L1 transport rejects the GPU graph.",
+    "Any CPU scattering or radiance field upload rejects the GPU graph.",
+    "Any scalar outside its predeclared bound rejects conformance.",
+    "Any reflective local-output acceptance without independent local-ground authority rejects the claim.",
+    "Any Star runtime or build import rejects production containment."
+  ]
+}

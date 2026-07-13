@@ -1,0 +1,159 @@
+{
+  "schemaVersion": 1,
+  "implementationId": "local-sun-shell-cache-implementation-v1-sha256:f8e8b4af4459cb1d2d9b243ee39c33679f7d8185f5b33b71ad6605fbbf049eff",
+  "phase": "phase-2-cpu-cache-implementation",
+  "parents": {
+    "familyId": "local-sun-base-fact-family-v1-sha256:221f587130ef9664a2593e1dd8c96dc9709c4e9c67f38d4342d941ccace3f61d",
+    "familyManifestSha256": "72cf2dd8cc9cf0b9c6388331202c0d4c354eb6c77feb4b0743e3557703bb3160",
+    "terminalShellRunId": "000234-local-sun-shell-cache-n-2048",
+    "closeoutRunId": "000237-local-sun-shell-cache-family-closeout"
+  },
+  "shellFacts": {
+    "shellCount": 2048,
+    "boundaryCount": 2049,
+    "factBytes": 17552,
+    "rule": "arithmetic-mean-boundary-light-held-through-shell",
+    "lookupOwner": "geometry-owned source-relative distanceFromSource"
+  },
+  "fieldContract": {
+    "publicQuantity": "Jthrough4",
+    "pureOrderRecurrence": "J1 -> L1 -> J2 -> L2 -> J3 -> L3 -> J4",
+    "cumulativeRule": "derive cumulative Jthrough4 without feeding cumulative values into a later order",
+    "positionDomain": {
+      "id": "algorithm32-native-48-position-v1",
+      "count": 48
+    },
+    "directionDomain": {
+      "id": "source-aligned-w27-cubed-sphere-v1",
+      "count": 4374
+    },
+    "spectralBasis": {
+      "id": "native-15",
+      "channelCount": 15
+    },
+    "layout": {
+      "kind": "scalar-directional-spectral-r32f-v1",
+      "axes": {
+        "x": "direction",
+        "y": "position",
+        "layer": "wavelength"
+      },
+      "internalFormat": "R32F",
+      "channelsPerTexel": 1,
+      "bytesPerScalar": 4,
+      "fieldBytes": 12597120,
+      "binary64StagingFieldBytes": 25194240
+    },
+    "factorization": "U_c shell-held source-light facts are separate construction inputs; directional-spectral fields are V-by-W27-by-native-15 and no resident U_c-by-V field is permitted."
+  },
+  "oracle": {
+    "continuousLightOwner": "scripts/algorithm32-star/src/model/LocalPointSun.js",
+    "directTransportOwner": "scripts/algorithm32-star/src/cache/l1-field.js",
+    "independentHighOrderAuthority": "scripts/algorithm32-star/src/n-order-cache/withheld-direction-authority.js",
+    "caseMatrix": "candidate-independent withheld-direction partition crossed with frozen Phase 1 source, shell-side, and whole-world boundary cases"
+  },
+  "rejectionRules": {
+    "noProductionModuleImport": true,
+    "noGpuBeforeCpuAcceptance": true,
+    "noUndeclaredUvMaterialization": true,
+    "noCumulativeRecurrenceInput": true,
+    "noCandidatePayloadReadByOracle": true
+  },
+  "sourceClosure": [
+    {
+      "path": "agents/topics/algorithm32/experiments/local-sun-shell-cache-inputs/base-fact-family-v1.json",
+      "byteLength": 26150,
+      "sha256": "72cf2dd8cc9cf0b9c6388331202c0d4c354eb6c77feb4b0743e3557703bb3160"
+    },
+    {
+      "path": "agents/topics/algorithm32/experiments/local-sun-shell-cache-inputs/base-fact-family-v1.json.sha256",
+      "byteLength": 91,
+      "sha256": "136f552b04b436cc0d1adc4ffae55c78e6c88171447cd7ebc6320a314afea095"
+    },
+    {
+      "path": "scripts/algorithm32-star/runs/000234-local-sun-shell-cache-n-2048/result.json",
+      "byteLength": 4786,
+      "sha256": "f5f157b62b72892167429cc9d134cb2b6074e17a32a1caa8534d19db7e00d268"
+    },
+    {
+      "path": "scripts/algorithm32-star/runs/000234-local-sun-shell-cache-n-2048/artifact-manifest.json",
+      "byteLength": 1662,
+      "sha256": "6c79ea8a49ca6b68cb48d35014aa29b03c2297932b972d341b2c37d3b4cd107b"
+    },
+    {
+      "path": "scripts/algorithm32-star/runs/000237-local-sun-shell-cache-family-closeout/result.json",
+      "byteLength": 19742,
+      "sha256": "9007c4d91349769dda58f38f34fcc1f1bf618c1020b7820a1c12657242e7e3ca"
+    },
+    {
+      "path": "scripts/algorithm32-star/runs/000237-local-sun-shell-cache-family-closeout/artifact-manifest.json",
+      "byteLength": 1495,
+      "sha256": "4a624372f9f5584497fed07964998613c9c6d1d32b47ce929c60dc76df94250d"
+    },
+    {
+      "path": "scripts/algorithm32-star/src/local-sun-shell-cache/BaseFactFamilyContract.js",
+      "byteLength": 22053,
+      "sha256": "36a89bb81adaf37dbf3d4b39e5d3c4540e114e293cae65c3d424fe26ba7720ad"
+    },
+    {
+      "path": "scripts/algorithm32-star/src/local-sun-shell-cache/base-fact-family-validation.js",
+      "byteLength": 5709,
+      "sha256": "ec967a90e942ecc453280523df02df47dddbf74d562a122b602c594dadb39c6b"
+    },
+    {
+      "path": "scripts/algorithm32-star/src/local-sun-shell-cache-implementation/phase2-implementation-freeze.js",
+      "byteLength": 8869,
+      "sha256": "c962d2ad9993021daab740389ed355d3443e278173180ca64b7673165fad7267"
+    },
+    {
+      "path": "scripts/algorithm32-star/run-local-sun-shell-cache-phase2-freeze.js",
+      "byteLength": 4650,
+      "sha256": "f54af03af796f41d64baec8f5de7dd63e628139d759d0a4a2e1f447665e7def1"
+    },
+    {
+      "path": "scripts/algorithm32-star/src/model/LocalPointSun.js",
+      "byteLength": 4805,
+      "sha256": "198dec6140cfea317546733281fa96c74d4e79fff6031ff7a5406c1e1562366a"
+    },
+    {
+      "path": "scripts/algorithm32-star/src/cache/l1-field.js",
+      "byteLength": 2810,
+      "sha256": "70a86768f7185c138594392f0e8f1b34ccacc82981096bcdeef2753469f9c91e"
+    },
+    {
+      "path": "scripts/algorithm32-star/src/n-order-cache/CpuDirectionalSpectralField.js",
+      "byteLength": 7459,
+      "sha256": "dbfda53e0875dde573defd8c1f68d37779ec5f97a641e1dc8f393dc97d582098"
+    },
+    {
+      "path": "scripts/algorithm32-star/src/n-order-cache/build-cpu-distant-n-order-cache.js",
+      "byteLength": 35880,
+      "sha256": "98aa61f7cf441226eef38f40043ea729b5b1feb93cbea4d9160b7a4c33ead24a"
+    },
+    {
+      "path": "scripts/algorithm32-star/src/n-order-cache/withheld-direction-authority.js",
+      "byteLength": 35361,
+      "sha256": "b62ce19de28d6abc4a72d1ff577ab90f91955ed69f6dcbb77a3d6c8a922c246d"
+    },
+    {
+      "path": "scripts/algorithm32-star/src/production-reference/cache/DirectionalSpectralCacheDescriptor.js",
+      "byteLength": 9116,
+      "sha256": "0f5e0cc69e71323566acb02fdecf36fff78835b72612c01c7f0d64a6d39a24b5"
+    },
+    {
+      "path": "scripts/algorithm32-star/src/run-record/artifact-manifest.js",
+      "byteLength": 6827,
+      "sha256": "8da24510dbea0ebe2a59ef88519c2cdd4b8ad6ae9d8279210a529203fa287eab"
+    },
+    {
+      "path": "scripts/algorithm32-star/src/run-record/source-file-hashes.js",
+      "byteLength": 1745,
+      "sha256": "6b5e19d4c339e4e59c726f875238bd8a4cd807b379a97dd85b88d9ad5b066b66"
+    },
+    {
+      "path": "scripts/algorithm32-star/src/run-record/write-run-record.js",
+      "byteLength": 10749,
+      "sha256": "4a459a9714676f7522d00f5fac910f9a5a3193243e1930b67c842e4236dd6f1d"
+    }
+  ]
+}

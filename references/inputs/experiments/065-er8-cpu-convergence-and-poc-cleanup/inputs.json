@@ -1,0 +1,265 @@
+{
+  "kind": "er8-cpu-convergence-and-cleanup-inputs-v1",
+  "sealedEr6Dependency": {
+    "acceptedStatus": "accepted",
+    "acquisitionFingerprint": "bb49a0d2ef88714c4176e7e7eee62b3c9e0e6941a6da81cacd90548b329f9e2b",
+    "attachmentFingerprints": [
+      "45abf091f4944caa6cc07f3b0ae4a36e6fff9847f2da873a9f06eca4682a3ad2",
+      "effe75fdae5e816f9e101f18e81cabf992dbbca77acefefe0f46a6eeb1945001",
+      "7877ca2cd0a749014a50db49dc23c965e7e79613bbfd7eb999544023672eaee0",
+      "51752c792a53f4792e9efb629d2fdf57d80e3792873c46b8c7a584b0a180d85c",
+      "62e564f8b5aa8d7be9923f1d480adb0d81d766625f487e8a5edc8ed4c941b93a",
+      "a4376099ad03225eb5c49d6539223e5340063ed8fe4857a17ecc542424adaf27",
+      "22431ef92618123dd6c3de7c7acab8c8255a6a24b9c6ce18f6677d1c00912607",
+      "f26056daf187fee23457b10c4dc962939ed5c5ebf5f550163603ebcd77656761"
+    ],
+    "caseCount": 8,
+    "directory": "tmp/atmosphere/reconciliation/056-er6-physical-globe-scene-validation",
+    "failureArtifactPresent": false,
+    "fileHashes": {
+      "acquisitionDependencySha256": "ee7c0b8b9b7acc156afa35b01070543b5964c2665a36971a39a37ef9f834a627",
+      "attachmentsSha256": "66736ad48d3f927f769a161353dd3fa7a5f0bdaccaa09682873431e37d0629de",
+      "criteriaResultsSha256": "22f38188926a3b221d5b4f3de89278bebcb7ff3d92f617bbe49ee950e2fbe96f",
+      "resultSha256": "1d8c0415b6c58a7c42ce117ac25b79f9d35438628ce363cba9bce3bb5ef71550",
+      "sceneMatrixSha256": "ac3ca5fd0be281a20e629b9fb669731132703c0106ffdde3c2f2e3ed4245f167",
+      "sourceReferencesSha256": "79290c5d148fd2233f02b706900c63ecf6ceafeacd750bb29262fa3d740b7a49"
+    },
+    "geometryDepthStatus": "accepted",
+    "kind": "er8-sealed-er6-physical-scene-dependency-v1",
+    "physicalRadiometryStatus": "accepted",
+    "recordId": "056-er6-physical-globe-scene-validation",
+    "rendererFingerprint": "46e82ea11addd3ed83964bbb14be72bc12c16c926033980cd55aa86834557c09",
+    "sourceReferencesFingerprint": "6fc4f1a403d174126778022965241c8324c165183567fc64a20e38dcaaa9ee7b"
+  },
+  "routedEr8Record060Dependency": {
+    "acceptedCriterionCount": 16,
+    "activeModuleGraphsAccepted": true,
+    "cleanupAccepted": true,
+    "cleanupStatus": "accepted",
+    "convergenceStatus": "rejected",
+    "directory": "tmp/atmosphere/reconciliation/060-er8-cpu-convergence-and-poc-cleanup",
+    "failureArtifactPresent": false,
+    "hashes": {
+      "activeModuleGraphsSha256": "aa375f43cf4a137965d4df776892ed8d99921968dd6221d786f5aa5b0358d0b9",
+      "cleanupInventorySha256": "27bcbd04d36c2580f8ba914a6478d29e8a1aec64cd8a4ecde1d146ef74eaca9d",
+      "convergenceResultsSha256": "78dbb679e4fc2e7000427e9d754a5a0db8f2f5d6ac1c37ac3a59229ef108463b",
+      "criteriaResultsSha256": "44e760c1db5249dbbccd160bb55a85edcd47527a5072ecf909a5616a17039b5f",
+      "publicSurfaceSha256": "7e9b093eb6c0bfe75020f1a4e325d0efbf4b87beeca09c91d8ea9ea1fd847ffe",
+      "resultSha256": "0e282e9cd62490ddf8f2db08c850b9c1c1d05ad6e6533e0768853f4d6e52e288",
+      "sealedRuntimeReproductionSha256": "2c4c7295a4da0c8cd3893a2783170c1b36276e39cfa2c6265157610fcdfdcb1c"
+    },
+    "kind": "er8-routed-record-060-dependency-v1",
+    "mechanicalStatus": "accepted",
+    "publicSurfaceAccepted": true,
+    "record060RoutingEvidenceAccepted": true,
+    "recordId": "060-er8-cpu-convergence-and-poc-cleanup",
+    "rejectedCriteria": [
+      {
+        "name": "path spectral radiance is within one percent per-channel peak-normalized residual",
+        "scope": "path"
+      },
+      {
+        "name": "base view transmittance is within 0.005 absolute",
+        "scope": "transmittance"
+      },
+      {
+        "name": "exact-source Sirius transmittance is within 0.005 absolute",
+        "scope": "transmittance"
+      },
+      {
+        "name": "accounted Sirius transported irradiance is within 0.5 percent",
+        "scope": "point-transport"
+      },
+      {
+        "name": "Sun transported projected irradiance is within 0.5 percent",
+        "scope": "extended-transport"
+      },
+      {
+        "name": "Moon transported projected irradiance is within 0.5 percent",
+        "scope": "extended-transport"
+      },
+      {
+        "name": "final pre-display spectrum is within one percent per-channel peak-normalized residual",
+        "scope": "composition"
+      },
+      {
+        "name": "shared display RGB is within one 8-bit code value",
+        "scope": "display"
+      }
+    ],
+    "rejectedCriterionCount": 8,
+    "routedFailureSetExact": true,
+    "sealedBaselineReproductionAccepted": true
+  },
+  "routedEr8Record064Dependency": {
+    "acceptedCriterionCount": 24,
+    "baselineIdentityExact": true,
+    "cleanupStatus": "accepted",
+    "convergenceStatus": "rejected",
+    "directory": "tmp/atmosphere/reconciliation/064-er8-cpu-convergence-and-poc-cleanup",
+    "failureArtifactPresent": false,
+    "hashes": {
+      "convergenceResultsSha256": "a93684c312f50a26c64ec38d85243584c98890309e0dcfc474ec6e1f93ac85f4",
+      "criteriaResultsSha256": "b3fb3b75c476196ef770a7ed6db3f3ab83729faefece0fac5e348d98aa336910",
+      "resultSha256": "e170d353221d557118eb75fe45705c2ac8a1609d716669b58d0247c6cd607f04"
+    },
+    "kind": "er8-routed-record-064-dependency-v1",
+    "mechanicalStatus": "accepted",
+    "profilesExact": true,
+    "recordId": "064-er8-cpu-convergence-and-poc-cleanup",
+    "referenceProfileFingerprint": "24ec8b3315d5038fdfd2f4cc5bd36eb8bd613ce8c39d850ff2256e562b82d4c4",
+    "rejectedCriteria": [
+      {
+        "name": "path spectral radiance is within one percent per-channel peak-normalized residual",
+        "scope": "path"
+      },
+      {
+        "name": "Moon transported projected irradiance is within 0.5 percent",
+        "scope": "extended-transport"
+      }
+    ],
+    "rejectedCriterionCount": 2,
+    "routedFailureSetExact": true,
+    "runtimeProfileFingerprint": "f78159068392d3c2e71e732c9179e0e34013cfa495845f18085dfeeb1055f619"
+  },
+  "camera": {
+    "widthPixels": 8,
+    "heightPixels": 6,
+    "verticalFovDegrees": 70
+  },
+  "runtimeProfile": {
+    "atmosphereControls": {
+      "incidentAltitudeBinCount": 4,
+      "incidentDirectionCount": 4,
+      "pathIntervalCount": 192,
+      "sourceTransmittanceIntervalCount": 128
+    },
+    "extendedQuadrature": {
+      "moon": {
+        "azimuthCount": 24,
+        "radialCount": 6
+      },
+      "sun": {
+        "azimuthCount": 24,
+        "radialCount": 6
+      }
+    },
+    "id": "routed-er8-runtime-path192-source128"
+  },
+  "referenceProfile": {
+    "atmosphereControls": {
+      "incidentAltitudeBinCount": 4,
+      "incidentDirectionCount": 4,
+      "pathIntervalCount": 384,
+      "sourceTransmittanceIntervalCount": 256
+    },
+    "extendedQuadrature": {
+      "moon": {
+        "azimuthCount": 24,
+        "radialCount": 6
+      },
+      "sun": {
+        "azimuthCount": 24,
+        "radialCount": 6
+      }
+    },
+    "id": "routed-er8-reference-path384-source256"
+  },
+  "expectedCleanupPaths": [
+    "scripts/flat/reconciliation/POC/browser-page/runner.js",
+    "scripts/flat/reconciliation/POC/src/external-boundary-radiance/ExternalBoundaryRadiance.js",
+    "scripts/flat/reconciliation/POC/src/external-boundary-radiance/consts.js",
+    "scripts/flat/reconciliation/POC/src/external-boundary-radiance/types.d.ts",
+    "scripts/flat/reconciliation/POC/src/external-celestial-candidates/ControlledCelestialSampleProvider.js",
+    "scripts/flat/reconciliation/POC/src/external-celestial-candidates/DistantSunBoundaryCandidateProvider.js",
+    "scripts/flat/reconciliation/POC/src/external-celestial-candidates/ExternalCelestialCandidate.js",
+    "scripts/flat/reconciliation/POC/src/external-celestial-candidates/ExternalCelestialDepthResolver.js",
+    "scripts/flat/reconciliation/POC/src/external-celestial-candidates/GlobeMoonBoundaryCandidateProvider.js",
+    "scripts/flat/reconciliation/POC/src/external-celestial-candidates/LocalSunBoundaryCandidateProvider.js",
+    "scripts/flat/reconciliation/POC/src/external-celestial-candidates/fixtures/flat-bright-star-subset.js",
+    "scripts/flat/reconciliation/POC/src/external-celestial-candidates/sunCandidateUtils.js",
+    "scripts/flat/reconciliation/POC/src/external-celestial-candidates/types.d.ts",
+    "scripts/flat/reconciliation/POC/src/moon/GlobeMoonSceneRenderer.js",
+    "scripts/flat/reconciliation/POC/src/moon/types.d.ts",
+    "scripts/flat/reconciliation/POC/src/shader/DistantSphericalShaderContributionFactory.js",
+    "scripts/flat/reconciliation/POC/src/soft-shader/CpuPostprocessSoftShader.js",
+    "scripts/flat/reconciliation/POC/src/subjective-scenes/Flat32CpuSoftShaderSceneRenderer.js",
+    "scripts/flat/reconciliation/POC/src/subjective-scenes/Flat32SceneCelestialProvider.js",
+    "scripts/flat/reconciliation/POC/src/subjective-scenes/Flat32SceneStateResolver.js"
+  ],
+  "expectedRootPublicExportPaths": [
+    "./atmosphere/CanonicalAtmosphere.js",
+    "./calculator/SpectralCalculator.js",
+    "./camera/PerspectiveCameraRaster.js",
+    "./color/BrunetonColorDisplayModel.js",
+    "./constants/consts.js",
+    "./directional-visibility/ExactDirectionalVisibilityResolver.js",
+    "./errors/ReconciliationConfigurationError.js",
+    "./evaluation/SpectralReferenceEvaluator.js",
+    "./extended-source-integration/CanonicalUniformSunDiskSource.js",
+    "./extended-source-integration/SphericalCapQuadrature.js",
+    "./extended-source-integration/TransportedExtendedSourceIntegrator.js",
+    "./external-celestial-sources/ExternalCelestialSource.js",
+    "./external-celestial-sources/SpectralDensityBasis.js",
+    "./external-celestial-sources/SpectralDensityPacket.js",
+    "./external-celestial-sources/binPiecewiseLinearSpectralDensity.js",
+    "./external-celestial-sources/consts.js",
+    "./external-celestial-sources/createCalspecSiriusIrradianceDensity.js",
+    "./external-celestial-sources/createCanonicalSolarIrradianceDensity.js",
+    "./external-celestial-sources/createCanonicalSpectralDensityBasis.js",
+    "./geometry/SphericalEarthGeometry.js",
+    "./light/CanonicalSolarIlluminationSource.js",
+    "./physical-frame/FrozenAtmosphereSpectralFrameEvaluator.js",
+    "./physical-frame/PhysicalSpectralFrameComposer.js",
+    "./point-source-raster/BilinearPointResponse.js",
+    "./point-source-raster/TransportedPointSourceAccumulator.js"
+  ],
+  "expectedRootPublicExportNames": [
+    "BilinearPointResponse",
+    "BrunetonColorDisplayModel",
+    "CANONICAL_ATMOSPHERE_CONSTANTS",
+    "CANONICAL_DENSITY_BASIS_ID",
+    "CANONICAL_DENSITY_QUADRATURE",
+    "CANONICAL_DENSITY_SAMPLE_SEMANTICS",
+    "CANONICAL_SPECTRAL_BASIS",
+    "CANONICAL_SPECTRAL_CHANNELS",
+    "CELESTIAL_SOURCE_MEASURE_QUANTITY",
+    "CanonicalAtmosphere",
+    "CanonicalSolarIlluminationSource",
+    "CanonicalUniformSunDiskSource",
+    "EXTENDED_CELESTIAL_SOURCE",
+    "ExactDirectionalVisibilityResolver",
+    "ExternalCelestialSource",
+    "FrozenAtmosphereSpectralFrameEvaluator",
+    "POINT_CELESTIAL_SOURCE",
+    "PerspectiveCameraRaster",
+    "PhysicalSpectralFrameComposer",
+    "ReconciliationConfigurationError",
+    "SPECTRAL_DENSITY_UNITS",
+    "SPECTRAL_IRRADIANCE_DENSITY",
+    "SPECTRAL_RADIANCE_DENSITY",
+    "SpectralCalculator",
+    "SpectralDensityBasis",
+    "SpectralDensityPacket",
+    "SpectralReferenceEvaluator",
+    "SphericalCapQuadrature",
+    "SphericalEarthGeometry",
+    "TransportedExtendedSourceIntegrator",
+    "TransportedPointSourceAccumulator",
+    "WAVELENGTH_UNITS_NANOMETERS",
+    "binPiecewiseLinearSpectralDensity",
+    "createCalspecSiriusIrradianceDensity",
+    "createCanonicalSolarIrradianceDensity",
+    "createCanonicalSpectralDensityBasis"
+  ],
+  "expectedEr6PublicExportPaths": [
+    "./Er6GlobeCaseMatrixResolver.js",
+    "./Er6PhysicalGlobeSceneRenderer.js",
+    "./Er6PhysicalGlobeStateMatrixAcquirer.js"
+  ],
+  "expectedEr6PublicExportNames": [
+    "Er6GlobeCaseMatrixResolver",
+    "Er6PhysicalGlobeSceneRenderer",
+    "Er6PhysicalGlobeStateMatrixAcquirer"
+  ]
+}

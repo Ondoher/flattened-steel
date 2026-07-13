@@ -1,0 +1,24 @@
+{
+  "schemaId": "spectral-color-rgb-endpoint-sweep-fixture-v1",
+  "conditions": ["noon", "sunset-minus-30", "sunset-minus-10", "sunset"],
+  "viewport": { "widthPixels": 481, "heightPixels": 271, "verticalFieldOfViewDegrees": 15 },
+  "localLightRecord": { "runId": "000302-spectral-color-local-light-record", "artifactSetSha256": "dedb03462344654252096e9879972bfa21a3328ba0b18b5c6db9dfd4bc4cb9c1" },
+  "grid": {
+    "sceneDynamicRanges": [1000000, 100000000, 10000000000],
+    "endpointAdaptationSlopes": [0.25, 0.5, 0.75],
+    "noonPeakLinearValues": [0.75, 0.9],
+    "reviewCount": 6
+  },
+  "gates": {
+    "maximumBlackFraction": 0.05,
+    "maximumSaturatedFraction": 0.05,
+    "minimumCenterLuminanceStep": 0.002,
+    "minimumMeanLuminanceStep": 0.002,
+    "minimumNoonToSunsetCenterLuminanceDifference": 0.08,
+    "minimumWarmthStep": 0.000001,
+    "minimumDiskToCircumsolarRatio": 1.15,
+    "minimumCenterColorRetention": 0.5,
+    "maximumNeutralEncodedSpread": 0.05
+  },
+  "tolerances": { "fullyVisibleCenterSpectrumRelative": 0.001, "horizonCenterSpectrumMaximumRelative": 0.005, "rgbBoundsAbsolute": 1e-12, "gpuReadbackNegativeAbsolute": 0.000001 }
+}

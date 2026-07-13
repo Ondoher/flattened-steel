@@ -1,0 +1,178 @@
+{
+  "schema": "algorithm32-flat-local-gpu-cache-parity-policy-v1",
+  "status": "predeclared-before-flat-local-gpu-output",
+  "promotionState": "implemented-candidate-rejected-by-stage9-convergence",
+  "authority": {
+    "primitiveGold": "sealed-algorithm32-star-flat-local-primitives",
+    "oracle": "production-binary64-flat-local-cpu-candidate",
+    "oracleAcceptance": "compositional-star-primitives-and-direct-outputs-plus-analytic-invariants-and-star-validated-generic-recurrence",
+    "candidate": "production-r32f-flat-local-gpu-cache",
+    "recurrence": "unchanged-star-accepted-generic-pure-field-recurrence",
+    "allowedError": "absolute + relative * abs(oracle)"
+  },
+  "productionDomain": {
+    "position": {
+      "kind": "source-subpoint-z-rho",
+      "zNodeCount": 5,
+      "rhoNodeCount": 5,
+      "positionCount": 25,
+      "interpolation": "clamped-bilinear-z-rho"
+    },
+    "incoming": {
+      "kind": "fibonacci-34",
+      "directionCount": 34
+    },
+    "outgoing": {
+      "kind": "cubed-sphere-w27",
+      "directionCount": 4374,
+      "interpolation": "dominant-face-bilinear"
+    },
+    "spectralChannelCount": 15,
+    "transportIntervalCount": 15
+  },
+  "boundedBrowserDomain": {
+    "position": {
+      "zNodeCount": 2,
+      "rhoNodeCount": 2,
+      "positionCount": 4
+    },
+    "incomingDirectionCount": 34,
+    "outgoing": {
+      "kind": "cubed-sphere-w3",
+      "directionCount": 54
+    },
+    "spectralChannelCount": 15,
+    "transportIntervalCount": 15
+  },
+  "bounds": {
+    "sourceDirectionComponent": {
+      "absolute": 0.000002,
+      "relative": 0.000002
+    },
+    "stencilWeight": {
+      "absolute": 0.000002,
+      "relative": 0.000002
+    },
+    "pureRadiance": {
+      "absolute": 2e-9,
+      "relative": 0.005
+    },
+    "pureScatteringDensity": {
+      "absolute": 2e-12,
+      "relative": 0.005
+    },
+    "cumulativeScatteringDensity": {
+      "absolute": 8e-12,
+      "relative": 0.005
+    },
+    "completeRayRadiance": {
+      "absolute": 2e-9,
+      "relative": 0.005
+    },
+    "transmittance": {
+      "absolute": 0.000002,
+      "relative": 0.00002
+    },
+    "exactCopy": {
+      "absolute": 0,
+      "relative": 0
+    }
+  },
+  "orders": [
+    1,
+    2,
+    4
+  ],
+  "wavelengthIndices": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14
+  ],
+  "boundedFieldProbes": {
+    "positionIndices": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "outgoingDirectionIndices": [
+      0,
+      4,
+      13,
+      22,
+      31,
+      40,
+      49,
+      53
+    ],
+    "incomingDirectionIndices": [
+      0,
+      8,
+      17,
+      25,
+      33
+    ]
+  },
+  "groundCases": [
+    "omitted-canonical-black",
+    "explicit-zero-lambertian",
+    "nonzero-lambertian"
+  ],
+  "runtimeCases": [
+    "exact-position-and-direction-node",
+    "z-rho-interior-and-w3-interior",
+    "position-endpoint-clamps",
+    "direction-face-seam",
+    "direction-face-corner",
+    "ground-terminated-ray",
+    "atmosphere-exit-ray",
+    "object-shortened-ray"
+  ],
+  "lifecycleCases": [
+    "exact-request-reuse",
+    "source-state-rebuild",
+    "geometry-state-rebuild",
+    "atmosphere-state-rebuild",
+    "ground-content-rebuild",
+    "camera-noninvalidation",
+    "display-noninvalidation",
+    "supersession",
+    "failure-preserves-last-published-cache",
+    "cancellation",
+    "idempotent-disposal"
+  ],
+  "resourceCriteria": {
+    "productionResidentFieldBytesMaximum": 8388608,
+    "productionPeakTrackedLogicalBytesMaximum": 67108864,
+    "boundedBrowserBuildMillisecondsMaximum": 120000,
+    "runtimeCumulativeQueriesPerPathPointAndSource": 1,
+    "readback": "declared-probes-only",
+    "qualificationBoundary": "logical resources and bounded Chromium conformance; supported-hardware performance remains Stage 13"
+  },
+  "invariants": {
+    "positionFlattening": "z-major-rho-minor",
+    "localFrameResolvedAtEveryPhysicalPosition": true,
+    "deterministicRhoZeroFrame": true,
+    "cumulativeFieldFeedsRecurrence": false,
+    "separateDirectViewTerm": false,
+    "incidentDirectionLoopAtRuntime": false,
+    "groundUsesDirectJ2AndPureL1L2ForJ3J4": true,
+    "scalarSpectralGpuStorage": true
+  },
+  "evidence": {
+    "toleranceSource": "src/algorithm32/fixtures/gpu-cache-parity-policy.json and src/algorithm32/fixtures/runtime-cache-parity-policy.json",
+    "domainRationale": "The implemented candidate retains the established F34/W27 angular domains and native-15 basis, adds the configured five-by-five z/rho lattice, and uses the requested 15 transport intervals rather than the paper-comparison count of 40. The later Stage 9 convergence result rejected promotion of this candidate and its 15-interval controls."
+  }
+}

@@ -1,0 +1,872 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://flattened-steel.local/schemas/extraterrestrial/celestial-contract-v1.schema.json",
+  "title": "Stage 12 G0 synthetic celestial contract fixture",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "fixtureId",
+    "claimBoundary",
+    "family",
+    "spectralBasis",
+    "placementProviderContract",
+    "geometry",
+    "sources",
+    "rosterInput",
+    "sharedSun",
+    "states",
+    "cameraVariants",
+    "expected"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "celestial-contract-v1"
+    },
+    "fixtureId": {
+      "const": "g0-synthetic-celestial-v1"
+    },
+    "claimBoundary": {
+      "type": "string",
+      "minLength": 1
+    },
+    "family": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "familyId",
+        "geometryKind",
+        "atmosphereKind",
+        "compositionPolicy",
+        "representation"
+      ],
+      "properties": {
+        "familyId": {
+          "const": "spherical-sun-stars-radial-v1"
+        },
+        "geometryKind": {
+          "const": "concentric-spherical-ground-and-atmosphere"
+        },
+        "atmosphereKind": {
+          "const": "radially-symmetric"
+        },
+        "compositionPolicy": {
+          "const": "additive"
+        },
+        "representation": {
+          "const": "unrealized-contract-only"
+        }
+      }
+    },
+    "spectralBasis": {
+      "$ref": "#/$defs/spectralBasis"
+    },
+    "placementProviderContract": {
+      "$ref": "#/$defs/placementProviderContract"
+    },
+    "geometry": {
+      "$ref": "#/$defs/geometry"
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 3,
+      "items": {
+        "$ref": "#/$defs/sourceDefinition"
+      }
+    },
+    "rosterInput": {
+      "$ref": "#/$defs/roster"
+    },
+    "sharedSun": {
+      "$ref": "#/$defs/sharedSun"
+    },
+    "states": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "$ref": "#/$defs/fixtureState"
+      }
+    },
+    "cameraVariants": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "$ref": "#/$defs/cameraVariant"
+      }
+    },
+    "expected": {
+      "$ref": "#/$defs/expected"
+    }
+  },
+  "$defs": {
+    "fingerprint": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "unitValue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "value",
+        "units"
+      ],
+      "properties": {
+        "value": {
+          "type": "number"
+        },
+        "units": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "epoch": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "value",
+        "units",
+        "timeScale"
+      ],
+      "properties": {
+        "value": {
+          "type": "number"
+        },
+        "units": {
+          "const": "seconds"
+        },
+        "timeScale": {
+          "const": "etx-synthetic-linear-seconds-v1"
+        }
+      }
+    },
+    "vector3": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": {
+        "type": "number"
+      }
+    },
+    "matrix3": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": {
+        "$ref": "#/$defs/vector3"
+      }
+    },
+    "spectralChannel": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "center",
+        "width"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "center": {
+          "$ref": "#/$defs/unitValue"
+        },
+        "width": {
+          "$ref": "#/$defs/unitValue"
+        }
+      }
+    },
+    "spectralBasis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "id",
+        "schemaRevision",
+        "semantics",
+        "channelCount",
+        "channels",
+        "contentHash"
+      ],
+      "properties": {
+        "kind": {
+          "const": "algorithm32-spectral-basis"
+        },
+        "id": {
+          "const": "algorithm32-native-15-spectral-basis-v1"
+        },
+        "schemaRevision": {
+          "const": "algorithm32-spectral-basis-v1"
+        },
+        "semantics": {
+          "const": "contiguous-wavelength-bin-average"
+        },
+        "channelCount": {
+          "const": 15
+        },
+        "channels": {
+          "type": "array",
+          "minItems": 15,
+          "maxItems": 15,
+          "items": {
+            "$ref": "#/$defs/spectralChannel"
+          }
+        },
+        "contentHash": {
+          "$ref": "#/$defs/fingerprint"
+        }
+      }
+    },
+    "spectralMeasure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "quantity",
+        "units",
+        "basisId",
+        "basisFingerprint",
+        "semantics",
+        "values",
+        "provenance"
+      ],
+      "properties": {
+        "quantity": {
+          "enum": [
+            "spectral-irradiance-density",
+            "spectral-radiance-density"
+          ]
+        },
+        "units": {
+          "enum": [
+            "W m^-2 nm^-1",
+            "W m^-2 sr^-1 nm^-1"
+          ]
+        },
+        "basisId": {
+          "const": "algorithm32-native-15-spectral-basis-v1"
+        },
+        "basisFingerprint": {
+          "$ref": "#/$defs/fingerprint"
+        },
+        "semantics": {
+          "const": "contiguous-wavelength-bin-average"
+        },
+        "values": {
+          "type": "array",
+          "minItems": 15,
+          "maxItems": 15,
+          "items": {
+            "type": "number",
+            "minimum": 0
+          }
+        },
+        "provenance": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "label",
+            "uncertaintyStatus"
+          ],
+          "properties": {
+            "label": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uncertaintyStatus": {
+              "const": "synthetic-exact"
+            }
+          }
+        }
+      }
+    },
+    "pointSupport": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind"
+      ],
+      "properties": {
+        "kind": {
+          "const": "point"
+        }
+      }
+    },
+    "uniformDiskSupport": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "angularRadius"
+      ],
+      "properties": {
+        "kind": {
+          "const": "uniform-disk"
+        },
+        "angularRadius": {
+          "$ref": "#/$defs/unitValue"
+        }
+      }
+    },
+    "sourceDefinition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourceId",
+        "sourceKind",
+        "placementKind",
+        "depth",
+        "spectralMeasure",
+        "support",
+        "placementProviderContractFingerprint"
+      ],
+      "properties": {
+        "sourceId": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "sourceKind": {
+          "enum": [
+            "point",
+            "extended"
+          ]
+        },
+        "placementKind": {
+          "enum": [
+            "infinite-direction",
+            "distant-direction"
+          ]
+        },
+        "depth": {
+          "const": "infinite"
+        },
+        "spectralMeasure": {
+          "$ref": "#/$defs/spectralMeasure"
+        },
+        "support": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/pointSupport"
+            },
+            {
+              "$ref": "#/$defs/uniformDiskSupport"
+            }
+          ]
+        },
+        "placementProviderContractFingerprint": {
+          "$ref": "#/$defs/fingerprint"
+        },
+        "radiometryFingerprint": {
+          "$ref": "#/$defs/fingerprint"
+        },
+        "supportFingerprint": {
+          "$ref": "#/$defs/fingerprint"
+        },
+        "sourceDefinitionFingerprint": {
+          "$ref": "#/$defs/fingerprint"
+        }
+      }
+    },
+    "placementProviderContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "frameId",
+        "originConvention",
+        "directionConvention",
+        "timeScale",
+        "placementForms",
+        "provenanceLabel",
+        "contentFingerprint"
+      ],
+      "properties": {
+        "id": {
+          "const": "etx-analytic-placement-provider-v1"
+        },
+        "frameId": {
+          "const": "etx-synthetic-celestial-rh-v1"
+        },
+        "originConvention": {
+          "const": "observer-independent-infinite-direction"
+        },
+        "directionConvention": {
+          "const": "receiver-to-source"
+        },
+        "timeScale": {
+          "const": "etx-synthetic-linear-seconds-v1"
+        },
+        "placementForms": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": {
+            "enum": [
+              "distant-direction",
+              "infinite-direction"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "provenanceLabel": {
+          "const": "synthetic-mechanics-only-no-astronomy-claim"
+        },
+        "contentFingerprint": {
+          "$ref": "#/$defs/fingerprint"
+        }
+      }
+    },
+    "placementState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourceId",
+        "direction",
+        "frameId",
+        "originConvention",
+        "directionConvention",
+        "epoch",
+        "placementProviderContractFingerprint"
+      ],
+      "properties": {
+        "sourceId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "direction": {
+          "$ref": "#/$defs/vector3"
+        },
+        "frameId": {
+          "const": "etx-synthetic-celestial-rh-v1"
+        },
+        "originConvention": {
+          "const": "observer-independent-infinite-direction"
+        },
+        "directionConvention": {
+          "const": "receiver-to-source"
+        },
+        "epoch": {
+          "$ref": "#/$defs/epoch"
+        },
+        "placementProviderContractFingerprint": {
+          "$ref": "#/$defs/fingerprint"
+        },
+        "placementStateFingerprint": {
+          "$ref": "#/$defs/fingerprint"
+        }
+      }
+    },
+    "observationState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "celestialFrameId",
+        "bodyFrameId",
+        "modelFrameId",
+        "receiverId"
+      ],
+      "properties": {
+        "celestialFrameId": {
+          "const": "etx-synthetic-celestial-rh-v1"
+        },
+        "bodyFrameId": {
+          "const": "etx-synthetic-body-fixed-rh-v1"
+        },
+        "modelFrameId": {
+          "const": "etx-synthetic-model-rh-y-up-v1"
+        },
+        "receiverId": {
+          "const": "etx-equator-one-kilometer-v1"
+        }
+      }
+    },
+    "fixtureState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "stateId",
+        "epoch",
+        "observationState",
+        "placements"
+      ],
+      "properties": {
+        "stateId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "epoch": {
+          "$ref": "#/$defs/epoch"
+        },
+        "observationState": {
+          "$ref": "#/$defs/observationState"
+        },
+        "placements": {
+          "type": "array",
+          "minItems": 3,
+          "items": {
+            "$ref": "#/$defs/placementState"
+          }
+        }
+      }
+    },
+    "geometry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "body",
+        "frames",
+        "transforms",
+        "receiver"
+      ],
+      "properties": {
+        "body": {
+          "type": "object"
+        },
+        "frames": {
+          "type": "object"
+        },
+        "transforms": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "bodyFromCelestial",
+            "modelFromBody",
+            "modelFromCelestial"
+          ],
+          "properties": {
+            "bodyFromCelestial": {
+              "$ref": "#/$defs/matrix3"
+            },
+            "modelFromBody": {
+              "$ref": "#/$defs/matrix3"
+            },
+            "modelFromCelestial": {
+              "$ref": "#/$defs/matrix3"
+            }
+          }
+        },
+        "receiver": {
+          "type": "object"
+        }
+      }
+    },
+    "pointLayer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "layerId",
+        "kind",
+        "compositionPolicy",
+        "fixedCapacity",
+        "members"
+      ],
+      "properties": {
+        "layerId": {
+          "const": "stars"
+        },
+        "kind": {
+          "const": "infinite-point-set"
+        },
+        "compositionPolicy": {
+          "const": "additive"
+        },
+        "fixedCapacity": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "members": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "extendedLayer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "layerId",
+        "kind",
+        "compositionPolicy",
+        "sourceId"
+      ],
+      "properties": {
+        "layerId": {
+          "const": "sun"
+        },
+        "kind": {
+          "const": "distant-extended"
+        },
+        "compositionPolicy": {
+          "const": "additive"
+        },
+        "sourceId": {
+          "const": "sun"
+        }
+      }
+    },
+    "roster": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "layers",
+        "foregroundEdges"
+      ],
+      "properties": {
+        "layers": {
+          "type": "array",
+          "prefixItems": [
+            {
+              "$ref": "#/$defs/pointLayer"
+            },
+            {
+              "$ref": "#/$defs/extendedLayer"
+            }
+          ],
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "foregroundEdges": {
+          "type": "array",
+          "maxItems": 0
+        }
+      }
+    },
+    "sharedSun": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "canonicalSourceId",
+        "consumerReferences"
+      ],
+      "properties": {
+        "canonicalSourceId": {
+          "const": "sun"
+        },
+        "consumerReferences": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "consumerId",
+              "sourceId"
+            ],
+            "properties": {
+              "consumerId": {
+                "enum": [
+                  "atmospheric-sun",
+                  "visible-sun-disk"
+                ]
+              },
+              "sourceId": {
+                "const": "sun"
+              }
+            }
+          }
+        }
+      }
+    },
+    "cameraVariant": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "variantId",
+        "orientationQuaternion",
+        "projection",
+        "verticalFovRadians",
+        "viewport",
+        "display"
+      ],
+      "properties": {
+        "variantId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "orientationQuaternion": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "items": {
+            "type": "number"
+          }
+        },
+        "projection": {
+          "type": "string",
+          "minLength": 1
+        },
+        "verticalFovRadians": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "viewport": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": {
+            "type": "integer",
+            "minimum": 1
+          }
+        },
+        "display": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "liveStatePacket": {
+      "description": "Cheap immutable live-state ingress. It carries evaluated placement, observation, and receiver state but no camera or transported spectrum.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "familyId",
+        "rosterFingerprint",
+        "epoch",
+        "observationState",
+        "receiverId",
+        "placements"
+      ],
+      "properties": {
+        "familyId": {
+          "const": "spherical-sun-stars-radial-v1"
+        },
+        "rosterFingerprint": {
+          "$ref": "#/$defs/fingerprint"
+        },
+        "epoch": {
+          "$ref": "#/$defs/epoch"
+        },
+        "observationState": {
+          "$ref": "#/$defs/observationState"
+        },
+        "receiverId": {
+          "const": "etx-equator-one-kilometer-v1"
+        },
+        "placements": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/placementState"
+          }
+        }
+      }
+    },
+    "identityProjection": {
+      "description": "The G0 identity split. Camera and display facts have no property in this closed schema.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "physicalFieldFingerprint",
+        "runtimeCompatibilityFingerprint",
+        "queryStateFingerprint",
+        "sourceDefinitionFingerprints",
+        "placementStateFingerprints"
+      ],
+      "properties": {
+        "physicalFieldFingerprint": {
+          "$ref": "#/$defs/fingerprint"
+        },
+        "runtimeCompatibilityFingerprint": {
+          "$ref": "#/$defs/fingerprint"
+        },
+        "queryStateFingerprint": {
+          "$ref": "#/$defs/fingerprint"
+        },
+        "sourceDefinitionFingerprints": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/fingerprint"
+          }
+        },
+        "placementStateFingerprints": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/fingerprint"
+          }
+        }
+      }
+    },
+    "classifiedFailure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "code",
+        "path",
+        "classification",
+        "message"
+      ],
+      "properties": {
+        "code": {
+          "type": "string",
+          "pattern": "^[A-Z][A-Z0-9]*(?:_[A-Z0-9]+)*$"
+        },
+        "path": {
+          "type": "string",
+          "pattern": "^\\$"
+        },
+        "classification": {
+          "enum": [
+            "baseline",
+            "capacity",
+            "capability",
+            "containment",
+            "contract",
+            "geometry",
+            "identity",
+            "internal",
+            "manifest",
+            "placement",
+            "proof",
+            "provenance",
+            "roster",
+            "schema",
+            "spectral"
+          ]
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "expected": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "canonicalLayerIds",
+        "canonicalPointMemberIds",
+        "pointSourceIndices",
+        "extendedSourceIndices",
+        "modelDirections"
+      ],
+      "properties": {
+        "canonicalLayerIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "canonicalPointMemberIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "pointSourceIndices": {
+          "type": "object"
+        },
+        "extendedSourceIndices": {
+          "type": "object"
+        },
+        "modelDirections": {
+          "type": "object"
+        }
+      }
+    }
+  }
+}

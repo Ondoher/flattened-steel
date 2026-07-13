@@ -1,0 +1,11 @@
+{
+  "basisFingerprint": "a666befc1789ebd9565d6c9a282613c8a3f4523c32248a5ec1de23b617a73b79",
+  "packetFingerprint": "c923dd256e097096b9b0f2789e4843d193f12d9d9756246fa03eafd6f5396ae9",
+  "sourceKind": "extended",
+  "claimBoundary": "analytic conservation fixtures only; no physical Sun/Moon calibration",
+  "sourceContentHashes": {
+    "runner": "56d17444dd47c41015f7857ac58882b0a55a9888dbc9990b5383f6094d07d431",
+    "camera": "218a1d694e9814bb1fff55eb2b221708dd45d1be13e11c669599d9fb9bf3986d",
+    "integrator": "325d77adf129114b6ae94ff5d1bd02712d79c9c77c8b4de18e37c97f99e97c87"
+  }
+}

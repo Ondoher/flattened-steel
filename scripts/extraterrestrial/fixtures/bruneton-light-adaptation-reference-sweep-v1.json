@@ -1,0 +1,27 @@
+{
+  "schemaId": "bruneton-light-adaptation-reference-sweep-fixture-v1",
+  "claim": "CIECAM16 reference characterization only; no rendering curve, adaptation implementation, image, or production change",
+  "viewingCondition": {
+    "whiteXyzRelative": [95.04559270516718, 100.0, 108.90577507598785],
+    "referenceWhiteToAdaptingLuminanceRatio": 5.0,
+    "backgroundRelativeY": 20.0,
+    "surround": "dim",
+    "discountIlluminant": true
+  },
+  "referenceAdaptingLuminanceCdPerSquareMeter": 20.0,
+  "adaptingLuminanceCdPerSquareMeter": [1.0, 3.0, 10.0, 30.0, 100.0, 300.0, 1000.0, 3000.0, 10000.0],
+  "stimuli": [
+    {"id": "neutral-1", "linearRec709Direction": [1.0, 1.0, 1.0], "absoluteYAtReferenceCdPerSquareMeter": 1.0, "neutral": true},
+    {"id": "neutral-18", "linearRec709Direction": [1.0, 1.0, 1.0], "absoluteYAtReferenceCdPerSquareMeter": 18.0, "neutral": true},
+    {"id": "neutral-90", "linearRec709Direction": [1.0, 1.0, 1.0], "absoluteYAtReferenceCdPerSquareMeter": 90.0, "neutral": true},
+    {"id": "warm-orange-18", "linearRec709Direction": [1.0, 0.22, 0.02], "absoluteYAtReferenceCdPerSquareMeter": 18.0, "neutral": false},
+    {"id": "sky-blue-18", "linearRec709Direction": [0.08, 0.35, 1.0], "absoluteYAtReferenceCdPerSquareMeter": 18.0, "neutral": false},
+    {"id": "green-18", "linearRec709Direction": [0.08, 0.8, 0.12], "absoluteYAtReferenceCdPerSquareMeter": 18.0, "neutral": false}
+  ],
+  "tolerances": {
+    "maximumInternalCorrelateAbsolute": 1e-9,
+    "maximumIndependentCorrelateAbsolute": 1e-8,
+    "maximumNeutralColorfulness": 1e-8,
+    "strictMonotonicAbsolute": 1e-10
+  }
+}

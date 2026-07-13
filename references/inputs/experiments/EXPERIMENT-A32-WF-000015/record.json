@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "experimentId": "EXPERIMENT-A32-WF-000015",
+  "externalName": "E2",
+  "name": "Display-Referenced Convergence Criterion",
+  "question": "What display-referred colour-difference values distinguish potential visibility from practical acceptable accuracy for continuous SDR sRGB output, and what endpoint contract lets a numerical-control experiment apply them directly?",
+  "facts": [
+    "FACT-A32-000178",
+    "FACT-A32-000179",
+    "FACT-A32-000180",
+    "FACT-A32-000181"
+  ],
+  "runner": "scripts/experiments/e2-display-referenced-convergence/run.js",
+  "tests": "scripts/experiments/e2-display-referenced-convergence/run.test.js",
+  "inputs": {
+    "displayBoundary": "continuous clamped SDR display-linear sRGB under the declared ICC reference-display conditions",
+    "externalAuthority": "ITU-R BT.2124-0 Annexes 1, 2, and 4",
+    "attemptedColourDirectionPairs": 240,
+    "reachableBoundaryIterations": 121,
+    "diagnosticDeltaEItpValues": [
+      1,
+      3
+    ]
+  },
+  "iterationCount": 121,
+  "resultTableMeaning": "Each row reports one reachable reference-colour and perturbation-direction boundary at Delta E ITP 1, together with continuous display values, root residual, transform disagreement, and non-governing encoded and quantized diagnostics.",
+  "result": {
+    "accepted": true,
+    "displayTransformUncertaintyDeltaEItp": 1.485163121927885e-10,
+    "scope": "The values 1 and 3 are display-difference diagnostics; neither is an automatic atmospheric-model or numerical-control selection gate.",
+    "conclusion": "The declared display transform reproducibly exposes BT.2124's potential-visibility value 1 and scoped reference-display accuracy value 3 for direct use as reported diagnostics."
+  },
+  "durableOutput": {
+    "path": "references/results/experiments/e2-display-referenced-convergence/result.md",
+    "sha256": "43f4330318a7c3cb671f80d8c4abfb29954b31578abc5e1b7cd888871a45d31e"
+  }
+}

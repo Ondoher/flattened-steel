@@ -1,0 +1,126 @@
+{
+	"schemaVersion": "aces-v2.0.0-2025.04.04-provenance-v1",
+	"authority": "Academy Software Foundation / Academy of Motion Picture Arts and Sciences ACES repository",
+	"release": {
+		"tag": "v2.0.0+2025.04.04",
+		"tagObject": "bff66e9532503de9693b9f2e32fb505ad7164339",
+		"commit": "35e1e6ac2c26ec75433547d5d0a3a881f39bd9f5",
+		"releasePage": "https://github.com/aces-aswf/aces/releases/tag/v2.0.0%2B2025.04.04"
+	},
+	"asset": {
+		"githubAssetId": 243655543,
+		"name": "aces_v2-0-0-2025-04-04.zip",
+		"downloadUrl": "https://github.com/aces-aswf/aces/releases/download/v2.0.0%2B2025.04.04/aces_v2-0-0-2025-04-04.zip",
+		"sizeBytes": 316810,
+		"sha256": "b9a7eb69dc57e1732b2bd63a060a94ad10fb9c61de2cdc33055f95594a3b08fa",
+		"digestAuthority": "locally measured over the saved binary asset",
+		"upstreamDigestPublished": false,
+		"archiveEntryCount": 259,
+		"includesPinnedSubmodules": true
+	},
+	"submodules": {
+		"aces-amf": "78e8d8175f6408c1eba5575e54a69b4cf363073b",
+		"aces-core": "2d7af39344725aaa8ac3bf1746693c9a1d6c4792",
+		"aces-input-and-colorspaces": "cc60becf11534f2a40df00a281f47e95412d0599",
+		"aces-look": "e0e70ecf2ce57d503318dde1fa4aa1bd7287fcdd",
+		"aces-output": "aab74723f76728c37345ed01e51ebb24fb1f2f1f"
+	},
+	"license": {
+		"name": "License Terms for Academy Color Encoding System Components",
+		"classification": "custom AMPAS terms; not Apache-2.0",
+		"requirements": "Retain the applicable copyright notice, conditions, disclaimer, and trademark/no-endorsement restrictions.",
+		"files": [
+			{
+				"path": "package/LICENSE.md",
+				"sizeBytes": 2759,
+				"sha256": "0ff2aaf84aa20b394be4d92414074a526e857a5c6b96e05a9e68452cf0427ed5"
+			},
+			{
+				"path": "package/aces-core/LICENSE.md",
+				"sizeBytes": 2761,
+				"sha256": "cf614fceabe08ebc5618bb79ab056ced3e68967cc32f60245bd64fabd6731833"
+			},
+			{
+				"path": "package/aces-amf/LICENSE.md",
+				"sizeBytes": 2759,
+				"sha256": "5b7e8d2d0f26d01b9739be0a706a106e3b9616ba19875eb577f340fbb1701b7f"
+			},
+			{
+				"path": "package/aces-input-and-colorspaces/LICENSE.md",
+				"sizeBytes": 2759,
+				"sha256": "5b7e8d2d0f26d01b9739be0a706a106e3b9616ba19875eb577f340fbb1701b7f"
+			},
+			{
+				"path": "package/aces-look/LICENSE.md",
+				"sizeBytes": 2759,
+				"sha256": "5b7e8d2d0f26d01b9739be0a706a106e3b9616ba19875eb577f340fbb1701b7f"
+			},
+			{
+				"path": "package/aces-output/LICENSE.md",
+				"sizeBytes": 2748,
+				"sha256": "ef0987b0b98ab18ef0f11a0ecf184c94adf65d69002d5941affe4ac2bcdc58f9"
+			}
+		]
+	},
+	"referenceClosure": {
+		"libraries": [
+			{
+				"path": "package/aces-core/lib/Lib.Academy.Utilities.ctl",
+				"sizeBytes": 9184,
+				"sha256": "91958f76775dbe022127fc25baddb70f9b79e621a10e0397db1ad68c33f7930a"
+			},
+			{
+				"path": "package/aces-core/lib/Lib.Academy.ColorSpaces.ctl",
+				"sizeBytes": 4230,
+				"sha256": "f99680a00ef7b9a033d03c34085ceeba4f2f0ad0211e70f5aac8ef90a0d4e400"
+			},
+			{
+				"path": "package/aces-core/lib/Lib.Academy.Tonescale.ctl",
+				"sizeBytes": 2918,
+				"sha256": "c63cc6127c594d0346f931680c1ef73a2abde5b7f7d82409e7aefdb74597d0f4"
+			},
+			{
+				"path": "package/aces-core/lib/Lib.Academy.OutputTransform.ctl",
+				"sizeBytes": 56959,
+				"sha256": "545a95d5f44f929365aaf989b266b98c14f2ebe1e7dea2ce9d30d0213f2d1b7a"
+			},
+			{
+				"path": "package/aces-core/lib/Lib.Academy.DisplayEncoding.ctl",
+				"sizeBytes": 14548,
+				"sha256": "1e732637fbc2d7ae907a078ef4fea8a6664b959c29d90f9b2883b61c8de30a87"
+			},
+			{
+				"path": "package/aces-input-and-colorspaces/ACEScg/CSC.Academy.ACES_to_ACEScg.ctl",
+				"sizeBytes": 1305,
+				"sha256": "1e8010a4617cafdce0d030f76999dfc700fd54c950f7ff2db0cd7e1086347086"
+			}
+		],
+		"outputCandidates": [
+			{
+				"id": "rec709-d65-100nit-srgb-piecewise",
+				"path": "package/aces-output/d65/srgb/Output.Academy.Rec709-D65_100nit_in_Rec709-D65_sRGB-Piecewise.ctl",
+				"sizeBytes": 2920,
+				"sha256": "4370f064e6fdffd11c2610bba958bba7e212768d12b38e603a8f04aece94e3f3",
+				"eotfEnum": 6
+			},
+			{
+				"id": "rec709-d65-100nit-bt1886",
+				"path": "package/aces-output/d65/rec709/Output.Academy.Rec709-D65_100nit_in_Rec709-D65_BT1886.ctl",
+				"sizeBytes": 2913,
+				"sha256": "58fec5f42824546b4cf0d77250c05c67e7fe171f394c017f8e47059c7ae95092",
+				"eotfEnum": 4
+			}
+		],
+		"selectedOutput": "rec709-d65-100nit-srgb-piecewise when and only when Step 5.1 measures direct code storage; automatic sRGB OETF is terminal rejection"
+	},
+	"officialClampContract": {
+		"projectAuthoredPreClampPermitted": false,
+		"coreOperation": "outputTransform_fwd converts AP0 to AP1 and clamps AP1 components before JMh rendering",
+		"ap1LowerLimit": 0,
+		"ap1UpperLimitAt100Nits": 1024,
+		"rHitAt100Nits": 128,
+		"forwardLimitMultiplier": 8,
+		"targetRgbClampBeforeEncoding": [0, 1]
+	},
+	"selectionPolicy": "Step 5.1 selects exactly one matching official output path from the measured renderer encoding. No image may select parameters or trigger a mapper comparison."
+}

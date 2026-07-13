@@ -1,0 +1,104 @@
+{
+  "schemaId": "camera-color-profile-v1",
+  "profileId": "generic-phone-noon-d55-identity-v1",
+  "claimLimit": "EXIF-anchored generic-phone concept profile. Authored sensor scale and PBRT-derived response shapes prohibit a named-device claim.",
+  "parents": [
+    {
+      "runId": "000358-camera-relative-projection-stage8a",
+      "artifactSetSha256": "69607f8d1a9339f6cc9d69a0c568cba85bd41ec25e80e55e66b2906d55b9d249",
+      "path": "evidence/compiled-camera-profile.json",
+      "sha256": "ebc2a2037592bff463e2efe7b83b3093111f1be81ea5f24332b14ce66a734cf4"
+    },
+    {
+      "runId": "000363-camera-generic-phone-stage8c",
+      "artifactSetSha256": "06c581d4802ffc2598a76147edac62db0c4b93e2c3c954d562f8159a71242829",
+      "path": "evidence/colour-oracle.json",
+      "sha256": "7840f1cbc36d8a9d604acdccd33947c040f916cdadfb78187e98d846047f0976"
+    },
+    {
+      "runId": "000363-camera-generic-phone-stage8c",
+      "artifactSetSha256": "06c581d4802ffc2598a76147edac62db0c4b93e2c3c954d562f8159a71242829",
+      "path": "evidence/stage8c-proof.json",
+      "sha256": "87a7967ef9a24c8b7371bf1b208d71dea583da129cb1b829b2bd94867e82011f"
+    }
+  ],
+  "nativeBasis": {
+    "id": "algorithm32-native-15-spectral-basis-v1",
+    "channelCount": 15,
+    "radianceUnits": "W m^-2 sr^-1 nm^-1",
+    "semantics": "bin-average spectral radiance; native bin integration occurs exactly once in the compiled response"
+  },
+  "response": {
+    "kind": "quantum-efficiency-photon-integral",
+    "matrixUnits": "m",
+    "description": "Integral over each native bin of authored generic Bayer QE_c(lambda) times lambda in meters. PBRT Canon relative shapes were globally normalized and scaled to authored 0.5 peak QE; no Canon physical claim.",
+    "matrix3x15": [
+      [7.614195283917808e-9,1.5416321459882245e-8,4.456893830310005e-8,1.629141503469782e-7,5.397842069474875e-7,1.1163457853364283e-6,2.5098135757955273e-6,4.809908857182601e-6,3.6599915917725184e-6,1.6144731167856204e-6,3.06179505115991e-7,1.2400934455539426e-8,9.87702595427774e-9,1.0288751204699961e-8,1.0700476455122179e-8],
+      [8.125634782927372e-9,6.303741100504463e-8,5.985580981495036e-7,2.892121220337172e-6,6.873420037296089e-6,6.96631629402641e-6,5.615593848683253e-6,2.98174504819076e-6,7.444940707734024e-7,2.3319888306695803e-7,6.814023708318422e-8,9.13977044265219e-9,9.87702595427774e-9,1.0288751204699961e-8,1.0700476455122179e-8],
+      [4.942517725025124e-9,4.6960749194688573e-7,4.219037555039622e-6,5.9537893558853655e-6,4.0898059715355814e-6,1.705825084540333e-6,7.333177759787559e-7,4.153817366446102e-7,1.9436214237359647e-7,1.3257325285808638e-7,3.8364690735321504e-8,7.595499976746628e-9,9.87702595427774e-9,1.0288751204699961e-8,1.0700476455122179e-8]
+    ]
+  },
+  "device": {
+    "pixelPitchMicrometers": 1.12,
+    "pixelAreaSquareMeters": 1.2544000000000001e-12,
+    "opticalTransmission": 0.7,
+    "fullWellElectrons": 5000,
+    "conversionGain": 1,
+    "blackLevelElectrons": 0,
+    "adcBits": 12,
+    "adcTransfer": "uniform-round-to-nearest",
+    "noise": {"enabled": false, "readNoiseElectronsRmsRecordedButDisabled": 2}
+  },
+  "capture": {
+    "shutterSeconds": 0.00015518311607697083,
+    "shutterNotation": "1/6444 s",
+    "apertureFNumber": 2.2,
+    "filter": "none",
+    "filterTransmission": 1,
+    "isoLabel": 102,
+    "postWellGain": 1.02,
+    "lensIrradianceModel": "on-axis-thin-lens-pi-over-4n2"
+  },
+  "color": {
+    "whiteBalanceId": "cie-d55-derived-from-generic-qe-v1",
+    "whiteBalanceMultipliers": [1.9100690064326875,1,1.5608106088842475],
+    "whiteBalanceMinimum": [0,0,0],
+    "whiteBalanceMaximum": [1,1,1],
+    "sensorToXyzD65Matrix3x3": [
+      [0.7285509950089872,0.025418499009441542,0.1816980330266486],
+      [0.2410920445170596,1.0153198185768506,-0.26639345444548646],
+      [0.07967466512179419,-0.7189161501031646,1.7039239122147656]
+    ],
+    "xyzToLinearRec709D65Matrix3x3": [
+      [3.2409699419045226,-1.537383177570094,-0.4986107602930034],
+      [-0.9692436362808796,1.8759675015077202,0.04155505740717559],
+      [0.05563007969699366,-0.20397695888897652,1.0569715142428786]
+    ],
+    "characterization": "D55 ColorChecker N Ohta fit to D65 XYZ; Colour 0.4.6 oracle"
+  },
+  "development": {
+    "interfaceId": "camera-development-v1",
+    "operator": "identity-clamp",
+    "linearMinimum": [0,0,0],
+    "linearMaximum": [1,1,1],
+    "toneCurve": "none",
+    "highlightPolicy": "hard-rec709-boundary",
+    "gamutPolicy": "per-channel-boundary-control"
+  },
+  "output": {
+    "encoding": "iec-61966-2-1-srgb",
+    "primaries": "rec709",
+    "whitePoint": "d65"
+  },
+  "derivation": {
+    "baseFixture": "scripts/extraterrestrial/fixtures/camera-generic-phone-stage8c-v1.json",
+    "baseFixtureSha256": "65001a7df317f57d2eba9aeeca1068fca93349d14930b461ab0210bf4c3137b6",
+    "operations": [
+      "compile generic 0.5-peak QE times wavelength integrals over native-15 bins",
+      "collect electrons using pi/(4*N^2), optical transmission, pixel area, shutter, and 1/(h*c)",
+      "clip to full well before post-well gain",
+      "apply D55 white balance and fixed sensor-to-D65-XYZ characterization",
+      "convert to linear Rec.709, identity clamp, and IEC sRGB encoding"
+    ]
+  }
+}

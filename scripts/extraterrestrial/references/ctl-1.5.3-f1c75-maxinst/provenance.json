@@ -1,0 +1,108 @@
+{
+	"schemaVersion": "ctl-1.5.3-f1c75-maxinst-provenance-v1",
+	"role": "Separately pinned official CTL runtime repair used only to execute the unchanged official ACES v2 CTL source graph.",
+	"base": {
+		"release": "ctl-1.5.3",
+		"commit": "a63c7ec4c1e3cc2c66df4fd8f2f083d9eb1c2f35",
+		"sourceArchive": "../ctl-1.5.3/ctl-a63c7ec4c1e3cc2c66df4fd8f2f083d9eb1c2f35.tar.gz",
+		"sourceArchiveSha256": "05e465fda223740e81ca370a7fac9f07ffd2a14fbab292a26a30bf17fc2741d7",
+		"provenance": "../ctl-1.5.3/provenance.json"
+	},
+	"upstreamFix": {
+		"commit": "f1c75e0d6a08b46e4eccc1fe0cf62e250e9fbd8b",
+		"tree": "4377d23dee8d67940fa561a039790aa5587f00c2",
+		"parent": "2adb330a641b0eed2b8a901c9328a714cad3f46f",
+		"committedAt": "2024-04-21T05:03:23Z",
+		"commitUrl": "https://github.com/aces-aswf/CTL/commit/f1c75e0d6a08b46e4eccc1fe0cf62e250e9fbd8b",
+		"issueUrl": "https://github.com/aces-aswf/CTL/issues/150",
+		"pullRequestUrl": "https://github.com/aces-aswf/CTL/pull/151",
+		"signedCommitVerifiedByGitHub": true,
+		"releaseContainment": "The fix is included in official CTL release ctl-1.5.4. This tool deliberately retains the already sealed ctl-1.5.3 base and applies only the two executable C++ hunks from the official fix, excluding unrelated workflow, Docker, and test-material changes."
+	},
+	"semanticPatch": {
+		"path": "f1c75-max-inst-count-semantic.patch",
+		"sizeBytes": 1298,
+		"sha256": "2c4868368f931369a5551efccfeec6e91712a9b6dd0eb0109b641ddf066a2854",
+		"changedFiles": [
+			{
+				"path": "lib/IlmCtlSimd/CtlSimdInterpreter.cpp",
+				"baseSha256": "bc2e9fb44fe73ca441c23843e2fd02b63c16e88c1bf6b56f7f77fc1bf2431e2e",
+				"patchedSha256": "2f96ce99e89d5ab1d48be7906f1f334b6af65e7b3c16fe5a203e09e920deb872",
+				"effect": "Raises SimdInterpreter::Data.maxInstCount from 10,000,000 to 100,000,000."
+			},
+			{
+				"path": "lib/IlmCtlSimd/CtlSimdXContext.cpp",
+				"baseSha256": "af06af4047999fb7dc35eec5eee465e880df3800d712dd67de4d1edfc736be35",
+				"patchedSha256": "14a0e8247922adb7c29b86cd3e221e7dbde6a82b59b6896ad6a114aaef919c59",
+				"effect": "Retains the instruction guard and reports the maximum and executed instruction counts when it trips."
+			}
+		],
+		"claimLimit": "This patch changes CTL interpreter capacity and diagnostics only. It does not modify ACES source, CTL language semantics, color transforms, input values, or output encoding."
+	},
+	"build": {
+		"environment": "Ubuntu 24.04.4 LTS under WSL2",
+		"sourceConstruction": {
+			"procedure": "Copy the sealed ctl-1.5.3 package into tmp/extraterrestrial, apply the sealed semantic patch with strip level 1, and verify the complete resulting source tree before CMake configuration.",
+			"generatedPath": "tmp/extraterrestrial/tools/ctl-1.5.3-f1c75-maxinst-build/source",
+			"baseFileCount": 321,
+			"baseAggregateSha256": "ced5c71c1e71431228d044be6f61919a9736851d8cea2f5450ed2c283448d3a4",
+			"patchedFileCount": 321,
+			"patchedAggregateSha256": "522c71151f3255932d62882cdccbe87ebc555f2fa4b8e5a3ece59cbe87d26b00"
+		},
+		"configuration": {
+			"CMAKE_BUILD_TYPE": "Release",
+			"CMAKE_CXX_FLAGS_RELEASE": "-O3 -DNDEBUG",
+			"CTL_BUILD_TESTS": false,
+			"CTL_BUILD_TOOLS": true,
+			"BUILD_SHARED_LIBS": false,
+			"CMAKE_DISABLE_FIND_PACKAGE_TIFF": true,
+			"CMAKE_DISABLE_FIND_PACKAGE_AcesContainer": true
+		},
+		"commands": [
+			"cmake -S <sealed-patched-source> -B <contained-build> -DCMAKE_BUILD_TYPE=Release -DCTL_BUILD_TESTS=OFF -DCTL_BUILD_TOOLS=ON -DBUILD_SHARED_LIBS=OFF -DCMAKE_DISABLE_FIND_PACKAGE_TIFF=TRUE -DCMAKE_DISABLE_FIND_PACKAGE_AcesContainer=TRUE",
+			"cmake --build <contained-build> --config Release --parallel 4"
+		],
+		"packages": "Exactly the compiler, linker, CMake, OpenEXR, Imath, zlib, libc, libstdc++, and transitive executable/header closure sealed by the base provenance and decision runner before and after execution.",
+		"executable": {
+			"generatedPath": "tmp/extraterrestrial/tools/ctl-1.5.3-f1c75-maxinst-build/ctlrender/ctlrender",
+			"sizeBytes": 2498184,
+			"sha256": "f4d426ed89bc6e569275a9a8ee11f9409cf71b1e2e82c250bed66a43baf4d31b"
+		}
+	},
+	"requiredPreflight": {
+		"inputRecords": [
+			{"id": "black", "rgb": [0, 0, 0]},
+			{"id": "neutral-0.18-after-scale", "rgb": [614.7000122070312, 614.7000122070312, 614.7000122070312]},
+			{"id": "red-1-after-scale", "rgb": [3415, 0, 0]},
+			{"id": "signed-warm", "rgb": [3415, 853.75, -341.5]},
+			{"id": "neutral-1024-after-scale", "rgb": [3496960, 3496960, 3496960]}
+		],
+		"unpatchedNegativeControl": "The sealed unpatched ctl-1.5.3 executable must reproduce the sealed no-output crash phenotype for the unchanged wrapper plus official ACES v2 sRGB-piecewise ODT. This old/new executable differential is not, by itself, a direct instruction-guard diagnosis.",
+		"patchedPositiveControl": "The patched executable must complete the same five records with finite output, then match pinned OCIO 2.4.2 within the declared float tolerance and in every final Q8 code.",
+		"knownPatchedOutput": {
+			"absoluteTolerance": 1e-7,
+			"rgba": [
+				[0, 0, 0, 1],
+				[0.349189430475235, 0.3491891920566559, 0.3491891622543335, 1],
+				[0.7698673009872437, 0.09199769049882889, 0.04260057955980301, 1],
+				[0.7238746881484985, 0.4538552761077881, 6.832741661355612e-8, 1],
+				[0.9999999403953552, 0.9999998211860657, 0.9999999403953552, 1]
+			],
+			"measuredCtlVersusOcioMaximumAbsoluteError": 0.000006854534149169922,
+			"measuredFinalQ8MismatchCount": 0
+		},
+		"floatParity": {
+			"absolute": 0.000007,
+			"relative": 0.00002,
+			"maximumUlp": 256,
+			"nearZeroUlpWaiverMultiplier": 8
+		},
+		"exactFinalQ8": true
+	},
+	"license": {
+		"name": "custom AMPAS CTL license",
+		"path": "../ctl-1.5.3/package/LICENSE",
+		"sha256": "f0d1195518ab5fa674f96e0741b156c94d31016eff1539b8500fd5d00432ca48",
+		"requirements": "Retain copyright, conditions, disclaimer, and no-endorsement terms."
+	}
+}

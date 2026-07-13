@@ -1,0 +1,41 @@
+{
+  "schemaId": "spectral-color-stage2b-colorfulness-candidates-fixture-v1",
+  "bridgeFixture": {
+    "path": "scripts/extraterrestrial/fixtures/spectral-color-stage2b-reference-bridge-v1.json",
+    "sha256": "ddd6dc488737cf06db4243d42bbdedc55635036d36cadb1b9971ac4c89632de2"
+  },
+  "outputFixture": {
+    "path": "scripts/extraterrestrial/fixtures/spectral-color-stage2b-output-proof-v1.json",
+    "sha256": "6ef911303872d067da43b0f79b57dafc12c008eb0217ab73bed2d3d714f76e7b"
+  },
+  "expectedInventoryCount": 25,
+  "expectedCalibrationCount": 9,
+  "expectedHeldOutCount": 16,
+  "synthetic": {
+    "qFractions": [0.25, 0.4, 0.6, 0.8, 1],
+    "colorfulness": [0, 10, 25, 50, 75],
+    "huesDegrees": [0, 30, 60, 120, 180, 240, 300]
+  },
+  "tolerances": {
+    "rgbBoundsAbsolute": 1e-12,
+    "neutralEncodedSpread": 2e-6,
+    "hueDegrees": 1e-6,
+    "continuityEncodedDistance": 0.0002,
+    "chromaticityAbsolute": 1e-10,
+    "redDominanceImprovement": 0.000001
+  },
+  "render": {
+    "widthPixels": 1350,
+    "headerHeightPixels": 112,
+    "footerHeightPixels": 54,
+    "columns": 3,
+    "cellWidthPixels": 450,
+    "cellHeightPixels": 250,
+    "diskRadiusPixels": 78,
+    "background": "#080a0e",
+    "cellBackground": "#11151c",
+    "cellBorder": "#27303b",
+    "primaryText": "#f4f7fb",
+    "secondaryText": "#aeb8c5"
+  }
+}

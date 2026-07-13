@@ -1,0 +1,1723 @@
+{
+  "schemaVersion": 1,
+  "managedBy": "production-core-v1",
+  "sourceSnapshotId": "SNAPSHOT-REPO-000001",
+  "auditScope": {
+    "title": "Step 032 residual provenance, derivation, numerical-evidence, unit, and profile completion audit",
+    "reviewedRoots": [
+      "tmp/atmosphere/bruneton_start_fresh/032-figure1-four-view-source-k-no-ground-baseline/",
+      "tmp/atmosphere/bruneton_start_fresh/external_sources/",
+      "scripts/flat/reconciliation/POC/src/external-celestial-sources/fixtures/astmg173.zip",
+      "agents/topics/apps/flat/plans/atmosphere-cleanroom-design/experiment-032-algorithm.md",
+      "agents/topics/apps/flat/reconciliation/archive/mark-i-bruneton-start-fresh-source-audit.md",
+      "shared/algorithm32/production/references.md",
+      "shared/algorithm32/production/constants/Algorithm32CanonicalData.js",
+      "shared/algorithm32/production/color/BrunetonColorDisplayModel.js",
+      "shared/algorithm32/production/quarantine/DistantSphericalShaderContributionFactory.js",
+      "scripts/flat/reconciliation/POC/src/constants/consts.js",
+      "scripts/flat/reconciliation/POC/src/color/BrunetonColorDisplayModel.js",
+      "scripts/flat/reconciliation/POC/src/shader/DistantSphericalShaderContributionFactory.js"
+    ],
+    "includedRecordRange": "Residual Step 032 gaps named by the canonical handoff were reviewed. The existing experiment-032 input already accounts for every physics-bearing predecessor record from Step 002 through Step 031 and explicitly excludes Step 001 plus display-only Steps 004, 014, 020, 021, 024, and 028. This completion fragment adds no duplicate predecessor experiment records.",
+    "explicitExclusions": [
+      {
+        "referenceIds": [
+          "a32-poc-color-032:bruneton-figure1-display-adapter",
+          "a32-poc-color-032:cie-interpolation-table-display-consumer",
+          "a32-poc-color-032:color-owned-shader-display-contribution"
+        ],
+        "reason": "These scoped portions of the broad production short code are display conversion, CIE/display-consumer, or shader assembly/contribution claims. They are outside physics-source authority. Atmosphere and spectral transport claims under the same short code are represented by existing atomic Step 032 facts; no shader-conformance result is claimed without a pinned CPU Reference oracle and pre-display comparison."
+      }
+    ],
+    "authorityBoundary": "External or independently derived physics supports the CPU Reference. Historical code identity, exact arithmetic correspondence, and source-family matches establish provenance or reconstruction inputs only; they do not scientifically accept the Reference or make a shader authoritative.",
+    "lineageRule": "The pinned Bruneton bundle is an exact reconstruction bundle selected from official repositories. Matching retained Git blobs proves byte correspondence for three files but does not recover the unrecorded historical acquisition commit or a per-fact production acceptance decision."
+  },
+  "sources": [
+    {
+      "id": "SOURCE-EXT-000017",
+      "kind": "exact-external-source-revision-bundle",
+      "identity": {
+        "title": "Pinned Bruneton atmospheric-scattering and clear-sky source revision bundle for Step 032 reconstruction",
+        "author": "Eric Bruneton",
+        "repositoryUrl": "https://github.com/ebruneton/precomputed_atmospheric_scattering",
+        "projectUrl": "https://ebruneton.github.io/precomputed_atmospheric_scattering/",
+        "revision": "precomputed_atmospheric_scattering@34f14e745cff948f4ca3157d1b62a445ffa7286f plus clear-sky-models@4df2ec6609bc0127a478bd34fff29c94352579cc",
+        "selectedLocators": [
+          {
+            "repositoryUrl": "https://github.com/ebruneton/precomputed_atmospheric_scattering",
+            "commit": "34f14e745cff948f4ca3157d1b62a445ffa7286f",
+            "commitDateUtc": "2025-10-05T18:22:09Z",
+            "files": [
+              {
+                "path": "atmosphere/demo/demo.cc",
+                "gitBlobSha1": "edd1ae134a8a79c6ff7254682a26cc99351a75ea"
+              },
+              {
+                "path": "atmosphere/demo/demo.glsl",
+                "gitBlobSha1": "4b6f4fa8057c987b9405f406f1ffbc15e6da5489"
+              },
+              {
+                "path": "atmosphere/model.cc",
+                "gitBlobSha1": "9504cbfca20bb0a49a211f27350999d02ba9a56f"
+              },
+              {
+                "path": "atmosphere/functions.glsl",
+                "gitBlobSha1": "ba8a2fc55afa0f47c31153a8481b221195ac8f90"
+              },
+              {
+                "path": "atmosphere/model.h",
+                "gitBlobSha1": "f8c944feb81457a4550b7bd31b357de8f94e37e3"
+              },
+              {
+                "path": "atmosphere/constants.h",
+                "gitBlobSha1": "7070d526c06be2235c8d7561184b2f5b3c7c4b41"
+              }
+            ]
+          },
+          {
+            "repositoryUrl": "https://github.com/ebruneton/clear-sky-models",
+            "commit": "4df2ec6609bc0127a478bd34fff29c94352579cc",
+            "commitDateUtc": "2018-11-05T18:31:21Z",
+            "files": [
+              {
+                "path": "atmosphere/comparisons.cc",
+                "gitBlobSha1": "58e44fe06d52b903a69e1969e998cd3e5c84323a"
+              }
+            ]
+          }
+        ],
+        "retainedFiles": [
+          "atmosphere/demo/demo.cc",
+          "atmosphere/demo/demo.glsl",
+          "atmosphere/model.cc"
+        ],
+        "missingHistoricallyCitedFiles": [
+          "atmosphere/functions.glsl",
+          "atmosphere/model.h",
+          "atmosphere/constants.h",
+          "clear-sky-models/atmosphere/comparisons.cc"
+        ]
+      },
+      "authority": {
+        "role": "exact-official-source-metadata-bundle-for-reconstruction",
+        "status": "official-repository-revisions-and-selected-git-blobs-pinned",
+        "limitations": [
+          "The bundle pins a reproducible reconstruction source choice; Step 032 did not record the exact historical acquisition commit.",
+          "Only the three retained precomputed-atmospheric-scattering files were locally byte-matched by Git object identity; the four missing files were verified as official tree metadata only and were not acquired.",
+          "Agreement with an implementation source establishes lineage and reconstruction inputs, not independent proof of the CPU Reference physics.",
+          "The clear-sky-models and precomputed-atmospheric-scattering component licenses still require a complete retention review."
+        ]
+      },
+      "availability": {
+        "status": "official-repository-metadata-verified-link-only",
+        "onlineStatus": "commits-and-selected-tree-blobs-verified-without-acquiring-external-payload-bytes",
+        "verifiedAtUtc": "2026-07-14T16:27:16.117Z"
+      },
+      "license": {
+        "status": "component-license-review-incomplete",
+        "redistributionStatus": "blocked-pending-license-review"
+      },
+      "reviewStatus": "official-revision-and-tree-metadata-reviewed",
+      "disposition": "link-only",
+      "blockers": [
+        "The global import gate is closed.",
+        "The historical acquisition commit is not embedded in the Step 032 record.",
+        "Four historically cited payloads are not retained locally.",
+        "Component license and redistribution terms require review before any later retention."
+      ],
+      "links": {
+        "locations": [],
+        "facts": [],
+        "experiments": [],
+        "materials": [],
+        "contradictions": []
+      }
+    }
+  ],
+  "sourceUpdates": [
+    {
+      "id": "SOURCE-EXT-000003",
+      "identity": {
+        "title": "ASTM G173-03 Reference Spectra Derived from SMARTS v. 2.9.2",
+        "organization": "National Renewable Energy Laboratory historical retained identity",
+        "datasetOrganization": "National Laboratory of the Rockies current official host",
+        "version": "ASTM G173-03",
+        "sourcePage": "https://www.nlr.gov/grid/solar-resource/spectra-am1.5",
+        "retainedInstitutionalUrl": "https://www.nrel.gov/grid/solar-resource/spectra-am1.5",
+        "tableEntry": "ASTMG173.csv",
+        "selectedColumn": "Etr W*m-2*nm-1",
+        "selectedLocators": [
+          {
+            "officialLandingPage": "https://www.nlr.gov/grid/solar-resource/spectra-am1.5",
+            "officialDescription": "ASTM G173 reference spectra calculated by SMARTS2 version 2.9.2",
+            "retainedArchiveEntry": "ASTMG173.csv",
+            "retainedHeader": "ASTM G173-03 Reference Spectra Derived from SMARTS v. 2.9.2",
+            "selectedColumn": "Etr W*m-2*nm-1"
+          }
+        ]
+      },
+      "authority": {
+        "role": "third-party-solar-spectral-irradiance-source",
+        "status": "official-landing-page-and-retained-table-identity-reviewed",
+        "limitations": [
+          "The retained archive is provenance for the historical Algorithm32 solar packet and is not a second runtime spectrum owner.",
+          "The retained CSV-to-48-bin and 48-bin-to-15-channel arithmetic has been independently reconstructed, but that does not select 15 channels as the accepted production discretization.",
+          "The retained ZIP has not been authenticated against a current official downloadable payload, signature, or publisher checksum.",
+          "The official landing page establishes dataset identity and column meaning, not byte identity of the retained archive."
+        ]
+      },
+      "availability": {
+        "status": "retained-payload-observed-and-official-landing-page-verified",
+        "onlineStatus": "official-metadata-verified-without-acquiring-external-payload-bytes",
+        "verifiedAtUtc": "2026-07-14T16:27:16.117Z"
+      },
+      "reviewStatus": "metadata-retained-entry-and-step032-derivation-reviewed",
+      "blockers": [
+        "The retained ZIP is not authenticated against an official publisher hash or signature.",
+        "Payload license and redistribution terms have not been verified.",
+        "The global import gate is closed."
+      ]
+    },
+    {
+      "id": "SOURCE-EXT-000016",
+      "identity": {
+        "title": "Measurement of areas on a sphere using Fibonacci and latitude-longitude lattices",
+        "author": "Alvaro Gonzalez",
+        "year": 2009,
+        "arxivId": "0912.4540",
+        "version": "v1",
+        "stableUrl": "https://arxiv.org/abs/0912.4540v1",
+        "doi": "10.48550/arXiv.0912.4540",
+        "paperDoi": "10.1007/s11004-009-9257-x",
+        "journal": "Mathematical Geosciences",
+        "selectedLocators": [
+          {
+            "version": "arXiv:0912.4540v1",
+            "submitted": "2009-12-23",
+            "section": "3.1 Fibonacci lattice",
+            "equations": [
+              "2",
+              "3",
+              "4"
+            ],
+            "role": "odd-count-spherical-fibonacci-construction"
+          },
+          {
+            "version": "arXiv:0912.4540v1",
+            "submitted": "2009-12-23",
+            "section": "4.2 Weights",
+            "equation": "9",
+            "role": "equal-point-weight"
+          }
+        ]
+      },
+      "authority": {
+        "role": "third-party-spherical-lattice-source",
+        "status": "official-arxiv-v1-metadata-and-relevant-formulas-reviewed",
+        "limitations": [
+          "The paper supports the odd-count near-equal-area spherical Fibonacci construction and equal-area weighting idea only.",
+          "It does not select 17 directions, establish radiative quadrature error for atmospheric scattering, or validate the 24-bin incident-radiance cache.",
+          "Formula-family correspondence does not constitute a convergence result."
+        ]
+      },
+      "availability": {
+        "status": "official-arxiv-v1-link-verified-not-acquired",
+        "onlineStatus": "official-metadata-and-relevant-text-reviewed-without-retaining-payload-bytes",
+        "verifiedAtUtc": "2026-07-14T16:27:16.117Z"
+      },
+      "license": {
+        "status": "unverified",
+        "redistributionStatus": "blocked-pending-license-review"
+      },
+      "reviewStatus": "official-v1-formulas-reviewed-link-only",
+      "disposition": "link-only",
+      "blockers": [
+        "The global import gate is closed.",
+        "No paper payload is retained or hash-pinned locally.",
+        "License and redistribution terms require review before any later acquisition."
+      ]
+    }
+  ],
+  "materialUpdates": [
+    {
+      "id": "MATERIAL-EXT-000016",
+      "identity": {
+        "arxivId": "0912.4540",
+        "version": "v1",
+        "year": 2009,
+        "stableUrl": "https://arxiv.org/abs/0912.4540v1",
+        "doi": "10.48550/arXiv.0912.4540",
+        "expectedTitle": "Measurement of areas on a sphere using Fibonacci and latitude-longitude lattices",
+        "identityQualification": "Official arXiv v1 metadata verified; journal DOI 10.1007/s11004-009-9257-x.",
+        "selectedLocators": [
+          "Section 3.1, equations (2)-(4): odd-count spherical Fibonacci construction",
+          "Section 4.2, equation (9): equal point weight"
+        ]
+      },
+      "availability": {
+        "status": "official-link-verified-not-acquired"
+      },
+      "authenticity": {
+        "status": "official-arxiv-v1-metadata-verified-link-only",
+        "verificationBasis": "Official arXiv abstract/version metadata and relevant formula text were reviewed; no payload bytes were retained or hash-pinned."
+      },
+      "reviewStatus": "metadata-and-relevant-sections-reviewed-link-only",
+      "blockers": [
+        "The global import gate is closed.",
+        "No payload hash is available until a later authorized acquisition.",
+        "License and redistribution terms require review."
+      ]
+    }
+  ],
+  "factUpdates": [
+    {
+      "semanticKey": "step032:source-gap:missing-historically-cited-primary-files",
+      "statement": "An exact official reconstruction bundle now pins precomputed_atmospheric_scattering commit 34f14e745cff948f4ca3157d1b62a445ffa7286f and clear-sky-models commit 4df2ec6609bc0127a478bd34fff29c94352579cc with all seven historically cited Git blobs; only three payloads are retained and byte-matched locally, and the Step 032 record still does not identify its historical acquisition commit.",
+      "structuredValue": {
+        "reconstructionBundle": {
+          "precomputedAtmosphericScatteringCommit": "34f14e745cff948f4ca3157d1b62a445ffa7286f",
+          "clearSkyModelsCommit": "4df2ec6609bc0127a478bd34fff29c94352579cc",
+          "selectedFileCount": 7
+        },
+        "retainedByteMatchedFileCount": 3,
+        "metadataOnlyMissingLocalPayloadCount": 4,
+        "historicalAcquisitionCommit": "not-recorded"
+      },
+      "supportStatus": "source-backed",
+      "implementationStatus": "not-applicable",
+      "decisionStatus": "provisional",
+      "verificationLayer": "static-code-observation",
+      "externalCitations": [
+        {
+          "sourceId": "SOURCE-EXT-000017",
+          "role": "pins-exact-reconstruction-revisions-and-selected-git-blobs",
+          "locator": {
+            "precomputedAtmosphericScatteringCommit": "34f14e745cff948f4ca3157d1b62a445ffa7286f",
+            "clearSkyModelsCommit": "4df2ec6609bc0127a478bd34fff29c94352579cc",
+            "selectedFileCount": 7
+          }
+        }
+      ],
+      "materialIds": [
+        "MATERIAL-EXT-000015"
+      ],
+      "relatedFactSemanticKeys": [
+        "step032:source-bundle:bruneton-reconstruction-revisions-pinned",
+        "step032:source-bundle:retained-bruneton-files-match-official-blobs"
+      ],
+      "disposition": "must-rederive",
+      "blockers": [
+        "The original historical acquisition commit is absent from the Step 032 record.",
+        "Four selected source payloads are metadata-only and not retained under the closed gate."
+      ],
+      "nextAction": "After gate authorization, acquire the selected revisions subject to license review, preserve hashes, and reconstruct source-backed equations without treating the chosen reconstruction commits as proof of the original acquisition revision.",
+      "reviewStatus": "exact-reconstruction-bundle-pinned-historical-acquisition-gap-retained"
+    },
+    {
+      "semanticKey": "step032:sampling:gonzalez-citation-identified-not-verified",
+      "statement": "Official arXiv v1 of Gonzalez 2009 has now been metadata- and formula-reviewed: it supports the odd-count near-equal-area spherical Fibonacci construction used by Step 032, but it neither selects 17 directions nor validates atmospheric-radiance quadrature error.",
+      "supportStatus": "derived-from-source",
+      "implementationStatus": "not-applicable",
+      "decisionStatus": "provisional",
+      "verificationLayer": "analytic",
+      "externalCitations": [
+        {
+          "sourceId": "SOURCE-EXT-000016",
+          "role": "supports-spherical-fibonacci-construction-but-not-step032-count-or-error",
+          "locator": {
+            "stableUrl": "https://arxiv.org/abs/0912.4540v1",
+            "version": "v1",
+            "sections": [
+              "3.1 Fibonacci lattice",
+              "4.2 Weights"
+            ],
+            "equations": [
+              "2",
+              "3",
+              "4",
+              "9"
+            ]
+          }
+        }
+      ],
+      "materialIds": [
+        "MATERIAL-EXT-000016"
+      ],
+      "relatedFactSemanticKeys": [
+        "step032:sampling:gonzalez-spherical-fibonacci-construction",
+        "step032:sampling:seventeen-direction-construction-matches-gonzalez-family",
+        "step032:convergence:seventeen-direction-quadrature-error-unbounded"
+      ],
+      "disposition": "must-rederive",
+      "blockers": [
+        "No accepted radiative quadrature error bound exists for N = 17."
+      ],
+      "nextAction": "Retain the construction as source-backed lineage and determine the direction count against an independent refined angular oracle.",
+      "reviewStatus": "official-v1-formula-family-reviewed-count-and-error-still-provisional"
+    },
+    {
+      "semanticKey": "step032:production-lineage:claimed-poc-shader-path-deleted",
+      "statement": "The three POC files named by production short code a32-poc-color-032 exist at parent commit cf3e00afbec1e81da66a062642dc233c32b54194, and commit e728953ee0288f1f9464b42360c3266b42b01d93 introduces their production counterparts and the registry; the original POC shader path is deleted in the frozen worktree, and no per-fact scientific promotion or acceptance record accompanies the code-introduction commit.",
+      "structuredValue": {
+        "pocCommit": "cf3e00afbec1e81da66a062642dc233c32b54194",
+        "productionIntroductionCommit": "e728953ee0288f1f9464b42360c3266b42b01d93",
+        "productionTree": "2a1d602b23298643f6b063232df7df2c7aacc1d8",
+        "pocBlobs": {
+          "constants": "46339e627ef2fc73ec148fa59e107fa182860f86",
+          "colorDisplayModel": "ab47187f85c3c3b1551cac398062b01d2e785f7f",
+          "shaderContribution": "076151fe310d4b193b20983fa5b1dfef5bcde0e3"
+        },
+        "productionBlobsAtIntroduction": {
+          "canonicalData": "25dd63c7749cdaf23731e520e75c2cc82b73a1ba",
+          "colorDisplayModel": "d68440319874fb24960613c51f014eaf97b1062c",
+          "shaderContribution": "c5bf5fdc6a2b9ece45ec5455fe5de2d0cc6ac773",
+          "referenceRegistry": "ca2f6f575903253681ce3a09ce21ed0d78a0beb6"
+        },
+        "perFactScientificAcceptanceRecord": "not-identified"
+      },
+      "supportStatus": "source-backed",
+      "implementationStatus": "not-applicable",
+      "decisionStatus": "provisional",
+      "verificationLayer": "static-code-observation",
+      "repositoryStateCitations": [
+        {
+          "path": "scripts/flat/reconciliation/POC/src/constants/consts.js",
+          "gitBlobSha": "46339e627ef2fc73ec148fa59e107fa182860f86",
+          "role": "pins-poc-parent-constants-blob",
+          "note": "The index blob matches the constants source at the completed POC parent commit."
+        },
+        {
+          "path": "scripts/flat/reconciliation/POC/src/color/BrunetonColorDisplayModel.js",
+          "gitBlobSha": "ab47187f85c3c3b1551cac398062b01d2e785f7f",
+          "role": "pins-poc-parent-color-model-blob",
+          "note": "The index blob matches the color model source at the completed POC parent commit."
+        },
+        {
+          "path": "scripts/flat/reconciliation/POC/src/shader/DistantSphericalShaderContributionFactory.js",
+          "gitBlobSha": "076151fe310d4b193b20983fa5b1dfef5bcde0e3",
+          "role": "pins-poc-parent-shader-blob-and-current-deleted-path",
+          "note": "The frozen worktree records this historically pinned registry target as deleted."
+        },
+        {
+          "path": "shared/algorithm32/production/quarantine/DistantSphericalShaderContributionFactory.js",
+          "gitCommit": "e728953ee0288f1f9464b42360c3266b42b01d93",
+          "gitBlobSha": "c5bf5fdc6a2b9ece45ec5455fe5de2d0cc6ac773",
+          "role": "pins-production-introduction-shader-counterpart",
+          "note": "This historical citation pins the production shader counterpart exactly at the code-introduction commit; it does not assert current working-tree identity."
+        },
+        {
+          "path": "shared/algorithm32/production/references.md",
+          "gitBlobSha": "ca2f6f575903253681ce3a09ce21ed0d78a0beb6",
+          "role": "pins-production-introduction-registry-blob",
+          "note": "Read-only git show and rev-parse identify the introduction commit, tree, parent, and paired source blobs."
+        }
+      ],
+      "contradictionIds": [
+        "CONTRADICTION-A32-000011"
+      ],
+      "relatedFactSemanticKeys": [
+        "step032:production-lineage:code-introduction-commit-pinned",
+        "mark-i:identity:next-production-shader-checkpoint"
+      ],
+      "disposition": "must-rederive",
+      "blockers": [
+        "The code-introduction commit is not a per-fact scientific promotion or acceptance decision.",
+        "Current documentation still names historical POC paths rather than immutable commit:path locators."
+      ],
+      "nextAction": "Replace mutable path-only lineage with immutable commit:path locators and independently rederive every retained production physics input before any Reference or shader acceptance claim.",
+      "reviewStatus": "code-introduction-identity-pinned-per-fact-authority-gap-retained"
+    }
+  ],
+  "manualFacts": [
+    {
+      "semanticKey": "step032:source-bundle:bruneton-reconstruction-revisions-pinned",
+      "statement": "The Step 032 reconstruction source bundle is exactly pinned to official precomputed_atmospheric_scattering commit 34f14e745cff948f4ca3157d1b62a445ffa7286f and clear-sky-models commit 4df2ec6609bc0127a478bd34fff29c94352579cc, with seven selected source paths identified by Git blob SHA-1.",
+      "kind": "exact-external-reconstruction-bundle-identity",
+      "domain": "step032-source-provenance",
+      "owner": "algorithm32-reference-catalog",
+      "authorityRole": "reference-validation",
+      "structuredValue": {
+        "repositories": [
+          {
+            "name": "precomputed_atmospheric_scattering",
+            "commit": "34f14e745cff948f4ca3157d1b62a445ffa7286f",
+            "selectedFileCount": 6
+          },
+          {
+            "name": "clear-sky-models",
+            "commit": "4df2ec6609bc0127a478bd34fff29c94352579cc",
+            "selectedFileCount": 1
+          }
+        ],
+        "totalSelectedFileCount": 7
+      },
+      "supportStatus": "source-backed",
+      "implementationStatus": "not-applicable",
+      "decisionStatus": "provisional",
+      "verificationLayer": "static-code-observation",
+      "externalCitations": [
+        {
+          "sourceId": "SOURCE-EXT-000017",
+          "role": "pins-precomputed-atmospheric-scattering-revision-and-six-file-tree-selection",
+          "locator": {
+            "repositoryUrl": "https://github.com/ebruneton/precomputed_atmospheric_scattering",
+            "commit": "34f14e745cff948f4ca3157d1b62a445ffa7286f",
+            "treeUrl": "https://github.com/ebruneton/precomputed_atmospheric_scattering/tree/34f14e745cff948f4ca3157d1b62a445ffa7286f/atmosphere"
+          }
+        },
+        {
+          "sourceId": "SOURCE-EXT-000017",
+          "role": "pins-clear-sky-models-revision-and-comparisons-source",
+          "locator": {
+            "repositoryUrl": "https://github.com/ebruneton/clear-sky-models",
+            "commit": "4df2ec6609bc0127a478bd34fff29c94352579cc",
+            "path": "atmosphere/comparisons.cc",
+            "gitBlobSha1": "58e44fe06d52b903a69e1969e998cd3e5c84323a"
+          }
+        }
+      ],
+      "disposition": "link-only",
+      "blockers": [
+        "The historical acquisition commit remains unrecorded.",
+        "Four selected payloads are metadata-only under the closed import gate."
+      ],
+      "nextAction": "Use these immutable revisions as the reconstruction bundle after gate and license authorization while preserving the separate historical-acquisition gap.",
+      "reviewStatus": "exact-reconstruction-bundle-identity-reviewed"
+    },
+    {
+      "semanticKey": "step032:source-bundle:retained-bruneton-files-match-official-blobs",
+      "statement": "Read-only Git object hashing shows that all three retained Bruneton files are byte-identical to their selected official precomputed_atmospheric_scattering blobs: demo.cc edd1ae134a8a79c6ff7254682a26cc99351a75ea, demo.glsl 4b6f4fa8057c987b9405f406f1ffbc15e6da5489, and model.cc 9504cbfca20bb0a49a211f27350999d02ba9a56f.",
+      "kind": "retained-to-official-git-blob-correspondence",
+      "domain": "step032-source-provenance",
+      "owner": "algorithm32-reference-catalog",
+      "authorityRole": "reference-validation",
+      "structuredValue": {
+        "matches": [
+          {
+            "localPath": "tmp/atmosphere/bruneton_start_fresh/external_sources/bruneton-2017-demo.cc",
+            "byteLength": 21699,
+            "sha256": "7e3659cdd8c23feca988b49801029e36e201ff0701e693fee2069b441ffa40d2",
+            "gitBlobSha1": "edd1ae134a8a79c6ff7254682a26cc99351a75ea"
+          },
+          {
+            "localPath": "tmp/atmosphere/bruneton_start_fresh/external_sources/bruneton-2017-demo.glsl",
+            "byteLength": 17314,
+            "sha256": "9267398e301b9ed6a356ef24c2a0ea2eeec346448b361b72c2cc500af7e9b296",
+            "gitBlobSha1": "4b6f4fa8057c987b9405f406f1ffbc15e6da5489"
+          },
+          {
+            "localPath": "tmp/atmosphere/bruneton_start_fresh/external_sources/bruneton-2017-model.cc",
+            "byteLength": 52165,
+            "sha256": "5ae93aa940787f0d20dcecdefde3ff512d4f228c4111aa5df3ebfdd0f952aff2",
+            "gitBlobSha1": "9504cbfca20bb0a49a211f27350999d02ba9a56f"
+          }
+        ],
+        "mismatchCount": 0
+      },
+      "supportStatus": "derived-from-source",
+      "implementationStatus": "not-applicable",
+      "decisionStatus": "provisional",
+      "verificationLayer": "static-code-observation",
+      "citations": [
+        {
+          "path": "tmp/atmosphere/bruneton_start_fresh/external_sources/bruneton-2017-demo.cc",
+          "role": "retained-demo-cc-byte-identity"
+        },
+        {
+          "path": "tmp/atmosphere/bruneton_start_fresh/external_sources/bruneton-2017-demo.glsl",
+          "role": "retained-demo-glsl-byte-identity"
+        },
+        {
+          "path": "tmp/atmosphere/bruneton_start_fresh/external_sources/bruneton-2017-model.cc",
+          "role": "retained-model-cc-byte-identity"
+        }
+      ],
+      "externalCitations": [
+        {
+          "sourceId": "SOURCE-EXT-000017",
+          "role": "provides-selected-official-git-blob-identities",
+          "locator": {
+            "repositoryUrl": "https://github.com/ebruneton/precomputed_atmospheric_scattering",
+            "commit": "34f14e745cff948f4ca3157d1b62a445ffa7286f",
+            "gitBlobSha1Values": [
+              "edd1ae134a8a79c6ff7254682a26cc99351a75ea",
+              "4b6f4fa8057c987b9405f406f1ffbc15e6da5489",
+              "9504cbfca20bb0a49a211f27350999d02ba9a56f"
+            ]
+          }
+        }
+      ],
+      "materialIds": [
+        "MATERIAL-EXT-000015"
+      ],
+      "nonClaims": [
+        "A blob match does not identify which historical commit was originally acquired because the same blobs can persist across multiple commits.",
+        "A source-code match is not independent validation of transport physics."
+      ],
+      "disposition": "link-only",
+      "blockers": [
+        "The historical acquisition commit is not recorded."
+      ],
+      "nextAction": "Preserve both the retained SHA-256 identities and selected official commit:path blob identities in any later authorized reconstruction.",
+      "reviewStatus": "three-of-three-retained-files-git-blob-matched"
+    },
+    {
+      "semanticKey": "step032:solar-spectrum:retained-astm-csv-entry-identity",
+      "statement": "The retained 25,833-byte ASTM archive contains ASTMG173.csv as an 81,381-byte entry with SHA-256 b48a6635ce398f7e0fa392150d68b5793ed7f2a65d9e2406bec7e6be9fb20954, the ASTM G173-03/SMARTS 2.9.2 header, the Etr W*m-2*nm-1 column, and 2,002 data rows.",
+      "kind": "retained-astm-table-entry-identity",
+      "domain": "solar-spectral-irradiance-provenance",
+      "owner": "algorithm32-solar-spectrum-provenance",
+      "authorityRole": "reference-validation",
+      "structuredValue": {
+        "archiveByteLength": 25833,
+        "archiveSha256": "de6ed831cd7426d9a7147d5c0a48b1e67a483cb7f8ecd6d3ae846848154a5657",
+        "entryPath": "ASTMG173.csv",
+        "entryByteLength": 81381,
+        "entrySha256": "b48a6635ce398f7e0fa392150d68b5793ed7f2a65d9e2406bec7e6be9fb20954",
+        "header": "ASTM G173-03 Reference Spectra Derived from SMARTS v. 2.9.2",
+        "selectedColumn": "Etr W*m-2*nm-1",
+        "dataRowCount": 2002
+      },
+      "supportStatus": "source-backed",
+      "implementationStatus": "not-applicable",
+      "decisionStatus": "provisional",
+      "verificationLayer": "static-code-observation",
+      "citations": [
+        {
+          "path": "scripts/flat/reconciliation/POC/src/external-celestial-sources/fixtures/astmg173.zip",
+          "role": "contains-retained-astm-csv-entry",
+          "structuredLocator": {
+            "archiveEntry": "ASTMG173.csv",
+            "entryByteLength": 81381,
+            "entrySha256": "b48a6635ce398f7e0fa392150d68b5793ed7f2a65d9e2406bec7e6be9fb20954",
+            "dataRowCount": 2002
+          }
+        }
+      ],
+      "externalCitations": [
+        {
+          "sourceId": "SOURCE-EXT-000003",
+          "role": "official-landing-page-identifies-astm-g173-smarts-and-etr-column",
+          "locator": {
+            "stableUrl": "https://www.nlr.gov/grid/solar-resource/spectra-am1.5",
+            "dataset": "ASTM G173",
+            "modelVersion": "SMARTS2 2.9.2",
+            "column": "Etr W*m-2*nm-1"
+          }
+        }
+      ],
+      "materialIds": [
+        "MATERIAL-EXT-000001"
+      ],
+      "nonClaims": [
+        "The retained entry identity is not an official publisher checksum or signature."
+      ],
+      "disposition": "must-rederive",
+      "blockers": [
+        "Official payload byte authentication and license review remain open."
+      ],
+      "nextAction": "Preserve this entry identity and compare it to a later authorized official acquisition before accepting it as the canonical retained dataset.",
+      "reviewStatus": "retained-zip-entry-identity-reviewed"
+    },
+    {
+      "semanticKey": "step032:solar-spectrum:astm-etr-to-forty-eight-bin-derivation-verified",
+      "statement": "A read-only independent arithmetic audit reproduced all 48 Bruneton solar-irradiance table values by averaging retained ASTM Etr rows in half-open 10 nm bins [lambda, lambda + 10) from lambda 360 through 830 nm and rounding each mean to five decimal places.",
+      "kind": "astm-to-bruneton-forty-eight-bin-derivation-verification",
+      "domain": "solar-spectral-irradiance-derivation",
+      "owner": "algorithm32-solar-spectrum-provenance",
+      "authorityRole": "reference-validation",
+      "structuredValue": {
+        "inputEntrySha256": "b48a6635ce398f7e0fa392150d68b5793ed7f2a65d9e2406bec7e6be9fb20954",
+        "selectedColumn": "Etr W*m-2*nm-1",
+        "binStartNanometers": 360,
+        "binEndNanometers": 830,
+        "binWidthNanometers": 10,
+        "binMembership": "wavelength >= lambda and wavelength < lambda + 10",
+        "roundDecimalPlaces": 5,
+        "expectedValueCount": 48,
+        "mismatchCount": 0,
+        "maximumAbsolutePreRoundDifferenceFromPublishedFiveDecimalValue": 0.0000035
+      },
+      "supportStatus": "derived-from-source",
+      "implementationStatus": "not-applicable",
+      "decisionStatus": "provisional",
+      "verificationLayer": "analytic",
+      "citations": [
+        {
+          "path": "scripts/flat/reconciliation/POC/src/external-celestial-sources/fixtures/astmg173.zip",
+          "role": "provides-retained-astm-etr-rows",
+          "structuredLocator": {
+            "archiveEntry": "ASTMG173.csv",
+            "selectedColumn": "Etr W*m-2*nm-1",
+            "entrySha256": "b48a6635ce398f7e0fa392150d68b5793ed7f2a65d9e2406bec7e6be9fb20954"
+          }
+        },
+        {
+          "path": "tmp/atmosphere/bruneton_start_fresh/external_sources/bruneton-2017-demo.cc",
+          "lineStart": 189,
+          "lineEnd": 203,
+          "role": "states-bin-mean-rule-units-and-forty-eight-values"
+        },
+        {
+          "path": "tmp/atmosphere/bruneton_start_fresh/032-figure1-four-view-source-k-no-ground-baseline/script-snapshot.js",
+          "lineStart": 429,
+          "lineEnd": 436,
+          "role": "records-step032-forty-eight-value-input-table"
+        }
+      ],
+      "externalCitations": [
+        {
+          "sourceId": "SOURCE-EXT-000003",
+          "role": "identifies-official-astm-g173-etr-quantity-and-units",
+          "locator": {
+            "stableUrl": "https://www.nlr.gov/grid/solar-resource/spectra-am1.5",
+            "column": "Etr W*m-2*nm-1"
+          }
+        },
+        {
+          "sourceId": "SOURCE-EXT-000017",
+          "role": "pins-demo-source-containing-bin-rule-and-table",
+          "locator": {
+            "commit": "34f14e745cff948f4ca3157d1b62a445ffa7286f",
+            "path": "atmosphere/demo/demo.cc",
+            "gitBlobSha1": "edd1ae134a8a79c6ff7254682a26cc99351a75ea",
+            "lineStart": 189,
+            "lineEnd": 203
+          }
+        }
+      ],
+      "experimentIds": [
+        "EXPERIMENT-A32-000001"
+      ],
+      "materialIds": [
+        "MATERIAL-EXT-000001",
+        "MATERIAL-EXT-000015"
+      ],
+      "relatedFactSemanticKeys": [
+        "step032:solar-spectrum:retained-astm-csv-entry-identity",
+        "step032:solar-spectrum:forty-eight-bin-to-fifteen-channel-interpolation-verified"
+      ],
+      "nonClaims": [
+        "Arithmetic reproduction does not authenticate the retained ZIP against the publisher or select the Step 032 spectral sample count."
+      ],
+      "disposition": "must-rederive",
+      "blockers": [
+        "Official payload authentication and final spectral-discretization acceptance remain open."
+      ],
+      "nextAction": "Repeat the derivation from an authenticated official payload after gate authorization and compare the resulting packet under the target Reference spectral convergence study.",
+      "reviewStatus": "all-forty-eight-rounded-bin-means-reproduced"
+    },
+    {
+      "semanticKey": "step032:solar-spectrum:forty-eight-bin-to-fifteen-channel-interpolation-verified",
+      "statement": "Re-evaluating the exact Step 032 binary64 algorithm gives all 15 recorded solar-irradiance values with zero mismatches: wavelengths are centered at 360 + (i + 0.5) * (470 / 15) nm and values are linearly interpolated from the 48 samples at 360 + 10j nm.",
+      "kind": "forty-eight-bin-to-fifteen-channel-interpolation-verification",
+      "domain": "solar-spectral-irradiance-derivation",
+      "owner": "algorithm32-solar-spectrum-provenance",
+      "authorityRole": "reference-validation",
+      "structuredValue": {
+        "inputSampleCount": 48,
+        "inputWavelengthRule": "360 + 10 * j nanometers",
+        "outputSampleCount": 15,
+        "outputWavelengthRule": "360 + (i + 0.5) * (470 / 15) nanometers",
+        "interpolation": "piecewise-linear-binary64",
+        "mismatchCount": 0,
+        "maximumAbsoluteDifference": 0
+      },
+      "supportStatus": "derived-from-source",
+      "implementationStatus": "not-applicable",
+      "decisionStatus": "provisional",
+      "verificationLayer": "analytic",
+      "citations": [
+        {
+          "path": "tmp/atmosphere/bruneton_start_fresh/external_sources/bruneton-2017-model.cc",
+          "lineStart": 535,
+          "lineEnd": 551,
+          "role": "defines-source-family-linear-interpolation"
+        },
+        {
+          "path": "tmp/atmosphere/bruneton_start_fresh/external_sources/bruneton-2017-model.cc",
+          "lineStart": 915,
+          "lineEnd": 924,
+          "role": "defines-centered-wavelength-rule-for-precomputed-illuminance-mode"
+        },
+        {
+          "path": "tmp/atmosphere/bruneton_start_fresh/032-figure1-four-view-source-k-no-ground-baseline/script-snapshot.js",
+          "lineStart": 1446,
+          "lineEnd": 1498,
+          "role": "implements-step032-linear-interpolation-and-fifteen-centered-channels"
+        },
+        {
+          "path": "tmp/atmosphere/bruneton_start_fresh/032-figure1-four-view-source-k-no-ground-baseline/equations-and-constants.json",
+          "jsonPointer": "/constants/spectralChannels",
+          "role": "records-fifteen-derived-wavelength-and-irradiance-pairs"
+        }
+      ],
+      "externalCitations": [
+        {
+          "sourceId": "SOURCE-EXT-000017",
+          "role": "pins-model-source-for-interpolation-and-centered-sampling",
+          "locator": {
+            "commit": "34f14e745cff948f4ca3157d1b62a445ffa7286f",
+            "path": "atmosphere/model.cc",
+            "gitBlobSha1": "9504cbfca20bb0a49a211f27350999d02ba9a56f",
+            "lineRanges": [
+              "535-551",
+              "915-924"
+            ]
+          }
+        }
+      ],
+      "experimentIds": [
+        "EXPERIMENT-A32-000001"
+      ],
+      "materialIds": [
+        "MATERIAL-EXT-000001",
+        "MATERIAL-EXT-000015"
+      ],
+      "contradictionIds": [
+        "CONTRADICTION-A32-000012"
+      ],
+      "relatedFactSemanticKeys": [
+        "step032:solar-spectrum:astm-etr-to-forty-eight-bin-derivation-verified",
+        "step032:spectral:fifteen-centered-channel-realization",
+        "step032:profile:fifteen-channel-grid-historical-not-final"
+      ],
+      "nonClaims": [
+        "Exact interpolation correspondence does not establish that 15 channels are spectrally converged or accepted for production."
+      ],
+      "disposition": "must-rederive",
+      "blockers": [
+        "No accepted 15-channel discretization error bound exists."
+      ],
+      "nextAction": "Use the reconstructed input packet in a refined-spectrum convergence study before selecting a production spectral grid.",
+      "reviewStatus": "all-fifteen-binary64-interpolants-reproduced"
+    },
+    {
+      "semanticKey": "step032:solar-spectrum:retained-astm-payload-official-authenticity-unresolved",
+      "statement": "The official landing-page identity and retained CSV header are consistent, but the retained ASTM ZIP has no publisher checksum, signature, or authorized current-payload byte comparison, so its official payload authenticity remains unresolved.",
+      "kind": "retained-astm-official-authenticity-gap",
+      "domain": "solar-spectral-irradiance-provenance",
+      "owner": "algorithm32-solar-spectrum-provenance",
+      "authorityRole": "physics-provenance-gap",
+      "structuredValue": {
+        "retainedArchiveSha256": "de6ed831cd7426d9a7147d5c0a48b1e67a483cb7f8ecd6d3ae846848154a5657",
+        "officialPublisherChecksum": "not-identified",
+        "officialSignature": "not-identified",
+        "authorizedByteComparison": "not-performed"
+      },
+      "supportStatus": "transitional-unsourced",
+      "implementationStatus": "not-applicable",
+      "decisionStatus": "provisional",
+      "verificationLayer": "not-verified",
+      "citations": [
+        {
+          "path": "scripts/flat/reconciliation/POC/src/external-celestial-sources/fixtures/astmg173.zip",
+          "role": "pins-retained-but-not-publisher-authenticated-archive"
+        }
+      ],
+      "externalCitations": [
+        {
+          "sourceId": "SOURCE-EXT-000003",
+          "role": "official-landing-page-supports-dataset-identity-not-retained-byte-identity",
+          "locator": {
+            "stableUrl": "https://www.nlr.gov/grid/solar-resource/spectra-am1.5",
+            "verificationBoundary": "landing-page-metadata-only"
+          }
+        }
+      ],
+      "materialIds": [
+        "MATERIAL-EXT-000001"
+      ],
+      "disposition": "blocked",
+      "blockers": [
+        "The global import gate is closed.",
+        "No official publisher checksum or signature was identified.",
+        "License terms require review before later acquisition."
+      ],
+      "nextAction": "After explicit gate authorization and license review, acquire from the official endpoint, hash the payload and embedded CSV, and compare them with the retained identities.",
+      "reviewStatus": "explicit-official-authenticity-gap-recorded"
+    },
+    {
+      "semanticKey": "step032:sampling:gonzalez-spherical-fibonacci-construction",
+      "statement": "Gonzalez arXiv v1 defines an odd-count spherical Fibonacci point set indexed symmetrically about zero, with sine latitude 2i/(2N+1) and longitude 2*pi*i/phi, as an evenly distributed, almost-equal-area spherical lattice suitable for equal-area weighting.",
+      "kind": "spherical-fibonacci-lattice-source-claim",
+      "domain": "second-order-direction-quadrature",
+      "owner": "algorithm32-second-order-quadrature",
+      "authorityRole": "physics-source-claim",
+      "structuredValue": {
+        "indexRange": "i = -N through N",
+        "pointCount": "2N + 1",
+        "sineLatitude": "2i / (2N + 1)",
+        "longitude": "2*pi*i / phi",
+        "weightingScope": "almost-equal-area construction"
+      },
+      "supportStatus": "source-backed",
+      "implementationStatus": "not-applicable",
+      "decisionStatus": "provisional",
+      "verificationLayer": "analytic",
+      "externalCitations": [
+        {
+          "sourceId": "SOURCE-EXT-000016",
+          "role": "defines-spherical-fibonacci-point-construction-and-area-weighting-context",
+          "locator": {
+            "stableUrl": "https://arxiv.org/abs/0912.4540v1",
+            "version": "v1",
+            "sections": [
+              "3.1 Fibonacci lattice",
+              "4.2 Weights"
+            ],
+            "equations": [
+              "2",
+              "3",
+              "4",
+              "9"
+            ]
+          }
+        }
+      ],
+      "materialIds": [
+        "MATERIAL-EXT-000016"
+      ],
+      "nonClaims": [
+        "The paper does not select N = 8 for a 17-point set or establish an atmospheric-radiance quadrature tolerance."
+      ],
+      "disposition": "link-only",
+      "blockers": [
+        "Payload retention and license review remain blocked by the closed gate."
+      ],
+      "nextAction": "Use the official v1 formulas as the construction source while independently converging the radiative direction count.",
+      "reviewStatus": "official-v1-construction-formulas-reviewed"
+    },
+    {
+      "semanticKey": "step032:sampling:seventeen-direction-construction-matches-gonzalez-family",
+      "statement": "Static comparison verifies that Step 032's 17 directions implement the Gonzalez odd-count construction with i = -8 through 8, z = 2i/17, latitude = asin(z), longitude = 2*pi*i/phi, and equal full-sphere weight 4*pi/17.",
+      "kind": "step032-to-gonzalez-formula-family-verification",
+      "domain": "second-order-direction-quadrature",
+      "owner": "algorithm32-second-order-quadrature",
+      "authorityRole": "reference-validation",
+      "structuredValue": {
+        "directionCount": 17,
+        "indexMinimum": -8,
+        "indexMaximum": 8,
+        "zRule": "2 * index / 17",
+        "latitudeRule": "asin(z)",
+        "longitudeRule": "2 * pi * index / goldenRatio",
+        "angularWeightSteradians": 0.7391982714328925,
+        "constructionMismatchCount": 0
+      },
+      "supportStatus": "derived-from-source",
+      "implementationStatus": "not-applicable",
+      "decisionStatus": "provisional",
+      "verificationLayer": "analytic",
+      "citations": [
+        {
+          "path": "tmp/atmosphere/bruneton_start_fresh/032-figure1-four-view-source-k-no-ground-baseline/script-snapshot.js",
+          "lineStart": 2184,
+          "lineEnd": 2225,
+          "role": "implements-seventeen-point-spherical-fibonacci-directions-and-full-sphere-weight"
+        },
+        {
+          "path": "agents/topics/apps/flat/plans/atmosphere-cleanroom-design/experiment-032-algorithm.md",
+          "lineStart": 315,
+          "lineEnd": 328,
+          "role": "records-formula-family-count-weight-and-cache-decision-boundary"
+        }
+      ],
+      "externalCitations": [
+        {
+          "sourceId": "SOURCE-EXT-000016",
+          "role": "provides-source-formula-family",
+          "locator": {
+            "stableUrl": "https://arxiv.org/abs/0912.4540v1",
+            "sections": [
+              "3.1 Fibonacci lattice",
+              "4.2 Weights"
+            ],
+            "equations": [
+              "2",
+              "3",
+              "4",
+              "9"
+            ]
+          }
+        }
+      ],
+      "experimentIds": [
+        "EXPERIMENT-A32-000001",
+        "EXPERIMENT-A32-000040"
+      ],
+      "materialIds": [
+        "MATERIAL-EXT-000016"
+      ],
+      "relatedFactSemanticKeys": [
+        "step032:sampling:gonzalez-spherical-fibonacci-construction",
+        "step032:convergence:seventeen-direction-quadrature-error-unbounded"
+      ],
+      "nonClaims": [
+        "A construction match does not validate the N = 17 radiative quadrature error."
+      ],
+      "disposition": "must-rederive",
+      "blockers": [
+        "No independent refined angular oracle or accepted error tolerance exists."
+      ],
+      "nextAction": "Converge the direction count against an independent full-sphere radiative integral while retaining this source-family identity.",
+      "reviewStatus": "construction-and-weight-match-reviewed-error-unverified"
+    },
+    {
+      "semanticKey": "step032:production-lineage:code-introduction-commit-pinned",
+      "statement": "Read-only Git history pins e728953ee0288f1f9464b42360c3266b42b01d93 as the direct child of completed POC commit cf3e00afbec1e81da66a062642dc233c32b54194 that introduces the production canonical-data, color-display, shader-contribution, and short-code registry counterparts with exact tree and blob identities.",
+      "kind": "step032-to-production-code-introduction-identity",
+      "domain": "production-canonical-data-lineage",
+      "owner": "production-algorithm32-lineage",
+      "authorityRole": "physics-provenance-gap",
+      "structuredValue": {
+        "commit": "e728953ee0288f1f9464b42360c3266b42b01d93",
+        "parentCommit": "cf3e00afbec1e81da66a062642dc233c32b54194",
+        "tree": "2a1d602b23298643f6b063232df7df2c7aacc1d8",
+        "authorAndCommitDate": "2026-07-08T19:56:31-07:00",
+        "subject": "- first pass production shader",
+        "pocSourceBlobs": {
+          "scripts/flat/reconciliation/POC/src/constants/consts.js": "46339e627ef2fc73ec148fa59e107fa182860f86",
+          "scripts/flat/reconciliation/POC/src/color/BrunetonColorDisplayModel.js": "ab47187f85c3c3b1551cac398062b01d2e785f7f",
+          "scripts/flat/reconciliation/POC/src/shader/DistantSphericalShaderContributionFactory.js": "076151fe310d4b193b20983fa5b1dfef5bcde0e3"
+        },
+        "productionIntroductionBlobs": {
+          "shared/algorithm32/production/constants/Algorithm32CanonicalData.js": "25dd63c7749cdaf23731e520e75c2cc82b73a1ba",
+          "shared/algorithm32/production/color/BrunetonColorDisplayModel.js": "d68440319874fb24960613c51f014eaf97b1062c",
+          "shared/algorithm32/production/quarantine/DistantSphericalShaderContributionFactory.js": "c5bf5fdc6a2b9ece45ec5455fe5de2d0cc6ac773",
+          "shared/algorithm32/production/references.md": "ca2f6f575903253681ce3a09ce21ed0d78a0beb6"
+        }
+      },
+      "supportStatus": "source-backed",
+      "implementationStatus": "not-applicable",
+      "decisionStatus": "provisional",
+      "verificationLayer": "static-code-observation",
+      "citations": [
+        {
+          "path": "shared/algorithm32/production/references.md",
+          "lineStart": 38,
+          "lineEnd": 44,
+          "role": "names-the-three-poc-promotion-sources"
+        }
+      ],
+      "repositoryStateCitations": [
+        {
+          "path": "shared/algorithm32/production/references.md",
+          "gitBlobSha": "ca2f6f575903253681ce3a09ce21ed0d78a0beb6",
+          "role": "anchors-introduction-commit-registry-state",
+          "note": "Read-only git show, diff-tree, and rev-parse established the commit, parent, tree, and listed source/production blobs."
+        },
+        {
+          "path": "shared/algorithm32/production/quarantine/DistantSphericalShaderContributionFactory.js",
+          "gitCommit": "e728953ee0288f1f9464b42360c3266b42b01d93",
+          "gitBlobSha": "c5bf5fdc6a2b9ece45ec5455fe5de2d0cc6ac773",
+          "role": "anchors-introduction-commit-production-shader-counterpart",
+          "note": "This historical citation anchors the production quarantine shader blob at e728953ee0288f1f9464b42360c3266b42b01d93; it does not assert current working-tree identity."
+        }
+      ],
+      "experimentIds": [
+        "EXPERIMENT-A32-000001"
+      ],
+      "contradictionIds": [
+        "CONTRADICTION-A32-000011"
+      ],
+      "relatedFactSemanticKeys": [
+        "step032:production-lineage:short-code-claims-three-poc-files",
+        "step032:production-lineage:claimed-poc-shader-path-deleted",
+        "mark-i:identity:next-production-shader-checkpoint"
+      ],
+      "nonClaims": [
+        "The code-introduction identity is not a per-fact scientific derivation, promotion decision, CPU-oracle result, or shader-conformance result."
+      ],
+      "disposition": "must-rederive",
+      "blockers": [
+        "No per-fact scientific promotion or acceptance record is attached to the commit.",
+        "Current mutable documentation does not replace each short-code subclaim with an immutable scientific locator."
+      ],
+      "nextAction": "Use the commit only as immutable lineage evidence; reconstruct and independently validate each production physics fact before accepting the CPU Reference or testing shader conformance.",
+      "reviewStatus": "exact-code-introduction-identity-reviewed-scientific-authority-unresolved"
+    },
+    {
+      "semanticKey": "step032:convergence:view-ray-twenty-interval-error-unbounded",
+      "statement": "Step 032 fixes the view-ray single-scattering quadrature at 20 intervals, but no retained convergence sweep, independent oracle, or accepted radiance-error tolerance bounds that choice.",
+      "kind": "view-ray-quadrature-convergence-gap",
+      "domain": "step032-numerical-convergence",
+      "owner": "step032-reconstruction",
+      "authorityRole": "physics-provenance-gap",
+      "structuredValue": {
+        "viewRayIntervals": 20,
+        "convergenceSweep": "not-identified",
+        "independentOracle": "not-identified",
+        "acceptedErrorTolerance": "not-identified"
+      },
+      "supportStatus": "transitional-unsourced",
+      "implementationStatus": "absent",
+      "decisionStatus": "provisional",
+      "verificationLayer": "not-verified",
+      "citations": [
+        {
+          "path": "tmp/atmosphere/bruneton_start_fresh/032-figure1-four-view-source-k-no-ground-baseline/script-snapshot.js",
+          "lineStart": 365,
+          "lineEnd": 380,
+          "role": "records-twenty-view-interval-control"
+        },
+        {
+          "path": "agents/topics/apps/flat/plans/atmosphere-cleanroom-design/experiment-032-algorithm.md",
+          "lineStart": 235,
+          "lineEnd": 237,
+          "role": "classifies-the-count-as-an-algorithmic-choice"
+        },
+        {
+          "path": "agents/topics/apps/flat/plans/atmosphere-cleanroom-design/experiment-032-algorithm.md",
+          "lineStart": 536,
+          "lineEnd": 540,
+          "role": "prohibits-carry-forward-without-convergence-tests"
+        }
+      ],
+      "experimentIds": [
+        "EXPERIMENT-A32-000001"
+      ],
+      "relatedFactSemanticKeys": [
+        "step032:numerical-controls:external-sources-do-not-select-exact-counts"
+      ],
+      "disposition": "must-rederive",
+      "blockers": [
+        "No accepted pre-display radiance tolerance or refined view integration exists."
+      ],
+      "nextAction": "Sweep view-ray interval counts against an independent refined CPU integral across the named scenes and wavelengths, then record unit-bearing absolute and relative error bounds.",
+      "reviewStatus": "atomic-convergence-gap-recorded"
+    },
+    {
+      "semanticKey": "step032:convergence:sun-ray-ten-interval-error-unbounded",
+      "statement": "Step 032 fixes each sample-to-Sun optical-depth quadrature at 10 intervals, but no retained convergence sweep, independent transmittance oracle, or accepted error tolerance bounds that choice.",
+      "kind": "sample-to-sun-quadrature-convergence-gap",
+      "domain": "step032-numerical-convergence",
+      "owner": "step032-reconstruction",
+      "authorityRole": "physics-provenance-gap",
+      "structuredValue": {
+        "sampleToSunIntervals": 10,
+        "convergenceSweep": "not-identified",
+        "independentOracle": "not-identified",
+        "acceptedErrorTolerance": "not-identified"
+      },
+      "supportStatus": "transitional-unsourced",
+      "implementationStatus": "absent",
+      "decisionStatus": "provisional",
+      "verificationLayer": "not-verified",
+      "citations": [
+        {
+          "path": "tmp/atmosphere/bruneton_start_fresh/032-figure1-four-view-source-k-no-ground-baseline/script-snapshot.js",
+          "lineStart": 365,
+          "lineEnd": 380,
+          "role": "records-ten-sample-to-sun-interval-control"
+        },
+        {
+          "path": "agents/topics/apps/flat/plans/atmosphere-cleanroom-design/experiment-032-algorithm.md",
+          "lineStart": 235,
+          "lineEnd": 237,
+          "role": "classifies-the-count-as-an-algorithmic-choice"
+        },
+        {
+          "path": "agents/topics/apps/flat/plans/atmosphere-cleanroom-design/experiment-032-algorithm.md",
+          "lineStart": 536,
+          "lineEnd": 540,
+          "role": "prohibits-carry-forward-without-convergence-tests"
+        }
+      ],
+      "experimentIds": [
+        "EXPERIMENT-A32-000001"
+      ],
+      "relatedFactSemanticKeys": [
+        "step032:numerical-controls:external-sources-do-not-select-exact-counts"
+      ],
+      "disposition": "must-rederive",
+      "blockers": [
+        "No accepted optical-depth or transmittance tolerance and no independent refined source-ray integration exist."
+      ],
+      "nextAction": "Sweep sample-to-Sun intervals against an independent analytic or refined optical-depth oracle over altitude, zenith, and wavelength extremes.",
+      "reviewStatus": "atomic-convergence-gap-recorded"
+    },
+    {
+      "semanticKey": "step032:convergence:seventeen-direction-quadrature-error-unbounded",
+      "statement": "Gonzalez supports the spherical Fibonacci sampling family, but Step 032's choice of 17 full-sphere directions has no retained angular convergence sweep, independent radiative oracle, or accepted quadrature-error bound.",
+      "kind": "second-order-angular-quadrature-convergence-gap",
+      "domain": "step032-numerical-convergence",
+      "owner": "step032-reconstruction",
+      "authorityRole": "physics-provenance-gap",
+      "structuredValue": {
+        "directionCount": 17,
+        "angularWeightSteradians": 0.7391982714328925,
+        "samplingFamily": "spherical-Fibonacci",
+        "radiativeConvergenceSweep": "not-identified",
+        "acceptedQuadratureErrorBound": "not-identified"
+      },
+      "supportStatus": "transitional-unsourced",
+      "implementationStatus": "absent",
+      "decisionStatus": "provisional",
+      "verificationLayer": "not-verified",
+      "citations": [
+        {
+          "path": "tmp/atmosphere/bruneton_start_fresh/032-figure1-four-view-source-k-no-ground-baseline/script-snapshot.js",
+          "lineStart": 2184,
+          "lineEnd": 2225,
+          "role": "implements-seventeen-directions-and-full-sphere-weight"
+        },
+        {
+          "path": "agents/topics/apps/flat/plans/atmosphere-cleanroom-design/experiment-032-algorithm.md",
+          "lineStart": 441,
+          "lineEnd": 456,
+          "role": "records-direction-count-as-experiment-choice"
+        },
+        {
+          "path": "agents/topics/apps/flat/plans/atmosphere-cleanroom-design/experiment-032-algorithm.md",
+          "lineStart": 536,
+          "lineEnd": 540,
+          "role": "prohibits-carry-forward-without-convergence-tests"
+        }
+      ],
+      "externalCitations": [
+        {
+          "sourceId": "SOURCE-EXT-000016",
+          "role": "supports-sampling-family-but-not-direction-count-or-radiative-error",
+          "locator": {
+            "stableUrl": "https://arxiv.org/abs/0912.4540v1",
+            "section": "3.1 Fibonacci lattice",
+            "equations": [
+              "2",
+              "3",
+              "4"
+            ]
+          }
+        }
+      ],
+      "experimentIds": [
+        "EXPERIMENT-A32-000001",
+        "EXPERIMENT-A32-000040"
+      ],
+      "materialIds": [
+        "MATERIAL-EXT-000016"
+      ],
+      "relatedFactSemanticKeys": [
+        "step032:sampling:seventeen-direction-construction-matches-gonzalez-family",
+        "step032:numerical-controls:external-sources-do-not-select-exact-counts"
+      ],
+      "disposition": "must-rederive",
+      "blockers": [
+        "No independent refined angular integral or unit-bearing radiance tolerance exists."
+      ],
+      "nextAction": "Converge full-sphere direction count and orientation against an independent high-resolution angular oracle across anisotropic Mie and near-horizon cases.",
+      "reviewStatus": "atomic-convergence-gap-recorded"
+    },
+    {
+      "semanticKey": "step032:convergence:twenty-four-altitude-bin-cache-error-unbounded",
+      "statement": "Step 032 caches incident first-order sky radiance by scene, incoming direction, and 24 altitude bins, but no retained uncached oracle, interpolation study, or accepted cache-error bound validates that altitude resolution or the omitted local angular coordinates.",
+      "kind": "incident-radiance-altitude-cache-error-gap",
+      "domain": "step032-numerical-convergence",
+      "owner": "step032-reconstruction",
+      "authorityRole": "physics-provenance-gap",
+      "structuredValue": {
+        "altitudeBinCount": 24,
+        "activeCacheCoordinates": [
+          "scene",
+          "incoming-direction-index",
+          "altitude-bin"
+        ],
+        "omittedCoordinates": [
+          "local-solar-zenith",
+          "incoming-view-zenith"
+        ],
+        "uncachedOracle": "not-identified",
+        "acceptedCacheErrorBound": "not-identified"
+      },
+      "supportStatus": "transitional-unsourced",
+      "implementationStatus": "absent",
+      "decisionStatus": "provisional",
+      "verificationLayer": "not-verified",
+      "citations": [
+        {
+          "path": "tmp/atmosphere/bruneton_start_fresh/032-figure1-four-view-source-k-no-ground-baseline/script-snapshot.js",
+          "lineStart": 2350,
+          "lineEnd": 2417,
+          "role": "implements-altitude-only-cache-key-and-bin-center-evaluation"
+        },
+        {
+          "path": "tmp/atmosphere/bruneton_start_fresh/032-figure1-four-view-source-k-no-ground-baseline/provenance.json",
+          "lineStart": 807,
+          "lineEnd": 817,
+          "role": "records-twenty-four-bin-altitude-only-cache-contract"
+        },
+        {
+          "path": "agents/topics/apps/flat/plans/atmosphere-cleanroom-design/experiment-032-algorithm.md",
+          "lineStart": 441,
+          "lineEnd": 456,
+          "role": "classifies-twenty-four-bins-as-an-experiment-choice"
+        },
+        {
+          "path": "agents/topics/apps/flat/plans/atmosphere-cleanroom-design/experiment-032-algorithm.md",
+          "lineStart": 536,
+          "lineEnd": 540,
+          "role": "prohibits-carry-forward-without-convergence-tests"
+        }
+      ],
+      "experimentIds": [
+        "EXPERIMENT-A32-000001",
+        "EXPERIMENT-A32-000040"
+      ],
+      "relatedFactSemanticKeys": [
+        "step032:second-order:altitude-and-direction-only-cache",
+        "step032:numerical-controls:external-sources-do-not-select-exact-counts",
+        "step032:cache:later-coordinate-probes-lack-uncached-oracle"
+      ],
+      "disposition": "must-rederive",
+      "blockers": [
+        "No uncached independent second-order incident-radiance oracle or accepted cache tolerance exists."
+      ],
+      "nextAction": "Compare altitude-only cache values and final radiance against an uncached independent oracle while sweeping altitude and angular coordinates and bin counts.",
+      "reviewStatus": "atomic-cache-error-gap-recorded"
+    },
+    {
+      "semanticKey": "step032:cache:later-coordinate-probes-lack-uncached-oracle",
+      "statement": "Historical Steps 026 and 027 add local solar-zenith and incoming-view-zenith cache coordinates. Their provenance pins both records to the same bruneton-start-fresh runner, while their notes identify generated PNG comparisons, a visual-delta evaluation focus, and transport-coordinate-only review decisions; neither reviewed record identifies an uncached numeric oracle or numeric acceptance tolerance that can validate Step 032's altitude-only cache omission or select a production cache domain.",
+      "kind": "later-cache-coordinate-probe-evidence-gap",
+      "domain": "step032-second-order-cache",
+      "owner": "step032-reconstruction",
+      "authorityRole": "physics-provenance-gap",
+      "structuredValue": {
+        "step026AddedCoordinate": "local-solar-zenith",
+        "step027AddedCoordinate": "incoming-view-zenith",
+        "binsPerAddedCoordinate": 5,
+        "recordedRunner": "scripts/flat/atmosphere/experimental/bruneton-start-fresh.js",
+        "recordedOutputClass": "PNG comparison images",
+        "recordedEvaluationFocus": "visual deltas and transport-coordinate evidence",
+        "independentUncachedOracle": "not-identified-in-reviewed-notes-and-provenance",
+        "numericAcceptanceTolerance": "not-identified-in-reviewed-notes-and-provenance"
+      },
+      "supportStatus": "transitional-unsourced",
+      "implementationStatus": "absent",
+      "decisionStatus": "provisional",
+      "verificationLayer": "static-code-observation",
+      "citations": [
+        {
+          "path": "agents/topics/apps/flat/plans/atmosphere-cleanroom-design/experiment-032-algorithm.md",
+          "lineStart": 325,
+          "lineEnd": 328,
+          "role": "distinguishes-step032-altitude-only-cache-from-later-coordinate-probes"
+        },
+        {
+          "path": "agents/topics/apps/flat/plans/atmosphere-cleanroom-design/experiment-032-algorithm.md",
+          "lineStart": 487,
+          "lineEnd": 489,
+          "role": "records-later-five-by-five-coordinate-controls-as-inactive-in-step032"
+        },
+        {
+          "path": "tmp/atmosphere/bruneton_start_fresh/026-second-order-sun-angle-cache-baseline/provenance.json",
+          "lineStart": 11,
+          "lineEnd": 13,
+          "role": "pins-step026-to-the-shared-bruneton-start-fresh-runner-and-record-directory"
+        },
+        {
+          "path": "tmp/atmosphere/bruneton_start_fresh/027-second-order-sun-view-angle-cache-baseline/provenance.json",
+          "lineStart": 11,
+          "lineEnd": 13,
+          "role": "pins-step027-to-the-shared-bruneton-start-fresh-runner-and-record-directory"
+        },
+        {
+          "path": "tmp/atmosphere/bruneton_start_fresh/026-second-order-sun-angle-cache-baseline/notes.md",
+          "lineStart": 42,
+          "lineEnd": 63,
+          "role": "records-png-outputs-visual-delta-focus-and-coordinate-evidence-only-decision"
+        },
+        {
+          "path": "tmp/atmosphere/bruneton_start_fresh/027-second-order-sun-view-angle-cache-baseline/notes.md",
+          "lineStart": 42,
+          "lineEnd": 63,
+          "role": "records-png-outputs-visual-delta-focus-and-nonfinal-coordinate-evidence-decision"
+        }
+      ],
+      "experimentIds": [
+        "EXPERIMENT-A32-000001",
+        "EXPERIMENT-A32-000044",
+        "EXPERIMENT-A32-000045"
+      ],
+      "relatedFactSemanticKeys": [
+        "step032:convergence:twenty-four-altitude-bin-cache-error-unbounded",
+        "step032-history:step026:solar-zenith-cache-coordinate-probe",
+        "step032-history:step027:solar-and-view-zenith-cache-coordinate-probe"
+      ],
+      "disposition": "must-rederive",
+      "blockers": [
+        "Neither reviewed historical record identifies an uncached oracle or unit-bearing numeric acceptance criterion."
+      ],
+      "nextAction": "Reconstruct coordinate ablations against an independent uncached solver before choosing cache coordinates or bin counts.",
+      "reviewStatus": "historical-probes-accounted-as-non-oracle-evidence"
+    },
+    {
+      "semanticKey": "step032:selected-ray:radiance-dimensional-unit-candidate",
+      "statement": "Dimensional analysis of the recorded single-scattering equation gives a candidate spectral-radiance unit of W m^-2 nm^-1 sr^-1 when solar irradiance is W m^-2 nm^-1, scattering coefficient is m^-1, path increment is m, phase is sr^-1, and densities and transmittances are dimensionless; the second-order term has the same candidate unit only if its cached incident field is unit-consistent.",
+      "kind": "selected-ray-spectral-radiance-dimensional-analysis",
+      "domain": "step032-selected-ray-contract",
+      "owner": "step032-reconstruction",
+      "authorityRole": "reference-validation",
+      "structuredValue": {
+        "solarIrradianceUnit": "W m^-2 nm^-1",
+        "scatteringCoefficientUnit": "m^-1",
+        "pathIncrementUnit": "m",
+        "phaseFunctionUnit": "sr^-1",
+        "densityUnit": "dimensionless",
+        "transmittanceUnit": "dimensionless",
+        "candidateResultUnit": "W m^-2 nm^-1 sr^-1",
+        "secondOrderQualification": "requires-unit-consistent-cached-incident-radiance"
+      },
+      "assumptions": [
+        "The retained source comments and formulas use the stated SI-derived quantities.",
+        "No undocumented scale is applied before selected-ray serialization."
+      ],
+      "supportStatus": "derived-from-source",
+      "implementationStatus": "not-applicable",
+      "decisionStatus": "provisional",
+      "verificationLayer": "analytic",
+      "citations": [
+        {
+          "path": "tmp/atmosphere/bruneton_start_fresh/external_sources/bruneton-2017-demo.cc",
+          "lineStart": 189,
+          "lineEnd": 203,
+          "role": "states-solar-irradiance-density-units"
+        },
+        {
+          "path": "tmp/atmosphere/bruneton_start_fresh/032-figure1-four-view-source-k-no-ground-baseline/equations-and-constants.json",
+          "jsonPointer": "/equations/5",
+          "role": "records-single-scattering-dimensional-factors"
+        },
+        {
+          "path": "tmp/atmosphere/bruneton_start_fresh/032-figure1-four-view-source-k-no-ground-baseline/equations-and-constants.json",
+          "jsonPointer": "/equations/6",
+          "role": "records-second-order-incident-radiance-integral"
+        },
+        {
+          "path": "tmp/atmosphere/bruneton_start_fresh/032-figure1-four-view-source-k-no-ground-baseline/script-snapshot.js",
+          "lineStart": 2817,
+          "lineEnd": 2839,
+          "role": "implements-single-scattering-result-composition"
+        }
+      ],
+      "externalCitations": [
+        {
+          "sourceId": "SOURCE-EXT-000003",
+          "role": "identifies-etr-spectral-irradiance-density-units",
+          "locator": {
+            "stableUrl": "https://www.nlr.gov/grid/solar-resource/spectra-am1.5",
+            "column": "Etr W*m-2*nm-1"
+          }
+        }
+      ],
+      "experimentIds": [
+        "EXPERIMENT-A32-000001"
+      ],
+      "materialIds": [
+        "MATERIAL-EXT-000001",
+        "MATERIAL-EXT-000015"
+      ],
+      "relatedFactSemanticKeys": [
+        "step032:output-boundary:pre-display-spectral-radiance",
+        "step032:selected-ray:radiance-unit-contract-missing"
+      ],
+      "nonClaims": [
+        "This dimensional inference is not a recorded or accepted historical unit contract and does not verify every intermediate scale."
+      ],
+      "disposition": "must-rederive",
+      "blockers": [
+        "The historical record does not label selected-ray radiance arrays with units or enforce a unit-bearing API."
+      ],
+      "nextAction": "Reconstruct a unit-bearing CPU Reference and confirm first- and second-order dimensional closure before using the historical packets as oracle values.",
+      "reviewStatus": "candidate-unit-derived-historical-contract-still-missing"
+    },
+    {
+      "semanticKey": "step032:selected-ray:radiance-unit-contract-missing",
+      "statement": "The four Step 032 scene diagnostics serialize zenith and horizon spectral-radiance arrays without a unit field, scale declaration, or unit-enforcing schema, so the historical radiance packet's accepted units remain unknown despite the dimensional candidate.",
+      "kind": "selected-ray-radiance-unit-contract-gap",
+      "domain": "step032-selected-ray-contract",
+      "owner": "step032-reconstruction",
+      "authorityRole": "physics-provenance-gap",
+      "structuredValue": {
+        "sceneCount": 4,
+        "radiancePacketCount": 8,
+        "serializedUnitField": "absent",
+        "serializedScaleDeclaration": "absent",
+        "acceptedHistoricalUnit": "unknown",
+        "candidateDimensionalUnit": "W m^-2 nm^-1 sr^-1"
+      },
+      "supportStatus": "transitional-unsourced",
+      "implementationStatus": "absent",
+      "decisionStatus": "provisional",
+      "verificationLayer": "static-code-observation",
+      "citations": [
+        {
+          "path": "tmp/atmosphere/bruneton_start_fresh/032-figure1-four-view-source-k-no-ground-baseline/provenance.json",
+          "jsonPointer": "/sceneDiagnostics",
+          "role": "serializes-selected-ray-radiance-arrays-without-unit-fields"
+        },
+        {
+          "path": "tmp/atmosphere/bruneton_start_fresh/032-figure1-four-view-source-k-no-ground-baseline/equations-and-constants.json",
+          "jsonPointer": "/equations/5",
+          "role": "provides-formula-but-no-selected-ray-output-unit-contract"
+        }
+      ],
+      "experimentIds": [
+        "EXPERIMENT-A32-000001"
+      ],
+      "relatedFactSemanticKeys": [
+        "step032:selected-ray:radiance-dimensional-unit-candidate",
+        "step032:output-boundary:pre-display-spectral-radiance"
+      ],
+      "disposition": "must-rederive",
+      "blockers": [
+        "No explicit unit field, unit-bearing type, or accepted conversion scale accompanies the historical arrays."
+      ],
+      "nextAction": "Define and independently verify the CPU Reference spectral-radiance unit contract, then regenerate selected-ray packets with explicit units and scale metadata.",
+      "reviewStatus": "atomic-historical-radiance-unit-gap-recorded"
+    },
+    {
+      "semanticKey": "step032:selected-ray:numeric-tolerance-contract-missing",
+      "statement": "None of the 12 Step 032 selected-ray packets has an accepted numeric tolerance, uncertainty, or machine comparison criterion; the retained evaluation focus is qualitative visual comparison, so the packets cannot yet serve as a pass/fail CPU oracle.",
+      "kind": "selected-ray-numeric-tolerance-contract-gap",
+      "domain": "step032-selected-ray-contract",
+      "owner": "step032-reconstruction",
+      "authorityRole": "physics-provenance-gap",
+      "structuredValue": {
+        "sceneCount": 4,
+        "packetCount": 12,
+        "radiancePacketCount": 8,
+        "transmittancePacketCount": 4,
+        "acceptedAbsoluteTolerance": "absent",
+        "acceptedRelativeTolerance": "absent",
+        "uncertaintyModel": "absent",
+        "historicalCriterion": "qualitative-visual-deltas"
+      },
+      "supportStatus": "transitional-unsourced",
+      "implementationStatus": "absent",
+      "decisionStatus": "provisional",
+      "verificationLayer": "not-verified",
+      "citations": [
+        {
+          "path": "tmp/atmosphere/bruneton_start_fresh/032-figure1-four-view-source-k-no-ground-baseline/notes.md",
+          "lineStart": 51,
+          "lineEnd": 55,
+          "role": "records-qualitative-visual-evaluation-focus"
+        },
+        {
+          "path": "tmp/atmosphere/bruneton_start_fresh/032-figure1-four-view-source-k-no-ground-baseline/provenance.json",
+          "jsonPointer": "/sceneDiagnostics",
+          "role": "records-twelve-selected-ray-packets-without-tolerances"
+        }
+      ],
+      "experimentIds": [
+        "EXPERIMENT-A32-000001"
+      ],
+      "relatedFactSemanticKeys": [
+        "step032:selected-ray:radiance-unit-contract-missing"
+      ],
+      "disposition": "must-rederive",
+      "blockers": [
+        "No independent oracle, uncertainty budget, or accepted absolute/relative tolerance exists."
+      ],
+      "nextAction": "After unit and convergence reconstruction, compare unit-bearing packets to an independent CPU oracle and adopt explicit per-quantity absolute and relative tolerances.",
+      "reviewStatus": "atomic-selected-ray-tolerance-gap-recorded"
+    },
+    {
+      "semanticKey": "step032:profile:fifteen-channel-grid-historical-not-final",
+      "statement": "The exactly reconstructed 15-channel solar packet is a named historical Step 032 comparison profile, not an accepted final production spectral grid, until its pre-display error is bounded against a sufficiently refined independent spectrum.",
+      "kind": "historical-spectral-profile-disposition",
+      "domain": "step032-model-profile",
+      "owner": "algorithm32-reference-profile",
+      "authorityRole": "physics-provenance-gap",
+      "structuredValue": {
+        "historicalChannelCount": 15,
+        "paperComparisonChannelCount": 40,
+        "derivationIdentity": "reconstructed",
+        "productionSelectionStatus": "not-accepted",
+        "requiredComparison": "refined-independent-spectral-oracle"
+      },
+      "supportStatus": "derived-from-source",
+      "implementationStatus": "not-applicable",
+      "decisionStatus": "provisional",
+      "verificationLayer": "analytic",
+      "citations": [
+        {
+          "path": "agents/topics/apps/flat/plans/atmosphere-cleanroom-design/experiment-032-algorithm.md",
+          "lineStart": 411,
+          "lineEnd": 417,
+          "role": "distinguishes-fifteen-channel-history-from-forty-wavelength-paper-run"
+        },
+        {
+          "path": "agents/topics/apps/flat/plans/atmosphere-cleanroom-design/experiment-032-algorithm.md",
+          "lineStart": 536,
+          "lineEnd": 543,
+          "role": "prohibits-carrying-fifteen-channel-grid-as-final-physics-truth"
+        }
+      ],
+      "experimentIds": [
+        "EXPERIMENT-A32-000001",
+        "EXPERIMENT-A32-000042"
+      ],
+      "materialIds": [
+        "MATERIAL-EXT-000001",
+        "MATERIAL-EXT-000014",
+        "MATERIAL-EXT-000015"
+      ],
+      "contradictionIds": [
+        "CONTRADICTION-A32-000012"
+      ],
+      "relatedFactSemanticKeys": [
+        "step032:solar-spectrum:forty-eight-bin-to-fifteen-channel-interpolation-verified",
+        "step032:spectral:fifteen-centered-channel-realization"
+      ],
+      "disposition": "must-rederive",
+      "blockers": [
+        "No accepted spectral discretization error bound exists."
+      ],
+      "nextAction": "Run identical pre-display scenes with 15, 40, and refined spectral grids against an independent oracle before selecting the production profile.",
+      "reviewStatus": "historical-profile-explicit-final-selection-unresolved"
+    },
+    {
+      "semanticKey": "step032:profile:ozone-disabled-comparison-only",
+      "statement": "Ozone disabled is retained only as the named Step 032 Figure 1 comparison profile; it is not a universal Earth-atmosphere policy, and an ozone-enabled target profile still requires pinned cross sections, a vertical density profile, and independent enabled-versus-disabled validation.",
+      "kind": "ozone-profile-disposition-gap",
+      "domain": "step032-model-profile",
+      "owner": "algorithm32-reference-profile",
+      "authorityRole": "physics-provenance-gap",
+      "structuredValue": {
+        "step032ComparisonProfile": "ozone-disabled",
+        "universalEarthPolicy": false,
+        "ozoneEnabledProfileStatus": "not-accepted",
+        "requiredEnabledInputs": [
+          "pinned-ozone-cross-sections",
+          "pinned-vertical-density-profile",
+          "unit-bearing-end-to-end-oracle"
+        ]
+      },
+      "supportStatus": "source-backed",
+      "implementationStatus": "not-applicable",
+      "decisionStatus": "provisional",
+      "verificationLayer": "static-code-observation",
+      "citations": [
+        {
+          "path": "agents/topics/apps/flat/plans/atmosphere-cleanroom-design/experiment-032-algorithm.md",
+          "lineStart": 393,
+          "lineEnd": 417,
+          "role": "records-active-no-ozone-comparison-profile"
+        },
+        {
+          "path": "agents/topics/apps/flat/plans/atmosphere-cleanroom-design/experiment-032-algorithm.md",
+          "lineStart": 470,
+          "lineEnd": 491,
+          "role": "separates-inactive-demo-ozone-inputs-from-step032-policy"
+        },
+        {
+          "path": "tmp/atmosphere/bruneton_start_fresh/032-figure1-four-view-source-k-no-ground-baseline/provenance.json",
+          "lineStart": 871,
+          "lineEnd": 889,
+          "role": "records-ozone-omission-as-step032-design"
+        }
+      ],
+      "experimentIds": [
+        "EXPERIMENT-A32-000001",
+        "EXPERIMENT-A32-000028",
+        "EXPERIMENT-A32-000030",
+        "EXPERIMENT-A32-000035"
+      ],
+      "materialIds": [
+        "MATERIAL-EXT-000014",
+        "MATERIAL-EXT-000015"
+      ],
+      "contradictionIds": [
+        "CONTRADICTION-A32-000013"
+      ],
+      "relatedFactSemanticKeys": [
+        "step032:model-profile:ozone-disabled"
+      ],
+      "disposition": "must-rederive",
+      "blockers": [
+        "No independently accepted named ozone-enabled Reference profile and end-to-end oracle result exist."
+      ],
+      "nextAction": "Keep no-ozone as an explicit comparison profile and separately define, source, and validate any ozone-enabled Earth profile.",
+      "reviewStatus": "comparison-profile-boundary-explicit-enabled-profile-unresolved"
+    },
+    {
+      "semanticKey": "step032:profile:no-ground-comparison-only",
+      "statement": "Ground coupling off is retained only as the named Step 032 Figure 1 comparison profile; historical subjective similarity cannot establish physical insignificance, and no-ground versus sourced lower-boundary variants lack a unit-bearing numeric ablation and accepted tolerance.",
+      "kind": "ground-profile-disposition-gap",
+      "domain": "step032-model-profile",
+      "owner": "algorithm32-reference-profile",
+      "authorityRole": "physics-provenance-gap",
+      "structuredValue": {
+        "step032ComparisonProfile": "ground-coupling-off",
+        "historicalEvidence": "subjective-visual-similarity",
+        "physicalInsignificanceEstablished": false,
+        "numericPreDisplayAblation": "absent",
+        "acceptedTolerance": "absent"
+      },
+      "supportStatus": "source-backed",
+      "implementationStatus": "not-applicable",
+      "decisionStatus": "provisional",
+      "verificationLayer": "static-code-observation",
+      "citations": [
+        {
+          "path": "agents/topics/apps/flat/plans/atmosphere-cleanroom-design/experiment-032-algorithm.md",
+          "lineStart": 13,
+          "lineEnd": 16,
+          "role": "identifies-step032-as-the-no-ground-spectral-transport-path"
+        },
+        {
+          "path": "agents/topics/apps/flat/plans/atmosphere-cleanroom-design/experiment-032-algorithm.md",
+          "lineStart": 470,
+          "lineEnd": 491,
+          "role": "separates-inactive-ground-controls-from-step032-profile"
+        },
+        {
+          "path": "tmp/atmosphere/bruneton_start_fresh/032-figure1-four-view-source-k-no-ground-baseline/provenance.json",
+          "lineStart": 871,
+          "lineEnd": 889,
+          "role": "records-ground-coupling-omission-as-step032-design"
+        }
+      ],
+      "experimentIds": [
+        "EXPERIMENT-A32-000001",
+        "EXPERIMENT-A32-000033",
+        "EXPERIMENT-A32-000034",
+        "EXPERIMENT-A32-000043",
+        "EXPERIMENT-A32-000046",
+        "EXPERIMENT-A32-000047"
+      ],
+      "materialIds": [
+        "MATERIAL-EXT-000014",
+        "MATERIAL-EXT-000015"
+      ],
+      "contradictionIds": [
+        "CONTRADICTION-A32-000014"
+      ],
+      "relatedFactSemanticKeys": [
+        "step032:model-profile:ground-coupling-off"
+      ],
+      "disposition": "must-rederive",
+      "blockers": [
+        "No independent numeric lower-boundary ablation with explicit spectral-radiance units and accepted tolerance exists."
+      ],
+      "nextAction": "Compare no-ground, direct-ground, and Sun-plus-sky lower-boundary variants against an independent CPU oracle before selecting any target Reference profile.",
+      "reviewStatus": "comparison-profile-boundary-explicit-physical-ablation-unresolved"
+    }
+  ],
+  "contradictionUpdates": [
+    {
+      "id": "CONTRADICTION-A32-000011",
+      "summary": "The production a32-poc-color-032 registry points to three historical POC files. Exact Git history now pins their completed POC parent and production code-introduction commit with paired blobs, but current path pointers remain mutable or deleted and the commit does not supply per-fact scientific derivation or acceptance authority.",
+      "currentObservation": "Commit e728953ee0288f1f9464b42360c3266b42b01d93 is the direct child of completed POC commit cf3e00afbec1e81da66a062642dc233c32b54194 and introduces production canonical-data, color-display, shader-contribution, and registry counterparts. The frozen worktree deletes the original POC shader path, and surviving equality or commit ancestry establishes code lineage only.",
+      "resolutionStatus": "partially-resolved-code-introduction-pinned-per-fact-authority-unresolved",
+      "requiredAction": "Replace mutable path-only pointers with immutable commit:path locators, then independently rederive and accept each production physics fact against a pinned CPU Reference before making any shader-conformance claim.",
+      "blockers": [
+        "No per-fact scientific promotion or acceptance decision is attached to the code-introduction commit.",
+        "Current registry text does not distinguish physics inputs from display and shader contribution claims at atomic granularity.",
+        "The CPU Reference has not been independently rederived against the Step 032 source packet and explicit units, tolerances, and convergence bounds."
+      ]
+    }
+  ]
+}

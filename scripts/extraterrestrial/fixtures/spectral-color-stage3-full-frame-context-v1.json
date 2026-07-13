@@ -1,0 +1,32 @@
+{
+  "schemaId": "spectral-color-stage3-full-frame-context-fixture-v1",
+  "stage1Fixture": {
+    "path": "scripts/extraterrestrial/fixtures/spectral-color-stage1-ledger-v1.json",
+    "sha256": "a38a9eb84c5bd068b53df37467de974a121ac19d6af2de492b087d7153a810df"
+  },
+  "bridgeFixture": {
+    "path": "scripts/extraterrestrial/fixtures/spectral-color-stage2b-reference-bridge-v1.json",
+    "sha256": "ddd6dc488737cf06db4243d42bbdedc55635036d36cadb1b9971ac4c89632de2"
+  },
+  "outputFixture": {
+    "path": "scripts/extraterrestrial/fixtures/spectral-color-stage2b-output-proof-v1.json",
+    "sha256": "6ef911303872d067da43b0f79b57dafc12c008eb0217ab73bed2d3d714f76e7b"
+  },
+  "candidateFixture": {
+    "path": "scripts/extraterrestrial/fixtures/spectral-color-stage2b-colorfulness-candidates-v1.json",
+    "sha256": "cc7e4d81e4b6dba8d345ed14e539873df9b3b7c3541638a3d0ce0a74f628ba00"
+  },
+  "conditions": ["sunset-minus-60", "sunset-minus-30", "sunset"],
+  "viewport": {
+    "widthPixels": 481,
+    "heightPixels": 271,
+    "verticalFieldOfViewDegrees": 15
+  },
+  "expectedTransformId": "stage2b-normal-q-log-preserve-m-fixed-q-boundary-v1",
+  "tolerances": {
+    "fullyVisibleCenterLinearRgbRelative": 0.001,
+    "horizonCenterLinearRgbRelativeRange": [0.05, 0.1],
+    "rgbBoundsAbsolute": 1e-12,
+    "negativeXyzAbsolute": 0.001
+  }
+}

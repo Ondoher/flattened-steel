@@ -1,0 +1,20 @@
+{
+  "runner": "er8CpuConvergenceAndPocCleanup",
+  "runnerPath": "scripts/flat/reconciliation/POC/src/runners/er8CpuConvergenceAndPocCleanup.js",
+  "recordId": "065-er8-cpu-convergence-and-poc-cleanup",
+  "expectedRecordDirectory": "tmp/atmosphere/reconciliation/065-er8-cpu-convergence-and-poc-cleanup",
+  "runtime": {
+    "node": "v25.4.0",
+    "v8": "14.1.146.11-node.15",
+    "platform": "win32",
+    "architecture": "x64"
+  },
+  "dependencies": [
+    "056-er6-physical-globe-scene-validation",
+    "060-er8-cpu-convergence-and-poc-cleanup",
+    "064-er8-cpu-convergence-and-poc-cleanup"
+  ],
+  "networkAcquisition": false,
+  "productionImports": false,
+  "flat32RuntimeImports": false
+}

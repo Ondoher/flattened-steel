@@ -1,0 +1,22 @@
+{
+  "schema": "algorithm32-b3-mismatch-map-v1",
+  "subject": "Algorithm32 Paper J3 CPU candidate evaluated with the published paper-comparison physical-input profile",
+  "mismatches": [
+    {
+      "field": "multiple-scattering treatment",
+      "disposition": "Algorithm32 Paper J3 stores and integrates cumulative J1 + J2 + J3 scattering density and stops the recurrence after order 3 rather than resolving libRadtran DISORT's fuller multiple-scattering solution. Aggregate-score proximity does not establish component, order-by-order, or pointwise equality."
+    },
+    {
+      "field": "incident angular quadrature",
+      "disposition": "Algorithm32 Paper J3 uses the pinned 34-direction source-oriented equal-weight Fibonacci incoming quadrature and the separate W27 source-aligned cubed-sphere outgoing reconstruction; the retained libRadtran DISORT calculation uses 16 streams."
+    },
+    {
+      "field": "vertical and path discretization",
+      "disposition": "Algorithm32 Paper J3 uses analytic exponential density profiles, 48 physical altitude nodes, 40 view-path and higher-order transport intervals, and 20 source-transmittance intervals; libRadtran uses its retained layered atmosphere and solver controls."
+    },
+    {
+      "field": "geometry approximation",
+      "disposition": "Algorithm32 Paper J3 uses exact ray intersections with its spherical atmosphere; the retained libRadtran setup is pseudospherical."
+    }
+  ]
+}

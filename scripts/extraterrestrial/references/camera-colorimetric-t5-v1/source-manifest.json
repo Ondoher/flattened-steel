@@ -1,0 +1,109 @@
+{
+  "schemaId": "camera-colorimetric-t5-source-manifest-v1",
+  "acquiredOn": "2026-08-16",
+  "policy": {
+    "spectralDomainNanometers": [380, 780],
+    "sourceInterpolation": "piecewise-linear",
+    "extrapolation": "zero/out-of-support; no endpoint extension",
+    "cameraResponseSemantics": "effective relative R/G/B response; not absolute quantum efficiency",
+    "characterizationIlluminant": "D55",
+    "outputReferenceIlluminant": "D65",
+    "validationIlluminants": ["D55", "D65", "D75"],
+    "excludedIlluminants": {
+      "A": "The official page advertises MD5 6c33a1c3caff2d774f0f2025f3001a56, while the CSV served by its own link hashed to ed0e4effb55d82b950c0912b6278a9d1 on acquisition."
+    }
+  },
+  "sources": [
+    {
+      "path": "Canon_EOS_5D_Mark_IV_380_780_5.json",
+      "url": "https://raw.githubusercontent.com/AcademySoftwareFoundation/rawtoaces-data/e9b8503cf8a0641f40e5345d9757bde60c15f423/data/camera/Canon_EOS_5D_Mark_IV_380_780_5.json",
+      "sha256": "c3d5bc6a271fa2d0270386e27aa5dcf258c64223322a1730b03815497375be29",
+      "bytes": 14143,
+      "license": "Apache-2.0"
+    },
+    {
+      "path": "training_spectral.json",
+      "url": "https://raw.githubusercontent.com/AcademySoftwareFoundation/rawtoaces-data/e9b8503cf8a0641f40e5345d9757bde60c15f423/data/training/training_spectral.json",
+      "sha256": "1b63cc85f7cf521bf80450fc60172a424a551cc690fdb05313b2cfa7aaa66da1",
+      "bytes": 297706,
+      "license": "Apache-2.0"
+    },
+    {
+      "path": "rawtoaces-data-LICENSE",
+      "url": "https://raw.githubusercontent.com/AcademySoftwareFoundation/rawtoaces-data/e9b8503cf8a0641f40e5345d9757bde60c15f423/LICENSE",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+      "bytes": 11357,
+      "license": "Apache-2.0"
+    },
+    {
+      "path": "colour-0.4.6-colorchecker-sds.py",
+      "url": "https://raw.githubusercontent.com/colour-science/colour/v0.4.6/colour/characterisation/datasets/colour_checkers/sds.py",
+      "sha256": "fca45b3c8c3644f361755b56bce1358c4f61737c6a2073603535acdc3233d80d",
+      "bytes": 81371,
+      "license": "BSD-3-Clause"
+    },
+    {
+      "path": "colour-0.4.6-LICENSE",
+      "url": "https://raw.githubusercontent.com/colour-science/colour/v0.4.6/LICENSE",
+      "sha256": "cd9efcd4b6ac5218189d90ffc25f9766f8411e62c5526c452145e1cc8b19baf7",
+      "bytes": 1465,
+      "license": "BSD-3-Clause"
+    },
+    {
+      "path": "CIE_illum_D55.csv",
+      "url": "https://files.cie.co.at/CIE_illum_D55.csv",
+      "sha256": "3e5aa1a8d5514df1928effef1615ab90e16c9a368ccfe513372cd8556c37bf4b",
+      "md5": "8b5678358f265567a0759b9800f17d7f",
+      "bytes": 1177,
+      "doi": "10.25039/CIE.DS.qewfb3kp"
+    },
+    {
+      "path": "CIE_std_illum_D65.csv",
+      "url": "https://files.cie.co.at/CIE_std_illum_D65.csv",
+      "sha256": "e76f210bffff3d552ef7113025da5f325d5dfec200dd4b878b1a2f3a507032cb",
+      "md5": "03d4eb9b837c60671627c946fb534deb",
+      "bytes": 6820,
+      "doi": "10.25039/CIE.DS.hjfjmt59"
+    },
+    {
+      "path": "CIE_illum_D75.csv",
+      "url": "https://files.cie.co.at/CIE_illum_D75.csv",
+      "sha256": "573a08831f2bcdf18a8e333490049e6d0fabaf1d1c0abbc2a49d6247a939b62d",
+      "md5": "fc2ae36ece39ad1729696ab2833bd013",
+      "bytes": 1194,
+      "doi": "10.25039/CIE.DS.9fvcmrk4"
+    },
+    {
+      "path": "CIE_xyz_1931_2deg.csv",
+      "url": "https://files.cie.co.at/CIE_xyz_1931_2deg.csv",
+      "sha256": "fa663e3535a7e0763a745993a1f0a192eb0275ac46ad2d1befd7626841e713c1",
+      "md5": "17cca777db64b17170f06f67ce9d3ab7",
+      "bytes": 24021,
+      "doi": "10.25039/CIE.DS.xvudnb9b"
+    },
+    {
+      "path": "CIE_illum_D55.csv_metadata.json",
+      "url": "https://files.cie.co.at/CIE_illum_D55.csv_metadata.json",
+      "sha256": "b251e00e84528fb947c44d951964c27ffee9835097dbc8502652cbf7a7114385",
+      "bytes": 2751
+    },
+    {
+      "path": "CIE_std_illum_D65.csv_metadata.json",
+      "url": "https://files.cie.co.at/CIE_std_illum_D65.csv_metadata.json",
+      "sha256": "de1ed36015fce537045791505f87f80eed5c508267af384f537ab94f29f01657",
+      "bytes": 2666
+    },
+    {
+      "path": "CIE_illum_D75.csv_metadata.json",
+      "url": "https://files.cie.co.at/CIE_illum_D75.csv_metadata.json",
+      "sha256": "b9531c5383d6a1346c8f1289795b4894dfe4af659f7af42a64a93765e715c8bd",
+      "bytes": 2750
+    },
+    {
+      "path": "CIE_xyz_1931_2deg.csv_metadata.json",
+      "url": "https://files.cie.co.at/CIE_xyz_1931_2deg.csv_metadata.json",
+      "sha256": "03abcaecf4e63d77045ef57c4514b52c8bb1a46dd18e1f93a50044a0f4f481c8",
+      "bytes": 3787
+    }
+  ]
+}

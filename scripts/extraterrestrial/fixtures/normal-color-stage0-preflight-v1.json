@@ -1,0 +1,54 @@
+{
+	"schemaId": "normal-color-stage0-preflight-v1",
+	"location": {
+		"name": "San Jose",
+		"latitudeDegrees": 37.3382,
+		"longitudeDegrees": -121.8863,
+		"observerHeightMeters": 5
+	},
+	"sun": {
+		"sourceId": "sun",
+		"angularRadiusRadians": 0.004675
+	},
+	"conditions": [
+		{
+			"id": "solar-noon",
+			"timeIso": "2024-06-20T20:08:00.000Z",
+			"diskVisible": true
+		},
+		{
+			"id": "sunset-minus-10",
+			"timeIso": "2024-06-21T03:16:03.503Z",
+			"diskVisible": true
+		},
+		{
+			"id": "sunset-plus-120",
+			"timeIso": "2024-06-21T05:26:03.503Z",
+			"diskVisible": false
+		}
+	],
+	"sampling": {
+		"viewportPixels": 33,
+		"verticalFieldOfViewDegrees": 2,
+		"limbRadiusFraction": 0.95,
+		"hemisphereRingCount": 4,
+		"hemisphereAzimuthCount": 8
+	},
+	"execution": {
+		"maximumScatteringOrder": 4,
+		"maximumElapsedMilliseconds": 600000
+	},
+	"tolerances": {
+		"compositionRelative": 0.000002,
+		"compositionAbsolute": 0.0001,
+		"zeroDirectAbsolute": 0.0001,
+		"aimAngularErrorRadians": 0.000001,
+		"observerProjectionRelativeY": 0.05,
+		"observerProjectionDeltaUv": 0.005
+	},
+	"toleranceBasis": {
+		"observerProjectionRelativeY": "The existing Bruneton B1 color gate bounds mean relative luminance error at five percent.",
+		"observerProjectionDeltaUv": "The existing Bruneton B1 color gate bounds worst-ray CIE 1976 chromaticity disagreement at 0.005.",
+		"projectionReference": "Each native bin-average radiance is held constant over its declared bin and integrated against the official one-nanometer CIE 1931 2-degree color-matching functions."
+	}
+}

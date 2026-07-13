@@ -1,0 +1,841 @@
+{
+  "schemaVersion": 1,
+  "familyId": "local-sun-base-fact-family-v1-sha256:221f587130ef9664a2593e1dd8c96dc9709c4e9c67f38d4342d941ccace3f61d",
+  "scientificPayloadSha256": "221f587130ef9664a2593e1dd8c96dc9709c4e9c67f38d4342d941ccace3f61d",
+  "scientificPayload": {
+    "familyKind": "local-sun-base-fact-shell-light-characterization",
+    "familyRevision": "base-fact-family-v1",
+    "authorityLocators": [
+      "agents/topics/algorithm32/cache/local-sun-cache-design.md",
+      "agents/topics/algorithm32/experiments/flat-world-atmosphere-boundary-decision.md",
+      "agents/topics/algorithm32/experiments/local-sun-shell-cache-experiment-plan.md",
+      "agents/topics/algorithm32/experiments/star-flat-local-cache-plan.md",
+      "agents/topics/algorithm32/cache/cache-contract.md",
+      "agents/topics/algorithm32/flat-local/unresolved-research.md"
+    ],
+    "authorityLocatorPolicy": "mutable current-state documents are locators, not family content pins; this scientificPayload is the frozen contract",
+    "claimBoundary": "continuous direct available light versus arithmetic-mean shell-held light under fixed-direct-primary-response-bank-v1; no complete scattering cache or production claim",
+    "world": {
+      "frameId": "north-pole-aeqd-fixed-map-z-up-meters-v1",
+      "mapCenterMeters": [
+        0,
+        0
+      ],
+      "mapRadiusMeters": 20015114.442035925,
+      "atmosphereApexMeters": 100000,
+      "boundaryProfileId": "north-pole-aeqd-whole-flat-world-earth-clear-day-v1",
+      "exactQueryBoundaryClassificationRequired": true,
+      "geometryQueryPacket": {
+        "owner": "geometry",
+        "fields": [
+          "distanceFromSource",
+          "flatAltitudeMeters",
+          "exactRayLengthMeters",
+          "boundaryClassification"
+        ],
+        "radialConsumerReads": [
+          "distanceFromSource"
+        ],
+        "atmosphereConsumerReads": [
+          "flatAltitudeMeters"
+        ],
+        "worldCoordinateInterpretationByFactTables": false
+      }
+    },
+    "source": {
+      "sourceKey": "algorithm32-star-local-sun-basic",
+      "referenceDistanceMeters": 4800000,
+      "referenceSpectralScale": 1,
+      "radiusMeters": 25749.504,
+      "distanceFalloff": true,
+      "spectralBasis": "canonical-native-15",
+      "cases": [
+        {
+          "id": "centered",
+          "horizontalOffsetMeters": 0,
+          "positionMeters": [
+            0,
+            0,
+            4800000
+          ],
+          "domain": {
+            "rMinMeters": 4700000,
+            "rMaxMeters": 20582633.605245832,
+            "nearestAtmospherePointMeters": [
+              0,
+              0,
+              100000
+            ],
+            "farthestAtmospherePointMeters": [
+              -20015114.442035925,
+              0,
+              0
+            ],
+            "sourceRadiusClampInactive": true
+          }
+        },
+        {
+          "id": "near-center-east-1m",
+          "horizontalOffsetMeters": 1,
+          "positionMeters": [
+            1,
+            0,
+            4800000
+          ],
+          "domain": {
+            "rMinMeters": 4700000,
+            "rMaxMeters": 20582634.577673115,
+            "nearestAtmospherePointMeters": [
+              0.9976590991175913,
+              0,
+              100000
+            ],
+            "farthestAtmospherePointMeters": [
+              -20015114.442035925,
+              0,
+              0
+            ],
+            "sourceRadiusClampInactive": true
+          }
+        },
+        {
+          "id": "near-center-west-1m",
+          "horizontalOffsetMeters": -1,
+          "positionMeters": [
+            -1,
+            0,
+            4800000
+          ],
+          "domain": {
+            "rMinMeters": 4700000,
+            "rMaxMeters": 20582634.577673115,
+            "nearestAtmospherePointMeters": [
+              -0.9976590991175913,
+              0,
+              100000
+            ],
+            "farthestAtmospherePointMeters": [
+              20015114.442035925,
+              0,
+              0
+            ],
+            "sourceRadiusClampInactive": true
+          }
+        },
+        {
+          "id": "production-east-4800km",
+          "horizontalOffsetMeters": 4800000,
+          "positionMeters": [
+            4800000,
+            0,
+            4800000
+          ],
+          "domain": {
+            "rMinMeters": 4705737.689283371,
+            "rMaxMeters": 25275084.663979664,
+            "nearestAtmospherePointMeters": [
+              4788749.990778438,
+              0,
+              94275.75843691826
+            ],
+            "farthestAtmospherePointMeters": [
+              -20015114.442035925,
+              0,
+              0
+            ],
+            "sourceRadiusClampInactive": true
+          }
+        },
+        {
+          "id": "production-west-4800km",
+          "horizontalOffsetMeters": -4800000,
+          "positionMeters": [
+            -4800000,
+            0,
+            4800000
+          ],
+          "domain": {
+            "rMinMeters": 4705737.689283371,
+            "rMaxMeters": 25275084.663979664,
+            "nearestAtmospherePointMeters": [
+              -4788749.990778438,
+              0,
+              94275.75843691826
+            ],
+            "farthestAtmospherePointMeters": [
+              20015114.442035925,
+              0,
+              0
+            ],
+            "sourceRadiusClampInactive": true
+          }
+        },
+        {
+          "id": "outer-east-16000km",
+          "horizontalOffsetMeters": 16000000,
+          "positionMeters": [
+            16000000,
+            0,
+            4800000
+          ],
+          "domain": {
+            "rMinMeters": 4763751.18212533,
+            "rMaxMeters": 36333572.19257342,
+            "nearestAtmospherePointMeters": [
+              15962038.756515045,
+              0,
+              36400.07250881195
+            ],
+            "farthestAtmospherePointMeters": [
+              -20015114.442035925,
+              0,
+              0
+            ],
+            "sourceRadiusClampInactive": true
+          }
+        },
+        {
+          "id": "outer-west-16000km",
+          "horizontalOffsetMeters": -16000000,
+          "positionMeters": [
+            -16000000,
+            0,
+            4800000
+          ],
+          "domain": {
+            "rMinMeters": 4763751.18212533,
+            "rMaxMeters": 36333572.19257342,
+            "nearestAtmospherePointMeters": [
+              -15962038.756515045,
+              0,
+              36400.07250881195
+            ],
+            "farthestAtmospherePointMeters": [
+              20015114.442035925,
+              0,
+              0
+            ],
+            "sourceRadiusClampInactive": true
+          }
+        },
+        {
+          "id": "rim-near-east",
+          "horizontalOffsetMeters": 19915114.442035925,
+          "positionMeters": [
+            19915114.442035925,
+            0,
+            4800000
+          ],
+          "domain": {
+            "rMinMeters": 4798766.599812746,
+            "rMaxMeters": 40217697.33257196,
+            "nearestAtmospherePointMeters": [
+              19867517.808351103,
+              0,
+              1469.449931383133
+            ],
+            "farthestAtmospherePointMeters": [
+              -20015114.442035925,
+              0,
+              0
+            ],
+            "sourceRadiusClampInactive": true
+          }
+        },
+        {
+          "id": "rim-near-west",
+          "horizontalOffsetMeters": -19915114.442035925,
+          "positionMeters": [
+            -19915114.442035925,
+            0,
+            4800000
+          ],
+          "domain": {
+            "rMinMeters": 4798766.599812746,
+            "rMaxMeters": 40217697.33257196,
+            "nearestAtmospherePointMeters": [
+              -19867517.808351103,
+              0,
+              1469.449931383133
+            ],
+            "farthestAtmospherePointMeters": [
+              20015114.442035925,
+              0,
+              0
+            ],
+            "sourceRadiusClampInactive": true
+          }
+        }
+      ]
+    },
+    "representation": {
+      "radial": {
+        "kind": "shared-inverse-square-boundaries",
+        "rowCount": "N + 1",
+        "rowSchema": [
+          "radiusMeters:float64"
+        ],
+        "ordinaryLookup": "half-open; floor(N*u) for u < 1 and N-1 at u = 1"
+      },
+      "atmosphere": {
+        "kind": "selected-native-48-flat-altitude-adaptation",
+        "rowCount": 48,
+        "coordinatesMeters": [
+          2,
+          1875,
+          3125,
+          4375,
+          5625,
+          6875,
+          8124.999999999999,
+          9375,
+          10625,
+          11875,
+          13125,
+          14375,
+          15625.000000000002,
+          16875,
+          18125,
+          19375,
+          20625,
+          21875,
+          23125,
+          24375,
+          25625,
+          26875,
+          28125,
+          29375,
+          30624.999999999996,
+          31875,
+          33125,
+          34375,
+          35625,
+          36875,
+          38125,
+          39375,
+          40625,
+          41875,
+          43125,
+          44375,
+          45625,
+          46875,
+          48125,
+          49375,
+          50625,
+          51875,
+          53125,
+          54375,
+          55625,
+          56875,
+          58125,
+          59375
+        ],
+        "rowSchema": [
+          "coordinate:float64",
+          "rayleighDensity:float64",
+          "mieDensity:float64"
+        ],
+        "lookupId": "linear-actual-neighboring-nodes-v1",
+        "descriptorId": "algorithm32-native-48-position-v1",
+        "descriptorContentSha256": "4607a46195252a09df23c6b1684921146fcd3a0beaf68ac40da5ce228ae8428e",
+        "semanticAdaptation": "coordinates are meters above selected flat ground without rescaling to the 100 km apex",
+        "decidingAxis": false
+      },
+      "aroundShellAxis": false,
+      "jointRadialAtmosphereMaterialization": false,
+      "packedBinary64": {
+        "headerBytes": 8,
+        "equation": "8N + 1,168",
+        "constructionPeakEquation": "packed resident bytes plus constant implementation overhead"
+      }
+    },
+    "light": {
+      "directEvaluator": "referenceSpectralScale * (referenceDistanceMeters / max(radiusMeters, sourceRadiusMeters, Number.EPSILON))^2",
+      "shellRuleId": "arithmetic-mean-boundary-light-v1",
+      "shellHeldLight": "(shellEntryLightLevel + shellExitLightLevel) / 2",
+      "queryTimeLightInterpolationPermitted": false
+    },
+    "perception": {
+      "projectionId": "fixed-direct-primary-response-bank-v1",
+      "responseAnchorMeters": [
+        0,
+        0,
+        5
+      ],
+      "responseRoles": [
+        {
+          "id": "fixture-zenith",
+          "baseDirection": [
+            0,
+            0,
+            1
+          ]
+        },
+        {
+          "id": "fixture-source-bearing-45deg",
+          "baseDirection": [
+            0.7071067811865476,
+            0,
+            0.7071067811865476
+          ]
+        },
+        {
+          "id": "fixture-opposite-45deg",
+          "baseDirection": [
+            -0.7071067811865476,
+            0,
+            0.7071067811865476
+          ]
+        },
+        {
+          "id": "fixture-north-horizon",
+          "baseDirection": [
+            0,
+            1,
+            0
+          ]
+        },
+        {
+          "id": "fixture-source-bearing-horizon",
+          "baseDirection": [
+            1,
+            0,
+            0
+          ]
+        }
+      ],
+      "negativeSourceCaseDirectionRule": "joint reflection M_x([x,y,z]) = [-x,y,z] applied to each declared base direction",
+      "centeredSourceSymmetry": "base directions retained; rotations about the vertical source axis are structural checks",
+      "pathIntervalCount": 15,
+      "sourceTransmittanceIntervalCount": 15,
+      "e8Boundary": "canonical-spectral-radiance-to-display-linear-srgb",
+      "e2Metric": "Delta E_ITP",
+      "referenceUncertainty": 0,
+      "displayTransformUncertainty": 1.485163121927885e-10,
+      "strictLimit": 1,
+      "displayConditions": {
+        "whiteCdPerSquareMeter": 80,
+        "viewerObservedBlackCdPerSquareMeter": 0.2,
+        "imageBackgroundCdPerSquareMeter": 16,
+        "surroundCdPerSquareMeter": 4.1,
+        "ambientLux": 64,
+        "whitePoint": "D65"
+      }
+    },
+    "sampling": {
+      "innerShellLimit": 64,
+      "innerPhases": [
+        {
+          "tag": "1of64",
+          "numerator": 1,
+          "denominator": 64,
+          "value": 0.015625
+        },
+        {
+          "tag": "1of16",
+          "numerator": 1,
+          "denominator": 16,
+          "value": 0.0625
+        },
+        {
+          "tag": "1of4",
+          "numerator": 1,
+          "denominator": 4,
+          "value": 0.25
+        },
+        {
+          "tag": "1of2",
+          "numerator": 1,
+          "denominator": 2,
+          "value": 0.5
+        },
+        {
+          "tag": "3of4",
+          "numerator": 3,
+          "denominator": 4,
+          "value": 0.75
+        },
+        {
+          "tag": "15of16",
+          "numerator": 15,
+          "denominator": 16,
+          "value": 0.9375
+        },
+        {
+          "tag": "63of64",
+          "numerator": 63,
+          "denominator": 64,
+          "value": 0.984375
+        }
+      ],
+      "wholeRangeShellLimit": 64,
+      "wholeRangePhases": [
+        "1of64",
+        "1of2",
+        "63of64"
+      ],
+      "outerShellLimit": 8,
+      "outerPhases": [
+        "1of64",
+        "1of2",
+        "63of64"
+      ],
+      "boundarySides": [
+        "entry",
+        "exit"
+      ],
+      "semanticDeduplication": true,
+      "maximumComparisonsPerCount": 41670,
+      "maximumComparisonsAcrossSequence": 662760,
+      "percentileRule": "nearest-rank: sorted[max(0, ceil(p*n)-1) over finite interior comparisons",
+      "qualificationMaximumRecords": 92,
+      "qualification": {
+        "stage1GeometryFixtureIds": [
+          "B01",
+          "B02",
+          "B03",
+          "B04",
+          "B05",
+          "B06",
+          "B07",
+          "B08",
+          "B09",
+          "B10",
+          "B11",
+          "B12",
+          "B13",
+          "B14",
+          "B15",
+          "B16",
+          "B17",
+          "B18"
+        ],
+        "stage2PositionFixtureIds": [
+          "C01",
+          "C02",
+          "C03",
+          "C04"
+        ],
+        "stage2PositionResponseCrossProductCount": 20,
+        "sourceTransformCaseIds": [
+          "centered",
+          "near-center-east-1m",
+          "near-center-west-1m",
+          "production-east-4800km",
+          "production-west-4800km",
+          "outer-east-16000km",
+          "outer-west-16000km",
+          "rim-near-east",
+          "rim-near-west"
+        ],
+        "normalizedResponseBankCount": 45,
+        "maximumRecordCount": 92,
+        "deciding": false
+      },
+      "decidingSamplesUntouchedUntilQualificationPasses": true
+    },
+    "stopping": {
+      "countSequence": [
+        1,
+        2,
+        4,
+        8,
+        16,
+        32,
+        64,
+        128,
+        256,
+        512,
+        1024,
+        2048,
+        4096,
+        8192,
+        16384,
+        32768,
+        65536,
+        131072,
+        262144,
+        524288,
+        1048576,
+        1484977
+      ],
+      "minimumInnerWidthMeters": 1.5,
+      "widthMaximumShellCount": 1484977,
+      "firstStop": "first completed count in countSequence with every required sample and structural control satisfying totalDelta < 1",
+      "secondStop": "completed widthMaximumShellCount when no earlier count passed",
+      "operationalFailureIsScientificStop": false,
+      "finalCompletedCountSummaryLength": 5
+    },
+    "runPolicy": {
+      "lane": "algorithm32-star",
+      "immutableNumberedRuns": true,
+      "manifestRequiredForEveryRun": true,
+      "qualificationRequiredBeforeDecidingAccess": true,
+      "oneCountPerDecidingRun": true,
+      "cacheFieldConstructionPermitted": false,
+      "gpuExecutionPermitted": false,
+      "browserExecutionPermitted": false,
+      "renderingPermitted": false,
+      "applicationExecutionPermitted": false,
+      "productionModificationPermitted": false,
+      "commands": {
+        "freeze": "npm run freeze:local-sun-shell-cache:family",
+        "focusedValidation": "npm run test:local-sun-shell-cache:family"
+      },
+      "environmentCapture": "run-record environment.json plus command.txt and complete source hashes",
+      "completeness": "every required sample and structural control has one finite retained result",
+      "terminalStates": [
+        "accepted",
+        "rejected",
+        "failed",
+        "interrupted"
+      ],
+      "perSampleFields": [
+        "familyId",
+        "runId",
+        "shellCount",
+        "shellIndex",
+        "inverseSquarePhase",
+        "lookupOwnerOrBoundarySide",
+        "sourceCaseId",
+        "responseRoleId",
+        "coverageRoles",
+        "sampleId",
+        "sampleRadiusMeters",
+        "responseBankIdentity",
+        "directLightLevel",
+        "shellHeldLightLevel",
+        "signedLightDelta",
+        "absoluteLightDelta",
+        "directComparisonRadiance",
+        "shellHeldComparisonRadiance",
+        "directDisplayLinearSrgb",
+        "shellHeldDisplayLinearSrgb",
+        "directItp",
+        "shellHeldItp",
+        "observedDeltaEItp",
+        "totalDeltaEItp",
+        "passed"
+      ],
+      "perCountFields": [
+        "shellCount",
+        "innerWidthBySourceCase",
+        "familyMinimumInnerWidthMeters",
+        "controllingSourceCaseId",
+        "factBytes",
+        "requiredSampleCount",
+        "completedSampleCount",
+        "maximumTotalDeltaEItp",
+        "p99TotalDeltaEItp",
+        "p95TotalDeltaEItp",
+        "minimumSignedLightDelta",
+        "maximumSignedLightDelta",
+        "maximumAbsoluteLightDelta",
+        "stratifiedMaxima",
+        "failedSampleCount",
+        "worstSampleId",
+        "perceptionLimitMargin",
+        "structuralControlsPassed",
+        "fullySuccessful"
+      ]
+    }
+  },
+  "sourceClosureKind": "explicit-complete-step1-source-closure-v1",
+  "sourceClosure": [
+    {
+      "path": "references/downloads/cie-1931-2deg/CIE_xyz_1931_2deg.csv",
+      "byteLength": 24021,
+      "sha256": "fa663e3535a7e0763a745993a1f0a192eb0275ac46ad2d1befd7626841e713c1"
+    },
+    {
+      "path": "references/results/experiments/e2-display-referenced-convergence/result.md",
+      "byteLength": 53156,
+      "sha256": "43f4330318a7c3cb671f80d8c4abfb29954b31578abc5e1b7cd888871a45d31e"
+    },
+    {
+      "path": "references/results/experiments/e8-spectral-to-rgb-boundary-correctness/result.md",
+      "byteLength": 12403,
+      "sha256": "fce3c62e7542f869f272ededdb5a5777bfa95ce18ac05b8fe43f43732c186938"
+    },
+    {
+      "path": "scripts/algorithm32-star/cases/flat-local-dome-cache-index-stage1-matrix-v1.json",
+      "byteLength": 12556,
+      "sha256": "903b3b0dbeaabe612b8298fca8eaac335815655acafd6974bf514e8d108fda6b"
+    },
+    {
+      "path": "scripts/algorithm32-star/cases/flat-local-dome-cache-index-stage2-matrix-v1.json",
+      "byteLength": 14791,
+      "sha256": "a5743f611069b4ad527fa2e0e7112ca3df0d3a91c28efaa9c8c71dad411ea6d7"
+    },
+    {
+      "path": "scripts/algorithm32-star/cases/flat-world-atmosphere-boundary-profile-v1.json",
+      "byteLength": 5520,
+      "sha256": "59241f0ada85b08ea8264f36d31317dbd01a3ad0c784d21434b7ca27ef0af46c"
+    },
+    {
+      "path": "scripts/algorithm32-star/cases/local-sun-basic.js",
+      "byteLength": 2731,
+      "sha256": "7cc8e5735b9ba5491c8e2646c2322363cfd9c993dd7a4c27da15a19d2b06ac09"
+    },
+    {
+      "path": "scripts/algorithm32-star/experimental-lane-rules.md",
+      "byteLength": 9584,
+      "sha256": "fbfa8b958869e2aad0f9a791c572ebe20a6499ba700d21ea2628e0531fa4100b"
+    },
+    {
+      "path": "scripts/algorithm32-star/package-lock.json",
+      "byteLength": 618,
+      "sha256": "402b84ec01678eac34718395113bd860b09e3c1bbe4e2e1fbb2add6b4cf5f6ff"
+    },
+    {
+      "path": "scripts/algorithm32-star/package.json",
+      "byteLength": 3912,
+      "sha256": "2a1a8717d07f784f9b1236ac378d906b55dbff821c1d0a9faf2cfa54bc77ff05"
+    },
+    {
+      "path": "scripts/algorithm32-star/run-local-sun-shell-cache-characterization.js",
+      "byteLength": 9395,
+      "sha256": "e36c956656cb2c0c24857f025a9d6e316b4c249710019807354202e4e1d8a18a"
+    },
+    {
+      "path": "scripts/algorithm32-star/run-local-sun-shell-cache-family-tests.js",
+      "byteLength": 5977,
+      "sha256": "7665ab9589f7fab155cb38613d461109aaf04acd5abb423b60e89916ead19a2c"
+    },
+    {
+      "path": "scripts/algorithm32-star/src/cache/l1-field.js",
+      "byteLength": 2810,
+      "sha256": "70a86768f7185c138594392f0e8f1b34ccacc82981096bcdeef2753469f9c91e"
+    },
+    {
+      "path": "scripts/algorithm32-star/src/flat-local-dome-cache-index/FlatWorldAtmosphereDomain.js",
+      "byteLength": 36805,
+      "sha256": "09e75d2d1b8d24bb8192673c11280edc0acf9c51363bf4eb692627e560359af3"
+    },
+    {
+      "path": "scripts/algorithm32-star/src/flat-local-dome-cache-index/FlatWorldAtmosphereTransportGeometry.js",
+      "byteLength": 11461,
+      "sha256": "c10dec6bf54a93bb7ade53aad2697419f4ce0e947456b2556d2bc043b8918e8f"
+    },
+    {
+      "path": "scripts/algorithm32-star/src/local-sun-shell-cache/BaseFactFamilyContract.js",
+      "byteLength": 22053,
+      "sha256": "36a89bb81adaf37dbf3d4b39e5d3c4540e114e293cae65c3d424fe26ba7720ad"
+    },
+    {
+      "path": "scripts/algorithm32-star/src/local-sun-shell-cache/BaseFactFamilyContract.test.js",
+      "byteLength": 4749,
+      "sha256": "760915dcfd94cbc4b9e98f316446291bce52aedbc9b19554cca478a4aae934d1"
+    },
+    {
+      "path": "scripts/algorithm32-star/src/local-sun-shell-cache/Stage3Characterization.js",
+      "byteLength": 12403,
+      "sha256": "cf2b97af2da41b143408dc890feafd3834df54d6079197ba14e5e570931b0c6c"
+    },
+    {
+      "path": "scripts/algorithm32-star/src/local-sun-shell-cache/base-fact-family-freeze.js",
+      "byteLength": 2634,
+      "sha256": "447f8bc7d799e92e115a94abc1ef9c0abe83d9c40a96d401fe22c9758e9c7b33"
+    },
+    {
+      "path": "scripts/algorithm32-star/src/local-sun-shell-cache/base-fact-family-validation.js",
+      "byteLength": 5709,
+      "sha256": "ec967a90e942ecc453280523df02df47dddbf74d562a122b602c594dadb39c6b"
+    },
+    {
+      "path": "scripts/algorithm32-star/src/model/CanonicalAtmosphere.js",
+      "byteLength": 7275,
+      "sha256": "005c9d69d0b4f8f368e336f0e4624938e28cc939bd69bd67bbde9fc6759bef06"
+    },
+    {
+      "path": "scripts/algorithm32-star/src/model/LocalPointSun.js",
+      "byteLength": 4805,
+      "sha256": "198dec6140cfea317546733281fa96c74d4e79fff6031ff7a5406c1e1562366a"
+    },
+    {
+      "path": "scripts/algorithm32-star/src/model/vector3.js",
+      "byteLength": 1950,
+      "sha256": "d8788c9ce643f463e41a4de801f0feb7c53e8cd502c4e087ba67af59bec2f213"
+    },
+    {
+      "path": "scripts/algorithm32-star/src/output/spectral-to-rgb.js",
+      "byteLength": 4299,
+      "sha256": "e55fa94464c506e6bdb3a664196bf9763759d5f22709577f4b0918deeed629fc"
+    },
+    {
+      "path": "scripts/algorithm32-star/src/run-record/allocate-run-directory.js",
+      "byteLength": 6385,
+      "sha256": "aa8253721c9115f215671b3d6c695139ee9380387b2694601d7a1499615fa0a9"
+    },
+    {
+      "path": "scripts/algorithm32-star/src/run-record/artifact-manifest.js",
+      "byteLength": 6827,
+      "sha256": "8da24510dbea0ebe2a59ef88519c2cdd4b8ad6ae9d8279210a529203fa287eab"
+    },
+    {
+      "path": "scripts/algorithm32-star/src/run-record/index.js",
+      "byteLength": 596,
+      "sha256": "2389d022e68159be6ae5c823bcd835aed7b596232f7581faeedcaaa59d5cee71"
+    },
+    {
+      "path": "scripts/algorithm32-star/src/run-record/interruption-handler.js",
+      "byteLength": 4066,
+      "sha256": "434a08720eef91c5dd647c443fa218ccd818b6e51039f14486d4ca73eb5f0c68"
+    },
+    {
+      "path": "scripts/algorithm32-star/src/run-record/source-file-hashes.js",
+      "byteLength": 1745,
+      "sha256": "6b5e19d4c339e4e59c726f875238bd8a4cd807b379a97dd85b88d9ad5b066b66"
+    },
+    {
+      "path": "scripts/algorithm32-star/src/run-record/write-run-record.js",
+      "byteLength": 10749,
+      "sha256": "4a459a9714676f7522d00f5fac910f9a5a3193243e1930b67c842e4236dd6f1d"
+    },
+    {
+      "path": "scripts/algorithm32-star/src/spectral/SpectralPacket.js",
+      "byteLength": 7534,
+      "sha256": "8491c90f4673b3486890c4fe3b41c0e451998c3a6e6ef823e544929f3052ee57"
+    },
+    {
+      "path": "scripts/algorithm32-star/src/spectral/canonical-basis.js",
+      "byteLength": 2883,
+      "sha256": "1c94db577042d24d5bf48e9c7a0c5868c092514a343a27ff3b7c66970981ac0a"
+    },
+    {
+      "path": "scripts/algorithm32-star/src/spectral/spectral-math.js",
+      "byteLength": 2741,
+      "sha256": "e3350346ff3e0bee9d0511c1073625c09916d82f038b24c3e1f70a85773a08b6"
+    },
+    {
+      "path": "scripts/algorithm32-star/src/transport/SpectralCalculator.js",
+      "byteLength": 9009,
+      "sha256": "66692a81df51ba0c962f5dc7846619d5094e23068d3b15d28cdd698bdd33c9ea"
+    },
+    {
+      "path": "scripts/algorithm32-star/src/transport/path-quadrature.js",
+      "byteLength": 1634,
+      "sha256": "4f99e6d148ecda73faa4f96925f105a67c5192e51e1cdd2de9b6b9ae4c87086e"
+    },
+    {
+      "path": "scripts/experiments/e2-display-referenced-convergence/run.js",
+      "byteLength": 22100,
+      "sha256": "97e987f9bf2adb444adf87b6228cf26d023e07565ee12cea828e0c32d8de40e7"
+    },
+    {
+      "path": "src/algorithm32/domains/SphericalNativePositionDomain.js",
+      "byteLength": 4946,
+      "sha256": "ed632e12c36345803346074e1279e2087a4447206fae5d0d0bcbdb998cd2cab9"
+    },
+    {
+      "path": "src/algorithm32/geometries/SphericalEarthGeometry.js",
+      "byteLength": 91990,
+      "sha256": "0379ec6dd9ac29a13e81dfea5e759524df76819de018a202ce0677f838798b41"
+    }
+  ],
+  "freezeProcedure": {
+    "runner": "scripts/algorithm32-star/src/local-sun-shell-cache/base-fact-family-freeze.js",
+    "serialization": "JSON.stringify(manifest, null, 2) plus LF",
+    "fullManifestDigest": "agents/topics/algorithm32/experiments/local-sun-shell-cache-inputs/base-fact-family-v1.json.sha256 contains SHA-256 of exact manifest bytes"
+  }
+}

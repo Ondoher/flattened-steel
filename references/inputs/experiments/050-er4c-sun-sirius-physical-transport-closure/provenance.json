@@ -1,0 +1,551 @@
+{
+  "runner": "er4cSunSiriusPhysicalTransportClosure",
+  "recordId": "050-er4c-sun-sirius-physical-transport-closure",
+  "expectedRecordDirectory": "tmp/atmosphere/reconciliation/050-er4c-sun-sirius-physical-transport-closure",
+  "runtime": {
+    "node": "v25.4.0",
+    "v8": "14.1.146.11-node.15",
+    "platform": "win32",
+    "architecture": "x64"
+  },
+  "sourceOwnership": {
+    "canonicalSolarPacketFingerprint": "2eac05ad96981953570fb80969d7186e31388d22a45fe2157d388d6b2ddaa17e",
+    "canonicalSolarRetainedProvenanceFixtureIdentity": {
+      "path": "scripts/flat/reconciliation/POC/src/external-celestial-sources/fixtures/astmg173.zip",
+      "byteLength": 25833,
+      "sourceHashSha256": "de6ed831cd7426d9a7147d5c0a48b1e67a483cb7f8ecd6d3ae846848154a5657",
+      "role": "provenance-only; runtime values remain owned by the canonical packet"
+    },
+    "siriusPacketFingerprint": "2610eca38a1cbbac642d2caada1dcbd99122e9943463bd7ae7853f8e94ba2183",
+    "basisFingerprint": "a666befc1789ebd9565d6c9a282613c8a3f4523c32248a5ec1de23b617a73b79",
+    "duplicateSolarRuntimeOwner": false,
+    "calspecRetainedFixtureIdentity": {
+      "path": "scripts/flat/reconciliation/POC/src/external-celestial-sources/fixtures/sirius_stis_005.fits",
+      "byteLength": 282240,
+      "sourceHashSha256": "1349da7b8b59ad035aefea8d7948f552b41b3897d07e5ad82ca162a53af97271"
+    }
+  },
+  "fixtureManifest": {
+    "manifestVersion": 3,
+    "canonicalSolar": {
+      "byteLength": 25833,
+      "fileName": "astmg173.zip",
+      "quantity": "spectral-irradiance-density",
+      "rawPayloadRole": "Provenance/audit payload only; it does not replace or fork the accepted runtime owner.",
+      "runtimeOwner": "scripts/flat/reconciliation/POC/src/constants/consts.js#CANONICAL_SPECTRAL_CHANNELS",
+      "sourceColumn": "Etr W*m-2*nm-1",
+      "sourceHashSha256": "de6ed831cd7426d9a7147d5c0a48b1e67a483cb7f8ecd6d3ae846848154a5657",
+      "sourceId": "algorithm32-canonical-astm-g173-etr",
+      "sourcePage": "https://www.nrel.gov/grid/solar-resource/spectra-am1.5",
+      "sourceVersion": "accepted-15-channel-center-interpolation-v1",
+      "tableEntry": "ASTMG173.csv",
+      "tableTitle": "ASTM G173-03 Reference Spectra Derived from SMARTS v. 2.9.2",
+      "units": "W m^-2 nm^-1"
+    },
+    "siriusCalspec": {
+      "byteLength": 282240,
+      "catalogRoundedMaximumAngstroms": 2996862.55,
+      "contentType": "image/fits",
+      "conversionFactor": 0.01,
+      "convertedUnits": "W m^-2 nm^-1",
+      "dataQualityPolicy": "Use DATAQUAL=1 only; fail if a canonical-bin interval needs another row.",
+      "documentationUrl": "https://www.stsci.edu/hst/instrumentation/reference-data-for-calibration-and-tools/astronomical-catalogs/calspec",
+      "doi": "10.17909/t9-khb7-4049",
+      "expectedMaximumAngstroms": 2996862.5500922,
+      "expectedMinimumAngstroms": 1150.2,
+      "expectedPedigree": "INFLIGHT 1997 to 2022",
+      "expectedRowCount": 8970,
+      "expectedTargetId": "SIRIUS",
+      "fileName": "sirius_stis_005.fits",
+      "httpEtag": "44e80-5ebf9ccbfd1ec",
+      "httpLastModified": "Thu, 27 Oct 2022 01:09:58 GMT",
+      "mutableAliasProhibited": "https://archive.stsci.edu/hlsps/reference-atlases/cdbs/current_calspec/sirius_stis_005.fits",
+      "originalUnits": "erg s^-1 cm^-2 Angstrom^-1",
+      "pinnedUrl": "https://archive.stsci.edu/hlsps/reference-atlases/cdbs/calspec/sirius_stis_005.fits",
+      "quantity": "spectral-irradiance-density",
+      "sourceHashSha256": "1349da7b8b59ad035aefea8d7948f552b41b3897d07e5ad82ca162a53af97271",
+      "sourceId": "stsci-calspec-sirius",
+      "sourceUsePolicy": "Absolute Earth-observer F_lambda; never apply a second visual-magnitude scale.",
+      "sourceVersion": "sirius_stis_005",
+      "uncertaintyQualification": "Retain STATERROR and SYSERROR separately; nominal 1% systematics may understate uncertainty for saturated bright-star observations.",
+      "visibleSegment": "Measured STIS segment 1675..10200 Angstrom covers all canonical bins.",
+      "wavelengthState": "vacuum; composite already adjusted for radial velocity -6.0 km/s"
+    },
+    "tsis1HsrsV2": {
+      "byteLength": 1298915,
+      "commonSupportGateNanometers": [
+        360,
+        830
+      ],
+      "datasetDoi": "10.25980/ta3f-7h90",
+      "fileName": "tsis1_hsrs_1nm.csv",
+      "paperDoi": "10.1029/2022EA002637",
+      "pinnedUrl": "https://lasp.colorado.edu/lisird/latis/dap/tsis1_hsrs_1nm.csv",
+      "quantity": "spectral-irradiance-density",
+      "referenceRole": "Independent modern solar absolute-scale comparison; never a second runtime Sun owner.",
+      "sampleCount": 25281,
+      "sourceHashSha256": "1cf3b07e6ac9669c429ad7ce9e92d50dfd741422efcfffa3d1e0eeb5f901616f",
+      "sourceId": "lasp-tsis1-hybrid-solar-reference-spectrum",
+      "sourceVersion": "HSRS-v2-2022EA002637",
+      "uncertaintyPolicy": "Integrate the published standard-uncertainty density as fully correlated for a conservative common-support bound.",
+      "uncertaintyUnits": "W m^-2 nm^-1",
+      "units": "W m^-2 nm^-1",
+      "wavelengthSupportNanometers": [
+        202,
+        2730
+      ]
+    },
+    "rieke2023SiriusAbsoluteCalibration": {
+      "byteLength": 1262848,
+      "fileName": "rieke-2023-absolute-calibration-iii.pdf",
+      "msxReference": {
+        "coefficientSource": "Table 3, MSX row",
+        "excludedBrackettGammaMicrometers": [
+          2.14,
+          2.18
+        ],
+        "fitWindowMicrometers": [
+          2,
+          2.31
+        ],
+        "fluxWattsPerSquareCentimeterPerMicrometer": 1.52e-13,
+        "pivotWavelengthMicrometers": 2.1603,
+        "standardUncertaintyWattsPerSquareCentimeterPerMicrometer": 2.1e-15
+      },
+      "pinnedUrl": "https://openresearch-repository.anu.edu.au/bitstreams/7566b264-4d1e-48c6-92db-871815597356/download",
+      "publicationDoi": "10.3847/1538-3881/ac9f1b",
+      "referenceRole": "Independent Sirius absolute-scale anchors; does not validate every canonical spectral channel.",
+      "sourceHashSha256": "752967e0ca7d13997824bbe2894b8bc625ddc9c4b81c02ef43545fb01039280c",
+      "sourceId": "rieke-2023-sirius-visible-through-mid-infrared-calibration",
+      "sourceVersion": "AJ-165-99-published-2023",
+      "visibleReference": {
+        "coefficientSource": "Table 1",
+        "comparisonWindowNanometers": [
+          554.5,
+          557
+        ],
+        "fluxWattsPerSquareMeterPerNanometer": 1.3436e-10,
+        "standardUncertaintyWattsPerSquareMeterPerNanometer": 8.1e-13,
+        "wavelengthNanometers": 555.75
+      }
+    }
+  },
+  "lunarDependency": {
+    "recordId": "049-er5-lunar-physical-reference-calibration",
+    "claim": "sealed disk-integrated lunar XA-G09 dependency only",
+    "result": {
+      "path": "tmp/atmosphere/reconciliation/049-er5-lunar-physical-reference-calibration/result.json",
+      "sourceHashSha256": "bce00d297c44e943fc47677fb8e829de450e58f5f3fbb30f3201926bdf9453f5",
+      "expectedSourceHashSha256": "bce00d297c44e943fc47677fb8e829de450e58f5f3fbb30f3201926bdf9453f5",
+      "status": "accepted",
+      "lunarPhysicalReferenceStatus": "accepted",
+      "acceptedCriterionCount": 15,
+      "criterionCount": 15
+    },
+    "criteria": {
+      "path": "tmp/atmosphere/reconciliation/049-er5-lunar-physical-reference-calibration/criteria-results.json",
+      "sourceHashSha256": "38f3c23037792051607a0b24b6694638a373d2ac52e0e71cfb7f3480263d3386",
+      "expectedSourceHashSha256": "38f3c23037792051607a0b24b6694638a373d2ac52e0e71cfb7f3480263d3386",
+      "status": "accepted",
+      "acceptedCriterionCount": 15,
+      "criterionCount": 15
+    },
+    "accepted": true,
+    "runnerImported": false,
+    "runnerExecuted": false
+  },
+  "localModuleGraph": {
+    "allowedRoot": "scripts/flat/reconciliation/POC/src",
+    "entries": [
+      "scripts/flat/reconciliation/POC/src/runners/er4cSunSiriusPhysicalTransportClosure.js"
+    ],
+    "externalPackagesIncluded": false,
+    "fileCount": 38,
+    "files": {
+      "scripts/flat/reconciliation/POC/src/atmosphere/CanonicalAtmosphere.js": {
+        "byteLength": 6600,
+        "imports": [
+          "scripts/flat/reconciliation/POC/src/math/vector.js"
+        ],
+        "sha256": "5e8d4cb077b7ab7afc4030453d0838c24199bcd45f2a43fae3d9b1aefa90dd4f"
+      },
+      "scripts/flat/reconciliation/POC/src/calculator/SpectralCalculator.js": {
+        "byteLength": 19791,
+        "imports": [
+          "scripts/flat/reconciliation/POC/src/math/vector.js"
+        ],
+        "sha256": "614c9c880f8fc6d66a216d0512a3e16374a1cfe890c406daa8542d943082219f"
+      },
+      "scripts/flat/reconciliation/POC/src/camera/PerspectiveCameraRaster.js": {
+        "byteLength": 11536,
+        "imports": [
+          "scripts/flat/reconciliation/POC/src/errors/ReconciliationConfigurationError.js",
+          "scripts/flat/reconciliation/POC/src/provenance/stableHash.js"
+        ],
+        "sha256": "c81db9ce12e1db726eb837780712a05eee2ae61d7d2748b1b459126101bad2f3"
+      },
+      "scripts/flat/reconciliation/POC/src/color/BrunetonColorDisplayModel.js": {
+        "byteLength": 18366,
+        "imports": [
+          "scripts/flat/reconciliation/POC/src/constants/consts.js",
+          "scripts/flat/reconciliation/POC/src/math/vector.js"
+        ],
+        "sha256": "123c580878759d91a1c96b33d4a0faf545867935b22cf0ee1fdd7b28c0b9a2f7"
+      },
+      "scripts/flat/reconciliation/POC/src/constants/consts.js": {
+        "byteLength": 76744,
+        "imports": [],
+        "sha256": "e2aeb8323101b0ddf92e224b2f3dad02f11611a3f2a3524f4d33d5f06cac48fa"
+      },
+      "scripts/flat/reconciliation/POC/src/directional-visibility/ExactDirectionalVisibilityResolver.js": {
+        "byteLength": 23704,
+        "imports": [
+          "scripts/flat/reconciliation/POC/src/errors/ReconciliationConfigurationError.js",
+          "scripts/flat/reconciliation/POC/src/provenance/stableHash.js"
+        ],
+        "sha256": "e983dcb8e5701fb3ef81190e7ec0a2f75b339320c8524d29b237ec4409467ea5"
+      },
+      "scripts/flat/reconciliation/POC/src/errors/ReconciliationConfigurationError.js": {
+        "byteLength": 498,
+        "imports": [],
+        "sha256": "551416e409f9549dd270a4088aa16c79c954e7d0cfe77286f8a207f5af6cb5bf"
+      },
+      "scripts/flat/reconciliation/POC/src/evaluation/SpectralReferenceEvaluator.js": {
+        "byteLength": 5702,
+        "imports": [
+          "scripts/flat/reconciliation/POC/src/calculator/SpectralCalculator.js",
+          "scripts/flat/reconciliation/POC/src/errors/ReconciliationConfigurationError.js",
+          "scripts/flat/reconciliation/POC/src/validation/validateModelSet.js"
+        ],
+        "sha256": "e8f92b658c6aaf0c55359051d615e91eefdbbcdb7cb83ba2c363b5a54a41003e"
+      },
+      "scripts/flat/reconciliation/POC/src/extended-source-integration/CanonicalUniformSunDiskSource.js": {
+        "byteLength": 17565,
+        "imports": [
+          "scripts/flat/reconciliation/POC/src/errors/ReconciliationConfigurationError.js",
+          "scripts/flat/reconciliation/POC/src/external-celestial-sources/ExternalCelestialSource.js",
+          "scripts/flat/reconciliation/POC/src/external-celestial-sources/SpectralDensityPacket.js",
+          "scripts/flat/reconciliation/POC/src/external-celestial-sources/consts.js",
+          "scripts/flat/reconciliation/POC/src/external-celestial-sources/createCanonicalSpectralDensityBasis.js",
+          "scripts/flat/reconciliation/POC/src/provenance/stableHash.js"
+        ],
+        "sha256": "7a73a9ff02782b21a918e81e5e3d3bb22636269ed4d8a0cb6799ab65d8a6a970"
+      },
+      "scripts/flat/reconciliation/POC/src/extended-source-integration/SphericalCapQuadrature.js": {
+        "byteLength": 4297,
+        "imports": [
+          "scripts/flat/reconciliation/POC/src/errors/ReconciliationConfigurationError.js"
+        ],
+        "sha256": "946137cbcb0d3eaadfa399ffcd3279716664aa0911f3e04385605f6c473ef631"
+      },
+      "scripts/flat/reconciliation/POC/src/extended-source-integration/TransportedExtendedSourceIntegrator.js": {
+        "byteLength": 44976,
+        "imports": [
+          "scripts/flat/reconciliation/POC/src/camera/PerspectiveCameraRaster.js",
+          "scripts/flat/reconciliation/POC/src/errors/ReconciliationConfigurationError.js",
+          "scripts/flat/reconciliation/POC/src/extended-source-integration/SphericalCapQuadrature.js",
+          "scripts/flat/reconciliation/POC/src/external-celestial-sources/ExternalCelestialSource.js",
+          "scripts/flat/reconciliation/POC/src/external-celestial-sources/consts.js",
+          "scripts/flat/reconciliation/POC/src/provenance/stableHash.js"
+        ],
+        "sha256": "c8018bb3065d0f2348ff557d5b2c22302deb9240ccc726173bd7a416b9953d74"
+      },
+      "scripts/flat/reconciliation/POC/src/external-celestial-sources/CalspecFitsSpectrumReader.js": {
+        "byteLength": 12705,
+        "imports": [
+          "scripts/flat/reconciliation/POC/src/errors/ReconciliationConfigurationError.js"
+        ],
+        "sha256": "7a998d8d5fd4f51c118bf7e4b730e854ecf8ec4906b0047392ba5551a9de3221"
+      },
+      "scripts/flat/reconciliation/POC/src/external-celestial-sources/ExternalCelestialSource.js": {
+        "byteLength": 4028,
+        "imports": [
+          "scripts/flat/reconciliation/POC/src/errors/ReconciliationConfigurationError.js",
+          "scripts/flat/reconciliation/POC/src/external-celestial-sources/SpectralDensityPacket.js",
+          "scripts/flat/reconciliation/POC/src/external-celestial-sources/consts.js",
+          "scripts/flat/reconciliation/POC/src/provenance/stableHash.js"
+        ],
+        "sha256": "29f69e3ea69013ae9eade5da02004ab3c4a2ccd1619229d7f17988b4d662e0a8"
+      },
+      "scripts/flat/reconciliation/POC/src/external-celestial-sources/RiekeSiriusReferenceEvaluator.js": {
+        "byteLength": 33535,
+        "imports": [
+          "scripts/flat/reconciliation/POC/src/errors/ReconciliationConfigurationError.js",
+          "scripts/flat/reconciliation/POC/src/external-celestial-sources/fixtureManifest.js"
+        ],
+        "sha256": "fc50f14645c6117918832ef3430da87e2fe6cdade2519e48a0c4c1e3fe949e60"
+      },
+      "scripts/flat/reconciliation/POC/src/external-celestial-sources/SpectralDensityBasis.js": {
+        "byteLength": 5858,
+        "imports": [
+          "scripts/flat/reconciliation/POC/src/errors/ReconciliationConfigurationError.js",
+          "scripts/flat/reconciliation/POC/src/provenance/stableHash.js"
+        ],
+        "sha256": "0c046b215ef7681f7dfb6a1499409425493682747b25d4c04f651cc85cb4372c"
+      },
+      "scripts/flat/reconciliation/POC/src/external-celestial-sources/SpectralDensityPacket.js": {
+        "byteLength": 7446,
+        "imports": [
+          "scripts/flat/reconciliation/POC/src/errors/ReconciliationConfigurationError.js",
+          "scripts/flat/reconciliation/POC/src/external-celestial-sources/SpectralDensityBasis.js",
+          "scripts/flat/reconciliation/POC/src/external-celestial-sources/consts.js",
+          "scripts/flat/reconciliation/POC/src/provenance/stableHash.js"
+        ],
+        "sha256": "bdecd086ccd9ecbc7124cd75747507d5d74580d07225af0309b860aaf2278c46"
+      },
+      "scripts/flat/reconciliation/POC/src/external-celestial-sources/TsisHsrsReferenceReader.js": {
+        "byteLength": 17412,
+        "imports": [
+          "scripts/flat/reconciliation/POC/src/errors/ReconciliationConfigurationError.js",
+          "scripts/flat/reconciliation/POC/src/external-celestial-sources/fixtureManifest.js"
+        ],
+        "sha256": "da56f16a5c9b98e0d382b1d9745a5b81a70463c576d3414d8cda3ff3c4ac8313"
+      },
+      "scripts/flat/reconciliation/POC/src/external-celestial-sources/binPiecewiseLinearSpectralDensity.js": {
+        "byteLength": 5649,
+        "imports": [
+          "scripts/flat/reconciliation/POC/src/errors/ReconciliationConfigurationError.js",
+          "scripts/flat/reconciliation/POC/src/external-celestial-sources/SpectralDensityBasis.js"
+        ],
+        "sha256": "b58518d02e892a98c9cd62745a79af00d7dfea6e137cbeecf28e81f99e85b251"
+      },
+      "scripts/flat/reconciliation/POC/src/external-celestial-sources/consts.js": {
+        "byteLength": 6110,
+        "imports": [],
+        "sha256": "75659b123c6c800b0d07d02681123801fdc286b77c8b1bba54b72a44f364abf5"
+      },
+      "scripts/flat/reconciliation/POC/src/external-celestial-sources/createCalspecSiriusIrradianceDensity.js": {
+        "byteLength": 5705,
+        "imports": [
+          "scripts/flat/reconciliation/POC/src/errors/ReconciliationConfigurationError.js",
+          "scripts/flat/reconciliation/POC/src/external-celestial-sources/CalspecFitsSpectrumReader.js",
+          "scripts/flat/reconciliation/POC/src/external-celestial-sources/SpectralDensityBasis.js",
+          "scripts/flat/reconciliation/POC/src/external-celestial-sources/SpectralDensityPacket.js",
+          "scripts/flat/reconciliation/POC/src/external-celestial-sources/binPiecewiseLinearSpectralDensity.js",
+          "scripts/flat/reconciliation/POC/src/external-celestial-sources/consts.js",
+          "scripts/flat/reconciliation/POC/src/external-celestial-sources/fixtureManifest.js"
+        ],
+        "sha256": "90dfc18736f73193c30b55ea33e49b1d310761e962636d6f91b140c84feed1ae"
+      },
+      "scripts/flat/reconciliation/POC/src/external-celestial-sources/createCanonicalSolarIrradianceDensity.js": {
+        "byteLength": 1671,
+        "imports": [
+          "scripts/flat/reconciliation/POC/src/constants/consts.js",
+          "scripts/flat/reconciliation/POC/src/external-celestial-sources/SpectralDensityBasis.js",
+          "scripts/flat/reconciliation/POC/src/external-celestial-sources/SpectralDensityPacket.js",
+          "scripts/flat/reconciliation/POC/src/external-celestial-sources/consts.js",
+          "scripts/flat/reconciliation/POC/src/external-celestial-sources/fixtureManifest.js"
+        ],
+        "sha256": "3202716a2ff59ada4b23b8ae84dfd763ccf53cfcbf77a2a7c0e96cdc200a10a7"
+      },
+      "scripts/flat/reconciliation/POC/src/external-celestial-sources/createCanonicalSpectralDensityBasis.js": {
+        "byteLength": 2219,
+        "imports": [
+          "scripts/flat/reconciliation/POC/src/constants/consts.js",
+          "scripts/flat/reconciliation/POC/src/external-celestial-sources/SpectralDensityBasis.js",
+          "scripts/flat/reconciliation/POC/src/external-celestial-sources/consts.js"
+        ],
+        "sha256": "8eda0e6fc0f63304b28fce7d44f1261f59aadcaa722e012784eb9f7de5b38b42"
+      },
+      "scripts/flat/reconciliation/POC/src/external-celestial-sources/fixtureManifest.js": {
+        "byteLength": 16921,
+        "imports": [
+          "scripts/flat/reconciliation/POC/src/provenance/stableHash.js"
+        ],
+        "sha256": "8fd0b1eeab6e516ab78b13b02d89030bb4ebc7b51bf0834d3917aa22f76285f0"
+      },
+      "scripts/flat/reconciliation/POC/src/geometry/SphericalEarthGeometry.js": {
+        "byteLength": 19185,
+        "imports": [
+          "scripts/flat/reconciliation/POC/src/math/vector.js",
+          "scripts/flat/reconciliation/POC/src/three/ExactSphereGroundObject.js"
+        ],
+        "sha256": "b976975335339bb7667647418238a1b18e8d56d4d286406ed45309c1581c294e"
+      },
+      "scripts/flat/reconciliation/POC/src/incident-radiance/DistantSunIncidentRadianceCache.js": {
+        "byteLength": 9463,
+        "imports": [
+          "scripts/flat/reconciliation/POC/src/math/vector.js"
+        ],
+        "sha256": "6953c3cd49d301eb90ecf44391eb883c33e801693fb9f89ca6b74c2b1b08be7a"
+      },
+      "scripts/flat/reconciliation/POC/src/light/CanonicalSolarIlluminationSource.js": {
+        "byteLength": 18525,
+        "imports": [
+          "scripts/flat/reconciliation/POC/src/errors/ReconciliationConfigurationError.js",
+          "scripts/flat/reconciliation/POC/src/external-celestial-sources/SpectralDensityPacket.js",
+          "scripts/flat/reconciliation/POC/src/external-celestial-sources/consts.js",
+          "scripts/flat/reconciliation/POC/src/external-celestial-sources/createCanonicalSpectralDensityBasis.js",
+          "scripts/flat/reconciliation/POC/src/incident-radiance/DistantSunIncidentRadianceCache.js",
+          "scripts/flat/reconciliation/POC/src/provenance/stableHash.js"
+        ],
+        "sha256": "e93e24e5ca2e11c93ca7cc420302730f22e784381a98f85018a0249ca0e93219"
+      },
+      "scripts/flat/reconciliation/POC/src/math/vector.js": {
+        "byteLength": 3753,
+        "imports": [],
+        "sha256": "6b7ae01841a6ea0a9a239dbdfb2bc7beb4169d058dc42fa6a2405e2e87e6ca57"
+      },
+      "scripts/flat/reconciliation/POC/src/physical-frame/Er4cPhysicalFullFrameClosureEvaluator.js": {
+        "byteLength": 43872,
+        "imports": [
+          "scripts/flat/reconciliation/POC/src/camera/PerspectiveCameraRaster.js",
+          "scripts/flat/reconciliation/POC/src/color/BrunetonColorDisplayModel.js",
+          "scripts/flat/reconciliation/POC/src/errors/ReconciliationConfigurationError.js",
+          "scripts/flat/reconciliation/POC/src/physical-frame/FrozenAtmosphereSpectralFrameEvaluator.js",
+          "scripts/flat/reconciliation/POC/src/physical-frame/PhysicalSpectralFrameComposer.js",
+          "scripts/flat/reconciliation/POC/src/provenance/stableHash.js"
+        ],
+        "sha256": "99268e53f06ceb903e368e4656dbfbf33e668f32b9ac126fca2a4fee3ad773b0"
+      },
+      "scripts/flat/reconciliation/POC/src/physical-frame/FrozenAtmosphereSpectralFrameEvaluator.js": {
+        "byteLength": 18094,
+        "imports": [
+          "scripts/flat/reconciliation/POC/src/camera/PerspectiveCameraRaster.js",
+          "scripts/flat/reconciliation/POC/src/errors/ReconciliationConfigurationError.js",
+          "scripts/flat/reconciliation/POC/src/provenance/stableHash.js"
+        ],
+        "sha256": "70efb9fc0eeb39b21b3723a0b0d682b064fd1445f89fdb6ca0d322b865252de4"
+      },
+      "scripts/flat/reconciliation/POC/src/physical-frame/PhysicalSpectralFrameComposer.js": {
+        "byteLength": 28176,
+        "imports": [
+          "scripts/flat/reconciliation/POC/src/camera/PerspectiveCameraRaster.js",
+          "scripts/flat/reconciliation/POC/src/errors/ReconciliationConfigurationError.js",
+          "scripts/flat/reconciliation/POC/src/provenance/stableHash.js"
+        ],
+        "sha256": "2874a2aada75e0ad6da3da57f413df82e8ffe45d27de6f274387fc77817d1457"
+      },
+      "scripts/flat/reconciliation/POC/src/point-source-raster/BilinearPointResponse.js": {
+        "byteLength": 5751,
+        "imports": [
+          "scripts/flat/reconciliation/POC/src/errors/ReconciliationConfigurationError.js",
+          "scripts/flat/reconciliation/POC/src/provenance/stableHash.js"
+        ],
+        "sha256": "b2748db3dc291a51514c50ac21dbdb2b9df12f9a63faa1ac025cff2e5c53e3b8"
+      },
+      "scripts/flat/reconciliation/POC/src/point-source-raster/TransportedPointSourceAccumulator.js": {
+        "byteLength": 32454,
+        "imports": [
+          "scripts/flat/reconciliation/POC/src/camera/PerspectiveCameraRaster.js",
+          "scripts/flat/reconciliation/POC/src/errors/ReconciliationConfigurationError.js",
+          "scripts/flat/reconciliation/POC/src/external-celestial-sources/ExternalCelestialSource.js",
+          "scripts/flat/reconciliation/POC/src/external-celestial-sources/consts.js",
+          "scripts/flat/reconciliation/POC/src/point-source-raster/BilinearPointResponse.js",
+          "scripts/flat/reconciliation/POC/src/provenance/stableHash.js"
+        ],
+        "sha256": "8b4ac95e59ef054a7a8b939b7b6afc93ccbee2e0e1834bc74def8d23c65d2477"
+      },
+      "scripts/flat/reconciliation/POC/src/provenance/LocalModuleGraphHasher.js": {
+        "byteLength": 7016,
+        "imports": [
+          "scripts/flat/reconciliation/POC/src/provenance/stableHash.js"
+        ],
+        "sha256": "7de1a7faed1a8e7853df5d6f6c022b11290f2fa63a8e160d2e89589069b63a54"
+      },
+      "scripts/flat/reconciliation/POC/src/provenance/stableHash.js": {
+        "byteLength": 2666,
+        "imports": [],
+        "sha256": "ecb22a1baf53516c911ab2c0932137d24152b627151272e0f38a6a16611f332e"
+      },
+      "scripts/flat/reconciliation/POC/src/runners/er4cSunSiriusPhysicalTransportClosure.js": {
+        "byteLength": 104963,
+        "imports": [
+          "scripts/flat/reconciliation/POC/src/atmosphere/CanonicalAtmosphere.js",
+          "scripts/flat/reconciliation/POC/src/calculator/SpectralCalculator.js",
+          "scripts/flat/reconciliation/POC/src/camera/PerspectiveCameraRaster.js",
+          "scripts/flat/reconciliation/POC/src/color/BrunetonColorDisplayModel.js",
+          "scripts/flat/reconciliation/POC/src/constants/consts.js",
+          "scripts/flat/reconciliation/POC/src/directional-visibility/ExactDirectionalVisibilityResolver.js",
+          "scripts/flat/reconciliation/POC/src/evaluation/SpectralReferenceEvaluator.js",
+          "scripts/flat/reconciliation/POC/src/extended-source-integration/CanonicalUniformSunDiskSource.js",
+          "scripts/flat/reconciliation/POC/src/extended-source-integration/TransportedExtendedSourceIntegrator.js",
+          "scripts/flat/reconciliation/POC/src/external-celestial-sources/ExternalCelestialSource.js",
+          "scripts/flat/reconciliation/POC/src/external-celestial-sources/RiekeSiriusReferenceEvaluator.js",
+          "scripts/flat/reconciliation/POC/src/external-celestial-sources/TsisHsrsReferenceReader.js",
+          "scripts/flat/reconciliation/POC/src/external-celestial-sources/createCalspecSiriusIrradianceDensity.js",
+          "scripts/flat/reconciliation/POC/src/external-celestial-sources/createCanonicalSolarIrradianceDensity.js",
+          "scripts/flat/reconciliation/POC/src/external-celestial-sources/createCanonicalSpectralDensityBasis.js",
+          "scripts/flat/reconciliation/POC/src/external-celestial-sources/fixtureManifest.js",
+          "scripts/flat/reconciliation/POC/src/geometry/SphericalEarthGeometry.js",
+          "scripts/flat/reconciliation/POC/src/light/CanonicalSolarIlluminationSource.js",
+          "scripts/flat/reconciliation/POC/src/physical-frame/Er4cPhysicalFullFrameClosureEvaluator.js",
+          "scripts/flat/reconciliation/POC/src/physical-frame/FrozenAtmosphereSpectralFrameEvaluator.js",
+          "scripts/flat/reconciliation/POC/src/point-source-raster/BilinearPointResponse.js",
+          "scripts/flat/reconciliation/POC/src/point-source-raster/TransportedPointSourceAccumulator.js",
+          "scripts/flat/reconciliation/POC/src/provenance/LocalModuleGraphHasher.js",
+          "scripts/flat/reconciliation/POC/src/provenance/stableHash.js",
+          "scripts/flat/reconciliation/POC/src/runners/recordWriter.js"
+        ],
+        "sha256": "08023dab65cf7283b6923f5fcbcf7cda64d58b5f2f4bc64a9ef72afb5905e030"
+      },
+      "scripts/flat/reconciliation/POC/src/runners/recordWriter.js": {
+        "byteLength": 2489,
+        "imports": [],
+        "sha256": "fc4b9997a24cf07fb3ac31ca1f797ec36cdf32635cb26cf517ad1a8b66de89f1"
+      },
+      "scripts/flat/reconciliation/POC/src/three/ExactSphereGroundObject.js": {
+        "byteLength": 3046,
+        "imports": [],
+        "sha256": "1fa0ac2d37f4c87376991f6b6553e610184dd43767473b4bf18d7d43261ef07d"
+      },
+      "scripts/flat/reconciliation/POC/src/validation/validateModelSet.js": {
+        "byteLength": 1822,
+        "imports": [
+          "scripts/flat/reconciliation/POC/src/errors/ReconciliationConfigurationError.js"
+        ],
+        "sha256": "a8f2a2b41b5a194ac240050360563f8bb1dec6cfc6f5fab8de0923937d0f2e5c"
+      }
+    },
+    "graphFingerprint": "3d5bf1d188a487abf7849e1e4c776415c9b4b7c6194d3763f99c6bdc7f68a339",
+    "hasherFingerprint": "a537d5f57142e5b56d16b6be5a162468bc4bcb7caaf7a74453605b3c9d2ef05a",
+    "importKinds": [
+      "static-import",
+      "static-export-from",
+      "literal-dynamic-import"
+    ],
+    "kind": "local-static-module-graph-hasher-v1",
+    "outsideAllowedRootPolicy": "reject",
+    "workspaceRoot": "C:/dev/poly-gc-react"
+  },
+  "moduleBoundaryAudit": {
+    "prohibitedModuleFragments": [
+      "/archive/",
+      "/external-boundary-radiance/",
+      "/external-celestial-candidates/",
+      "/flat32/"
+    ],
+    "prohibitedRuntimeModules": [],
+    "accepted": true
+  },
+  "dependencyLocks": {
+    "package.json": "417063e28794e321230654f5f3921d0e2af3b077cac6326fd1823346de1808b3",
+    "package-lock.json": "024aec20281cfeeb59192921d211344b8eb91f09b37d02992a3d4878f6500a5f"
+  },
+  "atmosphereControls": {
+    "pathIntervalCount": 6,
+    "sourceTransmittanceIntervalCount": 4,
+    "incidentDirectionCount": 4,
+    "incidentAltitudeBinCount": 4
+  },
+  "cameraToAtmosphereMatrix": [
+    [
+      0,
+      0,
+      -1
+    ],
+    [
+      -1,
+      0,
+      0
+    ],
+    [
+      0,
+      1,
+      0
+    ]
+  ],
+  "transportImplemented": true,
+  "externalRuntimeLinks": false,
+  "productionImports": false
+}

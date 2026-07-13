@@ -1,0 +1,365 @@
+{
+  "schema": "algorithm32-star-local-sun-shell-cpu-comparison-policy-v3",
+  "policyId": "algorithm32-star-local-sun-shell-cpu-comparison-policy-v3",
+  "claimBoundary": "Independent checked comparison of each requested production binary64 N1, N2, and N4 CPU recast against the matching separately executed Star-only omitted-ground request. This policy does not cover GPU construction, reflective ground, final-view rendering, or Stage 9.6.3.",
+  "gold": {
+    "path": "src/algorithm32/light-sources/fixtures/algorithm32-star-local-sun-shell-cpu-gold.json",
+    "sha256": "61532368d7efa2d4a60fc932a901097a8e583ccb0eb3593eb9b26d29c2674985",
+    "schema": "algorithm32-star-local-sun-shell-cpu-gold-v3",
+    "fixtureId": "algorithm32-star-local-sun-shell-cpu-gold-v3-sha256:bb3a1f871a375e53d9c180899003041afc4dda93cbe3fe69e62080481bd8d0c9"
+  },
+  "report": {
+    "path": "src/algorithm32/light-sources/fixtures/algorithm32-star-local-sun-shell-cpu-comparison-report.json"
+  },
+  "inputs": {
+    "sourceKey": "algorithm32-star-local-shell-cpu-gold-v1",
+    "sourcePosition": {
+      "coordinates": [
+        4800000,
+        0,
+        4800000
+      ],
+      "units": "meters"
+    },
+    "observerPosition": {
+      "coordinates": [
+        0,
+        0,
+        5
+      ],
+      "units": "meters"
+    },
+    "topAltitude": {
+      "value": 100000,
+      "units": "meters"
+    },
+    "rhoMaximum": {
+      "value": 4800000,
+      "units": "meters"
+    },
+    "referenceDistance": {
+      "value": 4800000,
+      "units": "meters"
+    },
+    "referenceSpectralIncidentScale": 1,
+    "distanceFalloff": true,
+    "sourceIrradiance": {
+      "production": {
+        "kind": "algorithm32-spectral-packet",
+        "quantity": "spectral-irradiance-density",
+        "units": "W m^-2 nm^-1",
+        "basisHash": "sha256:a03a3c7f45d9bd4ff8adf6482e9d1aac1acd72423758ecf797ac24f6dffba891",
+        "semantics": "contiguous-wavelength-bin-average",
+        "values": [
+          1.0688666666666664,
+          1.729673,
+          1.8620716666666661,
+          2.0220633333333335,
+          1.9081540000000001,
+          1.8833910000000003,
+          1.8342466666666666,
+          1.7674400000000001,
+          1.65952,
+          1.548102333333333,
+          1.45078,
+          1.3409603333333335,
+          1.2624333333333335,
+          1.175208,
+          1.090824
+        ],
+        "provenanceIdentity": "algorithm32-canonical-data-native-15-source-v1",
+        "contentHash": "sha256:b501bad3f86702dbef751b7def0cd9bf189f56816bd54750063a1933591d751e"
+      },
+      "star": {
+        "quantity": "spectral-irradiance-density",
+        "units": "W m^-2 nm^-1",
+        "basisId": "algorithm32-canonical-15-v1",
+        "sampleSemantics": "contiguous-wavelength-bin-average-spectral-density",
+        "values": [
+          1.0688666666666664,
+          1.729673,
+          1.8620716666666661,
+          2.0220633333333335,
+          1.9081540000000001,
+          1.8833910000000003,
+          1.8342466666666666,
+          1.7674400000000001,
+          1.65952,
+          1.548102333333333,
+          1.45078,
+          1.3409603333333335,
+          1.2624333333333335,
+          1.175208,
+          1.090824
+        ]
+      }
+    },
+    "atmosphere": {
+      "id": "canonical-atmosphere",
+      "spectralBasisHash": "sha256:a03a3c7f45d9bd4ff8adf6482e9d1aac1acd72423758ecf797ac24f6dffba891",
+      "star": {
+        "id": "canonical-atmosphere-cpu-v1",
+        "basisId": "algorithm32-canonical-15-v1"
+      },
+      "constants": {
+        "bottomRadius": {
+          "value": 6360000,
+          "units": "meters"
+        },
+        "topRadius": {
+          "value": 6420000,
+          "units": "meters"
+        },
+        "rayleighScaleHeight": {
+          "value": 8000,
+          "units": "meters"
+        },
+        "mieScaleHeight": {
+          "value": 1200,
+          "units": "meters"
+        },
+        "rayleighCoefficientScale": {
+          "value": 0.00000124062,
+          "units": "m^-1"
+        },
+        "mieAngstromAlpha": {
+          "value": 0.8,
+          "units": "1"
+        },
+        "mieAngstromBeta": {
+          "value": 0.04,
+          "units": "1"
+        },
+        "mieSingleScatteringAlbedo": {
+          "value": 0.8,
+          "units": "1"
+        },
+        "miePhaseFunctionG": {
+          "value": 0.7,
+          "units": "1"
+        },
+        "ozoneAbsorptionEnabled": false
+      }
+    },
+    "profile": {
+      "id": "algorithm32-native-production-default-v1",
+      "contentHash": "sha256:aceb50e3578f622658a6f1bcadcd13ecff90f36a177022af64f69209981faea9",
+      "physical": {
+        "id": "algorithm32-native-physical-default-v1",
+        "contentHash": "sha256:d680936e267a400119056fa03237386f159773d327a72e4059b2886bf40e469e"
+      },
+      "numerical": {
+        "id": "algorithm32-native-numerical-default-v1",
+        "contentHash": "sha256:aeef17c3ccc59122e1375b61e440ce7786f23bb77cebd350539f9d8a8563605f"
+      }
+    },
+    "sourceRadius": {
+      "value": 25749.504,
+      "units": "meters"
+    },
+    "sourceTransmittanceIntervalCount": 15,
+    "pathIntervalCount": 15,
+    "groundBoundary": "omitted",
+    "positionDomain": {
+      "selection": "source-subpoint-z2-rho2",
+      "starId": "algorithm32-star-local-shell-z2-rho2-v1",
+      "count": 4
+    },
+    "incomingDirectionDomain": {
+      "selection": "paired-Fibonacci-34",
+      "starId": "algorithm32-star-paired-fibonacci-34-incoming-v1",
+      "count": 34,
+      "pairCount": 17
+    },
+    "outgoingDirectionDomain": {
+      "selection": "W3",
+      "starId": "algorithm32-star-local-shell-w3-v1",
+      "count": 54,
+      "faceWidth": 3
+    },
+    "spectralBasis": {
+      "selection": "native-15",
+      "production": {
+        "id": "algorithm32-native-15-spectral-basis-v1",
+        "contentHash": "sha256:a03a3c7f45d9bd4ff8adf6482e9d1aac1acd72423758ecf797ac24f6dffba891"
+      },
+      "star": {
+        "id": "algorithm32-canonical-15-v1"
+      },
+      "channelCount": 15,
+      "channelNames": [
+        "lambda-376",
+        "lambda-407",
+        "lambda-438",
+        "lambda-470",
+        "lambda-501",
+        "lambda-532",
+        "lambda-564",
+        "lambda-595",
+        "lambda-626",
+        "lambda-658",
+        "lambda-689",
+        "lambda-720",
+        "lambda-752",
+        "lambda-783",
+        "lambda-814"
+      ],
+      "wavelengths": {
+        "values": [
+          375.6666666666667,
+          407,
+          438.3333333333333,
+          469.66666666666663,
+          501,
+          532.3333333333333,
+          563.6666666666666,
+          595,
+          626.3333333333333,
+          657.6666666666666,
+          689,
+          720.3333333333333,
+          751.6666666666666,
+          783,
+          814.3333333333333
+        ],
+        "units": "nanometers"
+      },
+      "binWidths": {
+        "values": [
+          31.333333333333332,
+          31.333333333333332,
+          31.333333333333332,
+          31.333333333333332,
+          31.333333333333332,
+          31.333333333333332,
+          31.333333333333332,
+          31.333333333333332,
+          31.333333333333332,
+          31.333333333333332,
+          31.333333333333332,
+          31.333333333333332,
+          31.333333333333332,
+          31.333333333333332,
+          31.333333333333332
+        ],
+        "units": "nanometers"
+      }
+    },
+    "requestedMaximumScatteringOrders": [
+      1,
+      2,
+      4
+    ]
+  },
+  "extraction": {
+    "scalarOrder": "wavelength-major-then-position-major-then-direction-major",
+    "positionFlattening": "z-major-rho-minor",
+    "n1Fields": [
+      "j1",
+      "cumulative"
+    ],
+    "n2Fields": [
+      "j1",
+      "l1",
+      "j2",
+      "cumulative"
+    ],
+    "n4Fields": [
+      "j1",
+      "l1",
+      "j2",
+      "l2",
+      "j3",
+      "l3",
+      "j4",
+      "cumulative"
+    ],
+    "recurrenceByRequestedOrder": {
+      "n1": [
+        "J1",
+        "Jthrough1"
+      ],
+      "n2": [
+        "J1",
+        "L1",
+        "J2",
+        "Jthrough2"
+      ],
+      "n4": [
+        "J1",
+        "L1",
+        "J2",
+        "L2",
+        "J3",
+        "L3",
+        "J4",
+        "Jthrough4"
+      ]
+    },
+    "goldFieldScalarCounts": {
+      "j1": 3240,
+      "l1": 2040,
+      "j2": 3240,
+      "l2": 2040,
+      "j3": 3240,
+      "l3": 2040,
+      "j4": 3240,
+      "cumulative": 3240
+    },
+    "goldFieldScalarCountsByRequestedOrder": {
+      "n1": 6480,
+      "n2": 11760,
+      "n4": 22320
+    },
+    "goldFieldScalarTotal": 40560,
+    "edgeCaseRecordCounts": {
+      "shellBoundaryResolution": 21,
+      "sourceRadiusClamp": 4,
+      "sourcePaths": 4
+    }
+  },
+  "acceptance": {
+    "inputAuthentication": {
+      "rule": "The production source falloff, complete source-irradiance packet, native-15 basis identity, canonical atmosphere constants, and native production profile identities must exactly equal these predeclared inputs."
+    },
+    "factsAndDomains": {
+      "rule": "Every compared scalar and semantic value must be exactly equal after normalization into the documented Star order."
+    },
+    "behavioralEdges": {
+      "rule": "Every shell min/max/internal-boundary neighbor record, source-radius clamp record, and zero-length/finite/ground-blocked/top-clipped source-path record must be exactly equal after production-unit normalization."
+    },
+    "fields": {
+      "rule": "Compare every production request-local field against the same field from the matching separately executed Star request. Accept a scalar when its absolute error is at most its quantity-specific absolute tolerance plus its relative tolerance multiplied by the absolute Star authority value.",
+      "radiance": {
+        "fieldNames": [
+          "l1",
+          "l2",
+          "l3"
+        ],
+        "maximumAbsoluteError": {
+          "value": 1e-15,
+          "units": "W m^-2 sr^-1 nm^-1"
+        },
+        "maximumRelativeError": 1e-12
+      },
+      "scatteringDensityAndCumulative": {
+        "fieldNames": [
+          "j1",
+          "j2",
+          "j3",
+          "j4",
+          "cumulative"
+        ],
+        "maximumAbsoluteError": {
+          "value": 1e-18,
+          "units": "W m^-3 sr^-1 nm^-1"
+        },
+        "maximumRelativeError": 1e-12
+      }
+    },
+    "orderInvariants": {
+      "rule": "On both the independently executed Star results and the independently requested production results, N1, N2, and N4 shared pure-field prefixes must be exactly equal. Each cumulative field must exactly equal its request-local pure-field sum in ascending order."
+    },
+    "state": "Pass only when fixture and source authentication, all predeclared numerical inputs, fixed facts and domains, every requested-order field comparison, and every order invariant pass."
+  }
+}

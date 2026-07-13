@@ -1,0 +1,3022 @@
+{
+  "status": "accepted",
+  "statuses": {
+    "automatedReviewabilityStatus": "not-claimed",
+    "cleanupStatus": "accepted",
+    "convergenceStatus": "accepted",
+    "gpuStatus": "not-claimed",
+    "humanReviewStatus": "not-claimed",
+    "mechanicalStatus": "accepted",
+    "observationalStatus": "not-claimed",
+    "overallStatus": "accepted",
+    "productionStatus": "not-claimed"
+  },
+  "criteria": [
+    {
+      "evidence": {
+        "acceptedStatus": "accepted",
+        "acquisitionFingerprint": "bb49a0d2ef88714c4176e7e7eee62b3c9e0e6941a6da81cacd90548b329f9e2b",
+        "attachmentFingerprints": [
+          "45abf091f4944caa6cc07f3b0ae4a36e6fff9847f2da873a9f06eca4682a3ad2",
+          "effe75fdae5e816f9e101f18e81cabf992dbbca77acefefe0f46a6eeb1945001",
+          "7877ca2cd0a749014a50db49dc23c965e7e79613bbfd7eb999544023672eaee0",
+          "51752c792a53f4792e9efb629d2fdf57d80e3792873c46b8c7a584b0a180d85c",
+          "62e564f8b5aa8d7be9923f1d480adb0d81d766625f487e8a5edc8ed4c941b93a",
+          "a4376099ad03225eb5c49d6539223e5340063ed8fe4857a17ecc542424adaf27",
+          "22431ef92618123dd6c3de7c7acab8c8255a6a24b9c6ce18f6677d1c00912607",
+          "f26056daf187fee23457b10c4dc962939ed5c5ebf5f550163603ebcd77656761"
+        ],
+        "caseCount": 8,
+        "directory": "tmp/atmosphere/reconciliation/056-er6-physical-globe-scene-validation",
+        "failureArtifactPresent": false,
+        "fileHashes": {
+          "acquisitionDependencySha256": "ee7c0b8b9b7acc156afa35b01070543b5964c2665a36971a39a37ef9f834a627",
+          "attachmentsSha256": "66736ad48d3f927f769a161353dd3fa7a5f0bdaccaa09682873431e37d0629de",
+          "criteriaResultsSha256": "22f38188926a3b221d5b4f3de89278bebcb7ff3d92f617bbe49ee950e2fbe96f",
+          "resultSha256": "1d8c0415b6c58a7c42ce117ac25b79f9d35438628ce363cba9bce3bb5ef71550",
+          "sceneMatrixSha256": "ac3ca5fd0be281a20e629b9fb669731132703c0106ffdde3c2f2e3ed4245f167",
+          "sourceReferencesSha256": "79290c5d148fd2233f02b706900c63ecf6ceafeacd750bb29262fa3d740b7a49"
+        },
+        "geometryDepthStatus": "accepted",
+        "kind": "er8-sealed-er6-physical-scene-dependency-v1",
+        "physicalRadiometryStatus": "accepted",
+        "recordId": "056-er6-physical-globe-scene-validation",
+        "rendererFingerprint": "46e82ea11addd3ed83964bbb14be72bc12c16c926033980cd55aa86834557c09",
+        "sourceReferencesFingerprint": "6fc4f1a403d174126778022965241c8324c165183567fc64a20e38dcaaa9ee7b"
+      },
+      "name": "accepted record 056 pins and eight attachments reconstruct",
+      "scope": "dependency",
+      "status": "accepted"
+    },
+    {
+      "evidence": {
+        "acceptedCriterionCount": 16,
+        "activeModuleGraphsAccepted": true,
+        "cleanupAccepted": true,
+        "cleanupStatus": "accepted",
+        "convergenceStatus": "rejected",
+        "directory": "tmp/atmosphere/reconciliation/060-er8-cpu-convergence-and-poc-cleanup",
+        "failureArtifactPresent": false,
+        "hashes": {
+          "activeModuleGraphsSha256": "aa375f43cf4a137965d4df776892ed8d99921968dd6221d786f5aa5b0358d0b9",
+          "cleanupInventorySha256": "27bcbd04d36c2580f8ba914a6478d29e8a1aec64cd8a4ecde1d146ef74eaca9d",
+          "convergenceResultsSha256": "78dbb679e4fc2e7000427e9d754a5a0db8f2f5d6ac1c37ac3a59229ef108463b",
+          "criteriaResultsSha256": "44e760c1db5249dbbccd160bb55a85edcd47527a5072ecf909a5616a17039b5f",
+          "publicSurfaceSha256": "7e9b093eb6c0bfe75020f1a4e325d0efbf4b87beeca09c91d8ea9ea1fd847ffe",
+          "resultSha256": "0e282e9cd62490ddf8f2db08c850b9c1c1d05ad6e6533e0768853f4d6e52e288",
+          "sealedRuntimeReproductionSha256": "2c4c7295a4da0c8cd3893a2783170c1b36276e39cfa2c6265157610fcdfdcb1c"
+        },
+        "kind": "er8-routed-record-060-dependency-v1",
+        "mechanicalStatus": "accepted",
+        "publicSurfaceAccepted": true,
+        "record060RoutingEvidenceAccepted": true,
+        "recordId": "060-er8-cpu-convergence-and-poc-cleanup",
+        "rejectedCriteria": [
+          {
+            "name": "path spectral radiance is within one percent per-channel peak-normalized residual",
+            "scope": "path"
+          },
+          {
+            "name": "base view transmittance is within 0.005 absolute",
+            "scope": "transmittance"
+          },
+          {
+            "name": "exact-source Sirius transmittance is within 0.005 absolute",
+            "scope": "transmittance"
+          },
+          {
+            "name": "accounted Sirius transported irradiance is within 0.5 percent",
+            "scope": "point-transport"
+          },
+          {
+            "name": "Sun transported projected irradiance is within 0.5 percent",
+            "scope": "extended-transport"
+          },
+          {
+            "name": "Moon transported projected irradiance is within 0.5 percent",
+            "scope": "extended-transport"
+          },
+          {
+            "name": "final pre-display spectrum is within one percent per-channel peak-normalized residual",
+            "scope": "composition"
+          },
+          {
+            "name": "shared display RGB is within one 8-bit code value",
+            "scope": "display"
+          }
+        ],
+        "rejectedCriterionCount": 8,
+        "routedFailureSetExact": true,
+        "sealedBaselineReproductionAccepted": true
+      },
+      "name": "record 060 accepts mechanics and cleanup and rejects only the exact eight atmosphere-dependent criteria",
+      "scope": "routed-dependency",
+      "status": "accepted"
+    },
+    {
+      "evidence": {
+        "acceptedCriterionCount": 24,
+        "baselineIdentityExact": true,
+        "cleanupStatus": "accepted",
+        "convergenceStatus": "rejected",
+        "directory": "tmp/atmosphere/reconciliation/064-er8-cpu-convergence-and-poc-cleanup",
+        "failureArtifactPresent": false,
+        "hashes": {
+          "convergenceResultsSha256": "a93684c312f50a26c64ec38d85243584c98890309e0dcfc474ec6e1f93ac85f4",
+          "criteriaResultsSha256": "b3fb3b75c476196ef770a7ed6db3f3ab83729faefece0fac5e348d98aa336910",
+          "resultSha256": "e170d353221d557118eb75fe45705c2ac8a1609d716669b58d0247c6cd607f04"
+        },
+        "kind": "er8-routed-record-064-dependency-v1",
+        "mechanicalStatus": "accepted",
+        "profilesExact": true,
+        "recordId": "064-er8-cpu-convergence-and-poc-cleanup",
+        "referenceProfileFingerprint": "24ec8b3315d5038fdfd2f4cc5bd36eb8bd613ce8c39d850ff2256e562b82d4c4",
+        "rejectedCriteria": [
+          {
+            "name": "path spectral radiance is within one percent per-channel peak-normalized residual",
+            "scope": "path"
+          },
+          {
+            "name": "Moon transported projected irradiance is within 0.5 percent",
+            "scope": "extended-transport"
+          }
+        ],
+        "rejectedCriterionCount": 2,
+        "routedFailureSetExact": true,
+        "runtimeProfileFingerprint": "f78159068392d3c2e71e732c9179e0e34013cfa495845f18085dfeeb1055f619"
+      },
+      "name": "record 064 is exactly 24/26 with mechanics and cleanup accepted and only path radiance and Moon transported irradiance rejected in order",
+      "scope": "routed-predecessor",
+      "status": "accepted"
+    },
+    {
+      "evidence": {
+        "acceptedFingerprint": "6fc4f1a403d174126778022965241c8324c165183567fc64a20e38dcaaa9ee7b"
+      },
+      "name": "runtime and reference use the accepted physical source bundle unchanged",
+      "scope": "source-integrity",
+      "status": "accepted"
+    },
+    {
+      "evidence": {
+        "accepted": true,
+        "actualSourceReferencesFingerprint": "6fc4f1a403d174126778022965241c8324c165183567fc64a20e38dcaaa9ee7b",
+        "attachmentFingerprints": [
+          "45abf091f4944caa6cc07f3b0ae4a36e6fff9847f2da873a9f06eca4682a3ad2",
+          "effe75fdae5e816f9e101f18e81cabf992dbbca77acefefe0f46a6eeb1945001",
+          "7877ca2cd0a749014a50db49dc23c965e7e79613bbfd7eb999544023672eaee0",
+          "51752c792a53f4792e9efb629d2fdf57d80e3792873c46b8c7a584b0a180d85c",
+          "62e564f8b5aa8d7be9923f1d480adb0d81d766625f487e8a5edc8ed4c941b93a",
+          "a4376099ad03225eb5c49d6539223e5340063ed8fe4857a17ecc542424adaf27",
+          "22431ef92618123dd6c3de7c7acab8c8255a6a24b9c6ce18f6677d1c00912607",
+          "f26056daf187fee23457b10c4dc962939ed5c5ebf5f550163603ebcd77656761"
+        ],
+        "attachmentFingerprintsMatch": true,
+        "expectedSourceReferencesFingerprint": "6fc4f1a403d174126778022965241c8324c165183567fc64a20e38dcaaa9ee7b",
+        "geometryComparisonsMatch": true,
+        "kind": "er8-routed-sealed-identity-comparison-v1",
+        "pointPartitionMatch": true,
+        "routedGeometryComparisons": [
+          {
+            "accepted": true,
+            "caseId": "san-jose-globe-sunrise",
+            "referenceFingerprint": "68060f59a9a7ad3a3a7fe91216a3b39b3233b3ead21f84c2edc1f8ac941d1634",
+            "runtimeFingerprint": "68060f59a9a7ad3a3a7fe91216a3b39b3233b3ead21f84c2edc1f8ac941d1634"
+          },
+          {
+            "accepted": true,
+            "caseId": "san-jose-globe-solar-noon",
+            "referenceFingerprint": "47463295854ced3a7cd1f9299be7069de25a8a6ec4639917cf27ad960781969a",
+            "runtimeFingerprint": "47463295854ced3a7cd1f9299be7069de25a8a6ec4639917cf27ad960781969a"
+          },
+          {
+            "accepted": true,
+            "caseId": "san-jose-globe-sunset",
+            "referenceFingerprint": "69c1af2742a5268771b7d6e385a29e558368bf126f1d99708576e1910ab7685a",
+            "runtimeFingerprint": "69c1af2742a5268771b7d6e385a29e558368bf126f1d99708576e1910ab7685a"
+          },
+          {
+            "accepted": true,
+            "caseId": "san-jose-globe-sunset-plus-1",
+            "referenceFingerprint": "46c6be2d17fe046b3c3ad07284a6801aa2041fac53a90e7660e837e5daa34021",
+            "runtimeFingerprint": "46c6be2d17fe046b3c3ad07284a6801aa2041fac53a90e7660e837e5daa34021"
+          },
+          {
+            "accepted": true,
+            "caseId": "union-glacier-globe-sunrise",
+            "referenceFingerprint": "f8f9bfdd2c32500d8dd4feb3ba22488880bf125bd6687d57ad60621b24e4630c",
+            "runtimeFingerprint": "f8f9bfdd2c32500d8dd4feb3ba22488880bf125bd6687d57ad60621b24e4630c"
+          },
+          {
+            "accepted": true,
+            "caseId": "union-glacier-globe-solar-noon",
+            "referenceFingerprint": "99c7e42814e702e82c6de5bbe106cd16b742b83d78a3e8dd348b818170aed192",
+            "runtimeFingerprint": "99c7e42814e702e82c6de5bbe106cd16b742b83d78a3e8dd348b818170aed192"
+          },
+          {
+            "accepted": true,
+            "caseId": "union-glacier-globe-sunset",
+            "referenceFingerprint": "4f69f884f5c4460c429732895d814e013a9d5bef0a3edfe8f93ef114fe51304c",
+            "runtimeFingerprint": "4f69f884f5c4460c429732895d814e013a9d5bef0a3edfe8f93ef114fe51304c"
+          },
+          {
+            "accepted": true,
+            "caseId": "union-glacier-globe-sunset-plus-1",
+            "referenceFingerprint": "cf0af64a90f96e57062b353531df2e3c1f3a2366d5b0d6c2bf1ca6c956d7c983",
+            "runtimeFingerprint": "cf0af64a90f96e57062b353531df2e3c1f3a2366d5b0d6c2bf1ca6c956d7c983"
+          }
+        ],
+        "routedPointTransmittancePartition": {
+          "accepted": true,
+          "blockedSampleCount": 3,
+          "cases": [
+            {
+              "accepted": true,
+              "caseId": "san-jose-globe-sunrise",
+              "referenceSourceDirectionCamera": [
+                -0.16901607452289258,
+                -0.7961502995953323,
+                -0.58101485954073
+              ],
+              "referenceTransmittancePresent": false,
+              "referenceVisible": false,
+              "runtimeSourceDirectionCamera": [
+                -0.16901607452289258,
+                -0.7961502995953323,
+                -0.58101485954073
+              ],
+              "runtimeTransmittancePresent": false,
+              "runtimeVisible": false
+            },
+            {
+              "accepted": true,
+              "caseId": "san-jose-globe-solar-noon",
+              "referenceSourceDirectionCamera": [
+                0.768525106093417,
+                0.44947743714857685,
+                -0.4553451381078413
+              ],
+              "referenceTransmittancePresent": true,
+              "referenceVisible": true,
+              "runtimeSourceDirectionCamera": [
+                0.768525106093417,
+                0.44947743714857685,
+                -0.4553451381078413
+              ],
+              "runtimeTransmittancePresent": true,
+              "runtimeVisible": true
+            },
+            {
+              "accepted": true,
+              "caseId": "san-jose-globe-sunset",
+              "referenceSourceDirectionCamera": [
+                0.2592815496102442,
+                0.028887242091934218,
+                0.9653696728590724
+              ],
+              "referenceTransmittancePresent": false,
+              "referenceVisible": false,
+              "runtimeSourceDirectionCamera": [
+                0.2592815496102442,
+                0.028887242091934218,
+                0.9653696728590724
+              ],
+              "runtimeTransmittancePresent": false,
+              "runtimeVisible": false
+            },
+            {
+              "accepted": true,
+              "caseId": "san-jose-globe-sunset-plus-1",
+              "referenceSourceDirectionCamera": [
+                0.10564419798347086,
+                -0.16919758508930904,
+                0.9799038119286887
+              ],
+              "referenceTransmittancePresent": false,
+              "referenceVisible": false,
+              "runtimeSourceDirectionCamera": [
+                0.10564419798347086,
+                -0.16919758508930904,
+                0.9799038119286887
+              ],
+              "runtimeTransmittancePresent": false,
+              "runtimeVisible": false
+            },
+            {
+              "accepted": true,
+              "caseId": "union-glacier-globe-sunrise",
+              "referenceSourceDirectionCamera": [
+                -0.44166808713575156,
+                0.6250854703006135,
+                0.6435817396608658
+              ],
+              "referenceTransmittancePresent": true,
+              "referenceVisible": true,
+              "runtimeSourceDirectionCamera": [
+                -0.44166808713575156,
+                0.6250854703006135,
+                0.6435817396608658
+              ],
+              "runtimeTransmittancePresent": true,
+              "runtimeVisible": true
+            },
+            {
+              "accepted": true,
+              "caseId": "union-glacier-globe-solar-noon",
+              "referenceSourceDirectionCamera": [
+                0.9693819116720377,
+                0.18408782319353767,
+                0.1625127154253787
+              ],
+              "referenceTransmittancePresent": true,
+              "referenceVisible": true,
+              "runtimeSourceDirectionCamera": [
+                0.9693819116720377,
+                0.18408782319353767,
+                0.1625127154253787
+              ],
+              "runtimeTransmittancePresent": true,
+              "runtimeVisible": true
+            },
+            {
+              "accepted": true,
+              "caseId": "union-glacier-globe-sunset",
+              "referenceSourceDirectionCamera": [
+                -0.07304784142755301,
+                -0.03284464118716529,
+                -0.9967874610006192
+              ],
+              "referenceTransmittancePresent": true,
+              "referenceVisible": true,
+              "runtimeSourceDirectionCamera": [
+                -0.07304784142755301,
+                -0.03284464118716529,
+                -0.9967874610006192
+              ],
+              "runtimeTransmittancePresent": true,
+              "runtimeVisible": true
+            },
+            {
+              "accepted": true,
+              "caseId": "union-glacier-globe-sunset-plus-1",
+              "referenceSourceDirectionCamera": [
+                -0.31424634976163596,
+                0.030246232544281826,
+                -0.9488595244177953
+              ],
+              "referenceTransmittancePresent": true,
+              "referenceVisible": true,
+              "runtimeSourceDirectionCamera": [
+                -0.31424634976163596,
+                0.030246232544281826,
+                -0.9488595244177953
+              ],
+              "runtimeTransmittancePresent": true,
+              "runtimeVisible": true
+            }
+          ],
+          "expectedVisibleSampleCount": 5
+        },
+        "sealedAttachmentFingerprints": [
+          "45abf091f4944caa6cc07f3b0ae4a36e6fff9847f2da873a9f06eca4682a3ad2",
+          "effe75fdae5e816f9e101f18e81cabf992dbbca77acefefe0f46a6eeb1945001",
+          "7877ca2cd0a749014a50db49dc23c965e7e79613bbfd7eb999544023672eaee0",
+          "51752c792a53f4792e9efb629d2fdf57d80e3792873c46b8c7a584b0a180d85c",
+          "62e564f8b5aa8d7be9923f1d480adb0d81d766625f487e8a5edc8ed4c941b93a",
+          "a4376099ad03225eb5c49d6539223e5340063ed8fe4857a17ecc542424adaf27",
+          "22431ef92618123dd6c3de7c7acab8c8255a6a24b9c6ce18f6677d1c00912607",
+          "f26056daf187fee23457b10c4dc962939ed5c5ebf5f550163603ebcd77656761"
+        ],
+        "sealedBaselineReproductionAccepted": true,
+        "sealedGeometryComparisons": [
+          {
+            "accepted": true,
+            "caseId": "san-jose-globe-sunrise",
+            "referenceFingerprint": "68060f59a9a7ad3a3a7fe91216a3b39b3233b3ead21f84c2edc1f8ac941d1634",
+            "runtimeFingerprint": "68060f59a9a7ad3a3a7fe91216a3b39b3233b3ead21f84c2edc1f8ac941d1634"
+          },
+          {
+            "accepted": true,
+            "caseId": "san-jose-globe-solar-noon",
+            "referenceFingerprint": "47463295854ced3a7cd1f9299be7069de25a8a6ec4639917cf27ad960781969a",
+            "runtimeFingerprint": "47463295854ced3a7cd1f9299be7069de25a8a6ec4639917cf27ad960781969a"
+          },
+          {
+            "accepted": true,
+            "caseId": "san-jose-globe-sunset",
+            "referenceFingerprint": "69c1af2742a5268771b7d6e385a29e558368bf126f1d99708576e1910ab7685a",
+            "runtimeFingerprint": "69c1af2742a5268771b7d6e385a29e558368bf126f1d99708576e1910ab7685a"
+          },
+          {
+            "accepted": true,
+            "caseId": "san-jose-globe-sunset-plus-1",
+            "referenceFingerprint": "46c6be2d17fe046b3c3ad07284a6801aa2041fac53a90e7660e837e5daa34021",
+            "runtimeFingerprint": "46c6be2d17fe046b3c3ad07284a6801aa2041fac53a90e7660e837e5daa34021"
+          },
+          {
+            "accepted": true,
+            "caseId": "union-glacier-globe-sunrise",
+            "referenceFingerprint": "f8f9bfdd2c32500d8dd4feb3ba22488880bf125bd6687d57ad60621b24e4630c",
+            "runtimeFingerprint": "f8f9bfdd2c32500d8dd4feb3ba22488880bf125bd6687d57ad60621b24e4630c"
+          },
+          {
+            "accepted": true,
+            "caseId": "union-glacier-globe-solar-noon",
+            "referenceFingerprint": "99c7e42814e702e82c6de5bbe106cd16b742b83d78a3e8dd348b818170aed192",
+            "runtimeFingerprint": "99c7e42814e702e82c6de5bbe106cd16b742b83d78a3e8dd348b818170aed192"
+          },
+          {
+            "accepted": true,
+            "caseId": "union-glacier-globe-sunset",
+            "referenceFingerprint": "4f69f884f5c4460c429732895d814e013a9d5bef0a3edfe8f93ef114fe51304c",
+            "runtimeFingerprint": "4f69f884f5c4460c429732895d814e013a9d5bef0a3edfe8f93ef114fe51304c"
+          },
+          {
+            "accepted": true,
+            "caseId": "union-glacier-globe-sunset-plus-1",
+            "referenceFingerprint": "cf0af64a90f96e57062b353531df2e3c1f3a2366d5b0d6c2bf1ca6c956d7c983",
+            "runtimeFingerprint": "cf0af64a90f96e57062b353531df2e3c1f3a2366d5b0d6c2bf1ca6c956d7c983"
+          }
+        ],
+        "sealedPointTransmittancePartition": {
+          "accepted": true,
+          "blockedSampleCount": 3,
+          "cases": [
+            {
+              "accepted": true,
+              "caseId": "san-jose-globe-sunrise",
+              "referenceSourceDirectionCamera": [
+                -0.16901607452289258,
+                -0.7961502995953323,
+                -0.58101485954073
+              ],
+              "referenceTransmittancePresent": false,
+              "referenceVisible": false,
+              "runtimeSourceDirectionCamera": [
+                -0.16901607452289258,
+                -0.7961502995953323,
+                -0.58101485954073
+              ],
+              "runtimeTransmittancePresent": false,
+              "runtimeVisible": false
+            },
+            {
+              "accepted": true,
+              "caseId": "san-jose-globe-solar-noon",
+              "referenceSourceDirectionCamera": [
+                0.768525106093417,
+                0.44947743714857685,
+                -0.4553451381078413
+              ],
+              "referenceTransmittancePresent": true,
+              "referenceVisible": true,
+              "runtimeSourceDirectionCamera": [
+                0.768525106093417,
+                0.44947743714857685,
+                -0.4553451381078413
+              ],
+              "runtimeTransmittancePresent": true,
+              "runtimeVisible": true
+            },
+            {
+              "accepted": true,
+              "caseId": "san-jose-globe-sunset",
+              "referenceSourceDirectionCamera": [
+                0.2592815496102442,
+                0.028887242091934218,
+                0.9653696728590724
+              ],
+              "referenceTransmittancePresent": false,
+              "referenceVisible": false,
+              "runtimeSourceDirectionCamera": [
+                0.2592815496102442,
+                0.028887242091934218,
+                0.9653696728590724
+              ],
+              "runtimeTransmittancePresent": false,
+              "runtimeVisible": false
+            },
+            {
+              "accepted": true,
+              "caseId": "san-jose-globe-sunset-plus-1",
+              "referenceSourceDirectionCamera": [
+                0.10564419798347086,
+                -0.16919758508930904,
+                0.9799038119286887
+              ],
+              "referenceTransmittancePresent": false,
+              "referenceVisible": false,
+              "runtimeSourceDirectionCamera": [
+                0.10564419798347086,
+                -0.16919758508930904,
+                0.9799038119286887
+              ],
+              "runtimeTransmittancePresent": false,
+              "runtimeVisible": false
+            },
+            {
+              "accepted": true,
+              "caseId": "union-glacier-globe-sunrise",
+              "referenceSourceDirectionCamera": [
+                -0.44166808713575156,
+                0.6250854703006135,
+                0.6435817396608658
+              ],
+              "referenceTransmittancePresent": true,
+              "referenceVisible": true,
+              "runtimeSourceDirectionCamera": [
+                -0.44166808713575156,
+                0.6250854703006135,
+                0.6435817396608658
+              ],
+              "runtimeTransmittancePresent": true,
+              "runtimeVisible": true
+            },
+            {
+              "accepted": true,
+              "caseId": "union-glacier-globe-solar-noon",
+              "referenceSourceDirectionCamera": [
+                0.9693819116720377,
+                0.18408782319353767,
+                0.1625127154253787
+              ],
+              "referenceTransmittancePresent": true,
+              "referenceVisible": true,
+              "runtimeSourceDirectionCamera": [
+                0.9693819116720377,
+                0.18408782319353767,
+                0.1625127154253787
+              ],
+              "runtimeTransmittancePresent": true,
+              "runtimeVisible": true
+            },
+            {
+              "accepted": true,
+              "caseId": "union-glacier-globe-sunset",
+              "referenceSourceDirectionCamera": [
+                -0.07304784142755301,
+                -0.03284464118716529,
+                -0.9967874610006192
+              ],
+              "referenceTransmittancePresent": true,
+              "referenceVisible": true,
+              "runtimeSourceDirectionCamera": [
+                -0.07304784142755301,
+                -0.03284464118716529,
+                -0.9967874610006192
+              ],
+              "runtimeTransmittancePresent": true,
+              "runtimeVisible": true
+            },
+            {
+              "accepted": true,
+              "caseId": "union-glacier-globe-sunset-plus-1",
+              "referenceSourceDirectionCamera": [
+                -0.31424634976163596,
+                0.030246232544281826,
+                -0.9488595244177953
+              ],
+              "referenceTransmittancePresent": true,
+              "referenceVisible": true,
+              "runtimeSourceDirectionCamera": [
+                -0.31424634976163596,
+                0.030246232544281826,
+                -0.9488595244177953
+              ],
+              "runtimeTransmittancePresent": true,
+              "runtimeVisible": true
+            }
+          ],
+          "expectedVisibleSampleCount": 5
+        },
+        "sourceReferencesFingerprintMatches": true
+      },
+      "name": "sealed attachments, physical sources, geometry, visibility, and accepted record 060 baseline remain identical",
+      "scope": "sealed-identity",
+      "status": "accepted"
+    },
+    {
+      "evidence": {
+        "reference": {
+          "atmosphereControls": {
+            "incidentAltitudeBinCount": 4,
+            "incidentDirectionCount": 4,
+            "pathIntervalCount": 384,
+            "sourceTransmittanceIntervalCount": 256
+          },
+          "extendedQuadrature": {
+            "moon": {
+              "azimuthCount": 24,
+              "radialCount": 6
+            },
+            "sun": {
+              "azimuthCount": 24,
+              "radialCount": 6
+            }
+          },
+          "id": "routed-er8-reference-path384-source256"
+        },
+        "routing": {
+          "doubledReference": {
+            "pathIntervalCount": 384,
+            "sourceTransmittanceIntervalCount": 256
+          },
+          "fixedAcceptedQuadrature": {
+            "moon": {
+              "azimuthCount": 24,
+              "radialCount": 6
+            },
+            "sun": {
+              "azimuthCount": 24,
+              "radialCount": 6
+            }
+          },
+          "fixedInactiveCache": {
+            "incidentAltitudeBinCount": 4,
+            "incidentDirectionCount": 4
+          },
+          "promotedRuntimeFromRecord064Reference": {
+            "pathIntervalCount": 192,
+            "sourceTransmittanceIntervalCount": 128
+          }
+        },
+        "runtime": {
+          "atmosphereControls": {
+            "incidentAltitudeBinCount": 4,
+            "incidentDirectionCount": 4,
+            "pathIntervalCount": 192,
+            "sourceTransmittanceIntervalCount": 128
+          },
+          "extendedQuadrature": {
+            "moon": {
+              "azimuthCount": 24,
+              "radialCount": 6
+            },
+            "sun": {
+              "azimuthCount": 24,
+              "radialCount": 6
+            }
+          },
+          "id": "routed-er8-runtime-path192-source128"
+        }
+      },
+      "name": "only routed active path and source-transmittance controls double while cache and accepted source quadrature remain fixed",
+      "scope": "profile",
+      "status": "accepted"
+    },
+    {
+      "evidence": [
+        {
+          "accepted": true,
+          "caseId": "san-jose-globe-sunrise",
+          "referenceFingerprint": "68060f59a9a7ad3a3a7fe91216a3b39b3233b3ead21f84c2edc1f8ac941d1634",
+          "runtimeFingerprint": "68060f59a9a7ad3a3a7fe91216a3b39b3233b3ead21f84c2edc1f8ac941d1634"
+        },
+        {
+          "accepted": true,
+          "caseId": "san-jose-globe-solar-noon",
+          "referenceFingerprint": "47463295854ced3a7cd1f9299be7069de25a8a6ec4639917cf27ad960781969a",
+          "runtimeFingerprint": "47463295854ced3a7cd1f9299be7069de25a8a6ec4639917cf27ad960781969a"
+        },
+        {
+          "accepted": true,
+          "caseId": "san-jose-globe-sunset",
+          "referenceFingerprint": "69c1af2742a5268771b7d6e385a29e558368bf126f1d99708576e1910ab7685a",
+          "runtimeFingerprint": "69c1af2742a5268771b7d6e385a29e558368bf126f1d99708576e1910ab7685a"
+        },
+        {
+          "accepted": true,
+          "caseId": "san-jose-globe-sunset-plus-1",
+          "referenceFingerprint": "46c6be2d17fe046b3c3ad07284a6801aa2041fac53a90e7660e837e5daa34021",
+          "runtimeFingerprint": "46c6be2d17fe046b3c3ad07284a6801aa2041fac53a90e7660e837e5daa34021"
+        },
+        {
+          "accepted": true,
+          "caseId": "union-glacier-globe-sunrise",
+          "referenceFingerprint": "f8f9bfdd2c32500d8dd4feb3ba22488880bf125bd6687d57ad60621b24e4630c",
+          "runtimeFingerprint": "f8f9bfdd2c32500d8dd4feb3ba22488880bf125bd6687d57ad60621b24e4630c"
+        },
+        {
+          "accepted": true,
+          "caseId": "union-glacier-globe-solar-noon",
+          "referenceFingerprint": "99c7e42814e702e82c6de5bbe106cd16b742b83d78a3e8dd348b818170aed192",
+          "runtimeFingerprint": "99c7e42814e702e82c6de5bbe106cd16b742b83d78a3e8dd348b818170aed192"
+        },
+        {
+          "accepted": true,
+          "caseId": "union-glacier-globe-sunset",
+          "referenceFingerprint": "4f69f884f5c4460c429732895d814e013a9d5bef0a3edfe8f93ef114fe51304c",
+          "runtimeFingerprint": "4f69f884f5c4460c429732895d814e013a9d5bef0a3edfe8f93ef114fe51304c"
+        },
+        {
+          "accepted": true,
+          "caseId": "union-glacier-globe-sunset-plus-1",
+          "referenceFingerprint": "cf0af64a90f96e57062b353531df2e3c1f3a2366d5b0d6c2bf1ca6c956d7c983",
+          "runtimeFingerprint": "cf0af64a90f96e57062b353531df2e3c1f3a2366d5b0d6c2bf1ca6c956d7c983"
+        }
+      ],
+      "name": "case, source, camera, depth, and point-visibility facts are profile invariant",
+      "scope": "geometry-depth",
+      "status": "accepted"
+    },
+    {
+      "evidence": {
+        "referenceCaseStatuses": [
+          {
+            "automatedReviewabilityStatus": "not-claimed",
+            "caseId": "san-jose-globe-sunrise",
+            "geometryDepthStatus": "accepted",
+            "humanReviewStatus": "not-claimed",
+            "mechanicalStatus": "accepted",
+            "metrics": {
+              "compositionRelativeResidual": 0,
+              "moonConservationRelativeResidual": 0,
+              "moonProjectedRecoveryRelativeResidual": 4.131778747762451e-12,
+              "siriusAccountingRelativeResidual": 0,
+              "sunConservationRelativeResidual": 0,
+              "sunProjectedRecoveryRelativeResidual": 4.5566873688747895e-12
+            },
+            "observationalStatus": "not-claimed",
+            "overallPhysicalCaseStatus": "accepted",
+            "physicalRadiometryStatus": "accepted"
+          },
+          {
+            "automatedReviewabilityStatus": "not-claimed",
+            "caseId": "san-jose-globe-solar-noon",
+            "geometryDepthStatus": "accepted",
+            "humanReviewStatus": "not-claimed",
+            "mechanicalStatus": "accepted",
+            "metrics": {
+              "compositionRelativeResidual": 0,
+              "moonConservationRelativeResidual": 0,
+              "moonProjectedRecoveryRelativeResidual": 1.151461055032383e-12,
+              "siriusAccountingRelativeResidual": 0,
+              "sunConservationRelativeResidual": 3.1844995747892432e-15,
+              "sunProjectedRecoveryRelativeResidual": 1.4654383912324476e-13
+            },
+            "observationalStatus": "not-claimed",
+            "overallPhysicalCaseStatus": "accepted",
+            "physicalRadiometryStatus": "accepted"
+          },
+          {
+            "automatedReviewabilityStatus": "not-claimed",
+            "caseId": "san-jose-globe-sunset",
+            "geometryDepthStatus": "accepted",
+            "humanReviewStatus": "not-claimed",
+            "mechanicalStatus": "accepted",
+            "metrics": {
+              "compositionRelativeResidual": 0,
+              "moonConservationRelativeResidual": 3.3064312942650673e-15,
+              "moonProjectedRecoveryRelativeResidual": 2.1062239638665825e-12,
+              "siriusAccountingRelativeResidual": 0,
+              "sunConservationRelativeResidual": 3.4784352361372856e-15,
+              "sunProjectedRecoveryRelativeResidual": 1.1351320944013448e-12
+            },
+            "observationalStatus": "not-claimed",
+            "overallPhysicalCaseStatus": "accepted",
+            "physicalRadiometryStatus": "accepted"
+          },
+          {
+            "automatedReviewabilityStatus": "not-claimed",
+            "caseId": "san-jose-globe-sunset-plus-1",
+            "geometryDepthStatus": "accepted",
+            "humanReviewStatus": "not-claimed",
+            "mechanicalStatus": "accepted",
+            "metrics": {
+              "compositionRelativeResidual": 0,
+              "moonConservationRelativeResidual": 3.009969957263682e-15,
+              "moonProjectedRecoveryRelativeResidual": 2.2044800190817056e-12,
+              "siriusAccountingRelativeResidual": 0,
+              "sunConservationRelativeResidual": 0,
+              "sunProjectedRecoveryRelativeResidual": 3.94489256900032e-12
+            },
+            "observationalStatus": "not-claimed",
+            "overallPhysicalCaseStatus": "accepted",
+            "physicalRadiometryStatus": "accepted"
+          },
+          {
+            "automatedReviewabilityStatus": "not-claimed",
+            "caseId": "union-glacier-globe-sunrise",
+            "geometryDepthStatus": "accepted",
+            "humanReviewStatus": "not-claimed",
+            "mechanicalStatus": "accepted",
+            "metrics": {
+              "compositionRelativeResidual": 0,
+              "moonConservationRelativeResidual": 0,
+              "moonProjectedRecoveryRelativeResidual": 4.101774143821431e-12,
+              "siriusAccountingRelativeResidual": 0,
+              "sunConservationRelativeResidual": 3.6786447927608626e-15,
+              "sunProjectedRecoveryRelativeResidual": 2.992705593710966e-12
+            },
+            "observationalStatus": "not-claimed",
+            "overallPhysicalCaseStatus": "accepted",
+            "physicalRadiometryStatus": "accepted"
+          },
+          {
+            "automatedReviewabilityStatus": "not-claimed",
+            "caseId": "union-glacier-globe-solar-noon",
+            "geometryDepthStatus": "accepted",
+            "humanReviewStatus": "not-claimed",
+            "mechanicalStatus": "accepted",
+            "metrics": {
+              "compositionRelativeResidual": 0,
+              "moonConservationRelativeResidual": 0,
+              "moonProjectedRecoveryRelativeResidual": 4.15171890780263e-12,
+              "siriusAccountingRelativeResidual": 0,
+              "sunConservationRelativeResidual": 3.3492139142775655e-15,
+              "sunProjectedRecoveryRelativeResidual": 2.2177491274784563e-12
+            },
+            "observationalStatus": "not-claimed",
+            "overallPhysicalCaseStatus": "accepted",
+            "physicalRadiometryStatus": "accepted"
+          },
+          {
+            "automatedReviewabilityStatus": "not-claimed",
+            "caseId": "union-glacier-globe-sunset",
+            "geometryDepthStatus": "accepted",
+            "humanReviewStatus": "not-claimed",
+            "mechanicalStatus": "accepted",
+            "metrics": {
+              "compositionRelativeResidual": 0,
+              "moonConservationRelativeResidual": 0,
+              "moonProjectedRecoveryRelativeResidual": 2.0113900368606435e-12,
+              "siriusAccountingRelativeResidual": 1.5290177758182852e-16,
+              "sunConservationRelativeResidual": 3.2943087673687733e-15,
+              "sunProjectedRecoveryRelativeResidual": 3.3016986500445546e-12
+            },
+            "observationalStatus": "not-claimed",
+            "overallPhysicalCaseStatus": "accepted",
+            "physicalRadiometryStatus": "accepted"
+          },
+          {
+            "automatedReviewabilityStatus": "not-claimed",
+            "caseId": "union-glacier-globe-sunset-plus-1",
+            "geometryDepthStatus": "accepted",
+            "humanReviewStatus": "not-claimed",
+            "mechanicalStatus": "accepted",
+            "metrics": {
+              "compositionRelativeResidual": 0,
+              "moonConservationRelativeResidual": 0,
+              "moonProjectedRecoveryRelativeResidual": 1.2294230505581746e-12,
+              "siriusAccountingRelativeResidual": 1.345864646157702e-16,
+              "sunConservationRelativeResidual": 3.184498475037652e-15,
+              "sunProjectedRecoveryRelativeResidual": 4.264523133365743e-12
+            },
+            "observationalStatus": "not-claimed",
+            "overallPhysicalCaseStatus": "accepted",
+            "physicalRadiometryStatus": "accepted"
+          }
+        ],
+        "runtimeCaseStatuses": [
+          {
+            "automatedReviewabilityStatus": "not-claimed",
+            "caseId": "san-jose-globe-sunrise",
+            "geometryDepthStatus": "accepted",
+            "humanReviewStatus": "not-claimed",
+            "mechanicalStatus": "accepted",
+            "metrics": {
+              "compositionRelativeResidual": 0,
+              "moonConservationRelativeResidual": 0,
+              "moonProjectedRecoveryRelativeResidual": 4.131778747762451e-12,
+              "siriusAccountingRelativeResidual": 0,
+              "sunConservationRelativeResidual": 0,
+              "sunProjectedRecoveryRelativeResidual": 4.5566873688747895e-12
+            },
+            "observationalStatus": "not-claimed",
+            "overallPhysicalCaseStatus": "accepted",
+            "physicalRadiometryStatus": "accepted"
+          },
+          {
+            "automatedReviewabilityStatus": "not-claimed",
+            "caseId": "san-jose-globe-solar-noon",
+            "geometryDepthStatus": "accepted",
+            "humanReviewStatus": "not-claimed",
+            "mechanicalStatus": "accepted",
+            "metrics": {
+              "compositionRelativeResidual": 0,
+              "moonConservationRelativeResidual": 0,
+              "moonProjectedRecoveryRelativeResidual": 1.151461055032383e-12,
+              "siriusAccountingRelativeResidual": 0,
+              "sunConservationRelativeResidual": 3.019784079541524e-15,
+              "sunProjectedRecoveryRelativeResidual": 1.4654383912324476e-13
+            },
+            "observationalStatus": "not-claimed",
+            "overallPhysicalCaseStatus": "accepted",
+            "physicalRadiometryStatus": "accepted"
+          },
+          {
+            "automatedReviewabilityStatus": "not-claimed",
+            "caseId": "san-jose-globe-sunset",
+            "geometryDepthStatus": "accepted",
+            "humanReviewStatus": "not-claimed",
+            "mechanicalStatus": "accepted",
+            "metrics": {
+              "compositionRelativeResidual": 0,
+              "moonConservationRelativeResidual": 3.656149988850795e-15,
+              "moonProjectedRecoveryRelativeResidual": 2.1062239638665825e-12,
+              "siriusAccountingRelativeResidual": 0,
+              "sunConservationRelativeResidual": 3.173132491824222e-15,
+              "sunProjectedRecoveryRelativeResidual": 1.1351320944013448e-12
+            },
+            "observationalStatus": "not-claimed",
+            "overallPhysicalCaseStatus": "accepted",
+            "physicalRadiometryStatus": "accepted"
+          },
+          {
+            "automatedReviewabilityStatus": "not-claimed",
+            "caseId": "san-jose-globe-sunset-plus-1",
+            "geometryDepthStatus": "accepted",
+            "humanReviewStatus": "not-claimed",
+            "mechanicalStatus": "accepted",
+            "metrics": {
+              "compositionRelativeResidual": 0,
+              "moonConservationRelativeResidual": 3.198093079592662e-15,
+              "moonProjectedRecoveryRelativeResidual": 2.2044800190817056e-12,
+              "siriusAccountingRelativeResidual": 0,
+              "sunConservationRelativeResidual": 0,
+              "sunProjectedRecoveryRelativeResidual": 3.94489256900032e-12
+            },
+            "observationalStatus": "not-claimed",
+            "overallPhysicalCaseStatus": "accepted",
+            "physicalRadiometryStatus": "accepted"
+          },
+          {
+            "automatedReviewabilityStatus": "not-claimed",
+            "caseId": "union-glacier-globe-sunrise",
+            "geometryDepthStatus": "accepted",
+            "humanReviewStatus": "not-claimed",
+            "mechanicalStatus": "accepted",
+            "metrics": {
+              "compositionRelativeResidual": 0,
+              "moonConservationRelativeResidual": 0,
+              "moonProjectedRecoveryRelativeResidual": 4.101774143821431e-12,
+              "siriusAccountingRelativeResidual": 0,
+              "sunConservationRelativeResidual": 3.5139293542790332e-15,
+              "sunProjectedRecoveryRelativeResidual": 2.992705593710966e-12
+            },
+            "observationalStatus": "not-claimed",
+            "overallPhysicalCaseStatus": "accepted",
+            "physicalRadiometryStatus": "accepted"
+          },
+          {
+            "automatedReviewabilityStatus": "not-claimed",
+            "caseId": "union-glacier-globe-solar-noon",
+            "geometryDepthStatus": "accepted",
+            "humanReviewStatus": "not-claimed",
+            "mechanicalStatus": "accepted",
+            "metrics": {
+              "compositionRelativeResidual": 0,
+              "moonConservationRelativeResidual": 0,
+              "moonProjectedRecoveryRelativeResidual": 4.15171890780263e-12,
+              "siriusAccountingRelativeResidual": 0,
+              "sunConservationRelativeResidual": 3.3492139142775655e-15,
+              "sunProjectedRecoveryRelativeResidual": 2.2177491274784563e-12
+            },
+            "observationalStatus": "not-claimed",
+            "overallPhysicalCaseStatus": "accepted",
+            "physicalRadiometryStatus": "accepted"
+          },
+          {
+            "automatedReviewabilityStatus": "not-claimed",
+            "caseId": "union-glacier-globe-sunset",
+            "geometryDepthStatus": "accepted",
+            "humanReviewStatus": "not-claimed",
+            "mechanicalStatus": "accepted",
+            "metrics": {
+              "compositionRelativeResidual": 0,
+              "moonConservationRelativeResidual": 0,
+              "moonProjectedRecoveryRelativeResidual": 2.0113900368606435e-12,
+              "siriusAccountingRelativeResidual": 1.5306132961095581e-16,
+              "sunConservationRelativeResidual": 3.1844984751231474e-15,
+              "sunProjectedRecoveryRelativeResidual": 3.3016986500445546e-12
+            },
+            "observationalStatus": "not-claimed",
+            "overallPhysicalCaseStatus": "accepted",
+            "physicalRadiometryStatus": "accepted"
+          },
+          {
+            "automatedReviewabilityStatus": "not-claimed",
+            "caseId": "union-glacier-globe-sunset-plus-1",
+            "geometryDepthStatus": "accepted",
+            "humanReviewStatus": "not-claimed",
+            "mechanicalStatus": "accepted",
+            "metrics": {
+              "compositionRelativeResidual": 0,
+              "moonConservationRelativeResidual": 0,
+              "moonProjectedRecoveryRelativeResidual": 1.2294230505581746e-12,
+              "siriusAccountingRelativeResidual": 1.3471103410680355e-16,
+              "sunConservationRelativeResidual": 2.7452573060669415e-15,
+              "sunProjectedRecoveryRelativeResidual": 4.264523133365743e-12
+            },
+            "observationalStatus": "not-claimed",
+            "overallPhysicalCaseStatus": "accepted",
+            "physicalRadiometryStatus": "accepted"
+          }
+        ]
+      },
+      "name": "both profiles retain accepted ER6 mechanical, geometry, and physical-radiometry statuses",
+      "scope": "physical-status",
+      "status": "accepted"
+    },
+    {
+      "evidence": {
+        "accepted": true,
+        "allReferenceChannelPeaksPositive": true,
+        "cardinalityAccepted": true,
+        "expectedSampleCount": 384,
+        "maximumResidual": 0.0028360179406837953,
+        "referenceChannelPeaks": [
+          0.1045241703571025,
+          0.23975838735094737,
+          0.3202730813751592,
+          0.39743527156420283,
+          0.40679369274072835,
+          0.42105228832188124,
+          0.4205716171473535,
+          0.40951210929345816,
+          0.3846682688045044,
+          0.3565459109046375,
+          0.33044356297614313,
+          0.30109440901193035,
+          0.2788328599005245,
+          0.2549590116919704,
+          0.23223313103804005
+        ],
+        "requiredMinimumReferencePeakExclusive": 1e-30,
+        "sampleCount": 384,
+        "tolerance": 0.01,
+        "worst": {
+          "channel": 14,
+          "channelReferencePeak": 0.23223313103804005,
+          "location": "union-glacier-globe-sunrise/base/5,3",
+          "reference": 0.23223313103804005,
+          "residual": 0.0028360179406837953,
+          "runtime": 0.2328917483640851
+        }
+      },
+      "name": "path spectral radiance is within one percent per-channel peak-normalized residual",
+      "scope": "path",
+      "status": "accepted"
+    },
+    {
+      "evidence": {
+        "accepted": true,
+        "cardinalityAccepted": true,
+        "expectedSampleCount": 384,
+        "maximumReferenceMagnitude": 0.9989647115305967,
+        "maximumResidual": 0.0006154303202559053,
+        "positiveReferenceMagnitude": true,
+        "sampleCount": 384,
+        "tolerance": 0.005,
+        "worst": {
+          "channel": 13,
+          "location": "san-jose-globe-sunrise/base/0,3",
+          "reference": 0.6308880665548379,
+          "residual": 0.0006154303202559053,
+          "runtime": 0.630272636234582
+        }
+      },
+      "name": "base view transmittance is within 0.005 absolute",
+      "scope": "transmittance",
+      "status": "accepted"
+    },
+    {
+      "evidence": {
+        "metric": {
+          "accepted": true,
+          "cardinalityAccepted": true,
+          "expectedSampleCount": 5,
+          "maximumReferenceMagnitude": 0.885380501279519,
+          "maximumResidual": 0.0006090022018440111,
+          "positiveReferenceMagnitude": true,
+          "sampleCount": 5,
+          "tolerance": 0.005,
+          "worst": {
+            "channel": 14,
+            "location": "union-glacier-globe-solar-noon/sirius/T",
+            "reference": 0.577820350464144,
+            "residual": 0.0006090022018440111,
+            "runtime": 0.5772113482623
+          }
+        },
+        "partition": {
+          "accepted": true,
+          "blockedSampleCount": 3,
+          "cases": [
+            {
+              "accepted": true,
+              "caseId": "san-jose-globe-sunrise",
+              "referenceSourceDirectionCamera": [
+                -0.16901607452289258,
+                -0.7961502995953323,
+                -0.58101485954073
+              ],
+              "referenceTransmittancePresent": false,
+              "referenceVisible": false,
+              "runtimeSourceDirectionCamera": [
+                -0.16901607452289258,
+                -0.7961502995953323,
+                -0.58101485954073
+              ],
+              "runtimeTransmittancePresent": false,
+              "runtimeVisible": false
+            },
+            {
+              "accepted": true,
+              "caseId": "san-jose-globe-solar-noon",
+              "referenceSourceDirectionCamera": [
+                0.768525106093417,
+                0.44947743714857685,
+                -0.4553451381078413
+              ],
+              "referenceTransmittancePresent": true,
+              "referenceVisible": true,
+              "runtimeSourceDirectionCamera": [
+                0.768525106093417,
+                0.44947743714857685,
+                -0.4553451381078413
+              ],
+              "runtimeTransmittancePresent": true,
+              "runtimeVisible": true
+            },
+            {
+              "accepted": true,
+              "caseId": "san-jose-globe-sunset",
+              "referenceSourceDirectionCamera": [
+                0.2592815496102442,
+                0.028887242091934218,
+                0.9653696728590724
+              ],
+              "referenceTransmittancePresent": false,
+              "referenceVisible": false,
+              "runtimeSourceDirectionCamera": [
+                0.2592815496102442,
+                0.028887242091934218,
+                0.9653696728590724
+              ],
+              "runtimeTransmittancePresent": false,
+              "runtimeVisible": false
+            },
+            {
+              "accepted": true,
+              "caseId": "san-jose-globe-sunset-plus-1",
+              "referenceSourceDirectionCamera": [
+                0.10564419798347086,
+                -0.16919758508930904,
+                0.9799038119286887
+              ],
+              "referenceTransmittancePresent": false,
+              "referenceVisible": false,
+              "runtimeSourceDirectionCamera": [
+                0.10564419798347086,
+                -0.16919758508930904,
+                0.9799038119286887
+              ],
+              "runtimeTransmittancePresent": false,
+              "runtimeVisible": false
+            },
+            {
+              "accepted": true,
+              "caseId": "union-glacier-globe-sunrise",
+              "referenceSourceDirectionCamera": [
+                -0.44166808713575156,
+                0.6250854703006135,
+                0.6435817396608658
+              ],
+              "referenceTransmittancePresent": true,
+              "referenceVisible": true,
+              "runtimeSourceDirectionCamera": [
+                -0.44166808713575156,
+                0.6250854703006135,
+                0.6435817396608658
+              ],
+              "runtimeTransmittancePresent": true,
+              "runtimeVisible": true
+            },
+            {
+              "accepted": true,
+              "caseId": "union-glacier-globe-solar-noon",
+              "referenceSourceDirectionCamera": [
+                0.9693819116720377,
+                0.18408782319353767,
+                0.1625127154253787
+              ],
+              "referenceTransmittancePresent": true,
+              "referenceVisible": true,
+              "runtimeSourceDirectionCamera": [
+                0.9693819116720377,
+                0.18408782319353767,
+                0.1625127154253787
+              ],
+              "runtimeTransmittancePresent": true,
+              "runtimeVisible": true
+            },
+            {
+              "accepted": true,
+              "caseId": "union-glacier-globe-sunset",
+              "referenceSourceDirectionCamera": [
+                -0.07304784142755301,
+                -0.03284464118716529,
+                -0.9967874610006192
+              ],
+              "referenceTransmittancePresent": true,
+              "referenceVisible": true,
+              "runtimeSourceDirectionCamera": [
+                -0.07304784142755301,
+                -0.03284464118716529,
+                -0.9967874610006192
+              ],
+              "runtimeTransmittancePresent": true,
+              "runtimeVisible": true
+            },
+            {
+              "accepted": true,
+              "caseId": "union-glacier-globe-sunset-plus-1",
+              "referenceSourceDirectionCamera": [
+                -0.31424634976163596,
+                0.030246232544281826,
+                -0.9488595244177953
+              ],
+              "referenceTransmittancePresent": true,
+              "referenceVisible": true,
+              "runtimeSourceDirectionCamera": [
+                -0.31424634976163596,
+                0.030246232544281826,
+                -0.9488595244177953
+              ],
+              "runtimeTransmittancePresent": true,
+              "runtimeVisible": true
+            }
+          ],
+          "expectedVisibleSampleCount": 5
+        }
+      },
+      "name": "exact-source Sirius transmittance is within 0.005 absolute",
+      "scope": "transmittance",
+      "status": "accepted"
+    },
+    {
+      "evidence": {
+        "accepted": true,
+        "cardinalityAccepted": true,
+        "caseCount": 8,
+        "comparisons": [
+          {
+            "accepted": true,
+            "caseId": "san-jose-globe-sunrise",
+            "maximumResidual": 0,
+            "referenceOracle": {
+              "accepted": true,
+              "maximumResidual": 0,
+              "structuralMatch": true,
+              "tolerance": 1e-15
+            },
+            "runtimeOracle": {
+              "accepted": true,
+              "maximumResidual": 0,
+              "structuralMatch": true,
+              "tolerance": 1e-15
+            },
+            "runtimeReferenceIdentical": true
+          },
+          {
+            "accepted": true,
+            "caseId": "san-jose-globe-solar-noon",
+            "maximumResidual": 0,
+            "referenceOracle": {
+              "accepted": true,
+              "maximumResidual": 0,
+              "structuralMatch": true,
+              "tolerance": 1e-15
+            },
+            "runtimeOracle": {
+              "accepted": true,
+              "maximumResidual": 0,
+              "structuralMatch": true,
+              "tolerance": 1e-15
+            },
+            "runtimeReferenceIdentical": true
+          },
+          {
+            "accepted": true,
+            "caseId": "san-jose-globe-sunset",
+            "maximumResidual": 0,
+            "referenceOracle": {
+              "accepted": true,
+              "maximumResidual": 0,
+              "structuralMatch": true,
+              "tolerance": 1e-15
+            },
+            "runtimeOracle": {
+              "accepted": true,
+              "maximumResidual": 0,
+              "structuralMatch": true,
+              "tolerance": 1e-15
+            },
+            "runtimeReferenceIdentical": true
+          },
+          {
+            "accepted": true,
+            "caseId": "san-jose-globe-sunset-plus-1",
+            "maximumResidual": 0,
+            "referenceOracle": {
+              "accepted": true,
+              "maximumResidual": 0,
+              "structuralMatch": true,
+              "tolerance": 1e-15
+            },
+            "runtimeOracle": {
+              "accepted": true,
+              "maximumResidual": 0,
+              "structuralMatch": true,
+              "tolerance": 1e-15
+            },
+            "runtimeReferenceIdentical": true
+          },
+          {
+            "accepted": true,
+            "caseId": "union-glacier-globe-sunrise",
+            "maximumResidual": 0,
+            "referenceOracle": {
+              "accepted": true,
+              "maximumResidual": 0,
+              "structuralMatch": true,
+              "tolerance": 1e-15
+            },
+            "runtimeOracle": {
+              "accepted": true,
+              "maximumResidual": 0,
+              "structuralMatch": true,
+              "tolerance": 1e-15
+            },
+            "runtimeReferenceIdentical": true
+          },
+          {
+            "accepted": true,
+            "caseId": "union-glacier-globe-solar-noon",
+            "maximumResidual": 0,
+            "referenceOracle": {
+              "accepted": true,
+              "maximumResidual": 0,
+              "structuralMatch": true,
+              "tolerance": 1e-15
+            },
+            "runtimeOracle": {
+              "accepted": true,
+              "maximumResidual": 0,
+              "structuralMatch": true,
+              "tolerance": 1e-15
+            },
+            "runtimeReferenceIdentical": true
+          },
+          {
+            "accepted": true,
+            "caseId": "union-glacier-globe-sunset",
+            "maximumResidual": 0,
+            "referenceOracle": {
+              "accepted": true,
+              "maximumResidual": 0,
+              "structuralMatch": true,
+              "tolerance": 1e-15
+            },
+            "runtimeOracle": {
+              "accepted": true,
+              "maximumResidual": 0,
+              "structuralMatch": true,
+              "tolerance": 1e-15
+            },
+            "runtimeReferenceIdentical": true
+          },
+          {
+            "accepted": true,
+            "caseId": "union-glacier-globe-sunset-plus-1",
+            "maximumResidual": 0,
+            "referenceOracle": {
+              "accepted": true,
+              "maximumResidual": 0,
+              "structuralMatch": true,
+              "tolerance": 1e-15
+            },
+            "runtimeOracle": {
+              "accepted": true,
+              "maximumResidual": 0,
+              "structuralMatch": true,
+              "tolerance": 1e-15
+            },
+            "runtimeReferenceIdentical": true
+          }
+        ],
+        "expectedCaseCount": 8,
+        "maximumResidual": 0,
+        "tolerance": 1e-15
+      },
+      "name": "independent separable-tent oracle and both profiles agree within 1e-15",
+      "scope": "point-response",
+      "status": "accepted"
+    },
+    {
+      "evidence": {
+        "accepted": true,
+        "allReferenceChannelPeaksPositive": true,
+        "cardinalityAccepted": true,
+        "expectedSampleCount": 8,
+        "maximumResidual": 0.0007155463004758786,
+        "referenceChannelPeaks": [
+          6.539319164019298e-11,
+          1.3639799237767003e-10,
+          1.4023702058824482e-10,
+          1.3611774958006056e-10,
+          1.1792665625456794e-10,
+          1.0870042505130574e-10,
+          9.72129465682069e-11,
+          8.543440362645455e-11,
+          7.467412543699808e-11,
+          6.289748288450421e-11,
+          5.80034009315297e-11,
+          5.1106918732530493e-11,
+          4.513560880353025e-11,
+          3.996946163034391e-11,
+          3.548067022666347e-11
+        ],
+        "requiredMinimumReferencePeakExclusive": 1e-30,
+        "sampleCount": 8,
+        "tolerance": 0.005,
+        "worst": {
+          "channel": 0,
+          "channelReferencePeak": 6.539319164019298e-11,
+          "location": "san-jose-globe-solar-noon/sirius/accounted",
+          "reference": 6.539319164019298e-11,
+          "residual": 0.0007155463004758786,
+          "runtime": 6.534639978383853e-11
+        }
+      },
+      "name": "accounted Sirius transported irradiance is within 0.5 percent",
+      "scope": "point-transport",
+      "status": "accepted"
+    },
+    {
+      "evidence": {
+        "accepted": true,
+        "allReferenceChannelPeaksPositive": true,
+        "cardinalityAccepted": true,
+        "expectedSampleCount": 8,
+        "maximumResidual": 0,
+        "referenceChannelPeaks": [
+          1.0688666666708795,
+          1.729673000006817,
+          1.8620716666740047,
+          2.022063333341307,
+          1.9081540000075186,
+          1.883391000007423,
+          1.834246666673897,
+          1.7674400000069668,
+          1.6595200000065404,
+          1.5481023333394381,
+          1.4507800000057225,
+          1.3409603333386217,
+          1.2624333333383129,
+          1.175208000004636,
+          1.0908240000043012
+        ],
+        "requiredMinimumReferencePeakExclusive": 1e-30,
+        "sampleCount": 8,
+        "tolerance": 0.005,
+        "worst": null
+      },
+      "name": "Sun input projected irradiance is within 0.5 percent",
+      "scope": "extended-quadrature",
+      "status": "accepted"
+    },
+    {
+      "evidence": {
+        "accepted": true,
+        "allReferenceChannelPeaksPositive": true,
+        "cardinalityAccepted": true,
+        "expectedSampleCount": 8,
+        "maximumResidual": 0,
+        "referenceChannelPeaks": [
+          0.0000017154672504116613,
+          0.0000027133412518439025,
+          0.000003420259608898839,
+          0.000004175161272344539,
+          0.000004248557119994662,
+          0.0000043474870805054525,
+          0.000004478551916970556,
+          0.000004505045924299072,
+          0.000004373704719666665,
+          0.000004215312357295198,
+          0.000004145744572255813,
+          0.000003960313739075497,
+          0.000003797790442227489,
+          0.0000036349943395727135,
+          0.0000034470227210374557
+        ],
+        "requiredMinimumReferencePeakExclusive": 1e-30,
+        "sampleCount": 8,
+        "tolerance": 0.005,
+        "worst": null
+      },
+      "name": "Moon input projected irradiance is within 0.5 percent",
+      "scope": "extended-quadrature",
+      "status": "accepted"
+    },
+    {
+      "evidence": {
+        "accepted": true,
+        "allReferenceChannelPeaksPositive": true,
+        "cardinalityAccepted": true,
+        "expectedSampleCount": 8,
+        "maximumResidual": 0.0005864954614970675,
+        "referenceChannelPeaks": [
+          0.5850334975237161,
+          1.0957207856836817,
+          1.3041704365785403,
+          1.5204761963319795,
+          1.5107542343412714,
+          1.5493799935777615,
+          1.5534265062613224,
+          1.5308138167470553,
+          1.462900719298588,
+          1.3840053928023315,
+          1.3118339456897463,
+          1.2238854257085132,
+          1.1611544110165415,
+          1.0879551151849536,
+          1.0153961130048288
+        ],
+        "requiredMinimumReferencePeakExclusive": 1e-30,
+        "sampleCount": 8,
+        "tolerance": 0.005,
+        "worst": {
+          "channel": 7,
+          "channelReferencePeak": 1.5308138167470553,
+          "location": "union-glacier-globe-sunset-plus-1/sun/transmitted",
+          "reference": 1.1072460951077194,
+          "residual": 0.0005864954614970675,
+          "runtime": 1.1063482797518003
+        }
+      },
+      "name": "Sun transported projected irradiance is within 0.5 percent",
+      "scope": "extended-transport",
+      "status": "accepted"
+    },
+    {
+      "evidence": {
+        "accepted": true,
+        "allReferenceChannelPeaksPositive": true,
+        "cardinalityAccepted": true,
+        "expectedSampleCount": 8,
+        "maximumResidual": 0.0016411424771230008,
+        "referenceChannelPeaks": [
+          8.674417267854953e-8,
+          2.6258404066396404e-7,
+          5.181128460432363e-7,
+          8.679375118063464e-7,
+          0.000001112074697877457,
+          0.0000013527443265092504,
+          0.0000015912269042884851,
+          0.000001774279256014262,
+          0.0000018693073843301183,
+          0.000001923682345953278,
+          0.000001994148052626847,
+          0.000001988010895316752,
+          0.0000019753537041910427,
+          0.0000019479214583774863,
+          0.000001894181090252412
+        ],
+        "requiredMinimumReferencePeakExclusive": 1e-30,
+        "sampleCount": 8,
+        "tolerance": 0.005,
+        "worst": {
+          "channel": 0,
+          "channelReferencePeak": 8.674417267854953e-8,
+          "location": "san-jose-globe-sunset-plus-1/moon/transmitted",
+          "reference": 8.674417267854953e-8,
+          "residual": 0.0016411424771230008,
+          "runtime": 8.660181313212387e-8
+        }
+      },
+      "name": "Moon transported projected irradiance is within 0.5 percent",
+      "scope": "extended-transport",
+      "status": "accepted"
+    },
+    {
+      "evidence": {
+        "accepted": true,
+        "allReferenceChannelPeaksPositive": true,
+        "cardinalityAccepted": true,
+        "expectedSampleCount": 384,
+        "maximumResidual": 0.00112219981379637,
+        "referenceChannelPeaks": [
+          4.328682211045664,
+          10.622742360762468,
+          15.222309610561108,
+          20.236579102598682,
+          22.11680986635399,
+          24.344477544038984,
+          25.751639853834643,
+          26.448227110947283,
+          26.108568440308158,
+          25.34754991401178,
+          24.533017086393055,
+          23.283033212628098,
+          22.404743405239135,
+          21.242818568603678,
+          20.0260205662873
+        ],
+        "requiredMinimumReferencePeakExclusive": 1e-30,
+        "sampleCount": 384,
+        "tolerance": 0.01,
+        "worst": {
+          "channel": 0,
+          "channelReferencePeak": 4.328682211045664,
+          "location": "union-glacier-globe-sunrise/final/5,2",
+          "reference": 4.328682211045664,
+          "residual": 0.00112219981379637,
+          "runtime": 4.323824564674445
+        }
+      },
+      "name": "final pre-display spectrum is within one percent per-channel peak-normalized residual",
+      "scope": "composition",
+      "status": "accepted"
+    },
+    {
+      "evidence": {
+        "accepted": true,
+        "cardinalityAccepted": true,
+        "expectedSampleCount": 384,
+        "maximumReferenceMagnitude": 1,
+        "maximumResidual": 0.0007381729727574671,
+        "positiveReferenceMagnitude": true,
+        "sampleCount": 384,
+        "tolerance": 0.00392156862745098,
+        "worst": {
+          "channel": 0,
+          "location": "san-jose-globe-solar-noon/final/5,0",
+          "reference": 0.48988497528996944,
+          "residual": 0.0007381729727574671,
+          "runtime": 0.4906231482627269
+        }
+      },
+      "name": "shared display RGB is within one 8-bit code value",
+      "scope": "display",
+      "status": "accepted"
+    },
+    {
+      "evidence": {
+        "accepted": true,
+        "kind": "er8-unit-consistent-conservation-metric-v1",
+        "maximumResidual": 3.6786447927608626e-15,
+        "submetrics": {
+          "composition": {
+            "accepted": true,
+            "allOwningInputScalesPositive": true,
+            "cardinalityAccepted": true,
+            "expectedSampleCount": 16,
+            "id": "composition",
+            "maximumRelativeResidual": 0,
+            "sampleCount": 16,
+            "samples": [
+              {
+                "absoluteResidual": 0,
+                "allowedAbsoluteResidual": 4.154667735435266e-14,
+                "caseId": "san-jose-globe-sunrise",
+                "positiveOwningInputScale": true,
+                "profileId": "routed-er8-runtime-path192-source128",
+                "quantity": "spectral-radiance-density",
+                "relativeResidual": 0,
+                "reportedRelativeResidual": 0,
+                "reportedResidualMatches": true,
+                "requiredMinimumOwningInputScaleExclusive": 1e-30,
+                "scale": 0.04154667735435266,
+                "units": "W m^-2 sr^-1 nm^-1"
+              },
+              {
+                "absoluteResidual": 0,
+                "allowedAbsoluteResidual": 6.771852239806987e-14,
+                "caseId": "san-jose-globe-solar-noon",
+                "positiveOwningInputScale": true,
+                "profileId": "routed-er8-runtime-path192-source128",
+                "quantity": "spectral-radiance-density",
+                "relativeResidual": 0,
+                "reportedRelativeResidual": 0,
+                "reportedResidualMatches": true,
+                "requiredMinimumOwningInputScaleExclusive": 1e-30,
+                "scale": 0.06771852239806987,
+                "units": "W m^-2 sr^-1 nm^-1"
+              },
+              {
+                "absoluteResidual": 0,
+                "allowedAbsoluteResidual": 1.2028930961971976e-14,
+                "caseId": "san-jose-globe-sunset",
+                "positiveOwningInputScale": true,
+                "profileId": "routed-er8-runtime-path192-source128",
+                "quantity": "spectral-radiance-density",
+                "relativeResidual": 0,
+                "reportedRelativeResidual": 0,
+                "reportedResidualMatches": true,
+                "requiredMinimumOwningInputScaleExclusive": 1e-30,
+                "scale": 0.012028930961971976,
+                "units": "W m^-2 sr^-1 nm^-1"
+              },
+              {
+                "absoluteResidual": 0,
+                "allowedAbsoluteResidual": 2.3829571284225825e-17,
+                "caseId": "san-jose-globe-sunset-plus-1",
+                "positiveOwningInputScale": true,
+                "profileId": "routed-er8-runtime-path192-source128",
+                "quantity": "spectral-radiance-density",
+                "relativeResidual": 0,
+                "reportedRelativeResidual": 0,
+                "reportedResidualMatches": true,
+                "requiredMinimumOwningInputScaleExclusive": 1e-30,
+                "scale": 0.000023829571284225826,
+                "units": "W m^-2 sr^-1 nm^-1"
+              },
+              {
+                "absoluteResidual": 0,
+                "allowedAbsoluteResidual": 2.6429656160743803e-11,
+                "caseId": "union-glacier-globe-sunrise",
+                "positiveOwningInputScale": true,
+                "profileId": "routed-er8-runtime-path192-source128",
+                "quantity": "spectral-radiance-density",
+                "relativeResidual": 0,
+                "reportedRelativeResidual": 0,
+                "reportedResidualMatches": true,
+                "requiredMinimumOwningInputScaleExclusive": 1e-30,
+                "scale": 26.429656160743804,
+                "units": "W m^-2 sr^-1 nm^-1"
+              },
+              {
+                "absoluteResidual": 0,
+                "allowedAbsoluteResidual": 7.770659243402179e-14,
+                "caseId": "union-glacier-globe-solar-noon",
+                "positiveOwningInputScale": true,
+                "profileId": "routed-er8-runtime-path192-source128",
+                "quantity": "spectral-radiance-density",
+                "relativeResidual": 0,
+                "reportedRelativeResidual": 0,
+                "reportedResidualMatches": true,
+                "requiredMinimumOwningInputScaleExclusive": 1e-30,
+                "scale": 0.0777065924340218,
+                "units": "W m^-2 sr^-1 nm^-1"
+              },
+              {
+                "absoluteResidual": 0,
+                "allowedAbsoluteResidual": 7.138689428488023e-14,
+                "caseId": "union-glacier-globe-sunset",
+                "positiveOwningInputScale": true,
+                "profileId": "routed-er8-runtime-path192-source128",
+                "quantity": "spectral-radiance-density",
+                "relativeResidual": 0,
+                "reportedRelativeResidual": 0,
+                "reportedResidualMatches": true,
+                "requiredMinimumOwningInputScaleExclusive": 1e-30,
+                "scale": 0.07138689428488024,
+                "units": "W m^-2 sr^-1 nm^-1"
+              },
+              {
+                "absoluteResidual": 0,
+                "allowedAbsoluteResidual": 6.976240492713489e-14,
+                "caseId": "union-glacier-globe-sunset-plus-1",
+                "positiveOwningInputScale": true,
+                "profileId": "routed-er8-runtime-path192-source128",
+                "quantity": "spectral-radiance-density",
+                "relativeResidual": 0,
+                "reportedRelativeResidual": 0,
+                "reportedResidualMatches": true,
+                "requiredMinimumOwningInputScaleExclusive": 1e-30,
+                "scale": 0.06976240492713488,
+                "units": "W m^-2 sr^-1 nm^-1"
+              },
+              {
+                "absoluteResidual": 0,
+                "allowedAbsoluteResidual": 4.159872982119948e-14,
+                "caseId": "san-jose-globe-sunrise",
+                "positiveOwningInputScale": true,
+                "profileId": "routed-er8-reference-path384-source256",
+                "quantity": "spectral-radiance-density",
+                "relativeResidual": 0,
+                "reportedRelativeResidual": 0,
+                "reportedResidualMatches": true,
+                "requiredMinimumOwningInputScaleExclusive": 1e-30,
+                "scale": 0.04159872982119948,
+                "units": "W m^-2 sr^-1 nm^-1"
+              },
+              {
+                "absoluteResidual": 0,
+                "allowedAbsoluteResidual": 6.769373029547918e-14,
+                "caseId": "san-jose-globe-solar-noon",
+                "positiveOwningInputScale": true,
+                "profileId": "routed-er8-reference-path384-source256",
+                "quantity": "spectral-radiance-density",
+                "relativeResidual": 0,
+                "reportedRelativeResidual": 0,
+                "reportedResidualMatches": true,
+                "requiredMinimumOwningInputScaleExclusive": 1e-30,
+                "scale": 0.06769373029547919,
+                "units": "W m^-2 sr^-1 nm^-1"
+              },
+              {
+                "absoluteResidual": 0,
+                "allowedAbsoluteResidual": 1.2042666929596167e-14,
+                "caseId": "san-jose-globe-sunset",
+                "positiveOwningInputScale": true,
+                "profileId": "routed-er8-reference-path384-source256",
+                "quantity": "spectral-radiance-density",
+                "relativeResidual": 0,
+                "reportedRelativeResidual": 0,
+                "reportedResidualMatches": true,
+                "requiredMinimumOwningInputScaleExclusive": 1e-30,
+                "scale": 0.012042666929596168,
+                "units": "W m^-2 sr^-1 nm^-1"
+              },
+              {
+                "absoluteResidual": 0,
+                "allowedAbsoluteResidual": 2.3851284197754854e-17,
+                "caseId": "san-jose-globe-sunset-plus-1",
+                "positiveOwningInputScale": true,
+                "profileId": "routed-er8-reference-path384-source256",
+                "quantity": "spectral-radiance-density",
+                "relativeResidual": 0,
+                "reportedRelativeResidual": 0,
+                "reportedResidualMatches": true,
+                "requiredMinimumOwningInputScaleExclusive": 1e-30,
+                "scale": 0.000023851284197754854,
+                "units": "W m^-2 sr^-1 nm^-1"
+              },
+              {
+                "absoluteResidual": 0,
+                "allowedAbsoluteResidual": 2.6448227110947284e-11,
+                "caseId": "union-glacier-globe-sunrise",
+                "positiveOwningInputScale": true,
+                "profileId": "routed-er8-reference-path384-source256",
+                "quantity": "spectral-radiance-density",
+                "relativeResidual": 0,
+                "reportedRelativeResidual": 0,
+                "reportedResidualMatches": true,
+                "requiredMinimumOwningInputScaleExclusive": 1e-30,
+                "scale": 26.448227110947283,
+                "units": "W m^-2 sr^-1 nm^-1"
+              },
+              {
+                "absoluteResidual": 0,
+                "allowedAbsoluteResidual": 7.767802109570679e-14,
+                "caseId": "union-glacier-globe-solar-noon",
+                "positiveOwningInputScale": true,
+                "profileId": "routed-er8-reference-path384-source256",
+                "quantity": "spectral-radiance-density",
+                "relativeResidual": 0,
+                "reportedRelativeResidual": 0,
+                "reportedResidualMatches": true,
+                "requiredMinimumOwningInputScaleExclusive": 1e-30,
+                "scale": 0.07767802109570679,
+                "units": "W m^-2 sr^-1 nm^-1"
+              },
+              {
+                "absoluteResidual": 0,
+                "allowedAbsoluteResidual": 7.14628189840741e-14,
+                "caseId": "union-glacier-globe-sunset",
+                "positiveOwningInputScale": true,
+                "profileId": "routed-er8-reference-path384-source256",
+                "quantity": "spectral-radiance-density",
+                "relativeResidual": 0,
+                "reportedRelativeResidual": 0,
+                "reportedResidualMatches": true,
+                "requiredMinimumOwningInputScaleExclusive": 1e-30,
+                "scale": 0.0714628189840741,
+                "units": "W m^-2 sr^-1 nm^-1"
+              },
+              {
+                "absoluteResidual": 0,
+                "allowedAbsoluteResidual": 6.984428415590598e-14,
+                "caseId": "union-glacier-globe-sunset-plus-1",
+                "positiveOwningInputScale": true,
+                "profileId": "routed-er8-reference-path384-source256",
+                "quantity": "spectral-radiance-density",
+                "relativeResidual": 0,
+                "reportedRelativeResidual": 0,
+                "reportedResidualMatches": true,
+                "requiredMinimumOwningInputScaleExclusive": 1e-30,
+                "scale": 0.06984428415590599,
+                "units": "W m^-2 sr^-1 nm^-1"
+              }
+            ],
+            "tolerance": 1e-12
+          },
+          "moon": {
+            "accepted": true,
+            "allOwningInputScalesPositive": true,
+            "cardinalityAccepted": true,
+            "expectedSampleCount": 16,
+            "id": "moon",
+            "maximumRelativeResidual": 3.656149988850795e-15,
+            "sampleCount": 16,
+            "samples": [
+              {
+                "absoluteResidual": 0,
+                "allowedAbsoluteResidual": 2.6200328076294674e-18,
+                "caseId": "san-jose-globe-sunrise",
+                "positiveOwningInputScale": true,
+                "profileId": "routed-er8-runtime-path192-source128",
+                "quantity": "spectral-radiance-solid-angle-integral",
+                "relativeResidual": 0,
+                "reportedRelativeResidual": 0,
+                "reportedResidualMatches": true,
+                "requiredMinimumOwningInputScaleExclusive": 1e-30,
+                "scale": 0.0000026200328076294675,
+                "units": "W m^-2 nm^-1"
+              },
+              {
+                "absoluteResidual": 0,
+                "allowedAbsoluteResidual": 2.8931802424284034e-18,
+                "caseId": "san-jose-globe-solar-noon",
+                "positiveOwningInputScale": true,
+                "profileId": "routed-er8-runtime-path192-source128",
+                "quantity": "spectral-radiance-solid-angle-integral",
+                "relativeResidual": 0,
+                "reportedRelativeResidual": 0,
+                "reportedResidualMatches": true,
+                "requiredMinimumOwningInputScaleExclusive": 1e-30,
+                "scale": 0.0000028931802424284036,
+                "units": "W m^-2 nm^-1"
+              },
+              {
+                "absoluteResidual": 1.2176098616780567e-20,
+                "allowedAbsoluteResidual": 3.330306101749335e-18,
+                "caseId": "san-jose-globe-sunset",
+                "positiveOwningInputScale": true,
+                "profileId": "routed-er8-runtime-path192-source128",
+                "quantity": "spectral-radiance-solid-angle-integral",
+                "relativeResidual": 3.656149988850795e-15,
+                "reportedRelativeResidual": 3.656149988850795e-15,
+                "reportedResidualMatches": true,
+                "requiredMinimumOwningInputScaleExclusive": 1e-30,
+                "scale": 0.000003330306101749335,
+                "units": "W m^-2 nm^-1"
+              },
+              {
+                "absoluteResidual": 1.079967007749233e-20,
+                "allowedAbsoluteResidual": 3.3769092420749283e-18,
+                "caseId": "san-jose-globe-sunset-plus-1",
+                "positiveOwningInputScale": true,
+                "profileId": "routed-er8-runtime-path192-source128",
+                "quantity": "spectral-radiance-solid-angle-integral",
+                "relativeResidual": 3.198093079592662e-15,
+                "reportedRelativeResidual": 3.198093079592662e-15,
+                "reportedResidualMatches": true,
+                "requiredMinimumOwningInputScaleExclusive": 1e-30,
+                "scale": 0.000003376909242074928,
+                "units": "W m^-2 nm^-1"
+              },
+              {
+                "absoluteResidual": 0,
+                "allowedAbsoluteResidual": 3.683043040639396e-18,
+                "caseId": "union-glacier-globe-sunrise",
+                "positiveOwningInputScale": true,
+                "profileId": "routed-er8-runtime-path192-source128",
+                "quantity": "spectral-radiance-solid-angle-integral",
+                "relativeResidual": 0,
+                "reportedRelativeResidual": 0,
+                "reportedResidualMatches": true,
+                "requiredMinimumOwningInputScaleExclusive": 1e-30,
+                "scale": 0.000003683043040639396,
+                "units": "W m^-2 nm^-1"
+              },
+              {
+                "absoluteResidual": 0,
+                "allowedAbsoluteResidual": 4.054232773312722e-18,
+                "caseId": "union-glacier-globe-solar-noon",
+                "positiveOwningInputScale": true,
+                "profileId": "routed-er8-runtime-path192-source128",
+                "quantity": "spectral-radiance-solid-angle-integral",
+                "relativeResidual": 0,
+                "reportedRelativeResidual": 0,
+                "reportedResidualMatches": true,
+                "requiredMinimumOwningInputScaleExclusive": 1e-30,
+                "scale": 0.000004054232773312722,
+                "units": "W m^-2 nm^-1"
+              },
+              {
+                "absoluteResidual": 0,
+                "allowedAbsoluteResidual": 4.461039292279343e-18,
+                "caseId": "union-glacier-globe-sunset",
+                "positiveOwningInputScale": true,
+                "profileId": "routed-er8-runtime-path192-source128",
+                "quantity": "spectral-radiance-solid-angle-integral",
+                "relativeResidual": 0,
+                "reportedRelativeResidual": 0,
+                "reportedResidualMatches": true,
+                "requiredMinimumOwningInputScaleExclusive": 1e-30,
+                "scale": 0.000004461039292279343,
+                "units": "W m^-2 nm^-1"
+              },
+              {
+                "absoluteResidual": 0,
+                "allowedAbsoluteResidual": 4.505070528473359e-18,
+                "caseId": "union-glacier-globe-sunset-plus-1",
+                "positiveOwningInputScale": true,
+                "profileId": "routed-er8-runtime-path192-source128",
+                "quantity": "spectral-radiance-solid-angle-integral",
+                "relativeResidual": 0,
+                "reportedRelativeResidual": 0,
+                "reportedResidualMatches": true,
+                "requiredMinimumOwningInputScaleExclusive": 1e-30,
+                "scale": 0.0000045050705284733585,
+                "units": "W m^-2 nm^-1"
+              },
+              {
+                "absoluteResidual": 0,
+                "allowedAbsoluteResidual": 2.6200328076294674e-18,
+                "caseId": "san-jose-globe-sunrise",
+                "positiveOwningInputScale": true,
+                "profileId": "routed-er8-reference-path384-source256",
+                "quantity": "spectral-radiance-solid-angle-integral",
+                "relativeResidual": 0,
+                "reportedRelativeResidual": 0,
+                "reportedResidualMatches": true,
+                "requiredMinimumOwningInputScaleExclusive": 1e-30,
+                "scale": 0.0000026200328076294675,
+                "units": "W m^-2 nm^-1"
+              },
+              {
+                "absoluteResidual": 0,
+                "allowedAbsoluteResidual": 2.8931802424284034e-18,
+                "caseId": "san-jose-globe-solar-noon",
+                "positiveOwningInputScale": true,
+                "profileId": "routed-er8-reference-path384-source256",
+                "quantity": "spectral-radiance-solid-angle-integral",
+                "relativeResidual": 0,
+                "reportedRelativeResidual": 0,
+                "reportedResidualMatches": true,
+                "requiredMinimumOwningInputScaleExclusive": 1e-30,
+                "scale": 0.0000028931802424284036,
+                "units": "W m^-2 nm^-1"
+              },
+              {
+                "absoluteResidual": 1.1011428314305904e-20,
+                "allowedAbsoluteResidual": 3.330306101749335e-18,
+                "caseId": "san-jose-globe-sunset",
+                "positiveOwningInputScale": true,
+                "profileId": "routed-er8-reference-path384-source256",
+                "quantity": "spectral-radiance-solid-angle-integral",
+                "relativeResidual": 3.3064312942650673e-15,
+                "reportedRelativeResidual": 3.3064312942650673e-15,
+                "reportedResidualMatches": true,
+                "requiredMinimumOwningInputScaleExclusive": 1e-30,
+                "scale": 0.000003330306101749335,
+                "units": "W m^-2 nm^-1"
+              },
+              {
+                "absoluteResidual": 1.0164395367051604e-20,
+                "allowedAbsoluteResidual": 3.3769092420749283e-18,
+                "caseId": "san-jose-globe-sunset-plus-1",
+                "positiveOwningInputScale": true,
+                "profileId": "routed-er8-reference-path384-source256",
+                "quantity": "spectral-radiance-solid-angle-integral",
+                "relativeResidual": 3.009969957263682e-15,
+                "reportedRelativeResidual": 3.009969957263682e-15,
+                "reportedResidualMatches": true,
+                "requiredMinimumOwningInputScaleExclusive": 1e-30,
+                "scale": 0.000003376909242074928,
+                "units": "W m^-2 nm^-1"
+              },
+              {
+                "absoluteResidual": 0,
+                "allowedAbsoluteResidual": 3.683043040639396e-18,
+                "caseId": "union-glacier-globe-sunrise",
+                "positiveOwningInputScale": true,
+                "profileId": "routed-er8-reference-path384-source256",
+                "quantity": "spectral-radiance-solid-angle-integral",
+                "relativeResidual": 0,
+                "reportedRelativeResidual": 0,
+                "reportedResidualMatches": true,
+                "requiredMinimumOwningInputScaleExclusive": 1e-30,
+                "scale": 0.000003683043040639396,
+                "units": "W m^-2 nm^-1"
+              },
+              {
+                "absoluteResidual": 0,
+                "allowedAbsoluteResidual": 4.054232773312722e-18,
+                "caseId": "union-glacier-globe-solar-noon",
+                "positiveOwningInputScale": true,
+                "profileId": "routed-er8-reference-path384-source256",
+                "quantity": "spectral-radiance-solid-angle-integral",
+                "relativeResidual": 0,
+                "reportedRelativeResidual": 0,
+                "reportedResidualMatches": true,
+                "requiredMinimumOwningInputScaleExclusive": 1e-30,
+                "scale": 0.000004054232773312722,
+                "units": "W m^-2 nm^-1"
+              },
+              {
+                "absoluteResidual": 0,
+                "allowedAbsoluteResidual": 4.461039292279343e-18,
+                "caseId": "union-glacier-globe-sunset",
+                "positiveOwningInputScale": true,
+                "profileId": "routed-er8-reference-path384-source256",
+                "quantity": "spectral-radiance-solid-angle-integral",
+                "relativeResidual": 0,
+                "reportedRelativeResidual": 0,
+                "reportedResidualMatches": true,
+                "requiredMinimumOwningInputScaleExclusive": 1e-30,
+                "scale": 0.000004461039292279343,
+                "units": "W m^-2 nm^-1"
+              },
+              {
+                "absoluteResidual": 0,
+                "allowedAbsoluteResidual": 4.505070528473359e-18,
+                "caseId": "union-glacier-globe-sunset-plus-1",
+                "positiveOwningInputScale": true,
+                "profileId": "routed-er8-reference-path384-source256",
+                "quantity": "spectral-radiance-solid-angle-integral",
+                "relativeResidual": 0,
+                "reportedRelativeResidual": 0,
+                "reportedResidualMatches": true,
+                "requiredMinimumOwningInputScaleExclusive": 1e-30,
+                "scale": 0.0000045050705284733585,
+                "units": "W m^-2 nm^-1"
+              }
+            ],
+            "tolerance": 1e-12
+          },
+          "sirius": {
+            "accepted": true,
+            "allOwningInputScalesPositive": true,
+            "cardinalityAccepted": true,
+            "expectedSampleCount": 16,
+            "id": "sirius",
+            "maximumRelativeResidual": 4.366325798953558e-17,
+            "sampleCount": 16,
+            "samples": [
+              {
+                "absoluteResidual": 0,
+                "allowedAbsoluteResidual": 2.9600853592369617e-22,
+                "caseId": "san-jose-globe-sunrise",
+                "positiveOwningInputScale": true,
+                "profileId": "routed-er8-runtime-path192-source128",
+                "quantity": "spectral-irradiance-density",
+                "relativeResidual": 0,
+                "reportedRelativeResidual": 0,
+                "reportedResidualMatches": true,
+                "requiredMinimumOwningInputScaleExclusive": 1e-30,
+                "scale": 2.960085359236962e-10,
+                "units": "W m^-2 nm^-1"
+              },
+              {
+                "absoluteResidual": 0,
+                "allowedAbsoluteResidual": 2.9600853592369617e-22,
+                "caseId": "san-jose-globe-solar-noon",
+                "positiveOwningInputScale": true,
+                "profileId": "routed-er8-runtime-path192-source128",
+                "quantity": "spectral-irradiance-density",
+                "relativeResidual": 0,
+                "reportedRelativeResidual": 0,
+                "reportedResidualMatches": true,
+                "requiredMinimumOwningInputScaleExclusive": 1e-30,
+                "scale": 2.960085359236962e-10,
+                "units": "W m^-2 nm^-1"
+              },
+              {
+                "absoluteResidual": 0,
+                "allowedAbsoluteResidual": 2.9600853592369617e-22,
+                "caseId": "san-jose-globe-sunset",
+                "positiveOwningInputScale": true,
+                "profileId": "routed-er8-runtime-path192-source128",
+                "quantity": "spectral-irradiance-density",
+                "relativeResidual": 0,
+                "reportedRelativeResidual": 0,
+                "reportedResidualMatches": true,
+                "requiredMinimumOwningInputScaleExclusive": 1e-30,
+                "scale": 2.960085359236962e-10,
+                "units": "W m^-2 nm^-1"
+              },
+              {
+                "absoluteResidual": 0,
+                "allowedAbsoluteResidual": 2.9600853592369617e-22,
+                "caseId": "san-jose-globe-sunset-plus-1",
+                "positiveOwningInputScale": true,
+                "profileId": "routed-er8-runtime-path192-source128",
+                "quantity": "spectral-irradiance-density",
+                "relativeResidual": 0,
+                "reportedRelativeResidual": 0,
+                "reportedResidualMatches": true,
+                "requiredMinimumOwningInputScaleExclusive": 1e-30,
+                "scale": 2.960085359236962e-10,
+                "units": "W m^-2 nm^-1"
+              },
+              {
+                "absoluteResidual": 0,
+                "allowedAbsoluteResidual": 2.9600853592369617e-22,
+                "caseId": "union-glacier-globe-sunrise",
+                "positiveOwningInputScale": true,
+                "profileId": "routed-er8-runtime-path192-source128",
+                "quantity": "spectral-irradiance-density",
+                "relativeResidual": 0,
+                "reportedRelativeResidual": 0,
+                "reportedResidualMatches": true,
+                "requiredMinimumOwningInputScaleExclusive": 1e-30,
+                "scale": 2.960085359236962e-10,
+                "units": "W m^-2 nm^-1"
+              },
+              {
+                "absoluteResidual": 0,
+                "allowedAbsoluteResidual": 2.9600853592369617e-22,
+                "caseId": "union-glacier-globe-solar-noon",
+                "positiveOwningInputScale": true,
+                "profileId": "routed-er8-runtime-path192-source128",
+                "quantity": "spectral-irradiance-density",
+                "relativeResidual": 0,
+                "reportedRelativeResidual": 0,
+                "reportedResidualMatches": true,
+                "requiredMinimumOwningInputScaleExclusive": 1e-30,
+                "scale": 2.960085359236962e-10,
+                "units": "W m^-2 nm^-1"
+              },
+              {
+                "absoluteResidual": 1.2924697071141057e-26,
+                "allowedAbsoluteResidual": 2.9600853592369617e-22,
+                "caseId": "union-glacier-globe-sunset",
+                "positiveOwningInputScale": true,
+                "profileId": "routed-er8-runtime-path192-source128",
+                "quantity": "spectral-irradiance-density",
+                "relativeResidual": 4.366325798953558e-17,
+                "reportedRelativeResidual": 1.5306132961095581e-16,
+                "reportedResidualMatches": true,
+                "requiredMinimumOwningInputScaleExclusive": 1e-30,
+                "scale": 2.960085359236962e-10,
+                "units": "W m^-2 nm^-1"
+              },
+              {
+                "absoluteResidual": 1.2924697071141057e-26,
+                "allowedAbsoluteResidual": 2.9600853592369617e-22,
+                "caseId": "union-glacier-globe-sunset-plus-1",
+                "positiveOwningInputScale": true,
+                "profileId": "routed-er8-runtime-path192-source128",
+                "quantity": "spectral-irradiance-density",
+                "relativeResidual": 4.366325798953558e-17,
+                "reportedRelativeResidual": 1.3471103410680355e-16,
+                "reportedResidualMatches": true,
+                "requiredMinimumOwningInputScaleExclusive": 1e-30,
+                "scale": 2.960085359236962e-10,
+                "units": "W m^-2 nm^-1"
+              },
+              {
+                "absoluteResidual": 0,
+                "allowedAbsoluteResidual": 2.9600853592369617e-22,
+                "caseId": "san-jose-globe-sunrise",
+                "positiveOwningInputScale": true,
+                "profileId": "routed-er8-reference-path384-source256",
+                "quantity": "spectral-irradiance-density",
+                "relativeResidual": 0,
+                "reportedRelativeResidual": 0,
+                "reportedResidualMatches": true,
+                "requiredMinimumOwningInputScaleExclusive": 1e-30,
+                "scale": 2.960085359236962e-10,
+                "units": "W m^-2 nm^-1"
+              },
+              {
+                "absoluteResidual": 0,
+                "allowedAbsoluteResidual": 2.9600853592369617e-22,
+                "caseId": "san-jose-globe-solar-noon",
+                "positiveOwningInputScale": true,
+                "profileId": "routed-er8-reference-path384-source256",
+                "quantity": "spectral-irradiance-density",
+                "relativeResidual": 0,
+                "reportedRelativeResidual": 0,
+                "reportedResidualMatches": true,
+                "requiredMinimumOwningInputScaleExclusive": 1e-30,
+                "scale": 2.960085359236962e-10,
+                "units": "W m^-2 nm^-1"
+              },
+              {
+                "absoluteResidual": 0,
+                "allowedAbsoluteResidual": 2.9600853592369617e-22,
+                "caseId": "san-jose-globe-sunset",
+                "positiveOwningInputScale": true,
+                "profileId": "routed-er8-reference-path384-source256",
+                "quantity": "spectral-irradiance-density",
+                "relativeResidual": 0,
+                "reportedRelativeResidual": 0,
+                "reportedResidualMatches": true,
+                "requiredMinimumOwningInputScaleExclusive": 1e-30,
+                "scale": 2.960085359236962e-10,
+                "units": "W m^-2 nm^-1"
+              },
+              {
+                "absoluteResidual": 0,
+                "allowedAbsoluteResidual": 2.9600853592369617e-22,
+                "caseId": "san-jose-globe-sunset-plus-1",
+                "positiveOwningInputScale": true,
+                "profileId": "routed-er8-reference-path384-source256",
+                "quantity": "spectral-irradiance-density",
+                "relativeResidual": 0,
+                "reportedRelativeResidual": 0,
+                "reportedResidualMatches": true,
+                "requiredMinimumOwningInputScaleExclusive": 1e-30,
+                "scale": 2.960085359236962e-10,
+                "units": "W m^-2 nm^-1"
+              },
+              {
+                "absoluteResidual": 0,
+                "allowedAbsoluteResidual": 2.9600853592369617e-22,
+                "caseId": "union-glacier-globe-sunrise",
+                "positiveOwningInputScale": true,
+                "profileId": "routed-er8-reference-path384-source256",
+                "quantity": "spectral-irradiance-density",
+                "relativeResidual": 0,
+                "reportedRelativeResidual": 0,
+                "reportedResidualMatches": true,
+                "requiredMinimumOwningInputScaleExclusive": 1e-30,
+                "scale": 2.960085359236962e-10,
+                "units": "W m^-2 nm^-1"
+              },
+              {
+                "absoluteResidual": 0,
+                "allowedAbsoluteResidual": 2.9600853592369617e-22,
+                "caseId": "union-glacier-globe-solar-noon",
+                "positiveOwningInputScale": true,
+                "profileId": "routed-er8-reference-path384-source256",
+                "quantity": "spectral-irradiance-density",
+                "relativeResidual": 0,
+                "reportedRelativeResidual": 0,
+                "reportedResidualMatches": true,
+                "requiredMinimumOwningInputScaleExclusive": 1e-30,
+                "scale": 2.960085359236962e-10,
+                "units": "W m^-2 nm^-1"
+              },
+              {
+                "absoluteResidual": 1.2924697071141057e-26,
+                "allowedAbsoluteResidual": 2.9600853592369617e-22,
+                "caseId": "union-glacier-globe-sunset",
+                "positiveOwningInputScale": true,
+                "profileId": "routed-er8-reference-path384-source256",
+                "quantity": "spectral-irradiance-density",
+                "relativeResidual": 4.366325798953558e-17,
+                "reportedRelativeResidual": 1.5290177758182852e-16,
+                "reportedResidualMatches": true,
+                "requiredMinimumOwningInputScaleExclusive": 1e-30,
+                "scale": 2.960085359236962e-10,
+                "units": "W m^-2 nm^-1"
+              },
+              {
+                "absoluteResidual": 1.2924697071141057e-26,
+                "allowedAbsoluteResidual": 2.9600853592369617e-22,
+                "caseId": "union-glacier-globe-sunset-plus-1",
+                "positiveOwningInputScale": true,
+                "profileId": "routed-er8-reference-path384-source256",
+                "quantity": "spectral-irradiance-density",
+                "relativeResidual": 4.366325798953558e-17,
+                "reportedRelativeResidual": 1.345864646157702e-16,
+                "reportedResidualMatches": true,
+                "requiredMinimumOwningInputScaleExclusive": 1e-30,
+                "scale": 2.960085359236962e-10,
+                "units": "W m^-2 nm^-1"
+              }
+            ],
+            "tolerance": 1e-12
+          },
+          "sun": {
+            "accepted": true,
+            "allOwningInputScalesPositive": true,
+            "cardinalityAccepted": true,
+            "expectedSampleCount": 16,
+            "id": "sun",
+            "maximumRelativeResidual": 3.6786447927608626e-15,
+            "sampleCount": 16,
+            "samples": [
+              {
+                "absoluteResidual": 0,
+                "allowedAbsoluteResidual": 2.0220739209219704e-12,
+                "caseId": "san-jose-globe-sunrise",
+                "positiveOwningInputScale": true,
+                "profileId": "routed-er8-runtime-path192-source128",
+                "quantity": "spectral-radiance-solid-angle-integral",
+                "relativeResidual": 0,
+                "reportedRelativeResidual": 0,
+                "reportedResidualMatches": true,
+                "requiredMinimumOwningInputScaleExclusive": 1e-30,
+                "scale": 2.0220739209219705,
+                "units": "W m^-2 nm^-1"
+              },
+              {
+                "absoluteResidual": 6.106226635438361e-15,
+                "allowedAbsoluteResidual": 2.0220739213796485e-12,
+                "caseId": "san-jose-globe-solar-noon",
+                "positiveOwningInputScale": true,
+                "profileId": "routed-er8-runtime-path192-source128",
+                "quantity": "spectral-radiance-solid-angle-integral",
+                "relativeResidual": 3.019784079541524e-15,
+                "reportedRelativeResidual": 3.019784079541524e-15,
+                "reportedResidualMatches": true,
+                "requiredMinimumOwningInputScaleExclusive": 1e-30,
+                "scale": 2.0220739213796484,
+                "units": "W m^-2 nm^-1"
+              },
+              {
+                "absoluteResidual": 6.416308456769215e-15,
+                "allowedAbsoluteResidual": 2.0220739201093063e-12,
+                "caseId": "san-jose-globe-sunset",
+                "positiveOwningInputScale": true,
+                "profileId": "routed-er8-runtime-path192-source128",
+                "quantity": "spectral-radiance-solid-angle-integral",
+                "relativeResidual": 3.173132491824222e-15,
+                "reportedRelativeResidual": 3.173132491824222e-15,
+                "reportedResidualMatches": true,
+                "requiredMinimumOwningInputScaleExclusive": 1e-30,
+                "scale": 2.0220739201093063,
+                "units": "W m^-2 nm^-1"
+              },
+              {
+                "absoluteResidual": 0,
+                "allowedAbsoluteResidual": 2.022073919907812e-12,
+                "caseId": "san-jose-globe-sunset-plus-1",
+                "positiveOwningInputScale": true,
+                "profileId": "routed-er8-runtime-path192-source128",
+                "quantity": "spectral-radiance-solid-angle-integral",
+                "relativeResidual": 0,
+                "reportedRelativeResidual": 0,
+                "reportedResidualMatches": true,
+                "requiredMinimumOwningInputScaleExclusive": 1e-30,
+                "scale": 2.022073919907812,
+                "units": "W m^-2 nm^-1"
+              },
+              {
+                "absoluteResidual": 7.105427357601002e-15,
+                "allowedAbsoluteResidual": 2.022074618247085e-12,
+                "caseId": "union-glacier-globe-sunrise",
+                "positiveOwningInputScale": true,
+                "profileId": "routed-er8-runtime-path192-source128",
+                "quantity": "spectral-radiance-solid-angle-integral",
+                "relativeResidual": 3.5139293542790332e-15,
+                "reportedRelativeResidual": 3.5139293542790332e-15,
+                "reportedResidualMatches": true,
+                "requiredMinimumOwningInputScaleExclusive": 1e-30,
+                "scale": 2.022074618247085,
+                "units": "W m^-2 nm^-1"
+              },
+              {
+                "absoluteResidual": 6.772360450213455e-15,
+                "allowedAbsoluteResidual": 2.0220746191645606e-12,
+                "caseId": "union-glacier-globe-solar-noon",
+                "positiveOwningInputScale": true,
+                "profileId": "routed-er8-runtime-path192-source128",
+                "quantity": "spectral-radiance-solid-angle-integral",
+                "relativeResidual": 3.3492139142775655e-15,
+                "reportedRelativeResidual": 3.3492139142775655e-15,
+                "reportedResidualMatches": true,
+                "requiredMinimumOwningInputScaleExclusive": 1e-30,
+                "scale": 2.0220746191645604,
+                "units": "W m^-2 nm^-1"
+              },
+              {
+                "absoluteResidual": 6.439293542825908e-15,
+                "allowedAbsoluteResidual": 2.0220746196390925e-12,
+                "caseId": "union-glacier-globe-sunset",
+                "positiveOwningInputScale": true,
+                "profileId": "routed-er8-runtime-path192-source128",
+                "quantity": "spectral-radiance-solid-angle-integral",
+                "relativeResidual": 3.1844984751231474e-15,
+                "reportedRelativeResidual": 3.1844984751231474e-15,
+                "reportedResidualMatches": true,
+                "requiredMinimumOwningInputScaleExclusive": 1e-30,
+                "scale": 2.0220746196390924,
+                "units": "W m^-2 nm^-1"
+              },
+              {
+                "absoluteResidual": 5.551115123125783e-15,
+                "allowedAbsoluteResidual": 2.0220746196933794e-12,
+                "caseId": "union-glacier-globe-sunset-plus-1",
+                "positiveOwningInputScale": true,
+                "profileId": "routed-er8-runtime-path192-source128",
+                "quantity": "spectral-radiance-solid-angle-integral",
+                "relativeResidual": 2.7452573060669415e-15,
+                "reportedRelativeResidual": 2.7452573060669415e-15,
+                "reportedResidualMatches": true,
+                "requiredMinimumOwningInputScaleExclusive": 1e-30,
+                "scale": 2.0220746196933796,
+                "units": "W m^-2 nm^-1"
+              },
+              {
+                "absoluteResidual": 0,
+                "allowedAbsoluteResidual": 2.0220739209219704e-12,
+                "caseId": "san-jose-globe-sunrise",
+                "positiveOwningInputScale": true,
+                "profileId": "routed-er8-reference-path384-source256",
+                "quantity": "spectral-radiance-solid-angle-integral",
+                "relativeResidual": 0,
+                "reportedRelativeResidual": 0,
+                "reportedResidualMatches": true,
+                "requiredMinimumOwningInputScaleExclusive": 1e-30,
+                "scale": 2.0220739209219705,
+                "units": "W m^-2 nm^-1"
+              },
+              {
+                "absoluteResidual": 6.439293542825908e-15,
+                "allowedAbsoluteResidual": 2.0220739213796485e-12,
+                "caseId": "san-jose-globe-solar-noon",
+                "positiveOwningInputScale": true,
+                "profileId": "routed-er8-reference-path384-source256",
+                "quantity": "spectral-radiance-solid-angle-integral",
+                "relativeResidual": 3.1844995747892432e-15,
+                "reportedRelativeResidual": 3.1844995747892432e-15,
+                "reportedResidualMatches": true,
+                "requiredMinimumOwningInputScaleExclusive": 1e-30,
+                "scale": 2.0220739213796484,
+                "units": "W m^-2 nm^-1"
+              },
+              {
+                "absoluteResidual": 7.0336531737824615e-15,
+                "allowedAbsoluteResidual": 2.0220739201093063e-12,
+                "caseId": "san-jose-globe-sunset",
+                "positiveOwningInputScale": true,
+                "profileId": "routed-er8-reference-path384-source256",
+                "quantity": "spectral-radiance-solid-angle-integral",
+                "relativeResidual": 3.4784352361372856e-15,
+                "reportedRelativeResidual": 3.4784352361372856e-15,
+                "reportedResidualMatches": true,
+                "requiredMinimumOwningInputScaleExclusive": 1e-30,
+                "scale": 2.0220739201093063,
+                "units": "W m^-2 nm^-1"
+              },
+              {
+                "absoluteResidual": 0,
+                "allowedAbsoluteResidual": 2.022073919907812e-12,
+                "caseId": "san-jose-globe-sunset-plus-1",
+                "positiveOwningInputScale": true,
+                "profileId": "routed-er8-reference-path384-source256",
+                "quantity": "spectral-radiance-solid-angle-integral",
+                "relativeResidual": 0,
+                "reportedRelativeResidual": 0,
+                "reportedResidualMatches": true,
+                "requiredMinimumOwningInputScaleExclusive": 1e-30,
+                "scale": 2.022073919907812,
+                "units": "W m^-2 nm^-1"
+              },
+              {
+                "absoluteResidual": 7.438494264988549e-15,
+                "allowedAbsoluteResidual": 2.022074618247085e-12,
+                "caseId": "union-glacier-globe-sunrise",
+                "positiveOwningInputScale": true,
+                "profileId": "routed-er8-reference-path384-source256",
+                "quantity": "spectral-radiance-solid-angle-integral",
+                "relativeResidual": 3.6786447927608626e-15,
+                "reportedRelativeResidual": 3.6786447927608626e-15,
+                "reportedResidualMatches": true,
+                "requiredMinimumOwningInputScaleExclusive": 1e-30,
+                "scale": 2.022074618247085,
+                "units": "W m^-2 nm^-1"
+              },
+              {
+                "absoluteResidual": 6.772360450213455e-15,
+                "allowedAbsoluteResidual": 2.0220746191645606e-12,
+                "caseId": "union-glacier-globe-solar-noon",
+                "positiveOwningInputScale": true,
+                "profileId": "routed-er8-reference-path384-source256",
+                "quantity": "spectral-radiance-solid-angle-integral",
+                "relativeResidual": 3.3492139142775655e-15,
+                "reportedRelativeResidual": 3.3492139142775655e-15,
+                "reportedResidualMatches": true,
+                "requiredMinimumOwningInputScaleExclusive": 1e-30,
+                "scale": 2.0220746191645604,
+                "units": "W m^-2 nm^-1"
+              },
+              {
+                "absoluteResidual": 6.661338147750939e-15,
+                "allowedAbsoluteResidual": 2.0220746196390925e-12,
+                "caseId": "union-glacier-globe-sunset",
+                "positiveOwningInputScale": true,
+                "profileId": "routed-er8-reference-path384-source256",
+                "quantity": "spectral-radiance-solid-angle-integral",
+                "relativeResidual": 3.2943087673687733e-15,
+                "reportedRelativeResidual": 3.2943087673687733e-15,
+                "reportedResidualMatches": true,
+                "requiredMinimumOwningInputScaleExclusive": 1e-30,
+                "scale": 2.0220746196390924,
+                "units": "W m^-2 nm^-1"
+              },
+              {
+                "absoluteResidual": 6.439293542825908e-15,
+                "allowedAbsoluteResidual": 2.0220746196933794e-12,
+                "caseId": "union-glacier-globe-sunset-plus-1",
+                "positiveOwningInputScale": true,
+                "profileId": "routed-er8-reference-path384-source256",
+                "quantity": "spectral-radiance-solid-angle-integral",
+                "relativeResidual": 3.184498475037652e-15,
+                "reportedRelativeResidual": 3.184498475037652e-15,
+                "reportedResidualMatches": true,
+                "requiredMinimumOwningInputScaleExclusive": 1e-30,
+                "scale": 2.0220746196933796,
+                "units": "W m^-2 nm^-1"
+              }
+            ],
+            "tolerance": 1e-12
+          }
+        },
+        "tolerance": 1e-12
+      },
+      "name": "composition, Sun, Moon, and Sirius each retain typed scale-relative conservation within 1e-12",
+      "scope": "conservation",
+      "status": "accepted"
+    },
+    {
+      "evidence": {
+        "accepted": true,
+        "cacheBuilderModules": [],
+        "excludedClaim": "this does not validate a future multiple-scattering incident-radiance cache",
+        "frameEvaluatorModulePresent": true,
+        "kind": "er8-inactive-incident-radiance-cache-evidence-v1",
+        "operationBoundary": "ER6 constructs no incidentRadianceSampling operation and never calls buildIncidentRadianceCache; incidentDirectionCount and incidentAltitudeBinCount are descriptor metadata only in this matrix",
+        "rendererModulePresent": true,
+        "status": "not-applicable-inactive",
+        "xaG11Disposition": "cache convergence is N/A for this selected no-cache operation; path, direct-source transmittance, point response, and extended integration are bounded separately"
+      },
+      "name": "incident-radiance cache is explicitly inactive and N/A",
+      "scope": "cache-scope",
+      "status": "accepted"
+    },
+    {
+      "evidence": [
+        {
+          "accepted": true,
+          "path": "scripts/flat/reconciliation/POC/browser-page/runner.js",
+          "present": false
+        },
+        {
+          "accepted": true,
+          "path": "scripts/flat/reconciliation/POC/src/external-boundary-radiance/ExternalBoundaryRadiance.js",
+          "present": false
+        },
+        {
+          "accepted": true,
+          "path": "scripts/flat/reconciliation/POC/src/external-boundary-radiance/consts.js",
+          "present": false
+        },
+        {
+          "accepted": true,
+          "path": "scripts/flat/reconciliation/POC/src/external-boundary-radiance/types.d.ts",
+          "present": false
+        },
+        {
+          "accepted": true,
+          "path": "scripts/flat/reconciliation/POC/src/external-celestial-candidates/ControlledCelestialSampleProvider.js",
+          "present": false
+        },
+        {
+          "accepted": true,
+          "path": "scripts/flat/reconciliation/POC/src/external-celestial-candidates/DistantSunBoundaryCandidateProvider.js",
+          "present": false
+        },
+        {
+          "accepted": true,
+          "path": "scripts/flat/reconciliation/POC/src/external-celestial-candidates/ExternalCelestialCandidate.js",
+          "present": false
+        },
+        {
+          "accepted": true,
+          "path": "scripts/flat/reconciliation/POC/src/external-celestial-candidates/ExternalCelestialDepthResolver.js",
+          "present": false
+        },
+        {
+          "accepted": true,
+          "path": "scripts/flat/reconciliation/POC/src/external-celestial-candidates/GlobeMoonBoundaryCandidateProvider.js",
+          "present": false
+        },
+        {
+          "accepted": true,
+          "path": "scripts/flat/reconciliation/POC/src/external-celestial-candidates/LocalSunBoundaryCandidateProvider.js",
+          "present": false
+        },
+        {
+          "accepted": true,
+          "path": "scripts/flat/reconciliation/POC/src/external-celestial-candidates/fixtures/flat-bright-star-subset.js",
+          "present": false
+        },
+        {
+          "accepted": true,
+          "path": "scripts/flat/reconciliation/POC/src/external-celestial-candidates/sunCandidateUtils.js",
+          "present": false
+        },
+        {
+          "accepted": true,
+          "path": "scripts/flat/reconciliation/POC/src/external-celestial-candidates/types.d.ts",
+          "present": false
+        },
+        {
+          "accepted": true,
+          "path": "scripts/flat/reconciliation/POC/src/moon/GlobeMoonSceneRenderer.js",
+          "present": false
+        },
+        {
+          "accepted": true,
+          "path": "scripts/flat/reconciliation/POC/src/moon/types.d.ts",
+          "present": false
+        },
+        {
+          "accepted": true,
+          "path": "scripts/flat/reconciliation/POC/src/shader/DistantSphericalShaderContributionFactory.js",
+          "present": false
+        },
+        {
+          "accepted": true,
+          "path": "scripts/flat/reconciliation/POC/src/soft-shader/CpuPostprocessSoftShader.js",
+          "present": false
+        },
+        {
+          "accepted": true,
+          "path": "scripts/flat/reconciliation/POC/src/subjective-scenes/Flat32CpuSoftShaderSceneRenderer.js",
+          "present": false
+        },
+        {
+          "accepted": true,
+          "path": "scripts/flat/reconciliation/POC/src/subjective-scenes/Flat32SceneCelestialProvider.js",
+          "present": false
+        },
+        {
+          "accepted": true,
+          "path": "scripts/flat/reconciliation/POC/src/subjective-scenes/Flat32SceneStateResolver.js",
+          "present": false
+        }
+      ],
+      "name": "all superseded v1 implementation paths are absent",
+      "scope": "cleanup",
+      "status": "accepted"
+    },
+    {
+      "evidence": [
+        {
+          "accepted": true,
+          "path": "scripts/flat/reconciliation/POC/src/color/BrunetonColorDisplayModel.js",
+          "presentSymbols": [],
+          "prohibitedSymbols": [
+            "displayRgbToLinearSrgb",
+            "neutralLinearSrgbAppearanceTargetToSpectralRadiance",
+            "linearSrgbAlbedoToSpectralReflectance"
+          ],
+          "readError": null
+        },
+        {
+          "accepted": true,
+          "path": "scripts/flat/reconciliation/POC/src/color/types.d.ts",
+          "presentSymbols": [],
+          "prohibitedSymbols": [
+            "displayRgbToLinearSrgb",
+            "neutralLinearSrgbAppearanceTargetToSpectralRadiance",
+            "linearSrgbAlbedoToSpectralReflectance"
+          ],
+          "readError": null
+        },
+        {
+          "accepted": true,
+          "path": "scripts/flat/reconciliation/POC/src/light/DistantSunLightSource.js",
+          "presentSymbols": [],
+          "prohibitedSymbols": [
+            "createVisibleBodyCandidateProvider"
+          ],
+          "readError": null
+        },
+        {
+          "accepted": true,
+          "path": "scripts/flat/reconciliation/POC/src/light/LocalSunLightSource.js",
+          "presentSymbols": [],
+          "prohibitedSymbols": [
+            "createVisibleBodyCandidateProvider"
+          ],
+          "readError": null
+        },
+        {
+          "accepted": true,
+          "path": "scripts/flat/reconciliation/POC/src/light/types.d.ts",
+          "presentSymbols": [],
+          "prohibitedSymbols": [
+            "createVisibleBodyCandidateProvider"
+          ],
+          "readError": null
+        },
+        {
+          "accepted": true,
+          "path": "scripts/flat/reconciliation/POC/src/soft-shader/types.d.ts",
+          "presentSymbols": [],
+          "prohibitedSymbols": [
+            "CpuPostprocessSoftShader",
+            "ExternalBoundaryRadianceSample"
+          ],
+          "readError": null
+        },
+        {
+          "accepted": true,
+          "path": "scripts/flat/reconciliation/POC/src/subjective-scenes/consts.js",
+          "presentSymbols": [],
+          "prohibitedSymbols": [
+            "RECORD_020_PROTOTYPE_STAR_CALIBRATION"
+          ],
+          "readError": null
+        }
+      ],
+      "name": "retained modules contain none of the rejected calibration or candidate seams",
+      "scope": "cleanup",
+      "status": "accepted"
+    },
+    {
+      "evidence": {
+        "accepted": true,
+        "actualExportNames": [
+          "BilinearPointResponse",
+          "BrunetonColorDisplayModel",
+          "CANONICAL_ATMOSPHERE_CONSTANTS",
+          "CANONICAL_DENSITY_BASIS_ID",
+          "CANONICAL_DENSITY_QUADRATURE",
+          "CANONICAL_DENSITY_SAMPLE_SEMANTICS",
+          "CANONICAL_SPECTRAL_BASIS",
+          "CANONICAL_SPECTRAL_CHANNELS",
+          "CELESTIAL_SOURCE_MEASURE_QUANTITY",
+          "CanonicalAtmosphere",
+          "CanonicalSolarIlluminationSource",
+          "CanonicalUniformSunDiskSource",
+          "EXTENDED_CELESTIAL_SOURCE",
+          "ExactDirectionalVisibilityResolver",
+          "ExternalCelestialSource",
+          "FrozenAtmosphereSpectralFrameEvaluator",
+          "POINT_CELESTIAL_SOURCE",
+          "PerspectiveCameraRaster",
+          "PhysicalSpectralFrameComposer",
+          "ReconciliationConfigurationError",
+          "SPECTRAL_DENSITY_UNITS",
+          "SPECTRAL_IRRADIANCE_DENSITY",
+          "SPECTRAL_RADIANCE_DENSITY",
+          "SpectralCalculator",
+          "SpectralDensityBasis",
+          "SpectralDensityPacket",
+          "SpectralReferenceEvaluator",
+          "SphericalCapQuadrature",
+          "SphericalEarthGeometry",
+          "TransportedExtendedSourceIntegrator",
+          "TransportedPointSourceAccumulator",
+          "WAVELENGTH_UNITS_NANOMETERS",
+          "binPiecewiseLinearSpectralDensity",
+          "createCalspecSiriusIrradianceDensity",
+          "createCanonicalSolarIrradianceDensity",
+          "createCanonicalSpectralDensityBasis"
+        ],
+        "actualExportPaths": [
+          "./atmosphere/CanonicalAtmosphere.js",
+          "./calculator/SpectralCalculator.js",
+          "./camera/PerspectiveCameraRaster.js",
+          "./color/BrunetonColorDisplayModel.js",
+          "./constants/consts.js",
+          "./directional-visibility/ExactDirectionalVisibilityResolver.js",
+          "./errors/ReconciliationConfigurationError.js",
+          "./evaluation/SpectralReferenceEvaluator.js",
+          "./extended-source-integration/CanonicalUniformSunDiskSource.js",
+          "./extended-source-integration/SphericalCapQuadrature.js",
+          "./extended-source-integration/TransportedExtendedSourceIntegrator.js",
+          "./external-celestial-sources/ExternalCelestialSource.js",
+          "./external-celestial-sources/SpectralDensityBasis.js",
+          "./external-celestial-sources/SpectralDensityPacket.js",
+          "./external-celestial-sources/binPiecewiseLinearSpectralDensity.js",
+          "./external-celestial-sources/consts.js",
+          "./external-celestial-sources/createCalspecSiriusIrradianceDensity.js",
+          "./external-celestial-sources/createCanonicalSolarIrradianceDensity.js",
+          "./external-celestial-sources/createCanonicalSpectralDensityBasis.js",
+          "./geometry/SphericalEarthGeometry.js",
+          "./light/CanonicalSolarIlluminationSource.js",
+          "./physical-frame/FrozenAtmosphereSpectralFrameEvaluator.js",
+          "./physical-frame/PhysicalSpectralFrameComposer.js",
+          "./point-source-raster/BilinearPointResponse.js",
+          "./point-source-raster/TransportedPointSourceAccumulator.js"
+        ],
+        "expectedExportNames": [
+          "BilinearPointResponse",
+          "BrunetonColorDisplayModel",
+          "CANONICAL_ATMOSPHERE_CONSTANTS",
+          "CANONICAL_DENSITY_BASIS_ID",
+          "CANONICAL_DENSITY_QUADRATURE",
+          "CANONICAL_DENSITY_SAMPLE_SEMANTICS",
+          "CANONICAL_SPECTRAL_BASIS",
+          "CANONICAL_SPECTRAL_CHANNELS",
+          "CELESTIAL_SOURCE_MEASURE_QUANTITY",
+          "CanonicalAtmosphere",
+          "CanonicalSolarIlluminationSource",
+          "CanonicalUniformSunDiskSource",
+          "EXTENDED_CELESTIAL_SOURCE",
+          "ExactDirectionalVisibilityResolver",
+          "ExternalCelestialSource",
+          "FrozenAtmosphereSpectralFrameEvaluator",
+          "POINT_CELESTIAL_SOURCE",
+          "PerspectiveCameraRaster",
+          "PhysicalSpectralFrameComposer",
+          "ReconciliationConfigurationError",
+          "SPECTRAL_DENSITY_UNITS",
+          "SPECTRAL_IRRADIANCE_DENSITY",
+          "SPECTRAL_RADIANCE_DENSITY",
+          "SpectralCalculator",
+          "SpectralDensityBasis",
+          "SpectralDensityPacket",
+          "SpectralReferenceEvaluator",
+          "SphericalCapQuadrature",
+          "SphericalEarthGeometry",
+          "TransportedExtendedSourceIntegrator",
+          "TransportedPointSourceAccumulator",
+          "WAVELENGTH_UNITS_NANOMETERS",
+          "binPiecewiseLinearSpectralDensity",
+          "createCalspecSiriusIrradianceDensity",
+          "createCanonicalSolarIrradianceDensity",
+          "createCanonicalSpectralDensityBasis"
+        ],
+        "expectedExportPaths": [
+          "./atmosphere/CanonicalAtmosphere.js",
+          "./calculator/SpectralCalculator.js",
+          "./camera/PerspectiveCameraRaster.js",
+          "./color/BrunetonColorDisplayModel.js",
+          "./constants/consts.js",
+          "./directional-visibility/ExactDirectionalVisibilityResolver.js",
+          "./errors/ReconciliationConfigurationError.js",
+          "./evaluation/SpectralReferenceEvaluator.js",
+          "./extended-source-integration/CanonicalUniformSunDiskSource.js",
+          "./extended-source-integration/SphericalCapQuadrature.js",
+          "./extended-source-integration/TransportedExtendedSourceIntegrator.js",
+          "./external-celestial-sources/ExternalCelestialSource.js",
+          "./external-celestial-sources/SpectralDensityBasis.js",
+          "./external-celestial-sources/SpectralDensityPacket.js",
+          "./external-celestial-sources/binPiecewiseLinearSpectralDensity.js",
+          "./external-celestial-sources/consts.js",
+          "./external-celestial-sources/createCalspecSiriusIrradianceDensity.js",
+          "./external-celestial-sources/createCanonicalSolarIrradianceDensity.js",
+          "./external-celestial-sources/createCanonicalSpectralDensityBasis.js",
+          "./geometry/SphericalEarthGeometry.js",
+          "./light/CanonicalSolarIlluminationSource.js",
+          "./physical-frame/FrozenAtmosphereSpectralFrameEvaluator.js",
+          "./physical-frame/PhysicalSpectralFrameComposer.js",
+          "./point-source-raster/BilinearPointResponse.js",
+          "./point-source-raster/TransportedPointSourceAccumulator.js"
+        ],
+        "missing": [],
+        "missingNames": [],
+        "path": "scripts/flat/reconciliation/POC/src/index.js",
+        "readError": null,
+        "unexpected": [],
+        "unexpectedNames": [],
+        "wildcardExportPaths": []
+      },
+      "name": "root index is exactly the accepted reset primitive allowlist",
+      "scope": "public-surface",
+      "status": "accepted"
+    },
+    {
+      "evidence": {
+        "accepted": true,
+        "actualExportNames": [
+          "Er6GlobeCaseMatrixResolver",
+          "Er6PhysicalGlobeSceneRenderer",
+          "Er6PhysicalGlobeStateMatrixAcquirer"
+        ],
+        "actualExportPaths": [
+          "./Er6GlobeCaseMatrixResolver.js",
+          "./Er6PhysicalGlobeSceneRenderer.js",
+          "./Er6PhysicalGlobeStateMatrixAcquirer.js"
+        ],
+        "expectedExportNames": [
+          "Er6GlobeCaseMatrixResolver",
+          "Er6PhysicalGlobeSceneRenderer",
+          "Er6PhysicalGlobeStateMatrixAcquirer"
+        ],
+        "expectedExportPaths": [
+          "./Er6GlobeCaseMatrixResolver.js",
+          "./Er6PhysicalGlobeSceneRenderer.js",
+          "./Er6PhysicalGlobeStateMatrixAcquirer.js"
+        ],
+        "missing": [],
+        "missingNames": [],
+        "path": "scripts/flat/reconciliation/POC/src/er6-case-matrix/index.js",
+        "readError": null,
+        "unexpected": [],
+        "unexpectedNames": [],
+        "wildcardExportPaths": []
+      },
+      "name": "ER6 index exports only resolver, acquirer, and physical renderer",
+      "scope": "public-surface",
+      "status": "accepted"
+    },
+    {
+      "evidence": [
+        {
+          "accepted": true,
+          "collected": true,
+          "error": null,
+          "id": "scripts/flat/reconciliation/POC/src/runners/er8CpuConvergenceAndPocCleanup.js",
+          "prohibitedModules": []
+        },
+        {
+          "accepted": true,
+          "collected": true,
+          "error": null,
+          "id": "scripts/flat/reconciliation/POC/src/index.js+scripts/flat/reconciliation/POC/src/er6-case-matrix/index.js",
+          "prohibitedModules": []
+        }
+      ],
+      "name": "runner and public entries reach no superseded v1 module",
+      "scope": "module-graph",
+      "status": "accepted"
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "schemaId": "spectral-color-rgb-range-proof-fixture-v1",
+  "input": {
+    "runId": "000258-spectral-color-stage1-ledger",
+    "artifactSetSha256": "abe89535535f523d4d04a0a5e9fe5cef86bff441f274cd998103e0121a7cacd5",
+    "ledgerPath": "evidence/spectral-ledger.json",
+    "ledgerSha256": "a1574e12645f3f0c5eff1694d609f9e73cc39ec2661cf131ad0356a09f1c55d0"
+  },
+  "transformId": "cie2015-xyzf-local-light-rgb-range-n074-v1",
+  "conditions": [
+    "spherical-distant/noon",
+    "spherical-distant/sunset-minus-30",
+    "spherical-distant/sunset-minus-10",
+    "spherical-distant/sunset"
+  ],
+  "sphericalAngularRadiusRadians": 0.004675,
+  "range": {
+    "exponent": 0.74,
+    "blackResponse": 0.01,
+    "whiteResponse": 0.99,
+    "provenance": "Accepted receptor exponent from run 000293; range midpoint derived from recorded L_A and full analytic solar-disk support. Crossings are diagnostic rather than hard clips."
+  },
+  "synthetic": {
+    "neutralSteps": 1001,
+    "channelSteps": 2001,
+    "channelMinimumMidpointMultiple": 0.000001,
+    "channelMaximumMidpointMultiple": 1000000
+  },
+  "tolerances": {
+    "boundsAbsolute": 2e-12,
+    "neutralAbsolute": 2e-12,
+    "crossingAbsolute": 2e-12,
+    "strictMonotonicAbsolute": 1e-14,
+    "minimumMeasuredEncodedDistance": 1e-8,
+    "minimumWarmOrderingDelta": 1e-8,
+    "equalInputOutputAbsolute": 2e-12
+  }
+}

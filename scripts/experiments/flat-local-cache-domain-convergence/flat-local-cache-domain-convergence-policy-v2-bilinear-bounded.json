@@ -1,0 +1,245 @@
+{
+  "schema": "algorithm32-flat-local-cache-domain-convergence-policy-v2",
+  "status": "predeclared-before-candidate-output",
+  "amendmentHistory": [
+    {
+      "kind": "structural-fixture-correction-after-failed-execution",
+      "scope": "outgoingStudy.positionAxes.zNodesMeters",
+      "change": "Replaced the invalid [0, 99000] explicit geometry axis with the required [0, 100000] boundary-complete axis.",
+      "resultInspection": "The first execution terminated before emitting a report. No candidate metrics, thresholds, rankings, or acceptance rules were changed or inspected."
+    },
+    {
+      "kind": "evidence-driven-v2-after-completed-v1-rejection",
+      "priorPolicy": "scripts/experiments/flat-local-cache-domain-convergence/flat-local-cache-domain-convergence-policy-v1-containing-lower.json",
+      "priorReport": {
+        "path": "archives/algorithm32-flat-local-cache-domain-convergence/report-v1-containing-lower.json",
+        "sha256": "6eab318246a66979245a57cea7138038fff15a8cfe31457ec162662d4da925ab"
+      },
+      "priorFailureDiagnostic": {
+        "path": "archives/algorithm32-flat-local-cache-domain-convergence/failure-diagnostic-v1-containing-lower.json",
+        "sha256": "6d1821867b083a4c4964b13797204246184da050c9dfddf3c53284a3386b9690"
+      },
+      "observedFailure": "The containing-lower construction lookup made transported fields piecewise constant, amplified spatial error through recurrence, and made uniform 15-point transport highly phase-sensitive to cell crossings.",
+      "predeclaredCorrection": "Use the flat geometry's existing clamped bilinear z/rho stencil for both construction and final-view sampling, retain the user-selected 15-interval controls as explicit selected inputs, and screen larger nonuniform domains under resource limits calibrated against the accepted spherical cache instead of the arbitrary v1 8 MiB cap.",
+      "candidateOutputInspection": "No bilinear-construction candidate or v2 control output was executed or inspected before this v2 policy was written. The v1 thresholds remain unchanged."
+    }
+  ],
+  "claimBoundary": {
+    "purpose": "Stage 9 engineering selection evidence for the configured flat/local cache domain and numerical controls.",
+    "authority": "The runner calls the production FlatEarthGeometry, LocalSunLightSource, LocalSun CPU field, transport, resident-cache, and cubed-sphere owners. It does not implement a second cache.",
+    "starBoundary": "Algorithm32-star has no integrated flat/local cache, so Star is not used as a cache-output oracle here.",
+    "configurationBoundary": "The 100 km atmosphere and 4.8 Mm point-source case is a configured diagnostic case, not a universal production physical default.",
+    "diagnosticDomainBoundary": "W3 is used only to isolate position-domain and transport-control behavior. A separate W9-to-W27 primary-field refinement check uses the production cubed-sphere owners; production intentionally has no denser W owner.",
+    "selectedControlBoundary": "The production transport count of 15 is an explicit project selection based on the user's cited production reference, not a value this post-selection study may silently replace. The 15-to-60 differentials remain visible characterization. Spatial promotion still requires the unchanged numerical limits, and the stored-transport differential must pass after the bilinear lookup correction.",
+    "scientificBoundary": "These are predeclared project engineering limits, not published physical-error tolerances or a scientific-validation claim."
+  },
+  "configuredCase": {
+    "observerPositionMeters": [0, 0, 5],
+    "sourcePositionMeters": [4800000, 0, 4800000],
+    "topAltitudeMeters": 100000,
+    "radialMaximumMeters": 4800000,
+    "referenceDistanceMeters": 4800000,
+    "sourceRadiusMeters": 25749.504,
+    "referenceSpectralIncidentScale": 1,
+    "distanceFalloff": true,
+    "spectralBasis": "algorithm32-native-15-bin-average-v1",
+    "groundBoundary": "omitted-canonical-black"
+  },
+  "productionSelection": {
+    "position": {
+      "id": "uniform-z5-rho5",
+      "zNodesMeters": [0, 25000, 50000, 75000, 100000],
+      "rhoNodesMeters": [0, 1200000, 2400000, 3600000, 4800000],
+      "interpolation": "clamped-bilinear-z-rho",
+      "constructionLookup": "clamped-bilinear-z-rho",
+      "positionCount": 25
+    },
+    "incoming": {
+      "kind": "fibonacci-34",
+      "directionCount": 34
+    },
+    "outgoing": {
+      "kind": "cubed-sphere-w27",
+      "faceWidth": 27,
+      "directionCount": 4374,
+      "interpolation": "dominant-face-bilinear"
+    },
+    "spectralChannelCount": 15,
+    "sourceTransmittanceIntervalCount": 15,
+    "transportIntervalCount": 15,
+    "maximumScatteringOrder": 4,
+    "gpuScalarBytes": 4
+  },
+  "spatialStudy": {
+    "reference": {
+      "id": "withheld-node-reference-z19-rho13-w3-n4",
+      "zNodesMeters": [0, 250, 500, 1000, 1500, 3000, 5000, 7000, 10000, 14000, 20000, 25000, 37500, 50000, 62500, 75000, 87500, 99000, 100000],
+      "rhoNodesMeters": [0, 100000, 200000, 400000, 600000, 1200000, 1800000, 2400000, 3000000, 3600000, 4200000, 4700000, 4800000],
+      "outgoingFaceWidth": 3,
+      "sourceTransmittanceIntervalCount": 15,
+      "transportIntervalCount": 15,
+      "maximumScatteringOrder": 4,
+      "interpretation": "Every declared stress position is an exact reference node. Candidate axes omit declared reference nodes so the comparison exercises withheld interpolation as well as shared exact nodes. The result is a denser production-owner comparison surface, not a continuous-cache oracle."
+    },
+    "stressPositions": [
+      {"id": "near-ground-near-subpoint", "zMeters": 500, "rhoMeters": 200000},
+      {"id": "near-ground-observer-side", "zMeters": 500, "rhoMeters": 4700000},
+      {"id": "lower-density-rise-near", "zMeters": 3000, "rhoMeters": 600000},
+      {"id": "lower-density-rise-far", "zMeters": 3000, "rhoMeters": 4200000},
+      {"id": "lower-troposphere-inner", "zMeters": 10000, "rhoMeters": 1800000},
+      {"id": "lower-troposphere-outer", "zMeters": 10000, "rhoMeters": 3000000},
+      {"id": "upper-troposphere-near", "zMeters": 20000, "rhoMeters": 600000},
+      {"id": "upper-troposphere-far", "zMeters": 20000, "rhoMeters": 4700000},
+      {"id": "lower-stratosphere-subpoint", "zMeters": 37500, "rhoMeters": 200000},
+      {"id": "lower-stratosphere-inner", "zMeters": 37500, "rhoMeters": 1800000},
+      {"id": "lower-stratosphere-outer", "zMeters": 37500, "rhoMeters": 4200000},
+      {"id": "middle-stratosphere-near", "zMeters": 62500, "rhoMeters": 600000},
+      {"id": "middle-stratosphere-inner", "zMeters": 62500, "rhoMeters": 3000000},
+      {"id": "middle-stratosphere-far", "zMeters": 62500, "rhoMeters": 4700000},
+      {"id": "upper-atmosphere-subpoint", "zMeters": 87500, "rhoMeters": 200000},
+      {"id": "upper-atmosphere-inner", "zMeters": 87500, "rhoMeters": 1800000},
+      {"id": "upper-atmosphere-outer", "zMeters": 87500, "rhoMeters": 4200000},
+      {"id": "near-top-near", "zMeters": 99000, "rhoMeters": 600000},
+      {"id": "near-top-inner", "zMeters": 99000, "rhoMeters": 3000000},
+      {"id": "near-top-far", "zMeters": 99000, "rhoMeters": 4700000},
+      {"id": "withheld-boundary-layer-near", "zMeters": 250, "rhoMeters": 100000},
+      {"id": "withheld-boundary-layer-far", "zMeters": 1500, "rhoMeters": 400000},
+      {"id": "withheld-lower-atmosphere-inner", "zMeters": 5000, "rhoMeters": 1200000},
+      {"id": "withheld-lower-atmosphere-middle", "zMeters": 7000, "rhoMeters": 2400000},
+      {"id": "withheld-troposphere-outer", "zMeters": 14000, "rhoMeters": 3600000},
+      {"id": "withheld-transition-far", "zMeters": 25000, "rhoMeters": 4800000},
+      {"id": "withheld-middle-atmosphere-near", "zMeters": 50000, "rhoMeters": 100000},
+      {"id": "withheld-upper-atmosphere-middle", "zMeters": 75000, "rhoMeters": 2400000}
+    ],
+    "outgoingDirectionIndicesW3": [0, 4, 13, 22, 31, 40, 49, 53],
+    "comparedFields": ["J1", "J2", "J3", "J4", "Jthrough4"],
+    "spectrumMetric": {
+      "maximumNormalizedLInf": 0.1,
+      "maximumP95NormalizedRms": 0.02,
+      "normalizedLInfDefinition": "max(abs(candidate-reference)) / max(max(abs(reference)), 1e-30)",
+      "normalizedRmsDefinition": "sqrt(mean(((candidate-reference) / max(max(abs(reference)), 1e-30))^2))",
+      "percentileDefinition": "nearest-rank with one-based rank ceil(p * sampleCount), clamped to the final sorted sample"
+    },
+    "acceptance": "A position candidate passes only if every compared field satisfies both spectrum limits and every sampled scalar is finite and nonnegative."
+  },
+  "positionCandidates": [
+    {
+      "id": "uniform-z5-rho5",
+      "role": "current-production-selection",
+      "zNodesMeters": [0, 25000, 50000, 75000, 100000],
+      "rhoNodesMeters": [0, 1200000, 2400000, 3600000, 4800000],
+      "positionCount": 25
+    },
+    {
+      "id": "profile-z10-rho6",
+      "role": "bounded-v2-fallback",
+      "zNodesMeters": [0, 500, 3000, 10000, 20000, 37500, 62500, 87500, 99000, 100000],
+      "rhoNodesMeters": [0, 600000, 1800000, 3000000, 4200000, 4800000],
+      "positionCount": 60
+    },
+    {
+      "id": "profile-z15-rho6",
+      "role": "bounded-v2-fallback",
+      "zNodesMeters": [0, 250, 500, 1500, 3000, 5000, 10000, 14000, 20000, 37500, 50000, 62500, 87500, 99000, 100000],
+      "rhoNodesMeters": [0, 600000, 1800000, 3000000, 4200000, 4800000],
+      "positionCount": 90
+    },
+    {
+      "id": "profile-z19-rho6",
+      "role": "bounded-v2-altitude-complete",
+      "zNodesMeters": [0, 250, 500, 1000, 1500, 3000, 5000, 7000, 10000, 14000, 20000, 25000, 37500, 50000, 62500, 75000, 87500, 99000, 100000],
+      "rhoNodesMeters": [0, 600000, 1800000, 3000000, 4200000, 4800000],
+      "positionCount": 114
+    },
+    {
+      "id": "profile-z14-rho9",
+      "role": "bounded-v2-radial-heavy",
+      "zNodesMeters": [0, 250, 500, 1500, 3000, 5000, 10000, 20000, 37500, 50000, 62500, 87500, 99000, 100000],
+      "rhoNodesMeters": [0, 100000, 200000, 600000, 1800000, 3000000, 4200000, 4700000, 4800000],
+      "positionCount": 126
+    }
+  ],
+  "controlStudies": {
+    "sourceTransmittance": {
+      "candidateIntervalCount": 15,
+      "referenceIntervalCount": 60,
+      "field": "J1",
+      "domain": "withheld-node-reference-z19-rho13-w3-n4",
+      "probePositions": "spatialStudy.stressPositions",
+      "directionIndices": "spatialStudy.outgoingDirectionIndicesW3",
+      "maximumNormalizedLInf": 0.02,
+      "maximumP95NormalizedRms": 0.005,
+      "gating": false,
+      "promotionRole": "selected-production-control-characterization",
+      "selectionAuthority": "User-confirmed production count of 15 backed by an existing project reference; retain the measured 15-to-60 differential without post-hoc threshold weakening."
+    },
+    "storedFieldTransport": {
+      "candidateIntervalCount": 15,
+      "referenceIntervalCount": 60,
+      "field": "L1",
+      "domain": "withheld-node-reference-z19-rho13-w3-n4",
+      "probePositions": "spatialStudy.stressPositions",
+      "incomingDirectionIndices": [0, 8, 17, 25, 33],
+      "maximumNormalizedLInf": 0.05,
+      "maximumP95NormalizedRms": 0.01,
+      "gating": true,
+      "promotionRole": "corroborating-bilinear-transport-convergence"
+    }
+  },
+  "outgoingStudy": {
+    "candidateFaceWidth": 9,
+    "referenceFaceWidth": 27,
+    "referenceDirectionIndexStride": 43,
+    "includeFinalReferenceDirection": true,
+    "positionAxes": {
+      "zNodesMeters": [0, 100000],
+      "rhoNodesMeters": [0, 4800000]
+    },
+    "field": "J1",
+    "sourceTransmittanceIntervalCount": 15,
+    "maximumNormalizedLInf": 0.1,
+    "maximumP95NormalizedRms": 0.02,
+    "acceptanceInterpretation": "Passing shows that even W9 reconstructs the sampled local primary field within the declared limits, so retained W27 is conservatively finer on this diagnostic. Failure rejects W9 but cannot by itself estimate or reject W27 because production intentionally exposes no denser cubed-sphere owner.",
+    "scope": "This does not reselect the already accepted Fibonacci-34 incident quadrature and does not claim a direct beyond-W27 convergence bound."
+  },
+  "resourceCriteria": {
+    "maximumPositionCountUnderW27ResidentLimit": 126,
+    "residentCumulativeFieldBytesMaximum": 33554432,
+    "peakTrackedLogicalBytesMaximum": 201326592,
+    "scalarBytes": 4,
+    "fieldPeakModel": {
+      "scatteringDensityFields": 3,
+      "radianceFields": 1,
+      "reason": "Conservative N4 reflective-graph live-field bound before an output pass releases its inputs."
+    },
+    "packedTransportTapUpperBoundPerQuery": 256,
+    "packedTransportTapUpperBoundReason": "At most four z/rho position taps times four W taps at each of transportIntervalCount + 1 trapezoid points.",
+    "budgetRationale": "The accepted spherical/distant cache already retains 12,597,120 bytes and reports 44,562,816 peak tracked bytes. The v2 local limits allow at most 32 MiB resident and 192 MiB tracked for the extra finite-source position axis and its four-position-by-four-direction packed transport stencils while remaining explicitly bounded.",
+    "qualificationBoundary": "Logical production-owner resource accounting only; driver overhead, supported-hardware timing, and release performance remain later qualification."
+  },
+  "selectionRule": {
+    "retainCurrentIfPassing": true,
+    "fallbackEligibility": "A fallback must pass every spatial field and both resource limits. Every control study marked gating must pass. The selected 15-interval source control remains reported characterization under its explicit authority rather than a post-selection veto. The W9-to-W27 study is supporting angular-refinement evidence under its separately declared claim boundary.",
+    "passingFallbackOrder": "lowest maximum normalized L-infinity, then lowest p95 normalized RMS, then lowest position count, then lexical id",
+    "failureRule": "If the current grid and every bounded fallback fail, report no promoted position domain. Do not weaken criteria or silently change production."
+  },
+  "report": {
+    "schema": "algorithm32-flat-local-cache-domain-convergence-report-v2",
+    "path": "archives/algorithm32-flat-local-cache-domain-convergence/report.json",
+    "determinism": "No timestamp, duration, process id, absolute workspace path, or unseeded sample enters the report. Ordered inputs and results are hashed with SHA-256."
+  },
+  "evidence": {
+    "spatialThresholdPrecedent": "scripts/algorithm32-star/src/n-order-cache/outgoing-direction-error-metrics.js MILESTONE_4A_GATE_POLICY algorithm-domain primary limits",
+    "gpuPolicy": "src/algorithm32/fixtures/local-sun-gpu-cache-parity-policy.json",
+    "productionOwners": [
+      "src/algorithm32/geometries/FlatEarthGeometry.js",
+      "src/algorithm32/light-sources/LocalSunLightSource.js",
+      "src/algorithm32/light-sources/LocalSunConstructionDomainSelection.js",
+      "src/algorithm32/light-sources/local-sun-cpu-cache-build.js",
+      "src/algorithm32/light-sources/local-sun-primary-scattering-density.js",
+      "src/algorithm32/light-sources/local-sun-scattering-density-transport.js",
+      "src/algorithm32/light-sources/LocalSunCpuCache.js",
+      "src/algorithm32/domains/CubedSphereDirectionDomain.js"
+    ]
+  }
+}

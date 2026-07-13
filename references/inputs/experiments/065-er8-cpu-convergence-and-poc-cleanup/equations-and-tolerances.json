@@ -1,0 +1,30 @@
+{
+  "kind": "er8-convergence-equations-and-tolerances-v1",
+  "equations": {
+    "perChannelPeakNormalized": "max_i |runtime(lambda,i)-reference(lambda,i)| / max_i |reference(lambda,i)|, accepted only when all 15 retained reference-channel peaks are strictly greater than 1e-30",
+    "transmittanceAbsolute": "|T_runtime - T_reference|",
+    "pointTent": "p(x,y) = [1-tx,tx] tensor [1-ty,ty]; on-frame plus off-raster equals one",
+    "displayAbsolute": "|rgb_runtime-rgb_reference|, accepted only when retained maximum reference magnitude is greater than zero",
+    "typedConservation": "relativeResidual = absoluteResidual / max(owning composition-or-source input scale, 1e-30); every retained owning input scale must be strictly greater than 1e-30 and composition, Sun, Moon, and Sirius are gated separately at 1e-12"
+  },
+  "tolerances": {
+    "pathSpectralPeakNormalizedRelative": 0.01,
+    "viewTransmittanceAbsolute": 0.005,
+    "exactPointTransmittanceAbsolute": 0.005,
+    "pointTransportedSpectralPeakNormalizedRelative": 0.005,
+    "extendedInputProjectedSpectralPeakNormalizedRelative": 0.005,
+    "extendedTransportedProjectedSpectralPeakNormalizedRelative": 0.005,
+    "finalSpectralPeakNormalizedRelative": 0.01,
+    "displayRgbAbsolute": 0.00392156862745098,
+    "pointResponseAbsolute": 1e-15,
+    "componentConservationRelative": 1e-12
+  },
+  "requiredSampleCounts": {
+    "pathViewFinalAndDisplay": 384,
+    "pointAndEachExtendedAggregate": 8,
+    "typedConservationPerComponent": 16,
+    "exactPointTransmittance": "derived from all eight exact-source visibility results, retained explicitly, and required greater than zero"
+  },
+  "routing": "record 064 remained rejected only in path spectral radiance and Moon transported projected irradiance, in that order; runtime promotes its 192/128 reference to runtime and compares against 384/256, routing those two remaining criteria to their owning controls while inactive cache controls stay 4/4, accepted source quadrature stays 6x24, all positive-scale/cardinality gates remain required, and no tolerance or criterion changes",
+  "cache": "incident-radiance cache is not constructed by the selected ER6 operation and is N/A"
+}

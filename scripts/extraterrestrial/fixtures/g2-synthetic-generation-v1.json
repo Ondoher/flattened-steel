@@ -1,0 +1,24 @@
+{
+  "schemaVersion": "g2-synthetic-generation-v1",
+  "fixtureId": "g2-synthetic-generation-v1",
+  "claimBoundary": "Synthetic lifecycle payloads only. This fixture proves no atmospheric transport, raster, visibility, shader, or GPU implementation.",
+  "geometry": {
+    "bottomRadius": { "value": 6360000, "units": "meters" },
+    "topRadius": { "value": 6420000, "units": "meters" },
+    "celestialContributionDomain": {
+      "altitudeNodes": [0, 1000, 35000, 60000],
+      "uNodes": [0, 0.25, 0.5, 0.75, 1],
+      "frames": {
+        "celestialFrameId": "etx-synthetic-celestial-rh-v1",
+        "bodyFrameId": "etx-synthetic-body-fixed-rh-v1",
+        "modelFrameId": "etx-synthetic-model-rh-v1",
+        "modelFromBody": [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
+      }
+    }
+  },
+  "layers": [
+    { "layerId": "stars", "kind": "infinite-point-set", "compositionPolicy": "additive", "fixedCapacity": 16, "members": ["star-beta", "star-alpha"] },
+    { "layerId": "sun", "kind": "distant-extended", "compositionPolicy": "additive", "sourceId": "sun" }
+  ],
+  "resourceReport": { "logicalBytes": 720, "packedBytes": 768, "peakBytes": 1536, "residentBytes": 768 }
+}

@@ -1,0 +1,69 @@
+{
+  "status": "accepted",
+  "mechanicalStatus": "accepted",
+  "physicalConservationStatus": "accepted",
+  "observationalStatus": "not-applicable",
+  "humanReviewStatus": "not-applicable",
+  "criteria": [
+    {
+      "name": "every-perspective-pixel-solid-angle-matches-independent-reference",
+      "status": "accepted"
+    },
+    {
+      "name": "summed-pixel-solid-angle-matches-analytic-frustum",
+      "status": "accepted"
+    },
+    {
+      "name": "direction-and-raster-coordinate-round-trips-pass",
+      "status": "accepted"
+    },
+    {
+      "name": "known-cardinal-bilinear-weight-signatures-pass",
+      "status": "accepted"
+    },
+    {
+      "name": "optical-axis-even-and-odd-raster-signatures-pass",
+      "status": "accepted"
+    },
+    {
+      "name": "bilinear-full-response-is-nonnegative-and-normalized",
+      "status": "accepted"
+    },
+    {
+      "name": "on-frame-plus-off-raster-response-is-one-without-renormalization",
+      "status": "accepted"
+    },
+    {
+      "name": "every-point-case-reconstructs-each-source-channel",
+      "status": "accepted"
+    },
+    {
+      "name": "accounted-flux-is-invariant-across-resolution-fov-field-and-subpixel",
+      "status": "accepted"
+    },
+    {
+      "name": "overlapping-point-sources-add-linearly",
+      "status": "accepted"
+    },
+    {
+      "name": "declared-magnitude-flux-ratios-pass",
+      "status": "accepted"
+    },
+    {
+      "name": "point-raster-path-uses-exact-omega-not-fixed-divisor",
+      "status": "accepted"
+    },
+    {
+      "name": "point-response-never-uses-coverage-opacity-or-authored-disks",
+      "status": "accepted"
+    },
+    {
+      "name": "all-invalid-cases-fail-with-predeclared-error-codes",
+      "status": "accepted"
+    },
+    {
+      "name": "er2-produced-no-atmosphere-display-or-image",
+      "status": "accepted"
+    }
+  ]
+}

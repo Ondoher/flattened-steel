@@ -1,0 +1,838 @@
+{
+  "schema": "algorithm32-production-star-live-n4-parity-v1",
+  "createdAt": "2026-07-21T16:31:25.113Z",
+  "scene": {
+    "id": "figure1-06h00-z87",
+    "directionToLight": [
+      0.8988227122935298,
+      -0.43517660730953706,
+      0.05233595624294383
+    ],
+    "solarZenithDegrees": 87
+  },
+  "starSource": {
+    "path": "scripts/algorithm32-star/src/n-order-cache/build-cpu-distant-n-order-cache.js",
+    "sha256": "98aa61f7cf441226eef38f40043ea729b5b1feb93cbea4d9160b7a4c33ead24a"
+  },
+  "contract": {
+    "profile": "native production default; not paper comparison",
+    "ground": "black",
+    "maximumScatteringOrder": 4,
+    "positionCount": 48,
+    "incomingDirectionCount": 34,
+    "outgoingDirectionCount": 4374,
+    "wavelengthCount": 15,
+    "transportIntervalCount": 40,
+    "packingComparison": "logical position/direction/wavelength coordinates; raw offsets intentionally differ",
+    "resolvedStencilGateRationale": "Position weights share one scalar altitude and retain the 1e-15 gate. Direction weights include independent physical/source-basis round trips and W27 coordinate scaling, so they use a distinct 1e-14 binary64 gate. Indices must still match exactly."
+  },
+  "gates": {
+    "positionMetersAbsolute": 1e-9,
+    "directionComponentAbsolute": 1e-14,
+    "weightAbsolute": 1e-15,
+    "resolvedPositionWeightAbsolute": 1e-15,
+    "resolvedDirectionWeightAbsolute": 1e-14,
+    "wavelengthNanometersAbsolute": 1e-12,
+    "sourceIrradianceAbsolute": 1e-15,
+    "radiance": {
+      "absolute": 1e-16,
+      "relative": 1e-12
+    },
+    "scatteringDensity": {
+      "absolute": 1e-18,
+      "relative": 1e-12
+    },
+    "cumulativeScatteringDensity": {
+      "absolute": 4e-18,
+      "relative": 1e-12
+    }
+  },
+  "timingsMilliseconds": {
+    "starIncident": 6370.4899,
+    "starN4": 76721.0824,
+    "productionN4": 18969.8572,
+    "total": 102885.856
+  },
+  "domains": {
+    "position": {
+      "maximumAbsoluteDifference": 0,
+      "worstVectorIndex": -1,
+      "worstComponentIndex": -1,
+      "tolerance": 1e-9,
+      "passed": true
+    },
+    "fibonacciDirections": {
+      "maximumAbsoluteDifference": 1.1102230246251565e-16,
+      "worstVectorIndex": 14,
+      "worstComponentIndex": 1,
+      "tolerance": 1e-14,
+      "passed": true
+    },
+    "w27Directions": {
+      "maximumAbsoluteDifference": 3.3306690738754696e-16,
+      "worstVectorIndex": 48,
+      "worstComponentIndex": 0,
+      "tolerance": 1e-14,
+      "passed": true
+    },
+    "weights": {
+      "maximumAbsoluteDifference": 0,
+      "worstIndex": -1,
+      "tolerance": 1e-15,
+      "passed": true
+    },
+    "wavelengths": {
+      "maximumAbsoluteDifference": 0,
+      "worstIndex": -1,
+      "tolerance": 1e-12,
+      "passed": true
+    }
+  },
+  "sourceIrradiance": {
+    "maximumAbsoluteDifference": 0,
+    "worstIndex": -1,
+    "tolerance": 1e-15,
+    "passed": true
+  },
+  "fields": {
+    "J1": {
+      "label": "J1",
+      "absoluteTolerance": 1e-18,
+      "relativeTolerance": 1e-12,
+      "comparedScalarCount": 3149280,
+      "bitExactScalarCount": 1981377,
+      "mismatchCount": 0,
+      "nonFiniteCount": 0,
+      "maximumAbsoluteError": 1.1689054672109345e-19,
+      "maximumRelativeError": 9.516235182580368e-15,
+      "worstAbsolute": {
+        "coordinates": {
+          "positionIndex": 0,
+          "directionIndex": 309,
+          "wavelengthIndex": 12
+        },
+        "expected": 0.00001255893607105569,
+        "actual": 0.000012558936071055572,
+        "absoluteError": 1.1689054672109345e-19,
+        "relativeError": 9.307360596451206e-15
+      },
+      "worstRelative": {
+        "coordinates": {
+          "positionIndex": 0,
+          "directionIndex": 309,
+          "wavelengthIndex": 14
+        },
+        "expected": 0.000012283276367009465,
+        "actual": 0.000012283276367009348,
+        "absoluteError": 1.1689054672109345e-19,
+        "relativeError": 9.516235182580368e-15
+      },
+      "rmsAbsoluteError": 6.437660431324981e-22,
+      "passed": true
+    },
+    "J2": {
+      "label": "J2",
+      "absoluteTolerance": 1e-18,
+      "relativeTolerance": 1e-12,
+      "comparedScalarCount": 3149280,
+      "bitExactScalarCount": 1444257,
+      "mismatchCount": 0,
+      "nonFiniteCount": 0,
+      "maximumAbsoluteError": 6.606856988583543e-20,
+      "maximumRelativeError": 9.219570329440244e-15,
+      "worstAbsolute": {
+        "coordinates": {
+          "positionIndex": 0,
+          "directionIndex": 419,
+          "wavelengthIndex": 9
+        },
+        "expected": 0.000007177117063896298,
+        "actual": 0.000007177117063896232,
+        "absoluteError": 6.606856988583543e-20,
+        "relativeError": 9.205446880361773e-15
+      },
+      "worstRelative": {
+        "coordinates": {
+          "positionIndex": 1,
+          "directionIndex": 419,
+          "wavelengthIndex": 14
+        },
+        "expected": 7.005344058377793e-7,
+        "actual": 7.005344058377728e-7,
+        "absoluteError": 6.45862622281404e-21,
+        "relativeError": 9.219570329440244e-15
+      },
+      "rmsAbsoluteError": 2.525565675532078e-22,
+      "passed": true
+    },
+    "J3": {
+      "label": "J3",
+      "absoluteTolerance": 1e-18,
+      "relativeTolerance": 1e-12,
+      "comparedScalarCount": 3149280,
+      "bitExactScalarCount": 814611,
+      "mismatchCount": 0,
+      "nonFiniteCount": 0,
+      "maximumAbsoluteError": 2.837560373301906e-20,
+      "maximumRelativeError": 9.503568860314823e-15,
+      "worstAbsolute": {
+        "coordinates": {
+          "positionIndex": 0,
+          "directionIndex": 419,
+          "wavelengthIndex": 10
+        },
+        "expected": 0.000003046795583185152,
+        "actual": 0.0000030467955831851237,
+        "absoluteError": 2.837560373301906e-20,
+        "relativeError": 9.313261411307059e-15
+      },
+      "worstRelative": {
+        "coordinates": {
+          "positionIndex": 0,
+          "directionIndex": 419,
+          "wavelengthIndex": 14
+        },
+        "expected": 0.0000024064527665355918,
+        "actual": 0.000002406452766535569,
+        "absoluteError": 2.286988957586611e-20,
+        "relativeError": 9.503568860314823e-15
+      },
+      "rmsAbsoluteError": 1.0630951983850323e-22,
+      "passed": true
+    },
+    "J4": {
+      "label": "J4",
+      "absoluteTolerance": 1e-18,
+      "relativeTolerance": 1e-12,
+      "comparedScalarCount": 3149280,
+      "bitExactScalarCount": 595596,
+      "mismatchCount": 0,
+      "nonFiniteCount": 0,
+      "maximumAbsoluteError": 1.1434944787933055e-20,
+      "maximumRelativeError": 9.416915122398578e-15,
+      "worstAbsolute": {
+        "coordinates": {
+          "positionIndex": 0,
+          "directionIndex": 419,
+          "wavelengthIndex": 8
+        },
+        "expected": 0.0000012385842365136241,
+        "actual": 0.0000012385842365136127,
+        "absoluteError": 1.1434944787933055e-20,
+        "relativeError": 9.232270564108113e-15
+      },
+      "worstRelative": {
+        "coordinates": {
+          "positionIndex": 0,
+          "directionIndex": 419,
+          "wavelengthIndex": 5
+        },
+        "expected": 8.657497716987039e-7,
+        "actual": 8.657497716986957e-7,
+        "absoluteError": 8.152692117322641e-21,
+        "relativeError": 9.416915122398578e-15
+      },
+      "rmsAbsoluteError": 4.3401354466866524e-23,
+      "passed": true
+    },
+    "L1": {
+      "label": "L1",
+      "absoluteTolerance": 1e-16,
+      "relativeTolerance": 1e-12,
+      "comparedScalarCount": 24480,
+      "bitExactScalarCount": 23358,
+      "mismatchCount": 0,
+      "nonFiniteCount": 0,
+      "maximumAbsoluteError": 2.0122792321330962e-16,
+      "maximumRelativeError": 9.152118658196244e-13,
+      "worstAbsolute": {
+        "coordinates": {
+          "positionIndex": 2,
+          "directionIndex": 25,
+          "wavelengthIndex": 5
+        },
+        "expected": 0.01691630826026529,
+        "actual": 0.01691630826026509,
+        "absoluteError": 2.0122792321330962e-16,
+        "relativeError": 1.189549871741069e-14
+      },
+      "worstRelative": {
+        "coordinates": {
+          "positionIndex": 47,
+          "directionIndex": 20,
+          "wavelengthIndex": 10
+        },
+        "expected": 0.000001120554900115625,
+        "actual": 0.0000011205549001145995,
+        "absoluteError": 1.0255451408881441e-18,
+        "relativeError": 9.152118658196244e-13
+      },
+      "rmsAbsoluteError": 5.518240433735103e-18,
+      "passed": true
+    },
+    "L2": {
+      "label": "L2",
+      "absoluteTolerance": 1e-16,
+      "relativeTolerance": 1e-12,
+      "comparedScalarCount": 24480,
+      "bitExactScalarCount": 18287,
+      "mismatchCount": 0,
+      "nonFiniteCount": 0,
+      "maximumAbsoluteError": 3.729655473350135e-17,
+      "maximumRelativeError": 9.296334077749389e-13,
+      "worstAbsolute": {
+        "coordinates": {
+          "positionIndex": 5,
+          "directionIndex": 20,
+          "wavelengthIndex": 1
+        },
+        "expected": 0.004549851079888436,
+        "actual": 0.004549851079888399,
+        "absoluteError": 3.729655473350135e-17,
+        "relativeError": 8.197313291936553e-15
+      },
+      "worstRelative": {
+        "coordinates": {
+          "positionIndex": 47,
+          "directionIndex": 20,
+          "wavelengthIndex": 10
+        },
+        "expected": 1.2457091665262092e-8,
+        "actual": 1.2457091665250511e-8,
+        "absoluteError": 1.1580528575742387e-20,
+        "relativeError": 9.296334077749389e-13
+      },
+      "rmsAbsoluteError": 1.2830432820222584e-18,
+      "passed": true
+    },
+    "L3": {
+      "label": "L3",
+      "absoluteTolerance": 1e-16,
+      "relativeTolerance": 1e-12,
+      "comparedScalarCount": 24480,
+      "bitExactScalarCount": 16121,
+      "mismatchCount": 0,
+      "nonFiniteCount": 0,
+      "maximumAbsoluteError": 2.0816681711721685e-17,
+      "maximumRelativeError": 9.302054893615227e-13,
+      "worstAbsolute": {
+        "coordinates": {
+          "positionIndex": 0,
+          "directionIndex": 17,
+          "wavelengthIndex": 6
+        },
+        "expected": 0.04870025514738528,
+        "actual": 0.04870025514738526,
+        "absoluteError": 2.0816681711721685e-17,
+        "relativeError": 4.2744502361892315e-16
+      },
+      "worstRelative": {
+        "coordinates": {
+          "positionIndex": 47,
+          "directionIndex": 20,
+          "wavelengthIndex": 3
+        },
+        "expected": 8.670139087146979e-9,
+        "actual": 8.670139087138914e-9,
+        "absoluteError": 8.06501097239202e-21,
+        "relativeError": 9.302054893615227e-13
+      },
+      "rmsAbsoluteError": 3.706279007092974e-19,
+      "passed": true
+    },
+    "Jthrough1Derived": {
+      "label": "Jthrough1Derived",
+      "absoluteTolerance": 4e-18,
+      "relativeTolerance": 1e-12,
+      "comparedScalarCount": 3149280,
+      "bitExactScalarCount": 1981377,
+      "mismatchCount": 0,
+      "nonFiniteCount": 0,
+      "maximumAbsoluteError": 1.1689054672109345e-19,
+      "maximumRelativeError": 9.516235182580368e-15,
+      "worstAbsolute": {
+        "coordinates": {
+          "positionIndex": 0,
+          "directionIndex": 309,
+          "wavelengthIndex": 12
+        },
+        "expected": 0.00001255893607105569,
+        "actual": 0.000012558936071055572,
+        "absoluteError": 1.1689054672109345e-19,
+        "relativeError": 9.307360596451206e-15
+      },
+      "worstRelative": {
+        "coordinates": {
+          "positionIndex": 0,
+          "directionIndex": 309,
+          "wavelengthIndex": 14
+        },
+        "expected": 0.000012283276367009465,
+        "actual": 0.000012283276367009348,
+        "absoluteError": 1.1689054672109345e-19,
+        "relativeError": 9.516235182580368e-15
+      },
+      "rmsAbsoluteError": 6.437660431324981e-22,
+      "passed": true
+    },
+    "Jthrough2Derived": {
+      "label": "Jthrough2Derived",
+      "absoluteTolerance": 4e-18,
+      "relativeTolerance": 1e-12,
+      "comparedScalarCount": 3149280,
+      "bitExactScalarCount": 1888235,
+      "mismatchCount": 0,
+      "nonFiniteCount": 0,
+      "maximumAbsoluteError": 1.7957098481791167e-19,
+      "maximumRelativeError": 9.454360979457922e-15,
+      "worstAbsolute": {
+        "coordinates": {
+          "positionIndex": 0,
+          "directionIndex": 419,
+          "wavelengthIndex": 10
+        },
+        "expected": 0.00001920606155786936,
+        "actual": 0.00001920606155786918,
+        "absoluteError": 1.7957098481791167e-19,
+        "relativeError": 9.34970370040991e-15
+      },
+      "worstRelative": {
+        "coordinates": {
+          "positionIndex": 1,
+          "directionIndex": 419,
+          "wavelengthIndex": 14
+        },
+        "expected": 0.000006808974623583478,
+        "actual": 0.000006808974623583414,
+        "absoluteError": 6.437450399132683e-20,
+        "relativeError": 9.454360979457922e-15
+      },
+      "rmsAbsoluteError": 7.82148926566547e-22,
+      "passed": true
+    },
+    "Jthrough3Derived": {
+      "label": "Jthrough3Derived",
+      "absoluteTolerance": 4e-18,
+      "relativeTolerance": 1e-12,
+      "comparedScalarCount": 3149280,
+      "bitExactScalarCount": 1882445,
+      "mismatchCount": 0,
+      "nonFiniteCount": 0,
+      "maximumAbsoluteError": 2.0667603913004928e-19,
+      "maximumRelativeError": 9.520917515547449e-15,
+      "worstAbsolute": {
+        "coordinates": {
+          "positionIndex": 0,
+          "directionIndex": 419,
+          "wavelengthIndex": 10
+        },
+        "expected": 0.00002225285714105451,
+        "actual": 0.000022252857141054304,
+        "absoluteError": 2.0667603913004928e-19,
+        "relativeError": 9.287618116630545e-15
+      },
+      "worstRelative": {
+        "coordinates": {
+          "positionIndex": 1,
+          "directionIndex": 419,
+          "wavelengthIndex": 14
+        },
+        "expected": 0.000006850341559211683,
+        "actual": 0.000006850341559211618,
+        "absoluteError": 6.522153693858113e-20,
+        "relativeError": 9.520917515547449e-15
+      },
+      "rmsAbsoluteError": 8.530577684149655e-22,
+      "passed": true
+    },
+    "Jthrough4": {
+      "label": "Jthrough4",
+      "absoluteTolerance": 4e-18,
+      "relativeTolerance": 1e-12,
+      "comparedScalarCount": 3149280,
+      "bitExactScalarCount": 1881931,
+      "mismatchCount": 0,
+      "nonFiniteCount": 0,
+      "maximumAbsoluteError": 2.168404344971009e-19,
+      "maximumRelativeError": 9.518272267936135e-15,
+      "worstAbsolute": {
+        "coordinates": {
+          "positionIndex": 0,
+          "directionIndex": 419,
+          "wavelengthIndex": 10
+        },
+        "expected": 0.000023449381665183448,
+        "actual": 0.00002344938166518323,
+        "absoluteError": 2.168404344971009e-19,
+        "relativeError": 9.247170675679499e-15
+      },
+      "worstRelative": {
+        "coordinates": {
+          "positionIndex": 1,
+          "directionIndex": 419,
+          "wavelengthIndex": 14
+        },
+        "expected": 0.000006852245355314178,
+        "actual": 0.0000068522453553141125,
+        "absoluteError": 6.522153693858113e-20,
+        "relativeError": 9.518272267936135e-15
+      },
+      "rmsAbsoluteError": 8.832582954686036e-22,
+      "passed": true
+    }
+  },
+  "residentSampling": {
+    "caseCount": 6,
+    "rows": [
+      {
+        "id": "exact-position-and-direction-node",
+        "altitudeMeters": 30624.999999999996,
+        "physicalOutgoingDirection": [
+          0.8988227122935298,
+          -0.43517660730953706,
+          0.05233595624294383
+        ],
+        "positionStencil": {
+          "expectedIndices": [
+            24
+          ],
+          "actualIndices": [
+            24
+          ],
+          "indicesMatch": true,
+          "expectedWeights": [
+            1
+          ],
+          "actualWeights": [
+            1
+          ],
+          "maximumWeightAbsoluteDifference": 0,
+          "weightTolerance": 1e-15,
+          "passed": true
+        },
+        "directionStencil": {
+          "expectedIndices": [
+            364
+          ],
+          "actualIndices": [
+            364
+          ],
+          "indicesMatch": true,
+          "expectedWeights": [
+            1
+          ],
+          "actualWeights": [
+            1
+          ],
+          "maximumWeightAbsoluteDifference": 0,
+          "weightTolerance": 1e-14,
+          "passed": true
+        }
+      },
+      {
+        "id": "off-grid-altitude-only",
+        "altitudeMeters": 13437.5,
+        "physicalOutgoingDirection": [
+          0.8988227122935298,
+          -0.43517660730953706,
+          0.05233595624294383
+        ],
+        "positionStencil": {
+          "expectedIndices": [
+            10,
+            11
+          ],
+          "actualIndices": [
+            10,
+            11
+          ],
+          "indicesMatch": true,
+          "expectedWeights": [
+            0.75,
+            0.25
+          ],
+          "actualWeights": [
+            0.75,
+            0.25
+          ],
+          "maximumWeightAbsoluteDifference": 0,
+          "weightTolerance": 1e-15,
+          "passed": true
+        },
+        "directionStencil": {
+          "expectedIndices": [
+            364
+          ],
+          "actualIndices": [
+            364
+          ],
+          "indicesMatch": true,
+          "expectedWeights": [
+            1
+          ],
+          "actualWeights": [
+            1
+          ],
+          "maximumWeightAbsoluteDifference": 0,
+          "weightTolerance": 1e-14,
+          "passed": true
+        }
+      },
+      {
+        "id": "two-tap-w27-direction",
+        "altitudeMeters": 13125,
+        "physicalOutgoingDirection": [
+          0.89634823543604,
+          -0.43397855742830893,
+          0.09067773995386859
+        ],
+        "positionStencil": {
+          "expectedIndices": [
+            10
+          ],
+          "actualIndices": [
+            10
+          ],
+          "indicesMatch": true,
+          "expectedWeights": [
+            1
+          ],
+          "actualWeights": [
+            1
+          ],
+          "maximumWeightAbsoluteDifference": 0,
+          "weightTolerance": 1e-15,
+          "passed": true
+        },
+        "directionStencil": {
+          "expectedIndices": [
+            364,
+            391
+          ],
+          "actualIndices": [
+            364,
+            391
+          ],
+          "indicesMatch": true,
+          "expectedWeights": [
+            0.4999999999999982,
+            0.5000000000000018
+          ],
+          "actualWeights": [
+            0.5000000000000018,
+            0.4999999999999982
+          ],
+          "maximumWeightAbsoluteDifference": 3.552713678800501e-15,
+          "weightTolerance": 1e-14,
+          "passed": true
+        }
+      },
+      {
+        "id": "two-position-by-four-direction",
+        "altitudeMeters": 23593.75,
+        "physicalOutgoingDirection": [
+          0.9124227604834924,
+          -0.3990919457213312,
+          0.0906108437883973
+        ],
+        "positionStencil": {
+          "expectedIndices": [
+            18,
+            19
+          ],
+          "actualIndices": [
+            18,
+            19
+          ],
+          "indicesMatch": true,
+          "expectedWeights": [
+            0.625,
+            0.375
+          ],
+          "actualWeights": [
+            0.625,
+            0.375
+          ],
+          "maximumWeightAbsoluteDifference": 0,
+          "weightTolerance": 1e-15,
+          "passed": true
+        },
+        "directionStencil": {
+          "expectedIndices": [
+            364,
+            365,
+            391,
+            392
+          ],
+          "actualIndices": [
+            364,
+            365,
+            391,
+            392
+          ],
+          "indicesMatch": true,
+          "expectedWeights": [
+            0.25,
+            0.24999999999999822,
+            0.2500000000000018,
+            0.25
+          ],
+          "actualWeights": [
+            0.25,
+            0.24999999999999822,
+            0.2500000000000018,
+            0.25
+          ],
+          "maximumWeightAbsoluteDifference": 0,
+          "weightTolerance": 1e-14,
+          "passed": true
+        }
+      },
+      {
+        "id": "w27-face-seam-tie",
+        "altitudeMeters": 38750,
+        "physicalOutgoingDirection": [
+          0.9420728276138133,
+          0.32921804721157427,
+          0.06414253551202863
+        ],
+        "positionStencil": {
+          "expectedIndices": [
+            30,
+            31
+          ],
+          "actualIndices": [
+            30,
+            31
+          ],
+          "indicesMatch": true,
+          "expectedWeights": [
+            0.5,
+            0.5
+          ],
+          "actualWeights": [
+            0.5,
+            0.5
+          ],
+          "maximumWeightAbsoluteDifference": 0,
+          "weightTolerance": 1e-15,
+          "passed": true
+        },
+        "directionStencil": {
+          "expectedIndices": [
+            1809,
+            1836
+          ],
+          "actualIndices": [
+            1809,
+            1836
+          ],
+          "indicesMatch": true,
+          "expectedWeights": [
+            0.4999999999999982,
+            0.5000000000000018
+          ],
+          "actualWeights": [
+            0.5000000000000018,
+            0.4999999999999982
+          ],
+          "maximumWeightAbsoluteDifference": 3.552713678800501e-15,
+          "weightTolerance": 1e-14,
+          "passed": true
+        }
+      },
+      {
+        "id": "upper-altitude-endpoint-clamp",
+        "altitudeMeters": 60375,
+        "physicalOutgoingDirection": [
+          0.9124227604834924,
+          -0.3990919457213312,
+          0.0906108437883973
+        ],
+        "positionStencil": {
+          "expectedIndices": [
+            47
+          ],
+          "actualIndices": [
+            47
+          ],
+          "indicesMatch": true,
+          "expectedWeights": [
+            1
+          ],
+          "actualWeights": [
+            1
+          ],
+          "maximumWeightAbsoluteDifference": 0,
+          "weightTolerance": 1e-15,
+          "passed": true
+        },
+        "directionStencil": {
+          "expectedIndices": [
+            364,
+            365,
+            391,
+            392
+          ],
+          "actualIndices": [
+            364,
+            365,
+            391,
+            392
+          ],
+          "indicesMatch": true,
+          "expectedWeights": [
+            0.25,
+            0.24999999999999822,
+            0.2500000000000018,
+            0.25
+          ],
+          "actualWeights": [
+            0.25,
+            0.24999999999999822,
+            0.2500000000000018,
+            0.25
+          ],
+          "maximumWeightAbsoluteDifference": 0,
+          "weightTolerance": 1e-14,
+          "passed": true
+        }
+      }
+    ],
+    "values": {
+      "label": "resident-Jthrough4-sampling",
+      "absoluteTolerance": 4e-18,
+      "relativeTolerance": 1e-12,
+      "comparedScalarCount": 90,
+      "bitExactScalarCount": 56,
+      "mismatchCount": 0,
+      "nonFiniteCount": 0,
+      "maximumAbsoluteError": 1.0587911840678754e-22,
+      "maximumRelativeError": 3.110146566194349e-16,
+      "worstAbsolute": {
+        "coordinates": {
+          "caseId": "two-tap-w27-direction",
+          "wavelengthIndex": 2
+        },
+        "expected": 7.533539818693322e-7,
+        "actual": 7.533539818693324e-7,
+        "absoluteError": 1.0587911840678754e-22,
+        "relativeError": 1.405436500701367e-16
+      },
+      "worstRelative": {
+        "coordinates": {
+          "caseId": "two-tap-w27-direction",
+          "wavelengthIndex": 13
+        },
+        "expected": 8.510782060694313e-8,
+        "actual": 8.51078206069431e-8,
+        "absoluteError": 2.6469779601696886e-23,
+        "relativeError": 3.110146566194349e-16
+      },
+      "rmsAbsoluteError": 2.1886621792113307e-23,
+      "passed": true
+    },
+    "passed": true
+  },
+  "passed": true
+}

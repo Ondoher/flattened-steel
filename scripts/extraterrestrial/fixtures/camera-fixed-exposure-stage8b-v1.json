@@ -1,0 +1,59 @@
+{
+  "schemaId": "camera-fixed-exposure-stage8b-fixture-v1",
+  "stage8a": {
+    "runId": "000358-camera-relative-projection-stage8a",
+    "artifactSetSha256": "69607f8d1a9339f6cc9d69a0c568cba85bd41ec25e80e55e66b2906d55b9d249",
+    "profileArtifact": "evidence/compiled-camera-profile.json",
+    "profileArtifactSha256": "ebc2a2037592bff463e2efe7b83b3093111f1be81ea5f24332b14ce66a734cf4"
+  },
+  "inputRuns": [
+    {
+      "viewId": "sun-focused",
+      "runId": "000351-spectral-color-production-sun-focused-light-adapted-log",
+      "artifactSetSha256": "a936417dcc770ef965c33694340b227f3f7ca92c709964ee3ed2ec45301c81bc",
+      "widthPixels": 641,
+      "heightPixels": 401,
+      "verticalFovDegrees": 15
+    },
+    {
+      "viewId": "wide",
+      "runId": "000352-spectral-color-production-wide-light-adapted-log",
+      "artifactSetSha256": "a563b4366dd465ff4d6a6c7a496594fec4e21c0f0659113887d04ff04f6ffb49",
+      "widthPixels": 641,
+      "heightPixels": 401,
+      "verticalFovDegrees": 78
+    }
+  ],
+  "conditions": [
+    "solar-noon",
+    "sunset-minus-30-minutes",
+    "sunset-minus-10-minutes",
+    "sunset"
+  ],
+  "exposure": {
+    "anchorViewId": "wide",
+    "anchorConditionId": "solar-noon",
+    "anchorStatistic": "median-positive-CIE-Y",
+    "middleGray": 0.18,
+    "stops": [-4, -2, 0, 2],
+    "selectionPolicy": "derive one scalar once from the complete wide noon field; reuse unchanged for every view and clock condition"
+  },
+  "development": {
+    "cameraCharacterization": "accepted Stage 8a D55 sensor RGB to D65 XYZ matrix",
+    "outputColorSpace": "linear Rec.709 D65",
+    "rawClipping": "disabled; relative PBRT response has no qualified physical full-well scale",
+    "negativeDisplayHandling": "clip each final linear Rec.709 channel to zero",
+    "highlightDisplayHandling": "clip each final linear Rec.709 channel to one",
+    "encoding": "IEC 61966-2-1 sRGB transfer function",
+    "toneCurve": "none",
+    "automaticExposure": false,
+    "sunSpecificBranch": false
+  },
+  "tolerances": {
+    "zeroMaximumAbsolute": 0,
+    "exposureScaleRelative": 1e-12,
+    "minimumSunsetNoonPreclipRedBlueRatioFactor": 1.05,
+    "minimumDistinctDiskCenterEncodedTripletsPerView": 2
+  },
+  "claimLimit": "Fixed relative-exposure full-frame presentation proof only. No electron count, quantum efficiency, physical aperture/shutter/ISO, noise, full-well, ADC, or physical Canon body claim."
+}

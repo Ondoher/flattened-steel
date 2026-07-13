@@ -1,0 +1,58 @@
+{
+  "schemaId": "spectral-color-stage2b-reference-bridge-fixture-v1",
+  "input": {
+    "runId": "000258-spectral-color-stage1-ledger",
+    "artifactSetSha256": "abe89535535f523d4d04a0a5e9fe5cef86bff441f274cd998103e0121a7cacd5",
+    "ledgerPath": "evidence/spectral-ledger.json",
+    "ledgerSha256": "a1574e12645f3f0c5eff1694d609f9e73cc39ec2661cf131ad0356a09f1c55d0",
+    "sampleRole": "disk-center",
+    "eligibility": "eligible",
+    "expectedSampleCount": 25
+  },
+  "sphericalAngularRadiusRadians": 0.004675,
+  "sourceViewingCondition": {
+    "whiteChromaticityXyzRelative": [95.04559270516715, 100, 108.90577507598783],
+    "backgroundRelativeY": 20,
+    "referenceWhiteToAdaptingLuminanceRatio": 5,
+    "adaptationFloorCdPerSquareMeter": 0.000001,
+    "discountIlluminant": true,
+    "surround": "dim"
+  },
+  "outputViewingCondition": {
+    "whiteChromaticityXyzRelative": [95.04559270516715, 100, 108.90577507598783],
+    "referenceWhiteLuminanceCdPerSquareMeter": 100,
+    "backgroundLuminanceCdPerSquareMeter": 10,
+    "adaptingLuminanceCdPerSquareMeter": 10,
+    "backgroundRelativeY": 10,
+    "discountIlluminant": true,
+    "surround": "dim"
+  },
+  "publishedCam16DevelopmentVector": {
+    "provenance": "Colour Science XYZ_to_CAM16 documentation example implementing Li et al. 2017",
+    "xyz": [20.654008, 12.197225, 5.136952],
+    "whiteXyz": [95.05, 100, 108.88],
+    "adaptingLuminanceCdPerSquareMeter": 318.31,
+    "backgroundRelativeY": 20,
+    "surround": { "F": 1, "c": 0.69, "Nc": 1 },
+    "expected": {
+      "J": 33.880368498111686,
+      "Q": 176.03752758512178,
+      "C": 69.44435335740803,
+      "M": 72.18638534116765,
+      "h": 19.510887327451748,
+      "s": 64.03612114840314
+    }
+  },
+  "calibrationRows": [
+    "spherical-distant/noon-minus-60", "spherical-distant/noon", "spherical-distant/noon-plus-60",
+    "spherical-distant/sunset-minus-60", "spherical-distant/sunset-minus-30", "spherical-distant/sunset",
+    "flat-local/closest", "flat-local/farthest-minus-30", "flat-local/farthest-plus-10"
+  ],
+  "tolerances": {
+    "internalCam16Absolute": 1e-10,
+    "publishedCam16VectorAbsolute": 1e-10,
+    "supportAbsolute": 1e-12,
+    "masteringCoordinateAbsolute": 1e-12,
+    "strictMonotonicAbsolute": 1e-14
+  }
+}

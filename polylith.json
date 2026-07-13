@@ -1,0 +1,21 @@
+{
+    "apps": [
+        {
+            "name": "flat",
+            "filename": "flat.json",
+            "code": false,
+            "default": false
+        },
+        {
+            "name": "flat32",
+            "filename": "flat32.json",
+            "code": false,
+            "default": false
+        }
+    ],
+    "builds": "builds",
+    "dest": "dist",
+    "multiple": false,
+    "react": true,
+    "src": "src"
+}

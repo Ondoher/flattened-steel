@@ -1,0 +1,10 @@
+{
+  "status": "accepted",
+  "er1Status": "accepted",
+  "acceptedCriterionCount": 16,
+  "criterionCount": 16,
+  "sourceGate": "XA-G01 accepted for Sirius and analytic extended fixture",
+  "lunarCalibrationStatus": "sealed-research-candidate-not-executed-or-calibrated",
+  "nextPhase": "ER2 point-source conservation reference",
+  "imageCount": 0
+}

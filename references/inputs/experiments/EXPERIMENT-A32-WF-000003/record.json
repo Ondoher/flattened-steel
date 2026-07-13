@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "experimentId": "EXPERIMENT-A32-WF-000003",
+  "externalName": "E3",
+  "name": "Bruneton-Referenced Sky-Ray Direction Characterization",
+  "question": "How does completed sky-ray output differ from the pinned Bruneton 16 by 32 incident-direction benchmark as Algorithm32 Fibonacci direction count increases through the practical 4-to-68 cost envelope, and where does the current count 34 lie on that curve?",
+  "facts": [
+    "FACT-A32-000180"
+  ],
+  "runner": "scripts/experiments/e3-sky-ray-direction-characterization/run.js",
+  "tests": "scripts/experiments/e3-sky-ray-direction-characterization/run.test.js",
+  "dataGenerator": "scripts/experiments/e3-sky-ray-direction-characterization/generate-data.js",
+  "inputs": {
+    "spectralBasisChannelCount": 15,
+    "sunZenithDegrees": [
+      87,
+      41,
+      31,
+      21
+    ],
+    "skyRaysPerSun": 6,
+    "pairedSkyRayCount": 24,
+    "candidateDirectionCounts": {
+      "minimum": 4,
+      "maximum": 68,
+      "count": 65
+    },
+    "benchmark": "Bruneton commit-pinned 16 by 32 midpoint incident-direction quadrature",
+    "decisionPolicy": "cost-neutral first release: do not exceed the current 34-direction angular work"
+  },
+  "iterationCount": 65,
+  "resultTableMeaning": "Each primary row reports one Fibonacci direction count evaluated over all 24 paired sky rays; the report also gives one per-ray row at the current count 34.",
+  "result": {
+    "accepted": true,
+    "retainedDirectionCount": 34,
+    "automaticThresholdSelection": null,
+    "currentCountDeltaEItp": {
+      "mean": 2.150588146330829,
+      "median": 1.042747,
+      "p95": 6.1793980746262696,
+      "maximum": 9.651289567809977
+    },
+    "currentCountLogLuminanceCorrelation": 0.9949910564153577,
+    "currentCountAggregateLuminanceRatio": 1.075211725375909,
+    "limitation": "The largest discrepancies occur in low-Sun horizon queries; perceptual indistinguishability, continuous convergence, and independent physical accuracy are not claimed.",
+    "conclusion": "Count 34 is retained as the best tested Bruneton-benchmark agreement within the declared no-extra-angular-work budget; the former finite-horizontal value 188 is rejected as inapplicable to sky-cache use."
+  },
+  "durableOutput": {
+    "path": "references/results/experiments/e3-sky-ray-direction-characterization/result.md",
+    "sha256": "2e23ea3e7460a8b49d870f30c340a64014ec9dcbdcfdb72a674709ce9c18dd3c"
+  }
+}

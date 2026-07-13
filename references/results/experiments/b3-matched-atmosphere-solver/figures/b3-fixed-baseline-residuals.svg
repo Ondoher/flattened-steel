@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="1070" viewBox="0 0 1400 1070" role="img" aria-labelledby="title description">
+<title id="title">B3 Algorithm32 profile aggregate scores beside published libRadtran</title>
+<desc id="description">Selected order-4 Algorithm32 aggregate spectral-radiance RMSE beside the published libRadtran coarse and refined values, with Kider residual diagnostics by time, wavelength, and view-zenith ring.</desc>
+<metadata id="provenance">{&quot;generator&quot;:&quot;scripts/experiments/generate-benchmark-figures.js&quot;,&quot;observable&quot;:&quot;B3 Algorithm32 profile spectral-radiance scores and Kider residual diagnostics&quot;,&quot;status&quot;:&quot;Algorithm32 is the selected J4 result and is compared with published libRadtran coarse and refined scores; detailed panels compare it with Kider measurements&quot;,&quot;profileFamily&quot;:&quot;paper&quot;,&quot;candidateLabel&quot;:&quot;Algorithm32&quot;,&quot;selectedMaximumScatteringOrder&quot;:4,&quot;measurements&quot;:{&quot;path&quot;:&quot;references/results/experiments/b1-directional-sky-radiance/measurement-boundary.tsv&quot;,&quot;sha256&quot;:&quot;a751d56dc0d8deb87958cbc9e811204a38f2b86101c732109c3503dfcfedad74&quot;},&quot;algorithm32Cube&quot;:{&quot;path&quot;:&quot;references/results/experiments/b3-matched-atmosphere-solver/algorithm32-paper-j4-proposed-cube.json&quot;,&quot;sha256&quot;:&quot;af71e302164deaee7c18ca8cb80d8276ab1f6c5bf85d7ace4648713424d19504&quot;},&quot;referenceCube&quot;:{&quot;path&quot;:&quot;references/results/experiments/b3-matched-atmosphere-solver/libRadtran-reference-cube.json&quot;,&quot;sha256&quot;:&quot;7f48cf61deb8da7257173c0a48ce8a5d292e9f0dc5878e6d5313aa494a07b9c4&quot;}}</metadata>
+<style>
+text{font-family:Arial,Helvetica,sans-serif;fill:#202124}
+.title{font-size:24px;font-weight:700}
+.subtitle{font-size:14px;fill:#4d5156}
+.panel-title{font-size:16px;font-weight:700}
+.axis{stroke:#303134;stroke-width:1}
+.grid{stroke:#dadce0;stroke-width:1}
+.tick{font-size:11px;fill:#5f6368}
+.axis-label{font-size:13px;font-weight:600}
+.legend{font-size:12px}
+.note{font-size:11px;fill:#5f6368}
+</style>
+<rect width="100%" height="100%" fill="#ffffff"/>
+<text class="title" x="48" y="42">B3 - Algorithm32 profile scores beside published libRadtran</text>
+<text class="subtitle" x="48" y="70">Aggregate values share the Kider metric. Algorithm32 is cumulative through order 4. Diagnostics are not pointwise libRadtran comparisons.</text>
+<rect x="48" y="88" width="1304" height="176" rx="6" fill="#f8f9fa" stroke="#dadce0"/>
+<text class="panel-title" x="76" y="116">Published libRadtran RMSE: 11.48 coarse; 11.45 refined (primary external results)</text>
+<text class="panel-title" x="76" y="136" fill="#b00020">Algorithm32 RMSE: 11.925783  |  coarse difference +0.445783  |  ratio 1.038831</text>
+<text class="note" x="76" y="244">Optional local fixed-libRadtran cross-check: 11.48054694.</text>
+<text class="panel-title" x="82" y="302">A. RMSE by measurement time</text>
+<line class="grid" x1="82" y1="558" x2="652" y2="558"/>
+<text class="tick" x="72" y="562" text-anchor="end">0</text>
+<line class="grid" x1="82" y1="498" x2="652" y2="498"/>
+<text class="tick" x="72" y="502" text-anchor="end">5</text>
+<line class="grid" x1="82" y1="438" x2="652" y2="438"/>
+<text class="tick" x="72" y="442" text-anchor="end">10</text>
+<line class="grid" x1="82" y1="378" x2="652" y2="378"/>
+<text class="tick" x="72" y="382" text-anchor="end">15</text>
+<line class="grid" x1="82" y1="318" x2="652" y2="318"/>
+<text class="tick" x="72" y="322" text-anchor="end">20</text>
+<line class="axis" x1="82" y1="318" x2="82" y2="558"/>
+<line class="axis" x1="82" y1="558" x2="652" y2="558"/>
+<line class="axis" x1="82" y1="558" x2="82" y2="563"/>
+<text class="tick" x="82" y="577" text-anchor="middle">09:30</text>
+<line class="axis" x1="153.25" y1="558" x2="153.25" y2="563"/>
+<text class="tick" x="153.25" y="577" text-anchor="middle">10:00</text>
+<line class="axis" x1="224.5" y1="558" x2="224.5" y2="563"/>
+<text class="tick" x="224.5" y="577" text-anchor="middle">10:30</text>
+<line class="axis" x1="295.75" y1="558" x2="295.75" y2="563"/>
+<text class="tick" x="295.75" y="577" text-anchor="middle">11:00</text>
+<line class="axis" x1="367" y1="558" x2="367" y2="563"/>
+<text class="tick" x="367" y="577" text-anchor="middle">11:30</text>
+<line class="axis" x1="438.25" y1="558" x2="438.25" y2="563"/>
+<text class="tick" x="438.25" y="577" text-anchor="middle">12:00</text>
+<line class="axis" x1="509.5" y1="558" x2="509.5" y2="563"/>
+<text class="tick" x="509.5" y="577" text-anchor="middle">12:30</text>
+<line class="axis" x1="580.75" y1="558" x2="580.75" y2="563"/>
+<text class="tick" x="580.75" y="577" text-anchor="middle">13:00</text>
+<line class="axis" x1="652" y1="558" x2="652" y2="563"/>
+<text class="tick" x="652" y="577" text-anchor="middle">13:30</text>
+<text class="axis-label" x="367" y="601" text-anchor="middle">Local time</text>
+<text class="axis-label" transform="translate(21 438) rotate(-90)" text-anchor="middle">RMSE (mW m^-2 sr^-1 nm^-1)</text>
+<path d="M82,400.921 L117.625,419.262 L153.25,424.232 L188.875,433.682 L224.5,447.022 L260.125,443.565 L295.75,417.712 L331.375,423.455 L367,440.54 L402.625,438.54 L438.25,435.78 L473.875,372.87 L509.5,339.087 L545.125,410.761 L580.75,420.512 L616.375,419.071 L652,407.617" fill="none" stroke="#b00020" stroke-width="2" opacity="1"/>
+<circle cx="82" cy="400.921" r="2.5" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
+<circle cx="117.625" cy="419.262" r="2.5" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
+<circle cx="153.25" cy="424.232" r="2.5" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
+<circle cx="188.875" cy="433.682" r="2.5" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
+<circle cx="224.5" cy="447.022" r="2.5" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
+<circle cx="260.125" cy="443.565" r="2.5" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
+<circle cx="295.75" cy="417.712" r="2.5" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
+<circle cx="331.375" cy="423.455" r="2.5" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
+<circle cx="367" cy="440.54" r="2.5" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
+<circle cx="402.625" cy="438.54" r="2.5" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
+<circle cx="438.25" cy="435.78" r="2.5" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
+<circle cx="473.875" cy="372.87" r="2.5" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
+<circle cx="509.5" cy="339.087" r="2.5" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
+<circle cx="545.125" cy="410.761" r="2.5" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
+<circle cx="580.75" cy="420.512" r="2.5" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
+<circle cx="616.375" cy="419.071" r="2.5" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
+<circle cx="652" cy="407.617" r="2.5" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
+<text class="panel-title" x="782" y="302">B. RMSE by wavelength</text>
+<line class="grid" x1="782" y1="558" x2="1352" y2="558"/>
+<text class="tick" x="772" y="562" text-anchor="end">0</text>
+<line class="grid" x1="782" y1="498" x2="1352" y2="498"/>
+<text class="tick" x="772" y="502" text-anchor="end">5</text>
+<line class="grid" x1="782" y1="438" x2="1352" y2="438"/>
+<text class="tick" x="772" y="442" text-anchor="end">10</text>
+<line class="grid" x1="782" y1="378" x2="1352" y2="378"/>
+<text class="tick" x="772" y="382" text-anchor="end">15</text>
+<line class="grid" x1="782" y1="318" x2="1352" y2="318"/>
+<text class="tick" x="772" y="322" text-anchor="end">20</text>
+<line class="axis" x1="782" y1="318" x2="782" y2="558"/>
+<line class="axis" x1="782" y1="558" x2="1352" y2="558"/>
+<line class="axis" x1="782" y1="558" x2="782" y2="563"/>
+<text class="tick" x="782" y="577" text-anchor="middle">360</text>
+<line class="axis" x1="877" y1="558" x2="877" y2="563"/>
+<text class="tick" x="877" y="577" text-anchor="middle">418.75</text>
+<line class="axis" x1="972" y1="558" x2="972" y2="563"/>
+<text class="tick" x="972" y="577" text-anchor="middle">477.5</text>
+<line class="axis" x1="1067" y1="558" x2="1067" y2="563"/>
+<text class="tick" x="1067" y="577" text-anchor="middle">536.25</text>
+<line class="axis" x1="1162" y1="558" x2="1162" y2="563"/>
+<text class="tick" x="1162" y="577" text-anchor="middle">595</text>
+<line class="axis" x1="1257" y1="558" x2="1257" y2="563"/>
+<text class="tick" x="1257" y="577" text-anchor="middle">653.75</text>
+<line class="axis" x1="1352" y1="558" x2="1352" y2="563"/>
+<text class="tick" x="1352" y="577" text-anchor="middle">712.5</text>
+<text class="axis-label" x="1067" y="601" text-anchor="middle">Wavelength (nm)</text>
+<text class="axis-label" transform="translate(721 438) rotate(-90)" text-anchor="middle">RMSE (mW m^-2 sr^-1 nm^-1)</text>
+<path d="M782,485.675 L801,430.608 L820,477.687 L839,382.672 L858,418.88 L877,356.571 L896,442.449 L915,409.437 L934,384.999 L953,383.67 L972,364.107 L991,393.633 L1010,402.379 L1029,393.312 L1048,407.611 L1067,406.504 L1086,410.879 L1105,413.139 L1124,409.162 L1143,415.222 L1162,417.097 L1181,419.702 L1200,422.152 L1219,427.269 L1238,429.445 L1257,436.437 L1276,434.186 L1295,437.406 L1314,432.175 L1333,450.779 L1352,453.832" fill="none" stroke="#b00020" stroke-width="2" opacity="1"/>
+<circle cx="782" cy="485.675" r="2.5" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
+<circle cx="801" cy="430.608" r="2.5" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
+<circle cx="820" cy="477.687" r="2.5" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
+<circle cx="839" cy="382.672" r="2.5" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
+<circle cx="858" cy="418.88" r="2.5" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
+<circle cx="877" cy="356.571" r="2.5" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
+<circle cx="896" cy="442.449" r="2.5" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
+<circle cx="915" cy="409.437" r="2.5" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
+<circle cx="934" cy="384.999" r="2.5" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
+<circle cx="953" cy="383.67" r="2.5" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
+<circle cx="972" cy="364.107" r="2.5" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
+<circle cx="991" cy="393.633" r="2.5" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
+<circle cx="1010" cy="402.379" r="2.5" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
+<circle cx="1029" cy="393.312" r="2.5" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
+<circle cx="1048" cy="407.611" r="2.5" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
+<circle cx="1067" cy="406.504" r="2.5" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
+<circle cx="1086" cy="410.879" r="2.5" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
+<circle cx="1105" cy="413.139" r="2.5" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
+<circle cx="1124" cy="409.162" r="2.5" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
+<circle cx="1143" cy="415.222" r="2.5" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
+<circle cx="1162" cy="417.097" r="2.5" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
+<circle cx="1181" cy="419.702" r="2.5" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
+<circle cx="1200" cy="422.152" r="2.5" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
+<circle cx="1219" cy="427.269" r="2.5" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
+<circle cx="1238" cy="429.445" r="2.5" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
+<circle cx="1257" cy="436.437" r="2.5" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
+<circle cx="1276" cy="434.186" r="2.5" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
+<circle cx="1295" cy="437.406" r="2.5" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
+<circle cx="1314" cy="432.175" r="2.5" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
+<circle cx="1333" cy="450.779" r="2.5" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
+<circle cx="1352" cy="453.832" r="2.5" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
+<text class="panel-title" x="415" y="682">C. RMSE by view-zenith ring</text>
+<line class="grid" x1="415" y1="928" x2="985" y2="928"/>
+<text class="tick" x="405" y="932" text-anchor="end">0</text>
+<line class="grid" x1="415" y1="870.5" x2="985" y2="870.5"/>
+<text class="tick" x="405" y="874.5" text-anchor="end">5</text>
+<line class="grid" x1="415" y1="813" x2="985" y2="813"/>
+<text class="tick" x="405" y="817" text-anchor="end">10</text>
+<line class="grid" x1="415" y1="755.5" x2="985" y2="755.5"/>
+<text class="tick" x="405" y="759.5" text-anchor="end">15</text>
+<line class="grid" x1="415" y1="698" x2="985" y2="698"/>
+<text class="tick" x="405" y="702" text-anchor="end">20</text>
+<line class="axis" x1="415" y1="698" x2="415" y2="928"/>
+<line class="axis" x1="415" y1="928" x2="985" y2="928"/>
+<line class="axis" x1="415" y1="928" x2="415" y2="933"/>
+<text class="tick" x="415" y="947" text-anchor="middle">0</text>
+<line class="axis" x1="557.5" y1="928" x2="557.5" y2="933"/>
+<text class="tick" x="557.5" y="947" text-anchor="middle">18.1</text>
+<line class="axis" x1="700" y1="928" x2="700" y2="933"/>
+<text class="tick" x="700" y="947" text-anchor="middle">36.6</text>
+<line class="axis" x1="842.5" y1="928" x2="842.5" y2="933"/>
+<text class="tick" x="842.5" y="947" text-anchor="middle">56.3</text>
+<line class="axis" x1="985" y1="928" x2="985" y2="933"/>
+<text class="tick" x="985" y="947" text-anchor="middle">77.9</text>
+<text class="axis-label" x="700" y="971" text-anchor="middle">View zenith angle (degrees)</text>
+<text class="axis-label" transform="translate(354 813) rotate(-90)" text-anchor="middle">RMSE (mW m^-2 sr^-1 nm^-1)</text>
+<path d="M415,820.882 L557.5,720.345 L700,770.555 L842.5,816.188 L985,806.752" fill="none" stroke="#b00020" stroke-width="2" opacity="1"/>
+<circle cx="415" cy="820.882" r="2.5" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
+<circle cx="557.5" cy="720.345" r="2.5" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
+<circle cx="700" cy="770.555" r="2.5" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
+<circle cx="842.5" cy="816.188" r="2.5" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
+<circle cx="985" cy="806.752" r="2.5" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
+<line x1="48" y1="995" x2="76" y2="995" stroke="#b00020" stroke-width="2"/><text class="legend" x="84" y="999">Algorithm32</text>
+<text class="note" x="48" y="1026">All diagnostics use 42,687 Kider comparisons; maximum absolute residuals: Algorithm32 0.178021 W m^-2 sr^-1 nm^-1.</text>
+<text class="note" x="48" y="1046">The paper supplies aggregate libRadtran scores, not the decomposed curves below. B3 reuses B1 measurements and does not constitute independent or out-of-sample validation.</text>
+</svg>

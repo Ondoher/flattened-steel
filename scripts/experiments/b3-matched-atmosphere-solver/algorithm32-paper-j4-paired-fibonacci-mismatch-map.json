@@ -1,0 +1,22 @@
+{
+  "schema": "algorithm32-b3-mismatch-map-v1",
+  "subject": "Algorithm32 Paper J4 paired-Fibonacci count ladder",
+  "mismatches": [
+    {
+      "field": "multiple-scattering treatment",
+      "disposition": "Each candidate stops after cumulative J1 + J2 + J3 + J4 rather than resolving libRadtran DISORT's fuller multiple-scattering solution."
+    },
+    {
+      "field": "incident angular quadrature",
+      "disposition": "Each candidate uses one frozen equal-weight paired-Fibonacci count from 34, 38, 42, 46, or 50 with exact antipodal closure, plus the separate W27 source-aligned outgoing reconstruction; retained libRadtran DISORT uses 16 streams."
+    },
+    {
+      "field": "vertical and path discretization",
+      "disposition": "Each candidate retains 48 physical altitude nodes, 40 view-path and higher-order transport intervals, and 20 source-transmittance intervals; libRadtran uses its retained layered atmosphere and solver controls."
+    },
+    {
+      "field": "geometry approximation",
+      "disposition": "Each candidate uses exact ray intersections with its spherical atmosphere; the retained libRadtran setup is pseudospherical."
+    }
+  ]
+}

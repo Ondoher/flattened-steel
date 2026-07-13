@@ -1,0 +1,2613 @@
+{
+  "schema": "algorithm32-star-local-sun-shell-cpu-comparison-report-v3",
+  "reportId": "algorithm32-star-local-sun-shell-cpu-comparison-report-v3-sha256:358f1abbbc910774be040baae85d240c2d2d0ca14c9eb4f51bb96af5ceaddd5a",
+  "state": "passed",
+  "claimBoundary": "Independent checked comparison of each requested production binary64 N1, N2, and N4 CPU recast against the matching separately executed Star-only omitted-ground request. This policy does not cover GPU construction, reflective ground, final-view rendering, or Stage 9.6.3.",
+  "authority": {
+    "policy": {
+      "path": "src/algorithm32/light-sources/fixtures/algorithm32-star-local-sun-shell-cpu-comparison-policy.json",
+      "sha256": "46715af74dedb2b3104b1861d0643a3ba20ef5f32f3d14116085ac9c1e84b6e0",
+      "policyId": "algorithm32-star-local-sun-shell-cpu-comparison-policy-v3"
+    },
+    "gold": {
+      "path": "src/algorithm32/light-sources/fixtures/algorithm32-star-local-sun-shell-cpu-gold.json",
+      "sha256": "61532368d7efa2d4a60fc932a901097a8e583ccb0eb3593eb9b26d29c2674985",
+      "fixtureId": "algorithm32-star-local-sun-shell-cpu-gold-v3-sha256:bb3a1f871a375e53d9c180899003041afc4dda93cbe3fe69e62080481bd8d0c9"
+    },
+    "authentication": {
+      "numericSectionCount": 16,
+      "numericScalarCount": 44657,
+      "edgeCaseRecordCount": 29,
+      "acceptedManifest": {
+        "path": "scripts/algorithm32-star/cases/local-sun-shell-cache-accepted-implementation-v1.json",
+        "sha256": "6a27106bce134174309a59908c6bcbb278a22989f74c64274347840ccc8abeb6",
+        "implementationId": "local-sun-shell-cache-accepted-implementation-v1-sha256:457bc753c9c3814560a8af0aaeeabaf3ea6efe64718e75e36b09a8bc863ee00e"
+      },
+      "physicalManifest": {
+        "path": "scripts/algorithm32-star/cases/local-sun-shell-cache-physical-implementation-v3.json",
+        "sha256": "8d548f25ed6590a79ac4b1a055e941fb49b4a000b6b5bf94fb3d7694d2f561ac",
+        "implementationId": "local-sun-shell-cache-physical-implementation-v3-sha256:30f2af5e0895953cd6b434686284915e94270b64eaaa2a80495e3db4d63d5913"
+      },
+      "acceptedSourceClosure": {
+        "sourceFileCount": 29,
+        "aggregateSha256": "c267abdc2d4511de4a7311f7f7c9c70cb1dd9fddd4340802b3a27493d5dd3105"
+      },
+      "physicalSourceClosure": {
+        "sourceFileCount": 13,
+        "aggregateSha256": "2ee959d19a7aeda11539097fa374bd32d085e4c62c6a83f907ec08b8c88bf782"
+      },
+      "captureSourceClosure": {
+        "sourceFileCount": 24,
+        "aggregateSha256": "a3e122200404a68ae418a6a5eccb03f7b2f751bde42299f9c14d0515ac0c1c5a"
+      },
+      "goldOrderInvariants": {
+        "state": "passed",
+        "sections": {
+          "n1J1EqualsN2J1": {
+            "id": "star-n1-j1-equals-n2-j1",
+            "state": "passed",
+            "comparedLeafCount": 3240,
+            "mismatchCount": 0,
+            "mismatchSamples": [],
+            "expectedJsonSha256": "fe0f6360c6ec6f3bc0e5c97352107d59113c6c1ba1a4a86eefb9bf3126b19d9f",
+            "actualJsonSha256": "fe0f6360c6ec6f3bc0e5c97352107d59113c6c1ba1a4a86eefb9bf3126b19d9f"
+          },
+          "n2J1EqualsN4J1": {
+            "id": "star-n2-j1-equals-n4-j1",
+            "state": "passed",
+            "comparedLeafCount": 3240,
+            "mismatchCount": 0,
+            "mismatchSamples": [],
+            "expectedJsonSha256": "fe0f6360c6ec6f3bc0e5c97352107d59113c6c1ba1a4a86eefb9bf3126b19d9f",
+            "actualJsonSha256": "fe0f6360c6ec6f3bc0e5c97352107d59113c6c1ba1a4a86eefb9bf3126b19d9f"
+          },
+          "n2L1EqualsN4L1": {
+            "id": "star-n2-l1-equals-n4-l1",
+            "state": "passed",
+            "comparedLeafCount": 2040,
+            "mismatchCount": 0,
+            "mismatchSamples": [],
+            "expectedJsonSha256": "2c0ae774a7bac92c3dc9a48f6c1a944ba2063cbea06aaab20410267219d8541d",
+            "actualJsonSha256": "2c0ae774a7bac92c3dc9a48f6c1a944ba2063cbea06aaab20410267219d8541d"
+          },
+          "n2J2EqualsN4J2": {
+            "id": "star-n2-j2-equals-n4-j2",
+            "state": "passed",
+            "comparedLeafCount": 3240,
+            "mismatchCount": 0,
+            "mismatchSamples": [],
+            "expectedJsonSha256": "024126b45fd73454599ffd446950cba8b34b8006ce323460c08516f9fc058f98",
+            "actualJsonSha256": "024126b45fd73454599ffd446950cba8b34b8006ce323460c08516f9fc058f98"
+          },
+          "n1CumulativeEqualsJ1": {
+            "id": "star-n1-cumulative-equals-j1",
+            "state": "passed",
+            "comparedLeafCount": 3240,
+            "mismatchCount": 0,
+            "mismatchSamples": [],
+            "expectedJsonSha256": "fe0f6360c6ec6f3bc0e5c97352107d59113c6c1ba1a4a86eefb9bf3126b19d9f",
+            "actualJsonSha256": "fe0f6360c6ec6f3bc0e5c97352107d59113c6c1ba1a4a86eefb9bf3126b19d9f"
+          },
+          "n2CumulativeEqualsPureSum": {
+            "id": "star-n2-cumulative-equals-pure-sum",
+            "state": "passed",
+            "comparedLeafCount": 3240,
+            "mismatchCount": 0,
+            "mismatchSamples": [],
+            "expectedJsonSha256": "cac2042e04428d42e2c44f90c1ef5b5b18f30aad9f0c111eac87a1bb0613d12c",
+            "actualJsonSha256": "cac2042e04428d42e2c44f90c1ef5b5b18f30aad9f0c111eac87a1bb0613d12c"
+          },
+          "n4CumulativeEqualsPureSum": {
+            "id": "star-n4-cumulative-equals-pure-sum",
+            "state": "passed",
+            "comparedLeafCount": 3240,
+            "mismatchCount": 0,
+            "mismatchSamples": [],
+            "expectedJsonSha256": "34b322332f65d03535c5500f33a22bd8c5cf6c0cf851795bf9b7f7082b8564a2",
+            "actualJsonSha256": "34b322332f65d03535c5500f33a22bd8c5cf6c0cf851795bf9b7f7082b8564a2"
+          }
+        }
+      }
+    }
+  },
+  "production": {
+    "sourceEntryPaths": [
+      "src/algorithm32/atmospheres/CanonicalAtmosphere.js",
+      "src/algorithm32/constants/Algorithm32CanonicalData.js",
+      "src/algorithm32/domains/consts.js",
+      "src/algorithm32/geometries/FlatEarthGeometry.js",
+      "src/algorithm32/implementation/SpectralCalculator.js",
+      "src/algorithm32/light-sources/LocalSunConstructionDomainSelection.js",
+      "src/algorithm32/light-sources/LocalSunConstructionLightSource.js",
+      "src/algorithm32/light-sources/LocalSunCpuCache.js",
+      "src/algorithm32/light-sources/LocalSunLightSource.js",
+      "src/algorithm32/light-sources/create-local-sun-shell-fact-cache.js",
+      "src/algorithm32/light-sources/local-sun-cpu-cache-build.js",
+      "src/algorithm32/light-sources/local-sun-later-order-scattering-density.js",
+      "src/algorithm32/light-sources/local-sun-scattering-density-transport.js",
+      "src/algorithm32/profiles/native-15-profile.js"
+    ],
+    "sourceClosure": [
+      {
+        "path": "src/algorithm32/atmospheres/CanonicalAtmosphere.js",
+        "size": {
+          "value": 25886,
+          "units": "bytes"
+        },
+        "sha256": "6f93b1cc07e684a2e3523ee43ed5f12ca815f98b34f48acc3dcd1b150c478f3f"
+      },
+      {
+        "path": "src/algorithm32/atmospheres/consts.js",
+        "size": {
+          "value": 1139,
+          "units": "bytes"
+        },
+        "sha256": "7c3a3a5595786198e167e0fb47f7e7c6ac5d56dee70619284c1df5340a2dfd98"
+      },
+      {
+        "path": "src/algorithm32/caches/CacheConstructionControlsDescriptor.js",
+        "size": {
+          "value": 1582,
+          "units": "bytes"
+        },
+        "sha256": "67950516d3f2ced7b5e9e454ab0f75a46b9a9a3c93586a2d5a0e58c24ccce383"
+      },
+      {
+        "path": "src/algorithm32/caches/consts.js",
+        "size": {
+          "value": 130,
+          "units": "bytes"
+        },
+        "sha256": "c5c806ab78015e747d2ce3cec8dc13fba30ec6d237655fc7917a2f97aceb0264"
+      },
+      {
+        "path": "src/algorithm32/caches/CpuDirectionalSpectralField.js",
+        "size": {
+          "value": 5664,
+          "units": "bytes"
+        },
+        "sha256": "30794371da7eb6a365edfcf4030cb025ee64b777a06af46f42b014b1199dc3f5"
+      },
+      {
+        "path": "src/algorithm32/caches/DenseScalarArrayLayout.js",
+        "size": {
+          "value": 6370,
+          "units": "bytes"
+        },
+        "sha256": "aeb168741f08f2aa4245505553d55b656a9fa25823c8b6ec6f16309cf22654c9"
+      },
+      {
+        "path": "src/algorithm32/caches/DirectionalSpectralFieldDescriptor.js",
+        "size": {
+          "value": 4000,
+          "units": "bytes"
+        },
+        "sha256": "99b74ed0f71b2a1db3c2393ce48ecc543cdd571ec8d684807b65a20091ea4057"
+      },
+      {
+        "path": "src/algorithm32/caches/gpu/cacheBuildContracts.js",
+        "size": {
+          "value": 3536,
+          "units": "bytes"
+        },
+        "sha256": "d5689ec9651016ca052069425fef63d9e7d6de61ba6acddbc3185701d5cba685"
+      },
+      {
+        "path": "src/algorithm32/caches/gpu/CacheGpuExecutor.js",
+        "size": {
+          "value": 12794,
+          "units": "bytes"
+        },
+        "sha256": "8c611f952d9d3909b4a781ca9ce12f235551412a5f2af18f81d35b72090d16fc"
+      },
+      {
+        "path": "src/algorithm32/caches/gpu/CacheOperations.js",
+        "size": {
+          "value": 8761,
+          "units": "bytes"
+        },
+        "sha256": "5b1312086fa752fb0800534af014fc07973e420312e2716f1fdf683ecaf540d0"
+      },
+      {
+        "path": "src/algorithm32/caches/gpu/CachePassAssembler.js",
+        "size": {
+          "value": 5468,
+          "units": "bytes"
+        },
+        "sha256": "37ac2726944263bbb8fc7abb4ea45844f90709397ee56068f38367af08720290"
+      },
+      {
+        "path": "src/algorithm32/caches/gpu/cacheRuntimeContracts.js",
+        "size": {
+          "value": 173,
+          "units": "bytes"
+        },
+        "sha256": "794bccd488ae30ef648edc55acfb91b6a6cd03ab8409b4bc1e361707daab8a36"
+      },
+      {
+        "path": "src/algorithm32/caches/gpu/canonical-black-ground.js",
+        "size": {
+          "value": 637,
+          "units": "bytes"
+        },
+        "sha256": "34386d16be2bd4537b2d3bb069af8bff0d526154e5d03d613e58be98351a125c"
+      },
+      {
+        "path": "src/algorithm32/caches/gpu/consts.js",
+        "size": {
+          "value": 969,
+          "units": "bytes"
+        },
+        "sha256": "359ab706e0123080bd26fb7943593c58bed24bcc4daaa7b29e77371c19ec0c20"
+      },
+      {
+        "path": "src/algorithm32/caches/ScalarArrayTextureLayout.js",
+        "size": {
+          "value": 1496,
+          "units": "bytes"
+        },
+        "sha256": "4b9712ccba84f94aed3184c3062e2098467e5d6c3cd67aba447a104b35af13da"
+      },
+      {
+        "path": "src/algorithm32/caches/ScatteringCacheDescriptor.js",
+        "size": {
+          "value": 3007,
+          "units": "bytes"
+        },
+        "sha256": "3d8b4dc584f7ec15ec3e9847496a202b821a8ebb8228459ed8228c8a9a26d053"
+      },
+      {
+        "path": "src/algorithm32/constants/Algorithm32CanonicalData.js",
+        "size": {
+          "value": 3449,
+          "units": "bytes"
+        },
+        "sha256": "38010895481fdcebce8fe4489739f32bfb69a320676daacd24761f7a6a890994"
+      },
+      {
+        "path": "src/algorithm32/descriptors/descriptorSupport.js",
+        "size": {
+          "value": 8663,
+          "units": "bytes"
+        },
+        "sha256": "008942fc41d4d59684fdefefa4e3d257e00f1b16787e0e762c6cee04de02cf77"
+      },
+      {
+        "path": "src/algorithm32/domains/consts.js",
+        "size": {
+          "value": 2961,
+          "units": "bytes"
+        },
+        "sha256": "5a41ac4ee865ea26037dec80c14187af6764bccc476431a130fa438b5e9fbaf9"
+      },
+      {
+        "path": "src/algorithm32/domains/CubedSphereDirectionDomain.js",
+        "size": {
+          "value": 16152,
+          "units": "bytes"
+        },
+        "sha256": "c4d3b0d07ce0ab1d4323010d268e75369437f6123247f2a1c6d9157729aef885"
+      },
+      {
+        "path": "src/algorithm32/domains/CubedSphereW27DirectionDomain.js",
+        "size": {
+          "value": 2379,
+          "units": "bytes"
+        },
+        "sha256": "8b80726f242bc4e3a8c6cad1cd8d7305b24beb624ab8171ec01c29e1d6bf5f84"
+      },
+      {
+        "path": "src/algorithm32/domains/DirectionDomainDescriptor.js",
+        "size": {
+          "value": 3401,
+          "units": "bytes"
+        },
+        "sha256": "902c6800c97e5d8a7c2897b4228ab5acd86d89b2c55b5f3af1322cc300ea405e"
+      },
+      {
+        "path": "src/algorithm32/domains/domain-consts.js",
+        "size": {
+          "value": 8325,
+          "units": "bytes"
+        },
+        "sha256": "9616864029c254a0f813180788bb3d72a3413fc00f5c7bc4d4d664160ac23ca6"
+      },
+      {
+        "path": "src/algorithm32/domains/domainDescriptorSupport.js",
+        "size": {
+          "value": 279,
+          "units": "bytes"
+        },
+        "sha256": "1b238b10c38250fd8ce4443f3860e2af62638f40c459d03c59a1bb4a785e0a03"
+      },
+      {
+        "path": "src/algorithm32/domains/Fibonacci34DirectionDomain.js",
+        "size": {
+          "value": 2573,
+          "units": "bytes"
+        },
+        "sha256": "4ed3f01bdf62b1e7ddf3d65ada9b4b4f38302bfa65f2d07ff246e466518d12b4"
+      },
+      {
+        "path": "src/algorithm32/domains/index.js",
+        "size": {
+          "value": 1429,
+          "units": "bytes"
+        },
+        "sha256": "bed011f791cf97912f377448419096956d4046cd5c0c8f243ad8bd7c7deaa476"
+      },
+      {
+        "path": "src/algorithm32/domains/Native48PositionDomain.js",
+        "size": {
+          "value": 1175,
+          "units": "bytes"
+        },
+        "sha256": "ff853c2210a8ad4c81466f91d392c56fad7e1ecbf3248eaf113d3314bdadda81"
+      },
+      {
+        "path": "src/algorithm32/domains/PairedFibonacci34DirectionDomain.js",
+        "size": {
+          "value": 2890,
+          "units": "bytes"
+        },
+        "sha256": "d68a45468d1946ea76e2d1505a293ba959374969a683a89ecdf4991005a08863"
+      },
+      {
+        "path": "src/algorithm32/domains/PositionDomainDescriptor.js",
+        "size": {
+          "value": 3248,
+          "units": "bytes"
+        },
+        "sha256": "a74e8fc57a7549c0f88447bf199bbcefdd55c44f7a1edb567986d61802a3baff"
+      },
+      {
+        "path": "src/algorithm32/domains/SphericalNativePositionDomain.js",
+        "size": {
+          "value": 4869,
+          "units": "bytes"
+        },
+        "sha256": "f8b310165cb40c75489e1f5f23720132b6ed9eff81bca19e9e2c59077fecb3c0"
+      },
+      {
+        "path": "src/algorithm32/geometries/consts.js",
+        "size": {
+          "value": 3615,
+          "units": "bytes"
+        },
+        "sha256": "1f0fb8d85007fad1e07d265ff7848097793a6aa496ab588590171c0573a88ee3"
+      },
+      {
+        "path": "src/algorithm32/geometries/FlatEarthGeometry.js",
+        "size": {
+          "value": 95845,
+          "units": "bytes"
+        },
+        "sha256": "9989421043c81c7dc7355a88f769bfe14e83b6a3f97a38bfc5fe2b5aa8222e17"
+      },
+      {
+        "path": "src/algorithm32/geometries/geometryCoordinates.js",
+        "size": {
+          "value": 3399,
+          "units": "bytes"
+        },
+        "sha256": "d4c9bf3c960ffbe37186cdf8e6f4ce3f24cdcb51e829bfa56f2876fdbf1ee063"
+      },
+      {
+        "path": "src/algorithm32/geometries/geometryRequestNormalization.js",
+        "size": {
+          "value": 6695,
+          "units": "bytes"
+        },
+        "sha256": "948e4dbe8902ea0233cce55c642cc2b49e692798abe9a603c962fc3042648da0"
+      },
+      {
+        "path": "src/algorithm32/implementation/SpectralCalculator.js",
+        "size": {
+          "value": 23440,
+          "units": "bytes"
+        },
+        "sha256": "95d4d60d5f8a4d4054893ea8c90a6fb7c9a9081f7f76b7dfe58580db445ee0e9"
+      },
+      {
+        "path": "src/algorithm32/implementation/spectralNumericKernels.js",
+        "size": {
+          "value": 4608,
+          "units": "bytes"
+        },
+        "sha256": "f304e8c23cd44d247df740b3d951928d8b2d39a4e9997b4f14e801f2b8819a04"
+      },
+      {
+        "path": "src/algorithm32/light-sources/create-local-sun-shell-fact-cache.js",
+        "size": {
+          "value": 8089,
+          "units": "bytes"
+        },
+        "sha256": "31135a340f9bdb3bb85eae1b8b0dc42ca537ccf064a438cef02faf016b8eb292"
+      },
+      {
+        "path": "src/algorithm32/light-sources/lightSourceRequestValues.js",
+        "size": {
+          "value": 6463,
+          "units": "bytes"
+        },
+        "sha256": "8652bc0750c75c6e75cec6cca8d4a2700a6316c5f1ebd73dac102e60c3178993"
+      },
+      {
+        "path": "src/algorithm32/light-sources/local-sun-cache-fingerprint.js",
+        "size": {
+          "value": 1833,
+          "units": "bytes"
+        },
+        "sha256": "90046d37c5829ec65e3f204c27456c77b48458c593d754633bda64c59cf9b022"
+      },
+      {
+        "path": "src/algorithm32/light-sources/local-sun-cache-plan.js",
+        "size": {
+          "value": 19326,
+          "units": "bytes"
+        },
+        "sha256": "1193941f0e852e45284f8458a8fa2f1c96ae9728a2710051e35341e474453feb"
+      },
+      {
+        "path": "src/algorithm32/light-sources/local-sun-consts.js",
+        "size": {
+          "value": 6294,
+          "units": "bytes"
+        },
+        "sha256": "eea85d362daeb2bdfa025a53488cb4f21d29dc7c11716f06a01f09527e1522d5"
+      },
+      {
+        "path": "src/algorithm32/light-sources/local-sun-cpu-cache-build.js",
+        "size": {
+          "value": 6301,
+          "units": "bytes"
+        },
+        "sha256": "d7d6ffbeffeacc7dad922d83cfedd3a1aa8b36d53dcd7df2eae9fbbf2f2197ad"
+      },
+      {
+        "path": "src/algorithm32/light-sources/local-sun-geometry-pairing.js",
+        "size": {
+          "value": 1041,
+          "units": "bytes"
+        },
+        "sha256": "fb97278613c8d4331357d58032ceb4ee33b3cba47fa4de7c87dda4b0522540e4"
+      },
+      {
+        "path": "src/algorithm32/light-sources/local-sun-later-order-scattering-density.js",
+        "size": {
+          "value": 10955,
+          "units": "bytes"
+        },
+        "sha256": "635cc343734c067750f1452acd2f27ec45ce1405ac5ba2f26622755224822a26"
+      },
+      {
+        "path": "src/algorithm32/light-sources/local-sun-primary-radiance.js",
+        "size": {
+          "value": 3335,
+          "units": "bytes"
+        },
+        "sha256": "e333bdfb575da8e205e01283f9f35445552ed711e96755eb95d16b04e2290e01"
+      },
+      {
+        "path": "src/algorithm32/light-sources/local-sun-primary-scattering-density.js",
+        "size": {
+          "value": 3665,
+          "units": "bytes"
+        },
+        "sha256": "af93e4727e962f65cf6a6222313b43a121a3dd61ef9ac1e0d94be4e4bb39b866"
+      },
+      {
+        "path": "src/algorithm32/light-sources/local-sun-scattering-density-transport.js",
+        "size": {
+          "value": 3340,
+          "units": "bytes"
+        },
+        "sha256": "f35bfb76fc67bdb265dfffcfcefd1ac0693fbe43df9c565691487462f03cdb38"
+      },
+      {
+        "path": "src/algorithm32/light-sources/LocalSunCache.js",
+        "size": {
+          "value": 3869,
+          "units": "bytes"
+        },
+        "sha256": "abe6e74f1dc9631f861a6041d6e73ee16d7eff2aabb033612f54446ccb288073"
+      },
+      {
+        "path": "src/algorithm32/light-sources/LocalSunCacheController.js",
+        "size": {
+          "value": 8784,
+          "units": "bytes"
+        },
+        "sha256": "20704669393aef1252dc611d6b41c2131324c7b0229f3d59321fac352a29b1b1"
+      },
+      {
+        "path": "src/algorithm32/light-sources/LocalSunCacheSource.js",
+        "size": {
+          "value": 13186,
+          "units": "bytes"
+        },
+        "sha256": "36adc4cc3222360a4ce7382998d4e6c3bb023bbe45c88222e7456be80e470f83"
+      },
+      {
+        "path": "src/algorithm32/light-sources/LocalSunConstructionDomainSelection.js",
+        "size": {
+          "value": 6368,
+          "units": "bytes"
+        },
+        "sha256": "05154e406057cd0df9fe21f2d5e7b8a1d0e3f7dd2c873282f951c66adf28b46f"
+      },
+      {
+        "path": "src/algorithm32/light-sources/LocalSunConstructionLightSource.js",
+        "size": {
+          "value": 2920,
+          "units": "bytes"
+        },
+        "sha256": "2d1a4570f7f24726fe8270638eb075e95ea0ccd2fa49365aa22e2ef6051525a3"
+      },
+      {
+        "path": "src/algorithm32/light-sources/LocalSunCpuCache.js",
+        "size": {
+          "value": 3126,
+          "units": "bytes"
+        },
+        "sha256": "dc3fe363c16e3457e1515028713f9e4933db399587550c94228fc3454735fb27"
+      },
+      {
+        "path": "src/algorithm32/light-sources/LocalSunCpuFields.js",
+        "size": {
+          "value": 4570,
+          "units": "bytes"
+        },
+        "sha256": "50be6a989adfa84d88b7ef9c84ef416ec792126013ff4dbc3d3a2f8fae8a114a"
+      },
+      {
+        "path": "src/algorithm32/light-sources/LocalSunFieldPacking.js",
+        "size": {
+          "value": 3204,
+          "units": "bytes"
+        },
+        "sha256": "f584437c4ce3f0c6118d2fb8a318dd8f0e560c62a0e802306a33766b2074f518"
+      },
+      {
+        "path": "src/algorithm32/light-sources/LocalSunLightSource.js",
+        "size": {
+          "value": 48244,
+          "units": "bytes"
+        },
+        "sha256": "8af91963b94db1847eca630e7e1ae81667cbbb57084586fc11850def936fd797"
+      },
+      {
+        "path": "src/algorithm32/light-sources/LocalSunShellFactCache.js",
+        "size": {
+          "value": 3576,
+          "units": "bytes"
+        },
+        "sha256": "3193329e9b177e8d722ed51ff17301469b02ca8a01ca9f009b80b4c395f58889"
+      },
+      {
+        "path": "src/algorithm32/light-sources/threeLightingSupport.js",
+        "size": {
+          "value": 2441,
+          "units": "bytes"
+        },
+        "sha256": "d9a49d5ab0739d5aa3dc3e0013654f8064f0a966706cd84a3506254a0d1198a4"
+      },
+      {
+        "path": "src/algorithm32/light-sources/ThreeShadowObjectConfigurator.js",
+        "size": {
+          "value": 3700,
+          "units": "bytes"
+        },
+        "sha256": "9ec54105f211d167d50f259289a6148f3dd34602b5611f83cb4dd78cc6564713"
+      },
+      {
+        "path": "src/algorithm32/profiles/consts.js",
+        "size": {
+          "value": 1217,
+          "units": "bytes"
+        },
+        "sha256": "e52acacb11cff473f33c56f4946b5925ed1a36ffc1f1846290b3fb7b166809b7"
+      },
+      {
+        "path": "src/algorithm32/profiles/native-15-profile.js",
+        "size": {
+          "value": 11853,
+          "units": "bytes"
+        },
+        "sha256": "d5119185924fb8c49fc4d34a0a6be933b6632dd6a9d65acfdaadbede3dfa8936"
+      },
+      {
+        "path": "src/algorithm32/quantities/consts.js",
+        "size": {
+          "value": 2324,
+          "units": "bytes"
+        },
+        "sha256": "d998507ede7c5f26a9d2422867f08518bf2e1e0eeb5d93224f24741aa22558bd"
+      },
+      {
+        "path": "src/algorithm32/quantities/index.js",
+        "size": {
+          "value": 951,
+          "units": "bytes"
+        },
+        "sha256": "aea8105cbaa68714fd202d590511caca79d8abe9969826dd52b13bae994d7a5a"
+      },
+      {
+        "path": "src/algorithm32/quantities/spectral-packet-contract.js",
+        "size": {
+          "value": 2211,
+          "units": "bytes"
+        },
+        "sha256": "84aeecf9820be2af8bee3ce4bcdf53174ec4ce3d12866641fe59c72bfa368ef3"
+      },
+      {
+        "path": "src/algorithm32/quantities/spectral-packets.js",
+        "size": {
+          "value": 2935,
+          "units": "bytes"
+        },
+        "sha256": "72823fb6ad11d4d018c84d979ed622df38d65f053265795c1540bb9245c3becf"
+      },
+      {
+        "path": "src/algorithm32/quantities/spectralBases.js",
+        "size": {
+          "value": 1480,
+          "units": "bytes"
+        },
+        "sha256": "ae53a41446d2c2a0221d5304e3721f59ec531753b233c597561de7b4cc9d1903"
+      },
+      {
+        "path": "src/algorithm32/quantities/SpectralBasis.js",
+        "size": {
+          "value": 2147,
+          "units": "bytes"
+        },
+        "sha256": "b860f8673f72dd4fffe3cef9e717307397434b40dbacea2bb16268c41d774170"
+      },
+      {
+        "path": "src/algorithm32/quantities/spectralBasisContract.js",
+        "size": {
+          "value": 3313,
+          "units": "bytes"
+        },
+        "sha256": "20a08500ba806e29370ab4de280df4c6e0269fc05202f7bc472cd5bdb87cf0d2"
+      },
+      {
+        "path": "src/algorithm32/quantities/SpectralMath.js",
+        "size": {
+          "value": 11541,
+          "units": "bytes"
+        },
+        "sha256": "e7daeace0e801b17d30ee8298c3323e5fce105f57eb6327a38607696590fc008"
+      },
+      {
+        "path": "src/algorithm32/quantities/SpectralPacket.js",
+        "size": {
+          "value": 2620,
+          "units": "bytes"
+        },
+        "sha256": "70e87dfd57ba88b3cd38f2378f1a0f0b18f973e7b22fb1c9431f4823b2be9897"
+      },
+      {
+        "path": "src/algorithm32/quantities/UnitValue.js",
+        "size": {
+          "value": 7129,
+          "units": "bytes"
+        },
+        "sha256": "3e2bd0ace18bac9334641144be38d7d5e64716fb990b76082b952e774e2bd0b9"
+      },
+      {
+        "path": "src/algorithm32/shader/shaderContribution.js",
+        "size": {
+          "value": 3662,
+          "units": "bytes"
+        },
+        "sha256": "abcd0d90bf177aa575defad63284ba1fe7c6897dff92ef5ef9627557375a0852"
+      },
+      {
+        "path": "src/algorithm32/shader/stableHash.js",
+        "size": {
+          "value": 2682,
+          "units": "bytes"
+        },
+        "sha256": "6557e9ce3500667ca390cb34bb671bff179b35f8023cee90f1d9d0ba3e181c90"
+      },
+      {
+        "path": "src/algorithm32/three/ExactFlatGroundObject.js",
+        "size": {
+          "value": 3285,
+          "units": "bytes"
+        },
+        "sha256": "e0e066fae30126af0c59ff21417ae7020e5e250716d429236015e50362ab2f12"
+      },
+      {
+        "path": "src/algorithm32/transport/consts.js",
+        "size": {
+          "value": 1062,
+          "units": "bytes"
+        },
+        "sha256": "1e980c8868732b4b9674df9e01fe13672927ee9c423586a0b6307b31a7ea5379"
+      },
+      {
+        "path": "src/algorithm32/transport/later-order-scattering-density.js",
+        "size": {
+          "value": 6518,
+          "units": "bytes"
+        },
+        "sha256": "a31cfbb17f083123641f8083f955f4ae2b33ed628b65891170a6889ff58d33e8"
+      },
+      {
+        "path": "src/algorithm32/transport/scattering-density-transport.js",
+        "size": {
+          "value": 9694,
+          "units": "bytes"
+        },
+        "sha256": "52621528eb7a46f335ac318cac481569ef0b171c28e9015e006935c41a31b7f0"
+      },
+      {
+        "path": "src/algorithm32/transport/scattering-order-field-operations.js",
+        "size": {
+          "value": 6619,
+          "units": "bytes"
+        },
+        "sha256": "89b2fc941253196e63f69b48559a0909cc7d60a71ba5fd5c114aa7b39e530fa4"
+      },
+      {
+        "path": "src/algorithm32/utils/ArrayMath.js",
+        "size": {
+          "value": 2341,
+          "units": "bytes"
+        },
+        "sha256": "52077d7f89fb9e6fd1f49feba46cb602e3990f8ac767258d488f917ba21a8e48"
+      },
+      {
+        "path": "src/algorithm32/utils/DistanceMath.js",
+        "size": {
+          "value": 6038,
+          "units": "bytes"
+        },
+        "sha256": "2937955545d3e6953cfab3f4b049c9ad976769890130a50b876be84296898d66"
+      },
+      {
+        "path": "src/algorithm32/utils/durationValues.js",
+        "size": {
+          "value": 786,
+          "units": "bytes"
+        },
+        "sha256": "5daf1dd73ae06893ce361c7ea1ade815d181beb1b647a87c353c35a7cd7a51b2"
+      },
+      {
+        "path": "src/algorithm32/utils/numericValues.js",
+        "size": {
+          "value": 556,
+          "units": "bytes"
+        },
+        "sha256": "6f51f2691d28e1dec7764cc70e4cafe95d85c4980accc96986161c28f011e351"
+      },
+      {
+        "path": "src/algorithm32/utils/PixelMath.js",
+        "size": {
+          "value": 3886,
+          "units": "bytes"
+        },
+        "sha256": "4c0a71b14300e5b35b963f215553ab21cb5cc2fe48674127170d3c17c719cf55"
+      },
+      {
+        "path": "src/algorithm32/utils/SceneMath.js",
+        "size": {
+          "value": 5030,
+          "units": "bytes"
+        },
+        "sha256": "3f1115d48a63f531761a3dcda9946e2d4ae861999ff556c6ce95fc488021415b"
+      },
+      {
+        "path": "src/algorithm32/utils/VectorMath.js",
+        "size": {
+          "value": 5472,
+          "units": "bytes"
+        },
+        "sha256": "252f2bcb8b2c0c15d990128b50471b3cc9e34fa40b468fbd14ee7722feb12537"
+      },
+      {
+        "path": "src/algorithm32/utils/WavelengthMath.js",
+        "size": {
+          "value": 3492,
+          "units": "bytes"
+        },
+        "sha256": "894483ce9c2c6d78fad1fa7d60d9f3819691b2d92be664eef6c90e8eedc4e992"
+      }
+    ],
+    "sourceClosureAggregateSha256": "95bf4d938bb8cb966a3c617658daac95351137379be3bd7283a77308fcf6aa83",
+    "comparisonSources": [
+      {
+        "path": "scripts/algorithm32-star/parity-data-set/comparison/compare-local-sun-shell-cpu-gold.js",
+        "size": {
+          "value": 67716,
+          "units": "bytes"
+        },
+        "sha256": "f2fcf43bfcbbb4f9f61f0c30f34de95b5d6314d9a1668d0426ac6865c68c25bf"
+      },
+      {
+        "path": "scripts/algorithm32-star/parity-data-set/comparison/consts.js",
+        "size": {
+          "value": 5874,
+          "units": "bytes"
+        },
+        "sha256": "cb7f05b5956755a8e160286c63536857e4863469ec56519043da46e40a80060e"
+      },
+      {
+        "path": "scripts/algorithm32-star/parity-data-set/comparison/LocalSunShellCpuGoldProductionBuilder.js",
+        "size": {
+          "value": 12153,
+          "units": "bytes"
+        },
+        "sha256": "3eade48a9adabdba51893e61c577b54715cfe314b4337237b67e94fb161b0c50"
+      }
+    ],
+    "comparisonSourceAggregateSha256": "bfbfc9acf1848995bb48f0677670f4922ee712b1e155bcdb4ef4261ea9d336b2",
+    "inputs": {
+      "sourceKey": "algorithm32-star-local-shell-cpu-gold-v1",
+      "sourcePosition": {
+        "coordinates": [
+          4800000,
+          0,
+          4800000
+        ],
+        "units": "meters"
+      },
+      "observerPosition": {
+        "coordinates": [
+          0,
+          0,
+          5
+        ],
+        "units": "meters"
+      },
+      "topAltitude": {
+        "value": 100000,
+        "units": "meters"
+      },
+      "rhoMaximum": {
+        "value": 4800000,
+        "units": "meters"
+      },
+      "referenceDistance": {
+        "value": 4800000,
+        "units": "meters"
+      },
+      "referenceSpectralIncidentScale": 1,
+      "distanceFalloff": true,
+      "sourceIrradiance": {
+        "production": {
+          "kind": "algorithm32-spectral-packet",
+          "quantity": "spectral-irradiance-density",
+          "units": "W m^-2 nm^-1",
+          "basisHash": "sha256:a03a3c7f45d9bd4ff8adf6482e9d1aac1acd72423758ecf797ac24f6dffba891",
+          "semantics": "contiguous-wavelength-bin-average",
+          "values": [
+            1.0688666666666664,
+            1.729673,
+            1.8620716666666661,
+            2.0220633333333335,
+            1.9081540000000001,
+            1.8833910000000003,
+            1.8342466666666666,
+            1.7674400000000001,
+            1.65952,
+            1.548102333333333,
+            1.45078,
+            1.3409603333333335,
+            1.2624333333333335,
+            1.175208,
+            1.090824
+          ],
+          "provenanceIdentity": "algorithm32-canonical-data-native-15-source-v1",
+          "contentHash": "sha256:b501bad3f86702dbef751b7def0cd9bf189f56816bd54750063a1933591d751e"
+        },
+        "star": {
+          "quantity": "spectral-irradiance-density",
+          "units": "W m^-2 nm^-1",
+          "basisId": "algorithm32-canonical-15-v1",
+          "sampleSemantics": "contiguous-wavelength-bin-average-spectral-density",
+          "values": [
+            1.0688666666666664,
+            1.729673,
+            1.8620716666666661,
+            2.0220633333333335,
+            1.9081540000000001,
+            1.8833910000000003,
+            1.8342466666666666,
+            1.7674400000000001,
+            1.65952,
+            1.548102333333333,
+            1.45078,
+            1.3409603333333335,
+            1.2624333333333335,
+            1.175208,
+            1.090824
+          ]
+        }
+      },
+      "atmosphere": {
+        "id": "canonical-atmosphere",
+        "spectralBasisHash": "sha256:a03a3c7f45d9bd4ff8adf6482e9d1aac1acd72423758ecf797ac24f6dffba891",
+        "star": {
+          "id": "canonical-atmosphere-cpu-v1",
+          "basisId": "algorithm32-canonical-15-v1"
+        },
+        "constants": {
+          "bottomRadius": {
+            "value": 6360000,
+            "units": "meters"
+          },
+          "topRadius": {
+            "value": 6420000,
+            "units": "meters"
+          },
+          "rayleighScaleHeight": {
+            "value": 8000,
+            "units": "meters"
+          },
+          "mieScaleHeight": {
+            "value": 1200,
+            "units": "meters"
+          },
+          "rayleighCoefficientScale": {
+            "value": 0.00000124062,
+            "units": "m^-1"
+          },
+          "mieAngstromAlpha": {
+            "value": 0.8,
+            "units": "1"
+          },
+          "mieAngstromBeta": {
+            "value": 0.04,
+            "units": "1"
+          },
+          "mieSingleScatteringAlbedo": {
+            "value": 0.8,
+            "units": "1"
+          },
+          "miePhaseFunctionG": {
+            "value": 0.7,
+            "units": "1"
+          },
+          "ozoneAbsorptionEnabled": false
+        }
+      },
+      "profile": {
+        "id": "algorithm32-native-production-default-v1",
+        "contentHash": "sha256:aceb50e3578f622658a6f1bcadcd13ecff90f36a177022af64f69209981faea9",
+        "physical": {
+          "id": "algorithm32-native-physical-default-v1",
+          "contentHash": "sha256:d680936e267a400119056fa03237386f159773d327a72e4059b2886bf40e469e"
+        },
+        "numerical": {
+          "id": "algorithm32-native-numerical-default-v1",
+          "contentHash": "sha256:aeef17c3ccc59122e1375b61e440ce7786f23bb77cebd350539f9d8a8563605f"
+        }
+      },
+      "sourceRadius": {
+        "value": 25749.504,
+        "units": "meters"
+      },
+      "sourceTransmittanceIntervalCount": 15,
+      "pathIntervalCount": 15,
+      "groundBoundary": "omitted",
+      "positionDomain": {
+        "selection": "source-subpoint-z2-rho2",
+        "starId": "algorithm32-star-local-shell-z2-rho2-v1",
+        "count": 4
+      },
+      "incomingDirectionDomain": {
+        "selection": "paired-Fibonacci-34",
+        "starId": "algorithm32-star-paired-fibonacci-34-incoming-v1",
+        "count": 34,
+        "pairCount": 17
+      },
+      "outgoingDirectionDomain": {
+        "selection": "W3",
+        "starId": "algorithm32-star-local-shell-w3-v1",
+        "count": 54,
+        "faceWidth": 3
+      },
+      "spectralBasis": {
+        "selection": "native-15",
+        "production": {
+          "id": "algorithm32-native-15-spectral-basis-v1",
+          "contentHash": "sha256:a03a3c7f45d9bd4ff8adf6482e9d1aac1acd72423758ecf797ac24f6dffba891"
+        },
+        "star": {
+          "id": "algorithm32-canonical-15-v1"
+        },
+        "channelCount": 15,
+        "channelNames": [
+          "lambda-376",
+          "lambda-407",
+          "lambda-438",
+          "lambda-470",
+          "lambda-501",
+          "lambda-532",
+          "lambda-564",
+          "lambda-595",
+          "lambda-626",
+          "lambda-658",
+          "lambda-689",
+          "lambda-720",
+          "lambda-752",
+          "lambda-783",
+          "lambda-814"
+        ],
+        "wavelengths": {
+          "values": [
+            375.6666666666667,
+            407,
+            438.3333333333333,
+            469.66666666666663,
+            501,
+            532.3333333333333,
+            563.6666666666666,
+            595,
+            626.3333333333333,
+            657.6666666666666,
+            689,
+            720.3333333333333,
+            751.6666666666666,
+            783,
+            814.3333333333333
+          ],
+          "units": "nanometers"
+        },
+        "binWidths": {
+          "values": [
+            31.333333333333332,
+            31.333333333333332,
+            31.333333333333332,
+            31.333333333333332,
+            31.333333333333332,
+            31.333333333333332,
+            31.333333333333332,
+            31.333333333333332,
+            31.333333333333332,
+            31.333333333333332,
+            31.333333333333332,
+            31.333333333333332,
+            31.333333333333332,
+            31.333333333333332,
+            31.333333333333332
+          ],
+          "units": "nanometers"
+        }
+      },
+      "requestedMaximumScatteringOrders": [
+        1,
+        2,
+        4
+      ]
+    },
+    "groundBoundary": "omitted",
+    "gpuOwnersExecuted": false
+  },
+  "coverage": {
+    "requestedMaximumScatteringOrders": [
+      1,
+      2,
+      4
+    ],
+    "scalarOrder": "wavelength-major-then-position-major-then-direction-major",
+    "directGoldFieldScalarCount": 40560,
+    "fieldNamesByRequestedOrder": {
+      "n1": [
+        "j1",
+        "cumulative"
+      ],
+      "n2": [
+        "j1",
+        "l1",
+        "j2",
+        "cumulative"
+      ],
+      "n4": [
+        "j1",
+        "l1",
+        "j2",
+        "l2",
+        "j3",
+        "l3",
+        "j4",
+        "cumulative"
+      ]
+    },
+    "edgeCaseRecordCounts": {
+      "shellBoundaryResolution": 21,
+      "sourceRadiusClamp": 4,
+      "sourcePaths": 4
+    },
+    "queryTimeShellScaleCountByRequestedOrder": {
+      "n1": 0,
+      "n2": 0,
+      "n4": 0
+    }
+  },
+  "acceptance": {
+    "inputAuthentication": {
+      "rule": "The production source falloff, complete source-irradiance packet, native-15 basis identity, canonical atmosphere constants, and native production profile identities must exactly equal these predeclared inputs."
+    },
+    "factsAndDomains": {
+      "rule": "Every compared scalar and semantic value must be exactly equal after normalization into the documented Star order."
+    },
+    "behavioralEdges": {
+      "rule": "Every shell min/max/internal-boundary neighbor record, source-radius clamp record, and zero-length/finite/ground-blocked/top-clipped source-path record must be exactly equal after production-unit normalization."
+    },
+    "fields": {
+      "rule": "Compare every production request-local field against the same field from the matching separately executed Star request. Accept a scalar when its absolute error is at most its quantity-specific absolute tolerance plus its relative tolerance multiplied by the absolute Star authority value.",
+      "radiance": {
+        "fieldNames": [
+          "l1",
+          "l2",
+          "l3"
+        ],
+        "maximumAbsoluteError": {
+          "value": 1e-15,
+          "units": "W m^-2 sr^-1 nm^-1"
+        },
+        "maximumRelativeError": 1e-12
+      },
+      "scatteringDensityAndCumulative": {
+        "fieldNames": [
+          "j1",
+          "j2",
+          "j3",
+          "j4",
+          "cumulative"
+        ],
+        "maximumAbsoluteError": {
+          "value": 1e-18,
+          "units": "W m^-3 sr^-1 nm^-1"
+        },
+        "maximumRelativeError": 1e-12
+      }
+    },
+    "orderInvariants": {
+      "rule": "On both the independently executed Star results and the independently requested production results, N1, N2, and N4 shared pure-field prefixes must be exactly equal. Each cumulative field must exactly equal its request-local pure-field sum in ascending order."
+    },
+    "state": "Pass only when fixture and source authentication, all predeclared numerical inputs, fixed facts and domains, every requested-order field comparison, and every order invariant pass."
+  },
+  "comparisons": {
+    "inputAuthentication": {
+      "star": {
+        "state": "passed",
+        "sections": {
+          "source": {
+            "id": "star-input-source",
+            "state": "passed",
+            "comparedLeafCount": 30,
+            "mismatchCount": 0,
+            "mismatchSamples": [],
+            "expectedJsonSha256": "b80fe40e3784986728683168bfed2ca7bd7b08a70af138239deda8e363384eaa",
+            "actualJsonSha256": "b80fe40e3784986728683168bfed2ca7bd7b08a70af138239deda8e363384eaa"
+          },
+          "atmosphere": {
+            "id": "star-input-atmosphere",
+            "state": "passed",
+            "comparedLeafCount": 22,
+            "mismatchCount": 0,
+            "mismatchSamples": [],
+            "expectedJsonSha256": "399fc9781789d50d519fbf6a1d14c7f8d2488d8750b5e7e6bf3599933cc57ca6",
+            "actualJsonSha256": "399fc9781789d50d519fbf6a1d14c7f8d2488d8750b5e7e6bf3599933cc57ca6"
+          },
+          "controls": {
+            "id": "star-input-controls",
+            "state": "passed",
+            "comparedLeafCount": 14,
+            "mismatchCount": 0,
+            "mismatchSamples": [],
+            "expectedJsonSha256": "7bb8cc0dc8819c2ff60500a047bf8204faff330cba03eb69fca44b0eb28a3c34",
+            "actualJsonSha256": "7bb8cc0dc8819c2ff60500a047bf8204faff330cba03eb69fca44b0eb28a3c34"
+          },
+          "domains": {
+            "id": "star-input-domains",
+            "state": "passed",
+            "comparedLeafCount": 57,
+            "mismatchCount": 0,
+            "mismatchSamples": [],
+            "expectedJsonSha256": "67840af21d3a34e8a015882084de014a806bebc70f2e0f6f0e390fd60954dda5",
+            "actualJsonSha256": "67840af21d3a34e8a015882084de014a806bebc70f2e0f6f0e390fd60954dda5"
+          }
+        }
+      },
+      "production": {
+        "state": "passed",
+        "sections": {
+          "sourceAndBasis": {
+            "id": "input-source-and-basis",
+            "state": "passed",
+            "comparedLeafCount": 74,
+            "mismatchCount": 0,
+            "mismatchSamples": [],
+            "expectedJsonSha256": "584c4f98f173e455a0b9f96bd812e2fe3b5b746da2b5fa74d82c61a0295ba291",
+            "actualJsonSha256": "584c4f98f173e455a0b9f96bd812e2fe3b5b746da2b5fa74d82c61a0295ba291"
+          },
+          "atmosphere": {
+            "id": "input-atmosphere",
+            "state": "passed",
+            "comparedLeafCount": 21,
+            "mismatchCount": 0,
+            "mismatchSamples": [],
+            "expectedJsonSha256": "634f4f3b227676b700dab9dbcb3e1c075724c33f49b2a6f896fa6239f7e5739f",
+            "actualJsonSha256": "634f4f3b227676b700dab9dbcb3e1c075724c33f49b2a6f896fa6239f7e5739f"
+          },
+          "profile": {
+            "id": "input-profile",
+            "state": "passed",
+            "comparedLeafCount": 6,
+            "mismatchCount": 0,
+            "mismatchSamples": [],
+            "expectedJsonSha256": "c183bba3253adba4e7c351ae7995850aa660c4f1a9e11aeb7295105b0f2a0365",
+            "actualJsonSha256": "c183bba3253adba4e7c351ae7995850aa660c4f1a9e11aeb7295105b0f2a0365"
+          }
+        }
+      },
+      "state": "passed"
+    },
+    "factsAndDomains": {
+      "state": "passed",
+      "sections": {
+        "shellFactSemantics": {
+          "id": "shell-fact-semantics",
+          "state": "passed",
+          "comparedLeafCount": 14,
+          "mismatchCount": 0,
+          "mismatchSamples": [],
+          "expectedJsonSha256": "edb68ad38332740027f335fb1c3e12e07aa3921619fd5d877f8f6e46c50cb18d",
+          "actualJsonSha256": "edb68ad38332740027f335fb1c3e12e07aa3921619fd5d877f8f6e46c50cb18d"
+        },
+        "shellBoundaries": {
+          "id": "shell-boundaries",
+          "state": "passed",
+          "comparedLeafCount": 2049,
+          "mismatchCount": 0,
+          "mismatchSamples": [],
+          "expectedJsonSha256": "8ce92ea15ca7df1c62b536a92fbe6229d6f29572e375455fca3975b5df675c33",
+          "actualJsonSha256": "8ce92ea15ca7df1c62b536a92fbe6229d6f29572e375455fca3975b5df675c33"
+        },
+        "shellHeldScales": {
+          "id": "shell-held-incident-scales",
+          "state": "passed",
+          "comparedLeafCount": 2048,
+          "mismatchCount": 0,
+          "mismatchSamples": [],
+          "expectedJsonSha256": "f6f325570ba0b7811ce10caee7e76cc7c09963110d63f0283da8055140b973b1",
+          "actualJsonSha256": "f6f325570ba0b7811ce10caee7e76cc7c09963110d63f0283da8055140b973b1"
+        },
+        "positionDomain": {
+          "id": "position-domain",
+          "state": "passed",
+          "comparedLeafCount": 29,
+          "mismatchCount": 0,
+          "mismatchSamples": [],
+          "expectedJsonSha256": "d6bda63c256ea0d1cdb62fe7e60266462f4aad5c3d095484e85fe80be2de2aee",
+          "actualJsonSha256": "d6bda63c256ea0d1cdb62fe7e60266462f4aad5c3d095484e85fe80be2de2aee"
+        },
+        "incomingDomain": {
+          "id": "incoming-direction-domain",
+          "state": "passed",
+          "comparedLeafCount": 140,
+          "mismatchCount": 0,
+          "mismatchSamples": [],
+          "expectedJsonSha256": "f74331c8ea57a693968cbf6607ed8e387a2ade8df14232b425397e033aa82518",
+          "actualJsonSha256": "f74331c8ea57a693968cbf6607ed8e387a2ade8df14232b425397e033aa82518"
+        },
+        "outgoingDomain": {
+          "id": "outgoing-direction-domain",
+          "state": "passed",
+          "comparedLeafCount": 165,
+          "mismatchCount": 0,
+          "mismatchSamples": [],
+          "expectedJsonSha256": "c0d960aaa2fda8f249fa2f73488d546252a97cc915ba0ce46474aff0ecfc8057",
+          "actualJsonSha256": "c0d960aaa2fda8f249fa2f73488d546252a97cc915ba0ce46474aff0ecfc8057"
+        },
+        "spectralBasis": {
+          "id": "spectral-basis",
+          "state": "passed",
+          "comparedLeafCount": 46,
+          "mismatchCount": 0,
+          "mismatchSamples": [],
+          "expectedJsonSha256": "052b227aa4e735bda8d48c74c3b1950e7bfba25f77e285d5e94a71ccacfff033",
+          "actualJsonSha256": "052b227aa4e735bda8d48c74c3b1950e7bfba25f77e285d5e94a71ccacfff033"
+        }
+      }
+    },
+    "behavioralEdges": {
+      "state": "passed",
+      "sections": {
+        "shellBoundaryResolution": {
+          "id": "shell-boundary-resolution-edges",
+          "state": "passed",
+          "comparedLeafCount": 189,
+          "mismatchCount": 0,
+          "mismatchSamples": [],
+          "expectedJsonSha256": "914750b8eaf74488e5627ec7c6bd4fbbe44c277c9951c3dec40ebb93eb034c77",
+          "actualJsonSha256": "914750b8eaf74488e5627ec7c6bd4fbbe44c277c9951c3dec40ebb93eb034c77"
+        },
+        "sourceRadiusClamp": {
+          "id": "source-radius-clamp-edges",
+          "state": "passed",
+          "comparedLeafCount": 152,
+          "mismatchCount": 0,
+          "mismatchSamples": [],
+          "expectedJsonSha256": "4e856e5ef03278959689d8f6014232833293cef9b7c8f6f859cb2907850fff40",
+          "actualJsonSha256": "4e856e5ef03278959689d8f6014232833293cef9b7c8f6f859cb2907850fff40"
+        },
+        "sourcePaths": {
+          "id": "source-path-edges",
+          "state": "passed",
+          "comparedLeafCount": 588,
+          "mismatchCount": 0,
+          "mismatchSamples": [],
+          "expectedJsonSha256": "62b47648e784517633ed298ecc2c356fe527e84ed4f0e5add675dd870516e121",
+          "actualJsonSha256": "62b47648e784517633ed298ecc2c356fe527e84ed4f0e5add675dd870516e121"
+        }
+      }
+    },
+    "requestedOrders": {
+      "n1": {
+        "state": "passed",
+        "structure": {
+          "id": "n1-structure",
+          "state": "passed",
+          "comparedLeafCount": 6,
+          "mismatchCount": 0,
+          "mismatchSamples": [],
+          "expectedJsonSha256": "64525009f027ba056ad2c31702c281bf9e8e30044a71903bf8f2c66b0e16ab43",
+          "actualJsonSha256": "64525009f027ba056ad2c31702c281bf9e8e30044a71903bf8f2c66b0e16ab43"
+        },
+        "fields": {
+          "j1": {
+            "id": "n1-j1",
+            "state": "passed",
+            "comparedScalarCount": 3240,
+            "mismatchCount": 0,
+            "zeroReferenceMismatchCount": 0,
+            "tolerance": {
+              "maximumAbsoluteError": {
+                "value": 1e-18,
+                "units": "W m^-3 sr^-1 nm^-1"
+              },
+              "maximumRelativeError": 1e-12
+            },
+            "maximumAbsoluteError": {
+              "value": 6.776263578034403e-21,
+              "units": "W m^-3 sr^-1 nm^-1"
+            },
+            "maximumRelativeError": 2.8876610978126245e-16,
+            "rmsAbsoluteError": {
+              "value": 1.7318480629391604e-22,
+              "units": "W m^-3 sr^-1 nm^-1"
+            },
+            "worstAbsolute": {
+              "offset": 2446,
+              "wavelengthIndex": 11,
+              "positionIndex": 1,
+              "directionIndex": 16,
+              "expected": {
+                "value": 0.00003269526006757675,
+                "units": "W m^-3 sr^-1 nm^-1"
+              },
+              "actual": {
+                "value": 0.00003269526006757676,
+                "units": "W m^-3 sr^-1 nm^-1"
+              },
+              "absoluteError": {
+                "value": 6.776263578034403e-21,
+                "units": "W m^-3 sr^-1 nm^-1"
+              },
+              "relativeError": 2.0725522794523633e-16
+            },
+            "worstRelative": {
+              "offset": 2757,
+              "wavelengthIndex": 12,
+              "positionIndex": 3,
+              "directionIndex": 3,
+              "expected": {
+                "value": 6.993493519359075e-13,
+                "units": "W m^-3 sr^-1 nm^-1"
+              },
+              "actual": {
+                "value": 6.993493519359073e-13,
+                "units": "W m^-3 sr^-1 nm^-1"
+              },
+              "absoluteError": {
+                "value": 2.0194839173657902e-28,
+                "units": "W m^-3 sr^-1 nm^-1"
+              },
+              "relativeError": 2.8876610978126245e-16
+            },
+            "mismatchSamples": [],
+            "expectedHashes": {
+              "float64LittleEndianSha256": "de7238758781b5ca16678cf5bb3f8d7d773c3d75f010aefb374611c15128c05d",
+              "jsonNumbersSha256": "fe0f6360c6ec6f3bc0e5c97352107d59113c6c1ba1a4a86eefb9bf3126b19d9f"
+            },
+            "actualHashes": {
+              "float64LittleEndianSha256": "9ac564cc2dc53d69bafaf3d5c45771d676ab4096027ecd922475bc91140b81b3",
+              "jsonNumbersSha256": "01a9314048fadf54597fb19ea1496893ff2da8d0e0b840a2f1f2e8cf57aa992b"
+            }
+          },
+          "cumulative": {
+            "id": "n1-cumulative",
+            "state": "passed",
+            "comparedScalarCount": 3240,
+            "mismatchCount": 0,
+            "zeroReferenceMismatchCount": 0,
+            "tolerance": {
+              "maximumAbsoluteError": {
+                "value": 1e-18,
+                "units": "W m^-3 sr^-1 nm^-1"
+              },
+              "maximumRelativeError": 1e-12
+            },
+            "maximumAbsoluteError": {
+              "value": 6.776263578034403e-21,
+              "units": "W m^-3 sr^-1 nm^-1"
+            },
+            "maximumRelativeError": 2.8876610978126245e-16,
+            "rmsAbsoluteError": {
+              "value": 1.7318480629391604e-22,
+              "units": "W m^-3 sr^-1 nm^-1"
+            },
+            "worstAbsolute": {
+              "offset": 2446,
+              "wavelengthIndex": 11,
+              "positionIndex": 1,
+              "directionIndex": 16,
+              "expected": {
+                "value": 0.00003269526006757675,
+                "units": "W m^-3 sr^-1 nm^-1"
+              },
+              "actual": {
+                "value": 0.00003269526006757676,
+                "units": "W m^-3 sr^-1 nm^-1"
+              },
+              "absoluteError": {
+                "value": 6.776263578034403e-21,
+                "units": "W m^-3 sr^-1 nm^-1"
+              },
+              "relativeError": 2.0725522794523633e-16
+            },
+            "worstRelative": {
+              "offset": 2757,
+              "wavelengthIndex": 12,
+              "positionIndex": 3,
+              "directionIndex": 3,
+              "expected": {
+                "value": 6.993493519359075e-13,
+                "units": "W m^-3 sr^-1 nm^-1"
+              },
+              "actual": {
+                "value": 6.993493519359073e-13,
+                "units": "W m^-3 sr^-1 nm^-1"
+              },
+              "absoluteError": {
+                "value": 2.0194839173657902e-28,
+                "units": "W m^-3 sr^-1 nm^-1"
+              },
+              "relativeError": 2.8876610978126245e-16
+            },
+            "mismatchSamples": [],
+            "expectedHashes": {
+              "float64LittleEndianSha256": "de7238758781b5ca16678cf5bb3f8d7d773c3d75f010aefb374611c15128c05d",
+              "jsonNumbersSha256": "fe0f6360c6ec6f3bc0e5c97352107d59113c6c1ba1a4a86eefb9bf3126b19d9f"
+            },
+            "actualHashes": {
+              "float64LittleEndianSha256": "9ac564cc2dc53d69bafaf3d5c45771d676ab4096027ecd922475bc91140b81b3",
+              "jsonNumbersSha256": "01a9314048fadf54597fb19ea1496893ff2da8d0e0b840a2f1f2e8cf57aa992b"
+            }
+          }
+        }
+      },
+      "n2": {
+        "state": "passed",
+        "structure": {
+          "id": "n2-structure",
+          "state": "passed",
+          "comparedLeafCount": 8,
+          "mismatchCount": 0,
+          "mismatchSamples": [],
+          "expectedJsonSha256": "ae4b4f4124da77c9fd992d253200502683a62c3084862f39a00d021137fb383c",
+          "actualJsonSha256": "ae4b4f4124da77c9fd992d253200502683a62c3084862f39a00d021137fb383c"
+        },
+        "fields": {
+          "j1": {
+            "id": "n2-j1",
+            "state": "passed",
+            "comparedScalarCount": 3240,
+            "mismatchCount": 0,
+            "zeroReferenceMismatchCount": 0,
+            "tolerance": {
+              "maximumAbsoluteError": {
+                "value": 1e-18,
+                "units": "W m^-3 sr^-1 nm^-1"
+              },
+              "maximumRelativeError": 1e-12
+            },
+            "maximumAbsoluteError": {
+              "value": 6.776263578034403e-21,
+              "units": "W m^-3 sr^-1 nm^-1"
+            },
+            "maximumRelativeError": 2.8876610978126245e-16,
+            "rmsAbsoluteError": {
+              "value": 1.7318480629391604e-22,
+              "units": "W m^-3 sr^-1 nm^-1"
+            },
+            "worstAbsolute": {
+              "offset": 2446,
+              "wavelengthIndex": 11,
+              "positionIndex": 1,
+              "directionIndex": 16,
+              "expected": {
+                "value": 0.00003269526006757675,
+                "units": "W m^-3 sr^-1 nm^-1"
+              },
+              "actual": {
+                "value": 0.00003269526006757676,
+                "units": "W m^-3 sr^-1 nm^-1"
+              },
+              "absoluteError": {
+                "value": 6.776263578034403e-21,
+                "units": "W m^-3 sr^-1 nm^-1"
+              },
+              "relativeError": 2.0725522794523633e-16
+            },
+            "worstRelative": {
+              "offset": 2757,
+              "wavelengthIndex": 12,
+              "positionIndex": 3,
+              "directionIndex": 3,
+              "expected": {
+                "value": 6.993493519359075e-13,
+                "units": "W m^-3 sr^-1 nm^-1"
+              },
+              "actual": {
+                "value": 6.993493519359073e-13,
+                "units": "W m^-3 sr^-1 nm^-1"
+              },
+              "absoluteError": {
+                "value": 2.0194839173657902e-28,
+                "units": "W m^-3 sr^-1 nm^-1"
+              },
+              "relativeError": 2.8876610978126245e-16
+            },
+            "mismatchSamples": [],
+            "expectedHashes": {
+              "float64LittleEndianSha256": "de7238758781b5ca16678cf5bb3f8d7d773c3d75f010aefb374611c15128c05d",
+              "jsonNumbersSha256": "fe0f6360c6ec6f3bc0e5c97352107d59113c6c1ba1a4a86eefb9bf3126b19d9f"
+            },
+            "actualHashes": {
+              "float64LittleEndianSha256": "9ac564cc2dc53d69bafaf3d5c45771d676ab4096027ecd922475bc91140b81b3",
+              "jsonNumbersSha256": "01a9314048fadf54597fb19ea1496893ff2da8d0e0b840a2f1f2e8cf57aa992b"
+            }
+          },
+          "l1": {
+            "id": "n2-l1",
+            "state": "passed",
+            "comparedScalarCount": 2040,
+            "mismatchCount": 0,
+            "zeroReferenceMismatchCount": 0,
+            "tolerance": {
+              "maximumAbsoluteError": {
+                "value": 1e-15,
+                "units": "W m^-2 sr^-1 nm^-1"
+              },
+              "maximumRelativeError": 1e-12
+            },
+            "maximumAbsoluteError": {
+              "value": 1.0408340855860843e-16,
+              "units": "W m^-2 sr^-1 nm^-1"
+            },
+            "maximumRelativeError": 2.008524303712539e-15,
+            "rmsAbsoluteError": {
+              "value": 6.749758056882426e-18,
+              "units": "W m^-2 sr^-1 nm^-1"
+            },
+            "worstAbsolute": {
+              "offset": 830,
+              "wavelengthIndex": 6,
+              "positionIndex": 0,
+              "directionIndex": 14,
+              "expected": {
+                "value": 0.059859212544708794,
+                "units": "W m^-2 sr^-1 nm^-1"
+              },
+              "actual": {
+                "value": 0.0598592125447089,
+                "units": "W m^-2 sr^-1 nm^-1"
+              },
+              "absoluteError": {
+                "value": 1.0408340855860843e-16,
+                "units": "W m^-2 sr^-1 nm^-1"
+              },
+              "relativeError": 1.7388035046546698e-15
+            },
+            "worstRelative": {
+              "offset": 1374,
+              "wavelengthIndex": 10,
+              "positionIndex": 0,
+              "directionIndex": 14,
+              "expected": {
+                "value": 0.0380019464050775,
+                "units": "W m^-2 sr^-1 nm^-1"
+              },
+              "actual": {
+                "value": 0.03800194640507758,
+                "units": "W m^-2 sr^-1 nm^-1"
+              },
+              "absoluteError": {
+                "value": 7.632783294297951e-17,
+                "units": "W m^-2 sr^-1 nm^-1"
+              },
+              "relativeError": 2.008524303712539e-15
+            },
+            "mismatchSamples": [],
+            "expectedHashes": {
+              "float64LittleEndianSha256": "e08812ea71c6e30ba87635367e2d77b20a2b1116c42033f469688eb5cb396a0b",
+              "jsonNumbersSha256": "2c0ae774a7bac92c3dc9a48f6c1a944ba2063cbea06aaab20410267219d8541d"
+            },
+            "actualHashes": {
+              "float64LittleEndianSha256": "09ae25612af7cd2ad3a631b3df08d60bc4614171c5502a7568061c4a03315eac",
+              "jsonNumbersSha256": "85f0813c3ecb483e7c76f938b8c1e172360401d8d414073011e9064e8eada828"
+            }
+          },
+          "j2": {
+            "id": "n2-j2",
+            "state": "passed",
+            "comparedScalarCount": 3240,
+            "mismatchCount": 0,
+            "zeroReferenceMismatchCount": 0,
+            "tolerance": {
+              "maximumAbsoluteError": {
+                "value": 1e-18,
+                "units": "W m^-3 sr^-1 nm^-1"
+              },
+              "maximumRelativeError": 1e-12
+            },
+            "maximumAbsoluteError": {
+              "value": 3.3881317890172014e-21,
+              "units": "W m^-3 sr^-1 nm^-1"
+            },
+            "maximumRelativeError": 1.1013681786443488e-15,
+            "rmsAbsoluteError": {
+              "value": 3.5226488250657923e-22,
+              "units": "W m^-3 sr^-1 nm^-1"
+            },
+            "worstAbsolute": {
+              "offset": 6,
+              "wavelengthIndex": 0,
+              "positionIndex": 0,
+              "directionIndex": 6,
+              "expected": {
+                "value": 0.000005621754447452241,
+                "units": "W m^-3 sr^-1 nm^-1"
+              },
+              "actual": {
+                "value": 0.000005621754447452237,
+                "units": "W m^-3 sr^-1 nm^-1"
+              },
+              "absoluteError": {
+                "value": 3.3881317890172014e-21,
+                "units": "W m^-3 sr^-1 nm^-1"
+              },
+              "relativeError": 6.026822801826022e-16
+            },
+            "worstRelative": {
+              "offset": 2814,
+              "wavelengthIndex": 13,
+              "positionIndex": 0,
+              "directionIndex": 6,
+              "expected": {
+                "value": 7.690733795277213e-7,
+                "units": "W m^-3 sr^-1 nm^-1"
+              },
+              "actual": {
+                "value": 7.690733795277204e-7,
+                "units": "W m^-3 sr^-1 nm^-1"
+              },
+              "absoluteError": {
+                "value": 8.470329472543003e-22,
+                "units": "W m^-3 sr^-1 nm^-1"
+              },
+              "relativeError": 1.1013681786443488e-15
+            },
+            "mismatchSamples": [],
+            "expectedHashes": {
+              "float64LittleEndianSha256": "cce0a76c4cbf17e854207d6417d9c7072a1fb3e99eed952b8601c167fb07a482",
+              "jsonNumbersSha256": "024126b45fd73454599ffd446950cba8b34b8006ce323460c08516f9fc058f98"
+            },
+            "actualHashes": {
+              "float64LittleEndianSha256": "577de3d86509a66e625f0d30b90a182a4195393d7f261d851ea89862b17d43f7",
+              "jsonNumbersSha256": "a68343c0a30c27e52520e114c75169831097971ef40c050022189d3d9598bc09"
+            }
+          },
+          "cumulative": {
+            "id": "n2-cumulative",
+            "state": "passed",
+            "comparedScalarCount": 3240,
+            "mismatchCount": 0,
+            "zeroReferenceMismatchCount": 0,
+            "tolerance": {
+              "maximumAbsoluteError": {
+                "value": 1e-18,
+                "units": "W m^-3 sr^-1 nm^-1"
+              },
+              "maximumRelativeError": 1e-12
+            },
+            "maximumAbsoluteError": {
+              "value": 6.776263578034403e-21,
+              "units": "W m^-3 sr^-1 nm^-1"
+            },
+            "maximumRelativeError": 3.955061663210414e-16,
+            "rmsAbsoluteError": {
+              "value": 4.430686232012801e-22,
+              "units": "W m^-3 sr^-1 nm^-1"
+            },
+            "worstAbsolute": {
+              "offset": 2446,
+              "wavelengthIndex": 11,
+              "positionIndex": 1,
+              "directionIndex": 16,
+              "expected": {
+                "value": 0.000034801153574598176,
+                "units": "W m^-3 sr^-1 nm^-1"
+              },
+              "actual": {
+                "value": 0.00003480115357459818,
+                "units": "W m^-3 sr^-1 nm^-1"
+              },
+              "absoluteError": {
+                "value": 6.776263578034403e-21,
+                "units": "W m^-3 sr^-1 nm^-1"
+              },
+              "relativeError": 1.9471376325239078e-16
+            },
+            "worstRelative": {
+              "offset": 2166,
+              "wavelengthIndex": 10,
+              "positionIndex": 0,
+              "directionIndex": 6,
+              "expected": {
+                "value": 0.000004283285669770035,
+                "units": "W m^-3 sr^-1 nm^-1"
+              },
+              "actual": {
+                "value": 0.000004283285669770033,
+                "units": "W m^-3 sr^-1 nm^-1"
+              },
+              "absoluteError": {
+                "value": 1.6940658945086007e-21,
+                "units": "W m^-3 sr^-1 nm^-1"
+              },
+              "relativeError": 3.955061663210414e-16
+            },
+            "mismatchSamples": [],
+            "expectedHashes": {
+              "float64LittleEndianSha256": "2377110d4c7adeea893dd8875c9152073644816ff7541e6b6319151950e0867f",
+              "jsonNumbersSha256": "cac2042e04428d42e2c44f90c1ef5b5b18f30aad9f0c111eac87a1bb0613d12c"
+            },
+            "actualHashes": {
+              "float64LittleEndianSha256": "230ddc49d8a866fa1bfba106678bc90dfc56def5fbef05033cb74b141006c283",
+              "jsonNumbersSha256": "235c05e0f75c11b52856486b44bd5c16267ce5ec09728e413f11dbfaeb8f53bb"
+            }
+          }
+        }
+      },
+      "n4": {
+        "state": "passed",
+        "structure": {
+          "id": "n4-structure",
+          "state": "passed",
+          "comparedLeafCount": 12,
+          "mismatchCount": 0,
+          "mismatchSamples": [],
+          "expectedJsonSha256": "6e8b2dbb6a07973e0565e7edd4136dba3d23c82da4ec4fc177e98781f1902baa",
+          "actualJsonSha256": "6e8b2dbb6a07973e0565e7edd4136dba3d23c82da4ec4fc177e98781f1902baa"
+        },
+        "fields": {
+          "j1": {
+            "id": "n4-j1",
+            "state": "passed",
+            "comparedScalarCount": 3240,
+            "mismatchCount": 0,
+            "zeroReferenceMismatchCount": 0,
+            "tolerance": {
+              "maximumAbsoluteError": {
+                "value": 1e-18,
+                "units": "W m^-3 sr^-1 nm^-1"
+              },
+              "maximumRelativeError": 1e-12
+            },
+            "maximumAbsoluteError": {
+              "value": 6.776263578034403e-21,
+              "units": "W m^-3 sr^-1 nm^-1"
+            },
+            "maximumRelativeError": 2.8876610978126245e-16,
+            "rmsAbsoluteError": {
+              "value": 1.7318480629391604e-22,
+              "units": "W m^-3 sr^-1 nm^-1"
+            },
+            "worstAbsolute": {
+              "offset": 2446,
+              "wavelengthIndex": 11,
+              "positionIndex": 1,
+              "directionIndex": 16,
+              "expected": {
+                "value": 0.00003269526006757675,
+                "units": "W m^-3 sr^-1 nm^-1"
+              },
+              "actual": {
+                "value": 0.00003269526006757676,
+                "units": "W m^-3 sr^-1 nm^-1"
+              },
+              "absoluteError": {
+                "value": 6.776263578034403e-21,
+                "units": "W m^-3 sr^-1 nm^-1"
+              },
+              "relativeError": 2.0725522794523633e-16
+            },
+            "worstRelative": {
+              "offset": 2757,
+              "wavelengthIndex": 12,
+              "positionIndex": 3,
+              "directionIndex": 3,
+              "expected": {
+                "value": 6.993493519359075e-13,
+                "units": "W m^-3 sr^-1 nm^-1"
+              },
+              "actual": {
+                "value": 6.993493519359073e-13,
+                "units": "W m^-3 sr^-1 nm^-1"
+              },
+              "absoluteError": {
+                "value": 2.0194839173657902e-28,
+                "units": "W m^-3 sr^-1 nm^-1"
+              },
+              "relativeError": 2.8876610978126245e-16
+            },
+            "mismatchSamples": [],
+            "expectedHashes": {
+              "float64LittleEndianSha256": "de7238758781b5ca16678cf5bb3f8d7d773c3d75f010aefb374611c15128c05d",
+              "jsonNumbersSha256": "fe0f6360c6ec6f3bc0e5c97352107d59113c6c1ba1a4a86eefb9bf3126b19d9f"
+            },
+            "actualHashes": {
+              "float64LittleEndianSha256": "9ac564cc2dc53d69bafaf3d5c45771d676ab4096027ecd922475bc91140b81b3",
+              "jsonNumbersSha256": "01a9314048fadf54597fb19ea1496893ff2da8d0e0b840a2f1f2e8cf57aa992b"
+            }
+          },
+          "l1": {
+            "id": "n4-l1",
+            "state": "passed",
+            "comparedScalarCount": 2040,
+            "mismatchCount": 0,
+            "zeroReferenceMismatchCount": 0,
+            "tolerance": {
+              "maximumAbsoluteError": {
+                "value": 1e-15,
+                "units": "W m^-2 sr^-1 nm^-1"
+              },
+              "maximumRelativeError": 1e-12
+            },
+            "maximumAbsoluteError": {
+              "value": 1.0408340855860843e-16,
+              "units": "W m^-2 sr^-1 nm^-1"
+            },
+            "maximumRelativeError": 2.008524303712539e-15,
+            "rmsAbsoluteError": {
+              "value": 6.749758056882426e-18,
+              "units": "W m^-2 sr^-1 nm^-1"
+            },
+            "worstAbsolute": {
+              "offset": 830,
+              "wavelengthIndex": 6,
+              "positionIndex": 0,
+              "directionIndex": 14,
+              "expected": {
+                "value": 0.059859212544708794,
+                "units": "W m^-2 sr^-1 nm^-1"
+              },
+              "actual": {
+                "value": 0.0598592125447089,
+                "units": "W m^-2 sr^-1 nm^-1"
+              },
+              "absoluteError": {
+                "value": 1.0408340855860843e-16,
+                "units": "W m^-2 sr^-1 nm^-1"
+              },
+              "relativeError": 1.7388035046546698e-15
+            },
+            "worstRelative": {
+              "offset": 1374,
+              "wavelengthIndex": 10,
+              "positionIndex": 0,
+              "directionIndex": 14,
+              "expected": {
+                "value": 0.0380019464050775,
+                "units": "W m^-2 sr^-1 nm^-1"
+              },
+              "actual": {
+                "value": 0.03800194640507758,
+                "units": "W m^-2 sr^-1 nm^-1"
+              },
+              "absoluteError": {
+                "value": 7.632783294297951e-17,
+                "units": "W m^-2 sr^-1 nm^-1"
+              },
+              "relativeError": 2.008524303712539e-15
+            },
+            "mismatchSamples": [],
+            "expectedHashes": {
+              "float64LittleEndianSha256": "e08812ea71c6e30ba87635367e2d77b20a2b1116c42033f469688eb5cb396a0b",
+              "jsonNumbersSha256": "2c0ae774a7bac92c3dc9a48f6c1a944ba2063cbea06aaab20410267219d8541d"
+            },
+            "actualHashes": {
+              "float64LittleEndianSha256": "09ae25612af7cd2ad3a631b3df08d60bc4614171c5502a7568061c4a03315eac",
+              "jsonNumbersSha256": "85f0813c3ecb483e7c76f938b8c1e172360401d8d414073011e9064e8eada828"
+            }
+          },
+          "j2": {
+            "id": "n4-j2",
+            "state": "passed",
+            "comparedScalarCount": 3240,
+            "mismatchCount": 0,
+            "zeroReferenceMismatchCount": 0,
+            "tolerance": {
+              "maximumAbsoluteError": {
+                "value": 1e-18,
+                "units": "W m^-3 sr^-1 nm^-1"
+              },
+              "maximumRelativeError": 1e-12
+            },
+            "maximumAbsoluteError": {
+              "value": 3.3881317890172014e-21,
+              "units": "W m^-3 sr^-1 nm^-1"
+            },
+            "maximumRelativeError": 1.1013681786443488e-15,
+            "rmsAbsoluteError": {
+              "value": 3.5226488250657923e-22,
+              "units": "W m^-3 sr^-1 nm^-1"
+            },
+            "worstAbsolute": {
+              "offset": 6,
+              "wavelengthIndex": 0,
+              "positionIndex": 0,
+              "directionIndex": 6,
+              "expected": {
+                "value": 0.000005621754447452241,
+                "units": "W m^-3 sr^-1 nm^-1"
+              },
+              "actual": {
+                "value": 0.000005621754447452237,
+                "units": "W m^-3 sr^-1 nm^-1"
+              },
+              "absoluteError": {
+                "value": 3.3881317890172014e-21,
+                "units": "W m^-3 sr^-1 nm^-1"
+              },
+              "relativeError": 6.026822801826022e-16
+            },
+            "worstRelative": {
+              "offset": 2814,
+              "wavelengthIndex": 13,
+              "positionIndex": 0,
+              "directionIndex": 6,
+              "expected": {
+                "value": 7.690733795277213e-7,
+                "units": "W m^-3 sr^-1 nm^-1"
+              },
+              "actual": {
+                "value": 7.690733795277204e-7,
+                "units": "W m^-3 sr^-1 nm^-1"
+              },
+              "absoluteError": {
+                "value": 8.470329472543003e-22,
+                "units": "W m^-3 sr^-1 nm^-1"
+              },
+              "relativeError": 1.1013681786443488e-15
+            },
+            "mismatchSamples": [],
+            "expectedHashes": {
+              "float64LittleEndianSha256": "cce0a76c4cbf17e854207d6417d9c7072a1fb3e99eed952b8601c167fb07a482",
+              "jsonNumbersSha256": "024126b45fd73454599ffd446950cba8b34b8006ce323460c08516f9fc058f98"
+            },
+            "actualHashes": {
+              "float64LittleEndianSha256": "577de3d86509a66e625f0d30b90a182a4195393d7f261d851ea89862b17d43f7",
+              "jsonNumbersSha256": "a68343c0a30c27e52520e114c75169831097971ef40c050022189d3d9598bc09"
+            }
+          },
+          "l2": {
+            "id": "n4-l2",
+            "state": "passed",
+            "comparedScalarCount": 2040,
+            "mismatchCount": 0,
+            "zeroReferenceMismatchCount": 0,
+            "tolerance": {
+              "maximumAbsoluteError": {
+                "value": 1e-15,
+                "units": "W m^-2 sr^-1 nm^-1"
+              },
+              "maximumRelativeError": 1e-12
+            },
+            "maximumAbsoluteError": {
+              "value": 4.440892098500626e-16,
+              "units": "W m^-2 sr^-1 nm^-1"
+            },
+            "maximumRelativeError": 6.418255111019303e-16,
+            "rmsAbsoluteError": {
+              "value": 2.410118794820134e-17,
+              "units": "W m^-2 sr^-1 nm^-1"
+            },
+            "worstAbsolute": {
+              "offset": 0,
+              "wavelengthIndex": 0,
+              "positionIndex": 0,
+              "directionIndex": 0,
+              "expected": {
+                "value": 2.8071688377108477,
+                "units": "W m^-2 sr^-1 nm^-1"
+              },
+              "actual": {
+                "value": 2.8071688377108472,
+                "units": "W m^-2 sr^-1 nm^-1"
+              },
+              "absoluteError": {
+                "value": 4.440892098500626e-16,
+                "units": "W m^-2 sr^-1 nm^-1"
+              },
+              "relativeError": 1.5819825437083524e-16
+            },
+            "worstRelative": {
+              "offset": 129,
+              "wavelengthIndex": 0,
+              "positionIndex": 3,
+              "directionIndex": 27,
+              "expected": {
+                "value": 0.432447372931254,
+                "units": "W m^-2 sr^-1 nm^-1"
+              },
+              "actual": {
+                "value": 0.43244737293125374,
+                "units": "W m^-2 sr^-1 nm^-1"
+              },
+              "absoluteError": {
+                "value": 2.7755575615628914e-16,
+                "units": "W m^-2 sr^-1 nm^-1"
+              },
+              "relativeError": 6.418255111019303e-16
+            },
+            "mismatchSamples": [],
+            "expectedHashes": {
+              "float64LittleEndianSha256": "5ef731f972d618ac2350246e638bd119d04aa556eb683dc435d7782c7b6fe2fb",
+              "jsonNumbersSha256": "43c1bcabd997003e68cf45a22a94d97af0308198c42c6d8e8ea2e17828fe2ccd"
+            },
+            "actualHashes": {
+              "float64LittleEndianSha256": "33e5e0630df6a0cc6e8d14c0b9fa356d172d794f459122ec013e17dc54bc56c3",
+              "jsonNumbersSha256": "a3809995598679dbfb77412a8bbd525f0c8ff34cd8cc214f6ae48d0809f423a0"
+            }
+          },
+          "j3": {
+            "id": "n4-j3",
+            "state": "passed",
+            "comparedScalarCount": 3240,
+            "mismatchCount": 0,
+            "zeroReferenceMismatchCount": 0,
+            "tolerance": {
+              "maximumAbsoluteError": {
+                "value": 1e-18,
+                "units": "W m^-3 sr^-1 nm^-1"
+              },
+              "maximumRelativeError": 1e-12
+            },
+            "maximumAbsoluteError": {
+              "value": 5.421010862427522e-20,
+              "units": "W m^-3 sr^-1 nm^-1"
+            },
+            "maximumRelativeError": 1.5188535461799166e-15,
+            "rmsAbsoluteError": {
+              "value": 2.0893531297209408e-21,
+              "units": "W m^-3 sr^-1 nm^-1"
+            },
+            "worstAbsolute": {
+              "offset": 247,
+              "wavelengthIndex": 1,
+              "positionIndex": 0,
+              "directionIndex": 31,
+              "expected": {
+                "value": 0.00016668338989280128,
+                "units": "W m^-3 sr^-1 nm^-1"
+              },
+              "actual": {
+                "value": 0.00016668338989280133,
+                "units": "W m^-3 sr^-1 nm^-1"
+              },
+              "absoluteError": {
+                "value": 5.421010862427522e-20,
+                "units": "W m^-3 sr^-1 nm^-1"
+              },
+              "relativeError": 3.2522801857545163e-16
+            },
+            "worstRelative": {
+              "offset": 2382,
+              "wavelengthIndex": 11,
+              "positionIndex": 0,
+              "directionIndex": 6,
+              "expected": {
+                "value": 0.0000030672352983707658,
+                "units": "W m^-3 sr^-1 nm^-1"
+              },
+              "actual": {
+                "value": 0.000003067235298370761,
+                "units": "W m^-3 sr^-1 nm^-1"
+              },
+              "absoluteError": {
+                "value": 4.658681209898652e-21,
+                "units": "W m^-3 sr^-1 nm^-1"
+              },
+              "relativeError": 1.5188535461799166e-15
+            },
+            "mismatchSamples": [],
+            "expectedHashes": {
+              "float64LittleEndianSha256": "7f546d4f800ed0e70f15f2c2eb6fbaa04584148dc728c874e776281779905d13",
+              "jsonNumbersSha256": "655c3d8a26fd2f1e569cd239c2e142a2aa46811f0dda79d2a5fe0828653c15dd"
+            },
+            "actualHashes": {
+              "float64LittleEndianSha256": "76d5b1bdfb061b7f6d78e2b2fb5d6b9f69264a9c94e8f739ca0d2e2146ed3265",
+              "jsonNumbersSha256": "a90df6150095cd38df7456a71dfc97ad0c32ef1393218085e825f4ee1fe5dfe7"
+            }
+          },
+          "l3": {
+            "id": "n4-l3",
+            "state": "passed",
+            "comparedScalarCount": 2040,
+            "mismatchCount": 0,
+            "zeroReferenceMismatchCount": 0,
+            "tolerance": {
+              "maximumAbsoluteError": {
+                "value": 1e-15,
+                "units": "W m^-2 sr^-1 nm^-1"
+              },
+              "maximumRelativeError": 1e-12
+            },
+            "maximumAbsoluteError": {
+              "value": 1.0658141036401503e-14,
+              "units": "W m^-2 sr^-1 nm^-1"
+            },
+            "maximumRelativeError": 8.430313771788455e-16,
+            "rmsAbsoluteError": {
+              "value": 3.395210963990182e-16,
+              "units": "W m^-2 sr^-1 nm^-1"
+            },
+            "worstAbsolute": {
+              "offset": 137,
+              "wavelengthIndex": 1,
+              "positionIndex": 0,
+              "directionIndex": 1,
+              "expected": {
+                "value": 26.030945179735383,
+                "units": "W m^-2 sr^-1 nm^-1"
+              },
+              "actual": {
+                "value": 26.030945179735394,
+                "units": "W m^-2 sr^-1 nm^-1"
+              },
+              "absoluteError": {
+                "value": 1.0658141036401503e-14,
+                "units": "W m^-2 sr^-1 nm^-1"
+              },
+              "relativeError": 4.094411848210057e-16
+            },
+            "worstRelative": {
+              "offset": 1473,
+              "wavelengthIndex": 10,
+              "positionIndex": 3,
+              "directionIndex": 11,
+              "expected": {
+                "value": 0.04938530706029822,
+                "units": "W m^-2 sr^-1 nm^-1"
+              },
+              "actual": {
+                "value": 0.04938530706029818,
+                "units": "W m^-2 sr^-1 nm^-1"
+              },
+              "absoluteError": {
+                "value": 4.163336342344337e-17,
+                "units": "W m^-2 sr^-1 nm^-1"
+              },
+              "relativeError": 8.430313771788455e-16
+            },
+            "mismatchSamples": [],
+            "expectedHashes": {
+              "float64LittleEndianSha256": "be5b36c769dc28b8faa596fda805f9b1599a78c4cce3171b47551722c35637cb",
+              "jsonNumbersSha256": "81c26db596a6227a8d97bb7f6617859a87f2962678dca679bb51c87af5c055a6"
+            },
+            "actualHashes": {
+              "float64LittleEndianSha256": "c24c206bf3155a7c90dba5beef823e6b7cee0f9abe389de7e60bc97276037cd0",
+              "jsonNumbersSha256": "9e8378dd30c3543313d8d6acab0bf380afb625e80ab1846f7a3564befb63a9c7"
+            }
+          },
+          "j4": {
+            "id": "n4-j4",
+            "state": "passed",
+            "comparedScalarCount": 3240,
+            "mismatchCount": 0,
+            "zeroReferenceMismatchCount": 0,
+            "tolerance": {
+              "maximumAbsoluteError": {
+                "value": 1e-18,
+                "units": "W m^-3 sr^-1 nm^-1"
+              },
+              "maximumRelativeError": 1e-12
+            },
+            "maximumAbsoluteError": {
+              "value": 4.336808689942018e-19,
+              "units": "W m^-3 sr^-1 nm^-1"
+            },
+            "maximumRelativeError": 1.1885006487027618e-15,
+            "rmsAbsoluteError": {
+              "value": 1.2706207002353188e-20,
+              "units": "W m^-3 sr^-1 nm^-1"
+            },
+            "worstAbsolute": {
+              "offset": 247,
+              "wavelengthIndex": 1,
+              "positionIndex": 0,
+              "directionIndex": 31,
+              "expected": {
+                "value": 0.0011165293227891214,
+                "units": "W m^-3 sr^-1 nm^-1"
+              },
+              "actual": {
+                "value": 0.0011165293227891218,
+                "units": "W m^-3 sr^-1 nm^-1"
+              },
+              "absoluteError": {
+                "value": 4.336808689942018e-19,
+                "units": "W m^-3 sr^-1 nm^-1"
+              },
+              "relativeError": 3.8841870082807577e-16
+            },
+            "worstRelative": {
+              "offset": 2228,
+              "wavelengthIndex": 10,
+              "positionIndex": 1,
+              "directionIndex": 14,
+              "expected": {
+                "value": 0.000002138071059983424,
+                "units": "W m^-3 sr^-1 nm^-1"
+              },
+              "actual": {
+                "value": 0.0000021380710599834214,
+                "units": "W m^-3 sr^-1 nm^-1"
+              },
+              "absoluteError": {
+                "value": 2.541098841762901e-21,
+                "units": "W m^-3 sr^-1 nm^-1"
+              },
+              "relativeError": 1.1885006487027618e-15
+            },
+            "mismatchSamples": [],
+            "expectedHashes": {
+              "float64LittleEndianSha256": "bd0d917f5c7b94c8d3c9a7b23537a04b9d77d7d732e2648bd19e7c0b3a7740cc",
+              "jsonNumbersSha256": "f77b246191272523c10facb8eb7068e60a0650faf15f141db0ad80274e59a6be"
+            },
+            "actualHashes": {
+              "float64LittleEndianSha256": "3df8315fae0600d9b66676a6b56a1bb3b800f5ec4ff1383ff32dd907ff627f76",
+              "jsonNumbersSha256": "d5c478ece90fa9c63007041a15f84ba8e4355ca9bdeea9d010d15f4b5a184561"
+            }
+          },
+          "cumulative": {
+            "id": "n4-cumulative",
+            "state": "passed",
+            "comparedScalarCount": 3240,
+            "mismatchCount": 0,
+            "zeroReferenceMismatchCount": 0,
+            "tolerance": {
+              "maximumAbsoluteError": {
+                "value": 1e-18,
+                "units": "W m^-3 sr^-1 nm^-1"
+              },
+              "maximumRelativeError": 1e-12
+            },
+            "maximumAbsoluteError": {
+              "value": 4.336808689942018e-19,
+              "units": "W m^-3 sr^-1 nm^-1"
+            },
+            "maximumRelativeError": 1.0438445974311776e-15,
+            "rmsAbsoluteError": {
+              "value": 1.4567332854142983e-20,
+              "units": "W m^-3 sr^-1 nm^-1"
+            },
+            "worstAbsolute": {
+              "offset": 247,
+              "wavelengthIndex": 1,
+              "positionIndex": 0,
+              "directionIndex": 31,
+              "expected": {
+                "value": 0.0013107422345064704,
+                "units": "W m^-3 sr^-1 nm^-1"
+              },
+              "actual": {
+                "value": 0.0013107422345064708,
+                "units": "W m^-3 sr^-1 nm^-1"
+              },
+              "absoluteError": {
+                "value": 4.336808689942018e-19,
+                "units": "W m^-3 sr^-1 nm^-1"
+              },
+              "relativeError": 3.308666323378938e-16
+            },
+            "worstRelative": {
+              "offset": 2382,
+              "wavelengthIndex": 11,
+              "positionIndex": 0,
+              "directionIndex": 6,
+              "expected": {
+                "value": 0.000014606190507761515,
+                "units": "W m^-3 sr^-1 nm^-1"
+              },
+              "actual": {
+                "value": 0.0000146061905077615,
+                "units": "W m^-3 sr^-1 nm^-1"
+              },
+              "absoluteError": {
+                "value": 1.5246593050577406e-20,
+                "units": "W m^-3 sr^-1 nm^-1"
+              },
+              "relativeError": 1.0438445974311776e-15
+            },
+            "mismatchSamples": [],
+            "expectedHashes": {
+              "float64LittleEndianSha256": "b586b0f690e580546c4f4825671247b51cd333c1a0423ebb9c4b41f912757d4a",
+              "jsonNumbersSha256": "34b322332f65d03535c5500f33a22bd8c5cf6c0cf851795bf9b7f7082b8564a2"
+            },
+            "actualHashes": {
+              "float64LittleEndianSha256": "cb5bdbfe1230164d24e8d4b9e53965f84371c446734cb4e7e26a309973072804",
+              "jsonNumbersSha256": "31e3a489b77eb4534e6d76900268c43c777062ff36d2f9ead632e94e97f26d1c"
+            }
+          }
+        }
+      }
+    },
+    "residentCumulativeSampling": {
+      "state": "passed",
+      "observation": "Every exact-node public cache sample equals its resident cumulative field value.",
+      "inference": "Exact equality establishes zero additional query-time shell-held scaling.",
+      "queryTimeShellScaleCountByRequestedOrder": {
+        "n1": 0,
+        "n2": 0,
+        "n4": 0
+      },
+      "sections": {
+        "n1": {
+          "state": "passed",
+          "exactNodeDirectionSampleCount": 216,
+          "nonzeroResidentScalarCount": 3240,
+          "structure": {
+            "id": "n1-resident-sampling-structure",
+            "state": "passed",
+            "comparedLeafCount": 4,
+            "mismatchCount": 0,
+            "mismatchSamples": [],
+            "expectedJsonSha256": "f4b89d1a2512ca45519834fac1e8d09fb63dbe7fe88c714eafc1dde77d70bdc7",
+            "actualJsonSha256": "f4b89d1a2512ca45519834fac1e8d09fb63dbe7fe88c714eafc1dde77d70bdc7"
+          },
+          "values": {
+            "id": "n1-resident-cumulative-sampling",
+            "state": "passed",
+            "comparedLeafCount": 3240,
+            "mismatchCount": 0,
+            "mismatchSamples": [],
+            "expectedJsonSha256": "01a9314048fadf54597fb19ea1496893ff2da8d0e0b840a2f1f2e8cf57aa992b",
+            "actualJsonSha256": "01a9314048fadf54597fb19ea1496893ff2da8d0e0b840a2f1f2e8cf57aa992b"
+          }
+        },
+        "n2": {
+          "state": "passed",
+          "exactNodeDirectionSampleCount": 216,
+          "nonzeroResidentScalarCount": 3240,
+          "structure": {
+            "id": "n2-resident-sampling-structure",
+            "state": "passed",
+            "comparedLeafCount": 4,
+            "mismatchCount": 0,
+            "mismatchSamples": [],
+            "expectedJsonSha256": "f4b89d1a2512ca45519834fac1e8d09fb63dbe7fe88c714eafc1dde77d70bdc7",
+            "actualJsonSha256": "f4b89d1a2512ca45519834fac1e8d09fb63dbe7fe88c714eafc1dde77d70bdc7"
+          },
+          "values": {
+            "id": "n2-resident-cumulative-sampling",
+            "state": "passed",
+            "comparedLeafCount": 3240,
+            "mismatchCount": 0,
+            "mismatchSamples": [],
+            "expectedJsonSha256": "235c05e0f75c11b52856486b44bd5c16267ce5ec09728e413f11dbfaeb8f53bb",
+            "actualJsonSha256": "235c05e0f75c11b52856486b44bd5c16267ce5ec09728e413f11dbfaeb8f53bb"
+          }
+        },
+        "n4": {
+          "state": "passed",
+          "exactNodeDirectionSampleCount": 216,
+          "nonzeroResidentScalarCount": 3240,
+          "structure": {
+            "id": "n4-resident-sampling-structure",
+            "state": "passed",
+            "comparedLeafCount": 4,
+            "mismatchCount": 0,
+            "mismatchSamples": [],
+            "expectedJsonSha256": "f4b89d1a2512ca45519834fac1e8d09fb63dbe7fe88c714eafc1dde77d70bdc7",
+            "actualJsonSha256": "f4b89d1a2512ca45519834fac1e8d09fb63dbe7fe88c714eafc1dde77d70bdc7"
+          },
+          "values": {
+            "id": "n4-resident-cumulative-sampling",
+            "state": "passed",
+            "comparedLeafCount": 3240,
+            "mismatchCount": 0,
+            "mismatchSamples": [],
+            "expectedJsonSha256": "31e3a489b77eb4534e6d76900268c43c777062ff36d2f9ead632e94e97f26d1c",
+            "actualJsonSha256": "31e3a489b77eb4534e6d76900268c43c777062ff36d2f9ead632e94e97f26d1c"
+          }
+        }
+      }
+    },
+    "orderInvariants": {
+      "star": {
+        "state": "passed",
+        "sections": {
+          "n1J1EqualsN2J1": {
+            "id": "star-n1-j1-equals-n2-j1",
+            "state": "passed",
+            "comparedLeafCount": 3240,
+            "mismatchCount": 0,
+            "mismatchSamples": [],
+            "expectedJsonSha256": "fe0f6360c6ec6f3bc0e5c97352107d59113c6c1ba1a4a86eefb9bf3126b19d9f",
+            "actualJsonSha256": "fe0f6360c6ec6f3bc0e5c97352107d59113c6c1ba1a4a86eefb9bf3126b19d9f"
+          },
+          "n2J1EqualsN4J1": {
+            "id": "star-n2-j1-equals-n4-j1",
+            "state": "passed",
+            "comparedLeafCount": 3240,
+            "mismatchCount": 0,
+            "mismatchSamples": [],
+            "expectedJsonSha256": "fe0f6360c6ec6f3bc0e5c97352107d59113c6c1ba1a4a86eefb9bf3126b19d9f",
+            "actualJsonSha256": "fe0f6360c6ec6f3bc0e5c97352107d59113c6c1ba1a4a86eefb9bf3126b19d9f"
+          },
+          "n2L1EqualsN4L1": {
+            "id": "star-n2-l1-equals-n4-l1",
+            "state": "passed",
+            "comparedLeafCount": 2040,
+            "mismatchCount": 0,
+            "mismatchSamples": [],
+            "expectedJsonSha256": "2c0ae774a7bac92c3dc9a48f6c1a944ba2063cbea06aaab20410267219d8541d",
+            "actualJsonSha256": "2c0ae774a7bac92c3dc9a48f6c1a944ba2063cbea06aaab20410267219d8541d"
+          },
+          "n2J2EqualsN4J2": {
+            "id": "star-n2-j2-equals-n4-j2",
+            "state": "passed",
+            "comparedLeafCount": 3240,
+            "mismatchCount": 0,
+            "mismatchSamples": [],
+            "expectedJsonSha256": "024126b45fd73454599ffd446950cba8b34b8006ce323460c08516f9fc058f98",
+            "actualJsonSha256": "024126b45fd73454599ffd446950cba8b34b8006ce323460c08516f9fc058f98"
+          },
+          "n1CumulativeEqualsJ1": {
+            "id": "star-n1-cumulative-equals-j1",
+            "state": "passed",
+            "comparedLeafCount": 3240,
+            "mismatchCount": 0,
+            "mismatchSamples": [],
+            "expectedJsonSha256": "fe0f6360c6ec6f3bc0e5c97352107d59113c6c1ba1a4a86eefb9bf3126b19d9f",
+            "actualJsonSha256": "fe0f6360c6ec6f3bc0e5c97352107d59113c6c1ba1a4a86eefb9bf3126b19d9f"
+          },
+          "n2CumulativeEqualsPureSum": {
+            "id": "star-n2-cumulative-equals-pure-sum",
+            "state": "passed",
+            "comparedLeafCount": 3240,
+            "mismatchCount": 0,
+            "mismatchSamples": [],
+            "expectedJsonSha256": "cac2042e04428d42e2c44f90c1ef5b5b18f30aad9f0c111eac87a1bb0613d12c",
+            "actualJsonSha256": "cac2042e04428d42e2c44f90c1ef5b5b18f30aad9f0c111eac87a1bb0613d12c"
+          },
+          "n4CumulativeEqualsPureSum": {
+            "id": "star-n4-cumulative-equals-pure-sum",
+            "state": "passed",
+            "comparedLeafCount": 3240,
+            "mismatchCount": 0,
+            "mismatchSamples": [],
+            "expectedJsonSha256": "34b322332f65d03535c5500f33a22bd8c5cf6c0cf851795bf9b7f7082b8564a2",
+            "actualJsonSha256": "34b322332f65d03535c5500f33a22bd8c5cf6c0cf851795bf9b7f7082b8564a2"
+          }
+        }
+      },
+      "production": {
+        "state": "passed",
+        "sections": {
+          "n1J1EqualsN2J1": {
+            "id": "production-n1-j1-equals-n2-j1",
+            "state": "passed",
+            "comparedLeafCount": 3240,
+            "mismatchCount": 0,
+            "mismatchSamples": [],
+            "expectedJsonSha256": "01a9314048fadf54597fb19ea1496893ff2da8d0e0b840a2f1f2e8cf57aa992b",
+            "actualJsonSha256": "01a9314048fadf54597fb19ea1496893ff2da8d0e0b840a2f1f2e8cf57aa992b"
+          },
+          "n2J1EqualsN4J1": {
+            "id": "production-n2-j1-equals-n4-j1",
+            "state": "passed",
+            "comparedLeafCount": 3240,
+            "mismatchCount": 0,
+            "mismatchSamples": [],
+            "expectedJsonSha256": "01a9314048fadf54597fb19ea1496893ff2da8d0e0b840a2f1f2e8cf57aa992b",
+            "actualJsonSha256": "01a9314048fadf54597fb19ea1496893ff2da8d0e0b840a2f1f2e8cf57aa992b"
+          },
+          "n2L1EqualsN4L1": {
+            "id": "production-n2-l1-equals-n4-l1",
+            "state": "passed",
+            "comparedLeafCount": 2040,
+            "mismatchCount": 0,
+            "mismatchSamples": [],
+            "expectedJsonSha256": "85f0813c3ecb483e7c76f938b8c1e172360401d8d414073011e9064e8eada828",
+            "actualJsonSha256": "85f0813c3ecb483e7c76f938b8c1e172360401d8d414073011e9064e8eada828"
+          },
+          "n2J2EqualsN4J2": {
+            "id": "production-n2-j2-equals-n4-j2",
+            "state": "passed",
+            "comparedLeafCount": 3240,
+            "mismatchCount": 0,
+            "mismatchSamples": [],
+            "expectedJsonSha256": "a68343c0a30c27e52520e114c75169831097971ef40c050022189d3d9598bc09",
+            "actualJsonSha256": "a68343c0a30c27e52520e114c75169831097971ef40c050022189d3d9598bc09"
+          },
+          "n1CumulativeEqualsJ1": {
+            "id": "production-n1-cumulative-equals-j1",
+            "state": "passed",
+            "comparedLeafCount": 3240,
+            "mismatchCount": 0,
+            "mismatchSamples": [],
+            "expectedJsonSha256": "01a9314048fadf54597fb19ea1496893ff2da8d0e0b840a2f1f2e8cf57aa992b",
+            "actualJsonSha256": "01a9314048fadf54597fb19ea1496893ff2da8d0e0b840a2f1f2e8cf57aa992b"
+          },
+          "n2CumulativeEqualsPureSum": {
+            "id": "production-n2-cumulative-equals-pure-sum",
+            "state": "passed",
+            "comparedLeafCount": 3240,
+            "mismatchCount": 0,
+            "mismatchSamples": [],
+            "expectedJsonSha256": "235c05e0f75c11b52856486b44bd5c16267ce5ec09728e413f11dbfaeb8f53bb",
+            "actualJsonSha256": "235c05e0f75c11b52856486b44bd5c16267ce5ec09728e413f11dbfaeb8f53bb"
+          },
+          "n4CumulativeEqualsPureSum": {
+            "id": "production-n4-cumulative-equals-pure-sum",
+            "state": "passed",
+            "comparedLeafCount": 3240,
+            "mismatchCount": 0,
+            "mismatchSamples": [],
+            "expectedJsonSha256": "31e3a489b77eb4534e6d76900268c43c777062ff36d2f9ead632e94e97f26d1c",
+            "actualJsonSha256": "31e3a489b77eb4534e6d76900268c43c777062ff36d2f9ead632e94e97f26d1c"
+          }
+        }
+      },
+      "state": "passed"
+    }
+  },
+  "totals": {
+    "fieldComparedScalarCount": 40560,
+    "fieldMismatchCount": 0,
+    "coreExactComparedLeafCount": 26900,
+    "inputAuthenticationComparedLeafCount": 224,
+    "exactComparedLeafCount": 27124,
+    "coreExactMismatchCount": 0,
+    "inputAuthenticationMismatchCount": 0,
+    "exactMismatchCount": 0,
+    "requestedOrderCount": 3,
+    "behavioralEdgeRecordCount": 29,
+    "residentExactNodeDirectionSampleCount": 648,
+    "residentSampledScalarCount": 9720,
+    "residentSampleMismatchCount": 0
+  }
+}

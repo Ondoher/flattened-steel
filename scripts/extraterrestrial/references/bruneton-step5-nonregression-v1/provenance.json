@@ -1,0 +1,46 @@
+{
+	"schemaVersion": "bruneton-step5-nonregression-v1",
+	"role": "Contained checksum-sealed matched spectral input for the Step 5.4 shared-transform non-regression gate.",
+	"sunDisk": "excluded",
+	"rowCountPerModel": 1377,
+	"wavelengthCount": 40,
+	"sources": {
+		"publishedModels": {
+			"repositoryPath": "references/results/experiments/b1-directional-sky-radiance/published-models.tsv",
+			"completeSourceSha256": "4e11e9ebc6c8cf2eb85e608d86a750b827a17d13582f4b89f035b71824b204f4",
+			"selectedModel": "bruneton",
+			"containedPath": "bruneton-published-model.tsv",
+			"containedCanonicalSha256": "dc163f86512cba3caf6dac65c991eff4a6a458b0e06a96766168ec8428e8f239",
+			"derivation": "UTF-8 header plus every tab-delimited row whose model field is exactly bruneton, in original order, LF terminated."
+		},
+		"productionGpu": {
+			"repositoryPath": "references/results/experiments/b1-directional-sky-radiance/gpu/algorithm32-current-production-gpu-j4.tsv",
+			"containedPath": "algorithm32-current-production-gpu-j4.tsv",
+			"sha256": "d366ba11a0697aa471f8a822da9ccc9964a67bfcfb18cad0764de62a33583a7f",
+			"selectedModel": "proposed"
+		},
+		"cie1931": {
+			"repositoryPath": "references/downloads/cie-1931-2deg/CIE_xyz_1931_2deg.csv",
+			"containedPath": "CIE_xyz_1931_2deg.csv",
+			"sha256": "fa663e3535a7e0763a745993a1f0a192eb0275ac46ad2d1befd7626841e713c1"
+		}
+	},
+	"projection": {
+		"wavelengthsNanometers": "360 + index * 11.75 for indices 0 through 39",
+		"sampleWidthNanometers": 11.75,
+		"matchingFunctions": "CIE 1931 2-degree XYZ, linearly interpolated at each wavelength",
+		"luminousEfficacyLumensPerWatt": 683,
+		"xyzToLinearRec709D65": [
+			[3.2406, -1.5372, -0.4986],
+			[-0.9689, 1.8758, 0.0415],
+			[0.0557, -0.204, 1.057]
+		]
+	},
+	"baselineMetrics": {
+		"immutableRun": "tmp/extraterrestrial/runs/000235-bruneton-shader-sky-color-comparison",
+		"figure1DisplayRgbRmse": 0.025415448634317904,
+		"meanUPrimeVPrimeDistance": 0.00718644641835909,
+		"meanAbsoluteRelativeLuminanceError": 0.046603647486835945
+	},
+	"claimLimit": "The contained files reproduce the checksum-pinned run-235 input pairing. Step 5.4 must transform both sides with the same frozen ACES candidate and compute fresh metrics; historical outputs are not an oracle."
+}

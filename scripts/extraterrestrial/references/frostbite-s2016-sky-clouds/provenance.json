@@ -1,0 +1,25 @@
+{
+	"schemaVersion": "frostbite-s2016-sky-clouds-provenance-v1",
+	"title": "Physically Based Sky, Atmosphere & Cloud Rendering",
+	"author": "Sebastien Hillaire",
+	"venue": "SIGGRAPH 2016, Physically Based Shading in Theory and Practice course",
+	"publisher": "Electronic Arts / Frostbite",
+	"landingPage": "https://www.ea.com/news/physically-based-sky-atmosphere-and-cloud-rendering",
+	"asset": {
+		"name": "s2016_pbs_frostbite_sky_clouds.pdf",
+		"sourceUrl": "https://media.contentapi.ea.com/content/dam/eacom/frostbite/files/s2016_pbs_frostbite_sky_clouds.pdf",
+		"retrievedAtUtc": "2026-08-14T00:27:07.1485191Z",
+		"sizeBytes": 52647767,
+		"sha256": "3e0e684c2caa8ba5ccc7260ba5be2940306611174e8a0652f35d0f66ebdda0f5",
+		"mediaType": "application/pdf",
+		"pdfHeader": "%PDF-1.5",
+		"digestAuthority": "locally measured over the saved binary asset"
+	},
+	"retrieval": {
+		"tool": "curl.exe",
+		"redirectsFollowed": true,
+		"certificateVerification": false,
+		"certificateVerificationNote": "The first Windows Schannel request failed because certificate-revocation status was unavailable; the exact HTTPS URL was then retrieved with certificate verification disabled. File identity is sealed by the locally measured SHA-256 above."
+	},
+	"status": "saved for later evaluation; not yet used as design authority, implementation input, fixture, or oracle"
+}

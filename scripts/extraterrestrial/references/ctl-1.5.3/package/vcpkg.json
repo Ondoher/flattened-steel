@@ -1,0 +1,9 @@
+{
+    "name": "ctl", 
+    "version": "1.5.3",
+    "dependencies": [
+        "imath",
+        "openexr",
+        "tiff"
+    ]
+}

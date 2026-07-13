@@ -1,0 +1,83 @@
+{
+  "recordId": "050-er4c-sun-sirius-physical-transport-closure",
+  "recordDirectory": "tmp/atmosphere/reconciliation/050-er4c-sun-sirius-physical-transport-closure",
+  "stage": "combined-ER4C-ER5-sun-sirius-physical-transport-closure",
+  "modes": {
+    "record": "the only result-bearing mode; one fresh immutable numbered record",
+    "preflight": "disabled because every result-bearing execution must use a numbered record"
+  },
+  "atmosphereControls": {
+    "pathIntervalCount": 6,
+    "sourceTransmittanceIntervalCount": 4,
+    "incidentDirectionCount": 4,
+    "incidentAltitudeBinCount": 4
+  },
+  "cameraToAtmosphereMatrix": [
+    [
+      0,
+      0,
+      -1
+    ],
+    [
+      -1,
+      0,
+      0
+    ],
+    [
+      0,
+      1,
+      0
+    ]
+  ],
+  "tolerances": {
+    "spectralRelative": 1e-12,
+    "spectralScaleFloor": 1e-30,
+    "solarReferenceMinimumRelative": 0.02,
+    "solarReferenceUncertaintyMultiplier": 2,
+    "solarReferenceAbsoluteFloorRelative": 0.0005,
+    "solarDiskReconstructionRelative": 1e-10,
+    "siriusVisibleRelative": 0.03,
+    "siriusNearInfraredRelative": 0.04,
+    "quadratureHighOrderRelative": 0.005,
+    "wrongRouteMinimumRelative": 0.0001,
+    "displayCallCount": "exact"
+  },
+  "claimLayers": {
+    "er4c": "physical source-to-pixel atmosphere transport and frame composition",
+    "er5": "independent Sun/Sirius source-reference closure with inherited lunar XA-G09"
+  },
+  "applicableXaGates": {
+    "er4c": [
+      "XA-G01",
+      "XA-G02",
+      "XA-G03",
+      "XA-G04",
+      "XA-G05",
+      "XA-G06",
+      "XA-G07",
+      "XA-G08",
+      "XA-G10"
+    ],
+    "er5": [
+      "XA-G01",
+      "XA-G03",
+      "XA-G04",
+      "XA-G06",
+      "XA-G08",
+      "XA-G09",
+      "XA-G10"
+    ]
+  },
+  "xaGateQualifications": {
+    "xaG02": "ER4C uses exact analytic proof directions/depths; astronomical returned-epoch geometry remains ER6.",
+    "xaG07": "Exact deterministic analytic blockers and partial occlusion are claimed; real-scene depth remains ER6.",
+    "xaG10": "Mechanical and physical statuses are separated; automated/human review and observational visibility are not claimed."
+  },
+  "deferredXaGates": [
+    "XA-G11",
+    "XA-G12"
+  ],
+  "observationalClaim": "none",
+  "gpuClaim": "none",
+  "productionClaim": "none"
+}

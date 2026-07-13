@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "g8-distant-sun-qualification-contract-v1",
+  "scope": "Accepted spherical distant uniform Sun primary-cache path only; GPU star projection, facade integration, and unsupported geometry families are excluded.",
+  "hardwareClass": {
+    "browser": "Chrome headless WebGL2",
+    "adapter": "ANGLE SwiftShader",
+    "cacheLayout": "R32F 11x13x15 scalar array"
+  },
+  "budgets": {
+    "exactNodeAbsoluteError": 0.00002,
+    "residentFieldStorageBytesMaximum": 16384,
+    "peakTrackedStorageBytesMaximum": 32768,
+    "initialRenderBuildMillisecondsMaximum": 5000,
+    "liveTwoFrameMillisecondsMaximum": 1000,
+    "exactReuseAdditionalBuildsMaximum": 0,
+    "contextRehydrationRequired": true,
+    "failurePreservesActiveGenerationRequired": true,
+    "repeatedDisposalRequired": true
+  },
+  "acceptance": "All stated budgets must pass in one new immutable browser qualification run. Context rehydration means rebuilding the deterministic published field on a fresh WebGL2 backend after disposing the prior backend; this is not an application-level context-loss handler claim."
+}

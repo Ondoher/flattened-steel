@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "experimentId": "EXPERIMENT-A32-WF-000011",
+  "externalName": "E4",
+  "name": "Point-Source Flux Conservation",
+  "question": "What point-response normalization and raster-boundary accounting conserve transported point flux when it is distributed as pixel spectral radiance?",
+  "facts": [
+    "FACT-A32-002313",
+    "FACT-A32-002315",
+    "FACT-A32-003023"
+  ],
+  "runner": "scripts/experiments/e4-point-source-flux-conservation/run.js",
+  "tests": "scripts/experiments/e4-point-source-flux-conservation/run.test.js",
+  "inputs": {
+    "spectralBasisChannelCount": 15,
+    "sourceDataType": "spectral flux density",
+    "pixelDataType": "spectral radiance density",
+    "footprintEntryData": [
+      "normalized response weight",
+      "pixel solid angle",
+      "on-raster or off-raster classification"
+    ],
+    "cases": [
+      "interior",
+      "asymmetric subpixel",
+      "edge",
+      "corner",
+      "fully off-raster",
+      "fine resolution",
+      "wide field",
+      "overlapping sources"
+    ]
+  },
+  "iterationCount": 8,
+  "resultTableMeaning": "Each row reports source count, on/off response mass, and maximum per-channel residuals for response normalization, on/off flux partition, total reconstructed flux, and overlapping-source additivity.",
+  "result": {
+    "accepted": true,
+    "maximumResponseMassResidual": 0,
+    "maximumPartitionFluxResidual": 3.2311742677852644e-27,
+    "maximumTotalFluxResidual": 3.2311742677852644e-27,
+    "maximumOverlappingAdditivityResidual": 3.2311742677852644e-27,
+    "conclusion": "Normalized point-response weights conserve every spectral channel under L_lambda_i = F_lambda * p_i / Omega_i. Explicit off-raster mass accounts for edge and corner loss without renormalization, reconstructed flux is invariant to pixel solid angle, and overlapping sources add linearly."
+  },
+  "durableOutput": {
+    "path": "references/results/experiments/e4-point-source-flux-conservation/result.md",
+    "sha256": "90325c47e00ca09a0feed41de12dd067209c664387ef5c3c202c5f55eeab0ec1"
+  }
+}

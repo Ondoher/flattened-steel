@@ -1,0 +1,26 @@
+{
+  "schema": "algorithm32-b3-mismatch-map-v1",
+  "subject": "Algorithm32 Paper CPU candidate evaluated with the published paper-comparison physical-input profile",
+  "mismatches": [
+    {
+      "field": "ground reflection",
+      "disposition": "Algorithm32 Paper has no ground-reflection contribution, while the matched libRadtran setup uses Lambertian grass spectral albedo. This remains an explicit scope limitation."
+    },
+    {
+      "field": "multiple-scattering treatment",
+      "disposition": "Algorithm32 Paper uses the production Default second-order incident-radiance approximation rather than libRadtran DISORT's fuller multiple-scattering solution. Aggregate-score proximity does not establish component, order-by-order, or pointwise equality."
+    },
+    {
+      "field": "incident angular quadrature",
+      "disposition": "Algorithm32 Paper uses the pinned 34-direction source-oriented equal-weight Fibonacci incoming quadrature; the retained libRadtran DISORT calculation uses 16 streams."
+    },
+    {
+      "field": "vertical and path discretization",
+      "disposition": "Algorithm32 Paper uses analytic exponential density profiles, 48 physical altitude nodes, 40 view-path intervals, and 20 source-transmittance intervals; libRadtran uses its retained layered atmosphere and solver controls."
+    },
+    {
+      "field": "geometry approximation",
+      "disposition": "Algorithm32 Paper uses exact ray intersections with its spherical atmosphere; the retained libRadtran setup is pseudospherical."
+    }
+  ]
+}

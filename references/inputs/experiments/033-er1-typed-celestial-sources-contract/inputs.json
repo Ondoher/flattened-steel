@@ -1,0 +1,27 @@
+{
+  "stage": "ER1-typed-quantity-and-source-fixture-contract",
+  "runner": "er1TypedCelestialSourcesContract",
+  "tolerances": {
+    "basisBoundNanometersAbsolute": 1e-12,
+    "analyticBinningRelative": 1e-12,
+    "canonicalSolarIntegralAbsoluteWattsPerSquareMeter": 1e-9,
+    "independentSiriusChannelAbsoluteFloor": 1e-24,
+    "independentSiriusChannelRelative": 1e-10,
+    "sourceBinReconstructionRelative": 0.000001,
+    "magnitudeRoundTripAbsolute": 1e-10,
+    "clippedPassbandApproximationAbsoluteMagnitude": 0.01
+  },
+  "prohibitedOutputs": [
+    "camera",
+    "realized geometry",
+    "atmosphere evaluation",
+    "point response or PSF",
+    "display conversion",
+    "image"
+  ],
+  "requestedMagnitudeDelta": 2.5,
+  "clippedPhotometrySupportNanometers": [
+    360,
+    830
+  ]
+}

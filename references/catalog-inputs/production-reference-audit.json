@@ -1,0 +1,1833 @@
+{
+  "schemaVersion": 1,
+  "managedBy": "production-core-v1",
+  "sourceSnapshotId": "SNAPSHOT-REPO-000001",
+  "sources": [],
+  "experiments": [],
+  "manualFacts": [
+    {
+      "semanticKey": "production-governance:per-fact-physics-provenance-requirement",
+      "statement": "The active production requirements require every promoted physics decision, algorithm, numeric value, default, spectral shape, and validation expectation to have a third-party source, source-backed fixture or derivation, or explicitly accepted first-party Algorithm32 evidence; repeated POC behavior is implementation evidence rather than physical authority.",
+      "kind": "reference-proof-policy",
+      "domain": "production-physics-provenance",
+      "owner": "production-algorithm32-requirements",
+      "authorityRole": "reference-validation",
+      "supportStatus": "source-backed",
+      "implementationStatus": "not-applicable",
+      "decisionStatus": "provisional",
+      "verificationLayer": "static-code-observation",
+      "citations": [
+        {
+          "path": "agents/topics/apps/flat/algorithm32/requirements.md",
+          "lineStart": 28,
+          "lineEnd": 41,
+          "role": "states-per-fact-proof-and-provenance-requirement"
+        }
+      ],
+      "nonClaims": [
+        "This policy does not itself supply the missing physical sources.",
+        "Current code, POC lineage, and fixture repetition do not prove a physical fact."
+      ],
+      "blockers": [
+        "The frozen production package does not yet satisfy this rule for all retained constants, model choices, tolerances, and reductions."
+      ],
+      "nextAction": "Apply this rule atomically while reconstructing every source, derivation, and experiment behind the CPU Reference."
+    },
+    {
+      "semanticKey": "production-governance:reference-before-shader-proof-chain",
+      "statement": "The documented acceptance chain runs from an independent physical or accepted first-party oracle to the CPU Reference or CPU cache query and only then to a packed GPU query; a shader result can establish conformance to an identified Reference, not physical authority over it.",
+      "kind": "reference-and-shader-proof-order-policy",
+      "domain": "production-proof-hierarchy",
+      "owner": "production-reference-and-gpu-shader-rules",
+      "authorityRole": "reference-validation",
+      "supportStatus": "source-backed",
+      "implementationStatus": "not-applicable",
+      "decisionStatus": "accepted",
+      "verificationLayer": "static-code-observation",
+      "citations": [
+        {
+          "path": "agents/topics/apps/flat/algorithm32/requirements.md",
+          "lineStart": 18,
+          "lineEnd": 21,
+          "role": "requires-gpu-validation-against-reference"
+        },
+        {
+          "path": "agents/topics/apps/flat/algorithm32/production-reference-and-gpu-shader-rules.md",
+          "lineStart": 269,
+          "lineEnd": 291,
+          "role": "defines-layered-parity-order"
+        }
+      ],
+      "nonClaims": [
+        "The documented chain is a proof requirement, not evidence that any current shader satisfies it.",
+        "Agreement with a Reference does not prove that the Reference physics is correct."
+      ],
+      "blockers": [
+        "No shader-conformance fact may be accepted until it pins the exact Reference revision, inputs, and comparison boundary."
+      ],
+      "nextAction": "Use the CPU Reference as the sole implementation oracle and catalog shader work only as downstream conformance."
+    },
+    {
+      "semanticKey": "production-governance:aggregate-spec-count-is-not-physics-proof",
+      "statement": "The production rules explicitly state that an aggregate passing spec count does not establish physical CPU parity or GPU parity; a completion claim must name the exact verification layer executed.",
+      "kind": "validation-claim-boundary-policy",
+      "domain": "production-reference-validation",
+      "owner": "production-reference-and-gpu-shader-rules",
+      "authorityRole": "reference-validation",
+      "supportStatus": "source-backed",
+      "implementationStatus": "not-applicable",
+      "decisionStatus": "accepted",
+      "verificationLayer": "static-code-observation",
+      "citations": [
+        {
+          "path": "agents/topics/apps/flat/algorithm32/production-reference-and-gpu-shader-rules.md",
+          "lineStart": 348,
+          "lineEnd": 362,
+          "role": "defines-test-claim-discipline"
+        }
+      ],
+      "nonClaims": [
+        "A documented historical count is not a test execution in this catalog.",
+        "Contract, shader-source, and fake-renderer tests are not CPU-oracle or GPU physical parity."
+      ],
+      "blockers": [],
+      "nextAction": "Classify every test and experiment by the strongest layer it actually executes."
+    },
+    {
+      "semanticKey": "production-status:physical-visible-celestial-contribution-absent",
+      "statement": "The frozen current-status owner says physical visible Sun, Moon, and star contribution is absent from production; captured celestial meshes and diagnostic stars are presentation only.",
+      "kind": "missing-physics-implementation-status",
+      "domain": "visible-celestial-contribution",
+      "owner": "production-algorithm32-status",
+      "authorityRole": "physics-provenance-gap",
+      "supportStatus": "source-backed",
+      "implementationStatus": "absent",
+      "decisionStatus": "provisional",
+      "verificationLayer": "static-code-observation",
+      "citations": [
+        {
+          "path": "agents/topics/apps/flat/algorithm32/status.md",
+          "lineStart": 43,
+          "lineEnd": 48,
+          "role": "records-current-absence"
+        }
+      ],
+      "nonClaims": [
+        "Presentation meshes and authored RGB do not implement physical source radiometry."
+      ],
+      "blockers": [
+        "The selected physical source and contribution-cache contracts remain unimplemented and unaccepted."
+      ],
+      "nextAction": "Catalog and qualify the source physics before selecting any production implementation."
+    },
+    {
+      "semanticKey": "production-status:celestial-contribution-cache-unimplemented",
+      "statement": "The selected CelestialContributionCache has no production implementation, runtime result, or parity proof; its physical coordinate reductions, packing, capability limits, and minimal canonical source provider remain unresolved pending qualification.",
+      "kind": "selected-but-unimplemented-physics-extension",
+      "domain": "celestial-contribution-cache",
+      "owner": "production-algorithm32-status",
+      "authorityRole": "physics-provenance-gap",
+      "supportStatus": "source-backed",
+      "implementationStatus": "absent",
+      "decisionStatus": "provisional",
+      "verificationLayer": "static-code-observation",
+      "citations": [
+        {
+          "path": "agents/topics/apps/flat/algorithm32/status.md",
+          "lineStart": 68,
+          "lineEnd": 94,
+          "role": "records-unresolved-design-and-absence"
+        },
+        {
+          "path": "agents/topics/apps/flat/algorithm32/reconciliation-production-deltas.md",
+          "lineStart": 49,
+          "lineEnd": 65,
+          "role": "enumerates-current-production-gaps"
+        }
+      ],
+      "nonClaims": [
+        "A selected design is not accepted behavior or proof.",
+        "This fact does not approve any candidate coordinate reduction or GPU layout."
+      ],
+      "blockers": [
+        "Qualification Gate A and all later contract, builder, resource, evidence, runtime, and production gates remain open."
+      ],
+      "nextAction": "Catalog the dossier claims and experiment contracts before recreating the qualification lanes."
+    },
+    {
+      "semanticKey": "production-status:record-067-rolled-back-nonacceptance",
+      "statement": "Production status classifies record 067 as rolled-back historical execution evidence that does not describe the current tree and cannot accept the selected successor cache.",
+      "kind": "historical-evidence-nonacceptance",
+      "domain": "production-promotion-evidence",
+      "owner": "production-algorithm32-status",
+      "authorityRole": "reference-validation",
+      "supportStatus": "source-backed",
+      "implementationStatus": "rolled-back",
+      "decisionStatus": "rejected",
+      "verificationLayer": "static-code-observation",
+      "citations": [
+        {
+          "path": "agents/topics/apps/flat/algorithm32/status.md",
+          "lineStart": 8,
+          "lineEnd": 11,
+          "role": "records-rollback-status"
+        },
+        {
+          "path": "agents/topics/apps/flat/algorithm32/reconciliation-production-deltas.md",
+          "lineStart": 38,
+          "lineEnd": 39,
+          "role": "records-successor-nonacceptance"
+        }
+      ],
+      "experimentIds": [
+        "EXPERIMENT-A32-000024"
+      ],
+      "nonClaims": [
+        "Cataloging the record-067 experiment contract does not reaccept its result.",
+        "Record 067 must not be amended or rerun as the new proof."
+      ],
+      "blockers": [
+        "A fresh production proof record is required for any successor."
+      ],
+      "nextAction": "Use cataloged record 067 only as rejected evidence, then design a new proof after the physical contract is qualified."
+    },
+    {
+      "semanticKey": "reference:flat-geometry:scene-coordinate-convention",
+      "statement": "The frozen FlatEarthGeometry realizes a z-up observer-local scene frame in which atmosphere altitude is position.z in meters and the forward direction is negative y.",
+      "kind": "cpu-reference-geometry-realization",
+      "domain": "flat-atmosphere-geometry",
+      "owner": "production-flat-earth-geometry",
+      "authorityRole": "reference-realization",
+      "structuredValue": {
+        "upAxis": "+z",
+        "forwardAxis": "-y",
+        "altitudeExpression": "position.z",
+        "altitudeUnits": "meters"
+      },
+      "supportStatus": "source-backed",
+      "implementationStatus": "implemented",
+      "decisionStatus": "provisional",
+      "verificationLayer": "contract-unit",
+      "citations": [
+        {
+          "path": "shared/algorithm32/production/geometries/FlatEarthGeometry.js",
+          "lineStart": 13,
+          "lineEnd": 17,
+          "role": "defines-frame"
+        },
+        {
+          "path": "shared/algorithm32/production/geometries/FlatEarthGeometry.js",
+          "lineStart": 209,
+          "lineEnd": 231,
+          "role": "resolves-coordinate"
+        },
+        {
+          "path": "shared/algorithm32/production/geometries/_tests/FlatEarthGeometry.spec.js",
+          "lineStart": 6,
+          "lineEnd": 28,
+          "role": "asserts-selected-convention"
+        }
+      ],
+      "nonClaims": [
+        "The test establishes the chosen local convention, not physical authority for a flat atmosphere."
+      ],
+      "blockers": [],
+      "nextAction": "Retain as Reference coordinate convention and keep it separate from physical atmosphere-domain assumptions."
+    },
+    {
+      "semanticKey": "reference:flat-geometry:view-and-source-path-boundaries",
+      "statement": "The frozen FlatEarthGeometry ends a view or source path at the nearest applicable ground, top-atmosphere, observer-dome, request, or source cap; a forward ground hit before the selected source boundary produces a blocked empty source path.",
+      "kind": "cpu-reference-geometry-realization",
+      "domain": "flat-atmosphere-path-boundaries",
+      "owner": "production-flat-earth-geometry",
+      "authorityRole": "reference-realization",
+      "supportStatus": "source-backed",
+      "implementationStatus": "implemented",
+      "decisionStatus": "provisional",
+      "verificationLayer": "contract-unit",
+      "citations": [
+        {
+          "path": "shared/algorithm32/production/geometries/FlatEarthGeometry.js",
+          "lineStart": 161,
+          "lineEnd": 198,
+          "role": "implements-flat-boundary-intersections"
+        },
+        {
+          "path": "shared/algorithm32/production/geometries/FlatEarthGeometry.js",
+          "lineStart": 240,
+          "lineEnd": 320,
+          "role": "selects-view-and-source-path-limits"
+        },
+        {
+          "path": "shared/algorithm32/production/geometries/_tests/FlatEarthGeometry.spec.js",
+          "lineStart": 44,
+          "lineEnd": 95,
+          "role": "asserts-toy-boundary-cases"
+        }
+      ],
+      "nonClaims": [
+        "Toy arithmetic tests do not establish that the chosen flat-domain caps are physically adequate."
+      ],
+      "blockers": [
+        "The observer-dome and finite flat-domain policies need source or experimentally bounded authority."
+      ],
+      "nextAction": "Recreate boundary experiments before accepting the flat path domain."
+    },
+    {
+      "semanticKey": "reference:flat-geometry:observer-dome-clips-integration",
+      "statement": "The frozen flat Reference can clip atmosphere integration with an observer-centered spherical dome derived from observer altitude, apex altitude, and maximum view extent.",
+      "kind": "cpu-reference-domain-approximation",
+      "domain": "flat-atmosphere-observer-dome",
+      "owner": "production-flat-earth-geometry",
+      "authorityRole": "physics-provenance-gap",
+      "supportStatus": "unsourced",
+      "implementationStatus": "implemented",
+      "decisionStatus": "provisional",
+      "verificationLayer": "contract-unit",
+      "citations": [
+        {
+          "path": "shared/algorithm32/production/geometries/FlatEarthGeometry.js",
+          "lineStart": 717,
+          "lineEnd": 752,
+          "role": "applies-observer-dome-intersection"
+        },
+        {
+          "path": "shared/algorithm32/production/geometries/FlatEarthGeometry.js",
+          "lineStart": 1483,
+          "lineEnd": 1529,
+          "role": "constructs-dome"
+        },
+        {
+          "path": "shared/algorithm32/production/geometries/_tests/FlatEarthGeometry.spec.js",
+          "lineStart": 238,
+          "lineEnd": 251,
+          "role": "asserts-one-constructed-example"
+        }
+      ],
+      "nonClaims": [
+        "The construction test does not establish the dome as a physical direct-celestial boundary or bound its transport error."
+      ],
+      "blockers": [
+        "Current design explicitly leaves the observer-dome interpretation unresolved."
+      ],
+      "nextAction": "Catalog the original experimental rationale and rederive view-ray and direct-source boundary errors separately."
+    },
+    {
+      "semanticKey": "reference:spherical-geometry:ray-sphere-path-boundaries",
+      "statement": "The frozen SphericalEarthGeometry computes altitude as radial distance minus ground radius and uses exact ray-sphere intersections to end atmosphere paths at the nearest ground or top-atmosphere boundary; a ground hit blocks a source path.",
+      "kind": "cpu-reference-geometry-realization",
+      "domain": "spherical-atmosphere-geometry",
+      "owner": "production-spherical-earth-geometry",
+      "structuredValue": {
+        "expression": "altitude = length(position) - groundRadius; discriminant(R) = r^2 * (mu^2 - 1) + R^2; topDistance = max(0, -r * mu + sqrt(max(0, discriminant(topRadius)))); groundDistance = -r * mu - sqrt(discriminant(groundRadius)) when mu < 0 and the result is positive; pathEnd = the nearer positive ground or top distance",
+        "namedInputs": ["position", "unit ray direction", "groundRadius", "topRadius"],
+        "output": {
+          "altitude": "meters",
+          "pathBoundaryDistance": "meters"
+        },
+        "dimensionalContract": "Radius, altitude, and ray-boundary distance are lengths in meters; mu and the normalized ray direction are dimensionless.",
+        "domainOfApplicability": "SphericalEarthGeometry with the sphere center at the model-space origin and a normalized ray direction."
+      },
+      "authorityRole": "reference-realization",
+      "supportStatus": "source-backed",
+      "implementationStatus": "implemented",
+      "decisionStatus": "provisional",
+      "verificationLayer": "contract-unit",
+      "citations": [
+        {
+          "path": "shared/algorithm32/production/geometries/SphericalEarthGeometry.js",
+          "lineStart": 149,
+          "lineEnd": 256,
+          "role": "resolves-altitude-view-and-source-paths"
+        },
+        {
+          "path": "shared/algorithm32/production/geometries/SphericalEarthGeometry.js",
+          "lineStart": 654,
+          "lineEnd": 743,
+          "role": "implements-ray-sphere-intersections"
+        },
+        {
+          "path": "shared/algorithm32/production/geometries/_tests/SphericalEarthGeometry.spec.js",
+          "lineStart": 302,
+          "lineEnd": 370,
+          "role": "asserts-toy-radii-and-path-cases"
+        }
+      ],
+      "nonClaims": [
+        "Euclidean intersection arithmetic does not source the spherical homogeneous-atmosphere model or its physical radii."
+      ],
+      "blockers": [
+        "The physical model assumptions and canonical radii need independent provenance."
+      ],
+      "nextAction": "Retain the exact geometry realization while sourcing model assumptions and constants separately."
+    },
+    {
+      "semanticKey": "reference:distant-source:angular-radius-has-no-cpu-transport-effect",
+      "statement": "The frozen DistantSunLightSource copies each configured solarIrradiance scalar into a packet field named incidentRadiance and always samples one direction toward the source; its angularRadius metadata does not affect CPU Reference transport.",
+      "kind": "cpu-reference-light-source-realization",
+      "domain": "distant-directional-source",
+      "owner": "production-distant-sun-light-source",
+      "authorityRole": "physics-provenance-gap",
+      "supportStatus": "unsourced",
+      "implementationStatus": "implemented",
+      "decisionStatus": "provisional",
+      "verificationLayer": "contract-unit",
+      "citations": [
+        {
+          "path": "shared/algorithm32/production/light-sources/DistantSunLightSource.js",
+          "lineStart": 142,
+          "lineEnd": 153,
+          "role": "constructs-direct-light-packet"
+        },
+        {
+          "path": "shared/algorithm32/production/light-sources/DistantSunLightSource.js",
+          "lineStart": 349,
+          "lineEnd": 354,
+          "role": "samples-single-source-direction"
+        },
+        {
+          "path": "shared/algorithm32/production/light-sources/_tests/DistantSunLightSource.spec.js",
+          "lineStart": 74,
+          "lineEnd": 90,
+          "role": "asserts-field-mapping"
+        }
+      ],
+      "relatedFactIds": [
+        "FACT-A32-000023"
+      ],
+      "nonClaims": [
+        "The field-name mapping does not establish a valid irradiance-to-radiance or delta-direction convention.",
+        "The unit test repeats the implementation and is not independent physical validation."
+      ],
+      "blockers": [
+        "The angular measure and units of the direct-light packet remain unresolved."
+      ],
+      "nextAction": "Define and source the directional-delta measure before accepting the distant-source Reference input."
+    },
+    {
+      "semanticKey": "reference:local-source:center-directed-inverse-square-realization",
+      "statement": "The frozen LocalSunLightSource aims every direct-light ray at the source center and, when falloff is enabled, multiplies each configured solarIrradiance scalar by calibrationScale times the square of referenceDistance divided by max(sourceRadius, centerDistance).",
+      "kind": "cpu-reference-light-source-realization",
+      "domain": "finite-local-source",
+      "owner": "production-local-sun-light-source",
+      "authorityRole": "physics-provenance-gap",
+      "structuredValue": {
+        "expression": "solarIrradiance[channel] * calibrationScale * (referenceDistance / max(sourceRadius, centerDistance))^2",
+        "directionTarget": "source-center"
+      },
+      "supportStatus": "unsourced",
+      "implementationStatus": "implemented",
+      "decisionStatus": "provisional",
+      "verificationLayer": "contract-unit",
+      "citations": [
+        {
+          "path": "shared/algorithm32/production/light-sources/LocalSunLightSource.js",
+          "lineStart": 142,
+          "lineEnd": 182,
+          "role": "implements-direct-packet-and-falloff"
+        },
+        {
+          "path": "shared/algorithm32/production/light-sources/LocalSunLightSource.js",
+          "lineStart": 458,
+          "lineEnd": 465,
+          "role": "resolves-center-distance-scale"
+        },
+        {
+          "path": "shared/algorithm32/production/light-sources/_tests/LocalSunLightSource.spec.js",
+          "lineStart": 46,
+          "lineEnd": 110,
+          "role": "asserts-local-arithmetic"
+        }
+      ],
+      "nonClaims": [
+        "The implementation does not integrate a finite disk or source solid angle.",
+        "The arithmetic tests do not source calibration scale, radius clamping, units, or center-versus-surface path policy."
+      ],
+      "blockers": [
+        "The source measure, calibration scalar, radius clamp, and center-directed approximation lack precise authority."
+      ],
+      "nextAction": "Reconstruct the calibration experiment and compare the point approximation against a source-backed finite-source model."
+    },
+    {
+      "semanticKey": "reference:incident-cache:direction-sequences-and-equal-sphere-weights",
+      "statement": "The frozen incident caches use two deterministic full-sphere direction sequences: the local sequence is a half-offset Fibonacci sphere and the distant sequence uses a source-oriented centered-index variant; cache samplers assign every direction equal solid-angle weight 4 pi divided by direction count.",
+      "kind": "cpu-reference-quadrature-realization",
+      "domain": "incident-radiance-direction-quadrature",
+      "owner": "production-incident-radiance-directions",
+      "structuredValue": {
+        "expression": "local: k = i + 0.5, z = 1 - 2k/N, rho = sqrt(max(0, 1 - z^2)), phi = pi * (3 - sqrt(5)) * k, d = (rho*cos(phi), rho*sin(phi), z); distant: k = i - N/2, z = 2k/N, latitude = asin(z), longitude = 2*pi*k/goldenRatio, then rotate and normalize the local direction into the source-oriented basis; angularWeight = 4*pi/N",
+        "namedInputs": ["directionIndex i", "directionCount N", "sourceAxis for the distant sequence"],
+        "output": {
+          "direction": "dimensionless unit vector",
+          "angularWeight": "steradians"
+        },
+        "dimensionalContract": "Direction coordinates are dimensionless and each equal quadrature weight is a solid angle in steradians.",
+        "domainOfApplicability": "Integer 0 <= i < N with positive integer N; the distant variant additionally requires a unit source axis."
+      },
+      "authorityRole": "physics-provenance-gap",
+      "supportStatus": "unsourced",
+      "implementationStatus": "implemented",
+      "decisionStatus": "provisional",
+      "verificationLayer": "static-code-observation",
+      "citations": [
+        {
+          "path": "shared/algorithm32/production/light-sources/IncidentRadianceDirections.js",
+          "lineStart": 10,
+          "lineEnd": 55,
+          "role": "implements-both-direction-sequences"
+        },
+        {
+          "path": "shared/algorithm32/production/light-sources/DistantSunIncidentRadianceCache.js",
+          "lineStart": 286,
+          "lineEnd": 303,
+          "role": "applies-equal-direction-weight"
+        },
+        {
+          "path": "shared/algorithm32/production/light-sources/LocalSunIncidentRadianceCache.js",
+          "lineStart": 279,
+          "lineEnd": 296,
+          "role": "applies-equal-direction-weight"
+        }
+      ],
+      "relatedFactIds": [
+        "FACT-A32-000026"
+      ],
+      "nonClaims": [
+        "The 4 pi over N sum is an analytic normalization only; it does not establish isotropy, convergence, or suitability for either radiance field.",
+        "Current cache tests do not independently validate the direction sets."
+      ],
+      "blockers": [
+        "No precise external source, isotropy bound, or target-Reference convergence experiment is registered for either sequence."
+      ],
+      "nextAction": "Recreate normalization, rotational-covariance, angular-function, and convergence experiments for both sequences."
+    },
+    {
+      "semanticKey": "reference:incident-cache:stores-one-extra-scattering-order",
+      "statement": "Each frozen incident cache builds its stored field by calling SpectralCalculator.computeRadiance without incident sampling, so the stored value is direct-source single-scattered radiance; integrating that field in the main Reference adds one second-order term rather than a recursive multiple-scattering closure.",
+      "kind": "cpu-reference-scattering-order-realization",
+      "domain": "incident-radiance-cache",
+      "owner": "production-incident-radiance-caches",
+      "authorityRole": "physics-provenance-gap",
+      "supportStatus": "source-backed",
+      "implementationStatus": "implemented",
+      "decisionStatus": "provisional",
+      "verificationLayer": "static-code-observation",
+      "citations": [
+        {
+          "path": "shared/algorithm32/production/light-sources/DistantSunIncidentRadianceCache.js",
+          "lineStart": 124,
+          "lineEnd": 148,
+          "role": "builds-distant-cache-without-incident-sampling"
+        },
+        {
+          "path": "shared/algorithm32/production/light-sources/LocalSunIncidentRadianceCache.js",
+          "lineStart": 119,
+          "lineEnd": 143,
+          "role": "builds-local-cache-without-incident-sampling"
+        },
+        {
+          "path": "shared/algorithm32/production/implementation/SpectralCalculator.js",
+          "lineStart": 459,
+          "lineEnd": 486,
+          "role": "uses-zero-incident-contribution-when-sampling-is-absent"
+        }
+      ],
+      "nonClaims": [
+        "Calling the cache L2 or second-order does not establish that truncation at that order is physically sufficient.",
+        "Stub-based cache tests validate wiring rather than the scattering-order result."
+      ],
+      "blockers": [
+        "No source or convergence experiment bounds the omitted higher orders for the claimed production domains."
+      ],
+      "nextAction": "Recreate order-by-order convergence against the target Reference model and claimed atmosphere/source cases."
+    },
+    {
+      "semanticKey": "reference:distant-incident-cache:spatial-reduction-omits-position-and-orientation",
+      "statement": "The frozen distant incident cache indexes only altitude bin and incoming direction and builds every altitude bin on one observer-up radial line, omitting runtime planet position, local radial frame, and solar-zenith state from the cached field.",
+      "kind": "unproven-cache-coordinate-reduction",
+      "domain": "distant-spherical-incident-cache",
+      "owner": "production-distant-sun-incident-radiance-cache",
+      "authorityRole": "physics-provenance-gap",
+      "supportStatus": "unsourced",
+      "implementationStatus": "implemented",
+      "decisionStatus": "provisional",
+      "verificationLayer": "contract-unit",
+      "citations": [
+        {
+          "path": "shared/algorithm32/production/geometries/SphericalEarthGeometry.js",
+          "lineStart": 314,
+          "lineEnd": 362,
+          "role": "maps-runtime-position-to-altitude-bin-only"
+        },
+        {
+          "path": "shared/algorithm32/production/geometries/SphericalEarthGeometry.js",
+          "lineStart": 635,
+          "lineEnd": 643,
+          "role": "constructs-one-radial-cache-build-origin"
+        },
+        {
+          "path": "shared/algorithm32/production/light-sources/DistantSunIncidentRadianceCache.js",
+          "lineStart": 91,
+          "lineEnd": 115,
+          "role": "declares-reduced-cache-domain"
+        }
+      ],
+      "nonClaims": [
+        "Spherical atmosphere symmetry alone does not make a fixed distant-source radiance field invariant to planet position and local horizon orientation.",
+        "One toy radial test does not establish a global error bound."
+      ],
+      "blockers": [
+        "No independent symmetry derivation or measured error bound justifies reusing the field at all planet positions."
+      ],
+      "nextAction": "Recreate a latitude, solar-zenith, local-frame, horizon, and altitude matrix before accepting any reduced spherical cache domain."
+    },
+    {
+      "semanticKey": "reference:local-incident-cache:spatial-reduction-omits-azimuthal-covariance",
+      "statement": "The frozen local incident cache indexes z, rho, and a fixed-frame direction but not position azimuth; it builds at one source-to-observer radial axis and does not rotate the sampled Fibonacci directions for runtime azimuth.",
+      "kind": "unproven-cache-coordinate-reduction",
+      "domain": "local-flat-incident-cache",
+      "owner": "production-local-sun-incident-radiance-cache",
+      "authorityRole": "physics-provenance-gap",
+      "supportStatus": "unsourced",
+      "implementationStatus": "implemented",
+      "decisionStatus": "provisional",
+      "verificationLayer": "contract-unit",
+      "citations": [
+        {
+          "path": "shared/algorithm32/production/geometries/FlatEarthGeometry.js",
+          "lineStart": 367,
+          "lineEnd": 397,
+          "role": "maps-runtime-position-to-z-rho-with-fixed-direction"
+        },
+        {
+          "path": "shared/algorithm32/production/geometries/FlatEarthGeometry.js",
+          "lineStart": 634,
+          "lineEnd": 659,
+          "role": "builds-on-one-source-observer-radial-axis"
+        },
+        {
+          "path": "shared/algorithm32/production/light-sources/LocalSunIncidentRadianceCache.js",
+          "lineStart": 85,
+          "lineEnd": 110,
+          "role": "declares-reduced-cache-domain"
+        }
+      ],
+      "nonClaims": [
+        "Axial symmetry would require a proved rotation/covariance mapping; simply omitting azimuth does not establish it.",
+        "Current tests do not rotate an equivalent query around the source and compare the transformed angular field."
+      ],
+      "blockers": [
+        "No rotational-covariance proof or experiment supports the fixed-global-frame lookup."
+      ],
+      "nextAction": "Recreate azimuth-rotation and direction-frame covariance tests across the target local Reference domain."
+    },
+    {
+      "semanticKey": "reference:incident-cache:descriptor-compatibility-is-not-enforced",
+      "statement": "Although the incident-sampling type describes its cache descriptor as compatibility metadata, the frozen Reference validates only descriptor presence and a callable sampler, and SpectralCalculator ignores the descriptor while consuming samples.",
+      "kind": "reference-compatibility-gap",
+      "domain": "incident-radiance-sampling",
+      "owner": "production-reference",
+      "authorityRole": "physics-provenance-gap",
+      "supportStatus": "source-backed",
+      "implementationStatus": "partial",
+      "decisionStatus": "provisional",
+      "verificationLayer": "contract-unit",
+      "citations": [
+        {
+          "path": "shared/algorithm32/production/types/types.d.ts",
+          "lineStart": 242,
+          "lineEnd": 256,
+          "role": "declares-descriptor-compatibility-role"
+        },
+        {
+          "path": "shared/algorithm32/production/implementation/Reference.js",
+          "lineStart": 119,
+          "lineEnd": 136,
+          "role": "validates-only-shape"
+        },
+        {
+          "path": "shared/algorithm32/production/implementation/SpectralCalculator.js",
+          "lineStart": 466,
+          "lineEnd": 486,
+          "role": "consumes-sampler-without-descriptor-check"
+        }
+      ],
+      "nonClaims": [
+        "A descriptor existing on a packet does not establish source, geometry, atmosphere, spectral-basis, dimensions, or revision compatibility."
+      ],
+      "blockers": [
+        "The CPU oracle can accept an arbitrary operation-ready packet without verifying it belongs to the configured model."
+      ],
+      "nextAction": "Define and test exact Reference-side compatibility invariants before accepting cache-backed oracle results."
+    },
+    {
+      "semanticKey": "reference:incident-cache:request-source-interval-control-can-be-ignored",
+      "statement": "The generic cache-build helper forwards both pathIntervalCount and sourceTransmittanceIntervalCount, but the concrete distant and local cache builders consume only pathIntervalCount; source-path sampling remains fixed in the calculator created earlier.",
+      "kind": "reference-execution-control-gap",
+      "domain": "incident-radiance-cache-building",
+      "owner": "production-incident-radiance-cache-builder",
+      "authorityRole": "physics-provenance-gap",
+      "supportStatus": "source-backed",
+      "implementationStatus": "partial",
+      "decisionStatus": "provisional",
+      "verificationLayer": "static-code-observation",
+      "citations": [
+        {
+          "path": "shared/algorithm32/production/implementation/buildIncidentRadianceCache.js",
+          "lineStart": 32,
+          "lineEnd": 41,
+          "role": "forwards-both-request-controls"
+        },
+        {
+          "path": "shared/algorithm32/production/light-sources/DistantSunIncidentRadianceCache.js",
+          "lineStart": 124,
+          "lineEnd": 145,
+          "role": "destructures-only-path-control"
+        },
+        {
+          "path": "shared/algorithm32/production/light-sources/LocalSunIncidentRadianceCache.js",
+          "lineStart": 119,
+          "lineEnd": 140,
+          "role": "destructures-only-path-control"
+        }
+      ],
+      "nonClaims": [
+        "Automatic shader setup may happen to construct both layers from the same execution object; that does not make the standalone request field effective."
+      ],
+      "blockers": [
+        "The helper spec uses a spy cache and cannot detect that a concrete builder ignores the request-level source control."
+      ],
+      "nextAction": "Choose one canonical control owner, remove the misleading field or make it effective, and add a real-cache sensitivity test."
+    },
+    {
+      "semanticKey": "reference:spectral-basis:transport-alignment-is-index-only",
+      "statement": "The frozen SpectralModel retains ordered wavelengths and exposes an alignment helper, but active Algorithm32 transport obtains only channel count and pairs light-source and atmosphere vectors by array index and length; production does not call SpectralModel.isBasisAligned before Reference evaluation.",
+      "kind": "reference-spectral-identity-gap",
+      "domain": "spectral-basis-alignment",
+      "owner": "production-spectral-model",
+      "authorityRole": "physics-provenance-gap",
+      "supportStatus": "source-backed",
+      "implementationStatus": "partial",
+      "decisionStatus": "provisional",
+      "verificationLayer": "contract-unit",
+      "citations": [
+        {
+          "path": "shared/algorithm32/production/models/SpectralModel.js",
+          "lineStart": 132,
+          "lineEnd": 181,
+          "role": "stores-wavelengths-and-exposes-unused-alignment-helper"
+        },
+        {
+          "path": "shared/algorithm32/production/implementation/SpectralCalculator.js",
+          "lineStart": 84,
+          "lineEnd": 87,
+          "role": "uses-channel-count"
+        },
+        {
+          "path": "shared/algorithm32/production/Algorithm32.js",
+          "lineStart": 268,
+          "lineEnd": 306,
+          "role": "delegates-evaluation-without-basis-alignment"
+        }
+      ],
+      "nonClaims": [
+        "Equal vector lengths do not prove equal wavelength samples, ordering, bin widths, or density convention.",
+        "The isolated SpectralModel helper spec does not establish that production calls the helper."
+      ],
+      "blockers": [
+        "No active Reference boundary proves source and atmosphere spectra share the configured basis identity."
+      ],
+      "nextAction": "Make basis compatibility an enforced operation-boundary invariant and add mismatched-wavelength negative tests."
+    },
+    {
+      "semanticKey": "reference:spectral-basis:bin-width-and-radiometric-measure-are-lost",
+      "statement": "Canonical channel records contain a 31.333333333333332 nm bin width, but the active SpectralBasis retains only center wavelengths and SpectralValue is an array of bare numbers whose source type permits irradiance or radiance input; density-versus-bin-integral and radiometric units therefore do not survive to Reference transport.",
+      "kind": "reference-dimensional-contract-gap",
+      "domain": "spectral-radiometry",
+      "owner": "production-spectral-types",
+      "authorityRole": "physics-provenance-gap",
+      "structuredValue": {
+        "canonicalBinWidth": 31.333333333333332,
+        "canonicalBinWidthUnits": "nanometers",
+        "activeTransportMeasure": "ambiguous"
+      },
+      "supportStatus": "contradicted",
+      "implementationStatus": "partial",
+      "decisionStatus": "provisional",
+      "verificationLayer": "static-code-observation",
+      "citations": [
+        {
+          "path": "shared/algorithm32/production/constants/Algorithm32CanonicalData.js",
+          "lineStart": 52,
+          "lineEnd": 54,
+          "role": "defines-canonical-bin-width"
+        },
+        {
+          "path": "shared/algorithm32/production/models/SpectralModel.js",
+          "lineStart": 155,
+          "lineEnd": 165,
+          "role": "retains-centers-without-bin-width"
+        },
+        {
+          "path": "shared/algorithm32/production/types/types.d.ts",
+          "lineStart": 100,
+          "lineEnd": 123,
+          "role": "defines-bare-spectral-vector"
+        },
+        {
+          "path": "shared/algorithm32/production/light-sources/types.d.ts",
+          "lineStart": 4,
+          "lineEnd": 23,
+          "role": "permits-irradiance-or-radiance-input"
+        }
+      ],
+      "contradictionIds": [
+        "CONTRADICTION-A32-000008"
+      ],
+      "relatedFactIds": [
+        "FACT-A32-000023"
+      ],
+      "nonClaims": [
+        "A matching array length does not resolve physical units or angular measure.",
+        "This fact does not select density samples or integrated bins; it records that the current contract cannot distinguish them."
+      ],
+      "blockers": [
+        "The direct-source packet, transport equations, and spectral basis lack one consistent dimensional convention."
+      ],
+      "nextAction": "Define unit-bearing spectral density or bin-integral packets and rederive every conversion into Reference transport."
+    },
+    {
+      "semanticKey": "reference:surface-boundary-radiance-term-is-absent",
+      "statement": "The frozen Algorithm32 facade and SharedModel have no physical surface owner, and Reference.evaluate returns atmosphere path radiance and transmittance after geometry clipping without adding a transmitted surface-radiance boundary term.",
+      "kind": "missing-reference-physics-term",
+      "domain": "surface-boundary-transport",
+      "owner": "production-reference",
+      "authorityRole": "physics-provenance-gap",
+      "supportStatus": "source-backed",
+      "implementationStatus": "absent",
+      "decisionStatus": "provisional",
+      "verificationLayer": "static-code-observation",
+      "citations": [
+        {
+          "path": "shared/algorithm32/production/Algorithm32.js",
+          "lineStart": 197,
+          "lineEnd": 207,
+          "role": "constructs-model-without-surface-owner"
+        },
+        {
+          "path": "shared/algorithm32/production/models/SharedModel.js",
+          "lineStart": 13,
+          "lineEnd": 23,
+          "role": "defines-configured-model-owners"
+        },
+        {
+          "path": "shared/algorithm32/production/implementation/Reference.js",
+          "lineStart": 149,
+          "lineEnd": 191,
+          "role": "returns-atmosphere-only-result"
+        },
+        {
+          "path": "shared/algorithm32/production/_tests/fixtures.spec.js",
+          "lineStart": 149,
+          "lineEnd": 166,
+          "role": "validates-lambertian-fixture-envelope-only"
+        }
+      ],
+      "nonClaims": [
+        "Cataloged Lambertian fixture rows are assertions in a draft ledger; their envelope test does not execute a surface term.",
+        "Renderer endpoint composition is out of scope and does not fill the CPU Reference physics gap."
+      ],
+      "blockers": [
+        "Ground-hit Reference results implicitly omit transmitted physical surface radiance."
+      ],
+      "nextAction": "Decide the physical surface boundary contract, source it, implement it in the Reference, and add independent fixtures."
+    },
+    {
+      "semanticKey": "reference-validation:no-real-model-end-to-end-cpu-oracle-test",
+      "statement": "The frozen production tests do not run Algorithm32.evaluate end to end with CanonicalAtmosphere, a real geometry, a real source, and an optional real incident cache; facade, Reference, and cache tests use vacuum models, stubs, or isolated arithmetic.",
+      "kind": "missing-reference-validation-coverage",
+      "domain": "cpu-reference-validation",
+      "owner": "production-algorithm32-tests",
+      "authorityRole": "reference-validation",
+      "supportStatus": "source-backed",
+      "implementationStatus": "absent",
+      "decisionStatus": "provisional",
+      "verificationLayer": "contract-unit",
+      "citations": [
+        {
+          "path": "shared/algorithm32/production/_tests/Algorithm32.spec.js",
+          "lineStart": 33,
+          "lineEnd": 128,
+          "role": "uses-hand-built-vacuum-models"
+        },
+        {
+          "path": "shared/algorithm32/production/implementation/_tests/Reference.spec.js",
+          "lineStart": 84,
+          "lineEnd": 164,
+          "role": "stubs-calculator"
+        },
+        {
+          "path": "shared/algorithm32/production/implementation/_tests/SpectralCalculator.spec.js",
+          "lineStart": 43,
+          "lineEnd": 137,
+          "role": "tests-isolated-arithmetic"
+        },
+        {
+          "path": "shared/algorithm32/production/light-sources/_tests/DistantSunIncidentRadianceCache.spec.js",
+          "lineStart": 22,
+          "lineEnd": 55,
+          "role": "stubs-radiance-calculation"
+        }
+      ],
+      "nonClaims": [
+        "This is a static coverage audit, not a report that the source test lane was executed here.",
+        "Individual owner contract tests do not establish integrated Reference physics."
+      ],
+      "blockers": [
+        "No accepted selected-ray oracle fixture currently exercises the assembled real production owners."
+      ],
+      "nextAction": "Create source-backed selected-ray fixtures and an end-to-end CPU Reference lane before using it as the shader oracle."
+    },
+    {
+      "semanticKey": "reference-vs-shader:default-incident-cache-authority-mismatch",
+      "statement": "The frozen Algorithm32 facade constructs its default CPU Reference without incident-radiance sampling, while shader setup automatically builds and binds an incident-radiance cache; default facade evaluation is therefore not the same configured scattering path that the automatic shader setup is intended to execute.",
+      "kind": "reference-shader-oracle-mismatch",
+      "domain": "reference-shader-conformance-prerequisite",
+      "owner": "production-algorithm32-facade",
+      "authorityRole": "physics-provenance-gap",
+      "supportStatus": "contradicted",
+      "implementationStatus": "partial",
+      "decisionStatus": "provisional",
+      "verificationLayer": "static-code-observation",
+      "citations": [
+        {
+          "path": "shared/algorithm32/production/Algorithm32.js",
+          "lineStart": 197,
+          "lineEnd": 207,
+          "role": "constructs-reference-without-default-incident-sampling"
+        },
+        {
+          "path": "shared/algorithm32/production/implementation/ShaderBuilder.js",
+          "lineStart": 233,
+          "lineEnd": 245,
+          "role": "requires-and-prepares-incident-cache"
+        },
+        {
+          "path": "shared/algorithm32/production/implementation/ShaderBuilder.js",
+          "lineStart": 287,
+          "lineEnd": 318,
+          "role": "automatically-builds-cache-from-configured-model"
+        },
+        {
+          "path": "shared/algorithm32/production/implementation/Reference.js",
+          "lineStart": 119,
+          "lineEnd": 136,
+          "role": "supports-manual-default-or-request-sampler"
+        }
+      ],
+      "contradictionIds": [
+        "CONTRADICTION-A32-000007"
+      ],
+      "nonClaims": [
+        "This static mismatch does not prove what a GPU draw returns.",
+        "Renderer mechanics are outside the claim; the issue is that the proposed Reference oracle and shader model inputs differ."
+      ],
+      "blockers": [
+        "No conformance experiment can be interpreted until Reference and shader evaluate the same incident-radiance configuration."
+      ],
+      "nextAction": "Make the facade expose or build the exact Reference sampling state used by shader setup, then rerun pre-display parity."
+    },
+    {
+      "semanticKey": "production-consumer:physical-source-packet-imports-are-missing-and-incompatible",
+      "statement": "The frozen modified flat and flat32 consumer code imports physical spectral-density factories that do not exist in the production tree and passes spectralIrradianceDensity to DistantSunLightSource, whose constructor requires spectralChannels; those consumer paths cannot currently construct the documented production source packet.",
+      "kind": "missing-physical-source-contract-implementation",
+      "domain": "production-physical-source-packets",
+      "owner": "production-algorithm32-consumers",
+      "authorityRole": "physics-provenance-gap",
+      "supportStatus": "contradicted",
+      "implementationStatus": "absent",
+      "decisionStatus": "provisional",
+      "verificationLayer": "static-code-observation",
+      "citations": [
+        {
+          "path": "src/flat/shared/algorithm32-production-config.js",
+          "lineStart": 3,
+          "lineEnd": 23,
+          "role": "imports-missing-physical-packet-factories"
+        },
+        {
+          "path": "src/flat/shared/algorithm32-production-config.js",
+          "lineStart": 132,
+          "lineEnd": 139,
+          "role": "passes-spectral-density-field"
+        },
+        {
+          "path": "src/flat32/index.js",
+          "lineStart": 8,
+          "lineEnd": 28,
+          "role": "imports-missing-physical-packet-factories"
+        },
+        {
+          "path": "src/flat32/index.js",
+          "lineStart": 1057,
+          "lineEnd": 1064,
+          "role": "passes-spectral-density-field"
+        },
+        {
+          "path": "shared/algorithm32/production/light-sources/DistantSunLightSource.js",
+          "lineStart": 30,
+          "lineEnd": 40,
+          "role": "requires-spectral-channels-field"
+        }
+      ],
+      "contradictionIds": [
+        "CONTRADICTION-A32-000008"
+      ],
+      "nonClaims": [
+        "The missing files are not proof that the proposed spectral-density contract is physically correct.",
+        "This fact records frozen workspace consistency, not an executed build result."
+      ],
+      "blockers": [
+        "The intended unit-bearing physical source packet is absent and the active constructor contract is different."
+      ],
+      "nextAction": "Catalog the intended packet design and source data, then choose and implement one physically explicit constructor contract before porting either app."
+    },
+    {
+      "semanticKey": "reference:spherical-geometry:finite-source-limit-loses-to-any-ground-intersection",
+      "statement": "When a spherical source path has no explicit endDistanceMeters, the frozen Reference returns a ground-blocked path for any forward ground intersection before it applies sourcePathLimit.maxDistanceMeters; it therefore also blocks an inward finite source whose distance cap lies before the ground hit.",
+      "kind": "reference-path-boundary-ordering-defect",
+      "domain": "spherical-finite-source-path",
+      "owner": "production-spherical-earth-geometry",
+      "authorityRole": "physics-provenance-gap",
+      "supportStatus": "source-backed",
+      "implementationStatus": "partial",
+      "decisionStatus": "provisional",
+      "verificationLayer": "static-code-observation",
+      "citations": [
+        {
+          "path": "shared/algorithm32/production/geometries/SphericalEarthGeometry.js",
+          "lineStart": 212,
+          "lineEnd": 234,
+          "role": "checks-any-ground-hit-before-applying-source-cap"
+        },
+        {
+          "path": "shared/algorithm32/production/geometries/_tests/SphericalEarthGeometry.spec.js",
+          "lineStart": 352,
+          "lineEnd": 370,
+          "role": "tests-outward-cap-and-uncapped-inward-blocking-separately"
+        }
+      ],
+      "nonClaims": [
+        "The audited test does not cover an inward ray whose finite source lies closer than the ground.",
+        "This finding does not challenge ground blocking when the ground is the nearest physical boundary."
+      ],
+      "blockers": [
+        "The Reference does not compare the finite source distance with the ground-intersection distance before declaring the source path blocked."
+      ],
+      "nextAction": "Order the ground and finite-source boundaries by distance and add a selected-ray case with the source cap before ground."
+    },
+    {
+      "semanticKey": "reference:local-source:source-path-limit-is-center-distance-not-near-surface",
+      "statement": "The frozen LocalSunLightSource caps source-path extinction at the sample-to-source-center distance even though its direct-light falloff clamps at sourceRadius; for a finite source the Reference therefore integrates toward the center rather than stopping at the near source surface.",
+      "kind": "cpu-reference-finite-source-boundary-approximation",
+      "domain": "local-source-extinction-path",
+      "owner": "production-local-sun-light-source",
+      "authorityRole": "physics-provenance-gap",
+      "structuredValue": {
+        "implementedPathLimit": "centerDistanceMeters",
+        "candidateNearSurfaceLimit": "max(0, centerDistanceMeters - radiusMeters)"
+      },
+      "supportStatus": "unsourced",
+      "implementationStatus": "implemented",
+      "decisionStatus": "provisional",
+      "verificationLayer": "contract-unit",
+      "citations": [
+        {
+          "path": "shared/algorithm32/production/light-sources/LocalSunLightSource.js",
+          "lineStart": 142,
+          "lineEnd": 182,
+          "role": "uses-radius-only-for-direct-light-distance-clamp"
+        },
+        {
+          "path": "shared/algorithm32/production/light-sources/LocalSunLightSource.js",
+          "lineStart": 458,
+          "lineEnd": 465,
+          "role": "returns-center-distance-as-source-path-limit"
+        },
+        {
+          "path": "shared/algorithm32/production/implementation/SpectralCalculator.js",
+          "lineStart": 106,
+          "lineEnd": 129,
+          "role": "uses-source-path-limit-for-extinction-integration"
+        },
+        {
+          "path": "shared/algorithm32/production/light-sources/_tests/LocalSunLightSource.spec.js",
+          "lineStart": 98,
+          "lineEnd": 110,
+          "role": "asserts-center-distance-contract"
+        }
+      ],
+      "nonClaims": [
+        "The catalog does not yet select the correct surface, volume-emission, or participating-medium treatment for a finite source.",
+        "Radius-clamped inverse-square falloff does not justify integrating atmospheric extinction through the source interior."
+      ],
+      "blockers": [
+        "No source or retained experiment establishes center distance as the finite-source extinction boundary."
+      ],
+      "nextAction": "Define the finite-source radiative boundary and rederive the source-path limit independently before accepting this Reference behavior."
+    },
+    {
+      "semanticKey": "reference:flat-incident-cache:nearest-bin-access-policy",
+      "statement": "The frozen FlatEarthGeometry resolves local incident-cache access by independently searching every configured z and rho bin for minimum absolute distance; exact ties retain the earliest array entry, non-finite coordinates select index zero with a diagnostic, and no interpolation is performed.",
+      "kind": "cpu-reference-cache-lookup-realization",
+      "domain": "flat-local-incident-cache-access",
+      "owner": "production-flat-earth-geometry",
+      "authorityRole": "reference-realization",
+      "structuredValue": {
+        "zPolicy": "global-nearest-configured-bin",
+        "rhoPolicy": "global-nearest-configured-bin",
+        "tiePolicy": "earliest-array-entry",
+        "nonFinitePolicy": "index-zero-with-diagnostic",
+        "interpolation": "none"
+      },
+      "supportStatus": "source-backed",
+      "implementationStatus": "implemented",
+      "decisionStatus": "provisional",
+      "verificationLayer": "static-code-observation",
+      "citations": [
+        {
+          "path": "shared/algorithm32/production/geometries/FlatEarthGeometry.js",
+          "lineStart": 367,
+          "lineEnd": 396,
+          "role": "maps-source-relative-z-and-rho-to-cache-indices"
+        },
+        {
+          "path": "shared/algorithm32/production/geometries/FlatEarthGeometry.js",
+          "lineStart": 806,
+          "lineEnd": 837,
+          "role": "implements-global-nearest-search-and-diagnostics"
+        }
+      ],
+      "nonClaims": [
+        "The first and last entries are used for an out-of-range diagnostic, but an unsorted array is still searched globally and is not clamped to an endpoint.",
+        "Nearest-bin selection is implementation behavior, not evidence that its reconstruction error is physically acceptable."
+      ],
+      "blockers": [
+        "No source-backed error bound or reconstructed experiment establishes nearest-bin access as sufficient for the retained local-cache domains."
+      ],
+      "nextAction": "Pin ordered cache domains and compare nearest-bin Reference results with an independently evaluated interpolation or direct-transport oracle."
+    },
+    {
+      "semanticKey": "reference:incident-cache:ground-blocked-build-rays-store-zero-vector",
+      "statement": "During frozen distant and local incident-cache generation, a null geometry build ray is stored as an all-zero spectral vector for that coordinate; runtime sampling subsequently emits that zero vector with the ordinary directional quadrature weight.",
+      "kind": "cpu-reference-cache-ground-blocking-realization",
+      "domain": "incident-radiance-cache-generation",
+      "owner": "production-incident-radiance-caches",
+      "authorityRole": "reference-realization",
+      "supportStatus": "source-backed",
+      "implementationStatus": "implemented",
+      "decisionStatus": "provisional",
+      "verificationLayer": "contract-unit",
+      "citations": [
+        {
+          "path": "shared/algorithm32/production/light-sources/DistantSunIncidentRadianceCache.js",
+          "lineStart": 124,
+          "lineEnd": 148,
+          "role": "stores-zero-vector-for-null-distant-build-ray"
+        },
+        {
+          "path": "shared/algorithm32/production/light-sources/DistantSunIncidentRadianceCache.js",
+          "lineStart": 305,
+          "lineEnd": 306,
+          "role": "constructs-distant-zero-vector"
+        },
+        {
+          "path": "shared/algorithm32/production/light-sources/LocalSunIncidentRadianceCache.js",
+          "lineStart": 119,
+          "lineEnd": 143,
+          "role": "stores-zero-vector-for-null-local-build-ray"
+        },
+        {
+          "path": "shared/algorithm32/production/light-sources/LocalSunIncidentRadianceCache.js",
+          "lineStart": 299,
+          "lineEnd": 300,
+          "role": "constructs-local-zero-vector"
+        },
+        {
+          "path": "shared/algorithm32/production/light-sources/_tests/DistantSunIncidentRadianceCache.spec.js",
+          "lineStart": 113,
+          "lineEnd": 127,
+          "role": "asserts-distant-ground-blocked-zero-storage"
+        }
+      ],
+      "nonClaims": [
+        "A stored zero does not preserve whether it arose from ground blocking or from a computed zero-radiance path.",
+        "The audited local-cache spec does not directly assert its identical null-ray branch."
+      ],
+      "blockers": [],
+      "nextAction": "Retain the zero-contribution Reference rule only with selected blocked-ray fixtures and explicit blocked-value provenance where diagnostics require it."
+    },
+    {
+      "semanticKey": "reference:incident-cache:missing-value-fallback-diverges-by-cache-kind",
+      "statement": "The frozen distant cache throws for invalid coordinates or missing generated values, while the local cache records a diagnostic and returns an empty sample array; SpectralCalculator converts that local empty result into zero incident in-scattering, contrary to the production requirement that missing or invalid cache samples fail loudly.",
+      "kind": "cpu-reference-cache-failure-policy-contradiction",
+      "domain": "incident-radiance-cache-runtime-access",
+      "owner": "production-incident-radiance-caches",
+      "authorityRole": "physics-provenance-gap",
+      "supportStatus": "contradicted",
+      "implementationStatus": "partial",
+      "decisionStatus": "provisional",
+      "verificationLayer": "contract-unit",
+      "citations": [
+        {
+          "path": "agents/topics/apps/flat/algorithm32/requirements.md",
+          "lineStart": 680,
+          "lineEnd": 681,
+          "role": "requires-loud-cache-sampling-failure"
+        },
+        {
+          "path": "shared/algorithm32/production/light-sources/DistantSunIncidentRadianceCache.js",
+          "lineStart": 155,
+          "lineEnd": 182,
+          "role": "throws-for-invalid-or-missing-distant-cache-access"
+        },
+        {
+          "path": "shared/algorithm32/production/light-sources/LocalSunIncidentRadianceCache.js",
+          "lineStart": 150,
+          "lineEnd": 187,
+          "role": "returns-empty-array-for-invalid-or-missing-local-cache-access"
+        },
+        {
+          "path": "shared/algorithm32/production/implementation/SpectralCalculator.js",
+          "lineStart": 459,
+          "lineEnd": 486,
+          "role": "turns-empty-samples-into-zero-contribution"
+        },
+        {
+          "path": "shared/algorithm32/production/light-sources/_tests/LocalSunIncidentRadianceCache.spec.js",
+          "lineStart": 104,
+          "lineEnd": 118,
+          "role": "asserts-tolerant-local-fallback"
+        }
+      ],
+      "contradictionIds": [
+        "CONTRADICTION-A32-000009"
+      ],
+      "nonClaims": [
+        "A diagnostic retained in memory is not a loud failure at the CPU Reference operation boundary.",
+        "The zero fallback can conceal stale or incomplete cache state as a physically dark contribution."
+      ],
+      "blockers": [
+        "The two cache kinds do not implement one authoritative failure contract, and the local behavior violates the current production requirement."
+      ],
+      "nextAction": "Make local invalid and missing access fail at the Reference boundary, align both cache kinds, and add negative end-to-end tests."
+    },
+    {
+      "semanticKey": "reference:distant-cache:altitude-bin-coordinate-mapping",
+      "statement": "The frozen spherical Reference maps runtime distant-cache access by clamping altitude to cacheBoundaryAltitudeMeters, normalizing by atmosphere height, and flooring into a cache bin; cache generation samples bin zero at the clamped boundary altitude and every later bin at its uniform altitude-bin center.",
+      "kind": "cpu-reference-cache-coordinate-realization",
+      "domain": "distant-incident-cache-altitude-domain",
+      "owner": "production-spherical-earth-geometry-and-distant-cache",
+      "authorityRole": "reference-realization",
+      "structuredValue": {
+        "runtimeIndex": "floor(clamp(max(altitude, boundaryAltitude) / atmosphereHeight, 0, 0.999999999) * altitudeBinCount)",
+        "buildBinZeroAltitude": "clamp(boundaryAltitude, 0, atmosphereHeight)",
+        "buildHigherBinAltitude": "((binIndex + 0.5) / altitudeBinCount) * atmosphereHeight"
+      },
+      "supportStatus": "source-backed",
+      "implementationStatus": "implemented",
+      "decisionStatus": "provisional",
+      "verificationLayer": "contract-unit",
+      "citations": [
+        {
+          "path": "shared/algorithm32/production/geometries/SphericalEarthGeometry.js",
+          "lineStart": 314,
+          "lineEnd": 333,
+          "role": "clamps-runtime-altitude-and-resolves-cache-access"
+        },
+        {
+          "path": "shared/algorithm32/production/geometries/SphericalEarthGeometry.js",
+          "lineStart": 635,
+          "lineEnd": 643,
+          "role": "maps-altitude-to-floored-bin-index"
+        },
+        {
+          "path": "shared/algorithm32/production/light-sources/DistantSunIncidentRadianceCache.js",
+          "lineStart": 91,
+          "lineEnd": 115,
+          "role": "enumerates-altitude-and-direction-build-coordinates"
+        },
+        {
+          "path": "shared/algorithm32/production/light-sources/DistantSunIncidentRadianceCache.js",
+          "lineStart": 286,
+          "lineEnd": 295,
+          "role": "selects-boundary-or-bin-center-build-altitude"
+        },
+        {
+          "path": "shared/algorithm32/production/geometries/_tests/SphericalEarthGeometry.spec.js",
+          "lineStart": 372,
+          "lineEnd": 397,
+          "role": "asserts-selected-runtime-bin-and-build-ray-cases"
+        },
+        {
+          "path": "shared/algorithm32/production/light-sources/_tests/DistantSunIncidentRadianceCache.spec.js",
+          "lineStart": 4,
+          "lineEnd": 20,
+          "role": "asserts-boundary-bin-build-coordinate"
+        }
+      ],
+      "nonClaims": [
+        "The arithmetic and toy tests do not establish a physical error bound for the bin count, boundary altitude, or sample locations.",
+        "This CPU fact does not establish shader conformance for linear interpolation."
+      ],
+      "blockers": [
+        "The altitude discretization and special first-bin sample require independent convergence and boundary-bias evidence."
+      ],
+      "nextAction": "Recreate altitude-domain convergence against direct CPU transport before accepting the cache mapping."
+    },
+    {
+      "semanticKey": "reference:distant-cache:boundary-altitude-domain-and-owner-coupling-unenforced",
+      "statement": "SphericalEarthGeometry and DistantSunIncidentRadianceCache each retain their own radii, altitude-bin count, and boundary-altitude facts, while DistantSunLightSource combines request-supplied radii and boundary overrides with source-owned cache dimensions; no frozen operation boundary enforces that the geometry runtime mapping and generated cache use identical domain facts.",
+      "kind": "reference-cache-domain-compatibility-gap",
+      "domain": "distant-incident-cache-owner-coupling",
+      "owner": "production-distant-cache-assembly",
+      "authorityRole": "physics-provenance-gap",
+      "supportStatus": "source-backed",
+      "implementationStatus": "partial",
+      "decisionStatus": "provisional",
+      "verificationLayer": "static-code-observation",
+      "citations": [
+        {
+          "path": "shared/algorithm32/production/geometries/SphericalEarthGeometry.js",
+          "lineStart": 35,
+          "lineEnd": 77,
+          "role": "stores-geometry-owned-radii-bin-count-and-boundary"
+        },
+        {
+          "path": "shared/algorithm32/production/geometries/SphericalEarthGeometry.js",
+          "lineStart": 314,
+          "lineEnd": 333,
+          "role": "uses-geometry-owned-runtime-cache-domain"
+        },
+        {
+          "path": "shared/algorithm32/production/geometries/SphericalEarthGeometry.js",
+          "lineStart": 635,
+          "lineEnd": 643,
+          "role": "uses-geometry-owned-altitude-bin-count"
+        },
+        {
+          "path": "shared/algorithm32/production/light-sources/DistantSunIncidentRadianceCache.js",
+          "lineStart": 23,
+          "lineEnd": 64,
+          "role": "stores-independent-cache-domain-facts"
+        },
+        {
+          "path": "shared/algorithm32/production/light-sources/DistantSunIncidentRadianceCache.js",
+          "lineStart": 286,
+          "lineEnd": 295,
+          "role": "uses-cache-owned-build-domain"
+        },
+        {
+          "path": "shared/algorithm32/production/light-sources/DistantSunLightSource.js",
+          "lineStart": 30,
+          "lineEnd": 66,
+          "role": "stores-source-owned-cache-count-and-boundary"
+        },
+        {
+          "path": "shared/algorithm32/production/light-sources/DistantSunLightSource.js",
+          "lineStart": 115,
+          "lineEnd": 134,
+          "role": "combines-request-and-source-cache-domain-facts"
+        }
+      ],
+      "nonClaims": [
+        "Callers can manually provide matching values, but the current Reference boundary does not prove or enforce that match.",
+        "A structurally valid cache descriptor is not evidence that it matches the active geometry domain."
+      ],
+      "blockers": [
+        "A cache can be built under domain facts different from those used to resolve runtime altitude keys."
+      ],
+      "nextAction": "Create one canonical distant-cache domain descriptor, require exact geometry/cache compatibility, and add mismatched-domain negative tests."
+    },
+    {
+      "semanticKey": "reference:local-cache:geometry-and-source-own-independent-bin-grids",
+      "statement": "FlatEarthGeometry owns the z/rho arrays used to resolve runtime cache access, while LocalSunLightSource independently owns the z/rho arrays copied into the generated local cache; SharedModel aggregation and Algorithm32 shape checks do not compare the two grids.",
+      "kind": "reference-cache-domain-ownership-contradiction",
+      "domain": "local-incident-cache-spatial-grid",
+      "owner": "production-local-cache-assembly",
+      "authorityRole": "physics-provenance-gap",
+      "supportStatus": "source-backed",
+      "implementationStatus": "partial",
+      "decisionStatus": "provisional",
+      "verificationLayer": "static-code-observation",
+      "citations": [
+        {
+          "path": "agents/topics/apps/flat/algorithm32/requirements.md",
+          "lineStart": 671,
+          "lineEnd": 678,
+          "role": "requires-geometry-owned-spatial-cache-domain"
+        },
+        {
+          "path": "shared/algorithm32/production/geometries/FlatEarthGeometry.js",
+          "lineStart": 34,
+          "lineEnd": 78,
+          "role": "stores-geometry-owned-z-and-rho-grids"
+        },
+        {
+          "path": "shared/algorithm32/production/geometries/FlatEarthGeometry.js",
+          "lineStart": 367,
+          "lineEnd": 396,
+          "role": "uses-geometry-grids-for-runtime-access"
+        },
+        {
+          "path": "shared/algorithm32/production/light-sources/LocalSunLightSource.js",
+          "lineStart": 28,
+          "lineEnd": 72,
+          "role": "stores-independent-source-owned-z-and-rho-grids"
+        },
+        {
+          "path": "shared/algorithm32/production/light-sources/LocalSunLightSource.js",
+          "lineStart": 122,
+          "lineEnd": 133,
+          "role": "copies-source-grids-into-generated-cache"
+        },
+        {
+          "path": "shared/algorithm32/production/models/SharedModel.js",
+          "lineStart": 13,
+          "lineEnd": 23,
+          "role": "aggregates-owners-without-grid-compatibility-check"
+        },
+        {
+          "path": "shared/algorithm32/production/Algorithm32.js",
+          "lineStart": 268,
+          "lineEnd": 292,
+          "role": "checks-owner-method-shapes-without-grid-equality"
+        }
+      ],
+      "nonClaims": [
+        "Separate arrays can be manually configured with equal values; the defect is that equality and ownership are not enforced.",
+        "Matching array lengths alone would not establish matching bin coordinates."
+      ],
+      "blockers": [
+        "Runtime keys can address a cache generated from a different physical z/rho grid."
+      ],
+      "nextAction": "Move spatial grid authority to one geometry descriptor and reject every cache whose exact grid identity differs from it."
+    },
+    {
+      "semanticKey": "reference:incident-cache:generated-spectral-values-are-not-validated",
+      "statement": "The frozen distant and local cache builders copy calculator.computeRadiance(...).inScattered directly into generated cache values without checking spectral length, finiteness, units, or basis identity; later Reference scattering indexes those arrays by the active channel count and can propagate undefined or non-finite values.",
+      "kind": "reference-generated-spectrum-validation-gap",
+      "domain": "incident-radiance-cache-spectral-values",
+      "owner": "production-incident-radiance-cache-builders",
+      "authorityRole": "physics-provenance-gap",
+      "supportStatus": "source-backed",
+      "implementationStatus": "partial",
+      "decisionStatus": "provisional",
+      "verificationLayer": "static-code-observation",
+      "citations": [
+        {
+          "path": "shared/algorithm32/production/light-sources/DistantSunIncidentRadianceCache.js",
+          "lineStart": 124,
+          "lineEnd": 148,
+          "role": "copies-unvalidated-distant-in-scattered-vector"
+        },
+        {
+          "path": "shared/algorithm32/production/light-sources/LocalSunIncidentRadianceCache.js",
+          "lineStart": 119,
+          "lineEnd": 143,
+          "role": "copies-unvalidated-local-in-scattered-vector"
+        },
+        {
+          "path": "shared/algorithm32/production/implementation/SpectralCalculator.js",
+          "lineStart": 308,
+          "lineEnd": 340,
+          "role": "indexes-sample-radiance-by-active-result-length"
+        },
+        {
+          "path": "shared/algorithm32/production/light-sources/_tests/DistantSunIncidentRadianceCache.spec.js",
+          "lineStart": 22,
+          "lineEnd": 55,
+          "role": "uses-only-well-shaped-stub-vector"
+        },
+        {
+          "path": "shared/algorithm32/production/light-sources/_tests/LocalSunIncidentRadianceCache.spec.js",
+          "lineStart": 25,
+          "lineEnd": 57,
+          "role": "uses-only-well-shaped-stub-vector"
+        }
+      ],
+      "nonClaims": [
+        "The calculator's current output may usually match its own basis; the cache operation boundary does not enforce that invariant.",
+        "Successful float packing would not prove the radiometric measure or wavelength identity of the values."
+      ],
+      "blockers": [
+        "Malformed, stale, or mismatched spectra can enter the CPU oracle and any derived shader payload without a loud failure."
+      ],
+      "nextAction": "Validate every generated vector against an exact unit-bearing spectral-basis descriptor before storing or packing it, with negative tests for length and non-finite values."
+    },
+    {
+      "semanticKey": "reference:local-source:zero-radius-center-singularity-is-accepted",
+      "statement": "The frozen LocalSunLightSource accepts radiusMeters equal to zero; if a path sample lies exactly at that zero-radius source center, FlatEarthGeometry supplies a fallback upward direction but direct-light falloff divides the positive reference distance by a zero safe distance and produces unbounded spectral values.",
+      "kind": "reference-local-source-singularity-gap",
+      "domain": "finite-local-source-center",
+      "owner": "production-local-sun-light-source",
+      "authorityRole": "physics-provenance-gap",
+      "supportStatus": "source-backed",
+      "implementationStatus": "partial",
+      "decisionStatus": "provisional",
+      "verificationLayer": "static-code-observation",
+      "citations": [
+        {
+          "path": "shared/algorithm32/production/light-sources/LocalSunLightSource.js",
+          "lineStart": 46,
+          "lineEnd": 51,
+          "role": "permits-zero-source-radius"
+        },
+        {
+          "path": "shared/algorithm32/production/light-sources/LocalSunLightSource.js",
+          "lineStart": 149,
+          "lineEnd": 165,
+          "role": "divides-by-radius-or-center-distance-without-positive-floor"
+        },
+        {
+          "path": "shared/algorithm32/production/geometries/FlatEarthGeometry.js",
+          "lineStart": 328,
+          "lineEnd": 358,
+          "role": "accepts-center-sample-with-fallback-direction"
+        },
+        {
+          "path": "shared/algorithm32/production/light-sources/_tests/LocalSunLightSource.spec.js",
+          "lineStart": 71,
+          "lineEnd": 95,
+          "role": "tests-positive-radius-clamp-but-not-zero-radius-center"
+        }
+      ],
+      "nonClaims": [
+        "A zero-radius source may be a useful point-source abstraction, but its radiometric normalization and singularity treatment are not defined here.",
+        "The fallback direction prevents a zero-vector normalization error; it does not make the radiance finite."
+      ],
+      "blockers": [
+        "The Reference permits a finite constructor configuration that can generate infinite incident radiance."
+      ],
+      "nextAction": "Either forbid zero radius for this finite-source owner or define a separately normalized point-source contract with a finite evaluated domain."
+    },
+    {
+      "semanticKey": "reference:atmosphere:physical-parameter-domains-are-not-enforced",
+      "statement": "CanonicalAtmosphere enforces positive scale heights but only finiteness for the Rayleigh coefficient scale, Mie Angstrom parameters, single-scattering albedo, and phase asymmetry g; negative optical coefficients, albedo outside zero to one, and an invalid g magnitude can therefore enter Reference transport.",
+      "kind": "reference-atmosphere-parameter-domain-gap",
+      "domain": "canonical-atmosphere-physical-parameters",
+      "owner": "production-canonical-atmosphere",
+      "authorityRole": "physics-provenance-gap",
+      "supportStatus": "source-backed",
+      "implementationStatus": "partial",
+      "decisionStatus": "provisional",
+      "verificationLayer": "static-code-observation",
+      "citations": [
+        {
+          "path": "shared/algorithm32/production/atmospheres/CanonicalAtmosphere.js",
+          "lineStart": 470,
+          "lineEnd": 490,
+          "role": "checks-finiteness-but-only-bounds-scale-heights"
+        }
+      ],
+      "nonClaims": [
+        "The catalog has not yet sourced exact accepted domains for every retained atmosphere parameterization.",
+        "Finiteness is a numeric shape check, not a physical-domain proof."
+      ],
+      "blockers": [
+        "The CPU Reference can be configured with values that yield negative or undefined physical medium behavior."
+      ],
+      "nextAction": "Source each parameter domain, enforce it at construction, and add negative configuration tests before accepting CanonicalAtmosphere as an oracle."
+    },
+    {
+      "semanticKey": "reference:light-source:negative-solar-irradiance-is-accepted",
+      "statement": "Both frozen light-source owners require each solarIrradiance value to be finite but do not require it to be non-negative; the distant source copies negative values directly into incidentRadiance and the local source scales them into Reference transport.",
+      "kind": "reference-source-radiometry-domain-gap",
+      "domain": "direct-source-spectral-input",
+      "owner": "production-light-sources",
+      "authorityRole": "physics-provenance-gap",
+      "supportStatus": "source-backed",
+      "implementationStatus": "partial",
+      "decisionStatus": "provisional",
+      "verificationLayer": "static-code-observation",
+      "citations": [
+        {
+          "path": "shared/algorithm32/production/light-sources/DistantSunLightSource.js",
+          "lineStart": 142,
+          "lineEnd": 152,
+          "role": "copies-source-values-into-distant-incident-radiance"
+        },
+        {
+          "path": "shared/algorithm32/production/light-sources/DistantSunLightSource.js",
+          "lineStart": 421,
+          "lineEnd": 431,
+          "role": "requires-only-finite-distant-source-values"
+        },
+        {
+          "path": "shared/algorithm32/production/light-sources/LocalSunLightSource.js",
+          "lineStart": 142,
+          "lineEnd": 168,
+          "role": "scales-local-source-values-into-incident-radiance"
+        },
+        {
+          "path": "shared/algorithm32/production/light-sources/LocalSunLightSource.js",
+          "lineStart": 566,
+          "lineEnd": 576,
+          "role": "requires-only-finite-local-source-values"
+        }
+      ],
+      "nonClaims": [
+        "This fact does not resolve the separate irradiance-versus-radiance dimensional ambiguity.",
+        "Signed intermediate residuals in a numerical method do not justify accepting negative physical source input."
+      ],
+      "blockers": [
+        "The Reference accepts a physically invalid direct-source spectrum without a loud configuration failure."
+      ],
+      "nextAction": "Require a unit-bearing non-negative source spectrum and add negative-value rejection tests at the source and assembled Reference boundaries."
+    },
+    {
+      "semanticKey": "reference-vs-shader:distant-linear-altitude-lookup-has-no-cpu-oracle",
+      "statement": "The frozen CPU Reference distant-cache sampler consumes one integer altitude-bin index and returns that exact bin, while the optional shader linear-altitude-v1 path computes a fractional bin coordinate and interpolates packed altitude samples; no CPU Reference path implements that interpolation policy for downstream shader conformance.",
+      "kind": "shader-reference-conformance-prerequisite-gap",
+      "domain": "distant-cache-altitude-reconstruction",
+      "owner": "production-distant-incident-cache",
+      "authorityRole": "physics-provenance-gap",
+      "supportStatus": "source-backed",
+      "implementationStatus": "partial",
+      "decisionStatus": "provisional",
+      "verificationLayer": "static-code-observation",
+      "citations": [
+        {
+          "path": "shared/algorithm32/production/light-sources/DistantSunIncidentRadianceCache.js",
+          "lineStart": 23,
+          "lineEnd": 64,
+          "role": "retains-shader-altitude-lookup-policy-as-descriptor-fact"
+        },
+        {
+          "path": "shared/algorithm32/production/light-sources/DistantSunIncidentRadianceCache.js",
+          "lineStart": 155,
+          "lineEnd": 182,
+          "role": "cpu-sampler-uses-one-integer-altitude-bin"
+        },
+        {
+          "path": "shared/algorithm32/production/light-sources/_tests/DistantSunIncidentRadianceCache.spec.js",
+          "lineStart": 98,
+          "lineEnd": 111,
+          "role": "asserts-descriptor-only-not-cpu-linear-result"
+        },
+        {
+          "path": "shared/algorithm32/production/light-sources/DistantSunIncidentRadianceCache.js",
+          "lineStart": 525,
+          "lineEnd": 550,
+          "role": "selects-interpolated-or-exact-bin-shader-helper"
+        },
+        {
+          "path": "shared/algorithm32/production/geometries/SphericalEarthGeometry.js",
+          "lineStart": 856,
+          "lineEnd": 876,
+          "role": "computes-shader-fractional-altitude-bin-coordinate"
+        }
+      ],
+      "nonClaims": [
+        "Static shader source does not establish an executed GPU result.",
+        "This is not a shader-conformance fact: under the fixed authority direction, the shader must defer to an exact CPU Reference policy that is absent for linear lookup."
+      ],
+      "blockers": [
+        "There is no same-policy CPU oracle, pinned Reference revision and input set, or experiment-backed pre-display comparison for linear altitude lookup."
+      ],
+      "nextAction": "Define linear reconstruction in the CPU Reference or remove the shader-only mode, then run packed pre-display conformance against that pinned Reference."
+    },
+    {
+      "semanticKey": "reference:flat-cache:bin-domain-order-and-uniqueness-unenforced",
+      "statement": "The frozen flat geometry, local source, and local cache accept any non-empty finite z/rho arrays without enforcing ascending order or unique coordinates; runtime nearest-bin search still scans every entry, while its out-of-range diagnostic assumes the first and last entries describe the range.",
+      "kind": "reference-cache-bin-domain-validation-gap",
+      "domain": "flat-local-cache-bin-domain",
+      "owner": "production-flat-local-cache-owners",
+      "authorityRole": "physics-provenance-gap",
+      "supportStatus": "source-backed",
+      "implementationStatus": "partial",
+      "decisionStatus": "provisional",
+      "verificationLayer": "static-code-observation",
+      "citations": [
+        {
+          "path": "shared/algorithm32/production/geometries/FlatEarthGeometry.js",
+          "lineStart": 61,
+          "lineEnd": 78,
+          "role": "accepts-finite-geometry-bin-arrays"
+        },
+        {
+          "path": "shared/algorithm32/production/geometries/FlatEarthGeometry.js",
+          "lineStart": 806,
+          "lineEnd": 837,
+          "role": "globally-searches-bins-but-diagnoses-from-first-and-last"
+        },
+        {
+          "path": "shared/algorithm32/production/geometries/FlatEarthGeometry.js",
+          "lineStart": 1538,
+          "lineEnd": 1540,
+          "role": "validates-only-nonempty-finite-array"
+        },
+        {
+          "path": "shared/algorithm32/production/light-sources/LocalSunLightSource.js",
+          "lineStart": 54,
+          "lineEnd": 72,
+          "role": "accepts-finite-source-bin-arrays"
+        },
+        {
+          "path": "shared/algorithm32/production/light-sources/LocalSunLightSource.js",
+          "lineStart": 1092,
+          "lineEnd": 1094,
+          "role": "validates-only-nonempty-finite-source-array"
+        },
+        {
+          "path": "shared/algorithm32/production/light-sources/LocalSunIncidentRadianceCache.js",
+          "lineStart": 31,
+          "lineEnd": 49,
+          "role": "accepts-finite-cache-bin-arrays"
+        },
+        {
+          "path": "shared/algorithm32/production/light-sources/LocalSunIncidentRadianceCache.js",
+          "lineStart": 323,
+          "lineEnd": 325,
+          "role": "validates-only-nonempty-finite-cache-array"
+        },
+        {
+          "path": "shared/algorithm32/production/geometries/_tests/FlatEarthGeometry.spec.js",
+          "lineStart": 254,
+          "lineEnd": 260,
+          "role": "rejects-empty-but-not-unsorted-or-duplicate-geometry-bins"
+        },
+        {
+          "path": "shared/algorithm32/production/light-sources/_tests/LocalSunLightSource.spec.js",
+          "lineStart": 368,
+          "lineEnd": 374,
+          "role": "rejects-empty-but-not-unsorted-or-duplicate-source-bins"
+        }
+      ],
+      "nonClaims": [
+        "Unsorted bins do not force endpoint clamping because the implementation searches every entry for the nearest value.",
+        "Duplicate coordinates make tie ownership depend on array order and can leave distinct cache indices for the same physical coordinate."
+      ],
+      "blockers": [
+        "The Reference has no canonical bin-domain invariant or negative coverage for unsorted and duplicate grids."
+      ],
+      "nextAction": "Require strictly increasing unique grids under one domain owner and add construction and runtime mapping tests for rejected invalid arrays."
+    }
+  ],
+  "contradictions": [
+    {
+      "id": "CONTRADICTION-A32-000007",
+      "kind": "reference-shader-default-physics-mismatch",
+      "summary": "Default CPU Reference evaluation omits incident-radiance sampling while automatic shader setup builds and binds the incident cache, so the proposed oracle and shader do not share the same configured scattering inputs.",
+      "scope": "CPU Reference authority and pre-display shader conformance prerequisite",
+      "currentObservation": "Algorithm32 constructs Reference without a default incident sampler; ShaderBuilder creates the configured source-owned cache during shader setup. Tests exercise each path with stubs and do not establish parity between them.",
+      "desiredState": "The CPU Reference used as authority evaluates the same model facts, incident cache generation, descriptor, and sampling state as the shader for every conformance case.",
+      "resolutionStatus": "unresolved-oracle-configuration-mismatch",
+      "requiredAction": "Unify or explicitly fixture the Reference incident-sampling state, validate cache compatibility, and execute fresh packed pre-display parity against the pinned Reference.",
+      "citations": [
+        {
+          "path": "shared/algorithm32/production/Algorithm32.js",
+          "lineStart": 197,
+          "lineEnd": 207,
+          "role": "constructs-default-reference"
+        },
+        {
+          "path": "shared/algorithm32/production/implementation/ShaderBuilder.js",
+          "lineStart": 233,
+          "lineEnd": 245,
+          "role": "requires-cache-for-shader-setup"
+        },
+        {
+          "path": "shared/algorithm32/production/implementation/ShaderBuilder.js",
+          "lineStart": 287,
+          "lineEnd": 318,
+          "role": "builds-cache-for-shader-setup"
+        }
+      ],
+      "experimentIds": [],
+      "blockers": [
+        "No current experiment pins equivalent CPU and shader incident-radiance state."
+      ]
+    },
+    {
+      "id": "CONTRADICTION-A32-000008",
+      "kind": "consumer-source-packet-contract-mismatch",
+      "summary": "Modified flat and flat32 consumers expect missing spectral-density factories and a spectralIrradianceDensity constructor field, while the current production source implementation requires spectralChannels.",
+      "scope": "canonical physical source packet and current consumer construction",
+      "currentObservation": "The app imports name a planned typed physical-density surface that is absent from the frozen tree; the implemented DistantSunLightSource accepts a different, dimensionally ambiguous array contract.",
+      "desiredState": "One present, unit-bearing, source-backed physical packet contract is shared by the CPU Reference, shader inputs, and both consumers.",
+      "resolutionStatus": "unresolved-missing-and-incompatible-source-contract",
+      "requiredAction": "Catalog the intended packet and data provenance, select the authoritative dimensional convention, implement it once, and update consumers only after Reference validation.",
+      "citations": [
+        {
+          "path": "src/flat/shared/algorithm32-production-config.js",
+          "lineStart": 3,
+          "lineEnd": 23,
+          "role": "expects-missing-source-packet-modules"
+        },
+        {
+          "path": "src/flat32/index.js",
+          "lineStart": 8,
+          "lineEnd": 28,
+          "role": "expects-missing-source-packet-modules"
+        },
+        {
+          "path": "shared/algorithm32/production/light-sources/DistantSunLightSource.js",
+          "lineStart": 30,
+          "lineEnd": 40,
+          "role": "implements-different-constructor-packet"
+        }
+      ],
+      "experimentIds": [],
+      "blockers": [
+        "The intended physical packet factories and source data owner are absent."
+      ]
+    },
+    {
+      "id": "CONTRADICTION-A32-000009",
+      "kind": "incident-cache-runtime-failure-policy-mismatch",
+      "summary": "Distant cache access fails loudly for invalid or missing data, but local cache access silently becomes an empty sample set and then zero in-scattering, violating the production cache-sampling failure rule.",
+      "scope": "CPU Reference incident-radiance cache runtime access",
+      "currentObservation": "The distant sampler throws for an invalid coordinate or absent generated value. The local sampler records an in-memory error diagnostic and returns an empty array, which SpectralCalculator treats as a zero contribution; its unit test explicitly accepts that tolerant fallback.",
+      "desiredState": "Every invalid position, stale key, missing sample, source mismatch, or invalid direction fails loudly at the CPU Reference operation boundary under one cache-kind-independent contract.",
+      "resolutionStatus": "unresolved-divergent-and-noncompliant-failure-policy",
+      "requiredAction": "Replace the local empty-array fallback with the authoritative loud failure, align both cache kinds, and add assembled Reference negative tests that cannot convert missing evidence into physical darkness.",
+      "citations": [
+        {
+          "path": "agents/topics/apps/flat/algorithm32/requirements.md",
+          "lineStart": 680,
+          "lineEnd": 681,
+          "role": "requires-loud-cache-sampling-failure"
+        },
+        {
+          "path": "shared/algorithm32/production/light-sources/DistantSunIncidentRadianceCache.js",
+          "lineStart": 155,
+          "lineEnd": 182,
+          "role": "implements-loud-distant-failure"
+        },
+        {
+          "path": "shared/algorithm32/production/light-sources/LocalSunIncidentRadianceCache.js",
+          "lineStart": 150,
+          "lineEnd": 187,
+          "role": "implements-tolerant-local-empty-fallback"
+        },
+        {
+          "path": "shared/algorithm32/production/implementation/SpectralCalculator.js",
+          "lineStart": 459,
+          "lineEnd": 486,
+          "role": "converts-empty-fallback-to-zero-in-scattering"
+        },
+        {
+          "path": "shared/algorithm32/production/light-sources/_tests/LocalSunIncidentRadianceCache.spec.js",
+          "lineStart": 104,
+          "lineEnd": 118,
+          "role": "asserts-current-tolerant-local-behavior"
+        }
+      ],
+      "experimentIds": [],
+      "blockers": [
+        "The local CPU path can currently conceal missing cache state as a zero physical contribution."
+      ]
+    }
+  ]
+}

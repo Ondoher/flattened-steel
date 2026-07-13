@@ -1,0 +1,33 @@
+{
+	"schemaId": "bruneton-b1-sky-color-gate-v1",
+	"oracle": {
+		"id": "bruneton-b1-spectral-sky-dome-v1",
+		"source": "references/results/experiments/b1-directional-sky-radiance/published-models.tsv",
+		"model": "bruneton",
+		"rowCount": 1377,
+		"canonicalTsvSha256": "dc163f86512cba3caf6dac65c991eff4a6a458b0e06a96766168ec8428e8f239"
+	},
+	"comparison": {
+		"times": 17,
+		"directionsPerTime": 81,
+		"sunDisk": "excluded",
+		"spectralProjection": "CIE 1931 2-degree XYZ; 683 lm/W; XYZ to linear sRGB",
+		"displayTransform": "channel-wise Bruneton Figure-1 exponential K=1/(5*683), written directly"
+	},
+	"requirements": {
+		"displayRgbRmseMaximum": 0.00392156862745098,
+		"maximumDisplayChannelError": 0.01568627450980392,
+		"meanDeltaUvMaximum": 0.002,
+		"maximumDeltaUvMaximum": 0.005,
+		"meanRelativeLuminanceErrorMaximum": 0.05,
+		"maximumAbsoluteMeanDisplayChannelBias": 0.00392156862745098
+	},
+	"requirementBasis": {
+		"displayRgbRmseMaximum": "one 8-bit display code value",
+		"maximumDisplayChannelError": "four 8-bit display code values",
+		"meanDeltaUvMaximum": "tight CIE 1976 chromaticity agreement",
+		"maximumDeltaUvMaximum": "bounded worst-ray CIE 1976 chromaticity agreement",
+		"meanRelativeLuminanceErrorMaximum": "five-percent mean absolute luminance agreement",
+		"maximumAbsoluteMeanDisplayChannelBias": "one 8-bit display code value in every mean signed channel"
+	}
+}

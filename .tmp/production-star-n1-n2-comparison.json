@@ -1,0 +1,312 @@
+{
+  "schema": "algorithm32-production-star-live-n1-n2-parity-v1",
+  "createdAt": "2026-07-21T15:14:43.361Z",
+  "scene": {
+    "id": "figure1-06h00-z87",
+    "directionToLight": [
+      0.8988227122935298,
+      -0.43517660730953706,
+      0.05233595624294383
+    ],
+    "solarZenithDegrees": 87
+  },
+  "starSource": {
+    "path": "scripts/algorithm32-star/src/n-order-cache/build-cpu-distant-n-order-cache.js",
+    "sha256": "98aa61f7cf441226eef38f40043ea729b5b1feb93cbea4d9160b7a4c33ead24a"
+  },
+  "contract": {
+    "profile": "native production default; not paper comparison",
+    "ground": "black",
+    "starMaximumScatteringOrder": 2,
+    "productionRequestedOrders": [
+      1,
+      2
+    ],
+    "positionCount": 48,
+    "incomingDirectionCount": 34,
+    "outgoingDirectionCount": 4374,
+    "wavelengthCount": 15,
+    "transportIntervalCount": 40,
+    "packingComparison": "logical position/direction/wavelength coordinates; raw offsets intentionally differ"
+  },
+  "gates": {
+    "positionMetersAbsolute": 1e-9,
+    "directionComponentAbsolute": 1e-14,
+    "weightAbsolute": 1e-15,
+    "wavelengthNanometersAbsolute": 1e-12,
+    "sourceIrradianceAbsolute": 1e-15,
+    "radiance": {
+      "absolute": 1e-16,
+      "relative": 1e-12
+    },
+    "scatteringDensity": {
+      "absolute": 1e-18,
+      "relative": 1e-12
+    },
+    "cumulativeScatteringDensity": {
+      "absolute": 4e-18,
+      "relative": 1e-12
+    }
+  },
+  "timingsMilliseconds": {
+    "starIncident": 5852.999,
+    "starN2": 22983.5086,
+    "productionN2": 7478.420300000002,
+    "productionN1": 161.1814000000013,
+    "total": 36928.807
+  },
+  "domains": {
+    "position": {
+      "maximumAbsoluteDifference": 0,
+      "worstVectorIndex": -1,
+      "worstComponentIndex": -1,
+      "tolerance": 1e-9,
+      "passed": true
+    },
+    "fibonacciDirections": {
+      "maximumAbsoluteDifference": 1.1102230246251565e-16,
+      "worstVectorIndex": 14,
+      "worstComponentIndex": 1,
+      "tolerance": 1e-14,
+      "passed": true
+    },
+    "w27Directions": {
+      "maximumAbsoluteDifference": 3.3306690738754696e-16,
+      "worstVectorIndex": 48,
+      "worstComponentIndex": 0,
+      "tolerance": 1e-14,
+      "passed": true
+    },
+    "weights": {
+      "maximumAbsoluteDifference": 0,
+      "worstIndex": -1,
+      "tolerance": 1e-15,
+      "passed": true
+    },
+    "wavelengths": {
+      "maximumAbsoluteDifference": 0,
+      "worstIndex": -1,
+      "tolerance": 1e-12,
+      "passed": true
+    }
+  },
+  "sourceIrradiance": {
+    "maximumAbsoluteDifference": 0,
+    "worstIndex": -1,
+    "tolerance": 1e-15,
+    "passed": true
+  },
+  "fields": {
+    "N2J1": {
+      "label": "N2J1",
+      "absoluteTolerance": 1e-18,
+      "relativeTolerance": 1e-12,
+      "comparedScalarCount": 3149280,
+      "bitExactScalarCount": 1981377,
+      "mismatchCount": 0,
+      "nonFiniteCount": 0,
+      "maximumAbsoluteError": 1.1689054672109345e-19,
+      "maximumRelativeError": 9.516235182580368e-15,
+      "worstAbsolute": {
+        "coordinates": {
+          "positionIndex": 0,
+          "directionIndex": 309,
+          "wavelengthIndex": 12
+        },
+        "expected": 0.00001255893607105569,
+        "actual": 0.000012558936071055572,
+        "absoluteError": 1.1689054672109345e-19,
+        "relativeError": 9.307360596451206e-15
+      },
+      "worstRelative": {
+        "coordinates": {
+          "positionIndex": 0,
+          "directionIndex": 309,
+          "wavelengthIndex": 14
+        },
+        "expected": 0.000012283276367009465,
+        "actual": 0.000012283276367009348,
+        "absoluteError": 1.1689054672109345e-19,
+        "relativeError": 9.516235182580368e-15
+      },
+      "rmsAbsoluteError": 6.437660431324981e-22,
+      "passed": true
+    },
+    "N2L1": {
+      "label": "N2L1",
+      "absoluteTolerance": 1e-16,
+      "relativeTolerance": 1e-12,
+      "comparedScalarCount": 24480,
+      "bitExactScalarCount": 23358,
+      "mismatchCount": 0,
+      "nonFiniteCount": 0,
+      "maximumAbsoluteError": 2.0122792321330962e-16,
+      "maximumRelativeError": 9.152118658196244e-13,
+      "worstAbsolute": {
+        "coordinates": {
+          "positionIndex": 2,
+          "directionIndex": 25,
+          "wavelengthIndex": 5
+        },
+        "expected": 0.01691630826026529,
+        "actual": 0.01691630826026509,
+        "absoluteError": 2.0122792321330962e-16,
+        "relativeError": 1.189549871741069e-14
+      },
+      "worstRelative": {
+        "coordinates": {
+          "positionIndex": 47,
+          "directionIndex": 20,
+          "wavelengthIndex": 10
+        },
+        "expected": 0.000001120554900115625,
+        "actual": 0.0000011205549001145995,
+        "absoluteError": 1.0255451408881441e-18,
+        "relativeError": 9.152118658196244e-13
+      },
+      "rmsAbsoluteError": 5.518240433735103e-18,
+      "passed": true
+    },
+    "N2J2": {
+      "label": "N2J2",
+      "absoluteTolerance": 1e-18,
+      "relativeTolerance": 1e-12,
+      "comparedScalarCount": 3149280,
+      "bitExactScalarCount": 1444257,
+      "mismatchCount": 0,
+      "nonFiniteCount": 0,
+      "maximumAbsoluteError": 6.606856988583543e-20,
+      "maximumRelativeError": 9.219570329440244e-15,
+      "worstAbsolute": {
+        "coordinates": {
+          "positionIndex": 0,
+          "directionIndex": 419,
+          "wavelengthIndex": 9
+        },
+        "expected": 0.000007177117063896298,
+        "actual": 0.000007177117063896232,
+        "absoluteError": 6.606856988583543e-20,
+        "relativeError": 9.205446880361773e-15
+      },
+      "worstRelative": {
+        "coordinates": {
+          "positionIndex": 1,
+          "directionIndex": 419,
+          "wavelengthIndex": 14
+        },
+        "expected": 7.005344058377793e-7,
+        "actual": 7.005344058377728e-7,
+        "absoluteError": 6.45862622281404e-21,
+        "relativeError": 9.219570329440244e-15
+      },
+      "rmsAbsoluteError": 2.525565675532078e-22,
+      "passed": true
+    },
+    "N2Jthrough2": {
+      "label": "N2Jthrough2",
+      "absoluteTolerance": 4e-18,
+      "relativeTolerance": 1e-12,
+      "comparedScalarCount": 3149280,
+      "bitExactScalarCount": 1888235,
+      "mismatchCount": 0,
+      "nonFiniteCount": 0,
+      "maximumAbsoluteError": 1.7957098481791167e-19,
+      "maximumRelativeError": 9.454360979457922e-15,
+      "worstAbsolute": {
+        "coordinates": {
+          "positionIndex": 0,
+          "directionIndex": 419,
+          "wavelengthIndex": 10
+        },
+        "expected": 0.00001920606155786936,
+        "actual": 0.00001920606155786918,
+        "absoluteError": 1.7957098481791167e-19,
+        "relativeError": 9.34970370040991e-15
+      },
+      "worstRelative": {
+        "coordinates": {
+          "positionIndex": 1,
+          "directionIndex": 419,
+          "wavelengthIndex": 14
+        },
+        "expected": 0.000006808974623583478,
+        "actual": 0.000006808974623583414,
+        "absoluteError": 6.437450399132683e-20,
+        "relativeError": 9.454360979457922e-15
+      },
+      "rmsAbsoluteError": 7.82148926566547e-22,
+      "passed": true
+    },
+    "N1J1": {
+      "label": "N1J1",
+      "absoluteTolerance": 1e-18,
+      "relativeTolerance": 1e-12,
+      "comparedScalarCount": 3149280,
+      "bitExactScalarCount": 1981377,
+      "mismatchCount": 0,
+      "nonFiniteCount": 0,
+      "maximumAbsoluteError": 1.1689054672109345e-19,
+      "maximumRelativeError": 9.516235182580368e-15,
+      "worstAbsolute": {
+        "coordinates": {
+          "positionIndex": 0,
+          "directionIndex": 309,
+          "wavelengthIndex": 12
+        },
+        "expected": 0.00001255893607105569,
+        "actual": 0.000012558936071055572,
+        "absoluteError": 1.1689054672109345e-19,
+        "relativeError": 9.307360596451206e-15
+      },
+      "worstRelative": {
+        "coordinates": {
+          "positionIndex": 0,
+          "directionIndex": 309,
+          "wavelengthIndex": 14
+        },
+        "expected": 0.000012283276367009465,
+        "actual": 0.000012283276367009348,
+        "absoluteError": 1.1689054672109345e-19,
+        "relativeError": 9.516235182580368e-15
+      },
+      "rmsAbsoluteError": 6.437660431324981e-22,
+      "passed": true
+    },
+    "N1Jthrough1": {
+      "label": "N1Jthrough1",
+      "absoluteTolerance": 4e-18,
+      "relativeTolerance": 1e-12,
+      "comparedScalarCount": 3149280,
+      "bitExactScalarCount": 1981377,
+      "mismatchCount": 0,
+      "nonFiniteCount": 0,
+      "maximumAbsoluteError": 1.1689054672109345e-19,
+      "maximumRelativeError": 9.516235182580368e-15,
+      "worstAbsolute": {
+        "coordinates": {
+          "positionIndex": 0,
+          "directionIndex": 309,
+          "wavelengthIndex": 12
+        },
+        "expected": 0.00001255893607105569,
+        "actual": 0.000012558936071055572,
+        "absoluteError": 1.1689054672109345e-19,
+        "relativeError": 9.307360596451206e-15
+      },
+      "worstRelative": {
+        "coordinates": {
+          "positionIndex": 0,
+          "directionIndex": 309,
+          "wavelengthIndex": 14
+        },
+        "expected": 0.000012283276367009465,
+        "actual": 0.000012283276367009348,
+        "absoluteError": 1.1689054672109345e-19,
+        "relativeError": 9.516235182580368e-15
+      },
+      "rmsAbsoluteError": 6.437660431324981e-22,
+      "passed": true
+    }
+  },
+  "passed": true
+}

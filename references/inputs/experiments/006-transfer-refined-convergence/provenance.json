@@ -1,0 +1,211 @@
+{
+  "schemaVersion": 1,
+  "step": {
+    "id": "transfer-refined-convergence",
+    "label": "transfer-refined-convergence",
+    "kind": "convergence",
+    "title": "Finite object transfer refined convergence pass",
+    "status": "refined convergence follow-up",
+    "stateGoal": "Compare the refined doubled-sample baseline against an 80/40/68/96 high-sample convergence run.",
+    "numericalControls": {
+      "viewRayScatteringIntervals": 80,
+      "sampleToSunTransmittanceIntervals": 40,
+      "secondOrderIncomingDirections": 68,
+      "secondOrderIncidentAltitudeBins": 96
+    }
+  },
+  "scriptPath": "scripts/flat/atmosphere-environment/run.js",
+  "command": "node scripts/flat/atmosphere-environment/run.js --step=transfer-refined-convergence",
+  "artifactFolder": "tmp/atmosphere/cleanroom_environment/006-transfer-refined-convergence",
+  "artifactNumber": 6,
+  "artifactNumberDecision": {
+    "existingArtifacts": [
+      "001-transfer-baseline",
+      "002-transfer-convergence",
+      "003-transfer-baseline",
+      "004-transfer-convergence",
+      "005-transfer-refined-baseline"
+    ],
+    "nextArtifactNumber": 6,
+    "policy": "max(existing NNN) + 1; never overwrite"
+  },
+  "sourceBoundary": {
+    "allowedLocalCode": [
+      "scripts/flat/experimental/bruneton-start-fresh.js"
+    ],
+    "forbiddenLocalSources": [
+      "scripts/flat/atmosphere_rejected/",
+      "older Flat atmosphere code",
+      "older local atmosphere docs",
+      "previous local atmosphere logs and generated images"
+    ]
+  },
+  "startedAt": "2026-06-22T18:35:54.666Z",
+  "completedAt": "2026-06-22T18:35:55.081Z",
+  "status": "accepted",
+  "runningLog": "tmp/atmosphere/cleanroom_environment/running-log.md",
+  "scriptSnapshot": "script-snapshot.js",
+  "convergenceReferenceArtifact": "005-transfer-refined-baseline",
+  "references": [
+    {
+      "id": "bruneton-functions-glsl",
+      "title": "Eric Bruneton, Precomputed Atmospheric Scattering, atmosphere/functions.glsl",
+      "url": "https://github.com/ebruneton/precomputed_atmospheric_scattering/blob/master/atmosphere/functions.glsl#L41-L53",
+      "usedFor": [
+        "top-atmosphere boundary distance",
+        "optical-length integration",
+        "Beer-Lambert transmittance"
+      ]
+    },
+    {
+      "id": "bruneton-demo-constants",
+      "title": "Eric Bruneton, Precomputed Atmospheric Scattering, atmosphere/demo/demo.cc",
+      "url": "https://github.com/ebruneton/precomputed_atmospheric_scattering/blob/master/atmosphere/demo/demo.cc#L12-L20",
+      "usedFor": [
+        "Earth radii",
+        "Rayleigh and Mie scale heights",
+        "Rayleigh coefficient law",
+        "solar irradiance source table carried by the cleanroom script"
+      ]
+    },
+    {
+      "id": "bruneton-single-scattering",
+      "title": "Eric Bruneton, Precomputed Atmospheric Scattering, atmosphere/functions.glsl",
+      "url": "https://github.com/ebruneton/precomputed_atmospheric_scattering/blob/master/atmosphere/functions.glsl#L82-L109",
+      "usedFor": [
+        "single-scattering integrand",
+        "Rayleigh phase function",
+        "Cornette-Shanks Mie phase function"
+      ]
+    },
+    {
+      "id": "bruneton-2016-clear-sky-parameters",
+      "title": "Eric Bruneton, A Qualitative and Quantitative Evaluation of 8 Clear Sky Models",
+      "url": "https://arxiv.org/abs/1612.04336",
+      "usedFor": [
+        "aerosol Angstrom alpha 0.8",
+        "aerosol Angstrom beta 0.04",
+        "aerosol single-scattering albedo 0.8",
+        "Mie phase asymmetry g 0.7"
+      ]
+    },
+    {
+      "id": "bruneton-2016-no-ozone-comparison-policy",
+      "title": "Eric Bruneton, A Qualitative and Quantitative Evaluation of 8 Clear Sky Models",
+      "url": "https://arxiv.org/abs/1612.04336",
+      "usedFor": [
+        "no-ozone comparison policy"
+      ]
+    },
+    {
+      "id": "bruneton-2016-nishita96-double-scattering",
+      "title": "Eric Bruneton, A Qualitative and Quantitative Evaluation of 8 Clear Sky Models",
+      "url": "https://arxiv.org/abs/1612.04336",
+      "usedFor": [
+        "incoming-direction integration requirement for double scattering"
+      ]
+    },
+    {
+      "id": "gonzalez-2009-fibonacci-sphere-lattice",
+      "title": "Alvaro Gonzalez, Measurement of areas on a sphere using Fibonacci and latitude-longitude lattices",
+      "url": "https://arxiv.org/abs/0912.4540",
+      "usedFor": [
+        "full-sphere Fibonacci direction set for second-order sampling"
+      ]
+    },
+    {
+      "id": "bruneton-color-constants",
+      "title": "Eric Bruneton, Precomputed Atmospheric Scattering, atmosphere/constants.h",
+      "url": "https://github.com/ebruneton/precomputed_atmospheric_scattering/blob/master/atmosphere/constants.h",
+      "usedFor": [
+        "CIE color matching functions",
+        "XYZ to linear sRGB matrix",
+        "maximum luminous efficacy 683"
+      ]
+    },
+    {
+      "id": "bruneton-2016-comparison-source-tone-map",
+      "title": "Eric Bruneton, clear-sky-models comparison source, atmosphere/comparisons.cc",
+      "url": "https://github.com/ebruneton/clear-sky-models/blob/master/atmosphere/comparisons.cc#L148-L153",
+      "usedFor": [
+        "display-only k = 1 / (5 * 683) tone map"
+      ]
+    },
+    {
+      "id": "bruneton-2016-figure1-four-view-layout",
+      "title": "Eric Bruneton, A Qualitative and Quantitative Evaluation of 8 Clear Sky Models, Figure 1",
+      "url": "https://arxiv.org/abs/1612.04336",
+      "usedFor": [
+        "required 06h00 / 87 degree low-Sun case",
+        "required 13h15 / 21 degree highest-Sun case"
+      ]
+    },
+    {
+      "id": "bruneton-demo-finite-object-composition",
+      "title": "Eric Bruneton, Precomputed Atmospheric Scattering, atmosphere/demo/demo.glsl",
+      "url": "https://github.com/ebruneton/precomputed_atmospheric_scattering/blob/master/atmosphere/demo/demo.glsl",
+      "usedFor": [
+        "finite object radiance composed as radiance * transmittance + in-scatter"
+      ]
+    }
+  ],
+  "algorithmicDecisions": [
+    {
+      "id": "synthetic-object-radiance",
+      "value": "black, neutral_unit, neutral_high, blue_step, green_peak, red_step",
+      "reason": "Stress the transfer equation without introducing material-reflectance ownership."
+    },
+    {
+      "id": "baseline-distances",
+      "value": [
+        0,
+        100,
+        1000,
+        5000,
+        20000,
+        50000,
+        100000
+      ],
+      "reason": "Cover zero identity, near-field, mid-distance, and long finite path stress cases."
+    },
+    {
+      "id": "target-card-size",
+      "value": {
+        "widthMeters": 1,
+        "heightMeters": 1
+      },
+      "reason": "Visualization metadata only; baseline criteria use center-ray transfer packets."
+    },
+    {
+      "id": "baseline-numerical-controls",
+      "value": {
+        "viewRayScatteringIntervals": 20,
+        "sampleToSunTransmittanceIntervals": 10,
+        "secondOrderIncomingDirections": 17,
+        "secondOrderIncidentAltitudeBins": 24
+      },
+      "reason": "Inherited experiment 032 controls pending the 002 convergence pass."
+    },
+    {
+      "id": "contact-sheet-layout",
+      "value": "Sun case and object-spectrum blocks, distance rows, source/attenuated/path/final columns.",
+      "reason": "Expose the transfer components without using image pixels as the proof data."
+    },
+    {
+      "id": "ratio-epsilon",
+      "value": 1e-30,
+      "reason": "Avoid divide-by-zero diagnostics for path-radiance fraction summaries."
+    }
+  ],
+  "generatedFiles": [
+    "contact-sheet.png",
+    "criteria-results.json",
+    "equations-and-constants.json",
+    "inputs.json",
+    "report.md",
+    "run.log",
+    "script-snapshot.js",
+    "state-goal.md",
+    "transfer-cases.json"
+  ]
+}

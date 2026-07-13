@@ -1,0 +1,93 @@
+{
+  "schemaVersion": "g4-cpu-sun-disk-transport-v1",
+  "fixtureId": "g4-cpu-sun-disk-transport-v1",
+  "claimBoundary": "Synthetic shared-atmospheric-Sun radiometry. This fixture proves camera-independent CPU Sun-disk transport data only; it does not rasterize, compose, apply scene visibility, use GPU resources, or make an astronomical claim.",
+  "relativeInterpolationBound": 0.15,
+  "absoluteInterpolationBound": 0.00000000001,
+  "geometry": {
+    "bottomRadius": { "value": 6360000, "units": "meters" },
+    "topRadius": { "value": 6420000, "units": "meters" },
+    "celestialContributionDomain": {
+      "altitudeNodes": [0, 250, 500, 750, 1000, 5000, 10000, 15000, 25000, 35000, 42500, 50000, 60000],
+      "uNodes": [0, 0.03125, 0.0625, 0.09375, 0.125, 0.25, 0.5, 0.75, 0.875, 0.9375, 1],
+      "pathSampleCount": 96,
+      "frames": {
+        "celestialFrameId": "etx-synthetic-celestial-rh-v1",
+        "bodyFrameId": "etx-synthetic-body-fixed-rh-v1",
+        "modelFrameId": "etx-synthetic-model-rh-v1",
+        "modelFromBody": [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
+      }
+    }
+  },
+  "sourceId": "sun",
+  "angularRadiusRadians": 0.05,
+  "sourceIrradianceValues": [0.000000001, 0.000000002, 0.000000003, 0.000000004, 0.000000005, 0.000000006, 0.000000007, 0.000000008, 0.000000009, 0.00000001, 0.000000011, 0.000000012, 0.000000013, 0.000000014, 0.000000015],
+  "offNodeProbes": [
+    { "h": 625, "u": 0.109375 },
+    { "h": 7500, "u": 0.1875 },
+    { "h": 30000, "u": 0.625 },
+    { "h": 46250, "u": 0.8125 }
+  ],
+  "generationDescriptor": {
+    "generationId": "g4-synthetic-shared-sun-generation-v1",
+    "runtimeCompatibilityFingerprint": "sha256:g4-synthetic-runtime-compatibility-v1"
+  },
+  "sourceDefinitions": [
+    {
+      "sourceId": "sun",
+      "sourceKind": "extended",
+      "placementKind": "distant-direction",
+      "depth": "infinite",
+      "sourceDefinitionFingerprint": "sha256:g4-shared-sun-static-v1",
+      "placementProviderContractFingerprint": "sha256:g4-provider-v1",
+      "placementProviderContract": {
+        "frameId": "etx-synthetic-celestial-rh-v1",
+        "originConvention": "observer-independent-infinite-direction",
+        "directionConvention": "receiver-to-source",
+        "timeScale": "etx-synthetic-linear-seconds-v1"
+      },
+      "support": { "kind": "uniform-disk", "angularRadiusRadians": 0.05 }
+    }
+  ],
+  "states": [
+    {
+      "stateId": "full-sun",
+      "observationState": {
+        "celestialFrameId": "etx-synthetic-celestial-rh-v1",
+        "bodyFrameId": "etx-synthetic-body-fixed-rh-v1",
+        "modelFrameId": "etx-synthetic-model-rh-v1",
+        "timeScale": "etx-synthetic-linear-seconds-v1",
+        "epoch": { "value": 0, "units": "seconds", "timeScale": "etx-synthetic-linear-seconds-v1" },
+        "bodyFromCelestial": [[1, 0, 0], [0, 1, 0], [0, 0, 1]],
+        "geographicReceiver": { "latitudeRadians": 0, "longitudeRadians": 0, "altitude": { "value": 1000, "units": "meters" } }
+      },
+      "sunDirection": [1, 0, 0]
+    },
+    {
+      "stateId": "partial-sun-horizon-crossing",
+      "observationState": {
+        "celestialFrameId": "etx-synthetic-celestial-rh-v1",
+        "bodyFrameId": "etx-synthetic-body-fixed-rh-v1",
+        "modelFrameId": "etx-synthetic-model-rh-v1",
+        "timeScale": "etx-synthetic-linear-seconds-v1",
+        "epoch": { "value": 3600, "units": "seconds", "timeScale": "etx-synthetic-linear-seconds-v1" },
+        "bodyFromCelestial": [[1, 0, 0], [0, 1, 0], [0, 0, 1]],
+        "geographicReceiver": { "latitudeRadians": 0, "longitudeRadians": 6.283185307179586, "altitude": { "value": 35000, "units": "meters" } }
+      },
+      "sunDirection": [-0.104, 0.995, 0]
+    },
+    {
+      "stateId": "empty-sun",
+      "observationState": {
+        "celestialFrameId": "etx-synthetic-celestial-rh-v1",
+        "bodyFrameId": "etx-synthetic-body-fixed-rh-v1",
+        "modelFrameId": "etx-synthetic-model-rh-v1",
+        "timeScale": "etx-synthetic-linear-seconds-v1",
+        "epoch": { "value": 7200, "units": "seconds", "timeScale": "etx-synthetic-linear-seconds-v1" },
+        "bodyFromCelestial": [[1, 0, 0], [0, 1, 0], [0, 0, 1]],
+        "geographicReceiver": { "latitudeRadians": -0.3, "longitudeRadians": -6.283185307179586, "altitude": { "value": 0, "units": "meters" } }
+      },
+      "sunDirection": [-1, 0, 0]
+    }
+  ]
+}

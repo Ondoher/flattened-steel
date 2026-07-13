@@ -1,0 +1,94 @@
+{
+	"schemaId": "spectral-color-stage1-ledger-v1",
+	"spherical": {
+		"location": {
+			"name": "San Jose",
+			"latitudeDegrees": 37.3382,
+			"longitudeDegrees": -121.8863,
+			"observerHeightMeters": 5
+		},
+		"sun": {
+			"sourceId": "sun",
+			"angularRadiusRadians": 0.004675
+		},
+		"conditions": [
+			{"id":"noon-minus-60","series":"noon","offsetMinutes":-60,"timeIso":"2024-06-20T19:08:00.000Z"},
+			{"id":"noon-minus-30","series":"noon","offsetMinutes":-30,"timeIso":"2024-06-20T19:38:00.000Z"},
+			{"id":"noon","series":"noon","offsetMinutes":0,"timeIso":"2024-06-20T20:08:00.000Z"},
+			{"id":"noon-plus-30","series":"noon","offsetMinutes":30,"timeIso":"2024-06-20T20:38:00.000Z"},
+			{"id":"noon-plus-60","series":"noon","offsetMinutes":60,"timeIso":"2024-06-20T21:08:00.000Z"},
+			{"id":"sunset-minus-60","series":"sunset","offsetMinutes":-60,"timeIso":"2024-06-21T02:26:03.503Z"},
+			{"id":"sunset-minus-50","series":"sunset","offsetMinutes":-50,"timeIso":"2024-06-21T02:36:03.503Z"},
+			{"id":"sunset-minus-40","series":"sunset","offsetMinutes":-40,"timeIso":"2024-06-21T02:46:03.503Z"},
+			{"id":"sunset-minus-30","series":"sunset","offsetMinutes":-30,"timeIso":"2024-06-21T02:56:03.503Z"},
+			{"id":"sunset-minus-20","series":"sunset","offsetMinutes":-20,"timeIso":"2024-06-21T03:06:03.503Z"},
+			{"id":"sunset-minus-10","series":"sunset","offsetMinutes":-10,"timeIso":"2024-06-21T03:16:03.503Z"},
+			{"id":"sunset","series":"sunset","offsetMinutes":0,"timeIso":"2024-06-21T03:26:03.503Z"},
+			{"id":"sunset-plus-10","series":"sunset","offsetMinutes":10,"timeIso":"2024-06-21T03:36:03.503Z"},
+			{"id":"sunset-plus-120","series":"night-control","offsetMinutes":120,"timeIso":"2024-06-21T05:26:03.503Z"}
+		]
+	},
+	"flat": {
+		"location": {
+			"label": "Union Glacier",
+			"latitudeDegrees": -79.768036,
+			"longitudeDegrees": -83.261666,
+			"dateBasis": "2024-12-14T12:00:00.000Z",
+			"observerMeters": [0, 0, 5]
+		},
+		"source": {
+			"sourceId": "flat-local-sun",
+			"radiusMeters": 25749.504,
+			"heightMeters": 4828032,
+			"surfaceRadianceValues": [
+				11822.66204572723, 19131.796290730832, 20596.24900510576, 22365.90602980418, 21105.962583299384,
+				20832.06071193563, 20288.478558443545, 19549.534528254357, 18355.838693437217, 17123.45540373146,
+				16046.979644514584, 14832.271724935203, 13963.689878931815, 12998.896355112902, 12065.530627488644
+			]
+		},
+		"geometry": {
+			"projectionRadiusMeters": 6360000,
+			"topAltitudeMeters": 100000,
+			"observerDomeApexMeters": 100000,
+			"observerDomeMaximumViewRayMeters": 1926774
+		},
+		"conditions": [
+			{"id":"closest-minus-60","series":"noon-closest","offsetMinutes":-60,"unwrappedAngleDegrees":-15},
+			{"id":"closest-minus-30","series":"noon-closest","offsetMinutes":-30,"unwrappedAngleDegrees":-7.5},
+			{"id":"closest","series":"noon-closest","offsetMinutes":0,"unwrappedAngleDegrees":0},
+			{"id":"closest-plus-30","series":"noon-closest","offsetMinutes":30,"unwrappedAngleDegrees":7.5},
+			{"id":"closest-plus-60","series":"noon-closest","offsetMinutes":60,"unwrappedAngleDegrees":15},
+			{"id":"farthest-minus-60","series":"sunset-farthest","offsetMinutes":-60,"unwrappedAngleDegrees":165},
+			{"id":"farthest-minus-50","series":"sunset-farthest","offsetMinutes":-50,"unwrappedAngleDegrees":167.5},
+			{"id":"farthest-minus-40","series":"sunset-farthest","offsetMinutes":-40,"unwrappedAngleDegrees":170},
+			{"id":"farthest-minus-30","series":"sunset-farthest","offsetMinutes":-30,"unwrappedAngleDegrees":172.5},
+			{"id":"farthest-minus-20","series":"sunset-farthest","offsetMinutes":-20,"unwrappedAngleDegrees":175},
+			{"id":"farthest-minus-10","series":"sunset-farthest","offsetMinutes":-10,"unwrappedAngleDegrees":177.5},
+			{"id":"farthest","series":"sunset-farthest","offsetMinutes":0,"unwrappedAngleDegrees":180},
+			{"id":"farthest-plus-10","series":"sunset-farthest","offsetMinutes":10,"unwrappedAngleDegrees":182.5}
+		]
+	},
+	"sampling": {
+		"viewportPixels": 33,
+		"verticalFieldOfViewDegrees": 2,
+		"limbRadiusFraction": 0.95,
+		"circumsolarRadiiDegrees": [0.5, 1, 2],
+		"horizonContextElevationsDegrees": [0.5, 1, 2],
+		"hemisphereRingCount": 4,
+		"hemisphereAzimuthCount": 8
+	},
+	"execution": {
+		"maximumScatteringOrder": 4,
+		"maximumTotalHostWallMilliseconds": 600000,
+		"maximumFlatAnchorHostWallMilliseconds": 180000
+	},
+	"tolerances": {
+		"compositionRelative": 0.000002,
+		"compositionAbsolute": 0.0001,
+		"zeroDirectAbsolute": 0.0001,
+		"aimAngularErrorRadians": 0.000001,
+		"flatAnchorPositionMeters": 2,
+		"observerProjectionRelativeY": 0.05,
+		"observerProjectionDeltaUv": 0.005
+	}
+}

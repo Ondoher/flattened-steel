@@ -1,0 +1,39 @@
+{
+  "schemaVersion": "subjective-globe-context-scenes-v1",
+  "claimBoundary": "Two subjective visual contexts use frozen location/time source directions derived read-only from the Flat32 controller, the candidate-native solar spectrum, order-4 atmosphere, and native 0.004675 radian disk. Each capture uses SphericalEarthGeometry's observer-local spherical ground endpoint object; camera and material remain presentation inputs, so these captures are not ephemeris, geography, or observational validation.",
+  "camera": {
+    "widthPixels": 640,
+    "heightPixels": 400,
+    "verticalFovDegrees": 78,
+    "observerHeightMeters": 1.7,
+    "viewElevationDegrees": 5
+  },
+  "scenes": [
+    {
+      "id": "san-jose-globe-sunset",
+      "location": "San Jose",
+      "latitudeDegrees": 37.3382,
+      "longitudeDegrees": -121.8863,
+      "dateBasis": "2024-06-20T12:00:00.000Z",
+      "timeLabel": "Sunset",
+      "timeIso": "2024-06-21T03:26:03.503Z",
+      "directionToSourceUpEastNorth": [0.0007345177958817672, -0.8659924602538107, 0.500056516073093],
+      "viewAzimuthDegrees": -43.0,
+      "viewElevationDegrees": 5.0,
+      "groundLinearSrgb": [0.0, 0.12, 0.0]
+    },
+    {
+      "id": "union-glacier-globe-solar-noon",
+      "location": "Union Glacier",
+      "latitudeDegrees": -79.768036,
+      "longitudeDegrees": -83.261666,
+      "dateBasis": "2024-12-14T12:00:00.000Z",
+      "timeLabel": "Solar noon",
+      "timeIso": "2024-12-14T17:27:41.487Z",
+      "directionToSourceUpEastNorth": [0.5503939489982425, 5.6162697423256525e-8, 0.8349050849684154],
+      "viewAzimuthDegrees": 0.0000038531586792238513,
+      "viewElevationDegrees": 33.39404371410622,
+      "groundLinearSrgb": [0.42, 0.45, 0.48]
+    }
+  ]
+}

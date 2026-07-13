@@ -1,0 +1,5 @@
+add_subdirectory(IlmCtl)
+add_subdirectory(IlmCtlMath)
+add_subdirectory(IlmCtlSimd)
+add_subdirectory(IlmImfCtl)
+add_subdirectory(dpx)

@@ -1,0 +1,9 @@
+{
+  "commands": [
+    {
+      "command": "node scripts/flat/reconciliation/POC/src/runners/er4cSunSiriusPhysicalTransportClosure.js --record tmp/atmosphere/reconciliation/050-er4c-sun-sirius-physical-transport-closure",
+      "timestamp": "2026-07-12T20:55:43.646Z",
+      "writesRecord": true
+    }
+  ]
+}

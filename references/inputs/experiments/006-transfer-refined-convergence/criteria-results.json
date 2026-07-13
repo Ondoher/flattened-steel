@@ -1,0 +1,358 @@
+{
+  "summary": {
+    "passed": 15,
+    "failed": 0,
+    "unresolved": 0,
+    "notApplicable": 0
+  },
+  "metrics": {
+    "maxCompositionError": 0,
+    "maxZeroTransmittanceError": 0,
+    "maxZeroPathRadiance": 0,
+    "maxBlackIdentityError": 0,
+    "maxLinearityError": 1.7763568394002505e-15,
+    "maxSegmentTransmittanceError": 1.6653345369377348e-16,
+    "maxSegmentPathRadianceError": 5.551115123125783e-17,
+    "maxBeerLambertError": 0,
+    "minTransmittance": 0.000006197013019846065,
+    "maxTransmittance": 1,
+    "minOpticalDepth": 0,
+    "finiteNonnegativeFailureCount": 0,
+    "distanceResponses": [
+      {
+        "sunCase": "figure1-06h00-z87",
+        "nearMeanTransmittance": 0.993056843980429,
+        "farMeanTransmittance": 0.009886757277291373,
+        "nearMeanPathFraction": 0.0003706211372044969,
+        "farMeanPathFraction": 0.9199008047678578,
+        "transmittanceDrop": 0.9831700867031377,
+        "pathFractionChange": 0.9195301836306533
+      },
+      {
+        "sunCase": "figure1-13h15-z21",
+        "nearMeanTransmittance": 0.993056843980429,
+        "farMeanTransmittance": 0.009886757277291373,
+        "nearMeanPathFraction": 0.00033181291727072223,
+        "farMeanPathFraction": 0.8011563208603362,
+        "transmittanceDrop": 0.9831700867031377,
+        "pathFractionChange": 0.8008245079430655
+      }
+    ],
+    "sunPathDifference": 0.06172640733821979,
+    "sunFinalDifference": 0.061726407338219824,
+    "convergenceComparison": {
+      "baselineArtifact": "005-transfer-refined-baseline",
+      "matchedCaseCount": 84,
+      "missingCaseIds": [],
+      "maxTransmittanceDelta": 0.0000032602778439159985,
+      "maxPathRadianceDelta": 0.009627402426940067,
+      "maxFinalRadianceDelta": 0.009633477104322066,
+      "maxAttenuatedObjectDelta": 0.00003260277843913917,
+      "marginMultiplier": 5,
+      "effects": {
+        "distanceEffectSize": 0.9831700867031377,
+        "sunPathDifference": 0.06172640733821979,
+        "sunFinalDifference": 0.061726407338219824
+      },
+      "margins": {
+        "distanceTransmittanceMargin": 301560.21473379346,
+        "sunPathMargin": 6.411532893389048,
+        "sunFinalMargin": 6.4074899093834174,
+        "minimumMargin": 6.4074899093834174
+      },
+      "passed": true
+    }
+  },
+  "compositionDiagnostics": [
+    {
+      "sunCase": "figure1-06h00-z87",
+      "distanceMeters": 1000,
+      "splitDistanceMeters": 500,
+      "fullSegmentViewIntervals": 160,
+      "splitSegmentViewIntervalsEach": 80,
+      "maxTransmittanceError": 1.1102230246251565e-16,
+      "maxPathRadianceError": 2.6020852139652106e-18,
+      "meanFullTransmittance": 0.9329971854922926,
+      "meanFullPathRadiance": 0.003600922164400909
+    },
+    {
+      "sunCase": "figure1-06h00-z87",
+      "distanceMeters": 20000,
+      "splitDistanceMeters": 10000,
+      "fullSegmentViewIntervals": 160,
+      "splitSegmentViewIntervalsEach": 80,
+      "maxTransmittanceError": 1.6653345369377348e-16,
+      "maxPathRadianceError": 5.551115123125783e-17,
+      "meanFullTransmittance": 0.2813703480828987,
+      "meanFullPathRadiance": 0.04594998969806728
+    },
+    {
+      "sunCase": "figure1-06h00-z87",
+      "distanceMeters": 100000,
+      "splitDistanceMeters": 50000,
+      "fullSegmentViewIntervals": 160,
+      "splitSegmentViewIntervalsEach": 80,
+      "maxTransmittanceError": 2.42861286636753e-17,
+      "maxPathRadianceError": 5.551115123125783e-17,
+      "meanFullTransmittance": 0.009886463054497948,
+      "meanFullPathRadiance": 0.07402201887117815
+    },
+    {
+      "sunCase": "figure1-13h15-z21",
+      "distanceMeters": 1000,
+      "splitDistanceMeters": 500,
+      "fullSegmentViewIntervals": 160,
+      "splitSegmentViewIntervalsEach": 80,
+      "maxTransmittanceError": 1.1102230246251565e-16,
+      "maxPathRadianceError": 1.734723475976807e-18,
+      "meanFullTransmittance": 0.9329971854922926,
+      "meanFullPathRadiance": 0.0031714352054869775
+    },
+    {
+      "sunCase": "figure1-13h15-z21",
+      "distanceMeters": 20000,
+      "splitDistanceMeters": 10000,
+      "fullSegmentViewIntervals": 160,
+      "splitSegmentViewIntervalsEach": 80,
+      "maxTransmittanceError": 1.6653345369377348e-16,
+      "maxPathRadianceError": 2.0816681711721685e-17,
+      "meanFullTransmittance": 0.2813703480828987,
+      "meanFullPathRadiance": 0.03297244988272902
+    },
+    {
+      "sunCase": "figure1-13h15-z21",
+      "distanceMeters": 100000,
+      "splitDistanceMeters": 50000,
+      "fullSegmentViewIntervals": 160,
+      "splitSegmentViewIntervalsEach": 80,
+      "maxTransmittanceError": 2.42861286636753e-17,
+      "maxPathRadianceError": 2.7755575615628914e-17,
+      "meanFullTransmittance": 0.009886463054497948,
+      "meanFullPathRadiance": 0.04396370938252298
+    }
+  ],
+  "criteria": [
+    {
+      "criterionId": "composition-identity",
+      "status": "pass",
+      "tolerance": {
+        "absolute": 1e-10,
+        "relative": 1e-8
+      },
+      "measuredError": 0,
+      "sourceOrStatus": "reference-backed",
+      "cases": "all 84 transfer cases",
+      "notes": "Stored final radiance equals T_view * L_object + L_path on spectral arrays."
+    },
+    {
+      "criterionId": "zero-distance-identity",
+      "status": "pass",
+      "tolerance": {
+        "absolute": 1e-12
+      },
+      "measuredError": {
+        "maxZeroTransmittanceError": 0,
+        "maxZeroPathRadiance": 0
+      },
+      "sourceOrStatus": "reference-backed transfer identity",
+      "cases": "all 0 m cases",
+      "notes": "Zero-length segment must have T = 1 and L_path = 0."
+    },
+    {
+      "criterionId": "black-object-identity",
+      "status": "pass",
+      "tolerance": {
+        "absolute": 1e-10,
+        "relative": 1e-8
+      },
+      "measuredError": 0,
+      "sourceOrStatus": "reference-backed transfer identity",
+      "cases": "black object cases",
+      "notes": "With zero object radiance, final radiance equals path radiance."
+    },
+    {
+      "criterionId": "linearity-identity",
+      "status": "pass",
+      "tolerance": {
+        "absolute": 1e-10,
+        "relative": 1e-8
+      },
+      "measuredError": 1.7763568394002505e-15,
+      "sourceOrStatus": "reference-backed transfer identity",
+      "cases": [
+        "neutral_high - neutral_unit",
+        "red_step - blue_step",
+        "green_peak - neutral_unit"
+      ],
+      "notes": "Final-radiance differences equal transmittance times object-radiance differences."
+    },
+    {
+      "criterionId": "segment-composition-identity",
+      "status": "pass",
+      "tolerance": {
+        "absolute": 0.00001,
+        "status": "algorithmic until convergence"
+      },
+      "measuredError": {
+        "maxSegmentTransmittanceError": 1.6653345369377348e-16,
+        "maxSegmentPathRadianceError": 5.551115123125783e-17
+      },
+      "sourceOrStatus": "reference-backed identity, algorithmic numerical gate",
+      "cases": [
+        "figure1-06h00-z87 1000m",
+        "figure1-06h00-z87 20000m",
+        "figure1-06h00-z87 100000m",
+        "figure1-13h15-z21 1000m",
+        "figure1-13h15-z21 20000m",
+        "figure1-13h15-z21 100000m"
+      ],
+      "notes": "Splitting a segment recomposes T_full = T_1 * T_2 and L_path_full = L_path_1 + T_1 * L_path_2."
+    },
+    {
+      "criterionId": "transmittance-bounds",
+      "status": "pass",
+      "tolerance": {
+        "lower": 0,
+        "upper": 1,
+        "slack": 1e-12
+      },
+      "measuredError": {
+        "minTransmittance": 0.000006197013019846065,
+        "maxTransmittance": 1
+      },
+      "sourceOrStatus": "reference-backed",
+      "cases": "all transfer cases",
+      "notes": "Beer-Lambert transmittance should stay in [0, 1]."
+    },
+    {
+      "criterionId": "nonnegative-optical-depth",
+      "status": "pass",
+      "tolerance": {
+        "lower": 0,
+        "slack": 1e-12
+      },
+      "measuredError": {
+        "minOpticalDepth": 0
+      },
+      "sourceOrStatus": "reference-backed",
+      "cases": "all transfer cases",
+      "notes": "Optical depth should be nonnegative."
+    },
+    {
+      "criterionId": "beer-lambert-identity",
+      "status": "pass",
+      "tolerance": {
+        "absolute": 1e-12
+      },
+      "measuredError": 0,
+      "sourceOrStatus": "reference-backed",
+      "cases": "all transfer cases",
+      "notes": "Stored transmittance equals exp(-opticalDepth)."
+    },
+    {
+      "criterionId": "finite-nonnegative-radiance",
+      "status": "pass",
+      "tolerance": {
+        "nonnegativeSlack": 1e-12
+      },
+      "measuredError": {
+        "finiteNonnegativeFailureCount": 0
+      },
+      "sourceOrStatus": "reference-backed",
+      "cases": "all transfer cases",
+      "notes": "Radiance and transfer arrays must be finite and nonnegative."
+    },
+    {
+      "criterionId": "distance-response",
+      "status": "pass",
+      "tolerance": {
+        "effect": "positive transmittance drop from 100 m to 100 km",
+        "status": "algorithmic demonstration gate"
+      },
+      "effectSize": {
+        "distanceResponses": [
+          {
+            "sunCase": "figure1-06h00-z87",
+            "nearMeanTransmittance": 0.993056843980429,
+            "farMeanTransmittance": 0.009886757277291373,
+            "nearMeanPathFraction": 0.0003706211372044969,
+            "farMeanPathFraction": 0.9199008047678578,
+            "transmittanceDrop": 0.9831700867031377,
+            "pathFractionChange": 0.9195301836306533
+          },
+          {
+            "sunCase": "figure1-13h15-z21",
+            "nearMeanTransmittance": 0.993056843980429,
+            "farMeanTransmittance": 0.009886757277291373,
+            "nearMeanPathFraction": 0.00033181291727072223,
+            "farMeanPathFraction": 0.8011563208603362,
+            "transmittanceDrop": 0.9831700867031377,
+            "pathFractionChange": 0.8008245079430655
+          }
+        ]
+      },
+      "sourceOrStatus": "algorithmic demonstration criterion",
+      "cases": "neutral_unit at 100 m and 100 km for both Sun cases",
+      "notes": "Longer finite segments reduce the object term and change relative path-radiance influence."
+    },
+    {
+      "criterionId": "sun-position-response",
+      "status": "pass",
+      "tolerance": {
+        "effect": "nonzero spectral delta at 20 km",
+        "status": "algorithmic demonstration gate"
+      },
+      "effectSize": {
+        "sunPathDifference": 0.06172640733821979,
+        "sunFinalDifference": 0.061726407338219824
+      },
+      "sourceOrStatus": "algorithmic demonstration criterion",
+      "cases": "neutral_unit at 20 km",
+      "notes": "Low-Sun and highest-Sun cases produce different path radiance and final object radiance."
+    },
+    {
+      "criterionId": "spectral-proof",
+      "status": "pass",
+      "sourceOrStatus": "artifact-structure check",
+      "cases": "all transfer cases",
+      "notes": "Criteria are computed from wavelength-indexed arrays before CIE, sRGB, tone mapping, or PNG writing."
+    },
+    {
+      "criterionId": "display-boundary-proof",
+      "status": "pass",
+      "sourceOrStatus": "artifact-structure check",
+      "cases": "contact-sheet.png and displayPreview fields",
+      "notes": "Display previews are generated from transfer-cases.json values and are not used for pass/fail transport checks."
+    },
+    {
+      "criterionId": "no-sky-only-proof",
+      "status": "pass",
+      "sourceOrStatus": "artifact-structure check",
+      "cases": "84 finite object endpoint cases",
+      "notes": "The artifact contains finite target endpoints, not only sky rays."
+    },
+    {
+      "criterionId": "convergence-backed-effect-margin",
+      "status": "pass",
+      "tolerance": {
+        "marginMultiplier": 5,
+        "status": "algorithmic convergence gate"
+      },
+      "measuredError": {
+        "maxTransmittanceDelta": 0.0000032602778439159985,
+        "maxPathRadianceDelta": 0.009627402426940067,
+        "maxFinalRadianceDelta": 0.009633477104322066,
+        "maxAttenuatedObjectDelta": 0.00003260277843913917,
+        "missingCaseIds": []
+      },
+      "effectSize": {
+        "distanceEffectSize": 0.9831700867031377,
+        "sunPathDifference": 0.06172640733821979,
+        "sunFinalDifference": 0.061726407338219824
+      },
+      "sourceOrStatus": "algorithmic convergence gate",
+      "cases": "84 matched cases against 005-transfer-refined-baseline",
+      "notes": "Minimum effect-to-convergence margin is 6.4074899093834174."
+    }
+  ]
+}

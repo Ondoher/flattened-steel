@@ -1,0 +1,37 @@
+{
+  "schema": "algorithm32-whole-algorithm-judgment-rules-v1",
+  "declaredOn": "2026-07-18",
+  "declaredBeforeProposedResults": true,
+  "subject": "Algorithm32 Paper J3 n-order CPU candidate, direct 40-channel paper physical profile with W27 cumulative scattering through order 3",
+  "profileSelection": "The content-addressed algorithm32-paper-comparison-v1 physical profile, direct 40-coordinate spectral boundary, and Jthrough3 numerical identity were fixed before this complete Kider B1/B2/B3 result. These rules copy the already frozen production Default comparator thresholds without tuning.",
+  "spectralBoundary": {
+    "nativeRepresentation": "40 point-sampled spectral-radiance-density channels at the paper coordinates lambda_i = 360 + 11.75*i nanometers for i=0..39",
+    "benchmarkProjection": "Identity. Every transported Algorithm32 Paper J3 channel is already one unchanged paper-comparison wavelength coordinate. No 15-to-40 hold, interpolation, source-specific correction, RGB conversion, or fitted scale is applied.",
+    "reason": "This evaluates the Algorithm32 J3 equations directly on the paper's physical spectral input and scoring coordinates while leaving the numerical method under test unchanged."
+  },
+  "b3MismatchBoundary": {
+    "expectedFieldCount": 4,
+    "expectedFields": ["multiple-scattering treatment", "incident angular quadrature", "vertical and path discretization", "geometry approximation"],
+    "alignedFieldsNotDeclaredAsMismatches": ["spectral representation", "molecular-scattering parameterization", "observer altitude", "solar source treatment"]
+  },
+  "publishedComparatorScale": {
+    "b1AggregateRmseMilliwatt": { "favorableMedian": 18.3, "limitedUpperQuartile": 41.5 },
+    "b1Figure5RmseMilliwattByTime": {
+      "10:15": { "favorableMedian": 17.7, "limitedUpperQuartile": 39.9 },
+      "11:15": { "favorableMedian": 18.7, "limitedUpperQuartile": 42.8 },
+      "13:15": { "favorableMedian": 17.4, "limitedUpperQuartile": 40.5 }
+    },
+    "b2RmseWattsPerSquareMeter": { "favorableMedian": 12.0182815531215, "limitedUpperQuartile": 20.496807820233318 },
+    "b2AbsoluteBiasWattsPerSquareMeter": { "favorableMedian": 11.94158717515906, "limitedUpperQuartile": 20.44040293869519 },
+    "b2WorstAbsoluteResidualWattsPerSquareMeter": { "favorableMedian": 14.100659, "limitedUpperQuartile": 23.056024 },
+    "b2EvidenceQualification": "The B2 numeric comparator curves are optional reproductions from the pinned published comparison code because Figure 8 does not publish a numeric table."
+  },
+  "rules": [
+    "Output validity requires all Algorithm32 Paper J3 directional spectral-radiance samples and derived irradiances to be finite and nonnegative, with the complete 17-time by 81-direction boundary present.",
+    "B1 is favorable when aggregate RMSE is no greater than the published-model median 18.3 mW m^-2 sr^-1 nm^-1 and all three printed Figure 5 times are no greater than their medians: 17.7 at 10:15, 18.7 at 11:15, and 17.4 at 13:15. B1 is limited when every corresponding value is no greater than the published-model upper quartile: 41.5 aggregate, 39.9, 42.8, and 40.5. It is adverse otherwise.",
+    "B2 is favorable when RMSE, absolute bias, and worst absolute residual against the 17-point measured irradiance curve are no greater than the published-source-model medians 12.0182815531215, 11.94158717515906, and 14.100659 W m^-2. It is limited when all three are no greater than the upper-quartile values 20.496807820233318, 20.44040293869519, and 23.056024 W m^-2. It is adverse otherwise.",
+    "B3 must reproduce B1's aggregate RMSE within 0.000001 mW m^-2 sr^-1 nm^-1 and must retain exactly the five predeclared genuine mismatch fields. It reports that same-measurement score beside the paper's published libRadtran values 11.48 coarse and 11.45 refined. B3 inherits B1's classification; it is context rather than a third independent acceptance vote and is not a pointwise libRadtran comparison.",
+    "The whole-algorithm benchmark conclusion is favorable when output validity, B1, and B2 are favorable and B3 is consistent and fully mapped; limited when neither B1 nor B2 is adverse, at least one is limited, and B3 is consistent and fully mapped; and adverse when output validity fails, either B1 or B2 is adverse, B3 is inconsistent, or a material mismatch is concealed.",
+    "No favorable classification establishes out-of-sample accuracy, flat-geometry accuracy, finite-local-source accuracy, ground-reflection accuracy, equality with libRadtran, convergence beyond J3, or release adequacy. All five declared differences remain limitations."
+  ]
+}

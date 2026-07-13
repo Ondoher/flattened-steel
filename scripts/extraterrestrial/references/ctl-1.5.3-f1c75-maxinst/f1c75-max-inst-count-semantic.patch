@@ -1,0 +1,30 @@
+diff --git a/lib/IlmCtlSimd/CtlSimdInterpreter.cpp b/lib/IlmCtlSimd/CtlSimdInterpreter.cpp
+index cdcf6a84..43a02dac 100644
+--- a/lib/IlmCtlSimd/CtlSimdInterpreter.cpp
++++ b/lib/IlmCtlSimd/CtlSimdInterpreter.cpp
+@@ -86,7 +86,7 @@ SimdInterpreter::SimdInterpreter():
+     Interpreter(),
+     _data (new Data)
+ {
+-    _data->maxInstCount = 10000000;
++    _data->maxInstCount = 100000000;
+     _data->abortCount = 0;
+ 
+     //
+diff --git a/lib/IlmCtlSimd/CtlSimdXContext.cpp b/lib/IlmCtlSimd/CtlSimdXContext.cpp
+index 6797cc9a..1b9fa181 100644
+--- a/lib/IlmCtlSimd/CtlSimdXContext.cpp
++++ b/lib/IlmCtlSimd/CtlSimdXContext.cpp
+@@ -240,7 +240,11 @@ SimdXContext::countInstruction ()
+     if ((++_instCount & 0x01fff) == 0)
+     {
+ 	if (_maxInstCount && _instCount > _maxInstCount)
+-	    throw Ctl::MaxInstExc ("Maximum CTL instruction count exceeded.");
++      THROW(Ctl::MaxInstExc, "\nException Ctl::MaxInstExc thrown\n" <<
++        "Maximum CTL instruction count _maxInstCount=" << _maxInstCount <<
++        " exceeded, _instCount=" << _instCount << "\n" <<
++        "Try increasing SimdInterpreter::Data->maxInstCount\n");
++//	    throw Ctl::MaxInstExc ("Maximum CTL instruction count exceeded.");
+ 
+ 	if (_abortCount != _interpreter.abortCount())
+ 	    throw Ctl::AbortExc ("CTL program aborted.");

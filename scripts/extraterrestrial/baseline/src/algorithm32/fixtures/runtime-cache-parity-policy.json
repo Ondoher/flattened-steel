@@ -1,0 +1,84 @@
+{
+  "schema": "algorithm32-production-runtime-cache-parity-policy-v1",
+  "status": "predeclared-before-runtime-cache-output",
+  "authority": {
+    "algorithm": "algorithm32-star cumulative-final-view-transport",
+    "oracle": "production-binary64-cpu-resident-cache",
+    "candidate": "production-r32f-gpu-resident-cache",
+    "accumulationOrder": "path-point-major-then-wavelength",
+    "allowedError": "absolute + relative * abs(oracle)"
+  },
+  "bounds": {
+    "stencilWeight": {
+      "absolute": 0.000002,
+      "relative": 0.000002
+    },
+    "cumulativeScatteringDensity": {
+      "absolute": 8e-12,
+      "relative": 0.005
+    },
+    "completeRayRadiance": {
+      "absolute": 2e-9,
+      "relative": 0.005
+    },
+    "transmittance": {
+      "absolute": 0.000002,
+      "relative": 0.00002
+    }
+  },
+  "orders": [1, 2, 4],
+  "wavelengthIndices": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
+  "positionCases": {
+    "exactNodes": "all-native-48-nodes",
+    "endpointClamps": [
+      { "id": "below-first-node", "altitude": { "value": 0, "units": "meters" } },
+      { "id": "above-last-node", "altitude": { "value": 60000, "units": "meters" } }
+    ],
+    "formerBoundaries": {
+      "first": { "value": 1250, "units": "meters" },
+      "step": { "value": 1250, "units": "meters" },
+      "count": 47,
+      "offsets": [
+        { "value": -0.25, "units": "meters" },
+        { "value": 0, "units": "meters" },
+        { "value": 0.25, "units": "meters" }
+      ]
+    }
+  },
+  "directionCases": [
+    { "id": "positive-x-exact-node", "direction": [1, 0, 0], "role": "exact-node" },
+    { "id": "negative-x-exact-node", "direction": [-1, 0, 0], "role": "exact-node" },
+    { "id": "face-interior-four-tap", "direction": [0.9763684905994163, 0.11716421887192995, 0.17574632830789492], "role": "interior" },
+    { "id": "positive-x-positive-y-seam", "direction": [0.7071067811865475, 0.7071067811865475, 0], "role": "seam" },
+    { "id": "positive-corner", "direction": [0.5773502691896258, 0.5773502691896258, 0.5773502691896258], "role": "corner" }
+  ],
+  "rayCases": [
+    {
+      "id": "bottom-upward-atmosphere-exit",
+      "origin": { "coordinates": [6360002, 0, 0], "units": "meters" },
+      "direction": [1, 0, 0],
+      "termination": "atmosphere-exit"
+    },
+    {
+      "id": "interior-tangent-atmosphere-exit",
+      "origin": { "coordinates": [6375000, 0, 0], "units": "meters" },
+      "direction": [0, 1, 0],
+      "termination": "atmosphere-exit"
+    },
+    {
+      "id": "object-shortened-upward",
+      "origin": { "coordinates": [6360002, 0, 0], "units": "meters" },
+      "direction": [1, 0, 0],
+      "termination": "object",
+      "endpointDistance": { "value": 10000, "units": "meters" }
+    }
+  ],
+  "invariants": {
+    "cumulativeQueriesPerPathPointAndSource": 1,
+    "separateDirectSourceTerm": false,
+    "incidentDirectionLoop": false,
+    "cumulativeFieldFeedsRecurrence": false,
+    "objectShorteningPreserved": true,
+    "atmosphereExitPreserved": true
+  }
+}

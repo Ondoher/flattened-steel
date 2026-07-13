@@ -1,0 +1,124 @@
+{
+  "schemaVersion": "g1-spherical-celestial-geometry-v1",
+  "fixtureId": "g1-spherical-celestial-geometry-v1",
+  "claimBoundary": "Synthetic geometry mechanics only. This fixture proves no atmospheric transport, cache generation, raster, scene visibility, GPU, or astronomical claim.",
+  "geometry": {
+    "bottomRadius": { "value": 6360000, "units": "meters" },
+    "topRadius": { "value": 6420000, "units": "meters" },
+    "celestialContributionDomain": {
+      "altitudeNodes": [0, 1000, 35000, 60000],
+      "uNodes": [0, 0.25, 0.5, 0.75, 1],
+      "frames": {
+        "celestialFrameId": "etx-synthetic-celestial-rh-v1",
+        "bodyFrameId": "etx-synthetic-body-fixed-rh-v1",
+        "modelFrameId": "etx-synthetic-model-rh-v1",
+        "modelFromBody": [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
+      }
+    }
+  },
+  "generationDescriptor": {
+    "generationId": "g1-synthetic-field-plan-v1",
+    "runtimeCompatibilityFingerprint": "sha256:g1-synthetic-runtime-compatibility-v1",
+    "physicalFieldFingerprint": "sha256:g1-synthetic-field-plan-v1"
+  },
+  "sourceDefinitions": [
+    {
+      "sourceId": "star-alpha",
+      "sourceKind": "point",
+      "placementKind": "infinite-direction",
+      "depth": "infinite",
+      "sourceDefinitionFingerprint": "sha256:g1-star-alpha-static-v1",
+      "placementProviderContractFingerprint": "sha256:g1-provider-v1",
+      "placementProviderContract": {
+        "frameId": "etx-synthetic-celestial-rh-v1",
+        "originConvention": "observer-independent-infinite-direction",
+        "directionConvention": "receiver-to-source",
+        "timeScale": "etx-synthetic-linear-seconds-v1"
+      },
+      "support": { "kind": "point" }
+    },
+    {
+      "sourceId": "star-beta",
+      "sourceKind": "point",
+      "placementKind": "infinite-direction",
+      "depth": "infinite",
+      "sourceDefinitionFingerprint": "sha256:g1-star-beta-static-v1",
+      "placementProviderContractFingerprint": "sha256:g1-provider-v1",
+      "placementProviderContract": {
+        "frameId": "etx-synthetic-celestial-rh-v1",
+        "originConvention": "observer-independent-infinite-direction",
+        "directionConvention": "receiver-to-source",
+        "timeScale": "etx-synthetic-linear-seconds-v1"
+      },
+      "support": { "kind": "point" }
+    },
+    {
+      "sourceId": "sun",
+      "sourceKind": "extended",
+      "placementKind": "distant-direction",
+      "depth": "infinite",
+      "sourceDefinitionFingerprint": "sha256:g1-sun-static-v1",
+      "placementProviderContractFingerprint": "sha256:g1-provider-v1",
+      "placementProviderContract": {
+        "frameId": "etx-synthetic-celestial-rh-v1",
+        "originConvention": "observer-independent-infinite-direction",
+        "directionConvention": "receiver-to-source",
+        "timeScale": "etx-synthetic-linear-seconds-v1"
+      },
+      "support": { "kind": "uniform-disk", "angularRadiusRadians": 0.05 }
+    }
+  ],
+  "states": [
+    {
+      "stateId": "zenith-one-kilometer",
+      "observationState": {
+        "celestialFrameId": "etx-synthetic-celestial-rh-v1",
+        "bodyFrameId": "etx-synthetic-body-fixed-rh-v1",
+        "modelFrameId": "etx-synthetic-model-rh-v1",
+        "timeScale": "etx-synthetic-linear-seconds-v1",
+        "epoch": { "value": 0, "units": "seconds", "timeScale": "etx-synthetic-linear-seconds-v1" },
+        "bodyFromCelestial": [[1, 0, 0], [0, 1, 0], [0, 0, 1]],
+        "geographicReceiver": { "latitudeRadians": 0, "longitudeRadians": 0, "altitude": { "value": 1000, "units": "meters" } }
+      },
+      "placements": {
+        "star-alpha": [1, 0, 0],
+        "star-beta": [0, 1, 0],
+        "sun": [1, 0, 0]
+      }
+    },
+    {
+      "stateId": "partial-sun-longitude-wrap",
+      "observationState": {
+        "celestialFrameId": "etx-synthetic-celestial-rh-v1",
+        "bodyFrameId": "etx-synthetic-body-fixed-rh-v1",
+        "modelFrameId": "etx-synthetic-model-rh-v1",
+        "timeScale": "etx-synthetic-linear-seconds-v1",
+        "epoch": { "value": 3600, "units": "seconds", "timeScale": "etx-synthetic-linear-seconds-v1" },
+        "bodyFromCelestial": [[1, 0, 0], [0, 1, 0], [0, 0, 1]],
+        "geographicReceiver": { "latitudeRadians": 0, "longitudeRadians": 6.283185307179586, "altitude": { "value": 35000, "units": "meters" } }
+      },
+      "placements": {
+        "star-alpha": [0, 1, 0],
+        "star-beta": [0, 0, 1],
+        "sun": [-0.104, 0.995, 0]
+      }
+    },
+    {
+      "stateId": "empty-sun-below-horizon",
+      "observationState": {
+        "celestialFrameId": "etx-synthetic-celestial-rh-v1",
+        "bodyFrameId": "etx-synthetic-body-fixed-rh-v1",
+        "modelFrameId": "etx-synthetic-model-rh-v1",
+        "timeScale": "etx-synthetic-linear-seconds-v1",
+        "epoch": { "value": 7200, "units": "seconds", "timeScale": "etx-synthetic-linear-seconds-v1" },
+        "bodyFromCelestial": [[1, 0, 0], [0, 1, 0], [0, 0, 1]],
+        "geographicReceiver": { "latitudeRadians": -0.3, "longitudeRadians": -6.283185307179586, "altitude": { "value": 0, "units": "meters" } }
+      },
+      "placements": {
+        "star-alpha": [-1, 0, 0],
+        "star-beta": [0, 1, 0],
+        "sun": [-1, 0, 0]
+      }
+    }
+  ]
+}

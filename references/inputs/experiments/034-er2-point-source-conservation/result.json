@@ -1,0 +1,12 @@
+{
+  "status": "accepted",
+  "er2Status": "accepted",
+  "acceptedCriterionCount": 15,
+  "criterionCount": 15,
+  "cameraCount": 9,
+  "pointCaseCount": 252,
+  "edgeCaseCount": 162,
+  "sourceGate": "XA-G03 through XA-G05 accepted for point raster reference; XA-G02 real geometry not claimed",
+  "nextPhase": "ER3 extended-source conservation reference",
+  "imageCount": 0
+}

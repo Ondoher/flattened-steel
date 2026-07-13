@@ -1,0 +1,73 @@
+{
+  "schema": "algorithm32-star-legacy-l1-parity-v1",
+  "authority": {
+    "selectedImplementation": "scripts/algorithm32-star/src/n-order-cache/build-cpu-distant-n-order-cache.js",
+    "selectedImplementationSha256": "98aa61f7cf441226eef38f40043ea729b5b1feb93cbea4d9160b7a4c33ead24a",
+    "preservedPayload": "algorithm32-star-legacy-34-j2-compatibility.json",
+    "preservedPayloadSha256": "760afe6c8621f889805dfba5d75a0963c051b4c4dbfb004ade21340cb94c0998",
+    "preservedPayloadSource": "scripts/algorithm32-star/fixtures/n-order/legacy-34-j2-compatibility.json",
+    "preservedPayloadGenerator": "scripts/algorithm32-star/create-norder-legacy-fixture.js",
+    "preservedPayloadEvidenceRun": "scripts/algorithm32-star/runs/000090-gpu-n-order-legacy34-j2-compatibility",
+    "productionDiagnosticSpec": "src/algorithm32/light-sources/_tests/distant-sun-primary-radiance.spec.js",
+    "productionSourceRepository": "C:/dev/poly-gc-react",
+    "productionSourceCommit": "514d5f6080d2dd485efdb07b5da9a203357a40c0"
+  },
+  "controls": {
+    "pathIntervalCount": 40,
+    "sourceTransmittanceIntervalCount": 20,
+    "altitudeBinCount": 48,
+    "directionCount": 34,
+    "spectralChannelCount": 15
+  },
+  "extraction": {
+    "caseIds": [
+      "altitude-0-forward",
+      "altitude-24-forward",
+      "altitude-47-forward"
+    ],
+    "positionIndices": [0, 24, 47],
+    "valuePath": "cases[caseId].incomingSamples[directionIndex].radiance[channelIndex]",
+    "uniqueScalarCount": 1530,
+    "rule": "Select one forward case for each listed altitude because the 34 incoming L1 spectra are duplicated unchanged across the three outgoing J2 cases at that altitude. Compare every direction and spectral channel."
+  },
+  "acceptance": {
+    "rule": "Accept a scalar when its absolute error is within the absolute bound or its nonzero-reference relative error is within the relative bound.",
+    "maximumAbsoluteError": 1e-16,
+    "maximumRelativeError": 1e-14
+  },
+  "productionPortComparison": {
+    "schema": "algorithm32-stage33-j1-l1-production-parity-diagnostic-v1",
+    "comparedScalarCount": 1530,
+    "directPrimaryL1": {
+      "provenanceIdentity": "algorithm32-star-create-l1-field-direct-sha256-98aa61f7cf441226eef38f40043ea729b5b1feb93cbea4d9160b7a4c33ead24a",
+      "maximumAbsoluteError": 6.591949208711867e-17,
+      "maximumRelativeError": 9.152118658196244e-13,
+      "rmsAbsoluteError": 4.9033968062203634e-18,
+      "scalarMismatchCountUnderAcceptanceRule": 0
+    },
+    "transportedStoredJ1": {
+      "provenanceIdentity": "algorithm32-star-selected-jk-to-lk-transport-98aa61f7-v1",
+      "maximumAbsoluteError": 0.027786648426056437,
+      "maximumRelativeError": 0.4877257920870377,
+      "rmsAbsoluteError": 0.0024681937439114494,
+      "nonzeroReferenceScalarCount": 810,
+      "relativeErrorPercentiles": {
+        "p50": 0.0161649679717599,
+        "p90": 0.04041621932418381,
+        "p95": 0.0745732311496404,
+        "p99": 0.3612644096994787
+      },
+      "countOverFivePercent": 65,
+      "countOverTenPercent": 32,
+      "countOverTwentyFivePercent": 18,
+      "worstAbsoluteSample": {
+        "positionIndex": 0,
+        "directionIndex": 17,
+        "wavelengthIndex": 7,
+        "expected": 0.2957431243473396,
+        "actual": 0.2679564759212832
+      }
+    },
+    "decision": "Retain the selected Star direct-primary L1 seed. Generic stored-field Jk-to-Lk transport begins at J2-to-L2; applying it to J1 remains a diagnostic only."
+  }
+}

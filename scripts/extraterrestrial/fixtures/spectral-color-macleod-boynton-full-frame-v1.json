@@ -1,0 +1,25 @@
+{
+  "schemaId": "spectral-color-macleod-boynton-full-frame-fixture-v1",
+  "conditions": ["noon", "sunset-minus-30", "sunset-minus-10", "sunset"],
+  "viewport": {
+    "widthPixels": 481,
+    "heightPixels": 271,
+    "verticalFieldOfViewDegrees": 15
+  },
+  "expectedTransformId": "cie170-2-macleod-boynton-separated-brightness-rec709-v1",
+  "numericalProof": {
+    "runId": "000306-spectral-color-macleod-boynton-display-proof",
+    "artifactSetSha256": "9fb4d544e7126580e30d981c2a5ca5e9ba6729d759b4834d679b5d97ec1d78bf"
+  },
+  "localLightRecord": {
+    "runId": "000302-spectral-color-local-light-record",
+    "artifactSetSha256": "dedb03462344654252096e9879972bfa21a3328ba0b18b5c6db9dfd4bc4cb9c1"
+  },
+  "tolerances": {
+    "fullyVisibleCenterSpectrumRelative": 0.001,
+    "horizonCenterSpectrumMaximumRelative": 0.005,
+    "rgbBoundsAbsolute": 1e-12,
+    "gpuReadbackNegativeAbsolute": 0.000001,
+    "localStateRelative": 1e-12
+  }
+}

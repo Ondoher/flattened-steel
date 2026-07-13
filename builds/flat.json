@@ -1,0 +1,28 @@
+{
+	"name": "flat",
+	"dest": "dist/flat",
+	"source": "src/flat",
+	"index": "src/flat/index.js",
+	"spec": "src/flat/spec.js",
+	"template": {
+		"source": "src/flat/templates/index.html",
+		"destination": "dist/flat/index.html"
+	},
+	"testDest": "tests/flat",
+	"resources": [
+		{
+			"dest": "images",
+			"cwd": "images",
+			"glob": "**/*.{png,jpg,gif,svn}",
+			"keepNest": true
+		}
+	],
+	"css": [
+		{
+			"dest": "styles",
+			"cwd": "styles",
+			"glob": "**/*.css",
+			"keepNest": true
+		}
+	]
+}

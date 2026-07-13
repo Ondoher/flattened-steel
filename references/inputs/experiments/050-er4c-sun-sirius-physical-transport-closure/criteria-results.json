@@ -1,0 +1,1239 @@
+{
+  "status": "accepted",
+  "er4TransportStatus": "accepted",
+  "lunarDependencyStatus": "accepted",
+  "siriusReferenceStatus": "accepted",
+  "solarReferenceStatus": "accepted",
+  "er5ExitStatus": "accepted",
+  "allCriteriaAccepted": true,
+  "overallStatus": "accepted",
+  "pointTransportStatus": "accepted",
+  "extendedTransportStatus": "accepted",
+  "fullFrameTransportStatus": "accepted",
+  "mechanicalStatus": "accepted",
+  "physicalRadiometryStatus": "accepted",
+  "automatedReviewabilityStatus": "not-claimed",
+  "humanReviewStatus": "not-claimed",
+  "observationalStatus": "not-claimed",
+  "criteria": [
+    {
+      "scope": "lunar-dependency",
+      "name": "sealed-record-049-lunar-xa-g09-dependency-is-accepted",
+      "status": "accepted",
+      "evidence": {
+        "recordId": "049-er5-lunar-physical-reference-calibration",
+        "claim": "sealed disk-integrated lunar XA-G09 dependency only",
+        "result": {
+          "path": "tmp/atmosphere/reconciliation/049-er5-lunar-physical-reference-calibration/result.json",
+          "sourceHashSha256": "bce00d297c44e943fc47677fb8e829de450e58f5f3fbb30f3201926bdf9453f5",
+          "expectedSourceHashSha256": "bce00d297c44e943fc47677fb8e829de450e58f5f3fbb30f3201926bdf9453f5",
+          "status": "accepted",
+          "lunarPhysicalReferenceStatus": "accepted",
+          "acceptedCriterionCount": 15,
+          "criterionCount": 15
+        },
+        "criteria": {
+          "path": "tmp/atmosphere/reconciliation/049-er5-lunar-physical-reference-calibration/criteria-results.json",
+          "sourceHashSha256": "38f3c23037792051607a0b24b6694638a373d2ac52e0e71cfb7f3480263d3386",
+          "expectedSourceHashSha256": "38f3c23037792051607a0b24b6694638a373d2ac52e0e71cfb7f3480263d3386",
+          "status": "accepted",
+          "acceptedCriterionCount": 15,
+          "criterionCount": 15
+        },
+        "accepted": true,
+        "runnerImported": false,
+        "runnerExecuted": false
+      }
+    },
+    {
+      "scope": "solar-reference",
+      "name": "canonical-solar-provenance-bytes-match-pinned-manifest",
+      "status": "accepted",
+      "evidence": {
+        "actual": {
+          "path": "scripts/flat/reconciliation/POC/src/external-celestial-sources/fixtures/astmg173.zip",
+          "byteLength": 25833,
+          "sourceHashSha256": "de6ed831cd7426d9a7147d5c0a48b1e67a483cb7f8ecd6d3ae846848154a5657",
+          "role": "provenance-only; runtime values remain owned by the canonical packet"
+        },
+        "expected": {
+          "byteLength": 25833,
+          "sourceHashSha256": "de6ed831cd7426d9a7147d5c0a48b1e67a483cb7f8ecd6d3ae846848154a5657"
+        },
+        "runtimeOwnerUnchanged": true
+      }
+    },
+    {
+      "scope": "solar-reference",
+      "name": "canonical-solar-360-830-midpoint-integral-passes-tsis",
+      "status": "accepted",
+      "evidence": {
+        "canonicalSolarIntegralWattsPerSquareMeter": 739.5836757777778,
+        "tsisSolarIntegralWattsPerSquareMeter": 739.3906237986234,
+        "tsisFullyCorrelatedStandardUncertaintyWattsPerSquareMeter": 2.8769977706135244,
+        "solarRelativeDifference": 0.00026109606064861346,
+        "solarThreshold": 0.02,
+        "siriusVisibleRelativeDifference": 0.002764148156943369,
+        "siriusNearInfraredRelativeDifference": 0.009698432891971587
+      }
+    },
+    {
+      "scope": "sirius-reference",
+      "name": "calspec-sirius-retained-bytes-match-pinned-manifest",
+      "status": "accepted",
+      "evidence": {
+        "actual": {
+          "path": "scripts/flat/reconciliation/POC/src/external-celestial-sources/fixtures/sirius_stis_005.fits",
+          "byteLength": 282240,
+          "sourceHashSha256": "1349da7b8b59ad035aefea8d7948f552b41b3897d07e5ad82ca162a53af97271"
+        },
+        "expected": {
+          "byteLength": 282240,
+          "sourceHashSha256": "1349da7b8b59ad035aefea8d7948f552b41b3897d07e5ad82ca162a53af97271"
+        }
+      }
+    },
+    {
+      "scope": "sirius-reference",
+      "name": "calspec-sirius-visible-reference-passes",
+      "status": "accepted",
+      "evidence": {
+        "signedRelativeDifference": 0.002764148156943369,
+        "tolerance": 0.03
+      }
+    },
+    {
+      "scope": "sirius-reference",
+      "name": "calspec-sirius-nir-msx-reference-passes",
+      "status": "accepted",
+      "evidence": {
+        "signedRelativeDifference": 0.009698432891971587,
+        "tolerance": 0.04
+      }
+    },
+    {
+      "scope": "er4-transport",
+      "name": "er4c-full-frame-transport-is-implemented",
+      "status": "accepted",
+      "evidence": {
+        "status": "implemented"
+      }
+    },
+    {
+      "scope": "er4-transport",
+      "name": "point-vacuum-matrix-spans-resolution-fov-field-subpixel-and-edge",
+      "status": "accepted",
+      "evidence": {
+        "resolutions": [
+          "10x6",
+          "16x12",
+          "8x6"
+        ],
+        "verticalFovsDegrees": [
+          10,
+          15,
+          30
+        ],
+        "offAxisCaseIds": [
+          "off-axis-subpixel-10x6-vfov15"
+        ],
+        "subpixelCaseIds": [
+          "between-pixels-near-center-8x6-vfov10",
+          "between-pixels-resolution-16x12-vfov10",
+          "between-pixels-fov-8x6-vfov30",
+          "off-axis-subpixel-10x6-vfov15",
+          "left-edge-loss-8x6-vfov10"
+        ],
+        "measuredOffRasterCaseIds": [
+          "left-edge-loss-8x6-vfov10"
+        ],
+        "hasMultipleResolutions": true,
+        "hasMultipleVerticalFovs": true,
+        "hasOffAxisFieldCase": true,
+        "hasSubpixelCase": true,
+        "hasMeasuredOffRasterCase": true
+      }
+    },
+    {
+      "scope": "er4-transport",
+      "name": "point-vacuum-matrix-uses-exact-f-times-p-over-omega",
+      "status": "accepted",
+      "evidence": {
+        "maximumRelativeResidual": 0,
+        "tolerance": 1e-12
+      }
+    },
+    {
+      "scope": "er4-transport",
+      "name": "point-vacuum-on-frame-plus-off-raster-reconstructs-input",
+      "status": "accepted",
+      "evidence": {
+        "maximumRelativeResidual": 2.0141986998567076e-16,
+        "tolerance": 1e-12
+      }
+    },
+    {
+      "scope": "er4-transport",
+      "name": "point-edge-loss-is-explicit-and-not-renormalized",
+      "status": "accepted",
+      "evidence": {
+        "onFrameWeight": 0.75,
+        "offRasterWeight": 0.25,
+        "fullWeight": 1
+      }
+    },
+    {
+      "scope": "er4-transport",
+      "name": "point-actual-near-horizon-exact-source-transmittance-precedes-response",
+      "status": "accepted",
+      "evidence": {
+        "sourceAltitudeDegrees": 0.25063496008300784,
+        "rasterCenter": {
+          "x": 3.5,
+          "y": 2.35
+        },
+        "callbackEvidence": {
+          "visibilityCallCount": 1,
+          "transmittanceCallCount": 1,
+          "visibilityUsedExpectedRayObject": true,
+          "transmittanceUsedExpectedRayObject": true,
+          "callbacksUsedSameRayObject": true,
+          "exactRay": {
+            "sourceId": "calspec-sirius-point",
+            "sourceGeometry": {
+              "kind": "calspec-directional-point-source",
+              "owner": "ER4C/ER5 exact point-source fixture",
+              "qualification": "physical CALSPEC Sirius point-source fixture"
+            },
+            "directionCamera": [
+              0,
+              0.004374391323051605,
+              -0.9999904323045059
+            ],
+            "directionFrame": "camera-space-unit-vector-forward-minus-z",
+            "depth": {
+              "kind": "infinite"
+            }
+          },
+          "visibilityProviderFingerprint": "3ec2b42a72f9b49b93122d7074f249fcdc5d95a1ff628efc44c234878976f8b7",
+          "transmittanceProviderFingerprint": "edb9384bf1326f4ffcea123a0309bab528eb59e8179603270ede67fc29542d20"
+        },
+        "accumulatorTransportCalls": {
+          "order": [
+            "resolveExactSourceVisibility",
+            "sampleExactSourceTransmittance"
+          ],
+          "visibility": {
+            "callback": "resolveExactSourceVisibility",
+            "callCount": 1,
+            "exactSourceRay": {
+              "sourceId": "calspec-sirius-point",
+              "sourceGeometry": {
+                "kind": "calspec-directional-point-source",
+                "owner": "ER4C/ER5 exact point-source fixture",
+                "qualification": "physical CALSPEC Sirius point-source fixture"
+              },
+              "directionCamera": [
+                0,
+                0.004374391323051605,
+                -0.9999904323045059
+              ],
+              "directionFrame": "camera-space-unit-vector-forward-minus-z",
+              "depth": {
+                "kind": "infinite"
+              }
+            }
+          },
+          "transmittance": {
+            "callback": "sampleExactSourceTransmittance",
+            "callCount": 1,
+            "exactSourceRay": {
+              "sourceId": "calspec-sirius-point",
+              "sourceGeometry": {
+                "kind": "calspec-directional-point-source",
+                "owner": "ER4C/ER5 exact point-source fixture",
+                "qualification": "physical CALSPEC Sirius point-source fixture"
+              },
+              "directionCamera": [
+                0,
+                0.004374391323051605,
+                -0.9999904323045059
+              ],
+              "directionFrame": "camera-space-unit-vector-forward-minus-z",
+              "depth": {
+                "kind": "infinite"
+              }
+            }
+          },
+          "sameExactSourceRayObject": true
+        },
+        "transportRelativeResidual": 0,
+        "pixelFormulaRelativeResidual": 0,
+        "tolerance": 1e-12
+      }
+    },
+    {
+      "scope": "er4-transport",
+      "name": "point-actual-atmosphere-on-plus-off-conservation-passes",
+      "status": "accepted",
+      "evidence": {
+        "relativeResidual": 1.603425176752752e-16,
+        "tolerance": 1e-12
+      }
+    },
+    {
+      "scope": "er4-transport",
+      "name": "point-destination-transmittance-wrong-route-is-discriminated",
+      "status": "accepted",
+      "evidence": {
+        "relativeDifference": 3001574239.886401,
+        "minimum": 0.0001
+      }
+    },
+    {
+      "scope": "er4-transport",
+      "name": "point-double-transmittance-wrong-route-is-discriminated",
+      "status": "accepted",
+      "evidence": {
+        "relativeDifference": 0.9999999998855387,
+        "minimum": 0.0001
+      }
+    },
+    {
+      "scope": "er4-transport",
+      "name": "point-exact-blocker-skips-transmittance-and-retains-occluder",
+      "status": "accepted",
+      "evidence": {
+        "visibility": {
+          "visible": false,
+          "occluder": {
+            "distanceMeters": 1,
+            "featureId": "analytic-blocking-plane",
+            "fingerprint": "768b114cb35397bbccb12e382ae71114b8e8483b140ccd78f57ce87900d2c23a",
+            "id": "nearer-scene-blocker",
+            "kind": "scene",
+            "relationToSource": "nearer-than-infinite-source",
+            "selection": {
+              "depthContenderIds": [
+                "nearer-scene-blocker"
+              ],
+              "nearestDistanceMeters": 1,
+              "occluderId": "nearer-scene-blocker",
+              "rule": "nearest-blocking-depth"
+            },
+            "sourceDepth": {
+              "kind": "infinite"
+            },
+            "tieBreak": null
+          },
+          "resolverFingerprint": "7ad5cb770c13d59cc27bf5edca4d741114738b34aa31aa9dff9f23ba55b5bc45"
+        },
+        "blockerIntersectionCallCount": 1,
+        "accumulatorTransportCalls": {
+          "order": [
+            "resolveExactSourceVisibility"
+          ],
+          "visibility": {
+            "callback": "resolveExactSourceVisibility",
+            "callCount": 1,
+            "exactSourceRay": {
+              "sourceId": "calspec-sirius-point",
+              "sourceGeometry": {
+                "kind": "calspec-directional-point-source",
+                "owner": "ER4C/ER5 exact point-source fixture",
+                "qualification": "physical CALSPEC Sirius point-source fixture"
+              },
+              "directionCamera": [
+                0,
+                0.004374391323051605,
+                -0.9999904323045059
+              ],
+              "directionFrame": "camera-space-unit-vector-forward-minus-z",
+              "depth": {
+                "kind": "infinite"
+              }
+            }
+          },
+          "transmittance": {
+            "callback": "sampleExactSourceTransmittance",
+            "callCount": 0,
+            "exactSourceRay": null
+          },
+          "sameExactSourceRayObject": null
+        },
+        "samplerCallCount": 0
+      }
+    },
+    {
+      "scope": "er4-transport",
+      "name": "point-overlapping-sources-add-linearly",
+      "status": "accepted",
+      "evidence": {
+        "maximumRelativeResidual": 0,
+        "transportCalls": {
+          "visibilityCallCount": 2,
+          "transmittanceCallCount": 2,
+          "bySource": [
+            {
+              "sourceId": "calspec-sirius-point",
+              "exactSourceRay": {
+                "sourceId": "calspec-sirius-point",
+                "sourceGeometry": {
+                  "kind": "calspec-directional-point-source",
+                  "owner": "ER4C/ER5 exact point-source fixture",
+                  "qualification": "physical CALSPEC Sirius point-source fixture"
+                },
+                "directionCamera": [
+                  0,
+                  0.004374391323051605,
+                  -0.9999904323045059
+                ],
+                "directionFrame": "camera-space-unit-vector-forward-minus-z",
+                "depth": {
+                  "kind": "infinite"
+                }
+              },
+              "visibilityCallCount": 1,
+              "transmittanceCallCount": 1
+            },
+            {
+              "sourceId": "calspec-sirius-additivity-copy",
+              "exactSourceRay": {
+                "sourceId": "calspec-sirius-additivity-copy",
+                "sourceGeometry": {
+                  "kind": "calspec-directional-point-source",
+                  "owner": "ER4C/ER5 exact point-source fixture",
+                  "qualification": "explicit duplicate-flux additivity diagnostic; not a second physical Sirius claim"
+                },
+                "directionCamera": [
+                  0,
+                  0.004374391323051605,
+                  -0.9999904323045059
+                ],
+                "directionFrame": "camera-space-unit-vector-forward-minus-z",
+                "depth": {
+                  "kind": "infinite"
+                }
+              },
+              "visibilityCallCount": 1,
+              "transmittanceCallCount": 1
+            }
+          ]
+        },
+        "tolerance": 1e-12
+      }
+    },
+    {
+      "scope": "solar-reference",
+      "name": "canonical-sun-disk-direct-irradiance-reconstruction-passes",
+      "status": "accepted",
+      "evidence": {
+        "maximumRelativeResidual": 1.3380049949686132e-16,
+        "tolerance": 1e-10,
+        "formula": "E_reconstructed_lambda = L_uniform_lambda * pi * sin(alpha)^2"
+      }
+    },
+    {
+      "scope": "er4-transport",
+      "name": "sun-vacuum-matrix-spans-resolution-fov-field-subpixel-edge-and-off-raster",
+      "status": "accepted",
+      "evidence": {
+        "resolutions": [
+          "10x6",
+          "16x12",
+          "8x6"
+        ],
+        "verticalFovsDegrees": [
+          10,
+          15,
+          30
+        ],
+        "offAxisCaseIds": [
+          "sun-off-axis-10x6-vfov15"
+        ],
+        "subpixelCaseIds": [
+          "sun-center-subpixel-8x6-vfov10",
+          "sun-resolution-16x12-vfov10",
+          "sun-fov-8x6-vfov30",
+          "sun-off-axis-10x6-vfov15",
+          "sun-left-edge-half-disk-8x6-vfov10"
+        ],
+        "measuredOffRasterCaseIds": [
+          "sun-left-edge-half-disk-8x6-vfov10"
+        ],
+        "hasMultipleResolutions": true,
+        "hasMultipleVerticalFovs": true,
+        "hasOffAxisFieldCase": true,
+        "hasSubpixelCase": true,
+        "hasMeasuredOffRasterCase": true
+      }
+    },
+    {
+      "scope": "er4-transport",
+      "name": "sun-vacuum-path-zero-transmittance-one-and-per-direction-calls-pass",
+      "status": "accepted",
+      "evidence": {
+        "maximumAbsolutePathRadiance": 0,
+        "rows": [
+          {
+            "id": "sun-center-subpixel-8x6-vfov10",
+            "sampleCount": 144,
+            "visibilityCallCount": 144,
+            "transmittanceCallCount": 144,
+            "allSampleTransmittanceOne": true
+          },
+          {
+            "id": "sun-resolution-16x12-vfov10",
+            "sampleCount": 144,
+            "visibilityCallCount": 144,
+            "transmittanceCallCount": 144,
+            "allSampleTransmittanceOne": true
+          },
+          {
+            "id": "sun-fov-8x6-vfov30",
+            "sampleCount": 144,
+            "visibilityCallCount": 144,
+            "transmittanceCallCount": 144,
+            "allSampleTransmittanceOne": true
+          },
+          {
+            "id": "sun-off-axis-10x6-vfov15",
+            "sampleCount": 144,
+            "visibilityCallCount": 144,
+            "transmittanceCallCount": 144,
+            "allSampleTransmittanceOne": true
+          },
+          {
+            "id": "sun-left-edge-half-disk-8x6-vfov10",
+            "sampleCount": 144,
+            "visibilityCallCount": 144,
+            "transmittanceCallCount": 144,
+            "allSampleTransmittanceOne": true
+          }
+        ]
+      }
+    },
+    {
+      "scope": "solar-reference",
+      "name": "sun-vacuum-integrated-disk-reconstructs-canonical-irradiance",
+      "status": "accepted",
+      "evidence": {
+        "maximumRelativeResidual": 1.6801761926780612e-12,
+        "tolerance": 1e-10
+      }
+    },
+    {
+      "scope": "er4-transport",
+      "name": "sun-vacuum-component-conservation-passes-across-camera-matrix",
+      "status": "accepted",
+      "evidence": {
+        "maximumRelativeResidual": 3.623740070451831e-15,
+        "tolerance": 1e-12
+      }
+    },
+    {
+      "scope": "er4-transport",
+      "name": "sun-edge-case-retains-on-frame-and-off-raster-integrals",
+      "status": "accepted",
+      "evidence": {
+        "qualification": "derived-diagnostic-only-not-an-input-or-opacity",
+        "solidAnglesSteradians": {
+          "input": 0.00006866134588630899,
+          "visible": 0.00006866134588630899,
+          "blocked": 0,
+          "onFrame": 0.0000343306729431546,
+          "offRaster": 0.0000343306729431546,
+          "onFrameVisible": 0.0000343306729431546,
+          "onFrameBlocked": 0,
+          "offRasterVisible": 0.0000343306729431546,
+          "offRasterBlocked": 0
+        },
+        "fractionsOfInputSolidAngle": {
+          "visible": 1,
+          "blocked": 0,
+          "onFrame": 0.5000000000000016,
+          "offRaster": 0.5000000000000016
+        }
+      }
+    },
+    {
+      "scope": "er4-transport",
+      "name": "sun-actual-atmosphere-directional-low-high-integral-converges",
+      "status": "accepted",
+      "evidence": {
+        "relativeResidual": 0.00003056779280808492,
+        "tolerance": 0.005,
+        "runtimeQuadrature": {
+          "radialCount": 6,
+          "azimuthCount": 24
+        },
+        "highQuadrature": {
+          "radialCount": 12,
+          "azimuthCount": 48
+        }
+      }
+    },
+    {
+      "scope": "er4-transport",
+      "name": "sun-actual-atmosphere-directional-low-high-projected-converges",
+      "status": "accepted",
+      "evidence": {
+        "relativeResidual": 0.00003056109756713789,
+        "tolerance": 0.005
+      }
+    },
+    {
+      "scope": "er4-transport",
+      "name": "sun-actual-direction-map-and-per-quadrature-transport-pass",
+      "status": "accepted",
+      "evidence": {
+        "directionMappingResidual": 0,
+        "tolerance": 1e-12,
+        "runtimeCallbackEvidence": {
+          "id": "runtime",
+          "visibilityCallCount": 144,
+          "transmittanceCallCount": 144,
+          "sameRayObjectCount": 144,
+          "distinctVisibilityRayObjectCount": 144,
+          "visibilityProviderFingerprint": "a8b161a5543f505e624d085681a8e30ed6f467958bfe4ac7bc48547aa999d919",
+          "transmittanceProviderFingerprint": "a2bea2208f4d6cd957bcd224fbe5a208eff871524bda3065d14dceba762cb373"
+        },
+        "runtimeAccumulatorTransportCalls": {
+          "physicalOrder": [
+            "sample top-of-atmosphere radiance once at each quadrature direction",
+            "resolve visibility once at that direction and source depth",
+            "sample aligned transmittance once at the same direction only when visible",
+            "multiply top-of-atmosphere radiance by transmittance once",
+            "accumulate transported radiance times quadrature solid-angle weight",
+            "divide each on-frame integral by exact destination-pixel solid angle"
+          ],
+          "sampleCount": 144,
+          "radianceSampleCallCount": 144,
+          "visibilityCallCount": 144,
+          "transmittanceCallCount": 144,
+          "sameDirectionAndDepthObjectForVisibleCallbacks": true
+        },
+        "runtimeSampleCount": 144,
+        "highOrderCallbackEvidence": {
+          "id": "high-order",
+          "visibilityCallCount": 576,
+          "transmittanceCallCount": 576,
+          "sameRayObjectCount": 576,
+          "distinctVisibilityRayObjectCount": 576,
+          "visibilityProviderFingerprint": "a9254baac539e5cf88c661c9a3939f1f15918f5c01f5d634e1a6c17b85457e5b",
+          "transmittanceProviderFingerprint": "913e780be070e17d2c2f60ed8e8359078419ed8d7f2dfa7f047171cb4361febf"
+        },
+        "highOrderAccumulatorTransportCalls": {
+          "physicalOrder": [
+            "sample top-of-atmosphere radiance once at each quadrature direction",
+            "resolve visibility once at that direction and source depth",
+            "sample aligned transmittance once at the same direction only when visible",
+            "multiply top-of-atmosphere radiance by transmittance once",
+            "accumulate transported radiance times quadrature solid-angle weight",
+            "divide each on-frame integral by exact destination-pixel solid angle"
+          ],
+          "sampleCount": 576,
+          "radianceSampleCallCount": 576,
+          "visibilityCallCount": 576,
+          "transmittanceCallCount": 576,
+          "sameDirectionAndDepthObjectForVisibleCallbacks": true
+        },
+        "highOrderSampleCount": 576
+      }
+    },
+    {
+      "scope": "er4-transport",
+      "name": "sun-actual-atmosphere-component-conservation-passes",
+      "status": "accepted",
+      "evidence": {
+        "relativeResidual": 3.5294254577635504e-15,
+        "tolerance": 1e-12
+      }
+    },
+    {
+      "scope": "er4-transport",
+      "name": "canonical-solar-packet-is-one-illumination-and-visible-disk-owner",
+      "status": "accepted",
+      "evidence": {
+        "canonicalSolarPacketFingerprint": "2eac05ad96981953570fb80969d7186e31388d22a45fe2157d388d6b2ddaa17e",
+        "illuminationPacketRetainedByIdentity": true,
+        "visibleDiskPacketRetainedByIdentity": true,
+        "duplicateSolarSpectrum": "none"
+      }
+    },
+    {
+      "scope": "er4-transport",
+      "name": "sun-center-transmittance-wrong-route-is-discriminated",
+      "status": "accepted",
+      "evidence": {
+        "relativeDifference": 0.17372457300741875,
+        "minimum": 0.0001
+      }
+    },
+    {
+      "scope": "er4-transport",
+      "name": "sun-double-transmittance-wrong-route-is-discriminated",
+      "status": "accepted",
+      "evidence": {
+        "relativeDifference": 0.9999999662430149,
+        "minimum": 0.0001
+      }
+    },
+    {
+      "scope": "er4-transport",
+      "name": "sun-partial-opaque-blocker-resolves-every-direction-and-skips-blocked-t",
+      "status": "accepted",
+      "evidence": {
+        "sampleCount": 144,
+        "visibleSampleCount": 72,
+        "blockedSampleCount": 72,
+        "blockerIntersectionCallCount": 144,
+        "accumulatorTransportCalls": {
+          "physicalOrder": [
+            "sample top-of-atmosphere radiance once at each quadrature direction",
+            "resolve visibility once at that direction and source depth",
+            "sample aligned transmittance once at the same direction only when visible",
+            "multiply top-of-atmosphere radiance by transmittance once",
+            "accumulate transported radiance times quadrature solid-angle weight",
+            "divide each on-frame integral by exact destination-pixel solid angle"
+          ],
+          "sampleCount": 144,
+          "radianceSampleCallCount": 144,
+          "visibilityCallCount": 144,
+          "transmittanceCallCount": 72,
+          "sameDirectionAndDepthObjectForVisibleCallbacks": true
+        },
+        "samplerCallCount": 72,
+        "everyBlockedSampleNamesOccluder": true,
+        "everyBlockedSampleHasNullTransmittance": true,
+        "everyBlockedSampleHasZeroTransport": true,
+        "componentConservationRelativeResidual": 3.623740070451831e-15,
+        "nonzeroButReducedRelativeToClear": true
+      }
+    },
+    {
+      "scope": "er4-transport",
+      "name": "sun-partial-blocker-does-not-alter-atmosphere-path-radiance",
+      "status": "accepted",
+      "evidence": {
+        "relativeResidual": 0,
+        "tolerance": 1e-12
+      }
+    },
+    {
+      "scope": "er4-transport",
+      "name": "sun-uses-one-conservative-path-without-collapsed-optimization",
+      "status": "accepted",
+      "evidence": {
+        "acceptedPath": "directional-spherical-cap-quadrature-only",
+        "collapsedOptimization": "absent",
+        "runtimeMethod": "spherical-cap-midpoint-equal-solid-angle-v1",
+        "highMethod": "spherical-cap-midpoint-equal-solid-angle-v1",
+        "runtimeIntegrator": {
+          "kind": "transported-extended-source-integrator-v1",
+          "channelCount": 15,
+          "physicalOrder": [
+            "sample top-of-atmosphere radiance once at each quadrature direction",
+            "resolve visibility once at that direction and source depth",
+            "sample aligned transmittance once at the same direction only when visible",
+            "multiply top-of-atmosphere radiance by transmittance once",
+            "accumulate transported radiance times quadrature solid-angle weight",
+            "divide each on-frame integral by exact destination-pixel solid angle"
+          ],
+          "rasterAssignment": "nearest-destination-pixel-from-exact-sample-direction",
+          "cameraFingerprint": "4bfd23bf3bf4c36bd83af6da1b7de9eab8e43ea8b49cdcea1467a6d4d406cecc",
+          "visibilityResolverFingerprint": "a8b161a5543f505e624d085681a8e30ed6f467958bfe4ac7bc48547aa999d919",
+          "visibilityResolverKind": "method-provider",
+          "visibilityResolverFingerprintDerivation": "supplied-sha256",
+          "transmittanceSamplerFingerprint": "a2bea2208f4d6cd957bcd224fbe5a208eff871524bda3065d14dceba762cb373",
+          "transmittanceSamplerKind": "method-provider",
+          "transmittanceSamplerFingerprintDerivation": "supplied-sha256",
+          "sourceQuantity": "spectral-radiance-density",
+          "sourceUnits": "W m^-2 sr^-1 nm^-1",
+          "transmittanceUnits": "1",
+          "outputQuantity": "transported-extended-spectral-radiance-density",
+          "outputUnits": "W m^-2 sr^-1 nm^-1",
+          "executionPath": "directional-spherical-cap-quadrature-only",
+          "collapsedOptimization": "absent",
+          "excludedInputs": [
+            "coverage-or-opacity",
+            "source-center-or-destination-transmittance",
+            "path-or-endpoint-radiance",
+            "display-values"
+          ],
+          "outsideThisClass": [
+            "path-radiance-integration",
+            "endpoint-radiance-composition",
+            "final-display-transform"
+          ]
+        },
+        "highOrderIntegrator": {
+          "kind": "transported-extended-source-integrator-v1",
+          "channelCount": 15,
+          "physicalOrder": [
+            "sample top-of-atmosphere radiance once at each quadrature direction",
+            "resolve visibility once at that direction and source depth",
+            "sample aligned transmittance once at the same direction only when visible",
+            "multiply top-of-atmosphere radiance by transmittance once",
+            "accumulate transported radiance times quadrature solid-angle weight",
+            "divide each on-frame integral by exact destination-pixel solid angle"
+          ],
+          "rasterAssignment": "nearest-destination-pixel-from-exact-sample-direction",
+          "cameraFingerprint": "4bfd23bf3bf4c36bd83af6da1b7de9eab8e43ea8b49cdcea1467a6d4d406cecc",
+          "visibilityResolverFingerprint": "a9254baac539e5cf88c661c9a3939f1f15918f5c01f5d634e1a6c17b85457e5b",
+          "visibilityResolverKind": "method-provider",
+          "visibilityResolverFingerprintDerivation": "supplied-sha256",
+          "transmittanceSamplerFingerprint": "913e780be070e17d2c2f60ed8e8359078419ed8d7f2dfa7f047171cb4361febf",
+          "transmittanceSamplerKind": "method-provider",
+          "transmittanceSamplerFingerprintDerivation": "supplied-sha256",
+          "sourceQuantity": "spectral-radiance-density",
+          "sourceUnits": "W m^-2 sr^-1 nm^-1",
+          "transmittanceUnits": "1",
+          "outputQuantity": "transported-extended-spectral-radiance-density",
+          "outputUnits": "W m^-2 sr^-1 nm^-1",
+          "executionPath": "directional-spherical-cap-quadrature-only",
+          "collapsedOptimization": "absent",
+          "excludedInputs": [
+            "coverage-or-opacity",
+            "source-center-or-destination-transmittance",
+            "path-or-endpoint-radiance",
+            "display-values"
+          ],
+          "outsideThisClass": [
+            "path-radiance-integration",
+            "endpoint-radiance-composition",
+            "final-display-transform"
+          ]
+        }
+      }
+    },
+    {
+      "scope": "er4-transport",
+      "name": "full-frame-base-is-complete-and-evaluated-once",
+      "status": "accepted",
+      "evidence": {
+        "evaluateBaseFrameCallCount": 1,
+        "expectedPixelCount": 48,
+        "actualPixelCount": 48,
+        "uniquePixelCount": 48,
+        "directionCount": 48,
+        "endpointCountBeforeInjection": 0,
+        "nonzeroPathPixelCount": 48,
+        "completeAndUnique": true,
+        "atmosphereCallsBeforeClosure": 145,
+        "atmosphereCallsAfterClosure": 193,
+        "baseFrameAtmosphereCallDelta": 48
+      }
+    },
+    {
+      "scope": "er4-transport",
+      "name": "full-frame-endpoint-is-typed-and-transported-once",
+      "status": "accepted",
+      "evidence": {
+        "fixtureId": "er4c-deterministic-non-celestial-endpoint-radiance-v1",
+        "pixelX": 3,
+        "pixelY": 2,
+        "equation": "L_endpoint_transported = T_view * L_endpoint",
+        "maximumAbsoluteResidual": 0,
+        "typedNonzeroFixtureInjected": true,
+        "viewSpectralTransmittance": {
+          "quantity": "spectral-transmittance",
+          "units": "1",
+          "basisFingerprint": "a666befc1789ebd9565d6c9a282613c8a3f4523c32248a5ec1de23b617a73b79",
+          "values": [
+            8.098986813500695e-9,
+            4.249088004567654e-7,
+            0.000006682543533751717,
+            0.000048304691001289313,
+            0.00020793792037094368,
+            0.0006271848130152452,
+            0.0014726387541690884,
+            0.002887056943930472,
+            0.004956901065254816,
+            0.007705668290932051,
+            0.011105157808301642,
+            0.015093309165737083,
+            0.01959097096414203,
+            0.024514434580485005,
+            0.029783404343720662
+          ]
+        },
+        "untransportedSpectralRadianceDensity": {
+          "quantity": "spectral-radiance-density",
+          "units": "W m^-2 sr^-1 nm^-1",
+          "basisFingerprint": "a666befc1789ebd9565d6c9a282613c8a3f4523c32248a5ec1de23b617a73b79",
+          "values": [
+            1e-7,
+            2e-7,
+            3e-7,
+            4e-7,
+            5e-7,
+            6e-7,
+            7e-7,
+            8e-7,
+            9e-7,
+            0.000001,
+            0.0000011,
+            0.0000012,
+            0.0000012999999999999998,
+            0.0000014,
+            0.0000015
+          ]
+        },
+        "transportedSpectralRadianceDensity": {
+          "quantity": "spectral-radiance-density",
+          "units": "W m^-2 sr^-1 nm^-1",
+          "basisFingerprint": "a666befc1789ebd9565d6c9a282613c8a3f4523c32248a5ec1de23b617a73b79",
+          "values": [
+            8.098986813500695e-16,
+            8.498176009135307e-14,
+            2.0047630601255152e-12,
+            1.9321876400515726e-11,
+            1.0396896018547183e-10,
+            3.763108878091471e-10,
+            1.0308471279183618e-9,
+            2.3096455551443773e-9,
+            4.461210958729334e-9,
+            7.70566829093205e-9,
+            1.2215673589131806e-8,
+            1.8111970998884498e-8,
+            2.5468262253384636e-8,
+            3.4320208412679004e-8,
+            4.4675106515580996e-8
+          ]
+        },
+        "hasStrictNonzeroAttenuation": true,
+        "transportedDiffersFromUntransported": true
+      }
+    },
+    {
+      "scope": "er4-transport",
+      "name": "full-frame-retains-nonzero-path-endpoint-extended-point-and-final-spectra",
+      "status": "accepted",
+      "evidence": {
+        "retainedComponents": [
+          "pathSpectralRadianceDensity",
+          "viewSpectralTransmittance",
+          "endpointSpectralRadianceDensity",
+          "transportedEndpointSpectralRadianceDensity",
+          "extendedSpectralRadianceDensity",
+          "pointSpectralRadianceDensity",
+          "finalSpectralRadianceDensity"
+        ],
+        "nonzeroPixelCounts": {
+          "path": 48,
+          "transportedEndpoint": 1,
+          "extended": 2,
+          "point": 4,
+          "final": 48
+        },
+        "maximumAbsoluteResidual": 0,
+        "accepted": true
+      }
+    },
+    {
+      "scope": "er4-transport",
+      "name": "full-frame-physical-algebra-and-component-totals-pass",
+      "status": "accepted",
+      "evidence": {
+        "algebra": {
+          "equation": "L_final=L_path+T_view*L_endpoint+L_extended_transport+L_point_transport",
+          "prescribedOperationMaximumAbsoluteResidual": 0,
+          "composerAssociativeMaximumAbsoluteResidual": 2.220446049250313e-16,
+          "composerAssociativeRoundoffTolerance": 7.97300009892312e-14,
+          "totalAlgebraResidual": [
+            -1.3234889800848443e-23,
+            -8.470329472543003e-22,
+            -6.776263578034403e-21,
+            5.421010862427522e-20,
+            -2.168404344971009e-19,
+            1.3010426069826053e-18,
+            8.673617379884035e-19,
+            -1.734723475976807e-18,
+            -1.734723475976807e-18,
+            -6.938893903907228e-18,
+            1.0408340855860843e-17,
+            6.938893903907228e-18,
+            -1.0408340855860843e-17,
+            6.938893903907228e-18,
+            6.938893903907228e-18
+          ],
+          "maximumAbsoluteTotalAlgebraResidual": 1.0408340855860843e-17,
+          "totalAlgebraRoundoffTolerance": 7.105427357601002e-15,
+          "exactPrescribedAlgebra": true
+        },
+        "componentTotals": {
+          "quantity": "spectral-radiance-solid-angle-integral",
+          "units": "W m^-2 nm^-1",
+          "values": {
+            "path": {
+              "quantity": "spectral-radiance-solid-angle-integral",
+              "units": "W m^-2 nm^-1",
+              "basisFingerprint": "a666befc1789ebd9565d6c9a282613c8a3f4523c32248a5ec1de23b617a73b79",
+              "values": [
+                8.585909239146789e-8,
+                9.775488691604444e-7,
+                0.000004358513476352183,
+                0.000014329574199012268,
+                0.00003356339729377818,
+                0.00007087730856842186,
+                0.00013047218677339001,
+                0.00021393022962732424,
+                0.00031317553982777917,
+                0.00042401755962484744,
+                0.0005441615580448568,
+                0.0006571178085725351,
+                0.0007779236379368211,
+                0.000882660127591876,
+                0.0009733021830881838
+              ]
+            },
+            "transportedEndpoint": {
+              "quantity": "spectral-radiance-solid-angle-integral",
+              "units": "W m^-2 nm^-1",
+              "basisFingerprint": "a666befc1789ebd9565d6c9a282613c8a3f4523c32248a5ec1de23b617a73b79",
+              "values": [
+                6.882125691983517e-19,
+                7.221337285050886e-17,
+                1.7035502934058604e-15,
+                1.641879225826793e-14,
+                8.834777343611557e-14,
+                3.1977071809122235e-13,
+                8.759638294173112e-13,
+                1.9626246320018515e-12,
+                3.790920427879881e-12,
+                6.547902711796609e-12,
+                1.0380286199812971e-11,
+                1.5390673403258118e-11,
+                2.1641692475905076e-11,
+                2.9163646454813024e-11,
+                3.796273600920758e-11
+              ]
+            },
+            "extended": {
+              "quantity": "spectral-radiance-solid-angle-integral",
+              "units": "W m^-2 nm^-1",
+              "basisFingerprint": "a666befc1789ebd9565d6c9a282613c8a3f4523c32248a5ec1de23b617a73b79",
+              "values": [
+                2.5454919074210816e-8,
+                0.000001648508741338021,
+                0.00002338151272001485,
+                0.0001626257221254984,
+                0.0006063199750849481,
+                0.001695173048982299,
+                0.003697406851038024,
+                0.006734511940988954,
+                0.010549266078513524,
+                0.014949387561584732,
+                0.019813561087435108,
+                0.02450525577895092,
+                0.029554874881495507,
+                0.03404538019702879,
+                0.03802639475990445
+              ]
+            },
+            "point": {
+              "quantity": "spectral-radiance-solid-angle-integral",
+              "units": "W m^-2 nm^-1",
+              "basisFingerprint": "a666befc1789ebd9565d6c9a282613c8a3f4523c32248a5ec1de23b617a73b79",
+              "values": [
+                2.0815737697335727e-20,
+                4.232612614074648e-18,
+                1.0584359975388345e-16,
+                1.0195683943765033e-15,
+                4.819848592111654e-15,
+                1.6074413965831476e-14,
+                3.893685987937993e-14,
+                7.521871005431524e-14,
+                1.239271725619754e-13,
+                1.753316912561599e-13,
+                2.4871507701464075e-13,
+                3.148703080513614e-13,
+                3.7868819146421435e-13,
+                4.3755899371947013e-13,
+                4.896276782748852e-13
+              ]
+            },
+            "final": {
+              "quantity": "spectral-radiance-solid-angle-integral",
+              "units": "W m^-2 nm^-1",
+              "basisFingerprint": "a666befc1789ebd9565d6c9a282613c8a3f4523c32248a5ec1de23b617a73b79",
+              "values": [
+                1.1131401146638772e-7,
+                0.0000026260576105749104,
+                0.000027740026198176422,
+                0.00017695529634194907,
+                0.0006398833724718937,
+                0.0017660503578865673,
+                0.0038278790387263157,
+                0.006948442172654119,
+                0.010862441622256148,
+                0.015373405127932806,
+                0.020357722656108974,
+                0.025162373603229007,
+                0.030332798541452696,
+                0.03492804035422188,
+                0.03899969698144501
+              ]
+            }
+          },
+          "independentResiduals": {
+            "path": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "transportedEndpoint": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "extended": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "point": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "final": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          "maximumAbsoluteRetentionResidual": 0
+        }
+      }
+    },
+    {
+      "scope": "er4-transport",
+      "name": "full-frame-runs-one-global-display-pass-after-composition-without-source-gain",
+      "status": "accepted",
+      "evidence": {
+        "display": {
+          "model": "BrunetonColorDisplayModel",
+          "displayFingerprint": "d6438926bc71954ee3dba44c49d1792ee31c9d704af2e5b9f5b7e5a03ff2a30b",
+          "callCountBeforeComposition": 0,
+          "callCountAfterComposition": 48,
+          "expectedCallCount": 48,
+          "pixelsWithExactlyOneCall": 48,
+          "oneCallPerCompletedPixel": true,
+          "sourceSpecificGain": "none",
+          "preDisplaySpectralValuesRetained": true
+        },
+        "preCompositionPolicy": {
+          "roots": [
+            "baseFrame",
+            "pointAccumulation",
+            "extendedIntegration"
+          ],
+          "displayFieldPaths": [],
+          "sourceGainFieldPaths": [],
+          "explicitNoGainDeclarations": [],
+          "displayPayloadAbsent": true,
+          "sourceSpecificGainAbsent": true,
+          "displayCallCountBeforeComposition": 0,
+          "noDisplayBeforeComposition": true,
+          "noSourceSpecificGain": true
+        }
+      }
+    },
+    {
+      "scope": "er4-transport",
+      "name": "full-frame-retains-exact-source-camera-basis-and-display-identities",
+      "status": "accepted",
+      "evidence": {
+        "sourceIdentities": {
+          "expected": {
+            "point": [
+              "calspec-sirius-full-frame-point"
+            ],
+            "extended": [
+              "canonical-sun-full-frame-disk"
+            ]
+          },
+          "composed": {
+            "extended": [
+              "canonical-sun-full-frame-disk"
+            ],
+            "point": [
+              "calspec-sirius-full-frame-point"
+            ]
+          },
+          "exactIdentityRetention": true
+        },
+        "fingerprints": {
+          "closureEvaluator": "a155de6bc27d0f0c0ad898276a4e86e2ccd8f9afb0e71c3a8e236fe2a47c5284",
+          "frameEvaluator": "1ead9c5af799dbfd27ba1d9fa111cacc77c0f04b5f8f6718b5a1a2c14feaf1c8",
+          "composer": "28d927223e8ce8ed77756fa3d948929aea0d577a72dcfdc3744d8c26d795a185",
+          "camera": "4bfd23bf3bf4c36bd83af6da1b7de9eab8e43ea8b49cdcea1467a6d4d406cecc",
+          "basis": "a666befc1789ebd9565d6c9a282613c8a3f4523c32248a5ec1de23b617a73b79",
+          "display": "d6438926bc71954ee3dba44c49d1792ee31c9d704af2e5b9f5b7e5a03ff2a30b"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,81 @@
+{
+  "schemaId": "camera-generic-phone-stage8c-fixture-v1",
+  "stage8a": {
+    "runId": "000358-camera-relative-projection-stage8a",
+    "artifactSetSha256": "69607f8d1a9339f6cc9d69a0c568cba85bd41ec25e80e55e66b2906d55b9d249",
+    "responseArtifact": "evidence/extracted-camera-response.json",
+    "responseArtifactSha256": "bc77aa6fbee545c8c74904c1d55559586f75154ba9658630774d4cf96791a9aa"
+  },
+  "input": {
+    "viewId": "wide",
+    "conditionId": "solar-noon",
+    "runId": "000352-spectral-color-production-wide-light-adapted-log",
+    "artifactSetSha256": "a563b4366dd465ff4d6a6c7a496594fec4e21c0f0659113887d04ff04f6ffb49",
+    "widthPixels": 641,
+    "heightPixels": 401,
+    "verticalFovDegrees": 78,
+    "productionImageArtifact": "renders/production/solar-noon.png"
+  },
+  "exifAnchor": {
+    "source": "https://commons.wikimedia.org/wiki/File:Sun_at_noon.jpg",
+    "cameraRecorded": "Samsung SM-M015G",
+    "fNumber": 2.2,
+    "shutterSeconds": 0.00015518311607697083,
+    "shutterNotation": "1/6444 s",
+    "iso": 102,
+    "focalLengthMillimeters": 2.26,
+    "metering": "average",
+    "whiteBalance": "auto",
+    "output": "sRGB",
+    "claim": "settings anchor only; not a Galaxy M01 reproduction"
+  },
+  "nominalSensor": {
+    "pixelPitchMicrometers": 1.12,
+    "peakQuantumEfficiency": 0.5,
+    "opticalTransmission": 0.7,
+    "fullWellElectrons": 5000,
+    "readNoiseElectronsRms": 2,
+    "adcBits": 12,
+    "isoGain": 1.02
+  },
+  "sensitivitySweep": {
+    "pixelPitchMicrometers": [0.8, 1.12, 1.4],
+    "peakQuantumEfficiency": [0.3, 0.5, 0.7],
+    "opticalTransmission": [0.5, 0.7, 0.9],
+    "fullWellElectrons": [1300, 5000, 9000]
+  },
+  "model": {
+    "lensIrradiance": "on-axis thin-lens E_lambda = L_lambda * pi / (4*N^2) * transmission",
+    "spectralResponse": "PBRT Canon 5D Mark IV relative response shapes globally normalized and reinterpreted only as authored generic Bayer QE shapes",
+    "photonConversion": "photons = E_lambda * pixelArea * shutter * integral_bin(lambda/(h*c) * QE_c(lambda) d lambda)",
+    "rawClipping": "electrons_captured = min(photoelectrons, fullWellElectrons), before characterization, white balance, ISO metadata, ADC, or sRGB",
+    "noise": "recorded but disabled for the deterministic saturation proof",
+    "iso": "recorded setting; 1.02 nominal gain applied only to normalized post-well ADC signal and cannot undo full-well clipping",
+    "development": "fixed D55 characterization to D65 XYZ, linear Rec.709 conversion, hard display clamp, IEC sRGB encoding; no tone curve",
+    "glare": "deferred"
+  },
+  "oracle": {
+    "implementation": "Colour",
+    "version": "0.4.6",
+    "pythonRelativePath": "tmp/extraterrestrial/tools/colour-0.4.6/Scripts/python.exe",
+    "script": "scripts/extraterrestrial/tools/camera-stage8c-colour-oracle.py",
+    "spectralShape": {"startNanometers": 360, "endNanometers": 830, "intervalNanometers": 1},
+    "colourCheckerDataset": "ColorChecker N Ohta",
+    "heldOutPatchIndicesZeroBased": [3, 7, 11, 15, 19, 23]
+  },
+  "references": [
+    {"id": "emva-1288", "url": "https://www.emva.org/wp-content/uploads/EMVA1288-3.0.pdf", "use": "QE, electron saturation capacity, and noise are separate sensor quantities"},
+    {"id": "raspberry-pi-camera-docs", "url": "https://www.raspberrypi.com/documentation/accessories/camera.html", "use": "1.12 micrometer IMX219 pixel-pitch precedent"},
+    {"id": "small-bsi-pixel", "url": "https://www.jos.ac.cn/article/doi/10.1088/1674-4926/33/12/124006", "use": "small-pixel simulated full-well examples from 1289 to 6390 electrons"},
+    {"id": "digital-camera-simulation", "url": "https://opg.optica.org/ao/abstract.cfm?uri=ao-51-4-a80", "use": "published physical-camera simulation precedent with 2.2 micrometer pixels and 9000-electron well"},
+    {"id": "pbrt-realistic-camera", "url": "https://www.pbr-book.org/3ed-2018/Camera_Models/Realistic_Cameras", "use": "radiance-to-sensor-irradiance camera-model precedent"}
+  ],
+  "gates": {
+    "namedSkySamples": ["upper-quarter", "top-center"],
+    "sunSample": "disk-center",
+    "requireNominalSunAllChannelsClipped": true,
+    "requireNominalSkyNoChannelsClipped": true,
+    "requireSweepRelationshipFraction": 1.0
+  },
+  "claimLimit": "EXIF-anchored generic-phone concept proof. Authored sensor parameters and PBRT-derived QE shapes prohibit a Galaxy M01 or other named-device reproduction claim."
+}

@@ -1,0 +1,554 @@
+{
+  "schemaVersion": 1,
+  "managedBy": "production-core-v1",
+  "sourceSnapshotId": "SNAPSHOT-REPO-000001",
+  "sources": [
+    {
+      "id": "SOURCE-REPO-000001",
+      "kind": "source-repository-snapshot",
+      "identity": {
+        "title": "poly-gc-react frozen working-tree snapshot",
+        "repositoryPath": "C:\\dev\\poly-gc-react",
+        "revision": "514d5f6080d2dd485efdb07b5da9a203357a40c0",
+        "snapshotId": "SNAPSHOT-REPO-000001"
+      },
+      "authority": {
+        "role": "implementation-and-document-state",
+        "status": "observed",
+        "limitations": [
+          "This source can establish what the frozen code, tests, documents, and artifacts say or contain; it cannot establish scientific correctness by itself.",
+          "The snapshot includes tracked, modified, deleted, untracked, ignored, and filesystem-only state."
+        ]
+      },
+      "availability": {
+        "status": "source-repository-read-only"
+      },
+      "license": {
+        "status": "repository-license-recorded-separately"
+      },
+      "reviewStatus": "reviewed",
+      "disposition": "metadata-only",
+      "links": {
+        "locations": [],
+        "facts": [],
+        "experiments": [],
+        "materials": [],
+        "contradictions": []
+      },
+      "blockers": []
+    },
+    {
+      "id": "SOURCE-EXT-000001",
+      "kind": "external-book",
+      "identity": {
+        "title": "Physically Based Rendering: From Theory to Implementation",
+        "edition": "4th",
+        "authors": [
+          "Matt Pharr",
+          "Wenzel Jakob",
+          "Greg Humphreys"
+        ],
+        "publisher": "MIT Press",
+        "year": 2023,
+        "stableUrl": "https://www.pbr-book.org/4ed/contents",
+        "sectionLocators": {
+          "transmittance": "https://www.pbr-book.org/4ed/Volume_Scattering/Transmittance",
+          "volume-scattering-processes": "https://www.pbr-book.org/4ed/Volume_Scattering/Volume_Scattering_Processes",
+          "phase-functions": "https://www.pbr-book.org/4ed/Volume_Scattering/Phase_Functions",
+          "diffuse-reflection": "https://www.pbr-book.org/4ed/Reflection_Models/Diffuse_Reflection",
+          "rays": "https://www.pbr-book.org/4ed/Geometry_and_Transformations/Rays",
+          "preface-license": "https://www.pbr-book.org/4ed/Preface#The-Online-Edition"
+        }
+      },
+      "authority": {
+        "role": "third-party-physics-and-transport-source",
+        "status": "production-cited-primary-technical-source",
+        "limitations": [
+          "Local packet shapes, error policy, quadrature choices, and product architecture are project decisions, not PBRT claims.",
+          "A PBRT equation supports its mathematical relationship only within the assumptions identified by each fact citation.",
+          "The cited PBRT sections do not by themselves select Algorithm32 atmosphere profiles, spectral data, phase-model parameters, or numerical convergence limits."
+        ]
+      },
+      "availability": {
+        "status": "online",
+        "verifiedAtUtc": "2026-07-13T23:41:22.0226588Z"
+      },
+      "license": {
+        "status": "official-online-license-verified",
+        "textLicense": {
+          "name": "Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International",
+          "shortName": "CC BY-NC-ND 4.0",
+          "url": "https://creativecommons.org/licenses/by-nc-nd/4.0/"
+        },
+        "figureLicense": {
+          "name": "Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International",
+          "shortName": "CC BY-NC-SA 4.0",
+          "url": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+          "scope": "book figures only; no figure is currently retained as catalog material"
+        },
+        "sourceUrl": "https://www.pbr-book.org/4ed/Preface#The-Online-Edition",
+        "sourceLocator": "The Online Edition license paragraph",
+        "reviewedAtUtc": "2026-07-13T23:41:22.0226588Z"
+      },
+      "reviewStatus": "reviewed",
+      "disposition": "link-only",
+      "links": {
+        "locations": [],
+        "facts": [],
+        "experiments": [],
+        "materials": [],
+        "contradictions": []
+      },
+      "blockers": []
+    }
+  ],
+  "experiments": [
+    {
+      "id": "EXPERIMENT-A32-000001",
+      "title": "Step 032 pre-display atmosphere and spectral physics correspondence candidate",
+      "kind": "experiment-032-correspondence-candidate",
+      "recordPath": "tmp/atmosphere/bruneton_start_fresh/032-figure1-four-view-source-k-no-ground-baseline",
+      "historicalLocators": [],
+      "runner": {
+        "status": "exact-record-snapshot-and-distinct-relocated-candidate-identified",
+        "paths": [
+          "tmp/atmosphere/bruneton_start_fresh/032-figure1-four-view-source-k-no-ground-baseline/script-snapshot.js",
+          "scripts/flat/experimental/bruneton-start-fresh.js"
+        ],
+        "pathRoles": [
+          {
+            "path": "tmp/atmosphere/bruneton_start_fresh/032-figure1-four-view-source-k-no-ground-baseline/script-snapshot.js",
+            "role": "exact-record-local-runner-snapshot"
+          },
+          {
+            "path": "scripts/flat/experimental/bruneton-start-fresh.js",
+            "role": "relocated-reconstruction-candidate-not-exact-record-runner"
+          }
+        ],
+        "recordedHistoricalPath": "scripts/flat/atmosphere/experimental/bruneton-start-fresh.js",
+        "recordedHistoricalPathStatus": "absent-in-frozen-snapshot",
+        "contentRelationship": "The record-local snapshot and relocated candidate have different SHA-256 values; only the snapshot preserves the executed historical runner bytes."
+      },
+      "claimBoundary": {
+        "status": "provisional-pre-display-physics-correspondence-only",
+        "supports": [
+          "Lineage candidate for production atmosphere and spectral physical constants.",
+          "Lineage candidate for recorded transport equations and model assumptions.",
+          "Historical value/name correspondence between Step 032 numerical controls 20/10/17/24 and the frozen production Step 032 control group, suggesting possible lineage."
+        ],
+        "doesNotProve": [
+          "Any display transform, color conversion, CIE table, rendered image, or visual-match claim; display and image outputs are explicitly out of scope.",
+          "That every current production Reference value maps to an exact Step 032 artifact field.",
+          "That the current CPU Reference realizes the model correctly.",
+          "Scientific validity beyond the external sources and model assumptions recorded by the experiment.",
+          "That the production control values were derived from Step 032; no exact handoff, commit, or decision locator has been identified."
+        ]
+      },
+      "historicalAcceptance": "short-code-cited-by-production-as-broad-possible-physics-lineage-not-per-fact-authority",
+      "rederivationReasons": [
+        "Production physical constants use only the broad transitional short code a32-poc-color-032.",
+        "Exact mappings from each retained constant, equation, model assumption, and numerical control to an external authority or artifact field have not been reconstructed in flattened-steel.",
+        "Display transforms, CIE/display tables, rendered images, and visual-match conclusions are excluded from this experiment claim boundary."
+      ]
+    },
+    {
+      "id": "EXPERIMENT-A32-000009",
+      "title": "Cleanroom finite-object transfer refined baseline",
+      "kind": "cleanroom-production-correspondence-candidate",
+      "recordPath": "tmp/atmosphere/cleanroom_environment/005-transfer-refined-baseline",
+      "historicalLocators": [],
+      "runner": {
+        "status": "exact-record-snapshot-and-distinct-maintained-candidate-identified",
+        "paths": [
+          "tmp/atmosphere/cleanroom_environment/005-transfer-refined-baseline/script-snapshot.js",
+          "scripts/flat/atmosphere-environment/run.js"
+        ],
+        "pathRoles": [
+          {
+            "path": "tmp/atmosphere/cleanroom_environment/005-transfer-refined-baseline/script-snapshot.js",
+            "role": "exact-record-local-runner-snapshot"
+          },
+          {
+            "path": "scripts/flat/atmosphere-environment/run.js",
+            "role": "maintained-reconstruction-candidate-not-exact-record-runner"
+          }
+        ],
+        "contentRelationship": "The record-local snapshot and maintained script have different SHA-256 values; only the snapshot preserves the executed historical runner bytes."
+      },
+      "claimBoundary": {
+        "status": "provisional-from-record-provenance-and-report",
+        "supports": [
+          "Historical value/name correspondence between record 005 and production runtime numerical controls 40/20/34/48, suggesting possible lineage.",
+          "A refined finite-object transfer baseline over its recorded cases and criteria."
+        ],
+        "doesNotProve": [
+          "That 40/20/34/48 is an optimal or universal production runtime profile.",
+          "Current production or target-code convergence, GPU parity, or app integration.",
+          "Any CIE, sRGB, tone-map, contact-sheet, or other display-preview result; those artifacts are inventory members only.",
+          "That production runtime controls were derived from record 005; no exact handoff, commit, or decision locator has been identified."
+        ]
+      },
+      "historicalAcceptance": "accepted-by-cleanroom-record-with-one-convergence-follow-up-unresolved",
+      "futureVerificationLayer": "cpu-oracle",
+      "rederivationReasons": [
+        "Production currently gives these controls no exact evidence pointer.",
+        "The record belongs to an archived cleanroom implementation lane and must be reproduced against target code."
+      ]
+    },
+    {
+      "id": "EXPERIMENT-A32-000010",
+      "title": "Cleanroom finite-object transfer refined convergence",
+      "kind": "cleanroom-production-correspondence-candidate",
+      "recordPath": "tmp/atmosphere/cleanroom_environment/006-transfer-refined-convergence",
+      "historicalLocators": [],
+      "runner": {
+        "status": "exact-record-snapshot-and-distinct-maintained-candidate-identified",
+        "paths": [
+          "tmp/atmosphere/cleanroom_environment/006-transfer-refined-convergence/script-snapshot.js",
+          "scripts/flat/atmosphere-environment/run.js"
+        ],
+        "pathRoles": [
+          {
+            "path": "tmp/atmosphere/cleanroom_environment/006-transfer-refined-convergence/script-snapshot.js",
+            "role": "exact-record-local-runner-snapshot"
+          },
+          {
+            "path": "scripts/flat/atmosphere-environment/run.js",
+            "role": "maintained-reconstruction-candidate-not-exact-record-runner"
+          }
+        ],
+        "contentRelationship": "The record-local snapshot and maintained script have different SHA-256 values; only the snapshot preserves the executed historical runner bytes."
+      },
+      "claimBoundary": {
+        "status": "provisional-from-record-provenance-and-report",
+        "supports": [
+          "Historical value/name correspondence between record 006 and production validation numerical controls 80/40/68/96, suggesting possible lineage.",
+          "A recorded finite-object transfer convergence comparison against record 005 with all 15 criteria passing and minimum effect-to-convergence margin about 6.40749."
+        ],
+        "doesNotProve": [
+          "That 80/40/68/96 is sufficient for every production scene or geometry.",
+          "Current production or target-code convergence, GPU parity, or app integration.",
+          "Any CIE, sRGB, tone-map, contact-sheet, or other display-preview result; those artifacts are inventory members only.",
+          "That production validation controls were derived from record 006; no exact handoff, commit, or decision locator has been identified."
+        ]
+      },
+      "historicalAcceptance": "accepted-by-cleanroom-record",
+      "futureVerificationLayer": "cpu-oracle",
+      "rederivationReasons": [
+        "Production currently gives these controls no exact evidence pointer.",
+        "The record belongs to an archived cleanroom implementation lane and must be reproduced against target code."
+      ]
+    }
+  ],
+  "manualFacts": [
+    {
+      "semanticKey": "production-source-registry:status",
+      "statement": "The frozen production source registry declares its status to be scaffold.",
+      "kind": "provenance-implementation-observation",
+      "domain": "production-source-registry",
+      "owner": "production-algorithm32-references",
+      "structuredValue": {
+        "value": "scaffold"
+      },
+      "supportStatus": "source-backed",
+      "implementationStatus": "scaffold",
+      "decisionStatus": "provisional",
+      "verificationLayer": "static-code-observation",
+      "citations": [
+        {
+          "path": "shared/algorithm32/production/references/source-registry.json",
+          "jsonPointer": "/status",
+          "role": "observes-registry-status"
+        }
+      ],
+      "nonClaims": [
+        "A scaffold does not provide source identities or claim mappings."
+      ],
+      "blockers": [
+        "The source registry has not been populated."
+      ],
+      "nextAction": "Replace the scaffold with selectively accepted, precisely pinned source records after catalog curation.",
+      "authorityRole": "physics-provenance-gap"
+    },
+    {
+      "semanticKey": "production-source-registry:source-count",
+      "statement": "The frozen production source registry contains zero source entries.",
+      "kind": "provenance-gap-observation",
+      "domain": "production-source-registry",
+      "owner": "production-algorithm32-references",
+      "structuredValue": {
+        "value": 0,
+        "units": "source-records"
+      },
+      "supportStatus": "source-backed",
+      "implementationStatus": "absent",
+      "decisionStatus": "provisional",
+      "verificationLayer": "static-code-observation",
+      "citations": [
+        {
+          "path": "shared/algorithm32/production/references/source-registry.json",
+          "jsonPointer": "/sources",
+          "role": "observes-empty-source-array"
+        }
+      ],
+      "nonClaims": [
+        "The separate Markdown references ledger is not empty."
+      ],
+      "blockers": [
+        "No machine-readable production source records exist."
+      ],
+      "nextAction": "Populate the target catalog first; later generate any production-local registry from accepted catalog owners.",
+      "authorityRole": "physics-provenance-gap"
+    },
+    {
+      "semanticKey": "production-source-registry:test-permits-empty-array",
+      "statement": "The production scaffold spec validates fields only inside existing source entries, so an empty source array satisfies that spec.",
+      "kind": "test-contract-observation",
+      "domain": "production-source-registry",
+      "owner": "production-algorithm32-tests",
+      "supportStatus": "source-backed",
+      "implementationStatus": "implemented",
+      "decisionStatus": "provisional",
+      "verificationLayer": "static-code-observation",
+      "citations": [
+        {
+          "path": "shared/algorithm32/production/_tests/scaffold.spec.js",
+          "lineStart": 109,
+          "lineEnd": 135,
+          "role": "observes-test-contract"
+        }
+      ],
+      "nonClaims": [
+        "This is a static test observation; the catalog has not executed the source test suite."
+      ],
+      "blockers": [
+        "The test does not require any source entry or validate source content."
+      ],
+      "nextAction": "Require meaningful source coverage through the repository catalog and later focused production tests.",
+      "authorityRole": "reference-validation"
+    },
+    {
+      "semanticKey": "production-analytic-fixture:status",
+      "statement": "The frozen production analytic invariant ledger declares its status to be draft.",
+      "kind": "fixture-status-observation",
+      "domain": "analytic-fixtures",
+      "owner": "production-algorithm32-fixtures",
+      "structuredValue": {
+        "value": "draft"
+      },
+      "supportStatus": "source-backed",
+      "implementationStatus": "implemented",
+      "decisionStatus": "provisional",
+      "verificationLayer": "static-code-observation",
+      "citations": [
+        {
+          "path": "shared/algorithm32/production/fixtures/analytic-invariants.json",
+          "jsonPointer": "/status",
+          "role": "observes-fixture-status"
+        }
+      ],
+      "nonClaims": [
+        "Draft fixture presence does not establish execution or target acceptance."
+      ],
+      "blockers": [
+        "Each row must be independently reviewed and reproduced in the target lane."
+      ],
+      "nextAction": "Retain atomic row facts while preserving their draft status.",
+      "authorityRole": "physics-provenance-gap"
+    },
+    {
+      "semanticKey": "production-analytic-fixture:abandoned-source-path",
+      "statement": "The production analytic invariant ledger records the abandoned atmosphere implementation fixture as its source path.",
+      "kind": "fixture-lineage-observation",
+      "domain": "analytic-fixtures",
+      "owner": "production-algorithm32-fixtures",
+      "structuredValue": {
+        "path": "scripts/flat/atmosphere_rejected/reference/stages/_tests/fixtures/analytic-invariants.json"
+      },
+      "supportStatus": "source-backed",
+      "implementationStatus": "implemented",
+      "decisionStatus": "provisional",
+      "verificationLayer": "static-code-observation",
+      "citations": [
+        {
+          "path": "shared/algorithm32/production/fixtures/analytic-invariants.json",
+          "jsonPointer": "/sourcePath",
+          "role": "observes-recorded-lineage"
+        }
+      ],
+      "nonClaims": [
+        "The abandoned implementation is not current production authority."
+      ],
+      "blockers": [
+        "The exact transformation from the 21-row abandoned fixture to the 15-row production fixture has not yet been reconstructed."
+      ],
+      "nextAction": "Catalog the abandoned ledger and its row-level transformation separately.",
+      "authorityRole": "physics-provenance-gap"
+    },
+    {
+      "semanticKey": "production-analytic-fixture:test-validates-envelope-not-source-content",
+      "statement": "The production fixture spec validates row shape and citation-number consistency but does not retrieve or validate the cited source content.",
+      "kind": "test-contract-observation",
+      "domain": "analytic-fixtures",
+      "owner": "production-algorithm32-tests",
+      "supportStatus": "source-backed",
+      "implementationStatus": "implemented",
+      "decisionStatus": "provisional",
+      "verificationLayer": "static-code-observation",
+      "citations": [
+        {
+          "path": "shared/algorithm32/production/_tests/fixtures.spec.js",
+          "lineStart": 91,
+          "lineEnd": 167,
+          "role": "observes-test-boundary"
+        }
+      ],
+      "nonClaims": [
+        "The spec does not independently establish any expected numeric value or report a current execution."
+      ],
+      "blockers": [
+        "Independent source/derivation verification remains necessary for every row."
+      ],
+      "nextAction": "Reproduce each fixture derivation and add target execution evidence separately.",
+      "authorityRole": "reference-validation"
+    },
+    {
+      "semanticKey": "production-short-code:a32-poc-color-032:workspace-identity",
+      "statement": "Production attributes its physical atmosphere and spectral constants only through the broad a32-poc-color-032 short code, which supplies neither per-fact external authority nor a precise source or artifact locator for those constants.",
+      "kind": "provenance-gap-observation",
+      "domain": "production-canonical-data-lineage",
+      "owner": "production-algorithm32-references",
+      "supportStatus": "source-backed",
+      "implementationStatus": "not-applicable",
+      "decisionStatus": "provisional",
+      "verificationLayer": "static-code-observation",
+      "citations": [
+        {
+          "path": "shared/algorithm32/production/references.md",
+          "lineStart": 38,
+          "lineEnd": 44,
+          "role": "defines-broad-short-code-lineage"
+        }
+      ],
+      "experimentIds": [
+        "EXPERIMENT-A32-000001"
+      ],
+      "contradictionIds": [
+        "CONTRADICTION-A32-000006"
+      ],
+      "nonClaims": [
+        "The short code is a lineage lead, not per-fact external authority.",
+        "No Color, display, rendered-image, or shader provenance claim is retained in this fact."
+      ],
+      "blockers": [
+        "No retained physical constant has been mapped from the broad short code to an exact external authority and precise source or experiment locator."
+      ],
+      "nextAction": "Map each retained physical constant to an exact external authority or explicitly experimental derivation, keeping the short code only as a lineage alias.",
+      "authorityRole": "physics-provenance-gap"
+    },
+    {
+      "semanticKey": "production-mie-phase:cornette-shanks-pointer-gap",
+      "statement": "CanonicalAtmosphere labels its Mie phase formula Cornette-Shanks-style but cites only production PBRT phase-functions reference 3, which is not a precise Cornette-Shanks source pointer.",
+      "kind": "provenance-gap-observation",
+      "domain": "atmosphere-phase-functions",
+      "owner": "production-algorithm32-atmosphere",
+      "supportStatus": "candidate-source",
+      "implementationStatus": "implemented",
+      "decisionStatus": "provisional",
+      "verificationLayer": "static-code-observation",
+      "citations": [
+        {
+          "path": "shared/algorithm32/production/atmospheres/CanonicalAtmosphere.js",
+          "lineStart": 427,
+          "lineEnd": 445,
+          "role": "observes-formula-and-citation"
+        },
+        {
+          "path": "shared/algorithm32/production/references.md",
+          "lineStart": 57,
+          "lineEnd": 59,
+          "role": "identifies-reference-3"
+        }
+      ],
+      "experimentIds": [],
+      "nonClaims": [
+        "PBRT supports general phase-function concepts; this gap concerns the exact named formula provenance."
+      ],
+      "blockers": [
+        "The precise Bruneton/Cornette-Shanks source identity is not promoted into the production ledger."
+      ],
+      "nextAction": "Pin and cite the exact upstream formula, then independently compare the production implementation.",
+      "authorityRole": "physics-provenance-gap"
+    }
+  ],
+  "contradictions": [
+    {
+      "id": "CONTRADICTION-A32-000002",
+      "kind": "overbroad-production-source-label",
+      "summary": "Algorithm32CanonicalData.js applies the Step 032 short code at file scope, while its runtime and validation numerical-control field names and values correspond to cleanroom records 005 and 006; no exact handoff proves derivation from those records.",
+      "scope": "production canonical-data provenance",
+      "currentObservation": "Step 032 records 20/10/17/24; cleanroom 005 records 40/20/34/48; cleanroom 006 records 80/40/68/96; and frozen production records the same three groups. Equality and field-name correspondence suggest possible lineage but do not prove it.",
+      "desiredState": "Retain separate per-control correspondence candidates until an exact handoff, commit, or decision proves lineage, then independently rederive and accept any target controls.",
+      "resolutionStatus": "catalog-records-correspondence-source-document-unmodified",
+      "requiredAction": "Replace the file-level shorthand with precise per-value evidence pointers and, where available, exact handoff or decision locators during selective production documentation and code curation.",
+      "citations": [
+        {
+          "path": "shared/algorithm32/production/constants/Algorithm32CanonicalData.js",
+          "lineStart": 1,
+          "lineEnd": 3,
+          "role": "contains-overbroad-file-level-source-label"
+        },
+        {
+          "path": "tmp/atmosphere/cleanroom_environment/005-transfer-refined-baseline/provenance.json",
+          "lineStart": 9,
+          "lineEnd": 14,
+          "role": "records-runtime-control-correspondence-candidate"
+        },
+        {
+          "path": "tmp/atmosphere/cleanroom_environment/006-transfer-refined-convergence/provenance.json",
+          "lineStart": 9,
+          "lineEnd": 14,
+          "role": "records-validation-control-correspondence-candidate"
+        }
+      ],
+      "experimentIds": [
+        "EXPERIMENT-A32-000001",
+        "EXPERIMENT-A32-000009",
+        "EXPERIMENT-A32-000010"
+      ],
+      "blockers": [
+        "Target-code convergence and policy acceptance have not been run."
+      ]
+    },
+    {
+      "id": "CONTRADICTION-A32-000006",
+      "kind": "physical-constants-broad-short-code-provenance-gap",
+      "summary": "Production attributes physical atmosphere and spectral constants through the broad a32-poc-color-032 short code without per-fact external authority or precise source and artifact locators.",
+      "scope": "canonical atmosphere and spectral physical-constant provenance",
+      "currentObservation": "The short code identifies broad POC lineage, but it does not map any individual retained physical constant to an external source equation, dataset row, or exact experiment field.",
+      "desiredState": "Every retained physical constant has an exact external authority and locator, or an explicitly classified experimental derivation with a reproducible record; the broad short code remains lineage metadata only.",
+      "resolutionStatus": "unresolved-per-fact-physics-provenance",
+      "requiredAction": "Reconstruct per-constant mappings from external physics sources and the pre-display portion of Step 032, then review each mapping independently.",
+      "citations": [
+        {
+          "path": "shared/algorithm32/production/references.md",
+          "lineStart": 38,
+          "lineEnd": 44,
+          "role": "defines-broad-short-code-lineage"
+        },
+        {
+          "path": "shared/algorithm32/production/constants/Algorithm32CanonicalData.js",
+          "lineStart": 1,
+          "lineEnd": 3,
+          "role": "applies-broad-short-code-at-file-scope"
+        }
+      ],
+      "experimentIds": [
+        "EXPERIMENT-A32-000001"
+      ],
+      "blockers": [
+        "No complete per-constant external-authority and precise-locator mapping exists."
+      ]
+    }
+  ]
+}

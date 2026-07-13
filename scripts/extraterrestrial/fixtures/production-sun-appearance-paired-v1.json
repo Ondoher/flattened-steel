@@ -1,0 +1,295 @@
+{
+	"id": "production-sun-appearance-paired-v1",
+	"schemaVersion": "production-sun-appearance-paired-v1",
+	"claimBoundary": "A sealed normal-path diagnostic and one fixed ACES 2 candidate decision. This fixture does not authorize production changes, source-specific display rules, parameter tuning, or a comparison sweep.",
+	"productionProfileId": "native-15",
+	"fixedSceneScale": {
+		"owner": "BrunetonColorDisplayModel.DISPLAY_TONE_MAP_K",
+		"luminousEfficacyLumensPerWatt": 683,
+		"referenceLuminanceMultiplier": 5,
+		"value": 0.00029282576866764276,
+		"variable": false
+	},
+	"sourcePathConvergence": {
+		"productionIntervalCount": 20,
+		"refinedIntervalCounts": [20, 40, 80, 160, 320, 640, 1280],
+		"richardsonOrder": 2,
+		"tailEstimate": "abs(f1280-f640)/3",
+		"requiredContraction": {
+			"d320MaximumFromD160": {
+				"factor": 0.35,
+				"absoluteFloor": 1e-12
+			},
+			"d640MaximumFromD320": {
+				"factor": 0.35,
+				"absoluteFloor": 1e-12
+			}
+		},
+		"spectralTailTolerance": {
+			"absolute": 1e-10,
+			"relative": 0.0001
+		},
+		"xyzAndYTolerance": {
+			"absolute": 0.000001,
+			"relative": 0.00005
+		}
+	},
+	"distant": {
+		"family": "spherical-distant",
+		"location": {
+			"label": "San Jose",
+			"latitudeDegrees": 37.3382,
+			"longitudeDegrees": -121.8863,
+			"observerHeightMeters": 5
+		},
+		"sunAngularRadiusRadians": 0.004675,
+		"conditions": [
+			{
+				"id": "solar-noon",
+				"instant": "2024-06-20T20:08:00.000Z",
+				"partition": "calibration",
+				"radialOrientations": ["zenithward"]
+			},
+			{
+				"id": "sunset-minus-30-minutes",
+				"instant": "2024-06-21T02:56:03.503Z",
+				"partition": "holdout",
+				"radialOrientations": ["zenithward", "equal-elevation"]
+			},
+			{
+				"id": "sunset-minus-20-minutes",
+				"instant": "2024-06-21T03:06:03.503Z",
+				"partition": "calibration",
+				"radialOrientations": ["zenithward", "equal-elevation"]
+			},
+			{
+				"id": "sunset-minus-10-minutes",
+				"instant": "2024-06-21T03:16:03.503Z",
+				"partition": "holdout",
+				"radialOrientations": ["zenithward", "equal-elevation"],
+				"candidatePreview": true
+			},
+			{
+				"id": "sunset",
+				"instant": "2024-06-21T03:26:03.503Z",
+				"partition": "calibration",
+				"radialOrientations": ["zenithward", "equal-elevation"]
+			}
+		]
+	},
+	"flat": {
+		"family": "flat-local",
+		"claimBoundary": "Union Glacier labels identify frozen Flat32 presentation states only; they are not geographic, ephemeris, or observational validation.",
+		"location": {
+			"label": "Union Glacier",
+			"latitudeDegrees": -79.768036,
+			"longitudeDegrees": -83.261666,
+			"dateBasis": "2024-12-14T12:00:00.000Z",
+			"observerMeters": [0, 0, 5]
+		},
+		"source": {
+			"sourceId": "flat-local-sun",
+			"radiusMeters": 25749.504,
+			"heightMeters": 4828032,
+			"surfaceRadianceValues": [
+				11822.66204572723, 19131.796290730832, 20596.24900510576, 22365.90602980418, 21105.962583299384,
+				20832.06071193563, 20288.478558443545, 19549.534528254357, 18355.838693437217, 17123.45540373146,
+				16046.979644514584, 14832.271724935203, 13963.689878931815, 12998.896355112902, 12065.530627488644
+			]
+		},
+		"geometry": {
+			"topAltitudeMeters": 100000,
+			"observerDomeApexMeters": 100000,
+			"observerDomeMaximumViewRayMeters": 1926774,
+			"referenceDistanceMeters": 4800000
+		},
+		"conditions": [
+			{
+				"id": "flat-close",
+				"flatAngleDegrees": 0,
+				"expectedCenterMeters": [0, 6283427.593407407, 4828032],
+				"expectedCacheRadialMaximumMeters": 6283427.593407407,
+				"distanceClass": "close",
+				"partition": "calibration",
+				"radialOrientations": ["zenithward"]
+			},
+			{
+				"id": "flat-medium",
+				"flatAngleDegrees": 90,
+				"expectedCenterMeters": [-12561323.593082156, 18844750.419161934, 4828032],
+				"expectedCacheRadialMaximumMeters": 22647548.846853744,
+				"distanceClass": "medium",
+				"partition": "holdout",
+				"radialOrientations": ["zenithward"]
+			},
+			{
+				"id": "flat-long",
+				"flatAngleDegrees": 180,
+				"expectedCenterMeters": [-24595.66610387899, 31412707.263672166, 4828032],
+				"expectedCacheRadialMaximumMeters": 31412716.886663348,
+				"distanceClass": "long",
+				"partition": "calibration",
+				"radialOrientations": ["zenithward"],
+				"candidatePreview": true
+			}
+		]
+	},
+	"viewports": [
+		{
+			"id": "camera-a-wide",
+			"widthPixels": 641,
+			"heightPixels": 401,
+			"devicePixelRatio": 1,
+			"verticalFovDegrees": 78
+		},
+		{
+			"id": "camera-b-tight",
+			"widthPixels": 961,
+			"heightPixels": 541,
+			"devicePixelRatio": 1,
+			"verticalFovDegrees": 50
+		}
+	],
+	"sampling": {
+		"centerPixelMustBeOpticalAxis": true,
+		"rasterSubsamplesPerPixel": 4,
+		"diskSamples": [
+			{
+				"id": "center",
+				"apparentRadiusFactor": 0
+			},
+			{
+				"id": "inside-limb",
+				"apparentRadiusFactor": 0.95
+			}
+		],
+		"circumsolarOffsetsDegrees": [0.5, 1, 2],
+		"expectedCounts": {
+			"distantPixelPairs": 108,
+			"distantRasterSubsamplePairs": 432,
+			"flatPixelPairs": 36,
+			"flatRasterSubsamplePairs": 144,
+			"totalPixelPairs": 144,
+			"totalRasterSubsamplePairs": 576,
+			"calibrationPixelPairs": 84,
+			"holdoutPixelPairs": 60
+		}
+	},
+	"outputContract": {
+		"sentinelLinearValues": [0, 0.00392156862745098, 0.0031308, 0.018, 0.18, 0.5, 0.75, 1],
+		"candidateEncodings": ["identity", "srgb-piecewise"],
+		"normalizedUnsignedQuantizer": "round((2^b-1)*clamp(x,0,1))/(2^b-1)",
+		"requiredStages": [
+			"completed-native-spectrum",
+			"signed-scene-linear-rgb",
+			"mapper-float",
+			"rgba32f-diagnostic-replay",
+			"rgba16f-production-like-replay",
+			"default-framebuffer",
+			"png-or-screenshot-code-values"
+		],
+		"requireExactCodeClassification": true
+	},
+	"diagnosticTolerances": {
+		"cacheVersusBinary64": {
+			"absolute": 0.0005,
+			"relative": 0.00005,
+			"reportUlp": true
+		},
+		"float32Composition": {
+			"maximumUlp": 0,
+			"operation": "f32(f32(path)+f32(celestial))"
+		},
+		"coverage": {
+			"allowedValues": [0, 0.25, 0.5, 0.75, 1],
+			"absolute": 0.00001
+		},
+		"cpuReferenceTransform": {
+			"absolute": 0.000002,
+			"relative": 0.00002,
+			"maximumUlp": 256
+		},
+		"gpuCpuTransform": {
+			"absolute": 0.00001,
+			"relative": 0.0001,
+			"maximumUlp": 1024
+		},
+		"nearZeroUlpWaiverMultiplier": 8,
+		"quantizedCodesMustMatchExactly": true
+	},
+	"pairDecision": {
+		"rawPositiveOrder": "(diskYRefined-diskYUncertainty)-(skyYRefined+skyYUncertainty)>0",
+		"designatedLowSunConditionIds": [
+			"sunset-minus-30-minutes",
+			"sunset-minus-20-minutes",
+			"sunset-minus-10-minutes",
+			"sunset",
+			"flat-close",
+			"flat-medium",
+			"flat-long"
+		],
+		"requireStrictRenderingTargetYOrder": true,
+		"requireNonidenticalNoninvertedQuantizedCodes": true,
+		"allowHighNoonCodeWhite": true,
+		"requireNoNewRadialInversionOrHalo": true
+	},
+	"candidate": {
+		"id": "aces-2.0-rec709-d65-100nit-fixed-scale-v1",
+		"releaseTag": "v2.0.0+2025.04.04",
+		"tagObject": "bff66e9532503de9693b9f2e32fb505ad7164339",
+		"releaseCommit": "35e1e6ac2c26ec75433547d5d0a3a881f39bd9f5",
+		"releaseAsset": {
+			"name": "aces_v2-0-0-2025-04-04.zip",
+			"githubAssetId": 243655543,
+			"sizeBytes": 316810,
+			"sha256": "b9a7eb69dc57e1732b2bd63a060a94ad10fb9c61de2cdc33055f95594a3b08fa"
+		},
+		"submodules": {
+			"aces-amf": "78e8d8175f6408c1eba5575e54a69b4cf363073b",
+			"aces-core": "2d7af39344725aaa8ac3bf1746693c9a1d6c4792",
+			"aces-input-and-colorspaces": "cc60becf11534f2a40df00a281f47e95412d0599",
+			"aces-look": "e0e70ecf2ce57d503318dde1fa4aa1bd7287fcdd",
+			"aces-output": "aab74723f76728c37345ed01e51ebb24fb1f2f1f"
+		},
+		"license": "License Terms for Academy Color Encoding System Components",
+		"creativeWhite": "D65",
+		"renderingTarget": "100-nit Rec.709/D65",
+		"displayEncoding": "deferred-until-output-contract-measurement",
+		"projectClampPolicy": "No project-authored clamp before the pinned ACES core. Invoke the official core unchanged and record its AP1 lower/upper clamp masks.",
+		"officialCoreClamp": {
+			"ap1LowerLimit": 0,
+			"ap1UpperLimitFor100NitTarget": 1024,
+			"rHit": 128,
+			"forwardLimitMultiplier": 8
+		},
+		"parameterTuningPermitted": false,
+		"alternateMapperComparisonPermitted": false
+	},
+	"syntheticReferenceGrid": {
+		"largestMeasuredMagnitudeSymbol": "M",
+		"neutralRangeStops": {
+			"minimumPowerOfTwo": -16,
+			"maximum": "at-least-2M",
+			"stepStops": 0.25,
+			"include": [0, 1024, "neighbors-of-1024", "all-measured-neutral-levels"]
+		},
+		"signedCubeMultipliers": [-2, -1, 0, 1, 2],
+		"hueCount": 360,
+		"hueLightnessLevels": [0.00390625, 0.18, 1, 16, 256, 1024, "2M"],
+		"saturationMultipliers": [0, 0.25, 0.5, 0.75, 1, 1.25, 1.5, 2, 4],
+		"includeOfficialHueKnotsAndWrap": true,
+		"includeGamutCusps": true,
+		"includeEncodingBranches": true,
+		"includeQuantizerHalfCodes": true,
+		"seamDeltaMultipliers": [0.00390625, 0.000244140625, 0.0000152587890625],
+		"continuityGate": "D(k+1)<=0.5*D(k)+4*tauOutput",
+		"strictMonotonicDomain": [0, 1024],
+		"aboveOfficialForwardLimitPolicy": "continuous-nondecreasing-plateau-permitted"
+	},
+	"brunetonNonRegression": {
+		"rgbRmseMaximum": 0.025415448635317905,
+		"meanUPrimeVPrimeDistanceMaximum": 0.00718644641935909,
+		"meanAbsoluteRelativeLuminanceErrorMaximum": 0.046603647487835945,
+		"note": "The additive 1e-12 allowance is already included in each stored maximum. Existing color-gate promotion thresholds remain independently authoritative."
+	}
+}

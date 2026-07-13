@@ -1,0 +1,723 @@
+{
+  "schema": "algorithm32-current-production-b1-provenance-v2",
+  "runId": "current-production-b1-gpu-shaders-20260813T022114257Z",
+  "backend": "gpu-production-shaders-r32f",
+  "executionBoundary": "production GPU cache construction and production final-view transport shader with native spectral readout",
+  "gpuCapabilities": {
+    "threeRevision": "180",
+    "webglVersion": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+    "shadingLanguageVersion": "WebGL GLSL ES 3.00 (OpenGL ES GLSL ES 3.0 Chromium)",
+    "renderer": "WebKit WebGL",
+    "unmaskedVendor": "Google Inc. (NVIDIA)",
+    "unmaskedRenderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 2060 Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "maximumArrayLayers": 2048,
+    "maximumTextureSize": 16384
+  },
+  "gpuConditionDiagnostics": [
+    {
+      "time": "09:30",
+      "shaderDiagnostics": {
+        "status": "installed",
+        "modelVersion": 1,
+        "runtime": {
+          "status": "ready",
+          "sourceHash": "fnv1a32:19461314",
+          "frameCount": 10,
+          "renderErrorCount": 0,
+          "lastRenderError": null,
+          "viewportSize": {
+            "width": 9,
+            "height": 9,
+            "units": "pixels"
+          },
+          "sceneInputCapture": null,
+          "skyExposure": null
+        }
+      },
+      "shaderSourceMetrics": {
+        "characterCount": 25375,
+        "utf8ByteCount": 25375,
+        "lineCount": 505
+      },
+      "executionTimings": {
+        "cacheGpuDrainDurationMilliseconds": null,
+        "finalShaderPreparationDurationMilliseconds": 34717.5,
+        "readbackDurationMilliseconds": 1992.9000000953674
+      }
+    },
+    {
+      "time": "09:45",
+      "shaderDiagnostics": {
+        "status": "installed",
+        "modelVersion": 1,
+        "runtime": {
+          "status": "ready",
+          "sourceHash": "fnv1a32:19461314",
+          "frameCount": 10,
+          "renderErrorCount": 0,
+          "lastRenderError": null,
+          "viewportSize": {
+            "width": 9,
+            "height": 9,
+            "units": "pixels"
+          },
+          "sceneInputCapture": null,
+          "skyExposure": null
+        }
+      },
+      "shaderSourceMetrics": {
+        "characterCount": 25375,
+        "utf8ByteCount": 25375,
+        "lineCount": 505
+      },
+      "executionTimings": {
+        "cacheGpuDrainDurationMilliseconds": null,
+        "finalShaderPreparationDurationMilliseconds": 392.10000014305115,
+        "readbackDurationMilliseconds": 783.7000000476837
+      }
+    },
+    {
+      "time": "10:00",
+      "shaderDiagnostics": {
+        "status": "installed",
+        "modelVersion": 1,
+        "runtime": {
+          "status": "ready",
+          "sourceHash": "fnv1a32:19461314",
+          "frameCount": 10,
+          "renderErrorCount": 0,
+          "lastRenderError": null,
+          "viewportSize": {
+            "width": 9,
+            "height": 9,
+            "units": "pixels"
+          },
+          "sceneInputCapture": null,
+          "skyExposure": null
+        }
+      },
+      "shaderSourceMetrics": {
+        "characterCount": 25375,
+        "utf8ByteCount": 25375,
+        "lineCount": 505
+      },
+      "executionTimings": {
+        "cacheGpuDrainDurationMilliseconds": null,
+        "finalShaderPreparationDurationMilliseconds": 362.2999999523163,
+        "readbackDurationMilliseconds": 341.2999999523163
+      }
+    },
+    {
+      "time": "10:15",
+      "shaderDiagnostics": {
+        "status": "installed",
+        "modelVersion": 1,
+        "runtime": {
+          "status": "ready",
+          "sourceHash": "fnv1a32:19461314",
+          "frameCount": 10,
+          "renderErrorCount": 0,
+          "lastRenderError": null,
+          "viewportSize": {
+            "width": 9,
+            "height": 9,
+            "units": "pixels"
+          },
+          "sceneInputCapture": null,
+          "skyExposure": null
+        }
+      },
+      "shaderSourceMetrics": {
+        "characterCount": 25375,
+        "utf8ByteCount": 25375,
+        "lineCount": 505
+      },
+      "executionTimings": {
+        "cacheGpuDrainDurationMilliseconds": null,
+        "finalShaderPreparationDurationMilliseconds": 393,
+        "readbackDurationMilliseconds": 732.2999999523163
+      }
+    },
+    {
+      "time": "10:30",
+      "shaderDiagnostics": {
+        "status": "installed",
+        "modelVersion": 1,
+        "runtime": {
+          "status": "ready",
+          "sourceHash": "fnv1a32:19461314",
+          "frameCount": 10,
+          "renderErrorCount": 0,
+          "lastRenderError": null,
+          "viewportSize": {
+            "width": 9,
+            "height": 9,
+            "units": "pixels"
+          },
+          "sceneInputCapture": null,
+          "skyExposure": null
+        }
+      },
+      "shaderSourceMetrics": {
+        "characterCount": 25375,
+        "utf8ByteCount": 25375,
+        "lineCount": 505
+      },
+      "executionTimings": {
+        "cacheGpuDrainDurationMilliseconds": null,
+        "finalShaderPreparationDurationMilliseconds": 392.10000014305115,
+        "readbackDurationMilliseconds": 641
+      }
+    },
+    {
+      "time": "10:45",
+      "shaderDiagnostics": {
+        "status": "installed",
+        "modelVersion": 1,
+        "runtime": {
+          "status": "ready",
+          "sourceHash": "fnv1a32:19461314",
+          "frameCount": 10,
+          "renderErrorCount": 0,
+          "lastRenderError": null,
+          "viewportSize": {
+            "width": 9,
+            "height": 9,
+            "units": "pixels"
+          },
+          "sceneInputCapture": null,
+          "skyExposure": null
+        }
+      },
+      "shaderSourceMetrics": {
+        "characterCount": 25375,
+        "utf8ByteCount": 25375,
+        "lineCount": 505
+      },
+      "executionTimings": {
+        "cacheGpuDrainDurationMilliseconds": null,
+        "finalShaderPreparationDurationMilliseconds": 376.89999985694885,
+        "readbackDurationMilliseconds": 665.2999999523163
+      }
+    },
+    {
+      "time": "11:00",
+      "shaderDiagnostics": {
+        "status": "installed",
+        "modelVersion": 1,
+        "runtime": {
+          "status": "ready",
+          "sourceHash": "fnv1a32:19461314",
+          "frameCount": 10,
+          "renderErrorCount": 0,
+          "lastRenderError": null,
+          "viewportSize": {
+            "width": 9,
+            "height": 9,
+            "units": "pixels"
+          },
+          "sceneInputCapture": null,
+          "skyExposure": null
+        }
+      },
+      "shaderSourceMetrics": {
+        "characterCount": 25375,
+        "utf8ByteCount": 25375,
+        "lineCount": 505
+      },
+      "executionTimings": {
+        "cacheGpuDrainDurationMilliseconds": null,
+        "finalShaderPreparationDurationMilliseconds": 409.7000000476837,
+        "readbackDurationMilliseconds": 693.3999998569489
+      }
+    },
+    {
+      "time": "11:15",
+      "shaderDiagnostics": {
+        "status": "installed",
+        "modelVersion": 1,
+        "runtime": {
+          "status": "ready",
+          "sourceHash": "fnv1a32:19461314",
+          "frameCount": 10,
+          "renderErrorCount": 0,
+          "lastRenderError": null,
+          "viewportSize": {
+            "width": 9,
+            "height": 9,
+            "units": "pixels"
+          },
+          "sceneInputCapture": null,
+          "skyExposure": null
+        }
+      },
+      "shaderSourceMetrics": {
+        "characterCount": 25375,
+        "utf8ByteCount": 25375,
+        "lineCount": 505
+      },
+      "executionTimings": {
+        "cacheGpuDrainDurationMilliseconds": null,
+        "finalShaderPreparationDurationMilliseconds": 373.7999999523163,
+        "readbackDurationMilliseconds": 695.1000001430511
+      }
+    },
+    {
+      "time": "11:30",
+      "shaderDiagnostics": {
+        "status": "installed",
+        "modelVersion": 1,
+        "runtime": {
+          "status": "ready",
+          "sourceHash": "fnv1a32:19461314",
+          "frameCount": 10,
+          "renderErrorCount": 0,
+          "lastRenderError": null,
+          "viewportSize": {
+            "width": 9,
+            "height": 9,
+            "units": "pixels"
+          },
+          "sceneInputCapture": null,
+          "skyExposure": null
+        }
+      },
+      "shaderSourceMetrics": {
+        "characterCount": 25375,
+        "utf8ByteCount": 25375,
+        "lineCount": 505
+      },
+      "executionTimings": {
+        "cacheGpuDrainDurationMilliseconds": null,
+        "finalShaderPreparationDurationMilliseconds": 380,
+        "readbackDurationMilliseconds": 680.4000000953674
+      }
+    },
+    {
+      "time": "11:45",
+      "shaderDiagnostics": {
+        "status": "installed",
+        "modelVersion": 1,
+        "runtime": {
+          "status": "ready",
+          "sourceHash": "fnv1a32:19461314",
+          "frameCount": 10,
+          "renderErrorCount": 0,
+          "lastRenderError": null,
+          "viewportSize": {
+            "width": 9,
+            "height": 9,
+            "units": "pixels"
+          },
+          "sceneInputCapture": null,
+          "skyExposure": null
+        }
+      },
+      "shaderSourceMetrics": {
+        "characterCount": 25375,
+        "utf8ByteCount": 25375,
+        "lineCount": 505
+      },
+      "executionTimings": {
+        "cacheGpuDrainDurationMilliseconds": null,
+        "finalShaderPreparationDurationMilliseconds": 364,
+        "readbackDurationMilliseconds": 353.10000014305115
+      }
+    },
+    {
+      "time": "12:00",
+      "shaderDiagnostics": {
+        "status": "installed",
+        "modelVersion": 1,
+        "runtime": {
+          "status": "ready",
+          "sourceHash": "fnv1a32:19461314",
+          "frameCount": 10,
+          "renderErrorCount": 0,
+          "lastRenderError": null,
+          "viewportSize": {
+            "width": 9,
+            "height": 9,
+            "units": "pixels"
+          },
+          "sceneInputCapture": null,
+          "skyExposure": null
+        }
+      },
+      "shaderSourceMetrics": {
+        "characterCount": 25375,
+        "utf8ByteCount": 25375,
+        "lineCount": 505
+      },
+      "executionTimings": {
+        "cacheGpuDrainDurationMilliseconds": null,
+        "finalShaderPreparationDurationMilliseconds": 385,
+        "readbackDurationMilliseconds": 695.1000001430511
+      }
+    },
+    {
+      "time": "12:15",
+      "shaderDiagnostics": {
+        "status": "installed",
+        "modelVersion": 1,
+        "runtime": {
+          "status": "ready",
+          "sourceHash": "fnv1a32:19461314",
+          "frameCount": 10,
+          "renderErrorCount": 0,
+          "lastRenderError": null,
+          "viewportSize": {
+            "width": 9,
+            "height": 9,
+            "units": "pixels"
+          },
+          "sceneInputCapture": null,
+          "skyExposure": null
+        }
+      },
+      "shaderSourceMetrics": {
+        "characterCount": 25375,
+        "utf8ByteCount": 25375,
+        "lineCount": 505
+      },
+      "executionTimings": {
+        "cacheGpuDrainDurationMilliseconds": null,
+        "finalShaderPreparationDurationMilliseconds": 385.5,
+        "readbackDurationMilliseconds": 684
+      }
+    },
+    {
+      "time": "12:30",
+      "shaderDiagnostics": {
+        "status": "installed",
+        "modelVersion": 1,
+        "runtime": {
+          "status": "ready",
+          "sourceHash": "fnv1a32:19461314",
+          "frameCount": 10,
+          "renderErrorCount": 0,
+          "lastRenderError": null,
+          "viewportSize": {
+            "width": 9,
+            "height": 9,
+            "units": "pixels"
+          },
+          "sceneInputCapture": null,
+          "skyExposure": null
+        }
+      },
+      "shaderSourceMetrics": {
+        "characterCount": 25375,
+        "utf8ByteCount": 25375,
+        "lineCount": 505
+      },
+      "executionTimings": {
+        "cacheGpuDrainDurationMilliseconds": null,
+        "finalShaderPreparationDurationMilliseconds": 367.40000009536743,
+        "readbackDurationMilliseconds": 345.2999999523163
+      }
+    },
+    {
+      "time": "12:45",
+      "shaderDiagnostics": {
+        "status": "installed",
+        "modelVersion": 1,
+        "runtime": {
+          "status": "ready",
+          "sourceHash": "fnv1a32:19461314",
+          "frameCount": 10,
+          "renderErrorCount": 0,
+          "lastRenderError": null,
+          "viewportSize": {
+            "width": 9,
+            "height": 9,
+            "units": "pixels"
+          },
+          "sceneInputCapture": null,
+          "skyExposure": null
+        }
+      },
+      "shaderSourceMetrics": {
+        "characterCount": 25375,
+        "utf8ByteCount": 25375,
+        "lineCount": 505
+      },
+      "executionTimings": {
+        "cacheGpuDrainDurationMilliseconds": null,
+        "finalShaderPreparationDurationMilliseconds": 394.2999999523163,
+        "readbackDurationMilliseconds": 664.2999999523163
+      }
+    },
+    {
+      "time": "13:00",
+      "shaderDiagnostics": {
+        "status": "installed",
+        "modelVersion": 1,
+        "runtime": {
+          "status": "ready",
+          "sourceHash": "fnv1a32:19461314",
+          "frameCount": 10,
+          "renderErrorCount": 0,
+          "lastRenderError": null,
+          "viewportSize": {
+            "width": 9,
+            "height": 9,
+            "units": "pixels"
+          },
+          "sceneInputCapture": null,
+          "skyExposure": null
+        }
+      },
+      "shaderSourceMetrics": {
+        "characterCount": 25375,
+        "utf8ByteCount": 25375,
+        "lineCount": 505
+      },
+      "executionTimings": {
+        "cacheGpuDrainDurationMilliseconds": null,
+        "finalShaderPreparationDurationMilliseconds": 374,
+        "readbackDurationMilliseconds": 662.2999999523163
+      }
+    },
+    {
+      "time": "13:15",
+      "shaderDiagnostics": {
+        "status": "installed",
+        "modelVersion": 1,
+        "runtime": {
+          "status": "ready",
+          "sourceHash": "fnv1a32:19461314",
+          "frameCount": 10,
+          "renderErrorCount": 0,
+          "lastRenderError": null,
+          "viewportSize": {
+            "width": 9,
+            "height": 9,
+            "units": "pixels"
+          },
+          "sceneInputCapture": null,
+          "skyExposure": null
+        }
+      },
+      "shaderSourceMetrics": {
+        "characterCount": 25375,
+        "utf8ByteCount": 25375,
+        "lineCount": 505
+      },
+      "executionTimings": {
+        "cacheGpuDrainDurationMilliseconds": null,
+        "finalShaderPreparationDurationMilliseconds": 393.2999999523163,
+        "readbackDurationMilliseconds": 668.9000000953674
+      }
+    },
+    {
+      "time": "13:30",
+      "shaderDiagnostics": {
+        "status": "installed",
+        "modelVersion": 1,
+        "runtime": {
+          "status": "ready",
+          "sourceHash": "fnv1a32:19461314",
+          "frameCount": 10,
+          "renderErrorCount": 0,
+          "lastRenderError": null,
+          "viewportSize": {
+            "width": 9,
+            "height": 9,
+            "units": "pixels"
+          },
+          "sceneInputCapture": null,
+          "skyExposure": null
+        }
+      },
+      "shaderSourceMetrics": {
+        "characterCount": 25375,
+        "utf8ByteCount": 25375,
+        "lineCount": 505
+      },
+      "executionTimings": {
+        "cacheGpuDrainDurationMilliseconds": null,
+        "finalShaderPreparationDurationMilliseconds": 358.89999985694885,
+        "readbackDurationMilliseconds": 341.7000000476837
+      }
+    }
+  ],
+  "modelNameInBenchmarkTables": "proposed",
+  "profileId": "paper",
+  "presentationName": "Algorithm32 Paper",
+  "physicalProfileId": "algorithm32-paper-comparison-v1",
+  "physicalProfileContentHash": "sha256:d47601d954167ca8775c0a88cd8ca9b9527ae8e74a6f42ae6041eec3244aeecc",
+  "order": 4,
+  "rowCount": 1377,
+  "completeCanonicalBoundary": true,
+  "spectralChannelCount": 40,
+  "nativeSpectralBoundary": {
+    "channelCount": 40,
+    "centersNanometers": [
+      360,
+      371.75,
+      383.5,
+      395.25,
+      407,
+      418.75,
+      430.5,
+      442.25,
+      454,
+      465.75,
+      477.5,
+      489.25,
+      501,
+      512.75,
+      524.5,
+      536.25,
+      548,
+      559.75,
+      571.5,
+      583.25,
+      595,
+      606.75,
+      618.5,
+      630.25,
+      642,
+      653.75,
+      665.5,
+      677.25,
+      689,
+      700.75,
+      712.5,
+      724.25,
+      736,
+      747.75,
+      759.5,
+      771.25,
+      783,
+      794.75,
+      806.5,
+      818.25
+    ],
+    "sampleSemantics": "point-sampled-spectral-density",
+    "projection": "identity-direct-40"
+  },
+  "numericalControls": {
+    "pathIntervalCount": 40,
+    "sourceTransmittanceIntervalCount": 20,
+    "incidentDirectionCount": 68,
+    "incidentAltitudeBinCount": 48,
+    "incomingDirectionDomain": "algorithm32-reflection-completed-fibonacci-68-incoming-v1",
+    "scatteringOutputDomain": "source-aligned-boundary-inclusive-gnomonic-cubed-sphere-w27",
+    "scatteringOutputFaceWidth": 27,
+    "scatteringOutputDirectionCount": 4374,
+    "positionNodeCount": 48,
+    "positionLookup": "view-only-linear-physical-altitude-over-actual-nodes",
+    "maximumScatteringOrder": 4
+  },
+  "table": {
+    "name": "algorithm32-current-production-gpu-j4.tsv",
+    "sha256": "d366ba11a0697aa471f8a822da9ccc9964a67bfcfb18cad0764de62a33583a7f",
+    "byteLength": 1180809
+  },
+  "profiles": [
+    {
+      "id": "b1-bruneton-0930-j4-v1",
+      "contentHash": "sha256:eb352acd396af669668b288bc534b7dba5ae74aedc40547abc2d4ca7011c1766",
+      "time": "09:30",
+      "fittedAzimuthDegrees": 91.14246195784821
+    },
+    {
+      "id": "b1-bruneton-0945-j4-v1",
+      "contentHash": "sha256:eb8d82658d9d903623fede2700e3263a9e47c6befaeec1bf1ef99f47ade96394",
+      "time": "09:45",
+      "fittedAzimuthDegrees": 93.89430417529859
+    },
+    {
+      "id": "b1-bruneton-1000-j4-v1",
+      "contentHash": "sha256:efeb0663a0f2ed3695bbd1dc9afd11a8c372d56c7d4fd41c1dac9d67618e7f65",
+      "time": "10:00",
+      "fittedAzimuthDegrees": 96.23317650653027
+    },
+    {
+      "id": "b1-bruneton-1015-j4-v1",
+      "contentHash": "sha256:657e43fad041ee7d660adaf6cb5de9cc84ed263c7f9383e9747d566d94b0afde",
+      "time": "10:15",
+      "fittedAzimuthDegrees": 98.59994923191232
+    },
+    {
+      "id": "b1-bruneton-1030-j4-v1",
+      "contentHash": "sha256:d9124b372fbcab6b4f59b353806d4671fb0d0bd0030030416a81df3620af1be1",
+      "time": "10:30",
+      "fittedAzimuthDegrees": 100.64372859730334
+    },
+    {
+      "id": "b1-bruneton-1045-j4-v1",
+      "contentHash": "sha256:86903abb98a6c03af41cf347d45c022accdac76d1aeaa509b21705e0e7827045",
+      "time": "10:45",
+      "fittedAzimuthDegrees": 104.8234287657915
+    },
+    {
+      "id": "b1-bruneton-1100-j4-v1",
+      "contentHash": "sha256:2b46014db219f3f3cae2c059142446ca0ee67c6eb51995bb1f31b206e862e7cc",
+      "time": "11:00",
+      "fittedAzimuthDegrees": 108.20914751464628
+    },
+    {
+      "id": "b1-bruneton-1115-j4-v1",
+      "contentHash": "sha256:9c23cdc22c98a7ff0b5db5c742f5d8e69e7cb4b5046da628e159b49076aeea28",
+      "time": "11:15",
+      "fittedAzimuthDegrees": 111.68270889819306
+    },
+    {
+      "id": "b1-bruneton-1130-j4-v1",
+      "contentHash": "sha256:16ad73d013f39d0f1042f77843e3c8e28d5bd5a2ee69f81136f428f071c9589b",
+      "time": "11:30",
+      "fittedAzimuthDegrees": 116.93611340645329
+    },
+    {
+      "id": "b1-bruneton-1145-j4-v1",
+      "contentHash": "sha256:f2ee869af41d83b80a3331a547d6835b7042d0c117441051c9a98fe4ecf82829",
+      "time": "11:45",
+      "fittedAzimuthDegrees": 122.26567982930705
+    },
+    {
+      "id": "b1-bruneton-1200-j4-v1",
+      "contentHash": "sha256:105cab091dbd44aecd23c792ebe4018035eab3ec5e230e1bae3d4e8c77f64abf",
+      "time": "12:00",
+      "fittedAzimuthDegrees": 130.75858093979636
+    },
+    {
+      "id": "b1-bruneton-1215-j4-v1",
+      "contentHash": "sha256:52fd8ce806a46dbd8ccb85acc335bdd9432c4e821d3cfcea91ddf31752e0a0bc",
+      "time": "12:15",
+      "fittedAzimuthDegrees": 134.8682819681534
+    },
+    {
+      "id": "b1-bruneton-1230-j4-v1",
+      "contentHash": "sha256:30731007726fa24f1696605d1426568e42187d47fe71252093ddc13c0b9d7ce6",
+      "time": "12:30",
+      "fittedAzimuthDegrees": 143.97853686677962
+    },
+    {
+      "id": "b1-bruneton-1245-j4-v1",
+      "contentHash": "sha256:7cbc4fc98b55f9a18aa4ad4c71af6f444ea2d31a2fa3d0a71129dae1ea06101e",
+      "time": "12:45",
+      "fittedAzimuthDegrees": 153.76505878947935
+    },
+    {
+      "id": "b1-bruneton-1300-j4-v1",
+      "contentHash": "sha256:6c901c0f4900459d8bce8808ae30bdab73b2f295cb71edc4f10290d424121ccf",
+      "time": "13:00",
+      "fittedAzimuthDegrees": 162.57770113145415
+    },
+    {
+      "id": "b1-bruneton-1315-j4-v1",
+      "contentHash": "sha256:ecfc45c8911bb23ad43aeb2c44b955bf627bd7f155d43a7e879ae0591bf14570",
+      "time": "13:15",
+      "fittedAzimuthDegrees": 174.2693750288133
+    },
+    {
+      "id": "b1-bruneton-1330-j4-v1",
+      "contentHash": "sha256:c0c0dce51cd60a6a0bbf3f92717c821f334f2c2820a1da9a9f3f424889c4def3",
+      "time": "13:30",
+      "fittedAzimuthDegrees": 179.87345331399575
+    }
+  ]
+}

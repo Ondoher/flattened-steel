@@ -1,0 +1,56 @@
+{
+  "schema": "algorithm32-current-production-b1-run-v2",
+  "runId": "current-production-b1-gpu-shaders-20260813T022114257Z",
+  "backend": "gpu-production-shaders-r32f",
+  "gpuCapabilities": {
+    "threeRevision": "180",
+    "webglVersion": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+    "shadingLanguageVersion": "WebGL GLSL ES 3.00 (OpenGL ES GLSL ES 3.0 Chromium)",
+    "renderer": "WebKit WebGL",
+    "unmaskedVendor": "Google Inc. (NVIDIA)",
+    "unmaskedRenderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 2060 Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "maximumArrayLayers": 2048,
+    "maximumTextureSize": 16384
+  },
+  "gpuProgressLogPath": "C:\\dev\\flattened-steel\\tmp\\algorithm32-bruneton-paper\\b1-production-gpu-progress.log",
+  "status": "COMPLETE",
+  "startedAt": "2026-08-13T02:21:14.258Z",
+  "completedAt": "2026-08-13T02:22:29.231Z",
+  "conditions": [
+    "09:30",
+    "09:45",
+    "10:00",
+    "10:15",
+    "10:30",
+    "10:45",
+    "11:00",
+    "11:15",
+    "11:30",
+    "11:45",
+    "12:00",
+    "12:15",
+    "12:30",
+    "12:45",
+    "13:00",
+    "13:15",
+    "13:30"
+  ],
+  "orders": [
+    4
+  ],
+  "profileFamily": "paper",
+  "incomingDirectionVariant": "production-68",
+  "outputs": [
+    {
+      "order": 4,
+      "table": "algorithm32-current-production-gpu-j4.tsv",
+      "tableSha256": "d366ba11a0697aa471f8a822da9ccc9964a67bfcfb18cad0764de62a33583a7f",
+      "provenance": "algorithm32-current-production-gpu-j4-provenance.json",
+      "provenanceSha256": "2629f73957beafd2dfd38dd38bfafebce016f3fb623b6266ed6d5fa85f9dd109",
+      "cube": "algorithm32-current-production-gpu-j4-cube.json",
+      "cubeSha256": "93f749428d08ad4a3724bd0dac2109ed7616710acc35cb52c9506f9d68bee905",
+      "defaultProvenance": "algorithm32-current-production-gpu-default-provenance.json",
+      "defaultProvenanceSha256": "a88771c686a3067e07cecadab26a67d4e8659d9a076b056ae1ecc1e91a8770ac"
+    }
+  ]
+}

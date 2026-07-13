@@ -1,0 +1,92 @@
+{
+  "stage": "ER3-extended-source-conservation-reference",
+  "tolerances": {
+    "solidAngleAbsolute": 1e-12,
+    "uniformAbsoluteFloor": 1e-19,
+    "uniformRelative": 1e-12,
+    "limbRelative": 0.00002,
+    "lambertRelative": 0.0005,
+    "edgeReferenceFractionAbsolute": 0.01,
+    "smallAngleRelative": 1e-8
+  },
+  "cameraMatrix": [
+    {
+      "id": "square-64-vfov-10",
+      "widthPixels": 64,
+      "heightPixels": 64,
+      "verticalFovDegrees": 10
+    },
+    {
+      "id": "square-64-vfov-60",
+      "widthPixels": 64,
+      "heightPixels": 64,
+      "verticalFovDegrees": 60
+    },
+    {
+      "id": "square-64-vfov-100",
+      "widthPixels": 64,
+      "heightPixels": 64,
+      "verticalFovDegrees": 100
+    },
+    {
+      "id": "landscape-128x96-vfov-10",
+      "widthPixels": 128,
+      "heightPixels": 96,
+      "verticalFovDegrees": 10
+    },
+    {
+      "id": "landscape-128x96-vfov-60",
+      "widthPixels": 128,
+      "heightPixels": 96,
+      "verticalFovDegrees": 60
+    },
+    {
+      "id": "landscape-128x96-vfov-100",
+      "widthPixels": 128,
+      "heightPixels": 96,
+      "verticalFovDegrees": 100
+    },
+    {
+      "id": "wide-257x129-vfov-10",
+      "widthPixels": 257,
+      "heightPixels": 129,
+      "verticalFovDegrees": 10
+    },
+    {
+      "id": "wide-257x129-vfov-60",
+      "widthPixels": 257,
+      "heightPixels": 129,
+      "verticalFovDegrees": 60
+    },
+    {
+      "id": "wide-257x129-vfov-100",
+      "widthPixels": 257,
+      "heightPixels": 129,
+      "verticalFovDegrees": 100
+    }
+  ],
+  "radiusRatios": [
+    0.001,
+    0.1,
+    1,
+    4
+  ],
+  "quadrature": {
+    "runtime": [
+      64,
+      128
+    ],
+    "reference": [
+      128,
+      256
+    ]
+  },
+  "prohibitedOutputs": [
+    "atmosphere",
+    "display",
+    "real-scene",
+    "image",
+    "physical Sun calibration",
+    "physical lunar calibration"
+  ]
+}

@@ -1,0 +1,21 @@
+{
+	"compilerOptions": {
+		"allowJs": true,
+		"baseUrl": ".",
+		"checkJs": true,
+		"module": "NodeNext",
+		"moduleResolution": "NodeNext",
+		"noEmit": true,
+		"paths": {
+			"@polylith/config": ["./polylith-side-effect.d.ts"],
+			"@polylith/core": ["./polylith-core.d.ts"],
+			"@polylith/features": ["./polylith-side-effect.d.ts"]
+		},
+		"skipLibCheck": true,
+		"strict": false,
+		"target": "ES2022",
+		"types": []
+	},
+	"include": ["../algorithm32/**/*.d.ts", "**/*.d.ts", "**/*.js"],
+	"exclude": ["**/_tests/**", "../../node_modules/**", "**/node_modules/**"]
+}

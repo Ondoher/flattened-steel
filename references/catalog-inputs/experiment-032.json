@@ -1,0 +1,2306 @@
+{
+  "schemaVersion": 1,
+  "managedBy": "production-core-v1",
+  "sourceSnapshotId": "SNAPSHOT-REPO-000001",
+  "auditScope": {
+    "title": "Bruneton start-fresh Step 002 through Step 032 physics and production-lineage audit",
+    "authorityBoundary": "External or independently derived physics supports the CPU Reference; the shader defers to that Reference.",
+    "reviewedRoots": [
+      "tmp/atmosphere/bruneton_start_fresh/",
+      "tmp/atmosphere/bruneton_start_fresh/external_sources/",
+      "scripts/flat/experimental/bruneton-start-fresh.js",
+      "agents/topics/apps/flat/plans/atmosphere-cleanroom-design/experiment-032-algorithm.md",
+      "agents/topics/apps/flat/reconciliation/archive/mark-i-bruneton-start-fresh-source-audit.md",
+      "shared/algorithm32/production/references.md",
+      "shared/algorithm32/production/constants/Algorithm32CanonicalData.js",
+      "scripts/flat/reconciliation/POC/src/constants/consts.js"
+    ],
+    "includedRecordRange": "Physics-bearing records 002 through 031 plus existing canonical experiment record EXPERIMENT-A32-000001 for Step 032.",
+    "explicitExclusions": [
+      {
+        "paths": [
+          "tmp/atmosphere/bruneton_start_fresh/001-scaffold-diagnostic",
+          "tmp/atmosphere/bruneton_start_fresh/004-luminance-conversion-baseline",
+          "tmp/atmosphere/bruneton_start_fresh/014-demo-white-balance-display-baseline",
+          "tmp/atmosphere/bruneton_start_fresh/020-paper-figure1-tone-map-baseline",
+          "tmp/atmosphere/bruneton_start_fresh/021-paper-figure1-fitted-tone-map-baseline",
+          "tmp/atmosphere/bruneton_start_fresh/024-paper-40-wavelength-refit-tone-map-baseline",
+          "tmp/atmosphere/bruneton_start_fresh/028-paper-figure1-derived-k-no-ground-baseline"
+        ],
+        "reason": "Renderer/display-only diagnostics or an explicitly invalid display rerun; they do not establish Algorithm32 transport physics."
+      },
+      {
+        "paths": [
+          "tmp/atmosphere/bruneton_start_fresh/external_sources/bruneton-2016-page4-images/",
+          "tmp/atmosphere/bruneton_start_fresh/032-figure1-four-view-source-k-no-ground-baseline/figure1-four-view-contact-sheet.png",
+          "tmp/atmosphere/bruneton_start_fresh/032-figure1-four-view-source-k-no-ground-baseline/external-bruneton-column-step32-comparison.png",
+          "tmp/atmosphere/bruneton_start_fresh/032-figure1-four-view-source-k-no-ground-baseline/step31-bruneton-step32-comparison.png",
+          "tmp/atmosphere/bruneton_start_fresh/032-figure1-four-view-source-k-no-ground-baseline/step31-step32-source-k-comparison.png"
+        ],
+        "reason": "Display and visual-comparison evidence. Extracted tiles remain reproduction inputs for scene orientation but are not physical authority."
+      },
+      {
+        "referenceIds": [
+          "fisheye-equidistant-projection",
+          "bruneton-2016-figure1-display-transform",
+          "bruneton-2016-comparison-source-tone-map",
+          "bruneton-2016-figure1-extracted-target-tiles",
+          "bruneton-color-constants",
+          "bruneton-demo-display",
+          "bruneton-demo-white-balance"
+        ],
+        "reason": "Projection, color conversion, tone mapping, image extraction, or display policy outside the physics catalog."
+      }
+    ],
+    "lineageRule": "Matching names or values are possible lineage only; they are not proof of derivation without an exact handoff, revision, and locator."
+  },
+  "sourceUpdates": [
+    {
+      "id": "SOURCE-EXT-000013",
+      "identity": {
+        "title": "A Qualitative and Quantitative Evaluation of 8 Clear Sky Models",
+        "author": "Eric Bruneton",
+        "sourceYearLabel": 2016,
+        "publication": "IEEE Transactions on Visualization and Computer Graphics",
+        "doi": "10.1109/TVCG.2016.2622272",
+        "arxivId": "1612.04336",
+        "projectUrl": "https://ebruneton.github.io/clear-sky-models/",
+        "stablePreprintUrl": "https://arxiv.org/abs/1612.04336",
+        "retainedIdentity": "bruneton-2016-clear-sky-models.pdf"
+      },
+      "authority": {
+        "role": "third-party-clear-sky-model-comparison-source",
+        "status": "candidate-external-authority-with-precise-locators-reviewed",
+        "limitations": [
+          "Its fitted aerosol parameters are conditional comparison-profile parameters inferred from the Kider measurement set, not universal atmosphere constants.",
+          "The paper's comparison used 40 wavelengths from 360 to 830 nm; Step 032's 15-channel realization is a different implementation choice.",
+          "The paper explains model families and limitations but does not select Step 032's exact 20/10/17/24 numerical controls.",
+          "Extracted Figure 1 tiles, color conversion, tone mapping, and visual matching are outside this physics catalog slice."
+        ]
+      },
+      "blockers": [
+        "Use the paper by link and citation only unless separate redistribution permission is obtained.",
+        "Claims must remain tied to exact PDF pages and sections and to the paper's conditional comparison assumptions."
+      ]
+    },
+    {
+      "id": "SOURCE-EXT-000014",
+      "identity": {
+        "title": "Precomputed Atmospheric Scattering: A New Implementation source",
+        "author": "Eric Bruneton",
+        "year": 2017,
+        "projectUrl": "https://ebruneton.github.io/precomputed_atmospheric_scattering/",
+        "repositoryUrl": "https://github.com/ebruneton/precomputed_atmospheric_scattering",
+        "upstreamRevision": "unknown",
+        "retainedFiles": [
+          "atmosphere/demo/demo.cc",
+          "atmosphere/demo/demo.glsl",
+          "atmosphere/model.cc"
+        ],
+        "missingHistoricallyCitedFiles": [
+          "atmosphere/functions.glsl",
+          "atmosphere/model.h",
+          "atmosphere/constants.h"
+        ]
+      },
+      "authority": {
+        "role": "third-party-atmospheric-model-implementation-source",
+        "status": "candidate-external-authority-partial-hash-pinned-collection",
+        "limitations": [
+          "The retained files support only facts with exact retained-file line locators and stated model assumptions.",
+          "The retained collection is incomplete: functions.glsl, model.h, constants.h, and clear-sky-models comparisons.cc were historically cited but are not retained in it.",
+          "The exact upstream commit is unknown and historical GitHub master links are mutable; frozen local hashes identify only the observed subset.",
+          "Source implementation agreement can support model lineage but does not independently prove the CPU Reference."
+        ]
+      },
+      "availability": {
+        "status": "retained-partial-source-collection-observed-in-frozen-source-snapshot",
+        "onlineStatus": "mutable-upstream-master-not-verified-by-this-pass"
+      },
+      "blockers": [
+        "Recover and pin the exact upstream revision.",
+        "Recover or explicitly replace the missing cited physics files before relying on their equations.",
+        "Any later retention must preserve the observed BSD license notices."
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "SOURCE-EXT-000016",
+      "kind": "external-mathematical-sampling-paper",
+      "identity": {
+        "title": "Measurement of areas on a sphere using Fibonacci and latitude-longitude lattices",
+        "author": "Alvaro Gonzalez",
+        "year": 2009,
+        "arxivId": "0912.4540",
+        "stableUrl": "https://arxiv.org/abs/0912.4540"
+      },
+      "authority": {
+        "role": "third-party-spherical-lattice-source",
+        "status": "citation-identified-payload-not-retained",
+        "limitations": [
+          "The citation supports the near-equal-area Fibonacci sphere sampling family only.",
+          "It does not select 17 directions, the equal-weight radiative quadrature error, or the 24-bin incident-radiance cache."
+        ]
+      },
+      "availability": {
+        "status": "not-yet-acquired-citation-only",
+        "onlineStatus": "not-verified-by-this-pass"
+      },
+      "license": {
+        "status": "unverified",
+        "redistributionStatus": "blocked-pending-license-review"
+      },
+      "reviewStatus": "metadata-reviewed-payload-pending",
+      "disposition": "link-only",
+      "links": {
+        "locations": [],
+        "facts": [],
+        "experiments": [],
+        "materials": [
+          "MATERIAL-EXT-000016"
+        ],
+        "contradictions": []
+      },
+      "blockers": [
+        "The source payload, exact version identity, and license have not been independently acquired or verified."
+      ]
+    }
+  ],
+  "materials": [
+    {
+      "id": "MATERIAL-EXT-000016",
+      "kind": "external-paper-link-only-candidate",
+      "title": "Gonzalez 2009 Fibonacci sphere lattice paper",
+      "sourceId": "SOURCE-EXT-000016",
+      "identity": {
+        "arxivId": "0912.4540",
+        "stableUrl": "https://arxiv.org/abs/0912.4540",
+        "expectedTitle": "Measurement of areas on a sphere using Fibonacci and latitude-longitude lattices"
+      },
+      "availability": {
+        "status": "not-yet-acquired"
+      },
+      "repositoryPaths": [],
+      "sidecarPaths": [],
+      "expectedRepositoryFiles": [],
+      "expectedSidecarFiles": [],
+      "intendedClaims": [
+        "Candidate primary support for the near-equal-area spherical Fibonacci lattice family used by the Step 032 second-order sampling experiment."
+      ],
+      "nonClaims": [
+        "The paper does not establish Step 032's exact direction count, angular quadrature error, or cache design.",
+        "A link is not a retained or authenticated payload."
+      ],
+      "license": {
+        "status": "unverified",
+        "redistributionStatus": "blocked-pending-license-review"
+      },
+      "authenticity": {
+        "status": "not-verified-link-only"
+      },
+      "duplicates": [],
+      "transformations": [],
+      "proposedTargetPath": "references/MATERIAL-EXT-000016/gonzalez-2009-fibonacci-sphere.pdf",
+      "canonicalOwner": "MATERIAL-EXT-000016",
+      "disposition": "link-only",
+      "blockers": [
+        "The global import gate is closed.",
+        "Payload identity, hash, and license require review before any later acquisition."
+      ],
+      "relatedMaterialIds": [],
+      "citations": [
+        {
+          "path": "agents/topics/apps/flat/plans/atmosphere-cleanroom-design/experiment-032-algorithm.md",
+          "lineStart": 516,
+          "lineEnd": 516,
+          "role": "records-the-historical-external-reference-identity"
+        }
+      ]
+    }
+  ],
+  "experimentUpdates": [
+    {
+      "id": "EXPERIMENT-A32-000001",
+      "title": "Step 032 exact historical pre-display physics record and production-lineage candidate",
+      "kind": "step032-historical-cpu-physics-and-lineage-candidate",
+      "historicalLocators": [
+        "scripts/flat/atmosphere/experimental/bruneton-start-fresh.js (recorded command path; absent in frozen snapshot)",
+        "scripts/flat/experimental/bruneton-start-fresh.js (tracked relocated reconstruction candidate)"
+      ],
+      "runner": {
+        "status": "exact-record-snapshot-and-semantic-relocation-candidate-identified",
+        "paths": [
+          "tmp/atmosphere/bruneton_start_fresh/032-figure1-four-view-source-k-no-ground-baseline/script-snapshot.js",
+          "scripts/flat/experimental/bruneton-start-fresh.js"
+        ],
+        "pathRoles": [
+          {
+            "path": "tmp/atmosphere/bruneton_start_fresh/032-figure1-four-view-source-k-no-ground-baseline/script-snapshot.js",
+            "role": "exact-record-local-runner-snapshot"
+          },
+          {
+            "path": "scripts/flat/experimental/bruneton-start-fresh.js",
+            "role": "tracked-relocated-candidate-differing-only-in-root-relative-depth"
+          }
+        ],
+        "recordedHistoricalPath": "scripts/flat/atmosphere/experimental/bruneton-start-fresh.js",
+        "recordedHistoricalPathStatus": "absent-in-frozen-snapshot",
+        "contentRelationship": "A full no-index diff finds one line changed: ROOT resolves ../../../.. in the record snapshot and ../../.. in the relocated candidate. The snapshot remains the exact executed-byte authority."
+      },
+      "contractParts": {
+        "importedModules": {
+          "status": "reviewed-node-builtins-only",
+          "paths": [
+            "node:fs",
+            "node:path",
+            "node:zlib",
+            "node:url"
+          ]
+        },
+        "inputs": {
+          "status": "embedded-constants-equations-scenes-and-external-source-identities-recorded",
+          "paths": [
+            "tmp/atmosphere/bruneton_start_fresh/032-figure1-four-view-source-k-no-ground-baseline/equations-and-constants.json",
+            "tmp/atmosphere/bruneton_start_fresh/032-figure1-four-view-source-k-no-ground-baseline/provenance.json"
+          ]
+        },
+        "environment": {
+          "status": "partial-command-and-runtime-recorded",
+          "node": "v25.4.0",
+          "platform": "win32",
+          "createdAt": "2026-06-22T16:24:03.544Z"
+        },
+        "criteria": {
+          "status": "later-subjective-handoff-acceptance-no-independent-machine-criterion"
+        },
+        "controls": {
+          "status": "recorded-active-and-inactive-controls-separated-by-later-audit"
+        },
+        "results": {
+          "status": "four-scene-pre-display-selected-ray-packets-and-output-artifacts-present"
+        },
+        "reports": {
+          "status": "record-notes-run-log-and-later-algorithm-audit-present"
+        }
+      },
+      "claimBoundary": {
+        "status": "historical-pre-display-reference-candidate-only",
+        "supports": [
+          "Exact historical runner behavior, active model configuration, and selected-ray pre-display packets for four Step 032 scenes.",
+          "Possible lineage into the production atmosphere, spectral packet, and Step 032 numerical-control group.",
+          "A reconstruction inventory for the source-informed first-order plus approximate second-order CPU path."
+        ],
+        "doesNotProve": [
+          "That the production CPU Reference was copied from this record or currently reproduces it.",
+          "That matching names or values establish derivation.",
+          "That the Step 032 approximation is physically complete or independently correct.",
+          "That 20/10/17/24 controls are converged or externally selected.",
+          "Any display transform, CIE-to-RGB conversion, tone map, PNG, visual-match, renderer, browser, Three.js, or shader claim."
+        ]
+      },
+      "independence": {
+        "status": "self-generated-historical-reference-candidate",
+        "oracle": "record-local selected-ray diagnostics plus external model citations; no independent implementation oracle",
+        "sharedCodeRisk": "high because the same monolithic runner defines inputs, transport, diagnostics, and output"
+      },
+      "historicalAcceptance": "Later reconciliation documents treated Step 032 as the pure-algorithm starting baseline, but the original record labels itself a source-k comparison experiment and contains no independent numeric acceptance criteria.",
+      "rederivationReasons": [
+        "The result depends on a monolithic ignored tmp runner and self-generated diagnostics.",
+        "Several cited Bruneton source files and the exact upstream source revision are missing.",
+        "The ASTM-to-Bruneton-table-to-15-channel derivation has not been independently reconstructed.",
+        "The numerical controls and altitude-only second-order cache were selected experimentally without a retained convergence proof.",
+        "The exact production handoff is absent and the current CPU Reference has no real-model end-to-end oracle test.",
+        "Historical visual agreement and PNG comparisons are outside the physics proof boundary."
+      ],
+      "rederivation": {
+        "required": true,
+        "status": "cataloged-not-rederived",
+        "additionalReasons": [],
+        "requiredInputs": [
+          "exact-record-local-runner-snapshot-and-hashes",
+          "pinned-Bruneton-paper-and-complete-source-revision",
+          "official-ASTM-G173-payload-and-independent-48-table-derivation",
+          "independent-15-centered-channel-interpolation-derivation",
+          "four-scene-input-packet-with-reproducible-azimuth-measurement-metadata",
+          "independent-optical-depth-phase-single-scattering-and-second-order-oracles",
+          "pinned-target-CPU-Reference-revision-and-input-packet",
+          "pre-display-selected-ray-comparison-with-explicit-units-and-tolerances",
+          "control-convergence-and-cache-coordinate-error-studies",
+          "named-model-profile-tests-for-ozone-ground-direct-disc-and-higher-order-omissions"
+        ],
+        "futureVerificationLayer": "cpu-oracle"
+      },
+      "decisionStatus": "provisional",
+      "disposition": "must-rederive",
+      "reviewStatus": "inventory-and-physics-claim-boundary-reviewed",
+      "sourceIds": [
+        "SOURCE-EXT-000003",
+        "SOURCE-EXT-000013",
+        "SOURCE-EXT-000014",
+        "SOURCE-EXT-000016"
+      ],
+      "materialIds": [
+        "MATERIAL-EXT-000001",
+        "MATERIAL-EXT-000014",
+        "MATERIAL-EXT-000015",
+        "MATERIAL-EXT-000016"
+      ],
+      "relatedExperimentIds": [
+        "EXPERIMENT-A32-000040",
+        "EXPERIMENT-A32-000042",
+        "EXPERIMENT-A32-000043",
+        "EXPERIMENT-A32-000044",
+        "EXPERIMENT-A32-000045",
+        "EXPERIMENT-A32-000046",
+        "EXPERIMENT-A32-000047",
+        "EXPERIMENT-A32-000048"
+      ],
+      "blockers": [
+        "No independent target-repository reproduction exists.",
+        "Exact external source revision and missing source files are unresolved.",
+        "Physical units, tolerances, and acceptance criteria for the selected-ray packets remain unaccepted.",
+        "Production lineage is correspondence only, not a proven copy or decision chain."
+      ],
+      "nextAction": "Reconstruct a source-pinned, unit-bearing, pre-display CPU Reference proof that reproduces the selected-ray packets only after independently deriving the source inputs and convergence bounds."
+    }
+  ],
+  "experiments": [
+    {
+      "id": "EXPERIMENT-A32-000025",
+      "title": "Step 002 spherical geometry and Beer-Lambert diagnostic baseline",
+      "kind": "historical-step002-geometry-transmittance-diagnostic",
+      "recordPath": "tmp/atmosphere/bruneton_start_fresh/002-geometry-transmittance-baseline",
+      "historicalLocators": [],
+      "runner": {
+        "status": "exact-record-local-snapshot-identified",
+        "paths": ["tmp/atmosphere/bruneton_start_fresh/002-geometry-transmittance-baseline/script-snapshot.js"],
+        "pathRoles": [{"path": "tmp/atmosphere/bruneton_start_fresh/002-geometry-transmittance-baseline/script-snapshot.js", "role": "exact-record-local-runner-snapshot"}]
+      },
+      "contractParts": {
+        "importedModules": {"status": "reviewed-node-builtins-only", "paths": ["node:fs", "node:path", "node:zlib", "node:url"]},
+        "inputs": {"status": "embedded-and-recorded-in-equations-and-provenance"},
+        "environment": {"status": "historical-command-and-runtime-partially-recorded"},
+        "criteria": {"status": "historical-accepted-label-without-independent-machine-criterion"},
+        "controls": {"status": "recorded-in-runner-and-equations"},
+        "results": {"status": "false-color-optical-depth-and-transmittance-diagnostics-present"},
+        "reports": {"status": "notes-and-run-log-present"}
+      },
+      "claimBoundary": {
+        "status": "historical-geometry-and-transmittance-diagnostic-only",
+        "supports": ["A surviving implementation probe for spherical top-boundary distance, sampled optical depth, and Beer-Lambert transmittance."],
+        "doesNotProve": ["Sky radiance, scattering, spectral color, multiple scattering, ground coupling, current CPU Reference behavior, or physical accuracy."]
+      },
+      "independence": {"status": "self-validation", "oracle": "record-local false-color diagnostics", "sharedCodeRisk": "high"},
+      "historicalAcceptance": "accepted",
+      "rederivationReasons": ["The runner and diagnostics share the implementation under test.", "The cited functions.glsl source is not locally pinned.", "The result does not cover the current CPU Reference."],
+      "rederivation": {
+        "required": true,
+        "status": "cataloged-not-rederived",
+        "additionalReasons": [],
+        "requiredInputs": ["pinned-shell-radii-and-boundary-equation", "independent-ray-sphere-and-Beer-Lambert-oracles", "explicit-spectral-coefficients-and-units", "pinned-target-Reference-revision", "numeric-not-image-acceptance-criteria"],
+        "futureVerificationLayer": "analytic"
+      },
+      "decisionStatus": "provisional",
+      "disposition": "must-rederive",
+      "reviewStatus": "inventory-and-claim-boundary-reviewed",
+      "sourceIds": ["SOURCE-EXT-000014"],
+      "materialIds": ["MATERIAL-EXT-000015"],
+      "relatedExperimentIds": [],
+      "blockers": ["No independent target-repository analytic reproduction exists."],
+      "nextAction": "Recreate the shell-intersection and Beer-Lambert checks as numeric analytic CPU Reference tests."
+    },
+    {
+      "id": "EXPERIMENT-A32-000026",
+      "title": "Step 003 Rayleigh and Mie single-scattering baseline",
+      "kind": "historical-step003-single-scattering-probe",
+      "recordPath": "tmp/atmosphere/bruneton_start_fresh/003-single-scattering-baseline",
+      "historicalLocators": [],
+      "runner": {
+        "status": "exact-record-local-snapshot-identified",
+        "paths": ["tmp/atmosphere/bruneton_start_fresh/003-single-scattering-baseline/script-snapshot.js"],
+        "pathRoles": [{"path": "tmp/atmosphere/bruneton_start_fresh/003-single-scattering-baseline/script-snapshot.js", "role": "exact-record-local-runner-snapshot"}]
+      },
+      "contractParts": {
+        "importedModules": {"status": "reviewed-node-builtins-only", "paths": ["node:fs", "node:path", "node:zlib", "node:url"]},
+        "inputs": {"status": "embedded-and-recorded-in-equations-and-provenance"},
+        "environment": {"status": "historical-command-and-runtime-partially-recorded"},
+        "criteria": {"status": "historical-accepted-label-without-independent-machine-criterion"},
+        "controls": {"status": "recorded-in-runner-and-equations"},
+        "results": {"status": "three-wavelength-output-and-diagnostics-present"},
+        "reports": {"status": "notes-and-run-log-present"}
+      },
+      "claimBoundary": {
+        "status": "historical-three-channel-first-order-transport-only",
+        "supports": ["A surviving implementation probe for view/source transmittance and Rayleigh-plus-Mie single-scattering at 680, 550, and 440 nm."],
+        "doesNotProve": ["Full spectral transport, ozone, ground coupling, multiple scattering, display correctness, current CPU Reference behavior, or independent physical validity."]
+      },
+      "independence": {"status": "self-validation", "oracle": "record-local runner and generated images", "sharedCodeRisk": "high"},
+      "historicalAcceptance": "accepted",
+      "rederivationReasons": ["The monolithic runner generates both expected behavior and artifacts.", "The cited functions.glsl single-scattering source is missing from the retained source subset.", "No target CPU Reference selected-ray comparison exists."],
+      "rederivation": {
+        "required": true,
+        "status": "cataloged-not-rederived",
+        "additionalReasons": [],
+        "requiredInputs": ["pinned-phase-and-single-scattering-equations", "unit-bearing-three-channel-input-packet", "independent-single-scattering-oracle", "pinned-target-Reference-revision", "pre-display-selected-ray-tolerances"],
+        "futureVerificationLayer": "cpu-oracle"
+      },
+      "decisionStatus": "provisional",
+      "disposition": "must-rederive",
+      "reviewStatus": "inventory-and-claim-boundary-reviewed",
+      "sourceIds": ["SOURCE-EXT-000014"],
+      "materialIds": ["MATERIAL-EXT-000015"],
+      "relatedExperimentIds": ["EXPERIMENT-A32-000025"],
+      "blockers": ["The exact upstream physics source revision and independent oracle are missing."],
+      "nextAction": "Recreate first-order selected-ray packets with independently implemented equations and compare them to a pinned CPU Reference."
+    },
+    {
+      "id": "EXPERIMENT-A32-000027",
+      "title": "Step 005 Bruneton 2016 aerosol-parameter probe",
+      "kind": "historical-step005-paper-aerosol-parameter-probe",
+      "recordPath": "tmp/atmosphere/bruneton_start_fresh/005-bruneton-2016-parameters",
+      "historicalLocators": [],
+      "runner": {
+        "status": "exact-record-local-snapshot-identified",
+        "paths": ["tmp/atmosphere/bruneton_start_fresh/005-bruneton-2016-parameters/script-snapshot.js"],
+        "pathRoles": [{"path": "tmp/atmosphere/bruneton_start_fresh/005-bruneton-2016-parameters/script-snapshot.js", "role": "exact-record-local-runner-snapshot"}]
+      },
+      "contractParts": {
+        "importedModules": {"status": "reviewed-node-builtins-only", "paths": ["node:fs", "node:path", "node:zlib", "node:url"]},
+        "inputs": {"status": "paper-aerosol-values-embedded-and-recorded"},
+        "environment": {"status": "historical-command-and-runtime-partially-recorded"},
+        "criteria": {"status": "historical-accepted-label-without-independent-numeric-criterion"},
+        "controls": {"status": "recorded-in-runner-and-equations"},
+        "results": {"status": "three-wavelength-output-and-diagnostics-present"},
+        "reports": {"status": "notes-and-run-log-present"}
+      },
+      "claimBoundary": {
+        "status": "historical-conditional-aerosol-profile-realization",
+        "supports": ["A surviving probe using alpha 0.8, beta 0.04, single-scattering albedo 0.8, and g 0.7 in the three-channel first-order path."],
+        "doesNotProve": ["That these fitted values are universal atmosphere constants, that the transport is correct, or that the current CPU Reference descends from this step."]
+      },
+      "independence": {"status": "partial-source-informed-self-validation", "oracle": "Bruneton paper parameter statement plus record-local output", "sharedCodeRisk": "high"},
+      "historicalAcceptance": "accepted",
+      "rederivationReasons": ["The fitted parameter scope and uncertainty were not carried into production.", "The transport and diagnostics share one runner.", "No target CPU Reference reproduction exists."],
+      "rederivation": {
+        "required": true,
+        "status": "cataloged-not-rederived",
+        "additionalReasons": [],
+        "requiredInputs": ["pinned-paper-page-and-conditional-profile", "unit-bearing-aerosol-parameter-packet", "independent-coefficient-and-phase-calculation", "pinned-target-Reference-revision", "profile-naming-and-tolerance-policy"],
+        "futureVerificationLayer": "analytic"
+      },
+      "decisionStatus": "provisional",
+      "disposition": "must-rederive",
+      "reviewStatus": "inventory-and-claim-boundary-reviewed",
+      "sourceIds": ["SOURCE-EXT-000013", "SOURCE-EXT-000014"],
+      "materialIds": ["MATERIAL-EXT-000014", "MATERIAL-EXT-000015"],
+      "relatedExperimentIds": ["EXPERIMENT-A32-000026"],
+      "blockers": ["Production does not preserve the paper's conditional fit scope or uncertainty."],
+      "nextAction": "Re-derive the named Bruneton-2016 comparison aerosol profile with exact paper locators and independently check its coefficient realization."
+    },
+    {
+      "id": "EXPERIMENT-A32-000028",
+      "title": "Step 006 Bruneton demo ozone absorption probe",
+      "kind": "historical-step006-ozone-profile-probe",
+      "recordPath": "tmp/atmosphere/bruneton_start_fresh/006-ozone-absorption-baseline",
+      "historicalLocators": [],
+      "runner": {
+        "status": "exact-record-local-snapshot-identified",
+        "paths": ["tmp/atmosphere/bruneton_start_fresh/006-ozone-absorption-baseline/script-snapshot.js"],
+        "pathRoles": [{"path": "tmp/atmosphere/bruneton_start_fresh/006-ozone-absorption-baseline/script-snapshot.js", "role": "exact-record-local-runner-snapshot"}]
+      },
+      "contractParts": {
+        "importedModules": {"status": "reviewed-node-builtins-only", "paths": ["node:fs", "node:path", "node:zlib", "node:url"]},
+        "inputs": {"status": "demo-ozone-profile-and-300-DU-amount-embedded-and-recorded"},
+        "environment": {"status": "historical-command-and-runtime-partially-recorded"},
+        "criteria": {"status": "historical-accepted-label-without-independent-numeric-criterion"},
+        "controls": {"status": "recorded-in-runner-and-equations"},
+        "results": {"status": "three-wavelength-output-and-diagnostics-present"},
+        "reports": {"status": "notes-and-run-log-present"}
+      },
+      "claimBoundary": {
+        "status": "historical-demo-ozone-profile-realization-later-inactive",
+        "supports": ["A surviving probe of the Bruneton demo ozone profile and 300-Dobson-unit amount in the early three-channel path."],
+        "doesNotProve": ["That this ozone profile is appropriate for the Step 032 comparison profile or current production; Step 032 later disables ozone."]
+      },
+      "independence": {"status": "source-informed-self-validation", "oracle": "retained demo.cc parameterization plus record-local output", "sharedCodeRisk": "high"},
+      "historicalAcceptance": "accepted, later inactive in Step 032",
+      "rederivationReasons": ["The final Step 032 profile selects no ozone.", "The original ozone dataset source and profile accuracy are not fully pinned.", "No target CPU Reference named ozone profile exists."],
+      "rederivation": {
+        "required": true,
+        "status": "cataloged-not-rederived",
+        "additionalReasons": [],
+        "requiredInputs": ["pinned-ozone-cross-section-source", "explicit-Dobson-unit-and-density-profile-derivation", "named-ozone-bearing-profile", "independent-optical-depth-oracle", "pinned-target-Reference-revision"],
+        "futureVerificationLayer": "analytic"
+      },
+      "decisionStatus": "superseded",
+      "disposition": "must-rederive",
+      "reviewStatus": "inventory-and-claim-boundary-reviewed",
+      "sourceIds": ["SOURCE-EXT-000014"],
+      "materialIds": ["MATERIAL-EXT-000015"],
+      "relatedExperimentIds": ["EXPERIMENT-A32-000027"],
+      "blockers": ["The source profile is incomplete and is not the active Step 032 profile."],
+      "nextAction": "Retain as a candidate ozone-bearing profile experiment, separate from the no-ozone Step 032 comparison profile."
+    },
+    {
+      "id": "EXPERIMENT-A32-000029",
+      "title": "Step 007 fifteen-channel centered spectral transport probe",
+      "kind": "historical-step007-fifteen-channel-spectral-probe",
+      "recordPath": "tmp/atmosphere/bruneton_start_fresh/007-spectral-cie-baseline",
+      "historicalLocators": [],
+      "runner": {
+        "status": "exact-record-local-snapshot-identified",
+        "paths": ["tmp/atmosphere/bruneton_start_fresh/007-spectral-cie-baseline/script-snapshot.js"],
+        "pathRoles": [{"path": "tmp/atmosphere/bruneton_start_fresh/007-spectral-cie-baseline/script-snapshot.js", "role": "exact-record-local-runner-snapshot"}]
+      },
+      "contractParts": {
+        "importedModules": {"status": "reviewed-node-builtins-only", "paths": ["node:fs", "node:path", "node:zlib", "node:url"]},
+        "inputs": {"status": "15-channel-centers-and-solar-values-embedded-and-recorded"},
+        "environment": {"status": "historical-command-and-runtime-partially-recorded"},
+        "criteria": {"status": "historical-accepted-label-without-independent-spectral-criterion"},
+        "controls": {"status": "recorded-in-runner-and-equations"},
+        "results": {"status": "spectral-output-and-display-artifacts-present-pre-display-packets-not-separated"},
+        "reports": {"status": "notes-and-run-log-present"}
+      },
+      "claimBoundary": {
+        "status": "historical-fifteen-channel-transport-realization",
+        "supports": ["A surviving transition from three wavelengths to 15 centered samples between 360 and 830 nm."],
+        "doesNotProve": ["The CIE/display path, final spectral-grid sufficiency, independent ASTM derivation, or current CPU Reference correctness."]
+      },
+      "independence": {"status": "self-validation", "oracle": "runner-generated 15-channel path and images", "sharedCodeRisk": "high"},
+      "historicalAcceptance": "accepted",
+      "rederivationReasons": ["The 15-channel packet was derived inside the monolithic runner.", "The official ASTM-to-retained-table-to-interpolated-channel chain is not independently reconstructed.", "No spectral error bound selects 15 channels for production."],
+      "rederivation": {
+        "required": true,
+        "status": "cataloged-not-rederived",
+        "additionalReasons": [],
+        "requiredInputs": ["official-ASTM-G173-payload", "retained-Bruneton-48-value-table", "independent-centered-grid-and-interpolation-derivation", "higher-resolution-spectral-control", "pinned-target-Reference-revision-and-pre-display-comparison"],
+        "futureVerificationLayer": "analytic"
+      },
+      "decisionStatus": "provisional",
+      "disposition": "must-rederive",
+      "reviewStatus": "inventory-and-claim-boundary-reviewed",
+      "sourceIds": ["SOURCE-EXT-000003", "SOURCE-EXT-000014"],
+      "materialIds": ["MATERIAL-EXT-000001", "MATERIAL-EXT-000015"],
+      "relatedExperimentIds": ["EXPERIMENT-A32-000028"],
+      "blockers": ["No independent channel derivation or spectral convergence proof exists."],
+      "nextAction": "Reconstruct the 15-channel packet from pinned ASTM data and compare it numerically with higher-resolution controls."
+    },
+    {
+      "id": "EXPERIMENT-A32-000030",
+      "title": "Step 008 fifteen-channel Bruneton demo aerosol and ozone probe",
+      "kind": "historical-step008-demo-profile-spectral-probe",
+      "recordPath": "tmp/atmosphere/bruneton_start_fresh/008-spectral-demo-aerosol-baseline",
+      "historicalLocators": [],
+      "runner": {
+        "status": "exact-record-local-snapshot-identified",
+        "paths": ["tmp/atmosphere/bruneton_start_fresh/008-spectral-demo-aerosol-baseline/script-snapshot.js"],
+        "pathRoles": [{"path": "tmp/atmosphere/bruneton_start_fresh/008-spectral-demo-aerosol-baseline/script-snapshot.js", "role": "exact-record-local-runner-snapshot"}]
+      },
+      "contractParts": {
+        "importedModules": {"status": "reviewed-node-builtins-only", "paths": ["node:fs", "node:path", "node:zlib", "node:url"]},
+        "inputs": {"status": "demo-aerosol-ozone-and-15-channel-packet-embedded"},
+        "environment": {"status": "historical-command-and-runtime-partially-recorded"},
+        "criteria": {"status": "historical-accepted-label-without-independent-numeric-criterion"},
+        "controls": {"status": "recorded-in-runner-and-equations"},
+        "results": {"status": "spectral-output-and-display-artifacts-present"},
+        "reports": {"status": "notes-and-run-log-present"}
+      },
+      "claimBoundary": {
+        "status": "historical-demo-profile-fifteen-channel-realization-later-superseded",
+        "supports": ["A surviving 15-channel probe using Bruneton demo aerosol defaults and ozone."],
+        "doesNotProve": ["That demo aerosol defaults or ozone belong to the Step 032 comparison profile or production Reference."]
+      },
+      "independence": {"status": "source-informed-self-validation", "oracle": "retained demo source plus record-local output", "sharedCodeRisk": "high"},
+      "historicalAcceptance": "accepted, later superseded by the paper aerosol and no-ozone profile",
+      "rederivationReasons": ["The final profile replaces both the demo aerosol parameters and ozone choice.", "The retained result is self-generated.", "No target named-profile reproduction exists."],
+      "rederivation": {
+        "required": true,
+        "status": "cataloged-not-rederived",
+        "additionalReasons": [],
+        "requiredInputs": ["named-demo-atmosphere-profile", "complete-pinned-demo-source", "independent-coefficient-and-ozone-oracle", "15-channel-source-derivation", "target-Reference-profile-comparison"],
+        "futureVerificationLayer": "cpu-oracle"
+      },
+      "decisionStatus": "superseded",
+      "disposition": "must-rederive",
+      "reviewStatus": "inventory-and-claim-boundary-reviewed",
+      "sourceIds": ["SOURCE-EXT-000003", "SOURCE-EXT-000014"],
+      "materialIds": ["MATERIAL-EXT-000001", "MATERIAL-EXT-000015"],
+      "relatedExperimentIds": ["EXPERIMENT-A32-000029"],
+      "blockers": ["The active Step 032 profile intentionally differs."],
+      "nextAction": "Keep only as a separately named demo-profile reconstruction candidate."
+    },
+    {
+      "id": "EXPERIMENT-A32-000031",
+      "title": "Step 009 scalar multiple-scattering proxy hypothesis",
+      "kind": "historical-step009-superseded-multiple-scattering-proxy",
+      "recordPath": "tmp/atmosphere/bruneton_start_fresh/009-multiple-scattering-proxy-baseline",
+      "historicalLocators": [],
+      "runner": {
+        "status": "exact-record-local-snapshot-identified",
+        "paths": ["tmp/atmosphere/bruneton_start_fresh/009-multiple-scattering-proxy-baseline/script-snapshot.js"],
+        "pathRoles": [{"path": "tmp/atmosphere/bruneton_start_fresh/009-multiple-scattering-proxy-baseline/script-snapshot.js", "role": "exact-record-local-runner-snapshot"}]
+      },
+      "contractParts": {
+        "importedModules": {"status": "reviewed-node-builtins-only", "paths": ["node:fs", "node:path", "node:zlib", "node:url"]},
+        "inputs": {"status": "scalar-1.5-proxy-and-profile-embedded"},
+        "environment": {"status": "historical-command-and-runtime-partially-recorded"},
+        "criteria": {"status": "hypothesis-test-acceptance-subjective-and-post-hoc"},
+        "controls": {"status": "recorded-in-runner-and-equations"},
+        "results": {"status": "proxy-scaled-output-and-display-artifacts-present"},
+        "reports": {"status": "notes-and-run-log-present"}
+      },
+      "claimBoundary": {
+        "status": "superseded-hypothesis-only",
+        "supports": ["Historical evidence that multiplying the old sky-scattered result by 1.5 changed the mismatch in the anticipated direction."],
+        "doesNotProve": ["A physical multiple-scattering equation, an irradiance closure, a production scale, or current Reference validity."]
+      },
+      "independence": {"status": "subjective-self-validation", "oracle": "visual comparison after applying a scalar suggested by a broad paper observation", "sharedCodeRisk": "high"},
+      "historicalAcceptance": "accepted as a hypothesis test; superseded for further work",
+      "rederivationReasons": ["The scalar proxy is dimensionally and directionally incomplete.", "The criterion was visual and does not isolate physical multiple scattering.", "Later steps replaced it with explicit directional second order."],
+      "rederivation": {
+        "required": true,
+        "status": "cataloged-not-rederived",
+        "additionalReasons": [],
+        "requiredInputs": ["pinned-paper-irradiance-gap-context", "independent-single-and-multiple-scattering-reference", "unit-bearing-comparison-quantity", "pre-display-error-metrics", "explicit-rejection-of-scalar-proxy-for-production"],
+        "futureVerificationLayer": "analytic"
+      },
+      "decisionStatus": "superseded",
+      "disposition": "must-rederive",
+      "reviewStatus": "inventory-and-claim-boundary-reviewed",
+      "sourceIds": ["SOURCE-EXT-000013", "SOURCE-EXT-000014"],
+      "materialIds": ["MATERIAL-EXT-000014", "MATERIAL-EXT-000015"],
+      "relatedExperimentIds": ["EXPERIMENT-A32-000030"],
+      "blockers": ["This proxy must not be promoted as physics."],
+      "nextAction": "Use only to reconstruct why explicit second-order work began; do not carry the 1.5 scalar into the Reference."
+    },
+    {
+      "id": "EXPERIMENT-A32-000032",
+      "title": "Step 010 eight-direction explicit second-order scattering probe",
+      "kind": "historical-step010-directional-second-order-probe",
+      "recordPath": "tmp/atmosphere/bruneton_start_fresh/010-second-order-scattering-baseline",
+      "historicalLocators": [],
+      "runner": {
+        "status": "exact-record-local-snapshot-identified",
+        "paths": ["tmp/atmosphere/bruneton_start_fresh/010-second-order-scattering-baseline/script-snapshot.js"],
+        "pathRoles": [{"path": "tmp/atmosphere/bruneton_start_fresh/010-second-order-scattering-baseline/script-snapshot.js", "role": "exact-record-local-runner-snapshot"}]
+      },
+      "contractParts": {
+        "importedModules": {"status": "reviewed-node-builtins-only", "paths": ["node:fs", "node:path", "node:zlib", "node:url"]},
+        "inputs": {"status": "eight-directions-and-altitude-cache-embedded"},
+        "environment": {"status": "historical-command-and-runtime-partially-recorded"},
+        "criteria": {"status": "historical-accepted-label-without-independent-second-order-criterion"},
+        "controls": {"status": "recorded-in-runner-and-equations"},
+        "results": {"status": "explicit-second-order-output-and-diagnostics-present"},
+        "reports": {"status": "notes-and-run-log-present"}
+      },
+      "claimBoundary": {
+        "status": "historical-approximate-double-scattering-realization",
+        "supports": ["A surviving replacement of the scalar proxy with an explicit integral over eight incoming directions at each view sample."],
+        "doesNotProve": ["Full-sphere convergence, third or higher scattering orders, Bruneton precomputed-texture equivalence, or current Reference correctness."]
+      },
+      "independence": {"status": "source-informed-self-validation", "oracle": "same-runner first-order incident field integrated by same-runner second order", "sharedCodeRisk": "high"},
+      "historicalAcceptance": "accepted",
+      "rederivationReasons": ["The incident-radiance field and outer integral share the same implementation.", "Eight directions were not shown converged.", "The historical result does not cover current cache behavior."],
+      "rederivation": {
+        "required": true,
+        "status": "cataloged-not-rederived",
+        "additionalReasons": [],
+        "requiredInputs": ["pinned-double-scattering-integral", "independent-first-order-incident-field", "direction-and-altitude-convergence-sweep", "unit-bearing-selected-ray-packets", "pinned-target-Reference-and-cache-revision"],
+        "futureVerificationLayer": "cpu-oracle"
+      },
+      "decisionStatus": "provisional",
+      "disposition": "must-rederive",
+      "reviewStatus": "inventory-and-claim-boundary-reviewed",
+      "sourceIds": ["SOURCE-EXT-000013", "SOURCE-EXT-000014"],
+      "materialIds": ["MATERIAL-EXT-000014", "MATERIAL-EXT-000015"],
+      "relatedExperimentIds": ["EXPERIMENT-A32-000031"],
+      "blockers": ["No independent incident-field oracle or quadrature convergence proof exists."],
+      "nextAction": "Recreate the second-order integral with an independent first-order oracle and direction/altitude convergence controls."
+    },
+    {
+      "id": "EXPERIMENT-A32-000033",
+      "title": "Step 011 direct-Sun Lambertian ground-coupling probe",
+      "kind": "historical-step011-direct-ground-coupling-probe",
+      "recordPath": "tmp/atmosphere/bruneton_start_fresh/011-ground-bounce-coupling-baseline",
+      "historicalLocators": [],
+      "runner": {
+        "status": "exact-record-local-snapshot-identified",
+        "paths": ["tmp/atmosphere/bruneton_start_fresh/011-ground-bounce-coupling-baseline/script-snapshot.js"],
+        "pathRoles": [{"path": "tmp/atmosphere/bruneton_start_fresh/011-ground-bounce-coupling-baseline/script-snapshot.js", "role": "exact-record-local-runner-snapshot"}]
+      },
+      "contractParts": {
+        "importedModules": {"status": "reviewed-node-builtins-only", "paths": ["node:fs", "node:path", "node:zlib", "node:url"]},
+        "inputs": {"status": "direct-ground-albedo-and-transport-controls-embedded"},
+        "environment": {"status": "historical-command-and-runtime-partially-recorded"},
+        "criteria": {"status": "historical-visual-acceptance-without-independent-radiometric-criterion"},
+        "controls": {"status": "recorded-in-runner-and-equations"},
+        "results": {"status": "ground-coupled-output-and-diagnostics-present"},
+        "reports": {"status": "notes-and-run-log-present"}
+      },
+      "claimBoundary": {
+        "status": "historical-direct-ground-coupling-realization",
+        "supports": ["A surviving implementation of direct-Sun Lambertian lower-boundary radiance attenuated to an atmosphere sample and scattered toward the camera."],
+        "doesNotProve": ["Sky-irradiance ground reflection, ground-model accuracy, perceptual necessity, current Reference behavior, or a final ground policy."]
+      },
+      "independence": {"status": "source-informed-self-validation", "oracle": "Bruneton demo ground expression reimplemented in the same runner", "sharedCodeRisk": "high"},
+      "historicalAcceptance": "accepted as a lower-boundary transport step, not a final visual decision",
+      "rederivationReasons": ["The ground term was judged visually rather than against a radiometric oracle.", "The final Step 032 profile turns ground coupling off.", "No target Reference surface-boundary owner currently exists."],
+      "rederivation": {
+        "required": true,
+        "status": "cataloged-not-rederived",
+        "additionalReasons": [],
+        "requiredInputs": ["pinned-Lambertian-ground-equation", "explicit-ground-albedo-spectrum-and-visibility-contract", "independent-ground-radiance-oracle", "ground-on-off-selected-ray-differences", "target-Reference-surface-boundary-contract"],
+        "futureVerificationLayer": "cpu-oracle"
+      },
+      "decisionStatus": "deferred",
+      "disposition": "must-rederive",
+      "reviewStatus": "inventory-and-claim-boundary-reviewed",
+      "sourceIds": ["SOURCE-EXT-000001", "SOURCE-EXT-000014"],
+      "materialIds": ["MATERIAL-EXT-000015"],
+      "relatedExperimentIds": ["EXPERIMENT-A32-000032"],
+      "blockers": ["Ground coupling is absent from the current production Reference and was not independently validated."],
+      "nextAction": "Recreate direct-ground coupling as a named optional physical profile with numeric pre-display comparisons."
+    },
+    {
+      "id": "EXPERIMENT-A32-000034",
+      "title": "Step 012 Sun-plus-sky Lambertian ground-coupling probe",
+      "kind": "historical-step012-sun-sky-ground-coupling-probe",
+      "recordPath": "tmp/atmosphere/bruneton_start_fresh/012-ground-sky-irradiance-coupling-baseline",
+      "historicalLocators": [],
+      "runner": {
+        "status": "exact-record-local-snapshot-identified",
+        "paths": ["tmp/atmosphere/bruneton_start_fresh/012-ground-sky-irradiance-coupling-baseline/script-snapshot.js"],
+        "pathRoles": [{"path": "tmp/atmosphere/bruneton_start_fresh/012-ground-sky-irradiance-coupling-baseline/script-snapshot.js", "role": "exact-record-local-runner-snapshot"}]
+      },
+      "contractParts": {
+        "importedModules": {"status": "reviewed-node-builtins-only", "paths": ["node:fs", "node:path", "node:zlib", "node:url"]},
+        "inputs": {"status": "sun-sky-ground-controls-and-profile-embedded"},
+        "environment": {"status": "historical-command-and-runtime-partially-recorded"},
+        "criteria": {"status": "historical-visual-acceptance-without-independent-radiometric-criterion"},
+        "controls": {"status": "recorded-in-runner-and-equations"},
+        "results": {"status": "sun-sky-ground-output-and-diagnostics-present"},
+        "reports": {"status": "notes-and-run-log-present"}
+      },
+      "claimBoundary": {
+        "status": "historical-sun-plus-sky-ground-coupling-realization",
+        "supports": ["A surviving implementation adding sky irradiance to the direct-Sun Lambertian ground term before attenuation and atmospheric scattering."],
+        "doesNotProve": ["Ground-irradiance convergence, physical sufficiency, final production inclusion, or current Reference behavior."]
+      },
+      "independence": {"status": "self-validation", "oracle": "same-runner sky field supplies the same-runner ground irradiance and atmosphere coupling", "sharedCodeRisk": "very high"},
+      "historicalAcceptance": "accepted",
+      "rederivationReasons": ["The incident sky, ground irradiance, and coupled transport share the same implementation.", "Ground-direction counts were not shown converged.", "The final Step 032 profile omits the term."],
+      "rederivation": {
+        "required": true,
+        "status": "cataloged-not-rederived",
+        "additionalReasons": [],
+        "requiredInputs": ["independent-sky-irradiance-oracle", "pinned-Lambertian-ground-equation", "ground-direction-and-transmittance-convergence", "shadowed-and-illuminated-ground-controls", "pinned-target-Reference-surface-contract"],
+        "futureVerificationLayer": "cpu-oracle"
+      },
+      "decisionStatus": "deferred",
+      "disposition": "must-rederive",
+      "reviewStatus": "inventory-and-claim-boundary-reviewed",
+      "sourceIds": ["SOURCE-EXT-000001", "SOURCE-EXT-000014"],
+      "materialIds": ["MATERIAL-EXT-000015"],
+      "relatedExperimentIds": ["EXPERIMENT-A32-000033"],
+      "blockers": ["No independent sky-irradiance or ground-coupling oracle exists."],
+      "nextAction": "Recreate the full Sun-plus-sky ground term with independent irradiance and convergence controls."
+    },
+    {
+      "id": "EXPERIMENT-A32-000035",
+      "title": "Step 013 no-ozone comparison-profile probe",
+      "kind": "historical-step013-no-ozone-profile-probe",
+      "recordPath": "tmp/atmosphere/bruneton_start_fresh/013-paper-comparison-no-ozone-baseline",
+      "historicalLocators": [],
+      "runner": {
+        "status": "exact-record-local-snapshot-identified",
+        "paths": ["tmp/atmosphere/bruneton_start_fresh/013-paper-comparison-no-ozone-baseline/script-snapshot.js"],
+        "pathRoles": [{"path": "tmp/atmosphere/bruneton_start_fresh/013-paper-comparison-no-ozone-baseline/script-snapshot.js", "role": "exact-record-local-runner-snapshot"}]
+      },
+      "contractParts": {
+        "importedModules": {"status": "reviewed-node-builtins-only", "paths": ["node:fs", "node:path", "node:zlib", "node:url"]},
+        "inputs": {"status": "no-ozone-profile-choice-embedded-and-recorded"},
+        "environment": {"status": "historical-command-and-runtime-partially-recorded"},
+        "criteria": {"status": "historical-accepted-label-without-independent-profile-criterion"},
+        "controls": {"status": "recorded-in-runner-and-equations"},
+        "results": {"status": "no-ozone-output-and-diagnostics-present"},
+        "reports": {"status": "notes-and-run-log-present"}
+      },
+      "claimBoundary": {
+        "status": "historical-no-absorption-comparison-profile-realization",
+        "supports": ["A surviving transition that disables ozone absorption to follow the paper comparison's simplified parameter policy."],
+        "doesNotProve": ["That real visible-air absorption is exactly zero, that all Bruneton profiles omit ozone, or that the current Reference profile is scientifically sufficient."]
+      },
+      "independence": {"status": "source-informed-self-validation", "oracle": "paper policy statement plus record-local output", "sharedCodeRisk": "high"},
+      "historicalAcceptance": "accepted",
+      "rederivationReasons": ["The paper's simplification is a named comparison assumption, not a universal physical claim.", "The source family also contains an ozone-enabled demo default.", "The current Reference requires explicit named-profile authority."],
+      "rederivation": {
+        "required": true,
+        "status": "cataloged-not-rederived",
+        "additionalReasons": [],
+        "requiredInputs": ["exact-paper-no-absorption-locator", "named-comparison-profile", "ozone-on-off-independent-control", "visible-band-error-bound", "pinned-target-Reference-profile"],
+        "futureVerificationLayer": "analytic"
+      },
+      "decisionStatus": "provisional",
+      "disposition": "must-rederive",
+      "reviewStatus": "inventory-and-claim-boundary-reviewed",
+      "sourceIds": ["SOURCE-EXT-000013", "SOURCE-EXT-000014"],
+      "materialIds": ["MATERIAL-EXT-000014", "MATERIAL-EXT-000015"],
+      "relatedExperimentIds": ["EXPERIMENT-A32-000034"],
+      "blockers": ["The no-ozone choice is not yet expressed as a bounded named production profile."],
+      "nextAction": "Recreate and name the no-ozone comparison profile, then bound it separately from an ozone-bearing profile."
+    },
+    {
+      "id": "EXPERIMENT-A32-000036",
+      "title": "Step 015 paper-aerosol current-transport probe",
+      "kind": "historical-step015-paper-aerosol-current-transport-probe",
+      "recordPath": "tmp/atmosphere/bruneton_start_fresh/015-paper-aerosol-transport-baseline",
+      "historicalLocators": [],
+      "runner": {
+        "status": "exact-record-local-snapshot-identified",
+        "paths": ["tmp/atmosphere/bruneton_start_fresh/015-paper-aerosol-transport-baseline/script-snapshot.js"],
+        "pathRoles": [{"path": "tmp/atmosphere/bruneton_start_fresh/015-paper-aerosol-transport-baseline/script-snapshot.js", "role": "exact-record-local-runner-snapshot"}]
+      },
+      "contractParts": {
+        "importedModules": {"status": "reviewed-node-builtins-only", "paths": ["node:fs", "node:path", "node:zlib", "node:url"]},
+        "inputs": {"status": "paper-aerosol-no-ozone-and-current-transport-controls-recorded"},
+        "environment": {"status": "historical-command-and-runtime-partially-recorded"},
+        "criteria": {"status": "historical-accepted-label-without-independent-numeric-criterion"},
+        "controls": {"status": "recorded-in-runner-and-equations"},
+        "results": {"status": "paper-profile-output-and-diagnostics-present"},
+        "reports": {"status": "notes-and-run-log-present"}
+      },
+      "claimBoundary": {
+        "status": "historical-paper-profile-integration-checkpoint",
+        "supports": ["A surviving checkpoint combining the conditional Bruneton-2016 aerosol values, no ozone, explicit eight-direction second order, and Sun-plus-sky ground coupling."],
+        "doesNotProve": ["That the combined model is independently correct, that display white balance is relevant to physics, or that every component belongs in the final profile."]
+      },
+      "independence": {"status": "partial-source-informed-self-validation", "oracle": "paper parameters and same-runner transport", "sharedCodeRisk": "high"},
+      "historicalAcceptance": "accepted",
+      "rederivationReasons": ["Several physical and display hypotheses are combined in one record.", "No independent selected-ray oracle isolates the parameter change.", "Later steps change directions, ground, and cache coordinates."],
+      "rederivation": {
+        "required": true,
+        "status": "cataloged-not-rederived",
+        "additionalReasons": [],
+        "requiredInputs": ["named-paper-aerosol-profile", "no-ozone-profile", "independent-first-and-second-order-oracles", "component-ablation-matrix", "pinned-target-Reference-revision"],
+        "futureVerificationLayer": "cpu-oracle"
+      },
+      "decisionStatus": "provisional",
+      "disposition": "must-rederive",
+      "reviewStatus": "inventory-and-claim-boundary-reviewed",
+      "sourceIds": ["SOURCE-EXT-000013", "SOURCE-EXT-000014"],
+      "materialIds": ["MATERIAL-EXT-000014", "MATERIAL-EXT-000015"],
+      "relatedExperimentIds": ["EXPERIMENT-A32-000035"],
+      "blockers": ["The record entangles multiple changes and has no independent numeric oracle."],
+      "nextAction": "Reconstruct the profile as separable, unit-tested physical components before any Reference adoption."
+    },
+    {
+      "id": "EXPERIMENT-A32-000037",
+      "title": "Step 016 Nishita96-style eight-plane direction probe",
+      "kind": "historical-step016-nishita-plane-direction-probe",
+      "recordPath": "tmp/atmosphere/bruneton_start_fresh/016-nishita96-plane-second-order-baseline",
+      "historicalLocators": [],
+      "runner": {
+        "status": "exact-record-local-snapshot-identified",
+        "paths": ["tmp/atmosphere/bruneton_start_fresh/016-nishita96-plane-second-order-baseline/script-snapshot.js"],
+        "pathRoles": [{"path": "tmp/atmosphere/bruneton_start_fresh/016-nishita96-plane-second-order-baseline/script-snapshot.js", "role": "exact-record-local-runner-snapshot"}]
+      },
+      "contractParts": {
+        "importedModules": {"status": "reviewed-node-builtins-only", "paths": ["node:fs", "node:path", "node:zlib", "node:url"]},
+        "inputs": {"status": "paper-described-eight-plane-directions-embedded"},
+        "environment": {"status": "historical-command-and-runtime-partially-recorded"},
+        "criteria": {"status": "historical-accepted-label-without-independent-quadrature-criterion"},
+        "controls": {"status": "recorded-in-runner-and-equations"},
+        "results": {"status": "eight-plane-output-and-diagnostics-present"},
+        "reports": {"status": "notes-and-run-log-present"}
+      },
+      "claimBoundary": {
+        "status": "historical-eight-plane-sampling-realization",
+        "supports": ["A surviving implementation of the paper-described Nishita96 eight directions in the vertical/Sun plane."],
+        "doesNotProve": ["Accuracy over the full sphere, acceptance of the Nishita approximation, or current Reference cache correctness."]
+      },
+      "independence": {"status": "source-informed-self-validation", "oracle": "paper description of direction geometry plus same-runner output", "sharedCodeRisk": "high"},
+      "historicalAcceptance": "accepted, later superseded by a full-sphere Fibonacci family",
+      "rederivationReasons": ["The paper itself reports that the eight-plane approximation underestimates measured values.", "No independent angular quadrature error was measured.", "Later Step 019 supersedes the direction family."],
+      "rederivation": {
+        "required": true,
+        "status": "cataloged-not-rederived",
+        "additionalReasons": [],
+        "requiredInputs": ["exact-paper-direction-definition", "high-direction-count-full-sphere-control", "independent-incident-field", "angular-error-metrics", "pinned-target-Reference-cache-revision"],
+        "futureVerificationLayer": "cpu-oracle"
+      },
+      "decisionStatus": "superseded",
+      "disposition": "must-rederive",
+      "reviewStatus": "inventory-and-claim-boundary-reviewed",
+      "sourceIds": ["SOURCE-EXT-000013", "SOURCE-EXT-000014"],
+      "materialIds": ["MATERIAL-EXT-000014", "MATERIAL-EXT-000015"],
+      "relatedExperimentIds": ["EXPERIMENT-A32-000036"],
+      "blockers": ["The approximation's error is not independently bounded."],
+      "nextAction": "Use this as a negative/control lane when measuring full-sphere quadrature error, not as the production sampling authority."
+    },
+    {
+      "id": "EXPERIMENT-A32-000038",
+      "title": "Step 017 pixel-filtered direct solar-disc probe",
+      "kind": "historical-step017-rejected-direct-solar-disc-probe",
+      "recordPath": "tmp/atmosphere/bruneton_start_fresh/017-pixel-filtered-solar-disc-baseline",
+      "historicalLocators": [],
+      "runner": {
+        "status": "exact-record-local-snapshot-identified",
+        "paths": ["tmp/atmosphere/bruneton_start_fresh/017-pixel-filtered-solar-disc-baseline/script-snapshot.js"],
+        "pathRoles": [{"path": "tmp/atmosphere/bruneton_start_fresh/017-pixel-filtered-solar-disc-baseline/script-snapshot.js", "role": "exact-record-local-runner-snapshot"}]
+      },
+      "contractParts": {
+        "importedModules": {"status": "reviewed-node-builtins-only", "paths": ["node:fs", "node:path", "node:zlib", "node:url"]},
+        "inputs": {"status": "solar-angular-radius-and-seven-by-seven-pixel-filter-embedded"},
+        "environment": {"status": "historical-command-and-runtime-partially-recorded"},
+        "criteria": {"status": "historical-visual-review-rejected"},
+        "controls": {"status": "recorded-in-runner-and-equations"},
+        "results": {"status": "direct-disc-display-artifacts-and-diagnostics-present"},
+        "reports": {"status": "notes-and-run-log-present"}
+      },
+      "claimBoundary": {
+        "status": "rejected-direct-disc-camera-path",
+        "supports": ["A surviving rejected experiment that averaged finite solar-disc coverage over a seven-by-seven fisheye pixel footprint."],
+        "doesNotProve": ["A physical source-radiance unit contract, camera response, current Reference behavior, or renderer correctness."]
+      },
+      "independence": {"status": "subjective-display-review", "oracle": "rendered pixel appearance", "sharedCodeRisk": "high"},
+      "historicalAcceptance": "rejected after review",
+      "rederivationReasons": ["The experiment was rejected and mixes source physics with projection/display sampling.", "The target Step 032 sky contract omits direct solar-disc camera radiance.", "Any future visible-source model needs an explicit radiance and angular-measure contract."],
+      "rederivation": {
+        "required": true,
+        "status": "cataloged-not-rederived",
+        "additionalReasons": [],
+        "requiredInputs": ["pinned-solar-angular-radius-source", "unit-bearing-solar-radiance-contract", "finite-pixel-angular-integration-contract", "independent-conservation-control", "separate-visible-source-Reference-design"],
+        "futureVerificationLayer": "analytic"
+      },
+      "decisionStatus": "rejected",
+      "disposition": "must-rederive",
+      "reviewStatus": "inventory-and-rejection-boundary-reviewed",
+      "sourceIds": ["SOURCE-EXT-000001", "SOURCE-EXT-000014"],
+      "materialIds": ["MATERIAL-EXT-000015"],
+      "relatedExperimentIds": ["EXPERIMENT-A32-000037"],
+      "blockers": ["This rejected display-coupled path cannot be promoted as source physics."],
+      "nextAction": "If direct visible-source radiance is later required, design a new unit-bearing experiment rather than reviving this path."
+    },
+    {
+      "id": "EXPERIMENT-A32-000039",
+      "title": "Step 018 scattered-sky-only target-contract probe",
+      "kind": "historical-step018-no-direct-disc-target-contract-probe",
+      "recordPath": "tmp/atmosphere/bruneton_start_fresh/018-paper-sky-radiance-no-direct-sun-baseline",
+      "historicalLocators": [],
+      "runner": {
+        "status": "exact-record-local-snapshot-identified",
+        "paths": ["tmp/atmosphere/bruneton_start_fresh/018-paper-sky-radiance-no-direct-sun-baseline/script-snapshot.js"],
+        "pathRoles": [{"path": "tmp/atmosphere/bruneton_start_fresh/018-paper-sky-radiance-no-direct-sun-baseline/script-snapshot.js", "role": "exact-record-local-runner-snapshot"}]
+      },
+      "contractParts": {
+        "importedModules": {"status": "reviewed-node-builtins-only", "paths": ["node:fs", "node:path", "node:zlib", "node:url"]},
+        "inputs": {"status": "scattered-sky-only-camera-boundary-embedded"},
+        "environment": {"status": "historical-command-and-runtime-partially-recorded"},
+        "criteria": {"status": "historical-target-contract-visual-diagnostic-not-final"},
+        "controls": {"status": "recorded-in-runner-and-equations"},
+        "results": {"status": "no-direct-disc-output-and-diagnostics-present"},
+        "reports": {"status": "notes-and-run-log-present"}
+      },
+      "claimBoundary": {
+        "status": "historical-scattered-sky-output-boundary",
+        "supports": ["A surviving experiment that keeps direct sunlight as the scattering source while omitting direct solar-disc radiance from the camera output."],
+        "doesNotProve": ["That a complete physical scene should omit the visible Sun or that the red-cross Figure 1 marker is a physical emitter model."]
+      },
+      "independence": {"status": "target-contract-self-validation", "oracle": "visual comparison target with red-cross Sun marker", "sharedCodeRisk": "high"},
+      "historicalAcceptance": "accepted as target-contract diagnostic, not final",
+      "rederivationReasons": ["The omission is a comparison-output boundary rather than a universal physical rule.", "The historical criterion was visual.", "The CPU Reference output and separate visible-source contribution need explicit unit contracts."],
+      "rederivation": {
+        "required": true,
+        "status": "cataloged-not-rederived",
+        "additionalReasons": [],
+        "requiredInputs": ["explicit-scattered-sky-output-contract", "separate-direct-source-radiance-contract", "unit-bearing-pre-display-packets", "target-Reference-output-boundary", "non-display-numeric-criteria"],
+        "futureVerificationLayer": "cpu-oracle"
+      },
+      "decisionStatus": "provisional",
+      "disposition": "must-rederive",
+      "reviewStatus": "inventory-and-claim-boundary-reviewed",
+      "sourceIds": ["SOURCE-EXT-000013", "SOURCE-EXT-000014"],
+      "materialIds": ["MATERIAL-EXT-000014", "MATERIAL-EXT-000015"],
+      "relatedExperimentIds": ["EXPERIMENT-A32-000038"],
+      "blockers": ["No accepted separation contract exists for scattered atmosphere radiance versus visible-source radiance."],
+      "nextAction": "Define the CPU Reference endpoint as pre-display scattered spectral radiance and model visible-source radiance separately."
+    },
+    {
+      "id": "EXPERIMENT-A32-000040",
+      "title": "Step 019 full-sphere Fibonacci second-order quadrature probe",
+      "kind": "historical-step019-fibonacci-second-order-probe",
+      "recordPath": "tmp/atmosphere/bruneton_start_fresh/019-fibonacci-sphere-second-order-baseline",
+      "historicalLocators": [],
+      "runner": {
+        "status": "exact-record-local-snapshot-identified",
+        "paths": ["tmp/atmosphere/bruneton_start_fresh/019-fibonacci-sphere-second-order-baseline/script-snapshot.js"],
+        "pathRoles": [{"path": "tmp/atmosphere/bruneton_start_fresh/019-fibonacci-sphere-second-order-baseline/script-snapshot.js", "role": "exact-record-local-runner-snapshot"}]
+      },
+      "contractParts": {
+        "importedModules": {"status": "reviewed-node-builtins-only", "paths": ["node:fs", "node:path", "node:zlib", "node:url"]},
+        "inputs": {"status": "fibonacci-directions-equal-weight-and-cache-controls-embedded"},
+        "environment": {"status": "historical-command-and-runtime-partially-recorded"},
+        "criteria": {"status": "historical-quadrature-acceptance-without-convergence-threshold"},
+        "controls": {"status": "recorded-in-runner-and-equations"},
+        "results": {"status": "full-sphere-second-order-output-and-diagnostics-present"},
+        "reports": {"status": "notes-and-run-log-present"}
+      },
+      "claimBoundary": {
+        "status": "historical-full-sphere-sampling-family-evidence",
+        "supports": ["A surviving replacement of eight plane directions with 17 equal-weight full-sphere Fibonacci directions."],
+        "doesNotProve": ["That 17 directions or 24 altitude bins are converged, that equal weights are sufficiently accurate for the integrand, or that the current Reference direction sequence is identical."]
+      },
+      "independence": {"status": "source-informed-self-validation", "oracle": "same-runner comparison of direction families", "sharedCodeRisk": "high"},
+      "historicalAcceptance": "accepted as quadrature evidence, not final",
+      "rederivationReasons": ["The Gonzalez citation supports the sampling family but not N=17.", "The source paper calls for all-direction integration but does not select this quadrature.", "No retained direction/altitude convergence sweep exists."],
+      "rederivation": {
+        "required": true,
+        "status": "cataloged-not-rederived",
+        "additionalReasons": [],
+        "requiredInputs": ["verified-Gonzalez-source", "exact-direction-sequence-definition", "independent-high-count-spherical-quadrature", "direction-and-altitude-convergence-matrix", "pinned-target-Reference-cache-sequence"],
+        "futureVerificationLayer": "cpu-oracle"
+      },
+      "decisionStatus": "provisional",
+      "disposition": "must-rederive",
+      "reviewStatus": "inventory-and-claim-boundary-reviewed",
+      "sourceIds": ["SOURCE-EXT-000013", "SOURCE-EXT-000014", "SOURCE-EXT-000016"],
+      "materialIds": ["MATERIAL-EXT-000014", "MATERIAL-EXT-000015", "MATERIAL-EXT-000016"],
+      "relatedExperimentIds": ["EXPERIMENT-A32-000037", "EXPERIMENT-A32-000039"],
+      "blockers": ["No independent angular or cache-coordinate error bound exists."],
+      "nextAction": "Recreate the spherical quadrature against a high-count independent oracle and measure both direction and altitude-cache errors."
+    },
+    {
+      "id": "EXPERIMENT-A32-000041",
+      "title": "Step 022 Figure 1 Sun-zenith scene-input probe",
+      "kind": "historical-step022-figure1-scene-input-probe",
+      "recordPath": "tmp/atmosphere/bruneton_start_fresh/022-figure1-sun-zenith-baseline",
+      "historicalLocators": [],
+      "runner": {
+        "status": "exact-record-local-snapshot-identified",
+        "paths": ["tmp/atmosphere/bruneton_start_fresh/022-figure1-sun-zenith-baseline/script-snapshot.js"],
+        "pathRoles": [{"path": "tmp/atmosphere/bruneton_start_fresh/022-figure1-sun-zenith-baseline/script-snapshot.js", "role": "exact-record-local-runner-snapshot"}]
+      },
+      "contractParts": {
+        "importedModules": {"status": "reviewed-node-builtins-only", "paths": ["node:fs", "node:path", "node:zlib", "node:url"]},
+        "inputs": {"status": "paper-row-zenith-angles-and-local-scene-mapping-recorded"},
+        "environment": {"status": "historical-command-and-runtime-partially-recorded"},
+        "criteria": {"status": "historical-scene-angle-evidence-no-physics-acceptance-criterion"},
+        "controls": {"status": "recorded-in-runner-and-equations"},
+        "results": {"status": "low-and-high-Sun-output-and-diagnostics-present"},
+        "reports": {"status": "notes-and-run-log-present"}
+      },
+      "claimBoundary": {
+        "status": "experiment-reproduction-scene-input-only",
+        "supports": ["A surviving use of the paper's 87-degree and 21-degree Sun-zenith row labels as low- and high-Sun scene inputs."],
+        "doesNotProve": ["Sun-position ephemerides, the locally measured azimuths, atmosphere physics, or visual agreement as physical validation."]
+      },
+      "independence": {"status": "external-label-plus-local-measurement", "oracle": "paper Figure 1 row labels and extracted image orientation", "sharedCodeRisk": "high for rendering and output"},
+      "historicalAcceptance": "accepted as scene-angle evidence, not final",
+      "rederivationReasons": ["The exact tile extraction and red-cross measurement procedure is not machine recorded.", "Scene labels are reproduction inputs, not physical atmosphere authority.", "No target selected-ray comparison pins the scene frame."],
+      "rederivation": {
+        "required": true,
+        "status": "cataloged-not-rederived",
+        "additionalReasons": [],
+        "requiredInputs": ["pinned-source-PDF-hash", "reproducible-page-image-extraction-metadata", "crop-and-red-cross-measurement-procedure", "explicit-scene-frame-and-angle-convention", "target-selected-ray-input-packet"],
+        "futureVerificationLayer": "analytic"
+      },
+      "decisionStatus": "provisional",
+      "disposition": "must-rederive",
+      "reviewStatus": "inventory-and-reproduction-boundary-reviewed",
+      "sourceIds": ["SOURCE-EXT-000013"],
+      "materialIds": ["MATERIAL-EXT-000014"],
+      "relatedExperimentIds": ["EXPERIMENT-A32-000040"],
+      "blockers": ["Tile extraction, crop boxes, and azimuth measurement are not reproducibly recorded."],
+      "nextAction": "Reconstruct the scene-input measurement metadata only as needed to rerun selected-ray physics; do not promote image-derived azimuths as atmosphere facts."
+    },
+    {
+      "id": "EXPERIMENT-A32-000042",
+      "title": "Step 023 forty-wavelength paper-comparison probe",
+      "kind": "historical-step023-forty-wavelength-spectral-probe",
+      "recordPath": "tmp/atmosphere/bruneton_start_fresh/023-paper-40-wavelength-baseline",
+      "historicalLocators": [],
+      "runner": {
+        "status": "exact-record-local-snapshot-identified",
+        "paths": ["tmp/atmosphere/bruneton_start_fresh/023-paper-40-wavelength-baseline/script-snapshot.js"],
+        "pathRoles": [{"path": "tmp/atmosphere/bruneton_start_fresh/023-paper-40-wavelength-baseline/script-snapshot.js", "role": "exact-record-local-runner-snapshot"}]
+      },
+      "contractParts": {
+        "importedModules": {"status": "reviewed-node-builtins-only", "paths": ["node:fs", "node:path", "node:zlib", "node:url"]},
+        "inputs": {"status": "forty-centered-wavelength-grid-and-paper-profile-recorded"},
+        "environment": {"status": "historical-command-and-runtime-partially-recorded"},
+        "criteria": {"status": "historical-spectral-sampling-evidence-no-independent-error-threshold"},
+        "controls": {"status": "recorded-in-runner-and-equations"},
+        "results": {"status": "forty-channel-output-and-diagnostics-present"},
+        "reports": {"status": "notes-and-run-log-present"}
+      },
+      "claimBoundary": {
+        "status": "historical-higher-resolution-spectral-control",
+        "supports": ["A surviving run using 40 centered wavelengths between 360 and 830 nm to mirror the paper comparison count."],
+        "doesNotProve": ["That its centers exactly match the paper's unspecified sample positions, that 15 channels are sufficient, or that fitted display agreement establishes transport accuracy."]
+      },
+      "independence": {"status": "same-runner-resolution-comparison", "oracle": "paper count plus monolithic runner", "sharedCodeRisk": "high"},
+      "historicalAcceptance": "accepted as spectral-sampling evidence, not final",
+      "rederivationReasons": ["The paper specifies the range and count but not this runner's exact centered grid construction.", "The comparison is entangled with fitted display output.", "No pre-display 15-versus-40 spectral error budget survives."],
+      "rederivation": {
+        "required": true,
+        "status": "cataloged-not-rederived",
+        "additionalReasons": [],
+        "requiredInputs": ["exact-paper-spectral-comparison-locator", "explicit-40-channel-grid", "independent-high-resolution-spectrum", "15-versus-40-pre-display-error-metrics", "pinned-target-Reference-spectral-packet"],
+        "futureVerificationLayer": "cpu-oracle"
+      },
+      "decisionStatus": "provisional",
+      "disposition": "must-rederive",
+      "reviewStatus": "inventory-and-claim-boundary-reviewed",
+      "sourceIds": ["SOURCE-EXT-000003", "SOURCE-EXT-000013", "SOURCE-EXT-000014", "SOURCE-EXT-000016"],
+      "materialIds": ["MATERIAL-EXT-000001", "MATERIAL-EXT-000014", "MATERIAL-EXT-000015", "MATERIAL-EXT-000016"],
+      "relatedExperimentIds": ["EXPERIMENT-A32-000029", "EXPERIMENT-A32-000041"],
+      "blockers": ["No independent spectral reference or accepted 15-channel error budget exists."],
+      "nextAction": "Use a pinned higher-resolution spectral oracle to quantify the 15-channel packet error before retaining that packet."
+    },
+    {
+      "id": "EXPERIMENT-A32-000043",
+      "title": "Step 025 shadowed-ground sky-irradiance probe",
+      "kind": "historical-step025-shadowed-ground-irradiance-probe",
+      "recordPath": "tmp/atmosphere/bruneton_start_fresh/025-shadowed-ground-sky-irradiance-baseline",
+      "historicalLocators": [],
+      "runner": {
+        "status": "exact-record-local-snapshot-identified",
+        "paths": ["tmp/atmosphere/bruneton_start_fresh/025-shadowed-ground-sky-irradiance-baseline/script-snapshot.js"],
+        "pathRoles": [{"path": "tmp/atmosphere/bruneton_start_fresh/025-shadowed-ground-sky-irradiance-baseline/script-snapshot.js", "role": "exact-record-local-runner-snapshot"}]
+      },
+      "contractParts": {
+        "importedModules": {"status": "reviewed-node-builtins-only", "paths": ["node:fs", "node:path", "node:zlib", "node:url"]},
+        "inputs": {"status": "separate-Sun-and-sky-visibility-ground-controls-recorded"},
+        "environment": {"status": "historical-command-and-runtime-partially-recorded"},
+        "criteria": {"status": "historical-physics-correctness-label-visually-neutral-no-independent-oracle"},
+        "controls": {"status": "recorded-in-runner-and-equations"},
+        "results": {"status": "shadowed-ground-output-and-diagnostics-present"},
+        "reports": {"status": "notes-and-run-log-present"}
+      },
+      "claimBoundary": {
+        "status": "historical-ground-visibility-logic-probe",
+        "supports": ["A surviving correction that keeps sky irradiance active on ground when direct-Sun visibility is zero, following separate Sun and sky visibility factors."],
+        "doesNotProve": ["The magnitude of sky irradiance, visual significance, convergence, or final inclusion of ground coupling."]
+      },
+      "independence": {"status": "source-informed-self-validation", "oracle": "retained demo.glsl branch structure plus same-runner output", "sharedCodeRisk": "high"},
+      "historicalAcceptance": "accepted as physics-correctness audit, visually neutral, not final",
+      "rederivationReasons": ["The branch logic is source-informed but the irradiance values are same-runner generated.", "Visual neutrality does not establish physical insignificance.", "Ground coupling is absent in Step 032 and production."],
+      "rederivation": {
+        "required": true,
+        "status": "cataloged-not-rederived",
+        "additionalReasons": [],
+        "requiredInputs": ["pinned-demo-ground-source-lines", "independent-sky-irradiance-oracle", "direct-shadow-and-sky-visibility-cases", "numeric-ground-on-off-deltas", "target-Reference-surface-contract"],
+        "futureVerificationLayer": "cpu-oracle"
+      },
+      "decisionStatus": "deferred",
+      "disposition": "must-rederive",
+      "reviewStatus": "inventory-and-claim-boundary-reviewed",
+      "sourceIds": ["SOURCE-EXT-000001", "SOURCE-EXT-000014"],
+      "materialIds": ["MATERIAL-EXT-000015"],
+      "relatedExperimentIds": ["EXPERIMENT-A32-000034", "EXPERIMENT-A32-000042"],
+      "blockers": ["No independent sky-irradiance magnitude or target surface contract exists."],
+      "nextAction": "Recreate the separate visibility cases numerically if a ground-coupled profile is retained."
+    },
+    {
+      "id": "EXPERIMENT-A32-000044",
+      "title": "Step 026 local solar-zenith cache-coordinate probe",
+      "kind": "historical-step026-sun-angle-cache-probe",
+      "recordPath": "tmp/atmosphere/bruneton_start_fresh/026-second-order-sun-angle-cache-baseline",
+      "historicalLocators": [],
+      "runner": {
+        "status": "exact-record-local-snapshot-identified",
+        "paths": ["tmp/atmosphere/bruneton_start_fresh/026-second-order-sun-angle-cache-baseline/script-snapshot.js"],
+        "pathRoles": [{"path": "tmp/atmosphere/bruneton_start_fresh/026-second-order-sun-angle-cache-baseline/script-snapshot.js", "role": "exact-record-local-runner-snapshot"}]
+      },
+      "contractParts": {
+        "importedModules": {"status": "reviewed-node-builtins-only", "paths": ["node:fs", "node:path", "node:zlib", "node:url"]},
+        "inputs": {"status": "five-solar-mu-bins-plus-altitude-and-direction-recorded"},
+        "environment": {"status": "historical-command-and-runtime-partially-recorded"},
+        "criteria": {"status": "historical-transport-coordinate-evidence-no-independent-cache-error-threshold"},
+        "controls": {"status": "recorded-in-runner-and-equations"},
+        "results": {"status": "sun-angle-cache-output-and-diagnostics-present"},
+        "reports": {"status": "notes-and-run-log-present"}
+      },
+      "claimBoundary": {
+        "status": "historical-cache-coordinate-sensitivity-probe",
+        "supports": ["A surviving experiment adding five local solar-zenith bins to the direction-and-altitude incident-radiance cache."],
+        "doesNotProve": ["That five bins are sufficient, that the coordinate mapping matches Bruneton textures, or that the target Reference should use this cache."]
+      },
+      "independence": {"status": "same-runner-cache-variant-comparison", "oracle": "visual and record-local numeric behavior", "sharedCodeRisk": "high"},
+      "historicalAcceptance": "accepted as transport-coordinate evidence, not final",
+      "rederivationReasons": ["The cache stores same-runner incident radiance.", "Five mu_s bins were not shown converged.", "Step 032 later returns to an altitude-only cache despite this evidence."],
+      "rederivation": {
+        "required": true,
+        "status": "cataloged-not-rederived",
+        "additionalReasons": [],
+        "requiredInputs": ["explicit-mu_s-coordinate-definition", "independent-uncached-second-order-oracle", "mu_s-bin-convergence-sweep", "scene-position-and-sun-angle-matrix", "pinned-target-cache-contract"],
+        "futureVerificationLayer": "cpu-oracle"
+      },
+      "decisionStatus": "deferred",
+      "disposition": "must-rederive",
+      "reviewStatus": "inventory-and-claim-boundary-reviewed",
+      "sourceIds": ["SOURCE-EXT-000013", "SOURCE-EXT-000014", "SOURCE-EXT-000016"],
+      "materialIds": ["MATERIAL-EXT-000014", "MATERIAL-EXT-000015", "MATERIAL-EXT-000016"],
+      "relatedExperimentIds": ["EXPERIMENT-A32-000040", "EXPERIMENT-A32-000043"],
+      "blockers": ["No uncached oracle or mu_s convergence bound exists."],
+      "nextAction": "Measure altitude-only versus mu_s-aware cache error against an uncached independent second-order oracle."
+    },
+    {
+      "id": "EXPERIMENT-A32-000045",
+      "title": "Step 027 local solar/view-zenith cache-coordinate probe",
+      "kind": "historical-step027-sun-view-angle-cache-probe",
+      "recordPath": "tmp/atmosphere/bruneton_start_fresh/027-second-order-sun-view-angle-cache-baseline",
+      "historicalLocators": [],
+      "runner": {
+        "status": "exact-record-local-snapshot-identified",
+        "paths": ["tmp/atmosphere/bruneton_start_fresh/027-second-order-sun-view-angle-cache-baseline/script-snapshot.js"],
+        "pathRoles": [{"path": "tmp/atmosphere/bruneton_start_fresh/027-second-order-sun-view-angle-cache-baseline/script-snapshot.js", "role": "exact-record-local-runner-snapshot"}]
+      },
+      "contractParts": {
+        "importedModules": {"status": "reviewed-node-builtins-only", "paths": ["node:fs", "node:path", "node:zlib", "node:url"]},
+        "inputs": {"status": "five-solar-mu-and-five-incoming-mu-bins-recorded"},
+        "environment": {"status": "historical-command-and-runtime-partially-recorded"},
+        "criteria": {"status": "historical-coordinate-evidence-and-subjective-visual-ranking"},
+        "controls": {"status": "recorded-in-runner-and-equations"},
+        "results": {"status": "sun-view-angle-cache-output-and-diagnostics-present"},
+        "reports": {"status": "notes-and-run-log-present"}
+      },
+      "claimBoundary": {
+        "status": "historical-cache-coordinate-sensitivity-probe",
+        "supports": ["A surviving experiment adding both five solar-zenith and five incoming-view-zenith bins to the incident cache."],
+        "doesNotProve": ["That either coordinate count is converged, that visual distance from a target measures physical error, or that Step 032's simpler cache is adequate."]
+      },
+      "independence": {"status": "same-runner-cache-variant-comparison", "oracle": "visual and record-local behavior", "sharedCodeRisk": "high"},
+      "historicalAcceptance": "accepted as transport-coordinate evidence, not closest visual match",
+      "rederivationReasons": ["The cache and comparison share code.", "The result was ranked visually rather than against an uncached oracle.", "The later selected Step 032 cache omits both added coordinates."],
+      "rederivation": {
+        "required": true,
+        "status": "cataloged-not-rederived",
+        "additionalReasons": [],
+        "requiredInputs": ["explicit-mu_s-and-mu-coordinate-definitions", "independent-uncached-second-order-oracle", "two-dimensional-cache-convergence-sweep", "position-orientation-covariance-cases", "pinned-target-cache-contract"],
+        "futureVerificationLayer": "cpu-oracle"
+      },
+      "decisionStatus": "deferred",
+      "disposition": "must-rederive",
+      "reviewStatus": "inventory-and-claim-boundary-reviewed",
+      "sourceIds": ["SOURCE-EXT-000013", "SOURCE-EXT-000014", "SOURCE-EXT-000016"],
+      "materialIds": ["MATERIAL-EXT-000014", "MATERIAL-EXT-000015", "MATERIAL-EXT-000016"],
+      "relatedExperimentIds": ["EXPERIMENT-A32-000044"],
+      "blockers": ["No uncached oracle or two-dimensional cache error bound exists."],
+      "nextAction": "Recreate the coordinate reductions against an independent uncached oracle before choosing a production cache domain."
+    },
+    {
+      "id": "EXPERIMENT-A32-000046",
+      "title": "Step 029 corrected no-ground comparison anchor",
+      "kind": "historical-step029-no-ground-subjective-equivalence-probe",
+      "recordPath": "tmp/atmosphere/bruneton_start_fresh/029-paper-figure1-derived-k-no-ground-baseline",
+      "historicalLocators": [],
+      "runner": {
+        "status": "exact-record-local-snapshot-identified",
+        "paths": ["tmp/atmosphere/bruneton_start_fresh/029-paper-figure1-derived-k-no-ground-baseline/script-snapshot.js"],
+        "pathRoles": [{"path": "tmp/atmosphere/bruneton_start_fresh/029-paper-figure1-derived-k-no-ground-baseline/script-snapshot.js", "role": "exact-record-local-runner-snapshot"}]
+      },
+      "contractParts": {
+        "importedModules": {"status": "reviewed-node-builtins-only", "paths": ["node:fs", "node:path", "node:zlib", "node:url"]},
+        "inputs": {"status": "no-ground-model-controls-and-comparison-scenes-recorded"},
+        "environment": {"status": "historical-command-and-runtime-partially-recorded"},
+        "criteria": {"status": "subjective-no-clear-visual-difference-no-numeric-threshold"},
+        "controls": {"status": "recorded-in-runner-and-equations"},
+        "results": {"status": "no-ground-output-and-diagnostics-present"},
+        "reports": {"status": "notes-and-run-log-present"}
+      },
+      "claimBoundary": {
+        "status": "historical-subjective-no-ground-simplification-evidence",
+        "supports": ["A surviving corrected run with both ground-coupling terms off that reviewers found visually indistinguishable from nearby comparison variants."],
+        "doesNotProve": ["That ground physics is negligible, that pre-display radiance is equal, or that a no-ground production profile is physically sufficient."]
+      },
+      "independence": {"status": "subjective-display-comparison", "oracle": "human visual comparison among same-runner outputs", "sharedCodeRisk": "high"},
+      "historicalAcceptance": "accepted as simplified Step-021-equivalent anchor, not final",
+      "rederivationReasons": ["The conclusion is perceptual and display-dependent.", "No pre-display numeric difference or tolerance was recorded.", "The source paper states that ground properties affect sky color."],
+      "rederivation": {
+        "required": true,
+        "status": "cataloged-not-rederived",
+        "additionalReasons": [],
+        "requiredInputs": ["ground-off-and-ground-on-unit-bearing-packets", "independent-ground-coupled-oracle", "selected-ray-and-hemisphere-error-metrics", "explicit-profile-scope", "pinned-target-Reference-revision"],
+        "futureVerificationLayer": "cpu-oracle"
+      },
+      "decisionStatus": "provisional",
+      "disposition": "must-rederive",
+      "reviewStatus": "inventory-and-claim-boundary-reviewed",
+      "sourceIds": ["SOURCE-EXT-000013", "SOURCE-EXT-000014", "SOURCE-EXT-000016"],
+      "materialIds": ["MATERIAL-EXT-000014", "MATERIAL-EXT-000015", "MATERIAL-EXT-000016"],
+      "relatedExperimentIds": ["EXPERIMENT-A32-000043", "EXPERIMENT-A32-000045"],
+      "blockers": ["Visual equivalence is not a physical ground-omission proof."],
+      "nextAction": "Measure pre-display ground-on/off error before accepting a named no-ground profile."
+    },
+    {
+      "id": "EXPERIMENT-A32-000047",
+      "title": "Step 030 direct-ground-only comparison probe",
+      "kind": "historical-step030-direct-ground-subjective-equivalence-probe",
+      "recordPath": "tmp/atmosphere/bruneton_start_fresh/030-paper-figure1-derived-k-direct-ground-baseline",
+      "historicalLocators": [],
+      "runner": {
+        "status": "exact-record-local-snapshot-identified",
+        "paths": ["tmp/atmosphere/bruneton_start_fresh/030-paper-figure1-derived-k-direct-ground-baseline/script-snapshot.js"],
+        "pathRoles": [{"path": "tmp/atmosphere/bruneton_start_fresh/030-paper-figure1-derived-k-direct-ground-baseline/script-snapshot.js", "role": "exact-record-local-runner-snapshot"}]
+      },
+      "contractParts": {
+        "importedModules": {"status": "reviewed-node-builtins-only", "paths": ["node:fs", "node:path", "node:zlib", "node:url"]},
+        "inputs": {"status": "direct-ground-only-controls-and-comparison-scenes-recorded"},
+        "environment": {"status": "historical-command-and-runtime-partially-recorded"},
+        "criteria": {"status": "subjective-no-clear-visual-difference-no-numeric-threshold"},
+        "controls": {"status": "recorded-in-runner-and-equations"},
+        "results": {"status": "direct-ground-only-output-and-diagnostics-present"},
+        "reports": {"status": "notes-and-run-log-present"}
+      },
+      "claimBoundary": {
+        "status": "historical-subjective-ground-term-equivalence-evidence",
+        "supports": ["A surviving run retaining only the direct-Sun ground term that reviewers found visually indistinguishable from the no-ground and prior variants."],
+        "doesNotProve": ["Radiometric equivalence, physical insignificance of ground, sky-ground correctness, or a production ground policy."]
+      },
+      "independence": {"status": "subjective-display-comparison", "oracle": "human visual comparison among same-runner outputs", "sharedCodeRisk": "high"},
+      "historicalAcceptance": "accepted as ground-term equivalence evidence, not the simpler anchor",
+      "rederivationReasons": ["The conclusion is display-dependent and subjective.", "No pre-display difference packet or threshold survives.", "The isolated ground term is absent in Step 032."],
+      "rederivation": {
+        "required": true,
+        "status": "cataloged-not-rederived",
+        "additionalReasons": [],
+        "requiredInputs": ["matched-ground-off-direct-ground-and-sun-sky-ground-packets", "independent-ground-oracle", "selected-ray-and-integrated-error-metrics", "ground-profile-scope", "pinned-target-Reference-revision"],
+        "futureVerificationLayer": "cpu-oracle"
+      },
+      "decisionStatus": "provisional",
+      "disposition": "must-rederive",
+      "reviewStatus": "inventory-and-claim-boundary-reviewed",
+      "sourceIds": ["SOURCE-EXT-000001", "SOURCE-EXT-000013", "SOURCE-EXT-000014", "SOURCE-EXT-000016"],
+      "materialIds": ["MATERIAL-EXT-000014", "MATERIAL-EXT-000015", "MATERIAL-EXT-000016"],
+      "relatedExperimentIds": ["EXPERIMENT-A32-000033", "EXPERIMENT-A32-000046"],
+      "blockers": ["No numeric equivalence criterion or independent ground oracle exists."],
+      "nextAction": "Recreate only as one cell in a numeric ground-coupling ablation matrix."
+    },
+    {
+      "id": "EXPERIMENT-A32-000048",
+      "title": "Step 031 four-view no-ground predecessor to Step 032",
+      "kind": "historical-step031-four-view-predecessor",
+      "recordPath": "tmp/atmosphere/bruneton_start_fresh/031-figure1-four-view-derived-k-no-ground-baseline",
+      "historicalLocators": [],
+      "runner": {
+        "status": "exact-record-local-snapshot-identified",
+        "paths": ["tmp/atmosphere/bruneton_start_fresh/031-figure1-four-view-derived-k-no-ground-baseline/script-snapshot.js"],
+        "pathRoles": [{"path": "tmp/atmosphere/bruneton_start_fresh/031-figure1-four-view-derived-k-no-ground-baseline/script-snapshot.js", "role": "exact-record-local-runner-snapshot"}]
+      },
+      "contractParts": {
+        "importedModules": {"status": "reviewed-node-builtins-only", "paths": ["node:fs", "node:path", "node:zlib", "node:url"]},
+        "inputs": {"status": "four-scene-no-ground-model-and-local-orientation-measurements-recorded"},
+        "environment": {"status": "historical-command-and-runtime-partially-recorded"},
+        "criteria": {"status": "generated-orientation-set-no-independent-physics-criterion"},
+        "controls": {"status": "recorded-in-runner-and-equations"},
+        "results": {"status": "four-scene-output-and-diagnostics-present"},
+        "reports": {"status": "notes-and-run-log-present"}
+      },
+      "claimBoundary": {
+        "status": "historical-four-scene-lineage-predecessor",
+        "supports": ["A surviving four-scene predecessor using the same no-ground 15-channel approximate second-order physics later retained by Step 032."],
+        "doesNotProve": ["The fitted display scalar, image orientation, current Reference correctness, or exact production derivation."]
+      },
+      "independence": {"status": "self-generated-lineage-record", "oracle": "same-runner four-view outputs and local image measurements", "sharedCodeRisk": "high"},
+      "historicalAcceptance": "generated as four-view Figure 1 orientation set",
+      "rederivationReasons": ["The scene azimuth extraction is not reproducibly documented.", "The record differs from Step 032 in display policy but shares its physics path.", "No current CPU Reference selected-ray reproduction exists."],
+      "rederivation": {
+        "required": true,
+        "status": "cataloged-not-rederived",
+        "additionalReasons": [],
+        "requiredInputs": ["reproducible-four-scene-input-packet", "exact-runner-snapshot", "pre-display-selected-ray-packets", "independent-physics-oracles", "pinned-target-Reference-revision"],
+        "futureVerificationLayer": "cpu-oracle"
+      },
+      "decisionStatus": "provisional",
+      "disposition": "must-rederive",
+      "reviewStatus": "inventory-and-lineage-boundary-reviewed",
+      "sourceIds": ["SOURCE-EXT-000003", "SOURCE-EXT-000013", "SOURCE-EXT-000014", "SOURCE-EXT-000016"],
+      "materialIds": ["MATERIAL-EXT-000001", "MATERIAL-EXT-000014", "MATERIAL-EXT-000015", "MATERIAL-EXT-000016"],
+      "relatedExperimentIds": ["EXPERIMENT-A32-000041", "EXPERIMENT-A32-000046", "EXPERIMENT-A32-000047"],
+      "blockers": ["It is a historical predecessor, not an independent oracle or exact production handoff."],
+      "nextAction": "Use its pre-display packets only to explain Step 032 lineage and recreate the four-scene input contract."
+    }
+  ],
+  "factSeries": [
+    {
+      "seriesKey": "bruneton-retained-earth-atmosphere-parameters",
+      "shared": {
+        "kind": "external-implementation-parameter-claim",
+        "domain": "bruneton-earth-atmosphere-profile",
+        "owner": "algorithm32-physics-model",
+        "authorityRole": "physics-source-claim",
+        "scope": {
+          "area": "A32",
+          "sourceProfile": "Bruneton-2017-demo-Earth-atmosphere"
+        },
+        "supportStatus": "source-backed",
+        "implementationStatus": "not-applicable",
+        "decisionStatus": "provisional",
+        "verificationLayer": "not-verified",
+        "citations": [
+          {
+            "path": "agents/topics/apps/flat/reconciliation/archive/mark-i-bruneton-start-fresh-source-audit.md",
+            "lineStart": 55,
+            "lineEnd": 56,
+            "role": "records-the-retained-source-trail-and-bounded-parameter-claims"
+          }
+        ],
+        "experimentIds": ["EXPERIMENT-A32-000001"],
+        "materialIds": ["MATERIAL-EXT-000015"],
+        "nonClaims": [
+          "A retained external implementation parameter is not by itself a universal Earth constant or proof of the CPU Reference.",
+          "The exact upstream source commit remains unknown."
+        ],
+        "blockers": ["The exact upstream revision of the retained Bruneton source subset is not established."],
+        "nextAction": "Independently review this bounded source parameter before accepting the corresponding CPU Reference input."
+      },
+      "entries": [
+        {
+          "semanticKey": "step032-source:bruneton-demo:bottom-radius-meters",
+          "statement": "The retained Bruneton demo source defines the bottom radius of its Earth atmosphere profile as 6360000 meters.",
+          "structuredValue": {"value": 6360000, "units": "meters"},
+          "externalCitations": [
+            {
+              "sourceId": "SOURCE-EXT-000014",
+              "role": "defines-retained-demo-parameter",
+              "locator": {"retainedMaterialId": "MATERIAL-EXT-000015", "path": "tmp/atmosphere/bruneton_start_fresh/external_sources/bruneton-2017-demo.cc", "upstreamPath": "atmosphere/demo/demo.cc", "lineStart": 226, "lineEnd": 226}
+            }
+          ],
+          "relatedFactIds": ["FACT-A32-000122"]
+        },
+        {
+          "semanticKey": "step032-source:bruneton-demo:top-radius-meters",
+          "statement": "The retained Bruneton demo source defines the top radius of its Earth atmosphere profile as 6420000 meters.",
+          "structuredValue": {"value": 6420000, "units": "meters"},
+          "externalCitations": [
+            {
+              "sourceId": "SOURCE-EXT-000014",
+              "role": "defines-retained-demo-parameter",
+              "locator": {"retainedMaterialId": "MATERIAL-EXT-000015", "path": "tmp/atmosphere/bruneton_start_fresh/external_sources/bruneton-2017-demo.cc", "upstreamPath": "atmosphere/demo/demo.cc", "lineStart": 227, "lineEnd": 227}
+            }
+          ],
+          "relatedFactIds": ["FACT-A32-000123"]
+        },
+        {
+          "semanticKey": "step032-source:bruneton-profile:rayleigh-scale-height-meters",
+          "statement": "The retained Bruneton demo source and the paper comparison parameterization use an 8000-meter Rayleigh molecular-density scale height.",
+          "structuredValue": {"value": 8000, "units": "meters"},
+          "externalCitations": [
+            {
+              "sourceId": "SOURCE-EXT-000014",
+              "role": "defines-retained-demo-parameter",
+              "locator": {"retainedMaterialId": "MATERIAL-EXT-000015", "path": "tmp/atmosphere/bruneton_start_fresh/external_sources/bruneton-2017-demo.cc", "upstreamPath": "atmosphere/demo/demo.cc", "lineStart": 229, "lineEnd": 240}
+            },
+            {
+              "sourceId": "SOURCE-EXT-000013",
+              "role": "states-comparison-parameter-assumption",
+              "locator": {"retainedMaterialId": "MATERIAL-EXT-000014", "pdfPage": 2, "section": "3.4 Model parameters — Inversion method", "claim": "typical air-molecule parameters use an exponential scale height of 8 km"}
+            }
+          ],
+          "materialIds": ["MATERIAL-EXT-000014"],
+          "relatedFactIds": ["FACT-A32-000124"]
+        },
+        {
+          "semanticKey": "step032-source:bruneton-profile:mie-scale-height-meters",
+          "statement": "The retained Bruneton demo source and the paper comparison parameterization use a 1200-meter aerosol-density scale height.",
+          "structuredValue": {"value": 1200, "units": "meters"},
+          "externalCitations": [
+            {
+              "sourceId": "SOURCE-EXT-000014",
+              "role": "defines-retained-demo-parameter",
+              "locator": {"retainedMaterialId": "MATERIAL-EXT-000015", "path": "tmp/atmosphere/bruneton_start_fresh/external_sources/bruneton-2017-demo.cc", "upstreamPath": "atmosphere/demo/demo.cc", "lineStart": 230, "lineEnd": 241}
+            },
+            {
+              "sourceId": "SOURCE-EXT-000013",
+              "role": "states-comparison-parameter-assumption",
+              "locator": {"retainedMaterialId": "MATERIAL-EXT-000014", "pdfPage": 3, "section": "3.4 Model parameters — Inversion method", "claim": "aerosol scale height fixed to 1.2 km"}
+            }
+          ],
+          "materialIds": ["MATERIAL-EXT-000014"],
+          "relatedFactIds": ["FACT-A32-000125"]
+        },
+        {
+          "semanticKey": "step032-source:bruneton-demo:rayleigh-coefficient-scale",
+          "statement": "The retained Bruneton demo source defines its Rayleigh scattering coefficient as 1.24062e-6 times wavelength in micrometers raised to minus four.",
+          "structuredValue": {"scale": 0.00000124062, "wavelengthUnits": "micrometers", "expression": "beta_R(lambda_um) = 1.24062e-6 * lambda_um^-4"},
+          "externalCitations": [
+            {
+              "sourceId": "SOURCE-EXT-000014",
+              "role": "defines-retained-demo-parameter-and-realization",
+              "locator": {"retainedMaterialId": "MATERIAL-EXT-000015", "path": "tmp/atmosphere/bruneton_start_fresh/external_sources/bruneton-2017-demo.cc", "upstreamPath": "atmosphere/demo/demo.cc", "lineStart": 228, "lineEnd": 228}
+            },
+            {
+              "sourceId": "SOURCE-EXT-000014",
+              "role": "applies-micrometer-wavelength-power-law",
+              "locator": {"retainedMaterialId": "MATERIAL-EXT-000015", "path": "tmp/atmosphere/bruneton_start_fresh/external_sources/bruneton-2017-demo.cc", "upstreamPath": "atmosphere/demo/demo.cc", "lineStart": 259, "lineEnd": 270}
+            }
+          ],
+          "relatedFactIds": ["FACT-A32-000037", "FACT-A32-000126"]
+        }
+      ]
+    },
+    {
+      "seriesKey": "bruneton-2016-bounded-physics-and-profile-claims",
+      "shared": {
+        "kind": "external-paper-physics-or-profile-claim",
+        "domain": "bruneton-2016-clear-sky-comparison",
+        "owner": "algorithm32-physics-model",
+        "authorityRole": "physics-source-claim",
+        "scope": {"area": "A32", "sourceProfile": "Bruneton-2016-clear-sky-comparison"},
+        "supportStatus": "source-backed",
+        "implementationStatus": "not-applicable",
+        "decisionStatus": "provisional",
+        "verificationLayer": "not-verified",
+        "materialIds": ["MATERIAL-EXT-000014"],
+        "nonClaims": ["A conditional comparison assumption or fitted parameter is not a universal atmosphere constant."],
+        "blockers": [],
+        "nextAction": "Use this claim only within its exact paper section and comparison-profile assumptions."
+      },
+      "entries": [
+        {
+          "semanticKey": "step032-source:bruneton-paper:rayleigh-lambda-minus-four",
+          "statement": "Bruneton's clear-sky comparison paper states that Rayleigh molecular scattering is proportional to wavelength raised to minus four.",
+          "externalCitations": [{"sourceId": "SOURCE-EXT-000013", "role": "states-bounded-physics-relationship", "locator": {"retainedMaterialId": "MATERIAL-EXT-000014", "pdfPage": 2, "section": "3.2 Physical model", "claim": "Rayleigh scattering proportional to lambda^-4"}}],
+          "relatedFactIds": ["FACT-A32-000037"]
+        },
+        {
+          "semanticKey": "step032-source:bruneton-paper:molecular-density-approximately-exponential",
+          "statement": "Bruneton's clear-sky comparison paper describes air-molecule density as approximately decreasing exponentially with altitude.",
+          "externalCitations": [{"sourceId": "SOURCE-EXT-000013", "role": "states-bounded-density-model", "locator": {"retainedMaterialId": "MATERIAL-EXT-000014", "pdfPage": 2, "section": "3.2 Physical model", "claim": "molecular density approximately exponentially decreasing with altitude"}}],
+          "relatedFactIds": ["FACT-A32-000027"]
+        },
+        {
+          "semanticKey": "step032-source:bruneton-paper:comparison-assumes-no-air-absorption",
+          "statement": "For its simplified model-parameter inversion, Bruneton's comparison paper assumes that air molecules do not absorb light.",
+          "externalCitations": [{"sourceId": "SOURCE-EXT-000013", "role": "states-comparison-profile-assumption", "locator": {"retainedMaterialId": "MATERIAL-EXT-000014", "pdfPage": 2, "section": "3.4 Model parameters — Inversion method", "claim": "air molecules assumed not to absorb light"}}],
+          "experimentIds": ["EXPERIMENT-A32-000035", "EXPERIMENT-A32-000001"],
+          "contradictionIds": ["CONTRADICTION-A32-000013"],
+          "relatedFactIds": ["FACT-A32-000028", "FACT-A32-000131"]
+        },
+        {
+          "semanticKey": "step032-source:bruneton-paper:aerosol-single-scattering-albedo",
+          "statement": "Bruneton's comparison parameterization fixes aerosol single-scattering albedo to 0.8 independent of wavelength.",
+          "structuredValue": {"value": 0.8, "units": "dimensionless"},
+          "externalCitations": [{"sourceId": "SOURCE-EXT-000013", "role": "states-comparison-profile-parameter", "locator": {"retainedMaterialId": "MATERIAL-EXT-000014", "pdfPage": 3, "section": "3.4 Model parameters — Inversion method", "claim": "aerosol single-scattering albedo fixed to 0.8 independent of wavelength"}}],
+          "experimentIds": ["EXPERIMENT-A32-000027", "EXPERIMENT-A32-000036", "EXPERIMENT-A32-000001"],
+          "relatedFactIds": ["FACT-A32-000129"]
+        },
+        {
+          "semanticKey": "step032-source:bruneton-paper:aerosol-angstrom-alpha",
+          "statement": "Bruneton's comparison uses aerosol Angstrom alpha equal to 0.8 after a coarse inversion whose refined value did not add significant digits.",
+          "structuredValue": {"value": 0.8, "units": "dimensionless"},
+          "externalCitations": [{"sourceId": "SOURCE-EXT-000013", "role": "states-selected-comparison-profile-parameter", "locator": {"retainedMaterialId": "MATERIAL-EXT-000014", "pdfPage": 3, "section": "3.4 Model parameters — Inversion result", "claim": "selected alpha = 0.8"}}],
+          "experimentIds": ["EXPERIMENT-A32-000027", "EXPERIMENT-A32-000036", "EXPERIMENT-A32-000001"],
+          "relatedFactIds": ["FACT-A32-000127"]
+        },
+        {
+          "semanticKey": "step032-source:bruneton-paper:aerosol-angstrom-beta",
+          "statement": "Bruneton's comparison uses aerosol Angstrom beta equal to 0.04 after a coarse inversion whose refined value did not add significant digits.",
+          "structuredValue": {"value": 0.04, "units": "dimensionless"},
+          "externalCitations": [{"sourceId": "SOURCE-EXT-000013", "role": "states-selected-comparison-profile-parameter", "locator": {"retainedMaterialId": "MATERIAL-EXT-000014", "pdfPage": 3, "section": "3.4 Model parameters — Inversion result", "claim": "selected beta = 0.04"}}],
+          "experimentIds": ["EXPERIMENT-A32-000027", "EXPERIMENT-A32-000036", "EXPERIMENT-A32-000001"],
+          "relatedFactIds": ["FACT-A32-000128"]
+        },
+        {
+          "semanticKey": "step032-source:bruneton-paper:cornette-shanks-g",
+          "statement": "Bruneton's comparison uses Cornette-Shanks asymmetry parameter g equal to 0.7 after a coarse inversion whose refined value did not add significant digits.",
+          "structuredValue": {"value": 0.7, "units": "dimensionless"},
+          "externalCitations": [{"sourceId": "SOURCE-EXT-000013", "role": "states-selected-comparison-profile-parameter", "locator": {"retainedMaterialId": "MATERIAL-EXT-000014", "pdfPage": 3, "section": "3.4 Model parameters — Inversion result", "claim": "selected g = 0.7"}}],
+          "experimentIds": ["EXPERIMENT-A32-000027", "EXPERIMENT-A32-000036", "EXPERIMENT-A32-000001"],
+          "relatedFactIds": ["FACT-A32-000008", "FACT-A32-000130"]
+        },
+        {
+          "semanticKey": "step032-source:bruneton-paper:aerosol-fit-precision-qualification",
+          "statement": "Bruneton reports refined aerosol values 0.816, 0.0384, and 0.704 but says a broad nearly constant-RMSE region makes the refinement insignificant, so the comparison retains 0.8, 0.04, and 0.7.",
+          "structuredValue": {"coarse": {"alpha": 0.8, "beta": 0.04, "g": 0.7}, "refined": {"alpha": 0.816, "beta": 0.0384, "g": 0.704}, "qualification": "broad nearly constant-RMSE region"},
+          "externalCitations": [{"sourceId": "SOURCE-EXT-000013", "role": "qualifies-parameter-precision-and-scope", "locator": {"retainedMaterialId": "MATERIAL-EXT-000014", "pdfPage": 3, "section": "3.4 Model parameters — Inversion result"}}],
+          "experimentIds": ["EXPERIMENT-A32-000027", "EXPERIMENT-A32-000001"],
+          "nonClaims": ["The selected coarse tuple does not carry more precision than the paper supports and is not a universal aerosol state."]
+        },
+        {
+          "semanticKey": "step032-source:bruneton-paper:comparison-wavelength-count",
+          "statement": "Bruneton's quantitative comparison runs each model spectrally with the same 40 wavelengths between 360 and 830 nanometers.",
+          "structuredValue": {"count": 40, "minimum": 360, "maximum": 830, "wavelengthUnits": "nanometers"},
+          "externalCitations": [{"sourceId": "SOURCE-EXT-000013", "role": "states-comparison-spectral-count-and-range", "locator": {"retainedMaterialId": "MATERIAL-EXT-000014", "pdfPage": 3, "section": "4.2 Quantitative evaluations"}}],
+          "experimentIds": ["EXPERIMENT-A32-000042"],
+          "contradictionIds": ["CONTRADICTION-A32-000012"]
+        },
+        {
+          "semanticKey": "step032-source:bruneton-paper:double-scattering-all-directions-integral",
+          "statement": "Bruneton's summary of Nishita96 says computing double scattering requires an integral over all incoming directions at each view-ray sample, with a single-scattering integral in the integrand.",
+          "externalCitations": [{"sourceId": "SOURCE-EXT-000013", "role": "states-double-scattering-directional-integral-requirement", "locator": {"retainedMaterialId": "MATERIAL-EXT-000014", "pdfPage": 4, "section": "6.1 Overview"}}],
+          "experimentIds": ["EXPERIMENT-A32-000032", "EXPERIMENT-A32-000040", "EXPERIMENT-A32-000001"],
+          "relatedFactIds": ["FACT-A32-000013", "FACT-A32-000216"]
+        },
+        {
+          "semanticKey": "step032-source:bruneton-paper:eight-plane-double-scattering-underestimation",
+          "statement": "Bruneton attributes Nishita96's remaining underestimation partly to using only eight directions in one plane instead of many directions over the whole sphere and partly to omitting third and higher scattering orders.",
+          "externalCitations": [{"sourceId": "SOURCE-EXT-000013", "role": "states-approximation-limit", "locator": {"retainedMaterialId": "MATERIAL-EXT-000014", "pdfPage": 5, "section": "6.4 Quantitative evaluation"}}],
+          "experimentIds": ["EXPERIMENT-A32-000037", "EXPERIMENT-A32-000040", "EXPERIMENT-A32-000001"]
+        },
+        {
+          "semanticKey": "step032-source:bruneton-paper:ground-affects-sky-color",
+          "statement": "Bruneton's physical-model overview states that ground albedo and BRDF play a role in sky color and vary substantially by surface type.",
+          "externalCitations": [{"sourceId": "SOURCE-EXT-000013", "role": "states-bounded-ground-role", "locator": {"retainedMaterialId": "MATERIAL-EXT-000014", "pdfPage": 2, "section": "3.2 Physical model"}}],
+          "experimentIds": ["EXPERIMENT-A32-000033", "EXPERIMENT-A32-000034", "EXPERIMENT-A32-000043"],
+          "contradictionIds": ["CONTRADICTION-A32-000014"]
+        }
+      ]
+    },
+    {
+      "seriesKey": "bruneton-retained-spectral-and-ground-realizations",
+      "shared": {
+        "kind": "external-implementation-model-claim",
+        "domain": "bruneton-retained-source-realization",
+        "owner": "algorithm32-physics-model",
+        "authorityRole": "physics-source-claim",
+        "supportStatus": "source-backed",
+        "implementationStatus": "not-applicable",
+        "decisionStatus": "provisional",
+        "verificationLayer": "not-verified",
+        "materialIds": ["MATERIAL-EXT-000015"],
+        "nonClaims": ["This records an external implementation's model behavior; it does not prove the CPU Reference or select production controls."],
+        "blockers": ["The exact upstream revision is unknown."],
+        "nextAction": "Reconstruct and independently verify the bounded derivation before Reference acceptance."
+      },
+      "entries": [
+        {
+          "semanticKey": "step032-source:bruneton-code:forty-eight-value-astm-etr-table",
+          "statement": "The retained Bruneton demo source identifies its 48-value 360-to-830-nanometer solar-irradiance table as ASTM G-173 ETR values summed and averaged in 10-nanometer bins, in watts per square meter per nanometer.",
+          "structuredValue": {"count": 48, "minimum": 360, "maximum": 830, "spacing": 10, "wavelengthUnits": "nanometers", "valueUnits": "W m^-2 nm^-1", "attribution": "ASTM G-173 ETR"},
+          "externalCitations": [
+            {"sourceId": "SOURCE-EXT-000014", "role": "records-table-attribution-and-values", "locator": {"retainedMaterialId": "MATERIAL-EXT-000015", "path": "tmp/atmosphere/bruneton_start_fresh/external_sources/bruneton-2017-demo.cc", "upstreamPath": "atmosphere/demo/demo.cc", "lineStart": 189, "lineEnd": 203}},
+            {"sourceId": "SOURCE-EXT-000003", "role": "candidate-primary-dataset-identity-not-yet-rederived", "locator": {"materialId": "MATERIAL-EXT-000001", "table": "ASTMG173.csv", "column": "Etr W*m-2*nm-1"}}
+          ],
+          "materialIds": ["MATERIAL-EXT-000001"],
+          "experimentIds": ["EXPERIMENT-A32-000029", "EXPERIMENT-A32-000001"],
+          "blockers": ["The 48 values have not been independently regenerated from the official retained ASTM table."]
+        },
+        {
+          "semanticKey": "step032-source:bruneton-code:linear-spectrum-interpolation",
+          "statement": "The retained Bruneton model source evaluates tabulated spectra at an intermediate wavelength by linear interpolation between adjacent wavelength samples and clamps outside the table to an endpoint value.",
+          "structuredValue": {"interpolation": "linear-between-adjacent-samples", "outsideRange": "endpoint-clamp"},
+          "externalCitations": [{"sourceId": "SOURCE-EXT-000014", "role": "defines-retained-interpolation-function", "locator": {"retainedMaterialId": "MATERIAL-EXT-000015", "path": "tmp/atmosphere/bruneton_start_fresh/external_sources/bruneton-2017-model.cc", "upstreamPath": "atmosphere/model.cc", "lineStart": 535, "lineEnd": 551}}],
+          "experimentIds": ["EXPERIMENT-A32-000029", "EXPERIMENT-A32-000001"]
+        },
+        {
+          "semanticKey": "step032-source:bruneton-code:centered-precomputed-wavelength-samples",
+          "statement": "For precomputed illuminance mode, the retained Bruneton model source divides 360 through 830 nanometers into iterations of three and places each spectral evaluation at the center of its equal-width subinterval.",
+          "structuredValue": {"minimum": 360, "maximum": 830, "wavelengthUnits": "nanometers", "centerExpression": "lambda_min + (sampleIndex + 0.5) * delta_lambda"},
+          "externalCitations": [{"sourceId": "SOURCE-EXT-000014", "role": "defines-centered-spectral-sample-construction", "locator": {"retainedMaterialId": "MATERIAL-EXT-000015", "path": "tmp/atmosphere/bruneton_start_fresh/external_sources/bruneton-2017-model.cc", "upstreamPath": "atmosphere/model.cc", "lineStart": 915, "lineEnd": 940}}],
+          "experimentIds": ["EXPERIMENT-A32-000029", "EXPERIMENT-A32-000001"],
+          "relatedFactIds": ["FACT-A32-000132", "FACT-A32-000134", "FACT-A32-000135", "FACT-A32-000137", "FACT-A32-000138", "FACT-A32-000140", "FACT-A32-000141", "FACT-A32-000143", "FACT-A32-000144", "FACT-A32-000146", "FACT-A32-000147", "FACT-A32-000149", "FACT-A32-000150", "FACT-A32-000152", "FACT-A32-000153", "FACT-A32-000155", "FACT-A32-000156", "FACT-A32-000158", "FACT-A32-000159", "FACT-A32-000161", "FACT-A32-000162", "FACT-A32-000164", "FACT-A32-000165", "FACT-A32-000167", "FACT-A32-000168", "FACT-A32-000170", "FACT-A32-000171", "FACT-A32-000173", "FACT-A32-000174", "FACT-A32-000176"]
+        },
+        {
+          "semanticKey": "step032-source:bruneton-demo:separate-sun-and-sky-ground-radiance",
+          "statement": "The retained Bruneton demo shader computes Lambertian ground radiance as albedo divided by pi times direct-Sun irradiance multiplied by Sun visibility plus sky irradiance multiplied by sky visibility, then attenuates that ground radiance and adds in-scatter.",
+          "structuredValue": {"expression": "L_ground = albedo/pi * (E_sun * V_sun + E_sky * V_sky); L_camera = T * L_ground + L_in_scatter"},
+          "externalCitations": [{"sourceId": "SOURCE-EXT-000014", "role": "defines-retained-ground-radiance-realization", "locator": {"retainedMaterialId": "MATERIAL-EXT-000015", "path": "tmp/atmosphere/bruneton_start_fresh/external_sources/bruneton-2017-demo.glsl", "upstreamPath": "atmosphere/demo/demo.glsl", "lineStart": 345, "lineEnd": 369}}],
+          "experimentIds": ["EXPERIMENT-A32-000033", "EXPERIMENT-A32-000034", "EXPERIMENT-A32-000043"],
+          "contradictionIds": ["CONTRADICTION-A32-000014"],
+          "relatedFactIds": ["FACT-A32-000016", "FACT-A32-000223"]
+        },
+        {
+          "semanticKey": "step032-source:bruneton-demo:ozone-enabled-default",
+          "statement": "The retained Bruneton demo source initializes its ozone switch to enabled and uses that switch to include or zero the configured ozone absorption extinction.",
+          "structuredValue": {"defaultUseOzone": true},
+          "externalCitations": [
+            {"sourceId": "SOURCE-EXT-000014", "role": "defines-demo-default", "locator": {"retainedMaterialId": "MATERIAL-EXT-000015", "path": "tmp/atmosphere/bruneton_start_fresh/external_sources/bruneton-2017-demo.cc", "upstreamPath": "atmosphere/demo/demo.cc", "lineStart": 104, "lineEnd": 104}},
+            {"sourceId": "SOURCE-EXT-000014", "role": "applies-demo-ozone-switch", "locator": {"retainedMaterialId": "MATERIAL-EXT-000015", "path": "tmp/atmosphere/bruneton_start_fresh/external_sources/bruneton-2017-demo.cc", "upstreamPath": "atmosphere/demo/demo.cc", "lineStart": 272, "lineEnd": 274}}
+          ],
+          "experimentIds": ["EXPERIMENT-A32-000028", "EXPERIMENT-A32-000030"],
+          "contradictionIds": ["CONTRADICTION-A32-000013"]
+        }
+      ]
+    },
+    {
+      "seriesKey": "bruneton-start-fresh-historical-physics-observations",
+      "shared": {
+        "kind": "historical-experiment-observation",
+        "domain": "bruneton-start-fresh-lineage",
+        "owner": "algorithm32-reference-validation",
+        "authorityRole": "reference-validation",
+        "scope": {"area": "A32", "evidenceRole": "historical-self-record"},
+        "supportStatus": "experiment-backed-historical",
+        "implementationStatus": "not-applicable",
+        "decisionStatus": "provisional",
+        "verificationLayer": "static-code-observation",
+        "nonClaims": [
+          "A historical record states what its own runner attempted or observed; it is not an independent oracle for the current CPU Reference.",
+          "A record-local accepted label is not physical proof, a convergence result, or proof of production lineage."
+        ],
+        "blockers": ["No predecessor record in this series has been independently reproduced in flattened-steel."],
+        "nextAction": "Use the observation only to design the smallest independent rederivation needed by the selected CPU Reference model."
+      },
+      "entries": [
+        {
+          "semanticKey": "step032-history:step002:spherical-geometry-and-beer-lambert-probe",
+          "statement": "Step 002 records a historical probe of spherical top-boundary distance, sampled optical depth, and Beer-Lambert transmittance before sky scattering was implemented.",
+          "citations": [{"path": "tmp/atmosphere/bruneton_start_fresh/002-geometry-transmittance-baseline/notes.md", "lineStart": 3, "lineEnd": 15, "role": "records-historical-step-scope-and-boundary"}],
+          "experimentIds": ["EXPERIMENT-A32-000025"]
+        },
+        {
+          "semanticKey": "step032-history:step003:three-channel-single-scattering-probe",
+          "statement": "Step 003 records a historical Rayleigh-plus-Mie single-scattering probe at 680, 550, and 440 nanometers with view and source transmittance.",
+          "citations": [{"path": "tmp/atmosphere/bruneton_start_fresh/003-single-scattering-baseline/notes.md", "lineStart": 3, "lineEnd": 20, "role": "records-historical-step-scope"}],
+          "experimentIds": ["EXPERIMENT-A32-000026"]
+        },
+        {
+          "semanticKey": "step032-history:step005:paper-aerosol-three-channel-probe",
+          "statement": "Step 005 records a three-channel first-order probe using aerosol alpha 0.8, beta 0.04, single-scattering albedo 0.8, and asymmetry parameter g 0.7.",
+          "structuredValue": {"alpha": 0.8, "beta": 0.04, "singleScatteringAlbedo": 0.8, "g": 0.7},
+          "citations": [{"path": "tmp/atmosphere/bruneton_start_fresh/005-bruneton-2016-parameters/notes.md", "lineStart": 3, "lineEnd": 20, "role": "records-historical-aerosol-probe"}],
+          "experimentIds": ["EXPERIMENT-A32-000027"]
+        },
+        {
+          "semanticKey": "step032-history:step006:demo-ozone-probe",
+          "statement": "Step 006 records an early three-channel probe of the Bruneton demo ozone profile and 300-Dobson-unit amount.",
+          "structuredValue": {"ozoneAmount": 300, "units": "Dobson units"},
+          "decisionStatus": "superseded",
+          "citations": [{"path": "tmp/atmosphere/bruneton_start_fresh/006-ozone-absorption-baseline/notes.md", "lineStart": 3, "lineEnd": 20, "role": "records-historical-ozone-probe"}],
+          "experimentIds": ["EXPERIMENT-A32-000028"],
+          "contradictionIds": ["CONTRADICTION-A32-000013"]
+        },
+        {
+          "semanticKey": "step032-history:step007:fifteen-centered-channel-transition",
+          "statement": "Step 007 records the historical transition from three wavelengths to 15 centered spectral samples spanning 360 through 830 nanometers.",
+          "structuredValue": {"count": 15, "minimum": 360, "maximum": 830, "wavelengthUnits": "nanometers", "sampling": "centered"},
+          "citations": [{"path": "tmp/atmosphere/bruneton_start_fresh/007-spectral-cie-baseline/notes.md", "lineStart": 3, "lineEnd": 20, "role": "records-historical-spectral-transition"}],
+          "experimentIds": ["EXPERIMENT-A32-000029"]
+        },
+        {
+          "semanticKey": "step032-history:step008:demo-aerosol-and-ozone-fifteen-channel-probe",
+          "statement": "Step 008 records a 15-channel probe using the Bruneton demo aerosol defaults with ozone absorption enabled.",
+          "decisionStatus": "superseded",
+          "citations": [{"path": "tmp/atmosphere/bruneton_start_fresh/008-spectral-demo-aerosol-baseline/notes.md", "lineStart": 3, "lineEnd": 20, "role": "records-historical-demo-profile-probe"}],
+          "experimentIds": ["EXPERIMENT-A32-000030"],
+          "contradictionIds": ["CONTRADICTION-A32-000013"]
+        },
+        {
+          "semanticKey": "step032-history:step009:scalar-multiple-scattering-proxy",
+          "statement": "Step 009 records that multiplying the earlier sky-scattered result by 1.5 changed its visual mismatch in the anticipated direction; the record labels this a superseded hypothesis test.",
+          "structuredValue": {"multiplier": 1.5, "classification": "historical-visual-hypothesis"},
+          "decisionStatus": "superseded",
+          "citations": [{"path": "tmp/atmosphere/bruneton_start_fresh/009-multiple-scattering-proxy-baseline/notes.md", "lineStart": 3, "lineEnd": 20, "role": "records-superseded-scalar-proxy"}],
+          "experimentIds": ["EXPERIMENT-A32-000031"],
+          "nonClaims": ["The 1.5 multiplier is not a physically derived multiple-scattering model."]
+        },
+        {
+          "semanticKey": "step032-history:step010:eight-direction-explicit-second-order-probe",
+          "statement": "Step 010 records replacement of the scalar proxy with an explicit second-order integral over eight incoming directions at each primary view-ray sample.",
+          "structuredValue": {"incomingDirectionCount": 8, "scatteringOrder": 2},
+          "citations": [{"path": "tmp/atmosphere/bruneton_start_fresh/010-second-order-scattering-baseline/notes.md", "lineStart": 3, "lineEnd": 20, "role": "records-historical-second-order-probe"}],
+          "experimentIds": ["EXPERIMENT-A32-000032"]
+        },
+        {
+          "semanticKey": "step032-history:step011:direct-sun-ground-coupling-probe",
+          "statement": "Step 011 records a direct-Sun Lambertian lower-boundary radiance term attenuated to an atmosphere sample and scattered toward the camera.",
+          "decisionStatus": "deferred",
+          "citations": [{"path": "tmp/atmosphere/bruneton_start_fresh/011-ground-bounce-coupling-baseline/notes.md", "lineStart": 3, "lineEnd": 20, "role": "records-historical-direct-ground-probe"}],
+          "experimentIds": ["EXPERIMENT-A32-000033"],
+          "contradictionIds": ["CONTRADICTION-A32-000014"]
+        },
+        {
+          "semanticKey": "step032-history:step012:sun-plus-sky-ground-coupling-probe",
+          "statement": "Step 012 records adding sky irradiance to the direct-Sun Lambertian ground term before attenuation and atmospheric scattering.",
+          "decisionStatus": "deferred",
+          "citations": [{"path": "tmp/atmosphere/bruneton_start_fresh/012-ground-sky-irradiance-coupling-baseline/notes.md", "lineStart": 3, "lineEnd": 20, "role": "records-historical-sun-plus-sky-ground-probe"}],
+          "experimentIds": ["EXPERIMENT-A32-000034"],
+          "contradictionIds": ["CONTRADICTION-A32-000014"]
+        },
+        {
+          "semanticKey": "step032-history:step013:no-ozone-comparison-profile",
+          "statement": "Step 013 records disabling ozone absorption to follow the simplified no-air-absorption policy used by the cited paper comparison.",
+          "structuredValue": {"ozoneAbsorptionEnabled": false},
+          "citations": [{"path": "tmp/atmosphere/bruneton_start_fresh/013-paper-comparison-no-ozone-baseline/notes.md", "lineStart": 3, "lineEnd": 20, "role": "records-historical-no-ozone-profile"}],
+          "experimentIds": ["EXPERIMENT-A32-000035"],
+          "contradictionIds": ["CONTRADICTION-A32-000013"]
+        },
+        {
+          "semanticKey": "step032-history:step015:combined-paper-profile-transport-probe",
+          "statement": "Step 015 records a checkpoint combining the conditional paper aerosol values, no ozone, explicit eight-direction second order, and Sun-plus-sky ground coupling.",
+          "citations": [{"path": "tmp/atmosphere/bruneton_start_fresh/015-paper-aerosol-transport-baseline/notes.md", "lineStart": 3, "lineEnd": 20, "role": "records-historical-combined-transport-profile"}],
+          "experimentIds": ["EXPERIMENT-A32-000036"]
+        },
+        {
+          "semanticKey": "step032-history:step016:nishita-eight-plane-directions",
+          "statement": "Step 016 records a second-order sampling probe using eight directions in the vertical plane containing the Sun, as described for Nishita96 by the cited paper.",
+          "structuredValue": {"incomingDirectionCount": 8, "directionDomain": "vertical-Sun-plane"},
+          "decisionStatus": "superseded",
+          "citations": [{"path": "tmp/atmosphere/bruneton_start_fresh/016-nishita96-plane-second-order-baseline/notes.md", "lineStart": 3, "lineEnd": 20, "role": "records-historical-eight-plane-probe"}],
+          "experimentIds": ["EXPERIMENT-A32-000037"]
+        },
+        {
+          "semanticKey": "step032-history:step017:pixel-filtered-direct-solar-disc-rejected",
+          "statement": "Step 017 records and rejects a camera-output experiment that averaged finite solar-disc coverage over a seven-by-seven fisheye pixel footprint.",
+          "structuredValue": {"pixelFootprint": [7, 7], "classification": "camera-output-experiment"},
+          "decisionStatus": "rejected",
+          "citations": [{"path": "tmp/atmosphere/bruneton_start_fresh/017-pixel-filtered-solar-disc-baseline/notes.md", "lineStart": 3, "lineEnd": 20, "role": "records-rejected-direct-disc-probe"}],
+          "experimentIds": ["EXPERIMENT-A32-000038"],
+          "nonClaims": ["Camera solar-disc rasterization is not part of the CPU Reference atmospheric-transport authority."]
+        },
+        {
+          "semanticKey": "step032-history:step018:scattered-sky-only-camera-contract",
+          "statement": "Step 018 records retaining direct sunlight as an incident scattering source while omitting direct solar-disc radiance from the camera-output packet.",
+          "structuredValue": {"directSunAsScatteringSource": true, "directSolarDiscInCameraOutput": false},
+          "citations": [{"path": "tmp/atmosphere/bruneton_start_fresh/018-paper-sky-radiance-no-direct-sun-baseline/notes.md", "lineStart": 3, "lineEnd": 20, "role": "records-historical-scattered-sky-output-contract"}],
+          "experimentIds": ["EXPERIMENT-A32-000039"]
+        },
+        {
+          "semanticKey": "step032-history:step019:seventeen-direction-fibonacci-quadrature",
+          "statement": "Step 019 records replacement of eight plane directions with 17 equal-weight full-sphere Fibonacci directions for the approximate second-order integral.",
+          "structuredValue": {"incomingDirectionCount": 17, "directionDomain": "full-sphere", "weightExpression": "4*pi/17", "lattice": "Fibonacci"},
+          "citations": [{"path": "tmp/atmosphere/bruneton_start_fresh/019-fibonacci-sphere-second-order-baseline/notes.md", "lineStart": 3, "lineEnd": 20, "role": "records-historical-full-sphere-quadrature-probe"}],
+          "experimentIds": ["EXPERIMENT-A32-000040"]
+        },
+        {
+          "semanticKey": "step032-history:step022:figure1-sun-zenith-row-inputs",
+          "statement": "Step 022 records using the cited Figure 1 row labels at 87-degree and 21-degree Sun zenith as low- and high-Sun scene inputs.",
+          "structuredValue": {"sunZenithDegrees": [87, 21], "classification": "paper-row-label-inputs"},
+          "citations": [{"path": "tmp/atmosphere/bruneton_start_fresh/022-figure1-sun-zenith-baseline/notes.md", "lineStart": 3, "lineEnd": 20, "role": "records-historical-scene-input-probe"}],
+          "experimentIds": ["EXPERIMENT-A32-000041"]
+        },
+        {
+          "semanticKey": "step032-history:step023:forty-centered-wavelength-probe",
+          "statement": "Step 023 records a run with 40 centered wavelength samples from 360 through 830 nanometers to mirror the cited paper comparison count.",
+          "structuredValue": {"count": 40, "minimum": 360, "maximum": 830, "wavelengthUnits": "nanometers", "sampling": "centered"},
+          "citations": [{"path": "tmp/atmosphere/bruneton_start_fresh/023-paper-40-wavelength-baseline/notes.md", "lineStart": 3, "lineEnd": 20, "role": "records-historical-forty-wavelength-probe"}],
+          "experimentIds": ["EXPERIMENT-A32-000042"],
+          "contradictionIds": ["CONTRADICTION-A32-000012"]
+        },
+        {
+          "semanticKey": "step032-history:step025:shadowed-ground-sky-irradiance-correction",
+          "statement": "Step 025 records a lower-boundary correction that keeps sky irradiance active when direct-Sun visibility at the ground is zero.",
+          "structuredValue": {"directSunVisibility": 0, "skyIrradianceStillActive": true},
+          "decisionStatus": "deferred",
+          "citations": [{"path": "tmp/atmosphere/bruneton_start_fresh/025-shadowed-ground-sky-irradiance-baseline/notes.md", "lineStart": 3, "lineEnd": 20, "role": "records-historical-ground-visibility-correction"}],
+          "experimentIds": ["EXPERIMENT-A32-000043"],
+          "contradictionIds": ["CONTRADICTION-A32-000014"]
+        },
+        {
+          "semanticKey": "step032-history:step026:solar-zenith-cache-coordinate-probe",
+          "statement": "Step 026 records adding five local solar-zenith bins to the direction-and-altitude incident-radiance cache key.",
+          "structuredValue": {"solarZenithBinCount": 5},
+          "decisionStatus": "deferred",
+          "citations": [{"path": "tmp/atmosphere/bruneton_start_fresh/026-second-order-sun-angle-cache-baseline/notes.md", "lineStart": 3, "lineEnd": 20, "role": "records-historical-cache-coordinate-probe"}],
+          "experimentIds": ["EXPERIMENT-A32-000044"]
+        },
+        {
+          "semanticKey": "step032-history:step027:solar-and-view-zenith-cache-coordinate-probe",
+          "statement": "Step 027 records adding five local solar-zenith bins and five incoming-view-zenith bins to the incident-radiance cache key.",
+          "structuredValue": {"solarZenithBinCount": 5, "incomingViewZenithBinCount": 5},
+          "decisionStatus": "deferred",
+          "citations": [{"path": "tmp/atmosphere/bruneton_start_fresh/027-second-order-sun-view-angle-cache-baseline/notes.md", "lineStart": 3, "lineEnd": 20, "role": "records-historical-cache-coordinate-probe"}],
+          "experimentIds": ["EXPERIMENT-A32-000045"]
+        },
+        {
+          "semanticKey": "step032-history:step029:no-ground-subjective-equivalence",
+          "statement": "Step 029 records a corrected no-ground run and a subjective review finding no clear visual difference among Steps 021, 029, and 030.",
+          "structuredValue": {"groundCoupling": "off", "comparison": "subjective-no-clear-visual-difference"},
+          "citations": [{"path": "tmp/atmosphere/bruneton_start_fresh/029-paper-figure1-derived-k-no-ground-baseline/notes.md", "lineStart": 3, "lineEnd": 8, "role": "records-historical-subjective-ground-equivalence"}],
+          "experimentIds": ["EXPERIMENT-A32-000046"],
+          "contradictionIds": ["CONTRADICTION-A32-000014"],
+          "nonClaims": ["Subjective display equivalence does not show that ground coupling is physically negligible in pre-display spectral radiance."]
+        },
+        {
+          "semanticKey": "step032-history:step030:direct-ground-subjective-equivalence",
+          "statement": "Step 030 records a direct-Sun-ground-only run and a subjective review finding no clear visual difference from the no-ground and prior variants.",
+          "structuredValue": {"groundCoupling": "direct-Sun-only", "comparison": "subjective-no-clear-visual-difference"},
+          "citations": [{"path": "tmp/atmosphere/bruneton_start_fresh/030-paper-figure1-derived-k-direct-ground-baseline/notes.md", "lineStart": 3, "lineEnd": 8, "role": "records-historical-subjective-ground-equivalence"}],
+          "experimentIds": ["EXPERIMENT-A32-000047"],
+          "contradictionIds": ["CONTRADICTION-A32-000014"],
+          "nonClaims": ["Subjective display equivalence does not show that ground coupling is physically negligible in pre-display spectral radiance."]
+        },
+        {
+          "semanticKey": "step032-history:step031:four-scene-no-ground-predecessor",
+          "statement": "Step 031 records the four-scene no-ground 15-channel approximate-second-order configuration that immediately preceded Step 032.",
+          "citations": [{"path": "tmp/atmosphere/bruneton_start_fresh/031-figure1-four-view-derived-k-no-ground-baseline/notes.md", "lineStart": 3, "lineEnd": 20, "role": "records-immediate-historical-predecessor"}],
+          "experimentIds": ["EXPERIMENT-A32-000048"],
+          "relatedFactIds": ["FACT-A32-000132", "FACT-A32-000216", "FACT-A32-000217"]
+        }
+      ]
+    },
+    {
+      "seriesKey": "step032-pre-display-selected-ray-packets",
+      "shared": {
+        "kind": "historical-selected-ray-result-packet",
+        "domain": "step032-pre-display-selected-rays",
+        "owner": "algorithm32-reference-validation",
+        "authorityRole": "reference-validation",
+        "scope": {"area": "A32", "comparisonBoundary": "pre-display-spectral-output", "record": "Step 032"},
+        "supportStatus": "experiment-backed-historical",
+        "implementationStatus": "not-applicable",
+        "decisionStatus": "provisional",
+        "verificationLayer": "static-code-observation",
+        "experimentIds": ["EXPERIMENT-A32-000001"],
+        "relatedFactIds": ["FACT-A32-000132", "FACT-A32-000135", "FACT-A32-000138", "FACT-A32-000141", "FACT-A32-000144", "FACT-A32-000147", "FACT-A32-000150", "FACT-A32-000153", "FACT-A32-000156", "FACT-A32-000159", "FACT-A32-000162", "FACT-A32-000165", "FACT-A32-000168", "FACT-A32-000171", "FACT-A32-000174"],
+        "nonClaims": [
+          "These are self-generated historical runner outputs, not independent expected values or proof of the current CPU Reference.",
+          "The record does not establish accepted physical units, uncertainty, tolerance, convergence, or production lineage.",
+          "No display transform, image, renderer, Three.js, browser, or shader behavior is claimed."
+        ],
+        "blockers": ["The packet must be regenerated against independently derived inputs and a pinned CPU Reference revision with accepted units and tolerances."],
+        "nextAction": "Recreate the four scenes and compare these pre-display packets to an independently proved CPU Reference under a frozen input and tolerance contract."
+      },
+      "entries": [
+        {
+          "semanticKey": "step032:selected-ray:figure1-06h00-z87:zenith-radiance",
+          "statement": "Step 032 records this 15-channel pre-display zenith-radiance packet for scene figure1-06h00-z87.",
+          "structuredValue": {"scene": "figure1-06h00-z87", "quantity": "zenithRadiance", "spectralBasis": "Step-032-15-centered-channels", "units": "historical-runner-native-spectral-radiance-units-unverified", "values": [0.004020162176797341, 0.006986114408510746, 0.0076856194847667765, 0.0081997319350679, 0.007371394839794845, 0.006773611755062229, 0.006043282239909894, 0.005278719372136719, 0.004465516381126118, 0.003742512935925056, 0.0031496338401262374, 0.0026178487762724707, 0.0022218365879566214, 0.0018709367845080784, 0.0015770314414891567]},
+          "citations": [{"path": "tmp/atmosphere/bruneton_start_fresh/032-figure1-four-view-source-k-no-ground-baseline/provenance.json", "jsonPointer": "/sceneDiagnostics/0/diagnostics/zenithRadiance", "role": "records-historical-pre-display-packet"}]
+        },
+        {
+          "semanticKey": "step032:selected-ray:figure1-06h00-z87:horizon-azimuth-zero-radiance",
+          "statement": "Step 032 records this 15-channel pre-display horizon-at-azimuth-zero radiance packet for scene figure1-06h00-z87.",
+          "structuredValue": {"scene": "figure1-06h00-z87", "quantity": "horizonAzimuth0Radiance", "spectralBasis": "Step-032-15-centered-channels", "units": "historical-runner-native-spectral-radiance-units-unverified", "values": [0.004399237236524497, 0.011990147248397805, 0.024213265881040023, 0.04600468948465598, 0.06775994338347857, 0.09440202401684963, 0.12006061255603369, 0.14251308560369474, 0.1577931075502923, 0.16794930322932516, 0.17511329381344226, 0.176614378776358, 0.17869413446804278, 0.17664141163037747, 0.17244235356166532]},
+          "citations": [{"path": "tmp/atmosphere/bruneton_start_fresh/032-figure1-four-view-source-k-no-ground-baseline/provenance.json", "jsonPointer": "/sceneDiagnostics/0/diagnostics/horizonAzimuth0Radiance", "role": "records-historical-pre-display-packet"}]
+        },
+        {
+          "semanticKey": "step032:selected-ray:figure1-06h00-z87:direct-sun-transmittance",
+          "statement": "Step 032 records this 15-channel direct-Sun transmittance packet for scene figure1-06h00-z87.",
+          "structuredValue": {"scene": "figure1-06h00-z87", "quantity": "directSunTransmittance", "spectralBasis": "Step-032-15-centered-channels", "units": "dimensionless", "values": [0.00004969888205508734, 0.0004466549345809277, 0.0020449566106632553, 0.00606380012234246, 0.013467354003059644, 0.024540412137920693, 0.03891704976765851, 0.055855001186784305, 0.07451140858992299, 0.09411799369981537, 0.11405707300027779, 0.13387358686834364, 0.15325585299369723, 0.1720059308111624, 0.19001027391833974]},
+          "citations": [{"path": "tmp/atmosphere/bruneton_start_fresh/032-figure1-four-view-source-k-no-ground-baseline/provenance.json", "jsonPointer": "/sceneDiagnostics/0/diagnostics/directSunTransmittance", "role": "records-historical-transmittance-packet"}]
+        },
+        {
+          "semanticKey": "step032:selected-ray:figure1-10h15-z41:zenith-radiance",
+          "statement": "Step 032 records this 15-channel pre-display zenith-radiance packet for scene figure1-10h15-z41.",
+          "structuredValue": {"scene": "figure1-10h15-z41", "quantity": "zenithRadiance", "spectralBasis": "Step-032-15-centered-channels", "units": "historical-runner-native-spectral-radiance-units-unverified", "values": [0.03750706236515142, 0.053299302510339056, 0.04978976888677909, 0.04693522586233842, 0.03869949429320257, 0.033684894366912604, 0.02922569712313342, 0.02534232039369908, 0.021618178402441412, 0.01848298970689874, 0.016000718540069535, 0.013758793602343368, 0.012125901782997474, 0.010625761941604694, 0.009329437557602151]},
+          "citations": [{"path": "tmp/atmosphere/bruneton_start_fresh/032-figure1-four-view-source-k-no-ground-baseline/provenance.json", "jsonPointer": "/sceneDiagnostics/1/diagnostics/zenithRadiance", "role": "records-historical-pre-display-packet"}]
+        },
+        {
+          "semanticKey": "step032:selected-ray:figure1-10h15-z41:horizon-azimuth-zero-radiance",
+          "statement": "Step 032 records this 15-channel pre-display horizon-at-azimuth-zero radiance packet for scene figure1-10h15-z41.",
+          "structuredValue": {"scene": "figure1-10h15-z41", "quantity": "horizonAzimuth0Radiance", "spectralBasis": "Step-032-15-centered-channels", "units": "historical-runner-native-spectral-radiance-units-unverified", "values": [0.17073726027250408, 0.2644485283244342, 0.26745031169668576, 0.27106695073455067, 0.23880337959629905, 0.22088864082312648, 0.20270776445681818, 0.18515443318137745, 0.16576610902122138, 0.14824995989031856, 0.13384065352458024, 0.11968597160691474, 0.10941505140988593, 0.09922010670823508, 0.08995657942589431]},
+          "citations": [{"path": "tmp/atmosphere/bruneton_start_fresh/032-figure1-four-view-source-k-no-ground-baseline/provenance.json", "jsonPointer": "/sceneDiagnostics/1/diagnostics/horizonAzimuth0Radiance", "role": "records-historical-pre-display-packet"}]
+        },
+        {
+          "semanticKey": "step032:selected-ray:figure1-10h15-z41:direct-sun-transmittance",
+          "statement": "Step 032 records this 15-channel direct-Sun transmittance packet for scene figure1-10h15-z41.",
+          "structuredValue": {"scene": "figure1-10h15-z41", "quantity": "directSunTransmittance", "spectralBasis": "Step-032-15-centered-channels", "units": "dimensionless", "values": [0.37455102016250197, 0.4607912475532988, 0.5323128641833703, 0.5904583729414482, 0.6374481985906851, 0.6754945358076232, 0.7064938427024197, 0.7319710504579489, 0.7531166049885508, 0.7708480094174116, 0.7858697410789924, 0.7987234500541823, 0.8098274138944445, 0.8195066191792488, 0.8280153711540177]},
+          "citations": [{"path": "tmp/atmosphere/bruneton_start_fresh/032-figure1-four-view-source-k-no-ground-baseline/provenance.json", "jsonPointer": "/sceneDiagnostics/1/diagnostics/directSunTransmittance", "role": "records-historical-transmittance-packet"}]
+        },
+        {
+          "semanticKey": "step032:selected-ray:figure1-11h15-z31:zenith-radiance",
+          "statement": "Step 032 records this 15-channel pre-display zenith-radiance packet for scene figure1-11h15-z31.",
+          "structuredValue": {"scene": "figure1-11h15-z31", "quantity": "zenithRadiance", "spectralBasis": "Step-032-15-centered-channels", "units": "historical-runner-native-spectral-radiance-units-unverified", "values": [0.04923445165016301, 0.07190762616376237, 0.069260384653039, 0.06739243953029887, 0.057335070751929236, 0.0514245016025606, 0.045886684439635436, 0.040831316158263575, 0.03566027346394151, 0.03114298982027486, 0.027478899186259086, 0.024034022942118795, 0.02150482392975891, 0.019099628498752984, 0.016970977177606043]},
+          "citations": [{"path": "tmp/atmosphere/bruneton_start_fresh/032-figure1-four-view-source-k-no-ground-baseline/provenance.json", "jsonPointer": "/sceneDiagnostics/2/diagnostics/zenithRadiance", "role": "records-historical-pre-display-packet"}]
+        },
+        {
+          "semanticKey": "step032:selected-ray:figure1-11h15-z31:horizon-azimuth-zero-radiance",
+          "statement": "Step 032 records this 15-channel pre-display horizon-at-azimuth-zero radiance packet for scene figure1-11h15-z31.",
+          "structuredValue": {"scene": "figure1-11h15-z31", "quantity": "horizonAzimuth0Radiance", "spectralBasis": "Step-032-15-centered-channels", "units": "historical-runner-native-spectral-radiance-units-unverified", "values": [0.1459035979201529, 0.2103153030201643, 0.19964786403917634, 0.19178269649880206, 0.16160501504218605, 0.14410649753788102, 0.12831824144579393, 0.11432248520203045, 0.10025264014849601, 0.08811710727670105, 0.07839668999531554, 0.06923911851241865, 0.06262710410903315, 0.05627314689483965, 0.050615039900059736]},
+          "citations": [{"path": "tmp/atmosphere/bruneton_start_fresh/032-figure1-four-view-source-k-no-ground-baseline/provenance.json", "jsonPointer": "/sceneDiagnostics/2/diagnostics/horizonAzimuth0Radiance", "role": "records-historical-pre-display-packet"}]
+        },
+        {
+          "semanticKey": "step032:selected-ray:figure1-11h15-z31:direct-sun-transmittance",
+          "statement": "Step 032 records this 15-channel direct-Sun transmittance packet for scene figure1-11h15-z31.",
+          "structuredValue": {"scene": "figure1-11h15-z31", "quantity": "directSunTransmittance", "spectralBasis": "Step-032-15-centered-channels", "units": "dimensionless", "values": [0.4208538563240949, 0.5051554193958464, 0.5736393531086154, 0.6285074704359039, 0.6723796307368136, 0.7076208296826596, 0.7361610424373597, 0.7595066287745645, 0.7788103960110825, 0.7949483875512371, 0.8085862495852716, 0.8202316987592041, 0.83027435679808, 0.8390154301774989, 0.8466896550897424]},
+          "citations": [{"path": "tmp/atmosphere/bruneton_start_fresh/032-figure1-four-view-source-k-no-ground-baseline/provenance.json", "jsonPointer": "/sceneDiagnostics/2/diagnostics/directSunTransmittance", "role": "records-historical-transmittance-packet"}]
+        },
+        {
+          "semanticKey": "step032:selected-ray:figure1-13h15-z21:zenith-radiance",
+          "statement": "Step 032 records this 15-channel pre-display zenith-radiance packet for scene figure1-13h15-z21.",
+          "structuredValue": {"scene": "figure1-13h15-z21", "quantity": "zenithRadiance", "spectralBasis": "Step-032-15-centered-channels", "units": "historical-runner-native-spectral-radiance-units-unverified", "values": [0.0717639932391638, 0.10920650456449377, 0.10947692994762515, 0.1105468776856768, 0.09724587576884121, 0.08984483493967893, 0.08228224237881672, 0.0748965325358732, 0.06671231093858536, 0.059264327963540336, 0.0530701030405718, 0.04701480716634991, 0.042536449339678435, 0.03814447404038422, 0.03417824230483914]},
+          "citations": [{"path": "tmp/atmosphere/bruneton_start_fresh/032-figure1-four-view-source-k-no-ground-baseline/provenance.json", "jsonPointer": "/sceneDiagnostics/3/diagnostics/zenithRadiance", "role": "records-historical-pre-display-packet"}]
+        },
+        {
+          "semanticKey": "step032:selected-ray:figure1-13h15-z21:horizon-azimuth-zero-radiance",
+          "statement": "Step 032 records this 15-channel pre-display horizon-at-azimuth-zero radiance packet for scene figure1-13h15-z21.",
+          "structuredValue": {"scene": "figure1-13h15-z21", "quantity": "horizonAzimuth0Radiance", "spectralBasis": "Step-032-15-centered-channels", "units": "historical-runner-native-spectral-radiance-units-unverified", "values": [0.15932176450851349, 0.21585662502895867, 0.19667519359759175, 0.1836437053837413, 0.15146785886759273, 0.132665861597402, 0.11620027051296924, 0.1018632720414024, 0.08785945019496838, 0.07590407443845068, 0.06632718363564113, 0.05749788888537634, 0.05102315175483794, 0.04496823255589444, 0.03967130739896289]},
+          "citations": [{"path": "tmp/atmosphere/bruneton_start_fresh/032-figure1-four-view-source-k-no-ground-baseline/provenance.json", "jsonPointer": "/sceneDiagnostics/3/diagnostics/horizonAzimuth0Radiance", "role": "records-historical-pre-display-packet"}]
+        },
+        {
+          "semanticKey": "step032:selected-ray:figure1-13h15-z21:direct-sun-transmittance",
+          "statement": "Step 032 records this 15-channel direct-Sun transmittance packet for scene figure1-13h15-z21.",
+          "structuredValue": {"scene": "figure1-13h15-z21", "quantity": "directSunTransmittance", "spectralBasis": "Step-032-15-centered-channels", "units": "dimensionless", "values": [0.45156167969675287, 0.5340098760482049, 0.6001566044626528, 0.6526860679516284, 0.6944191358555316, 0.7277816071709688, 0.7547014954052702, 0.7766588449393308, 0.7947735545013077, 0.8098897401319323, 0.8226448842711018, 0.8335229415198906, 0.8428939256139736, 0.8510430349993621, 0.858191991509606]},
+          "citations": [{"path": "tmp/atmosphere/bruneton_start_fresh/032-figure1-four-view-source-k-no-ground-baseline/provenance.json", "jsonPointer": "/sceneDiagnostics/3/diagnostics/directSunTransmittance", "role": "records-historical-transmittance-packet"}]
+        }
+      ]
+    },
+    {
+      "seriesKey": "step032-historical-reference-configuration-and-provenance",
+      "shared": {
+        "kind": "historical-reference-configuration-observation",
+        "domain": "step032-historical-reference-configuration",
+        "owner": "algorithm32-reference-validation",
+        "authorityRole": "reference-realization",
+        "scope": {"area": "A32", "record": "Step 032", "comparisonBoundary": "pre-display-CPU-physics"},
+        "supportStatus": "experiment-backed-historical",
+        "implementationStatus": "quarantined",
+        "decisionStatus": "provisional",
+        "verificationLayer": "static-code-observation",
+        "experimentIds": ["EXPERIMENT-A32-000001"],
+        "nonClaims": [
+          "This records the historical Step 032 realization and its provenance assertions; it does not establish independent physics authority or current production behavior.",
+          "Matching values and identifiers are possible lineage only unless an exact handoff is recovered."
+        ],
+        "blockers": ["The Step 032 configuration has not been independently derived and reproduced in flattened-steel."],
+        "nextAction": "Re-derive the selected input or model decision from independent authority, then test a pinned CPU Reference before accepting it."
+      },
+      "entries": [
+        {
+          "semanticKey": "step032:output-boundary:pre-display-spectral-radiance",
+          "statement": "The Step 032 design identifies the spectral-radiance packet and diagnostics as the carry-forward endpoint and classifies the generated PNGs as display artifacts.",
+          "citations": [{"path": "agents/topics/apps/flat/plans/atmosphere-cleanroom-design/experiment-032-algorithm.md", "lineStart": 130, "lineEnd": 145, "role": "defines-historical-pre-display-output-boundary"}]
+        },
+        {
+          "semanticKey": "step032:model-profile:active-aerosol-alpha",
+          "statement": "Step 032 realizes the active Mie Angstrom alpha as 0.8.",
+          "structuredValue": {"value": 0.8, "units": "dimensionless"},
+          "citations": [{"path": "tmp/atmosphere/bruneton_start_fresh/032-figure1-four-view-source-k-no-ground-baseline/equations-and-constants.json", "jsonPointer": "/constants/activeAerosol/mieAngstromAlpha", "role": "records-historical-active-model-value"}],
+          "relatedFactIds": ["FACT-A32-000127"]
+        },
+        {
+          "semanticKey": "step032:model-profile:active-aerosol-beta",
+          "statement": "Step 032 realizes the active Mie Angstrom beta as 0.04.",
+          "structuredValue": {"value": 0.04, "units": "dimensionless"},
+          "citations": [{"path": "tmp/atmosphere/bruneton_start_fresh/032-figure1-four-view-source-k-no-ground-baseline/equations-and-constants.json", "jsonPointer": "/constants/activeAerosol/mieAngstromBeta", "role": "records-historical-active-model-value"}],
+          "relatedFactIds": ["FACT-A32-000128"]
+        },
+        {
+          "semanticKey": "step032:model-profile:active-aerosol-single-scattering-albedo",
+          "statement": "Step 032 realizes the active Mie single-scattering albedo as 0.8.",
+          "structuredValue": {"value": 0.8, "units": "dimensionless"},
+          "citations": [{"path": "tmp/atmosphere/bruneton_start_fresh/032-figure1-four-view-source-k-no-ground-baseline/equations-and-constants.json", "jsonPointer": "/constants/activeAerosol/mieSingleScatteringAlbedo", "role": "records-historical-active-model-value"}],
+          "relatedFactIds": ["FACT-A32-000129"]
+        },
+        {
+          "semanticKey": "step032:model-profile:active-aerosol-phase-g",
+          "statement": "Step 032 realizes the active Mie phase-function asymmetry parameter g as 0.7.",
+          "structuredValue": {"value": 0.7, "units": "dimensionless"},
+          "citations": [{"path": "tmp/atmosphere/bruneton_start_fresh/032-figure1-four-view-source-k-no-ground-baseline/equations-and-constants.json", "jsonPointer": "/constants/activeAerosol/miePhaseFunctionG", "role": "records-historical-active-model-value"}],
+          "relatedFactIds": ["FACT-A32-000130"]
+        },
+        {
+          "semanticKey": "step032:model-profile:ozone-disabled",
+          "statement": "Step 032 realizes ozone absorption as disabled for its Figure 1 comparison profile.",
+          "structuredValue": {"ozoneAbsorptionEnabled": false},
+          "citations": [{"path": "tmp/atmosphere/bruneton_start_fresh/032-figure1-four-view-source-k-no-ground-baseline/equations-and-constants.json", "jsonPointer": "/constants/derived/ozoneAbsorptionEnabled", "role": "records-historical-active-model-switch"}],
+          "contradictionIds": ["CONTRADICTION-A32-000013"],
+          "relatedFactIds": ["FACT-A32-000131"]
+        },
+        {
+          "semanticKey": "step032:model-profile:ground-coupling-off",
+          "statement": "Step 032 realizes ground-bounce coupling as absent from its active transport configuration.",
+          "structuredValue": {"groundBounceCoupling": null, "interpretation": "off"},
+          "citations": [{"path": "tmp/atmosphere/bruneton_start_fresh/032-figure1-four-view-source-k-no-ground-baseline/equations-and-constants.json", "jsonPointer": "/constants/derived/groundBounceCoupling", "role": "records-historical-active-model-switch"}],
+          "contradictionIds": ["CONTRADICTION-A32-000014"]
+        },
+        {
+          "semanticKey": "step032:model-profile:direct-solar-disc-camera-radiance-off",
+          "statement": "Step 032 leaves direct sunlight active as an incident scattering source but does not add direct solar-disc radiance to the camera-output packet.",
+          "structuredValue": {"directSolarDiscRendered": false, "directSunRemainsIncidentScatteringSource": true},
+          "citations": [
+            {"path": "tmp/atmosphere/bruneton_start_fresh/032-figure1-four-view-source-k-no-ground-baseline/equations-and-constants.json", "jsonPointer": "/constants/derived/directSolarDiscRendered", "role": "records-historical-active-output-switch"},
+            {"path": "agents/topics/apps/flat/plans/atmosphere-cleanroom-design/experiment-032-algorithm.md", "lineStart": 330, "lineEnd": 347, "role": "defines-direct-sun-separation-boundary"}
+          ]
+        },
+        {
+          "semanticKey": "step032:model-profile:third-and-higher-scattering-omitted",
+          "statement": "Step 032 records first-order plus an approximate second-order term and omits third and higher scattering orders.",
+          "structuredValue": {"includedOrders": [1, 2], "secondOrder": "approximate", "omittedOrders": ">=3"},
+          "citations": [{"path": "tmp/atmosphere/bruneton_start_fresh/032-figure1-four-view-source-k-no-ground-baseline/notes.md", "lineStart": 5, "lineEnd": 11, "role": "records-historical-scattering-order-boundary"}],
+          "relatedFactIds": ["FACT-A32-000216"]
+        },
+        {
+          "semanticKey": "step032:second-order:altitude-and-direction-only-cache",
+          "statement": "Step 032's approximate second-order incident-radiance cache is indexed by incoming direction and 24 altitude bins and has no solar-zenith or incoming-view-zenith cache bins.",
+          "structuredValue": {"incomingDirectionCount": 17, "altitudeBinCount": 24, "sunMuBins": null, "incomingViewMuBins": null, "coordinates": "altitude bin for each incoming direction"},
+          "citations": [{"path": "tmp/atmosphere/bruneton_start_fresh/032-figure1-four-view-source-k-no-ground-baseline/equations-and-constants.json", "jsonPointer": "/constants/derived/secondOrderScattering", "role": "records-historical-second-order-cache-contract"}],
+          "relatedFactIds": ["FACT-A32-000216", "FACT-A32-000217"]
+        },
+        {
+          "semanticKey": "step032:spectral:fifteen-centered-channel-realization",
+          "statement": "Step 032 realizes 15 centered spectral channels spanning 360 through 830 nanometers with bin width 31.333333333333332 nanometers.",
+          "structuredValue": {"count": 15, "minimum": 360, "maximum": 830, "binWidth": 31.333333333333332, "wavelengthUnits": "nanometers", "sampling": "centered"},
+          "citations": [
+            {"path": "tmp/atmosphere/bruneton_start_fresh/032-figure1-four-view-source-k-no-ground-baseline/equations-and-constants.json", "jsonPointer": "/constants/spectralChannels", "role": "records-historical-spectral-realization"},
+            {"path": "agents/topics/apps/flat/plans/atmosphere-cleanroom-design/experiment-032-algorithm.md", "lineStart": 411, "lineEnd": 417, "role": "qualifies-fifteen-channel-decision"}
+          ],
+          "contradictionIds": ["CONTRADICTION-A32-000012"],
+          "relatedFactIds": ["FACT-A32-000132", "FACT-A32-000135", "FACT-A32-000138", "FACT-A32-000141", "FACT-A32-000144", "FACT-A32-000147", "FACT-A32-000150", "FACT-A32-000153", "FACT-A32-000156", "FACT-A32-000159", "FACT-A32-000162", "FACT-A32-000165", "FACT-A32-000168", "FACT-A32-000171", "FACT-A32-000174"]
+        },
+        {
+          "semanticKey": "step032:lineage:spectral-packet-equals-poc-and-production",
+          "statement": "A static comparison finds that the 15 Step 032 channel names, wavelengths, and solar-irradiance values equal the corresponding POC and production canonical spectral-channel entries; this is possible lineage, not proof of derivation.",
+          "kind": "spectral-packet-lineage-correspondence",
+          "domain": "production-canonical-data-lineage",
+          "authorityRole": "physics-provenance-gap",
+          "structuredValue": {"channelCount": 15, "comparedFields": ["name", "wavelengthNanometers", "solarIrradiance"], "result": "all-equal", "lineageStatus": "possible-not-proven"},
+          "citations": [
+            {"path": "tmp/atmosphere/bruneton_start_fresh/032-figure1-four-view-source-k-no-ground-baseline/equations-and-constants.json", "jsonPointer": "/constants/spectralChannels", "role": "records-historical-candidate-packet"},
+            {"path": "scripts/flat/reconciliation/POC/src/constants/consts.js", "lineStart": 27, "lineEnd": 43, "role": "records-poc-corresponding-packet"},
+            {"path": "shared/algorithm32/production/constants/Algorithm32CanonicalData.js", "lineStart": 29, "lineEnd": 45, "role": "records-production-corresponding-packet"}
+          ],
+          "contradictionIds": ["CONTRADICTION-A32-000002"],
+          "nonClaims": ["Exact equality does not identify the copying direction, decision, commit, or independently accepted source authority."]
+        },
+        {
+          "semanticKey": "step032:runner:relocated-candidate-one-root-line-difference",
+          "statement": "The exact Step 032 record-local runner and the tracked relocated candidate differ only in the ROOT relative-depth line; their byte identities remain distinct and the record-local snapshot is the historical executed-byte authority.",
+          "kind": "historical-runner-identity-observation",
+          "domain": "step032-runner-provenance",
+          "authorityRole": "physics-provenance-gap",
+          "structuredValue": {"exactSnapshot": {"sha256": "59bff00e4e92d8c9ac50813e93766b4c7d5a25413c2152cdd3031b14f8d97d35", "bytes": 154370, "rootExpression": "../../../.."}, "relocatedCandidate": {"sha256": "c96e6f3e87ba510068db134809b8478d3f10885e0173db5902fa79e898bfdf8e", "bytes": 154367, "rootExpression": "../../.."}, "changedLine": 8},
+          "citations": [
+            {"path": "tmp/atmosphere/bruneton_start_fresh/032-figure1-four-view-source-k-no-ground-baseline/script-snapshot.js", "lineStart": 8, "lineEnd": 8, "role": "identifies-exact-historical-runner-root"},
+            {"path": "scripts/flat/experimental/bruneton-start-fresh.js", "lineStart": 8, "lineEnd": 8, "role": "identifies-relocated-candidate-root"}
+          ]
+        },
+        {
+          "semanticKey": "step032:provenance:source-boundary-is-self-assertion",
+          "statement": "The Step 032 provenance file declares its own source-boundary classifications, but that self-authored boundary is not an independent source or verification result.",
+          "kind": "historical-provenance-boundary-observation",
+          "domain": "step032-source-provenance",
+          "authorityRole": "physics-provenance-gap",
+          "citations": [{"path": "tmp/atmosphere/bruneton_start_fresh/032-figure1-four-view-source-k-no-ground-baseline/provenance.json", "jsonPointer": "/sourceBoundary", "role": "records-self-authored-source-boundary"}],
+          "nonClaims": ["A provenance label does not independently demonstrate that the cited source entails the implementation or selected value."]
+        },
+        {
+          "semanticKey": "step032:source-gap:missing-historically-cited-primary-files",
+          "statement": "The retained Step 032 external-source subset lacks historically cited functions.glsl, model.h, constants.h, and clear-sky-models comparisons.cc, and its exact upstream revision is unknown.",
+          "kind": "missing-primary-source-observation",
+          "domain": "step032-source-provenance",
+          "authorityRole": "physics-provenance-gap",
+          "supportStatus": "unsourced",
+          "structuredValue": {"missingFiles": ["atmosphere/functions.glsl", "atmosphere/model.h", "atmosphere/constants.h", "clear-sky-models/atmosphere/comparisons.cc"], "exactUpstreamRevision": null},
+          "citations": [{"path": "agents/topics/apps/flat/reconciliation/archive/mark-i-bruneton-start-fresh-source-audit.md", "lineStart": 114, "lineEnd": 121, "role": "records-retained-source-gap"}],
+          "materialIds": ["MATERIAL-EXT-000015"]
+        },
+        {
+          "semanticKey": "step032:numerical-controls:external-sources-do-not-select-exact-counts",
+          "statement": "The Step 032 counts 20 view intervals, 10 sample-to-Sun intervals, 17 second-order directions, and 24 altitude bins are experiment choices; the cited external sources do not select these exact counts.",
+          "kind": "numerical-control-provenance-gap",
+          "domain": "production-canonical-data-lineage",
+          "authorityRole": "physics-provenance-gap",
+          "structuredValue": {"viewIntervals": 20, "sampleToSunIntervals": 10, "secondOrderDirections": 17, "altitudeBins": 24, "externalSelection": false},
+          "citations": [{"path": "agents/topics/apps/flat/reconciliation/archive/mark-i-bruneton-start-fresh-source-audit.md", "lineStart": 137, "lineEnd": 144, "role": "classifies-exact-counts-as-experiment-backed"}],
+          "contradictionIds": ["CONTRADICTION-A32-000002"],
+          "relatedFactIds": ["FACT-A32-000186", "FACT-A32-000187", "FACT-A32-000188", "FACT-A32-000189", "FACT-A32-000190", "FACT-A32-000191", "FACT-A32-000192", "FACT-A32-000193"]
+        },
+        {
+          "semanticKey": "step032:sampling:gonzalez-citation-identified-not-verified",
+          "statement": "The Step 032 design cites Gonzalez 2009 for the nearly equal-area Fibonacci sphere sampling family, but the paper payload has not been acquired or reviewed and does not select 17 directions or validate the radiative quadrature error.",
+          "kind": "external-source-candidate-gap",
+          "domain": "second-order-direction-quadrature",
+          "authorityRole": "physics-provenance-gap",
+          "supportStatus": "candidate-source",
+          "citations": [{"path": "agents/topics/apps/flat/plans/atmosphere-cleanroom-design/experiment-032-algorithm.md", "lineStart": 320, "lineEnd": 328, "role": "records-historical-citation-and-algorithmic-decision-boundary"}],
+          "externalCitations": [{"sourceId": "SOURCE-EXT-000016", "role": "identifies-unreviewed-candidate-source", "locator": {"arxivId": "0912.4540", "stableUrl": "https://arxiv.org/abs/0912.4540"}}],
+          "materialIds": ["MATERIAL-EXT-000016"]
+        },
+        {
+          "semanticKey": "step032:production-lineage:short-code-claims-three-poc-files",
+          "statement": "The production reference registry says short code a32-poc-color-032 was promoted from three named POC files, including a shader factory path.",
+          "kind": "production-lineage-documentation-observation",
+          "domain": "production-source-registry",
+          "authorityRole": "physics-provenance-gap",
+          "supportStatus": "source-backed",
+          "implementationStatus": "not-applicable",
+          "citations": [{"path": "shared/algorithm32/production/references.md", "lineStart": 38, "lineEnd": 44, "role": "claims-production-promotion-lineage"}],
+          "contradictionIds": ["CONTRADICTION-A32-000011"]
+        },
+        {
+          "semanticKey": "step032:production-lineage:claimed-poc-shader-path-deleted",
+          "statement": "The POC shader factory named by the production a32-poc-color-032 registry is deleted in the frozen source snapshot, while the surviving POC constants file still points to now-moved reconciliation documents; no exact handoff record was found.",
+          "kind": "production-lineage-broken-pointer-observation",
+          "domain": "production-source-registry",
+          "authorityRole": "physics-provenance-gap",
+          "supportStatus": "contradicted",
+          "implementationStatus": "removed",
+          "citations": [{"path": "scripts/flat/reconciliation/POC/src/constants/consts.js", "lineStart": 1, "lineEnd": 4, "role": "records-stale-document-pointers"}],
+          "repositoryStateCitations": [{"path": "scripts/flat/reconciliation/POC/src/shader/DistantSphericalShaderContributionFactory.js", "gitBlobSha": "076151fe310d4b193b20983fa5b1dfef5bcde0e3", "role": "records-deleted-claimed-lineage-path", "note": "Production references.md names this path, but the frozen snapshot records it as deleted."}],
+          "contradictionIds": ["CONTRADICTION-A32-000011"]
+        },
+        {
+          "semanticKey": "step032:scene-inputs:azimuths-are-local-tile-measurements",
+          "statement": "Step 032's four Sun azimuth inputs are local measurements from red-cross centers in extracted Figure 1 tiles, not published numerical constants from the cited paper.",
+          "kind": "historical-scene-input-provenance-observation",
+          "domain": "step032-scene-inputs",
+          "authorityRole": "physics-provenance-gap",
+          "structuredValue": {"sceneAzimuthDegrees": {"figure1-06h00-z87": -25.83454348280912, "figure1-10h15-z41": 9.544525565558136, "figure1-11h15-z31": 22.166345822082455, "figure1-13h15-z21": 85.31410016049729}, "derivation": "local-red-cross-center-measurement"},
+          "citations": [
+            {"path": "agents/topics/apps/flat/plans/atmosphere-cleanroom-design/experiment-032-algorithm.md", "lineStart": 177, "lineEnd": 179, "role": "qualifies-scene-azimuth-origin"},
+            {"path": "agents/topics/apps/flat/plans/atmosphere-cleanroom-design/experiment-032-algorithm.md", "lineStart": 382, "lineEnd": 391, "role": "records-scene-input-packet"}
+          ],
+          "experimentIds": ["EXPERIMENT-A32-000041"],
+          "nonClaims": ["The extracted tiles and red-cross pixels are reproduction inputs, not physics authority or image-match evidence."]
+        }
+      ]
+    }
+  ],
+  "manualFacts": [],
+  "contradictions": [
+    {
+      "id": "CONTRADICTION-A32-000011",
+      "kind": "broken-production-lineage-pointer",
+      "summary": "The production a32-poc-color-032 registry claims promotion from three POC files, but one named shader path is deleted in the frozen source snapshot and the surviving constants file points to reconciliation documents that were later moved; no exact promotion handoff was found.",
+      "scope": "Step 032 to POC to production lineage documentation",
+      "currentObservation": "Production references.md names the POC constants, color display model, and DistantSphericalShaderContributionFactory.js as promotion sources. The shader path is recorded as deleted, the constants header names stale pre-archive document paths, and equality of surviving values proves correspondence only.",
+      "desiredState": "Every retained production physics value and Reference behavior has an exact source or experiment locator plus a pinned handoff decision; deleted or moved lineage pointers are replaced by precise current evidence without treating the shader as authority.",
+      "resolutionStatus": "unresolved-broken-lineage-pointer",
+      "requiredAction": "Recover the exact promotion commit or decision record if it exists; otherwise reconstruct per-fact lineage and independently rederive the CPU Reference inputs before documenting shader conformance.",
+      "citations": [
+        {"path": "shared/algorithm32/production/references.md", "lineStart": 38, "lineEnd": 44, "role": "claims-three-file-poc-promotion-lineage"},
+        {"path": "scripts/flat/reconciliation/POC/src/constants/consts.js", "lineStart": 1, "lineEnd": 4, "role": "records-stale-reconciliation-document-pointers"}
+      ],
+      "repositoryStateCitations": [
+        {"path": "scripts/flat/reconciliation/POC/src/shader/DistantSphericalShaderContributionFactory.js", "gitBlobSha": "076151fe310d4b193b20983fa5b1dfef5bcde0e3", "role": "records-deleted-claimed-lineage-path", "note": "The frozen snapshot records this production-registry target as deleted."}
+      ],
+      "experimentIds": ["EXPERIMENT-A32-000001"],
+      "blockers": ["No exact source-to-POC-to-production handoff record has been identified."]
+    },
+    {
+      "id": "CONTRADICTION-A32-000012",
+      "kind": "spectral-sampling-profile-divergence",
+      "summary": "The cited Bruneton 2016 quantitative comparison uses 40 wavelengths from 360 to 830 nanometers, while Step 032 selects 15 centered channels over the same range from the Bruneton implementation family.",
+      "scope": "Step 032 spectral discretization versus cited paper comparison profile",
+      "currentObservation": "Both counts are source-associated but describe different profiles: 40 wavelengths for the paper's quantitative comparison and 15 centered channels for Step 032's selected historical path. The 15-channel choice cannot be described as the exact paper comparison run.",
+      "desiredState": "The target CPU Reference names its spectral discretization as an explicit numerical-model choice, derives the channel packet from pinned source data, and quantifies its error against a sufficiently refined independent spectral oracle.",
+      "resolutionStatus": "unresolved-explicit-model-divergence",
+      "requiredAction": "Recreate 15-channel and refined or 40-channel pre-display CPU calculations under identical inputs, establish convergence and error bounds, and document the selected Reference profile without conflating it with the paper comparison.",
+      "citations": [
+        {"path": "agents/topics/apps/flat/plans/atmosphere-cleanroom-design/experiment-032-algorithm.md", "lineStart": 411, "lineEnd": 417, "role": "records-fifteen-channel-selection-and-forty-channel-distinction"},
+        {"path": "agents/topics/apps/flat/reconciliation/archive/mark-i-bruneton-start-fresh-source-audit.md", "lineStart": 62, "lineEnd": 63, "role": "records-fifteen-channel-source-family"},
+        {"path": "agents/topics/apps/flat/reconciliation/archive/mark-i-bruneton-start-fresh-source-audit.md", "lineStart": 73, "lineEnd": 75, "role": "records-separate-forty-wavelength-comparison-path"}
+      ],
+      "experimentIds": ["EXPERIMENT-A32-000001", "EXPERIMENT-A32-000042"],
+      "blockers": ["No accepted target-repository spectral convergence or discretization-error result exists."]
+    },
+    {
+      "id": "CONTRADICTION-A32-000013",
+      "kind": "ozone-profile-source-family-ambiguity",
+      "summary": "The retained Bruneton source family contains an ozone-enabled demo profile, the paper comparison describes a no-air-absorption simplification, and Step 032 disables ozone; these are distinct model profiles rather than one universal setting.",
+      "scope": "ozone absorption policy and atmosphere-profile identity",
+      "currentObservation": "Early start-fresh records exercised demo ozone, the retained demo.cc defaults ozone on, later comparison-profile records disable it, and Step 032 carries inactive ozone constants while setting ozoneAbsorptionEnabled false.",
+      "desiredState": "Each CPU Reference atmosphere profile names its ozone policy and source assumptions explicitly; no-ozone comparison behavior and ozone-enabled Earth-atmosphere behavior have separate independently sourced tests.",
+      "resolutionStatus": "unresolved-profile-identity-ambiguity",
+      "requiredAction": "Define the intended Reference profiles, pin the relevant ozone cross sections and vertical profile for any enabled case, and reproduce enabled-versus-disabled pre-display spectra under fixed inputs.",
+      "citations": [
+        {"path": "agents/topics/apps/flat/reconciliation/archive/mark-i-bruneton-start-fresh-source-audit.md", "lineStart": 80, "lineEnd": 82, "role": "distinguishes-demo-ozone-from-step032-profile"},
+        {"path": "agents/topics/apps/flat/plans/atmosphere-cleanroom-design/experiment-032-algorithm.md", "lineStart": 470, "lineEnd": 491, "role": "records-inactive-ozone-constants-and-disabled-policy"}
+      ],
+      "experimentIds": ["EXPERIMENT-A32-000001", "EXPERIMENT-A32-000028", "EXPERIMENT-A32-000030", "EXPERIMENT-A32-000035"],
+      "blockers": ["The target CPU Reference has no independently accepted named ozone-profile contract and end-to-end oracle result."]
+    },
+    {
+      "id": "CONTRADICTION-A32-000014",
+      "kind": "ground-physics-versus-subjective-equivalence",
+      "summary": "The cited Bruneton model assigns ground reflection a physical role, while Step 032 turns ground coupling off based partly on historical visual-equivalence observations that cannot establish pre-display physical insignificance.",
+      "scope": "ground-reflection policy in the Step 032 comparison profile",
+      "currentObservation": "The retained demo source separates direct-Sun and sky ground irradiance, historical Steps 011, 012, and 025 implement or correct those terms, and Steps 029 and 030 report no clear subjective visual difference among variants. Step 032 nevertheless selects no ground coupling without a numeric radiance-error criterion.",
+      "desiredState": "The target CPU Reference either includes a sourced lower-boundary model or explicitly defines a no-ground comparison profile, with the effect quantified in pre-display spectra across relevant scenes.",
+      "resolutionStatus": "unresolved-visual-evidence-insufficient-for-physics-decision",
+      "requiredAction": "Recreate no-ground, direct-ground, and Sun-plus-sky-ground variants against an independent CPU oracle; compare spectral radiance with explicit units and tolerances before selecting the Reference profile.",
+      "citations": [
+        {"path": "agents/topics/apps/flat/reconciliation/archive/mark-i-bruneton-start-fresh-source-audit.md", "lineStart": 76, "lineEnd": 79, "role": "records-source-model-and-step032-ground-policy"},
+        {"path": "tmp/atmosphere/bruneton_start_fresh/029-paper-figure1-derived-k-no-ground-baseline/notes.md", "lineStart": 3, "lineEnd": 8, "role": "records-subjective-no-ground-equivalence"},
+        {"path": "tmp/atmosphere/bruneton_start_fresh/030-paper-figure1-derived-k-direct-ground-baseline/notes.md", "lineStart": 3, "lineEnd": 8, "role": "records-subjective-direct-ground-equivalence"}
+      ],
+      "experimentIds": ["EXPERIMENT-A32-000001", "EXPERIMENT-A32-000033", "EXPERIMENT-A32-000034", "EXPERIMENT-A32-000043", "EXPERIMENT-A32-000046", "EXPERIMENT-A32-000047"],
+      "blockers": ["No independent numeric lower-boundary ablation with accepted pre-display tolerance exists."]
+    }
+  ]
+}

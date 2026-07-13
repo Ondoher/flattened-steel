@@ -1,0 +1,27 @@
+{
+  "equations": {
+    "point": "L_point(lambda,i)=F(lambda)*T(lambda,omega_s)*p_i/Omega_i",
+    "extended": "L_extended(lambda,i)=sum_q[V_q*T(lambda,omega_q)*L(lambda,omega_q)*w_q]/Omega_i",
+    "frame": "L_final=L_path+T_view*L_endpoint+L_extended_transport+L_point_transport",
+    "sunDisk": "E_lambda=L_lambda*pi*sin(alpha)^2",
+    "solarReference": "threshold=max(0.02,2*u_TSIS/I_TSIS,0.0005)"
+  },
+  "tolerances": {
+    "spectralRelative": 1e-12,
+    "spectralScaleFloor": 1e-30,
+    "solarReferenceMinimumRelative": 0.02,
+    "solarReferenceUncertaintyMultiplier": 2,
+    "solarReferenceAbsoluteFloorRelative": 0.0005,
+    "solarDiskReconstructionRelative": 1e-10,
+    "siriusVisibleRelative": 0.03,
+    "siriusNearInfraredRelative": 0.04,
+    "quadratureHighOrderRelative": 0.005,
+    "wrongRouteMinimumRelative": 0.0001,
+    "displayCallCount": "exact"
+  },
+  "wrongRoutes": [
+    "destination-pixel transmittance after point spreading",
+    "second transmittance multiplication",
+    "Sun center transmittance substituted for directional samples"
+  ]
+}

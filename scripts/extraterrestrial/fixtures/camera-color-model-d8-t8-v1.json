@@ -1,0 +1,120 @@
+{
+  "schemaId": "camera-color-model-d8-t8-fixture-v1",
+  "input": {
+    "viewId": "wide",
+    "runId": "000352-spectral-color-production-wide-light-adapted-log",
+    "artifactSetSha256": "a563b4366dd465ff4d6a6c7a496594fec4e21c0f0659113887d04ff04f6ffb49",
+    "widthPixels": 641,
+    "heightPixels": 401,
+    "verticalFovDegrees": 78
+  },
+  "dependency": {
+    "runId": "000379-camera-color-model-d7-t7",
+    "artifactSetSha256": "82262da32dedea97a18f41658643323e9b057e59b07fa4fce9dd2f1837d29fc5"
+  },
+  "configurations": [
+    {
+      "id": "U-PHONE-DAYLIGHT",
+      "conditionId": "solar-noon",
+      "apertureFNumber": 2.2,
+      "shutterSeconds": 0.00015518311607697083,
+      "shutterNotation": "1/6444 s",
+      "iso": 102,
+      "postWellGain": 1.02,
+      "filterOpticalDensity": 0,
+      "sourceId": "SRC-NOON-PHONE",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Sun_at_noon.jpg"
+    },
+    {
+      "id": "U-DSLR-NOON",
+      "conditionId": "solar-noon",
+      "apertureFNumber": 7.1,
+      "shutterSeconds": 0.001,
+      "shutterNotation": "1/1000 s",
+      "iso": 200,
+      "postWellGain": 2,
+      "filterOpticalDensity": 0,
+      "sourceId": "SRC-NOON-DSLR",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Sun_at_noon_time.jpg"
+    },
+    {
+      "id": "U-PHONE-SUNSET",
+      "conditionId": "sunset",
+      "apertureFNumber": 2.2,
+      "shutterSeconds": 0.01,
+      "shutterNotation": "1/100 s",
+      "iso": 32,
+      "postWellGain": 0.32,
+      "filterOpticalDensity": 0,
+      "sourceId": "SRC-SUNSET-PHONE",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Sunsetbeach.jpg"
+    },
+    {
+      "id": "U-DSLR-SUNSET",
+      "conditionId": "sunset",
+      "apertureFNumber": 5,
+      "shutterSeconds": 0.008,
+      "shutterNotation": "1/125 s",
+      "iso": 200,
+      "postWellGain": 2,
+      "filterOpticalDensity": 0,
+      "sourceId": "SRC-SUNSET-DSLR",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Sunset_Beach_(2333571055).jpg"
+    },
+    {
+      "id": "U-DISK-MANUAL",
+      "conditionId": "solar-noon",
+      "apertureFNumber": 2.2,
+      "shutterSeconds": 0.00015518311607697083,
+      "shutterNotation": "1/6444 s",
+      "iso": 100,
+      "postWellGain": 1,
+      "filterOpticalDensity": 5,
+      "sourceId": "SRC-ND",
+      "sourceUrl": "https://www.baader-planetarium.com/en/downloads/dl/file/id/1578/product/2986/instruction_manual_baader_solar_filter_v_1_7.pdf"
+    },
+    {
+      "id": "U-HDR-MEMBERS-EV-MINUS-3",
+      "familyId": "U-HDR-MEMBERS",
+      "conditionId": "solar-noon",
+      "apertureFNumber": 2.2,
+      "shutterSeconds": 0.000019397889509621354,
+      "shutterNotation": "1/51552 s derived",
+      "iso": 102,
+      "postWellGain": 1.02,
+      "filterOpticalDensity": 0,
+      "exposureOffsetEv": -3,
+      "sourceId": "SRC-HDR",
+      "sourceUrl": "https://cam.start.canon/id/C003/manual/html/UG-03_Shooting-1_0060.html"
+    },
+    {
+      "id": "U-HDR-MEMBERS-EV-0",
+      "familyId": "U-HDR-MEMBERS",
+      "conditionId": "solar-noon",
+      "apertureFNumber": 2.2,
+      "shutterSeconds": 0.00015518311607697083,
+      "shutterNotation": "1/6444 s",
+      "iso": 102,
+      "postWellGain": 1.02,
+      "filterOpticalDensity": 0,
+      "exposureOffsetEv": 0,
+      "sourceId": "SRC-HDR",
+      "sourceUrl": "https://cam.start.canon/id/C003/manual/html/UG-03_Shooting-1_0060.html"
+    },
+    {
+      "id": "U-HDR-MEMBERS-EV-PLUS-3",
+      "familyId": "U-HDR-MEMBERS",
+      "conditionId": "solar-noon",
+      "apertureFNumber": 2.2,
+      "shutterSeconds": 0.0012414649286157667,
+      "shutterNotation": "1/805.5 s derived",
+      "iso": 102,
+      "postWellGain": 1.02,
+      "filterOpticalDensity": 0,
+      "exposureOffsetEv": 3,
+      "sourceId": "SRC-HDR",
+      "sourceUrl": "https://cam.start.canon/id/C003/manual/html/UG-03_Shooting-1_0060.html"
+    }
+  ],
+  "claimLimit": "Curated generic-camera setting combinations with identity development. No named-camera reproduction, automatic exposure, HDR merge, timelapse policy, glare, noise, or final appearance claim."
+}

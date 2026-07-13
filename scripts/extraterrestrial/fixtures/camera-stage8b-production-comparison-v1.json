@@ -1,0 +1,33 @@
+{
+  "schemaId": "camera-stage8b-production-comparison-fixture-v1",
+  "cameraRun": {
+    "runId": "000359-camera-fixed-exposure-stage8b",
+    "artifactSetSha256": "279c374cc5d3396603c31a29d281e84fc8b0bcd5602e7f238015abeed75ba7d3"
+  },
+  "productionRuns": [
+    {
+      "viewId": "wide",
+      "runId": "000331-spectral-color-production-gpu-bases",
+      "artifactSetSha256": "1e106c04b40680d26bcbafe577db51763100a45a74ad5b52ae4cfd5eb9ea6612"
+    },
+    {
+      "viewId": "sun-focused",
+      "runId": "000332-spectral-color-production-gpu-sun-focused-bases",
+      "artifactSetSha256": "686e5dee030ff4ff8cadb0bb1cdcb369bd56cc14ddd975038a2f9cc1cf62e324"
+    }
+  ],
+  "conditions": [
+    "solar-noon",
+    "sunset-minus-30-minutes",
+    "sunset-minus-10-minutes",
+    "sunset"
+  ],
+  "stops": [-4, -2, 0, 2],
+  "layout": {
+    "left": "production GPU reference",
+    "right": "Stage 8b fixed-exposure camera render",
+    "dividerPixels": 16,
+    "dividerRgba": [32, 32, 32, 255],
+    "resampling": "none"
+  }
+}

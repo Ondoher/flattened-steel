@@ -1,0 +1,2044 @@
+{
+  "schema": "algorithm32-production-native-n4-cpu-gpu-parity-oracle-v1",
+  "status": "checked-production-binary64-cpu-oracle",
+  "configuration": {
+    "profile": {
+      "id": "algorithm32-native-production-default-v1",
+      "contentHash": "sha256:aceb50e3578f622658a6f1bcadcd13ecff90f36a177022af64f69209981faea9",
+      "role": "native-production-default",
+      "comparisonParity": false
+    },
+    "atmosphere": {
+      "kind": "canonical-atmosphere",
+      "spectralChannelCount": 15,
+      "spectralBasisHash": "sha256:a03a3c7f45d9bd4ff8adf6482e9d1aac1acd72423758ecf797ac24f6dffba891",
+      "constants": {
+        "bottomRadius": {
+          "value": 6360000,
+          "units": "meters"
+        },
+        "topRadius": {
+          "value": 6420000,
+          "units": "meters"
+        },
+        "rayleighScaleHeight": {
+          "value": 8000,
+          "units": "meters"
+        },
+        "mieScaleHeight": {
+          "value": 1200,
+          "units": "meters"
+        },
+        "rayleighCoefficientScale": 0.00000124062,
+        "mieAngstromAlpha": 0.8,
+        "mieAngstromBeta": 0.04,
+        "mieSingleScatteringAlbedo": 0.8,
+        "miePhaseFunctionG": 0.7,
+        "ozoneAbsorptionEnabled": false
+      }
+    },
+    "geometry": {
+      "kind": "spherical-earth-geometry",
+      "bottomRadius": {
+        "value": 6360000,
+        "units": "meters"
+      },
+      "topRadius": {
+        "value": 6420000,
+        "units": "meters"
+      },
+      "observerHeight": {
+        "value": 2,
+        "units": "meters"
+      },
+      "directionToSource": [
+        0,
+        1,
+        0
+      ],
+      "cacheAltitudeBinCount": 48,
+      "cacheBoundaryAltitude": {
+        "value": 2,
+        "units": "meters"
+      },
+      "sourceTransmittanceIntervalCount": 20,
+      "observerLocalSceneFrame": {
+        "kind": "observer-local",
+        "up": [
+          1,
+          0,
+          0
+        ],
+        "right": [
+          0,
+          1,
+          0
+        ],
+        "forward": [
+          0,
+          0,
+          -1
+        ]
+      },
+      "sceneFrame": {
+        "kind": "observer-local",
+        "up": [
+          1,
+          0,
+          0
+        ],
+        "right": [
+          0,
+          1,
+          0
+        ],
+        "forward": [
+          0,
+          0,
+          -1
+        ]
+      }
+    },
+    "lightSource": {
+      "kind": "distant-sun-light-source",
+      "sourceKey": "distant-sun",
+      "directionToLight": [
+        0,
+        1,
+        0
+      ],
+      "angularRadius": {
+        "value": 0.004675,
+        "units": "radians"
+      },
+      "spectralChannelCount": 15,
+      "sourceIrradianceHash": "sha256:b501bad3f86702dbef751b7def0cd9bf189f56816bd54750063a1933591d751e"
+    },
+    "groundBoundary": {
+      "id": "algorithm32-black-ground-boundary-v1",
+      "contentHash": "sha256:9354da58a6efa726304b75fc1586ccb70686ebd71d073f216c362acee4e7d9b4",
+      "behavior": "zero-reflection"
+    },
+    "maximumScatteringOrder": 4,
+    "sourceTransmittanceIntervalCount": 20,
+    "transportIntervalCount": 40
+  },
+  "provenance": {
+    "oracle": "src/algorithm32 production binary64 CPU recurrence",
+    "runtimeImports": "src/algorithm32 only; no Algorithm32-Star runtime imports",
+    "queryPolicy": {
+      "schema": "algorithm32-production-gpu-cache-parity-policy-v1",
+      "status": "predeclared-before-production-gpu-output"
+    },
+    "constructionIdentities": {
+      "source": {
+        "id": "algorithm32-native-distant-sun-gpu-parity-source-v1",
+        "contentHash": "sha256:880ad273d23544b456f9e90aedc2f4614a0bbb10a0c102ab182908eea037eabf"
+      },
+      "atmosphere": {
+        "id": "algorithm32-native-canonical-atmosphere-gpu-parity-v1",
+        "contentHash": "sha256:4d5af4326dca3d45a00706a70598965a40ed7c022f962809a2ce15be9f98a0a3"
+      },
+      "geometry": {
+        "id": "algorithm32-native-spherical-earth-gpu-parity-v1",
+        "contentHash": "sha256:0e23d4242eb8ae6b27e39515fe671df7c4631b2c9eea4ac14b27289453105235"
+      },
+      "boundary": {
+        "id": "algorithm32-black-ground-boundary-v1",
+        "contentHash": "sha256:9354da58a6efa726304b75fc1586ccb70686ebd71d073f216c362acee4e7d9b4"
+      }
+    },
+    "cacheDescriptor": {
+      "id": "algorithm32-distant-sun-cpu-scattering-cache-n4-v1",
+      "contentHash": "sha256:eb058b488a7170a95ca75c5f162f5fd25b50e3353f14b958571e81e0ab064501"
+    }
+  },
+  "buildTiming": {
+    "startedAt": "2026-07-22T13:38:18.038Z",
+    "duration": {
+      "value": 1421463.5862,
+      "units": "milliseconds"
+    },
+    "runtime": "v25.4.0",
+    "platform": "win32",
+    "architecture": "x64"
+  },
+  "wavelengthIndices": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14
+  ],
+  "fields": [
+    {
+      "name": "J1",
+      "quantity": "spectral-scattering-density",
+      "units": "W m^-3 sr^-1 nm^-1",
+      "order": {
+        "kind": "pure",
+        "value": 1
+      },
+      "basisId": "algorithm32-native-15-spectral-basis-v1",
+      "positionDomainId": "algorithm32-native-48-position-v1",
+      "directionDomainId": "algorithm32-cubed-sphere-w27-outgoing-v1",
+      "precision": "binary64",
+      "provenanceIdentity": "algorithm32-distant-sun-primary-scattering-density-cpu-v1",
+      "queryKind": "scatteringDensity",
+      "queries": [
+        {
+          "positionIndex": 0,
+          "altitude": {
+            "value": 2,
+            "units": "meters"
+          },
+          "directionIndex": 364,
+          "cacheDirection": [
+            1,
+            0,
+            0
+          ],
+          "values": [
+            9.323631630451727e-16,
+            2.860076488498076e-13,
+            1.1753544184704924e-11,
+            1.7327371036388908e-10,
+            1.1143223910089873e-9,
+            4.671498689903567e-9,
+            1.385426061379308e-8,
+            3.1992163530658705e-8,
+            6.036799881277844e-8,
+            9.920261110836776e-8,
+            1.481349224114059e-7,
+            2.0189260171196836e-7,
+            2.637220224877172e-7,
+            3.245626111744589e-7,
+            3.8309452205626365e-7
+          ]
+        },
+        {
+          "positionIndex": 0,
+          "altitude": {
+            "value": 2,
+            "units": "meters"
+          },
+          "directionIndex": 1093,
+          "cacheDirection": [
+            -1,
+            0,
+            0
+          ],
+          "values": [
+            6.614855670484073e-17,
+            1.6277167165109263e-14,
+            5.465018548403042e-13,
+            6.695261298724467e-12,
+            3.63495253536189e-11,
+            1.305325413706354e-10,
+            3.360906702887087e-10,
+            6.821969038420276e-10,
+            1.1445237813123239e-9,
+            1.6898781897180792e-9,
+            2.289257626105213e-9,
+            2.8556483135204404e-9,
+            3.441863087427562e-9,
+            3.9374877868290545e-9,
+            4.34937121990557e-9
+          ]
+        },
+        {
+          "positionIndex": 12,
+          "altitude": {
+            "value": 15625.000000000002,
+            "units": "meters"
+          },
+          "directionIndex": 0,
+          "cacheDirection": [
+            0.5773502691896258,
+            -0.5773502691896258,
+            -0.5773502691896258
+          ],
+          "values": [
+            6.170565944911901e-8,
+            1.4382615551586063e-7,
+            1.8335948931167808e-7,
+            2.0916898772829716e-7,
+            1.924354609210988e-7,
+            1.7667379549029158e-7,
+            1.553798503781359e-7,
+            1.327341272421932e-7,
+            1.092658892093637e-7,
+            8.88025319829965e-8,
+            7.227870136862901e-8,
+            5.7970564747142e-8,
+            4.73820980758782e-8,
+            3.8352034048396395e-8,
+            3.101902837999613e-8
+          ]
+        },
+        {
+          "positionIndex": 24,
+          "altitude": {
+            "value": 30624.999999999996,
+            "units": "meters"
+          },
+          "directionIndex": 2551,
+          "cacheDirection": [
+            0,
+            -1,
+            0
+          ],
+          "values": [
+            5.901823137632087e-8,
+            7.696363886230925e-8,
+            6.612240162612593e-8,
+            5.7250156985043264e-8,
+            4.323568930492619e-8,
+            3.436138788054412e-8,
+            2.7141638645705848e-8,
+            2.137495493060849e-8,
+            1.6530078031986573e-8,
+            1.2796590632078649e-8,
+            1.0023949678848017e-8,
+            7.797983470793609e-9,
+            6.219092991581203e-9,
+            4.934525067529568e-9,
+            3.926437255659801e-9
+          ]
+        },
+        {
+          "positionIndex": 47,
+          "altitude": {
+            "value": 59375,
+            "units": "meters"
+          },
+          "directionIndex": 4373,
+          "cacheDirection": [
+            -0.5773502691896258,
+            0.5773502691896258,
+            -0.5773502691896258
+          ],
+          "values": [
+            3.1582761863155748e-9,
+            3.712879137402196e-9,
+            2.97280208472577e-9,
+            2.4502323713111765e-9,
+            1.7863460678294744e-9,
+            1.3835826956845139e-9,
+            1.0721097178121568e-9,
+            8.321506226728884e-10,
+            6.363955966243022e-10,
+            4.88399871990865e-10,
+            3.7997009009003785e-10,
+            2.939862124720715e-10,
+            2.334364815344672e-10,
+            1.845620530411307e-10,
+            1.4643046013319553e-10
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Jthrough1",
+      "quantity": "spectral-scattering-density",
+      "units": "W m^-3 sr^-1 nm^-1",
+      "order": {
+        "kind": "cumulative-through",
+        "value": 1,
+        "included": [
+          1
+        ]
+      },
+      "basisId": "algorithm32-native-15-spectral-basis-v1",
+      "positionDomainId": "algorithm32-native-48-position-v1",
+      "directionDomainId": "algorithm32-cubed-sphere-w27-outgoing-v1",
+      "precision": "binary64",
+      "provenanceIdentity": "algorithm32-distant-sun-cpu-recurrence-through-1-v1",
+      "queryKind": "scatteringDensity",
+      "derivation": "binary64 operation-order sum J1 through J1",
+      "queries": [
+        {
+          "positionIndex": 0,
+          "altitude": {
+            "value": 2,
+            "units": "meters"
+          },
+          "directionIndex": 364,
+          "cacheDirection": [
+            1,
+            0,
+            0
+          ],
+          "values": [
+            9.323631630451727e-16,
+            2.860076488498076e-13,
+            1.1753544184704924e-11,
+            1.7327371036388908e-10,
+            1.1143223910089873e-9,
+            4.671498689903567e-9,
+            1.385426061379308e-8,
+            3.1992163530658705e-8,
+            6.036799881277844e-8,
+            9.920261110836776e-8,
+            1.481349224114059e-7,
+            2.0189260171196836e-7,
+            2.637220224877172e-7,
+            3.245626111744589e-7,
+            3.8309452205626365e-7
+          ]
+        },
+        {
+          "positionIndex": 0,
+          "altitude": {
+            "value": 2,
+            "units": "meters"
+          },
+          "directionIndex": 1093,
+          "cacheDirection": [
+            -1,
+            0,
+            0
+          ],
+          "values": [
+            6.614855670484073e-17,
+            1.6277167165109263e-14,
+            5.465018548403042e-13,
+            6.695261298724467e-12,
+            3.63495253536189e-11,
+            1.305325413706354e-10,
+            3.360906702887087e-10,
+            6.821969038420276e-10,
+            1.1445237813123239e-9,
+            1.6898781897180792e-9,
+            2.289257626105213e-9,
+            2.8556483135204404e-9,
+            3.441863087427562e-9,
+            3.9374877868290545e-9,
+            4.34937121990557e-9
+          ]
+        },
+        {
+          "positionIndex": 12,
+          "altitude": {
+            "value": 15625.000000000002,
+            "units": "meters"
+          },
+          "directionIndex": 0,
+          "cacheDirection": [
+            0.5773502691896258,
+            -0.5773502691896258,
+            -0.5773502691896258
+          ],
+          "values": [
+            6.170565944911901e-8,
+            1.4382615551586063e-7,
+            1.8335948931167808e-7,
+            2.0916898772829716e-7,
+            1.924354609210988e-7,
+            1.7667379549029158e-7,
+            1.553798503781359e-7,
+            1.327341272421932e-7,
+            1.092658892093637e-7,
+            8.88025319829965e-8,
+            7.227870136862901e-8,
+            5.7970564747142e-8,
+            4.73820980758782e-8,
+            3.8352034048396395e-8,
+            3.101902837999613e-8
+          ]
+        },
+        {
+          "positionIndex": 24,
+          "altitude": {
+            "value": 30624.999999999996,
+            "units": "meters"
+          },
+          "directionIndex": 2551,
+          "cacheDirection": [
+            0,
+            -1,
+            0
+          ],
+          "values": [
+            5.901823137632087e-8,
+            7.696363886230925e-8,
+            6.612240162612593e-8,
+            5.7250156985043264e-8,
+            4.323568930492619e-8,
+            3.436138788054412e-8,
+            2.7141638645705848e-8,
+            2.137495493060849e-8,
+            1.6530078031986573e-8,
+            1.2796590632078649e-8,
+            1.0023949678848017e-8,
+            7.797983470793609e-9,
+            6.219092991581203e-9,
+            4.934525067529568e-9,
+            3.926437255659801e-9
+          ]
+        },
+        {
+          "positionIndex": 47,
+          "altitude": {
+            "value": 59375,
+            "units": "meters"
+          },
+          "directionIndex": 4373,
+          "cacheDirection": [
+            -0.5773502691896258,
+            0.5773502691896258,
+            -0.5773502691896258
+          ],
+          "values": [
+            3.1582761863155748e-9,
+            3.712879137402196e-9,
+            2.97280208472577e-9,
+            2.4502323713111765e-9,
+            1.7863460678294744e-9,
+            1.3835826956845139e-9,
+            1.0721097178121568e-9,
+            8.321506226728884e-10,
+            6.363955966243022e-10,
+            4.88399871990865e-10,
+            3.7997009009003785e-10,
+            2.939862124720715e-10,
+            2.334364815344672e-10,
+            1.845620530411307e-10,
+            1.4643046013319553e-10
+          ]
+        }
+      ]
+    },
+    {
+      "name": "L1",
+      "quantity": "spectral-radiance-density",
+      "units": "W m^-2 sr^-1 nm^-1",
+      "order": {
+        "kind": "pure",
+        "value": 1
+      },
+      "basisId": "algorithm32-native-15-spectral-basis-v1",
+      "positionDomainId": "algorithm32-native-48-position-v1",
+      "directionDomainId": "algorithm32-fibonacci-34-incoming-v1",
+      "precision": "binary64",
+      "provenanceIdentity": "algorithm32-star-create-l1-field-direct-sha256-98aa61f7cf441226eef38f40043ea729b5b1feb93cbea4d9160b7a4c33ead24a",
+      "queryKind": "radiance",
+      "queries": [
+        {
+          "positionIndex": 0,
+          "altitude": {
+            "value": 2,
+            "units": "meters"
+          },
+          "directionIndex": 17,
+          "cacheDirection": [
+            1,
+            0,
+            0
+          ],
+          "values": [
+            1.0882794594449956e-10,
+            3.2811993339479024e-8,
+            0.000001331078819744494,
+            0.000019432290955258994,
+            0.00012404268479824073,
+            0.0005170543587834706,
+            0.0015266680403994506,
+            0.0035132602421302905,
+            0.006611535192198504,
+            0.010841671664539464,
+            0.01616222959660991,
+            0.0219981375895146,
+            0.028704674226288432,
+            0.03529716951470028,
+            0.04163493848286542
+          ]
+        },
+        {
+          "positionIndex": 12,
+          "altitude": {
+            "value": 15625.000000000002,
+            "units": "meters"
+          },
+          "directionIndex": 0,
+          "cacheDirection": [
+            -6.118005084603635e-17,
+            2.5299871800168635e-18,
+            -1
+          ],
+          "values": [
+            0.008011741532057625,
+            0.021253494175746065,
+            0.029654982795798444,
+            0.03607103305970851,
+            0.034763792600105724,
+            0.03302836915602222,
+            0.02980231448767515,
+            0.025960154246970756,
+            0.021693823667921584,
+            0.01783895523374226,
+            0.014654571847132751,
+            0.011840625946812424,
+            0.009735555859478795,
+            0.007918250770499074,
+            0.006429590179584004
+          ]
+        },
+        {
+          "positionIndex": 24,
+          "altitude": {
+            "value": 30624.999999999996,
+            "units": "meters"
+          },
+          "directionIndex": 8,
+          "cacheDirection": [
+            -0.784182423271093,
+            0.3236991047619375,
+            -0.5294117647058824
+          ],
+          "values": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "positionIndex": 36,
+          "altitude": {
+            "value": 45625,
+            "units": "meters"
+          },
+          "directionIndex": 25,
+          "cacheDirection": [
+            0.8288129085212791,
+            -0.3026811448889182,
+            0.47058823529411775
+          ],
+          "values": [
+            0.0004741275625773287,
+            0.0005616821243740925,
+            0.0004520804009067138,
+            0.0003739768953040774,
+            0.0002733634521959263,
+            0.00021213473273806307,
+            0.00016461352690381084,
+            0.00012790791216624731,
+            0.00009790009960504156,
+            0.00007518170634531087,
+            0.00005852038668120381,
+            0.00004529610642015622,
+            0.000035978605178384476,
+            0.00002845332462617366,
+            0.000022579596536003244
+          ]
+        },
+        {
+          "positionIndex": 47,
+          "altitude": {
+            "value": 59375,
+            "units": "meters"
+          },
+          "directionIndex": 33,
+          "cacheDirection": [
+            0.2583867092358571,
+            -0.21776859209109395,
+            0.9411764705882353
+          ],
+          "values": [
+            0.000006976838839524549,
+            0.000008199575541662344,
+            0.0000065638638054594305,
+            0.000005409287398878791,
+            0.00000394325516174658,
+            0.000003053954825176124,
+            0.0000023663176614610003,
+            0.0000018366137654746438,
+            0.000001404524414958133,
+            0.0000010778714116099616,
+            8.385566020507039e-7,
+            6.487886017916256e-7,
+            5.151569578519618e-7,
+            4.0729479953131654e-7,
+            3.231426536796665e-7
+          ]
+        }
+      ]
+    },
+    {
+      "name": "J2",
+      "quantity": "spectral-scattering-density",
+      "units": "W m^-3 sr^-1 nm^-1",
+      "order": {
+        "kind": "pure",
+        "value": 2
+      },
+      "basisId": "algorithm32-native-15-spectral-basis-v1",
+      "positionDomainId": "algorithm32-native-48-position-v1",
+      "directionDomainId": "algorithm32-cubed-sphere-w27-outgoing-v1",
+      "precision": "binary64",
+      "provenanceIdentity": "algorithm32-star-selected-lkm1-to-jk-scatter-98aa61f7-v1",
+      "queryKind": "scatteringDensity",
+      "queries": [
+        {
+          "positionIndex": 0,
+          "altitude": {
+            "value": 2,
+            "units": "meters"
+          },
+          "directionIndex": 364,
+          "cacheDirection": [
+            1,
+            0,
+            0
+          ],
+          "values": [
+            5.8694516167900494e-8,
+            1.0977741245438643e-7,
+            1.2870899731221688e-7,
+            1.4617529372665787e-7,
+            1.4213839574155495e-7,
+            1.4918828507598981e-7,
+            1.6862753103251512e-7,
+            2.0991318658004196e-7,
+            2.732821216909908e-7,
+            3.5961944944567057e-7,
+            4.667856996531055e-7,
+            5.781086511510157e-7,
+            7.034381951072963e-7,
+            8.182591007069468e-7,
+            9.21196246191421e-7
+          ]
+        },
+        {
+          "positionIndex": 0,
+          "altitude": {
+            "value": 2,
+            "units": "meters"
+          },
+          "directionIndex": 1093,
+          "cacheDirection": [
+            -1,
+            0,
+            0
+          ],
+          "values": [
+            5.705287530622897e-8,
+            1.1683724406355234e-7,
+            1.535945184731581e-7,
+            1.9572464955758317e-7,
+            2.0750825915136282e-7,
+            2.2032276030163456e-7,
+            2.2185189312484527e-7,
+            2.1373955343543436e-7,
+            1.9537644243587538e-7,
+            1.7388924703527638e-7,
+            1.532317146573626e-7,
+            1.3187526420813975e-7,
+            1.1489926171638745e-7,
+            9.868052469716225e-8,
+            8.44344715218078e-8
+          ]
+        },
+        {
+          "positionIndex": 12,
+          "altitude": {
+            "value": 15625.000000000002,
+            "units": "meters"
+          },
+          "directionIndex": 0,
+          "cacheDirection": [
+            0.5773502691896258,
+            -0.5773502691896258,
+            -0.5773502691896258
+          ],
+          "values": [
+            2.909743157684941e-8,
+            3.857046931916725e-8,
+            3.2048793343965245e-8,
+            2.5708427267280106e-8,
+            1.7432555647695626e-8,
+            1.2180929185526532e-8,
+            8.348505598574934e-9,
+            5.661552392056052e-9,
+            3.756084263972291e-9,
+            2.491728880055285e-9,
+            1.6736982988885546e-9,
+            1.1185328768190874e-9,
+            7.683333429622631e-10,
+            5.26696362013118e-10,
+            3.632995718483625e-10
+          ]
+        },
+        {
+          "positionIndex": 24,
+          "altitude": {
+            "value": 30624.999999999996,
+            "units": "meters"
+          },
+          "directionIndex": 2551,
+          "cacheDirection": [
+            0,
+            -1,
+            0
+          ],
+          "values": [
+            2.571682856548927e-9,
+            2.394267746937244e-9,
+            1.512837668754347e-9,
+            9.867165826111643e-10,
+            5.726920186409437e-10,
+            3.558209155931134e-10,
+            2.2300675669154437e-10,
+            1.4117838396554293e-10,
+            8.878590770526374e-11,
+            5.6476518738946874e-11,
+            3.6692034995080366e-11,
+            2.3875426683301164e-11,
+            1.6050286499261137e-11,
+            1.081075807298983e-11,
+            7.349962186603734e-12
+          ]
+        },
+        {
+          "positionIndex": 47,
+          "altitude": {
+            "value": 59375,
+            "units": "meters"
+          },
+          "directionIndex": 4373,
+          "cacheDirection": [
+            -0.5773502691896258,
+            0.5773502691896258,
+            -0.5773502691896258
+          ],
+          "values": [
+            7.706053874459159e-13,
+            6.575708077577431e-13,
+            3.9135308242418026e-13,
+            2.4472427309344546e-13,
+            1.3779997257992897e-13,
+            8.373539748643036e-14,
+            5.1616855024722885e-14,
+            3.226845348668256e-14,
+            2.009791219983418e-14,
+            1.2688185138281084e-14,
+            8.194470964849581e-15,
+            5.306915763913727e-15,
+            3.554001058760552e-15,
+            2.386414785382946e-15,
+            1.6183543400129653e-15
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Jthrough2",
+      "quantity": "spectral-scattering-density",
+      "units": "W m^-3 sr^-1 nm^-1",
+      "order": {
+        "kind": "cumulative-through",
+        "value": 2,
+        "included": [
+          1,
+          2
+        ]
+      },
+      "basisId": "algorithm32-native-15-spectral-basis-v1",
+      "positionDomainId": "algorithm32-native-48-position-v1",
+      "directionDomainId": "algorithm32-cubed-sphere-w27-outgoing-v1",
+      "precision": "binary64",
+      "provenanceIdentity": "algorithm32-distant-sun-cpu-recurrence-through-2-v1",
+      "queryKind": "scatteringDensity",
+      "derivation": "binary64 operation-order sum J1 through J2",
+      "queries": [
+        {
+          "positionIndex": 0,
+          "altitude": {
+            "value": 2,
+            "units": "meters"
+          },
+          "directionIndex": 364,
+          "cacheDirection": [
+            1,
+            0,
+            0
+          ],
+          "values": [
+            5.869451710026366e-8,
+            1.0977769846203528e-7,
+            1.2872075085640158e-7,
+            1.4634856743702175e-7,
+            1.4325271813256394e-7,
+            1.5385978376589337e-7,
+            1.824817916463082e-7,
+            2.419053501107007e-7,
+            3.3365012050376923e-7,
+            4.5882206055403836e-7,
+            6.149206220645114e-7,
+            7.80001252862984e-7,
+            9.671602175950134e-7,
+            0.0000011428217118814057,
+            0.0000013042907682476846
+          ]
+        },
+        {
+          "positionIndex": 0,
+          "altitude": {
+            "value": 2,
+            "units": "meters"
+          },
+          "directionIndex": 1093,
+          "cacheDirection": [
+            -1,
+            0,
+            0
+          ],
+          "values": [
+            5.7052875372377526e-8,
+            1.1683726034071951e-7,
+            1.5359506497501294e-7,
+            1.9573134481888188e-7,
+            2.0754460867671644e-7,
+            2.204532928430052e-7,
+            2.22187983795134e-7,
+            2.1442175033927638e-7,
+            1.965209662171877e-7,
+            1.7557912522499447e-7,
+            1.5552097228346782e-7,
+            1.3473091252166019e-7,
+            1.1834112480381501e-7,
+            1.0261801248399131e-7,
+            8.878384274171338e-8
+          ]
+        },
+        {
+          "positionIndex": 12,
+          "altitude": {
+            "value": 15625.000000000002,
+            "units": "meters"
+          },
+          "directionIndex": 0,
+          "cacheDirection": [
+            0.5773502691896258,
+            -0.5773502691896258,
+            -0.5773502691896258
+          ],
+          "values": [
+            9.080309102596842e-8,
+            1.8239662483502787e-7,
+            2.1540828265564332e-7,
+            2.3487741499557726e-7,
+            2.0986801656879442e-7,
+            1.888547246758181e-7,
+            1.6372835597671085e-7,
+            1.3839567963424926e-7,
+            1.13021973473336e-7,
+            9.129426086305178e-8,
+            7.395239966751757e-8,
+            5.9089097623961085e-8,
+            4.815043141884047e-8,
+            3.887873041040951e-8,
+            3.138232795184449e-8
+          ]
+        },
+        {
+          "positionIndex": 24,
+          "altitude": {
+            "value": 30624.999999999996,
+            "units": "meters"
+          },
+          "directionIndex": 2551,
+          "cacheDirection": [
+            0,
+            -1,
+            0
+          ],
+          "values": [
+            6.15899142328698e-8,
+            7.935790660924649e-8,
+            6.763523929488028e-8,
+            5.8236873567654426e-8,
+            4.380838132356713e-8,
+            3.471720879613723e-8,
+            2.736464540239739e-8,
+            2.1516133314574032e-8,
+            1.6618863939691838e-8,
+            1.2853067150817595e-8,
+            1.0060641713843097e-8,
+            7.821858897476909e-9,
+            6.235143278080464e-9,
+            4.945335825602558e-9,
+            3.933787217846404e-9
+          ]
+        },
+        {
+          "positionIndex": 47,
+          "altitude": {
+            "value": 59375,
+            "units": "meters"
+          },
+          "directionIndex": 4373,
+          "cacheDirection": [
+            -0.5773502691896258,
+            0.5773502691896258,
+            -0.5773502691896258
+          ],
+          "values": [
+            3.1590467917030207e-9,
+            3.7135367082099534e-9,
+            2.9731934378081945e-9,
+            2.45047709558427e-9,
+            1.7864838678020542e-9,
+            1.3836664310820003e-9,
+            1.0721613346671816e-9,
+            8.321828911263751e-10,
+            6.364156945365021e-10,
+            4.884125601760034e-10,
+            3.799782845610027e-10,
+            2.939915193878354e-10,
+            2.3344003553552595e-10,
+            1.845644394559161e-10,
+            1.4643207848753555e-10
+          ]
+        }
+      ]
+    },
+    {
+      "name": "L2",
+      "quantity": "spectral-radiance-density",
+      "units": "W m^-2 sr^-1 nm^-1",
+      "order": {
+        "kind": "pure",
+        "value": 2
+      },
+      "basisId": "algorithm32-native-15-spectral-basis-v1",
+      "positionDomainId": "algorithm32-native-48-position-v1",
+      "directionDomainId": "algorithm32-fibonacci-34-incoming-v1",
+      "precision": "binary64",
+      "provenanceIdentity": "algorithm32-star-selected-jk-to-lk-transport-98aa61f7-v1",
+      "queryKind": "radiance",
+      "queries": [
+        {
+          "positionIndex": 0,
+          "altitude": {
+            "value": 2,
+            "units": "meters"
+          },
+          "directionIndex": 17,
+          "cacheDirection": [
+            1,
+            0,
+            0
+          ],
+          "values": [
+            0.0007154798778690656,
+            0.0014289382402746362,
+            0.0017995236104044099,
+            0.002198037567045332,
+            0.0022965148167733195,
+            0.0025876921599357044,
+            0.003140463929335206,
+            0.004192858122224798,
+            0.0058288942695215755,
+            0.008140311874668571,
+            0.011146489319817139,
+            0.01448905901163628,
+            0.018426111748681546,
+            0.022322541218047564,
+            0.02609447550898498
+          ]
+        },
+        {
+          "positionIndex": 12,
+          "altitude": {
+            "value": 15625.000000000002,
+            "units": "meters"
+          },
+          "directionIndex": 0,
+          "cacheDirection": [
+            -6.118005084603635e-17,
+            2.5299871800168635e-18,
+            -1
+          ],
+          "values": [
+            0.003103632920219677,
+            0.004921864157382232,
+            0.004621114713336533,
+            0.00403513614665185,
+            0.002906265975329597,
+            0.002121722553354919,
+            0.0015021936846557015,
+            0.0010439893886880387,
+            0.0007057496058422285,
+            0.0004750631840232073,
+            0.00032278338676752127,
+            0.00021769433903693215,
+            0.00015063789161177808,
+            0.00010387945144154041,
+            0.00007200277263533204
+          ]
+        },
+        {
+          "positionIndex": 24,
+          "altitude": {
+            "value": 30624.999999999996,
+            "units": "meters"
+          },
+          "directionIndex": 8,
+          "cacheDirection": [
+            -0.784182423271093,
+            0.3236991047619375,
+            -0.5294117647058824
+          ],
+          "values": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "positionIndex": 36,
+          "altitude": {
+            "value": 45625,
+            "units": "meters"
+          },
+          "directionIndex": 25,
+          "cacheDirection": [
+            0.8288129085212791,
+            -0.3026811448889182,
+            0.47058823529411775
+          ],
+          "values": [
+            0.0000012151504303330688,
+            0.0000010464476471000176,
+            6.26686777216935e-7,
+            3.935972993628691e-7,
+            2.2232089739431021e-7,
+            1.3540415380491115e-7,
+            8.360903074230237e-8,
+            5.2335836055998725e-8,
+            3.2628848509977506e-8,
+            2.0615075026290024e-8,
+            1.3322016550953578e-8,
+            8.631797095766765e-9,
+            5.782897465297027e-9,
+            3.88428405858927e-9,
+            2.6348196994774763e-9
+          ]
+        },
+        {
+          "positionIndex": 47,
+          "altitude": {
+            "value": 59375,
+            "units": "meters"
+          },
+          "directionIndex": 33,
+          "cacheDirection": [
+            0.2583867092358571,
+            -0.21776859209109395,
+            0.9411764705882353
+          ],
+          "values": [
+            2.224054064105166e-9,
+            1.89790588268651e-9,
+            1.129571473572957e-9,
+            7.063679017239584e-10,
+            3.977493215004124e-10,
+            2.416985729190144e-10,
+            1.4899099733297232e-10,
+            9.31427978407727e-11,
+            5.8012836451525485e-11,
+            3.6624713932019524e-11,
+            2.3653580955512908e-11,
+            1.5318603051205892e-11,
+            1.025877058419786e-11,
+            6.88849492436698e-12,
+            4.6714591745820015e-12
+          ]
+        }
+      ]
+    },
+    {
+      "name": "J3",
+      "quantity": "spectral-scattering-density",
+      "units": "W m^-3 sr^-1 nm^-1",
+      "order": {
+        "kind": "pure",
+        "value": 3
+      },
+      "basisId": "algorithm32-native-15-spectral-basis-v1",
+      "positionDomainId": "algorithm32-native-48-position-v1",
+      "directionDomainId": "algorithm32-cubed-sphere-w27-outgoing-v1",
+      "precision": "binary64",
+      "provenanceIdentity": "algorithm32-star-selected-lkm1-to-jk-scatter-98aa61f7-v1",
+      "queryKind": "scatteringDensity",
+      "queries": [
+        {
+          "positionIndex": 0,
+          "altitude": {
+            "value": 2,
+            "units": "meters"
+          },
+          "directionIndex": 364,
+          "cacheDirection": [
+            1,
+            0,
+            0
+          ],
+          "values": [
+            7.215814635208688e-8,
+            1.1964380333576705e-7,
+            1.2790327512448914e-7,
+            1.355494471285503e-7,
+            1.2463391681223846e-7,
+            1.2335418047591687e-7,
+            1.2958903180694956e-7,
+            1.4910990404814322e-7,
+            1.8207415249324993e-7,
+            2.298724905452473e-7,
+            2.9153452610665465e-7,
+            3.5679850530049303e-7,
+            4.317070879930655e-7,
+            5.009606371515812e-7,
+            5.634971096417247e-7
+          ]
+        },
+        {
+          "positionIndex": 0,
+          "altitude": {
+            "value": 2,
+            "units": "meters"
+          },
+          "directionIndex": 1093,
+          "cacheDirection": [
+            -1,
+            0,
+            0
+          ],
+          "values": [
+            5.594906260543103e-8,
+            9.393221857495684e-8,
+            1.0169652472330811e-7,
+            1.086810497774972e-7,
+            9.912300798350083e-8,
+            9.294585919461722e-8,
+            8.46281579447283e-8,
+            7.523103740809777e-8,
+            6.456292399741108e-8,
+            5.477785387876086e-8,
+            4.664954152082706e-8,
+            3.9284373891406687e-8,
+            3.386915161268961e-8,
+            2.9072873692705898e-8,
+            2.5079384990446983e-8
+          ]
+        },
+        {
+          "positionIndex": 12,
+          "altitude": {
+            "value": 15625.000000000002,
+            "units": "meters"
+          },
+          "directionIndex": 0,
+          "cacheDirection": [
+            0.5773502691896258,
+            -0.5773502691896258,
+            -0.5773502691896258
+          ],
+          "values": [
+            3.98359664049449e-9,
+            3.939879927779108e-9,
+            2.4926973147048094e-9,
+            1.548229811278482e-9,
+            8.244110841628542e-10,
+            4.579861948085543e-10,
+            2.523528192687356e-10,
+            1.3899193185693005e-10,
+            7.560040044792471e-11,
+            4.1476052414116694e-11,
+            2.3226171682333704e-11,
+            1.3037568345409226e-11,
+            7.574571012418073e-12,
+            4.420097984275706e-12,
+            2.6110204113059003e-12
+          ]
+        },
+        {
+          "positionIndex": 24,
+          "altitude": {
+            "value": 30624.999999999996,
+            "units": "meters"
+          },
+          "directionIndex": 2551,
+          "cacheDirection": [
+            0,
+            -1,
+            0
+          ],
+          "values": [
+            6.010068449142713e-11,
+            4.103004302557375e-11,
+            1.9408430087279005e-11,
+            9.65312838233742e-12,
+            4.34326167661887e-12,
+            2.122914639951338e-12,
+            1.0606133267517373e-12,
+            5.416371184087052e-13,
+            2.777501520464468e-13,
+            1.4547434902350743e-13,
+            7.851635487807407e-14,
+            4.2789812228212003e-14,
+            2.4272405683889668e-14,
+            1.3890224950119121e-14,
+            8.074486117385659e-15
+          ]
+        },
+        {
+          "positionIndex": 47,
+          "altitude": {
+            "value": 59375,
+            "units": "meters"
+          },
+          "directionIndex": 4373,
+          "cacheDirection": [
+            -0.5773502691896258,
+            0.5773502691896258,
+            -0.5773502691896258
+          ],
+          "values": [
+            1.9187930743769202e-16,
+            1.1889007659057949e-16,
+            5.260775082135158e-17,
+            2.496316779827367e-17,
+            1.0857728540177155e-17,
+            5.176764748591608e-18,
+            2.538740511805489e-18,
+            1.278353149541499e-18,
+            6.484673621195097e-19,
+            3.36782904764852e-19,
+            1.805632520758328e-19,
+            9.788195261397578e-20,
+            5.5286388414209e-20,
+            3.15287451764046e-20,
+            1.8275844652704667e-20
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Jthrough3",
+      "quantity": "spectral-scattering-density",
+      "units": "W m^-3 sr^-1 nm^-1",
+      "order": {
+        "kind": "cumulative-through",
+        "value": 3,
+        "included": [
+          1,
+          2,
+          3
+        ]
+      },
+      "basisId": "algorithm32-native-15-spectral-basis-v1",
+      "positionDomainId": "algorithm32-native-48-position-v1",
+      "directionDomainId": "algorithm32-cubed-sphere-w27-outgoing-v1",
+      "precision": "binary64",
+      "provenanceIdentity": "algorithm32-distant-sun-cpu-recurrence-through-3-v1",
+      "queryKind": "scatteringDensity",
+      "derivation": "binary64 operation-order sum J1 through J3",
+      "queries": [
+        {
+          "positionIndex": 0,
+          "altitude": {
+            "value": 2,
+            "units": "meters"
+          },
+          "directionIndex": 364,
+          "cacheDirection": [
+            1,
+            0,
+            0
+          ],
+          "values": [
+            1.3085266345235054e-7,
+            2.2942150179780232e-7,
+            2.5662402598089075e-7,
+            2.8189801456557205e-7,
+            2.678866349448024e-7,
+            2.7721396424181024e-7,
+            3.120708234532578e-7,
+            3.910152541588439e-7,
+            5.157242729970191e-7,
+            6.886945510992857e-7,
+            9.06455148171166e-7,
+            0.000001136799758163477,
+            0.0000013988673055880788,
+            0.000001643782349032987,
+            0.0000018677878778894093
+          ]
+        },
+        {
+          "positionIndex": 0,
+          "altitude": {
+            "value": 2,
+            "units": "meters"
+          },
+          "directionIndex": 1093,
+          "cacheDirection": [
+            -1,
+            0,
+            0
+          ],
+          "values": [
+            1.1300193797780855e-7,
+            2.1076947891567635e-7,
+            2.5529158969832107e-7,
+            3.044123945963791e-7,
+            3.0666761666021725e-7,
+            3.1339915203762243e-7,
+            3.068161417398623e-7,
+            2.896527877473741e-7,
+            2.610838902145988e-7,
+            2.3035697910375532e-7,
+            2.0217051380429487e-7,
+            1.7401528641306686e-7,
+            1.5221027641650464e-7,
+            1.316908861766972e-7,
+            1.1386322773216036e-7
+          ]
+        },
+        {
+          "positionIndex": 12,
+          "altitude": {
+            "value": 15625.000000000002,
+            "units": "meters"
+          },
+          "directionIndex": 0,
+          "cacheDirection": [
+            0.5773502691896258,
+            -0.5773502691896258,
+            -0.5773502691896258
+          ],
+          "values": [
+            9.478668766646292e-8,
+            1.86336504762807e-7,
+            2.1790097997034812e-7,
+            2.3642564480685575e-7,
+            2.1069242765295727e-7,
+            1.8931271087062666e-7,
+            1.639807087959796e-7,
+            1.385346715661062e-7,
+            1.1309757387378393e-7,
+            9.13357369154659e-8,
+            7.39756258391999e-8,
+            5.910213519230649e-8,
+            4.8158005989852885e-8,
+            3.888315050839379e-8,
+            3.1384938972255796e-8
+          ]
+        },
+        {
+          "positionIndex": 24,
+          "altitude": {
+            "value": 30624.999999999996,
+            "units": "meters"
+          },
+          "directionIndex": 2551,
+          "cacheDirection": [
+            0,
+            -1,
+            0
+          ],
+          "values": [
+            6.165001491736122e-8,
+            7.939893665227207e-8,
+            6.765464772496757e-8,
+            5.8246526696036764e-8,
+            4.381272458524375e-8,
+            3.471933171077718e-8,
+            2.736570601572414e-8,
+            2.151667495169244e-8,
+            1.6619141689843885e-8,
+            1.2853212625166619e-8,
+            1.0060720230197975e-8,
+            7.821901687289138e-9,
+            6.235167550486148e-9,
+            4.9453497158275075e-9,
+            3.933795292332521e-9
+          ]
+        },
+        {
+          "positionIndex": 47,
+          "altitude": {
+            "value": 59375,
+            "units": "meters"
+          },
+          "directionIndex": 4373,
+          "cacheDirection": [
+            -0.5773502691896258,
+            0.5773502691896258,
+            -0.5773502691896258
+          ],
+          "values": [
+            3.159046983582328e-9,
+            3.7135368271000302e-9,
+            2.9731934904159455e-9,
+            2.4504771205474376e-9,
+            1.7864838786597827e-9,
+            1.383666436258765e-9,
+            1.0721613372059222e-9,
+            8.321828924047283e-10,
+            6.364156951849694e-10,
+            4.884125605127862e-10,
+            3.7997828474156595e-10,
+            2.9399151948571734e-10,
+            2.3344003559081233e-10,
+            1.8456443948744483e-10,
+            1.4643207850581138e-10
+          ]
+        }
+      ]
+    },
+    {
+      "name": "L3",
+      "quantity": "spectral-radiance-density",
+      "units": "W m^-2 sr^-1 nm^-1",
+      "order": {
+        "kind": "pure",
+        "value": 3
+      },
+      "basisId": "algorithm32-native-15-spectral-basis-v1",
+      "positionDomainId": "algorithm32-native-48-position-v1",
+      "directionDomainId": "algorithm32-fibonacci-34-incoming-v1",
+      "precision": "binary64",
+      "provenanceIdentity": "algorithm32-star-selected-jk-to-lk-transport-98aa61f7-v1",
+      "queryKind": "radiance",
+      "queries": [
+        {
+          "positionIndex": 0,
+          "altitude": {
+            "value": 2,
+            "units": "meters"
+          },
+          "directionIndex": 17,
+          "cacheDirection": [
+            1,
+            0,
+            0
+          ],
+          "values": [
+            0.0008795997624013511,
+            0.001557358377074794,
+            0.0017881983560672603,
+            0.002037885023911142,
+            0.002011971464884549,
+            0.0021330645970640953,
+            0.0023952509015342026,
+            0.002939307539324731,
+            0.003814199966811936,
+            0.00509328477461111,
+            0.00679867751199136,
+            0.008718847205271878,
+            0.011012205263386943,
+            0.013296127059250979,
+            0.015517888611946456
+          ]
+        },
+        {
+          "positionIndex": 12,
+          "altitude": {
+            "value": 15625.000000000002,
+            "units": "meters"
+          },
+          "directionIndex": 0,
+          "cacheDirection": [
+            -6.118005084603635e-17,
+            2.5299871800168635e-18,
+            -1
+          ],
+          "values": [
+            0.00040363980249070194,
+            0.0004694865725430549,
+            0.00033147271003404575,
+            0.00022202264665561376,
+            0.00012468476955124203,
+            0.00007197775296930167,
+            0.000040798866525594705,
+            0.00002295435563332472,
+            0.00001268977232056746,
+            0.000007050100482024536,
+            0.000003987223620855664,
+            0.0000022558161611547272,
+            0.0000013188904408346093,
+            7.735874893218914e-7,
+            4.5889371153291117e-7
+          ]
+        },
+        {
+          "positionIndex": 24,
+          "altitude": {
+            "value": 30624.999999999996,
+            "units": "meters"
+          },
+          "directionIndex": 8,
+          "cacheDirection": [
+            -0.784182423271093,
+            0.3236991047619375,
+            -0.5294117647058824
+          ],
+          "values": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "positionIndex": 36,
+          "altitude": {
+            "value": 45625,
+            "units": "meters"
+          },
+          "directionIndex": 25,
+          "cacheDirection": [
+            0.8288129085212791,
+            -0.3026811448889182,
+            0.47058823529411775
+          ],
+          "values": [
+            2.8632474279675063e-9,
+            1.7941002933864256e-9,
+            7.999567951823036e-10,
+            3.8162435323801615e-10,
+            1.666237869517437e-10,
+            7.966576927849977e-11,
+            3.9150469230717e-11,
+            1.9744904534925897e-11,
+            1.002810942704201e-11,
+            5.21304039375742e-12,
+            2.7970069666203226e-12,
+            1.517134814886431e-12,
+            8.57327598713857e-13,
+            4.891063835839843e-13,
+            2.836035548941748e-13
+          ]
+        },
+        {
+          "positionIndex": 47,
+          "altitude": {
+            "value": 59375,
+            "units": "meters"
+          },
+          "directionIndex": 33,
+          "cacheDirection": [
+            0.2583867092358571,
+            -0.21776859209109395,
+            0.9411764705882353
+          ],
+          "values": [
+            5.892959479498741e-13,
+            3.6514152919375933e-13,
+            1.615743305654602e-13,
+            7.667031074413399e-14,
+            3.334801681364223e-14,
+            1.5899813265017707e-14,
+            7.797471845227541e-15,
+            3.9263389817665025e-15,
+            1.9917103397549207e-15,
+            1.0344010609739853e-15,
+            5.54586083310111e-16,
+            3.0063723277066005e-16,
+            1.6980825429347942e-16,
+            9.683840258764818e-17,
+            5.613305483650605e-17
+          ]
+        }
+      ]
+    },
+    {
+      "name": "J4",
+      "quantity": "spectral-scattering-density",
+      "units": "W m^-3 sr^-1 nm^-1",
+      "order": {
+        "kind": "pure",
+        "value": 4
+      },
+      "basisId": "algorithm32-native-15-spectral-basis-v1",
+      "positionDomainId": "algorithm32-native-48-position-v1",
+      "directionDomainId": "algorithm32-cubed-sphere-w27-outgoing-v1",
+      "precision": "binary64",
+      "provenanceIdentity": "algorithm32-star-selected-lkm1-to-jk-scatter-98aa61f7-v1",
+      "queryKind": "scatteringDensity",
+      "queries": [
+        {
+          "positionIndex": 0,
+          "altitude": {
+            "value": 2,
+            "units": "meters"
+          },
+          "directionIndex": 364,
+          "cacheDirection": [
+            1,
+            0,
+            0
+          ],
+          "values": [
+            5.691630436503301e-8,
+            8.550862879139942e-8,
+            8.53791581809338e-8,
+            8.657048317754805e-8,
+            7.746731121091653e-8,
+            7.531819809963543e-8,
+            7.795053471187252e-8,
+            8.846626867807183e-8,
+            1.0693186165100047e-7,
+            1.3431442063413337e-7,
+            1.701540771677283e-7,
+            2.0848707039055148e-7,
+            2.5279362596460773e-7,
+            2.940252493109865e-7,
+            3.3142705581382524e-7
+          ]
+        },
+        {
+          "positionIndex": 0,
+          "altitude": {
+            "value": 2,
+            "units": "meters"
+          },
+          "directionIndex": 1093,
+          "cacheDirection": [
+            -1,
+            0,
+            0
+          ],
+          "values": [
+            3.112150749499367e-8,
+            4.295179427821693e-8,
+            3.891776968056797e-8,
+            3.560414839932331e-8,
+            2.8583081339044043e-8,
+            2.433911483614746e-8,
+            2.0769706845556267e-8,
+            1.7824154881227006e-8,
+            1.516476965566819e-8,
+            1.3052954077192021e-8,
+            1.1494159204258878e-8,
+            1.0156119548312314e-8,
+            9.279886322264782e-9,
+            8.48997503721165e-9,
+            7.820266719441971e-9
+          ]
+        },
+        {
+          "positionIndex": 12,
+          "altitude": {
+            "value": 15625.000000000002,
+            "units": "meters"
+          },
+          "directionIndex": 0,
+          "cacheDirection": [
+            0.5773502691896258,
+            -0.5773502691896258,
+            -0.5773502691896258
+          ],
+          "values": [
+            3.9488373299566835e-10,
+            3.001119778851546e-10,
+            1.4711385424535672e-10,
+            7.147192972308542e-11,
+            3.0068422342954626e-11,
+            1.3330617549302031e-11,
+            5.91960323106004e-12,
+            2.6523885618638906e-12,
+            1.1841218481223017e-12,
+            5.376837856741929e-13,
+            2.511695393726984e-13,
+            1.1847469052718274e-13,
+            5.82364967487475e-14,
+            2.893664454134984e-14,
+            1.4641750687213582e-14
+          ]
+        },
+        {
+          "positionIndex": 24,
+          "altitude": {
+            "value": 30624.999999999996,
+            "units": "meters"
+          },
+          "directionIndex": 2551,
+          "cacheDirection": [
+            0,
+            -1,
+            0
+          ],
+          "values": [
+            1.0971859277503729e-12,
+            5.501484007860718e-13,
+            1.950129210060485e-13,
+            7.40098576581021e-14,
+            2.5824804065136132e-14,
+            9.933091506304403e-15,
+            3.956725304901714e-15,
+            1.6302472746295422e-15,
+            6.817389802518632e-16,
+            2.940326879779003e-16,
+            1.3184629197432505e-16,
+            6.018270349946622e-17,
+            2.880732435978921e-17,
+            1.4006736383976168e-17,
+            6.961951455221886e-18
+          ]
+        },
+        {
+          "positionIndex": 47,
+          "altitude": {
+            "value": 59375,
+            "units": "meters"
+          },
+          "directionIndex": 4373,
+          "cacheDirection": [
+            -0.5773502691896258,
+            0.5773502691896258,
+            -0.5773502691896258
+          ],
+          "values": [
+            4.77626459222057e-20,
+            2.1488842533725235e-20,
+            7.069605523031138e-21,
+            2.5455809445534094e-21,
+            8.55250747647476e-22,
+            3.1994288561112e-22,
+            1.2482736663693508e-22,
+            5.062771071439219e-23,
+            2.0916550921529639e-23,
+            8.936456760737645e-24,
+            3.9774306602431056e-24,
+            1.804794948956371e-24,
+            8.59772814905918e-25,
+            4.164206612985472e-25,
+            2.0632228179790125e-25
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Jthrough4",
+      "quantity": "spectral-scattering-density",
+      "units": "W m^-3 sr^-1 nm^-1",
+      "order": {
+        "kind": "cumulative-through",
+        "value": 4,
+        "included": [
+          1,
+          2,
+          3,
+          4
+        ]
+      },
+      "basisId": "algorithm32-native-15-spectral-basis-v1",
+      "positionDomainId": "algorithm32-native-48-position-v1",
+      "directionDomainId": "algorithm32-cubed-sphere-w27-outgoing-v1",
+      "precision": "binary64",
+      "provenanceIdentity": "algorithm32-distant-sun-cpu-recurrence-through-4-v1",
+      "queryKind": "scatteringDensity",
+      "derivation": "binary64 operation-order sum J1 through J4",
+      "queries": [
+        {
+          "positionIndex": 0,
+          "altitude": {
+            "value": 2,
+            "units": "meters"
+          },
+          "directionIndex": 364,
+          "cacheDirection": [
+            1,
+            0,
+            0
+          ],
+          "values": [
+            1.8776896781738354e-7,
+            3.1493013058920175e-7,
+            3.4200318416182456e-7,
+            3.6846849774312013e-7,
+            3.453539461557189e-7,
+            3.5253216234144565e-7,
+            3.900213581651303e-7,
+            4.794815228369157e-7,
+            6.226561346480196e-7,
+            8.230089717334191e-7,
+            0.0000010766092253388944,
+            0.0000013452868285540285,
+            0.0000016516609315526865,
+            0.0000019378075983439734,
+            0.0000021992149337032346
+          ]
+        },
+        {
+          "positionIndex": 0,
+          "altitude": {
+            "value": 2,
+            "units": "meters"
+          },
+          "directionIndex": 1093,
+          "cacheDirection": [
+            -1,
+            0,
+            0
+          ],
+          "values": [
+            1.4412344547280222e-7,
+            2.537212731938933e-7,
+            2.9420935937888905e-7,
+            3.4001654299570237e-7,
+            3.352506979992613e-7,
+            3.377382668737699e-7,
+            3.2758584858541857e-7,
+            3.074769426286011e-7,
+            2.7624865987026696e-7,
+            2.4340993318094736e-7,
+            2.1366467300855374e-7,
+            1.8417140596137917e-7,
+            1.614901627387694e-7,
+            1.4018086121390886e-7,
+            1.2168349445160232e-7
+          ]
+        },
+        {
+          "positionIndex": 12,
+          "altitude": {
+            "value": 15625.000000000002,
+            "units": "meters"
+          },
+          "directionIndex": 0,
+          "cacheDirection": [
+            0.5773502691896258,
+            -0.5773502691896258,
+            -0.5773502691896258
+          ],
+          "values": [
+            9.518157139945858e-8,
+            1.8663661674069216e-7,
+            2.1804809382459347e-7,
+            2.3649711673657885e-7,
+            2.1072249607530022e-7,
+            1.8932604148817595e-7,
+            1.6398662839921065e-7,
+            1.3853732395466807e-7,
+            1.1309875799563204e-7,
+            9.133627459925158e-8,
+            7.397587700873927e-8,
+            5.910225366699702e-8,
+            4.815806422634963e-8,
+            3.888317944503833e-8,
+            3.138495361400648e-8
+          ]
+        },
+        {
+          "positionIndex": 24,
+          "altitude": {
+            "value": 30624.999999999996,
+            "units": "meters"
+          },
+          "directionIndex": 2551,
+          "cacheDirection": [
+            0,
+            -1,
+            0
+          ],
+          "values": [
+            6.165111210328897e-8,
+            7.939948680067286e-8,
+            6.765484273788857e-8,
+            5.8246600705894425e-8,
+            4.381275041004782e-8,
+            3.471934164386869e-8,
+            2.7365709972449448e-8,
+            2.1516676581939715e-8,
+            1.6619142371582866e-8,
+            1.2853212919199306e-8,
+            1.0060720362044267e-8,
+            7.821901747471841e-9,
+            6.235167579293472e-9,
+            4.945349729834244e-9,
+            3.933795299294473e-9
+          ]
+        },
+        {
+          "positionIndex": 47,
+          "altitude": {
+            "value": 59375,
+            "units": "meters"
+          },
+          "directionIndex": 4373,
+          "cacheDirection": [
+            -0.5773502691896258,
+            0.5773502691896258,
+            -0.5773502691896258
+          ],
+          "values": [
+            3.1590469836300908e-9,
+            3.713536827121519e-9,
+            2.973193490423015e-9,
+            2.4504771205499833e-9,
+            1.786483878660638e-9,
+            1.3836664362590849e-9,
+            1.072161337206047e-9,
+            8.321828924047789e-10,
+            6.364156951849903e-10,
+            4.884125605127951e-10,
+            3.7997828474156993e-10,
+            2.9399151948571915e-10,
+            2.334400355908132e-10,
+            1.8456443948744525e-10,
+            1.464320785058116e-10
+          ]
+        }
+      ]
+    }
+  ]
+}

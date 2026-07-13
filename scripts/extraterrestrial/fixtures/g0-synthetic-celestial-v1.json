@@ -1,0 +1,695 @@
+{
+  "schemaVersion": "celestial-contract-v1",
+  "fixtureId": "g0-synthetic-celestial-v1",
+  "claimBoundary": "Synthetic contract mechanics only. This fixture makes no astronomical, atmospheric-transport, cache-realization, raster, visibility, or GPU claim.",
+  "family": {
+    "familyId": "spherical-sun-stars-radial-v1",
+    "geometryKind": "concentric-spherical-ground-and-atmosphere",
+    "atmosphereKind": "radially-symmetric",
+    "compositionPolicy": "additive",
+    "representation": "unrealized-contract-only"
+  },
+  "spectralBasis": {
+    "kind": "algorithm32-spectral-basis",
+    "id": "algorithm32-native-15-spectral-basis-v1",
+    "schemaRevision": "algorithm32-spectral-basis-v1",
+    "semantics": "contiguous-wavelength-bin-average",
+    "channelCount": 15,
+    "channels": [
+      {
+        "id": "lambda-376",
+        "center": {
+          "value": 375.6666666666667,
+          "units": "nanometers"
+        },
+        "width": {
+          "value": 31.333333333333332,
+          "units": "nanometers"
+        }
+      },
+      {
+        "id": "lambda-407",
+        "center": {
+          "value": 407,
+          "units": "nanometers"
+        },
+        "width": {
+          "value": 31.333333333333332,
+          "units": "nanometers"
+        }
+      },
+      {
+        "id": "lambda-438",
+        "center": {
+          "value": 438.3333333333333,
+          "units": "nanometers"
+        },
+        "width": {
+          "value": 31.333333333333332,
+          "units": "nanometers"
+        }
+      },
+      {
+        "id": "lambda-470",
+        "center": {
+          "value": 469.66666666666663,
+          "units": "nanometers"
+        },
+        "width": {
+          "value": 31.333333333333332,
+          "units": "nanometers"
+        }
+      },
+      {
+        "id": "lambda-501",
+        "center": {
+          "value": 501,
+          "units": "nanometers"
+        },
+        "width": {
+          "value": 31.333333333333332,
+          "units": "nanometers"
+        }
+      },
+      {
+        "id": "lambda-532",
+        "center": {
+          "value": 532.3333333333333,
+          "units": "nanometers"
+        },
+        "width": {
+          "value": 31.333333333333332,
+          "units": "nanometers"
+        }
+      },
+      {
+        "id": "lambda-564",
+        "center": {
+          "value": 563.6666666666666,
+          "units": "nanometers"
+        },
+        "width": {
+          "value": 31.333333333333332,
+          "units": "nanometers"
+        }
+      },
+      {
+        "id": "lambda-595",
+        "center": {
+          "value": 595,
+          "units": "nanometers"
+        },
+        "width": {
+          "value": 31.333333333333332,
+          "units": "nanometers"
+        }
+      },
+      {
+        "id": "lambda-626",
+        "center": {
+          "value": 626.3333333333333,
+          "units": "nanometers"
+        },
+        "width": {
+          "value": 31.333333333333332,
+          "units": "nanometers"
+        }
+      },
+      {
+        "id": "lambda-658",
+        "center": {
+          "value": 657.6666666666666,
+          "units": "nanometers"
+        },
+        "width": {
+          "value": 31.333333333333332,
+          "units": "nanometers"
+        }
+      },
+      {
+        "id": "lambda-689",
+        "center": {
+          "value": 689,
+          "units": "nanometers"
+        },
+        "width": {
+          "value": 31.333333333333332,
+          "units": "nanometers"
+        }
+      },
+      {
+        "id": "lambda-720",
+        "center": {
+          "value": 720.3333333333333,
+          "units": "nanometers"
+        },
+        "width": {
+          "value": 31.333333333333332,
+          "units": "nanometers"
+        }
+      },
+      {
+        "id": "lambda-752",
+        "center": {
+          "value": 751.6666666666666,
+          "units": "nanometers"
+        },
+        "width": {
+          "value": 31.333333333333332,
+          "units": "nanometers"
+        }
+      },
+      {
+        "id": "lambda-783",
+        "center": {
+          "value": 783,
+          "units": "nanometers"
+        },
+        "width": {
+          "value": 31.333333333333332,
+          "units": "nanometers"
+        }
+      },
+      {
+        "id": "lambda-814",
+        "center": {
+          "value": 814.3333333333333,
+          "units": "nanometers"
+        },
+        "width": {
+          "value": 31.333333333333332,
+          "units": "nanometers"
+        }
+      }
+    ],
+    "contentHash": "sha256:a03a3c7f45d9bd4ff8adf6482e9d1aac1acd72423758ecf797ac24f6dffba891"
+  },
+  "placementProviderContract": {
+    "id": "etx-analytic-placement-provider-v1",
+    "frameId": "etx-synthetic-celestial-rh-v1",
+    "originConvention": "observer-independent-infinite-direction",
+    "directionConvention": "receiver-to-source",
+    "timeScale": "etx-synthetic-linear-seconds-v1",
+    "placementForms": [
+      "distant-direction",
+      "infinite-direction"
+    ],
+    "provenanceLabel": "synthetic-mechanics-only-no-astronomy-claim",
+    "contentFingerprint": "sha256:c513ae1c686f022f89153515cef956167e119f84b2fad4963a70489c291f8a35"
+  },
+  "geometry": {
+    "body": {
+      "bodyId": "etx-synthetic-spherical-body-v1",
+      "bottomRadius": {
+        "value": 6360000,
+        "units": "meters"
+      },
+      "topRadius": {
+        "value": 6420000,
+        "units": "meters"
+      }
+    },
+    "frames": {
+      "celestial": {
+        "frameId": "etx-synthetic-celestial-rh-v1",
+        "handedness": "right",
+        "axisMeaning": [
+          "+x-reference",
+          "+y-east",
+          "+z-north"
+        ]
+      },
+      "body": {
+        "frameId": "etx-synthetic-body-fixed-rh-v1",
+        "handedness": "right"
+      },
+      "model": {
+        "frameId": "etx-synthetic-model-rh-y-up-v1",
+        "handedness": "right",
+        "units": "meters"
+      }
+    },
+    "transforms": {
+      "bodyFromCelestial": [
+        [
+          0,
+          -1,
+          0
+        ],
+        [
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1
+        ]
+      ],
+      "modelFromBody": [
+        [
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          -1,
+          0
+        ]
+      ],
+      "modelFromCelestial": [
+        [
+          0,
+          -1,
+          0
+        ],
+        [
+          0,
+          0,
+          1
+        ],
+        [
+          -1,
+          0,
+          0
+        ]
+      ]
+    },
+    "receiver": {
+      "receiverId": "etx-equator-one-kilometer-v1",
+      "geographic": {
+        "latitude": {
+          "value": 0,
+          "units": "degrees"
+        },
+        "longitude": {
+          "value": 0,
+          "units": "degrees"
+        },
+        "altitude": {
+          "value": 1000,
+          "units": "meters"
+        }
+      },
+      "bodyPositionModelMeters": [
+        6361000,
+        0,
+        0
+      ],
+      "receiverPositionModelMeters": [
+        6361000,
+        0,
+        0
+      ],
+      "upModel": [
+        1,
+        0,
+        0
+      ]
+    }
+  },
+  "sources": [
+    {
+      "sourceId": "star-alpha",
+      "sourceKind": "point",
+      "placementKind": "infinite-direction",
+      "depth": "infinite",
+      "spectralMeasure": {
+        "quantity": "spectral-irradiance-density",
+        "units": "W m^-2 nm^-1",
+        "basisId": "algorithm32-native-15-spectral-basis-v1",
+        "basisFingerprint": "sha256:a03a3c7f45d9bd4ff8adf6482e9d1aac1acd72423758ecf797ac24f6dffba891",
+        "semantics": "contiguous-wavelength-bin-average",
+        "values": [
+          0.000000001,
+          0.000000002,
+          0.000000003,
+          0.000000004,
+          0.000000005,
+          0.000000006,
+          0.000000007,
+          0.000000008,
+          0.000000009,
+          0.00000001,
+          0.000000011,
+          0.000000012,
+          0.000000013,
+          0.000000014,
+          0.000000015
+        ],
+        "provenance": {
+          "label": "g0-synthetic-star-alpha-ramp",
+          "uncertaintyStatus": "synthetic-exact"
+        }
+      },
+      "support": {
+        "kind": "point"
+      },
+      "placementProviderContractFingerprint": "sha256:c513ae1c686f022f89153515cef956167e119f84b2fad4963a70489c291f8a35"
+    },
+    {
+      "sourceId": "star-beta",
+      "sourceKind": "point",
+      "placementKind": "infinite-direction",
+      "depth": "infinite",
+      "spectralMeasure": {
+        "quantity": "spectral-irradiance-density",
+        "units": "W m^-2 nm^-1",
+        "basisId": "algorithm32-native-15-spectral-basis-v1",
+        "basisFingerprint": "sha256:a03a3c7f45d9bd4ff8adf6482e9d1aac1acd72423758ecf797ac24f6dffba891",
+        "semantics": "contiguous-wavelength-bin-average",
+        "values": [
+          0.000000016,
+          0.000000017,
+          0.000000018,
+          0.000000019,
+          0.00000002,
+          0.000000021,
+          0.000000022,
+          0.000000023,
+          0.000000024,
+          0.000000025,
+          0.000000026,
+          0.000000027,
+          0.000000028,
+          0.000000029,
+          0.00000003
+        ],
+        "provenance": {
+          "label": "g0-synthetic-star-beta-ramp",
+          "uncertaintyStatus": "synthetic-exact"
+        }
+      },
+      "support": {
+        "kind": "point"
+      },
+      "placementProviderContractFingerprint": "sha256:c513ae1c686f022f89153515cef956167e119f84b2fad4963a70489c291f8a35"
+    },
+    {
+      "sourceId": "sun",
+      "sourceKind": "extended",
+      "placementKind": "distant-direction",
+      "depth": "infinite",
+      "spectralMeasure": {
+        "quantity": "spectral-radiance-density",
+        "units": "W m^-2 sr^-1 nm^-1",
+        "basisId": "algorithm32-native-15-spectral-basis-v1",
+        "basisFingerprint": "sha256:a03a3c7f45d9bd4ff8adf6482e9d1aac1acd72423758ecf797ac24f6dffba891",
+        "semantics": "contiguous-wavelength-bin-average",
+        "values": [
+          101,
+          102,
+          103,
+          104,
+          105,
+          106,
+          107,
+          108,
+          109,
+          110,
+          111,
+          112,
+          113,
+          114,
+          115
+        ],
+        "provenance": {
+          "label": "g0-synthetic-uniform-sun-radiance-ramp",
+          "uncertaintyStatus": "synthetic-exact"
+        }
+      },
+      "support": {
+        "kind": "uniform-disk",
+        "angularRadius": {
+          "value": 0.01,
+          "units": "radians"
+        }
+      },
+      "placementProviderContractFingerprint": "sha256:c513ae1c686f022f89153515cef956167e119f84b2fad4963a70489c291f8a35"
+    }
+  ],
+  "rosterInput": {
+    "layers": [
+      {
+        "layerId": "stars",
+        "kind": "infinite-point-set",
+        "compositionPolicy": "additive",
+        "fixedCapacity": 16,
+        "members": [
+          "star-beta",
+          "star-alpha"
+        ]
+      },
+      {
+        "layerId": "sun",
+        "kind": "distant-extended",
+        "compositionPolicy": "additive",
+        "sourceId": "sun"
+      }
+    ],
+    "foregroundEdges": []
+  },
+  "sharedSun": {
+    "canonicalSourceId": "sun",
+    "consumerReferences": [
+      {
+        "consumerId": "atmospheric-sun",
+        "sourceId": "sun"
+      },
+      {
+        "consumerId": "visible-sun-disk",
+        "sourceId": "sun"
+      }
+    ]
+  },
+  "states": [
+    {
+      "stateId": "t0",
+      "epoch": {
+        "value": 0,
+        "units": "seconds",
+        "timeScale": "etx-synthetic-linear-seconds-v1"
+      },
+      "observationState": {
+        "celestialFrameId": "etx-synthetic-celestial-rh-v1",
+        "bodyFrameId": "etx-synthetic-body-fixed-rh-v1",
+        "modelFrameId": "etx-synthetic-model-rh-y-up-v1",
+        "receiverId": "etx-equator-one-kilometer-v1"
+      },
+      "placements": [
+        {
+          "sourceId": "sun",
+          "direction": [
+            0,
+            -1,
+            0
+          ],
+          "frameId": "etx-synthetic-celestial-rh-v1",
+          "originConvention": "observer-independent-infinite-direction",
+          "directionConvention": "receiver-to-source",
+          "epoch": {
+            "value": 0,
+            "units": "seconds",
+            "timeScale": "etx-synthetic-linear-seconds-v1"
+          },
+          "placementProviderContractFingerprint": "sha256:c513ae1c686f022f89153515cef956167e119f84b2fad4963a70489c291f8a35"
+        },
+        {
+          "sourceId": "star-beta",
+          "direction": [
+            0,
+            -0.6,
+            0.8
+          ],
+          "frameId": "etx-synthetic-celestial-rh-v1",
+          "originConvention": "observer-independent-infinite-direction",
+          "directionConvention": "receiver-to-source",
+          "epoch": {
+            "value": 0,
+            "units": "seconds",
+            "timeScale": "etx-synthetic-linear-seconds-v1"
+          },
+          "placementProviderContractFingerprint": "sha256:c513ae1c686f022f89153515cef956167e119f84b2fad4963a70489c291f8a35"
+        },
+        {
+          "sourceId": "star-alpha",
+          "direction": [
+            0.6,
+            -0.8,
+            0
+          ],
+          "frameId": "etx-synthetic-celestial-rh-v1",
+          "originConvention": "observer-independent-infinite-direction",
+          "directionConvention": "receiver-to-source",
+          "epoch": {
+            "value": 0,
+            "units": "seconds",
+            "timeScale": "etx-synthetic-linear-seconds-v1"
+          },
+          "placementProviderContractFingerprint": "sha256:c513ae1c686f022f89153515cef956167e119f84b2fad4963a70489c291f8a35"
+        }
+      ]
+    },
+    {
+      "stateId": "t1",
+      "epoch": {
+        "value": 1,
+        "units": "seconds",
+        "timeScale": "etx-synthetic-linear-seconds-v1"
+      },
+      "observationState": {
+        "celestialFrameId": "etx-synthetic-celestial-rh-v1",
+        "bodyFrameId": "etx-synthetic-body-fixed-rh-v1",
+        "modelFrameId": "etx-synthetic-model-rh-y-up-v1",
+        "receiverId": "etx-equator-one-kilometer-v1"
+      },
+      "placements": [
+        {
+          "sourceId": "star-alpha",
+          "direction": [
+            0,
+            -0.8,
+            0.6
+          ],
+          "frameId": "etx-synthetic-celestial-rh-v1",
+          "originConvention": "observer-independent-infinite-direction",
+          "directionConvention": "receiver-to-source",
+          "epoch": {
+            "value": 1,
+            "units": "seconds",
+            "timeScale": "etx-synthetic-linear-seconds-v1"
+          },
+          "placementProviderContractFingerprint": "sha256:c513ae1c686f022f89153515cef956167e119f84b2fad4963a70489c291f8a35"
+        },
+        {
+          "sourceId": "sun",
+          "direction": [
+            -0.6,
+            -0.8,
+            0
+          ],
+          "frameId": "etx-synthetic-celestial-rh-v1",
+          "originConvention": "observer-independent-infinite-direction",
+          "directionConvention": "receiver-to-source",
+          "epoch": {
+            "value": 1,
+            "units": "seconds",
+            "timeScale": "etx-synthetic-linear-seconds-v1"
+          },
+          "placementProviderContractFingerprint": "sha256:c513ae1c686f022f89153515cef956167e119f84b2fad4963a70489c291f8a35"
+        },
+        {
+          "sourceId": "star-beta",
+          "direction": [
+            0.8,
+            -0.6,
+            0
+          ],
+          "frameId": "etx-synthetic-celestial-rh-v1",
+          "originConvention": "observer-independent-infinite-direction",
+          "directionConvention": "receiver-to-source",
+          "epoch": {
+            "value": 1,
+            "units": "seconds",
+            "timeScale": "etx-synthetic-linear-seconds-v1"
+          },
+          "placementProviderContractFingerprint": "sha256:c513ae1c686f022f89153515cef956167e119f84b2fad4963a70489c291f8a35"
+        }
+      ]
+    }
+  ],
+  "cameraVariants": [
+    {
+      "variantId": "baseline",
+      "orientationQuaternion": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "projection": "perspective",
+      "verticalFovRadians": 1,
+      "viewport": [
+        640,
+        360
+      ],
+      "display": "linear-srgb"
+    },
+    {
+      "variantId": "rotated-wide",
+      "orientationQuaternion": [
+        0,
+        0.7071067811865476,
+        0,
+        0.7071067811865476
+      ],
+      "projection": "perspective",
+      "verticalFovRadians": 1.5,
+      "viewport": [
+        1920,
+        1080
+      ],
+      "display": "display-p3"
+    }
+  ],
+  "expected": {
+    "canonicalLayerIds": [
+      "stars",
+      "sun"
+    ],
+    "canonicalPointMemberIds": [
+      "star-alpha",
+      "star-beta"
+    ],
+    "pointSourceIndices": {
+      "star-alpha": 0,
+      "star-beta": 1
+    },
+    "extendedSourceIndices": {
+      "sun": 0
+    },
+    "modelDirections": {
+      "t0": {
+        "star-alpha": [
+          0.8,
+          0,
+          -0.6
+        ],
+        "star-beta": [
+          0.6,
+          0.8,
+          0
+        ],
+        "sun": [
+          1,
+          0,
+          0
+        ]
+      },
+      "t1": {
+        "star-alpha": [
+          0.8,
+          0.6,
+          0
+        ],
+        "star-beta": [
+          0.6,
+          0,
+          -0.8
+        ],
+        "sun": [
+          0.8,
+          0,
+          0.6
+        ]
+      }
+    }
+  }
+}

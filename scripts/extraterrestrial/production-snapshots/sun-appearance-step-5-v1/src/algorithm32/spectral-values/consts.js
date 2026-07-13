@@ -1,0 +1,65 @@
+/** Supported interpretation for every spectral channel. */
+export const SPECTRAL_SAMPLE_SEMANTICS = /** @type {const} */ ({
+	BIN_AVERAGE: 'contiguous-wavelength-bin-average',
+	POINT_SAMPLED_SPECTRAL_DENSITY: 'point-sampled-spectral-density',
+});
+
+/** Current spectral-basis schema revision. */
+export const SPECTRAL_BASIS_SCHEMA_REVISION = 'algorithm32-spectral-basis-v1';
+
+/** Canonical unit spelling for spectral-channel centers and widths. */
+export const CANONICAL_CHANNEL_UNITS = 'nanometers';
+
+/** Supported spectral physical quantities keyed by public role. */
+export const SPECTRAL_QUANTITIES = /** @type {const} */ ({
+	IRRADIANCE_DENSITY: 'spectral-irradiance-density',
+	RADIANCE_DENSITY: 'spectral-radiance-density',
+	SCATTERING_DENSITY: 'spectral-scattering-density',
+	TRANSMITTANCE: 'spectral-transmittance',
+	OPTICAL_DEPTH: 'spectral-optical-depth',
+	EXTINCTION_COEFFICIENT: 'spectral-extinction-coefficient',
+	SCATTERING_COEFFICIENT: 'spectral-scattering-coefficient',
+	ABSORPTION_COEFFICIENT: 'spectral-absorption-coefficient',
+	PHASE_WEIGHTED_SCATTERING_COEFFICIENT: 'spectral-phase-weighted-scattering-coefficient',
+	REFLECTANCE: 'spectral-reflectance',
+	BRDF: 'spectral-brdf',
+	PHASE: 'spectral-phase',
+});
+
+/** Canonical units used by supported spectral quantities. */
+export const SPECTRAL_UNITS = /** @type {const} */ ({
+	DIMENSIONLESS: '1',
+	INVERSE_LENGTH: 'm^-1',
+	INVERSE_SOLID_ANGLE: 'sr^-1',
+	INVERSE_LENGTH_SOLID_ANGLE: 'm^-1 sr^-1',
+	IRRADIANCE_DENSITY: 'W m^-2 nm^-1',
+	RADIANCE_DENSITY: 'W m^-2 sr^-1 nm^-1',
+	SCATTERING_DENSITY: 'W m^-3 sr^-1 nm^-1',
+});
+
+/**
+ * Complete set of accepted spectral quantities.
+ *
+ * @type {ReadonlySet<string>}
+ */
+export const ALLOWED_SPECTRAL_QUANTITIES = new Set(Object.values(SPECTRAL_QUANTITIES));
+
+/**
+ * Canonical units keyed by spectral quantity.
+ *
+ * @type {ReadonlyMap<SpectralQuantity, SpectralUnits>}
+ */
+export const SPECTRAL_QUANTITY_UNITS = new Map([
+	[SPECTRAL_QUANTITIES.IRRADIANCE_DENSITY, SPECTRAL_UNITS.IRRADIANCE_DENSITY],
+	[SPECTRAL_QUANTITIES.RADIANCE_DENSITY, SPECTRAL_UNITS.RADIANCE_DENSITY],
+	[SPECTRAL_QUANTITIES.SCATTERING_DENSITY, SPECTRAL_UNITS.SCATTERING_DENSITY],
+	[SPECTRAL_QUANTITIES.TRANSMITTANCE, SPECTRAL_UNITS.DIMENSIONLESS],
+	[SPECTRAL_QUANTITIES.OPTICAL_DEPTH, SPECTRAL_UNITS.DIMENSIONLESS],
+	[SPECTRAL_QUANTITIES.EXTINCTION_COEFFICIENT, SPECTRAL_UNITS.INVERSE_LENGTH],
+	[SPECTRAL_QUANTITIES.SCATTERING_COEFFICIENT, SPECTRAL_UNITS.INVERSE_LENGTH],
+	[SPECTRAL_QUANTITIES.ABSORPTION_COEFFICIENT, SPECTRAL_UNITS.INVERSE_LENGTH],
+	[SPECTRAL_QUANTITIES.PHASE_WEIGHTED_SCATTERING_COEFFICIENT, SPECTRAL_UNITS.INVERSE_LENGTH_SOLID_ANGLE],
+	[SPECTRAL_QUANTITIES.REFLECTANCE, SPECTRAL_UNITS.DIMENSIONLESS],
+	[SPECTRAL_QUANTITIES.BRDF, SPECTRAL_UNITS.INVERSE_SOLID_ANGLE],
+	[SPECTRAL_QUANTITIES.PHASE, SPECTRAL_UNITS.INVERSE_SOLID_ANGLE],
+]);

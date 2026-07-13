@@ -1,0 +1,34 @@
+{
+  "schema": "algorithm32-whole-algorithm-judgment-rules-v1",
+  "declaredOn": "2026-07-27",
+  "declaredBeforeProposedResults": true,
+  "subject": "Algorithm32 Paper J4 experimental Lebedev-38 incoming-quadrature candidate",
+  "profileSelection": "The candidate changes only the incident angular quadrature from pinned equal-weight Fibonacci-34 to the antipodally closed ninth-degree Lebedev-38 rule. The paper physical profile, W27 outgoing domain, 48 physical altitude nodes, Jthrough4 recurrence, numerical controls, measurements, and score thresholds remain unchanged. These rules are fixed before candidate output is generated.",
+  "spectralBoundary": {
+    "nativeRepresentation": "40 point-sampled spectral-radiance-density channels at the paper coordinates lambda_i = 360 + 11.75*i nanometers for i=0..39",
+    "benchmarkProjection": "Identity; no spectral fit, scale, RGB conversion, or 15-to-40 projection is applied."
+  },
+  "b3MismatchBoundary": {
+    "expectedFieldCount": 4,
+    "expectedFields": ["multiple-scattering treatment", "incident angular quadrature", "vertical and path discretization", "geometry approximation"]
+  },
+  "publishedComparatorScale": {
+    "b1AggregateRmseMilliwatt": { "favorableMedian": 18.3, "limitedUpperQuartile": 41.5 },
+    "b1Figure5RmseMilliwattByTime": {
+      "10:15": { "favorableMedian": 17.7, "limitedUpperQuartile": 39.9 },
+      "11:15": { "favorableMedian": 18.7, "limitedUpperQuartile": 42.8 },
+      "13:15": { "favorableMedian": 17.4, "limitedUpperQuartile": 40.5 }
+    },
+    "b2RmseWattsPerSquareMeter": { "favorableMedian": 12.0182815531215, "limitedUpperQuartile": 20.496807820233318 },
+    "b2AbsoluteBiasWattsPerSquareMeter": { "favorableMedian": 11.94158717515906, "limitedUpperQuartile": 20.44040293869519 },
+    "b2WorstAbsoluteResidualWattsPerSquareMeter": { "favorableMedian": 14.100659, "limitedUpperQuartile": 23.056024 }
+  },
+  "rules": [
+    "Output validity requires all 17 by 81 directional spectra and derived irradiances to be finite and nonnegative.",
+    "B1 is favorable at or below the published-model medians, limited at or below the upper quartiles, and adverse otherwise.",
+    "B2 is favorable only when RMSE, absolute bias, and worst absolute residual are all at or below their medians; limited only when all are at or below their upper quartiles; and adverse otherwise.",
+    "B3 must reproduce B1 aggregate RMSE within 0.000001 mW m^-2 sr^-1 nm^-1 and retain exactly the four declared mismatch fields.",
+    "The whole-algorithm classification uses the same favorable, limited, and adverse aggregation rule as the frozen Paper J4 baseline.",
+    "The candidate may not be preferred merely because its Flat180 render is more symmetric. It must be rescored against the comparison-paper measurements, and its scores must be reported beside the unchanged Paper J4 Fibonacci-34 baseline."
+  ]
+}

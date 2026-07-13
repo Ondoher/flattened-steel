@@ -1,0 +1,208 @@
+{
+  "fixtureManifest": {
+    "acquiredAtUtc": "2026-07-12",
+    "acquisitionPolicy": "Pinned immutable/versioned URL plus retained bytes and SHA-256; mutable current aliases are prohibited.",
+    "canonicalSolar": {
+      "byteLength": 25833,
+      "fileName": "astmg173.zip",
+      "quantity": "spectral-irradiance-density",
+      "rawPayloadRole": "Provenance/audit payload only; it does not replace or fork the accepted runtime owner.",
+      "runtimeOwner": "scripts/flat/reconciliation/POC/src/constants/consts.js#CANONICAL_SPECTRAL_CHANNELS",
+      "sourceColumn": "Etr W*m-2*nm-1",
+      "sourceHashSha256": "de6ed831cd7426d9a7147d5c0a48b1e67a483cb7f8ecd6d3ae846848154a5657",
+      "sourceId": "algorithm32-canonical-astm-g173-etr",
+      "sourcePage": "https://www.nrel.gov/grid/solar-resource/spectra-am1.5",
+      "sourceVersion": "accepted-15-channel-center-interpolation-v1",
+      "tableEntry": "ASTMG173.csv",
+      "tableTitle": "ASTM G173-03 Reference Spectra Derived from SMARTS v. 2.9.2",
+      "units": "W m^-2 nm^-1"
+    },
+    "gaiaEdr3PassbandsV2": {
+      "byteLength": 27941,
+      "fileName": "GaiaEDR3_passbands_zeropoints_version2.zip",
+      "httpLastModified": "Thu, 09 Sep 2021 14:42:09 GMT",
+      "landingUrl": "https://www.cosmos.esa.int/web/gaia/edr3-passbands",
+      "missingSentinelPolicy": "99.99 means undefined and becomes zero response with a retained flag.",
+      "photometrySystem": "synthetic AB",
+      "pinnedUrl": "https://www.cosmos.esa.int/documents/29201/4226701/GaiaEDR3_passbands_zeropoints.zip/b03ab6ac-8b02-9850-7586-7dd7cdbc84c9?t=1603980987171",
+      "releasePaperBibcode": "2021A&A...649A...3R",
+      "releasePaperDoi": "10.1051/0004-6361/202039587",
+      "responseUnits": "dimensionless",
+      "selectedBand": "G",
+      "sourceHashSha256": "d22a1d765a2e3e6815a9cb7e9bf0cf999c4bd1473148c0b031e57e6aac0e3b8f",
+      "sourceId": "gaia-edr3-dr3-passbands",
+      "sourceUnitsLabelQualification": "ReadMe labels transmissivity fields mag; those fields are dimensionless response.",
+      "sourceVersion": "version-2",
+      "supportQualification": "Full Gaia G is 320..1100 nm; compare 15-channel output only on identical clipped 360..830 nm support.",
+      "zeroPointPolicy": "Do not apply packaged 25.x catalogue zero points to CALSPEC physical flux."
+    },
+    "limeLunarCandidate": {
+      "atbd": {
+        "byteLength": 3809214,
+        "date": "2025-11-02",
+        "fileName": "LIME-Model-ATBD-v3.3.pdf",
+        "pinnedUrl": "https://lime.uva.es/wp-content/uploads/2025/11/D5_LIME_ModelATBD_final.pdf",
+        "sourceHashSha256": "fc3c8e88f7c9821aa81e856cea0e5aa61e2ac43bd55b09d5b01a7758fc706598",
+        "version": "3.3"
+      },
+      "candidateQuantity": "dimensionless disk-equivalent lunar reflectance A_lambda",
+      "canonicalIntervalFittedAnchorsNanometers": [
+        440,
+        500,
+        675
+      ],
+      "coefficients": {
+        "byteIdenticalToEmbeddedEntry": true,
+        "byteLength": 154366,
+        "embeddedEntry": "lime_tbx-1.4.1/coeff_data/versions/LIME_MODEL_COEFS_20251010_V01.nc",
+        "fileName": "LIME_MODEL_COEFS_20251010_V01.nc",
+        "gitBlobSha1": "e4844ee96f6b308eff9d61b4bce76b6cd5bc570b",
+        "licenseQualification": "Repository declares LGPL-3.0; coefficient NetCDF has no separate file-level license statement.",
+        "modelId": "20251010_v1",
+        "pinnedUrl": "https://raw.githubusercontent.com/LIME-ESA/lime_tbx/v1.4.1/coeff_data/versions/LIME_MODEL_COEFS_20251010_V01.nc",
+        "selectionGuard": "Explicitly select 20251010_v1 and assert exported reference_model; pinned listv.txt still names an older default.",
+        "sourceHashSha256": "8e6839d95315eb2d797484be559ad70b69010cc1eb9b614770f61bb5ce2cf691",
+        "variables": [
+          "coeff",
+          "u_coeff",
+          "err_corr_coeff",
+          "wavelength"
+        ]
+      },
+      "domain": "absolute phase angle <= 90 degrees",
+      "er1Status": "sealed-research-candidate-not-executed-or-calibrated",
+      "fittedAnchorsNanometers": [
+        440,
+        500,
+        675,
+        870,
+        1020,
+        1640
+      ],
+      "release": {
+        "annotatedTagObject": "4d31ca31249562269686514e2fdec15c41f784b1",
+        "byteLength": 132331903,
+        "commit": "82edc07dfdc6a0de2e7a6bd73a8674cd33c2edd1",
+        "fileName": "lime_tbx-v1.4.1.zip",
+        "implementationLicense": "LGPL-3.0",
+        "pinnedUrl": "https://github.com/LIME-ESA/lime_tbx/archive/refs/tags/v1.4.1.zip",
+        "releaseUrl": "https://github.com/LIME-ESA/lime_tbx/releases/tag/v1.4.1",
+        "sourceHashSha256": "2731da32927c9933a0ff728719069f4b75099ff33fe1b8c48ab5e39f9a7926b5",
+        "tagQualification": "Unsigned and not guaranteed immutable; retained payload hash is authoritative."
+      },
+      "resolvedRadianceQualification": "Disk-integrated photometry only; a separate normalized disk profile is required for resolved radiance.",
+      "solarQualification": "LIME absolute scale uses TSIS-1. ER5 retains the Algorithm32 canonical Sun and reports TSIS/canonical bias as uncertainty.",
+      "sourceId": "esa-lime-lunar-reflectance-model",
+      "sourceVersion": "LIME-TBX-v1.4.1-model-20251010_v1-asd-v2.0.0-atbd-v3.3",
+      "spectralQualification": "ASD gaps use Apollo/model assistance, including 300..400 and 809..840 nm; preserve covariance and per-region qualification.",
+      "spectralReference": {
+        "byteLength": 43488052,
+        "embeddedAndZenodoByteIdentical": true,
+        "embeddedEntry": "lime_tbx-1.4.1/lime_tbx/business/interpolation/interp_data/assets/ds_ASD_32.nc",
+        "license": "CC BY 4.0",
+        "sourceHashSha256": "360044078e42d31ff5e9dffb085f5b3bd455db30a7b46a82c4f68c96fc4b522d",
+        "sourceMd5": "77996dac3ef0c29edc5b965993df0d2b",
+        "sourceVersion": "ASD-v2.0.0",
+        "zenodoDoi": "10.5281/zenodo.17332582",
+        "zenodoUrl": "https://zenodo.org/records/17332582/files/LIME_ASD.nc?download=1"
+      }
+    },
+    "manifestVersion": 1,
+    "siriusCalspec": {
+      "byteLength": 282240,
+      "catalogRoundedMaximumAngstroms": 2996862.55,
+      "contentType": "image/fits",
+      "conversionFactor": 0.01,
+      "convertedUnits": "W m^-2 nm^-1",
+      "dataQualityPolicy": "Use DATAQUAL=1 only; fail if a canonical-bin interval needs another row.",
+      "documentationUrl": "https://www.stsci.edu/hst/instrumentation/reference-data-for-calibration-and-tools/astronomical-catalogs/calspec",
+      "doi": "10.17909/t9-khb7-4049",
+      "expectedMaximumAngstroms": 2996862.5500922,
+      "expectedMinimumAngstroms": 1150.2,
+      "expectedPedigree": "INFLIGHT 1997 to 2022",
+      "expectedRowCount": 8970,
+      "expectedTargetId": "SIRIUS",
+      "fileName": "sirius_stis_005.fits",
+      "httpEtag": "44e80-5ebf9ccbfd1ec",
+      "httpLastModified": "Thu, 27 Oct 2022 01:09:58 GMT",
+      "mutableAliasProhibited": "https://archive.stsci.edu/hlsps/reference-atlases/cdbs/current_calspec/sirius_stis_005.fits",
+      "originalUnits": "erg s^-1 cm^-2 Angstrom^-1",
+      "pinnedUrl": "https://archive.stsci.edu/hlsps/reference-atlases/cdbs/calspec/sirius_stis_005.fits",
+      "quantity": "spectral-irradiance-density",
+      "sourceHashSha256": "1349da7b8b59ad035aefea8d7948f552b41b3897d07e5ad82ca162a53af97271",
+      "sourceId": "stsci-calspec-sirius",
+      "sourceUsePolicy": "Absolute Earth-observer F_lambda; never apply a second visual-magnitude scale.",
+      "sourceVersion": "sirius_stis_005",
+      "uncertaintyQualification": "Retain STATERROR and SYSERROR separately; nominal 1% systematics may understate uncertainty for saturated bright-star observations.",
+      "visibleSegment": "Measured STIS segment 1675..10200 Angstrom covers all canonical bins.",
+      "wavelengthState": "vacuum; composite already adjusted for radial velocity -6.0 km/s"
+    }
+  },
+  "fixtureVerification": {
+    "sirius": {
+      "status": "accepted",
+      "fileName": "sirius_stis_005.fits",
+      "expectedByteLength": 282240,
+      "actualByteLength": 282240,
+      "expectedSha256": "1349da7b8b59ad035aefea8d7948f552b41b3897d07e5ad82ca162a53af97271",
+      "actualSha256": "1349da7b8b59ad035aefea8d7948f552b41b3897d07e5ad82ca162a53af97271"
+    },
+    "gaia": {
+      "status": "accepted",
+      "fileName": "GaiaEDR3_passbands_zeropoints_version2.zip",
+      "expectedByteLength": 27941,
+      "actualByteLength": 27941,
+      "expectedSha256": "d22a1d765a2e3e6815a9cb7e9bf0cf999c4bd1473148c0b031e57e6aac0e3b8f",
+      "actualSha256": "d22a1d765a2e3e6815a9cb7e9bf0cf999c4bd1473148c0b031e57e6aac0e3b8f"
+    },
+    "solar": {
+      "status": "accepted",
+      "fileName": "astmg173.zip",
+      "expectedByteLength": 25833,
+      "actualByteLength": 25833,
+      "expectedSha256": "de6ed831cd7426d9a7147d5c0a48b1e67a483cb7f8ecd6d3ae846848154a5657",
+      "actualSha256": "de6ed831cd7426d9a7147d5c0a48b1e67a483cb7f8ecd6d3ae846848154a5657"
+    },
+    "limeRelease": {
+      "status": "accepted",
+      "fileName": "lime_tbx-v1.4.1.zip",
+      "expectedByteLength": 132331903,
+      "actualByteLength": 132331903,
+      "expectedSha256": "2731da32927c9933a0ff728719069f4b75099ff33fe1b8c48ab5e39f9a7926b5",
+      "actualSha256": "2731da32927c9933a0ff728719069f4b75099ff33fe1b8c48ab5e39f9a7926b5"
+    },
+    "limeCoefficient": {
+      "status": "accepted",
+      "fileName": "LIME_MODEL_COEFS_20251010_V01.nc",
+      "expectedByteLength": 154366,
+      "actualByteLength": 154366,
+      "expectedSha256": "8e6839d95315eb2d797484be559ad70b69010cc1eb9b614770f61bb5ce2cf691",
+      "actualSha256": "8e6839d95315eb2d797484be559ad70b69010cc1eb9b614770f61bb5ce2cf691"
+    },
+    "limeAtbd": {
+      "status": "accepted",
+      "fileName": "LIME-Model-ATBD-v3.3.pdf",
+      "expectedByteLength": 3809214,
+      "actualByteLength": 3809214,
+      "expectedSha256": "fc3c8e88f7c9821aa81e856cea0e5aa61e2ac43bd55b09d5b01a7758fc706598",
+      "actualSha256": "fc3c8e88f7c9821aa81e856cea0e5aa61e2ac43bd55b09d5b01a7758fc706598"
+    }
+  },
+  "sourceContentHashes": {
+    "scripts/flat/reconciliation/POC/src/runners/er1TypedCelestialSourcesContract.js": "733bebebc3a6ec1835d55c1d27609aaed46f55b4bd0fe4da75dd7fec11becd5c",
+    "scripts/flat/reconciliation/POC/src/external-celestial-sources/SpectralDensityBasis.js": "0c046b215ef7681f7dfb6a1499409425493682747b25d4c04f651cc85cb4372c",
+    "scripts/flat/reconciliation/POC/src/external-celestial-sources/SpectralDensityPacket.js": "bdecd086ccd9ecbc7124cd75747507d5d74580d07225af0309b860aaf2278c46",
+    "scripts/flat/reconciliation/POC/src/external-celestial-sources/ExternalCelestialSource.js": "29f69e3ea69013ae9eade5da02004ab3c4a2ccd1619229d7f17988b4d662e0a8",
+    "scripts/flat/reconciliation/POC/src/external-celestial-sources/binPiecewiseLinearSpectralDensity.js": "b58518d02e892a98c9cd62745a79af00d7dfea6e137cbeecf28e81f99e85b251",
+    "scripts/flat/reconciliation/POC/src/external-celestial-sources/CalspecFitsSpectrumReader.js": "7a998d8d5fd4f51c118bf7e4b730e854ecf8ec4906b0047392ba5551a9de3221",
+    "scripts/flat/reconciliation/POC/src/external-celestial-sources/GaiaPassbandReader.js": "b4cbb4fb09221fac6df6236432dab08fa69236dd4b8a7f0687f0fbc9c846d430",
+    "scripts/flat/reconciliation/POC/src/external-celestial-sources/syntheticAbPhotometry.js": "1e829ace936a40e0b61996941d0157aa1ca249c3c99599f75aec0777f19800c9",
+    "scripts/flat/reconciliation/POC/src/external-celestial-sources/fixtureManifest.js": "bc66e37defa5d9ed16839a8e5b68692f7fefd2e2a56e344fff9e2d05410bdaf4",
+    "scripts/flat/reconciliation/POC/src/color/BrunetonColorDisplayModel.js": "123c580878759d91a1c96b33d4a0faf545867935b22cf0ee1fdd7b28c0b9a2f7",
+    "scripts/flat/reconciliation/POC/src/constants/consts.js": "e2aeb8323101b0ddf92e224b2f3dad02f11611a3f2a3524f4d33d5f06cac48fa",
+    "scripts/flat/reconciliation/POC/src/provenance/stableHash.js": "ecb22a1baf53516c911ab2c0932137d24152b627151272e0f38a6a16611f332e"
+  },
+  "governingDesign": "agents/topics/apps/flat/reconciliation/extra-atmosphere-reset-design.md",
+  "governingPlan": "agents/topics/apps/flat/reconciliation/extra-atmosphere-reset-plan.md",
+  "acquisitionQualification": "Windows curl retained normal chain/hostname verification and used ssl-revoke-best-effort because the environment could not reach certificate revocation endpoints."
+}

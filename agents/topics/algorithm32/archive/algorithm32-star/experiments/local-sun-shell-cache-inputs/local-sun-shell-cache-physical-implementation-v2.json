@@ -1,0 +1,145 @@
+{
+  "schemaVersion": 2,
+  "implementationId": "local-sun-shell-cache-physical-implementation-v2-sha256:d9b6a73b0b52dbd81884d32dbeac55760d577eb027b60970e1593eaba8323b46",
+  "phase": "phase-2-physical-cpu-cache-implementation",
+  "supersedes": {
+    "implementation": "local-sun-shell-cache-implementation-v1",
+    "reason": "v1 discarded the second physical position coordinate and incorrectly applied held light after cumulative construction"
+  },
+  "parents": {
+    "phase1TerminalRunId": "000234-local-sun-shell-cache-n-2048",
+    "phase1CloseoutRunId": "000237-local-sun-shell-cache-family-closeout",
+    "validDirectOracleRunId": "000252-local-sun-shell-cache-phase2-direct-oracle-tests"
+  },
+  "shellFacts": {
+    "shellCount": 2048,
+    "factBytes": 17552,
+    "soleDistanceDependentApproximation": "inverse-square incident amplitude",
+    "applicationBoundary": "construction-time J1 source sample at every geometry-owned position node",
+    "queryTimeCumulativeScalePermitted": false
+  },
+  "positionContract": {
+    "kind": "source-subpoint-z-rho",
+    "zCount": 19,
+    "rhoCount": 15,
+    "positionCount": 285,
+    "lookup": "clamped-bilinear-z-rho",
+    "owner": "flat geometry"
+  },
+  "fieldContract": {
+    "incomingRadiance": {
+      "directionDomain": "Fibonacci-34",
+      "directionCount": 34,
+      "fieldR32fBytes": 581400
+    },
+    "outgoingScatteringDensity": {
+      "directionDomain": "W27",
+      "directionCount": 4374,
+      "fieldR32fBytes": 74795400
+    },
+    "spectralBasis": "native-15",
+    "recurrence": "J1 -> L1 -> J2 -> L2 -> J3 -> L3 -> J4; Jthrough4 = sum(J1..J4)",
+    "physicalGeometryInputs": [
+      "source direction",
+      "source path",
+      "altitude",
+      "rho",
+      "ground/boundary facts"
+    ]
+  },
+  "resources": {
+    "factBytes": 17552,
+    "jFieldR32fBytes": 74795400,
+    "lFieldR32fBytes": 581400,
+    "finalResidentBytes": 74812952,
+    "sevenPureConstructionFieldsR32fBytes": 300925800
+  },
+  "rejectionRules": {
+    "noVOnlyPhysicalField": true,
+    "noQueryTimeCumulativeShellScale": true,
+    "noCumulativeRecurrenceInput": true,
+    "noGpuBeforePhysicalCpuAcceptance": true
+  },
+  "sourceClosure": [
+    {
+      "path": "scripts/algorithm32-star/src/local-sun-shell-cache-implementation/PhysicalShellHeldLightSource.js",
+      "byteLength": 2276,
+      "sha256": "bb1c57784dc74d485acb29fc1125afdd9258643fa4602cac6624ac599117a66e"
+    },
+    {
+      "path": "scripts/algorithm32-star/src/local-sun-shell-cache-implementation/PhysicalLocalSunShellCpuBuilder.js",
+      "byteLength": 2759,
+      "sha256": "70f3788c6e61c4f04e7b2ca3fda657a0eb3459ce4735287ece655e91b2c514ae"
+    },
+    {
+      "path": "scripts/algorithm32-star/src/local-sun-shell-cache-implementation/phase2-physical-implementation-freeze.js",
+      "byteLength": 6432,
+      "sha256": "7908fbafcab9809098d2b1ac309a108bea04f5e5459b639242bd01237ea56ba7"
+    },
+    {
+      "path": "scripts/algorithm32-star/src/local-sun-shell-cache-implementation/ShellFactCache.js",
+      "byteLength": 4686,
+      "sha256": "c467c37572a2384c9ce5ddb336569a02c79960de3735fc17eabc8335eab44dfc"
+    },
+    {
+      "path": "src/algorithm32/light-sources/local-sun-cpu-cache-build.js",
+      "byteLength": 6295,
+      "sha256": "e7f1d56d9b3cea9e5af805a528c4c0214a101b2b2ac7270dad0644d43135481f"
+    },
+    {
+      "path": "src/algorithm32/light-sources/local-sun-primary-scattering-density.js",
+      "byteLength": 3767,
+      "sha256": "91ad8ad5e7b56f358690bc7ed72714c75b899656df4fa7101762ddb80dae0957"
+    },
+    {
+      "path": "src/algorithm32/light-sources/local-sun-scattering-density-transport.js",
+      "byteLength": 2868,
+      "sha256": "71f2b89d79c6512483a8a229ee1ad5e425ec3e4c245e4c00d01b31b4ff07f30e"
+    },
+    {
+      "path": "src/algorithm32/light-sources/local-sun-later-order-scattering-density.js",
+      "byteLength": 10632,
+      "sha256": "5dfb1b1bcef601208d488d3ed4dfb1f9e18e42a98c5ea2aa21e1821cb32f27df"
+    },
+    {
+      "path": "src/algorithm32/light-sources/LocalSunConstructionDomainSelection.js",
+      "byteLength": 11995,
+      "sha256": "a3e4a21b05aa3050a8fe4aeec5963a3a4a5efb96bc3aca32303c6d0ee7b883d0"
+    },
+    {
+      "path": "src/algorithm32/light-sources/LocalSunCpuFields.js",
+      "byteLength": 4570,
+      "sha256": "06faf70bb985837822db82de5270520416f786ba141e2f9d283e14565ab0afbd"
+    },
+    {
+      "path": "src/algorithm32/transport/ScatteringOrderFieldOperations.js",
+      "byteLength": 11838,
+      "sha256": "be879105d36ee96f000535b40bc0d218ddd1f3ddc0b19ee41d6454fdfb670caf"
+    },
+    {
+      "path": "src/algorithm32/transport/ScatteringDensityTransport.js",
+      "byteLength": 14541,
+      "sha256": "20fc0799d09c0ebdd8c83d81bc025283fbd2c27a8eb4920202e3be4028684c04"
+    },
+    {
+      "path": "src/algorithm32/transport/later-order-scattering-density.js",
+      "byteLength": 9135,
+      "sha256": "66692f721f17bbe4366b0327a7ec489a898cac2cb521e099ce1d0b4f850bca68"
+    },
+    {
+      "path": "src/algorithm32/geometries/FlatEarthGeometry.js",
+      "byteLength": 97097,
+      "sha256": "a6db83399ff42080cb21e66d228c887585f467c0f74f6b5d70b2982f7c3f1bcb"
+    },
+    {
+      "path": "src/algorithm32/domains/Fibonacci34DirectionDomain.js",
+      "byteLength": 5417,
+      "sha256": "758b6912958e75908cb45ebc577e380e2365cfcb178950fd40602f0f3c5b9eff"
+    },
+    {
+      "path": "src/algorithm32/domains/CubedSphereDirectionDomain.js",
+      "byteLength": 16677,
+      "sha256": "11bf367257637694042d516a75d6769f40b7fbcb42bed5079e458d29380c3b42"
+    }
+  ]
+}

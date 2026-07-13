@@ -1,0 +1,10 @@
+{
+  "schemaId": "colorjs-cam16-independent-oracle-provenance-v1",
+  "repository": "https://github.com/color-js/color.js",
+  "commit": "349008c68d6273c61e1d3138936ad28a6c7f2b21",
+  "sourcePath": "src/spaces/cam16.js",
+  "sourceSha256": "f301e9abaf4726755bb147925e6615ee8e58d813744a925184135ba42abb5d0a",
+  "license": "MIT",
+  "licenseSha256": "feee8a4ec1649b385f3ec9ac73174501cbfc9d5a75171a056d94cb452d3f3ec3",
+  "adaptation": "Minimal standalone extraction of environment(), toCam16(), and fromCam16() algebra; project implementation is not imported."
+}

@@ -1,0 +1,49 @@
+{
+  "status": "accepted",
+  "mechanicalStatus": "accepted",
+  "physicalConservationStatus": "accepted",
+  "observationalStatus": "not-applicable",
+  "humanReviewStatus": "not-applicable",
+  "criteria": [
+    {
+      "name": "cap-quadrature-reconstructs-solid-angle",
+      "status": "accepted"
+    },
+    {
+      "name": "uniform-disk-integral-and-projected-irradiance-pass",
+      "status": "accepted"
+    },
+    {
+      "name": "normalized-limb-preserves-projected-irradiance",
+      "status": "accepted"
+    },
+    {
+      "name": "lambert-phase-law-fixture-passes",
+      "status": "accepted"
+    },
+    {
+      "name": "pixel-averaging-uses-omega-once-and-derives-coverage",
+      "status": "accepted"
+    },
+    {
+      "name": "edge-on-off-raster-integrals-are-accounted-without-renormalization",
+      "status": "accepted"
+    },
+    {
+      "name": "resolved-collapsed-small-angle-convergence-passes",
+      "status": "accepted"
+    },
+    {
+      "name": "largest-disk-occupies-multiple-pixels",
+      "status": "accepted"
+    },
+    {
+      "name": "all-invalid-cases-fail-with-predeclared-error-codes",
+      "status": "accepted"
+    },
+    {
+      "name": "er3-produced-no-atmosphere-display-or-image",
+      "status": "accepted"
+    }
+  ]
+}

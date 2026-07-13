@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "experimentId": "EXPERIMENT-A32-WF-000012",
+  "externalName": "E5",
+  "name": "Extended-Source Angular Conservation",
+  "question": "What angular-integration relationship conserves extended spectral radiance over ordinary and cosine-projected solid angle?",
+  "facts": [
+    "FACT-A32-003024"
+  ],
+  "runner": "scripts/experiments/e5-extended-source-angular-conservation/run.js",
+  "tests": "scripts/experiments/e5-extended-source-angular-conservation/run.test.js",
+  "inputs": {
+    "spectralBasisChannelCount": 15,
+    "sampleDataType": "spectral radiance density",
+    "sampleFields": [
+      "solid-angle weight",
+      "projection cosine",
+      "on-raster or off-raster classification"
+    ],
+    "cases": [
+      "uniform spherical cap",
+      "uniform angular disk",
+      "normalized linear limb profile",
+      "partially clipped support",
+      "fully off-raster support",
+      "resolved small-angle disk",
+      "collapsed small-angle disk"
+    ]
+  },
+  "iterationCount": 7,
+  "resultTableMeaning": "Each row reports sample count, on/off support, and maximum per-channel residuals and binary64 limits for ordinary integration, projected integration, and raster partitioning.",
+  "result": {
+    "accepted": true,
+    "maximumAnalyticResidual": 4.2012834183813297e-19,
+    "maximumResolvedCollapsedResidual": 5.36425415550288e-29,
+    "conclusion": "Ordinary extended radiance integrates as sum_j(L_lambda_j*DeltaOmega_j) and cosine-projected radiance as sum_j(L_lambda_j*cosTheta_j*DeltaOmega_j). Normalized limb profiles preserve their declared projected integral, clipped support partitions without renormalization, and resolved and collapsed small-angle representations yield the same analytic integral."
+  },
+  "durableOutput": {
+    "path": "references/results/experiments/e5-extended-source-angular-conservation/result.md",
+    "sha256": "f7b761481a26a340ee161fbe46be8d506c5a4e971d1ac04da00183030bb59d91"
+  }
+}

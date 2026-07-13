@@ -1,0 +1,9 @@
+{
+  "schemaId": "spectral-color-rgb-range-full-frame-fixture-v1",
+  "conditions": ["noon", "sunset-minus-30", "sunset-minus-10", "sunset"],
+  "viewport": { "widthPixels": 481, "heightPixels": 271, "verticalFieldOfViewDegrees": 15 },
+  "expectedTransformId": "cie2015-xyzf-local-light-rgb-range-n074-v1",
+  "numericalProof": { "runId": "000311-spectral-color-rgb-range-proof", "artifactSetSha256": "f7e02614aa4376405c796dc3f7ec85a7e589accf38beedaed1b64dfacada52dd" },
+  "localLightRecord": { "runId": "000302-spectral-color-local-light-record", "artifactSetSha256": "dedb03462344654252096e9879972bfa21a3328ba0b18b5c6db9dfd4bc4cb9c1" },
+  "tolerances": { "fullyVisibleCenterSpectrumRelative": 0.001, "horizonCenterSpectrumMaximumRelative": 0.005, "rgbBoundsAbsolute": 1e-12, "gpuReadbackNegativeAbsolute": 0.000001, "localStateRelative": 1e-12 }
+}

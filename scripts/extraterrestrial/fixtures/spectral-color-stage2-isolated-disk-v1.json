@@ -1,0 +1,31 @@
+{
+  "schemaId": "spectral-color-stage2-isolated-disk-fixture-v1",
+  "input": {
+    "runId": "000258-spectral-color-stage1-ledger",
+    "artifactSetSha256": "abe89535535f523d4d04a0a5e9fe5cef86bff441f274cd998103e0121a7cacd5",
+    "ledgerPath": "evidence/spectral-ledger.json",
+    "ledgerSha256": "a1574e12645f3f0c5eff1694d609f9e73cc39ec2661cf131ad0356a09f1c55d0",
+    "sampleRole": "disk-center",
+    "spectrum": "celestialRadiance",
+    "eligibility": "eligible",
+    "expectedSampleCount": 25
+  },
+  "laneA": {
+    "displayPeakNits": 100,
+    "luminancePivotCdPerSquareMeter": 1000000,
+    "nitsPerStop": 8
+  },
+  "render": {
+    "diskRadiusPixels": 34,
+    "cellWidthPixels": 150,
+    "cellHeightPixels": 126,
+    "backgroundEncodedSrgb": [0, 0, 0]
+  },
+  "tolerances": {
+    "chromaticityAbsolute": 1e-12,
+    "neutralEncodedSpread": 0.0002,
+    "lightnessMonotonicAbsolute": 1e-12,
+    "rgbBoundsAbsolute": 1e-12,
+    "laneBIdentityRelative": 1e-12
+  }
+}

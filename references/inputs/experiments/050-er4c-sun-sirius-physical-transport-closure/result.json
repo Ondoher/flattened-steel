@@ -1,0 +1,23 @@
+{
+  "status": "accepted",
+  "er4TransportStatus": "accepted",
+  "pointTransportStatus": "accepted",
+  "extendedTransportStatus": "accepted",
+  "fullFrameTransportStatus": "accepted",
+  "lunarDependencyStatus": "accepted",
+  "siriusReferenceStatus": "accepted",
+  "solarReferenceStatus": "accepted",
+  "er5ExitStatus": "accepted",
+  "mechanicalStatus": "accepted",
+  "physicalRadiometryStatus": "accepted",
+  "automatedReviewabilityStatus": "not-claimed",
+  "humanReviewStatus": "not-claimed",
+  "observationalStatus": "not-claimed",
+  "acceptedCriterionCount": 39,
+  "criterionCount": 39,
+  "elapsedMilliseconds": 748.0786,
+  "imageCount": 0,
+  "gpuClaimed": false,
+  "productionClaimed": false,
+  "nextPhase": "ER6 real Flat32 globe validation"
+}

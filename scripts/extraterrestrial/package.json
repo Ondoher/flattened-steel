@@ -1,0 +1,56 @@
+{
+  "name": "algorithm32-extraterrestrial-experiment",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Isolated Stage 12 Sun-and-stars cache implementation and proof lane.",
+  "type": "module",
+	"scripts": {
+		"render:stellar-ferwerda:full-scene": "node runners/render-stellar-ferwerda-full-scene-san-jose.js",
+		"render:stellar-ferwerda:daylight": "node runners/render-stellar-ferwerda-daylight-san-jose.js",
+		"render:stellar-ferwerda:san-jose": "node runners/render-stellar-ferwerda-san-jose.js",
+		"render:stellar-screen-palette:san-jose": "node runners/render-stellar-screen-palette-san-jose.js",
+		"proof:stellar-screen-palette:composition": "node runners/run-stellar-screen-palette-atmosphere-composition-proof.js",
+		"proof:stellar-screen-palette:gpu-resource": "node runners/run-stellar-screen-palette-gpu-resource-proof.js",
+		"proof:stellar-screen-palette:cpu-builder": "node runners/run-stellar-screen-palette-cpu-builder-proof.js",
+		"proof:stellar-screen-palette:projection": "node runners/run-stellar-screen-palette-projection-proof.js",
+		"proof:pre-g9:stellar-live-raster": "node runners/run-pre-g9-stellar-live-raster-proof.js",
+		"proof:pre-g9:celestial-replacement-runtime": "node runners/run-pre-g9-celestial-replacement-runtime-proof.js",
+		"proof:pre-g9:stellar-tiled-cache-cpu": "node runners/run-pre-g9-stellar-tiled-cache-cpu-proof.js",
+		"proof:pre-g9:stellar-tiled-cache": "node runners/run-pre-g9-stellar-tiled-cache-proof.js",
+		"proof:pre-g9:stellar-photometry": "node runners/run-pre-g9-stellar-photometry-proof.js",
+		"proof:pre-g9:stellar-celestial-source": "node runners/run-pre-g9-stellar-celestial-source-proof.js",
+		"proof:pre-g9:bright-star-catalog": "node runners/run-pre-g9-bright-star-catalog-contract-proof.js",
+		"proof:pre-g9:flat-local-finite-sun": "node runners/run-pre-g9-flat-local-finite-sun-contract-proof.js",
+		"proof:pre-g9:flat-local-finite-sun-gpu": "node runners/run-pre-g9-flat-local-finite-sun-gpu-cache-proof.js",
+		"proof:pre-g9:flat-local-finite-sun-runtime": "node runners/run-pre-g9-flat-local-finite-sun-runtime-proof.js",
+		"proof:pre-g9:flat-local-finite-sun-ground-scenes": "node runners/run-pre-g9-flat-local-finite-sun-ground-scenes-proof.js",
+		"render:union-glacier:flat-local-closest": "node runners/run-union-glacier-flat-local-closest-render.js",
+		"proof:g7:three-subjective-scenes": "node runners/run-g7-three-subjective-globe-scenes.js",
+		"proof:g7:three-atmosphere": "node runners/run-g7-three-atmosphere-integration.js",
+		"proof:g7:atmosphere-preview": "node runners/run-g7-atmosphere-preview.js",
+    "snapshot:g0": "node runners/create-g0-snapshot.js",
+    "proof:g0": "node runners/run-g0-boundary-contract-proof.js",
+
+    "proof:g1": "node runners/run-g1-geometry-transform-proof.js",
+    "proof:g2": "node runners/run-g2-generation-lifecycle-proof.js",
+    "proof:g3": "node runners/run-g3-cpu-star-transport-proof.js",
+    "proof:g4": "node runners/run-g4-cpu-sun-disk-transport-proof.js",
+    "proof:g5": "node runners/run-g5-ray-probe-frame-evaluator-proof.js",
+    "proof:g6a": "node runners/run-g6a-primary-celestial-cache-proof.js",
+    "proof:g6b": "node runners/run-g6b-r32f-representation-proof.js",
+    "proof:g6c": "node runners/run-g6c-gpu-cache-render-proof.js",
+    "proof:g7": "node runners/run-g7-live-gpu-consumption-proof.js",
+    "proof:g7:captures": "node runners/run-g7-visual-capture-proof.js",
+    "proof:g8": "node runners/run-g8-distant-sun-qualification.js",
+    "verify:run": "node runners/verify-run.js"
+  },
+  "dependencies": {
+    "@react-three/fiber": "8.18.0",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "three": "0.180.0"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}
