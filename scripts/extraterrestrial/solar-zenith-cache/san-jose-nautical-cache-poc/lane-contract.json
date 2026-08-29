@@ -1,0 +1,150 @@
+{
+  "schemaVersion": 1,
+  "laneId": "algorithm32-san-jose-nautical-actual-point-cache-poc-v1",
+  "status": "zp7-five-compatible-scene-pages-complete",
+  "purpose": "Render one plausibility view of the fixed San Jose nautical-twilight scene through a scene-specific cache page built from the complete actual-point N4 recurrence.",
+  "parents": {
+    "currentScene": {
+      "runId": "000493-san-jose-nautical-twilight-ozone-f68-w39-preview",
+      "artifactSetSha256": "63ccccc8ce9e2796781dc6ac0fbd4c912c4340815050215f85dd263ea8ea966f",
+      "configPath": "browser/config.json",
+      "configSha256": "84e5c8f5bc713b69ca1e949d704569f9858b75015e2675be2c7e36467c09af70"
+    },
+    "actualPointJ1Control": {
+      "runId": "000497-san-jose-nautical-twilight-actual-point-j1-control",
+      "artifactSetSha256": "3460c9e3b4d450757861ad57ef9ae459d0a34b2d52af729611a68638cae82877",
+      "role": "causal visual comparison only; not cache input or a correction term"
+    }
+  },
+  "scene": {
+    "id": "sunset-plus-one-hour",
+    "timeIso": "2024-06-21T04:26:03.503Z",
+    "directionToSourceUpEastNorth": [
+      -0.16946677586889025,
+      -0.7579900644516986,
+      0.6298667113517853
+    ],
+    "solarElevationDegrees": -9.756817735470484,
+    "observerHeightMeters": 1.7,
+    "viewAzimuthDegrees": -59.99625193137896,
+    "viewElevationDegrees": 5,
+    "verticalFieldOfViewDegrees": 78,
+    "viewport": {
+      "width": 640,
+      "height": 400
+    }
+  },
+  "physicalModel": {
+    "source": "distant collimated Sun",
+    "geometry": "radially stratified spherical atmosphere",
+    "bottomRadiusMeters": 6360000,
+    "topRadiusMeters": 6420000,
+    "ozone": "retained 300-DU absorption-enabled configuration",
+    "maximumScatteringOrder": 4,
+    "recurrence": [
+      "J1",
+      "direct L1",
+      "L1 -> J2",
+      "J2 -> L2",
+      "L2 -> J3",
+      "J3 -> L3",
+      "L3 -> J4",
+      "C4 = J1 + J2 + J3 + J4"
+    ],
+    "cumulativeFeedback": "prohibited",
+    "actualPointTransport": "required through J1-J4",
+    "scenePageJ1": "evaluate directly at each requested actual page point; higher orders are seeded by direct L1, so no universal stored J1 field is required"
+  },
+  "domains": {
+    "position": "algorithm32-native-48-position-v2",
+    "incoming": "contained-reflection-completed-ordinary-fibonacci-68-control-v1",
+    "outgoing": {
+      "family": "cubed sphere",
+      "faceWidth": 39,
+      "directionCount": 9126
+    },
+    "spectrum": {
+      "basis": "algorithm32-native-15-spectral-basis-v1",
+      "channelCount": 15,
+      "storage": "R32F"
+    },
+    "temporarySolarZenith": {
+      "id": "uniform-solar-zenith-cell-centers-180x1-degree-v1",
+      "count": 180,
+      "firstCenterDegrees": 0.5,
+      "lastCenterDegrees": 179.5,
+      "spacingDegrees": 1,
+      "status": "initial POC construction control; not a qualified final resolution"
+    }
+  },
+  "temporaryField": {
+    "semantic": "pure-order radiance and scattering-density working fields",
+    "logicalCoordinates": [
+      "radius",
+      "localSolarZenith",
+      "direction",
+      "wavelength"
+    ],
+    "wavelengthScheduling": "one wavelength at a time",
+    "durable": false
+  },
+  "builderInterface": {
+    "transportSpec": "one immutable physical and numerical solver identity",
+    "scenePageRequests": "ordered non-empty list; the first POC contains only the retained San Jose request",
+    "projectionScheduling": "project every requested compatible page before releasing each wavelength's temporary field",
+    "incrementalAddition": "a later immutable run may build additional independent pages without modifying prior page artifacts",
+    "universalFieldReuse": "optional only when a separately preserved artifact has an exactly compatible identity and complete derivation record",
+    "pageIndependence": "each page is independently stored, hashed, addressed, and loadable",
+    "collectionAssembly": "a new immutable manifest may reference page artifacts from multiple preserved runs"
+  },
+  "scenePage": {
+    "semantic": "C4 cumulative local spectral scattering density",
+    "logicalCoordinates": [
+      "altitude",
+      "canonicalObserverRayOutgoingDirection",
+      "wavelength"
+    ],
+    "sceneSunZenith": "page identity",
+    "spectralPayload": "Native15",
+    "runtimeConsumer": "ordinary Algorithm32 transmittance-weighted camera-ray integration"
+  },
+  "pageCompatibilityIdentity": [
+    "planet and atmosphere",
+    "distant-source model and spectrum",
+    "ground model",
+    "maximum scattering order and recurrence",
+    "numerical controls",
+    "position, incoming, outgoing, and spectral domains",
+    "stored semantic and units",
+    "canonical observer-up/Sun frame convention",
+    "precision and layout schema"
+  ],
+  "prohibitedShortcuts": [
+    "current receiver-column C4 as higher-order input",
+    "additive actual-point J1 outside the cache",
+    "completed sky-radiance replacement",
+    "cumulative field feedback into recurrence",
+    "Color or exposure repair of missing transport"
+  ],
+  "output": {
+    "required": "one N4 San Jose plausibility render",
+    "renderEvenWhenImplausible": true,
+    "root": "tmp/extraterrestrial/runs"
+  },
+  "resourcePolicy": {
+    "offlineConstructionMemory": "not a design constraint, optimization objective, or acceptance gate",
+    "backendAllocationFailure": "select a capable offline backend or lossless field-safe chunking; do not reduce physical state, order, or final page semantics",
+    "finalScenePageSize": "material runtime-cache property"
+  },
+  "excluded": [
+    "formal validation gates",
+    "Bruneton comparison",
+    "complete CPU oracle",
+    "convergence qualification",
+    "compression",
+    "paging and streaming",
+    "animation",
+    "production integration",
+    "local or finite Sun"
+  ]
+}

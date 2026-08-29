@@ -2,6 +2,12 @@
 
 Status: active implementation topic.
 
+The active spherical-cache successor is owned by the
+[Solar-Zenith Cache Production Adoption](solar-zenith-cache-adoption-plan.md)
+topic. Its contained numerical plan is complete through P10; PA0 begins with a
+read-only production migration inventory. Production-source implementation
+requires separate explicit authorization under the current containment policy.
+
 Historical Algorithm32-Star documentation is
 [archived](../archive/algorithm32-star/README.md). Its executable bridge and
 evidence capsule were retired; no historical Star path is a validation

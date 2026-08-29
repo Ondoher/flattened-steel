@@ -14,15 +14,14 @@ evidence categories.
 Focused documents own the details below this umbrella contract:
 
 - [Distant-Sun solar-zenith cache design](solar-zenith-cache-design.md)
-  owns the proposed successor's actual-point coordinates, candidate stored
-  fields, Native15 representation, resource study, and replacement evidence.
-  No successor semantic is selected, and it does not silently amend this
-  implemented contract.
-- [Candidate distant-Sun branch-integrated solar-zenith cache plan](distant-sun-solar-zenith-cache-plan.md)
-  records one possible contained execution order and evidence gates. No
-  numbered phase is currently authorized; it selects no local-Sun layout and
-  changes none of this implemented contract before a separately authorized
-  promotion.
+  owns the selected successor's point-local cumulative-density coordinates,
+  one-cache-per-scene contract, Native15 representation, resource study, and
+  replacement evidence. Selection for contained implementation does not
+  silently amend this implemented contract.
+- [Distant-Sun point-local solar-zenith cache plan](distant-sun-solar-zenith-cache-plan.md)
+  records the contained execution order and evidence gates. No numbered phase
+  has started; it selects no local-Sun layout and changes none of this
+  implemented contract before a separately authorized promotion.
 - [Spatial reconstruction](spatial-reconstruction.md) owns the exact
   final-view position stencil, its evidence, and its CPU/shader completion
   requirements.

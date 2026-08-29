@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "policyId": "algorithm32-san-jose-nautical-actual-point-cache-poc-contained-lane-v1",
+  "parentPolicy": "scripts/extraterrestrial/solar-zenith-cache/containment-policy.json",
+  "implementationRoot": "scripts/extraterrestrial/solar-zenith-cache/san-jose-nautical-cache-poc",
+  "runnerRoot": "scripts/extraterrestrial/solar-zenith-cache/runners",
+  "runner": "run-san-jose-nautical-actual-point-cache-poc.js",
+  "generatedOutputRoot": "tmp/extraterrestrial",
+  "productionComparisonRoots": [
+    "src/algorithm32",
+    "src/flat32"
+  ],
+  "productionComparisonAccess": "read-only",
+  "historicalRunAccess": "read-only",
+  "unitTestTree": "prohibited",
+  "testFrameworkDependency": "prohibited",
+  "immutableRunProtocol": "scripts/extraterrestrial/harness/lib/run-record.js"
+}

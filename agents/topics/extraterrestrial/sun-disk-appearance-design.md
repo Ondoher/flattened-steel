@@ -1214,10 +1214,10 @@ when that work resumes.
 
 The focused
 [solar-zenith cache design](../algorithm32/cache/solar-zenith-cache-design.md)
-now owns the spherical branch-integrated atmosphere field, its unresolved
-coordinate-chunk fork, Native15 payload, bounded residency, codec study, and
-compatibility identity. It does not yet select `mu_s` pages as the physical
-layout. This section retains the general persistence, atomicity, and immutable-
+now owns the spherical point-local cumulative-density scene cache, its packed
+altitude/solar-zenith inventory, Native15 payload, bounded residency, codec
+study, and compatibility identity. This section retains the general
+persistence, atomicity, and immutable-
 evidence requirements shared by appearance-related cache artifacts.
 
 The Stage 1 acquisition confirms that repeated current Flat/local construction

@@ -587,16 +587,18 @@ The active numerical follow-up is now owned by the
 [solar-zenith cache design](../algorithm32/cache/solar-zenith-cache-design.md).
 Accepted run `000497` strengthens the diagnosis by closing `97.20795%` of the
 focused center/flank deficit with actual-point direct first-order radiance.
-The design now selects cumulative branch-integral semantics; its
+The design now selects one point-local cumulative-density cache per scene,
+addressed by altitude, actual local solar zenith, and complete local
+source-relative outgoing direction. Its
 [distant-Sun plan](../algorithm32/cache/distant-sun-solar-zenith-cache-plan.md)
-makes a provisional J1 choice between origin-indexed and canonical-prefix
-coordinates against a boundary-total comparator, builds the actual-point N4
-solver, reopens layout and checkpoint mapping at P5, compiles the asset at P6,
-and proves loader/residency behavior at P7. It does not select a common local/
-distant field or transformed-source interface. The existing reduced cache
-remains unchanged before complete cache-render, higher-order, live, lifecycle,
-and HDR requalification. Existing Bruneton scores remain historical to the
-reduced cache.
+freezes scene support, builds the packed altitude/zenith inventory, reuses the
+actual-point N4 solver to accumulate selected local rows, compiles Native15,
+and makes the ordinary Algorithm32 samples query actual `mu_s`. Geometry keeps
+its ray-length contract. It does not select a common local/distant field or
+transformed-source interface. The existing reduced cache remains unchanged
+before complete cache-render, higher-order, live, lifecycle, and HDR
+requalification. Existing Bruneton scores remain historical to the reduced
+cache.
 
 Ambient lighting now takes the same sampling path: Geometry consumes sampled
 sky linear-RGB diffuse irradiance at endpoint normals, while the companion
@@ -610,8 +612,8 @@ claim. The following retained handoff splits numerical field ownership to the
 and production API sequencing to the
 [production follow-up plan](promotion-plan.md#production-follow-up-backlog).
 
-1. **Distant-Sun solar-zenith field:** qualify the branch-integrated spherical
-   field under its canonical design and contained plan. A later production
+1. **Distant-Sun solar-zenith field:** qualify the point-local spherical scene
+   cache under its canonical design and contained plan. A later production
    port may define live distant-source transform ingress, but finite/local
    coordinates and any common local/far API require a separate design after
    distant acceptance. Retain the current `(h, W27)` cache unchanged, then

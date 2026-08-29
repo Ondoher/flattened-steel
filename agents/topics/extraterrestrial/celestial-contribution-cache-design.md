@@ -902,13 +902,14 @@ C is built at p_ref(h), not at p.
 
 The replacement solver must preserve spherical state at each offline branch
 point, including actual-point direct-Sun visibility/source paths in every
-higher-order recurrence term. No runtime stored semantic is selected. The
-current candidates include actual-point cumulative local density with retained
-live branch integration, completed cumulative path-radiance integrals,
-canonical prefixes, and a boundary-total endpoint field. Geometry owns branch
-and coordinate reconstruction; the distant light source still owns `s` and
-source irradiance; the atmosphere remains the transport owner. This does not
-introduce camera state into the asset or move Color/ambient ownership.
+higher-order recurrence term. The selected runtime semantic is cumulative
+local spectral scattering density in one point-local cache per scene,
+addressed by altitude, actual local solar zenith, and complete local
+source-relative outgoing direction. Geometry continues to own ray termination
+and actual sample coordinates; Algorithm32 continues live branch integration.
+The distant light source owns `s` and source irradiance, and the atmosphere
+remains the transport owner. This does not introduce camera or object state
+into the cache or move Color/ambient ownership.
 
 Immutable run `000205-subjective-globe-twenty-minutes-after-sunset-actual-point-j1-control-render`
 is the accepted diagnostic control for this decision (artifact-set SHA-256
@@ -945,13 +946,14 @@ the same step. A later local design must independently select its finite-source
 coordinates, inverse-square policy, and asset identity before deciding whether
 the source-transform API is genuinely shared.
 
-For the distant source, its transform/direction remains live state separate
-from static radiometry and offline atmosphere-asset identity. Geometry owns
-its application and coordinate reconstruction; the source owns supplied
-direction and irradiance. The solar-zenith asset makes direction changes
-coordinate/chunk selections rather than rebuilds. The current reduced distant
-cache remains unchanged until numerical and integration contracts are
-separately qualified.
+For the distant source, Geometry owns application of the active direction and
+the source owns supplied direction and irradiance. Under the selected
+one-cache-per-scene design, that direction belongs to scene-cache identity.
+A direction change therefore selects or atomically swaps a separately built
+compatible scene cache; continuous animation remains deferred. Static
+atmosphere/compiler products may still be reused as declared construction
+inputs. The current reduced distant cache remains unchanged until numerical
+and integration contracts are separately qualified.
 
 The solar-zenith design now owns selection and qualification of the new
 spherical field representation. A later production port must reconcile it

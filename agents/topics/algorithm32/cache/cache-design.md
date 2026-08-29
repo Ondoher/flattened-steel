@@ -2276,13 +2276,13 @@ resolution cost of spreading 15 radial nodes over a complete trajectory must
 be decided explicitly.
 
 The spherical/distant numerical replacement is owned by the
-[distant-Sun solar-zenith branch-integrated cache design](solar-zenith-cache-design.md).
-It selects cumulative branch-integrated Native15 semantics and retains an
-origin-indexed versus canonical-prefix coordinate fork, with a boundary-total
-endpoint identity as the required comparator. The J1 choice is provisional
-until the complete fork is requalified at N4. The
+[distant-Sun solar-zenith scene-cache design](solar-zenith-cache-design.md).
+It selects one point-local cumulative-density Native15 cache per scene,
+addressed by altitude, actual local solar zenith, and complete local
+source-relative outgoing direction. Geometry retains ray termination and
+Algorithm32 retains live path sampling. The
 [distant-Sun plan](distant-sun-solar-zenith-cache-plan.md) owns the contained
-decision gates, offline compiler, chunk residency, and qualification. This
+phase gates, offline compiler, packed scene residency, and qualification. This
 interface document retains only compatible program reuse, loading,
 active/staging publication, failure preservation, and disposal mechanics; it
 does not independently select the spherical field, local-Sun layout, or a

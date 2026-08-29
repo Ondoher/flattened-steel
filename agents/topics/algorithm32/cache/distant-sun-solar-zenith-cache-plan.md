@@ -1,553 +1,813 @@
-# Distant-Sun Branch-Integrated Solar-Zenith Cache Plan
+# Distant-Sun Point-Local Solar-Zenith Scene-Cache Plan
 
-Status: candidate contained research and implementation plan under
-representation reconsideration, current through 2026-08-27. No numbered phase
-is implemented or authorized by this document. Production remains unchanged.
+Status: contained execution plan complete through P10, current through
+2026-08-29. P7 closes the P0 fixed-observer camera/object contract in accepted
+run `000570`; P8 retains the Native48/Z180/W27/F68/N4/Q30 candidate under the
+owner-selected external-accuracy boundary; P9 measures its complete
+uncompressed W27 asset and lifecycle in accepted runs `000572` and `000577`;
+and P10 qualifies exact cubed-sphere seam deduplication in accepted run
+`000579`. Production remains unchanged.
 
-No successor stored semantic or coordinate layout is selected. The
-branch-integrated phases below remain a candidate sequence drafted before the
-owner reopened the representation choice. Pre-phase run
-`000498-san-jose-nautical-zenith-culling-memory` instead quantifies the
-geometric memory opportunity for a culled actual-point cumulative-density
-alternative. Its result does not complete P0 or authorize P1; this plan must be
-reconciled with the eventual representation decision before numbered work
-begins.
-
-This plan implements and qualifies only a radially stratified spherical
-atmosphere illuminated by a distant collimated Sun. It owns execution order,
-phase status, immutable evidence, and acceptance gates for the numerical design
-in the [Distant-Sun Solar-Zenith Spectral Cache Design](solar-zenith-cache-design.md).
-The design document remains the authority for equations and physical meaning.
-
-All new proof source stays below
-`scripts/extraterrestrial/solar-zenith-cache/`. All generated assets, logs,
-captures, reports, and evidence stay in new immutable runs below
-`tmp/extraterrestrial/`. The lane creates focused self-verifying proof runners,
-not an experimental unit-test tree. Existing production source and sealed runs
-remain read-only.
-
-## Candidate Objective
-
-If branch-integrated storage is selected after the pre-phase representation
-comparison, deliver a contained offline compiler and runtime proof for one
-uncompressed Native15 distant-Sun atmosphere asset that:
-
-- preserves actual-point `(r, mu, mu_s, nu)` physics through N4;
-- stores branch-length-indexed completed path-radiance integrals;
-- supports full-boundary and finite/object-shortened segments;
-- is reusable across its declared distant-Sun elevation and azimuth range;
-- loads only a query-derived subset of the offline asset;
-- records exact disk, decode, staging, GPU-resident, and runtime costs; and
-- passes independently frozen physical and spectral error gates.
-
-The plan ends with an owner decision about a later production port. It does
-not land production code and does not implement or qualify a local Sun.
-
-## Candidate Semantic And Open Coordinate Fork
-
-For branch `g`, checkpoint length `ell_i`, Native15 channel `lambda`, and
-maximum order `N`, the stored radiance is
+The [canonical design](solar-zenith-cache-design.md) selects one point-local
+cache per scene:
 
 ```text
-F_N(g, ell_i, lambda) = integral from 0 through ell_i of
-    T_g(0 -> t, lambda) * J_<=N(p_g(t), v_g, lambda) dt
+C4(altitude, localSolarZenith, outgoingDirection, Native15)
 ```
 
-Every checkpoint is one completed integral. Runtime interpolates its upper
-limit; it never sums checkpoint values. `ell` is physical distance in metres.
-A normalized coordinate and an integer checkpoint index are storage mappings,
-not physical units. Offline quadrature count is independent of retained
-checkpoint count.
+This plan replaces the earlier branch-integrated checkpoint sequence. It does
+not implement observer-projected pages, camera-origin branch checkpoints,
+canonical prefixes, or boundary-total fields.
 
-If the branch-integrated candidate survives pre-phase comparison, Phase 3
-provisionally selects between:
+All implementation belongs below `scripts/extraterrestrial/`. All generated
+output belongs in new immutable runs below `tmp/extraterrestrial/`. The
+historical observer-projected lane and every prior run remain read-only
+evidence.
 
-1. origin-indexed `F(r, mu, mu_s, nu, ell, lambda)`, which adds a true fifth
-   axis; and
-2. a canonical whole-ray prefix such as `F(b, eta, nu, x, lambda)`, which may
-   replace origin redundancy but changes paging and finite-segment algebra.
+## Objective
 
-Neither layout, `N_ell = 15`, nor two-page residency is preselected. Phase 3
-also builds a single-boundary-total endpoint-algebra comparator. It is not a
-third checkpoint semantic, but it is required before extra checkpoint storage
-can be justified.
+Build, load, and exercise one uncompressed Native15 scene cache that makes the
+ordinary Algorithm32 path sampler local-solar-zenith aware without changing
+Geometry's ray-length contract.
 
-## Pre-Limit Resource Policy
+The selected runtime remains:
 
-No steady-state, transition, construction, disk, or driver-memory ceiling is
-selected before the [pre-limit memory ledger](solar-zenith-cache-design.md#pre-limit-memory-ledger)
-is completed and then replaced by measurements from the real layouts. The
-initial ledger deliberately reports an envelope rather than fitting a design
-to a guessed budget.
+```text
+rayLength = Geometry.resolveVisibleLength(...)
 
-The resource decision has four evidence levels:
+for each Algorithm32 sample along rayLength:
+    calculate actual point
+    calculate altitude and local solar zenith
+    transform outgoing direction into the local source frame
+    query one scene cache
+    accumulate transmittance-weighted spectral density
+```
 
-1. exact logical arithmetic for every candidate count and scalar format;
-2. exact physical packing, chunk, staging, and active/prefetch/successor/
-   retiring resource unions from the prototype;
-3. query traces for ordinary sky, varied endpoints, probes, ground, and space;
-   and
-4. observed steady and peak renderer/driver deltas on named hardware.
+The first implementation targets the retained San Jose distant-Sun scenes.
+Solar noon provides the clearest near-ground control; nautical twilight
+provides the decisive missing-`mu_s` control.
 
-P0 freezes the ledger schema, not a limit. P3 produces provisional J1
-rate/accuracy/query-union curves and may eliminate dominated layouts without
-inventing an absolute ceiling. P5 repeats them at N4, may change the layout,
-and presents the first complete uncompressed frontier for an owner choice
-before P6 compilation. P8 adds observed runtime and driver allocation before
-any supported-hardware budget is final. Compression does not contribute
-credit before P9.
+## Fixed Decisions
 
-## Frozen Claim Boundary
+- Stored semantic: cumulative local spectral scattering density through N4.
+- Runtime axes: altitude, local solar zenith, and complete source-relative
+  outgoing direction.
+- Payload: Native15 spectral values; no RGB cache representation.
+- One atomically published cache per scene Sun state.
+- Geometry continues to provide ray termination; the cache contains no camera
+  or object dimension.
+- Objects shorten the live integration ray and do not rebuild the cache.
+- The existing pure-order recurrence remains `L1 -> J2 -> L2 -> J3 -> L3 ->
+  J4`; cumulative density never feeds recurrence.
+- Offline construction time and temporary memory do not constrain the stored
+  physics. Resident scene-cache memory remains a governing measurement.
+- Production W27 is the qualification baseline. A first visual POC may retain
+  W39 only to compare directly with the historical POC.
+- Native15 `R32F` is the uncompressed correctness baseline. Compression waits
+  until qualification.
+- Requested images are written regardless of appearance or numerical gates.
 
-The first truth asset fixes and hashes:
+## Required Scene-Support Decision
 
-- planet bottom/top radii and spherical geometry policy;
-- radially stratified atmosphere, aerosols, and ozone profile;
-- ozone as absorption/extinction only, never scattering or phase;
-- ground model and albedo;
-- distant collimated source direction convention, angular-support policy,
-  Native15 irradiance, and normalization;
-- Native15 bin-average semantics and the higher-resolution offline spectrum;
-- requested N1, N2, and N4 recurrence with only the preceding pure order
-  feeding the next;
-- source/view/angular/spectral integration policies;
-- source-visibility, refraction, and finite-disk policy;
-- supported solar-elevation interval;
-- branch kinds, units, coordinate mappings, and precision; and
-- compiler, solver, writer, verifier, and source revisions.
+Before inventory construction, P0 must declare what one scene cache promises
+to support. At minimum the declaration contains:
 
-Camera, Color, stars, Sun tiles, display exposure, and screen resolution are
-not asset axes. They can appear only in downstream diagnostic renders.
+- permitted camera-origin region;
+- permitted camera directions or complete rotation support;
+- ground, atmosphere, and object endpoint ranges;
+- altitude range;
+- local-solar-zenith range reachable at each altitude; and
+- behavior for an out-of-support query.
 
-## Phase 0 — Contract And Evidence Freeze
+A fixed observer with rotation, a bounded camera volume, and unrestricted
+planet-wide motion create different inventories. They use the same field
+semantic but cannot share byte claims.
+
+The first San Jose POC may freeze the existing observer position with complete
+rotation and arbitrary object-shortened endpoints. Any wider translation
+support must be declared and measured rather than inferred.
+
+## Selected Logical And Packed Layout
+
+The logical field is rectangular:
+
+```text
+altitude node
+local-solar-zenith node
+outgoing direction
+Native15 spectrum
+```
+
+The physical cache may omit altitude/zenith blocks unreachable by declared
+scene support. One retained inventory block contains all outgoing directions
+and all Native15 values at one altitude/zenith node.
+
+The first packed representation uses:
+
+```text
+x = W27 or comparison W39 outgoing index
+y = packed (altitude, local-solar-zenith) row
+z = Native15 wavelength layer
+format = R32F
+```
+
+A ledger maps physical altitude/zenith stencils to packed rows. It must provide
+every lower/upper altitude and zenith neighbor required by runtime
+interpolation. Missing support is an explicit error, not a zero field value.
+
+One published scene-cache handle may internally bind more than one hardware
+texture if required by limits, but all resources publish, swap, restore, and
+dispose atomically. There is no Sun-position paging inside one scene cache.
+
+## Memory Baselines
+
+One retained block costs:
+
+```text
+W27: 262,440 bytes
+W39: 547,560 bytes
+```
+
+Full Native48/Z180 rectangular caches cost:
+
+```text
+W27: 2,267,481,600 bytes (about 2.112 GiB)
+W39: 4,730,918,400 bytes (about 4.405 GiB)
+```
+
+Run `000498`'s conservative San Jose nautical W27 ledger retains 617 blocks or
+`154.424171 MiB`; a one-node exterior halo retains 713 blocks or
+`178.451271 MiB`. These are input evidence for P1, not accepted N4 cache
+sizes.
+
+The plan chooses no memory limit before it records:
+
+- uncompressed payload bytes;
+- ledger and global-resource bytes;
+- physical texture allocation;
+- complete-cache steady residency;
+- atomic replacement transition peak; and
+- observed driver allocation on named hardware.
+
+## Builder Strategy
+
+The existing contained GPU solver already constructs the correct transient
+logical field over Native48, Z180, F68, and W39. The successor compiler removes
+only the fixed-observer projection stage.
+
+For each wavelength:
+
+```text
+initialize the packed scene-cache accumulator
+
+evaluate J1 at every retained local field state
+accumulate selected J1 rows
+
+construct J2 from L1
+accumulate selected J2 rows
+transport J2 to L2
+
+construct J3 from L2
+accumulate selected J3 rows
+transport J3 to L3
+
+construct J4 from L3
+accumulate selected J4 rows
+
+write the completed packed wavelength layer
+```
+
+Rows are selected by `(altitudeIndex, solarZenithIndex)` and copied directly
+from the local solver field. No observer ray, altitude-shell intersection,
+projection validity mask, camera canonical frame, or branch-distance mapping
+participates.
+
+## Runtime Strategy
+
+At each existing Algorithm32 quadrature point, runtime calculates:
+
+```text
+p = observer + distance * worldRay
+h = length(p) - bottomRadius
+localUp = normalize(p)
+mu_s = dot(localUp, sceneSunDirection)
+localOutgoing = express(worldRay, localUp, sceneSunDirection)
+```
+
+The packed ledger resolves the two altitude and two solar-zenith rows. W27 or
+W39 supplies the four outgoing-direction taps. The cache reconstructs one
+Native15 spectrum from at most 16 taps.
+
+The outer path length, sample distances, view transmittance, object shortening,
+endpoint composition, celestial composition, and Color remain unchanged.
+
+## Phase P0 — Contract And Scene-Support Freeze
+
+Status: complete in accepted immutable run
+`000516-point-local-scene-cache-p0-contract` (artifact-set SHA-256
+`c1c7630ad076c74aba3ea0c987879b15c0c42f1cca2cf003eeb7ec220308724c`).
 
 Deliverables:
 
-- one versioned field-semantic record;
-- units and sign conventions for every coordinate and quantity;
-- explicit ground, tangent/space, and terminal branch definitions;
-- one upstream prefix anchor per connected participating-medium interval and
-  an explicit prohibition on prefixes across opaque ground;
-- both coordinate candidates and their inverse mappings;
-- truth-corpus identities and held-out partitions;
-- predeclared numerical tolerances and denominator floors;
-- a pre-limit analytical memory ledger covering complete assets, decoded
-  staging, steady query unions, compatible and incompatible atomic
-  replacement, and compiler truth memory for all declared count sweeps; and
-- resource-ledger and failure-status schemas for logical, physically packed,
-  and observed driver bytes.
+- create a new contained successor lane;
+- pin the selected cumulative-density semantic and units;
+- pin the first scene Sun state and supported camera/spatial region;
+- pin Native48, provisional Z180, F68, W39-for-POC, Native15, N4, ozone, and
+  numerical controls;
+- define exact out-of-support behavior;
+- define packed-row ledger and cache manifest schemas; and
+- record the historical runs consumed as comparison evidence.
 
 Gate P0:
 
-- every physical, numerical, source, and tool input has one owner and identity;
-- no production or local-Sun implementation or accuracy claim appears in the
-  contract;
-- branch checkpoint count is declared open;
-- no memory ceiling, page-count limit, target hardware class, or compression
-  credit is selected from analytical payload arithmetic alone; and
-- candidate output has not been inspected before error thresholds are frozen.
+- one scene means one declared cache identity and support domain;
+- camera and object state are absent from the stored axes;
+- Geometry's ray-length contract is unchanged; and
+- all implementation/output paths satisfy containment and immutable-run rules.
 
-## Phase 1 — Geometry, Branch Mapping, And Shape-Impact Oracle
+## Phase P1 — Inventory And Culling Ledger
 
-Implement a cache-free binary64 geometry oracle for:
+Status: complete in accepted immutable run
+`000517-point-local-scene-cache-p1-inventory` (artifact-set SHA-256
+`91cb2e9938e1f24ba3a7feb5e5217ae45b120aff33d18a585c7e1b274ad3c5ac`).
 
-- atmosphere entry/exit and ground intersection;
-- tangent/closest-approach coordinates;
-- actual-point `r`, `mu`, `mu_s`, and `nu` along a branch;
-- analytic Earth-shadow/source-visibility crossings;
-- `ell`, normalized address, checkpoint index, and inverse mapping; and
-- physical-domain validity and disconnected branch kinds.
+The fixed San Jose observer, complete camera rotation, and arbitrary
+Geometry-shortened endpoints retain 618 altitude/zenith blocks for solar noon
+and 617 for nautical twilight. Both occupy 18 complete Z180 pages, but the
+packed ledgers cost only `338,392,080` and `337,844,520` bytes with W39, or
+`162,187,920` and `161,925,480` bytes with W27. The proof exercised
+`6,736,896` reachable local queries and more than `26.6 million` stencil taps
+per scene. These are exact logical R32F counts, not N4 construction,
+interpolation-accuracy, physical-texture, or driver-memory evidence.
 
-Before the distant address layout is provisionally selected, add a
-mathematical shape-impact audit for later local work. It must:
+Deliverables:
 
-- independently verify the design's same-rank fixed-range spherical point-
-  source invariants `(r, mu, zeta, kappa, ell)` with fixed geocentric source-
-  center radius `rho = length(S)` in asset identity, failing P1 if a
-  counterexample is found and treating sampled `rho` as an additional axis;
-- show their distant limit `zeta -> mu_s` and `kappa -> nu`;
-- retain a concrete Flat/dome two-center counterexample in which atmosphere or
-  map center, source subpoint, and boundary state are not represented by that
-  spherical tuple; and
-- verify that named-axis manifests and opaque query packets do not hard-code a
-  `mu_s` page family.
-
-This is a coordinate-sufficiency and interface-shape audit only. It does not
-construct a local cache or qualify local physics.
-
-Required fixtures include ground, atmosphere, space, tangent, radial, horizon,
-and degeneracy cases. The retained San Jose nautical horizon must reproduce
-its first sunlit region near `543 km` without hard-coding that value.
+- enumerate every altitude/zenith block reachable by the P0 scene support;
+- add interpolation-safe altitude and zenith halos;
+- prove every declared runtime query has a complete 2-by-2 physical stencil;
+- compare rectangular, complete-page, and packed-row byte counts;
+- measure solar-noon and nautical inventories independently; and
+- record W39 POC and W27 successor sizes without selecting a limit.
 
 Gate P1:
 
-- every mapping is monotone over its declared connected branch;
-- zero and terminal endpoints are exact;
-- forward/inverse round trips pass their frozen tolerance;
-- canonical states obey `eta^2 + nu^2 <= 1`, use a declared radial convention
-  at `b = 0`, and keep each prefix inside one connected interval;
-- finite-spherical origin states obey
-  `1 + 2*mu*zeta*kappa - mu^2 - zeta^2 - kappa^2 >= 0`, canonical finite
-  states obey `eta^2 + kappa^2 <= 1`, and any `d_t = 0` source-center
-  singularity has an explicit excluded-domain, finite-radius, clamp, or
-  termination policy;
-- no interpolation path crosses invalid or disconnected states; and
-- analytic and independently sampled visibility events agree; and
-- the finite-spherical derivation and Flat/dome counterexample above are both
-  retained before P3 without selecting a local asset.
+- no retained block depends on a camera-ray shell intersection;
+- no missing block is interpreted as spectral zero;
+- the ledger deterministically round-trips every retained physical node; and
+- the declared support closure is complete.
 
-## Phase 2 — Cumulative J1 Checkpoint Study
+## Phase P2 — Selected-Row GPU Accumulator
 
-Construct high-resolution binary64 actual-point J1 cumulative curves before
-building a full field. Use training branches plus whole held-out branches and
-held-out endpoint lengths.
+Status: complete in accepted immutable run
+`000519-point-local-scene-cache-p2-accumulator` (artifact-set SHA-256
+`8ad58afb3c45175c015c3e2f4d4997294698352fcf3f1403f27f25da7959c873`).
+At `595 nm`, it emits exactly 618 solar-noon and 617 nautical packed rows,
+proves binary32 cumulative order identities, finite nonnegative values,
+preceding-pure-order recurrence, and complete tracked temporary release. Run
+`000518` is the preserved sandbox-denied Chrome-launch predecessor.
 
-Compare retained counts `8`, `12`, `15`, `24`, and `32` under:
+Deliverables:
 
-- uniform physical distance;
-- optical-depth-aligned spacing;
-- analytic event-aligned spacing; and
-- an adaptive worst-interval splitter used as a truth upper bound.
+- replace observer-page projection with packed local-row accumulation;
+- evaluate direct J1 over retained local states;
+- copy and accumulate selected pure J2, J3, and J4 rows;
+- retain preceding-pure-order recurrence only;
+- process one wavelength at a time; and
+- expose selected probes and complete resource ledgers.
 
-Every candidate includes zero and terminal endpoints plus applicable
-entry/exit, ground, tangent, source-visibility, and high-gradient landmarks.
-Measure construction convergence separately from checkpoint interpolation and
-`R32F` quantization.
+Gate P2:
 
-Gate P2 selects a preliminary checkpoint mapping only if it passes:
+- one wavelength emits the exact packed row count;
+- every emitted scalar is finite and nonnegative;
+- `C4 = J1 + J2 + J3 + J4` at selected probes;
+- no cumulative field feeds recurrence; and
+- all temporary solver resources release after their last use.
 
-- absolute Native15 error and relative error above a frozen floor;
-- spectral energy, photopic Y, XYZ, and signed-linear-RGB error;
-- transmittance/optical-depth error;
-- zero, nonnegative, and nondecreasing cumulative-integral invariants;
-- full-boundary equality and arbitrary shortened-segment error;
-- source-visibility crossing and short-segment conditioning; and
-- the retained nautical center/flank diagnostic.
+## Phase P3 — Complete Native15 Scene-Cache Compiler
 
-Failure to find a passing checkpoint grid within the declared `8` through
-`32` study counts rejects the explicit checkpoint-axis candidate; those study
-counts are not a runtime memory limit, and failure does not authorize post-hoc
-threshold changes.
+Status: complete in accepted immutable run
+`000520-point-local-scene-cache-p3-compiler` (artifact-set SHA-256
+`16271de0e4c5de115335655ccfd6a0670604458a4340d659a06da7116f4da17d`).
+It writes independently loadable Native15 W39 payloads of `338,392,080` bytes
+for solar noon and `337,844,520` bytes for nautical twilight, with separate
+ledgers, manifests, derivations, and content hashes.
 
-## Phase 3 — Provisional Coordinate-Layout Decision
+Deliverables:
 
-Build reduced uncompressed prototypes for both checkpoint-coordinate
-candidates and a boundary-total endpoint comparator using the same J1 truth
-curves, endpoints, and query corpus.
+- execute all 15 wavelength schedules;
+- write one uncompressed scene-cache payload and packed-row ledger;
+- write cache identity, support, layout, units, and derivation metadata;
+- preserve complete content hashes; and
+- support adding another independently built scene cache without mutating an
+  earlier run.
 
-For origin-indexed storage, record the real five-axis payload and
-`(mu_s, i_ell)` slab working sets. At the provisional reference grid, direct
-Native15 `R32F` with 15 checkpoints is `28.125 MiB` per `mu_s` page,
-`56.25 MiB` for two complete pages, and `900 MiB` over 32 pages.
-Those figures are one point in the required `N_mu_s = 16, 24, 32, 48, 64`
-by `N_ell = 8, 12, 15, 24, 32` sweep, not a selected limit. Include factored
-transmittance, coordinate tables, physical padding, active query unions,
-adjacent shared-page transitions, fully incompatible replacements, and CPU
-decode/upload overlap at every point. Select and report radiance and factored-
-transmittance checkpoint counts, metre mappings, and runtime slab unions
-independently; source independence does not imply equal `ell` grids.
+Gate P3:
 
-For canonical prefixes, record converged `(b, eta, nu, x)` counts, prefix
-subtraction error, weak-transmittance amplification, disconnected branch
-handling, and actual query chunk unions. No size is inferred from the
-origin-indexed grid. Its byte ledger must count both atmospheric intervals for
-every ground-crossing line, invalid-domain or ragged-packing policy, radial and
-tangent seams, transmittance, and the exact physical chunk layout.
+- payload and ledger sizes match exact arithmetic;
+- every wavelength uses the same logical inventory;
+- the cache is independently loadable; and
+- immutable-run verification passes.
 
-For the comparator, let `B(x)` be radiance from actual-point state `x` to the
-forward terminal boundary of its connected branch, and reconstruct a
-downstream endpoint `y` with
+## Phase P4 — Zenith-Aware Runtime Lookup
 
-```text
-L(x -> y) = B(x) - T(x -> y) * B(y).
-```
+Status: complete in accepted immutable run
+`000522-point-local-scene-cache-p4-runtime` (artifact-set SHA-256
+`6595be5cab9e1d75bfb6717dbf44b612c9b50e0f0a3efa04c217c59859042e2c`).
+Exact nodes resolve one tap; the manufactured off-grid state resolves eight
+nonzero taps with unit total weight. GPU reconstruction agrees with CPU
+addressing within `1.23447e-13` maximum absolute error. Unsupported states
+fail explicitly. Run `000521` preserves the exact-node tolerance predecessor.
 
-Build both boundary lookups from geometrically consistent actual-point states.
-Reject queries that cross opaque ground, and measure subtraction cancellation,
-short-segment relative error, transmittance underflow, bytes, fetches, and
-resident query unions on exactly the checkpoint candidates' endpoint corpus.
+Deliverables:
 
-Gate P3 provisionally selects one checkpoint layout using:
-
-- held-out physical error;
-- exact logical disk and decoded bytes;
-- GPU packing and resident bytes;
-- per-frame active, prefetched, successor, and retiring chunk-union
-  distributions with P50/P95/P99 and worst case;
-- CPU fetched, decoded, repacked, upload-backing, verification, and
-  restoration-mirror peaks;
-- texture dimensions/counts/formats plus texture-size, array-layer, fragment-
-  sampler, combined-sampler, and float-format capability limits;
-- texture fetches and interpolation work;
-- short-segment numerical conditioning; and
-- endpoint, full-boundary, ground, and space support.
-
-The checkpoint layout must also show a measured advantage over the comparator
-that is sufficient to justify its extra state. If neither checkpoint candidate
-is viable, or the boundary-total identity dominates it, stop and revise the
-representation in the design before compiling an asset. P3 is a J1 decision
-only and cannot freeze the final layout; P5 must reopen it at N4.
-
-## Phase 4 — Independent Actual-Point N4 Truth Solver
-
-Implement an offline binary64-or-higher solver that retains pure
-`J1, L1, J2, L2, J3, L3, J4` evidence and cumulative `JthroughN` only for
-comparison. It must evaluate actual-point solar state and Earth shadow along
-every source, incoming, transport, and view path.
-
-It must not read the current receiver-column `C4` as physical truth. Only the
-preceding pure order feeds recurrence; cumulative feedback is a manufactured
-failure case.
+- load and bind the packed scene cache as one runtime provider;
+- compute actual-point altitude and `mu_s` at every path sample;
+- transform the live outgoing direction into the local source frame;
+- implement the 2-altitude by 2-zenith by 4-direction stencil;
+- preserve Native15 through path integration; and
+- fail explicitly on unsupported queries.
 
 Gate P4:
 
-- internal quadratures converge independently on every retained axis;
-- recurrence and order/component conservation identities hold;
-- N1 agrees with run `000497`'s actual-point three-ray oracle;
-- blocked direct components and nonzero multiple-scattered shadow radiance are
-  distinguished correctly;
-- symmetry controls pass where the declared atmosphere/ground is symmetric;
-  and
-- all 15 channels are finite with declared nonnegative tolerances.
+- manufactured local states resolve the declared packed rows and weights;
+- exact nodes produce exact single-row/single-direction access;
+- off-grid weights sum to one;
+- no observer-projection or validity-mask path participates; and
+- the outer Algorithm32 sample distances and Geometry ray length remain
+  unchanged.
 
-## Phase 5 — N4 Layout And Resolution Convergence
+## Phase P5 — Solar-Noon And Nautical Plausibility Renders
 
-Vary each selected physical axis, retained branch checkpoints, internal
-quadrature, and Native15 reduction independently. Hold out complete solar
-states, branches, checkpoint intervals, orders, and wavelength conditions.
+Status: complete in accepted immutable run
+`000524-point-local-scene-cache-p5-renders` (artifact-set SHA-256
+`85d3bb8298775210d5a30c88d8c3ae6faecd80eba4b06060f5353d9c78df1d25`).
+Both unconditional `640 x 400` images use only their complete P3 point-local
+cache. Solar-noon row 220 measures `(148.74, 146.33, 141.94)`, close to run
+`000513`'s successful `(145.43, 144.62, 141.62)` near-ground diagnostic. The
+nautical source band measures `57.81`, versus left/right flanks `53.58` and
+`58.16`; the prior central depression is absent in this first-look metric.
+Run `000523` preserves the post-render historical-image-decode stall; its
+uploaded images were not promoted or copied.
 
-Repeat the P2 checkpoint selection against the complete N4 field. Rebuild and
-recompare both checkpoint-coordinate candidates and the single-boundary-total
-endpoint comparator on held-out N4 states and the same segment corpus. P5 may
-reverse P3's layout choice or reject the explicit checkpoint representation;
-neither the J1 mapping nor the J1 address decision is grandfathered.
+Deliverables:
 
-Freeze every nondominated uncompressed N4 grid and layout that passes the
-predeclared physical, conditioning, and query-union gates. Record its complete
-resource envelope without discarding it against an unselected absolute memory
-ceiling. A J1 mapping or layout that fails at N4 is rejected.
+- render the retained San Jose solar-noon scene first;
+- render the retained San Jose nautical-twilight scene second;
+- preserve both images regardless of appearance;
+- compare solar-noon horizon profiles with runs `000511`, `000513`, and
+  `000515`; and
+- compare nautical source-axis/flank behavior with runs `000493`, `000497`,
+  and `000509`.
 
-Recompute the complete P3 memory frontier with the N4-selected counts and
-actual compiler/runtime packing. P5 may not inherit a ceiling from the J1
-prototype, and it must keep logical bytes distinct from observed driver
-allocation.
+Gate P5 is operational only for the first look:
 
-Gate P5 records the uncompressed Pareto frontier for coordinate layout,
-checkpoint mapping, grid, transmittance algebra, and resource envelope. Before
-P6, the owner selects one measured candidate envelope for compilation or
-rejects the checkpoint representation. This is the first resource-limit
-decision; it is not backdated into P0--P3.
+- the complete cache loads;
+- both scenes render without resource or shader failure;
+- no additive actual-point correction or observer-projected page is used; and
+- all outputs and configuration identities are preserved.
 
-## Phase 6 — Offline Asset Compiler
+## Phase P6 — Radial And Solar-Zenith Resolution
 
-Compile the P5-selected grid from the converged truth solver. First emit
-uncompressed Native15 `R32F`; do not add a basis, dictionary, residual codec,
-or half precision.
+Status: complete. P6.1 is complete in accepted immutable runs
+`000525-point-local-scene-cache-p6-radial-build` (artifact-set SHA-256
+`9513169456d7da76a839d97e434fc01b6927c4294af3ec178bd13151af424d66`)
+and `000526-point-local-scene-cache-p6-radial-diagnostic` (artifact-set SHA-256
+`bac0ecad8c5f25208c0150c1a92b7413dfcdac8c32605f16963ffdf5e6a02690`).
+The isolated quadratic 48-node radial redistribution does not remove the gray
+band, and retained, linear, and chromaticity views show that display
+compression is not its primary cause. The dominant first camera-path midpoint
+lies at about `190.3 m` altitude and supplies more than `92.6%` of the focused
+Native15 spectral sum. P6.2 is complete in accepted immutable run
+`000527-point-local-scene-cache-p6-components` (artifact-set SHA-256
+`f85d0412aa15feb4929ed47fb1f48cbc94a4c7dc5ca4964e9975e8b39b9e33c0`).
+The gray-band focus is `56.79%` final-event Mie and `49.07%` J2--J4, versus
+`16.89%` and `29.35%` in the blue-sky control. This attribution does not by
+itself select a physical correction.
+P6.3 is complete in accepted immutable run
+`000528-point-local-scene-cache-p6-aerosol-sweep` (artifact-set SHA-256
+`87ea6c235558b427ca0ca27d104ddb87b885701da2639a40b9733744eb901729`).
+The pale band survives with zero aerosol, where J1 supplies `77.70%` of the
+focused result. Aerosol changes brightness and hue but is not the structural
+cause. The next isolated P6 step refines the uniform 15-interval camera-path
+quadrature around the dominant near-ground interval while reusing the complete
+canonical cache unchanged.
+P6.4 is complete in accepted immutable run
+`000529-point-local-scene-cache-p6-view-quadrature` (artifact-set SHA-256
+`c3d1f025692483e98d2f6090367abf7afd0e3389a22d96ccbfcddca878166ea3`).
+Using the exact canonical cache, quadratic near-observer spacing changes row
+220 from gray to blue at the same 15-sample count; 30 and 60 intervals then
+converge within `0.71%` magnitude and `0.000593` normalized spectral shape.
+The uniform camera-path quadrature is the causal defect. P6.5 subsequently
+qualifies the general Q30 view-path rule across retained Sun states and
+endpoint classes.
+P6.5 is complete in accepted immutable run
+`000530-point-local-scene-cache-p6-q30-qualification` (artifact-set SHA-256
+`e63cc4b2b516e2909c33d456f3966ca713e7f4bbf2c91aa883c00c47db2d03f9`).
+All six Q30/Q60 solar-noon, nautical, and opaque-black 10 km object renders are
+preserved. Against uniform-960 sparse integration, Q30's worst result is the
+solar-noon horizon at `0.927412%` magnitude error and `0.000764425` normalized
+shape error, within the frozen `2%` and `0.002` gates. Q30 is the contained
+candidate for subsequent coverage; production remains unchanged.
 
-The immutable asset contains at least:
+Deliverables:
 
-```text
-manifest.json
-coordinates.json
-source-model.json
-branch-mapping.json
-transmittance-manifest.json
-radiance/<coordinate-chunk>.bin
-transmittance/<coordinate-chunk>.bin
-checksums.json
-order-component-probes.json
-convergence-ledger.json
-derivation.json
-validation-report.md
-```
+- measure held-out Native15 interpolation error for Native48;
+- test a fixed-count radial redistribution with denser valid near-ground
+  support;
+- treat run `000524`'s pale gray solar-noon near-ground band as an explicit
+  defect and preserve it as the visual and spectral control;
+- separate cache interpolation, atmospheric scattering, and display
+  conversion at that band by recording pre-display Native15 values plus
+  Rayleigh, aerosol, and scattering-order contributions;
+- render the solar-noon control after each isolated radial or model change,
+  preserving every image regardless of its gate result;
+- refine local solar zenith around the terminator and low elevations;
+- independently refine outgoing direction and construction quadrature; and
+- return from comparison W39 to production W27 unless evidence justifies a
+  different decision.
 
-The actual names may be refined before P0; their semantic records may not be
-omitted. Every chunk records logical and physical packing, units, dimensions,
-byte lengths, uncompressed and stored-byte hashes, parents, and derivation.
+Gate P6 freezes the first qualified altitude, zenith, incoming, and outgoing
+domains only after held-out physical error and scene-cache bytes are recorded.
+It may not accept the current gray near-ground band as plausible haze. The
+band must either be materially corrected by the selected resolution/model
+change or be causally isolated to a named non-cache owner with a concrete
+correction step that is completed before P7 begins.
 
-Gate P6:
+## Phase P7 — Camera And Scene-Object Coverage
 
-- two independent builds produce identical declared bytes and hashes;
-- a separate verifier reconstructs the manifest and every content hash;
-- decode reproduces the uncompressed values exactly;
-- retained order probes agree with P4 and the selected layout agrees with P5;
-  and
-- complete disk, peak construction, and verification resources are recorded.
+Status: complete in accepted immutable run
+`000570-point-local-scene-cache-p7-closure`. It consumes the sealed P1
+full-rotation closure, P6 endpoint-class qualification, P7 object renders, and
+six-scene sequence. It additionally proves Native15 opaque-black, lit, and
+emissive endpoint composition, moving-object cache reuse, the P0 no-translation
+boundary, and explicit out-of-support failure. Object-cast volumetric shadows
+remain outside scope.
 
-## Phase 7 — Contained Loader, Sampler, And Residency
+Deliverables:
 
-Implement a contained runtime consumer around an opaque coordinate-family
-query packet. Generic loader code must not assume that every family has a
-`mu_s` page, even though the first concrete asset is distant-Sun only.
+- exercise complete camera rotation;
+- exercise every P0-declared camera translation bound;
+- exercise ground-, atmosphere-, and object-shortened rays;
+- verify `L_atmosphere + T_view * L_surface` endpoint composition;
+- verify moving objects do not rebuild or invalidate the cache; and
+- report queries outside declared scene support.
 
-The sampler returns:
+Object-cast volumetric shadows remain explicitly outside this gate.
 
-- already-integrated Native15 atmospheric path radiance for the requested
-  segment; and
-- the separately defined Native15 transmittance needed for celestial or
-  endpoint composition.
+## Phase P8 — Independent Physical And Spectral Qualification
 
-It never attenuates integrated atmospheric radiance twice and never restores a
-live density-marching fallback silently.
+Status: complete and accepted by superseding owner-decision run `000569`.
 
-Residency is the exact union required by the frame's query packets. Loading and
-publication atomically bind asset, distant-source state, query packet, and
-chunk set. Missing ranges fail explicitly; stale loads, black substitution,
-and incompatible clamping are prohibited.
+Deliverables:
 
-Gate P7:
+- build the physically matched 40-wavelength B1 candidate through the actual
+  point-local cache consumer and selected live view integration;
+- preserve the exact B1 measurement boundary, 17 times, 81 directions, 31
+  scored 360--712.5 nm values, units, preprocessing, and aggregate equation;
+- require aggregate spectral RMSE no greater than the accepted current
+  Algorithm32 F68 score `11.820391604126252 mW m^-2 sr^-1 nm^-1`; this is the
+  hard promotion non-regression gate selected by the owner;
+- report the candidate beside all 17 accepted F68 per-time scores even though
+  the aggregate, rather than each individual time, is the selected hard gate;
+- compare all 40 values and their conservative Native15 reduction;
+- build sparse over-resolved actual-point GPU oracles;
+- separate J1, J2, J3, and J4 diagnostics;
+- test source scaling, ozone, aerosols, symmetry, rotation, and exact-zero
+  invariants; and
+- cover solar noon, sunset, civil, nautical, astronomical, antisolar,
+  near-ground, terminator, and weak-blue states.
 
-- all-resident and split-chunk sampling agree under the frozen tolerance;
-- ordinary sky, varied endpoint, probe, ground, and space query unions pass;
-- prefetch, stale completion, failure preservation, context restoration, and
-  exact-once disposal pass; and
-- a dummy second coordinate-family manifest proves generic compiler/loader
-  plumbing has no hard-coded distant-axis assumption. This is an architecture
-  fixture, not local-Sun physics or accuracy evidence.
+Gate P8 applies thresholds frozen before candidate output is inspected. The
+B1 gate scores physical spectral radiance before Color, exposure, gamma, or
+other display transforms; image-space similarity is separate evidence.
 
-## Phase 8 — Physical, Appearance, And Resource Qualification
+### Immediate follow-up — B1 point-local non-regression
 
-The qualification matrix includes:
+Status: executed; numerical gate accepted after exact-ground binary32 boundary
+correction, with diagnostic and figure evidence preserved.
 
-- exact San Jose sunset, civil, nautical, and astronomical states;
-- run `000497`'s source-axis and `+/-50-degree` causal controls;
-- daylight B1 with the unchanged measurement boundary;
-- source-facing, antisolar, zenith, horizon, ground, and space paths;
-- full-boundary and object-shortened segments;
-- page/chunk-crossing Sun-motion sweeps;
-- low-elevation blue energy and the `470/626 nm` ratio; and
-- order-separated and ozone-on/off physical diagnostics.
+1. Freeze run `000479`'s reflection-completed F68 candidate table and
+   `11.820391604126252 mW m^-2 sr^-1 nm^-1` aggregate as the baseline.
+2. Adapt the B1 paper-profile inputs, 17 Sun states, 81 directions, Direct40
+   wavelengths, N4, F68, and W27 to the contained point-local compiler.
+3. Stream one wavelength layer at a time through packed scene rows, the real
+   point-local lookup, Geometry atmosphere endpoints, and Q30 view integration;
+   do not persist seventeen complete 40-channel caches.
+4. Preserve the complete 1,377-row by 40-channel candidate table, exact input
+   and implementation identities, sparse cache probes, and all per-time scores.
+5. Score with the unchanged B1 measurement boundary and equation. Accept the
+   promotion gate only when aggregate RMSE is no greater than
+   `11.820391604126252`; preserve failed output without weakening the gate.
 
-Spectral/oracle gates own acceptance. Every requested diagnostic image is
-written even if an appearance gate fails; failure status must not suppress
-captures. A Bruneton side-by-side panel is not required for the first causal
-qualification.
+The Direct40 result owns the primary non-regression decision. Conservative
+Native15 reduction remains a separately reported follow-up and cannot replace
+or relax the Direct40 gate.
 
-Record complete asset bytes, stored and decoded chunk bytes, CPU staging,
-GPU resident and driver peaks, decode/upload/publication times, cache misses,
-frame cost, texture fetches, and the observed query-union distribution.
-Record cold load, steady terminal sky, varied endpoints, page/chunk crossing,
-prefetch, compatible Sun transition, incompatible asset replacement, failed
-load, context restoration, and delayed post-disposal reclamation as separate
-timelines. Report texture format, dimensions, count, padding, invalid slots,
-sampler count, `MAX_TEXTURE_SIZE`, `MAX_ARRAY_TEXTURE_LAYERS`, fragment and
-combined texture-unit limits, applicable float-sampling/render-target support,
-and hardware/browser/ANGLE identity with every driver result.
+Rejected run `000535-point-local-scene-cache-b1-non-regression` first exposed
+a contained compiler defect: direct J1 used local `+Z` as the source phase
+direction for every solar-zenith row. Its `33.395280492741584` aggregate is
+diagnostic only. The corrected compiler uses
+`(sin(solarZenith), 0, cos(solarZenith))` in the local source-relative frame.
 
-Gate P8 decides whether the checkpoint representation is viable relative to a
-P3/P5-qualified single boundary total plus two-lookup segment algebra. It may
-accept correct physics while rejecting the representation on memory.
+Rejected run `000536-point-local-scene-cache-b1-non-regression` executes the
+corrected complete Direct40/W27/F68/N4/Q30 observable. Its aggregate RMSE is
+`14.699769088419915 mW m^-2 sr^-1 nm^-1`, exceeding the frozen ceiling by
+`2.879377484293663`. All 17
+per-time scores, the 1,377-by-40 table, packed-ledger identities, sparse cache
+probes, and GPU facts are preserved. Accepted derivative run
+`000538-point-local-scene-cache-b1-figures` preserves the complete six-figure
+B1 set from that sealed table.
 
-## Phase 9 — Compression And Redundancy
+Accepted diagnostic runs `000539`, `000543`, and `000544` isolate two coupled
+binary32 ground-boundary errors. Exact `0 m` J1 rows were zero for an
+above-horizon Sun because a representative point rounded slightly inside the
+ground sphere and the raw positive-root test treated the far root as an
+occluder. After source visibility was made boundary-aware, J1 aggregate RMSE
+improved from `27.722843611108893` to `24.90946661314442`, but J4 spiked to
+`26.676770746633608`: inward transport still used a narrower `0.25 m`
+boundary tolerance and could select a through-Earth branch after nonzero
+ground rows reached later orders. Applying the same `1 m` binary32-safe
+ground policy to inward transport removes that spike.
 
-Compression begins only after the uncompressed field passes P8. Run one codec
-per immutable experiment:
+Accepted run `000545-point-local-scene-cache-b1-non-regression` executes the
+complete corrected Direct40/W27/F68/N4/Q30 boundary and scores
+`11.554012538468113`, which is `0.26637906565813907` below the frozen current-
+Algorithm32 ceiling. The hard aggregate non-regression gate is therefore
+closed successfully. Accepted derivative run `000546` preserves all six B1
+figures from the sealed accepted table. Accepted derivative run `000547`
+preserves the canonical full-model `b1-per-time-rmse.svg`, using the complete
+published-model comparison set and the accepted point-local result as the
+selected Algorithm32 series. Subsequent Native15 and grid-sensitivity work is
+closed by the terminal owner decision below; the B1 aggregate remains the
+selected external accuracy gate.
 
-1. implicit exact-zero representation;
-2. reduced precision or scaled/block-float storage;
-3. shared linear spectral bases;
-4. global spectral dictionary plus amplitude/residual;
-5. cross-zenith key pages and residuals; and
-6. cross-checkpoint delta or curve representations.
+### Immediate diagnostic ladder — B1 regression attribution
 
-Fitters hold out complete solar pages, branches, and checkpoint intervals.
-Worst-case Native15, terminator, weak-blue, segment, page-boundary, and
-conditioning errors own selection. Compression ratio and global variance do
-not.
+Status: completed for regression attribution. Run `000536` remains the
+immutable rejected control and its threshold was not changed.
 
-## Phase 10 — Owner Decision
+1. Validate the complete B1 observation mapping: all 81 directions, fitted
+   solar azimuths, local/world transforms, and forward-scattering cell
+   placement. Begin with the worst run-`000536` residual at `11:00`, grid
+   `(3, 6)`, `477.5 nm`.
+2. Preserve separately scored cumulative order boundaries `J1`, `J1+J2`,
+   `J1+J2+J3`, and `J1+J2+J3+J4`, including all 17 per-time scores and
+   residual domes, to identify the first order that introduces the regression.
+3. Repeat the order attribution with canonical black and B1 grass ground and
+   compare sparse ground-hit branch values with the established Algorithm32
+   ground calculation.
+4. Consume the same candidate cache with Q30, uniform 40, and an over-resolved
+   view-path reference so camera quadrature is separated from cache
+   construction and reconstruction.
+5. At the worst residuals compare exact actual-point values, full rectangular
+   field values, packed-row reads, altitude interpolation, solar-zenith
+   interpolation, and W27 outgoing interpolation. Attribute error to field
+   construction or a named reconstruction axis.
+6. Compare sparse `J1`, `L1`, `J2`, `L2`, `J3`, `L3`, and `J4` values with the
+   current Algorithm32 implementation at physically matched states, including
+   observer-column states where both representations must agree.
+7. Preserve every diagnostic output regardless of outcome, update the owning
+   design/status documents, and select the next numerical change only after a
+   specific error boundary has been demonstrated.
 
-Produce one terminal decision record:
+Run `000539` closes mapping to `3.3306690738754696e-16` maximum cosine error,
+rules down grass-versus-black ground and Q30-versus-uniform/over-resolved view
+quadrature, and exposes zero exact-ground J1 taps carrying about `98%` of the
+first focused altitude stencil. Run `000543` executes the read-only current
+Algorithm32 B1 boundary at cumulative J1 through J4: its aggregate sequence is
+`24.381786328373472`, `14.094434631631465`, `12.187366290386846`, and
+`11.820391604126252`, versus the pre-correction point-local sequence
+`27.722843611108893`, `16.39425033793466`, `14.169369167591903`, and
+`14.699769088419915`. This locates the first discrepancy at J1 rather than a
+later-order-only recurrence error. Run `000544` proves the source-visibility
+half of the boundary correction and exposes the remaining inward-transport
+half through its isolated J4 spike. Run `000545` proves the complete boundary
+correction at the frozen observable and passes the unchanged gate.
 
-- accept the contained distant-Sun compiler and runtime representation;
-- reject it with exact failing gates; or
-- retain it as an oracle while selecting another runtime layout.
+Exact internal production `L1/L2/L3` scalar parity at matched observer-column
+states remains part of P8's broader sparse-oracle qualification. It is not an
+open attribution blocker: the cache-node taps, cumulative order boundaries,
+single-variable boundary controls, black-ground control, quadrature controls,
+and accepted full B1 rerun already demonstrate the causal error boundary.
 
-Only an accepted result may motivate a separate production-port plan.
-Production changes, source-transform integration, and cache-interface cutover
-are outside this plan.
+### Immediate follow-up — actual Native15 B1 retention
 
-## Local-Sun Impact And Deferred Follow-Up
+Status: complete; matched Native15 non-regression is accepted by sealed run
+`000558`.
 
-Current distant and local implementations do not share one concrete cache
-shape. They share Native15/atmosphere semantics, pure-order recurrence,
-generic scatter/transport concepts, and lifecycle principles. Source-specific
-J1/L1, Geometry, domains, packing, concrete cache, and source controller remain
-distinct.
+1. Freeze the canonical fifteen equal-width bins spanning `360` through
+   `830 nm`, with centers from `375.6666666666667` through
+   `814.3333333333333 nm`.
+2. Reduce the Direct40 physical source irradiance, Rayleigh coefficient, Mie
+   extinction, and grass albedo inputs independently by equal-weight mean over
+   the canonical B1 membership
+   `nativeIndex(k) = min(14, floor(3 * k / 8))`.
+3. Execute the actual point-local W27/F68/N4/Q30 cache path at those fifteen
+   bin-average inputs; do not reduce the completed Direct40 radiance table.
+4. Reconstruct the unchanged forty-coordinate B1 boundary by canonical
+   piecewise-constant hold using the same membership, then score the original
+   17 times, 81 directions, and 31 scored wavelengths without modifying the
+   measurements or equation.
+5. Preserve the 1,377-by-15 Native15 table, reconstructed 1,377-by-40 table,
+   all per-time scores, Direct40-versus-Native15 representation error, GPU
+   facts, and canonical full-model figures regardless of outcome.
 
-Concretely, the implemented distant persistent field is
-`W27 x 48 altitude nodes x Native15`; the implemented Flat/local field is
-`W27 x (19 z nodes x 15 source-centered rho nodes) x Native15`. Their GPU
-storage records both look like direction-by-position-by-wavelength fields, but
-the position coordinates and source physics are not interchangeable. Replacing
-the distant field therefore must not mutate a supposedly universal tensor
-shape underneath the local cache.
+The original `11.820391604126252 mW m^-2 sr^-1 nm^-1` ceiling belongs to the
+previous model's Direct40 execution. It remains the Direct40 decision boundary
+but is not a fair Native15 ceiling. Matched Native15 non-regression instead
+compares both models after the identical physical-input reduction and
+piecewise-constant reconstruction.
 
-This plan deliberately future-proofs only potentially reusable machinery:
+Rejected run `000549-point-local-scene-cache-b1-native15-retention` executes
+the actual GPU recurrence at the fifteen bin-average physical inputs and
+scores `12.293121003109862`. That is `0.4727293989836099` above the frozen
+ceiling and `0.739108464641749` worse than the accepted Direct40 parent. The
+Native15 reconstruction differs from Direct40 by
+`3.8546085068418026 mW m^-2 sr^-1 nm^-1` RMSE over the 31 scored channels;
+its largest absolute difference is `25.499218525345647` at `395.25 nm` in
+the `09:30`, `(4,7)` sample. This rejects equal-weight averaging of every
+physical input followed by piecewise-constant reconstruction as the selected
+Native15 realization under the unmatched Direct40 ceiling. It does not reject
+that realization under a fair model comparison.
 
-- cumulative-integral and checkpoint semantics;
-- high-accuracy integration and convergence tooling;
-- named-axis manifests, hashes, and error ledgers;
-- codec infrastructure;
-- bounded loader/pool and atomic publication mechanics; and
-- an opaque source-family coordinate-query boundary.
+Accepted derivative run `000551-point-local-scene-cache-b1-native15-figures`
+preserves all six standard B1 figures plus the canonical full-model per-time
+comparison despite the parent rejection. Failed operational browser-launch
+and figure-launch predecessors `000548` and `000550` remain preserved.
 
-It does not select a shared physical tensor. The Phase-1 shape audit must keep
-two future cases distinct:
+Accepted run `000558-previous-model-b1-native15-comparison` supplies the
+missing matched control. The previous model scores `12.586323005727962` under
+the identical Native15 physical inputs and reconstruction, versus
+`12.293121003109862` for the point-local cache. The point-local cache is
+therefore `0.29320200261810037` better under Native15, as well as
+`0.26637906565813907` better under Direct40. Native15 adds
+`0.7659314016017102` error to the previous model and `0.739108464641749` to
+the point-local model; the new model's reduction penalty is
+`0.026822936959961297` smaller. The contained production snapshot reproduces
+the sealed previous Direct40 score within `4.350769025052159e-7`, and all
+duplicated slots within each Native15 bin are exactly equal. The matched
+Native15 gate is accepted.
 
-- for a radially stratified spherical atmosphere and a fixed-range point
-  source `S = rho * A`, origin invariants `(r, mu, zeta, kappa, ell)` can have
-  the same axis count as the distant tuple, with `zeta = dot(p/r, A)`,
-  `kappa = dot(v, A)`, and fixed geocentric source-center radius `rho` in asset
-  identity; sampling `rho` adds an axis. This is a legitimate same-rank
-  hypothesis, not a qualified local layout; and
-- the implemented Flat/dome local source is a two-center problem involving
-  atmosphere or map center, source subpoint, and map/dome boundary. It may
-  require additional invariants and a distinct coordinate family.
+Run `000556` owns the complete 34-build GPU payload reused by run `000558`;
+it failed only while reading GPU identity after intentional context disposal.
+Runs `000552` through `000555` and `000557` preserve the contained setup and
+post-processing predecessors. Accepted derivative run `000559` preserves 13
+unconditional fair-comparison figures.
 
-In either case a finite source has branch-varying direction, `mu_s`, `nu`,
-visibility, and inverse-square irradiance. An area emitter additionally has
-branch-varying angular support. Matching axis count therefore would not make
-the distant and finite assets interchangeable.
+### Terminal P8 grid-sensitivity decision
 
-After P10, a separate local study may:
+Runs `000561` through `000565` test coordinate-node sensitivity beyond the
+external B1 observable. Run `000561` compares the current field with a complete
+midpoint-shifted execution of the same solver, and run `000562` attributes the
+largest differences to altitude and solar-zenith coordinates rather than W27.
+Run `000563` makes an experimental refined grid substantially less sensitive
+to the same perturbation. These are solver-versus-solver diagnostics, not
+comparisons with measured data or an independently converged physical oracle.
 
-1. select spherical versus flat and point versus area-source physics;
-2. prove sufficient local invariants with counterexamples;
-3. prove convergence to the distant limit using `S_D = D * s_hat` and a
-   radiometric normalization such as `K(D) = E_infinity * D^2` that preserves
-   finite far-field irradiance;
-4. measure extra dimensions, asset families, and residency;
-5. decide which modules genuinely remain shared; and
-6. create a separate local-Sun plan.
+The unchanged Kider B1 measurement remains the stronger external accuracy
+boundary. Rejected run `000564` scores the experimental refined grid at
+`18.47808688506421`, versus the frozen `11.820391604126252` ceiling, and run
+`000567` preserves all six figures regardless of that failure. The refined
+grid is therefore rejected.
 
-Other than the pre-P3 mathematical shape-impact audit, local implementation and
-accuracy work is not required for any phase in this plan. A later local design
-must select its source model and coordinate sufficiency rather than treating a
-new source-distance value as automatic qualification.
+Run `000568` preserved an initial interpretation that treated the shifted-grid
+threshold as a promotion gate. Superseding accepted run
+`000569-point-local-scene-cache-p8-owner-decision` retains that immutable
+evidence but reclassifies it as non-blocking diagnostic information. The
+selected P8 candidate remains Native48/Z180/W27/F68/N4/Q30, backed by Direct40
+B1 `11.554012538468113` and matched Native15 B1 `12.293121003109862` versus
+the previous model's `12.586323005727962`. Grid-convergence work reopens only
+for a specific visible twilight defect, a successively over-resolved reference,
+or external twilight spectral measurements.
+
+## Phase P9 — Physical Resources And Lifecycle
+
+Status: complete in accepted immutable runs
+`000572-point-local-scene-cache-p9-w27-asset` and
+`000577-point-local-scene-cache-p9-resources-lifecycle`. Failed operational
+predecessors `000571`, `000573`, `000574`, and `000575` remain preserved.
+
+Run `000572` constructs the complete selected San Jose nautical Native15 W27
+asset on the RTX 2060 in `22.8 s`. Its `617 x 4,374 x 15` payload is exactly
+`161,925,480 bytes`; ledger plus manifest bring the complete asset to
+`161,957,892 bytes`.
+
+Run `000577` loads, uploads, publishes, fails, replaces, supersedes,
+context-restores, and disposes that asset on the same named D3D11 WebGL2 GPU.
+Exact cache texel residency is `161,925,480 bytes` steady and
+`323,850,960 bytes` during atomic replacement; retaining the loaded payload
+during replacement makes the accounted peak `485,776,440 bytes`. Host-clock
+measurements record `832 ms` load, `117/59 ms` first/replacement upload,
+`140 ms` restore upload, and `64 ms` for twelve 640-by-400 single-cache-lookup
+kernels. WebGL exposes successful allocation and the exact committed texel
+lower bound, but not opaque driver overhead. Consequently the named RTX 2060
+configuration is supported by this evidence; no general hardware or opaque
+driver-memory ceiling is selected.
+
+Deliverables:
+
+- measure complete asset, packed payload, ledger, staging, steady resident,
+  transition, and driver bytes;
+- measure construction, load, upload, publication, and frame costs;
+- prove atomic scene-cache replacement and failure preservation;
+- prove context restoration, supersession, and disposal; and
+- select supported-hardware resource limits from observed evidence.
+
+No compression credit participates in P9's uncompressed baseline.
+
+## Phase P10 — Compression And Owner Decision
+
+Status: complete for the first selected exact codec in accepted immutable run
+`000579-point-local-scene-cache-p10-seam-dedup`. Failed shader-typing
+predecessor `000578` remains preserved.
+
+Study one codec at a time against the accepted uncompressed cache. Candidate
+families include reduced precision, key-zenith residuals, shared spectral
+bases, dictionaries, source-spectrum factoring, and seam deduplication.
+
+The owner then decides whether to:
+
+- promote the uncompressed or qualified compressed design;
+- revise a failed resolution or packing choice;
+- retain the implementation as contained research; or
+- stop the production path.
+
+Production changes require separate explicit authorization.
+
+Run `000579` selects exact cubed-sphere seam deduplication for future
+production consideration while retaining the uncompressed asset as the
+correctness oracle and deferring lossy codecs. W27's `4,374` logical slots
+contain `4,058` unique physical directions. A `Uint16` logical-to-unique map
+plus the unique R32F payload costs `150,235,908 bytes`, saving
+`11,689,572 bytes` or `7.219105973933194%`. Exhaustive decode compares all
+`40,481,370` stored scalars with zero mismatches; 63 GPU probes are exact.
+On the named RTX 2060, twelve matched lookup-kernel frames take `51 ms`
+uncompressed and `55 ms` through the index. That single-run timing is reported
+as observed evidence, not a general performance bound. Reduced precision,
+bases, dictionaries, and residual codecs receive no memory credit.
+
+## Historical Evidence Ledger
+
+| Evidence | Current use |
+| --- | --- |
+| Run `000497` | Strong causal evidence that actual-point solar-zenith state repairs the focused nautical J1 deficit. |
+| Run `000498` | Geometry and logical-byte evidence for scene-specific altitude/zenith culling. |
+| Run `000500` | Proxy redundancy screen only; no codec selected. |
+| Runs `000502`, `000506`, `000508` | Reusable contained domains, actual-point geometry, and complete transient N4 solver evidence. |
+| Runs `000509` and `000511` | Historical observer-projected page compilation/runtime evidence; not the successor stored contract. |
+| Run `000513` | Shows the projected solar-noon page is highly sensitive to missing near-ground support. |
+| Run `000515` | Shows validity masking repairs only part of the rejected projected-page defect. |
+| Run `000516` | Freezes the point-local C4 contract, first San Jose support envelope, two independent scene-cache identities, schemas, and explicit out-of-support failure. |
+| Run `000517` | Proves deterministic packed-row inventory and complete altitude/zenith stencil closure for solar noon and nautical twilight, with exact W39/W27 logical-byte counts. |
+| Run `000519` | Accepts the one-wavelength selected-row GPU accumulator; run `000518` is its sandbox-denied predecessor. |
+| Run `000520` | Accepts the complete independently loadable Native15 W39 solar-noon and nautical point-local scene caches. |
+| Run `000522` | Accepts complete-cache binding and manufactured exact/off-grid point-local runtime lookup; run `000521` preserves the exact-node tolerance predecessor. |
+| Run `000524` | Accepts the operational solar-noon and nautical first-look renders and preserves both PNGs unconditionally; run `000523` preserves the post-render comparison stall. |
+| Run `000525` | Accepts the isolated fixed-count quadratic 48-node solar-noon radial-control cache. |
+| Run `000526` | Preserves six unconditional radial/display images and complete focused Native15 path traces; rules down the tested radial redistribution and display compression as primary causes of the gray band. |
+| Run `000527` | Separates J1--J4 and final-event Rayleigh/Mie contributions at three focused pixels; closes component reconstruction below `8.20e-8` relative error and identifies elevated aerosol and higher-order participation in the gray band. |
+| Run `000528` | Rebuilds and renders complete `0x/0.25x/0.5x/1x` aerosol caches; proves aerosol controls brightness and hue but the pale band survives without it, where J1 dominates. |
+| Run `000529` | Reuses the canonical cache and isolates view-path quadrature; same-count quadratic spacing corrects the gray band and 30/60 interval results converge closely. |
+| Run `000539` | Preserves the pre-correction B1 mapping, cumulative-order, ground, quadrature, and sparse reconstruction ladder; exact-ground above-horizon J1 taps are zero. |
+| Run `000543` | Preserves read-only current Algorithm32 F68 cumulative J1-through-J4 B1 references and locates the point-local discrepancy at J1. |
+| Run `000544` | Preserves the source-visibility boundary correction: J1--J3 improve materially, while the isolated J4 spike exposes the remaining narrower inward-transport boundary rule. |
+| Run `000545` | Accepts the complete corrected Direct40/W27/F68/N4/Q30 B1 gate at `11.554012538468113`, below the unchanged `11.820391604126252` ceiling. |
+| Run `000546` | Preserves all six B1 figures from accepted run `000545`. |
+| Run `000547` | Preserves the canonical full-model B1 per-time RMSE comparison with the complete published-model set and accepted point-local candidate. |
+| Run `000549` | Rejects the actual equal-bin Native15 realization at `12.293121003109862`, `0.4727293989836099` above the frozen gate; failed launch predecessor `000548` is preserved. |
+| Run `000551` | Preserves the rejected Native15 result's six standard B1 figures plus canonical full-model comparison; failed launch predecessor `000550` is preserved. |
+| Run `000558` | Accepts matched Native15 non-regression: previous `12.586323005727962`, point-local `12.293121003109862`, improvement `0.29320200261810037`; it derives the complete GPU payload from failed-metadata source run `000556`. |
+| Run `000559` | Preserves 13 fair-comparison figures for both models and both spectral representations. |
+| Run `000570` | Closes the P0 fixed-observer P7 camera, endpoint, composition, moving-object, and support-failure contract. |
+| Run `000572` | Builds the complete selected 617-block Native15 W27 nautical asset and records its exact payload and construction timing. |
+| Run `000577` | Accepts the superseding named-RTX-2060 uncompressed resource, timing, publication, failure, replacement, supersession, restoration, and disposal proof. |
+| Run `000579` | Qualifies exact W27 seam deduplication with zero scalar mismatches and records the contained P10 disposition. |
 
 ## Status Ledger
 
 | Phase | Status | Current result |
 | --- | --- | --- |
-| Pre-phase zenith-culling census | accepted exploratory evidence | Run `000498`: 617 conservative ragged altitude/zenith blocks (`154.424171 MiB`) or 713 with a one-node halo (`178.451271 MiB`); whole-page equivalents are 18 pages (`216.243896 MiB`) or 20 pages (`240.270996 MiB`). Geometry/logical bytes only; no spectral, N4 closure, packing, or layout-selection claim. |
-| Pre-phase recorded-proxy codec screen | accepted exploratory evidence | Run `000500` measures base/gain, shared-delta, and direct int8/int16 residual rate-distortion over labeled downstream Native15 path-radiance cohorts. It finds strong approximate redundancy but weak-blue, nonnegativity, and out-of-family transfer failures. It does not use raw successor-cache data, select a codec, complete P9, or contribute compression credit to the uncompressed frontier. The canonical design owns its measurements. |
-| P0 contract freeze | pending | Analytical pre-limit memory envelope added; evidence inputs and schemas not frozen |
-| P1 branch geometry/shape impact | pending | No implementation |
-| P2 J1 checkpoint study | pending | No implementation |
-| P3 provisional coordinate decision | pending | Two checkpoint layouts and boundary-total comparator retained |
-| P4 N4 truth solver | pending | No implementation |
-| P5 N4 layout/convergence | pending | No implementation |
-| P6 offline compiler | pending | No implementation |
-| P7 loader/sampler | pending | No implementation |
-| P8 qualification/resources | pending | No implementation |
-| P9 compression | blocked by P8 | No codec selected |
-| P10 owner decision | blocked by P8 | No production authorization |
+| Historical actual-point solver and projected-page POC | complete diagnostic evidence | Actual-point recurrence is available; observer-projected storage is rejected as the final design. |
+| P0 contract and scene support | complete | Run `000516` accepts the successor lane and first support contract. |
+| P1 inventory and culling ledger | complete | Run `000517` accepts independent 618-block solar-noon and 617-block nautical ledgers with full stencil closure. |
+| P2 selected-row accumulator | complete | Run `000519` accepts direct packed local-row accumulation at 595 nm. |
+| P3 Native15 compiler | complete | Run `000520` accepts both complete uncompressed W39 scene caches. |
+| P4 runtime lookup | complete | Run `000522` accepts zenith-aware packed lookup and unchanged Geometry-length sampling. |
+| P5 plausibility renders | complete | Run `000524` preserves and operationally accepts solar-noon and nautical first looks. |
+| P6 resolution | complete | Run `000530` qualifies Q30 across both retained scenes and Geometry endpoint classes against uniform-960 sparse integration. |
+| P7 camera/object coverage | complete | Run `000570` closes full rotation, the P0 fixed observer, endpoint classes and composition, moving-object reuse, and explicit support failure using sealed runs `000517`, `000530`, `000531`, and `000533`. |
+| P8 qualification | complete and accepted | Run `000569` selects the current Native48/Z180/W27 grid under the external B1 boundary. Shifted-grid runs are non-blocking diagnostics; the refined candidate remains B1-rejected. |
+| P9 resources/lifecycle | complete | Runs `000572` and `000577` build the complete W27 asset and accept named-RTX-2060 allocation, timing, publication, failure preservation, atomic replacement, supersession, restoration, and disposal. |
+| P10 compression/decision | complete contained decision | Run `000579` qualifies exact seam deduplication at `7.2191%` savings with zero scalar mismatches, retains the uncompressed oracle, and defers lossy codecs. Production remains unchanged. |
 
 ## Done Condition
 
-This plan is complete only when P10 records an owner decision backed by an
-immutable, independently verified distant-Sun asset, offline compiler,
-contained runtime sampler, full error ledger, and measured resource envelope.
-Local-Sun design and production promotion remain separate work even after that
-condition is met.
+This plan is complete only when one point-local scene cache has been compiled,
+consumed by the unchanged Geometry-length/Algorithm32-sampling structure,
+qualified across the declared scene support including object-shortened rays,
+measured on named hardware, and presented to the owner with an uncompressed
+resource ledger and any separately qualified codec results.
+
+This condition is met by runs `000570`, `000572`, `000577`, and `000579` in
+combination with the accepted P0--P8 evidence. Any production port or broader
+hardware-support promise is separate work requiring explicit authorization.

@@ -66,18 +66,20 @@ copied.
   frozen domains, physical ownership, ground participation, invalidation,
   runtime calculation, and completion-evidence categories.
 - [Distant-Sun solar-zenith cache design](solar-zenith-cache-design.md)
-  owns the active successor research space: actual-point spherical state,
-  cumulative local density, branch-integrated and boundary-total candidates,
-  offline construction, Native15 layout, resource accounting,
-  redundancy/compression studies, and the qualification boundary. No stored
-  semantic or layout is selected, and it changes no implemented baseline by
-  itself.
-- [Candidate distant-Sun branch-integrated solar-zenith cache plan](distant-sun-solar-zenith-cache-plan.md)
-  records one possible contained execution sequence and its phase gates. No
-  numbered phase is authorized until the representation choice is reconciled.
-  Accepted pre-phase run `000498` is geometry/storage evidence for zenith
-  culling of a cumulative-density alternative, not plan-gate completion. The
-  plan contains no local-Sun or production implementation phase.
+  owns the selected point-local successor field: one cumulative local-density
+  cache per scene, addressed by altitude, actual local solar zenith, complete
+  source-relative outgoing direction, and Native15 payload. It also owns
+  scene-support culling, packing, resource accounting, resolution,
+  redundancy/compression studies, and the qualification boundary. It changes
+  no implemented baseline by itself.
+- [Distant-Sun point-local solar-zenith cache plan](distant-sun-solar-zenith-cache-plan.md)
+  records the contained execution sequence and phase gates. P0 through P10 are
+  complete: P7 closes in run `000570`, P8 accepts the current
+  Native48/Z180/W27 grid in run `000569`, P9 builds and measures the complete
+  uncompressed W27 asset in runs `000572`/`000577`, and P10 qualifies exact
+  seam deduplication in run `000579`. Shifted-grid results remain non-blocking
+  diagnostics and the tested refined grid remains B1-rejected. The plan
+  contains no local-Sun or production implementation phase.
 - [Cache interface design](cache-design.md) owns the ambient
   type surface, owner contributions, pass representation and assembly, GPU
   backend and executor, concrete classes, runtime handoff, and lifecycle
@@ -315,15 +317,14 @@ run results and the still-open sparse binary64/capable-hardware evidence.
 
 ## Open Work
 
-- Use accepted pre-phase run `000498` to design the smallest spectral/N4 test
-  that can validate its one-degree zenith culling opportunity. The exact
-  geometry census retains 617 ragged altitude/zenith blocks (`154.424171 MiB`)
-  or 713 with a halo (`178.451271 MiB`), but does not establish interpolation
-  accuracy, N4 dependency closure, or physical packing. Compare the
-  cumulative-density, branch-integrated, prefix, and boundary-total
-  representations before authorizing a numbered phase in the
-  [candidate distant-Sun plan](distant-sun-solar-zenith-cache-plan.md).
-  No production or local-Sun implementation is authorized.
+- The selected [distant-Sun plan](distant-sun-solar-zenith-cache-plan.md) is
+  complete through P10. Run `000569` owns the external-accuracy decision, run
+  `000570` closes the P0 scene-support contract, runs `000572`/`000577` own
+  the uncompressed asset and named-hardware lifecycle ledger, and run `000579`
+  qualifies exact seam deduplication. Open work is now limited to an explicitly
+  authorized production port, broader hardware/opaque-driver budgets,
+  deferred animation, any separately justified lossy codec study, and later
+  independent local-Sun design.
 - Preserve the terminal
   [historical Star flat/local dome-cache evidence](../archive/algorithm32-star/experiments/star-flat-local-cache-plan.md#stage-3-evidence).
   Focused run `000201` accepts all 165 candidate-v4 tests; deciding run

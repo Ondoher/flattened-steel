@@ -984,7 +984,7 @@ Keep the following isolated as later designs: in-place time/location animation
 for non-stellar physical cache products and their required cache transforms;
 any common transformed local/far source API or physical cache shape; the
 separately owned
-[distant-Sun branch-integrated spectral field and unresolved coordinate chunks](../algorithm32/cache/solar-zenith-cache-design.md);
+[distant-Sun point-local spectral scene cache](../algorithm32/cache/solar-zenith-cache-design.md);
 HDR dark-twilight adaptation; Moon; opacity/order; profiled disks; and catalog
 expansion.
 

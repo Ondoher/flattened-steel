@@ -1452,11 +1452,12 @@ J2--J4. Do not port any diagnostic configuration to production.
 The owner has selected the missing spherical solar-zenith state as the next
 architecture question. The canonical
 [distant-Sun solar-zenith cache design](../algorithm32/cache/solar-zenith-cache-design.md)
-records cumulative Native15 branch-integral semantics and the unresolved
-origin-indexed versus canonical-prefix coordinate fork. Its
+records one point-local Native15 cumulative-density cache per scene, addressed
+by altitude, actual local solar zenith, and complete outgoing direction. Its
 [contained execution plan](../algorithm32/cache/distant-sun-solar-zenith-cache-plan.md)
-owns the offline truth solver, checkpoint study, compiler, bounded residency,
-and qualification sequence. This is a handoff out of the stellar port; it does
+owns scene support, packed inventory, the reusable actual-point solver,
+compiler, bounded residency, and qualification sequence. This is a handoff out
+of the stellar port; it does
 not change production or select a local-Sun field.
 
 ### Paused Stellar-Port Resumption Work

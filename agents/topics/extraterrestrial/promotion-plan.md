@@ -58,7 +58,7 @@ gates.
 
 The retained production scope is: (1) reconcile and promote accepted semantic
 deltas with durable production tests; (2) after separate acceptance and
-authorization, port the distant-Sun branch-integrated spectral field and
+authorization, port the distant-Sun point-local spectral scene cache and
 regenerate its comparison reports; (3) separately design any later common
 local/far transform API or cache-shape relationship rather than making it a
 premise of the distant field; (4) add live celestial placement/rotation
@@ -954,13 +954,13 @@ step.
 The [solar-zenith cache design](../algorithm32/cache/solar-zenith-cache-design.md)
 owns the contained numerical representation. Its
 [distant-Sun execution plan](../algorithm32/cache/distant-sun-solar-zenith-cache-plan.md)
-owns checkpoint/coordinate selection, the actual-point N4 solver, offline
+owns scene support, packed altitude/zenith inventory, the actual-point N4 solver, offline
 compiler, contained loader, and evidence gates.
 
 - Qualify only the radially stratified spherical atmosphere under a distant
   collimated source in this prerequisite.
 - Keep the existing `(h, W27)` cache unchanged until the uncompressed
-  branch-integrated representation and bounded chunk residency are accepted.
+  point-local scene cache and bounded packed residency are accepted.
 - If a later production port is authorized, define live distant-source
   transform ingress and requalify direct/higher-order transport, rendering,
   HDR meter, endpoint lighting, residency, and lifecycle behavior.
@@ -971,7 +971,7 @@ compiler, contained loader, and evidence gates.
   reports remain archived measurements of the reduced `(h, W27)` cache.
 
 **Observable conclusion:** separate design/proof records establish the
-distant-Sun branch-integrated field without changing the current cache. A
+distant-Sun point-local scene cache without changing the current cache. A
 later integrated replacement record demonstrates that lookup matches direct
 spherical transport across horizon-crossing, finite-endpoint, and below-horizon
 source cases at every supported scattering order, with the resource/lifecycle
