@@ -6,8 +6,14 @@ import {
 } from '../../../implementation/index.js';
 import {CANONICAL_ATMOSPHERE_CONSTANTS} from '../../../implementation/canonical-atmosphere/consts.js';
 import {ShaderAssemblyPreparer} from '../../../rendering-runtime/ShaderAssemblyPreparer.js';
-import {DistantSunCache} from '../../../implementation/distant-sun/cache/DistantSunCache.js';
+import DistantSunSceneCache from '../../../implementation/distant-sun/cache/DistantSunSceneCache.js';
+import DistantSunSceneCacheLedger from '../../../implementation/distant-sun/cache/DistantSunSceneCacheLedger.js';
 import {NATIVE_15_SPECTRAL_BASIS} from '../../../profiles/index.js';
+import {
+	CUBED_SPHERE_W27_DIRECTION_DOMAIN_OWNER,
+	NATIVE_48_POSITION_DOMAIN_OWNER,
+	SOLAR_ZENITH_180_DOMAIN_OWNER,
+} from '../../../sampling-domains/index.js';
 import {Algorithm32Transport} from '../../../atmospheric-transport/Algorithm32Transport.js';
 import {Algorithm32ShaderAssembler} from '../Algorithm32ShaderAssembler.js';
 
@@ -50,7 +56,7 @@ describe('distant spherical owner shader contributions', /** Called by Jasmine t
 			'geometry-spherical-earth',
 			'atmosphere-canonical',
 			'light-distant-sun',
-			'cache-distant-sun-cumulative-scattering',
+			'cache-distant-sun-point-local-scene',
 			'transport-algorithm32-cumulative-cache',
 		]);
 		expect(contributions[0].provides).toEqual([
@@ -72,15 +78,14 @@ describe('distant spherical owner shader contributions', /** Called by Jasmine t
 		);
 		expect(Math.hypot(...contributions[2].uniforms[0].defaultValue)).toBeCloseTo(1, 12);
 		expect(contributions[3].textures[0]).toEqual({
-			name: 'uCumulativeScatteringDensityCache',
+			name: 'uDistantSunSceneCumulativeCache',
 			type: 'sampler2DArray',
-			valueKey: 'cache.cumulativeScatteringDensity',
+			valueKey: 'cache.sceneCumulativeScatteringDensity',
 		});
+		expect(contributions[3].textures[1].type).toBe('usampler2D');
 		expect(contributions[4].requires).toEqual([
 			'atmosphere.sampleMedium',
 			'geometry.resolveAtmosphereCoordinate',
-			'geometry.resolveScatteringCachePositionStencil',
-			'geometry.resolveScatteringCacheDirectionStencil',
 			'cache.sampleCumulativeScatteringDensity',
 		]);
 	});
@@ -118,14 +123,15 @@ describe('distant spherical owner shader contributions', /** Called by Jasmine t
 
 		expect(assembly.status).toBe('accepted');
 		expect(assembly.fragmentShaderSource).toContain('precision highp sampler2DArray;');
-		expect(assembly.fragmentShaderSource).toContain('uniform sampler2DArray uCumulativeScatteringDensityCache;');
+		expect(assembly.fragmentShaderSource).toContain('uniform sampler2DArray uDistantSunSceneCumulativeCache;');
+		expect(assembly.fragmentShaderSource).toContain('uniform usampler2D uDistantSunLogicalToUniqueDirection;');
 		expect(assembly.fragmentShaderSource).toContain('const int GEOMETRY_CACHE_POSITION_COUNT = 48;');
 		expect(assembly.fragmentShaderSource).toContain(
 			'CacheDirectionStencil resolveScatteringCacheDirectionStencil(',
 		);
 		expect(assembly.fragmentShaderSource).toContain('SpectralValue sampleCumulativeScatteringDensity(');
 		expect(assembly.fragmentShaderSource).toContain(
-			'sampleCumulativeScatteringDensity(\n\t\t\tpositionStencil,\n\t\t\tdirectionStencil',
+			'sampleCumulativeScatteringDensity(\n\t\t\tpositionMeters,\n\t\t\tatmosphereCoordinate,\n\t\t\tstate.ray.direction',
 		);
 		expect(assembly.fragmentShaderSource).toContain(
 			'MediumSample medium = sampleAtmosphere(atmosphereCoordinate);',
@@ -141,7 +147,8 @@ describe('distant spherical owner shader contributions', /** Called by Jasmine t
 				 */ (binding) => binding.id,
 			),
 		).toEqual([
-			'cache.cumulative-scattering-density',
+			'cache.distant-scene-cumulative',
+			'cache.distant-scene-direction-index',
 			'geometry.camera-ground-relative-position',
 			'runtime.depth-texture',
 			'runtime.scene-color-texture',
@@ -195,24 +202,56 @@ function createOwnerContributions() {
  * @returns - The result produced by the operation.
  */
 function createGpuCache() {
-	return new DistantSunCache(
-		/** @type {CacheBuildArtifact} */ (
-			/** @type {unknown} */ ({
-				runtimeBindings: {
-					backendId: 'owner-contribution-backend',
-					bindings: [
-						{
-							id: 'owner-contribution-binding',
-							valueKey: 'cache.cumulativeScatteringDensity',
-							fieldId: 'owner-contribution-field',
-							backendId: 'owner-contribution-backend',
-						},
-					],
-				},
-				/** Call this method to dispose. */ dispose() {},
-			})
+	const sceneSun = {
+		id: 'test-scene',
+		instant: '2026-03-20T12:00:00.000Z',
+		directionToSourceUpEastNorth: [1, 0, 0],
+		sourceIdentity: 'algorithm32-native-distant-collimated-sun-v1',
+	};
+	const ledger = new DistantSunSceneCacheLedger({
+		sceneSun,
+		support: {
+			id: 'test-support',
+			bottomRadius: distance(6360000),
+			topRadius: distance(6420000),
+			observerAltitude: distance(2),
+			observerSolarZenith: {value: 0, units: 'radians'},
+			completeCameraRotation: true,
+			arbitraryShortenedEndpoint: true,
+		},
+		positionDomain: NATIVE_48_POSITION_DOMAIN_OWNER,
+		solarZenithDomain: SOLAR_ZENITH_180_DOMAIN_OWNER,
+		outgoingDirectionDomain: CUBED_SPHERE_W27_DIRECTION_DOMAIN_OWNER,
+		spectralBasis: NATIVE_15_SPECTRAL_BASIS,
+	});
+	const texture = (id, storage, valueKey) => ({
+		id,
+		storage,
+		backendId: 'owner-contribution-backend',
+		runtimeBinding: {id: `${id}:binding`, valueKey, fieldId: id, backendId: 'owner-contribution-backend'},
+		dispose() {},
+	});
+	return new DistantSunSceneCache({
+		manifest: {
+			record: {
+				cacheIdentity: 'test-scene-cache',
+				exactSeamPayload: {byteLength: ledger.retainedBlockCount * 4058 * 15 * 4},
+				logicalToUniqueIndex: {byteLength: 8748},
+			},
+			requireCacheIdentity() {},
+		},
+		ledger,
+		cumulativeTexture: texture(
+			'scene-values',
+			{format: 'RGBA32F', width: 648, height: 27, layers: ledger.retainedBlockCount},
+			'cache.sceneCumulativeScatteringDensity',
 		),
-	);
+		directionIndexTexture: texture(
+			'scene-index',
+			{format: 'R16UI', width: 4374, height: 1, layers: 1},
+			'cache.sceneLogicalToUniqueDirection',
+		),
+	});
 }
 
 /**

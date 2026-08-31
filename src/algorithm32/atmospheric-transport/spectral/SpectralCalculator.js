@@ -240,6 +240,32 @@ export class SpectralCalculator {
 		return points;
 	}
 
+	/** Build quadratic interval boundaries and one distance midpoint per interval. */
+	buildQuadraticMidpointPathIntegrationPoints(viewRaySegment, pathIntervalCount) {
+		if (!Number.isInteger(pathIntervalCount) || pathIntervalCount < 1) {
+			throw new RangeError('pathIntervalCount must be a positive integer.');
+		}
+		const startDistanceMeters = DistanceMath.toMeters(viewRaySegment.startDistance);
+		const endDistanceMeters = DistanceMath.toMeters(viewRaySegment.endDistance);
+		const pathLengthMeters = endDistanceMeters - startDistanceMeters;
+
+		return Array.from({length: pathIntervalCount}, (_unused, pointIndex) => {
+			const lowerFraction = pointIndex / pathIntervalCount;
+			const upperFraction = (pointIndex + 1) / pathIntervalCount;
+			const lowerDistanceMeters = startDistanceMeters + pathLengthMeters * lowerFraction * lowerFraction;
+			const upperDistanceMeters = startDistanceMeters + pathLengthMeters * upperFraction * upperFraction;
+			const intervalLengthMeters = upperDistanceMeters - lowerDistanceMeters;
+			return {
+				integrationKind: /** @type {const} */ ('quadratic-midpoint'),
+				pointIndex,
+				distanceAlongRay: DistanceMath.inMeters(0.5 * (lowerDistanceMeters + upperDistanceMeters)),
+				intervalLengthFromPrevious: DistanceMath.inMeters(intervalLengthMeters),
+				trapezoidWeight: 1,
+				measure: DistanceMath.inMeters(intervalLengthMeters),
+			};
+		});
+	}
+
 	/**
 	 * Call this method to compute source-path transmittance from finite source optical depth.
 	 *
@@ -597,8 +623,19 @@ export class SpectralCalculator {
 			);
 			const atmosphereCoordinate = geometry.resolveAtmosphereCoordinate(position);
 			const medium = atmosphere.sampleMedium(atmosphereCoordinate);
+			const isQuadraticMidpoint = point.integrationKind === 'quadratic-midpoint';
 
-			if (previousMedium) {
+			if (isQuadraticMidpoint) {
+				const halfIntervalTransmittanceValues = Float64Array.from(medium.extinction.values, (value) =>
+					Math.exp(-0.5 * value * intervalLengthFromPreviousMeters),
+				);
+				viewTransmittanceValues = ArrayMath.multiplyToFloat64(
+					viewTransmittanceValues,
+					halfIntervalTransmittanceValues,
+				);
+			}
+
+			if (!isQuadraticMidpoint && previousMedium) {
 				const segmentTransmittanceValues = this._trapezoidSegmentTransmittanceValues(
 					previousMedium.extinction.values,
 					medium.extinction.values,
@@ -610,23 +647,28 @@ export class SpectralCalculator {
 				);
 			}
 
-			const positionStencil = geometry.resolveScatteringCachePositionStencil({
-				position,
-				atmosphereCoordinate,
-			});
-			const directionStencil = geometry.resolveScatteringCacheDirectionStencil({
-				position,
-				physicalOutgoingDirection: viewRaySegment.ray.direction,
-			});
-			const scatteringDensity = scatteringCache.sampleResolved({
-				positionStencil,
-				directionStencil,
+			const scatteringDensity = scatteringCache.sampleCumulativeScatteringDensity({
+				context: {
+					position,
+					atmosphereCoordinate,
+					physicalOutgoingDirection: viewRaySegment.ray.direction,
+				},
+				geometry,
 			});
 			const measureMeters = DistanceMath.toMeters(point.measure);
 
 			for (let channelIndex = 0; channelIndex < pathRadianceValues.length; channelIndex += 1) {
 				pathRadianceValues[channelIndex] +=
 					viewTransmittanceValues[channelIndex] * scatteringDensity.values[channelIndex] * measureMeters;
+			}
+			if (isQuadraticMidpoint) {
+				const halfIntervalTransmittanceValues = Float64Array.from(medium.extinction.values, (value) =>
+					Math.exp(-0.5 * value * intervalLengthFromPreviousMeters),
+				);
+				viewTransmittanceValues = ArrayMath.multiplyToFloat64(
+					viewTransmittanceValues,
+					halfIntervalTransmittanceValues,
+				);
 			}
 
 			previousMedium = medium;

@@ -105,7 +105,11 @@ describe('Stellar point-set production WebGL path', () => {
 				contributions: [support.runtime, support.geometry, resource.createShaderContribution(), support.sun, resource.createLiveShaderContribution({queryPacket: fixture.query}), support.color],
 				mainRequiredSymbols: ['runtime.initialState', 'celestial.evaluateStellarPointSetRadiance', 'color.encodeOutput'],
 			});
-			const uniforms = {uViewportSizePixels: {value: new THREE.Vector2(8, 8)}, uStellarPointSetTransportCache: {value: null}};
+			const uniforms = {
+				uViewportSizePixels: {value: new THREE.Vector2(8, 8)},
+				uStellarPointMemberCount: {value: resource.memberCount},
+				uStellarPointSetTransportCache: {value: null},
+			};
 			backend.installRuntimeBindings({bindings: resource.getRuntimeBindings(), uniforms: {'cache.celestial.starTransport': uniforms.uStellarPointSetTransportCache}});
 			material = new THREE.RawShaderMaterial({
 				glslVersion: THREE.GLSL3,
@@ -118,9 +122,11 @@ void main() { screenTextureCoordinates = position.xy * 0.5 + 0.5; gl_Position = 
 			plane = new THREE.PlaneGeometry(2, 2);
 			const scene = new THREE.Scene();
 			scene.add(new THREE.Mesh(plane, material));
+			const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
 			target = new THREE.WebGLRenderTarget(8, 8, {depthBuffer: false, stencilBuffer: false});
 			renderer.setRenderTarget(target);
-			renderer.render(scene, new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1));
+			await renderer.compileAsync(scene, camera);
+			renderer.render(scene, camera);
 			expect(assembly.fragmentShaderSource).toContain('stellarPointSetDirection(memberIndex)');
 			expect(uniforms.uStellarPointSetTransportCache.value).not.toBeNull();
 			expect(context.getError()).toBe(context.NO_ERROR);

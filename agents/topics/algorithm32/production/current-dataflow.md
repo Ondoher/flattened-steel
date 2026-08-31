@@ -6,6 +6,19 @@ runs are archive-internal and resolve through the
 
 Status: current production behavior and implementation seams.
 
+Solar-zenith adoption is complete through PA7. The owner-selected deployment
+catalog/packaging and obsolete GPU-runtime cleanup are implemented, and the
+complete Algorithm32 WebGL lane passes `23/23` against the mandatory exact
+scene-cache contract.
+Shared CPU and shader transport now pass physical position, atmosphere coordinate, and physical outgoing
+direction to the concrete cache. The spherical/distant and Flat/local caches
+resolve their own concrete stencils through the active geometry. Distant
+runtime cache creation requires the exact selected manifest-backed point-local
+asset and integrates it with Q30; Flat/local remains on its existing concrete
+cache. No receiver-column/point-local runtime switch exists. The former
+receiver-column GPU cache/controller are removed; the CPU recurrence remains a
+reference and offline-construction surface.
+
 This document describes the production dataflow that exists now. The
 [production plan](production-implementation-plan.md) owns delivery stages;
 the [cache design](../cache/README.md) owns selected numerical controls; and
@@ -255,11 +268,12 @@ reuse key to each cache request.
 
 The runtime integrates one already-cumulative local spectral scattering field.
 At each path point it updates view transmittance, resolves one geometry-owned
-atmosphere coordinate, obtains the Native-48 position stencil and source-
-framed W27 direction stencil, performs one logical cache lookup, multiplies by
-path measure, and accumulates spectral radiance. There is no incident-direction
-loop and no separate direct term, so `J1` is not counted twice. Direct-primary
-`L1` exists only inside source-owned cache construction.
+atmosphere coordinate, and passes pairing-neutral physical sample context to
+one logical cache lookup. The concrete cache asks the active geometry for its
+position and source-framed W27 direction stencils, multiplies by path measure,
+and returns cumulative spectral density. There is no incident-direction loop
+and no separate direct term, so `J1` is not counted twice. Direct-primary `L1`
+exists only inside source-owned cache construction.
 
 The selected production final-view count is 15 uniform physical-distance
 intervals.
@@ -272,16 +286,105 @@ different production sample count.
 
 Spherical shader geometry reconstructs altitude from the live camera ground-
 relative position plus the ray offset, avoiding subtraction between two
-Earth-scale binary32 radii. The atmosphere consumes the same coordinate used
-for cache-position reconstruction. The cache receives only fixed resolved
-stencils and owns only direction/position/wavelength addressing; neither the
-generic transport nor the cache branches on source or geometry kind.
+Earth-scale binary32 radii. The atmosphere and cache receive that same
+physical context. Shared transport does not branch on source or geometry kind;
+each concrete cache interprets the context through its paired geometry.
 
 The CPU reference follows the same boundary through `CpuScatteringCache`.
-Geometry resolves both final-view stencils, and the generic spectral calculator
-performs exactly one cumulative sample per path point. Static objects shorten
-the view segment, and an unshortened ray ends at the geometry-owned atmosphere
-exit.
+The generic spectral calculator performs exactly one physical-context
+cumulative sample per path point, and the concrete CPU cache resolves its
+stencils through the paired geometry. Static objects shorten the view segment,
+and an unshortened ray ends at the geometry-owned atmosphere exit.
+
+## Offline And Resident Point-Local Adoption
+
+The PA2 production command under `scripts/algorithm32/solar-zenith-cache`
+executes the qualified actual-point N4 GPU recurrence offline, one Native15
+wavelength at a time. It consumes canonical production Native48, Z180, W27,
+reflection-completed F68, and Native15 owners plus a scene definition, then
+emits a content-addressed oracle payload, exact-seam derivative, W27 index,
+packed-row ledger, manifest, hashes, and derivation record. The San Jose
+nautical rebuild exactly matches the sealed P9/P10 payload identities.
+
+No runtime owner imports the compiler or executes this recurrence. The PA3
+asset loader verifies the exact manifest and compatibility identities, rebuilds
+the executable packed ledger, verifies hashes and payload shapes, scans all
+Native15 values, and checks the complete logical-to-unique W27 map before GPU
+ownership begins. The loader transposes those unchanged floats into a logical
+W27 face-grid atlas with four RGBA channel groups. `ThreeCacheBackend` eagerly
+uploads the `648 x 27 x retainedRows` RGBA32F atlas and the validated
+`4374 x 1` R16UI provenance index as two opaque bindings.
+`DistantSunSceneCache` derives local solar zenith and the source-relative
+outgoing frame at the actual physical path point, combines at most four
+altitude/zenith rows, and emits a non-value for unsupported ledger rows rather
+than clamping or returning zero.
+
+The resident shader resolves four packed ledger rows, support state, and
+altitude/solar-zenith weights once per path point. Hardware bilinear sampling
+performs the four W27 direction taps for each of four RGBA spectral groups.
+This reduces the Q30 maximum from 7,200 scalar cache reads to 480 atlas reads
+per output pixel without changing any Native15 source value.
+
+`DistantSunLightSource.createCacheController()` now requires the exact selected
+asset and creates its attachment-owned manifest loader/controller directly.
+The selected asset direction is installed as Geometry's explicit distant
+source placement, avoiding a nearby ephemeris recomputation. Algorithm32's
+live transport retains Geometry's first scene-object, ground, or atmosphere
+endpoint and evaluates 30 intervals whose normalized boundaries are squared;
+each interval samples cumulative density at its distance midpoint and applies
+half-interval extinction on both sides of that contribution. Endpoint
+composition remains spectral path radiance plus attenuated captured scene
+color at the display boundary.
+
+The distant scene-cache controller now serializes generation-local loads,
+reuses only an exact active identity, preserves the last complete cache on
+failure, disposes superseded candidates, and atomically swaps complete
+two-texture binding groups. It enforces the qualified exact-seam logical-byte
+limits and reports resident, atomic-transition, and transition-plus-staging
+payloads separately from opaque driver overhead. Context loss releases invalid
+renderer objects while their original context is lost; the source retains its
+exact asset selection and reconstructs the complete cache after restoration.
+
+The default Flat32 application derives the live distant-Sun direction and
+observer solar zenith from its observation, submits only the scalar zenith to
+the server resolver, and loads the returned content-addressed package. An
+explicit dark response instead publishes one shared texture-free cache whose
+cumulative Native15 scattering density is zero. That state downloads no cache
+payload and keeps spherical geometry, transport, scene composition, and stars
+inside the ordinary Algorithm32 shader. An unsupported spherical scene still
+fails cache preparation explicitly and preserves the application's direct
+scene fallback; it never falls back to receiver-column construction. PA5
+publication/lifecycle and PA6 production qualification are complete. PA6
+retains fresh B1 scores and six figures, exact oracle/seam parity, six live
+scene assets, all declared endpoint classes, complete W27 rotation, and named
+RTX 2060 timing/resource evidence. PA7 run `000585` emits all six runtime-only
+packages at `901,034,856` bytes. The older celestial-composition fixture now
+supplies a complete production-shaped exact asset through the real scene-cache
+controller and passes inside the unfiltered `23/23` WebGL gate.
+
+Those six packages are retained qualification evidence. A verified generated
+construction inventory covers every integer solar-
+zenith angle from 0 through 108 degrees. It contains 109 unique cache packages,
+`17,411,056,920` oracle bytes, and `16,154,147,172` exact-runtime bytes in
+`tmp/extraterrestrial/production-adoption/one-degree-inventory-20260829-1`.
+The independent verification record
+`one-degree-inventory-verification-20260829-1` matched every package manifest,
+ledger, R32F payload, and R16UI index SHA-256. The application keeps
+one scene cache resident and atomically swap complete caches; total
+offline/deployed storage, rather than steady resident size, scales with the
+number of angle bins. The bin-covered runtime inventory at
+`one-degree-bin-covered-runtime-packages-20260830-1` contains 109 packages,
+`17,230,339,148` total bytes, and a `161,192,508`-byte maximum resident cache.
+It owns half-up, half-open bins across `[0, 108)` and returns explicit darkness
+at 108 degrees. All dark angles share the procedural zero-scattering runtime
+state rather than multiplying the offline inventory. Its union ledgers cover
+both bin edges, and all 5,494 shared
+physical coordinates are byte-identical across their construction parents.
+The server selects the exact catalog record and returns its content-addressed
+manifest/package URLs. Static
+storage or a CDN serves the large immutable files; the server does not calculate
+the Sun position, execute recurrence, or return the payload inside its resolver
+response.
 
 ## Flat/Local Production Dataflow
 
@@ -469,6 +572,16 @@ atmosphere pass. At the display boundary, the color model:
 sceneTransmittanceRgb`; and
 4. performs the final display encoding once.
 
+Flat32 selects `BrunetonSourceLuminanceLiftColorDisplayModel`, which retains
+that complete composition and Figure-1 mapping as its bright baseline. Before
+configuration publication, `LocalLightLevelCalculator` applies geometry-owned
+source support and atmosphere-owned source-path transmittance to the primary
+source irradiance, then reduces it to one photopic `E_v / pi` scalar. Color
+maps that scalar from exact gamma `1` at `5 cd m^-2` to exact gamma `0.125` at
+`0.001 cd m^-2` with a smooth logarithmic Hermite curve, applies one common RGB
+gain, and caps that gain at `32768`. Flat32 setup does not replace this scalar
+with its retained explicit diffuse-environment diagnostic measurement.
+
 This RGB-band operation is a display-boundary compositor, not RGB atmospheric
 transport or cache construction. `ShaderRuntimePass` binds the current
 composer read-buffer texture as the captured scene color on every render.
@@ -546,6 +659,29 @@ preflight, atomic render-operation replacement, direct-scene failure fallback,
 and ordered disposal. Host resizing changes only scene capture and final
 composition pixels; it does not reduce the cache domains or the six 4096
 shadow maps.
+
+The [Flat32 one-degree scene-cache hookup plan](flat32-one-degree-cache-hookup-plan.md)
+is complete. Flat32 preserves the observation's live source direction for
+placement while resolving its scalar solar zenith, validating the selected
+offline package, and atomically publishing the new cache.
+The normal Polylith server mounts the resolver at
+`/flat32/api/distant-sun-scene-cache` and immutable assets below
+`/flat32/scene-caches/`. `FLAT32_DISTANT_SUN_CACHE_ROOT` selects the deployed
+package root; local omission uses the qualified bin-covered package set.
+
+The first hooked-up shader placed exact-seam index and packed-row resolution
+inside the Native15 loop and admitted up to 14,400 texture reads per output
+pixel under Q30. Hoisting invariant work alone did not materially improve the
+live application. Pass-local GPU queries measured roughly 673-880 ms per
+1920-by-1080 scalar frame, proving the earlier `gl.finish()` counter evidence
+was CPU-submission timing. RGBA channel packing reached roughly 63-73 ms after
+warm-up; the selected face-grid atlas reaches 22.22 ms mean and 22.30 ms p95
+over eight warmed frames on the named RTX 2060/D3D11 path. Accepted proof is
+`flat32-distant-sun-runtime-performance-20260831-11`. Algorithm32 `591/591`,
+Algorithm32 WebGL `23/23`, and the full exact-cache Flat32 lane `16/16` pass.
+The same pass measures 123.32 ms mean at 3840 by 2160, so 4K 30-FPS rendering
+remains open. These timings are hardware-specific and do not establish a
+portable performance guarantee.
 
 The composer captures the Three scene before the atmosphere pass, and the
 runtime supplies that read-buffer texture to the retained display-boundary

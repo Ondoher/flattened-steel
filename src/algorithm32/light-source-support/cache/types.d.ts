@@ -304,13 +304,23 @@ type ScatteringCacheDirectionStencil = {
 	weights: readonly number[];
 };
 
-/** Type that describes one resolved cumulative-cache sample request. */
-type ScatteringCacheSampleRequest = {
-	/** Value that stores the geometry-resolved position stencil. */
-	positionStencil: ScatteringCachePositionStencil;
-	/** Value that stores the direction-domain stencil. */
-	directionStencil: ScatteringCacheDirectionStencil;
-};
+/** Pairing-neutral physical context for one cumulative scattering-cache sample. */
+type ScatteringCacheSampleContext = Readonly<{
+	/** Physical model-space sample position. */
+	readonly position: Position;
+	/** Geometry-resolved atmosphere coordinate at the physical position. */
+	readonly atmosphereCoordinate: AtmosphereCoordinate;
+	/** Physical model-space outgoing direction viewed from the sample. */
+	readonly physicalOutgoingDirection: UnitVector3;
+}>;
+
+/** Request that pairs physical sample context with the active geometry interpreter. */
+type ScatteringCacheSampleRequest = Readonly<{
+	/** Pairing-neutral physical sample context. */
+	readonly context: ScatteringCacheSampleContext;
+	/** Active geometry that interprets the physical context for the concrete cache. */
+	readonly geometry: GeometryModel;
+}>;
 
 /** Type that describes transient inputs for a source-owned scattering-cache build. */
 type ScatteringCacheBuildRequest = Readonly<{
@@ -367,12 +377,12 @@ interface CpuScatteringCache extends ScatteringCache {
 	readonly sampleProvenanceIdentity: string;
 
 	/**
-	 * Call this method to sample the cache from geometry-resolved physical position and direction stencils.
+	 * Call this method to sample the cache from pairing-neutral physical context.
 	 *
 	 * @param request - Supplies resolved position and direction stencils.
 	 * @returns - The cumulative local spectral scattering density.
 	 */
-	sampleResolved(request: ScatteringCacheSampleRequest): SpectralScatteringDensityPacket;
+	sampleCumulativeScatteringDensity(request: ScatteringCacheSampleRequest): SpectralScatteringDensityPacket;
 }
 
 /** Contract that provides final-view shader assembly and opaque bindings for a GPU-resident cumulative scattering cache. */

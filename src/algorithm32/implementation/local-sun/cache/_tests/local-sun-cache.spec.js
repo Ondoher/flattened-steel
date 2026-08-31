@@ -84,7 +84,11 @@ describe('LocalSunCache', /** Called by Jasmine to register the named test suite
 		const contribution = cache.createShaderContribution();
 
 		expect(contribution.provides).toEqual(['cache.sampleCumulativeScatteringDensity']);
-		expect(contribution.requires).toEqual(['geometry.scatteringCacheStencilTypes']);
+		expect(contribution.requires).toEqual([
+			'geometry.scatteringCacheStencilTypes',
+			'geometry.resolveScatteringCachePositionStencil',
+			'geometry.resolveScatteringCacheDirectionStencil',
+		]);
 		expect(contribution.textures).toEqual([
 			{
 				name: 'uLocalSunCumulativeScatteringDensityCache',
@@ -106,6 +110,8 @@ describe('LocalSunCache', /** Called by Jasmine to register the named test suite
 		expect(source).toContain('uLocalSunCumulativeScatteringDensityCache');
 		expect(source).toContain('positionStencil.weights[positionTapIndex]');
 		expect(source).toContain('directionStencil.weights[directionTapIndex]');
+		expect(source).toContain('resolveScatteringCachePositionStencil(atmosphereCoordinate)');
+		expect(source).toContain('resolveScatteringCacheDirectionStencil(');
 		expect(cache.getRuntimeBindings()).toBe(artifact.runtimeBindings);
 		expect(cache.resources).toBe(resources);
 	});

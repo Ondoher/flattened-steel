@@ -103,14 +103,14 @@ type ThreeCacheBackendDataTexture = ThreeCacheBackendTexture;
 
 /** Two-dimensional scalar data-texture constructor used by packed bindings. */
 type ThreeCacheBackendDataTextureConstructor = new (
-	data: Float32Array,
+	data: Float32Array | Uint16Array,
 	width: number,
 	height: number,
 ) => ThreeCacheBackendDataTexture;
 
 /** Array scalar data-texture constructor used by packed bindings. */
 type ThreeCacheBackendDataArrayTextureConstructor = new (
-	data: Float32Array,
+	data: Float32Array | Uint16Array,
 	width: number,
 	height: number,
 	depth: number,
@@ -213,10 +213,18 @@ type ThreeCacheBackendResourceNamespace = Readonly<{
 	REVISION: string;
 	/** Red texture format constant used by scalar cache resources. */
 	RedFormat: 1028;
+	/** RGBA texture format constant used by packed cache resources. */
+	RGBAFormat: 1023;
+	/** Red integer texture format constant used by index resources. */
+	RedIntegerFormat: 1029;
 	/** Float texture data-type constant used by scalar cache resources. */
 	FloatType: 1015;
+	/** Unsigned-short data-type constant used by index resources. */
+	UnsignedShortType: 1012;
 	/** Nearest-neighbor filter constant used by scalar cache resources. */
 	NearestFilter: 1003;
+	/** Linear filter constant used by packed sampling resources. */
+	LinearFilter: 1006;
 	/** Edge-clamping wrap constant used by scalar cache resources. */
 	ClampToEdgeWrapping: 1001;
 	/** GLSL 3 version constant used by cache materials. */
@@ -351,6 +359,8 @@ type ThreeCacheBackendRendererOperations = Readonly<{
 	 * @param camera - The camera value accepted by the operation.
 	 */
 	render(scene: ThreeCacheBackendScene, camera: ThreeCacheBackendCamera): void;
+	/** Call this method to eagerly initialize one immutable data texture. */
+	initTexture(texture: ThreeCacheBackendTexture): void;
 }>;
 
 /** Renderer state required by cache operations that temporarily mutate Three. */
@@ -377,10 +387,19 @@ type ThreeCacheBackendRecord = ThreeCacheBackendRendererRecord & {
 	fields: Set<GpuCacheField>;
 	/** Active opaque programs owned by the backend. */
 	programs: Set<CacheGpuProgram>;
+	/** Active immutable resident textures owned by the backend. */
+	immutableTextures: Set<CacheImmutableTexture>;
 	/** Sequence used to identify runtime bindings. */
 	runtimeBindingSequence: number;
 	/** Disposal state of the backend. */
 	disposed: boolean;
+};
+
+/** Private mutable lifecycle state for one immutable resident texture. */
+type ThreeCacheBackendImmutableTextureRecord = {
+	/** Backend state that owns the texture. */ backend: ThreeCacheBackendRecord;
+	/** Private renderer texture. */ texture: ThreeCacheBackendTexture;
+	/** Disposal state. */ disposed: boolean;
 };
 
 /** Private mutable lifecycle state for one opaque cache field. */
@@ -434,7 +453,9 @@ type ThreeCacheBackendRuntimeBindingRecord = Readonly<{
 	/** Backend state that owns the binding. */
 	backend: ThreeCacheBackendRecord;
 	/** Opaque cache field associated with the binding. */
-	field: GpuCacheField;
+	field?: GpuCacheField;
+	/** Opaque immutable texture associated with the binding. */
+	immutableTexture?: CacheImmutableTexture;
 }>;
 
 /** Restoration callback for caller-owned renderer state. */
@@ -494,6 +515,8 @@ class ThreeCacheBackend implements CacheGpuBackend, CacheProbeReader {
 	 * @returns - Opaque runtime binding.
 	 */
 	createRuntimeBinding(request: CacheRuntimeBindingRequest): CacheRuntimeBinding;
+	/** Validate and eagerly upload one immutable resident texture. */
+	uploadImmutableTexture(request: CacheImmutableTextureUploadRequest): CacheImmutableTexture;
 	/**
 	 * Call this method to resolve opaque bindings and install their private
 	 * textures into already-created renderer uniforms.

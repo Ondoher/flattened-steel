@@ -71,7 +71,7 @@ describe('Flat32 Step 5 stellar lifecycle', () => {
 		runtime.dispose();
 	});
 
-	it('rebuilds the normal Algorithm32 attachment after forwarding context lifecycle', async () => {
+	it('releases lost-context resources before rebuilding the normal Algorithm32 attachment', async () => {
 		const remove = jasmine.createSpy('removeContextLifecycleParticipant');
 		const sceneRuntime = {
 			addContextLifecycleParticipant: jasmine.createSpy('addContextLifecycleParticipant').and.returnValue(remove),
@@ -92,14 +92,16 @@ describe('Flat32 Step 5 stellar lifecycle', () => {
 		};
 		runtime._shaderHandle = handle;
 		runtime._installed = true;
-		spyOn(runtime, '_disposeSetupResources');
+		spyOn(runtime, '_disposeSetupResources').and.callThrough();
 		spyOn(runtime, 'setup').and.resolveTo({});
 
 		runtime.handleContextLoss();
 		expect(handle.handleContextLoss).toHaveBeenCalledTimes(1);
+		expect(handle.dispose).toHaveBeenCalledTimes(1);
+		expect(runtime._disposeSetupResources).toHaveBeenCalledTimes(1);
 		expect(runtime._installed).toBeFalse();
 		await runtime.handleContextRestoration();
-		expect(handle.handleContextRestoration).toHaveBeenCalledTimes(1);
+		expect(handle.handleContextRestoration).not.toHaveBeenCalled();
 		expect(runtime._disposeSetupResources).toHaveBeenCalledTimes(1);
 		expect(runtime.setup).toHaveBeenCalledTimes(1);
 		runtime.dispose();

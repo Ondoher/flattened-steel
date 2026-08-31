@@ -732,77 +732,6 @@ type DistantSunCpuCacheRequestN3 = Omit<DistantSunCpuCacheRequestN4, 'maximumSca
 type DistantSunCpuCacheRequestN5 = Omit<DistantSunCpuCacheRequestN4, 'maximumScatteringOrder'> &
 	Readonly<{maximumScatteringOrder?: 5}>;
 
-/** Owners and options shared by every controller-derived distant-Sun GPU build plan. */
-type DistantSunCacheControllerPlanRequestBase = Readonly<{
-	/** Configured atmosphere construction contributor. */
-	atmosphere: CacheBuildContributor &
-		Readonly<{
-			/** Spectral basis value. */ spectralBasis: SpectralBasis;
-		}>;
-	/**
-	 * Optional scoped construction lattice; omission retains production
-	 * Native48/Fibonacci34/W27.
-	 */
-	domainSelection?: DistantSunConstructionDomainSelection;
-	/**
-	 * Optional direct-plan comparison options; omission retains the production
-	 * order-specific 15-interval options.
-	 */
-	constructionOptions?: CacheConstructionOptions;
-	/** Optional executable reflective boundary; omission retains canonical black. */
-	groundBoundary?: (GroundBoundary & CacheBuildContributor) | null;
-}>;
-
-/** Controller plan request that stops before stored-field transport. */
-type DistantSunCacheControllerPlanRequestN1OrN2 = DistantSunCacheControllerPlanRequestBase &
-	Readonly<{
-		/** Geometry construction contributor. */
-		geometry: CacheBuildContributor &
-			Readonly<{
-				/** Geometry configuration containing observation and placement identity. */
-				configuration: SphericalEarthGeometryConfiguration;
-			}>;
-		/** Requested J1-only or J1-through-J2 graph. */
-		maximumScatteringOrder: 1 | 2;
-	}>;
-
-/** Controller N4 plan request with packed transport-data ownership. */
-type DistantSunCacheControllerPlanRequestN4 = DistantSunCacheControllerPlanRequestBase &
-	Readonly<{
-		/** Atmosphere contributor with transport sampling. */
-		atmosphere: DistantSunCacheControllerPlanRequestBase['atmosphere'] & Pick<AtmosphereModel, 'sampleMedium'>;
-		/** Geometry contributor with packed transport-data construction. */
-		geometry: CacheBuildContributor &
-			CacheTransportDataProvider &
-			Readonly<{
-				/** Geometry configuration containing observation and placement identity. */
-				configuration: SphericalEarthGeometryConfiguration;
-			}>;
-		/** Requested J1-through-J4 graph. */
-		maximumScatteringOrder: 4;
-	}>;
-
-/** Concrete owner request for one controller-derived distant-Sun GPU plan. */
-type DistantSunCacheControllerPlanRequest =
-	DistantSunCacheControllerPlanRequestN1OrN2 | DistantSunCacheControllerPlanRequestN4;
-
-/** Configured distant source used by its per-runtime controller. */
-type DistantSunCacheSource = CacheBuildContributor &
-	Readonly<{
-		/** Normalized source-owned construction values. */
-		configuration: DistantSunLightSourceConfiguration;
-	}>;
-
-/** Construction collaborators for one distant-Sun GPU cache controller. */
-type DistantSunCacheControllerConfiguration = Readonly<{
-	/** Aggregate execution model retained for the controller lifetime. */
-	model: SharedModel;
-	/** Externally owned GPU backend. */
-	backend: CacheGpuBackend;
-	/** Optional cache-build scheduler. */
-	scheduler?: CacheBuildScheduler;
-}>;
-
 /**
  * Geometry method names observed by the distant-Sun primary-radiance evaluator fixture.
  *
@@ -853,4 +782,154 @@ type DistantSunGroundContributionEvaluationResult = Readonly<{
 	constructionPositionStencilCount: number;
 	/** Number of final-view position stencil resolutions. */
 	finalViewPositionStencilCount: number;
+}>;
+/** Fixed-observer spherical support used to close one distant-Sun scene inventory. */
+type DistantSunSceneCacheSupport = Readonly<{
+	/** Stable support identity. */
+	readonly id: string;
+	/** Spherical bottom radius. */
+	readonly bottomRadius: Distance;
+	/** Spherical top radius. */
+	readonly topRadius: Distance;
+	/** Fixed observer altitude above the spherical ground. */
+	readonly observerAltitude: Distance;
+	/** Observer-local solar-zenith angle for the scene Sun state. */
+	readonly observerSolarZenith: Angle;
+	/** Complete camera-orientation support marker. */
+	readonly completeCameraRotation: true;
+	/** Whether every geometry-shortened endpoint from zero to the atmosphere exit is supported. */
+	readonly arbitraryShortenedEndpoint: true;
+}>;
+
+/** Exact distant-Sun state that identifies one independently loadable scene cache. */
+type DistantSunSceneSunIdentity = Readonly<{
+	/** Stable scene identity. */
+	readonly id: string;
+	/** Exact canonical UTC instant represented by the scene. */
+	readonly instant: string;
+	/** Unit direction toward the distant Sun in the scene's retained observer-local up/east/north frame. */
+	readonly directionToSourceUpEastNorth: UnitVector3;
+	/** Stable radiometric source identity. */
+	readonly sourceIdentity: string;
+}>;
+
+/** Definition used to build one interpolation-closed packed-row ledger. */
+type DistantSunSceneCacheLedgerDefinition = Readonly<{
+	/** Exact scene Sun state. */
+	readonly sceneSun: DistantSunSceneSunIdentity;
+	/** Fixed spatial support closed by the ledger. */
+	readonly support: DistantSunSceneCacheSupport;
+	/** Executable Native48 altitude domain. */
+	readonly positionDomain: PositionDomain;
+	/** Executable Z180 local-solar-zenith domain. */
+	readonly solarZenithDomain: SolarZenithDomain;
+	/** Executable logical W27 outgoing domain. */
+	readonly outgoingDirectionDomain: CubedSphereDirectionDomain;
+	/** Executable Native15 spectral basis. */
+	readonly spectralBasis: SpectralBasis;
+}>;
+
+/** Executable domains used to validate an external packed-row ledger. */
+type DistantSunSceneCacheLedgerDomainDefinition = Omit<DistantSunSceneCacheLedgerDefinition, 'sceneSun' | 'support'>;
+
+/** One altitude owner's interpolation-closed retained local-solar-zenith rows. */
+type DistantSunSceneCacheLedgerRow = Readonly<{
+	/** Native48 altitude-node index. */
+	readonly altitudeIndex: number;
+	/** Physical altitude represented by the node. */
+	readonly altitude: Distance;
+	/** Inclusive first retained Z180 node. */
+	readonly firstSolarZenithIndex: number;
+	/** Inclusive last retained Z180 node. */
+	readonly lastSolarZenithIndex: number;
+	/** First packed payload row for this altitude node. */
+	readonly firstPackedRow: number;
+	/** Number of packed rows owned by this altitude node. */
+	readonly packedRowCount: number;
+}>;
+
+/** Executable interpolation-closed packed-row ledger for one distant-Sun scene cache. */
+interface DistantSunSceneCacheLedger {
+	/** Ledger schema identity. */
+	readonly schemaId: string;
+	/** Exact scene Sun state. */
+	readonly sceneSun: DistantSunSceneSunIdentity;
+	/** Fixed spatial support. */
+	readonly support: DistantSunSceneCacheSupport;
+	/** Ordered altitude ledger rows. */
+	readonly rows: readonly DistantSunSceneCacheLedgerRow[];
+	/** Total retained altitude/local-solar-zenith blocks. */
+	readonly retainedBlockCount: number;
+	/** Logical uncompressed R32F byte length. */
+	readonly oracleByteLength: number;
+	/** Exact-seam R32F payload plus Uint16 map byte length. */
+	readonly exactSeamByteLength: number;
+	/** Call this method to resolve one retained altitude/Z180 coordinate to its packed row. */
+	lookupPackedRow(altitudeIndex: number, solarZenithIndex: number): number;
+	/** Call this method to return the serialized external ledger record. */
+	toRecord(): DistantSunSceneCacheLedgerRecord;
+}
+
+/** Serialized packed-row ledger record emitted beside a scene-cache payload. */
+type DistantSunSceneCacheLedgerRecord = Readonly<{
+	/** Ledger schema identity. */
+	readonly schemaId: string;
+	/** Exact scene Sun state. */
+	readonly sceneSun: DistantSunSceneSunIdentity;
+	/** Fixed spatial support. */
+	readonly support: DistantSunSceneCacheSupport;
+	/** Ordered altitude ledger rows. */
+	readonly rows: readonly DistantSunSceneCacheLedgerRow[];
+	/** Total retained altitude/local-solar-zenith blocks. */
+	readonly retainedBlockCount: number;
+	/** Logical uncompressed R32F byte length. */
+	readonly oracleByteLength: number;
+	/** Exact-seam R32F payload plus Uint16 map byte length. */
+	readonly exactSeamByteLength: number;
+}>;
+
+/** Content-addressed payload reference in a distant-Sun scene-cache manifest. */
+type DistantSunSceneCachePayloadReference = Readonly<{
+	/** Asset-relative payload path. */
+	readonly path: string;
+	/** Exact payload byte length. */
+	readonly byteLength: number;
+	/** Lowercase SHA-256 content hash. */
+	readonly sha256: string;
+	/** Payload codec identity. */
+	readonly codecId: string;
+}>;
+
+/** Serialized production manifest for one complete distant-Sun scene cache. */
+type DistantSunSceneCacheManifestRecord = Readonly<{
+	/** Manifest schema identity. */
+	readonly schemaId: string;
+	/** Stable complete-cache compatibility identity. */
+	readonly cacheIdentity: string;
+	/** Scalar resolver interval owned by this runtime-only package. */
+	readonly selection: Readonly<{
+		readonly representativeSolarZenithDegrees: number;
+		readonly minimumInputDegrees: number;
+		readonly maximumInputExclusiveDegrees: number;
+	}>;
+	/** Exact scene Sun state. */
+	readonly sceneSun: DistantSunSceneSunIdentity;
+	/** Stable atmosphere identity. */
+	readonly atmosphereIdentity: string;
+	/** Stable spherical geometry identity. */
+	readonly geometryIdentity: string;
+	/** Stable ground-boundary identity. */
+	readonly groundIdentity: string;
+	/** Stable Native48/Z180/W27/F68/Native15/N4/Q30 domain and numerical identity. */
+	readonly numericalIdentity: string;
+	/** Asset-relative packed-row ledger path. */
+	readonly ledgerPath: string;
+	/** SHA-256 hash of the exact serialized ledger bytes. */
+	readonly ledgerSha256: string;
+	/** Exact W27 seam-deduplicated payload. */
+	readonly exactSeamPayload: DistantSunSceneCachePayloadReference;
+	/** Exact logical-W27 to unique-direction Uint16 payload. */
+	readonly logicalToUniqueIndex: DistantSunSceneCachePayloadReference;
+	/** Complete compiler and parent-input derivation record. */
+	readonly derivation: Readonly<Record<string, unknown>>;
 }>;

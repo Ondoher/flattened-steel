@@ -85,6 +85,15 @@ describe('StellarPointSetCache production promotion', () => {
 		expect(first.getRuntimeBindings().bindings[0].valueKey).toBe('cache.celestial.starTransport');
 		expect(lookup.functions[0].code).toContain('tileX * 11');
 		expect(live.functions.map((block) => block.code).join('\n')).toContain('stellarPointSetDirection(memberIndex)');
+		expect(live.uniforms).toEqual([
+			{
+				name: 'uStellarPointMemberCount',
+				type: 'int',
+				valueKey: 'celestial.stellarPointSetMemberCount',
+				defaultValue: 500,
+			},
+		]);
+		expect(live.functions.map((block) => block.code).join('\n')).toContain('memberIndex < uStellarPointMemberCount');
 		expect(live.functions.map((block) => block.code).join('\n')).toContain('irradiance.channels[channelIndex] / pixelSolidAngle');
 		expect(live.mainHooks[0].code).toBe('addStellarPointSetRadiance(celestialRadiance, state);');
 

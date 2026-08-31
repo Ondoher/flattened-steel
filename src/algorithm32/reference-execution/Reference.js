@@ -125,10 +125,10 @@ export class Reference {
 	evaluate(request = {}) {
 		const viewRaySegment = this.model.geometry.resolveViewRaySegment(this._resolveViewRay(request.viewRay));
 		const pathIntervalCount = this.model.profile.numerical.viewPath.intervalCount;
-		const pathIntegrationPoints = this.calculator.buildEndpointTrapezoidPathIntegrationPoints(
-			viewRaySegment,
-			pathIntervalCount,
-		);
+		const pathIntegrationPoints =
+			this.model.profile.numerical.viewPath.sampleDistribution?.kind === 'quadratic-near-observer-v1'
+				? this.calculator.buildQuadraticMidpointPathIntegrationPoints(viewRaySegment, pathIntervalCount)
+				: this.calculator.buildEndpointTrapezoidPathIntegrationPoints(viewRaySegment, pathIntervalCount);
 		const scatteringCache = this._resolveScatteringCache(request);
 		const pathRadiance = this.calculator.computeRadiance(viewRaySegment, pathIntegrationPoints, {scatteringCache});
 

@@ -4,6 +4,10 @@ type DistantSunLightSourceConfig = {
 	readonly angularRadius: Angle;
 	/** Optional aligned source irradiance; omission selects the Native-15 packet. */
 	readonly sourceIrradiance?: SpectralIrradiancePacket;
+	/** Exact prebuilt scene cache selected for runtime atmospheric transport. */
+	readonly sceneCacheAsset?: DistantSunSceneCacheAssetSelection;
+	/** Select the shared texture-free zero-scattering cache beyond the qualified light range. */
+	readonly darkScattering?: boolean;
 };
 
 /** Geometry-bound distant-Sun configuration used by its private implementation closure. */

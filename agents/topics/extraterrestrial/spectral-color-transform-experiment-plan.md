@@ -1,6 +1,26 @@
 # Spectral Color-Transform Experiment Plan
 
-## Active Reset: Bruneton Primary Engine
+Status: active, resumed on 2026-08-31 after closure of the distant-Sun
+solar-zenith cache plan. The current production comparison baseline is
+`BrunetonSourceLuminanceLiftColorDisplayModel`, qualified by immutable runs
+`000466` and `000467` and now selected by both Flat32 modes. It is an accepted
+interim production display path, not the completed Color correction.
+
+The physical input baseline has changed since this plan paused. The qualified
+one-degree point-local scene-cache inventory, Q30 live transport, and shared
+post-108-degree dark state are now fixed upstream inputs. Color work may inspect
+their Native15 `preDisplayRadiance`, but it must not retune cache spectra,
+transport, cache interpolation, or the darkness cutoff to repair appearance.
+
+Immediate work resumes at the rejected Step 3 boundary: reproduce the current
+source-luminance-lift output over the established daylight, twilight, and dark
+scene matrix; retain the unchanged Bruneton projection as a control; then
+design and test the corrected static luminance/highlight mapper without
+per-channel or per-pixel peak normalization. Star appearance is a coordinated
+downstream follow-up and receives separate acceptance; it is not a Color-curve
+tuning input.
+
+## Preserved Reset Basis: Bruneton Primary Engine
 
 The project owner reset the active implementation direction after production
 spectra proved that the old Stage 1 starting data was invalid. Begin from the
@@ -98,12 +118,13 @@ distinguishes the changing spectral sensitivity of rod/cone transition. These
 facts constrain the design but do not uniquely determine the final SDR
 rendering curve.
 
-Status: active reset execution. The Bruneton base is frozen and verified.
-Reference characterization in step 2 is accepted. The first step-3 seam proof
-is complete and rejected; a corrected static luminance/highlight mapper is
-next. The old Stage 1 ledger and all
-pre-reset Color candidates are historical evidence only. This plan authorizes
-no production change.
+Reset checkpoint preserved from the pre-cache Color lane: the Bruneton base is
+frozen and verified, reference characterization in step 2 is accepted, and the
+first step-3 seam proof is complete and rejected. The old Stage 1 ledger and
+all pre-reset Color candidates remain historical evidence only. The later
+source-luminance-lift production adoption supersedes this checkpoint's former
+claim that production was unchanged; it does not accept the rejected mapper or
+complete Step 3.
 
 Immutable focused run
 `000349-spectral-color-production-sun-focused-bruneton-luminance-highlight`

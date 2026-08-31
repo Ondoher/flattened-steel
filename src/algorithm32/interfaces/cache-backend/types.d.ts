@@ -34,6 +34,34 @@ interface CacheRuntimeBinding {
 	/** Backend id value. */ readonly backendId: string;
 }
 
+/** Immutable texture formats accepted by the resident-asset upload boundary. */
+type CacheImmutableTextureFormat = 'R32F' | 'RGBA32F' | 'R16UI';
+
+/** Executable shape of one immutable resident texture. */
+type CacheImmutableTextureStorage = Readonly<{
+	/** GPU texel format. */ readonly format: CacheImmutableTextureFormat;
+	/** Texture width. */ readonly width: number;
+	/** Texture height. */ readonly height: number;
+	/** Array-layer count; R16UI assets use one layer. */ readonly layers: number;
+}>;
+
+/** Request to validate, upload, and bind one immutable resident texture. */
+type CacheImmutableTextureUploadRequest = Readonly<{
+	/** Stable texture identity. */ readonly id: string;
+	/** Exact executable texture storage. */ readonly storage: CacheImmutableTextureStorage;
+	/** Typed immutable source values. */ readonly values: Float32Array | Uint16Array;
+	/** Shader value populated by the resulting binding. */ readonly valueKey: CacheRuntimeValueKey;
+}>;
+
+/** Opaque owner of one completely uploaded immutable texture and binding. */
+interface CacheImmutableTexture {
+	/** Stable texture identity. */ readonly id: string;
+	/** Exact executable texture storage. */ readonly storage: CacheImmutableTextureStorage;
+	/** Backend ownership identity. */ readonly backendId: string;
+	/** Opaque runtime binding for this texture. */ readonly runtimeBinding: CacheRuntimeBinding;
+	/** Call this method to dispose the texture exactly once. */ dispose(): void;
+}
+
 /**
  * Shader value populated by one completed GPU field.
  *
@@ -45,6 +73,8 @@ interface CacheRuntimeBinding {
  */
 type CacheRuntimeValueKey =
 	| 'cache.cumulativeScatteringDensity'
+	| 'cache.sceneCumulativeScatteringDensity'
+	| 'cache.sceneLogicalToUniqueDirection'
 	| 'cache.celestial.sunTransport'
 	| 'cache.celestial.starTransport'
 	| 'cache.celestial.localSunRadiance'
@@ -105,6 +135,12 @@ interface CacheGpuBackend {
 	 * @param request - The resident field and its caller-selected shader value.
 	 * @returns - The result produced by the operation.
 	 */ createRuntimeBinding(request: CacheRuntimeBindingRequest): CacheRuntimeBinding;
+	/**
+	 * Call this method to validate and upload one immutable resident texture.
+	 * @param request - Exact typed payload, storage, identity, and shader value.
+	 * @returns - Opaque uploaded texture owner and runtime binding.
+	 */
+	uploadImmutableTexture(request: CacheImmutableTextureUploadRequest): CacheImmutableTexture;
 	/**
 	 * Call this method to resolve opaque bindings privately and install their renderer resources.
 	 * @param request - The request accepted by the operation.

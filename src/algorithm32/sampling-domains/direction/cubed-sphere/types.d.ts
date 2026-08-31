@@ -40,6 +40,14 @@ type CubedSpherePositiveFaceCenterIndices = Readonly<{
 	readonly positiveZ: number;
 }>;
 
+/** Exact seam mapping derived from one logical cubed-sphere direction table. */
+type CubedSphereExactSeamMapping = Readonly<{
+	/** Unique physical directions in first-logical-occurrence order. */
+	readonly uniqueUnitVectors: readonly UnitVector3[];
+	/** Logical-direction to unique-direction indices. */
+	readonly logicalToUniqueDirectionIndices: Uint16Array;
+}>;
+
 /** Executable boundary-inclusive cubed-sphere direction domain. */
 interface CubedSphereDirectionDomain extends DirectionDomain {
 	/** Number of nodes along one face edge. */
@@ -52,6 +60,12 @@ interface CubedSphereDirectionDomain extends DirectionDomain {
 	readonly faces: readonly CubedSphereFace[];
 	/** Flattened indices of the positive-axis face centers. */
 	readonly positiveFaceCenterIndices: CubedSpherePositiveFaceCenterIndices;
+	/** Unique physical directions in first-logical-occurrence order. */
+	readonly uniqueUnitVectors: readonly UnitVector3[];
+	/** Exact logical-direction to unique-direction indices. */
+	readonly logicalToUniqueDirectionIndices: Uint16Array;
+	/** Number of unique physical directions. */
+	readonly uniqueDirectionCount: number;
 	/**
 	 * Call this method to flatten one face-local node.
 	 * @param faceIndex - The face index value accepted by the operation.

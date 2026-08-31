@@ -67,10 +67,7 @@ describe('LocalLightLevelCalculator', /** Called by Jasmine to register the name
 	it('publishes one fixed camera-independent cosine-weighted hemisphere', /** Called by Jasmine to exercise the named behavior. */ () => {
 		expect(RECEIVER_ENVIRONMENT_LIGHT_QUADRATURE.length).toBe(RECEIVER_ENVIRONMENT_SAMPLE_COUNT);
 		expect(
-			RECEIVER_ENVIRONMENT_LIGHT_QUADRATURE.reduce(
-				(sum, sample) => sum + sample.irradianceWeightSteradians,
-				0,
-			),
+			RECEIVER_ENVIRONMENT_LIGHT_QUADRATURE.reduce((sum, sample) => sum + sample.irradianceWeightSteradians, 0),
 		).toBeCloseTo(Math.PI, 14);
 		for (const sample of RECEIVER_ENVIRONMENT_LIGHT_QUADRATURE) {
 			expect(Object.isFrozen(sample)).toBeTrue();
@@ -93,10 +90,7 @@ describe('LocalLightLevelCalculator', /** Called by Jasmine to register the name
 		expect(irradiance.quantity).toBe(SPECTRAL_QUANTITIES.IRRADIANCE_DENSITY);
 		expect(irradiance.units).toBe(SPECTRAL_UNITS.IRRADIANCE_DENSITY);
 		expect(irradiance.values[0]).toBeCloseTo(2 * Math.PI, 12);
-		expect(calculator.measureDirectIrradiance(irradiance).adaptingLuminanceProxy.value).toBeCloseTo(
-			2 * 683,
-			11,
-		);
+		expect(calculator.measureDirectIrradiance(irradiance).adaptingLuminanceProxy.value).toBeCloseTo(2 * 683, 11);
 	});
 
 	it('measures configured source scale with geometry-owned night support', /** Called by Jasmine to exercise the named behavior. */ () => {
@@ -150,6 +144,53 @@ describe('LocalLightLevelCalculator', /** Called by Jasmine to register the name
 				observation: /** @type {GeometryObservation} */ (/** @type {unknown} */ ({})),
 			}),
 		).toEqual({value: 0, units: 'cd m^-2'});
+	});
+
+	it('applies atmosphere-owned source transmittance before Color luminance reduction', /** Called by Jasmine to exercise the named behavior. */ () => {
+		const lightSource = /** @type {LightSourceModel} */ (
+			/** @type {unknown} */ ({
+				id: 'transmitted-source',
+				sampleDirectLighting: /** Return one unobstructed direct-source sample. */ () => ({
+					sourceIrradiance: createPacket(SPECTRAL_QUANTITIES.IRRADIANCE_DENSITY, [4]),
+					directionToLight: [0, 0, 1],
+				}),
+			})
+		);
+		const geometry = /** @type {GeometryModel} */ (
+			/** @type {unknown} */ ({
+				resolveViewRaySegment: /** Return the configured receiver position. */ () => ({
+					ray: {origin: {coordinates: [0, 0, 1], units: 'meters'}, direction: [0, 0, 1]},
+					startDistance: {value: 0, units: 'meters'},
+					endDistance: {value: 0, units: 'meters'},
+				}),
+				resolveSourceRelativePosition: /** Return an upward distant-source direction. */ () => ({
+					directionToSource: [0, 0, 1],
+					directionFromSource: [0, 0, -1],
+					distanceFromSource: null,
+				}),
+				resolveAtmospherePath: /** Return the geometry-owned source path. */ () => ({
+					start: {altitude: {value: 0, units: 'meters'}},
+					end: {altitude: {value: 1, units: 'meters'}},
+					length: {value: 1, units: 'meters'},
+					samples: [],
+				}),
+			})
+		);
+		const atmosphere = /** @type {AtmosphereModel} */ (
+			/** @type {unknown} */ ({
+				integrateOpticalDepth: /** Return fixed quarter transmittance. */ () => ({
+					blockedByGround: false,
+					opticalDepth: null,
+					transmittance: createPacket(SPECTRAL_QUANTITIES.TRANSMITTANCE, [0.25]),
+				}),
+			})
+		);
+		const calculator = new LocalLightLevelCalculator({lightSource});
+		const observation = /** @type {GeometryObservation} */ (/** @type {unknown} */ ({}));
+		const unattenuated = calculator.measureBrightnessProxy({geometry, observation});
+		const transmitted = calculator.measureBrightnessProxy({geometry, atmosphere, observation});
+
+		expect(transmitted.value).toBeCloseTo(unattenuated.value * 0.25, 14);
 	});
 
 	it('derives a camera-independent brightness policy before horizon clipping', /** Called by Jasmine to exercise the named behavior. */ () => {
@@ -281,7 +322,9 @@ describe('LocalLightLevelCalculator', /** Called by Jasmine to register the name
 			units:
 				quantity === SPECTRAL_QUANTITIES.RADIANCE_DENSITY
 					? SPECTRAL_UNITS.RADIANCE_DENSITY
-					: SPECTRAL_UNITS.IRRADIANCE_DENSITY,
+					: quantity === SPECTRAL_QUANTITIES.TRANSMITTANCE
+						? SPECTRAL_UNITS.DIMENSIONLESS
+						: SPECTRAL_UNITS.IRRADIANCE_DENSITY,
 			values,
 			provenanceIdentity: `local-light-level-spec:${quantity}:${values.join(',')}`,
 		});

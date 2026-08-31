@@ -314,6 +314,26 @@ export class Flat32View {
 		error.textContent = '';
 	}
 
+	/** Present one distant-Sun cache-resolution phase through the existing status surface. */
+	showDistantSunCacheState(sceneSummary, cacheState, solarZenithDegrees) {
+		const shell = this._requireElement(this._shell, 'shell');
+		const status = this._requireElement(this._status, 'status');
+		const atmosphere = this._requireElement(this._atmosphere, 'atmosphere');
+		this._publishSceneSummary(sceneSummary);
+		shell.dataset.flat32DistantSunCacheState = cacheState;
+		shell.dataset.flat32SolarZenithDegrees = String(solarZenithDegrees);
+		if (cacheState === 'resolving') {
+			status.textContent = `Resolving the offline distant-Sun cache for solar zenith ${solarZenithDegrees.toFixed(6)} degrees.`;
+			atmosphere.textContent = 'resolving cache';
+		} else if (cacheState === 'loading') {
+			status.textContent = 'Loading and validating the selected offline distant-Sun cache.';
+			atmosphere.textContent = 'loading cache';
+		} else if (cacheState === 'dark') {
+			status.textContent = 'The selected distant-Sun state is beyond the configured non-dark cache range.';
+			atmosphere.textContent = 'dark';
+		}
+	}
+
 	/**
 	 * Present the installed production atmosphere.
 	 *
@@ -330,6 +350,12 @@ export class Flat32View {
 
 		this._publishSceneSummary(sceneSummary);
 		shell.dataset.flat32State = 'ready';
+		if (atmosphereSummary.pairing === 'spherical/distant') {
+			shell.dataset.flat32DistantSunCacheState = atmosphereSummary.distantSunCacheState;
+		} else {
+			delete shell.dataset.flat32DistantSunCacheState;
+			delete shell.dataset.flat32SolarZenithDegrees;
+		}
 		shell.dataset.flat32AtmospherePairing = atmosphereSummary.pairing;
 		shell.dataset.flat32AtmosphereMaximumOrder = String(atmosphereSummary.maximumScatteringOrder);
 		shell.dataset.flat32AtmospherePositionCount = String(atmosphereSummary.positionCount);
@@ -342,7 +368,10 @@ export class Flat32View {
 		shell.dataset.flat32AtmosphereObserverDome = String(atmosphereSummary.observerDomeEnabled === true);
 		shell.dataset.flat32AtmosphereOutputPixel = atmosphereSummary.outputPixel.join(',');
 		shell.dataset.flat32AtmosphereSceneInputPixel = atmosphereSummary.sceneInputPixel.join(',');
-		status.textContent = `Atmosphere ready. Rendering the production ${atmosphereSummary.pairing} path.`;
+		status.textContent =
+			atmosphereSummary.pairing === 'spherical/distant' && atmosphereSummary.distantSunCacheState === 'dark'
+				? 'Atmosphere ready. Rendering the production spherical/distant path with the shared dark scattering state.'
+				: `Atmosphere ready. Rendering the production ${atmosphereSummary.pairing} path.`;
 		atmosphere.textContent = 'installed';
 		progress.hidden = true;
 		error.hidden = true;
@@ -365,6 +394,9 @@ export class Flat32View {
 
 		this._publishSceneSummary(sceneSummary);
 		shell.dataset.flat32State = 'atmosphere-failed';
+		if (shell.dataset.flat32DistantSunCacheState !== 'dark') {
+			shell.dataset.flat32DistantSunCacheState = 'failure';
+		}
 		status.textContent = 'The direct scene remains active; atmosphere setup failed.';
 		atmosphere.textContent = 'failed';
 		progress.hidden = true;

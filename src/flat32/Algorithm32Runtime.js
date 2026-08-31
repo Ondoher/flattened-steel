@@ -15,7 +15,8 @@ export class Algorithm32Runtime {
 	 *   onFailure: Flat32AtmosphereFailureHandler,
 	 *   composer?: import('three/examples/jsm/postprocessing/EffectComposer.js').EffectComposer,
 	 *   composerRenderTarget?: THREE.WebGLRenderTarget,
-	 *   deferPublication?: boolean
+	 *   deferPublication?: boolean,
+	 *   performanceCallback?: ShaderPerformanceCallback
 	 * }>} configuration - Supplies the scene, fixed mode, and failure sink.
 	 */
 	constructor(configuration) {
@@ -26,6 +27,7 @@ export class Algorithm32Runtime {
 		this._preparedComposer = configuration.composer ?? null;
 		this._preparedRenderTarget = configuration.composerRenderTarget ?? null;
 		this._deferPublication = configuration.deferPublication === true;
+		this._performanceCallback = configuration.performanceCallback;
 		this._ownsComposer = this._preparedComposer !== null;
 		/** @type {import('three/examples/jsm/postprocessing/EffectComposer.js').EffectComposer | null} */
 		this._composer = null;
@@ -54,18 +56,16 @@ export class Algorithm32Runtime {
 		};
 	}
 
-	/** Invalidate the installed stellar generation pair when the browser loses WebGL state. */
+	/** Release renderer-owned resources while their invalid WebGL context remains lost. */
 	handleContextLoss() {
 		if (this._disposed) return;
 		this._shaderHandle?.handleContextLoss?.();
-		this._installed = false;
+		this._disposeSetupResources();
 	}
 
 	/** Rebuild all renderer-owned atmosphere and stellar resources through normal setup after restoration. */
 	async handleContextRestoration() {
 		if (this._disposed) return;
-		this._shaderHandle?.handleContextRestoration?.();
-		this._disposeSetupResources();
 		await this.setup();
 	}
 
@@ -431,22 +431,15 @@ export class Algorithm32Runtime {
 						warn: this._handleShaderWarning,
 					})
 				),
+				performanceCallback: this._performanceCallback,
+				performanceSampleIntervalFrames: 1,
+				performanceMaxPendingQueries: 4,
 			});
 			if (this._disposed || cancellation.signal.aborted || generation !== this._setupGeneration) {
 				const error = new Error('Flat32 Algorithm32 setup was superseded.');
 
 				error.name = 'AbortError';
 				throw error;
-			}
-			const receiverEnvironmentMeasurement = await this._shaderHandle.measureReceiverEnvironmentLight({
-				THREE,
-				renderer: this._sceneRuntime.renderer,
-				backend: this._cacheBackend,
-				signal: cancellation.signal,
-				diagnostics: new URLSearchParams(globalThis.location?.search ?? '').get('receiverEnvironmentDiagnostics') === '1',
-			});
-			if (receiverEnvironmentMeasurement.diagnostics) {
-				this._sceneRuntime.canvas.dataset.flat32ReceiverEnvironmentDiagnostics = JSON.stringify(receiverEnvironmentMeasurement.diagnostics);
 			}
 			await this._shaderHandle.prepare(this._sceneRuntime.renderer);
 			if (this._disposed || cancellation.signal.aborted || generation !== this._setupGeneration) {

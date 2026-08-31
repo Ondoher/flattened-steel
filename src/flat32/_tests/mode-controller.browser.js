@@ -153,4 +153,57 @@ describe('Flat32 mode transaction', () => {
 		expect(events).toContain('direct-restored');
 		expect(events).not.toContain('unexpected-publish');
 	});
+
+	it('aborts asynchronous preparation and publishes only the newest request', async () => {
+		const events = [];
+		const controller = new ModeController(/** @type {any} */ ({
+			endpointScene: {},
+			onFailure() {},
+			async createMode(kind, _state, request) {
+				if (kind === 'spherical-distant') {
+					await new Promise((resolve) => {
+						request.signal.addEventListener('abort', () => {
+							events.push('first:aborted');
+							resolve();
+						}, {once: true});
+					});
+				}
+				return createMode(kind, events);
+			},
+			createRuntime({mode}) {
+				return createRuntime(mode.name, events);
+			},
+			onPreparing(kind) {
+				events.push(`prepare:${kind}`);
+			},
+			onReverted() {
+				events.push('unexpected-revert');
+			},
+			onPublished(kind) {
+				events.push(`accepted:${kind}`);
+			},
+			sceneRuntime: {
+				createAtmosphereComposer() {
+					return createComposer('newest', events);
+				},
+				restoreDirectRendering() {
+					events.push('direct-restored');
+				},
+			},
+		}));
+
+		const first = controller.switchTo('spherical-distant', /** @type {Flat32ApplicationState} */ ({}));
+		await Promise.resolve();
+		const second = controller.switchTo('flat-local', /** @type {Flat32ApplicationState} */ ({}));
+
+		expect(await first).toBeNull();
+		expect((await second).pairing).toBe('flat-local');
+		expect(events).toContain('first:aborted');
+		expect(events).toContain('spherical-distant:mode-disposed');
+		expect(events).toContain('accepted:flat-local');
+		expect(events).not.toContain('accepted:spherical-distant');
+		expect(events).not.toContain('unexpected-revert');
+
+		controller.dispose();
+	});
 });

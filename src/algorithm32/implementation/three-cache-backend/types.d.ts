@@ -4,10 +4,18 @@ type ThreeCacheBackendNamespace = Readonly<{
 	REVISION: unknown;
 	/** Red texture-format runtime value. */
 	RedFormat: unknown;
+	/** RGBA texture-format runtime value. */
+	RGBAFormat: unknown;
+	/** Red integer texture-format runtime value. */
+	RedIntegerFormat: unknown;
 	/** Float texture-type runtime value. */
 	FloatType: unknown;
+	/** Unsigned-short texture-type runtime value. */
+	UnsignedShortType: unknown;
 	/** Nearest-neighbor filter runtime value. */
 	NearestFilter: unknown;
+	/** Linear filter runtime value. */
+	LinearFilter: unknown;
 	/** Edge-clamping wrap runtime value. */
 	ClampToEdgeWrapping: unknown;
 	/** GLSL 3 version runtime value. */
@@ -68,6 +76,8 @@ type ThreeCacheBackendRenderer = Readonly<{
 	compileAsync?: unknown;
 	/** Synchronous compilation runtime value. */
 	compile: unknown;
+	/** Eager texture-upload runtime value. */
+	initTexture: unknown;
 	/** Scene-rendering runtime value. */
 	render: unknown;
 }>;

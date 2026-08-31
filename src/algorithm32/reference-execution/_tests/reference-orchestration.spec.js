@@ -60,7 +60,7 @@ function createScatteringCache(id) {
 			/**
 			 * Call this method to sample resolved.
 			 * @throws {Error} - When the operation cannot complete its caller-observable contract.
-			 */ sampleResolved() {
+			 */ sampleCumulativeScatteringDensity() {
 				throw new Error('Reference orchestration tests do not sample the cache.');
 			},
 			/** Call this method to dispose. */ dispose() {},
@@ -172,12 +172,12 @@ describe('Reference', /** Called by Jasmine to register the named test suite. */
 				 * Called by reference to resolve view ray segment.
 				 * @returns - The callback result returned to its caller.
 				 */ resolveViewRaySegment: () => ({
-						ray: {
-							origin: {coordinates: [0, 0, 0], units: 'meters'},
-							direction: [0, 0, 1],
-						},
-						startDistance: {value: 0, units: 'meters'},
-						endDistance: {value: 0, units: 'meters'},
+					ray: {
+						origin: {coordinates: [0, 0, 0], units: 'meters'},
+						direction: [0, 0, 1],
+					},
+					startDistance: {value: 0, units: 'meters'},
+					endDistance: {value: 0, units: 'meters'},
 				}),
 			}),
 			calculator,
@@ -236,12 +236,12 @@ describe('Reference', /** Called by Jasmine to register the named test suite. */
 				 * Called by reference to resolve view ray segment.
 				 * @returns - The callback result returned to its caller.
 				 */ resolveViewRaySegment: () => ({
-						ray: {
-							origin: {coordinates: [0, 0, 0], units: 'meters'},
-							direction: [0, 0, 1],
-						},
-						startDistance: {value: 0, units: 'meters'},
-						endDistance: {value: 0, units: 'meters'},
+					ray: {
+						origin: {coordinates: [0, 0, 0], units: 'meters'},
+						direction: [0, 0, 1],
+					},
+					startDistance: {value: 0, units: 'meters'},
+					endDistance: {value: 0, units: 'meters'},
 				}),
 			}),
 			calculator,

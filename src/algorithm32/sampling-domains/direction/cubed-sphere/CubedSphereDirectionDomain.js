@@ -56,6 +56,27 @@ export default class CubedSphereDirectionDomain {
 	 */
 	unitVectors;
 	/**
+	 * Unique source-local unit vectors in first-logical-occurrence order.
+	 *
+	 * @readonly
+	 * @type {readonly UnitVector3[]}
+	 */
+	uniqueUnitVectors;
+	/**
+	 * Exact logical-direction to unique-direction indices.
+	 *
+	 * @readonly
+	 * @type {Uint16Array}
+	 */
+	logicalToUniqueDirectionIndices;
+	/**
+	 * Number of unique physical directions after exact Float32 seam identity.
+	 *
+	 * @readonly
+	 * @type {number}
+	 */
+	uniqueDirectionCount;
+	/**
 	 * Absent integration weights for this reconstruction-only domain.
 	 *
 	 * @readonly
@@ -181,6 +202,37 @@ export default class CubedSphereDirectionDomain {
 			 * @returns - The callback result returned to its caller.
 			 */ (_unused, index) => this._createSourceLocalDirection(index, facts),
 		);
+	}
+
+	/**
+	 * Called by construction to derive the exact Float32 seam codec used by resident cubed-sphere assets.
+	 *
+	 * @param {readonly UnitVector3[]} unitVectors - The logical direction vectors.
+	 * @returns {CubedSphereExactSeamMapping} - The unique vectors and logical index map.
+	 */
+	_createExactSeamMapping(unitVectors) {
+		const uniqueIndexByKey = new Map();
+		const uniqueUnitVectors = [];
+		const logicalToUniqueDirectionIndices = new Uint16Array(unitVectors.length);
+
+		for (let logicalIndex = 0; logicalIndex < unitVectors.length; logicalIndex += 1) {
+			const unitVector = unitVectors[logicalIndex];
+			const key = unitVector.map(Math.fround).join(',');
+			let uniqueIndex = uniqueIndexByKey.get(key);
+
+			if (uniqueIndex === undefined) {
+				uniqueIndex = uniqueUnitVectors.length;
+				uniqueIndexByKey.set(key, uniqueIndex);
+				uniqueUnitVectors.push(unitVector);
+			}
+
+			logicalToUniqueDirectionIndices[logicalIndex] = uniqueIndex;
+		}
+
+		return {
+			uniqueUnitVectors,
+			logicalToUniqueDirectionIndices,
+		};
 	}
 
 	/**
@@ -419,6 +471,7 @@ export default class CubedSphereDirectionDomain {
 			directionCount,
 			faces,
 		});
+		const exactSeamMapping = this._createExactSeamMapping(unitVectors);
 
 		this.id = accepted.id;
 		this.faceWidth = accepted.faceWidth;
@@ -427,6 +480,9 @@ export default class CubedSphereDirectionDomain {
 		this.directionCount = directionCount;
 		this.faces = faces;
 		this.unitVectors = unitVectors;
+		this.uniqueUnitVectors = exactSeamMapping.uniqueUnitVectors;
+		this.logicalToUniqueDirectionIndices = exactSeamMapping.logicalToUniqueDirectionIndices;
+		this.uniqueDirectionCount = exactSeamMapping.uniqueUnitVectors.length;
 		this.integrationWeights = null;
 		this.positiveFaceCenterIndices = this._createPositiveFaceCenterIndices(this);
 	}

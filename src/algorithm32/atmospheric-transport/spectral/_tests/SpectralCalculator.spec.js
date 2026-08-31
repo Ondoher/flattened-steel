@@ -180,6 +180,32 @@ describe('SpectralCalculator', /** Called by Jasmine to register the named test 
 		]);
 	});
 
+	it('builds exact quadratic-boundary midpoint integration points', () => {
+		const basis = createAnalyticBasis([{value: 550, units: 'nanometers'}]);
+		const calculator = new SpectralCalculator({model: createCalculatorModel(basis)});
+		const points = calculator.buildQuadraticMidpointPathIntegrationPoints(
+			{
+				ray: {origin: {coordinates: [0, 0, 0], units: 'meters'}, direction: [0, 0, 1]},
+				startDistance: {value: 2, units: 'meters'},
+				endDistance: {value: 10, units: 'meters'},
+			},
+			2,
+		);
+
+		expect(points).toEqual([
+			jasmine.objectContaining({
+				integrationKind: 'quadratic-midpoint',
+				distanceAlongRay: {value: 3, units: 'meters'},
+				measure: {value: 2, units: 'meters'},
+			}),
+			jasmine.objectContaining({
+				integrationKind: 'quadratic-midpoint',
+				distanceAlongRay: {value: 7, units: 'meters'},
+				measure: {value: 6, units: 'meters'},
+			}),
+		]);
+	});
+
 	it('computes typed vacuum source transmittance from the analytic fixture', /** Called by Jasmine to exercise the named behavior. */ () => {
 		const fixture = findAnalyticRow('transmittance.vacuum.finite-path');
 		const basis = createAnalyticBasis(fixture.input.wavelengths);
@@ -337,23 +363,33 @@ describe('SpectralCalculator', /** Called by Jasmine to register the named test 
 		};
 		const densityValues = [10, 20, 30];
 		let densityIndex = 0;
-		const sampleResolved = jasmine.createSpy('sampleResolved').and.callFake(
+		const sampleCumulativeScatteringDensity = jasmine.createSpy('sampleCumulativeScatteringDensity').and.callFake(
 			/**
 			 * Called by the Jasmine spy to handle one callback invocation.
+			 * @param request - The physical sample request.
 			 * @returns - The callback result returned to its caller.
-			 */ () =>
-				packet(
+			 */ (request) => {
+				request.geometry.resolveScatteringCachePositionStencil({
+					position: request.context.position,
+					atmosphereCoordinate: request.context.atmosphereCoordinate,
+				});
+				request.geometry.resolveScatteringCacheDirectionStencil({
+					position: request.context.position,
+					physicalOutgoingDirection: request.context.physicalOutgoingDirection,
+				});
+				return packet(
 					basis,
 					SPECTRAL_QUANTITIES.SCATTERING_DENSITY,
 					SPECTRAL_UNITS.SCATTERING_DENSITY,
 					[densityValues[densityIndex++]],
 					`cumulative-density-${densityIndex}`,
-				),
+				);
+			},
 		);
 		const scatteringCache = /** @type {CpuScatteringCache} */ (
 			/** @type {unknown} */ ({
 				sampleProvenanceIdentity: 'cumulative-field-test-hash',
-				sampleResolved,
+				sampleCumulativeScatteringDensity,
 				/** Call this method to dispose. */ dispose() {},
 			})
 		);
@@ -374,14 +410,18 @@ describe('SpectralCalculator', /** Called by Jasmine to register the named test 
 
 		expect(result.pathRadiance.values[0]).toBeCloseTo(18.75, 12);
 		expect(result.transmittance.values[0]).toBeCloseTo(0.25, 12);
-		expect(sampleResolved).toHaveBeenCalledTimes(path.length);
+		expect(sampleCumulativeScatteringDensity).toHaveBeenCalledTimes(path.length);
 		expect(geometry.resolveScatteringCachePositionStencil).toHaveBeenCalledTimes(path.length);
 		expect(geometry.resolveScatteringCacheDirectionStencil).toHaveBeenCalledTimes(path.length);
 
-		for (const [index, sampleCall] of sampleResolved.calls.allArgs().entries()) {
+		for (const [index, sampleCall] of sampleCumulativeScatteringDensity.calls.allArgs().entries()) {
 			expect(sampleCall[0]).toEqual({
-				positionStencil: positionStencils[index],
-				directionStencil,
+				context: {
+					position: {coordinates: [0, 0, index], units: 'meters'},
+					atmosphereCoordinate: {altitude: index},
+					physicalOutgoingDirection: [0, 0, 1],
+				},
+				geometry,
 			});
 		}
 		for (const [index, positionCall] of geometry.resolveScatteringCachePositionStencil.calls.allArgs().entries()) {

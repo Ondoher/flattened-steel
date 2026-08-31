@@ -30,6 +30,8 @@ const PROGRAM_RECORDS = new WeakMap();
  * @type {WeakMap<CacheRuntimeBinding, ThreeCacheBackendRuntimeBindingRecord>}
  */
 const RUNTIME_BINDING_RECORDS = new WeakMap();
+/** @type {WeakMap<CacheImmutableTexture, ThreeCacheBackendImmutableTextureRecord>} */
+const IMMUTABLE_TEXTURE_RECORDS = new WeakMap();
 /** Monotonic identity sequence for backend handles. */
 let backendSequence = 0;
 
@@ -253,6 +255,18 @@ export class ThreeCacheBackend {
 		}
 	}
 
+	/** @param {CacheImmutableTexture} texture - Opaque immutable texture owner. */
+	_disposeImmutableTexture(texture) {
+		const record = IMMUTABLE_TEXTURE_RECORDS.get(texture);
+		if (!record || record.disposed) return;
+		record.disposed = true;
+		try {
+			record.texture.dispose();
+		} finally {
+			record.backend.immutableTextures.delete(texture);
+		}
+	}
+
 	/**
 	 * Called by ThreeCacheBackend to dispose one program handle and every private
 	 * resource it owns exactly once while retaining the first disposal error.
@@ -343,6 +357,26 @@ export class ThreeCacheBackend {
 	}
 
 	/**
+	 * @param {CacheImmutableTextureUploadRequest} request - Accepted immutable texture request.
+	 * @param {CacheRuntimeBinding} runtimeBinding - Opaque binding associated with the texture.
+	 * @param {string} backendId - Backend ownership identity.
+	 * @returns {CacheImmutableTexture} - Opaque immutable texture owner.
+	 */
+	_createImmutableTextureHandle(request, runtimeBinding, backendId) {
+		const owner = this;
+		const handle = /** @type {CacheImmutableTexture} */ ({
+			id: request.id,
+			storage: request.storage,
+			backendId,
+			runtimeBinding,
+			dispose() {
+				owner._disposeImmutableTexture(handle);
+			},
+		});
+		return handle;
+	}
+
+	/**
 	 * Called by ThreeCacheBackend to require the active field associated with one
 	 * opaque runtime binding owned by the supplied backend.
 	 *
@@ -356,8 +390,33 @@ export class ThreeCacheBackend {
 		if (!bindingRecord || bindingRecord.backend !== backend) {
 			throw new TypeError('Runtime cache binding must be an opaque binding owned by this backend.');
 		}
+		if (!bindingRecord.field) {
+			throw new TypeError('Runtime cache binding does not represent a render field.');
+		}
 
 		return this._requireFieldRecord(bindingRecord.field, backend, 'Runtime cache binding field');
+	}
+
+	/**
+	 * @param {CacheRuntimeBinding} binding - Opaque runtime binding.
+	 * @param {ThreeCacheBackendRecord} backend - Required backend owner.
+	 * @returns {ThreeCacheBackendTexture} - Active private texture.
+	 */
+	_requireRuntimeBindingTexture(binding, backend) {
+		const bindingRecord = RUNTIME_BINDING_RECORDS.get(binding);
+		if (!bindingRecord || bindingRecord.backend !== backend) {
+			throw new TypeError('Runtime cache binding must be an opaque binding owned by this backend.');
+		}
+		if (bindingRecord.field) {
+			return this._requireFieldRecord(bindingRecord.field, backend, 'Runtime cache binding field').target.texture;
+		}
+		const immutable = bindingRecord.immutableTexture;
+		const record = immutable ? IMMUTABLE_TEXTURE_RECORDS.get(immutable) : null;
+		if (!record || record.backend !== backend) {
+			throw new TypeError('Runtime cache binding has no backend-owned texture.');
+		}
+		if (record.disposed) throw new Error('Runtime cache immutable texture has been disposed.');
+		return record.texture;
 	}
 
 	/**
@@ -694,6 +753,7 @@ export class ThreeCacheBackend {
 			context: inspected.context,
 			fields: new Set(),
 			programs: new Set(),
+			immutableTextures: new Set(),
 			runtimeBindingSequence: 0,
 			disposed: false,
 		});
@@ -824,6 +884,90 @@ export class ThreeCacheBackend {
 	}
 
 	/**
+	 * Call this method to validate and eagerly upload one immutable R32F, RGBA32F, or R16UI texture.
+	 *
+	 * @param {CacheImmutableTextureUploadRequest} request - Exact typed payload and executable shape.
+	 * @returns {CacheImmutableTexture} - Opaque uploaded texture owner.
+	 */
+	uploadImmutableTexture(request) {
+		const backend = this._requireBackendRecord(this);
+		const {storage} = request;
+		if (
+			!request.id ||
+			!Number.isInteger(storage.width) ||
+			!Number.isInteger(storage.height) ||
+			!Number.isInteger(storage.layers)
+		) {
+			throw new TypeError('Immutable cache texture requires an identity and integer dimensions.');
+		}
+		if (
+			storage.width < 1 ||
+			storage.height < 1 ||
+			storage.layers < 1 ||
+			storage.width > this.capabilities.maximumTextureSize ||
+			storage.height > this.capabilities.maximumTextureSize ||
+			storage.layers > this.capabilities.maximumArrayLayers
+		) {
+			throw new RangeError("Immutable cache texture exceeds this backend's texture capabilities.");
+		}
+		const componentCount = storage.format === 'RGBA32F' ? 4 : 1;
+		const scalarCount = storage.width * storage.height * storage.layers * componentCount;
+		const isFloat =
+			(storage.format === 'R32F' || storage.format === 'RGBA32F') && request.values instanceof Float32Array;
+		const isUnsignedInteger =
+			storage.format === 'R16UI' && storage.layers === 1 && request.values instanceof Uint16Array;
+		if ((!isFloat && !isUnsignedInteger) || request.values.length !== scalarCount) {
+			throw new TypeError('Immutable cache texture payload type or scalar count is incompatible.');
+		}
+		if (typeof backend.renderer.initTexture !== 'function') {
+			throw new Error('ThreeCacheBackend renderer cannot eagerly upload immutable textures.');
+		}
+		if (storage.format === 'RGBA32F' && !backend.context.getExtension('OES_texture_float_linear')) {
+			throw new Error('ThreeCacheBackend requires OES_texture_float_linear for RGBA32F scene caches.');
+		}
+
+		const texture =
+			storage.layers > 1
+				? new backend.THREE.DataArrayTexture(request.values, storage.width, storage.height, storage.layers)
+				: new backend.THREE.DataTexture(request.values, storage.width, storage.height);
+		texture.format =
+			storage.format === 'RGBA32F'
+				? backend.THREE.RGBAFormat
+				: isFloat
+					? backend.THREE.RedFormat
+					: backend.THREE.RedIntegerFormat;
+		texture.type = isFloat ? backend.THREE.FloatType : backend.THREE.UnsignedShortType;
+		texture.internalFormat = storage.format;
+		texture.minFilter = storage.format === 'RGBA32F' ? backend.THREE.LinearFilter : backend.THREE.NearestFilter;
+		texture.magFilter = storage.format === 'RGBA32F' ? backend.THREE.LinearFilter : backend.THREE.NearestFilter;
+		texture.wrapS = backend.THREE.ClampToEdgeWrapping;
+		texture.wrapT = backend.THREE.ClampToEdgeWrapping;
+		texture.generateMipmaps = false;
+		texture.unpackAlignment = 1;
+		texture.needsUpdate = true;
+
+		try {
+			backend.renderer.initTexture(texture);
+		} catch (error) {
+			texture.dispose();
+			throw error;
+		}
+
+		backend.runtimeBindingSequence += 1;
+		const binding = this._createRuntimeBindingHandle(
+			`${this.id}:binding:${backend.runtimeBindingSequence}:${request.id}`,
+			request.valueKey,
+			request.id,
+			this.id,
+		);
+		const handle = this._createImmutableTextureHandle(request, binding, this.id);
+		IMMUTABLE_TEXTURE_RECORDS.set(handle, {backend, texture, disposed: false});
+		RUNTIME_BINDING_RECORDS.set(binding, {backend, immutableTexture: handle});
+		backend.immutableTextures.add(handle);
+		return handle;
+	}
+
+	/**
 	 * Call this method to resolve opaque cache handles inside the renderer adapter
 	 * and install their private textures into already-created shader uniforms.
 	 *
@@ -836,13 +980,13 @@ export class ThreeCacheBackend {
 		const backend = this._requireBackendRecord(this);
 
 		for (const binding of request.bindings.bindings) {
-			const field = this._requireRuntimeBindingField(binding, backend);
+			const texture = this._requireRuntimeBindingTexture(binding, backend);
 			const uniform = request.uniforms[binding.valueKey];
 			if (!uniform) {
 				throw new TypeError(`Runtime cache uniform ${binding.valueKey} is unavailable.`);
 			}
 
-			uniform.value = field.target.texture;
+			uniform.value = texture;
 		}
 	}
 
@@ -967,6 +1111,13 @@ export class ThreeCacheBackend {
 		for (const field of [...backend.fields]) {
 			try {
 				field.dispose();
+			} catch (error) {
+				disposalError ??= error;
+			}
+		}
+		for (const texture of [...backend.immutableTextures]) {
+			try {
+				texture.dispose();
 			} catch (error) {
 				disposalError ??= error;
 			}

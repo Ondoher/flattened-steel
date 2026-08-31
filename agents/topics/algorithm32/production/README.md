@@ -1,12 +1,79 @@
 # Algorithm32 Production
 
-Status: active implementation topic.
+Status: one-degree Flat32 hookup complete; unrelated production work remains active.
 
-The active spherical-cache successor is owned by the
-[Solar-Zenith Cache Production Adoption](solar-zenith-cache-adoption-plan.md)
-topic. Its contained numerical plan is complete through P10; PA0 begins with a
-read-only production migration inventory. Production-source implementation
-requires separate explicit authorization under the current containment policy.
+The completed integration is owned by the
+[Flat32 one-degree scene-cache hookup](flat32-one-degree-cache-hookup-plan.md)
+plan. Its numerical plan is complete through P10, and production
+adoption is complete through PA7. The shared physical sampling contract,
+Z180/exact-W27 domains, distant-specific ledger/manifest contracts, and
+production-owned offline compiler are implemented. The compiler exactly
+reproduces the sealed P9 oracle and P10 seam payloads. The exact manifest-backed
+loader, validated R32F/R16UI source packages, RGBA32F face-grid upload,
+actual-point resident lookup,
+exact asset Sun placement, and quadratic-near-observer Q30 live integration
+are implemented and proven with the complete nautical asset. Distant runtime
+cache creation now requires an exact prebuilt asset; it has no old/new cache
+switch and no runtime path executes the recurrence. The default application
+uses the scalar server resolver and generated bin-covered catalog. The
+deployment packager emits only runtime
+manifest, ledger, exact-seam, and direction-index files. Transactional reuse,
+failed-replacement preservation,
+supersession, cancellation, same-context swapping, real context restoration,
+idempotent disposal, and exact logical resource policies now pass. PA6
+production qualification also passes through the fresh B1 gates, all six
+figures, exact oracle/seam parity, six distinct live scene assets, declared
+endpoint classes, complete W27 rotation, and RTX 2060 resource evidence. The
+older celestial-composition fixture now uses the mandatory production-shaped
+exact scene-cache contract, and the complete Algorithm32 WebGL lane passes
+`23/23` without skipping or reducing that fixture. The provisional full
+0-degree through 108-degree inventory is also built and independently
+byte-verified: 109 unique packages, `17,411,056,920` oracle bytes, and
+`16,154,147,172` exact-runtime bytes.
+
+The six-state catalog remains qualification evidence. The one-degree
+construction inventory lives
+in `tmp/extraterrestrial/production-adoption/one-degree-inventory-20260829-1`;
+the complete streaming hash proof is
+`one-degree-inventory-verification-20260829-1`. Only the selected cache is
+resident; the larger inventory primarily increases offline and deployed
+storage. The qualified runtime derivative
+`one-degree-bin-covered-runtime-packages-20260830-1` contains 109 packages,
+`17,230,339,148` bytes total, with a `161,192,508`-byte maximum resident cache.
+Half-up, half-open bins cover `[0, 108)`, and 108 degrees begins explicit
+darkness. Every dark angle shares one texture-free zero-scattering cache
+contribution, so darkness remains a successfully installed Algorithm32 state
+without another package or download. Geometry, transport, scene composition,
+and stars remain active. The application calculates the scene solar-
+zenith angle and sends only that scalar to the server resolver. The resolver
+returns the correct content-addressed package descriptor; immutable cache bytes
+are served from static object storage or a CDN and remain independently hash-
+validated by the client.
+San Jose at sunset plus two hours (`108.136575` degrees) now publishes that
+shared dark state with zero render errors; the full Flat32 browser lane remains
+green at `16/16`.
+The ordinary Flat32 Polylith router owns the namespaced
+`/flat32/api/distant-sun-scene-cache` endpoint and
+`/flat32/scene-caches/` asset path. Deployment selects its immutable package
+root with `FLAT32_DISTANT_SUN_CACHE_ROOT`; the qualified local package set is
+the development fallback.
+
+The reported sub-one-FPS steady-frame regression is corrected. The original
+consumer performed up to 7,200 scalar cache reads per Q30 output pixel.
+Production validates the unchanged exact-seam package, transposes Native15
+into a logical W27 RGBA32F face-grid atlas, and uses hardware bilinear direction
+interpolation, leaving at most 480 atlas reads per pixel. The earlier
+`gl.finish()` frame-counter proof is superseded because timer queries showed
+the scalar atmosphere pass actually required roughly 673-880 ms at 1080p.
+Accepted pass-local GPU proof
+`flat32-distant-sun-runtime-performance-20260831-11` records 22.22 ms mean and
+22.30 ms p95 over eight warmed 1920-by-1080 frames on the RTX 2060/D3D11. The
+largest GPU derivative is `185,326,380` bytes versus a `161,192,508`-byte
+source package. A 3840-by-2160 diagnostic measures 123.32 ms mean and
+127.10 ms p95; 4K 30-FPS work remains open. Both typechecks, the Flat32 build,
+Algorithm32 `591/591`, Algorithm32 WebGL `23/23`, and the full exact-cache
+Flat32 lane `16/16` pass. The timings are local supported-hardware evidence, not
+a general hardware guarantee.
 
 Historical Algorithm32-Star documentation is
 [archived](../archive/algorithm32-star/README.md). Its executable bridge and
@@ -82,6 +149,16 @@ focused `1/1` real-WebGL gates pass. Stages 9.1-9.5 and 10 are accepted within
 their stated claim boundaries; Stage 9.6 is implemented through Stage 9.6.6
 within its omitted-ground acceptance and deferred reflective-validation
 boundary.
+
+Flat32's live Color selection is now
+`BrunetonSourceLuminanceLiftColorDisplayModel`, qualified by contained runs
+`000466` and `000467`. It preserves the complete Bruneton composition above,
+then changes only photopic luminance through one common capped RGB gain. Its
+condition scalar is geometry-supported, atmosphere-transmitted direct-source
+`E_v / pi`; it is not a diffuse environment, framebuffer, camera, time-of-day,
+or pixel-class measurement. Production-only PA4 run
+`pa4-live-transport-20260829-14` reproduces the selected nautical appearance
+with the exact point-local cache and spherical ground endpoint.
 
 The two Stage 10 numerical authorities are
 `scripts/algorithm32-star/src/output/spectral-to-rgb.js` at SHA-256

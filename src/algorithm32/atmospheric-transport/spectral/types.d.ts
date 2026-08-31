@@ -28,6 +28,12 @@ interface SpectralCalculator {
 		pathIntervalCount: number,
 	): readonly PathIntegrationPoint[];
 
+	/** Build quadratic-boundary midpoint points for the qualified distant-Sun view path. */
+	buildQuadraticMidpointPathIntegrationPoints(
+		viewRaySegment: RaySegment,
+		pathIntervalCount: number,
+	): readonly PathIntegrationPoint[];
+
 	/**
 	 * Call this method to compute source-path transmittance from finite source optical depth.
 	 * @param sourceOpticalDepth - The source optical depth value accepted by the operation.
@@ -107,6 +113,8 @@ interface SpectralCalculator {
 
 /** Type that stores one endpoint/trapezoid path integration point. */
 type PathIntegrationPoint = {
+	/** Numerical interpretation of this sample. */
+	readonly integrationKind?: 'endpoint-trapezoid' | 'quadratic-midpoint';
 	/** Value that stores the point index along the path. */
 	readonly pointIndex: number;
 

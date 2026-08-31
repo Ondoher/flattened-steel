@@ -85,6 +85,26 @@ function createBuildResult(order, configureField, domainSelection = DEFAULT_DIST
 	};
 }
 
+/**
+ * Called by this module to create a physical sample request whose geometry resolves the selected test stencils.
+ * @param positionStencil - The position stencil returned by the geometry double.
+ * @param directionStencil - The direction stencil returned by the geometry double.
+ * @returns - The pairing-neutral cache sample request.
+ */
+function createSampleRequest(positionStencil, directionStencil) {
+	return {
+		context: {
+			position: {coordinates: [0, 0, 0], units: 'meters'},
+			atmosphereCoordinate: {altitude: {value: 0, units: 'meters'}},
+			physicalOutgoingDirection: [1, 0, 0],
+		},
+		geometry: {
+			resolveScatteringCachePositionStencil: () => positionStencil,
+			resolveScatteringCacheDirectionStencil: () => directionStencil,
+		},
+	};
+}
+
 describe('DistantSunCpuCache', /** Called by Jasmine to register the named test suite. */ () => {
 	const positionStencil = {indices: [3, 9], weights: [0.25, 0.75]};
 	const directionStencil = {indices: [17, 31], weights: [0.4, 0.6]};
@@ -145,7 +165,7 @@ describe('DistantSunCpuCache', /** Called by Jasmine to register the named test 
 	});
 
 	it('returns typed cumulative density from the position-by-W27 tensor product', /** Called by Jasmine to exercise the named behavior. */ () => {
-		const packet = cache.sampleResolved({positionStencil, directionStencil});
+		const packet = cache.sampleCumulativeScatteringDensity(createSampleRequest(positionStencil, directionStencil));
 
 		expect(packet.kind).toBe('algorithm32-spectral-packet');
 		expect(packet.quantity).toBe('spectral-scattering-density');
@@ -214,10 +234,9 @@ describe('DistantSunCpuCache', /** Called by Jasmine to register the named test 
 			},
 		);
 		const interpolatingCache = new DistantSunCpuCache(result);
-		const packet = interpolatingCache.sampleResolved({
-			positionStencil: twoTapPositionStencil,
-			directionStencil: fourTapDirectionStencil,
-		});
+		const packet = interpolatingCache.sampleCumulativeScatteringDensity(
+			createSampleRequest(twoTapPositionStencil, fourTapDirectionStencil),
+		);
 
 		packet.values.forEach(
 			/**
@@ -268,10 +287,9 @@ describe('DistantSunCpuCache', /** Called by Jasmine to register the named test 
 			},
 		);
 		const directCache = new DistantSunCpuCache(result);
-		const packet = directCache.sampleResolved({
-			positionStencil: {indices: [3], weights: [1]},
-			directionStencil: {indices: [17], weights: [1]},
-		});
+		const packet = directCache.sampleCumulativeScatteringDensity(
+			createSampleRequest({indices: [3], weights: [1]}, {indices: [17], weights: [1]}),
+		);
 
 		expect(directCache.sampleProvenanceIdentity).toBe(result.cumulativeScatteringDensity.provenanceIdentity);
 		expect(packet.values.length).toBe(15);
@@ -315,10 +333,9 @@ describe('DistantSunCpuCache', /** Called by Jasmine to register the named test 
 			domains,
 		);
 		const direct40Cache = new DistantSunCpuCache(result);
-		const packet = direct40Cache.sampleResolved({
-			positionStencil: {indices: [0], weights: [1]},
-			directionStencil: {indices: [0], weights: [1]},
-		});
+		const packet = direct40Cache.sampleCumulativeScatteringDensity(
+			createSampleRequest({indices: [0], weights: [1]}, {indices: [0], weights: [1]}),
+		);
 
 		expect(packet.basis).toBe(basis);
 		expect(packet.semantics).toBe(SPECTRAL_SAMPLE_SEMANTICS.POINT_SAMPLED_SPECTRAL_DENSITY);
@@ -342,10 +359,9 @@ describe('DistantSunCpuCache', /** Called by Jasmine to register the named test 
 			 * Called by Jasmine to invoke the operation whose outcome is asserted.
 			 * @returns - The callback result returned to its caller.
 			 */ () =>
-				disposable.sampleResolved({
-					positionStencil: {indices: [0], weights: [1]},
-					directionStencil: {indices: [0], weights: [1]},
-				}),
+				disposable.sampleCumulativeScatteringDensity(
+					createSampleRequest({indices: [0], weights: [1]}, {indices: [0], weights: [1]}),
+				),
 		).toThrowError(/disposed/u);
 	});
 });

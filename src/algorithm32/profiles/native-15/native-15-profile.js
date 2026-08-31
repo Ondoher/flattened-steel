@@ -328,10 +328,17 @@ export function createNativeExecutionProfile(definition) {
 		atmosphere: definition.atmosphere,
 		geometry: definition.geometry,
 		groundBoundary: definition.groundBoundary,
-		sourcePlacement: {
-			kind: /** @type {const} */ ('geometry-observation'),
-			observation: definition.observation,
-		},
+		sourcePlacement:
+			definition.sourcePlacement === undefined
+				? {
+						kind: /** @type {const} */ ('geometry-observation'),
+						observation: definition.observation,
+					}
+				: {
+						kind: /** @type {const} */ ('explicit-geometry-placement'),
+						observation: definition.observation,
+						placement: definition.sourcePlacement,
+					},
 		celestialSources: definition.celestialSources ?? null,
 	};
 	const identity = {

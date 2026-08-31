@@ -10,11 +10,11 @@ export class DistantSunCpuCache implements CpuScatteringCache {
 	readonly sampleProvenanceIdentity: string;
 
 	/**
-	 * Call this method to sample all spectral channels from already-resolved physical stencils.
+	 * Call this method to sample all spectral channels from pairing-neutral physical context.
 	 * @param request - The request accepted by the operation.
 	 * @returns - The result produced by the operation.
 	 */
-	sampleResolved(request: ScatteringCacheSampleRequest): SpectralScatteringDensityPacket;
+	sampleCumulativeScatteringDensity(request: ScatteringCacheSampleRequest): SpectralScatteringDensityPacket;
 
 	/** Call this method to release the resident CPU reader. Repeated disposal is safe. */
 	dispose(): void;

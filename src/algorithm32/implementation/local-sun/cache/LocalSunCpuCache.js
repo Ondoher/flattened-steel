@@ -64,22 +64,30 @@ export default class LocalSunCpuCache {
 	}
 
 	/**
-	 * Call this method to sample all channels from geometry-resolved z-by-rho and W stencils.
+	 * Call this method to sample all channels from pairing-neutral physical context.
 	 *
-	 * @param {ScatteringCacheSampleRequest} request - Supplies resolved stencils.
+	 * @param {ScatteringCacheSampleRequest} request - Supplies physical context and the active geometry interpreter.
 	 * @returns {SpectralScatteringDensityPacket} - The cumulative density.
 	 */
-	sampleResolved(request) {
+	sampleCumulativeScatteringDensity(request) {
 		const reader = this._requireCumulativeReader();
 		const values = new Float64Array(this._spectralBasis.channelCount);
+		const positionStencil = request.geometry.resolveScatteringCachePositionStencil({
+			position: request.context.position,
+			atmosphereCoordinate: request.context.atmosphereCoordinate,
+		});
+		const directionStencil = request.geometry.resolveScatteringCacheDirectionStencil({
+			position: request.context.position,
+			physicalOutgoingDirection: request.context.physicalOutgoingDirection,
+		});
 
-		for (let positionTap = 0; positionTap < request.positionStencil.indices.length; positionTap += 1) {
-			const positionIndex = request.positionStencil.indices[positionTap];
-			const positionWeight = request.positionStencil.weights[positionTap];
+		for (let positionTap = 0; positionTap < positionStencil.indices.length; positionTap += 1) {
+			const positionIndex = positionStencil.indices[positionTap];
+			const positionWeight = positionStencil.weights[positionTap];
 
-			for (let directionTap = 0; directionTap < request.directionStencil.indices.length; directionTap += 1) {
-				const directionIndex = request.directionStencil.indices[directionTap];
-				const weight = positionWeight * request.directionStencil.weights[directionTap];
+			for (let directionTap = 0; directionTap < directionStencil.indices.length; directionTap += 1) {
+				const directionIndex = directionStencil.indices[directionTap];
+				const weight = positionWeight * directionStencil.weights[directionTap];
 
 				for (let wavelengthIndex = 0; wavelengthIndex < values.length; wavelengthIndex += 1) {
 					values[wavelengthIndex] +=

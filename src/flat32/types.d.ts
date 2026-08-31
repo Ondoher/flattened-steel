@@ -1,5 +1,6 @@
 interface Window {
 	__flat32Cleanup?: () => void;
+	__flat32PerformanceSamples?: ShaderPerformanceSample[];
 }
 
 type Flat32RenderOperation = () => void;
@@ -35,7 +36,11 @@ interface Flat32AlgorithmRuntimeConfiguration {
 /** Configure transactional supported-mode ownership. */
 interface Flat32ModeControllerConfiguration {
 	/** Create the requested supported mode. */
-	createMode: (kind: Flat32ModeKind, state: Flat32ApplicationState) => Flat32Mode;
+	createMode: (
+		kind: Flat32ModeKind,
+		state: Flat32ApplicationState,
+		request: Readonly<{readonly signal: AbortSignal}>,
+	) => Flat32Mode | Promise<Flat32Mode>;
 	/** Optionally create an observable runtime boundary for focused tests. */
 	createRuntime?: (
 		configuration: Flat32AlgorithmRuntimeConfiguration,
@@ -166,12 +171,34 @@ interface Flat32SceneSummary extends LocalSunLightingSummary {
 
 interface SphericalDistantModeSummary {
 	pairing: 'spherical/distant';
+	distantSunCacheState: 'ready' | 'dark';
 	maximumScatteringOrder: SupportedCacheScatteringOrder;
 	positionCount: number;
 	incomingDirectionCount: number;
 	outgoingDirectionCount: number;
 	spectralChannelCount: number;
 }
+
+/** Live spherical/distant scene placement and its cache-selection scalar. */
+interface Flat32DistantSunSceneState {
+	readonly observation: GeometryObservation;
+	readonly geometry: import('../algorithm32/implementation/spherical-earth/SphericalEarthGeometry.js').SphericalEarthGeometry;
+	readonly directionToSourceModel: UnitVector3;
+	readonly observerSolarZenith: Angle;
+	readonly solarZenithDegrees: number;
+}
+
+type Flat32DistantSunCacheResolution =
+	| Readonly<{
+			readonly status: 'ready';
+			readonly requestedSolarZenithDegrees: number;
+			readonly representativeSolarZenithDegrees: number;
+			readonly asset: DistantSunSceneCacheAssetSelection;
+	  }>
+	| Readonly<{
+			readonly status: 'dark' | 'unsupported';
+			readonly requestedSolarZenithDegrees: number;
+	  }>;
 
 interface Flat32AtmosphereSummary extends SphericalDistantModeSummary {
 	pairing: 'spherical/distant' | 'flat/local';

@@ -83,6 +83,25 @@ export const DISTANT_SUN_PRIMARY_DIRECTION_TOLERANCE = 1e-12;
 /** Tolerance used to accept normalized distant-Sun physical directions. */
 export const UNIT_VECTOR_TOLERANCE = 1e-10;
 
+/** Schema identity for one accepted point-local distant-Sun scene-cache manifest. */
+export const DISTANT_SUN_SCENE_CACHE_MANIFEST_SCHEMA_ID = 'algorithm32-distant-sun-scene-cache-manifest-v1';
+/** Runtime-only manifest excludes construction oracles and declares its scalar selection interval. */
+export const DISTANT_SUN_RUNTIME_SCENE_CACHE_MANIFEST_SCHEMA_ID =
+	'algorithm32-distant-sun-runtime-scene-cache-manifest-v2';
+/** Schema identity for one packed altitude/local-solar-zenith row ledger. */
+export const DISTANT_SUN_SCENE_CACHE_LEDGER_SCHEMA_ID = 'algorithm32-distant-sun-packed-row-ledger-v1';
+/** Codec identity for the uncompressed logical W27 correctness oracle. */
+export const DISTANT_SUN_SCENE_CACHE_ORACLE_CODEC_ID = 'algorithm32-distant-sun-w27-r32f-oracle-v1';
+/** Codec identity for exact W27 physical-seam deduplication. */
+export const DISTANT_SUN_SCENE_CACHE_EXACT_SEAM_CODEC_ID = 'algorithm32-distant-sun-w27-exact-seam-u16-v1';
+
+/** Largest four-layer RGBA32F runtime derivative, including its logical-direction index. */
+export const DISTANT_SUN_SCENE_CACHE_MAXIMUM_RESIDENT_BYTES = 185_326_380;
+/** Largest qualified two-cache atomic-publication footprint. */
+export const DISTANT_SUN_SCENE_CACHE_MAXIMUM_TRANSITION_BYTES = 2 * DISTANT_SUN_SCENE_CACHE_MAXIMUM_RESIDENT_BYTES;
+/** Largest qualified transition footprint while one candidate payload remains staged on the host. */
+export const DISTANT_SUN_SCENE_CACHE_MAXIMUM_TRANSITION_WITH_STAGING_BYTES = 717_171_648;
+
 /** W27 is face-major with 27-by-27 faces; each center uses u = v = 13. */
 export const W27_POSITIVE_X_FACE_CENTER_INDEX = 364;
 /** W27 positive y face center index constant. */

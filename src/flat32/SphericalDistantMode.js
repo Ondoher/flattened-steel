@@ -1,13 +1,10 @@
-import {
-	Algorithm32,
-	CanonicalAtmosphere,
-	DistantSunLightSource,
-	SphericalEarthGeometry,
-	StellarPointSetSource,
-} from '../algorithm32/implementation/index.js';
+import {Algorithm32} from '../algorithm32/implementation/algorithm32/Algorithm32.js';
+import {CanonicalAtmosphere} from '../algorithm32/implementation/canonical-atmosphere/CanonicalAtmosphere.js';
+import {DistantSunLightSource} from '../algorithm32/implementation/distant-sun/DistantSunLightSource.js';
+import {SphericalEarthGeometry} from '../algorithm32/implementation/spherical-earth/SphericalEarthGeometry.js';
+import {StellarPointSetSource} from '../algorithm32/implementation/star-field/StellarPointSetSource.js';
 import {
 	CUBED_SPHERE_W27_DIRECTION_COUNT,
-	NATIVE_48_POSITION_DOMAIN_OWNER,
 	NATIVE_48_POSITION_COUNT,
 	REFLECTION_COMPLETED_FIBONACCI_68_DIRECTION_DOMAIN_OWNER,
 } from '../algorithm32/sampling-domains/index.js';
@@ -24,12 +21,13 @@ import {createFlat32ColorDisplayModel} from './Flat32ColorDisplayModel.js';
 export class SphericalDistantMode {
 	/**
 	 * @param {Readonly<{
-	 *   observation: GeometryObservation,
-	 *   observerHeight: Distance,
-	 *   observerUpDirection: UnitVector3,
+	 *   sceneState: Flat32DistantSunSceneState,
 	 *   sceneScale: SceneScale,
 	 *   sourceAngularRadius: Angle,
 	 *   maximumScatteringOrder: SupportedCacheScatteringOrder,
+	 *   sceneCacheAsset?: DistantSunSceneCacheAssetSelection,
+	 *   distantSunCacheState?: 'ready' | 'dark',
+	 *   celestialSourcesEnabled?: boolean,
 	 *   colorDisplayModelConfiguration?: object
 	 * }>} configuration - Supplies the Flat32 application selections that are
 	 * owned by its constants module.
@@ -38,20 +36,11 @@ export class SphericalDistantMode {
 		const profile = DEFAULT_NATIVE_PRODUCTION_PROFILE;
 		const spectralBasis = profile.spectral.basis;
 		const atmosphere = new CanonicalAtmosphere();
-		const geometry = new SphericalEarthGeometry({
-			bottomRadius: profile.physical.geometry.bottomRadius,
-			topRadius: profile.physical.geometry.topRadius,
-			observerHeight: configuration.observerHeight,
-			observerUpDirection: configuration.observerUpDirection,
-			sceneFrame: {
-				kind: 'observer-local',
-			},
-			cacheAltitudeBinCount: NATIVE_48_POSITION_DOMAIN_OWNER.count,
-			cacheBoundaryAltitude: NATIVE_48_POSITION_DOMAIN_OWNER.nodes[0].coordinate,
-			sourceTransmittanceIntervalCount: profile.numerical.sourcePathTransmittance.intervalCount,
-		});
+		const geometry = configuration.sceneState.geometry;
 		const lightSource = new DistantSunLightSource({
 			angularRadius: configuration.sourceAngularRadius,
+			sceneCacheAsset: configuration.sceneCacheAsset,
+			darkScattering: configuration.distantSunCacheState === 'dark',
 		});
 		const stars = new StellarPointSetSource();
 		const celestialSources = /** @type {SphericalSunStarsSourceRoster} */ ({
@@ -67,19 +56,26 @@ export class SphericalDistantMode {
 		this._sceneScale = configuration.sceneScale;
 		this._maximumScatteringOrder = configuration.maximumScatteringOrder;
 		this._spectralChannelCount = spectralBasis.channelCount;
+		this._distantSunCacheState = configuration.distantSunCacheState ?? 'ready';
 		this._algorithm32 = new Algorithm32({
 			lightSource,
 			atmosphere,
 			geometry,
 			groundBoundary: null,
 			celestialSources:
+				configuration.celestialSourcesEnabled === false ||
 				configuration.colorDisplayModelConfiguration?.model === 'bruneton-control'
 					? null
 					: celestialSources,
 			color: createFlat32ColorDisplayModel(configuration.colorDisplayModelConfiguration),
-			observation: configuration.observation,
+			observation: configuration.sceneState.observation,
+			sourcePlacement: {
+				kind: /** @type {const} */ ('distant-direction'),
+				directionToLight: configuration.sceneState.directionToSourceModel,
+			},
 			execution: {
-				pathIntervalCount: profile.numerical.viewPath.intervalCount,
+				pathIntervalCount: 30,
+				pathSampleDistribution: {kind: 'quadratic-near-observer-v1'},
 				maximumScatteringOrder: configuration.maximumScatteringOrder,
 			},
 		});
@@ -164,6 +160,7 @@ export class SphericalDistantMode {
 
 		return {
 			pairing: 'spherical/distant',
+			distantSunCacheState: this._distantSunCacheState,
 			maximumScatteringOrder: this._maximumScatteringOrder,
 			positionCount: NATIVE_48_POSITION_COUNT,
 			incomingDirectionCount: REFLECTION_COMPLETED_FIBONACCI_68_DIRECTION_DOMAIN_OWNER.directionCount,

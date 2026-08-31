@@ -1,3 +1,4 @@
+import {Algorithm32Runtime} from './Algorithm32Runtime.js';
 import {EndpointScene} from './EndpointScene.js';
 import {Flat32View} from './Flat32View.js';
 import {LocationTimeController} from './LocationTimeController.js';
@@ -5,6 +6,7 @@ import {FlatLocalMode} from './FlatLocalMode.js';
 import {ModeController} from './ModeController.js';
 import {PointerLookController} from './PointerLookController.js';
 import {SphericalDistantMode} from './SphericalDistantMode.js';
+import {createDistantSunSceneState} from './DistantSunSceneState.js';
 import {ThreeSceneRuntime} from './ThreeSceneRuntime.js';
 import {DEFAULT_NATIVE_PRODUCTION_PROFILE} from '../algorithm32/profiles/native-15/native-15-profile.js';
 import {
@@ -25,7 +27,12 @@ export class Flat32Application {
 	 *   maximumScatteringOrder?: SupportedCacheScatteringOrder,
 	 *   reviewObjectsEnabled?: boolean,
 	 *   colorDisplayModelConfiguration?: object,
-	 *   cameraDirectionScene?: readonly [number, number, number]
+	 *   cameraDirectionScene?: readonly [number, number, number],
+	 *   performanceCallback?: ShaderPerformanceCallback,
+	 *   resolveDistantSunSceneCacheAsset?: (
+	 *     solarZenithDegrees: number,
+	 *     request?: Readonly<{signal?: AbortSignal}>
+	 *   ) => Flat32DistantSunCacheResolution | Promise<Flat32DistantSunCacheResolution>
 	 * }>} [configuration] - Supplies explicit diagnostic overrides. Omission
 	 * retains the ordinary production application configuration.
 	 */
@@ -40,6 +47,10 @@ export class Flat32Application {
 		this._reviewObjectsEnabled = configuration.reviewObjectsEnabled !== false;
 		this._colorDisplayModelConfiguration = configuration.colorDisplayModelConfiguration;
 		this._cameraDirectionScene = configuration.cameraDirectionScene ?? null;
+		this._performanceCallback = configuration.performanceCallback;
+		this._resolveDistantSunSceneCacheAsset =
+			configuration.resolveDistantSunSceneCacheAsset ??
+			((solarZenithDegrees) => ({status: 'unsupported', requestedSolarZenithDegrees: solarZenithDegrees}));
 		/** @type {ThreeSceneRuntime | null} */
 		this._sceneRuntime = null;
 		/** @type {EndpointScene | null} */
@@ -183,20 +194,62 @@ export class Flat32Application {
 	}
 
 	/**
-	 * Create the fixed native-production spherical/distant mode.
+	 * Create the live spherical/distant scene state before cache resolution.
 	 *
-	 * @returns {SphericalDistantMode} Return the new mode owner.
+	 * @returns {Flat32DistantSunSceneState} Return geometry and the scalar resolver input.
 	 */
-	_createSphericalDistantMode(state) {
-		return new SphericalDistantMode({
+	_createSphericalDistantSceneState(state) {
+		return createDistantSunSceneState({
 			observation: state.observation,
 			observerHeight: ATMOSPHERE_OBSERVER_HEIGHT,
 			observerUpDirection: ATMOSPHERE_OBSERVER_UP_DIRECTION,
+		});
+	}
+
+	/**
+	 * Create one mode from a resolved live state and optional exact package.
+	 * @param {Flat32DistantSunSceneState} sceneState - Live geometry and source placement.
+	 * @param {DistantSunSceneCacheAssetSelection | undefined} sceneCacheAsset - Optional exact non-dark package.
+	 * @param {'ready' | 'dark'} [distantSunCacheState] - Selected scattering-cache state.
+	 * @returns {SphericalDistantMode} The configured mode.
+	 */
+	_createSphericalDistantMode(sceneState, sceneCacheAsset, distantSunCacheState = 'ready') {
+		return new SphericalDistantMode({
+			sceneState,
 			sceneScale: ATMOSPHERE_SCENE_SCALE,
 			sourceAngularRadius: ATMOSPHERE_SOURCE_ANGULAR_RADIUS,
 			maximumScatteringOrder: this._maximumScatteringOrder,
+			sceneCacheAsset,
+			distantSunCacheState,
 			colorDisplayModelConfiguration: this._colorDisplayModelConfiguration,
 		});
+	}
+
+	/** Resolve one exact offline package before constructing the runtime mode. */
+	async _prepareSphericalDistantMode(state, request) {
+		const sceneState = this._createSphericalDistantSceneState(state);
+		if (this._sceneSummary !== null) {
+			this._view.showDistantSunCacheState(this._sceneSummary, 'resolving', sceneState.solarZenithDegrees);
+		}
+		const resolution = await this._resolveDistantSunSceneCacheAsset(sceneState.solarZenithDegrees, request);
+		if (request.signal.aborted) {
+			const error = new Error('Distant-Sun cache resolution was cancelled or superseded.');
+			error.name = 'AbortError';
+			throw error;
+		}
+		if (resolution.status === 'dark') {
+			if (this._sceneSummary !== null) {
+				this._view.showDistantSunCacheState(this._sceneSummary, 'dark', sceneState.solarZenithDegrees);
+			}
+			return this._createSphericalDistantMode(sceneState, undefined, 'dark');
+		}
+		if (resolution.status !== 'ready') {
+			throw new RangeError('No qualified distant-Sun scene cache covers the selected solar zenith.');
+		}
+		if (this._sceneSummary !== null) {
+			this._view.showDistantSunCacheState(this._sceneSummary, 'loading', sceneState.solarZenithDegrees);
+		}
+		return this._createSphericalDistantMode(sceneState, resolution.asset, 'ready');
 	}
 
 	/** Create the fixed selected production flat/local mode. */
@@ -305,7 +358,7 @@ export class Flat32Application {
 			this._endpointScene.install();
 			const initialSceneMode =
 				this._state.modeKind === 'spherical-distant'
-					? this._createSphericalDistantMode(this._state)
+					? this._createSphericalDistantMode(this._createSphericalDistantSceneState(this._state), undefined)
 					: this._createFlatLocalMode(this._state);
 
 			this._endpointScene.applyMode(this._state.modeKind, initialSceneMode.geometry);
@@ -322,10 +375,15 @@ export class Flat32Application {
 					this._sceneSummary = this._endpointScene?.describe() ?? null;
 				},
 				onFailure: this._handleAtmosphereFailure,
-				createMode: (kind, state) =>
+				createMode: (kind, state, request) =>
 					kind === 'spherical-distant'
-						? this._createSphericalDistantMode(state)
+						? this._prepareSphericalDistantMode(state, request)
 						: this._createFlatLocalMode(state),
+				createRuntime: (runtimeConfiguration) =>
+					new Algorithm32Runtime({
+						...runtimeConfiguration,
+						performanceCallback: this._performanceCallback,
+					}),
 				onPublished: (kind, mode, state) => {
 					if (kind === 'spherical-distant') {
 						const distantMode = /** @type {SphericalDistantMode} */ (mode);

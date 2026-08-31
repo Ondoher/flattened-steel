@@ -14,7 +14,6 @@ import {
 	DISTANT_SUN_CPU_SECOND_ORDER_CACHE_OPTIONS,
 	DISTANT_SUN_CPU_TRANSPORT_INTERVAL_COUNT,
 } from './consts.js';
-import {DistantSunCacheController} from './DistantSunCacheController.js';
 import DistantSunDomainSelectionOwner from './DistantSunConstructionDomainSelection.js';
 import {DistantSunCpuMultipleScatteringEvaluator} from './DistantSunCpuMultipleScatteringEvaluator.js';
 import {DistantSunCpuPrimaryEvaluator} from './DistantSunCpuPrimaryEvaluator.js';
@@ -582,21 +581,6 @@ a32CacheOutput = cacheDirectL1(
 			requires,
 			blocks,
 			bindings,
-		});
-	}
-
-	/**
-	 * Call this method to create one cache controller for a renderer attachment.
-	 *
-	 * @param {CacheControllerRequest} request - The renderer-owned backend and scheduler.
-	 * @returns {DistantSunCacheController} - The attachment-owned controller.
-	 *
-	 */
-	createCacheController({model, backend, scheduler}) {
-		return new DistantSunCacheController({
-			model,
-			backend,
-			scheduler,
 		});
 	}
 

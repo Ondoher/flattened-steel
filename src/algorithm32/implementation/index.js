@@ -1,5 +1,6 @@
 export {Algorithm32} from './algorithm32/Algorithm32.js';
 export {BrunetonColorDisplayModel} from './bruneton-color/BrunetonColorDisplayModel.js';
+export {BrunetonSourceLuminanceLiftColorDisplayModel} from './bruneton-source-luminance-lift-color/BrunetonSourceLuminanceLiftColorDisplayModel.js';
 export {FerwerdaColorDisplayModel} from './ferwerda-color/FerwerdaColorDisplayModel.js';
 export {CanonicalAtmosphere} from './canonical-atmosphere/CanonicalAtmosphere.js';
 export {DistantSunLightSource} from './distant-sun/DistantSunLightSource.js';

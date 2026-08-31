@@ -1,6 +1,9 @@
 # Normal Mode Test Plan
 
-Status: Stage 0 prerequisite, Stage 1 frozen ledger, and Stage 2A fixed
+Status: active supporting acceptance plan, resumed on 2026-08-31 against the
+production `BrunetonSourceLuminanceLiftColorDisplayModel` and the closed
+one-degree distant-Sun cache baseline. Stage 0 prerequisite, Stage 1 frozen
+ledger, and Stage 2A fixed
 diagnostic laboratory accepted for their declared data/traceability claims.
 Stage 2B research prerequisite `2B-R` was executed on 2026-08-14. Global
 research prerequisite `3R-G` was completed on 2026-08-15 after live full-frame
@@ -9,7 +12,10 @@ the goal to a reasonable global `Normal`; full-view prerequisite `2B-M` is now
 optional future image-appearance research rather than a blocker. The referenced Normal configuration
 remains active design for the
 [Spectral Color-Transform Experiment Plan](spectral-color-transform-experiment-plan.md),
-current through 2026-08-14. This plan defines how lane `A` will be tested as a
+current through 2026-08-31. Historical recorded-input evidence remains valid
+only within its declared transport identity; new live acceptance uses the
+qualified point-local cache and shared dark state. This plan defines how lane
+`A` will be tested as a
 population-average human-viewing mode. It authorizes no production change and
 does not modify the frozen Bruneton-derived lane `B`.
 

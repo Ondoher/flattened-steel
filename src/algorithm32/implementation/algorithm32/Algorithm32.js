@@ -17,6 +17,7 @@ import {ReceiverEnvironmentLightController} from '../scene-lighting/ReceiverEnvi
 /** Supported path sample distributions constant. */
 const SUPPORTED_PATH_SAMPLE_DISTRIBUTIONS = new Set([
 	'uniform-distance',
+	'quadratic-near-observer-v1',
 	'tangent-density-adaptive-v1',
 	'tangent-density-adaptive-soft-v1',
 ]);
@@ -125,6 +126,7 @@ export class Algorithm32 {
 			atmosphere: config.atmosphere,
 			geometry: config.geometry,
 			observation: this._acceptObservation(config.observation),
+			sourcePlacement: config.sourcePlacement,
 			celestialSources: config.celestialSources ?? null,
 			groundBoundary: config.groundBoundary,
 			color: config.color,
@@ -155,6 +157,7 @@ export class Algorithm32 {
 			atmosphere: config.atmosphere,
 			geometry: config.geometry,
 			observation: config.observation,
+			sourcePlacement: config.sourcePlacement,
 			celestialSources: config.celestialSources,
 			groundBoundary: config.groundBoundary,
 			color: config.color,
@@ -450,6 +453,7 @@ export class Algorithm32 {
 				'atmosphere',
 				'geometry',
 				'observation',
+				'sourcePlacement',
 				'groundBoundary',
 				'execution',
 				'celestialSources',
@@ -486,6 +490,23 @@ export class Algorithm32 {
 			!SUPPORTED_PATH_SAMPLE_DISTRIBUTIONS.has(pathSampleDistribution.kind)
 		) {
 			throw new RangeError('Algorithm32 pathSampleDistribution kind is not supported.');
+		}
+		if (config.sourcePlacement !== undefined) {
+			const configurableLightSource = /** @type {LightSourceModel & GeometryConfigurableLightSource} */ (
+				config.lightSource
+			);
+			if (config.sourcePlacement.kind !== configurableLightSource.geometryPlacementKind) {
+				throw new RangeError('Algorithm32 sourcePlacement does not match the configured light-source family.');
+			}
+			if (config.sourcePlacement.kind === 'distant-direction') {
+				GeometryDirections.directionTuple(
+					config.sourcePlacement.directionToLight,
+					'Algorithm32 sourcePlacement directionToLight',
+				);
+				if (Math.abs(VectorMath.length(config.sourcePlacement.directionToLight) - 1) > 1e-12) {
+					throw new RangeError('Algorithm32 sourcePlacement directionToLight must be a unit vector.');
+				}
+			}
 		}
 
 		this._acceptShaderConfig(config.shader);
@@ -574,6 +595,7 @@ export class Algorithm32 {
 			acceptedConfig.geometry.configureLightSource({
 				lightSource: configurableLightSource,
 				observation: acceptedConfig.observation,
+				...(acceptedConfig.sourcePlacement === undefined ? {} : {placement: acceptedConfig.sourcePlacement}),
 				...(initialDomains === null ? {} : {domains: initialDomains}),
 			});
 			CelestialSourceRoster.accept({
@@ -588,6 +610,7 @@ export class Algorithm32 {
 				geometry: acceptedConfig.geometry,
 				groundBoundary: acceptedConfig.groundBoundary ?? null,
 				observation: acceptedConfig.observation,
+				sourcePlacement: acceptedConfig.sourcePlacement,
 				celestialSources: acceptedConfig.celestialSources,
 				domains:
 					initialDomains ??
@@ -613,6 +636,7 @@ export class Algorithm32 {
 		});
 		const brightnessProxy = localLightLevelCalculator.measureBrightnessProxy({
 			geometry: profile.models.geometry,
+			atmosphere: profile.models.atmosphere,
 			observation: profile.models.sourcePlacement.observation,
 			celestialSources: profile.models.celestialSources,
 		});

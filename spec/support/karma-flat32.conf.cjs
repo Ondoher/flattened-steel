@@ -1,5 +1,13 @@
 module.exports = function configureFlat32Karma(config) {
 	const fullCache = process.env.FLAT32_FULL_ACCEPTANCE === '1';
+	const cacheServer = process.env.FLAT32_DISTANT_SUN_CACHE_SERVER_URL;
+	const cacheProxies =
+		fullCache && cacheServer
+			? {
+					'/base/dist/flat32/api/distant-sun-scene-cache': `${cacheServer.replace(/\/$/u, '')}/api/distant-sun-scene-cache`,
+					'/flat32/scene-caches/': `${cacheServer.replace(/\/$/u, '')}/scene-caches/`,
+				}
+			: {};
 	config.set({
 		basePath: '../..',
 		frameworks: ['jasmine'],
@@ -18,11 +26,8 @@ module.exports = function configureFlat32Karma(config) {
 				type: 'module',
 			},
 		],
-		plugins: [
-			require('karma-jasmine'),
-			require('karma-chrome-launcher'),
-			require('karma-spec-reporter'),
-		],
+		plugins: [require('karma-jasmine'), require('karma-chrome-launcher'), require('karma-spec-reporter')],
+		proxies: cacheProxies,
 		reporters: ['spec'],
 		client: {
 			args: fullCache ? ['full-cache'] : ['basic-cache'],

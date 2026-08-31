@@ -1,8 +1,3 @@
-import {CanonicalAtmosphere, DistantSunLightSource, SphericalEarthGeometry} from '../../../implementation/index.js';
-import {CANONICAL_ATMOSPHERE_CONSTANTS} from '../../../implementation/canonical-atmosphere/consts.js';
-import {DistantSunCacheController} from '../../../implementation/distant-sun/cache/DistantSunCacheController.js';
-import {DEFAULT_DISTANT_SUN_CONSTRUCTION_DOMAIN_SELECTION} from '../../../implementation/distant-sun/cache/consts.js';
-import {createNativeExecutionProfile, NATIVE_15_SPECTRAL_BASIS} from '../../../profiles/native-15/native-15-profile.js';
 import {CacheBuildModules} from '../../../shader-assembly/cache-pass/CacheBuildModules.js';
 import {CacheOperations} from '../CacheOperations.js';
 
@@ -36,63 +31,21 @@ function field(plan, id) {
  * @returns - The result produced by the operation.
  */
 function createPlan() {
-	const atmosphere = new CanonicalAtmosphere({
-		constants: CANONICAL_ATMOSPHERE_CONSTANTS,
+	const field = (id, width) => ({
+		id,
+		storage: {format: 'R32F', width, height: 48, layers: 15},
+		valueKey: `test.${id}`,
 	});
-	const geometry = new SphericalEarthGeometry({
-		bottomRadius: CANONICAL_ATMOSPHERE_CONSTANTS.bottomRadius,
-		topRadius: CANONICAL_ATMOSPHERE_CONSTANTS.topRadius,
-		observerHeight: {value: 2, units: 'meters'},
-		observerUpDirection: [1, 0, 0],
-		cacheAltitudeBinCount: 48,
-		cacheBoundaryAltitude: {value: 2, units: 'meters'},
-		sourceTransmittanceIntervalCount: 20,
-	});
-	const source = new DistantSunLightSource({
-		angularRadius: {value: 0.004675, units: 'radians'},
-	});
-	geometry.configureLightSource({
-		lightSource: source,
-		observation: {
-			instant: '2026-03-20T12:00:00.000Z',
-			location: {
-				latitude: {value: 0, units: 'degrees'},
-				longitude: {value: -90, units: 'degrees'},
-			},
-		},
-	});
-	const observation = geometry.configuration.observation;
-	const domains = DEFAULT_DISTANT_SUN_CONSTRUCTION_DOMAIN_SELECTION;
-	const model = /** @type {SharedModel} */ (
+	return /** @type {CacheBuildPlan} */ (
 		/** @type {unknown} */ ({
-			lightSource: source,
-			atmosphere,
-			geometry,
-			groundBoundary: null,
-			profile: createNativeExecutionProfile({
-				lightSource: source,
-				atmosphere,
-				geometry,
-				groundBoundary: null,
-				observation,
-				domains: {
-					positions: domains.positionDomain,
-					incomingDirections: domains.incomingDirectionDomain,
-					outgoingDirections: domains.outgoingDirectionDomain,
-				},
-				execution: TEST_CONSTRUCTION_OPTIONS,
-			}),
+			fields: [
+				field('distant-sun-j1', 4374),
+				field('distant-sun-l1', 68),
+				field('distant-sun-j2', 4374),
+				field('distant-sun-j-through-2', 4374),
+			],
 		})
 	);
-
-	const controller = new DistantSunCacheController({
-		model,
-		backend: /** @type {CacheGpuBackend} */ ({}),
-	});
-	const plan = controller.createBuildPlan();
-	controller.dispose();
-
-	return plan;
 }
 
 describe('CacheOperations', /** Called by Jasmine to register the named test suite. */ () => {

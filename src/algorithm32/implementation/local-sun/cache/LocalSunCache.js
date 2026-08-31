@@ -71,7 +71,11 @@ export class LocalSunCache {
 			id: LOCAL_SUN_CACHE_SHADER_CONTRIBUTION_ID,
 			owner: 'cache',
 			provides: ['cache.sampleCumulativeScatteringDensity'],
-			requires: ['geometry.scatteringCacheStencilTypes'],
+			requires: [
+				'geometry.scatteringCacheStencilTypes',
+				'geometry.resolveScatteringCachePositionStencil',
+				'geometry.resolveScatteringCacheDirectionStencil',
+			],
 			textures: [
 				ShaderContributions.createShaderTextureDeclaration(
 					LOCAL_SUN_CUMULATIVE_SCATTERING_SAMPLER_NAME,
@@ -85,9 +89,16 @@ export class LocalSunCache {
 					'sampleScatteringCache',
 					0,
 					`SpectralValue sampleCumulativeScatteringDensity(
-	CachePositionStencil positionStencil,
-	CacheDirectionStencil directionStencil
+	vec3 positionMeters,
+	AtmosphereCoordinate atmosphereCoordinate,
+	vec3 physicalOutgoingDirection
 ) {
+	CachePositionStencil positionStencil =
+		resolveScatteringCachePositionStencil(atmosphereCoordinate);
+	CacheDirectionStencil directionStencil = resolveScatteringCacheDirectionStencil(
+		positionMeters,
+		physicalOutgoingDirection
+	);
 	SpectralValue density;
 
 	for (int channelIndex = 0;

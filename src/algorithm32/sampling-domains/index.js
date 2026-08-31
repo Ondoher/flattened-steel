@@ -25,3 +25,5 @@ export {
 	NATIVE_48_POSITION_COUNT,
 	NATIVE_48_POSITION_NODES,
 } from './position/spherical-native/consts.js';
+export {default as SolarZenithDomain} from './solar-zenith/SolarZenithDomain.js';
+export {SOLAR_ZENITH_180_DOMAIN_OWNER} from './solar-zenith/consts.js';

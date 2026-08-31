@@ -4,7 +4,7 @@ import {RECEIVER_ENVIRONMENT_LIGHT_QUADRATURE} from '../ReceiverEnvironmentLight
 import {CanonicalAtmosphere} from '../../canonical-atmosphere/CanonicalAtmosphere.js';
 import {CANONICAL_ATMOSPHERE_CONSTANTS} from '../../canonical-atmosphere/consts.js';
 import {DistantSunLightSource} from '../../distant-sun/DistantSunLightSource.js';
-import {DistantSunCache} from '../../distant-sun/cache/DistantSunCache.js';
+import {createDistantSunSceneCacheFixture} from '../../distant-sun/cache/_tests/create-distant-sun-scene-cache-fixture.js';
 import {SphericalEarthGeometry} from '../../spherical-earth/SphericalEarthGeometry.js';
 import {LocalSunCache} from '../../local-sun/cache/LocalSunCache.js';
 import {NATIVE_15_SPECTRAL_BASIS} from '../../../profiles/index.js';
@@ -12,7 +12,10 @@ import {createDefaultAuthorityOwners} from '../../local-sun/cache/_tests/local-s
 
 function artifact(id) {
 	return {
-		runtimeBindings: {backendId: 'test', bindings: [{id, valueKey: 'cache.cumulativeScatteringDensity', fieldId: id, backendId: 'test'}]},
+		runtimeBindings: {
+			backendId: 'test',
+			bindings: [{id, valueKey: 'cache.cumulativeScatteringDensity', fieldId: id, backendId: 'test'}],
+		},
 		dispose() {},
 	};
 }
@@ -55,7 +58,12 @@ describe('Receiver environment-light common transport', () => {
 	it('replaces only camera reconstruction while preserving geometry-owned path and stencil code', () => {
 		const base = {
 			id: 'geometry-test',
-			requires: ['runtime.initialState', 'runtime.depthTexture', 'runtime.sceneHitTexture', 'light.directionToAtmosphericSource'],
+			requires: [
+				'runtime.initialState',
+				'runtime.depthTexture',
+				'runtime.sceneHitTexture',
+				'light.directionToAtmosphericSource',
+			],
 			functions: [
 				{id: 'geometry-reconstruct-helper', slot: 'reconstructRay', order: 0, code: 'camera reconstruction'},
 				{id: 'geometry-path-helper', slot: 'resolvePathBounds', order: 0, code: 'geometry path'},
@@ -83,23 +91,31 @@ describe('Receiver environment-light common transport', () => {
 		});
 		spherical.configureLightSource({
 			lightSource: distant,
-			observation: {instant: '2026-03-20T12:00:00.000Z', location: {latitude: {value: 0, units: 'degrees'}, longitude: {value: -90, units: 'degrees'}}},
+			observation: {
+				instant: '2026-03-20T12:00:00.000Z',
+				location: {latitude: {value: 0, units: 'degrees'}, longitude: {value: -90, units: 'degrees'}},
+			},
 		});
 		const sphericalAssembly = new ReceiverEnvironmentLightTransportShader().create({
 			model: model({geometry: spherical, atmosphere, lightSource: distant}),
-			scatteringCache: new DistantSunCache(artifact('distant-field')),
+			scatteringCache: createDistantSunSceneCacheFixture(),
 		});
 
 		const localOwners = createDefaultAuthorityOwners();
 		const localAssembly = new ReceiverEnvironmentLightTransportShader().create({
 			model: model(localOwners),
-			scatteringCache: new LocalSunCache(artifact('local-field'), {construction: {value: 0, units: 'bytes'}, resident: {value: 0, units: 'bytes'}}),
+			scatteringCache: new LocalSunCache(artifact('local-field'), {
+				construction: {value: 0, units: 'bytes'},
+				resident: {value: 0, units: 'bytes'},
+			}),
 		});
 
 		for (const assembly of [sphericalAssembly, localAssembly]) {
 			expect(assembly.fragmentShaderSource).toContain('void evaluatePathRadiance(inout ShaderState state)');
 			expect(assembly.fragmentShaderSource).toContain('texelFetch(uReceiverEnvironmentDirections');
-			expect(assembly.fragmentShaderSource).toContain('state.pathRadiance.channels[uReceiverEnvironmentOutputChannel]');
+			expect(assembly.fragmentShaderSource).toContain(
+				'state.pathRadiance.channels[uReceiverEnvironmentOutputChannel]',
+			);
 		}
 		expect(sphericalAssembly.fragmentShaderSource).toContain('ivec2 indices;');
 		expect(localAssembly.fragmentShaderSource).toContain('ivec4 indices;');

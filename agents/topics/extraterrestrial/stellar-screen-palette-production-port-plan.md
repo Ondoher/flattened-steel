@@ -1,12 +1,14 @@
 # Stellar Screen-Palette Production Port Plan
 
-Status: paused production-promotion plan, current through 2026-08-22.
-Production Work Plan steps 1 through 6 are complete. The owner rejected the
-Step 7 Ferwerda path and reset Color to a contained Bruneton-derived model.
-Runs `000466` and `000467` accept that replacement for the required
-spherical/distant and Flat/local sky matrices; production remains unchanged
-and Step 8 is not yet eligible. Step 7 is the preserved resumption point after
-the current distant-Sun solar-zenith cache design/plan, not active work.
+Status: paused stellar-appearance plan, current through 2026-08-31. Production
+Work Plan steps 1 through 6 are complete. The owner rejected the Step 7
+Ferwerda path; runs `000466` and `000467` accepted the replacement
+`BrunetonSourceLuminanceLiftColorDisplayModel`, and that model is now the live
+production selection for both Flat32 modes. The distant-Sun solar-zenith cache
+plan is closed through H7. Step 8 remains ineligible until the resumed Color
+plan accepts its corrected display result; stellar brightness, color,
+visibility, and exposure correction then resume as a separate acceptance
+problem rather than as Color tuning.
 
 This document owns execution order and current state for promoting the accepted
 stellar screen-index/native-15 palette and resolved Sun integration into
@@ -827,13 +829,13 @@ also pass.
 
 ### 7. Port the experimental Color behavior as a new model
 
-Status: the implemented production Ferwerda candidate passes mechanical gates,
-but the owner's daylight, sunset, and stellar visual audit rejects its sky
-appearance. The owner reset this step to the contained
-`BrunetonSourceLuminanceLiftColorDisplayModel`, now qualified by runs `000466`
-and `000467`. Production remains unchanged while the paired captures await
-owner review; a production port must be defined as a separate step before this
-section can become complete. The rejected `FerwerdaColorDisplayModel` remains
+Status: the implemented production Ferwerda candidate passed mechanical gates,
+but the owner's daylight, sunset, and stellar visual audit rejected its sky
+appearance. The replacement `BrunetonSourceLuminanceLiftColorDisplayModel`,
+qualified by runs `000466` and `000467`, is now ported and selected in
+production. Its integration closes the old porting question but not the active
+Color-correction or stellar-appearance questions. The rejected
+`FerwerdaColorDisplayModel` remains
 a separately exported production Color owner and the diagnostic history below
 explains why it is not a tuning input for the replacement.
 

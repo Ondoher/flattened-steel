@@ -24,6 +24,26 @@ import {LocalSunShellFactCache} from '../LocalSunShellFactCache.js';
 import {LOCAL_SUN_CPU_FIELD_PROVENANCE_IDENTITY, LOCAL_SUN_CPU_RECURRENCE_PROVENANCE_IDENTITY} from '../consts.js';
 import {LOCAL_SUN_TRANSPORT_INTERVAL_COUNT} from '../../consts.js';
 
+/**
+ * Called by this module to create a physical sample request whose geometry resolves selected stencils.
+ * @param positionStencil - The position stencil returned by the geometry double.
+ * @param directionStencil - The direction stencil returned by the geometry double.
+ * @returns - The pairing-neutral cache sample request.
+ */
+function createSampleRequest(positionStencil, directionStencil) {
+	return {
+		context: {
+			position: {coordinates: [0, 0, 0], units: 'meters'},
+			atmosphereCoordinate: {altitude: {value: 0, units: 'meters'}},
+			physicalOutgoingDirection: [1, 0, 0],
+		},
+		geometry: {
+			resolveScatteringCachePositionStencil: () => positionStencil,
+			resolveScatteringCacheDirectionStencil: () => directionStencil,
+		},
+	};
+}
+
 describe('local-Sun binary64 scattering cache', /** Called by Jasmine to register the named test suite. */ () => {
 	it('allocates fresh mutable members of every source-owned CPU field family', /** Called by Jasmine to exercise the named behavior. */ () => {
 		const {domainSelection} = createFixture();
@@ -259,10 +279,9 @@ describe('local-Sun binary64 scattering cache', /** Called by Jasmine to registe
 			model: fixture.model,
 		});
 		const cache = new LocalSunCpuCache(result);
-		const packet = cache.sampleResolved({
-			positionStencil: {indices: [0], weights: [1]},
-			directionStencil: {indices: [0], weights: [1]},
-		});
+		const packet = cache.sampleCumulativeScatteringDensity(
+			createSampleRequest({indices: [0], weights: [1]}, {indices: [0], weights: [1]}),
+		);
 		const cumulative = result.cumulativeScatteringDensity.createReader();
 
 		expect(result.maximumScatteringOrder).toBe(1);
@@ -307,10 +326,7 @@ describe('local-Sun binary64 scattering cache', /** Called by Jasmine to registe
 				physicalOutgoingDirection,
 			}),
 		);
-		const packet = cache.sampleResolved({
-			positionStencil,
-			directionStencil,
-		});
+		const packet = cache.sampleCumulativeScatteringDensity(createSampleRequest(positionStencil, directionStencil));
 
 		expect(positionStencil.indices.length).toBe(4);
 		expect(directionStencil.indices.length).toBe(4);
@@ -332,10 +348,9 @@ describe('local-Sun binary64 scattering cache', /** Called by Jasmine to registe
 			 * Called by Jasmine to invoke the operation whose outcome is asserted.
 			 * @returns - The callback result returned to its caller.
 			 */ () =>
-				cache.sampleResolved({
-					positionStencil: {indices: [0], weights: [1]},
-					directionStencil: {indices: [0], weights: [1]},
-				}),
+				cache.sampleCumulativeScatteringDensity(
+					createSampleRequest({indices: [0], weights: [1]}, {indices: [0], weights: [1]}),
+				),
 		).toThrowError(/disposed/u);
 	});
 

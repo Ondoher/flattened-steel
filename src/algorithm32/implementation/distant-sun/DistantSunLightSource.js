@@ -1,5 +1,7 @@
-import {DistantSunCacheController} from './cache/DistantSunCacheController.js';
 import {DistantSunCacheProvider} from './cache/DistantSunCacheProvider.js';
+import DistantSunSceneCacheAssetLoader from './cache/DistantSunSceneCacheAssetLoader.js';
+import DistantSunSceneCacheController from './cache/DistantSunSceneCacheController.js';
+import DistantSunDarkCacheController from './cache/DistantSunDarkCacheController.js';
 import {DistantSunShaderContributor} from './DistantSunShaderContributor.js';
 import {DistantSunSceneLightingAdapter} from './three/DistantSunSceneLightingAdapter.js';
 import {LightSourceRequestValues} from '../../light-source-support/LightSourceRequestValues.js';
@@ -78,6 +80,12 @@ export class DistantSunLightSource {
 		if (sourceIrradiance.values.some((value) => value < 0)) {
 			throw new RangeError('DistantSunLightSource sourceIrradiance values must be nonnegative.');
 		}
+		if (configuration.darkScattering !== undefined && typeof configuration.darkScattering !== 'boolean') {
+			throw new TypeError('DistantSunLightSource darkScattering must be boolean when supplied.');
+		}
+		if (configuration.darkScattering === true && configuration.sceneCacheAsset !== undefined) {
+			throw new TypeError('DistantSunLightSource cannot select both a scene-cache asset and dark scattering.');
+		}
 
 		this._configuration = null;
 		this._celestialSourceDefinition = null;
@@ -87,6 +95,8 @@ export class DistantSunLightSource {
 		this._intrinsicConfiguration = {
 			sourceIrradiance,
 			angularRadius: AngleMath.inRadians(angularRadiusRadians),
+			sceneCacheAsset: configuration.sceneCacheAsset,
+			darkScattering: configuration.darkScattering === true,
 		};
 	}
 
@@ -336,11 +346,32 @@ if (!cacheCelestialSupported(directionIndex, receiverIndex)) {
 	 * Call this method to create one distant-Sun cache controller for a renderer attachment.
 	 *
 	 * @param {CacheControllerRequest} request - The renderer-owned backend and scheduler.
-	 * @returns {DistantSunCacheController} - The attachment-owned controller.
+	 * @returns {CacheController} - The attachment-owned controller.
 	 */
-	createCacheController({model, backend, scheduler}) {
-		this._requireConfiguration('createCacheController');
-		return this._cacheProvider.createCacheController({model, backend, scheduler});
+	createCacheController({backend}) {
+		const configuration = this._requireConfiguration('createCacheController');
+		if (configuration.darkScattering) {
+			return new DistantSunDarkCacheController(backend);
+		}
+		if (!configuration.sceneCacheAsset) {
+			throw new Error('Distant-Sun runtime requires an exact prebuilt scene-cache asset.');
+		}
+		return new DistantSunSceneCacheController({
+			backend,
+			asset: configuration.sceneCacheAsset,
+		});
+	}
+
+	/**
+	 * Call this method to create one attachment-owned offline scene-cache loader.
+	 * Selection and publication remain owned by the later runtime cutover.
+	 *
+	 * @param {DistantSunSceneCacheAssetLoaderDefinition} request - Backend, static asset root, and optional Web adapters.
+	 * @returns {DistantSunSceneCacheAssetLoader} - Exact manifest-backed loader.
+	 */
+	createSceneCacheAssetLoader(request) {
+		this._requireConfiguration('createSceneCacheAssetLoader');
+		return new DistantSunSceneCacheAssetLoader(request);
 	}
 
 	/**

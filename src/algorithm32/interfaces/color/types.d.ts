@@ -41,6 +41,9 @@ type ColorConversionRequest = {
 
 	/** Optional positive global achromatic exposure modifier; identity when omitted. */
 	exposureModifier?: number;
+
+	/** Optional atmosphere-transmitted direct-source luminance used by condition-aware Color models. */
+	brightnessProxy?: UnitValue<'cd m^-2'>;
 };
 
 /**
@@ -75,6 +78,9 @@ type SceneDisplayCompositionRequest = {
 
 	/** Optional positive global achromatic exposure modifier; identity when omitted. */
 	exposureModifier?: number;
+
+	/** Optional atmosphere-transmitted direct-source luminance used by condition-aware Color models. */
+	brightnessProxy?: UnitValue<'cd m^-2'>;
 };
 /** Display-facing color values produced from Algorithm32 spectral output. */
 type ColorSample = {

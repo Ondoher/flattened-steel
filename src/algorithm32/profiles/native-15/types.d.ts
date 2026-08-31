@@ -187,6 +187,8 @@ type NativeExecutionProfileDefinition = Readonly<{
 	readonly groundBoundary: GroundBoundary | null;
 	/** Observation retained as the geometry-owned placement authority. */
 	readonly observation: GeometryObservation;
+	/** Optional exact placement selected instead of deriving one from the observation. */
+	readonly sourcePlacement?: GeometryResolvedLightSourcePlacement;
 	/** Optional celestial source roster normalized into the complete profile. */
 	readonly celestialSources?: CelestialSourceRoster | null;
 	/** Source-selected executable domains. */

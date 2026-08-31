@@ -63,19 +63,18 @@ describe('Algorithm32Transport', /** Called by Jasmine to register the named tes
 			'viewTransmittance.channels[channelIndex] *= segmentTransmittance.channels[channelIndex]',
 		);
 		const cumulativeLookup = code.indexOf(
-			'sampleCumulativeScatteringDensity(\n\t\t\tpositionStencil,\n\t\t\tdirectionStencil',
+			'sampleCumulativeScatteringDensity(\n\t\t\tpositionMeters,\n\t\t\tatmosphereCoordinate,\n\t\t\tstate.ray.direction',
 		);
 
 		expect(contribution.requires).toEqual([
 			'atmosphere.sampleMedium',
 			'geometry.resolveAtmosphereCoordinate',
-			'geometry.resolveScatteringCachePositionStencil',
-			'geometry.resolveScatteringCacheDirectionStencil',
 			'cache.sampleCumulativeScatteringDensity',
 		]);
 		expect(code).toContain('AtmosphereCoordinate atmosphereCoordinate = resolveAtmosphereCoordinate(');
 		expect(code).toContain('MediumSample medium = sampleAtmosphere(atmosphereCoordinate);');
-		expect(code).toContain('resolveScatteringCachePositionStencil(atmosphereCoordinate)');
+		expect(code).not.toContain('resolveScatteringCachePositionStencil');
+		expect(code).not.toContain('resolveScatteringCacheDirectionStencil');
 		expect(transmittanceUpdate).toBeGreaterThan(-1);
 		expect(cumulativeLookup).toBeGreaterThan(transmittanceUpdate);
 		expect(code.match(/sampleCumulativeScatteringDensity\(/gu)?.length).toBe(1);
@@ -112,6 +111,26 @@ describe('Algorithm32Transport', /** Called by Jasmine to register the named tes
 			'float stepMeters = max(state.bounds.endDistanceMeters - state.bounds.startDistanceMeters, 0.0)',
 		);
 		expect(code).toContain('pointIndex == 0 || pointIndex == uTransportPathIntervalCount');
+	});
+
+	it('implements quadratic interval boundaries with one midpoint density sample and exact interval measure', () => {
+		const contribution = new Algorithm32Transport().createShaderContribution(
+			createRequest({
+				pathIntervalCount: 30,
+				pathSampleDistribution: {kind: 'quadratic-near-observer-v1'},
+			}),
+		);
+		const code = shaderCode(contribution);
+
+		expect(contribution.uniforms[0].defaultValue).toBe(30);
+		expect(code).toContain('clamp(fraction * fraction, 0.0, 1.0)');
+		expect(code).toContain('0.5 * (startDistanceMeters + endDistanceMeters)');
+		expect(code).toContain('intervalIndex < uTransportPathIntervalCount');
+		expect(code).toContain('* intervalLengthMeters;');
+		expect(code.match(/viewTransmittance\.channels\[channelIndex\] \*= halfIntervalTransmittance/gu)?.length).toBe(
+			2,
+		);
+		expect(code).not.toContain('pointIndex <= uTransportPathIntervalCount');
 	});
 
 	it('binds accepted execution options as a runtime loop bound', /** Called by Jasmine to exercise the named behavior. */ () => {

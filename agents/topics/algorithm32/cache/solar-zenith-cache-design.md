@@ -1,14 +1,24 @@
 # Distant-Sun Solar-Zenith Scene-Cache Design
 
-Status: active canonical design with the point-local cumulative-density
-representation complete through the contained P10 decision, current through
-2026-08-29. Accepted run `000569` selects Native48/Z180/W27/F68/N4/Q30;
-runs `000572` and `000577` measure the complete uncompressed W27 asset and
-lifecycle; and run `000579` qualifies exact cubed-sphere seam deduplication.
-This document owns the numerical and runtime design for one distant-Sun
-atmosphere cache per scene. It does not authorize production integration. The
-[distant-Sun execution plan](distant-sun-solar-zenith-cache-plan.md) owns the
-contained implementation and qualification sequence.
+Status: complete canonical design, closed with the Flat32 H7 integration on
+2026-08-31. The point-local cumulative-density representation is complete
+through the contained P10 decision, production adoption is complete through
+PA7, and the 0-degree through 108-degree construction inventory is built and
+byte-verified. Half-open runtime bins cover `[0, 108)`, while every angle from
+108 degrees onward shares one texture-free zero-scattering runtime state.
+Accepted run
+`000569` selects Native48/Z180/W27/F68/N4/Q30; runs `000572` and `000577`
+measure the complete uncompressed W27 asset and lifecycle; and run `000579`
+qualifies exact cubed-sphere seam deduplication. The production-owned offline
+compiler now exactly reproduces the P9/P10 payload identities. Exact
+manifest-backed loading, immutable two-texture upload, resident point-local
+lookup, exact asset source placement, and live Q30 transport are implemented.
+PA6 final proof
+`tmp/extraterrestrial/production-adoption/pa6-final-qualification-20260829-1`
+passes the fresh B1, exact parity, six-scene, endpoint, rotation, lifecycle,
+and named-hardware gates. This
+document owns the numerical and runtime design for one distant-Sun atmosphere
+cache per scene.
 
 ## Selected Direction
 
@@ -36,6 +46,25 @@ spatial support. The cache is point-local and camera-independent. Camera
 origin, camera orientation, camera-ray length, object identity, object depth,
 display state, and post-exit celestial sources are not cache dimensions.
 
+The final product requires a substantially broader offline inventory than the
+six qualified scenes: enough discrete scene caches to cover the Sun through
+all non-dark hours, provisionally at one-degree solar-angle increments. The
+six-scene set is qualification and deployment-mechanics evidence, not the final
+coverage catalog. The darkness cutoff and indexed solar-angle bin policy must
+be selected from measured evidence. Solar azimuth is not a cache dimension:
+spherical symmetry, source-relative coordinates, multi-direction B1 evidence,
+six qualified scene builds, and complete-rotation coverage establish the
+rotational contract.
+
+The first complete construction inventory is
+`tmp/extraterrestrial/production-adoption/one-degree-inventory-20260829-1`.
+It contains 109 unique packages, `17,411,056,920` uncompressed oracle bytes,
+and `16,154,147,172` exact-seam runtime bytes. Independent streaming
+verification in `one-degree-inventory-verification-20260829-1` matched every
+manifest, ledger, oracle payload, exact payload, and logical-direction index
+SHA-256. This establishes constructed data and measured storage only; it does
+not qualify nearest-degree bins or the darkness cutoff.
+
 Geometry keeps its current simple responsibility: determine the physical end
 of a camera ray. Algorithm32 keeps its current live path integration and
 samples actual points along that ray. Zenith awareness is added only to the
@@ -54,18 +83,18 @@ the active design or execution plan.
 
 ## Glossary
 
-| Term | Meaning |
-| --- | --- |
-| **Scene Sun state** | The fixed distant-Sun direction and radiometric source identity used by one scene cache. |
-| **Transport state** | One physical local state addressed by `(r, mu_s, outgoingDirection)`. |
-| **Native15 spectrum** | Fifteen ordered bin-average spectral values spanning `360` through `830 nm`. |
-| **Spectral field sample** | One transport state paired with one Native15 cumulative-density spectrum. |
-| **Sample inventory** | The complete deterministic set of spectral field samples supported by one scene cache, including coordinate nodes and packing metadata. |
-| **Scene support** | The declared set of actual atmospheric points and outgoing directions that cameras and visible endpoints may query in the scene. |
-| **Inventory block** | Every outgoing direction and Native15 value at one `(altitude, local-solar-zenith)` node. |
-| **Packed-row ledger** | Metadata mapping a physical altitude/solar-zenith stencil to resident inventory rows. |
-| **Resident scene cache** | The one atomically published cache handle containing every block required by the declared scene support. Physical textures are an implementation detail, not separate Sun pages. |
-| **Construction quadrature** | Transient wavelength, direction, or path samples used offline to construct the cache. It is not a runtime cache axis. |
+| Term                        | Meaning                                                                                                                                                                          |
+| --------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Scene Sun state**         | The fixed distant-Sun direction and radiometric source identity used by one scene cache.                                                                                         |
+| **Transport state**         | One physical local state addressed by `(r, mu_s, outgoingDirection)`.                                                                                                            |
+| **Native15 spectrum**       | Fifteen ordered bin-average spectral values spanning `360` through `830 nm`.                                                                                                     |
+| **Spectral field sample**   | One transport state paired with one Native15 cumulative-density spectrum.                                                                                                        |
+| **Sample inventory**        | The complete deterministic set of spectral field samples supported by one scene cache, including coordinate nodes and packing metadata.                                          |
+| **Scene support**           | The declared set of actual atmospheric points and outgoing directions that cameras and visible endpoints may query in the scene.                                                 |
+| **Inventory block**         | Every outgoing direction and Native15 value at one `(altitude, local-solar-zenith)` node.                                                                                        |
+| **Packed-row ledger**       | Metadata mapping a physical altitude/solar-zenith stencil to resident inventory rows.                                                                                            |
+| **Resident scene cache**    | The one atomically published cache handle containing every block required by the declared scene support. Physical textures are an implementation detail, not separate Sun pages. |
+| **Construction quadrature** | Transient wavelength, direction, or path samples used offline to construct the cache. It is not a runtime cache axis.                                                            |
 
 ## Why The Cache Needs Local Solar Zenith
 
@@ -129,6 +158,15 @@ x 4 cubed-sphere direction nodes
 Queries outside declared scene support fail explicitly. They do not silently
 clamp to the nearest retained zenith row.
 
+The production GLSL resolves all channel-invariant lookup state before its
+Native15 loop. For each physical path sample it maps the four logical W27
+directions to exact-seam slots once, resolves the four altitude/solar-zenith
+packed rows once, and computes support and spatial weights once. The channel
+loop retains the same ordered R32F interpolation but cannot repeat those
+ledger and R16UI operations fifteen times. This is an exact evaluation-order
+correction; it does not alter a cache coordinate, payload, weight, spectral
+value, or Q30 path sample.
+
 ## Geometry And Scene Objects
 
 Geometry remains the owner of ray termination:
@@ -180,6 +218,67 @@ different scene Sun state selects or swaps a separately built cache.
 Animation remains deferred. A future discrete Sun-state animation may swap
 complete compatible scene caches atomically; interpolation between scene
 caches requires separate continuity evidence.
+
+Broad time-of-day coverage does not require every cache to be resident at once.
+One selected scene cache remains the GPU resident unit. The offline/deployed
+inventory grows approximately with the number of retained solar-angle bins,
+while steady resident GPU size remains the size of one selected cache and
+atomic swapping retains the already-qualified two-cache transition policy.
+
+The production resolver owns half-up, half-open one-degree bins across
+`[0, 108)`, with explicit darkness beginning at 108 degrees. Each runtime-only
+package contains the union of ledger rows required at both interval edges.
+All 5,494 coordinates shared by construction parents have byte-identical
+Native15 rows, so assembly changes support coverage without approximating the
+scattering field.
+
+## Server Cache Resolution
+
+The final product requires a server entry point that resolves one scene
+solar-zenith angle to the correct qualified cache. The application owns the
+location/time calculation and submits only that scalar angle, using the angle
+convention and units fixed by the endpoint contract. The browser does not carry
+the complete solar-angle catalog as handwritten application source. The
+deployed endpoint/catalog version fixes the supported atmosphere, geometry,
+spectral, recurrence, and codec identities; those identities remain explicit
+in the returned manifest for independent client validation rather than becoming
+resolver inputs.
+
+The resolver response is small. It returns either:
+
+- the exact selected solar-angle bin and scene-cache identity;
+- the content-addressed manifest URL and manifest SHA-256;
+- the package root used for its ledger, exact-seam payload, and direction index;
+- the representative solar-zenith angle owned by that bin;
+- cacheability/version facts and optional adjacent-bin prefetch identities; or
+- an explicit dark, unsupported, or incompatible result.
+
+The resolver service should not dynamically rebuild the atmosphere cache and
+need not proxy approximately 150 MB through an application JSON response. The
+offline builder publishes immutable content-addressed packages to static object
+storage or a CDN. The server selects one package; the existing loader downloads
+and verifies its manifest and payload hashes from those returned URLs. HTTP/CDN
+caching can therefore share packages across clients while the application keeps
+only the selected cache resident.
+
+The server owns bin policy and catalog availability, but it does not calculate
+the Sun position and cannot weaken the client's manifest compatibility checks.
+A stale, malformed, hash-mismatched, or physically incompatible response still
+fails before publication. Dark results must be distinguished from missing
+assets so that complete darkness is an intentional supported outcome rather
+than an accidental zero-spectrum fallback. All dark solar angles select one
+procedural, texture-free cache contribution that returns zero cumulative
+Native15 solar scattering. This is a valid cache implementation behind the
+same generic controller/resource interface, not a disabled shader: the live
+source placement, geometry, transmittance, scene composition, and celestial
+sources remain assembled. No dark angle adds an offline package, resolver
+descriptor payload, or resident cache texture.
+
+Flat32's deployed namespace is `/flat32`: its resolver is
+`/flat32/api/distant-sun-scene-cache`, and its immutable package namespace is
+`/flat32/scene-caches/`. The endpoint is document-relative in the browser so
+the application slug remains part of the request. The server package root is
+deployment configuration, not a browser request parameter.
 
 ## Scene Support And Culling
 
@@ -373,14 +472,14 @@ planet require different inventories while retaining the same cache semantic.
 The qualified successor returns to production W27. W39 remains available only
 for visual comparison in contained POCs.
 
-| Domain | Count |
-| --- | ---: |
-| Native48 altitude | 48 |
-| provisional solar-zenith centers | 180 |
-| F68 incoming quadrature | 68 |
-| production W27 outgoing | 4,374 |
-| comparison W39 outgoing | 9,126 |
-| Native15 wavelength values | 15 |
+| Domain                           | Count |
+| -------------------------------- | ----: |
+| Native48 altitude                |    48 |
+| provisional solar-zenith centers |   180 |
+| F68 incoming quadrature          |    68 |
+| production W27 outgoing          | 4,374 |
+| comparison W39 outgoing          | 9,126 |
+| Native15 wavelength values       |    15 |
 
 One uncompressed `R32F` inventory block costs:
 
@@ -556,6 +655,28 @@ production consideration, retains the uncompressed payload as the correctness
 oracle, and grants no memory credit to lossy precision, basis, dictionary, or
 residual candidates.
 
+Production hookup H6 exposed a shader scheduling defect that P10 did not gate:
+the initial point-local consumer repeated packed-row work and exact-seam index
+fetches inside every Native15 channel. With Q30 that source shape admitted as
+many as `7,200` R32F reads plus `7,200` redundant R16UI reads per output pixel.
+Hoisting the channel-invariant work did not fix the live application. The
+earlier `gl.finish()` proof is superseded because pass-local timer queries
+measured roughly 673-880 ms per 1920-by-1080 scalar frame.
+
+The selected resident derivative preserves the accepted P10 files as its
+validated source, duplicates seam values back into a logical W27 face grid,
+and packs Native15 into four RGBA32F groups. Hardware bilinear filtering then
+performs each four-direction W27 interpolation in one sample. Q30 requires at
+most 480 atlas reads per output pixel. The largest deployed source package
+remains `161,192,508` bytes; the largest GPU derivative is `185,326,380` bytes.
+Accepted timer-query proof
+`tmp/extraterrestrial/production-adoption/flat32-distant-sun-runtime-performance-20260831-11`
+measures 22.22 ms mean and 22.30 ms p95 across eight warmed 1920-by-1080 frames
+on the RTX 2060/D3D11. These observations close the reported sub-one-FPS
+regression on that hardware; they do not set a portable performance ceiling.
+At 3840 by 2160 the same atlas measures 123.32 ms mean and 127.10 ms p95;
+resolution scaling or reprojection remains necessary for a 30-FPS 4K target.
+
 ## Physical Resource And Lifecycle Result
 
 Accepted run `000572-point-local-scene-cache-p9-w27-asset` builds the complete
@@ -580,6 +701,19 @@ Observed host-clock measurements are `832 ms` load, `117 ms` first upload,
 twelve-frame 640-by-400 single-cache-lookup kernel batch. WebGL does not expose
 opaque driver overhead, so the evidence selects support only for the named
 RTX 2060 execution and does not claim a general GPU-memory ceiling.
+
+Production PA5 proof
+`tmp/extraterrestrial/production-adoption/pa5-lifecycle-20260829-7` exercises
+the production exact-seam loader/controller on the same named RTX 2060. It
+passes exact reuse, failed-replacement preservation, same-context complete
+replacement, old-cache retirement, real WebGL context loss/restoration,
+asset-backed reconstruction, and idempotent disposal with zero final WebGL
+errors. Its exact-seam logical accounting is `150,235,908 bytes` resident,
+`300,471,816 bytes` for two complete resident caches during atomic replacement,
+and `450,707,724 bytes` with one candidate payload staged. Lost-context GPU
+objects are released while their original context is lost; the exact validated
+asset selection remains the restoration authority and is reloaded only after
+the new context exists.
 
 ## Validation Contract
 
@@ -725,11 +859,10 @@ are:
   complete-rotation, arbitrary-shortened-endpoint support;
 - whether later evidence should reopen the selected Native48/Z180 mappings;
 - broader supported-hardware resident, transition, and opaque-driver limits;
-- whether one published cache handle uses one or several internal textures;
 - cache-swap behavior for deferred discrete Sun animation; and
 - whether lossy codecs should ever be studied beyond the qualified exact seam
   deduplication; and
-- whether the owner explicitly authorizes a production port.
+- broader observer/support regions beyond the qualified one-degree inventory.
 
 ## Current Conclusion
 
@@ -745,5 +878,17 @@ from the ordinary Algorithm32 integration loop. Its qualification sequence is
 complete.
 The selected handoff is the Native48/Z180/W27/F68/N4/Q30 point-local design,
 with uncompressed Native15 retained as its oracle and exact seam deduplication
-qualified as the preferred stored representation for future production
-consideration. Production remains unchanged pending separate authorization.
+qualified as the preferred stored representation. Production PA1 through PA5
+now own the executable contracts/domains, exact offline compiler, immutable
+two-texture resident upload, point-local lookup, exact asset direction, and
+quadratic-near-observer Q30 live transport inside Geometry's endpoint, and
+transactional exact-cache publication, resource policy, and context recovery.
+PA6 production numerical and scene qualification is complete. PA7 is owner-
+selected and complete; the six-state deployment catalog, runtime-only package
+emitter, obsolete receiver-column GPU-runtime removal, and mandatory exact-
+asset migration of the older celestial-composition WebGL fixture are
+implemented. The complete 0-degree through 108-degree construction inventory,
+byte-level verification, bin-covered runtime derivative, scalar resolver, and
+Flat32 integration are complete. The focused
+[Flat32 hookup plan](../production/flat32-one-degree-cache-hookup-plan.md)
+records the qualification and release evidence.

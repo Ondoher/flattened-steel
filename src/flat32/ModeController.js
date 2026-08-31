@@ -19,6 +19,8 @@ export class ModeController {
 		/** @type {Algorithm32Runtime | null} */
 		this._activeRuntime = null;
 		this._generation = 0;
+		/** @type {AbortController | null} */
+		this._preparationCancellation = null;
 		/** @type {'spherical-distant' | 'flat-local' | null} */
 		this._currentKind = null;
 		/** @type {'spherical-distant' | 'flat-local' | null} */
@@ -71,6 +73,9 @@ export class ModeController {
 	async switchTo(kind, state) {
 		if (this._disposed) throw new Error('Flat32 mode controller is disposed.');
 		const generation = ++this._generation;
+		this._preparationCancellation?.abort();
+		const preparationCancellation = new AbortController();
+		this._preparationCancellation = preparationCancellation;
 		/** @type {Flat32Mode | null} */
 		let mode = null;
 		/** @type {ReturnType<import('./ThreeSceneRuntime.js').ThreeSceneRuntime['createAtmosphereComposer']> | null} */
@@ -80,7 +85,11 @@ export class ModeController {
 		let sceneChanged = false;
 
 		try {
-			mode = this._createMode(kind, state);
+			mode = await this._createMode(kind, state, {signal: preparationCancellation.signal});
+			if (this._disposed || generation !== this._generation) {
+				mode.dispose();
+				return null;
+			}
 			sceneChanged = kind !== this._sceneKind;
 			if (sceneChanged) {
 				this._onPreparing?.(kind, mode);
@@ -121,6 +130,10 @@ export class ModeController {
 			}
 			if (!this._disposed && generation === this._generation) throw error;
 			return null;
+		} finally {
+			if (this._preparationCancellation === preparationCancellation) {
+				this._preparationCancellation = null;
+			}
 		}
 	}
 
@@ -130,6 +143,8 @@ export class ModeController {
 		if (this._disposed) return;
 		this._disposed = true;
 		this._generation += 1;
+		this._preparationCancellation?.abort();
+		this._preparationCancellation = null;
 		this._activeRuntime?.dispose();
 		this._activeRuntime = null;
 		this._activeMode = null;

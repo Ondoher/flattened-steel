@@ -23,16 +23,17 @@ export class Algorithm32Transport {
 	createShaderContribution(request) {
 		const options = request.model.profile.numerical.viewPath;
 		const celestialSourcesEnabled = request.model.celestialSources !== null;
-		const pathSampleHelper = this._transportPathSampleHelper(
-			options.sampleDistribution?.kind ?? 'uniform-distance',
-		);
+		const pathSampleDistributionKind = options.sampleDistribution?.kind ?? 'uniform-distance';
+		const pathSampleHelper = this._transportPathSampleHelper(pathSampleDistributionKind);
 
 		const functions = [
 			ShaderContributions.createShaderSourceBlock(
 				'transport-evaluate-helper',
 				'evaluateTransport',
 				0,
-				this._cumulativeTransportBlock(pathSampleHelper),
+				pathSampleDistributionKind === 'quadratic-near-observer-v1'
+					? this._quadraticMidpointTransportBlock(pathSampleHelper)
+					: this._cumulativeTransportBlock(pathSampleHelper),
 			),
 		];
 		const mainHooks = [
@@ -79,8 +80,6 @@ export class Algorithm32Transport {
 			requires: [
 				'atmosphere.sampleMedium',
 				'geometry.resolveAtmosphereCoordinate',
-				'geometry.resolveScatteringCachePositionStencil',
-				'geometry.resolveScatteringCacheDirectionStencil',
 				'cache.sampleCumulativeScatteringDensity',
 			],
 			uniforms: [
@@ -102,6 +101,16 @@ export class Algorithm32Transport {
 	 * @returns - The result produced by the operation.
 	 */
 	_transportPathSampleHelper(kind) {
+		if (kind === 'quadratic-near-observer-v1') {
+			return `float pathIntervalBoundaryDistance(ShaderState state, int boundaryIndex) {
+	float fraction = float(boundaryIndex) / float(max(${TRANSPORT_PATH_INTERVAL_COUNT_UNIFORM_NAME}, 1));
+	return mix(
+		state.bounds.startDistanceMeters,
+		state.bounds.endDistanceMeters,
+		clamp(fraction * fraction, 0.0, 1.0)
+	);
+}`;
+		}
 		if (kind === 'tangent-density-adaptive-v1' || kind === 'tangent-density-adaptive-soft-v1') {
 			const adaptiveBlend = kind === 'tangent-density-adaptive-soft-v1' ? '0.35' : '1.0';
 			return `float pathSampleFraction(ShaderState state, float uniformFraction) {
@@ -177,6 +186,51 @@ float pathSampleMeasureMeters(ShaderState state, int pointIndex) {
 }`;
 	}
 
+	/** Build the qualified quadratic-boundary, midpoint-per-interval Q30 transport. */
+	_quadraticMidpointTransportBlock(pathSampleHelper) {
+		return `${pathSampleHelper}
+
+void evaluatePathRadiance(inout ShaderState state) {
+	if (!state.bounds.valid) {
+		state.pathRadiance = zeroSpectral();
+		state.transmittance = oneSpectral();
+		return;
+	}
+
+	SpectralValue viewTransmittance = oneSpectral();
+	SpectralValue radiance = zeroSpectral();
+
+	for (int intervalIndex = 0; intervalIndex < ${TRANSPORT_PATH_INTERVAL_COUNT_UNIFORM_NAME}; intervalIndex += 1) {
+		float startDistanceMeters = pathIntervalBoundaryDistance(state, intervalIndex);
+		float endDistanceMeters = pathIntervalBoundaryDistance(state, intervalIndex + 1);
+		float intervalLengthMeters = max(endDistanceMeters - startDistanceMeters, 0.0);
+		float distanceMeters = 0.5 * (startDistanceMeters + endDistanceMeters);
+		vec3 positionMeters = state.ray.originMeters + state.ray.direction * distanceMeters;
+		AtmosphereCoordinate atmosphereCoordinate = resolveAtmosphereCoordinate(state.ray, distanceMeters);
+		MediumSample medium = sampleAtmosphere(atmosphereCoordinate);
+		SpectralValue cumulativeScatteringDensity = sampleCumulativeScatteringDensity(
+			positionMeters,
+			atmosphereCoordinate,
+			state.ray.direction
+		);
+
+		for (int channelIndex = 0; channelIndex < SPECTRAL_CHANNEL_COUNT; channelIndex += 1) {
+			float halfIntervalTransmittance = exp(
+				-0.5 * medium.extinction.channels[channelIndex] * intervalLengthMeters
+			);
+			viewTransmittance.channels[channelIndex] *= halfIntervalTransmittance;
+			radiance.channels[channelIndex] += viewTransmittance.channels[channelIndex]
+				* cumulativeScatteringDensity.channels[channelIndex]
+				* intervalLengthMeters;
+			viewTransmittance.channels[channelIndex] *= halfIntervalTransmittance;
+		}
+	}
+
+	state.transmittance = viewTransmittance;
+	state.pathRadiance = radiance;
+}`;
+	}
+
 	/**
 	 * Called by algorithm32 transport to integrate one already-cumulative local scattering-density field.
 	 * @param pathSampleHelper - The path sample helper value accepted by the operation.
@@ -228,15 +282,10 @@ void evaluatePathRadiance(inout ShaderState state) {
 			}
 		}
 
-		CachePositionStencil positionStencil =
-			resolveScatteringCachePositionStencil(atmosphereCoordinate);
-		CacheDirectionStencil directionStencil = resolveScatteringCacheDirectionStencil(
-			positionMeters,
-			state.ray.direction
-		);
 		SpectralValue cumulativeScatteringDensity = sampleCumulativeScatteringDensity(
-			positionStencil,
-			directionStencil
+			positionMeters,
+			atmosphereCoordinate,
+			state.ray.direction
 		);
 		float measureMeters = pathSampleMeasureMeters(state, pointIndex);
 		for (int channelIndex = 0; channelIndex < SPECTRAL_CHANNEL_COUNT; channelIndex += 1) {

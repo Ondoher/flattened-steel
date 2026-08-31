@@ -1,42 +1,33 @@
 # Active Topic
 
-Current active topic: `algorithm32-solar-zenith-cache-production-adoption`.
+Current active topic: `spectral-color-transform-correction`.
 
 Canonical entry document:
-[Solar-Zenith Cache Production Adoption](algorithm32/production/solar-zenith-cache-adoption-plan.md).
-
-Qualified numerical authority:
-[Distant-Sun Solar-Zenith Cache Design](algorithm32/cache/solar-zenith-cache-design.md).
-
-Completed contained execution authority:
-[Distant-Sun Point-Local Solar-Zenith Scene-Cache Plan](algorithm32/cache/distant-sun-solar-zenith-cache-plan.md).
-
-Implemented production baseline:
-[Algorithm32 Production](algorithm32/production/README.md).
+[Spectral Color-Transform Experiment Plan](extraterrestrial/spectral-color-transform-experiment-plan.md).
 
 ## Immediate Focus
 
-The contained Native48/Z180/W27/F68/N4/Q30 point-local distant-Sun cache is
-qualified through P10. The active topic is now its production adoption.
+The distant-Sun cache topic is closed through H7 with no unchecked work. Color
+correction resumes from the existing spectral Color plan, now reconciled with
+the live `BrunetonSourceLuminanceLiftColorDisplayModel`, immutable runs `000466`
+and `000467`, the qualified one-degree point-local cache, Q30 transport, and the
+shared post-108-degree dark state.
 
-Begin with PA0: a read-only migration inventory mapping the qualified
-point-local compiler, cache, lookup, Q30 integration, exact seam codec, and
-lifecycle behavior onto the current production architecture. Identify every
-affected owner, consumer, file, verification lane, replacement boundary, and
-rollback seam before implementation.
-
-Production has not changed. The current containment policy still requires new
-implementation under `scripts/extraterrestrial/` and generated evidence under
-`tmp/extraterrestrial/`. Obtain explicit owner authorization before the first
-write to `src/algorithm32`, `src/flat32`, or an application surface.
+The immediate task is to reproduce and diagnose the current production Color
+output over the established daylight, twilight, and dark scene matrix, then
+resume the rejected Step 3 boundary with a corrected static
+luminance/highlight mapper. The physical cache spectra and transport are fixed
+inputs, not tuning variables. Stellar appearance correction follows as a
+separate coordinated acceptance problem after Color establishes the display
+boundary.
 
 ## Minimal Reload Sources
 
 Read these files in order and no others during bootstrap:
 
 1. [Repository workflow instructions](../../AGENTS.md)
-2. [Production-adoption plan](algorithm32/production/solar-zenith-cache-adoption-plan.md)
-3. [Qualified solar-zenith design](algorithm32/cache/solar-zenith-cache-design.md)
-4. [Algorithm32 production status](algorithm32/production/README.md)
-5. [Implemented cache contract](algorithm32/cache/cache-contract.md)
-6. [Production current dataflow](algorithm32/production/current-dataflow.md)
+2. [Spectral Color plan](extraterrestrial/spectral-color-transform-experiment-plan.md)
+3. [Normal-mode acceptance plan](extraterrestrial/normal-mode-test-plan.md)
+4. [Stellar production-port plan](extraterrestrial/stellar-screen-palette-production-port-plan.md)
+5. [Algorithm32 production status](algorithm32/production/README.md)
+6. [Closed cache hookup plan](algorithm32/production/flat32-one-degree-cache-hookup-plan.md)

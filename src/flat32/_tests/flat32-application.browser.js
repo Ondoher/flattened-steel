@@ -105,7 +105,6 @@ describeFullCache('Flat32 scene application (full production cache)', () => {
 		const pairingState = applicationDocument.querySelector('#flat32-pairing');
 		const error = applicationDocument.querySelector('#flat32-error');
 		const setupFrameCount = Number(canvas.dataset.flat32FrameCount);
-		const setupYieldCount = Number(canvas.dataset.flat32CacheYieldCount ?? 0);
 		const initialViewportWidth = Math.round(canvas.getBoundingClientRect().width);
 		const initialViewportHeight = Math.round(canvas.getBoundingClientRect().height);
 		const initialPixelRatio = Number(canvas.dataset.flat32PixelRatio);
@@ -151,19 +150,12 @@ describeFullCache('Flat32 scene application (full production cache)', () => {
 		if (shell.dataset.flat32State === 'setting-up-atmosphere') {
 			expect(canvas.dataset.flat32RenderPath).toBe('direct-three');
 			expect(progress.hidden).toBeFalse();
-			expect(status.textContent).toContain('spherical/distant');
-			expect(status.textContent).toContain('Union Glacier');
-			expect(status.textContent).toContain('Flat 0');
-			expect(progress.getAttribute('aria-label')).toContain('spherical/distant');
-			expect(progress.getAttribute('aria-label')).toContain('Union Glacier');
-			expect(progress.getAttribute('aria-label')).toContain('Flat 0');
-			expect(atmosphereState.textContent).toContain('building');
+			expect(status.textContent).toMatch(/Resolving|Loading|Setting up/u);
+			expect(atmosphereState.textContent).toMatch(/resolving cache|loading cache|building/u);
 			await waitForCondition(
 				frame.contentWindow,
-				() =>
-					Number(canvas.dataset.flat32FrameCount) > setupFrameCount &&
-					Number(canvas.dataset.flat32CacheYieldCount ?? 0) > setupYieldCount,
-				'a responsive direct frame between cache layers',
+				() => Number(canvas.dataset.flat32FrameCount) > setupFrameCount,
+				'a responsive direct frame while loading the exact cache',
 				30000,
 			);
 		}
@@ -185,7 +177,6 @@ describeFullCache('Flat32 scene application (full production cache)', () => {
 		expect(progress.hidden).toBeTrue();
 		expect(error.hidden).toBeTrue();
 		expect(canvas.dataset.flat32RenderPath).toBe('algorithm32');
-		expect(Number(canvas.dataset.flat32CacheYieldCount)).toBeGreaterThan(0);
 		expect(shell.dataset.flat32AtmospherePairing).toBe('spherical/distant');
 		expect(shell.dataset.flat32AtmosphereMaximumOrder).toBe('4');
 		expect(shell.dataset.flat32AtmospherePositionCount).toBe('48');
@@ -286,9 +277,8 @@ describeFullCache('Flat32 scene application (full production cache)', () => {
 		expect(shell.dataset.flat32Mode).toBe('spherical/distant');
 		expect(shell.dataset.flat32State).toBe('setting-up-atmosphere');
 		expect(pairingState.textContent.trim()).toBe('Spherical geometry \u00b7 distant Sun');
-		expect(status.textContent).toContain('spherical/distant');
-		expect(status.textContent).toContain('Flat 180');
-		expect(progress.getAttribute('aria-label')).toContain('spherical/distant');
+		expect(status.textContent).toContain('Resolving the offline distant-Sun cache');
+		expect(atmosphereState.textContent).toContain('resolving cache');
 		expect(shell.dataset.flat32AtmospherePairing).toBe('flat/local');
 		await waitForCondition(
 			frame.contentWindow,
@@ -351,6 +341,38 @@ describeFullCache('Flat32 scene application (full production cache)', () => {
 		);
 		expect(canvas.dataset.flat32RenderPath).toBe('algorithm32');
 		expect(context.isContextLost()).toBeFalse();
+
+		const locationButton = shell.querySelector('#flat32-location-control');
+		const timeBasisButton = shell.querySelector('#flat32-time-basis-control');
+		const sunsetButton = shell.querySelector('button[data-flat32-globe-time="2"]');
+		const hourPlusButton = shell.querySelector('button[data-flat32-hour-offset="1"]');
+		expect(locationButton instanceof frame.contentWindow.HTMLButtonElement).toBeTrue();
+		expect(timeBasisButton instanceof frame.contentWindow.HTMLButtonElement).toBeTrue();
+		expect(sunsetButton instanceof frame.contentWindow.HTMLButtonElement).toBeTrue();
+		expect(hourPlusButton instanceof frame.contentWindow.HTMLButtonElement).toBeTrue();
+		locationButton.click();
+		locationButton.click();
+		timeBasisButton.click();
+		sunsetButton.click();
+		hourPlusButton.click();
+		hourPlusButton.click();
+		await waitForCondition(
+			frame.contentWindow,
+			() =>
+				shell.dataset.flat32Location === 'San Jose' &&
+				shell.dataset.flat32Time === 'Sunset +2h' &&
+				shell.dataset.flat32State === 'ready' &&
+				shell.dataset.flat32DistantSunCacheState === 'dark',
+			'the shared San Jose after-dark atmosphere publication',
+			300000,
+		);
+		expect(Number(shell.dataset.flat32SolarZenithDegrees)).toBeGreaterThanOrEqual(108);
+		expect(shell.dataset.flat32AtmospherePairing).toBe('spherical/distant');
+		expect(canvas.dataset.flat32RenderPath).toBe('algorithm32');
+		expect(shell.dataset.flat32AtmosphereRenderErrorCount).toBe('0');
+		expect(atmosphereState.textContent).toContain('installed');
+		expect(status.textContent).toContain('shared dark scattering state');
+		expect(error.hidden).toBeTrue();
 
 		expect(typeof frame.contentWindow.__flat32Cleanup).toBe('function');
 		frame.contentWindow.__flat32Cleanup();

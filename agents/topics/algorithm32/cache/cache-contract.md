@@ -1,8 +1,9 @@
 # Selected Scattering Cache Contract
 
-Status: implemented-baseline physical and numerical authority for the selected
-spherical, distant-source cache. The active successor research design is
-separate and changes none of this contract until promotion.
+Status: implemented physical and numerical authority for the spherical
+distant-source cache, current through PA7 owner selection, deployment catalog,
+and obsolete receiver-column GPU-runtime cleanup. Final PA7 release closure is
+still gated by one exact-asset migration in the broad WebGL test lane.
 
 ## Scope And Ownership
 
@@ -16,12 +17,16 @@ Focused documents own the details below this umbrella contract:
 - [Distant-Sun solar-zenith cache design](solar-zenith-cache-design.md)
   owns the selected successor's point-local cumulative-density coordinates,
   one-cache-per-scene contract, Native15 representation, resource study, and
-  replacement evidence. Selection for contained implementation does not
-  silently amend this implemented contract.
+  replacement evidence and implemented production representation.
 - [Distant-Sun point-local solar-zenith cache plan](distant-sun-solar-zenith-cache-plan.md)
-  records the contained execution order and evidence gates. No numbered phase
-  has started; it selects no local-Sun layout and changes none of this
-  implemented contract before a separately authorized promotion.
+  records the contained execution order and evidence gates. Its numbered
+  execution is complete through P10; it selects no local-Sun layout and
+  changes no local-Sun cache layout. The separate production-adoption topic is
+  complete through PA6: its pairing-neutral physical sample seam, Z180 and
+  exact-W27 domains, distant-specific ledger/manifest contracts, and offline
+  compiler are implemented together with exact manifest-backed loading,
+  immutable resident upload, point-local lookup, exact source placement, and
+  quadratic-near-observer Q30 live transport are implemented.
 - [Spatial reconstruction](spatial-reconstruction.md) owns the exact
   final-view position stencil, its evidence, and its CPU/shader completion
   requirements.
@@ -100,8 +105,8 @@ outside parity and must not be promoted as an alternate L1 strategy. The
 retired manifest is not a current production fixture, regression oracle,
 authority, or runtime input.
 
-The runtime cache stores camera-independent but receiver-column/source-state-
-specific cumulative local spectral scattering density:
+The runtime cache stores camera-independent, point-local, scene-Sun-specific
+cumulative local spectral scattering density:
 
 ```text
 JthroughN(position, outgoingDirection, wavelength)
@@ -116,7 +121,7 @@ extraterrestrial sources are not cache axes.
 | Field concern              | Selected contract                                                       |
 | -------------------------- | ----------------------------------------------------------------------- |
 | Spectral basis             | 15 scalar spectral channels                                             |
-| Position domain            | Ordered Native48 altitudes, including exact 0 m boundary node            |
+| Position domain            | Ordered Native48 altitudes, including exact 0 m boundary node           |
 | Incoming radiance          | Reflection-completed ordinary Fibonacci-68 quadrature and weights       |
 | Outgoing density           | Source-aligned W27 cubed sphere with 4,374 stored directions            |
 | Construction transport     | Production 15-interval control and retained construction lookup         |
@@ -377,6 +382,17 @@ source-created controller and one opaque GPU-cache binding are the production
 path; no incident-cache or CPU-upload alternative remains. The accepted
 software-renderer results are conformance evidence, not supported-hardware
 performance evidence.
+
+The asset-backed point-local successor now applies the same lifecycle contract
+to complete offline cache packages. Generation-local cancellation and
+supersession cannot poison later work; failed and oversized replacements leave
+the active cache usable; successful candidates publish before their predecessor
+is retired; and disposal is idempotent. A WebGL context loss is the one boundary
+where old resident objects cannot remain usable: they are released while their
+own context is lost, the exact asset selection remains retained, and a complete
+replacement is loaded after restoration. The PA5 RTX 2060 proof records
+`150,235,908` steady logical bytes, `300,471,816` atomic-transition bytes, and
+`450,707,724` transition-plus-staging bytes with zero final WebGL errors.
 
 The focused Stage 7 real-WebGL gate covers the predeclared position/direction
 surface, compares cumulative CPU and GLSL traversal over the same manufactured

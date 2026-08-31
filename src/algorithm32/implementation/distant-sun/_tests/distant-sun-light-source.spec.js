@@ -1,6 +1,8 @@
 import * as THREE from 'three';
 
-import {DistantSunCacheController} from '../cache/DistantSunCacheController.js';
+import DistantSunSceneCacheAssetLoader from '../cache/DistantSunSceneCacheAssetLoader.js';
+import DistantSunSceneCacheController from '../cache/DistantSunSceneCacheController.js';
+import DistantSunDarkCacheController from '../cache/DistantSunDarkCacheController.js';
 import {DistantSunLightSource} from '../DistantSunLightSource.js';
 import {NATIVE_SOURCE_IRRADIANCE_DENSITY} from '../../../profiles/index.js';
 import {createTestSourceIrradiance} from '../../../light-source-support/_tests/spectral-test-values.js';
@@ -125,7 +127,7 @@ describe('DistantSunLightSource', /** Called by Jasmine to register the named te
 	});
 
 	it('creates an independent cache controller for each renderer attachment', /** Called by Jasmine to exercise the named behavior. */ () => {
-		const source = createDistantSource();
+		const source = createDistantSource({sceneCacheAsset: createSceneCacheAsset()});
 		const backend = /** @type {CacheGpuBackend} */ ({});
 		const scheduler = /** @type {CacheBuildScheduler} */ ({
 			/**
@@ -136,12 +138,67 @@ describe('DistantSunLightSource', /** Called by Jasmine to register the named te
 		const first = source.createCacheController({model, backend, scheduler});
 		const second = source.createCacheController({model, backend, scheduler});
 
-		expect(first instanceof DistantSunCacheController).toBeTrue();
-		expect(second instanceof DistantSunCacheController).toBeTrue();
+		expect(first instanceof DistantSunSceneCacheController).toBeTrue();
+		expect(second instanceof DistantSunSceneCacheController).toBeTrue();
 		expect(second).not.toBe(first);
 		expect(first.active).toBeNull();
 		first.dispose();
 		second.dispose();
+	});
+
+	it('rejects runtime cache creation when no exact prebuilt asset was selected', () => {
+		const source = createDistantSource();
+		expect(() =>
+			source.createCacheController({
+				model: /** @type {SharedModel} */ ({}),
+				backend: /** @type {CacheGpuBackend} */ ({}),
+			}),
+		).toThrowError(/exact prebuilt scene-cache asset/);
+	});
+
+	it('uses one texture-free zero-scattering cache for every configured dark state', async () => {
+		const source = createDistantSource({darkScattering: true});
+		const backend = /** @type {CacheGpuBackend} */ ({id: 'dark-cache-test-backend'});
+		const controller = source.createCacheController({
+			model: /** @type {SharedModel} */ ({}),
+			backend,
+		});
+
+		expect(controller instanceof DistantSunDarkCacheController).toBeTrue();
+		const first = await controller.createScatteringCache({});
+		const second = await controller.createScatteringCache({});
+		expect(second).toBe(first);
+		expect(first.getRuntimeBindings()).toEqual({backendId: backend.id, bindings: []});
+		const contribution = first.createShaderContribution({model: /** @type {SharedModel} */ ({})});
+		expect(contribution.provides).toEqual(['cache.sampleCumulativeScatteringDensity']);
+		expect(contribution.textures).toEqual([]);
+		expect(contribution.bindingRequirements).toEqual([]);
+		expect(contribution.functions[0].code).toContain('density.channels[channelIndex] = 0.0');
+		controller.dispose();
+		expect(controller.active).toBeNull();
+	});
+
+	it('rejects ambiguous asset-backed and dark cache selection', () => {
+		expect(
+			() =>
+				new DistantSunLightSource({
+					angularRadius: {value: 0.004, units: 'radians'},
+					sceneCacheAsset: createSceneCacheAsset(),
+					darkScattering: true,
+				}),
+		).toThrowError(/cannot select both/);
+	});
+
+	it('creates an attachment-owned exact offline scene-cache loader without selecting it', () => {
+		const source = createDistantSource();
+		const loader = source.createSceneCacheAssetLoader({
+			backend: /** @type {CacheGpuBackend} */ ({}),
+			assetRoot: 'https://example.invalid/cache/',
+			fetch: async () => /** @type {Response} */ ({}),
+			subtleCrypto: /** @type {SubtleCrypto} */ ({}),
+		});
+
+		expect(loader instanceof DistantSunSceneCacheAssetLoader).toBeTrue();
 	});
 
 	it('contributes its accepted source direction from live configuration', /** Called by Jasmine to exercise the named behavior. */ () => {
@@ -791,6 +848,31 @@ function createDistantSource(overrides = {}) {
 	source.configureGeometryPlacement({kind: 'distant-direction', directionToLight});
 
 	return source;
+}
+
+/** Return an exact asset selection whose model direction matches the test placement. */
+function createSceneCacheAsset() {
+	const sceneSun = {
+		id: 'test-scene',
+		instant: '2024-06-21T04:26:03.503Z',
+		directionToSourceUpEastNorth: /** @type {UnitVector3} */ ([0, 1, 0]),
+		sourceIdentity: 'test-source',
+	};
+	return {
+		assetRoot: 'https://example.invalid/cache/',
+		loadRequest: {
+			manifestPath: 'manifest.json',
+			manifestSha256: '0'.repeat(64),
+			cacheIdentity: 'test-cache',
+			expected: {
+				sceneSun,
+				atmosphereIdentity: 'test-atmosphere',
+				geometryIdentity: 'test-geometry',
+				groundIdentity: 'test-ground',
+				numericalIdentity: 'test-numerical',
+			},
+		},
+	};
 }
 
 /**

@@ -57,6 +57,14 @@ export class StellarPointSetCacheResource {
 			id: 'celestial-stellar-point-set-live-raster', owner: 'celestialCache',
 			provides: ['celestial.evaluateStellarPointSetRadiance'],
 			requires: ['runtime.initialState', 'runtime.sceneHitTexture', 'geometry.reconstructViewRay', 'geometry.resolveStellarPointSetCacheStencil', 'cache.sampleStellarPointSetIrradiance', 'celestial.evaluateRadiance'],
+			uniforms: [
+				ShaderContributions.createShaderUniformDeclaration(
+					'uStellarPointMemberCount',
+					'int',
+					'celestial.stellarPointSetMemberCount',
+					this.memberCount,
+				),
+			],
 			functions: [
 				ShaderContributions.createShaderSourceBlock('stellar-point-set-live-constants', 'declareConstants', 1, `const int STELLAR_POINT_MEMBER_COUNT = ${this.memberCount};`),
 				ShaderContributions.createShaderSourceBlock('stellar-point-set-live-functions', 'evaluateCelestialRadiance', 1, `float stellarTriangleSolidAngle(vec3 a, vec3 b, vec3 c) {
@@ -100,7 +108,7 @@ void addStellarPointSetRadiance(inout SpectralValue celestialRadiance, ShaderSta
 	if (state.sceneHitMask > 0.5) return;
 	float pixelSolidAngle = stellarPixelSolidAngle(state.textureCoordinates);
 	if (!(pixelSolidAngle > 0.0)) return;
-	for (int memberIndex = 0; memberIndex < STELLAR_POINT_MEMBER_COUNT; memberIndex += 1) {
+	for (int memberIndex = 0; memberIndex < uStellarPointMemberCount; memberIndex += 1) {
 		vec3 directionToStar = stellarPointSetDirection(memberIndex);
 		if (!stellarDirectionInsidePixel(directionToStar, state.textureCoordinates, state.ray.direction)) continue;
 		CelestialCacheBilinearStencil stencil = resolveStellarPointSetCacheStencil(directionToStar);

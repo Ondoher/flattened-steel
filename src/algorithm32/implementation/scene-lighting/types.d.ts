@@ -12,6 +12,8 @@ type ConfiguredLocalDirectLightRequest = Readonly<{
 	readonly observation: GeometryObservation;
 	/** Optional configured roster used for exact extended-source horizon support. */
 	readonly celestialSources?: CelestialSourceRoster | null;
+	/** Optional atmosphere whose source-path transmittance is applied before photopic reduction. */
+	readonly atmosphere?: AtmosphereModel;
 }>;
 
 /** Inputs for combining a fixed Color baseline with a separate exposure factor. */

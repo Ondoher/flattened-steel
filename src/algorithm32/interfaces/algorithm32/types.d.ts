@@ -17,11 +17,15 @@ type ExecutionConfig = {
  * View-path sample-distribution policy.
  *
  * - **"uniform-distance"** - Equal-distance placement along the view path.
+ * - **"quadratic-near-observer-v1"** - Quadratic interval boundaries with one midpoint sample per interval.
  * - **"tangent-density-adaptive-v1"** - Full tangent-density adaptive placement.
  * - **"tangent-density-adaptive-soft-v1"** - Soft-blended tangent-density adaptive placement.
  */
 type ShaderPathSampleDistributionKind =
-	'uniform-distance' | 'tangent-density-adaptive-v1' | 'tangent-density-adaptive-soft-v1';
+	| 'uniform-distance'
+	| 'quadratic-near-observer-v1'
+	| 'tangent-density-adaptive-v1'
+	| 'tangent-density-adaptive-soft-v1';
 
 /** Type that configures shader view-path sample placement. */
 type ShaderPathSampleDistribution = {
@@ -42,6 +46,9 @@ type LegacyConfig = {
 
 	/** Construction-time geographic observation configured on geometry and the atmospheric light source. */
 	observation: GeometryObservation;
+
+	/** Optional exact geometry placement selected by a manifest-backed source state. */
+	sourcePlacement?: GeometryResolvedLightSourcePlacement;
 
 	/** Optional celestial source roster normalized into the Native-15 execution profile. */
 	celestialSources?: CelestialSourceRoster | null;
@@ -75,6 +82,7 @@ type ExecutionProfileConfig = {
 	atmosphere?: never;
 	geometry?: never;
 	observation?: never;
+	sourcePlacement?: never;
 	groundBoundary?: never;
 	execution?: never;
 	celestialSources?: never;
@@ -263,13 +271,15 @@ type ShaderPerformanceCallback =
  */
 interface ShaderHandle {
 	/** Measure the installed common-path environment and publish its Ferwerda proxy. */
-	measureReceiverEnvironmentLight(request: Readonly<{
-		readonly THREE: unknown;
-		readonly renderer: ShaderRuntimePassRenderer;
-		readonly backend: CacheGpuBackend & CacheProbeReader;
-		readonly signal?: AbortSignal;
-		readonly diagnostics?: boolean;
-	}>): Promise<ReceiverEnvironmentLightMeasurement>;
+	measureReceiverEnvironmentLight(
+		request: Readonly<{
+			readonly THREE: unknown;
+			readonly renderer: ShaderRuntimePassRenderer;
+			readonly backend: CacheGpuBackend & CacheProbeReader;
+			readonly signal?: AbortSignal;
+			readonly diagnostics?: boolean;
+		}>,
+	): Promise<ReceiverEnvironmentLightMeasurement>;
 	/**
 	 * Call this method to prepare the installed runtime program for its first render.
 	 *

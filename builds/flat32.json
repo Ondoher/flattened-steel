@@ -4,6 +4,7 @@
 	"source": "src/flat32",
 	"index": "src/flat32/index.js",
 	"spec": "src/flat32/spec.js",
+	"router": "server/flat32-router.js",
 	"template": {
 		"source": "src/flat32/templates/index.html",
 		"destination": "dist/flat32/index.html"
@@ -14,9 +15,7 @@
 			"name": "Flat32 Browser",
 			"description": "Observable Flat32 application behavior in Chrome.",
 			"root": "src/flat32",
-			"specs": [
-				"_tests/**/*.browser.js"
-			]
+			"specs": ["_tests/**/*.browser.js"]
 		}
 	},
 	"resources": [

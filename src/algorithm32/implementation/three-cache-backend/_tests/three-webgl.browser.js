@@ -359,6 +359,38 @@ describe('Algorithm32 Three WebGL browser lane', /** Called by Jasmine to regist
 		);
 	});
 
+	it('eagerly uploads and installs immutable R32F and R16UI scene assets', () => {
+		const backend = new ThreeCacheBackend({THREE, renderer});
+		const values = backend.uploadImmutableTexture({
+			id: 'browser-scene-values',
+			storage: {format: 'R32F', width: 2, height: 2, layers: 2},
+			values: new Float32Array([1, 2, 3, 4, 5, 6, 7, 8]),
+			valueKey: 'cache.sceneCumulativeScatteringDensity',
+		});
+		const index = backend.uploadImmutableTexture({
+			id: 'browser-scene-index',
+			storage: {format: 'R16UI', width: 4, height: 1, layers: 1},
+			values: new Uint16Array([0, 1, 1, 2]),
+			valueKey: 'cache.sceneLogicalToUniqueDirection',
+		});
+		const uniforms = {
+			'cache.sceneCumulativeScatteringDensity': {value: null},
+			'cache.sceneLogicalToUniqueDirection': {value: null},
+		};
+		backend.installRuntimeBindings({
+			bindings: {backendId: backend.id, bindings: [values.runtimeBinding, index.runtimeBinding]},
+			uniforms,
+		});
+
+		expect(uniforms['cache.sceneCumulativeScatteringDensity'].value).toEqual(jasmine.any(THREE.DataArrayTexture));
+		expect(uniforms['cache.sceneLogicalToUniqueDirection'].value).toEqual(jasmine.any(THREE.DataTexture));
+		expect(context.getError()).toBe(context.NO_ERROR);
+
+		values.dispose();
+		index.dispose();
+		backend.dispose();
+	});
+
 	it('writes and reads explicit R32F array layers while restoring renderer state', /** Called by Jasmine to exercise the named behavior. */ () => {
 		const sentinel = new THREE.WebGLRenderTarget(2, 2, {
 			depthBuffer: false,

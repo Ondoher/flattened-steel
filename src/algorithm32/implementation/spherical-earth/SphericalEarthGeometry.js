@@ -100,6 +100,27 @@ export class SphericalEarthGeometry {
 		return this.expressCelestialDirectionInModel(sourceBodyDirection, observation);
 	}
 
+	/**
+	 * Resolve the live distant-Sun placement and observer solar zenith from one
+	 * observation before binding a source. This is the authoritative placement
+	 * calculation used by both Flat32 cache selection and configureLightSource().
+	 *
+	 * @param {GeometryObservation} observation - The normalized observation.
+	 * @returns {Readonly<{directionToSourceModel: UnitVector3, observerSolarZenith: Angle}>} - Live scene state.
+	 */
+	resolveDistantSunSceneState(observation) {
+		const directionToSourceModel = this._resolveDirectionToSource(observation);
+		const solarZenithCosine = Math.max(
+			-1,
+			Math.min(1, VectorMath.dot(directionToSourceModel, this._shapeConfiguration.observerUpDirection)),
+		);
+
+		return Object.freeze({
+			directionToSourceModel,
+			observerSolarZenith: AngleMath.inRadians(Math.acos(solarZenithCosine)),
+		});
+	}
+
 	/** Require construction-time light-source placement. */
 	_assertConfigured() {
 		if (this._configuration === null) {
@@ -247,7 +268,7 @@ export class SphericalEarthGeometry {
 		const placement = /** @type {Readonly<{kind: 'distant-direction', directionToLight: UnitVector3}>} */ (
 			request.placement ?? {
 				kind: 'distant-direction',
-				directionToLight: this._resolveDirectionToSource(request.observation),
+				directionToLight: this.resolveDistantSunSceneState(request.observation).directionToSourceModel,
 			}
 		);
 		GeometryDirections.directionTuple(placement.directionToLight, 'SphericalEarthGeometry directionToLight');

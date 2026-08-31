@@ -284,6 +284,7 @@ class FakeRenderer {
 		this.renderCount = 0;
 		this.throwOnCompile = false;
 		this.throwOnRender = false;
+		this.initializedTextures = [];
 	}
 
 	/**
@@ -401,6 +402,11 @@ class FakeRenderer {
 		const scalar = scene.children[0].material.uniforms.scalarValue?.value ?? 0;
 		this.target.layerValues.set(this.layer, scalar);
 	}
+
+	/** @param {FakeTexture} texture - Texture accepted for eager upload. */
+	initTexture(texture) {
+		this.initializedTextures.push(texture);
+	}
 }
 
 /** Fake three constant. */
@@ -419,10 +425,12 @@ const FAKE_THREE = {
 	WebGLArrayRenderTarget: FakeArrayRenderTarget,
 	ClampToEdgeWrapping: 'clamp',
 	FloatType: 'float',
+	UnsignedShortType: 'unsigned-short',
 	GLSL3: 'glsl3',
 	NearestFilter: 'nearest',
 	NoBlending: 'none',
 	RedFormat: 'red',
+	RedIntegerFormat: 'red-integer',
 };
 
 /**
@@ -636,6 +644,46 @@ describe('ThreeCacheBackend', /** Called by Jasmine to register the named test s
 		field.dispose();
 		backend.dispose();
 		backend.dispose();
+	});
+
+	it('uploads and installs immutable R32F and R16UI textures as opaque bindings', () => {
+		const {renderer} = createHarness();
+		const backend = new ThreeCacheBackend({THREE: FAKE_THREE, renderer});
+		const values = backend.uploadImmutableTexture({
+			id: 'scene-values',
+			storage: {format: 'R32F', width: 2, height: 2, layers: 2},
+			values: new Float32Array(8),
+			valueKey: 'cache.sceneCumulativeScatteringDensity',
+		});
+		const index = backend.uploadImmutableTexture({
+			id: 'scene-index',
+			storage: {format: 'R16UI', width: 4, height: 1, layers: 1},
+			values: new Uint16Array([0, 1, 1, 2]),
+			valueKey: 'cache.sceneLogicalToUniqueDirection',
+		});
+		const uniforms = {
+			'cache.sceneCumulativeScatteringDensity': {value: null},
+			'cache.sceneLogicalToUniqueDirection': {value: null},
+		};
+		backend.installRuntimeBindings({
+			bindings: {backendId: backend.id, bindings: [values.runtimeBinding, index.runtimeBinding]},
+			uniforms,
+		});
+
+		expect(renderer.initializedTextures).toHaveSize(2);
+		expect(renderer.initializedTextures[0]).toEqual(jasmine.any(FakeDataArrayTexture));
+		expect(renderer.initializedTextures[0].internalFormat).toBe('R32F');
+		expect(renderer.initializedTextures[1]).toEqual(jasmine.any(FakeDataTexture));
+		expect(renderer.initializedTextures[1].internalFormat).toBe('R16UI');
+		expect(uniforms['cache.sceneCumulativeScatteringDensity'].value).toBe(renderer.initializedTextures[0]);
+		expect(uniforms['cache.sceneLogicalToUniqueDirection'].value).toBe(renderer.initializedTextures[1]);
+
+		values.dispose();
+		values.dispose();
+		index.dispose();
+		backend.dispose();
+		expect(renderer.initializedTextures[0].disposeCount).toBe(1);
+		expect(renderer.initializedTextures[1].disposeCount).toBe(1);
 	});
 
 	it('lets Three own GLSL versioning without re-emitting assembler-owned defines', /**

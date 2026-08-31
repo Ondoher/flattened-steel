@@ -64,15 +64,21 @@ export class DistantSunCpuCache {
 	}
 
 	/**
-	 * Call this method to sample all wavelengths from geometry/domain-resolved physical stencils.
+	 * Call this method to sample all wavelengths from pairing-neutral physical context.
 	 *
-	 * @param {ScatteringCacheSampleRequest} request - Supplies resolved native-position and W27 stencils.
+	 * @param {ScatteringCacheSampleRequest} request - Supplies physical context and the active geometry interpreter.
 	 * @returns {SpectralScatteringDensityPacket} - Return cumulative local scattering density.
 	 */
-	sampleResolved(request) {
+	sampleCumulativeScatteringDensity(request) {
 		const reader = this._requireCumulativeReader();
-		const positionStencil = request.positionStencil;
-		const directionStencil = request.directionStencil;
+		const positionStencil = request.geometry.resolveScatteringCachePositionStencil({
+			position: request.context.position,
+			atmosphereCoordinate: request.context.atmosphereCoordinate,
+		});
+		const directionStencil = request.geometry.resolveScatteringCacheDirectionStencil({
+			position: request.context.position,
+			physicalOutgoingDirection: request.context.physicalOutgoingDirection,
+		});
 		const values = new Float64Array(this._spectralBasis.channelCount);
 
 		for (let positionTap = 0; positionTap < positionStencil.indices.length; positionTap += 1) {

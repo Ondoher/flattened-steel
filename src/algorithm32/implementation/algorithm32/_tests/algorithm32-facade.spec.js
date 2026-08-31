@@ -650,7 +650,7 @@ describe('Algorithm32', /** Called by Jasmine to register the named test suite. 
 				/**
 				 * Call this method to sample resolved.
 				 * @returns - The result produced by the operation.
-				 */ sampleResolved() {
+				 */ sampleCumulativeScatteringDensity() {
 					return spectralPacket(
 						SPECTRAL_QUANTITIES.SCATTERING_DENSITY,
 						SPECTRAL_UNITS.SCATTERING_DENSITY,

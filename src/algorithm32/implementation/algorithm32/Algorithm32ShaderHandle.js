@@ -169,7 +169,8 @@ export class Algorithm32ShaderHandle {
 		this._assertUsable();
 		const buildResult = this._buildResult;
 		const scatteringCache = buildResult.scatteringCache;
-		if (!scatteringCache) throw new Error('Receiver environment-light measurement requires an active scattering cache.');
+		if (!scatteringCache)
+			throw new Error('Receiver environment-light measurement requires an active scattering cache.');
 		const measurementModel = Object.create(this._facade._model);
 		Object.defineProperty(measurementModel, 'celestialSources', {value: null, enumerable: true});
 		const sampler = new ReceiverEnvironmentLightTransportSampler({
@@ -194,21 +195,43 @@ export class Algorithm32ShaderHandle {
 		const gpuRadiances = await sampleGpuRadiances();
 		const resident = await residentPromise;
 		const basis = this._facade._model.spectral.basis;
+		const geometry = this._facade._model.geometry;
 		const cpuCache = {
 			sampleProvenanceIdentity: 'receiver-environment-live-cache-readback-oracle',
-			sampleResolved(request) {
+			sampleCumulativeScatteringDensity(request) {
+				const positionStencil = geometry.resolveScatteringCachePositionStencil({
+					position: request.context.position,
+					atmosphereCoordinate: request.context.atmosphereCoordinate,
+				});
+				const directionStencil = geometry.resolveScatteringCacheDirectionStencil({
+					position: request.context.position,
+					physicalOutgoingDirection: request.context.physicalOutgoingDirection,
+				});
 				const values = new Float64Array(basis.channelCount);
-				for (let positionTap = 0; positionTap < request.positionStencil.indices.length; positionTap += 1) {
-					for (let directionTap = 0; directionTap < request.directionStencil.indices.length; directionTap += 1) {
-						const positionIndex = request.positionStencil.indices[positionTap];
-						const directionIndex = request.directionStencil.indices[directionTap];
-						const weight = request.positionStencil.weights[positionTap] * request.directionStencil.weights[directionTap];
+				for (let positionTap = 0; positionTap < positionStencil.indices.length; positionTap += 1) {
+					for (let directionTap = 0; directionTap < directionStencil.indices.length; directionTap += 1) {
+						const positionIndex = positionStencil.indices[positionTap];
+						const directionIndex = directionStencil.indices[directionTap];
+						const weight = positionStencil.weights[positionTap] * directionStencil.weights[directionTap];
 						for (let channelIndex = 0; channelIndex < basis.channelCount; channelIndex += 1) {
-							values[channelIndex] += resident.values[(channelIndex * resident.storage.height + positionIndex) * resident.storage.width + directionIndex] * weight;
+							values[channelIndex] +=
+								resident.values[
+									(channelIndex * resident.storage.height + positionIndex) * resident.storage.width +
+										directionIndex
+								] * weight;
 						}
 					}
 				}
-				return /** @type {SpectralScatteringDensityPacket} */ (new SpectralPacket({basis, quantity: SPECTRAL_QUANTITIES.SCATTERING_DENSITY, units: SPECTRAL_UNITS.SCATTERING_DENSITY, semantics: basis.semantics, values, provenanceIdentity: 'receiver-environment-live-cache-readback-oracle'}));
+				return /** @type {SpectralScatteringDensityPacket} */ (
+					new SpectralPacket({
+						basis,
+						quantity: SPECTRAL_QUANTITIES.SCATTERING_DENSITY,
+						units: SPECTRAL_UNITS.SCATTERING_DENSITY,
+						semantics: basis.semantics,
+						values,
+						provenanceIdentity: 'receiver-environment-live-cache-readback-oracle',
+					})
+				);
 			},
 			dispose() {},
 		};
@@ -216,11 +239,21 @@ export class Algorithm32ShaderHandle {
 			reference: new Reference({model: this._facade._model, scatteringCache: cpuCache}),
 		}).sample();
 		const cpuIrradiance = this._facade._localLightLevelCalculator.measureEnvironmentIrradiance({
-			samples: cpuRadiances.map((spectralRadiance, index) => ({spectralRadiance, irradianceWeightSteradians: RECEIVER_ENVIRONMENT_LIGHT_QUADRATURE[index].irradianceWeightSteradians})),
+			samples: cpuRadiances.map((spectralRadiance, index) => ({
+				spectralRadiance,
+				irradianceWeightSteradians: RECEIVER_ENVIRONMENT_LIGHT_QUADRATURE[index].irradianceWeightSteradians,
+			})),
 		});
-		const cpuBrightnessProxy = this._facade._localLightLevelCalculator.measureDirectIrradiance(cpuIrradiance).adaptingLuminanceProxy;
+		const cpuBrightnessProxy =
+			this._facade._localLightLevelCalculator.measureDirectIrradiance(cpuIrradiance).adaptingLuminanceProxy;
 		const reference = new Reference({model: this._facade._model, scatteringCache: cpuCache});
-		const ferwerda = new FerwerdaColorDisplayModel({adaptation: {kind: FERWERDA_ADAPTATION_KINDS.BRIGHTNESS_PROXY, luminance: cpuBrightnessProxy, provenanceId: 'live-stage-diagnostic'}});
+		const ferwerda = new FerwerdaColorDisplayModel({
+			adaptation: {
+				kind: FERWERDA_ADAPTATION_KINDS.BRIGHTNESS_PROXY,
+				luminance: cpuBrightnessProxy,
+				provenanceId: 'live-stage-diagnostic',
+			},
+		});
 		const bruneton = new BrunetonColorDisplayModel();
 		const camera = /** @type {any} */ (buildResult.setup.camera);
 		camera.updateProjectionMatrix?.();
@@ -234,14 +267,37 @@ export class Algorithm32ShaderHandle {
 		].map(({id, ndc}) => {
 			const point = new THREE.Vector3(ndc[0], ndc[1], 0.5).unproject(camera);
 			const sceneDirection = point.sub(cameraPosition).normalize();
-			const modelDirection = this._facade._model.geometry.mapObserverLocalSceneDirectionToModelDirection([sceneDirection.x, sceneDirection.y, sceneDirection.z]);
+			const modelDirection = this._facade._model.geometry.mapObserverLocalSceneDirectionToModelDirection([
+				sceneDirection.x,
+				sceneDirection.y,
+				sceneDirection.z,
+			]);
 			const spectrum = reference.evaluate({viewRay: {direction: modelDirection}}).pathRadiance;
 			const linearSrgb = ferwerda.radianceToLinearSrgb(spectrum);
-			const luminance = linearSrgb.reduce((sum, value, index) => sum + Math.max(0, value) * [0.2126, 0.7152, 0.0722][index], 0);
+			const luminance = linearSrgb.reduce(
+				(sum, value, index) => sum + Math.max(0, value) * [0.2126, 0.7152, 0.0722][index],
+				0,
+			);
 			const cone = linearSrgb.map((value) => ferwerda.parameters.coneScale * Math.max(0, value));
 			const rod = ferwerda.parameters.rodScale * ferwerda.parameters.rodBlend * luminance;
-			const normalized = cone.map((value) => Math.min(1, Math.max(0, (value + rod) / ferwerda.parameters.displayMaximumLuminance)));
-			return {id, ndc, spectrum: Array.from(spectrum.values), linearSrgb, luminance, parameters: ferwerda.parameters, cone, rod, normalized, ferwerdaDisplayRgb: ferwerda.linearSrgbToDisplayRgb(linearSrgb), brunetonDisplayRgb: bruneton.linearSrgbToDisplayRgb(/** @type {readonly [number, number, number]} */ (/** @type {unknown} */ (linearSrgb)))};
+			const normalized = cone.map((value) =>
+				Math.min(1, Math.max(0, (value + rod) / ferwerda.parameters.displayMaximumLuminance)),
+			);
+			return {
+				id,
+				ndc,
+				spectrum: Array.from(spectrum.values),
+				linearSrgb,
+				luminance,
+				parameters: ferwerda.parameters,
+				cone,
+				rod,
+				normalized,
+				ferwerdaDisplayRgb: ferwerda.linearSrgbToDisplayRgb(linearSrgb),
+				brunetonDisplayRgb: bruneton.linearSrgbToDisplayRgb(
+					/** @type {readonly [number, number, number]} */ (/** @type {unknown} */ (linearSrgb)),
+				),
+			};
 		});
 		return {
 			...measurement,

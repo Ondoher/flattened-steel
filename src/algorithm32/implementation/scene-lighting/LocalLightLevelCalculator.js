@@ -37,9 +37,9 @@ export class LocalLightLevelCalculator {
 	/**
 	 * Measure the configured primary source at the configured receiver.
 	 *
-	 * This provisional input includes source-owned incident scale, finite-source
-	 * distance falloff, and geometry-owned horizon support. Atmospheric attenuation
-	 * and secondary-source aggregation remain separate future inputs.
+	 * This input includes source-owned incident scale, finite-source distance
+	 * falloff, geometry-owned horizon support, and atmosphere-owned source-path
+	 * transmittance when the request supplies an atmosphere.
 	 *
 	 * @param {ConfiguredLocalDirectLightRequest} request - Geometry, observation, and optional roster.
 	 * @returns {LocalDirectLightLevel} - Provisional receiver-local direct-light record.
@@ -77,7 +77,7 @@ export class LocalLightLevelCalculator {
 						: 0;
 		}
 
-		const supportedIrradiance = /** @type {SpectralIrradiancePacket} */ (
+		let supportedIrradiance = /** @type {SpectralIrradiancePacket} */ (
 			new SpectralPacket({
 				basis: sourceIrradiance.basis,
 				quantity: sourceIrradiance.quantity,
@@ -87,6 +87,33 @@ export class LocalLightLevelCalculator {
 				provenanceIdentity: `receiver-local-direct-source:${sourceIrradiance.contentHash}:${visibleFraction}`,
 			})
 		);
+		if (request.atmosphere) {
+			const metadata = /** @type {{distanceFromSource?: Distance | null}} */ (directSample.metadata ?? {});
+			const sourcePath = geometry.resolveAtmospherePath({
+				ray: {origin: observerPosition, direction: directSample.directionToLight},
+				sourcePathLimit: {
+					maxDistance: metadata.distanceFromSource ?? null,
+					reason:
+						metadata.distanceFromSource === undefined || metadata.distanceFromSource === null
+							? 'distant-source-to-atmosphere-boundary'
+							: 'finite-local-source-distance',
+				},
+			});
+			const transmittance =
+				directSample.sourceTransmittance ?? request.atmosphere.integrateOpticalDepth(sourcePath).transmittance;
+			supportedIrradiance = /** @type {SpectralIrradiancePacket} */ (
+				new SpectralPacket({
+					basis: supportedIrradiance.basis,
+					quantity: supportedIrradiance.quantity,
+					units: supportedIrradiance.units,
+					semantics: supportedIrradiance.semantics,
+					values: supportedIrradiance.values.map(
+						(value, channelIndex) => value * transmittance.values[channelIndex],
+					),
+					provenanceIdentity: `atmosphere-transmitted-direct-source:${supportedIrradiance.contentHash}:${transmittance.contentHash}`,
+				})
+			);
+		}
 		return this.measureDirectIrradiance(supportedIrradiance);
 	}
 

@@ -119,6 +119,10 @@ function expectDomainExtents(owner, faceWidth, directionCount, uniqueCount) {
 	expect(owner.faceNodeCount).toBe(faceWidth * faceWidth);
 	expect(owner.directionCount).toBe(directionCount);
 	expect(owner.unitVectors).toHaveSize(directionCount);
+	expect(owner.uniqueUnitVectors).toHaveSize(uniqueCount);
+	expect(owner.logicalToUniqueDirectionIndices).toBeInstanceOf(Uint16Array);
+	expect(owner.logicalToUniqueDirectionIndices).toHaveSize(directionCount);
+	expect(owner.uniqueDirectionCount).toBe(uniqueCount);
 	expect(
 		new Set(
 			owner.unitVectors.map(
@@ -130,4 +134,17 @@ function expectDomainExtents(owner, faceWidth, directionCount, uniqueCount) {
 			),
 		).size,
 	).toBe(uniqueCount);
+	for (let logicalIndex = 0; logicalIndex < directionCount; logicalIndex += 1) {
+		expect(owner.uniqueUnitVectors[owner.logicalToUniqueDirectionIndices[logicalIndex]]).toBe(
+			owner.unitVectors.find(
+				/**
+				 * Called by Array.prototype.find to locate the first exact Float32 direction representative.
+				 * @param vector - The candidate physical direction.
+				 * @returns - Whether the candidate owns the logical direction's exact seam key.
+				 */
+				(vector) =>
+					vector.map(Math.fround).join(',') === owner.unitVectors[logicalIndex].map(Math.fround).join(','),
+			),
+		);
+	}
 }
