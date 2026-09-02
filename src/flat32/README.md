@@ -47,8 +47,8 @@ is `/flat32/api/distant-sun-scene-cache`; returned immutable files live below
 `/flat32/scene-caches/`. The server validates the package report and catalog
 hash once, and the browser independently validates every selected manifest and
 payload. Set `FLAT32_DISTANT_SUN_CACHE_ROOT` to the deployed package-set root;
-local omission selects the qualified generated package set under
-`tmp/extraterrestrial/production-adoption`.
+local omission selects the qualified generated package set at
+`server/flat32/data/one-degree-bin-covered-runtime-packages-20260830-1`.
 
 The retained direct-scene and composed-output pixels are diagnostic telemetry,
 not publication tests. Completely black scene and output color are valid;
@@ -89,6 +89,13 @@ location/time control table, framebuffer measurement, or pixel/source class.
 The demonstration's distant-Sun ambient light reaches exact zero with its
 twilight scale. Color preserves semantic zero and contains no separate rod or
 nighttime-fill response.
+
+Color, celestial enablement, stellar catalog, and ordered presentation filters
+now use independent exact selections. `basic-bruneton` no longer disables
+celestial sources. The future `color-reset-slope-078-p9`, brightest-2,000, and
+enabled-filter selections are recognized but fail closed until their owning
+production phases implement them; none aliases to the current source-luminance-
+lift or brightest-500 behavior.
 
 The current Stage 9.6 browser lane passes `3/3` in Chrome Headless 150 on
 D3D11 at N4. It covers the application transition/source/update path and both

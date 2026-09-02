@@ -8,6 +8,7 @@ import {PointerLookController} from './PointerLookController.js';
 import {SphericalDistantMode} from './SphericalDistantMode.js';
 import {createDistantSunSceneState} from './DistantSunSceneState.js';
 import {ThreeSceneRuntime} from './ThreeSceneRuntime.js';
+import {resolveFlat32ProductionSelections} from './Flat32ProductionSelections.js';
 import {DEFAULT_NATIVE_PRODUCTION_PROFILE} from '../algorithm32/profiles/native-15/native-15-profile.js';
 import {
 	FLAT32_DELAYED_SCENE_REFRESH_MILLISECONDS,
@@ -20,23 +21,11 @@ import {
 export class Flat32Application {
 	/**
 	 * @param {HTMLElement} root - Hosts the application.
-	 * @param {Readonly<{
-	 *   cameraFieldOfViewDegrees?: number,
-	 *   initialFlatTimeIndex?: number,
-	 *   initialModeKind?: 'spherical-distant' | 'flat-local',
-	 *   maximumScatteringOrder?: SupportedCacheScatteringOrder,
-	 *   reviewObjectsEnabled?: boolean,
-	 *   colorDisplayModelConfiguration?: object,
-	 *   cameraDirectionScene?: readonly [number, number, number],
-	 *   performanceCallback?: ShaderPerformanceCallback,
-	 *   resolveDistantSunSceneCacheAsset?: (
-	 *     solarZenithDegrees: number,
-	 *     request?: Readonly<{signal?: AbortSignal}>
-	 *   ) => Flat32DistantSunCacheResolution | Promise<Flat32DistantSunCacheResolution>
-	 * }>} [configuration] - Supplies explicit diagnostic overrides. Omission
+	 * @param {Flat32ApplicationConfiguration} [configuration] - Supplies explicit diagnostic overrides. Omission
 	 * retains the ordinary production application configuration.
 	 */
 	constructor(root, configuration = {}) {
+		const productionSelections = resolveFlat32ProductionSelections(configuration);
 		this._view = new Flat32View(root);
 		this._cameraFieldOfViewDegrees = configuration.cameraFieldOfViewDegrees ?? null;
 		this._initialFlatTimeIndex = configuration.initialFlatTimeIndex ?? 0;
@@ -45,7 +34,7 @@ export class Flat32Application {
 			configuration.maximumScatteringOrder ??
 			DEFAULT_NATIVE_PRODUCTION_PROFILE.numerical.cacheConstruction.maximumScatteringOrder;
 		this._reviewObjectsEnabled = configuration.reviewObjectsEnabled !== false;
-		this._colorDisplayModelConfiguration = configuration.colorDisplayModelConfiguration;
+		this._productionSelections = productionSelections;
 		this._cameraDirectionScene = configuration.cameraDirectionScene ?? null;
 		this._performanceCallback = configuration.performanceCallback;
 		this._resolveDistantSunSceneCacheAsset =
@@ -221,7 +210,7 @@ export class Flat32Application {
 			maximumScatteringOrder: this._maximumScatteringOrder,
 			sceneCacheAsset,
 			distantSunCacheState,
-			colorDisplayModelConfiguration: this._colorDisplayModelConfiguration,
+			...this._productionSelections,
 		});
 	}
 
@@ -258,7 +247,7 @@ export class Flat32Application {
 			sceneScale: ATMOSPHERE_SCENE_SCALE,
 			observation: state.observation,
 			maximumScatteringOrder: this._maximumScatteringOrder,
-			colorDisplayModelConfiguration: this._colorDisplayModelConfiguration,
+			...this._productionSelections,
 		});
 	}
 

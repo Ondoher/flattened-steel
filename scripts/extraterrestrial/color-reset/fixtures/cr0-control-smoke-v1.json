@@ -1,0 +1,78 @@
+{
+  "schemaId": "algorithm32-color-reset-cr0-control-smoke-input-v1",
+  "location": {
+    "name": "San Jose",
+    "latitudeDegrees": 37.3382,
+    "longitudeDegrees": -121.8863
+  },
+  "observer": {
+    "heightMeters": 1.7,
+    "upDirection": [0, 0, 1]
+  },
+  "camera": {
+    "widthPixels": 640,
+    "heightPixels": 400,
+    "verticalFieldOfViewDegrees": 78,
+    "nearSceneUnits": 0.002,
+    "farSceneUnits": 500,
+    "viewAzimuthDegrees": -59.99625193137896,
+    "viewElevationDegrees": 5,
+    "aim": "fixed San Jose sunset bearing"
+  },
+  "scenes": [
+    {
+      "id": "solar-noon",
+      "label": "Solar noon",
+      "timeIso": "2024-06-20T20:08:00.000Z"
+    },
+    {
+      "id": "sunset-plus-60-minutes",
+      "label": "One hour after sunset",
+      "timeIso": "2024-06-21T04:26:03.503Z"
+    }
+  ],
+  "displayControls": [
+    {
+      "id": "bruneton",
+      "label": "Unchanged Bruneton",
+      "configuration": {
+        "model": "bruneton-control"
+      }
+    },
+    {
+      "id": "production-lift",
+      "label": "Current production luminance lift",
+      "configuration": {}
+    }
+  ],
+  "physicalControls": {
+    "spectralBasis": "algorithm32-native15",
+    "cacheNumericalIdentity": "algorithm32-native48-z180-w27-f68-native15-n4-q30-ozone-v1",
+    "maximumScatteringOrder": 4,
+    "pathIntervalCount": 30,
+    "pathSampleDistribution": "quadratic-near-observer-v1",
+    "sourceAngularRadiusRadians": 0.004675,
+    "sceneScaleMetersPerSceneUnit": 1000,
+    "sceneDepthMaxMeters": 500000,
+    "ground": "spherical geometry endpoint with black visual foreground",
+    "groundWidthSegments": 192,
+    "groundHeightSegments": 96,
+    "celestialSourcesEnabled": false,
+    "sceneObjects": false
+  },
+  "outputs": {
+    "individualPngs": [
+      "captures/bruneton-solar-noon.png",
+      "captures/production-lift-solar-noon.png",
+      "captures/bruneton-sunset-plus-60-minutes.png",
+      "captures/production-lift-sunset-plus-60-minutes.png"
+    ],
+    "contactSheet": "figures/cr0-control-smoke-contact-sheet.png",
+    "differencePngs": [
+      "figures/absolute-difference-solar-noon.png",
+      "figures/absolute-difference-sunset-plus-60-minutes.png"
+    ],
+    "panelIdentities": "evidence/panel-identities.json",
+    "progress": "progress.json"
+  }
+}

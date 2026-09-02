@@ -10,6 +10,10 @@ import {
 } from '../algorithm32/sampling-domains/index.js';
 import {DEFAULT_NATIVE_PRODUCTION_PROFILE} from '../algorithm32/profiles/native-15/native-15-profile.js';
 import {createFlat32ColorDisplayModel} from './Flat32ColorDisplayModel.js';
+import {
+	requireImplementedFlat32ProductionSelections,
+	resolveFlat32ProductionSelections,
+} from './Flat32ProductionSelections.js';
 
 /**
  * Own the fixed spherical-geometry/distant-Sun Algorithm32 application mode.
@@ -28,11 +32,15 @@ export class SphericalDistantMode {
 	 *   sceneCacheAsset?: DistantSunSceneCacheAssetSelection,
 	 *   distantSunCacheState?: 'ready' | 'dark',
 	 *   celestialSourcesEnabled?: boolean,
-	 *   colorDisplayModelConfiguration?: object
+	 *   colorDisplayModelConfiguration?: Flat32ColorDisplayModelConfiguration,
+	 *   stellarCatalog?: Flat32StellarCatalogId,
+	 *   presentationFilters?: readonly Flat32PresentationFilterConfiguration[]
 	 * }>} configuration - Supplies the Flat32 application selections that are
 	 * owned by its constants module.
 	 */
 	constructor(configuration) {
+		const selections = resolveFlat32ProductionSelections(configuration);
+		requireImplementedFlat32ProductionSelections(selections, {stellarCatalogUsed: true});
 		const profile = DEFAULT_NATIVE_PRODUCTION_PROFILE;
 		const spectralBasis = profile.spectral.basis;
 		const atmosphere = new CanonicalAtmosphere();
@@ -62,12 +70,8 @@ export class SphericalDistantMode {
 			atmosphere,
 			geometry,
 			groundBoundary: null,
-			celestialSources:
-				configuration.celestialSourcesEnabled === false ||
-				configuration.colorDisplayModelConfiguration?.model === 'bruneton-control'
-					? null
-					: celestialSources,
-			color: createFlat32ColorDisplayModel(configuration.colorDisplayModelConfiguration),
+			celestialSources: selections.celestialSourcesEnabled ? celestialSources : null,
+			color: createFlat32ColorDisplayModel(selections.colorDisplayModelConfiguration),
 			observation: configuration.sceneState.observation,
 			sourcePlacement: {
 				kind: /** @type {const} */ ('distant-direction'),
@@ -79,9 +83,9 @@ export class SphericalDistantMode {
 				maximumScatteringOrder: configuration.maximumScatteringOrder,
 			},
 		});
-		if (configuration.colorDisplayModelConfiguration?.model === 'ferwerda-control') {
+		if (selections.colorDisplayModelConfiguration.model === 'ferwerda-control') {
 			this._algorithm32.setAdaptingLuminance({
-				value: configuration.colorDisplayModelConfiguration.adaptationLuminanceCdPerSquareMeter,
+				value: selections.colorDisplayModelConfiguration.adaptationLuminanceCdPerSquareMeter,
 				units: 'cd m^-2',
 			});
 		}

@@ -1,0 +1,46 @@
+{
+  "schemaId": "algorithm32-color-reset-cr6f-brightest-2000-spectral-materialization-input-v1",
+  "experiment": {
+    "increment": "CR6F",
+    "slug": "cr6f-brightest-2000-spectral-materialization",
+    "question": "Can all 2,000 accepted roster members receive finite nonnegative Native15 packets while preserving the existing 1,993-member policy and exactly reconstructing catalog Johnson B-V and V?"
+  },
+  "parent": {
+    "runId": "000047-cr6b-brightest-2000-catalog-proof",
+    "artifactSetSha256": "ce50de53045f1e6f0ef33dcdc2b935a7023d5e28095b3d5f13add4980c370c57",
+    "rosterArtifactPath": "data/cr6b-brightest-2000-roster.json",
+    "rosterSha256": "6316eff663c7e41b27eb969f557ae32f9617f67e3dd40cd8cf396e1d306a1f3c"
+  },
+  "policy": {
+    "id": "pickles-bracketed-plus-photometry-constrained-red-proxy-v1",
+    "supportedMembers": "exact retained pickles-bracketed-bv-johnson-bv-vega-v2 equation",
+    "redProxyEquation": "S(lambda)=Sbase(lambda)*(lambda/lambdaV)^alpha; solve alpha for catalog Johnson B-V; normalize Johnson V to catalog Vmag",
+    "claimLimit": "The seven proxy packets reconstruct catalog B-V and V and provide a smooth Native15 continuum; carbon-star molecular bands and time variability are not inferred."
+  },
+  "redProxies": [
+    {"hr": 868, "baseTemplateId": "ukm7iii", "kind": "oxygen-rich-type-matched-tilted-pickles", "claimLimit": "M7IIIe continuum proxy; emission-line and variability detail unclaimed."},
+    {"hr": 8316, "baseTemplateId": "ukm2i", "kind": "oxygen-rich-type-matched-tilted-pickles", "claimLimit": "M2-Ia continuum proxy; variability detail unclaimed."},
+    {"hr": 1845, "baseTemplateId": "ukm2i", "kind": "oxygen-rich-type-matched-tilted-pickles", "claimLimit": "M2Iab-Ib continuum proxy."},
+    {"hr": 4163, "baseTemplateId": "ukm10iii", "kind": "carbon-color-constrained-continuum-proxy", "claimLimit": "C5II catalog-color proxy; carbon molecular bands unclaimed."},
+    {"hr": 2289, "baseTemplateId": "ukk4i", "kind": "oxygen-rich-type-matched-tilted-pickles", "claimLimit": "K5-M0Iab-Ib continuum proxy."},
+    {"hr": 4846, "baseTemplateId": "ukm10iii", "kind": "carbon-color-constrained-continuum-proxy", "claimLimit": "C7I catalog-color proxy; carbon molecular bands unclaimed."},
+    {"hr": 9004, "baseTemplateId": "ukm10iii", "kind": "carbon-color-constrained-continuum-proxy", "claimLimit": "C5II catalog-color proxy; carbon molecular bands unclaimed."}
+  ],
+  "gates": {
+    "memberCount": 2000,
+    "retainedPolicyCount": 1993,
+    "proxyCount": 7,
+    "maximumMagnitudeResidual": 1e-10,
+    "maximumBMinusVResidual": 1e-10,
+    "finiteNonnegativePackets": true,
+    "exactRosterOrder": true,
+    "noOmissionOrClamp": true
+  },
+  "outputs": [
+    "data/cr6f-brightest-2000-native15-packets.json",
+    "evidence/cr6f-spectral-materialization-proof.json",
+    "figures/cr6f-seven-proxy-spectra.svg",
+    "figures/cr6f-bv-reconstruction.svg",
+    "figures/cr6f-materialization-summary.svg"
+  ]
+}

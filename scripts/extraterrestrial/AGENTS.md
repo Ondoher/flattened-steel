@@ -14,13 +14,27 @@ below:
 ../../tmp/extraterrestrial/
 ```
 
+The owner-approved color-reset lane further isolates every generated artifact,
+including runs, browser profiles, bundles, captures, logs, and intermediates,
+below:
+
+```text
+../../tmp/extraterrestrial/color-reset/
+```
+
+Its immutable runs use the independent
+`color-reset/runs/NNNNNN-descriptive-kebab-slug` ledger. The namespace starts
+at `000001` and has its own counter and lock; every other canonical run rule is
+unchanged. A non-default run reference must include the namespace or complete
+contained path because its six-digit id is namespace-local.
+
 This includes runs, builds, browser bundles, profiles, caches, reports, GPU
 readbacks, captures, diagnostics, renders, logs, temporary files, and
 generated intermediates. Never write such output below
 `scripts/extraterrestrial/` or commit it. A later contained experiment may
 reuse generated artifacts as data, cache content, configuration, fixtures,
 comparison evidence, or oracle input. The sole reuse restriction is preserving
-the prior evidence: never modify, overwrite, delete, or reopen the source run
+the prior evidence: never modify, overwrite, discard, or reopen the source run
 or any source artifact; write copies and derivatives into a new run. Record the
 source and compatibility identities needed to substantiate a claim, but treat
 that as evidence quality rather than permission to reuse. Every evidence
@@ -28,6 +42,15 @@ artifact must retain its derivation: parent inputs and identities, the
 operation or equation applied, implementation and tool versions, material
 parameters, and the resulting artifact identity. A post-run verifier may also
 inspect the output it is validating.
+
+The project-owner-directed pre-color-reset archive relocation may remove a
+historical live copy only after its repository-relative contents have been
+placed in an accessible ZIP below `archives/`, every entry and hash has been
+verified, and the archive-set index records the source and restoration path.
+The ZIP then becomes the immutable evidence copy and may never be modified,
+replaced, or deleted. This is a relocation exception only; it does not permit
+discarding or changing evidence, does not apply to active color-reset output,
+and does not remove the need for a live extracted copy of an operational asset.
 
 For avoidance of doubt, generated output **may** be used as a later contained
 experiment's implementation input, configuration input, fixture, cache,
@@ -49,7 +72,7 @@ baseline rather than replacing an existing one.
 
 The
 [Stage 12 implementation topic](../../agents/topics/extraterrestrial/stage-12-implementation-topic.md#immutable-run-records)
-owns the exact run number, slug, initialization, finalization, and
+owns the exact namespace, run number, slug, initialization, finalization, and
 immutability rules.
 
 Do not add or run an experimental `tests/` tree, unit-test suite or files,

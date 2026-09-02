@@ -5,8 +5,9 @@ Work Plan steps 1 through 6 are complete. The owner rejected the Step 7
 Ferwerda path; runs `000466` and `000467` accepted the replacement
 `BrunetonSourceLuminanceLiftColorDisplayModel`, and that model is now the live
 production selection for both Flat32 modes. The distant-Sun solar-zenith cache
-plan is closed through H7. Step 8 remains ineligible until the resumed Color
-plan accepts its corrected display result; stellar brightness, color,
+plan is closed through H7. Step 8 remains ineligible until the
+[Color Reset Incremental Experiment Plan](color-reset-experiment-plan.md)
+accepts its corrected display result; stellar brightness, color,
 visibility, and exposure correction then resume as a separate acceptance
 problem rather than as Color tuning.
 
@@ -1406,7 +1407,10 @@ owner per responsibility.
 - ad-hoc Color tuning outside the accepted Ferwerda model; and
 - camera emulation.
 
-## Immediate Next Step
+## Historical Cache Handoff
+
+The following cache-diagnosis record is preserved history, not the current
+immediate step. Active Color and star work is owned by the color-reset plan.
 
 Current owner-directed work is a contained nautical-twilight diagnosis, not a
 production port. Run `000493` first combined the exact run-`000466`

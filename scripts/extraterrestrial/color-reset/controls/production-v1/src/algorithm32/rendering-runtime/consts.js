@@ -1,0 +1,22 @@
+/** Value that stores the default context for assembly-only shader builds. */
+export const EMPTY_SHADER_BUILD_CONTEXT = {
+	automaticAssembly: false,
+	scatteringCacheController: null,
+	scatteringCache: null,
+	scatteringCacheControllerIdentity: null,
+	createdScatteringCacheController: false,
+	distantSunCelestialCacheController: null,
+	distantSunCelestialCache: null,
+	distantSunCelestialCacheIdentity: null,
+	createdDistantSunCelestialCacheController: false,
+	celestialQueryPacket: null,
+	stellarPointSetCacheController: null,
+	stellarPointSetCache: null,
+	stellarPointSetCacheIdentity: null,
+	createdStellarPointSetCacheController: false,
+	flatFiniteSunCacheController: null,
+	flatFiniteSunCache: null,
+	flatFiniteSunCacheIdentity: null,
+	createdFlatFiniteSunCacheController: false,
+	mainRequiredSymbols: null,
+};

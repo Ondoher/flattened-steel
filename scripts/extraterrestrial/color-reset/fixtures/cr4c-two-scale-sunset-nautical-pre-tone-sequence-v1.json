@@ -1,0 +1,431 @@
+{
+	"schemaId": "algorithm32-color-reset-cr4c-two-scale-sunset-nautical-pre-tone-sequence-input-v1",
+	"claimBoundary": {
+		"summary": "Bounded revision of the rejected CR4C chronology using one analytic two-scale receiver-light response over the same accepted CR1 signed projected linear RGB and exact CR2 total-horizontal illuminance. The rejected CR4C panels and medians are read-only comparison evidence. The equal-36-W-m-2 row remains an independently normalized structure diagnostic only.",
+		"appearanceAcceptanceGate": false,
+		"boundedResponseRevision": true,
+		"paperSimilarityMetric": false,
+		"paperTarget": false,
+		"physicalTransportReexecution": false,
+		"structureDiagnosticGatesCandidate": false,
+		"brightControlMetricsGateCandidate": false,
+		"rejectedChronologyMetricsGateCandidate": false,
+		"productionClaim": false
+	},
+	"parents": {
+		"skyField": {
+			"namespace": "color-reset",
+			"runId": "000005-six-scene-visual-baseline",
+			"artifactSetSha256": "2f7b49dd239fcaf5399c65bfebc59195458edf0b82910cf9987e341b76a615fc",
+			"manifestSha256": "3ba1199191f6b9dd825b0475c7d329a4b0be84e441db655d354bdce234f6949b",
+			"analysis": {
+				"path": "evidence/render-analysis.json",
+				"byteLength": 287705,
+				"sha256": "d5525a54248d61c0f6606e8371181e569c9f6926e7729c555e906cb0286e01fe"
+			}
+		},
+		"receiverLight": {
+			"namespace": "color-reset",
+			"runId": "000007-available-light-inventory",
+			"artifactSetSha256": "dcd6cdd8146094d05427ad180af7fccefdbaa67e290d1b5f21e6a0d4b03697ba",
+			"manifestSha256": "f0790db92f9e39d1bc2c735572928d34b5698b0123524a56845b571d4f27b226",
+			"analysis": {
+				"path": "evidence/measurement-analysis.json",
+				"byteLength": 231633,
+				"sha256": "99cc785895bf84edd57072eb95951eb916af2ec37d49eae25abd148e34545a47"
+			}
+		},
+		"qualitativeStructure": {
+			"namespace": "color-reset",
+			"runId": "000019-native15-sunset-paper-visual-comparison",
+			"artifactSetSha256": "603940164f713a05b0eb30a183a0835cffc55c68cc271f89e5977c81749a9c55",
+			"manifestSha256": "204e80a6d6031757b15e4507bd5b7891d977269f6155380713f3194c23d74da9",
+			"analysis": {
+				"path": "evidence/analysis.json",
+				"byteLength": 222819,
+				"sha256": "6602f26ab4c14db0736f2ba8134c9e6c64ab83574c9a800c885d5680579e7606"
+			},
+			"role": "Qualitative method provenance only; no paper pixel, normalization, score, resemblance, or rank enters CR4C."
+		},
+		"selectedBracket": {
+			"namespace": "color-reset",
+			"runId": "000020-sunset-pre-tone-exposure-bracket",
+			"artifactSetSha256": "df9b90b4245b3abc59787e9c66b0d2b7bb5cf2b4fea88dd475f43feb209708cc",
+			"manifestSha256": "86834abc8f96a536ee99f5f06816579f21e86b99f1f59df3d3f789780e938953",
+			"analysis": {
+				"path": "evidence/analysis.json",
+				"byteLength": 49102,
+				"sha256": "305c1c3c4d7cdf358a2e57349a2b903aad56f8d2d76b2fb2093c503926f699a1"
+			},
+			"selectedSunsetPanel": {
+				"path": "captures/pre-tone-4096-sunset.png",
+				"byteLength": 84642,
+				"sha256": "355325b3a6948a8db18ee52f63e06e402d2e3876ef2601ea03c5626543596efe"
+			},
+			"role": "Provisional diagnostic row and sunset pixel-continuity parent only; appearanceAccepted remains false."
+		},
+		"rejectedChronology": {
+			"namespace": "color-reset",
+			"runId": "000021-sunset-nautical-pre-tone-sequence",
+			"artifactSetSha256": "3f61815d53a2a5cb8208e97bf12d1de85d38a705e0f1120f290398d4e62f14cb",
+			"manifestSha256": "1057280a3f6268d96355bb00c33f7c92726f2eee9c0e90ab9105e88e0cf8eaf1",
+			"conclusion": "rejected",
+			"analysis": {
+				"path": "evidence/analysis.json",
+				"byteLength": 57112,
+				"sha256": "0e156f8cba25d95b0fc6f0ac0000f7e964f3fc5e83829bf4bb2c74f85f36ecb0"
+			},
+			"candidates": [
+				{
+					"sceneId": "sunset",
+					"path": "captures/pre-tone-4096-sunset.png",
+					"byteLength": 84642,
+					"sha256": "355325b3a6948a8db18ee52f63e06e402d2e3876ef2601ea03c5626543596efe"
+				},
+				{
+					"sceneId": "sunset-plus-10-minutes",
+					"path": "captures/pre-tone-4096-sunset-plus-10-minutes.png",
+					"byteLength": 78839,
+					"sha256": "b6765a45b4a890346969cdad57a210fd89c33ee60b3178463b8a42817b2a5026"
+				},
+				{
+					"sceneId": "sunset-plus-60-minutes",
+					"path": "captures/pre-tone-4096-sunset-plus-60-minutes.png",
+					"byteLength": 83218,
+					"sha256": "49d9387cb9469508809397df709cc1b06b7d72509dc16d42437ca083b201ef83"
+				}
+			],
+			"chronology": {
+				"medianConvention": "true median (50th percentile points in the inclusive 0-to-100 domain)",
+				"allStrictlyDecreasing": false,
+				"regions": [
+					{
+						"regionId": "whole-sky",
+						"values": [0.42247058823529415, 0.4340101960784314, 0.13659372549019605]
+					},
+					{
+						"regionId": "upper-sky",
+						"values": [0.36284470588235296, 0.3785733333333333, 0.1088392156862745]
+					},
+					{
+						"regionId": "horizon-band",
+						"values": [0.5629254901960784, 0.5752701960784312, 0.24770509803921567]
+					}
+				]
+			},
+			"role": "Read-only rejected diagnostic parent. Its images and medians may be embedded for visible before/revised comparison but never count as new outputs."
+		}
+	},
+	"viewport": {
+		"widthPixels": 640,
+		"heightPixels": 400,
+		"verticalFieldOfViewDegrees": 78,
+		"aim": "fixed San Jose sunset bearing",
+		"foreground": "black spherical-ground visual endpoint inherited from CR1"
+	},
+	"receiverLightScalar": {
+		"id": "cr4b-total-horizontal-receiver-illuminance-v1",
+		"quantity": "photopic total horizontal illuminance",
+		"units": "lux",
+		"sameValueForEveryPixel": true,
+		"sameValueForEveryRgbChannel": true,
+		"namedTimeInput": false,
+		"solarZenithInput": false,
+		"sourceKindInput": false,
+		"imageDerived": false
+	},
+	"response": {
+		"id": "color-reset-cr4c-two-scale-total-horizontal-illuminance-pre-tone-gain-v1",
+		"selectedCandidate": {
+			"id": "pre-tone-two-scale",
+			"label": "Bounded CR4C two-scale pre-tone revision",
+			"sunsetAmplitude": 3.5,
+			"sunsetTransitionIlluminanceLux": 980,
+			"sunsetRolloffPower": 9,
+			"nauticalAmplitude": 5300,
+			"nauticalTransitionIlluminanceLux": 1,
+			"nauticalRolloffPower": 3
+		},
+		"equation": "g(E) = 1 + 3.5 / (1 + (E / 980 lux)^9) + 5300 / (1 + (E / 1 lux)^3)",
+		"operation": "exposedLinearRgb = signedProjectedLinearRgb * g(E); displayRgb = unchangedBrunetonExponential(exposedLinearRgb)",
+		"operationSpace": "signed projected linear sRGB before unchanged Bruneton exponential",
+		"sceneVariation": "one identical shader and curve in all scenes; only the exact CR2 total-horizontal illuminance uniform E changes",
+		"properties": {
+			"finiteForNonnegativeIlluminance": true,
+			"analyticForNonnegativeIlluminance": true,
+			"monotonicNonincreasing": true,
+			"derivativeAtZeroPerLux": 0,
+			"hardIdentityCutoff": false,
+			"namedSceneBranch": false
+		}
+	},
+	"structureDiagnostic": {
+		"id": "color-reset-cr4c-equal-36-w-m-2-independent-structure-v1",
+		"label": "Equal 36 W/mÂ² sky-irradiance structure diagnostic â€” independently normalized; not candidate exposure or brightness target",
+		"targetDiffuseSkyIrradiance": {
+			"value": 36,
+			"units": "W m^-2"
+		},
+		"equation": "structureScale = 36 W m^-2 / integral_over_native15(diffuseHorizontalSpectralIrradianceDensity dLambda); displayRgb = unchangedBrunetonExponential(signedProjectedLinearRgb * structureScale)",
+		"independentPerScene": true,
+		"candidateExposure": false,
+		"brightnessTarget": false,
+		"appearanceTarget": false,
+		"gatesCandidate": false
+	},
+	"scenes": [
+		{
+			"id": "sunset",
+			"label": "Sunset",
+			"timeIso": "2024-06-21T03:26:03.503Z",
+			"totalHorizontalIlluminance": {
+				"value": 1012.6643901353058,
+				"units": "lux"
+			},
+			"expectedCandidateGain": 2.493660402942143,
+			"diffuseHorizontalPacket": {
+				"basisHash": "sha256:a03a3c7f45d9bd4ff8adf6482e9d1aac1acd72423758ecf797ac24f6dffba891",
+				"contentHash": "sha256:ad4cce1a9826dce82b0dcb950a830d88daee82890ff28dd525af67513247d093",
+				"channelCount": 15,
+				"units": "W m^-2 nm^-1",
+				"integratedIrradianceWm2": 6.536968075052835,
+				"structureScale": 5.507140250139439
+			},
+			"field": {
+				"path": "data/pre-display-linear-rgb-y-sunset.f32le",
+				"byteLength": 4096000,
+				"sha256": "a81c0ab29093a09ef7b306418c945d61d71db5f5fb066702911f9d1b5bf6975b"
+			},
+			"mask": {
+				"path": "data/scene-hit-mask-sunset.r8",
+				"byteLength": 256000,
+				"sha256": "7519bd29b7cfc20aee3cb9230d93f6bc2365a332769f2f95b02e0b07203a94f8"
+			},
+			"bruneton": {
+				"path": "captures/bruneton-sunset.png",
+				"byteLength": 66620,
+				"sha256": "16d9808c8fc2702c2b29a904e4f4b2ea0fc13c6d799a1e1cd164119c1b157884"
+			}
+		},
+		{
+			"id": "sunset-plus-10-minutes",
+			"label": "10 minutes after sunset",
+			"timeIso": "2024-06-21T03:36:03.503Z",
+			"totalHorizontalIlluminance": {
+				"value": 385.0097520214597,
+				"units": "lux"
+			},
+			"expectedCandidateGain": 4.499312709647269,
+			"diffuseHorizontalPacket": {
+				"basisHash": "sha256:a03a3c7f45d9bd4ff8adf6482e9d1aac1acd72423758ecf797ac24f6dffba891",
+				"contentHash": "sha256:7e6b46ab4aa0f1054eebfd89e3715fe79a282b2ac14a4aa590b5e0031a30afc5",
+				"channelCount": 15,
+				"units": "W m^-2 nm^-1",
+				"integratedIrradianceWm2": 2.647201667882262,
+				"structureScale": 13.59926613706
+			},
+			"field": {
+				"path": "data/pre-display-linear-rgb-y-sunset-plus-10-minutes.f32le",
+				"byteLength": 4096000,
+				"sha256": "ea9baaea08f15432045c25176513bd20beeddef633ac4fdfab8b602d361500ba"
+			},
+			"mask": {
+				"path": "data/scene-hit-mask-sunset-plus-10-minutes.r8",
+				"byteLength": 256000,
+				"sha256": "7519bd29b7cfc20aee3cb9230d93f6bc2365a332769f2f95b02e0b07203a94f8"
+			},
+			"bruneton": {
+				"path": "captures/bruneton-sunset-plus-10-minutes.png",
+				"byteLength": 38547,
+				"sha256": "a1aecaf6df77d5b0c0e681e8f08a0cd516cfa5609aedafc3aa083a4b98ef7df3"
+			}
+		},
+		{
+			"id": "sunset-plus-60-minutes",
+			"label": "1 hour after sunset",
+			"timeIso": "2024-06-21T04:26:03.503Z",
+			"totalHorizontalIlluminance": {
+				"value": 0.2044095523727617,
+				"units": "lux"
+			},
+			"expectedCandidateGain": 5259.616582578368,
+			"diffuseHorizontalPacket": {
+				"basisHash": "sha256:a03a3c7f45d9bd4ff8adf6482e9d1aac1acd72423758ecf797ac24f6dffba891",
+				"contentHash": "sha256:83614fc9acf0438e42f699f0d6f99c47e508b25ed98b29dd6f4669771e3dc94b",
+				"channelCount": 15,
+				"units": "W m^-2 nm^-1",
+				"integratedIrradianceWm2": 0.0017028011987966299,
+				"structureScale": 21141.63416459961
+			},
+			"field": {
+				"path": "data/pre-display-linear-rgb-y-sunset-plus-60-minutes.f32le",
+				"byteLength": 4096000,
+				"sha256": "70d22578d130e854fce2dba8d087bbe53478b1cb196153dcd7d66b4dd184f54e"
+			},
+			"mask": {
+				"path": "data/scene-hit-mask-sunset-plus-60-minutes.r8",
+				"byteLength": 256000,
+				"sha256": "7519bd29b7cfc20aee3cb9230d93f6bc2365a332769f2f95b02e0b07203a94f8"
+			},
+			"bruneton": {
+				"path": "captures/bruneton-sunset-plus-60-minutes.png",
+				"byteLength": 6664,
+				"sha256": "e1093a93f878f5289c1e475b278d1b79a2c5504f6c0763a8a599167c81f6b96a"
+			}
+		}
+	],
+	"diagnostics": {
+		"differenceAmplification": 8,
+		"candidateGpuCpuParity": {
+			"maximumAbsoluteRgbCodeDifference": 1,
+			"maximumRgbCodeRmse": 0.35,
+			"maximumAbsoluteLinearRgbDifference": 0.00002,
+			"maximumLinearRgbRmse": 0.000002
+		},
+		"parentBrunetonReplay": {
+			"maximumAbsoluteRgbCodeDifference": 1,
+			"maximumRgbCodeRmse": 0.2
+		},
+		"expectedValueAbsoluteError": 1e-12,
+		"structureScaleRelativeError": 1e-12,
+		"blackSkyPixelFractionCeiling": 0.05,
+		"saturatedSkyPixelFractionCeiling": 0.05,
+		"chronologyRegions": [
+			{
+				"id": "whole-sky",
+				"label": "Whole sky",
+				"minimumYFraction": 0,
+				"maximumYFraction": 1
+			},
+			{
+				"id": "upper-sky",
+				"label": "Upper sky",
+				"minimumYFraction": 0,
+				"maximumYFraction": 0.35
+			},
+			{
+				"id": "horizon-band",
+				"label": "Horizon band",
+				"minimumYFraction": 0.35,
+				"maximumYFraction": 0.56
+			}
+		],
+		"chronologyExpectation": "Each candidate encoded-luminance median should strictly decrease from sunset to +10 minutes to +60 minutes; a failed row is preserved and diagnosed rather than hidden.",
+		"responsePlot": {
+			"widthPixels": 1400,
+			"heightPixels": 900,
+			"minimumIlluminanceLux": 0.001,
+			"maximumIlluminanceLux": 200000
+		},
+		"maskColors": {
+			"ordinarySky": "#202938",
+			"blackSky": "#0055ff",
+			"saturatedSky": "#ff00aa",
+			"blackAndSaturatedSky": "#ffffff",
+			"sceneGeometry": "#000000"
+		},
+		"analyticResponseProof": {
+			"minimumIlluminanceLux": 0,
+			"maximumIlluminanceLux": 200000,
+			"positiveLogSampleCount": 4096,
+			"expectedDerivativeAtZeroPerLux": 0,
+			"maximumDerivativeAbsoluteError": 1e-7,
+			"maximumDerivativeRelativeError": 1e-7
+		},
+		"brightControlReportOnly": {
+			"gatesCandidate": false,
+			"expectedGainAbsoluteError": 1e-12,
+			"statement": "Bright-control gains and implied departures from unity are reported only; no bright-control image is added to this 17-image bounded revision."
+		},
+		"rejectedChronologyComparison": {
+			"gatesCandidate": false,
+			"requireExactImageAndMetricProvenance": true,
+			"statement": "Rejected CR4C images and medians are embedded read-only to show visible progress; they are not counted among the new images."
+		},
+		"chronologyMedianConvention": "true median: percentile(sortedValues, 50) over inclusive percentile points 0 through 100"
+	},
+	"outputs": {
+		"controls": [
+			"captures/bruneton-sunset.png",
+			"captures/bruneton-sunset-plus-10-minutes.png",
+			"captures/bruneton-sunset-plus-60-minutes.png"
+		],
+		"candidates": [
+			"captures/pre-tone-two-scale-sunset.png",
+			"captures/pre-tone-two-scale-sunset-plus-10-minutes.png",
+			"captures/pre-tone-two-scale-sunset-plus-60-minutes.png"
+		],
+		"structureDiagnostics": [
+			"diagnostics/equal-36-wm2-structure-sunset.png",
+			"diagnostics/equal-36-wm2-structure-sunset-plus-10-minutes.png",
+			"diagnostics/equal-36-wm2-structure-sunset-plus-60-minutes.png"
+		],
+		"masks": [
+			"diagnostics/black-saturation-pre-tone-two-scale-sunset.png",
+			"diagnostics/black-saturation-pre-tone-two-scale-sunset-plus-10-minutes.png",
+			"diagnostics/black-saturation-pre-tone-two-scale-sunset-plus-60-minutes.png"
+		],
+		"differences": [
+			"diagnostics/difference-pre-tone-two-scale-sunset.png",
+			"diagnostics/difference-pre-tone-two-scale-sunset-plus-10-minutes.png",
+			"diagnostics/difference-pre-tone-two-scale-sunset-plus-60-minutes.png"
+		],
+		"figures": [
+			"figures/cr4c-two-scale-response-chronology.png",
+			"figures/cr4c-two-scale-sunset-nautical-pre-tone-sequence.png"
+		],
+		"decisionPlate": "figures/cr4c-two-scale-sunset-nautical-pre-tone-sequence.png",
+		"requestedImageUploadOrder": [
+			"captures/bruneton-sunset.png",
+			"captures/bruneton-sunset-plus-10-minutes.png",
+			"captures/bruneton-sunset-plus-60-minutes.png",
+			"captures/pre-tone-two-scale-sunset.png",
+			"captures/pre-tone-two-scale-sunset-plus-10-minutes.png",
+			"captures/pre-tone-two-scale-sunset-plus-60-minutes.png",
+			"diagnostics/equal-36-wm2-structure-sunset.png",
+			"diagnostics/equal-36-wm2-structure-sunset-plus-10-minutes.png",
+			"diagnostics/equal-36-wm2-structure-sunset-plus-60-minutes.png",
+			"diagnostics/black-saturation-pre-tone-two-scale-sunset.png",
+			"diagnostics/black-saturation-pre-tone-two-scale-sunset-plus-10-minutes.png",
+			"diagnostics/black-saturation-pre-tone-two-scale-sunset-plus-60-minutes.png",
+			"diagnostics/difference-pre-tone-two-scale-sunset.png",
+			"diagnostics/difference-pre-tone-two-scale-sunset-plus-10-minutes.png",
+			"diagnostics/difference-pre-tone-two-scale-sunset-plus-60-minutes.png",
+			"figures/cr4c-two-scale-response-chronology.png",
+			"figures/cr4c-two-scale-sunset-nautical-pre-tone-sequence.png"
+		],
+		"analysis": "evidence/analysis.json",
+		"panelIdentities": "evidence/panel-identities.json",
+		"imageDerivations": "evidence/image-derivations.json",
+		"progress": "progress.json"
+	},
+	"brightControls": [
+		{
+			"id": "solar-noon",
+			"label": "Solar noon",
+			"totalHorizontalIlluminance": {
+				"value": 117240.44327776447,
+				"units": "lux"
+			},
+			"expectedCandidateGain": 1.000000000003289
+		},
+		{
+			"id": "sunset-minus-60-minutes",
+			"label": "1 hour before sunset",
+			"totalHorizontalIlluminance": {
+				"value": 15435.1457596012,
+				"units": "lux"
+			},
+			"expectedCandidateGain": 1.000000001499947
+		},
+		{
+			"id": "sunset-minus-10-minutes",
+			"label": "10 minutes before sunset",
+			"totalHorizontalIlluminance": {
+				"value": 2155.4260282733017,
+				"units": "lux"
+			},
+			"expectedCandidateGain": 1.002904178642875
+		}
+	]
+}

@@ -37,10 +37,17 @@ if (
  * Recompute and validate a terminal run without writing or repairing it.
  *
  * @param {string} selector
+ * @param {{
+ *   repositoryRoot?: string,
+ *   experimentRoot?: string,
+ *   outputRoot?: string,
+ *   runsRoot?: string,
+ *   runNamespace?: "default" | "color-reset",
+ * }} [requestedRoots]
  * @returns {Promise<Record<string, unknown>>}
  */
-export async function verifyRun(selector) {
-	const roots = resolveRunRoots();
+export async function verifyRun(selector, requestedRoots = {}) {
+	const roots = resolveRunRoots(requestedRoots);
 	const runDirectory = await resolveExistingRunDirectory(selector, roots);
 	const identity = parseRunId(basename(runDirectory));
 	const manifestPath = resolve(runDirectory, "artifact-manifest.json");

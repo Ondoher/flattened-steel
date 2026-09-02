@@ -1,24 +1,19 @@
 # Spectral Color-Transform Experiment Plan
 
-Status: active, resumed on 2026-08-31 after closure of the distant-Sun
-solar-zenith cache plan. The current production comparison baseline is
+Status: superseded as the active execution authority on 2026-08-31 by the
+[Color Reset Incremental Experiment Plan](color-reset-experiment-plan.md). This
+document and every run it names remain read-only failure, diagnostic, and
+reference evidence. Its former reset sequence does not authorize another
+candidate or large experiment grid.
+
+The current production comparison baseline remains
 `BrunetonSourceLuminanceLiftColorDisplayModel`, qualified by immutable runs
-`000466` and `000467` and now selected by both Flat32 modes. It is an accepted
-interim production display path, not the completed Color correction.
-
-The physical input baseline has changed since this plan paused. The qualified
-one-degree point-local scene-cache inventory, Q30 live transport, and shared
-post-108-degree dark state are now fixed upstream inputs. Color work may inspect
-their Native15 `preDisplayRadiance`, but it must not retune cache spectra,
-transport, cache interpolation, or the darkness cutoff to repair appearance.
-
-Immediate work resumes at the rejected Step 3 boundary: reproduce the current
-source-luminance-lift output over the established daylight, twilight, and dark
-scene matrix; retain the unchanged Bruneton projection as a control; then
-design and test the corrected static luminance/highlight mapper without
-per-channel or per-pixel peak normalization. Star appearance is a coordinated
-downstream follow-up and receives separate acceptance; it is not a Color-curve
-tuning input.
+`000466` and `000467`. The qualified one-degree point-local scene-cache
+inventory, Q30 live transport, Native15 `preDisplayRadiance`, and shared
+post-108-degree dark state remain fixed upstream inputs. The new design begins
+with image-first reproduction and separates display, available-light ambient,
+and stellar-contrast questions instead of resuming this plan's rejected Step 3
+mapper directly.
 
 ## Preserved Reset Basis: Bruneton Primary Engine
 

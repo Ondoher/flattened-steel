@@ -3,6 +3,64 @@ interface Window {
 	__flat32PerformanceSamples?: ShaderPerformanceSample[];
 }
 
+type Flat32ColorModelId =
+	'basic-bruneton' | 'color-reset-slope-078-p9' | 'bruneton-source-luminance-lift-v2' | 'ferwerda-control';
+
+type Flat32ColorDisplayModelConfiguration =
+	| Readonly<{
+			readonly model?: 'bruneton-source-luminance-lift-v2';
+	  }>
+	| Readonly<{
+			readonly model: 'basic-bruneton' | 'color-reset-slope-078-p9';
+	  }>
+	| Readonly<{
+			readonly model: 'ferwerda-control';
+			readonly adaptationLuminanceCdPerSquareMeter: number;
+	  }>;
+
+type Flat32StellarCatalogId = 'brightest-500' | 'brightest-2000';
+type Flat32PresentationFilterId = 'human-mesopic-luminance-v1' | 'human-low-light-chroma-v1';
+type Flat32PresentationFilterConfiguration =
+	| Readonly<{
+			readonly id: 'human-mesopic-luminance-v1';
+			readonly stage: 'source-linear';
+			readonly target: 'stellar';
+			readonly enabled: boolean;
+			readonly parameters: Readonly<{readonly maximumRodContribution: number}>;
+	  }>
+	| Readonly<{
+			readonly id: 'human-low-light-chroma-v1';
+			readonly stage: 'source-linear';
+			readonly target: 'stellar';
+			readonly enabled: boolean;
+			readonly parameters: Readonly<{readonly maximumChromaRetention: number}>;
+	  }>;
+
+interface Flat32ProductionSelections {
+	readonly colorDisplayModelConfiguration: Flat32ColorDisplayModelConfiguration;
+	readonly celestialSourcesEnabled: boolean;
+	readonly stellarCatalog: Flat32StellarCatalogId;
+	readonly presentationFilters: readonly Flat32PresentationFilterConfiguration[];
+}
+
+interface Flat32ApplicationConfiguration {
+	readonly cameraFieldOfViewDegrees?: number;
+	readonly initialFlatTimeIndex?: number;
+	readonly initialModeKind?: 'spherical-distant' | 'flat-local';
+	readonly maximumScatteringOrder?: SupportedCacheScatteringOrder;
+	readonly reviewObjectsEnabled?: boolean;
+	readonly celestialSourcesEnabled?: boolean;
+	readonly colorDisplayModelConfiguration?: Flat32ColorDisplayModelConfiguration;
+	readonly stellarCatalog?: Flat32StellarCatalogId;
+	readonly presentationFilters?: readonly Flat32PresentationFilterConfiguration[];
+	readonly cameraDirectionScene?: readonly [number, number, number];
+	readonly performanceCallback?: ShaderPerformanceCallback;
+	readonly resolveDistantSunSceneCacheAsset?: (
+		solarZenithDegrees: number,
+		request?: Readonly<{signal?: AbortSignal}>,
+	) => Flat32DistantSunCacheResolution | Promise<Flat32DistantSunCacheResolution>;
+}
+
 type Flat32RenderOperation = () => void;
 interface Flat32ContextLifecycleParticipant {
 	/** Invalidate renderer-owned handles synchronously on context loss. */

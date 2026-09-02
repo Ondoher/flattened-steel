@@ -1,0 +1,239 @@
+{
+	"schemaId": "algorithm32-color-reset-cr4b-sunset-pre-tone-exposure-bracket-input-v1",
+	"claimBoundary": {
+		"summary": "Actual-sunset replay of one predeclared receiver-light-driven pre-tone achromatic exposure family over accepted CR1 signed projected linear RGB, using accepted CR2 total-horizontal illuminance. This run is diagnostic and makes no appearance-selection, paper-similarity, transport, production, gamut, shoulder, or stellar claim.",
+		"appearanceAcceptanceGate": false,
+		"paperSimilarityMetric": false,
+		"paperTarget": false,
+		"physicalTransportReexecution": false,
+		"preservationEligibilityGate": false
+	},
+	"parents": {
+		"skyField": {
+			"namespace": "color-reset",
+			"runId": "000005-six-scene-visual-baseline",
+			"artifactSetSha256": "2f7b49dd239fcaf5399c65bfebc59195458edf0b82910cf9987e341b76a615fc",
+			"manifestSha256": "3ba1199191f6b9dd825b0475c7d329a4b0be84e441db655d354bdce234f6949b",
+			"analysis": {
+				"path": "evidence/render-analysis.json",
+				"byteLength": 287705,
+				"sha256": "d5525a54248d61c0f6606e8371181e569c9f6926e7729c555e906cb0286e01fe"
+			}
+		},
+		"receiverLight": {
+			"namespace": "color-reset",
+			"runId": "000007-available-light-inventory",
+			"artifactSetSha256": "dcd6cdd8146094d05427ad180af7fccefdbaa67e290d1b5f21e6a0d4b03697ba",
+			"manifestSha256": "f0790db92f9e39d1bc2c735572928d34b5698b0123524a56845b571d4f27b226",
+			"analysis": {
+				"path": "evidence/measurement-analysis.json",
+				"byteLength": 231633,
+				"sha256": "99cc785895bf84edd57072eb95951eb916af2ec37d49eae25abd148e34545a47"
+			}
+		},
+		"qualitativeStructure": {
+			"namespace": "color-reset",
+			"runId": "000019-native15-sunset-paper-visual-comparison",
+			"artifactSetSha256": "603940164f713a05b0eb30a183a0835cffc55c68cc271f89e5977c81749a9c55",
+			"manifestSha256": "204e80a6d6031757b15e4507bd5b7891d977269f6155380713f3194c23d74da9",
+			"analysis": {
+				"path": "evidence/analysis.json",
+				"byteLength": 222819,
+				"sha256": "6602f26ab4c14db0736f2ba8134c9e6c64ab83574c9a800c885d5680579e7606"
+			},
+			"role": "Qualitative structural rationale only; its paper pixels and normalized presentation are neither replay inputs nor candidate targets."
+		}
+	},
+	"viewport": {
+		"widthPixels": 640,
+		"heightPixels": 400,
+		"verticalFieldOfViewDegrees": 78,
+		"aim": "fixed San Jose sunset bearing",
+		"foreground": "black spherical-ground visual endpoint inherited from CR1"
+	},
+	"scene": {
+		"id": "sunset",
+		"label": "San Jose sunset",
+		"timeIso": "2024-06-21T03:26:03.503Z",
+		"totalHorizontalIlluminance": {
+			"value": 1012.6643901353058,
+			"units": "lux"
+		},
+		"totalHorizontalIlluminanceSource": "accepted CR2 Native15 totalHorizontal = directHorizontal + diffuseHorizontal, photopically projected",
+		"field": {
+			"path": "data/pre-display-linear-rgb-y-sunset.f32le",
+			"byteLength": 4096000,
+			"sha256": "a81c0ab29093a09ef7b306418c945d61d71db5f5fb066702911f9d1b5bf6975b",
+			"layout": "top-down 640 x 400 direction-major RGBA32F; RGB is signed projected linear sRGB and A is luminance"
+		},
+		"mask": {
+			"path": "data/scene-hit-mask-sunset.r8",
+			"byteLength": 256000,
+			"sha256": "7519bd29b7cfc20aee3cb9230d93f6bc2365a332769f2f95b02e0b07203a94f8",
+			"layout": "top-down 640 x 400 R8; 0 sky, 255 scene geometry"
+		},
+		"bruneton": {
+			"path": "captures/bruneton-sunset.png",
+			"byteLength": 66620,
+			"sha256": "16d9808c8fc2702c2b29a904e4f4b2ea0fc13c6d799a1e1cd164119c1b157884"
+		}
+	},
+	"receiverLightScalar": {
+		"id": "cr4b-total-horizontal-receiver-illuminance-v1",
+		"quantity": "photopic total horizontal illuminance",
+		"units": "lux",
+		"sameValueForEveryPixel": true,
+		"sameValueForEveryRgbChannel": true,
+		"namedTimeInput": false,
+		"solarZenithInput": false,
+		"sourceKindInput": false,
+		"imageDerived": false
+	},
+	"response": {
+		"id": "color-reset-cr4b-total-horizontal-illuminance-pre-tone-rational-gain-v1",
+		"input": "E = total horizontal receiver illuminance in lux",
+		"equation": "g(E;G) = 1 + (G - 1) / (1 + (E / 3 lux)^1.3)",
+		"operation": "exposedLinearRgb = signedProjectedLinearRgb * g(E;G); displayRgb = unchangedBrunetonExponential(exposedLinearRgb)",
+		"operationSpace": "signed projected linear sRGB before unchanged Bruneton exponential",
+		"rgbTreatment": "one identical scene-global scalar multiplies all pixels and all three signed linear channels",
+		"transitionIlluminanceLux": 3,
+		"rolloffPower": 1.3,
+		"properties": {
+			"finiteForAllNonnegativeIlluminance": true,
+			"continuousValueAndSlope": true,
+			"zeroIlluminanceDerivativePerLux": 0,
+			"strictlyApproachesUnitGainAtIncreasingIlluminance": true,
+			"hardIdentityCutoff": false,
+			"namedSceneBranch": false,
+			"independentChannelCurve": false,
+			"preToneOrderingRequired": true
+		},
+		"candidates": [
+			{
+				"id": "pre-tone-2048",
+				"label": "Pre-tone G 2048",
+				"maximumGain": 2048,
+				"transitionIlluminanceLux": 3,
+				"rolloffPower": 1.3,
+				"expectedSunsetGain": 2.056929394143904
+			},
+			{
+				"id": "pre-tone-4096",
+				"label": "Pre-tone G 4096",
+				"maximumGain": 4096,
+				"transitionIlluminanceLux": 3,
+				"rolloffPower": 1.3,
+				"expectedSunsetGain": 3.1143751192082494
+			},
+			{
+				"id": "pre-tone-8192",
+				"label": "Pre-tone G 8192",
+				"maximumGain": 8192,
+				"transitionIlluminanceLux": 3,
+				"rolloffPower": 1.3,
+				"expectedSunsetGain": 5.22926656933694
+			}
+		]
+	},
+	"reportOnlyBrunetonPreservation": {
+		"scope": "Sunset sky pixels only; candidate versus independent CPU Bruneton replay from the same CR1 field.",
+		"maximumAbsoluteRgbCodeDifference": {
+			"equation": "1 + 4 / (1 + (E / 2000 lux)^2)",
+			"daylightFloorCodes": 1,
+			"lowSunRelaxationCodes": 4,
+			"scaleIlluminanceLux": 2000,
+			"power": 2
+		},
+		"rgbCodeRmse": {
+			"equation": "0.2 + 0.8 / (1 + (E / 2000 lux)^2)",
+			"daylightFloorCodes": 0.2,
+			"lowSunRelaxationCodes": 0.8,
+			"scaleIlluminanceLux": 2000,
+			"power": 2
+		},
+		"evaluationOnly": true,
+		"gatesCandidateEligibility": false,
+		"suppressesImages": false,
+		"appearanceMeaning": "none"
+	},
+	"diagnostics": {
+		"differenceAmplification": 8,
+		"gpuCpuParity": {
+			"maximumAbsoluteRgbCodeDifference": 1,
+			"maximumRgbCodeRmse": 0.35,
+			"maximumAbsoluteLinearRgbDifference": 0.00002,
+			"maximumLinearRgbRmse": 0.000002
+		},
+		"parentBrunetonReplay": {
+			"maximumAbsoluteRgbCodeDifference": 1,
+			"maximumRgbCodeRmse": 0.2
+		},
+		"commonGain": {
+			"maximumSignedLinearRgbCrossProductError": 1e-8
+		},
+		"preToneOrdering": {
+			"maximumIndependentCpuAbsoluteDifference": 1e-15,
+			"requireDifferentFromPostToneAlternative": true
+		},
+		"curveProof": {
+			"minimumIlluminanceLux": 0,
+			"maximumIlluminanceLux": 200000,
+			"logarithmicSampleCount": 4097,
+			"finiteDifferenceRelativeStep": 0.00001,
+			"maximumDerivativeAbsoluteError": 0.0001,
+			"maximumDerivativeRelativeError": 0.00001,
+			"maximumExpectedGainAbsoluteError": 1e-12
+		},
+		"responsePlot": {
+			"widthPixels": 1400,
+			"heightPixels": 900,
+			"minimumPlottedIlluminanceLux": 0.001,
+			"maximumPlottedIlluminanceLux": 200000
+		},
+		"maskColors": {
+			"ordinarySky": "#202938",
+			"blackSky": "#0055ff",
+			"saturatedSky": "#ff00aa",
+			"blackAndSaturatedSky": "#ffffff",
+			"sceneGeometry": "#000000"
+		}
+	},
+	"outputs": {
+		"panels": [
+			"captures/bruneton-sunset.png",
+			"captures/pre-tone-2048-sunset.png",
+			"captures/pre-tone-4096-sunset.png",
+			"captures/pre-tone-8192-sunset.png"
+		],
+		"masks": [
+			"diagnostics/black-saturation-pre-tone-2048-sunset.png",
+			"diagnostics/black-saturation-pre-tone-4096-sunset.png",
+			"diagnostics/black-saturation-pre-tone-8192-sunset.png"
+		],
+		"differences": [
+			"diagnostics/difference-pre-tone-2048-sunset.png",
+			"diagnostics/difference-pre-tone-4096-sunset.png",
+			"diagnostics/difference-pre-tone-8192-sunset.png"
+		],
+		"figures": ["figures/cr4b-response-curves.png", "figures/cr4b-sunset-pre-tone-exposure-bracket.png"],
+		"decisionPlate": "figures/cr4b-sunset-pre-tone-exposure-bracket.png",
+		"requestedImageUploadOrder": [
+			"captures/bruneton-sunset.png",
+			"captures/pre-tone-2048-sunset.png",
+			"captures/pre-tone-4096-sunset.png",
+			"captures/pre-tone-8192-sunset.png",
+			"diagnostics/black-saturation-pre-tone-2048-sunset.png",
+			"diagnostics/black-saturation-pre-tone-4096-sunset.png",
+			"diagnostics/black-saturation-pre-tone-8192-sunset.png",
+			"diagnostics/difference-pre-tone-2048-sunset.png",
+			"diagnostics/difference-pre-tone-4096-sunset.png",
+			"diagnostics/difference-pre-tone-8192-sunset.png",
+			"figures/cr4b-response-curves.png",
+			"figures/cr4b-sunset-pre-tone-exposure-bracket.png"
+		],
+		"analysis": "evidence/analysis.json",
+		"panelIdentities": "evidence/panel-identities.json",
+		"imageDerivations": "evidence/image-derivations.json",
+		"progress": "progress.json"
+	}
+}

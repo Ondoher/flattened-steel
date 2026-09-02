@@ -1,0 +1,202 @@
+{
+  "schemaId": "algorithm32-color-reset-cr2-available-light-inventory-input-v1",
+  "parentControl": {
+    "runId": "000005-six-scene-visual-baseline",
+    "artifactSetSha256": "2f7b49dd239fcaf5399c65bfebc59195458edf0b82910cf9987e341b76a615fc",
+    "contactSheet": {
+      "path": "figures/cr1-six-scene-visual-baseline.png",
+      "sha256": "990c10625d66528902a7503fe4bb485713916c3bf9e3458071aeb9bf9f31b1f1"
+    },
+    "renderAnalysis": {
+      "path": "evidence/render-analysis.json",
+      "sha256": "d5525a54248d61c0f6606e8371181e569c9f6926e7729c555e906cb0286e01fe"
+    },
+    "fieldDiagnostics": {
+      "path": "evidence/field-diagnostics.json",
+      "sha256": "6f4f5440a8d38424047bf3fd4ef434261ab5b32cdac29b062192b538a9ebd87b"
+    }
+  },
+  "location": {
+    "name": "San Jose",
+    "latitudeDegrees": 37.3382,
+    "longitudeDegrees": -121.8863
+  },
+  "observer": {
+    "heightMeters": 1.7,
+    "upDirection": [0, 0, 1]
+  },
+  "camera": {
+    "widthPixels": 640,
+    "heightPixels": 400,
+    "verticalFieldOfViewDegrees": 78,
+    "nearSceneUnits": 0.002,
+    "farSceneUnits": 500,
+    "viewAzimuthDegrees": -59.99625193137896,
+    "viewElevationDegrees": 5,
+    "aim": "fixed San Jose sunset bearing"
+  },
+  "scenes": [
+    {
+      "id": "solar-noon",
+      "label": "Solar noon",
+      "timeIso": "2024-06-20T20:08:00.000Z",
+      "cacheExpectation": {"status": "ready", "representativeSolarZenithDegrees": 14}
+    },
+    {
+      "id": "sunset-minus-60-minutes",
+      "label": "One hour before sunset",
+      "timeIso": "2024-06-21T02:26:03.503Z",
+      "cacheExpectation": {"status": "ready", "representativeSolarZenithDegrees": 79}
+    },
+    {
+      "id": "sunset-minus-10-minutes",
+      "label": "Ten minutes before sunset",
+      "timeIso": "2024-06-21T03:16:03.503Z",
+      "cacheExpectation": {"status": "ready", "representativeSolarZenithDegrees": 88}
+    },
+    {
+      "id": "sunset",
+      "label": "Sunset",
+      "timeIso": "2024-06-21T03:26:03.503Z",
+      "cacheExpectation": {"status": "ready", "representativeSolarZenithDegrees": 90}
+    },
+    {
+      "id": "sunset-plus-10-minutes",
+      "label": "Ten minutes after sunset",
+      "timeIso": "2024-06-21T03:36:03.503Z",
+      "cacheExpectation": {"status": "ready", "representativeSolarZenithDegrees": 92}
+    },
+    {
+      "id": "sunset-plus-60-minutes",
+      "label": "One hour after sunset",
+      "timeIso": "2024-06-21T04:26:03.503Z",
+      "cacheExpectation": {"status": "ready", "representativeSolarZenithDegrees": 100}
+    },
+    {
+      "id": "sunset-plus-120-minutes",
+      "label": "Two hours after sunset (dark control)",
+      "timeIso": "2024-06-21T05:26:03.503Z",
+      "cacheExpectation": {"status": "dark"}
+    }
+  ],
+  "physicalControls": {
+    "spectralBasis": "algorithm32-native15",
+    "cacheNumericalIdentity": "algorithm32-native48-z180-w27-f68-native15-n4-q30-ozone-v1",
+    "maximumScatteringOrder": 4,
+    "pathIntervalCount": 30,
+    "pathSampleDistribution": "quadratic-near-observer-v1",
+    "sourceAngularRadiusRadians": 0.004675,
+    "sceneScaleMetersPerSceneUnit": 1000,
+    "sceneDepthMaxMeters": 500000,
+    "ground": "spherical geometry endpoint; receiver diffuse measurement uses only the local upper hemisphere",
+    "groundWidthSegments": 192,
+    "groundHeightSegments": 96,
+    "celestialSourcesEnabled": false,
+    "sceneObjects": false
+  },
+  "measurement": {
+    "spectralChannelCount": 15,
+    "spectralQuantity": "spectral-irradiance-density",
+    "spectralUnits": "W m^-2 nm^-1",
+    "spectralSemantics": "contiguous-wavelength-bin-average",
+    "direct": {
+      "id": "receiver-local-direct-source-v1",
+      "definition": "configured source irradiance after geometry-owned visible disk support and atmosphere-owned source-path transmittance",
+      "directNormalOrientation": "plane normal to the source-center direction; this is the existing directional-light and brightness-proxy quantity",
+      "directHorizontalDerivation": "direct-normal spectrum multiplied by max(0, dot(localUp, directionToLight)); exact for the current center-direction direct-light contract, with the declared partial-disk contact-horizon limitation"
+    },
+    "diffuse": {
+      "id": "receiver-local-cosine-weighted-upper-hemisphere-v1",
+      "definition": "integral over the receiver-local upper hemisphere of common-path atmospheric sky radiance times cosine and solid angle; celestial disk and stars disabled",
+      "orientation": "horizontal receiver plane whose normal is local up",
+      "quadrature": {
+        "id": "color-reset-cr2-receiver-diffuse-mu64-azimuth64-primary-v1",
+        "sampleCount": 4096,
+        "muSampleCount": 64,
+        "azimuthSampleCount": 64,
+        "frame": "receiver-local positive Z is up, mapped to scene and then model direction",
+        "sampling": "deterministic midpoint product quadrature in mu=cos(zenith) and azimuth; weight is mu*dmu*dphi",
+        "lowestElevationDegrees": 0.4476278310304719,
+        "weightSumSteradians": 3.141592653589793
+      },
+      "rotationSensitivity": {
+        "quadratureId": "color-reset-cr2-receiver-diffuse-mu64-azimuth64-half-cell-rotation-v1",
+        "operation": "rotate all azimuth samples by one half cell while retaining the same mu rings and weights"
+      },
+      "productionCrossCheck": {
+        "quadratureId": "algorithm32-receiver-environment-light-cosine-hammersley-32-v1",
+        "sampleCount": 32,
+        "role": "frozen production comparison only; not the CR2 diffuse measurement authority because its lowest sample elevation is 7.18 degrees"
+      }
+    },
+    "total": {
+      "id": "receiver-local-available-light-diagnostic-v1",
+      "definition": "channel-wise direct-horizontal plus diffuse-horizontal spectral irradiance on the local horizontal receiver plane; direct-normal remains separately retained for directional-light and current-proxy comparison"
+    },
+    "photopicProjection": {
+      "observer": "CIE 1931 2-degree y-bar",
+      "maximumLuminousEfficacyLumensPerWatt": 683,
+      "illuminanceUnits": "lux",
+      "equivalentLuminance": "photopic illuminance divided by pi",
+      "equivalentLuminanceUnits": "cd m^-2"
+    },
+    "repeatCount": 2,
+    "stability": {
+      "repeatAbsoluteIrradianceFloor": 1e-10,
+      "repeatRelativeIrradianceDifference": 0.000001,
+      "rotationMaximumSymmetricRelativePhotopicDifference": 0.02,
+      "rotationChannelSignificanceFloor": 1e-9,
+      "rotationMaximumSymmetricRelativeChannelDifference": 0.05,
+      "rotationMaximumAbsoluteSubfloorChannelDifference": 5e-11,
+      "directProxyMaximumAbsoluteDifferenceCdPerSquareMeter": 1e-8,
+      "darkMaximumAbsoluteValue": 1e-12
+    }
+  },
+  "diagnostics": {
+    "illuminancePlot": {
+      "widthPixels": 1400,
+      "heightPixels": 820,
+      "minimumLog10Lux": -6,
+      "maximumLog10Lux": 6
+    },
+    "spectralStrips": {
+      "widthPixels": 1600,
+      "heightPixels": 1180,
+      "minimumLog10IrradianceDensity": -12,
+      "maximumLog10IrradianceDensity": 1,
+      "zeroColor": "#000000"
+    },
+    "fieldContextPlot": {
+      "widthPixels": 1400,
+      "heightPixels": 820,
+      "minimumLog10CdPerSquareMeter": -6,
+      "maximumLog10CdPerSquareMeter": 5
+    },
+    "annotatedContactSheet": {
+      "annotationWidthPixels": 850,
+      "source": "immutable CR1 chronological contact sheet",
+      "rowOrder": "the seven fixed scenes in chronological order"
+    }
+  },
+  "outputs": {
+    "images": [
+      "figures/cr2-direct-diffuse-illuminance.png",
+      "figures/cr2-native15-spectral-strips.png",
+      "figures/cr2-horizon-zenith-background.png",
+      "figures/cr2-annotated-cr1-baseline.png"
+    ],
+    "directDiffusePlot": "figures/cr2-direct-diffuse-illuminance.png",
+    "spectralStrips": "figures/cr2-native15-spectral-strips.png",
+    "fieldContextPlot": "figures/cr2-horizon-zenith-background.png",
+    "annotatedContactSheet": "figures/cr2-annotated-cr1-baseline.png",
+    "rawDiffuseRadiances": [
+      "data/receiver-diffuse-radiance-solar-noon.f32le",
+      "data/receiver-diffuse-radiance-sunset-minus-60-minutes.f32le",
+      "data/receiver-diffuse-radiance-sunset-minus-10-minutes.f32le",
+      "data/receiver-diffuse-radiance-sunset.f32le",
+      "data/receiver-diffuse-radiance-sunset-plus-10-minutes.f32le",
+      "data/receiver-diffuse-radiance-sunset-plus-60-minutes.f32le",
+      "data/receiver-diffuse-radiance-sunset-plus-120-minutes.f32le"
+    ]
+  }
+}

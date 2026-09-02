@@ -32,14 +32,21 @@ byte-verified: 109 unique packages, `17,411,056,920` oracle bytes, and
 `16,154,147,172` exact-runtime bytes.
 
 The six-state catalog remains qualification evidence. The one-degree
-construction inventory lives
-in `tmp/extraterrestrial/production-adoption/one-degree-inventory-20260829-1`;
-the complete streaming hash proof is
-`one-degree-inventory-verification-20260829-1`. Only the selected cache is
-resident; the larger inventory primarily increases offline and deployed
-storage. The qualified runtime derivative
-`one-degree-bin-covered-runtime-packages-20260830-1` contains 109 packages,
-`17,230,339,148` bytes total, with a `161,192,508`-byte maximum resident cache.
+construction inventory and its complete streaming hash proof are preserved at
+their original repository-relative paths inside the verified
+[inventory archive](../../../../archives/extraterrestrial-pre-color-reset-20260831/extraterrestrial-production-adoption-inventory-output-2026-08-31.zip)
+and
+[support archive](../../../../archives/extraterrestrial-pre-color-reset-20260831/extraterrestrial-production-adoption-support-output-2026-08-31.zip),
+respectively. Only the selected cache is resident; the larger inventory
+primarily increases offline and deployed storage. The qualified runtime
+derivative `one-degree-bin-covered-runtime-packages-20260830-1` contains 109
+packages, `17,230,339,148` bytes total, with a `161,192,508`-byte maximum
+resident cache. It remains extracted at
+`server/flat32/data/one-degree-bin-covered-runtime-packages-20260830-1`
+for Flat32 and is also preserved in the archive set.
+The retained offline inventory builder, independent verifier, runtime-package
+assembler, and local data-location contract are documented by the
+[Flat32 cache-data owner](../../../../server/flat32/data/README.md).
 Half-up, half-open bins cover `[0, 108)`, and 108 degrees begins explicit
 darkness. Every dark angle shares one texture-free zero-scattering cache
 contribution, so darkness remains a successfully installed Algorithm32 state
@@ -159,6 +166,32 @@ condition scalar is geometry-supported, atmosphere-transmitted direct-source
 or pixel-class measurement. Production-only PA4 run
 `pa4-live-transport-20260829-14` reproduces the selected nautical appearance
 with the exact point-local cache and spherical ground endpoint.
+
+The contained correction experiment is complete through accepted CR8 run
+`000065-color-reset-qualification`. Production promotion is now owned by the
+[Color Reset design](color-reset-design.md) and
+[implementation plan](color-reset-implementation-plan.md). Missing external
+citations and official-experiment promotions are tracked by the
+[source-gap register](color-reset-source-gaps.md); the closed
+[experiment plan](../../extraterrestrial/color-reset-experiment-plan.md)
+remains detailed evidence history. P0 and P1 are complete. The authenticated
+[promotion manifest](color-reset-promotion-manifest.md) owns the evidence,
+production-owner, fixed-500, qualification, and redistribution inventory.
+Production now has exact independent Color, celestial-enable, stellar-catalog,
+and ordered-filter selections; Basic Bruneton no longer disables celestial
+sources, and unsupported or not-yet-implemented selections fail closed. The
+live pre-P9 default remains `BrunetonSourceLuminanceLiftColorDisplayModel`;
+receiver-light implementation begins at P2.
+
+The owner has selected the complete brightest-2,000 stellar roster for the
+production integration target. Current production still contains the reviewed
+brightest-500 roster. Promotion must reuse the accepted CR6B roster, CR6F
+Native15 packets, and CR6G bounded GPU package capability without importing a
+contained experiment at runtime. The accepted presentation remains one pixel
+at `q=24`; the rejected CR6H appearance result does not authorize a brightness
+increase solely to make the additional 1,500 members robust. Production
+qualification must therefore treat catalog completeness and apparent stellar
+brightness as separate claims.
 
 The two Stage 10 numerical authorities are
 `scripts/algorithm32-star/src/output/spectral-to-rgb.js` at SHA-256

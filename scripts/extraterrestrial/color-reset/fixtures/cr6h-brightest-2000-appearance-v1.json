@@ -1,0 +1,55 @@
+{
+  "schemaId": "algorithm32-color-reset-cr6h-brightest-2000-appearance-input-v1",
+  "experiment": {
+    "increment": "CR6H",
+    "slug": "cr6h-brightest-2000-appearance",
+    "question": "Does the accepted one-pixel q24, moderate-chroma, half-mesopic presentation remain credible with the complete brightest-2,000 roster?"
+  },
+  "parents": {
+    "physicalRunId": "000044-cr6-stellar-contrast-onset",
+    "physicalArtifactSetSha256": "5d36ef15f32e37ef95addf4a3fe38d8ab8ff264c810386876a9d676f3875f2a7",
+    "presentationRunId": "000054-cr6e-toggleable-mesopic-stellar-luminance",
+    "presentationArtifactSetSha256": "2dcbf0fea5bf4edc0d667d437ab853ffbb9401cb8214f4a4e1d2be01c1359df5",
+    "spectraRunId": "000055-cr6f-brightest-2000-spectral-materialization",
+    "spectraArtifactSetSha256": "a380716366661c7b9bddcd6b025bd1c111d9e60b8a03cde6445e6cd0a61649c4",
+    "runtimeRunId": "000057-cr6g-brightest-2000-runtime-capacity",
+    "runtimeArtifactSetSha256": "ae7224f0b85859a08d896f32b7be24c33472b9b3e034f07b365f96024af90627",
+    "rosterRunId": "000047-cr6b-brightest-2000-catalog-proof",
+    "rosterArtifactSetSha256": "ce50de53045f1e6f0ef33dcdc2b935a7023d5e28095b3d5f13add4980c370c57"
+  },
+  "presentation": {
+    "rowId": "mesopic-half",
+    "brightnessMultiplier": 24,
+    "maximumChromaRetention": 0.65,
+    "maximumRodContribution": 0.5,
+    "pointFootprint": "exactly one top-left framebuffer pixel"
+  },
+  "transportApproximation": {
+    "id": "authenticated-spherical-transmittance-by-local-up-v1",
+    "source": "All 4,000 member-scene inferred Native15 view-transmittance records in CR6 run 000044",
+    "relationship": "Spherical atmosphere makes view transmittance azimuth-independent; linearly interpolate each channel by local ENU up coordinate for added members.",
+    "claimLimit": "Existing 500 use exact authenticated transported packets. Added 1,500 use the declared interpolation surrogate; no new scattering or atmosphere claim."
+  },
+  "gates": {
+    "memberCount": 2000,
+    "controlMemberCount": 500,
+    "addedMemberCount": 1500,
+    "sunsetMaximumRobustStars": 0,
+    "plus10MaximumRobustStars": 0,
+    "plus30MinimumRobustStars": 3,
+    "darkMinimumAddedRobustStars": 1,
+    "maximumSaturatedStellarPixels": 0,
+    "maximumExactWhiteStellarPixels": 0,
+    "requiredPointWidthPixels": 1,
+    "requiredPointHeightPixels": 1
+  },
+  "outputs": {
+    "proof": "evidence/cr6h-brightest-2000-appearance-proof.json",
+    "candidatePrefix": "captures/cr6h-brightest-2000-",
+    "controlPrefix": "captures/cr6h-control-500-",
+    "controlCadence": "figures/cr6h-control-500-cadence.png",
+    "candidateCadence": "figures/cr6h-brightest-2000-cadence.png",
+    "decisionMatrix": "figures/cr6h-appearance-decision-matrix.png",
+    "countPlot": "figures/cr6h-visible-counts.png"
+  }
+}

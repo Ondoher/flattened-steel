@@ -1,0 +1,36 @@
+{
+  "schemaId": "algorithm32-color-reset-cr7-integrated-sequence-input-v1",
+  "experiment": {"increment": "CR7", "slug": "integrated-color-reset-sequence"},
+  "parents": {
+    "ambientRunId": "000011-neutral-geometry-ambient-proof",
+    "ambientArtifactSetSha256": "6d3c23060973e14e325e1fb87d28d1e61efe9a445f2fe57c101d2db04eb0d8a5",
+    "presentationRunId": "000054-cr6e-toggleable-mesopic-stellar-luminance",
+    "presentationArtifactSetSha256": "2dcbf0fea5bf4edc0d667d437ab853ffbb9401cb8214f4a4e1d2be01c1359df5",
+    "catalogAppearanceRunId": "000058-cr6h-brightest-2000-appearance",
+    "catalogAppearanceArtifactSetSha256": "2252cfa5a6c7bd9ed0ba767e0fb3a4ca70b41f29369ed2644509358366c3fd5e"
+  },
+  "selectedState": {
+    "atmosphere": "slope-078/p9",
+    "stellarRoster": 500,
+    "brightnessMultiplier": 24,
+    "chromaMaximumRetention": 0.65,
+    "mesopicMaximumRodContribution": 0.5,
+    "pointFootprint": "one pixel"
+  },
+  "sharedGeometryScenes": ["sunset", "sunset-plus-10-minutes", "sunset-plus-60-minutes"],
+  "gates": {
+    "integratedFrameCount": 9,
+    "sharedGeometrySceneCount": 3,
+    "minimumChangedGeometryPixels": 1000,
+    "maximumChangedNonGeometryPixels": 0,
+    "maximumSaturatedGeometryFraction": 0.01,
+    "requireStrictGeometryDimming": true,
+    "requireExactUncomposedReplay": true
+  },
+  "outputs": {
+    "framePrefix": "captures/cr7-integrated-",
+    "contactSheet": "figures/cr7-integrated-sequence.png",
+    "differenceSheet": "figures/cr7-geometry-localized-differences.png",
+    "proof": "evidence/cr7-integrated-sequence-proof.json"
+  }
+}

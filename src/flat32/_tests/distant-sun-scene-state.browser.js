@@ -72,4 +72,29 @@ describe('Flat32 distant-Sun scene state', () => {
 
 		mode.dispose();
 	});
+
+	it('keeps celestial enablement independent from basic Bruneton selection', () => {
+		const createMode = (celestialSourcesEnabled) =>
+			new SphericalDistantMode({
+				sceneState: createDistantSunSceneState({
+					observation: OBSERVATION,
+					observerHeight: ATMOSPHERE_OBSERVER_HEIGHT,
+					observerUpDirection: ATMOSPHERE_OBSERVER_UP_DIRECTION,
+				}),
+				sceneScale: ATMOSPHERE_SCENE_SCALE,
+				sourceAngularRadius: ATMOSPHERE_SOURCE_ANGULAR_RADIUS,
+				maximumScatteringOrder: 4,
+				sceneCacheAsset: ASSET,
+				celestialSourcesEnabled,
+				colorDisplayModelConfiguration: {model: 'basic-bruneton'},
+			});
+		const enabled = createMode(true);
+		const disabled = createMode(false);
+
+		expect(enabled.algorithm32._model.celestialSources).not.toBeNull();
+		expect(disabled.algorithm32._model.celestialSources).toBeNull();
+
+		enabled.dispose();
+		disabled.dispose();
+	});
 });

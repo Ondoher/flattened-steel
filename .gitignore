@@ -145,6 +145,10 @@ vite.config.ts.timestamp-*
 # Local project archives
 /archives
 
+# Large generated Flat32 cache packages; keep the data contract documentation.
+/server/flat32/data/*
+!/server/flat32/data/README.md
+
 # Generated Polylith browser-test bundles
 /tests/flat32/
 

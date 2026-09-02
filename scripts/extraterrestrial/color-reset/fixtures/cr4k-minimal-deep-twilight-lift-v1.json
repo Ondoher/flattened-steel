@@ -1,0 +1,823 @@
+{
+  "schemaId": "algorithm32-color-reset-cr4k-minimal-deep-twilight-lift-input-v1",
+  "claimBoundary": {
+    "summary": "Replay twelve authenticated CR4I fields through the exact slope-078/p9 control and two pivot-only achromatic deep-twilight lifts. Preserve the control and all source evidence while making no automatic appearance selection.",
+    "fieldReplayOnly": true,
+    "physicalTransportExecution": false,
+    "cacheExecution": false,
+    "appearanceAcceptanceGate": false,
+    "appearanceAccepted": false,
+    "automaticCandidateSelection": false,
+    "perSceneColorTuning": false,
+    "namedTimeRuntimeBranch": false,
+    "chromaticCorrection": false,
+    "suppliedPhotographsRuntimeInput": false,
+    "suppliedPhotographsQuantitativeOracle": false,
+    "productionClaim": false
+  },
+  "parents": {
+    "cr1": {
+      "namespace": "color-reset",
+      "runId": "000005-six-scene-visual-baseline",
+      "conclusion": "accepted",
+      "artifactSetSha256": "2f7b49dd239fcaf5399c65bfebc59195458edf0b82910cf9987e341b76a615fc",
+      "manifest": {
+        "path": "artifact-manifest.json",
+        "byteLength": 14434,
+        "sha256": "3ba1199191f6b9dd825b0475c7d329a4b0be84e441db655d354bdce234f6949b"
+      },
+      "analysis": {
+        "path": "evidence/render-analysis.json",
+        "byteLength": 287705,
+        "sha256": "d5525a54248d61c0f6606e8371181e569c9f6926e7729c555e906cb0286e01fe"
+      },
+      "role": "Immutable RGBY-field and R8 scene-hit-mask authority for minus 60, minus 10, sunset, plus 10, and plus 60 minutes. Receiver-light values for those scenes are owned separately by CR2."
+    },
+    "cr2": {
+      "namespace": "color-reset",
+      "runId": "000007-available-light-inventory",
+      "conclusion": "accepted",
+      "artifactSetSha256": "dcd6cdd8146094d05427ad180af7fccefdbaa67e290d1b5f21e6a0d4b03697ba",
+      "manifest": {
+        "path": "artifact-manifest.json",
+        "byteLength": 7813,
+        "sha256": "f0790db92f9e39d1bc2c735572928d34b5698b0123524a56845b571d4f27b226"
+      },
+      "analysis": {
+        "path": "evidence/measurement-analysis.json",
+        "byteLength": 231633,
+        "sha256": "99cc785895bf84edd57072eb95951eb916af2ec37d49eae25abd148e34545a47"
+      },
+      "role": "Accepted total-horizontal receiver-illuminance authority for the CR1-owned minus 60, minus 10, sunset, plus 10, and plus 60 minute fields."
+    },
+    "cr4h": {
+      "namespace": "color-reset",
+      "runId": "000034-cr4h-low-sun-cadence-acquisition",
+      "conclusion": "accepted",
+      "artifactSetSha256": "92b779126f25e6b0b0bfa43e1efaf6ec684b5776bd708f187959ef977907155f",
+      "manifest": {
+        "path": "artifact-manifest.json",
+        "byteLength": 9966,
+        "sha256": "a6de83a6a54928542389a2aa5ebdf4bbf5e31270cb24b92649cfce2c76888d13"
+      },
+      "analysis": {
+        "path": "evidence/analysis.json",
+        "byteLength": 157290,
+        "sha256": "986e4db154895d5f5718dd9680ece56a1dee251c37c06626712ce11b8e145248"
+      },
+      "role": "Immutable CR4H RGBY-field, R8 mask, receiver-light, and angle authority for minus 45, minus 30, minus 20, and minus 5 minutes."
+    },
+    "cr4f": {
+      "namespace": "color-reset",
+      "runId": "000032-cr4f-fine-twilight-cadence",
+      "conclusion": "accepted",
+      "artifactSetSha256": "60e01c9cd2b26579f5c83cc0904f29b920493000a497019c5f2b0f6b2cf21042",
+      "manifest": {
+        "path": "artifact-manifest.json",
+        "byteLength": 9460,
+        "sha256": "97b42405a154405eab3603ea56e91d493249ce9304e999d2d06abbce5a01260e"
+      },
+      "analysis": {
+        "path": "evidence/analysis.json",
+        "byteLength": 129289,
+        "sha256": "72c652974a7b75a414f7c055b279c50c2b38c2687cee6310db2d5a553942354b"
+      },
+      "role": "Immutable RGBY-field, R8 mask, receiver-light, and angle authority for plus 20, plus 30, and plus 45 minutes."
+    },
+    "cr4i": {
+      "namespace": "color-reset",
+      "runId": "000035-cr4i-smooth-bruneton-shoulder-check",
+      "conclusion": "rejected",
+      "artifactSetSha256": "d5d7273e8200bd15070db6bf17d2acefe65908c2762d6e2cff12ca1d859aea38",
+      "manifest": {
+        "path": "artifact-manifest.json",
+        "byteLength": 18730,
+        "sha256": "e908b5f0290c09c8ad55c0b5bdf9731a0e258e496ea158553c505a4f7cb8d052"
+      },
+      "analysis": {
+        "path": "evidence/analysis.json",
+        "byteLength": 537216,
+        "sha256": "63341698ee0b5f5bf62a2d0fea1a5e1c239d1009d539dce33f9c22fcca8803c6"
+      },
+      "role": "Rejected-but-independently-verified CR4I run; authority for the exact twelve slope-078/p9 control PNGs and replay result identity only. Its rejected broader-shoulder candidate claim is not reinterpreted."
+    }
+  },
+  "viewport": {
+    "widthPixels": 640,
+    "heightPixels": 400,
+    "verticalFieldOfViewDegrees": 78,
+    "viewAzimuthDegrees": -59.99625193137896,
+    "viewElevationDegrees": 5,
+    "foreground": "black spherical-ground endpoint inherited from CR1"
+  },
+  "response": {
+    "operation": "exposedLinearRgb = signedProjectedLinearRgb * g(E); displayRgb = unchangedBrunetonExponential(exposedLinearRgb)",
+    "operationSpace": "signed projected linear sRGB before unchanged Bruneton exponential",
+    "receiverState": "total-horizontal photopic illuminance E in lux",
+    "sameScalarForEveryPixelAndChannel": true,
+    "familyEquation": "g(E) = [1 + A/(1+(E/S)^p)] * exp(q*w*softplus(ln(P/(E+F))/w))",
+    "pivotEquation": "P_s = 385 lux * 2^(s / 0.78)",
+    "shared": {
+      "sunsetAmplitude": 3.5,
+      "sunsetTransitionIlluminanceLux": 980,
+      "sunsetRolloffPower": 9,
+      "adaptationFloorIlluminanceLux": 0.02,
+      "adaptationSoftnessLogUnits": 0.1,
+      "adaptationExponent": 0.78
+    },
+    "rows": [
+      {
+        "id": "slope-078-p9-control",
+        "label": "Current slope 0.78 / p=9",
+        "kind": "smooth-response",
+        "sunsetAmplitude": 3.5,
+        "sunsetTransitionIlluminanceLux": 980,
+        "sunsetRolloffPower": 9,
+        "adaptationPivotIlluminanceLux": 385,
+        "adaptationFloorIlluminanceLux": 0.02,
+        "adaptationSoftnessLogUnits": 0.1,
+        "adaptationExponent": 0.78,
+        "intendedDeepLiftStops": 0,
+        "expectedDeepGainRatioFromControl": 1,
+        "colorCss": "#58a6ff",
+        "eligibility": "control",
+        "role": "Exact CR4I slope-078/p9 replay authority; authenticated against all twelve rejected-but-verified CR4I control PNGs."
+      },
+      {
+        "id": "deep-lift-015",
+        "label": "+0.15 stop deep lift",
+        "kind": "smooth-response",
+        "sunsetAmplitude": 3.5,
+        "sunsetTransitionIlluminanceLux": 980,
+        "sunsetRolloffPower": 9,
+        "adaptationPivotIlluminanceLux": 439.8971145541154,
+        "adaptationFloorIlluminanceLux": 0.02,
+        "adaptationSoftnessLogUnits": 0.1,
+        "adaptationExponent": 0.78,
+        "intendedDeepLiftStops": 0.15,
+        "expectedDeepGainRatioFromControl": 1.109569472067845,
+        "colorCss": "#65d68a",
+        "eligibility": "candidate"
+      },
+      {
+        "id": "deep-lift-030",
+        "label": "+0.30 stop deep lift",
+        "kind": "smooth-response",
+        "sunsetAmplitude": 3.5,
+        "sunsetTransitionIlluminanceLux": 980,
+        "sunsetRolloffPower": 9,
+        "adaptationPivotIlluminanceLux": 502.62200361827666,
+        "adaptationFloorIlluminanceLux": 0.02,
+        "adaptationSoftnessLogUnits": 0.1,
+        "adaptationExponent": 0.78,
+        "intendedDeepLiftStops": 0.3,
+        "expectedDeepGainRatioFromControl": 1.2311444133449163,
+        "colorCss": "#ff9f43",
+        "eligibility": "candidate"
+      }
+    ]
+  },
+  "qualitativeReferences": {
+    "ownerSuppliedNauticalTwilightPhotographs": {
+      "role": "qualitative appearance context only",
+      "desiredVisibleRelationships": [
+        "visible blue greater sky",
+        "narrow warm horizon",
+        "smooth vertical cool-to-warm transition",
+        "dark foreground"
+      ],
+      "excludedUses": [
+        "runtime input",
+        "pixel target",
+        "absolute brightness target",
+        "absolute hue target",
+        "RMSE oracle",
+        "parameter fit",
+        "scene-equivalence claim"
+      ],
+      "uncontrolledFactors": [
+        "solar depression",
+        "camera exposure",
+        "tone curve",
+        "white balance",
+        "atmosphere",
+        "clouds",
+        "Moon",
+        "foreground",
+        "local lights",
+        "site"
+      ]
+    }
+  },
+  "presentation": {
+    "title": "CR4K minimal deep-twilight lift",
+    "subtitle": "Exact slope-078/p9 replay plus +0.15/+0.30-stop pivot-only rows; photographs are qualitative context only",
+    "responseOrder": [
+      "slope-078-p9-control",
+      "deep-lift-015",
+      "deep-lift-030"
+    ],
+    "sceneOrder": [
+      "sunset-minus-60-minutes",
+      "sunset-minus-45-minutes",
+      "sunset-minus-30-minutes",
+      "sunset-minus-20-minutes",
+      "sunset-minus-10-minutes",
+      "sunset-minus-5-minutes",
+      "sunset",
+      "sunset-plus-10-minutes",
+      "sunset-plus-20-minutes",
+      "sunset-plus-30-minutes",
+      "sunset-plus-45-minutes",
+      "sunset-plus-60-minutes"
+    ],
+    "cadenceRows": [
+      [
+        "sunset-minus-60-minutes",
+        "sunset-minus-45-minutes",
+        "sunset-minus-30-minutes",
+        "sunset-minus-20-minutes",
+        "sunset-minus-10-minutes",
+        "sunset-minus-5-minutes"
+      ],
+      [
+        "sunset",
+        "sunset-plus-10-minutes",
+        "sunset-plus-20-minutes",
+        "sunset-plus-30-minutes",
+        "sunset-plus-45-minutes",
+        "sunset-plus-60-minutes"
+      ]
+    ],
+    "twilightComparisonSceneIds": [
+      "sunset",
+      "sunset-plus-10-minutes",
+      "sunset-plus-20-minutes",
+      "sunset-plus-30-minutes",
+      "sunset-plus-45-minutes",
+      "sunset-plus-60-minutes"
+    ],
+    "differenceAmplification": 8,
+    "imageSmoothing": false,
+    "backgroundCss": "#0d1117",
+    "headingCss": "#f0f6fc",
+    "secondaryCss": "#9da7b3",
+    "borderCss": "#475569",
+    "cadenceLayout": {
+      "columnCount": 6,
+      "rowCount": 2,
+      "outerPaddingPixels": 20,
+      "columnGapPixels": 12,
+      "rowGapPixels": 18,
+      "titleHeightPixels": 64,
+      "panelLabelHeightPixels": 32,
+      "expectedWidthPixels": 3940,
+      "expectedHeightPixels": 986
+    }
+  },
+  "scenes": [
+    {
+      "id": "sunset-minus-60-minutes",
+      "label": "1 hour before sunset",
+      "timeIso": "2024-06-21T02:26:03.503Z",
+      "offsetMinutes": -60,
+      "solarZenithDegrees": 79.21416580949227,
+      "solarElevationDegrees": 10.78583419050773,
+      "totalHorizontalIlluminance": {
+        "value": 15435.1457596012,
+        "units": "lux"
+      },
+      "sourcePrefix": "/cr1/",
+      "parentId": "cr1",
+      "receiverLightParentId": "cr2",
+      "field": {
+        "path": "data/pre-display-linear-rgb-y-sunset-minus-60-minutes.f32le",
+        "byteLength": 4096000,
+        "sha256": "70ca93b6114d0e695120b827dff50514b13d008477628b6e482cd734c61f52fb"
+      },
+      "mask": {
+        "path": "data/scene-hit-mask-sunset-minus-60-minutes.r8",
+        "byteLength": 256000,
+        "sha256": "7519bd29b7cfc20aee3cb9230d93f6bc2365a332769f2f95b02e0b07203a94f8"
+      },
+      "preservationQualification": "gate",
+      "controlPng": {
+        "path": "captures/cr4i-slope-078-p9-control-sunset-minus-60-minutes.png",
+        "byteLength": 127377,
+        "sha256": "866139ea39d00a9748e757118976f9138aca0dd910d161bfdb4baa61e82be4e4"
+      }
+    },
+    {
+      "id": "sunset-minus-45-minutes",
+      "label": "45 minutes before sunset",
+      "timeIso": "2024-06-21T02:41:03.503Z",
+      "offsetMinutes": -45,
+      "solarZenithDegrees": 81.9704740750178,
+      "solarElevationDegrees": 8.029525924982195,
+      "totalHorizontalIlluminance": {
+        "value": 10806.649111576957,
+        "units": "lux"
+      },
+      "sourcePrefix": "/cr4h/",
+      "parentId": "cr4h",
+      "receiverLightParentId": "cr4h",
+      "field": {
+        "path": "data/pre-display-linear-rgb-y-sunset-minus-45-minutes.f32le",
+        "byteLength": 4096000,
+        "sha256": "51b3cb5e28d72d4f74a5ab41fe8b0c81e096cb6e26f9554ef9942cf9e82f2a10"
+      },
+      "mask": {
+        "path": "data/scene-hit-mask-sunset-minus-45-minutes.r8",
+        "byteLength": 256000,
+        "sha256": "7519bd29b7cfc20aee3cb9230d93f6bc2365a332769f2f95b02e0b07203a94f8"
+      },
+      "preservationQualification": "gate",
+      "controlPng": {
+        "path": "captures/cr4i-slope-078-p9-control-sunset-minus-45-minutes.png",
+        "byteLength": 125663,
+        "sha256": "06632875b3864e8d95ab2b666789162ee08a3d5cd1c5bb7884c29671399aefe6"
+      }
+    },
+    {
+      "id": "sunset-minus-30-minutes",
+      "label": "30 minutes before sunset",
+      "timeIso": "2024-06-21T02:56:03.503Z",
+      "offsetMinutes": -30,
+      "solarZenithDegrees": 84.68311956050158,
+      "solarElevationDegrees": 5.316880439498405,
+      "totalHorizontalIlluminance": {
+        "value": 6596.110497292015,
+        "units": "lux"
+      },
+      "sourcePrefix": "/cr4h/",
+      "parentId": "cr4h",
+      "receiverLightParentId": "cr4h",
+      "field": {
+        "path": "data/pre-display-linear-rgb-y-sunset-minus-30-minutes.f32le",
+        "byteLength": 4096000,
+        "sha256": "48d098f65f90c7813ca68b50e3e6815b89393f2bfcc95d4e778900bd952487a7"
+      },
+      "mask": {
+        "path": "data/scene-hit-mask-sunset-minus-30-minutes.r8",
+        "byteLength": 256000,
+        "sha256": "7519bd29b7cfc20aee3cb9230d93f6bc2365a332769f2f95b02e0b07203a94f8"
+      },
+      "preservationQualification": "gate",
+      "controlPng": {
+        "path": "captures/cr4i-slope-078-p9-control-sunset-minus-30-minutes.png",
+        "byteLength": 122485,
+        "sha256": "ce965063a201e0ad7d731b9aa63b6d23b266d84181f1a7f2aaf63d62cd234cc4"
+      }
+    },
+    {
+      "id": "sunset-minus-20-minutes",
+      "label": "20 minutes before sunset",
+      "timeIso": "2024-06-21T03:06:03.503Z",
+      "offsetMinutes": -20,
+      "solarZenithDegrees": 86.46494683172762,
+      "solarElevationDegrees": 3.53505316827237,
+      "totalHorizontalIlluminance": {
+        "value": 3632.9196000280117,
+        "units": "lux"
+      },
+      "sourcePrefix": "/cr4h/",
+      "parentId": "cr4h",
+      "receiverLightParentId": "cr4h",
+      "field": {
+        "path": "data/pre-display-linear-rgb-y-sunset-minus-20-minutes.f32le",
+        "byteLength": 4096000,
+        "sha256": "fc4ed69e430d85db65be1b691d01574b0147021f6e41aee51bebb5d24c72ae59"
+      },
+      "mask": {
+        "path": "data/scene-hit-mask-sunset-minus-20-minutes.r8",
+        "byteLength": 256000,
+        "sha256": "7519bd29b7cfc20aee3cb9230d93f6bc2365a332769f2f95b02e0b07203a94f8"
+      },
+      "preservationQualification": "report-only",
+      "controlPng": {
+        "path": "captures/cr4i-slope-078-p9-control-sunset-minus-20-minutes.png",
+        "byteLength": 108671,
+        "sha256": "9562449e4805a084ec6a9cb90c6b075c2390f632531e1ae5d51684ebd1a2842e"
+      }
+    },
+    {
+      "id": "sunset-minus-10-minutes",
+      "label": "10 minutes before sunset",
+      "timeIso": "2024-06-21T03:16:03.503Z",
+      "offsetMinutes": -10,
+      "solarZenithDegrees": 88.2237421377953,
+      "solarElevationDegrees": 1.7762578622047,
+      "totalHorizontalIlluminance": {
+        "value": 2155.4260282733017,
+        "units": "lux"
+      },
+      "sourcePrefix": "/cr1/",
+      "parentId": "cr1",
+      "receiverLightParentId": "cr2",
+      "field": {
+        "path": "data/pre-display-linear-rgb-y-sunset-minus-10-minutes.f32le",
+        "byteLength": 4096000,
+        "sha256": "60a694a2e0827d6cc0c0f27ff640b7eaf506b80b207cc8a6adeb0045b4792fda"
+      },
+      "mask": {
+        "path": "data/scene-hit-mask-sunset-minus-10-minutes.r8",
+        "byteLength": 256000,
+        "sha256": "7519bd29b7cfc20aee3cb9230d93f6bc2365a332769f2f95b02e0b07203a94f8"
+      },
+      "preservationQualification": "report-only",
+      "controlPng": {
+        "path": "captures/cr4i-slope-078-p9-control-sunset-minus-10-minutes.png",
+        "byteLength": 98312,
+        "sha256": "786b518e7a5e01f09f4e750ecf3359f18745f423913971a20b89b2164fc4fe7b"
+      }
+    },
+    {
+      "id": "sunset-minus-5-minutes",
+      "label": "5 minutes before sunset",
+      "timeIso": "2024-06-21T03:21:03.503Z",
+      "offsetMinutes": -5,
+      "solarZenithDegrees": 89.09400917569873,
+      "solarElevationDegrees": 0.90599082430127,
+      "totalHorizontalIlluminance": {
+        "value": 1495.6121809049725,
+        "units": "lux"
+      },
+      "sourcePrefix": "/cr4h/",
+      "parentId": "cr4h",
+      "receiverLightParentId": "cr4h",
+      "field": {
+        "path": "data/pre-display-linear-rgb-y-sunset-minus-5-minutes.f32le",
+        "byteLength": 4096000,
+        "sha256": "90c3249f364f1a66587943af06608a48aa9c395ada1ad50c1bed4be684a407f7"
+      },
+      "mask": {
+        "path": "data/scene-hit-mask-sunset-minus-5-minutes.r8",
+        "byteLength": 256000,
+        "sha256": "7519bd29b7cfc20aee3cb9230d93f6bc2365a332769f2f95b02e0b07203a94f8"
+      },
+      "preservationQualification": "report-only",
+      "controlPng": {
+        "path": "captures/cr4i-slope-078-p9-control-sunset-minus-5-minutes.png",
+        "byteLength": 85265,
+        "sha256": "01ad5353245dd484e73fca960af3320ff2e865c7ebec9598f5fc57f3391c87f0"
+      }
+    },
+    {
+      "id": "sunset",
+      "label": "Sunset",
+      "timeIso": "2024-06-21T03:26:03.503Z",
+      "offsetMinutes": 0,
+      "solarZenithDegrees": 89.95791522653448,
+      "solarElevationDegrees": 0.04208477346552,
+      "totalHorizontalIlluminance": {
+        "value": 1012.6643901353058,
+        "units": "lux"
+      },
+      "sourcePrefix": "/cr1/",
+      "parentId": "cr1",
+      "receiverLightParentId": "cr2",
+      "field": {
+        "path": "data/pre-display-linear-rgb-y-sunset.f32le",
+        "byteLength": 4096000,
+        "sha256": "a81c0ab29093a09ef7b306418c945d61d71db5f5fb066702911f9d1b5bf6975b"
+      },
+      "mask": {
+        "path": "data/scene-hit-mask-sunset.r8",
+        "byteLength": 256000,
+        "sha256": "7519bd29b7cfc20aee3cb9230d93f6bc2365a332769f2f95b02e0b07203a94f8"
+      },
+      "preservationQualification": "report-only",
+      "controlPng": {
+        "path": "captures/cr4i-slope-078-p9-control-sunset.png",
+        "byteLength": 81792,
+        "sha256": "cea05de372524f0522732c16c90dbdb1d024afda3b2adc3b9301bacf0ba106d9"
+      }
+    },
+    {
+      "id": "sunset-plus-10-minutes",
+      "label": "10 minutes after sunset",
+      "timeIso": "2024-06-21T03:36:03.503Z",
+      "offsetMinutes": 10,
+      "solarZenithDegrees": 91.66578905821635,
+      "solarElevationDegrees": -1.66578905821635,
+      "totalHorizontalIlluminance": {
+        "value": 385.0097520214597,
+        "units": "lux"
+      },
+      "sourcePrefix": "/cr1/",
+      "parentId": "cr1",
+      "receiverLightParentId": "cr2",
+      "field": {
+        "path": "data/pre-display-linear-rgb-y-sunset-plus-10-minutes.f32le",
+        "byteLength": 4096000,
+        "sha256": "ea9baaea08f15432045c25176513bd20beeddef633ac4fdfab8b602d361500ba"
+      },
+      "mask": {
+        "path": "data/scene-hit-mask-sunset-plus-10-minutes.r8",
+        "byteLength": 256000,
+        "sha256": "7519bd29b7cfc20aee3cb9230d93f6bc2365a332769f2f95b02e0b07203a94f8"
+      },
+      "preservationQualification": "report-only",
+      "controlPng": {
+        "path": "captures/cr4i-slope-078-p9-control-sunset-plus-10-minutes.png",
+        "byteLength": 69451,
+        "sha256": "cc0813fc994062033f9c7d60ed07f6db802f4d3b742a3be9c899d77f88a2beb2"
+      }
+    },
+    {
+      "id": "sunset-plus-20-minutes",
+      "label": "20 minutes after sunset",
+      "timeIso": "2024-06-21T03:46:03.503Z",
+      "offsetMinutes": 20,
+      "solarZenithDegrees": 93.3455944119034,
+      "solarElevationDegrees": -3.345594411903406,
+      "totalHorizontalIlluminance": {
+        "value": 104.71173702690129,
+        "units": "lux"
+      },
+      "sourcePrefix": "/cr4f/",
+      "parentId": "cr4f",
+      "receiverLightParentId": "cr4f",
+      "field": {
+        "path": "data/pre-display-linear-rgb-y-sunset-plus-20-minutes.f32le",
+        "byteLength": 4096000,
+        "sha256": "e6b1392e1e558e3efaf6eb511f434d8135c36f2e141ebfe44582c9bd43cee92d"
+      },
+      "mask": {
+        "path": "data/scene-hit-mask-sunset-plus-20-minutes.r8",
+        "byteLength": 256000,
+        "sha256": "7519bd29b7cfc20aee3cb9230d93f6bc2365a332769f2f95b02e0b07203a94f8"
+      },
+      "preservationQualification": "report-only",
+      "controlPng": {
+        "path": "captures/cr4i-slope-078-p9-control-sunset-plus-20-minutes.png",
+        "byteLength": 71100,
+        "sha256": "490e8a82644b0871b7106b27e57d42f20acd7ff50e1625a52190a6337473b5ee"
+      }
+    },
+    {
+      "id": "sunset-plus-30-minutes",
+      "label": "30 minutes after sunset",
+      "timeIso": "2024-06-21T03:56:03.503Z",
+      "offsetMinutes": 30,
+      "solarZenithDegrees": 94.99546481658032,
+      "solarElevationDegrees": -4.995464816580323,
+      "totalHorizontalIlluminance": {
+        "value": 20.29393028505105,
+        "units": "lux"
+      },
+      "sourcePrefix": "/cr4f/",
+      "parentId": "cr4f",
+      "receiverLightParentId": "cr4f",
+      "field": {
+        "path": "data/pre-display-linear-rgb-y-sunset-plus-30-minutes.f32le",
+        "byteLength": 4096000,
+        "sha256": "165f29ee2782a2da2066d46562555521975f626f3164a5976d65846a25db8220"
+      },
+      "mask": {
+        "path": "data/scene-hit-mask-sunset-plus-30-minutes.r8",
+        "byteLength": 256000,
+        "sha256": "7519bd29b7cfc20aee3cb9230d93f6bc2365a332769f2f95b02e0b07203a94f8"
+      },
+      "preservationQualification": "report-only",
+      "controlPng": {
+        "path": "captures/cr4i-slope-078-p9-control-sunset-plus-30-minutes.png",
+        "byteLength": 76057,
+        "sha256": "64cb989cbd00feecc39a634c1172956e27ce8bb597f41291bed54985fb88923e"
+      }
+    },
+    {
+      "id": "sunset-plus-45-minutes",
+      "label": "45 minutes after sunset",
+      "timeIso": "2024-06-21T04:11:03.503Z",
+      "offsetMinutes": 45,
+      "solarZenithDegrees": 97.40980779067472,
+      "solarElevationDegrees": -7.409807790674717,
+      "totalHorizontalIlluminance": {
+        "value": 1.3443726921227952,
+        "units": "lux"
+      },
+      "sourcePrefix": "/cr4f/",
+      "parentId": "cr4f",
+      "receiverLightParentId": "cr4f",
+      "field": {
+        "path": "data/pre-display-linear-rgb-y-sunset-plus-45-minutes.f32le",
+        "byteLength": 4096000,
+        "sha256": "4e7eb1ed8bf56303f9b34e815f8a3b88f8131e58e0fe533db090f1f60b342dd6"
+      },
+      "mask": {
+        "path": "data/scene-hit-mask-sunset-plus-45-minutes.r8",
+        "byteLength": 256000,
+        "sha256": "7519bd29b7cfc20aee3cb9230d93f6bc2365a332769f2f95b02e0b07203a94f8"
+      },
+      "preservationQualification": "report-only",
+      "controlPng": {
+        "path": "captures/cr4i-slope-078-p9-control-sunset-plus-45-minutes.png",
+        "byteLength": 75267,
+        "sha256": "251148bb7e161137e42fdb631ee655d55d25c2766bbd9d2e6e8c535c47aff424"
+      }
+    },
+    {
+      "id": "sunset-plus-60-minutes",
+      "label": "1 hour after sunset",
+      "timeIso": "2024-06-21T04:26:03.503Z",
+      "offsetMinutes": 60,
+      "solarZenithDegrees": 99.74525026663457,
+      "solarElevationDegrees": -9.74525026663457,
+      "totalHorizontalIlluminance": {
+        "value": 0.2044095523727617,
+        "units": "lux"
+      },
+      "sourcePrefix": "/cr1/",
+      "parentId": "cr1",
+      "receiverLightParentId": "cr2",
+      "field": {
+        "path": "data/pre-display-linear-rgb-y-sunset-plus-60-minutes.f32le",
+        "byteLength": 4096000,
+        "sha256": "70d22578d130e854fce2dba8d087bbe53478b1cb196153dcd7d66b4dd184f54e"
+      },
+      "mask": {
+        "path": "data/scene-hit-mask-sunset-plus-60-minutes.r8",
+        "byteLength": 256000,
+        "sha256": "7519bd29b7cfc20aee3cb9230d93f6bc2365a332769f2f95b02e0b07203a94f8"
+      },
+      "preservationQualification": "report-only",
+      "controlPng": {
+        "path": "captures/cr4i-slope-078-p9-control-sunset-plus-60-minutes.png",
+        "byteLength": 61401,
+        "sha256": "f68dbd744c29adf0e2848838e08ba4f6b23c229d18b686e72aeb0ba23d3752a1"
+      }
+    }
+  ],
+  "diagnostics": {
+    "chronologyRegions": [
+      {
+        "id": "whole-sky",
+        "label": "Whole sky",
+        "minimumYFraction": 0,
+        "maximumYFraction": 1
+      },
+      {
+        "id": "upper-sky",
+        "label": "Upper sky (not true zenith)",
+        "minimumYFraction": 0,
+        "maximumYFraction": 0.35
+      },
+      {
+        "id": "horizon-band",
+        "label": "Horizon band",
+        "minimumYFraction": 0.35,
+        "maximumYFraction": 0.56
+      }
+    ],
+    "maximumCpuGpuRgbCodeDifference": 1,
+    "controlReplay": {
+      "maximumRgbCodeDifference": 1,
+      "maximumRgbCodeRmse": 0.05,
+      "exactPixelsPreferred": true
+    },
+    "candidatePreSunset": {
+      "maximumRgbCodeDifferenceFromControl": 1,
+      "maximumRgbCodeRmseFromControl": 0.05,
+      "lastOffsetMinutes": 0
+    },
+    "responseProof": {
+      "minimumIlluminanceLux": 0.0001,
+      "maximumDenseIlluminanceLux": 200000,
+      "highLightProofIlluminanceLux": 1000000000000,
+      "positiveLogSampleCount": 4096,
+      "maximumDerivativePositiveTolerance": 1e-14,
+      "maximumHighLightGainExcess": 1e-12,
+      "continuousFirstDerivativeBasis": "positive-parameter products and compositions of the fixed p=9 Hill term, logarithm over E+F with F>0, softplus, and exponential on E>=0; the response is continuously differentiable over E>=0"
+    },
+    "pivotProof": {
+      "controlPivotIlluminanceLux": 385,
+      "maximumPivotResidualLux": 1e-12,
+      "maximumDeepGainRatioResidual": 1e-12,
+      "deepProofIlluminanceLux": 0
+    },
+    "strictRegionalCadenceSceneIds": [
+      "sunset",
+      "sunset-plus-10-minutes",
+      "sunset-plus-20-minutes",
+      "sunset-plus-30-minutes",
+      "sunset-plus-45-minutes",
+      "sunset-plus-60-minutes"
+    ],
+    "reportOnlyInheritedJoin": {
+      "fromSceneId": "sunset-minus-5-minutes",
+      "toSceneId": "sunset",
+      "reason": "The selected p9 control retains the known pre-sunset rebound; CR4K changes only the deep adaptation pivot and does not claim to repair that join."
+    },
+    "maximumTwilightBlackSkyFraction": 0,
+    "maximumTwilightSaturatedSkyFraction": 0,
+    "noReboundDefinition": "For each response, whole-sky, upper-sky, and horizon-band encoded-luminance medians must strictly decrease from sunset through plus 60 minutes.",
+    "visualReviewOnly": [
+      "no new lobe",
+      "no seam",
+      "no broad gray or brown wash",
+      "no white or yellow horizon plateau",
+      "no flattened vertical gradient"
+    ]
+  },
+  "outputs": {
+    "frames": {
+      "slope-078-p9-control": [
+        "captures/cr4k-slope-078-p9-control-sunset-minus-60-minutes.png",
+        "captures/cr4k-slope-078-p9-control-sunset-minus-45-minutes.png",
+        "captures/cr4k-slope-078-p9-control-sunset-minus-30-minutes.png",
+        "captures/cr4k-slope-078-p9-control-sunset-minus-20-minutes.png",
+        "captures/cr4k-slope-078-p9-control-sunset-minus-10-minutes.png",
+        "captures/cr4k-slope-078-p9-control-sunset-minus-5-minutes.png",
+        "captures/cr4k-slope-078-p9-control-sunset.png",
+        "captures/cr4k-slope-078-p9-control-sunset-plus-10-minutes.png",
+        "captures/cr4k-slope-078-p9-control-sunset-plus-20-minutes.png",
+        "captures/cr4k-slope-078-p9-control-sunset-plus-30-minutes.png",
+        "captures/cr4k-slope-078-p9-control-sunset-plus-45-minutes.png",
+        "captures/cr4k-slope-078-p9-control-sunset-plus-60-minutes.png"
+      ],
+      "deep-lift-015": [
+        "captures/cr4k-deep-lift-015-sunset-minus-60-minutes.png",
+        "captures/cr4k-deep-lift-015-sunset-minus-45-minutes.png",
+        "captures/cr4k-deep-lift-015-sunset-minus-30-minutes.png",
+        "captures/cr4k-deep-lift-015-sunset-minus-20-minutes.png",
+        "captures/cr4k-deep-lift-015-sunset-minus-10-minutes.png",
+        "captures/cr4k-deep-lift-015-sunset-minus-5-minutes.png",
+        "captures/cr4k-deep-lift-015-sunset.png",
+        "captures/cr4k-deep-lift-015-sunset-plus-10-minutes.png",
+        "captures/cr4k-deep-lift-015-sunset-plus-20-minutes.png",
+        "captures/cr4k-deep-lift-015-sunset-plus-30-minutes.png",
+        "captures/cr4k-deep-lift-015-sunset-plus-45-minutes.png",
+        "captures/cr4k-deep-lift-015-sunset-plus-60-minutes.png"
+      ],
+      "deep-lift-030": [
+        "captures/cr4k-deep-lift-030-sunset-minus-60-minutes.png",
+        "captures/cr4k-deep-lift-030-sunset-minus-45-minutes.png",
+        "captures/cr4k-deep-lift-030-sunset-minus-30-minutes.png",
+        "captures/cr4k-deep-lift-030-sunset-minus-20-minutes.png",
+        "captures/cr4k-deep-lift-030-sunset-minus-10-minutes.png",
+        "captures/cr4k-deep-lift-030-sunset-minus-5-minutes.png",
+        "captures/cr4k-deep-lift-030-sunset.png",
+        "captures/cr4k-deep-lift-030-sunset-plus-10-minutes.png",
+        "captures/cr4k-deep-lift-030-sunset-plus-20-minutes.png",
+        "captures/cr4k-deep-lift-030-sunset-plus-30-minutes.png",
+        "captures/cr4k-deep-lift-030-sunset-plus-45-minutes.png",
+        "captures/cr4k-deep-lift-030-sunset-plus-60-minutes.png"
+      ]
+    },
+    "cadences": {
+      "slope-078-p9-control": "figures/cr4k-slope-078-p9-control-six-column-cadence.png",
+      "deep-lift-015": "figures/cr4k-deep-lift-015-six-column-cadence.png",
+      "deep-lift-030": "figures/cr4k-deep-lift-030-six-column-cadence.png"
+    },
+    "twilightComparison": "figures/cr4k-sunset-through-plus-60-comparison.png",
+    "amplifiedDifferences": "figures/cr4k-amplified-candidate-vs-control-differences.png",
+    "clippingMasks": "figures/cr4k-black-saturation-masks.png",
+    "diagnostic": "figures/cr4k-response-gain-regional-medians.png",
+    "requestedImageUploadOrder": [
+      "captures/cr4k-slope-078-p9-control-sunset-minus-60-minutes.png",
+      "captures/cr4k-slope-078-p9-control-sunset-minus-45-minutes.png",
+      "captures/cr4k-slope-078-p9-control-sunset-minus-30-minutes.png",
+      "captures/cr4k-slope-078-p9-control-sunset-minus-20-minutes.png",
+      "captures/cr4k-slope-078-p9-control-sunset-minus-10-minutes.png",
+      "captures/cr4k-slope-078-p9-control-sunset-minus-5-minutes.png",
+      "captures/cr4k-slope-078-p9-control-sunset.png",
+      "captures/cr4k-slope-078-p9-control-sunset-plus-10-minutes.png",
+      "captures/cr4k-slope-078-p9-control-sunset-plus-20-minutes.png",
+      "captures/cr4k-slope-078-p9-control-sunset-plus-30-minutes.png",
+      "captures/cr4k-slope-078-p9-control-sunset-plus-45-minutes.png",
+      "captures/cr4k-slope-078-p9-control-sunset-plus-60-minutes.png",
+      "captures/cr4k-deep-lift-015-sunset-minus-60-minutes.png",
+      "captures/cr4k-deep-lift-015-sunset-minus-45-minutes.png",
+      "captures/cr4k-deep-lift-015-sunset-minus-30-minutes.png",
+      "captures/cr4k-deep-lift-015-sunset-minus-20-minutes.png",
+      "captures/cr4k-deep-lift-015-sunset-minus-10-minutes.png",
+      "captures/cr4k-deep-lift-015-sunset-minus-5-minutes.png",
+      "captures/cr4k-deep-lift-015-sunset.png",
+      "captures/cr4k-deep-lift-015-sunset-plus-10-minutes.png",
+      "captures/cr4k-deep-lift-015-sunset-plus-20-minutes.png",
+      "captures/cr4k-deep-lift-015-sunset-plus-30-minutes.png",
+      "captures/cr4k-deep-lift-015-sunset-plus-45-minutes.png",
+      "captures/cr4k-deep-lift-015-sunset-plus-60-minutes.png",
+      "captures/cr4k-deep-lift-030-sunset-minus-60-minutes.png",
+      "captures/cr4k-deep-lift-030-sunset-minus-45-minutes.png",
+      "captures/cr4k-deep-lift-030-sunset-minus-30-minutes.png",
+      "captures/cr4k-deep-lift-030-sunset-minus-20-minutes.png",
+      "captures/cr4k-deep-lift-030-sunset-minus-10-minutes.png",
+      "captures/cr4k-deep-lift-030-sunset-minus-5-minutes.png",
+      "captures/cr4k-deep-lift-030-sunset.png",
+      "captures/cr4k-deep-lift-030-sunset-plus-10-minutes.png",
+      "captures/cr4k-deep-lift-030-sunset-plus-20-minutes.png",
+      "captures/cr4k-deep-lift-030-sunset-plus-30-minutes.png",
+      "captures/cr4k-deep-lift-030-sunset-plus-45-minutes.png",
+      "captures/cr4k-deep-lift-030-sunset-plus-60-minutes.png",
+      "figures/cr4k-slope-078-p9-control-six-column-cadence.png",
+      "figures/cr4k-deep-lift-015-six-column-cadence.png",
+      "figures/cr4k-deep-lift-030-six-column-cadence.png",
+      "figures/cr4k-sunset-through-plus-60-comparison.png",
+      "figures/cr4k-amplified-candidate-vs-control-differences.png",
+      "figures/cr4k-black-saturation-masks.png",
+      "figures/cr4k-response-gain-regional-medians.png"
+    ]
+  }
+}

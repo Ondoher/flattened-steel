@@ -31,9 +31,7 @@ import {
 } from "./atomic-files.js";
 import {
 	EXPERIMENT_ROOT,
-	OUTPUT_ROOT,
 	REPOSITORY_ROOT,
-	RUNS_ROOT,
 	assertRepositoryIdentity,
 	pathComparisonKey,
 } from "./roots.js";
@@ -44,6 +42,11 @@ export const ARTIFACT_MANIFEST_SCHEMA_ID =
 export const RUN_LOCK_SCHEMA_ID = "extraterrestrial-run-allocation-lock-v1";
 export const ARTIFACT_SET_ENCODING =
 	"utf8-lines-v1:path-null-byteLength-null-sha256-newline";
+
+export const RUN_NAMESPACES = Object.freeze([
+	"default",
+	"color-reset",
+]);
 
 export const TERMINAL_CONCLUSIONS = Object.freeze([
 	"accepted",
@@ -79,43 +82,54 @@ const STALE_LOCK_AGE_MILLISECONDS = 5 * 60 * 1000;
 /**
  * Derive the experiment paths from this module's repository identity.
  *
- * A future sibling root helper can supply the same values through `roots`;
- * the defaults remain explicit here so the write boundary is reviewable in
- * the allocator itself.
+ * `runNamespace` selects one explicitly reviewed ledger. Other root values
+ * remain exact checks rather than caller-controlled write destinations, so
+ * the allocator's complete write boundary stays reviewable here.
  *
  * @param {{
  *   repositoryRoot?: string,
  *   experimentRoot?: string,
  *   outputRoot?: string,
  *   runsRoot?: string,
+ *   runNamespace?: "default" | "color-reset",
  * }} [roots]
  * @returns {{
  *   repositoryRoot: string,
  *   experimentRoot: string,
  *   outputRoot: string,
  *   runsRoot: string,
+ *   runNamespace: "default" | "color-reset",
  * }}
  */
 export function resolveRunRoots(roots = {}) {
 	const repositoryRoot = resolve(
 		roots.repositoryRoot ?? REPOSITORY_ROOT,
 	);
+	const runNamespace = roots.runNamespace ?? "default";
+	if (!RUN_NAMESPACES.includes(runNamespace)) {
+		throw new RangeError(
+			`Unsupported immutable-run namespace: ${String(runNamespace)}.`,
+		);
+	}
 	const requiredExperimentRoot = resolve(
 		repositoryRoot,
 		"scripts",
 		"extraterrestrial",
 	);
-	const requiredOutputRoot = resolve(
+	const extraterrestrialOutputRoot = resolve(
 		repositoryRoot,
 		"tmp",
 		"extraterrestrial",
 	);
+	const requiredOutputRoot = runNamespace === "default"
+		? extraterrestrialOutputRoot
+		: resolve(extraterrestrialOutputRoot, runNamespace);
 	const requiredRunsRoot = resolve(requiredOutputRoot, "runs");
 	const experimentRoot = resolve(
 		roots.experimentRoot ?? EXPERIMENT_ROOT,
 	);
-	const outputRoot = resolve(roots.outputRoot ?? OUTPUT_ROOT);
-	const runsRoot = resolve(roots.runsRoot ?? RUNS_ROOT);
+	const outputRoot = resolve(roots.outputRoot ?? requiredOutputRoot);
+	const runsRoot = resolve(roots.runsRoot ?? requiredRunsRoot);
 	if (
 		pathComparisonKey(repositoryRoot)
 			!== pathComparisonKey(REPOSITORY_ROOT)
@@ -127,8 +141,8 @@ export function resolveRunRoots(roots = {}) {
 			!== pathComparisonKey(requiredRunsRoot)
 	) {
 		throw new Error(
-			"Run roots must use scripts/extraterrestrial and "
-				+ "tmp/extraterrestrial/runs in the selected repository.",
+			"Run roots must use scripts/extraterrestrial and the exact "
+				+ `${runNamespace} immutable-run namespace in the selected repository.`,
 		);
 	}
 
@@ -144,6 +158,7 @@ export function resolveRunRoots(roots = {}) {
 		experimentRoot,
 		outputRoot,
 		runsRoot,
+		runNamespace,
 	});
 }
 
@@ -195,6 +210,7 @@ export function normalizeRunSlug(requestedSlug) {
  *     experimentRoot?: string,
  *     outputRoot?: string,
  *     runsRoot?: string,
+ *     runNamespace?: "default" | "color-reset",
  *   },
  * }} request
  * @returns {Promise<ImmutableRunRecord>}

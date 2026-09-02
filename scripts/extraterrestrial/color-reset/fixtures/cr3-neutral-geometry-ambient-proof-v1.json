@@ -1,0 +1,482 @@
+{
+  "schemaId": "algorithm32-color-reset-cr3-neutral-geometry-ambient-proof-input-v1",
+  "increment": "CR3",
+  "question": "Does the accepted CR2 direct and diffuse receiver-light state produce the expected pre-display response on neutral Lambertian sphere and plane geometry without changing sky Color or feeding display state back into incident lighting?",
+  "parentReceiverLight": {
+    "namespace": "color-reset",
+    "runId": "000007-available-light-inventory",
+    "artifactSetSha256": "dcd6cdd8146094d05427ad180af7fccefdbaa67e290d1b5f21e6a0d4b03697ba",
+    "artifactManifest": {
+      "path": "artifact-manifest.json",
+      "sha256": "f0790db92f9e39d1bc2c735572928d34b5698b0123524a56845b571d4f27b226"
+    },
+    "result": {
+      "path": "result.json",
+      "sha256": "c688d932718f13cf969be79c3d7c6c2f8549104cfc7f58bb387447625e206123",
+      "accepted": true,
+      "integrityPassed": true
+    },
+    "proof": {
+      "path": "evidence/proof.json",
+      "sha256": "42534fe7ed93b54f2c5182bd2532166af903163c9f7296e0c549d0519e220f85"
+    },
+    "measurementAnalysis": {
+      "path": "evidence/measurement-analysis.json",
+      "sha256": "99cc785895bf84edd57072eb95951eb916af2ec37d49eae25abd148e34545a47",
+      "schemaId": "algorithm32-color-reset-cr2-browser-result-v1"
+    },
+    "inputFixture": {
+      "path": "scripts/extraterrestrial/color-reset/fixtures/cr2-available-light-inventory-v1.json",
+      "sha256": "873086fe8dfdfe7db11f08aa0b9048f9d4e8dc605dd8d75ec9b146fc34b259d2"
+    },
+    "quadratureImplementation": {
+      "path": "scripts/extraterrestrial/color-reset/lighting/Cr2ReceiverDiffuseQuadrature.js",
+      "sha256": "e981158c2bb5fbc28d0e8cd8990a8d7fdd341812eabc7445c7a07bc1ac199186"
+    },
+    "reusePolicy": "Read and hash-verify the immutable parent artifacts in place. Write every derivative only into the new CR3 run and verify the parent manifest before and after execution."
+  },
+  "skyControl": {
+    "role": "Exact unchanged-Bruneton CR1 backplates. They are presentation controls only and never supply incident light.",
+    "namespace": "color-reset",
+    "runId": "000005-six-scene-visual-baseline",
+    "artifactSetSha256": "2f7b49dd239fcaf5399c65bfebc59195458edf0b82910cf9987e341b76a615fc",
+    "artifactManifest": {
+      "path": "artifact-manifest.json",
+      "sha256": "3ba1199191f6b9dd825b0475c7d329a4b0be84e441db655d354bdce234f6949b"
+    },
+    "colorId": "bruneton-figure1-display",
+    "colorImplementation": {
+      "path": "scripts/extraterrestrial/color-reset/controls/production-v1/src/algorithm32/implementation/bruneton-color/BrunetonColorDisplayModel.js",
+      "sha256": "f96bb4323d2e7d6bc6f5b72424aa02a52ef72d7d56ef3b80d53a0baea31b3971"
+    },
+    "colorConstants": {
+      "path": "scripts/extraterrestrial/color-reset/controls/production-v1/src/algorithm32/implementation/bruneton-color/consts.js",
+      "sha256": "fd718ca007c466d1352358c17c81ea5c50f0c3c00c968fd0cce7a2a57e6cdc40"
+    },
+    "preservation": "The 640 x 400 backplate rectangle outside the neutral-geometry mask must remain pixel-exact in every direct-only, diffuse-only, and combined frame. Labels are appended outside that rectangle."
+  },
+  "location": {
+    "name": "San Jose",
+    "latitudeDegrees": 37.3382,
+    "longitudeDegrees": -121.8863
+  },
+  "observer": {
+    "heightMeters": 1.7,
+    "upDirectionModel": [0, 0, 1],
+    "upDirectionScene": [0, 1, 0]
+  },
+  "camera": {
+    "widthPixels": 640,
+    "heightPixels": 400,
+    "verticalFieldOfViewDegrees": 78,
+    "nearSceneUnits": 0.002,
+    "farSceneUnits": 500,
+    "viewAzimuthDegrees": -59.99625193137896,
+    "viewElevationDegrees": 5,
+    "aim": "fixed San Jose sunset bearing",
+    "sceneScaleMetersPerSceneUnit": 1000
+  },
+  "neutralGeometry": {
+    "coordinateFrame": "observer-local Three scene frame: positive Y is local up; the horizontal forward axis is the normalized horizontal projection of the fixed camera direction",
+    "normalTransform": "Evaluate all lighting dot products in spherical model space. Derive the observer-local scene-to-model orthonormal basis by transposing geometry.expressCelestialDirectionInScene applied to the three model unit axes, then map every Three scene normal through that basis before using the parent directionToSourceModel. For a CR2 quadrature tuple (x,y,z-up), first form the Three scene direction (x,z,y), then use the same basis. Never dot an untransformed Three Y-up normal against a model-space or CR2 Z-up direction.",
+    "sphere": {
+      "id": "neutral-lambertian-sphere",
+      "radiusMeters": 1,
+      "centerForwardMeters": 8,
+      "centerRightMeters": 0,
+      "centerHeightMeters": 1,
+      "geometryImplementation": "THREE.SphereGeometry",
+      "widthSegments": 32,
+      "heightSegments": 16,
+      "expectedEmittedVertexCount": 561,
+      "normalPolicy": "Evaluate Native15 response at every emitted THREE.SphereGeometry(1,32,16) vertex using that vertex's normalized outward normal transformed from the observer-local Three scene frame into spherical model space.",
+      "rasterPolicy": "Project each evaluated per-vertex Native15 direct, diffuse, and combined response independently to signed linear RGB plus photopic Y, store those four values as a vertex attribute, and let the GPU fragment stage interpolate projected RGBY across the fixed indexed triangles. CR3 makes no per-fragment Native15 sphere-evaluation claim.",
+      "sidePolicy": "front-facing indexed triangles only"
+    },
+    "plane": {
+      "id": "neutral-lambertian-plane",
+      "normalScene": [0, 1, 0],
+      "widthMeters": 24,
+      "depthMeters": 30,
+      "nearEdgeForwardMeters": 2,
+      "centerForwardMeters": 17,
+      "centerHeightMeters": 0,
+      "renderHeightOffsetMeters": 0,
+      "expectedEmittedVertexCount": 4,
+      "heightPolicy": "The plane is rendered exactly at centerHeightMeters with no depth-bias, visibility lift, epsilon, or other undeclared vertical offset.",
+      "sidePolicy": "front face only"
+    },
+    "visibility": {
+      "direct": "source support multiplied by max(0, surfaceNormal dot directionToSource)",
+      "diffuse": "upper-hemisphere sky directions multiplied by max(0, surfaceNormal dot incomingDirection)",
+      "castShadows": false,
+      "ambientOcclusion": false,
+      "interreflection": false,
+      "emission": false,
+      "reason": "CR3 isolates the incident-light-to-Lambertian-response boundary; mutual-object transport is outside this increment."
+    },
+    "mask": {
+      "artifactPath": "data/cr3-neutral-geometry-mask.r8",
+      "storage": "one unsigned byte per 640 x 400 pixel; 0 is backplate, 1 is plane, 2 is sphere",
+      "expectedByteLength": 256000,
+      "identityRule": "The same exact geometry mask is used by all twelve primary frames."
+    }
+  },
+  "material": {
+    "id": "neutral-lambertian-reflectance-018-native15-v1",
+    "brdf": "Lambertian",
+    "spectralQuantity": "spectral-reflectance",
+    "spectralUnits": "1",
+    "spectralSemantics": "contiguous-wavelength-bin-average",
+    "basisContentHash": "sha256:a03a3c7f45d9bd4ff8adf6482e9d1aac1acd72423758ecf797ac24f6dffba891",
+    "channelCount": 15,
+    "reflectanceValues": [0.18, 0.18, 0.18, 0.18, 0.18, 0.18, 0.18, 0.18, 0.18, 0.18, 0.18, 0.18, 0.18, 0.18, 0.18],
+    "inversePiBrdfSteradiansInverse": 0.3183098861837907,
+    "materialAndScalePolicy": "The same exact reflectance, geometry, camera, projection, and presentation constants apply to every mode and scene."
+  },
+  "incidentLight": {
+    "authority": "Only exact CR2 Native15 parent packets and raw radiance fields are numerical lighting inputs. Photopic projections, display pixels, exposure, clock values, and source kind never affect lighting behavior; sceneId is accepted only as a provenance label and is never read by the numerical response.",
+    "spectralBasis": "algorithm32-native15",
+    "basisContentHash": "sha256:a03a3c7f45d9bd4ff8adf6482e9d1aac1acd72423758ecf797ac24f6dffba891",
+    "channelCount": 15,
+    "irradianceQuantity": "spectral-irradiance-density",
+    "irradianceUnits": "W m^-2 nm^-1",
+    "radianceQuantity": "spectral-radiance-density",
+    "radianceUnits": "W m^-2 sr^-1 nm^-1",
+    "semantics": "contiguous-wavelength-bin-average",
+    "directInput": "measurement.packets.directNormal plus the geometry-resolved direction to source",
+    "diffuseInput": "direction-major 4096 x 15 CR2 primary radiance field",
+    "quadrature": {
+      "id": "color-reset-cr2-receiver-diffuse-mu64-azimuth64-primary-v1",
+      "muSampleCount": 64,
+      "azimuthSampleCount": 64,
+      "sampleCount": 4096,
+      "deltaMu": 0.015625,
+      "deltaAzimuthRadians": 0.09817477042468103,
+      "solidAngleWeightPerSampleSteradians": 0.0015339807878856412,
+      "radianceOrder": "mu-major then azimuth-major; each direction is followed by 15 Native15 channels",
+      "directionDefinition": "mu=(muIndex+0.5)/64; phi=(azimuthIndex+0.5)*2*pi/64; omega=(sqrt(1-mu^2)*cos(phi), sqrt(1-mu^2)*sin(phi), mu) in the receiver-local frame",
+      "importantWeightRule": "For an arbitrary surface normal use max(0, normal dot omega)*deltaMu*deltaAzimuth. The CR2 mu*deltaMu*deltaAzimuth irradiance weight is only the horizontal-normal specialization and must not be multiplied in again."
+    },
+    "oneWayDependency": "incident Native15 data -> Lambertian response -> linear RGB projection -> display. No display or Color value is visible to the incident-light or Lambertian owner.",
+    "rehydrationPolicy": "Read and decode the accepted CR2 measurement-analysis JSON and each selected little-endian float32 radiance field from immutable parent artifact bytes before rendering, then perform a fresh read and decode after all presentation and diagnostic work. Equality is established from the independently rehydrated packet values, decoded field values, byte lengths, and SHA-256 identities, not from retained JavaScript object identity or serialization of an in-memory copy."
+  },
+  "surfaceResponse": {
+    "ownerContract": "generic source- and geometry-independent unit-bearing Lambertian evaluator requiring a surface normal, neutral reflectance, one directional spectral irradiance, and one directional spectral-radiance field; the proof's display modes select direct, diffuse, or their completed sum without omitting either authenticated constructor input",
+    "equations": {
+      "directIrradiance": "E_direct(n,lambda)=E_directNormal(lambda)*max(0,dot(n,directionToSource))",
+      "diffuseIrradiance": "E_diffuse(n,lambda)=deltaMu*deltaPhi*sum_i(L_i(lambda)*max(0,dot(n,omega_i)))",
+      "directOutgoingRadiance": "L_direct(n,lambda)=rho(lambda)*E_direct(n,lambda)/pi",
+      "diffuseOutgoingRadiance": "L_diffuse(n,lambda)=rho(lambda)*E_diffuse(n,lambda)/pi",
+      "combinedOutgoingRadiance": "L_combined(n,lambda)=L_direct(n,lambda)+L_diffuse(n,lambda)"
+    },
+    "modeDefinitions": [
+      {
+        "id": "direct-only",
+        "directMultiplier": 1,
+        "diffuseMultiplier": 0
+      },
+      {
+        "id": "diffuse-only",
+        "directMultiplier": 0,
+        "diffuseMultiplier": 1
+      },
+      {
+        "id": "combined",
+        "directMultiplier": 1,
+        "diffuseMultiplier": 1
+      }
+    ],
+    "evaluationDomain": {
+      "expectedPlaneVertexCount": 4,
+      "expectedSphereVertexCount": 561,
+      "expectedTotalEvaluatedVertexCountPerScene": 565,
+      "expectedRasterPixelCountPerMode": 256000,
+      "plane": "Evaluate the up-normal Native15 response for every emitted plane vertex; all four vertices share the exact declared [0,1,0] scene normal and the fixed plane geometry is rasterized from those per-vertex projected RGBY values.",
+      "sphere": "Evaluate Native15 response at all 561 emitted THREE.SphereGeometry(1,32,16) vertex normals. Spectral and binary64 projected-RGB additivity claims apply to these evaluated vertices, including duplicated seam and pole vertices, not to an implied analytical normal at every fragment.",
+      "raster": "Float32 additivity applies independently to all 640 x 400 raster pixels and all stored RGBY channels after GPU interpolation and readback, including exact-zero background pixels."
+    },
+    "sequenceAuthority": "Derive the strict diffuse and total scene ordering from a fresh CR3 up-plane Native15 replay of the rehydrated direct packet and directional diffuse field, followed by the declared photopic diagnostic projection. Fixture photopic label values may annotate panels but may not establish or gate the ordering.",
+    "forbiddenBehaviorInputs": ["sceneId", "timeIso", "solarZenithDegrees", "cacheStatus", "sourceKind", "distantSun", "exposure", "displayRgb", "framebuffer"]
+  },
+  "presentation": {
+    "primary": {
+      "id": "unchanged-bruneton-figure1-surface-presentation-v1",
+      "colorId": "bruneton-figure1-display",
+      "spectralProjection": "the exact snapshot Native15 E8 spectral-radiance-to-linear-sRGB projection",
+      "displayOperation": "the exact snapshot Bruneton Figure 1 channel-wise exponential mapping",
+      "backplate": "the scene's exact immutable CR1 unchanged-Bruneton capture",
+      "composition": "replace only geometry-mask pixels with the completed surface display response; leave all other 640 x 400 backplate pixels exact",
+      "surfacePathApproximation": "receiver-near diagnostic overlay; no additional atmosphere path or scene transmittance is applied to the local neutral geometry",
+      "scalePolicy": "one exact Color implementation and constants set for every panel",
+      "persistedSkyReplay": "After every primary PNG has been uploaded, independently fetch and decode its final persisted PNG bytes, independently decode the exact parent CR1 backplate PNG, and read the persisted R8 geometry mask. Compare RGBA codes for every mask-zero pixel in the 640 x 400 content rectangle beginning at panel headerHeightPixels. This persisted-byte replay is separate from the in-memory compositor check and must be exact."
+    },
+    "fixedScaleDiagnostic": {
+      "id": "cr3-fixed-log-luminance-achromatic-surface-diagnostic-v1",
+      "role": "Diagnostic visualization only; it is not Color, exposure selection, or a candidate and cannot feed incident lighting.",
+      "luminanceQuantity": "photopic spectral radiance",
+      "luminanceUnits": "cd m^-2",
+      "minimumLog10Luminance": -6,
+      "maximumLog10Luminance": 5,
+      "zeroColor": "#000000",
+      "mapping": "t=clamp((log10(max(Y,1e-6))+6)/11,0,1); multiply all finite signed linear-sRGB channels by the same scalar required to place positive photopic Y at t; apply only a joint peak scale if needed before standard sRGB encoding",
+      "commonScale": true,
+      "perSceneNormalization": false,
+      "perModeNormalization": false,
+      "perChannelCurve": false,
+      "diagnosticGamutFacts": "Record negative-channel and joint-peak-scale masks; they are presentation diagnostics and do not change the pre-display evidence."
+    },
+    "panel": {
+      "contentWidthPixels": 640,
+      "contentHeightPixels": 400,
+      "headerHeightPixels": 38,
+      "widthPixels": 640,
+      "heightPixels": 438,
+      "labelFields": ["scene label", "mode", "solar zenith", "direct-horizontal lux", "diffuse-horizontal lux", "total-horizontal lux"]
+    },
+    "contactSheet": {
+      "columnOrder": ["solar-noon", "sunset", "sunset-plus-10-minutes", "sunset-plus-60-minutes"],
+      "rowOrder": ["direct-only", "diffuse-only", "combined"],
+      "columnCount": 4,
+      "rowCount": 3,
+      "titleHeightPixels": 64,
+      "widthPixels": 2560,
+      "heightPixels": 1378
+    }
+  },
+  "scenes": [
+    {
+      "id": "solar-noon",
+      "label": "Solar noon",
+      "timeIso": "2024-06-20T20:08:00.000Z",
+      "solarZenithDegrees": 13.891154209248315,
+      "cacheStatus": "ready",
+      "cacheIdentity": "algorithm32-distant-sun-scene-cache-sha256:1e5c2234b5e03a6be8e01f8b2639d643c543020db8fdac3557b1de9f48b09d20",
+      "directionToSourceModel": [0.0030863784484701506, -0.24005833283748818, 0.9707535583779019],
+      "directNormalPacketContentHash": "sha256:7da70503f7b207266e0c19d68647114e05a5ff36ffea9491e3caf872d7b8a1bd",
+      "directHorizontalPacketContentHash": "sha256:2c9755759a771ce93bf591f73dafea1a552ea272fde0ef659ed38ea8a1cbbd29",
+      "diffuseHorizontalPacketContentHash": "sha256:bf9f1e3aa73acc2bb75160cd094d515afa18af36ca9e824f0d8b972c63014d3d",
+      "totalHorizontalPacketContentHash": "sha256:40aea52168d4c34c6e8c6d2eab2017e7ed5107e97bfad611604f02ec6a933133",
+      "directNormalLux": 107758.74597956792,
+      "directHorizontalLux": 104607.18610600597,
+      "diffuseHorizontalLux": 12633.257171758487,
+      "totalHorizontalLux": 117240.44327776447,
+      "rawDiffuseRadiance": {
+        "path": "data/receiver-diffuse-radiance-solar-noon.f32le",
+        "byteLength": 245760,
+        "sha256": "aeeb6e5cc1f109d817168895e3e06084e82d4601f532084fdaa343dc7f15c274"
+      },
+      "skyBackplate": {
+        "path": "captures/bruneton-solar-noon.png",
+        "byteLength": 94200,
+        "sha256": "39e7aa96ffae52f0d2f2b9868e3429ed43d483ada5b1bf40fe06b312a51f1a95"
+      }
+    },
+    {
+      "id": "sunset",
+      "label": "Sunset",
+      "timeIso": "2024-06-21T03:26:03.503Z",
+      "solarZenithDegrees": 89.9579152265345,
+      "cacheStatus": "ready",
+      "cacheIdentity": "algorithm32-distant-sun-scene-cache-sha256:a555249c5e7d7966db019bcab13907bb045d1b41d775f49193105b86aaa81a96",
+      "directionToSourceModel": [-0.8659924602538108, 0.500056516073093, 0.0007345177958816562],
+      "directNormalPacketContentHash": "sha256:5143b8c0768ac07fd871fb25e4aaf7a3c66d771fc6f2bafbb3152f38ae8026c1",
+      "directHorizontalPacketContentHash": "sha256:23455bba07726bf2d6bd84ba7ff1ad8f29357067f5a6d42781d603883e55a69e",
+      "diffuseHorizontalPacketContentHash": "sha256:ad4cce1a9826dce82b0dcb950a830d88daee82890ff28dd525af67513247d093",
+      "totalHorizontalPacketContentHash": "sha256:541d8098898d42704220343ed43373742e7147aa41aaf3ea1284921a123e6235",
+      "directNormalLux": 15.303798996574816,
+      "directHorizontalLux": 0.011240912707580037,
+      "diffuseHorizontalLux": 1012.6531492225985,
+      "totalHorizontalLux": 1012.6643901353058,
+      "rawDiffuseRadiance": {
+        "path": "data/receiver-diffuse-radiance-sunset.f32le",
+        "byteLength": 245760,
+        "sha256": "11f662efc1d7acdad17965bc07e965548c901b907fee435eef2470f0d9ff2054"
+      },
+      "skyBackplate": {
+        "path": "captures/bruneton-sunset.png",
+        "byteLength": 66620,
+        "sha256": "16d9808c8fc2702c2b29a904e4f4b2ea0fc13c6d799a1e1cd164119c1b157884"
+      }
+    },
+    {
+      "id": "sunset-plus-10-minutes",
+      "label": "Ten minutes after sunset",
+      "timeIso": "2024-06-21T03:36:03.503Z",
+      "solarZenithDegrees": 91.66578905821636,
+      "cacheStatus": "ready",
+      "cacheIdentity": "algorithm32-distant-sun-scene-cache-sha256:b5f7651885cd5fe305731225771f5160103e5ad5319282a7d1f9c4c5dbd9f803",
+      "directionToSourceModel": [-0.8519642202082616, 0.5227924416054787, -0.029069408062620955],
+      "directNormalPacketContentHash": "sha256:1befeb1943857b7e3c045e41522faba31e0d0c7e4f742f3fd11766df70b3bd51",
+      "directHorizontalPacketContentHash": "sha256:a6216c64c7320e37f473dcb49ba043a8d0538ba0356f40e33ac1510effa9883c",
+      "diffuseHorizontalPacketContentHash": "sha256:7e6b46ab4aa0f1054eebfd89e3715fe79a282b2ac14a4aa590b5e0031a30afc5",
+      "totalHorizontalPacketContentHash": "sha256:4bd3628716a13958f106b10340d81758d62ea7c08ea9d8cda8a37e7070accf8d",
+      "directNormalLux": 0,
+      "directHorizontalLux": 0,
+      "diffuseHorizontalLux": 385.0097520214597,
+      "totalHorizontalLux": 385.0097520214597,
+      "rawDiffuseRadiance": {
+        "path": "data/receiver-diffuse-radiance-sunset-plus-10-minutes.f32le",
+        "byteLength": 245760,
+        "sha256": "be65d64b5c1fc1c35881413baa6b654627a35d7d9dd92140a93d2e15eb4c1a75"
+      },
+      "skyBackplate": {
+        "path": "captures/bruneton-sunset-plus-10-minutes.png",
+        "byteLength": 38547,
+        "sha256": "a1aecaf6df77d5b0c0e681e8f08a0cd516cfa5609aedafc3aa083a4b98ef7df3"
+      }
+    },
+    {
+      "id": "sunset-plus-60-minutes",
+      "label": "One hour after sunset",
+      "timeIso": "2024-06-21T04:26:03.503Z",
+      "solarZenithDegrees": 99.74525026663459,
+      "cacheStatus": "ready",
+      "cacheIdentity": "algorithm32-distant-sun-scene-cache-sha256:00bbd5b993c13b915fd747f16ecbe41701b600dd16ebdfccc6181c726b7744f6",
+      "directionToSourceModel": [-0.7581374742427799, 0.6297427897959174, -0.16926780216223483],
+      "directNormalPacketContentHash": "sha256:1befeb1943857b7e3c045e41522faba31e0d0c7e4f742f3fd11766df70b3bd51",
+      "directHorizontalPacketContentHash": "sha256:a6216c64c7320e37f473dcb49ba043a8d0538ba0356f40e33ac1510effa9883c",
+      "diffuseHorizontalPacketContentHash": "sha256:83614fc9acf0438e42f699f0d6f99c47e508b25ed98b29dd6f4669771e3dc94b",
+      "totalHorizontalPacketContentHash": "sha256:f606cd292437864ead3bf95566de55f33704dfb73aff5c7ff8c513d53c532117",
+      "directNormalLux": 0,
+      "directHorizontalLux": 0,
+      "diffuseHorizontalLux": 0.2044095523727617,
+      "totalHorizontalLux": 0.2044095523727617,
+      "rawDiffuseRadiance": {
+        "path": "data/receiver-diffuse-radiance-sunset-plus-60-minutes.f32le",
+        "byteLength": 245760,
+        "sha256": "13362362b6b5ffddecb90f95cbcdba45f6f23826933e881ee6013f4c35fd8904"
+      },
+      "skyBackplate": {
+        "path": "captures/bruneton-sunset-plus-60-minutes.png",
+        "byteLength": 6664,
+        "sha256": "e1093a93f878f5289c1e475b278d1b79a2c5504f6c0763a8a599167c81f6b96a"
+      }
+    }
+  ],
+  "outputs": {
+    "imageUploadOrder": [
+      "captures/cr3-direct-only-solar-noon.png",
+      "captures/cr3-direct-only-sunset.png",
+      "captures/cr3-direct-only-sunset-plus-10-minutes.png",
+      "captures/cr3-direct-only-sunset-plus-60-minutes.png",
+      "captures/cr3-diffuse-only-solar-noon.png",
+      "captures/cr3-diffuse-only-sunset.png",
+      "captures/cr3-diffuse-only-sunset-plus-10-minutes.png",
+      "captures/cr3-diffuse-only-sunset-plus-60-minutes.png",
+      "captures/cr3-combined-solar-noon.png",
+      "captures/cr3-combined-sunset.png",
+      "captures/cr3-combined-sunset-plus-10-minutes.png",
+      "captures/cr3-combined-sunset-plus-60-minutes.png",
+      "figures/cr3-fixed-scale-predisplay-response.png",
+      "figures/cr3-linear-additivity-and-spectral-probes.png",
+      "figures/cr3-neutral-geometry-ambient-proof.png"
+    ],
+    "individualFrames": [
+      "captures/cr3-direct-only-solar-noon.png",
+      "captures/cr3-direct-only-sunset.png",
+      "captures/cr3-direct-only-sunset-plus-10-minutes.png",
+      "captures/cr3-direct-only-sunset-plus-60-minutes.png",
+      "captures/cr3-diffuse-only-solar-noon.png",
+      "captures/cr3-diffuse-only-sunset.png",
+      "captures/cr3-diffuse-only-sunset-plus-10-minutes.png",
+      "captures/cr3-diffuse-only-sunset-plus-60-minutes.png",
+      "captures/cr3-combined-solar-noon.png",
+      "captures/cr3-combined-sunset.png",
+      "captures/cr3-combined-sunset-plus-10-minutes.png",
+      "captures/cr3-combined-sunset-plus-60-minutes.png"
+    ],
+    "fixedScaleDiagnostic": "figures/cr3-fixed-scale-predisplay-response.png",
+    "additivityAndSpectralDiagnostic": "figures/cr3-linear-additivity-and-spectral-probes.png",
+    "contactSheet": "figures/cr3-neutral-geometry-ambient-proof.png",
+    "contactSheetUploadedLast": true,
+    "rawLinearFields": [
+      "data/cr3-predisplay-linear-rgb-y-solar-noon.f32le",
+      "data/cr3-predisplay-linear-rgb-y-sunset.f32le",
+      "data/cr3-predisplay-linear-rgb-y-sunset-plus-10-minutes.f32le",
+      "data/cr3-predisplay-linear-rgb-y-sunset-plus-60-minutes.f32le"
+    ],
+    "rawLinearFieldLayout": "pixel-major, then direct-only/diffuse-only/combined, then linear R/G/B and photopic Y; 640 x 400 x 3 x 4 little-endian float32 values",
+    "rawLinearFieldByteLengthEach": 12288000,
+    "geometryMask": "data/cr3-neutral-geometry-mask.r8",
+    "evidence": [
+      "evidence/incident-input-replay.json",
+      "evidence/surface-response-analysis.json",
+      "evidence/png-sky-backplate-verification.json",
+      "evidence/image-derivations.json"
+    ]
+  },
+  "thresholds": {
+    "parentArtifactMaximumByteDifference": 0,
+    "incidentPacketMaximumValueDifference": 0,
+    "skyBackplateMaximumOutsideMaskCodeDifference": 0,
+    "horizontalDiffuseReplayAbsoluteTolerance": 1e-12,
+    "horizontalDiffuseReplayRelativeTolerance": 1e-12,
+    "directHorizontalReplayAbsoluteTolerance": 1e-12,
+    "directHorizontalReplayRelativeTolerance": 1e-12,
+    "totalHorizontalReplayAbsoluteTolerance": 2e-12,
+    "totalHorizontalReplayRelativeTolerance": 1e-12,
+    "directionProjectionFactorAbsoluteTolerance": 1e-12,
+    "spectralAdditivityAbsoluteToleranceWPerSquareMeterSteradianNanometer": 1e-12,
+    "spectralAdditivityRelativeTolerance": 1e-10,
+    "binary64LinearRgbAdditivityAbsoluteTolerance": 1e-9,
+    "binary64LinearRgbAdditivityRelativeTolerance": 1e-10,
+    "float32LinearFieldAbsoluteTolerance": 0.000001,
+    "float32LinearFieldRelativeTolerance": 0.00002,
+    "zeroDirectMaximumAbsoluteSpectralValue": 0,
+    "zeroDirectMaximumAbsoluteRasterValue": 0,
+    "nonzeroDiffuseMinimumPhotopicLuminanceCdPerSquareMeter": 1e-12,
+    "firstImageMaximumElapsedMilliseconds": 180000,
+    "decisionPlateMaximumElapsedMilliseconds": 600000
+  },
+  "gates": {
+    "integrity": [
+      "CR2 and CR1 parent manifests and every selected artifact match their declared byte lengths and SHA-256 values before and after the run.",
+      "Production and contained control inventories remain unchanged.",
+      "All four CR2 raw fields contain exactly 4096 x 15 finite nonnegative little-endian float32 radiance values on the declared Native15 basis.",
+      "All fifteen requested PNGs and all declared raw fields are written before scientific or appearance gates; the contact sheet is the final uploaded image.",
+      "The browser result schema is algorithm32-color-reset-cr3-browser-result-v1, no WebGL or browser-server error occurs, and every context remains healthy."
+    ],
+    "inputReplay": [
+      "The horizontal-normal diffuse reconstruction from every raw CR2 field matches the accepted CR2 diffuseHorizontal packet within the declared replay tolerance, with exact equality reported separately.",
+      "The horizontal-normal direct reconstruction matches the accepted CR2 directHorizontal packet within the declared replay tolerance.",
+      "Fresh post-render reads and decodes of the immutable CR2 measurement-analysis artifact and all four selected raw radiance fields reproduce the independently decoded pre-render packet values, field values, byte lengths, and content hashes exactly; retained object identity or reserialization of an in-memory copy is not evidence for this gate.",
+      "No lighting owner imports or consumes a Color, exposure, framebuffer, display RGB, photopic label, scene id, time, solar zenith, cache status, or source-kind behavior input."
+    ],
+    "lambertianResponse": [
+      "Every retained packet is finite, nonnegative, unit-bearing, Native15, and uses the declared irradiance, radiance, or reflectance quantity.",
+      "The fixed plane emits exactly 4 vertices and THREE.SphereGeometry(1,32,16) emits exactly 561 vertices; each scene evaluates all 565 vertex normals for spectral and binary64 projection evidence, and each mode retains all 256000 raster pixels for float32 evidence.",
+      "For every emitted plane vertex, every emitted THREE.SphereGeometry(1,32,16) vertex normal, and every retained analytical probe, combined outgoing Native15 spectral radiance equals independently evaluated direct plus diffuse outgoing spectral radiance within the declared binary64 spectral tolerance.",
+      "At every evaluated vertex, the corresponding binary64 projected linear-RGB combined response equals projected direct plus projected diffuse within the declared binary64 tolerance. Separately, at every 640 x 400 raster pixel and in every stored RGBY channel, the read-back float32 combined field equals the read-back direct plus diffuse fields within the declared float32 tolerance. No per-fragment Native15 evaluation or post-display additivity claim is made.",
+      "At ten and sixty minutes after sunset the direct input and direct-only geometry response are exact zero, while diffuse-only and combined pre-display geometry remain nonzero.",
+      "At solar noon and sunset the retained analytical sphere normal facing the source has nonzero direct-only Native15 outgoing radiance; plane direct response follows the source-up projection rather than direct-normal magnitude.",
+      "Photopic diffuse and total up-plane response derived from the fresh CR3 Native15 plane replay fall strictly in the scene order solar noon, sunset, plus ten minutes, plus sixty minutes, without per-scene renormalization; fixture photopic labels are annotation-only and cannot satisfy this gate.",
+      "Neutral reflectance applies one identical 0.18/pi scalar to all wavelength channels; any retained surface tint is therefore reproduced by the incident spectrum and directional integration, not a channel-specific bridge."
+    ],
+    "visualInterpretation": [
+      "All twelve primary frames have the same exact sphere and plane silhouette, material, camera, Color implementation, and presentation constants.",
+      "Outside the geometry mask, every independently decoded final persisted primary PNG replays its independently decoded CR1 unchanged-Bruneton backplate pixel-exactly across all three lighting modes; this gate uses the persisted R8 mask and content-rectangle offset, not the pre-encoding compositor buffer.",
+      "Solar-noon direct-only shows a directional sphere response; diffuse-only is softer; combined contains both without a geometry seam or bridge-created hue discontinuity.",
+      "Sunset combined response is diffuse-dominated as the CR2 incident values require.",
+      "Plus-ten and plus-sixty direct-only surfaces are black, while the common fixed-log pre-display diagnostic shows nonzero diffuse-only and combined surfaces and makes plus ten visibly brighter than plus sixty.",
+      "A primary Bruneton panel that quantizes a physically nonzero dim surface to black is recorded as a Color-boundary observation, not misclassified as missing incident light or a CR3 bridge failure."
+    ],
+    "progress": [
+      "The first requested PNG is completed within three minutes of run initialization.",
+      "The final contact sheet is completed within ten minutes of run initialization."
+    ]
+  },
+  "claimBoundary": {
+    "accepts": "Only the contained, unit-bearing, source- and geometry-independent direct-plus-directional-diffuse to neutral-Lambertian pre-display response boundary for the four declared San Jose scenes, evaluated on the fixed up-plane vertices and all emitted THREE.SphereGeometry(1,32,16) vertex normals with fragment-interpolated projected RGBY, plus exact preservation of freshly rehydrated CR2 incident data and independently decoded persisted CR1 sky backplates.",
+    "doesNotAccept": [
+      "a new Color, exposure, tone map, twilight sky appearance, or production adoption",
+      "the fixed-log diagnostic as a display candidate",
+      "arbitrary BRDFs, non-neutral materials, cast shadows, ambient occlusion, interreflection, or spatially varying receiver fields",
+      "per-fragment Native15 sphere evaluation or an analytical-normal claim beyond the fixed SphereGeometry(32,16) vertex domain",
+      "local-Sun or flat-geometry numerical behavior, despite the bridge contract containing no distant-Sun-only branch",
+      "animation, cache swapping, or continuity at the 108-degree cache transition",
+      "stellar, Moon, planet, glare, bloom, or camera-response behavior",
+      "final scene-object atmospheric transmittance over distances beyond the receiver-near diagnostic overlay"
+    ]
+  }
+}

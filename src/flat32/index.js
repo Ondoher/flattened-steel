@@ -46,6 +46,7 @@ if (
 ) {
 	document.documentElement.dataset.flat32Diagnostic = diagnostic;
 }
+/** @type {Flat32ApplicationConfiguration} */
 const applicationConfiguration =
 	diagnostic === 'spherical-wide-n4'
 		? {
@@ -70,7 +71,7 @@ const applicationConfiguration =
 						reviewObjectsEnabled: false,
 						colorDisplayModelConfiguration:
 							referenceColorMatch[2] === 'bruneton'
-								? {model: 'bruneton-control'}
+								? {model: 'basic-bruneton'}
 								: referenceColorMatch[1] === 'reference'
 									? {model: 'ferwerda-control', adaptationLuminanceCdPerSquareMeter: 0.001}
 									: undefined,
@@ -89,7 +90,7 @@ const applicationConfiguration =
 							),
 							reviewObjectsEnabled: flatDiagnosticMatch[2] !== 'wide',
 							...(flatDiagnosticMatch[4] === 'bruneton'
-								? {colorDisplayModelConfiguration: {model: 'bruneton-control'}}
+								? {colorDisplayModelConfiguration: {model: 'basic-bruneton'}}
 								: {}),
 						}
 					: {};

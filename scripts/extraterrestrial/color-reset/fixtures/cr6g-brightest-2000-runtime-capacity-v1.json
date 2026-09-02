@@ -1,0 +1,33 @@
+{
+  "schemaId": "algorithm32-color-reset-cr6g-brightest-2000-runtime-capacity-input-v1",
+  "experiment": {
+    "increment": "CR6G",
+    "slug": "cr6g-brightest-2000-runtime-capacity",
+    "question": "Can the exact 2,000-member roster and Native15 packets occupy a bounded contained WebGL2 runtime package with an explicit replacement seam?"
+  },
+  "parents": {
+    "rosterRunId": "000047-cr6b-brightest-2000-catalog-proof",
+    "rosterArtifactSetSha256": "ce50de53045f1e6f0ef33dcdc2b935a7023d5e28095b3d5f13add4980c370c57",
+    "rosterArtifactPath": "data/cr6b-brightest-2000-roster.json",
+    "rosterSha256": "6316eff663c7e41b27eb969f557ae32f9617f67e3dd40cd8cf396e1d306a1f3c",
+    "spectraRunId": "000055-cr6f-brightest-2000-spectral-materialization",
+    "spectraArtifactSetSha256": "a380716366661c7b9bddcd6b025bd1c111d9e60b8a03cde6445e6cd0a61649c4",
+    "spectraArtifactPath": "data/cr6f-brightest-2000-native15-packets.json"
+  },
+  "runtime": {
+    "memberCount": 2000,
+    "spectralChannelCount": 15,
+    "spectraTexture": {"format": "R32F", "width": 2000, "height": 15},
+    "memberTexture": {"format": "RGBA32F", "width": 2000, "height": 1},
+    "maximumTotalPayloadBytes": 262144,
+    "sampleMemberIndices": [0, 499, 500, 1999],
+    "sampleChannelIndices": [0, 7, 14]
+  },
+  "outputs": {
+    "membersBinary": "data/cr6g-members-rgba32f.bin",
+    "spectraBinary": "data/cr6g-spectra-r32f.bin",
+    "packageManifest": "data/cr6g-runtime-package.json",
+    "diagnosticImage": "figures/cr6g-runtime-capacity.png",
+    "proof": "evidence/cr6g-runtime-capacity-proof.json"
+  }
+}

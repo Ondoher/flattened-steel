@@ -1,23 +1,25 @@
 # Normal Mode Test Plan
 
-Status: active supporting acceptance plan, resumed on 2026-08-31 against the
-production `BrunetonSourceLuminanceLiftColorDisplayModel` and the closed
-one-degree distant-Sun cache baseline. Stage 0 prerequisite, Stage 1 frozen
-ledger, and Stage 2A fixed
-diagnostic laboratory accepted for their declared data/traceability claims.
+Status: historical supporting acceptance and failure-evidence plan. Active
+execution moved on 2026-08-31 to the
+[Color Reset Incremental Experiment Plan](color-reset-experiment-plan.md).
+Stage 0 prerequisite, Stage 1 frozen ledger, and Stage 2A fixed diagnostic
+laboratory remain accepted for their declared data/traceability claims.
 Stage 2B research prerequisite `2B-R` was executed on 2026-08-14. Global
 research prerequisite `3R-G` was completed on 2026-08-15 after live full-frame
 evidence rejected the preserve-`M` candidate. The project subsequently narrowed
 the goal to a reasonable global `Normal`; full-view prerequisite `2B-M` is now
-optional future image-appearance research rather than a blocker. The referenced Normal configuration
-remains active design for the
-[Spectral Color-Transform Experiment Plan](spectral-color-transform-experiment-plan.md),
-current through 2026-08-31. Historical recorded-input evidence remains valid
+optional future image-appearance research rather than a blocker. Historical
+recorded-input evidence remains valid
 only within its declared transport identity; new live acceptance uses the
 qualified point-local cache and shared dark state. This plan defines how lane
-`A` will be tested as a
+`A` was tested as a
 population-average human-viewing mode. It authorizes no production change and
 does not modify the frozen Bruneton-derived lane `B`.
+
+Where later sections call a candidate or step active, read that language as
+preserved chronology. The color-reset design owns current responsibilities,
+scene matrix, and stop/go decisions.
 
 ## Claim Boundary
 

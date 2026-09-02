@@ -365,15 +365,16 @@ controller and passes inside the unfiltered `23/23` WebGL gate.
 Those six packages are retained qualification evidence. A verified generated
 construction inventory covers every integer solar-
 zenith angle from 0 through 108 degrees. It contains 109 unique cache packages,
-`17,411,056,920` oracle bytes, and `16,154,147,172` exact-runtime bytes in
-`tmp/extraterrestrial/production-adoption/one-degree-inventory-20260829-1`.
-The independent verification record
-`one-degree-inventory-verification-20260829-1` matched every package manifest,
-ledger, R32F payload, and R16UI index SHA-256. The application keeps
+`17,411,056,920` oracle bytes, and `16,154,147,172` exact-runtime bytes. The
+inventory and independent verification record retain their original
+repository-relative paths inside the verified archives linked from the
+[production status](README.md). That verification matched every package
+manifest, ledger, R32F payload, and R16UI index SHA-256. The application keeps
 one scene cache resident and atomically swap complete caches; total
 offline/deployed storage, rather than steady resident size, scales with the
 number of angle bins. The bin-covered runtime inventory at
-`one-degree-bin-covered-runtime-packages-20260830-1` contains 109 packages,
+`server/flat32/data/one-degree-bin-covered-runtime-packages-20260830-1`
+contains 109 packages,
 `17,230,339,148` total bytes, and a `161,192,508`-byte maximum resident cache.
 It owns half-up, half-open bins across `[0, 108)` and returns explicit darkness
 at 108 degrees. All dark angles share the procedural zero-scattering runtime
@@ -606,13 +607,27 @@ captured scene texture, both the attenuated-endpoint and background branches,
 CPU/shader agreement, read-buffer rebinding, diagnostics, and cleanup. The
 earlier endpoint-adapter lane is superseded and cannot accept this path.
 
-## Non-Production And Open Boundaries
+## Open Color Reset And Celestial Boundaries
 
-Extraterrestrial point and extended-source formulas remain design and
-experiment evidence only; no production path currently composes visible
-celestial sources or maintains a celestial-contribution cache. See the
-[extraterrestrial topic](../../extraterrestrial/README.md) and
-[experiment register](../experiments/README.md).
+Production now contains the spherical/distant Sun-plus-brightest-500 roster,
+one-pixel stellar screen-index/palette generation, and final celestial
+composition machinery. P1 adds one exact Flat32 selection owner for Color,
+celestial enablement, stellar catalog, and ordered presentation filters. These
+selections are independent: Basic Bruneton no longer disables celestial
+sources. Unknown values and recognized later-phase choices fail closed instead
+of aliasing to an implemented path. Production still uses the explicit pre-P9
+source-luminance-lift Color default and the current 500-member data, so the
+selected receiver-light state, `slope-078/p9`, neutral diffuse scene lighting,
+brightest-2,000 replacement, `q=24`, and optional human-vision filters are not
+yet production behavior.
+Their current architecture and execution order are owned by the
+[Production Color Reset Design](color-reset-design.md) and
+[Production Color Reset Implementation Plan](color-reset-implementation-plan.md).
+The [promotion manifest](color-reset-promotion-manifest.md) owns the P0
+evidence, production-owner, fixed-500, qualification, and redistribution
+inventory.
+The [closed contained plan](../../extraterrestrial/color-reset-experiment-plan.md)
+remains evidence history.
 
 Flat geometry, the finite-distance point Sun, and the Stage 9.1-9.5 local-cache
 behavior are implemented within their recorded production boundaries. The
@@ -667,7 +682,8 @@ offline package, and atomically publishing the new cache.
 The normal Polylith server mounts the resolver at
 `/flat32/api/distant-sun-scene-cache` and immutable assets below
 `/flat32/scene-caches/`. `FLAT32_DISTANT_SUN_CACHE_ROOT` selects the deployed
-package root; local omission uses the qualified bin-covered package set.
+package root; local omission uses the qualified bin-covered package set at
+`server/flat32/data/one-degree-bin-covered-runtime-packages-20260830-1`.
 
 The first hooked-up shader placed exact-seam index and packed-row resolution
 inside the Native15 loop and admitted up to 14,400 texture reads per output

@@ -1,0 +1,51 @@
+{
+  "schemaId": "algorithm32-color-reset-cr8-qualification-input-v1",
+  "experiment": {"increment": "CR8", "slug": "color-reset-qualification"},
+  "archivedB1": {
+    "archive": "archives/extraterrestrial-pre-color-reset-20260831/extraterrestrial-run-output-000001-000585-2026-08-31.zip",
+    "archiveSha256": "85be52ef6928d162859166f2ba82abcd300c626718be5d35aef48d3093db387e",
+    "scoreEntry": "tmp/extraterrestrial/runs/000545-point-local-scene-cache-b1-non-regression/evidence/b1-score.json",
+    "tableEntry": "tmp/extraterrestrial/runs/000545-point-local-scene-cache-b1-non-regression/generated/b1-point-local-direct40-w27-q30.tsv",
+    "baselineTableEntry": "tmp/extraterrestrial/runs/000479-b1-reflection-completed-fibonacci68-full-figures/generated/b1-directional-sky-radiance/gpu/algorithm32-current-production-gpu-j4.tsv",
+    "baselineTableSha256": "d366ba11a0697aa471f8a822da9ccc9964a67bfcfb18cad0764de62a33583a7f",
+    "figureEntriesRoot": "tmp/extraterrestrial/runs/000546-point-local-scene-cache-b1-figures/figures/",
+    "tableSha256": "e6d62e23ec0184cc9941e8305d4ea9e69691cf996d5bce8523afb641830ce634",
+    "acceptedAggregateRmseMilliwatt": 11.554012538468113,
+    "maximumAggregateRmseMilliwatt": 11.820391604126252,
+    "figureNames": [
+      "b1-per-time-rmse.svg",
+      "b1-aggregate-rmse.svg",
+      "b1-figure5-algorithm32-10h15-z41.png",
+      "b1-figure5-algorithm32-11h15-z31.png",
+      "b1-figure5-algorithm32-13h15-z21.png",
+      "b1-figure5-relative-error-domes.svg"
+    ]
+  },
+  "parents": {
+    "baselineRunId": "000005-six-scene-visual-baseline",
+    "baselineArtifactSetSha256": "2f7b49dd239fcaf5399c65bfebc59195458edf0b82910cf9987e341b76a615fc",
+    "integratedRunId": "000062-integrated-color-reset-sequence",
+    "integratedArtifactSetSha256": "bc1759ab26dad40ae620d4997b2713bd7f3f283bc88721ef78fa753df7909adb"
+  },
+  "colorModels": [
+    {"id": "basic-bruneton", "label": "Basic Bruneton"},
+    {"id": "color-reset-slope-078-p9", "label": "Accepted color-reset candidate"}
+  ],
+  "candidateCurve": {
+    "id": "slope-078-p9",
+    "sunsetAmplitude": 3.5,
+    "sunsetTransitionIlluminanceLux": 980,
+    "sunsetRolloffPower": 9,
+    "adaptationPivotIlluminanceLux": 385,
+    "adaptationFloorIlluminanceLux": 0.02,
+    "adaptationSoftnessLogUnits": 0.1,
+    "adaptationExponent": 0.78
+  },
+  "scenes": [
+    {"id":"solar-noon","illuminanceLux":117240.44327776447},
+    {"id":"sunset","illuminanceLux":1012.664390447858},
+    {"id":"sunset-plus-10-minutes","illuminanceLux":385.0097520214597},
+    {"id":"sunset-plus-60-minutes","illuminanceLux":0.2044095523727617}
+  ],
+  "gates": {"maximumBasicBrunetonReplayCodeDifference": 1, "maximumDaylightCandidateCodeDifference": 0}
+}

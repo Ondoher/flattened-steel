@@ -1,0 +1,209 @@
+{
+  "schemaId": "algorithm32-color-reset-cr1-six-scene-visual-baseline-input-v1",
+  "parentControl": {
+    "runId": "000004-control-smoke",
+    "artifactSetSha256": "89b6974ba3ccff64f4efc3e8d7c219de99fb5fb099918c21d0a0098cc4be8dfb",
+    "overlappingPanelSha256": {
+      "solar-noon/bruneton": "39e7aa96ffae52f0d2f2b9868e3429ed43d483ada5b1bf40fe06b312a51f1a95",
+      "solar-noon/production-lift": "39e7aa96ffae52f0d2f2b9868e3429ed43d483ada5b1bf40fe06b312a51f1a95",
+      "sunset-plus-60-minutes/bruneton": "e1093a93f878f5289c1e475b278d1b79a2c5504f6c0763a8a599167c81f6b96a",
+      "sunset-plus-60-minutes/production-lift": "d0ad4a97d49dcd8224d854a2670d24602341f42cca3253baa09e63f9b51e9128"
+    }
+  },
+  "location": {
+    "name": "San Jose",
+    "latitudeDegrees": 37.3382,
+    "longitudeDegrees": -121.8863
+  },
+  "observer": {
+    "heightMeters": 1.7,
+    "upDirection": [0, 0, 1]
+  },
+  "camera": {
+    "widthPixels": 640,
+    "heightPixels": 400,
+    "verticalFieldOfViewDegrees": 78,
+    "nearSceneUnits": 0.002,
+    "farSceneUnits": 500,
+    "viewAzimuthDegrees": -59.99625193137896,
+    "viewElevationDegrees": 5,
+    "aim": "fixed San Jose sunset bearing"
+  },
+  "scenes": [
+    {
+      "id": "solar-noon",
+      "label": "Solar noon",
+      "timeIso": "2024-06-20T20:08:00.000Z",
+      "cacheExpectation": {"status": "ready", "representativeSolarZenithDegrees": 14}
+    },
+    {
+      "id": "sunset-minus-60-minutes",
+      "label": "One hour before sunset",
+      "timeIso": "2024-06-21T02:26:03.503Z",
+      "cacheExpectation": {"status": "ready", "representativeSolarZenithDegrees": 79}
+    },
+    {
+      "id": "sunset-minus-10-minutes",
+      "label": "Ten minutes before sunset",
+      "timeIso": "2024-06-21T03:16:03.503Z",
+      "cacheExpectation": {"status": "ready", "representativeSolarZenithDegrees": 88}
+    },
+    {
+      "id": "sunset",
+      "label": "Sunset",
+      "timeIso": "2024-06-21T03:26:03.503Z",
+      "cacheExpectation": {"status": "ready", "representativeSolarZenithDegrees": 90}
+    },
+    {
+      "id": "sunset-plus-10-minutes",
+      "label": "Ten minutes after sunset",
+      "timeIso": "2024-06-21T03:36:03.503Z",
+      "cacheExpectation": {"status": "ready", "representativeSolarZenithDegrees": 92}
+    },
+    {
+      "id": "sunset-plus-60-minutes",
+      "label": "One hour after sunset",
+      "timeIso": "2024-06-21T04:26:03.503Z",
+      "cacheExpectation": {"status": "ready", "representativeSolarZenithDegrees": 100}
+    },
+    {
+      "id": "sunset-plus-120-minutes",
+      "label": "Two hours after sunset (dark control)",
+      "timeIso": "2024-06-21T05:26:03.503Z",
+      "cacheExpectation": {"status": "dark"}
+    }
+  ],
+  "displayControls": [
+    {
+      "id": "bruneton",
+      "label": "Unchanged Bruneton",
+      "configuration": {"model": "bruneton-control"}
+    },
+    {
+      "id": "production-lift",
+      "label": "Current production luminance lift",
+      "configuration": {}
+    }
+  ],
+  "diagnostics": {
+    "preDisplayField": {
+      "colorId": "color-reset-pre-display-linear-rgb-v1",
+      "source": "composeSceneLinearSrgb before encodeDisplayOutput",
+      "storage": "little-endian float32, top-down row-major pixels, RGBA = linear R, linear G, linear B, photopic Y; sky/geometry population is defined by the separately retained scene hit mask",
+      "units": "cd m^-2",
+      "luminanceEquation": "Y = max(0, 0.2126 R + 0.7152 G + 0.0722 B)",
+      "percentiles": [0, 1, 5, 25, 50, 75, 95, 99, 100]
+    },
+    "sceneHitMask": {
+      "source": "full-resolution SceneInputCapture hit target, compared byte-for-byte under Bruneton, production lift, and pre-display diagnostic before retaining the diagnostic capture",
+      "storage": "unsigned 8-bit, top-down row-major R8; 0 = sky/no scene-geometry endpoint, 255 = scene-geometry endpoint",
+      "derivation": "extract the red byte from each RGBA hit-target readback; record all three population counts and equality; retain the pre-display diagnostic R8 only after the four scene PNG panels have uploaded"
+    },
+    "heatmap": {
+      "scale": "fixed log10",
+      "minimumLog10CdPerSquareMeter": -6,
+      "maximumLog10CdPerSquareMeter": 5,
+      "zeroColor": "#000000",
+      "geometryColor": "#404040",
+      "paletteStops": [
+        {"position": 0, "rgb": [0, 0, 32]},
+        {"position": 0.2, "rgb": [20, 20, 140]},
+        {"position": 0.4, "rgb": [0, 180, 220]},
+        {"position": 0.6, "rgb": [80, 220, 80]},
+        {"position": 0.8, "rgb": [255, 210, 0]},
+        {"position": 1, "rgb": [255, 32, 0]}
+      ]
+    },
+    "combinedMask": {
+      "layout": "two-by-two nearest-neighbor",
+      "skyPredicateColor": "#ffffff",
+      "skyNonPredicateColor": "#000000",
+      "geometryColor": "#404040",
+      "quadrants": [
+        {"row": 0, "column": 0, "label": "Bruneton black", "controlId": "bruneton", "predicate": "R == 0 && G == 0 && B == 0"},
+        {"row": 0, "column": 1, "label": "Lift black", "controlId": "production-lift", "predicate": "R == 0 && G == 0 && B == 0"},
+        {"row": 1, "column": 0, "label": "Bruneton saturation", "controlId": "bruneton", "predicate": "R == 255 || G == 255 || B == 255"},
+        {"row": 1, "column": 1, "label": "Lift saturation", "controlId": "production-lift", "predicate": "R == 255 || G == 255 || B == 255"}
+      ]
+    },
+    "directionalProbes": [
+      {"id": "sun-center-direction", "label": "Sun-center direction (disk source disabled)"},
+      {"id": "sunward-horizon", "label": "Sunward horizon at +0.25 degrees elevation", "elevationDegrees": 0.25},
+      {"id": "zenith", "label": "True local zenith"}
+    ],
+    "regions": {
+      "horizonBandPixelsAboveGeometry": 16,
+      "upperSkyMinimumImageFraction": 0.75
+    }
+  },
+  "physicalControls": {
+    "spectralBasis": "algorithm32-native15",
+    "cacheNumericalIdentity": "algorithm32-native48-z180-w27-f68-native15-n4-q30-ozone-v1",
+    "maximumScatteringOrder": 4,
+    "pathIntervalCount": 30,
+    "pathSampleDistribution": "quadratic-near-observer-v1",
+    "sourceAngularRadiusRadians": 0.004675,
+    "sceneScaleMetersPerSceneUnit": 1000,
+    "sceneDepthMaxMeters": 500000,
+    "ground": "spherical geometry endpoint with black visual foreground",
+    "groundWidthSegments": 192,
+    "groundHeightSegments": 96,
+    "celestialSourcesEnabled": false,
+    "sceneObjects": false
+  },
+  "outputs": {
+    "individualPngs": [
+      "captures/bruneton-solar-noon.png",
+      "captures/production-lift-solar-noon.png",
+      "diagnostics/pre-display-luminance-solar-noon.png",
+      "diagnostics/black-saturation-masks-solar-noon.png",
+      "captures/bruneton-sunset-minus-60-minutes.png",
+      "captures/production-lift-sunset-minus-60-minutes.png",
+      "diagnostics/pre-display-luminance-sunset-minus-60-minutes.png",
+      "diagnostics/black-saturation-masks-sunset-minus-60-minutes.png",
+      "captures/bruneton-sunset-minus-10-minutes.png",
+      "captures/production-lift-sunset-minus-10-minutes.png",
+      "diagnostics/pre-display-luminance-sunset-minus-10-minutes.png",
+      "diagnostics/black-saturation-masks-sunset-minus-10-minutes.png",
+      "captures/bruneton-sunset.png",
+      "captures/production-lift-sunset.png",
+      "diagnostics/pre-display-luminance-sunset.png",
+      "diagnostics/black-saturation-masks-sunset.png",
+      "captures/bruneton-sunset-plus-10-minutes.png",
+      "captures/production-lift-sunset-plus-10-minutes.png",
+      "diagnostics/pre-display-luminance-sunset-plus-10-minutes.png",
+      "diagnostics/black-saturation-masks-sunset-plus-10-minutes.png",
+      "captures/bruneton-sunset-plus-60-minutes.png",
+      "captures/production-lift-sunset-plus-60-minutes.png",
+      "diagnostics/pre-display-luminance-sunset-plus-60-minutes.png",
+      "diagnostics/black-saturation-masks-sunset-plus-60-minutes.png",
+      "captures/bruneton-sunset-plus-120-minutes.png",
+      "captures/production-lift-sunset-plus-120-minutes.png",
+      "diagnostics/pre-display-luminance-sunset-plus-120-minutes.png",
+      "diagnostics/black-saturation-masks-sunset-plus-120-minutes.png"
+    ],
+    "plot": "figures/cr1-field-luminance-summary.png",
+    "contactSheet": "figures/cr1-six-scene-visual-baseline.png",
+    "rawFields": [
+      "data/pre-display-linear-rgb-y-solar-noon.f32le",
+      "data/pre-display-linear-rgb-y-sunset-minus-60-minutes.f32le",
+      "data/pre-display-linear-rgb-y-sunset-minus-10-minutes.f32le",
+      "data/pre-display-linear-rgb-y-sunset.f32le",
+      "data/pre-display-linear-rgb-y-sunset-plus-10-minutes.f32le",
+      "data/pre-display-linear-rgb-y-sunset-plus-60-minutes.f32le",
+      "data/pre-display-linear-rgb-y-sunset-plus-120-minutes.f32le"
+    ],
+    "hitMasks": [
+      "data/scene-hit-mask-solar-noon.r8",
+      "data/scene-hit-mask-sunset-minus-60-minutes.r8",
+      "data/scene-hit-mask-sunset-minus-10-minutes.r8",
+      "data/scene-hit-mask-sunset.r8",
+      "data/scene-hit-mask-sunset-plus-10-minutes.r8",
+      "data/scene-hit-mask-sunset-plus-60-minutes.r8",
+      "data/scene-hit-mask-sunset-plus-120-minutes.r8"
+    ],
+    "panelIdentities": "evidence/panel-identities.json",
+    "fieldDiagnostics": "evidence/field-diagnostics.json",
+    "progress": "progress.json"
+  }
+}

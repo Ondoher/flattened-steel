@@ -12,6 +12,10 @@ import {DEFAULT_NATIVE_PRODUCTION_PROFILE} from '../algorithm32/profiles/native-
 import DistanceMath from '../algorithm32/math/DistanceMath.js';
 import {createFlat32ColorDisplayModel} from './Flat32ColorDisplayModel.js';
 import {
+	requireImplementedFlat32ProductionSelections,
+	resolveFlat32ProductionSelections,
+} from './Flat32ProductionSelections.js';
+import {
 	ATMOSPHERE_OBSERVER_HEIGHT,
 	FLAT_ATMOSPHERE_TOP_ALTITUDE,
 	FLAT_OBSERVER_DOME_MAX_VIEW_RAY_EXTENT,
@@ -24,10 +28,15 @@ export class FlatLocalMode {
 	 *   sceneScale: SceneScale,
 	 *   observation: GeometryObservation,
 	 *   maximumScatteringOrder: SupportedCacheScatteringOrder,
-	 *   colorDisplayModelConfiguration?: object
+	 *   celestialSourcesEnabled?: boolean,
+	 *   colorDisplayModelConfiguration?: Flat32ColorDisplayModelConfiguration,
+	 *   stellarCatalog?: Flat32StellarCatalogId,
+	 *   presentationFilters?: readonly Flat32PresentationFilterConfiguration[]
 	 * }>} configuration - Supplies application-owned runtime selections.
 	 */
 	constructor(configuration) {
+		const selections = resolveFlat32ProductionSelections(configuration);
+		requireImplementedFlat32ProductionSelections(selections);
 		const profile = DEFAULT_NATIVE_PRODUCTION_PROFILE;
 		const spectralBasis = profile.spectral.basis;
 		const observerPosition = /** @type {Position} */ ({
@@ -71,12 +80,9 @@ export class FlatLocalMode {
 			atmosphere: new CanonicalAtmosphere(),
 			geometry,
 			groundBoundary: null,
-			color: createFlat32ColorDisplayModel(configuration.colorDisplayModelConfiguration),
+			color: createFlat32ColorDisplayModel(selections.colorDisplayModelConfiguration),
 			observation: configuration.observation,
-			celestialSources:
-				configuration.colorDisplayModelConfiguration?.model === 'bruneton-control'
-					? null
-					: celestialSources,
+			celestialSources: selections.celestialSourcesEnabled ? celestialSources : null,
 			execution: {
 				pathIntervalCount: profile.numerical.viewPath.intervalCount,
 				maximumScatteringOrder: configuration.maximumScatteringOrder,

@@ -18,19 +18,30 @@ topic and the focus stated by its entry document.
 
 ## Retired Algorithm32-Star Evidence
 
-Preserve all historical Algorithm32-Star evidence. Do not delete, overwrite,
+Preserve all historical Algorithm32-Star evidence. Do not discard, overwrite,
 or modify a Star fixture, policy, provenance record, harness, command, gate,
 archive copy, or generated historical result. Star material may be inspected
 read-only and used as comparison evidence. Contained experiments may reproduce
 or test behavior informed by that evidence provided they do not alter the
 historical material.
 
-## Active Stellar Screen-Palette Experiment Containment
+The project-owner-directed pre-color-reset archive relocation is the sole
+working-copy exception. A historical working-tree or generated-output copy may
+be removed from its former directory only after its exact repository-relative
+contents are present in an accessible ZIP below `archives/`, the ZIP has passed
+complete entry/hash verification, and the archive-set index records its source
+and restoration path. The verified archive then becomes the immutable evidence
+copy and must never be modified, replaced, or deleted. This exception permits
+relocation, not disposal or content changes, and does not apply to the active
+color-reset lane or an operational asset that still requires a live extracted
+copy.
 
-The project owner has directed that the complex stellar screen-palette cache be
-developed outside production. All new implementation source, adapted production
-copies, contract types, fixtures, proof runners, harness code, manifests, and
-containment controls for this active lane must remain under:
+## Contained Experiment And Production Promotion Boundaries
+
+The completed stellar screen-palette and Color Reset experiments remain
+contained. Any new contained experiment implementation source, adapted
+production copy, contract type, fixture, proof runner, harness code, manifest,
+or containment control must remain under:
 
 ```text
 scripts/extraterrestrial/
@@ -49,6 +60,17 @@ Run allocation, naming, initialization, finalization, and immutability are
 owned by the
 [Stage 12 implementation topic](agents/topics/extraterrestrial/stage-12-implementation-topic.md#immutable-run-records).
 
+The active `algorithm32-production` topic is now an authorized production
+promotion lane. Work required by the production-owned
+[Color Reset implementation plan](agents/topics/algorithm32/production/color-reset-implementation-plan.md)
+may create and modify production implementation, contract, configuration,
+fixture, test, application, and documentation surfaces under `src/algorithm32`,
+`src/flat32`, and their ordinary repository-owned supporting paths. This
+authorization applies through P0-P9 and does not require renewed boundary
+approval for each planned production edit. The selected experimental
+algorithms must be adapted to existing production architecture and repository
+coding standards as defined by the production design and plan.
+
 Do not create or run an experimental unit-test tree, suite, file, or
 test-framework dependency. Use focused self-verifying proof runners for
 immutable run evidence.
@@ -56,8 +78,9 @@ immutable run evidence.
 Generated output remains below the ignored output root and may be reused by
 later contained experiments as data, cache content, configuration, fixtures,
 comparison evidence, or oracle input. The sole reuse restriction is preservation
-of prior evidence: never modify, overwrite, delete, or reopen the source run or
-its artifacts. Copy or derive new material into a new run. Consumers should
+of prior evidence: never modify, overwrite, discard, or reopen the source run or
+its artifacts. Apart from the verified archive relocation defined above, copy
+or derive new material into a new run. Consumers should
 record source run, artifact, schema, provenance, and compatibility identities
 needed to support their claims. Every evidence artifact must also retain how it
 was derived: its parent inputs, the operation or equation applied,
@@ -77,16 +100,20 @@ written into a new run, and the new evidence retains the complete derivation
 chain described above.
 
 The sealed experimental baseline, candidate, historical runs, and archived
-evidence remain immutable. `src/algorithm32`, `src/flat32`, every other
-production/application surface, and `C:\dev\poly-gc-react` are read-only
-comparison surfaces during this lane and may not become runtime dependencies.
-Canonical topic design and current-state documents remain writable under Topic
-Continuity.
+evidence remain immutable. Production promotion may read and adapt them but
+must never alter or reopen them and must not import a contained experiment at
+runtime. `C:\dev\poly-gc-react` remains a read-only comparison surface and may
+not become a runtime dependency.
 
-If completing a request appears to require implementation or generated-output
-writes outside `scripts/extraterrestrial/` and `tmp/extraterrestrial/`, stop
-before making the change, report the exact path and reason, and obtain explicit
-authorization to expand the boundary.
+For contained experiment work, implementation and generated-output writes
+remain restricted to `scripts/extraterrestrial/` and
+`tmp/extraterrestrial/`. For the active production promotion, ordinary
+production source, test, fixture, application, asset, and topic-document writes
+are allowed when required by the approved plan. Generated qualification output
+must remain in an ignored plan-owned output root and must preserve any parent
+evidence. Stop and obtain explicit authorization only when a requested change
+falls outside both the contained-experiment boundary and the active production
+plan, would alter protected evidence, or would write to an external repository.
 
 ## Switching Topics
 

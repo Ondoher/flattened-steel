@@ -1,0 +1,110 @@
+{
+  "schemaId": "algorithm32-color-reset-cr6b-brightest-2000-catalog-input-v1",
+  "experiment": {
+    "increment": "CR6B",
+    "slug": "cr6b-brightest-2000-catalog-proof",
+    "question": "Does the authenticated BSC V/50 source deterministically provide the exact 2,000 brightest usable stars while preserving the accepted production brightest-500 roster as an exact prefix?"
+  },
+  "claimBoundary": {
+    "catalogRosterOnly": true,
+    "catalogSelectionIntegrityGate": true,
+    "currentPhotometryCoverageReported": true,
+    "spectralPacketsMaterialized": false,
+    "unsupportedMembersOmitted": false,
+    "unsupportedMembersReplaced": false,
+    "runtimeIntegration": false,
+    "stellarAppearanceClaim": false,
+    "stellarOnsetClaim": false,
+    "performanceClaim": false,
+    "productionClaim": false
+  },
+  "source": {
+    "catalogId": "cds-v50-bright-star-catalogue-5th-revised",
+    "path": "scripts/extraterrestrial/catalogs/bright-star-catalog-v50.tsv",
+    "byteLength": 556724,
+    "sha256": "d79223194f938533b4a4b7d832249d8661cf7adda088a8a0ec44039d3baab759",
+    "parsedRecordCount": 9096,
+    "coordinateEpoch": "J2000.0",
+    "coordinateFrame": "eq-FK5-J2000"
+  },
+  "selection": {
+    "id": "finite-j2000-position-and-vmag; ascending-vmag; ascending-hr-tiebreak; first-2000",
+    "memberCount": 2000,
+    "sortKeys": [
+      {"field": "visualMagnitude", "order": "ascending"},
+      {"field": "hr", "order": "ascending"}
+    ],
+    "first": {"canonicalIndex": 0, "memberId": "bsc-v50-hr-2491", "hr": 2491, "visualMagnitude": -1.46},
+    "last": {"canonicalIndex": 1999, "memberId": "bsc-v50-hr-7474", "hr": 7474, "visualMagnitude": 5.17},
+    "boundaryTie": {
+      "visualMagnitude": 5.17,
+      "catalogMemberCountAtMagnitude": 28,
+      "selectedMemberCountAtMagnitude": 25,
+      "lastSelectedHr": 7474,
+      "firstExcludedHrs": [7770, 8011, 8324]
+    }
+  },
+  "productionPrefix": {
+    "memberCount": 500,
+    "snapshotPath": "scripts/extraterrestrial/color-reset/controls/production-v1/src/algorithm32/implementation/star-field/consts.js",
+    "snapshotSha256": "d13575deca80e425c287606d3ff260d935165d7e58630d3a1b3838fa1cb2c7ba",
+    "requiredRelationship": "The production 500 member IDs and all 1,500 direction scalars exactly equal catalog members 0 through 499."
+  },
+  "currentPhotometryCoverage": {
+    "policyId": "pickles-bracketed-bv-johnson-bv-vega-v2",
+    "picklesPath": "scripts/extraterrestrial/catalogs/pickles-v1998/dat.tar.gz",
+    "picklesSha256": "d25a74fe853d4b343c56fc936b18ebaf640b4946f5776f0797b66a44890a6130",
+    "johnsonBPath": "scripts/extraterrestrial/catalogs/svo-johnson/generic-johnson-b.xml",
+    "johnsonBSha256": "887af6b6164fd2e41c5b17d450286819a4758b83e7a6b89bfe9bad73a28ee197",
+    "johnsonVPath": "scripts/extraterrestrial/catalogs/svo-johnson/generic-johnson-v.xml",
+    "johnsonVSha256": "bbbbef8da2f3d074f2ab12307f6c85320d12e1a3306a27086c4564c227abacc6",
+    "supportedMemberCount": 1993,
+    "unsupportedMemberCount": 7,
+    "unsupportedHrsInRosterOrder": [868, 8316, 1845, 4163, 2289, 4846, 9004],
+    "handling": "Retain every unsupported member in the exact 2,000-star roster and report the current spectral-policy coverage exception; do not clamp, omit, or replace it."
+  },
+  "presentation": {
+    "projection": "J2000 equirectangular all-sky; right ascension increases leftward; declination is vertical",
+    "first500AllSky": {"widthPixels": 1200, "heightPixels": 600},
+    "brightest2000AllSky": {"widthPixels": 1200, "heightPixels": 600},
+    "magnitudeByRank": {"widthPixels": 1200, "heightPixels": 600},
+    "summary": {"widthPixels": 1248, "heightPixels": 1980},
+    "pointEncoding": "Marker area is monotonic in relative V-band flux for legibility only; catalog rank and magnitude remain the quantitative source."
+  },
+  "outputs": {
+    "roster": "data/cr6b-brightest-2000-roster.json",
+    "photometryCoverage": "evidence/cr6b-current-photometry-coverage.json",
+    "analysis": "evidence/cr6b-analysis.json",
+    "proof": "evidence/proof.json",
+    "progress": "progress.json",
+    "figures": {
+      "first500AllSky": "figures/cr6b-first-500-all-sky.png",
+      "brightest2000AllSky": "figures/cr6b-brightest-2000-all-sky.png",
+      "magnitudeByRank": "figures/cr6b-magnitude-by-rank.png",
+      "summary": "figures/cr6b-brightest-2000-catalog-summary.png"
+    },
+    "requestedImageUploadOrder": [
+      "figures/cr6b-first-500-all-sky.png",
+      "figures/cr6b-brightest-2000-all-sky.png",
+      "figures/cr6b-magnitude-by-rank.png",
+      "figures/cr6b-brightest-2000-catalog-summary.png"
+    ]
+  },
+  "gates": {
+    "requestedImageCount": 4,
+    "catalogSourceAuthenticated": true,
+    "parsedRecordCountExact": true,
+    "memberCountExact": true,
+    "selectionOrderExact": true,
+    "selectionEndpointsExact": true,
+    "memberIdsUnique": true,
+    "directionsFiniteAndUnitLength": true,
+    "allMembersHaveFiniteBMinusV": true,
+    "allMembersHaveSpectralType": true,
+    "productionFirst500ExactPrefix": true,
+    "sevenPhotometryCoverageExceptionsRetained": true,
+    "allImagesWrittenBeforeGateEvaluation": true,
+    "protectedSourcesUnchanged": true,
+    "terminalVerificationRequired": true
+  }
+}

@@ -1,0 +1,228 @@
+{
+	"schemaId": "algorithm32-color-reset-cr4j-slope-078-six-column-cadence-input-v1",
+	"claimBoundary": {
+		"summary": "Presentation-only, pixel-preserving 6-column by 2-row cadence derived from the twelve slope-078/p9 control PNGs in verified rejected CR4I run 000035. No physical, Color, appearance, or scientific claim is added.",
+		"presentationOnly": true,
+		"appearanceAcceptanceGate": false,
+		"appearanceAccepted": false,
+		"physicalTransportReexecution": false,
+		"colorResponseReexecution": false,
+		"sourcePixelModification": false,
+		"scientificClaim": false,
+		"productionClaim": false
+	},
+	"parent": {
+		"namespace": "color-reset",
+		"runId": "000035-cr4i-smooth-bruneton-shoulder-check",
+		"conclusion": "rejected",
+		"artifactSetSha256": "d5d7273e8200bd15070db6bf17d2acefe65908c2762d6e2cff12ca1d859aea38",
+		"manifest": {
+			"path": "artifact-manifest.json",
+			"byteLength": 18730,
+			"sha256": "e908b5f0290c09c8ad55c0b5bdf9731a0e258e496ea158553c505a4f7cb8d052"
+		},
+		"role": "Verified rejected CR4I evidence source. Only its unchanged slope-078/p9 control pixels are reused; its rejected candidate-family conclusion is not reinterpreted."
+	},
+	"viewport": {
+		"widthPixels": 640,
+		"heightPixels": 400,
+		"verticalFieldOfViewDegrees": 78,
+		"aim": "fixed San Jose sunset bearing",
+		"foreground": "black spherical-ground visual endpoint inherited from CR4I"
+	},
+	"presentation": {
+		"title": "San Jose slope-078 cadence: one hour before to one hour after sunset",
+		"subtitle": "Exact CR4I slope-078 / p9 control pixels — presentation-only replay",
+		"layout": {
+			"columnCount": 6,
+			"rowCount": 2,
+			"outerPaddingPixels": 20,
+			"titleHeightPixels": 64,
+			"panelLabelHeightPixels": 32,
+			"columnGapPixels": 12,
+			"rowGapPixels": 18,
+			"expectedWidthPixels": 3940,
+			"expectedHeightPixels": 986,
+			"backgroundCss": "#0d1117",
+			"headingCss": "#f0f6fc",
+			"secondaryCss": "#9da7b3",
+			"borderCss": "#475569"
+		}
+	},
+	"scenes": [
+		{
+			"id": "sunset-minus-60-minutes",
+			"label": "−60m",
+			"timeIso": "2024-06-21T02:26:03.503Z",
+			"solarElevationDegrees": 10.78583419050773,
+			"totalHorizontalIlluminance": {"value": 15435.1457596012, "units": "lux"},
+			"row": 0,
+			"column": 0,
+			"source": {
+				"path": "captures/cr4i-slope-078-p9-control-sunset-minus-60-minutes.png",
+				"byteLength": 127377,
+				"sha256": "866139ea39d00a9748e757118976f9138aca0dd910d161bfdb4baa61e82be4e4"
+			}
+		},
+		{
+			"id": "sunset-minus-45-minutes",
+			"label": "−45m",
+			"timeIso": "2024-06-21T02:41:03.503Z",
+			"solarElevationDegrees": 8.029525924982195,
+			"totalHorizontalIlluminance": {"value": 10806.649111576957, "units": "lux"},
+			"row": 0,
+			"column": 1,
+			"source": {
+				"path": "captures/cr4i-slope-078-p9-control-sunset-minus-45-minutes.png",
+				"byteLength": 125663,
+				"sha256": "06632875b3864e8d95ab2b666789162ee08a3d5cd1c5bb7884c29671399aefe6"
+			}
+		},
+		{
+			"id": "sunset-minus-30-minutes",
+			"label": "−30m",
+			"timeIso": "2024-06-21T02:56:03.503Z",
+			"solarElevationDegrees": 5.316880439498405,
+			"totalHorizontalIlluminance": {"value": 6596.110497292015, "units": "lux"},
+			"row": 0,
+			"column": 2,
+			"source": {
+				"path": "captures/cr4i-slope-078-p9-control-sunset-minus-30-minutes.png",
+				"byteLength": 122485,
+				"sha256": "ce965063a201e0ad7d731b9aa63b6d23b266d84181f1a7f2aaf63d62cd234cc4"
+			}
+		},
+		{
+			"id": "sunset-minus-20-minutes",
+			"label": "−20m",
+			"timeIso": "2024-06-21T03:06:03.503Z",
+			"solarElevationDegrees": 3.53505316827237,
+			"totalHorizontalIlluminance": {"value": 3632.9196000280117, "units": "lux"},
+			"row": 0,
+			"column": 3,
+			"source": {
+				"path": "captures/cr4i-slope-078-p9-control-sunset-minus-20-minutes.png",
+				"byteLength": 108671,
+				"sha256": "9562449e4805a084ec6a9cb90c6b075c2390f632531e1ae5d51684ebd1a2842e"
+			}
+		},
+		{
+			"id": "sunset-minus-10-minutes",
+			"label": "−10m",
+			"timeIso": "2024-06-21T03:16:03.503Z",
+			"solarElevationDegrees": 1.7762578622047,
+			"totalHorizontalIlluminance": {"value": 2155.4260282733017, "units": "lux"},
+			"row": 0,
+			"column": 4,
+			"source": {
+				"path": "captures/cr4i-slope-078-p9-control-sunset-minus-10-minutes.png",
+				"byteLength": 98312,
+				"sha256": "786b518e7a5e01f09f4e750ecf3359f18745f423913971a20b89b2164fc4fe7b"
+			}
+		},
+		{
+			"id": "sunset-minus-5-minutes",
+			"label": "−5m",
+			"timeIso": "2024-06-21T03:21:03.503Z",
+			"solarElevationDegrees": 0.90599082430127,
+			"totalHorizontalIlluminance": {"value": 1495.6121809049725, "units": "lux"},
+			"row": 0,
+			"column": 5,
+			"source": {
+				"path": "captures/cr4i-slope-078-p9-control-sunset-minus-5-minutes.png",
+				"byteLength": 85265,
+				"sha256": "01ad5353245dd484e73fca960af3320ff2e865c7ebec9598f5fc57f3391c87f0"
+			}
+		},
+		{
+			"id": "sunset",
+			"label": "Sunset",
+			"timeIso": "2024-06-21T03:26:03.503Z",
+			"solarElevationDegrees": 0.04208477346552,
+			"totalHorizontalIlluminance": {"value": 1012.6643901353058, "units": "lux"},
+			"row": 1,
+			"column": 0,
+			"source": {
+				"path": "captures/cr4i-slope-078-p9-control-sunset.png",
+				"byteLength": 81792,
+				"sha256": "cea05de372524f0522732c16c90dbdb1d024afda3b2adc3b9301bacf0ba106d9"
+			}
+		},
+		{
+			"id": "sunset-plus-10-minutes",
+			"label": "+10m",
+			"timeIso": "2024-06-21T03:36:03.503Z",
+			"solarElevationDegrees": -1.66578905821635,
+			"totalHorizontalIlluminance": {"value": 385.0097520214597, "units": "lux"},
+			"row": 1,
+			"column": 1,
+			"source": {
+				"path": "captures/cr4i-slope-078-p9-control-sunset-plus-10-minutes.png",
+				"byteLength": 69451,
+				"sha256": "cc0813fc994062033f9c7d60ed07f6db802f4d3b742a3be9c899d77f88a2beb2"
+			}
+		},
+		{
+			"id": "sunset-plus-20-minutes",
+			"label": "+20m",
+			"timeIso": "2024-06-21T03:46:03.503Z",
+			"solarElevationDegrees": -3.345594411903406,
+			"totalHorizontalIlluminance": {"value": 104.71173702690129, "units": "lux"},
+			"row": 1,
+			"column": 2,
+			"source": {
+				"path": "captures/cr4i-slope-078-p9-control-sunset-plus-20-minutes.png",
+				"byteLength": 71100,
+				"sha256": "490e8a82644b0871b7106b27e57d42f20acd7ff50e1625a52190a6337473b5ee"
+			}
+		},
+		{
+			"id": "sunset-plus-30-minutes",
+			"label": "+30m",
+			"timeIso": "2024-06-21T03:56:03.503Z",
+			"solarElevationDegrees": -4.995464816580323,
+			"totalHorizontalIlluminance": {"value": 20.29393028505105, "units": "lux"},
+			"row": 1,
+			"column": 3,
+			"source": {
+				"path": "captures/cr4i-slope-078-p9-control-sunset-plus-30-minutes.png",
+				"byteLength": 76057,
+				"sha256": "64cb989cbd00feecc39a634c1172956e27ce8bb597f41291bed54985fb88923e"
+			}
+		},
+		{
+			"id": "sunset-plus-45-minutes",
+			"label": "+45m",
+			"timeIso": "2024-06-21T04:11:03.503Z",
+			"solarElevationDegrees": -7.409807790674717,
+			"totalHorizontalIlluminance": {"value": 1.3443726921227952, "units": "lux"},
+			"row": 1,
+			"column": 4,
+			"source": {
+				"path": "captures/cr4i-slope-078-p9-control-sunset-plus-45-minutes.png",
+				"byteLength": 75267,
+				"sha256": "251148bb7e161137e42fdb631ee655d55d25c2766bbd9d2e6e8c535c47aff424"
+			}
+		},
+		{
+			"id": "sunset-plus-60-minutes",
+			"label": "+60m",
+			"timeIso": "2024-06-21T04:26:03.503Z",
+			"solarElevationDegrees": -9.74525026663457,
+			"totalHorizontalIlluminance": {"value": 0.2044095523727617, "units": "lux"},
+			"row": 1,
+			"column": 5,
+			"source": {
+				"path": "captures/cr4i-slope-078-p9-control-sunset-plus-60-minutes.png",
+				"byteLength": 61401,
+				"sha256": "f68dbd744c29adf0e2848838e08ba4f6b23c229d18b686e72aeb0ba23d3752a1"
+			}
+		}
+	],
+	"outputs": {
+		"cadence": "figures/cr4j-slope-078-six-column-cadence.png",
+		"requestedImageUploadOrder": [
+			"figures/cr4j-slope-078-six-column-cadence.png"
+		]
+	}
+}

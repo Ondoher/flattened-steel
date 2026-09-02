@@ -1,0 +1,127 @@
+{
+  "schemaId": "algorithm32-color-reset-cr6d-toggleable-low-light-stellar-chroma-input-v1",
+  "experiment": {
+    "increment": "CR6D",
+    "slug": "cr6d-toggleable-low-light-stellar-chroma",
+    "question": "Can a toggleable, luminance-preserving low-light perception approximation reduce excessive stellar color while preserving the accepted q=24 one-pixel brightness progression and every physical input?"
+  },
+  "claimBoundary": {
+    "accepts": "A fixed 640x400 source-linear stellar chroma option and its exact disabled identity under the accepted CR6C brightness and atmosphere.",
+    "doesNotAccept": [
+      "a retinal simulation",
+      "a universal observer or display",
+      "a scotopic or Purkinje luminance change",
+      "a solar filter",
+      "another filter stage",
+      "a 2000-member runtime",
+      "production adoption"
+    ]
+  },
+  "baseFixture": {
+    "path": "scripts/extraterrestrial/color-reset/fixtures/cr6c-one-pixel-brightness-calibration-v2.json",
+    "schemaId": "algorithm32-color-reset-cr6c-one-pixel-brightness-calibration-input-v2",
+    "byteLength": 50012,
+    "sha256": "443c0aff9c22990c136814c8021f1538fafe1ca5bef403823113cd5597792e4b"
+  },
+  "selectedBrightnessParent": {
+    "namespace": "color-reset",
+    "runId": "000049-cr6c-one-pixel-brightness-calibration-narrowed",
+    "conclusion": "accepted",
+    "artifactSetSha256": "bcd129d7484bbec696c8a3877d9822e4a3cdf89e0d17c3e8614909f4ad62c001",
+    "manifest": {"path": "artifact-manifest.json", "byteLength": 12653, "sha256": "edc2c313c2dd20d4cd46f792282d12118db557520bed343ab02361284f00ce4f"},
+    "terminalResult": {"path": "result.json", "byteLength": 1104066, "sha256": "2cd0de03c87c644ac038339add5620c9835c8ec6e91d526e5aee93b079c40b32"},
+    "controlFrames": [
+      {"sceneId":"sunset","path":"captures/cr6c-q24-narrowed-sunset-final-composite.png","byteLength":81753,"sha256":"bb13c0cb922e9c5ec76a38b140a37e9174cd29d16cc6478ca1fb606a6c5d524d"},
+      {"sceneId":"sunset-plus-10-minutes","path":"captures/cr6c-q24-narrowed-sunset-plus-10-minutes-final-composite.png","byteLength":69483,"sha256":"3977e1fe57f6f328f1bed1e3d9efcb098c46fee88a97111dbd6a1f40544cf4ac"},
+      {"sceneId":"sunset-plus-30-minutes","path":"captures/cr6c-q24-narrowed-sunset-plus-30-minutes-final-composite.png","byteLength":76140,"sha256":"914b58d526505aa3d58caa9504fea02986e58e852e0131d71914904b4f689345"},
+      {"sceneId":"sunset-plus-60-minutes","path":"captures/cr6c-q24-narrowed-sunset-plus-60-minutes-final-composite.png","byteLength":61837,"sha256":"baef85aa8e2e57ffea6bac5d4b9f915b79d709f988c17031d269b32926fa16ef"},
+      {"sceneId":"sunset-plus-90-minutes","path":"captures/cr6c-q24-narrowed-sunset-plus-90-minutes-final-composite.png","byteLength":18220,"sha256":"c6dae42c9cd2dde024c32c01eaed001cf5cc0fd91f33df1a399b88a7ac5e2d41"},
+      {"sceneId":"solar-zenith-108-below","path":"captures/cr6c-q24-narrowed-solar-zenith-108-below-final-composite.png","byteLength":7204,"sha256":"80d13e79b4a11c9b2903e1aaf19e68ae3efce281393db28fdb3003a9eeae1d40"},
+      {"sceneId":"solar-zenith-108-above","path":"captures/cr6c-q24-narrowed-solar-zenith-108-above-final-composite.png","byteLength":7204,"sha256":"2b0561b09e0f567faad80368c4a26dc55f50f8734754d82c82f0658d3ac396c7"},
+      {"sceneId":"sunset-plus-120-minutes","path":"captures/cr6c-q24-narrowed-sunset-plus-120-minutes-final-composite.png","byteLength":7244,"sha256":"d6c0b3355c70cb23256c648fea716035360acbfa1bdf4059836e482649e2f5db"}
+    ]
+  },
+  "catalogParent": {
+    "namespace": "color-reset",
+    "runId": "000047-cr6b-brightest-2000-catalog-proof",
+    "conclusion": "accepted",
+    "artifactSetSha256": "ce50de53045f1e6f0ef33dcdc2b935a7023d5e28095b3d5f13add4980c370c57",
+    "manifest": {"path":"artifact-manifest.json","byteLength":6266,"sha256":"904a5a81ee821fc71cdd4b87d155f34745f42213084ce572e79d58682b36558d"},
+    "roster": {"path":"data/cr6b-brightest-2000-roster.json","schemaId":"algorithm32-color-reset-cr6b-brightest-2000-catalog-roster-v1","byteLength":1295829,"sha256":"6316eff663c7e41b27eb969f557ae32f9617f67e3dd40cd8cf396e1d306a1f3c"}
+  },
+  "presentation": {
+    "brightnessMultiplier": 24,
+    "effectiveBoundaryScale": 1463996.1476640578,
+    "registryId": "view-presentation-filter-registry-v1",
+    "implementedStage": "source-linear",
+    "implementedTarget": "stellar",
+    "filterId": "human-low-light-chroma-v1",
+    "operation": "filteredStarRgb = neutralSameY + k(V) * (transportedStarRgb - neutralSameY); finalLinearRgb = sky + 24 * filteredStarRgb",
+    "collisionMagnitudeOperation": "V_pixel = -2.5 log10(sum_i 10^(-0.4 V_i)) for the canonical collision group"
+  },
+  "rows": [
+    {"id":"physical-control","label":"Physical color (filter off)","filter":{"id":"human-low-light-chroma-v1","stage":"source-linear","target":"stellar","order":0,"enabled":false,"parameters":{"fullColorMagnitude":0,"neutralMagnitude":3.2,"maximumChromaRetention":0.65}}},
+    {"id":"moderate-065","label":"Low-light moderate (max chroma 0.65)","filter":{"id":"human-low-light-chroma-v1","stage":"source-linear","target":"stellar","order":0,"enabled":true,"parameters":{"fullColorMagnitude":0,"neutralMagnitude":3.2,"maximumChromaRetention":0.65}}},
+    {"id":"strong-040","label":"Low-light strong (max chroma 0.40)","filter":{"id":"human-low-light-chroma-v1","stage":"source-linear","target":"stellar","order":0,"enabled":true,"parameters":{"fullColorMagnitude":0,"neutralMagnitude":3.2,"maximumChromaRetention":0.4}}}
+  ],
+  "gates": {
+    "requestedImageCount": 30,
+    "disabledControlMaximumRgbCode": 0,
+    "disabledControlMaximumLinearScalarDifference": 0,
+    "gpuCpuMaximumRgbCode": 1,
+    "luminanceMaximumAbsoluteDifference": 1e-8,
+    "nonstellarRgbMustMatchControlExactly": true,
+    "earlyRobustCount": 0,
+    "twilightAnchorMinimumRgbCode": 2,
+    "laterRobustCountMayNotDecrease": true,
+    "darkSaturatedStellarPixelCount": 0,
+    "darkExactWhiteStellarPixelCount": 0,
+    "retentionMustBeContinuousAndMonotone": true,
+    "moderateRetentionMustNotBeBelowStrong": true,
+    "transitionMaximumPerMemberDeltaDifferenceCodes": 1,
+    "allImagesBeforeScientificGates": true,
+    "requiredWebglVersion": 2,
+    "requiredAngleBackend": "D3D11",
+    "independentTerminalVerification": true
+  },
+  "outputs": {
+    "requestedImageUploadOrder": [
+      "captures/cr6d-physical-control-sunset-final-composite.png",
+      "captures/cr6d-physical-control-sunset-plus-10-minutes-final-composite.png",
+      "captures/cr6d-physical-control-sunset-plus-30-minutes-final-composite.png",
+      "captures/cr6d-physical-control-sunset-plus-60-minutes-final-composite.png",
+      "captures/cr6d-physical-control-sunset-plus-90-minutes-final-composite.png",
+      "captures/cr6d-physical-control-solar-zenith-108-below-final-composite.png",
+      "captures/cr6d-physical-control-solar-zenith-108-above-final-composite.png",
+      "captures/cr6d-physical-control-sunset-plus-120-minutes-final-composite.png",
+      "captures/cr6d-moderate-065-sunset-final-composite.png",
+      "captures/cr6d-moderate-065-sunset-plus-10-minutes-final-composite.png",
+      "captures/cr6d-moderate-065-sunset-plus-30-minutes-final-composite.png",
+      "captures/cr6d-moderate-065-sunset-plus-60-minutes-final-composite.png",
+      "captures/cr6d-moderate-065-sunset-plus-90-minutes-final-composite.png",
+      "captures/cr6d-moderate-065-solar-zenith-108-below-final-composite.png",
+      "captures/cr6d-moderate-065-solar-zenith-108-above-final-composite.png",
+      "captures/cr6d-moderate-065-sunset-plus-120-minutes-final-composite.png",
+      "captures/cr6d-strong-040-sunset-final-composite.png",
+      "captures/cr6d-strong-040-sunset-plus-10-minutes-final-composite.png",
+      "captures/cr6d-strong-040-sunset-plus-30-minutes-final-composite.png",
+      "captures/cr6d-strong-040-sunset-plus-60-minutes-final-composite.png",
+      "captures/cr6d-strong-040-sunset-plus-90-minutes-final-composite.png",
+      "captures/cr6d-strong-040-solar-zenith-108-below-final-composite.png",
+      "captures/cr6d-strong-040-solar-zenith-108-above-final-composite.png",
+      "captures/cr6d-strong-040-sunset-plus-120-minutes-final-composite.png",
+      "figures/cr6d-physical-control-cadence.png",
+      "figures/cr6d-moderate-065-cadence.png",
+      "figures/cr6d-strong-040-cadence.png",
+      "figures/cr6d-complete-decision-matrix.png",
+      "figures/cr6d-magnitude-chroma-retention.png",
+      "figures/cr6d-fixed-member-luminance-chroma.png"
+    ],
+    "evidence": {
+      "replayLedger":"evidence/cr6d-replay-ledger.json",
+      "fixedMemberAnalysis":"evidence/cr6d-fixed-member-analysis.json",
+      "transitionAnalysis":"evidence/cr6d-transition-analysis.json",
+      "analysis":"evidence/cr6d-analysis.json"
+    }
+  }
+}

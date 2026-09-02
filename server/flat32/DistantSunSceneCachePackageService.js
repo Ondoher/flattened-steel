@@ -52,12 +52,10 @@ async function containedOrdinaryFile(root, relativePath) {
 }
 
 export function defaultDistantSunSceneCachePackageRoot() {
-	const repositoryRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
+	const serverFlat32Root = path.dirname(fileURLToPath(import.meta.url));
 	return path.join(
-		repositoryRoot,
-		'tmp',
-		'extraterrestrial',
-		'production-adoption',
+		serverFlat32Root,
+		'data',
 		'one-degree-bin-covered-runtime-packages-20260830-1',
 	);
 }

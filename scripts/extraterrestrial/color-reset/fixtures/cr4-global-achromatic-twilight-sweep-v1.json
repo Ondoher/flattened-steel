@@ -1,0 +1,200 @@
+{
+  "schemaId": "algorithm32-color-reset-cr4-global-achromatic-twilight-sweep-input-v1",
+  "claimBoundary": "Image-first replay of one predeclared global achromatic Color response over accepted CR1 pre-display fields using the accepted CR2 receiver-light scalar. This run accepts no final appearance choice, gamut or shoulder operation, stellar behavior, production behavior, or change to physical scattering.",
+  "parents": {
+    "skyField": {
+      "namespace": "color-reset",
+      "runId": "000005-six-scene-visual-baseline",
+      "artifactSetSha256": "2f7b49dd239fcaf5399c65bfebc59195458edf0b82910cf9987e341b76a615fc",
+      "manifestSha256": "3ba1199191f6b9dd825b0475c7d329a4b0be84e441db655d354bdce234f6949b",
+      "analysis": {
+        "path": "evidence/render-analysis.json",
+        "byteLength": 287705,
+        "sha256": "d5525a54248d61c0f6606e8371181e569c9f6926e7729c555e906cb0286e01fe"
+      }
+    },
+    "receiverLight": {
+      "namespace": "color-reset",
+      "runId": "000007-available-light-inventory",
+      "artifactSetSha256": "dcd6cdd8146094d05427ad180af7fccefdbaa67e290d1b5f21e6a0d4b03697ba",
+      "manifestSha256": "f0790db92f9e39d1bc2c735572928d34b5698b0123524a56845b571d4f27b226",
+      "analysis": {
+        "path": "evidence/measurement-analysis.json",
+        "byteLength": 231633,
+        "sha256": "99cc785895bf84edd57072eb95951eb916af2ec37d49eae25abd148e34545a47"
+      }
+    }
+  },
+  "viewport": {
+    "widthPixels": 640,
+    "heightPixels": 400,
+    "verticalFieldOfViewDegrees": 78,
+    "aim": "fixed San Jose sunset bearing",
+    "foreground": "black spherical-ground visual endpoint inherited from CR1"
+  },
+  "receiverLightScalar": {
+    "id": "cr4-total-horizontal-receiver-illuminance-v1",
+    "quantity": "photopic total horizontal illuminance",
+    "units": "lux",
+    "source": "CR2 Native15 totalHorizontal = directHorizontal + diffuseHorizontal, projected with CIE 1931 two-degree y-bar and 683 lumens per watt",
+    "jsonPath": "scenes[].measurement.photopic.totalHorizontal.illuminance",
+    "sameValueForEveryPixel": true,
+    "namedTimeInput": false,
+    "solarZenithInput": false,
+    "sourceKindInput": false
+  },
+  "scenes": [
+    {
+      "id": "solar-noon",
+      "label": "Solar noon",
+      "timeIso": "2024-06-20T20:08:00.000Z",
+      "totalHorizontalIlluminanceLux": 117240.44327776447,
+      "field": {"path": "data/pre-display-linear-rgb-y-solar-noon.f32le", "byteLength": 4096000, "sha256": "2727e8eda7532e89158b5ba6d53b9b959aba674882ba6d9aa9f156e5c89ec333"},
+      "mask": {"path": "data/scene-hit-mask-solar-noon.r8", "byteLength": 256000, "sha256": "7519bd29b7cfc20aee3cb9230d93f6bc2365a332769f2f95b02e0b07203a94f8"},
+      "bruneton": {"path": "captures/bruneton-solar-noon.png", "byteLength": 94200, "sha256": "39e7aa96ffae52f0d2f2b9868e3429ed43d483ada5b1bf40fe06b312a51f1a95"},
+      "productionLift": {"path": "captures/production-lift-solar-noon.png", "byteLength": 94200, "sha256": "39e7aa96ffae52f0d2f2b9868e3429ed43d483ada5b1bf40fe06b312a51f1a95"}
+    },
+    {
+      "id": "sunset-minus-60-minutes",
+      "label": "One hour before sunset",
+      "timeIso": "2024-06-21T02:26:03.503Z",
+      "totalHorizontalIlluminanceLux": 15435.1457596012,
+      "field": {"path": "data/pre-display-linear-rgb-y-sunset-minus-60-minutes.f32le", "byteLength": 4096000, "sha256": "70ca93b6114d0e695120b827dff50514b13d008477628b6e482cd734c61f52fb"},
+      "mask": {"path": "data/scene-hit-mask-sunset-minus-60-minutes.r8", "byteLength": 256000, "sha256": "7519bd29b7cfc20aee3cb9230d93f6bc2365a332769f2f95b02e0b07203a94f8"},
+      "bruneton": {"path": "captures/bruneton-sunset-minus-60-minutes.png", "byteLength": 127460, "sha256": "0b599d6472a83dd927eac5b0f8b4458382d8b8ed189886de11c262c29c577142"},
+      "productionLift": {"path": "captures/production-lift-sunset-minus-60-minutes.png", "byteLength": 127460, "sha256": "0b599d6472a83dd927eac5b0f8b4458382d8b8ed189886de11c262c29c577142"}
+    },
+    {
+      "id": "sunset-minus-10-minutes",
+      "label": "Ten minutes before sunset",
+      "timeIso": "2024-06-21T03:16:03.503Z",
+      "totalHorizontalIlluminanceLux": 2155.4260282733017,
+      "field": {"path": "data/pre-display-linear-rgb-y-sunset-minus-10-minutes.f32le", "byteLength": 4096000, "sha256": "60a694a2e0827d6cc0c0f27ff640b7eaf506b80b207cc8a6adeb0045b4792fda"},
+      "mask": {"path": "data/scene-hit-mask-sunset-minus-10-minutes.r8", "byteLength": 256000, "sha256": "7519bd29b7cfc20aee3cb9230d93f6bc2365a332769f2f95b02e0b07203a94f8"},
+      "bruneton": {"path": "captures/bruneton-sunset-minus-10-minutes.png", "byteLength": 98170, "sha256": "8f6f222fcba63804ab2896b4c9fe74b1c6d4566eee4f742a891a94d24f402642"},
+      "productionLift": {"path": "captures/production-lift-sunset-minus-10-minutes.png", "byteLength": 98170, "sha256": "8f6f222fcba63804ab2896b4c9fe74b1c6d4566eee4f742a891a94d24f402642"}
+    },
+    {
+      "id": "sunset",
+      "label": "Sunset",
+      "timeIso": "2024-06-21T03:26:03.503Z",
+      "totalHorizontalIlluminanceLux": 1012.6643901353058,
+      "field": {"path": "data/pre-display-linear-rgb-y-sunset.f32le", "byteLength": 4096000, "sha256": "a81c0ab29093a09ef7b306418c945d61d71db5f5fb066702911f9d1b5bf6975b"},
+      "mask": {"path": "data/scene-hit-mask-sunset.r8", "byteLength": 256000, "sha256": "7519bd29b7cfc20aee3cb9230d93f6bc2365a332769f2f95b02e0b07203a94f8"},
+      "bruneton": {"path": "captures/bruneton-sunset.png", "byteLength": 66620, "sha256": "16d9808c8fc2702c2b29a904e4f4b2ea0fc13c6d799a1e1cd164119c1b157884"},
+      "productionLift": {"path": "captures/production-lift-sunset.png", "byteLength": 66687, "sha256": "0d6057e6d1ef917c4722029062009cdfff51b21f3301df0f93194ed8eca1cfaf"}
+    },
+    {
+      "id": "sunset-plus-10-minutes",
+      "label": "Ten minutes after sunset",
+      "timeIso": "2024-06-21T03:36:03.503Z",
+      "totalHorizontalIlluminanceLux": 385.0097520214597,
+      "field": {"path": "data/pre-display-linear-rgb-y-sunset-plus-10-minutes.f32le", "byteLength": 4096000, "sha256": "ea9baaea08f15432045c25176513bd20beeddef633ac4fdfab8b602d361500ba"},
+      "mask": {"path": "data/scene-hit-mask-sunset-plus-10-minutes.r8", "byteLength": 256000, "sha256": "7519bd29b7cfc20aee3cb9230d93f6bc2365a332769f2f95b02e0b07203a94f8"},
+      "bruneton": {"path": "captures/bruneton-sunset-plus-10-minutes.png", "byteLength": 38547, "sha256": "a1aecaf6df77d5b0c0e681e8f08a0cd516cfa5609aedafc3aa083a4b98ef7df3"},
+      "productionLift": {"path": "captures/production-lift-sunset-plus-10-minutes.png", "byteLength": 158110, "sha256": "55804cb1d8fc56d847545e1be723dddb6583ad790ba0bfa5a05b43aadb899c35"}
+    },
+    {
+      "id": "sunset-plus-60-minutes",
+      "label": "One hour after sunset",
+      "timeIso": "2024-06-21T04:26:03.503Z",
+      "totalHorizontalIlluminanceLux": 0.2044095523727617,
+      "field": {"path": "data/pre-display-linear-rgb-y-sunset-plus-60-minutes.f32le", "byteLength": 4096000, "sha256": "70d22578d130e854fce2dba8d087bbe53478b1cb196153dcd7d66b4dd184f54e"},
+      "mask": {"path": "data/scene-hit-mask-sunset-plus-60-minutes.r8", "byteLength": 256000, "sha256": "7519bd29b7cfc20aee3cb9230d93f6bc2365a332769f2f95b02e0b07203a94f8"},
+      "bruneton": {"path": "captures/bruneton-sunset-plus-60-minutes.png", "byteLength": 6664, "sha256": "e1093a93f878f5289c1e475b278d1b79a2c5504f6c0763a8a599167c81f6b96a"},
+      "productionLift": {"path": "captures/production-lift-sunset-plus-60-minutes.png", "byteLength": 95943, "sha256": "d0ad4a97d49dcd8224d854a2670d24602341f42cca3253baa09e63f9b51e9128"}
+    }
+  ],
+  "response": {
+    "id": "color-reset-cr4-total-horizontal-illuminance-rational-gain-v1",
+    "input": "E = total horizontal receiver illuminance in lux",
+    "equation": "g(E;G) = 1 + (G - 1) / (1 + (E / 68 lux)^4); outputRgb = clamp(brunetonRgb * g, 0, 1)",
+    "operationSpace": "post-Bruneton display RGB",
+    "rgbTreatment": "one identical gain for all three channels and every pixel before the final explicit display clamp",
+    "transitionIlluminanceLux": 68,
+    "rolloffPower": 4,
+    "properties": {
+      "finiteForAllNonnegativeIlluminance": true,
+      "continuousValueAndSlope": true,
+      "zeroIlluminanceDerivativePerLux": 0,
+      "strictlyApproachesUnitGainAtIncreasingIlluminance": true,
+      "hardIdentityCutoff": false,
+      "namedSceneBranch": false
+    },
+    "candidates": [
+      {"id": "restrained-256", "label": "Restrained (Gmax 256)", "maximumGain": 256, "transitionIlluminanceLux": 68, "rolloffPower": 4},
+      {"id": "balanced-512", "label": "Balanced (Gmax 512)", "maximumGain": 512, "transitionIlluminanceLux": 68, "rolloffPower": 4},
+      {"id": "strong-1024", "label": "Strong (Gmax 1024)", "maximumGain": 1024, "transitionIlluminanceLux": 68, "rolloffPower": 4}
+    ]
+  },
+  "brunetonPreservationEnvelope": {
+    "scope": "sky pixels whose total horizontal receiver illuminance satisfies the scalar applicability rule; candidate CPU quantization compared with CPU Bruneton quantization from the same CR1 float32 field",
+    "applicability": {
+      "equation": "E >= 1000 lux",
+      "minimumIlluminanceLux": 1000,
+      "evaluationOnly": true,
+      "namedSceneInput": false
+    },
+    "maximumAbsoluteRgbCodeDifference": {
+      "equation": "1 + 4 / (1 + (E / 2000 lux)^2)",
+      "daylightFloorCodes": 1,
+      "lowSunRelaxationCodes": 4,
+      "scaleIlluminanceLux": 2000,
+      "power": 2
+    },
+    "rgbCodeRmse": {
+      "equation": "0.2 + 0.8 / (1 + (E / 2000 lux)^2)",
+      "daylightFloorCodes": 0.2,
+      "lowSunRelaxationCodes": 0.8,
+      "scaleIlluminanceLux": 2000,
+      "power": 2
+    },
+    "fixedBeforeExecution": true,
+    "evaluationOnly": true,
+    "minimumQualifiedCandidateCount": 1
+  },
+  "diagnostics": {
+    "differenceAmplification": 4,
+    "gpuCpuParity": {"maximumAbsoluteRgbCodeDifference": 1, "maximumRgbCodeRmse": 0.35},
+    "parentBrunetonReplay": {"maximumAbsoluteRgbCodeDifference": 1, "maximumRgbCodeRmse": 0.2},
+    "achromaticity": {"maximumUnclippedCrossProductError": 1e-12},
+    "twilight": {
+      "maximumSkySaturatedFraction": 0.01,
+      "minimumPlus60NonblackSkyFraction": 0.5,
+      "minimumCandidateVsBrunetonRgbCodeRmse": 1,
+      "requireStrictlyFallingMedianDisplayLuminanceFromSunset": true
+    },
+    "curvePlot": {"widthPixels": 1400, "heightPixels": 900, "minimumIlluminanceLux": 0.001, "maximumIlluminanceLux": 200000},
+    "preservationPlot": {"widthPixels": 1400, "heightPixels": 900},
+    "blackSaturationPlot": {"widthPixels": 1400, "heightPixels": 900}
+  },
+  "outputs": {
+    "panels": [
+      "captures/bruneton-solar-noon.png", "captures/production-lift-solar-noon.png", "captures/restrained-256-solar-noon.png", "captures/balanced-512-solar-noon.png", "captures/strong-1024-solar-noon.png",
+      "captures/bruneton-sunset-minus-60-minutes.png", "captures/production-lift-sunset-minus-60-minutes.png", "captures/restrained-256-sunset-minus-60-minutes.png", "captures/balanced-512-sunset-minus-60-minutes.png", "captures/strong-1024-sunset-minus-60-minutes.png",
+      "captures/bruneton-sunset-minus-10-minutes.png", "captures/production-lift-sunset-minus-10-minutes.png", "captures/restrained-256-sunset-minus-10-minutes.png", "captures/balanced-512-sunset-minus-10-minutes.png", "captures/strong-1024-sunset-minus-10-minutes.png",
+      "captures/bruneton-sunset.png", "captures/production-lift-sunset.png", "captures/restrained-256-sunset.png", "captures/balanced-512-sunset.png", "captures/strong-1024-sunset.png",
+      "captures/bruneton-sunset-plus-10-minutes.png", "captures/production-lift-sunset-plus-10-minutes.png", "captures/restrained-256-sunset-plus-10-minutes.png", "captures/balanced-512-sunset-plus-10-minutes.png", "captures/strong-1024-sunset-plus-10-minutes.png",
+      "captures/bruneton-sunset-plus-60-minutes.png", "captures/production-lift-sunset-plus-60-minutes.png", "captures/restrained-256-sunset-plus-60-minutes.png", "captures/balanced-512-sunset-plus-60-minutes.png", "captures/strong-1024-sunset-plus-60-minutes.png"
+    ],
+    "differences": [
+      "diagnostics/difference-restrained-256-solar-noon.png", "diagnostics/difference-balanced-512-solar-noon.png", "diagnostics/difference-strong-1024-solar-noon.png",
+      "diagnostics/difference-restrained-256-sunset-minus-60-minutes.png", "diagnostics/difference-balanced-512-sunset-minus-60-minutes.png", "diagnostics/difference-strong-1024-sunset-minus-60-minutes.png",
+      "diagnostics/difference-restrained-256-sunset-minus-10-minutes.png", "diagnostics/difference-balanced-512-sunset-minus-10-minutes.png", "diagnostics/difference-strong-1024-sunset-minus-10-minutes.png",
+      "diagnostics/difference-restrained-256-sunset.png", "diagnostics/difference-balanced-512-sunset.png", "diagnostics/difference-strong-1024-sunset.png",
+      "diagnostics/difference-restrained-256-sunset-plus-10-minutes.png", "diagnostics/difference-balanced-512-sunset-plus-10-minutes.png", "diagnostics/difference-strong-1024-sunset-plus-10-minutes.png",
+      "diagnostics/difference-restrained-256-sunset-plus-60-minutes.png", "diagnostics/difference-balanced-512-sunset-plus-60-minutes.png", "diagnostics/difference-strong-1024-sunset-plus-60-minutes.png"
+    ],
+    "figures": [
+      "figures/cr4-response-curves.png",
+      "figures/cr4-bruneton-preservation.png",
+      "figures/cr4-black-saturation-summary.png",
+      "figures/cr4-global-achromatic-twilight-sweep.png"
+    ],
+    "contactSheet": "figures/cr4-global-achromatic-twilight-sweep.png",
+    "analysis": "evidence/analysis.json",
+    "panelIdentities": "evidence/panel-identities.json",
+    "imageDerivations": "evidence/image-derivations.json",
+    "progress": "progress.json"
+  }
+}

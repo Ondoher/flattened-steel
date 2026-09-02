@@ -1,0 +1,476 @@
+{
+  "schemaId": "algorithm32-color-reset-cr4f-fine-twilight-cadence-input-v1",
+  "claimBoundary": {
+    "summary": "Owner-review-only fine cadence from sunset through one hour after sunset. Accepted CR4C endpoint pixels and response evidence are copied and authenticated; only the plus-20, plus-30, and plus-45 minute scenes execute the fixed Native15/Q30 physical path, receiver-light measurement, and unchanged accepted two-scale Color response.",
+    "appearanceAcceptanceGate": false,
+    "appearanceAccepted": false,
+    "chronologyGate": false,
+    "continuityGate": false,
+    "continuityClaim": false,
+    "intermediateCadenceInspectionOnly": true,
+    "physicalTransportReexecutionForParentEndpoints": false,
+    "physicalTransportExecutionForIntermediateScenes": true,
+    "colorResponseReexecutionForParentEndpoints": false,
+    "colorResponseExecutionForIntermediateScenes": true,
+    "imageInterpolation": false,
+    "illuminanceInterpolation": false,
+    "perSceneColorTuning": false,
+    "paperSimilarityMetric": false,
+    "productionClaim": false
+  },
+  "parents": {
+    "acceptedCr4c": {
+      "namespace": "color-reset",
+      "runId": "000022-cr4c-two-scale-sunset-nautical-pre-tone-sequence",
+      "conclusion": "accepted",
+      "artifactSetSha256": "4952c7b4781999885a44e9495d9566c6f4f8f3f0e6f6679fbd93a9fdb3cde656",
+      "manifest": {
+        "path": "artifact-manifest.json",
+        "byteLength": 9041,
+        "sha256": "72cc7b93125a05036c0f315a36d69cd1fdd78bc7951e846b64149f2c6cae97ac"
+      },
+      "analysis": {
+        "path": "evidence/analysis.json",
+        "byteLength": 71862,
+        "sha256": "b62abc7394e3fe5c64195930c85dd82acdf63a4d7900ced2cb2c09b95b889d4b"
+      },
+      "responseId": "color-reset-cr4c-two-scale-total-horizontal-illuminance-pre-tone-gain-v1",
+      "endpointEntries": [
+        {
+          "sceneId": "sunset",
+          "candidate": {
+            "path": "captures/pre-tone-two-scale-sunset.png",
+            "byteLength": 82359,
+            "sha256": "e8a77f028cdb55ffe4983d3f4cf24c62df8f287dc4e8c78256ad187fd45fda9f"
+          },
+          "solarZenithDegrees": 89.95791522653448,
+          "solarElevationDegrees": 0.04208477346552,
+          "totalHorizontalIlluminanceLux": 1012.6643901353058,
+          "gain": 2.4936604029421425,
+          "gainDerivativePerLux": -0.0076096682321318155
+        },
+        {
+          "sceneId": "sunset-plus-10-minutes",
+          "candidate": {
+            "path": "captures/pre-tone-two-scale-sunset-plus-10-minutes.png",
+            "byteLength": 68086,
+            "sha256": "49af34e54de82d3e48c2b750992b4993cb111683ff2f3ba067acc41d8ae51422"
+          },
+          "solarZenithDegrees": 91.66578905821635,
+          "solarElevationDegrees": -1.66578905821635,
+          "totalHorizontalIlluminanceLux": 385.0097520214597,
+          "gain": 4.499312709647269,
+          "gainDerivativePerLux": -0.000018956533266512714
+        },
+        {
+          "sceneId": "sunset-plus-60-minutes",
+          "candidate": {
+            "path": "captures/pre-tone-two-scale-sunset-plus-60-minutes.png",
+            "byteLength": 90108,
+            "sha256": "fb56b2298115f0dd3506283ceed0555318aacf38ea0f04bca903b00923c84943"
+          },
+          "solarZenithDegrees": 99.74525026663457,
+          "solarElevationDegrees": -9.74525026663457,
+          "totalHorizontalIlluminanceLux": 0.2044095523727617,
+          "gain": 5259.616582578368,
+          "gainDerivativePerLux": -653.1493059850455
+        }
+      ],
+      "role": "Pixel and response-evidence authority for sunset, plus 10 minutes, and plus 60 minutes. Appearance acceptance remains false."
+    }
+  },
+  "cacheCatalog": {
+    "root": "server/flat32/data/one-degree-bin-covered-runtime-packages-20260830-1",
+    "path": "distant-sun-runtime-catalog-2dbf92ad616c5461954fc15f8eb1654c49f4b1e3ddbd948aa7bda7a40c76d7ac.json",
+    "byteLength": 154138,
+    "sha256": "2dbf92ad616c5461954fc15f8eb1654c49f4b1e3ddbd948aa7bda7a40c76d7ac",
+    "selectionRule": "half-up, half-open one-degree bins over [0, 108) degrees solar zenith; resolve and authenticate from the scene state at runtime",
+    "operationalInput": true
+  },
+  "location": {
+    "name": "San Jose",
+    "latitudeDegrees": 37.3382,
+    "longitudeDegrees": -121.8863
+  },
+  "observer": {
+    "heightMeters": 1.7,
+    "upDirection": [0, 0, 1]
+  },
+  "viewport": {
+    "widthPixels": 640,
+    "heightPixels": 400,
+    "verticalFieldOfViewDegrees": 78,
+    "nearSceneUnits": 0.002,
+    "farSceneUnits": 500,
+    "viewAzimuthDegrees": -59.99625193137896,
+    "viewElevationDegrees": 5,
+    "aim": "fixed San Jose sunset bearing",
+    "foreground": "black spherical-ground visual endpoint inherited from CR1"
+  },
+  "physicalControls": {
+    "sourceKind": "distant Sun",
+    "spectralBasis": "algorithm32-native15",
+    "spectralChannelCount": 15,
+    "cacheNumericalIdentity": "algorithm32-native48-z180-w27-f68-native15-n4-q30-ozone-v1",
+    "maximumScatteringOrder": 4,
+    "pathIntervalCount": 30,
+    "pathSampleDistribution": "quadratic-near-observer-v1",
+    "sourceAngularRadiusRadians": 0.004675,
+    "sceneScaleMetersPerSceneUnit": 1000,
+    "sceneDepthMaxMeters": 500000,
+    "ground": "spherical geometry endpoint with black visual foreground",
+    "groundWidthSegments": 192,
+    "groundHeightSegments": 96,
+    "celestialSourcesEnabled": false,
+    "sceneObjects": false,
+    "fieldAcquisitionContract": "CR1 color-reset-pre-display-linear-rgb-v1 signed projected linear RGBY field at the fixed camera",
+    "receiverLightMeasurementContract": "CR2 deterministic 64-by-64 midpoint product quadrature in receiver-local mu and azimuth over the same Q30 Native15 path radiance"
+  },
+  "receiverLight": {
+    "id": "cr4b-total-horizontal-receiver-illuminance-v1",
+    "quantity": "photopic total horizontal illuminance",
+    "units": "lux",
+    "equation": "totalHorizontal(lambda) = directNormal(lambda) * max(0, up dot sourceCenter) + integralUpperHemisphere L(lambda, omega) * max(0, up dot omega) dOmega",
+    "sameValueForEveryPixel": true,
+    "sameValueForEveryRgbChannel": true,
+    "namedTimeInput": false,
+    "solarZenithInputToColor": false,
+    "sourceKindInputToColor": false,
+    "imageDerived": false,
+    "liveDiffuseRadianceStorage": "little-endian float32, 4096 directions by 15 Native15 channels, topological direction order retained by the CR2 measurement owner",
+    "liveDiffuseRadianceByteLength": 245760
+  },
+  "response": {
+    "id": "color-reset-cr4c-two-scale-total-horizontal-illuminance-pre-tone-gain-v1",
+    "selectedCandidate": {
+      "id": "pre-tone-two-scale",
+      "label": "Accepted CR4C two-scale pre-tone diagnostic response",
+      "sunsetAmplitude": 3.5,
+      "sunsetTransitionIlluminanceLux": 980,
+      "sunsetRolloffPower": 9,
+      "nauticalAmplitude": 5300,
+      "nauticalTransitionIlluminanceLux": 1,
+      "nauticalRolloffPower": 3
+    },
+    "equation": "g(E) = 1 + 3.5 / (1 + (E / 980 lux)^9) + 5300 / (1 + (E / 1 lux)^3)",
+    "operation": "exposedLinearRgb = signedProjectedLinearRgb * g(E); displayRgb = unchangedBrunetonExponential(exposedLinearRgb)",
+    "operationSpace": "signed projected linear sRGB before unchanged Bruneton exponential",
+    "sceneVariation": "one identical shader and curve in all scenes; only measured total-horizontal receiver illuminance E changes",
+    "appearanceAccepted": false
+  },
+  "presentation": {
+    "title": "San Jose fine twilight cadence",
+    "subtitle": "Native15 / Q30 / accepted CR4C two-scale Color; no Bruneton comparison",
+    "columnCount": 1,
+    "sceneOrder": [
+      "sunset",
+      "sunset-plus-10-minutes",
+      "sunset-plus-20-minutes",
+      "sunset-plus-30-minutes",
+      "sunset-plus-45-minutes",
+      "sunset-plus-60-minutes"
+    ],
+    "labelContract": {
+      "requiredFacts": [
+        "offsetMinutes",
+        "solarZenithDegrees",
+        "solarElevationDegrees",
+        "totalHorizontalIlluminanceLux",
+        "candidateGain",
+        "evidenceMode"
+      ],
+      "solarAngleDecimalPlaces": 6,
+      "illuminanceSignificantDigits": 10,
+      "gainSignificantDigits": 10,
+      "parentEvidenceModeLabel": "replayed",
+      "liveEvidenceModeLabel": "measured/evaluated"
+    },
+    "layout": {
+      "outerPaddingPixels": 24,
+      "titleHeightPixels": 64,
+      "sceneLabelHeightPixels": 60,
+      "rowGapPixels": 20,
+      "expectedWidthPixels": 688,
+      "expectedHeightPixels": 2972,
+      "sourcePanelWidthPixels": 640,
+      "sourcePanelHeightPixels": 400,
+      "sourcePanelScale": 1,
+      "imageSmoothing": false,
+      "backgroundCss": "#0d1117",
+      "headingCss": "#f0f6fc",
+      "secondaryCss": "#9da7b3",
+      "borderCss": "#475569"
+    }
+  },
+  "scenes": [
+    {
+      "id": "sunset",
+      "label": "Sunset",
+      "timeIso": "2024-06-21T03:26:03.503Z",
+      "offsetMinutes": 0,
+      "solarZenithDegrees": 89.95791522653448,
+      "solarElevationDegrees": 0.04208477346552,
+      "mode": "parent",
+      "cacheExpectation": {
+        "status": "ready",
+        "representativeSolarZenithDegrees": 90,
+        "cacheIdentity": "algorithm32-distant-sun-scene-cache-sha256:a555249c5e7d7966db019bcab13907bb045d1b41d775f49193105b86aaa81a96",
+        "manifestSha256": "9f4e1b3d55542ec92b9cedd724ab6b0ef6f091ec0f4740bafc0f31b35e1ed701"
+      },
+      "parentCandidate": {
+        "path": "captures/pre-tone-two-scale-sunset.png",
+        "byteLength": 82359,
+        "sha256": "e8a77f028cdb55ffe4983d3f4cf24c62df8f287dc4e8c78256ad187fd45fda9f"
+      },
+      "totalHorizontalIlluminance": {
+        "mode": "replayed-parent-evidence",
+        "value": 1012.6643901353058,
+        "units": "lux"
+      },
+      "expectedGain": {
+        "mode": "replayed-parent-evidence",
+        "value": 2.4936604029421425
+      },
+      "output": {
+        "image": "captures/cr4f-new-color-sunset.png"
+      }
+    },
+    {
+      "id": "sunset-plus-10-minutes",
+      "label": "10 minutes after sunset",
+      "timeIso": "2024-06-21T03:36:03.503Z",
+      "offsetMinutes": 10,
+      "solarZenithDegrees": 91.66578905821635,
+      "solarElevationDegrees": -1.66578905821635,
+      "mode": "parent",
+      "cacheExpectation": {
+        "status": "ready",
+        "representativeSolarZenithDegrees": 92,
+        "cacheIdentity": "algorithm32-distant-sun-scene-cache-sha256:b5f7651885cd5fe305731225771f5160103e5ad5319282a7d1f9c4c5dbd9f803",
+        "manifestSha256": "11d58266154307b49a14fa00faf2d8423175198fc9242ef59339d40678fc28f6"
+      },
+      "parentCandidate": {
+        "path": "captures/pre-tone-two-scale-sunset-plus-10-minutes.png",
+        "byteLength": 68086,
+        "sha256": "49af34e54de82d3e48c2b750992b4993cb111683ff2f3ba067acc41d8ae51422"
+      },
+      "totalHorizontalIlluminance": {
+        "mode": "replayed-parent-evidence",
+        "value": 385.0097520214597,
+        "units": "lux"
+      },
+      "expectedGain": {
+        "mode": "replayed-parent-evidence",
+        "value": 4.499312709647269
+      },
+      "output": {
+        "image": "captures/cr4f-new-color-sunset-plus-10-minutes.png"
+      }
+    },
+    {
+      "id": "sunset-plus-20-minutes",
+      "label": "20 minutes after sunset",
+      "timeIso": "2024-06-21T03:46:03.503Z",
+      "offsetMinutes": 20,
+      "solarZenithDegrees": 93.345594,
+      "solarElevationDegrees": -3.345594,
+      "mode": "live",
+      "cacheExpectation": {
+        "status": "ready",
+        "representativeSolarZenithDegrees": 93,
+        "minimumInputDegrees": 92.5,
+        "maximumInputExclusiveDegrees": 93.5,
+        "assetPath": "packages/46b89795e3873b17812a95087b62615c285fa68e0a1ace586e09d4eae1d45341/",
+        "manifestPath": "scene-cache-manifest-8fa254dbbf27ff8fcabda8918473da246780350f0023e158a2368393ea2c3482.json",
+        "manifestSha256": "8fa254dbbf27ff8fcabda8918473da246780350f0023e158a2368393ea2c3482",
+        "cacheIdentity": "algorithm32-distant-sun-scene-cache-sha256:46b89795e3873b17812a95087b62615c285fa68e0a1ace586e09d4eae1d45341",
+        "packageByteLength": 161208272
+      },
+      "totalHorizontalIlluminance": {
+        "mode": "live-measurement",
+        "value": null,
+        "units": "lux",
+        "measurementContract": "receiverLight"
+      },
+      "expectedGain": {
+        "mode": "evaluate-response-from-live-measurement",
+        "value": null,
+        "responseId": "color-reset-cr4c-two-scale-total-horizontal-illuminance-pre-tone-gain-v1"
+      },
+      "output": {
+        "image": "captures/cr4f-new-color-sunset-plus-20-minutes.png",
+        "fieldPath": "data/pre-display-linear-rgb-y-sunset-plus-20-minutes.f32le",
+        "maskPath": "data/scene-hit-mask-sunset-plus-20-minutes.r8",
+        "rawReceiverRadiancePath": "data/receiver-diffuse-radiance-sunset-plus-20-minutes.f32le"
+      }
+    },
+    {
+      "id": "sunset-plus-30-minutes",
+      "label": "30 minutes after sunset",
+      "timeIso": "2024-06-21T03:56:03.503Z",
+      "offsetMinutes": 30,
+      "solarZenithDegrees": 94.995465,
+      "solarElevationDegrees": -4.995465,
+      "mode": "live",
+      "cacheExpectation": {
+        "status": "ready",
+        "representativeSolarZenithDegrees": 95,
+        "minimumInputDegrees": 94.5,
+        "maximumInputExclusiveDegrees": 95.5,
+        "assetPath": "packages/0052e520dd09c964bf807fad012b9f17028c88ec3dc846c4c6d41b9d0f91f9bf/",
+        "manifestPath": "scene-cache-manifest-81033b7286298fe130f7e64d8d03757f18ac23ea31cd995142223b3f4881b031.json",
+        "manifestSha256": "81033b7286298fe130f7e64d8d03757f18ac23ea31cd995142223b3f4881b031",
+        "cacheIdentity": "algorithm32-distant-sun-scene-cache-sha256:0052e520dd09c964bf807fad012b9f17028c88ec3dc846c4c6d41b9d0f91f9bf",
+        "packageByteLength": 161208288
+      },
+      "totalHorizontalIlluminance": {
+        "mode": "live-measurement",
+        "value": null,
+        "units": "lux",
+        "measurementContract": "receiverLight"
+      },
+      "expectedGain": {
+        "mode": "evaluate-response-from-live-measurement",
+        "value": null,
+        "responseId": "color-reset-cr4c-two-scale-total-horizontal-illuminance-pre-tone-gain-v1"
+      },
+      "output": {
+        "image": "captures/cr4f-new-color-sunset-plus-30-minutes.png",
+        "fieldPath": "data/pre-display-linear-rgb-y-sunset-plus-30-minutes.f32le",
+        "maskPath": "data/scene-hit-mask-sunset-plus-30-minutes.r8",
+        "rawReceiverRadiancePath": "data/receiver-diffuse-radiance-sunset-plus-30-minutes.f32le"
+      }
+    },
+    {
+      "id": "sunset-plus-45-minutes",
+      "label": "45 minutes after sunset",
+      "timeIso": "2024-06-21T04:11:03.503Z",
+      "offsetMinutes": 45,
+      "solarZenithDegrees": 97.409808,
+      "solarElevationDegrees": -7.409808,
+      "mode": "live",
+      "cacheExpectation": {
+        "status": "ready",
+        "representativeSolarZenithDegrees": 97,
+        "minimumInputDegrees": 96.5,
+        "maximumInputExclusiveDegrees": 97.5,
+        "assetPath": "packages/28e04cd466f9abc5a9a8cf53e1f5cb2a51d57528c588624357d913b456c8869a/",
+        "manifestPath": "scene-cache-manifest-2926403cc5d9e66898393cf123649bfd6bf5c5b9769465c4bff6a3ce7bdeeb85.json",
+        "manifestSha256": "2926403cc5d9e66898393cf123649bfd6bf5c5b9769465c4bff6a3ce7bdeeb85",
+        "cacheIdentity": "algorithm32-distant-sun-scene-cache-sha256:28e04cd466f9abc5a9a8cf53e1f5cb2a51d57528c588624357d913b456c8869a",
+        "packageByteLength": 161208297
+      },
+      "totalHorizontalIlluminance": {
+        "mode": "live-measurement",
+        "value": null,
+        "units": "lux",
+        "measurementContract": "receiverLight"
+      },
+      "expectedGain": {
+        "mode": "evaluate-response-from-live-measurement",
+        "value": null,
+        "responseId": "color-reset-cr4c-two-scale-total-horizontal-illuminance-pre-tone-gain-v1"
+      },
+      "output": {
+        "image": "captures/cr4f-new-color-sunset-plus-45-minutes.png",
+        "fieldPath": "data/pre-display-linear-rgb-y-sunset-plus-45-minutes.f32le",
+        "maskPath": "data/scene-hit-mask-sunset-plus-45-minutes.r8",
+        "rawReceiverRadiancePath": "data/receiver-diffuse-radiance-sunset-plus-45-minutes.f32le"
+      }
+    },
+    {
+      "id": "sunset-plus-60-minutes",
+      "label": "1 hour after sunset",
+      "timeIso": "2024-06-21T04:26:03.503Z",
+      "offsetMinutes": 60,
+      "solarZenithDegrees": 99.74525026663457,
+      "solarElevationDegrees": -9.74525026663457,
+      "mode": "parent",
+      "cacheExpectation": {
+        "status": "ready",
+        "representativeSolarZenithDegrees": 100,
+        "cacheIdentity": "algorithm32-distant-sun-scene-cache-sha256:00bbd5b993c13b915fd747f16ecbe41701b600dd16ebdfccc6181c726b7744f6",
+        "manifestSha256": "fc8904f47d2c759996e20f02fb6fde0613f8f73ccf8408052776b7cbabaf04f6"
+      },
+      "parentCandidate": {
+        "path": "captures/pre-tone-two-scale-sunset-plus-60-minutes.png",
+        "byteLength": 90108,
+        "sha256": "fb56b2298115f0dd3506283ceed0555318aacf38ea0f04bca903b00923c84943"
+      },
+      "totalHorizontalIlluminance": {
+        "mode": "replayed-parent-evidence",
+        "value": 0.2044095523727617,
+        "units": "lux"
+      },
+      "expectedGain": {
+        "mode": "replayed-parent-evidence",
+        "value": 5259.616582578368
+      },
+      "output": {
+        "image": "captures/cr4f-new-color-sunset-plus-60-minutes.png"
+      }
+    }
+  ],
+  "retainedLiveArtifacts": {
+    "field": {
+      "storage": "little-endian float32, top-down row-major pixels, RGBA = signed projected linear R, linear G, linear B, photopic Y",
+      "byteLengthPerScene": 4096000
+    },
+    "sceneHitMask": {
+      "storage": "unsigned 8-bit, top-down row-major R8; 0 = sky/no scene-geometry endpoint, 255 = scene-geometry endpoint",
+      "byteLengthPerScene": 256000
+    },
+    "receiverDiffuseRadiance": {
+      "storage": "little-endian float32, 4096 receiver-local upper-hemisphere directions by 15 Native15 channels",
+      "byteLengthPerScene": 245760,
+      "quantity": "spectral radiance density",
+      "units": "W m^-2 sr^-1 nm^-1"
+    },
+    "cacheProvenance": {
+      "retainResolvedCatalogEntry": true,
+      "retainPackageManifestIdentity": true,
+      "retainCacheIdentity": true,
+      "retainRequestedAndRepresentativeSolarZenith": true
+    }
+  },
+  "outputs": {
+    "individuals": [
+      "captures/cr4f-new-color-sunset.png",
+      "captures/cr4f-new-color-sunset-plus-10-minutes.png",
+      "captures/cr4f-new-color-sunset-plus-20-minutes.png",
+      "captures/cr4f-new-color-sunset-plus-30-minutes.png",
+      "captures/cr4f-new-color-sunset-plus-45-minutes.png",
+      "captures/cr4f-new-color-sunset-plus-60-minutes.png"
+    ],
+    "fields": [
+      "data/pre-display-linear-rgb-y-sunset-plus-20-minutes.f32le",
+      "data/pre-display-linear-rgb-y-sunset-plus-30-minutes.f32le",
+      "data/pre-display-linear-rgb-y-sunset-plus-45-minutes.f32le"
+    ],
+    "masks": [
+      "data/scene-hit-mask-sunset-plus-20-minutes.r8",
+      "data/scene-hit-mask-sunset-plus-30-minutes.r8",
+      "data/scene-hit-mask-sunset-plus-45-minutes.r8"
+    ],
+    "receiverRadiances": [
+      "data/receiver-diffuse-radiance-sunset-plus-20-minutes.f32le",
+      "data/receiver-diffuse-radiance-sunset-plus-30-minutes.f32le",
+      "data/receiver-diffuse-radiance-sunset-plus-45-minutes.f32le"
+    ],
+    "stack": "figures/cr4f-fine-twilight-cadence.png",
+    "requestedImageUploadOrder": [
+      "captures/cr4f-new-color-sunset.png",
+      "captures/cr4f-new-color-sunset-plus-10-minutes.png",
+      "captures/cr4f-new-color-sunset-plus-20-minutes.png",
+      "captures/cr4f-new-color-sunset-plus-30-minutes.png",
+      "captures/cr4f-new-color-sunset-plus-45-minutes.png",
+      "captures/cr4f-new-color-sunset-plus-60-minutes.png",
+      "figures/cr4f-fine-twilight-cadence.png"
+    ],
+    "analysis": "evidence/analysis.json",
+    "panelIdentities": "evidence/panel-identities.json",
+    "imageDerivations": "evidence/image-derivations.json",
+    "cacheProvenance": "evidence/cache-input-verification.json",
+    "progress": "progress.json"
+  }
+}

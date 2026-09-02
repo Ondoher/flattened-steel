@@ -1,0 +1,181 @@
+{
+	"schemaId": "algorithm32-color-reset-cr4e-six-scene-new-color-bruneton-stack-input-v1",
+	"claimBoundary": {
+		"summary": "Presentation-only, pixel-preserving six-scene owner-review stack derived from accepted CR4C/CR4D PNGs. It places the accepted two-scale new color on the left and unchanged Bruneton on the right without re-rendering or changing either source image.",
+		"presentationOnly": true,
+		"appearanceAcceptanceGate": false,
+		"appearanceAccepted": false,
+		"physicalTransportReexecution": false,
+		"colorResponseReexecution": false,
+		"sourcePixelModification": false,
+		"paperSimilarityMetric": false,
+		"productionClaim": false
+	},
+	"parents": {
+		"brightLowSun": {
+			"namespace": "color-reset",
+			"runId": "000025-cr4d-bright-low-sun-preservation-replay",
+			"conclusion": "accepted",
+			"artifactSetSha256": "4ce2f0ae986a5c317ad49d5075bfa0ab7ef24257029ebb245a9f0849f0a6fedd",
+			"manifest": {
+				"path": "artifact-manifest.json",
+				"byteLength": 9209,
+				"sha256": "e112b207bbb7df43474d3c807b4e9761e6cd627447ef952d2673776164b7128e"
+			},
+			"role": "Accepted solar-noon through sunset source panels; sunset is report-only appearance evidence and appearanceAccepted remains false."
+		},
+		"twilightSequence": {
+			"namespace": "color-reset",
+			"runId": "000022-cr4c-two-scale-sunset-nautical-pre-tone-sequence",
+			"conclusion": "accepted",
+			"artifactSetSha256": "4952c7b4781999885a44e9495d9566c6f4f8f3f0e6f6679fbd93a9fdb3cde656",
+			"manifest": {
+				"path": "artifact-manifest.json",
+				"byteLength": 9041,
+				"sha256": "72cc7b93125a05036c0f315a36d69cd1fdd78bc7951e846b64149f2c6cae97ac"
+			},
+			"role": "Accepted plus-10 and plus-60 two-scale source panels; appearanceAccepted remains false."
+		}
+	},
+	"viewport": {
+		"widthPixels": 640,
+		"heightPixels": 400,
+		"verticalFieldOfViewDegrees": 78,
+		"aim": "fixed San Jose sunset bearing",
+		"foreground": "black spherical-ground visual endpoint inherited from the accepted parents"
+	},
+	"presentation": {
+		"title": "San Jose sky: new color versus unchanged Bruneton",
+		"subtitle": "Native15 / Q30 accepted parent renders — presentation-only pixel replay",
+		"columns": [
+			{
+				"id": "new-color",
+				"label": "NEW COLOR — CR4C TWO-SCALE",
+				"side": "left"
+			},
+			{
+				"id": "bruneton",
+				"label": "UNCHANGED BRUNETON",
+				"side": "right"
+			}
+		],
+		"layout": {
+			"outerPaddingPixels": 24,
+			"titleHeightPixels": 64,
+			"columnHeaderHeightPixels": 48,
+			"sceneLabelHeightPixels": 34,
+			"columnGapPixels": 20,
+			"rowGapPixels": 20,
+			"expectedWidthPixels": 1348,
+			"expectedHeightPixels": 2864,
+			"backgroundCss": "#0d1117",
+			"headingCss": "#f0f6fc",
+			"secondaryCss": "#9da7b3",
+			"borderCss": "#475569"
+		}
+	},
+	"scenes": [
+		{
+			"id": "solar-noon",
+			"label": "Solar noon",
+			"timeIso": "2024-06-20T20:08:00.000Z",
+			"parentId": "brightLowSun",
+			"newColor": {
+				"path": "captures/pre-tone-two-scale-solar-noon.png",
+				"byteLength": 94200,
+				"sha256": "39e7aa96ffae52f0d2f2b9868e3429ed43d483ada5b1bf40fe06b312a51f1a95"
+			},
+			"bruneton": {
+				"path": "captures/bruneton-solar-noon.png",
+				"byteLength": 94200,
+				"sha256": "39e7aa96ffae52f0d2f2b9868e3429ed43d483ada5b1bf40fe06b312a51f1a95"
+			}
+		},
+		{
+			"id": "sunset-minus-60-minutes",
+			"label": "1 hour before sunset",
+			"timeIso": "2024-06-21T02:26:03.503Z",
+			"parentId": "brightLowSun",
+			"newColor": {
+				"path": "captures/pre-tone-two-scale-sunset-minus-60-minutes.png",
+				"byteLength": 127460,
+				"sha256": "0b599d6472a83dd927eac5b0f8b4458382d8b8ed189886de11c262c29c577142"
+			},
+			"bruneton": {
+				"path": "captures/bruneton-sunset-minus-60-minutes.png",
+				"byteLength": 127460,
+				"sha256": "0b599d6472a83dd927eac5b0f8b4458382d8b8ed189886de11c262c29c577142"
+			}
+		},
+		{
+			"id": "sunset-minus-10-minutes",
+			"label": "10 minutes before sunset",
+			"timeIso": "2024-06-21T03:16:03.503Z",
+			"parentId": "brightLowSun",
+			"newColor": {
+				"path": "captures/pre-tone-two-scale-sunset-minus-10-minutes.png",
+				"byteLength": 98194,
+				"sha256": "690b564530793fe4600b87f75feff47b3eea09c29e5aaf3a8d8ac635de607416"
+			},
+			"bruneton": {
+				"path": "captures/bruneton-sunset-minus-10-minutes.png",
+				"byteLength": 98170,
+				"sha256": "8f6f222fcba63804ab2896b4c9fe74b1c6d4566eee4f742a891a94d24f402642"
+			}
+		},
+		{
+			"id": "sunset",
+			"label": "Sunset",
+			"timeIso": "2024-06-21T03:26:03.503Z",
+			"parentId": "brightLowSun",
+			"newColor": {
+				"path": "captures/pre-tone-two-scale-sunset.png",
+				"byteLength": 82359,
+				"sha256": "e8a77f028cdb55ffe4983d3f4cf24c62df8f287dc4e8c78256ad187fd45fda9f"
+			},
+			"bruneton": {
+				"path": "captures/bruneton-sunset.png",
+				"byteLength": 66620,
+				"sha256": "16d9808c8fc2702c2b29a904e4f4b2ea0fc13c6d799a1e1cd164119c1b157884"
+			}
+		},
+		{
+			"id": "sunset-plus-10-minutes",
+			"label": "10 minutes after sunset",
+			"timeIso": "2024-06-21T03:36:03.503Z",
+			"parentId": "twilightSequence",
+			"newColor": {
+				"path": "captures/pre-tone-two-scale-sunset-plus-10-minutes.png",
+				"byteLength": 68086,
+				"sha256": "49af34e54de82d3e48c2b750992b4993cb111683ff2f3ba067acc41d8ae51422"
+			},
+			"bruneton": {
+				"path": "captures/bruneton-sunset-plus-10-minutes.png",
+				"byteLength": 38547,
+				"sha256": "a1aecaf6df77d5b0c0e681e8f08a0cd516cfa5609aedafc3aa083a4b98ef7df3"
+			}
+		},
+		{
+			"id": "sunset-plus-60-minutes",
+			"label": "1 hour after sunset",
+			"timeIso": "2024-06-21T04:26:03.503Z",
+			"parentId": "twilightSequence",
+			"newColor": {
+				"path": "captures/pre-tone-two-scale-sunset-plus-60-minutes.png",
+				"byteLength": 90108,
+				"sha256": "fb56b2298115f0dd3506283ceed0555318aacf38ea0f04bca903b00923c84943"
+			},
+			"bruneton": {
+				"path": "captures/bruneton-sunset-plus-60-minutes.png",
+				"byteLength": 6664,
+				"sha256": "e1093a93f878f5289c1e475b278d1b79a2c5504f6c0763a8a599167c81f6b96a"
+			}
+		}
+	],
+	"outputs": {
+		"stack": "figures/cr4e-six-scene-new-color-left-bruneton-right.png",
+		"requestedImageUploadOrder": [
+			"figures/cr4e-six-scene-new-color-left-bruneton-right.png"
+		]
+	}
+}

@@ -1,0 +1,819 @@
+{
+  "schemaId": "algorithm32-color-reset-cr6-stellar-contrast-onset-input-v1",
+  "claimBoundary": {
+    "summary": "Test the existing physical one-pixel stellar presentation under the frozen slope-078/p9 sky response. Measure progressive local-background contrast and the consecutive-millisecond 108-degree cache transition without adding a stellar visibility switch, changing sky Color, or fitting a star count.",
+    "status": "predeclared-not-executed",
+    "singleCandidate": true,
+    "physicalSkyFrozen": true,
+    "ambientBehaviorFrozen": true,
+    "stellarSourceRadiometryFrozen": true,
+    "stellarAtmosphericTransportFrozen": true,
+    "stellarScreenPaletteFrozen": true,
+    "runtimeContrastThreshold": false,
+    "runtimeLocalBackgroundInput": false,
+    "runtimeStarCountInput": false,
+    "namedTimeRuntimeBranch": false,
+    "solarZenithRuntimeVisibilityBranch": false,
+    "cacheStatusRuntimeVisibilityBranch": false,
+    "sourceKindRuntimeVisibilityBranch": false,
+    "skyRetuning": false,
+    "automaticCandidateSelection": false,
+    "productionClaim": false,
+    "ownerAppearanceDecisionRequired": true
+  },
+  "parents": {
+    "cr1": {
+      "namespace": "color-reset",
+      "runId": "000005-six-scene-visual-baseline",
+      "conclusion": "accepted",
+      "artifactSetSha256": "2f7b49dd239fcaf5399c65bfebc59195458edf0b82910cf9987e341b76a615fc",
+      "manifest": {
+        "path": "artifact-manifest.json",
+        "byteLength": 14434,
+        "sha256": "3ba1199191f6b9dd825b0475c7d329a4b0be84e441db655d354bdce234f6949b"
+      },
+      "analysis": {
+        "path": "evidence/render-analysis.json",
+        "byteLength": 287705,
+        "sha256": "d5525a54248d61c0f6606e8371181e569c9f6926e7729c555e906cb0286e01fe"
+      },
+      "role": "Immutable RGBY-field and whole-pixel scene-hit-mask authority for sunset, plus 10, plus 60, and plus 120 minutes. Plus 120 is the accepted texture-free exact-zero sky field."
+    },
+    "cr2": {
+      "namespace": "color-reset",
+      "runId": "000007-available-light-inventory",
+      "conclusion": "accepted",
+      "artifactSetSha256": "dcd6cdd8146094d05427ad180af7fccefdbaa67e290d1b5f21e6a0d4b03697ba",
+      "manifest": {
+        "path": "artifact-manifest.json",
+        "byteLength": 7813,
+        "sha256": "f0790db92f9e39d1bc2c735572928d34b5698b0123524a56845b571d4f27b226"
+      },
+      "analysis": {
+        "path": "evidence/measurement-analysis.json",
+        "byteLength": 231633,
+        "sha256": "99cc785895bf84edd57072eb95951eb916af2ec37d49eae25abd148e34545a47"
+      },
+      "role": "Accepted total-horizontal receiver-illuminance authority for sunset, plus 10, plus 60, and plus 120 minutes. It explicitly makes no 108-degree continuity or stellar claim."
+    },
+    "cr4f": {
+      "namespace": "color-reset",
+      "runId": "000032-cr4f-fine-twilight-cadence",
+      "conclusion": "accepted",
+      "artifactSetSha256": "60e01c9cd2b26579f5c83cc0904f29b920493000a497019c5f2b0f6b2cf21042",
+      "manifest": {
+        "path": "artifact-manifest.json",
+        "byteLength": 9460,
+        "sha256": "97b42405a154405eab3603ea56e91d493249ce9304e999d2d06abbce5a01260e"
+      },
+      "analysis": {
+        "path": "evidence/analysis.json",
+        "byteLength": 129289,
+        "sha256": "72c652974a7b75a414f7c055b279c50c2b38c2687cee6310db2d5a553942354b"
+      },
+      "role": "Immutable plus-30-minute RGBY field, whole-pixel scene-hit mask, receiver field, receiver-light value, and solar-angle authority."
+    },
+    "cr4g": {
+      "namespace": "color-reset",
+      "runId": "000033-cr4g-slope-limited-nautical-response-bracket",
+      "conclusion": "accepted",
+      "artifactSetSha256": "fd180391714f77ba2365d7f9ee487f63a61cb664170016f048caf0cc6c24108a",
+      "manifest": {
+        "path": "artifact-manifest.json",
+        "byteLength": 11516,
+        "sha256": "6ba186adb596f3b893bbc0b592fe187e12383efd85592d65c89de7c00936bcd0"
+      },
+      "analysis": {
+        "path": "evidence/analysis.json",
+        "byteLength": 246135,
+        "sha256": "8770b926c87f6ab8423cceaeb5ac8c2a18b4ded120156aca0aa12955d58210db"
+      },
+      "role": "Accepted sampled chronology and exact slope-078/p9 response authority."
+    },
+    "cr4k": {
+      "namespace": "color-reset",
+      "runId": "000037-cr4k-minimal-deep-twilight-lift",
+      "conclusion": "rejected",
+      "artifactSetSha256": "411617368762c3a7f9aa86aa1b0bdb154881addbf67dd9c5f563f358ce7b69bd",
+      "manifest": {
+        "path": "artifact-manifest.json",
+        "byteLength": 13936,
+        "sha256": "32c27b38693f375dcc40b67d32bb4efd6eb7834dc23a50c597e04ca412d34d2e"
+      },
+      "analysis": {
+        "path": "evidence/analysis.json",
+        "byteLength": 359012,
+        "sha256": "bb30f9caf0bdecc3f421a183b7fd0ade7de20eef9c092b6663db1bcf4ee53cf7"
+      },
+      "controlPngs": [
+        {
+          "sceneId": "sunset",
+          "path": "captures/cr4k-slope-078-p9-control-sunset.png",
+          "byteLength": 81792,
+          "sha256": "cea05de372524f0522732c16c90dbdb1d024afda3b2adc3b9301bacf0ba106d9"
+        },
+        {
+          "sceneId": "sunset-plus-10-minutes",
+          "path": "captures/cr4k-slope-078-p9-control-sunset-plus-10-minutes.png",
+          "byteLength": 69451,
+          "sha256": "cc0813fc994062033f9c7d60ed07f6db802f4d3b742a3be9c899d77f88a2beb2"
+        },
+        {
+          "sceneId": "sunset-plus-30-minutes",
+          "path": "captures/cr4k-slope-078-p9-control-sunset-plus-30-minutes.png",
+          "byteLength": 76057,
+          "sha256": "64cb989cbd00feecc39a634c1172956e27ce8bb597f41291bed54985fb88923e"
+        },
+        {
+          "sceneId": "sunset-plus-60-minutes",
+          "path": "captures/cr4k-slope-078-p9-control-sunset-plus-60-minutes.png",
+          "byteLength": 61401,
+          "sha256": "f68dbd744c29adf0e2848838e08ba4f6b23c229d18b686e72aeb0ba23d3752a1"
+        }
+      ],
+      "role": "Rejected-but-independently-verified bracket whose exact control PNGs authenticate the retained no-change slope-078/p9 sky at four shared scenes. The failed +0.30 row is not reused or reinterpreted."
+    }
+  },
+  "productionControlSnapshot": {
+    "root": "scripts/extraterrestrial/color-reset/controls/production-v1",
+    "manifest": {
+      "path": "snapshot-manifest.json",
+      "byteLength": 144917,
+      "sha256": "31eb9ffa0f893b15871f7c027670fe37ab92ed14bae98c20763bb5958844a7d5"
+    },
+    "inventorySha256": "c3dd659d7fe82c33f6c6bef252e3c716eaa450616028af69083c700ce40d3e84",
+    "requiredFiles": [
+      {
+        "path": "src/algorithm32/implementation/star-field/StellarPointPresentation.js",
+        "byteLength": 792,
+        "sha256": "a624c392564ab0f7fa3664d6c8d89f2c0bd9ee30f719655069c3b9aeea6661f9"
+      },
+      {
+        "path": "src/algorithm32/implementation/star-field/StellarScreenPaletteGenerationPolicy.js",
+        "byteLength": 4732,
+        "sha256": "556130118be037715fd6f44e680c12eb97be807dad6a9bd0f2bfaae33408d1eb"
+      },
+      {
+        "path": "src/algorithm32/implementation/star-field/StellarScreenPaletteGenerationStages.js",
+        "byteLength": 8460,
+        "sha256": "4e9222ee6a35f8cd3a90f31b225c41777f7371d51a4d04ec5c8f2037444d73e8"
+      },
+      {
+        "path": "src/algorithm32/implementation/star-field/StellarGenerationSourceTable.js",
+        "byteLength": 3101,
+        "sha256": "5895d9a6f3908f00a7f34e3412739d7d595db3aa3ee37dc967ece28e3ea80454"
+      },
+      {
+        "path": "src/algorithm32/celestial-source-support/CelestialScreenPaletteConsumerShaderContribution.js",
+        "byteLength": 6071,
+        "sha256": "1358cc671df2ffeed0feddb1b5374f4675129026d04324985bce497e9990456c"
+      },
+      {
+        "path": "src/algorithm32/implementation/star-field/consts.js",
+        "byteLength": 247320,
+        "sha256": "d13575deca80e425c287606d3ff260d935165d7e58630d3a1b3838fa1cb2c7ba"
+      },
+      {
+        "path": "src/algorithm32/implementation/spherical-earth/SphericalStellarGenerationShaderContributor.js",
+        "byteLength": 11031,
+        "sha256": "6c0d9bcab55c5b5cd2c841d073a520c06dba7b10cad29d4d676e009a09eb378e"
+      },
+      {
+        "path": "src/algorithm32/implementation/bruneton-color/BrunetonColorDisplayModel.js",
+        "byteLength": 23751,
+        "sha256": "f96bb4323d2e7d6bc6f5b72424aa02a52ef72d7d56ef3b80d53a0baea31b3971"
+      }
+    ]
+  },
+  "location": {
+    "name": "San Jose",
+    "latitudeDegrees": 37.3382,
+    "longitudeDegrees": -121.8863
+  },
+  "observer": {
+    "heightMeters": 1.7,
+    "upDirection": [0, 0, 1]
+  },
+  "viewport": {
+    "widthPixels": 640,
+    "heightPixels": 400,
+    "verticalFieldOfViewDegrees": 78,
+    "nearSceneUnits": 0.002,
+    "farSceneUnits": 500,
+    "viewAzimuthDegrees": -59.99625193137896,
+    "viewElevationDegrees": 5,
+    "aim": "fixed San Jose sunset bearing",
+    "foreground": "black spherical-ground endpoint",
+    "sceneObjects": false
+  },
+  "physicalControls": {
+    "spectralBasis": "algorithm32-native15",
+    "cacheNumericalIdentity": "algorithm32-native48-z180-w27-f68-native15-n4-q30-ozone-v1",
+    "maximumScatteringOrder": 4,
+    "pathIntervalCount": 30,
+    "pathSampleDistribution": "quadratic-near-observer-v1",
+    "sourceAngularRadiusRadians": 0.004675,
+    "sceneScaleMetersPerSceneUnit": 1000,
+    "sceneDepthMaxMeters": 500000,
+    "groundWidthSegments": 192,
+    "groundHeightSegments": 96,
+    "darkFromSolarZenithDegrees": 108,
+    "darkState": "shared texture-free zero distant-Sun scattering contribution; geometry, transport, scene masking, and stellar sources remain active"
+  },
+  "frozenSkyDisplay": {
+    "id": "slope-078-p9",
+    "operation": "exposedLinearRgb = signedProjectedLinearRgb * g(E); displayRgb = unchangedBrunetonExponential(exposedLinearRgb)",
+    "operationSpace": "signed projected linear sRGB before unchanged Bruneton exponential",
+    "receiverState": "total-horizontal photopic illuminance E in lux",
+    "familyEquation": "g(E) = [1 + A/(1+(E/S)^p)] * exp(q*w*softplus(ln(P/(E+F))/w))",
+    "sunsetAmplitude": 3.5,
+    "sunsetTransitionIlluminanceLux": 980,
+    "sunsetRolloffPower": 9,
+    "adaptationPivotIlluminanceLux": 385,
+    "adaptationFloorIlluminanceLux": 0.02,
+    "adaptationSoftnessLogUnits": 0.1,
+    "adaptationExponent": 0.78,
+    "sameScalarForEveryPixelAndChannel": true,
+    "starAndSkyShareOneDisplayEvaluation": true,
+    "noAdditionalExposureOrChromaticOperation": true
+  },
+  "stellarCandidate": {
+    "id": "native-one-pixel-shared-color-v1",
+    "label": "Existing physical one-pixel stars through frozen shared Color",
+    "presentationIdentity": "stellar-one-pixel-presentation-000435-v1",
+    "referenceViewport": {
+      "widthPixels": 640,
+      "heightPixels": 400,
+      "verticalFieldOfViewDegrees": 78,
+      "centerPixelSolidAngleSteradians": 0.00001639348576039236,
+      "provenanceOnly": true
+    },
+    "catalog": {
+      "catalogId": "cds-v50-bright-star-catalogue-5th-revised",
+      "catalogVersion": "V/50/catalog; Bright Star Catalogue, 5th Revised Edition",
+      "catalogSha256": "sha256:d79223194f938533b4a4b7d832249d8661cf7adda088a8a0ec44039d3baab759",
+      "selectionId": "finite-j2000-position-and-vmag; ascending-vmag; ascending-hr-tiebreak; first-500",
+      "selectionSha256": "sha256:3356dfa973a860bd91430010d77704d304abedbed92691f9faa58007ddb4d67e",
+      "photometryIdentity": "sha256:a8c450336b45106ccbc33f40630555c23a4077748751d1488ee38cec4bf19b42",
+      "frame": "fk5-j2000-mean-equatorial-rh-v1",
+      "epoch": {
+        "instant": "2000-01-01T12:00:00Z",
+        "timeScale": "utc"
+      },
+      "memberCount": 500,
+      "spectralChannelCount": 15
+    },
+    "irradianceToBoundaryRadianceScale": 60999.839486002405,
+    "boundaryEquation": "stellarBoundary(lambda,p) = 60999.839486002405 * sum in canonical member order of sourceIrradiance_i(lambda) for every member i projected into pixel p",
+    "transportEquation": "transportedStar(lambda,p) = wholePixelSceneVisibility(p) * viewPathTransmittance(lambda,p) * stellarBoundary(lambda,p)",
+    "compositionEquation": "final(lambda,p) = sky(lambda,p) + transportedStar(lambda,p), followed once by the frozen slope-078/p9 shared Color mapping",
+    "pointResponse": "unit-weight-one-pixel-v1",
+    "collisionRepresentative": "lowest-canonical-member",
+    "collisionAccumulation": "all colliding native-15 packets summed in canonical-member order",
+    "horizonRule": "geometry rejects below-horizon members before projection",
+    "sceneOcclusionRule": "existing live whole-pixel sceneHitMask; no inferred luminance mask and no fractional-edge claim",
+    "runtimeVisibilityFactor": 1,
+    "backgroundContrastIsDiagnosticOnly": true,
+    "forbiddenPresentationInputs": [
+      "timeIso",
+      "sceneId",
+      "solarZenithDegrees",
+      "cacheStatus",
+      "sourceKind",
+      "localSkyBackground",
+      "framebuffer",
+      "starCount",
+      "catalogMagnitudeThreshold"
+    ],
+    "timeUseBoundary": "Observation time may alter only the geometry-owned stellar transform and resulting projection; it may not alter stellar presentation gain or visibility."
+  },
+  "scenes": [
+    {
+      "id": "sunset",
+      "label": "Sunset",
+      "timeIso": "2024-06-21T03:26:03.503Z",
+      "offsetMinutes": 0,
+      "solarZenithDegrees": 89.95791522653448,
+      "solarElevationDegrees": 0.04208477346552,
+      "cacheExpectation": {
+        "status": "ready",
+        "representativeSolarZenithDegrees": 90
+      },
+      "totalHorizontalIlluminance": {
+        "value": 1012.6643901353058,
+        "units": "lux",
+        "parentId": "cr2"
+      },
+      "skyField": {
+        "parentId": "cr1",
+        "path": "data/pre-display-linear-rgb-y-sunset.f32le",
+        "byteLength": 4096000,
+        "sha256": "a81c0ab29093a09ef7b306418c945d61d71db5f5fb066702911f9d1b5bf6975b"
+      },
+      "sceneHitMask": {
+        "parentId": "cr1",
+        "path": "data/scene-hit-mask-sunset.r8",
+        "byteLength": 256000,
+        "sha256": "7519bd29b7cfc20aee3cb9230d93f6bc2365a332769f2f95b02e0b07203a94f8"
+      }
+    },
+    {
+      "id": "sunset-plus-10-minutes",
+      "label": "10 minutes after sunset",
+      "timeIso": "2024-06-21T03:36:03.503Z",
+      "offsetMinutes": 10,
+      "solarZenithDegrees": 91.66578905821635,
+      "solarElevationDegrees": -1.66578905821635,
+      "cacheExpectation": {
+        "status": "ready",
+        "representativeSolarZenithDegrees": 92
+      },
+      "totalHorizontalIlluminance": {
+        "value": 385.0097520214597,
+        "units": "lux",
+        "parentId": "cr2"
+      },
+      "skyField": {
+        "parentId": "cr1",
+        "path": "data/pre-display-linear-rgb-y-sunset-plus-10-minutes.f32le",
+        "byteLength": 4096000,
+        "sha256": "ea9baaea08f15432045c25176513bd20beeddef633ac4fdfab8b602d361500ba"
+      },
+      "sceneHitMask": {
+        "parentId": "cr1",
+        "path": "data/scene-hit-mask-sunset-plus-10-minutes.r8",
+        "byteLength": 256000,
+        "sha256": "7519bd29b7cfc20aee3cb9230d93f6bc2365a332769f2f95b02e0b07203a94f8"
+      }
+    },
+    {
+      "id": "sunset-plus-30-minutes",
+      "label": "30 minutes after sunset",
+      "timeIso": "2024-06-21T03:56:03.503Z",
+      "offsetMinutes": 30,
+      "solarZenithDegrees": 94.9954648167966,
+      "solarElevationDegrees": -4.9954648167966,
+      "cacheExpectation": {
+        "status": "ready",
+        "representativeSolarZenithDegrees": 95
+      },
+      "totalHorizontalIlluminance": {
+        "value": 20.29393028505105,
+        "units": "lux",
+        "parentId": "cr4f"
+      },
+      "skyField": {
+        "parentId": "cr4f",
+        "path": "data/pre-display-linear-rgb-y-sunset-plus-30-minutes.f32le",
+        "byteLength": 4096000,
+        "sha256": "165f29ee2782a2da2066d46562555521975f626f3164a5976d65846a25db8220"
+      },
+      "sceneHitMask": {
+        "parentId": "cr4f",
+        "path": "data/scene-hit-mask-sunset-plus-30-minutes.r8",
+        "byteLength": 256000,
+        "sha256": "7519bd29b7cfc20aee3cb9230d93f6bc2365a332769f2f95b02e0b07203a94f8"
+      }
+    },
+    {
+      "id": "sunset-plus-60-minutes",
+      "label": "1 hour after sunset",
+      "timeIso": "2024-06-21T04:26:03.503Z",
+      "offsetMinutes": 60,
+      "solarZenithDegrees": 99.74525026663457,
+      "solarElevationDegrees": -9.74525026663457,
+      "cacheExpectation": {
+        "status": "ready",
+        "representativeSolarZenithDegrees": 100
+      },
+      "totalHorizontalIlluminance": {
+        "value": 0.2044095523727617,
+        "units": "lux",
+        "parentId": "cr2"
+      },
+      "skyField": {
+        "parentId": "cr1",
+        "path": "data/pre-display-linear-rgb-y-sunset-plus-60-minutes.f32le",
+        "byteLength": 4096000,
+        "sha256": "70d22578d130e854fce2dba8d087bbe53478b1cb196153dcd7d66b4dd184f54e"
+      },
+      "sceneHitMask": {
+        "parentId": "cr1",
+        "path": "data/scene-hit-mask-sunset-plus-60-minutes.r8",
+        "byteLength": 256000,
+        "sha256": "7519bd29b7cfc20aee3cb9230d93f6bc2365a332769f2f95b02e0b07203a94f8"
+      }
+    },
+    {
+      "id": "sunset-plus-90-minutes",
+      "label": "90 minutes after sunset",
+      "timeIso": "2024-06-21T04:56:03.503Z",
+      "offsetMinutes": 90,
+      "solarZenithDegrees": 104.14826387038352,
+      "solarElevationDegrees": -14.14826387038352,
+      "cacheExpectation": {
+        "status": "ready",
+        "representativeSolarZenithDegrees": 104
+      },
+      "totalHorizontalIlluminance": {
+        "resolution": "runner-resolved-live-cr2-measurement",
+        "units": "lux"
+      },
+      "skyField": {
+        "resolution": "runner-acquired-live-native15-n4-q30-ozone"
+      },
+      "sceneHitMask": {
+        "resolution": "runner-acquired-live-whole-pixel-mask"
+      }
+    },
+    {
+      "id": "solar-zenith-108-below",
+      "label": "Immediately below 108 degrees",
+      "timeIso": "2024-06-21T05:24:58.209Z",
+      "offsetMinutes": 118.91176666666667,
+      "solarZenithDegrees": 107.99999984592024,
+      "solarElevationDegrees": -17.99999984592024,
+      "cacheExpectation": {
+        "status": "ready",
+        "representativeSolarZenithDegrees": 108
+      },
+      "totalHorizontalIlluminance": {
+        "resolution": "runner-resolved-live-cr2-measurement",
+        "units": "lux"
+      },
+      "skyField": {
+        "resolution": "runner-acquired-live-native15-n4-q30-ozone"
+      },
+      "sceneHitMask": {
+        "resolution": "runner-acquired-live-whole-pixel-mask"
+      }
+    },
+    {
+      "id": "solar-zenith-108-above",
+      "label": "Immediately above 108 degrees",
+      "timeIso": "2024-06-21T05:24:58.210Z",
+      "offsetMinutes": 118.91178333333333,
+      "solarZenithDegrees": 108.00000194253896,
+      "solarElevationDegrees": -18.00000194253896,
+      "cacheExpectation": {
+        "status": "dark",
+        "textureBindingCount": 0
+      },
+      "totalHorizontalIlluminance": {
+        "value": 0,
+        "units": "lux",
+        "derivation": "shared texture-free exact-zero distant-Sun state"
+      },
+      "skyField": {
+        "resolution": "runner-generated-exact-zero-dark-field"
+      },
+      "sceneHitMask": {
+        "resolution": "runner-acquired-live-whole-pixel-mask"
+      }
+    },
+    {
+      "id": "sunset-plus-120-minutes",
+      "label": "2 hours after sunset",
+      "timeIso": "2024-06-21T05:26:03.503Z",
+      "offsetMinutes": 120,
+      "solarZenithDegrees": 108.13657515628435,
+      "solarElevationDegrees": -18.13657515628435,
+      "cacheExpectation": {
+        "status": "dark",
+        "textureBindingCount": 0
+      },
+      "totalHorizontalIlluminance": {
+        "value": 0,
+        "units": "lux",
+        "parentId": "cr2"
+      },
+      "skyField": {
+        "parentId": "cr1",
+        "path": "data/pre-display-linear-rgb-y-sunset-plus-120-minutes.f32le",
+        "byteLength": 4096000,
+        "sha256": "4e3f131fde56261db87f09e9c9171784786b0849c388944233a852a1311e97a5"
+      },
+      "sceneHitMask": {
+        "parentId": "cr1",
+        "path": "data/scene-hit-mask-sunset-plus-120-minutes.r8",
+        "byteLength": 256000,
+        "sha256": "7519bd29b7cfc20aee3cb9230d93f6bc2365a332769f2f95b02e0b07203a94f8"
+      }
+    }
+  ],
+  "transitionBracket": {
+    "targetSolarZenithDegrees": 108,
+    "searchResolutionMilliseconds": 1,
+    "solver": "binary search over integer UTC milliseconds using the pinned DistantSunSceneState implementation",
+    "belowSceneId": "solar-zenith-108-below",
+    "aboveSceneId": "solar-zenith-108-above",
+    "requiredTimestampSeparationMilliseconds": 1,
+    "requiredBelowRelation": "solarZenithDegrees < 108 and cache status ready",
+    "requiredAboveRelation": "solarZenithDegrees >= 108 and cache status dark",
+    "maximumRecomputedSolarZenithResidualDegrees": 1e-12
+  },
+  "metrics": {
+    "memberLedger": {
+      "memberDomain": "all 500 canonical members in every scene",
+      "requiredFacts": [
+        "memberId",
+        "canonicalMemberIndex",
+        "projectedTopLeftPixel",
+        "insideViewport",
+        "aboveLocalHorizon",
+        "wholePixelSceneVisible",
+        "collisionGroupMemberIds",
+        "collisionRepresentativeMemberId",
+        "transportedNative15StellarValue",
+        "preDisplayStarLinearRgb",
+        "preDisplayStarLuminance",
+        "gpuPreDisplayStarLinearRgb",
+        "cpuGpuPreDisplayStarMaximumAbsoluteDifference",
+        "skyOnlyRgb8AtExactPixel",
+        "starFreeFiveByFiveRingMedianRgb8",
+        "finalCompositeRgb8",
+        "deltaRgb8",
+        "deltaEncodedLuminanceCodes",
+        "weberContrastReportOnly",
+        "encodedOnset",
+        "robustOnset"
+      ]
+    },
+    "localBackground": {
+      "compositionBackground": "exact sky-only encoded RGB at the same projected pixel",
+      "contextBackground": "per-channel median over the valid star-free 5 by 5 ring around the projected pixel, excluding the center and whole-pixel scene hits",
+      "contextOnly": true
+    },
+    "encodedLuminanceEquation": "Y8 = 0.2126*R8 + 0.7152*G8 + 0.0722*B8",
+    "deltaEncodedLuminanceEquation": "deltaY8 = Y8(finalComposite) - Y8(skyOnly)",
+    "weberContrastEquation": "deltaYNormalized / max(starFreeRingMedianYNormalized, 1/255)",
+    "weberContrastGate": false,
+    "encodedOnsetDefinition": "first eligible cadence scene for which at least one encoded RGB channel differs from the exact sky-only pixel",
+    "robustOnsetDefinition": "first eligible cadence scene for which max(abs(deltaR8), abs(deltaG8), abs(deltaB8)) is at least 2 codes",
+    "robustOnsetReason": "two codes is one code beyond the maximum permitted CPU/GPU framebuffer disagreement; it is an engineering-resolution proxy, not a human contrast threshold",
+    "reportedCodeThresholds": [1, 2, 4, 8],
+    "humanVisibilityThresholdClaim": false,
+    "gpuParityPath": {
+      "sky": "GPU-projected signed E8 linear RGB from atmosphere-only path radiance",
+      "stars": "independent GPU-projected signed E8 linear RGB from the transported Native15 stellar packet",
+      "final": "GPU sky RGB plus GPU stellar RGB passed through the GPU frozen slope-078/p9 display replay",
+      "cpuReference": "CPU E8 projection, CPU addition, and CPU frozen slope-078/p9 display evaluation",
+      "sharedCpuProjectedStellarInputProhibited": true
+    },
+    "fixedCohort": {
+      "selection": "all members that are inside the viewport, above the geometry-owned horizon, whole-pixel scene-visible, and collision-free in all eight scenes",
+      "selectionMayObserveCandidateDisplay": false,
+      "minimumMemberCount": 8,
+      "insufficientCountConclusion": "rejected-evidence-insufficiency",
+      "brightnessScore": "geometric mean of positive transported photopic one-pixel stellar luminance over sunset, plus 10, plus 30, plus 60, plus 90, and plus 120 minutes",
+      "brightnessQuartiles": "rank the fixed cohort by brightnessScore before reading display-onset results",
+      "sourceColorAxis": "(preDisplayStarR - preDisplayStarB) / max(abs(preDisplayStarR) + abs(preDisplayStarB), 1e-12)",
+      "displayDeltaColorAxis": "(deltaR8 - deltaB8) / max(abs(deltaR8) + abs(deltaB8), 1)"
+    }
+  },
+  "gates": {
+    "renderBeforeScientificGates": true,
+    "requestedImageCount": 38,
+    "maximumCpuGpuRgbCodeDifference": 1,
+    "gpuStellarProjectionMustFeedGpuFinal": true,
+    "minimumFixedCohortCount": 8,
+    "candidateEquationExact": true,
+    "canonicalCollisionSumExact": true,
+    "runtimeVisibilityFactorMustEqualOne": true,
+    "noForbiddenPresentationInput": true,
+    "sharedFrozenColorExact": true,
+    "sharedCelestialConsumerEquivalence": {
+      "activeConsumer": "CelestialScreenPaletteConsumerShaderContribution",
+      "sunPrecedence": "positive Sun coverage suppresses the stellar lookup at that pixel",
+      "maximumPositiveSunCoverageStellarPixelCount": 0,
+      "reason": "The CR6 star-only diagnostic is equivalent to the active shared consumer only when no occupied stellar pixel has positive Sun coverage."
+    },
+    "controlReplay": {
+      "sharedCr4kSceneIds": [
+        "sunset",
+        "sunset-plus-10-minutes",
+        "sunset-plus-30-minutes",
+        "sunset-plus-60-minutes"
+      ],
+      "maximumRgbCodeDifference": 1,
+      "maximumRgbCodeRmse": 0.05,
+      "exactPixelsPreferred": true
+    },
+    "progressiveOnset": {
+      "mainCadenceSceneIds": [
+        "sunset",
+        "sunset-plus-10-minutes",
+        "sunset-plus-30-minutes",
+        "sunset-plus-60-minutes",
+        "sunset-plus-90-minutes",
+        "sunset-plus-120-minutes"
+      ],
+      "minimumDistinctRobustOnsetIntervals": 2,
+      "minimumLaterRobustCrossingCount": 1,
+      "topBrightnessQuartileMedianOnsetNoLaterThanBottomQuartile": true,
+      "conditionalNoRegression": "For a fixed member over an adjacent pair where local background does not rise and transported stellar luminance does not fall, robust-onset status and robust delta may not regress.",
+      "populationCountTarget": null,
+      "starCountFittingProhibited": true
+    },
+    "darkSceneOrderingAndColor": {
+      "sceneId": "sunset-plus-120-minutes",
+      "minimumRobustFixedMemberCount": 1,
+      "topBrightnessQuartileMedianDeltaYStrictlyAboveBottomQuartile": true,
+      "sourceRedBlueQuartileMedianOrderPreservedInDisplayDelta": true,
+      "maximumExactWhiteStellarAddedPixels": 0,
+      "minimumDistinctResolvedDisplayDeltaRgbTriples": 2
+    },
+    "transition": {
+      "belowSceneId": "solar-zenith-108-below",
+      "aboveSceneId": "solar-zenith-108-above",
+      "projectedPixelsExact": true,
+      "eligibilityExact": true,
+      "collisionMembershipExact": true,
+      "sceneMaskExact": true,
+      "presentationFactorExact": true,
+      "maximumStarPaletteRelativeDifference": 1e-6,
+      "robustMembershipExact": true,
+      "maximumPerStarDisplayedDeltaRgbCodeDifference": 1,
+      "maximumSkyOnlyRgbCodeDifference": 1,
+      "skyFailureRouting": "shared-dark-cache-or-frozen-display-boundary",
+      "starTuningOnSkyFailureProhibited": true
+    },
+    "visualReviewOnly": [
+      "believable onset timing at ordinary one-to-one plate scale",
+      "bright and faint stars retain visible ordering",
+      "stellar colors do not collapse to uniform white",
+      "no all-at-once population switch",
+      "no distracting collision artifact",
+      "no horizon or whole-pixel scene-mask artifact",
+      "no visible seam across the consecutive-millisecond 108-degree pair"
+    ]
+  },
+  "presentation": {
+    "title": "CR6 stellar contrast onset",
+    "subtitle": "Existing physical one-pixel stars through frozen slope-078/p9; contrast overlays are diagnostics, not runtime thresholds",
+    "sceneOrder": [
+      "sunset",
+      "sunset-plus-10-minutes",
+      "sunset-plus-30-minutes",
+      "sunset-plus-60-minutes",
+      "sunset-plus-90-minutes",
+      "solar-zenith-108-below",
+      "solar-zenith-108-above",
+      "sunset-plus-120-minutes"
+    ],
+    "perSceneImageOrder": [
+      "sky-only",
+      "normalized-star-diagnostic",
+      "final-composite",
+      "local-contrast-overlay"
+    ],
+    "normalizedStarDiagnostic": "Every eligible stellar pixel receives equal diagnostic intensity while retaining its transported spectral chromaticity. This visibly labeled image is never composited into the final candidate.",
+    "imageSmoothing": false,
+    "nativePanelPixels": true,
+    "ordinaryReviewScale": "1:1 source pixels",
+    "layout": {
+      "panelWidthPixels": 640,
+      "panelHeightPixels": 400,
+      "outerPaddingPixels": 20,
+      "titleHeightPixels": 64,
+      "panelLabelHeightPixels": 32,
+      "columnGapPixels": 12,
+      "rowGapPixels": 18,
+      "finalCompositeCadence": {
+        "columnCount": 8,
+        "rowCount": 1,
+        "expectedWidthPixels": 5244,
+        "expectedHeightPixels": 536
+      },
+      "completeDecisionMatrix": {
+        "columnCount": 8,
+        "rowCount": 4,
+        "rowOrder": [
+          "skyOnly",
+          "normalizedStarDiagnostic",
+          "finalComposite",
+          "localContrastOverlay"
+        ],
+        "expectedWidthPixels": 5244,
+        "expectedHeightPixels": 1886
+      },
+      "fixedMemberOnsetLocalContrast": {
+        "expectedWidthPixels": 1600,
+        "expectedHeightPixels": 900
+      },
+      "brightnessColorOrder": {
+        "expectedWidthPixels": 1600,
+        "expectedHeightPixels": 900
+      },
+      "transitionDifference": {
+        "columnCount": 4,
+        "rowCount": 3,
+        "expectedWidthPixels": 2636,
+        "expectedHeightPixels": 1436
+      },
+      "eligibilityCollisionHorizonMaskAudit": {
+        "columnCount": 8,
+        "rowCount": 1,
+        "expectedWidthPixels": 5244,
+        "expectedHeightPixels": 536
+      }
+    }
+  },
+  "outputs": {
+    "perSceneKinds": [
+      {
+        "key": "skyOnly",
+        "pathSuffix": "sky-only"
+      },
+      {
+        "key": "normalizedStarDiagnostic",
+        "pathSuffix": "normalized-star-diagnostic"
+      },
+      {
+        "key": "finalComposite",
+        "pathSuffix": "final-composite"
+      },
+      {
+        "key": "localContrastOverlay",
+        "pathSuffix": "local-contrast-overlay"
+      }
+    ],
+    "requestedImageUploadOrder": [
+      "captures/cr6-sunset-sky-only.png",
+      "captures/cr6-sunset-normalized-star-diagnostic.png",
+      "captures/cr6-sunset-final-composite.png",
+      "captures/cr6-sunset-local-contrast-overlay.png",
+      "captures/cr6-sunset-plus-10-minutes-sky-only.png",
+      "captures/cr6-sunset-plus-10-minutes-normalized-star-diagnostic.png",
+      "captures/cr6-sunset-plus-10-minutes-final-composite.png",
+      "captures/cr6-sunset-plus-10-minutes-local-contrast-overlay.png",
+      "captures/cr6-sunset-plus-30-minutes-sky-only.png",
+      "captures/cr6-sunset-plus-30-minutes-normalized-star-diagnostic.png",
+      "captures/cr6-sunset-plus-30-minutes-final-composite.png",
+      "captures/cr6-sunset-plus-30-minutes-local-contrast-overlay.png",
+      "captures/cr6-sunset-plus-60-minutes-sky-only.png",
+      "captures/cr6-sunset-plus-60-minutes-normalized-star-diagnostic.png",
+      "captures/cr6-sunset-plus-60-minutes-final-composite.png",
+      "captures/cr6-sunset-plus-60-minutes-local-contrast-overlay.png",
+      "captures/cr6-sunset-plus-90-minutes-sky-only.png",
+      "captures/cr6-sunset-plus-90-minutes-normalized-star-diagnostic.png",
+      "captures/cr6-sunset-plus-90-minutes-final-composite.png",
+      "captures/cr6-sunset-plus-90-minutes-local-contrast-overlay.png",
+      "captures/cr6-solar-zenith-108-below-sky-only.png",
+      "captures/cr6-solar-zenith-108-below-normalized-star-diagnostic.png",
+      "captures/cr6-solar-zenith-108-below-final-composite.png",
+      "captures/cr6-solar-zenith-108-below-local-contrast-overlay.png",
+      "captures/cr6-solar-zenith-108-above-sky-only.png",
+      "captures/cr6-solar-zenith-108-above-normalized-star-diagnostic.png",
+      "captures/cr6-solar-zenith-108-above-final-composite.png",
+      "captures/cr6-solar-zenith-108-above-local-contrast-overlay.png",
+      "captures/cr6-sunset-plus-120-minutes-sky-only.png",
+      "captures/cr6-sunset-plus-120-minutes-normalized-star-diagnostic.png",
+      "captures/cr6-sunset-plus-120-minutes-final-composite.png",
+      "captures/cr6-sunset-plus-120-minutes-local-contrast-overlay.png",
+      "figures/cr6-final-composite-cadence.png",
+      "figures/cr6-complete-decision-matrix.png",
+      "figures/cr6-fixed-member-onset-local-contrast.png",
+      "figures/cr6-brightness-color-order.png",
+      "figures/cr6-108-degree-transition-difference.png",
+      "figures/cr6-eligibility-collision-horizon-mask-audit.png"
+    ],
+    "figures": {
+      "finalCompositeCadence": "figures/cr6-final-composite-cadence.png",
+      "completeDecisionMatrix": "figures/cr6-complete-decision-matrix.png",
+      "fixedMemberOnsetLocalContrast": "figures/cr6-fixed-member-onset-local-contrast.png",
+      "brightnessColorOrder": "figures/cr6-brightness-color-order.png",
+      "transitionDifference": "figures/cr6-108-degree-transition-difference.png",
+      "eligibilityCollisionHorizonMaskAudit": "figures/cr6-eligibility-collision-horizon-mask-audit.png"
+    },
+    "evidence": {
+      "memberLedger": "evidence/cr6-member-ledger.json",
+      "fixedMemberTracks": "evidence/cr6-fixed-member-tracks.json",
+      "transitionAnalysis": "evidence/cr6-transition-analysis.json",
+      "analysis": "evidence/cr6-analysis.json"
+    },
+    "perSceneDataPathPatterns": {
+      "stellarScreenIndex": "data/cr6-{sceneId}-stellar-screen-index.r16ui",
+      "stellarPalette": "data/cr6-{sceneId}-stellar-palette.f32le",
+      "skyLinearRgbY": "data/cr6-{sceneId}-sky-linear-rgb-y.f32le",
+      "sceneHitMask": "data/cr6-{sceneId}-scene-hit-mask.r8"
+    }
+  },
+  "ownerDecisionBoundary": {
+    "automaticSelection": false,
+    "advance": "Owner accepts the existing one-pixel shared-Color presentation for this static San Jose distant-Sun cadence and freezes it as CR7 input.",
+    "revise": "Objective evidence isolates a stellar-presentation defect while the frozen sky and transition background pass; any CR6A mechanism must be separately predeclared and may not fit a target star count.",
+    "routeUpstream": "A sky-only or receiver-state discontinuity at 108 degrees fails before stellar presentation and must be resolved at the shared dark-cache or frozen display boundary.",
+    "explicitlyUnclaimed": [
+      "psychophysical visibility threshold",
+      "real-camera exposure or star-count match",
+      "unsampled animation continuity",
+      "fractional scene-object-edge masking",
+      "Moon or planet appearance",
+      "local-Sun or flat-geometry stellar behavior",
+      "bloom, glare, point-spread function, sensor noise, or twinkle",
+      "catalogs larger than the fixed 500-member source",
+      "production adoption"
+    ]
+  }
+}

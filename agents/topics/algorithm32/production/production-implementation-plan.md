@@ -2191,24 +2191,37 @@ Each celestial controller/resource, its direct field and runtime facts, shader
 namespace, bindings, identity, and disposal slots remains distinct from the
 atmospheric scattering-cache path and from the other celestial cache families.
 
-The first bounded `spherical-sun-stars-radial-v1` capability has a radial
-atmosphere, one bounded aggregate multi-member star-field layer, and one
-distant uniform Sun-disk layer. It permits no finite celestial source, opaque
-celestial layer, or foreground edge. Each star retains its exact direction and
-transported irradiance until live visibility and projection complete; the
-surviving members then publish one additive star-field result. The complete
-Moon is deferred to the
+The selected production target for `spherical-sun-stars-radial-v1` has a radial
+atmosphere, the complete accepted brightest-2,000 stellar roster, one bounded
+aggregate multi-member star-field layer, and one distant uniform Sun-disk
+layer. It permits no finite celestial source, opaque celestial layer, or
+foreground edge. Each star retains its exact direction and transported
+irradiance until live visibility and projection complete; the surviving
+members then publish one additive star-field result. Promote the exact CR6B
+roster, CR6F Native15 packets, and CR6G runtime-package capability into
+production-owned data and source. Preserve one-pixel occupancy and the accepted
+`q=24` presentation. Do not retune brightness merely to expose the added 1,500
+members: CR6H established that those members increase occupied pixels but do
+not become two-code robust under `q=24`, so catalog completeness and appearance
+remain separate qualification claims. The complete Moon is deferred to the
 [resolved-Moon follow-up](../../extraterrestrial/moon-follow-up.md). Flat
-geometry, calibrated inputs, celestial mutual ordering, and catalog-scale
-stars require later family decisions. XA1 and XA2 remain standalone mechanics
-evidence; calibrated Sun and Sirius claims remain gated by applicable XA3
-protocol research and completion.
+geometry, calibrated inputs, and celestial mutual ordering require later
+family decisions. XA1 and XA2 remain standalone mechanics evidence; calibrated
+Sun and Sirius claims remain gated by applicable XA3 protocol research and
+completion.
 
 **Gate:** the selected family's transform, cache identity, point/Sun-extended
 transport, aggregate/per-member and Sun-disk conservation, live-visibility
 directionality, path-radiance preservation, lifecycle, CPU/GPU parity,
 resource, and pre-display composition checks pass their predeclared bounds.
 Flat32 is not an implementation or acceptance surface for the first family.
+
+The current Color, receiver-light, scene-lighting, brightest-2,000 catalog,
+one-pixel `q=24`, and optional human-vision promotion is owned by the
+[production Color Reset design](color-reset-design.md) and
+[incremental implementation plan](color-reset-implementation-plan.md). Those
+documents supersede the closed contained plan as current work instruction while
+retaining its immutable runs as evidence.
 
 ### 13. Implement benchmark-supplied comparison configuration and regeneration
 
@@ -2999,7 +3012,13 @@ evidence. They are not incidental refactors.
    Continue adapting required behavior from
    `C:\dev\poly-gc-react` without retaining an external repository dependency.
 7. Integrate extraterrestrial sources on CPU, then their GPU/browser
-   composition path.
+   composition path. Replace the current brightest-500 production roster with
+   the accepted ordered brightest-2,000 roster and Native15 packet set while
+   preserving one-pixel `q=24` presentation. Qualify roster identity, all
+   30,000 finite nonnegative spectral scalars, the declared `1,993/7`
+   retained/proxy partition, screen-palette collision conservation, exact
+   first-500 prefix preservation, lifecycle, resource use, and supported-view
+   appearance without tuning brightness to catalog size.
 8. Implement the non-public `bruneton-paper` profile and regenerate its
    production candidate boundaries, provenance, B1/B2/B3 results, and derived
    comparison images. This item is required before MVP completion.
