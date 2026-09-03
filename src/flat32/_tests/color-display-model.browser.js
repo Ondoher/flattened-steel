@@ -5,14 +5,19 @@ import {
 	resolveFlat32ProductionSelections,
 } from '../Flat32ProductionSelections.js';
 import {ATMOSPHERE_SCENE_SCALE} from '../consts.js';
+import {ViewPresentationFilterRegistry} from '../../algorithm32/implementation/presentation-filter/ViewPresentationFilterRegistry.js';
 describe('Flat32 Color selection', () => {
-	it('retains the current source-luminance lift as the explicit pre-P9 default', () => {
+	it('selects the accepted Color Reset model and brightest-2,000 catalog by default', () => {
 		const color = createFlat32ColorDisplayModel();
+		const selections = resolveFlat32ProductionSelections();
 
-		expect(color.id).toBe('bruneton-source-derived-global-luminance-lift-v2');
+		expect(color.id).toBe('color-reset-slope-078-p9');
+		expect(selections.colorDisplayModelConfiguration.model).toBe('color-reset-slope-078-p9');
+		expect(selections.stellarCatalog).toBe('brightest-2000');
+		expect(selections.presentationFilters).toEqual([]);
 	});
 
-	it('keeps explicit reference Color controls separate from the live default', () => {
+	it('keeps the explicit reference Color control separate from the live default', () => {
 		const ferwerda = createFlat32ColorDisplayModel({
 			model: 'ferwerda-control',
 			adaptationLuminanceCdPerSquareMeter: 0.001,
@@ -22,13 +27,19 @@ describe('Flat32 Color selection', () => {
 		expect(ferwerda.adaptation.luminance).toEqual({value: 0.001, units: 'cd m^-2'});
 		expect(ferwerda.adaptation.kind).toBe('qualified-starlight-reference');
 		expect(bruneton.id).toBe('bruneton-figure1-display');
-		expect(createFlat32ColorDisplayModel().id).toBe('bruneton-source-derived-global-luminance-lift-v2');
+		expect(createFlat32ColorDisplayModel().id).toBe('color-reset-slope-078-p9');
+		expect(resolveFlat32ProductionSelections({stellarCatalog: 'brightest-500'}).stellarCatalog).toBe(
+			'brightest-500',
+		);
 	});
 
-	it('fails closed for unknown and recognized but not-yet-implemented Color selections', () => {
+	it('routes the promoted Color Reset model exactly and fails closed for unknown selections', () => {
 		expect(() => createFlat32ColorDisplayModel({model: 'unknown'})).toThrowError(/not supported/);
-		expect(() => createFlat32ColorDisplayModel({model: 'color-reset-slope-078-p9'})).toThrowError(
-			/not implemented until P3/,
+		expect(() =>
+			createFlat32ColorDisplayModel({model: 'bruneton-source-luminance-lift-v2'}),
+		).toThrowError(/not supported/);
+		expect(createFlat32ColorDisplayModel({model: 'color-reset-slope-078-p9'}).id).toBe(
+			'color-reset-slope-078-p9',
 		);
 	});
 
@@ -52,6 +63,7 @@ describe('Flat32 Color selection', () => {
 		expect(selections.celestialSourcesEnabled).toBeFalse();
 		expect(selections.stellarCatalog).toBe('brightest-2000');
 		expect(selections.presentationFilters[0].id).toBe('human-mesopic-luminance-v1');
+		expect(selections.presentationFilterConfigurationIdentity).toMatch(/^sha256:[0-9a-f]{64}$/);
 	});
 
 	it('rejects unsupported fields, targets, parameters, and filter order', () => {
@@ -102,9 +114,19 @@ describe('Flat32 Color selection', () => {
 				],
 			}),
 		).toThrowError(/does not support hiddenGain/);
+		expect(() =>
+			resolveFlat32ProductionSelections({
+				presentationFilters: [{...{
+					id: 'human-low-light-chroma-v1',
+					stage: 'source-linear',
+					target: 'stellar',
+					enabled: true,
+				}, parameters: {maximumChromaRetention: 0.4}}],
+			}),
+		).toThrowError(/must equal 0.65/);
 	});
 
-	it('fails closed when a recognized later-phase catalog or filter reaches runtime', () => {
+	it('accepts the implemented catalog and P7 registry while rejecting incompatible filter combinations', () => {
 		const catalog = resolveFlat32ProductionSelections({stellarCatalog: 'brightest-2000'});
 		const filter = resolveFlat32ProductionSelections({
 			presentationFilters: [
@@ -118,10 +140,23 @@ describe('Flat32 Color selection', () => {
 			],
 		});
 
-		expect(() => requireImplementedFlat32ProductionSelections(catalog, {stellarCatalogUsed: true})).toThrowError(
-			/not implemented until P5/,
-		);
-		expect(() => requireImplementedFlat32ProductionSelections(filter)).toThrowError(/not implemented until P6/);
+		expect(() => requireImplementedFlat32ProductionSelections(catalog, {stellarCatalogUsed: true})).not.toThrow();
+		const registry = new ViewPresentationFilterRegistry(filter.presentationFilters, {
+			scotopicLuminanceWeights: new Array(15).fill(1),
+		});
+		expect(() => requireImplementedFlat32ProductionSelections(filter, {
+			presentationFilterRegistry: registry,
+		})).not.toThrow();
+		const ferwerda = resolveFlat32ProductionSelections({
+			colorDisplayModelConfiguration: {
+				model: 'ferwerda-control',
+				adaptationLuminanceCdPerSquareMeter: 0.001,
+			},
+			presentationFilters: filter.presentationFilters,
+		});
+		expect(() => requireImplementedFlat32ProductionSelections(ferwerda, {
+			presentationFilterRegistry: registry,
+		})).toThrowError(/require a Bruneton Color model/);
 	});
 
 	it('keeps flat/local celestial enablement independent from basic Bruneton selection', () => {

@@ -71,7 +71,7 @@ function createRendererDouble() {
 }
 
 /** Create one pass and its live camera. */
-function createPass(three = THREE) {
+function createPass(three = THREE, getPresentationCompatibility) {
 	const owners = createOwners();
 	const camera = createCamera();
 	const pass = new StellarScreenPaletteGenerationPass({
@@ -82,9 +82,34 @@ function createPass(three = THREE) {
 		camera,
 		viewportSize: {width: 32, height: 20, units: 'pixels'},
 		logger: {warn: () => {}},
+		...(getPresentationCompatibility ? {getPresentationCompatibility} : {}),
 	});
 	return {pass, camera};
 }
+
+it('rebuilds when Color, filters, or receiver-light presentation compatibility changes', () => {
+	let receiverLightIdentity = 'receiver-light-a';
+	const presentation = () => ({
+		colorIdentity: 'color-reset-slope-078-p9',
+		filterRegistryIdentity: 'sha256:filter-a',
+		scotopicWeightsIdentity: 'sha256:weights-a',
+		receiverLightIdentity,
+		adaptationLuminanceCdM2: receiverLightIdentity === 'receiver-light-a' ? 0.1 : 0.01,
+	});
+	const {pass} = createPass(THREE, presentation);
+	const renderer = createRendererDouble();
+	pass.render(renderer);
+	const first = pass.publicationState.active;
+	expect(first.compatibility.presentationIdentity).toMatch(/^sha256:[0-9a-f]{64}$/);
+	receiverLightIdentity = 'receiver-light-b';
+	pass.render(renderer);
+	const second = pass.publicationState.active;
+	expect(second.id).not.toBe(first.id);
+	expect(second.compatibility.viewIdentity).toBe(first.compatibility.viewIdentity);
+	expect(second.compatibility.presentationIdentity).not.toBe(first.compatibility.presentationIdentity);
+	expect(renderer.renderCount).toBe(4);
+	pass.dispose();
+});
 
 describe('stellar screen-palette generation runtime pass', () => {
 	it('captures stable perspective identities and changes identity with the live view', () => {
@@ -235,7 +260,7 @@ describe('stellar screen-palette generation runtime pass', () => {
 		expect(composer.passes[0].enabled).toBeFalse();
 		expect(consumerPass.enabled).toBeFalse();
 		expect(Array.from(consumerPass.uniforms.uStellarScreenIndex.value.image.data)).toEqual([0]);
-		expect(Array.from(consumerPass.uniforms.uStellarPalette.value.image.data)).toEqual(Array(15).fill(0));
+		expect(Array.from(consumerPass.uniforms.uStellarPalette.value.image.data)).toEqual(Array(16).fill(0));
 		const renderer = createRendererDouble();
 		await runtime.prepare(renderer);
 		expect(composer.passes[0].enabled).toBeTrue();

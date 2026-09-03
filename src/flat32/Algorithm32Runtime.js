@@ -16,6 +16,7 @@ export class Algorithm32Runtime {
 	 *   composer?: import('three/examples/jsm/postprocessing/EffectComposer.js').EffectComposer,
 	 *   composerRenderTarget?: THREE.WebGLRenderTarget,
 	 *   deferPublication?: boolean,
+	 *   atmosphereEnabled?: boolean,
 	 *   performanceCallback?: ShaderPerformanceCallback
 	 * }>} configuration - Supplies the scene, fixed mode, and failure sink.
 	 */
@@ -27,6 +28,7 @@ export class Algorithm32Runtime {
 		this._preparedComposer = configuration.composer ?? null;
 		this._preparedRenderTarget = configuration.composerRenderTarget ?? null;
 		this._deferPublication = configuration.deferPublication === true;
+		this._atmosphereEnabled = configuration.atmosphereEnabled !== false;
 		this._performanceCallback = configuration.performanceCallback;
 		this._ownsComposer = this._preparedComposer !== null;
 		/** @type {import('three/examples/jsm/postprocessing/EffectComposer.js').EffectComposer | null} */
@@ -45,6 +47,7 @@ export class Algorithm32Runtime {
 		this._runtimeFrameCount = 0;
 		this._cacheYieldCount = 0;
 		this._installed = false;
+		this._published = false;
 		this._disposed = false;
 		this._removeContextLifecycleParticipant = this._sceneRuntime.addContextLifecycleParticipant(this);
 		this._renderAtmosphereFrame = this._renderAtmosphereFrame.bind(this);
@@ -448,7 +451,28 @@ export class Algorithm32Runtime {
 				error.name = 'AbortError';
 				throw error;
 			}
+			await this._shaderHandle.measureReceiverEnvironmentLight({
+				THREE,
+				renderer: this._sceneRuntime.renderer,
+				backend: this._cacheBackend,
+				signal: cancellation.signal,
+			});
+			if (this._disposed || cancellation.signal.aborted || generation !== this._setupGeneration) {
+				const error = new Error('Flat32 receiver-light measurement was superseded.');
 
+				error.name = 'AbortError';
+				throw error;
+			}
+			if (this._mode.describe().pairing === 'spherical/distant') {
+				const distantMode = /** @type {import('./SphericalDistantMode.js').SphericalDistantMode} */ (this._mode);
+				const color = distantMode.algorithm32.config.config.color;
+				this._endpointScene.updateDistantSunLighting(
+					distantMode.geometry.configuration.directionToSource,
+					distantMode.algorithm32.receiverLight,
+					color,
+				);
+				this._sceneRuntime.refreshShadowMaps();
+			}
 			const preflight = this._preflightComposedFrame();
 			const modeSummary = this._mode.describe();
 			const runtimeDiagnostics =
@@ -493,7 +517,27 @@ export class Algorithm32Runtime {
 			throw new Error('Cannot publish Flat32 atmosphere before preflight.');
 		}
 
-		this._sceneRuntime.installRenderOperation(this._renderAtmosphereFrame);
+		this._published = true;
+		this._publishSelectedRenderOperation();
+	}
+
+	/** Apply the diagnostic composition selection to a published runtime. */
+	_publishSelectedRenderOperation() {
+		if (this._atmosphereEnabled) {
+			this._sceneRuntime.installRenderOperation(this._renderAtmosphereFrame);
+		} else {
+			this._sceneRuntime.restoreDirectRendering();
+		}
+	}
+
+	/** Select atmosphere composition or direct Three rendering without rebuilding resources. */
+	setAtmosphereEnabled(enabled) {
+		this._assertUsable();
+		if (typeof enabled !== 'boolean') {
+			throw new TypeError('Flat32 atmosphere enabled state must be boolean.');
+		}
+		this._atmosphereEnabled = enabled;
+		if (this._published && this._installed) this._publishSelectedRenderOperation();
 	}
 
 	/**
@@ -507,6 +551,7 @@ export class Algorithm32Runtime {
 		}
 
 		this._disposed = true;
+		this._published = false;
 		this._removeContextLifecycleParticipant();
 		this._setupGeneration += 1;
 		this._setupCancellation?.abort();

@@ -4,8 +4,13 @@ import '@polylith/config';
 
 import {Flat32Application} from './Flat32Application.js';
 import {createDistantSunSceneCacheHttpResolver} from './DistantSunSceneCacheResolver.js';
+import {loadBrightest2000StellarCatalogPackage} from './Brightest2000StellarCatalogPackageLoader.js';
+import {loadHumanVisionFilterPackage} from './HumanVisionFilterPackageLoader.js';
 
 const SUNSET_FACING_CAMERA_DIRECTION = /** @type {const} */ ([-0.784864, 0.422618, -0.453204]);
+const COLOR_RESET_SUNSET_FACING_CAMERA_DIRECTION = /** @type {const} */ ([
+	-0.8626973302119799, 0.08715574274765817, -0.4981537844393295,
+]);
 const FLAT_180_SOURCE_FACING_CAMERA_DIRECTION = /** @type {const} */ ([-0.0007728, 0.151886, -0.988397]);
 
 await registry.start();
@@ -20,6 +25,47 @@ if (root === null) {
 
 const searchParameters = new URLSearchParams(window.location.search);
 const diagnostic = searchParameters.get('diagnostic');
+const colorModelQuery = searchParameters.get('colorModel');
+const stellarCatalogQuery = searchParameters.get('stellarCatalog');
+const stellarCatalog = /** @type {Flat32StellarCatalogId} */ (stellarCatalogQuery ?? 'brightest-2000');
+const stellarPresentation = searchParameters.get('stellarPresentation') ?? 'human';
+if (
+	colorModelQuery !== null &&
+	!['basic-bruneton', 'color-reset-slope-078-p9'].includes(colorModelQuery)
+) {
+	throw new RangeError(`Unsupported Flat32 colorModel query selection: ${colorModelQuery}.`);
+}
+const colorDisplayModelConfiguration =
+	colorModelQuery === null
+		? null
+		: colorModelQuery === 'basic-bruneton'
+			? {model: /** @type {const} */ ('basic-bruneton')}
+			: {model: /** @type {const} */ ('color-reset-slope-078-p9')};
+if (!['physical', 'chroma', 'mesopic', 'human'].includes(stellarPresentation)) {
+	throw new RangeError(`Unsupported Flat32 stellarPresentation query selection: ${stellarPresentation}.`);
+}
+if (!['brightest-500', 'brightest-2000'].includes(stellarCatalog)) {
+	throw new RangeError(`Unsupported Flat32 stellarCatalog query selection: ${stellarCatalogQuery}.`);
+}
+const brightest2000StellarCatalogDefinition = stellarCatalog === 'brightest-2000'
+	? await loadBrightest2000StellarCatalogPackage()
+	: undefined;
+const mesopicFilter = {
+	id: /** @type {const} */ ('human-mesopic-luminance-v1'),
+	stage: /** @type {const} */ ('source-linear'),
+	target: /** @type {const} */ ('stellar'),
+	enabled: stellarPresentation === 'mesopic' || stellarPresentation === 'human',
+	parameters: {maximumRodContribution: 0.5},
+};
+const chromaFilter = {
+	id: /** @type {const} */ ('human-low-light-chroma-v1'),
+	stage: /** @type {const} */ ('source-linear'),
+	target: /** @type {const} */ ('stellar'),
+	enabled: stellarPresentation === 'chroma' || stellarPresentation === 'human',
+	parameters: {maximumChromaRetention: 0.65},
+};
+const presentationFilters = stellarPresentation === 'physical' ? [] : [mesopicFilter, chromaFilter];
+const humanVisionPackage = mesopicFilter.enabled ? await loadHumanVisionFilterPackage() : null;
 const performanceSamples = [];
 const performanceCallback =
 	searchParameters.get('performance') === '1'
@@ -37,7 +83,11 @@ const performanceCallback =
 		: undefined;
 const flatDiagnosticMatch =
 	diagnostic?.match(/^flat(0|135|180)-(wide|default)-n([124])(?:-(ferwerda|bruneton))?$/) ?? null;
-const referenceColorMatch = diagnostic?.match(/^spherical-(reference|sunset-facing)-(ferwerda|bruneton)-n4$/) ?? null;
+const referenceColorMatch =
+	diagnostic?.match(
+		/^spherical-(reference|sunset-facing|color-reset-sunset-facing)-(ferwerda|bruneton|production)-n4$/,
+	) ??
+	null;
 if (
 	diagnostic === 'spherical-wide-n4' ||
 	diagnostic === 'spherical-default-n1' ||
@@ -64,7 +114,9 @@ const applicationConfiguration =
 				? {
 						cameraFieldOfViewDegrees: 78,
 						cameraDirectionScene:
-							referenceColorMatch[1] === 'sunset-facing'
+							referenceColorMatch[1] === 'color-reset-sunset-facing'
+								? COLOR_RESET_SUNSET_FACING_CAMERA_DIRECTION
+								: referenceColorMatch[1] === 'sunset-facing'
 								? SUNSET_FACING_CAMERA_DIRECTION
 								: /** @type {const} */ ([0, 0.422618, -0.906308]),
 						maximumScatteringOrder: /** @type {const} */ (4),
@@ -72,7 +124,7 @@ const applicationConfiguration =
 						colorDisplayModelConfiguration:
 							referenceColorMatch[2] === 'bruneton'
 								? {model: 'basic-bruneton'}
-								: referenceColorMatch[1] === 'reference'
+								: referenceColorMatch[2] === 'ferwerda'
 									? {model: 'ferwerda-control', adaptationLuminanceCdPerSquareMeter: 0.001}
 									: undefined,
 					}
@@ -96,6 +148,11 @@ const applicationConfiguration =
 					: {};
 const application = new Flat32Application(root, {
 	...applicationConfiguration,
+	...(colorDisplayModelConfiguration === null ? {} : {colorDisplayModelConfiguration}),
+	stellarCatalog,
+	...(stellarCatalog === 'brightest-2000' ? {brightest2000StellarCatalogDefinition} : {}),
+	presentationFilters,
+	...(humanVisionPackage === null ? {} : {scotopicLuminanceWeights: humanVisionPackage.scotopicLuminanceWeights}),
 	performanceCallback,
 	resolveDistantSunSceneCacheAsset: createDistantSunSceneCacheHttpResolver(),
 });

@@ -6,7 +6,9 @@ run `000570`; P8 retains the Native48/Z180/W27/F68/N4/Q30 candidate under the
 owner-selected external-accuracy boundary; P9 measures its complete
 uncompressed W27 asset and lifecycle in accepted runs `000572` and `000577`;
 and P10 qualifies exact cubed-sphere seam deduplication in accepted run
-`000579`. Production remains unchanged.
+`000579`. Production was unchanged at contained-plan closure; subsequent
+production adoption and Flat32 hookup are complete under the
+[one-degree scene-cache hookup plan](../production/flat32-one-degree-cache-hookup-plan.md).
 
 The [canonical design](solar-zenith-cache-design.md) selects one point-local
 cache per scene:
@@ -798,7 +800,7 @@ bases, dictionaries, and residual codecs receive no memory credit.
 | P7 camera/object coverage | complete | Run `000570` closes full rotation, the P0 fixed observer, endpoint classes and composition, moving-object reuse, and explicit support failure using sealed runs `000517`, `000530`, `000531`, and `000533`. |
 | P8 qualification | complete and accepted | Run `000569` selects the current Native48/Z180/W27 grid under the external B1 boundary. Shifted-grid runs are non-blocking diagnostics; the refined candidate remains B1-rejected. |
 | P9 resources/lifecycle | complete | Runs `000572` and `000577` build the complete W27 asset and accept named-RTX-2060 allocation, timing, publication, failure preservation, atomic replacement, supersession, restoration, and disposal. |
-| P10 compression/decision | complete contained decision | Run `000579` qualifies exact seam deduplication at `7.2191%` savings with zero scalar mismatches, retains the uncompressed oracle, and defers lossy codecs. Production remains unchanged. |
+| P10 compression/decision | complete contained decision | Run `000579` qualifies exact seam deduplication at `7.2191%` savings with zero scalar mismatches, retains the uncompressed oracle, and defers lossy codecs. Production was unchanged at contained-plan closure; later adoption is owned by the production plans. |
 
 ## Done Condition
 

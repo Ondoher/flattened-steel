@@ -138,6 +138,18 @@ module.exports = function configureAlgorithm32ThreeKarma(config) {
 				served: true,
 				watched: false,
 			},
+			{
+				pattern: 'src/flat32/Brightest2000StellarCatalogPackageLoader.js',
+				included: false,
+				served: true,
+				watched: false,
+			},
+			{
+				pattern: 'server/flat32/data/brightest-2000-stellar-package-v1/*',
+				included: false,
+				served: true,
+				watched: false,
+			},
 		],
 		exclude: ['src/algorithm32/implementation/local-sun/cache/_tests/local-sun-gpu-transport-baseline.browser.js'],
 		plugins: [

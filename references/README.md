@@ -18,6 +18,10 @@ evidence merely because they are present here.
 - [downloads/manifest.json](downloads/manifest.json) owns admission of local
   reference payloads, including identity, provenance, checksum, exact
   consumer, transformation, and license disposition.
+- [followup.md](followup.md) owns the project-wide research-status index:
+  source-backed fact summaries, unresolved source leads, unresearched factual
+  premises, and claim boundaries. It is an index and research queue, not
+  citation authority.
 
 Presence outside one of these owners does not confer canonical status. In
 particular, a bibliography entry does not by itself admit or clear a local

@@ -43,7 +43,8 @@ function createStellarPacket(member, scale = 1) {
 		quantity: SPECTRAL_QUANTITIES.RADIANCE_DENSITY,
 		units: SPECTRAL_UNITS.RADIANCE_DENSITY,
 		values: member.values.map(
-			(value) => value * STELLAR_ONE_PIXEL_PRESENTATION.irradianceToBoundaryRadianceScale * scale,
+			(value) =>
+				value * STELLAR_ONE_PIXEL_PRESENTATION.calibration.baseIrradianceToBoundaryRadianceScale * scale,
 		),
 		provenanceIdentity: `stellar-ferwerda-survival:${member.id}:${scale}`,
 	});
@@ -59,8 +60,8 @@ function createModel(adaptationLuminance) {
 	});
 }
 
-describe('stellar one-pixel Ferwerda survival prerequisite', () => {
-	it('preserves brightness variation and ordering through the complete cone/rod range', () => {
+describe('historical base-scale stellar Ferwerda control', () => {
+	it('preserves its pre-CR6C brightness variation and ordering through the complete cone/rod range', () => {
 		const packets = STANDARD_STELLAR_MEMBER_DATA.map((member) => createStellarPacket(member));
 		const referenceModel = createModel(ADAPTATION_CONTROLS[0]);
 		const preColorLuminances = packets.map((packet) =>

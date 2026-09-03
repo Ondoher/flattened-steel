@@ -18,7 +18,7 @@ import {StellarScreenPaletteGenerationStages} from './StellarScreenPaletteGenera
 import {StellarScreenPaletteConsumerShaderContribution} from './StellarScreenPaletteConsumerShaderContribution.js';
 
 /**
- * Standard reviewed BSC V/50 brightest-500 stellar point-set source.
+ * Standard reviewed BSC V/50 stellar point-set source.
  *
  * @implements {StellarPointSetCelestialSource}
  * @implements {CelestialSourceProvider}
@@ -32,9 +32,14 @@ export class StellarPointSetSource {
 	/** Immutable packed source table for standard stellar generation. @type {StellarGenerationSourceTable} */
 	_generationSourceTable;
 
-	/** Creates the fixed reviewed production stellar source. */
-	constructor() {
-		const members = STANDARD_STELLAR_MEMBER_DATA.map(
+	/** Creates the reviewed production stellar source selected by its package. */
+	constructor(configuration = {}) {
+		const selected = configuration.catalogDefinition ?? {
+			catalog: STANDARD_STELLAR_CATALOG_IDENTITY,
+			photometryIdentity: STANDARD_STELLAR_PHOTOMETRY_IDENTITY,
+			members: STANDARD_STELLAR_MEMBER_DATA,
+		};
+		const members = selected.members.map(
 			/**
 			 * Called by Array.prototype.map to construct one typed stellar member.
 			 * @param member - Reviewed member data.
@@ -43,6 +48,8 @@ export class StellarPointSetSource {
 			(member) => ({
 				id: member.id,
 				direction: member.direction,
+				visualMagnitude: member.visualMagnitude,
+				...(member.derivation ? {spectralDerivation: member.derivation} : {}),
 				spectralIrradiance: /** @type {SpectralIrradiancePacket} */ (
 					new SpectralPacketClass({
 						quantity: SPECTRAL_QUANTITIES.IRRADIANCE_DENSITY,
@@ -50,17 +57,24 @@ export class StellarPointSetSource {
 						basis: NATIVE_15_SPECTRAL_BASIS,
 						semantics: NATIVE_15_SPECTRAL_BASIS.semantics,
 						values: member.values,
-						provenanceIdentity: `stellar-photometry:${STANDARD_STELLAR_PHOTOMETRY_IDENTITY}:${member.id}`,
+						provenanceIdentity: `stellar-photometry:${selected.photometryIdentity}:${member.id}`,
 					})
 				),
 			}),
 		);
 
 		this._definition = {
-			id: 'stellar-catalog-v50',
+			id: selected.members.length === 2000 ? 'stellar-catalog-v50-brightest-2000' : 'stellar-catalog-v50',
 			kind: 'static-stellar-point-set',
-			catalog: STANDARD_STELLAR_CATALOG_IDENTITY,
+			catalog: selected.catalog,
 			members,
+			...(selected.proxyMembers ? {
+				photometry: {
+					identity: selected.photometryIdentity,
+					retainedPolicyMemberCount: selected.members.length - selected.proxyMembers.length,
+					proxyMembers: selected.proxyMembers,
+				},
+			} : {}),
 		};
 		this._identity = CelestialSourceSupport.describeIdentity({
 			id: this._definition.id,
@@ -76,6 +90,7 @@ export class StellarPointSetSource {
 					id: member.id,
 					direction: member.direction,
 					spectralIrradiance: member.spectralIrradiance.contentHash,
+					...(member.spectralDerivation ? {spectralDerivation: member.spectralDerivation} : {}),
 				}),
 			),
 		});
@@ -146,6 +161,7 @@ export class StellarPointSetSource {
 			geometryIdentity: geometry.identity,
 			view: request.view,
 			policy,
+			...(request.presentation === undefined ? {} : {presentation: request.presentation}),
 		});
 	}
 

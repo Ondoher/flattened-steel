@@ -110,6 +110,11 @@ describeFullCache('Flat32 scene application (full production cache)', () => {
 		const initialPixelRatio = Number(canvas.dataset.flat32PixelRatio);
 
 		expect(['setting-up-atmosphere', 'ready']).toContain(shell.dataset.flat32State);
+		expect(shell.dataset.flat32ColorModel).toBe('color-reset-slope-078-p9');
+		expect(shell.dataset.flat32StellarCatalog).toBe('brightest-2000');
+		expect(shell.dataset.flat32PresentationFilters).toBe(
+			'human-mesopic-luminance-v1,human-low-light-chroma-v1',
+		);
 		expect(pairingState.textContent.trim()).toBe('Spherical geometry \u00b7 distant Sun');
 		expect(shell.dataset.flat32SourceLightCount).toBe('7');
 		expect(shell.dataset.flat32AmbientLightCount).toBe('1');
@@ -177,6 +182,7 @@ describeFullCache('Flat32 scene application (full production cache)', () => {
 		expect(progress.hidden).toBeTrue();
 		expect(error.hidden).toBeTrue();
 		expect(canvas.dataset.flat32RenderPath).toBe('algorithm32');
+		expect(shell.dataset.flat32AtmosphereShader).toBe('enabled');
 		expect(shell.dataset.flat32AtmospherePairing).toBe('spherical/distant');
 		expect(shell.dataset.flat32AtmosphereMaximumOrder).toBe('4');
 		expect(shell.dataset.flat32AtmospherePositionCount).toBe('48');
@@ -211,6 +217,50 @@ describeFullCache('Flat32 scene application (full production cache)', () => {
 		expect(context.drawingBufferHeight).toBe(canvas.height);
 		expect(context.isContextLost()).toBeFalse();
 		expect(context.getError()).toBe(context.NO_ERROR);
+
+		const atmosphereButton = shell.querySelector('#flat32-atmosphere-control');
+
+		expect(atmosphereButton instanceof frame.contentWindow.HTMLButtonElement).toBeTrue();
+		expect(atmosphereButton.textContent.trim()).toBe('Atmosphere Shader: On');
+		expect(atmosphereButton.getAttribute('aria-pressed')).toBe('true');
+		atmosphereButton.click();
+		expect(shell.dataset.flat32AtmosphereShader).toBe('bypassed');
+		expect(canvas.dataset.flat32RenderPath).toBe('direct-three');
+		expect(atmosphereButton.textContent.trim()).toBe('Atmosphere Shader: Off');
+		expect(atmosphereButton.getAttribute('aria-pressed')).toBe('false');
+		const directPixels = new Uint8Array(
+			context.drawingBufferWidth * context.drawingBufferHeight * 4,
+		);
+		context.readPixels(
+			0,
+			0,
+			context.drawingBufferWidth,
+			context.drawingBufferHeight,
+			context.RGBA,
+			context.UNSIGNED_BYTE,
+			directPixels,
+		);
+		let coloredScenePixelCount = 0;
+		for (let index = 0; index < directPixels.length; index += 4) {
+			const red = directPixels[index];
+			const green = directPixels[index + 1];
+			const blue = directPixels[index + 2];
+			if (
+				directPixels[index + 3] !== 0 &&
+				(red !== green || green !== blue) &&
+				(red !== 0 || green !== 0 || blue !== 0)
+			) {
+				coloredScenePixelCount += 1;
+			}
+		}
+		expect(coloredScenePixelCount).toBeGreaterThan(0);
+		expect(context.getError()).toBe(context.NO_ERROR);
+		await waitForTwoFrames(frame.contentWindow);
+		expect(shell.dataset.flat32State).toBe('ready');
+		atmosphereButton.click();
+		expect(shell.dataset.flat32AtmosphereShader).toBe('enabled');
+		expect(canvas.dataset.flat32RenderPath).toBe('algorithm32');
+		expect(atmosphereButton.textContent.trim()).toBe('Atmosphere Shader: On');
 
 		const modeButton = shell.querySelector('#flat32-mode-control');
 

@@ -1,19 +1,19 @@
 # Stellar Screen-Palette Production Port Plan
 
-Status: paused stellar-appearance plan, current through 2026-08-31. Production
-Work Plan steps 1 through 6 are complete. The owner rejected the Step 7
-Ferwerda path; runs `000466` and `000467` accepted the replacement
-`BrunetonSourceLuminanceLiftColorDisplayModel`, and that model is now the live
-production selection for both Flat32 modes. The distant-Sun solar-zenith cache
-plan is closed through H7. Step 8 remains ineligible until the
-[Color Reset Incremental Experiment Plan](color-reset-experiment-plan.md)
-accepts its corrected display result; stellar brightness, color,
-visibility, and exposure correction then resume as a separate acceptance
-problem rather than as Color tuning.
+Status: superseded as a current execution plan. Production Work Plan steps 1
+through 6 remain completed port history. The Step 7 Ferwerda and later
+`BrunetonSourceLuminanceLiftColorDisplayModel` paths were superseded; the latter
+has been removed from production. Color Reset is accepted experimentally and
+implemented through production P7, with its remaining qualification and
+release work owned by the
+[Production Color Reset Implementation Plan](../algorithm32/production/color-reset-implementation-plan.md)
+and the [production closeout plan](../algorithm32/production/color-star-cache-closeout-plan.md).
+Steps 8 and 9 below no longer own executable work. The distant-Sun one-degree
+hookup is closed through H7.
 
-This document owns execution order and current state for promoting the accepted
-stellar screen-index/native-15 palette and resolved Sun integration into
-`src/algorithm32` and `src/flat32`. The
+This document preserves the historical execution order and completed port
+state for the accepted stellar screen-index/native-15 palette and resolved Sun
+integration into `src/algorithm32` and `src/flat32`. The
 [Stellar Screen-Palette Cache Design](stellar-screen-palette-design.md) remains
 the representation authority. The completed
 [Stellar Rendering Plan](stellar-rendering-plan.md) and immutable runs remain
@@ -830,17 +830,16 @@ also pass.
 
 ### 7. Port the experimental Color behavior as a new model
 
-Status: the implemented production Ferwerda candidate passed mechanical gates,
-but the owner's daylight, sunset, and stellar visual audit rejected its sky
-appearance. The replacement `BrunetonSourceLuminanceLiftColorDisplayModel`,
-qualified by runs `000466` and `000467`, is now ported and selected in
-production. Its integration closes the old porting question but not the active
-Color-correction or stellar-appearance questions. The rejected
-`FerwerdaColorDisplayModel` remains
-a separately exported production Color owner and the diagnostic history below
-explains why it is not a tuning input for the replacement.
+Status: superseded historical step. The implemented production Ferwerda
+candidate passed mechanical gates but failed the owner's daylight, sunset, and
+stellar visual audit. Its replacement
+`BrunetonSourceLuminanceLiftColorDisplayModel`, qualified by runs `000466` and
+`000467`, was later superseded and removed by the accepted Color Reset
+production path. The diagnostic history below records those rejected and
+retired states; it is not current implementation instruction.
 
-Flat32 always constructs Ferwerda. At shader setup the facade obtains its one
+At that former checkpoint, Flat32 always constructed Ferwerda. At shader setup
+the facade obtained its one
 condition-wide `brightnessProxy` from `LocalLightLevelCalculator`. The
 calculator photopically projects source-owned receiver irradiance after
 geometry-owned visible support. It does not inspect elevation, source kind,
@@ -865,9 +864,10 @@ composition bridge, then apply exactly one Ferwerda display boundary to the
 complete composed stimulus. The shader contains no Sun, stellar, catalog, or
 framebuffer classification. Its two Ferwerda runtime uniforms are the facade-
 owned adaptation proxy and source-owned scene-luminance scale. Model selection
-remains the existing caller-owned `Color` configuration seam.
-`BrunetonColorDisplayModel` was not changed by this step and remains comparison
-and regression evidence only; it is not selected by either Flat32 mode.
+used the existing caller-owned `Color` configuration seam.
+`BrunetonColorDisplayModel` was not changed by this step and served as
+comparison and regression evidence only; it was not selected by either Flat32
+mode at that checkpoint.
 
 The production CPU controls reproduce immutable-run values for solar noon
 (`5070.201700912994 cd m^-2`), sunset (`3632.4668027619023 cd m^-2`), and the
@@ -1369,6 +1369,10 @@ owner explicitly decides the promotion boundary.
 
 ### 8. Qualify the integrated production path
 
+Status: superseded by production Color Reset P8 and the production closeout
+plan. No qualification run should be created against this plan's rejected
+Ferwerda or retired source-luminance-lift paths.
+
 Run focused Node, shader assembly, browser/WebGL2, Algorithm32, Flat32, and
 application-level regression coverage. Record production file inventories,
 commands, environment, numerical comparisons, captures, and derivation in a
@@ -1382,6 +1386,9 @@ through the selected path, and current-state documents identify any remaining
 release work.
 
 ### 9. Retire superseded production paths
+
+Status: superseded by production Color Reset P9 and the production closeout
+plan. Historical experimental sources and evidence remain immutable.
 
 Only after step 8 acceptance, remove production code made unreachable by the
 new stellar palette and Sun-tile path. Do not delete historical experimental
@@ -1466,10 +1473,11 @@ compiler, bounded residency, and qualification sequence. This is a handoff out
 of the stellar port; it does
 not change production or select a local-Sun field.
 
-### Paused Stellar-Port Resumption Work
+### Superseded Stellar-Port Resumption Record
 
-The remainder of this section is preserved for when the owner explicitly
-resumes the stellar/Color port; it is not the current immediate step.
+The remainder of this section preserves the former resumption handoff. Do not
+resume from it; current work starts from the production Color Reset and
+closeout plans linked at the top of this document.
 
 On resumption, review the accepted contained paired captures from runs `000466`
 and `000467`. If the owner accepts their appearance, define a separate production-port step

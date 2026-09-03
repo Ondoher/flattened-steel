@@ -109,7 +109,7 @@ function createState(options = {}) {
 		snapshot: {version: 2},
 	};
 	const facade = {
-		_model: {},
+		_model: {profile: {contentHash: `sha256:${'0'.repeat(64)}`}},
 		_publishReceiverEnvironmentLight: jasmine.createSpy('publishReceiverEnvironmentLight').and.resolveTo({
 			identity: 'accepted',
 		}),
@@ -151,15 +151,19 @@ describe('Algorithm32ShaderHandle', /** Called by Jasmine to register the named 
 	it('routes the installed cache and GPU reduction through atomic facade publication', async () => {
 		const context = createState();
 		const handle = new Algorithm32ShaderHandle(context.state);
+		const cancellation = new AbortController();
 		const measurement = await handle.measureReceiverEnvironmentLight({
 			THREE: {},
 			renderer: {},
 			backend: {capabilities: {scalarFormat: 'R32F', supportsArrayRenderTargets: true}},
+			signal: cancellation.signal,
 		});
 		expect(measurement.identity).toBe('accepted');
 		expect(context.facade._publishReceiverEnvironmentLight).toHaveBeenCalledTimes(1);
 		const request = context.facade._publishReceiverEnvironmentLight.calls.mostRecent().args[0];
 		expect(request.identity).toContain('receiver-environment-light:model-1');
+		expect(request.identity).toContain('runtime-cache-');
+		expect(request.signal).toBe(cancellation.signal);
 		expect(typeof request.sampleIncomingRadiance).toBe('function');
 		expect(typeof request.reduceIncomingRadiance).toBe('function');
 		handle.dispose();

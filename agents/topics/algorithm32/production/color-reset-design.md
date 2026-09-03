@@ -1,6 +1,6 @@
 # Production Color Reset Design
 
-Status: selected production design; implementation has not started.
+Status: selected production design; implementation complete through P7.
 
 This document is the current design authority for promoting the accepted Color
 Reset result into Algorithm32 and Flat32. The closed
@@ -12,8 +12,9 @@ runtime dependencies or current work instructions.
 
 The paired [production implementation plan](color-reset-implementation-plan.md)
 owns sequencing, gates, and completion state.
-The [source-gap register](color-reset-source-gaps.md) owns missing third-party
-citations and unregistered first-party experiment authority.
+The [project-wide research register](../../../../references/followup.md#color-reset-research-register)
+owns missing third-party citations and unregistered first-party experiment
+authority.
 
 ## Selected Outcome
 
@@ -93,7 +94,9 @@ the preserved architecture.
 Source research and official-experiment registration are deferred. That
 deferral does not block production implementation, deterministic reproduction,
 or engineering verification of the accepted algorithms. Until the applicable
-rows in the source-gap register close, however, each affected result remains a
+rows in the
+[project-wide research register](../../../../references/followup.md#missing-third-party-sources-or-canonical-registrations)
+close, however, each affected result remains a
 provisionally authorized reproduction: it cannot receive final scientific or
 numerical-authority acceptance, support a stronger physical claim than the
 contained evidence, or authorize release qualification and default selection.
@@ -142,6 +145,27 @@ source-placement, cache, spectral-basis, and quadrature identities that can
 change it. A failed or superseded calculation preserves the prior complete
 publication. It may not derive state from a framebuffer or named time.
 
+Production realizes this contract through the existing
+`LocalLightLevelCalculator` and `ReceiverEnvironmentLightController`. The
+retained direct-normal calculation is not changed: horizontal projection is a
+separate derived packet, and the environment reduction contributes only the
+diffuse-horizontal packet before exact addition. A newly prepared model starts
+with a complete zero-diffuse publication; Flat32 replaces it atomically with
+the cache-derived complete publication before its first accepted composed
+frame. Live invalidation covers the canonical profile/model state, exact
+runtime cache object generation, packet and basis hashes, and the fixed
+quadrature identity. The selected Color Reset model consumes the published
+photopic total-horizontal lux directly. The superseded source-luminance-lift
+path has been removed; Basic Bruneton remains the independent physical/B1
+control.
+
+Questions about resolved-disk horizon accuracy, quadrature convergence,
+absolute twilight authority, the temporary `E_v / pi` interpretation, and
+cross-process cache identity are retained in the
+[project-wide research backlog](../../../../references/followup.md#color-reset-research-questions).
+They are research boundaries, not permission to modify the selected equations
+during production promotion.
+
 ### Color selection and response
 
 The production selector exposes stable, explicit identities. At minimum:
@@ -171,6 +195,16 @@ The response cannot inspect source kind, solar zenith, clock, camera, viewport,
 pixel class, local background, or output codes. It introduces no independent
 RGB curves, per-frame grading, per-pixel normalization, or hidden gamut clamp.
 
+Production implements this as the fixed
+`ColorResetSlope078P9ColorDisplayModel`; the curve is not a caller-configurable
+family. Algorithm32 owns the live
+`color.totalHorizontalIlluminance.value` binding and publishes it from the
+same complete receiver-light generation as the direct, diffuse, and total
+packets. Flat32 selects this model when Color configuration is omitted and
+publishes the resolved identity for diagnostics. Basic Bruneton remains
+separately selectable as the physical/B1 control. Unknown and removed
+identities fail closed.
+
 ### Scene lighting
 
 Neutral Lambertian lighting consumes receiver-state spectra before Color:
@@ -187,9 +221,21 @@ preserve exact direct-only, diffuse-only, and additive combined modes at the
 declared neutral-material boundary. This does not claim general spectral PBR,
 interreflection, arbitrary materials, shadows, or long object-path transport.
 
+Production realizes the exact Color-free spectral relationship in
+`NeutralLambertianSceneLighting`. Its diffuse input is explicitly irradiance
+already integrated for the evaluated surface. Flat32 supplies P2's
+`diffuseHorizontal` packet to the selected black-ground upper-hemisphere
+light. It is exact for the upward receiver-horizontal neutral surface and a
+normal-dependent approximation for other renderer normals. Direct lighting
+remains directional and uses the exact direct-normal packet with
+`max(0,n dot s)`. Only after those spectral equations does the scene-light
+adapter project the result for Three. Full directional-sky diffuse response
+for arbitrary normals is deferred and tracked in the
+[project-wide research backlog](../../../../references/followup.md#color-reset-research-questions).
+
 ### Brightest-2,000 stellar catalog
 
-The production target replaces the current brightest-500 roster with the
+The ordinary production selection replaces the brightest-500 roster with the
 accepted ordered brightest-2,000 BSC V/50 roster:
 
 - source catalog SHA-256:
@@ -212,6 +258,16 @@ screen-palette zero entry makes the sparse palette capacity 2,001 entries.
 Catalog identity and member count participate in cache and generation
 compatibility identities.
 
+Production realizes this as an authenticated local-only package beneath
+`server/flat32/data/brightest-2000-stellar-package-v1`. The tracked
+materializer copies only hash-verified accepted artifacts, and the runtime
+loader rechecks every byte length and SHA-256 before constructing a source.
+The exact roster and Native15 packets remain available for binary64 identity
+and prefix verification; the two accepted float32 payloads are the GPU upload
+authority. This ownership layout does not grant redistribution permission:
+the package remains ignored and excluded from releases until the source-gap
+license rows close.
+
 Catalog completeness and appearance are separate claims. The rejected CR6H
 appearance run showed that the extra 1,500 members increase occupied pixels
 but do not become two-code robust under `q=24`. Production will include them
@@ -231,6 +287,12 @@ change to source irradiance. It cannot depend on time, scene, solar zenith,
 catalog size, magnitude, pixel, viewport, or framebuffer. Collision groups
 retain the canonical representative index while accumulating every colliding
 member's transported Native15 contribution exactly once.
+
+Production represents this without a second shader branch: the retained q1
+base scale is `60,999.839486002405`, the fixed multiplier is `24`, and the
+palette-generation constant is their product `1,463,996.1476640578`. The
+presentation identity includes the CR6C run and multiplier so q1 and q24
+cannot alias one compatible generation.
 
 Supported viewport and device-pixel-ratio behavior must be qualified in
 production. The contained appearance evidence alone does not establish
@@ -256,15 +318,20 @@ state, parameter schema, ordered compatibility, inputs, outputs, and derivation
 identity. Empty or fully disabled lists are exact identity. Unsupported stages,
 targets, combinations, or orderings fail closed.
 
-The selected optional stellar chain is:
+The selected stellar chain, enabled by default in the ordinary application but
+reversibly disabled by the physical presentation selection, is:
 
 1. `human-mesopic-luminance-v1`, `stage=source-linear`, `target=stellar`,
    `maximumRodContribution=0.5`;
 2. `human-low-light-chroma-v1`, `stage=source-linear`, `target=stellar`,
    `maximumChromaRetention=0.65`.
 
-The mesopic approximation uses the median physical, unmasked sky luminance
-before stars, exposure, and Color:
+The mesopic approximation uses receiver-local physical sky luminance before
+stars, exposure, and Color. Production approximates the contained experiment's
+unmasked framebuffer median with the median photopic luminance of the existing
+fixed 32 receiver-hemisphere radiance samples. This avoids a framebuffer
+dependency and shares the receiver-light generation; its equivalence and
+sensitivity remain a recorded research question:
 
 ```text
 t = clamp((log10(5) - log10(max(La, 0.005))) / 3, 0, 1)
@@ -289,6 +356,24 @@ Both are presentation approximations. They do not mutate physical packets or
 claim a complete CIE 191, temporal adaptation, or retinal simulation. Finite
 signed wide-gamut RGB components retain their signs; no hidden clamp is added.
 Physical stellar color and each intermediate toggle state remain selectable.
+
+Production ownership is `ViewPresentationFilterRegistry`. It registers the
+four stage names and five semantic-target names as closed design boundaries,
+while implementing only `source-linear/stellar`. It assigns list position as
+the deterministic order, hashes the complete normalized configuration, and
+emits the fixed stellar GLSL hook installed by P7. The promoted parameter
+surface accepts only rod contribution `0.5` and chroma retention `0.65`; other
+experimental strengths are not production aliases. P7 binds registry and
+scotopic-weight identities, Color, receiver light, screen index, and palette
+into one compatible stellar runtime generation. Unsupported Color/mode/filter
+combinations fail closed.
+
+The registry does not embed the CIE-derived Native15 scotopic weight vector in
+tracked production source. Mesopic CPU or shader execution requires an exact,
+finite, nonnegative 15-value vector supplied from an authenticated local
+production package, and the generated hook records that vector's content
+identity. This preserves the no-public-redistribution boundary until the
+source-gap licensing rows close.
 
 A future optical solar filter belongs at `spectral-view` and requires
 provenance-backed transmission for every affected radiance. A Sun-only
@@ -338,8 +423,9 @@ The design distinguishes facts that can be derived or recomputed from facts
 that require an external source. Reasonable inference may support design and
 implementation planning, but it does not override the repository's citation,
 official-experiment, or independent-conformance requirements. The
-[source-gap register](color-reset-source-gaps.md) remains the canonical owner
-of every unresolved source and registration action.
+[project-wide research-status index](../../../../references/followup.md#color-reset-research-register)
+owns the researched/unresearched fact classification and every unresolved
+source and registration action.
 
 ### Analytic or definitional relationships
 
@@ -362,17 +448,14 @@ LambertianOutgoingRadiance(lambda) = rho/pi *
                                       incidentIrradiance(lambda)
 ```
 
-The direct projection follows projected-area geometry. The diffuse integral is
-the definition of irradiance over the receiving hemisphere. Total horizontal
-irradiance is the additive combination of components expressed in the same
-orientation. The Lambertian `rho/pi` relationship follows from constant
-outgoing radiance and hemispherical energy conservation. Bibliography entry
-`[8]` may support the Lambertian derivation; `rho=0.18` remains a declared
-neutral test parameter rather than a universal physical constant.
-
-These relationships still require checked analytic tests, unit-bearing
-contracts, and focused production conformance. Their derivability does not
-make a production implementation its own authority.
+The external and analytic bases for projected irradiance and Lambertian
+`rho/pi` are recorded in the
+[project-wide researched-fact inventory](../../../../references/followup.md#color-reset-researched-facts).
+The selected `rho=0.18` remains a declared neutral test parameter rather than a
+universal physical constant. These relationships still require checked
+analytic tests, unit-bearing contracts, and focused production conformance;
+their derivability does not make a production implementation its own
+authority.
 
 ### Deterministic recomputations from authenticated inputs
 
@@ -437,54 +520,21 @@ first-party evidence must be promoted under repository policy, but later
 source research must not misrepresent them as externally prescribed physical
 constants.
 
-### Qualitative approximations suitable for bounded experiments
+### Unresolved physical and perceptual premises
 
-The following expectations are reasonable premises for an optional
-human-vision approximation:
-
-- rod contribution can shift relative apparent luminance so blue-green stars
-  may brighten while red stars may dim;
-- perceived chroma generally contracts as adaptation luminance falls;
-- mesopic behavior may be approximated by a smooth blend of photopic and
-  scotopic response; and
-- stellar color can become difficult to perceive while the star remains
-  detectable.
-
-These premises justify bounded experiments, not exact equations or parameter
-values. They do not independently authorize `0.65`, `0.5`, `V=3.2`, the
-`0.005–5 cd/m^2` interval, or the selected interpolation functions. The filters
-remain explicitly optional approximations rather than physiological
-simulations.
-
-San Jose is likewise a reasonable fixed summer geometry for repeatable review.
-It does not supply a light-pollution model or make the selected response
-location-independent evidence.
-
-### Facts that must not be inferred
-
-The following require the source investigation recorded in the source-gap
-register:
-
-- the CIE 1931 color-matching tables and exact `683 lm/W` convention;
-- the CIE scotopic `V'(lambda)` data and `1700 lm/W` convention;
-- applicability of the `0.005–5 cd/m^2` boundaries to the selected viewing
-  conditions;
-- Koomen and Patat values, valid domains, and extraction;
-- BSC, Pickles, Johnson/SVO, and Vega identity, version, license,
-  redistribution, and semantic provenance;
-- the claimed stellar-color threshold near `V=3`;
-- physical applicability of the seven red-member continuum proxies; and
-- credibility of the integrated brightest-2,000 appearance.
-
-An existing URL, DOI, retained payload, plausible expectation, or passing
-contained run cannot substitute for the canonical source registration and
-official-experiment boundary required for these claims.
+The qualitative premises, source-dependent facts, and interpretation limits
+that still require research are owned by the
+[project-wide reference follow-up](../../../../references/followup.md#color-reset-unresearched-facts).
+That same register retains the exact source or official-experiment closure
+work. These unresolved premises are not design facts and do not authorize
+broader physical, physiological, location-independent, or appearance claims
+while that work remains open.
 
 ## Evidence Authorities
 
 The contained runs below are promotion candidates, not yet official repository
 experiments. Their missing external sources and registration work are tracked
-only in the [source-gap register](color-reset-source-gaps.md). Until the
+only in the [project-wide research register](../../../../references/followup.md#missing-first-party-official-experiment-authority). Until the
 applicable rows close, these identities preserve evidence and selected intent
 but do not authorize production numerical acceptance.
 

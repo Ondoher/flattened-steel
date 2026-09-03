@@ -8,8 +8,21 @@ camera, direct-render fallback, ordinary matte scene content, setup/failure
 state, frame lifecycle, and owned cleanup.
 
 The source lights retain the checkpoint's six isolated review-object shadow
-maps, but their direction and direct/twilight-aware ambient intensities now
-follow the active spherical/distant source time.
+maps. In spherical/distant mode their direction and signed linear color/
+intensity now come from the installed receiver generation's Native15 direct-
+normal and diffuse-horizontal packets before composed-frame preflight. Distant
+diffuse uses a black-ground upper-hemisphere light, preserving the measured
+horizontal response while giving vertical and downward surfaces distinct
+uniform-upper-sky responses. Before assigning Three's unitless renderer-linear
+light values, the adapter maps physical E8 channels through the unchanged
+Figure-1 exponential and inverse sRGB; the normal captured-scene bridge
+reverses that representation without changing Color. The `Atmosphere Shader`
+button can bypass only
+final Algorithm32 composition to inspect this lit Three scene. The inspection
+path retains linear HDR scene rendering and applies only the fixed Bruneton
+renderer-linear-to-display conversion and sRGB encoding, preventing HDR values
+from clipping the default framebuffer white without reapplying the physical-
+radiance exposure to renderer-scale lights.
 The checkpoint also installs the source application's six isolated
 4096-by-4096 PCF-soft shadow maps with the source's PCF fallback, exact
 per-object orthographic cameras and tuning, and focus points. The six review
@@ -76,26 +89,43 @@ transmittance into RGB bands, attenuates the captured scene for an
 in-atmosphere endpoint, and combines both terms at the single display
 boundary. Scene RGB is not atmospheric cache or transport data.
 
-Both Flat32 modes use `BrunetonSourceLuminanceLiftColorDisplayModel`. During
-configuration, Algorithm32 asks `LocalLightLevelCalculator` for one camera-
-independent condition scalar. It photopically projects receiver-local
-native-15 direct-source irradiance after geometry-owned visible support and
-atmosphere-owned source-path transmittance. Bruneton Figure 1 remains exact at
-and above `5 cd m^-2`; a smooth logarithmic Hermite curve reaches gamma
-`0.125` at and below `0.001 cd m^-2`, and one common RGB gain is capped at
-`32768`. There is no atmosphere-cache readback, diffuse-sky quadrature,
-location/time control table, framebuffer measurement, or pixel/source class.
-
-The demonstration's distant-Sun ambient light reaches exact zero with its
-twilight scale. Color preserves semantic zero and contains no separate rod or
-nighttime-fill response.
+The ordinary application uses the fixed `ColorResetSlope078P9ColorDisplayModel`.
+Algorithm32 publishes one camera-independent total-horizontal photopic-
+illuminance condition from the same atomic receiver-light generation as the
+direct and diffuse spectra. Color Reset applies its fixed common source-linear
+gain before the unchanged Bruneton Figure-1 display encoding. It does not read
+time labels, solar zenith, the camera, framebuffer pixels, or source classes.
+`basic-bruneton` remains the exact unadjusted physical and B1 control.
 
 Color, celestial enablement, stellar catalog, and ordered presentation filters
 now use independent exact selections. `basic-bruneton` no longer disables
-celestial sources. The future `color-reset-slope-078-p9`, brightest-2,000, and
-enabled-filter selections are recognized but fail closed until their owning
-production phases implement them; none aliases to the current source-luminance-
-lift or brightest-500 behavior.
+celestial sources, and `color-reset-slope-078-p9` selects the implemented fixed
+candidate and is now the omission/default behavior. The live application
+retains `?colorModel=basic-bruneton` as its exact control query value; the
+superseded source-luminance-lift route has been removed and unknown values
+fail closed. Brightest-2,000 and enabled-
+filter selections are recognized independently. Brightest-2,000 is implemented
+through an authenticated local-only package and may be exercised with
+`?stellarCatalog=brightest-2000`; absence or mutation of that package fails
+closed. `?stellarCatalog=brightest-500` selects the retained catalog control.
+P7 installs the enabled source-linear stellar hook and authenticates
+its local scotopic-weight input.
+`?stellarPresentation=physical|chroma|mesopic|human` selects the exact
+physical, chroma-only, mesopic-only, or ordered full-chain path. Missing or
+altered mesopic data fails closed, as do enabled filters in unsupported
+Flat/local and Ferwerda control combinations. The catalog default is
+brightest-2,000, presentation defaults to `human`, and neither
+catalog nor filter selection changes one-pixel `q=24` behavior.
+The application strips stellar-only filters while operating in Flat/local,
+which has no star source, and restores them on return to spherical/distant.
+The production policy applies q24 as the effective boundary scale
+`1,463,996.1476640578` derived from the retained q1 reference scale and fixed
+CR6C multiplier; it does not enlarge the one-pixel raster footprint.
+The `spherical-color-reset-sunset-facing-production-n4` diagnostic retains the
+ordinary architecture but fixes the CR6/CR7 640-by-400 comparison camera at
+78 degrees vertical field of view, azimuth `-59.99625193137896` degrees, and
+elevation `5` degrees without overriding the production Color/catalog
+defaults. The `-bruneton-n4` variant explicitly selects Basic Bruneton.
 
 The current Stage 9.6 browser lane passes `3/3` in Chrome Headless 150 on
 D3D11 at N4. It covers the application transition/source/update path and both

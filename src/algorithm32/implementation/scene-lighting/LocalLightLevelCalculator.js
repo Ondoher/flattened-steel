@@ -1,5 +1,5 @@
 import {CIE_1931_2_DEG_SOURCE_ROWS, FIGURE1_DISPLAY_CONSTANTS} from '../bruneton-color/consts.js';
-import {SPECTRAL_QUANTITIES, SPECTRAL_UNITS, SpectralPacket} from '../../spectral-values/index.js';
+import {SPECTRAL_QUANTITIES, SPECTRAL_UNITS, SpectralMath, SpectralPacket} from '../../spectral-values/index.js';
 import AngleMath from '../../math/AngleMath.js';
 import VectorMath from '../../math/VectorMath.js';
 
@@ -42,10 +42,10 @@ export class LocalLightLevelCalculator {
 	 * transmittance when the request supplies an atmosphere.
 	 *
 	 * @param {ConfiguredLocalDirectLightRequest} request - Geometry, observation, and optional roster.
-	 * @returns {LocalDirectLightLevel} - Provisional receiver-local direct-light record.
+	 * @returns {{directNormal: SpectralIrradiancePacket, sourceCenterCosine: number}} - Existing direct-normal result and source-center orientation.
 	 */
-	measureConfiguredDirectSource(request) {
-		const {geometry, observerPosition, directSample, sourceIrradiance, elevationRadians} =
+	_measureConfiguredDirectNormal(request) {
+		const {geometry, observerPosition, directSample, sourceIrradiance, elevationRadians, sourceCenterCosine} =
 			this._sampleConfiguredDirectSource(request);
 		let visibleFraction = null;
 		const celestialGeometry = /** @type {GeometryModel & CelestialGeometryCapability} */ (geometry);
@@ -114,19 +114,139 @@ export class LocalLightLevelCalculator {
 				})
 			);
 		}
-		return this.measureDirectIrradiance(supportedIrradiance);
+		return {directNormal: supportedIrradiance, sourceCenterCosine};
 	}
 
 	/**
-	 * Derive the production brightness proxy from the configured receiver-local
-	 * direct-light calculation. The proxy is a coarse Color-control signal, not
-	 * a measured diffuse-sky or physiological adaptation luminance.
+	 * Measure the configured primary source through the retained direct-normal algorithm.
 	 *
 	 * @param {ConfiguredLocalDirectLightRequest} request - Geometry, observation, and optional roster.
-	 * @returns {UnitValue<'cd m^-2'>} - Receiver-local brightness proxy.
+	 * @returns {LocalDirectLightLevel} - Existing direct-normal spectral and photopic result.
 	 */
-	measureBrightnessProxy(request) {
-		return this.measureConfiguredDirectSource(request).adaptingLuminanceProxy;
+	measureConfiguredDirectSource(request) {
+		return this.measureDirectIrradiance(this._measureConfiguredDirectNormal(request).directNormal);
+	}
+
+	/**
+	 * Publish the retained direct-normal result plus its separate horizontal projection.
+	 *
+	 * @param {ConfiguredLocalDirectLightRequest} request - Geometry, observation, and optional roster.
+	 * @returns {ReceiverDirectLightMeasurement} - Receiver-local direct-normal and direct-horizontal light.
+	 */
+	measureConfiguredReceiverDirectLight(request) {
+		const measuredDirect = this._measureConfiguredDirectNormal(request);
+		const directNormal = measuredDirect.directNormal;
+		const sourceCenterCosine = Math.max(0, measuredDirect.sourceCenterCosine);
+		const directHorizontal = /** @type {SpectralIrradiancePacket} */ (
+			SpectralMath.scaleSpectralPacket(directNormal, sourceCenterCosine, {
+				provenanceIdentity: `receiver-direct-horizontal:${directNormal.contentHash}:source-center-cosine-${sourceCenterCosine}`,
+			})
+		);
+		return Object.freeze({
+			directNormal,
+			directHorizontal,
+			sourceCenterCosine,
+			photopicDirectNormalIlluminance: this.measureDirectIrradiance(directNormal).photopicDirectIlluminance,
+			photopicDirectHorizontalIlluminance:
+				this.measureDirectIrradiance(directHorizontal).photopicDirectIlluminance,
+		});
+	}
+
+	/**
+	 * Combine compatible direct and diffuse receiver irradiance into one complete
+	 * horizontal-light publication.
+	 *
+	 * @param {ReceiverLightCombinationRequest} request - Identity and complete component packets.
+	 * @returns {ReceiverEnvironmentLightMeasurement} - Four-packet receiver-light state and photopic projections.
+	 */
+	combineReceiverLight(request) {
+		if (typeof request?.identity !== 'string' || request.identity.length === 0) {
+			throw new TypeError('Receiver-light identity must be a non-empty string.');
+		}
+		const directNormal = this._assertReceiverIrradiance(request.directNormal, 'direct-normal');
+		const directHorizontal = this._assertReceiverIrradiance(request.directHorizontal, 'direct-horizontal');
+		const diffuseHorizontal = this._assertReceiverIrradiance(request.diffuseHorizontal, 'diffuse-horizontal');
+		SpectralPacket.assertCompatible(directNormal, directHorizontal, {
+			sameQuantity: true,
+			sameUnits: true,
+			sameSemantics: true,
+		});
+		SpectralPacket.assertCompatible(directHorizontal, diffuseHorizontal, {
+			sameQuantity: true,
+			sameUnits: true,
+			sameSemantics: true,
+		});
+		const totalHorizontal = /** @type {SpectralIrradiancePacket} */ (
+			SpectralMath.addSpectralPackets(directHorizontal, diffuseHorizontal, {
+				provenanceIdentity: `receiver-total-horizontal:${directHorizontal.contentHash}:${diffuseHorizontal.contentHash}`,
+			})
+		);
+		const directNormalPhotopic = this.measureDirectIrradiance(directNormal);
+		const directHorizontalPhotopic = this.measureDirectIrradiance(directHorizontal);
+		const diffuseHorizontalPhotopic = this.measureDirectIrradiance(diffuseHorizontal);
+		const totalHorizontalPhotopic = this.measureDirectIrradiance(totalHorizontal);
+		const stellarAdaptationLuminance = request.stellarAdaptationLuminance ?? {value: 0, units: 'cd m^-2'};
+		if (
+			stellarAdaptationLuminance.units !== 'cd m^-2' ||
+			!Number.isFinite(stellarAdaptationLuminance.value) ||
+			stellarAdaptationLuminance.value < 0
+		) {
+			throw new RangeError('Stellar adaptation luminance must be finite, nonnegative, and use cd m^-2.');
+		}
+
+		return Object.freeze({
+			identity: request.identity,
+			directNormal,
+			directHorizontal,
+			diffuseHorizontal,
+			totalHorizontal,
+			photopicDirectNormalIlluminance: directNormalPhotopic.photopicDirectIlluminance,
+			photopicDirectHorizontalIlluminance: directHorizontalPhotopic.photopicDirectIlluminance,
+			photopicDiffuseHorizontalIlluminance: diffuseHorizontalPhotopic.photopicDirectIlluminance,
+			photopicTotalHorizontalIlluminance: totalHorizontalPhotopic.photopicDirectIlluminance,
+			totalHorizontalLuminanceProxy: totalHorizontalPhotopic.adaptingLuminanceProxy,
+			stellarAdaptationLuminance: Object.freeze({...stellarAdaptationLuminance}),
+		});
+	}
+
+	/** Approximate the physical unmasked-sky median from the fixed receiver hemisphere samples. */
+	measureMedianSkyLuminance(radiances) {
+		if (!Array.isArray(radiances) || radiances.length === 0) {
+			throw new RangeError('Sky adaptation requires at least one spectral-radiance sample.');
+		}
+		const luminances = radiances.map((candidate) => {
+			const packet = SpectralPacket.assert(candidate, {
+				quantity: SPECTRAL_QUANTITIES.RADIANCE_DENSITY,
+				units: SPECTRAL_UNITS.RADIANCE_DENSITY,
+			});
+			if (!packet.values.every((value) => Number.isFinite(value) && value >= 0)) {
+				throw new RangeError('Sky adaptation radiance must be finite and nonnegative.');
+			}
+			return packet.values.reduce((sum, value, channelIndex) => {
+				const channel = packet.basis.channels[channelIndex];
+				return sum + value * channel.width.value * this._ciePhotopicResponseAt(channel.center.value) *
+					FIGURE1_DISPLAY_CONSTANTS.maxLuminousEfficacy.value;
+			}, 0);
+		}).sort((left, right) => left - right);
+		const middle = Math.floor(luminances.length / 2);
+		const value = luminances.length % 2 === 0
+			? (luminances[middle - 1] + luminances[middle]) / 2
+			: luminances[middle];
+		return Object.freeze({value, units: /** @type {const} */ ('cd m^-2')});
+	}
+
+	/** Assert one finite nonnegative spectral irradiance packet. */
+	_assertReceiverIrradiance(value, label) {
+		const packet = /** @type {SpectralIrradiancePacket} */ (
+			SpectralPacket.assert(value, {
+				quantity: SPECTRAL_QUANTITIES.IRRADIANCE_DENSITY,
+				units: SPECTRAL_UNITS.IRRADIANCE_DENSITY,
+			})
+		);
+		if (packet.values.some((channel) => !Number.isFinite(channel) || channel < 0)) {
+			throw new RangeError(`Receiver ${label} irradiance must be finite and nonnegative.`);
+		}
+		return packet;
 	}
 
 	/**
@@ -203,7 +323,7 @@ export class LocalLightLevelCalculator {
 	 * Sample the configured source once and derive its receiver-local elevation.
 	 *
 	 * @param {ConfiguredLocalDirectLightRequest} request - Geometry and observation inputs.
-	 * @returns {{geometry: GeometryModel, observerPosition: Position, directSample: DirectLightingSample, sourceIrradiance: SpectralIrradiancePacket, elevationRadians: number}} - Shared source facts.
+	 * @returns {{geometry: GeometryModel, observerPosition: Position, directSample: DirectLightingSample, sourceIrradiance: SpectralIrradiancePacket, elevationRadians: number, sourceCenterCosine: number}} - Shared source facts.
 	 */
 	_sampleConfiguredDirectSource(request) {
 		if (this._lightSource === null) {
@@ -227,11 +347,10 @@ export class LocalLightLevelCalculator {
 			VectorMath.length(receiverVector) > 0
 				? VectorMath.normalize(receiverVector)
 				: /** @type {UnitVector3} */ ([0, 0, 1]);
-		const elevationRadians = Math.asin(
-			Math.max(-1, Math.min(1, VectorMath.dot(up, directSample.directionToLight))),
-		);
+		const sourceCenterCosine = Math.max(-1, Math.min(1, VectorMath.dot(up, directSample.directionToLight)));
+		const elevationRadians = Math.asin(sourceCenterCosine);
 
-		return {geometry, observerPosition, directSample, sourceIrradiance, elevationRadians};
+		return {geometry, observerPosition, directSample, sourceIrradiance, elevationRadians, sourceCenterCosine};
 	}
 
 	/**

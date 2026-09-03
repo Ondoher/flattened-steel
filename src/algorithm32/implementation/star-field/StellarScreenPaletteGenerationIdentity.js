@@ -4,6 +4,7 @@ import {CelestialRenderViewSnapshot} from '../../rendering-runtime/three/Celesti
 const SOURCE_SCHEMA = 'stellar-screen-palette-source-compatibility-v1';
 const OBSERVATION_SCHEMA = 'stellar-screen-palette-observation-v1';
 const GENERATION_SCHEMA = 'stellar-screen-palette-generation-v1';
+const PRESENTATION_SCHEMA = 'stellar-screen-palette-presentation-compatibility-v1';
 
 /** Exact source, fixed-observation, view, and complete generation identity derivation. */
 export class StellarScreenPaletteGenerationIdentity {
@@ -53,10 +54,34 @@ export class StellarScreenPaletteGenerationIdentity {
 			epochTransform,
 			geometryIdentity,
 		});
+		let presentationIdentity;
+		if (configuration.presentation !== undefined) {
+			const presentation = configuration.presentation;
+			if (
+				typeof presentation?.colorIdentity !== 'string' ||
+				presentation.colorIdentity.length === 0 ||
+				typeof presentation.filterRegistryIdentity !== 'string' ||
+				presentation.filterRegistryIdentity.length === 0 ||
+				(presentation.scotopicWeightsIdentity !== null &&
+					(typeof presentation.scotopicWeightsIdentity !== 'string' ||
+						presentation.scotopicWeightsIdentity.length === 0)) ||
+				typeof presentation.receiverLightIdentity !== 'string' ||
+				presentation.receiverLightIdentity.length === 0 ||
+				!Number.isFinite(presentation.adaptationLuminanceCdM2) ||
+				presentation.adaptationLuminanceCdM2 < 0
+			) {
+				throw new RangeError('Stellar generation presentation compatibility is incomplete.');
+			}
+			presentationIdentity = CanonicalValueHash.sha256Value({
+				schema: PRESENTATION_SCHEMA,
+				...presentation,
+			});
+		}
 		const compatibility = {
 			sourceIdentity,
 			observationIdentity,
 			viewIdentity: derivedViewIdentity,
+			...(presentationIdentity === undefined ? {} : {presentationIdentity}),
 		};
 		const generationIdentity = CanonicalValueHash.sha256Value({
 			schema: GENERATION_SCHEMA,

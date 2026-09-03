@@ -16,6 +16,7 @@ export class ModeController {
 		this._onFailure = configuration.onFailure;
 		this._onPublished = configuration.onPublished;
 		this._sceneRuntime = configuration.sceneRuntime;
+		this._atmosphereEnabled = configuration.atmosphereEnabled !== false;
 		/** @type {Algorithm32Runtime | null} */
 		this._activeRuntime = null;
 		this._generation = 0;
@@ -104,12 +105,14 @@ export class ModeController {
 				composer: composer.composer,
 				composerRenderTarget: composer.renderTarget,
 				deferPublication: true,
+				atmosphereEnabled: this._atmosphereEnabled,
 			});
 			const summary = await candidate.setup();
 			if (this._disposed || generation !== this._generation) {
 				candidate.dispose({ restoreRendering: false });
 				return null;
 			}
+			candidate.setAtmosphereEnabled(this._atmosphereEnabled);
 			candidate.publish();
 			this._onPublished?.(kind, mode, state);
 			const replaced = this._activeRuntime;
@@ -138,6 +141,15 @@ export class ModeController {
 	}
 
 	get currentKind() { return this._currentKind; }
+
+	/** Select Algorithm32 composition or the direct lit scene without rebuilding either. */
+	setAtmosphereEnabled(enabled) {
+		if (typeof enabled !== 'boolean') {
+			throw new TypeError('Flat32 atmosphere enabled state must be boolean.');
+		}
+		this._atmosphereEnabled = enabled;
+		this._activeRuntime?.setAtmosphereEnabled(enabled);
+	}
 
 	dispose() {
 		if (this._disposed) return;

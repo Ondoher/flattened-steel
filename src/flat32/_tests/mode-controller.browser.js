@@ -42,6 +42,10 @@ function createRuntime(name, events, setupFailure = null) {
 			if (disposed) throw new Error(`${name} published after disposal.`);
 			events.push(`${name}:published`);
 		},
+		setAtmosphereEnabled(enabled) {
+			if (disposed) throw new Error(`${name} selected after disposal.`);
+			events.push(`${name}:atmosphere:${enabled}`);
+		},
 		dispose({ restoreRendering = true } = {}) {
 			if (disposed) return;
 			disposed = true;
@@ -51,6 +55,41 @@ function createRuntime(name, events, setupFailure = null) {
 }
 
 describe('Flat32 mode transaction', () => {
+	it('retains the shader-bypass selection across a mode replacement', async () => {
+		const events = [];
+		const controller = new ModeController(/** @type {any} */ ({
+			atmosphereEnabled: true,
+			endpointScene: {},
+			onFailure() {},
+			createMode(kind) {
+				return createMode(kind, events);
+			},
+			createRuntime({mode, atmosphereEnabled}) {
+				events.push(`${mode.name}:constructed:${atmosphereEnabled}`);
+				return createRuntime(mode.name, events);
+			},
+			onPreparing() {},
+			onReverted() {},
+			onPublished() {},
+			sceneRuntime: {
+				createAtmosphereComposer() {
+					return createComposer('candidate', events);
+				},
+				restoreDirectRendering() {},
+			},
+		}));
+
+		await controller.switchTo('spherical-distant', /** @type {Flat32ApplicationState} */ ({}));
+		controller.setAtmosphereEnabled(false);
+		await controller.switchTo('flat-local', /** @type {Flat32ApplicationState} */ ({}));
+
+		expect(events).toContain('spherical-distant:constructed:true');
+		expect(events).toContain('spherical-distant:atmosphere:false');
+		expect(events).toContain('flat-local:constructed:false');
+		expect(events).toContain('flat-local:atmosphere:false');
+		controller.dispose();
+	});
+
 	it('preserves and republishes the last valid mode after candidate setup failure', async () => {
 		const events = [];
 		const modes = [];

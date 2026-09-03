@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import {EffectComposer} from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import {RenderPass} from 'three/examples/jsm/postprocessing/RenderPass.js';
+import {ShaderPass} from 'three/examples/jsm/postprocessing/ShaderPass.js';
 
 import {
 	ATMOSPHERE_SCENE_COLOR_TARGET_NAME,
@@ -40,6 +41,11 @@ export class ThreeSceneRuntime {
 		this._composerRenderTarget = null;
 		/** @type {RenderPass | null} */
 		this._renderPass = null;
+		/** @type {EffectComposer | null} */
+		this._directDisplayComposer = null;
+		/** @type {ShaderPass | null} */
+		this._directDisplayPass = null;
+		this._directDisplayEnabled = false;
 		/** @type {Flat32RenderOperation} */
 		this._renderOperation = this._renderDirectScene.bind(this);
 		/** @type {number | null} */
@@ -184,6 +190,50 @@ export class ThreeSceneRuntime {
 		this._canvas.dataset.flat32PixelRatio = String(pixelRatio);
 		this._composer?.setPixelRatio(pixelRatio);
 		this._composer?.setSize(viewportSize.width, viewportSize.height);
+		this._directDisplayComposer?.setPixelRatio(pixelRatio);
+		this._directDisplayComposer?.setSize(viewportSize.width, viewportSize.height);
+	}
+
+	/** Create the display-only path for inspecting the linear HDR Three scene. */
+	_createDirectDisplayComposer() {
+		const renderer = this._requireRenderer();
+		const viewportSize = this.viewportSize;
+		const composer = new EffectComposer(renderer, this._createComposerRenderTarget());
+		const renderPass = new RenderPass(this._scene, this._camera);
+		const displayPass = new ShaderPass({
+			uniforms: {
+				tDiffuse: {value: null},
+			},
+			vertexShader: `
+varying vec2 vUv;
+void main() {
+	vUv = uv;
+	gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+}
+`,
+			fragmentShader: `
+uniform sampler2D tDiffuse;
+varying vec2 vUv;
+void main() {
+	vec4 sceneLinear = texture2D(tDiffuse, vUv);
+	vec3 nonnegative = max(sceneLinear.rgb, vec3(0.0));
+	float peakChannel = max(max(nonnegative.r, nonnegative.g), nonnegative.b);
+	vec3 bounded = peakChannel > 1.0 ? nonnegative / peakChannel : nonnegative;
+	gl_FragColor = vec4(bounded, sceneLinear.a);
+	#include <colorspace_fragment>
+}
+`,
+		});
+
+		displayPass.material.name = 'flat32-direct-three-display-boundary';
+		composer.setPixelRatio(this._resolvePixelRatio());
+		composer.setSize(viewportSize.width, viewportSize.height);
+		composer.addPass(renderPass);
+		composer.addPass(displayPass);
+		this._directDisplayComposer = composer;
+		this._directDisplayPass = displayPass;
+		this._canvas.dataset.flat32DirectDisplayBoundary =
+			'bruneton-renderer-linear-to-display-srgb-v1';
 	}
 
 	/**
@@ -226,7 +276,22 @@ export class ThreeSceneRuntime {
 	 * @returns {void}
 	 */
 	_renderDirectScene() {
-		this._requireRenderer().render(this._scene, this._camera);
+		const renderer = this._requireRenderer();
+
+		// Algorithm32 captures depth and hit masks with transient override
+		// materials and offscreen targets. Direct inspection owns an explicit
+		// clean boundary instead of inheriting any composer/capture state.
+		renderer.setRenderTarget(null);
+		renderer.autoClear = true;
+		this._scene.overrideMaterial = null;
+		if (!this._directDisplayEnabled) {
+			renderer.render(this._scene, this._camera);
+			return;
+		}
+		if (this._directDisplayComposer === null) {
+			throw new Error('Flat32 direct Three display boundary is unavailable.');
+		}
+		this._directDisplayComposer.render();
 	}
 
 	/**
@@ -402,6 +467,7 @@ export class ThreeSceneRuntime {
 		}
 
 		this._renderOperation = operation;
+		this._directDisplayEnabled = false;
 		this._canvas.dataset.flat32RenderPath = 'algorithm32';
 	}
 
@@ -415,8 +481,10 @@ export class ThreeSceneRuntime {
 			return;
 		}
 
+		this._directDisplayEnabled = true;
 		this._renderOperation = this._renderDirectScene.bind(this);
 		this._canvas.dataset.flat32RenderPath = 'direct-three';
+		if (this._started) this._renderDirectScene();
 	}
 
 	/**
@@ -445,6 +513,7 @@ export class ThreeSceneRuntime {
 		this._canvas.addEventListener('webglcontextlost', this._handleContextLost);
 		this._canvas.addEventListener('webglcontextrestored', this._handleContextRestored);
 		this._configureViewport();
+		this._createDirectDisplayComposer();
 		window.addEventListener('resize', this._handleResize);
 		this._canvas.dataset.flat32RenderPath = 'direct-three';
 		this._started = true;
@@ -478,6 +547,11 @@ export class ThreeSceneRuntime {
 		this._renderPass = null;
 		this._composer = null;
 		this._composerRenderTarget = null;
+		this._directDisplayComposer?.dispose();
+		this._directDisplayPass?.dispose();
+		this._directDisplayComposer = null;
+		this._directDisplayPass = null;
+		this._directDisplayEnabled = false;
 		this._renderer?.dispose();
 		this._renderer = null;
 	}

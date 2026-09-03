@@ -208,12 +208,12 @@ export class EndpointScene {
 	}
 
 	/** Update scene lighting to match the active spherical/distant atmosphere. */
-	updateDistantSunLighting(lightSource, directionToSource, sourceBrightness) {
+	updateDistantSunLighting(directionToSource, receiverLight, color) {
 		if (this._lighting === null) {
 			throw new Error('Flat32 endpoint scene is not installed.');
 		}
 
-		this._lighting.updateFromDistantSun(lightSource, directionToSource, sourceBrightness);
+		this._lighting.updateFromDistantSun(directionToSource, receiverLight, color);
 	}
 
 	/**

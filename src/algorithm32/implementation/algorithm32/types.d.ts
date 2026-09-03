@@ -40,6 +40,11 @@ type Algorithm32PreparedConfig = {
 	readonly exposureModifier: number;
 	/** Initial receiver-local brightness proxy; Ferwerda protects exact zero in its equations. */
 	readonly brightnessProxy: number;
+	/** Initial receiver total-horizontal photopic illuminance in lux. */
+	readonly totalHorizontalIlluminance: number;
+	/** Initial physical-sky median approximation for stellar presentation. */
+	readonly stellarAdaptationLuminance: number;
+	readonly receiverLightIdentity: string;
 	/** Initial configured source brightness used for the scene-luminance scale. */
 	readonly sourceBrightness: number;
 	/** Prepared runtime shader-build coordinator. */

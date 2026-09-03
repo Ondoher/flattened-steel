@@ -1,9 +1,10 @@
 # Solar-Zenith Cache Production Adoption
 
-Status: PA0 through PA7 complete as of 2026-08-29. A provisional complete
-0-degree through 108-degree inventory is built and byte-verified but is not yet
-eligible for nearest-degree deployment. The contained research plan is complete
-through P10. Production now contains the direct PA1
+Status: PA0 through PA7 complete as of 2026-08-29. The later
+[Flat32 one-degree scene-cache hookup](flat32-one-degree-cache-hookup-plan.md)
+qualified the complete 0-degree through 108-degree inventory, bin ownership,
+darkness cutoff, deployment packaging, resolver, and application path through
+H7. The contained research plan is complete through P10. Production contains the direct PA1
 contract/domain replacement, PA2 offline compiler, PA3 resident asset loader
 and point-local cache, and the PA4 exact-asset/Q30 live transport and selected
 Color path.
@@ -62,10 +63,9 @@ The canonical numerical design and contained evidence remain owned by the
   solar-zenith-specific or source-specific cache shape.
 - One complete cache per scene Sun state; continuous Sun animation remains
   deferred.
-- The six qualified states are a deployment seed, not final product coverage.
-  The final offline inventory must cover all non-dark hours at provisionally
-  one-degree solar-angle increments. Its darkness cutoff, bin ownership, and
-  within-bin error require explicit qualification.
+- The six qualified states were the PA adoption seed. The subsequent H1-H7
+  hookup qualified the complete one-degree non-dark inventory, darkness cutoff,
+  bin ownership, and interpolation-closed row unions.
 - Geometry continues to supply the first object, ground, or atmosphere-exit
   ray length.
 - Algorithm32 continues to integrate actual path points using Q30.
@@ -79,7 +79,7 @@ The canonical numerical design and contained evidence remain owned by the
   path passes production gates and is explicitly selected.
 - Historical Algorithm32-Star evidence remains immutable and comparison-only.
 
-## Immediate Focus
+## PA7 Closure And Later Hookup
 
 PA1 through PA5 are complete. Shared transport passes pairing-neutral physical
 sample context, each concrete cache interprets that context with its geometry,
@@ -97,19 +97,18 @@ selected prebuilt asset, installs its manifest direction as the exact Geometry
 source placement, and integrates the resident contribution with the qualified
 quadratic-boundary/midpoint Q30 rule inside Geometry's unchanged endpoint.
 
-PA6 production qualification is complete. Flat32
-selects the accepted Bruneton-derived, source-luminance-driven global lift
-qualified by runs `000466` and `000467`. Algorithm32 derives its one condition
-scalar from geometry-supported, atmosphere-transmitted direct-source
-irradiance; setup does not replace it with a diffuse sky measurement. Runtime
-recurrence, a receiver-column/point-local switch, and a Flat/local solar-
-zenith dimension remain prohibited. The owner selected the qualified offline
-zenith-aware path for production on 2026-08-29. The strict six-state catalog is
-now the normal Flat32 resolver, and run `000585` proves runtime-only package
-emission for all six exact assets at `901,034,856` total bytes. The obsolete
-receiver-column GPU cache/controller are removed while the CPU reference
-recurrence remains. Selection does not broaden the local-Sun or animation
-claims.
+PA6 production qualification is complete. At that checkpoint Flat32 selected
+the Bruneton-derived source-luminance lift qualified by runs `000466` and
+`000467`; that Color path was later superseded and removed by Color Reset
+without changing the accepted cache. Runtime recurrence, a receiver-column/
+point-local switch, and a Flat/local solar-zenith dimension remain prohibited.
+The owner selected the qualified offline zenith-aware path for production on
+2026-08-29. The strict six-state catalog was the PA7 resolver, and run `000585`
+proved runtime-only package emission for all six exact assets at `901,034,856`
+total bytes. H1-H7 later replaced that seed with the generated bin-covered
+catalog. The obsolete receiver-column GPU cache/controller remain removed
+while the CPU reference recurrence remains. Selection does not broaden the
+local-Sun or animation claims.
 
 The final deployment catalog is generated rather than hand-maintained. The
 first complete construction inventory covers integer solar-zenith angles from
@@ -122,11 +121,11 @@ R32F payload, and R16UI index SHA-256. The largest exact package is
 `150,966,348` bytes at 9 degrees. Mean GPU compiler time was
 `46,786.74587155263 ms`; total measured GPU compiler time was
 `5,099,755.299999237 ms`. Only one selected cache remains resident; total
-shipped/offline storage scales with inventory count. This inventory remains
-explicitly deployment-ineligible until its darkness cutoff, bin policy, and
-within-bin error pass qualification. The current exact
-resolver remains correct for its six records and must not silently become a
-nearest-degree resolver before those gates exist.
+shipped/offline storage scales with inventory count. This construction
+inventory was deployment-ineligible at the PA checkpoint. The subsequent
+H1-H7 plan derived and qualified the selected bin-covered runtime packages and
+scalar resolver; this paragraph records the earlier handoff rather than current
+deployment state.
 The final application calculates the scene solar-zenith angle and submits only
 that scalar to a server cache-resolution entry point. The endpoint applies the
 qualified bin policy and returns a small exact descriptor and content-addressed
@@ -338,8 +337,10 @@ the Algorithm32 typecheck passes.
       storage totals;
 - [x] independently stream and verify every manifest, ledger, oracle payload,
       exact payload, and logical-direction index by SHA-256; and
-- [ ] qualify darkness cutoff, bin ownership, and within-bin error before
-      deployment or nearest-degree resolution.
+- [x] qualify darkness cutoff, bin ownership, and within-bin behavior before
+      deployment or nearest-degree resolution; completed by H4 of the focused
+      hookup plan through the selected 108-degree cutoff, half-up/half-open bin
+      policy, interpolation-closed row unions, and byte-identical shared rows.
 
 The source inventory is
 `tmp/extraterrestrial/production-adoption/one-degree-inventory-20260829-1`.
@@ -366,9 +367,11 @@ The verifier accepted all 109 unique packages in
 
 ## Current Next Step
 
-Production adoption and inventory construction are complete. Flat32 hookup,
-generated deployment packaging, scalar-solar-zenith resolution, and the
-remaining bin/darkness gates are owned by the focused
+Production adoption, inventory construction, deployment packaging,
+scalar-solar-zenith resolution, bin/darkness qualification, and Flat32 hookup
+are complete through H7 of the focused
 [Flat32 one-degree scene-cache hookup plan](flat32-one-degree-cache-hookup-plan.md).
+Any remaining cache follow-up is triaged by the
+[production closeout plan](color-star-cache-closeout-plan.md).
 Do not restore runtime recurrence, add a compatibility bridge, or add an
 old/new distant-Sun switch.

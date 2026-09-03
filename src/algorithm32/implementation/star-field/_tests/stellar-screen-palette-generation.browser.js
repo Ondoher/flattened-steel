@@ -7,6 +7,7 @@ import {StellarScreenPaletteGenerationPass} from '../../../rendering-runtime/thr
 import {SunDiskTileGenerationPass} from '../../../rendering-runtime/three/SunDiskTileGenerationPass.js';
 import {CelestialScreenPaletteConsumerShaderContribution} from '../../../celestial-source-support/CelestialScreenPaletteConsumerShaderContribution.js';
 import {STELLAR_ONE_PIXEL_PRESENTATION} from '../StellarPointPresentation.js';
+import {loadBrightest2000StellarCatalogPackage} from '../../../../flat32/Brightest2000StellarCatalogPackageLoader.js';
 
 export const STELLAR_QUALIFICATION_OBSERVATION = {
 	instant: '2024-06-21T06:26:03.503Z',
@@ -193,13 +194,14 @@ function projectDirection(catalogDirection, uniforms, view = STELLAR_QUALIFICATI
 /** Construct the independent member classification and resolved-spectrum oracle. */
 export function createCpuOracle(source, geometryContribution, view = STELLAR_QUALIFICATION_VIEW) {
 	const layout = source.layout;
-	const values = source.copyValues();
+	const memberValues = source.copyMemberValues();
+	const spectra = source.copySpectralValues();
 	const uniforms = new Map(geometryContribution.uniforms.map((uniform) => [uniform.name, uniform.defaultValue]));
 	const pixelMembers = new Map();
 	const classifications = new Map();
 	for (let memberIndex = 0; memberIndex < layout.memberCount; memberIndex += 1) {
-		const offset = memberIndex * layout.componentCount + layout.directionOffset;
-		const projected = projectDirection(values.subarray(offset, offset + 3), uniforms, view);
+		const offset = memberIndex * layout.memberComponentCount;
+		const projected = projectDirection(memberValues.subarray(offset, offset + 3), uniforms, view);
 		classifications.set(memberIndex, projected);
 		if (projected.classification !== 'occupied') continue;
 		const key = `${projected.pixel[0]},${projected.pixel[1]}`;
@@ -211,23 +213,28 @@ export function createCpuOracle(source, geometryContribution, view = STELLAR_QUA
 		view.viewportSize.width * view.viewportSize.height,
 	);
 	const palette = new Float64Array((layout.memberCount + 1) * layout.spectralChannelCount);
+	const visualMagnitudes = new Float64Array(layout.memberCount + 1);
 	const inputTotals = new Float64Array(layout.spectralChannelCount);
-	for (const [key, members] of pixelMembers) {
+	for (const [key, pixelMemberIndices] of pixelMembers) {
 		const pixel = key.split(',').map(Number);
-		const representativeIndex = members[0] + 1;
+		const representativeIndex = pixelMemberIndices[0] + 1;
 		const framebufferY = view.viewportSize.height - 1 - pixel[1];
 		screenIndex[framebufferY * view.viewportSize.width + pixel[0]] = representativeIndex;
-		for (const memberIndex of members) {
-			const spectralOffset = memberIndex * layout.componentCount + layout.spectralOffset;
+		for (const memberIndex of pixelMemberIndices) {
 			for (let channel = 0; channel < layout.spectralChannelCount; channel += 1) {
-				const irradiance = values[spectralOffset + channel];
+				const irradiance = spectra[channel * layout.memberCount + memberIndex];
 				palette[representativeIndex * layout.spectralChannelCount + channel] +=
 					irradiance * STELLAR_ONE_PIXEL_PRESENTATION.irradianceToBoundaryRadianceScale;
 				inputTotals[channel] += irradiance;
 			}
 		}
+		const combinedVisualFlux = pixelMemberIndices.reduce(
+			(sum, memberIndex) => sum + 10 ** (-0.4 * Number(memberValues[memberIndex * 4 + 3])),
+			0,
+		);
+		visualMagnitudes[representativeIndex] = -2.5 * Math.log10(combinedVisualFlux);
 	}
-	return {classifications, pixelMembers, screenIndex, palette, inputTotals};
+	return {classifications, pixelMembers, screenIndex, palette, visualMagnitudes, inputTotals};
 }
 
 /** Create one nearest-sampled two-dimensional texture. */
@@ -242,22 +249,20 @@ function createTexture(gl, internalFormat, width, height) {
 	return texture;
 }
 
-/** Upload the immutable member-major source table. */
-function createSourceTexture(gl, source) {
+/** Upload the immutable CR6G-shaped split source textures. */
+function createSourceTextures(gl, source) {
 	const layout = source.layout;
-	const texture = createTexture(gl, gl.R32F, layout.componentCount, layout.memberCount);
+	const members = createTexture(gl, gl.RGBA32F, layout.memberCount, 1);
 	gl.texSubImage2D(
-		gl.TEXTURE_2D,
-		0,
-		0,
-		0,
-		layout.componentCount,
-		layout.memberCount,
-		gl.RED,
-		gl.FLOAT,
-		source.copyValues(),
+		gl.TEXTURE_2D, 0, 0, 0, layout.memberCount, 1, gl.RGBA, gl.FLOAT,
+		source.copyMemberValues(),
 	);
-	return texture;
+	const spectra = createTexture(gl, gl.R32F, layout.memberCount, layout.spectralChannelCount);
+	gl.texSubImage2D(
+		gl.TEXTURE_2D, 0, 0, 0, layout.memberCount, layout.spectralChannelCount, gl.RED, gl.FLOAT,
+		source.copySpectralValues(),
+	);
+	return {members, spectra};
 }
 
 /** Apply source, screen-index, and geometry uniforms to one linked stage program. */
@@ -265,18 +270,21 @@ function applyUniforms(
 	gl,
 	program,
 	geometryContribution,
-	sourceTexture,
+	sourceTextures,
 	screenIndexTexture = null,
 	view = STELLAR_QUALIFICATION_VIEW,
 ) {
 	gl.useProgram(program);
 	gl.activeTexture(gl.TEXTURE0);
-	gl.bindTexture(gl.TEXTURE_2D, sourceTexture);
-	gl.uniform1i(gl.getUniformLocation(program, 'uStellarGenerationSource'), 0);
+	gl.bindTexture(gl.TEXTURE_2D, sourceTextures.members);
+	gl.uniform1i(gl.getUniformLocation(program, 'uStellarSourceMembers'), 0);
+	gl.activeTexture(gl.TEXTURE1);
+	gl.bindTexture(gl.TEXTURE_2D, sourceTextures.spectra);
+	gl.uniform1i(gl.getUniformLocation(program, 'uStellarSourceSpectra'), 1);
 	if (screenIndexTexture !== null) {
-		gl.activeTexture(gl.TEXTURE1);
+		gl.activeTexture(gl.TEXTURE2);
 		gl.bindTexture(gl.TEXTURE_2D, screenIndexTexture);
-		gl.uniform1i(gl.getUniformLocation(program, 'uStellarScreenIndex'), 1);
+		gl.uniform1i(gl.getUniformLocation(program, 'uStellarScreenIndex'), 2);
 	}
 	for (const uniform of geometryContribution.uniforms) {
 		const location = gl.getUniformLocation(program, uniform.name);
@@ -303,19 +311,20 @@ function expectCompleteFramebuffer(gl) {
 /** Execute the two production shader stages and read back their persistent logical outputs. */
 function executeStages(gl, stages, source, geometryContribution, view = STELLAR_QUALIFICATION_VIEW) {
 	const layout = source.layout;
-	const sourceTexture = createSourceTexture(gl, source);
+	const sourceTextures = createSourceTextures(gl, source);
 	const screenIndexTexture = createTexture(
 		gl,
 		gl.R16UI,
 		view.viewportSize.width,
 		view.viewportSize.height,
 	);
-	const paletteTexture = createTexture(gl, gl.R32F, layout.memberCount + 1, layout.spectralChannelCount);
+	const paletteRowCount = stages[0].stellarLayout.rowCount;
+	const paletteTexture = createTexture(gl, gl.R32F, layout.memberCount + 1, paletteRowCount);
 	const depth = gl.createRenderbuffer();
 	const framebuffer = gl.createFramebuffer();
 	const vertexArray = gl.createVertexArray();
 	const programs = stages.map((stage) => linkProgram(gl, stage.vertexShaderSource, stage.fragmentShaderSource));
-	const resources = {sourceTexture, screenIndexTexture, paletteTexture, depth, framebuffer, vertexArray, programs};
+	const resources = {sourceTextures, screenIndexTexture, paletteTexture, depth, framebuffer, vertexArray, programs};
 
 	gl.bindVertexArray(vertexArray);
 	gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
@@ -338,21 +347,21 @@ function executeStages(gl, stages, source, geometryContribution, view = STELLAR_
 	gl.depthFunc(gl.LESS);
 	gl.depthMask(true);
 	gl.disable(gl.BLEND);
-	applyUniforms(gl, programs[0], geometryContribution, sourceTexture, null, view);
+	applyUniforms(gl, programs[0], geometryContribution, sourceTextures, null, view);
 	gl.drawArrays(gl.POINTS, 0, layout.memberCount);
 
 	gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, null);
 	gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, paletteTexture, 0);
 	expectCompleteFramebuffer(gl);
-	gl.viewport(0, 0, layout.memberCount + 1, layout.spectralChannelCount);
+	gl.viewport(0, 0, layout.memberCount + 1, paletteRowCount);
 	gl.clearBufferfv(gl.COLOR, 0, new Float32Array([0, 0, 0, 0]));
 	gl.disable(gl.DEPTH_TEST);
-	applyUniforms(gl, programs[1], geometryContribution, sourceTexture, screenIndexTexture, view);
+	applyUniforms(gl, programs[1], geometryContribution, sourceTextures, screenIndexTexture, view);
 	gl.drawArrays(gl.TRIANGLES, 0, 3);
 	gl.finish();
 
-	const palette = new Float32Array((layout.memberCount + 1) * layout.spectralChannelCount);
-	gl.readPixels(0, 0, layout.memberCount + 1, layout.spectralChannelCount, gl.RED, gl.FLOAT, palette);
+	const palette = new Float32Array((layout.memberCount + 1) * paletteRowCount);
+	gl.readPixels(0, 0, layout.memberCount + 1, paletteRowCount, gl.RED, gl.FLOAT, palette);
 	gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, screenIndexTexture, 0);
 	const screenIndex = new Uint16Array(
 		view.viewportSize.width * view.viewportSize.height,
@@ -378,7 +387,8 @@ function disposeExecution(gl, resources) {
 	gl.deleteRenderbuffer(resources.depth);
 	gl.deleteTexture(resources.paletteTexture);
 	gl.deleteTexture(resources.screenIndexTexture);
-	gl.deleteTexture(resources.sourceTexture);
+	gl.deleteTexture(resources.sourceTextures.members);
+	gl.deleteTexture(resources.sourceTextures.spectra);
 }
 
 /** Fetch resolved palette values through the same integer-index lookup used by the later consumer. */
@@ -743,6 +753,93 @@ void main() { outCoverage = texelFetch(uCoverage, ivec2(gl_FragCoord.xy), 0).r; 
 		}
 	});
 
+	it('recasts the exact brightest-2,000 package through GPU readback and collision conservation', async () => {
+		const definition = await loadBrightest2000StellarCatalogPackage(
+			'/base/server/flat32/data/brightest-2000-stellar-package-v1/manifest.json',
+		);
+		const canvas = document.createElement('canvas');
+		const gl = canvas.getContext('webgl2', {antialias: false, depth: true, stencil: false});
+		expect(gl).not.toBeNull();
+		expect(gl.getExtension('EXT_color_buffer_float')).not.toBeNull();
+		const geometry = createGeometry();
+		const geometryContribution = geometry.createStellarGenerationShaderContribution({
+			observation: STELLAR_QUALIFICATION_OBSERVATION,
+		});
+		const stellarSource = new StellarPointSetSource({catalogDefinition: definition});
+		const source = stellarSource.createStellarGenerationSourceTable();
+		const stages = stellarSource.createStellarGenerationStages({
+			geometry,
+			observation: STELLAR_QUALIFICATION_OBSERVATION,
+		});
+		const oracle = createCpuOracle(source, geometryContribution);
+		const execution = executeStages(gl, stages, source, geometryContribution);
+		try {
+			expect(source.layout.memberCount).toBe(2000);
+			expect(source.copyMemberValues().byteLength + source.copySpectralValues().byteLength).toBe(152000);
+			expect(gl.getParameter(gl.MAX_TEXTURE_SIZE)).toBeGreaterThanOrEqual(2001);
+			expect(Array.from(execution.screenIndex)).toEqual(Array.from(oracle.screenIndex));
+			expect([...oracle.pixelMembers.values()].some((members) => members.length > 1)).toBeTrue();
+			const representatives = new Set(oracle.screenIndex);
+			representatives.delete(0);
+			const outputTotals = new Float64Array(source.layout.spectralChannelCount);
+			for (const entry of representatives) {
+				for (let channel = 0; channel < source.layout.spectralChannelCount; channel += 1) {
+					const offset = channel * (source.layout.memberCount + 1) + entry;
+					const expected = oracle.palette[entry * source.layout.spectralChannelCount + channel];
+					const actual = execution.palette[offset];
+					expect(Math.abs(actual - expected) / Math.max(Math.abs(expected), 1e-30)).toBeLessThan(0.0003);
+					outputTotals[channel] += actual / STELLAR_ONE_PIXEL_PRESENTATION.irradianceToBoundaryRadianceScale;
+				}
+				const magnitudeOffset = 15 * (source.layout.memberCount + 1) + entry;
+				expect(execution.palette[magnitudeOffset]).toBeCloseTo(oracle.visualMagnitudes[entry], 5);
+			}
+			for (let channel = 0; channel < source.layout.spectralChannelCount; channel += 1) {
+				expect(Math.abs(outputTotals[channel] - oracle.inputTotals[channel]) / Math.max(oracle.inputTotals[channel], 1e-30)).toBeLessThan(0.0003);
+			}
+		} finally {
+			disposeExecution(gl, execution.resources);
+		}
+
+		const renderer = new THREE.WebGLRenderer({canvas: document.createElement('canvas'), antialias: false});
+		renderer.setSize(32, 20, false);
+		const camera = new THREE.PerspectiveCamera(120, 32 / 20, 0.1, 10);
+		camera.updateProjectionMatrix();
+		camera.updateMatrixWorld(true);
+		const pass = new StellarScreenPaletteGenerationPass({
+			THREE,
+			source: stellarSource,
+			geometry,
+			observation: STELLAR_QUALIFICATION_OBSERVATION,
+			camera,
+			viewportSize: STELLAR_QUALIFICATION_VIEW.viewportSize,
+		});
+		try {
+			await pass.prepare(renderer);
+			pass.render(renderer);
+			const first = pass.publicationState.active;
+			expect(first.layout.entryCapacity).toBe(2001);
+			camera.rotateY(0.125);
+			camera.updateMatrixWorld(true);
+			pass.render(renderer);
+			expect(pass.publicationState.active.id).not.toBe(first.id);
+			pass.handleContextLoss();
+			expect(pass.publicationState.active).toBeNull();
+			pass.handleContextRestoration();
+			pass.render(renderer);
+			expect(pass.publicationState.active.completion).toBe('complete');
+			expect(pass.getDiagnostics()).toEqual(jasmine.objectContaining({
+				generationCount: 3,
+				contextLossCount: 1,
+				createdTargetCount: 6,
+				disposedTargetCount: 4,
+			}));
+		} finally {
+			pass.dispose();
+			expect(pass.getDiagnostics().disposedTargetCount).toBe(6);
+			renderer.dispose();
+		}
+	});
+
 	it('keeps one-pixel stellar palette values invariant across viewport size and field of view', () => {
 		const canvas = document.createElement('canvas');
 		const gl = canvas.getContext('webgl2', {antialias: false, depth: true, stencil: false});
@@ -821,7 +918,7 @@ void main() { outCoverage = texelFetch(uCoverage, ivec2(gl_FragCoord.xy), 0).r; 
 			const generation = pass.publicationState.active;
 			expect(generation.completion).toBe('complete');
 			expect(generation.screenIndex).toEqual(jasmine.objectContaining({format: 'R16UI', width: 32, height: 20}));
-			expect(generation.palette).toEqual(jasmine.objectContaining({format: 'R32F', width: 501, height: 15}));
+			expect(generation.palette).toEqual(jasmine.objectContaining({format: 'R32F', width: 501, height: 16}));
 			const lookup = readRuntimeResolvedSpectra(renderer, generation);
 			expect(Array.from(lookup.indices)).toEqual(Array.from(oracle.screenIndex));
 			let maximumRelativeResidual = 0;

@@ -13,10 +13,11 @@ export class CelestialScreenPaletteConsumerShaderContribution {
 	/**
 	 * Create the shared consumer contribution owner.
 	 *
-	 * @param {Readonly<{includeStars: boolean, surfaceRadiance: SpectralRadiancePacket}>} configuration - Enabled back layer and Sun spectrum.
+	 * @param {Readonly<{includeStars: boolean, filteredStars?: boolean, surfaceRadiance: SpectralRadiancePacket}>} configuration - Enabled back layer and Sun spectrum.
 	 */
 	constructor(configuration) {
 		this._includeStars = configuration.includeStars;
+		this._filteredStars = configuration.filteredStars === true;
 		this._surfaceRadiance = configuration.surfaceRadiance;
 	}
 
@@ -79,8 +80,27 @@ export class CelestialScreenPaletteConsumerShaderContribution {
 			0
 		).r;
 		result.channels[channelIndex] = state.transmittance.channels[channelIndex] * boundaryRadiance;
-	}`
+	}
+	${this._filteredStars ? `stellarPresentation.radiance = result;
+	stellarPresentation.visualMagnitude = texelFetch(uStellarPalette, ivec2(int(paletteIndex), 15), 0).r;` : ''}`
 			: '';
+		const presentationType = this._filteredStars
+			? `struct StellarPresentationSample {
+	SpectralValue radiance;
+	float visualMagnitude;
+};`
+			: '';
+		const evaluationSignature = this._filteredStars
+			? 'SpectralValue evaluateScreenPaletteCelestialRadiance(ShaderState state, out StellarPresentationSample stellarPresentation)'
+			: 'SpectralValue evaluateScreenPaletteCelestialRadiance(ShaderState state)';
+		const presentationInitialization = this._filteredStars
+			? `stellarPresentation.radiance = zeroSpectral();
+	stellarPresentation.visualMagnitude = 0.0;`
+			: '';
+		const evaluationCall = this._filteredStars
+			? `StellarPresentationSample stellarPresentation;
+	SpectralValue celestialRadiance = evaluateScreenPaletteCelestialRadiance(state, stellarPresentation);`
+			: 'SpectralValue celestialRadiance = evaluateScreenPaletteCelestialRadiance(state);';
 
 		return ShaderContributions.createShaderContribution({
 			id: 'celestial-screen-palette-consumer',
@@ -115,6 +135,12 @@ export class CelestialScreenPaletteConsumerShaderContribution {
 			],
 			textures,
 			functions: [
+				...(this._filteredStars ? [ShaderContributions.createShaderSourceBlock(
+					'celestial-stellar-presentation-type',
+					'declareTypes',
+					10,
+					presentationType,
+				)] : []),
 				ShaderContributions.createShaderSourceBlock(
 					'celestial-screen-palette-consumer-helper',
 					'evaluateCelestialRadiance',
@@ -130,8 +156,9 @@ export class CelestialScreenPaletteConsumerShaderContribution {
 	return clamp(texture(uSunCoverageTile, tileCoordinates).r, 0.0, 1.0);
 }
 
-SpectralValue evaluateScreenPaletteCelestialRadiance(ShaderState state) {
+${evaluationSignature} {
 	SpectralValue result = zeroSpectral();
+	${presentationInitialization}
 	if (state.sceneHitMask >= 0.5) return result;
 	float sunCoverage = sampleSunCoverageTile(state);
 	if (sunCoverage > 0.0) {
@@ -152,7 +179,7 @@ SpectralValue evaluateScreenPaletteCelestialRadiance(ShaderState state) {
 					'celestial-screen-palette-consumer-main',
 					'evaluateCelestialRadiance',
 					0,
-					'SpectralValue celestialRadiance = evaluateScreenPaletteCelestialRadiance(state);',
+					evaluationCall,
 				),
 			],
 			bindingRequirements: bindings,
@@ -161,6 +188,7 @@ SpectralValue evaluateScreenPaletteCelestialRadiance(ShaderState state) {
 				sunClaim: 'any-positive-coverage-opaque',
 				sceneMask: 'whole-pixel-before-lookup',
 				transport: 'view-path-transmittance-once',
+				presentation: this._filteredStars ? 'source-linear-filtered' : 'physical-spectral',
 			},
 		});
 	}

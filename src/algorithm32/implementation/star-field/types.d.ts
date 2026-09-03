@@ -6,6 +6,22 @@ type StandardStellarMemberData = Readonly<{
 	readonly direction: UnitVector3;
 	/** Materialized native-15 apparent spectral irradiance density. */
 	readonly values: readonly number[];
+	readonly visualMagnitude?: number;
+}>;
+
+type Brightest2000StellarCatalogDefinition = Readonly<{
+	readonly catalog: StellarCatalogIdentity;
+	readonly photometryIdentity: string;
+	readonly members: readonly Readonly<{
+		readonly id: string;
+		readonly direction: UnitVector3;
+		readonly values: readonly number[];
+		readonly visualMagnitude: number;
+		readonly derivation: Readonly<Record<string, unknown>>;
+	}>[];
+	readonly memberTexels: Float32Array;
+	readonly spectraTexels: Float32Array;
+	readonly proxyMembers: readonly Readonly<{readonly id: string; readonly derivation: Readonly<Record<string, unknown>>}>[];
 }>;
 
 /** Source capability that publishes immutable input for the standard stellar generation shader. */
@@ -52,7 +68,17 @@ type StellarGenerationIdentityRequest = StellarGenerationStagesRequest &
 	Readonly<{
 		/** Renderer-neutral view whose declared identity must match all supplied facts. */
 		readonly view: CelestialRenderViewSnapshot;
+		/** Optional runtime presentation tuple paired with this generated palette. */
+		readonly presentation?: StellarPresentationCompatibility;
 	}>;
+
+type StellarPresentationCompatibility = Readonly<{
+	readonly colorIdentity: string;
+	readonly filterRegistryIdentity: string;
+	readonly scotopicWeightsIdentity: string | null;
+	readonly receiverLightIdentity: string;
+	readonly adaptationLuminanceCdM2: number;
+}>;
 
 /** Construction inputs for the stellar point and sparse-palette stage owner. */
 type StellarScreenPaletteGenerationStagesConfiguration = Readonly<{
@@ -92,6 +118,8 @@ type StellarScreenPaletteGenerationIdentityConfiguration = Readonly<{
 	readonly view: CelestialRenderViewSnapshot;
 	/** Already validated sparse capacity and numerical policy. */
 	readonly policy: StellarScreenPaletteGenerationPolicy;
+	/** Optional runtime presentation tuple paired with this generated palette. */
+	readonly presentation?: StellarPresentationCompatibility;
 }>;
 
 /** Exact published-field description owned by a stellar point-set plan. */
@@ -107,7 +135,7 @@ type StellarPointSetCacheDescriptor = Readonly<{
 	/** Spectral channel count stored per member. */
 	readonly channelCount: 15;
 	/** Number of individually retained stellar members. */
-	readonly memberCount: 500;
+	readonly memberCount: 500 | 2000;
 	/** Spectral irradiance-density quantity stored per member. */
 	readonly quantity: 'spectral-irradiance-density';
 	/** Spectral irradiance-density units stored per member. */
@@ -137,7 +165,18 @@ type StellarPointSetCachePlan = Readonly<{
 	/** Geometry-owned domain used for construction and lookup. */
 	readonly domain: CelestialContributionDomainDescription;
 	/** Canonical point-member count. */
-	readonly memberCount: 500;
+	readonly memberCount: 500 | 2000;
+	/** Selected tiled cache layout. */
+	readonly layout: Readonly<{
+		readonly memberCount: 500 | 2000;
+		readonly tileColumns: number;
+		readonly tileRows: number;
+		readonly directionCount: 11;
+		readonly receiverCount: 13;
+		readonly channelCount: 15;
+		readonly directionTableRowStart: number;
+		readonly storage: CacheFieldStorage;
+	}>;
 	/** Celestial field descriptor owned by this plan. */
 	readonly descriptor: StellarPointSetCacheDescriptor;
 	/** Executable packed-field copy graph. */
@@ -163,7 +202,7 @@ interface StellarPointSetCacheResource extends CelestialCacheResource {
 	/** Stellar source represented by this resource. */
 	readonly sourceId: string;
 	/** Number of individually retained stellar members. */
-	readonly memberCount: 500;
+	readonly memberCount: 500 | 2000;
 	/** Complete physical and layout descriptor. */
 	readonly descriptor: StellarPointSetCacheDescriptor;
 	/** Contribute tiled irradiance lookup. */

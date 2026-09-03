@@ -31,8 +31,8 @@ export class StellarScreenPaletteGenerationPolicy {
 	constructor(configuration) {
 		const {sourceLayout, layout, numericalPolicy} = configuration;
 		if (
-			sourceLayout.schema !== 'stellar-generation-source-table-v1' ||
-			sourceLayout.storageFormat !== 'R32F' ||
+			sourceLayout.schema !== 'stellar-generation-source-table-v2' ||
+			sourceLayout.storageFormat !== 'RGBA32F+R32F' ||
 			sourceLayout.memberOrder !== 'canonical-selection-order' ||
 			!Number.isSafeInteger(sourceLayout.memberCount) ||
 			sourceLayout.memberCount < 0 ||
@@ -58,6 +58,8 @@ export class StellarScreenPaletteGenerationPolicy {
 			layout.indexFormat !== 'R16UI' ||
 			layout.paletteFormat !== 'R32F' ||
 			layout.channelCount !== 15
+			|| layout.rowCount !== 16
+			|| layout.visualMagnitudeRow !== 15
 		) {
 			throw new RangeError('Stellar generation layout does not match the accepted sparse R16UI/R32F contract.');
 		}
@@ -101,6 +103,8 @@ export class StellarScreenPaletteGenerationPolicy {
 				indexFormat: 'R16UI',
 				paletteFormat: 'R32F',
 				channelCount: 15,
+				rowCount: 16,
+				visualMagnitudeRow: 15,
 			},
 			numericalPolicy: STELLAR_SCREEN_PALETTE_NUMERICAL_POLICY,
 		});

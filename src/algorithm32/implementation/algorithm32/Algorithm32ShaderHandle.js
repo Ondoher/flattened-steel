@@ -1,3 +1,22 @@
+/** Runtime-local identities distinguish rebuilt cache objects without exposing backend resources. */
+const RECEIVER_LIGHT_CACHE_IDENTITIES = new WeakMap();
+let nextReceiverLightCacheIdentity = 1;
+
+/**
+ * Return one stable identity for the lifetime of an installed cache object.
+ * @param {GpuScatteringCache} cache - Installed cache object.
+ * @returns {string} Runtime-local cache identity.
+ */
+function receiverLightCacheIdentity(cache) {
+	let identity = RECEIVER_LIGHT_CACHE_IDENTITIES.get(cache);
+	if (identity === undefined) {
+		identity = `runtime-cache-${nextReceiverLightCacheIdentity}`;
+		nextReceiverLightCacheIdentity += 1;
+		RECEIVER_LIGHT_CACHE_IDENTITIES.set(cache, identity);
+	}
+	return identity;
+}
+
 /**
  * Control one installed Algorithm32 runtime shader integration.
  */
@@ -164,7 +183,7 @@ export class Algorithm32ShaderHandle {
 		this._renderer = renderer;
 	}
 
-	/** Measure the active common-path environment and publish its Ferwerda proxy atomically. */
+	/** Measure the active common-path environment and publish complete receiver light atomically. */
 	async measureReceiverEnvironmentLight({THREE, renderer, backend, signal, diagnostics = false}) {
 		this._assertUsable();
 		const buildResult = this._buildResult;
@@ -187,7 +206,8 @@ export class Algorithm32ShaderHandle {
 		let gpuRadiancesPromise = null;
 		const sampleGpuRadiances = () => (gpuRadiancesPromise ??= sampler.sample({signal}));
 		const measurement = await this._facade._publishReceiverEnvironmentLight({
-			identity: `receiver-environment-light:model-${buildResult.modelVersion}:${buildResult.scatteringCacheControllerIdentity ?? 'active-cache'}`,
+			identity: `receiver-environment-light:model-${buildResult.modelVersion}:profile-${this._facade._model.profile.contentHash}:${receiverLightCacheIdentity(scatteringCache)}`,
+			signal,
 			sampleIncomingRadiance: sampleGpuRadiances,
 			reduceIncomingRadiance: (radiances) => reducer.reduce({radiances, signal}),
 		});
@@ -244,8 +264,13 @@ export class Algorithm32ShaderHandle {
 				irradianceWeightSteradians: RECEIVER_ENVIRONMENT_LIGHT_QUADRATURE[index].irradianceWeightSteradians,
 			})),
 		});
-		const cpuBrightnessProxy =
-			this._facade._localLightLevelCalculator.measureDirectIrradiance(cpuIrradiance).adaptingLuminanceProxy;
+		const cpuReceiverLight = this._facade._localLightLevelCalculator.combineReceiverLight({
+			identity: `${measurement.identity}:cpu-diagnostic`,
+			directNormal: measurement.directNormal,
+			directHorizontal: measurement.directHorizontal,
+			diffuseHorizontal: cpuIrradiance,
+		});
+		const cpuBrightnessProxy = cpuReceiverLight.totalHorizontalLuminanceProxy;
 		const reference = new Reference({model: this._facade._model, scatteringCache: cpuCache});
 		const ferwerda = new FerwerdaColorDisplayModel({
 			adaptation: {
@@ -304,10 +329,12 @@ export class Algorithm32ShaderHandle {
 			diagnostics: {
 				gpuRadiances: gpuRadiances.map((packet) => Array.from(packet.values)),
 				cpuRadiances: cpuRadiances.map((packet) => Array.from(packet.values)),
-				gpuIrradiance: Array.from(measurement.spectralIrradiance.values),
-				cpuIrradiance: Array.from(cpuIrradiance.values),
-				gpuBrightnessProxy: measurement.brightnessProxy.value,
-				cpuBrightnessProxy: cpuBrightnessProxy.value,
+				gpuDiffuseHorizontal: Array.from(measurement.diffuseHorizontal.values),
+				cpuDiffuseHorizontal: Array.from(cpuIrradiance.values),
+				gpuTotalHorizontal: Array.from(measurement.totalHorizontal.values),
+				cpuTotalHorizontal: Array.from(cpuReceiverLight.totalHorizontal.values),
+				gpuTotalHorizontalIlluminanceLux: measurement.photopicTotalHorizontalIlluminance.value,
+				cpuTotalHorizontalIlluminanceLux: cpuReceiverLight.photopicTotalHorizontalIlluminance.value,
 				stageRays,
 			},
 		};

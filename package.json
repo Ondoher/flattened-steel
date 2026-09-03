@@ -41,6 +41,10 @@
 	"scripts": {
 		"test": "start polylith test -a -w && start karma start --browsers ChromeHeadless karma.conf.cjs",
 		"build:algorithm32:distant-sun-cache": "node scripts/algorithm32/solar-zenith-cache/build-distant-sun-scene-cache.js",
+		"materialize:algorithm32:brightest-2000-stars": "node scripts/algorithm32/materialize-brightest-2000-stellar-package.js",
+		"verify:algorithm32:brightest-2000-stars": "node scripts/algorithm32/verify-brightest-2000-stellar-package.js",
+		"materialize:algorithm32:human-vision-filters": "node scripts/algorithm32/materialize-human-vision-filter-package.js",
+		"verify:algorithm32:human-vision-filters": "node scripts/algorithm32/verify-human-vision-filter-package.js",
 		"verify:algorithm32:distant-sun-cache:pa3": "node scripts/algorithm32/solar-zenith-cache/verify-pa3-resident-cache-browser.js",
 		"verify:algorithm32:distant-sun-cache:pa4": "node scripts/algorithm32/solar-zenith-cache/verify-pa4-live-transport-browser.js",
 		"verify:algorithm32:distant-sun-cache:pa5": "node scripts/algorithm32/solar-zenith-cache/verify-pa5-lifecycle-browser.js",

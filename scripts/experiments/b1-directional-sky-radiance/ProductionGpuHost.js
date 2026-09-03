@@ -53,16 +53,24 @@ export class ProductionGpuHost {
 <script type="importmap">{"imports":{"three":"/node_modules/three/build/three.module.js"}}</script>
 </head><body><script type="module">
 import {disposeGpuSession, generateGpuCondition, initializeGpuSession} from '/scripts/experiments/b1-directional-sky-radiance/production-gpu-browser.js';
-import {disposeJ2AngularGpuSession, generateJ2AngularCondition, generateJ2AngularScoreCondition, initializeJ2AngularGpuSession} from '/scripts/experiments/b1-directional-sky-radiance/j2-angular-gpu-browser.js';
 globalThis.algorithm32B1DisposeGpuSession = disposeGpuSession;
 globalThis.algorithm32B1GenerateGpuCondition = generateGpuCondition;
 globalThis.algorithm32B1InitializeGpuSession = initializeGpuSession;
-globalThis.algorithm32B1DisposeJ2AngularGpuSession = disposeJ2AngularGpuSession;
-globalThis.algorithm32B1GenerateJ2AngularCondition = generateJ2AngularCondition;
-globalThis.algorithm32B1GenerateJ2AngularScoreCondition = generateJ2AngularScoreCondition;
-globalThis.algorithm32B1InitializeJ2AngularGpuSession = initializeJ2AngularGpuSession;
 globalThis.algorithm32B1GpuReady = true;
 </script></body></html>`;
+	}
+
+	/** Load the legacy J2 diagnostic only when that separate lane requests it. */
+	async _loadJ2AngularModule() {
+		if (!this._page) throw new Error('ProductionGpuHost must be opened before J2 module loading.');
+		await this._page.evaluate(async () => {
+			if (globalThis.algorithm32B1InitializeJ2AngularGpuSession) return;
+			const module = await import('/scripts/experiments/b1-directional-sky-radiance/j2-angular-gpu-browser.js');
+			globalThis.algorithm32B1DisposeJ2AngularGpuSession = module.disposeJ2AngularGpuSession;
+			globalThis.algorithm32B1GenerateJ2AngularCondition = module.generateJ2AngularCondition;
+			globalThis.algorithm32B1GenerateJ2AngularScoreCondition = module.generateJ2AngularScoreCondition;
+			globalThis.algorithm32B1InitializeJ2AngularGpuSession = module.initializeJ2AngularGpuSession;
+		});
 	}
 
 	/**
@@ -164,6 +172,7 @@ globalThis.algorithm32B1GpuReady = true;
 	 */
 	async generateJ2AngularCondition(request) {
 		if (!this._page) throw new Error('ProductionGpuHost must be opened before J2 angular generation.');
+		await this._loadJ2AngularModule();
 		await this._page.evaluate(() => globalThis.algorithm32B1InitializeJ2AngularGpuSession());
 		return this._page.evaluate(
 			async (conditionRequest) => globalThis.algorithm32B1GenerateJ2AngularCondition(conditionRequest),
@@ -179,6 +188,7 @@ globalThis.algorithm32B1GpuReady = true;
 	 */
 	async generateJ2AngularScoreCondition(request) {
 		if (!this._page) throw new Error('ProductionGpuHost must be opened before J2 angular score generation.');
+		await this._loadJ2AngularModule();
 		await this._page.evaluate(() => globalThis.algorithm32B1InitializeJ2AngularGpuSession());
 		const startedAt = Date.now();
 		const heartbeat = setInterval(() => {
@@ -218,7 +228,7 @@ globalThis.algorithm32B1GpuReady = true;
 	async close() {
 		if (this._page) {
 			await this._page.evaluate(() => globalThis.algorithm32B1DisposeGpuSession());
-			await this._page.evaluate(() => globalThis.algorithm32B1DisposeJ2AngularGpuSession());
+			await this._page.evaluate(() => globalThis.algorithm32B1DisposeJ2AngularGpuSession?.());
 		}
 		const browser = this._browser;
 		const server = this._server;

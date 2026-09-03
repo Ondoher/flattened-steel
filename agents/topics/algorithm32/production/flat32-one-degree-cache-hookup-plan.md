@@ -248,6 +248,8 @@ The following remain deliberately outside this plan and do not block closure:
 Any future cache change must open a new focused plan or explicitly reopen this
 one with new evidence. Color and star work may consume this cache baseline but
 must not retune its physical spectral data.
+The [production closeout plan](color-star-cache-closeout-plan.md) inventories
+the current owner-disposition candidates without reopening H1-H7.
 
 ## Stop Conditions
 

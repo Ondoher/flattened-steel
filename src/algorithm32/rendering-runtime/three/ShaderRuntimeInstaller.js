@@ -495,6 +495,14 @@ export class ShaderRuntimeInstaller {
 			return null;
 		}
 
+		const color = request.config?.config?.color;
+		const registry = request.config?.config?.presentationFilterRegistry;
+		const hook = registry?.enabled === true ? registry.createStellarSourceLinearShaderHook() : null;
+		const hasPresentationCompatibility =
+			typeof color?.id === 'string' &&
+			request.bindingValues !== undefined &&
+			Object.hasOwn(request.bindingValues, 'presentation.stellar.receiverLightIdentity') &&
+			Object.hasOwn(request.bindingValues, 'presentation.stellar.adaptationLuminanceCdM2');
 		return new StellarScreenPaletteGenerationPass({
 			THREE: /** @type {typeof import('three')} */ (request.setup.THREE),
 			source: /** @type {StellarScreenPaletteSource} */ (source),
@@ -503,6 +511,17 @@ export class ShaderRuntimeInstaller {
 			camera: /** @type {ShaderRuntimeCelestialViewCamera} */ (request.setup.camera),
 			viewportSize: request.setup.viewportSize,
 			logger: request.setup.logger,
+			...(hasPresentationCompatibility ? {
+				getPresentationCompatibility: () => ({
+					colorIdentity: color.id,
+					filterRegistryIdentity: registry?.identity ?? 'view-presentation-filter-registry-v1:absent',
+					scotopicWeightsIdentity: hook?.scotopicWeightsIdentity ?? null,
+					receiverLightIdentity: String(request.bindingValues['presentation.stellar.receiverLightIdentity']),
+					adaptationLuminanceCdM2: Number(
+						request.bindingValues['presentation.stellar.adaptationLuminanceCdM2'],
+					),
+				}),
+			} : {}),
 		});
 	}
 

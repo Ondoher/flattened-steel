@@ -27,6 +27,13 @@ export class BrunetonColorDisplayModel {
 			configuration.displayConstants === undefined ? FIGURE1_DISPLAY_CONSTANTS : configuration.displayConstants,
 		);
 		this._displayLinearSrgbByChannel = this._buildDisplayLinearSrgbByChannel(NATIVE_15_SPECTRAL_BASIS);
+		this._presentationFilterRegistry = configuration.presentationFilterRegistry ?? null;
+		if (
+			this._presentationFilterRegistry !== null &&
+			typeof this._presentationFilterRegistry?.createStellarSourceLinearShaderHook !== 'function'
+		) {
+			throw new TypeError('Bruneton presentation filters require a registered source-linear owner.');
+		}
 	}
 
 	/**
@@ -44,6 +51,8 @@ export class BrunetonColorDisplayModel {
 	 *
 	 */
 	_displayLinearSrgbByChannel;
+	/** @type {ViewPresentationFilterRegistry | null} */
+	_presentationFilterRegistry;
 
 	/**
 	 * Value that identifies this configured color conversion instance.
@@ -306,8 +315,27 @@ const float DISPLAY_LINEAR_SRGB_B_BY_CHANNEL[${channelCount}] = float[${channelC
 	 * @returns {string} - Return GLSL source.
 	 */
 	_displayComposeBlock(basis, celestialSourcesEnabled) {
-		const radianceParameter = celestialSourcesEnabled ? ', SpectralValue preDisplayRadiance' : '';
+		const filteredStars = celestialSourcesEnabled && this._presentationFilterRegistry?.enabled === true;
+		const radianceParameter = celestialSourcesEnabled
+			? `, SpectralValue preDisplayRadiance${filteredStars ? ', StellarPresentationSample stellarPresentation' : ''}`
+			: '';
 		const spectralRadianceExpression = celestialSourcesEnabled ? 'preDisplayRadiance' : 'state.pathRadiance';
+		const filteredPathProjection = filteredStars
+			? `SpectralValue nonStellarRadiance = ${spectralRadianceExpression};
+	float transportedStellarNative15[15];
+	for (int channelIndex = 0; channelIndex < SPECTRAL_CHANNEL_COUNT; channelIndex += 1) {
+		nonStellarRadiance.channels[channelIndex] -= stellarPresentation.radiance.channels[channelIndex];
+		transportedStellarNative15[channelIndex] = stellarPresentation.radiance.channels[channelIndex];
+	}
+	vec3 physicalStellarLinearSrgb = spectralRadianceToLinearSrgb(stellarPresentation.radiance);
+	vec3 filteredStellarLinearSrgb = applyStellarSourceLinearPresentationFilters(
+		physicalStellarLinearSrgb,
+		transportedStellarNative15,
+		stellarPresentation.visualMagnitude,
+		uStellarAdaptationLuminanceCdM2
+	);
+	vec3 pathLinearSrgb = spectralRadianceToLinearSrgb(nonStellarRadiance) + filteredStellarLinearSrgb;`
+			: `vec3 pathLinearSrgb = spectralRadianceToLinearSrgb(${spectralRadianceExpression});`;
 		const transmittanceBlock =
 			basis.contentHash === NATIVE_15_SPECTRAL_BASIS.contentHash
 				? `vec3 spectralTransmittanceToRgbBands(SpectralValue transmittance) {
@@ -368,7 +396,7 @@ bool shouldApplySceneTransmittance(ShaderState state) {
 }
 
 vec3 composeSceneLinearSrgb(ShaderState state${radianceParameter}) {
-	vec3 pathLinearSrgb = spectralRadianceToLinearSrgb(${spectralRadianceExpression});
+	${filteredPathProjection}
 	vec3 sceneDisplayRgb = rendererLinearSrgbToDisplayRgb(state.sceneDisplayRgb);
 	vec3 sceneLinearSrgb = displayRgbToLinearSrgb(sceneDisplayRgb);
 	vec3 transmittanceRgb = spectralTransmittanceToRgbBands(state.transmittance);
@@ -571,7 +599,10 @@ vec3 composeSceneLinearSrgb(ShaderState state${radianceParameter}) {
 	createShaderContribution(request) {
 		const basis = request.model.profile.spectral.basis;
 		const celestialSourcesEnabled = request.model.celestialSources !== null;
-		const composeArguments = celestialSourcesEnabled ? 'state, preDisplayRadiance' : 'state';
+		const filteredStars = celestialSourcesEnabled && this._presentationFilterRegistry?.enabled === true;
+		const composeArguments = celestialSourcesEnabled
+			? `state, preDisplayRadiance${filteredStars ? ', stellarPresentation' : ''}`
+			: 'state';
 		const weights =
 			basis.contentHash === NATIVE_15_SPECTRAL_BASIS.contentHash
 				? this._displayLinearSrgbByChannel
@@ -583,6 +614,7 @@ vec3 composeSceneLinearSrgb(ShaderState state${radianceParameter}) {
 			requires: [
 				'runtime.initialState',
 				celestialSourcesEnabled ? 'composition.composeSpectralRadiance' : 'transport.evaluatePathRadiance',
+				...(filteredStars ? ['presentation.applyStellarSourceLinear'] : []),
 			],
 			textures: [],
 			uniforms: [],

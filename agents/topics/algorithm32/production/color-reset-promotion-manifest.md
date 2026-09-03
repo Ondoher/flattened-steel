@@ -6,14 +6,14 @@ This manifest is the production inventory and evidence-identity owner required
 by P0 of the [Color Reset implementation plan](color-reset-implementation-plan.md).
 The [production design](color-reset-design.md) remains the owner of equations,
 parameters, behavior, and claim boundaries. The
-[source-gap register](color-reset-source-gaps.md) remains the owner of missing
-third-party and official-experiment authority.
+[project-wide research register](../../../../references/followup.md#color-reset-research-register)
+owns missing third-party and official-experiment authority.
 
 ## Promotion Boundary
 
 - Accepted contained results provisionally authorize deterministic production
   reproduction and engineering verification through P8.
-- Open source-gap rows block final scientific or numerical-authority claims,
+- Open project-wide research rows block final scientific or numerical-authority claims,
   release qualification, and P9 default selection for affected capabilities.
 - Contained implementation code is an adaptation reference and never a
   production runtime dependency.
@@ -103,7 +103,7 @@ selection SHA-256
 and photometry identity
 `a8c450336b45106ccbc33f40630555c23a4077748751d1488ee38cec4bf19b42`.
 
-## Fixed-500 Assumptions Reserved For P5
+## Fixed-500 Assumptions Closed By P5
 
 P0 found explicit production assumptions in:
 
@@ -118,9 +118,12 @@ P0 found explicit production assumptions in:
 - their focused Node and browser fixtures, including the exact 501-entry
   palette assertion.
 
-The general palette policy, generation stages, and Three generation pass
-already derive capacity and iteration from `memberCount`; P5 must preserve that
-generic behavior while replacing the fixed source contracts.
+P5 generalized every listed contract to the explicit 500/2,000 selections.
+The general palette policy, generation stages, and Three generation pass retain
+capacity and iteration derived from `memberCount`; the selected 2,000-member
+path uses a 2,001-entry palette and the CR6G split source textures. Exact P5
+results and the local-only redistribution boundary are owned by the
+[implementation plan](color-reset-implementation-plan.md#p5---replace-the-500-star-roster-with-2000-stars).
 
 ## Qualification Matrix
 

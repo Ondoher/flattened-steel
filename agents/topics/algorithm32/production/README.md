@@ -1,6 +1,7 @@
 # Algorithm32 Production
 
-Status: one-degree Flat32 hookup complete; unrelated production work remains active.
+Status: production implementation largely complete; coordinated Color,
+stellar-rendering, ambient-light, and distant-Sun closeout is active.
 
 The completed integration is owned by the
 [Flat32 one-degree scene-cache hookup](flat32-one-degree-cache-hookup-plan.md)
@@ -157,41 +158,152 @@ their stated claim boundaries; Stage 9.6 is implemented through Stage 9.6.6
 within its omitted-ground acceptance and deferred reflective-validation
 boundary.
 
-Flat32's live Color selection is now
-`BrunetonSourceLuminanceLiftColorDisplayModel`, qualified by contained runs
-`000466` and `000467`. It preserves the complete Bruneton composition above,
-then changes only photopic luminance through one common capped RGB gain. Its
-condition scalar is geometry-supported, atmosphere-transmitted direct-source
-`E_v / pi`; it is not a diffuse environment, framebuffer, camera, time-of-day,
-or pixel-class measurement. Production-only PA4 run
-`pa4-live-transport-20260829-14` reproduces the selected nautical appearance
-with the exact point-local cache and spherical ground endpoint.
+The former source-luminance-lift production path and route have been removed.
+Its contained runs `000466` and `000467` remain immutable historical evidence.
+Flat32 now selects the fixed Color Reset model by default and retains Basic
+Bruneton as the exact physical/B1 control.
 
 The contained correction experiment is complete through accepted CR8 run
 `000065-color-reset-qualification`. Production promotion is now owned by the
 [Color Reset design](color-reset-design.md) and
 [implementation plan](color-reset-implementation-plan.md). Missing external
 citations and official-experiment promotions are tracked by the
-[source-gap register](color-reset-source-gaps.md); the closed
+[project-wide research register](../../../../references/followup.md#color-reset-research-register); the closed
 [experiment plan](../../extraterrestrial/color-reset-experiment-plan.md)
-remains detailed evidence history. P0 and P1 are complete. The authenticated
+remains detailed evidence history. P0 through P7 are complete. The authenticated
 [promotion manifest](color-reset-promotion-manifest.md) owns the evidence,
 production-owner, fixed-500, qualification, and redistribution inventory.
 Production now has exact independent Color, celestial-enable, stellar-catalog,
 and ordered-filter selections; Basic Bruneton no longer disables celestial
 sources, and unsupported or not-yet-implemented selections fail closed. The
-live pre-P9 default remains `BrunetonSourceLuminanceLiftColorDisplayModel`;
-receiver-light implementation begins at P2.
+receiver-light owner now publishes separate Native15 direct-normal, direct-
+horizontal, diffuse-horizontal, and total-horizontal packets plus their
+photopic lux projections. It preserves the existing direct-normal algorithm,
+adds cache-derived diffuse light atomically before Flat32 preflight, keys live
+state to model/cache/basis/quadrature inputs, and preserves the last complete
+state on failure, cancellation, or supersession. Production now also owns the
+fixed `color-reset-slope-078-p9` response, binds it directly to the matching
+facade-owned total-horizontal lux, and reproduces the accepted response values
+and slopes while preserving the inherited Bruneton encoding. The ordinary
+application now selects that Color Reset model by default. Basic Bruneton
+remains the independent exact physical/B1 control.
+The production neutral
+Lambertian owner now derives direct, diffuse, and exactly additive combined
+Native15 scene radiance without Color or photopic inputs. Flat32 feeds the P2
+direct-normal and diffuse-horizontal spectra into its existing directional
+lights and a black-ground upper-hemisphere diffuse light before preflight while
+retaining the single captured-scene Color boundary. The lighting adapter now
+maps physical E8-projected incident channels through the unchanged Figure-1
+exponential and inverse sRGB before assigning Three's unitless renderer-linear
+light values. This corrects the former magnitude/representation mismatch
+without changing Bruneton or Color Reset source. The application now has a
+reversible final-composition bypass for inspecting those lights without the
+atmosphere shader; the [ambient-light design](ambient-light-design.md) owns this
+production-only work. Matched ambient-light runs `000016`/`000017` at sunset
+plus one hour and `000018`/`000019` at sunset show no white-geometry regression
+and zero WebGL errors. The corrected sunset scene retains visible material
+color; the plus-one-hour scene is very dark and still awaits owner appearance
+review before its calibration is accepted. The focused Flat32 lane passes
+`24/24`, the exact-cache lane passes `25/25`, and Algorithm32 remains
+`610/610`. P5 now provides the exact explicitly selected brightest-2,000
+catalog through a production-owned local package. P6 owns the ordered,
+versioned presentation-filter registry and selected source-linear stellar
+algorithms. P7 installs that hook in the live stellar composition path. Empty,
+disabled, and nonstellar paths remain exact identity; selected parameters and
+mesopic-before-chroma order fail closed. Mesopic execution authenticates its
+local-only CIE-derived Native15 weights. The stellar generation identity now
+pairs catalog/policy and exact view with Color, filter/weight configuration,
+receiver-light generation, and adaptation luminance. Unsupported Flat/local
+and Ferwerda/filter combinations reject rather than silently rendering the
+physical path.
 
-The owner has selected the complete brightest-2,000 stellar roster for the
-production integration target. Current production still contains the reviewed
-brightest-500 roster. Promotion must reuse the accepted CR6B roster, CR6F
-Native15 packets, and CR6G bounded GPU package capability without importing a
-contained experiment at runtime. The accepted presentation remains one pixel
+Flat32 uses the promoted Color when `colorModel` is omitted and exposes
+`?colorModel=basic-bruneton` as the explicit physical/B1 control. The
+superseded source-luminance-lift query now fails closed.
+The production one-pixel policy now identifies both the historical q1 base
+scale `60,999.839486002405` and the accepted CR6C multiplier `24`, and uploads
+the resulting effective scale `1,463,996.1476640578`. This corrects the first
+P7 promotion pass, which had described q24 but still executed the q1 constant.
+`gl_PointSize=1.0`, source irradiance, atmospheric transport, and catalog
+photometry are unchanged.
+
+The owner has selected the complete brightest-2,000 stellar roster as the
+ordinary production catalog. Brightest-500 remains an explicit control. The
+selected catalog is materialized from accepted CR6B, CR6F, and CR6G evidence into an
+ignored local package with no contained runtime import. Runtime generation uses
+the accepted 152,000-byte split source representation and a 2,001-entry sparse
+palette. The accepted presentation remains one pixel
 at `q=24`; the rejected CR6H appearance result does not authorize a brightness
 increase solely to make the additional 1,500 members robust. Production
 qualification must therefore treat catalog completeness and apparent stellar
 brightness as separate claims.
+
+P5 verification passes Algorithm32 Node `605/605`, Algorithm32 WebGL `25/25`,
+Flat32 basic `22/22`, Flat32 exact-cache `23/23`, both type checks, and the
+Flat32 build. The exact package proof confirms endpoints HR 2491/7474, the
+unchanged first-500 prefix through HR 7590, all 30,000 finite nonnegative
+Native15 values, and the `1,993/7` retained/proxy partition. External-data
+redistribution remains blocked by the
+[project-wide research register](../../../../references/followup.md#missing-third-party-sources-or-canonical-registrations);
+the local package
+is neither tracked nor released.
+
+Corrected P7 verification passes Algorithm32 Node `614/614`, Algorithm32 WebGL
+`26/26`, both type checks, the Flat32 build, the Chrome Headless 153 Flat32
+basic lane `23/23` with one full-cache case skipped, and the configured exact-
+cache lane `24/24`. The enabled mesopic-then-chroma hook matches its CPU
+equation on WebGL2; one-pixel invariance, collision conservation, resize/view
+replacement, context restoration, and the 108-degree star-independence boundary
+pass. Local production preflight captures `000012` and `000013` reproduce the
+bright sunset response and visible one-pixel onset at sunset plus one hour in
+the experiment's 640-by-400, 78-degree, azimuth/elevation-matched candidate
+view. Over the shared 640-by-220 sky region, sunset RGB-byte RMSE is
+`4.4705308752784809` with maximum absolute delta `13`; sunset plus one hour is
+`1.23266099354202` with maximum absolute delta `5`. Runs `000008` and `000009` exercise the 2,000-star
+physical and optional human-vision selections. These are corrective preflight
+evidence that preceded the now-complete P8 cadence; it does not replace the
+owner appearance gate.
+
+Owner-directed default activation is now verified by immutable captures
+`000015-default-sunset-q24-2000` and
+`000016-default-sunset-plus-1h-q24-2000`. Both omit `colorModel` and
+`stellarCatalog`; their live shell facts report `color-reset-slope-078-p9` and
+`brightest-2000`. The sunset frame has the accepted bright Color Reset
+appearance, and the plus-one-hour frame has visible one-pixel stars. The basic
+Flat32 lane passes `23/23`, and the exact-cache application lane passes
+`24/24` with the new defaults, including resize, mode replacement, context
+restoration, and disposal. Relative to the prior candidate-camera production
+captures `000012` and `000013`, default activation changes sunset by only
+`0.00322748612183951` RGB-byte RMSE (maximum channel delta `1`) and plus one
+hour by `0.0656101173600536` RMSE (maximum delta `10`); only 8 and 280 of
+768,000 RGB channels differ, respectively. The latter difference is consistent
+with activating the additional catalog members while leaving the selected
+atmosphere and q24 algorithms unchanged. This activates the application
+behavior but did not by itself close the later P8 cadence or P9 conditions.
+
+The ordinary stellar presentation now enables the ordered mesopic-luminance
+then low-light-chroma chain. `?stellarPresentation=physical` remains the exact
+unfiltered control, with `chroma`, `mesopic`, and `human` retained as explicit
+selections. Flat/local has no stellar source, so the application removes these
+stellar-only stages at that mode boundary and restores the selected chain on
+return to spherical/distant. Default-route run
+`000017-default-sunset-plus-1h-q24-2000-human` publishes both enabled filter
+ids and retains visible one-pixel stars. Compared with the otherwise identical
+physical run `000016`, only 351 of 768,000 RGB channels change (RMSE
+`0.110709125263759`, maximum channel delta `42`), localizing the presentation
+change to stellar pixels rather than the accepted atmosphere curve.
+
+The [production qualification record](color-reset-production-qualification.md)
+now owns the complete nine-condition default-human cadence, exact 108-degree
+transition, clean 462-file runtime-dependency inventory, passing `610/610`
+Node, `26/26` WebGL, and `24/24` exact-cache Flat32 lanes, and the RTX 2060
+1080p result of 22.14 ms mean and 22.43 ms p95 atmosphere GPU time. The
+superseded source-luminance-lift source and query route are removed. P8 remains
+open only for a fresh GPU B1 regeneration through a production-owned offline
+direct-40 asset adapter and owner appearance acceptance. P9 remains blocked by
+the deferred source/licensing rows and those two P8 gates; its implementation,
+configuration, documentation, deployment inventory, and release checklist
+work are complete.
 
 The two Stage 10 numerical authorities are
 `scripts/algorithm32-star/src/output/spectral-to-rgb.js` at SHA-256
@@ -474,6 +586,12 @@ profile.
 
 ## Current Authorities
 
+- [Production closeout plan](color-star-cache-closeout-plan.md) — current
+  release-critical items, owner-disposition candidates, source links, and
+  deferral destinations across Color, stars, lighting, and the distant cache.
+- [Ambient-light design](ambient-light-design.md) and
+  [plan](ambient-light-plan.md) — current Three scene-light approximation,
+  diagnostic toggle, bridge candidate, evidence, and open appearance decision.
 - [Implementation plan](production-implementation-plan.md) — stages, gates,
   and remaining work.
 - [Current dataflow](current-dataflow.md) — implemented boundaries and known

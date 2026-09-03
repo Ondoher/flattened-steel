@@ -34,6 +34,7 @@ interface Color {
 	 */
 	createShaderContribution?(request: ShaderContributionRequest): ShaderContribution | readonly ShaderContribution[];
 }
+
 /** Inputs needed to convert Algorithm32 spectral output to display-facing color data. */
 type ColorConversionRequest = {
 	/** Value that stores completed spectral radiance aligned to the active spectral basis. */
@@ -44,6 +45,9 @@ type ColorConversionRequest = {
 
 	/** Optional atmosphere-transmitted direct-source luminance used by condition-aware Color models. */
 	brightnessProxy?: UnitValue<'cd m^-2'>;
+
+	/** Receiver total-horizontal photopic illuminance used by Color Reset models. */
+	totalHorizontalIlluminance?: UnitValue<'lux'>;
 };
 
 /**
@@ -81,6 +85,9 @@ type SceneDisplayCompositionRequest = {
 
 	/** Optional atmosphere-transmitted direct-source luminance used by condition-aware Color models. */
 	brightnessProxy?: UnitValue<'cd m^-2'>;
+
+	/** Receiver total-horizontal photopic illuminance used by Color Reset models. */
+	totalHorizontalIlluminance?: UnitValue<'lux'>;
 };
 /** Display-facing color values produced from Algorithm32 spectral output. */
 type ColorSample = {

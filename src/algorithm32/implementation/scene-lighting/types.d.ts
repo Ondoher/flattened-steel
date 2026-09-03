@@ -52,6 +52,27 @@ type LocalDirectLightLevel = Readonly<{
 	readonly adaptingLuminanceProxy: UnitValue<'cd m^-2'>;
 }>;
 
+/** Geometry-supported configured-source irradiance at one receiver. */
+type ReceiverDirectLightMeasurement = Readonly<{
+	/** Atmosphere-transmitted direct irradiance on a source-normal surface. */
+	readonly directNormal: SpectralIrradiancePacket;
+	/** Direct irradiance projected onto the receiver-local horizontal surface. */
+	readonly directHorizontal: SpectralIrradiancePacket;
+	/** Clamped receiver-up dot source-center direction used for projection. */
+	readonly sourceCenterCosine: number;
+	readonly photopicDirectNormalIlluminance: UnitValue<'lux'>;
+	readonly photopicDirectHorizontalIlluminance: UnitValue<'lux'>;
+}>;
+
+/** Complete component inputs for one receiver-light publication. */
+type ReceiverLightCombinationRequest = Readonly<{
+	readonly identity: string;
+	readonly directNormal: SpectralIrradiancePacket;
+	readonly directHorizontal: SpectralIrradiancePacket;
+	readonly diffuseHorizontal: SpectralIrradiancePacket;
+	readonly stellarAdaptationLuminance?: UnitValue<'cd m^-2'>;
+}>;
+
 /** One fixed-direction receiver-local incoming-radiance quadrature sample. */
 type ReceiverEnvironmentLightRadianceSample = Readonly<{
 	/** Incoming native-basis spectral radiance at the receiver. */
@@ -74,27 +95,66 @@ type ReceiverEnvironmentLightDirectionSample = Readonly<{
 /** One complete published receiver-local environmental-light measurement. */
 type ReceiverEnvironmentLightMeasurement = Readonly<{
 	readonly identity: string;
-	readonly spectralIrradiance: SpectralIrradiancePacket;
-	readonly brightnessProxy: UnitValue<'cd m^-2'>;
+	readonly directNormal: SpectralIrradiancePacket;
+	readonly directHorizontal: SpectralIrradiancePacket;
+	readonly diffuseHorizontal: SpectralIrradiancePacket;
+	readonly totalHorizontal: SpectralIrradiancePacket;
+	readonly photopicDirectNormalIlluminance: UnitValue<'lux'>;
+	readonly photopicDirectHorizontalIlluminance: UnitValue<'lux'>;
+	readonly photopicDiffuseHorizontalIlluminance: UnitValue<'lux'>;
+	readonly photopicTotalHorizontalIlluminance: UnitValue<'lux'>;
+	/** E_v / pi retained only for the pre-P3 Color implementation. */
+	readonly totalHorizontalLuminanceProxy: UnitValue<'cd m^-2'>;
+	/** Fixed-hemisphere approximation to median physical unmasked-sky luminance. */
+	readonly stellarAdaptationLuminance: UnitValue<'cd m^-2'>;
 	readonly diagnostics?: Readonly<{
 		readonly gpuRadiances: readonly (readonly number[])[];
 		readonly cpuRadiances: readonly (readonly number[])[];
-		readonly gpuIrradiance: readonly number[];
-		readonly cpuIrradiance: readonly number[];
-		readonly gpuBrightnessProxy: number;
-		readonly cpuBrightnessProxy: number;
+		readonly gpuDiffuseHorizontal: readonly number[];
+		readonly cpuDiffuseHorizontal: readonly number[];
+		readonly gpuTotalHorizontal: readonly number[];
+		readonly cpuTotalHorizontal: readonly number[];
+		readonly gpuTotalHorizontalIlluminanceLux: number;
+		readonly cpuTotalHorizontalIlluminanceLux: number;
 	}>;
 }>;
 
 /** Batch transport callback used by the renderer-specific reduction pass. */
 type ReceiverEnvironmentLightBuildRequest = Readonly<{
 	readonly identity: string;
+	readonly signal?: AbortSignal;
 	readonly sampleIncomingRadiance: (
 		directions: readonly ReceiverEnvironmentLightDirectionSample[],
 	) => Promise<readonly SpectralRadiancePacket[]> | readonly SpectralRadiancePacket[];
 	readonly reduceIncomingRadiance?: (
 		radiances: readonly SpectralRadiancePacket[],
 	) => Promise<SpectralIrradiancePacket> | SpectralIrradiancePacket;
+}>;
+
+/** Inputs to the production neutral Lambertian spectral response. */
+type NeutralLambertianSceneLightingRequest = Readonly<{
+	readonly identity: string;
+	/** Source-normal incident spectral irradiance. */
+	readonly directNormal: SpectralIrradiancePacket;
+	/** Diffuse irradiance already integrated for surfaceNormal. */
+	readonly diffuseIrradiance: SpectralIrradiancePacket;
+	readonly surfaceNormal: UnitVector3;
+	readonly directionToSource: UnitVector3;
+	/** Wavelength-independent neutral reflectance; defaults to 0.18. */
+	readonly reflectance?: number;
+}>;
+
+/** Separate and exactly additive output of the neutral Lambertian evaluator. */
+type NeutralLambertianSceneLightingResponse = Readonly<{
+	readonly identity: string;
+	readonly reflectance: number;
+	readonly directCosine: number;
+	readonly directIrradiance: SpectralIrradiancePacket;
+	readonly diffuseIrradiance: SpectralIrradiancePacket;
+	readonly combinedIrradiance: SpectralIrradiancePacket;
+	readonly directRadiance: SpectralRadiancePacket;
+	readonly diffuseRadiance: SpectralRadiancePacket;
+	readonly combinedRadiance: SpectralRadiancePacket;
 }>;
 
 /** Inputs needed to derive local direct irradiance from transported uniform-disk radiance. */

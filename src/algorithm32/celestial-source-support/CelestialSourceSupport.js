@@ -44,7 +44,7 @@ function describeFragment(definition) {
 			channelCount: 15,
 			support: {
 				catalog: definition.catalog,
-				memberCount: 500,
+				memberCount: /** @type {500 | 2000} */ (definition.members.length),
 			},
 		};
 	}

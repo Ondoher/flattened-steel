@@ -7,7 +7,7 @@
  * projection, field of view, and pixel position never enter the conversion.
  */
 export const STELLAR_ONE_PIXEL_PRESENTATION = /** @type {const} */ ({
-	id: 'stellar-one-pixel-presentation-000435-v1',
+	id: 'stellar-one-pixel-presentation-cr6c-q24-v1',
 	reference: {
 		runId: '000435-sun-layer-screen-palette-three-scenes',
 		viewportWidthPixels: 640,
@@ -15,6 +15,10 @@ export const STELLAR_ONE_PIXEL_PRESENTATION = /** @type {const} */ ({
 		verticalFieldOfViewDegrees: 78,
 		centerPixelSolidAngleSteradians: 1.639348576039236e-5,
 	},
-	irradianceToBoundaryRadianceScale: 60999.839486002405,
+	calibration: {
+		runId: '000049-cr6c-one-pixel-brightness-calibration-narrowed',
+		multiplier: 24,
+		baseIrradianceToBoundaryRadianceScale: 60999.839486002405,
+	},
+	irradianceToBoundaryRadianceScale: 1463996.1476640578,
 });
-

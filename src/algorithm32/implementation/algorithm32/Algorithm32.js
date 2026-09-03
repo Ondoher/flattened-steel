@@ -78,7 +78,10 @@ export class Algorithm32 {
 	_colorRuntimeBindingValues = {
 		'color.exposureModifier': 1,
 		'color.brightnessProxy': 0,
+		'color.totalHorizontalIlluminance.value': 0,
 		'color.sceneLuminanceScale': 0,
+		'presentation.stellar.adaptationLuminanceCdM2': 0,
+		'presentation.stellar.receiverLightIdentity': 'receiver-light:unconfigured',
 	};
 
 	/**
@@ -116,6 +119,7 @@ export class Algorithm32 {
 			return {
 				profile: config.profile,
 				color: config.color,
+				presentationFilterRegistry: config.presentationFilterRegistry ?? null,
 				shader: {...(config.shader === undefined ? {} : config.shader)},
 			};
 		}
@@ -130,6 +134,7 @@ export class Algorithm32 {
 			celestialSources: config.celestialSources ?? null,
 			groundBoundary: config.groundBoundary,
 			color: config.color,
+			presentationFilterRegistry: config.presentationFilterRegistry ?? null,
 			execution: {
 				...execution,
 				maximumScatteringOrder: execution.maximumScatteringOrder ?? 4,
@@ -149,6 +154,7 @@ export class Algorithm32 {
 			return {
 				profile: config.profile,
 				color: config.color,
+				presentationFilterRegistry: config.presentationFilterRegistry,
 				shader: config.shader,
 			};
 		}
@@ -161,6 +167,7 @@ export class Algorithm32 {
 			celestialSources: config.celestialSources,
 			groundBoundary: config.groundBoundary,
 			color: config.color,
+			presentationFilterRegistry: config.presentationFilterRegistry,
 			execution: config.execution,
 			shader: config.shader,
 		};
@@ -631,15 +638,21 @@ export class Algorithm32 {
 		const localLightLevelCalculator = new LocalLightLevelCalculator({
 			lightSource: profile.models.lightSource,
 		});
-		const receiverEnvironmentLightController = new ReceiverEnvironmentLightController({
-			calculator: localLightLevelCalculator,
-		});
-		const brightnessProxy = localLightLevelCalculator.measureBrightnessProxy({
+		const directLight = localLightLevelCalculator.measureConfiguredReceiverDirectLight({
 			geometry: profile.models.geometry,
 			atmosphere: profile.models.atmosphere,
 			observation: profile.models.sourcePlacement.observation,
 			celestialSources: profile.models.celestialSources,
 		});
+		const receiverEnvironmentLightController = new ReceiverEnvironmentLightController({
+			calculator: localLightLevelCalculator,
+			directLight,
+			identity: `receiver-light:model-${version}:profile-${profile.contentHash}:diffuse-unmeasured`,
+		});
+		const receiverLight = /** @type {ReceiverEnvironmentLightMeasurement} */ (
+			receiverEnvironmentLightController.active
+		);
+		const brightnessProxy = receiverLight.totalHorizontalLuminanceProxy;
 		const sourceBrightness = localLightLevelCalculator.measureSourceBrightness({
 			geometry: profile.models.geometry,
 			observation: profile.models.sourcePlacement.observation,
@@ -660,6 +673,9 @@ export class Algorithm32 {
 			receiverEnvironmentLightController,
 			exposureModifier,
 			brightnessProxy: brightnessProxy.value,
+			totalHorizontalIlluminance: receiverLight.photopicTotalHorizontalIlluminance.value,
+			stellarAdaptationLuminance: receiverLight.stellarAdaptationLuminance.value,
+			receiverLightIdentity: receiverLight.identity,
 			sourceBrightness: sourceBrightness.value,
 			shaderBuilder,
 			snapshot: {
@@ -693,7 +709,13 @@ export class Algorithm32 {
 		this._receiverEnvironmentLightController = prepared.receiverEnvironmentLightController;
 		this._colorRuntimeBindingValues['color.exposureModifier'] = prepared.exposureModifier;
 		this._colorRuntimeBindingValues['color.brightnessProxy'] = prepared.brightnessProxy;
+		this._colorRuntimeBindingValues['color.totalHorizontalIlluminance.value'] =
+			prepared.totalHorizontalIlluminance;
 		this._colorRuntimeBindingValues['color.sceneLuminanceScale'] = prepared.sourceBrightness;
+		this._colorRuntimeBindingValues['presentation.stellar.adaptationLuminanceCdM2'] =
+			prepared.stellarAdaptationLuminance;
+		this._colorRuntimeBindingValues['presentation.stellar.receiverLightIdentity'] =
+			prepared.receiverLightIdentity;
 		this._shaderBuilder = prepared.shaderBuilder;
 		previousReference?.dispose();
 		previousShaderBuilder?.dispose();
@@ -713,6 +735,9 @@ export class Algorithm32 {
 		}
 		if (prepared.shaderBuilder !== this._shaderBuilder) {
 			prepared.shaderBuilder.dispose();
+		}
+		if (prepared.receiverEnvironmentLightController !== this._receiverEnvironmentLightController) {
+			prepared.receiverEnvironmentLightController.dispose();
 		}
 	}
 
@@ -778,6 +803,15 @@ export class Algorithm32 {
 		if (Object.hasOwn(source, 'color.brightnessProxy')) {
 			throw new TypeError('color.brightnessProxy is owned by the Algorithm32 facade.');
 		}
+		if (Object.hasOwn(source, 'color.totalHorizontalIlluminance.value')) {
+			throw new TypeError('color.totalHorizontalIlluminance.value is owned by the Algorithm32 facade.');
+		}
+		if (Object.hasOwn(source, 'presentation.stellar.adaptationLuminanceCdM2')) {
+			throw new TypeError('presentation.stellar.adaptationLuminanceCdM2 is owned by the Algorithm32 facade.');
+		}
+		if (Object.hasOwn(source, 'presentation.stellar.receiverLightIdentity')) {
+			throw new TypeError('presentation.stellar.receiverLightIdentity is owned by the Algorithm32 facade.');
+		}
 		if (Object.hasOwn(source, 'color.sceneLuminanceScale')) {
 			throw new TypeError('color.sceneLuminanceScale is owned by the Algorithm32 facade.');
 		}
@@ -800,6 +834,22 @@ export class Algorithm32 {
 			enumerable: true,
 			get: /** Return the current facade-owned brightness proxy. */ () =>
 				this._colorRuntimeBindingValues['color.brightnessProxy'],
+		});
+		Object.defineProperty(combined, 'color.totalHorizontalIlluminance.value', {
+			configurable: false,
+			enumerable: true,
+			get: /** Return the current facade-owned receiver illuminance. */ () =>
+				this._colorRuntimeBindingValues['color.totalHorizontalIlluminance.value'],
+		});
+		Object.defineProperty(combined, 'presentation.stellar.adaptationLuminanceCdM2', {
+			enumerable: true,
+			configurable: false,
+			get: () => this._colorRuntimeBindingValues['presentation.stellar.adaptationLuminanceCdM2'],
+		});
+		Object.defineProperty(combined, 'presentation.stellar.receiverLightIdentity', {
+			enumerable: true,
+			configurable: false,
+			get: () => this._colorRuntimeBindingValues['presentation.stellar.receiverLightIdentity'],
 		});
 		Object.defineProperty(combined, 'color.sceneLuminanceScale', {
 			configurable: false,
@@ -852,6 +902,23 @@ export class Algorithm32 {
 		});
 	}
 
+	/** Return the current receiver total-horizontal photopic illuminance. */
+	get totalHorizontalIlluminance() {
+		this._assertUsable();
+		return /** @type {UnitValue<'lux'>} */ ({
+			value: Number(this._colorRuntimeBindingValues['color.totalHorizontalIlluminance.value']),
+			units: 'lux',
+		});
+	}
+
+	/** Return the last complete direct, diffuse, and total receiver-light publication. */
+	get receiverLight() {
+		this._assertUsable();
+		return /** @type {ReceiverEnvironmentLightMeasurement} */ (
+			this._receiverEnvironmentLightController.active
+		);
+	}
+
 	/** Return the current configured light-source brightness. */
 	get sourceBrightness() {
 		this._assertUsable();
@@ -900,7 +967,12 @@ export class Algorithm32 {
 		if (controller !== this._receiverEnvironmentLightController) {
 			throw new Error('Receiver environment-light measurement was superseded.');
 		}
-		this.setAdaptingLuminance(measurement.brightnessProxy);
+		this._colorRuntimeBindingValues['color.totalHorizontalIlluminance.value'] =
+			measurement.photopicTotalHorizontalIlluminance.value;
+		this._colorRuntimeBindingValues['presentation.stellar.adaptationLuminanceCdM2'] =
+			measurement.stellarAdaptationLuminance.value;
+		this._colorRuntimeBindingValues['presentation.stellar.receiverLightIdentity'] = measurement.identity;
+		this.setAdaptingLuminance(measurement.totalHorizontalLuminanceProxy);
 		return measurement;
 	}
 

@@ -11,6 +11,7 @@ import {
 import {DEFAULT_NATIVE_PRODUCTION_PROFILE} from '../algorithm32/profiles/native-15/native-15-profile.js';
 import DistanceMath from '../algorithm32/math/DistanceMath.js';
 import {createFlat32ColorDisplayModel} from './Flat32ColorDisplayModel.js';
+import {ViewPresentationFilterRegistry} from '../algorithm32/implementation/presentation-filter/ViewPresentationFilterRegistry.js';
 import {
 	requireImplementedFlat32ProductionSelections,
 	resolveFlat32ProductionSelections,
@@ -36,7 +37,8 @@ export class FlatLocalMode {
 	 */
 	constructor(configuration) {
 		const selections = resolveFlat32ProductionSelections(configuration);
-		requireImplementedFlat32ProductionSelections(selections);
+		const presentationFilterRegistry = new ViewPresentationFilterRegistry(selections.presentationFilters);
+		requireImplementedFlat32ProductionSelections(selections, {presentationFilterRegistry, supportsStellarFilters: false});
 		const profile = DEFAULT_NATIVE_PRODUCTION_PROFILE;
 		const spectralBasis = profile.spectral.basis;
 		const observerPosition = /** @type {Position} */ ({
@@ -80,7 +82,8 @@ export class FlatLocalMode {
 			atmosphere: new CanonicalAtmosphere(),
 			geometry,
 			groundBoundary: null,
-			color: createFlat32ColorDisplayModel(selections.colorDisplayModelConfiguration),
+			color: createFlat32ColorDisplayModel(selections.colorDisplayModelConfiguration, presentationFilterRegistry),
+			presentationFilterRegistry,
 			observation: configuration.observation,
 			celestialSources: selections.celestialSourcesEnabled ? celestialSources : null,
 			execution: {

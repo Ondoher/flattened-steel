@@ -1,5 +1,5 @@
 import {CanonicalValueHash} from '../../value-identity/CanonicalValueHash.js';
-import {STELLAR_GENERATION_SOURCE_LAYOUT} from './consts.js';
+import {createStellarGenerationSourceLayout} from './consts.js';
 
 /** Immutable member-major binary32 input for the standard stellar generation shader. */
 export class StellarGenerationSourceTable {
@@ -14,7 +14,11 @@ export class StellarGenerationSourceTable {
 	/** Canonical member identifiers. @type {string[]} */
 	_memberIds;
 	/** Private member-major binary32 values. @type {Float32Array} */
-	_values;
+	_memberValues;
+	/** Private channel-major binary32 spectra. @type {Float32Array} */
+	_spectralValues;
+	/** Accepted per-source layout. @type {StellarGenerationSourceTableLayout} */
+	_layout;
 
 	/**
 	 * Create one immutable shader-input table from an accepted stellar definition.
@@ -23,25 +27,31 @@ export class StellarGenerationSourceTable {
 	 */
 	constructor(configuration) {
 		const {definition, sourceIdentity} = configuration;
-		const layout = STELLAR_GENERATION_SOURCE_LAYOUT;
+		const layout = createStellarGenerationSourceLayout(definition.members.length);
 		if (
 			definition.catalog.frame !== 'fk5-j2000-mean-equatorial-rh-v1' ||
 			definition.members.length !== layout.memberCount
 		) {
-			throw new RangeError('Stellar generation source requires the reviewed 500-member FK5/J2000 table.');
+			throw new RangeError('Stellar generation source requires a reviewed FK5/J2000 table.');
 		}
 
 		this._sourceIdentity = sourceIdentity;
 		this._frame = definition.catalog.frame;
 		this._epoch = {...definition.catalog.epoch};
+		this._layout = layout;
 		this._memberIds = new Array(layout.memberCount);
-		this._values = new Float32Array(layout.memberCount * layout.componentCount);
+		this._memberValues = new Float32Array(layout.memberCount * layout.memberComponentCount);
+		this._spectralValues = new Float32Array(layout.memberCount * layout.spectralChannelCount);
 
 		for (const [memberIndex, member] of definition.members.entries()) {
-			const memberOffset = memberIndex * layout.componentCount;
+			const memberOffset = memberIndex * layout.memberComponentCount;
 			this._memberIds[memberIndex] = member.id;
-			this._values.set(member.direction, memberOffset + layout.directionOffset);
-			this._values.set(member.spectralIrradiance.values, memberOffset + layout.spectralOffset);
+			this._memberValues.set(member.direction, memberOffset);
+			this._memberValues[memberOffset + 3] = member.visualMagnitude ?? 0;
+			for (let channelIndex = 0; channelIndex < layout.spectralChannelCount; channelIndex += 1) {
+				this._spectralValues[channelIndex * layout.memberCount + memberIndex]
+					= member.spectralIrradiance.values[channelIndex];
+			}
 		}
 
 		this._identity = CanonicalValueHash.sha256Value({
@@ -50,7 +60,8 @@ export class StellarGenerationSourceTable {
 			layout,
 			memberIds: this._memberIds,
 			sourceIdentity: this._sourceIdentity,
-			values: this._values,
+			memberValues: this._memberValues,
+			spectralValues: this._spectralValues,
 		});
 	}
 
@@ -81,11 +92,16 @@ export class StellarGenerationSourceTable {
 
 	/** @returns {StellarGenerationSourceTableLayout} - Exact member-major scalar layout. */
 	get layout() {
-		return {...STELLAR_GENERATION_SOURCE_LAYOUT};
+		return {...this._layout};
 	}
 
-	/** @returns {Float32Array} - Independent packed values safe for caller-owned upload. */
-	copyValues() {
-		return new Float32Array(this._values);
+	/** @returns {Float32Array} - Independent RGBA32F member texels safe for caller-owned upload. */
+	copyMemberValues() {
+		return new Float32Array(this._memberValues);
+	}
+
+	/** @returns {Float32Array} - Independent channel-major R32F spectra safe for caller-owned upload. */
+	copySpectralValues() {
+		return new Float32Array(this._spectralValues);
 	}
 }

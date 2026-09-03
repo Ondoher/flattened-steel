@@ -1,15 +1,17 @@
 # Stellar Rendering Plan
 
 Status: successfully completed experimental lane. Immutable run `000435`
-accepts the final contained visual review. Current execution has moved to the
-[Stellar Screen-Palette Production Port Plan](stellar-screen-palette-production-port-plan.md).
+accepts the final contained visual review. Production porting was subsequently
+completed through its accepted stellar/Sun stages; current residual decisions
+are owned by the
+[production closeout plan](../algorithm32/production/color-star-cache-closeout-plan.md).
 
 The current representation contract is owned by the
 [Stellar Screen-Palette Cache Design](stellar-screen-palette-design.md). This
 plan derives its execution order from that design. The older celestial-cache
 document and dense-cache runs remain read-only historical evidence.
 
-## Execution State
+## Closed Execution State
 
 Current milestone: Work Plan steps 1 through 5 and 13, the owner-directed
 data-derived diffuse-adaptation comparison, and the fixed-sunset-bearing
@@ -22,13 +24,14 @@ full-scene renders using the same indexed native-15 palette as the sole visible
 celestial path. It supersedes the four-point visual review in `000431` by
 geometrically clipping the projected Sun disk to pixel squares and multiplying
 the Sun spectrum by each continuous overlap fraction. Step 6, qualified-close
-palette sharing, is deferred
-and may not be necessary; do not execute it without new project-owner direction.
-Do not start production promotion, Flat32 integration, temporal adaptation,
-acuity, ambient scene-lighting integration, or Moon work. Immutable run `000427`
+palette sharing, is deferred and may not be necessary; do not execute it
+without new project-owner direction. At contained-lane closure, production
+promotion, Flat32 integration, temporal adaptation, acuity, ambient scene-
+lighting integration, and Moon work were outside this plan. Subsequent
+production work does not reopen that contained boundary. Immutable run `000427`
 accepts step 13 and immutable run `000435` accepts its three-scene visual
-review. Generated evidence remains under `tmp/extraterrestrial/`;
-production source is read-only.
+review. Generated evidence remains under `tmp/extraterrestrial/` and the
+contained evidence remains immutable.
 
 Immutable run
 `000421-stellar-ferwerda-diffuse-data-adapted-full-scene-sunset-noon`
@@ -682,7 +685,7 @@ sums. Prove error bounds, reference accounting, deterministic output,
 conservation, and measured memory/time benefit before accepting it. This step
 may not be necessary and requires new project-owner direction before execution.
 
-### 7. Optimize matrix width separately
+### 7. Optimize matrix width separately — deferred
 
 After the final palette is known, rewrite `Uint16` indices to `Uint8` only when
 the entry count including reserved zero is at most 256. Prove every rewritten
@@ -690,20 +693,20 @@ index resolves to the same palette entry and report the exact matrix-memory
 reduction. Otherwise retain `Uint16`; select `Uint32` before construction when
 the declared occupied-pixel capacity requires it.
 
-### 8. Promotion decision
+### 8. Promotion decision — complete
 
 After the contained indexed cache, lifecycle, GPU resources, and constant-time
 consumer are accepted, request explicit authorization before adapting any code
 into `src/algorithm32` or `src/flat32`. Promotion must preserve the contained
 oracle and qualification evidence as independent controls.
 
-### 9. Resume rendering only by owner direction
+### 9. Resume rendering only by owner direction — complete
 
 After the indexed cache, lifecycle, and constant-time consumer are accepted,
 request or follow explicit direction before Flat32 integration, a controlled
 night render, visibility investigation, exposure, ambient-light, or Color work.
 
-### 10. Evaluate a sourced low-light visibility model
+### 10. Evaluate a sourced low-light visibility model — complete
 
 Owner direction authorizes one contained, source-independent Ferwerda 1996
 steady-state threshold-mapping experiment. Reuse the accepted screen-index and
@@ -721,7 +724,7 @@ claim is limited to steady-state threshold mapping on the unattenuated
 star-only upper bound. Temporal adaptation, spatial acuity, atmosphere, scene
 occlusion, and ambient-source aggregation remain outside the experiment.
 
-### 11. Compare exact sunset and solar noon
+### 11. Compare exact sunset and solar noon — complete
 
 Owner direction authorizes a follow-up cone-plus-achromatic-rod comparison at
 San Jose exact sunset and solar noon. Reproject and rebuild the screen palette
@@ -732,7 +735,7 @@ step isolates source visibility. Record explicitly that atmospheric sky
 background, stellar attenuation, scene geometry, temporal adaptation, and
 acuity remain absent.
 
-### 12. Review complete-scene color at sunset and noon
+### 12. Review complete-scene color at sunset and noon — complete
 
 Owner clarification requires complete spherical scene renders, not isolated
 stellar layers. Render the normal contained atmosphere, Sun, stars, spherical
@@ -894,6 +897,7 @@ may be inspected only when a named comparison is needed.
 ## Immediate Next Step
 
 No further work is scheduled in this experimental plan. Preserve every source
-and immutable run unchanged as implementation and comparison evidence. Execute
-new work only through the production-port plan, beginning with its read-only
-reconciliation step.
+and immutable run unchanged as implementation and comparison evidence. Triage
+any proposed follow-up through the
+[production closeout plan](../algorithm32/production/color-star-cache-closeout-plan.md)
+and create a new focused plan before execution.

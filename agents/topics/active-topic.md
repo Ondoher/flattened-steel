@@ -1,11 +1,19 @@
 # Active Topic
 
-Current active topic: `algorithm32-production`.
+Current active topic: `algorithm32-production-closeout`.
 
 Canonical entry document:
-[Algorithm32 Production](algorithm32/production/README.md).
+[Color, Stellar Rendering, And Distant-Sun Closeout Plan](algorithm32/production/color-star-cache-closeout-plan.md).
 
 ## Immediate Focus
+
+The active production task is to disposition the remaining Color Reset,
+stellar-rendering, ambient-light, and distant-Sun follow-ups without reopening
+their closed experimental or cache plans. Release-critical items C1-C6 remain
+open or dependency-blocked; candidates D1-D11 await owner decisions to execute,
+defer to their linked follow-up owner, or close as out of scope. The first
+decision pair is full-cadence Color/star appearance acceptance and the separate
+lighting-only sunset/plus-one-hour appearance review.
 
 The one-degree Flat32 distant-Sun scene-cache hookup is complete through P10
 and production adoption PA7. Exact prebuilt packages, scalar solar-zenith
@@ -36,22 +44,54 @@ reconciliation, and release closure is owner-deferred; 11.7 and unfinished
 The contained color-reset experiment is complete through accepted CR8 run
 `000065-color-reset-qualification`, and production promotion is now selected
 under the production-owned Color Reset design and implementation plan.
-P0 and P1 are complete: the promotion manifest authenticates the contained
+P0 through P7 are complete: the promotion manifest authenticates the contained
 parents and inventories production ownership/fixed-500 assumptions, while
 Flat32 now owns exact independent Color, celestial, catalog, and ordered-filter
-selections with fail-closed staged availability. The live pre-P9 default still
-selects `BrunetonSourceLuminanceLiftColorDisplayModel`; P2 receiver-light work
-is next. The target also replaces the current brightest-500 roster with the
-accepted brightest-2,000 roster while preserving one-pixel `q=24`
-presentation.
+selections with fail-closed staged availability. Production now publishes
+atomic direct-normal, direct-horizontal, diffuse-horizontal, and total-
+horizontal receiver light and Flat32 measures it before first-frame
+publication. The fixed `color-reset-slope-078-p9` model now consumes that
+facade-owned lux directly before unchanged Bruneton encoding and reproduces
+the accepted response values and slopes. Receiver scene lighting now consumes
+the same generation's direct-normal and diffuse-horizontal spectra through a
+Color-free neutral Lambertian owner before the existing single display
+boundary. Production now also owns an authenticated, local-only brightest-2,000
+package and exact explicit catalog selection. Its split `2000x1 RGBA32F` and
+`2000x15 R32F` source textures, 2,001-entry palette, collision conservation,
+resource bounds, replacement, and context restoration pass production gates.
+Production now owns the ordered `view-presentation-filter-registry-v1`, the
+selected mesopic and low-light chroma equations, exact identity paths, fixed
+configuration identities, authenticated local scotopic weights, and the live
+source-linear stellar shader hook. Catalog, screen index, 16-row palette,
+filter/weight configuration, receiver light, adaptation luminance, and Color
+publish as one compatible stellar generation. By project-owner direction, the
+ordinary Flat32 application now defaults to `color-reset-slope-078-p9`, the
+brightest-2,000 catalog, and the ordered `human-mesopic-luminance-v1` then
+`human-low-light-chroma-v1` stellar presentation. Basic Bruneton and
+brightest-500 remain explicit controls; `stellarPresentation=physical`
+disables the default perceptual chain. The superseded source-luminance-lift
+production implementation and route are removed.
+The stellar palette applies the accepted `q=24` calibration as the exact
+`1,463,996.1476640578` effective boundary scale while retaining one-pixel
+rasterization; the earlier promoted implementation had incorrectly retained
+only the historical `q=1` base scale. Default-route captures `000015` and
+`000016` prove the selected Color/catalog identities, accepted bright sunset
+response, and visible one-pixel stars at sunset plus one hour. P8 now has its
+complete nine-condition production cadence and engineering gates; fresh GPU B1
+regeneration and owner appearance acceptance remain open.
+Run `000017` is the current no-override plus-one-hour proof and publishes and
+executes both ordered human-vision filters; `000015` and `000016` remain the
+otherwise matching physical-presentation controls.
 
 Other open boundaries include 4K performance, broader supported-hardware
 resource/performance qualification, renewed Stage 8/reflective evidence,
 the cross-stage pinned-source audit, import provenance, citations, expanded
 release hardening, and the public entry point. Visible extraterrestrial source
-composition machinery is present for the current Sun and brightest-500 stellar
-roster, but the selected Color Reset, brightest-2,000 replacement, and their
-combined production qualification remain open under the new plan.
+composition machinery is present for the current Sun and both stellar
+catalogs. P9 implementation and documentation cleanup, including superseded-
+path removal, are complete. Deferred P9 source/licensing research, fresh GPU
+B1 qualification, owner appearance acceptance, and final release closure
+remain open; application default activation is complete.
 
 ## Minimal Reload Sources
 
@@ -59,7 +99,5 @@ Read these files in order and no others during bootstrap:
 
 1. [Repository workflow instructions](../../AGENTS.md)
 2. [Algorithm32 production status](algorithm32/production/README.md)
-3. [Current production dataflow](algorithm32/production/current-dataflow.md)
-4. [Production implementation plan](algorithm32/production/production-implementation-plan.md)
-5. [Production Color Reset design](algorithm32/production/color-reset-design.md)
-6. [Production Color Reset implementation plan](algorithm32/production/color-reset-implementation-plan.md)
+3. [Production closeout plan](algorithm32/production/color-star-cache-closeout-plan.md)
+4. [Project reference follow-up](../../references/followup.md)

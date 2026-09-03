@@ -7,7 +7,7 @@ import {ValueValidation} from '../validation/ValueValidation.js';
 
 const SHA256_PATTERN = /^sha256:[0-9a-f]{64}$/u;
 const EXPLICIT_UTC_OFFSET_PATTERN = /(?:Z|[+-]\d{2}:\d{2})$/u;
-const REQUIRED_STELLAR_MEMBER_COUNT = 500;
+const SUPPORTED_STELLAR_MEMBER_COUNTS = new Set([500, 2000]);
 
 /**
  * Called by roster validation to require one exact supported capability implementation.
@@ -230,8 +230,8 @@ function acceptFiniteSun(source, basis) {
  */
 function acceptStars(source, basis) {
 	const definition = source.celestialSourceDefinition;
-	if (!Array.isArray(definition.members) || definition.members.length !== REQUIRED_STELLAR_MEMBER_COUNT) {
-		throw new RangeError(`Stellar point-set must contain exactly ${REQUIRED_STELLAR_MEMBER_COUNT} members.`);
+	if (!Array.isArray(definition.members) || !SUPPORTED_STELLAR_MEMBER_COUNTS.has(definition.members.length)) {
+		throw new RangeError('Stellar point-set must contain exactly 500 or 2,000 members.');
 	}
 	const catalog = definition.catalog;
 	if (!catalog || typeof catalog !== 'object') {

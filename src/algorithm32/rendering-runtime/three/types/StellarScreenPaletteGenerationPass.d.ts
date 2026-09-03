@@ -12,6 +12,8 @@ type StellarScreenPaletteGenerationPassConfiguration = Readonly<{
 	readonly camera: ShaderRuntimeCelestialViewCamera;
 	/** Initial unit-bearing viewport dimensions. */
 	readonly viewportSize: PixelSize;
+	/** Exact live Color, filter, and receiver-light compatibility facts. */
+	readonly getPresentationCompatibility?: () => StellarPresentationCompatibility;
 	/** Optional non-fatal frame diagnostic logger. */
 	readonly logger?: Console | null;
 }>;

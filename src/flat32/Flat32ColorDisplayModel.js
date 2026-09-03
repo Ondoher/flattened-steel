@@ -1,20 +1,18 @@
 import {BrunetonColorDisplayModel} from '../algorithm32/implementation/bruneton-color/BrunetonColorDisplayModel.js';
-import {BrunetonSourceLuminanceLiftColorDisplayModel} from '../algorithm32/implementation/bruneton-source-luminance-lift-color/BrunetonSourceLuminanceLiftColorDisplayModel.js';
+import {ColorResetSlope078P9ColorDisplayModel} from '../algorithm32/implementation/color-reset-slope-078-p9/ColorResetSlope078P9ColorDisplayModel.js';
 import {FerwerdaColorDisplayModel} from '../algorithm32/implementation/ferwerda-color/FerwerdaColorDisplayModel.js';
 import {FLAT32_COLOR_MODEL_IDS, resolveFlat32ColorDisplayModelConfiguration} from './Flat32ProductionSelections.js';
 
 /**
  * Create Flat32's production Color model or an explicit integration-control model.
- * Omission selects the qualified source-luminance-driven Bruneton path.
+ * Omission selects the accepted Color Reset production path.
  */
-export function createFlat32ColorDisplayModel(configuration = {}) {
+export function createFlat32ColorDisplayModel(configuration = {}, presentationFilterRegistry = null) {
 	const accepted = resolveFlat32ColorDisplayModelConfiguration(configuration);
-	if (accepted.model === FLAT32_COLOR_MODEL_IDS.BASIC_BRUNETON) return new BrunetonColorDisplayModel();
-	if (accepted.model === FLAT32_COLOR_MODEL_IDS.SOURCE_LUMINANCE_LIFT_V2) {
-		return new BrunetonSourceLuminanceLiftColorDisplayModel();
-	}
+	const shared = {presentationFilterRegistry};
+	if (accepted.model === FLAT32_COLOR_MODEL_IDS.BASIC_BRUNETON) return new BrunetonColorDisplayModel(shared);
 	if (accepted.model === FLAT32_COLOR_MODEL_IDS.COLOR_RESET_SLOPE_078_P9) {
-		throw new RangeError('Flat32 color-reset-slope-078-p9 is recognized but is not implemented until P3.');
+		return new ColorResetSlope078P9ColorDisplayModel(shared);
 	}
 	if (!('adaptationLuminanceCdPerSquareMeter' in accepted)) {
 		throw new RangeError(`Flat32 Color model ${accepted.model} has no implementation.`);

@@ -1,7 +1,8 @@
+import {ViewPresentationFilterRegistry} from '../algorithm32/implementation/presentation-filter/ViewPresentationFilterRegistry.js';
+
 export const FLAT32_COLOR_MODEL_IDS = /** @type {const} */ ({
 	BASIC_BRUNETON: 'basic-bruneton',
 	COLOR_RESET_SLOPE_078_P9: 'color-reset-slope-078-p9',
-	SOURCE_LUMINANCE_LIFT_V2: 'bruneton-source-luminance-lift-v2',
 	FERWERDA_CONTROL: 'ferwerda-control',
 });
 
@@ -54,6 +55,9 @@ function acceptPresentationFilter(candidate, index) {
 
 	if (filter.id === FLAT32_PRESENTATION_FILTER_IDS.HUMAN_MESOPIC_LUMINANCE_V1) {
 		acceptKeys(parameters, new Set(['maximumRodContribution']), `${label} parameters`);
+		if (parameters.maximumRodContribution !== 0.5) {
+			throw new RangeError(`${label} maximumRodContribution must equal 0.5.`);
+		}
 		return Object.freeze({
 			id: filter.id,
 			stage: filter.stage,
@@ -70,6 +74,9 @@ function acceptPresentationFilter(candidate, index) {
 
 	if (filter.id === FLAT32_PRESENTATION_FILTER_IDS.HUMAN_LOW_LIGHT_CHROMA_V1) {
 		acceptKeys(parameters, new Set(['maximumChromaRetention']), `${label} parameters`);
+		if (parameters.maximumChromaRetention !== 0.65) {
+			throw new RangeError(`${label} maximumChromaRetention must equal 0.65.`);
+		}
 		return Object.freeze({
 			id: filter.id,
 			stage: filter.stage,
@@ -107,7 +114,7 @@ function acceptPresentationFilters(value) {
  */
 export function resolveFlat32ColorDisplayModelConfiguration(configuration = {}) {
 	const record = acceptRecord(configuration, 'Flat32 Color configuration');
-	const candidateModel = record.model ?? FLAT32_COLOR_MODEL_IDS.SOURCE_LUMINANCE_LIFT_V2;
+	const candidateModel = record.model ?? FLAT32_COLOR_MODEL_IDS.COLOR_RESET_SLOPE_078_P9;
 	if (!COLOR_MODEL_IDS.has(candidateModel)) {
 		throw new RangeError(`Flat32 Color model ${String(candidateModel)} is not supported.`);
 	}
@@ -138,26 +145,43 @@ export function resolveFlat32ProductionSelections(configuration = {}) {
 	if (typeof celestialSourcesEnabled !== 'boolean') {
 		throw new TypeError('Flat32 celestialSourcesEnabled must be boolean.');
 	}
-	const stellarCatalog = record.stellarCatalog ?? FLAT32_STELLAR_CATALOG_IDS.BRIGHTEST_500;
+	const stellarCatalog = record.stellarCatalog ?? FLAT32_STELLAR_CATALOG_IDS.BRIGHTEST_2000;
 	if (!STELLAR_CATALOG_IDS.has(stellarCatalog)) {
 		throw new RangeError(`Flat32 stellar catalog ${String(stellarCatalog)} is not supported.`);
 	}
+	const presentationFilters = acceptPresentationFilters(record.presentationFilters ?? []);
+	const presentationFilterConfigurationIdentity = new ViewPresentationFilterRegistry(
+		presentationFilters,
+	).identity;
 	return Object.freeze({
 		colorDisplayModelConfiguration: resolveFlat32ColorDisplayModelConfiguration(
 			record.colorDisplayModelConfiguration,
 		),
 		celestialSourcesEnabled,
 		stellarCatalog,
-		presentationFilters: acceptPresentationFilters(record.presentationFilters ?? []),
+		presentationFilters,
+		presentationFilterConfigurationIdentity,
 	});
 }
 
-/** Fail closed for recognized selections whose implementation belongs to a later plan phase. */
+/** Fail closed until P7 installs the P6 source-linear hooks in the compatible stellar generation. */
 export function requireImplementedFlat32ProductionSelections(selections, options = {}) {
-	if (options.stellarCatalogUsed === true && selections.stellarCatalog !== FLAT32_STELLAR_CATALOG_IDS.BRIGHTEST_500) {
-		throw new RangeError('Flat32 brightest-2000 is recognized but is not implemented until P5.');
+	if (
+		selections.presentationFilters.some((filter) => filter.enabled) &&
+		selections.colorDisplayModelConfiguration.model === FLAT32_COLOR_MODEL_IDS.FERWERDA_CONTROL
+	) {
+		throw new RangeError('Flat32 stellar presentation filters require a Bruneton Color model.');
 	}
-	if (selections.presentationFilters.some((filter) => filter.enabled)) {
-		throw new RangeError('Flat32 presentation filters are recognized but are not implemented until P6.');
+	if (selections.presentationFilters.some((filter) => filter.enabled) && options.supportsStellarFilters === false) {
+		throw new RangeError('Flat32 stellar presentation filters require the spherical/distant stellar mode.');
+	}
+	if (
+		selections.presentationFilters.some((filter) => filter.enabled) &&
+		options.presentationFilterRegistry?.enabled !== true
+	) {
+		throw new RangeError('Flat32 enabled presentation filters require their production registry.');
+	}
+	if (options.presentationFilterRegistry?.enabled === true) {
+		options.presentationFilterRegistry.createStellarSourceLinearShaderHook();
 	}
 }

@@ -6,14 +6,17 @@ document and every run it names remain read-only failure, diagnostic, and
 reference evidence. Its former reset sequence does not authorize another
 candidate or large experiment grid.
 
-The current production comparison baseline remains
+At this plan's retirement, the production comparison baseline was
 `BrunetonSourceLuminanceLiftColorDisplayModel`, qualified by immutable runs
-`000466` and `000467`. The qualified one-degree point-local scene-cache
-inventory, Q30 live transport, Native15 `preDisplayRadiance`, and shared
-post-108-degree dark state remain fixed upstream inputs. The new design begins
-with image-first reproduction and separates display, available-light ambient,
-and stellar-contrast questions instead of resuming this plan's rejected Step 3
-mapper directly.
+`000466` and `000467`. That production path has since been removed. Current
+Color behavior and remaining qualification work are owned by the
+[Production Color Reset Design](../algorithm32/production/color-reset-design.md)
+and
+[Production Color Reset Implementation Plan](../algorithm32/production/color-reset-implementation-plan.md).
+The qualified one-degree point-local scene-cache inventory, Q30 live transport,
+Native15 `preDisplayRadiance`, and shared post-108-degree dark state remain
+fixed upstream inputs. Nothing in this superseded plan authorizes resuming its
+rejected Step 3 mapper.
 
 ## Preserved Reset Basis: Bruneton Primary Engine
 

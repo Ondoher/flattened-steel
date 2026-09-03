@@ -4,12 +4,9 @@ interface Window {
 }
 
 type Flat32ColorModelId =
-	'basic-bruneton' | 'color-reset-slope-078-p9' | 'bruneton-source-luminance-lift-v2' | 'ferwerda-control';
+	'basic-bruneton' | 'color-reset-slope-078-p9' | 'ferwerda-control';
 
 type Flat32ColorDisplayModelConfiguration =
-	| Readonly<{
-			readonly model?: 'bruneton-source-luminance-lift-v2';
-	  }>
 	| Readonly<{
 			readonly model: 'basic-bruneton' | 'color-reset-slope-078-p9';
 	  }>
@@ -41,6 +38,7 @@ interface Flat32ProductionSelections {
 	readonly celestialSourcesEnabled: boolean;
 	readonly stellarCatalog: Flat32StellarCatalogId;
 	readonly presentationFilters: readonly Flat32PresentationFilterConfiguration[];
+	readonly presentationFilterConfigurationIdentity: string;
 }
 
 interface Flat32ApplicationConfiguration {
@@ -52,9 +50,12 @@ interface Flat32ApplicationConfiguration {
 	readonly celestialSourcesEnabled?: boolean;
 	readonly colorDisplayModelConfiguration?: Flat32ColorDisplayModelConfiguration;
 	readonly stellarCatalog?: Flat32StellarCatalogId;
+	readonly brightest2000StellarCatalogDefinition?: Brightest2000StellarCatalogDefinition;
+	readonly scotopicLuminanceWeights?: ArrayLike<number>;
 	readonly presentationFilters?: readonly Flat32PresentationFilterConfiguration[];
 	readonly cameraDirectionScene?: readonly [number, number, number];
 	readonly performanceCallback?: ShaderPerformanceCallback;
+	readonly atmosphereShaderEnabled?: boolean;
 	readonly resolveDistantSunSceneCacheAsset?: (
 		solarZenithDegrees: number,
 		request?: Readonly<{signal?: AbortSignal}>,
@@ -89,10 +90,14 @@ interface Flat32AlgorithmRuntimeConfiguration {
 	composerRenderTarget: import('three').WebGLRenderTarget;
 	/** Defer installation until the mode transaction publishes. */
 	deferPublication: true;
+	/** Select atmosphere composition or the direct lit scene. */
+	atmosphereEnabled?: boolean;
 }
 
 /** Configure transactional supported-mode ownership. */
 interface Flat32ModeControllerConfiguration {
+	/** Select atmosphere composition or the direct lit scene. */
+	atmosphereEnabled?: boolean;
 	/** Create the requested supported mode. */
 	createMode: (
 		kind: Flat32ModeKind,

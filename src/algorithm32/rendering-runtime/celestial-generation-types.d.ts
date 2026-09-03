@@ -49,7 +49,11 @@ type CelestialGenerationCompletionBoundary = 'stage' | 'publication';
  * - **"stellar-entry-by-native-channel"** - Sparse entry capacity by 15 native channels.
  */
 type CelestialGenerationOutputShape =
-	'viewport' | 'viewport-depth-order' | 'stellar-entry-by-native-channel' | 'source-local-continuous-coverage';
+	| 'viewport'
+	| 'viewport-depth-order'
+	| 'stellar-entry-by-native-channel'
+	| 'stellar-entry-by-native-channel-plus-visual-magnitude'
+	| 'source-local-continuous-coverage';
 
 /** Owner of one standard celestial generation-stage binding. */
 type CelestialGenerationBindingOwner = 'geometry' | 'stellarSource' | 'renderingRuntime';
@@ -120,6 +124,8 @@ type StellarScreenPaletteCompatibilityIdentity = Readonly<{
 	readonly observationIdentity: string;
 	/** Exact camera, projection, and viewport identity. */
 	readonly viewIdentity: string;
+	/** Color, filter configuration/weights, and receiver-light compatibility when runtime-integrated. */
+	readonly presentationIdentity?: string;
 }>;
 
 /** Complete identity derived before one stellar generation can execute or be consumed. */
@@ -152,6 +158,10 @@ type StellarScreenPaletteLayout = Readonly<{
 	readonly paletteFormat: 'R32F';
 	/** Native spectral channel count stored for every entry. */
 	readonly channelCount: 15;
+	/** Native channels plus the presentation metadata row. */
+	readonly rowCount: 16;
+	/** Collision-combined apparent visual magnitude row. */
+	readonly visualMagnitudeRow: 15;
 }>;
 
 /** Named numerical rules executed by the base stellar generation shaders. */
@@ -163,7 +173,7 @@ type StellarScreenPaletteNumericalPolicy = Readonly<{
 	/** One unit-weight screen pixel assigned to each eligible point member. */
 	readonly pointResponse: 'unit-weight-one-pixel-v1';
 	/** Camera-independent catalog-irradiance to one-pixel boundary presentation. */
-	readonly presentation: 'stellar-one-pixel-presentation-000435-v1';
+	readonly presentation: 'stellar-one-pixel-presentation-cr6c-q24-v1';
 	/** Canonical collision representative selection. */
 	readonly collisionRepresentative: 'lowest-canonical-member';
 	/** Deterministic spectral collision summation order. */
@@ -186,21 +196,17 @@ type StellarScreenPaletteGenerationStageDescription = CelestialGenerationStageDe
 /** Exact scalar layout of the immutable stellar generation source table. */
 type StellarGenerationSourceTableLayout = Readonly<{
 	/** Versioned table schema. */
-	readonly schema: 'stellar-generation-source-table-v1';
+	readonly schema: 'stellar-generation-source-table-v2';
 	/** Scalar GPU storage format selected for upload. */
-	readonly storageFormat: 'R32F';
+	readonly storageFormat: 'RGBA32F+R32F';
 	/** Canonical member ordering policy. */
 	readonly memberOrder: 'canonical-selection-order';
 	/** Exact reviewed source-member count. */
-	readonly memberCount: 500;
-	/** Direction plus native-15 scalar count stored per member. */
-	readonly componentCount: 18;
-	/** Member-row offset of the first catalog-direction component. */
-	readonly directionOffset: 0;
+	readonly memberCount: 500 | 2000;
+	/** Direction plus visual-magnitude scalars in each RGBA member texel. */
+	readonly memberComponentCount: 4;
 	/** Catalog-direction scalar count. */
 	readonly directionComponentCount: 3;
-	/** Member-row offset of the first native-15 irradiance channel. */
-	readonly spectralOffset: 3;
 	/** Native spectral channel count. */
 	readonly spectralChannelCount: 15;
 }>;
@@ -224,7 +230,9 @@ interface StellarGenerationSourceTable {
 	 *
 	 * @returns - An independent array containing exactly 18 scalars per canonical member.
 	 */
-	copyValues(): Float32Array;
+	copyMemberValues(): Float32Array;
+	/** Copy the channel-major R32F Native15 source payload. */
+	copySpectralValues(): Float32Array;
 }
 
 /** Trusted construction data for the immutable stellar generation source table. */

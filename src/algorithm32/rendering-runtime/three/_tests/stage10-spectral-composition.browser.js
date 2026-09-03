@@ -1,12 +1,17 @@
 import * as THREE from '../../../../../node_modules/three/build/three.module.js';
 
-import {BrunetonColorDisplayModel, FerwerdaColorDisplayModel} from '../../../implementation/index.js';
+import {
+	BrunetonColorDisplayModel,
+	ColorResetSlope078P9ColorDisplayModel,
+	FerwerdaColorDisplayModel,
+} from '../../../implementation/index.js';
 import {ShaderBuilder} from '../../ShaderBuilder.js';
 import {SharedModel} from '../../../implementation/algorithm32/model/SharedModel.js';
 import {NATIVE_15_SPECTRAL_BASIS} from '../../../profiles/native-15/native-15-profile.js';
 import {SPECTRAL_QUANTITIES, SPECTRAL_UNITS, SpectralPacket} from '../../../spectral-values/index.js';
 import {ShaderContributions} from '../../../shader-assembly/base/ShaderContributions.js';
 import {ShaderSource} from '../../../shader-assembly/base/ShaderSource.js';
+import {ViewPresentationFilterRegistry} from '../../../implementation/presentation-filter/ViewPresentationFilterRegistry.js';
 
 describe('Stage 10 production scene-composition browser gate', /** Called by Jasmine to register the named test suite. */ () => {
 	it('composes a captured scene pixel with hit attenuation and background bypass', /**
@@ -162,7 +167,143 @@ describe('Stage 10 production scene-composition browser gate', /** Called by Jas
 		];
 		for (const control of controls) await verifyFerwerdaShaderControl(control);
 	});
+
+	it('matches selected slope-078/p9 CPU values in the production shader', async () => {
+		await verifyColorResetShaderControls([1012.6643901353058, 104.71173702690129, 0.2044095523727617]);
+	});
+
+	it('executes the selected mesopic-then-chroma source-linear hook on WebGL2', () => {
+		const filters = [
+			{id: 'human-mesopic-luminance-v1', stage: 'source-linear', target: 'stellar', enabled: true,
+				parameters: {maximumRodContribution: 0.5}},
+			{id: 'human-low-light-chroma-v1', stage: 'source-linear', target: 'stellar', enabled: true,
+				parameters: {maximumChromaRetention: 0.65}},
+		];
+		const scotopicLuminanceWeights = new Array(15).fill(0);
+		scotopicLuminanceWeights[4] = 2;
+		const registry = new ViewPresentationFilterRegistry(filters, {scotopicLuminanceWeights});
+		const hook = registry.createStellarSourceLinearShaderHook();
+		const sourceRgb = [0.2, 0.4, 0.1];
+		const transportedNative15 = new Array(15).fill(0);
+		transportedNative15[4] = 0.3;
+		const expected = registry.applySourceLinear(sourceRgb, {
+			target: 'stellar',
+			visualMagnitude: 1.6,
+			transportedNative15,
+			adaptationLuminanceCdM2: 0.005,
+		});
+		const renderer = createRenderer();
+		const target = createFloatTarget(1, 1);
+		const geometry = new THREE.BufferGeometry();
+		geometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array(9), 3));
+		const material = new THREE.RawShaderMaterial({
+			glslVersion: THREE.GLSL3,
+			vertexShader: `precision highp float;
+void main() {
+	vec2 position = gl_VertexID == 0 ? vec2(-1.0, -1.0)
+		: (gl_VertexID == 1 ? vec2(3.0, -1.0) : vec2(-1.0, 3.0));
+	gl_Position = vec4(position, 0.0, 1.0);
+}`,
+			fragmentShader: `precision highp float;
+layout(location = 0) out highp vec4 outColor;
+${hook.source}
+void main() {
+	float transportedNative15[15] = float[15](${transportedNative15.map((value) => value.toFixed(1)).join(', ')});
+	vec3 filtered = applyStellarSourceLinearPresentationFilters(
+		vec3(${sourceRgb.join(', ')}), transportedNative15, 1.6, 0.005
+	);
+	outColor = vec4(filtered, 1.0);
+}`,
+			depthTest: false,
+			depthWrite: false,
+		});
+		const scene = new THREE.Scene();
+		const mesh = new THREE.Mesh(geometry, material);
+		mesh.frustumCulled = false;
+		scene.add(mesh);
+		try {
+			renderer.setRenderTarget(target);
+			renderer.render(scene, new THREE.Camera());
+			const actual = readPixel(renderer, target, 0, 0);
+			expectTripletClose(actual, expected, 1e-5);
+			expect(drainErrors(renderer.getContext())).toEqual([]);
+		} finally {
+			material.dispose();
+			geometry.dispose();
+			target.dispose();
+			renderer.dispose();
+			renderer.forceContextLoss();
+		}
+	});
 });
+
+/** Compile the fixed Color Reset response once and compare selected live lux values. */
+async function verifyColorResetShaderControls(illuminanceValues) {
+	const renderer = createRenderer();
+	const color = new ColorResetSlope078P9ColorDisplayModel();
+	const pathValues = NATIVE_15_SPECTRAL_BASIS.channels.map((_channel, index) => (index + 1) * 2e-7);
+	const transmittanceValues = NATIVE_15_SPECTRAL_BASIS.channels.map((_channel, index) => 0.15 + index * 0.05);
+	const automaticSetup = createAutomaticShaderSetup(pathValues, transmittanceValues);
+	const builder = new ShaderBuilder({model: automaticSetup.model, transport: automaticSetup.transport});
+	const composer = createComposer();
+	const scene = new THREE.Scene();
+	const camera = new THREE.PerspectiveCamera(60, 4 / 3, 0.1, 10);
+	const readTarget = createFloatTarget(4, 3);
+	const writeTarget = createFloatTarget(4, 3);
+	const bindingValues = {
+		'stage10.hasSceneEndpoint': true,
+		'color.totalHorizontalIlluminance.value': illuminanceValues[0],
+	};
+	let result;
+
+	try {
+		result = await builder.build({
+			setup: {
+				THREE,
+				composer,
+				scene,
+				camera,
+				viewportSize: {width: 4, height: 3, units: 'pixels'},
+				cacheBackend: automaticSetup.cacheBackend,
+				logger: {warn(_message, error) { throw error; }},
+			},
+			config: {config: {color, execution: {maximumScatteringOrder: 1}}},
+			bindingValues,
+		});
+		await result.runtime.prepare(renderer);
+		const [capturePass, runtimePass] = composer.passes;
+		renderLinearSceneColor(renderer, readTarget, [0.00008, 0.00004, 0.000015]);
+		const sceneLinearSrgb = readPixel(renderer, readTarget, 3, 2);
+		capturePass.render(renderer);
+
+		for (const illuminance of illuminanceValues) {
+			bindingValues['color.totalHorizontalIlluminance.value'] = illuminance;
+			runtimePass.render(renderer, writeTarget, readTarget);
+			const gpu = readPixel(renderer, writeTarget, 3, 2);
+			const cpu = color.composeSceneDisplayRgb({
+				pathRadiance: createRadiance(pathValues, 'color-reset-browser:path'),
+				transmittance: createTransmittance(transmittanceValues, 'color-reset-browser:transmittance'),
+				sceneDisplayRgb: sceneLinearSrgb,
+				sceneColorSpace: 'linear-srgb',
+				totalHorizontalIlluminance: {value: illuminance, units: 'lux'},
+			});
+			expect(runtimePass.uniforms.uColorResetTotalHorizontalIlluminanceLux.value).toBe(illuminance);
+			expectTripletClose(gpu, cpu, 1e-4);
+		}
+
+		expect(result.assembly.fragmentShaderSource).toContain('colorResetDisplayGain');
+		expect(drainErrors(renderer.getContext())).toEqual([]);
+	} finally {
+		result?.runtime?.dispose();
+		result?.scatteringCacheController?.dispose();
+		builder.dispose();
+		renderer.setRenderTarget(null);
+		readTarget.dispose();
+		writeTarget.dispose();
+		renderer.dispose();
+		renderer.forceContextLoss();
+	}
+}
 
 /** Compile and compare one immutable Ferwerda control through the production pass. */
 async function verifyFerwerdaShaderControl(control) {

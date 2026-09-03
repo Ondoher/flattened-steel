@@ -1,10 +1,12 @@
 import * as THREE from 'three';
 
-import {DistantSunLightSource} from '../algorithm32/implementation/index.js';
+import {
+	NEUTRAL_LAMBERTIAN_REFLECTANCE,
+	NeutralLambertianSceneLighting,
+} from '../algorithm32/implementation/index.js';
 
 import {
 	LOCAL_SUN_AMBIENT_LIGHT_INTENSITY,
-	DISTANT_SUN_SCENE_LIGHT_REFERENCE_BRIGHTNESS,
 	LOCAL_SUN_DIRECTIONAL_LIGHT_TOTAL_INTENSITY,
 	LOCAL_SUN_LIGHT_COLOR,
 	LOCAL_SUN_SHADOW_BIAS,
@@ -46,17 +48,24 @@ export class LocalSunSceneLighting {
 	}
 
 	/**
-	 * Create the source-owned ambient fill.
+	 * Create the source-owned environment fill. Equal sky and ground colors
+	 * reproduce the legacy uniform local fill; distant mode sets a black lower
+	 * hemisphere and drives the upper hemisphere from measured sky irradiance.
 	 *
-	 * @returns {THREE.AmbientLight} Return the ambient light.
+	 * @returns {THREE.HemisphereLight} Return the environment light.
 	 */
-	_createAmbientLight() {
-		const light = new THREE.AmbientLight(LOCAL_SUN_LIGHT_COLOR, LOCAL_SUN_AMBIENT_LIGHT_INTENSITY);
+	_createEnvironmentLight() {
+		const light = new THREE.HemisphereLight(
+			LOCAL_SUN_LIGHT_COLOR,
+			LOCAL_SUN_LIGHT_COLOR,
+			LOCAL_SUN_AMBIENT_LIGHT_INTENSITY,
+		);
 
-		light.name = `${LOCAL_SUN_SOURCE_KEY}-ambient-fill`;
+		light.name = `${LOCAL_SUN_SOURCE_KEY}-environment-fill`;
+		light.position.set(0, 1, 0);
 		light.userData.algorithm32SourceLight = true;
 		light.userData.sourceKey = LOCAL_SUN_SOURCE_KEY;
-		light.userData.lightingRole = 'ambient-fill';
+		light.userData.lightingRole = 'upper-hemisphere-diffuse-fill';
 		return light;
 	}
 
@@ -147,54 +156,94 @@ export class LocalSunSceneLighting {
 		return light;
 	}
 
+	/** Preserve one signed linear-RGB light vector through Three's color/intensity representation. */
+	_applyLinearRgb(light, linearRgb, divisor = 1) {
+		if (!Array.isArray(linearRgb) || linearRgb.length !== 3 || linearRgb.some((value) => !Number.isFinite(value))) {
+			throw new TypeError('Flat32 receiver scene-light RGB must contain three finite values.');
+		}
+		const peak = Math.max(...linearRgb.map(Math.abs));
+		if (peak === 0) {
+			light.color.setRGB(0, 0, 0);
+			light.intensity = 0;
+			return;
+		}
+		light.color.r = linearRgb[0] / peak;
+		light.color.g = linearRgb[1] / peak;
+		light.color.b = linearRgb[2] / peak;
+		light.intensity = peak / divisor;
+	}
+
+	/** Project Lambertian output to incident RGB and cross the physical-to-renderer bridge. */
+	_projectIncidentLinearRgb(color, outgoingRadiance) {
+		if (typeof color?.radianceToLinearSrgb !== 'function') {
+			throw new TypeError('Flat32 receiver scene lighting requires the selected Color spectral projection.');
+		}
+		const outgoing = color.radianceToLinearSrgb(outgoingRadiance);
+		const incident = outgoing.map((value) => value * Math.PI / NEUTRAL_LAMBERTIAN_REFLECTANCE);
+		const toneMapK = color.displayConstants?.paperFigure1ToneMapK;
+
+		if (!Number.isFinite(toneMapK) || toneMapK <= 0) return incident;
+		return incident.map((value) => {
+			const display = 1 - Math.exp(-Math.max(value, 0) * toneMapK);
+			return display <= 0.04045
+				? display / 12.92
+				: ((display + 0.055) / 1.055) ** 2.4;
+		});
+	}
+
 	/**
 	 * Update the checkpoint lights from the active production distant Sun.
 	 *
-	 * @param {DistantSunLightSource} lightSource - Resolves the selected
-	 * source's direct and twilight-aware ambient scales.
 	 * @param {UnitVector3} directionToSource - Supplies the spherical model-space
 	 * direction in east/north/up order.
-	 * @param {UnitValue<'cd m^-2'>} sourceBrightness - Supplies source-owned photopic brightness.
+	 * @param {ReceiverEnvironmentLightMeasurement} receiverLight - Supplies direct-normal and diffuse-horizontal spectra.
+	 * @param {Color} color - Supplies the selected Native15 linear-sRGB projection after physical lighting.
 	 * @returns {void}
 	 */
-	updateFromDistantSun(lightSource, directionToSource, sourceBrightness) {
+	updateFromDistantSun(directionToSource, receiverLight, color) {
 		if (this._group === null) {
 			throw new Error('Flat32 local-Sun lighting is not installed.');
 		}
 		const direction = [directionToSource[0], directionToSource[2], -directionToSource[1]];
-		const scales = lightSource.resolveSceneLightScales({
-			directionToSource,
-			observerUp: [0, 0, 1],
-		});
-		if (
-			sourceBrightness?.units !== 'cd m^-2' ||
-			!Number.isFinite(sourceBrightness.value) ||
-			sourceBrightness.value < 0
-		) {
-			throw new RangeError('Distant-Sun source brightness must be finite, nonnegative, and use cd m^-2.');
+		if (!receiverLight?.directNormal || !receiverLight?.diffuseHorizontal) {
+			throw new TypeError('Flat32 distant scene lighting requires complete receiver-light spectra.');
 		}
-		const sourceLightScale = sourceBrightness.value / DISTANT_SUN_SCENE_LIGHT_REFERENCE_BRIGHTNESS.value;
-		const ambientIntensity = sourceLightScale * scales.ambientLightScale.value;
-		const directionalIntensity = (4 * sourceLightScale * scales.directLightScale.value) / SCENE_OBJECTS.length;
+		const response = new NeutralLambertianSceneLighting().evaluate({
+			identity: `${receiverLight.identity}:flat32-neutral-scene-lighting`,
+			directNormal: receiverLight.directNormal,
+			diffuseIrradiance: receiverLight.diffuseHorizontal,
+			surfaceNormal: directionToSource,
+			directionToSource,
+		});
+		const directLinearRgb = this._projectIncidentLinearRgb(color, response.directRadiance);
+		const diffuseLinearRgb = this._projectIncidentLinearRgb(color, response.diffuseRadiance);
 
 		for (const light of this._lights) {
-			if (light instanceof THREE.AmbientLight) {
-				light.intensity = ambientIntensity;
+			if (light instanceof THREE.HemisphereLight) {
+				this._applyLinearRgb(light, diffuseLinearRgb);
+				light.groundColor.setRGB(0, 0, 0);
+				light.userData.receiverLightIdentity = receiverLight.identity;
+				light.userData.spectralPacketIdentity = receiverLight.diffuseHorizontal.contentHash;
 				continue;
 			}
 			if (!(light instanceof THREE.DirectionalLight)) continue;
 			const definition = SCENE_OBJECTS.find((candidate) => candidate.name === light.userData.reviewObjectKey);
 			if (definition === undefined) continue;
-			light.intensity = directionalIntensity;
+			this._applyLinearRgb(light, directLinearRgb, SCENE_OBJECTS.length);
 			light.position.set(
 				definition.shadowFocus[0] + direction[0] * definition.sourceLightDistance,
 				definition.shadowFocus[1] + direction[1] * definition.sourceLightDistance,
 				definition.shadowFocus[2] + direction[2] * definition.sourceLightDistance,
 			);
 			light.userData.directionToSource = direction;
+			light.userData.receiverLightIdentity = receiverLight.identity;
+			light.userData.spectralPacketIdentity = receiverLight.directNormal.contentHash;
 			light.shadow.needsUpdate = true;
 		}
 		this._group.userData.shadowMapUpdatePolicy = 'dynamic-from-production-distant-sun';
+		this._group.userData.receiverLightIdentity = receiverLight.identity;
+		this._group.userData.lightingPolicy =
+			'neutral-lambertian-figure1-renderer-bridge-upper-hemisphere-v3';
 	}
 
 	/**
@@ -207,7 +256,9 @@ export class LocalSunSceneLighting {
 		if (this._group === null) throw new Error('Flat32 local-Sun lighting is not installed.');
 		const sourceCoordinates = sourceScenePosition.coordinates;
 		for (const light of this._lights) {
-			if (light instanceof THREE.AmbientLight) {
+			if (light instanceof THREE.HemisphereLight) {
+				light.color.set(LOCAL_SUN_LIGHT_COLOR);
+				light.groundColor.set(LOCAL_SUN_LIGHT_COLOR);
 				light.intensity = LOCAL_SUN_AMBIENT_LIGHT_INTENSITY;
 				continue;
 			}
@@ -216,6 +267,7 @@ export class LocalSunSceneLighting {
 			if (definition === undefined) continue;
 			const direction = this._directionBetween(definition.shadowFocus, sourceCoordinates);
 
+			light.color.set(LOCAL_SUN_LIGHT_COLOR);
 			light.intensity = LOCAL_SUN_DIRECTIONAL_LIGHT_TOTAL_INTENSITY / SCENE_OBJECTS.length;
 			light.position.set(
 				definition.shadowFocus[0] + direction[0] * definition.sourceLightDistance,
@@ -262,7 +314,7 @@ export class LocalSunSceneLighting {
 		const shadowLayerMasks = new Set();
 
 		for (const light of this._lights) {
-			if (light instanceof THREE.AmbientLight) {
+			if (light instanceof THREE.HemisphereLight) {
 				ambientLightCount += 1;
 				ambientIntensity += light.intensity;
 			}
@@ -335,7 +387,7 @@ export class LocalSunSceneLighting {
 		this._group.userData.sourceKey = LOCAL_SUN_SOURCE_KEY;
 		this._group.userData.shadowMapsConfigured = true;
 		this._group.userData.shadowMapUpdatePolicy = LOCAL_SUN_SHADOW_UPDATE_POLICY;
-		this._addLight(this._createAmbientLight());
+		this._addLight(this._createEnvironmentLight());
 		for (const [index, definition] of SCENE_OBJECTS.entries()) {
 			const light = this._createDirectionalLight(definition, index);
 

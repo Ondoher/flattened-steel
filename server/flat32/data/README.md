@@ -4,6 +4,28 @@ This directory owns the extracted runtime data served by
 `DistantSunSceneCachePackageService`. Large generated packages are ignored by
 Git; this README is the tracked contract for their location and provenance.
 
+It also owns the local-only Color Reset P5 stellar package at
+`brightest-2000-stellar-package-v1/`. Run
+`npm run materialize:algorithm32:brightest-2000-stars` once from an unchanged
+copy of accepted CR6B run `000047`, CR6F run `000055`, and CR6G run `000057`;
+then run `npm run verify:algorithm32:brightest-2000-stars`. The package retains
+the exact double-precision roster and Native15 packets plus the accepted
+`2000x1 RGBA32F` member and `2000x15 R32F` spectrum payloads. It is ignored and
+must not enter a public repository or release package until the source and
+redistribution gaps named by the production Color Reset design close.
+
+The local-only P7 human-vision package lives at
+`human-vision-filter-package-v1/`. Run
+`npm run materialize:algorithm32:human-vision-filters` from the retained CIE
+scotopic sensitivity payload, then run
+`npm run verify:algorithm32:human-vision-filters`. The package contains the
+15 Native15 scotopic integration weights used by the optional mesopic filter.
+It is authenticated by the browser loader, remains ignored, and must not enter
+a public repository or release package until the CIE source and redistribution
+rows in the
+[project-wide research register](../../../references/followup.md#missing-third-party-sources-or-canonical-registrations)
+close.
+
 The qualified local package root is:
 
 ```text

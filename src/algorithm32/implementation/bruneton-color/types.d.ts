@@ -29,4 +29,6 @@ type Figure1DisplayConstants = {
 type BrunetonColorDisplayModelConfiguration = {
 	/** Figure 1 constants supplied instead of the canonical defaults. */
 	readonly displayConstants?: Figure1DisplayConstants;
+	/** Optional source-linear presentation-filter owner. */
+	readonly presentationFilterRegistry?: ViewPresentationFilterRegistry | null;
 };

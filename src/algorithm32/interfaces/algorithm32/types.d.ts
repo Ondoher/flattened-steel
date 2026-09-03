@@ -58,6 +58,8 @@ type LegacyConfig = {
 
 	/** Value that provides optional configured display conversion used by shader setup and CPU/offline display tooling. */
 	color?: Color;
+	/** Optional ordered view-presentation filter owner. */
+	presentationFilterRegistry?: ViewPresentationFilterRegistry | null;
 
 	/** Value that configures numerical execution behavior. */
 	execution?: ExecutionConfig;
@@ -75,6 +77,8 @@ type ExecutionProfileConfig = {
 	profile: Algorithm32ExecutionProfile;
 	/** Optional display conversion used by shader setup and CPU/offline display tooling. */
 	color?: Color;
+	/** Optional ordered view-presentation filter owner. */
+	presentationFilterRegistry?: ViewPresentationFilterRegistry | null;
 	/** Optional runtime shader behavior. */
 	shader?: ShaderRuntimeConfig;
 	/** Legacy component fields cannot be mixed with an explicit profile. */
@@ -106,6 +110,10 @@ interface Algorithm32Facade {
 	readonly config: ConfigSnapshot;
 	/** Current receiver-local Color brightness proxy. */
 	readonly brightnessProxy: UnitValue<'cd m^-2'>;
+	/** Current receiver total-horizontal photopic illuminance used by Color Reset. */
+	readonly totalHorizontalIlluminance: UnitValue<'lux'>;
+	/** Last complete direct, diffuse, and total-horizontal receiver-light publication. */
+	readonly receiverLight: ReceiverEnvironmentLightMeasurement;
 	/** Current configured light-source photopic brightness. */
 	readonly sourceBrightness: UnitValue<'cd m^-2'>;
 
@@ -270,7 +278,7 @@ type ShaderPerformanceCallback =
  * Control an installed Algorithm32 runtime shader integration.
  */
 interface ShaderHandle {
-	/** Measure the installed common-path environment and publish its Ferwerda proxy. */
+	/** Measure the installed common-path environment and publish complete receiver light. */
 	measureReceiverEnvironmentLight(
 		request: Readonly<{
 			readonly THREE: unknown;

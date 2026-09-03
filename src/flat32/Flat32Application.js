@@ -35,8 +35,11 @@ export class Flat32Application {
 			DEFAULT_NATIVE_PRODUCTION_PROFILE.numerical.cacheConstruction.maximumScatteringOrder;
 		this._reviewObjectsEnabled = configuration.reviewObjectsEnabled !== false;
 		this._productionSelections = productionSelections;
+		this._brightest2000StellarCatalogDefinition = configuration.brightest2000StellarCatalogDefinition;
+		this._scotopicLuminanceWeights = configuration.scotopicLuminanceWeights;
 		this._cameraDirectionScene = configuration.cameraDirectionScene ?? null;
 		this._performanceCallback = configuration.performanceCallback;
+		this._atmosphereShaderEnabled = configuration.atmosphereShaderEnabled !== false;
 		this._resolveDistantSunSceneCacheAsset =
 			configuration.resolveDistantSunSceneCacheAsset ??
 			((solarZenithDegrees) => ({status: 'unsupported', requestedSolarZenithDegrees: solarZenithDegrees}));
@@ -211,6 +214,8 @@ export class Flat32Application {
 			sceneCacheAsset,
 			distantSunCacheState,
 			...this._productionSelections,
+			brightest2000StellarCatalogDefinition: this._brightest2000StellarCatalogDefinition,
+			scotopicLuminanceWeights: this._scotopicLuminanceWeights,
 		});
 	}
 
@@ -248,6 +253,9 @@ export class Flat32Application {
 			observation: state.observation,
 			maximumScatteringOrder: this._maximumScatteringOrder,
 			...this._productionSelections,
+			// Flat/local has no stellar source; retain its fail-closed contract by
+			// removing stellar-only presentation stages at the application boundary.
+			presentationFilters: [],
 		});
 	}
 
@@ -290,6 +298,13 @@ export class Flat32Application {
 		);
 	}
 
+	/** Toggle only final Algorithm32 composition, retaining the lit Three scene. */
+	_toggleAtmosphereShader() {
+		this._atmosphereShaderEnabled = !this._atmosphereShaderEnabled;
+		this._modeController?.setAtmosphereEnabled(this._atmosphereShaderEnabled);
+		this._view.showAtmosphereShaderState(this._atmosphereShaderEnabled);
+	}
+
 	/**
 	 * Build the direct scene, then attach Algorithm32 asynchronously.
 	 *
@@ -304,6 +319,7 @@ export class Flat32Application {
 		}
 
 		this._view.start();
+		this._view.showProductionSelections(this._productionSelections);
 		this._view.installLocationTimeControls(
 			() => this._transitionLocationTime((state) => this._locationTimeController.nextLocation(state)),
 			(index) => this._transitionLocationTime((state) => this._locationTimeController.selectTime(state, index)),
@@ -320,6 +336,8 @@ export class Flat32Application {
 				),
 		);
 		this._view.installModeControl(() => this._switchMode());
+		this._view.installAtmosphereControl(() => this._toggleAtmosphereShader());
+		this._view.showAtmosphereShaderState(this._atmosphereShaderEnabled);
 		const initialLocationTimeState = this._locationTimeController.start();
 		this._state = {
 			...this._locationTimeController.selectTime(initialLocationTimeState, this._initialFlatTimeIndex),
@@ -353,6 +371,7 @@ export class Flat32Application {
 			this._endpointScene.applyMode(this._state.modeKind, initialSceneMode.geometry);
 			initialSceneMode.dispose();
 			this._modeController = new ModeController({
+				atmosphereEnabled: this._atmosphereShaderEnabled,
 				sceneRuntime: this._sceneRuntime,
 				endpointScene: this._endpointScene,
 				onPreparing: (kind, mode) => {
@@ -361,6 +380,22 @@ export class Flat32Application {
 				},
 				onReverted: (kind, mode) => {
 					this._endpointScene?.applyMode(kind, mode.geometry);
+					if (kind === 'spherical-distant') {
+						const distantMode = /** @type {SphericalDistantMode} */ (mode);
+						this._endpointScene?.updateDistantSunLighting(
+							distantMode.geometry.configuration.directionToSource,
+							distantMode.algorithm32.receiverLight,
+							distantMode.algorithm32.config.config.color,
+						);
+					} else {
+						const localMode = /** @type {FlatLocalMode} */ (mode);
+						this._endpointScene?.updateLocalSunLighting(
+							localMode.geometry.mapModelPositionToObserverLocalScenePoint(
+								localMode.geometry.configuration.sourcePosition,
+								{sceneScale: localMode.sceneScale},
+							),
+						);
+					}
 					this._sceneSummary = this._endpointScene?.describe() ?? null;
 				},
 				onFailure: this._handleAtmosphereFailure,
@@ -377,9 +412,9 @@ export class Flat32Application {
 					if (kind === 'spherical-distant') {
 						const distantMode = /** @type {SphericalDistantMode} */ (mode);
 						this._endpointScene?.updateDistantSunLighting(
-							distantMode.lightSource,
 							distantMode.geometry.configuration.directionToSource,
-							distantMode.algorithm32.sourceBrightness,
+							distantMode.algorithm32.receiverLight,
+							distantMode.algorithm32.config.config.color,
 						);
 					} else {
 						const localMode = /** @type {FlatLocalMode} */ (mode);
@@ -391,6 +426,7 @@ export class Flat32Application {
 						);
 					}
 					this._sceneRuntime?.refreshShadowMaps();
+					this._sceneSummary = this._endpointScene?.describe() ?? null;
 				},
 			});
 			this._sceneRuntime.start();

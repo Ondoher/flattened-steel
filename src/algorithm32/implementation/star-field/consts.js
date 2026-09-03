@@ -31,16 +31,22 @@ export const STANDARD_STELLAR_INPUT_IDENTITIES = {
 
 /** Exact member-major scalar layout uploaded as immutable stellar generation input. */
 export const STELLAR_GENERATION_SOURCE_LAYOUT = /** @type {const} */ ({
-	schema: 'stellar-generation-source-table-v1',
-	storageFormat: 'R32F',
+	schema: 'stellar-generation-source-table-v2',
+	storageFormat: 'RGBA32F+R32F',
 	memberOrder: 'canonical-selection-order',
 	memberCount: 500,
-	componentCount: 18,
-	directionOffset: 0,
+	memberComponentCount: 4,
 	directionComponentCount: 3,
-	spectralOffset: 3,
 	spectralChannelCount: 15,
 });
+
+/** Create the accepted split GPU-source layout for one selected catalog. */
+export function createStellarGenerationSourceLayout(memberCount) {
+	if (memberCount !== 500 && memberCount !== 2000) {
+		throw new RangeError('Stellar generation supports exactly 500 or 2,000 members.');
+	}
+	return Object.freeze({...STELLAR_GENERATION_SOURCE_LAYOUT, memberCount});
+}
 
 /** Exact accepted tiled stellar field dimensions. */
 export const STELLAR_POINT_SET_CACHE_LAYOUT = /** @type {const} */ ({
@@ -60,6 +66,24 @@ export const STELLAR_POINT_SET_CACHE_LAYOUT = /** @type {const} */ ({
 		layers: 15,
 	},
 });
+
+/** Create the preserved tiled transport layout for one selected catalog size. */
+export function createStellarPointSetCacheLayout(memberCount) {
+	if (memberCount === 500) return STELLAR_POINT_SET_CACHE_LAYOUT;
+	if (memberCount !== 2000) throw new RangeError('Stellar transport supports exactly 500 or 2,000 members.');
+	return Object.freeze({
+		capacity: 2048,
+		memberCount,
+		tileColumns: 64,
+		tileRows: 32,
+		directionCount: 11,
+		receiverCount: 13,
+		channelCount: 15,
+		transportHeight: 416,
+		directionTableRowStart: 416,
+		storage: Object.freeze({format: 'R32F', width: 704, height: 419, layers: 15}),
+	});
+}
 
 /** Exact ordered member data used to construct the standard source. @type {readonly StandardStellarMemberData[]} */
 export const STANDARD_STELLAR_MEMBER_DATA = [

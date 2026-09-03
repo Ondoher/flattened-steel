@@ -2,7 +2,8 @@ import {PixelMath} from '../../math/PixelMath.js';
 import {GLSL_DIRECTIVE_PREFIX} from './consts.js';
 import {CelestialRenderViewSnapshot} from './CelestialRenderViewSnapshot.js';
 
-const SOURCE_TEXTURE_NAME = 'algorithm32-stellar-generation-source';
+const SOURCE_MEMBERS_TEXTURE_NAME = 'algorithm32-stellar-generation-members';
+const SOURCE_SPECTRA_TEXTURE_NAME = 'algorithm32-stellar-generation-spectra';
 const SCREEN_INDEX_TEXTURE_NAME = 'algorithm32-stellar-screen-index';
 const PALETTE_TEXTURE_NAME = 'algorithm32-stellar-palette';
 const ZERO_SCREEN_INDEX_TEXTURE_NAME = 'algorithm32-stellar-screen-index-zero';
@@ -35,6 +36,7 @@ export class StellarScreenPaletteGenerationPass {
 		this._camera = configuration.camera;
 		this._viewportSize = PixelMath.acceptPixelSize(configuration.viewportSize, 'Stellar generation viewport');
 		this._logger = configuration.logger ?? null;
+		this._getPresentationCompatibility = configuration.getPresentationCompatibility ?? null;
 		this._sourceTable = this._sourceOwner.createStellarGenerationSourceTable();
 		this._geometryContribution = this._geometry.createStellarGenerationShaderContribution({
 			observation: this._observation,
@@ -45,7 +47,7 @@ export class StellarScreenPaletteGenerationPass {
 		});
 		this._assertStageContract();
 		this._layout = this._stages[0].stellarLayout;
-		this._sourceTexture = this._createSourceTexture();
+		this._sourceTextures = this._createSourceTextures();
 		this._zeroScreenIndexTexture = this._createZeroScreenIndexTexture();
 		this._zeroPaletteTexture = this._createZeroPaletteTexture();
 		this._disposedTargets = new WeakSet();
@@ -84,28 +86,39 @@ export class StellarScreenPaletteGenerationPass {
 		return source.replace(new RegExp(`^${GLSL_DIRECTIVE_PREFIX}version\\s+300\\s+es\\s*\\n`), '');
 	}
 
-	/** Create the immutable source-table data texture. */
-	_createSourceTexture() {
+	/** Create the immutable CR6G-shaped split source textures. */
+	_createSourceTextures() {
 		const THREE = this._THREE;
 		const layout = this._sourceTable.layout;
-		const texture = new THREE.DataTexture(
-			this._sourceTable.copyValues(),
-			layout.componentCount,
+		const members = new THREE.DataTexture(
+			this._sourceTable.copyMemberValues(),
 			layout.memberCount,
+			1,
+			THREE.RGBAFormat,
+			THREE.FloatType,
+		);
+		members.name = SOURCE_MEMBERS_TEXTURE_NAME;
+		members.internalFormat = 'RGBA32F';
+		const spectra = new THREE.DataTexture(
+			this._sourceTable.copySpectralValues(),
+			layout.memberCount,
+			layout.spectralChannelCount,
 			THREE.RedFormat,
 			THREE.FloatType,
 		);
-		texture.name = SOURCE_TEXTURE_NAME;
-		texture.internalFormat = 'R32F';
-		texture.minFilter = THREE.NearestFilter;
-		texture.magFilter = THREE.NearestFilter;
-		texture.wrapS = THREE.ClampToEdgeWrapping;
-		texture.wrapT = THREE.ClampToEdgeWrapping;
-		texture.generateMipmaps = false;
-		texture.flipY = false;
-		texture.unpackAlignment = 1;
-		texture.needsUpdate = true;
-		return texture;
+		spectra.name = SOURCE_SPECTRA_TEXTURE_NAME;
+		spectra.internalFormat = 'R32F';
+		for (const texture of [members, spectra]) {
+			texture.minFilter = THREE.NearestFilter;
+			texture.magFilter = THREE.NearestFilter;
+			texture.wrapS = THREE.ClampToEdgeWrapping;
+			texture.wrapT = THREE.ClampToEdgeWrapping;
+			texture.generateMipmaps = false;
+			texture.flipY = false;
+			texture.unpackAlignment = 1;
+			texture.needsUpdate = true;
+		}
+		return {members, spectra};
 	}
 
 	/** Create the format-compatible exact-zero integer texture used while no matching pair is consumable. */
@@ -131,9 +144,9 @@ export class StellarScreenPaletteGenerationPass {
 	_createZeroPaletteTexture() {
 		const THREE = this._THREE;
 		const texture = new THREE.DataTexture(
-			new Float32Array(this._layout.channelCount),
+			new Float32Array(this._layout.rowCount),
 			1,
-			this._layout.channelCount,
+			this._layout.rowCount,
 			THREE.RedFormat,
 			THREE.FloatType,
 		);
@@ -150,7 +163,8 @@ export class StellarScreenPaletteGenerationPass {
 	_createUniforms(includeScreenIndex) {
 		const THREE = this._THREE;
 		const uniforms = {
-			uStellarGenerationSource: {value: this._sourceTexture},
+			uStellarSourceMembers: {value: this._sourceTextures.members},
+			uStellarSourceSpectra: {value: this._sourceTextures.spectra},
 		};
 		if (includeScreenIndex) uniforms.uStellarScreenIndex = {value: null};
 		for (const uniform of this._geometryContribution.uniforms) {
@@ -228,7 +242,7 @@ export class StellarScreenPaletteGenerationPass {
 			this._createdTargetCount += 1;
 			screenIndexTarget.texture.name = SCREEN_INDEX_TEXTURE_NAME;
 			screenIndexTarget.texture.internalFormat = 'R16UI';
-			paletteTarget = new THREE.WebGLRenderTarget(this._layout.entryCapacity, this._layout.channelCount, {
+			paletteTarget = new THREE.WebGLRenderTarget(this._layout.entryCapacity, this._layout.rowCount, {
 				format: THREE.RedFormat,
 				type: THREE.FloatType,
 				minFilter: THREE.NearestFilter,
@@ -325,7 +339,7 @@ export class StellarScreenPaletteGenerationPass {
 					id: `${identity.generationIdentity}:palette`,
 					format: /** @type {const} */ ('R32F'),
 					width: this._layout.entryCapacity,
-					height: this._layout.channelCount,
+					height: this._layout.rowCount,
 					texture: pair.paletteTarget.texture,
 				}),
 				layout: this._layout,
@@ -427,12 +441,18 @@ export class StellarScreenPaletteGenerationPass {
 				geometry: this._geometry,
 				observation: this._observation,
 				view,
+				...(this._getPresentationCompatibility === null
+					? {}
+					: {presentation: this._getPresentationCompatibility()}),
 			});
 			if (this._activeGeneration?.id === identity.generationIdentity && this._dirtyReason === null) {
 				this._reusedFrameCount += 1;
 				return;
 			}
-			if (this._activeGeneration?.id !== identity.generationIdentity) this.markDirty('view');
+			if (this._activeGeneration?.id !== identity.generationIdentity) {
+				const sameView = this._activeGeneration?.compatibility.viewIdentity === identity.compatibility.viewIdentity;
+				this.markDirty(sameView ? 'configuration' : 'view');
+			}
 			this._generate(renderer, view, identity);
 		} catch (error) {
 			this._failedGenerationCount += 1;
@@ -457,7 +477,8 @@ export class StellarScreenPaletteGenerationPass {
 	/** Require normal regeneration after renderer context restoration. */
 	handleContextRestoration() {
 		if (this._disposed) return;
-		this._sourceTexture.needsUpdate = true;
+		this._sourceTextures.members.needsUpdate = true;
+		this._sourceTextures.spectra.needsUpdate = true;
 		this._zeroScreenIndexTexture.needsUpdate = true;
 		this._zeroPaletteTexture.needsUpdate = true;
 		this._dirtyReason = 'context-restoration';
@@ -490,7 +511,8 @@ export class StellarScreenPaletteGenerationPass {
 		this._stagingState = null;
 		this._activeGeneration = null;
 		this._dirtyReason = 'initial';
-		this._sourceTexture.dispose?.();
+		this._sourceTextures.members.dispose?.();
+		this._sourceTextures.spectra.dispose?.();
 		this._zeroScreenIndexTexture.dispose?.();
 		this._zeroPaletteTexture.dispose?.();
 		this._pointMaterial.dispose?.();

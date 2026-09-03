@@ -58,7 +58,7 @@ type StellarPointSetCelestialCacheFragmentSupport = Readonly<{
 	/** Reviewed catalog and ordered-selection identity. */
 	readonly catalog: StellarCatalogIdentity;
 	/** Exact supported stellar member count. */
-	readonly memberCount: 500;
+	readonly memberCount: 500 | 2000;
 }>;
 
 /** Flat finite-Sun support facts retained by one source-owned cache fragment. */

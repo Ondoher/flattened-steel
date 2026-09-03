@@ -104,7 +104,7 @@ describe('LocalLightLevelCalculator', /** Called by Jasmine to register the name
 			})
 		);
 		const calculator = new LocalLightLevelCalculator({lightSource});
-		const result = calculator.measureConfiguredDirectSource({
+		const request = {
 			geometry: /** @type {GeometryModel} */ (
 				/** @type {unknown} */ ({
 					resolveViewRaySegment: /** Return the configured receiver position. */ () => ({
@@ -120,30 +120,15 @@ describe('LocalLightLevelCalculator', /** Called by Jasmine to register the name
 				})
 			),
 			observation: /** @type {GeometryObservation} */ (/** @type {unknown} */ ({})),
-		});
+		};
+		const result = calculator.measureConfiguredReceiverDirectLight(request);
+		const retainedDirect = calculator.measureConfiguredDirectSource(request);
 
-		expect(result.directSpectralIrradiance.values).toEqual([0]);
-		expect(result.photopicDirectIlluminance.value).toBe(0);
-		expect(result.adaptingLuminanceProxy).toEqual({value: 0, units: 'cd m^-2'});
-		expect(
-			calculator.measureBrightnessProxy({
-				geometry: /** @type {GeometryModel} */ (
-					/** @type {unknown} */ ({
-						resolveViewRaySegment: /** Return the configured receiver position. */ () => ({
-							ray: {origin: {coordinates: [0, 0, 1], units: 'meters'}, direction: [0, 0, 1]},
-							startDistance: {value: 0, units: 'meters'},
-							endDistance: {value: 0, units: 'meters'},
-						}),
-						resolveSourceRelativePosition: /** Return the configured source direction. */ () => ({
-							directionToSource: [0, 0, -1],
-							directionFromSource: [0, 0, 1],
-							distanceFromSource: null,
-						}),
-					})
-				),
-				observation: /** @type {GeometryObservation} */ (/** @type {unknown} */ ({})),
-			}),
-		).toEqual({value: 0, units: 'cd m^-2'});
+		expect(result.directNormal.contentHash).toBe(retainedDirect.directSpectralIrradiance.contentHash);
+		expect(result.directNormal.values).toEqual([0]);
+		expect(result.directHorizontal.values).toEqual([0]);
+		expect(result.photopicDirectNormalIlluminance.value).toBe(0);
+		expect(result.photopicDirectHorizontalIlluminance.value).toBe(0);
 	});
 
 	it('applies atmosphere-owned source transmittance before Color luminance reduction', /** Called by Jasmine to exercise the named behavior. */ () => {
@@ -187,13 +172,14 @@ describe('LocalLightLevelCalculator', /** Called by Jasmine to register the name
 		);
 		const calculator = new LocalLightLevelCalculator({lightSource});
 		const observation = /** @type {GeometryObservation} */ (/** @type {unknown} */ ({}));
-		const unattenuated = calculator.measureBrightnessProxy({geometry, observation});
-		const transmitted = calculator.measureBrightnessProxy({geometry, atmosphere, observation});
+		const unattenuated = calculator.measureConfiguredReceiverDirectLight({geometry, observation});
+		const transmitted = calculator.measureConfiguredReceiverDirectLight({geometry, atmosphere, observation});
 
-		expect(transmitted.value).toBeCloseTo(unattenuated.value * 0.25, 14);
+		expect(transmitted.directNormal.values[0]).toBeCloseTo(unattenuated.directNormal.values[0] * 0.25, 14);
+		expect(transmitted.directHorizontal.values[0]).toBeCloseTo(unattenuated.directHorizontal.values[0] * 0.25, 14);
 	});
 
-	it('derives a camera-independent brightness policy before horizon clipping', /** Called by Jasmine to exercise the named behavior. */ () => {
+	it('projects direct-normal irradiance onto receiver-local horizontal orientation', /** Called by Jasmine to exercise the named behavior. */ () => {
 		let directionToLight = /** @type {UnitVector3} */ ([
 			Math.sqrt(1 - 0.0007345177958817672 ** 2),
 			0,
@@ -232,27 +218,62 @@ describe('LocalLightLevelCalculator', /** Called by Jasmine to register the name
 			observation: /** @type {GeometryObservation} */ (/** @type {unknown} */ ({})),
 		};
 		expect(calculator.measureSourceBrightness(request).value).toBeCloseTo(fullSourcePhotopicProxy, 9);
-		expect(calculator.measureBrightnessProxy(request).value).toBeCloseTo(fullSourcePhotopicProxy, 9);
+		let measured = calculator.measureConfiguredReceiverDirectLight(request);
+		expect(measured.photopicDirectNormalIlluminance.value / Math.PI).toBeCloseTo(fullSourcePhotopicProxy, 9);
+		expect(measured.sourceCenterCosine).toBeCloseTo(0.0007345177958817672, 15);
+		expect(measured.directHorizontal.values[0]).toBeCloseTo(
+			measured.directNormal.values[0] * measured.sourceCenterCosine,
+			14,
+		);
 
 		directionToLight = /** @type {UnitVector3} */ ([Math.sqrt(1 - 0.9707576860549317 ** 2), 0, 0.9707576860549317]);
-		expect(calculator.measureBrightnessProxy(request).value).toBeCloseTo(fullSourcePhotopicProxy, 9);
+		measured = calculator.measureConfiguredReceiverDirectLight(request);
+		expect(measured.photopicDirectNormalIlluminance.value / Math.PI).toBeCloseTo(fullSourcePhotopicProxy, 9);
+		expect(measured.directHorizontal.values[0]).toBeCloseTo(measured.directNormal.values[0] * 0.9707576860549317, 14);
 
 		directionToLight = /** @type {UnitVector3} */ ([
 			Math.cos((9.74525026663458 * Math.PI) / 180),
 			0,
 			-Math.sin((9.74525026663458 * Math.PI) / 180),
 		]);
-		expect(calculator.measureBrightnessProxy(request).value).toBe(0);
+		measured = calculator.measureConfiguredReceiverDirectLight(request);
+		expect(measured.directNormal.values[0]).toBe(0);
+		expect(measured.directHorizontal.values[0]).toBe(0);
 
 		directionToLight = /** @type {UnitVector3} */ ([
 			Math.cos((15.527384771856092 * Math.PI) / 180),
 			0,
 			-Math.sin((15.527384771856092 * Math.PI) / 180),
 		]);
-		expect(calculator.measureBrightnessProxy(request).value).toBe(0);
+		expect(calculator.measureConfiguredReceiverDirectLight(request).directHorizontal.values[0]).toBe(0);
 
 		directionToLight = /** @type {UnitVector3} */ ([Math.cos(Math.PI / 8), 0, -Math.sin(Math.PI / 8)]);
-		expect(calculator.measureBrightnessProxy(request)).toEqual({value: 0, units: 'cd m^-2'});
+		expect(calculator.measureConfiguredReceiverDirectLight(request).directHorizontal.values[0]).toBe(0);
+	});
+
+	it('publishes exact direct-only, diffuse-only, combined, and dark receiver-light sums', /** Called by Jasmine to exercise the named behavior. */ () => {
+		const calculator = new LocalLightLevelCalculator();
+		const zero = createPacket(SPECTRAL_QUANTITIES.IRRADIANCE_DENSITY, [0]);
+		const direct = createPacket(SPECTRAL_QUANTITIES.IRRADIANCE_DENSITY, [2]);
+		const diffuse = createPacket(SPECTRAL_QUANTITIES.IRRADIANCE_DENSITY, [3]);
+		const cases = [
+			{id: 'direct-only', directHorizontal: direct, diffuseHorizontal: zero, expected: 2},
+			{id: 'diffuse-only', directHorizontal: zero, diffuseHorizontal: diffuse, expected: 3},
+			{id: 'combined', directHorizontal: direct, diffuseHorizontal: diffuse, expected: 5},
+			{id: 'dark', directHorizontal: zero, diffuseHorizontal: zero, expected: 0},
+		];
+
+		for (const candidate of cases) {
+			const result = calculator.combineReceiverLight({
+				identity: candidate.id,
+				directNormal: direct,
+				directHorizontal: candidate.directHorizontal,
+				diffuseHorizontal: candidate.diffuseHorizontal,
+			});
+			expect(result.totalHorizontal.values).toEqual([candidate.expected]);
+			expect(result.photopicTotalHorizontalIlluminance.value).toBeCloseTo(candidate.expected * 683, 12);
+			expect(result.totalHorizontalLuminanceProxy.value).toBeCloseTo((candidate.expected * 683) / Math.PI, 12);
+		}
 	});
 
 	it('derives exact visible uniform-disk support without a sky probe', /** Called by Jasmine to exercise the named behavior. */ () => {

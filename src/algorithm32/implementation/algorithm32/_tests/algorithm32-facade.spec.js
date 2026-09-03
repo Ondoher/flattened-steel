@@ -334,6 +334,7 @@ describe('Algorithm32', /** Called by Jasmine to register the named test suite. 
 
 		expect(bindings['color.exposureModifier']).toBe(1);
 		expect(bindings['color.brightnessProxy']).toBeGreaterThanOrEqual(0);
+		expect(bindings['color.totalHorizontalIlluminance.value']).toBeGreaterThanOrEqual(0);
 		expect(bindings['color.sceneLuminanceScale']).toBeGreaterThan(0);
 		expect(algorithm32.sourceBrightness.value).toBe(bindings['color.sceneLuminanceScale']);
 		const sourceBrightness = bindings['color.sceneLuminanceScale'];
@@ -359,6 +360,10 @@ describe('Algorithm32', /** Called by Jasmine to register the named test suite. 
 		).toThrowError(TypeError, 'color.brightnessProxy is owned by the Algorithm32 facade.');
 		expect(
 			/** Called by Jasmine to invoke the rejected operation. */ () =>
+				algorithm32._createRuntimeBindingValues({'color.totalHorizontalIlluminance.value': 4}),
+		).toThrowError(TypeError, 'color.totalHorizontalIlluminance.value is owned by the Algorithm32 facade.');
+		expect(
+			/** Called by Jasmine to invoke the rejected operation. */ () =>
 				algorithm32._createRuntimeBindingValues({'color.sceneLuminanceScale': 4}),
 		).toThrowError(TypeError, 'color.sceneLuminanceScale is owned by the Algorithm32 facade.');
 
@@ -382,6 +387,55 @@ describe('Algorithm32', /** Called by Jasmine to register the named test suite. 
 		expect(bindings['color.brightnessProxy']).toBe(0);
 		expect(bindings['color.exposureModifier']).toBeCloseTo(10.50268593548108, 12);
 
+		algorithm32.dispose();
+	});
+
+	it('publishes direct-normal separately and adds diffuse light only to total-horizontal state', async () => {
+		const config = createConfig('receiver-light-addition');
+		config.lightSource.sampleDirectLighting = /** Return a source whose center cosine is one half. */ () => ({
+			sourceIrradiance: spectralPacket(
+				SPECTRAL_QUANTITIES.IRRADIANCE_DENSITY,
+				SPECTRAL_UNITS.IRRADIANCE_DENSITY,
+				2,
+				'algorithm32-facade-receiver-direct-normal',
+			),
+			directionToLight: [Math.sqrt(0.75), 0, 0.5],
+		});
+		const algorithm32 = new Algorithm32(config);
+		const initial = algorithm32.receiverLight;
+
+		expect(initial.directNormal.values.every((value) => value === 2)).toBeTrue();
+		expect(initial.directHorizontal.values.every((value) => value === 1)).toBeTrue();
+		expect(initial.diffuseHorizontal.values.every((value) => value === 0)).toBeTrue();
+		expect(initial.totalHorizontal.values.every((value) => value === 1)).toBeTrue();
+		expect(algorithm32.brightnessProxy).toEqual(initial.totalHorizontalLuminanceProxy);
+		expect(algorithm32.totalHorizontalIlluminance).toEqual(initial.photopicTotalHorizontalIlluminance);
+
+		const diffuse = spectralPacket(
+			SPECTRAL_QUANTITIES.IRRADIANCE_DENSITY,
+			SPECTRAL_UNITS.IRRADIANCE_DENSITY,
+			3,
+			'algorithm32-facade-receiver-diffuse-horizontal',
+		);
+		const radiance = spectralPacket(
+			SPECTRAL_QUANTITIES.RADIANCE_DENSITY,
+			SPECTRAL_UNITS.RADIANCE_DENSITY,
+			0,
+			'algorithm32-facade-receiver-radiance-placeholder',
+		);
+		const measured = await algorithm32._publishReceiverEnvironmentLight({
+			identity: 'algorithm32-facade-receiver-cache-generation',
+			sampleIncomingRadiance: (directions) => directions.map(() => radiance),
+			reduceIncomingRadiance: () => diffuse,
+		});
+
+		expect(measured.directNormal).toBe(initial.directNormal);
+		expect(measured.directHorizontal).toBe(initial.directHorizontal);
+		expect(measured.diffuseHorizontal).toBe(diffuse);
+		expect(measured.totalHorizontal.values.every((value) => value === 4)).toBeTrue();
+		expect(algorithm32.receiverLight).toBe(measured);
+		expect(algorithm32.brightnessProxy).toEqual(measured.totalHorizontalLuminanceProxy);
+		expect(algorithm32.totalHorizontalIlluminance).toEqual(measured.photopicTotalHorizontalIlluminance);
 		algorithm32.dispose();
 	});
 

@@ -316,6 +316,7 @@ SpectralValue oneSpectral() {
 		const providerRequest = {
 			model: this._model,
 		};
+		const presentationFilterRegistry = request.config?.config?.presentationFilterRegistry ?? null;
 		const providers = [
 			this._model.geometry,
 			this._model.atmosphere,
@@ -325,6 +326,7 @@ SpectralValue oneSpectral() {
 			buildContext.stellarPointSetCache,
 			buildContext.flatFiniteSunCache,
 			buildContext.automaticAssembly ? this._transport : null,
+			presentationFilterRegistry?.enabled === true ? presentationFilterRegistry : null,
 			request.config?.config?.color,
 		];
 
@@ -401,6 +403,10 @@ SpectralValue oneSpectral() {
 			contributions.push(
 				new CelestialScreenPaletteConsumerShaderContribution({
 					includeStars: roster.family === 'spherical-sun-stars-radial-v1' && roster.stars != null,
+					filteredStars:
+						roster.family === 'spherical-sun-stars-radial-v1' &&
+						roster.stars != null &&
+						presentationFilterRegistry?.enabled === true,
 					surfaceRadiance: sun.celestialSourceDefinition.surfaceRadiance,
 				}).createShaderContribution(),
 			);

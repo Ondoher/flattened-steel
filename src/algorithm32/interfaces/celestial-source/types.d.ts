@@ -98,6 +98,10 @@ type StellarSourceMemberDefinition = Readonly<{
 	readonly id: string;
 	/** Canonical unit direction in the catalog frame. */
 	readonly direction: UnitVector3;
+	/** Optional catalog visual magnitude retained by packaged catalogs. */
+	readonly visualMagnitude?: number;
+	/** Catalog-packet derivation retained for packaged proxy and Pickles members. */
+	readonly spectralDerivation?: Readonly<Record<string, unknown>>;
 	/** Apparent top-of-atmosphere spectral irradiance density. */
 	readonly spectralIrradiance: SpectralIrradiancePacket;
 }>;
@@ -110,8 +114,14 @@ type StellarPointSetSourceDefinition = Readonly<{
 	readonly kind: 'static-stellar-point-set';
 	/** Catalog and ordered-selection identity. */
 	readonly catalog: StellarCatalogIdentity;
-	/** Exactly 500 members in canonical selection order. */
+	/** Exactly 500 or 2,000 members in canonical selection order. */
 	readonly members: readonly StellarSourceMemberDefinition[];
+	/** Optional packaged photometry provenance, including every declared proxy. */
+	readonly photometry?: Readonly<{
+		readonly identity: string;
+		readonly retainedPolicyMemberCount: number;
+		readonly proxyMembers: readonly Readonly<{readonly id: string; readonly derivation: Readonly<Record<string, unknown>>}>[];
+	}>;
 }>;
 
 /** Static definition exposed by one supported celestial source capability. */

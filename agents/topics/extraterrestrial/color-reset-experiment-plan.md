@@ -1,7 +1,15 @@
 # Color Reset Incremental Experiment Plan
 
-Status: CR0 through CR3 are accepted and CR4's diagnostic execution is
-accepted without an owner-selected appearance row. CR4A and CR4B are complete.
+Status: closed through CR8 by accepted immutable run
+`000065-color-reset-qualification`. The detailed chronology below preserves
+the intermediate accepted, rejected, skipped, and superseded decisions; it is
+not current implementation instruction. Production adoption is owned by the
+[Production Color Reset Implementation Plan](../algorithm32/production/color-reset-implementation-plan.md).
+Remaining cross-surface disposition is owned by the
+[production closeout plan](../algorithm32/production/color-star-cache-closeout-plan.md).
+
+CR0 through CR3 are accepted and CR4's diagnostic execution was accepted
+without an owner-selected appearance row. CR4A and CR4B are complete.
 The authenticated paper inventory is accepted by immutable run
 `000016-paper-sunset-reference-inventory`, the matched Native15/Q30 comparison
 by `000019-native15-sunset-paper-visual-comparison`, and the single-scene
@@ -1918,8 +1926,8 @@ verified artifact-set SHA-256 is
 
 ### CR6G - Qualify the brightest-2,000 runtime package
 
-Status: predeclared; not yet executed. Planned slug:
-`cr6g-brightest-2000-runtime-capacity`.
+Status: complete and accepted by independently verified immutable run
+`000057-cr6g-brightest-2000-runtime-capacity`.
 
 Question: can the exact CR6B roster and CR6F packets occupy a bounded WebGL2
 package with an explicit ordered replacement seam? Pack member direction and V

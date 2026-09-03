@@ -1,6 +1,10 @@
 /** Fixed sample count for the receiver-local environmental-light reduction. */
 export const RECEIVER_ENVIRONMENT_SAMPLE_COUNT = 32;
 
+/** Stable identity of the fixed receiver-local cosine-weighted quadrature. */
+export const RECEIVER_ENVIRONMENT_LIGHT_QUADRATURE_IDENTITY =
+	'receiver-environment-light-quadrature:cosine-weighted-hammersley-32-v1';
+
 /**
  * Build a deterministic cosine-weighted upper-hemisphere quadrature in a
  * receiver-local frame whose positive Z axis is local up.

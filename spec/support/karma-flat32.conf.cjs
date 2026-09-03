@@ -6,12 +6,31 @@ module.exports = function configureFlat32Karma(config) {
 			? {
 					'/base/dist/flat32/api/distant-sun-scene-cache': `${cacheServer.replace(/\/$/u, '')}/api/distant-sun-scene-cache`,
 					'/flat32/scene-caches/': `${cacheServer.replace(/\/$/u, '')}/scene-caches/`,
+					'/scene-caches/': `${cacheServer.replace(/\/$/u, '')}/scene-caches/`,
 				}
 			: {};
+	const stellarCatalogProxies = {
+		'/base/dist/flat32/stellar-catalogs/brightest-2000-stellar-package-v1/':
+			'/base/server/flat32/data/brightest-2000-stellar-package-v1/',
+		'/base/dist/flat32/presentation-filters/human-vision-filter-package-v1/':
+			'/base/server/flat32/data/human-vision-filter-package-v1/',
+	};
 	config.set({
 		basePath: '../..',
 		frameworks: ['jasmine'],
 		files: [
+			{
+				pattern: 'server/flat32/data/brightest-2000-stellar-package-v1/**/*',
+				included: false,
+				served: true,
+				watched: false,
+			},
+			{
+				pattern: 'server/flat32/data/human-vision-filter-package-v1/**/*',
+				included: false,
+				served: true,
+				watched: false,
+			},
 			{
 				pattern: 'dist/flat32/**/*',
 				included: false,
@@ -27,7 +46,7 @@ module.exports = function configureFlat32Karma(config) {
 			},
 		],
 		plugins: [require('karma-jasmine'), require('karma-chrome-launcher'), require('karma-spec-reporter')],
-		proxies: cacheProxies,
+		proxies: {...cacheProxies, ...stellarCatalogProxies},
 		reporters: ['spec'],
 		client: {
 			args: fullCache ? ['full-cache'] : ['basic-cache'],

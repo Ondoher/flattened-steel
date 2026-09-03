@@ -36,8 +36,8 @@ function createGeometry(observation = FIXED_OBSERVATION) {
 function createPolicyConfiguration(memberCount = 500) {
 	return {
 		sourceLayout: {
-			schema: 'stellar-generation-source-table-v1',
-			storageFormat: 'R32F',
+			schema: 'stellar-generation-source-table-v2',
+			storageFormat: 'RGBA32F+R32F',
 			memberOrder: 'canonical-selection-order',
 			memberCount,
 			spectralChannelCount: 15,
@@ -52,6 +52,8 @@ function createPolicyConfiguration(memberCount = 500) {
 			indexFormat: 'R16UI',
 			paletteFormat: 'R32F',
 			channelCount: 15,
+			rowCount: 16,
+			visualMagnitudeRow: 15,
 		},
 		numericalPolicy: {...STELLAR_SCREEN_PALETTE_NUMERICAL_POLICY},
 	};
@@ -82,7 +84,7 @@ describe('stellar screen-palette generation stages', /** Called by Jasmine to re
 	it('accepts the complete R16UI boundary without wrapping its highest candidate index', /** Called by Jasmine to exercise the named behavior. */ () => {
 		const policy = new StellarScreenPaletteGenerationPolicy(createPolicyConfiguration(65_535));
 
-		expect(policy.layout).toEqual({
+			expect(policy.layout).toEqual({
 			zeroIndex: 0,
 			candidateSlotPolicy: 'canonical-member-index-plus-one',
 			collisionRepresentative: 'lowest-canonical-member',
@@ -92,6 +94,8 @@ describe('stellar screen-palette generation stages', /** Called by Jasmine to re
 			indexFormat: 'R16UI',
 			paletteFormat: 'R32F',
 			channelCount: 15,
+			rowCount: 16,
+			visualMagnitudeRow: 15,
 		});
 	});
 
@@ -126,19 +130,21 @@ describe('stellar screen-palette generation stages', /** Called by Jasmine to re
 
 		expect(stages[0].policyIdentity).toBe(stages[1].policyIdentity);
 		expect(stages[0].policyIdentity).toBe(
-			'sha256:babbd5aedf036080d05b2196a638cd4b40eac75a80e7b02fc1f05ed7148cfd60',
+			'sha256:edb006d1e5bae4eacdfc2fc0bc9a5fdf5aa000b25725d78f86be1bc0dcf3b89f',
 		);
 		expect(stages[0].stellarLayout.entryCapacity).toBe(501);
 		expect(stages[0].stellarLayout.memberCount).toBe(500);
 		expect(stages[0].stellarLayout.indexFormat).toBe('R16UI');
 		expect(stages[0].stellarLayout.paletteFormat).toBe('R32F');
 		expect(stages[0].stellarLayout.channelCount).toBe(15);
+		expect(stages[0].stellarLayout.rowCount).toBe(16);
+		expect(stages[0].stellarLayout.visualMagnitudeRow).toBe(15);
 		expect(stages[0].numericalPolicy).toEqual(STELLAR_SCREEN_PALETTE_NUMERICAL_POLICY);
 		expect(stages[1].stellarLayout).toEqual(stages[0].stellarLayout);
 		expect(stages[1].numericalPolicy).toEqual(stages[0].numericalPolicy);
 	});
 
-	it('freezes the accepted 000435 sky control without making it a runtime condition table', () => {
+	it('promotes the accepted CR6C q24 calibration over the frozen 000435 base scale', () => {
 		expect(STELLAR_SKY_REFERENCE_CONTROLS.view).toEqual({
 			widthPixels: 640,
 			heightPixels: 400,
@@ -150,13 +156,20 @@ describe('stellar screen-palette generation stages', /** Called by Jasmine to re
 			maximumByte: 235,
 			exactWhitePixelCount: 0,
 		});
-		expect(STELLAR_ONE_PIXEL_PRESENTATION.reference.runId).toBe(
-			STELLAR_SKY_REFERENCE_CONTROLS.sourceRun.id,
-		);
+		expect(STELLAR_ONE_PIXEL_PRESENTATION.reference.runId).toBe(STELLAR_SKY_REFERENCE_CONTROLS.sourceRun.id);
+		expect(STELLAR_ONE_PIXEL_PRESENTATION.calibration).toEqual({
+			runId: '000049-cr6c-one-pixel-brightness-calibration-narrowed',
+			multiplier: 24,
+			baseIrradianceToBoundaryRadianceScale: 60999.839486002405,
+		});
+		expect(
+			STELLAR_ONE_PIXEL_PRESENTATION.calibration.baseIrradianceToBoundaryRadianceScale *
+				STELLAR_ONE_PIXEL_PRESENTATION.reference.centerPixelSolidAngleSteradians,
+		).toBeCloseTo(1, 12);
 		expect(
 			STELLAR_ONE_PIXEL_PRESENTATION.irradianceToBoundaryRadianceScale *
 				STELLAR_ONE_PIXEL_PRESENTATION.reference.centerPixelSolidAngleSteradians,
-		).toBeCloseTo(1, 12);
+		).toBeCloseTo(24, 12);
 	});
 
 	it('derives stable source, fixed-observation, view, and complete generation identities', /** Called by Jasmine to exercise the named behavior. */ () => {
@@ -171,12 +184,12 @@ describe('stellar screen-palette generation stages', /** Called by Jasmine to re
 		});
 
 		expect(first).toEqual(equivalent);
-		expect(first.policyIdentity).toBe('sha256:babbd5aedf036080d05b2196a638cd4b40eac75a80e7b02fc1f05ed7148cfd60');
+		expect(first.policyIdentity).toBe('sha256:edb006d1e5bae4eacdfc2fc0bc9a5fdf5aa000b25725d78f86be1bc0dcf3b89f');
 		expect(first.generationIdentity).toBe(
-			'sha256:65c353e7e900b5a99249441731abb49bcae04c27d780d420f2c06ee0e160bd61',
+			'sha256:107555b8d919722cc6363034d6918c5fc921ad65d93bebd12eeaac604397e3a5',
 		);
 		expect(first.compatibility).toEqual({
-			sourceIdentity: 'sha256:cab085e7e0428e503ece8c5acd77f78ad8884ba1e111a25391adcab7e99a329d',
+			sourceIdentity: 'sha256:92216da236031ebadc17f08c52de792e6c4d614a70975edad7720b14f02248d9',
 			observationIdentity: 'sha256:b2bd1287f80229c6d2d201f28597497d35043aa7247cfd3643c6291d3500de85',
 			viewIdentity: 'sha256:bff251cf07f6a051fa3492c2460e51b6b8e15b1b05c3aee83385f194164e114b',
 		});
@@ -311,7 +324,7 @@ describe('stellar screen-palette generation stages', /** Called by Jasmine to re
 			firstStages.map((stage) => stage.sourceHash),
 		);
 		expect(source.createStellarGenerationSourceTable().identity).toBe(
-			'sha256:93dec8deb8bf5594778f523d0d01454194dbe0b052e812cf3fd67e1a20bc4d51',
+			'sha256:1b8f8143033d2ebc0b9a6f918c7e809411c737a873f229cb7dc5e05a84c02429',
 		);
 	});
 
@@ -323,7 +336,7 @@ describe('stellar screen-palette generation stages', /** Called by Jasmine to re
 		});
 
 		expect(point.id).toBe('celestial-generation.stellar-point-index');
-		expect(point.sourceHash).toBe('fnv1a32:50c482e6');
+		expect(point.sourceHash).toBe('fnv1a32:52d295ae');
 		expect(point.order).toBe(100);
 		expect(point.vertexCount).toBe(500);
 		expect(point.topology).toBe('points');
@@ -362,7 +375,7 @@ describe('stellar screen-palette generation stages', /** Called by Jasmine to re
 		});
 
 		expect(palette.id).toBe('celestial-generation.stellar-sparse-palette');
-		expect(palette.sourceHash).toBe('fnv1a32:e2ddfecd');
+		expect(palette.sourceHash).toBe('fnv1a32:288673e3');
 		expect(palette.order).toBe(110);
 		expect(palette.vertexCount).toBe(3);
 		expect(palette.topology).toBe('fullscreen-triangles');
@@ -374,7 +387,7 @@ describe('stellar screen-palette generation stages', /** Called by Jasmine to re
 				id: 'celestial.stellar.palette',
 				format: 'R32F',
 				persistence: 'published',
-				shape: 'stellar-entry-by-native-channel',
+				shape: 'stellar-entry-by-native-channel-plus-visual-magnitude',
 				clearValue: 0,
 			},
 		]);
@@ -384,7 +397,9 @@ describe('stellar screen-palette generation stages', /** Called by Jasmine to re
 			'for (int memberIndex = 0; memberIndex < 500; memberIndex += 1)',
 		);
 		expect(palette.fragmentShaderSource).not.toContain('stellarPixelSolidAngleSteradians');
-		expect(palette.fragmentShaderSource).toContain('accumulatedRadiance += irradiance * 60999.8394860;');
-		expect(palette.fragmentShaderSource).toContain('outStellarPaletteValue = accumulatedRadiance;');
+		expect(palette.fragmentShaderSource).toContain('accumulatedValue += irradiance * 1463996.14766;');
+		expect(palette.fragmentShaderSource).toContain('accumulatedValue += pow(10.0, -0.4 * visualMagnitude);');
+		expect(palette.fragmentShaderSource).toContain('? -2.5 * log(accumulatedValue) / log(10.0)');
+		expect(palette.fragmentShaderSource).toContain(': accumulatedValue;');
 	});
 });

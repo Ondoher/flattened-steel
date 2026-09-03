@@ -42,6 +42,9 @@ export class Flat32View {
 			</div>
 			<nav class="flat32-scene-controls" aria-label="Scene controls">
 				<button id="flat32-mode-control" type="button">Switch to Flat</button>
+				<button id="flat32-atmosphere-control" type="button" aria-pressed="true">
+					Atmosphere Shader: On
+				</button>
 				<button id="flat32-location-control" type="button">Location</button>
 			</nav>
 			<section class="flat32-time-panel" aria-label="Time controls">
@@ -125,6 +128,25 @@ export class Flat32View {
 	installModeControl(onMode) {
 		const shell = this._requireElement(this._shell, 'shell');
 		shell.querySelector('#flat32-mode-control')?.addEventListener('click', onMode);
+	}
+
+	/** Bind the diagnostic atmosphere-composition bypass. */
+	installAtmosphereControl(onToggle) {
+		const shell = this._requireElement(this._shell, 'shell');
+		shell.querySelector('#flat32-atmosphere-control')?.addEventListener('click', onToggle);
+	}
+
+	/** Present whether the Algorithm32 atmosphere composition shader is visible. */
+	showAtmosphereShaderState(enabled) {
+		const shell = this._requireElement(this._shell, 'shell');
+		const button = shell.querySelector('#flat32-atmosphere-control');
+
+		if (button instanceof HTMLButtonElement) {
+			button.textContent = `Atmosphere Shader: ${enabled ? 'On' : 'Off'}`;
+			button.setAttribute('aria-pressed', String(enabled));
+			button.classList.toggle('is-active', enabled);
+		}
+		shell.dataset.flat32AtmosphereShader = enabled ? 'enabled' : 'bypassed';
 	}
 
 	/**
@@ -253,6 +275,18 @@ export class Flat32View {
 		this._requireElement(this._pairing, 'pairing');
 	}
 
+	/** Publish the exact production selections used by this application instance. */
+	showProductionSelections(selections) {
+		const shell = this._requireElement(this._shell, 'shell');
+		shell.dataset.flat32ColorModel = selections.colorDisplayModelConfiguration.model;
+		shell.dataset.flat32StellarCatalog = selections.stellarCatalog;
+		shell.dataset.flat32PresentationFilters = selections.presentationFilters
+			.filter((filter) => filter.enabled)
+			.map((filter) => filter.id)
+			.join(',');
+		shell.dataset.flat32PresentationFilterConfiguration = selections.presentationFilterConfigurationIdentity;
+	}
+
 	/**
 	 * Publish ordinary scene and lighting facts.
 	 *
@@ -299,6 +333,7 @@ export class Flat32View {
 		const progress = this._requireElement(this._progress, 'progress');
 		const error = this._requireElement(this._error, 'error');
 		const atmosphere = this._requireElement(this._atmosphere, 'atmosphere');
+		const atmosphereControl = shell.querySelector('#flat32-atmosphere-control');
 		const pairing = state.modeKind === 'spherical-distant' ? 'spherical/distant' : 'flat/local';
 		const timeDisplay = this._timeDisplay(state);
 		const setupDescription = `${pairing} atmosphere for ${state.locationLabel} at ${timeDisplay}`;
@@ -312,6 +347,7 @@ export class Flat32View {
 		progress.hidden = false;
 		error.hidden = true;
 		error.textContent = '';
+		if (atmosphereControl instanceof HTMLButtonElement) atmosphereControl.disabled = true;
 	}
 
 	/** Present one distant-Sun cache-resolution phase through the existing status surface. */
@@ -347,6 +383,7 @@ export class Flat32View {
 		const progress = this._requireElement(this._progress, 'progress');
 		const error = this._requireElement(this._error, 'error');
 		const atmosphere = this._requireElement(this._atmosphere, 'atmosphere');
+		const atmosphereControl = shell.querySelector('#flat32-atmosphere-control');
 
 		this._publishSceneSummary(sceneSummary);
 		shell.dataset.flat32State = 'ready';
@@ -376,6 +413,7 @@ export class Flat32View {
 		progress.hidden = true;
 		error.hidden = true;
 		error.textContent = '';
+		if (atmosphereControl instanceof HTMLButtonElement) atmosphereControl.disabled = false;
 	}
 
 	/**

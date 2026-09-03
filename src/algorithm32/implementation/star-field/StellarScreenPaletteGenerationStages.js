@@ -3,7 +3,8 @@ import {ShaderSource} from '../../shader-assembly/base/ShaderSource.js';
 import {STELLAR_ONE_PIXEL_PRESENTATION} from './StellarPointPresentation.js';
 import {StellarScreenPaletteGenerationPolicy} from './StellarScreenPaletteGenerationPolicy.js';
 
-const SOURCE_TABLE_VALUE_KEY = 'runtime.celestial.stellarSourceTable';
+const SOURCE_MEMBERS_VALUE_KEY = 'runtime.celestial.stellarSourceMembers';
+const SOURCE_SPECTRA_VALUE_KEY = 'runtime.celestial.stellarSourceSpectra';
 const SCREEN_INDEX_OUTPUT_ID = 'celestial.stellar.screen-index';
 const ORDER_DEPTH_OUTPUT_ID = 'celestial.stellar.order-depth';
 const PALETTE_OUTPUT_ID = 'celestial.stellar.palette';
@@ -33,16 +34,12 @@ export class StellarScreenPaletteGenerationStages {
 		return [this._createPointStage(), this._createPaletteStage()];
 	}
 
-	/** @returns {CelestialGenerationBindingRequirement} - Immutable source-table sampler binding. */
-	_sourceBinding() {
-		return {
-			id: 'stellar-source.generation-table',
-			owner: 'stellarSource',
-			kind: 'texture',
-			updateFrequency: 'setup',
-			valueKey: SOURCE_TABLE_VALUE_KEY,
-			required: true,
-		};
+	/** @returns {readonly CelestialGenerationBindingRequirement[]} - Immutable split-source sampler bindings. */
+	_sourceBindings() {
+		return [
+			{id: 'stellar-source.members', owner: 'stellarSource', kind: 'texture', updateFrequency: 'setup', valueKey: SOURCE_MEMBERS_VALUE_KEY, required: true},
+			{id: 'stellar-source.spectra', owner: 'stellarSource', kind: 'texture', updateFrequency: 'setup', valueKey: SOURCE_SPECTRA_VALUE_KEY, required: true},
+		];
 	}
 
 	/** @returns {string} - GLSL declarations for geometry-owned uniforms. */
@@ -53,14 +50,13 @@ export class StellarScreenPaletteGenerationStages {
 	/** @returns {StellarScreenPaletteGenerationStageDescription} - One-member-per-point deterministic index stage. */
 	_createPointStage() {
 		const memberCount = this._source.layout.memberCount;
-		const directionOffset = this._source.layout.directionOffset;
 		const geometryUniforms = this._geometryUniformSource();
 		const vertexShaderSource = `#version 300 es
 precision highp float;
 precision highp int;
 precision highp sampler2D;
 
-uniform highp sampler2D uStellarGenerationSource;
+uniform highp sampler2D uStellarSourceMembers;
 ${geometryUniforms}
 
 ${this._geometry.source}
@@ -69,11 +65,7 @@ flat out highp uint vStellarCandidateIndex;
 
 void main() {
 	int memberIndex = gl_VertexID;
-	vec3 catalogDirection = vec3(
-		texelFetch(uStellarGenerationSource, ivec2(${directionOffset}, memberIndex), 0).r,
-		texelFetch(uStellarGenerationSource, ivec2(${directionOffset + 1}, memberIndex), 0).r,
-		texelFetch(uStellarGenerationSource, ivec2(${directionOffset + 2}, memberIndex), 0).r
-	);
+	vec3 catalogDirection = texelFetch(uStellarSourceMembers, ivec2(memberIndex, 0), 0).xyz;
 	StellarProjectionResult projection = stellarProjectCatalogDirection(catalogDirection);
 	vStellarCandidateIndex = uint(memberIndex + 1);
 	gl_PointSize = 1.0;
@@ -119,7 +111,7 @@ void main() {
 				},
 			],
 			dependencies: [],
-			bindingRequirements: [this._sourceBinding(), ...this._geometry.bindingRequirements],
+			bindingRequirements: [this._sourceBindings()[0], ...this._geometry.bindingRequirements],
 			completionBoundary: 'stage',
 		});
 	}
@@ -127,6 +119,7 @@ void main() {
 	/** @returns {StellarScreenPaletteGenerationStageDescription} - Sparse representative and collision-accumulation stage. */
 	_createPaletteStage() {
 		const layout = this._source.layout;
+		const paletteLayout = this._policy.layout;
 		const pointPresentationScale = ShaderSource.formatFloat(
 			STELLAR_ONE_PIXEL_PRESENTATION.irradianceToBoundaryRadianceScale,
 		);
@@ -146,7 +139,8 @@ precision highp int;
 precision highp sampler2D;
 precision highp usampler2D;
 
-uniform highp sampler2D uStellarGenerationSource;
+uniform highp sampler2D uStellarSourceMembers;
+uniform highp sampler2D uStellarSourceSpectra;
 uniform highp usampler2D uStellarScreenIndex;
 ${geometryUniforms}
 
@@ -155,11 +149,7 @@ ${this._geometry.source}
 layout(location = 0) out highp float outStellarPaletteValue;
 
 vec3 stellarGenerationCatalogDirection(int memberIndex) {
-	return vec3(
-		texelFetch(uStellarGenerationSource, ivec2(${layout.directionOffset}, memberIndex), 0).r,
-		texelFetch(uStellarGenerationSource, ivec2(${layout.directionOffset + 1}, memberIndex), 0).r,
-		texelFetch(uStellarGenerationSource, ivec2(${layout.directionOffset + 2}, memberIndex), 0).r
-	);
+	return texelFetch(uStellarSourceMembers, ivec2(memberIndex, 0), 0).xyz;
 }
 
 void main() {
@@ -167,7 +157,7 @@ void main() {
 	int channelIndex = int(gl_FragCoord.y);
 	outStellarPaletteValue = 0.0;
 	if (entryIndex == 0 || entryIndex > ${layout.memberCount}
-		|| channelIndex < 0 || channelIndex >= ${layout.spectralChannelCount}) {
+		|| channelIndex < 0 || channelIndex >= ${paletteLayout.rowCount}) {
 		return;
 	}
 	int representativeMemberIndex = entryIndex - 1;
@@ -185,7 +175,7 @@ void main() {
 	if (selectedIndex != uint(entryIndex)) {
 		return;
 	}
-	float accumulatedRadiance = 0.0;
+	float accumulatedValue = 0.0;
 	for (int memberIndex = 0; memberIndex < ${layout.memberCount}; memberIndex += 1) {
 		StellarProjectionResult memberProjection = stellarProjectCatalogDirection(
 			stellarGenerationCatalogDirection(memberIndex)
@@ -194,14 +184,17 @@ void main() {
 			|| any(notEqual(memberProjection.topLeftPixel, representative.topLeftPixel))) {
 			continue;
 		}
-		float irradiance = texelFetch(
-			uStellarGenerationSource,
-			ivec2(${layout.spectralOffset} + channelIndex, memberIndex),
-			0
-		).r;
-		accumulatedRadiance += irradiance * ${pointPresentationScale};
+		if (channelIndex == ${paletteLayout.visualMagnitudeRow}) {
+			float visualMagnitude = texelFetch(uStellarSourceMembers, ivec2(memberIndex, 0), 0).w;
+			accumulatedValue += pow(10.0, -0.4 * visualMagnitude);
+		} else {
+			float irradiance = texelFetch(uStellarSourceSpectra, ivec2(memberIndex, channelIndex), 0).r;
+			accumulatedValue += irradiance * ${pointPresentationScale};
+		}
 	}
-	outStellarPaletteValue = accumulatedRadiance;
+	outStellarPaletteValue = channelIndex == ${paletteLayout.visualMagnitudeRow}
+		? -2.5 * log(accumulatedValue) / log(10.0)
+		: accumulatedValue;
 }`;
 		return this._stage({
 			id: 'celestial-generation.stellar-sparse-palette',
@@ -216,12 +209,12 @@ void main() {
 					id: PALETTE_OUTPUT_ID,
 					format: 'R32F',
 					persistence: 'published',
-					shape: 'stellar-entry-by-native-channel',
+					shape: 'stellar-entry-by-native-channel-plus-visual-magnitude',
 					clearValue: 0,
 				},
 			],
 			dependencies: [SCREEN_INDEX_OUTPUT_ID],
-			bindingRequirements: [this._sourceBinding(), ...this._geometry.bindingRequirements],
+			bindingRequirements: [...this._sourceBindings(), ...this._geometry.bindingRequirements],
 			completionBoundary: 'publication',
 		});
 	}

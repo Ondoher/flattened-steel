@@ -1,5 +1,5 @@
 import {CanonicalValueHash} from '../../value-identity/CanonicalValueHash.js';
-import {STELLAR_POINT_SET_CACHE_LAYOUT} from './consts.js';
+import {createStellarPointSetCacheLayout} from './consts.js';
 
 /** Complete binary64 transported stellar point-set field in production member order. */
 export class StellarPointSetCpuCache {
@@ -7,6 +7,8 @@ export class StellarPointSetCpuCache {
 	descriptor;
 	/** @type {Float64Array} */
 	_values;
+	/** @type {ReturnType<typeof createStellarPointSetCacheLayout>} */
+	_layout;
 
 	/** @param {Readonly<{model: SharedModel, domain: CelestialContributionDomainDescription, placement: Extract<CelestialResolvedPlacement, {readonly kind: 'static-stellar-point-set'}>, source: StellarPointSetCelestialSource & CelestialSourceProvider}>} request */
 	constructor(request) {
@@ -26,13 +28,14 @@ export class StellarPointSetCpuCache {
 		if (domain?.contentHash !== geometryDomain.contentHash) {
 			throw new RangeError('Stellar point-set CPU domain does not match its geometry owner.');
 		}
-		const layout = STELLAR_POINT_SET_CACHE_LAYOUT;
+		const members = source.celestialSourceDefinition.members;
+		const layout = createStellarPointSetCacheLayout(members.length);
+		this._layout = layout;
 		if (domain.directionCoordinates.length !== layout.directionCount || domain.altitudeNodes.length !== layout.receiverCount) {
 			throw new RangeError('Stellar point-set CPU construction requires the exact 11 by 13 domain.');
 		}
-		const members = source.celestialSourceDefinition.members;
 		if (members.length !== layout.memberCount || members.some((member) => member.spectralIrradiance.values.length !== layout.channelCount)) {
-			throw new RangeError('Stellar point-set CPU construction requires 500 native-15 members.');
+			throw new RangeError('Stellar point-set CPU construction requires the selected native-15 roster.');
 		}
 
 		const sourceIdentity = source.describeCelestialSourceIdentity();
@@ -104,7 +107,7 @@ export class StellarPointSetCpuCache {
 
 	/** Read one logical member/domain scalar from the complete binary64 field. */
 	readScalar({memberIndex, directionIndex, receiverIndex, wavelengthIndex}) {
-		const layout = STELLAR_POINT_SET_CACHE_LAYOUT;
+		const layout = this._layout;
 		if (![memberIndex, directionIndex, receiverIndex, wavelengthIndex].every(Number.isInteger)) throw new TypeError('Stellar cache coordinates must be integers.');
 		if (memberIndex < 0 || memberIndex >= layout.memberCount || directionIndex < 0 || directionIndex >= layout.directionCount || receiverIndex < 0 || receiverIndex >= layout.receiverCount || wavelengthIndex < 0 || wavelengthIndex >= layout.channelCount) throw new RangeError('Stellar cache coordinate is outside the logical field.');
 		const x = (memberIndex % layout.tileColumns) * layout.directionCount + directionIndex;

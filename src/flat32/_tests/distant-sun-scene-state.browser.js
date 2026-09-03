@@ -54,6 +54,7 @@ describe('Flat32 distant-Sun scene state', () => {
 			CANONICAL_SCENE_SUN.directionToSourceUpEastNorth[0],
 		];
 		const mode = new SphericalDistantMode({
+			stellarCatalog: 'brightest-500',
 			sceneState,
 			sceneScale: ATMOSPHERE_SCENE_SCALE,
 			sourceAngularRadius: ATMOSPHERE_SOURCE_ANGULAR_RADIUS,
@@ -76,6 +77,7 @@ describe('Flat32 distant-Sun scene state', () => {
 	it('keeps celestial enablement independent from basic Bruneton selection', () => {
 		const createMode = (celestialSourcesEnabled) =>
 			new SphericalDistantMode({
+				stellarCatalog: 'brightest-500',
 				sceneState: createDistantSunSceneState({
 					observation: OBSERVATION,
 					observerHeight: ATMOSPHERE_OBSERVER_HEIGHT,
@@ -96,5 +98,48 @@ describe('Flat32 distant-Sun scene state', () => {
 
 		enabled.dispose();
 		disabled.dispose();
+	});
+
+	it('keeps the stellar source and optional filter configuration unchanged across the 108-degree cache transition', () => {
+		const presentationFilters = [{
+			id: 'human-low-light-chroma-v1',
+			stage: 'source-linear',
+			target: 'stellar',
+			enabled: true,
+			parameters: {maximumChromaRetention: 0.65},
+		}];
+		const createMode = (distantSunCacheState) => new SphericalDistantMode({
+			stellarCatalog: 'brightest-500',
+			sceneState: createDistantSunSceneState({
+				observation: OBSERVATION,
+				observerHeight: ATMOSPHERE_OBSERVER_HEIGHT,
+				observerUpDirection: ATMOSPHERE_OBSERVER_UP_DIRECTION,
+			}),
+			sceneScale: ATMOSPHERE_SCENE_SCALE,
+			sourceAngularRadius: ATMOSPHERE_SOURCE_ANGULAR_RADIUS,
+			maximumScatteringOrder: 4,
+			...(distantSunCacheState === 'ready' ? {sceneCacheAsset: ASSET} : {}),
+			distantSunCacheState,
+			colorDisplayModelConfiguration: {model: 'basic-bruneton'},
+			presentationFilters,
+		});
+		const ready = createMode('ready');
+		const dark = createMode('dark');
+		try {
+			const readyConfig = ready.algorithm32.config.config;
+			const darkConfig = dark.algorithm32.config.config;
+			expect(ready.describe().distantSunCacheState).toBe('ready');
+			expect(dark.describe().distantSunCacheState).toBe('dark');
+			expect(ready.algorithm32._model.celestialSources.stars.describeCelestialSourceIdentity()).toEqual(
+				dark.algorithm32._model.celestialSources.stars.describeCelestialSourceIdentity(),
+			);
+			expect(readyConfig.presentationFilterRegistry.identity).toBe(
+				darkConfig.presentationFilterRegistry.identity,
+			);
+			expect(readyConfig.presentationFilterRegistry.enabled).toBeTrue();
+		} finally {
+			ready.dispose();
+			dark.dispose();
+		}
 	});
 });

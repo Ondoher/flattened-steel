@@ -573,15 +573,15 @@ atmosphere pass. At the display boundary, the color model:
 sceneTransmittanceRgb`; and
 4. performs the final display encoding once.
 
-Flat32 selects `BrunetonSourceLuminanceLiftColorDisplayModel`, which retains
-that complete composition and Figure-1 mapping as its bright baseline. Before
-configuration publication, `LocalLightLevelCalculator` applies geometry-owned
-source support and atmosphere-owned source-path transmittance to the primary
-source irradiance, then reduces it to one photopic `E_v / pi` scalar. Color
-maps that scalar from exact gamma `1` at `5 cd m^-2` to exact gamma `0.125` at
-`0.001 cd m^-2` with a smooth logarithmic Hermite curve, applies one common RGB
-gain, and caps that gain at `32768`. Flat32 setup does not replace this scalar
-with its retained explicit diffuse-environment diagnostic measurement.
+Flat32 selects the fixed `ColorResetSlope078P9ColorDisplayModel`. Before first
+frame publication, the receiver-light owner combines geometry-supported,
+atmosphere-transmitted direct-horizontal irradiance with cache-derived diffuse-
+horizontal irradiance and publishes their photopic total in lux. Color Reset
+uses that facade-owned scalar directly, applies its fixed scene-global common
+gain before the unchanged Figure-1 mapping, and retains the complete captured-
+scene composition described above. Basic Bruneton remains the exact explicit
+physical/B1 control. The superseded source-luminance-lift runtime path has been
+removed.
 
 This RGB-band operation is a display-boundary compositor, not RGB atmospheric
 transport or cache construction. `ShaderRuntimePass` binds the current
@@ -609,18 +609,75 @@ earlier endpoint-adapter lane is superseded and cannot accept this path.
 
 ## Open Color Reset And Celestial Boundaries
 
-Production now contains the spherical/distant Sun-plus-brightest-500 roster,
+Production now contains the spherical/distant Sun with independently selected
+brightest-500 or brightest-2,000 rosters,
 one-pixel stellar screen-index/palette generation, and final celestial
 composition machinery. P1 adds one exact Flat32 selection owner for Color,
 celestial enablement, stellar catalog, and ordered presentation filters. These
 selections are independent: Basic Bruneton no longer disables celestial
-sources. Unknown values and recognized later-phase choices fail closed instead
-of aliasing to an implemented path. Production still uses the explicit pre-P9
-source-luminance-lift Color default and the current 500-member data, so the
-selected receiver-light state, `slope-078/p9`, neutral diffuse scene lighting,
-brightest-2,000 replacement, `q=24`, and optional human-vision filters are not
-yet production behavior.
-Their current architecture and execution order are owned by the
+sources. Unknown values fail closed. P6 resolves the two recognized stellar
+filters through `view-presentation-filter-registry-v1`, assigns deterministic
+order and a complete configuration identity, and owns exact CPU equations plus
+the source-linear GLSL hook. P7 installs the hook between the separate stellar
+E8 projection and unchanged common scene/display composition. Empty, disabled,
+and nonstellar paths are exact identity; unsupported mode, Color, weight, or
+ordering combinations fail closed. Brightest-2,000 requires its
+authenticated local production package and fails before mode construction when
+that package is absent. Production now computes the retained
+geometry-supported, atmosphere-transmitted direct-normal packet, derives its
+separate receiver-horizontal projection, reduces the installed cache over the
+fixed identified 32-direction cosine-weighted quadrature, and atomically
+publishes diffuse-horizontal plus the exact total-horizontal sum. The facade
+starts with a complete zero-diffuse state, exposes all four packets and their
+photopic projections, and Flat32 replaces that state from the installed cache
+before composed-frame preflight. Failure, cancellation, disposal, and
+supersession preserve the prior complete state; the path reads neither a
+framebuffer nor named time.
+
+The ordinary Flat32 application defaults to `color-reset-slope-078-p9`,
+brightest-2,000, and the ordered mesopic-luminance then low-light-chroma
+stellar chain. `stellarPresentation=physical` selects an empty filter chain.
+Brightest-500 remains an explicit catalog control. The selected Color Reset
+path is production behavior: the
+facade owns its live total-horizontal-lux binding and the model applies the
+fixed common gain before unchanged Bruneton display encoding. The Color-free
+neutral Lambertian owner now derives separate direct, diffuse, and exactly
+additive combined Native15 scene radiance from the same receiver generation.
+Flat32 projects the direct-normal and diffuse-horizontal packets through E8,
+the unchanged Figure-1 exponential, and inverse sRGB before assigning its
+unitless Three directional lights and black-ground upper-hemisphere light.
+This scene-light adapter bridge prevents physical projected values from being
+misread directly as renderer-linear display values and leaves Color unchanged.
+The hemisphere light preserves the measured horizontal response while
+providing the selected uniform-upper-sky normal dependence: full for upward,
+half for vertical, and zero for downward normals. It remains an explicitly
+limited approximation rather than a directional sky reconstruction. The
+application can diagnostically bypass only final Algorithm32 composition while
+retaining this scene lighting. The bypass renders the raw Three scene to linear
+HDR and applies the compositor's renderer-linear-to-display conversion plus
+sRGB encoding; it does not reapply physical-radiance exposure to renderer-scale
+lights. Raw default-framebuffer rendering is invalid because unbridged physical
+values can clip it white. The explicit brightest-2,000 path
+authenticates its local-only manifest, exact double-precision roster and
+packets, and CR6G float32 payloads before constructing the source. Generation
+uploads separate `2000x1 RGBA32F` member and `2000x15 R32F` spectrum textures,
+uses a 2,001-entry R32F palette, retains lowest-canonical collision ownership,
+and sums every colliding packet once. The tiled transport layout expands to
+64 by 32 member tiles in a `704x419x15` R32F array. The one-pixel presentation
+policy retains the historical q1 base `60,999.839486002405`, identifies the
+accepted CR6C multiplier `24`, and writes the resulting
+`1,463,996.1476640578` scale into palette generation. No time, catalog-size,
+viewport, or framebuffer term enters that calibration.
+Optional human-vision filter algorithms are production-owned live application
+behavior and are enabled by the ordinary application default. The stellar palette retains rows 0-14 for
+the unchanged transported Native15 values and row 15 for collision-combined
+apparent magnitude. Its compatibility identity also covers Color, registry,
+scotopic-weight content, receiver light, and adaptation luminance. The
+adaptation scalar is the median photopic luminance of the fixed 32 receiver-sky
+samples, documented as an approximation to the contained screen-pixel median.
+The nonstellar Flat/local mode explicitly receives an empty stellar-filter
+list; returning to spherical/distant restores the application selection.
+The current architecture and execution order are owned by the
 [Production Color Reset Design](color-reset-design.md) and
 [Production Color Reset Implementation Plan](color-reset-implementation-plan.md).
 The [promotion manifest](color-reset-promotion-manifest.md) owns the P0

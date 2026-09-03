@@ -5,7 +5,7 @@ import {CacheBuildModules} from '../../shader-assembly/cache-pass/CacheBuildModu
 import {CachePassAssembler} from '../../shader-assembly/cache-pass/CachePassAssembler.js';
 import {CanonicalValueHash} from '../../value-identity/CanonicalValueHash.js';
 import {StellarPointSetCpuCache} from './StellarPointSetCpuCache.js';
-import {STELLAR_POINT_SET_CACHE_LAYOUT} from './consts.js';
+import {createStellarPointSetCacheLayout} from './consts.js';
 
 /** Stateless stellar CPU-field packing and GPU copy owner. */
 export class StellarPointSetGpuBuilder {
@@ -14,7 +14,8 @@ export class StellarPointSetGpuBuilder {
 		this._source = source;
 		this._backend = backend;
 		this._cpuReferences = new WeakMap();
-		const storage = STELLAR_POINT_SET_CACHE_LAYOUT.storage;
+		this._layout = createStellarPointSetCacheLayout(source.celestialSourceDefinition.members.length);
+		const storage = this._layout.storage;
 		const capabilities = backend?.capabilities;
 		if (capabilities?.scalarFormat !== 'R32F' || capabilities.supportsArrayRenderTargets !== true || capabilities.supportsFloatSampling !== true || capabilities.maximumTextureSize < Math.max(storage.width, storage.height) || capabilities.maximumArrayLayers < storage.layers) {
 			throw new RangeError('Stellar point-set GPU backend does not support the exact R32F array field.');
@@ -28,7 +29,8 @@ export class StellarPointSetGpuBuilder {
 		const domain = this._model.geometry.describeCelestialContributionDomain();
 		if (query.domainIdentity !== domain.contentHash) throw new RangeError('Stellar point-set GPU query domain does not match geometry.');
 		const cpuReference = new StellarPointSetCpuCache({model: this._model, domain, placement, source: this._source});
-		const storage = STELLAR_POINT_SET_CACHE_LAYOUT.storage;
+		const layout = this._layout;
+		const storage = layout.storage;
 		const output = {id: 'stellar-point-set-tiled-transport', storage};
 		// The descriptor already identifies every source packet, atmosphere owner,
 		// domain node, equation input, and layout fact. Retain the binary32 payload
@@ -36,7 +38,7 @@ export class StellarPointSetGpuBuilder {
 		const packedValues = cpuReference.packedValues();
 		for (const [memberIndex, direction] of query.stars.placement.memberDirections.entries()) {
 			const x = memberIndex % storage.width;
-			const y = STELLAR_POINT_SET_CACHE_LAYOUT.directionTableRowStart + Math.floor(memberIndex / storage.width);
+			const y = layout.directionTableRowStart + Math.floor(memberIndex / storage.width);
 			for (let componentIndex = 0; componentIndex < 3; componentIndex += 1) {
 				packedValues[(componentIndex * storage.height + y) * storage.width + x] = direction[componentIndex];
 			}
@@ -59,8 +61,8 @@ export class StellarPointSetGpuBuilder {
 		const execution = {fields: [output], passes: [pass], result: output.id, valueKey: STELLAR_POINT_SET_CACHE_VALUE_KEY};
 		const plan = {
 			identity: CacheValues.createPlanIdentity('algorithm32-stellar-point-set-tiled-r32f-plan-v1', [output], [pass], {descriptor: cpuReference.descriptor.contentHash, query: query.contentHash}),
-			sourceId: this._source.id, domain, memberCount: STELLAR_POINT_SET_CACHE_LAYOUT.memberCount,
-			descriptor: cpuReference.descriptor, execution,
+			sourceId: this._source.id, domain, memberCount: layout.memberCount,
+			layout, descriptor: cpuReference.descriptor, execution,
 		};
 		this._cpuReferences.set(plan, cpuReference);
 		return plan;

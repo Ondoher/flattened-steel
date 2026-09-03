@@ -3,6 +3,7 @@ import {CanonicalAtmosphere} from '../algorithm32/implementation/canonical-atmos
 import {DistantSunLightSource} from '../algorithm32/implementation/distant-sun/DistantSunLightSource.js';
 import {SphericalEarthGeometry} from '../algorithm32/implementation/spherical-earth/SphericalEarthGeometry.js';
 import {StellarPointSetSource} from '../algorithm32/implementation/star-field/StellarPointSetSource.js';
+import {ViewPresentationFilterRegistry} from '../algorithm32/implementation/presentation-filter/ViewPresentationFilterRegistry.js';
 import {
 	CUBED_SPHERE_W27_DIRECTION_COUNT,
 	NATIVE_48_POSITION_COUNT,
@@ -11,6 +12,7 @@ import {
 import {DEFAULT_NATIVE_PRODUCTION_PROFILE} from '../algorithm32/profiles/native-15/native-15-profile.js';
 import {createFlat32ColorDisplayModel} from './Flat32ColorDisplayModel.js';
 import {
+	FLAT32_STELLAR_CATALOG_IDS,
 	requireImplementedFlat32ProductionSelections,
 	resolveFlat32ProductionSelections,
 } from './Flat32ProductionSelections.js';
@@ -34,13 +36,21 @@ export class SphericalDistantMode {
 	 *   celestialSourcesEnabled?: boolean,
 	 *   colorDisplayModelConfiguration?: Flat32ColorDisplayModelConfiguration,
 	 *   stellarCatalog?: Flat32StellarCatalogId,
+	 *   brightest2000StellarCatalogDefinition?: ReturnType<import('../algorithm32/implementation/star-field/Brightest2000StellarCatalogPackage.js').createBrightest2000StellarCatalogDefinition>,
 	 *   presentationFilters?: readonly Flat32PresentationFilterConfiguration[]
+	 *   scotopicLuminanceWeights?: ArrayLike<number>
 	 * }>} configuration - Supplies the Flat32 application selections that are
 	 * owned by its constants module.
 	 */
 	constructor(configuration) {
 		const selections = resolveFlat32ProductionSelections(configuration);
-		requireImplementedFlat32ProductionSelections(selections, {stellarCatalogUsed: true});
+		const presentationFilterRegistry = new ViewPresentationFilterRegistry(selections.presentationFilters, {
+			scotopicLuminanceWeights: configuration.scotopicLuminanceWeights,
+		});
+		requireImplementedFlat32ProductionSelections(selections, {
+			stellarCatalogUsed: true,
+			presentationFilterRegistry,
+		});
 		const profile = DEFAULT_NATIVE_PRODUCTION_PROFILE;
 		const spectralBasis = profile.spectral.basis;
 		const atmosphere = new CanonicalAtmosphere();
@@ -50,7 +60,13 @@ export class SphericalDistantMode {
 			sceneCacheAsset: configuration.sceneCacheAsset,
 			darkScattering: configuration.distantSunCacheState === 'dark',
 		});
-		const stars = new StellarPointSetSource();
+		const catalogDefinition = selections.stellarCatalog === FLAT32_STELLAR_CATALOG_IDS.BRIGHTEST_2000
+			? configuration.brightest2000StellarCatalogDefinition
+			: undefined;
+		if (selections.stellarCatalog === FLAT32_STELLAR_CATALOG_IDS.BRIGHTEST_2000 && !catalogDefinition) {
+			throw new RangeError('Flat32 brightest-2000 requires its authenticated local production package.');
+		}
+		const stars = new StellarPointSetSource({catalogDefinition});
 		const celestialSources = /** @type {SphericalSunStarsSourceRoster} */ ({
 			id: 'flat32-spherical-distant-sun',
 			family: 'spherical-sun-stars-radial-v1',
@@ -71,7 +87,8 @@ export class SphericalDistantMode {
 			geometry,
 			groundBoundary: null,
 			celestialSources: selections.celestialSourcesEnabled ? celestialSources : null,
-			color: createFlat32ColorDisplayModel(selections.colorDisplayModelConfiguration),
+			color: createFlat32ColorDisplayModel(selections.colorDisplayModelConfiguration, presentationFilterRegistry),
+			presentationFilterRegistry,
 			observation: configuration.sceneState.observation,
 			sourcePlacement: {
 				kind: /** @type {const} */ ('distant-direction'),

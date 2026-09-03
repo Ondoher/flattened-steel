@@ -1,6 +1,5 @@
 import {ShaderContributions} from '../../shader-assembly/base/ShaderContributions.js';
 import {STELLAR_POINT_SET_CACHE_VALUE_KEY} from '../../celestial-contribution-cache/consts.js';
-import {STELLAR_POINT_SET_CACHE_LAYOUT} from './consts.js';
 
 const SAMPLER_NAME = 'uStellarPointSetTransportCache';
 
@@ -22,7 +21,7 @@ export class StellarPointSetCacheResource {
 
 	createShaderContribution() {
 		this._requireLive();
-		const layout = STELLAR_POINT_SET_CACHE_LAYOUT;
+		const layout = this._plan.layout;
 		return ShaderContributions.createShaderContribution({
 			id: 'cache-stellar-point-set-tiled-transport', owner: 'cache',
 			provides: ['cache.sampleStellarPointSetIrradiance'], requires: ['geometry.celestialCacheStencilTypes'],
@@ -51,6 +50,7 @@ export class StellarPointSetCacheResource {
 
 	createLiveShaderContribution({queryPacket}) {
 		this._requireLive();
+		const layout = this._plan.layout;
 		const stars = queryPacket?.stars;
 		if (!stars || stars.placement.sourceId !== this.sourceId || stars.memberDirectionStencils.length !== this.memberCount) throw new RangeError('Stellar live raster requires its complete spherical query packet.');
 		return ShaderContributions.createShaderContribution({
@@ -95,8 +95,8 @@ float stellarPixelSolidAngle(vec2 uv) {
 }
 
 vec3 stellarPointSetDirection(int memberIndex) {
-	int x = memberIndex % ${STELLAR_POINT_SET_CACHE_LAYOUT.storage.width};
-	int y = ${STELLAR_POINT_SET_CACHE_LAYOUT.directionTableRowStart} + memberIndex / ${STELLAR_POINT_SET_CACHE_LAYOUT.storage.width};
+	int x = memberIndex % ${layout.storage.width};
+	int y = ${layout.directionTableRowStart} + memberIndex / ${layout.storage.width};
 	return normalize(vec3(
 		texelFetch(${SAMPLER_NAME}, ivec3(x, y, 0), 0).r,
 		texelFetch(${SAMPLER_NAME}, ivec3(x, y, 1), 0).r,

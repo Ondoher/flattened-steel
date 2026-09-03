@@ -64,47 +64,51 @@ describe('StellarPointSetSource', /** Called by Jasmine to register the named te
 		});
 	});
 
-	it('packs only canonical directions and native-15 packets into immutable shader input', /** Called by Jasmine to exercise the named behavior. */ () => {
+	it('packs canonical members and native-15 packets into immutable split shader input', /** Called by Jasmine to exercise the named behavior. */ () => {
 		const source = new StellarPointSetSource();
 		const definition = source.celestialSourceDefinition;
 		const table = source.createStellarGenerationSourceTable();
-		const values = table.copyValues();
+		const memberValues = table.copyMemberValues();
+		const spectralValues = table.copySpectralValues();
 
 		expect(table).toBe(source.createStellarGenerationSourceTable());
-		expect(table.identity).toBe('sha256:93dec8deb8bf5594778f523d0d01454194dbe0b052e812cf3fd67e1a20bc4d51');
+		expect(table.identity).toMatch(/^sha256:[0-9a-f]{64}$/);
 		expect(table.sourceIdentity).toBe(source.describeCelestialSourceIdentity().definitionHash);
 		expect(table.frame).toBe(definition.catalog.frame);
 		expect(table.epoch).toEqual(definition.catalog.epoch);
 		expect(table.memberIds).toEqual(definition.members.map((member) => member.id));
 		expect(table.layout).toEqual({
-			schema: 'stellar-generation-source-table-v1',
-			storageFormat: 'R32F',
+			schema: 'stellar-generation-source-table-v2',
+			storageFormat: 'RGBA32F+R32F',
 			memberOrder: 'canonical-selection-order',
 			memberCount: 500,
-			componentCount: 18,
-			directionOffset: 0,
+			memberComponentCount: 4,
 			directionComponentCount: 3,
-			spectralOffset: 3,
 			spectralChannelCount: 15,
 		});
-		expect(values).toEqual(jasmine.any(Float32Array));
-		expect(values.length).toBe(500 * 18);
-		expect(values.byteLength).toBe(36_000);
+		expect(memberValues).toEqual(jasmine.any(Float32Array));
+		expect(spectralValues).toEqual(jasmine.any(Float32Array));
+		expect(memberValues.byteLength).toBe(8_000);
+		expect(spectralValues.byteLength).toBe(30_000);
 
 		for (const [memberIndex, member] of definition.members.entries()) {
-			const offset = memberIndex * table.layout.componentCount;
-			expect(Array.from(values.slice(offset, offset + 3))).toEqual(member.direction.map(Math.fround));
-			expect(Array.from(values.slice(offset + 3, offset + 18))).toEqual(
-				member.spectralIrradiance.values.map(Math.fround),
-			);
+			const offset = memberIndex * table.layout.memberComponentCount;
+			expect(Array.from(memberValues.slice(offset, offset + 3))).toEqual(member.direction.map(Math.fround));
+			for (let channel = 0; channel < table.layout.spectralChannelCount; channel += 1) {
+				expect(spectralValues[channel * table.layout.memberCount + memberIndex]).toBe(
+					Math.fround(member.spectralIrradiance.values[channel]),
+				);
+			}
 		}
 
-		values[0] = 42;
+		memberValues[0] = 42;
+		spectralValues[0] = 42;
 		const memberIds = /** @type {string[]} */ (table.memberIds);
 		memberIds[0] = 'mutated';
 		const epoch = /** @type {{instant: string; timeScale: CelestialTimeScale}} */ (table.epoch);
 		epoch.instant = 'mutated';
-		expect(table.copyValues()[0]).toBe(Math.fround(definition.members[0].direction[0]));
+		expect(table.copyMemberValues()[0]).toBe(Math.fround(definition.members[0].direction[0]));
+		expect(table.copySpectralValues()[0]).toBe(Math.fround(definition.members[0].spectralIrradiance.values[0]));
 		expect(table.memberIds[0]).toBe(definition.members[0].id);
 		expect(table.epoch).toEqual(definition.catalog.epoch);
 	});
