@@ -91,18 +91,45 @@ function bindFramebuffer(gl, framebuffer, texture) {
 	);
 }
 
-function commonSource({
+export function createDistantSunSceneCacheCommonShaderSource({
 	wavelengthNanometers,
 	sourceIrradiance,
 	ozoneCrossSection,
+	ozoneMaximumDensity = 5.374e18,
 	rayleighScattering = null,
 	mieExtinction = null,
 	groundAlbedo = 0,
+	bottomRadiusMeters = 6360000,
+	topRadiusMeters = 6420000,
+	rayleighScaleHeightMeters = 8000,
+	mieScaleHeightMeters = 1200,
+	rayleighCoefficientScalePerMeter = 0.00000124062,
+	mieAngstromAlpha = 0.8,
+	mieAngstromBeta = 0.04,
+	mieSingleScatteringAlbedo = 0.8,
+	miePhaseFunctionG = 0.7,
+	sourcePathTransmittanceIntervalCount = 20,
+	incomingDirectionCount = 68,
 	transportIntervalCount = 15,
 	outgoingFaceWidth = 39,
 	positionAltitudesMeters = null,
 	solarZenithDegrees = null,
+	coordinateContract = 'scene-cache-receiver-local-v1',
+	sourceDirection = null,
 }) {
+	if (!['scene-cache-receiver-local-v1', 'production-source-aligned-v1'].includes(coordinateContract)) {
+		throw new RangeError(`Unsupported offline recurrence coordinate contract: ${coordinateContract}.`);
+	}
+	const sourceAligned = coordinateContract === 'production-source-aligned-v1';
+	if (
+		sourceAligned &&
+		(!Array.isArray(sourceDirection) ||
+			sourceDirection.length !== 3 ||
+			sourceDirection.some((value) => !Number.isFinite(value)) ||
+			Math.abs(Math.hypot(...sourceDirection) - 1) > 1e-10)
+	) {
+		throw new RangeError('Production source-aligned recurrence requires one unit source direction.');
+	}
 	const outgoingCellWidth = outgoingFaceWidth - 1;
 	const outgoingFaceNodeCount = outgoingFaceWidth * outgoingFaceWidth;
 	const altitudes =
@@ -110,32 +137,296 @@ function commonSource({
 		Array.from({length: 48}, (_unused, index) => (index === 0 ? 0 : ((index + 0.5) / 48) * 60000));
 	const zeniths = solarZenithDegrees ?? Array.from({length: 180}, (_unused, index) => index + 0.5);
 	const floatArray = (values) => values.map(formatFloat).join(', ');
+	const sourceDirectionValue = sourceAligned ? sourceDirection : [0, 0, 1];
+	const sourceDirectionGlsl = `vec3(${sourceDirectionValue.map(formatFloat).join(', ')})`;
+	const directionExactTolerance = sourceAligned ? '1e-10' : '1e-5';
+	const altitudeAtPointSource = sourceAligned
+		? `float altitudeAtPoint(vec3 point) {
+	float radialOffset = point.z - BOTTOM_RADIUS;
+	float transverseDistanceSquared = dot(point.xy, point.xy);
+	float radiusAtRadialOffset = BOTTOM_RADIUS + radialOffset;
+	float curvatureDenominator = sqrt(max(
+		radiusAtRadialOffset * radiusAtRadialOffset + transverseDistanceSquared,
+		0.0
+	)) + radiusAtRadialOffset;
+	return max(0.0, radialOffset + transverseDistanceSquared / max(curvatureDenominator, 1.0));
+}`
+		: `float altitudeAtPoint(vec3 point) {
+	return max(0.0, length(point) - BOTTOM_RADIUS);
+}`;
+	const geometryIntersectionSource = sourceAligned
+		? `bool rayBlockedByGround(vec3 position, vec3 direction) {
+	float height = altitudeAtPoint(position);
+	float radius = BOTTOM_RADIUS + height;
+	float halfLinear = dot(position, direction);
+	float constantTerm = height * (radius + BOTTOM_RADIUS);
+	float discriminant = halfLinear * halfLinear - constantTerm;
+	return halfLinear < 0.0 && discriminant >= 0.0;
+}
+float topBoundaryDistance(vec3 position, vec3 direction) {
+	float radius = BOTTOM_RADIUS + altitudeAtPoint(position);
+	float halfLinear = dot(position, direction);
+	float constantTerm = (radius - TOP_RADIUS) * (radius + TOP_RADIUS);
+	float root = sqrt(max(0.0, halfLinear * halfLinear - constantTerm));
+	return max(0.0, halfLinear >= 0.0 ? -constantTerm / (halfLinear + root) : -halfLinear + root);
+}
+bool groundBoundaryHit(vec3 position, vec3 direction, out float distanceMeters) {
+	float height = altitudeAtPoint(position);
+	float radius = BOTTOM_RADIUS + height;
+	float halfLinear = dot(position, direction);
+	float constantTerm = height * (radius + BOTTOM_RADIUS);
+	float discriminant = halfLinear * halfLinear - constantTerm;
+	if (halfLinear >= 0.0 || discriminant < 0.0) return false;
+	float denominator = -halfLinear + sqrt(max(0.0, discriminant));
+	distanceMeters = denominator == 0.0 ? 0.0 : max(0.0, constantTerm / denominator);
+	return true;
+}`
+		: `bool rayBlockedByGround(vec3 position, vec3 direction) {
+	return firstPositiveRoot(sphereRoots(position, direction, BOTTOM_RADIUS)) < 1e29;
+}
+float topBoundaryDistance(vec3 position, vec3 direction) {
+	return firstPositiveRoot(sphereRoots(position, direction, TOP_RADIUS));
+}
+bool groundBoundaryHit(vec3 position, vec3 direction, out float distanceMeters) {
+	distanceMeters = firstPositiveRoot(sphereRoots(position, direction, BOTTOM_RADIUS));
+	return distanceMeters < 1e29;
+}`;
+	const atmosphereBranchSource = sourceAligned
+		? `float atmosphereBranchLength(vec3 origin, vec3 direction) {
+	return topBoundaryDistance(origin, direction);
+}`
+		: `float atmosphereBranchLength(vec3 origin, vec3 direction) {
+	float radius = length(origin);
+	float radialDirection = dot(origin, direction);
+	if (abs(radius - BOTTOM_RADIUS) <= 1.0 && radialDirection < -1e-7) return -1.0;
+	if (abs(radius - TOP_RADIUS) <= 0.25 && radialDirection >= -1e-7) return -1.0;
+	float groundDistance = firstPositiveRoot(sphereRoots(origin, direction, BOTTOM_RADIUS));
+	float topDistance = firstPositiveRoot(sphereRoots(origin, direction, TOP_RADIUS));
+	float distanceMeters = min(groundDistance, topDistance);
+	return distanceMeters >= 1e29 ? -1.0 : distanceMeters;
+}`;
+	const sourceVisibilitySource = sourceAligned
+		? `bool sourceVisible(vec3 point) {
+	return !rayBlockedByGround(point, SOURCE_DIRECTION);
+}`
+		: `bool sourceVisible(vec3 point) {
+	float radius = length(point);
+	if (abs(radius - BOTTOM_RADIUS) <= 1.0) {
+		return dot(point, SOURCE_DIRECTION) >= 0.0;
+	}
+	return firstPositiveRoot(sphereRoots(point, SOURCE_DIRECTION, BOTTOM_RADIUS)) >= 1e29;
+}`;
+	const representativePointSource = sourceAligned
+		? `vec3 representativePoint(int positionIndex, int solarZenithIndex) {
+	float radius = BOTTOM_RADIUS + altitudeForIndex(positionIndex);
+	return vec3(0.0, 0.0, radius);
+}`
+		: `vec3 representativePoint(int positionIndex, int solarZenithIndex) {
+	float radius = BOTTOM_RADIUS + altitudeForIndex(positionIndex);
+	float angle = radians(SOLAR_ZENITH_DEGREES[solarZenithIndex]);
+	float muS = cos(angle);
+	return vec3(radius * sqrt(max(0.0, 1.0 - muS * muS)), 0.0, radius * muS);
+}`;
+	const directionFrameSource = sourceAligned
+		? `vec3 leastAlignedAxis(vec3 direction) {
+	vec3 selected = vec3(1.0, 0.0, 0.0);
+	if (abs(direction.y) < abs(dot(selected, direction))) selected = vec3(0.0, 1.0, 0.0);
+	if (abs(direction.z) < abs(dot(selected, direction))) selected = vec3(0.0, 0.0, 1.0);
+	return selected;
+}
+
+void productionFrame(bool fibonacci, out vec3 xAxis, out vec3 yAxis, out vec3 zAxis) {
+	xAxis = SOURCE_DIRECTION;
+	vec3 reference = fibonacci && abs(dot(xAxis, vec3(0.0, 0.0, 1.0))) >= 0.95
+		? vec3(0.0, 1.0, 0.0)
+		: vec3(0.0, 0.0, 1.0);
+	zAxis = reference - xAxis * dot(reference, xAxis);
+	if (!fibonacci && length(zAxis) <= 1.0e-10) {
+		vec3 fallback = leastAlignedAxis(xAxis);
+		zAxis = fallback - xAxis * dot(fallback, xAxis);
+	}
+	zAxis = normalize(zAxis);
+	yAxis = normalize(cross(zAxis, xAxis));
+}
+
+vec3 productionLocalToWorld(vec3 localDirection, bool fibonacci) {
+	vec3 xAxis; vec3 yAxis; vec3 zAxis;
+	productionFrame(fibonacci, xAxis, yAxis, zAxis);
+	return normalize(xAxis * localDirection.x + yAxis * localDirection.y + zAxis * localDirection.z);
+}
+
+vec3 productionWorldToW27(vec3 worldDirection) {
+	vec3 xAxis; vec3 yAxis; vec3 zAxis;
+	productionFrame(false, xAxis, yAxis, zAxis);
+	return vec3(dot(worldDirection, xAxis), dot(worldDirection, yAxis), dot(worldDirection, zAxis));
+}
+
+vec3 incomingPhysicalDirection(vec3 point, vec3 localDirection) {
+	return productionLocalToWorld(localDirection, true);
+}
+vec3 phaseOutgoingDirection(vec3 point, vec3 localDirection) {
+	return productionLocalToWorld(localDirection, false);
+}
+vec3 phaseIncomingDirection(vec3 point, vec3 localDirection) {
+	return productionLocalToWorld(localDirection, true);
+}
+vec3 outgoingLocalDirection(vec3 point, vec3 worldDirection) {
+	return normalize(productionWorldToW27(worldDirection));
+}
+vec3 j1SourceDirection(int solarZenithIndex) { return SOURCE_DIRECTION; }
+float sourceZenithDegreesAtPoint(vec3 point) {
+	return degrees(acos(clamp(dot(normalize(point), SOURCE_DIRECTION), -1.0, 1.0)));
+}`
+		: `void sourceFrame(vec3 point, out vec3 xAxis, out vec3 yAxis, out vec3 zAxis) {
+	zAxis = normalize(point);
+	float muS = clamp(zAxis.z, -1.0, 1.0);
+	xAxis = normalize(vec3(0.0, 0.0, 1.0) - muS * zAxis);
+	yAxis = normalize(cross(zAxis, xAxis));
+}
+
+vec3 localToWorld(vec3 point, vec3 localDirection) {
+	vec3 xAxis;
+	vec3 yAxis;
+	vec3 zAxis;
+	sourceFrame(point, xAxis, yAxis, zAxis);
+	return normalize(xAxis * localDirection.x + yAxis * localDirection.y + zAxis * localDirection.z);
+}
+
+vec3 worldToLocal(vec3 point, vec3 worldDirection) {
+	vec3 xAxis;
+	vec3 yAxis;
+	vec3 zAxis;
+	sourceFrame(point, xAxis, yAxis, zAxis);
+	return normalize(vec3(dot(worldDirection, xAxis), dot(worldDirection, yAxis), dot(worldDirection, zAxis)));
+}
+
+vec3 incomingPhysicalDirection(vec3 point, vec3 localDirection) { return localToWorld(point, localDirection); }
+vec3 phaseOutgoingDirection(vec3 point, vec3 localDirection) { return localDirection; }
+vec3 phaseIncomingDirection(vec3 point, vec3 localDirection) { return localDirection; }
+vec3 outgoingLocalDirection(vec3 point, vec3 worldDirection) { return worldToLocal(point, worldDirection); }
+vec3 j1SourceDirection(int solarZenithIndex) {
+	float solarZenith = radians(float(solarZenithIndex) + 0.5);
+	return vec3(sin(solarZenith), 0.0, cos(solarZenith));
+}
+float sourceZenithDegreesAtPoint(vec3 point) {
+	return degrees(acos(clamp(point.z / length(point), -1.0, 1.0)));
+}`;
+	const positionStencilSource = sourceAligned
+		? `void positionStencil(float altitudeMeters, out int lower, out int upper, out float fraction) {
+	float normalized = clamp(altitudeMeters / ATMOSPHERE_HEIGHT, 0.0, 0.999999999);
+	lower = clamp(int(floor(normalized * float(POSITION_COUNT))), 0, POSITION_COUNT - 1);
+	upper = lower;
+	fraction = 0.0;
+}`
+		: `void positionStencil(float altitudeMeters, out int lower, out int upper, out float fraction) {
+	if (altitudeMeters <= POSITION_ALTITUDES[0]) {
+		lower = 0; upper = 0; fraction = 0.0; return;
+	}
+	if (altitudeMeters >= POSITION_ALTITUDES[POSITION_COUNT - 1]) {
+		lower = POSITION_COUNT - 1; upper = lower; fraction = 0.0; return;
+	}
+	for (int index = 0; index < POSITION_COUNT - 1; index += 1) {
+		if (altitudeMeters <= POSITION_ALTITUDES[index + 1]) {
+			lower = index; upper = index + 1;
+			fraction = clamp((altitudeMeters - POSITION_ALTITUDES[index])
+				/ (POSITION_ALTITUDES[index + 1] - POSITION_ALTITUDES[index]), 0.0, 1.0);
+			return;
+		}
+	}
+}`;
+	const transportPolicySource = sourceAligned
+		? `bool radianceTransportBlocked(vec3 origin, vec3 direction) {
+	return rayBlockedByGround(origin, direction);
+}
+int transportBreaks(vec3 origin, vec3 direction, float lengthMeters, out float breaks[5]) {
+	breaks[0] = 0.0;
+	breaks[1] = lengthMeters;
+	return 2;
+}`
+		: `bool radianceTransportBlocked(vec3 origin, vec3 direction) { return false; }
+int transportBreaks(vec3 origin, vec3 direction, float lengthMeters, out float breaks[5]) {
+	return branchBreaks(origin, direction, lengthMeters, breaks);
+}`;
+	const groundIncomingSource = sourceAligned
+		? `void compensatedAdd(float value, inout float sum, inout float compensation) {
+	float adjusted = value - compensation;
+	float updated = sum + adjusted;
+	compensation = (updated - sum) - adjusted;
+	sum = updated;
+}
+
+float segmentTransmittance(vec3 origin, vec3 direction, float distanceMeters) {
+	if (distanceMeters <= 0.0) return 1.0;
+	float intervalLength = distanceMeters / float(SOURCE_TRANSMITTANCE_INTERVAL_COUNT);
+	float opticalDepth = 0.0;
+	for (int index = 0; index <= SOURCE_TRANSMITTANCE_INTERVAL_COUNT; index += 1) {
+		float weight = index == 0 || index == SOURCE_TRANSMITTANCE_INTERVAL_COUNT ? 0.5 : 1.0;
+		vec3 samplePoint = origin + direction * intervalLength * float(index);
+		opticalDepth += sampleMediumAtPoint(samplePoint).extinction * intervalLength * weight;
+	}
+	return exp(-opticalDepth);
+}
+
+float groundIncomingContribution(
+	vec3 point,
+	vec3 incomingDirection,
+	int scatteringOrder,
+	sampler2D directionRecords,
+	sampler2D groundIllumination
+) {
+	float groundDistance;
+	if (!groundBoundaryHit(point, incomingDirection, groundDistance)) return 0.0;
+	vec3 groundPoint = point + incomingDirection * groundDistance;
+	vec3 normal = normalize(groundPoint);
+	float reflected = 0.0;
+	if (scatteringOrder == 2) {
+		reflected = SOURCE_IRRADIANCE * sourceTransmittance(groundPoint)
+			* max(0.0, dot(normal, SOURCE_DIRECTION)) * GROUND_ALBEDO / PI;
+	} else {
+		float compensation = 0.0;
+		for (int directionIndex = 0; directionIndex < F68_COUNT; directionIndex += 1) {
+			vec4 record = texelFetch(directionRecords, ivec2(directionIndex, 0), 0);
+			vec3 illuminationDirection = incomingPhysicalDirection(groundPoint, record.xyz);
+			float incidenceCosine = max(0.0, dot(normal, illuminationDirection));
+			compensatedAdd(
+				texelFetch(groundIllumination, ivec2(directionIndex, 0), 0).r
+					* incidenceCosine * record.w * GROUND_ALBEDO / PI,
+				reflected,
+				compensation
+			);
+		}
+	}
+	return reflected * segmentTransmittance(groundPoint, -incomingDirection, groundDistance);
+}`
+		: '';
 	return `
 const float PI = 3.1415926535897932384626433832795;
-const float BOTTOM_RADIUS = 6360000.0;
-const float TOP_RADIUS = 6420000.0;
-const float ATMOSPHERE_HEIGHT = 60000.0;
-const float RAYLEIGH_SCALE_HEIGHT = 8000.0;
-const float MIE_SCALE_HEIGHT = 1200.0;
-const float RAYLEIGH_SCALE = 0.00000124062;
-const float MIE_ALPHA = 0.8;
-const float MIE_BETA = 0.04;
-const float MIE_ALBEDO = 0.8;
-const float MIE_G = 0.7;
+const float BOTTOM_RADIUS = ${formatFloat(bottomRadiusMeters)};
+const float TOP_RADIUS = ${formatFloat(topRadiusMeters)};
+const float ATMOSPHERE_HEIGHT = ${formatFloat(topRadiusMeters - bottomRadiusMeters)};
+const float RAYLEIGH_SCALE_HEIGHT = ${formatFloat(rayleighScaleHeightMeters)};
+const float MIE_SCALE_HEIGHT = ${formatFloat(mieScaleHeightMeters)};
+const float RAYLEIGH_SCALE = ${formatFloat(rayleighCoefficientScalePerMeter)};
+const float MIE_ALPHA = ${formatFloat(mieAngstromAlpha)};
+const float MIE_BETA = ${formatFloat(mieAngstromBeta)};
+const float MIE_ALBEDO = ${formatFloat(mieSingleScatteringAlbedo)};
+const float MIE_G = ${formatFloat(miePhaseFunctionG)};
 const float WAVELENGTH_MICROMETERS = ${formatFloat(wavelengthNanometers / 1000)};
 const float SOURCE_IRRADIANCE = ${formatFloat(sourceIrradiance)};
 const float OZONE_CROSS_SECTION = ${formatFloat(ozoneCrossSection)};
 const float EXPLICIT_RAYLEIGH_SCATTERING = ${formatFloat(rayleighScattering ?? -1)};
 const float EXPLICIT_MIE_EXTINCTION = ${formatFloat(mieExtinction ?? -1)};
 const float GROUND_ALBEDO = ${formatFloat(groundAlbedo)};
-const float OZONE_MAXIMUM_DENSITY = 5.374e18;
+const float OZONE_MAXIMUM_DENSITY = ${formatFloat(ozoneMaximumDensity)};
+const vec3 SOURCE_DIRECTION = ${sourceDirectionGlsl};
 const int POSITION_COUNT = ${altitudes.length};
 const int SOLAR_ZENITH_COUNT = ${zeniths.length};
-const int F68_COUNT = 68;
+const int F68_COUNT = ${incomingDirectionCount};
 const int OUTGOING_FACE_WIDTH = ${outgoingFaceWidth};
 const int OUTGOING_CELL_WIDTH = ${outgoingCellWidth};
 const int OUTGOING_FACE_NODE_COUNT = ${outgoingFaceNodeCount};
 const int TRANSPORT_INTERVAL_COUNT = ${transportIntervalCount};
+const int SOURCE_TRANSMITTANCE_INTERVAL_COUNT = ${sourcePathTransmittanceIntervalCount};
 const float POSITION_ALTITUDES[POSITION_COUNT] = float[POSITION_COUNT](
 	${floatArray(altitudes)}
 );
@@ -159,8 +450,10 @@ float ozoneDensityScale(float altitudeMeters) {
 	return (40000.0 - altitudeMeters) / 15000.0;
 }
 
+${altitudeAtPointSource}
+
 Medium sampleMediumAtPoint(vec3 point) {
-	float altitudeMeters = max(0.0, length(point) - BOTTOM_RADIUS);
+	float altitudeMeters = altitudeAtPoint(point);
 	float rayleighSeaLevel = EXPLICIT_RAYLEIGH_SCATTERING >= 0.0
 		? EXPLICIT_RAYLEIGH_SCATTERING
 		: RAYLEIGH_SCALE * pow(WAVELENGTH_MICROMETERS, -4.0);
@@ -207,76 +500,35 @@ float firstPositiveRoot(vec2 roots) {
 	return 1e30;
 }
 
-float atmosphereBranchLength(vec3 origin, vec3 direction) {
-	float radius = length(origin);
-	float radialDirection = dot(origin, direction);
-	if (abs(radius - BOTTOM_RADIUS) <= 1.0 && radialDirection < -1e-7) return -1.0;
-	if (abs(radius - TOP_RADIUS) <= 0.25 && radialDirection >= -1e-7) return -1.0;
-	float groundDistance = firstPositiveRoot(sphereRoots(origin, direction, BOTTOM_RADIUS));
-	float topDistance = firstPositiveRoot(sphereRoots(origin, direction, TOP_RADIUS));
-	float distanceMeters = min(groundDistance, topDistance);
-	return distanceMeters >= 1e29 ? -1.0 : distanceMeters;
-}
+${geometryIntersectionSource}
 
-bool sourceVisible(vec3 point) {
-	float radius = length(point);
-	if (abs(radius - BOTTOM_RADIUS) <= 1.0) {
-		return dot(point, vec3(0.0, 0.0, 1.0)) >= 0.0;
-	}
-	return firstPositiveRoot(sphereRoots(point, vec3(0.0, 0.0, 1.0), BOTTOM_RADIUS)) >= 1e29;
-}
+${atmosphereBranchSource}
+
+${sourceVisibilitySource}
 
 float sourceTransmittance(vec3 point) {
 	if (!sourceVisible(point)) return 0.0;
-	float distanceMeters = firstPositiveRoot(
-		sphereRoots(point, vec3(0.0, 0.0, 1.0), TOP_RADIUS)
-	);
+	float distanceMeters = topBoundaryDistance(point, SOURCE_DIRECTION);
 	if (distanceMeters >= 1e29) return 1.0;
-	float intervalLength = distanceMeters / 20.0;
+	float intervalLength = distanceMeters / float(SOURCE_TRANSMITTANCE_INTERVAL_COUNT);
 	float opticalDepth = 0.0;
-	for (int index = 0; index <= 20; index += 1) {
-		float weight = index == 0 || index == 20 ? 0.5 : 1.0;
-		vec3 samplePoint = point + vec3(0.0, 0.0, 1.0) * intervalLength * float(index);
+	for (int index = 0; index <= SOURCE_TRANSMITTANCE_INTERVAL_COUNT; index += 1) {
+		float weight = index == 0 || index == SOURCE_TRANSMITTANCE_INTERVAL_COUNT ? 0.5 : 1.0;
+		vec3 samplePoint = point + SOURCE_DIRECTION * intervalLength * float(index);
 		opticalDepth += sampleMediumAtPoint(samplePoint).extinction * intervalLength * weight;
 	}
 	return exp(-opticalDepth);
 }
 
-vec3 representativePoint(int positionIndex, int solarZenithIndex) {
-	float radius = BOTTOM_RADIUS + altitudeForIndex(positionIndex);
-	float angle = radians(SOLAR_ZENITH_DEGREES[solarZenithIndex]);
-	float muS = cos(angle);
-	return vec3(radius * sqrt(max(0.0, 1.0 - muS * muS)), 0.0, radius * muS);
-}
+${representativePointSource}
 
-void sourceFrame(vec3 point, out vec3 xAxis, out vec3 yAxis, out vec3 zAxis) {
-	zAxis = normalize(point);
-	float muS = clamp(zAxis.z, -1.0, 1.0);
-	xAxis = normalize(vec3(0.0, 0.0, 1.0) - muS * zAxis);
-	yAxis = normalize(cross(zAxis, xAxis));
-}
-
-vec3 localToWorld(vec3 point, vec3 localDirection) {
-	vec3 xAxis;
-	vec3 yAxis;
-	vec3 zAxis;
-	sourceFrame(point, xAxis, yAxis, zAxis);
-	return normalize(xAxis * localDirection.x + yAxis * localDirection.y + zAxis * localDirection.z);
-}
-
-vec3 worldToLocal(vec3 point, vec3 worldDirection) {
-	vec3 xAxis;
-	vec3 yAxis;
-	vec3 zAxis;
-	sourceFrame(point, xAxis, yAxis, zAxis);
-	return normalize(vec3(dot(worldDirection, xAxis), dot(worldDirection, yAxis), dot(worldDirection, zAxis)));
-}
+${directionFrameSource}
 
 float directScatteringDensity(vec3 point, vec3 outgoingDirection) {
 	float transmittance = sourceTransmittance(point);
 	if (transmittance == 0.0) return 0.0;
 	Medium medium = sampleMediumAtPoint(point);
-	vec3 sourceDirection = vec3(0.0, 0.0, 1.0);
+	vec3 sourceDirection = SOURCE_DIRECTION;
 	return SOURCE_IRRADIANCE * transmittance
 		* (medium.rayleighScattering * rayleighPhase(outgoingDirection, sourceDirection)
 			+ medium.mieScattering * miePhase(outgoingDirection, sourceDirection));
@@ -297,8 +549,8 @@ int branchBreaks(vec3 origin, vec3 direction, float lengthMeters, out float brea
 	breaks[0] = 0.0;
 	float tangent = -dot(origin, direction);
 	count = appendBreak(breaks, count, tangent, lengthMeters);
-	vec3 perpendicularOrigin = origin - origin.z * vec3(0.0, 0.0, 1.0);
-	vec3 perpendicularDirection = direction - direction.z * vec3(0.0, 0.0, 1.0);
+	vec3 perpendicularOrigin = origin - dot(origin, SOURCE_DIRECTION) * SOURCE_DIRECTION;
+	vec3 perpendicularDirection = direction - dot(direction, SOURCE_DIRECTION) * SOURCE_DIRECTION;
 	float a = dot(perpendicularDirection, perpendicularDirection);
 	float b = 2.0 * dot(perpendicularOrigin, perpendicularDirection);
 	float c = dot(perpendicularOrigin, perpendicularOrigin) - BOTTOM_RADIUS * BOTTOM_RADIUS;
@@ -341,22 +593,7 @@ int branchBreaks(vec3 origin, vec3 direction, float lengthMeters, out float brea
 	return count;
 }
 
-void positionStencil(float altitudeMeters, out int lower, out int upper, out float fraction) {
-	if (altitudeMeters <= POSITION_ALTITUDES[0]) {
-		lower = 0; upper = 0; fraction = 0.0; return;
-	}
-	if (altitudeMeters >= POSITION_ALTITUDES[POSITION_COUNT - 1]) {
-		lower = POSITION_COUNT - 1; upper = lower; fraction = 0.0; return;
-	}
-	for (int index = 0; index < POSITION_COUNT - 1; index += 1) {
-		if (altitudeMeters <= POSITION_ALTITUDES[index + 1]) {
-			lower = index; upper = index + 1;
-			fraction = clamp((altitudeMeters - POSITION_ALTITUDES[index])
-				/ (POSITION_ALTITUDES[index + 1] - POSITION_ALTITUDES[index]), 0.0, 1.0);
-			return;
-		}
-	}
-}
+${positionStencilSource}
 
 void solarZenithStencil(float degreesValue, out int lower, out int upper, out float fraction) {
 	if (degreesValue <= SOLAR_ZENITH_DEGREES[0]) {
@@ -406,8 +643,8 @@ float sampleJDirection(sampler2D field, int row, vec3 direction) {
 	float vCoordinate = (v + 1.0) * float(OUTGOING_CELL_WIDTH) * 0.5;
 	float roundedU = floor(uCoordinate + 0.5);
 	float roundedV = floor(vCoordinate + 0.5);
-	if (abs(uCoordinate - roundedU) <= 1e-5) uCoordinate = roundedU;
-	if (abs(vCoordinate - roundedV) <= 1e-5) vCoordinate = roundedV;
+	if (abs(uCoordinate - roundedU) <= ${directionExactTolerance}) uCoordinate = roundedU;
+	if (abs(vCoordinate - roundedV) <= ${directionExactTolerance}) vCoordinate = roundedV;
 	int u0 = clamp(int(floor(uCoordinate)), 0, OUTGOING_FACE_WIDTH - 1);
 	int v0 = clamp(int(floor(vCoordinate)), 0, OUTGOING_FACE_WIDTH - 1);
 	int u1 = min(u0 + 1, OUTGOING_FACE_WIDTH - 1);
@@ -423,8 +660,8 @@ float sampleJDirection(sampler2D field, int row, vec3 direction) {
 }
 
 float sampleJ(sampler2D field, vec3 point, vec3 worldDirection) {
-	float altitudeMeters = length(point) - BOTTOM_RADIUS;
-	float degreesValue = degrees(acos(clamp(point.z / length(point), -1.0, 1.0)));
+	float altitudeMeters = altitudeAtPoint(point);
+	float degreesValue = sourceZenithDegreesAtPoint(point);
 	int p0;
 	int p1;
 	float fp;
@@ -433,7 +670,7 @@ float sampleJ(sampler2D field, vec3 point, vec3 worldDirection) {
 	float fz;
 	positionStencil(altitudeMeters, p0, p1, fp);
 	solarZenithStencil(degreesValue, z0, z1, fz);
-	vec3 localDirection = worldToLocal(point, worldDirection);
+	vec3 localDirection = outgoingLocalDirection(point, worldDirection);
 	float a = sampleJDirection(field, z0 * POSITION_COUNT + p0, localDirection);
 	float b = sampleJDirection(field, z0 * POSITION_COUNT + p1, localDirection);
 	float cValue = sampleJDirection(field, z1 * POSITION_COUNT + p0, localDirection);
@@ -442,7 +679,7 @@ float sampleJ(sampler2D field, vec3 point, vec3 worldDirection) {
 }
 
 float sampleLAtGround(sampler2D field, vec3 groundPoint, int directionIndex) {
-	float degreesValue = degrees(acos(clamp(groundPoint.z / length(groundPoint), -1.0, 1.0)));
+	float degreesValue = sourceZenithDegreesAtPoint(groundPoint);
 	int z0;
 	int z1;
 	float fz;
@@ -451,6 +688,10 @@ float sampleLAtGround(sampler2D field, vec3 groundPoint, int directionIndex) {
 	float b = texelFetch(field, ivec2(directionIndex, z1 * POSITION_COUNT), 0).r;
 	return mix(a, b, fz);
 }
+
+${transportPolicySource}
+
+${groundIncomingSource}
 `;
 }
 
@@ -483,16 +724,23 @@ layout(location = 0) out float outputValue;
 void main() {
 	int directionIndex = int(gl_FragCoord.x);
 	int row = int(gl_FragCoord.y);
-	vec3 outgoing = texelFetch(uOutgoingDirections, ivec2(directionIndex, 0), 0).xyz;
+	vec3 point = representativePoint(row % POSITION_COUNT, row / POSITION_COUNT);
+	vec3 outgoing = phaseOutgoingDirection(
+		point,
+		texelFetch(uOutgoingDirections, ivec2(directionIndex, 0), 0).xyz
+	);
 	vec2 base = texelFetch(uDirectBase, ivec2(0, row), 0).rg;
-	float solarZenith = radians(float(row / POSITION_COUNT) + 0.5);
-	vec3 sourceDirection = vec3(sin(solarZenith), 0.0, cos(solarZenith));
+	vec3 sourceDirection = j1SourceDirection(row / POSITION_COUNT);
 	outputValue = base.x * rayleighPhase(outgoing, sourceDirection)
 		+ base.y * miePhase(outgoing, sourceDirection);
 }`;
 }
 
-function l1Fragment(common) {
+function l1Fragment(common, sourceAligned) {
+	const compensationDeclaration = sourceAligned ? 'float radianceCompensation = 0.0;' : '';
+	const radianceAddition = sourceAligned
+		? 'compensatedAdd(transmittance * directScatteringDensity(point, direction) * measure, radiance, radianceCompensation);'
+		: 'radiance += transmittance * directScatteringDensity(point, direction) * measure;';
 	return `#version 300 es
 precision highp float;
 precision highp int;
@@ -506,15 +754,17 @@ void main() {
 	int solarZenithIndex = row / POSITION_COUNT;
 	vec3 origin = representativePoint(positionIndex, solarZenithIndex);
 	vec3 localDirection = texelFetch(uF68Directions, ivec2(directionIndex, 0), 0).xyz;
-	vec3 direction = localToWorld(origin, localDirection);
+	vec3 direction = incomingPhysicalDirection(origin, localDirection);
+	if (radianceTransportBlocked(origin, direction)) { outputValue = 0.0; return; }
 	float lengthMeters = atmosphereBranchLength(origin, direction);
 	if (lengthMeters <= 0.0) { outputValue = 0.0; return; }
 	float groundDistance = firstPositiveRoot(sphereRoots(origin, direction, BOTTOM_RADIUS));
 	bool hitsGround = groundDistance < 1e29 && abs(groundDistance - lengthMeters) <= 1.0;
 	float breaks[5];
-	int breakCount = branchBreaks(origin, direction, lengthMeters, breaks);
+	int breakCount = transportBreaks(origin, direction, lengthMeters, breaks);
 	float transmittance = 1.0;
 	float radiance = 0.0;
+	${compensationDeclaration}
 	for (int segmentIndex = 0; segmentIndex < 4; segmentIndex += 1) {
 		if (segmentIndex + 1 >= breakCount) break;
 		float start = breaks[segmentIndex];
@@ -529,13 +779,13 @@ void main() {
 				transmittance *= exp(-0.5 * (previousExtinction + medium.extinction) * intervalLength);
 			}
 			float measure = intervalLength * (pointIndex == 0 || pointIndex == TRANSPORT_INTERVAL_COUNT ? 0.5 : 1.0);
-			radiance += transmittance * directScatteringDensity(point, direction) * measure;
+			${radianceAddition}
 			previousExtinction = medium.extinction;
 		}
 	}
 	if (hitsGround && GROUND_ALBEDO > 0.0) {
 		vec3 groundPoint = origin + direction * lengthMeters;
-		float incidenceCosine = max(0.0, dot(normalize(groundPoint), vec3(0.0, 0.0, 1.0)));
+		float incidenceCosine = max(0.0, dot(normalize(groundPoint), SOURCE_DIRECTION));
 		radiance += transmittance * SOURCE_IRRADIANCE * sourceTransmittance(groundPoint)
 			* incidenceCosine * GROUND_ALBEDO / PI;
 	}
@@ -543,13 +793,30 @@ void main() {
 }`;
 }
 
-function scatterFragment(common) {
+function scatterFragment(common, sourceAligned) {
+	const productionUniforms = sourceAligned
+		? 'uniform sampler2D uGroundIlluminationL;\nuniform int uScatteringOrder;\n'
+		: '';
+	const groundAddition = sourceAligned
+		? `incomingRadiance += groundIncomingContribution(
+			point,
+			incoming,
+			uScatteringOrder,
+			uF68Directions,
+			uGroundIlluminationL
+		);`
+		: '';
+	const compensationDeclaration = sourceAligned ? 'float sumCompensation = 0.0;' : '';
+	const sumAddition = sourceAligned
+		? 'compensatedAdd(incomingRadiance * scattering * incomingRecord.w, sum, sumCompensation);'
+		: 'sum += incomingRadiance * scattering * incomingRecord.w;';
 	return `#version 300 es
 precision highp float;
 precision highp int;
 uniform sampler2D uPreviousL;
 uniform sampler2D uF68Directions;
 uniform sampler2D uOutgoingDirections;
+${productionUniforms}
 ${common}
 layout(location = 0) out float outputValue;
 void main() {
@@ -558,20 +825,40 @@ void main() {
 	int positionIndex = row % POSITION_COUNT;
 	vec3 point = representativePoint(positionIndex, row / POSITION_COUNT);
 	Medium medium = sampleMediumAtPoint(point);
-	vec3 outgoing = texelFetch(uOutgoingDirections, ivec2(outgoingIndex, 0), 0).xyz;
+	vec3 outgoing = phaseOutgoingDirection(
+		point,
+		texelFetch(uOutgoingDirections, ivec2(outgoingIndex, 0), 0).xyz
+	);
 	float sum = 0.0;
+	${compensationDeclaration}
 	for (int incomingIndex = 0; incomingIndex < F68_COUNT; incomingIndex += 1) {
 		vec4 incomingRecord = texelFetch(uF68Directions, ivec2(incomingIndex, 0), 0);
+		vec3 incoming = phaseIncomingDirection(point, incomingRecord.xyz);
 		float incomingRadiance = texelFetch(uPreviousL, ivec2(incomingIndex, row), 0).r;
-		float scattering = medium.rayleighScattering * rayleighPhase(outgoing, incomingRecord.xyz)
-			+ medium.mieScattering * miePhase(outgoing, incomingRecord.xyz);
-		sum += incomingRadiance * scattering * incomingRecord.w;
+		${groundAddition}
+		float scattering = medium.rayleighScattering * rayleighPhase(outgoing, incoming)
+			+ medium.mieScattering * miePhase(outgoing, incoming);
+		${sumAddition}
 	}
 	outputValue = sum;
 }`;
 }
 
-function transportFragment(common) {
+function transportFragment(common, sourceAligned) {
+	const compensationDeclarations = sourceAligned
+		? 'float radianceCompensation = 0.0;\n\tfloat irradianceCompensation = 0.0;'
+		: '';
+	const radianceAddition = sourceAligned
+		? 'compensatedAdd(transmittance * sampleJ(uPreviousJ, point, direction) * measure, radiance, radianceCompensation);'
+		: 'radiance += transmittance * sampleJ(uPreviousJ, point, direction) * measure;';
+	const irradianceAddition = sourceAligned
+		? `compensatedAdd(
+				sampleLAtGround(uPreviousL, groundPoint, incomingIndex) * incidenceCosine * incomingRecord.w,
+				irradiance,
+				irradianceCompensation
+			);`
+		: `irradiance += sampleLAtGround(uPreviousL, groundPoint, incomingIndex)
+				* incidenceCosine * incomingRecord.w;`;
 	return `#version 300 es
 precision highp float;
 precision highp int;
@@ -587,15 +874,17 @@ void main() {
 	int solarZenithIndex = row / POSITION_COUNT;
 	vec3 origin = representativePoint(positionIndex, solarZenithIndex);
 	vec3 localDirection = texelFetch(uF68Directions, ivec2(directionIndex, 0), 0).xyz;
-	vec3 direction = localToWorld(origin, localDirection);
+	vec3 direction = incomingPhysicalDirection(origin, localDirection);
+	if (radianceTransportBlocked(origin, direction)) { outputValue = 0.0; return; }
 	float lengthMeters = atmosphereBranchLength(origin, direction);
 	if (lengthMeters <= 0.0) { outputValue = 0.0; return; }
 	float groundDistance = firstPositiveRoot(sphereRoots(origin, direction, BOTTOM_RADIUS));
 	bool hitsGround = groundDistance < 1e29 && abs(groundDistance - lengthMeters) <= 1.0;
 	float breaks[5];
-	int breakCount = branchBreaks(origin, direction, lengthMeters, breaks);
+	int breakCount = transportBreaks(origin, direction, lengthMeters, breaks);
 	float transmittance = 1.0;
 	float radiance = 0.0;
+	${compensationDeclarations}
 	for (int segmentIndex = 0; segmentIndex < 4; segmentIndex += 1) {
 		if (segmentIndex + 1 >= breakCount) break;
 		float start = breaks[segmentIndex];
@@ -610,7 +899,7 @@ void main() {
 				transmittance *= exp(-0.5 * (previousExtinction + medium.extinction) * intervalLength);
 			}
 			float measure = intervalLength * (pointIndex == 0 || pointIndex == TRANSPORT_INTERVAL_COUNT ? 0.5 : 1.0);
-			radiance += transmittance * sampleJ(uPreviousJ, point, direction) * measure;
+			${radianceAddition}
 			previousExtinction = medium.extinction;
 		}
 	}
@@ -619,9 +908,9 @@ void main() {
 		float irradiance = 0.0;
 		for (int incomingIndex = 0; incomingIndex < F68_COUNT; incomingIndex += 1) {
 			vec4 incomingRecord = texelFetch(uF68Directions, ivec2(incomingIndex, 0), 0);
-			float incidenceCosine = max(0.0, incomingRecord.z);
-			irradiance += sampleLAtGround(uPreviousL, groundPoint, incomingIndex)
-				* incidenceCosine * incomingRecord.w;
+			vec3 incoming = incomingPhysicalDirection(groundPoint, incomingRecord.xyz);
+			float incidenceCosine = max(0.0, dot(normalize(groundPoint), incoming));
+			${irradianceAddition}
 		}
 		radiance += transmittance * irradiance * GROUND_ALBEDO / PI;
 	}
@@ -685,17 +974,33 @@ export async function compileDistantSunSceneCacheWavelength({
 	const ozoneCrossSection =
 		ozone.crossSectionTable.values[lower] * (1 - fraction) + ozone.crossSectionTable.values[upper] * fraction;
 	const shaderProfile = spec.shaderProfile ?? {};
-	const common = commonSource({
+	const coordinateContract = shaderProfile.coordinateContract ?? 'scene-cache-receiver-local-v1';
+	const sourceAligned = coordinateContract === 'production-source-aligned-v1';
+	const common = createDistantSunSceneCacheCommonShaderSource({
 		wavelengthNanometers: channel.centerNanometers,
 		sourceIrradiance: channel.sourceIrradianceDensityWattsPerSquareMeterPerNanometer,
 		ozoneCrossSection,
+		ozoneMaximumDensity: ozone.maximumDensityPerCubicMeter ?? 5.374e18,
 		rayleighScattering: channel.rayleighScatteringPerMeter ?? null,
 		mieExtinction: channel.mieExtinctionPerMeter ?? null,
 		groundAlbedo: channel.groundAlbedo ?? 0,
+		bottomRadiusMeters: spec.planet.bottomRadiusMeters,
+		topRadiusMeters: spec.planet.topRadiusMeters,
+		rayleighScaleHeightMeters: spec.atmosphere.rayleighScaleHeightMeters,
+		mieScaleHeightMeters: spec.atmosphere.mieScaleHeightMeters,
+		rayleighCoefficientScalePerMeter: spec.atmosphere.rayleighCoefficientScalePerMeter,
+		mieAngstromAlpha: spec.atmosphere.mieAngstromAlpha,
+		mieAngstromBeta: spec.atmosphere.mieAngstromBeta,
+		mieSingleScatteringAlbedo: spec.atmosphere.mieSingleScatteringAlbedo,
+		miePhaseFunctionG: spec.atmosphere.miePhaseFunctionG,
+		sourcePathTransmittanceIntervalCount: spec.numerical.sourcePathTransmittanceIntervalCount,
+		incomingDirectionCount: domains.incoming.directionCount,
 		transportIntervalCount: spec.numerical.transportIntervalCount,
 		outgoingFaceWidth: domains.outgoing.faceWidth,
 		positionAltitudesMeters: domains.position.nodes.map((node) => node.altitudeMeters),
 		solarZenithDegrees: domains.solarZenith.nodes.map((node) => node.solarZenithDegrees),
+		coordinateContract,
+		sourceDirection: spec.source.directionToLight,
 	});
 	const widthJ = domains.outgoing.directionCount;
 	const widthL = domains.incoming.directionCount;
@@ -722,9 +1027,9 @@ export async function compileDistantSunSceneCacheWavelength({
 	const programs = {
 		directBase: createProgram(gl, directBaseFragment(common), 'ZP3 direct base'),
 		j1: createProgram(gl, j1Fragment(common), 'ZP3 J1'),
-		l1: createProgram(gl, l1Fragment(common), 'ZP3 L1'),
-		scatter: createProgram(gl, scatterFragment(common), 'ZP3 scatter'),
-		transport: createProgram(gl, transportFragment(common), 'ZP3 transport'),
+		l1: createProgram(gl, l1Fragment(common, sourceAligned), 'ZP3 L1'),
+		scatter: createProgram(gl, scatterFragment(common, sourceAligned), 'ZP3 scatter'),
+		transport: createProgram(gl, transportFragment(common, sourceAligned), 'ZP3 transport'),
 		projection: compileSceneCaches
 			? createProgram(gl, packedRowAccumulatorFragment(), 'P2 packed-row accumulation')
 			: null,
@@ -778,10 +1083,23 @@ export async function compileDistantSunSceneCacheWavelength({
 		timings.push({id, milliseconds, outputField: output.id, inputFields: inputs.map((input) => input[3])});
 		ledger.push({operation: 'pass', id, outputField: output.id, inputFields: inputs.map((input) => input[3])});
 	};
+	const probeZenithIndices = domains.solarZenith.count === 180 ? [45, 90, 99] : [0, 0, 0];
 	const probeCoordinates = [
-		{label: 'day-lower', x: domains.outgoing.positiveFaceCenterIndices.positiveX, y: 45 * 48 + 8},
-		{label: 'terminator-middle', x: domains.outgoing.positiveFaceCenterIndices.positiveX, y: 90 * 48 + 24},
-		{label: 'night-upper', x: domains.outgoing.positiveFaceCenterIndices.positiveZ, y: 99 * 48 + 47},
+		{
+			label: 'day-lower',
+			x: domains.outgoing.positiveFaceCenterIndices.positiveX,
+			y: probeZenithIndices[0] * domains.position.count + Math.min(8, domains.position.count - 1),
+		},
+		{
+			label: 'terminator-middle',
+			x: domains.outgoing.positiveFaceCenterIndices.positiveX,
+			y: probeZenithIndices[1] * domains.position.count + Math.min(24, domains.position.count - 1),
+		},
+		{
+			label: 'night-upper',
+			x: domains.outgoing.positiveFaceCenterIndices.positiveZ,
+			y: probeZenithIndices[2] * domains.position.count + domains.position.count - 1,
+		},
 	];
 	const probe = (order, resource) => {
 		bindFramebuffer(gl, framebuffer, resource.texture);
@@ -952,7 +1270,11 @@ export async function compileDistantSunSceneCacheWavelength({
 				[0, l1.texture, 'uPreviousL', 'L1'],
 				[1, f68Texture, 'uF68Directions', 'F68-directions'],
 				[2, outgoingDirectionTexture, 'uOutgoingDirections', 'outgoing-directions'],
+				...(sourceAligned ? [[3, l1.texture, 'uGroundIlluminationL', 'L1-ground-dummy']] : []),
 			],
+			uniforms: sourceAligned
+				? [(program) => gl.uniform1i(gl.getUniformLocation(program, 'uScatteringOrder'), 2)]
+				: [],
 		});
 		await captureFieldProbes('J2', j2);
 		projectionExposures.push(probe('J2', j2));
@@ -971,7 +1293,7 @@ export async function compileDistantSunSceneCacheWavelength({
 		});
 		await captureFieldProbes('L2', l2);
 		release('J2');
-		release('L1');
+		if (!sourceAligned) release('L1');
 
 		const j3 = allocate('J3', widthJ);
 		await drawField({
@@ -983,7 +1305,11 @@ export async function compileDistantSunSceneCacheWavelength({
 				[0, l2.texture, 'uPreviousL', 'L2'],
 				[1, f68Texture, 'uF68Directions', 'F68-directions'],
 				[2, outgoingDirectionTexture, 'uOutgoingDirections', 'outgoing-directions'],
+				...(sourceAligned ? [[3, l1.texture, 'uGroundIlluminationL', 'L1-ground']] : []),
 			],
+			uniforms: sourceAligned
+				? [(program) => gl.uniform1i(gl.getUniformLocation(program, 'uScatteringOrder'), 3)]
+				: [],
 		});
 		await captureFieldProbes('J3', j3);
 		projectionExposures.push(probe('J3', j3));
@@ -1002,7 +1328,8 @@ export async function compileDistantSunSceneCacheWavelength({
 		});
 		await captureFieldProbes('L3', l3);
 		release('J3');
-		release('L2');
+		if (sourceAligned) release('L1');
+		else release('L2');
 
 		const j4 = allocate('J4', widthJ);
 		await drawField({
@@ -1014,13 +1341,18 @@ export async function compileDistantSunSceneCacheWavelength({
 				[0, l3.texture, 'uPreviousL', 'L3'],
 				[1, f68Texture, 'uF68Directions', 'F68-directions'],
 				[2, outgoingDirectionTexture, 'uOutgoingDirections', 'outgoing-directions'],
+				...(sourceAligned ? [[3, l2.texture, 'uGroundIlluminationL', 'L2-ground']] : []),
 			],
+			uniforms: sourceAligned
+				? [(program) => gl.uniform1i(gl.getUniformLocation(program, 'uScatteringOrder'), 4)]
+				: [],
 		});
 		await captureFieldProbes('J4', j4);
 		projectionExposures.push(probe('J4', j4));
 		if (compileSceneCaches) await accumulateOrder(4, j4);
 		release('J4');
 		release('L3');
+		if (sourceAligned) release('L2');
 		const compiledCaches = [];
 		for (let cacheIndex = 0; cacheIndex < cacheResources.length; cacheIndex += 1) {
 			const cacheState = cacheResources[cacheIndex];

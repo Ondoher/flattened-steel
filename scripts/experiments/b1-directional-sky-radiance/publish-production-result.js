@@ -10,6 +10,7 @@ import {
 } from '../production-result-paths.js';
 import {renderReport, runExperiment} from './run.js';
 import {ProductionRun} from './ProductionRun.js';
+import {B1_FIGURE_COLOR_CONTROL} from '../../algorithm32/production-b-experiments/B1MeasurementBoundary.js';
 
 /** Score one complete production B1 boundary and publish its report and original figure family. */
 export function publishProductionB1Result(path, options = {}) {
@@ -29,6 +30,7 @@ export function publishProductionB1Result(path, options = {}) {
 	const candidatePaths = ProductionRun.candidatePaths(productionRun);
 	const figureRun = generateB1Figures({
 		profileFamily: productionRun.manifest.profileFamily ?? 'paper',
+		colorModel: B1_FIGURE_COLOR_CONTROL.selectionId,
 		singleCandidate: true,
 		outputRoot,
 		resultSubdirectory: backendDirectory,
@@ -41,6 +43,7 @@ export function publishProductionB1Result(path, options = {}) {
 
 	return Object.freeze({
 		resultPath,
+		figureColorControl: figureRun.figureColorControl,
 		figures: figureRun.artifacts,
 	});
 }

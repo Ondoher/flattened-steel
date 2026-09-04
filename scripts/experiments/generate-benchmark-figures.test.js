@@ -534,12 +534,20 @@ test(
 	() => {
 		const directory = mkdtempSync(join(tmpdir(), 'algorithm32-b1-figures-'));
 		try {
-			const run = generateB1Figures({outputRoot: directory});
+			const run = generateB1Figures({outputRoot: directory, colorModel: 'basic-bruneton'});
 			assert.equal(run.artifacts.length, 6);
 			assert.equal(run.artifacts.filter(({path}) => path.endsWith('.svg')).length, 3);
 			assert.equal(run.artifacts.filter(({path}) => path.endsWith('.png')).length, 3);
 			assert.equal(run.b1Figure5PublishedPanels.length, 27);
 			assert.equal(run.b1Figure5Panels.length, 3);
+			assert.deepEqual(run.figureColorControl, {
+				schemaId: 'algorithm32-b1-figure-color-control-v1',
+				selectionId: 'basic-bruneton',
+				implementationId: 'bruneton-figure1-display',
+				role: 'six-b1-visual-comparison-figures-only',
+				artifactCount: 6,
+				participatesInPhysicalScoring: false,
+			});
 			assert.ok(run.artifacts.every(({path}) => path.includes('b1-directional-sky-radiance')));
 			assert.equal(existsSync(join(directory, 'b2-hemispherical-sky-irradiance')), false);
 			assert.equal(existsSync(join(directory, 'b3-matched-atmosphere-solver')), false);

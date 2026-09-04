@@ -24,6 +24,10 @@ import {
 } from './b2-hemispherical-sky-irradiance/benchmark.js';
 import {readCube, readMeasurementBoundary, scoreCubes} from './b3-matched-atmosphere-solver/cube.js';
 import {PUBLISHED as B3_PUBLISHED} from './b3-matched-atmosphere-solver/contract.js';
+import {
+	B1_FIGURE_COLOR_CONTROL,
+	requireB1FigureColorControl,
+} from '../algorithm32/production-b-experiments/B1MeasurementBoundary.js';
 
 const SCRIPT_DIRECTORY = dirname(fileURLToPath(import.meta.url));
 const REPOSITORY_ROOT = resolve(SCRIPT_DIRECTORY, '..', '..');
@@ -1261,6 +1265,12 @@ export function parseArguments(argv) {
 			options.profileFamily = argv[++index];
 			resolveFigureFamily(options.profileFamily);
 			continue;
+		} else if (argv[index] === '--color-model') {
+			options.colorModel = argv[++index];
+			if (options.colorModel !== B1_FIGURE_COLOR_CONTROL.selectionId) {
+				throw new Error('B1 visual figures require --color-model basic-bruneton.');
+			}
+			continue;
 		}
 		const key = names.get(argv[index]);
 		if (!key || !argv[index + 1]) {
@@ -1314,6 +1324,9 @@ export function generateBenchmarkFigures(options = {}) {
 	const publishedModelsPath = resolvePublishedModels(options.publishedModels);
 	const outputRoot = options.outputRoot ?? RESULT_ROOT;
 	const resultSubdirectory = options.resultSubdirectory ?? null;
+	const figureColorControl = options.colorModel
+		? requireB1FigureColorControl({...B1_FIGURE_COLOR_CONTROL, selectionId: options.colorModel})
+		: null;
 	if (resultSubdirectory !== null && !['cpu', 'gpu'].includes(resultSubdirectory)) {
 		throw new Error('Figure result subdirectory must be cpu or gpu.');
 	}
@@ -1382,6 +1395,7 @@ export function generateBenchmarkFigures(options = {}) {
 		measurements: commonProvenance.measurements,
 		publishedModels: commonProvenance.publishedModels,
 		algorithm32Boundary: commonProvenance.algorithm32Boundary,
+		figureColorControl,
 	});
 
 	const artifacts = [];
@@ -1456,6 +1470,7 @@ export function generateBenchmarkFigures(options = {}) {
 			profileFamily: profileFamilyId,
 			candidateLabel: 'Algorithm32',
 			selectedMaximumScatteringOrder: 4,
+			figureColorControl,
 			candidateLabels: profileFamily.labels,
 			artifacts: Object.freeze(artifacts),
 			b1Scores,
@@ -1521,6 +1536,7 @@ export function generateBenchmarkFigures(options = {}) {
 		profileFamily: profileFamilyId,
 		candidateLabel: 'Algorithm32',
 		selectedMaximumScatteringOrder: 4,
+		figureColorControl,
 		candidateLabels: profileFamily.labels,
 		artifacts: Object.freeze(artifacts),
 		b1Scores,

@@ -47,11 +47,35 @@ test('routes production outputs through separate CPU and GPU result roots', () =
 		resolve('alternate-results/b1-directional-sky-radiance/gpu'),
 	);
 	assert.equal(parseArguments(['--output-root', 'alternate-results']).outputRoot, resolve('alternate-results'));
+	assert.deepEqual(
+		parseArguments([
+			'--backend',
+			'gpu',
+			'--asset-set',
+			'cache-set',
+			'--production-revision',
+			'revision-1',
+		]),
+		{
+			backend: 'gpu',
+			dryRun: false,
+			orders: [4],
+			conditions: [...parseArguments([]).conditions],
+			measureGpuCompletion: false,
+			incomingDirectionVariant: 'production-68',
+			assetSetDirectory: resolve('cache-set'),
+			productionRevision: 'revision-1',
+		},
+	);
 	assert.deepEqual(parseScoreArguments(['run', '--output-root', 'alternate-results']), {
 		productionRunPath: 'run',
 		outputRoot: resolve('alternate-results'),
 	});
 	assert.equal(parseFigureArguments(['--backend', 'cpu']).resultSubdirectory, 'cpu');
+	assert.equal(
+		parseFigureArguments(['--color-model', 'basic-bruneton']).colorModel,
+		'basic-bruneton',
+	);
 	assert.equal(
 		parseFigureArguments(['--profile-family', 'paper-reflection-completed-136']).profileFamily,
 		'paper-reflection-completed-136',
@@ -63,7 +87,13 @@ test('rejects duplicate work before allocating a production run', () => {
 	assert.throws(() => parseArguments(['--conditions', '09:30,09:30']), /unique/);
 	assert.throws(() => parseArguments(['--backend', 'reference']), /cpu or gpu/);
 	assert.throws(() => parseArguments(['--measure-gpu-completion']), /requires --backend gpu/);
+	assert.throws(() => parseArguments(['--asset-set', 'cache-set']), /require --backend gpu/u);
+	assert.throws(() => parseArguments(['--production-revision', 'revision-1']), /require --backend gpu/u);
 	assert.throws(() => parseArguments(['--incoming-direction-variant', 'unknown']), /production-68/);
+	assert.throws(
+		() => parseFigureArguments(['--color-model', 'color-reset-slope-078-p9']),
+		/require --color-model basic-bruneton/u,
+	);
 });
 
 test('requires an alternate output root for a bounded noncanonical generation', async () => {

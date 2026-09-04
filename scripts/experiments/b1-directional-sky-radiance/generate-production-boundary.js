@@ -6,6 +6,7 @@ import {pathToFileURL} from 'node:url';
 import {Algorithm32} from '../../../src/algorithm32/implementation/algorithm32/Algorithm32.js';
 import {SharedModel} from '../../../src/algorithm32/implementation/algorithm32/model/SharedModel.js';
 import {DistantSunCpuCache} from '../../../src/algorithm32/implementation/distant-sun/cache/DistantSunCpuCache.js';
+import {B1_PHYSICAL_MEASUREMENT_BOUNDARY} from '../../algorithm32/production-b-experiments/B1MeasurementBoundary.js';
 import {makeCube} from '../b3-matched-atmosphere-solver/cube.js';
 import {CAPTURE_TIMES, loadKiderDataset} from './benchmark.js';
 import {createBrunetonProductionProfile, createViewDirection} from './production-profile.js';
@@ -60,6 +61,7 @@ const INCOMING_VARIANT_METADATA = Object.freeze({
 		presentationSuffix: ' Experimental Reflection-Completed 136',
 	}),
 });
+const CPU_REFERENCE_COMPILER_IDENTITY = 'algorithm32-b1-cpu-reference-binary64-v1';
 
 function parseList(value, label) {
 	if (!value) throw new Error(`${label} requires a comma-separated value.`);
@@ -104,6 +106,13 @@ export function parseArguments(argv) {
 			const progressLogPath = argv[++index];
 			if (!progressLogPath) throw new Error('--progress-log requires a path.');
 			options.progressLogPath = resolve(progressLogPath);
+		} else if (argument === '--asset-set') {
+			const assetSetDirectory = argv[++index];
+			if (!assetSetDirectory) throw new Error('--asset-set requires a path.');
+			options.assetSetDirectory = resolve(assetSetDirectory);
+		} else if (argument === '--production-revision') {
+			options.productionRevision = argv[++index];
+			if (!options.productionRevision) throw new Error('--production-revision requires an identity.');
 		} else {
 			throw new Error(`Unknown argument: ${argument}`);
 		}
@@ -113,6 +122,9 @@ export function parseArguments(argv) {
 	}
 	if (options.measureGpuCompletion && options.backend !== 'gpu') {
 		throw new Error('--measure-gpu-completion requires --backend gpu.');
+	}
+	if ((options.assetSetDirectory || options.productionRevision) && options.backend !== 'gpu') {
+		throw new Error('--asset-set and --production-revision require --backend gpu.');
 	}
 	if (!(options.incomingDirectionVariant in INCOMING_VARIANT_METADATA)) {
 		throw new RangeError(
@@ -244,6 +256,9 @@ export async function runGeneration(options = {}) {
 			profiles: profiles.map((profile) => ({id: profile.id, contentHash: profile.contentHash})),
 		};
 	}
+	if (backend === 'gpu' && (!options.assetSetDirectory || !options.productionRevision)) {
+		throw new Error('Production GPU generation requires --asset-set and --production-revision.');
+	}
 
 	const {runId, runDirectory, outputDirectory} = allocateRunDirectory(
 		outputRoot,
@@ -255,12 +270,21 @@ export async function runGeneration(options = {}) {
 	const gpuProgressLogPath = backend === 'gpu'
 		? options.progressLogPath ?? resolve('tmp/algorithm32-bruneton-paper/b1-production-gpu-progress.log')
 		: null;
-	const gpuHost = backend === 'gpu' ? new ProductionGpuHost({progressLogPath: gpuProgressLogPath}) : null;
+	const gpuHost =
+		backend === 'gpu'
+			? new ProductionGpuHost({
+					progressLogPath: gpuProgressLogPath,
+					assetSetDirectory: options.assetSetDirectory,
+					productionRevision: options.productionRevision,
+				})
+			: null;
 	let gpuCapabilities = null;
+	let gpuAssetInputs = null;
 	let generatedGpuConditionCount = 0;
 
 	try {
 		await gpuHost?.open();
+		gpuAssetInputs = gpuHost?.assetSetProvenance ?? null;
 		for (const order of orders) {
 			const lines = [tableHeader()];
 			const profileRecords = [];
@@ -289,10 +313,15 @@ export async function runGeneration(options = {}) {
 						measureGpuCompletion: options.measureGpuCompletion === true,
 					});
 					generatedGpuConditionCount += 1;
+					if (gpuResult.measurementBoundaryIdentity !== B1_PHYSICAL_MEASUREMENT_BOUNDARY.identity) {
+						throw new Error('B1 GPU result did not preserve the Color-free physical measurement boundary.');
+					}
 					gpuValues = gpuResult.values;
 					gpuCapabilities ??= gpuResult.capabilities;
 					gpuConditionDiagnostics.push({
 						time: condition.time,
+						assetSetIdentity: gpuResult.assetSetIdentity,
+						assetIdentity: gpuResult.assetIdentity,
 						shaderDiagnostics: gpuResult.shaderDiagnostics,
 						shaderSourceMetrics: gpuResult.shaderSourceMetrics,
 						executionTimings: gpuResult.executionTimings,
@@ -350,6 +379,7 @@ export async function runGeneration(options = {}) {
 			const tableName = `algorithm32-current-production-${backend}-j${order}.tsv`;
 			const tablePath = join(runDirectory, tableName);
 			writeFileSync(tablePath, table, {encoding: 'utf8', flag: 'wx'});
+			const tableSha256 = sha256(table);
 			const provenance = {
 				schema: 'algorithm32-current-production-b1-provenance-v2',
 				runId,
@@ -368,6 +398,7 @@ export async function runGeneration(options = {}) {
 				order,
 				rowCount: conditions.length * 81,
 				completeCanonicalBoundary: conditions.length === 17,
+				physicalMeasurementBoundary: B1_PHYSICAL_MEASUREMENT_BOUNDARY,
 				spectralChannelCount: 40,
 				nativeSpectralBoundary: {
 					channelCount: 40,
@@ -388,7 +419,7 @@ export async function runGeneration(options = {}) {
 					positionLookup: 'view-only-linear-physical-altitude-over-actual-nodes',
 					maximumScatteringOrder: order,
 				},
-				table: {name: tableName, sha256: sha256(table), byteLength: Buffer.byteLength(table)},
+				table: {name: tableName, sha256: tableSha256, byteLength: Buffer.byteLength(table)},
 				profiles: profileRecords,
 			};
 			const provenanceName = `algorithm32-current-production-${backend}-j${order}-provenance.json`;
@@ -417,30 +448,54 @@ export async function runGeneration(options = {}) {
 						runId,
 						order,
 						table: tableName,
-						tableSha256: sha256(table),
+							tableSha256,
 					}),
 				);
 			}
 			outputs.push({
 				order,
 				table: tableName,
-				tableSha256: sha256(table),
+				tableSha256,
 				provenance: provenanceName,
 				provenanceSha256,
 				cube,
 				cubeSha256,
 				defaultProvenance,
 				defaultProvenanceSha256,
+				derivation: {
+					inputAssetSetIdentity: gpuAssetInputs?.assetSetIdentity ?? null,
+					inputProfileHashes: profileRecords.map(({time, id, contentHash}) => ({time, id, contentHash})),
+					operation: 'production final-view directional spectral-radiance evaluation; first 31 channels form the B3 cube',
+				},
 			});
 		}
 	} finally {
 		await gpuHost?.close();
 	}
 
+	const profileHashes = profiles.map((profile, index) => ({
+		order: profile.numerical.cacheConstruction.maximumScatteringOrder,
+		time: conditions[Math.floor(index / orders.length)].time,
+		id: profile.id,
+		contentHash: profile.contentHash,
+	}));
 	const manifest = {
 		schema: ProductionRun.MANIFEST_SCHEMA,
 		runId,
 		backend: backend === 'gpu' ? 'gpu-production-shaders-r32f' : 'cpu-reference-binary64',
+		executionIdentity:
+			backend === 'gpu' ? 'algorithm32-b1-production-gpu-final-view-r32f-v1' : CPU_REFERENCE_COMPILER_IDENTITY,
+		canonicality: {
+			kind: completeCanonicalSelection ? 'canonical-candidate' : 'bounded-or-diagnostic',
+			publicationEligible: completeCanonicalSelection,
+		},
+		productionRevision: gpuAssetInputs?.productionRevision ?? null,
+		compilerIdentity: gpuAssetInputs?.compilerIdentity ?? CPU_REFERENCE_COMPILER_IDENTITY,
+		assetSetIdentity: gpuAssetInputs?.assetSetIdentity ?? null,
+		assetSet: gpuAssetInputs?.assetSet ?? null,
+		assetSetManifest: gpuAssetInputs?.assetSetManifest ?? null,
+		assets: gpuAssetInputs?.assets ?? [],
+		profileHashes,
 		gpuCapabilities: backend === 'gpu' ? gpuCapabilities : null,
 		gpuProgressLogPath,
 		status: 'COMPLETE',

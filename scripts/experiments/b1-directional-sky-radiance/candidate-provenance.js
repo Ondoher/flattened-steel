@@ -14,6 +14,12 @@ const N_ORDER_CONTROLS = Object.freeze({
 	positionLookup: 'view-only-linear-physical-altitude-over-actual-nodes',
 });
 
+const RETAINED_NATIVE_N_ORDER_CONTROLS = Object.freeze({
+	...N_ORDER_CONTROLS,
+	incidentDirectionCount: 34,
+	incomingDirectionDomain: 'source-oriented-fibonacci-pinned-34',
+});
+
 export const PAPER_PHYSICAL_PROFILE_ID = 'algorithm32-paper-comparison-v1';
 export const PAPER_PHYSICAL_PROFILE_CONTENT_HASH =
 	'sha256:d47601d954167ca8775c0a88cd8ca9b9527ae8e74a6f42ae6041eec3244aeecc';
@@ -48,7 +54,7 @@ function nOrderProfile(order) {
 		label: `${algorithm32DisplayName(order)} (cumulative scattering through order ${order})`,
 		role: 'comparative',
 		controls: Object.freeze({
-			...N_ORDER_CONTROLS,
+			...RETAINED_NATIVE_N_ORDER_CONTROLS,
 			maximumScatteringOrder: order,
 		}),
 	});
@@ -176,12 +182,12 @@ export const N_ORDER_PROFILE_KEYS = Object.freeze(['j2', 'j3', 'j4', 'j5']);
 export const CANDIDATE_PROFILES = Object.freeze({
 	default: Object.freeze({
 		id: 'Algorithm32',
-		label: 'Algorithm32 (Default, 68 incident directions)',
+		label: 'Algorithm32 (Default, 34 incident directions)',
 		role: 'canonical Default',
 		controls: Object.freeze({
 			pathIntervalCount: 40,
 			sourceTransmittanceIntervalCount: 20,
-			incidentDirectionCount: 68,
+			incidentDirectionCount: 34,
 			incidentAltitudeBinCount: 48,
 		}),
 	}),

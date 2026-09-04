@@ -167,17 +167,17 @@ const vec3 GEOMETRY_OBSERVER_FORWARD_DIRECTION = ${ShaderSource.formatVec3(frame
 					0,
 					`PathBounds resolveAtmospherePath(ViewRay ray, float sceneTerminationMeters, bool hasSceneEndpoint) {
 	float radius = length(ray.originMeters);
-	float radialDirectionCosine = dot(ray.originMeters, ray.direction) / max(radius, 1.0);
-	float topDiscriminant =
-		radius * radius * (radialDirectionCosine * radialDirectionCosine - 1.0)
-		+ GEOMETRY_TOP_RADIUS_METERS * GEOMETRY_TOP_RADIUS_METERS;
+	float halfLinear = dot(ray.originMeters, ray.direction);
+	float constantTerm = (radius - GEOMETRY_TOP_RADIUS_METERS)
+		* (radius + GEOMETRY_TOP_RADIUS_METERS);
+	float topDiscriminant = halfLinear * halfLinear - constantTerm;
 	if (topDiscriminant < 0.0) {
 		return PathBounds(0.0, 0.0, 0.0, false, false, false);
 	}
-	float atmosphereExitMeters = max(
-		0.0,
-		-radius * radialDirectionCosine + sqrt(topDiscriminant)
-	);
+	float root = sqrt(topDiscriminant);
+	float atmosphereExitMeters = max(0.0, halfLinear >= 0.0
+		? -constantTerm / (halfLinear + root)
+		: -halfLinear + root);
 	float boundaryDistanceMeters = atmosphereExitMeters;
 	bool hasGroundEndpoint = false;
 	float endDistanceMeters = hasSceneEndpoint ? min(max(sceneTerminationMeters, 0.0), boundaryDistanceMeters) : boundaryDistanceMeters;

@@ -4,8 +4,13 @@ import {Algorithm32} from '../../../src/algorithm32/implementation/algorithm32/A
 import {ThreeCacheBackend} from '../../../src/algorithm32/implementation/three-cache-backend/ThreeCacheBackend.js';
 import {ShaderContributions} from '../../../src/algorithm32/shader-assembly/base/ShaderContributions.js';
 import {ShaderSource} from '../../../src/algorithm32/shader-assembly/base/ShaderSource.js';
+import {
+	B1_PHYSICAL_MEASUREMENT_BOUNDARY,
+	requireB1PhysicalMeasurementShader,
+} from '../../algorithm32/production-b-experiments/B1MeasurementBoundary.js';
 import {ProductionProgressCacheBackend} from './ProductionProgressCacheBackend.js';
 import {createBrunetonProductionProfile, createViewDirection} from './production-profile.js';
+import {B1AssetBackedDistantSunLightSource} from '../../algorithm32/production-b-experiments/B1Direct40AssetCache.js';
 
 const GRID_WIDTH = 9;
 const CHANNELS_PER_READ = 4;
@@ -178,8 +183,12 @@ function createComposer() {
 }
 
 /** Initialize the one WebGL context shared by every B1 condition in a run. */
-export function initializeGpuSession() {
+export function initializeGpuSession(assetSet) {
 	if (session) return;
+	const expectedAssetCount = assetSet?.diagnostic === true ? 1 : 17;
+	if (!assetSet || assetSet.assets?.length !== expectedAssetCount || !assetSet.setIdentity) {
+		throw new Error('B1 GPU session requires one verified canonical asset set or one verified diagnostic asset.');
+	}
 	const rendererResources = createRenderer();
 	const zeroTextures = [createZeroTexture(), createZeroTexture(), createZeroTexture()];
 	const output = new THREE.WebGLRenderTarget(GRID_WIDTH, GRID_WIDTH, {
@@ -205,6 +214,7 @@ export function initializeGpuSession() {
 		camera: new THREE.PerspectiveCamera(90, 1, 0.1, 10),
 		zeroTextures,
 		output,
+		assetSet,
 		warmAlgorithm: null,
 		warmHandle: null,
 		warmFragmentShaderSource: null,
@@ -222,7 +232,7 @@ export function initializeGpuSession() {
 
 /** Dispose the shared B1 WebGL session after every requested condition completes. */
 export function disposeGpuSession() {
-	if (!session) return;
+	if (!session) return {complete: true, alreadyDisposed: true, contextLossRequested: false};
 	const current = session;
 	session = null;
 	current.warmHandle?.dispose();
@@ -234,6 +244,17 @@ export function disposeGpuSession() {
 	current.renderer.dispose();
 	current.renderer.forceContextLoss();
 	current.canvas.remove();
+	return {
+		complete: true,
+		alreadyDisposed: false,
+		runtimeHandleDisposed: true,
+		outputDisposed: true,
+		zeroTextureCountDisposed: current.zeroTextures.length,
+		backendDisposed: true,
+		rendererDisposed: true,
+		contextLossRequested: true,
+		canvasRemoved: !current.canvas.isConnected,
+	};
 }
 
 /**
@@ -244,6 +265,14 @@ export function disposeGpuSession() {
  */
 export async function generateGpuCondition(request) {
 	if (!session) throw new Error('B1 GPU session must be initialized before generation.');
+	if (
+		request.maximumScatteringOrder !== 4 ||
+		(request.incomingDirectionVariant ?? 'production-68') !== 'production-68' ||
+		!request.asset ||
+		request.assetSetIdentity !== session.assetSet.setIdentity
+	) {
+		throw new Error('B1 GPU production accepts only verified production-68 J4 cache assets.');
+	}
 	const {renderer, context, backend, scene, camera, zeroTextures, output, bindingValues} = session;
 	const logger = {
 		/** @param {string} message - The runtime message. @param {unknown} error - The failure. */
@@ -277,7 +306,58 @@ export async function generateGpuCondition(request) {
 			`[B1 GPU progress] ${request.time} J${request.maximumScatteringOrder} final shader warmup complete; warmup cache released`,
 		);
 	}
-	const profile = createBrunetonProductionProfile(request);
+	const baseProfile = createBrunetonProductionProfile(request);
+	if (
+		request.asset.profile.id !== baseProfile.id ||
+		request.asset.condition.fittedAzimuthDegrees !== request.fittedAzimuthDegrees ||
+		!Array.isArray(request.asset.directionToSource) ||
+		request.asset.directionToSource.length !== 3 ||
+		request.asset.directionToSource.some(
+			(component, index) =>
+				!Number.isFinite(component) ||
+				Math.abs(component - baseProfile.models.sourcePlacement.placement.directionToLight[index]) > 1e-14,
+		)
+	) {
+		throw new Error(
+			`B1 GPU condition does not match its verified cache asset profile: ${JSON.stringify({
+				requested: {
+					id: baseProfile.id,
+					contentHash: baseProfile.contentHash,
+					fittedAzimuthDegrees: request.fittedAzimuthDegrees,
+				},
+				asset: {
+					id: request.asset.profile.id,
+					contentHash: request.asset.profile.contentHash,
+					fittedAzimuthDegrees: request.asset.condition.fittedAzimuthDegrees,
+				},
+			})}`,
+		);
+	}
+	// The asset was independently verified against the Node-created production
+	// profile before browser launch. Preserve its exact serialized identity and
+	// source direction here: transcendental results may differ by an ulp across
+	// JS engines, which must not mint a second profile identity in the GPU host.
+	const assetProfile = {
+		...baseProfile,
+		contentHash: request.asset.profile.contentHash,
+		models: {
+			...baseProfile.models,
+			sourcePlacement: {
+				...baseProfile.models.sourcePlacement,
+				placement: {
+					...baseProfile.models.sourcePlacement.placement,
+					directionToLight: request.asset.directionToSource,
+				},
+			},
+		},
+	};
+	const profile = {
+		...assetProfile,
+		models: {
+			...assetProfile.models,
+			lightSource: new B1AssetBackedDistantSunLightSource({profile: assetProfile, asset: request.asset}),
+		},
+	};
 	const algorithm = new Algorithm32({profile, color: createSpectralReadoutOwner()});
 	const composer = createComposer();
 	let handle;
@@ -301,6 +381,7 @@ export async function generateGpuCondition(request) {
 			throw new Error('B1 GPU generation did not install a runtime shader pass.');
 		}
 		const fragmentShaderSource = runtimePass.material.fragmentShader;
+		requireB1PhysicalMeasurementShader(fragmentShaderSource);
 		if (session.warmFragmentShaderSource !== null && fragmentShaderSource !== session.warmFragmentShaderSource) {
 			throw new Error('B1 GPU final shader warmup source differed from the Bruneton-512 runtime shader.');
 		}
@@ -376,6 +457,9 @@ export async function generateGpuCondition(request) {
 		const rendererInformation = context.getExtension('WEBGL_debug_renderer_info');
 		return {
 			values: spectra,
+			measurementBoundaryIdentity: B1_PHYSICAL_MEASUREMENT_BOUNDARY.identity,
+			assetSetIdentity: request.assetSetIdentity,
+			assetIdentity: request.asset.assetIdentity,
 			capabilities: {
 				threeRevision: THREE.REVISION,
 				webglVersion: context.getParameter(context.VERSION),

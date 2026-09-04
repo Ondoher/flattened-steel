@@ -1,7 +1,18 @@
-import {readFileSync} from 'node:fs';
+import {createHash} from 'node:crypto';
+import {mkdirSync, readFileSync, writeFileSync} from 'node:fs';
+import {dirname, resolve} from 'node:path';
 import {pathToFileURL} from 'node:url';
 
 import {ProductionRun} from './ProductionRun.js';
+
+export const PRODUCTION_GPU_PARITY_LIMITS = Object.freeze({
+	rmse: 2e-7,
+	maximumAbsoluteDifference: 2e-6,
+});
+
+function sha256(bytes) {
+	return createHash('sha256').update(bytes).digest('hex');
+}
 
 /**
  * Called by backend comparison to parse one generated B1 table.
@@ -16,13 +27,35 @@ function readSpectra(path) {
 		const fields = line.split('\t');
 		const key = fields.slice(1, 4).join('/');
 		const values = fields.slice(4).map(Number);
-		if (fields[0] !== 'proposed' || values.length !== 40 || values.some((value) => !Number.isFinite(value))) {
+		if (
+			fields[0] !== 'proposed' ||
+			values.length !== 40 ||
+			values.some((value) => !Number.isFinite(value) || value < 0)
+		) {
 			throw new Error(`Malformed generated B1 row in ${path}: ${key}.`);
 		}
 		if (spectra.has(key)) throw new Error(`Duplicate generated B1 row in ${path}: ${key}.`);
 		spectra.set(key, values);
 	}
 	return spectra;
+}
+
+/** Require the predeclared production R32F versus binary64 parity envelope. */
+export function assertProductionGpuParity(comparisons) {
+	if (!Array.isArray(comparisons) || comparisons.length === 0) {
+		throw new Error('Production CPU/GPU parity requires at least one order comparison.');
+	}
+	for (const comparison of comparisons) {
+		if (
+			comparison.rmse > PRODUCTION_GPU_PARITY_LIMITS.rmse ||
+			comparison.maximumAbsoluteDifference > PRODUCTION_GPU_PARITY_LIMITS.maximumAbsoluteDifference
+		) {
+			throw new Error(
+				`J${comparison.order} production CPU/GPU parity exceeds the predeclared R32F envelope.`,
+			);
+		}
+	}
+	return Object.freeze({accepted: true, limits: PRODUCTION_GPU_PARITY_LIMITS});
 }
 
 /**
@@ -104,12 +137,19 @@ export function compareProductionBackends(firstRunPath, secondRunPath) {
 		if (!cpuOutput || !gpuOutput) throw new Error(`Both production runs must contain J${order}.`);
 		return {order, ...compareSpectralTables(cpuOutput.tablePath, gpuOutput.tablePath)};
 	});
+	const gate = assertProductionGpuParity(comparisons);
 	return {
 		schema: 'algorithm32-current-production-b1-backend-comparison-v1',
 		cpuRunId: cpu.manifest.runId,
 		gpuRunId: gpu.manifest.runId,
 		conditions: cpu.manifest.conditions,
 		orders: cpu.manifest.orders,
+		gate,
+		derivation: {
+			cpuManifestSha256: sha256(readFileSync(cpu.manifestPath)),
+			gpuManifestSha256: sha256(readFileSync(gpu.manifestPath)),
+			operation: 'pointwise binary64 CPU versus production R32F GPU comparison over every selected B1 spectrum',
+		},
 		comparisons,
 	};
 }
@@ -117,12 +157,26 @@ export function compareProductionBackends(firstRunPath, secondRunPath) {
 const invoked = process.argv[1] && pathToFileURL(process.argv[1]).href;
 if (invoked === import.meta.url) {
 	try {
-		if (process.argv.length !== 4) {
-			throw new Error('Usage: node compare-production-backends.js <cpu-or-gpu-run> <other-run>');
+		const args = process.argv.slice(2);
+		const outputIndex = args.indexOf('--output');
+		let outputPath = null;
+		if (outputIndex >= 0) {
+			outputPath = args[outputIndex + 1];
+			if (!outputPath) throw new Error('--output requires a fresh file path.');
+			args.splice(outputIndex, 2);
 		}
-		process.stdout.write(
-			`${JSON.stringify(compareProductionBackends(process.argv[2], process.argv[3]), null, 2)}\n`,
-		);
+		if (args.length !== 2) {
+			throw new Error(
+				'Usage: node compare-production-backends.js <cpu-or-gpu-run> <other-run> [--output fresh-record.json]',
+			);
+		}
+		const text = `${JSON.stringify(compareProductionBackends(args[0], args[1]), null, 2)}\n`;
+		if (outputPath) {
+			const absoluteOutputPath = resolve(outputPath);
+			mkdirSync(dirname(absoluteOutputPath), {recursive: true});
+			writeFileSync(absoluteOutputPath, text, {encoding: 'utf8', flag: 'wx'});
+		}
+		process.stdout.write(text);
 	} catch (error) {
 		console.error(error instanceof Error ? error.stack : error);
 		process.exitCode = 1;

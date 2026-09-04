@@ -1,40 +1,62 @@
 # B1 - Directional Sky-Radiance Benchmark
 
-This directory owns the independent B1 benchmark boundary. It does not import,
-invoke, or instrument production Algorithm32.
+This directory owns the independent B1 benchmark and scoring boundary. The
+scorer does not invoke or instrument production Algorithm32; the separately
+identified candidate generator adapts the benchmark profile to production.
 
 The benchmark-owned mapping into the generic production execution contract is
 defined in [`execution-profile-mapping.md`](execution-profile-mapping.md).
 Candidate generation may import production Algorithm32 only in a separate
 generator boundary; scoring in this directory remains independent.
 
-## Current-production regeneration
+## Current Production Contract And Migration Status
 
-The Stage 13 generator constructs the benchmark-owned direct-40 profile and
-has an explicit `--backend cpu|gpu` switch. Both backends emit the same
+The canonical production B-family boundary is now only cumulative J4 over all
+17 conditions, 81 directions per condition, and 40 direct spectral channels.
+B1, B2, and B3 must consume one validated backend-identified production-run
+manifest. In addition to the predeclared favorable B1 and B2 classification
+rules and B3 consistency rule, Color Reset closeout requires B1 aggregate RMSE
+at or below `11.820391604126252` mW m^-2 sr^-1 nm^-1.
+
+Fresh GPU generation now requires the complete production-owned direct-40
+asset set and its exact production revision. The host independently verifies
+all 17 assets before browser launch, selects the condition-matching asset, and
+loads it through the production immutable-texture backend. No runtime path
+constructs recurrence data. Physical scoring remains native-spectral and
+Color-free under `b1-direct40-post-transport-pre-color-rgba32f-v1`; the six
+B1 figures separately record `basic-bruneton` / `bruneton-figure1-display` as
+their figure-only Color control.
+
+## Asset-Backed Regeneration Workflow
+
+The Stage 13 generator constructed the benchmark-owned direct-40 profile and
+has an explicit `--backend cpu|gpu` switch. Historically, both backends emitted the same
 40-channel table and cube schemas for the same 17 times and 81 exact benchmark
 view directions at the paper/default cumulative scattering order J4:
 
 - `cpu` builds the binary64 production reference cache and evaluates the
   binary64 final-view reference. It is the default for compatibility.
-- `gpu` builds the production R32F cache through `ThreeCacheBackend`, executes
-  the assembled production final-view transport shader, and replaces only the
-  display conversion with a benchmark-owned float spectral readout. It does
-  not perform final-view integration on the CPU.
+- `gpu` verifies and uploads the exact production R32F asset through
+  `ThreeCacheBackend`, executes the assembled production final-view transport
+  shader, and replaces only the display conversion with a benchmark-owned
+  float spectral readout. Ten RGBA32F reads retain all 40 native channels. It
+  does not perform final-view integration on the CPU.
 
-The complete commands select J4 and all 17 conditions:
+The CPU command remains usable as a reference. GPU generation requires the
+verified set and the revision recorded by that set:
 
 ```text
 npm run generate:algorithm32:b1-production:cpu
-npm run generate:algorithm32:b1-production:gpu
+npm run generate:algorithm32:b1-production:gpu -- --asset-set PATH_TO_ASSET_SET --production-revision EXACT_REVISION
 ```
 
 The canonical production profile uses the selected Z-up spherical/distant
-frame and exact-0 m first altitude node. Promotion run 043 completed all 17
+frame and exact-0 m first altitude node. Historical promotion run 043 completed all 17
 conditions in 127.3 seconds, scored `11.925778` mW aggregate RMSE, and produced
 the same J4 table SHA-256
 `50a6df87d73bf0b7979faa21675ecdb50099f4be02229313ab65518727bcd486`
-as the isolated retained-parity qualification.
+as the isolated retained-parity qualification. That historical score does not
+satisfy or replace the current Color Reset closeout threshold.
 
 A complete canonical generation also scores B1 and writes all six figures
 owned by the original B1 experiment beneath the selected `cpu/figures/` or
@@ -50,10 +72,10 @@ npm run score:algorithm32:b1-production -- PATH_TO_RUN
 
 The unsuffixed command remains the CPU default. An explicitly requested order
 sweep is diagnostic rather than part of the canonical Bruneton reproduction.
-Pass bounded selections after the npm argument separator, for example:
+Pass a bounded J4 condition after the npm argument separator, for example:
 
 ```text
-npm run generate:algorithm32:b1-production:gpu -- --orders 2 --conditions 09:30 --output-root tmp/b1-j2-diagnostic
+npm run generate:algorithm32:b1-production:gpu -- --conditions 09:30 --output-root tmp/extraterrestrial/production-color-reset/p8/NEW_OUTPUT --staging-root tmp/extraterrestrial/production-color-reset/p8/NEW_STAGING --asset-set PATH_TO_ASSET_SET --production-revision EXACT_REVISION
 ```
 
 ### Reflection-completed quadrature diagnostic
@@ -127,7 +149,12 @@ npm run compare:algorithm32:b1-production-backends -- PATH_TO_CPU_RUN PATH_TO_GP
 ```
 
 The comparator rejects mixed conditions or order sets and requires exactly
-one CPU-reference manifest and one GPU-shader manifest.
+one CPU-reference manifest and one GPU-shader manifest. It rejects negative
+spectral values and requires the predeclared production R32F envelope: RMS no
+greater than `2e-7` and maximum absolute residual no greater than `2e-6`.
+Pass `--output FRESH_PATH.json` to publish a comparison record only after the
+gate passes; the record hashes both source manifests and is created with
+exclusive-write semantics.
 
 Every complete canonical J4 execution publishes its files and manifest directly under
 `references/results/experiments/b1-directional-sky-radiance/cpu/`
@@ -136,12 +163,16 @@ or
 Construction uses an isolated temporary staging directory, so an interrupted
 run does not publish a complete manifest. The finalized manifest records
 `cpu-reference-binary64` or
-`gpu-production-shaders-r32f`, hashes each 40-channel B1 table, provenance
-sidecar, and derived 31-channel B3 cube, and records WebGL capabilities for a
-GPU run. Every provenance sidecar must match the manifest backend. A bounded
+`gpu-production-shaders-r32f`. The v3 manifest hashes each 40-channel B1 table,
+provenance sidecar, and derived 31-channel B3 cube. A GPU run additionally
+records its production revision, compiler identity, authenticated asset-set
+manifest and identity, all 17 ordered asset and profile identities, selected
+profile hashes, WebGL capabilities, and output derivation. Every provenance
+sidecar must match the manifest backend, profiles, and exact table. A bounded
 diagnostic may select work explicitly, for example
 `--orders 1 --conditions 09:30`, but a bounded run must supply an explicit
-`--output-root`; incomplete runs are rejected by the canonical scorers.
+`--output-root`. Its manifest is marked `bounded-or-diagnostic` and
+`publicationEligible: false`; canonical loading and scoring reject it.
 
 GPU generation retains one browser, WebGL2 context, renderer, cache backend,
 and readback target across all 17 times. It constructs one J4 cache per time
@@ -164,9 +195,10 @@ Scoring creates a separate sortable record under
 modifies the generation record. It also publishes each experiment's original
 `result.md`, materializes the paper-profile tables, provenance, and cubes, and
 regenerates the B1-through-B3 figures under that same backend root. Its
-directory and manifest retain the selected backend, so CPU and GPU results
-cannot overwrite or be mistaken for one another. B1 and B2 consume the exact
-same finalized spectral tables.
+directory and v3 score manifest retain the selected backend and the complete
+source-to-product derivation, so CPU and GPU results cannot overwrite or be
+mistaken for one another. B1 and B2 consume the exact same finalized spectral
+tables.
 B3 consumes cubes derived directly from those tables and verifies its
 candidate aggregates against the B1 report produced in that scoring run.
 Each individual runner also accepts `--production-run PATH`; B3 additionally

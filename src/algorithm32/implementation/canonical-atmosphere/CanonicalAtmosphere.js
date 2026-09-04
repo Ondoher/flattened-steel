@@ -342,6 +342,27 @@ const float ATMOSPHERE_SEA_LEVEL_MIE_EXTINCTION[${spectralChannelCount}] = float
 	}
 
 	/**
+	 * Exact sea-level Rayleigh packet selected for this atmosphere instance.
+	 *
+	 * Offline production compilers use this immutable packet instead of
+	 * reconstructing profile-specific coefficients from implementation details.
+	 *
+	 * @returns {SpectralPacket} - Basis-aligned coefficients.
+	 */
+	get seaLevelRayleighScattering() {
+		return this._seaLevelRayleighScattering;
+	}
+
+	/**
+	 * Exact sea-level Mie-extinction packet selected for this atmosphere instance.
+	 *
+	 * @returns {SpectralPacket} - Basis-aligned coefficients.
+	 */
+	get seaLevelMieExtinction() {
+		return this._seaLevelMieExtinction;
+	}
+
+	/**
 	 * Value that identifies this configured atmosphere model instance for compatibility.
 	 *
 	 * @returns {string} - The atmosphere id.

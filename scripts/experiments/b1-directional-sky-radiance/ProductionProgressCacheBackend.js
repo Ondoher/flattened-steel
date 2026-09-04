@@ -80,6 +80,11 @@ export class ProductionProgressCacheBackend {
 		return this._backend.createRuntimeBinding(field);
 	}
 
+	/** @param {CacheImmutableTextureUploadRequest} request - Exact immutable texture upload. @returns {CacheImmutableTexture} - Delegated texture owner. */
+	uploadImmutableTexture(request) {
+		return this._backend.uploadImmutableTexture(request);
+	}
+
 	/** @returns {Promise<CacheProbeResult>} - Selected resident-cache values for experiment diagnostics. */
 	async readResidentProbe() {
 		if (!this._residentField) throw new Error('No resident cache field is available for probing.');

@@ -88,12 +88,12 @@ export default class DistantSunSceneCacheOfflineCompiler {
 	 *
 	 * @returns {string} - The complete HTML source.
 	 */
-	_browserDocument() {
+	_browserDocument(browserModulePath = '/repository/scripts/algorithm32/solar-zenith-cache/runOfflineCompilerBrowser.js') {
 		return (
 			'<!doctype html><meta charset="utf-8"><pre id="result">pending</pre>' +
 			'<script type="module">const target=document.querySelector("#result");' +
 			'globalThis.offlineCompilerProgress=(stage)=>fetch("/progress?stage="+encodeURIComponent(stage));' +
-			'try{const module=await import("/repository/scripts/algorithm32/solar-zenith-cache/runOfflineCompilerBrowser.js");' +
+			`try{const module=await import(${JSON.stringify(browserModulePath)});` +
 			'target.textContent=JSON.stringify(await module.runOfflineCompilerBrowser());}' +
 			'catch(error){target.textContent=JSON.stringify({error:{name:error.name,message:error.message,stack:error.stack}});}</script>'
 		);
@@ -107,8 +107,8 @@ export default class DistantSunSceneCacheOfflineCompiler {
 	 * @param {DistantSunSceneCacheCompilerScene} scene - The exact scene supplied to the browser compiler.
 	 * @returns {import('node:http').Server} - The unstarted loopback server.
 	 */
-	_createServer(uploads, progress, scene) {
-		const browserDocument = this._browserDocument();
+	_createServer(uploads, progress, control, browserModulePath, layerCount) {
+		const browserDocument = this._browserDocument(browserModulePath);
 
 		return createServer(async (request, response) => {
 			try {
@@ -128,10 +128,15 @@ export default class DistantSunSceneCacheOfflineCompiler {
 				}
 				if (pathname === '/control.json') {
 					response.writeHead(200, {'content-type': 'application/json; charset=utf-8'});
-					response.end(this._jsonBytes({scene}));
+					response.end(this._jsonBytes(control));
 					return;
 				}
-				if (request.method === 'POST' && /^\/artifact\/layer-(?:[0-9]|1[0-4])\.f32$/u.test(pathname)) {
+				const layerMatch = pathname.match(/^\/artifact\/layer-([0-9]+)\.f32$/u);
+				if (
+					request.method === 'POST' &&
+					layerMatch !== null &&
+					Number(layerMatch[1]) < layerCount
+				) {
 					if (uploads.has(pathname)) {
 						throw new Error('Offline compiler browser attempted a duplicate layer upload.');
 					}
@@ -276,10 +281,10 @@ export default class DistantSunSceneCacheOfflineCompiler {
 	 * @param {number} packedRowCount - The number of retained altitude/solar-zenith rows.
 	 * @returns {DistantSunSceneCacheSeamEncoding} - The exact derivative and logical index bytes.
 	 */
-	_encodeExactSeams(oracle, packedRowCount) {
+	_encodeExactSeams(oracle, packedRowCount, spectralChannelCount = 15) {
 		const domain = CUBED_SPHERE_W27_DIRECTION_DOMAIN_OWNER;
 		const logicalValues = new Float32Array(oracle.buffer, oracle.byteOffset, oracle.byteLength / 4);
-		const uniqueValues = new Float32Array(domain.uniqueDirectionCount * packedRowCount * 15);
+		const uniqueValues = new Float32Array(domain.uniqueDirectionCount * packedRowCount * spectralChannelCount);
 		const representatives = new Int32Array(domain.uniqueDirectionCount);
 		representatives.fill(-1);
 		for (let logicalIndex = 0; logicalIndex < domain.directionCount; logicalIndex += 1) {
@@ -287,7 +292,7 @@ export default class DistantSunSceneCacheOfflineCompiler {
 			if (representatives[uniqueIndex] === -1) representatives[uniqueIndex] = logicalIndex;
 		}
 
-		for (let layerIndex = 0; layerIndex < 15; layerIndex += 1) {
+		for (let layerIndex = 0; layerIndex < spectralChannelCount; layerIndex += 1) {
 			for (let packedRow = 0; packedRow < packedRowCount; packedRow += 1) {
 				const logicalBase = (layerIndex * packedRowCount + packedRow) * domain.directionCount;
 				const uniqueBase = (layerIndex * packedRowCount + packedRow) * domain.uniqueDirectionCount;
@@ -325,18 +330,22 @@ export default class DistantSunSceneCacheOfflineCompiler {
 	}
 
 	/**
-	 * Call this method to compile and emit one independently loadable, content-addressed scene-cache package.
-	 *
-	 * The output directory must not already exist. Browser construction is offline only; runtime code never imports this owner.
-	 *
-	 * @param {DistantSunSceneCacheOfflineCompileRequest} request - The empty output directory for the package.
-	 * @returns {Promise<DistantSunSceneCacheOfflineCompileResult>} - The manifest, paths, hashes, and GPU build report.
+	 * Execute one isolated offline GPU layer compilation into a newly-created output directory.
+	 * Callers own validation and transactional publication of the returned layers.
 	 */
-	async compile(request) {
+	async compileLayers({outputDirectory: requestedOutput, control, browserModulePath, layerCount}) {
 		await lstat(this._chromePath);
-		const scene = request.scene ?? DistantSunSceneCacheCompilerInputs.createQualifiedSanJoseNauticalScene();
-		const inputSet = DistantSunSceneCacheCompilerInputs.createInputSet(scene);
-		const outputDirectory = path.resolve(request.outputDirectory);
+		if (!Number.isInteger(layerCount) || layerCount < 1 || layerCount > 256) {
+			throw new RangeError('Offline compiler layer count must be an integer from 1 through 256.');
+		}
+		if (
+			typeof browserModulePath !== 'string' ||
+			!browserModulePath.startsWith('/repository/') ||
+			browserModulePath.includes('..')
+		) {
+			throw new RangeError('Offline compiler browser module must be a repository-rooted module path.');
+		}
+		const outputDirectory = path.resolve(requestedOutput);
 		await lstat(outputDirectory)
 			.then(() => {
 				throw new Error('Offline compiler output directory must not already exist.');
@@ -352,11 +361,10 @@ export default class DistantSunSceneCacheOfflineCompiler {
 
 		const uploads = new Map();
 		const progress = [];
-		const server = this._createServer(uploads, progress, scene);
+		const server = this._createServer(uploads, progress, control, browserModulePath, layerCount);
 		const profilePath = path.join(outputDirectory, '.chrome-profile');
 		await mkdir(profilePath);
 		let browserExecution;
-
 		try {
 			await new Promise((resolve, reject) => {
 				server.once('error', reject);
@@ -368,7 +376,30 @@ export default class DistantSunSceneCacheOfflineCompiler {
 			await rm(profilePath, {recursive: true, force: true, maxRetries: 20, retryDelay: 250});
 		}
 
-		const layers = Array.from({length: 15}, (_unused, index) => uploads.get(`/artifact/layer-${index}.f32`));
+		const layers = Array.from({length: layerCount}, (_unused, index) => uploads.get(`/artifact/layer-${index}.f32`));
+		if (layers.some((layer) => !layer)) {
+			throw new Error('Offline compiler did not emit every requested wavelength layer.');
+		}
+		return {outputDirectory, layers, progress, browserExecution};
+	}
+
+	/**
+	 * Call this method to compile and emit one independently loadable, content-addressed scene-cache package.
+	 *
+	 * The output directory must not already exist. Browser construction is offline only; runtime code never imports this owner.
+	 *
+	 * @param {DistantSunSceneCacheOfflineCompileRequest} request - The empty output directory for the package.
+	 * @returns {Promise<DistantSunSceneCacheOfflineCompileResult>} - The manifest, paths, hashes, and GPU build report.
+	 */
+	async compile(request) {
+		const scene = request.scene ?? DistantSunSceneCacheCompilerInputs.createQualifiedSanJoseNauticalScene();
+		const inputSet = DistantSunSceneCacheCompilerInputs.createInputSet(scene);
+		const {outputDirectory, layers, progress, browserExecution} = await this.compileLayers({
+			outputDirectory: request.outputDirectory,
+			control: {scene},
+			browserModulePath: '/repository/scripts/algorithm32/solar-zenith-cache/runOfflineCompilerBrowser.js',
+			layerCount: 15,
+		});
 		const expectedLayerByteLength = inputSet.ledger.retainedBlockCount * 4374 * 4;
 		if (layers.some((layer) => !layer || layer.byteLength !== expectedLayerByteLength)) {
 			throw new Error('Offline compiler did not emit every exact logical-W27 wavelength layer.');

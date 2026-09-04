@@ -9,12 +9,60 @@ import {renderReport as renderB2Report, runExperiment as runB2} from '../b2-hemi
 import {renderReport as renderB3Report, runExperiment as runB3} from '../b3-matched-atmosphere-solver/run.js';
 import {generateBenchmarkFigures} from '../generate-benchmark-figures.js';
 import {
+	B1_FIGURE_COLOR_CONTROL,
+	B1_PHYSICAL_MEASUREMENT_BOUNDARY,
+	requireB1FigureColorControl,
+	requireB1PhysicalMeasurementBoundary,
+} from '../../algorithm32/production-b-experiments/B1MeasurementBoundary.js';
+import {
 	DEFAULT_EXPERIMENT_RESULTS_ROOT,
 	resolveProductionBackendDirectory,
 	resolveProductionResultRoot,
 } from '../production-result-paths.js';
 
 const SCORE_DIRECTORY = 'b1-b3-production-scores';
+export const PRODUCTION_B1_CLOSEOUT_MAXIMUM_RMSE_MILLIWATT = 11.820391604126252;
+
+/** Require the conjunctive numerical and classification gates for one production B1-B3 result set. */
+export function assertProductionBFamilyCloseout({b1, b2, b3}) {
+	if (!b1?.accepted || !b1.proposedStage?.completed) {
+		throw new Error('Current-production B1 scoring did not complete the Bruneton J4 candidate.');
+	}
+	const b1Rmse = b1.proposedStage.score?.aggregate?.rmseMilliwatt;
+	if (!Number.isFinite(b1Rmse) || b1Rmse > PRODUCTION_B1_CLOSEOUT_MAXIMUM_RMSE_MILLIWATT) {
+		throw new Error(
+			`Current-production B1 aggregate RMSE must be no greater than ${PRODUCTION_B1_CLOSEOUT_MAXIMUM_RMSE_MILLIWATT}.`,
+		);
+	}
+	if (b1.proposedStage.assessment?.classification !== 'favorable') {
+		throw new Error('Current-production B1 must remain favorable under its predeclared judgment rules.');
+	}
+	if (!b2?.fullBenchmarkAccepted || !b2.proposedScore) {
+		throw new Error('Current-production B2 scoring did not complete the Bruneton J4 candidate.');
+	}
+	if (b2.proposedAssessment?.classification !== 'favorable') {
+		throw new Error('Current-production B2 must remain favorable under its predeclared judgment rules.');
+	}
+	if (!b3?.complete || !b3.proposed || !b3.proposedAssessment) {
+		throw new Error('Current-production B3 scoring did not complete the Bruneton J4 candidate.');
+	}
+	if (
+		b3.proposedAssessment.classification !== 'favorable' ||
+		b3.proposedAssessment.consistent !== true ||
+		b3.proposedAssessment.mismatchAssessment?.complete !== true
+	) {
+		throw new Error('Current-production B3 must preserve favorable B1 inheritance, same-run consistency, and its mismatch map.');
+	}
+	return Object.freeze({b1RmseMilliwatt: b1Rmse, classification: 'favorable'});
+}
+
+/** Keep physical scoring and visual-figure Color identities separate in the score manifest. */
+export function createProductionBPresentationBoundaries(figureColorControl) {
+	return Object.freeze({
+		physicalScoringBoundary: requireB1PhysicalMeasurementBoundary(B1_PHYSICAL_MEASUREMENT_BOUNDARY),
+		figureColorControl: requireB1FigureColorControl(figureColorControl),
+	});
+}
 
 function sha256(text) {
 	return createHash('sha256').update(text).digest('hex');
@@ -87,15 +135,9 @@ export function scoreProductionRun(path, options = {}) {
 	const scoreRoot = resolveProductionResultRoot(resultsRoot, SCORE_DIRECTORY, productionRun.manifest.backend);
 
 	const b1 = runB1({productionRunPath});
-	if (!b1.accepted || !b1.proposedStage.completed) {
-		throw new Error('Current-production B1 scoring did not complete the Bruneton J4 candidate.');
-	}
 	const b1Report = renderB1Report(b1);
 
 	const b2 = runB2({productionRunPath});
-	if (!b2.fullBenchmarkAccepted || !b2.proposedScore) {
-		throw new Error('Current-production B2 scoring did not complete the Bruneton J4 candidate.');
-	}
 	const b2Report = renderB2Report(b2);
 
 	mkdirSync(scoreRoot, {recursive: true});
@@ -105,9 +147,7 @@ export function scoreProductionRun(path, options = {}) {
 		const temporaryB1ResultPath = join(temporaryDirectory, 'b1-result.md');
 		writeFileSync(temporaryB1ResultPath, b1Report, 'utf8');
 		const b3 = runB3({productionRunPath, b1ResultPath: temporaryB1ResultPath});
-		if (!b3.complete || !b3.proposed) {
-			throw new Error('Current-production B3 scoring did not complete the Bruneton J4 candidate.');
-		}
+		assertProductionBFamilyCloseout({b1, b2, b3});
 		b3Report = renderB3Report(b3);
 	} finally {
 		rmSync(temporaryDirectory, {recursive: true, force: true});
@@ -116,6 +156,7 @@ export function scoreProductionRun(path, options = {}) {
 	const materialized = materializeCandidateBoundaries(productionRun, b1ResultDirectory, b3ResultDirectory);
 	const figureRun = generateBenchmarkFigures({
 		profileFamily: 'paper',
+		colorModel: B1_FIGURE_COLOR_CONTROL.selectionId,
 		singleCandidate: true,
 		outputRoot: resultsRoot,
 		resultSubdirectory: backendDirectory,
@@ -138,13 +179,16 @@ export function scoreProductionRun(path, options = {}) {
 	const b1Sha256 = writeImmutable(resultPaths.b1, b1Report);
 	const b2Sha256 = writeImmutable(resultPaths.b2, b2Report);
 	const b3Sha256 = writeImmutable(resultPaths.b3, b3Report);
+	const presentationBoundaries = createProductionBPresentationBoundaries(figureRun.figureColorControl);
+	const productionManifestSha256 = sha256(readFileSync(productionRun.manifestPath));
+	const sourceOutput = productionRun.manifest.outputs.find((output) => output.order === 4);
 
 	const scoreManifest = {
-		schema: 'algorithm32-current-production-b1-b3-scores-v2',
+		schema: 'algorithm32-current-production-b1-b3-scores-v3',
 		scoreRunId,
 		runId: productionRun.manifest.runId,
 		backend: productionRun.manifest.backend,
-		productionManifestSha256: sha256(readFileSync(productionRun.manifestPath)),
+		productionManifestSha256,
 		completedAt: new Date().toISOString(),
 		outputRoot: resultsRoot,
 		backendDirectory,
@@ -169,7 +213,36 @@ export function scoreProductionRun(path, options = {}) {
 			},
 		],
 		boundaries: materialized.artifacts,
+		...presentationBoundaries,
 		figures: figureRun.artifacts,
+		derivation: {
+			schemaId: 'algorithm32-current-production-b1-b3-score-derivation-v1',
+			source: {
+				runId: productionRun.manifest.runId,
+				manifestSha256: productionManifestSha256,
+				productionRevision: productionRun.manifest.productionRevision,
+				compilerIdentity: productionRun.manifest.compilerIdentity,
+				assetSetIdentity: productionRun.manifest.assetSetIdentity,
+				assetIdentities: productionRun.manifest.assets.map((asset) => asset.assetIdentity),
+				profileHashes: productionRun.manifest.profileHashes,
+				tableSha256: sourceOutput.tableSha256,
+				provenanceSha256: sourceOutput.provenanceSha256,
+				cubeSha256: sourceOutput.cubeSha256,
+			},
+			products: {
+				b1: {operation: 'score direct-40 directional radiance', reportSha256: b1Sha256},
+				b2: {operation: 'integrate the same B1 directional spectra', reportSha256: b2Sha256},
+				b3: {operation: 'score the 31-channel cube derived from the same B1 table', reportSha256: b3Sha256},
+				figures: {
+					operation: 'render the six B1 visual comparisons plus B2 and B3 diagnostics',
+					colorControl: figureRun.figureColorControl,
+					outputs: figureRun.artifacts.map(({relativePath, sha256: artifactSha256}) => ({
+						relativePath,
+						sha256: artifactSha256,
+					})),
+				},
+			},
+		},
 	};
 	writeImmutable(resultPaths.manifest, `${JSON.stringify(scoreManifest, null, 2)}\n`);
 	return Object.freeze({...scoreManifest, scoreDirectory});
