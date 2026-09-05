@@ -8,11 +8,11 @@ belong to the [implementation plan](production-implementation-plan.md); and
 the [ground topic](../ground/README.md) owns the active boundary design and
 implementation handoff.
 
-Repository-wide [Code Conventions](../../standards/code-conventions.md),
-[Type Conventions](../../standards/types.md), and [JSDoc Conventions]
-(../../standards/jsdoc.md) apply without exception. This document defines only
-the Algorithm32-specific physical, numerical, cache, lifecycle, and production
-ownership rules that supplement them.
+Repository-wide engineering standards are selected by the
+[standards manifest](../../standards/manifest.md) and modified only by the
+[repository overlay](../../standards/overlay.md). This document defines
+Algorithm32-specific physical, numerical, cache, lifecycle, and production
+facts; it is not an additional standards authority.
 
 ## Authority
 
@@ -242,8 +242,10 @@ not implicit work required to prove the existing abstractions.
 
 ## Durable Contract Rules
 
-- [Algorithm32 Standards: Durable Physical Data And Units](../standards.md#durable-physical-data-and-units)
-  owns the unit-bearing physical-data and radiometric naming rules.
+- The [production Algorithm32 durable scientific quantities and provenance]
+  (../../standards/overlay.md#add-production-algorithm32-durable-scientific-quantities-and-provenance)
+  entry owns the topic-scoped unit-bearing physical-data and radiometric naming
+  rules.
 - Each fact has one canonical owner. Direct physical, spectral, field, plan,
   and packed-data identities remain only where an active consumer compares or
   reuses them; evidence fixtures may retain their own hashes without becoming
@@ -275,6 +277,10 @@ remain follow-on hardening before release or publication.
 
 - Historical Mark I, abandoned-reference, reconciliation, and experimental
   class structures are not production architecture.
+- No general production diagnostic API, logging policy, report format, runtime
+  instrumentation, retention policy, or validation boundary is currently
+  selected. Any such capability requires a named owner, consumer, retention
+  model, and accepted validation boundary before implementation.
 - A passing aggregate spec count is not physical validation or CPU/GPU parity.
 - Renderer RGB, camera-specific pixels, and application state are not
   atmospheric cache data.

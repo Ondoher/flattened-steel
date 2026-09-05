@@ -370,10 +370,10 @@ adaptation remain out of scope.
 
 ### Standards Gate
 
-Every port step must conform to the repository authorities in
-[Repository Standards](../standards/README.md), especially Architecture, Code
-Conventions, Type Conventions, JSDoc Conventions, and Testing. Algorithm32-
-specific review is governed by the current
+Every port step must conform to the canonical standards selected by the
+[standards manifest](../standards/manifest.md) and the applicable
+[repository overlay](../standards/overlay.md). Algorithm32-specific review is
+governed by the current
 [Production README](../algorithm32/production/README.md),
 [Architecture Boundaries](../algorithm32/production/architecture-boundaries.md),
 [Current Dataflow](../algorithm32/production/current-dataflow.md), the selected

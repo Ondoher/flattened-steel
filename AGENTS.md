@@ -1,3 +1,13 @@
+# Bootstrap Entry Warning
+
+An ordinary repository session that reaches this file without an established
+bootstrap lifecycle must run `$bootstrap` before continuing. Do not redirect an
+active `$bootstrap`, `$review-standards`, `$normalize-standards`, or equivalent
+self-loading workflow; each follows its own entry contract. After context
+compaction, a known initialized session follows `active-topic.md` and its
+`Minimal Reload Sources`. If prior initialization cannot be established, run
+`$bootstrap`.
+
 # Topic Bootstrap
 
 At the start of a session, read only

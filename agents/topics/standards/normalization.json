@@ -1,0 +1,31 @@
+{
+	"schemaVersion": 1,
+	"status": "normalized",
+	"manifest": "agents/topics/standards/manifest.md",
+	"normalizedAt": "2026-09-04T23:07:15.736Z",
+	"repositoryStandardsFingerprint": "sha256:7f4239c4c033e34d2c95d94ef359b788c26bed8b0a428da0e2474a483b96a115",
+	"pendingDivergences": 0,
+	"deferredDivergences": 0,
+	"inputs": [
+		{
+			"path": "AGENTS.md",
+			"sha256": "65eab902c0652102c6e73f3174af3c5e71ba69bd32eebd76c8aa3789d209e5e1"
+		},
+		{
+			"path": "agents/topics/standards/manifest.md",
+			"sha256": "7a3d4f0a96420049b4c5418f0c43cf49d7b2fb33ae15df3dbe2200b6901ace31"
+		},
+		{
+			"path": "agents/topics/standards/overlay.md",
+			"sha256": "e4d8c24a24af713339c91d983d048c5c9d57c9ae51f7555eb2cc34e77e2d33d0"
+		},
+		{
+			"path": "scripts/extraterrestrial/AGENTS.md",
+			"sha256": "6ced6e48258c7e65b81c6f8002a13cfbd128d3fcf86363567bef24d03022081b"
+		},
+		{
+			"path": "tmp/flat32-pinned-ea262115/AGENTS.md",
+			"sha256": "8d9ddad3b91c3b605971bcb21e56bcb96bdc46937b1bf4b92cd9fa91eca03fa3"
+		}
+	]
+}

@@ -77,7 +77,7 @@ the [testing topic](../../testing/README.md) owns runner architecture.
   Unit-bearing boundary changes retain no aliases, fallback readers,
   versioned shadows, old/new switches, or compatibility translation bridges.
 - Direct-source contracts now conform to the
-  [radiometric naming rule](../standards.md#durable-physical-data-and-units)
+  [production Algorithm32 radiometric naming rule](../../standards/overlay.md#add-production-algorithm32-durable-scientific-quantities-and-provenance)
   across configuration, CPU transport, shader assembly, and production
   fixtures. The retired names have no compatibility aliases.
 - The original imported snapshot is retained in

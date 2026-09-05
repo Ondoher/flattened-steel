@@ -22,6 +22,11 @@ those self-checks to Jasmine does not turn the experiments into production
 tests or make a test result scientific authority. The archived Star
 engineering runners followed a separate dedicated lane contract.
 
+Focused proof runners may collect and report the numerical, lifecycle,
+resource, or browser observations declared by an experiment. Those diagnostics
+are evidence outputs within the experiment's claim boundary; they are not
+engineering standards or production diagnostic APIs.
+
 The closed Star engineering lane remains separate from the official
 preimplementation lane. Its use of the selected test bed's executable
 primitives and GPU infrastructure means an archived immutable run alone cannot

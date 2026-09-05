@@ -160,15 +160,15 @@ Sharing the order builder does not make distant-Sun and local-Sun caches the
 same concrete type.
 
 Throughout this contract, immutable describes a readonly public contract, not
-runtime freezing. Cache implementations follow the repository
-[Type Conventions](../../standards/types.md)
-and do not use `Object.freeze` to enforce that contract.
+runtime freezing. Cache implementations follow the type rules selected by the
+[standards manifest](../../standards/manifest.md) and do not use
+`Object.freeze` to enforce that contract.
 
 Public cache requests validate only their externally supplied semantic values
 and ranges. Builders, storage, packing, assemblers, backends, and samplers
 trust the ambient/JSDoc contracts, accepted API values, internally constructed
-records, and repository constants, as required by the repository
-[validation convention](../../standards/code-conventions.md#validation).
+records, and repository constants, as required by the validation rules
+selected by the [standards manifest](../../standards/manifest.md).
 
 ## Direct Domain, Field, And Storage Contracts
 

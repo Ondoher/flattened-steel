@@ -7,8 +7,9 @@ unrelated code, history, or evidence into every session.
 ## Taxonomy
 
 - [Context](context/README.md) owns session bootstrap and topic routing.
-- [Standards](standards/README.md) owns repository-wide engineering
-  conventions shared across products and applications.
+- The [standards manifest](standards/manifest.md) selects applicable canonical
+  engineering standards, and the [repository overlay](standards/overlay.md)
+  owns the approved local additions and replacements.
 - `products/` owns durable product and domain knowledge that can span more
   than one deployable application.
 - `apps/` owns deployable application surfaces and their integration or
@@ -23,10 +24,11 @@ unrelated code, history, or evidence into every session.
   extraction record. Current Algorithm32 work is routed by the
   [Algorithm32 topic](algorithm32/README.md).
 
-Use the narrowest durable owner. Cross-repository rules belong in standards,
-domain meaning belongs in products, and deployment-surface details belong in
-apps. References support claims but do not own current product or engineering
-policy.
+Use the narrowest durable owner. Cross-repository rules belong in the canonical
+standards library, repository-specific standards differences belong in the
+overlay, domain meaning belongs in products, and deployment-surface details
+belong in apps. References support claims but do not own current product or
+engineering policy.
 
 ## Bootstrap
 

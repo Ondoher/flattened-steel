@@ -19,8 +19,9 @@ context for the task.
   extension contracts and research gaps.
 - `testing/`: repository test architecture, runner boundaries, and experiment
   test migration.
-- [Standards](../standards/README.md): conventions that apply across the
-  repository.
+- [Standards manifest](../standards/manifest.md): applicable canonical
+  standards; [repository overlay](../standards/overlay.md): approved local
+  additions and replacements.
 - `products/`: durable domain or product knowledge shared by one or more
   application surfaces.
 - `apps/`: deployable application surfaces, integration, and operations.
@@ -34,7 +35,9 @@ context for the task.
 ## Ownership Rules
 
 - Route a fact to the narrowest area that can own it durably.
-- Keep cross-cutting policy in standards and domain behavior in products.
+- Keep reusable cross-repository policy in canonical standards,
+  repository-specific standards differences in the overlay, and domain
+  behavior in products.
 - Keep application documents focused on the deployable surface rather than
   duplicating product or repository policy.
 - Keep source identity, provenance, and collected material with references;

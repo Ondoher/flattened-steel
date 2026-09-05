@@ -18,9 +18,10 @@ dependency.
 
 - A source definition identifies the physical quantity, units, spectral basis,
   point/bin meaning, provenance, licensing/redistribution status, and capability
-  limit. Apply the [Algorithm32 durable physical-data and unit rules]
-  (../algorithm32/standards.md#durable-physical-data-and-units) to every
-  durable contract.
+  limit. Experimental work may voluntarily carry over the
+  [production Algorithm32 durable scientific quantities and provenance practice]
+  (../standards/overlay.md#add-production-algorithm32-durable-scientific-quantities-and-provenance),
+  but that production-topic entry does not govern an experimental lane.
 - The proposal names whether the source is distant or finite, resolved or
   unresolved, static or live, and the geometry/source pairings it supports. It
   does not imply unsupported pairings merely because another source has a

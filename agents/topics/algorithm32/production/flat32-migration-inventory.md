@@ -515,8 +515,8 @@ deleted when the Star compositor was restored.
 | `spec/support/karma-flat32.conf.cjs`                      |                      11.2 | Focused real-Chrome application lane and browser-test entry.                                                                                                                                                                                                                                                                                                                                                                                                                                     |
 
 Class-specific helpers remain private methods, including pure helpers. Private
-fields and methods follow the canonical
-[single-underscore convention](../../standards/code-conventions.md#class-files);
+fields and methods follow the canonical single-underscore convention selected
+by the [standards manifest](../../standards/manifest.md);
 ECMAScript hash-private names are not used.
 Reusable pure operations move to a focused utility file or namespace owner.
 Class modules export only their class. Constants live in `consts.js`;

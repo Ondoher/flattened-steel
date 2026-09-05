@@ -118,10 +118,12 @@ adapted in controlled stages to the selected design. The canonical
 govern acceptance evidence. There is no current Star-backed scope. A new or
 changed numerical capability requires a production architectural recast and
 direct affected-output comparison against a newly selected independent
-authority in a new isolated evidence lane before acceptance. [Algorithm32 Standards]
-(../standards.md#durable-physical-data-and-units) owns durable physical-data
-and radiometric naming conventions; the repository-wide code, type, JSDoc, and
-testing standards own production source and test conventions. This plan owns
+authority in a new isolated evidence lane before acceptance. The
+[production Algorithm32 durable scientific quantities and provenance]
+(../../standards/overlay.md#add-production-algorithm32-durable-scientific-quantities-and-provenance)
+overlay entry owns durable physical-data and radiometric naming conventions;
+the standards selected by the [manifest](../../standards/manifest.md) own
+production source and test conventions. This plan owns
 when those rules gate each stage, not alternate versions of the rules.
 
 ## Repository Stewardship
@@ -1932,9 +1934,9 @@ Keep `src/flat32/index.js` as a thin composition and startup entry. Separate
 application lifecycle, Three renderer/scene/frame ownership, Algorithm32
 runtime ownership, supported-mode configuration, UI/status controls, and
 scene-content ownership into focused files as those capabilities move. Class
-modules, helpers, constants, exports, and filenames follow the canonical
-[Code Conventions](../../standards/code-conventions.md)
-rules during migration rather than in a later cleanup.
+modules, helpers, constants, exports, and filenames follow the canonical code
+rules selected by the [standards manifest](../../standards/manifest.md) during
+migration rather than in a later cleanup.
 
 After every implementation increment from 11.2 onward:
 

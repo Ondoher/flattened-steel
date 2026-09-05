@@ -4,11 +4,12 @@
 
 - Repository: `C:\dev\flattened-steel`
 - Canonical standards root: `C:\Users\gande\.codex\documentation\standards`
-- Standards governance: unresolved — the required `agents/topics/standards/manifest.md` is absent, so there is no canonical `documentation.md` link whose resolved destination can be copied into this report.
-- Generated developer guide: root `STANDARDS.md` is absent. This is reported separately and does not invalidate normalization or block reviewers; generate it with `$write-standards-guide` only after reconciliation produces a valid attestation.
+- Standards governance: [Standards Governance](../../../../../Users/gande/.codex/documentation/standards/documentation.md)
+- Generated developer guide: root `STANDARDS.md` is current at source fingerprint `sha256:6ac919be5ce56c65795ef7e517ad1f27650e86d9914a17f5b8bf55ba9cb0a540`.
+- Normalization attestation: valid at repository standards fingerprint `sha256:7f4239c4c033e34d2c95d94ef359b788c26bed8b0a428da0e2474a483b96a115` with 5 inputs.
 - Audit date: 2026-09-04
 - Audit basis: repository commit `20db38fbed50513e29e193c004bf78345af5f6a3`; current repository and Codex-home instructions; the complete canonical standards library; the `manifest.md`, overlay, generated-guide, topic-scope, reviewer-selection, and attestation governance contract in `documentation/standards/documentation.md`; all documents below `agents/topics/standards`; and the domain supplement `agents/topics/algorithm32/standards.md`. Pre-existing working-tree changes were treated as developer-owned and were not modified. This report was refreshed for the current governance model on 2026-09-04.
-- Phase: `awaiting-explicit-reconcile-request`
+- Phase: `reconciled`
 
 ## Summary
 
@@ -149,8 +150,8 @@ project facts stored under standards ownership.
 - Developer decision: `remove-local`
 - Developer notes: Local standards documents are retained as developer-review evidence through reconciliation, but their standards-authority claims must be removed. Applicable standards are based on global rules selected by `manifest.md`, modified only by `overlay.md`; the generated root `STANDARDS.md` becomes the human-readable reference.
 - Re-review required: `no` — the settled manifest, overlay, and generated-guide model determines the disposition without discarding the documents before their useful material is migrated.
-- Reconciliation result:
-- Validation evidence:
+- Reconciliation result: Removed the legacy local standards owners after their approved rules and facts were migrated; created the separate manifest, overlay, and generated root guide.
+- Validation evidence: `agents/topics/standards/` now contains only `manifest.md`, `overlay.md`, `reconciliation.md`, and `normalization.json`; root `STANDARDS.md` is generated and current.
 
 ### DIV-002: Type conventions are a byte-for-byte canonical copy apart from status text
 
@@ -166,8 +167,8 @@ project facts stored under standards ownership.
 - Developer decision: `already-covered`
 - Developer notes: Original decision text: "no local override."
 - Re-review required: `no` — the original "no local override" direction maps unambiguously to `already-covered`, and CFG-001 approves selecting the canonical type standard in the manifest.
-- Reconciliation result:
-- Validation evidence:
+- Reconciliation result: Removed the local `types.md` copy and selected canonical `types.md` in the manifest.
+- Validation evidence: The manifest resolves `types.md`; no repository copy remains.
 
 ### DIV-003: Code-convention baseline is duplicated locally
 
@@ -184,8 +185,8 @@ project facts stored under standards ownership.
 - Developer notes: transplant the science and references rules to be overrides in the algorithm32 topic
 - Decision interpretation: "overrides in the algorithm32 topic" means entries owned by `agents/topics/standards/overlay.md` with the exact scope `topic:agents/topics/algorithm32/production/README.md`. It does not make `agents/topics/algorithm32/standards.md` or another topic document a standards authority. The separately inventoried rules remain `ADD` candidates because their canonical targets stay applicable.
 - Re-review required: `no`
-- Reconciliation result:
-- Validation evidence:
+- Reconciliation result: Removed the duplicated local code-convention baseline; promoted its approved general additions and moved its approved scientific/reference rules to the overlay.
+- Validation evidence: Canonical `code-conventions.md` is selected; the overlay contains the production-topic additions and the former local file is absent.
 
 ### DIV-004: General identifier guidance is materially more precise than the canonical rule
 
@@ -201,8 +202,8 @@ project facts stored under standards ownership.
 - Developer decision: `promote-global`
 - Developer notes: Original decision text: "promote the extended rules to the global standards."
 - Re-review required: `no`
-- Reconciliation result:
-- Validation evidence:
+- Reconciliation result: Expanded canonical identifier guidance with the approved abbreviations, coordinate names, and ambiguity tests.
+- Validation evidence: Canonical `code-conventions.md#JavaScript And Module Shape` contains the promoted rule without repository-specific names.
 
 ### DIV-005: Class helpers and utilities follow a narrower namespace-first policy
 
@@ -219,8 +220,8 @@ project facts stored under standards ownership.
 - Developer decision: `promote-global`
 - Developer notes: Original decision text: "promote the more restrictive guidance to global standards."
 - Re-review required: `no` — the explicit instruction to promote the stricter guidance globally already uses a valid current disposition and supplies enough direction for reconciliation.
-- Reconciliation result:
-- Validation evidence:
+- Reconciliation result: Promoted the instance-only class-helper rule, cohesive namespace default, and function-level utility ownership test globally.
+- Validation evidence: Canonical `code-conventions.md#Classes And Utilities` contains the promoted guidance; no local overlay entry was created.
 
 ### DIV-008: JSDoc baseline is a partial local fork
 
@@ -236,8 +237,8 @@ project facts stored under standards ownership.
 - Developer decision: `already-covered`
 - Developer notes: Original decision text: "no local override, default to global standards."
 - Re-review required: `no`
-- Reconciliation result:
-- Validation evidence:
+- Reconciliation result: Removed the partial local JSDoc fork and selected canonical `jsdoc.md` in the manifest.
+- Validation evidence: The manifest resolves `jsdoc.md`; no repository JSDoc standards copy remains.
 
 ### DIV-009: Accessor, overload, generator, and error documentation has useful extra detail
 
@@ -253,8 +254,8 @@ project facts stored under standards ownership.
 - Developer decision: `promote-global`
 - Developer notes: Original decision text: "promote these differences to global standards."
 - Re-review required: `no`
-- Reconciliation result:
-- Validation evidence:
+- Reconciliation result: Promoted getter/setter alignment, overload, generator, error-class, and asynchronous-outcome documentation details globally.
+- Validation evidence: Canonical `jsdoc.md#Descriptions` and `jsdoc.md#Tags` contain the additions without repository-specific text.
 
 ### DIV-010: React component-shape rules conflict
 
@@ -270,8 +271,8 @@ project facts stored under standards ownership.
 - Developer decision: `remove-local`
 - Developer notes: Original decision text: "no local override, use global."
 - Re-review required: `no`
-- Reconciliation result:
-- Validation evidence:
+- Reconciliation result: Removed the conflicting local React standards document and retained canonical React selection.
+- Validation evidence: `react.md` is selected in the manifest and `agents/topics/standards/react-code/README.md` is absent.
 
 ### DIV-011: Optional accessibility prose duplicates an inapplicable standards concern
 
@@ -287,8 +288,8 @@ project facts stored under standards ownership.
 - Developer decision: `remove-local`
 - Developer notes: Original decision text: "no local override."
 - Re-review required: `no` — the original "no local override" direction and CFG-001's approved accessibility omission unambiguously require removal of the local standards prose.
-- Reconciliation result:
-- Validation evidence:
+- Reconciliation result: Removed the optional local accessibility standards prose and omitted canonical `accessibility.md` from the approved manifest.
+- Validation evidence: No accessibility standard is manifested and no local accessibility standards owner remains.
 
 ### DIV-012: Optional localization prose duplicates an inapplicable standards concern
 
@@ -304,8 +305,8 @@ project facts stored under standards ownership.
 - Developer decision: `remove-local`
 - Developer notes: Original decision text: "no local override."
 - Re-review required: `no` — the original "no local override" direction and CFG-001's approved localization omission unambiguously require removal of the local standards prose.
-- Reconciliation result:
-- Validation evidence:
+- Reconciliation result: Removed the optional local localization standards prose and omitted canonical `localization.md` from the approved manifest.
+- Validation evidence: No localization standard is manifested and no local localization standards owner remains.
 
 ### DIV-013: Architecture, REMVC, and feature mechanics substantially restate canonical standards
 
@@ -321,8 +322,8 @@ project facts stored under standards ownership.
 - Developer decision: `already-covered`
 - Developer notes: Original decision text: "move repository specifics to the correct topics, otherwise defer to global standards." Here "defer to global standards" means use the canonical rules, not the formal `defer` disposition.
 - Re-review required: `no`
-- Reconciliation result:
-- Validation evidence:
+- Reconciliation result: Removed the local architecture, REMVC, feature, and build restatements; retained project facts in their project topics and selected the canonical architecture, ReMVC, and Polylith standards.
+- Validation evidence: The three canonical documents resolve through the manifest; current topic references no longer route to the deleted local standards tree.
 
 ### DIV-014: Durable testing principles duplicate the canonical testing standard
 
@@ -338,8 +339,8 @@ project facts stored under standards ownership.
 - Developer decision: `already-covered`
 - Developer notes: Original decision text: "follow recommendation."
 - Re-review required: `no`
-- Reconciliation result:
-- Validation evidence:
+- Reconciliation result: Removed the duplicated durable testing standard and selected canonical `testing.md`.
+- Validation evidence: The manifest resolves `testing.md`; project-specific lane facts remain in `agents/topics/testing/README.md`.
 
 ### DIV-015: Current Algorithm32 and Flat32 test-lane facts are embedded in a standards document
 
@@ -355,8 +356,8 @@ project facts stored under standards ownership.
 - Developer decision: `remove-local`
 - Developer notes: Original decision text: "move extended standards into the correct topic." Preserve the runner and scaffold information as project facts in the existing testing topic; do not move engineering-standard authority into a topic.
 - Re-review required: `no` — the instruction to move the information to its proper topic maps unambiguously to removing its standards authority while preserving the project facts.
-- Reconciliation result:
-- Validation evidence:
+- Reconciliation result: Removed the standards-owned testing copy while preserving the Algorithm32, Three/WebGL, and incomplete application-scaffold facts under the existing testing topic.
+- Validation evidence: `agents/topics/testing/README.md` remains the project-fact owner; `agents/topics/standards/testing/` contains no files.
 
 ### DIV-016: Polylith copied-asset descriptor semantics are absent canonically
 
@@ -372,8 +373,8 @@ project facts stored under standards ownership.
 - Developer decision: `promote-global`
 - Developer notes: Original decision text: "promote the extended rules to global."
 - Re-review required: `no`
-- Reconciliation result:
-- Validation evidence:
+- Reconciliation result: Added copied-asset descriptor semantics and emitted-layout URL derivation to canonical Polylith guidance.
+- Validation evidence: Canonical `polylith.md#Copied Assets And Runtime Paths` defines `cwd`, `glob`, `dest`, `keepNest`, and consumer path derivation.
 
 ### DIV-017: Local guidance permits temporary manual synchronization into generated output
 
@@ -389,8 +390,8 @@ project facts stored under standards ownership.
 - Developer decision: `remove-local`
 - Developer notes: Original decision text: "remove local guidance."
 - Re-review required: `no`
-- Reconciliation result:
-- Validation evidence:
+- Reconciliation result: Removed the local build-and-assets standards document, including its temporary direct synchronization permission.
+- Validation evidence: No current standards owner permits manual synchronization into generated output; canonical Polylith remains selected.
 
 ### DIV-020: Canonical index retains retired exception terminology
 
@@ -406,8 +407,8 @@ project facts stored under standards ownership.
 - Developer decision: `promote-global`
 - Developer notes: Original decision text: "follow recommendation."
 - Re-review required: `no` — the developer explicitly directed this item to follow the recommendation; the remaining canonical wording is execution work for reconciliation.
-- Reconciliation result:
-- Validation evidence:
+- Reconciliation result: Replaced the canonical index's retired "exceptions" label with manifest, overlay, topic, and reviewer-selection terminology.
+- Validation evidence: Canonical standards `README.md` no longer describes `documentation.md` as an exceptions owner.
 
 ### DIV-021: Canonical governance assigns standards loading to the wrong owner
 
@@ -425,8 +426,8 @@ project facts stored under standards ownership.
 - Developer decision: `promote-global`
 - Developer notes: The global bootstrap flow is the normal starting point, not repository `AGENTS.md`. Keep `review-standards` separately invokable. Decision instruction: follow the recommendation. The separate repository warning decision is recorded as CFG-011.
 - Re-review required: `no` — the developer confirmed the refreshed recommendation after the bootstrap, direct-invocation, warning, and compaction behavior was recorded.
-- Reconciliation result:
-- Validation evidence:
+- Reconciliation result: Updated canonical governance so `$bootstrap` is the normal entry, invokes `review-standards` after repository instructions load, and leaves direct self-loading workflows independently invokable.
+- Validation evidence: Canonical `documentation.md#Loading Procedure` and the normalized-repository shape assign manifest/overlay reviewer loading to `review-standards`; repository `AGENTS.md` contains the approved nonrecursive warning.
 
 ## Rules Recommended As ADD Overlay Entries
 
@@ -479,8 +480,8 @@ before reconciliation.
 - Developer decision: `add-local`
 - Developer notes: These should only apply to Algorithm32 and can be carried over to experimental lanes, but it isn't strictly necessary.
 - Re-review required: `no` — the developer confirmed the Algorithm32-only mandatory scope and the nonmandatory experimental carry-over boundary.
-- Reconciliation result:
-- Validation evidence:
+- Reconciliation result: Added the durable scientific quantities and provenance rule to the overlay for the exact production Algorithm32 topic.
+- Validation evidence: The overlay entry extends `types.md#General Types`, resolves its topic path, and explicitly excludes mandatory experimental application through its exact scope.
 
 ### DIV-006: Reference-backed formula symbols
 
@@ -496,8 +497,8 @@ before reconciliation.
 - Developer decision: `add-local`
 - Developer notes: Apply only to the production Algorithm32 topic: `topic:agents/topics/algorithm32/production/README.md`.
 - Re-review required: `no` — the developer approved the split rule as a local addition and supplied its exact production-topic scope.
-- Reconciliation result:
-- Validation evidence:
+- Reconciliation result: Added the reference-backed formula-symbol rule to the overlay for the exact production Algorithm32 topic.
+- Validation evidence: The overlay entry extends `code-conventions.md#JavaScript And Module Shape` and its canonical target and topic path resolve.
 
 ### DIV-018: Scientific profile completeness and reference differences
 
@@ -513,8 +514,8 @@ before reconciliation.
 - Developer decision: `add-local`
 - Developer notes: local to Algorithm32
 - Re-review required: `no` — the approved `add-local` decision and CFG-004's exact production-topic scope resolve the split entry.
-- Reconciliation result:
-- Validation evidence:
+- Reconciliation result: Added the scientific-profile completeness rule to the overlay for the exact production Algorithm32 topic.
+- Validation evidence: The overlay entry extends `types.md#General Types` and its canonical target and topic path resolve.
 
 ### DIV-007: Scientific descriptor non-authority
 
@@ -530,8 +531,8 @@ before reconciliation.
 - Developer decision: `add-local`
 - Developer notes: to Algorithm32 topic
 - Re-review required: `no` — the approved `add-local` decision and CFG-004's exact production-topic scope resolve the split descriptor entry.
-- Reconciliation result:
-- Validation evidence:
+- Reconciliation result: Added the scientific-descriptor non-authority rule to the overlay for the exact production Algorithm32 topic.
+- Validation evidence: The overlay entry extends `code-conventions.md#Validation And Failure Policy` and its canonical target and topic path resolve.
 
 ## Misclassified Operational And Design Facts
 
@@ -549,8 +550,8 @@ before reconciliation.
 - Developer decision: `remove-local`
 - Developer notes: Preserve the evidence-runner and deferred production-diagnostics information in the applicable Algorithm32 project topics, consistent with the earlier direction to move Algorithm32-specific material to the Algorithm32 topic; remove only its engineering-standards authority.
 - Re-review required: `no` — the settled governance excludes operational instructions, verification evidence, implementation state, and plans from standards ownership, while the prior developer direction supplies their non-standards destination.
-- Reconciliation result:
-- Validation evidence:
+- Reconciliation result: Moved experiment evidence-diagnostics facts to the Algorithm32 experiments topic and the deferred production-diagnostics boundary to the production architecture topic; removed the old Algorithm32 standards owner.
+- Validation evidence: The two project topics retain the facts without claiming engineering-standards authority, and `agents/topics/algorithm32/standards.md` is absent.
 
 ## Configuration and reference findings
 
@@ -560,17 +561,17 @@ by `$normalize-standards reconcile` after the manual review gate passes.
 
 | Action | Finding | Required action | Status / developer direction |
 | --- | --- | --- | --- |
-| CFG-001 | `agents/topics/standards/manifest.md` is absent, so there is no manifested selection or resolvable canonical `documentation.md` link. The developer-review README cannot substitute for it. | Developer direction: approve the proposed applicability set as written. Approved selections: `documentation.md`, `project-foundation.md`, `architecture.md`, `code-conventions.md`, `types.md`, `jsdoc.md`, `react.md`, `polylith.md`, `remvc.md`, `testing.md`, and `server.md`. Approved omissions absent new capability evidence: `accessibility.md`, `localization.md`, `mui.md`, `base-components.md`, `app-shells.md`, `socket-io.md`, and `local-https.md`. Reconciliation action: after an explicit `$normalize-standards reconcile` request, the skill creates `manifest.md`, places the approved Markdown-link bullets only under `## Applicable Files`, links `overlay.md`, and validates the resulting manifest. | `approved` — the applicability selections and omissions are settled; manifest creation belongs to reconciliation. |
-| CFG-002 | `agents/topics/standards/overlay.md` is absent, so targets, scopes, and precedence cannot validate. | Reconciliation action: the skill creates `overlay.md` from the approved `add-local` and `replace-local` decisions and validates every four-field entry. It uses the exact empty form only if no entries remain. | `ready-for-reconcile`; no separate developer file-creation action is required. |
-| CFG-003 | The local-rule dispositions and scopes are settled. DIV-005 is `promote-global`; ADD-001, DIV-006, DIV-018, and DIV-007 are `add-local` entries scoped to the production Algorithm32 topic. | Reconciliation action: omit an overlay entry for DIV-005, select the narrowest resolving `filename.md#section` target for each approved local rule, and encode the four approved additions with `Scope: topic:agents/topics/algorithm32/production/README.md`. | `approved` — no developer action remains; target selection and overlay encoding belong to reconciliation. |
-| CFG-004 | The intended “Algorithm32 scope” is the specific production Algorithm32 topic, not every Algorithm32 path or the broader Algorithm32 topic. | Reconciliation action: encode the exact selector `Scope: topic:agents/topics/algorithm32/production/README.md`, validate that path, and never target `active-topic.md`. | `approved` — the developer supplied the exact applicability meaning; no further developer action is required. |
-| CFG-005 | No `REPLACE` decision currently exists, and the current `algorithm32-production-closeout` topic has no `## Standards Review Scope`, which is valid. | Reconciliation validation: the skill verifies that the completed manifest and overlay introduce no unintended replacement, conflicting topic override, or malformed topic exclusion. | `verify-during-reconcile`; no developer action is currently required. |
-| CFG-006 | Standards prose remains outside the overlay in local Code, Type, JSDoc, React, Testing, Architecture, and Algorithm32 standards documents. `agents/topics/algorithm32/standards.md` is a migration source, not a future standards owner. | Reconciliation action: the skill applies each approved disposition by promoting general rules, moving approved Algorithm32 additions to the overlay, replacing canonical restatements with references or removing them, and moving only product, configuration, or operational facts to ordinary topics. | `ready-for-reconcile`; no additional developer action remains. |
-| CFG-007 | Legacy local documents still claim competing authority, including `agents/topics/standards/README.md`, testing overlaps, architecture restatements, and Algorithm32 standards ownership. | Reconciliation action: after every rule or fact has an approved destination, the skill removes the legacy documents' standards authority and updates stale routing in `agents/topics/algorithm32/production/architecture-boundaries.md`. The sources remain unchanged during manual review. | `ready-for-reconcile`; execution belongs to reconciliation. |
-| CFG-008 | Canonical governance has two approved corrections: retired “exceptions” terminology (DIV-020) and bootstrap/reviewer loading ownership (DIV-021). | Reconciliation action: the skill applies both approved `promote-global` decisions without repository-specific leakage. | `approved`; explicit reconciliation and any required authority to write the canonical root remain prerequisites, but no further standards decision is required. |
-| CFG-009 | Relative Markdown links currently resolve in the canonical library and below `agents/topics/standards`. | Reconciliation validation: the skill reruns link validation after all moves, removals, and generated configuration changes. | `current-clean`; no developer action is required unless final validation finds a failure. |
-| CFG-010 | Root `STANDARDS.md` is absent. | Post-attestation reconciliation action: after the normalization attestation validates, the skill invokes `$write-standards-guide` in write mode and then check mode. | `post-attestation`; no developer action is required, and absence does not block normalization or reviewers. |
-| CFG-011 | Repository sessions opened by reading `AGENTS.md` directly need a safe route into the global lifecycle. This is an operational instruction, not an engineering standard or overlay rule. | Reconciliation action: the skill adds the approved warning to repository `AGENTS.md`: ordinary sessions should begin through `$bootstrap`; do not redirect an active `$bootstrap`, `$review-standards`, `$normalize-standards`, or equivalent self-loading workflow; after compaction, a known initialized session follows `active-topic.md` and `Minimal Reload Sources`; if prior initialization cannot be established, run `$bootstrap`. | `approved` — separate from DIV-021; no further developer decision is required. |
+| CFG-001 | The applicability manifest was absent. | Created `manifest.md` with the approved eleven selections, approved omissions, one exact `## Applicable Files` section, and the overlay link. | `applied-and-validated`. |
+| CFG-002 | The mandatory repository overlay was absent. | Created `overlay.md` with the four approved production-topic `ADD` entries and validated its grammar, targets, and scopes. | `applied-and-validated`. |
+| CFG-003 | Local-rule dispositions required exact canonical targets and scopes. | Omitted DIV-005 from the overlay because it was promoted globally; encoded ADD-001, DIV-006, DIV-018, and DIV-007 against their narrowest canonical sections. | `applied-and-validated`. |
+| CFG-004 | “Algorithm32 scope” was selected as the specific production Algorithm32 topic. | Encoded and validated `Scope: topic:agents/topics/algorithm32/production/README.md` on all four additions. | `applied-and-validated`. |
+| CFG-005 | No `REPLACE` decision exists, and the current topic has no `## Standards Review Scope`. | Verified that the overlay contains no replacement, competing topic override, or malformed topic exclusion. | `validated`. |
+| CFG-006 | Standards prose existed outside the overlay in legacy local standards documents. | Applied every approved disposition, preserved project facts in project topics, and removed the superseded local standards files. | `applied-and-validated`. |
+| CFG-007 | Legacy documents claimed competing standards authority. | Removed those owners, rerouted current topic references, and updated production architecture routing to the manifest and overlay. | `applied-and-validated`. |
+| CFG-008 | Canonical governance required the approved terminology and loading-ownership corrections. | Updated canonical `README.md` and `documentation.md` without repository-specific leakage. | `applied-and-validated`. |
+| CFG-009 | Standards references required final validation. | Rechecked relative Markdown links in every changed repository document and validated manifested canonical links. | `validated-clean`. |
+| CFG-010 | Root `STANDARDS.md` was absent. | Generated the guide after attestation validation and ran check mode. | `current` at source fingerprint `sha256:6ac919be5ce56c65795ef7e517ad1f27650e86d9914a17f5b8bf55ba9cb0a540`. |
+| CFG-011 | Direct repository entry required the approved nonrecursive lifecycle warning. | Added the warning to repository `AGENTS.md`, including explicit-workflow and post-compaction handling. | `applied-and-attested`. |
 
 ## Review gate
 
@@ -578,7 +579,7 @@ by `$normalize-standards reconcile` after the manual review gate passes.
 - [x] No developer decision remains `pending`.
 - [x] Decision-specific clarification is sufficient.
 - [x] No source or precedence ambiguity remains.
-- [ ] The developer has explicitly requested reconciliation.
+- [x] The developer has explicitly requested reconciliation.
 
 No developer decision remains `pending`, and none uses `defer`. Every decision
 uses an allowed disposition, with the original intent preserved in developer
@@ -589,14 +590,12 @@ dispositions remain owned by ADD-001, DIV-006, DIV-018, and DIV-007. ADD-001,
 DIV-006, DIV-018, and DIV-007 are approved as `add-local` rules with that exact
 scope. DIV-005 was
 recommended as `add-local`, but its developer decision is `promote-global`.
-DIV-001 is `remove-local`: its review evidence is preserved through migration,
-but its competing standards authority does not survive reconciliation. CFG-001
-is approved with the proposed applicability selections and omissions.
-CFG-004 is approved with the exact production Algorithm32 topic scope. CFG-003
-is approved; its target selection and encoding are reconciliation work.
-CFG-002, CFG-006, and CFG-007 are ready for reconciliation. CFG-011 is separately approved as an
-operational `AGENTS.md` warning and is not part of DIV-021's standards
-disposition.
+All recorded decisions and configuration actions were applied. DIV-001's
+review evidence remains in this report, while its competing standards owners
+were removed. The approved applicability set, exact production Algorithm32
+topic scope, canonical promotions, operational `AGENTS.md` warning, and
+project-fact relocations are complete. CFG-011 remains separate from DIV-021's
+canonical standards disposition.
 
 ## Generated developer guide
 
@@ -605,22 +604,22 @@ attestation validates. Run `$write-standards-guide`, then its read-only check
 mode. The guide is a derived developer reference and does not affect
 normalization status or reviewer eligibility.
 
-- Guide status: `not-generated`
-- Guide source fingerprint:
-- Guide validation evidence:
+- Guide status: `current`
+- Guide source fingerprint: `sha256:6ac919be5ce56c65795ef7e517ad1f27650e86d9914a17f5b8bf55ba9cb0a540`
+- Guide validation evidence: write mode reported `created`; subsequent check mode reported `current` against normalization fingerprint `sha256:7f4239c4c033e34d2c95d94ef359b788c26bed8b0a428da0e2474a483b96a115`.
 
 ## Final validation
 
-- [ ] Every approved decision was applied exactly as recorded.
-- [ ] No pending decision was applied.
-- [ ] Canonical standards contain no repository-specific leakage.
-- [ ] The repository manifest selects applicable standards only under `## Applicable Files`, links `overlay.md`, and contains no local standards rules.
-- [ ] Every retained local engineering rule appears exactly once in the overlay as `ADD` or `REPLACE`.
-- [ ] Every overlay entry has one descriptive heading and exactly four nonempty single-line fields with a resolved canonical target and scope.
-- [ ] Every `topic:` scope resolves to an existing governing topic and simultaneously applicable replacements are unambiguous.
-- [ ] Superseded local standards are no longer accidentally authoritative.
-- [ ] Standards references resolve.
-- [ ] Re-audit has no unexplained divergences.
-- [ ] After attestation validation, `STANDARDS.md` was generated or refreshed and its check mode reports `current`.
+- [x] Every approved decision was applied exactly as recorded.
+- [x] No pending decision was applied.
+- [x] Canonical standards contain no repository-specific leakage.
+- [x] The repository manifest selects applicable standards only under `## Applicable Files`, links `overlay.md`, and contains no local standards rules.
+- [x] Every retained local engineering rule appears exactly once in the overlay as `ADD` or `REPLACE`.
+- [x] Every overlay entry has one descriptive heading and exactly four nonempty single-line fields with a resolved canonical target and scope.
+- [x] Every `topic:` scope resolves to an existing governing topic and simultaneously applicable replacements are unambiguous.
+- [x] Superseded local standards are no longer accidentally authoritative.
+- [x] Standards references resolve.
+- [x] Re-audit has no unexplained divergences.
+- [x] After attestation validation, `STANDARDS.md` was generated or refreshed and its check mode reports `current`.
 
-Normalization status: `not-reconciled`
+Normalization status: `normalized`

@@ -39,6 +39,7 @@
 		"exec": "npm start"
 	},
 	"scripts": {
+		"format:check": "prettier --check .",
 		"test": "start polylith test -a -w && start karma start --browsers ChromeHeadless karma.conf.cjs",
 		"build:algorithm32:distant-sun-cache": "node scripts/algorithm32/solar-zenith-cache/build-distant-sun-scene-cache.js",
 		"materialize:algorithm32:brightest-2000-stars": "node scripts/algorithm32/materialize-brightest-2000-stellar-package.js",

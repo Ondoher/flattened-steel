@@ -23,10 +23,9 @@ Contract](production-api-ownership-contract.md).
 
 ## Repository Conventions And Reload Requirement
 
-Apply the repository [workflow instructions](../../../AGENTS.md),
-[Repository Standards](../standards/README.md), [Code Conventions]
-(../standards/code-conventions.md), [Type Conventions](../standards/types.md),
-[JSDoc Conventions](../standards/jsdoc.md), and
+Apply the repository [workflow instructions](../../../AGENTS.md), the
+[standards manifest](../standards/manifest.md), the
+[repository overlay](../standards/overlay.md), and
 [Algorithm32 Production Architecture Boundaries]
 (../algorithm32/production/architecture-boundaries.md), plus the
 [Extraterrestrial Adoption Guidance](extraterrestrial.md), throughout this
@@ -213,9 +212,11 @@ complete current standards scans, document consistency, and hygiene pass.
 
 Before porting extraterrestrial behavior, bring the complete
 `src/algorithm32` production implementation surface into conformance with the
-current [Code Conventions](../standards/code-conventions.md), [Type
-Conventions](../standards/types.md), [JSDoc Conventions](../standards/jsdoc.md),
-and [Algorithm32 Standards](../algorithm32/standards.md). This was a production
+current canonical standards selected by the
+[manifest](../standards/manifest.md), the production-topic rules in the
+[overlay](../standards/overlay.md), and the
+[Algorithm32 Production Architecture Boundaries]
+(../algorithm32/production/architecture-boundaries.md). This was a production
 reconciliation step, not an attempt to modernize the archived experiment or
 copy its code style into production. [Algorithm32 Standards Reconciliation]
 (../algorithm32/archive/reconciliation-2026-08-04/extraterrestrial/reconciliation.md)

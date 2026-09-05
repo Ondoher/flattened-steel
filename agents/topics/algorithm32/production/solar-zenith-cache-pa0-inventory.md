@@ -13,11 +13,9 @@ status after PA0.
 
 ## Authorities Applied
 
-The audit applies the repository [code](../../standards/code-conventions.md),
-[type](../../standards/types.md), [JSDoc](../../standards/jsdoc.md),
-[architecture](../../standards/architecture/README.md),
-[build and asset](../../standards/architecture/build-and-assets.md), and
-[testing](../../standards/testing/testing.md) standards together with the
+The audit applies the canonical standards selected by the current
+[standards manifest](../../standards/manifest.md), the applicable
+[repository overlay](../../standards/overlay.md), and the
 [Algorithm32 production boundaries](architecture-boundaries.md). In
 particular:
 
