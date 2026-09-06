@@ -49,18 +49,15 @@ copy.
 ## Contained Experiment And Production Promotion Boundaries
 
 The completed stellar screen-palette and Color Reset experiments remain
-contained. Any new contained experiment implementation source, adapted
-production copy, contract type, fixture, proof runner, harness code, manifest,
-or containment control must remain under:
+contained under their established roots. Their tracked implementation and
+control surface remains under:
 
 ```text
 experiments/extraterrestrial/
 ```
 
-All generated experimental execution and qualification output, including run
-records, builds, browser bundles, profiles, caches, reports, GPU readbacks,
-captures, diagnostics, renders, logs, temporary files, and other
-intermediates, must remain under the ignored local root:
+Their generated execution and qualification output remains under the ignored
+legacy root:
 
 ```text
 tmp/extraterrestrial/
@@ -69,6 +66,14 @@ tmp/extraterrestrial/
 Run allocation, naming, initialization, finalization, and immutability are
 owned by the
 [extraterrestrial run contract](experiments/extraterrestrial/run-contract.md#immutable-run-records).
+
+Create each new side experiment through the repository `start-experiment`
+skill. Its experiment-local instructions and design own that lane's exact
+source, output, progress, and immutable-run boundaries. The standard scaffold
+uses `experiments/<slug>/` for tracked source and
+`tmp/experiments/<slug>/` for ignored generated output. Creating a new lane
+does not reopen, relocate, or grant write access to an existing experiment,
+sealed run, archive, production tree, or external repository.
 
 The `production-algorithm32` work topic is an authorized production
 promotion lane. Work required by the production-owned
@@ -85,12 +90,13 @@ Do not create or run an experimental unit-test tree, suite, file, or
 test-framework dependency. Use focused self-verifying proof runners for
 immutable run evidence.
 
-Generated output remains below the ignored output root and may be reused by
-later contained experiments as data, cache content, configuration, fixtures,
-comparison evidence, or oracle input. The sole reuse restriction is preservation
-of prior evidence: never modify, overwrite, discard, or reopen the source run or
-its artifacts. Apart from the verified archive relocation defined above, copy
-or derive new material into a new run. Consumers should
+Generated output remains below its experiment's declared ignored output root
+and may be reused by later contained experiments as data, cache content,
+configuration, fixtures, comparison evidence, or oracle input. The sole reuse
+restriction is preservation of prior evidence: never modify, overwrite,
+discard, or reopen the source run or its artifacts. Apart from the verified
+archive relocation defined above, copy or derive new material into a new run.
+Consumers should
 record source run, artifact, schema, provenance, and compatibility identities
 needed to support their claims. Every evidence artifact must also retain how it
 was derived: its parent inputs, the operation or equation applied,
@@ -116,14 +122,15 @@ runtime. `C:\dev\poly-gc-react` remains a read-only comparison surface and may
 not become a runtime dependency.
 
 For contained experiment work, implementation and generated-output writes
-remain restricted to `experiments/extraterrestrial/` and
-`tmp/extraterrestrial/`. For the active production promotion, ordinary
+remain restricted to the source and output roots declared by that experiment's
+local instructions and design. For the active production promotion, ordinary
 production source, test, fixture, application, asset, and topic-document writes
 are allowed when required by the approved plan. Generated qualification output
 must remain in an ignored plan-owned output root and must preserve any parent
 evidence. Stop and obtain explicit authorization only when a requested change
-falls outside both the contained-experiment boundary and the active production
-plan, would alter protected evidence, or would write to an external repository.
+falls outside both the selected contained-experiment boundary and the active
+production plan, would alter protected evidence, or would write to an external
+repository.
 
 ## Switching Topics
 

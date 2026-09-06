@@ -7,8 +7,8 @@
 - Folder manifest: [`agents/topics/standards/manifest.md`](./agents/topics/standards/manifest.md)
 - Repository overlay: [`agents/topics/standards/overlay.md`](./agents/topics/standards/overlay.md)
 - Standards governance: [`documentation.md`](../../Users/gande/.codex/documentation/standards/documentation.md)
-- Normalization fingerprint: `sha256:fbaa7d5da48540af823ddced16a3802135aa2b1af064faa8c16c15bb3aa108a2`
-- Guide source fingerprint: `sha256:6bc8da5fa67609da8c441939011ea4bbf60ddcb67bb85dc4dfec4eefb9f4627e`
+- Normalization fingerprint: `sha256:48e285217b8a224caae6e1a43d44cacc59e1acf215c1417a773ddd9604c88791`
+- Guide source fingerprint: `sha256:6b20eecf20ce0906dc9a3bd23fae365721632412a42a50f20ccc0d007aa08337`
 
 For each file, the longest matching folder assignment selects one named standards set. The set includes its inherited canonical standards, then matching folder-scoped overlay rules modify specific sections. This file is a readable projection only.
 
@@ -111,6 +111,7 @@ Adds:
 - `scripts/experiments/b1-directional-sky-radiance/` → `proof-tools` — Independent scoring and GPU HTTP proof host.
 - `scripts/experiments/algorithm32-frame-parity/` → `proof-tools` — Independent CPU/GPU frame comparison and HTTP proof hosts.
 - `experiments/` → `code` — Contained authored source and proof runners; operational no-unit-test instructions remain effective.
+- `experiments/distant-sun-cache-optimization/` → `proof-tools` — Contained cache experiment with a local HTTP browser proof host.
 - `experiments/extraterrestrial/runners/` → `proof-tools` — Contained HTTP/browser proof orchestration.
 - `experiments/extraterrestrial/color-reset/harness/` → `proof-tools` — Contained Color Reset browser host.
 - `experiments/extraterrestrial/color-reset/runners/` → `proof-tools` — Contained Color Reset HTTP/browser proof orchestration.

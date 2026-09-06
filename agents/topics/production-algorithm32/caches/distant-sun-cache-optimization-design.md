@@ -1,13 +1,16 @@
 # Distant-Sun Cache Optimization Design
 
-Status: design proposal with evaluation findings recorded on 2026-09-05.
-Implementation and qualification are pending.
+Status: design proposal with evaluation findings recorded on 2026-09-05 and
+recommended v1 architecture recorded on 2026-09-06. Implementation and
+qualification are pending.
 
 This document owns the proposed reduction of distant-Sun cache storage,
 transfer size, and offline generation time. It is linked from the active
 [production closeout plan](../../production-app/release/color-star-cache-closeout-plan.md). The accepted
 [one-degree cache hookup](../../production-app/runtime-integration/flat32-one-degree-cache-hookup-plan.md) remains the
-owner of current runtime behavior and qualification.
+owner of current runtime behavior and qualification. The
+[implementation plan](distant-sun-cache-optimization-plan.md) owns execution
+order, gates, and promotion.
 
 
 ## Objective And Preservation Boundary
@@ -52,6 +55,119 @@ ranking, not a schedule that promotes an easier task ahead of a larger benefit.
 
 All MB and GB values in this document use decimal units. MiB denotes
 1,048,576 bytes.
+
+
+## Recommended V1 Architecture
+
+The following defaults resolve the implementation decisions in this design.
+They are ordered by their effect on storage reduction, generation time, and
+runtime reliability rather than implementation effort.
+
+| Decision | Recommended v1 default |
+| --- | --- |
+| Shared-block grouping | Fixed coordinate tiles containing four altitude rows by eight local-Sun-angle rows, with no more than 32 populated rows or 16 MiB decoded data per block. |
+| Manifest and coordinate index | Versioned JSON metadata split into package-set report, runtime catalog, configuration manifest, block index, and per-scene manifest. |
+| Browser decoder | One persistent module Worker behind a repository-owned decoder interface; prefer a feature-detected native Zstandard decoder and retain a pinned decoder-only WebAssembly fallback. |
+| Request coalescing | One process-wide in-flight request per encoded artifact, at most four concurrent artifact requests, with subscriber-aware cancellation. |
+| Client retention | Pin blocks used by an unpublished transaction and retain published decoded blocks in a byte-weighted 64 MiB least-recently-used cache. Rely on the browser HTTP cache for encoded files. |
+| Generator staging | Calculate the common field once per wavelength and scatter union rows into preallocated temporary block files at final wavelength offsets; validate, shuffle, compress, and publish one completed block at a time. |
+| Failure and publication | Generation-token and `AbortSignal` cancellation, full identity validation before GPU upload, isolated candidate resources, and one atomic publication swap that preserves the last good cache. |
+
+The numerical defaults are starting contracts, not permanent constants. The
+qualification run must compare the block candidates and retention limits named
+below. A different value may replace a default only when the same evidence set
+shows a material end-to-end improvement without weakening the bounds or
+behavioral guarantees.
+
+### Shared Block Shape
+
+Partition each configuration's 48-by-180 coordinate domain into stable
+four-altitude-by-eight-Sun-angle tiles. Omit coordinates not present in the
+inventory union rather than padding them with spectral data. Within a block,
+order populated coordinates first by altitude index and then by local
+Sun-angle index. Store wavelength-major float32 values for each coordinate so
+the generator can write one contiguous coordinate span per wavelength and the
+loader can reconstruct the current package ordering without numerical work.
+
+A full 32-row tile decodes to:
+
+```text
+32 * 4,058 directions * 15 channels * 4 bytes = 7,791,360 bytes
+```
+
+This approximately 7.43 MiB decoded target is large enough for useful
+compression and request amortization while allowing several neighboring
+blocks within the client retention budget. Enforce a format-level decoded-size
+ceiling of 16 MiB before allocation. Qualification must compare `2x8`, `4x8`,
+`4x16`, and `8x8` tiles using total compressed inventory bytes, requests and
+bytes for initial and neighboring selections, browser decode latency, and peak
+memory. Keep `4x8` unless another candidate materially improves the combined
+result.
+
+### Manifest And Coordinate-Index Ownership
+
+Use versioned JSON metadata for v1 and binary files only for encoded spectral
+blocks. JSON keeps deployment diagnostics and restoration practical while the
+metadata remains small relative to payloads. Divide ownership as follows:
+
+- The package-set report identifies the immutable build, parent evidence,
+  generator and codec versions, configuration manifests, runtime catalog, and
+  their artifact hashes.
+- The runtime catalog maps a scene-selection key to a per-scene manifest and
+  retains the current catalog-selection contract.
+- A configuration manifest owns the physical and numerical configuration,
+  coordinate domains, direction layout, spectral layout, block-grid rules,
+  codec profile, and block-index identity.
+- The block index maps each coordinate to exactly one block and row ordinal
+  and maps each block id to its artifact path, ordered coordinate list,
+  decoded byte length and SHA-256, encoded byte length and SHA-256, codec,
+  shuffle, and derivation identity.
+- A per-scene manifest owns the selected scene, interpolation-closed ledger,
+  ordered coordinates, required block ids, and the expected reconstructed
+  package identity.
+
+Use a configuration hash plus tile coordinates as the logical block id. Keep
+that logical decoded identity separate from the encoded artifact hash so a
+codec or compression-level change does not alter the scientific identity.
+Reject duplicate coordinates, gaps, out-of-domain indices, non-canonical
+ordering, inconsistent lengths, unsupported schema or codec versions, and any
+hash mismatch before publication.
+
+### Browser Decode, Requests, And Retention
+
+Put Zstandard behind a repository-owned asynchronous decoder contract that
+accepts encoded bytes, an expected decoded bound, codec parameters, and an
+abort signal. Browser support documentation is currently inconsistent:
+[MDN lists `zstd`](https://developer.mozilla.org/en-US/docs/Web/API/CompressionStream/CompressionStream),
+while the current [WHATWG Compression Standard](https://compression.spec.whatwg.org/)
+does not define it. Therefore feature-detect native support at runtime rather
+than making it a deployment assumption, and ship a pinned decoder-only
+WebAssembly fallback. Qualify the exact fallback dependency before adoption.
+
+Use one persistent module Worker for hash validation, decompression, inverse
+shuffle, and decoded-hash validation. Transfer `ArrayBuffer` ownership at the
+worker boundary and process one block at a time per worker to bound memory.
+Add a second worker only if profiling shows decoder throughput on supported
+devices blocks first publication and the additional memory remains within the
+qualified bound.
+
+Fetch complete immutable, content-addressed block files; do not make v1 depend
+on byte ranges or dynamically assembled bundles. Maintain one process-wide
+in-flight promise per encoded artifact hash and limit the request scheduler to
+four concurrent block fetches. Multiple cache transactions subscribe to that
+promise. A subscriber cancellation stops only its own continuation; abort the
+underlying fetch or decode only after every subscriber has cancelled. Validate
+both encoded and decoded hashes so HTTP caching, coalescing, and codec changes
+cannot blur identity boundaries.
+
+Pin every decoded block referenced by the current published cache or an active
+candidate transaction. After publication, retain other decoded blocks in a
+byte-weighted 64 MiB least-recently-used cache, evicting only unpinned entries.
+If pinned blocks exceed the budget, allow the temporary excess and expose it in
+diagnostics; correctness must not depend on eviction. Do not add IndexedDB or
+Cache Storage persistence in v1. Immutable cache headers and content-addressed
+URLs let the browser HTTP cache retain encoded artifacts without a second
+application-owned storage lifecycle.
 
 
 ## 1. Shared Storage Across The Inventory
@@ -103,19 +219,21 @@ is insufficient across different configurations.
 Package manifests retain the selected scene and bin-coverage ledger and refer
 to shared blocks. Each block records its ordered coordinates, spectral and
 direction layout, decoded byte length and hash, encoded byte length and hash,
-codec settings, and derivation identity. The precise schema and block grouping
-are implementation decisions still to be qualified.
+codec settings, and derivation identity. The recommended v1 schema and block
+grouping are defined above; their numerical tuning remains subject to the
+specified comparative qualification.
 
-Use stable groups of rows and coalesced requests to balance transfer overhead
-against overfetch. Measure block sizes and request counts before selecting the
-layout. The loader fetches only blocks required by the selected ledger and
-reconstructs the existing wavelength-major payload and RGBA32F face-grid atlas.
-It must not require a download or GPU upload of the entire distinct inventory.
+Use stable coordinate tiles and coalesced requests to balance transfer overhead
+against overfetch. The loader fetches only blocks required by the selected
+ledger and reconstructs the existing wavelength-major payload and RGBA32F
+face-grid atlas. It must not require a download or GPU upload of the entire
+distinct inventory.
 
-Bound retained decoded and encoded blocks independently from the active GPU
-cache. Preserve transactional publication while blocks are fetched, decoded,
-validated, and assembled. Shared storage reduces the total deployed inventory;
-the initial selected view still needs its own working set.
+Bound retained decoded blocks independently from the active GPU cache and let
+the browser HTTP cache own encoded-file retention. Preserve transactional
+publication while blocks are fetched, decoded, validated, and assembled.
+Shared storage reduces the total deployed inventory; the initial selected view
+still needs its own working set.
 
 
 ## 2. One Atmospheric Calculation For The Inventory
@@ -166,10 +284,62 @@ accumulator textures for every package and retain much of the duplication.
 The implementation must account for accumulator, recurrence, readback,
 compression, and host staging memory separately.
 
+### Bounded Staging And Finalization
+
+Preallocate one temporary uncompressed file for every populated block using
+its exact decoded length. For each of the 15 wavelengths, run the existing
+full-domain recurrence once, read back only a bounded tile, and scatter each
+required coordinate into its block file at the final wavelength offset. Do not
+retain the 1.34 GB distinct inventory or all per-package accumulators in host
+memory.
+
+After all wavelengths complete, close and flush staging handles. Then process
+one block at a time: validate its length and decoded hash, apply the reversible
+byte shuffle, compress with the pinned Zstandard profile, validate a decode
+round trip, and write the content-addressed encoded candidate. The intended
+host-memory bound is one wavelength field plus one readback tile plus one
+encoding block, with small metadata overhead. Record measured peak host and GPU
+memory; the implementation must fail cleanly rather than exceed a declared
+limit.
+
+Write all candidates under a unique build staging directory. Only after every
+block, index, manifest, catalog, and report passes schema, containment, length,
+hash, and reconstruction checks may the generator atomically publish the new
+package-set root or its single active pointer. On failure or cancellation,
+leave the previously published set unchanged and retain or remove only the
+unpublished staging directory according to the run-evidence policy.
+
 The expected structural reduction is 1,635 to 15 wavelength calculations.
 Measure final elapsed time including setup, calculation, readback, compression,
 hashing, metadata, and disk writes. Preserve per-package decoded payload hashes
 as the exact reconstruction oracle. New container hashes may differ.
+
+
+## Runtime Failure, Cancellation, And Publication
+
+Assign every requested scene transition a monotonically increasing generation
+token and an `AbortController`. A newer request cancels the older transaction's
+subscriptions and makes every older continuation ineligible to publish, even
+if a shared fetch or worker operation completes later. Crossing into the
+texture-free dark domain at or above 108 degrees immediately cancels the
+candidate and atomically publishes the existing dark state without waiting for
+cache I/O.
+
+A candidate transaction must validate the complete catalog-to-manifest-to-
+block identity chain, decoded bounds, coordinate coverage, and reconstructed
+package identity before creating or updating published GPU resources. Assemble
+and upload into isolated candidate resources, then make one atomic controller
+swap only if the generation token is still current. Dispose superseded
+candidate resources after their work settles. A fetch, decode, validation,
+allocation, upload, context-loss, or cancellation failure must preserve the
+last known-good published cache and report a stage-specific error.
+
+Shared request cancellation follows subscriber accounting: one cancelled
+scene must not abort an artifact still needed by another transaction. Worker
+messages carry transaction and artifact identities, and stale or mismatched
+responses are discarded. Context restoration reuses validated retained blocks
+when available but performs the same isolated upload and atomic-publication
+checks as a fresh load.
 
 
 ## 3. Lossless Payload Compression
@@ -320,17 +490,27 @@ Implementation qualification should establish:
   neighboring-bin transfer sizes; and bounded host and GPU working sets.
 - Browser decode and first-publication latency, failed/cancelled/superseded
   replacement behavior, same-context reuse, context restoration, and darkness.
+- Comparative `2x8`, `4x8`, `4x16`, and `8x8` block results; request
+  coalescing under overlapping and partially cancelled transactions; decoded
+  LRU behavior at, below, and above its 64 MiB target.
 - Fresh generation output parity and full elapsed-time breakdowns on the
   selected hardware, with each optimization compared against its immediate
   parent to avoid double-counting benefits.
+- Generator peak staging, host, and GPU memory; interrupted-build cleanup; and
+  proof that a failed build cannot replace the last published package set.
 - A new derivation record identifying immutable parent packages, operations,
   configuration, implementation/tool identities, and resulting artifacts.
 
-Select block layout, browser decoding integration, shared-block retention
-policy, and bounded generator staging before implementation. Quantization,
-float16 storage, reduced angular or spectral resolution, and lossy codecs are
-outside this exact-value proposal. Further scientific or display tradeoffs
-would require their own error and appearance acceptance boundary.
+The v1 defaults select the block layout, decoding boundary, request
+coalescing, retention policy, bounded staging strategy, and transactional
+behavior needed to begin implementation. Qualification may tune the numerical
+defaults or select the exact decoder dependency, but it must not relax decoded
+size bounds, identity checks, cancellation isolation, exact reconstruction, or
+last-good publication. Quantization, float16 storage, reduced angular or
+spectral resolution, and lossy codecs are outside this exact-value proposal.
+Further scientific or display tradeoffs require their own error and appearance
+acceptance boundary.
 
-Current completion: evaluation findings and impact ranking are documented;
-runtime, generator, deployed package format, and acceptance status are unchanged.
+Current completion: evaluation findings, impact ranking, and recommended v1
+architecture are documented; runtime, generator, deployed package format, and
+acceptance status are unchanged.

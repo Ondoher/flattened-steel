@@ -1,0 +1,120 @@
+{
+	"schemaId": "distant-sun-cache-optimization-c0-measurement-contract-v1",
+	"purpose": "Comparable control and candidate measurements for exact-value distant-Sun cache storage, generation, transport, memory, and lifecycle behavior.",
+	"inventory": {
+		"packageCount": 109,
+		"distinctCoordinateCount": 5494,
+		"expectedTotalByteLength": 17230339148,
+		"requiredIdentityChecks": [
+			"catalog",
+			"package-report",
+			"scene-manifest",
+			"row-ledger",
+			"spectral-payload",
+			"logical-to-unique-index"
+		]
+	},
+	"runtimeScenarios": [
+		{
+			"id": "cold-90",
+			"kind": "cold-load",
+			"solarZenithDegrees": 90
+		},
+		{
+			"id": "exact-reuse-90",
+			"kind": "same-identity-reuse",
+			"solarZenithDegrees": 90
+		},
+		{
+			"id": "adjacent-91",
+			"kind": "replacement",
+			"solarZenithDegrees": 91
+		},
+		{
+			"id": "nonadjacent-30",
+			"kind": "replacement",
+			"solarZenithDegrees": 30
+		},
+		{
+			"id": "warm-90",
+			"kind": "warm-replacement",
+			"solarZenithDegrees": 90
+		},
+		{
+			"id": "failed-replacement",
+			"kind": "last-good-preservation",
+			"solarZenithDegrees": 90
+		},
+		{
+			"id": "superseded-91-by-92",
+			"kind": "in-flight-supersession",
+			"solarZenithDegrees": [91, 92]
+		},
+		{
+			"id": "caller-cancelled-93",
+			"kind": "in-flight-cancellation",
+			"solarZenithDegrees": 93
+		},
+		{
+			"id": "context-restoration-92",
+			"kind": "webgl-context-cycle",
+			"solarZenithDegrees": 92
+		},
+		{
+			"id": "dark-boundary",
+			"kind": "resolver-boundary",
+			"solarZenithDegrees": [107.999, 108, 180]
+		}
+	],
+	"measurements": {
+		"unavailableValue": null,
+		"storage": ["artifactCount", "byteLength"],
+		"transport": ["requestCount", "responseByteLength", "uniqueRequestCount"],
+		"latency": ["browserElapsedMilliseconds", "hostWallMilliseconds"],
+		"codec": [
+			"encodeMilliseconds",
+			"decodeMilliseconds",
+			"inverseShuffleMilliseconds",
+			"workerQueueMilliseconds"
+		],
+		"memory": [
+			"browserHeapBeforeBytes",
+			"browserHeapAfterBytes",
+			"peakBrowserHeapBytes",
+			"peakWorkerHeapBytes",
+			"peakProcessResidentBytes",
+			"peakProcessHeapBytes",
+			"peakGpuResidentBytes",
+			"peakDiskStagingBytes",
+			"activeResidentTextureBytes",
+			"lastTransitionTextureBytes",
+			"lastTransitionWithStagingBytes"
+		],
+		"generation": [
+			"setupMilliseconds",
+			"calculationMilliseconds",
+			"readbackMilliseconds",
+			"stagingMilliseconds",
+			"encodingMilliseconds",
+			"validationMilliseconds",
+			"publicationMilliseconds",
+			"totalMilliseconds"
+		],
+		"exactness": ["checkedByteLength", "expectedSha256", "actualSha256", "matches"]
+	},
+	"availabilityRule": "Every declared metric is emitted as a finite number, boolean, SHA-256 string, or explicit null when the metric does not apply to that control or candidate.",
+	"candidateBounds": {
+		"completeDeployedByteLengthMaximum": 600000000,
+		"completeGenerationMillisecondsMaximum": 900000,
+		"decodedBlockByteLengthMaximum": 16777216,
+		"decodedRetentionTargetBytes": 67108864
+	},
+	"nonNegotiable": [
+		"exact decoded reconstruction",
+		"bounded allocation before decode",
+		"subscriber-isolated cancellation",
+		"stale-result rejection",
+		"last-good transactional publication",
+		"texture-free darkness at and above 108 degrees"
+	]
+}

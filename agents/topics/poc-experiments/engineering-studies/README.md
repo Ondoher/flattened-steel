@@ -8,6 +8,7 @@ Closed experimental lanes remain closed. Start with closed-lanes-and-candidates.
 
 - [Algorithm32 Cache Interface Design](cache-design.md)
 - [Closed Lanes And Unselected Studies](closed-lanes-and-candidates.md)
+- [Distant-Sun Cache Optimization Experiment](distant-sun-cache-optimization/README.md)
 - [Extraterrestrial Experiment Promotions](extraterrestrial-promotions.md)
 - [Retained Algorithm32 Experiment Definitions](retained-experiments.md)
 - [Stellar Screen-Palette Cache Design](stellar-screen-palette-design.md)

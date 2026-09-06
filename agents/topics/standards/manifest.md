@@ -90,6 +90,7 @@ Standards:
 - `scripts/experiments/b1-directional-sky-radiance/` - `proof-tools` - Independent scoring and GPU HTTP proof host.
 - `scripts/experiments/algorithm32-frame-parity/` - `proof-tools` - Independent CPU/GPU frame comparison and HTTP proof hosts.
 - `experiments/` - `code` - Contained authored source and proof runners; operational no-unit-test instructions remain effective.
+- `experiments/distant-sun-cache-optimization/` - `proof-tools` - Contained cache experiment with a local HTTP browser proof host.
 - `experiments/extraterrestrial/runners/` - `proof-tools` - Contained HTTP/browser proof orchestration.
 - `experiments/extraterrestrial/color-reset/harness/` - `proof-tools` - Contained Color Reset browser host.
 - `experiments/extraterrestrial/color-reset/runners/` - `proof-tools` - Contained Color Reset HTTP/browser proof orchestration.

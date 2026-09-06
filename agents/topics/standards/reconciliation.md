@@ -9,14 +9,19 @@
 - Audit date: 2026-09-06.
 - Audit basis: working tree at commit `8e9a11ab8d78dd02a53eb73a5e0c991cc99a4e32`, including pre-existing edits and the untracked repository skill. This is a standards configuration/ownership audit, not an application-code compliance audit.
 - Phase: `reconciled`.
-- Normalization status: `normalized`; all ten developer-approved dispositions are applied, with zero pending or deferred items.
-- Reconciled scope: approved folder mapping, local overlay consolidation, canonical setter promotion, redundant prose removal, experiment-scaffold repair, and operational contract handoff. Topic relocation is recorded separately in the completed migration ledger.
+- Normalization status: `normalized`; all twelve developer-approved dispositions are applied, with zero pending or deferred items.
+- Reconciled scope: approved folder mapping, local overlay consolidation, canonical setter promotion, redundant prose removal, experiment-scaffold repair, operational contract handoff, skill-owned new-experiment placement, and proof-host capability mapping. Topic relocation is recorded separately in the completed migration ledger.
 
-The developer explicitly accepted all ten recommendations and authorized
-reconciliation. FM-009 promotes assignment-only setters to canonical code
-conventions. The detailed comparisons below retain the pre-change audit basis;
-reconciliation results and the validation record describe the installed state.
-The historical appendix remains unchanged developer-decision evidence.
+The developer explicitly accepted the first ten recommendations and later
+directed removal of the stale extraterrestrial-only placement restriction in
+favor of the `start-experiment` skill, authorizing FM-011 reconciliation.
+The developer's blanket preapproval of recommendations authorizes FM-012's
+narrow folder mapping after the C0 review exposed its HTTP proof-host
+capability.
+FM-009 promotes assignment-only setters to canonical code conventions. The
+detailed comparisons below retain the pre-change audit basis; reconciliation
+results and the validation record describe the installed state. The historical
+appendix remains unchanged developer-decision evidence.
 
 ## Summary
 
@@ -25,11 +30,11 @@ The historical appendix remains unchanged developer-decision evidence.
 | `promote-global` | 1 |
 | `add-local` | 4 |
 | `replace-local` | 0 |
-| `remove-local` | 3 |
-| `already-covered` | 2 |
+| `remove-local` | 4 |
+| `already-covered` | 3 |
 | `defer` | 0 |
 
-Installed outcome: nine reusable sets and 26 existing-folder assignments,
+Installed outcome: nine reusable sets and 27 existing-folder assignments,
 using the same eleven canonical standards already selected. Preserve the four
 scientific requirements under `src/algorithm32/`, encode the two type-section
 requirements together, and promote the assignment-only setter rule to canonical
@@ -90,6 +95,7 @@ unused set.
 | `scripts/experiments/b1-directional-sky-radiance/` | `proof-tools` | Independent scoring and GPU HTTP proof host. |
 | `scripts/experiments/algorithm32-frame-parity/` | `proof-tools` | Independent CPU/GPU frame comparison and HTTP proof hosts. |
 | `experiments/` | `code` | Contained authored source and proof runners; operational no-unit-test instructions remain effective. |
+| `experiments/distant-sun-cache-optimization/` | `proof-tools` | Contained cache experiment with a local HTTP browser proof host. |
 | `experiments/extraterrestrial/runners/` | `proof-tools` | Contained HTTP/browser proof orchestration. |
 | `experiments/extraterrestrial/color-reset/harness/` | `proof-tools` | Contained Color Reset browser host. |
 | `experiments/extraterrestrial/color-reset/runners/` | `proof-tools` | Contained Color Reset HTTP/browser proof orchestration. |
@@ -238,6 +244,7 @@ Standards:
 - `scripts/experiments/b1-directional-sky-radiance/` - `proof-tools` - Independent scoring and GPU HTTP proof host.
 - `scripts/experiments/algorithm32-frame-parity/` - `proof-tools` - Independent CPU/GPU frame comparison and HTTP proof hosts.
 - `experiments/` - `code` - Contained authored source and proof runners; operational no-unit-test instructions remain effective.
+- `experiments/distant-sun-cache-optimization/` - `proof-tools` - Contained cache experiment with a local HTTP browser proof host.
 - `experiments/extraterrestrial/runners/` - `proof-tools` - Contained HTTP/browser proof orchestration.
 - `experiments/extraterrestrial/color-reset/harness/` - `proof-tools` - Contained Color Reset browser host.
 - `experiments/extraterrestrial/color-reset/runners/` - `proof-tools` - Contained Color Reset HTTP/browser proof orchestration.
@@ -254,7 +261,7 @@ Standards:
 
 ## Divergences
 
-The current decision identifiers are FM-001 through FM-010. Historical DIV/ADD/CFG
+The current decision identifiers are FM-001 through FM-012. Historical DIV/ADD/CFG
 identifiers remain unchanged in the appendix. Reconciliation may apply only
 current recorded approvals.
 
@@ -423,6 +430,38 @@ Accepted canonical wording, now installed:
 - Re-review required: `no` — The developer accepted the recorded recommendation, scope, and preservation boundary.
 - Reconciliation result: Applied as approved; see completed verification below.
 - Audit evidence (before reconciliation): Read both AGENTS files, the complete run section, citation policy, and testing topic. These are future handoff actions; neither current owner has moved.
+
+### FM-011: Defer new side-experiment placement to the scaffold skill
+
+- Canonical source: [documentation.md - Project Topics](../../../../../Users/gande/.codex/documentation/standards/documentation.md#project-topics); repository `start-experiment` skill and its output contract.
+- Repository source: [AGENTS.md](../../../AGENTS.md), contained-experiment boundary; the reconciled `experiments/` folder assignment above.
+- Canonical rule: Experiment paths and operational containment are project facts; folder standards apply through the longest matching assignment and do not choose a work topic or experiment root.
+- Repository rule: The root instruction restricted every new experiment to the legacy `experiments/extraterrestrial/` and `tmp/extraterrestrial/` roots even though the approved top-level `experiments/` assignment and scaffold skill reserve `experiments/<slug>/` and `tmp/experiments/<slug>/` for new side POCs.
+- Behavioral difference: The stale restriction prevents the approved scaffold from creating any new experiment and conflates new independent studies with the sealed extraterrestrial lane and its historical run namespace.
+- Information at risk: Removing the restriction without retaining legacy ownership could appear to relocate or reopen existing extraterrestrial evidence.
+- Agent recommendation: `remove-local`.
+- Recommendation rationale: Remove only the blanket placement restriction for new experiments. Make the `start-experiment` skill and each generated experiment's local instructions/design own new lane roots. Preserve `experiments/extraterrestrial/`, `tmp/extraterrestrial/`, and their run contract unchanged for existing lanes.
+- Developer decision: `remove-local`.
+- Developer notes: The developer explicitly directed that the restriction be removed in favor of the skill.
+- Re-review required: `no` - The direction names both the obsolete restriction and its replacement authority.
+- Reconciliation result: Applied as approved in root `AGENTS.md`; no folder assignment, overlay rule, existing experiment root, or historical evidence changed.
+- Audit evidence: The `experiments/` folder already resolves to the `code` set, the scaffold helper refuses overwrites, and the generic output contract requires ignored generated output, real-path containment, immutable runs, provenance, terminal states, and monitorable progress.
+
+### FM-012: Apply proof-host standards to the distant-Sun cache experiment
+
+- Canonical source: [documentation.md - Effective Standards For A File](../../../../../Users/gande/.codex/documentation/standards/documentation.md#effective-standards-for-a-file); [server.md](../../../../../Users/gande/.codex/documentation/standards/server.md).
+- Repository source: `experiments/distant-sun-cache-optimization/run-c0-baseline.js`; the existing `proof-tools` set and comparable proof-host assignments in this manifest.
+- Canonical rule: Folder mappings must select every standard required by a file's evident capability; when source exposes an uncovered capability, review stops for manifest audit and reconciliation.
+- Repository fact: The C0 runner owns a loopback HTTP server, static routing, response headers, streaming, and HTTP error translation, while its inherited `experiments/` assignment selected `code` without `server.md`.
+- Behavioral difference: Reviewing the runner as generic code would omit the server-boundary rules already applied to equivalent browser proof hosts.
+- Information at risk: Assigning an application-server set would add unrelated Polylith/application concerns; leaving `code` would omit the applicable transport and filesystem-service rules.
+- Agent recommendation: `already-covered`.
+- Recommendation rationale: Reuse the existing `proof-tools` set at the narrow experiment folder boundary. It extends `code` only with `server.md`, matching this contained mixed proof-tool lane without changing its operational authority.
+- Developer decision: `already-covered`.
+- Developer notes: Accepted under the developer's explicit preapproval of all recommendations; use the narrow experiment folder and do not broaden production or other experiment mappings.
+- Re-review required: `no` - The existing set, exact folder, and non-authority boundary are unambiguous.
+- Reconciliation result: Assigned `experiments/distant-sun-cache-optimization/` to `proof-tools`; no overlay, production scope, source/output permission, or immutable run changed.
+- Audit evidence: Architecture review stopped on the missing `server.md` applicability at the C0 loopback host. The new longest matching assignment selects `proof-tools` for the contained experiment and leaves other experiment folders unchanged.
 
 
 ## Proposed Overlay Encoding
@@ -627,16 +666,18 @@ archive verification.
 
 ## Completed Reconciliation Evidence
 
-- FM-001: Installed nine sets and 26 folder assignments; shared parser and real-folder validation pass.
+- FM-001: Installed nine sets and the original 26 folder assignments; shared parser and real-folder validation pass.
 - FM-002/FM-004: Preserved quantities/provenance and complete scientific profiles in one engine-folder types ADD, avoiding duplicate target/scope keys.
 - FM-003/FM-005: Preserved formula-symbol and descriptor non-authority ADD entries at src/algorithm32/.
 - FM-006: Create/check fixture passes with folder-resolved set code. Existing destination and obsolete --exclude are rejected. A malformed manifest fails before any destination is created. Node syntax and skill quick validation pass. The disposable fixture was removed; no scientific experiment ran.
 - FM-007/FM-008: Removed approved duplicate and obsolete coding prose, retaining concrete cache/API facts and canonical links. Original topic bytes remain in verified history.
 - FM-009: Installed the assignment-only setter restriction in canonical code-conventions.md, Classes And Utilities. The global file is outside this repository checkpoint.
 - FM-010: Complete immutable-run contract now lives at experiments/extraterrestrial/run-contract.md; citation policy lives under references/. Current consumers are repaired; contained experiments remain runner-only and closed lanes remain closed.
+- FM-011: New side experiments defer placement and operational containment to `start-experiment`; the legacy extraterrestrial source, output, and run contracts remain unchanged for existing lanes.
+- FM-012: The distant-Sun cache experiment maps to `proof-tools`, adding the already-selected server standard at the narrow proof-host boundary without broadening authority.
 
-- Attestation create/validate: `sha256:fbaa7d5da48540af823ddced16a3802135aa2b1af064faa8c16c15bb3aa108a2`, seven audited inputs.
-- Generated guide write/check: current at `sha256:6bc8da5fa67609da8c441939011ea4bbf60ddcb67bb85dc4dfec4eefb9f4627e`.
+- Attestation create/validate: `sha256:48e285217b8a224caae6e1a43d44cacc59e1acf215c1417a773ddd9604c88791`, six audited inputs including the new experiment-local instructions.
+- Generated guide write/check: current at `sha256:6b20eecf20ce0906dc9a3bd23fae365721632412a42a50f20ccc0d007aa08337`.
 - Folder parser, canonical-root validation, formatting preflight, and `npm run format:check`: pass.
 - Protected topic evidence: all 66 frozen files byte-hash unchanged; original-topic ZIP retains its verified SHA-256.
 - Topic cutover: five work topics and folder-independent focus routing; [migration verification](../context/topic-migration-archive-index.md) owns relocation evidence.

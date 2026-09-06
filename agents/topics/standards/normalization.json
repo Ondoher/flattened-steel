@@ -2,30 +2,26 @@
 	"schemaVersion": 1,
 	"status": "normalized",
 	"manifest": "agents/topics/standards/manifest.md",
-	"normalizedAt": "2026-09-06T15:15:09.495Z",
-	"repositoryStandardsFingerprint": "sha256:fbaa7d5da48540af823ddced16a3802135aa2b1af064faa8c16c15bb3aa108a2",
+	"normalizedAt": "2026-09-06T18:42:52.113Z",
+	"repositoryStandardsFingerprint": "sha256:48e285217b8a224caae6e1a43d44cacc59e1acf215c1417a773ddd9604c88791",
 	"pendingDivergences": 0,
 	"deferredDivergences": 0,
 	"inputs": [
 		{
-			"path": ".agents/skills/start-experiment/scripts/scaffold-experiment.mjs",
-			"sha256": "a5152ca9bc93073aee25044faba51b7a9b694190b87102f4b1ab15594d43745f"
-		},
-		{
-			"path": ".agents/skills/start-experiment/SKILL.md",
-			"sha256": "eef75bf9dfb36df4f31b8d454d21d163c35f50ffa4fcdd2939b50744ce038b47"
-		},
-		{
 			"path": "AGENTS.md",
-			"sha256": "f9382c39fff0af9985970953753b9f5859c4f8850e49f523ea422effee460c32"
+			"sha256": "15e055f851b526ba79cafd6fff2682fc540ed041740183359c5853e994d8a7f4"
 		},
 		{
 			"path": "agents/topics/standards/manifest.md",
-			"sha256": "33c65f6a47e949faa4ed688a8d3ec6373d6c27b1544d81fe6fad296f55c60a87"
+			"sha256": "274b5d0fedb56145a1658cc7097f9e13e77f0f5d931ff89475f615e042479fe0"
 		},
 		{
 			"path": "agents/topics/standards/overlay.md",
 			"sha256": "5b67d2e2a7016b3d1f9d1cbe20d1892aeca479a01e641cefc4ef0354d31b8793"
+		},
+		{
+			"path": "experiments/distant-sun-cache-optimization/AGENTS.md",
+			"sha256": "237c89d2d286850d1eecff2e2c1210143b6423484a2cb40f7b9f26d714112407"
 		},
 		{
 			"path": "experiments/extraterrestrial/AGENTS.md",

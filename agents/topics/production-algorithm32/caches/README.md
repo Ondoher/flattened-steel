@@ -2,7 +2,11 @@
 
 Focus: Cache construction, storage, reconstruction, loading, and optimization.
 
-The one-degree distant-Sun cache is implemented and adopted. The current task is the impact-ranked storage and offline-generation optimization design. Its implementation and qualification are pending. Historical POC, P0-P10, and PA0-PA7 execution is archived, not reopened.
+The one-degree distant-Sun cache is implemented and adopted. The current task
+is the impact-ranked storage and offline-generation optimization plan. Its
+contained packaging-and-transport experiment is active: C0 is accepted and E1
+format/compression comparison is next. Historical POC, P0-P10, and PA0-PA7
+execution is archived, not reopened.
 
 ## Working Documents
 
@@ -10,6 +14,7 @@ The one-degree distant-Sun cache is implemented and adopted. The current task is
 - [Algorithm32 Cache Interface Design](cache-design.md)
 - [Algorithm32 Current Dataflow](current-dataflow.md)
 - [Distant-Sun Cache Optimization Design](distant-sun-cache-optimization-design.md)
+- [Distant-Sun Cache Optimization Implementation Plan](distant-sun-cache-optimization-plan.md)
 - [Flat Geometry And Local-Source Extension Contract](extension-contract.md)
 - [Flat/Local GPU Transport Offload Plan](gpu-transport-offload-plan.md)
 - [Selected Outgoing Reconstruction](outgoing-reconstruction.md)
