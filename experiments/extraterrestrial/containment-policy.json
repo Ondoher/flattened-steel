@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 1,
+  "policyId": "algorithm32-extraterrestrial-g0-containment-v1",
+  "repositoryMarkers": [
+    ".git",
+    "AGENTS.md"
+  ],
+  "trackedSourceRoot": "experiments/extraterrestrial",
+  "generatedOutputRoot": "tmp/extraterrestrial",
+  "baselineRoot": "experiments/extraterrestrial/baseline",
+  "candidateRoot": "experiments/extraterrestrial/candidate",
+  "localDependencyRoot": "experiments/extraterrestrial/node_modules",
+  "writePolicy": {
+    "implementationAndControl": [
+      "experiments/extraterrestrial/**"
+    ],
+    "generated": [
+      "tmp/extraterrestrial/**"
+    ],
+    "canonicalDocumentation": [
+      "agents/topics/active-topic.md",
+      "agents/topics/extraterrestrial/stage-12-implementation-topic.md",
+      "agents/topics/extraterrestrial/celestial-contribution-cache-design.md",
+      "agents/topics/extraterrestrial/promotion-plan.md",
+      "agents/topics/extraterrestrial/stellar-screen-palette-design.md",
+      "agents/topics/extraterrestrial/stellar-rendering-plan.md",
+      "agents/topics/extraterrestrial/color-reset-design.md",
+      "agents/topics/extraterrestrial/color-reset-experiment-plan.md"
+    ],
+    "allOtherTrackedCodeAndConfiguration": "protected"
+  },
+  "runtimePolicy": {
+    "allowedRelativeRoot": "experiments/extraterrestrial",
+    "allowedBareDependencies": [
+      "@react-three/fiber",
+      "react",
+      "react-dom",
+      "three"
+    ],
+    "forbiddenRoots": [
+      "src",
+      "scripts/algorithm32-star",
+      "scripts/flat",
+      "scripts/flat32",
+      "scripts/experiments",
+      "tmp",
+      "C:/dev/poly-gc-react"
+    ],
+    "candidateInertGlobs": [
+      "**/_tests/**",
+      "**/*.spec.js",
+      "**/*.test.js"
+    ],
+    "dynamicImports": "reject",
+    "absoluteImports": "reject",
+    "fileUrlImports": "reject",
+    "symlinksJunctionsAndReparsePoints": "reject"
+  },
+  "snapshotPolicy": {
+    "productionSource": "src/algorithm32",
+    "baselineDestination": "experiments/extraterrestrial/baseline/src/algorithm32",
+    "candidateDestination": "experiments/extraterrestrial/candidate/src/algorithm32",
+    "manifest": "experiments/extraterrestrial/baseline-manifest.json",
+    "creation": "create-once",
+    "baselineMutation": "reject",
+    "candidateSeed": "byte-identical"
+  },
+  "runPolicy": {
+    "root": "tmp/extraterrestrial/runs",
+    "counter": ".last-run-number",
+    "lock": ".run-allocation-lock",
+    "numberPattern": "^[0-9]{6}$",
+    "slugPattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+    "terminalStates": [
+      "accepted",
+      "rejected",
+      "failed",
+      "interrupted"
+    ],
+    "terminalManifest": "artifact-manifest.json",
+    "additionalNamespaces": [
+      {
+        "id": "color-reset",
+        "root": "tmp/extraterrestrial/color-reset/runs",
+        "counter": ".last-run-number",
+        "lock": ".run-allocation-lock",
+        "independentSequence": true,
+        "authority": "agents/topics/extraterrestrial/color-reset-experiment-plan.md"
+      }
+    ]
+  },
+  "proofPolicy": {
+    "unitTestTree": "prohibited",
+    "testFrameworkDependency": "prohibited",
+    "packageTestCommand": "prohibited",
+    "qualifyingRunnerRoot": "experiments/extraterrestrial/runners"
+  }
+}

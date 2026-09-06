@@ -43,8 +43,7 @@ function createStellarPacket(member, scale = 1) {
 		quantity: SPECTRAL_QUANTITIES.RADIANCE_DENSITY,
 		units: SPECTRAL_UNITS.RADIANCE_DENSITY,
 		values: member.values.map(
-			(value) =>
-				value * STELLAR_ONE_PIXEL_PRESENTATION.calibration.baseIrradianceToBoundaryRadianceScale * scale,
+			(value) => value * STELLAR_ONE_PIXEL_PRESENTATION.calibration.baseIrradianceToBoundaryRadianceScale * scale,
 		),
 		provenanceIdentity: `stellar-ferwerda-survival:${member.id}:${scale}`,
 	});
@@ -64,9 +63,7 @@ describe('historical base-scale stellar Ferwerda control', () => {
 	it('preserves its pre-CR6C brightness variation and ordering through the complete cone/rod range', () => {
 		const packets = STANDARD_STELLAR_MEMBER_DATA.map((member) => createStellarPacket(member));
 		const referenceModel = createModel(ADAPTATION_CONTROLS[0]);
-		const preColorLuminances = packets.map((packet) =>
-			luminance(referenceModel.radianceToLinearSrgb(packet)),
-		);
+		const preColorLuminances = packets.map((packet) => luminance(referenceModel.radianceToLinearSrgb(packet)));
 		const uniquePreColorCount = new Set(preColorLuminances).size;
 		const meanDisplayLuminances = [];
 
@@ -78,7 +75,9 @@ describe('historical base-scale stellar Ferwerda control', () => {
 				displayLuminances.reduce((sum, value) => sum + value, 0) / displayLuminances.length,
 			);
 
-			expect(outputs.every((rgb) => rgb.every((value) => Number.isFinite(value) && value >= 0 && value <= 1))).toBeTrue();
+			expect(
+				outputs.every((rgb) => rgb.every((value) => Number.isFinite(value) && value >= 0 && value <= 1)),
+			).toBeTrue();
 			expect(outputs.filter((rgb) => Math.max(...rgb) === 0).length).toBe(0);
 			expect(outputs.filter((rgb) => Math.min(...rgb) === 1).length).toBe(0);
 			expect(new Set(displayLuminances).size / uniquePreColorCount).toBeGreaterThan(0.96);

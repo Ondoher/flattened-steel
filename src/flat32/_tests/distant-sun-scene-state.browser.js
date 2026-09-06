@@ -101,28 +101,31 @@ describe('Flat32 distant-Sun scene state', () => {
 	});
 
 	it('keeps the stellar source and optional filter configuration unchanged across the 108-degree cache transition', () => {
-		const presentationFilters = [{
-			id: 'human-low-light-chroma-v1',
-			stage: 'source-linear',
-			target: 'stellar',
-			enabled: true,
-			parameters: {maximumChromaRetention: 0.65},
-		}];
-		const createMode = (distantSunCacheState) => new SphericalDistantMode({
-			stellarCatalog: 'brightest-500',
-			sceneState: createDistantSunSceneState({
-				observation: OBSERVATION,
-				observerHeight: ATMOSPHERE_OBSERVER_HEIGHT,
-				observerUpDirection: ATMOSPHERE_OBSERVER_UP_DIRECTION,
-			}),
-			sceneScale: ATMOSPHERE_SCENE_SCALE,
-			sourceAngularRadius: ATMOSPHERE_SOURCE_ANGULAR_RADIUS,
-			maximumScatteringOrder: 4,
-			...(distantSunCacheState === 'ready' ? {sceneCacheAsset: ASSET} : {}),
-			distantSunCacheState,
-			colorDisplayModelConfiguration: {model: 'basic-bruneton'},
-			presentationFilters,
-		});
+		const presentationFilters = [
+			{
+				id: 'human-low-light-chroma-v1',
+				stage: 'source-linear',
+				target: 'stellar',
+				enabled: true,
+				parameters: {maximumChromaRetention: 0.65},
+			},
+		];
+		const createMode = (distantSunCacheState) =>
+			new SphericalDistantMode({
+				stellarCatalog: 'brightest-500',
+				sceneState: createDistantSunSceneState({
+					observation: OBSERVATION,
+					observerHeight: ATMOSPHERE_OBSERVER_HEIGHT,
+					observerUpDirection: ATMOSPHERE_OBSERVER_UP_DIRECTION,
+				}),
+				sceneScale: ATMOSPHERE_SCENE_SCALE,
+				sourceAngularRadius: ATMOSPHERE_SOURCE_ANGULAR_RADIUS,
+				maximumScatteringOrder: 4,
+				...(distantSunCacheState === 'ready' ? {sceneCacheAsset: ASSET} : {}),
+				distantSunCacheState,
+				colorDisplayModelConfiguration: {model: 'basic-bruneton'},
+				presentationFilters,
+			});
 		const ready = createMode('ready');
 		const dark = createMode('dark');
 		try {

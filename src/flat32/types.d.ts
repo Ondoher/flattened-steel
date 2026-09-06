@@ -3,8 +3,7 @@ interface Window {
 	__flat32PerformanceSamples?: ShaderPerformanceSample[];
 }
 
-type Flat32ColorModelId =
-	'basic-bruneton' | 'color-reset-slope-078-p9' | 'ferwerda-control';
+type Flat32ColorModelId = 'basic-bruneton' | 'color-reset-slope-078-p9' | 'ferwerda-control';
 
 type Flat32ColorDisplayModelConfiguration =
 	| Readonly<{

@@ -2,9 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 
 import {CAPTURE_TIMES} from '../../experiments/b1-directional-sky-radiance/benchmark-domain.js';
-import B1Direct40CacheAssetSetManifest, {
-	B1_DIRECT40_PROFILE_FAMILY,
-} from './B1Direct40CacheAssetSetManifest.js';
+import B1Direct40CacheAssetSetManifest, {B1_DIRECT40_PROFILE_FAMILY} from './B1Direct40CacheAssetSetManifest.js';
 
 const HASH = 'a'.repeat(64);
 

@@ -229,7 +229,10 @@ describe('LocalLightLevelCalculator', /** Called by Jasmine to register the name
 		directionToLight = /** @type {UnitVector3} */ ([Math.sqrt(1 - 0.9707576860549317 ** 2), 0, 0.9707576860549317]);
 		measured = calculator.measureConfiguredReceiverDirectLight(request);
 		expect(measured.photopicDirectNormalIlluminance.value / Math.PI).toBeCloseTo(fullSourcePhotopicProxy, 9);
-		expect(measured.directHorizontal.values[0]).toBeCloseTo(measured.directNormal.values[0] * 0.9707576860549317, 14);
+		expect(measured.directHorizontal.values[0]).toBeCloseTo(
+			measured.directNormal.values[0] * 0.9707576860549317,
+			14,
+		);
 
 		directionToLight = /** @type {UnitVector3} */ ([
 			Math.cos((9.74525026663458 * Math.PI) / 180),

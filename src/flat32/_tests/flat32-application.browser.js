@@ -112,9 +112,7 @@ describeFullCache('Flat32 scene application (full production cache)', () => {
 		expect(['setting-up-atmosphere', 'ready']).toContain(shell.dataset.flat32State);
 		expect(shell.dataset.flat32ColorModel).toBe('color-reset-slope-078-p9');
 		expect(shell.dataset.flat32StellarCatalog).toBe('brightest-2000');
-		expect(shell.dataset.flat32PresentationFilters).toBe(
-			'human-mesopic-luminance-v1,human-low-light-chroma-v1',
-		);
+		expect(shell.dataset.flat32PresentationFilters).toBe('human-mesopic-luminance-v1,human-low-light-chroma-v1');
 		expect(pairingState.textContent.trim()).toBe('Spherical geometry \u00b7 distant Sun');
 		expect(shell.dataset.flat32SourceLightCount).toBe('7');
 		expect(shell.dataset.flat32AmbientLightCount).toBe('1');
@@ -228,9 +226,7 @@ describeFullCache('Flat32 scene application (full production cache)', () => {
 		expect(canvas.dataset.flat32RenderPath).toBe('direct-three');
 		expect(atmosphereButton.textContent.trim()).toBe('Atmosphere Shader: Off');
 		expect(atmosphereButton.getAttribute('aria-pressed')).toBe('false');
-		const directPixels = new Uint8Array(
-			context.drawingBufferWidth * context.drawingBufferHeight * 4,
-		);
+		const directPixels = new Uint8Array(context.drawingBufferWidth * context.drawingBufferHeight * 4);
 		context.readPixels(
 			0,
 			0,

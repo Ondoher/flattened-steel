@@ -1,0 +1,22 @@
+{
+  "schemaId": "spectral-color-stage2b-output-proof-fixture-v1",
+  "bridgeFixture": "experiments/extraterrestrial/fixtures/spectral-color-stage2b-reference-bridge-v1.json",
+  "bisectionIterations": 56,
+  "syntheticQFractions": [0, 0.0001, 0.001, 0.01, 0.1, 0.25, 0.5, 0.75, 1],
+  "syntheticColorfulnessRatios": [0, 0.02, 0.1, 0.25],
+  "syntheticHuesDegrees": [0, 30, 60, 120, 180, 240, 300, 359.999],
+  "tolerances": {
+    "roundTripRelativeXyz": 0.00002,
+    "roundTripAbsoluteXyz": 0.000000001,
+    "correlateAbsolute": 0.000001,
+    "inputEquivalenceAbsolute": 0.000002,
+    "inputEquivalenceRelative": 0.00002,
+    "inputEquivalenceHueDegrees": 0.1,
+    "hueDegrees": 0.000001,
+    "neutralEncodedSpread": 0.000002,
+    "rgbBoundsAbsolute": 0.000000000001,
+    "continuityEncodedDistance": 0.0002,
+    "plateauEncodedDistance": 0.000002,
+    "ratioRelative": 0.000000001
+  }
+}

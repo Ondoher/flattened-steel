@@ -150,9 +150,7 @@ export function resolveFlat32ProductionSelections(configuration = {}) {
 		throw new RangeError(`Flat32 stellar catalog ${String(stellarCatalog)} is not supported.`);
 	}
 	const presentationFilters = acceptPresentationFilters(record.presentationFilters ?? []);
-	const presentationFilterConfigurationIdentity = new ViewPresentationFilterRegistry(
-		presentationFilters,
-	).identity;
+	const presentationFilterConfigurationIdentity = new ViewPresentationFilterRegistry(presentationFilters).identity;
 	return Object.freeze({
 		colorDisplayModelConfiguration: resolveFlat32ColorDisplayModelConfiguration(
 			record.colorDisplayModelConfiguration,

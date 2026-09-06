@@ -232,8 +232,7 @@ void main() {
 		composer.addPass(displayPass);
 		this._directDisplayComposer = composer;
 		this._directDisplayPass = displayPass;
-		this._canvas.dataset.flat32DirectDisplayBoundary =
-			'bruneton-renderer-linear-to-display-srgb-v1';
+		this._canvas.dataset.flat32DirectDisplayBoundary = 'bruneton-renderer-linear-to-display-srgb-v1';
 	}
 
 	/**

@@ -1,0 +1,461 @@
+{
+  "schemaId": "algorithm32-color-reset-cr4a-sunset-paper-visual-comparison-input-v1",
+  "experiment": {
+    "id": "CR4A",
+    "slug": "sunset-paper-visual-comparison",
+    "kind": "qualitative-control-inventory",
+    "candidate": null,
+    "frozenBeforeExecution": true,
+    "purpose": "Place current Native15/Q30 Algorithm32 sunset imagery beside the paper's subjective sunrise swatches and low-Sun full-spectral sky domes, while preserving normalized and absolute-brightness interpretations as separate controls."
+  },
+  "parents": {
+    "paperReferenceInventory": {
+      "namespace": "color-reset",
+      "runId": "000016-paper-sunset-reference-inventory",
+      "artifactCount": 50,
+      "artifactBytes": 8959955,
+      "artifactSetSha256": "e5c45a85efb4107a0440f6d3af0f08ff562c52cf0b1910473d6056987241ae37",
+      "manifest": {
+        "path": "artifact-manifest.json",
+        "byteLength": 9219,
+        "sha256": "fb239c385666a51e781383e8f6d68ef36ecdf43ad991886ce41e8452c8509480"
+      },
+      "referenceInventory": {
+        "path": "evidence/reference-inventory.json",
+        "byteLength": 38970,
+        "sha256": "8a584f5fb9c081472ce0d33d9c9b6c7cf19b4a333fdc366cba2e900cb1c46d33"
+      },
+      "panelIdentities": {
+        "path": "evidence/panel-identities.json",
+        "byteLength": 10777,
+        "sha256": "638f62152de6fbd386f5c55ce2878f71fd413237c54a2f0dc0a9c7935c0cec6e"
+      },
+      "imageDerivations": {
+        "path": "evidence/image-derivations.json",
+        "byteLength": 60380,
+        "sha256": "42d79e3d4f033cf3a4f98eaa41f81a4d5d430e357f7a71d7a38a6a19c3aaaf62"
+      },
+      "proof": {
+        "path": "evidence/proof.json",
+        "byteLength": 12760,
+        "sha256": "18ae2907ca5f1223fe4711ac235c396160584486c5d02fd67fa219891da2a837"
+      },
+      "copyArtifacts": [
+        "reference/figure9-sunrise-nishita93.png",
+        "reference/figure9-sunrise-nishita96.png",
+        "reference/figure9-sunrise-preetham.png",
+        "reference/figure9-sunrise-oneal.png",
+        "reference/figure9-sunrise-haber.png",
+        "reference/figure9-sunrise-bruneton.png",
+        "reference/figure9-sunrise-elek.png",
+        "reference/figure9-sunrise-hosek.png",
+        "reference/figure1-z87-nishita93.png",
+        "reference/figure1-z87-nishita96.png",
+        "reference/figure1-z87-preetham.png",
+        "reference/figure1-z87-oneal.png",
+        "reference/figure1-z87-haber.png",
+        "reference/figure1-z87-bruneton.png",
+        "reference/figure1-z87-elek.png",
+        "reference/figure1-z87-hosek.png",
+        "reference/figure1-z87-libradtran.png"
+      ],
+      "copyBoundary": "Copy only the 17 immutable reference panels into the new run. Do not copy the parent's three figures because the complete comparison writes new derivatives at those same run-relative paths."
+    }
+  },
+  "claimBoundary": {
+    "summary": "This is a labeled qualitative color, gradient, and angular-structure comparison only. It is not an RMSE, similarity, validation, model-ranking, measurement, or absolute-accuracy experiment.",
+    "mandatoryStatements": [
+      "The paper and Algorithm32 scenes differ in date, geographic location, atmospheric profile, solar-zenith angle, source azimuth, and spectral discretization.",
+      "The paper's Figure 9 sunrise panels are uniformly normalized per model to 36 W/m^2 total sky irradiance, so they cannot support an absolute-brightness judgment.",
+      "The paper's Figure 1 z87 row has no measured-sky panel and therefore supplies no measurement authority.",
+      "The retained paper panels are 8-bit display PNGs, not spectral radiance or luminance fields.",
+      "Algorithm32 uses the accepted production Native15 basis and Q30 camera-path transport; the paper panels do not use that wavelength contract.",
+      "Source-relative rotational alignment assumes a horizontally homogeneous atmosphere and spherical ground and is only a display-alignment operation.",
+      "No paper-panel pixel difference, resemblance score, RMSE, threshold, pass, failure, or model ordering is permitted.",
+      "The z87 bridge reduces the solar-zenith mismatch but does not make the atmosphere, wavelength basis, date, or location equivalent.",
+      "The actual San Jose sunset row is the product-facing subject; the z87 row is an orientation and low-Sun bridge only."
+    ],
+    "allowedObservations": [
+      "qualitative hue family",
+      "warm-horizon versus blue-upper-sky separation",
+      "smoothness and spatial extent of gradients",
+      "location and shape of angular structures",
+      "whether normalized and absolute presentations lead to different visual conclusions"
+    ],
+    "objectiveAccuracyClaim": false,
+    "appearanceAcceptanceGate": false,
+    "similarityMetricGate": false,
+    "rmseGate": false
+  },
+  "paper": {
+    "title": "A Qualitative and Quantitative Evaluation of 8 Clear Sky Models",
+    "author": "Eric Bruneton",
+    "paperUrl": "https://arxiv.org/abs/1612.04336",
+    "retainedPdfPath": "archives/downloads/bruneton-clear-sky-models-paper-1612.04336/paper.pdf",
+    "retainedPdfByteLength": 9751196,
+    "retainedPdfSha256": "a1220d40bc0ed6fd35e8fe728365fb5b371a615051d505dcd611f61ff22dd5c5",
+    "sourceCheckout": {
+      "path": "references/downloads/bruneton-clear-sky-models-4df2ec6609bc-full/clear-sky-models-4df2ec6609bc0127a478bd34fff29c94352579cc",
+      "commit": "4df2ec6609bc0127a478bd34fff29c94352579cc",
+      "comparisonSourcePath": "atmosphere/comparisons.cc",
+      "comparisonSourceSha256": "2d9585a8f50a6dc3791eb5337ddf72f4b1a2b79c5c5e0b678e5db5186770b5f5",
+      "mainSourcePath": "main.cc",
+      "mainSourceSha256": "f2d67185516f0181c4803ff38f2245c8bc2151076eff94288ef62f8a223c78d0"
+    }
+  },
+  "figure9SunriseSwatches": {
+    "role": "subjective irradiance-normalized color and gradient reference",
+    "figure": 9,
+    "printedPage": 11,
+    "pdfPageIndex": 10,
+    "row": "sunrise",
+    "extractor": {
+      "path": "experiments/extraterrestrial/color-reset/reference/extract-bruneton-figure9.py",
+      "cli": "python experiments/extraterrestrial/color-reset/reference/extract-bruneton-figure9.py <retained-pdf-path>",
+      "stdoutSchemaId": "bruneton-figure9-sunrise-xobjects-v1",
+      "writesFiles": false,
+      "expectedCombinedByteLength": 2268521,
+      "expectedCombinedSha256": "6f4359eebd6eaad3d418b0598f1359d56f3b2e42b2721908352f12891f98ed7d"
+    },
+    "paperScene": {
+      "location": {"name": "Cornell paper site", "latitudeDegrees": 42.44337, "longitudeDegrees": -76.48163},
+      "date": "2013-05-27",
+      "localTime": "06:00",
+      "utcTime": "2013-05-27T10:00:00.000Z",
+      "sunAzimuthDegreesForcedByPaper": -30,
+      "whiteBalance": false
+    },
+    "modelOrder": ["nishita93", "nishita96", "preetham", "oneal", "haber", "bruneton", "elek", "hosek"],
+    "panels": [
+      {"modelId": "nishita93", "modelLabel": "Nishita93", "objectName": "Im195", "outputPath": "reference/figure9-sunrise-nishita93.png", "byteLength": 284192, "sha256": "4bf9b52a580c4b57ed6b8f3d2f3e82586e47b5396ec9007f02cf8cf3f29e9e03"},
+      {"modelId": "nishita96", "modelLabel": "Nishita96", "objectName": "Im196", "outputPath": "reference/figure9-sunrise-nishita96.png", "byteLength": 285258, "sha256": "094596d2387dd5a7a5c6ca5051bf2271175868b1210c2a8c87f2372e19e3c582"},
+      {"modelId": "preetham", "modelLabel": "Preetham", "objectName": "Im197", "outputPath": "reference/figure9-sunrise-preetham.png", "byteLength": 323278, "sha256": "4dcb62d011bfed95ea157256062d636094f78592c647eb23fee26435cdffb146"},
+      {"modelId": "oneal", "modelLabel": "O'Neal", "objectName": "Im198", "outputPath": "reference/figure9-sunrise-oneal.png", "byteLength": 280544, "sha256": "f1e1eb9fa45fbe51bcf106c12d8cd0a2eab78398c67af9a7fd13a00659a709ba"},
+      {"modelId": "haber", "modelLabel": "Haber", "objectName": "Im199", "outputPath": "reference/figure9-sunrise-haber.png", "byteLength": 279781, "sha256": "9af05f47dd94feb1d57e4783e4245d1eeba87b42c7ba86f7073c405427264f08"},
+      {"modelId": "bruneton", "modelLabel": "Bruneton", "objectName": "Im200", "outputPath": "reference/figure9-sunrise-bruneton.png", "byteLength": 262057, "sha256": "e3ca229bdad0f9252ddf22781cc8e1bdbbe9669bd85274a13ffafa4a9196738f"},
+      {"modelId": "elek", "modelLabel": "Elek", "objectName": "Im201", "outputPath": "reference/figure9-sunrise-elek.png", "byteLength": 265749, "sha256": "51d7706dfaae8f5a20b1ddf3c3d9df390a21e32af43e834bb170a6a4ad4e78b4"},
+      {"modelId": "hosek", "modelLabel": "Hosek", "objectName": "Im202", "outputPath": "reference/figure9-sunrise-hosek.png", "byteLength": 287662, "sha256": "74aa2a073b406953544c5f40ff5570f30250dc13a52bab3b784ec22380b01bb9"}
+    ],
+    "imageContract": {
+      "widthPixels": 1024,
+      "heightPixels": 576,
+      "colorMode": "RGB",
+      "bitDepthPerComponent": 8,
+      "horizontalFieldOfViewDegrees": 90,
+      "verticalFieldOfViewEquation": "2 * atan(tan((90 degrees) / 2) * 576 / 1024)",
+      "verticalFieldOfViewRadians": 1.0247789206214752,
+      "verticalFieldOfViewDegrees": 58.71550708558254,
+      "cameraCenterElevationDegrees": 29.35775354279127,
+      "basis": {
+        "left": [1, 0, 0],
+        "topEquation": "[0, -sin(verticalFov/2), cos(verticalFov/2)]",
+        "centerEquation": "[0, cos(verticalFov/2), sin(verticalFov/2)] * width / (2 * tan(horizontalFov/2))"
+      },
+      "pixelRayEquation": "normalize(center + left * (i - width/2) + top * (height - 1 - j - height/2))",
+      "viewZenithEquation": "acos(viewDirection.z)",
+      "viewAzimuthEquation": "atan2(viewDirection.x, viewDirection.y)",
+      "horizonPlacement": "lower image edge"
+    },
+    "normalizationContract": {
+      "targetTotalSkyIrradianceWattsPerSquareMeter": 36,
+      "factorEquation": "normalizationFactor = 36 W/m^2 / Integral(GetSkyIrradiance(observerAltitude=0 m, sunZenith))",
+      "application": "Multiply both sky radiance and the separately inserted transmitted solar-disk radiance by the same per-model factor before color projection.",
+      "absoluteBrightnessPreserved": false
+    },
+    "solarDiskContract": {
+      "angularDiameterDegrees": 0.5357,
+      "angularRadiusRadians": 0.004674864401466811,
+      "solidAngleEquation": "2 * pi * (1 - cos((0.5357 degrees)/2)) sr",
+      "insideDiskEquation": "acos(dot(viewDirection, sunDirection)) < (0.5357 degrees)/2",
+      "radianceEquation": "GetSunIrradiance(observerAltitude=0 m, sunZenith) / solarSolidAngle"
+    },
+    "displayContract": {
+      "paperColorProjection": "GetOriginalColor(normalized radiance)",
+      "toneMapEquation": "displayRgb = 1 - exp(-rgb / (5 * 683 W m^-2 sr^-1))",
+      "toneMapDenominator": 3415,
+      "whiteBalance": false,
+      "quantization": "round(255 * displayRgb) after Floyd-Steinberg error diffusion",
+      "floydSteinbergWeights": {"right": "7/16", "downLeft": "3/16", "down": "5/16", "downRight": "1/16"},
+      "outputTransfer": "No additional transfer equation is present in RenderSkyImage; compare the retained PNG bytes as the paper's display artifact."
+    }
+  },
+  "figure1LowSunDomes": {
+    "role": "absolute-display low-Sun angular-structure reference",
+    "figure": 1,
+    "printedPage": 4,
+    "pdfPageIndex": 3,
+    "rowId": "06h00-z87",
+    "solarZenithDegrees": 87,
+    "sunAzimuthDegrees": -25.83454348280912,
+    "measurementAvailable": false,
+    "metadata": {
+      "path": "references/downloads/bruneton-clear-sky-models-arxiv-1612.04336/figure1-full-spectral/metadata.json",
+      "byteLength": 1685,
+      "sha256": "1780a774f6bc7c73faf65deb983cdb02279c7114049e98129af650556b068756"
+    },
+    "attribution": {
+      "path": "references/downloads/bruneton-clear-sky-models-arxiv-1612.04336/figure1-full-spectral/ATTRIBUTION.md",
+      "byteLength": 1502,
+      "sha256": "65abcc734d479708a920b740d0a2b3cd45952833ed042e4dcb1cfab6cca39e7f"
+    },
+    "modelOrder": ["nishita93", "nishita96", "preetham", "oneal", "haber", "bruneton", "elek", "hosek", "libradtran"],
+    "panels": [
+      {"modelId": "nishita93", "modelLabel": "Nishita93", "sourcePath": "references/downloads/bruneton-clear-sky-models-arxiv-1612.04336/figure1-full-spectral/figure1-nishita93-06h00-z87.png", "outputPath": "reference/figure1-z87-nishita93.png", "byteLength": 33582, "sha256": "dc41c008646c4f750e0f1b96100336eb0173640004eda3f956d13b17c3500023"},
+      {"modelId": "nishita96", "modelLabel": "Nishita96", "sourcePath": "references/downloads/bruneton-clear-sky-models-arxiv-1612.04336/figure1-full-spectral/figure1-nishita96-06h00-z87.png", "outputPath": "reference/figure1-z87-nishita96.png", "byteLength": 34148, "sha256": "a247b279ba3b064b2408126bc871f4d402f310e3d6a72bc60e893225506513ed"},
+      {"modelId": "preetham", "modelLabel": "Preetham", "sourcePath": "references/downloads/bruneton-clear-sky-models-arxiv-1612.04336/figure1-full-spectral/figure1-preetham-06h00-z87.png", "outputPath": "reference/figure1-z87-preetham.png", "byteLength": 29126, "sha256": "c1235165d7a7e215443138fd4e1601b515ff5099cc5bcb553bb778cba0f3733b"},
+      {"modelId": "oneal", "modelLabel": "O'Neal", "sourcePath": "references/downloads/bruneton-clear-sky-models-arxiv-1612.04336/figure1-full-spectral/figure1-oneal-06h00-z87.png", "outputPath": "reference/figure1-z87-oneal.png", "byteLength": 35763, "sha256": "a26f0c0f9fc2405e49175f5d5d5f8396f8c98d94f4ec3167a35e339d2d021c4c"},
+      {"modelId": "haber", "modelLabel": "Haber", "sourcePath": "references/downloads/bruneton-clear-sky-models-arxiv-1612.04336/figure1-full-spectral/figure1-haber-06h00-z87.png", "outputPath": "reference/figure1-z87-haber.png", "byteLength": 32960, "sha256": "1251dd310fdf7a00188b9477d754bee1ddf913d795a62dcea26bb15b2437201a"},
+      {"modelId": "bruneton", "modelLabel": "Bruneton", "sourcePath": "references/downloads/bruneton-clear-sky-models-arxiv-1612.04336/figure1-full-spectral/figure1-bruneton-06h00-z87.png", "outputPath": "reference/figure1-z87-bruneton.png", "byteLength": 34170, "sha256": "4d525b0e3f8a086e71e1bde698c87d333e40c8df42f042997ce994716a4a804e"},
+      {"modelId": "elek", "modelLabel": "Elek", "sourcePath": "references/downloads/bruneton-clear-sky-models-arxiv-1612.04336/figure1-full-spectral/figure1-elek-06h00-z87.png", "outputPath": "reference/figure1-z87-elek.png", "byteLength": 34170, "sha256": "4d525b0e3f8a086e71e1bde698c87d333e40c8df42f042997ce994716a4a804e"},
+      {"modelId": "hosek", "modelLabel": "Hosek", "sourcePath": "references/downloads/bruneton-clear-sky-models-arxiv-1612.04336/figure1-full-spectral/figure1-hosek-06h00-z87.png", "outputPath": "reference/figure1-z87-hosek.png", "byteLength": 34611, "sha256": "2bb2a49f73ee321786a48501e4d5ae3394956d1e33346774046f8fe54db8bf4b"},
+      {"modelId": "libradtran", "modelLabel": "libRadTran", "sourcePath": "references/downloads/bruneton-clear-sky-models-arxiv-1612.04336/figure1-full-spectral/figure1-libradtran-06h00-z87.png", "outputPath": "reference/figure1-z87-libradtran.png", "byteLength": 32949, "sha256": "a601bff4fa0bbb72d991d718e9c537aec0418fcad1ce40d434bf942447714079"}
+    ],
+    "imageContract": {
+      "widthPixels": 256,
+      "heightPixels": 256,
+      "projection": "upper-hemisphere equidistant fisheye sampled at pixel centers",
+      "xEquation": "x = (i + 0.5 - 128) / 128",
+      "yEquation": "y = (128 - 0.5 - j) / 128",
+      "radiusEquation": "radius = sqrt(x*x + y*y)",
+      "outsideDisk": "radius >= 1 is opaque black",
+      "viewZenithEquation": "viewZenith = radius * pi / 2",
+      "viewAzimuthEquation": "viewAzimuth = atan2(x, -y)",
+      "solarDiskInserted": false,
+      "paperAnnotations": "The extracted panels retain the paper's red source cross and black directional-sample crosses."
+    },
+    "displayContract": {
+      "irradianceNormalization": false,
+      "paperColorProjection": "GetSrgbColor(full-spectral radiance)",
+      "toneMapEquation": "displayRgb = 1 - exp(-rgb / (5 * 683 W m^-2 sr^-1))",
+      "toneMapDenominator": 3415,
+      "quantization": "integer truncation of 255 * displayRgb before the paper annotations",
+      "outsideDiskRgb": [0, 0, 0]
+    }
+  },
+  "algorithm32Control": {
+    "sourceKind": "distant Sun",
+    "geometry": "spherical Earth and atmosphere",
+    "ground": "canonical black spherical ground",
+    "sceneObjects": false,
+    "celestialSources": false,
+    "cache": {
+      "compatibilityIdentity": "algorithm32-native48-z180-w27-f68-native15-n4-q30-ozone-v1",
+      "spectralBasis": "production Native15",
+      "spectralChannelCount": 15,
+      "outgoingDirectionDomain": "W27",
+      "incomingSampleDirections": "F68",
+      "maximumScatteringOrder": 4,
+      "cameraPathQuadrature": "Q30 quadratic-near-observer",
+      "ozone": true,
+      "exactSceneCacheRequired": true
+    },
+    "display": {
+      "projection": "production Native15 to Bruneton pre-display linear RGB",
+      "toneMapEquation": "displayRgb = 1 - exp(-max(linearRgb, 0) / (5 * 683))",
+      "candidateCorrection": null
+    },
+    "runtime": {
+      "sceneScaleMetersPerSceneUnit": 1000,
+      "sceneDepthMaxMeters": 500000,
+      "sourceAngularRadiusRadians": 0.004675,
+      "groundWidthSegments": 192,
+      "groundHeightSegments": 96,
+      "setupViewportPixels": [16, 16]
+    },
+    "orientation": {
+      "figure9AlignedSunAzimuthDegrees": -30,
+      "figure1AlignedSunAzimuthDegrees": -25.83454348280912,
+      "method": "Rotate only the horizontally homogeneous source-relative display frame about local zenith; do not rotate or resample any paper PNG.",
+      "actualGeographicDome": "Render a separate dome using the actual San Jose solar azimuth."
+    }
+  },
+  "spectralComparisonBoundary": {
+    "algorithm32": {"basis": "production Native15", "channelCount": 15},
+    "figure9Paper": {"basis": "each paper model's original wavelength implementation", "uniformChannelCount": false},
+    "figure1Paper": {"basis": "paper full-spectral comparison", "wavelengthSampleCount": 40},
+    "requiredLabel": "Every Algorithm32 panel must say Native15/Q30; every paper row must retain its original-paper or full-spectral label.",
+    "equivalenceClaim": false
+  },
+  "location": {
+    "id": "san-jose-california",
+    "latitudeDegrees": 37.3382,
+    "longitudeDegrees": -121.8863,
+    "observerAltitudeMeters": 1.7
+  },
+  "scenes": [
+    {
+      "id": "z87-bridge",
+      "label": "San Jose z87 bridge",
+      "timeIso": "2024-06-21T03:09:05.179Z",
+      "solarZenithDegrees": 87.00000072411677,
+      "solarElevationDegrees": 2.999999275883228,
+      "solarAzimuthDegrees": -62.52738564649884,
+      "directionToSourceLocal": [-0.8860155144368624, 0.4606923671848415, 0.05233594362204223],
+      "cacheExpectation": {"status": "ready", "representativeSolarZenithDegrees": 87},
+      "renderInThisControl": true
+    },
+    {
+      "id": "actual-sunset",
+      "label": "San Jose actual sunset",
+      "timeIso": "2024-06-21T03:26:03.503Z",
+      "solarZenithDegrees": 89.95791522653448,
+      "solarElevationDegrees": 0.042084773465515,
+      "solarAzimuthDegrees": -59.99625193137896,
+      "directionToSourceLocal": [-0.8659924602538109, 0.5000565160730931, 0.0007345177958817675],
+      "cacheExpectation": {"status": "ready", "representativeSolarZenithDegrees": 90},
+      "renderInThisControl": true
+    },
+    {
+      "id": "sunset-plus-10-minutes",
+      "label": "Ten minutes after sunset follow-on",
+      "timeIso": "2024-06-21T03:36:03.503Z",
+      "solarZenithDegrees": 91.66578905821635,
+      "solarElevationDegrees": -1.6657890582163524,
+      "solarAzimuthDegrees": -58.465392983743854,
+      "directionToSourceLocal": [-0.8519642202082616, 0.5227924416054786, -0.029069408062620844],
+      "cacheExpectation": {"status": "ready", "representativeSolarZenithDegrees": 92},
+      "renderInThisControl": false,
+      "role": "frozen qualitative follow-on input"
+    },
+    {
+      "id": "sunset-plus-60-minutes",
+      "label": "One hour after sunset follow-on",
+      "timeIso": "2024-06-21T04:26:03.503Z",
+      "solarZenithDegrees": 99.74525026663457,
+      "solarElevationDegrees": -9.74525026663458,
+      "solarAzimuthDegrees": -50.28546619231275,
+      "directionToSourceLocal": [-0.75813747424278, 0.6297427897959174, -0.16926780216223475],
+      "cacheExpectation": {"status": "ready", "representativeSolarZenithDegrees": 100},
+      "renderInThisControl": false,
+      "role": "frozen nautical-twilight follow-on input"
+    }
+  ],
+  "renderContracts": {
+    "normalizedSwatches": {
+      "algorithm32Rows": ["z87-bridge", "actual-sunset"],
+      "projection": "exact Figure 9 pinhole projection",
+      "sunAzimuthDegreesInComparisonFrame": -30,
+      "normalization": "36 W/m^2 total Native15 diffuse-horizontal sky irradiance, computed separately for each Algorithm32 scene",
+      "solarDisk": "exact Figure 9 angular diameter, solid-angle replacement, and shared normalization",
+      "display": "Native15 production projection followed by the exact Figure 9 exponential tone map and Floyd-Steinberg quantization",
+      "interpretation": "normalized hue and structure only"
+    },
+    "absoluteDomes": {
+      "algorithm32Rows": ["z87-bridge", "actual-sunset"],
+      "projection": "exact Figure 1 upper-hemisphere equidistant fisheye projection",
+      "sunAzimuthDegreesInAlignedComparisonFrame": -25.83454348280912,
+      "normalization": "none",
+      "solarDisk": "none",
+      "display": "unchanged production Bruneton exponential tone map",
+      "cleanPanels": true,
+      "paperPanelsRemainAnnotated": true,
+      "interpretation": "absolute display response and angular structure, without measurement authority"
+    },
+    "actualGeographicDome": {
+      "scene": "actual-sunset",
+      "projection": "exact Figure 1 projection",
+      "sunAzimuthDegrees": -59.99625193137896,
+      "normalization": "none",
+      "display": "unchanged production Bruneton exponential tone map"
+    },
+    "luminanceDiagnostic": {
+      "scene": "actual-sunset",
+      "projection": "exact Figure 1 projection in the aligned comparison frame",
+      "quantity": "pre-display luminance",
+      "units": "cd/m^2",
+      "scale": "logarithmic false color with a run-recorded finite domain",
+      "purpose": "Separate a spectral/transport field defect from display quantization or exposure."
+    }
+  },
+  "outputs": {
+    "paperSwatchPanels": [
+      "reference/figure9-sunrise-nishita93.png",
+      "reference/figure9-sunrise-nishita96.png",
+      "reference/figure9-sunrise-preetham.png",
+      "reference/figure9-sunrise-oneal.png",
+      "reference/figure9-sunrise-haber.png",
+      "reference/figure9-sunrise-bruneton.png",
+      "reference/figure9-sunrise-elek.png",
+      "reference/figure9-sunrise-hosek.png"
+    ],
+    "paperDomePanels": [
+      "reference/figure1-z87-nishita93.png",
+      "reference/figure1-z87-nishita96.png",
+      "reference/figure1-z87-preetham.png",
+      "reference/figure1-z87-oneal.png",
+      "reference/figure1-z87-haber.png",
+      "reference/figure1-z87-bruneton.png",
+      "reference/figure1-z87-elek.png",
+      "reference/figure1-z87-hosek.png",
+      "reference/figure1-z87-libradtran.png"
+    ],
+    "oursCleanPanels": [
+      {"id": "z87-normalized-swatch", "path": "captures/ours-z87-paper-normalized-swatch.png", "widthPixels": 1024, "heightPixels": 576},
+      {"id": "actual-sunset-normalized-swatch", "path": "captures/ours-actual-sunset-paper-normalized-swatch.png", "widthPixels": 1024, "heightPixels": 576},
+      {"id": "z87-absolute-dome", "path": "captures/ours-z87-absolute-dome.png", "widthPixels": 256, "heightPixels": 256},
+      {"id": "actual-sunset-absolute-dome", "path": "captures/ours-actual-sunset-absolute-dome.png", "widthPixels": 256, "heightPixels": 256},
+      {"id": "actual-sunset-geographic-dome", "path": "captures/ours-actual-sunset-geographic-dome.png", "widthPixels": 256, "heightPixels": 256}
+    ],
+    "actualGeographicDome": "captures/ours-actual-sunset-geographic-dome.png",
+    "luminanceDiagnostic": {
+      "id": "actual-sunset-pre-display-luminance",
+      "path": "diagnostics/ours-actual-sunset-pre-display-luminance.png",
+      "widthPixels": 256,
+      "heightPixels": 256
+    },
+    "rawFields": [
+      {"id": "z87-aligned-dome", "path": "data/z87-aligned-dome-path-radiance-native15.f32le", "directionCount": 51468, "channelCount": 15, "valueCount": 772020, "scalarType": "float32", "byteOrder": "little-endian", "byteLength": 3088080, "layout": "direction-major then Native15 channel"},
+      {"id": "z87-aligned-swatch", "path": "data/z87-aligned-swatch-path-radiance-native15.f32le", "directionCount": 589824, "channelCount": 15, "valueCount": 8847360, "scalarType": "float32", "byteOrder": "little-endian", "byteLength": 35389440, "layout": "direction-major then Native15 channel"},
+      {"id": "actual-sunset-aligned-dome", "path": "data/actual-sunset-aligned-dome-path-radiance-native15.f32le", "directionCount": 51468, "channelCount": 15, "valueCount": 772020, "scalarType": "float32", "byteOrder": "little-endian", "byteLength": 3088080, "layout": "direction-major then Native15 channel"},
+      {"id": "actual-sunset-geographic-dome", "path": "data/actual-sunset-geographic-dome-path-radiance-native15.f32le", "directionCount": 51468, "channelCount": 15, "valueCount": 772020, "scalarType": "float32", "byteOrder": "little-endian", "byteLength": 3088080, "layout": "direction-major then Native15 channel"},
+      {"id": "actual-sunset-aligned-swatch", "path": "data/actual-sunset-aligned-swatch-path-radiance-native15.f32le", "directionCount": 589824, "channelCount": 15, "valueCount": 8847360, "scalarType": "float32", "byteOrder": "little-endian", "byteLength": 35389440, "layout": "direction-major then Native15 channel"}
+    ],
+    "sceneMeasurements": "evidence/native15-scene-measurements.json",
+    "paperSwatchColumn": "figures/cr4a-figure9-sunrise-swatch-column.png",
+    "paperDomeColumn": "figures/cr4a-figure1-z87-sky-dome-column.png",
+    "decisionPlate": "figures/cr4a-sunset-paper-visual-decision-plate.png",
+    "compositeImages": [
+      {"id": "paper-swatch-column", "path": "figures/cr4a-figure9-sunrise-swatch-column.png", "widthPixels": 1064, "heightPixels": 6578},
+      {"id": "paper-dome-column", "path": "figures/cr4a-figure1-z87-sky-dome-column.png", "widthPixels": 552, "heightPixels": 3704},
+      {"id": "decision-plate", "path": "figures/cr4a-sunset-paper-visual-decision-plate.png", "widthPixels": 1364, "heightPixels": 2092}
+    ],
+    "requestedImageUploadOrder": [
+      "captures/ours-z87-absolute-dome.png",
+      "captures/ours-z87-paper-normalized-swatch.png",
+      "captures/ours-actual-sunset-absolute-dome.png",
+      "captures/ours-actual-sunset-geographic-dome.png",
+      "diagnostics/ours-actual-sunset-pre-display-luminance.png",
+      "captures/ours-actual-sunset-paper-normalized-swatch.png",
+      "figures/cr4a-figure9-sunrise-swatch-column.png",
+      "figures/cr4a-figure1-z87-sky-dome-column.png",
+      "figures/cr4a-sunset-paper-visual-decision-plate.png"
+    ],
+    "analysis": "evidence/analysis.json",
+    "referenceInventory": "evidence/reference-inventory.json",
+    "panelIdentities": "evidence/panel-identities.json",
+    "imageDerivations": "evidence/image-derivations.json",
+    "progress": "progress.json"
+  },
+  "integrityGates": {
+    "integrityOnly": true,
+    "evaluateAfterAllRequestedImagesAreWritten": true,
+    "requirements": [
+      "retained PDF SHA-256, byte length, page index, XObject names, decoded dimensions, RGB mode, and all eight extracted PNG hashes match the fixture",
+      "all nine Figure 1 source paths, byte lengths, dimensions, and SHA-256 values match the fixture before copying",
+      "every requested paper panel, Algorithm32 panel, diagnostic, column, and decision plate is written and is a decodable PNG with its declared dimensions",
+      "both Algorithm32 scenes resolve exact compatible Native15 scene caches and execute Q30 transport",
+      "paper PNGs are neither rotated nor resampled; labels and layout are external composition only",
+      "normalized and absolute panels remain separately labeled and are never mixed in a numerical comparison",
+      "every derivative records exact parents, operation or equation, implementation and tool identities, material parameters, and result SHA-256",
+      "the contained implementation closure passes and direct inventories of src/algorithm32 and src/flat32 remain byte-identical"
+    ],
+    "forbiddenGates": [
+      "paper pixel RMSE",
+      "paper pixel similarity",
+      "paper resemblance threshold",
+      "model ranking",
+      "appearance acceptance",
+      "production promotion"
+    ]
+  }
+}

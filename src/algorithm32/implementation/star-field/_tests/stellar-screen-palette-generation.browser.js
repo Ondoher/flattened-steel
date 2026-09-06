@@ -176,10 +176,7 @@ function projectDirection(catalogDirection, uniforms, view = STELLAR_QUALIFICATI
 	const clip = multiplyMatrix4Vector4(view.modelViewProjectionMatrix, [east, up, -north, 0]);
 	if (!(clip[3] > 0)) return {classification: 'behind-camera'};
 	const ndc = [clip[0] / clip[3], clip[1] / clip[3]];
-	const screen = [
-		(ndc[0] + 1) * 0.5 * view.viewportSize.width,
-		(1 - ndc[1]) * 0.5 * view.viewportSize.height,
-	];
+	const screen = [(ndc[0] + 1) * 0.5 * view.viewportSize.width, (1 - ndc[1]) * 0.5 * view.viewportSize.height];
 	if (
 		screen[0] < 0 ||
 		screen[0] >= view.viewportSize.width ||
@@ -209,9 +206,7 @@ export function createCpuOracle(source, geometryContribution, view = STELLAR_QUA
 		pixelMembers.get(key).push(memberIndex);
 	}
 
-	const screenIndex = new Uint16Array(
-		view.viewportSize.width * view.viewportSize.height,
-	);
+	const screenIndex = new Uint16Array(view.viewportSize.width * view.viewportSize.height);
 	const palette = new Float64Array((layout.memberCount + 1) * layout.spectralChannelCount);
 	const visualMagnitudes = new Float64Array(layout.memberCount + 1);
 	const inputTotals = new Float64Array(layout.spectralChannelCount);
@@ -253,13 +248,17 @@ function createTexture(gl, internalFormat, width, height) {
 function createSourceTextures(gl, source) {
 	const layout = source.layout;
 	const members = createTexture(gl, gl.RGBA32F, layout.memberCount, 1);
-	gl.texSubImage2D(
-		gl.TEXTURE_2D, 0, 0, 0, layout.memberCount, 1, gl.RGBA, gl.FLOAT,
-		source.copyMemberValues(),
-	);
+	gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, layout.memberCount, 1, gl.RGBA, gl.FLOAT, source.copyMemberValues());
 	const spectra = createTexture(gl, gl.R32F, layout.memberCount, layout.spectralChannelCount);
 	gl.texSubImage2D(
-		gl.TEXTURE_2D, 0, 0, 0, layout.memberCount, layout.spectralChannelCount, gl.RED, gl.FLOAT,
+		gl.TEXTURE_2D,
+		0,
+		0,
+		0,
+		layout.memberCount,
+		layout.spectralChannelCount,
+		gl.RED,
+		gl.FLOAT,
 		source.copySpectralValues(),
 	);
 	return {members, spectra};
@@ -312,12 +311,7 @@ function expectCompleteFramebuffer(gl) {
 function executeStages(gl, stages, source, geometryContribution, view = STELLAR_QUALIFICATION_VIEW) {
 	const layout = source.layout;
 	const sourceTextures = createSourceTextures(gl, source);
-	const screenIndexTexture = createTexture(
-		gl,
-		gl.R16UI,
-		view.viewportSize.width,
-		view.viewportSize.height,
-	);
+	const screenIndexTexture = createTexture(gl, gl.R16UI, view.viewportSize.width, view.viewportSize.height);
 	const paletteRowCount = stages[0].stellarLayout.rowCount;
 	const paletteTexture = createTexture(gl, gl.R32F, layout.memberCount + 1, paletteRowCount);
 	const depth = gl.createRenderbuffer();
@@ -330,12 +324,7 @@ function executeStages(gl, stages, source, geometryContribution, view = STELLAR_
 	gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
 	gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, screenIndexTexture, 0);
 	gl.bindRenderbuffer(gl.RENDERBUFFER, depth);
-	gl.renderbufferStorage(
-		gl.RENDERBUFFER,
-		gl.DEPTH_COMPONENT24,
-		view.viewportSize.width,
-		view.viewportSize.height,
-	);
+	gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_COMPONENT24, view.viewportSize.width, view.viewportSize.height);
 	gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, depth);
 	expectCompleteFramebuffer(gl);
 	gl.viewport(0, 0, view.viewportSize.width, view.viewportSize.height);
@@ -363,9 +352,7 @@ function executeStages(gl, stages, source, geometryContribution, view = STELLAR_
 	const palette = new Float32Array((layout.memberCount + 1) * paletteRowCount);
 	gl.readPixels(0, 0, layout.memberCount + 1, paletteRowCount, gl.RED, gl.FLOAT, palette);
 	gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, screenIndexTexture, 0);
-	const screenIndex = new Uint16Array(
-		view.viewportSize.width * view.viewportSize.height,
-	);
+	const screenIndex = new Uint16Array(view.viewportSize.width * view.viewportSize.height);
 	gl.readPixels(
 		0,
 		0,
@@ -794,7 +781,10 @@ void main() { outCoverage = texelFetch(uCoverage, ivec2(gl_FragCoord.xy), 0).r; 
 				expect(execution.palette[magnitudeOffset]).toBeCloseTo(oracle.visualMagnitudes[entry], 5);
 			}
 			for (let channel = 0; channel < source.layout.spectralChannelCount; channel += 1) {
-				expect(Math.abs(outputTotals[channel] - oracle.inputTotals[channel]) / Math.max(oracle.inputTotals[channel], 1e-30)).toBeLessThan(0.0003);
+				expect(
+					Math.abs(outputTotals[channel] - oracle.inputTotals[channel]) /
+						Math.max(oracle.inputTotals[channel], 1e-30),
+				).toBeLessThan(0.0003);
 			}
 		} finally {
 			disposeExecution(gl, execution.resources);
@@ -827,12 +817,14 @@ void main() { outCoverage = texelFetch(uCoverage, ivec2(gl_FragCoord.xy), 0).r; 
 			pass.handleContextRestoration();
 			pass.render(renderer);
 			expect(pass.publicationState.active.completion).toBe('complete');
-			expect(pass.getDiagnostics()).toEqual(jasmine.objectContaining({
-				generationCount: 3,
-				contextLossCount: 1,
-				createdTargetCount: 6,
-				disposedTargetCount: 4,
-			}));
+			expect(pass.getDiagnostics()).toEqual(
+				jasmine.objectContaining({
+					generationCount: 3,
+					contextLossCount: 1,
+					createdTargetCount: 6,
+					disposedTargetCount: 4,
+				}),
+			);
 		} finally {
 			pass.dispose();
 			expect(pass.getDiagnostics().disposedTargetCount).toBe(6);

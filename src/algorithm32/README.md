@@ -7,7 +7,7 @@ experimental implementations may inform research, but production code must not
 depend on them at runtime.
 
 The authoritative implementation sequence and completion criteria live in
-[`agents/topics/algorithm32/production/production-implementation-plan.md`](../../agents/topics/algorithm32/production/production-implementation-plan.md).
+[production implementation plan](../../agents/topics/production-algorithm32/architecture-contracts/production-implementation-plan.md).
 
 ## Current State
 
@@ -27,13 +27,11 @@ layout. Production no longer constructs or uploads a geometry-expanded
 transport table for either path. The binary64 CPU transport builders remain
 reference and diagnostic authorities.
 
-The [production implementation plan](../../agents/topics/algorithm32/production/production-implementation-plan.md)
+The [production implementation plan](../../agents/topics/production-algorithm32/architecture-contracts/production-implementation-plan.md)
 owns current delivery status, completion criteria, and verification evidence.
-The completed [reconciliation record]
-(../../agents/topics/algorithm32/archive/reconciliation-2026-08-04/extraterrestrial/reconciliation.md)
+The completed [reconciliation record](../../archives/topics/retired-20260906/agents/topics/algorithm32/archive/reconciliation-2026-08-04/extraterrestrial/reconciliation.md)
 owns the standards-reconciliation checkpoint. The completed
-[Flat/local GPU transport offload plan]
-(../../agents/topics/algorithm32/flat-local/gpu-transport-offload-plan.md)
+[Flat/local GPU transport qualification](../../agents/topics/production-algorithm32/qualification/gpu-transport-offload-plan.md)
 owns that qualification boundary. Extraterrestrial production integration has
 completed typed optional Step 3, all of Step 4, and all distant-Sun cache Step
 5 groups. The exact cache contracts, sealed binary64 logical field,
@@ -58,7 +56,7 @@ Focused real-browser N1 proofs reach `ready` and visibly render the disk;
 remaining Step 9 lifecycle and visibility-matrix qualification is tracked by
 the extraterrestrial integration plan. The completed
 feature-reorganization
-record is [archived under the Algorithm32 topic](../../agents/topics/algorithm32/archive/feature-implementation-reorganization-2026-08-06/implementation-feature-reorganization-plan.md). A
+record is [retained in the local topic archive](../../archives/topics/retired-20260906/agents/topics/algorithm32/archive/feature-implementation-reorganization-2026-08-06/implementation-feature-reorganization-plan.md). A
 software-renderer result establishes conformance only, not supported-hardware
 timing or resource budgets.
 
@@ -88,7 +86,7 @@ it globally around the unchanged Figure-1 coefficient. Moon/diffuse aggregation,
 temporal smoothing, tuning, and a post-change render remain deferred.
 
 The current project supports only the production architecture's selected
-[spherical/distant and flat/local pairings](../../agents/topics/algorithm32/production/architecture-boundaries.md#supported-geometry-and-source-pairings).
+[spherical/distant and flat/local pairings](../../agents/topics/production-algorithm32/architecture-contracts/architecture-boundaries.md#supported-geometry-and-source-pairings).
 The geometry and source contracts remain independent; unused flat/distant and
 spherical/local cross-pairings are not completion or parity requirements.
 
@@ -185,49 +183,24 @@ not rotate camera or Sun directions themselves.
 
 ## Contract Rules
 
-Durable configuration, request, result, sample, serialized, and class
-properties use neutral physical names. Their values carry units as data. For
-example, use `sceneScale`, `sceneDepthMax`, and `resolveSceneDepthMax`; do not
-encode a unit in those property or method names.
+The [scientific quantities and profile overlay](../../agents/topics/standards/overlay.md#add-production-algorithm32-scientific-quantities-provenance-and-profile-completeness)
+owns the engine's durable scientific-data requirements. Examples of the selected
+API vocabulary are `sceneScale`, `sceneDepthMax`, and `resolveSceneDepthMax`;
+`altitudeMeters` is a normalized local computational value.
 
-Once a unit-bearing value has been accepted and normalized to a known unit, a
-local scalar can and should name that unit when it clarifies arithmetic, such as
-`altitudeMeters`. This exception applies only to local implementation values,
-including shader-facing normalized scalars, and not to durable object shapes.
-
-Contracts are replaced directly when they change. Do not retain aliases,
-fallback field names, alternate packet shapes, re-export adapters, or other
-backwards-compatibility bridges.
+The current API selects direct contract replacement, not a compatibility layer.
 
 Cache shader resources use direct `ShaderTextureDeclaration` entries and
 opaque `CacheRuntimeBinding` handles. A raw texture is not an alternate public
 input.
 
-The owner of a boundary validates a value when it enters the system. Internal
-code then relies on the accepted contract, JSDoc, and static type checking
-instead of repeatedly validating the same value. `Object.freeze` is not a
-contract or immutability mechanism in Algorithm32; it adds unnecessary
-complexity and must not be used for that purpose.
-
-Complex contracts belong in the nearest ambient `.d.ts` file and receive
-property-level documentation. JavaScript classes and non-trivial functions use
-JSDoc with explicit parameter and return types. Ambient contracts are named
-directly in declaration files and JSDoc; do not add `import(...).Type`,
-`import type`, or local alias bridges for them. Runtime module imports and
-external package types remain module-scoped where they are not ambient
-contracts. A class implementation file is named for and exports that class;
-reusable stateless helpers live in focused neighboring modules, and lower-level
-helpers precede the composed class or operation that uses them.
-
-Class-specific support operations use private instance methods, including pure
-operations that do not read instance state. A class module exports only its
-class; genuinely reusable operations move to cohesive utility modules, and
-module constants live in the owning `consts.js`. Use setters only for direct
-assignment with no processing; use a named method when a state change
-validates, normalizes, derives, coordinates, or otherwise performs work.
-
-Type checking owns class and module shape. Unit tests cover observable
-behavior rather than parsing class exports, private members, or declarations.
+Generic ingress validation, class/helper ownership, setter behavior, type
+placement, readonly intent, and documentation belong to canonical
+[code conventions](../../../../Users/gande/.codex/documentation/standards/code-conventions.md),
+[types](../../../../Users/gande/.codex/documentation/standards/types.md),
+[JSDoc](../../../../Users/gande/.codex/documentation/standards/jsdoc.md), and
+[testing](../../../../Users/gande/.codex/documentation/standards/testing.md),
+selected through the [folder manifest](../../agents/topics/standards/manifest.md).
 
 ## References and Experiments
 
@@ -253,7 +226,7 @@ npm run test:algorithm32
 ```
 
 The current result is recorded in the
-[baseline import status](../../agents/topics/algorithm32/production/baseline-import-status.md).
+[baseline import status](../../agents/topics/production-algorithm32/architecture-contracts/baseline-import-status.md).
 Specs live beside the source they exercise in `_tests/` directories.
 
 Run focused Three/WebGL browser conformance with:
@@ -266,7 +239,7 @@ Browser-only Jasmine specs use the adjacent `*.browser.js` suffix and run
 through Karma and headless Chrome without a Polylith or application build.
 They cover real renderer and GPU contracts that Node cannot establish. A
 software-renderer pass is conformance evidence only, not hardware performance
-evidence. The [testing topic](../../agents/topics/testing/README.md) owns the
+evidence. The [testing topic](../../agents/topics/production-algorithm32/qualification/testing-contract.md) owns the
 runner boundaries and conventions.
 
 Run the JavaScript/JSDoc type-checking lane with:

@@ -214,24 +214,30 @@ export class LocalLightLevelCalculator {
 		if (!Array.isArray(radiances) || radiances.length === 0) {
 			throw new RangeError('Sky adaptation requires at least one spectral-radiance sample.');
 		}
-		const luminances = radiances.map((candidate) => {
-			const packet = SpectralPacket.assert(candidate, {
-				quantity: SPECTRAL_QUANTITIES.RADIANCE_DENSITY,
-				units: SPECTRAL_UNITS.RADIANCE_DENSITY,
-			});
-			if (!packet.values.every((value) => Number.isFinite(value) && value >= 0)) {
-				throw new RangeError('Sky adaptation radiance must be finite and nonnegative.');
-			}
-			return packet.values.reduce((sum, value, channelIndex) => {
-				const channel = packet.basis.channels[channelIndex];
-				return sum + value * channel.width.value * this._ciePhotopicResponseAt(channel.center.value) *
-					FIGURE1_DISPLAY_CONSTANTS.maxLuminousEfficacy.value;
-			}, 0);
-		}).sort((left, right) => left - right);
+		const luminances = radiances
+			.map((candidate) => {
+				const packet = SpectralPacket.assert(candidate, {
+					quantity: SPECTRAL_QUANTITIES.RADIANCE_DENSITY,
+					units: SPECTRAL_UNITS.RADIANCE_DENSITY,
+				});
+				if (!packet.values.every((value) => Number.isFinite(value) && value >= 0)) {
+					throw new RangeError('Sky adaptation radiance must be finite and nonnegative.');
+				}
+				return packet.values.reduce((sum, value, channelIndex) => {
+					const channel = packet.basis.channels[channelIndex];
+					return (
+						sum +
+						value *
+							channel.width.value *
+							this._ciePhotopicResponseAt(channel.center.value) *
+							FIGURE1_DISPLAY_CONSTANTS.maxLuminousEfficacy.value
+					);
+				}, 0);
+			})
+			.sort((left, right) => left - right);
 		const middle = Math.floor(luminances.length / 2);
-		const value = luminances.length % 2 === 0
-			? (luminances[middle - 1] + luminances[middle]) / 2
-			: luminances[middle];
+		const value =
+			luminances.length % 2 === 0 ? (luminances[middle - 1] + luminances[middle]) / 2 : luminances[middle];
 		return Object.freeze({value, units: /** @type {const} */ ('cd m^-2')});
 	}
 

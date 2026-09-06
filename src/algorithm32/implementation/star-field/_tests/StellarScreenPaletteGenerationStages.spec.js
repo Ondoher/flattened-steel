@@ -84,7 +84,7 @@ describe('stellar screen-palette generation stages', /** Called by Jasmine to re
 	it('accepts the complete R16UI boundary without wrapping its highest candidate index', /** Called by Jasmine to exercise the named behavior. */ () => {
 		const policy = new StellarScreenPaletteGenerationPolicy(createPolicyConfiguration(65_535));
 
-			expect(policy.layout).toEqual({
+		expect(policy.layout).toEqual({
 			zeroIndex: 0,
 			candidateSlotPolicy: 'canonical-member-index-plus-one',
 			collisionRepresentative: 'lowest-canonical-member',

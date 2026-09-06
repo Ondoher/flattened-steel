@@ -511,17 +511,21 @@ export class ShaderRuntimeInstaller {
 			camera: /** @type {ShaderRuntimeCelestialViewCamera} */ (request.setup.camera),
 			viewportSize: request.setup.viewportSize,
 			logger: request.setup.logger,
-			...(hasPresentationCompatibility ? {
-				getPresentationCompatibility: () => ({
-					colorIdentity: color.id,
-					filterRegistryIdentity: registry?.identity ?? 'view-presentation-filter-registry-v1:absent',
-					scotopicWeightsIdentity: hook?.scotopicWeightsIdentity ?? null,
-					receiverLightIdentity: String(request.bindingValues['presentation.stellar.receiverLightIdentity']),
-					adaptationLuminanceCdM2: Number(
-						request.bindingValues['presentation.stellar.adaptationLuminanceCdM2'],
-					),
-				}),
-			} : {}),
+			...(hasPresentationCompatibility
+				? {
+						getPresentationCompatibility: () => ({
+							colorIdentity: color.id,
+							filterRegistryIdentity: registry?.identity ?? 'view-presentation-filter-registry-v1:absent',
+							scotopicWeightsIdentity: hook?.scotopicWeightsIdentity ?? null,
+							receiverLightIdentity: String(
+								request.bindingValues['presentation.stellar.receiverLightIdentity'],
+							),
+							adaptationLuminanceCdM2: Number(
+								request.bindingValues['presentation.stellar.adaptationLuminanceCdM2'],
+							),
+						}),
+					}
+				: {}),
 		});
 	}
 

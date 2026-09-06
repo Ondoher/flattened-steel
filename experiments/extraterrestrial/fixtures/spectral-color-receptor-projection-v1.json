@@ -1,0 +1,38 @@
+{
+  "schemaId": "spectral-color-receptor-projection-fixture-v1",
+  "input": {
+    "runId": "000258-spectral-color-stage1-ledger",
+    "artifactSetSha256": "abe89535535f523d4d04a0a5e9fe5cef86bff441f274cd998103e0121a7cacd5",
+    "ledgerPath": "evidence/spectral-ledger.json",
+    "ledgerSha256": "a1574e12645f3f0c5eff1694d609f9e73cc39ec2661cf131ad0356a09f1c55d0",
+    "sampleRole": "disk-center",
+    "eligibility": "eligible",
+    "expectedSampleCount": 25
+  },
+  "parameterFixture": "experiments/extraterrestrial/fixtures/spectral-color-receptor-parameter-v1.json",
+  "projection": {
+    "nativeSemantics": "contiguous-wavelength-bin-average",
+    "weighting": "exact integral of piecewise-linear CIE fundamentals over each native bin",
+    "oneNanometerReference": "piecewise-linear CIE fundamentals evaluated by midpoint integration over one-nanometer cells plus exact fractional bin-edge cells",
+    "spectralDensityUnits": "W m^-2 sr^-1 nm^-1",
+    "rawLmsUnits": "CIE-energy-fundamental weighted cd m^-2",
+    "xyzFObserver": "CIE 2015 XYZ_F reconstructed from CIE 2006 LMS",
+    "legacyObserverDiagnostic": "CIE 1931 2-degree; diagnostic only because it is a different observer basis"
+  },
+  "metamer": {
+    "adaptationLuminanceCdPerSquareMeter": 100,
+    "relativePerturbation": 0.45,
+    "construction": "deterministically select the strongest wrong-order witness from all four-native-bin null-space constructions",
+    "negativeControl": "apply the Naka-Rushton nonlinearity to wavelength-bin values before overlapping LMS integration"
+  },
+  "proofGates": {
+    "matrixMaximumRelativeOneNanometer": 1e-12,
+    "matrixMaximumAbsoluteOneNanometer": 1e-8,
+    "xyzRoundTripMaximumRelative": 1e-12,
+    "metamerLinearLmsMaximumRelative": 1e-12,
+    "metamerResponseMaximumAbsolute": 1e-12,
+    "minimumWrongOrderResponseDifference": 1e-6,
+    "minimumMetamerSpectralDifference": 1e-6
+  },
+  "claim": "Native-15 CIE 2006 LMS projection and nonlinear-ordering proof only; no display candidate or physiological completeness claim."
+}

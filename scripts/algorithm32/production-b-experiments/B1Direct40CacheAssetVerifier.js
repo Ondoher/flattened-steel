@@ -39,7 +39,8 @@ export default class B1Direct40CacheAssetVerifier {
 	static async verifyAsset({assetDirectory, condition, productionRevision = null}) {
 		const requestedDirectory = path.resolve(assetDirectory);
 		const canonicalDirectory = await realpath(requestedDirectory);
-		if (canonicalDirectory !== requestedDirectory) throw new Error('B1 cache asset directory may not traverse a link.');
+		if (canonicalDirectory !== requestedDirectory)
+			throw new Error('B1 cache asset directory may not traverse a link.');
 		const information = await lstat(canonicalDirectory);
 		if (!information.isDirectory() || information.isSymbolicLink()) {
 			throw new Error('B1 cache asset directory must be a real directory.');
@@ -61,8 +62,10 @@ export default class B1Direct40CacheAssetVerifier {
 		}
 		for (const payload of [source.record.cumulativeScatteringDensity, source.record.logicalToUniqueIndex]) {
 			const {target, information: payloadInformation} = await requireRealFile(canonicalDirectory, payload.path);
-			if (payloadInformation.size !== payload.byteLength) throw new Error('B1 cache asset payload byte length is invalid.');
-			if (sha256(await readFile(target)) !== payload.sha256) throw new Error('B1 cache asset payload hash is invalid.');
+			if (payloadInformation.size !== payload.byteLength)
+				throw new Error('B1 cache asset payload byte length is invalid.');
+			if (sha256(await readFile(target)) !== payload.sha256)
+				throw new Error('B1 cache asset payload hash is invalid.');
 		}
 		const evidence = source.record.derivation.inputs.compilerEvidence;
 		if (
@@ -94,7 +97,8 @@ export default class B1Direct40CacheAssetVerifier {
 	static async verifySet({setDirectory, productionRevision = null}) {
 		const requestedDirectory = path.resolve(setDirectory);
 		const canonicalDirectory = await realpath(requestedDirectory);
-		if (canonicalDirectory !== requestedDirectory) throw new Error('B1 cache asset-set directory may not traverse a link.');
+		if (canonicalDirectory !== requestedDirectory)
+			throw new Error('B1 cache asset-set directory may not traverse a link.');
 		const source = await readSingleManifest(
 			canonicalDirectory,
 			/^asset-set-manifest-[a-f0-9]{64}\.json$/u,
@@ -123,6 +127,12 @@ export default class B1Direct40CacheAssetVerifier {
 			}
 			assets.push(verified);
 		}
-		return {setDirectory: canonicalDirectory, manifestPath: source.path, manifestSha256: source.sha256, manifest: source.record, assets};
+		return {
+			setDirectory: canonicalDirectory,
+			manifestPath: source.path,
+			manifestSha256: source.sha256,
+			manifest: source.record,
+			assets,
+		};
 	}
 }

@@ -464,7 +464,9 @@ export class Algorithm32Runtime {
 				throw error;
 			}
 			if (this._mode.describe().pairing === 'spherical/distant') {
-				const distantMode = /** @type {import('./SphericalDistantMode.js').SphericalDistantMode} */ (this._mode);
+				const distantMode = /** @type {import('./SphericalDistantMode.js').SphericalDistantMode} */ (
+					this._mode
+				);
 				const color = distantMode.algorithm32.config.config.color;
 				this._endpointScene.updateDistantSunLighting(
 					distantMode.geometry.configuration.directionToSource,

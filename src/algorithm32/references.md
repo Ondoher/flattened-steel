@@ -45,27 +45,26 @@ value.
 
 ## Third-Party References
 
-1. Pharr M, Jakob W, Humphreys G. Transmittance. In: *Physically Based
-   Rendering: From Theory to Implementation*. 4th ed. Accessed June 29, 2026.
+1. Pharr M, Jakob W, Humphreys G. Transmittance. In: _Physically Based
+   Rendering: From Theory to Implementation_. 4th ed. Accessed June 29, 2026.
    https://www.pbr-book.org/4ed/Volume_Scattering/Transmittance
 
 2. Pharr M, Jakob W, Humphreys G. Volume Scattering Processes. In:
-   *Physically Based Rendering: From Theory to Implementation*. 4th ed.
+   _Physically Based Rendering: From Theory to Implementation_. 4th ed.
    Accessed June 29, 2026.
    https://www.pbr-book.org/4ed/Volume_Scattering/Volume_Scattering_Processes
 
-3. Pharr M, Jakob W, Humphreys G. Phase Functions. In: *Physically Based
-   Rendering: From Theory to Implementation*. 4th ed. Accessed June 29, 2026.
+3. Pharr M, Jakob W, Humphreys G. Phase Functions. In: _Physically Based
+   Rendering: From Theory to Implementation_. 4th ed. Accessed June 29, 2026.
    https://www.pbr-book.org/4ed/Volume_Scattering/Phase_Functions
 
-4. Pharr M, Jakob W, Humphreys G. Diffuse Reflection. In: *Physically Based
-   Rendering: From Theory to Implementation*. 4th ed. Accessed June 29, 2026.
+4. Pharr M, Jakob W, Humphreys G. Diffuse Reflection. In: _Physically Based
+   Rendering: From Theory to Implementation_. 4th ed. Accessed June 29, 2026.
    https://www.pbr-book.org/4ed/Reflection_Models/Diffuse_Reflection
 
-5. three.js authors. Data3DTexture source documentation. Accessed July 8,
-   2026.
+5. three.js authors. Data3DTexture source documentation. Accessed July 8, 2026.
    https://github.com/mrdoob/three.js/blob/master/src/textures/Data3DTexture.js
 
-6. National Institute of Standards and Technology. *Secure Hash Standard
-   (SHS).* FIPS PUB 180-4. Updated August 2015. Accessed August 4, 2026.
+6. National Institute of Standards and Technology. _Secure Hash Standard
+   (SHS)._ FIPS PUB 180-4. Updated August 2015. Accessed August 4, 2026.
    https://doi.org/10.6028/NIST.FIPS.180-4

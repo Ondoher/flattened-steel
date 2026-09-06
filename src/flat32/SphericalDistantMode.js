@@ -60,9 +60,10 @@ export class SphericalDistantMode {
 			sceneCacheAsset: configuration.sceneCacheAsset,
 			darkScattering: configuration.distantSunCacheState === 'dark',
 		});
-		const catalogDefinition = selections.stellarCatalog === FLAT32_STELLAR_CATALOG_IDS.BRIGHTEST_2000
-			? configuration.brightest2000StellarCatalogDefinition
-			: undefined;
+		const catalogDefinition =
+			selections.stellarCatalog === FLAT32_STELLAR_CATALOG_IDS.BRIGHTEST_2000
+				? configuration.brightest2000StellarCatalogDefinition
+				: undefined;
 		if (selections.stellarCatalog === FLAT32_STELLAR_CATALOG_IDS.BRIGHTEST_2000 && !catalogDefinition) {
 			throw new RangeError('Flat32 brightest-2000 requires its authenticated local production package.');
 		}

@@ -37,8 +37,22 @@ export class StellarScreenPaletteGenerationStages {
 	/** @returns {readonly CelestialGenerationBindingRequirement[]} - Immutable split-source sampler bindings. */
 	_sourceBindings() {
 		return [
-			{id: 'stellar-source.members', owner: 'stellarSource', kind: 'texture', updateFrequency: 'setup', valueKey: SOURCE_MEMBERS_VALUE_KEY, required: true},
-			{id: 'stellar-source.spectra', owner: 'stellarSource', kind: 'texture', updateFrequency: 'setup', valueKey: SOURCE_SPECTRA_VALUE_KEY, required: true},
+			{
+				id: 'stellar-source.members',
+				owner: 'stellarSource',
+				kind: 'texture',
+				updateFrequency: 'setup',
+				valueKey: SOURCE_MEMBERS_VALUE_KEY,
+				required: true,
+			},
+			{
+				id: 'stellar-source.spectra',
+				owner: 'stellarSource',
+				kind: 'texture',
+				updateFrequency: 'setup',
+				valueKey: SOURCE_SPECTRA_VALUE_KEY,
+				required: true,
+			},
 		];
 	}
 

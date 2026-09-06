@@ -1,0 +1,37 @@
+{
+  "schemaId": "spectral-color-receptor-curve-sweep-fixture-v1",
+  "input": {
+    "runId": "000258-spectral-color-stage1-ledger",
+    "artifactSetSha256": "abe89535535f523d4d04a0a5e9fe5cef86bff441f274cd998103e0121a7cacd5",
+    "ledgerPath": "evidence/spectral-ledger.json",
+    "ledgerSha256": "a1574e12645f3f0c5eff1694d609f9e73cc39ec2661cf131ad0356a09f1c55d0"
+  },
+  "parameterFixture": "experiments/extraterrestrial/fixtures/spectral-color-receptor-parameter-v1.json",
+  "stateKeys": [
+    "spherical-distant/noon",
+    "spherical-distant/sunset-minus-30",
+    "spherical-distant/sunset-minus-10",
+    "spherical-distant/sunset"
+  ],
+  "crossings": [0.01, 0.5, 0.99],
+  "sweep": {
+    "sampleCount": 81,
+    "minimumResponse": 0.001,
+    "maximumResponse": 0.999,
+    "referenceScaleStops": [-20, 20]
+  },
+  "displayDiagnostic": {
+    "space": "signed linear Rec.709/D65",
+    "normalization": "equal primary receptor responses map to D65 with Y=1",
+    "claim": "coordinate diagnostic only; no tone mapping, gamut mapping, clipping, encoding, or display candidate"
+  },
+  "proofGates": {
+    "crossingMaximumAbsolute": 1e-12,
+    "neutralRgbMaximumSpread": 1e-12,
+    "strictMonotonicAbsolute": 1e-14,
+    "minimumDistinctMeasuredResponseDistance": 1e-8,
+    "whitePlateauDiagnostic": 0.99,
+    "minimumWarmOrderingDelta": 1e-8
+  },
+  "claim": "Numerical receptor operating-range and relationship proof only; no final Normal display mapping or image acceptance."
+}

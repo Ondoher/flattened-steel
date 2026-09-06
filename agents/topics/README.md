@@ -1,53 +1,22 @@
-# Agent Topics
+# Work Topics
 
-This tree contains agent-facing documentation organized by purpose. Topic
-documents should make the current repository understandable without loading
-unrelated code, history, or evidence into every session.
+Topics guide the kind of work and the smallest useful context. Engineering
+standards are selected only by affected folders through the
+[standards manifest](standards/manifest.md).
 
-## Taxonomy
+- [production-algorithm32](production-algorithm32/README.md) — production engine contracts, algorithms, caches, profiles, and conformance.
+- [poc-experiments](poc-experiments/README.md) — bounded studies, protocols, and independent benchmarks.
+- [poc-flat32](poc-flat32/README.md) — exploratory application interactions and appearance review.
+- [production-app](production-app/README.md) — supported application behavior, integration, and release.
+- [pure-research](pure-research/README.md) — physical, numerical, perceptual, and source authority.
 
-- [Context](context/README.md) owns session bootstrap and topic routing.
-- The [standards manifest](standards/manifest.md) selects applicable canonical
-  engineering standards, and the [repository overlay](standards/overlay.md)
-  owns the approved local additions and replacements.
-- `products/` owns durable product and domain knowledge that can span more
-  than one deployable application.
-- `apps/` owns deployable application surfaces and their integration or
-  operational guidance.
-- [References](references/README.md) routes to external sources, collected
-  materials, and supporting evidence.
-- [Testing](testing/README.md) owns repository test architecture and runner
-  boundaries.
-- [Topic documentation archive](../../archives/topic-documentation-archive-2026-07-19.zip)
-  contains historical, non-authoritative topic material.
-- [Initialization](initialization/README.md) preserves the completed repository
-  extraction record. Current Algorithm32 work is routed by the
-  [Algorithm32 topic](algorithm32/README.md).
+[Active focus](active-topic.md) is the session reload contract.
+[Routing examples](context/routing.md), [open-work ownership](context/open-work-ownership.md),
+and the [archive index](context/topic-migration-archive-index.md) are discovery
+surfaces, not additional automatic reload sources.
 
-Use the narrowest durable owner. Cross-repository rules belong in the canonical
-standards library, repository-specific standards differences belong in the
-overlay, domain meaning belongs in products, and deployment-surface details
-belong in apps. References support claims but do not own current product or
-engineering policy.
-
-## Bootstrap
-
-The canonical bootstrap contract is [AGENTS.md](../../AGENTS.md). Start with
-[Active Topic](active-topic.md), then load only its minimal reload sources.
-Use this index and [Topic Routing](context/routing.md) on demand, not as default
-session context.
-
-## Topic Document Shape
-
-A working topic should have:
-
-- one canonical entry document that states its purpose and routes to focused
-  documents;
-- a current-state or status document when the entry document is not sufficient;
-- focused design, plan, contract, runbook, or evidence documents only when
-  their responsibilities are distinct; and
-- an explicit log or archive location if chronology must be retained.
-
-The active-topic file is a session pointer, not a second status tracker. Keep
-facts in their owning topic documents and keep reload sets as small as the
-current work permits.
+Retired topics and reference stubs are retained locally under root `archives/`,
+excluded from the current tracked tree, and preserved in existing Git history.
+The [retired-topic archive index](context/retired-topic-archive-index.md) records
+verified content and restoration paths; archived instructions are not current
+guidance.

@@ -74,15 +74,20 @@ try {
 	if (error.code !== 'ENOENT') throw error;
 }
 await mkdir(outputDirectory);
-if ((await realpath(outputDirectory)) !== outputDirectory) throw new Error('Qualification output must resolve exactly.');
+if ((await realpath(outputDirectory)) !== outputDirectory)
+	throw new Error('Qualification output must resolve exactly.');
 
 const indexBytes = await readFile(indexPath);
 const inventory = JSON.parse(indexBytes.toString('utf8'));
 const failures = [];
 const bins = [];
 for (const entry of inventory.packages) {
-	const manifest = JSON.parse(await readFile(await ordinaryFile(path.join(entry.path, entry.manifestPath), entry.id), 'utf8'));
-	const center = JSON.parse(await readFile(await ordinaryFile(path.join(entry.path, manifest.ledgerPath), entry.id), 'utf8'));
+	const manifest = JSON.parse(
+		await readFile(await ordinaryFile(path.join(entry.path, entry.manifestPath), entry.id), 'utf8'),
+	);
+	const center = JSON.parse(
+		await readFile(await ordinaryFile(path.join(entry.path, manifest.ledgerPath), entry.id), 'utf8'),
+	);
 	const degrees = entry.solarZenithDegrees;
 	const minimumInputDegrees = Math.max(0, degrees - 0.5);
 	const maximumInputExclusiveDegrees = degrees === 108 ? 108.5 : degrees + 0.5;
@@ -135,10 +140,13 @@ const report = {
 	bins,
 	failures,
 	derivation: {
-		operation: 'compare every emitted center ledger against both limiting scene-support ledgers for its half-open nearest-degree bin',
+		operation:
+			'compare every emitted center ledger against both limiting scene-support ledgers for its half-open nearest-degree bin',
 		implementation: 'scripts/algorithm32/solar-zenith-cache/qualify-one-degree-bin-support.js',
 	},
 };
 await writeFile(path.join(outputDirectory, 'qualification-report.json'), `${JSON.stringify(report, null, 2)}\n`);
-process.stdout.write(`${JSON.stringify({accepted: report.accepted, binCount: bins.length, missingRowCount: failures.length})}\n`);
+process.stdout.write(
+	`${JSON.stringify({accepted: report.accepted, binCount: bins.length, missingRowCount: failures.length})}\n`,
+);
 if (!report.accepted) process.exitCode = 1;

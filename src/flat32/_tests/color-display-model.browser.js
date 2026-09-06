@@ -35,12 +35,10 @@ describe('Flat32 Color selection', () => {
 
 	it('routes the promoted Color Reset model exactly and fails closed for unknown selections', () => {
 		expect(() => createFlat32ColorDisplayModel({model: 'unknown'})).toThrowError(/not supported/);
-		expect(() =>
-			createFlat32ColorDisplayModel({model: 'bruneton-source-luminance-lift-v2'}),
-		).toThrowError(/not supported/);
-		expect(createFlat32ColorDisplayModel({model: 'color-reset-slope-078-p9'}).id).toBe(
-			'color-reset-slope-078-p9',
+		expect(() => createFlat32ColorDisplayModel({model: 'bruneton-source-luminance-lift-v2'})).toThrowError(
+			/not supported/,
 		);
+		expect(createFlat32ColorDisplayModel({model: 'color-reset-slope-078-p9'}).id).toBe('color-reset-slope-078-p9');
 	});
 
 	it('normalizes Color, celestial, catalog, and filter selections independently', () => {
@@ -116,12 +114,17 @@ describe('Flat32 Color selection', () => {
 		).toThrowError(/does not support hiddenGain/);
 		expect(() =>
 			resolveFlat32ProductionSelections({
-				presentationFilters: [{...{
-					id: 'human-low-light-chroma-v1',
-					stage: 'source-linear',
-					target: 'stellar',
-					enabled: true,
-				}, parameters: {maximumChromaRetention: 0.4}}],
+				presentationFilters: [
+					{
+						...{
+							id: 'human-low-light-chroma-v1',
+							stage: 'source-linear',
+							target: 'stellar',
+							enabled: true,
+						},
+						parameters: {maximumChromaRetention: 0.4},
+					},
+				],
 			}),
 		).toThrowError(/must equal 0.65/);
 	});
@@ -144,9 +147,11 @@ describe('Flat32 Color selection', () => {
 		const registry = new ViewPresentationFilterRegistry(filter.presentationFilters, {
 			scotopicLuminanceWeights: new Array(15).fill(1),
 		});
-		expect(() => requireImplementedFlat32ProductionSelections(filter, {
-			presentationFilterRegistry: registry,
-		})).not.toThrow();
+		expect(() =>
+			requireImplementedFlat32ProductionSelections(filter, {
+				presentationFilterRegistry: registry,
+			}),
+		).not.toThrow();
 		const ferwerda = resolveFlat32ProductionSelections({
 			colorDisplayModelConfiguration: {
 				model: 'ferwerda-control',
@@ -154,9 +159,11 @@ describe('Flat32 Color selection', () => {
 			},
 			presentationFilters: filter.presentationFilters,
 		});
-		expect(() => requireImplementedFlat32ProductionSelections(ferwerda, {
-			presentationFilterRegistry: registry,
-		})).toThrowError(/require a Bruneton Color model/);
+		expect(() =>
+			requireImplementedFlat32ProductionSelections(ferwerda, {
+				presentationFilterRegistry: registry,
+			}),
+		).toThrowError(/require a Bruneton Color model/);
 	});
 
 	it('keeps flat/local celestial enablement independent from basic Bruneton selection', () => {

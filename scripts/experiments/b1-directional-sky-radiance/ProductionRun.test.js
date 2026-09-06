@@ -43,7 +43,9 @@ function createCompleteRun(directory, {backend = 'cpu-reference-binary64'} = {})
 		const provenance = `j${order}-provenance.json`;
 		const cube = `j${order}-cube.json`;
 		const tableLines = [
-			['model', 'time', 'grid_x', 'grid_y', ...Array.from({length: 40}, (_, index) => `lambda_${index}`)].join('\t'),
+			['model', 'time', 'grid_x', 'grid_y', ...Array.from({length: 40}, (_, index) => `lambda_${index}`)].join(
+				'\t',
+			),
 		];
 		for (const time of CAPTURE_TIMES) {
 			for (let x = 0; x < 9; x += 1) {

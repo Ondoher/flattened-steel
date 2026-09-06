@@ -6,9 +6,7 @@ import {ProductionGpuHost} from './ProductionGpuHost.js';
 
 const TIMES = Object.freeze(['10:15', '11:15', '13:15']);
 const WIDTHS = Object.freeze([27, 39, 55, 81]);
-const DEFAULT_OUTPUT_ROOT = resolve(
-	'tmp/algorithm32-bruneton-paper/exact-j1-diagnostic/007-j2-angular-score-sweep',
-);
+const DEFAULT_OUTPUT_ROOT = resolve('tmp/algorithm32-bruneton-paper/exact-j1-diagnostic/007-j2-angular-score-sweep');
 const EXACT_J1_PATH = resolve(
 	'tmp/algorithm32-bruneton-paper/exact-j1-diagnostic/002-three-time-order-sweep-observable/algorithm32-j1-exact-binary64.tsv',
 );
@@ -117,9 +115,13 @@ async function run(argv) {
 			...candidateRows
 				.get(width)
 				.map((row) =>
-					[`j1-exact-plus-j2-w${width}`, row.time, row.gridX, row.gridY, ...row.values.map((value) => value.toPrecision(17))].join(
-						'\t',
-					),
+					[
+						`j1-exact-plus-j2-w${width}`,
+						row.time,
+						row.gridX,
+						row.gridY,
+						...row.values.map((value) => value.toPrecision(17)),
+					].join('\t'),
 				),
 		];
 		writeFileSync(join(outputRoot, `algorithm32-j2-w${width}-direct-40.tsv`), `${lines.join('\n')}\n`, {
@@ -128,7 +130,10 @@ async function run(argv) {
 		});
 	}
 	report.status = 'COMPLETE';
-	writeFileSync(join(outputRoot, 'report.json'), `${JSON.stringify(report, null, 2)}\n`, {encoding: 'utf8', flag: 'wx'});
+	writeFileSync(join(outputRoot, 'report.json'), `${JSON.stringify(report, null, 2)}\n`, {
+		encoding: 'utf8',
+		flag: 'wx',
+	});
 	progress('angular score sweep complete');
 	process.stdout.write(`${JSON.stringify(report, null, 2)}\n`);
 }

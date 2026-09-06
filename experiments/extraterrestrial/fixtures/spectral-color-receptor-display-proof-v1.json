@@ -1,0 +1,61 @@
+{
+	"schemaId": "spectral-color-receptor-display-proof-fixture-v1",
+	"input": {
+		"runId": "000258-spectral-color-stage1-ledger",
+		"artifactSetSha256": "abe89535535f523d4d04a0a5e9fe5cef86bff441f274cd998103e0121a7cacd5",
+		"ledgerPath": "evidence/spectral-ledger.json",
+		"ledgerSha256": "a1574e12645f3f0c5eff1694d609f9e73cc39ec2661cf131ad0356a09f1c55d0"
+	},
+	"metamerInput": {
+		"runId": "000294-spectral-color-receptor-projection-proof",
+		"artifactSetSha256": "b866e80e451c5d8b1d2077822ffc8b2d4c2b870e9dcdf2081fd2c85b8b3e6909",
+		"path": "evidence/receptor-projection.json",
+		"sha256": "7952079bb703749ef88aee7839344e5d20631355a9f58c5a794d04756c632aa7"
+	},
+	"parameterFixture": "experiments/extraterrestrial/fixtures/spectral-color-receptor-parameter-v1.json",
+	"bridgeFixture": "experiments/extraterrestrial/fixtures/spectral-color-stage2b-reference-bridge-v1.json",
+	"calibrationRows": [
+		"spherical-distant/noon-minus-60",
+		"spherical-distant/noon",
+		"spherical-distant/noon-plus-60",
+		"spherical-distant/sunset-minus-60",
+		"spherical-distant/sunset-minus-30",
+		"spherical-distant/sunset",
+		"flat-local/closest",
+		"flat-local/farthest-minus-30",
+		"flat-local/farthest-plus-10"
+	],
+	"display": {
+		"id": "cie2006-receptor-linear-display-d65-neutral-boundary-v1",
+		"peakLuminanceCdPerSquareMeter": 100,
+		"blackLuminanceCdPerSquareMeter": 0,
+		"white": "D65",
+		"primaries": "Rec.709",
+		"encoding": "IEC 61966-2-1 sRGB piecewise",
+		"scale": "zero receptor response maps to black; equal unit receptor response maps to D65 peak white; intermediate response is linear display light",
+		"gamut": "same-luminance line from the signed target toward D65 neutral, intersected analytically with the Rec.709 cube",
+		"toneCurve": null,
+		"exposure": null
+	},
+	"synthetic": {
+		"neutralSampleCount": 1001,
+		"responseCubeSteps": 11,
+		"continuityPerturbation": 0.000001,
+		"neutralHueThreshold": 1e-10
+	},
+	"proofGates": {
+		"boundsAbsolute": 2e-12,
+		"neutralMaximumSpread": 2e-12,
+		"neutralMaximumAbsolute": 2e-12,
+		"strictMonotonicAbsolute": 1e-14,
+		"metamerEncodedMaximumAbsolute": 1e-12,
+		"responseRoundTripMaximumAbsolute": 2e-10,
+		"hueMaximumDegrees": 1e-7,
+		"continuityMaximumEncodedDistance": 0.0001,
+		"minimumMeasuredEncodedDistance": 1e-8,
+		"minimumWarmOrderingDelta": 1e-8,
+		"plateauChannelAbsolute": 2e-6,
+		"materialInputMaximumRelative": 0.0055
+	},
+	"claim": "Calibration-only numerical receptor-to-display qualification. No atmosphere, cache, framebuffer, image, held-out display output, or final observer acceptance."
+}

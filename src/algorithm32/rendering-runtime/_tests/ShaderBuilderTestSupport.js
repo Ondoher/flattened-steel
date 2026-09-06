@@ -253,20 +253,18 @@ function createStellarShaderCacheDouble(fieldId = 'test-stellar-cache-field') {
 				],
 			});
 		},
-		createLiveShaderContribution: jasmine
-			.createSpy('stellarCache.createLiveShaderContribution')
-			.and.callFake(() =>
-				createContribution({
-					id: 'celestial-stellar-live-raster-test',
-					owner: 'celestialCache',
-					provides: ['celestial.evaluateStellarPointSetRadiance'],
-					requires: ['celestial.evaluateRadiance', 'cache.sampleStellarPointSetIrradiance'],
-					uniforms: [],
-					functions: [],
-					mainHooks: [],
-					bindingRequirements: [],
-				}),
-			),
+		createLiveShaderContribution: jasmine.createSpy('stellarCache.createLiveShaderContribution').and.callFake(() =>
+			createContribution({
+				id: 'celestial-stellar-live-raster-test',
+				owner: 'celestialCache',
+				provides: ['celestial.evaluateStellarPointSetRadiance'],
+				requires: ['celestial.evaluateRadiance', 'cache.sampleStellarPointSetIrradiance'],
+				uniforms: [],
+				functions: [],
+				mainHooks: [],
+				bindingRequirements: [],
+			}),
+		),
 		dispose: jasmine.createSpy('stellarCache.dispose'),
 	};
 }

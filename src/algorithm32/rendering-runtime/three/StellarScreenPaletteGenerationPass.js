@@ -450,7 +450,8 @@ export class StellarScreenPaletteGenerationPass {
 				return;
 			}
 			if (this._activeGeneration?.id !== identity.generationIdentity) {
-				const sameView = this._activeGeneration?.compatibility.viewIdentity === identity.compatibility.viewIdentity;
+				const sameView =
+					this._activeGeneration?.compatibility.viewIdentity === identity.compatibility.viewIdentity;
 				this.markDirty(sameView ? 'configuration' : 'view');
 			}
 			this._generate(renderer, view, identity);

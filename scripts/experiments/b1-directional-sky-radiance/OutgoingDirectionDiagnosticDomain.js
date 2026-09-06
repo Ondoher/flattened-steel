@@ -51,7 +51,10 @@ export class OutgoingDirectionDiagnosticDomain {
 				: this._gridStencil(direction, definition.faceWidth, directions, indicesByKey),
 		);
 		this._queryStencilsByKey = new Map(
-			definition.queryDirections.map((direction, index) => [this._vectorKey(direction), this.queryStencils[index]]),
+			definition.queryDirections.map((direction, index) => [
+				this._vectorKey(direction),
+				this.queryStencils[index],
+			]),
 		);
 		this.unitVectors = directions;
 		this.directionCount = directions.length;
@@ -218,14 +221,11 @@ export class OutgoingDirectionDiagnosticDomain {
 			throw new RangeError('Diagnostic outgoing domain received an undeclared exact query direction.');
 		}
 		const previousCount = this._directions.length;
-		const reconstructed = this._gridStencil(
-			direction,
-			this._faceWidth,
-			this._directions,
-			this._indicesByKey,
-		);
+		const reconstructed = this._gridStencil(direction, this._faceWidth, this._directions, this._indicesByKey);
 		if (this._directions.length !== previousCount) {
-			throw new RangeError('Diagnostic outgoing domain query requires a node absent from its constructed GPU field.');
+			throw new RangeError(
+				'Diagnostic outgoing domain query requires a node absent from its constructed GPU field.',
+			);
 		}
 		return reconstructed;
 	}

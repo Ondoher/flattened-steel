@@ -1,10 +1,5 @@
 import VectorMath from '../../math/VectorMath.js';
-import {
-	SPECTRAL_QUANTITIES,
-	SPECTRAL_UNITS,
-	SpectralMath,
-	SpectralPacket,
-} from '../../spectral-values/index.js';
+import {SPECTRAL_QUANTITIES, SPECTRAL_UNITS, SpectralMath, SpectralPacket} from '../../spectral-values/index.js';
 
 /** Neutral reflectance used by the accepted CR3 production boundary. */
 export const NEUTRAL_LAMBERTIAN_REFLECTANCE = 0.18;
@@ -80,10 +75,12 @@ export class NeutralLambertianSceneLighting {
 	}
 
 	_acceptIrradiance(value, label) {
-		const packet = /** @type {SpectralIrradiancePacket} */ (SpectralPacket.assert(value, {
-			quantity: SPECTRAL_QUANTITIES.IRRADIANCE_DENSITY,
-			units: SPECTRAL_UNITS.IRRADIANCE_DENSITY,
-		}));
+		const packet = /** @type {SpectralIrradiancePacket} */ (
+			SpectralPacket.assert(value, {
+				quantity: SPECTRAL_QUANTITIES.IRRADIANCE_DENSITY,
+				units: SPECTRAL_UNITS.IRRADIANCE_DENSITY,
+			})
+		);
 		if (packet.values.some((channel) => !Number.isFinite(channel) || channel < 0)) {
 			throw new RangeError(`Neutral Lambertian ${label} irradiance must be finite and nonnegative.`);
 		}
@@ -101,13 +98,15 @@ export class NeutralLambertianSceneLighting {
 	}
 
 	_radianceFromIrradiance(irradiance, scale, provenanceIdentity) {
-		return /** @type {SpectralRadiancePacket} */ (new SpectralPacket({
-			basis: irradiance.basis,
-			quantity: SPECTRAL_QUANTITIES.RADIANCE_DENSITY,
-			units: SPECTRAL_UNITS.RADIANCE_DENSITY,
-			semantics: irradiance.semantics,
-			values: irradiance.values.map((value) => value * scale),
-			provenanceIdentity,
-		}));
+		return /** @type {SpectralRadiancePacket} */ (
+			new SpectralPacket({
+				basis: irradiance.basis,
+				quantity: SPECTRAL_QUANTITIES.RADIANCE_DENSITY,
+				units: SPECTRAL_UNITS.RADIANCE_DENSITY,
+				semantics: irradiance.semantics,
+				values: irradiance.values.map((value) => value * scale),
+				provenanceIdentity,
+			})
+		);
 	}
 }

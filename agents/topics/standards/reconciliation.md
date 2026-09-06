@@ -4,14 +4,682 @@
 
 - Repository: `C:\dev\flattened-steel`
 - Canonical standards root: `C:\Users\gande\.codex\documentation\standards`
+- Standards governance: [documentation.md — Folder Standards Manifest](../../../../../Users/gande/.codex/documentation/standards/documentation.md#folder-standards-manifest)
+- Generated developer guide: [STANDARDS.md](../../../STANDARDS.md) is current and generated from the normalized folder configuration.
+- Audit date: 2026-09-06.
+- Audit basis: working tree at commit `8e9a11ab8d78dd02a53eb73a5e0c991cc99a4e32`, including pre-existing edits and the untracked repository skill. This is a standards configuration/ownership audit, not an application-code compliance audit.
+- Phase: `reconciled`.
+- Normalization status: `normalized`; all ten developer-approved dispositions are applied, with zero pending or deferred items.
+- Reconciled scope: approved folder mapping, local overlay consolidation, canonical setter promotion, redundant prose removal, experiment-scaffold repair, and operational contract handoff. Topic relocation is recorded separately in the completed migration ledger.
+
+The developer explicitly accepted all ten recommendations and authorized
+reconciliation. FM-009 promotes assignment-only setters to canonical code
+conventions. The detailed comparisons below retain the pre-change audit basis;
+reconciliation results and the validation record describe the installed state.
+The historical appendix remains unchanged developer-decision evidence.
+
+## Summary
+
+| Recommended disposition | Count |
+| --- | ---: |
+| `promote-global` | 1 |
+| `add-local` | 4 |
+| `replace-local` | 0 |
+| `remove-local` | 3 |
+| `already-covered` | 2 |
+| `defer` | 0 |
+
+Installed outcome: nine reusable sets and 26 existing-folder assignments,
+using the same eleven canonical standards already selected. Preserve the four
+scientific requirements under `src/algorithm32/`, encode the two type-section
+requirements together, and promote the assignment-only setter rule to canonical
+`code-conventions.md#Classes And Utilities`. The resulting overlay has three
+ADD entries containing the four scientific requirements. The setter restriction
+follows canonical code-conventions applicability rather than an Algorithm32
+overlay scope. No new optional application infrastructure is proposed.
+
+The obsolete manifest, topic scopes, duplicate ADD encoding, and obsolete
+scaffold controls have been replaced. Operational contract handoff is complete.
+
+## Approved Folder Configuration
+
+This approved configuration is installed in the manifest. The exact
+machine-readable configuration follows the tables. Standards never follow topic or
+focus names, runtime imports, or a file's historical origin.
+
+### Named sets
+
+Each row lists only additions to its parent.
+
+| Set | Extends | Adds |
+| --- | --- | --- |
+| `base` | `none` | `documentation.md`, `project-foundation.md` |
+| `code` | `base` | `architecture.md`, `code-conventions.md`, `types.md`, `jsdoc.md`, `testing.md` |
+| `build` | `code` | `polylith.md` |
+| `application` | `build` | `remvc.md` |
+| `http-application` | `application` | `server.md` |
+| `react-application` | `application` | `react.md` |
+| `react-library` | `code` | `react.md` |
+| `server` | `build` | `server.md` |
+| `proof-tools` | `code` | `server.md` |
+
+### Folder assignments
+
+The root covers `builds/`, `spec/`, and root-level package/runner configuration.
+Narrower assignments remove inappropriate application concerns from engine,
+research, and documentation paths. A parent set used by inheritance is not an
+unused set.
+
+| Folder | Set | Capability / boundary |
+| --- | --- | --- |
+| `.` | `build` | Root package, Polylith, build, and runner configuration. |
+| `agents/` | `base` | Work context and standards configuration; topics do not select standards. |
+| `.agents/` | `base` | Repository workflow documentation. |
+| `.agents/skills/start-experiment/scripts/` | `code` | Authored scaffolding automation. |
+| `references/` | `base` | Scientific source, claim, and result registers; retained evidence is not active code. |
+| `archives/` | `base` | Immutable historical evidence; mapping never authorizes edits. |
+| `src/` | `code` | Shared authored implementation and contracts. |
+| `src/algorithm32/implementation/react-three/` | `react-library` | Production React and R3F bindings inside the standalone engine. |
+| `src/flat/` | `react-application` | React Polylith application. |
+| `src/flat32/` | `http-application` | Polylith application with imperative DOM and client HTTP package loading. |
+| `server/` | `server` | Polylith router and filesystem-backed application services. |
+| `server/flat32/data/` | `base` | Operational asset documentation and immutable scientific packages, not database entities. |
+| `scripts/` | `code` | Offline tooling and independent scientific runners. |
+| `scripts/algorithm32/solar-zenith-cache/` | `proof-tools` | Offline compiler and local HTTP browser proof hosts. |
+| `scripts/flat32/` | `server` | Application build, capture, and cache-service tooling. |
+| `scripts/experiments/b1-directional-sky-radiance/` | `proof-tools` | Independent scoring and GPU HTTP proof host. |
+| `scripts/experiments/algorithm32-frame-parity/` | `proof-tools` | Independent CPU/GPU frame comparison and HTTP proof hosts. |
+| `experiments/` | `code` | Contained authored source and proof runners; operational no-unit-test instructions remain effective. |
+| `experiments/extraterrestrial/runners/` | `proof-tools` | Contained HTTP/browser proof orchestration. |
+| `experiments/extraterrestrial/color-reset/harness/` | `proof-tools` | Contained Color Reset browser host. |
+| `experiments/extraterrestrial/color-reset/runners/` | `proof-tools` | Contained Color Reset HTTP/browser proof orchestration. |
+| `experiments/extraterrestrial/solar-zenith-cache/point-local-scene-cache/` | `proof-tools` | Contained local scene-cache browser host. |
+| `experiments/extraterrestrial/solar-zenith-cache/runners/` | `proof-tools` | Contained solar-zenith browser proof hosts. |
+| `experiments/extraterrestrial/baseline/src/algorithm32/react/` | `react-library` | Sealed React comparison source; read-only, not a modernization target. |
+| `experiments/extraterrestrial/candidate/src/algorithm32/react/` | `react-library` | Sealed React comparison source; read-only, not a modernization target. |
+| `experiments/extraterrestrial/production-snapshots/sun-appearance-step-5-v1/src/algorithm32/implementation/react-three/` | `react-library` | Sealed React promotion snapshot; read-only. |
+
+React is selected for the actual `src/algorithm32/implementation/react-three/`
+bindings, not for all engine source. Flat32 uses imperative DOM plus HTTP, so it
+does not inherit React merely because the repository also has a React app.
+
+The `proof-tools` set includes HTTP ingress/failure concerns because these
+folders contain HTTP browser hosts. It does not add Polylith merely for those
+hosts or turn them into application servers. Applicability of individual rules
+still respects the controlled proof-host role and applicable instructions.
+Selecting `testing.md` does not authorize experimental test trees or bypass the
+contained runner-only boundary.
+
+Mapping sealed React copies records their capability without authorizing review
+remediation, modernization, execution, or changes to their evidence. Archives,
+generated output, retained third-party inputs, and operational cache packages
+remain non-authored/protected surfaces; their fallback assignment is never
+permission to rewrite them. No mapping is added for an empty future topic or
+hypothetical future feature.
+
+### Optional capability decisions retained
+
+- `accessibility.md` and `localization.md`: keep the previously approved
+  omissions for this technical/research application. Native semantics and
+  interaction requirements already present in selected code/React standards
+  still apply. Adding a customer-facing requirement requires a fresh folder
+  applicability decision; a new topic name does not enable these standards.
+- `mui.md`, `base-components.md`, and `app-shells.md`: no MUI dependency,
+  generated base-component layer, or page-registry shell capability was found
+  in the inspected app/build surfaces. A rendering canvas is not that shell.
+- `socket-io.md` and `local-https.md`: no selected Socket.IO feature or local
+  certificate/HTTPS setup in the application package and Polylith configuration.
+  A downloaded HTTPS scientific source is not local HTTPS infrastructure.
+- `data-persistence.md`: no database-backed application-record boundary found
+  in inspected production packages, source imports, and server surfaces. The
+  canonical standard explicitly applies to database persistence. Content-hashed
+  spectral packages, JSON manifests, local asset storage, and scientific run
+  ledgers do not acquire UUID or epoch-millisecond requirements by being stored.
+
+These are capability-selection findings, not proof that no future or uninspected
+code could introduce a capability. Reviewers must block for a mapping audit if
+changed-file contents reveal an absent concern.
+
+### Concrete proposal
+
+The following block was parsed in memory using the installed shared parser.
+It has not been installed as `manifest.md`.
+
+```markdown
+# Folder Standards Manifest
+
+## Standards Sets
+
+### `base`
+
+Extends: none
+Standards:
+
+- [documentation.md](../../../../../Users/gande/.codex/documentation/standards/documentation.md) - Folder applicability and standards governance.
+- [project-foundation.md](../../../../../Users/gande/.codex/documentation/standards/project-foundation.md) - Repository and package boundaries.
+
+### `code`
+
+Extends: base
+Standards:
+
+- [architecture.md](../../../../../Users/gande/.codex/documentation/standards/architecture.md) - Implementation ownership and dependency boundaries.
+- [code-conventions.md](../../../../../Users/gande/.codex/documentation/standards/code-conventions.md) - JavaScript and formatting conventions.
+- [types.md](../../../../../Users/gande/.codex/documentation/standards/types.md) - Ambient public and internal contracts.
+- [jsdoc.md](../../../../../Users/gande/.codex/documentation/standards/jsdoc.md) - Callable and declaration documentation.
+- [testing.md](../../../../../Users/gande/.codex/documentation/standards/testing.md) - Behavioral verification and lane boundaries.
+
+### `build`
+
+Extends: code
+Standards:
+
+- [polylith.md](../../../../../Users/gande/.codex/documentation/standards/polylith.md) - Polylith build, activation, and deployment.
+
+### `application`
+
+Extends: build
+Standards:
+
+- [remvc.md](../../../../../Users/gande/.codex/documentation/standards/remvc.md) - Application responsibility and lifecycle.
+
+### `http-application`
+
+Extends: application
+Standards:
+
+- [server.md](../../../../../Users/gande/.codex/documentation/standards/server.md) - HTTP ingress, transport, filesystem service, and failure boundaries.
+
+### `react-application`
+
+Extends: application
+Standards:
+
+- [react.md](../../../../../Users/gande/.codex/documentation/standards/react.md) - React presentation and adapter lifecycle.
+
+### `react-library`
+
+Extends: code
+Standards:
+
+- [react.md](../../../../../Users/gande/.codex/documentation/standards/react.md) - React presentation and adapter lifecycle.
+
+### `server`
+
+Extends: build
+Standards:
+
+- [server.md](../../../../../Users/gande/.codex/documentation/standards/server.md) - HTTP ingress, transport, filesystem service, and failure boundaries.
+
+### `proof-tools`
+
+Extends: code
+Standards:
+
+- [server.md](../../../../../Users/gande/.codex/documentation/standards/server.md) - HTTP ingress, transport, filesystem service, and failure boundaries.
+
+## Folder Assignments
+
+- `.` - `build` - Root package, Polylith, build, and runner configuration.
+- `agents/` - `base` - Work context and standards configuration; topics do not select standards.
+- `.agents/` - `base` - Repository workflow documentation.
+- `.agents/skills/start-experiment/scripts/` - `code` - Authored scaffolding automation.
+- `references/` - `base` - Scientific source, claim, and result registers; retained evidence is not active code.
+- `archives/` - `base` - Immutable historical evidence; mapping never authorizes edits.
+- `src/` - `code` - Shared authored implementation and contracts.
+- `src/algorithm32/implementation/react-three/` - `react-library` - Production React and R3F bindings inside the standalone engine.
+- `src/flat/` - `react-application` - React Polylith application.
+- `src/flat32/` - `http-application` - Polylith application with imperative DOM and client HTTP package loading.
+- `server/` - `server` - Polylith router and filesystem-backed application services.
+- `server/flat32/data/` - `base` - Operational asset documentation and immutable scientific packages, not database entities.
+- `scripts/` - `code` - Offline tooling and independent scientific runners.
+- `scripts/algorithm32/solar-zenith-cache/` - `proof-tools` - Offline compiler and local HTTP browser proof hosts.
+- `scripts/flat32/` - `server` - Application build, capture, and cache-service tooling.
+- `scripts/experiments/b1-directional-sky-radiance/` - `proof-tools` - Independent scoring and GPU HTTP proof host.
+- `scripts/experiments/algorithm32-frame-parity/` - `proof-tools` - Independent CPU/GPU frame comparison and HTTP proof hosts.
+- `experiments/` - `code` - Contained authored source and proof runners; operational no-unit-test instructions remain effective.
+- `experiments/extraterrestrial/runners/` - `proof-tools` - Contained HTTP/browser proof orchestration.
+- `experiments/extraterrestrial/color-reset/harness/` - `proof-tools` - Contained Color Reset browser host.
+- `experiments/extraterrestrial/color-reset/runners/` - `proof-tools` - Contained Color Reset HTTP/browser proof orchestration.
+- `experiments/extraterrestrial/solar-zenith-cache/point-local-scene-cache/` - `proof-tools` - Contained local scene-cache browser host.
+- `experiments/extraterrestrial/solar-zenith-cache/runners/` - `proof-tools` - Contained solar-zenith browser proof hosts.
+- `experiments/extraterrestrial/baseline/src/algorithm32/react/` - `react-library` - Sealed React comparison source; read-only, not a modernization target.
+- `experiments/extraterrestrial/candidate/src/algorithm32/react/` - `react-library` - Sealed React comparison source; read-only, not a modernization target.
+- `experiments/extraterrestrial/production-snapshots/sun-appearance-step-5-v1/src/algorithm32/implementation/react-three/` - `react-library` - Sealed React promotion snapshot; read-only.
+
+## Repository Overlay
+
+[overlay.md](overlay.md) owns repository additions and replacements.
+```
+
+## Divergences
+
+The current decision identifiers are FM-001 through FM-010. Historical DIV/ADD/CFG
+identifiers remain unchanged in the appendix. Reconciliation may apply only
+current recorded approvals.
+
+### FM-001: Replace the obsolete repository-wide list with folder assignments
+
+- Canonical source: [documentation.md — Folder Standards Manifest](../../../../../Users/gande/.codex/documentation/standards/documentation.md#folder-standards-manifest)
+- Repository source: [agents/topics/standards/manifest.md](manifest.md) (`## Applicable Files`, lines 13–25); package/build metadata and the capability evidence below.
+- Canonical rule: Exactly one Standards Sets section and one Folder Assignments section; a required root assignment, longest-folder matching, and inherited named sets determine applicability.
+- Repository rule: One flat list of eleven standards; no named sets or folder assignments.
+- Behavioral difference: The installed resolver cannot map any file. Retaining the list keeps reviewer startup blocked; applying all standards to every path would also erase the intended engine/application distinction.
+- Information at risk: The eleven selected concerns and earlier decisions not to install optional application infrastructure.
+- Agent recommendation: `remove-local`.
+- Recommendation rationale: Remove the obsolete list syntax and install the exact nine-set, 26-assignment proposal below. Retain the existing eleven-standard ceiling; do not introduce optional capabilities solely for this migration.
+- Developer decision: `remove-local`.
+- Developer notes: Accepted by the developer's instruction approving all standards and directing reconciliation; approval includes this item's rationale, scope, and preservation boundaries (FM-001).
+- Re-review required: `no` — The developer accepted the recorded recommendation, scope, and preservation boundary.
+- Reconciliation result: Applied as approved; see completed verification below.
+- Audit evidence (before reconciliation): Current parser fails on missing Standards Sets; the proposed configuration parses in memory and all 26 folders exist.
+
+### FM-002: Durable scientific quantities and provenance become engine-folder additions
+
+- Canonical source: [documentation.md — Repository Standards Overlay](../../../../../Users/gande/.codex/documentation/standards/documentation.md#repository-standards-overlay); [types.md — General Types](../../../../../Users/gande/.codex/documentation/standards/types.md#general-types)
+- Repository source: [agents/topics/standards/overlay.md](overlay.md) lines 3–8; historical ADD-001.
+- Canonical rule: Local additions use repository or folder scope and apply only where the selected set includes their target standard.
+- Repository rule: Algorithm32 durable quantities carry units, physical quantity, spectral basis, point/bin meaning, provenance, unit-neutral property names, and explicit radiometric stages; scope selects a governing topic.
+- Behavioral difference: Under the old scope, the rule is activated by context instead of the path being changed.
+- Information at risk: Scientific meaning must remain required for engine changes even when an app or research topic is active; unrelated application and experiment files must not acquire the requirement.
+- Agent recommendation: `add-local`.
+- Recommendation rationale: Keep the existing Rule text verbatim and use folder:src/algorithm32/. Combine it with FM-004 in one types.md#General Types ADD because the installed parser rejects duplicate ADD keys. Flat32, scripts, server, and contained copies receive no scientific ADD merely through association or imports.
+- Developer decision: `add-local`.
+- Developer notes: Accepted by the developer's instruction approving all standards and directing reconciliation; approval includes this item's rationale, scope, and preservation boundaries (FM-002).
+- Re-review required: `no` — The developer accepted the recorded recommendation, scope, and preservation boundary.
+- Reconciliation result: Applied as approved; see completed verification below.
+- Audit evidence (before reconciliation): The existing rule text is present verbatim in the in-memory merged overlay; sample engine files receive it and application/experiment/tooling files do not.
+
+### FM-003: Reference-backed formula symbols become an engine-folder addition
+
+- Canonical source: [code-conventions.md — JavaScript And Module Shape](../../../../../Users/gande/.codex/documentation/standards/code-conventions.md#javascript-and-module-shape); [documentation.md — Repository Standards Overlay](../../../../../Users/gande/.codex/documentation/standards/documentation.md#repository-standards-overlay)
+- Repository source: [agents/topics/standards/overlay.md](overlay.md) lines 10–15; historical DIV-006.
+- Canonical rule: Canonical naming remains applicable; local additions are selected by the file's folder.
+- Repository rule: Published scientific symbols require identified external authority and an unambiguous code-to-formula mapping, presently under topic scope.
+- Behavioral difference: Changing work context currently changes whether the extra provenance condition applies.
+- Information at risk: Formula traceability, and the boundary that keeps this requirement local rather than global.
+- Agent recommendation: `add-local`.
+- Recommendation rationale: Preserve the exact rule and target, replacing only its scope with folder:src/algorithm32/. No global promotion or unrelated-folder expansion.
+- Developer decision: `add-local`.
+- Developer notes: Accepted by the developer's instruction approving all standards and directing reconciliation; approval includes this item's rationale, scope, and preservation boundaries (FM-003).
+- Re-review required: `no` — The developer accepted the recorded recommendation, scope, and preservation boundary.
+- Reconciliation result: Applied as approved; see completed verification below.
+- Audit evidence (before reconciliation): The target heading exists; the proposed overlay parses and preserves the original rule.
+
+### FM-004: Scientific profile completeness shares the type-section addition
+
+- Canonical source: [types.md — General Types](../../../../../Users/gande/.codex/documentation/standards/types.md#general-types); [documentation.md — Repository Standards Overlay](../../../../../Users/gande/.codex/documentation/standards/documentation.md#repository-standards-overlay)
+- Repository source: [agents/topics/standards/overlay.md](overlay.md) lines 17–22; historical DIV-018; installed standards-config.mjs duplicate-key validation.
+- Canonical rule: Named contracts remain canonical; valid local additions refine them in folder scope.
+- Repository rule: A scientific profile has a named type, one documented default, caller overrides, complete options, and declared reference differences.
+- Behavioral difference: Its topic scope is invalid. A scope-only rewrite also fails because this and the quantity rule share the ADD/target/scope key.
+- Information at risk: Dropping this entry to satisfy the parser would silently lose profile completeness and reference-deviation requirements.
+- Agent recommendation: `add-local`.
+- Recommendation rationale: Preserve its Rule text verbatim alongside FM-002 in one types.md#General Types ADD for folder:src/algorithm32/. Preserve both reasons and keep the two historical rule identities mapped to the one entry.
+- Developer decision: `add-local`.
+- Developer notes: Accepted by the developer's instruction approving all standards and directing reconciliation; approval includes this item's rationale, scope, and preservation boundaries (FM-004).
+- Re-review required: `no` — The developer accepted the recorded recommendation, scope, and preservation boundary.
+- Reconciliation result: Applied as approved; see completed verification below.
+- Audit evidence (before reconciliation): Scope-only rewrite reproduces duplicate ADD for types.md#General Types; merged in-memory encoding succeeds without changing either constituent rule.
+
+### FM-005: Scientific descriptor non-authority becomes an engine-folder addition
+
+- Canonical source: [code-conventions.md — Validation And Failure Policy](../../../../../Users/gande/.codex/documentation/standards/code-conventions.md#validation-and-failure-policy); [documentation.md — Repository Standards Overlay](../../../../../Users/gande/.codex/documentation/standards/documentation.md#repository-standards-overlay)
+- Repository source: [agents/topics/standards/overlay.md](overlay.md) lines 24–29; historical DIV-007.
+- Canonical rule: Validate accepted facts at ingress; repository refinements live in folder-scoped overlay entries.
+- Repository rule: Descriptors may identify and diagnose evidence but cannot validate executable facts, select algorithms, calculate indexing/packing, or recover executable facts.
+- Behavioral difference: The prohibition is currently selected by a topic rather than the implementation path.
+- Information at risk: The separation between descriptive metadata and executable numerical authority.
+- Agent recommendation: `add-local`.
+- Recommendation rationale: Keep the exact rule and target with folder:src/algorithm32/. This does not remove genuine serialized-input validation or promote an experiment descriptor to production authority.
+- Developer decision: `add-local`.
+- Developer notes: Accepted by the developer's instruction approving all standards and directing reconciliation; approval includes this item's rationale, scope, and preservation boundaries (FM-005).
+- Re-review required: `no` — The developer accepted the recorded recommendation, scope, and preservation boundary.
+- Reconciliation result: Applied as approved; see completed verification below.
+- Audit evidence (before reconciliation): The target heading exists; the proposed overlay preserves the rule and has no duplicate key.
+
+### FM-006: Remove topic exclusions from the local experiment generator
+
+- Canonical source: [documentation.md — Project Topics](../../../../../Users/gande/.codex/documentation/standards/documentation.md#project-topics); [documentation.md — Reviewer Selection Algorithm](../../../../../Users/gande/.codex/documentation/standards/documentation.md#reviewer-selection-algorithm)
+- Repository source: [.agents/skills/start-experiment/SKILL.md](../../../.agents/skills/start-experiment/SKILL.md) steps 3, 5, 7 and Verification; [.agents/skills/start-experiment/scripts/scaffold-experiment.mjs](../../../.agents/skills/start-experiment/scripts/scaffold-experiment.mjs) parseManifestStandards, parseExclusions, topicReadme, and path allocation.
+- Canonical rule: Topics cannot select or exclude standards; generators must consume the shared folder configuration rather than implement another selector.
+- Repository rule: The skill requires Applicable Files, accepts --exclude, emits Standards Review Scope, and invokes the removed topic-review-scope.mjs helper.
+- Behavioral difference: It will fail after normalization or regenerate invalid topic controls. Its topic path also recreates a retired top-level experiments topic.
+- Information at risk: Experiment isolation, output/progress records, safe non-overwriting creation, and reviewer refresh must survive removal of the obsolete selection mechanism.
+- Agent recommendation: `remove-local`.
+- Recommendation rationale: Remove --exclude and generated review-scope prose; use the installed folder resolver for the intended source paths and stop for explicit normalization if a capability needs a different set. Route new documentation to agents/topics/poc-experiments/engineering-studies/<slug>/ and update source instructions accordingly. Do not silently create mappings, overlays, attestations, new execution authority, or an experiment during repair.
+- Developer decision: `remove-local`.
+- Developer notes: Accepted by the developer's instruction approving all standards and directing reconciliation; approval includes this item's rationale, scope, and preservation boundaries (FM-006).
+- Re-review required: `no` — The developer accepted the recorded recommendation, scope, and preservation boundary.
+- Reconciliation result: Applied as approved; see completed verification below.
+- Audit evidence (before reconciliation): Source inspection confirms old parser/emitter paths. The old global topic-review-scope.mjs file is absent. Reconciliation must validate both creation and check behavior in an isolated scaffold fixture without executing a scientific experiment.
+
+### FM-007: Replace repeated generic coding rules with canonical references
+
+- Canonical source: [documentation.md — Global Standards Ownership](../../../../../Users/gande/.codex/documentation/standards/documentation.md#global-standards-ownership); [types.md — Ambient Types](../../../../../Users/gande/.codex/documentation/standards/types.md#ambient-types); [code-conventions.md — Validation And Failure Policy](../../../../../Users/gande/.codex/documentation/standards/code-conventions.md#validation-and-failure-policy); [jsdoc.md — Types and declarations](../../../../../Users/gande/.codex/documentation/standards/jsdoc.md#types-and-declarations)
+- Repository source: [src/algorithm32/README.md#contract-rules](../../../src/algorithm32/README.md#contract-rules) lines 188–230; [agents/topics/algorithm32/cache/cache-design.md#naming-and-ambient-types](../../../archives/topics/topic-consolidation-20260906/agents/topics/algorithm32/cache/cache-design.md#naming-and-ambient-types) and [agents/topics/algorithm32/cache/cache-design.md#contract-and-coding-rules](../../../archives/topics/topic-consolidation-20260906/agents/topics/algorithm32/cache/cache-design.md#contract-and-coding-rules).
+- Canonical rule: Canonical files own ingress validation, readonly intent, ambient contracts, callable documentation, class ownership, constants, helper order, and behavioral test principles. The overlay owns local differences.
+- Repository rule: Source/topic prose independently repeats those rules, including no Object.freeze, ambient/JSDoc placement, validation, and unit-bearing naming.
+- Behavioral difference: Duplicated standards can drift and complicate retiring or splitting the containing topic.
+- Information at risk: Selected cache APIs, field/storage ownership, units examples, and physical claim boundaries are product/design facts and must not be deleted with the duplicate prose.
+- Agent recommendation: `already-covered`.
+- Recommendation rationale: Replace generic restatements with links to canonical sections and the retained scientific ADD. Keep concrete cache semantics and examples with their work owner. FM-008 and FM-009 separately handle information that is not a simple duplicate.
+- Developer decision: `already-covered`.
+- Developer notes: Accepted by the developer's instruction approving all standards and directing reconciliation; approval includes this item's rationale, scope, and preservation boundaries (FM-007).
+- Re-review required: `no` — The developer accepted the recorded recommendation, scope, and preservation boundary.
+- Reconciliation result: Applied as approved; see completed verification below.
+- Audit evidence (before reconciliation): Canonical comparison distinguishes repeated engineering rules from source-owned cache contracts. No application-code compliance finding is inferred.
+
+### FM-008: Retire outdated helper and declaration-placement guidance
+
+- Canonical source: [code-conventions.md — Classes And Utilities](../../../../../Users/gande/.codex/documentation/standards/code-conventions.md#classes-and-utilities); [types.md — Class Types](../../../../../Users/gande/.codex/documentation/standards/types.md#class-types); [types.md — Interface Types](../../../../../Users/gande/.codex/documentation/standards/types.md#interface-types)
+- Repository source: [agents/topics/algorithm32/cache/cache-design.md](../production-algorithm32/caches/cache-design.md) lines 925–928 and 2120–2124; [src/algorithm32/README.md](../../../src/algorithm32/README.md) lines 217–225.
+- Canonical rule: Class-only helpers are private instance methods; reusable same-domain operations normally use cohesive namespaces. Class-named types and public ambient contracts have distinct canonical locations.
+- Repository rule: The cache design prescribes ordinary same-basename exported class declarations and focused neighboring helper functions; the source README describes generic neighboring/utility modules without the current namespace boundary.
+- Behavioral difference: These unqualified instructions can direct new work into the pre-normalization shapes rather than the approved canonical ownership rules.
+- Information at risk: Actual executable cache names, source-folder ownership, and legitimate independent helper contracts must remain documented.
+- Agent recommendation: `remove-local`.
+- Recommendation rationale: Remove the obsolete general prescriptions and reference the current canonical rules. Preserve concrete cache vocabulary and ownership. Do not rewrite source code, sealed copies, or completed historical evidence as part of standards reconciliation.
+- Developer decision: `remove-local`.
+- Developer notes: Accepted by the developer's instruction approving all standards and directing reconciliation; approval includes this item's rationale, scope, and preservation boundaries (FM-008).
+- Re-review required: `no` — The developer accepted the recorded recommendation, scope, and preservation boundary.
+- Reconciliation result: Applied as approved; see completed verification below.
+- Audit evidence (before reconciliation): Compared against the complete canonical class, interface, and helper sections; the distinct declaration-only public-interface architecture remains permitted.
+
+### FM-009: Promote assignment-only setters to canonical code conventions
+
+- Canonical source: [code-conventions.md — Classes And Utilities](../../../../../Users/gande/.codex/documentation/standards/code-conventions.md#classes-and-utilities); [jsdoc.md — Descriptions](../../../../../Users/gande/.codex/documentation/standards/jsdoc.md#descriptions)
+- Repository source: [src/algorithm32/README.md](../../../src/algorithm32/README.md) lines 225–227, within Contract Rules.
+- Canonical rule: Canonical conventions cover helper ownership and getter/setter documentation, but do not require setters to be assignment-only.
+- Repository rule: Setters only assign; validation, normalization, derivation, coordination, or other processing uses a named method.
+- Behavioral difference: This is a stricter coding rule outside the overlay, not a duplicate that can safely disappear during consolidation.
+- Information at risk: Removing all generic-looking README guidance would silently remove this restriction.
+- Agent recommendation: `promote-global`.
+- Recommendation rationale: Assignment syntax should not conceal processing. This is a general API-design boundary with no scientific or Algorithm32-specific dependency. Promote the existing sentence to canonical code-conventions.md#Classes And Utilities and replace the repository restatement with a canonical link. Do not create a local setter ADD. The rule will apply wherever code-conventions.md is selected, without authorizing unrelated implementation rewrites or edits to protected evidence.
+- Developer decision: `promote-global`.
+- Developer notes: The developer directed that assignment-only setters and processing in named methods belong in the canonical standards. This supersedes the original add-local recommendation for FM-009; the subsequent blanket approval accepts all ten items and starts reconciliation.
+- Re-review required: `no` — The general scope and canonical destination are recorded; the agent recommendation now agrees with the developer's disposition.
+- Reconciliation result: Applied as approved; see completed verification below.
+- Audit evidence (before reconciliation): Canonical code-conventions.md still has no equivalent processing restriction; its Classes And Utilities section is the selected destination. The local setter entry has been removed from the proposed overlay only.
+
+Accepted canonical wording, now installed:
+
+> Use setters only for direct assignment with no processing; use a named method
+> when a state change validates, normalizes, derives, coordinates, or otherwise
+> performs work.
+
+### FM-010: Keep live evidence and citation contracts out of engineering-rule consolidation
+
+- Canonical source: [documentation.md — Project Topics](../../../../../Users/gande/.codex/documentation/standards/documentation.md#project-topics)
+- Repository source: [AGENTS.md](../../../AGENTS.md); [experiments/extraterrestrial/AGENTS.md](../../../experiments/extraterrestrial/AGENTS.md); [agents/topics/extraterrestrial/stage-12-implementation-topic.md#immutable-run-records](../../../experiments/extraterrestrial/run-contract.md#immutable-run-records); [agents/topics/references/citation-and-retention-policy.md](../../../references/citation-and-retention-policy.md); [agents/topics/testing/README.md#experiment-migration](../poc-experiments/protocols/testing-contract.md#experiment-migration).
+- Canonical rule: Selected paths, run identities, verification contracts, research registrations, implementation state, and operations remain project facts rather than generic engineering standards.
+- Repository rule: Stage 12 owns the live run protocol even though its implementation history is retired. Citation policy owns exact repository registers. Testing prose proposes a broad Jasmine experiment migration despite the current contained lane's explicit no-unit-test boundary.
+- Behavioral difference: Archiving these documents indiscriminately could orphan live instructions or appear to revive a forbidden/stopped workflow.
+- Information at risk: Run counters/namespaces, initialization/finalization order, immutable evidence, source/output boundaries, citation identity and license gates, and the contained runner-only restriction.
+- Agent recommendation: `already-covered`.
+- Recommendation rationale: Preserve these contracts as operations: extract the complete Immutable Run Records section into experiments/extraterrestrial/run-contract.md and repair both AGENTS links before archiving its topic; move citation policy to references/citation-and-retention-policy.md with all consumers repaired. New focus entries link to these owners. Narrow the stale Jasmine migration paragraph so it cannot apply to the contained extraterrestrial lane. Do not copy these project-specific protocols into overlay rules or change evidence, run numbers, source/output roots, permissions, or acceptance gates.
+- Developer decision: `already-covered`.
+- Developer notes: Accepted by the developer's instruction approving all standards and directing reconciliation; approval includes this item's rationale, scope, and preservation boundaries (FM-010).
+- Re-review required: `no` — The developer accepted the recorded recommendation, scope, and preservation boundary.
+- Reconciliation result: Applied as approved; see completed verification below.
+- Audit evidence (before reconciliation): Read both AGENTS files, the complete run section, citation policy, and testing topic. These are future handoff actions; neither current owner has moved.
+
+
+## Proposed Overlay Encoding
+
+This block is a proposal, not an additional rule authority. It passed the
+installed parser in memory. Every existing scientific Rule sentence is retained
+verbatim. FM-009 is a separate canonical promotion and creates no local entry.
+
+```markdown
+# Repository Standards Overlay
+
+## ADD: Production Algorithm32 scientific quantities, provenance, and profile completeness
+
+Extends: types.md#General Types
+Scope: folder:src/algorithm32/
+Rule: Public and durable Algorithm32 quantities must carry explicit units, physical quantity, spectral basis, point or bin meaning, and provenance identity; durable property names must remain unit-neutral and hold unit-bearing values, normalized local computational scalars may use unit suffixes, and radiometric names must distinguish source irradiance before source-path attenuation, incident irradiance after attenuation, and directional incident radiance. A scientific profile must be a named type with one documented default, caller-supplied overrides, every configurable option relevant to the profile, and every difference from the paper or reference configuration it represents.
+Reason: Production Algorithm32 contracts must preserve the meaning, stage, and provenance of scientific values across CPU, GPU, cache, and serialization boundaries. Production Algorithm32 profiles encode selected scientific configurations whose defaults, options, and reference deviations must remain explicit.
+
+## ADD: Production Algorithm32 reference-backed formula symbols
+
+Extends: code-conventions.md#JavaScript And Module Shape
+Scope: folder:src/algorithm32/
+Rule: A scientific implementation may retain a published formula symbol only when owning documentation or an adjacent comment identifies its external authority and makes the code-to-formula mapping unambiguous.
+Reason: Production Algorithm32 source must keep compact scientific notation traceable to its reference authority without weakening the general descriptive-identifier rule.
+
+## ADD: Production Algorithm32 scientific descriptor non-authority
+
+Extends: code-conventions.md#Validation And Failure Policy
+Scope: folder:src/algorithm32/
+Rule: Scientific descriptors may identify, fingerprint, report, and diagnose evidence but must not validate executable facts, select algorithms, calculate indexing or packing, or recover executable facts.
+Reason: Production Algorithm32 must keep executable numerical authority separate from descriptive evidence metadata.
+
+```
+
+## Configuration and reference findings
+
+| Check | Current finding | Proposed resolution / evidence |
+| --- | --- | --- |
+| Missing applicable standards | No new canonical concern recommended beyond the existing eleven; the current malformed manifest cannot assign any of them by folder. | FM-001 and capability table. |
+| Sets and assignments | Standards Sets and Folder Assignments sections and root assignment are absent. | Proposed nine sets / 26 assignments parse; no cycles, duplicate folders, missing parents, inherited duplicates, or nonexistent assigned folders. |
+| Overlay syntax | Four topic scopes are invalid. | FM-002 through FM-005. |
+| Duplicate overlay keys | Scope-only rewrite fails on the two types.md#General Types additions. | Merge their exact Rule and Reason text; do not weaken either rule or change the global parser. |
+| Targets and precedence | Existing target standards and named sections exist; no REPLACE entries or competing replacements. | Three proposed ADD entries parse with existing canonical section targets. |
+| Canonical links | All eleven selected links resolve beneath the current global standards root. | Shared-parser candidate check plus real-path validation. |
+| Misplaced standards | Generic and outdated coding prose remains in mixed source/topic documents; setter restriction is distinct. | FM-007 through FM-009. |
+| Obsolete topic controls | No live emitted Standards Review Scope heading was found outside the generator template; four overlay scopes and the generator's Applicable Files/exclusion mechanism remain. | FM-006; historical archive/report mentions are evidence, not configuration. |
+| Broken workflow reference | Local skill names removed topic-review-scope.mjs. | Replace with folder resolver and normal gated context refresh. |
+| Stale descriptive references | Production architecture calls the overlay topic-scoped; completed integration-plan prose names production-topic rules. | Repair current descriptive links/wording at reconciliation; label completed historical statements as history rather than changing evidence. |
+| Competing report authority | Earlier report says normalized/current under the old model. | Preserve it only in the historical appendix; this current audit controls status and decisions. |
+| Generated guide | STANDARDS.md has the exact generator warning and is therefore not a competing authority, but its topic-model projection is stale. | Generate and check only after approved reconciliation and valid attestation. |
+| Operational dependencies | Both AGENTS files link the Stage 12 run contract; citation policy and testing topic retain live/stale workflow boundaries. | FM-010; no archival before successful contract extraction and consumer repair. |
+| Historical evidence | Sealed Star/candidate/baseline/snapshot and existing archive material remain protected. | No content rewrite, test execution, or new acceptance claim. |
+
+The proposed scope does not automatically include `scripts/algorithm32/`.
+Those files are production support, but the earlier scientific addition was
+explicitly Algorithm32-only and excluded other lanes. The narrow source-folder
+mapping is the recommended conversion; any later extension to tooling requires
+its own explicit scope decision.
+
+The scope audit also found stale governance language in canonical
+`architecture.md#Canonical Documentation Ownership` referring to exceptions
+in a manifest and fixed topic paths. Canonical `documentation.md` explicitly
+owns governance and takes precedence within this standards system. No global
+edit is needed to implement the proposed local configuration; fixed topic paths
+are not copied into the new routing.
+
+## Operational Handoff And Reconciliation Sequence
+
+After manual approval and an explicit reconciliation request:
+
+1. Re-read source hashes and decisions; re-audit any materially changed source.
+2. Install the approved folder manifest and scientific overlay encoding; promote
+   FM-009 to canonical code-conventions.md#Classes And Utilities, without
+   repository-specific wording or a duplicate local setter entry.
+3. Replace the specified duplicate/obsolete coding paragraphs with canonical
+   references, preserving concrete design facts and approved local rules.
+4. Repair the local experiment skill/helper using the skill-authoring workflow.
+   Retain containment, non-overwrite creation, monitorable progress, and the
+   existing source/output contract; do not run or start an experiment.
+   The approved work-topic destination does not enlarge the source-write
+   authorization in repository AGENTS. New experiments still require their
+   own explicit authorized boundary.
+5. Extract the full operational run contract, move the citation-policy owner,
+   repair inbound consumers, and clarify the contained test boundary as FM-010
+   specifies. Preserve historical snapshots before topic retirement.
+6. Audit the resulting repository standards surface again. Include both
+   applicable AGENTS files, manifest/overlay, and the repaired local skill and
+   helper as explicit attestation inputs when automatic discovery omits them.
+   These latter files can otherwise recreate obsolete configuration.
+7. Only with no pending, ambiguous, or deferred decisions, create and validate
+   the normalization attestation through the installed helper.
+8. Generate/check STANDARDS.md and run the reviewer eligibility gates. Then
+   continue the approved topic-consolidation plan. Any instruction/configuration
+   changes during the final cutover require another valid reconciliation;
+   do not hand-edit the attestation to make migration appear complete.
+
+Neither a parser pass nor approved folder configuration claims source compliance
+or authorizes changes to protected evidence. No automated audit recommendation
+counts as the developer's approval.
+
+## Review gate
+
+- [x] Every FM divergence has been reviewed manually.
+- [x] No current developer decision remains `pending`.
+- [x] Decisions differing from recommendations include sufficient clarification.
+- [x] No source, folder, or precedence ambiguity remains.
+- [x] The developer has explicitly requested reconciliation after reviewing this report.
+
+## Generated developer guide
+
+- Guide status: `stale-topic-model`; not regenerated in audit mode.
+- Guide source fingerprint: historical only; see appendix.
+- Guide validation evidence: current folder validation fails before generation.
+
+## Validation Evidence
+
+- Current attestation validator: fails with missing `## Standards Sets`.
+- Current folder resolver: same blocking error.
+- Independently parsed current overlay entries: all four reject `topic:` scope.
+- Scope-only overlay rewrite: rejects duplicate ADD for
+  `types.md#General Types` in `folder:src/algorithm32/`.
+- Proposed in-memory manifest: nine sets, 26 existing assignments, eleven
+  canonical standards; all selected real paths remain beneath the global root.
+- Proposed in-memory overlay: three ADD entries, all section targets exist;
+  all four original scientific Rule sentences survive verbatim.
+- Deterministic mapping exercised on 6,355 inspected filesystem paths.
+  This inventory excludes dependency/build/output/archive/data roots from
+  source-content verification; it is not a scientific artifact inventory.
+- Engine and React-binding samples receive all three proposed ADD entries;
+  Flat32, legacy React app, server, compiler tooling, contained proof host,
+  and topic/skill-documentation samples receive zero scientific additions.
+- `npm run format:check` passed in the preceding handoff preflight; its ignore
+  configuration excludes this report and the contained source tree. It is
+  not evidence that those excluded surfaces were formatted or reviewed.
+- No reviewer started; no build, scientific experiment, or application test
+  was run during this configuration audit.
+
+### Audited inputs at report preparation
+
+Hashes identify this audit's inputs, not a normalization attestation. Re-read
+them before reconciliation. The old report's raw-byte SHA-256 was
+`2a7cc31c91283d03681a73236b969ca84eaada5ace800321fbe7ce312a7b82a1`; its text and developer decisions are retained below.
+Ordinary newline normalization of this report is not historical-evidence
+archive verification.
+
+| Repository input | SHA-256 |
+| --- | --- |
+| `AGENTS.md` | `5c674a402ad008f4c46c570df13fe2cd23719ae311d2782950885ec248c33b54` |
+| `experiments/extraterrestrial/AGENTS.md` | `e32c9235529cbee629fe59f654596b3da370dcfe35585ca64a3e2e27a358e93e` |
+| `agents/topics/standards/manifest.md` | `7a3d4f0a96420049b4c5418f0c43cf49d7b2fb33ae15df3dbe2200b6901ace31` |
+| `agents/topics/standards/overlay.md` | `e4d8c24a24af713339c91d983d048c5c9d57c9ae51f7555eb2cc34e77e2d33d0` |
+| `agents/topics/standards/normalization.json` | `95092c053ea25053f520fd53932e5bde36f91ba91868c3a507ec6208c5959cbb` |
+| `STANDARDS.md` | `d58dbbb6919c0bbd9624baf63a0b39f77745bf880d6fa399153da39dff9d1da6` |
+| `.agents/skills/start-experiment/SKILL.md` | `fd691efaa815e788ec4b8f5e502908e7392231cac6391a22c1a9763ab2e481d9` |
+| `.agents/skills/start-experiment/scripts/scaffold-experiment.mjs` | `f3ea746adea9fb89f5ecbef5f1f6a7813405396124be974cc9020357d908aee0` |
+| `.agents/skills/start-experiment/references/output-contract.md` | `7127d72560bf6e7425b2b3d7d439d89e2a005a695305a4a8d94305faac099f93` |
+| `agents/topics/extraterrestrial/stage-12-implementation-topic.md` | `961c7f8ec9d723951e815b9ba9500a3e0c4db78079449aa0c0a818c2066dddda` |
+| `agents/topics/references/citation-and-retention-policy.md` | `b6a80070e4269ced6d5d31661534c7da2b19ebcd3404d0d651d3aa86ff1b5de1` |
+| `agents/topics/testing/README.md` | `ffce96e702f81a4d26ffa9b42e65aafea7d64c31bfa69e67b94cc38d19a3fdda` |
+| `src/algorithm32/README.md` | `19411ade7e7fb4bab4949fc1902da4d685a64fefafd0019dda9b6c884df9ac6a` |
+| `agents/topics/algorithm32/cache/cache-design.md` | `e0fc5b7f34037cdd58ddf04ac3730d659e8ab48dd0d22fcaee204345714da591` |
+| `agents/topics/algorithm32/production/architecture-boundaries.md` | `0fd0c5fc320e75d7c6c57dbb0818f8b050b2fd718893ff24942400c01713abf0` |
+
+| Canonical input | SHA-256 |
+| --- | --- |
+| `README.md` | `f9b3791e316bcd4cab14a2c4ff500df61ff119719baba7b26f9788bfc1cb61eb` |
+| `accessibility.md` | `cb8f27418f3a00b324a610a87ec651976fcc8f412946e688b39e346688787f80` |
+| `app-shells.md` | `35ca6835c0b4e109bbacdf32f6134835c2d2c11ce48e6a2348ccfc80eb572777` |
+| `architecture.md` | `1d7164c0354d727007485ab389db7e529c76b37fc20a7ef050018ed32ccbfbcf` |
+| `base-components.md` | `a1a95a9358415bb4dc3b7e4ff6b2746b8c440189571a9be2f4d67f0fb58edf4b` |
+| `code-conventions.md` | `33d8209b33f79c8718feb67bbfd2cf82235c1a154ede37acec0cd8e93d83fedc` |
+| `data-persistence.md` | `7ebdea6df0c9e0a33fb2061110c122831ddcfc90752511509d778dc146cf85ba` |
+| `documentation.md` | `489d8b4aaa329512da62e0c63fe5282903df627f3dc8d634d9fc7b442a0b8078` |
+| `jsdoc.md` | `cddf34f7ee6e7574c53d27a44fb0a5c5eca252cc3626c9adf42a49c3900c4166` |
+| `local-https.md` | `b29a31c68f9cca5eba865e9c2ebb0a11fa92b777df759eeb371a8f227960f353` |
+| `localization.md` | `65f9a732a3cade0e1f1e8689d17ea68e27db2a051d4b198d1d6a11c4d6f741e2` |
+| `mui.md` | `1a66f9359d17614ede19479e793c757dd97cdd7d28192587b0ee6e0b769d8086` |
+| `polylith.md` | `b150363644980a0af74215cbe6cabb1dab1c98a65e039eba00409cf2a3f373b5` |
+| `project-foundation.md` | `b8d22fc7ccf0cea43bcc32f98e2ef38c8103abc22892717377a5c3d577894583` |
+| `react.md` | `a556d9bb8c37d4974bcca5813c2174c198f62fb7b2b0e62648b2915ef0e1793c` |
+| `remvc.md` | `284fc7929493c6493612c23311cfca9785a650bf9c4b09d50ce8b6420966dd53` |
+| `server.md` | `47c93e38f4b8f63af9056fd34d307292b877df488bc3c487e2e0b6c53a0adb75` |
+| `socket-io.md` | `f7373a1e9d87de3c94e476b8b40025aea66713f6ef8bb5e2d983eaab2079bb32` |
+| `testing.md` | `d5aa5ff4df35e0c70c437f09003da936e9c04b5f52cb4178517377e1cf0cfc53` |
+| `types.md` | `add94e8ae068472256227ecd38245c77d14892a8e50f34fbeed35ca42553eb8c` |
+
+## Final validation
+
+- [x] Every approved decision was applied exactly as recorded.
+- [x] No pending decision was applied.
+- [x] All sets, assignments, canonical links, targets, and overlay scopes validate.
+- [x] Every retained local engineering rule has one overlay owner.
+- [x] No active topic-based standards controls or generator path remains.
+- [x] Live operational contracts and all current consumers retain valid owners.
+- [x] Protected evidence remains unchanged.
+- [x] Re-audit has no unexplained divergence or ambiguity.
+- [x] Attestation creation and validation succeeded through reconciliation.
+- [x] Generated developer guide reports current.
+- [x] Reviewer eligibility helpers and topic cutover link/coverage checks succeeded.
+- Reviewer roster refresh: partial; the environment rejected additional reviewer threads. The existing UI lane is READY for the final checkpoint-handoff context at `sha256:c54470b4a902e1d366596e405c1ec4bbe3cc130f66c3ba162c63c459c95a94be`. No full standards-review result is claimed.
+
+
+## Completed Reconciliation Evidence
+
+- FM-001: Installed nine sets and 26 folder assignments; shared parser and real-folder validation pass.
+- FM-002/FM-004: Preserved quantities/provenance and complete scientific profiles in one engine-folder types ADD, avoiding duplicate target/scope keys.
+- FM-003/FM-005: Preserved formula-symbol and descriptor non-authority ADD entries at src/algorithm32/.
+- FM-006: Create/check fixture passes with folder-resolved set code. Existing destination and obsolete --exclude are rejected. A malformed manifest fails before any destination is created. Node syntax and skill quick validation pass. The disposable fixture was removed; no scientific experiment ran.
+- FM-007/FM-008: Removed approved duplicate and obsolete coding prose, retaining concrete cache/API facts and canonical links. Original topic bytes remain in verified history.
+- FM-009: Installed the assignment-only setter restriction in canonical code-conventions.md, Classes And Utilities. The global file is outside this repository checkpoint.
+- FM-010: Complete immutable-run contract now lives at experiments/extraterrestrial/run-contract.md; citation policy lives under references/. Current consumers are repaired; contained experiments remain runner-only and closed lanes remain closed.
+
+- Attestation create/validate: `sha256:fbaa7d5da48540af823ddced16a3802135aa2b1af064faa8c16c15bb3aa108a2`, seven audited inputs.
+- Generated guide write/check: current at `sha256:6bc8da5fa67609da8c441939011ea4bbf60ddcb67bb85dc4dfec4eefb9f4627e`.
+- Folder parser, canonical-root validation, formatting preflight, and `npm run format:check`: pass.
+- Protected topic evidence: all 66 frozen files byte-hash unchanged; original-topic ZIP retains its verified SHA-256.
+- Topic cutover: five work topics and folder-independent focus routing; [migration verification](../context/topic-migration-archive-index.md) owns relocation evidence.
+
+Normalization status: `normalized`. All current decisions are accepted and applied;
+none is pending, ambiguous, or deferred. Reviewer thread capacity does not alter
+the standards authority or imply a complete code-compliance review.
+
+## Historical Reconciliation Archive — 2026-09-04
+
+The following report is retained as historical developer-decision evidence.
+Its normalized/current claims, Applicable Files model, topic scopes, old
+validation results, and references to removed files are not current guidance.
+Unchanged substantive decisions remain historical approvals; the current FM
+items explicitly identify which scope/ownership changes require re-review.
+
+<details>
+<summary>Preserved prior reconciliation report and developer decisions</summary>
+
+
+# Standards Reconciliation
+
+## Status
+
+- Repository: `C:\dev\flattened-steel`
+- Canonical standards root: `C:\Users\gande\.codex\documentation\standards`
 - Standards governance: [Standards Governance](../../../../../Users/gande/.codex/documentation/standards/documentation.md)
-- Generated developer guide: root `STANDARDS.md` is current at source fingerprint `sha256:6ac919be5ce56c65795ef7e517ad1f27650e86d9914a17f5b8bf55ba9cb0a540`.
-- Normalization attestation: valid at repository standards fingerprint `sha256:7f4239c4c033e34d2c95d94ef359b788c26bed8b0a428da0e2474a483b96a115` with 5 inputs.
+- Generated developer guide: root `STANDARDS.md` is current at source fingerprint `sha256:c1b9ee10ccf45714a4ee306b097baa8b2535b07d00c604c824356b7c90f360ef`.
+- Normalization attestation: valid at repository standards fingerprint `sha256:2a0cf1dbfa5a068476be00aac94899021a8f143fddc4e3b6b2559e386368da23` with 5 inputs.
 - Audit date: 2026-09-04
-- Audit basis: repository commit `20db38fbed50513e29e193c004bf78345af5f6a3`; current repository and Codex-home instructions; the complete canonical standards library; the `manifest.md`, overlay, generated-guide, topic-scope, reviewer-selection, and attestation governance contract in `documentation/standards/documentation.md`; all documents below `agents/topics/standards`; and the domain supplement `agents/topics/algorithm32/standards.md`. Pre-existing working-tree changes were treated as developer-owned and were not modified. This report was refreshed for the current governance model on 2026-09-04.
+- Audit basis: repository commit `20db38fbed50513e29e193c004bf78345af5f6a3`; current repository and Codex-home instructions; the complete canonical standards library; the `manifest.md`, overlay, generated-guide, topic-scope, reviewer-selection, and attestation governance contract in `documentation/standards/documentation.md`; all documents below `agents/topics/standards`; and the former domain supplement `agents/topics/algorithm32/standards.md`. Pre-existing working-tree changes were treated as developer-owned and were not modified. This report was refreshed for the current governance model and refreshed again after the approved experiment-root relocation on 2026-09-04.
 - Phase: `reconciled`
 
 ## Summary
+
+### Experiment-root relocation audit
+
+- The repository owner moved the tracked experiment root from `scripts/extraterrestrial/` to `experiments/extraterrestrial/` so top-level `experiments/` can own side POC projects.
+- This is an operational repository-path change, not a new or changed engineering standard. It creates no new divergence or developer disposition.
+- All 2,185 paths tracked at the former root have a mapped file at the new root, and the former source root is absent.
+- Repository-owned live links, commands, imports, containment paths, and documentation references now use `experiments/extraterrestrial/`; the immutable generated-output root remains `tmp/extraterrestrial/`.
+- No broken Markdown link into the relocated tree was detected. Reconciliation replaced the stale generated attestation rather than hand-editing it.
+- The repository-local `start-experiment` skill is operational scaffolding: it selects no canonical standard, defines no overlay precedence, and explicitly denies itself standards authority. Its generated paths, topic documents, output contract, and progress records are experiment configuration and workflow facts rather than an additional standards source.
 
 | Recommended disposition | Count |
 | --- | ---: |
@@ -570,8 +1238,9 @@ by `$normalize-standards reconcile` after the manual review gate passes.
 | CFG-007 | Legacy documents claimed competing standards authority. | Removed those owners, rerouted current topic references, and updated production architecture routing to the manifest and overlay. | `applied-and-validated`. |
 | CFG-008 | Canonical governance required the approved terminology and loading-ownership corrections. | Updated canonical `README.md` and `documentation.md` without repository-specific leakage. | `applied-and-validated`. |
 | CFG-009 | Standards references required final validation. | Rechecked relative Markdown links in every changed repository document and validated manifested canonical links. | `validated-clean`. |
-| CFG-010 | Root `STANDARDS.md` was absent. | Generated the guide after attestation validation and ran check mode. | `current` at source fingerprint `sha256:6ac919be5ce56c65795ef7e517ad1f27650e86d9914a17f5b8bf55ba9cb0a540`. |
+| CFG-010 | Root `STANDARDS.md` was absent. | Generated the guide after attestation validation and refreshed it after the approved experiment-root relocation. | `current` at source fingerprint `sha256:c1b9ee10ccf45714a4ee306b097baa8b2535b07d00c604c824356b7c90f360ef`. |
 | CFG-011 | Direct repository entry required the approved nonrecursive lifecycle warning. | Added the warning to repository `AGENTS.md`, including explicit-workflow and post-compaction handling. | `applied-and-attested`. |
+| CFG-012 | The contained experiment root moved from `scripts/extraterrestrial/` to `experiments/extraterrestrial/`. | Verified all 2,185 mapped tracked paths, repaired live references, retained `tmp/extraterrestrial/` as the immutable output root, classified the local experiment-scaffolding skill as operational rather than standards authority, and refreshed the attestation through reconciliation. | `applied-and-attested`. |
 
 ## Review gate
 
@@ -605,8 +1274,8 @@ mode. The guide is a derived developer reference and does not affect
 normalization status or reviewer eligibility.
 
 - Guide status: `current`
-- Guide source fingerprint: `sha256:6ac919be5ce56c65795ef7e517ad1f27650e86d9914a17f5b8bf55ba9cb0a540`
-- Guide validation evidence: write mode reported `created`; subsequent check mode reported `current` against normalization fingerprint `sha256:7f4239c4c033e34d2c95d94ef359b788c26bed8b0a428da0e2474a483b96a115`.
+- Guide source fingerprint: `sha256:c1b9ee10ccf45714a4ee306b097baa8b2535b07d00c604c824356b7c90f360ef`
+- Guide validation evidence: write mode reported `updated`; subsequent check mode reported `current` against normalization fingerprint `sha256:2a0cf1dbfa5a068476be00aac94899021a8f143fddc4e3b6b2559e386368da23`.
 
 ## Final validation
 
@@ -623,3 +1292,5 @@ normalization status or reviewer eligibility.
 - [x] After attestation validation, `STANDARDS.md` was generated or refreshed and its check mode reports `current`.
 
 Normalization status: `normalized`
+
+</details>

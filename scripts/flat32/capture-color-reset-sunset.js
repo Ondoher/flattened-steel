@@ -103,37 +103,43 @@ let facts;
 try {
 	await page.goto(applicationUrl.href, {waitUntil: 'networkidle2', timeout: 120_000});
 	process.stderr.write('capture: application loaded; waiting for initial ready state\n');
-	await page.waitForFunction(
-		() => document.querySelector('.flat32-shell')?.dataset.flat32State === 'ready',
-		{timeout: 900_000, polling: 250},
-	);
+	await page.waitForFunction(() => document.querySelector('.flat32-shell')?.dataset.flat32State === 'ready', {
+		timeout: 900_000,
+		polling: 250,
+	});
 	process.stderr.write('capture: initial state ready; selecting requested sunset state\n');
-	await page.evaluate(({requestedOffsetMinutes, requestedGlobePreset}) => {
-		const shell = document.querySelector('.flat32-shell');
-		const location = shell?.querySelector('#flat32-location-control');
-		const timeBasis = shell?.querySelector('#flat32-time-basis-control');
-		const presetIndex = {sunrise: 0, 'solar-noon': 1, sunset: 2}[requestedGlobePreset];
-		const preset = shell?.querySelector(`button[data-flat32-globe-time="${presetIndex}"]`);
-		const minuteOffset = shell?.querySelector('button[data-flat32-minute-offset="10"]');
-		if (!(location instanceof HTMLButtonElement)) throw new Error('Flat32 location control is unavailable.');
-		if (!(timeBasis instanceof HTMLButtonElement)) throw new Error('Flat32 time-basis control is unavailable.');
-		if (!(preset instanceof HTMLButtonElement)) throw new Error('Flat32 globe-time preset is unavailable.');
-		if (!(minuteOffset instanceof HTMLButtonElement)) throw new Error('Flat32 minute-offset control is unavailable.');
-		location.click();
-		location.click();
-		timeBasis.click();
-		preset.click();
-		if (requestedOffsetMinutes !== 0) {
-			minuteOffset.dataset.flat32MinuteOffset = String(requestedOffsetMinutes);
-			minuteOffset.click();
-		}
-	}, {requestedOffsetMinutes: offsetMinutes, requestedGlobePreset: globePreset});
+	await page.evaluate(
+		({requestedOffsetMinutes, requestedGlobePreset}) => {
+			const shell = document.querySelector('.flat32-shell');
+			const location = shell?.querySelector('#flat32-location-control');
+			const timeBasis = shell?.querySelector('#flat32-time-basis-control');
+			const presetIndex = {sunrise: 0, 'solar-noon': 1, sunset: 2}[requestedGlobePreset];
+			const preset = shell?.querySelector(`button[data-flat32-globe-time="${presetIndex}"]`);
+			const minuteOffset = shell?.querySelector('button[data-flat32-minute-offset="10"]');
+			if (!(location instanceof HTMLButtonElement)) throw new Error('Flat32 location control is unavailable.');
+			if (!(timeBasis instanceof HTMLButtonElement)) throw new Error('Flat32 time-basis control is unavailable.');
+			if (!(preset instanceof HTMLButtonElement)) throw new Error('Flat32 globe-time preset is unavailable.');
+			if (!(minuteOffset instanceof HTMLButtonElement))
+				throw new Error('Flat32 minute-offset control is unavailable.');
+			location.click();
+			location.click();
+			timeBasis.click();
+			preset.click();
+			if (requestedOffsetMinutes !== 0) {
+				minuteOffset.dataset.flat32MinuteOffset = String(requestedOffsetMinutes);
+				minuteOffset.click();
+			}
+		},
+		{requestedOffsetMinutes: offsetMinutes, requestedGlobePreset: globePreset},
+	);
 	await page.waitForFunction(
 		(requestedTimeLabel) => {
 			const shell = document.querySelector('.flat32-shell');
-			return shell?.dataset.flat32Location === 'San Jose' &&
+			return (
+				shell?.dataset.flat32Location === 'San Jose' &&
 				shell.dataset.flat32Time === requestedTimeLabel &&
-				shell.dataset.flat32State === 'setting-up-atmosphere';
+				shell.dataset.flat32State === 'setting-up-atmosphere'
+			);
 		},
 		{timeout: 30_000, polling: 50},
 		expectedTimeLabel,
@@ -143,11 +149,13 @@ try {
 		(requestedTimeLabel) => {
 			const shell = document.querySelector('.flat32-shell');
 			const canvas = document.querySelector('#flat32-canvas');
-			return shell?.dataset.flat32Location === 'San Jose' &&
+			return (
+				shell?.dataset.flat32Location === 'San Jose' &&
 				shell.dataset.flat32Time === requestedTimeLabel &&
 				shell.dataset.flat32State === 'ready' &&
 				canvas?.dataset.flat32RenderPath === 'algorithm32' &&
-				canvas.dataset.flat32StellarGenerationCompletion === 'complete';
+				canvas.dataset.flat32StellarGenerationCompletion === 'complete'
+			);
 		},
 		{timeout: 900_000, polling: 250},
 		expectedTimeLabel,
@@ -165,8 +173,10 @@ try {
 			() => {
 				const shell = document.querySelector('.flat32-shell');
 				const canvas = document.querySelector('#flat32-canvas');
-				return shell?.dataset.flat32AtmosphereShader === 'bypassed' &&
-					canvas?.dataset.flat32RenderPath === 'direct-three';
+				return (
+					shell?.dataset.flat32AtmosphereShader === 'bypassed' &&
+					canvas?.dataset.flat32RenderPath === 'direct-three'
+				);
 			},
 			{timeout: 30_000, polling: 50},
 		);

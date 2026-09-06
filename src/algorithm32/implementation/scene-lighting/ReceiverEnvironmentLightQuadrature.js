@@ -31,11 +31,7 @@ function createReceiverEnvironmentLightQuadrature() {
 		samples.push(
 			Object.freeze({
 				directionLocal: /** @type {UnitVector3} */ (
-					Object.freeze([
-						radius * Math.cos(azimuth),
-						radius * Math.sin(azimuth),
-						Math.sqrt(1 - first),
-					])
+					Object.freeze([radius * Math.cos(azimuth), radius * Math.sin(azimuth), Math.sqrt(1 - first)])
 				),
 				irradianceWeightSteradians: Math.PI / RECEIVER_ENVIRONMENT_SAMPLE_COUNT,
 			}),

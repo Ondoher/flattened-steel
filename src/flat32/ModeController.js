@@ -1,4 +1,4 @@
-import { Algorithm32Runtime } from './Algorithm32Runtime.js';
+import {Algorithm32Runtime} from './Algorithm32Runtime.js';
 
 /** Own supported-mode preparation, atomic publication, and rollback. */
 export class ModeController {
@@ -8,8 +8,7 @@ export class ModeController {
 	 */
 	constructor(configuration) {
 		this._createMode = configuration.createMode;
-		this._createRuntime = configuration.createRuntime
-			?? this._createAlgorithm32Runtime.bind(this);
+		this._createRuntime = configuration.createRuntime ?? this._createAlgorithm32Runtime.bind(this);
 		this._endpointScene = configuration.endpointScene;
 		this._onPreparing = configuration.onPreparing;
 		this._onReverted = configuration.onReverted;
@@ -57,9 +56,7 @@ export class ModeController {
 
 	/** Restore the last published scene and render operation after failure. */
 	_restorePublishedState(sceneChanged) {
-		if (sceneChanged
-			&& this._currentKind !== null
-			&& this._activeMode !== null) {
+		if (sceneChanged && this._currentKind !== null && this._activeMode !== null) {
 			this._onReverted?.(this._currentKind, this._activeMode);
 			this._sceneKind = this._currentKind;
 		}
@@ -109,7 +106,7 @@ export class ModeController {
 			});
 			const summary = await candidate.setup();
 			if (this._disposed || generation !== this._generation) {
-				candidate.dispose({ restoreRendering: false });
+				candidate.dispose({restoreRendering: false});
 				return null;
 			}
 			candidate.setAtmosphereEnabled(this._atmosphereEnabled);
@@ -120,11 +117,11 @@ export class ModeController {
 			this._activeRuntime = candidate;
 			this._currentKind = kind;
 			this._activeMode = mode;
-			replaced?.dispose({ restoreRendering: false });
+			replaced?.dispose({restoreRendering: false});
 			return summary;
 		} catch (error) {
 			if (candidate !== null) {
-				candidate.dispose({ restoreRendering: false });
+				candidate.dispose({restoreRendering: false});
 			} else {
 				this._disposeUnownedCandidate(mode, composer);
 			}
@@ -140,7 +137,9 @@ export class ModeController {
 		}
 	}
 
-	get currentKind() { return this._currentKind; }
+	get currentKind() {
+		return this._currentKind;
+	}
 
 	/** Select Algorithm32 composition or the direct lit scene without rebuilding either. */
 	setAtmosphereEnabled(enabled) {

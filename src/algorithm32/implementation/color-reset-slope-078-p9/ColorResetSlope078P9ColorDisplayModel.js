@@ -30,11 +30,11 @@ function hillTermDerivative(illuminance, amplitude, transitionIlluminanceLux, po
 	if (ratio > 1) {
 		const inverseRatio = 1 / ratio;
 		const inversePower = inverseRatio ** power;
-		return -(amplitude * power * inversePower * inverseRatio) /
-			(transitionIlluminanceLux * (1 + inversePower) ** 2);
+		return (
+			-(amplitude * power * inversePower * inverseRatio) / (transitionIlluminanceLux * (1 + inversePower) ** 2)
+		);
 	}
-	return -(amplitude * power * ratio ** (power - 1)) /
-		(transitionIlluminanceLux * (1 + ratio ** power) ** 2);
+	return -(amplitude * power * ratio ** (power - 1)) / (transitionIlluminanceLux * (1 + ratio ** power) ** 2);
 }
 
 function stableSoftplus(value) {
@@ -69,11 +69,9 @@ export class ColorResetSlope078P9ColorDisplayModel extends BrunetonColorDisplayM
 
 	_baseGain(illuminance) {
 		const curve = COLOR_RESET_SLOPE_078_P9_CURVE;
-		return 1 + hillTerm(
-			illuminance,
-			curve.sunsetAmplitude,
-			curve.sunsetTransitionIlluminanceLux,
-			curve.sunsetRolloffPower,
+		return (
+			1 +
+			hillTerm(illuminance, curve.sunsetAmplitude, curve.sunsetTransitionIlluminanceLux, curve.sunsetRolloffPower)
 		);
 	}
 
@@ -89,8 +87,9 @@ export class ColorResetSlope078P9ColorDisplayModel extends BrunetonColorDisplayM
 
 	_adaptationState(illuminance) {
 		const curve = COLOR_RESET_SLOPE_078_P9_CURVE;
-		const logRatio = Math.log(curve.adaptationPivotIlluminanceLux /
-			(illuminance + curve.adaptationFloorIlluminanceLux));
+		const logRatio = Math.log(
+			curve.adaptationPivotIlluminanceLux / (illuminance + curve.adaptationFloorIlluminanceLux),
+		);
 		const input = logRatio / curve.adaptationSoftnessLogUnits;
 		const softLogRatio = curve.adaptationSoftnessLogUnits * stableSoftplus(input);
 		return {
@@ -109,26 +108,24 @@ export class ColorResetSlope078P9ColorDisplayModel extends BrunetonColorDisplayM
 		const curve = COLOR_RESET_SLOPE_078_P9_CURVE;
 		const base = this._baseGain(illuminance);
 		const adaptation = this._adaptationState(illuminance);
-		const adaptationLogDerivative = -(curve.adaptationExponent * adaptation.activation) /
-			(illuminance + curve.adaptationFloorIlluminanceLux);
+		const adaptationLogDerivative =
+			-(curve.adaptationExponent * adaptation.activation) / (illuminance + curve.adaptationFloorIlluminanceLux);
 		return adaptation.factor * (this._baseGainDerivative(illuminance) + base * adaptationLogDerivative);
 	}
 
 	displayGainLogElasticity(totalHorizontalIlluminance) {
 		const illuminance = this._acceptTotalHorizontalIlluminance(totalHorizontalIlluminance);
 		if (illuminance === 0) return 0;
-		return illuminance * this.displayGainDerivative(totalHorizontalIlluminance) /
-			this.displayGain(totalHorizontalIlluminance);
+		return (
+			(illuminance * this.displayGainDerivative(totalHorizontalIlluminance)) /
+			this.displayGain(totalHorizontalIlluminance)
+		);
 	}
 
 	applyPreToneGain(linearSrgb, totalHorizontalIlluminance) {
 		const gain = this.displayGain(totalHorizontalIlluminance);
 		const rgb = requireFiniteRgb(linearSrgb);
-		return /** @type {readonly [number, number, number]} */ ([
-			rgb[0] * gain,
-			rgb[1] * gain,
-			rgb[2] * gain,
-		]);
+		return /** @type {readonly [number, number, number]} */ ([rgb[0] * gain, rgb[1] * gain, rgb[2] * gain]);
 	}
 
 	linearSrgbToDisplayRgb(linearSrgb, totalHorizontalIlluminance) {

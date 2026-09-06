@@ -1,42 +1,42 @@
 {
-  "schema": "algorithm32-b3-mismatch-map-v1",
-  "subject": "Algorithm32 J3 n-order CPU candidate, W27 cumulative scattering through order 3 with pinned-34 incoming recurrence, 48 physical altitude nodes, and view-only actual-altitude interpolation",
-  "mismatches": [
-    {
-      "field": "spectral representation",
-      "disposition": "Algorithm32 J3 computes its native 15 equal-width channels. For the unchanged paper RMSE coordinates, each value is held constant over its declared bin; no 40-channel transport realization is substituted."
-    },
-    {
-      "field": "ground reflection",
-      "disposition": "The sky-only Algorithm32 J3 benchmark calculation has no ground-reflection contribution, while the matched libRadtran setup uses Lambertian grass spectral albedo. Treat the resulting comparison as scope-limited rather than input-identical."
-    },
-    {
-      "field": "molecular-scattering parameterization",
-      "disposition": "Algorithm32 J3 uses the canonical Algorithm32 wavelength law and coefficient scale; the libRadtran deck uses the retained Penndorf table. Preserve this as a model-family difference."
-    },
-    {
-      "field": "multiple-scattering treatment",
-      "disposition": "Algorithm32 J3 stores and integrates the cumulative J1 + J2 + J3 scattering density and stops the recurrence after order 3. The retained libRadtran DISORT calculation resolves a fuller multiple-scattering solution. Do not interpret aggregate-score proximity as component, order-by-order, or pointwise equality."
-    },
-    {
-      "field": "incident angular quadrature",
-      "disposition": "Algorithm32 J3 uses the pinned 34-direction source-oriented equal-weight Fibonacci domain for incoming-radiance integration and a separate W27 source-aligned cubed-sphere domain for outgoing-density reconstruction; the retained libRadtran DISORT calculation resolves its angular field with 16 streams. Preserve these numerical-method differences."
-    },
-    {
-      "field": "vertical and path discretization",
-      "disposition": "Algorithm32 J3 uses analytic exponential density profiles, 48 physical altitude nodes, 40 view-path and higher-order transport intervals, and 20 source-transmittance intervals. Final view lookup linearly interpolates the actual neighboring altitude nodes, while cache construction and recurrence retain their selected sampling policy. libRadtran uses its retained layered atmosphere and solver controls."
-    },
-    {
-      "field": "geometry approximation",
-      "disposition": "Algorithm32 J3 uses exact ray intersections with its spherical atmosphere; the retained libRadtran setup is pseudospherical. Treat the distinction as a declared model mismatch."
-    },
-    {
-      "field": "observer altitude",
-      "disposition": "Algorithm32 J3 evaluates at two meters above its spherical ground boundary; the retained libRadtran deck uses zero-kilometer output altitude. Report the two-meter choice and do not conceal the difference."
-    },
-    {
-      "field": "solar source treatment",
-      "disposition": "Algorithm32 J3 uses an ideal unresolved distant directional Sun and reports atmosphere path radiance without a resolved solar disc; preserve this boundary when comparing with the retained solver output and measurements."
-    }
-  ]
+	"schema": "algorithm32-b3-mismatch-map-v1",
+	"subject": "Algorithm32 J3 n-order CPU candidate, W27 cumulative scattering through order 3 with pinned-34 incoming recurrence, 48 physical altitude nodes, and view-only actual-altitude interpolation",
+	"mismatches": [
+		{
+			"field": "spectral representation",
+			"disposition": "Algorithm32 J3 computes its native 15 equal-width channels. For the unchanged paper RMSE coordinates, each value is held constant over its declared bin; no 40-channel transport realization is substituted."
+		},
+		{
+			"field": "ground reflection",
+			"disposition": "The sky-only Algorithm32 J3 benchmark calculation has no ground-reflection contribution, while the matched libRadtran setup uses Lambertian grass spectral albedo. Treat the resulting comparison as scope-limited rather than input-identical."
+		},
+		{
+			"field": "molecular-scattering parameterization",
+			"disposition": "Algorithm32 J3 uses the canonical Algorithm32 wavelength law and coefficient scale; the libRadtran deck uses the retained Penndorf table. Preserve this as a model-family difference."
+		},
+		{
+			"field": "multiple-scattering treatment",
+			"disposition": "Algorithm32 J3 stores and integrates the cumulative J1 + J2 + J3 scattering density and stops the recurrence after order 3. The retained libRadtran DISORT calculation resolves a fuller multiple-scattering solution. Do not interpret aggregate-score proximity as component, order-by-order, or pointwise equality."
+		},
+		{
+			"field": "incident angular quadrature",
+			"disposition": "Algorithm32 J3 uses the pinned 34-direction source-oriented equal-weight Fibonacci domain for incoming-radiance integration and a separate W27 source-aligned cubed-sphere domain for outgoing-density reconstruction; the retained libRadtran DISORT calculation resolves its angular field with 16 streams. Preserve these numerical-method differences."
+		},
+		{
+			"field": "vertical and path discretization",
+			"disposition": "Algorithm32 J3 uses analytic exponential density profiles, 48 physical altitude nodes, 40 view-path and higher-order transport intervals, and 20 source-transmittance intervals. Final view lookup linearly interpolates the actual neighboring altitude nodes, while cache construction and recurrence retain their selected sampling policy. libRadtran uses its retained layered atmosphere and solver controls."
+		},
+		{
+			"field": "geometry approximation",
+			"disposition": "Algorithm32 J3 uses exact ray intersections with its spherical atmosphere; the retained libRadtran setup is pseudospherical. Treat the distinction as a declared model mismatch."
+		},
+		{
+			"field": "observer altitude",
+			"disposition": "Algorithm32 J3 evaluates at two meters above its spherical ground boundary; the retained libRadtran deck uses zero-kilometer output altitude. Report the two-meter choice and do not conceal the difference."
+		},
+		{
+			"field": "solar source treatment",
+			"disposition": "Algorithm32 J3 uses an ideal unresolved distant directional Sun and reports atmosphere path radiance without a resolved solar disc; preserve this boundary when comparing with the retained solver output and measurements."
+		}
+	]
 }

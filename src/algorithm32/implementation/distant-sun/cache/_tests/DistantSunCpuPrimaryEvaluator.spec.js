@@ -86,7 +86,7 @@ describe('DistantSunCpuPrimaryEvaluator', /** Called by Jasmine to register the 
 			/**
 			 * Called by Jasmine to invoke the operation whose outcome is asserted.
 			 * @returns - The callback result returned to its caller.
-				 */ () =>
+			 */ () =>
 				evaluator.buildPrimaryRadiance({
 					model: createPrimaryModel(source, createRadianceGeometry(), createOnePositionDomainSelection(), 3),
 					calculator,

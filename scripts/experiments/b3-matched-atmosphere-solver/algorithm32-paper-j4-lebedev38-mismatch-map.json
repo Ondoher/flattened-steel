@@ -1,22 +1,22 @@
 {
-  "schema": "algorithm32-b3-mismatch-map-v1",
-  "subject": "Algorithm32 Paper J4 experimental Lebedev-38 candidate",
-  "mismatches": [
-    {
-      "field": "multiple-scattering treatment",
-      "disposition": "The candidate stops after cumulative J1 + J2 + J3 + J4 rather than resolving libRadtran DISORT's fuller multiple-scattering solution."
-    },
-    {
-      "field": "incident angular quadrature",
-      "disposition": "The candidate uses a 38-node antipodally closed ninth-degree Lebedev incoming quadrature and the separate W27 source-aligned outgoing reconstruction; retained libRadtran DISORT uses 16 streams."
-    },
-    {
-      "field": "vertical and path discretization",
-      "disposition": "The candidate retains 48 physical altitude nodes, 40 view-path and higher-order transport intervals, and 20 source-transmittance intervals; libRadtran uses its retained layered atmosphere and solver controls."
-    },
-    {
-      "field": "geometry approximation",
-      "disposition": "The candidate uses exact ray intersections with its spherical atmosphere; the retained libRadtran setup is pseudospherical."
-    }
-  ]
+	"schema": "algorithm32-b3-mismatch-map-v1",
+	"subject": "Algorithm32 Paper J4 experimental Lebedev-38 candidate",
+	"mismatches": [
+		{
+			"field": "multiple-scattering treatment",
+			"disposition": "The candidate stops after cumulative J1 + J2 + J3 + J4 rather than resolving libRadtran DISORT's fuller multiple-scattering solution."
+		},
+		{
+			"field": "incident angular quadrature",
+			"disposition": "The candidate uses a 38-node antipodally closed ninth-degree Lebedev incoming quadrature and the separate W27 source-aligned outgoing reconstruction; retained libRadtran DISORT uses 16 streams."
+		},
+		{
+			"field": "vertical and path discretization",
+			"disposition": "The candidate retains 48 physical altitude nodes, 40 view-path and higher-order transport intervals, and 20 source-transmittance intervals; libRadtran uses its retained layered atmosphere and solver controls."
+		},
+		{
+			"field": "geometry approximation",
+			"disposition": "The candidate uses exact ray intersections with its spherical atmosphere; the retained libRadtran setup is pseudospherical."
+		}
+	]
 }

@@ -79,11 +79,16 @@ const manifest = {
 		runtimeRunId: '000057-cr6g-brightest-2000-runtime-capacity',
 		runtimeArtifactSetSha256: 'ae7224f0b85859a08d896f32b7be24c33472b9b3e034f07b365f96024af90627',
 	},
-	artifacts: Object.fromEntries(Object.entries(outputs).map(([key, filename]) => [key, {
-		path: filename,
-		byteLength: materialized[key].bytes.byteLength,
-		sha256: materialized[key].source.sha256,
-	}])),
+	artifacts: Object.fromEntries(
+		Object.entries(outputs).map(([key, filename]) => [
+			key,
+			{
+				path: filename,
+				byteLength: materialized[key].bytes.byteLength,
+				sha256: materialized[key].source.sha256,
+			},
+		]),
+	),
 	runtime: {
 		memberTexture: {format: 'RGBA32F', width: 2000, height: 1},
 		spectraTexture: {format: 'R32F', width: 2000, height: 15},

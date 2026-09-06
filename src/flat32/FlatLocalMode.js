@@ -38,7 +38,10 @@ export class FlatLocalMode {
 	constructor(configuration) {
 		const selections = resolveFlat32ProductionSelections(configuration);
 		const presentationFilterRegistry = new ViewPresentationFilterRegistry(selections.presentationFilters);
-		requireImplementedFlat32ProductionSelections(selections, {presentationFilterRegistry, supportsStellarFilters: false});
+		requireImplementedFlat32ProductionSelections(selections, {
+			presentationFilterRegistry,
+			supportsStellarFilters: false,
+		});
 		const profile = DEFAULT_NATIVE_PRODUCTION_PROFILE;
 		const spectralBasis = profile.spectral.basis;
 		const observerPosition = /** @type {Position} */ ({

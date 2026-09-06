@@ -1,10 +1,10 @@
-import { ModeController } from '../ModeController.js';
+import {ModeController} from '../ModeController.js';
 
 /** Create one observable fake supported mode. */
 function createMode(name, events) {
 	return {
 		name,
-		geometry: { id: `${name}-geometry` },
+		geometry: {id: `${name}-geometry`},
 		dispose() {
 			events.push(`${name}:mode-disposed`);
 		},
@@ -36,7 +36,7 @@ function createRuntime(name, events, setupFailure = null) {
 		async setup() {
 			events.push(`${name}:setup`);
 			if (setupFailure !== null) throw setupFailure;
-			return { pairing: name };
+			return {pairing: name};
 		},
 		publish() {
 			if (disposed) throw new Error(`${name} published after disposal.`);
@@ -46,7 +46,7 @@ function createRuntime(name, events, setupFailure = null) {
 			if (disposed) throw new Error(`${name} selected after disposal.`);
 			events.push(`${name}:atmosphere:${enabled}`);
 		},
-		dispose({ restoreRendering = true } = {}) {
+		dispose({restoreRendering = true} = {}) {
 			if (disposed) return;
 			disposed = true;
 			events.push(`${name}:runtime-disposed:${restoreRendering}`);
@@ -57,27 +57,29 @@ function createRuntime(name, events, setupFailure = null) {
 describe('Flat32 mode transaction', () => {
 	it('retains the shader-bypass selection across a mode replacement', async () => {
 		const events = [];
-		const controller = new ModeController(/** @type {any} */ ({
-			atmosphereEnabled: true,
-			endpointScene: {},
-			onFailure() {},
-			createMode(kind) {
-				return createMode(kind, events);
-			},
-			createRuntime({mode, atmosphereEnabled}) {
-				events.push(`${mode.name}:constructed:${atmosphereEnabled}`);
-				return createRuntime(mode.name, events);
-			},
-			onPreparing() {},
-			onReverted() {},
-			onPublished() {},
-			sceneRuntime: {
-				createAtmosphereComposer() {
-					return createComposer('candidate', events);
+		const controller = new ModeController(
+			/** @type {any} */ ({
+				atmosphereEnabled: true,
+				endpointScene: {},
+				onFailure() {},
+				createMode(kind) {
+					return createMode(kind, events);
 				},
-				restoreDirectRendering() {},
-			},
-		}));
+				createRuntime({mode, atmosphereEnabled}) {
+					events.push(`${mode.name}:constructed:${atmosphereEnabled}`);
+					return createRuntime(mode.name, events);
+				},
+				onPreparing() {},
+				onReverted() {},
+				onPublished() {},
+				sceneRuntime: {
+					createAtmosphereComposer() {
+						return createComposer('candidate', events);
+					},
+					restoreDirectRendering() {},
+				},
+			}),
+		);
 
 		await controller.switchTo('spherical-distant', /** @type {Flat32ApplicationState} */ ({}));
 		controller.setAtmosphereEnabled(false);
@@ -98,52 +100,48 @@ describe('Flat32 mode transaction', () => {
 			createRuntime('replacement', events, new Error('candidate failed')),
 		];
 		let composerIndex = 0;
-		const controller = new ModeController(/** @type {any} */ ({
-			endpointScene: {},
-			onFailure() {},
-			createMode(kind) {
-				const mode = createMode(
-					kind === 'spherical-distant' ? 'baseline' : 'replacement',
-					events,
-				);
+		const controller = new ModeController(
+			/** @type {any} */ ({
+				endpointScene: {},
+				onFailure() {},
+				createMode(kind) {
+					const mode = createMode(kind === 'spherical-distant' ? 'baseline' : 'replacement', events);
 
-				modes.push(mode);
-				return mode;
-			},
-			createRuntime() {
-				return runtimes.shift();
-			},
-			onPreparing(kind) {
-				events.push(`prepare:${kind}`);
-			},
-			onReverted(kind, mode) {
-				events.push(`revert:${kind}:${mode.name}`);
-			},
-			onPublished(kind) {
-				events.push(`accepted:${kind}`);
-			},
-			sceneRuntime: {
-				createAtmosphereComposer() {
-					composerIndex += 1;
-					return createComposer(`candidate-${composerIndex}`, events);
+					modes.push(mode);
+					return mode;
 				},
-				restoreDirectRendering() {
-					events.push('direct-restored');
+				createRuntime() {
+					return runtimes.shift();
 				},
-			},
-		}));
+				onPreparing(kind) {
+					events.push(`prepare:${kind}`);
+				},
+				onReverted(kind, mode) {
+					events.push(`revert:${kind}:${mode.name}`);
+				},
+				onPublished(kind) {
+					events.push(`accepted:${kind}`);
+				},
+				sceneRuntime: {
+					createAtmosphereComposer() {
+						composerIndex += 1;
+						return createComposer(`candidate-${composerIndex}`, events);
+					},
+					restoreDirectRendering() {
+						events.push('direct-restored');
+					},
+				},
+			}),
+		);
 		const state = /** @type {Flat32ApplicationState} */ ({});
 
 		await controller.switchTo('spherical-distant', state);
-		await expectAsync(
-			controller.switchTo('flat-local', state),
-		).toBeRejectedWithError('candidate failed');
+		await expectAsync(controller.switchTo('flat-local', state)).toBeRejectedWithError('candidate failed');
 
 		expect(controller.currentKind).toBe('spherical-distant');
 		expect(events).toContain('replacement:runtime-disposed:false');
 		expect(events).toContain('revert:spherical-distant:baseline');
-		expect(events.filter((event) => event === 'baseline:published').length)
-			.toBe(2);
+		expect(events.filter((event) => event === 'baseline:published').length).toBe(2);
 		expect(events).not.toContain('baseline:runtime-disposed:false');
 
 		controller.dispose();
@@ -152,38 +150,39 @@ describe('Flat32 mode transaction', () => {
 
 	it('disposes the isolated mode, composer, and target when runtime construction fails', async () => {
 		const events = [];
-		const controller = new ModeController(/** @type {any} */ ({
-			endpointScene: {},
-			onFailure() {},
-			createMode() {
-				return createMode('candidate', events);
-			},
-			createRuntime() {
-				throw new Error('runtime construction failed');
-			},
-			onPreparing() {
-				events.push('prepare:candidate');
-			},
-			onReverted() {
-				events.push('unexpected-revert');
-			},
-			onPublished() {
-				events.push('unexpected-publish');
-			},
-			sceneRuntime: {
-				createAtmosphereComposer() {
-					return createComposer('candidate', events);
+		const controller = new ModeController(
+			/** @type {any} */ ({
+				endpointScene: {},
+				onFailure() {},
+				createMode() {
+					return createMode('candidate', events);
 				},
-				restoreDirectRendering() {
-					events.push('direct-restored');
+				createRuntime() {
+					throw new Error('runtime construction failed');
 				},
-			},
-		}));
+				onPreparing() {
+					events.push('prepare:candidate');
+				},
+				onReverted() {
+					events.push('unexpected-revert');
+				},
+				onPublished() {
+					events.push('unexpected-publish');
+				},
+				sceneRuntime: {
+					createAtmosphereComposer() {
+						return createComposer('candidate', events);
+					},
+					restoreDirectRendering() {
+						events.push('direct-restored');
+					},
+				},
+			}),
+		);
 
-		await expectAsync(controller.switchTo(
-			'flat-local',
-			/** @type {Flat32ApplicationState} */ ({}),
-		)).toBeRejectedWithError('runtime construction failed');
+		await expectAsync(
+			controller.switchTo('flat-local', /** @type {Flat32ApplicationState} */ ({})),
+		).toBeRejectedWithError('runtime construction failed');
 
 		expect(controller.currentKind).toBeNull();
 		expect(events).toContain('candidate:mode-disposed');
@@ -195,41 +194,47 @@ describe('Flat32 mode transaction', () => {
 
 	it('aborts asynchronous preparation and publishes only the newest request', async () => {
 		const events = [];
-		const controller = new ModeController(/** @type {any} */ ({
-			endpointScene: {},
-			onFailure() {},
-			async createMode(kind, _state, request) {
-				if (kind === 'spherical-distant') {
-					await new Promise((resolve) => {
-						request.signal.addEventListener('abort', () => {
-							events.push('first:aborted');
-							resolve();
-						}, {once: true});
-					});
-				}
-				return createMode(kind, events);
-			},
-			createRuntime({mode}) {
-				return createRuntime(mode.name, events);
-			},
-			onPreparing(kind) {
-				events.push(`prepare:${kind}`);
-			},
-			onReverted() {
-				events.push('unexpected-revert');
-			},
-			onPublished(kind) {
-				events.push(`accepted:${kind}`);
-			},
-			sceneRuntime: {
-				createAtmosphereComposer() {
-					return createComposer('newest', events);
+		const controller = new ModeController(
+			/** @type {any} */ ({
+				endpointScene: {},
+				onFailure() {},
+				async createMode(kind, _state, request) {
+					if (kind === 'spherical-distant') {
+						await new Promise((resolve) => {
+							request.signal.addEventListener(
+								'abort',
+								() => {
+									events.push('first:aborted');
+									resolve();
+								},
+								{once: true},
+							);
+						});
+					}
+					return createMode(kind, events);
 				},
-				restoreDirectRendering() {
-					events.push('direct-restored');
+				createRuntime({mode}) {
+					return createRuntime(mode.name, events);
 				},
-			},
-		}));
+				onPreparing(kind) {
+					events.push(`prepare:${kind}`);
+				},
+				onReverted() {
+					events.push('unexpected-revert');
+				},
+				onPublished(kind) {
+					events.push(`accepted:${kind}`);
+				},
+				sceneRuntime: {
+					createAtmosphereComposer() {
+						return createComposer('newest', events);
+					},
+					restoreDirectRendering() {
+						events.push('direct-restored');
+					},
+				},
+			}),
+		);
 
 		const first = controller.switchTo('spherical-distant', /** @type {Flat32ApplicationState} */ ({}));
 		await Promise.resolve();

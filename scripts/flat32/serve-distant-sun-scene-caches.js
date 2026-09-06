@@ -56,10 +56,7 @@ const applicationRoot =
 		? null
 		: await ordinaryDirectory(path.resolve(applicationRootArgument), 'Flat32 application root');
 const report = JSON.parse(await readFile(await containedFile(packageRoot, 'package-report.json'), 'utf8'));
-if (
-	report.schemaId !== 'algorithm32-distant-sun-bin-covered-runtime-package-set-v1' ||
-	report.accepted !== true
-) {
+if (report.schemaId !== 'algorithm32-distant-sun-bin-covered-runtime-package-set-v1' || report.accepted !== true) {
 	throw new Error('Runtime package report is incompatible.');
 }
 const catalogFile = await containedFile(packageRoot, report.catalogPath);
@@ -80,7 +77,8 @@ const server = createServer(async (request, response) => {
 				return;
 			}
 			const rawDegrees = url.searchParams.get('solarZenithDegrees');
-			const solarZenithDegrees = rawDegrees === null || rawDegrees.trim() === '' ? Number.NaN : Number(rawDegrees);
+			const solarZenithDegrees =
+				rawDegrees === null || rawDegrees.trim() === '' ? Number.NaN : Number(rawDegrees);
 			try {
 				const resolution = resolveDistantSunSceneCache(catalog, solarZenithDegrees, '/scene-caches/');
 				sendJson(response, 200, resolution);

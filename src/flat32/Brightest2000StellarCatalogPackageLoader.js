@@ -12,7 +12,7 @@ async function loadArtifact(fetchImplementation, baseUrl, artifact, kind) {
 	const response = await fetchImplementation(new URL(artifact.path, baseUrl));
 	if (!response.ok) throw new Error(`Brightest-2,000 ${kind} request failed with ${response.status}.`);
 	const bytes = await response.arrayBuffer();
-	if (bytes.byteLength !== artifact.byteLength || await sha256(bytes) !== artifact.sha256) {
+	if (bytes.byteLength !== artifact.byteLength || (await sha256(bytes)) !== artifact.sha256) {
 		throw new Error(`Brightest-2,000 ${kind} bytes do not match the manifest.`);
 	}
 	return bytes;

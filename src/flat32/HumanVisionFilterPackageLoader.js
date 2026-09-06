@@ -25,15 +25,20 @@ export async function loadHumanVisionFilterPackage(
 		manifest.packageId !== 'human-vision-filter-package-v1' ||
 		manifest.parents?.sourceSha256 !== EXPECTED_SOURCE_SHA256 ||
 		manifest.artifact?.sha256 !== EXPECTED_ARTIFACT_SHA256
-	) throw new Error('Human-vision manifest identity is incompatible.');
+	)
+		throw new Error('Human-vision manifest identity is incompatible.');
 	const artifactResponse = await fetchImplementation(new URL(manifest.artifact.path, absoluteManifestUrl));
 	if (!artifactResponse.ok) throw new Error(`Human-vision artifact request failed with ${artifactResponse.status}.`);
 	const bytes = await artifactResponse.arrayBuffer();
-	if (bytes.byteLength !== manifest.artifact.byteLength || await sha256(bytes) !== EXPECTED_ARTIFACT_SHA256) {
+	if (bytes.byteLength !== manifest.artifact.byteLength || (await sha256(bytes)) !== EXPECTED_ARTIFACT_SHA256) {
 		throw new Error('Human-vision artifact bytes do not match the accepted package.');
 	}
 	const values = JSON.parse(new TextDecoder().decode(bytes)).values;
-	if (!Array.isArray(values) || values.length !== 15 || !values.every((value) => Number.isFinite(value) && value >= 0)) {
+	if (
+		!Array.isArray(values) ||
+		values.length !== 15 ||
+		!values.every((value) => Number.isFinite(value) && value >= 0)
+	) {
 		throw new Error('Human-vision package must contain 15 finite nonnegative weights.');
 	}
 	return Object.freeze({

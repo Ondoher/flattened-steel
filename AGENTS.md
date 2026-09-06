@@ -54,7 +54,7 @@ production copy, contract type, fixture, proof runner, harness code, manifest,
 or containment control must remain under:
 
 ```text
-scripts/extraterrestrial/
+experiments/extraterrestrial/
 ```
 
 All generated experimental execution and qualification output, including run
@@ -68,11 +68,11 @@ tmp/extraterrestrial/
 
 Run allocation, naming, initialization, finalization, and immutability are
 owned by the
-[Stage 12 implementation topic](agents/topics/extraterrestrial/stage-12-implementation-topic.md#immutable-run-records).
+[extraterrestrial run contract](experiments/extraterrestrial/run-contract.md#immutable-run-records).
 
-The active `algorithm32-production` topic is now an authorized production
+The `production-algorithm32` work topic is an authorized production
 promotion lane. Work required by the production-owned
-[Color Reset implementation plan](agents/topics/algorithm32/production/color-reset-implementation-plan.md)
+[Color Reset release plan and linked implementation owners](agents/topics/production-app/release/color-reset-implementation-plan.md)
 may create and modify production implementation, contract, configuration,
 fixture, test, application, and documentation surfaces under `src/algorithm32`,
 `src/flat32`, and their ordinary repository-owned supporting paths. This
@@ -116,7 +116,7 @@ runtime. `C:\dev\poly-gc-react` remains a read-only comparison surface and may
 not become a runtime dependency.
 
 For contained experiment work, implementation and generated-output writes
-remain restricted to `scripts/extraterrestrial/` and
+remain restricted to `experiments/extraterrestrial/` and
 `tmp/extraterrestrial/`. For the active production promotion, ordinary
 production source, test, fixture, application, asset, and topic-document writes
 are allowed when required by the approved plan. Generated qualification output

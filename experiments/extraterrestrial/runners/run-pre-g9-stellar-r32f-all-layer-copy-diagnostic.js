@@ -1,0 +1,34 @@
+#!/usr/bin/env node
+import { execFile as executeFile } from 'node:child_process';
+import { createServer } from 'node:http';
+import { promisify } from 'node:util';
+import { assertContainmentPreconditions, assertNoReparseEntries, createProtectedTrackedInventory, verifyProtectedTrackedInventory } from '../harness/lib/containment.js';
+import { buildStaticModuleClosure } from '../harness/lib/module-closure.js';
+import { initializeRunRecord } from '../harness/lib/run-record.js';
+import { EXPERIMENT_NODE_MODULES_ROOT, EXPERIMENT_PACKAGE_PATH, EXPERIMENT_ROOT } from '../harness/lib/roots.js';
+
+const COMMAND = 'node experiments/extraterrestrial/runners/run-pre-g9-stellar-r32f-all-layer-copy-diagnostic.js';
+const CHROME_PATH = 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe';
+const execFile = promisify(executeFile);
+const assert = (value, message) => { if (!value) throw new Error(message); };
+
+const html = `<!doctype html><pre id="result">pending</pre><script>
+try {
+ const c=document.createElement('canvas'),g=c.getContext('webgl2'),w=352,h=208,l=15;
+ if(!g||!g.getExtension('EXT_color_buffer_float'))throw Error('WebGL2 R32F unavailable');
+ const values=new Float32Array(w*h*l); values[((7*h+103)*w)+176]=.125;
+ const make=(v)=>{const t=g.createTexture();g.bindTexture(g.TEXTURE_2D_ARRAY,t);g.texParameteri(g.TEXTURE_2D_ARRAY,g.TEXTURE_MIN_FILTER,g.NEAREST);g.texParameteri(g.TEXTURE_2D_ARRAY,g.TEXTURE_MAG_FILTER,g.NEAREST);g.texImage3D(g.TEXTURE_2D_ARRAY,0,g.R32F,w,h,l,0,g.RED,g.FLOAT,v);return t};
+ const input=make(values),output=make(null); if(g.getError()!==g.NO_ERROR)throw Error('R32F setup failed');
+ const vs=g.createShader(g.VERTEX_SHADER),fs=g.createShader(g.FRAGMENT_SHADER),p=g.createProgram();
+ g.shaderSource(vs,'#version 300 es\\nvoid main(){vec2 q=vec2((gl_VertexID==1)?3.:-1.,(gl_VertexID==2)?3.:-1.);gl_Position=vec4(q,0.,1.);}');g.compileShader(vs);
+ g.shaderSource(fs,'#version 300 es\\nprecision highp float;precision highp sampler2DArray;uniform sampler2DArray s;uniform int z;layout(location=0)out float o;void main(){o=texelFetch(s,ivec3(int(gl_FragCoord.x),int(gl_FragCoord.y),z),0).r;}');g.compileShader(fs);
+ g.attachShader(p,vs);g.attachShader(p,fs);g.linkProgram(p);if(!g.getProgramParameter(p,g.LINK_STATUS))throw Error(g.getProgramInfoLog(p));
+ const f=g.createFramebuffer(),a=g.createVertexArray();g.bindFramebuffer(g.FRAMEBUFFER,f);g.drawBuffers([g.COLOR_ATTACHMENT0]);g.useProgram(p);g.bindVertexArray(a);g.activeTexture(g.TEXTURE0);g.bindTexture(g.TEXTURE_2D_ARRAY,input);g.uniform1i(g.getUniformLocation(p,'s'),0);const layer=g.getUniformLocation(p,'z');g.viewport(0,0,w,h);
+ for(let z=0;z<l;z++){g.framebufferTextureLayer(g.FRAMEBUFFER,g.COLOR_ATTACHMENT0,output,0,z);if(g.checkFramebufferStatus(g.FRAMEBUFFER)!==g.FRAMEBUFFER_COMPLETE)throw Error('FBO incomplete');g.uniform1i(layer,z);g.drawArrays(g.TRIANGLES,0,3);}
+ g.framebufferTextureLayer(g.FRAMEBUFFER,g.COLOR_ATTACHMENT0,output,0,7);const q=new Float32Array(1);g.readPixels(176,103,1,1,g.RED,g.FLOAT,q);
+ document.querySelector('#result').textContent=JSON.stringify({api:g.getParameter(g.VERSION),width:w,height:h,layers:l,value:q[0]});
+}catch(e){document.querySelector('#result').textContent=JSON.stringify({error:{name:e.name,message:e.message}})}
+</script>`;
+async function serve() { const server = createServer((request, response) => { response.writeHead(200, { 'content-type': 'text/html; charset=utf-8' }); response.end(html); }); await new Promise((resolve, reject) => { server.once('error', reject); server.listen(0, '127.0.0.1', resolve); }); return { url: `http://127.0.0.1:${server.address().port}/`, close: () => new Promise((resolve, reject) => server.close((error) => error ? reject(error) : resolve())) }; }
+async function main() { const run = await initializeRunRecord({ slug: 'pre-g9-stellar-r32f-all-layer-copy-diagnostic', command: COMMAND, inputs: { browser: 'Chrome headless WebGL2', cacheRender: '15 layer R32F 352x208 copy' }, provenance: { experiment: 'experiments/extraterrestrial' }, environment: { node: process.version, platform: process.platform, chromePath: CHROME_PATH }, references: { canonicalDesign: 'agents/topics/extraterrestrial/celestial-contribution-cache-design.md' } }); let server; try { const policy = await assertContainmentPreconditions(); const before = await createProtectedTrackedInventory(policy); await assertNoReparseEntries(EXPERIMENT_ROOT, 'Experiment tree'); server = await serve(); const browser = await execFile(CHROME_PATH, ['--headless=new', '--enable-webgl', '--ignore-gpu-blocklist', '--use-angle=swiftshader', '--virtual-time-budget=20000', '--dump-dom', server.url], { timeout: 60000, maxBuffer: 1024 * 1024, windowsHide: true }); await run.writeArtifact('browser/dom.html', browser.stdout); const text = /<pre id="result">([\s\S]*?)<\/pre>/u.exec(browser.stdout)?.[1]; assert(text, 'Browser emitted no result.'); const result = JSON.parse(text); if (result.error) throw new Error(`${result.error.name}: ${result.error.message}`); assert(result.width === 352 && result.height === 208 && result.layers === 15 && result.value === .125, 'Full 15-layer R32F copy did not preserve the selected scalar.'); const closure = await buildStaticModuleClosure({ candidateRoot: EXPERIMENT_ROOT, entryFiles: ['runners/run-pre-g9-stellar-r32f-all-layer-copy-diagnostic.js'], packageJsonPath: EXPERIMENT_PACKAGE_PATH, nodeModulesRoot: EXPERIMENT_NODE_MODULES_ROOT, allowedNodeBuiltins: ['node:child_process','node:crypto','node:fs','node:fs/promises','node:http','node:module','node:os','node:path','node:url','node:util'] }); const after = await verifyProtectedTrackedInventory(before, policy); await run.writeJsonArtifact('evidence/stellar-r32f-all-layer-copy.json', { accepted: true, result, containment: { protectedFiles: after.fileCount, closureFileCount: closure.files.length, closureEdgeCount: closure.edges.length } }); const manifest = await run.finalize({ conclusion: 'accepted', result, report: `# ${run.runId}: stellar R32F all-layer copy diagnostic\n\nConclusion: **accepted**\n\nThe complete 15-layer R32F shader copy preserves the selected scalar.\n` }); process.stdout.write(`${JSON.stringify({ runId: run.runId, conclusion: 'accepted', artifactSetSha256: manifest.artifactSetSha256 }, null, 2)}\\n`); } catch (error) { const detail={name:error.name,message:error.message,stack:error.stack}; try { await run.writeJsonArtifact('evidence/failure.json', detail); const manifest=await run.finalize({ conclusion:'failed',result:{error:detail},report:`# ${run.runId}: stellar R32F all-layer copy diagnostic\n\nConclusion: **failed**\n\n${detail.message}\n`}); process.stderr.write(JSON.stringify({runId:run.runId,conclusion:'failed',artifactSetSha256:manifest.artifactSetSha256,error:detail},null,2)); } catch {} process.exitCode=1; } finally { await server?.close().catch(()=>{}); } }
+await main();

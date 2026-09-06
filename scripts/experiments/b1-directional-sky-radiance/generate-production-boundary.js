@@ -260,16 +260,13 @@ export async function runGeneration(options = {}) {
 		throw new Error('Production GPU generation requires --asset-set and --production-revision.');
 	}
 
-	const {runId, runDirectory, outputDirectory} = allocateRunDirectory(
-		outputRoot,
-		backend,
-		options.stagingRoot,
-	);
+	const {runId, runDirectory, outputDirectory} = allocateRunDirectory(outputRoot, backend, options.stagingRoot);
 	const startedAt = new Date().toISOString();
 	const outputs = [];
-	const gpuProgressLogPath = backend === 'gpu'
-		? options.progressLogPath ?? resolve('tmp/algorithm32-bruneton-paper/b1-production-gpu-progress.log')
-		: null;
+	const gpuProgressLogPath =
+		backend === 'gpu'
+			? (options.progressLogPath ?? resolve('tmp/algorithm32-bruneton-paper/b1-production-gpu-progress.log'))
+			: null;
 	const gpuHost =
 		backend === 'gpu'
 			? new ProductionGpuHost({
@@ -448,7 +445,7 @@ export async function runGeneration(options = {}) {
 						runId,
 						order,
 						table: tableName,
-							tableSha256,
+						tableSha256,
 					}),
 				);
 			}
@@ -465,7 +462,8 @@ export async function runGeneration(options = {}) {
 				derivation: {
 					inputAssetSetIdentity: gpuAssetInputs?.assetSetIdentity ?? null,
 					inputProfileHashes: profileRecords.map(({time, id, contentHash}) => ({time, id, contentHash})),
-					operation: 'production final-view directional spectral-radiance evaluation; first 31 channels form the B3 cube',
+					operation:
+						'production final-view directional spectral-radiance evaluation; first 31 channels form the B3 cube',
 				},
 			});
 		}

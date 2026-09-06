@@ -21,4 +21,3 @@ export const STELLAR_SKY_REFERENCE_CONTROLS = /** @type {const} */ ({
 		exactWhitePixelCount: 0,
 	},
 });
-

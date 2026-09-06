@@ -88,7 +88,9 @@ export default class DistantSunSceneCacheOfflineCompiler {
 	 *
 	 * @returns {string} - The complete HTML source.
 	 */
-	_browserDocument(browserModulePath = '/repository/scripts/algorithm32/solar-zenith-cache/runOfflineCompilerBrowser.js') {
+	_browserDocument(
+		browserModulePath = '/repository/scripts/algorithm32/solar-zenith-cache/runOfflineCompilerBrowser.js',
+	) {
 		return (
 			'<!doctype html><meta charset="utf-8"><pre id="result">pending</pre>' +
 			'<script type="module">const target=document.querySelector("#result");' +
@@ -132,11 +134,7 @@ export default class DistantSunSceneCacheOfflineCompiler {
 					return;
 				}
 				const layerMatch = pathname.match(/^\/artifact\/layer-([0-9]+)\.f32$/u);
-				if (
-					request.method === 'POST' &&
-					layerMatch !== null &&
-					Number(layerMatch[1]) < layerCount
-				) {
+				if (request.method === 'POST' && layerMatch !== null && Number(layerMatch[1]) < layerCount) {
 					if (uploads.has(pathname)) {
 						throw new Error('Offline compiler browser attempted a duplicate layer upload.');
 					}
@@ -376,7 +374,9 @@ export default class DistantSunSceneCacheOfflineCompiler {
 			await rm(profilePath, {recursive: true, force: true, maxRetries: 20, retryDelay: 250});
 		}
 
-		const layers = Array.from({length: layerCount}, (_unused, index) => uploads.get(`/artifact/layer-${index}.f32`));
+		const layers = Array.from({length: layerCount}, (_unused, index) =>
+			uploads.get(`/artifact/layer-${index}.f32`),
+		);
 		if (layers.some((layer) => !layer)) {
 			throw new Error('Offline compiler did not emit every requested wavelength layer.');
 		}

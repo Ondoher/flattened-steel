@@ -23,17 +23,10 @@ function parseArguments(arguments_) {
 		else if (argument === '--output') options.output = resolve(arguments_[++index]);
 		else throw new Error(`Unknown argument: ${argument}`);
 	}
-	const required = [
-		'j2Values',
-		'j3Values',
-		'j4Values',
-		'j2Authority',
-		'j3Authority',
-		'j4Authority',
-		'output',
-	];
+	const required = ['j2Values', 'j3Values', 'j4Values', 'j2Authority', 'j3Authority', 'j4Authority', 'output'];
 	for (const property of required) {
-		if (!options[property]) throw new Error(`--${property.replace(/[A-Z]/gu, (letter) => `-${letter.toLowerCase()}`)} is required.`);
+		if (!options[property])
+			throw new Error(`--${property.replace(/[A-Z]/gu, (letter) => `-${letter.toLowerCase()}`)} is required.`);
 	}
 	return options;
 }
@@ -78,9 +71,7 @@ function loadTableBoundary(path) {
  */
 function indexRows(rows) {
 	return new Map(
-		rows
-			.filter((row) => row.time === CONDITION)
-			.map((row) => [`${row.time}:${row.gridX}:${row.gridY}`, row]),
+		rows.filter((row) => row.time === CONDITION).map((row) => [`${row.time}:${row.gridX}:${row.gridY}`, row]),
 	);
 }
 
@@ -151,7 +142,8 @@ function summarize(rows) {
 			rowMaximum = Math.max(rowMaximum, absolute);
 			channelSquaredSums[channelIndex] += residual * residual;
 			channelMaximums[channelIndex] = Math.max(channelMaximums[channelIndex], absolute);
-			if (absolute > maximum.absolute) maximum = {absolute, signed: residual, location: `${key}:lambda${channelIndex}`};
+			if (absolute > maximum.absolute)
+				maximum = {absolute, signed: residual, location: `${key}:lambda${channelIndex}`};
 		}
 		rowMetrics.push({location: key, rms: Math.sqrt(rowSquaredSum / CHANNEL_COUNT), maximumAbsolute: rowMaximum});
 	}
@@ -201,5 +193,8 @@ const result = {
 	},
 };
 mkdirSync(options.output, {recursive: false});
-writeFileSync(resolve(options.output, 'result.json'), `${JSON.stringify(result, null, 2)}\n`, {encoding: 'utf8', flag: 'wx'});
+writeFileSync(resolve(options.output, 'result.json'), `${JSON.stringify(result, null, 2)}\n`, {
+	encoding: 'utf8',
+	flag: 'wx',
+});
 process.stdout.write(`${JSON.stringify(result, null, 2)}\n`);

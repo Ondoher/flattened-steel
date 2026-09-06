@@ -131,10 +131,8 @@ export function humanMesopicRodWeight(adaptationLuminanceCdM2) {
 	}
 	const parameters = HUMAN_MESOPIC_LUMINANCE_PARAMETERS;
 	const bounded = Math.max(adaptationLuminanceCdM2, parameters.scotopicBoundaryCdM2);
-	const logarithmicRange = Math.log10(parameters.photopicBoundaryCdM2) -
-		Math.log10(parameters.scotopicBoundaryCdM2);
-	const position = (Math.log10(parameters.photopicBoundaryCdM2) - Math.log10(bounded)) /
-		logarithmicRange;
+	const logarithmicRange = Math.log10(parameters.photopicBoundaryCdM2) - Math.log10(parameters.scotopicBoundaryCdM2);
+	const position = (Math.log10(parameters.photopicBoundaryCdM2) - Math.log10(bounded)) / logarithmicRange;
 	return parameters.maximumRodContribution * smoothstep01(position);
 }
 
@@ -160,8 +158,8 @@ export function native15ScotopicLuminance(transportedNative15, scotopicLuminance
 export function humanLowLightChromaRetention(visualMagnitude) {
 	if (!Number.isFinite(visualMagnitude)) throw new RangeError('Visual magnitude must be finite.');
 	const parameters = HUMAN_LOW_LIGHT_CHROMA_PARAMETERS;
-	const position = (parameters.neutralMagnitude - visualMagnitude) /
-		(parameters.neutralMagnitude - parameters.fullColorMagnitude);
+	const position =
+		(parameters.neutralMagnitude - visualMagnitude) / (parameters.neutralMagnitude - parameters.fullColorMagnitude);
 	return parameters.maximumChromaRetention * smoothstep01(position);
 }
 
@@ -192,9 +190,10 @@ export class ViewPresentationFilterRegistry {
 			schemaId: VIEW_PRESENTATION_FILTER_REGISTRY_ID,
 			filters: this._filters,
 		});
-		this._scotopicLuminanceWeights = configuration.scotopicLuminanceWeights === undefined
-			? null
-			: Object.freeze(Array.from(configuration.scotopicLuminanceWeights, Number));
+		this._scotopicLuminanceWeights =
+			configuration.scotopicLuminanceWeights === undefined
+				? null
+				: Object.freeze(Array.from(configuration.scotopicLuminanceWeights, Number));
 		if (
 			this._scotopicLuminanceWeights !== null &&
 			(this._scotopicLuminanceWeights.length !== NATIVE_15_SCOTOPIC_LUMINANCE_WEIGHT_COUNT ||
@@ -223,9 +222,7 @@ export class ViewPresentationFilterRegistry {
 
 	/** Apply only matching stellar source-linear filters; identity returns the original RGB object. */
 	applySourceLinear(rgb, metadata) {
-		const applicable = this._filters.filter(
-			(filter) => filter.enabled && filter.target === metadata?.target,
-		);
+		const applicable = this._filters.filter((filter) => filter.enabled && filter.target === metadata?.target);
 		if (applicable.length === 0) return rgb;
 		let result = acceptRgb(rgb);
 		for (const filter of applicable) {
@@ -273,14 +270,16 @@ export class ViewPresentationFilterRegistry {
 		if (mesopicEnabled && this._scotopicLuminanceWeights === null) {
 			throw new RangeError('Mesopic shader generation requires authenticated local scotopic weights.');
 		}
-		const scotopicWeights = (this._scotopicLuminanceWeights ?? new Array(15).fill(0))
-			.map((value) => Number(value).toExponential(16));
+		const scotopicWeights = (this._scotopicLuminanceWeights ?? new Array(15).fill(0)).map((value) =>
+			Number(value).toExponential(16),
+		);
 		return Object.freeze({
 			id: 'stellar-source-linear-presentation-filter-hook-v1',
 			registryIdentity: this._identity,
-			scotopicWeightsIdentity: this._scotopicLuminanceWeights === null
-				? null
-				: CanonicalValueHash.sha256Value(this._scotopicLuminanceWeights),
+			scotopicWeightsIdentity:
+				this._scotopicLuminanceWeights === null
+					? null
+					: CanonicalValueHash.sha256Value(this._scotopicLuminanceWeights),
 			stage: VIEW_PRESENTATION_FILTER_STAGES.SOURCE_LINEAR,
 			target: VIEW_PRESENTATION_FILTER_TARGETS.STELLAR,
 			source: `const float STELLAR_SCOTOPIC_WEIGHTS[15] = float[15](${scotopicWeights.join(', ')});
@@ -291,7 +290,9 @@ vec3 applyStellarSourceLinearPresentationFilters(
 	float adaptationLuminanceCdM2
 ) {
 	vec3 filteredRgb = sourceRgb;
-	${mesopicEnabled ? `float photopic = dot(filteredRgb, vec3(0.2126, 0.7152, 0.0722));
+	${
+		mesopicEnabled
+			? `float photopic = dot(filteredRgb, vec3(0.2126, 0.7152, 0.0722));
 	if (photopic > 0.0) {
 		float boundedAdaptation = max(adaptationLuminanceCdM2, 0.005);
 		float t = clamp((log(5.0) / log(10.0) - log(boundedAdaptation) / log(10.0)) / 3.0, 0.0, 1.0);
@@ -302,11 +303,17 @@ vec3 applyStellarSourceLinearPresentationFilters(
 		}
 		float mesopic = photopic + rodWeight * (scotopic - photopic);
 		filteredRgb *= mesopic / photopic;
-	}` : ''}
-	${chromaEnabled ? `float luminance = dot(filteredRgb, vec3(0.2126, 0.7152, 0.0722));
+	}`
+			: ''
+	}
+	${
+		chromaEnabled
+			? `float luminance = dot(filteredRgb, vec3(0.2126, 0.7152, 0.0722));
 	float magnitudeT = clamp((3.2 - visualMagnitude) / 3.2, 0.0, 1.0);
 	float retention = 0.65 * magnitudeT * magnitudeT * (3.0 - 2.0 * magnitudeT);
-	filteredRgb = vec3(luminance) + retention * (filteredRgb - vec3(luminance));` : ''}
+	filteredRgb = vec3(luminance) + retention * (filteredRgb - vec3(luminance));`
+			: ''
+	}
 	return filteredRgb;
 }`,
 		});
@@ -322,26 +329,32 @@ vec3 applyStellarSourceLinearPresentationFilters(
 			provides: ['presentation.applyStellarSourceLinear'],
 			requires: [],
 			textures: [],
-			uniforms: [ShaderContributions.createShaderUniformDeclaration(
-				'uStellarAdaptationLuminanceCdM2',
-				'float',
-				'presentation.stellar.adaptationLuminanceCdM2',
-				0,
-			)],
-			bindingRequirements: [ShaderContributions.createShaderBindingRequirement(
-				'presentation.stellar-adaptation-luminance',
-				'stellarSource',
-				'uniform',
-				'frame',
-				'presentation.stellar.adaptationLuminanceCdM2',
-				true,
-			)],
-			functions: [ShaderContributions.createShaderSourceBlock(
-				'presentation-stellar-source-linear-hook',
-				'composeSceneColor',
-				-10,
-				hook.source,
-			)],
+			uniforms: [
+				ShaderContributions.createShaderUniformDeclaration(
+					'uStellarAdaptationLuminanceCdM2',
+					'float',
+					'presentation.stellar.adaptationLuminanceCdM2',
+					0,
+				),
+			],
+			bindingRequirements: [
+				ShaderContributions.createShaderBindingRequirement(
+					'presentation.stellar-adaptation-luminance',
+					'stellarSource',
+					'uniform',
+					'frame',
+					'presentation.stellar.adaptationLuminanceCdM2',
+					true,
+				),
+			],
+			functions: [
+				ShaderContributions.createShaderSourceBlock(
+					'presentation-stellar-source-linear-hook',
+					'composeSceneColor',
+					-10,
+					hook.source,
+				),
+			],
 			mainHooks: [],
 			diagnostics: {
 				registryIdentity: this.identity,

@@ -31,25 +31,27 @@ describe('ColorResetSlope078P9ColorDisplayModel', () => {
 		expect(model.displayGainLogElasticity({value: 0, units: 'lux'})).toBe(0);
 		expect(model.displayGain({value: 200000, units: 'lux'})).toBe(1);
 		expect(model.applyPreToneGain([-2, 3, 0], {value: 385.0097520214597, units: 'lux'})).toEqual([
-			-9.498050268990976,
-			14.247075403486465,
-			0,
+			-9.498050268990976, 14.247075403486465, 0,
 		]);
 	});
 
 	it('adds only the total-horizontal lux binding to inherited Bruneton composition', () => {
 		const model = new ColorResetSlope078P9ColorDisplayModel();
-		const contribution = model.createShaderContribution(/** @type {ShaderContributionRequest} */ ({
-			model: {profile: {spectral: {basis: NATIVE_15_SPECTRAL_BASIS}}, celestialSources: null},
-		}));
+		const contribution = model.createShaderContribution(
+			/** @type {ShaderContributionRequest} */ ({
+				model: {profile: {spectral: {basis: NATIVE_15_SPECTRAL_BASIS}}, celestialSources: null},
+			}),
+		);
 		const source = contribution.functions.map((block) => block.code).join('\n');
 
 		expect(model.id).toBe('color-reset-slope-078-p9');
 		expect(contribution.id).toBe('color-reset-slope-078-p9-display');
-		expect(contribution.uniforms).toContain(jasmine.objectContaining({
-			name: 'uColorResetTotalHorizontalIlluminanceLux',
-			valueKey: 'color.totalHorizontalIlluminance.value',
-		}));
+		expect(contribution.uniforms).toContain(
+			jasmine.objectContaining({
+				name: 'uColorResetTotalHorizontalIlluminanceLux',
+				valueKey: 'color.totalHorizontalIlluminance.value',
+			}),
+		);
 		expect(source).toContain('COLOR_RESET_ADAPTATION_EXPONENT = 0.78');
 		expect(source).toContain('linearSrgb * colorResetDisplayGain');
 		expect(source).toContain('exp(-max(exposedLinearSrgb, vec3(0.0)) * DISPLAY_TONE_MAP_K)');
@@ -60,8 +62,9 @@ describe('ColorResetSlope078P9ColorDisplayModel', () => {
 		const model = new ColorResetSlope078P9ColorDisplayModel();
 
 		expect(basic.id).toBe('bruneton-figure1-display');
-		expect(basic.createShaderContribution({model: {profile: {spectral: {basis: NATIVE_15_SPECTRAL_BASIS}}}}).id)
-			.toBe('color-bruneton-figure1-display');
+		expect(
+			basic.createShaderContribution({model: {profile: {spectral: {basis: NATIVE_15_SPECTRAL_BASIS}}}}).id,
+		).toBe('color-bruneton-figure1-display');
 		expect(() => model.displayGain({value: -1, units: 'lux'})).toThrowError(RangeError);
 		expect(() => model.displayGain({value: 1, units: 'cd m^-2'})).toThrowError(TypeError);
 		expect(() => model.applyPreToneGain([1, Number.NaN, 3], {value: 1, units: 'lux'})).toThrowError(TypeError);

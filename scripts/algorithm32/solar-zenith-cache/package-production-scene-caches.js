@@ -53,7 +53,10 @@ function requireContinuousInventory(index) {
 	const packages = [...index.packages].sort((left, right) => left.solarZenithDegrees - right.solarZenithDegrees);
 	for (let degrees = 0; degrees <= 108; degrees += 1) {
 		const entry = packages[degrees];
-		if (entry?.solarZenithDegrees !== degrees || entry.id !== `solar-zenith-${String(degrees).padStart(3, '0')}-degrees`) {
+		if (
+			entry?.solarZenithDegrees !== degrees ||
+			entry.id !== `solar-zenith-${String(degrees).padStart(3, '0')}-degrees`
+		) {
 			throw new Error(`Deployment input does not own exact solar-zenith degree ${degrees}.`);
 		}
 	}
@@ -182,7 +185,8 @@ async function main() {
 			inventoryIndexSha256: sha256(indexBytes),
 			verificationSchemaId: verification.schemaId,
 			verificationReportSha256: sha256(await readFile(verificationPath)),
-			operation: 'copy manifest, ledger, exact R32F payload, and R16UI index into content-addressed runtime packages',
+			operation:
+				'copy manifest, ledger, exact R32F payload, and R16UI index into content-addressed runtime packages',
 			implementation: 'scripts/algorithm32/solar-zenith-cache/package-production-scene-caches.js',
 		},
 		totalByteLength: runtimeEntries.reduce((sum, entry) => sum + entry.byteLength, 0),

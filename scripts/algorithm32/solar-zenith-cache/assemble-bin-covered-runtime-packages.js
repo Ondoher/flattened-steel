@@ -5,9 +5,7 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 
 import DistantSunSceneCacheLedger from '../../../src/algorithm32/implementation/distant-sun/cache/DistantSunSceneCacheLedger.js';
-import {
-	DISTANT_SUN_RUNTIME_SCENE_CACHE_MANIFEST_SCHEMA_ID,
-} from '../../../src/algorithm32/implementation/distant-sun/cache/consts.js';
+import {DISTANT_SUN_RUNTIME_SCENE_CACHE_MANIFEST_SCHEMA_ID} from '../../../src/algorithm32/implementation/distant-sun/cache/consts.js';
 import {
 	CUBED_SPHERE_W27_DIRECTION_DOMAIN_OWNER,
 	NATIVE_48_POSITION_DOMAIN_OWNER,
@@ -22,8 +20,7 @@ const PACKAGE_SET_SCHEMA = 'algorithm32-distant-sun-bin-covered-runtime-package-
 const LEDGER_SCHEMA = 'algorithm32-distant-sun-packed-row-ledger-v1';
 const CACHE_IDENTITY_PREFIX = 'algorithm32-distant-sun-scene-cache-sha256:';
 const ROW_BYTE_LENGTH = CUBED_SPHERE_W27_DIRECTION_DOMAIN_OWNER.uniqueDirectionCount * Float32Array.BYTES_PER_ELEMENT;
-const LOGICAL_ROW_BYTE_LENGTH =
-	CUBED_SPHERE_W27_DIRECTION_DOMAIN_OWNER.directionCount * Float32Array.BYTES_PER_ELEMENT;
+const LOGICAL_ROW_BYTE_LENGTH = CUBED_SPHERE_W27_DIRECTION_DOMAIN_OWNER.directionCount * Float32Array.BYTES_PER_ELEMENT;
 const CHANNEL_COUNT = NATIVE_15_SPECTRAL_BASIS.channelCount;
 
 function argument(name) {
@@ -89,10 +86,7 @@ function paddedLedger(centerDegrees, sceneSun) {
 	let firstPackedRow = 0;
 	const rows = lower.rows.map((lowerRow, altitudeIndex) => {
 		const upperRow = upper.rows[altitudeIndex];
-		const firstSolarZenithIndex = Math.min(
-			lowerRow.firstSolarZenithIndex,
-			upperRow.firstSolarZenithIndex,
-		);
+		const firstSolarZenithIndex = Math.min(lowerRow.firstSolarZenithIndex, upperRow.firstSolarZenithIndex);
 		const lastSolarZenithIndex = Math.max(lowerRow.lastSolarZenithIndex, upperRow.lastSolarZenithIndex);
 		const packedRowCount = lastSolarZenithIndex - firstSolarZenithIndex + 1;
 		const row = {
@@ -124,10 +118,7 @@ function paddedLedger(centerDegrees, sceneSun) {
 
 function sourcePackedRow(source, altitudeIndex, solarZenithIndex) {
 	const row = source.ledger.rows[altitudeIndex];
-	if (
-		solarZenithIndex < row.firstSolarZenithIndex ||
-		solarZenithIndex > row.lastSolarZenithIndex
-	) return null;
+	if (solarZenithIndex < row.firstSolarZenithIndex || solarZenithIndex > row.lastSolarZenithIndex) return null;
 	return row.firstPackedRow + solarZenithIndex - row.firstSolarZenithIndex;
 }
 
@@ -180,7 +171,11 @@ async function fillTargetPayload(target, sources, centerDegrees) {
 	const targetBytes = Buffer.allocUnsafe(target.record.retainedBlockCount * ROW_BYTE_LENGTH * CHANNEL_COUNT);
 	const rowSources = [];
 	for (const row of target.record.rows) {
-		for (let solarZenithIndex = row.firstSolarZenithIndex; solarZenithIndex <= row.lastSolarZenithIndex; solarZenithIndex += 1) {
+		for (
+			let solarZenithIndex = row.firstSolarZenithIndex;
+			solarZenithIndex <= row.lastSolarZenithIndex;
+			solarZenithIndex += 1
+		) {
 			const selected = chooseSource(sources, centerDegrees, row.altitudeIndex, solarZenithIndex);
 			rowSources.push({
 				targetPackedRow: row.firstPackedRow + solarZenithIndex - row.firstSolarZenithIndex,
@@ -210,10 +205,10 @@ async function fillTargetPayload(target, sources, centerDegrees) {
 			const byteLength = group.count * ROW_BYTE_LENGTH;
 			const sourceOffset =
 				(channel * group.source.ledger.retainedBlockCount + group.sourcePackedRow) * ROW_BYTE_LENGTH;
-			const targetOffset =
-				(channel * target.record.retainedBlockCount + group.targetPackedRow) * ROW_BYTE_LENGTH;
+			const targetOffset = (channel * target.record.retainedBlockCount + group.targetPackedRow) * ROW_BYTE_LENGTH;
 			const result = await group.source.handle.read(targetBytes, targetOffset, byteLength, sourceOffset);
-			if (result.bytesRead !== byteLength) throw new Error('Runtime row parent ended before the declared payload shape.');
+			if (result.bytesRead !== byteLength)
+				throw new Error('Runtime row parent ended before the declared payload shape.');
 		}
 	}
 	return {bytes: targetBytes, rowSources};
@@ -269,8 +264,7 @@ try {
 		for (const row of assembled.rowSources) {
 			const hash = createHash('sha256');
 			for (let channel = 0; channel < CHANNEL_COUNT; channel += 1) {
-				const offset =
-					(channel * target.record.retainedBlockCount + row.targetPackedRow) * ROW_BYTE_LENGTH;
+				const offset = (channel * target.record.retainedBlockCount + row.targetPackedRow) * ROW_BYTE_LENGTH;
 				hash.update(assembled.bytes.subarray(offset, offset + ROW_BYTE_LENGTH));
 			}
 			const identity = hash.digest('hex');
@@ -325,8 +319,7 @@ try {
 				operation:
 					'form the union ledger required by both limiting angles of the half-open resolver bin and copy each exact Native15 row from the nearest verified inventory parent that owns the coordinate',
 				parameters: target.selection,
-				implementation:
-					'scripts/algorithm32/solar-zenith-cache/assemble-bin-covered-runtime-packages.js',
+				implementation: 'scripts/algorithm32/solar-zenith-cache/assemble-bin-covered-runtime-packages.js',
 				outputs: {ledgerSha256, exactSha256, logicalToUniqueIndexSha256: firstIndexHash},
 			},
 		};
@@ -357,7 +350,10 @@ try {
 				numericalIdentity: manifest.numericalIdentity,
 			},
 			byteLength:
-				assembled.bytes.byteLength + ledgerBytes.byteLength + manifestBytes.byteLength + firstIndexBytes.byteLength,
+				assembled.bytes.byteLength +
+				ledgerBytes.byteLength +
+				manifestBytes.byteLength +
+				firstIndexBytes.byteLength,
 			retainedBlockCount: target.record.retainedBlockCount,
 			parentCacheIdentityCount: parentIdentities.length,
 		});
@@ -400,7 +396,9 @@ const report = {
 	packageCount: catalogEntries.length,
 	totalByteLength: catalog.totalByteLength,
 	maximumResidentByteLength: Math.max(
-		...catalogEntries.map((entry) => entry.retainedBlockCount * ROW_BYTE_LENGTH * CHANNEL_COUNT + firstIndexBytes.byteLength),
+		...catalogEntries.map(
+			(entry) => entry.retainedBlockCount * ROW_BYTE_LENGTH * CHANNEL_COUNT + firstIndexBytes.byteLength,
+		),
 	),
 	sharedCoordinateHashCount: coordinateHashes.size,
 };

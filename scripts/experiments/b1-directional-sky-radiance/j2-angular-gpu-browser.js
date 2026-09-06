@@ -169,7 +169,9 @@ function integrateJ2ViewRays(profile, domain, field) {
 			createReader() {
 				return {
 					readScalar({directionIndex, positionIndex, wavelengthIndex}) {
-						return field.values[wavelengthIndex * layerSize + positionIndex * field.storage.width + directionIndex];
+						return field.values[
+							wavelengthIndex * layerSize + positionIndex * field.storage.width + directionIndex
+						];
 					},
 				};
 			},
@@ -189,7 +191,9 @@ function integrateJ2ViewRays(profile, domain, field) {
 					segment,
 					profile.numerical.viewPath.intervalCount,
 				);
-				values.push([...calculator.computeRadiance(segment, path, {scatteringCache: cache}).pathRadiance.values]);
+				values.push([
+					...calculator.computeRadiance(segment, path, {scatteringCache: cache}).pathRadiance.values,
+				]);
 			}
 		}
 		return values;

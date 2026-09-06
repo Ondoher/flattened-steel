@@ -250,9 +250,7 @@ describe('BrunetonColorDisplayModel', /** Called by Jasmine to register the name
 		expect(composition).toContain('return pathLinearSrgb + sceneLinearSrgb * sceneTransmittanceRgb;');
 		expect(composition).not.toContain('endpointRadiance');
 		expect(composition).not.toContain('uMatteEndpointRadianceTexture');
-		expect(encoding).toContain(
-			'vec3(1.0) - exp(-max(linearSrgb, vec3(0.0)) * DISPLAY_TONE_MAP_K)',
-		);
+		expect(encoding).toContain('vec3(1.0) - exp(-max(linearSrgb, vec3(0.0)) * DISPLAY_TONE_MAP_K)');
 		expect(encoding).toContain('return vec4(mapped, 1.0);');
 		expect(encoding).not.toContain('exposedPeak');
 	});

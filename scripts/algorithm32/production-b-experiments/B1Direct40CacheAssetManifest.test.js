@@ -130,6 +130,9 @@ test('rejects the wrong profile, condition, source direction, basis, or domain b
 		(value) => (value.domains.incoming.id = 'wrong-incoming-domain'),
 	]) {
 		const manifest = new B1Direct40CacheAssetManifest(recordWith(mutation));
-		assert.throws(() => manifest.requireCompatibility(selectedProfile, CONDITION), /incompatible with the requested/u);
+		assert.throws(
+			() => manifest.requireCompatibility(selectedProfile, CONDITION),
+			/incompatible with the requested/u,
+		);
 	}
 });

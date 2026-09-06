@@ -5,11 +5,7 @@ import {fileURLToPath, pathToFileURL} from 'node:url';
 
 import {Algorithm32} from '../../../src/algorithm32/implementation/algorithm32/Algorithm32.js';
 import {CUBED_SPHERE_W27_DIRECTION_DOMAIN_OWNER} from '../../../src/algorithm32/sampling-domains/index.js';
-import {
-	SPECTRAL_QUANTITIES,
-	SPECTRAL_UNITS,
-	SpectralPacket,
-} from '../../../src/algorithm32/spectral-values/index.js';
+import {SPECTRAL_QUANTITIES, SPECTRAL_UNITS, SpectralPacket} from '../../../src/algorithm32/spectral-values/index.js';
 import {loadKiderDataset} from '../../experiments/b1-directional-sky-radiance/benchmark.js';
 import {
 	compareSpectralTables,
@@ -48,7 +44,11 @@ class Direct40R32fCpuCache {
 	constructor({verifiedAsset, spectralBasis}) {
 		const payload = verifiedAsset.manifest.cumulativeScatteringDensity;
 		const bytes = readFileSync(path.join(verifiedAsset.assetDirectory, payload.path));
-		this._values = new Float32Array(bytes.buffer, bytes.byteOffset, bytes.byteLength / Float32Array.BYTES_PER_ELEMENT);
+		this._values = new Float32Array(
+			bytes.buffer,
+			bytes.byteOffset,
+			bytes.byteLength / Float32Array.BYTES_PER_ELEMENT,
+		);
 		this._logicalToUnique = CUBED_SPHERE_W27_DIRECTION_DOMAIN_OWNER.logicalToUniqueDirectionIndices;
 		this._uniqueDirectionCount = CUBED_SPHERE_W27_DIRECTION_DOMAIN_OWNER.uniqueDirectionCount;
 		this._spectralBasis = spectralBasis;
@@ -71,7 +71,8 @@ class Direct40R32fCpuCache {
 				const uniqueDirectionIndex = this._logicalToUnique[directionStencil.indices[directionTap]];
 				const weight = positionStencil.weights[positionTap] * directionStencil.weights[directionTap];
 				for (let channelIndex = 0; channelIndex < 40; channelIndex += 1) {
-					const index = (channelIndex * 48 + positionIndex) * this._uniqueDirectionCount + uniqueDirectionIndex;
+					const index =
+						(channelIndex * 48 + positionIndex) * this._uniqueDirectionCount + uniqueDirectionIndex;
 					values[channelIndex] += this._values[index] * weight;
 				}
 			}
@@ -116,9 +117,7 @@ export async function compareSingleAssetCpuReference({
 	const cache = new Direct40R32fCpuCache({verifiedAsset, spectralBasis: profile.spectral.basis});
 	const algorithm = new Algorithm32({profile});
 	const lines = [
-		['model', 'time', 'grid_x', 'grid_y', ...Array.from({length: 40}, (_, index) => `lambda_${index}`)].join(
-			'\t',
-		),
+		['model', 'time', 'grid_x', 'grid_y', ...Array.from({length: 40}, (_, index) => `lambda_${index}`)].join('\t'),
 	];
 	try {
 		for (let gridX = 0; gridX < 9; gridX += 1) {
@@ -127,7 +126,9 @@ export async function compareSingleAssetCpuReference({
 					viewRay: {direction: createViewDirection(gridX, gridY)},
 					scatteringCache: cache,
 				}).pathRadiance.values;
-				lines.push(['proposed', localTime, gridX, gridY, ...values.map((value) => value.toPrecision(17))].join('\t'));
+				lines.push(
+					['proposed', localTime, gridX, gridY, ...values.map((value) => value.toPrecision(17))].join('\t'),
+				);
 			}
 		}
 	} finally {
@@ -170,7 +171,8 @@ export async function compareSingleAssetCpuReference({
 }
 
 if (process.argv[1] && pathToFileURL(process.argv[1]).href === import.meta.url) {
-	const [assetDirectory, productionRevision, cpuTablePath, outputDirectory, localTime = '09:30'] = process.argv.slice(2);
+	const [assetDirectory, productionRevision, cpuTablePath, outputDirectory, localTime = '09:30'] =
+		process.argv.slice(2);
 	if (!assetDirectory || !productionRevision || !cpuTablePath || !outputDirectory) {
 		throw new Error(
 			'Usage: node compare-single-asset-cpu-reference.js <asset-directory> <production-revision> <cpu-table> <fresh-output-directory> [local-time]',

@@ -120,7 +120,10 @@ type StellarPointSetSourceDefinition = Readonly<{
 	readonly photometry?: Readonly<{
 		readonly identity: string;
 		readonly retainedPolicyMemberCount: number;
-		readonly proxyMembers: readonly Readonly<{readonly id: string; readonly derivation: Readonly<Record<string, unknown>>}>[];
+		readonly proxyMembers: readonly Readonly<{
+			readonly id: string;
+			readonly derivation: Readonly<Record<string, unknown>>;
+		}>[];
 	}>;
 }>;
 

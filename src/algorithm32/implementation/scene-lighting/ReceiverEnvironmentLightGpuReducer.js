@@ -12,7 +12,10 @@ const VALUE_KEY = 'lighting.receiverEnvironmentIrradiance';
 export class ReceiverEnvironmentLightGpuReducer {
 	/** @param {{backend: CacheGpuBackend & CacheProbeReader}} dependencies - External renderer backend. */
 	constructor({backend}) {
-		if (backend?.capabilities?.scalarFormat !== 'R32F' || backend.capabilities.supportsArrayRenderTargets !== true) {
+		if (
+			backend?.capabilities?.scalarFormat !== 'R32F' ||
+			backend.capabilities.supportsArrayRenderTargets !== true
+		) {
 			throw new RangeError('Receiver environment-light GPU reducer requires an R32F array backend.');
 		}
 		this._backend = backend;
@@ -27,20 +30,29 @@ export class ReceiverEnvironmentLightGpuReducer {
 	 * @returns {Promise<SpectralIrradiancePacket>} - GPU-reduced receiver irradiance.
 	 */
 	async reduce(request) {
-		if (!Array.isArray(request?.radiances) || request.radiances.length !== RECEIVER_ENVIRONMENT_LIGHT_QUADRATURE.length) {
-			throw new RangeError('Receiver environment-light GPU reduction requires one radiance per quadrature direction.');
+		if (
+			!Array.isArray(request?.radiances) ||
+			request.radiances.length !== RECEIVER_ENVIRONMENT_LIGHT_QUADRATURE.length
+		) {
+			throw new RangeError(
+				'Receiver environment-light GPU reduction requires one radiance per quadrature direction.',
+			);
 		}
-		const first = /** @type {SpectralRadiancePacket} */ (SpectralPacket.assert(request.radiances[0], {
-			quantity: SPECTRAL_QUANTITIES.RADIANCE_DENSITY,
-			units: SPECTRAL_UNITS.RADIANCE_DENSITY,
-		}));
+		const first = /** @type {SpectralRadiancePacket} */ (
+			SpectralPacket.assert(request.radiances[0], {
+				quantity: SPECTRAL_QUANTITIES.RADIANCE_DENSITY,
+				units: SPECTRAL_UNITS.RADIANCE_DENSITY,
+			})
+		);
 		const channelCount = first.basis.channelCount;
 		const packedValues = new Float32Array(request.radiances.length * channelCount);
 		for (const [directionIndex, candidate] of request.radiances.entries()) {
-			const radiance = /** @type {SpectralRadiancePacket} */ (SpectralPacket.assert(candidate, {
-				quantity: SPECTRAL_QUANTITIES.RADIANCE_DENSITY,
-				units: SPECTRAL_UNITS.RADIANCE_DENSITY,
-			}));
+			const radiance = /** @type {SpectralRadiancePacket} */ (
+				SpectralPacket.assert(candidate, {
+					quantity: SPECTRAL_QUANTITIES.RADIANCE_DENSITY,
+					units: SPECTRAL_UNITS.RADIANCE_DENSITY,
+				})
+			);
 			if (radiance.basis.contentHash !== first.basis.contentHash) {
 				throw new TypeError('Receiver environment-light GPU radiances must share one spectral basis.');
 			}
@@ -55,44 +67,80 @@ export class ReceiverEnvironmentLightGpuReducer {
 			shape: [request.radiances.length, 1, channelCount],
 			values: packedValues,
 		});
-		const output = {id: FIELD_ID, storage: {format: /** @type {const} */ ('R32F'), width: 1, height: 1, layers: channelCount}};
+		const output = {
+			id: FIELD_ID,
+			storage: {format: /** @type {const} */ ('R32F'), width: 1, height: 1, layers: channelCount},
+		};
 		const module = CacheBuildModules.createBuildModule({
 			id: 'receiver-environment-light-gpu-reduction-module-v1',
 			owner: 'cache',
 			provides: ['lighting.receiverEnvironmentIrradiance'],
 			requires: [],
-			bindings: [{
-				spec: {id: 'receiver-environment-radiance-batch', name: 'uReceiverEnvironmentRadiance', kind: 'data', shaderType: 'sampler2DArray', frequency: 'build'},
-				value: packed,
-			}],
-			blocks: [{
-				id: 'receiver-environment-light-gpu-reduction-main',
-				phase: 'main',
-				order: 0,
-				source: `float irradiance = 0.0;
+			bindings: [
+				{
+					spec: {
+						id: 'receiver-environment-radiance-batch',
+						name: 'uReceiverEnvironmentRadiance',
+						kind: 'data',
+						shaderType: 'sampler2DArray',
+						frequency: 'build',
+					},
+					value: packed,
+				},
+			],
+			blocks: [
+				{
+					id: 'receiver-environment-light-gpu-reduction-main',
+					phase: 'main',
+					order: 0,
+					source: `float irradiance = 0.0;
 for (int directionIndex = 0; directionIndex < ${request.radiances.length}; directionIndex += 1) {
 	irradiance += texelFetch(uReceiverEnvironmentRadiance, ivec3(directionIndex, 0, a32CacheWavelengthLayer), 0).r;
 }
 a32CacheOutput = irradiance * ${Math.PI / request.radiances.length};`,
-			}],
+				},
+			],
 		});
-		const pass = {id: 'receiver-environment-light-gpu-reduction', kind: /** @type {const} */ ('transport'), order: /** @type {const} */ (1), inputs: [], output: FIELD_ID, modules: [module]};
-		const plan = {fields: [output], passes: [pass], result: FIELD_ID, valueKey: /** @type {CacheRuntimeValueKey} */ (VALUE_KEY)};
-		const coordinates = Array.from({length: channelCount}, (_, wavelengthIndex) => ({directionIndex: 0, positionIndex: 0, wavelengthIndex}));
+		const pass = {
+			id: 'receiver-environment-light-gpu-reduction',
+			kind: /** @type {const} */ ('transport'),
+			order: /** @type {const} */ (1),
+			inputs: [],
+			output: FIELD_ID,
+			modules: [module],
+		};
+		const plan = {
+			fields: [output],
+			passes: [pass],
+			result: FIELD_ID,
+			valueKey: /** @type {CacheRuntimeValueKey} */ (VALUE_KEY),
+		};
+		const coordinates = Array.from({length: channelCount}, (_, wavelengthIndex) => ({
+			directionIndex: 0,
+			positionIndex: 0,
+			wavelengthIndex,
+		}));
 		const executor = new GpuFieldExecutor({backend: this._backend, assembler: new CachePassAssembler()});
 		let artifact;
 		try {
-			artifact = await executor.execute(plan, {signal: request.signal, probeReader: this._backend, probes: [{field: FIELD_ID, coordinates}]});
+			artifact = await executor.execute(plan, {
+				signal: request.signal,
+				probeReader: this._backend,
+				probes: [{field: FIELD_ID, coordinates}],
+			});
 			const probe = artifact.diagnostics.passes[0].probe;
-			if (!probe || probe.samples.length !== channelCount) throw new Error('Receiver environment-light GPU reduction did not return its native channels.');
-			return /** @type {SpectralIrradiancePacket} */ (new SpectralPacket({
-				basis: first.basis,
-				quantity: SPECTRAL_QUANTITIES.IRRADIANCE_DENSITY,
-				units: SPECTRAL_UNITS.IRRADIANCE_DENSITY,
-				semantics: first.semantics,
-				values: probe.samples.map((sample) => sample.value),
-				provenanceIdentity: `receiver-environment-light-gpu:${packed.contentHash}`,
-			}));
+			if (!probe || probe.samples.length !== channelCount)
+				throw new Error('Receiver environment-light GPU reduction did not return its native channels.');
+			return /** @type {SpectralIrradiancePacket} */ (
+				new SpectralPacket({
+					basis: first.basis,
+					quantity: SPECTRAL_QUANTITIES.IRRADIANCE_DENSITY,
+					units: SPECTRAL_UNITS.IRRADIANCE_DENSITY,
+					semantics: first.semantics,
+					values: probe.samples.map((sample) => sample.value),
+					provenanceIdentity: `receiver-environment-light-gpu:${packed.contentHash}`,
+				})
+			);
 		} finally {
 			artifact?.dispose();
 			executor.dispose();

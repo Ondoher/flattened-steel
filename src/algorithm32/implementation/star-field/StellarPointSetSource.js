@@ -68,13 +68,15 @@ export class StellarPointSetSource {
 			kind: 'static-stellar-point-set',
 			catalog: selected.catalog,
 			members,
-			...(selected.proxyMembers ? {
-				photometry: {
-					identity: selected.photometryIdentity,
-					retainedPolicyMemberCount: selected.members.length - selected.proxyMembers.length,
-					proxyMembers: selected.proxyMembers,
-				},
-			} : {}),
+			...(selected.proxyMembers
+				? {
+						photometry: {
+							identity: selected.photometryIdentity,
+							retainedPolicyMemberCount: selected.members.length - selected.proxyMembers.length,
+							proxyMembers: selected.proxyMembers,
+						},
+					}
+				: {}),
 		};
 		this._identity = CelestialSourceSupport.describeIdentity({
 			id: this._definition.id,

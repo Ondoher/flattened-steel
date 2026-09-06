@@ -29,10 +29,7 @@ const colorModelQuery = searchParameters.get('colorModel');
 const stellarCatalogQuery = searchParameters.get('stellarCatalog');
 const stellarCatalog = /** @type {Flat32StellarCatalogId} */ (stellarCatalogQuery ?? 'brightest-2000');
 const stellarPresentation = searchParameters.get('stellarPresentation') ?? 'human';
-if (
-	colorModelQuery !== null &&
-	!['basic-bruneton', 'color-reset-slope-078-p9'].includes(colorModelQuery)
-) {
+if (colorModelQuery !== null && !['basic-bruneton', 'color-reset-slope-078-p9'].includes(colorModelQuery)) {
 	throw new RangeError(`Unsupported Flat32 colorModel query selection: ${colorModelQuery}.`);
 }
 const colorDisplayModelConfiguration =
@@ -47,9 +44,8 @@ if (!['physical', 'chroma', 'mesopic', 'human'].includes(stellarPresentation)) {
 if (!['brightest-500', 'brightest-2000'].includes(stellarCatalog)) {
 	throw new RangeError(`Unsupported Flat32 stellarCatalog query selection: ${stellarCatalogQuery}.`);
 }
-const brightest2000StellarCatalogDefinition = stellarCatalog === 'brightest-2000'
-	? await loadBrightest2000StellarCatalogPackage()
-	: undefined;
+const brightest2000StellarCatalogDefinition =
+	stellarCatalog === 'brightest-2000' ? await loadBrightest2000StellarCatalogPackage() : undefined;
 const mesopicFilter = {
 	id: /** @type {const} */ ('human-mesopic-luminance-v1'),
 	stage: /** @type {const} */ ('source-linear'),
@@ -86,8 +82,7 @@ const flatDiagnosticMatch =
 const referenceColorMatch =
 	diagnostic?.match(
 		/^spherical-(reference|sunset-facing|color-reset-sunset-facing)-(ferwerda|bruneton|production)-n4$/,
-	) ??
-	null;
+	) ?? null;
 if (
 	diagnostic === 'spherical-wide-n4' ||
 	diagnostic === 'spherical-default-n1' ||
@@ -117,8 +112,8 @@ const applicationConfiguration =
 							referenceColorMatch[1] === 'color-reset-sunset-facing'
 								? COLOR_RESET_SUNSET_FACING_CAMERA_DIRECTION
 								: referenceColorMatch[1] === 'sunset-facing'
-								? SUNSET_FACING_CAMERA_DIRECTION
-								: /** @type {const} */ ([0, 0.422618, -0.906308]),
+									? SUNSET_FACING_CAMERA_DIRECTION
+									: /** @type {const} */ ([0, 0.422618, -0.906308]),
 						maximumScatteringOrder: /** @type {const} */ (4),
 						reviewObjectsEnabled: false,
 						colorDisplayModelConfiguration:

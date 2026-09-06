@@ -4,62 +4,145 @@
 
 ## Authority and provenance
 
-- Repository manifest: [`agents/topics/standards/manifest.md`](./agents/topics/standards/manifest.md)
+- Folder manifest: [`agents/topics/standards/manifest.md`](./agents/topics/standards/manifest.md)
 - Repository overlay: [`agents/topics/standards/overlay.md`](./agents/topics/standards/overlay.md)
 - Standards governance: [`documentation.md`](../../Users/gande/.codex/documentation/standards/documentation.md)
-- Normalization fingerprint: `sha256:7f4239c4c033e34d2c95d94ef359b788c26bed8b0a428da0e2474a483b96a115`
-- Guide source fingerprint: `sha256:6ac919be5ce56c65795ef7e517ad1f27650e86d9914a17f5b8bf55ba9cb0a540`
+- Normalization fingerprint: `sha256:fbaa7d5da48540af823ddced16a3802135aa2b1af064faa8c16c15bb3aa108a2`
+- Guide source fingerprint: `sha256:6bc8da5fa67609da8c441939011ea4bbf60ddcb67bb85dc4dfec4eefb9f4627e`
 
-Effective rules come from the selected global standards plus matching specific overlay additions and replacements. This file is a readable projection only.
+For each file, the longest matching folder assignment selects one named standards set. The set includes its inherited canonical standards, then matching folder-scoped overlay rules modify specific sections. This file is a readable projection only.
 
-## Selected global standards
+## Standards sets
 
-- [`documentation.md`](../../Users/gande/.codex/documentation/standards/documentation.md) — Standards ownership, manifests, overlays, topics, normalization, and reviewer selection apply.
-- [`project-foundation.md`](../../Users/gande/.codex/documentation/standards/project-foundation.md) — Repository, runtime, dependency, package, and Git boundaries apply.
-- [`architecture.md`](../../Users/gande/.codex/documentation/standards/architecture.md) — Ownership, feature privacy, build/runtime, and layer boundaries apply.
-- [`code-conventions.md`](../../Users/gande/.codex/documentation/standards/code-conventions.md) — JavaScript, files, validation, diagnostics, presentation, CSS, and formatting apply.
-- [`types.md`](../../Users/gande/.codex/documentation/standards/types.md) — Ambient JavaScript contracts and declaration placement apply.
-- [`jsdoc.md`](../../Users/gande/.codex/documentation/standards/jsdoc.md) — Runtime documentation and service-interface conventions apply.
-- [`react.md`](../../Users/gande/.codex/documentation/standards/react.md) — React presentation, state, effects, lifecycle, markup, CSS, and testing apply.
-- [`polylith.md`](../../Users/gande/.codex/documentation/standards/polylith.md) — Builds, feature activation, deployment, lifecycle, server ownership, and browser-test assembly apply.
-- [`remvc.md`](../../Users/gande/.codex/documentation/standards/remvc.md) — Registry, executor, model, controller, view, and presentation responsibilities apply.
-- [`testing.md`](../../Users/gande/.codex/documentation/standards/testing.md) — Runner boundaries, test placement, behavioral coverage, and lane readiness apply.
-- [`server.md`](../../Users/gande/.codex/documentation/standards/server.md) — Service-based routing, client HTTP policy, failures, and server testing apply.
+### `base`
+
+Extends: `none`
+
+Adds:
+
+- [`documentation.md`](../../Users/gande/.codex/documentation/standards/documentation.md) — Folder applicability and standards governance.
+- [`project-foundation.md`](../../Users/gande/.codex/documentation/standards/project-foundation.md) — Repository and package boundaries.
+
+### `code`
+
+Extends: `base`
+
+Adds:
+
+- [`architecture.md`](../../Users/gande/.codex/documentation/standards/architecture.md) — Implementation ownership and dependency boundaries.
+- [`code-conventions.md`](../../Users/gande/.codex/documentation/standards/code-conventions.md) — JavaScript and formatting conventions.
+- [`types.md`](../../Users/gande/.codex/documentation/standards/types.md) — Ambient public and internal contracts.
+- [`jsdoc.md`](../../Users/gande/.codex/documentation/standards/jsdoc.md) — Callable and declaration documentation.
+- [`testing.md`](../../Users/gande/.codex/documentation/standards/testing.md) — Behavioral verification and lane boundaries.
+
+### `build`
+
+Extends: `code`
+
+Adds:
+
+- [`polylith.md`](../../Users/gande/.codex/documentation/standards/polylith.md) — Polylith build, activation, and deployment.
+
+### `application`
+
+Extends: `build`
+
+Adds:
+
+- [`remvc.md`](../../Users/gande/.codex/documentation/standards/remvc.md) — Application responsibility and lifecycle.
+
+### `http-application`
+
+Extends: `application`
+
+Adds:
+
+- [`server.md`](../../Users/gande/.codex/documentation/standards/server.md) — HTTP ingress, transport, filesystem service, and failure boundaries.
+
+### `react-application`
+
+Extends: `application`
+
+Adds:
+
+- [`react.md`](../../Users/gande/.codex/documentation/standards/react.md) — React presentation and adapter lifecycle.
+
+### `react-library`
+
+Extends: `code`
+
+Adds:
+
+- [`react.md`](../../Users/gande/.codex/documentation/standards/react.md) — React presentation and adapter lifecycle.
+
+### `server`
+
+Extends: `build`
+
+Adds:
+
+- [`server.md`](../../Users/gande/.codex/documentation/standards/server.md) — HTTP ingress, transport, filesystem service, and failure boundaries.
+
+### `proof-tools`
+
+Extends: `code`
+
+Adds:
+
+- [`server.md`](../../Users/gande/.codex/documentation/standards/server.md) — HTTP ingress, transport, filesystem service, and failure boundaries.
+
+## Folder assignments
+
+- `.` → `build` — Root package, Polylith, build, and runner configuration.
+- `agents/` → `base` — Work context and standards configuration; topics do not select standards.
+- `.agents/` → `base` — Repository workflow documentation.
+- `.agents/skills/start-experiment/scripts/` → `code` — Authored scaffolding automation.
+- `references/` → `base` — Scientific source, claim, and result registers; retained evidence is not active code.
+- `archives/` → `base` — Immutable historical evidence; mapping never authorizes edits.
+- `src/` → `code` — Shared authored implementation and contracts.
+- `src/algorithm32/implementation/react-three/` → `react-library` — Production React and R3F bindings inside the standalone engine.
+- `src/flat/` → `react-application` — React Polylith application.
+- `src/flat32/` → `http-application` — Polylith application with imperative DOM and client HTTP package loading.
+- `server/` → `server` — Polylith router and filesystem-backed application services.
+- `server/flat32/data/` → `base` — Operational asset documentation and immutable scientific packages, not database entities.
+- `scripts/` → `code` — Offline tooling and independent scientific runners.
+- `scripts/algorithm32/solar-zenith-cache/` → `proof-tools` — Offline compiler and local HTTP browser proof hosts.
+- `scripts/flat32/` → `server` — Application build, capture, and cache-service tooling.
+- `scripts/experiments/b1-directional-sky-radiance/` → `proof-tools` — Independent scoring and GPU HTTP proof host.
+- `scripts/experiments/algorithm32-frame-parity/` → `proof-tools` — Independent CPU/GPU frame comparison and HTTP proof hosts.
+- `experiments/` → `code` — Contained authored source and proof runners; operational no-unit-test instructions remain effective.
+- `experiments/extraterrestrial/runners/` → `proof-tools` — Contained HTTP/browser proof orchestration.
+- `experiments/extraterrestrial/color-reset/harness/` → `proof-tools` — Contained Color Reset browser host.
+- `experiments/extraterrestrial/color-reset/runners/` → `proof-tools` — Contained Color Reset HTTP/browser proof orchestration.
+- `experiments/extraterrestrial/solar-zenith-cache/point-local-scene-cache/` → `proof-tools` — Contained local scene-cache browser host.
+- `experiments/extraterrestrial/solar-zenith-cache/runners/` → `proof-tools` — Contained solar-zenith browser proof hosts.
+- `experiments/extraterrestrial/baseline/src/algorithm32/react/` → `react-library` — Sealed React comparison source; read-only, not a modernization target.
+- `experiments/extraterrestrial/candidate/src/algorithm32/react/` → `react-library` — Sealed React comparison source; read-only, not a modernization target.
+- `experiments/extraterrestrial/production-snapshots/sun-appearance-step-5-v1/src/algorithm32/implementation/react-three/` → `react-library` — Sealed React promotion snapshot; read-only.
 
 ## Repository-wide additions and replacements
 
 None.
 
-## Topic-specific additions and replacements
+## Folder-specific additions and replacements
 
-### [`agents/topics/algorithm32/production/README.md`](./agents/topics/algorithm32/production/README.md)
-
-#### ADD: Production Algorithm32 durable scientific quantities and provenance
+### ADD: Production Algorithm32 scientific quantities, provenance, and profile completeness
 
 - Extends: `types.md#General Types`
-- Rule: Public and durable Algorithm32 quantities must carry explicit units, physical quantity, spectral basis, point or bin meaning, and provenance identity; durable property names must remain unit-neutral and hold unit-bearing values, normalized local computational scalars may use unit suffixes, and radiometric names must distinguish source irradiance before source-path attenuation, incident irradiance after attenuation, and directional incident radiance.
-- Reason: Production Algorithm32 contracts must preserve the meaning, stage, and provenance of scientific values across CPU, GPU, cache, and serialization boundaries.
+- Scope: `folder:src/algorithm32/`
+- Rule: Public and durable Algorithm32 quantities must carry explicit units, physical quantity, spectral basis, point or bin meaning, and provenance identity; durable property names must remain unit-neutral and hold unit-bearing values, normalized local computational scalars may use unit suffixes, and radiometric names must distinguish source irradiance before source-path attenuation, incident irradiance after attenuation, and directional incident radiance. A scientific profile must be a named type with one documented default, caller-supplied overrides, every configurable option relevant to the profile, and every difference from the paper or reference configuration it represents.
+- Reason: Production Algorithm32 contracts must preserve the meaning, stage, and provenance of scientific values across CPU, GPU, cache, and serialization boundaries. Production Algorithm32 profiles encode selected scientific configurations whose defaults, options, and reference deviations must remain explicit.
 
-#### ADD: Production Algorithm32 reference-backed formula symbols
+### ADD: Production Algorithm32 reference-backed formula symbols
 
 - Extends: `code-conventions.md#JavaScript And Module Shape`
+- Scope: `folder:src/algorithm32/`
 - Rule: A scientific implementation may retain a published formula symbol only when owning documentation or an adjacent comment identifies its external authority and makes the code-to-formula mapping unambiguous.
 - Reason: Production Algorithm32 source must keep compact scientific notation traceable to its reference authority without weakening the general descriptive-identifier rule.
 
-#### ADD: Production Algorithm32 scientific profile completeness
-
-- Extends: `types.md#General Types`
-- Rule: A scientific profile must be a named type with one documented default, caller-supplied overrides, every configurable option relevant to the profile, and every difference from the paper or reference configuration it represents.
-- Reason: Production Algorithm32 profiles encode selected scientific configurations whose defaults, options, and reference deviations must remain explicit.
-
-#### ADD: Production Algorithm32 scientific descriptor non-authority
+### ADD: Production Algorithm32 scientific descriptor non-authority
 
 - Extends: `code-conventions.md#Validation And Failure Policy`
+- Scope: `folder:src/algorithm32/`
 - Rule: Scientific descriptors may identify, fingerprint, report, and diagnose evidence but must not validate executable facts, select algorithms, calculate indexing or packing, or recover executable facts.
 - Reason: Production Algorithm32 must keep executable numerical authority separate from descriptive evidence metadata.
-
-## Review monitoring exclusions
-
-These exclusions narrow automatic reviewer selection only. They do not remove or replace standards rules.
-
-None.

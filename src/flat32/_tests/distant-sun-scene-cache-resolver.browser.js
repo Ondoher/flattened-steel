@@ -46,7 +46,7 @@ describe('DistantSunSceneCacheResolver', () => {
 		expect(upper.representativeSolarZenithDegrees).toBe(11);
 		expect(last.representativeSolarZenithDegrees).toBe(108);
 		expect(upper.asset.assetRoot).toMatch(/^\/assets\/distant-sun\/packages\/[a-f0-9]{64}\/$/u);
-		expect(upper.asset.loadRequest.manifestSha256).toBe(11..toString(16).padStart(64, '0'));
+		expect(upper.asset.loadRequest.manifestSha256).toBe((11).toString(16).padStart(64, '0'));
 	});
 
 	it('returns explicit unsupported and dark results without clamping', () => {
@@ -66,13 +66,16 @@ describe('DistantSunSceneCacheResolver', () => {
 	it('sends only the scalar solar zenith to the HTTP entry point', async () => {
 		const expected = resolveDistantSunSceneCache(catalog(), 99.745, '/scene-caches/');
 		let requestedUrl = null;
-		const resolve = createDistantSunSceneCacheHttpResolver(
-			'/api/distant-sun-scene-cache',
-			async (url) => {
-				requestedUrl = url;
-				return {ok: true, status: 200, async json() { return expected; }};
-			},
-		);
+		const resolve = createDistantSunSceneCacheHttpResolver('/api/distant-sun-scene-cache', async (url) => {
+			requestedUrl = url;
+			return {
+				ok: true,
+				status: 200,
+				async json() {
+					return expected;
+				},
+			};
+		});
 		const actual = await resolve(99.745);
 
 		expect(actual).toEqual(expected);

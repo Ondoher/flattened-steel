@@ -1,9 +1,6 @@
 import * as THREE from 'three';
 
-import {
-	NEUTRAL_LAMBERTIAN_REFLECTANCE,
-	NeutralLambertianSceneLighting,
-} from '../algorithm32/implementation/index.js';
+import {NEUTRAL_LAMBERTIAN_REFLECTANCE, NeutralLambertianSceneLighting} from '../algorithm32/implementation/index.js';
 
 import {
 	LOCAL_SUN_AMBIENT_LIGHT_INTENSITY,
@@ -179,15 +176,13 @@ export class LocalSunSceneLighting {
 			throw new TypeError('Flat32 receiver scene lighting requires the selected Color spectral projection.');
 		}
 		const outgoing = color.radianceToLinearSrgb(outgoingRadiance);
-		const incident = outgoing.map((value) => value * Math.PI / NEUTRAL_LAMBERTIAN_REFLECTANCE);
+		const incident = outgoing.map((value) => (value * Math.PI) / NEUTRAL_LAMBERTIAN_REFLECTANCE);
 		const toneMapK = color.displayConstants?.paperFigure1ToneMapK;
 
 		if (!Number.isFinite(toneMapK) || toneMapK <= 0) return incident;
 		return incident.map((value) => {
 			const display = 1 - Math.exp(-Math.max(value, 0) * toneMapK);
-			return display <= 0.04045
-				? display / 12.92
-				: ((display + 0.055) / 1.055) ** 2.4;
+			return display <= 0.04045 ? display / 12.92 : ((display + 0.055) / 1.055) ** 2.4;
 		});
 	}
 
@@ -242,8 +237,7 @@ export class LocalSunSceneLighting {
 		}
 		this._group.userData.shadowMapUpdatePolicy = 'dynamic-from-production-distant-sun';
 		this._group.userData.receiverLightIdentity = receiverLight.identity;
-		this._group.userData.lightingPolicy =
-			'neutral-lambertian-figure1-renderer-bridge-upper-hemisphere-v3';
+		this._group.userData.lightingPolicy = 'neutral-lambertian-figure1-renderer-bridge-upper-hemisphere-v3';
 	}
 
 	/**

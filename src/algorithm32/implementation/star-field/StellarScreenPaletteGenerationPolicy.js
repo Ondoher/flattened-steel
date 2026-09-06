@@ -57,9 +57,9 @@ export class StellarScreenPaletteGenerationPolicy {
 			layout.memberCount !== sourceLayout.memberCount ||
 			layout.indexFormat !== 'R16UI' ||
 			layout.paletteFormat !== 'R32F' ||
-			layout.channelCount !== 15
-			|| layout.rowCount !== 16
-			|| layout.visualMagnitudeRow !== 15
+			layout.channelCount !== 15 ||
+			layout.rowCount !== 16 ||
+			layout.visualMagnitudeRow !== 15
 		) {
 			throw new RangeError('Stellar generation layout does not match the accepted sparse R16UI/R32F contract.');
 		}

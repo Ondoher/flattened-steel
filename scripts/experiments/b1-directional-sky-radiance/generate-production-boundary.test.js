@@ -48,14 +48,7 @@ test('routes production outputs through separate CPU and GPU result roots', () =
 	);
 	assert.equal(parseArguments(['--output-root', 'alternate-results']).outputRoot, resolve('alternate-results'));
 	assert.deepEqual(
-		parseArguments([
-			'--backend',
-			'gpu',
-			'--asset-set',
-			'cache-set',
-			'--production-revision',
-			'revision-1',
-		]),
+		parseArguments(['--backend', 'gpu', '--asset-set', 'cache-set', '--production-revision', 'revision-1']),
 		{
 			backend: 'gpu',
 			dryRun: false,
@@ -72,10 +65,7 @@ test('routes production outputs through separate CPU and GPU result roots', () =
 		outputRoot: resolve('alternate-results'),
 	});
 	assert.equal(parseFigureArguments(['--backend', 'cpu']).resultSubdirectory, 'cpu');
-	assert.equal(
-		parseFigureArguments(['--color-model', 'basic-bruneton']).colorModel,
-		'basic-bruneton',
-	);
+	assert.equal(parseFigureArguments(['--color-model', 'basic-bruneton']).colorModel, 'basic-bruneton');
 	assert.equal(
 		parseFigureArguments(['--profile-family', 'paper-reflection-completed-136']).profileFamily,
 		'paper-reflection-completed-136',

@@ -15,9 +15,8 @@ export class ReceiverEnvironmentLightTransportCpuSampler {
 				sample.directionLocal[2],
 				sample.directionLocal[1],
 			]);
-			const direction = this._reference.model.geometry.mapObserverLocalSceneDirectionToModelDirection(
-				directionSceneLocal,
-			);
+			const direction =
+				this._reference.model.geometry.mapObserverLocalSceneDirectionToModelDirection(directionSceneLocal);
 			return this._reference.evaluate({viewRay: {direction}}).pathRadiance;
 		});
 	}

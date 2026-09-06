@@ -174,10 +174,20 @@ describe('Stage 10 production scene-composition browser gate', /** Called by Jas
 
 	it('executes the selected mesopic-then-chroma source-linear hook on WebGL2', () => {
 		const filters = [
-			{id: 'human-mesopic-luminance-v1', stage: 'source-linear', target: 'stellar', enabled: true,
-				parameters: {maximumRodContribution: 0.5}},
-			{id: 'human-low-light-chroma-v1', stage: 'source-linear', target: 'stellar', enabled: true,
-				parameters: {maximumChromaRetention: 0.65}},
+			{
+				id: 'human-mesopic-luminance-v1',
+				stage: 'source-linear',
+				target: 'stellar',
+				enabled: true,
+				parameters: {maximumRodContribution: 0.5},
+			},
+			{
+				id: 'human-low-light-chroma-v1',
+				stage: 'source-linear',
+				target: 'stellar',
+				enabled: true,
+				parameters: {maximumChromaRetention: 0.65},
+			},
 		];
 		const scotopicLuminanceWeights = new Array(15).fill(0);
 		scotopicLuminanceWeights[4] = 2;
@@ -265,7 +275,11 @@ async function verifyColorResetShaderControls(illuminanceValues) {
 				camera,
 				viewportSize: {width: 4, height: 3, units: 'pixels'},
 				cacheBackend: automaticSetup.cacheBackend,
-				logger: {warn(_message, error) { throw error; }},
+				logger: {
+					warn(_message, error) {
+						throw error;
+					},
+				},
 			},
 			config: {config: {color, execution: {maximumScatteringOrder: 1}}},
 			bindingValues,

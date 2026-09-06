@@ -1,0 +1,269 @@
+{
+	"schemaVersion": 1,
+	"laneId": "algorithm32-color-reset-contained-lane-v1",
+	"status": "cr0-through-cr8-complete-contained-qualification-accepted",
+	"purpose": "Develop and review daylight-preserving twilight Color, physically derived ambient scene lighting, and progressive stellar appearance through small image-first experiments.",
+	"authorities": {
+		"design": "agents/topics/extraterrestrial/color-reset-design.md",
+		"plan": "agents/topics/extraterrestrial/color-reset-experiment-plan.md",
+		"immutableRunRules": "agents/topics/extraterrestrial/stage-12-implementation-topic.md#immutable-run-records",
+		"repositoryPolicy": "AGENTS.md",
+		"experimentPolicy": "experiments/extraterrestrial/AGENTS.md"
+	},
+	"containment": {
+		"implementationRoot": "experiments/extraterrestrial/color-reset",
+		"runnerRoot": "experiments/extraterrestrial/color-reset/runners",
+		"generatedOutputRoot": "tmp/extraterrestrial/color-reset",
+		"runRoot": "tmp/extraterrestrial/color-reset/runs",
+		"browserProfileRoot": "tmp/extraterrestrial/color-reset/browser-profiles",
+		"productionComparisonRoots": ["src/algorithm32", "src/flat32"],
+		"productionAccess": "read-only"
+	},
+	"runIdentity": {
+		"namespace": "color-reset",
+		"numberWidth": 6,
+		"firstNumber": 1,
+		"allocation": "1 + max(namespace counter, greatest existing namespace prefix), under the namespace allocation lock",
+		"directoryPattern": "^[0-9]{6}-[a-z0-9]+(?:-[a-z0-9]+)*$",
+		"oneDirectoryPerExperiment": true,
+		"manualNumbering": "prohibited",
+		"gapReuse": "prohibited",
+		"nestedNumberedRuns": "prohibited"
+	},
+	"fixedPhysicalBoundary": {
+		"sceneCache": "qualified one-degree point-local distant-Sun inventory",
+		"cameraPathQuadrature": "Q30 quadratic-near-observer",
+		"spectrum": "Algorithm32 Native15",
+		"ground": "spherical geometry endpoint",
+		"darkState": "shared texture-free zero-scattering state at and above 108 degrees solar zenith",
+		"physicalComparison": "current accepted B1 Native15/Direct40 evidence",
+		"mutableByLane": false
+	},
+	"displayControls": ["unchanged production Bruneton", "current BrunetonSourceLuminanceLiftColorDisplayModel"],
+	"acceptedBaseline": {
+		"increment": "CR1",
+		"runId": "000005-six-scene-visual-baseline",
+		"artifactSetSha256": "2f7b49dd239fcaf5399c65bfebc59195458edf0b82910cf9987e341b76a615fc",
+		"imageCount": 30,
+		"browserUploadCount": 44,
+		"browserArtifacts": {
+			"individualPngCount": 28,
+			"plotCount": 1,
+			"contactSheetCount": 1,
+			"rgba32fFieldCount": 7,
+			"r8SceneHitMaskCount": 7
+		},
+		"parentControlReplay": {
+			"runId": "000004-control-smoke",
+			"overlappingPanelCount": 4,
+			"exactRgba": true
+		},
+		"claimBoundary": "complete shape-matched visual and numerical baseline; no new Color candidate"
+	},
+	"acceptedReceiverLightInventory": {
+		"increment": "CR2",
+		"runId": "000007-available-light-inventory",
+		"artifactSetSha256": "dcd6cdd8146094d05427ad180af7fccefdbaa67e290d1b5f21e6a0d4b03697ba",
+		"artifactCount": 41,
+		"artifactBytes": 5121712,
+		"rawNative15FieldCount": 7,
+		"receiverDirectionCountPerField": 4096,
+		"imageCount": 4,
+		"measurement": {
+			"directNormal": "source-normal spectral irradiance retained separately",
+			"directHorizontal": "direct-normal multiplied by max(0, local-up dot source-center direction)",
+			"diffuseHorizontal": "cosine-weighted local upper-hemisphere spectral irradiance",
+			"totalHorizontal": "direct-horizontal plus diffuse-horizontal"
+		},
+		"twilightPhotopicDiagnostics": {
+			"sunsetPlus10MinutesDiffuseHorizontalLux": 385.0097520214597,
+			"sunsetPlus60MinutesDiffuseHorizontalLux": 0.2044095523727617,
+			"diffuseRatioPlus10ToPlus60": 1883.52133035033,
+			"directSupportZeroAtBoth": true
+		},
+		"stability": {
+			"repeatExact": true,
+			"maximumRotatedPhotopicSymmetricRelativeDifference": 0.00014509071575601368,
+			"maximumRotatedSignificantChannelSymmetricRelativeDifference": 0.00032276175489032117
+		},
+		"claimBoundary": "receiver-light measurement only; no ambient-light bridge, Color operation, twilight appearance, stellar behavior, or 108-degree transition-continuity claim"
+	},
+	"acceptedNeutralGeometryAmbientProof": {
+		"increment": "CR3",
+		"runId": "000011-neutral-geometry-ambient-proof",
+		"artifactSetSha256": "6d3c23060973e14e325e1fb87d28d1e61efe9a445f2fe57c101d2db04eb0d8a5",
+		"artifactCount": 57,
+		"artifactBytes": 52550399,
+		"imageCount": 15,
+		"rawLinearRgbYFieldCount": 4,
+		"r8GeometryMaskCount": 1,
+		"sceneCount": 4,
+		"geometryVertexCountPerScene": 565,
+		"modes": ["direct-only", "diffuse-only", "combined"],
+		"progress": {
+			"firstImageSeconds": 5.988,
+			"decisionPlateSeconds": 6.429,
+			"targetsMet": true
+		},
+		"proofs": {
+			"native15SpectralAdditivityExact": true,
+			"diffuseAndTotalHorizontalPlaneSequenceStrictlyFalling": true,
+			"directResponseExactZeroAtSunsetPlus10Minutes": true,
+			"directResponseExactZeroAtSunsetPlus60Minutes": true,
+			"persistedRgbaSkyReplayOutsideGeometryMaskExact": true,
+			"newColorOperationIntroduced": false
+		},
+		"claimBoundary": "neutral Lambertian pre-display direct-plus-diffuse lighting bridge for the four declared scenes; no new Color, exposure, tone map, twilight appearance, stellar behavior, or production adoption"
+	},
+	"acceptedCr4Diagnostic": {
+		"increment": "CR4",
+		"namespace": "color-reset",
+		"runId": "000013-global-achromatic-twilight-sweep",
+		"artifactSetSha256": "098add701fdb6af73df7b861e27f57c908293619768f77df1240a08ba111e2fa",
+		"artifactCount": 81,
+		"artifactBytes": 8155157,
+		"imageCount": 52,
+		"qualifiedCandidates": ["restrained-256", "balanced-512"],
+		"diagnosticOnlyCandidates": ["strong-1024"],
+		"ownerAppearanceSelectionPending": true,
+		"allImagesWrittenBeforeScientificGates": true,
+		"independentlyVerified": true,
+		"claimBoundary": "one continuous scene-global achromatic response is implemented and numerically qualified for restrained and balanced rows; no row has owner appearance approval and no production behavior is claimed"
+	},
+	"failedSetups": [
+		{
+			"increment": "CR2",
+			"runId": "000006-available-light-inventory",
+			"conclusion": "failed",
+			"reason": "annotated contact-sheet border changed 3066 immutable parent pixels even though every scientific gate passed",
+			"acceptedClaim": false
+		},
+		{
+			"increment": "CR4",
+			"namespace": "color-reset",
+			"runId": "000012-global-achromatic-twilight-sweep",
+			"artifactSetSha256": "49e194989de9c2ff436dc28b48ea6a80e6666d4e1f797f4ee7bf0ad47e0d0625",
+			"conclusion": "failed",
+			"reason": "local Chrome spawn was denied by the filesystem sandbox before the first render",
+			"acceptedClaim": false
+		}
+	],
+	"cr3NonAcceptedAttempts": [
+		{
+			"runId": "000008-neutral-geometry-ambient-proof",
+			"conclusion": "failed",
+			"reason": "sandbox browser launch failed",
+			"acceptedClaim": false
+		},
+		{
+			"runId": "000009-neutral-geometry-ambient-proof",
+			"conclusion": "failed",
+			"reason": "browser harness initialization failed",
+			"acceptedClaim": false
+		},
+		{
+			"runId": "000010-neutral-geometry-ambient-proof",
+			"conclusion": "rejected",
+			"reason": "independent stored-field reader used a different float32 tolerance policy than the declared browser gate",
+			"acceptedClaim": false
+		}
+	],
+	"solarZenithTransitionBoundary": {
+		"darkFromDegrees": 108,
+		"cr2DarkControlSolarZenithDegrees": 108.13657515628435,
+		"cr2DarkControlExactlyZero": true,
+		"transitionBracketMeasuredByCr2": false,
+		"continuityQualificationIncrement": "CR6"
+	},
+	"currentIncrement": {
+		"id": "CR8",
+		"name": "color-reset qualification",
+		"status": "accepted",
+		"runId": "000065-color-reset-qualification",
+		"artifactSetSha256": "1f5fa1226d1520847fa900fea14870144e6c07f1cbecd11dc0ff4246d2b8bfe1",
+		"b1AggregateRmseMilliwatt": 11.554012538468113,
+		"b1ThresholdRmseMilliwatt": 11.820391604126252,
+		"b1ColorOptions": ["basic-bruneton", "color-reset-slope-078-p9"],
+		"productionPromotionAuthorized": false
+	},
+	"primaryScenes": [
+		{
+			"id": "solar-noon",
+			"timeIso": "2024-06-20T20:08:00.000Z"
+		},
+		{
+			"id": "sunset-minus-60-minutes",
+			"timeIso": "2024-06-21T02:26:03.503Z"
+		},
+		{
+			"id": "sunset-minus-10-minutes",
+			"timeIso": "2024-06-21T03:16:03.503Z"
+		},
+		{
+			"id": "sunset",
+			"timeIso": "2024-06-21T03:26:03.503Z"
+		},
+		{
+			"id": "sunset-plus-10-minutes",
+			"timeIso": "2024-06-21T03:36:03.503Z"
+		},
+		{
+			"id": "sunset-plus-60-minutes",
+			"timeIso": "2024-06-21T04:26:03.503Z"
+		}
+	],
+	"supplementalControls": [
+		{
+			"id": "sunset-plus-120-minutes",
+			"timeIso": "2024-06-21T05:26:03.503Z",
+			"role": "dark and stellar control"
+		}
+	],
+	"firstViewport": {
+		"widthPixels": 640,
+		"heightPixels": 400,
+		"verticalFieldOfViewDegrees": 78,
+		"aim": "sunset-facing wide sky",
+		"foreground": "black unless an increment explicitly introduces neutral geometry"
+	},
+	"imagePolicy": {
+		"renderAllRequestedImagesBeforeGates": true,
+		"retainRejectedImages": true,
+		"retainPartialFailureOutput": true,
+		"individualPngs": "required",
+		"labeledContactSheet": "required",
+		"panelIdentityJson": "required",
+		"progressTimestamps": "required",
+		"firstImageTargetSeconds": 180,
+		"firstDecisionPlateTargetSeconds": 600
+	},
+	"responsibilities": {
+		"physicalSky": "immutable Native15 preDisplayRadiance",
+		"receiverLight": "separate direct and diffuse spectral irradiance",
+		"display": "global source-independent achromatic response over the common Color boundary",
+		"ambientScene": "direct plus diffuse linear-light response before Color",
+		"stellarAppearance": "transported stellar signal evaluated against local sky background"
+	},
+	"prohibited": [
+		"cache, transport, ozone, source-radiometry, Q30, or ground retuning",
+		"independent RGB curves",
+		"per-pixel peak normalization",
+		"framebuffer-derived or image-derived physical lighting",
+		"named-time, solar-zenith, source-kind, or scene-id appearance branches",
+		"hard or slope-discontinuous Bruneton-identity cutoff",
+		"star-driven sky-curve tuning",
+		"production modification or promotion",
+		"experimental unit-test tree or test-framework dependency"
+	],
+	"increments": [
+		"CR0 control smoke",
+		"CR1 six-scene visual baseline",
+		"CR2 available-light inventory",
+		"CR3 neutral-geometry ambient proof",
+		"CR4 global achromatic twilight sweep",
+		"CR5 conditional luminance-shoulder isolation",
+		"CR6 stellar contrast onset",
+		"CR7 integrated sequence",
+		"CR8 qualification"
+	]
+}

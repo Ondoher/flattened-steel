@@ -1,0 +1,4 @@
+interface:
+    display_name: 'Start Experiment'
+    short_description: 'Scaffold an isolated repository experiment'
+    default_prompt: 'Use $start-experiment to create a new isolated proof-of-concept experiment.'

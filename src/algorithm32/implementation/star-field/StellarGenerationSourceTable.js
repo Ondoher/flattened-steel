@@ -49,8 +49,8 @@ export class StellarGenerationSourceTable {
 			this._memberValues.set(member.direction, memberOffset);
 			this._memberValues[memberOffset + 3] = member.visualMagnitude ?? 0;
 			for (let channelIndex = 0; channelIndex < layout.spectralChannelCount; channelIndex += 1) {
-				this._spectralValues[channelIndex * layout.memberCount + memberIndex]
-					= member.spectralIrradiance.values[channelIndex];
+				this._spectralValues[channelIndex * layout.memberCount + memberIndex] =
+					member.spectralIrradiance.values[channelIndex];
 			}
 		}
 

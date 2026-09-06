@@ -17,7 +17,11 @@ export class StellarPointSetCpuCache {
 		if (typeof geometry?.createCelestialBuildSample !== 'function') {
 			throw new TypeError('Stellar point-set CPU construction requires celestial geometry.');
 		}
-		if (source?.kind !== 'static-stellar-point-set' || placement?.sourceId !== source.id || placement.kind !== source.kind) {
+		if (
+			source?.kind !== 'static-stellar-point-set' ||
+			placement?.sourceId !== source.id ||
+			placement.kind !== source.kind
+		) {
 			throw new RangeError('Stellar point-set CPU placement must match its source.');
 		}
 		const roster = model.celestialSources;
@@ -31,10 +35,16 @@ export class StellarPointSetCpuCache {
 		const members = source.celestialSourceDefinition.members;
 		const layout = createStellarPointSetCacheLayout(members.length);
 		this._layout = layout;
-		if (domain.directionCoordinates.length !== layout.directionCount || domain.altitudeNodes.length !== layout.receiverCount) {
+		if (
+			domain.directionCoordinates.length !== layout.directionCount ||
+			domain.altitudeNodes.length !== layout.receiverCount
+		) {
 			throw new RangeError('Stellar point-set CPU construction requires the exact 11 by 13 domain.');
 		}
-		if (members.length !== layout.memberCount || members.some((member) => member.spectralIrradiance.values.length !== layout.channelCount)) {
+		if (
+			members.length !== layout.memberCount ||
+			members.some((member) => member.spectralIrradiance.values.length !== layout.channelCount)
+		) {
 			throw new RangeError('Stellar point-set CPU construction requires the selected native-15 roster.');
 		}
 
@@ -77,7 +87,9 @@ export class StellarPointSetCpuCache {
 					if (!Number.isFinite(value) || value < 0 || value > 1) {
 						throw new RangeError('Stellar point-set transmittance must be finite and within [0, 1].');
 					}
-					transmittance[(receiverIndex * layout.directionCount + directionIndex) * layout.channelCount + channelIndex] = value;
+					transmittance[
+						(receiverIndex * layout.directionCount + directionIndex) * layout.channelCount + channelIndex
+					] = value;
 				}
 			}
 		}
@@ -88,9 +100,14 @@ export class StellarPointSetCpuCache {
 			for (let receiverIndex = 0; receiverIndex < layout.receiverCount; receiverIndex += 1) {
 				for (let directionIndex = 0; directionIndex < layout.directionCount; directionIndex += 1) {
 					for (let channelIndex = 0; channelIndex < layout.channelCount; channelIndex += 1) {
-						const transport = transmittance[(receiverIndex * layout.directionCount + directionIndex) * layout.channelCount + channelIndex];
+						const transport =
+							transmittance[
+								(receiverIndex * layout.directionCount + directionIndex) * layout.channelCount +
+									channelIndex
+							];
 						const value = member.spectralIrradiance.values[channelIndex] * transport;
-						if (!Number.isFinite(value) || value < 0) throw new RangeError('Stellar transported irradiance must be finite and nonnegative.');
+						if (!Number.isFinite(value) || value < 0)
+							throw new RangeError('Stellar transported irradiance must be finite and nonnegative.');
 						const x = tileX * layout.directionCount + directionIndex;
 						const y = tileY * layout.receiverCount + receiverIndex;
 						this._values[(channelIndex * layout.storage.height + y) * layout.storage.width + x] = value;
@@ -108,8 +125,19 @@ export class StellarPointSetCpuCache {
 	/** Read one logical member/domain scalar from the complete binary64 field. */
 	readScalar({memberIndex, directionIndex, receiverIndex, wavelengthIndex}) {
 		const layout = this._layout;
-		if (![memberIndex, directionIndex, receiverIndex, wavelengthIndex].every(Number.isInteger)) throw new TypeError('Stellar cache coordinates must be integers.');
-		if (memberIndex < 0 || memberIndex >= layout.memberCount || directionIndex < 0 || directionIndex >= layout.directionCount || receiverIndex < 0 || receiverIndex >= layout.receiverCount || wavelengthIndex < 0 || wavelengthIndex >= layout.channelCount) throw new RangeError('Stellar cache coordinate is outside the logical field.');
+		if (![memberIndex, directionIndex, receiverIndex, wavelengthIndex].every(Number.isInteger))
+			throw new TypeError('Stellar cache coordinates must be integers.');
+		if (
+			memberIndex < 0 ||
+			memberIndex >= layout.memberCount ||
+			directionIndex < 0 ||
+			directionIndex >= layout.directionCount ||
+			receiverIndex < 0 ||
+			receiverIndex >= layout.receiverCount ||
+			wavelengthIndex < 0 ||
+			wavelengthIndex >= layout.channelCount
+		)
+			throw new RangeError('Stellar cache coordinate is outside the logical field.');
 		const x = (memberIndex % layout.tileColumns) * layout.directionCount + directionIndex;
 		const y = Math.floor(memberIndex / layout.tileColumns) * layout.receiverCount + receiverIndex;
 		return this._values[(wavelengthIndex * layout.storage.height + y) * layout.storage.width + x];

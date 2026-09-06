@@ -47,7 +47,9 @@ export default class DistantSunSceneCacheLedger {
 				row.firstPackedRow !== firstPackedRow ||
 				row.packedRowCount !== packedRowCount
 			) {
-				throw new RangeError('Distant-Sun scene-cache ledger is not an interpolation-closed inventory superset.');
+				throw new RangeError(
+					'Distant-Sun scene-cache ledger is not an interpolation-closed inventory superset.',
+				);
 			}
 			firstPackedRow += packedRowCount;
 		}

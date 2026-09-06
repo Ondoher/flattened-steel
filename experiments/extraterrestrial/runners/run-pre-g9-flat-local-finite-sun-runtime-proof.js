@@ -1,0 +1,39 @@
+#!/usr/bin/env node
+import { execFile as executeFile } from 'node:child_process';
+import { lstat, readFile, realpath } from 'node:fs/promises';
+import { createServer } from 'node:http';
+import path from 'node:path';
+import { promisify } from 'node:util';
+import { assertContainmentPreconditions, assertNoReparseEntries, createProtectedTrackedInventory, verifyProtectedTrackedInventory } from '../harness/lib/containment.js';
+import { buildStaticModuleClosure } from '../harness/lib/module-closure.js';
+import { initializeRunRecord } from '../harness/lib/run-record.js';
+import { CANDIDATE_ROOT, EXPERIMENT_NODE_MODULES_ROOT, EXPERIMENT_PACKAGE_PATH, EXPERIMENT_ROOT } from '../harness/lib/roots.js';
+
+const COMMAND = 'node experiments/extraterrestrial/runners/run-pre-g9-flat-local-finite-sun-runtime-proof.js';
+const CHROME_PATH = 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe';
+const execFile = promisify(executeFile);
+const requireCondition = (value, message) => { if (!value) throw new Error(message); };
+const type = (target) => target.endsWith('.js') ? 'text/javascript; charset=utf-8' : target.endsWith('.json') ? 'application/json; charset=utf-8' : 'text/html; charset=utf-8';
+async function serve(run) {
+	const roots = new Map([['/browser/', path.join(run.runDirectory, 'browser')], ['/harness/', path.join(EXPERIMENT_ROOT, 'harness')], ['/candidate/', CANDIDATE_ROOT], ['/fixtures/', path.join(EXPERIMENT_ROOT, 'fixtures')], ['/node_modules/', EXPERIMENT_NODE_MODULES_ROOT]]);
+	const server = createServer(async (request, response) => { try { const pathname = decodeURIComponent(new URL(request.url, 'http://127.0.0.1').pathname); const route = [...roots.entries()].find(([prefix]) => pathname.startsWith(prefix)); if (!route || pathname.includes('..')) throw new Error('Unsafe proof path.'); const [prefix, root] = route; const target = path.resolve(root, pathname.slice(prefix.length)); if (!target.startsWith(`${path.resolve(root)}${path.sep}`)) throw new Error('Proof path escapes root.'); const info = await lstat(target); if (!info.isFile() || info.isSymbolicLink()) throw new Error('Proof target is not a real file.'); const canonicalRoot = await realpath(root); const canonicalTarget = await realpath(target); if (!canonicalTarget.startsWith(`${canonicalRoot}${path.sep}`)) throw new Error('Proof real path escapes root.'); response.writeHead(200, { 'content-type': type(target) }); response.end(await readFile(canonicalTarget)); } catch (error) { response.writeHead(404); response.end(String(error.message)); } });
+	await new Promise((resolve, reject) => { server.once('error', reject); server.listen(0, '127.0.0.1', resolve); }); return { url: `http://127.0.0.1:${server.address().port}/browser/index.html`, close: () => new Promise((resolve, reject) => server.close((error) => error ? reject(error) : resolve())) };
+}
+async function main() {
+	const run = await initializeRunRecord({ slug: 'pre-g9-flat-local-finite-sun-runtime-proof', command: COMMAND, inputs: { fixture: 'experiments/extraterrestrial/fixtures/flat-local-finite-sun-v1.json', browser: 'Chrome headless WebGL2', runtime: 'Algorithm32 -> ShaderBuilder -> shader handle -> EffectComposer' }, provenance: { experiment: 'experiments/extraterrestrial', candidate: 'experiments/extraterrestrial/candidate' }, environment: { node: process.version, platform: process.platform, chromePath: CHROME_PATH }, references: { canonicalDesign: 'agents/topics/extraterrestrial/celestial-contribution-cache-design.md', canonicalPlan: 'agents/topics/extraterrestrial/promotion-plan.md' } });
+	let server;
+	try {
+		const policy = await assertContainmentPreconditions(); const before = await createProtectedTrackedInventory(policy); await Promise.all([lstat(CHROME_PATH), assertNoReparseEntries(EXPERIMENT_ROOT, 'Experiment tree')]);
+		await run.writeArtifact('browser/index.html', '<!doctype html><meta charset="utf-8"><pre id="result">pending</pre><script type="importmap">{"imports":{"three":"/node_modules/three/build/three.module.js","three/addons/":"/node_modules/three/examples/jsm/"}}</script><script type="module">import { runFlatFiniteSunRuntimeBrowserProof } from \'/harness/flat-finite-sun-runtime-browser-entry.js\'; const result=document.querySelector(\'#result\'); try { result.textContent=JSON.stringify(await runFlatFiniteSunRuntimeBrowserProof()); } catch (error) { result.textContent=JSON.stringify({error:{name:error.name,message:error.message,stack:error.stack}}); }</script>');
+		server = await serve(run); const browser = await execFile(CHROME_PATH, ['--headless=new','--enable-webgl','--ignore-gpu-blocklist','--use-angle=swiftshader','--virtual-time-budget=120000','--dump-dom',server.url], { timeout: 180000, maxBuffer: 16*1024*1024, windowsHide: true }); await run.writeArtifact('browser/dom.html', browser.stdout);
+		const match = /<pre id="result">([\s\S]*?)<\/pre>/u.exec(browser.stdout); requireCondition(match, 'Headless browser did not emit runtime result.'); const result = JSON.parse(match[1]); if (result.error) throw new Error(`Runtime proof failed: ${result.error.name}: ${result.error.message}`);
+		const assertions = []; const check = (value, message) => { requireCondition(value, message); assertions.push(message); };
+		check(result.diagnostics.status === 'installed', 'Algorithm32 installs the Flat finite-Sun runtime through ShaderBuilder and a shader handle.');
+		check(result.shaderIncludes.finiteDisk && result.shaderIncludes.finiteAtmosphere && result.shaderIncludes.normalCache, 'The installed pass combines finite-disk, finite atmospheric path, and ordinary cumulative-cache contributions.');
+		check(result.initial.nonBlack > 0, 'The normal runtime renders a visible finite local-Sun/atmosphere result.');
+		check(result.centerUniformAfterRefresh[0] === 100000 && result.celestialGenerationIdentity, 'Changing the caller-owned center binding refreshes the live transform without replacing the celestial cache generation.');
+		const closure = await buildStaticModuleClosure({ candidateRoot: EXPERIMENT_ROOT, entryFiles: ['runners/run-pre-g9-flat-local-finite-sun-runtime-proof.js','harness/flat-finite-sun-runtime-browser-entry.js'], packageJsonPath: EXPERIMENT_PACKAGE_PATH, nodeModulesRoot: EXPERIMENT_NODE_MODULES_ROOT, allowedNodeBuiltins: ['node:child_process','node:crypto','node:fs','node:fs/promises','node:http','node:module','node:os','node:path','node:url','node:util'] }); const after = await verifyProtectedTrackedInventory(before, policy);
+		const proof = { proofId: 'pre-g9-flat-local-finite-sun-runtime-v1', accepted: true, assertions, result, containment: { protectedFiles: after.fileCount, closureFileCount: closure.files.length, closureEdgeCount: closure.edges.length } }; await run.writeJsonArtifact('evidence/runtime.json', proof); const manifest = await run.finalize({ conclusion: 'accepted', result: { proofId: proof.proofId, assertionCount: assertions.length }, report: `# ${run.runId}: flat/local finite-Sun runtime proof\n\nConclusion: **accepted**\n\n- Assertions: ${assertions.length}/${assertions.length} accepted.\n` }); process.stdout.write(`${JSON.stringify({runId:run.runId,conclusion:'accepted',artifactSetSha256:manifest.artifactSetSha256},null,2)}\\n`);
+	} catch (error) { const detail = { name:error.name,message:error.message,stack:error.stack }; try { await run.writeJsonArtifact('evidence/failure.json', detail); const manifest = await run.finalize({ conclusion:'failed', result:{error:detail}, report:`# ${run.runId}: flat/local finite-Sun runtime proof\n\nConclusion: **failed**\n\n${detail.message}\n` }); process.stderr.write(`${JSON.stringify({runId:run.runId,conclusion:'failed',artifactSetSha256:manifest.artifactSetSha256,error:detail},null,2)}\\n`); } catch {} process.exitCode=1; } finally { await server?.close().catch(() => {}); }
+}
+await main();

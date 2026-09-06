@@ -252,7 +252,8 @@ function verifyRunDerivation(manifest, requireCanonical) {
 		const assetSet = new B1Direct40CacheAssetSetManifest(manifest.assetSet).toRecord();
 		const acceptedCompilerIdentity =
 			manifest.compilerIdentity === B1_DIRECT40_OFFLINE_ASSET_ADAPTER_IDENTITY ||
-			(!requireCanonical && B1_DIRECT40_OFFLINE_ASSET_ADAPTER_LEGACY_IDENTITIES.includes(manifest.compilerIdentity));
+			(!requireCanonical &&
+				B1_DIRECT40_OFFLINE_ASSET_ADAPTER_LEGACY_IDENTITIES.includes(manifest.compilerIdentity));
 		if (
 			manifest.executionIdentity !== GPU_EXECUTION_IDENTITY ||
 			typeof manifest.productionRevision !== 'string' ||
@@ -289,7 +290,10 @@ function verifyRunDerivation(manifest, requireCanonical) {
 		}
 		for (const profile of manifest.profileHashes) {
 			const asset = manifest.assets.find((candidate) => candidate.condition === profile.time);
-			if (profile.order === 4 && (asset?.profileId !== profile.id || asset.profileContentHash !== profile.contentHash)) {
+			if (
+				profile.order === 4 &&
+				(asset?.profileId !== profile.id || asset.profileContentHash !== profile.contentHash)
+			) {
 				throw new Error('GPU production-run profile hashes do not match their cache assets.');
 			}
 		}

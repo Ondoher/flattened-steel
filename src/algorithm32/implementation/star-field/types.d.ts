@@ -21,7 +21,10 @@ type Brightest2000StellarCatalogDefinition = Readonly<{
 	}>[];
 	readonly memberTexels: Float32Array;
 	readonly spectraTexels: Float32Array;
-	readonly proxyMembers: readonly Readonly<{readonly id: string; readonly derivation: Readonly<Record<string, unknown>>}>[];
+	readonly proxyMembers: readonly Readonly<{
+		readonly id: string;
+		readonly derivation: Readonly<Record<string, unknown>>;
+	}>[];
 }>;
 
 /** Source capability that publishes immutable input for the standard stellar generation shader. */

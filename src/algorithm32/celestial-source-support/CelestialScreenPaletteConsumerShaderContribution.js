@@ -81,8 +81,12 @@ export class CelestialScreenPaletteConsumerShaderContribution {
 		).r;
 		result.channels[channelIndex] = state.transmittance.channels[channelIndex] * boundaryRadiance;
 	}
-	${this._filteredStars ? `stellarPresentation.radiance = result;
-	stellarPresentation.visualMagnitude = texelFetch(uStellarPalette, ivec2(int(paletteIndex), 15), 0).r;` : ''}`
+	${
+		this._filteredStars
+			? `stellarPresentation.radiance = result;
+	stellarPresentation.visualMagnitude = texelFetch(uStellarPalette, ivec2(int(paletteIndex), 15), 0).r;`
+			: ''
+	}`
 			: '';
 		const presentationType = this._filteredStars
 			? `struct StellarPresentationSample {
@@ -135,12 +139,16 @@ export class CelestialScreenPaletteConsumerShaderContribution {
 			],
 			textures,
 			functions: [
-				...(this._filteredStars ? [ShaderContributions.createShaderSourceBlock(
-					'celestial-stellar-presentation-type',
-					'declareTypes',
-					10,
-					presentationType,
-				)] : []),
+				...(this._filteredStars
+					? [
+							ShaderContributions.createShaderSourceBlock(
+								'celestial-stellar-presentation-type',
+								'declareTypes',
+								10,
+								presentationType,
+							),
+						]
+					: []),
 				ShaderContributions.createShaderSourceBlock(
 					'celestial-screen-palette-consumer-helper',
 					'evaluateCelestialRadiance',

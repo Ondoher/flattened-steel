@@ -51,7 +51,9 @@ export function assertProductionBFamilyCloseout({b1, b2, b3}) {
 		b3.proposedAssessment.consistent !== true ||
 		b3.proposedAssessment.mismatchAssessment?.complete !== true
 	) {
-		throw new Error('Current-production B3 must preserve favorable B1 inheritance, same-run consistency, and its mismatch map.');
+		throw new Error(
+			'Current-production B3 must preserve favorable B1 inheritance, same-run consistency, and its mismatch map.',
+		);
 	}
 	return Object.freeze({b1RmseMilliwatt: b1Rmse, classification: 'favorable'});
 }

@@ -21,7 +21,7 @@ async function collectFiles(target, repositoryRoot) {
 	for (const entry of await (await import('node:fs/promises')).readdir(target, {withFileTypes: true})) {
 		const child = path.join(target, entry.name);
 		if (entry.isSymbolicLink()) throw new Error(`Dependency inventory rejects links: ${child}`);
-		if (entry.isDirectory()) files.push(...await collectFiles(child, repositoryRoot));
+		if (entry.isDirectory()) files.push(...(await collectFiles(child, repositoryRoot)));
 		else if (entry.isFile()) files.push(child);
 	}
 	return files.filter((file) => file.startsWith(`${repositoryRoot}${path.sep}`));
@@ -52,9 +52,7 @@ const sourceTargets = [
 	path.join(repositoryRoot, 'server', 'flat32', 'HumanVisionFilterPackageService.js'),
 	path.join(repositoryRoot, 'server', 'flat32-router.js'),
 ];
-const files = (await Promise.all(sourceTargets.map((target) => collectFiles(target, repositoryRoot))))
-	.flat()
-	.sort();
+const files = (await Promise.all(sourceTargets.map((target) => collectFiles(target, repositoryRoot)))).flat().sort();
 const forbiddenPatterns = [/scripts[\\/]extraterrestrial/iu, /tmp[\\/]extraterrestrial/iu, /poly-gc-react/iu];
 const forbiddenReferences = [];
 const externalImports = new Set();
@@ -81,12 +79,15 @@ const report = {
 	files: inventory,
 	derivation: {
 		implementation: 'scripts/flat32/verify-color-reset-production-dependencies.js',
-		operation: 'Recursively hash production source owners and scan textual runtime dependency syntax and path references.',
+		operation:
+			'Recursively hash production source owners and scan textual runtime dependency syntax and path references.',
 		targets: sourceTargets.map((target) => path.relative(repositoryRoot, target).replaceAll('\\', '/')),
 	},
 };
 await writeFile(path.join(outputDirectory, 'dependency-inventory.json'), `${JSON.stringify(report, null, 2)}\n`, {
 	flag: 'wx',
 });
-process.stdout.write(`${JSON.stringify({accepted: report.accepted, fileCount: files.length, externalImports: report.externalImports}, null, 2)}\n`);
+process.stdout.write(
+	`${JSON.stringify({accepted: report.accepted, fileCount: files.length, externalImports: report.externalImports}, null, 2)}\n`,
+);
 if (!report.accepted) throw new Error('Production dependency inventory found a forbidden runtime reference.');

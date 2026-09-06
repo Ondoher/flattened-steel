@@ -709,13 +709,11 @@ export class Algorithm32 {
 		this._receiverEnvironmentLightController = prepared.receiverEnvironmentLightController;
 		this._colorRuntimeBindingValues['color.exposureModifier'] = prepared.exposureModifier;
 		this._colorRuntimeBindingValues['color.brightnessProxy'] = prepared.brightnessProxy;
-		this._colorRuntimeBindingValues['color.totalHorizontalIlluminance.value'] =
-			prepared.totalHorizontalIlluminance;
+		this._colorRuntimeBindingValues['color.totalHorizontalIlluminance.value'] = prepared.totalHorizontalIlluminance;
 		this._colorRuntimeBindingValues['color.sceneLuminanceScale'] = prepared.sourceBrightness;
 		this._colorRuntimeBindingValues['presentation.stellar.adaptationLuminanceCdM2'] =
 			prepared.stellarAdaptationLuminance;
-		this._colorRuntimeBindingValues['presentation.stellar.receiverLightIdentity'] =
-			prepared.receiverLightIdentity;
+		this._colorRuntimeBindingValues['presentation.stellar.receiverLightIdentity'] = prepared.receiverLightIdentity;
 		this._shaderBuilder = prepared.shaderBuilder;
 		previousReference?.dispose();
 		previousShaderBuilder?.dispose();
@@ -914,9 +912,7 @@ export class Algorithm32 {
 	/** Return the last complete direct, diffuse, and total receiver-light publication. */
 	get receiverLight() {
 		this._assertUsable();
-		return /** @type {ReceiverEnvironmentLightMeasurement} */ (
-			this._receiverEnvironmentLightController.active
-		);
+		return /** @type {ReceiverEnvironmentLightMeasurement} */ (this._receiverEnvironmentLightController.active);
 	}
 
 	/** Return the current configured light-source brightness. */

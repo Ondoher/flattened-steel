@@ -57,7 +57,9 @@ type Algorithm32PreparedConfig = {
 interface Algorithm32ShaderHandleFacade {
 	readonly _model: SharedModel;
 	readonly _localLightLevelCalculator: LocalLightLevelCalculator;
-	_publishReceiverEnvironmentLight(request: ReceiverEnvironmentLightBuildRequest): Promise<ReceiverEnvironmentLightMeasurement>;
+	_publishReceiverEnvironmentLight(
+		request: ReceiverEnvironmentLightBuildRequest,
+	): Promise<ReceiverEnvironmentLightMeasurement>;
 	/**
 	 * Called by algorithm32 shader handle facade to prepare a replacement facade configuration without publishing it.
 	 * @param config - The config value accepted by the operation.

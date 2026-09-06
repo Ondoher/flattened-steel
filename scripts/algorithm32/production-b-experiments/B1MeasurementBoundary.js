@@ -55,7 +55,9 @@ export function requireB1PhysicalMeasurementShader(source) {
 			source,
 		)
 	) {
-		throw new Error('B1 physical measurement shader contains a Color, encoding, tone, or presentation contribution.');
+		throw new Error(
+			'B1 physical measurement shader contains a Color, encoding, tone, or presentation contribution.',
+		);
 	}
 	return source;
 }

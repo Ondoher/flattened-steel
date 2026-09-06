@@ -78,7 +78,7 @@
 		"score:algorithm32:b1-production": "node scripts/experiments/b1-directional-sky-radiance/publish-production-result.js references/results/experiments/b1-directional-sky-radiance/gpu",
 		"score:algorithm32:b1-b3-production": "node scripts/experiments/b1-directional-sky-radiance/score-production-run.js",
 		"compare:algorithm32:b1-production-backends": "node scripts/experiments/b1-directional-sky-radiance/compare-production-backends.js",
-		"compare:algorithm32:bruneton-sky-color": "node scripts/extraterrestrial/runners/run-bruneton-shader-sky-color-comparison.js",
+		"compare:algorithm32:bruneton-sky-color": "node experiments/extraterrestrial/runners/run-bruneton-shader-sky-color-comparison.js",
 		"gate:algorithm32:bruneton-sky-color": "npm run generate:algorithm32:b1-production:gpu && npm run score:algorithm32:b1-production && npm run compare:algorithm32:bruneton-sky-color",
 		"dev": "start polylith watch --all -v false&start npm run dev:serve",
 		"karma": "karma start --browsers ChromeHeadless karma.conf.cjs",

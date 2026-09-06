@@ -1,37 +1,21 @@
-import { createHash } from 'node:crypto';
-import {
-	mkdir,
-	readFile,
-	writeFile,
-} from 'node:fs/promises';
-import { dirname, join } from 'node:path';
+import {createHash} from 'node:crypto';
+import {mkdir, readFile, writeFile} from 'node:fs/promises';
+import {dirname, join} from 'node:path';
 
-import { CanonicalAtmosphere } from
-	'../../../src/algorithm32/atmospheres/CanonicalAtmosphere.js';
-import {
-	CANONICAL_ATMOSPHERE_CONSTANTS,
-} from '../../../src/algorithm32/constants/Algorithm32CanonicalData.js';
+import {CanonicalAtmosphere} from '../../../src/algorithm32/atmospheres/CanonicalAtmosphere.js';
+import {CANONICAL_ATMOSPHERE_CONSTANTS} from '../../../src/algorithm32/constants/Algorithm32CanonicalData.js';
 import {
 	CUBED_SPHERE_W3_DIRECTION_DOMAIN_OWNER,
 	CUBED_SPHERE_W9_DIRECTION_DOMAIN_OWNER,
 	CUBED_SPHERE_W27_DIRECTION_DOMAIN_OWNER,
 } from '../../../src/algorithm32/domains/consts.js';
-import {
-	FIBONACCI_34_DIRECTION_DOMAIN_OWNER,
-} from '../../../src/algorithm32/domains/consts.js';
-import { FlatEarthGeometry } from
-	'../../../src/algorithm32/geometries/FlatEarthGeometry.js';
-import { SpectralCalculator } from
-	'../../../src/algorithm32/implementation/SpectralCalculator.js';
-import LocalSunConstructionDomainSelection from
-	'../../../src/algorithm32/light-sources/LocalSunConstructionDomainSelection.js';
-import LocalSunCpuCache from
-	'../../../src/algorithm32/light-sources/LocalSunCpuCache.js';
-import { LocalSunLightSource } from
-	'../../../src/algorithm32/light-sources/LocalSunLightSource.js';
-import {
-	buildLocalSunCpuTransportedRadiance,
-} from '../../../src/algorithm32/light-sources/local-sun-scattering-density-transport.js';
+import {FIBONACCI_34_DIRECTION_DOMAIN_OWNER} from '../../../src/algorithm32/domains/consts.js';
+import {FlatEarthGeometry} from '../../../src/algorithm32/geometries/FlatEarthGeometry.js';
+import {SpectralCalculator} from '../../../src/algorithm32/implementation/SpectralCalculator.js';
+import LocalSunConstructionDomainSelection from '../../../src/algorithm32/light-sources/LocalSunConstructionDomainSelection.js';
+import LocalSunCpuCache from '../../../src/algorithm32/light-sources/LocalSunCpuCache.js';
+import {LocalSunLightSource} from '../../../src/algorithm32/light-sources/LocalSunLightSource.js';
+import {buildLocalSunCpuTransportedRadiance} from '../../../src/algorithm32/light-sources/local-sun-scattering-density-transport.js';
 import {
 	DEFAULT_NATIVE_PRODUCTION_PROFILE,
 	NATIVE_15_SPECTRAL_BASIS,
@@ -64,11 +48,8 @@ export default class FlatLocalCacheConvergenceStudy {
 	 * @param {{ readonly workspaceRoot: string }} request - Supplies repository root.
 	 */
 	constructor(request) {
-		if (typeof request?.workspaceRoot !== 'string'
-			|| request.workspaceRoot.length === 0) {
-			throw new TypeError(
-				'FlatLocalCacheConvergenceStudy requires workspaceRoot.',
-			);
+		if (typeof request?.workspaceRoot !== 'string' || request.workspaceRoot.length === 0) {
+			throw new TypeError('FlatLocalCacheConvergenceStudy requires workspaceRoot.');
 		}
 
 		this.#workspaceRoot = request.workspaceRoot;
@@ -85,11 +66,7 @@ export default class FlatLocalCacheConvergenceStudy {
 		const sourceHashesBefore = await this.#hashSources(policy);
 		const shared = this.#createSharedOwners(policy);
 		const spatial = this.#runSpatialStudy(policy, shared);
-		const controls = this.#runControlStudies(
-			policy,
-			shared,
-			spatial.referenceFixture,
-		);
+		const controls = this.#runControlStudies(policy, shared, spatial.referenceFixture);
 		const outgoing = this.#runOutgoingStudy(policy, shared);
 		const resources = this.#runResourceStudy(policy, shared);
 		const decision = this.#resolveDecision({
@@ -101,13 +78,8 @@ export default class FlatLocalCacheConvergenceStudy {
 		});
 		const sourceHashesAfter = await this.#hashSources(policy);
 
-		if (
-			this.#canonicalJson(sourceHashesBefore)
-				!== this.#canonicalJson(sourceHashesAfter)
-		) {
-			throw new Error(
-				'Convergence study sources changed during execution.',
-			);
+		if (this.#canonicalJson(sourceHashesBefore) !== this.#canonicalJson(sourceHashesAfter)) {
+			throw new Error('Convergence study sources changed during execution.');
 		}
 
 		const studies = {
@@ -119,9 +91,7 @@ export default class FlatLocalCacheConvergenceStudy {
 			outgoing,
 			resources,
 		};
-		const policyBytes = await readFile(
-			join(this.#workspaceRoot, POLICY_RELATIVE_PATH),
-		);
+		const policyBytes = await readFile(join(this.#workspaceRoot, POLICY_RELATIVE_PATH));
 		const report = {
 			schema: policy.report.schema,
 			status: 'completed',
@@ -149,16 +119,11 @@ export default class FlatLocalCacheConvergenceStudy {
 			reportPath: REPORT_RELATIVE_PATH,
 			status: report.status,
 			decision: report.decision.status,
-			currentPositionDomainPass:
-				report.decision.currentPositionDomainPass,
-			recommendedCandidateId:
-				report.decision.recommendedCandidateId,
-			controlStudiesPass:
-				report.decision.controlStudiesPass,
-			resourceCriteriaPass:
-				report.decision.resourceCriteriaPass,
-			resultIdentitySha256:
-				report.resultIdentitySha256,
+			currentPositionDomainPass: report.decision.currentPositionDomainPass,
+			recommendedCandidateId: report.decision.recommendedCandidateId,
+			controlStudiesPass: report.decision.controlStudiesPass,
+			resourceCriteriaPass: report.decision.resourceCriteriaPass,
+			resultIdentitySha256: report.resultIdentitySha256,
 		};
 	}
 
@@ -168,10 +133,7 @@ export default class FlatLocalCacheConvergenceStudy {
 	 * @returns {Promise<any>} The parsed policy.
 	 */
 	async #readPolicy() {
-		return JSON.parse(await readFile(
-			join(this.#workspaceRoot, POLICY_RELATIVE_PATH),
-			'utf8',
-		));
+		return JSON.parse(await readFile(join(this.#workspaceRoot, POLICY_RELATIVE_PATH), 'utf8'));
 	}
 
 	/**
@@ -182,57 +144,35 @@ export default class FlatLocalCacheConvergenceStudy {
 	 */
 	#assertPolicy(policy) {
 		if (
-			policy?.schema
-				!== 'algorithm32-flat-local-cache-domain-convergence-policy-v5'
-			|| policy.status
-				!== 'predeclared-before-post-promotion-verification-output'
-			|| policy.report?.schema
-				!== 'algorithm32-flat-local-cache-domain-convergence-report-v5'
-			|| policy.report?.path !== REPORT_RELATIVE_PATH
-			|| policy.productionSelection?.maximumScatteringOrder !== 4
-			|| policy.spatialStudy?.reference?.outgoingFaceWidth
-				!== W3_FACE_WIDTH
-			|| policy.spatialStudy?.diagnostics
-				?.retainedWorstSpectrumCountPerFieldCandidate !== 10
-			|| policy.outgoingStudy?.candidateFaceWidth !== W9_FACE_WIDTH
-			|| policy.outgoingStudy?.referenceFaceWidth !== W27_FACE_WIDTH
-			|| typeof policy.resourceCriteria
-				?.defaultPositionDomainRequirement !== 'string'
-			|| policy.positionCandidates?.length !== 1
-			|| policy.positionCandidates[0]?.id
-				!== policy.productionSelection?.position?.id
-			|| policy.positionCandidates[0]?.role
-				!== 'current-production-selection'
-			|| this.#canonicalJson(
-				policy.positionCandidates[0]?.zNodesMeters,
-			) !== this.#canonicalJson(
-				policy.productionSelection?.position?.zNodesMeters,
-			)
-			|| this.#canonicalJson(
-				policy.positionCandidates[0]?.rhoNodesMeters,
-			) !== this.#canonicalJson(
-				policy.productionSelection?.position?.rhoNodesMeters,
-			)
+			policy?.schema !== 'algorithm32-flat-local-cache-domain-convergence-policy-v5' ||
+			policy.status !== 'predeclared-before-post-promotion-verification-output' ||
+			policy.report?.schema !== 'algorithm32-flat-local-cache-domain-convergence-report-v5' ||
+			policy.report?.path !== REPORT_RELATIVE_PATH ||
+			policy.productionSelection?.maximumScatteringOrder !== 4 ||
+			policy.spatialStudy?.reference?.outgoingFaceWidth !== W3_FACE_WIDTH ||
+			policy.spatialStudy?.diagnostics?.retainedWorstSpectrumCountPerFieldCandidate !== 10 ||
+			policy.outgoingStudy?.candidateFaceWidth !== W9_FACE_WIDTH ||
+			policy.outgoingStudy?.referenceFaceWidth !== W27_FACE_WIDTH ||
+			typeof policy.resourceCriteria?.defaultPositionDomainRequirement !== 'string' ||
+			policy.positionCandidates?.length !== 1 ||
+			policy.positionCandidates[0]?.id !== policy.productionSelection?.position?.id ||
+			policy.positionCandidates[0]?.role !== 'current-production-selection' ||
+			this.#canonicalJson(policy.positionCandidates[0]?.zNodesMeters) !==
+				this.#canonicalJson(policy.productionSelection?.position?.zNodesMeters) ||
+			this.#canonicalJson(policy.positionCandidates[0]?.rhoNodesMeters) !==
+				this.#canonicalJson(policy.productionSelection?.position?.rhoNodesMeters)
 		) {
-			throw new TypeError(
-				'Flat/local cache convergence policy is incomplete or unsupported.',
-			);
+			throw new TypeError('Flat/local cache convergence policy is incomplete or unsupported.');
 		}
 
 		for (const candidate of policy.positionCandidates) {
 			if (
-				candidate.positionCount
-					!== candidate.zNodesMeters.length
-						* candidate.rhoNodesMeters.length
-				|| candidate.positionCount
-					> policy.resourceCriteria
-						.maximumPositionCountUnderW27ResidentLimit
-				|| !this.#strictlyIncreasing(candidate.zNodesMeters)
-				|| !this.#strictlyIncreasing(candidate.rhoNodesMeters)
+				candidate.positionCount !== candidate.zNodesMeters.length * candidate.rhoNodesMeters.length ||
+				candidate.positionCount > policy.resourceCriteria.maximumPositionCountUnderW27ResidentLimit ||
+				!this.#strictlyIncreasing(candidate.zNodesMeters) ||
+				!this.#strictlyIncreasing(candidate.rhoNodesMeters)
 			) {
-				throw new RangeError(
-					`Invalid predeclared position candidate ${candidate.id}.`,
-				);
+				throw new RangeError(`Invalid predeclared position candidate ${candidate.id}.`);
 			}
 		}
 	}
@@ -244,17 +184,12 @@ export default class FlatLocalCacheConvergenceStudy {
 	 * @returns {Promise<readonly object[]>} Ordered source hashes.
 	 */
 	async #hashSources(policy) {
-		const paths = [
-			...policy.evidence.productionOwners,
-			...STUDY_SOURCE_RELATIVE_PATHS,
-		];
+		const paths = [...policy.evidence.productionOwners, ...STUDY_SOURCE_RELATIVE_PATHS];
 		const uniquePaths = [...new Set(paths)].sort();
 		const results = [];
 
 		for (const relativePath of uniquePaths) {
-			const bytes = await readFile(
-				join(this.#workspaceRoot, relativePath),
-			);
+			const bytes = await readFile(join(this.#workspaceRoot, relativePath));
 			results.push({
 				path: relativePath,
 				byteLength: bytes.byteLength,
@@ -279,18 +214,13 @@ export default class FlatLocalCacheConvergenceStudy {
 		});
 		const lightSource = new LocalSunLightSource({
 			sourceKey: 'flat-local-domain-convergence-point-sun',
-			position:
-				this.#position(configured.sourcePositionMeters),
+			position: this.#position(configured.sourcePositionMeters),
 			sourceIrradiance: NATIVE_SOURCE_IRRADIANCE_DENSITY,
-			referenceDistance:
-				this.#distance(configured.referenceDistanceMeters),
-			referenceSpectralIncidentScale:
-				configured.referenceSpectralIncidentScale,
+			referenceDistance: this.#distance(configured.referenceDistanceMeters),
+			referenceSpectralIncidentScale: configured.referenceSpectralIncidentScale,
 			radius: this.#distance(configured.sourceRadiusMeters),
 			distanceFalloff: configured.distanceFalloff,
-			sourceTransmittanceIntervalCount:
-				policy.productionSelection
-					.sourceTransmittanceIntervalCount,
+			sourceTransmittanceIntervalCount: policy.productionSelection.sourceTransmittanceIntervalCount,
 		});
 
 		return {
@@ -315,12 +245,9 @@ export default class FlatLocalCacheConvergenceStudy {
 			id: referencePolicy.id,
 			zNodesMeters: referencePolicy.zNodesMeters,
 			rhoNodesMeters: referencePolicy.rhoNodesMeters,
-			sourceTransmittanceIntervalCount:
-				referencePolicy.sourceTransmittanceIntervalCount,
-			outgoingDirectionDomainOwner:
-				CUBED_SPHERE_W3_DIRECTION_DOMAIN_OWNER,
-			maximumScatteringOrder:
-				referencePolicy.maximumScatteringOrder,
+			sourceTransmittanceIntervalCount: referencePolicy.sourceTransmittanceIntervalCount,
+			outgoingDirectionDomainOwner: CUBED_SPHERE_W3_DIRECTION_DOMAIN_OWNER,
+			maximumScatteringOrder: referencePolicy.maximumScatteringOrder,
 		});
 		const candidates = [];
 
@@ -331,39 +258,30 @@ export default class FlatLocalCacheConvergenceStudy {
 				id: candidatePolicy.id,
 				zNodesMeters: candidatePolicy.zNodesMeters,
 				rhoNodesMeters: candidatePolicy.rhoNodesMeters,
-				sourceTransmittanceIntervalCount:
-					policy.productionSelection
-						.sourceTransmittanceIntervalCount,
-				outgoingDirectionDomainOwner:
-					CUBED_SPHERE_W3_DIRECTION_DOMAIN_OWNER,
-				maximumScatteringOrder:
-					policy.productionSelection.maximumScatteringOrder,
+				sourceTransmittanceIntervalCount: policy.productionSelection.sourceTransmittanceIntervalCount,
+				outgoingDirectionDomainOwner: CUBED_SPHERE_W3_DIRECTION_DOMAIN_OWNER,
+				maximumScatteringOrder: policy.productionSelection.maximumScatteringOrder,
 			});
-			candidates.push(this.#compareSpatialFixture({
-				policy,
-				referenceFixture,
-				candidateFixture,
-				candidatePolicy,
-			}));
+			candidates.push(
+				this.#compareSpatialFixture({
+					policy,
+					referenceFixture,
+					candidateFixture,
+					candidatePolicy,
+				}),
+			);
 		}
 
 		return {
 			referenceFixture,
 			reference: {
 				id: referencePolicy.id,
-				positionCount:
-					referenceFixture.domainSelection.positionCount,
-				zNodeCount:
-					referenceFixture.domainSelection.zCount,
-				rhoNodeCount:
-					referenceFixture.domainSelection.rhoCount,
-				outgoingDirectionCount:
-					referenceFixture.domainSelection
-						.outgoingDirectionCount,
-				maximumScatteringOrder:
-					referenceFixture.result.maximumScatteringOrder,
-				fieldHashes:
-					this.#resultFieldHashes(referenceFixture.result),
+				positionCount: referenceFixture.domainSelection.positionCount,
+				zNodeCount: referenceFixture.domainSelection.zCount,
+				rhoNodeCount: referenceFixture.domainSelection.rhoCount,
+				outgoingDirectionCount: referenceFixture.domainSelection.outgoingDirectionCount,
+				maximumScatteringOrder: referenceFixture.result.maximumScatteringOrder,
+				fieldHashes: this.#resultFieldHashes(referenceFixture.result),
 				interpretation: referencePolicy.interpretation,
 			},
 			candidates,
@@ -381,14 +299,12 @@ export default class FlatLocalCacheConvergenceStudy {
 			policy: request.policy,
 			zNodesMeters: request.zNodesMeters,
 			rhoNodesMeters: request.rhoNodesMeters,
-			sourceTransmittanceIntervalCount:
-				request.sourceTransmittanceIntervalCount,
+			sourceTransmittanceIntervalCount: request.sourceTransmittanceIntervalCount,
 		});
 		const domainSelection = this.#createDomainSelection({
 			id: request.id,
 			geometry,
-			outgoingDirectionDomainOwner:
-				request.outgoingDirectionDomainOwner,
+			outgoingDirectionDomainOwner: request.outgoingDirectionDomainOwner,
 		});
 		const constructionIdentities = this.#constructionIdentities({
 			geometry,
@@ -396,18 +312,15 @@ export default class FlatLocalCacheConvergenceStudy {
 			lightSource: request.shared.lightSource,
 			domainSelection,
 		});
-		const result =
-			request.shared.lightSource.buildCpuScatteringCache({
-				atmosphere: request.shared.atmosphere,
-				geometry,
-				profile: request.shared.profile,
-				constructionIdentities,
-				domainSelection,
-				maximumScatteringOrder:
-					request.maximumScatteringOrder,
-				sourceTransmittanceIntervalCount:
-					request.sourceTransmittanceIntervalCount,
-			});
+		const result = request.shared.lightSource.buildCpuScatteringCache({
+			atmosphere: request.shared.atmosphere,
+			geometry,
+			profile: request.shared.profile,
+			constructionIdentities,
+			domainSelection,
+			maximumScatteringOrder: request.maximumScatteringOrder,
+			sourceTransmittanceIntervalCount: request.sourceTransmittanceIntervalCount,
+		});
 
 		return {
 			geometry,
@@ -428,22 +341,15 @@ export default class FlatLocalCacheConvergenceStudy {
 		const cacheAxes = request.useConfiguredDefaultNodes
 			? {}
 			: {
-				cacheAltitudeNodes:
-					request.zNodesMeters.map((value) =>
-						this.#distance(value)),
-				cacheRadialNodes:
-					request.rhoNodesMeters.map((value) =>
-						this.#distance(value)),
-			};
+					cacheAltitudeNodes: request.zNodesMeters.map((value) => this.#distance(value)),
+					cacheRadialNodes: request.rhoNodesMeters.map((value) => this.#distance(value)),
+				};
 
 		return new FlatEarthGeometry({
-			observerPosition:
-				this.#position(configured.observerPositionMeters),
-			sourcePosition:
-				this.#position(configured.sourcePositionMeters),
+			observerPosition: this.#position(configured.observerPositionMeters),
+			sourcePosition: this.#position(configured.sourcePositionMeters),
 			topAltitude: this.#distance(configured.topAltitudeMeters),
-			cacheRadialMaximum:
-				this.#distance(configured.radialMaximumMeters),
+			cacheRadialMaximum: this.#distance(configured.radialMaximumMeters),
 			...cacheAxes,
 		});
 	}
@@ -455,32 +361,19 @@ export default class FlatLocalCacheConvergenceStudy {
 	 * @returns {LocalSunConstructionDomainSelection} The coherent domain.
 	 */
 	#createDomainSelection(request) {
-		const positionDomainOwner =
-			request.geometry.createLocalSunCachePositionDomain();
-		const faceWidth =
-			request.outgoingDirectionDomainOwner.faceWidth;
+		const positionDomainOwner = request.geometry.createLocalSunCachePositionDomain();
+		const faceWidth = request.outgoingDirectionDomainOwner.faceWidth;
 
 		return new LocalSunConstructionDomainSelection({
-			id:
-				`flat-local-domain-study-${request.id}`
-				+ `-fibonacci34-w${faceWidth}`,
+			id: `flat-local-domain-study-${request.id}` + `-fibonacci34-w${faceWidth}`,
 			positionDomainOwner,
-			incomingDirectionDomain:
-				FIBONACCI_34_DIRECTION_DOMAIN_OWNER.descriptor,
-			incomingUnitVectors:
-				FIBONACCI_34_DIRECTION_DOMAIN_OWNER.unitVectors,
-			incomingIntegrationWeights:
-				FIBONACCI_34_DIRECTION_DOMAIN_OWNER
-					.integrationWeights,
-			outgoingDirectionDomainOwner:
-				request.outgoingDirectionDomainOwner,
+			incomingDirectionDomain: FIBONACCI_34_DIRECTION_DOMAIN_OWNER.descriptor,
+			incomingUnitVectors: FIBONACCI_34_DIRECTION_DOMAIN_OWNER.unitVectors,
+			incomingIntegrationWeights: FIBONACCI_34_DIRECTION_DOMAIN_OWNER.integrationWeights,
+			outgoingDirectionDomainOwner: request.outgoingDirectionDomainOwner,
 			spectralBasis: NATIVE_15_SPECTRAL_BASIS,
-			radiancePackingId:
-				`flat-local-domain-study-${request.id}`
-				+ '-radiance-packing',
-			scatteringDensityPackingId:
-				`flat-local-domain-study-${request.id}`
-				+ `-w${faceWidth}-density-packing`,
+			radiancePackingId: `flat-local-domain-study-${request.id}` + '-radiance-packing',
+			scatteringDensityPackingId: `flat-local-domain-study-${request.id}` + `-w${faceWidth}-density-packing`,
 		});
 	}
 
@@ -494,30 +387,22 @@ export default class FlatLocalCacheConvergenceStudy {
 		return {
 			source: {
 				id: request.lightSource.id,
-				contentHash:
-					this.#hashJson(request.lightSource.describe()),
+				contentHash: this.#hashJson(request.lightSource.describe()),
 			},
 			atmosphere: {
 				id: request.atmosphere.id,
-				contentHash:
-					this.#hashJson(request.atmosphere.describe()),
+				contentHash: this.#hashJson(request.atmosphere.describe()),
 			},
 			geometry: {
 				id: request.geometry.id,
-				contentHash:
-					this.#hashJson(request.geometry.describe()),
+				contentHash: this.#hashJson(request.geometry.describe()),
 			},
 			domain: {
 				id: request.domainSelection.id,
 				contentHash: this.#hashJson({
-					position:
-						request.domainSelection.positionDomain,
-					incoming:
-						request.domainSelection
-							.incomingDirectionDomain,
-					outgoing:
-						request.domainSelection
-							.outgoingDirectionDomain,
+					position: request.domainSelection.positionDomain,
+					incoming: request.domainSelection.incomingDirectionDomain,
+					outgoing: request.domainSelection.outgoingDirectionDomain,
 				}),
 			},
 		};
@@ -531,103 +416,70 @@ export default class FlatLocalCacheConvergenceStudy {
 	 */
 	#compareSpatialFixture(request) {
 		const fieldResults = {};
-		const referenceCache =
-			new LocalSunCpuCache(request.referenceFixture.result);
-		const candidateCache =
-			new LocalSunCpuCache(request.candidateFixture.result);
+		const referenceCache = new LocalSunCpuCache(request.referenceFixture.result);
+		const candidateCache = new LocalSunCpuCache(request.candidateFixture.result);
 
 		try {
-			for (const fieldLabel of
-				request.policy.spatialStudy.comparedFields) {
+			for (const fieldLabel of request.policy.spatialStudy.comparedFields) {
 				const comparisons = [];
-				const referenceField =
-					this.#resultField(
-						request.referenceFixture.result,
-						fieldLabel,
-					);
-				const candidateField =
-					this.#resultField(
-						request.candidateFixture.result,
-						fieldLabel,
-					);
-				const referenceReader =
-					referenceField.createReader();
-				const candidateReader =
-					candidateField.createReader();
+				const referenceField = this.#resultField(request.referenceFixture.result, fieldLabel);
+				const candidateField = this.#resultField(request.candidateFixture.result, fieldLabel);
+				const referenceReader = referenceField.createReader();
+				const candidateReader = candidateField.createReader();
 
-				for (const stressPosition of
-					request.policy.spatialStudy.stressPositions) {
-					const referencePositionIndex =
-						this.#positionIndex(
-							request.referenceFixture
-								.domainSelection,
-							stressPosition.zMeters,
-							stressPosition.rhoMeters,
-						);
+				for (const stressPosition of request.policy.spatialStudy.stressPositions) {
+					const referencePositionIndex = this.#positionIndex(
+						request.referenceFixture.domainSelection,
+						stressPosition.zMeters,
+						stressPosition.rhoMeters,
+					);
 					const position =
-						request.referenceFixture
-							.domainSelection
-							.positionNodes[
-								referencePositionIndex
-							].metadata.position;
+						request.referenceFixture.domainSelection.positionNodes[referencePositionIndex].metadata
+							.position;
 					const atmosphereCoordinate =
-						request.candidateFixture.geometry
-							.resolveAtmosphereCoordinate(position);
+						request.candidateFixture.geometry.resolveAtmosphereCoordinate(position);
 					const candidatePositionStencil =
-						request.candidateFixture.geometry
-							.resolveScatteringCachePositionStencil({
-								position,
-								atmosphereCoordinate,
-								positionDomain:
-									request.candidateFixture
-										.domainSelection
-										.positionDomain,
-							});
+						request.candidateFixture.geometry.resolveScatteringCachePositionStencil({
+							position,
+							atmosphereCoordinate,
+							positionDomain: request.candidateFixture.domainSelection.positionDomain,
+						});
 
-					for (const directionIndex of
-						request.policy.spatialStudy
-							.outgoingDirectionIndicesW3) {
-						const referenceSpectrum =
-							this.#readExactSpectrum({
-								reader: referenceReader,
-								positionIndex:
-									referencePositionIndex,
-								directionIndex,
-							});
+					for (const directionIndex of request.policy.spatialStudy.outgoingDirectionIndicesW3) {
+						const referenceSpectrum = this.#readExactSpectrum({
+							reader: referenceReader,
+							positionIndex: referencePositionIndex,
+							directionIndex,
+						});
 						const candidateSpectrum =
 							fieldLabel === 'Jthrough4'
 								? candidateCache.sampleResolved({
-									positionStencil:
-										candidatePositionStencil,
-									directionStencil: {
-										indices: [directionIndex],
-										weights: [1],
-									},
-								}).values
+										positionStencil: candidatePositionStencil,
+										directionStencil: {
+											indices: [directionIndex],
+											weights: [1],
+										},
+									}).values
 								: this.#sampleSpectrum({
-									reader: candidateReader,
-									positionStencil:
-										candidatePositionStencil,
-									directionStencil: {
-										indices: [directionIndex],
-										weights: [1],
-									},
-								});
+										reader: candidateReader,
+										positionStencil: candidatePositionStencil,
+										directionStencil: {
+											indices: [directionIndex],
+											weights: [1],
+										},
+									});
 
 						if (fieldLabel === 'Jthrough4') {
-							const observableReference =
-								referenceCache.sampleResolved({
-									positionStencil: {
-										indices: [
-											referencePositionIndex,
-										],
-										weights: [1],
-									},
-									directionStencil: {
-										indices: [directionIndex],
-										weights: [1],
-									},
-								}).values;
+							const observableReference = referenceCache.sampleResolved({
+								positionStencil: {
+									indices: [referencePositionIndex],
+									weights: [1],
+								},
+								directionStencil: {
+									indices: [directionIndex],
+									weights: [1],
+								},
+							}).values;
 							this.#assertSpectraExactlyEqual(
 								referenceSpectrum,
 								observableReference,
@@ -635,65 +487,44 @@ export default class FlatLocalCacheConvergenceStudy {
 							);
 						}
 
-						comparisons.push(this.#compareSpectra({
-							id:
-								`${stressPosition.id}`
-								+ `:w3-${directionIndex}`,
-							reference: referenceSpectrum,
-							candidate: candidateSpectrum,
-						}));
+						comparisons.push(
+							this.#compareSpectra({
+								id: `${stressPosition.id}` + `:w3-${directionIndex}`,
+								reference: referenceSpectrum,
+								candidate: candidateSpectrum,
+							}),
+						);
 					}
 				}
 
-				fieldResults[fieldLabel] =
-					this.#summarizeComparisons({
-						comparisons,
-						maximumNormalizedLInf:
-							request.policy.spatialStudy
-								.spectrumMetric
-								.maximumNormalizedLInf,
-						maximumP95NormalizedRms:
-							request.policy.spatialStudy
-								.spectrumMetric
-								.maximumP95NormalizedRms,
-						retainedWorstSpectrumCount:
-							request.policy.spatialStudy
-								.diagnostics
-								.retainedWorstSpectrumCountPerFieldCandidate,
-					});
+				fieldResults[fieldLabel] = this.#summarizeComparisons({
+					comparisons,
+					maximumNormalizedLInf: request.policy.spatialStudy.spectrumMetric.maximumNormalizedLInf,
+					maximumP95NormalizedRms: request.policy.spatialStudy.spectrumMetric.maximumP95NormalizedRms,
+					retainedWorstSpectrumCount:
+						request.policy.spatialStudy.diagnostics.retainedWorstSpectrumCountPerFieldCandidate,
+				});
 			}
 		} finally {
 			referenceCache.dispose();
 			candidateCache.dispose();
 		}
 
-		const spatialPass = Object.values(fieldResults)
-			.every((result) => result.pass);
+		const spatialPass = Object.values(fieldResults).every((result) => result.pass);
 		const maximumNormalizedLInf = Math.max(
-			...Object.values(fieldResults)
-				.map((result) =>
-					result.maximumNormalizedLInf),
+			...Object.values(fieldResults).map((result) => result.maximumNormalizedLInf),
 		);
 		const maximumP95NormalizedRms = Math.max(
-			...Object.values(fieldResults)
-				.map((result) =>
-					result.p95NormalizedRms),
+			...Object.values(fieldResults).map((result) => result.p95NormalizedRms),
 		);
 
 		return {
 			id: request.candidatePolicy.id,
 			role: request.candidatePolicy.role,
-			positionCount:
-				request.candidateFixture
-					.domainSelection.positionCount,
-			zNodesMeters:
-				request.candidatePolicy.zNodesMeters,
-			rhoNodesMeters:
-				request.candidatePolicy.rhoNodesMeters,
-			fieldHashes:
-				this.#resultFieldHashes(
-					request.candidateFixture.result,
-				),
+			positionCount: request.candidateFixture.domainSelection.positionCount,
+			zNodesMeters: request.candidatePolicy.zNodesMeters,
+			rhoNodesMeters: request.candidatePolicy.rhoNodesMeters,
+			fieldHashes: this.#resultFieldHashes(request.candidateFixture.result),
 			fields: fieldResults,
 			maximumNormalizedLInf,
 			maximumP95NormalizedRms,
@@ -711,18 +542,8 @@ export default class FlatLocalCacheConvergenceStudy {
 	 */
 	#runControlStudies(policy, shared, referenceFixture) {
 		return {
-			sourceTransmittance:
-				this.#runSourceTransmittanceStudy(
-					policy,
-					shared,
-					referenceFixture,
-				),
-			storedFieldTransport:
-				this.#runStoredFieldTransportStudy(
-					policy,
-					shared,
-					referenceFixture,
-				),
+			sourceTransmittance: this.#runSourceTransmittanceStudy(policy, shared, referenceFixture),
+			storedFieldTransport: this.#runStoredFieldTransportStudy(policy, shared, referenceFixture),
 		};
 	}
 
@@ -734,11 +555,7 @@ export default class FlatLocalCacheConvergenceStudy {
 	 * @param {any} candidateFixture - Supplies the 15-interval result.
 	 * @returns {object} Source-control convergence.
 	 */
-	#runSourceTransmittanceStudy(
-		policy,
-		shared,
-		candidateFixture,
-	) {
+	#runSourceTransmittanceStudy(policy, shared, candidateFixture) {
 		const control = policy.controlStudies.sourceTransmittance;
 		const referencePolicy = policy.spatialStudy.reference;
 		const referenceFixture = this.#buildFixture({
@@ -747,49 +564,30 @@ export default class FlatLocalCacheConvergenceStudy {
 			id: `${referencePolicy.id}-source60`,
 			zNodesMeters: referencePolicy.zNodesMeters,
 			rhoNodesMeters: referencePolicy.rhoNodesMeters,
-			sourceTransmittanceIntervalCount:
-				control.referenceIntervalCount,
-			outgoingDirectionDomainOwner:
-				CUBED_SPHERE_W3_DIRECTION_DOMAIN_OWNER,
+			sourceTransmittanceIntervalCount: control.referenceIntervalCount,
+			outgoingDirectionDomainOwner: CUBED_SPHERE_W3_DIRECTION_DOMAIN_OWNER,
 			maximumScatteringOrder: 1,
 		});
 		const comparisons = this.#compareExactFieldProbes({
 			policy,
 			referenceFixture,
-			referenceField:
-				referenceFixture.result
-					.pureScatteringDensityByOrder[0],
+			referenceField: referenceFixture.result.pureScatteringDensityByOrder[0],
 			candidateFixture,
-			candidateField:
-				candidateFixture.result
-					.pureScatteringDensityByOrder[0],
-			directionIndices:
-				policy.spatialStudy.outgoingDirectionIndicesW3,
+			candidateField: candidateFixture.result.pureScatteringDensityByOrder[0],
+			directionIndices: policy.spatialStudy.outgoingDirectionIndicesW3,
 		});
 		const summary = this.#summarizeComparisons({
 			comparisons,
-			maximumNormalizedLInf:
-				control.maximumNormalizedLInf,
-			maximumP95NormalizedRms:
-				control.maximumP95NormalizedRms,
+			maximumNormalizedLInf: control.maximumNormalizedLInf,
+			maximumP95NormalizedRms: control.maximumP95NormalizedRms,
 		});
 
 		return {
-			candidateIntervalCount:
-				control.candidateIntervalCount,
-			referenceIntervalCount:
-				control.referenceIntervalCount,
+			candidateIntervalCount: control.candidateIntervalCount,
+			referenceIntervalCount: control.referenceIntervalCount,
 			field: control.field,
-			candidateFieldSha256:
-				this.#hashField(
-					candidateFixture.result
-						.pureScatteringDensityByOrder[0],
-				),
-			referenceFieldSha256:
-				this.#hashField(
-					referenceFixture.result
-						.pureScatteringDensityByOrder[0],
-				),
+			candidateFieldSha256: this.#hashField(candidateFixture.result.pureScatteringDensityByOrder[0]),
+			referenceFieldSha256: this.#hashField(referenceFixture.result.pureScatteringDensityByOrder[0]),
 			...summary,
 		};
 	}
@@ -810,30 +608,21 @@ export default class FlatLocalCacheConvergenceStudy {
 			lightSource: shared.lightSource,
 			spectralBasis: NATIVE_15_SPECTRAL_BASIS,
 			executionControls: {
-				pathIntervalCount:
-					control.referenceIntervalCount,
-				sourceTransmittanceIntervalCount:
-					policy.productionSelection
-						.sourceTransmittanceIntervalCount,
+				pathIntervalCount: control.referenceIntervalCount,
+				sourceTransmittanceIntervalCount: policy.productionSelection.sourceTransmittanceIntervalCount,
 			},
 		});
-		const referenceField =
-			buildLocalSunCpuTransportedRadiance({
-				scatteringDensity:
-					fixture.result
-						.pureScatteringDensityByOrder[0],
-				geometry: fixture.geometry,
-				atmosphere: shared.atmosphere,
-				calculator,
-				sourceState: shared.lightSource.describe(),
-				domainSelection: fixture.domainSelection,
-				pathIntervalCount:
-					control.referenceIntervalCount,
-				id:
-					'flat-local-domain-study-reference-l1-transport60',
-			});
-		const candidateField =
-			fixture.result.pureRadianceByOrder[0];
+		const referenceField = buildLocalSunCpuTransportedRadiance({
+			scatteringDensity: fixture.result.pureScatteringDensityByOrder[0],
+			geometry: fixture.geometry,
+			atmosphere: shared.atmosphere,
+			calculator,
+			sourceState: shared.lightSource.describe(),
+			domainSelection: fixture.domainSelection,
+			pathIntervalCount: control.referenceIntervalCount,
+			id: 'flat-local-domain-study-reference-l1-transport60',
+		});
+		const candidateField = fixture.result.pureRadianceByOrder[0];
 		const comparisons = this.#compareExactFieldProbes({
 			policy,
 			referenceFixture: fixture,
@@ -844,22 +633,16 @@ export default class FlatLocalCacheConvergenceStudy {
 		});
 		const summary = this.#summarizeComparisons({
 			comparisons,
-			maximumNormalizedLInf:
-				control.maximumNormalizedLInf,
-			maximumP95NormalizedRms:
-				control.maximumP95NormalizedRms,
+			maximumNormalizedLInf: control.maximumNormalizedLInf,
+			maximumP95NormalizedRms: control.maximumP95NormalizedRms,
 		});
 
 		return {
-			candidateIntervalCount:
-				control.candidateIntervalCount,
-			referenceIntervalCount:
-				control.referenceIntervalCount,
+			candidateIntervalCount: control.candidateIntervalCount,
+			referenceIntervalCount: control.referenceIntervalCount,
 			field: control.field,
-			candidateFieldSha256:
-				this.#hashField(candidateField),
-			referenceFieldSha256:
-				this.#hashField(referenceField),
+			candidateFieldSha256: this.#hashField(candidateField),
+			referenceFieldSha256: this.#hashField(referenceField),
 			...summary,
 		};
 	}
@@ -871,14 +654,11 @@ export default class FlatLocalCacheConvergenceStudy {
 	 * @returns {readonly object[]} Spectral comparisons.
 	 */
 	#compareExactFieldProbes(request) {
-		const referenceReader =
-			request.referenceField.createReader();
-		const candidateReader =
-			request.candidateField.createReader();
+		const referenceReader = request.referenceField.createReader();
+		const candidateReader = request.candidateField.createReader();
 		const comparisons = [];
 
-		for (const stressPosition of
-			request.policy.spatialStudy.stressPositions) {
+		for (const stressPosition of request.policy.spatialStudy.stressPositions) {
 			const referencePositionIndex = this.#positionIndex(
 				request.referenceFixture.domainSelection,
 				stressPosition.zMeters,
@@ -890,23 +670,22 @@ export default class FlatLocalCacheConvergenceStudy {
 				stressPosition.rhoMeters,
 			);
 
-			for (const directionIndex of
-				request.directionIndices) {
-				comparisons.push(this.#compareSpectra({
-					id:
-						`${stressPosition.id}`
-						+ `:direction-${directionIndex}`,
-					reference: this.#readExactSpectrum({
-						reader: referenceReader,
-						positionIndex: referencePositionIndex,
-						directionIndex,
+			for (const directionIndex of request.directionIndices) {
+				comparisons.push(
+					this.#compareSpectra({
+						id: `${stressPosition.id}` + `:direction-${directionIndex}`,
+						reference: this.#readExactSpectrum({
+							reader: referenceReader,
+							positionIndex: referencePositionIndex,
+							directionIndex,
+						}),
+						candidate: this.#readExactSpectrum({
+							reader: candidateReader,
+							positionIndex: candidatePositionIndex,
+							directionIndex,
+						}),
 					}),
-					candidate: this.#readExactSpectrum({
-						reader: candidateReader,
-						positionIndex: candidatePositionIndex,
-						directionIndex,
-					}),
-				}));
+				);
 			}
 		}
 
@@ -926,109 +705,77 @@ export default class FlatLocalCacheConvergenceStudy {
 			policy,
 			shared,
 			id: 'outgoing-w9-candidate',
-			zNodesMeters:
-				outgoing.positionAxes.zNodesMeters,
-			rhoNodesMeters:
-				outgoing.positionAxes.rhoNodesMeters,
-			sourceTransmittanceIntervalCount:
-				outgoing.sourceTransmittanceIntervalCount,
-			outgoingDirectionDomainOwner:
-				CUBED_SPHERE_W9_DIRECTION_DOMAIN_OWNER,
+			zNodesMeters: outgoing.positionAxes.zNodesMeters,
+			rhoNodesMeters: outgoing.positionAxes.rhoNodesMeters,
+			sourceTransmittanceIntervalCount: outgoing.sourceTransmittanceIntervalCount,
+			outgoingDirectionDomainOwner: CUBED_SPHERE_W9_DIRECTION_DOMAIN_OWNER,
 			maximumScatteringOrder: 1,
 		});
 		const referenceFixture = this.#buildFixture({
 			policy,
 			shared,
 			id: 'outgoing-w27-reference',
-			zNodesMeters:
-				outgoing.positionAxes.zNodesMeters,
-			rhoNodesMeters:
-				outgoing.positionAxes.rhoNodesMeters,
-			sourceTransmittanceIntervalCount:
-				outgoing.sourceTransmittanceIntervalCount,
-			outgoingDirectionDomainOwner:
-				CUBED_SPHERE_W27_DIRECTION_DOMAIN_OWNER,
+			zNodesMeters: outgoing.positionAxes.zNodesMeters,
+			rhoNodesMeters: outgoing.positionAxes.rhoNodesMeters,
+			sourceTransmittanceIntervalCount: outgoing.sourceTransmittanceIntervalCount,
+			outgoingDirectionDomainOwner: CUBED_SPHERE_W27_DIRECTION_DOMAIN_OWNER,
 			maximumScatteringOrder: 1,
 		});
-		const candidateField =
-			candidateFixture.result
-				.pureScatteringDensityByOrder[0];
-		const referenceField =
-			referenceFixture.result
-				.pureScatteringDensityByOrder[0];
+		const candidateField = candidateFixture.result.pureScatteringDensityByOrder[0];
+		const referenceField = referenceFixture.result.pureScatteringDensityByOrder[0];
 		const candidateReader = candidateField.createReader();
 		const referenceReader = referenceField.createReader();
 		const directionIndices = this.#stridedIndices({
-			count:
-				referenceFixture.domainSelection
-					.outgoingDirectionCount,
+			count: referenceFixture.domainSelection.outgoingDirectionCount,
 			stride: outgoing.referenceDirectionIndexStride,
-			includeFinal:
-				outgoing.includeFinalReferenceDirection,
+			includeFinal: outgoing.includeFinalReferenceDirection,
 		});
 		const comparisons = [];
 
-		for (let positionIndex = 0;
-			positionIndex
-				< referenceFixture.domainSelection.positionCount;
-			positionIndex += 1) {
+		for (
+			let positionIndex = 0;
+			positionIndex < referenceFixture.domainSelection.positionCount;
+			positionIndex += 1
+		) {
 			for (const referenceDirectionIndex of directionIndices) {
-				const cacheDirection =
-					referenceFixture.domainSelection
-						.outgoingUnitVectors[
-							referenceDirectionIndex
-						];
+				const cacheDirection = referenceFixture.domainSelection.outgoingUnitVectors[referenceDirectionIndex];
 				const candidateDirectionStencil =
-					candidateFixture.domainSelection
-						.resolveOutgoingDirectionStencil(
-							cacheDirection,
-						);
-				comparisons.push(this.#compareSpectra({
-					id:
-						`position-${positionIndex}`
-						+ `:w27-${referenceDirectionIndex}`,
-					reference: this.#readExactSpectrum({
-						reader: referenceReader,
-						positionIndex,
-						directionIndex:
-							referenceDirectionIndex,
+					candidateFixture.domainSelection.resolveOutgoingDirectionStencil(cacheDirection);
+				comparisons.push(
+					this.#compareSpectra({
+						id: `position-${positionIndex}` + `:w27-${referenceDirectionIndex}`,
+						reference: this.#readExactSpectrum({
+							reader: referenceReader,
+							positionIndex,
+							directionIndex: referenceDirectionIndex,
+						}),
+						candidate: this.#sampleSpectrum({
+							reader: candidateReader,
+							positionStencil: {
+								indices: [positionIndex],
+								weights: [1],
+							},
+							directionStencil: candidateDirectionStencil,
+						}),
 					}),
-					candidate: this.#sampleSpectrum({
-						reader: candidateReader,
-						positionStencil: {
-							indices: [positionIndex],
-							weights: [1],
-						},
-						directionStencil:
-							candidateDirectionStencil,
-					}),
-				}));
+				);
 			}
 		}
 
 		const summary = this.#summarizeComparisons({
 			comparisons,
-			maximumNormalizedLInf:
-				outgoing.maximumNormalizedLInf,
-			maximumP95NormalizedRms:
-				outgoing.maximumP95NormalizedRms,
+			maximumNormalizedLInf: outgoing.maximumNormalizedLInf,
+			maximumP95NormalizedRms: outgoing.maximumP95NormalizedRms,
 		});
 
 		return {
-			candidateFaceWidth:
-				outgoing.candidateFaceWidth,
-			referenceFaceWidth:
-				outgoing.referenceFaceWidth,
-			sampledReferenceDirectionCount:
-				directionIndices.length,
-			positionCount:
-				referenceFixture.domainSelection.positionCount,
-			candidateFieldSha256:
-				this.#hashField(candidateField),
-			referenceFieldSha256:
-				this.#hashField(referenceField),
-			acceptanceInterpretation:
-				outgoing.acceptanceInterpretation,
+			candidateFaceWidth: outgoing.candidateFaceWidth,
+			referenceFaceWidth: outgoing.referenceFaceWidth,
+			sampledReferenceDirectionCount: directionIndices.length,
+			positionCount: referenceFixture.domainSelection.positionCount,
+			candidateFieldSha256: this.#hashField(candidateField),
+			referenceFieldSha256: this.#hashField(referenceField),
+			acceptanceInterpretation: outgoing.acceptanceInterpretation,
 			scope: outgoing.scope,
 			...summary,
 		};
@@ -1047,124 +794,74 @@ export default class FlatLocalCacheConvergenceStudy {
 		const geometry = this.#createGeometry({
 			policy,
 			useConfiguredDefaultNodes: true,
-			sourceTransmittanceIntervalCount:
-				production.sourceTransmittanceIntervalCount,
+			sourceTransmittanceIntervalCount: production.sourceTransmittanceIntervalCount,
 		});
 		const domainSelection = this.#createDomainSelection({
 			id: `${production.position.id}-resource-measurement`,
 			geometry,
-			outgoingDirectionDomainOwner:
-				CUBED_SPHERE_W27_DIRECTION_DOMAIN_OWNER,
+			outgoingDirectionDomainOwner: CUBED_SPHERE_W27_DIRECTION_DOMAIN_OWNER,
 		});
-		const realizedZNodesMeters =
-			domainSelection.zNodes.map((node) => node.value);
-		const realizedRhoNodesMeters =
-			domainSelection.rhoNodes.map((node) => node.value);
+		const realizedZNodesMeters = domainSelection.zNodes.map((node) => node.value);
+		const realizedRhoNodesMeters = domainSelection.rhoNodes.map((node) => node.value);
 		const defaultPositionDomainPass =
-			this.#canonicalJson(realizedZNodesMeters)
-				=== this.#canonicalJson(
-					production.position.zNodesMeters,
-				)
-			&& this.#canonicalJson(realizedRhoNodesMeters)
-				=== this.#canonicalJson(
-					production.position.rhoNodesMeters,
-				);
+			this.#canonicalJson(realizedZNodesMeters) === this.#canonicalJson(production.position.zNodesMeters) &&
+			this.#canonicalJson(realizedRhoNodesMeters) === this.#canonicalJson(production.position.rhoNodesMeters);
 		const transportData = geometry.createTransportData({
 			atmosphere: shared.atmosphere,
 			domains: domainSelection,
-			intervalCount:
-				production.transportIntervalCount,
+			intervalCount: production.transportIntervalCount,
 		});
 		const measuredTransportBytes =
-			(
-				transportData.sources.values.length
-				+ transportData.coefficients.values.length
-			) * FLOAT32_BYTES_PER_SCALAR;
+			(transportData.sources.values.length + transportData.coefficients.values.length) * FLOAT32_BYTES_PER_SCALAR;
 		const auxiliaryPackedBytes =
-			domainSelection.positionCount
-				* LOCAL_CACHE_POSITION_COMPONENT_COUNT
-				* FLOAT32_BYTES_PER_SCALAR
-			+ domainSelection.incomingDirectionCount
-				* (
-					LOCAL_CACHE_DIRECTION_COMPONENT_COUNT + 1
-				)
-				* FLOAT32_BYTES_PER_SCALAR
-			+ domainSelection.outgoingDirectionCount
-				* LOCAL_CACHE_DIRECTION_COMPONENT_COUNT
-				* FLOAT32_BYTES_PER_SCALAR;
-		const packedDataBytes =
-			measuredTransportBytes + auxiliaryPackedBytes;
+			domainSelection.positionCount * LOCAL_CACHE_POSITION_COMPONENT_COUNT * FLOAT32_BYTES_PER_SCALAR +
+			domainSelection.incomingDirectionCount *
+				(LOCAL_CACHE_DIRECTION_COMPONENT_COUNT + 1) *
+				FLOAT32_BYTES_PER_SCALAR +
+			domainSelection.outgoingDirectionCount * LOCAL_CACHE_DIRECTION_COMPONENT_COUNT * FLOAT32_BYTES_PER_SCALAR;
+		const packedDataBytes = measuredTransportBytes + auxiliaryPackedBytes;
 		const scatteringDensityFieldBytes =
-			domainSelection.scatteringDensityPacking.scalarCount
-				* resourcePolicy.scalarBytes;
-		const radianceFieldBytes =
-			domainSelection.radiancePacking.scalarCount
-				* resourcePolicy.scalarBytes;
+			domainSelection.scatteringDensityPacking.scalarCount * resourcePolicy.scalarBytes;
+		const radianceFieldBytes = domainSelection.radiancePacking.scalarCount * resourcePolicy.scalarBytes;
 		const peakFieldBytes =
-			resourcePolicy.fieldPeakModel
-				.scatteringDensityFields
-				* scatteringDensityFieldBytes
-			+ resourcePolicy.fieldPeakModel.radianceFields
-				* radianceFieldBytes;
-		const peakTrackedLogicalBytes =
-			peakFieldBytes + packedDataBytes;
-		const candidates = policy.positionCandidates.map(
-			(candidate) =>
-				this.#candidateResourceEstimate({
-					candidate,
-					policy,
-				}),
+			resourcePolicy.fieldPeakModel.scatteringDensityFields * scatteringDensityFieldBytes +
+			resourcePolicy.fieldPeakModel.radianceFields * radianceFieldBytes;
+		const peakTrackedLogicalBytes = peakFieldBytes + packedDataBytes;
+		const candidates = policy.positionCandidates.map((candidate) =>
+			this.#candidateResourceEstimate({
+				candidate,
+				policy,
+			}),
 		);
 
 		return {
 			production: {
-				positionDomainId:
-					domainSelection.positionDomain.id,
-				positionCount:
-					domainSelection.positionCount,
+				positionDomainId: domainSelection.positionDomain.id,
+				positionCount: domainSelection.positionCount,
 				realizedZNodesMeters,
 				realizedRhoNodesMeters,
 				defaultPositionDomainPass,
-				incomingDirectionCount:
-					domainSelection.incomingDirectionCount,
-				outgoingDirectionCount:
-					domainSelection.outgoingDirectionCount,
-				spectralChannelCount:
-					production.spectralChannelCount,
-				transportIntervalCount:
-					production.transportIntervalCount,
-				measuredTransportQueryCount:
-					transportData.queryCount,
-				measuredTransportTapCount:
-					transportData.tapCount,
-				declaredTransportTapUpperBound:
-					resourcePolicy
-						.packedTransportTapUpperBoundPerQuery,
+				incomingDirectionCount: domainSelection.incomingDirectionCount,
+				outgoingDirectionCount: domainSelection.outgoingDirectionCount,
+				spectralChannelCount: production.spectralChannelCount,
+				transportIntervalCount: production.transportIntervalCount,
+				measuredTransportQueryCount: transportData.queryCount,
+				measuredTransportTapCount: transportData.tapCount,
+				declaredTransportTapUpperBound: resourcePolicy.packedTransportTapUpperBoundPerQuery,
 				measuredTransportBytes,
 				auxiliaryPackedBytes,
 				packedDataBytes,
 				scatteringDensityFieldBytes,
 				radianceFieldBytes,
 				peakFieldBytes,
-				residentCumulativeFieldBytes:
-					scatteringDensityFieldBytes,
+				residentCumulativeFieldBytes: scatteringDensityFieldBytes,
 				peakTrackedLogicalBytes,
-				residentPass:
-					scatteringDensityFieldBytes
-						<= resourcePolicy
-							.residentCumulativeFieldBytesMaximum,
-				peakTrackedPass:
-					peakTrackedLogicalBytes
-						<= resourcePolicy
-							.peakTrackedLogicalBytesMaximum,
-				transportTapBoundPass:
-					transportData.tapCount
-						<= resourcePolicy
-							.packedTransportTapUpperBoundPerQuery,
+				residentPass: scatteringDensityFieldBytes <= resourcePolicy.residentCumulativeFieldBytesMaximum,
+				peakTrackedPass: peakTrackedLogicalBytes <= resourcePolicy.peakTrackedLogicalBytesMaximum,
+				transportTapBoundPass: transportData.tapCount <= resourcePolicy.packedTransportTapUpperBoundPerQuery,
 			},
 			candidates,
-			qualificationBoundary:
-				resourcePolicy.qualificationBoundary,
+			qualificationBoundary: resourcePolicy.qualificationBoundary,
 		};
 	}
 
@@ -1177,66 +874,39 @@ export default class FlatLocalCacheConvergenceStudy {
 	#candidateResourceEstimate(request) {
 		const candidate = request.candidate;
 		const production = request.policy.productionSelection;
-		const resource =
-			request.policy.resourceCriteria;
+		const resource = request.policy.resourceCriteria;
 		const scatteringDensityFieldBytes =
-			candidate.positionCount
-				* production.outgoing.directionCount
-				* production.spectralChannelCount
-				* resource.scalarBytes;
+			candidate.positionCount *
+			production.outgoing.directionCount *
+			production.spectralChannelCount *
+			resource.scalarBytes;
 		const radianceFieldBytes =
-			candidate.positionCount
-				* production.incoming.directionCount
-				* production.spectralChannelCount
-				* resource.scalarBytes;
-		const queryCount =
-			candidate.positionCount
-				* production.incoming.directionCount;
+			candidate.positionCount *
+			production.incoming.directionCount *
+			production.spectralChannelCount *
+			resource.scalarBytes;
+		const queryCount = candidate.positionCount * production.incoming.directionCount;
 		const transportBytesUpperBound =
-			queryCount
-				* resource
-					.packedTransportTapUpperBoundPerQuery
-				* (
-					TRANSPORT_SOURCE_COMPONENT_COUNT
-					+ production.spectralChannelCount
-				)
-				* resource.scalarBytes;
+			queryCount *
+			resource.packedTransportTapUpperBoundPerQuery *
+			(TRANSPORT_SOURCE_COMPONENT_COUNT + production.spectralChannelCount) *
+			resource.scalarBytes;
 		const auxiliaryPackedBytes =
-			candidate.positionCount
-				* LOCAL_CACHE_POSITION_COMPONENT_COUNT
-				* resource.scalarBytes
-			+ production.incoming.directionCount
-				* (
-					LOCAL_CACHE_DIRECTION_COMPONENT_COUNT + 1
-				)
-				* resource.scalarBytes
-			+ production.outgoing.directionCount
-				* LOCAL_CACHE_DIRECTION_COMPONENT_COUNT
-				* resource.scalarBytes;
+			candidate.positionCount * LOCAL_CACHE_POSITION_COMPONENT_COUNT * resource.scalarBytes +
+			production.incoming.directionCount * (LOCAL_CACHE_DIRECTION_COMPONENT_COUNT + 1) * resource.scalarBytes +
+			production.outgoing.directionCount * LOCAL_CACHE_DIRECTION_COMPONENT_COUNT * resource.scalarBytes;
 		const peakFieldBytes =
-			resource.fieldPeakModel.scatteringDensityFields
-				* scatteringDensityFieldBytes
-			+ resource.fieldPeakModel.radianceFields
-				* radianceFieldBytes;
-		const peakTrackedLogicalBytesUpperBound =
-			peakFieldBytes
-			+ transportBytesUpperBound
-			+ auxiliaryPackedBytes;
+			resource.fieldPeakModel.scatteringDensityFields * scatteringDensityFieldBytes +
+			resource.fieldPeakModel.radianceFields * radianceFieldBytes;
+		const peakTrackedLogicalBytesUpperBound = peakFieldBytes + transportBytesUpperBound + auxiliaryPackedBytes;
 
 		return {
 			id: candidate.id,
 			positionCount: candidate.positionCount,
-			residentCumulativeFieldBytes:
-				scatteringDensityFieldBytes,
+			residentCumulativeFieldBytes: scatteringDensityFieldBytes,
 			peakTrackedLogicalBytesUpperBound,
-			residentPass:
-				scatteringDensityFieldBytes
-					<= resource
-						.residentCumulativeFieldBytesMaximum,
-			peakTrackedPass:
-				peakTrackedLogicalBytesUpperBound
-					<= resource
-						.peakTrackedLogicalBytesMaximum,
+			residentPass: scatteringDensityFieldBytes <= resource.residentCumulativeFieldBytesMaximum,
+			peakTrackedPass: peakTrackedLogicalBytesUpperBound <= resource.peakTrackedLogicalBytesMaximum,
 		};
 	}
 
@@ -1247,40 +917,29 @@ export default class FlatLocalCacheConvergenceStudy {
 	 * @returns {object} The honest selection result.
 	 */
 	#resolveDecision(request) {
-		const currentId =
-			request.policy.productionSelection.position.id;
-		const current =
-			request.spatial.candidates.find(
-				(candidate) => candidate.id === currentId,
+		const currentId = request.policy.productionSelection.position.id;
+		const current = request.spatial.candidates.find((candidate) => candidate.id === currentId);
+		const resourceById = new Map(request.resources.candidates.map((candidate) => [candidate.id, candidate]));
+		const eligibleFallbacks = request.spatial.candidates
+			.filter((candidate) => {
+				const resources = resourceById.get(candidate.id);
+				return (
+					candidate.id !== currentId &&
+					candidate.spatialPass &&
+					resources?.residentPass &&
+					resources?.peakTrackedPass
+				);
+			})
+			.sort(
+				(left, right) =>
+					left.positionCount - right.positionCount ||
+					left.maximumNormalizedLInf - right.maximumNormalizedLInf ||
+					left.maximumP95NormalizedRms - right.maximumP95NormalizedRms ||
+					left.id.localeCompare(right.id),
 			);
-		const resourceById = new Map(
-			request.resources.candidates.map((candidate) => [
-				candidate.id,
-				candidate,
-			]),
-		);
-		const eligibleFallbacks =
-			request.spatial.candidates
-				.filter((candidate) => {
-					const resources =
-						resourceById.get(candidate.id);
-					return candidate.id !== currentId
-						&& candidate.spatialPass
-						&& resources?.residentPass
-						&& resources?.peakTrackedPass;
-				})
-				.sort((left, right) =>
-					left.positionCount
-						- right.positionCount
-					|| left.maximumNormalizedLInf
-						- right.maximumNormalizedLInf
-					|| left.maximumP95NormalizedRms
-						- right.maximumP95NormalizedRms
-					|| left.id.localeCompare(right.id));
 		const controlStudyDisposition = Object.fromEntries(
 			Object.entries(request.controls).map(([id, result]) => {
-				const policy =
-					request.policy.controlStudies[id];
+				const policy = request.policy.controlStudies[id];
 				return [
 					id,
 					{
@@ -1291,47 +950,31 @@ export default class FlatLocalCacheConvergenceStudy {
 				];
 			}),
 		);
-		const controlStudiesPass =
-			Object.values(controlStudyDisposition)
-				.filter((control) => control.gating)
-				.every((control) => control.pass);
-		const gatingControlStudyCount =
-			Object.values(controlStudyDisposition)
-				.filter((control) => control.gating)
-				.length;
-		const characterizationFailureIds =
-			Object.entries(controlStudyDisposition)
-				.filter(([, control]) =>
-					!control.gating && !control.pass)
-				.map(([id]) => id);
-		const productionResources =
-			request.resources.production;
+		const controlStudiesPass = Object.values(controlStudyDisposition)
+			.filter((control) => control.gating)
+			.every((control) => control.pass);
+		const gatingControlStudyCount = Object.values(controlStudyDisposition).filter(
+			(control) => control.gating,
+		).length;
+		const characterizationFailureIds = Object.entries(controlStudyDisposition)
+			.filter(([, control]) => !control.gating && !control.pass)
+			.map(([id]) => id);
+		const productionResources = request.resources.production;
 		const resourceCriteriaPass =
-			productionResources.defaultPositionDomainPass
-			&& productionResources.residentPass
-			&& productionResources.peakTrackedPass
-			&& productionResources.transportTapBoundPass;
-		const currentPositionDomainPass =
-			current?.spatialPass === true;
-		let status =
-			'no-position-domain-promoted';
+			productionResources.defaultPositionDomainPass &&
+			productionResources.residentPass &&
+			productionResources.peakTrackedPass &&
+			productionResources.transportTapBoundPass;
+		const currentPositionDomainPass = current?.spatialPass === true;
+		let status = 'no-position-domain-promoted';
 		let recommendedCandidateId = null;
 
-		if (
-			currentPositionDomainPass
-			&& controlStudiesPass
-			&& resourceCriteriaPass
-		) {
+		if (currentPositionDomainPass && controlStudiesPass && resourceCriteriaPass) {
 			status = 'retain-current-production-selection';
 			recommendedCandidateId = currentId;
-		} else if (
-			controlStudiesPass
-			&& eligibleFallbacks.length > 0
-		) {
-			status =
-				'current-selection-rejected-bounded-fallback-identified';
-			recommendedCandidateId =
-				eligibleFallbacks[0].id;
+		} else if (controlStudiesPass && eligibleFallbacks.length > 0) {
+			status = 'current-selection-rejected-bounded-fallback-identified';
+			recommendedCandidateId = eligibleFallbacks[0].id;
 		}
 
 		return {
@@ -1343,18 +986,11 @@ export default class FlatLocalCacheConvergenceStudy {
 			characterizationFailureIds,
 			controlStudyDisposition,
 			resourceCriteriaPass,
-			outgoingSupportingStudyPass:
-				request.outgoing.pass,
+			outgoingSupportingStudyPass: request.outgoing.pass,
 			recommendedCandidateId,
-			productionChangeRequired:
-				recommendedCandidateId !== null
-				&& recommendedCandidateId !== currentId,
-			eligibleFallbackIds:
-				eligibleFallbacks.map(
-					(candidate) => candidate.id,
-				),
-			failureRule:
-				request.policy.selectionRule.failureRule,
+			productionChangeRequired: recommendedCandidateId !== null && recommendedCandidateId !== currentId,
+			eligibleFallbackIds: eligibleFallbacks.map((candidate) => candidate.id),
+			failureRule: request.policy.selectionRule.failureRule,
 		};
 	}
 
@@ -1370,8 +1006,7 @@ export default class FlatLocalCacheConvergenceStudy {
 			return result.cumulativeScatteringDensity;
 		}
 		const order = Number(label.slice(1));
-		const field =
-			result.pureScatteringDensityByOrder[order - 1];
+		const field = result.pureScatteringDensityByOrder[order - 1];
 		if (!field) {
 			throw new RangeError(`Missing result field ${label}.`);
 		}
@@ -1387,15 +1022,10 @@ export default class FlatLocalCacheConvergenceStudy {
 	 */
 	#resultFieldHashes(result) {
 		const hashes = {};
-		for (let order = 1;
-			order <= result.pureScatteringDensityByOrder.length;
-			order += 1) {
-			hashes[`J${order}`] = this.#hashField(
-				result.pureScatteringDensityByOrder[order - 1],
-			);
+		for (let order = 1; order <= result.pureScatteringDensityByOrder.length; order += 1) {
+			hashes[`J${order}`] = this.#hashField(result.pureScatteringDensityByOrder[order - 1]);
 		}
-		hashes[`Jthrough${result.maximumScatteringOrder}`] =
-			this.#hashField(result.cumulativeScatteringDensity);
+		hashes[`Jthrough${result.maximumScatteringOrder}`] = this.#hashField(result.cumulativeScatteringDensity);
 
 		return hashes;
 	}
@@ -1409,13 +1039,11 @@ export default class FlatLocalCacheConvergenceStudy {
 	 * @returns {number} The flattened node index.
 	 */
 	#positionIndex(domain, zMeters, rhoMeters) {
-		const index = domain.positionNodes.findIndex((node) =>
-			node.metadata.z.value === zMeters
-			&& node.metadata.rho.value === rhoMeters);
+		const index = domain.positionNodes.findIndex(
+			(node) => node.metadata.z.value === zMeters && node.metadata.rho.value === rhoMeters,
+		);
 		if (index < 0) {
-			throw new RangeError(
-				`Missing exact study node z=${zMeters}, rho=${rhoMeters}.`,
-			);
+			throw new RangeError(`Missing exact study node z=${zMeters}, rho=${rhoMeters}.`);
 		}
 
 		return index;
@@ -1428,18 +1056,13 @@ export default class FlatLocalCacheConvergenceStudy {
 	 * @returns {Float64Array} The fifteen-channel spectrum.
 	 */
 	#readExactSpectrum(request) {
-		const values = new Float64Array(
-			NATIVE_15_SPECTRAL_BASIS.channelCount,
-		);
-		for (let wavelengthIndex = 0;
-			wavelengthIndex < values.length;
-			wavelengthIndex += 1) {
-			values[wavelengthIndex] =
-				request.reader.readScalar({
-					positionIndex: request.positionIndex,
-					directionIndex: request.directionIndex,
-					wavelengthIndex,
-				});
+		const values = new Float64Array(NATIVE_15_SPECTRAL_BASIS.channelCount);
+		for (let wavelengthIndex = 0; wavelengthIndex < values.length; wavelengthIndex += 1) {
+			values[wavelengthIndex] = request.reader.readScalar({
+				positionIndex: request.positionIndex,
+				directionIndex: request.directionIndex,
+				wavelengthIndex,
+			});
 		}
 
 		return values;
@@ -1452,31 +1075,17 @@ export default class FlatLocalCacheConvergenceStudy {
 	 * @returns {Float64Array} The reconstructed spectrum.
 	 */
 	#sampleSpectrum(request) {
-		const values = new Float64Array(
-			NATIVE_15_SPECTRAL_BASIS.channelCount,
-		);
+		const values = new Float64Array(NATIVE_15_SPECTRAL_BASIS.channelCount);
 
-		for (let positionTap = 0;
-			positionTap < request.positionStencil.indices.length;
-			positionTap += 1) {
-			for (let directionTap = 0;
-				directionTap
-					< request.directionStencil.indices.length;
-				directionTap += 1) {
+		for (let positionTap = 0; positionTap < request.positionStencil.indices.length; positionTap += 1) {
+			for (let directionTap = 0; directionTap < request.directionStencil.indices.length; directionTap += 1) {
 				const weight =
-					request.positionStencil.weights[positionTap]
-					* request.directionStencil.weights[directionTap];
-				for (let wavelengthIndex = 0;
-					wavelengthIndex < values.length;
-					wavelengthIndex += 1) {
+					request.positionStencil.weights[positionTap] * request.directionStencil.weights[directionTap];
+				for (let wavelengthIndex = 0; wavelengthIndex < values.length; wavelengthIndex += 1) {
 					values[wavelengthIndex] +=
 						request.reader.readScalar({
-							positionIndex:
-								request.positionStencil
-									.indices[positionTap],
-							directionIndex:
-								request.directionStencil
-									.indices[directionTap],
+							positionIndex: request.positionStencil.indices[positionTap],
+							directionIndex: request.directionStencil.indices[directionTap],
 							wavelengthIndex,
 						}) * weight;
 				}
@@ -1499,47 +1108,30 @@ export default class FlatLocalCacheConvergenceStudy {
 		let nonFiniteScalarCount = 0;
 		let negativeScalarCount = 0;
 
-		for (let index = 0;
-			index < request.reference.length;
-			index += 1) {
-			referenceScale = Math.max(
-				referenceScale,
-				Math.abs(request.reference[index]),
-			);
+		for (let index = 0; index < request.reference.length; index += 1) {
+			referenceScale = Math.max(referenceScale, Math.abs(request.reference[index]));
 		}
-		for (let index = 0;
-			index < request.reference.length;
-			index += 1) {
+		for (let index = 0; index < request.reference.length; index += 1) {
 			const reference = request.reference[index];
 			const candidate = request.candidate[index];
-			if (!Number.isFinite(reference)
-				|| !Number.isFinite(candidate)) {
+			if (!Number.isFinite(reference) || !Number.isFinite(candidate)) {
 				nonFiniteScalarCount += 1;
 				continue;
 			}
 			if (reference < 0 || candidate < 0) {
 				negativeScalarCount += 1;
 			}
-			const absoluteError =
-				Math.abs(candidate - reference);
-			maximumAbsoluteError = Math.max(
-				maximumAbsoluteError,
-				absoluteError,
-			);
-			squaredNormalizedNumerator +=
-				(absoluteError / referenceScale) ** 2;
+			const absoluteError = Math.abs(candidate - reference);
+			maximumAbsoluteError = Math.max(maximumAbsoluteError, absoluteError);
+			squaredNormalizedNumerator += (absoluteError / referenceScale) ** 2;
 		}
 
 		return {
 			id: request.id,
 			referenceScale,
 			maximumAbsoluteError,
-			normalizedLInf:
-				maximumAbsoluteError / referenceScale,
-			normalizedRms: Math.sqrt(
-				squaredNormalizedNumerator
-					/ request.reference.length,
-			),
+			normalizedLInf: maximumAbsoluteError / referenceScale,
+			normalizedRms: Math.sqrt(squaredNormalizedNumerator / request.reference.length),
 			nonFiniteScalarCount,
 			negativeScalarCount,
 		};
@@ -1555,88 +1147,53 @@ export default class FlatLocalCacheConvergenceStudy {
 		const sortedRms = request.comparisons
 			.map((comparison) => comparison.normalizedRms)
 			.sort((left, right) => left - right);
-		const percentileIndex = Math.min(
-			sortedRms.length - 1,
-			Math.max(0, Math.ceil(0.95 * sortedRms.length) - 1),
-		);
-		const worstLInf = request.comparisons.reduce(
-			(worst, comparison) =>
-				comparison.normalizedLInf
-					> worst.normalizedLInf
-					? comparison
-					: worst,
+		const percentileIndex = Math.min(sortedRms.length - 1, Math.max(0, Math.ceil(0.95 * sortedRms.length) - 1));
+		const worstLInf = request.comparisons.reduce((worst, comparison) =>
+			comparison.normalizedLInf > worst.normalizedLInf ? comparison : worst,
 		);
 		const maximumAbsoluteError = Math.max(
-			...request.comparisons.map(
-				(comparison) =>
-					comparison.maximumAbsoluteError,
-			),
+			...request.comparisons.map((comparison) => comparison.maximumAbsoluteError),
 		);
-		const nonFiniteScalarCount =
-			request.comparisons.reduce(
-				(sum, comparison) =>
-					sum + comparison.nonFiniteScalarCount,
-				0,
-			);
-		const negativeScalarCount =
-			request.comparisons.reduce(
-				(sum, comparison) =>
-					sum + comparison.negativeScalarCount,
-				0,
-			);
-		const maximumNormalizedLInf =
-			worstLInf.normalizedLInf;
-		const p95NormalizedRms =
-			sortedRms[percentileIndex];
+		const nonFiniteScalarCount = request.comparisons.reduce(
+			(sum, comparison) => sum + comparison.nonFiniteScalarCount,
+			0,
+		);
+		const negativeScalarCount = request.comparisons.reduce(
+			(sum, comparison) => sum + comparison.negativeScalarCount,
+			0,
+		);
+		const maximumNormalizedLInf = worstLInf.normalizedLInf;
+		const p95NormalizedRms = sortedRms[percentileIndex];
 		const worstSpectra =
 			request.retainedWorstSpectrumCount === undefined
 				? null
 				: request.comparisons
-					.map((comparison, ordinal) => ({
-						comparison,
-						ordinal,
-					}))
-					.sort(
-						this.#compareWorstSpectrumEntries,
-					)
-					.slice(
-						0,
-						request.retainedWorstSpectrumCount,
-					)
-					.map(({ comparison }) =>
-						this.#spectrumDiagnostic(
+						.map((comparison, ordinal) => ({
 							comparison,
-						));
+							ordinal,
+						}))
+						.sort(this.#compareWorstSpectrumEntries)
+						.slice(0, request.retainedWorstSpectrumCount)
+						.map(({comparison}) => this.#spectrumDiagnostic(comparison));
 		const pass =
-			nonFiniteScalarCount === 0
-			&& negativeScalarCount === 0
-			&& maximumNormalizedLInf
-				<= request.maximumNormalizedLInf
-			&& p95NormalizedRms
-				<= request.maximumP95NormalizedRms;
+			nonFiniteScalarCount === 0 &&
+			negativeScalarCount === 0 &&
+			maximumNormalizedLInf <= request.maximumNormalizedLInf &&
+			p95NormalizedRms <= request.maximumP95NormalizedRms;
 
 		return {
 			spectrumCount: request.comparisons.length,
-			scalarCount:
-				request.comparisons.length
-					* NATIVE_15_SPECTRAL_BASIS.channelCount,
+			scalarCount: request.comparisons.length * NATIVE_15_SPECTRAL_BASIS.channelCount,
 			maximumAbsoluteError,
 			maximumNormalizedLInf,
 			p95NormalizedRms,
 			nonFiniteScalarCount,
 			negativeScalarCount,
-			worstSpectrum:
-				this.#spectrumDiagnostic(
-					worstLInf,
-				),
-			...(worstSpectra === null
-				? {}
-				: { worstSpectra }),
+			worstSpectrum: this.#spectrumDiagnostic(worstLInf),
+			...(worstSpectra === null ? {} : {worstSpectra}),
 			limits: {
-				maximumNormalizedLInf:
-					request.maximumNormalizedLInf,
-				maximumP95NormalizedRms:
-					request.maximumP95NormalizedRms,
+				maximumNormalizedLInf: request.maximumNormalizedLInf,
+				maximumP95NormalizedRms: request.maximumP95NormalizedRms,
 			},
 			pass,
 		};
@@ -1651,9 +1208,7 @@ export default class FlatLocalCacheConvergenceStudy {
 	 * @returns {number} The deterministic sort comparison.
 	 */
 	#compareWorstSpectrumEntries(left, right) {
-		const normalizedDifference =
-			right.comparison.normalizedLInf
-				- left.comparison.normalizedLInf;
+		const normalizedDifference = right.comparison.normalizedLInf - left.comparison.normalizedLInf;
 		if (normalizedDifference !== 0) {
 			return normalizedDifference;
 		}
@@ -1675,14 +1230,10 @@ export default class FlatLocalCacheConvergenceStudy {
 	#spectrumDiagnostic(comparison) {
 		return {
 			id: comparison.id,
-			referenceScale:
-				comparison.referenceScale,
-			maximumAbsoluteError:
-				comparison.maximumAbsoluteError,
-			normalizedLInf:
-				comparison.normalizedLInf,
-			normalizedRms:
-				comparison.normalizedRms,
+			referenceScale: comparison.referenceScale,
+			maximumAbsoluteError: comparison.maximumAbsoluteError,
+			normalizedLInf: comparison.normalizedLInf,
+			normalizedRms: comparison.normalizedRms,
 		};
 	}
 
@@ -1695,13 +1246,8 @@ export default class FlatLocalCacheConvergenceStudy {
 	#hashField(field) {
 		const reader = field.createReader();
 		const bytes = Buffer.allocUnsafe(reader.scalarCount * 8);
-		for (let offset = 0;
-			offset < reader.scalarCount;
-			offset += 1) {
-			bytes.writeDoubleLE(
-				reader.readScalarAtOffset(offset),
-				offset * 8,
-			);
+		for (let offset = 0; offset < reader.scalarCount; offset += 1) {
+			bytes.writeDoubleLE(reader.readScalarAtOffset(offset), offset * 8);
 		}
 
 		return this.#sha256(bytes);
@@ -1715,15 +1261,10 @@ export default class FlatLocalCacheConvergenceStudy {
 	 */
 	#stridedIndices(request) {
 		const indices = [];
-		for (let index = 0;
-			index < request.count;
-			index += request.stride) {
+		for (let index = 0; index < request.count; index += request.stride) {
 			indices.push(index);
 		}
-		if (
-			request.includeFinal
-			&& indices[indices.length - 1] !== request.count - 1
-		) {
+		if (request.includeFinal && indices[indices.length - 1] !== request.count - 1) {
 			indices.push(request.count - 1);
 		}
 
@@ -1741,9 +1282,7 @@ export default class FlatLocalCacheConvergenceStudy {
 	#assertSpectraExactlyEqual(left, right, label) {
 		for (let index = 0; index < left.length; index += 1) {
 			if (!Object.is(left[index], right[index])) {
-				throw new Error(
-					`${label} differs at wavelength ${index}.`,
-				);
+				throw new Error(`${label} differs at wavelength ${index}.`);
 			}
 		}
 	}
@@ -1755,10 +1294,7 @@ export default class FlatLocalCacheConvergenceStudy {
 	 * @returns {boolean} True for a valid ordered axis.
 	 */
 	#strictlyIncreasing(values) {
-		return values.every(
-			(value, index) =>
-				index === 0 || value > values[index - 1],
-		);
+		return values.every((value, index) => index === 0 || value > values[index - 1]);
 	}
 
 	/**
@@ -1768,7 +1304,7 @@ export default class FlatLocalCacheConvergenceStudy {
 	 * @returns {Distance} The distance packet.
 	 */
 	#distance(value) {
-		return { value, units: 'meters' };
+		return {value, units: 'meters'};
 	}
 
 	/**
@@ -1812,24 +1348,21 @@ export default class FlatLocalCacheConvergenceStudy {
 	 */
 	#canonicalValue(value) {
 		if (Array.isArray(value)) {
-			return value.map((entry) =>
-				this.#canonicalValue(entry));
+			return value.map((entry) => this.#canonicalValue(entry));
 		}
-		if (value !== null
-			&& typeof value === 'object'
-			&& !(value instanceof Float32Array)
-			&& !(value instanceof Float64Array)) {
+		if (
+			value !== null &&
+			typeof value === 'object' &&
+			!(value instanceof Float32Array) &&
+			!(value instanceof Float64Array)
+		) {
 			const canonical = {};
 			for (const key of Object.keys(value).sort()) {
-				canonical[key] =
-					this.#canonicalValue(value[key]);
+				canonical[key] = this.#canonicalValue(value[key]);
 			}
 			return canonical;
 		}
-		if (
-			value instanceof Float32Array
-			|| value instanceof Float64Array
-		) {
+		if (value instanceof Float32Array || value instanceof Float64Array) {
 			return Array.from(value);
 		}
 
@@ -1854,19 +1387,8 @@ export default class FlatLocalCacheConvergenceStudy {
 	 * @returns {Promise<void>}
 	 */
 	async #writeReport(report, policy) {
-		const reportPath = join(
-			this.#workspaceRoot,
-			policy.report.path,
-		);
-		await mkdir(dirname(reportPath), { recursive: true });
-		await writeFile(
-			reportPath,
-			`${JSON.stringify(
-				this.#canonicalValue(report),
-				null,
-				2,
-			)}\n`,
-			'utf8',
-		);
+		const reportPath = join(this.#workspaceRoot, policy.report.path);
+		await mkdir(dirname(reportPath), {recursive: true});
+		await writeFile(reportPath, `${JSON.stringify(this.#canonicalValue(report), null, 2)}\n`, 'utf8');
 	}
 }

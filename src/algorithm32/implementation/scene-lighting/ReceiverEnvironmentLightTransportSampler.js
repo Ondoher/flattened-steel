@@ -43,9 +43,8 @@ export class ReceiverEnvironmentLightTransportSampler {
 				sample.directionLocal[2],
 				sample.directionLocal[1],
 			]);
-			const modelDirection = this._model.geometry.mapObserverLocalSceneDirectionToModelDirection(
-				directionSceneLocal,
-			);
+			const modelDirection =
+				this._model.geometry.mapObserverLocalSceneDirectionToModelDirection(directionSceneLocal);
 			values.set(modelDirection, index * 4);
 			values[index * 4 + 3] = 1;
 		}
@@ -70,7 +69,9 @@ export class ReceiverEnvironmentLightTransportSampler {
 			for (const uniform of contribution.uniforms) {
 				const value = Object.hasOwn(this._bindingValues, uniform.valueKey)
 					? this._bindingValues[uniform.valueKey]
-					: Object.hasOwn(uniform, 'defaultValue') ? uniform.defaultValue : null;
+					: Object.hasOwn(uniform, 'defaultValue')
+						? uniform.defaultValue
+						: null;
 				uniforms[uniform.name] = {
 					value: this._normalizeUniform(uniform.type, value),
 				};
@@ -86,7 +87,8 @@ export class ReceiverEnvironmentLightTransportSampler {
 
 	/** Execute the active cache transport and return one native radiance packet per fixed direction. */
 	async sample(request = {}) {
-		if (request.signal?.aborted) throw new DOMException('Receiver environment-light transport was aborted.', 'AbortError');
+		if (request.signal?.aborted)
+			throw new DOMException('Receiver environment-light transport was aborted.', 'AbortError');
 		const THREE = this._THREE;
 		const assembly = new ReceiverEnvironmentLightTransportShader().create({
 			model: this._model,
@@ -97,7 +99,8 @@ export class ReceiverEnvironmentLightTransportSampler {
 		const cacheUniforms = {};
 		for (const contribution of assembly.contributions) {
 			for (const texture of contribution.textures) {
-				if (texture.valueKey !== DIRECTION_TEXTURE_VALUE_KEY) cacheUniforms[texture.valueKey] = uniforms[texture.name];
+				if (texture.valueKey !== DIRECTION_TEXTURE_VALUE_KEY)
+					cacheUniforms[texture.valueKey] = uniforms[texture.name];
 			}
 		}
 		this._backend.installRuntimeBindings({bindings: this._cache.getRuntimeBindings(), uniforms: cacheUniforms});
@@ -112,7 +115,10 @@ export class ReceiverEnvironmentLightTransportSampler {
 			blending: THREE.NoBlending,
 		});
 		const geometry = new THREE.BufferGeometry();
-		geometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array([-1, -1, 0, 3, -1, 0, -1, 3, 0]), 3));
+		geometry.setAttribute(
+			'position',
+			new THREE.BufferAttribute(new Float32Array([-1, -1, 0, 3, -1, 0, -1, 3, 0]), 3),
+		);
 		const scene = new THREE.Scene();
 		const mesh = new THREE.Mesh(geometry, material);
 		mesh.frustumCulled = false;
@@ -140,11 +146,19 @@ export class ReceiverEnvironmentLightTransportSampler {
 			}
 			const pixels = new Float32Array(RECEIVER_ENVIRONMENT_LIGHT_QUADRATURE.length * 4);
 			for (let channelIndex = 0; channelIndex < this._model.spectral.basis.channelCount; channelIndex += 1) {
-				if (request.signal?.aborted) throw new DOMException('Receiver environment-light transport was aborted.', 'AbortError');
+				if (request.signal?.aborted)
+					throw new DOMException('Receiver environment-light transport was aborted.', 'AbortError');
 				uniforms.uReceiverEnvironmentOutputChannel.value = channelIndex;
 				this._renderer.setRenderTarget(target);
 				this._renderer.render(scene, camera);
-				this._renderer.readRenderTargetPixels(target, 0, 0, RECEIVER_ENVIRONMENT_LIGHT_QUADRATURE.length, 1, pixels);
+				this._renderer.readRenderTargetPixels(
+					target,
+					0,
+					0,
+					RECEIVER_ENVIRONMENT_LIGHT_QUADRATURE.length,
+					1,
+					pixels,
+				);
 				for (let directionIndex = 0; directionIndex < values.length; directionIndex += 1) {
 					values[directionIndex][channelIndex] = pixels[directionIndex * 4];
 				}

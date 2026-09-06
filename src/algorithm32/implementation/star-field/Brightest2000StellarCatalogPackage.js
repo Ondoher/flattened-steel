@@ -47,7 +47,11 @@ export function createBrightest2000StellarCatalogDefinition(packageValue) {
 	}
 	const members = roster.members.map((catalogMember, memberIndex) => {
 		const packet = packets.packets[memberIndex];
-		if (catalogMember.canonicalIndex !== memberIndex || packet?.canonicalIndex !== memberIndex || packet.memberId !== catalogMember.memberId) {
+		if (
+			catalogMember.canonicalIndex !== memberIndex ||
+			packet?.canonicalIndex !== memberIndex ||
+			packet.memberId !== catalogMember.memberId
+		) {
 			throw new RangeError(`Brightest-2,000 package order differs at member ${memberIndex}.`);
 		}
 		requireFiniteSeries(catalogMember.direction, 3, `Brightest-2,000 member ${memberIndex} direction`);
@@ -56,12 +60,19 @@ export function createBrightest2000StellarCatalogDefinition(packageValue) {
 			throw new RangeError(`Brightest-2,000 member ${memberIndex} packet must be nonnegative.`);
 		}
 		for (let component = 0; component < 3; component += 1) {
-			if (!Object.is(memberTexels[memberIndex * 4 + component], Math.fround(catalogMember.direction[component]))) {
+			if (
+				!Object.is(memberTexels[memberIndex * 4 + component], Math.fround(catalogMember.direction[component]))
+			) {
 				throw new RangeError(`Brightest-2,000 member ${memberIndex} GPU direction differs.`);
 			}
 		}
 		for (let channel = 0; channel < CHANNEL_COUNT; channel += 1) {
-			if (!Object.is(spectraTexels[channel * MEMBER_COUNT + memberIndex], Math.fround(packet.spectralIrradiance[channel]))) {
+			if (
+				!Object.is(
+					spectraTexels[channel * MEMBER_COUNT + memberIndex],
+					Math.fround(packet.spectralIrradiance[channel]),
+				)
+			) {
 				throw new RangeError(`Brightest-2,000 member ${memberIndex} GPU spectrum differs.`);
 			}
 		}

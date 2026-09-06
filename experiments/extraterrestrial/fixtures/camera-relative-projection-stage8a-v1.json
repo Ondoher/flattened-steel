@@ -1,0 +1,60 @@
+{
+  "schemaId": "camera-relative-projection-stage8a-fixture-v1",
+  "inputRuns": [
+    {
+      "viewId": "sun-focused",
+      "runId": "000351-spectral-color-production-sun-focused-light-adapted-log",
+      "artifactSetSha256": "a936417dcc770ef965c33694340b227f3f7ca92c709964ee3ed2ec45301c81bc",
+      "widthPixels": 641,
+      "heightPixels": 401,
+      "verticalFovDegrees": 15
+    },
+    {
+      "viewId": "wide",
+      "runId": "000352-spectral-color-production-wide-light-adapted-log",
+      "artifactSetSha256": "a563b4366dd465ff4d6a6c7a496594fec4e21c0f0659113887d04ff04f6ffb49",
+      "widthPixels": 641,
+      "heightPixels": 401,
+      "verticalFovDegrees": 78
+    }
+  ],
+  "conditions": [
+    "solar-noon",
+    "sunset-minus-30-minutes",
+    "sunset-minus-10-minutes",
+    "sunset"
+  ],
+  "profile": {
+    "id": "pbrt-canon-eos-5d-mkiv-relative-d55-to-d65-v1",
+    "sensorName": "canon_eos_5d_mkiv",
+    "responseSemantics": "PBRT relative spectral energy-response matching functions; arbitrary scale; not quantum efficiency",
+    "sourceUrl": "https://raw.githubusercontent.com/mmp/pbrt-v4/master/src/pbrt/util/spectrum.cpp",
+    "licenseUrl": "https://raw.githubusercontent.com/mmp/pbrt-v4/master/LICENSE.txt",
+    "interpolation": "piecewise-linear with PBRT FromInterleaved constant endpoint extension to 360-830 nm",
+    "characterizationIlluminant": "D55",
+    "outputIlluminant": "D65",
+    "outputColorSpace": "linear Rec.709 / D65",
+    "colourCheckerDataset": "ColorChecker N Ohta",
+    "heldOutPatchIndicesZeroBased": [3, 7, 11, 15, 19, 23]
+  },
+  "oracle": {
+    "implementation": "Colour",
+    "version": "0.4.6",
+    "pythonRelativePath": "tmp/extraterrestrial/tools/colour-0.4.6/Scripts/python.exe",
+    "script": "experiments/extraterrestrial/tools/camera-stage8a-colour-oracle.py",
+    "spectralShape": {
+      "startNanometers": 360,
+      "endNanometers": 830,
+      "intervalNanometers": 1
+    }
+  },
+  "tolerances": {
+    "compiledWeightMaximumRelative": 1e-11,
+    "fitMatrixMaximumAbsolute": 1e-10,
+    "linearityMaximumRelative": 1e-12,
+    "zeroMaximumAbsolute": 0,
+    "minimumNoonToSunsetRawChromaticityDistance": 1e-4,
+    "minimumNoonToSunsetRedBlueRatioFactor": 1.05
+  },
+  "claimLimit": "Relative spectral-camera color only. No electron count, quantum efficiency, noise, full-well, ISO, ADC, or physical Canon body exposure claim."
+}

@@ -1,0 +1,20 @@
+{
+	"schemaVersion": 1,
+	"policyId": "algorithm32-color-reset-contained-lane-v1",
+	"parentPolicy": "experiments/extraterrestrial/containment-policy.json",
+	"implementationRoot": "experiments/extraterrestrial/color-reset",
+	"qualifyingRunnerRoot": "experiments/extraterrestrial/color-reset/runners",
+	"generatedOutputRoot": "tmp/extraterrestrial/color-reset",
+	"immutableRunRoot": "tmp/extraterrestrial/color-reset/runs",
+	"browserProfileRoot": "tmp/extraterrestrial/color-reset/browser-profiles",
+	"runNamespace": "color-reset",
+	"runRecordWrapper": "experiments/extraterrestrial/color-reset/harness/color-reset-run-record.js",
+	"sharedRunProtocol": "experiments/extraterrestrial/harness/lib/run-record.js",
+	"productionComparisonRoots": ["src/algorithm32", "src/flat32"],
+	"productionComparisonAccess": "read-only",
+	"historicalRunAccess": "read-only",
+	"unitTestTree": "prohibited",
+	"testFrameworkDependency": "prohibited",
+	"renderBeforeGate": true,
+	"terminalRunMutation": "prohibited"
+}

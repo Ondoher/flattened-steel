@@ -1,19 +1,18 @@
 import {NATIVE_15_SPECTRAL_BASIS} from '../../../profiles/index.js';
 import {SPECTRAL_QUANTITIES, SPECTRAL_UNITS, SpectralPacket} from '../../../spectral-values/index.js';
-import {
-	NEUTRAL_LAMBERTIAN_REFLECTANCE,
-	NeutralLambertianSceneLighting,
-} from '../NeutralLambertianSceneLighting.js';
+import {NEUTRAL_LAMBERTIAN_REFLECTANCE, NeutralLambertianSceneLighting} from '../NeutralLambertianSceneLighting.js';
 
 function irradiance(value, identity) {
-	return /** @type {SpectralIrradiancePacket} */ (new SpectralPacket({
-		basis: NATIVE_15_SPECTRAL_BASIS,
-		quantity: SPECTRAL_QUANTITIES.IRRADIANCE_DENSITY,
-		units: SPECTRAL_UNITS.IRRADIANCE_DENSITY,
-		semantics: NATIVE_15_SPECTRAL_BASIS.semantics,
-		values: NATIVE_15_SPECTRAL_BASIS.channels.map((_channel, index) => value * (index + 1)),
-		provenanceIdentity: identity,
-	}));
+	return /** @type {SpectralIrradiancePacket} */ (
+		new SpectralPacket({
+			basis: NATIVE_15_SPECTRAL_BASIS,
+			quantity: SPECTRAL_QUANTITIES.IRRADIANCE_DENSITY,
+			units: SPECTRAL_UNITS.IRRADIANCE_DENSITY,
+			semantics: NATIVE_15_SPECTRAL_BASIS.semantics,
+			values: NATIVE_15_SPECTRAL_BASIS.channels.map((_channel, index) => value * (index + 1)),
+			provenanceIdentity: identity,
+		})
+	);
 }
 
 describe('NeutralLambertianSceneLighting', () => {

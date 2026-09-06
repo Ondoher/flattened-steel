@@ -89,7 +89,9 @@ export default async function registerFlat32Routes(_expressApplication, router, 
 
 	router.get('/stellar-catalogs/brightest-2000-stellar-package-v1/*', async (request, response, next) => {
 		if (stellarService === null) {
-			sendJson(response, 503, {error: `Stellar catalog service is unavailable: ${errorMessage(stellarSetupError)}`});
+			sendJson(response, 503, {
+				error: `Stellar catalog service is unavailable: ${errorMessage(stellarSetupError)}`,
+			});
 			return;
 		}
 		try {
@@ -111,7 +113,9 @@ export default async function registerFlat32Routes(_expressApplication, router, 
 
 	router.get('/presentation-filters/human-vision-filter-package-v1/*', async (request, response, next) => {
 		if (humanVisionService === null) {
-			sendJson(response, 503, {error: `Human-vision filter service is unavailable: ${errorMessage(humanVisionSetupError)}`});
+			sendJson(response, 503, {
+				error: `Human-vision filter service is unavailable: ${errorMessage(humanVisionSetupError)}`,
+			});
 			return;
 		}
 		try {

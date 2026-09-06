@@ -94,5 +94,4 @@ export class StellarScreenPaletteGenerationIdentity {
 			policyIdentity: policy.identity,
 		};
 	}
-
 }

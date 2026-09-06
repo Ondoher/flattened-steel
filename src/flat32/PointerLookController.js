@@ -1,5 +1,4 @@
-import { PointerLockControls } from
-	'three/examples/jsm/controls/PointerLockControls.js';
+import {PointerLockControls} from 'three/examples/jsm/controls/PointerLockControls.js';
 
 /** Own pointer-lock camera rotation for the Flat32 scene. */
 export class PointerLookController {

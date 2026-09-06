@@ -13,7 +13,9 @@ try {
 				ProductionRun.load(options.productionRunPath).manifest.backend,
 			)
 		: resolve(options.outputRoot ?? DEFAULT_EXPERIMENT_RESULTS_ROOT);
-	const resultDirectory = options.productionRunPath ? resultRoot : join(resultRoot, 'b2-hemispherical-sky-irradiance');
+	const resultDirectory = options.productionRunPath
+		? resultRoot
+		: join(resultRoot, 'b2-hemispherical-sky-irradiance');
 	const resultPath = join(resultDirectory, 'result.md');
 	const run = runExperiment(options);
 	const report = renderReport(run);

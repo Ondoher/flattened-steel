@@ -15,18 +15,36 @@ export class StellarPointSetCacheResource {
 		this.resourceIdentity = plan.identity.contentHash;
 	}
 
-	_requireLive() { if (this._disposed) throw new Error('Stellar point-set cache resource is disposed.'); }
+	_requireLive() {
+		if (this._disposed) throw new Error('Stellar point-set cache resource is disposed.');
+	}
 
-	getRuntimeBindings() { this._requireLive(); return this._artifact.runtimeBindings; }
+	getRuntimeBindings() {
+		this._requireLive();
+		return this._artifact.runtimeBindings;
+	}
 
 	createShaderContribution() {
 		this._requireLive();
 		const layout = this._plan.layout;
 		return ShaderContributions.createShaderContribution({
-			id: 'cache-stellar-point-set-tiled-transport', owner: 'cache',
-			provides: ['cache.sampleStellarPointSetIrradiance'], requires: ['geometry.celestialCacheStencilTypes'],
-			textures: [ShaderContributions.createShaderTextureDeclaration(SAMPLER_NAME, 'sampler2DArray', STELLAR_POINT_SET_CACHE_VALUE_KEY)],
-			functions: [ShaderContributions.createShaderSourceBlock('cache-stellar-point-set-tiled-lookup', 'sampleCelestialCache', 1, `SpectralValue sampleStellarPointSetIrradiance(int memberIndex, CelestialCacheBilinearStencil stencil) {
+			id: 'cache-stellar-point-set-tiled-transport',
+			owner: 'cache',
+			provides: ['cache.sampleStellarPointSetIrradiance'],
+			requires: ['geometry.celestialCacheStencilTypes'],
+			textures: [
+				ShaderContributions.createShaderTextureDeclaration(
+					SAMPLER_NAME,
+					'sampler2DArray',
+					STELLAR_POINT_SET_CACHE_VALUE_KEY,
+				),
+			],
+			functions: [
+				ShaderContributions.createShaderSourceBlock(
+					'cache-stellar-point-set-tiled-lookup',
+					'sampleCelestialCache',
+					1,
+					`SpectralValue sampleStellarPointSetIrradiance(int memberIndex, CelestialCacheBilinearStencil stencil) {
 	SpectralValue result = zeroSpectral();
 	if (!stencil.valid) return result;
 	int tileX = memberIndex % ${layout.tileColumns};
@@ -43,8 +61,19 @@ export class StellarPointSetCacheResource {
 		}
 	}
 	return result;
-}`)],
-			bindingRequirements: [ShaderContributions.createShaderBindingRequirement('cache.stellar-point-set-transport', 'cache', 'texture', 'setup', STELLAR_POINT_SET_CACHE_VALUE_KEY, true)],
+}`,
+				),
+			],
+			bindingRequirements: [
+				ShaderContributions.createShaderBindingRequirement(
+					'cache.stellar-point-set-transport',
+					'cache',
+					'texture',
+					'setup',
+					STELLAR_POINT_SET_CACHE_VALUE_KEY,
+					true,
+				),
+			],
 		});
 	}
 
@@ -52,11 +81,24 @@ export class StellarPointSetCacheResource {
 		this._requireLive();
 		const layout = this._plan.layout;
 		const stars = queryPacket?.stars;
-		if (!stars || stars.placement.sourceId !== this.sourceId || stars.memberDirectionStencils.length !== this.memberCount) throw new RangeError('Stellar live raster requires its complete spherical query packet.');
+		if (
+			!stars ||
+			stars.placement.sourceId !== this.sourceId ||
+			stars.memberDirectionStencils.length !== this.memberCount
+		)
+			throw new RangeError('Stellar live raster requires its complete spherical query packet.');
 		return ShaderContributions.createShaderContribution({
-			id: 'celestial-stellar-point-set-live-raster', owner: 'celestialCache',
+			id: 'celestial-stellar-point-set-live-raster',
+			owner: 'celestialCache',
 			provides: ['celestial.evaluateStellarPointSetRadiance'],
-			requires: ['runtime.initialState', 'runtime.sceneHitTexture', 'geometry.reconstructViewRay', 'geometry.resolveStellarPointSetCacheStencil', 'cache.sampleStellarPointSetIrradiance', 'celestial.evaluateRadiance'],
+			requires: [
+				'runtime.initialState',
+				'runtime.sceneHitTexture',
+				'geometry.reconstructViewRay',
+				'geometry.resolveStellarPointSetCacheStencil',
+				'cache.sampleStellarPointSetIrradiance',
+				'celestial.evaluateRadiance',
+			],
 			uniforms: [
 				ShaderContributions.createShaderUniformDeclaration(
 					'uStellarPointMemberCount',
@@ -66,8 +108,17 @@ export class StellarPointSetCacheResource {
 				),
 			],
 			functions: [
-				ShaderContributions.createShaderSourceBlock('stellar-point-set-live-constants', 'declareConstants', 1, `const int STELLAR_POINT_MEMBER_COUNT = ${this.memberCount};`),
-				ShaderContributions.createShaderSourceBlock('stellar-point-set-live-functions', 'evaluateCelestialRadiance', 1, `float stellarTriangleSolidAngle(vec3 a, vec3 b, vec3 c) {
+				ShaderContributions.createShaderSourceBlock(
+					'stellar-point-set-live-constants',
+					'declareConstants',
+					1,
+					`const int STELLAR_POINT_MEMBER_COUNT = ${this.memberCount};`,
+				),
+				ShaderContributions.createShaderSourceBlock(
+					'stellar-point-set-live-functions',
+					'evaluateCelestialRadiance',
+					1,
+					`float stellarTriangleSolidAngle(vec3 a, vec3 b, vec3 c) {
 	float numerator = abs(dot(a, cross(b, c)));
 	float denominator = 1.0 + dot(a, b) + dot(b, c) + dot(c, a);
 	return abs(2.0 * atan(numerator, denominator));
@@ -116,12 +167,28 @@ void addStellarPointSetRadiance(inout SpectralValue celestialRadiance, ShaderSta
 		SpectralValue irradiance = sampleStellarPointSetIrradiance(memberIndex, stencil);
 		for (int channelIndex = 0; channelIndex < SPECTRAL_CHANNEL_COUNT; channelIndex += 1) celestialRadiance.channels[channelIndex] += irradiance.channels[channelIndex] / pixelSolidAngle;
 	}
-}`),
+}`,
+				),
 			],
-			mainHooks: [ShaderContributions.createShaderSourceBlock('stellar-point-set-live-main', 'evaluateCelestialRadiance', 1, 'addStellarPointSetRadiance(celestialRadiance, state);')],
-			diagnostics: {sourceId: this.sourceId, queryIdentity: queryPacket.contentHash, memberCount: this.memberCount},
+			mainHooks: [
+				ShaderContributions.createShaderSourceBlock(
+					'stellar-point-set-live-main',
+					'evaluateCelestialRadiance',
+					1,
+					'addStellarPointSetRadiance(celestialRadiance, state);',
+				),
+			],
+			diagnostics: {
+				sourceId: this.sourceId,
+				queryIdentity: queryPacket.contentHash,
+				memberCount: this.memberCount,
+			},
 		});
 	}
 
-	dispose() { if (this._disposed) return; this._disposed = true; this._artifact.dispose(); }
+	dispose() {
+		if (this._disposed) return;
+		this._disposed = true;
+		this._artifact.dispose();
+	}
 }

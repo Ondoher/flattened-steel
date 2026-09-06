@@ -12,17 +12,14 @@ import B1Direct40CacheAssetManifest, {
 	B1_DIRECT40_CACHE_PAYLOAD_CODEC,
 	B1_DIRECT40_DIRECTION_INDEX_CODEC,
 } from './B1Direct40CacheAssetManifest.js';
-import B1Direct40CacheAssetSetManifest, {
-	B1_DIRECT40_PROFILE_FAMILY,
-} from './B1Direct40CacheAssetSetManifest.js';
+import B1Direct40CacheAssetSetManifest, {B1_DIRECT40_PROFILE_FAMILY} from './B1Direct40CacheAssetSetManifest.js';
 import B1Direct40CacheAssetVerifier from './B1Direct40CacheAssetVerifier.js';
 import {
 	DistantSunProfileCompilerInputs,
 	DISTANT_SUN_PROFILE_COMPILER_IDENTITY,
 } from './DistantSunProfileCompilerInputs.js';
 
-export const B1_DIRECT40_OFFLINE_ASSET_ADAPTER_IDENTITY =
-	'algorithm32-production-b1-direct40-offline-asset-adapter-v8';
+export const B1_DIRECT40_OFFLINE_ASSET_ADAPTER_IDENTITY = 'algorithm32-production-b1-direct40-offline-asset-adapter-v8';
 export const B1_DIRECT40_OFFLINE_ASSET_ADAPTER_LEGACY_IDENTITIES = Object.freeze([
 	'algorithm32-production-b1-direct40-offline-asset-adapter-v1',
 	'algorithm32-production-b1-direct40-offline-asset-adapter-v2',
@@ -42,9 +39,7 @@ function sha256(bytes) {
 }
 
 function jsonControl(value) {
-	return JSON.parse(
-		JSON.stringify(value, (_key, item) => (ArrayBuffer.isView(item) ? Array.from(item) : item)),
-	);
+	return JSON.parse(JSON.stringify(value, (_key, item) => (ArrayBuffer.isView(item) ? Array.from(item) : item)));
 }
 
 /** Production-owned adapter that emits immutable direct-40 cache assets for the B1 condition family. */
@@ -198,7 +193,11 @@ export default class B1Direct40OfflineAssetAdapter extends DistantSunSceneCacheO
 					logicalCount: 4374,
 					uniqueCount: CUBED_SPHERE_W27_DIRECTION_DOMAIN_OWNER.uniqueDirectionCount,
 				},
-				spectrum: {id: profile.spectral.basis.id, contentHash: profile.spectral.basis.contentHash, channelCount: 40},
+				spectrum: {
+					id: profile.spectral.basis.id,
+					contentHash: profile.spectral.basis.contentHash,
+					channelCount: 40,
+				},
 			},
 			numerical: {
 				viewPathIntervalCount: 40,
@@ -212,13 +211,16 @@ export default class B1Direct40OfflineAssetAdapter extends DistantSunSceneCacheO
 			derivation: {
 				compilerIdentity: B1_DIRECT40_OFFLINE_ASSET_ADAPTER_IDENTITY,
 				productionRevision,
-				operation:
-					'GPU actual-point cumulative J4 on direct-40/Native48/F68/W27; exact W27 seam deduplication',
+				operation: 'GPU actual-point cumulative J4 on direct-40/Native48/F68/W27; exact W27 seam deduplication',
 				inputs: {
 					profileContentHash: profile.contentHash,
 					numericalIdentity: inputSet.numericalIdentity,
 					buildRequestContentHash: compilerEvidence.buildRequestContentHash,
-					compilerEvidence: {path: evidencePath, byteLength: evidenceBytes.byteLength, sha256: evidenceSha256},
+					compilerEvidence: {
+						path: evidencePath,
+						byteLength: evidenceBytes.byteLength,
+						sha256: evidenceSha256,
+					},
 				},
 			},
 		});

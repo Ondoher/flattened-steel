@@ -145,4 +145,4 @@ contracts. The temporary `MatteEndpointTexture` and composer endpoint adapter
 were removed.
 
 The canonical migration boundary and acceptance gate are owned by the
-[Algorithm32 production implementation plan](../../agents/topics/algorithm32/production/production-implementation-plan.md#11-integrate-flat32).
+[Algorithm32 production implementation plan](../../agents/topics/production-app/product-behavior/production-implementation-plan.md#11-integrate-flat32).

@@ -12,18 +12,21 @@ describe('ReceiverEnvironmentLightController', () => {
 	const basis = new SpectralBasis({
 		id: 'receiver-environment-controller-555nm',
 		semantics: SPECTRAL_SAMPLE_SEMANTICS.BIN_AVERAGE,
-		channels: [{id: 'photopic-peak', center: {value: 555, units: 'nanometers'}, width: {value: 1, units: 'nanometers'}}],
+		channels: [
+			{id: 'photopic-peak', center: {value: 555, units: 'nanometers'}, width: {value: 1, units: 'nanometers'}},
+		],
 	});
-	const packet = (quantity, value, id) => new SpectralPacket({
-		basis,
-		quantity,
-		units:
-			quantity === SPECTRAL_QUANTITIES.RADIANCE_DENSITY
-				? SPECTRAL_UNITS.RADIANCE_DENSITY
-				: SPECTRAL_UNITS.IRRADIANCE_DENSITY,
-		values: [value],
-		provenanceIdentity: `receiver-environment-controller:${id ?? value}`,
-	});
+	const packet = (quantity, value, id) =>
+		new SpectralPacket({
+			basis,
+			quantity,
+			units:
+				quantity === SPECTRAL_QUANTITIES.RADIANCE_DENSITY
+					? SPECTRAL_UNITS.RADIANCE_DENSITY
+					: SPECTRAL_UNITS.IRRADIANCE_DENSITY,
+			values: [value],
+			provenanceIdentity: `receiver-environment-controller:${id ?? value}`,
+		});
 	const radiance = (value) => packet(SPECTRAL_QUANTITIES.RADIANCE_DENSITY, value);
 	const directLight = Object.freeze({
 		directNormal: packet(SPECTRAL_QUANTITIES.IRRADIANCE_DENSITY, 4, 'direct-normal'),
@@ -32,11 +35,12 @@ describe('ReceiverEnvironmentLightController', () => {
 		photopicDirectNormalIlluminance: {value: 4 * 683, units: 'lux'},
 		photopicDirectHorizontalIlluminance: {value: 683, units: 'lux'},
 	});
-	const createController = () => new ReceiverEnvironmentLightController({
-		calculator: new LocalLightLevelCalculator(),
-		directLight,
-		identity: 'receiver-controller-initial',
-	});
+	const createController = () =>
+		new ReceiverEnvironmentLightController({
+			calculator: new LocalLightLevelCalculator(),
+			directLight,
+			identity: 'receiver-controller-initial',
+		});
 
 	it('starts with a complete direct-only publication', () => {
 		const controller = createController();
@@ -102,11 +106,13 @@ describe('ReceiverEnvironmentLightController', () => {
 		const baseline = controller.active;
 		const cancellation = new AbortController();
 		cancellation.abort();
-		await expectAsync(controller.build({
-			identity: 'cancelled',
-			signal: cancellation.signal,
-			sampleIncomingRadiance: () => [],
-		})).toBeRejectedWithError(Error, 'Receiver environment-light build was cancelled.');
+		await expectAsync(
+			controller.build({
+				identity: 'cancelled',
+				signal: cancellation.signal,
+				sampleIncomingRadiance: () => [],
+			}),
+		).toBeRejectedWithError(Error, 'Receiver environment-light build was cancelled.');
 		expect(controller.active).toBe(baseline);
 
 		let resolveSlow;

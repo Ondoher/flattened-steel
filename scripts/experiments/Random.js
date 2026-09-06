@@ -11,7 +11,7 @@ class Random {
 	}
 
 	randomize(value) {
-		value = (value === undefined) ? Date.now() : value;
+		value = value === undefined ? Date.now() : value;
 		this.randSeed = value;
 	}
 
@@ -89,7 +89,7 @@ class Random {
 
 		let width = end - start;
 		let center = mean ?? (start + end) / 2;
-		let spread = stddev ?? (width / 6);
+		let spread = stddev ?? width / 6;
 
 		while (true) {
 			let value = this.randomNormalInt(center, spread);

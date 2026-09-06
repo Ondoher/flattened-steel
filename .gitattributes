@@ -1,0 +1,4 @@
+# Owner-approved CRLF whitespace exception for immutable historical fixtures.
+# Keep normal whitespace checks; do not normalize or rewrite these files.
+experiments/extraterrestrial/color-reset/fixtures/cr6c-one-pixel-brightness-calibration-v1.json whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+experiments/extraterrestrial/color-reset/fixtures/cr6c-one-pixel-brightness-calibration-v2.json whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol

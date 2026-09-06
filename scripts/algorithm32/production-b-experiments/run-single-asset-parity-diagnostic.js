@@ -38,9 +38,7 @@ function createGpuTable(localTime, spectra) {
 		throw new Error('Single-asset GPU diagnostic did not return 81 spectra.');
 	}
 	const lines = [
-		['model', 'time', 'grid_x', 'grid_y', ...Array.from({length: 40}, (_, index) => `lambda_${index}`)].join(
-			'\t',
-		),
+		['model', 'time', 'grid_x', 'grid_y', ...Array.from({length: 40}, (_, index) => `lambda_${index}`)].join('\t'),
 	];
 	for (let gridX = 0; gridX < 9; gridX += 1) {
 		for (let gridY = 0; gridY < 9; gridY += 1) {
@@ -48,7 +46,9 @@ function createGpuTable(localTime, spectra) {
 			if (values?.length !== 40 || values.some((value) => !Number.isFinite(value) || value < 0)) {
 				throw new Error(`Invalid GPU spectrum at ${localTime}/${gridX}/${gridY}.`);
 			}
-			lines.push(['proposed', localTime, gridX, gridY, ...values.map((value) => value.toPrecision(17))].join('\t'));
+			lines.push(
+				['proposed', localTime, gridX, gridY, ...values.map((value) => value.toPrecision(17))].join('\t'),
+			);
 		}
 	}
 	return `${lines.join('\n')}\n`;
@@ -126,7 +126,8 @@ export async function runSingleAssetParityDiagnostic({
 }
 
 if (process.argv[1] && pathToFileURL(process.argv[1]).href === import.meta.url) {
-	const [assetDirectory, productionRevision, cpuTablePath, outputDirectory, localTime = '09:30'] = process.argv.slice(2);
+	const [assetDirectory, productionRevision, cpuTablePath, outputDirectory, localTime = '09:30'] =
+		process.argv.slice(2);
 	if (!assetDirectory || !productionRevision || !cpuTablePath || !outputDirectory) {
 		throw new Error(
 			'Usage: node run-single-asset-parity-diagnostic.js <asset-directory> <production-revision> <cpu-table> <fresh-output-directory> [local-time]',

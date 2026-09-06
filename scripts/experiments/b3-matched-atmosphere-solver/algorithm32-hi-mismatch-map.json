@@ -1,42 +1,42 @@
 {
-  "schema": "algorithm32-b3-mismatch-map-v1",
-  "subject": "Production Algorithm32-hi CPU Reference, 40/20/68/48 numerical controls",
-  "mismatches": [
-    {
-      "field": "spectral representation",
-      "disposition": "Algorithm32-hi computes its native 15 equal-width channels. For the unchanged paper RMSE coordinates, each value is held constant over its declared bin; no 40-channel transport realization is substituted."
-    },
-    {
-      "field": "ground reflection",
-      "disposition": "The production sky-only Algorithm32-hi benchmark calculation has no ground-reflection contribution, while the matched libRadtran setup uses Lambertian grass spectral albedo. Treat the resulting comparison as scope-limited rather than input-identical."
-    },
-    {
-      "field": "molecular-scattering parameterization",
-      "disposition": "Algorithm32-hi uses its canonical wavelength law and coefficient scale; the libRadtran deck uses the retained Penndorf table. Preserve this as a model-family difference."
-    },
-    {
-      "field": "multiple-scattering treatment",
-      "disposition": "Algorithm32-hi uses its production incident-radiance cache and documented truncated scattering calculation; libRadtran DISORT is the fuller numerical reference. Do not interpret aggregate-score proximity as component or pointwise equality."
-    },
-    {
-      "field": "incident angular quadrature",
-      "disposition": "Algorithm32-hi uses 68 source-oriented equal-weight Fibonacci incident directions; the retained libRadtran DISORT calculation resolves its angular field with 16 streams. Preserve this numerical-method difference."
-    },
-    {
-      "field": "vertical and path discretization",
-      "disposition": "Algorithm32-hi uses analytic exponential density profiles, 48 cache altitude representatives, 40 view-path intervals, and 20 source-transmittance intervals; libRadtran uses its retained layered atmosphere and solver controls."
-    },
-    {
-      "field": "geometry approximation",
-      "disposition": "Algorithm32-hi uses exact ray intersections with its spherical atmosphere; the retained libRadtran setup is pseudospherical. Treat the distinction as a declared model mismatch."
-    },
-    {
-      "field": "observer altitude",
-      "disposition": "Algorithm32-hi evaluates at two meters above its spherical ground boundary; the retained libRadtran deck uses zero-kilometer output altitude. Report the two-meter choice and do not conceal the difference."
-    },
-    {
-      "field": "solar source treatment",
-      "disposition": "Algorithm32-hi uses an ideal unresolved distant directional Sun and reports atmosphere path radiance without a resolved solar disc; preserve this boundary when comparing with the retained solver output and measurements."
-    }
-  ]
+	"schema": "algorithm32-b3-mismatch-map-v1",
+	"subject": "Production Algorithm32-hi CPU Reference, 40/20/68/48 numerical controls",
+	"mismatches": [
+		{
+			"field": "spectral representation",
+			"disposition": "Algorithm32-hi computes its native 15 equal-width channels. For the unchanged paper RMSE coordinates, each value is held constant over its declared bin; no 40-channel transport realization is substituted."
+		},
+		{
+			"field": "ground reflection",
+			"disposition": "The production sky-only Algorithm32-hi benchmark calculation has no ground-reflection contribution, while the matched libRadtran setup uses Lambertian grass spectral albedo. Treat the resulting comparison as scope-limited rather than input-identical."
+		},
+		{
+			"field": "molecular-scattering parameterization",
+			"disposition": "Algorithm32-hi uses its canonical wavelength law and coefficient scale; the libRadtran deck uses the retained Penndorf table. Preserve this as a model-family difference."
+		},
+		{
+			"field": "multiple-scattering treatment",
+			"disposition": "Algorithm32-hi uses its production incident-radiance cache and documented truncated scattering calculation; libRadtran DISORT is the fuller numerical reference. Do not interpret aggregate-score proximity as component or pointwise equality."
+		},
+		{
+			"field": "incident angular quadrature",
+			"disposition": "Algorithm32-hi uses 68 source-oriented equal-weight Fibonacci incident directions; the retained libRadtran DISORT calculation resolves its angular field with 16 streams. Preserve this numerical-method difference."
+		},
+		{
+			"field": "vertical and path discretization",
+			"disposition": "Algorithm32-hi uses analytic exponential density profiles, 48 cache altitude representatives, 40 view-path intervals, and 20 source-transmittance intervals; libRadtran uses its retained layered atmosphere and solver controls."
+		},
+		{
+			"field": "geometry approximation",
+			"disposition": "Algorithm32-hi uses exact ray intersections with its spherical atmosphere; the retained libRadtran setup is pseudospherical. Treat the distinction as a declared model mismatch."
+		},
+		{
+			"field": "observer altitude",
+			"disposition": "Algorithm32-hi evaluates at two meters above its spherical ground boundary; the retained libRadtran deck uses zero-kilometer output altitude. Report the two-meter choice and do not conceal the difference."
+		},
+		{
+			"field": "solar source treatment",
+			"disposition": "Algorithm32-hi uses an ideal unresolved distant directional Sun and reports atmosphere path radiance without a resolved solar disc; preserve this boundary when comparing with the retained solver output and measurements."
+		}
+	]
 }

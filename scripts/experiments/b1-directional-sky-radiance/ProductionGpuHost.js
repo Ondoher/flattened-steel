@@ -132,7 +132,9 @@ globalThis.algorithm32B1GpuReady = true;
 			canonicalInput === diagnosticInput ||
 			(diagnosticInput && (!this._diagnosticAssetDirectory || !this._diagnosticCondition))
 		) {
-			throw new Error('ProductionGpuHost requires one canonical asset set or one complete diagnostic asset descriptor.');
+			throw new Error(
+				'ProductionGpuHost requires one canonical asset set or one complete diagnostic asset descriptor.',
+			);
 		}
 		const verified = canonicalInput
 			? await B1Direct40CacheAssetVerifier.verifySet({
@@ -154,9 +156,7 @@ globalThis.algorithm32B1GpuReady = true;
 				throw new Error('B1 direct-40 asset must remain below the repository root.');
 			}
 		}
-		const compilerIdentities = new Set(
-			verifiedAssets.map((asset) => asset.manifest.derivation.compilerIdentity),
-		);
+		const compilerIdentities = new Set(verifiedAssets.map((asset) => asset.manifest.derivation.compilerIdentity));
 		if (compilerIdentities.size !== 1) {
 			throw new Error('B1 direct-40 asset set must use one compiler identity.');
 		}
@@ -223,10 +223,7 @@ globalThis.algorithm32B1GpuReady = true;
 		await this._page.goto(`http://127.0.0.1:${port}/`, {waitUntil: 'networkidle0', timeout: 900000});
 		this._recordProgress('[B1 GPU progress] browser module page loaded');
 		await this._page.waitForFunction(() => globalThis.algorithm32B1GpuReady === true, {timeout: 900000});
-		await this._page.evaluate(
-			(assetSet) => globalThis.algorithm32B1InitializeGpuSession(assetSet),
-			this._assetSet,
-		);
+		await this._page.evaluate((assetSet) => globalThis.algorithm32B1InitializeGpuSession(assetSet), this._assetSet);
 		this._recordProgress('[B1 GPU progress] shared WebGL session initialized');
 	}
 

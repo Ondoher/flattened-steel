@@ -1,0 +1,449 @@
+{
+  "schemaVersion": "g0-decision-manifest-v1",
+  "manifestId": "stage12-g0-contract-v1",
+  "familyId": "spherical-sun-stars-radial-v1",
+  "experimentRoots": {
+    "source": "experiments/extraterrestrial",
+    "output": "tmp/extraterrestrial"
+  },
+  "baselineManifest": {
+    "path": "experiments/extraterrestrial/baseline-manifest.json",
+    "aggregateHash": "sha256:515987a60fdf661ef283e42bcf436c1bc5baf0a8768e33969a53e49da097612d"
+  },
+  "candidateSeed": {
+    "aggregateHash": "sha256:515987a60fdf661ef283e42bcf436c1bc5baf0a8768e33969a53e49da097612d",
+    "identicalToBaseline": true
+  },
+  "schemas": [
+    {
+      "id": "celestial-contract-v1",
+      "version": "1",
+      "path": "experiments/extraterrestrial/schemas/celestial-contract-v1.schema.json",
+      "sha256": "sha256:5a23bb28df556c5f7870c3a4f4724bc025ebbf149cdf669df461ce2c49c41f81"
+    },
+    {
+      "id": "g0-decision-manifest-v1",
+      "version": "1",
+      "path": "experiments/extraterrestrial/schemas/g0-decision-manifest-v1.schema.json",
+      "sha256": "sha256:74489357e916b900915e0ef8d30c231b6e8541cd137393ab2121c4307d4211b9"
+    }
+  ],
+  "fixtures": [
+    {
+      "id": "g0-synthetic-celestial-v1",
+      "version": "1",
+      "path": "experiments/extraterrestrial/fixtures/g0-synthetic-celestial-v1.json",
+      "sha256": "sha256:72bd8c0f378bbf6e8d1006c68088fcb568dd68c39ece90df0793c54e666e7b10"
+    }
+  ],
+  "decisions": [
+    {
+      "id": "architecture.owner-map",
+      "status": "fixed",
+      "value": {
+        "source": "radiometry-and-celestial-placement-facts",
+        "geometry": "transforms-cache-coordinates-and-controller-creation",
+        "atmosphere": "direct-transport-physics",
+        "celestialCache": "generation-identity-fields-lookup-publication-and-disposal",
+        "rasterVisibility": "live-source-resolution-projection-and-visibility",
+        "color": "spectral-to-display-conversion",
+        "runner": "orchestration-and-observation-only"
+      },
+      "constraints": [
+        "Provisional code retains the eventual production ownership boundaries.",
+        "Runners may not absorb source, geometry, atmosphere, cache, raster, visibility, or Color responsibilities."
+      ],
+      "ownerGoal": "G0",
+      "changeRule": "Changing ownership requires a versioned design decision and a new qualifying boundary proof.",
+      "rationale": "The experiment may be provisional, but architectural ownership is not."
+    },
+    {
+      "id": "architecture.cache-slots",
+      "status": "fixed",
+      "value": {
+        "scatteringCache": {
+          "creator": "light-source",
+          "quantity": "cumulative-scattering-density",
+          "use": "inside-ordinary-path-transport"
+        },
+        "celestialCache": {
+          "creator": "geometry",
+          "quantity": "transported-celestial-source-measures",
+          "use": "live-source-raster-after-path-transport"
+        },
+        "identityLifecycleAndBindings": "separate"
+      },
+      "constraints": [
+        "The celestial cache is not encoded as the scattering cache.",
+        "Neither cache borrows the other cache's identity, publication slot, resources, or disposal."
+      ],
+      "ownerGoal": "G0",
+      "changeRule": "Changing the slot split requires a versioned architecture decision and a new G0-equivalent proof.",
+      "rationale": "The two caches hold different physical quantities and enter the algorithm at different points."
+    },
+    {
+      "id": "composition.order",
+      "status": "fixed",
+      "value": {
+        "equation": "preDisplayRadiance = pathRadiance + celestialRadiance",
+        "additionCount": 1,
+        "after": "ordinary-atmosphere-path-transport",
+        "before": "Color",
+        "sidecarRenderer": false
+      },
+      "constraints": [
+        "Celestial spectra flow naturally through the spectral pipeline.",
+        "Color remains the only spectral-to-display conversion owner."
+      ],
+      "ownerGoal": "G0",
+      "changeRule": "Changing the insertion point or addition count requires a versioned design decision and a new quantity-route proof.",
+      "rationale": "This preserves spectral information through atmosphere transport and prevents duplicate conversion or composition."
+    },
+    {
+      "id": "spectral.native-15-basis",
+      "status": "fixed",
+      "value": {
+        "id": "algorithm32-native-15-spectral-basis-v1",
+        "channelCount": 15,
+        "contentHash": "sha256:a03a3c7f45d9bd4ff8adf6482e9d1aac1acd72423758ecf797ac24f6dffba891"
+      },
+      "constraints": [
+        "Every first-family source and cached result uses the sealed production channel centers and widths.",
+        "Basis conversion is not performed inside the celestial cache."
+      ],
+      "ownerGoal": "G0",
+      "changeRule": "A basis change requires a new family or versioned contract and complete requalification.",
+      "rationale": "A shared typed basis is required for exact spectral composition before Color."
+    },
+    {
+      "id": "source.quantity-contract",
+      "status": "fixed",
+      "value": {
+        "infinitePoint": {
+          "inputAndCacheMeasure": "spectral-irradiance-density",
+          "units": "W m^-2 nm^-1"
+        },
+        "distantUniformDisk": {
+          "inputAndCacheMeasure": "spectral-radiance-density",
+          "units": "W m^-2 sr^-1 nm^-1"
+        },
+        "pointRadianceConversion": "normalized-response-divided-by-exact-pixel-solid-angle-once"
+      },
+      "constraints": [
+        "Point irradiance and extended radiance remain distinct typed measures.",
+        "Atmosphere transport is already applied when the cache returns either measure."
+      ],
+      "ownerGoal": "G0",
+      "changeRule": "A quantity or unit change requires a versioned schema and renewed conservation proof.",
+      "rationale": "Point and extended sources contribute radiance differently even though both have a rendering need."
+    },
+    {
+      "id": "roster.first-family",
+      "status": "fixed",
+      "value": {
+        "layers": [
+          {
+            "layerId": "stars",
+            "kind": "infinite-point-set",
+            "composition": "additive",
+            "memberOrder": "sourceId-ascending"
+          },
+          {
+            "layerId": "sun",
+            "kind": "distant-extended",
+            "profile": "uniform-disk",
+            "composition": "additive"
+          }
+        ],
+        "foregroundOf": [],
+        "opacity": false
+      },
+      "constraints": [
+        "The star field acts as one layer while retaining individually addressable members.",
+        "The first family has exactly two layers, zero foreground edges, and no opacity."
+      ],
+      "ownerGoal": "G0",
+      "changeRule": "Changing layer kind, order, composition, or edges requires a different qualified family.",
+      "rationale": "Sun and stars are sufficient for the first cache proof; Moon ordering is an explicit follow-up."
+    },
+    {
+      "id": "identity.static-vs-live",
+      "status": "fixed",
+      "value": {
+        "physicalFieldIncludes": [
+          "static-source-definitions",
+          "provider-contract",
+          "atmosphere-transport",
+          "geometry-family-domain",
+          "spectral-basis",
+          "numerical-policy",
+          "layer-roster"
+        ],
+        "physicalFieldExcludes": [
+          "evaluated-placement",
+          "receiver",
+          "observation",
+          "camera",
+          "viewport",
+          "display"
+        ],
+        "queryStateIncludes": [
+          "evaluated-placement",
+          "receiver",
+          "observation"
+        ]
+      },
+      "constraints": [
+        "Compatible placement-only changes reuse the physical field.",
+        "Static-definition and provider-contract changes rebuild the generation."
+      ],
+      "ownerGoal": "G0",
+      "changeRule": "Changing identity projections requires a versioned family contract and lifecycle requalification.",
+      "rationale": "Placement can move through a symmetric field without turning camera or epoch into physical cache axes."
+    },
+    {
+      "id": "identity.camera-exclusion",
+      "status": "fixed",
+      "value": {
+        "excludedFromPhysicalField": [
+          "orientation",
+          "projection",
+          "fov",
+          "viewport",
+          "pixelRatio",
+          "pixelCoordinate",
+          "pointResponse",
+          "sceneDepth",
+          "exposure",
+          "display"
+        ],
+        "excludedFromQueryStateWhenReceiverIsFixed": true,
+        "cameraRole": "live-raster-only"
+      },
+      "constraints": [
+        "A renderer camera may designate the physical receiver only through geometry.",
+        "Camera-only changes do not rebuild or re-key the transported field."
+      ],
+      "ownerGoal": "G0",
+      "changeRule": "Admitting camera state into cache identity requires a new architecture and full requalification.",
+      "rationale": "The cache is a camera-independent field, not an image or camera-bound frame cache."
+    },
+    {
+      "id": "live-state.packet-semantics",
+      "status": "fixed",
+      "value": {
+        "mutability": "immutable-packet",
+        "route": "cheap-live-ingress-bypassing-full-setConfig",
+        "contents": [
+          "evaluated-placement-states",
+          "observation-and-body-orientation-state",
+          "geometry-mapped-receiver-state",
+          "generation-compatible-roster-reference"
+        ],
+        "transportedPayloadAllowed": false,
+        "cameraAllowed": false
+      },
+      "constraints": [
+        "The packet cannot redefine static source membership or radiometry.",
+        "Geometry validates frame/provider compatibility before producing a query packet."
+      ],
+      "ownerGoal": "G0",
+      "changeRule": "Semantic changes require a versioned packet contract and new identity proof; only names remain provisional.",
+      "rationale": "Live celestial/geographic state must update cheaply without polluting static facade configuration."
+    },
+    {
+      "id": "sun.shared-canonical-identity",
+      "status": "fixed",
+      "value": {
+        "canonicalOwner": "sun-source",
+        "sharedReferences": [
+          "atmospheric-sun",
+          "visible-sun-disk"
+        ],
+        "mustMatch": [
+          "source-definition",
+          "radiometry",
+          "placement-provider-contract",
+          "evaluated-placement-state"
+        ],
+        "mismatchPolicy": "reject"
+      },
+      "constraints": [
+        "Geometry transforms Sun placement but does not own Sun brightness.",
+        "The celestial cache does not create a second Sun source."
+      ],
+      "ownerGoal": "G0",
+      "changeRule": "Splitting Sun ownership requires a new architecture decision and renewed atmosphere/visible-route proof.",
+      "rationale": "Atmospheric brightening and the rendered disk must describe one physical Sun."
+    },
+    {
+      "id": "capability.first-family",
+      "status": "fixed",
+      "value": {
+        "familyId": "spherical-sun-stars-radial-v1",
+        "supports": [
+          "concentric-spherical-ground-and-atmosphere",
+          "radially-symmetric-atmosphere",
+          "bounded-infinite-point-star-set",
+          "one-distant-uniform-sun-disk"
+        ],
+        "rejects": [
+          "finite-celestial-placement",
+          "finite-point-source",
+          "moon",
+          "opaque-celestial-layer",
+          "foreground-edge",
+          "flat-geometry",
+          "profiled-or-asymmetric-disk",
+          "catalog-scale-star-field"
+        ]
+      },
+      "constraints": [
+        "Unsupported capabilities fail explicitly without fallback.",
+        "The synthetic fixture makes no calibrated astronomy claim."
+      ],
+      "ownerGoal": "G0",
+      "changeRule": "Each added capability requires its own family design and observable qualification.",
+      "rationale": "A narrow first family makes the cache semantics falsifiable."
+    },
+    {
+      "id": "capacity.point-members",
+      "status": "provisional",
+      "value": 16,
+      "constraints": [
+        "The cap is hard, fingerprinted, and enforced through G5.",
+        "A seventeenth member is rejected rather than truncated."
+      ],
+      "ownerGoal": "G0",
+      "reconsiderByGoal": "G6",
+      "changeRule": "G6 may replace this value only through measured representation evidence and a new decision manifest.",
+      "rationale": "Sixteen is sufficient for progressive concept proofs without pretending to solve catalog scale."
+    },
+    {
+      "id": "api.internal-live-ingress-names",
+      "status": "provisional",
+      "value": {
+        "packet": "CelestialLiveStatePacket",
+        "ingress": "updateCelestialLiveState",
+        "visibilityContract": "DirectionalVisibilityResolver"
+      },
+      "constraints": [
+        "Packet semantics and ownership are fixed even while experimental names may change.",
+        "No public facade compatibility claim is made before promotion."
+      ],
+      "ownerGoal": "G0",
+      "reconsiderByGoal": "12.10",
+      "changeRule": "Names may change inside the candidate with manifest updates; final public names are selected only at promotion.",
+      "rationale": "Provisional names let experiments proceed without freezing an unproven public API."
+    },
+    {
+      "id": "field.coordinates-and-stencils",
+      "status": "deferred",
+      "constraints": [
+        "G1 must select exact height and horizon-direction reduction, nodes, normalization, boundaries, and stencil topology.",
+        "Camera state remains excluded from field coordinates and identity."
+      ],
+      "ownerGoal": "G1",
+      "reconsiderByGoal": "G1",
+      "changeRule": "G1 closes only with an accepted deterministic geometry/query/stencil proof and a versioned decision value.",
+      "rationale": "Architecture determines ownership but cannot choose a numerical field realization without geometry evidence."
+    },
+    {
+      "id": "transport.point-controls-and-tolerances",
+      "status": "deferred",
+      "constraints": [
+        "G3 must select direct-transmittance integration controls and point-field interpolation tolerances.",
+        "Exact zero below the analytic horizon is mandatory."
+      ],
+      "ownerGoal": "G3",
+      "reconsiderByGoal": "G3",
+      "changeRule": "G3 closes only when independent direct-transport comparisons accept the selected values.",
+      "rationale": "Numerical controls should be measured against transported point fields, not guessed in G0."
+    },
+    {
+      "id": "transport.sun-controls-and-tolerances",
+      "status": "deferred",
+      "constraints": [
+        "G4 must select Sun-field integration controls and interpolation tolerances.",
+        "Full, partial, empty, and horizon-crossing support must be represented."
+      ],
+      "ownerGoal": "G4",
+      "reconsiderByGoal": "G4",
+      "changeRule": "G4 closes only when independent direct-transport comparisons accept the selected values.",
+      "rationale": "Extended-source transport policy needs Sun-specific convergence evidence."
+    },
+    {
+      "id": "raster.visibility-response-quadrature",
+      "status": "deferred",
+      "constraints": [
+        "Ordered pixel corner rays, exact pixel solid angle, normalized response, and camera-as-live-only are invariant.",
+        "G5 must select projection families, raster origin, clipping, visibility, point response, off-raster accounting, Sun quadrature, and numerical controls."
+      ],
+      "ownerGoal": "G5",
+      "reconsiderByGoal": "G5",
+      "changeRule": "G5 closes only when CPU conservation and live-visibility proofs accept the concrete policies.",
+      "rationale": "The adapter details depend on measurable projection and energy-conservation behavior."
+    },
+    {
+      "id": "gpu.executor-packing-and-final-capacity",
+      "status": "deferred",
+      "constraints": [
+        "G6 compares a generalized multi-resource executor with a celestial executor over the same externally owned backend.",
+        "The selected layout must carry all 15 channels, declare resource ceilings, and replace the provisional capacity."
+      ],
+      "ownerGoal": "G6",
+      "reconsiderByGoal": "G6",
+      "changeRule": "G6 closes only with an accepted measured representation or an explicit rejection of every candidate.",
+      "rationale": "GPU layout, executor, capacity, and resource limits are representation results rather than architecture facts."
+    },
+    {
+      "id": "browser.live-gpu-adapter",
+      "status": "deferred",
+      "constraints": [
+        "G7 must prove browser output matches the CPU behavior.",
+        "Camera and placement changes may not trigger unnecessary physical-cache rebuilds."
+      ],
+      "ownerGoal": "G7",
+      "reconsiderByGoal": "G7",
+      "changeRule": "G7 closes only with an accepted live GPU consumption proof.",
+      "rationale": "Browser adapter behavior depends on the G6 representation and G5 raster contracts."
+    },
+    {
+      "id": "qualification.hardware-and-budgets",
+      "status": "deferred",
+      "constraints": [
+        "G8 must name the qualifying hardware class and numerical, lifecycle, memory, build-time, query-time, and frame-cost budgets.",
+        "Failed limits reject the strategy explicitly."
+      ],
+      "ownerGoal": "G8",
+      "reconsiderByGoal": "G8",
+      "changeRule": "G8 closes only with measured qualification against all declared budgets.",
+      "rationale": "Final budgets require an implemented representation and representative runtime evidence."
+    },
+    {
+      "id": "api.public-contract-names",
+      "status": "deferred",
+      "constraints": [
+        "Final public names must reflect accepted semantics and current production conventions.",
+        "The experiment creates no facade compatibility promise."
+      ],
+      "ownerGoal": "12.10",
+      "reconsiderByGoal": "12.10",
+      "changeRule": "Names are fixed only during explicit production promotion and reconciliation.",
+      "rationale": "Public naming should follow proven behavior rather than constrain the experiments."
+    }
+  ],
+  "proofAssertions": [
+    "baseline.candidate-identical",
+    "claim.g0-only",
+    "containment.boundary-evidence",
+    "fixture.schema-and-typed-measures",
+    "geometry.exact-named-frame-transforms",
+    "identity.camera-excluded",
+    "identity.placement-only-query-change",
+    "negative.classified-contract-errors",
+    "roster.canonical-layer-and-member-order",
+    "sun.shared-canonical-identity"
+  ],
+  "contentHash": "sha256:37c0fd85c82c887ba4d65c51ce7b2eb74e231d63c1f680e78efc3e0e108f8f43"
+}

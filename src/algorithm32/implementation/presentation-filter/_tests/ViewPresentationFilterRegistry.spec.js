@@ -19,9 +19,7 @@ const CHROMA = {
 	enabled: true,
 	parameters: {maximumChromaRetention: 0.65},
 };
-const SYNTHETIC_SCOTOPIC_WEIGHTS = Object.freeze([
-	0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-]);
+const SYNTHETIC_SCOTOPIC_WEIGHTS = Object.freeze([0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
 
 function luminance(rgb) {
 	return rgb.reduce((sum, value, index) => sum + value * HUMAN_LOW_LIGHT_LUMINANCE_WEIGHTS[index], 0);
@@ -31,9 +29,11 @@ describe('view-presentation filter registry', () => {
 	it('keeps empty, disabled, and nonstellar paths as exact object identity', () => {
 		const rgb = Object.freeze([-0.25, 1.5, 3]);
 		expect(new ViewPresentationFilterRegistry().applySourceLinear(rgb, {target: 'stellar'})).toBe(rgb);
-		expect(new ViewPresentationFilterRegistry([{...CHROMA, enabled: false}]).applySourceLinear(rgb, {
-			target: 'stellar',
-		})).toBe(rgb);
+		expect(
+			new ViewPresentationFilterRegistry([{...CHROMA, enabled: false}]).applySourceLinear(rgb, {
+				target: 'stellar',
+			}),
+		).toBe(rgb);
 		expect(new ViewPresentationFilterRegistry([CHROMA]).applySourceLinear(rgb, {target: 'sky'})).toBe(rgb);
 	});
 
@@ -46,9 +46,9 @@ describe('view-presentation filter registry', () => {
 		expect(() => new ViewPresentationFilterRegistry([{...CHROMA, target: 'solar'}])).toThrowError(
 			/unimplemented target/,
 		);
-		expect(() => new ViewPresentationFilterRegistry([
-			{...CHROMA, parameters: {maximumChromaRetention: 0.4}},
-		])).toThrowError(/must equal 0.65/);
+		expect(
+			() => new ViewPresentationFilterRegistry([{...CHROMA, parameters: {maximumChromaRetention: 0.4}}]),
+		).toThrowError(/must equal 0.65/);
 	});
 
 	it('assigns deterministic order and a configuration-sensitive identity', () => {
@@ -130,10 +130,12 @@ describe('view-presentation filter registry', () => {
 			scotopicLuminanceWeights: SYNTHETIC_SCOTOPIC_WEIGHTS,
 		}).createShaderContribution();
 		expect(contribution.provides).toEqual(['presentation.applyStellarSourceLinear']);
-		expect(contribution.uniforms[0]).toEqual(jasmine.objectContaining({
-			name: 'uStellarAdaptationLuminanceCdM2',
-			valueKey: 'presentation.stellar.adaptationLuminanceCdM2',
-		}));
+		expect(contribution.uniforms[0]).toEqual(
+			jasmine.objectContaining({
+				name: 'uStellarAdaptationLuminanceCdM2',
+				valueKey: 'presentation.stellar.adaptationLuminanceCdM2',
+			}),
+		);
 		expect(contribution.functions[0].code).toContain('applyStellarSourceLinearPresentationFilters');
 		expect(() => new ViewPresentationFilterRegistry().createShaderContribution()).toThrowError(
 			/Disabled presentation filters/,
@@ -143,10 +145,12 @@ describe('view-presentation filter registry', () => {
 	it('fails closed when mesopic execution lacks its local authenticated weights', () => {
 		const registry = new ViewPresentationFilterRegistry([MESOPIC]);
 		expect(() => registry.createStellarSourceLinearShaderHook()).toThrowError(/authenticated local/);
-		expect(() => registry.applySourceLinear([1, 1, 1], {
-			target: 'stellar',
-			transportedNative15: new Array(15).fill(1),
-			adaptationLuminanceCdM2: 0.005,
-		})).toThrowError(/authenticated local/);
+		expect(() =>
+			registry.applySourceLinear([1, 1, 1], {
+				target: 'stellar',
+				transportedNative15: new Array(15).fill(1),
+				adaptationLuminanceCdM2: 0.005,
+			}),
+		).toThrowError(/authenticated local/);
 	});
 });

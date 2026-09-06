@@ -50,9 +50,7 @@ export function assertProductionGpuParity(comparisons) {
 			comparison.rmse > PRODUCTION_GPU_PARITY_LIMITS.rmse ||
 			comparison.maximumAbsoluteDifference > PRODUCTION_GPU_PARITY_LIMITS.maximumAbsoluteDifference
 		) {
-			throw new Error(
-				`J${comparison.order} production CPU/GPU parity exceeds the predeclared R32F envelope.`,
-			);
+			throw new Error(`J${comparison.order} production CPU/GPU parity exceeds the predeclared R32F envelope.`);
 		}
 	}
 	return Object.freeze({accepted: true, limits: PRODUCTION_GPU_PARITY_LIMITS});

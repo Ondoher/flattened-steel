@@ -191,8 +191,18 @@ export default class B1Direct40CacheAssetManifest {
 			REQUIRED_COUNTS.uniqueOutgoingDirections *
 			Float32Array.BYTES_PER_ELEMENT;
 		const indexByteLength = REQUIRED_COUNTS.logicalOutgoingDirections * Uint16Array.BYTES_PER_ELEMENT;
-		requirePayload(record.cumulativeScatteringDensity, B1_DIRECT40_CACHE_PAYLOAD_CODEC, cacheByteLength, 'Cache payload');
-		requirePayload(record.logicalToUniqueIndex, B1_DIRECT40_DIRECTION_INDEX_CODEC, indexByteLength, 'Direction index');
+		requirePayload(
+			record.cumulativeScatteringDensity,
+			B1_DIRECT40_CACHE_PAYLOAD_CODEC,
+			cacheByteLength,
+			'Cache payload',
+		);
+		requirePayload(
+			record.logicalToUniqueIndex,
+			B1_DIRECT40_DIRECTION_INDEX_CODEC,
+			indexByteLength,
+			'Direction index',
+		);
 		for (const [value, label] of [
 			[record.derivation?.compilerIdentity, 'Derivation compiler identity'],
 			[record.derivation?.productionRevision, 'Derivation production revision'],

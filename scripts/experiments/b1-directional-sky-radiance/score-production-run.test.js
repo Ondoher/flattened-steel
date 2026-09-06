@@ -60,8 +60,14 @@ test('rejects a favorable B1 result above the independent closeout ceiling', () 
 });
 
 test('rejects non-favorable B1 or B2 classifications and an inconsistent B3 result', () => {
-	assert.throws(() => assertProductionBFamilyCloseout(resultSet({b1Classification: 'limited'})), /B1 must remain favorable/u);
-	assert.throws(() => assertProductionBFamilyCloseout(resultSet({b2Classification: 'limited'})), /B2 must remain favorable/u);
+	assert.throws(
+		() => assertProductionBFamilyCloseout(resultSet({b1Classification: 'limited'})),
+		/B1 must remain favorable/u,
+	);
+	assert.throws(
+		() => assertProductionBFamilyCloseout(resultSet({b2Classification: 'limited'})),
+		/B2 must remain favorable/u,
+	);
 	assert.throws(() => assertProductionBFamilyCloseout(resultSet({b3Consistent: false})), /B3 must preserve/u);
 	assert.throws(() => assertProductionBFamilyCloseout(resultSet({mismatchMapComplete: false})), /B3 must preserve/u);
 });

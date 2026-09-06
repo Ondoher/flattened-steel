@@ -53,11 +53,7 @@ async function containedOrdinaryFile(root, relativePath) {
 
 export function defaultDistantSunSceneCachePackageRoot() {
 	const serverFlat32Root = path.dirname(fileURLToPath(import.meta.url));
-	return path.join(
-		serverFlat32Root,
-		'data',
-		'one-degree-bin-covered-runtime-packages-20260830-1',
-	);
+	return path.join(serverFlat32Root, 'data', 'one-degree-bin-covered-runtime-packages-20260830-1');
 }
 
 /** Load and validate the immutable runtime catalog used by the Flat32 server. */

@@ -5,7 +5,7 @@ import {fileURLToPath} from 'node:url';
 
 const repositoryRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const source = {
-	path: 'scripts/extraterrestrial/color-reset/fixtures/cie/CIE_sle_scotopic.csv',
+	path: 'experiments/extraterrestrial/color-reset/fixtures/cie/CIE_sle_scotopic.csv',
 	sha256: '6a75d3fdbcbf5e9e9a07478511933eefeda953f3e2cc14b74459e5a099ec3759',
 };
 const outputRoot = path.join(repositoryRoot, 'server/flat32/data/human-vision-filter-package-v1');
@@ -30,17 +30,21 @@ function integrate(rows, lower, upper) {
 	for (let index = 1; index < knots.length; index += 1) {
 		const left = knots[index - 1];
 		const right = knots[index];
-		sum += (right - left) * (efficiencyAt(rows, left) + efficiencyAt(rows, right)) / 2;
+		sum += ((right - left) * (efficiencyAt(rows, left) + efficiencyAt(rows, right))) / 2;
 	}
 	return sum;
 }
 
 const sourceBytes = await readFile(path.join(repositoryRoot, source.path));
 if (sha256(sourceBytes) !== source.sha256) throw new Error('P7 CIE scotopic source hash mismatch.');
-const rows = sourceBytes.toString('utf8').trim().split(/\r?\n/u).map((line) => {
-	const [wavelength, efficiency] = line.split(',').map(Number);
-	return {wavelength, efficiency};
-});
+const rows = sourceBytes
+	.toString('utf8')
+	.trim()
+	.split(/\r?\n/u)
+	.map((line) => {
+		const [wavelength, efficiency] = line.split(',').map(Number);
+		return {wavelength, efficiency};
+	});
 if (rows.length !== 401 || rows[0].wavelength !== 380 || rows.at(-1).wavelength !== 780) {
 	throw new Error('P7 CIE scotopic source grid changed.');
 }
@@ -56,8 +60,17 @@ await writeFile(path.join(outputRoot, 'native15-scotopic-weights.json'), artifac
 const manifest = {
 	schemaId: 'algorithm32-production-human-vision-filter-package-v1',
 	packageId: 'human-vision-filter-package-v1',
-	parents: {sourcePath: source.path, sourceSha256: source.sha256, containedRunId: '000054-cr6e-toggleable-mesopic-stellar-luminance'},
-	derivation: {operation: '1700-times-piecewise-linear-integral-per-native15-bin', lowerNanometers: 360, upperNanometers: 830, binCount: 15},
+	parents: {
+		sourcePath: source.path,
+		sourceSha256: source.sha256,
+		containedRunId: '000054-cr6e-toggleable-mesopic-stellar-luminance',
+	},
+	derivation: {
+		operation: '1700-times-piecewise-linear-integral-per-native15-bin',
+		lowerNanometers: 360,
+		upperNanometers: 830,
+		binCount: 15,
+	},
 	artifact: {path: 'native15-scotopic-weights.json', byteLength: artifactBytes.byteLength, sha256: artifactSha256},
 	redistribution: 'local-only-pending-cie-license-and-source-clearance',
 };

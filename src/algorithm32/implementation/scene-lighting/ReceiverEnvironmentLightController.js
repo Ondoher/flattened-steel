@@ -60,7 +60,8 @@ export class ReceiverEnvironmentLightController {
 		if (typeof request.sampleIncomingRadiance !== 'function') {
 			throw new TypeError('Receiver environment-light build requires sampleIncomingRadiance.');
 		}
-		if (this._activeRequestIdentity === request.identity) return /** @type {ReceiverEnvironmentLightMeasurement} */ (this._active);
+		if (this._activeRequestIdentity === request.identity)
+			return /** @type {ReceiverEnvironmentLightMeasurement} */ (this._active);
 		const generation = ++this._generation;
 		this._assertBuildCurrent(generation, request.signal);
 
@@ -72,12 +73,12 @@ export class ReceiverEnvironmentLightController {
 		const diffuseHorizontal = request.reduceIncomingRadiance
 			? await request.reduceIncomingRadiance(radiances)
 			: this._calculator.measureEnvironmentIrradiance({
-			samples: radiances.map((spectralRadiance, index) => ({
-				spectralRadiance,
-				irradianceWeightSteradians:
-					RECEIVER_ENVIRONMENT_LIGHT_QUADRATURE[index].irradianceWeightSteradians,
-			})),
-			});
+					samples: radiances.map((spectralRadiance, index) => ({
+						spectralRadiance,
+						irradianceWeightSteradians:
+							RECEIVER_ENVIRONMENT_LIGHT_QUADRATURE[index].irradianceWeightSteradians,
+					})),
+				});
 		const stellarAdaptationLuminance = this._calculator.measureMedianSkyLuminance(radiances);
 		this._assertBuildCurrent(generation, request.signal);
 		const measurement = this._calculator.combineReceiverLight({

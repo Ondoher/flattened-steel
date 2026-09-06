@@ -17,17 +17,29 @@ export class StellarPointSetGpuBuilder {
 		this._layout = createStellarPointSetCacheLayout(source.celestialSourceDefinition.members.length);
 		const storage = this._layout.storage;
 		const capabilities = backend?.capabilities;
-		if (capabilities?.scalarFormat !== 'R32F' || capabilities.supportsArrayRenderTargets !== true || capabilities.supportsFloatSampling !== true || capabilities.maximumTextureSize < Math.max(storage.width, storage.height) || capabilities.maximumArrayLayers < storage.layers) {
+		if (
+			capabilities?.scalarFormat !== 'R32F' ||
+			capabilities.supportsArrayRenderTargets !== true ||
+			capabilities.supportsFloatSampling !== true ||
+			capabilities.maximumTextureSize < Math.max(storage.width, storage.height) ||
+			capabilities.maximumArrayLayers < storage.layers
+		) {
 			throw new RangeError('Stellar point-set GPU backend does not support the exact R32F array field.');
 		}
 	}
 
 	createBuildPlan({placement, query}) {
-		if (query?.family !== 'spherical-sun-stars-radial-v1' || query.stars?.placement.sourceId !== this._source.id || placement?.sourceId !== this._source.id || placement.kind !== 'static-stellar-point-set') {
+		if (
+			query?.family !== 'spherical-sun-stars-radial-v1' ||
+			query.stars?.placement.sourceId !== this._source.id ||
+			placement?.sourceId !== this._source.id ||
+			placement.kind !== 'static-stellar-point-set'
+		) {
 			throw new RangeError('Stellar point-set GPU request does not match its spherical query packet.');
 		}
 		const domain = this._model.geometry.describeCelestialContributionDomain();
-		if (query.domainIdentity !== domain.contentHash) throw new RangeError('Stellar point-set GPU query domain does not match geometry.');
+		if (query.domainIdentity !== domain.contentHash)
+			throw new RangeError('Stellar point-set GPU query domain does not match geometry.');
 		const cpuReference = new StellarPointSetCpuCache({model: this._model, domain, placement, source: this._source});
 		const layout = this._layout;
 		const storage = layout.storage;
@@ -49,20 +61,65 @@ export class StellarPointSetGpuBuilder {
 			units: 'W m^-2 nm^-1',
 			shape: [storage.width, storage.height, storage.layers],
 			values: packedValues,
-			contentHash: CanonicalValueHash.sha256Value({descriptor: cpuReference.descriptor.contentHash, query: query.contentHash, directionTable: 'two-row-r32f-v1'}),
+			contentHash: CanonicalValueHash.sha256Value({
+				descriptor: cpuReference.descriptor.contentHash,
+				query: query.contentHash,
+				directionTable: 'two-row-r32f-v1',
+			}),
 		});
 		const module = CacheBuildModules.createBuildModule({
-			id: 'algorithm32-stellar-point-set-r32f-copy-module-v1', owner: 'cache',
-			provides: ['cache.stellarPointSetTransport'], requires: [],
-			bindings: [{spec: {id: 'stellar-point-set-packed-field', name: 'uStellarPointSetPackedField', kind: 'data', shaderType: 'sampler2DArray', frequency: 'build'}, value: packed}],
-			blocks: [{id: 'stellar-point-set-r32f-copy-main', phase: 'main', order: 0, source: 'a32CacheOutput = texelFetch(uStellarPointSetPackedField, ivec3(int(gl_FragCoord.x), int(gl_FragCoord.y), a32CacheWavelengthLayer), 0).r;'}],
+			id: 'algorithm32-stellar-point-set-r32f-copy-module-v1',
+			owner: 'cache',
+			provides: ['cache.stellarPointSetTransport'],
+			requires: [],
+			bindings: [
+				{
+					spec: {
+						id: 'stellar-point-set-packed-field',
+						name: 'uStellarPointSetPackedField',
+						kind: 'data',
+						shaderType: 'sampler2DArray',
+						frequency: 'build',
+					},
+					value: packed,
+				},
+			],
+			blocks: [
+				{
+					id: 'stellar-point-set-r32f-copy-main',
+					phase: 'main',
+					order: 0,
+					source: 'a32CacheOutput = texelFetch(uStellarPointSetPackedField, ivec3(int(gl_FragCoord.x), int(gl_FragCoord.y), a32CacheWavelengthLayer), 0).r;',
+				},
+			],
 		});
-		const pass = {id: 'stellar-point-set-r32f-copy', kind: /** @type {const} */ ('direct-l1'), order: /** @type {const} */ (1), inputs: [], output: output.id, modules: [module]};
-		const execution = {fields: [output], passes: [pass], result: output.id, valueKey: STELLAR_POINT_SET_CACHE_VALUE_KEY};
+		const pass = {
+			id: 'stellar-point-set-r32f-copy',
+			kind: /** @type {const} */ ('direct-l1'),
+			order: /** @type {const} */ (1),
+			inputs: [],
+			output: output.id,
+			modules: [module],
+		};
+		const execution = {
+			fields: [output],
+			passes: [pass],
+			result: output.id,
+			valueKey: STELLAR_POINT_SET_CACHE_VALUE_KEY,
+		};
 		const plan = {
-			identity: CacheValues.createPlanIdentity('algorithm32-stellar-point-set-tiled-r32f-plan-v1', [output], [pass], {descriptor: cpuReference.descriptor.contentHash, query: query.contentHash}),
-			sourceId: this._source.id, domain, memberCount: layout.memberCount,
-			layout, descriptor: cpuReference.descriptor, execution,
+			identity: CacheValues.createPlanIdentity(
+				'algorithm32-stellar-point-set-tiled-r32f-plan-v1',
+				[output],
+				[pass],
+				{descriptor: cpuReference.descriptor.contentHash, query: query.contentHash},
+			),
+			sourceId: this._source.id,
+			domain,
+			memberCount: layout.memberCount,
+			layout,
+			descriptor: cpuReference.descriptor,
+			execution,
 		};
 		this._cpuReferences.set(plan, cpuReference);
 		return plan;
@@ -73,7 +130,12 @@ export class StellarPointSetGpuBuilder {
 		if (!cpuReference) throw new TypeError('Stellar point-set GPU execution requires a builder-created plan.');
 		const executor = new GpuFieldExecutor({backend: this._backend, assembler: new CachePassAssembler()});
 		try {
-			const artifact = await executor.execute(plan.execution, {signal: options.signal, scheduler: options.scheduler, probeReader: options.probeReader, probes: options.probes});
+			const artifact = await executor.execute(plan.execution, {
+				signal: options.signal,
+				scheduler: options.scheduler,
+				probeReader: options.probeReader,
+				probes: options.probes,
+			});
 			return {plan, cpuReference, artifact};
 		} finally {
 			executor.dispose();

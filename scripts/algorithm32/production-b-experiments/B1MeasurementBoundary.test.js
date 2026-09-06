@@ -31,7 +31,13 @@ test('rejects Color and presentation code at the physical shader boundary', () =
 state.outputRgba = vec4(state.pathRadiance.channels[uB1SpectralChannelBase]);
 outColor = state.outputRgba;`;
 	assert.equal(requireB1PhysicalMeasurementShader(nativeReadout), nativeReadout);
-	for (const forbidden of ['uColorReset', 'colorResetDisplayGain', 'humanMesopic', 'stellarPresentation', 'toneMapping']) {
+	for (const forbidden of [
+		'uColorReset',
+		'colorResetDisplayGain',
+		'humanMesopic',
+		'stellarPresentation',
+		'toneMapping',
+	]) {
 		assert.throws(
 			() => requireB1PhysicalMeasurementShader(`${nativeReadout}\nfloat ${forbidden};`),
 			/Color, encoding, tone, or presentation/u,
