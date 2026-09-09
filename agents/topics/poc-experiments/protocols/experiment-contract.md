@@ -69,6 +69,15 @@ seed. Randomized coverage supplements named edge cases; it never replaces
 deterministic acceptance cases.
 
 
+## Folder Identity
+
+New contained experiments use the sortable folder identity owned and enforced
+by the repository [start-experiment skill](../../../../.agents/skills/start-experiment/SKILL.md#folder-identity).
+The same allocated identity must name the experiment's topic, authored source,
+and generated-output folders. Existing legacy folders and immutable evidence
+remain unchanged.
+
+
 ## Scientific Status
 
 - `planned`: required definition or runner is not complete.

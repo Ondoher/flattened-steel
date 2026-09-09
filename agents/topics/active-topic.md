@@ -1,24 +1,21 @@
 # Active Topic
 
-Current active topic: `poc-experiments`.
-Focus: `engineering-studies/distant-sun-shadow-animation-evidence`.
+Current active topic: `production-algorithm32`.
+Focus: `caches/gpu-resident-shared-block-promotion`.
 
-Canonical entry document: [Distant-Sun Shadow Animation Evidence Experiment](poc-experiments/engineering-studies/distant-sun-shadow-animation-evidence/README.md).
+Canonical entry document: [Caches](production-algorithm32/caches/README.md).
 
 ## Immediate Focus
 
-The distant-Sun shadow animation evidence experiment is closed successfully.
-The owner accepted The Hours, a sixty-second native-4K full astronomical day,
-and its independent verification is complete. The topic status owns the film,
-verification identities, repeatability boundary, and deferred follow-ups. No
-experiment work remains. Preserve historical evidence and completed runs;
-production and existing lighting code remain read-only while awaiting the
-owner's next topic.
+Evaluate promotion of the accepted GPU-resident shared-block distant-Sun cache
+format into production. Define the production-owned architectural boundary,
+implementation sequence, compatibility policy, qualification evidence, and
+explicit exclusions without modifying sealed experiment evidence.
 
 ## Minimal Reload Sources
 
 1. [Repository workflow instructions](../../AGENTS.md)
-2. [Experiment entry](poc-experiments/engineering-studies/distant-sun-shadow-animation-evidence/README.md)
-3. [Experiment design](poc-experiments/engineering-studies/distant-sun-shadow-animation-evidence/design.md)
-4. [Experiment plan](poc-experiments/engineering-studies/distant-sun-shadow-animation-evidence/plan.md)
-5. [Experiment status](poc-experiments/engineering-studies/distant-sun-shadow-animation-evidence/status.md)
+2. [Production cache entry](production-algorithm32/caches/README.md)
+3. [Experimental promotion decision](poc-experiments/engineering-studies/gpu-resident-shared-block-cache/decision.md)
+4. [Production cache interface design](production-algorithm32/caches/cache-design.md)
+5. [Production distant-Sun optimization design](production-algorithm32/caches/distant-sun-cache-optimization-design.md)
