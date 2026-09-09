@@ -1,6 +1,7 @@
 # New Animation Prompt
 
-Status: draft; goal, rendering rules, and creative direction recorded.
+Status: completed as The Hours; accepted film and independent verification
+are recorded in the [experiment status](../../../agents/topics/poc-experiments/engineering-studies/distant-sun-shadow-animation-evidence/status.md).
 
 ## Goal
 
@@ -17,6 +18,14 @@ full darkness after evening twilight.
    updating it as the animation progresses.
 5. Prefer the local shadow light provided by Algorithm32. When used, keep it
    aligned with the Sun's location as the animation progresses.
+6. A derivative color model may enhance lighting, but keep the result close to
+   natural, normal lighting and preserve the Algorithm32 requirements above.
+7. Do not modify any existing lighting code. Clone any lighting implementation
+   that needs enhancement into separately owned creative-animation code and
+   enhance that copy only.
+8. Do not modify any production code. Production is a read-only source of
+   existing behavior and reusable references, regardless of the broader
+   creative freedom granted elsewhere in this prompt.
 
 ## Scene and Creative Direction
 
@@ -24,6 +33,15 @@ Exercise creative control over the scene and populate it with any suitable
 objects. Downloaded models, textures, shaders, and other helpful Three.js
 objects are allowed. Supplementary assets and shaders must respect the
 Algorithm32 rendering and lighting requirements above.
+
+The creative brief is: impress the viewer. Aim for a distinctive, polished
+composition and a memorable journey through the day's changing light.
+
+## Deterministic Randomness
+
+If deterministic randomness is needed, use the existing repository RNG at
+`scripts/experiments/Random.js`. Keep that implementation unchanged; choose
+and retain an explicit seed for reproducible scene construction and replay.
 
 ## Camera Direction
 
@@ -47,6 +65,13 @@ needed. State which approach was used when delivering the video.
 The finished video must be between 30 and 90 seconds long.
 
 ## Working Approach
+
+Before implementing needed functionality, inspect the available repository
+classes and reuse an existing capability when it fits. New scene-specific
+code and explicitly requested lighting clones should build on those owners.
+Use the geometry-provided ground object as the scene's ground foundation.
+Consider a reasonable desert spectral reflectance, keeping local appearance
+and bounce distinct from any ground contribution baked into atmosphere caches.
 
 Treat this as a creative animation project. The user authorizes reorganizing
 new work across existing experiment boundaries wherever useful. No formal plan

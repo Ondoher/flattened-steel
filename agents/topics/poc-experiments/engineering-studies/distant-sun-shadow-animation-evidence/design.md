@@ -58,6 +58,13 @@ scientific plan remains a record of the static proof and deferred measurement
 work; it does not impose feedback gates on this creative continuation.
 Historical evidence and completed runs remain immutable.
 
+The creative film uses the existing production one-degree scene caches through
+an experiment-owned exact-time adapter. Cache-bin replacement and encoding
+waits are outside its ideal 30-fps presentation timeline. This does not qualify
+the separate shared-atlas shadow adapter or measure live performance. Existing
+spectral, geometry, recording, and Three utilities are reused; only the new
+scene, camera, integration, and separately cloned lighting are authored here.
+
 ### Initial still before animation
 
 The first evidence is one lossless native-4K PNG, not a video or performance

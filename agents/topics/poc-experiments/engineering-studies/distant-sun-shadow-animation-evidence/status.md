@@ -1,9 +1,66 @@
 # Distant-Sun Shadow Animation Evidence Experiment Status
 
-Status: P0-P2 static composition accepted; creative-animation prompt saved and
-execution awaiting the requested repository checkpoint.
+Status: **closed successfully**. P0-P2 static composition and The Hours
+creative animation are accepted and independently verified.
 
 ## Current State
+
+The creative continuation is **The Hours**, a sixty-second desert-observatory
+film from pre-astronomical dawn to full darkness. It reuses the existing
+Algorithm32 runtime, astronomy, Native15 spectra, geometry-provided spherical
+ground, and extracted animation-evidence recorder. The experiment adds a
+deterministic armillary, terraces, colonnade, dunes, and a fluid camera score.
+Cloned lighting uses the production direct/sky spectral bridge, one shared
+4096-square shadow map, and a restrained local sand-bounce approximation.
+The [ground response note](../../../../../experiments/distant-sun-shadow-animation-evidence/creative/ground-reflectance.md)
+owns the illustrative desert spectrum and unchanged black-ground atmosphere
+cache limitation. No production or existing lighting source is modified.
+
+Latest creative preview: `1788974313115-creative-animation`, accepted with
+eleven 1920-by-1080 PNGs, including same-cache-bin consecutive-frame checks.
+Visual inspection confirms day/twilight illumination, foreground shadow
+references, nighttime stars, revised surface variation, and lateral camera
+offsets that keep the sculpture clear of the centered horizon Sun. Runtime
+guards reject silent atmosphere fallback or incomplete celestial publication.
+The completed native-4K film is owner-accepted and independently verified.
+This is ideal offline choreography, not a runtime-performance measurement. The
+[creative source guide](../../../../../experiments/distant-sun-shadow-animation-evidence/creative/README.md)
+records reproduction commands and the existing capabilities reused.
+
+The experiment's success criterion is satisfied: the repository can construct
+and record a deterministic, full-day Algorithm32 animation with fluid camera
+movement, time-dependent spectral illumination, visible celestial sources,
+and local Sun-aligned shadows at native 4K. The accepted film also provides
+external visual evidence of that result.
+
+## Creative Film And Verification
+
+- Accepted render: `1788974488678-creative-animation`.
+- Film: `captures/creative-full-day.mp4`, 3840 by 2160, 60 seconds,
+  30 fps, 1,800 frames, AVC, 258,596,947 bytes.
+- Film SHA-256:
+  `91e4b8595217eb39c669cdf0d86ec4d1030e9b2114dbf0485ecb8a0a4d91b4c4`.
+- Render artifact set:
+  `25953f738ece16e4a82fa90f27893a58d6e8f045582a89f616a7a32fec8a4807`.
+- Independent accepted verification:
+  `1788976234370-creative-video-verification`; artifact set
+  `b6c23e8779f8b13acfa69ebc0032527223630375f773ac62adffa6fcfd608ffb`.
+- All 1,800 encoded presentation timestamps and the complete scene trace
+  pass cadence/duration checks. Ten exact decoded checkpoints, including
+  the final frame, pass browser decoding and immutable-parent rehashing.
+- Maximum checkpoint mean absolute RGB difference is 0.436 code values
+  on the aligned 480-by-270 diagnostic comparison (not a full-resolution
+  quality metric). Decoded daylight, sunset, and closing frames were viewed.
+- Native-4K frame-zero star preservation passes: peak 232 versus 239;
+  bright-pixel count 108 versus 135 at threshold 32. Production's one-pixel
+  stars remain visible at native resolution but become faint when downscaled.
+- Nine lossless native-4K captures, all frame states, consumed cache manifest
+  identities, source identities, and encoding derivation remain with the film.
+- Combined focused type checking passes for all new creative JavaScript;
+  formatting and whitespace checks pass. Production, existing lighting,
+  shared recorder, RNG, and historical evidence remain unchanged.
+
+### Retained static proof
 
 The contained runner enables the exact production San Jose review-object
 scene, ground receiver, materials, six per-object directional shadow lights,
@@ -16,7 +73,7 @@ This accepted still uses the production one-degree cache as the static
 composition control. It does not yet claim that the closed shared packet atlas
 has been installed with shadows, and it makes no animation-performance claim.
 
-## Latest Verification
+## Retained Static Verification
 
 - Post-scaffold normalization, generated standards guide, and topic-refresh
   reviewer lifecycle pass.
@@ -43,14 +100,33 @@ has been installed with shadows, and it makes no animation-performance claim.
 
 ## Blockers
 
-None for the static composition. The shared-atlas animation adapter is planned
-work, not a current blocker.
+None. Near-horizon appearance concerns are acknowledged but do not prevent
+acceptance of the film; they belong to later atmosphere/cache work. The
+shared-atlas shadow adapter, scientific measurement, and local-Sun animation
+are separate future lanes rather than unfinished work in this experiment.
+
+## Repeatability Boundary
+
+The creative runner, deterministic seed, camera and astronomical score,
+recording command, full 1,800-frame trace, dependency identities, consumed
+JSON inputs, and independent verifier are retained. The accepted render and
+verification artifact manifests reverify without change, and the reusable
+animation-evidence toolkit passes all seven focused behavioral checks.
+
+The workflow is rerunnable in the current repository environment, but the run
+is not a self-contained restoration package. A clean restoration also needs
+the ignored `dist/flat32` build, installed Node/browser dependencies,
+Mediabunny 1.55.7, and the generated Algorithm32 cache packages identified by
+the evidence. Hardware video encoding may produce different MP4 bytes while
+preserving the same scene states and appearance. A future portability effort
+may package those prerequisites and perform a fresh-render comparison; it is
+not required to close this successful experiment.
 
 ## Next Action
 
-Complete the requested repository checkpoint, then execute the
-[creative-animation prompt](../../../../../experiments/distant-sun-shadow-animation-evidence/prompts/new-animation.md).
-The user has supplied the requirements and authorized autonomous creative work
-within the repository, with no formal plan or intermediate feedback gates.
-The new animation has not started. The separate shared-atlas shadow adapter
-and scientific measurement remain unproven; the accepted still is unchanged.
+No experiment work remains. Preserve the accepted runs and source. Further
+recordings, revisions, horizon corrections, portability packaging, or local-Sun
+animation require a new continuation or topic. The last checkpoint is
+`90d285cb5c6fe86d9882ebba257bac9dd51b60fb`, made before the creative work; the
+finished creative source and closeout documentation remain uncommitted pending
+an explicit checkpoint request.

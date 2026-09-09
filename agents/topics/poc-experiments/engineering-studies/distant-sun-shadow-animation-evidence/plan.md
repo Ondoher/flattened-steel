@@ -55,6 +55,10 @@ follows the [prompt](../../../../../experiments/distant-sun-shadow-animation-evi
 without a formal plan or intermediate feedback gates; this checklist is not a
 prerequisite for that work.
 
+Closure: P3 is not required by the static acceptance gate or the accepted
+creative-film brief. It remains unstarted future scientific work and does not
+leave this successfully closed experiment incomplete.
+
 ## Promotion Boundary
 
 Experiment results are evidence, not production architecture. Promotion requires a separate production-owned design, implementation plan, and verification boundary.

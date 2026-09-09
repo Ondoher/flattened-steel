@@ -7,13 +7,13 @@ Canonical entry document: [Distant-Sun Shadow Animation Evidence Experiment](poc
 
 ## Immediate Focus
 
-Checkpoint the completed cache studies, reusable recording toolkit, accepted
-San Jose shadow still, and saved creative-animation prompt before new animation
-work starts. The next creative work is governed by the
-[animation prompt](../../experiments/distant-sun-shadow-animation-evidence/prompts/new-animation.md).
-The user authorizes useful cross-experiment organization within this repository,
-without a formal plan or intermediate feedback gates. Preserve historical
-evidence and completed runs.
+The distant-Sun shadow animation evidence experiment is closed successfully.
+The owner accepted The Hours, a sixty-second native-4K full astronomical day,
+and its independent verification is complete. The topic status owns the film,
+verification identities, repeatability boundary, and deferred follow-ups. No
+experiment work remains. Preserve historical evidence and completed runs;
+production and existing lighting code remain read-only while awaiting the
+owner's next topic.
 
 ## Minimal Reload Sources
 
