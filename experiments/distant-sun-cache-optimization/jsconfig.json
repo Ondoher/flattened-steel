@@ -1,0 +1,15 @@
+{
+	"compilerOptions": {
+		"allowJs": true,
+		"checkJs": true,
+		"module": "NodeNext",
+		"moduleResolution": "NodeNext",
+		"noEmit": true,
+		"skipLibCheck": true,
+		"strict": false,
+		"target": "ES2022",
+		"types": ["node"]
+	},
+	"include": ["../../src/algorithm32/**/*.d.ts", "**/*.d.ts", "**/*.js"],
+	"exclude": ["../../node_modules/**", "**/node_modules/**"]
+}

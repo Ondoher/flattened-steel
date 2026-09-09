@@ -128,11 +128,23 @@ the combined storage, transfer, request, decode, and memory result.
   pins, including temporary pinned-budget excess.
 - Measure cold and warm latency, main-thread responsiveness, Worker and main
   heap peaks, request counts, cancellation latency, and retained bytes.
+- Preserve raw per-scene decompaction records: required, reused, and newly
+  decoded block counts; encoded and decoded bytes; Worker queue,
+  decompression, inverse-shuffle, transfer, upload, and publication elapsed
+  time. Use them later to decide animation-prefetch behavior; do not make
+  animation behavior an E2 acceptance gate.
 
 Gate: exact decoded bytes, bounded allocation before decode, no duplicate
 network work for one artifact, no cross-subscriber cancellation, no stale
 publication, and no correctness dependency on cache eviction. Select and pin
 one decoder-only WebAssembly dependency with its license and build identity.
+
+Contained E2 evidence has accepted Three r180's vendored `zstddec` WebAssembly
+fallback for promotion evaluation. The current accepted run and artifact-set
+identity are owned by the
+[experiment status](../../poc-experiments/engineering-studies/distant-sun-cache-optimization/status.md).
+It is experimental evidence only; production promotion still requires the
+repository-owned dependency boundary and separately authorized implementation.
 
 ### E3 - Contained Bounded-Generator POC
 
@@ -288,9 +300,13 @@ production adaptation, and deployment activation in one checkpoint.
 
 ## Current State And Next Action
 
-The POC lane is active and C0 is accepted. Its current run identities,
-artifact-set hashes, measurements, and verification results are owned by the
-[experiment status](../../poc-experiments/engineering-studies/distant-sun-cache-optimization/status.md).
-No decoder dependency, candidate format, generator, runtime loader, or package
-artifact has been selected for production. The next action is E1; production
-source remains unchanged.
+The contained POC and D0 recommendation are complete. Current run identities,
+artifact-set hashes, measurements, verification results, and qualification
+limitations are owned by the
+[experiment status](../../poc-experiments/engineering-studies/distant-sun-cache-optimization/status.md);
+promotion constraints are owned by the
+[D0 decision](../../poc-experiments/engineering-studies/distant-sun-cache-optimization/decision.md).
+The next production action is separately authorized adaptation with the
+recorded qualification limitations addressed. No candidate format, decoder
+dependency, generator, runtime loader, or package artifact has been selected
+or deployed in production.

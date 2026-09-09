@@ -2,8 +2,8 @@
 	"schemaVersion": 1,
 	"status": "normalized",
 	"manifest": "agents/topics/standards/manifest.md",
-	"normalizedAt": "2026-09-06T18:42:52.113Z",
-	"repositoryStandardsFingerprint": "sha256:48e285217b8a224caae6e1a43d44cacc59e1acf215c1417a773ddd9604c88791",
+	"normalizedAt": "2026-09-09T15:03:26.310Z",
+	"repositoryStandardsFingerprint": "sha256:4a9f5014683d07ead7ec14eda96dca9c0a38543408f958c5d9cc3923dae54649",
 	"pendingDivergences": 0,
 	"deferredDivergences": 0,
 	"inputs": [
@@ -13,7 +13,7 @@
 		},
 		{
 			"path": "agents/topics/standards/manifest.md",
-			"sha256": "274b5d0fedb56145a1658cc7097f9e13e77f0f5d931ff89475f615e042479fe0"
+			"sha256": "f1c312317b07394e2feda5bd6602247f374ce55828147287596dcab9f4549057"
 		},
 		{
 			"path": "agents/topics/standards/overlay.md",
@@ -24,8 +24,16 @@
 			"sha256": "237c89d2d286850d1eecff2e2c1210143b6423484a2cb40f7b9f26d714112407"
 		},
 		{
+			"path": "experiments/distant-sun-shadow-animation-evidence/AGENTS.md",
+			"sha256": "1167e9a10e14c5beee53832e739ae045bd49621bc2bd1eef2b0e7c5fae61b4bc"
+		},
+		{
 			"path": "experiments/extraterrestrial/AGENTS.md",
 			"sha256": "0814c53bad7cd43bc8e0210b29d79f9ea66971249644204c74b35e61b7d8a620"
+		},
+		{
+			"path": "experiments/gpu-resident-shared-block-cache/AGENTS.md",
+			"sha256": "a49c22da8a23c5eaafa005102a31581b48a43d62b132e42d77480dd35afd7942"
 		},
 		{
 			"path": "tmp/flat32-pinned-ea262115/AGENTS.md",

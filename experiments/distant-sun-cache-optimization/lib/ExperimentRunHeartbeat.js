@@ -1,15 +1,3 @@
-/**
- * Schedule the production heartbeat interval.
- *
- * @param {() => void} callback - Interval callback.
- * @param {number} intervalMilliseconds - Heartbeat interval.
- * @returns {() => void} - Cancellation operation.
- */
-function scheduleInterval(callback, intervalMilliseconds) {
-	const handle = setInterval(callback, intervalMilliseconds);
-	return () => clearInterval(handle);
-}
-
 /** Owner of deterministic scheduling and one-shot failure delivery for a run heartbeat. */
 export default class ExperimentRunHeartbeat {
 	/** @type {() => Promise<void>} */ _operation;
@@ -24,9 +12,21 @@ export default class ExperimentRunHeartbeat {
 	 * @param {() => Promise<void>} operation - Progress operation invoked by each heartbeat.
 	 * @param {CacheOptimizationHeartbeatScheduler} [scheduler] - Interval scheduler collaborator.
 	 */
-	constructor(operation, scheduler = scheduleInterval) {
+	constructor(operation, scheduler) {
 		this._operation = operation;
-		this._scheduler = scheduler;
+		this._scheduler = scheduler ?? ((callback, intervalMilliseconds) => this._scheduleInterval(callback, intervalMilliseconds));
+	}
+
+	/**
+	 * Called by the default scheduler to own the native interval resource.
+	 *
+	 * @param {() => void} callback - Interval callback.
+	 * @param {number} intervalMilliseconds - Heartbeat interval.
+	 * @returns {() => void} - Cancellation operation.
+	 */
+	_scheduleInterval(callback, intervalMilliseconds) {
+		const handle = setInterval(callback, intervalMilliseconds);
+		return () => clearInterval(handle);
 	}
 
 	/** Call this method to start the heartbeat interval; it throws when already active, and callers must retain the existing interval. */
@@ -38,7 +38,7 @@ export default class ExperimentRunHeartbeat {
 				this._failure = error;
 				this._cancelActiveInterval();
 			});
-		}, 25_000);
+		}, 10_000);
 	}
 
 	/**

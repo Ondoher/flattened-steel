@@ -1,0 +1,59 @@
+{
+	"schemaId": "distant-sun-shadow-animation-evidence-initial-still-control-v1",
+	"parents": [
+		{
+			"path": "src/flat32/consts.js",
+			"sha256": "85e9acffc20ff5c56885561a5a3c65274dbcc6628e61611edf83f956c9d9376e"
+		},
+		{
+			"path": "src/flat32/EndpointScene.js",
+			"sha256": "a87ae831fdd2e345eac448ca7c32759e59bb2224e8ca1e1e458a6aa4fbe223c9"
+		},
+		{
+			"path": "src/flat32/LocalSunSceneLighting.js",
+			"sha256": "946bb73ed7fc43a4a0c25dd9f12d14ab9cccc221bcee8302f805500ca5171786"
+		},
+		{
+			"path": "src/flat32/LocationTimeController.js",
+			"sha256": "c32226acacb440af5e6bc7e8b292d281d2ce49748f5653809ef6032a8c67881d"
+		},
+		{
+			"path": "src/flat32/ThreeSceneRuntime.js",
+			"sha256": "50db42449f1f1a3f3369f874c71690097b67859acc6ca80c68f0d6fb311ecdc1"
+		},
+		{
+			"path": "dist/flat32/flat32.js",
+			"sha256": "54ad68feb7626c365f127168f614403ac897dcce955c481e545c049cec740700"
+		},
+		{
+			"path": "tmp/experiments/gpu-resident-shared-block-cache/runs/1788917159050-s9-shared-packet-renderer/result.json",
+			"sha256": "f195ab02076a254a1a18f7cec3bb65c17997eb49873ec8f5a945c5cb88d957ad"
+		},
+		{
+			"path": "tmp/experiments/gpu-resident-shared-block-cache/runs/1788917159050-s9-shared-packet-renderer/artifact-manifest.json",
+			"sha256": "49825029354237c9f89b666abb73dc623b560408916d24e2615df1646437c008"
+		}
+	],
+	"productionUrl": "http://127.0.0.1:8081/flat32/?diagnostic=spherical-sunset-facing-production-n4&performance=1",
+	"location": "San Jose",
+	"globeTimePresetIndex": 2,
+	"sunsetOffsetMinutes": -120,
+	"camera": {
+		"verticalFieldOfViewDegrees": 55,
+		"directionPolicy": "future-sunset-and-canonical-box-line-bisector-with-downward-framing",
+		"futureSunsetDirectionWeight": 1,
+		"canonicalBoxLineDirectionWeight": 1,
+		"downwardFramingComponent": -0.12
+	},
+	"capture": {
+		"width": 3840,
+		"height": 2160,
+		"format": "png"
+	},
+	"scene": {
+		"expectedReviewObjectCount": 6,
+		"expectedShadowMapCount": 6,
+		"expectedShadowMapWidth": 4096,
+		"expectedShadowMapHeight": 4096
+	}
+}

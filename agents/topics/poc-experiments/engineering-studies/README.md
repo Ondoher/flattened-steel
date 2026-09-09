@@ -9,10 +9,12 @@ Closed experimental lanes remain closed. Start with closed-lanes-and-candidates.
 - [Algorithm32 Cache Interface Design](cache-design.md)
 - [Closed Lanes And Unselected Studies](closed-lanes-and-candidates.md)
 - [Distant-Sun Cache Optimization Experiment](distant-sun-cache-optimization/README.md)
+- [Distant-Sun Shadow Animation Evidence Experiment](distant-sun-shadow-animation-evidence/README.md)
 - [Extraterrestrial Experiment Promotions](extraterrestrial-promotions.md)
 - [Retained Algorithm32 Experiment Definitions](retained-experiments.md)
 - [Stellar Screen-Palette Cache Design](stellar-screen-palette-design.md)
 - [Flat/Local Cache Promotion Work](unresolved-research.md)
+- [GPU-Resident Shared-Block Cache Experiment](gpu-resident-shared-block-cache/README.md)
 
 ## Context Boundary
 

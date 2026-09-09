@@ -1,0 +1,30 @@
+{
+	"schemaId": "animation-evidence-extraction-origin-v1",
+	"toolVersion": "1.0.0",
+	"operation": "Adapt the generic frame-trace, measurement association, fixed-cadence mapping, deterministic canvas replay, WebCodecs probing, Mediabunny output adaptation, bounded chunk streaming, diagnostic composition, and artifact identity behavior. Remove all Algorithm32, solar, camera, shader, cache, run-server, and experiment-path policy from the reusable contracts.",
+	"acceptedEvidence": {
+		"publishedRunId": "1788926658377-s9-published-evidence",
+		"publishedArtifactSetSha256": "2d9411657a439dd3691235b11a6b715dcce5d89a19b896fcd90ec701fbab25a3",
+		"replayRunId": "1788919958694-s9-presentation-replay",
+		"fov55TraceRunId": "1788919164368-s9-animation-trace-fov55"
+	},
+	"sourceIdentities": [
+		{
+			"path": "experiments/gpu-resident-shared-block-cache/browser/s9-animation-trace-browser.js",
+			"sha256": "95f27f98b6558abb242cbbb2983d904c97a2c0781e157f48877d65cc2ebf4e69"
+		},
+		{
+			"path": "experiments/gpu-resident-shared-block-cache/run-s9-presentation-replay.js",
+			"sha256": "9b6a52578bc3a4f4d47667fcb16977902e52a5df9eb2d0f21b8580565b39a526"
+		},
+		{
+			"path": "experiments/gpu-resident-shared-block-cache/browser/s9-deterministic-render-browser.js",
+			"sha256": "b3e9c536f99efea6c6fdc3728507e64ced5a244b13ba18b13b083531172af75f"
+		},
+		{
+			"path": "experiments/gpu-resident-shared-block-cache/run-s9-publish-evidence.js",
+			"sha256": "fa971674d02c5e3c79524afcd4b49a211d3bbe898fd631ddd2038b0921efa5a2"
+		}
+	],
+	"runtimeDependencyOnExperiment": false
+}

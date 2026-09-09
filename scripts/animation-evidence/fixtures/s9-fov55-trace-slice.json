@@ -1,0 +1,26 @@
+{
+	"schemaId": "animation-evidence-s9-trace-slice-v1",
+	"parent": {
+		"runId": "1788919164368-s9-animation-trace-fov55",
+		"path": "tmp/experiments/gpu-resident-shared-block-cache/runs/1788919164368-s9-animation-trace-fov55/trace.jsonl",
+		"sha256": "dabc69596ccee619eb8b4488eed2038d6f7fd6b18cf31d9fb75c8d05f0635685"
+	},
+	"oracle": {
+		"runId": "1788919958694-s9-presentation-replay",
+		"path": "tmp/experiments/gpu-resident-shared-block-cache/runs/1788919958694-s9-presentation-replay/mappings/fov55-trace.jsonl",
+		"sha256": "7616e0adf671da921c8315f7232c7c44b97f601fb975a92cb33b1cf32248543a",
+		"firstTwelveSourceFrameIds": [0, 0, 2, 3, 4, 5, 6, 6, 7, 7, 8, 8]
+	},
+	"derivation": "Retain the first nine source frame identifiers, callback timestamps, scene selections, and transition flags required to reproduce the first twelve 60 Hz presentation slots; omit Algorithm32 vectors and shader measurements because they are not inputs to generic cadence mapping.",
+	"frames": [
+		{"frameId": 0, "animationCallbackMicroseconds": 0, "cacheSceneDegrees": 90, "transition": true},
+		{"frameId": 1, "animationCallbackMicroseconds": 16700, "cacheSceneDegrees": 90, "transition": false},
+		{"frameId": 2, "animationCallbackMicroseconds": 33200, "cacheSceneDegrees": 90, "transition": false},
+		{"frameId": 3, "animationCallbackMicroseconds": 49800, "cacheSceneDegrees": 90, "transition": false},
+		{"frameId": 4, "animationCallbackMicroseconds": 66400, "cacheSceneDegrees": 89, "transition": true},
+		{"frameId": 5, "animationCallbackMicroseconds": 83100, "cacheSceneDegrees": 89, "transition": false},
+		{"frameId": 6, "animationCallbackMicroseconds": 99700, "cacheSceneDegrees": 89, "transition": false},
+		{"frameId": 7, "animationCallbackMicroseconds": 116700, "cacheSceneDegrees": 89, "transition": false},
+		{"frameId": 8, "animationCallbackMicroseconds": 166400, "cacheSceneDegrees": 88, "transition": true}
+	]
+}

@@ -25,58 +25,93 @@ results are recorded only in the [experiment status](status.md).
 
 ## E1 - Format And Compression
 
-- [ ] Extract the distinct coordinate set from immutable packages.
-- [ ] Build `2x8`, `4x8`, `4x16`, and `8x8` candidates with complete v1 JSON
+- [x] Authenticate the sealed C0 run and every package manifest, ledger,
+  payload, and logical-index identity before extraction.
+- [x] Extract the distinct coordinate set from immutable packages.
+- [x] Build `2x8`, `4x8`, `4x16`, and `8x8` candidates with complete v1 JSON
   metadata and content-addressed blocks.
-- [ ] Compare byte shuffle plus pinned Zstandard profiles, including level 3.
-- [ ] Reconstruct and authenticate all 109 scene payloads.
-- [ ] Measure total size, metadata, block distribution, scene requests and
+- [x] Compare byte shuffle plus pinned Zstandard profiles, including level 3.
+- [x] Reconstruct and authenticate all 109 scene payloads through the
+  serialized publication graph under the decoded-retention limit.
+- [x] Measure total size, metadata, block distribution, scene requests and
   bytes, neighboring reuse, overfetch, and encode/decode time.
 
 Gate: zero byte differences, canonical coordinate ownership, valid artifact
 chains, and an evidence-backed block and codec recommendation.
 
+Accepted: `8x8` tiles with byte-lane shuffle and Zstandard level 6. The graph
+owns its build, codec, configuration, and catalog-selection identities and
+passes bounded independent verification, including closed candidate-subtree,
+immutable-C0-oracle, artifact-addressed request, scene-allocation,
+unit-vector-ingress, progress, terminal-summary, and total-time checks. The
+[experiment status](status.md) owns the evidence identity and measurements.
+
 ## E2 - Browser Transport
 
-- [ ] Implement one decoder contract with optional native and mandatory
+- [x] Implement one decoder contract with optional native and mandatory
   WebAssembly implementations.
-- [ ] Exercise one persistent module Worker with transferable buffers and
+- [x] Exercise one persistent module Worker with transferable buffers and
   one-block-at-a-time decode.
-- [ ] Exercise four-request scheduling, artifact coalescing, independent
+- [x] Exercise four-request scheduling, artifact coalescing, independent
   subscribers, final-subscriber abort, tokens, and stale-response rejection.
-- [ ] Exercise transaction/publication pins and a byte-weighted 64 MiB decoded
+- [x] Exercise transaction/publication pins and a byte-weighted 64 MiB decoded
   LRU under deterministic latency, corruption, and failure injection.
-- [ ] Measure cold and warm latency, main-thread responsiveness, cancellation,
+- [x] Measure cold and warm latency, main-thread responsiveness, cancellation,
   requests, Worker/main memory, and retained bytes.
+- [x] Record every measured scene activation with required, reused, and newly
+  decoded block counts; encoded and decoded bytes; Worker queue,
+  decompression, and inverse-shuffle time; and transfer, upload, and
+  publication elapsed time. Preserve the raw per-scene records for later
+  animation-prefetch evaluation without making animation a gate in E2.
 
 Gate: exact bounded decode, effective coalescing, isolated cancellation, no
 stale publication, and one pinned decoder dependency suitable for promotion.
 
+Terminally accepted: E2 run `000055-e2-browser-transport`, artifact set
+`433594b98968aafe02eee61f77af73be73ca7c0a080122fad88285b6729eeade`.
+Its independent post-seal verification authenticates all 12 sealed artifacts.
+The run uses the Three r180 `zstddec` WebAssembly fallback, because
+the qualifying Chrome had no native Zstandard decoder. It reconstructs every
+measured scene exactly, preserves the last-good publication during corruption,
+cancellation, and stale-response scenarios, and retains 62,330,880 decoded
+bytes after the transaction pins release. The [status](status.md) owns current
+measurements and raw-record references.
+
 ## E3 - Bounded Generator
 
-- [ ] Build the union ledger and preallocate exact temporary block files.
-- [ ] Calculate the full field once per wavelength and scatter bounded readback
+- [x] Build the union ledger and preallocate exact temporary block files.
+- [x] Calculate the full field once per wavelength and scatter bounded readback
   tiles into final wavelength offsets.
-- [ ] Validate, shuffle, compress, round-trip, and address one completed block
+- [x] Validate, shuffle, compress, round-trip, and address one completed block
   at a time.
-- [ ] Inject cancellation and failure at compute, readback, staging,
+- [x] Inject cancellation and failure at compute, readback, staging,
   compression, validation, and publication boundaries.
-- [ ] Measure stage timings and peak GPU, browser, Node, and disk-staging use.
+- [x] Measure stage timings and peak GPU, browser, Node, and disk-staging use.
 
 Gate: exact reconstruction from fresh calculation, bounded staging, no
 per-scene accumulators, and no partial replacement after interruption.
 
+Terminally accepted: E3 run `000064-e3-bounded-generator`, artifact set
+SHA-256 `6f588d42127f92d95985cfc63ec215dd46aa31337215e3fd27ecd22c831b3905`.
+It regenerated the common field once for each of 15 wavelengths, published 89
+fresh 8x8 blocks only after exact shuffle/Zstandard-level-6 round trips, and
+reconstructed all 109 C0 scenes exactly.
+
 ## D0 - Decide
 
-- [ ] Compare E1-E3 against the predeclared controls and bounds.
-- [ ] Record accepted and rejected alternatives and the exact evidence runs.
-- [ ] Recommend whether production should promote, revise, or reject the
+- [x] Compare E1-E3 against the predeclared controls and bounds.
+- [x] Record accepted and rejected alternatives and the exact evidence runs.
+- [x] Recommend whether production should promote, revise, or reject the
   candidate.
-- [ ] Update the production design only through a separately authorized
-  production change.
+- [x] Keep the production design unchanged; any update requires separately
+  authorized production work.
 
 Gate: one conclusion is supported by immutable evidence, with no unresolved
 format, dependency, resource, or lifecycle choice concealed by promotion.
+
+D0 recommends production promotion of the accepted mechanism, subject to the
+explicit constraints in the [D0 decision](decision.md). This contained
+experiment does not authorize or make production changes.
 
 ## Promotion Boundary
 

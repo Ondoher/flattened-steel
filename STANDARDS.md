@@ -7,8 +7,8 @@
 - Folder manifest: [`agents/topics/standards/manifest.md`](./agents/topics/standards/manifest.md)
 - Repository overlay: [`agents/topics/standards/overlay.md`](./agents/topics/standards/overlay.md)
 - Standards governance: [`documentation.md`](../../Users/gande/.codex/documentation/standards/documentation.md)
-- Normalization fingerprint: `sha256:48e285217b8a224caae6e1a43d44cacc59e1acf215c1417a773ddd9604c88791`
-- Guide source fingerprint: `sha256:6b20eecf20ce0906dc9a3bd23fae365721632412a42a50f20ccc0d007aa08337`
+- Normalization fingerprint: `sha256:4a9f5014683d07ead7ec14eda96dca9c0a38543408f958c5d9cc3923dae54649`
+- Guide source fingerprint: `sha256:c6515eed757e99ae10c77584a40b5a8332d7336c87b4e63dc70fbd1f1312e135`
 
 For each file, the longest matching folder assignment selects one named standards set. The set includes its inherited canonical standards, then matching folder-scoped overlay rules modify specific sections. This file is a readable projection only.
 
@@ -112,6 +112,8 @@ Adds:
 - `scripts/experiments/algorithm32-frame-parity/` → `proof-tools` — Independent CPU/GPU frame comparison and HTTP proof hosts.
 - `experiments/` → `code` — Contained authored source and proof runners; operational no-unit-test instructions remain effective.
 - `experiments/distant-sun-cache-optimization/` → `proof-tools` — Contained cache experiment with a local HTTP browser proof host.
+- `experiments/distant-sun-shadow-animation-evidence/` → `proof-tools` — Contained browser interception and WebGL evidence harness.
+- `experiments/gpu-resident-shared-block-cache/` → `proof-tools` — Contained GPU atlas and animation-prefetch experiment with a local HTTP browser proof host.
 - `experiments/extraterrestrial/runners/` → `proof-tools` — Contained HTTP/browser proof orchestration.
 - `experiments/extraterrestrial/color-reset/harness/` → `proof-tools` — Contained Color Reset browser host.
 - `experiments/extraterrestrial/color-reset/runners/` → `proof-tools` — Contained Color Reset HTTP/browser proof orchestration.

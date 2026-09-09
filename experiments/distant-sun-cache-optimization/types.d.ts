@@ -401,6 +401,20 @@ type CacheOptimizationMeasurementContract = CacheOptimizationJsonObject & Readon
 	nonNegotiable: readonly CacheOptimizationNonNegotiableRequirement[];
 }>;
 
+/** Exact material identities expected by the contained production loader proof. */
+type CacheOptimizationExpectedCompatibility = Readonly<{
+	/** Immutable scene-Sun identity expected by the cache loader. */
+	sceneSun: CacheOptimizationE1SceneSun;
+	/** Atmosphere model identity. */
+	atmosphereIdentity: string;
+	/** Geometry model identity. */
+	geometryIdentity: string;
+	/** Ground-boundary identity. */
+	groundIdentity: string;
+	/** Numerical configuration identity. */
+	numericalIdentity: string;
+}>;
+
 /** Deployed catalog entry consumed by C0. */
 type CacheOptimizationCatalogEntry = CacheOptimizationJsonObject & Readonly<{
 	/** Stable package identity. */
@@ -416,7 +430,7 @@ type CacheOptimizationCatalogEntry = CacheOptimizationJsonObject & Readonly<{
 	/** Expected production cache identity. */
 	cacheIdentity: string;
 	/** Production loader expectations passed through unchanged. */
-	expected: DistantSunSceneCacheExpectedCompatibility;
+	expected: CacheOptimizationExpectedCompatibility;
 	/** Complete package length in bytes. */
 	byteLength: number;
 }>;
@@ -434,14 +448,65 @@ type CacheOptimizationRuntimeCatalog = CacheOptimizationJsonObject & Readonly<{
 }>;
 
 /** Production artifact reference authenticated by C0. */
-type CacheOptimizationProductionArtifact = CacheOptimizationJsonObject & CacheOptimizationFileIdentity;
+type CacheOptimizationProductionArtifact = CacheOptimizationFileIdentity & Readonly<{
+	/** Production artifact codec identity. */
+	codecId: string;
+}>;
+
+/** Scalar physical measurement with an explicit unit. */
+type CacheOptimizationMeasuredValue<TUnits extends string> = Readonly<{
+	/** Finite physical value. */
+	value: number;
+	/** Unit in which the value is expressed. */
+	units: TUnits;
+}>;
+
+/** Immutable source-package derivation outputs. */
+type CacheOptimizationSourceDerivationOutputs = Readonly<{
+	/** SHA-256 of the derived row ledger. */
+	ledgerSha256: string;
+	/** SHA-256 of the derived exact spectral payload. */
+	exactSha256: string;
+	/** SHA-256 of the shared logical-to-unique index. */
+	logicalToUniqueIndexSha256: string;
+}>;
+
+/** Immutable derivation record retained by a production scene manifest. */
+type CacheOptimizationSourceDerivation = Readonly<{
+	/** Versioned production derivation schema. */
+	schemaId: 'algorithm32-distant-sun-bin-covered-runtime-derivation-v1';
+	/** SHA-256 of the source inventory index. */
+	parentInventoryIndexSha256: string;
+	/** Ordered source cache identities used to assemble the scene. */
+	parentCacheIdentities: readonly string[];
+	/** Human-readable derivation operation. */
+	operation: string;
+	/** Scene-selection parameters applied by the derivation. */
+	parameters: CacheOptimizationE1SceneSelection;
+	/** Repository-relative generator implementation path. */
+	implementation: string;
+	/** Content identities produced by the derivation. */
+	outputs: CacheOptimizationSourceDerivationOutputs;
+}>;
 
 /** Scene manifest fields consumed by C0. */
-type CacheOptimizationSceneManifest = CacheOptimizationJsonObject & Readonly<{
+type CacheOptimizationSceneManifest = Readonly<{
 	/** Versioned scene-manifest schema identity. */
-	schemaId: string;
+	schemaId: 'algorithm32-distant-sun-runtime-scene-cache-manifest-v2';
 	/** Content-derived production cache identity. */
 	cacheIdentity: string;
+	/** Half-open scene-selection interval. */
+	selection: CacheOptimizationE1SceneSelection;
+	/** Scene-Sun identity and direction. */
+	sceneSun: CacheOptimizationE1SceneSun;
+	/** Atmosphere-model identity. */
+	atmosphereIdentity: string;
+	/** Geometry-model identity. */
+	geometryIdentity: string;
+	/** Ground-boundary identity. */
+	groundIdentity: string;
+	/** Numerical-configuration identity. */
+	numericalIdentity: string;
 	/** Package-relative packed-row-ledger path. */
 	ledgerPath: string;
 	/** SHA-256 of the packed-row ledger. */
@@ -450,30 +515,64 @@ type CacheOptimizationSceneManifest = CacheOptimizationJsonObject & Readonly<{
 	exactSeamPayload: CacheOptimizationProductionArtifact;
 	/** Logical-to-unique index identity. */
 	logicalToUniqueIndex: CacheOptimizationProductionArtifact;
+	/** Complete immutable source derivation. */
+	derivation: CacheOptimizationSourceDerivation;
+}>;
+
+/** Physical support contract retained by a packed row ledger. */
+type CacheOptimizationLedgerSupport = Readonly<{
+	/** Stable support-model identity. */
+	id: 'san-jose-fixed-observer-complete-rotation-v1';
+	/** Atmosphere bottom radius. */
+	bottomRadius: CacheOptimizationMeasuredValue<'meters'>;
+	/** Atmosphere top radius. */
+	topRadius: CacheOptimizationMeasuredValue<'meters'>;
+	/** Observer altitude above the bottom radius. */
+	observerAltitude: CacheOptimizationMeasuredValue<'meters'>;
+	/** Observer solar-zenith angle. */
+	observerSolarZenith: CacheOptimizationMeasuredValue<'radians'>;
+	/** Confirmation that complete camera rotation was retained. */
+	completeCameraRotation: true;
+	/** Retained arbitrary-shortened-endpoint policy flag. */
+	arbitraryShortenedEndpoint: true;
 }>;
 
 /** Packed ledger row fields consumed by C0. */
-type CacheOptimizationLedgerRow = CacheOptimizationJsonObject & Readonly<{
+type CacheOptimizationLedgerRow = Readonly<{
 	/** Zero-based altitude coordinate index. */
 	altitudeIndex: number;
+	/** Physical altitude represented by this row. */
+	altitude: CacheOptimizationMeasuredValue<'meters'>;
 	/** First inclusive solar-zenith coordinate index. */
 	firstSolarZenithIndex: number;
 	/** Last inclusive solar-zenith coordinate index. */
 	lastSolarZenithIndex: number;
+	/** First packed row represented by the span. */
+	firstPackedRow: number;
 	/** Number of packed spectral rows represented by the ledger row. */
 	packedRowCount: number;
 }>;
 
 /** Packed row ledger consumed by C0. */
-type CacheOptimizationRowLedger = CacheOptimizationJsonObject & Readonly<{
+type CacheOptimizationRowLedger = Readonly<{
 	/** Versioned packed-ledger schema identity. */
-	schemaId: string;
+	schemaId: 'algorithm32-distant-sun-packed-row-ledger-v1';
+	/** Scene-Sun identity duplicated by the source ledger. */
+	sceneSun: CacheOptimizationE1SceneSun;
+	/** Physical support used to retain coordinate rows. */
+	support: CacheOptimizationLedgerSupport;
+	/** Number of retained coordinate rows. */
+	retainedBlockCount: number;
 	/** Ordered altitude spans represented by the package payload. */
 	rows: readonly CacheOptimizationLedgerRow[];
+	/** Source oracle payload byte length before exact-seam conversion. */
+	oracleByteLength: number;
+	/** Exact-seam payload plus logical-index byte length. */
+	exactSeamByteLength: number;
 }>;
 
 /** One authenticated deployed package retained by the C0 inventory. */
-type CacheOptimizationInventoryPackage = CacheOptimizationJsonObject & Readonly<{
+type CacheOptimizationInventoryPackage = Readonly<{
 	/** Stable package identity. */
 	id: string;
 	/** Representative solar-zenith angle in degrees. */
@@ -497,9 +596,9 @@ type CacheOptimizationInventoryPackage = CacheOptimizationJsonObject & Readonly<
 }>;
 
 /** Complete authenticated inventory retained as immutable C0 evidence. */
-type CacheOptimizationInventoryPins = CacheOptimizationJsonObject & Readonly<{
+type CacheOptimizationInventoryPins = Readonly<{
 	/** Versioned inventory schema identity. */
-	schemaId: string;
+	schemaId: 'distant-sun-cache-optimization-c0-inventory-pins-v1';
 	/** Accepted inventory-authentication state. */
 	accepted: true;
 	/** Number of deployed packages. */
@@ -1119,6 +1218,8 @@ type CacheOptimizationSealedRunVerification = Readonly<{
 	artifactCount: number;
 	/** Recomputed SHA-256 of the canonical artifact identity array. */
 	artifactSetSha256: string;
+	/** Semantic E1 graph verification when the accepted run uses the v2 E1 schema. */
+	semanticVerification?: CacheOptimizationE1CandidateVerification;
 }>;
 
 /** Browser performance extension used only when precise heap reporting is enabled. */
@@ -1132,3 +1233,774 @@ interface Performance {
 	/** Precise heap information when Chrome exposes it. */
 	memory?: CacheOptimizationPerformanceMemory;
 }
+
+/** Immutable C0 parent identity required by E1. */
+type CacheOptimizationE1ParentIdentity = Readonly<{
+	/** Six-digit immutable run identity. */
+	runId: string;
+	/** SHA-256 of the parent's canonical artifact set. */
+	artifactSetSha256: string;
+}>;
+
+/**
+ * E1 coordinate-tile identity.
+ *
+ * - **"2x8"** - Two altitude indices by eight solar-zenith indices.
+ * - **"4x8"** - Four altitude indices by eight solar-zenith indices.
+ * - **"4x16"** - Four altitude indices by sixteen solar-zenith indices.
+ * - **"8x8"** - Eight altitude indices by eight solar-zenith indices.
+ */
+type CacheOptimizationE1LayoutId = '2x8' | '4x8' | '4x16' | '8x8';
+
+/** Pinned Zstandard comparison level. */
+type CacheOptimizationE1ZstandardLevel = 1 | 3 | 6;
+
+/** Reversible Float32 byte-lane transform identity. */
+type CacheOptimizationE1ShuffleId = 'float32-byte-lane-v1';
+
+/** One E1 coordinate-tile shape. */
+type CacheOptimizationE1Layout = Readonly<{
+	/** Stable tile identity. */
+	id: CacheOptimizationE1LayoutId;
+	/** Maximum altitude indices per tile. */
+	altitudeCount: number;
+	/** Maximum solar-zenith indices per tile. */
+	solarZenithCount: number;
+}>;
+
+/** Frozen E1 winner-selection policy. */
+type CacheOptimizationE1SelectionPolicy = Readonly<{
+	/** Primary comparison metric. */
+	primaryMetric: 'completeByteLength';
+	/** Allowed proportional growth from the smallest passing candidate. */
+	maximumGrowthRatioFromMinimum: number;
+	/** Ordered tie-breaking metrics inside the materiality band. */
+	withinBandPriority: readonly ['coldEncodedByteLength', 'coldRequestCount', 'encodeMilliseconds'];
+}>;
+
+/** Frozen E1 resource limits. */
+type CacheOptimizationE1Bounds = Readonly<{
+	/** Maximum encoded blocks plus metadata bytes. */
+	maximumCompleteByteLength: number;
+	/** Maximum decoded size of one block. */
+	maximumDecodedBlockByteLength: number;
+	/** Maximum reconstructed bytes for one authenticated production scene. */
+	maximumScenePayloadByteLength: number;
+	/** Maximum complete E1 runner wall time. */
+	maximumTotalElapsedMilliseconds: number;
+	/** Maximum decoded bytes retained by the verifier. */
+	decodedRetentionByteLength: number;
+}>;
+
+/** Frozen request-model scenes. */
+type CacheOptimizationE1Scenarios = Readonly<{
+	/** Initial cold scene angle. */
+	coldSceneDegrees: number;
+	/** Scene adjacent to the cold selection. */
+	adjacentSceneDegrees: number;
+	/** Nonadjacent replacement scene. */
+	nonadjacentSceneDegrees: number;
+	/** Already-retained warm scene. */
+	warmSceneDegrees: number;
+}>;
+
+/** Frozen E1 candidate matrix, parent, scenarios, and resource bounds. */
+type CacheOptimizationE1CandidateContract = Readonly<{
+	/** Versioned contract schema. */
+	schemaId: 'distant-sun-cache-optimization-e1-candidate-contract-v1';
+	/** Coordinate tilings to compare. */
+	layouts: readonly CacheOptimizationE1Layout[];
+	/** Zstandard levels to compare for every layout. */
+	zstandardLevels: readonly CacheOptimizationE1ZstandardLevel[];
+	/** Required reversible transform. */
+	shuffle: CacheOptimizationE1ShuffleId;
+	/** Required immutable C0 parent. */
+	acceptedC0: CacheOptimizationE1ParentIdentity;
+	/** Winner-selection policy. */
+	selectionPolicy: CacheOptimizationE1SelectionPolicy;
+	/** Resource limits. */
+	bounds: CacheOptimizationE1Bounds;
+	/** Request-model scene selections. */
+	scenarios: CacheOptimizationE1Scenarios;
+}>;
+
+/** Codec wall times for one complete candidate build. */
+type CacheOptimizationE1CodecMetrics = Readonly<{
+	/** Byte-shuffle wall time in milliseconds. */
+	shuffleMilliseconds: number;
+	/** Zstandard encoding wall time in milliseconds. */
+	encodeMilliseconds: number;
+	/** Zstandard decoding wall time in milliseconds. */
+	decodeMilliseconds: number;
+	/** Inverse-shuffle wall time in milliseconds. */
+	inverseShuffleMilliseconds: number;
+}>;
+
+/** Modeled work for one request scenario. */
+type CacheOptimizationE1RequestScenarioMetrics = Readonly<{
+	/** Total block and metadata requests. */
+	requestCount: number;
+	/** Total encoded block and metadata bytes. */
+	encodedByteLength: number;
+	/** Content-addressed block requests. */
+	blockRequestCount: number;
+	/** Metadata requests. */
+	metadataRequestCount: number;
+	/** Metadata bytes. */
+	metadataByteLength: number;
+}>;
+
+/** Adjacent-scene block reuse. */
+type CacheOptimizationE1NeighborReuse = Readonly<{
+	/** Blocks shared with the predecessor. */
+	sharedBlockCount: number;
+	/** Blocks required by the adjacent scene. */
+	requiredBlockCount: number;
+}>;
+
+/** Decoded-row overfetch distribution. */
+type CacheOptimizationE1Overfetch = Readonly<{
+	/** Minimum scene ratio. */
+	minimumRatio: number;
+	/** Arithmetic mean scene ratio. */
+	meanRatio: number;
+	/** Maximum scene ratio. */
+	maximumRatio: number;
+}>;
+
+/** Modeled request and reuse measurements for one candidate. */
+type CacheOptimizationE1RequestMetrics = Readonly<{
+	/** Exact assumptions of the request model. */
+	model: string;
+	/** Cold-scene work. */
+	cold: CacheOptimizationE1RequestScenarioMetrics;
+	/** Adjacent replacement work after cold retention. */
+	adjacent: CacheOptimizationE1RequestScenarioMetrics;
+	/** Nonadjacent replacement work after adjacent retention. */
+	nonadjacent: CacheOptimizationE1RequestScenarioMetrics;
+	/** Exact warm-reuse work. */
+	warm: CacheOptimizationE1RequestScenarioMetrics;
+	/** Adjacent-scene block reuse. */
+	neighborReuse: CacheOptimizationE1NeighborReuse;
+	/** Decoded-row overfetch distribution. */
+	overfetch: CacheOptimizationE1Overfetch;
+}>;
+
+/** Compact measurements retained for one fully built E1 candidate. */
+type CacheOptimizationE1CandidateSummary = Readonly<{
+	/** Layout and codec profile identity. */
+	id: string;
+	/** Coordinate-tile identity. */
+	layoutId: CacheOptimizationE1LayoutId;
+	/** Zstandard compression level. */
+	zstandardLevel: CacheOptimizationE1ZstandardLevel;
+	/** Logical block count. */
+	blockCount: number;
+	/** Distinct content-addressed encoded artifacts. */
+	uniqueBlockArtifactCount: number;
+	/** Encoded bytes after content deduplication. */
+	encodedByteLength: number;
+	/** Published metadata bytes. */
+	metadataByteLength: number;
+	/** Published metadata artifact count. */
+	metadataArtifactCount: number;
+	/** Encoded blocks plus metadata bytes. */
+	completeByteLength: number;
+	/** Largest decoded logical block. */
+	maximumDecodedBlockByteLength: number;
+	/** Blocks that passed codec round-trip. */
+	exactBlockCount: number;
+	/** Codec timing measurements. */
+	codec: CacheOptimizationE1CodecMetrics;
+	/** Request-model measurements. */
+	requests: CacheOptimizationE1RequestMetrics;
+}>;
+
+/** Exact published-scene reconstruction result. */
+type CacheOptimizationE1Exactness = Readonly<{
+	/** Reconstructed scene count. */
+	sceneCount: number;
+	/** Total reconstructed payload bytes. */
+	checkedByteLength: number;
+	/** Observed differing bytes. */
+	byteDifferenceCount: 0;
+	/** Confirmation that every payload hash matched. */
+	matches: true;
+}>;
+
+/** Result bounds with measured pass decisions. */
+type CacheOptimizationE1ResultBounds = CacheOptimizationE1Bounds & Readonly<{
+	/** Whether the winner passes complete-size limits. */
+	completeByteLengthPasses: true;
+	/** Whether the winner passes decoded-block limits. */
+	decodedBlockByteLengthPasses: true;
+	/** Whether every reconstructed scene passes its allocation limit. */
+	scenePayloadByteLengthPasses: true;
+	/** Whether complete runner wall time passes its limit. */
+	totalElapsedMillisecondsPasses: true;
+}>;
+
+/** Accepted terminal evidence for the E1 format and compression comparison. */
+type CacheOptimizationE1Result = Readonly<{
+	/** Versioned accepted-result schema. */
+	schemaId: 'distant-sun-cache-optimization-e1-result-v2';
+	/** Immutable E1 run identity. */
+	runId: string;
+	/** Accepted terminal conclusion. */
+	conclusion: 'accepted';
+	/** Accepted-state flag. */
+	accepted: true;
+	/** Authenticated C0 parent. */
+	parent: CacheOptimizationE1ParentIdentity;
+	/** Exact published-graph reconstruction result. */
+	exactness: CacheOptimizationE1Exactness;
+	/** Complete 4-layout by 3-level comparison matrix. */
+	candidates: readonly CacheOptimizationE1CandidateSummary[];
+	/** Winner selected by the frozen policy. */
+	recommendation: CacheOptimizationE1CandidateSummary;
+	/** Frozen limits and winner decisions. */
+	bounds: CacheOptimizationE1ResultBounds;
+	/** Complete runner wall time. */
+	totalElapsedMilliseconds: number;
+	/** Explicit boundary on the evidence claim. */
+	claimBoundary: string;
+}>;
+
+/** E1 direction-table contract. */
+type CacheOptimizationE1DirectionLayout = Readonly<{
+	/** Production direction codec identity. */
+	id: 'algorithm32-distant-sun-w27-exact-seam-u16-v1';
+	/** Number of unique direction vectors. */
+	uniqueDirectionCount: 4058;
+	/** Number of logical direction indices. */
+	logicalDirectionCount: 4374;
+	/** SHA-256 of the logical-to-unique index. */
+	logicalToUniqueIndexSha256: string;
+}>;
+
+/** E1 spectral layout contract. */
+type CacheOptimizationE1SpectralLayout = Readonly<{
+	/** Native spectral basis identity. */
+	id: 'Native15';
+	/** Spectral channel count. */
+	channelCount: 15;
+	/** Production payload channel ordering. */
+	order: 'wavelength-major';
+}>;
+
+/** One indexed coordinate domain. */
+type CacheOptimizationE1IndexDomain = Readonly<{
+	/** First inclusive index. */
+	firstIndex: number;
+	/** Number of available indices. */
+	count: number;
+}>;
+
+/** Coordinate domains captured by the candidate configuration. */
+type CacheOptimizationE1CoordinateDomains = Readonly<{
+	/** Altitude index domain. */
+	altitude: CacheOptimizationE1IndexDomain;
+	/** Solar-zenith index domain and angular width. */
+	solarZenith: CacheOptimizationE1IndexDomain & Readonly<{/** Width of one bin in degrees. */ binWidthDegrees: number}>;
+}>;
+
+/** Canonical block-grid ordering. */
+type CacheOptimizationE1BlockGrid = Readonly<{
+	/** Altitude indices per tile. */
+	altitudeCount: number;
+	/** Solar-zenith indices per tile. */
+	solarZenithCount: number;
+	/** Coordinate ordering inside each block. */
+	coordinateOrder: 'altitude-then-solar-zenith';
+	/** Byte ordering inside each decoded block. */
+	payloadOrder: 'wavelength-then-coordinate-then-direction';
+	/** Confirmation that absent coordinates consume no rows. */
+	omitUnpopulatedCoordinates: true;
+}>;
+
+/** Zstandard publication contract. */
+type CacheOptimizationE1Codec = Readonly<{
+	/** Compression format. */
+	id: 'zstandard';
+	/** Selected compression level. */
+	level: CacheOptimizationE1ZstandardLevel;
+	/** Runtime and codec implementation identity. */
+	implementation: string;
+}>;
+
+/** Published E1 configuration manifest. */
+type CacheOptimizationE1ConfigurationManifest = Readonly<{
+	/** Versioned configuration schema. */
+	schemaId: 'distant-sun-cache-configuration-manifest-v1';
+	/** SHA-256 of the canonical physical and layout facts. */
+	configurationIdentity: string;
+	/** Atmosphere model identity. */
+	atmosphereIdentity: string;
+	/** Geometry model identity. */
+	geometryIdentity: string;
+	/** Ground-boundary identity. */
+	groundIdentity: string;
+	/** Numerical configuration identity. */
+	numericalIdentity: string;
+	/** Direction-table facts. */
+	directionLayout: CacheOptimizationE1DirectionLayout;
+	/** Spectral-layout facts. */
+	spectralLayout: CacheOptimizationE1SpectralLayout;
+	/** Physical coordinate domains. */
+	coordinateDomains: CacheOptimizationE1CoordinateDomains;
+	/** Canonical block-grid facts. */
+	blockGrid: CacheOptimizationE1BlockGrid;
+	/** Selected logical tile. */
+	layout: CacheOptimizationE1Layout;
+	/** Selected compression profile. */
+	codec: CacheOptimizationE1Codec;
+	/** Selected reversible shuffle. */
+	shuffle: CacheOptimizationE1ShuffleId;
+	/** Decoded bytes per coordinate row. */
+	rowByteLength: number;
+	/** Number of uniquely owned coordinates. */
+	distinctCoordinateCount: number;
+	/** Content identity of the block index. */
+	blockIndex: CacheOptimizationFileIdentity;
+}>;
+
+/** One altitude/solar-zenith coordinate tuple. */
+type CacheOptimizationE1Coordinate = readonly [altitudeIndex: number, solarZenithIndex: number];
+
+/** Derivation retained for one logical block. */
+type CacheOptimizationE1BlockDerivation = Readonly<{
+	/** Source C0 run identity. */
+	parentRunId: string;
+	/** Source C0 artifact-set identity. */
+	parentArtifactSetSha256: string;
+	/** Human-readable transformation. */
+	operation: string;
+	/** Candidate configuration identity. */
+	configurationIdentity: string;
+}>;
+
+/** Published content-addressed block descriptor. */
+type CacheOptimizationE1Block = Readonly<{
+	/** Configuration-qualified logical tile identity. */
+	id: string;
+	/** First coordinate indices of the tile. */
+	tile: Readonly<{/** First altitude index. */ altitudeIndex: number; /** First solar-zenith index. */ solarZenithIndex: number}>;
+	/** Populated coordinate rows. */
+	rowCount: number;
+	/** Uncompressed unshuffled byte count. */
+	decodedByteLength: number;
+	/** SHA-256 of uncompressed unshuffled bytes. */
+	decodedSha256: string;
+	/** Zstandard artifact byte count. */
+	encodedByteLength: number;
+	/** SHA-256 of Zstandard bytes. */
+	encodedSha256: string;
+	/** Candidate-relative Zstandard artifact path. */
+	path: string;
+	/** Ordered coordinate ownership table. */
+	coordinates: readonly CacheOptimizationE1Coordinate[];
+	/** Complete source and operation identity. */
+	derivation: CacheOptimizationE1BlockDerivation;
+}>;
+
+/** Published E1 block index. */
+type CacheOptimizationE1BlockIndex = Readonly<{
+	/** Versioned block-index schema. */
+	schemaId: 'distant-sun-cache-block-index-v1';
+	/** Decoded bytes per coordinate row. */
+	rowByteLength: number;
+	/** Number of uniquely owned coordinates. */
+	distinctCoordinateCount: number;
+	/** Logical block descriptors. */
+	blocks: readonly CacheOptimizationE1Block[];
+}>;
+
+/** Root of one published E1 candidate graph. */
+type CacheOptimizationE1PackageSetReport = Readonly<{
+	/** Versioned package-set schema. */
+	schemaId: 'distant-sun-cache-package-set-report-v1';
+	/** Authenticated C0 parent. */
+	parent: CacheOptimizationE1ParentIdentity;
+	/** Immutable generator, implementation-set, and source-catalog identity. */
+	build: CacheOptimizationE1BuildIdentity;
+	/** Configuration-manifest identity. */
+	configuration: CacheOptimizationFileIdentity;
+	/** Semantic configuration identity repeated at the graph root. */
+	configurationIdentity: string;
+	/** Selected codec identity repeated at the graph root. */
+	codec: CacheOptimizationE1Codec;
+	/** Runtime-catalog identity. */
+	catalog: CacheOptimizationFileIdentity;
+	/** SHA-256 of the canonical catalog-selection contract. */
+	catalogSelectionIdentity: string;
+}>;
+
+/** Immutable build inputs owned by the E1 graph root. */
+type CacheOptimizationE1BuildIdentity = Readonly<{
+	/** Generator source identity. */
+	generator: CacheOptimizationFileIdentity;
+	/** SHA-256 of the ordered implementation file-identity set. */
+	implementationSetSha256: string;
+	/** Authenticated production catalog from which selection behavior was retained. */
+	sourceCatalog: CacheOptimizationFileIdentity;
+}>;
+
+/** One runtime-catalog scene entry. */
+type CacheOptimizationE1CatalogEntry = Readonly<{
+	/** Stable scene identity. */
+	id: string;
+	/** Representative selection angle. */
+	representativeSolarZenithDegrees: number;
+	/** Scene-manifest identity. */
+	manifest: CacheOptimizationFileIdentity;
+}>;
+
+/** Published E1 runtime catalog. */
+type CacheOptimizationE1RuntimeCatalog = Readonly<{
+	/** Versioned runtime-catalog schema. */
+	schemaId: 'distant-sun-cache-runtime-catalog-v1';
+	/** Catalog-wide production selection and dark-boundary behavior. */
+	selection: CacheOptimizationE1CatalogSelection;
+	/** Complete ordered scene entries. */
+	scenes: readonly CacheOptimizationE1CatalogEntry[];
+}>;
+
+/** Catalog-wide production scene-selection contract retained by E1. */
+type CacheOptimizationE1CatalogSelection = Readonly<{
+	/** Selection algorithm identity. */
+	kind: 'ledger-covered-nearest-integer-half-up-v1';
+	/** Inclusive texture-free dark boundary in degrees. */
+	darkFromSolarZenithDegrees: 108;
+	/** First catalog scene angle in degrees. */
+	startSolarZenithDegrees: 0;
+	/** Last catalog scene angle in degrees. */
+	endSolarZenithDegrees: 108;
+	/** Catalog scene-angle increment in degrees. */
+	incrementDegrees: 1;
+	/** Minimum selectable input angle in degrees. */
+	minimumInputDegrees: 0;
+	/** Exclusive maximum selectable input angle in degrees. */
+	maximumInputExclusiveDegrees: 108;
+}>;
+
+/** One scene's consecutive rows inside a logical block. */
+type CacheOptimizationE1SceneSegment = Readonly<{
+	/** Zero-based block-index position. */
+	blockIndex: number;
+	/** First row within the decoded block. */
+	firstBlockRow: number;
+	/** Consecutive row count. */
+	rowCount: number;
+}>;
+
+/** Half-open production scene-selection interval, including the retained terminal 108-degree boundary package. */
+type CacheOptimizationE1SceneSelection = Readonly<{
+	/** Representative scene angle in degrees; only the terminal package may equal the exclusive maximum at 108 degrees. */
+	representativeSolarZenithDegrees: number;
+	/** Inclusive input angle in degrees. */
+	minimumInputDegrees: number;
+	/** Exclusive input angle in degrees. */
+	maximumInputExclusiveDegrees: number;
+}>;
+
+/** Production scene-Sun identity and direction. */
+type CacheOptimizationE1SceneSun = Readonly<{
+	/** Stable scene-Sun identity. */
+	id: string;
+	/** ISO instant used to construct the scene. */
+	instant: string;
+	/** Unit direction in up/east/north order. */
+	directionToSourceUpEastNorth: readonly [number, number, number];
+	/** Source-model identity. */
+	sourceIdentity: string;
+}>;
+
+/** Production compatibility identities retained by a scene. */
+type CacheOptimizationE1SceneCompatibility = Readonly<{
+	/** Production cache identity. */
+	cacheIdentity: string;
+	/** Atmosphere-model identity. */
+	atmosphereIdentity: string;
+	/** Geometry-model identity. */
+	geometryIdentity: string;
+	/** Ground-boundary identity. */
+	groundIdentity: string;
+	/** Numerical-configuration identity. */
+	numericalIdentity: string;
+}>;
+
+/** Published E1 scene manifest. */
+type CacheOptimizationE1SceneManifest = Readonly<{
+	/** Versioned scene schema. */
+	schemaId: 'distant-sun-cache-scene-manifest-v1';
+	/** Stable production scene identity. */
+	id: string;
+	/** Representative selection angle. */
+	representativeSolarZenithDegrees: number;
+	/** Production selection contract. */
+	selection: CacheOptimizationE1SceneSelection;
+	/** Production scene-Sun identity. */
+	sceneSun: CacheOptimizationE1SceneSun;
+	/** Runtime compatibility identities. */
+	compatibility: CacheOptimizationE1SceneCompatibility;
+	/** Original packed-coordinate ledger. */
+	ledger: CacheOptimizationRowLedger;
+	/** SHA-256 of the original production manifest. */
+	sourceManifestSha256: string;
+	/** SHA-256 of the expected reconstructed payload. */
+	payloadSha256: string;
+	/** Expected reconstructed payload bytes. */
+	payloadByteLength: number;
+	/** Ordered references into published blocks. */
+	segments: readonly CacheOptimizationE1SceneSegment[];
+}>;
+
+/** Unique encoded-block size facts derived from a serialized E1 graph. */
+type CacheOptimizationE1GraphSizeSummary = Readonly<{
+	/** Number of distinct content-addressed block artifacts. */
+	uniqueBlockArtifactCount: number;
+	/** Total bytes in distinct encoded block artifacts. */
+	encodedByteLength: number;
+	/** Largest decoded logical block in bytes. */
+	maximumDecodedBlockByteLength: number;
+}>;
+
+/** Semantic verification of one serialized E1 candidate graph. */
+type CacheOptimizationE1CandidateVerification = CacheOptimizationE1Exactness & Readonly<{
+	/** Authenticated graph-root identity. */
+	packageSet: CacheOptimizationFileIdentity;
+	/** Complete sorted candidate-relative artifact paths traversed by the graph. */
+	artifactPaths: readonly string[];
+	/** Authenticated coordinate-tile identity. */
+	layoutId: CacheOptimizationE1LayoutId;
+	/** Authenticated Zstandard level. */
+	zstandardLevel: CacheOptimizationE1ZstandardLevel;
+	/** Authenticated metadata artifact count. */
+	metadataArtifactCount: number;
+	/** Total authenticated metadata bytes. */
+	metadataByteLength: number;
+	/** Authenticated logical block count. */
+	blockCount: number;
+	/** Authenticated unique content-addressed block count. */
+	uniqueBlockArtifactCount: number;
+	/** Total authenticated encoded block bytes. */
+	encodedByteLength: number;
+	/** Total authenticated metadata and encoded block bytes. */
+	completeByteLength: number;
+	/** Largest authenticated decoded block in bytes. */
+	maximumDecodedBlockByteLength: number;
+	/** Authenticated unique coordinate count. */
+	distinctCoordinateCount: number;
+}>;
+
+/** Optional progress callback invoked after one published scene verifies. */
+interface CacheOptimizationE1SceneVerifiedOperation {
+	/** @param completed - Verified scene count. @param total - Total scene count. @param sceneId - Latest verified scene identity. */
+	(completed: number, total: number, sceneId: string): Promise<void>;
+}
+
+/** Allocation and progress policy for semantic E1 verification. */
+type CacheOptimizationE1CandidateVerificationPolicy = Readonly<{
+	/** Maximum decoded block bytes retained concurrently. */
+	decodedRetentionByteLength: number;
+	/** Maximum complete encoded candidate and metadata bytes. */
+	maximumCompleteByteLength: number;
+	/** Maximum reconstructed scene bytes accepted before allocation. */
+	maximumScenePayloadByteLength: number;
+	/** Optional scene-completion observer. */
+	onSceneVerified?: CacheOptimizationE1SceneVerifiedOperation;
+}>;
+
+/**
+ * C0 package artifact role authenticated before E1 extraction.
+ *
+ * - **"manifest"** - Scene package manifest.
+ * - **"ledger"** - Packed coordinate-row ledger.
+ * - **"payload"** - Exact Native15 Float32 payload.
+ * - **"logicalToUniqueIndex"** - Logical-to-unique direction index.
+ */
+type CacheOptimizationPackageArtifactName = 'manifest' | 'ledger' | 'payload' | 'logicalToUniqueIndex';
+
+/** Mutable extraction record for one distinct source coordinate. */
+type CacheOptimizationE1SourceCoordinate = {
+	/** Stable altitude/solar-zenith key. */
+	key: string;
+	/** Zero-based altitude index. */
+	altitudeIndex: number;
+	/** Zero-based solar-zenith index. */
+	solarZenithIndex: number;
+	/** C0-root-relative source payload path. */
+	payloadPath: string;
+	/** Packed row within the source payload. */
+	payloadPackedRow: number;
+	/** Total source payload rows. */
+	payloadRowCount: number;
+	/** Assigned row within the canonical E1 staging file. */
+	canonicalRow?: number;
+};
+
+/** Source scene retained during E1 extraction. */
+type CacheOptimizationE1SourceScene = Readonly<{
+	/** Stable production scene identity. */
+	id: string;
+	/** Representative selection angle. */
+	representativeSolarZenithDegrees: number;
+	/** Production selection contract. */
+	selection: CacheOptimizationE1SceneSelection;
+	/** Production scene-Sun contract. */
+	sceneSun: CacheOptimizationE1SceneSun;
+	/** Production compatibility identities. */
+	compatibility: CacheOptimizationE1SceneCompatibility;
+	/** Authenticated source ledger. */
+	ledger: CacheOptimizationRowLedger;
+	/** Authenticated source-manifest SHA-256. */
+	sourceManifestSha256: string;
+	/** Expected payload SHA-256. */
+	payloadSha256: string;
+	/** Expected payload byte count. */
+	payloadByteLength: number;
+	/** Ordered coordinate keys. */
+	coordinates: readonly string[];
+}>;
+
+/** Published scene fields before the schema discriminator is added. */
+type CacheOptimizationE1SceneMetadata = Omit<CacheOptimizationE1SceneManifest, 'schemaId'>;
+
+/** Physical and layout facts common to every E1 candidate. */
+type CacheOptimizationE1SourceConfiguration = Readonly<{
+	/** Atmosphere model identity. */
+	atmosphereIdentity: string;
+	/** Geometry model identity. */
+	geometryIdentity: string;
+	/** Ground-boundary identity. */
+	groundIdentity: string;
+	/** Numerical configuration identity. */
+	numericalIdentity: string;
+	/** Direction-layout facts. */
+	directionLayout: CacheOptimizationE1DirectionLayout;
+	/** Spectral-layout facts. */
+	spectralLayout: CacheOptimizationE1SpectralLayout;
+	/** Coordinate-domain facts. */
+	coordinateDomains: CacheOptimizationE1CoordinateDomains;
+}>;
+
+/** Authenticated source inventory prepared for E1 candidate generation. */
+type CacheOptimizationE1SourceInventory = Readonly<{
+	/** Distinct coordinates by stable key. */
+	coordinates: Map<string, CacheOptimizationE1SourceCoordinate>;
+	/** Canonically ordered distinct coordinates. */
+	orderedCoordinates: readonly CacheOptimizationE1SourceCoordinate[];
+	/** Ordered source scenes. */
+	scenes: readonly CacheOptimizationE1SourceScene[];
+	/** Shared physical and numerical configuration. */
+	configuration: CacheOptimizationE1SourceConfiguration;
+}>;
+
+/** Location of a coordinate inside a logical block. */
+type CacheOptimizationE1BlockLocation = Readonly<{
+	/** Zero-based block-index position. */
+	blockIndex: number;
+	/** Zero-based coordinate row within the block. */
+	blockRow: number;
+}>;
+
+/** Serialized content-addressed metadata document. */
+type CacheOptimizationE1MetadataDocument<T extends CacheOptimizationJsonObject = CacheOptimizationJsonObject> = Readonly<{
+	/** Candidate-relative content identity. */
+	identity: CacheOptimizationFileIdentity;
+	/** Parsed JSON payload. */
+	value: T;
+	/** Pretty-printed UTF-8 JSON bytes. */
+	bytes: Buffer;
+}>;
+
+/** Configuration facts and their canonical identity. */
+type CacheOptimizationE1ConfigurationContract = Readonly<{
+	/** Physical, numerical, and block-grid facts. */
+	facts: CacheOptimizationE1SourceConfiguration & Readonly<{/** Candidate block grid. */ blockGrid: CacheOptimizationE1BlockGrid}>;
+	/** SHA-256 of canonical configuration JSON. */
+	identity: string;
+}>;
+
+/** Complete in-memory metadata publication bundle. */
+type CacheOptimizationE1MetadataBundle = Readonly<{
+	/** Root, catalog, configuration, index, and scene documents. */
+	artifacts: readonly CacheOptimizationE1MetadataDocument[];
+	/** Logical block descriptors. */
+	blocks: readonly CacheOptimizationE1Block[];
+	/** Published scene manifests. */
+	scenes: readonly CacheOptimizationE1SceneMetadata[];
+	/** Decoded bytes per coordinate row. */
+	rowByteLength: number;
+	/** Shared root/catalog/configuration/index bytes. */
+	globalByteLength: number;
+	/** All metadata bytes. */
+	metadataByteLength: number;
+	/** Identity of the ordered metadata artifact identities. */
+	identitySha256: string;
+}>;
+
+/** Fully built candidate including private publication metadata. */
+type CacheOptimizationE1BuiltCandidate = CacheOptimizationE1CandidateSummary & Readonly<{
+	/** Complete metadata bundle omitted from the terminal summary. */
+	metadata: CacheOptimizationE1MetadataBundle;
+}>;
+
+/** Independent fixed-vector proof for the byte-lane transform. */
+type CacheOptimizationE1ByteShuffleProof = Readonly<{
+	/** Versioned proof schema. */
+	schemaId: 'distant-sun-cache-optimization-e1-byte-shuffle-proof-v1';
+	/** Fixed interleaved input bytes. */
+	source: readonly number[];
+	/** Independently declared shuffled bytes. */
+	expected: readonly number[];
+	/** Actual shuffled bytes. */
+	actual: readonly number[];
+	/** Actual inverse-shuffled bytes. */
+	inverse: readonly number[];
+	/** Confirmation that wrong-type and misaligned inputs rejected. */
+	malformedInputsRejected: true;
+}>;
+
+/** Narrow random-access file capability used by E1 staging I/O. */
+interface CacheOptimizationRandomAccessFileHandle {
+	/** Read bytes into a caller-owned buffer. */
+	read(buffer: Uint8Array, offset: number, length: number, position: number): Promise<Readonly<{/** Bytes placed in the buffer. */ bytesRead: number}>>;
+	/** Write caller-owned bytes at an exact position. */
+	write(buffer: Uint8Array, offset: number, length: number, position: number): Promise<Readonly<{/** Bytes written from the buffer. */ bytesWritten: number}>>;
+}
+
+/** Immutable browser-consumed metadata identity. */
+type CacheOptimizationE2FileIdentity = Readonly<{path: string; byteLength: number; sha256: string}>;
+/** Browser-safe E1 catalog projection. */
+type CacheOptimizationE2Catalog = Readonly<{scenes: readonly Readonly<{degrees: number; manifest: CacheOptimizationE2FileIdentity}>[]}>;
+/** Browser-safe E1 configuration projection. */
+type CacheOptimizationE2Configuration = Readonly<{blockIndex: CacheOptimizationE2FileIdentity; channelCount: number; uniqueDirectionCount: number; rowByteLength: number}>;
+/** Browser-safe E1 shared-block descriptor. */
+type CacheOptimizationE2Block = Readonly<{encodedSha256: string; decodedSha256: string; encodedByteLength: number; decodedByteLength: number; path: string; rowCount: number}>;
+/** Browser-safe E1 shared-block index. */
+type CacheOptimizationE2BlockIndex = Readonly<{blocks: readonly CacheOptimizationE2Block[]}>;
+/** Browser-safe E1 scene segment. */
+type CacheOptimizationE2Segment = Readonly<{blockIndex: number; firstBlockRow: number; rowCount: number}>;
+/** Browser-safe E1 scene projection. */
+type CacheOptimizationE2Scene = Readonly<{segments: readonly CacheOptimizationE2Segment[]; payloadByteLength: number; payloadSha256: string}>;
+/** Successful Worker decode reply. */
+type CacheOptimizationE2WorkerSuccess = Readonly<{id: number; decoded: ArrayBuffer; queueMilliseconds: number; decodeMilliseconds: number; inverseShuffleMilliseconds: number; workerHeapBytes: number | null}>;
+/** Failed Worker decode reply. */
+type CacheOptimizationE2WorkerFailure = Readonly<{id: number; error: Readonly<{name: string; message: string}>}>;
+/** Closed reply received from the decoder Worker. */
+type CacheOptimizationE2WorkerResponse = CacheOptimizationE2WorkerSuccess | CacheOptimizationE2WorkerFailure;
+/** Pending main-thread promise handlers for one Worker request. */
+type CacheOptimizationE2WorkerPending = Readonly<{resolve: (value: CacheOptimizationE2WorkerSuccess) => void; reject: (reason: unknown) => void}>;
+/** Decoded-block fetch result supplied to a scene transaction. */
+type CacheOptimizationE2BlockResult = Readonly<{value: Uint8Array; reused: boolean; transferMilliseconds: number; queueMilliseconds: number; decodeMilliseconds: number; inverseShuffleMilliseconds: number; workerHeapBytes: number | null}>;
+/** Shared artifact request and subscriber ownership state. */
+type CacheOptimizationE2InflightBlock = {promise: Promise<CacheOptimizationE2BlockResult>; controller: AbortController; subscribers: number};
+/** Observed client transport counters. */
+type CacheOptimizationE2TransportMetrics = Readonly<{requestCount: number; uniqueRequestCount: number; maximumObservedRequests: number; peakMainHeapBytes: number | null; peakWorkerHeapBytes: number | null}>;
+/** Per-scene reconstruction, upload, and publication measurement. */
+type CacheOptimizationE2SceneRecord = CacheOptimizationJsonObject & Readonly<{degrees: number; requiredBlockCount: number; reusedBlockCount: number; newlyDecodedBlockCount: number; encodedByteLength: number; decodedByteLength: number; workerQueueMilliseconds: number; decompressionMilliseconds: number; inverseShuffleMilliseconds: number; transferMilliseconds: number; uploadMilliseconds: number; publicationMilliseconds: number; elapsedMilliseconds: number; retainedBytes: number; published: boolean; payloadSha256: string}>;
+/** Accepted browser E2 proof payload. */
+type CacheOptimizationE2BrowserResult = CacheOptimizationJsonObject & Readonly<{schemaId: 'distant-sun-cache-optimization-e2-browser-result-v1'; accepted: true; decoder: CacheOptimizationJsonObject; concurrency: 4; retentionTargetBytes: 67108864; retainedBytes: number; heapBeforeBytes: number | null; heapAfterBytes: number | null; mainThreadResponsivenessTicks: number; metrics: CacheOptimizationE2TransportMetrics; perSceneDecompaction: readonly CacheOptimizationE2SceneRecord[]; faults: CacheOptimizationJsonObject}>;
+/** Accepted E2 terminal evidence envelope. */
+type CacheOptimizationE2Result = CacheOptimizationTerminalResult & Readonly<{schemaId: 'distant-sun-cache-optimization-e2-result-v1'; conclusion: 'accepted'; accepted: true; parent: Readonly<{runId: '000041-e1-format-compression'; artifactSetSha256: '19d79885512d628ad874501b3c854b86eae2dfc374910bdae1dbc6569c96cf4a'}>; browser: CacheOptimizationE2BrowserResult; claimBoundary: string}>;

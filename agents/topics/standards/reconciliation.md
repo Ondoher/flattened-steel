@@ -6,10 +6,10 @@
 - Canonical standards root: `C:\Users\gande\.codex\documentation\standards`
 - Standards governance: [documentation.md — Folder Standards Manifest](../../../../../Users/gande/.codex/documentation/standards/documentation.md#folder-standards-manifest)
 - Generated developer guide: [STANDARDS.md](../../../STANDARDS.md) is current and generated from the normalized folder configuration.
-- Audit date: 2026-09-06.
+- Audit date: 2026-09-09.
 - Audit basis: working tree at commit `8e9a11ab8d78dd02a53eb73a5e0c991cc99a4e32`, including pre-existing edits and the untracked repository skill. This is a standards configuration/ownership audit, not an application-code compliance audit.
 - Phase: `reconciled`.
-- Normalization status: `normalized`; all twelve developer-approved dispositions are applied, with zero pending or deferred items.
+- Normalization status: `normalized`; all thirteen developer-approved dispositions are applied, with zero pending or deferred items.
 - Reconciled scope: approved folder mapping, local overlay consolidation, canonical setter promotion, redundant prose removal, experiment-scaffold repair, operational contract handoff, skill-owned new-experiment placement, and proof-host capability mapping. Topic relocation is recorded separately in the completed migration ledger.
 
 The developer explicitly accepted the first ten recommendations and later
@@ -23,6 +23,26 @@ detailed comparisons below retain the pre-change audit basis; reconciliation
 results and the validation record describe the installed state. The historical
 appendix remains unchanged developer-decision evidence.
 
+The developer explicitly approved the narrow GPU-resident shared-block-cache
+proof-host assignment after the experiment-start capability check identified
+that its planned loopback/WebGL proof host requires `proof-tools` rather than
+the generic `code` set. That approval authorizes FM-013 only.
+
+The developer explicitly approved FM-014 after the initial-still review found
+that the contained shadow-animation harness intercepts and responds to the
+production bundle request. The narrow experiment assignment adds `server.md`
+without altering experiment authority or any production path.
+
+On 2026-09-09 the developer explicitly authorized the post-scaffold input
+refresh for `experiments/distant-sun-shadow-animation-evidence/`. Its exact
+scaffold `AGENTS.md` inherits the existing `experiments/` -> `code` assignment;
+no manifest, overlay, canonical-standard, or folder-capability change was
+required. The refreshed normalization has eight operational inputs and
+fingerprint
+`sha256:4a9f5014683d07ead7ec14eda96dca9c0a38543408f958c5d9cc3923dae54649`.
+The regenerated guide source fingerprint is
+`sha256:c6515eed757e99ae10c77584a40b5a8332d7336c87b4e63dc70fbd1f1312e135`.
+
 ## Summary
 
 | Recommended disposition | Count |
@@ -34,7 +54,7 @@ appendix remains unchanged developer-decision evidence.
 | `already-covered` | 3 |
 | `defer` | 0 |
 
-Installed outcome: nine reusable sets and 27 existing-folder assignments,
+Installed outcome: nine reusable sets and 29 existing-folder assignments,
 using the same eleven canonical standards already selected. Preserve the four
 scientific requirements under `src/algorithm32/`, encode the two type-section
 requirements together, and promote the assignment-only setter rule to canonical
@@ -96,6 +116,7 @@ unused set.
 | `scripts/experiments/algorithm32-frame-parity/` | `proof-tools` | Independent CPU/GPU frame comparison and HTTP proof hosts. |
 | `experiments/` | `code` | Contained authored source and proof runners; operational no-unit-test instructions remain effective. |
 | `experiments/distant-sun-cache-optimization/` | `proof-tools` | Contained cache experiment with a local HTTP browser proof host. |
+| `experiments/distant-sun-shadow-animation-evidence/` | `proof-tools` | Contained browser interception and WebGL evidence harness. |
 | `experiments/extraterrestrial/runners/` | `proof-tools` | Contained HTTP/browser proof orchestration. |
 | `experiments/extraterrestrial/color-reset/harness/` | `proof-tools` | Contained Color Reset browser host. |
 | `experiments/extraterrestrial/color-reset/runners/` | `proof-tools` | Contained Color Reset HTTP/browser proof orchestration. |
@@ -245,6 +266,7 @@ Standards:
 - `scripts/experiments/algorithm32-frame-parity/` - `proof-tools` - Independent CPU/GPU frame comparison and HTTP proof hosts.
 - `experiments/` - `code` - Contained authored source and proof runners; operational no-unit-test instructions remain effective.
 - `experiments/distant-sun-cache-optimization/` - `proof-tools` - Contained cache experiment with a local HTTP browser proof host.
+- `experiments/distant-sun-shadow-animation-evidence/` - `proof-tools` - Contained browser interception and WebGL evidence harness.
 - `experiments/extraterrestrial/runners/` - `proof-tools` - Contained HTTP/browser proof orchestration.
 - `experiments/extraterrestrial/color-reset/harness/` - `proof-tools` - Contained Color Reset browser host.
 - `experiments/extraterrestrial/color-reset/runners/` - `proof-tools` - Contained Color Reset HTTP/browser proof orchestration.
@@ -261,9 +283,46 @@ Standards:
 
 ## Divergences
 
-The current decision identifiers are FM-001 through FM-012. Historical DIV/ADD/CFG
+The current decision identifiers are FM-001 through FM-014. Historical DIV/ADD/CFG
 identifiers remain unchanged in the appendix. Reconciliation may apply only
 current recorded approvals.
+
+### FM-014: Assign the shadow-animation interception harness to proof-tools
+
+- Canonical source: [documentation.md — Folder Standards Manifest](../../../../../Users/gande/.codex/documentation/standards/documentation.md#folder-assignments)
+- Repository source: `agents/topics/standards/manifest.md`, `experiments/distant-sun-shadow-animation-evidence/AGENTS.md`, and `experiments/distant-sun-shadow-animation-evidence/run-initial-still.js`.
+- Canonical rule: A deeper folder assignment is required when a subtree needs a meaningfully different standards set; `proof-tools` adds HTTP ingress and failure-boundary standards to the code baseline.
+- Repository rule: The contained still harness intercepts the production JavaScript request and responds with an instrumented bundle before driving hardware WebGL evidence.
+- Behavioral difference: The generic `experiments/` assignment omits `server.md`, while the request interception and response seam is an HTTP transport boundary.
+- Information at risk: Retaining only `code` would omit applicable transport, error, and boundary rules; assigning `proof-tools` to all experiments would over-apply those rules.
+- Agent recommendation: `add-local`.
+- Recommendation rationale: Reuse the existing `proof-tools` set only at `experiments/distant-sun-shadow-animation-evidence/`, parallel to the two other contained browser proof-host lanes.
+- Developer decision: `add-local`.
+- Developer notes: Explicitly approved by the developer's `yes` response after the exact stale-mapping finding and proposed narrow assignment were reported.
+- Re-review required: `no`.
+- Reconciliation result: Applied as approved; no overlay, canonical standard, operational authority, or production path changed.
+- Validation evidence: Folder parsing selects `proof-tools`; attestation
+  validates at
+  `sha256:4a9f5014683d07ead7ec14eda96dca9c0a38543408f958c5d9cc3923dae54649`;
+  guide write/check is current at
+  `sha256:c6515eed757e99ae10c77584a40b5a8332d7336c87b4e63dc70fbd1f1312e135`;
+  formatting and reviewer eligibility gates pass.
+
+### FM-013: Assign the GPU-resident shared-block-cache proof host to proof-tools
+
+- Canonical source: [documentation.md — Folder Standards Manifest](../../../../../Users/gande/.codex/documentation/standards/documentation.md#folder-assignments)
+- Repository source: `agents/topics/standards/manifest.md` and `experiments/gpu-resident-shared-block-cache/AGENTS.md`.
+- Canonical rule: A deeper folder assignment is required when a subtree needs a meaningfully different standards set; `proof-tools` adds HTTP ingress and failure-boundary standards to the code baseline.
+- Repository rule: The new contained experiment will own a loopback/WebGL proof host for shader-addressable cache blocks and predictive animation prefetch.
+- Behavioral difference: The generic `experiments/` assignment omits `server.md`, while a browser proof host has HTTP ingress, containment, and failure boundaries that require it.
+- Information at risk: Applying only `code` would leave the new proof host without its applicable HTTP boundary standard; assigning `proof-tools` to all experiments would over-apply it to unrelated lanes.
+- Agent recommendation: `add-local`.
+- Recommendation rationale: Assign the existing `proof-tools` set only to `experiments/gpu-resident-shared-block-cache/`, matching the existing distant-Sun cache experiment pattern without changing any unrelated path or adding a local rule.
+- Developer decision: `add-local`.
+- Developer notes: Explicitly approved by the developer's “let's do that” instruction after the capability and reconciliation boundary were explained.
+- Re-review required: `no`.
+- Reconciliation result: Applied as approved; the manifest has one narrow existing-folder assignment.
+- Validation evidence: The shared folder resolver selects `proof-tools` for the new experiment source and `base` for its topic documents.
 
 ### FM-001: Replace the obsolete repository-wide list with folder assignments
 
@@ -675,6 +734,8 @@ archive verification.
 - FM-010: Complete immutable-run contract now lives at experiments/extraterrestrial/run-contract.md; citation policy lives under references/. Current consumers are repaired; contained experiments remain runner-only and closed lanes remain closed.
 - FM-011: New side experiments defer placement and operational containment to `start-experiment`; the legacy extraterrestrial source, output, and run contracts remain unchanged for existing lanes.
 - FM-012: The distant-Sun cache experiment maps to `proof-tools`, adding the already-selected server standard at the narrow proof-host boundary without broadening authority.
+- FM-013: The GPU-resident shared-block-cache experiment maps to `proof-tools` at its browser proof-host boundary.
+- FM-014: The shadow-animation evidence experiment maps to `proof-tools` at its browser request-interception boundary.
 
 - Attestation create/validate: `sha256:48e285217b8a224caae6e1a43d44cacc59e1acf215c1417a773ddd9604c88791`, six audited inputs including the new experiment-local instructions.
 - Generated guide write/check: current at `sha256:6b20eecf20ce0906dc9a3bd23fae365721632412a42a50f20ccc0d007aa08337`.

@@ -1,0 +1,152 @@
+{
+	"schemaId": "gpu-resident-shared-block-cache-s9-animation-contract-v1",
+	"parents": {
+		"e1": {
+			"runId": "000041-e1-format-compression",
+			"artifactSetSha256": "19d79885512d628ad874501b3c854b86eae2dfc374910bdae1dbc6569c96cf4a",
+			"catalog": {
+				"path": "tmp/experiments/distant-sun-cache-optimization/runs/000041-e1-format-compression/candidate/metadata/catalogs/runtime-catalog-fe937a81e6d804a8e854b3d0db31f9bdafa9420358e5fc0deef18b8d656391fe.json",
+				"byteLength": 40796,
+				"sha256": "fe937a81e6d804a8e854b3d0db31f9bdafa9420358e5fc0deef18b8d656391fe"
+			},
+			"blockIndex": {
+				"path": "tmp/experiments/distant-sun-cache-optimization/runs/000041-e1-format-compression/candidate/metadata/indexes/block-index-087eb111cc978fa870bc9e98f418cfe1b86790b4620ac681002387a5d17a37a7.json",
+				"sha256": "087eb111cc978fa870bc9e98f418cfe1b86790b4620ac681002387a5d17a37a7"
+			}
+		},
+		"s3AtlasCapability": {
+			"runId": "1788886953998-s3-atlas-host-smoke",
+			"resultPath": "tmp/experiments/gpu-resident-shared-block-cache/runs/1788886953998-s3-atlas-host-smoke/result.json",
+			"byteLength": 498,
+			"sha256": "670c4beb0e460c9450e943ba4c9f50bf0967719070c1a96b825b03f1511837cf"
+		},
+		"s4ExactAtlas": {
+			"runId": "1788887946682-s4-exact-atlas",
+			"resultPath": "tmp/experiments/gpu-resident-shared-block-cache/runs/1788887946682-s4-exact-atlas/result.json",
+			"byteLength": 636,
+			"sha256": "09efe4622925e80be4a9a9beb159e6867c015a2f9eb0f7940f99e76b383d184c"
+		},
+		"s5Animation": {
+			"runId": "1788907211015-s5-animation-measurement",
+			"resultPath": "tmp/experiments/gpu-resident-shared-block-cache/runs/1788907211015-s5-animation-measurement/result.json",
+			"byteLength": 10512,
+			"sha256": "c668b7c5d0f3d8477ade740d844899e0d03c5e0e70e81b7d7ba3d1bd86f2ef21"
+		},
+		"s8IntervalSweep": {
+			"runId": "1788909415561-s5-production-interval-sweep-4k",
+			"resultPath": "tmp/experiments/gpu-resident-shared-block-cache/runs/1788909415561-s5-production-interval-sweep-4k/result.json",
+			"byteLength": 33059,
+			"sha256": "10e1f0f7bff8c9892cbeed086c18e21eb711528a23e62163c32f40fb762e8633"
+		}
+	},
+	"scenario": {
+		"id": "sunrise-to-sunset-camera-follows-sun-20s-v1",
+		"durationMicroseconds": 20000000,
+		"progress": "clamp(elapsedMicroseconds / durationMicroseconds, 0, 1)",
+		"solarZenithDegrees": "90 - 60 * sin(PI * progress)",
+		"solarAzimuthDegrees": "90 + 180 * progress",
+		"directionToSunUpEastNorth": "[cos(zenith), sin(zenith) * sin(azimuth), sin(zenith) * cos(azimuth)] with angles in radians",
+		"camera": {
+			"position": "fixed at the production reference observer",
+			"target": "directionToSunUpEastNorth",
+			"rollDegrees": 0,
+			"tracking": "recompute the view orientation from the exact scenario state for every submitted frame"
+		},
+		"cacheSelection": {
+			"kind": "ledger-covered-nearest-integer-half-up-v1",
+			"minimumSolarZenithDegrees": 30,
+			"maximumSolarZenithDegrees": 90,
+			"expectedSceneCount": 61,
+			"expectedUniqueBlockCount": 62,
+			"expectedEncodedBytes": 363647002,
+			"expectedDecodedBytes": 966128640
+		},
+		"initialTemporalControl": "nearest-degree hard switch without interpolation",
+		"initialQuality": {
+			"name": "Low diagnostic motion control",
+			"transportPathIntervalCount": 10,
+			"qualification": "unqualified S8 diagnostic used only for animation characterization"
+		}
+	},
+	"preparation": {
+		"wholeRouteGpuCandidate": {
+			"representation": "TEXTURE_2D_ARRAY",
+			"scalarFormat": "R32F",
+			"widthTexels": 4058,
+			"heightTexels": 960,
+			"layers": 62,
+			"decodedBytes": 966128640,
+			"publication": "publish only after all encoded and decoded identities authenticate and every layer upload completes without WebGL error or context loss"
+		},
+		"fallback": {
+			"decodedCpuPoolBlocks": 62,
+			"decodedCpuPoolBytes": 966128640,
+			"gpuLayers": 24,
+			"gpuBytes": 373985280,
+			"residency": "current scene plus the next one-degree scene in the known direction, with least-recently-used unpinned eviction",
+			"allowedPlaybackWork": ["authenticated decoded CPU-to-GPU upload", "frame-boundary lookup publication"],
+			"forbiddenPlaybackWork": ["encoded transfer", "Zstandard decode", "inverse shuffle", "block authentication", "scene lookup construction"]
+		}
+	},
+	"performanceTrace": {
+		"recordingOrImageReadbackAllowed": false,
+		"animationClock": "performance.now() elapsed from the accepted first animation callback",
+		"presentationCadenceBoundary": "ordered requestAnimationFrame callback cadence; GPU query durations attribute cost but do not claim exact physical scanout time",
+		"physicalDisplayBoundary": "exact monitor scanout requires external capture hardware and is outside this experiment",
+		"requiredFrameFields": [
+			"frameId",
+			"requestedElapsedMicroseconds",
+			"animationCallbackMicroseconds",
+			"scenarioProgress",
+			"solarZenithDegrees",
+			"solarAzimuthDegrees",
+			"directionToSunUpEastNorth",
+			"cameraTargetUpEastNorth",
+			"cacheSceneDegrees",
+			"qualityIntervalCount",
+			"cpuSubmissionStartMicroseconds",
+			"cpuSubmissionEndMicroseconds",
+			"gpuElapsedMicroseconds",
+			"gpuTimerDisjoint",
+			"cacheEvents"
+		],
+		"requiredSummaryFields": [
+			"submittedFrameCount",
+			"meanFramesPerSecond",
+			"onePercentLowFramesPerSecond",
+			"missedPresentationSlots",
+			"longestVisibleHoldMicroseconds",
+			"hitches"
+		]
+	},
+	"replay": {
+		"outputWidth": 3840,
+		"outputHeight": 2160,
+		"outputFramesPerSecond": 60,
+		"outputFrameCount": 1200,
+		"outputDurationMicroseconds": 20000000,
+		"slotTimestampMicroseconds": "round(slotIndex * 1000000 / 60)",
+		"idealStateProgress": "slotIndex / 1199",
+		"traceMapping": "select the most recent submitted trace frame at or before each slot; hold the preceding frame across callback gaps; never interpolate over a measured hitch",
+		"encoderMode": "offline quality mode; generation wall time is not evidence of animation performance",
+		"containerSelection": "feature-test 4K WebCodecs configurations, then freeze one supported codec/container and an experiment-local muxer identity before encoding"
+	},
+	"requiredArtifacts": [
+		"raw performance trace",
+		"trace summary and hitch attribution",
+		"ideal replay mapping",
+		"trace-faithful replay mapping",
+		"clean ideal-timing video",
+		"clean trace-timing video",
+		"annotated side-by-side diagnostic video",
+		"representative lossless PNG frames",
+		"encoder and muxer configuration",
+		"environment and derivation records",
+		"artifact identities and terminal manifest"
+	],
+	"laterCandidate": {
+		"name": "neighboring-scene spectral interpolation",
+		"control": "seal and preserve the nearest-degree hard-switch evidence before implementing interpolation",
+		"acceptance": "compare temporal stepping, spectral and display error, atlas capacity, and shader cost without replacing or modifying the control"
+	}
+}

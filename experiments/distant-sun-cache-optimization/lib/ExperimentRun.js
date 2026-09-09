@@ -90,7 +90,7 @@ export default class ExperimentRun {
 			});
 			await run.writeArtifact('report.md', `# ${run.runId}\n\nStatus: running.\n`);
 			await run.writeArtifact('progress.jsonl', '');
-			await run.progress('initialize', 'Initialized the immutable C0 run record.');
+			await run.progress('initialize', 'Initialized the immutable experiment run record.');
 			return run;
 		} catch (error) {
 			await experimentRunAllocation.rollbackInitialization(identity.runDirectory);

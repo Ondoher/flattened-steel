@@ -1,0 +1,8 @@
+{
+	"name": "gpu-resident-shared-block-cache-experiment",
+	"private": true,
+	"type": "module",
+	"dependencies": {
+		"mediabunny": "1.55.7"
+	}
+}

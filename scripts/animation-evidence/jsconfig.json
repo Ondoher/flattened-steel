@@ -1,0 +1,14 @@
+{
+	"compilerOptions": {
+		"allowJs": true,
+		"checkJs": true,
+		"lib": ["ES2023", "DOM", "DOM.Iterable"],
+		"module": "NodeNext",
+		"moduleResolution": "NodeNext",
+		"noEmit": true,
+		"strict": true,
+		"target": "ES2023"
+	},
+	"include": ["*.js", "types.d.ts"],
+	"exclude": ["*.test.js"]
+}

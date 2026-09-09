@@ -36,8 +36,13 @@ authorized.
 - Use a new `runs/<run-id>/` directory for each evidence-bearing execution. Never overwrite or reopen a completed run. Copy or derive reused material into the new run and retain its source identity.
 - Record the command, inputs, relevant configuration, implementation revision or hashes, tool/runtime versions, environment facts that affect the result, parent artifacts, derivation operation, and resulting artifact identities.
 - Finalize a run with an explicit terminal state: `accepted`, `rejected`, `failed`, or `interrupted`. Publish its terminal manifest only after all artifacts are closed and hashed.
+- Cooperative cancellation and handled failures must finalize explicitly. An
+  uncatchable process or host termination may leave an incomplete run; that
+  directory is quarantined, is never evidence, and must never be reopened.
 - A verifier may read the run it validates but must not mutate it. Corrections and retries create a new run.
 - Keep production and other experiment trees read-only during experiment execution unless the engineer explicitly expands the write scope.
+- The canonical one-shot generation and post-seal verification commands are
+  owned by the [experiment entry](README.md#one-shot-commands).
 
 ## Monitorable progress
 
@@ -120,3 +125,57 @@ validation, recoverable progress failure, post-seal immutability, and missing,
 extra, corrupt, or semantically invalid artifact sets. The
 [experiment status](status.md) is the sole current owner of accepted run
 identities, artifact-set hashes, measurements, and verification results.
+
+## Accepted E1 Format Evidence
+
+E1 selects `8x8` coordinate tiles, the `float32-byte-lane-v1` reversible
+shuffle, and Zstandard level 6 for E2 evaluation. The accepted graph owns its
+immutable build and catalog-selection identities. Its independent verifier
+derives the executable row layout from validated serialized configuration and
+enforces complete compressed and decompressed block-allocation bounds, the
+frozen maximum scene payload before reconstruction allocation, and the
+15-minute total evidence-run bound, rejects malformed scene-Sun unit vectors at
+ingress, closes its candidate subtree, and independently authenticates its C0
+oracle. This selection does not change production architecture before
+promotion.
+
+The selection rule first finds the smallest complete candidate, retains every
+candidate within 1% of that minimum, then minimizes cold transfer bytes,
+request count, and encoding time. Current measurements and their evidence
+status are owned only by the [experiment status](status.md).
+
+The candidate format materializes separately hashed package-set report, runtime
+catalog, configuration manifest, block index, and per-scene manifests, plus
+content-addressed Zstandard blocks. Payload bytes are wavelength-major within
+each block. Every coordinate has one block and row ordinal; scene manifests
+retain ordered segments and the expected reconstructed payload identity.
+
+E1 request results are artifact-level models with immutable metadata retained
+after first fetch. They are not browser latency or cache-policy qualification.
+E2 must exercise the decoder, Worker, scheduler, coalescing, subscriber abort,
+64 MiB LRU, and transaction behavior in a real browser.
+
+E2 must retain raw per-scene decompaction records: required, reused, and newly
+decoded block counts; encoded and decoded bytes; Worker queue, decompression,
+and inverse-shuffle time; and transfer, upload, and publication elapsed time.
+These records support a later animation-prefetch decision; E2 does not make
+continuous animation behavior an acceptance gate.
+
+## Accepted E2 Browser Evidence
+
+E2 run `000055-e2-browser-transport` has an accepted terminal state and uses
+one persistent module Worker with transferred buffers. Its independent
+post-seal verification is recorded in [status](status.md). It
+selects the already-vendored Three r180 `zstddec` WebAssembly implementation;
+Chrome 153 did not expose native Zstandard decoding. The Worker validates the
+bounded encoded and decoded identities, inverse-shuffles one block at a time,
+and reconstructs selected scene payloads exactly before a measured WebGL2
+`R32F` upload and token-guarded last-good publication.
+
+The transport exercises four concurrent encoded-block requests, hash-addressed
+coalescing, isolated subscriber abort, final-subscriber fetch abort, stale
+result suppression, corruption rejection, and a byte-weighted 64 MiB LRU. A
+transaction may temporarily retain its pinned blocks above that target; after
+transactions complete, retained decoded bytes were 62,330,880. The complete
+raw per-scene records are immutable evidence in the accepted run, with their
+current measurements summarized only by [status](status.md).
