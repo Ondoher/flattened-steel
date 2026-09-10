@@ -95,7 +95,7 @@ artifacts stay only in the P7 output root.
 - [x] D0 — Select the `8x8` storage/generator mechanism.
 - [x] D1 — Select the production GPU packet, residency, publication, and live-runtime architecture.
 - [x] P1 — Implement production format and compatibility contracts.
-- [ ] P2 — Implement and verify production shared-inventory generation.
+- [x] P2 — Implement and verify production shared-inventory generation.
 - [ ] P3 — Implement production browser transport and Worker preparation.
 - [ ] P4 — Implement renderer-owned packet-atlas primitives.
 - [ ] P5 — Implement residency, predictive preparation, and atomic publication.
@@ -168,15 +168,15 @@ numerical configuration.
 
 Work:
 
-- [ ] Compute the union ledger once and preserve the existing J1-J4 recurrence
+- [x] Compute the union ledger once and preserve the existing J1-J4 recurrence
   and accumulation order.
-- [ ] Run one common calculation per wavelength with bounded tile readback and
+- [x] Run one common calculation per wavelength with bounded tile readback and
   direct scatter to exact block offsets.
-- [ ] Finalize one block at a time through validation, byte-lane shuffle,
+- [x] Finalize one block at a time through validation, byte-lane shuffle,
   Zstandard level 6, decode round trip, and content-addressed publication.
-- [ ] Use unique staging roots, cancellation, complete final verification,
+- [x] Use unique staging roots, cancellation, complete final verification,
   atomic publication, and last-good preservation.
-- [ ] Emit deterministic provenance and timing reports covering computation,
+- [x] Emit deterministic provenance and timing reports covering computation,
   readback, staging, compression, hashing, reconstruction, and disk usage.
 
 Completeness: a fresh production run reconstructs all 109 control payloads
@@ -377,9 +377,9 @@ checkpoint.
 
 ## Current State And Next Action
 
-D0, D1, and P1 are complete. Production now owns executable shared-package,
-codec, block, scene, packet-mapping, residency-metadata, prepared-route,
-publication-snapshot, and rollout-response contracts. No generator, transport,
-renderer, deployed cache artifact, or active package selection has changed.
-The next action is P2: implement the bounded production shared-inventory
-generator and exact reconstruction verifier against the immutable controls.
+D0, D1, P1, and P2 are complete. The production generator's
+[qualified immutable run](shared-generation-qualification.md) reconstructs all
+109 controls exactly, authenticates the persisted graph, and meets the
+storage, generation-time, working-disk, and Node-memory bounds. Active
+selection and deployed assets remain unchanged. Continue P3 browser transport
+and Worker preparation, then P4-P8 in the declared checkpoint order.

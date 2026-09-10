@@ -7,10 +7,10 @@ Canonical entry document: [Caches](production-algorithm32/caches/README.md).
 
 ## Immediate Focus
 
-P1 now owns executable shared-package schemas, canonical packet mapping,
-runtime metadata/publication contracts, and a versioned dense rollout
-response. Begin P2 production shared-inventory generation without modifying
-sealed experiment evidence or deployed cache assets.
+P2 now generates and verifies all 109 controls exactly in a bounded immutable
+shared-inventory run. Continue P3 browser transport and Worker preparation;
+the whole P3-P8 promotion remains in scope. Preserve sealed evidence and
+change deployed selection only after release qualification.
 
 ## Minimal Reload Sources
 

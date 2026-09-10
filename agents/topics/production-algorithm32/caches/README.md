@@ -8,7 +8,9 @@ packet-atlas mechanism. Its contained storage, generator, transport,
 residency, packet-rendering, animation, and final-audit experiments are closed.
 D0 and D1 select the production architecture, and P1 implements the production
 format, packet-mapping, runtime-publication, and rollout-response contracts.
-P2 shared-inventory generation is next. Historical POC, P0-P10, and PA0-PA7
+P2 shared-inventory generation is implemented and
+[qualified against all 109 controls](shared-generation-qualification.md).
+P3 browser transport and Worker preparation is next. Historical POC, P0-P10, and PA0-PA7
 execution remains archived and is not reopened.
 
 ## Working Documents

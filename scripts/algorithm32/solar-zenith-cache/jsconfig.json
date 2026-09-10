@@ -1,0 +1,23 @@
+{
+	"compilerOptions": {
+		"allowJs": true,
+		"checkJs": true,
+		"maxNodeModuleJsDepth": 0,
+		"module": "NodeNext",
+		"moduleResolution": "NodeNext",
+		"noEmit": true,
+		"skipLibCheck": true,
+		"strict": false,
+		"target": "ES2022",
+		"types": ["node"],
+		"typeRoots": ["../../../node_modules/@types"]
+	},
+	"include": [
+		"DistantSunSharedCache*.js",
+		"generate-shared-cache.js",
+		"verify-shared-cache-publication-failure.js",
+		"*.d.ts",
+		"../../../src/algorithm32/**/*.d.ts"
+	],
+	"exclude": ["*.test.js", "../../../node_modules/**", "../../../src/algorithm32/**/node_modules/**"]
+}

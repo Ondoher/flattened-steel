@@ -945,19 +945,38 @@ function uploadTextureUnit(gl, texture, unit, program, name) {
 	gl.uniform1i(gl.getUniformLocation(program, name), unit);
 }
 
-/** Execute one complete Native15 wavelength through the actual-point N4 recurrence. */
+/**
+ * Call this method to execute one Native15 wavelength through the actual-point N4 recurrence.
+ * Tile delivery replaces complete-layer delivery when supplied. Each callback is awaited before
+ * further readback. Invalid bounds, unsupported GPU capabilities, shader or readback failures, and
+ * rejected callbacks abort execution; callers must discard incomplete extraction and preserve prior runs.
+ *
+ * @param {DistantSunSceneCacheWavelengthRequest} request - Exact inputs, GPU context, and extraction observers.
+ * @returns {Promise<DistantSunSceneCacheWavelengthResult>} - Complete execution and allocation diagnostics.
+ */
 export async function compileDistantSunSceneCacheWavelength({
 	gl,
 	buildRequest,
 	wavelengthIndex = 7,
-	reportProgress = async () => {},
+	reportProgress = async (_stage) => {},
 	compileSceneCaches = false,
 	sceneCacheRequests = [],
-	onSceneCacheLayer = async () => {},
+	onSceneCacheLayer = async (_layer) => {},
+	onSceneCacheTile = null,
+	sceneCacheReadbackRowCount = 64,
 	onSceneCacheOrderLayer = null,
 	fieldProbeCoordinates = {},
 	onFieldProbes = null,
 }) {
+	if (onSceneCacheTile !== null) {
+		requireCondition(typeof onSceneCacheTile === 'function', 'Scene-cache tile receiver must be callable.');
+		requireCondition(
+			Number.isInteger(sceneCacheReadbackRowCount) &&
+				sceneCacheReadbackRowCount >= 1 &&
+				sceneCacheReadbackRowCount <= 64,
+			'Scene-cache tile readback must contain between one and 64 rows.',
+		);
+	}
 	requireCondition(gl instanceof WebGL2RenderingContext, 'ZP3 requires WebGL2.');
 	requireCondition(gl.getExtension('EXT_color_buffer_float'), 'EXT_color_buffer_float is required.');
 	const spec = buildRequest.transportSpec;
@@ -1039,7 +1058,7 @@ export async function compileDistantSunSceneCacheWavelength({
 	const timings = [];
 	let liveBytes = 0;
 	let peakLiveBytes = 0;
-	const allocate = (id, width, internalFormat = gl.R32F, format = gl.RED, components = 1) => {
+	const allocate = (id, width, internalFormat = Number(gl.R32F), format = Number(gl.RED), components = 1) => {
 		const texture = createTexture(gl, {width, height, internalFormat, format});
 		const bytes = width * height * components * 4;
 		resources.set(id, {id, texture, width, height, bytes});
@@ -1358,27 +1377,43 @@ export async function compileDistantSunSceneCacheWavelength({
 			const cacheState = cacheResources[cacheIndex];
 			bindFramebuffer(gl, framebuffer, cacheState.textures[cacheState.activeIndex]);
 			const packedHeight = cacheState.request.ledger.retainedBlockCount;
-			const values = new Float32Array(widthJ * packedHeight);
-			gl.readPixels(0, 0, widthJ, packedHeight, gl.RED, gl.FLOAT, values);
-			requireNoGlError(gl, `Offline scene cache ${cacheIndex} readback`);
 			let finite = true;
 			let nonnegative = true;
 			let maximum = 0;
-			for (let index = 0; index < values.length; index += 1) {
-				finite &&= Number.isFinite(values[index]);
-				nonnegative &&= values[index] >= 0;
-				maximum = Math.max(maximum, values[index]);
+			let readbackMilliseconds = 0;
+			let deliveryMilliseconds = 0;
+			const tileHeight = onSceneCacheTile === null ? packedHeight : sceneCacheReadbackRowCount;
+			for (let firstPackedRow = 0; firstPackedRow < packedHeight; firstPackedRow += tileHeight) {
+				const rowCount = Math.min(tileHeight, packedHeight - firstPackedRow);
+				const values = new Float32Array(widthJ * rowCount);
+				const readbackStarted = performance.now();
+				gl.readPixels(0, firstPackedRow, widthJ, rowCount, gl.RED, gl.FLOAT, values);
+				requireNoGlError(gl, `Offline scene cache ${cacheIndex} readback`);
+				readbackMilliseconds += performance.now() - readbackStarted;
+				for (let index = 0; index < values.length; index += 1) {
+					finite &&= Number.isFinite(values[index]);
+					nonnegative &&= values[index] >= 0;
+					maximum = Math.max(maximum, values[index]);
+				}
+				const deliveryStarted = performance.now();
+				if (onSceneCacheTile === null) await onSceneCacheLayer({cacheIndex, wavelengthIndex, values});
+				else {
+					requireCondition(finite && nonnegative, 'Scene-cache tile contains invalid spectral values.');
+					await onSceneCacheTile({cacheIndex, wavelengthIndex, firstPackedRow, rowCount, values});
+				}
+				deliveryMilliseconds += performance.now() - deliveryStarted;
 			}
-			await onSceneCacheLayer({cacheIndex, wavelengthIndex, values});
 			compiledCaches.push({
 				cacheIndex,
 				cacheIdentity: cacheState.request.cacheIdentity,
 				packedRowCount: packedHeight,
-				scalarCount: values.length,
-				logicalBytes: values.byteLength,
+				scalarCount: widthJ * packedHeight,
+				logicalBytes: widthJ * packedHeight * Float32Array.BYTES_PER_ELEMENT,
 				finite,
 				nonnegative,
 				maximum,
+				readbackMilliseconds,
+				deliveryMilliseconds,
 			});
 		}
 		return {

@@ -12,3 +12,17 @@ export const DISTANT_SUN_SCENE_CACHE_COMPILER_IDENTITY = 'algorithm32-offline-na
 
 /** Complete numerical compatibility identity required by the qualified runtime asset. */
 export const DISTANT_SUN_SCENE_CACHE_NUMERICAL_IDENTITY = 'algorithm32-native48-z180-w27-f68-native15-n4-q30-ozone-v1';
+
+/** Immutable dense control inventory selected by the production promotion plan. */
+export const SHARED_GENERATION_CONTROL_ROOT = 'server/flat32/data/one-degree-bin-covered-runtime-packages-20260830-1';
+/** Authenticated catalog identity of the selected 109-scene control. */
+export const SHARED_GENERATION_CONTROL_CATALOG_SHA256 =
+	'2dbf92ad616c5461954fc15f8eb1654c49f4b1e3ddbd948aa7bda7a40c76d7ac';
+/** Plan-owned ignored output root; each execution allocates a unique child. */
+export const SHARED_GENERATION_RUN_ROOT = 'tmp/production-algorithm32/distant-sun-shared-block-cache/runs';
+/** Complete source owner directory for the production offline generator. */
+export const SHARED_GENERATION_SOURCE_ROOT = 'scripts/algorithm32/solar-zenith-cache';
+/** Qualified production generator working-disk ceiling, including private browser profile overhead. */
+export const SHARED_GENERATION_MAXIMUM_WORKING_BYTES = 2 * 1024 * 1024 * 1024;
+/** Qualified Node generator process RSS ceiling, distinct from browser/driver overhead. */
+export const SHARED_GENERATION_MAXIMUM_NODE_RSS_BYTES = 1024 * 1024 * 1024;

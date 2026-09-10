@@ -23,6 +23,7 @@ export const DistantSunSceneCacheCompilerInputs = {
 	 * @returns {DistantSunSceneCacheCompilerScene} - The exact scene and fixed support.
 	 */
 	createQualifiedSanJoseNauticalScene() {
+		/** @type {UnitVector3} */
 		const directionToSourceUpEastNorth = [-0.16946677586889025, -0.7579900644516986, 0.6298667113517853];
 		const observerSolarZenithRadians = Math.acos(directionToSourceUpEastNorth[0]);
 
