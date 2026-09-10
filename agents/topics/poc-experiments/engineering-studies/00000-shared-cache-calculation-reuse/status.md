@@ -1,6 +1,6 @@
 # Shared Cache Calculation Reuse Experiment Status
 
-Status: E0-E6 complete; retain the qualified experimental candidate.
+Status: first candidate E0-E6 and Bruneton verification R0 complete; original runtime-improvement objective remains open at R1.
 
 ## Current State
 
@@ -13,6 +13,39 @@ the qualified generator issues 21,600 per-zenith completion waits over 120
 field passes. Cross-wavelength arithmetic reuse remains unproven.
 
 ## Latest Verification
+
+### Bruneton Reverification Using Existing Data
+
+Run: `runs/2026-09-10T23-21-50-177Z-bruneton-verification-d920ef95-faba-4834-b2de-ec70f0ff9c7f/`
+below the experiment output root. Execution took 17.9 seconds with zero new GPU
+calculations. All 17 new cache payloads equal their authenticated canonical
+parents byte-for-byte, permitting reuse of the prior final-view measurements.
+Unchanged B1, B2, and B3 scorers reproduce every prior score and classification.
+The derivation pins scorer revision `8abbadd581ca95317f7f4b850246c0fbe619017b`
+and verifies the scorer/dependency/reference worktree is clean before execution.
+Focused review confirms the result and provenance boundaries; the local
+experiment typecheck passes. Earlier attempts remain immutable, including the
+first numerical verification and a sandbox-denied Git subprocess attempt.
+The sealed run and copied figures pass independent artifact verification in
+`runs/2026-09-10T23-22-51-566Z-verification-b3c0e782-fc7f-4460-8dcd-20ce9bbce50f/`.
+
+| Result | Verified value | Disposition |
+| --- | --- | --- |
+| B1 aggregate RMSE | 11.831044211622888 mW m^-2 sr^-1 nm^-1 | favorable classification; exceeds unchanged 11.820391604126252 closeout ceiling |
+| B2 aggregate RMSE | 2.834261691366828 W m^-2 | favorable |
+| B3 same-run difference | 0.00000021162288810216978 mW m^-2 sr^-1 nm^-1 | consistent within 0.000001; favorable with all five mismatch fields |
+
+The run contains `b1-result.md`, `b2-result.md`, `b3-result.md`,
+`benchmark-verification.json`, and `derivation.json`. All six original figures
+are authenticated and copied under their original basenames into this run:
+`b1-aggregate-rmse.svg`, `b1-per-time-rmse.svg`,
+`b1-figure5-relative-error-domes.svg`, and the three
+`b1-figure5-algorithm32-*.png` panels. They are reused exact figures, not a new
+render or new final-view measurement. Verification passes; benchmark closeout
+remains rejected. The separate ground-contact investigation owns the historical
+ceiling conflict; no benchmark authority decision is made here.
+
+### First Candidate Evidence
 
 All run paths below are relative to the declared output root.
 
@@ -54,7 +87,7 @@ parent-directed checkpoints will not claim that ledger or full compliance.
 An initial browser attempt exited in the restricted sandbox. A fresh run uses
 the authorized browser execution permission; the failed run remains preserved.
 
-## Final Disposition
+## First Candidate Disposition And Next Gate
 
 Retain the candidate and its immutable proof evidence. Exact results, reduced
 allocation/compilation counts, fewer explicit waits, bounded active resources,
@@ -65,6 +98,8 @@ and total work still grow with distinct inputs; there is no fixed scene ceiling.
 
 Overall end-to-end speedup is not established by these measurements. A future
 performance claim needs equivalent host workloads; additional mathematical
-reuse needs its own dependency and oracle proof. Neither is an unfinished gate
-of this selected candidate. No production promotion was performed, and the
+reuse needs its own dependency and oracle proof. Those are unfinished parts of
+the owner's original objective, now explicitly tracked at R1. The next effort
+checkpoint is a small reusable-program proof before any further full run.
+No production promotion was performed, and the
 separate production B1 benchmark acceptance remains unchanged.

@@ -14,6 +14,15 @@ Can dependency-based planning and retained GPU execution reproduce the applicati
 - [x] E5: Verify compatibility against existing 17-scene direct-40 data with its correct ground contribution and complete profile. Keep fixed benchmark acceptance separate from optimization equivalence.
 - [x] E6: Consolidate correctness, lifecycle, containment, provenance, and performance evidence; decide whether to reject, iterate, retain, or propose promotion. Retain the qualified experimental candidate; overall runtime improvement and production promotion remain unclaimed.
 
+## Owner-Directed Follow-Up
+
+- [x] R0: Reuse the completed direct-40 data to verify the Bruneton B1-B3 results. Authenticate exact cache equivalence, rescore the existing final-view measurements, preserve the benchmark ceiling and prior rejection, and retain the six figures in a new immutable run.
+- [ ] R1: Prototype reusable algorithm-stage programs with changing inputs supplied as uniforms or buffers. Use two wavelengths and two scenes from existing application data, including repeated requirements. Require exact results, no additional compilation for compatible input changes, no additional calculation for repeated requirements, and a measured elapsed-time reduction before widening execution. If this gate fails, fix the mechanism before a full run.
+
+R0 is the current requested verification task. R1 restores the original
+optimization objective; completion of the first candidate does not establish
+that objective or an overall speedup.
+
 ## First Effort Checkpoint
 
 At the end of E1, report existing sharing, additional avoidable work, dependency

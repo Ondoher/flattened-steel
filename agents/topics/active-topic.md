@@ -7,9 +7,11 @@ Canonical entry document: [Shared Cache Calculation Reuse](poc-experiments/engin
 
 ## Immediate Focus
 
-The experiment plan is complete, including direct-40 compatibility and final
-artifact verification. The status document owns run identities, measured
-results, and the retain decision. The design owns dependencies and containment.
+The first resource-reuse candidate is complete, and the Bruneton results have
+been reverified using the existing data. The original goal of meaningful runtime
+savings through reusable programs and unique-work execution remains open.
+The next implementation gate is the small reusable-program prototype in the
+plan. The status owns evidence; the design owns dependencies and containment.
 Continue the owner's reduced review/testing cadence and preserve parent evidence.
 
 The separate production benchmark decision remains with the

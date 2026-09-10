@@ -161,6 +161,19 @@ findings before expensive execution; no speedup is claimed at scaffold time.
 
 ## Follow-up Questions Outside This Candidate
 
+### Next Candidate: Reusable Programs
+
+The owner's original objective remains open after the first resource-pooling
+candidate. The next implementation should keep compatible algorithm-stage
+programs resident while supplying changing spectral, scene, and material values
+through uniforms or buffers. A small two-scene/two-wavelength application-data
+proof must establish exact output and directly measure compilation, calculation,
+transfer, and total elapsed time. Repeated requirements must reuse inventory
+results, and compatible changed inputs must not trigger additional compilation.
+The plan's R1 gate precedes any broader run; no speedup is presumed from resource
+counters alone. Bruneton reverification R0 reuses exact cache equivalence and
+existing final-view evidence without changing the benchmark qualification rule.
+
 The selected candidate establishes exact-source program reuse, texture pooling,
 field-boundary waits, and row-level persistent inventory under the budgets above.
 Its measured results and disposition belong to [status](status.md).

@@ -25,11 +25,13 @@ The baseline already shares common fields; additional savings must be measured
 against that generator. The separate 17-scene, 40-spectrum Bruneton set follows
 after the application proofs. Scene counts come from inputs, not fixed limits.
 
-The experiment plan is complete. Application reconstruction, retained GPU
+The first candidate's E0-E6 plan is complete. Application reconstruction, retained GPU
 calculation, bounded residency, lifecycle, and direct-40 compatibility proofs
 have passed. Retain this candidate as exactness and lifecycle evidence;
 overall runtime improvement is not established. See [status](status.md) for
-run identities, measured results, and the final disposition.
+run identities, measured results, and the candidate disposition. The original
+runtime-improvement objective remains open; the plan now records the small
+reusable-program gate before any further full execution.
 
 The separate production qualification decision remains with the
 [ground-contact investigation](../../benchmarks/production-b-family-ground-contact-investigation.md).
