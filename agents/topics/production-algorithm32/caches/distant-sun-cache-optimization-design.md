@@ -111,6 +111,16 @@ GPU and that route. The complete 89-block production inventory would occupy
 1,594,515,456 bytes and is neither a default nor an experimentally qualified
 whole-inventory mode.
 
+P5's concrete memory admission keeps required blocks ahead of predictions.
+The generated inventory's maximum scene and adjacent-pair footprints are both
+18 blocks; a nonadjacent pair can require 36. A 24-layer controller holds the
+last-good scene when a jump cannot coexist with its protected slots. It may
+prepare that jump in a separate 24-layer atlas only with explicit target
+qualification for the 859,963,392-byte dual-atlas footprint and a compatible
+host-pin budget. Publication retires the old atlas. Prediction alone never
+forces a second allocation. Larger route policies require the exact qualified
+block set; the same declaration never implies all-inventory support.
+
 Animation preparation has two eligible forms:
 
 - preload every route block when the declared route fits a device-qualified

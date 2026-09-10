@@ -1,8 +1,8 @@
 # Distant-Sun Shared-Block Cache Production Plan
 
-Status: D1 production architecture and P1 executable format contracts are
-complete. The contained experiments are closed; P2 production generation is
-next.
+Status: D1 and P1-P5 are implemented and verified at their selected phase scope.
+P6 shader and stable live-runtime integration is next. The contained experiments
+remain closed; P7 qualification and P8 activation remain pending.
 
 This plan executes the
 [distant-Sun cache optimization design](distant-sun-cache-optimization-design.md).
@@ -86,6 +86,12 @@ checkpoint, whichever occurs first. Continue when verified implementation is
 advancing at a reasonable rate. Stop for reevaluation if redundant work or
 owner-provided periodic credit readings show excessive cost.
 
+The P3 assessment passed with approximately 25 minutes of implementation and
+five minutes of focused review. The latest owner-provided credit reading is
+76%, holding at that value while P4 completed and P5 advanced. Continue under
+this cadence and report progress; reevaluate if later readings or redundant
+work show excessive consumption.
+
 ### Production Owners
 
 All tests and evidence are production-owned. No P1-P8 work may create or use
@@ -121,7 +127,7 @@ artifacts stay only in the P7 output root.
 - [x] P2 — Implement and verify production shared-inventory generation.
 - [x] P3 — Implement production browser transport and Worker preparation.
 - [x] P4 — Implement renderer-owned packet-atlas primitives.
-- [ ] P5 — Implement residency, predictive preparation, and atomic publication.
+- [x] P5 — Implement residency, predictive preparation, and atomic publication.
 - [ ] P6 — Integrate the packet shader and stable live runtime.
 - [ ] P7 — Generate and qualify the release candidate.
 - [ ] P8 — Publish, observe, roll back if necessary, and remove the bridge.
@@ -271,27 +277,33 @@ Goal: keep cache preparation ahead of animation while bounding GPU residency.
 
 Work:
 
-- [ ] Port the deterministic 24-slot residency policy with required/predicted
+- [x] Port the deterministic 24-slot residency policy with required/predicted
   pins and least-recently-used eviction of unpinned slots.
-- [ ] Build and authenticate the initial current/predicted window before
+- [x] Build and authenticate the initial current/predicted window before
   declaring animation ready.
-- [ ] Accept a declared route and velocity when available; otherwise infer
+- [x] Accept a declared route and velocity when available; otherwise infer
   direction from recent scene requests and maintain at least one-scene
   look-ahead.
-- [ ] Fetch, decode, authenticate, packetize, and upload future blocks before
+- [x] Fetch, decode, authenticate, packetize, and upload future blocks before
   their presentation deadlines. Ordinary prepared playback should perform
   metadata-only scene changes.
-- [ ] Publish a complete current-generation row map and scene ordinal at one
+- [x] Publish a complete current-generation row map and scene ordinal at one
   frame boundary. Preserve the last-good scene on every miss or failure.
-- [ ] Handle reversal, seek, nonadjacent jumps, predictor cancellation,
+- [x] Handle reversal, seek, nonadjacent jumps, predictor cancellation,
   supersession, darkness at 108 degrees, disposal, and context restoration.
-- [ ] Permit a route-resident atlas only after its exact block set passes the
+- [x] Permit a route-resident atlas only after its exact block set passes the
   target's allocation and memory qualification; never infer whole-inventory
   support from the accepted 62-block route.
 
 Completeness: forward and reverse animation, route changes, jumps, and injected
 misses never expose a missing, corrupt, stale, evicted, or partially uploaded
 row. Diagnostics show whether every change was preloaded, predicted, or held.
+
+[Focused P5 evidence](shared-residency-verification.md) covers exact metadata,
+predictive reuse, slot replacement, ownership, failure, and publication using
+production tests and the authenticated immutable package. P6 supplies the live
+application scheduling and coherent binding installation; P7 measures actual
+presentation deadlines and qualifies each selected device/memory policy.
 
 ## P6 — Packet Shader And Stable Live Runtime
 
@@ -405,7 +417,7 @@ checkpoint.
 
 ## Current State And Next Action
 
-D0, D1, P1, P2, P3, and P4 are implemented and verified at their selected phase scope. The production generator's
+D0, D1, and P1-P5 are implemented and verified at their selected phase scope. The production generator's
 [qualified immutable run](shared-generation-qualification.md) reconstructs all
 109 controls exactly, authenticates the persisted graph, and meets the
 storage, generation-time, working-disk, and Node-memory bounds. Active
@@ -414,5 +426,7 @@ selection and deployed assets remain unchanged. The
 packet bytes, bounded retention, coalescing, cancellation, and real Worker
 transfer/recovery. [P4 GPU probes](shared-atlas-verification.md) establish exact
 packet and metadata storage with stable bindings and protected published layers.
-Continue P5-P8 in the declared checkpoint order; P7 retains
+[P5 residency checks](shared-residency-verification.md) establish authenticated
+metadata ingress, prediction, bounded slot ownership, and complete publication.
+Continue P6-P8 in the declared checkpoint order; P7 retains
 the complete integration and cross-cutting review gate.

@@ -474,10 +474,11 @@ export default class DistantSunSharedCacheRuntimeContracts {
 		if (!Array.isArray(snapshot.residentSlots) || snapshot.residentSlots.length === 0) {
 			throw new RangeError('Shared-cache ready publication must identify resident slots.');
 		}
+		const rowAddressTable = this.acceptRowAddressTable(snapshot.rowAddressTable);
 		const residentSlots = new Map();
 		const residentBlockIds = new Set();
 		for (const slotValue of snapshot.residentSlots) {
-			const slot = this.acceptResidentSlot(slotValue);
+			const slot = this.acceptResidentSlot(slotValue, rowAddressTable.residentLayerCount);
 			if (slot.generation !== generation)
 				throw new RangeError('Shared-cache publication contains a stale resident slot.');
 			if (residentSlots.has(slot.slotIndex) || residentBlockIds.has(slot.logicalBlockId)) {
@@ -491,7 +492,6 @@ export default class DistantSunSharedCacheRuntimeContracts {
 				throw new RangeError('Shared-cache publication is missing a required block.');
 		}
 
-		const rowAddressTable = this.acceptRowAddressTable(snapshot.rowAddressTable);
 		if (rowAddressTable.generation !== generation)
 			throw new RangeError('Shared-cache publication row addresses are stale.');
 		const altitudeLedgerTable = this.acceptAltitudeLedgerTable(

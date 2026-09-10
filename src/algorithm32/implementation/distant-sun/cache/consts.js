@@ -173,6 +173,8 @@ export const DISTANT_SUN_SHARED_CACHE_REQUEST_LIMIT = 4;
 export const DISTANT_SUN_SHARED_CACHE_LRU_BYTES = 64 * 1024 * 1024;
 /** Default host pin admission budget, excluding the separately bounded LRU and active decode. */
 export const DISTANT_SUN_SHARED_CACHE_PIN_BYTES = 768 * 1024 * 1024;
+/** Maximum complete browser metadata graph allocation before JSON parsing. */
+export const DISTANT_SUN_SHARED_CACHE_METADATA_BYTES = 32 * 1024 * 1024;
 /** Maximum encoded frame length accepted before network or decoder allocation. */
 export const DISTANT_SUN_SHARED_CACHE_MAXIMUM_ENCODED_BYTES = 16 * 1024 * 1024;
 /** Deadline for one Worker preparation, including initialization and authentication. */

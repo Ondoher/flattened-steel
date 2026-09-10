@@ -1684,3 +1684,144 @@ type DistantSunSharedCachePublicationSnapshot = Readonly<{
 	/** Complete altitude-ledger table, or null for darkness. */
 	readonly altitudeLedgerTable: DistantSunSharedCacheAltitudeLedgerTable | null;
 }>;
+/** Authenticated package graph privately copied into each runtime controller. */
+type DistantSunSharedCachePackageGraph = {
+	/** Physical and numerical compatibility owner. */
+	configuration: DistantSunSharedCacheConfigurationManifest;
+	/** Complete canonical coordinate ownership. */
+	blockIndex: DistantSunSharedCacheBlockIndex;
+	/** All 109 authenticated scenes in ordinal order. */
+	scenes: DistantSunSharedCacheSceneManifest[];
+	/** Authenticated executable W27 seam map. */
+	logicalToUniqueIndex: Uint16Array;
+	/** Catalog artifact identity. */
+	catalogSha256: string;
+};
+/** Browser ingress for one trusted immutable package root. */
+type DistantSunSharedCachePackageRequest = {
+	/** Same-origin root directory URL with a trailing slash. */
+	rootUrl: string;
+	/** Trusted root-report file identity from deployment selection. */
+	report: DistantSunSharedCacheFileIdentity;
+	/** Whole-graph cancellation signal. */
+	signal: AbortSignal;
+	/** Optional complete-file network capability. */
+	fetch?: typeof fetch;
+};
+/** Authenticated metadata and contained artifact addressing capability. */
+interface DistantSunSharedCachePackageSource {
+	/** Call this method to obtain a private authenticated metadata snapshot. */
+	getGraph(): DistantSunSharedCachePackageGraph;
+	/** Call this method to resolve one authenticated logical block to its contained URL. */
+	getBlockUrl(id: string): string;
+}
+/** Borrowed process-wide block preparation capability. */
+interface DistantSunSharedCachePacketSource {
+	/** Call this method to acquire a separately releasable authenticated packet pin. */
+	request(request: DistantSunSharedCacheBlockRequest): Promise<DistantSunSharedCachePacketLease>;
+}
+/** Uploaded atlas slot with its optional retained host pin. */
+type DistantSunSharedCacheAtlasSlot = {
+	/** Zero-based resident layer. */
+	index: number;
+	/** Authenticated logical block descriptor. */
+	block: DistantSunSharedCacheBlockDescriptor;
+	/** Active or predictive host pin, absent for unpinned GPU reuse. */
+	lease?: DistantSunSharedCachePacketLease;
+	/** Monotonic deterministic LRU sequence. */
+	lastUse: number;
+};
+/** Explicit target qualification required for optional memory policies. */
+type DistantSunSharedCacheMemoryQualification = {
+	/** Immutable qualification evidence identity. */
+	evidenceId: string;
+	/** Qualified device/driver target identity. */
+	targetId: string;
+	/** Qualified GPU allocation ceiling excluding driver overhead. */
+	maximumBytes: number;
+};
+/** Exact larger-atlas route qualification. */
+type DistantSunSharedCacheRouteQualification = DistantSunSharedCacheMemoryQualification & {
+	/** Exact unique qualified route block set. */
+	blockIds: readonly string[];
+};
+/** Runtime capabilities and explicit memory admission for one shared-cache controller. */
+type DistantSunSharedCacheControllerDefinition = {
+	/** Borrowed renderer resource owner. */
+	backend: CachePacketAtlasBackend;
+	/** Borrowed process-wide packet transport. */
+	transport: DistantSunSharedCachePacketSource;
+	/** Authenticated package metadata owner. */
+	package: DistantSunSharedCachePackageSource;
+	/** Fixed GPU layer capacity, defaulting to 24. */
+	layers?: number;
+	/** Total simultaneous atlas allocation ceiling. */
+	maximumGpuBytes: number;
+	/** Required qualification for any nondefault atlas capacity. */
+	routeQualification?: DistantSunSharedCacheRouteQualification;
+	/** Required qualification when admitting simultaneous current and candidate atlases. */
+	transitionQualification?: DistantSunSharedCacheMemoryQualification;
+};
+/** Declared route position and velocity for one predictive request. */
+type DistantSunSharedCacheSceneRequest = {
+	/** Exact index in the declared ordered route, disambiguating repeats. */
+	routeIndex?: number;
+	/** Signed progression speed; its magnitude selects up to one second of look-ahead. */
+	velocityDegreesPerSecond?: number;
+};
+/** Complete controller-owned frame whose borrowed resources are valid until the next publication. */
+type DistantSunSharedCacheFrame = {
+	/** Complete validated scene and row-address selection. */
+	snapshot: DistantSunSharedCachePublicationSnapshot;
+	/** Owned immutable GPU metadata released on retirement. */
+	metadataTextures: CacheImmutableTexture[];
+	/** Opaque shader binding handles installed with the scene ordinal before rendering. */
+	bindings: CacheRuntimeBinding[];
+	/** Host-pinned current/predicted block window. */
+	predictedBlockIds: string[];
+	/** Internal atlas capability, absent for texture-free darkness. */
+	atlas: DistantSunSharedCacheAtlasOwner | undefined;
+};
+/** Internal atlas lifecycle capability used by the controller-owned frame. */
+interface DistantSunSharedCacheAtlasOwner {
+	/** Opaque allocation handle. */
+	readonly array: CachePersistentArray;
+	/** Call this method to check whether GPU contents still match uploaded records. */
+	isCurrent(): boolean;
+	/** Call this method to reset invalidated GPU records after restoration. */
+	resetAfterRestoration(): void;
+	/** Call this method to check admission without overwriting published blocks. */
+	canFit(ids: readonly string[]): boolean;
+	/** Call this method to obtain current uploaded slot records for metadata construction. */
+	getSlots(): DistantSunSharedCacheAtlasSlot[];
+	/** Call this method to install one authenticated packet under candidate reservations. */
+	install(
+		block: DistantSunSharedCacheBlockDescriptor,
+		lease: DistantSunSharedCachePacketLease,
+		reserved: ReadonlySet<string>,
+	): boolean;
+	/** Call this method to release unpublished candidate pins. */
+	discardCandidate(): void;
+	/** Call this method to pin a complete published and predicted window. */
+	protect(published: readonly string[], predicted: readonly string[], owner: string): void;
+	/** Call this method to release owned host pins and GPU allocation. */
+	dispose(): void;
+}
+/** Bounded predictive preparation and publication diagnostics. */
+type DistantSunSharedCacheControllerDiagnostics = {
+	/** Requested scene count. */ requests: number;
+	/** Completed packet-layer upload count. */ uploads: number;
+	/** Existing uploaded layer reuse count. */ reused: number;
+	/** Atomically published scene count. */ published: number;
+	/** Frame boundaries that held the prior publication. */ held: number;
+	/** Superseded preparation count. */ canceled: number;
+	/** Failed preparation count. */ failures: number;
+	/** Qualified dual-atlas transition count. */ transitions: number;
+	/** Most recent complete preparation duration. */ lastPreparationMilliseconds: number;
+	/** Most recent failure message, cleared on successful preparation. */ lastError: string;
+	/** First predicted scene ordinal, or -1 when no complete future scene fits. */ predictedScene: number;
+	/** Monotonic requested generation. */ generation: number;
+	/** Published scene ordinal, or null before publication and in darkness. */ sceneOrdinal: number | null;
+	/** Whether a complete current candidate awaits its frame boundary. */ candidateReady: boolean;
+	/** Exact currently allocated atlas bytes, excluding driver overhead. */ gpuBytes: number;
+};

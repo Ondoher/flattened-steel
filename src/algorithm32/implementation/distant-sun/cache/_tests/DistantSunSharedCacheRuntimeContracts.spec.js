@@ -94,6 +94,17 @@ describe('DistantSunSharedCache packet and runtime contracts', /** Called by Jas
 		);
 	});
 
+	it('validates published slot indices against the explicitly allocated larger atlas', () => {
+		const fixture = createRuntimeFixture();
+		fixture.rowAddressTable.residentLayerCount = 62;
+		fixture.slot.slotIndex = 61;
+		for (let index = 0; index < fixture.rowAddressTable.values.length; index += 2)
+			if (fixture.rowAddressTable.values[index] === 0) fixture.rowAddressTable.values[index] = 61;
+		expect(contracts.acceptPublicationSnapshot(fixture.publication)).toBe(fixture.publication);
+		fixture.slot.slotIndex = 62;
+		expect(() => contracts.acceptPublicationSnapshot(fixture.publication)).toThrowError(/contract range/u);
+	});
+
 	it('rejects mixed sentinels, altitude-ledger gaps, and prepared-route memory overflow', /** Called by Jasmine to prove metadata and prediction bounds. */ () => {
 		const mixed = createRuntimeFixture();
 		mixed.rowAddressTable.values[2] = DISTANT_SUN_SHARED_CACHE_UNAVAILABLE_ROW_ADDRESS;
