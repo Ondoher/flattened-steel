@@ -7,8 +7,8 @@
 - Folder manifest: [`agents/topics/standards/manifest.md`](./agents/topics/standards/manifest.md)
 - Repository overlay: [`agents/topics/standards/overlay.md`](./agents/topics/standards/overlay.md)
 - Standards governance: [`documentation.md`](../../Users/gande/.codex/documentation/standards/documentation.md)
-- Normalization fingerprint: `sha256:4a9f5014683d07ead7ec14eda96dca9c0a38543408f958c5d9cc3923dae54649`
-- Guide source fingerprint: `sha256:c6515eed757e99ae10c77584a40b5a8332d7336c87b4e63dc70fbd1f1312e135`
+- Normalization fingerprint: `sha256:04d7baaa3c0727864de581a63eadbd4e0972a00d7e5507c38ae857f467643ae3`
+- Guide source fingerprint: `sha256:2418113af674da180b7346ad725cd5ee19fb0004b959d8932b20b1554a88b9d3`
 
 For each file, the longest matching folder assignment selects one named standards set. The set includes its inherited canonical standards, then matching folder-scoped overlay rules modify specific sections. This file is a readable projection only.
 

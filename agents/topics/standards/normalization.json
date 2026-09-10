@@ -2,14 +2,14 @@
 	"schemaVersion": 1,
 	"status": "normalized",
 	"manifest": "agents/topics/standards/manifest.md",
-	"normalizedAt": "2026-09-09T15:03:26.310Z",
-	"repositoryStandardsFingerprint": "sha256:4a9f5014683d07ead7ec14eda96dca9c0a38543408f958c5d9cc3923dae54649",
+	"normalizedAt": "2026-09-10T12:58:18.670Z",
+	"repositoryStandardsFingerprint": "sha256:04d7baaa3c0727864de581a63eadbd4e0972a00d7e5507c38ae857f467643ae3",
 	"pendingDivergences": 0,
 	"deferredDivergences": 0,
 	"inputs": [
 		{
 			"path": "AGENTS.md",
-			"sha256": "15e055f851b526ba79cafd6fff2682fc540ed041740183359c5853e994d8a7f4"
+			"sha256": "feba97419bad209013ad197459ce7991ce4f9694cbf535894042865ad4572798"
 		},
 		{
 			"path": "agents/topics/standards/manifest.md",

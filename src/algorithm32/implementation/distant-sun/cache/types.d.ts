@@ -933,3 +933,519 @@ type DistantSunSceneCacheManifestRecord = Readonly<{
 	/** Complete compiler and parent-input derivation record. */
 	readonly derivation: Readonly<Record<string, unknown>>;
 }>;
+
+/** Content identity and contained location of one immutable shared-cache file. */
+type DistantSunSharedCacheFileIdentity = Readonly<{
+	/** Package-root-relative canonical POSIX path. */
+	readonly path: string;
+	/** Exact serialized file length in bytes. */
+	readonly byteLength: number;
+	/** Lowercase SHA-256 of the exact serialized bytes. */
+	readonly sha256: string;
+}>;
+
+/** Authored implementation identity retained by durable cache derivation. */
+type DistantSunSharedCacheImplementationIdentity = Readonly<{
+	/** Stable implementation identifier. */
+	readonly id: string;
+	/** Exact implementation version. */
+	readonly version: string;
+	/** Lowercase SHA-256 of the material implementation source. */
+	readonly sha256: string;
+}>;
+
+/** Material tool identity retained by durable cache derivation. */
+type DistantSunSharedCacheToolIdentity = Readonly<{
+	/** Stable tool identifier. */
+	readonly id: string;
+	/** Exact tool version. */
+	readonly version: string;
+}>;
+
+/** Role-qualified parent artifact retained by one shared-cache derivation. */
+type DistantSunSharedCacheDerivationParent = Readonly<{
+	/** Unique semantic role of the parent in this derivation. */
+	readonly role: string;
+	/** Exact immutable parent artifact identity. */
+	readonly artifact: DistantSunSharedCacheFileIdentity;
+}>;
+
+/** Role-qualified output identity retained by one shared-cache derivation. */
+type DistantSunSharedCacheDerivationOutput = Readonly<{
+	/** Unique semantic role of the output in this derivation. */
+	readonly role: string;
+	/** Exact output length in bytes. */
+	readonly byteLength: number;
+	/** Lowercase SHA-256 of the exact output bytes. */
+	readonly sha256: string;
+}>;
+
+/** Complete durable parent, operation, implementation, tool, parameter, and output provenance. */
+type DistantSunSharedCacheDerivation = Readonly<{
+	/** Versioned derivation schema identity. */
+	readonly schemaId: string;
+	/** Ordered immutable input artifacts and their semantic roles. */
+	readonly parents: readonly DistantSunSharedCacheDerivationParent[];
+	/** Stable transformation operation identifier. */
+	readonly operationId: string;
+	/** Stable equation or mapping identifier applied by the operation. */
+	readonly equationId: string;
+	/** Material production implementation identity. */
+	readonly implementation: DistantSunSharedCacheImplementationIdentity;
+	/** Ordered material runtime and build tool identities. */
+	readonly tools: readonly DistantSunSharedCacheToolIdentity[];
+	/** Lowercase SHA-256 of the canonical material parameter record. */
+	readonly parametersSha256: string;
+	/** Ordered exact outputs produced by the operation. */
+	readonly outputs: readonly DistantSunSharedCacheDerivationOutput[];
+}>;
+
+/** Selected lossless compression, shuffle, scalar, and implementation profile. */
+type DistantSunSharedCacheCodecProfile = Readonly<{
+	/** Versioned codec-profile schema identity. */
+	readonly schemaId: string;
+	/** Stable selected codec-profile identifier. */
+	readonly id: string;
+	/** Selected Zstandard compression format identifier. */
+	readonly compression: string;
+	/** Selected Zstandard compression level. */
+	readonly level: number;
+	/** Reversible Float32 byte-lane shuffle identifier. */
+	readonly shuffle: string;
+	/** Decoded little-endian Float32 scalar identifier. */
+	readonly decodedScalar: string;
+	/** Exact codec implementation used to produce artifacts. */
+	readonly implementation: DistantSunSharedCacheImplementationIdentity;
+}>;
+
+/** Production generator identity retained by the shared-cache graph root. */
+type DistantSunSharedCacheGeneratorIdentity = DistantSunSharedCacheImplementationIdentity;
+
+/** Root report for one immutable production shared-cache package set. */
+type DistantSunSharedCachePackageSetReport = Readonly<{
+	/** Versioned package-set schema identity. */
+	readonly schemaId: string;
+	/** Lowercase SHA-256 semantic identity of the complete package set. */
+	readonly packageSetIdentity: string;
+	/** Complete derivation from immutable parent evidence to the package set. */
+	readonly derivation: DistantSunSharedCacheDerivation;
+	/** Exact production generator identity. */
+	readonly generator: DistantSunSharedCacheGeneratorIdentity;
+	/** Selected lossless codec profile. */
+	readonly codecProfile: DistantSunSharedCacheCodecProfile;
+	/** Ordered configuration-manifest artifacts available in the set. */
+	readonly configurations: readonly DistantSunSharedCacheFileIdentity[];
+	/** Exact runtime-catalog artifact selected by this set. */
+	readonly runtimeCatalog: DistantSunSharedCacheFileIdentity;
+}>;
+
+/** Frozen nearest-integer half-up selection and darkness boundary. */
+type DistantSunSharedCacheCatalogSelection = Readonly<{
+	/** Production scene-selection algorithm identifier. */
+	readonly kind: string;
+	/** Inclusive texture-free darkness boundary in degrees. */
+	readonly darkFromSolarZenithDegrees: number;
+	/** First catalog scene angle in degrees. */
+	readonly startSolarZenithDegrees: number;
+	/** Last retained catalog scene angle in degrees. */
+	readonly endSolarZenithDegrees: number;
+	/** Scene-angle increment in degrees. */
+	readonly incrementDegrees: number;
+	/** Minimum supported input angle in degrees. */
+	readonly minimumInputDegrees: number;
+	/** Exclusive maximum cache-backed input angle in degrees. */
+	readonly maximumInputExclusiveDegrees: number;
+}>;
+
+/** One ordered scene-manifest entry in the production shared-cache catalog. */
+type DistantSunSharedCacheCatalogEntry = Readonly<{
+	/** Stable scene identity. */
+	readonly id: string;
+	/** Representative local solar-zenith angle in degrees. */
+	readonly representativeSolarZenithDegrees: number;
+	/** Exact scene-manifest file identity. */
+	readonly manifest: DistantSunSharedCacheFileIdentity;
+}>;
+
+/** Complete production scene-selection catalog for one shared-cache configuration. */
+type DistantSunSharedCacheRuntimeCatalog = Readonly<{
+	/** Versioned runtime-catalog schema identity. */
+	readonly schemaId: string;
+	/** Lowercase SHA-256 of the selected physical and numerical configuration. */
+	readonly configurationIdentity: string;
+	/** Frozen production selection policy. */
+	readonly selection: DistantSunSharedCacheCatalogSelection;
+	/** All 109 scenes in ascending representative-angle order. */
+	readonly scenes: readonly DistantSunSharedCacheCatalogEntry[];
+}>;
+
+/** Exact-seam W27 layout and authenticated logical-to-unique map identity. */
+type DistantSunSharedCacheDirectionLayout = Readonly<{
+	/** Production exact-seam direction-codec identifier. */
+	readonly id: string;
+	/** Number of stored unique W27 directions. */
+	readonly uniqueDirectionCount: number;
+	/** Number of logical face-grid W27 directions. */
+	readonly logicalDirectionCount: number;
+	/** Exact Uint16 logical-to-unique index artifact. */
+	readonly logicalToUniqueIndex: DistantSunSharedCacheFileIdentity;
+}>;
+
+/** Native15 spectral storage order and scalar identity. */
+type DistantSunSharedCacheSpectralLayout = Readonly<{
+	/** Native spectral basis identifier. */
+	readonly id: string;
+	/** Number of spectral basis channels. */
+	readonly channelCount: number;
+	/** Wavelength-major decoded block ordering. */
+	readonly order: string;
+	/** Decoded little-endian Float32 scalar identity. */
+	readonly scalar: string;
+}>;
+
+/** One zero-based indexed coordinate domain. */
+type DistantSunSharedCacheIndexDomain = Readonly<{
+	/** First inclusive executable index. */
+	readonly firstIndex: number;
+	/** Number of executable indices. */
+	readonly count: number;
+}>;
+
+/** Native48 altitude and Z180 local-solar-zenith coordinate domains. */
+type DistantSunSharedCacheCoordinateDomains = Readonly<{
+	/** Native48 altitude index domain. */
+	readonly altitude: DistantSunSharedCacheIndexDomain;
+	/** Z180 angle-index domain and one-degree bin width. */
+	readonly solarZenith: DistantSunSharedCacheIndexDomain & Readonly<{readonly binWidthDegrees: number}>;
+}>;
+
+/** Selected 8x8 shared-block geometry and decoded ordering. */
+type DistantSunSharedCacheBlockGrid = Readonly<{
+	/** Altitude indices per tile. */
+	readonly altitudeCount: number;
+	/** Local-solar-zenith indices per tile. */
+	readonly solarZenithCount: number;
+	/** Altitude-first then solar-zenith coordinate ordering identifier. */
+	readonly coordinateOrder: string;
+	/** Wavelength-first then coordinate then direction decoded ordering identifier. */
+	readonly payloadOrder: string;
+	/** Marker that coordinates absent from the inventory union consume no rows. */
+	readonly omitUnpopulatedCoordinates: boolean;
+}>;
+
+/** Physical, numerical, domain, block-grid, codec, and index identity for one shared inventory. */
+type DistantSunSharedCacheConfigurationManifest = Readonly<{
+	/** Versioned configuration-manifest schema identity. */
+	readonly schemaId: string;
+	/** Lowercase SHA-256 of canonical physical, numerical, and layout facts. */
+	readonly configurationIdentity: string;
+	/** Stable atmosphere model identity. */
+	readonly atmosphereIdentity: string;
+	/** Stable spherical geometry identity. */
+	readonly geometryIdentity: string;
+	/** Stable ground-boundary identity. */
+	readonly groundIdentity: string;
+	/** Stable Native48/Z180/W27/F68/Native15/N4/Q30 numerical identity. */
+	readonly numericalIdentity: string;
+	/** Exact-seam direction layout and logical map identity. */
+	readonly directionLayout: DistantSunSharedCacheDirectionLayout;
+	/** Native15 spectral layout. */
+	readonly spectralLayout: DistantSunSharedCacheSpectralLayout;
+	/** Native48 and Z180 coordinate domains. */
+	readonly coordinateDomains: DistantSunSharedCacheCoordinateDomains;
+	/** Selected 8x8 block-grid contract. */
+	readonly blockGrid: DistantSunSharedCacheBlockGrid;
+	/** Selected lossless codec profile. */
+	readonly codecProfile: DistantSunSharedCacheCodecProfile;
+	/** Exact configuration-owned block-index artifact. */
+	readonly blockIndex: DistantSunSharedCacheFileIdentity;
+}>;
+
+/** One altitude and local-solar-zenith coordinate in canonical index space. */
+type DistantSunSharedCacheCoordinate = readonly [altitudeIndex: number, solarZenithIndex: number];
+
+/** Logical decoded byte identity without an encoded artifact path. */
+type DistantSunSharedCacheDecodedBlockIdentity = Readonly<{
+	/** Exact unshuffled decoded byte length. */
+	readonly byteLength: number;
+	/** Lowercase SHA-256 of the exact unshuffled decoded bytes. */
+	readonly sha256: string;
+}>;
+
+/** One logical 8x8 tile and its independently identified encoded artifact. */
+type DistantSunSharedCacheBlockDescriptor = Readonly<{
+	/** Configuration-qualified logical decoded block identity. */
+	readonly id: string;
+	/** First altitude and local-solar-zenith indices in the tile. */
+	readonly tile: Readonly<{readonly altitudeIndex: number; readonly solarZenithIndex: number}>;
+	/** Number of populated coordinate rows. */
+	readonly rowCount: number;
+	/** Populated coordinates in canonical altitude-then-solar-zenith order. */
+	readonly coordinates: readonly DistantSunSharedCacheCoordinate[];
+	/** Logical decoded byte identity, independent of compression. */
+	readonly decoded: DistantSunSharedCacheDecodedBlockIdentity;
+	/** Content-addressed compressed artifact identity. */
+	readonly encoded: DistantSunSharedCacheFileIdentity;
+	/** Selected codec-profile identifier. */
+	readonly codecProfileId: string;
+	/** Selected reversible byte-lane shuffle identifier. */
+	readonly shuffle: string;
+	/** Complete block extraction, shuffle, compression, and output derivation. */
+	readonly derivation: DistantSunSharedCacheDerivation;
+}>;
+
+/** Complete nonoverlapping coordinate ownership index for one shared-cache configuration. */
+type DistantSunSharedCacheBlockIndex = Readonly<{
+	/** Versioned block-index schema identity. */
+	readonly schemaId: string;
+	/** Lowercase SHA-256 of the owning configuration. */
+	readonly configurationIdentity: string;
+	/** Exact decoded Native15/W27 byte length per coordinate row. */
+	readonly rowByteLength: number;
+	/** Number of distinct coordinates owned by all blocks. */
+	readonly distinctCoordinateCount: number;
+	/** Logical blocks in canonical tile order. */
+	readonly blocks: readonly DistantSunSharedCacheBlockDescriptor[];
+}>;
+
+/** Half-open scalar input interval selecting one representative scene. */
+type DistantSunSharedCacheSceneSelection = Readonly<{
+	/** Representative local solar-zenith angle in degrees. */
+	readonly representativeSolarZenithDegrees: number;
+	/** Inclusive minimum input angle in degrees. */
+	readonly minimumInputDegrees: number;
+	/** Exclusive maximum input angle in degrees. */
+	readonly maximumInputExclusiveDegrees: number;
+}>;
+
+/** Physical and numerical identities required to consume one shared-cache scene. */
+type DistantSunSharedCacheSceneCompatibility = Readonly<{
+	/** Lowercase SHA-256 of the complete shared configuration. */
+	readonly configurationIdentity: string;
+	/** Stable atmosphere model identity. */
+	readonly atmosphereIdentity: string;
+	/** Stable spherical geometry identity. */
+	readonly geometryIdentity: string;
+	/** Stable ground-boundary identity. */
+	readonly groundIdentity: string;
+	/** Stable Native48/Z180/W27/F68/Native15/N4/Q30 numerical identity. */
+	readonly numericalIdentity: string;
+}>;
+
+/** Exact identity of the reconstructed dense control payload for one scene. */
+type DistantSunSharedCacheReconstructedPayloadIdentity = DistantSunSharedCacheDecodedBlockIdentity;
+
+/** One production scene's ledger, ordered coordinates, block needs, and dense-control identity. */
+type DistantSunSharedCacheSceneManifest = Readonly<{
+	/** Versioned shared scene-manifest schema identity. */
+	readonly schemaId: string;
+	/** Stable representative scene identity. */
+	readonly id: string;
+	/** Representative local solar-zenith angle in degrees. */
+	readonly representativeSolarZenithDegrees: number;
+	/** Exact half-open scalar selection interval. */
+	readonly selection: DistantSunSharedCacheSceneSelection;
+	/** Exact physical Sun identity and unit direction. */
+	readonly sceneSun: DistantSunSceneSunIdentity;
+	/** Required physical and numerical configuration identities. */
+	readonly compatibility: DistantSunSharedCacheSceneCompatibility;
+	/** Interpolation-closed Native48/Z180 scene ledger. */
+	readonly ledger: DistantSunSceneCacheLedgerRecord;
+	/** Coordinates in exact reconstructed packed-row order. */
+	readonly coordinates: readonly DistantSunSharedCacheCoordinate[];
+	/** Logical block identities in first-use scene order. */
+	readonly requiredBlockIds: readonly string[];
+	/** Exact dense-control payload identity reconstructed from the required blocks. */
+	readonly reconstructedPayload: DistantSunSharedCacheReconstructedPayloadIdentity;
+	/** Complete scene assembly and reconstructed-output derivation. */
+	readonly derivation: DistantSunSharedCacheDerivation;
+}>;
+
+/** One logical sample destination in the persistent RGBA packet atlas. */
+type DistantSunSharedCachePacketDestination = Readonly<{
+	/** Resident array-texture layer. */
+	readonly layer: number;
+	/** Packet-layer texel row. */
+	readonly y: number;
+	/** Packet-layer texel column. */
+	readonly x: number;
+	/** RGBA component index. */
+	readonly component: number;
+}>;
+
+/** Authenticated decoded inputs required to construct one packet-ready block. */
+type DistantSunSharedCachePacketBuildRequest = Readonly<{
+	/** Configuration-qualified logical decoded block identity. */
+	readonly logicalBlockId: string;
+	/** Lowercase SHA-256 of the decoded wavelength-major bytes. */
+	readonly decodedSha256: string;
+	/** Number of populated coordinate rows. */
+	readonly blockRowCount: number;
+	/** Authenticated decoded wavelength-major Native15 Float32 values. */
+	readonly decodedValues: Float32Array;
+	/** Executable W27 logical-to-unique Uint16 index. */
+	readonly logicalToUniqueIndex: Uint16Array;
+	/** Lowercase SHA-256 of the exact logical-to-unique index bytes. */
+	readonly logicalToUniqueIndexSha256: string;
+}>;
+
+/** Fixed single-layer RGBA32F packet storage and upload orientation. */
+type DistantSunSharedCachePacketStorage = Readonly<{
+	/** RGBA32F packet texture format. */
+	readonly format: string;
+	/** Packet layer width in RGBA texels. */
+	readonly width: number;
+	/** Packet layer height in RGBA texels. */
+	readonly height: number;
+	/** Single-layer packet-block depth. */
+	readonly layers: number;
+	/** Marker that RGBA values are stored with x as the fastest texel coordinate. */
+	readonly xFastest: boolean;
+	/** Marker that packet construction does not invert the y axis. */
+	readonly flipY: boolean;
+}>;
+
+/** One complete packet-ready block validated before GPU upload. */
+type DistantSunSharedCachePacketBlock = Readonly<{
+	/** Versioned packet-block schema identity. */
+	readonly schemaId: string;
+	/** Configuration-qualified logical decoded block identity. */
+	readonly logicalBlockId: string;
+	/** Lowercase SHA-256 of the authenticated decoded source bytes. */
+	readonly decodedSha256: string;
+	/** Lowercase SHA-256 of the authenticated W27 seam map. */
+	readonly logicalToUniqueIndexSha256: string;
+	/** Number of populated coordinate rows. */
+	readonly blockRowCount: number;
+	/** Fixed packet-layer storage facts. */
+	readonly storage: DistantSunSharedCachePacketStorage;
+	/** X-fastest RGBA32F values including exact-zero padding. */
+	readonly values: Float32Array;
+}>;
+
+/**
+ * Authenticated resident-slot lifecycle state.
+ *
+ * - **"uploaded"** - The complete packet block upload succeeded and is eligible for publication.
+ */
+type DistantSunSharedCacheResidentSlotState = 'uploaded';
+
+/** One successfully uploaded authenticated block and atlas-slot binding. */
+type DistantSunSharedCacheResidentSlot = Readonly<{
+	/** Versioned resident-slot schema identity. */
+	readonly schemaId: string;
+	/** Publication generation that owns the slot binding. */
+	readonly generation: number;
+	/** Zero-based persistent atlas layer. */
+	readonly slotIndex: number;
+	/** Uploaded and authenticated slot state. */
+	readonly state: DistantSunSharedCacheResidentSlotState;
+	/** Configuration-qualified logical block identity. */
+	readonly logicalBlockId: string;
+	/** Lowercase SHA-256 of the uploaded block's decoded bytes. */
+	readonly decodedSha256: string;
+	/** Number of populated rows addressable in the uploaded packet block. */
+	readonly blockRowCount: number;
+}>;
+
+/** Complete RG16UI mapping from scene packed rows to resident slots and block rows. */
+type DistantSunSharedCacheRowAddressTable = Readonly<{
+	/** Versioned row-address schema identity. */
+	readonly schemaId: string;
+	/** Publication generation that owns every address. */
+	readonly generation: number;
+	/** Unsigned two-component metadata texture format. */
+	readonly format: string;
+	/** Maximum scene packed-row extent. */
+	readonly width: number;
+	/** Fixed 109-scene catalog extent. */
+	readonly height: number;
+	/** Allocated packet-atlas layer count. */
+	readonly residentLayerCount: number;
+	/** Packed-row count for every scene ordinal. */
+	readonly sceneRowCounts: readonly number[];
+	/** Uint16 sentinel stored in both components for unavailable rows. */
+	readonly unavailableValue: number;
+	/** Scene-major RG16UI values storing resident slot then block row. */
+	readonly values: Uint16Array;
+}>;
+
+/** Complete RGBA32I mapping from scene/altitude coordinates to interpolation spans. */
+type DistantSunSharedCacheAltitudeLedgerTable = Readonly<{
+	/** Versioned altitude-ledger schema identity. */
+	readonly schemaId: string;
+	/** Publication generation that owns every ledger entry. */
+	readonly generation: number;
+	/** Signed four-component metadata texture format. */
+	readonly format: string;
+	/** Fixed Native48 altitude extent. */
+	readonly width: number;
+	/** Fixed 109-scene catalog extent. */
+	readonly height: number;
+	/** Scene-major RGBA32I values storing first zenith, last zenith, first packed row, and zero. */
+	readonly values: Int32Array;
+}>;
+
+/**
+ * Predictive route preparation completion state.
+ *
+ * - **"partial"** - A bounded prefix or subset is prepared and later blocks remain scheduled.
+ * - **"ready"** - Every required route block is prepared within the declared memory ceiling.
+ */
+type DistantSunSharedCachePreparedRouteStatus = 'partial' | 'ready';
+
+/** Bounded host-retention state for one declared animation route. */
+type DistantSunSharedCachePreparedRoute = Readonly<{
+	/** Versioned prepared-route schema identity. */
+	readonly schemaId: string;
+	/** Preparation generation invalidated by route replacement. */
+	readonly generation: number;
+	/** Stable caller-owned route identity. */
+	readonly routeId: string;
+	/** Lowercase SHA-256 of the selected physical/numerical configuration. */
+	readonly configurationIdentity: string;
+	/** Lowercase SHA-256 of the exact runtime catalog. */
+	readonly catalogSha256: string;
+	/** Ordered scene ordinals, including repeated or reverse traversal. */
+	readonly sceneOrdinals: readonly number[];
+	/** Unique logical block identities required by the route. */
+	readonly requiredBlockIds: readonly string[];
+	/** Unique required logical block identities currently prepared. */
+	readonly preparedBlockIds: readonly string[];
+	/** Caller-declared compressed, decoded, and packet-ready host-memory ceiling in bytes. */
+	readonly hostMemoryCeilingBytes: number;
+	/** Current route-owned retained host bytes. */
+	readonly retainedBytes: number;
+	/** Whether preparation is partial or complete. */
+	readonly status: DistantSunSharedCachePreparedRouteStatus;
+}>;
+
+/**
+ * Atomically visible cache publication state.
+ *
+ * - **"ready"** - One complete shared scene is addressable through authenticated resident blocks.
+ * - **"dark"** - The texture-free state at or above 108 degrees is active.
+ */
+type DistantSunSharedCachePublicationStatus = 'ready' | 'dark';
+
+/** One coherent frame-boundary shared-cache publication or texture-free dark state. */
+type DistantSunSharedCachePublicationSnapshot = Readonly<{
+	/** Versioned publication-snapshot schema identity. */
+	readonly schemaId: string;
+	/** Generation shared by slots, row addresses, and altitude ledger. */
+	readonly generation: number;
+	/** Ready or texture-free dark publication state. */
+	readonly status: DistantSunSharedCachePublicationStatus;
+	/** Published scene ordinal, or null for the dark state. */
+	readonly sceneOrdinal: number | null;
+	/** Published representative local solar-zenith angle in degrees, or null for darkness. */
+	readonly representativeSolarZenithDegrees: number | null;
+	/** Logical blocks required by the published scene. */
+	readonly requiredBlockIds: readonly string[];
+	/** Authenticated resident slots visible to the publication. */
+	readonly residentSlots: readonly DistantSunSharedCacheResidentSlot[];
+	/** Complete row-address table, or null for darkness. */
+	readonly rowAddressTable: DistantSunSharedCacheRowAddressTable | null;
+	/** Complete altitude-ledger table, or null for darkness. */
+	readonly altitudeLedgerTable: DistantSunSharedCacheAltitudeLedgerTable | null;
+}>;

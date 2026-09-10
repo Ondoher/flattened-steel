@@ -8,6 +8,13 @@ compaction, a known initialized session follows `active-topic.md` and its
 `Minimal Reload Sources`. If prior initialization cannot be established, run
 `$bootstrap`.
 
+# Checkpoint Adviser
+
+During repository bootstrap, activate `checkpoint-advisor` monitoring through
+the global `review-standards` skill after its eligibility gates pass. Keep
+monitoring active for the session unless the user suspends it. The skill owns
+evaluation timing, readiness evidence, and adviser lifecycle.
+
 # Topic Bootstrap
 
 At the start of a session, read only

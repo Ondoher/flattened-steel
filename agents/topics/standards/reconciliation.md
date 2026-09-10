@@ -37,13 +37,28 @@ On 2026-09-09 the developer explicitly authorized the post-scaffold input
 refresh for `experiments/distant-sun-shadow-animation-evidence/`. Its exact
 scaffold `AGENTS.md` inherits the existing `experiments/` -> `code` assignment;
 no manifest, overlay, canonical-standard, or folder-capability change was
-required. The refreshed normalization has eight operational inputs and
-fingerprint
-`sha256:4a9f5014683d07ead7ec14eda96dca9c0a38543408f958c5d9cc3923dae54649`.
-The regenerated guide source fingerprint is
-`sha256:c6515eed757e99ae10c77584a40b5a8332d7336c87b4e63dc70fbd1f1312e135`.
+required. Current attestation and guide identities are recorded in the
+checkpoint-adviser activation record below.
 
 ## Summary
+
+### Checkpoint Adviser Activation
+
+The 2026-09-10 request to enable the check-in adviser authorizes the repository
+bootstrap opt-in in `AGENTS.md`. The focused audit found only that operational
+instruction changed among the eight attested inputs. It selects the existing
+`review-standards` adviser lifecycle and eligibility gates; it introduces no
+engineering-rule, folder-mapping, overlay, or canonical-standard divergence.
+The requested activation is the recorded developer decision. Reconciliation
+is limited to this instruction and the derived attestation and guide refresh.
+
+Validation retains eight operational inputs, zero pending or deferred
+divergences, and normalization fingerprint
+`sha256:04d7baaa3c0727864de581a63eadbd4e0972a00d7e5507c38ae857f467643ae3`.
+The generated guide source fingerprint is
+`sha256:2418113af674da180b7346ad725cd5ee19fb0004b959d8932b20b1554a88b9d3`.
+
+### Disposition Counts
 
 | Recommended disposition | Count |
 | --- | ---: |

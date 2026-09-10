@@ -63,6 +63,7 @@ const catalogFile = await containedFile(packageRoot, report.catalogPath);
 const catalogBytes = await readFile(catalogFile);
 if (sha256(catalogBytes) !== report.catalogSha256) throw new Error('Runtime catalog hash does not match its report.');
 const catalog = JSON.parse(catalogBytes.toString('utf8'));
+const assetBaseUrl = argument('--asset-base-url', '/scene-caches/');
 const requestedPort = Number(argument('--port', '0'));
 if (!Number.isInteger(requestedPort) || requestedPort < 0 || requestedPort > 65535) {
 	throw new RangeError('--port must be an integer from 0 through 65535.');
@@ -80,7 +81,7 @@ const server = createServer(async (request, response) => {
 			const solarZenithDegrees =
 				rawDegrees === null || rawDegrees.trim() === '' ? Number.NaN : Number(rawDegrees);
 			try {
-				const resolution = resolveDistantSunSceneCache(catalog, solarZenithDegrees, '/scene-caches/');
+				const resolution = resolveDistantSunSceneCache(catalog, solarZenithDegrees, assetBaseUrl);
 				sendJson(response, 200, resolution);
 			} catch (error) {
 				sendJson(response, 400, {error: error instanceof Error ? error.message : String(error)});
@@ -125,7 +126,7 @@ const server = createServer(async (request, response) => {
 		sendJson(response, 404, {error: 'Not found.'});
 	} catch (error) {
 		sendJson(response, error?.code === 'ENOENT' ? 404 : 500, {
-			error: error instanceof Error ? error.message : String(error),
+			error: error?.code === 'ENOENT' ? 'Not found.' : 'Internal server error.',
 		});
 	}
 });

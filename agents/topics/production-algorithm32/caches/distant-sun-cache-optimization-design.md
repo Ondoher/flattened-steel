@@ -1,8 +1,10 @@
 # Distant-Sun Cache Optimization Design
 
-Status: design proposal with evaluation findings recorded on 2026-09-05 and
-recommended v1 architecture recorded on 2026-09-06. Implementation and
-qualification are pending.
+Status: production promotion architecture selected through D1 and executable
+format/compatibility contracts completed through P1. The contained storage,
+generator, transport, GPU-residency, packet-rendering, and animation
+experiments are complete; production generation through P2 and later runtime
+implementation and qualification remain pending.
 
 This document owns the proposed reduction of distant-Sun cache storage,
 transfer size, and offline generation time. It is linked from the active
@@ -19,10 +21,13 @@ The owner considers the current behavior correct. The first objective is to
 reduce individual cache files and the excessive size of the complete
 inventory; the second is to generate the inventory faster.
 
-The proposed design stores shared, losslessly compressed data blocks generated
-from one common atmospheric calculation per physical/numerical configuration.
-Per-angle manifests select the required blocks. The loader reconstructs the
-same float32 samples and existing face-grid GPU representation.
+The selected design stores shared, losslessly compressed spectral blocks
+generated from one common atmospheric calculation per physical/numerical
+configuration. Per-angle manifests select the required blocks. The browser
+authenticates and decodes those blocks, expands each resident block into the
+existing RGBA spectral-packet organization, and uploads it into a persistent
+GPU atlas. Per-scene row-address metadata selects resident slots without
+reconstructing or uploading a complete dense scene during ordinary use.
 
 Preserve Native15 spectra, Native48 altitude nodes, Z180 local Sun angles,
 W27 directions, F68 incoming quadrature, N4 recurrence, accumulation order,
@@ -32,9 +37,12 @@ atomic replacement, failure preservation, and context restoration remain
 acceptance requirements.
 
 Existing packages, sealed experimental evidence, and archives remain immutable.
-This design does not reopen their completed plans. Lossy codecs remain a
-separate closeout D4 decision; 4K rendering performance remains D1. No GPU
-memory reduction or frame-rate improvement is claimed by the storage design.
+This design does not reopen their completed plans. Lossy codecs, temporal
+interpolation, reduced spatial or angular resolution, and the known
+near-horizon appearance defect remain separate work. The packet atlas is
+selected for fast scene changes, not as a GPU-memory or frame-rate reduction:
+its bounded residency is intentionally larger than one current dense scene,
+and its 4K shader cost was experimentally comparable rather than faster.
 
 
 ## Proposals Ranked By Impact
@@ -47,9 +55,9 @@ ranking, not a schedule that promotes an easier task ahead of a larger benefit.
 
 | Rank | Proposal | Impact supported by the evaluation | Evidence boundary |
 | --- | --- | --- | --- |
-| 1 | Store identical altitude/Sun-angle rows once across all packages. | Spectral payload falls from 17.23 GB to 1.34 GB before compression: 92.2353% fewer bytes. Neighboring selections can reuse downloaded blocks. | Full inventory payload hashes and all repeated coordinate hashes were checked; block/index overhead and browser loading are still unmeasured. |
-| 2 | Generate the common atmospheric field once, then extract all required rows. | Complete wavelength calculations fall from 1,635 to 15 for the 109-package inventory. The recorded independent-package inventory took about 85 minutes. | All 109 reconstructed executable build requests were identical. The new generator has not been implemented or timed; 109-fold less repeated recurrence is not a 109-fold elapsed-time claim. |
-| 3 | Apply reversible byte shuffle and Zstandard compression. | Four 161.18 MB payloads became 54.58-62.98 MB, a 60.93-66.14% reduction, with exact reconstruction. | Four complete payloads measured in Node; compressed distinct-inventory size, browser decode cost, and final shared-block layout remain open. |
+| 1 | Store identical altitude/Sun-angle rows once across all packages. | Spectral payload falls from 17.23 GB to 1.34 GB before compression: 92.2353% fewer bytes. Neighboring selections reuse authenticated blocks. | E1 and E3 reconstructed all 109 package payloads exactly. |
+| 2 | Generate the common atmospheric field once, then extract all required rows. | Complete wavelength calculations fall from 1,635 to 15. The accepted E3 durable run completed recurrence, staging, compression, and reconstruction in under nine minutes. | The production generator must independently reproduce the accepted result and retain its measured disk-staging requirement. |
+| 3 | Apply reversible byte-lane shuffle and Zstandard level 6. | The accepted `8x8` candidate is 506,490,201 bytes including metadata, 97.0605% below the 17.23 GB control. | E1 selected the complete candidate and E2 qualified its browser fallback mechanism; production must own the dependency and implementation. |
 | 4 | Reuse shader programs and reduce repeated compilation. | One retained 45.76-second compilation spent about 30.80 seconds between wavelength start and programs-compiled checkpoints. | This interval includes setup and shader compilation, not isolated shader compiler time. Savings after rank 2 are not additive to eliminating repeated inventory builds. |
 | 5 | Reduce unnecessary GPU synchronization and progress round trips. | Current field traversal performs 21,600 strip-level gl.finish() calls per package, plus accumulation waits. | The count follows the executable loops; the achievable time reduction has not been measured. |
 
@@ -65,44 +73,116 @@ runtime reliability rather than implementation effort.
 
 | Decision | Recommended v1 default |
 | --- | --- |
-| Shared-block grouping | Fixed coordinate tiles containing four altitude rows by eight local-Sun-angle rows, with no more than 32 populated rows or 16 MiB decoded data per block. |
+| Shared-block grouping | Fixed `8x8` coordinate tiles containing at most 64 populated rows. A full block is 15,582,720 decoded bytes and remains below the 16 MiB format ceiling. |
 | Manifest and coordinate index | Versioned JSON metadata split into package-set report, runtime catalog, configuration manifest, block index, and per-scene manifest. |
 | Browser decoder | One persistent module Worker behind a repository-owned decoder interface; prefer a feature-detected native Zstandard decoder and retain a pinned decoder-only WebAssembly fallback. |
 | Request coalescing | One process-wide in-flight request per encoded artifact, at most four concurrent artifact requests, with subscriber-aware cancellation. |
-| Client retention | Pin blocks used by an unpublished transaction and retain published decoded blocks in a byte-weighted 64 MiB least-recently-used cache. Rely on the browser HTTP cache for encoded files. |
+| Client retention | Pin blocks used by the published and predicted windows and retain other decoded blocks in a byte-weighted 64 MiB least-recently-used cache. A declared animation-preparation budget may retain additional compressed, decoded, or packet-ready route data. |
 | Generator staging | Calculate the common field once per wavelength and scatter union rows into preallocated temporary block files at final wavelength offsets; validate, shuffle, compress, and publish one completed block at a time. |
-| Failure and publication | Generation-token and `AbortSignal` cancellation, full identity validation before GPU upload, isolated candidate resources, and one atomic publication swap that preserves the last good cache. |
+| GPU packet block | Expand one authenticated 64-row block to one `648x1728` `RGBA32F` array layer. Preserve Native15 channels in four RGBA packets and require exact zero padding in the unused sixteenth component. |
+| Row metadata | Use an `RG16UI` scene-row address mapping to `{resident slot, block row}` and an `RGBA32I` scene/altitude ledger matching the accepted packet proof. |
+| GPU residency | Use a 24-layer sliding atlas as the bounded default. Preload the initial current/predicted window; upload later blocks ahead of their deadline. A fully route-resident atlas is optional and route- and device-qualified. |
+| Live publication | Keep one compiled runtime. Publish Sun direction, scene selection, row metadata, receiver lighting, and shadow-light placement coherently at a frame boundary. |
+| Failure and publication | Generation-token and `AbortSignal` cancellation, full identity validation before slot upload, and one current-generation metadata publication that preserves the last good state. |
 
-The numerical defaults are starting contracts, not permanent constants. The
-qualification run must compare the block candidates and retention limits named
-below. A different value may replace a default only when the same evidence set
-shows a material end-to-end improvement without weakening the bounds or
-behavioral guarantees.
+The numerical defaults are selected production inputs, not permanent
+constants. A later value may replace one only when a separately declared
+evidence set shows a material end-to-end improvement without weakening the
+bounds or behavioral guarantees.
+
+### D1 Production Promotion Freeze
+
+D1 combines the accepted storage mechanism with the accepted GPU packet
+mechanism. Production adapts both behind its existing cache and renderer
+boundaries; it never imports experiment modules or writes to sealed runs.
+
+The ordinary runtime path does not rebuild the wavelength-major scene payload.
+Full dense reconstruction remains a qualification oracle and temporary
+rollback bridge only. Each authenticated shared block is independently packed
+and uploaded once per residency, and an eligible scene becomes visible only
+when all of its row addresses resolve to authenticated resident slots.
+
+The default 24-layer packet atlas occupies exactly 429,981,696 bytes before
+driver overhead. This exceeds the current 185,326,380-byte maximum dense-scene
+allocation and therefore requires an explicit production memory policy and a
+safe dense fallback during rollout. The accepted 62-block sunrise-to-sunset
+route occupies 1,110,786,048 bytes; that result qualifies only the reference
+GPU and that route. The complete 89-block production inventory would occupy
+1,594,515,456 bytes and is neither a default nor an experimentally qualified
+whole-inventory mode.
+
+Animation preparation has two eligible forms:
+
+- preload every route block when the declared route fits a device-qualified
+  atlas; or
+- preload the initial 24-layer window and predictively fetch, authenticate,
+  packetize, and upload later blocks before their presentation deadline.
+
+Normal prepared playback performs metadata and live-light publication at the
+frame boundary. A forced prediction miss holds the last-good scene until a
+complete successor is ready; it never publishes an incomplete row map. The
+first production qualification must combine the 24-layer RGBA packet atlas
+with actual predictive replacement because the contained experiment proved
+bounded sliding residency and final packet rendering in separate executions.
 
 ### Shared Block Shape
 
 Partition each configuration's 48-by-180 coordinate domain into stable
-four-altitude-by-eight-Sun-angle tiles. Omit coordinates not present in the
+eight-altitude-by-eight-Sun-angle tiles. Omit coordinates not present in the
 inventory union rather than padding them with spectral data. Within a block,
 order populated coordinates first by altitude index and then by local
 Sun-angle index. Store wavelength-major float32 values for each coordinate so
 the generator can write one contiguous coordinate span per wavelength and the
-loader can reconstruct the current package ordering without numerical work.
+runtime can packetize an authenticated block without numerical reconstruction.
 
-A full 32-row tile decodes to:
+A full 64-row tile decodes to:
 
 ```text
-32 * 4,058 directions * 15 channels * 4 bytes = 7,791,360 bytes
+64 * 4,058 directions * 15 channels * 4 bytes = 15,582,720 bytes
 ```
 
-This approximately 7.43 MiB decoded target is large enough for useful
-compression and request amortization while allowing several neighboring
-blocks within the client retention budget. Enforce a format-level decoded-size
-ceiling of 16 MiB before allocation. Qualification must compare `2x8`, `4x8`,
-`4x16`, and `8x8` tiles using total compressed inventory bytes, requests and
-bytes for initial and neighboring selections, browser decode latency, and peak
-memory. Keep `4x8` unless another candidate materially improves the combined
-result.
+This approximately 14.86 MiB decoded block is the D0-selected result of the
+completed `2x8`, `4x8`, `4x16`, and `8x8` comparison. Enforce the 16 MiB
+decoded-size ceiling before allocation. Changing the block geometry or codec
+is a new format decision and cannot occur as an implementation convenience.
+
+### Canonical Packet Mapping
+
+The decoded block is wavelength-major, then populated block-row-major, then
+unique-direction-major. For channel `c`, populated block row `r`, and unique
+direction `d`, its exact Float32 source index is:
+
+```text
+sourceIndex = (c * blockRowCount + r) * 4058 + d
+```
+
+Packet construction first expands each logical W27 direction `l` through the
+authenticated 4,374-entry logical-to-unique map. With `face = floor(l / 729)`,
+`faceLocal = l - face * 729`, `v = floor(faceLocal / 27)`, and
+`u = faceLocal - v * 27`, the destination of channel `c` and block row `r` is:
+
+```text
+packetGroup = floor(c / 4)
+component   = c % 4
+x           = packetGroup * 162 + face * 27 + u
+y           = r * 27 + v
+layer       = residentSlot
+```
+
+The array texture is `648x1728`, uses x-fastest RGBA component order, and does
+not flip the y axis during upload. Construction copies the source Float32 bit
+pattern without numerical conversion. Channel indices 0 through 14 retain
+Native15 basis order. Packet group 3 component 3, corresponding to synthetic
+channel 15, is exact positive zero for every logical direction and populated
+row. Unpopulated rows through row 63 are also exact zero.
+
+The `RG16UI` row-address texel at `(scenePackedRow, sceneOrdinal)` stores
+`{residentSlot, blockRow}`. Both components use `0xffff` for an unavailable
+entry, and publication rejects a supported row containing that sentinel. The
+`RGBA32I` ledger texel at `(altitudeIndex, sceneOrdinal)` stores
+`{firstSolarZenithIndex, lastSolarZenithIndex, firstScenePackedRow, 0}`. These
+equations, component assignments, origins, sentinels, and exact-copy semantics
+are format contracts shared by the independent packer, shader, and verifier.
 
 ### Manifest And Coordinate-Index Ownership
 
@@ -160,13 +240,23 @@ underlying fetch or decode only after every subscriber has cancelled. Validate
 both encoded and decoded hashes so HTTP caching, coalescing, and codec changes
 cannot blur identity boundaries.
 
-Pin every decoded block referenced by the current published cache or an active
-candidate transaction. After publication, retain other decoded blocks in a
-byte-weighted 64 MiB least-recently-used cache, evicting only unpinned entries.
-If pinned blocks exceed the budget, allow the temporary excess and expose it in
-diagnostics; correctness must not depend on eviction. Do not add IndexedDB or
-Cache Storage persistence in v1. Immutable cache headers and content-addressed
-URLs let the browser HTTP cache retain encoded artifacts without a second
+Host pins have explicit owners and lifetimes. A published pin lasts while the
+active or predicted GPU window references the block. A candidate pin lasts
+until that transaction publishes, fails, or is cancelled. A prediction pin
+lasts until it becomes published or the predictor supersedes it. A declared
+prepared-route pin lasts until consumption, explicit release, or route
+replacement. After pins release, decoded or packet-ready data enters a
+byte-weighted 64 MiB least-recently-used cache that evicts only unpinned
+entries.
+
+Current, candidate, and next-deadline prediction pins may temporarily exceed
+the ordinary LRU target and must expose that excess in diagnostics. A prepared
+route has a separate caller-declared host-memory ceiling. Admission stops at
+that ceiling: excess future blocks remain encoded in the browser HTTP cache or
+are scheduled later rather than growing memory without a bound. Correctness
+must never depend on host retention or eviction. Do not add IndexedDB or Cache
+Storage persistence in v1. Immutable cache headers and content-addressed URLs
+let the browser HTTP cache retain encoded artifacts without a second
 application-owned storage lifecycle.
 
 
@@ -224,16 +314,18 @@ grouping are defined above; their numerical tuning remains subject to the
 specified comparative qualification.
 
 Use stable coordinate tiles and coalesced requests to balance transfer overhead
-against overfetch. The loader fetches only blocks required by the selected
-ledger and reconstructs the existing wavelength-major payload and RGBA32F
-face-grid atlas. It must not require a download or GPU upload of the entire
-distinct inventory.
+against overfetch. The loader fetches only blocks required by the selected and
+predicted ledgers. It authenticates each wavelength-major block, expands it to
+one production-compatible RGBA32F packet layer, and uploads it to a stable
+resident slot. It must not reconstruct a complete dense scene or require a
+download or GPU upload of the entire distinct inventory.
 
-Bound retained decoded blocks independently from the active GPU cache and let
-the browser HTTP cache own encoded-file retention. Preserve transactional
-publication while blocks are fetched, decoded, validated, and assembled.
-Shared storage reduces the total deployed inventory; the initial selected view
-still needs its own working set.
+Bound retained decoded and packet-ready host blocks independently from the GPU
+atlas and let the browser HTTP cache own ordinary encoded-file retention. A
+declared animation-preparation request may use a larger bounded host budget.
+Preserve transactional publication while blocks are fetched, decoded,
+validated, packetized, and uploaded. Shared storage reduces total deployed
+inventory; the initial selected view still needs its own working set.
 
 
 ## 2. One Atmospheric Calculation For The Inventory
@@ -326,13 +418,15 @@ candidate and atomically publishes the existing dark state without waiting for
 cache I/O.
 
 A candidate transaction must validate the complete catalog-to-manifest-to-
-block identity chain, decoded bounds, coordinate coverage, and reconstructed
-package identity before creating or updating published GPU resources. Assemble
-and upload into isolated candidate resources, then make one atomic controller
-swap only if the generation token is still current. Dispose superseded
-candidate resources after their work settles. A fetch, decode, validation,
-allocation, upload, context-loss, or cancellation failure must preserve the
-last known-good published cache and report a stage-specific error.
+block identity chain, decoded bounds, coordinate coverage, and packet shape
+before an uploaded slot can enter a published row map. Slot uploads may reuse
+the persistent atlas, but their identities remain unpublished until one
+current-generation metadata swap makes a complete scene visible. Reclaim
+superseded unpinned slots only after their work settles. A fetch, decode,
+validation, packetization, allocation, upload, context-loss, or cancellation
+failure must preserve the last known-good scene and report a stage-specific
+error. Full package reconstruction and its expected identity remain mandatory
+offline qualification rather than an ordinary runtime allocation.
 
 Shared request cancellation follows subscriber accounting: one cancelled
 scene must not abort an artifact still needed by another transaction. Worker
@@ -374,16 +468,17 @@ describes byte and bit shuffle for numerical data. Those sources explain the
 codec/filter techniques; the repository measurements above establish the
 observed cache-specific sizes.
 
-Benchmark compression again on the selected shared-row block layout. The
-measured 1 MiB wavelength-major chunks are not a finalized shared-block format,
-and their compression ratios cannot establish the complete compressed
-distinct-inventory size.
+The completed E1 comparison selected `8x8` blocks, the
+`float32-byte-lane-v1` reversible transform, and Zstandard level 6. Its
+506,490,201-byte complete candidate supersedes the earlier four-payload level-3
+estimate as the production planning authority.
 
-Decode before the existing GPU packing operation. Validate compressed framing
-and bounded decoded size, then check the decoded identity before publication.
-Qualify the browser decoder, its packaging, worker behavior, cancellation,
-peak memory, and latency. The proposed file reduction does not reduce the
-approximately 185 MB maximum existing GPU atlas allocation.
+Decode and authenticate before packet packing. Prefer packet construction in
+the persistent Worker and transfer one completed packet block to the renderer;
+GPU upload remains renderer-owned. Bound the decoded, packet-ready, transferred,
+and resident copies separately. The storage reduction does not reduce GPU
+memory: one 24-layer packet atlas is approximately 430 MB before driver
+overhead.
 
 
 ## 4. Shader Setup And Program Reuse
@@ -434,10 +529,17 @@ again. No synchronization speedup has yet been measured.
 
 ## Evidence Identity And Reproduction
 
-The evaluation was read-only and left source, payloads, and historical reports
-unchanged. Its hash checks and compression timings were emitted to the session;
-no standalone immutable qualification run was created. This document records
-those findings and reproduction details, not a new production acceptance claim.
+The accepted storage, transport, and generator identities are owned by the
+[D0 decision](../../poc-experiments/engineering-studies/distant-sun-cache-optimization/decision.md).
+The accepted atlas, packet-renderer, native-4K, animation, and final-audit
+identities are owned by the
+[GPU-resident decision](../../poc-experiments/engineering-studies/gpu-resident-shared-block-cache/decision.md).
+Those runs remain immutable evidence and never become production runtime
+dependencies.
+
+The initial evaluation below was read-only and left source, payloads, and
+historical reports unchanged. It predates the later immutable experiment runs
+and is retained as reproduction context, not as the final promotion authority.
 
 The input package root is owned by the
 [Flat32 cache-data contract](../../../../server/flat32/data/README.md):
@@ -490,9 +592,22 @@ Implementation qualification should establish:
   neighboring-bin transfer sizes; and bounded host and GPU working sets.
 - Browser decode and first-publication latency, failed/cancelled/superseded
   replacement behavior, same-context reuse, context restoration, and darkness.
-- Comparative `2x8`, `4x8`, `4x16`, and `8x8` block results; request
-  coalescing under overlapping and partially cancelled transactions; decoded
-  LRU behavior at, below, and above its 64 MiB target.
+- Exact RGBA packet probes, zero-padding checks, row-to-slot and altitude-ledger
+  coverage, and same-frame dense/candidate render comparison.
+- Combined 24-layer packet residency with preloaded initial state, predictive
+  upload, reverse motion, direction change, and forced prediction misses.
+- Request coalescing under overlapping and partially cancelled transactions;
+  decoded and packet-ready retention at, below, and above their declared
+  budgets.
+- Stable-runtime animation in which Sun direction, cache selection, receiver
+  environment light, celestial placement, and shadow-light placement change
+  coherently without shader recompilation or whole-mode replacement.
+- Native-4K GPU timer-query evidence separating stable frames, metadata-only
+  transitions, predictive uploads, and misses. Recording and encoding remain
+  separate from performance measurement.
+- Capability and allocation behavior for the 24-layer default. Any fully
+  route-resident atlas is qualified for its exact route and target; the
+  62-layer experiment is not a general whole-inventory guarantee.
 - Fresh generation output parity and full elapsed-time breakdowns on the
   selected hardware, with each optimization compared against its immediate
   parent to avoid double-counting benefits.
@@ -501,16 +616,16 @@ Implementation qualification should establish:
 - A new derivation record identifying immutable parent packages, operations,
   configuration, implementation/tool identities, and resulting artifacts.
 
-The v1 defaults select the block layout, decoding boundary, request
-coalescing, retention policy, bounded staging strategy, and transactional
-behavior needed to begin implementation. Qualification may tune the numerical
-defaults or select the exact decoder dependency, but it must not relax decoded
-size bounds, identity checks, cancellation isolation, exact reconstruction, or
-last-good publication. Quantization, float16 storage, reduced angular or
-spectral resolution, and lossy codecs are outside this exact-value proposal.
-Further scientific or display tradeoffs require their own error and appearance
-acceptance boundary.
+The selected defaults establish the block layout, codec, decoding boundary,
+request coalescing, retention policy, packet atlas, predictive preparation,
+bounded staging, and transactional behavior needed to begin implementation.
+Qualification must not relax decoded-size bounds, identity checks,
+cancellation isolation, exact reconstruction, or last-good publication.
+Quantization, float16 storage, reduced angular or spectral resolution,
+temporal interpolation, and lossy codecs are outside this exact-value
+promotion. The known horizon appearance problem must be disclosed and checked
+for regression, but remains a separately owned visual/physical issue.
 
-Current completion: evaluation findings, impact ranking, and recommended v1
-architecture are documented; runtime, generator, deployed package format, and
-acceptance status are unchanged.
+Current completion: D0 selected the shared storage/generation mechanism and D1
+selects its production GPU-resident packet adaptation. Runtime, generator,
+deployed package format, and production acceptance remain unchanged.

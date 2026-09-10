@@ -3,10 +3,13 @@
 Focus: Cache construction, storage, reconstruction, loading, and optimization.
 
 The one-degree distant-Sun cache is implemented and adopted. The current task
-is the impact-ranked storage and offline-generation optimization plan. Its
-contained packaging-and-transport experiment is active: C0 is accepted and E1
-format/compression comparison is next. Historical POC, P0-P10, and PA0-PA7
-execution is archived, not reopened.
+is production promotion of the accepted shared-block storage and GPU-resident
+packet-atlas mechanism. Its contained storage, generator, transport,
+residency, packet-rendering, animation, and final-audit experiments are closed.
+D0 and D1 select the production architecture, and P1 implements the production
+format, packet-mapping, runtime-publication, and rollout-response contracts.
+P2 shared-inventory generation is next. Historical POC, P0-P10, and PA0-PA7
+execution remains archived and is not reopened.
 
 ## Working Documents
 

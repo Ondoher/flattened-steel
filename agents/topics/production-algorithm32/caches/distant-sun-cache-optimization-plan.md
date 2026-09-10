@@ -1,312 +1,385 @@
-# Distant-Sun Cache Optimization Implementation Plan
+# Distant-Sun Shared-Block Cache Production Plan
 
-Status: proposed execution plan. The contained POC is created and active;
-production implementation and qualification have not started.
+Status: D1 production architecture and P1 executable format contracts are
+complete. The contained experiments are closed; P2 production generation is
+next.
 
 This plan executes the
 [distant-Sun cache optimization design](distant-sun-cache-optimization-design.md).
-That design owns architecture and numerical defaults; this document owns work
-order, gates, evidence, and promotion. The existing one-degree package set and
-accepted runtime remain the control until the final publication gate passes.
-
+The design owns representation and architectural decisions. This document owns
+dependency order, trackable work, completeness requirements, qualification,
+and rollout. The existing one-degree package set and dense runtime remain the
+production control until P8 accepts the replacement.
 
 ## Completion Target
 
-Replace the duplicated 109-package distant-Sun inventory with an immutable,
-content-addressed set of shared, losslessly compressed blocks while preserving
-the exact decoded float32 package values and existing runtime behavior. Build
-the set from one common atmospheric calculation per wavelength using bounded
-host staging. Load it through validated, coalesced browser requests and an
-atomic last-good cache transition.
-
-The work is complete only when:
-
-- every current scene package reconstructs byte-for-byte from the new set;
-- total deployed bytes, initial and neighboring-scene transfer, generation
-  time, decode latency, host memory, and GPU memory are measured end to end;
-- cancellation, corruption, supersession, context restoration, and the
-  texture-free dark boundary retain their current behavior;
-- the new package set is published transactionally with an explicit rollback
-  path; and
-- the temporary old-format compatibility and selection paths are removed after
-  acceptance rather than becoming permanent architecture.
-
-
-## Recommendation: Create A Narrow Contained POC Lane
-
-Create a new contained engineering lane dedicated to cache packaging and
-transport before modifying the production loader or generator. This is
-recommended because four important choices remain empirically uncertain:
-
-1. The `4x8` block default has not been compared with the required alternatives
-   over the complete distinct-row inventory.
-2. The browser Zstandard fallback, Worker transfer path, and peak decode memory
-   have not been qualified in the supported browser.
-3. Coalescing, subscriber-aware cancellation, decoded-block retention, and
-   stale-result suppression interact and need deterministic fault injection.
-4. The bounded scatter-to-files generator has not demonstrated exact
-   reconstruction or its intended memory bound.
-
-These are suitable POC questions because a wrong answer would otherwise harden
-new file formats, dependency choices, and asynchronous behavior directly in
-production. The atmospheric algorithm itself is not experimental: the POC must
-reuse immutable current package bytes as its primary oracle and must not reopen
-the accepted scientific or visual result.
-
-The lane should be named `distant-sun-cache-optimization`. Its tracked source,
-controls, proof runners, and manifests belong below the `start-experiment`
-skill's standard source root:
+Replace the duplicated 109-package inventory and per-selection dense-scene
+reconstruction with a production-owned shared-block pipeline:
 
 ```text
-experiments/distant-sun-cache-optimization/
+8x8 Native15 spectral blocks
+  -> byte-lane shuffle + Zstandard level 6
+  -> authenticated Worker decode and packet construction
+  -> bounded RGBA32F GPU block atlas
+  -> frame-boundary row metadata and live-light publication
 ```
 
-Its generated packages, browser bundles, profiles, reports, and immutable run
-records belong below an isolated ignored namespace:
+The promotion is complete only when:
 
-```text
-tmp/experiments/distant-sun-cache-optimization/
-```
+- all 109 current scene payloads reconstruct byte-for-byte from the production
+  shared set;
+- ordinary runtime loading uses authenticated shared blocks without rebuilding
+  a complete dense scene;
+- a 24-layer packet atlas preloads its initial current/predicted window and
+  keeps later blocks ahead of playback through predictive preparation;
+- prepared animation changes metadata and coherent live lighting without
+  recompiling the shader or replacing the whole mode;
+- corruption, cancellation, prediction misses, supersession, context loss,
+  allocation failure, and darkness preserve a valid last-good publication;
+- storage, generator, transfer, decode, packet construction, upload, host
+  memory, GPU memory, and native-4K frame behavior are measured separately;
+- rollout has an explicit dense-cache fallback and recorded rollback; and
+- the temporary dense bridge and duplicated deployed inventory are removed
+  after acceptance so one production path remains.
 
-The repository `start-experiment` skill created and activated the lane. It is
-disposable evidence, never a runtime dependency. Production code may adapt an
-accepted result but may not import the experiment or mutate its completed runs.
+## Selected Defaults And Boundaries
 
+| Concern | Initial production selection |
+| --- | --- |
+| Shared storage | D0 `8x8` blocks, wavelength-major Native15 Float32 spectra, `float32-byte-lane-v1`, Zstandard level 6 |
+| Complete candidate target | At most 600 MB including metadata; contained control was 506,490,201 bytes |
+| Generator target | At most 15 minutes on the comparison machine; preserve at least 17.23 GB scene staging plus 1.34 GB canonical staging or qualify a lower-disk replacement |
+| Browser transport | Persistent module Worker, feature-detected native decoder, pinned Three r180 `zstddec` WASM fallback, four-request scheduler |
+| Ordinary decoded retention | Byte-weighted 64 MiB unpinned LRU; published, candidate, and predicted pins may exceed it and must be diagnosed |
+| GPU packet block | One `648x1728` `RGBA32F` layer per authenticated 64-row block, with exact zero sixteenth component |
+| Default GPU residency | 24-layer sliding atlas, 429,981,696 bytes before driver overhead |
+| Prediction | Preload the initial window; at least one-scene look-ahead, expanded from declared route and animation velocity when preparation time permits |
+| Route-resident option | Allowed only when the exact route fits a device-qualified allocation; the accepted 62-layer route is not a whole-inventory guarantee |
+| Miss behavior | Hold the last-good scene until a complete successor is ready |
+| Rollback | Current dense packages and loader remain selected by an explicit temporary switch through observation |
 
-## Execution Order And Gates
+No stage may change spectral resolution, angular or altitude domains,
+interpolation, recurrence order, or physical inputs. Temporal interpolation,
+lossy representation, quality presets, the local-Sun cache, and correction of
+the known horizon appearance defect are outside this plan.
 
-The stages below are dependency ordered. Within a stage, work is ranked by the
-impact order from the design: sharing, common generation, compression, then
-residual compiler and synchronization improvements.
+## Verification Ownership And Placement
 
-### C0 - Freeze Controls And Measurement Contract
+All tests and evidence are production-owned. No P1-P8 work may create or use
+an experimental unit-test tree.
 
-- Record the current catalog, all 109 manifests and payload identities, the
-  5,494-coordinate distinct-row inventory, tool versions, and supported browser
-  and GPU environment as immutable parent inputs.
-- Define one results schema for compressed size, request count and bytes,
-  encode/decode time, generation stage timing, peak host and GPU memory, and
-  exact reconstruction.
-- Define representative cold-load, warm neighboring-selection, rapid
-  supersession, cancellation, corruption, context-loss, and 108-degree-dark
-  scenarios before measuring candidates.
-- Capture current loader latency and memory as the behavioral performance
-  control. Existing historical timing may inform expectations but cannot
-  replace this fresh baseline.
+| Evidence | Production owner and runner |
+| --- | --- |
+| Algorithm32 contracts, cache objects, controllers, shader assembly, and backend behavior | Co-located `src/algorithm32/**/_tests/` Jasmine specs through `npm run test:algorithm32`; renderer-backed browser cases through `npm run test:algorithm32:three` |
+| Flat32 selection, stable-runtime, lighting, shadow, and application behavior | `src/flat32/_tests/` browser specs through `npm run test:ui:flat32:full` |
+| Format generation, complete reconstruction, package service, containment, and post-run verification | Production runners and verifiers under `scripts/algorithm32/solar-zenith-cache/`, exposed by named package scripts |
+| Native-4K prediction, frame timing, and trace/video evidence | Production drivers under `scripts/flat32/`, exposed by named package scripts and kept separate from runtime source |
+| Generated P7 evidence | Ignored `tmp/production-algorithm32/distant-sun-shared-block-cache/runs/<run-id>/` |
 
-Gate: every later result can name an immutable input, implementation identity,
-command, environment, and comparable metric definition.
+Every P7 execution creates a new run directory and never overwrites or reopens
+a finalized run. The runner derives repository and output roots from repository
+identity, rejects links and escapes, writes monitorable progress, and records
+parent artifacts, operations, equations, implementation/tool identities,
+material parameters, and output hashes. A production post-run verifier may
+inspect the finalized run and must validate its artifact index and terminal
+result before the evidence is cited. P1-P6 unit and integration checks stay in
+their mapped production test locations; durable measurements and generated
+artifacts stay only in the P7 output root.
 
-### E1 - Contained Format And Compression POC
+## Progress Summary
 
-- Read the immutable deployed inventory and construct the distinct coordinate
-  set without changing source packages.
-- Repack that set using `2x8`, `4x8`, `4x16`, and `8x8` coordinate tiles.
-- Apply the specified byte shuffle and pinned Zstandard profiles, including
-  level 3, and decode every candidate back to exact float32 bytes.
-- Generate the proposed package-set report, configuration manifest, block
-  index, runtime catalog, and per-scene manifests for each layout.
-- Measure complete deployed bytes including metadata, block-size distribution,
-  per-scene required blocks, cold transfer, and adjacent-scene overfetch.
+- [x] C0 — Freeze controls and measurement contract.
+- [x] E1 — Select exact shared format and compression.
+- [x] E2 — Prove browser transport and decoder behavior.
+- [x] E3 — Prove bounded common-field generation.
+- [x] D0 — Select the `8x8` storage/generator mechanism.
+- [x] D1 — Select the production GPU packet, residency, publication, and live-runtime architecture.
+- [x] P1 — Implement production format and compatibility contracts.
+- [ ] P2 — Implement and verify production shared-inventory generation.
+- [ ] P3 — Implement production browser transport and Worker preparation.
+- [ ] P4 — Implement renderer-owned packet-atlas primitives.
+- [ ] P5 — Implement residency, predictive preparation, and atomic publication.
+- [ ] P6 — Integrate the packet shader and stable live runtime.
+- [ ] P7 — Generate and qualify the release candidate.
+- [ ] P8 — Publish, observe, roll back if necessary, and remove the bridge.
 
-Gate: zero reconstruction differences across all 109 scenes; every coordinate
-has exactly one canonical owner; every artifact passes length and encoded and
-decoded hash validation. Keep `4x8` unless another layout materially improves
-the combined storage, transfer, request, decode, and memory result.
+Historical C0-E3 results and D0 identities are owned by the
+[storage experiment decision](../../poc-experiments/engineering-studies/distant-sun-cache-optimization/decision.md).
+The GPU-residency, packet-rendering, animation, and final-audit identities are
+owned by the
+[GPU-resident experiment decision](../../poc-experiments/engineering-studies/gpu-resident-shared-block-cache/decision.md).
+Production may adapt those mechanisms but never imports experiment code at
+runtime or modifies sealed evidence.
 
-### E2 - Contained Browser Transport POC
+## D1 — Production Architecture Freeze
 
-- Put native and WebAssembly Zstandard implementations behind the same
-  repository-shaped asynchronous decoder contract; the POC must prove the
-  fallback because native browser support is optional.
-- Decode and inverse-shuffle in one persistent module Worker using transferred
-  buffers and one-block-at-a-time processing.
-- Exercise four-request scheduling, artifact-hash coalescing, independent
-  subscribers, last-subscriber abort, generation tokens, and stale-response
-  rejection with deterministic latency and failure injection.
-- Exercise a byte-weighted 64 MiB decoded LRU with transaction and publication
-  pins, including temporary pinned-budget excess.
-- Measure cold and warm latency, main-thread responsiveness, Worker and main
-  heap peaks, request counts, cancellation latency, and retained bytes.
-- Preserve raw per-scene decompaction records: required, reused, and newly
-  decoded block counts; encoded and decoded bytes; Worker queue,
-  decompression, inverse-shuffle, transfer, upload, and publication elapsed
-  time. Use them later to decide animation-prefetch behavior; do not make
-  animation behavior an E2 acceptance gate.
+Goal: join the accepted shared storage format to the accepted packet-rendering
+shape without preserving dense reconstruction as permanent architecture.
 
-Gate: exact decoded bytes, bounded allocation before decode, no duplicate
-network work for one artifact, no cross-subscriber cancellation, no stale
-publication, and no correctness dependency on cache eviction. Select and pin
-one decoder-only WebAssembly dependency with its license and build identity.
+Completed work:
 
-Contained E2 evidence has accepted Three r180's vendored `zstddec` WebAssembly
-fallback for promotion evaluation. The current accepted run and artifact-set
-identity are owned by the
-[experiment status](../../poc-experiments/engineering-studies/distant-sun-cache-optimization/status.md).
-It is experimental evidence only; production promotion still requires the
-repository-owned dependency boundary and separately authorized implementation.
+- [x] Reconcile the earlier `4x8` proposal with D0's selected `8x8` blocks.
+- [x] Separate compressed spectral storage from RGBA packet GPU publication.
+- [x] Select explicit `RG16UI` row-address and `RGBA32I` altitude-ledger metadata.
+- [x] Select 24 layers as the bounded default and route-qualified larger atlases as optional.
+- [x] Require initial-window preload and predictive off-critical-path preparation.
+- [x] Require a stable compiled runtime with coherent cache, Sun, ambient, celestial, and shadow-light updates.
+- [x] Record exact memory facts and retain the current dense path as rollout fallback.
 
-### E3 - Contained Bounded-Generator POC
+Completeness: the design and this plan identify one production architecture,
+its resource policy, its experimental evidence boundary, and every remaining
+implementation and qualification gate.
 
-- Build the union ledger before GPU work and preallocate exact-size temporary
-  block files.
-- Run the full recurrence once for each wavelength, read back bounded tiles,
-  and scatter rows directly to their final wavelength offsets.
-- Finalize one block at a time through decoded validation, shuffle,
-  compression, round-trip validation, and content-addressed output.
-- Inject cancellation and failures during recurrence, readback, staging,
-  compression, validation, and final publication.
-- Measure stage timings and peak GPU, browser, Node, and disk-staging resources.
+## P1 — Production Format And Compatibility Contracts
 
-Gate: the complete candidate reconstructs every control package byte-for-byte;
-the generator retains neither the full distinct inventory nor per-scene
-accumulators in memory; interrupted work cannot replace a completed set.
+Goal: make every external and internal cache identity executable and reject
+ambiguous data before allocation.
 
-### D0 - POC Decision And Production Design Freeze
+Work:
 
-- Compare E1-E3 results against the predeclared measurement contract.
-- Confirm or revise the block shape, codec profile, decoder dependency,
-  concurrency, retention budget, and staging bounds in the design.
-- Record accepted and rejected alternatives. A revision that changes fidelity
-  or introduces lossy representation requires a separate study and is not
-  eligible for this plan.
-- Define the exact production schemas and public JavaScript contracts before
-  copying or adapting POC mechanisms.
+- [x] Add schema identifiers, JavaScript types, parsers, and validation for the
+  package-set report, runtime catalog, configuration manifest, block index,
+  scene manifests, and codec profile.
+- [x] Keep logical decoded block identity separate from encoded artifact
+  identity and record complete derivation parents.
+- [x] Validate canonical coordinate ordering, coverage, domains, lengths,
+  hashes, paths, codec parameters, and the 16 MiB decoded allocation ceiling.
+- [x] Define packet-block, resident-slot, row-address, altitude-ledger,
+  prepared-route, and publication-snapshot contracts.
+- [x] Freeze the design's canonical mapping from decoded
+  `{channel, populated block row, unique direction}` to
+  `{resident layer, y, x, RGBA component}`, including logical-to-unique seam
+  expansion, x-fastest/no-y-flip upload order, exact Float32 bit copying,
+  partial-block row stride, zero unpopulated rows, and synthetic channel 15 in
+  packet 3 component 3.
+- [x] Version the Flat32 resolution response so the dense and shared package
+  sets cannot be confused during rollout.
+- [x] Add focused positive and negative tests for duplicates, gaps, overflow,
+  unsupported versions, unsafe paths, incompatible physics, and corrupt
+  identities.
 
-Gate: one evidence-backed v1 architecture is selected, its dependencies and
-resource bounds are known, and no unresolved POC choice leaks into production
-implementation.
+Completeness: malformed or incompatible data is rejected before network
+continuation, decode, packet construction, or GPU allocation can trust it.
 
-### P1 - Implement Production Format Contracts
+## P2 — Production Shared-Inventory Generation
 
-- Add schema identifiers, types, parsers, and validation for the package-set
-  report, configuration manifest, block index, catalog, and scene manifests.
-- Keep logical decoded block identity separate from encoded artifact identity.
-- Validate canonical coordinate ordering, coverage, domains, lengths, hashes,
-  codec settings, paths, derivation, and decoded allocation bounds.
-- Add focused positive and negative tests for duplicates, gaps, overflow,
-  unsupported versions, corrupt hashes, and unsafe artifact paths.
+Goal: generate the selected immutable shared set once per physical and
+numerical configuration.
 
-Gate: production validators reject every malformed or ambiguous structure
-before network, decode, staging, or GPU allocation can trust it.
+Work:
 
-### P2 - Implement Shared Inventory Generation
+- [ ] Compute the union ledger once and preserve the existing J1-J4 recurrence
+  and accumulation order.
+- [ ] Run one common calculation per wavelength with bounded tile readback and
+  direct scatter to exact block offsets.
+- [ ] Finalize one block at a time through validation, byte-lane shuffle,
+  Zstandard level 6, decode round trip, and content-addressed publication.
+- [ ] Use unique staging roots, cancellation, complete final verification,
+  atomic publication, and last-good preservation.
+- [ ] Emit deterministic provenance and timing reports covering computation,
+  readback, staging, compression, hashing, reconstruction, and disk usage.
 
-- Refactor the offline compiler so common physical work is explicit and the
-  union ledger is computed once.
-- Implement wavelength-at-a-time calculation, bounded tile readback, direct
-  block-file scatter, and one-block-at-a-time finalization.
-- Preserve J1-J4 accumulation order and all existing numerical inputs.
-- Implement unique staging roots, cancellation, complete verification, atomic
-  publication, and last-good preservation.
-- Generate deterministic reports with parent, implementation, tool, codec,
-  configuration, and artifact identities.
+Completeness: a fresh production run reconstructs all 109 control payloads
+byte-for-byte, stays within its declared memory and disk bounds, completes in
+at most 15 minutes on the comparison machine, and publishes no partial set.
 
-Gate: fresh generation reconstructs all 109 current packages exactly and
-passes the declared staging-memory bound. Record total elapsed time and every
-major stage rather than inferring speedup from loop-count reduction.
+## P3 — Browser Transport And Worker Preparation
 
-### P3 - Implement Browser Block Transport
+Goal: deliver authenticated decoded or packet-ready blocks without blocking
+the visible animation path.
 
-- Add the repository-owned decoder interface, persistent Worker, native
-  feature detection, and pinned WebAssembly fallback.
-- Add the process-wide four-request scheduler, encoded-artifact in-flight map,
-  subscriber accounting, and transferable-buffer ownership rules.
-- Add the byte-weighted decoded LRU and explicit candidate/published pins.
-- Expose bounded diagnostics for requests, coalescing, decoded bytes, pins,
-  evictions, Worker queueing, decode duration, and failures.
+Work:
 
-Gate: Node and browser tests cover exact decode, bounds, coalescing, partial and
-complete cancellation, eviction, corruption, and Worker failure without an
-unhandled rejection or leaked subscriber/resource.
+- [ ] Implement the repository-owned decoder interface, persistent module
+  Worker, native feature detection, and pinned WASM fallback.
+- [ ] Implement the process-wide four-request scheduler, encoded-artifact
+  in-flight map, subscriber accounting, and transferable ownership.
+- [ ] Validate encoded framing/hash, decoded bound/hash, inverse shuffle, and
+  exact spectral layout inside the Worker.
+- [ ] Add Worker-side RGBA packet construction where measurement confirms that
+  transferring packet-ready blocks respects the selected memory bound.
+- [ ] Implement decoded and packet-ready retention with explicit published,
+  candidate, predicted, and prepared-route pins.
+- [ ] Expose bounded diagnostics for requests, coalescing, queueing, decode,
+  authentication, packet construction, transfer, pins, eviction, cancellation,
+  and failure.
 
-### P4 - Integrate Transactional Runtime Publication
+Completeness: Node and browser tests prove exact decode and packet construction,
+bounded allocation, coalescing, partial/final cancellation, eviction,
+corruption rejection, Worker failure, and absence of stale delivery or leaked
+resources.
 
-- Resolve scene manifests and required blocks through the existing Flat32
-  catalog boundary.
-- Reconstruct the current wavelength-major scene payload and existing RGBA32F
-  face-grid resources from validated blocks.
-- Build GPU resources in isolation and publish them with one current-generation
-  swap. Preserve the last good cache on every failure.
-- Preserve same-identity reuse, rapid supersession, disposal, context
-  restoration, and immediate texture-free darkness at and above 108 degrees.
-- Use a temporary explicit selection switch for qualification; do not silently
-  change the ordinary deployed format.
+## P4 — Renderer-Owned Packet Atlas
 
-Gate: the existing cache lifecycle suite and new fault cases pass against the
-shared-block candidate, with no experimental runtime import.
+Goal: provide production-owned persistent GPU storage with authenticated slot
+updates and opaque runtime bindings.
 
-### P5 - Generate And Qualify The Release Candidate
+Work:
 
-- Generate the complete candidate set from the production generator into an
-  ignored, immutable qualification run.
-- Verify all existing package identities by reconstruction and compare selected
-  GPU inputs and rendered outputs against the current production control.
-- Measure complete storage, manifest overhead, cold initial load, adjacent and
-  nonadjacent changes, warm reuse, browser decode, main-thread responsiveness,
-  generator time, disk staging, and peak host and GPU memory.
-- Run corruption, truncation, oversize declaration, unavailable decoder,
-  network failure, cancellation, supersession, context loss/restoration,
-  disposal, and dark-boundary cases.
-- Run the applicable Algorithm32, Flat32, server, type, format, and build gates.
+- [ ] Extend the cache-backend contract narrowly for persistent array
+  allocation and layer replacement without exposing raw WebGL resources.
+- [ ] Add `RG16UI` and `RGBA32I` immutable metadata formats and their exact
+  typed-array contracts.
+- [ ] Allocate the 24-layer `648x1728 RGBA32F` atlas only after texture-size,
+  layer-count, float-filtering, and declared memory-policy checks.
+- [ ] Upload one packet layer into an unexposed slot, associate its authenticated
+  block identity, and make it eligible for later metadata publication.
+- [ ] Preserve stable runtime bindings while slots change; implement disposal,
+  allocation failure, context loss, and complete restoration.
+- [ ] Add exact Float32 packet probes, zero-padding probes, metadata readback,
+  foreign-handle, malformed-shape, and failed-upload tests. An independent
+  dense-control oracle must cover first/last populated rows, partial blocks,
+  all 15 channels, every RGBA component, face and seam boundaries, duplicated
+  logical seam directions, unavailable-row sentinels, and shader-side metadata
+  decoding.
 
-Gate: exact reconstruction and behavior are unconditional. The performance
-candidate should reduce the approximately 17.23 GB deployed inventory to no
-more than 600 MB including metadata, complete generation in no more than 15
-minutes on the comparison machine, and avoid a regression in qualified cold
-publication latency or production GPU residency. Missing a performance target
-causes review, not relaxation of correctness or safety gates.
+Completeness: a slot is never addressable by a published scene until its exact
+packet upload succeeds; allocation or upload failure preserves all currently
+published bindings and state.
 
-### P6 - Publish, Observe, And Remove The Bridge
+## P5 — Residency, Prediction, And Atomic Publication
 
-- Publish the immutable set under a new content-addressed root and verify the
-  server's containment, caching, content type, and complete-file behavior.
-- Switch the explicit catalog/package-set selection only after its deployed
-  identities match the accepted qualification record.
-- Retain the previous immutable package set as the rollback target during the
-  observation window. Rollback changes selection; it never edits either set.
-- After acceptance, remove the old-format loader, temporary selection switch,
-  generation path, and duplicated deployed inventory from the active product
-  surface. Preserve history and designated evidence according to repository
-  archival policy.
-- Update the cache design, current dataflow, deployment inventory, status, and
-  release documentation to identify the new canonical format.
+Goal: keep cache preparation ahead of animation while bounding GPU residency.
 
-Gate: one production cache path remains, rollback evidence is recorded, and
-documentation describes current behavior rather than the migration sequence.
+Work:
 
+- [ ] Port the deterministic 24-slot residency policy with required/predicted
+  pins and least-recently-used eviction of unpinned slots.
+- [ ] Build and authenticate the initial current/predicted window before
+  declaring animation ready.
+- [ ] Accept a declared route and velocity when available; otherwise infer
+  direction from recent scene requests and maintain at least one-scene
+  look-ahead.
+- [ ] Fetch, decode, authenticate, packetize, and upload future blocks before
+  their presentation deadlines. Ordinary prepared playback should perform
+  metadata-only scene changes.
+- [ ] Publish a complete current-generation row map and scene ordinal at one
+  frame boundary. Preserve the last-good scene on every miss or failure.
+- [ ] Handle reversal, seek, nonadjacent jumps, predictor cancellation,
+  supersession, darkness at 108 degrees, disposal, and context restoration.
+- [ ] Permit a route-resident atlas only after its exact block set passes the
+  target's allocation and memory qualification; never infer whole-inventory
+  support from the accepted 62-block route.
+
+Completeness: forward and reverse animation, route changes, jumps, and injected
+misses never expose a missing, corrupt, stale, evicted, or partially uploaded
+row. Diagnostics show whether every change was preloaded, predicted, or held.
+
+## P6 — Packet Shader And Stable Live Runtime
+
+Goal: consume shared packet blocks through the existing spectral algorithm and
+change time of day without rebuilding the atmosphere runtime.
+
+Work:
+
+- [ ] Replace dense packed-row addressing with altitude-ledger and row-to-slot
+  metadata lookup while retaining the four hardware-filtered RGBA reads and
+  Native15 spectral arithmetic.
+- [ ] Remove the scalar `R32F` manual-bilinear candidate from production scope.
+- [ ] Add live binding values for scene ordinal and distant-Sun direction and
+  refresh them without recompilation.
+- [ ] Reuse one source/cache controller and one installed shader across scene
+  changes rather than constructing a new `SphericalDistantMode` for every bin.
+- [ ] Publish cache selection, atmospheric Sun direction, celestial Sun
+  placement, receiver environment light, endpoint illumination, shadow-light
+  direction, and shadow refresh coherently.
+- [ ] Preserve the immediate texture-free dark state and the direct-scene
+  fallback on preparation failure.
+
+Completeness: a production animation traverses multiple one-degree scenes with
+one compiled shader/runtime. Captured state proves every rendered frame uses a
+coherent cache, Sun, ambient-light, celestial, and shadow selection.
+
+## P7 — Release-Candidate Qualification
+
+Goal: prove exactness, lifecycle safety, memory bounds, and useful native-4K
+animation behavior before deployment selection changes.
+
+Work:
+
+- [ ] Generate the complete shared set into an ignored immutable qualification
+  run with full provenance and post-run verification.
+- [ ] Reconstruct and hash all 109 control payloads; compare exact packet probes
+  and representative full rendered outputs against the dense control. The
+  independent verifier must exercise the complete canonical packet mapping,
+  partial and full blocks, all channel/component assignments, zero padding,
+  logical seam expansion, row-address sentinels, and altitude-ledger decoding.
+- [ ] Run the combined 24-layer packet path with initial preload, predictive
+  uploads, reverse motion, seeks, nonadjacent jumps, and forced misses.
+- [ ] Measure cold publication, warm reuse, request/decode/packet/upload stages,
+  main-thread responsiveness, host peaks, 429,981,696-byte atlas residency,
+  context restoration, and transition peaks.
+- [ ] Use WebGL GPU timer queries at native 3840x2160 to separate stable frames,
+  metadata transitions, predictive uploads, and misses. Measure recording in a
+  separate execution and retain trace-faithful viewable evidence.
+- [ ] Qualify the 24-layer allocation on the supported target matrix. Qualify
+  each larger route-resident policy separately; failure selects the bounded or
+  dense fallback rather than weakening safety gates.
+- [ ] Inject truncation, oversize declarations, decoder unavailability,
+  network failure, corruption, cancellation, supersession, context loss,
+  disposal, allocation/upload failure, and the 108-degree dark transition.
+- [ ] Run applicable Algorithm32, Flat32, server, type, format, build, and
+  runtime-dependency gates. Disclose the known horizon issue and reject any
+  candidate-specific regression without assigning the pre-existing defect to
+  this cache format.
+
+Completeness: exactness and lifecycle gates pass unconditionally. The complete
+set is at most 600 MB, generation is at most 15 minutes on the comparison
+machine, normal prepared animation stays ahead of presentation, and accepted
+targets remain within declared host/GPU memory. A missed performance target
+causes review; it never relaxes correctness.
+
+## P8 — Publish, Observe, And Remove The Bridge
+
+Goal: activate the new format with a recoverable selection change, then leave
+one production path.
+
+Work:
+
+- [ ] Publish the immutable set under a new content-addressed root and verify
+  containment, caching, content type, and complete-file serving.
+- [ ] Change only the explicit catalog/runtime selection after deployed
+  identities match the P7 qualification record.
+- [ ] Retain the previous immutable package set and dense loader as rollback
+  during the observation window. Rollback changes selection and never edits
+  either set.
+- [ ] Record production observations, any rollback, and the final acceptance
+  decision.
+- [ ] After acceptance, remove the dense loader, old generator path, temporary
+  switch, and duplicated active inventory while preserving designated evidence.
+- [ ] Update cache design, current dataflow, deployment inventory, status, and
+  release documents to describe only current production behavior.
+
+Completeness: one production shared-block packet path remains, rollback evidence
+is recorded, obsolete active assets and bridge code are removed, and current
+documentation matches deployed behavior.
 
 ## Verification Matrix
 
 | Concern | Required evidence |
 | --- | --- |
-| Numerical identity | Byte-for-byte reconstruction of every existing scene payload and coordinate overlap. |
-| Format integrity | Positive and negative schema, ordering, coverage, length, path, encoded-hash, decoded-hash, and decoded-bound tests. |
-| Storage and transfer | Complete inventory including metadata; block distribution; cold scene; adjacent scene; nonadjacent scene; warm reuse. |
-| Browser behavior | Native capability detection, mandatory WASM fallback, Worker transfer, responsiveness, decode latency, and peak retained bytes. |
-| Concurrency | Coalesced subscribers, partial abort, final abort, supersession, stale Worker response, and request-limit enforcement. |
-| Lifecycle | Same identity, changed identity, last-good preservation, context restoration, disposal, and texture-free darkness. |
-| Generator | One calculation per wavelength, exact scatter offsets, bounded staging, deterministic identities, cancellation, failed finalization, and atomic publication. |
-| Integration | Algorithm32, Flat32, server, type, format, build, runtime-dependency, and supported-hardware gates. |
-
+| Numerical identity | All 109 dense payloads reconstruct byte-for-byte; packet and padding probes match exact Float32 bits. |
+| Format integrity | Positive/negative schema, ordering, coverage, length, path, codec, encoded-hash, decoded-hash, and allocation-bound tests. |
+| Storage and generation | Complete inventory bytes, deterministic identities, one recurrence per wavelength, bounded staging, cancellation, failed finalization, and atomic publication. |
+| Browser transport | Native detection, mandatory WASM fallback, Worker transfer, responsiveness, coalescing, subscriber cancellation, retention, and failure. |
+| GPU atlas | Capability checks, 24-layer allocation, exact slot uploads, stable bindings, metadata, disposal, and context restoration. |
+| Prediction | Initial preload, forward/reverse look-ahead, route changes, jumps, misses, eviction pins, and deadline diagnostics. |
+| Runtime coherence | Cache, Sun direction, celestial placement, ambient/receiver light, endpoint light, and shadow state share one frame-boundary selection. |
+| Performance | Native-4K GPU query results for stable, transition, upload, and miss frames; recording measured separately. |
+| Integration | Algorithm32, Flat32, server, type, format, build, containment, runtime-dependency, and supported-target gates. |
 
 ## Checkpoint Boundaries
 
-Use semantically reviewable checkpoints after C0, accepted E1-E3 evidence and
-D0 selection, P1 contracts, P2 generator, P3 transport, P4 integration, P5
-qualification, and P6 publication cleanup. Do not combine POC selection,
-production adaptation, and deployment activation in one checkpoint.
-
+Use one semantically reviewable checkpoint after D1 and after each of P1-P8.
+Do not combine format contracts, generator changes, renderer primitives,
+runtime activation, qualification evidence, or deployment selection in one
+checkpoint.
 
 ## Current State And Next Action
 
-The contained POC and D0 recommendation are complete. Current run identities,
-artifact-set hashes, measurements, verification results, and qualification
-limitations are owned by the
-[experiment status](../../poc-experiments/engineering-studies/distant-sun-cache-optimization/status.md);
-promotion constraints are owned by the
-[D0 decision](../../poc-experiments/engineering-studies/distant-sun-cache-optimization/decision.md).
-The next production action is separately authorized adaptation with the
-recorded qualification limitations addressed. No candidate format, decoder
-dependency, generator, runtime loader, or package artifact has been selected
-or deployed in production.
+D0, D1, and P1 are complete. Production now owns executable shared-package,
+codec, block, scene, packet-mapping, residency-metadata, prepared-route,
+publication-snapshot, and rollout-response contracts. No generator, transport,
+renderer, deployed cache artifact, or active package selection has changed.
+The next action is P2: implement the bounded production shared-inventory
+generator and exact reconstruction verifier against the immutable controls.

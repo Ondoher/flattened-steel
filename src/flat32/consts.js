@@ -8,6 +8,12 @@ export const ATMOSPHERE_OBSERVER_HEIGHT = {
 /** @type {UnitVector3} */
 export const ATMOSPHERE_OBSERVER_UP_DIRECTION = [0, 0, 1];
 export const ATMOSPHERE_SCENE_COLOR_TARGET_NAME = 'Flat32.algorithm32.sceneColor';
+/** Versioned HTTP and in-process distant-Sun cache-resolution response identity. */
+export const FLAT32_DISTANT_SUN_CACHE_RESOLUTION_SCHEMA_ID = 'flat32-distant-sun-cache-resolution-v2';
+/** Rollout discriminator for the currently selected complete dense-scene package format. */
+export const FLAT32_DISTANT_SUN_DENSE_CACHE_FORMAT_ID = 'algorithm32-distant-sun-dense-scene-v1';
+/** Rollout discriminator reserved for the production shared-block package format. */
+export const FLAT32_DISTANT_SUN_SHARED_CACHE_FORMAT_ID = 'algorithm32-distant-sun-shared-block-v1';
 /** @type {SceneScale} */
 export const ATMOSPHERE_SCENE_SCALE = {
 	value: 1000,

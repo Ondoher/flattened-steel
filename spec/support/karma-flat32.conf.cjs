@@ -5,6 +5,7 @@ module.exports = function configureFlat32Karma(config) {
 		fullCache && cacheServer
 			? {
 					'/base/dist/flat32/api/distant-sun-scene-cache': `${cacheServer.replace(/\/$/u, '')}/api/distant-sun-scene-cache`,
+					'/base/dist/flat32/scene-caches/': `${cacheServer.replace(/\/$/u, '')}/scene-caches/`,
 					'/flat32/scene-caches/': `${cacheServer.replace(/\/$/u, '')}/scene-caches/`,
 					'/scene-caches/': `${cacheServer.replace(/\/$/u, '')}/scene-caches/`,
 				}

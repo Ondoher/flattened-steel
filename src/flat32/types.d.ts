@@ -57,7 +57,7 @@ interface Flat32ApplicationConfiguration {
 	readonly atmosphereShaderEnabled?: boolean;
 	readonly resolveDistantSunSceneCacheAsset?: (
 		solarZenithDegrees: number,
-		request?: Readonly<{signal?: AbortSignal}>,
+		request?: Flat32DistantSunCacheResolutionRequest,
 	) => Flat32DistantSunCacheResolution | Promise<Flat32DistantSunCacheResolution>;
 }
 
@@ -250,15 +250,68 @@ interface Flat32DistantSunSceneState {
 	readonly solarZenithDegrees: number;
 }
 
+/** Caller-owned cancellation input for one distant-Sun cache resolution. */
+interface Flat32DistantSunCacheResolutionRequest {
+	/** Optional signal that cancels only this caller's unresolved continuation. */
+	readonly signal?: AbortSignal;
+}
+
+/** Shared event capability inherited by every registered Flat32 application service. */
+type EventBus = import('@polylith/core').EventBus;
+
+/**
+ * HTTP methods supported by the standard Flat32 JSON transport.
+ *
+ * - **"GET"** - Retrieve one JSON resource without a request body.
+ * - **"POST"** - Create or invoke a resource with optional JSON feature data.
+ * - **"PUT"** - Replace a resource with optional JSON feature data.
+ * - **"PATCH"** - Partially update a resource with optional JSON feature data.
+ * - **"DELETE"** - Delete a resource with optional JSON feature data.
+ */
+type Flat32IoMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
+
+/** One feature request normalized by the standard Flat32 JSON transport. */
+type Flat32IoJsonRequest = Readonly<{
+	/** Supported HTTP method. */
+	readonly method: Flat32IoMethod;
+	/** Absolute or application-relative route owned by the feature caller. */
+	readonly route: string | URL;
+	/** Optional feature data serialized as one JSON request body. */
+	readonly data?: unknown;
+	/** Optional caller-owned cancellation signal. */
+	readonly signal?: AbortSignal;
+}>;
+
+/**
+ * Distant-Sun cache package representation selected during the rollout bridge.
+ *
+ * - **"algorithm32-distant-sun-dense-scene-v1"** - Current independently packaged complete dense scene.
+ * - **"algorithm32-distant-sun-shared-block-v1"** - New shared spectral-block package set.
+ */
+type Flat32DistantSunCacheFormatId =
+	'algorithm32-distant-sun-dense-scene-v1' | 'algorithm32-distant-sun-shared-block-v1';
+
+/**
+ * Non-ready result of resolving one distant-Sun cache selection.
+ *
+ * - **"dark"** - The requested angle is in the texture-free dark domain.
+ * - **"unsupported"** - The requested angle is outside the catalog's supported lighted domain.
+ */
+type Flat32DistantSunCacheNonReadyStatus = 'dark' | 'unsupported';
+
 type Flat32DistantSunCacheResolution =
 	| Readonly<{
+			readonly schemaId: 'flat32-distant-sun-cache-resolution-v2';
+			readonly cacheFormat: Flat32DistantSunCacheFormatId;
 			readonly status: 'ready';
 			readonly requestedSolarZenithDegrees: number;
 			readonly representativeSolarZenithDegrees: number;
 			readonly asset: DistantSunSceneCacheAssetSelection;
 	  }>
 	| Readonly<{
-			readonly status: 'dark' | 'unsupported';
+			readonly schemaId: 'flat32-distant-sun-cache-resolution-v2';
+			readonly cacheFormat: Flat32DistantSunCacheFormatId;
+			readonly status: Flat32DistantSunCacheNonReadyStatus;
 			readonly requestedSolarZenithDegrees: number;
 	  }>;
 

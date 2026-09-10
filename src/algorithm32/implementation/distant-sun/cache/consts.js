@@ -95,6 +95,76 @@ export const DISTANT_SUN_SCENE_CACHE_ORACLE_CODEC_ID = 'algorithm32-distant-sun-
 /** Codec identity for exact W27 physical-seam deduplication. */
 export const DISTANT_SUN_SCENE_CACHE_EXACT_SEAM_CODEC_ID = 'algorithm32-distant-sun-w27-exact-seam-u16-v1';
 
+/** Schema identity for the production shared-cache package-set report. */
+export const DISTANT_SUN_SHARED_CACHE_PACKAGE_SET_SCHEMA_ID =
+	'algorithm32-distant-sun-shared-cache-package-set-report-v1';
+/** Schema identity for the production shared-cache runtime catalog. */
+export const DISTANT_SUN_SHARED_CACHE_RUNTIME_CATALOG_SCHEMA_ID =
+	'algorithm32-distant-sun-shared-cache-runtime-catalog-v1';
+/** Schema identity for one production shared-cache configuration manifest. */
+export const DISTANT_SUN_SHARED_CACHE_CONFIGURATION_SCHEMA_ID =
+	'algorithm32-distant-sun-shared-cache-configuration-manifest-v1';
+/** Schema identity for one production shared-cache block index. */
+export const DISTANT_SUN_SHARED_CACHE_BLOCK_INDEX_SCHEMA_ID = 'algorithm32-distant-sun-shared-cache-block-index-v1';
+/** Schema identity for one production shared-cache scene manifest. */
+export const DISTANT_SUN_SHARED_CACHE_SCENE_MANIFEST_SCHEMA_ID =
+	'algorithm32-distant-sun-shared-cache-scene-manifest-v1';
+/** Schema identity for the selected Zstandard shared-cache codec profile. */
+export const DISTANT_SUN_SHARED_CACHE_CODEC_PROFILE_SCHEMA_ID = 'algorithm32-distant-sun-shared-cache-codec-profile-v1';
+/** Schema identity for complete production cache-artifact derivation. */
+export const DISTANT_SUN_SHARED_CACHE_DERIVATION_SCHEMA_ID = 'algorithm32-distant-sun-shared-cache-derivation-v1';
+/** Schema identity for one packet-ready shared spectral block. */
+export const DISTANT_SUN_SHARED_CACHE_PACKET_BLOCK_SCHEMA_ID = 'algorithm32-distant-sun-shared-cache-packet-block-v1';
+/** Schema identity for one authenticated resident atlas slot. */
+export const DISTANT_SUN_SHARED_CACHE_RESIDENT_SLOT_SCHEMA_ID = 'algorithm32-distant-sun-shared-cache-resident-slot-v1';
+/** Schema identity for one scene-row to resident-slot address table. */
+export const DISTANT_SUN_SHARED_CACHE_ROW_ADDRESS_SCHEMA_ID = 'algorithm32-distant-sun-shared-cache-row-address-v1';
+/** Schema identity for one scene/altitude interpolation ledger table. */
+export const DISTANT_SUN_SHARED_CACHE_ALTITUDE_LEDGER_SCHEMA_ID =
+	'algorithm32-distant-sun-shared-cache-altitude-ledger-v1';
+/** Schema identity for one predictively prepared animation route. */
+export const DISTANT_SUN_SHARED_CACHE_PREPARED_ROUTE_SCHEMA_ID =
+	'algorithm32-distant-sun-shared-cache-prepared-route-v1';
+/** Schema identity for one atomically published cache selection. */
+export const DISTANT_SUN_SHARED_CACHE_PUBLICATION_SCHEMA_ID =
+	'algorithm32-distant-sun-shared-cache-publication-snapshot-v1';
+
+/** Selected shared-cache decoded spectral scalar representation. */
+export const DISTANT_SUN_SHARED_CACHE_DECODED_SCALAR_ID = 'float32-little-endian';
+/** Selected shared-cache reversible byte-layout transform. */
+export const DISTANT_SUN_SHARED_CACHE_SHUFFLE_ID = 'float32-byte-lane-v1';
+/** Selected shared-cache compression format. */
+export const DISTANT_SUN_SHARED_CACHE_COMPRESSION_ID = 'zstandard';
+/** Selected shared-cache Zstandard compression level. */
+export const DISTANT_SUN_SHARED_CACHE_ZSTANDARD_LEVEL = 6;
+/** Selected shared-cache altitude indices per block tile. */
+export const DISTANT_SUN_SHARED_CACHE_BLOCK_ALTITUDE_COUNT = 8;
+/** Selected shared-cache local-solar-zenith indices per block tile. */
+export const DISTANT_SUN_SHARED_CACHE_BLOCK_SOLAR_ZENITH_COUNT = 8;
+/** Largest populated coordinate-row count in one shared block. */
+export const DISTANT_SUN_SHARED_CACHE_MAXIMUM_BLOCK_ROW_COUNT = 64;
+/** Largest decoded shared-block allocation accepted by the v1 format. */
+export const DISTANT_SUN_SHARED_CACHE_MAXIMUM_DECODED_BLOCK_BYTES = 16 * 1024 * 1024;
+/** Number of exact-seam W27 directions stored for one coordinate row. */
+export const DISTANT_SUN_SHARED_CACHE_UNIQUE_DIRECTION_COUNT = 4058;
+/** Number of logical W27 directions expanded into the packet atlas. */
+export const DISTANT_SUN_SHARED_CACHE_LOGICAL_DIRECTION_COUNT = 4374;
+/** Number of Native15 spectral channels stored in each shared block. */
+export const DISTANT_SUN_SHARED_CACHE_SPECTRAL_CHANNEL_COUNT = 15;
+/** Decoded bytes in one wavelength-complete shared coordinate row. */
+export const DISTANT_SUN_SHARED_CACHE_ROW_BYTE_LENGTH =
+	DISTANT_SUN_SHARED_CACHE_UNIQUE_DIRECTION_COUNT *
+	DISTANT_SUN_SHARED_CACHE_SPECTRAL_CHANNEL_COUNT *
+	Float32Array.BYTES_PER_ELEMENT;
+/** Selected packet-atlas layer width in RGBA texels. */
+export const DISTANT_SUN_SHARED_CACHE_PACKET_WIDTH = 648;
+/** Selected packet-atlas layer height in RGBA texels. */
+export const DISTANT_SUN_SHARED_CACHE_PACKET_HEIGHT = 1728;
+/** Selected bounded packet-atlas resident layer count. */
+export const DISTANT_SUN_SHARED_CACHE_DEFAULT_RESIDENT_LAYER_COUNT = 24;
+/** Unavailable row-address component stored in RG16UI metadata. */
+export const DISTANT_SUN_SHARED_CACHE_UNAVAILABLE_ROW_ADDRESS = 0xffff;
+
 /** Largest four-layer RGBA32F runtime derivative, including its logical-direction index. */
 export const DISTANT_SUN_SCENE_CACHE_MAXIMUM_RESIDENT_BYTES = 185_326_380;
 /** Largest qualified two-cache atomic-publication footprint. */
