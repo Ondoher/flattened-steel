@@ -372,6 +372,29 @@ void main() {
 			this._frameRequest = null;
 		}
 		for (const participant of this._contextLifecycleParticipants) participant.handleContextLoss();
+		// Detach Three's old-context disposal listeners before the renderer replaces its GL caches.
+		// The CPU geometry/material objects remain usable and upload again after restoration.
+		this._scene?.traverse((object) => {
+			if (object instanceof THREE.Mesh) {
+				object.geometry.dispose();
+				const materials = Array.isArray(object.material) ? object.material : [object.material];
+				for (const material of materials) material.dispose();
+			}
+			if (
+				object instanceof THREE.DirectionalLight ||
+				object instanceof THREE.SpotLight ||
+				object instanceof THREE.PointLight
+			) {
+				object.shadow.dispose();
+				object.shadow.map = null;
+				object.shadow.mapPass = null;
+				object.shadow.needsUpdate = true;
+			}
+		});
+		this._composer?.dispose();
+		this._composerRenderTarget?.dispose();
+		this._directDisplayComposer?.dispose();
+		this._directDisplayPass?.dispose();
 		this._canvas.dataset.flat32ContextState = 'lost';
 	}
 

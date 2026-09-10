@@ -395,16 +395,24 @@ if (!cacheCelestialSupported(directionIndex, receiverIndex)) {
 
 	/** Call this method to validate and stage source direction owners before an atomic live publication.
 	 * @param {UnitVector3} direction - Candidate unit direction.
+	 * @param {number | null} [sceneOrdinal] - Matching cache scene to restore after context loss.
 	 * @returns {() => void} - Nonthrowing assignment-only publication.
 	 */
-	prepareSharedDirection(direction) {
+	prepareSharedDirection(direction, sceneOrdinal) {
 		const previous = this._requireConfiguration('publishSharedDirection');
 		if (!previous.sharedCache) throw new Error('Live direction publication requires the shared-cache policy.');
 		const directionToLight = LightSourceRequestValues.normalizeDirection(
 			direction,
 			'Shared-cache live Sun direction',
 		);
-		const configuration = {...previous, directionToLight};
+		const ordinal = sceneOrdinal === undefined ? previous.sharedCache.sceneOrdinal : sceneOrdinal;
+		if (ordinal !== null && (!Number.isSafeInteger(ordinal) || ordinal < 0 || ordinal > 108))
+			throw new RangeError('Shared-cache restoration scene is invalid.');
+		const configuration = {
+			...previous,
+			directionToLight,
+			sharedCache: {...previous.sharedCache, sceneOrdinal: ordinal},
+		};
 		const shaderContributor = new DistantSunShaderContributor(configuration);
 		const sceneAdapter = new DistantSunSceneLightingAdapter(this, configuration);
 		const cacheProvider = new DistantSunCacheProvider(this, configuration);

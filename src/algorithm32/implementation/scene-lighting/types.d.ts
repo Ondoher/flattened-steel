@@ -177,3 +177,13 @@ type LocalUniformDiskLightLevel = LocalDirectLightLevel &
 		/** Visible projected disk solid angle in steradians. */
 		readonly visibleProjectedSolidAngleSteradians: number;
 	}>;
+/** Renderer collaborators and explicit lifetime for repeated receiver-light reductions. */
+type ReceiverEnvironmentLightReducerDependencies = {
+	/** Borrowed GPU owner for all fields and programs. */ backend: CacheGpuBackend & CacheProbeReader;
+	/** Retains one compiled program until dispose; default false retains no resources between reductions. */ retainProgram?: boolean;
+};
+/** Complete canonical receiver-direction batch to reduce on the GPU without changing arithmetic. */
+type ReceiverEnvironmentLightGpuReductionRequest = {
+	/** Ordered radiance packets from every fixed receiver direction. */ radiances: readonly SpectralRadiancePacket[];
+	/** Caller-owned cancellation before publication. */ signal?: AbortSignal;
+};

@@ -139,6 +139,7 @@ describe('Algorithm32ShaderAssembler', /** Called by Jasmine to register the nam
 		const source = assembly.fragmentShaderSource;
 
 		expect(source).toContain('precision highp sampler2DArray;');
+		expect(source).toContain('precision highp isampler2D;');
 		expect(source).toContain('uniform sampler2DArray uCumulativeScatteringDensityCache;');
 		expect(source.indexOf('uniform sampler2DArray')).toBeLessThan(
 			source.indexOf('float sampleCumulativeScatteringDensity'),

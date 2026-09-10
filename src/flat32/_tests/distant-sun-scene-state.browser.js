@@ -58,6 +58,16 @@ describe('Flat32 distant-Sun scene state', () => {
 			expect(mode.lightSource).toBe(source);
 			expect(source.configuration.directionToLight).toEqual(prepared.sceneState.directionToSourceModel);
 			expect(geometry.configuration.directionToSource).toEqual(prepared.sceneState.directionToSourceModel);
+			mode.prepareContextRestoration();
+			expect(mode.geometry.configuration.directionToSource).toEqual(prepared.sceneState.directionToSourceModel);
+			expect(mode.geometry.configuration.observation).toBe(
+				mode.algorithm32._model.profile.models.sourcePlacement.observation,
+			);
+			expect(mode.lightSource.configuration.sharedCache.sceneOrdinal).toBe(
+				prepared.sceneState.solarZenithDegrees >= 108
+					? null
+					: Math.floor(prepared.sceneState.solarZenithDegrees + 0.5),
+			);
 		} finally {
 			mode.dispose();
 		}

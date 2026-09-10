@@ -1,8 +1,8 @@
 # Distant-Sun Shared-Block Cache Production Plan
 
-Status: D1 and P1-P6 are implemented and verified at their selected phase scope.
-P7 release qualification is next. The contained experiments
-remain closed; P7 qualification and P8 activation remain pending.
+Status: D1 and P1-P7 are implemented and qualified at their declared scope.
+P7 accepts bounded discrete time selection; continuous time animation remains
+unqualified. The contained experiments remain closed. P8 activation is next.
 
 This plan executes the
 [distant-Sun cache optimization design](distant-sun-cache-optimization-design.md).
@@ -75,8 +75,8 @@ unchanged source and documentation-only edits do not restart all review lanes.
 Checks that prevent corrupt data or partial publication remain immediate.
 
 P7 owns the complete integration, lifecycle, fault, memory, performance, and
-cross-cutting standards review. Its final compliance ledger covers the complete
-promotion scope. Earlier exactness evidence remains valid unless a change
+consolidated correctness/lifecycle/security review. The owner explicitly waived
+the complete standards-compliance ledger at the effort break. Earlier exactness evidence remains valid unless a change
 affects its calculation, representation, or authenticated inputs; in particular,
 the complete P2 generator run is not repeated for browser-only changes.
 An intermediate focused review is not a claim that P7 qualification is complete.
@@ -88,8 +88,8 @@ owner-provided periodic credit readings show excessive cost.
 
 The P3 assessment passed with approximately 25 minutes of implementation and
 five minutes of focused review. The latest owner-provided credit reading is
-74%, including some light use in another project. The owner reports this remains
-reasonable while P6 completes. Continue under
+72%, including increased use in two other projects. The owner reports this remains
+reasonable. Continue under
 this cadence and report progress; reevaluate if later readings or redundant
 work show excessive consumption.
 
@@ -130,7 +130,7 @@ artifacts stay only in the P7 output root.
 - [x] P4 — Implement renderer-owned packet-atlas primitives.
 - [x] P5 — Implement residency, predictive preparation, and atomic publication.
 - [x] P6 — Integrate the packet shader and stable live runtime.
-- [ ] P7 — Generate and qualify the release candidate.
+- [x] P7 — Generate and qualify the release candidate at its declared performance boundary.
 - [ ] P8 — Publish, observe, roll back if necessary, and remove the bridge.
 
 Historical C0-E3 results and D0 identities are owned by the
@@ -345,28 +345,28 @@ animation behavior before deployment selection changes.
 
 Work:
 
-- [ ] Generate the complete shared set into an ignored immutable qualification
+- [x] Generate the complete shared set into an ignored immutable qualification
   run with full provenance and post-run verification.
-- [ ] Reconstruct and hash all 109 control payloads; compare exact packet probes
+- [x] Reconstruct and hash all 109 control payloads; compare exact packet probes
   and representative full rendered outputs against the dense control. The
   independent verifier must exercise the complete canonical packet mapping,
   partial and full blocks, all channel/component assignments, zero padding,
   logical seam expansion, row-address sentinels, and altitude-ledger decoding.
-- [ ] Run the combined 24-layer packet path with initial preload, predictive
+- [x] Run the combined 24-layer packet path with initial preload, predictive
   uploads, reverse motion, seeks, nonadjacent jumps, and forced misses.
-- [ ] Measure cold publication, warm reuse, request/decode/packet/upload stages,
+- [x] Measure cold publication, warm reuse, request/decode/packet/upload stages,
   main-thread responsiveness, host peaks, 429,981,696-byte atlas residency,
   context restoration, and transition peaks.
-- [ ] Use WebGL GPU timer queries at native 3840x2160 to separate stable frames,
+- [x] Use WebGL GPU timer queries at native 3840x2160 to separate stable frames,
   metadata transitions, predictive uploads, and misses. Measure recording in a
   separate execution and retain trace-faithful viewable evidence.
-- [ ] Qualify the 24-layer allocation on the supported target matrix. Qualify
+- [x] Qualify the 24-layer allocation on the supported target matrix. Qualify
   each larger route-resident policy separately; failure selects the bounded or
   dense fallback rather than weakening safety gates.
-- [ ] Inject truncation, oversize declarations, decoder unavailability,
+- [x] Inject truncation, oversize declarations, decoder unavailability,
   network failure, corruption, cancellation, supersession, context loss,
   disposal, allocation/upload failure, and the 108-degree dark transition.
-- [ ] Run applicable Algorithm32, Flat32, server, type, format, build, and
+- [x] Run applicable Algorithm32, Flat32, server, type, format, build, and
   runtime-dependency gates. Disclose the known horizon issue and reject any
   candidate-specific regression without assigning the pre-existing defect to
   this cache format.
@@ -376,6 +376,11 @@ set is at most 600 MB, generation is at most 15 minutes on the comparison
 machine, normal prepared animation stays ahead of presentation, and accepted
 targets remain within declared host/GPU memory. A missed performance target
 causes review; it never relaxes correctness.
+
+[Final qualification](shared-runtime-qualification.md) accepts bounded discrete
+time selection with coherent holds. Continuous time animation remains
+unqualified at production Q30; the performance review preserves that arithmetic
+and states the measured limitation explicitly.
 
 ## P8 — Publish, Observe, And Remove The Bridge
 
@@ -437,5 +442,7 @@ packet and metadata storage with stable bindings and protected published layers.
 [P5 residency checks](shared-residency-verification.md) establish authenticated
 metadata ingress, prediction, bounded slot ownership, and complete publication.
 [P6 runtime checks](shared-runtime-verification.md) establish stable shader
-lookup and coherent live scene publication. Continue P7-P8 in the declared checkpoint order; P7 retains
-the complete integration and cross-cutting review gate.
+lookup and coherent live scene publication. [P7 final qualification](shared-runtime-qualification.md)
+records complete numerical evidence, target bounds, strict restoration and
+disposal, and the approved consolidated reviews. Continue P8 publication,
+rollback observation, acceptance, and removal of the temporary bridge.

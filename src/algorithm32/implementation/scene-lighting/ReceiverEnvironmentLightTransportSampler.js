@@ -24,6 +24,7 @@ export class ReceiverEnvironmentLightTransportSampler {
 		this._model = request.model;
 		this._cache = request.scatteringCache;
 		this._bindingValues = request.bindingValues ?? {};
+		this._programRetention = request.programRetention;
 	}
 
 	_normalizeUniform(type, value) {
@@ -95,7 +96,7 @@ export class ReceiverEnvironmentLightTransportSampler {
 			scatteringCache: this._cache,
 		});
 		const directionTexture = this._createDirectionTexture();
-		const uniforms = this._createUniforms(assembly, directionTexture);
+		let uniforms = this._createUniforms(assembly, directionTexture);
 		const cacheUniforms = {};
 		for (const contribution of assembly.contributions) {
 			for (const texture of contribution.textures) {
@@ -105,15 +106,31 @@ export class ReceiverEnvironmentLightTransportSampler {
 		}
 		this._backend.installRuntimeBindings({bindings: this._cache.getRuntimeBindings(), uniforms: cacheUniforms});
 
-		const material = new THREE.RawShaderMaterial({
-			glslVersion: THREE.GLSL3 ?? '300 es',
-			vertexShader: VERTEX_SHADER.replace(/^#version 300 es\s*/u, ''),
-			fragmentShader: assembly.fragmentShaderSource.replace(/^#version 300 es\s*/u, ''),
-			uniforms,
-			depthTest: false,
-			depthWrite: false,
-			blending: THREE.NoBlending,
-		});
+		const retained = this._programRetention;
+		if (retained?.material && retained.shaderSource !== assembly.fragmentShaderSource) {
+			retained.material.dispose();
+			retained.material = null;
+		}
+		const material =
+			retained?.material ??
+			new THREE.RawShaderMaterial({
+				glslVersion: THREE.GLSL3 ?? '300 es',
+				vertexShader: VERTEX_SHADER.replace(/^#version 300 es\s*/u, ''),
+				fragmentShader: assembly.fragmentShaderSource.replace(/^#version 300 es\s*/u, ''),
+				uniforms,
+				depthTest: false,
+				depthWrite: false,
+				blending: THREE.NoBlending,
+			});
+		if (material.uniforms !== uniforms) {
+			for (const [name, uniform] of Object.entries(uniforms)) material.uniforms[name].value = uniform.value;
+			uniforms = material.uniforms;
+		}
+		material.uniformsNeedUpdate = true;
+		if (retained) {
+			retained.material = material;
+			retained.shaderSource = assembly.fragmentShaderSource;
+		}
 		const geometry = new THREE.BufferGeometry();
 		geometry.setAttribute(
 			'position',
@@ -167,7 +184,7 @@ export class ReceiverEnvironmentLightTransportSampler {
 			this._renderer.setRenderTarget(previousTarget);
 			target.dispose();
 			geometry.dispose();
-			material.dispose();
+			if (!retained) material.dispose();
 			directionTexture.dispose();
 		}
 		return values.map(

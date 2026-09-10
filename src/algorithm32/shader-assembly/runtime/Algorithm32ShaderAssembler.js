@@ -300,6 +300,7 @@ export class Algorithm32ShaderAssembler {
 precision highp float;
 precision highp sampler2D;
 precision highp usampler2D;
+precision highp isampler2D;
 precision highp sampler3D;
 precision highp sampler2DArray;
 

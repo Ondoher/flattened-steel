@@ -94,6 +94,8 @@ describe('Flat32 mode transaction', () => {
 		await controller.switchTo('spherical-distant', state);
 		const changing = controller.switchTo('spherical-distant', {
 			...state,
+			flatTimeIndex: 2,
+			timeLabel: 'Flat 90',
 			observation: {...state.observation, instant: 'second'},
 		});
 		expect(created).toBe(1);

@@ -18,7 +18,9 @@ P5 residency and atomic publication are implemented and
 [checked against exact metadata and ownership boundaries](shared-residency-verification.md).
 P6 shader and stable live-runtime integration are implemented and
 [checked at the shader and publication boundaries](shared-runtime-verification.md).
-P7 qualification and P8 activation are next. Historical POC, P0-P10, and PA0-PA7
+[P7 combined qualification](shared-runtime-qualification.md) is accepted for
+bounded discrete time selection on the declared target;
+P8 activation remains pending. Historical POC, P0-P10, and PA0-PA7
 execution remains archived and is not reopened.
 
 ## Working Documents

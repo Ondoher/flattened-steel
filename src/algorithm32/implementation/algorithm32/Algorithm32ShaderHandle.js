@@ -36,6 +36,8 @@ export class Algorithm32ShaderHandle {
 		this._generation = 0;
 		this._rebuildCancellation = null;
 		this._renderer = null;
+		this._receiverProgramRetention = {material: null, shaderSource: ''};
+		this._receiverReducer = null;
 	}
 
 	/**
@@ -217,8 +219,12 @@ export class Algorithm32ShaderHandle {
 			backend: request.backend,
 			model,
 			scatteringCache: request.scatteringCache,
+			programRetention: this._receiverProgramRetention,
 		});
-		const reducer = new ReceiverEnvironmentLightGpuReducer({backend: request.backend});
+		const reducer = (this._receiverReducer ??= new ReceiverEnvironmentLightGpuReducer({
+			backend: request.backend,
+			retainProgram: true,
+		}));
 		try {
 			const measurement = await controller.build({
 				identity: request.identity,
@@ -260,8 +266,12 @@ export class Algorithm32ShaderHandle {
 			backend,
 			model: measurementModel,
 			scatteringCache,
+			programRetention: this._receiverProgramRetention,
 		});
-		const reducer = new ReceiverEnvironmentLightGpuReducer({backend});
+		const reducer = (this._receiverReducer ??= new ReceiverEnvironmentLightGpuReducer({
+			backend,
+			retainProgram: true,
+		}));
 		const residentPromise = diagnostics
 			? backend.readRuntimeBindingField(scatteringCache.getRuntimeBindings().bindings[0])
 			: null;
@@ -411,6 +421,10 @@ export class Algorithm32ShaderHandle {
 	/** Invalidate renderer-owned celestial handles after WebGL context loss. */
 	handleContextLoss() {
 		this._assertUsable();
+		this._receiverProgramRetention.material?.dispose();
+		this._receiverProgramRetention.material = null;
+		this._receiverReducer?.dispose();
+		this._receiverReducer = null;
 		this._buildResult.celestialGenerationParticipant?.handleContextLoss();
 	}
 
@@ -457,6 +471,10 @@ export class Algorithm32ShaderHandle {
 		this._rebuildCancellation?.abort();
 		this._rebuildCancellation = null;
 		const buildResult = this._buildResult;
+		this._receiverProgramRetention.material?.dispose();
+		this._receiverProgramRetention.material = null;
+		this._receiverReducer?.dispose();
+		this._receiverReducer = null;
 		this._buildResult = null;
 		try {
 			this._disposeBuildResult(buildResult);

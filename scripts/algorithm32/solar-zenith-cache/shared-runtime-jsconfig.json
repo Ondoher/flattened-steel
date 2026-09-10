@@ -1,0 +1,13 @@
+{
+	"extends": "../../../src/flat32/jsconfig.json",
+	"compilerOptions": {"maxNodeModuleJsDepth": 0, "types": ["node"], "typeRoots": ["../../../node_modules/@types"]},
+	"include": [
+		"DistantSunSharedRuntime*.js",
+		"qualify-shared-runtime.js",
+		"*.d.ts",
+		"../../../src/algorithm32/**/*.d.ts",
+		"../../../src/flat32/**/*.d.ts",
+		"../../../server/flat32/**/*.d.ts"
+	],
+	"exclude": ["**/_tests/**", "../../../node_modules/**"]
+}

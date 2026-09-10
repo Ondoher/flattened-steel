@@ -182,11 +182,16 @@ export class Algorithm32Runtime {
 		this._predictionCancellation?.abort();
 		this._shaderHandle?.handleContextLoss?.();
 		this._disposeSetupResources();
+		if (this._ownsComposer) {
+			this._composer?.dispose();
+			this._preparedRenderTarget?.dispose();
+		}
 	}
 
 	/** Rebuild all renderer-owned atmosphere and stellar resources through normal setup after restoration. */
 	async handleContextRestoration() {
 		if (this._disposed) return;
+		if (this._mode instanceof SphericalDistantMode) this._mode.prepareContextRestoration();
 		await this.setup();
 	}
 

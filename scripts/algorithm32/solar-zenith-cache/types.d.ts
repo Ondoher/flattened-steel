@@ -410,3 +410,98 @@ type SharedGenerationRunResult = {
 	/** Exact source implementation. */ implementation: DistantSunSharedCacheImplementationIdentity;
 	/** Immutable derivation roots. */ parents: DistantSunSharedCacheDerivationParent[];
 };
+/** Chromium's optional measured JavaScript heap extension. */
+type SharedQualificationPerformance = Performance & {
+	/** Browser-observed heap allocation, excluding GPU and native process memory. */
+	memory?: {usedJSHeapSize: number};
+};
+/** CommonJS plugin's callable runtime export across its legacy declaration boundary. */
+type SharedQualificationCommonJsFactory = () => import('rollup').Plugin;
+
+/** Candidate shared packet rendering or immutable dense numerical control. */
+type SharedQualificationSelection = 'shared' | 'dense';
+/** Coherence observed after actual production render calls. */
+type SharedQualificationCoherence = {
+	/** Maximum simultaneous atlas bytes observed after render. */ peakGpuBytes: number;
+	/** Maximum explicit host pins observed after render. */ peakPinnedBytes: number;
+	/** Maximum browser JavaScript heap bytes observed after render. */ peakHeapBytes: number;
+	/** Rendered frame count. */ frames: number;
+	/** Bounded failed selection comparisons. */ failures: {
+		ordinal: number | null;
+		actual: number | null;
+		identity: string;
+	}[];
+	/** Published generation changes. */ generations: {generation: number; ordinal: number | null; identity: string}[];
+};
+/** Measured application state at a qualification boundary. */
+type SharedQualificationSnapshot = {
+	/** Public rendering diagnostics. */ canvas: DOMStringMap;
+	/** Atmospheric source direction. */ direction: number[];
+	/** Geometry source direction. */ geometryDirection: number[];
+	/** Receiver-light snapshot identity. */ receiverIdentity: string;
+	/** Whether the initial runtime is retained. */ sameRuntime: boolean;
+	/** Whether the initial shader handle is retained. */ sameHandle: boolean;
+	/** Compiled program identities. */ programs: number[];
+	/** Renderer-owned live counts. */ rendererMemory: {geometries: number; textures: number};
+	/** Shared residency facts, absent for the dense control. */ cache?: DistantSunSharedCacheControllerDiagnostics;
+	/** Worker and host retention facts. */ transport?: DistantSunSharedCacheTransportDiagnostics;
+	/** WebGL error code. */ glError: number;
+	/** Physical framebuffer dimensions. */ drawingBuffer: number[];
+	/** Reported driver identity. */ gpu: string;
+	/** Browser-observed JavaScript heap bytes. */ heapBytes?: number;
+	/** Post-render selection observations. */ coherence: SharedQualificationCoherence;
+};
+/** Complete rendered RGBA8 framebuffer in WebGL row order. */
+type SharedQualificationPixels = {width: number; height: number; base64: string};
+/** One physical time change through the production controller. */
+type SharedQualificationTransition = {
+	/** Requested solar zenith. */ degrees: number;
+	/** Preparation and publication wall time. */ elapsedMilliseconds: number;
+	/** State before the request. */ before: SharedQualificationSnapshot;
+	/** State after publication. */ after: SharedQualificationSnapshot;
+	/** GPU query observations collected during preparation. */ samples: ShaderPerformanceSample[];
+	/** Bounded receiver-light stage timings. */ preparationStages: {operation: string; milliseconds: number}[];
+};
+/** Timing observations outside recording work. */
+type SharedQualificationMeasurement = {
+	/** Completed-frame wall durations in milliseconds. */ durations: number[];
+	/** Asynchronously available GPU timing queries. */ samples: ShaderPerformanceSample[];
+	/** State after measurement. */ state: SharedQualificationSnapshot;
+};
+/** Exact resident block comparison counts. */
+type SharedQualificationProbe = {blocks: number; scalars: number; totalBlocks: number};
+/** Entire catalog traversal while visible rendering is paused. */
+type SharedQualificationInventoryEntry = SharedQualificationProbe & {
+	/** Catalog ordinal. */ ordinal: number;
+	/** Residency after publication. */ diagnostics: DistantSunSharedCacheControllerDiagnostics;
+};
+/** Actual application fault and restoration observations. */
+type SharedQualificationLifecycle = {
+	/** Superseded request was rejected. */ supersession: boolean;
+	/** Complete last-good state. */ beforeMiss: SharedQualificationSnapshot;
+	/** Preserved state after an unqualified jump. */ afterMiss: SharedQualificationSnapshot;
+	/** Texture-free data state. */ dark: SharedQualificationTransition;
+	/** Latest observation before losing the context. */ beforeLoss: SharedQualificationSnapshot;
+	/** Restored matching observation. */ afterLoss: SharedQualificationSnapshot;
+};
+/** Independent dense-control bit oracle for one shared block. */
+type SharedQualificationOracleBlock = {
+	/** Authenticated block identity. */ blockId: string;
+	/** Populated row count. */ rowCount: number;
+	/** Immutable dense payload identities and row selections. */ parents: {
+		row: number;
+		coordinate: readonly number[];
+		artifact: DistantSunSharedCacheFileIdentity;
+		denseRow: number;
+		denseRowCount: number;
+	}[];
+	/** Exact expected RGBA bits at independently chosen packet coordinates. */ samples: {
+		row: number;
+		face: number;
+		u: number;
+		v: number;
+		packet: number;
+		expected: number[];
+	}[];
+	/** Equation used to derive expected bits from dense inputs. */ operation: string;
+};

@@ -172,6 +172,16 @@ describe('Receiver environment-light GPU reduction', () => {
 			expect(gpu.values[0]).toBeCloseTo(cpu.values[0], 5);
 			expect(gpu.quantity).toBe(SPECTRAL_QUANTITIES.IRRADIANCE_DENSITY);
 			expect(gpu.units).toBe(SPECTRAL_UNITS.IRRADIANCE_DENSITY);
+			const retained = new ReceiverEnvironmentLightGpuReducer({backend, retainProgram: true});
+			const linked = spyOn(context, 'linkProgram').and.callThrough();
+			const concurrent = await Promise.all([retained.reduce({radiances}), retained.reduce({radiances})]);
+			for (const value of concurrent) expect(value.values[0]).toBeCloseTo(cpu.values[0], 5);
+			expect(linked).toHaveBeenCalledTimes(1);
+			await retained.reduce({radiances});
+			expect(linked).toHaveBeenCalledTimes(1);
+			expect(renderer.info.programs.length).toBe(1);
+			retained.dispose();
+			expect(renderer.info.programs.length).toBe(0);
 		} finally {
 			backend.dispose();
 			renderer.dispose();

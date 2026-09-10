@@ -82,7 +82,17 @@ export class ModeController {
 		/** @type {Algorithm32Runtime | null} */
 		let candidate = null;
 		let sceneChanged = false;
-		const configurationIdentity = JSON.stringify({...state, observation: undefined});
+		const configurationIdentity = JSON.stringify({
+			...state,
+			observation: undefined,
+			locationIndex: undefined,
+			flatTimeIndex: undefined,
+			globeTimeIndex: undefined,
+			globeHourOffset: undefined,
+			locationLabel: undefined,
+			timeLabel: undefined,
+			timeBasis: undefined,
+		});
 
 		try {
 			if (

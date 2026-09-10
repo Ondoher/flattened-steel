@@ -136,7 +136,10 @@ export class SphericalDistantMode {
 			observation,
 			placement: {kind: 'distant-direction', directionToLight: sceneState.directionToSourceModel},
 		});
-		const publishSource = this._lightSource.prepareSharedDirection(sceneState.directionToSourceModel);
+		const publishSource = this._lightSource.prepareSharedDirection(
+			sceneState.directionToSourceModel,
+			sceneState.solarZenithDegrees >= 108 ? null : Math.floor(sceneState.solarZenithDegrees + 0.5),
+		);
 		const publishGeometry = this._geometry.prepareSharedPublication(sceneState.geometry, this._lightSource);
 		return {
 			sceneState,
@@ -170,6 +173,26 @@ export class SphericalDistantMode {
 		this._assertUsable();
 
 		return this._algorithm32;
+	}
+
+	/** Call this method after context loss to rebuild from the last published observation.
+	 * @returns {void}
+	 */
+	prepareContextRestoration() {
+		if (!this._lightSource.configuration.sharedCache) return;
+		const configuration = /** @type {LegacyConfig} */ (this._algorithm32.config.config);
+		const restored = createDistantSunSceneState({
+			observation: this._liveSceneState.observation,
+			observerHeight: this._geometry.configuration.observerHeight,
+			observerUpDirection: this._geometry.configuration.observerUpDirection,
+		});
+		this._algorithm32.setConfig({
+			...configuration,
+			geometry: restored.geometry,
+			observation: this._liveSceneState.observation,
+			sourcePlacement: {kind: 'distant-direction', directionToLight: this._liveSceneState.directionToSourceModel},
+		});
+		this._geometry = restored.geometry;
 	}
 
 	/**

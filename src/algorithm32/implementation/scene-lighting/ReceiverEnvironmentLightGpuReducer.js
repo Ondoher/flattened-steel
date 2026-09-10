@@ -10,8 +10,11 @@ const VALUE_KEY = 'lighting.receiverEnvironmentIrradiance';
 
 /** GPU implementation of the fixed native-basis radiance-to-irradiance reduction. */
 export class ReceiverEnvironmentLightGpuReducer {
-	/** @param {{backend: CacheGpuBackend & CacheProbeReader}} dependencies - External renderer backend. */
-	constructor({backend}) {
+	/** Creates a reducer with optional runtime-owned program retention.
+	 *
+	 * @param {ReceiverEnvironmentLightReducerDependencies} dependencies - External renderer backend and retention policy.
+	 */
+	constructor({backend, retainProgram = false}) {
 		if (
 			backend?.capabilities?.scalarFormat !== 'R32F' ||
 			backend.capabilities.supportsArrayRenderTargets !== true
@@ -19,17 +22,23 @@ export class ReceiverEnvironmentLightGpuReducer {
 			throw new RangeError('Receiver environment-light GPU reducer requires an R32F array backend.');
 		}
 		this._backend = backend;
+		this._retainProgram = retainProgram;
 	}
 
 	/** @type {CacheGpuBackend & CacheProbeReader} */ _backend;
+	/** Retained compiled reduction program, independent of transient fields. @type {CacheGpuProgram | null} */
+	_program = null;
+	/** Terminal owner lifecycle. */ _disposed = false;
 
 	/**
 	 * Reduce exactly one radiance per canonical direction to native spectral irradiance.
 	 *
-	 * @param {{radiances: readonly SpectralRadiancePacket[], signal?: AbortSignal}} request - Batch result from common transport.
+	 * @param {ReceiverEnvironmentLightGpuReductionRequest} request - Batch result from common transport.
 	 * @returns {Promise<SpectralIrradiancePacket>} - GPU-reduced receiver irradiance.
 	 */
 	async reduce(request) {
+		if (this._disposed) throw new Error('Receiver environment-light GPU reducer is disposed.');
+		request.signal?.throwIfAborted();
 		if (
 			!Array.isArray(request?.radiances) ||
 			request.radiances.length !== RECEIVER_ENVIRONMENT_LIGHT_QUADRATURE.length
@@ -123,6 +132,16 @@ a32CacheOutput = irradiance * ${Math.PI / request.radiances.length};`,
 		const executor = new GpuFieldExecutor({backend: this._backend, assembler: new CachePassAssembler()});
 		let artifact;
 		try {
+			if (this._retainProgram && !this._program) {
+				const candidate = await this._backend.compile(new CachePassAssembler().assemble(pass, output));
+				if (this._disposed || request.signal?.aborted) {
+					candidate.dispose();
+					throw new Error('Receiver reduction preparation was canceled.');
+				}
+				// Another first-use request may have retained the same GL program while compilation yielded.
+				if (this._program) candidate.dispose();
+				else this._program = candidate;
+			}
 			artifact = await executor.execute(plan, {
 				signal: request.signal,
 				probeReader: this._backend,
@@ -145,5 +164,15 @@ a32CacheOutput = irradiance * ${Math.PI / request.radiances.length};`,
 			artifact?.dispose();
 			executor.dispose();
 		}
+	}
+
+	/** Call this method to release an explicitly retained program after its runtime retires.
+	 *
+	 * @returns {void}
+	 */
+	dispose() {
+		this._disposed = true;
+		this._program?.dispose();
+		this._program = null;
 	}
 }
