@@ -13,6 +13,12 @@ B1's measurement field, not an independent measured observable.
 
 Run from the repository root:
 
+Current production execution uses the J4 asset-backed B1 manifest and combined
+`score:algorithm32:b1-b3-production` command with a separate fresh P8
+`--output-root`. The [2026-09-10 result](../../../agents/topics/poc-experiments/benchmarks/production-b-family-c1-9-result.md)
+is favorable for B2, while the independent B1 closeout ceiling remains failed.
+Historical candidate results below remain comparison evidence.
+
 ```text
 node --test --test-isolation=none scripts/experiments/b2-hemispherical-sky-irradiance/run.test.js
 node scripts/experiments/b2-hemispherical-sky-irradiance/run.js

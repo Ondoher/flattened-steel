@@ -1,5 +1,12 @@
 # B3 - Matched-Atmosphere Solver Benchmark
 
+Current production B3 consumes the 31-channel cube derived from the same
+asset-backed J4 B1 run and its same-run B1 report. Use the combined
+`score:algorithm32:b1-b3-production` command with a fresh P8 `--output-root`.
+The [2026-09-10 result](../../../agents/topics/poc-experiments/benchmarks/production-b-family-c1-9-result.md)
+is favorable and consistent for B3; the separate B1 closeout ceiling fails,
+so no accepted combined score record was published.
+
 This experiment adopts the published libRadtran result from Eric Bruneton's
 clear-sky comparison, with comparison source revision
 `4df2ec6609bc0127a478bd34fff29c94352579cc` pinned as pedigree. It is independent

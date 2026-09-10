@@ -380,8 +380,10 @@ The actual production GPU final-view report at
 same exact R32F asset also passes with RMS `1.6225871567685206e-7` and maximum
 absolute residual `9.258900772191048e-7`, isolating runtime GPU error below the
 declared envelope. This closes the bounded C1.8 parity defect. It does not
-claim that the unexecuted 17-condition canonical C1.9 set passes; no full-set
-build or run was performed after the fix.
+claim that the 17-condition canonical C1.9 set passes. The subsequent
+[full corrected run](../../poc-experiments/benchmarks/production-b-family-c1-9-result.md)
+is executed but rejected by the fixed B1 closeout ceiling. Its evidence and
+remaining failure investigation are owned by that result record.
 
 
 ## Verification Lanes

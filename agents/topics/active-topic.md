@@ -1,23 +1,28 @@
 # Active Topic
 
 Current active topic: `production-algorithm32`.
-Focus: `caches/gpu-resident-shared-block-promotion`.
+Focus: `qualification/production-b1-b3-canonical-run`.
 
-Canonical entry document: [Caches](production-algorithm32/caches/README.md).
+Canonical entry document: [Qualification](production-algorithm32/qualification/README.md).
 
 ## Immediate Focus
 
-D1 and P1-P8 are complete. The shared package is published and selected after
-local production-router observation and rollback. The temporary dense bridge
-is removed; historical evidence and the operational numerical oracle remain
-preserved. Final checkpoint P8 closes this promotion.
+C1.1-C1.8 are complete. The full corrected 17-condition C1.9 run is executed
+and recorded. B1 misses the fixed closeout ceiling; B2 and B3 pass their
+existing rules. Six B1 figures and all failed acceptance evidence are preserved.
+C1.10 and release C1 remain open. The result owner identifies the next bounded
+cache-construction versus historical-baseline investigation; no new full CPU
+construction or compiler correction has been performed.
 
-The owner approved consolidated correctness/lifecycle/security reviews plus
-rollout verification and explicitly waived the full standards ledger. These
-reviews and focused corrections are complete. Q30 numerical arithmetic is
-unchanged: bounded discrete time changes are accepted, continuous time animation
-at the experiment's Q10 cadence is unqualified. The separate application-release
-and source/redistribution dispositions remain outside this completed cache plan.
+Reuse completed correctness evidence and apply focused review to changed work.
+The owner approved consolidated reviews and waived the full standards ledger.
+The experimental judgment rules retain authority; do not relax thresholds in
+response to results. Preserve all earlier runs and write new evidence only
+under `tmp/extraterrestrial/production-color-reset/p8/`.
+
+The shared-cache P1-P8 promotion is complete. The Flat32 time-change delay
+investigation is deferred at the owner's direction. Appearance acceptance,
+source/redistribution decisions, and final application release remain separate.
 
 The owner reported 72% credit remaining, including other projects, and judged
 the reduced review/testing cadence reasonable. Preserve that cadence and reuse
@@ -26,6 +31,7 @@ unchanged exact numerical evidence in future work.
 ## Minimal Reload Sources
 
 1. [Repository workflow instructions](../../AGENTS.md)
-2. [Production cache entry](production-algorithm32/caches/README.md)
-3. [Completed promotion plan](production-algorithm32/caches/distant-sun-cache-optimization-plan.md)
-4. [Current rollout and preserved evidence](production-algorithm32/caches/shared-runtime-rollout.md)
+2. [Production qualification entry](production-algorithm32/qualification/README.md)
+3. [B-family implementation and fixed boundary](production-algorithm32/qualification/production-b-experiment-wiring-plan.md)
+4. [Canonical execution and closure](poc-experiments/benchmarks/production-b-experiment-wiring-plan.md)
+5. [Executed C1.9 result and next investigation](poc-experiments/benchmarks/production-b-family-c1-9-result.md)

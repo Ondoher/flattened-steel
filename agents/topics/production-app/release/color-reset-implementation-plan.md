@@ -79,10 +79,12 @@ Algorithm32 Node passes `610/610`, Algorithm32 WebGL passes `26/26`, the exact-
 cache Flat32 lane and build pass `24/24`, both type checks pass, the runtime-
 dependency inventory is clean, and the RTX 2060/D3D11 1080p gate measures
 22.14 ms mean and 22.43 ms p95 atmosphere GPU time. Production stellar
-resource and lifecycle gates pass. Fresh GPU B1 regeneration remains blocked
-on a production-owned offline adapter for the direct-40 paper profile; runtime
-recurrence will not be restored. Owner acceptance of the production cadence is
-also still required.
+resource and lifecycle gates pass. The production-owned offline direct-40
+adapter and complete corrected GPU run are implemented and executed. The
+[canonical B-family result](../../poc-experiments/benchmarks/production-b-family-c1-9-result.md)
+fails the fixed B1 closeout ceiling; B2 and B3 pass their existing rules.
+Runtime recurrence remains excluded. Owner acceptance of the production cadence
+is also still required.
 
 
 ## P9 - Select Defaults And Close Promotion

@@ -8,8 +8,10 @@ Related owners: [qualification](../../production-algorithm32/qualification/color
 
 The production-owned direct-40 offline compiler, verified asset adapter,
 asset-backed GPU host, Color-free measurement seam, and derivation validation
-are implemented through C1.8. The bounded corrected worst condition passes;
-the fresh full 17-condition C1.9 generation and B1-B3 scoring remain pending.
+are implemented through C1.8. The bounded corrected worst condition passes.
+The full corrected C1.9 run is [executed and recorded](production-b-family-c1-9-result.md):
+B1 misses the fixed closeout ceiling, while B2 and B3 pass their existing rules.
+The complete table and six B1 figures are preserved. C1.10 remains open.
 [The execution plan](production-b-experiment-wiring-plan.md) owns that gate;
 [engine qualification](../../production-algorithm32/qualification/production-b-experiment-wiring-plan.md)
 owns the compiler and bounded parity evidence. Runtime recurrence remains

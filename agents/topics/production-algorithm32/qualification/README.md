@@ -2,7 +2,7 @@
 
 Focus: Engine conformance and production benchmark export.
 
-Implementation conformance is separate from scientific authority and appearance acceptance. C1.8 bounded parity passes; C1.9 full post-fix qualification remains open. Reflective physical validation and broader hardware/release hardening retain their stated gaps.
+Implementation conformance is separate from scientific authority and appearance acceptance. C1.8 bounded parity passes. The [full C1.9 run](../../poc-experiments/benchmarks/production-b-family-c1-9-result.md) is executed but fails the fixed B1 closeout ceiling; B2 and B3 pass their existing rules. C1.10 remains open. Reflective physical validation and broader hardware/release hardening retain their stated gaps.
 
 ## Working Documents
 

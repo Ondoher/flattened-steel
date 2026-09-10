@@ -29,6 +29,14 @@ their figure-only Color control.
 
 ## Asset-Backed Regeneration Workflow
 
+The [2026-09-10 canonical v8 run](../../../agents/topics/poc-experiments/benchmarks/production-b-family-c1-9-result.md)
+completed all 17 conditions and six figures, but failed the fixed B1 closeout
+ceiling. Its favorable benchmark classification is not release acceptance.
+For new execution, pass explicit fresh `--output-root`, `--staging-root`, and
+`--progress-log` paths below `tmp/extraterrestrial/production-color-reset/p8/`.
+Run `score:algorithm32:b1-b3-production` with the resulting manifest and a
+separate fresh `--output-root`; never reuse an earlier output directory.
+
 The Stage 13 generator constructed the benchmark-owned direct-40 profile and
 has an explicit `--backend cpu|gpu` switch. Historically, both backends emitted the same
 40-channel table and cube schemas for the same 17 times and 81 exact benchmark

@@ -23,6 +23,13 @@ Produce and accept one fresh production GPU B-family record in which:
 
 ### C1.9 - Execute And Score The Canonical B-Family Run
 
+Status: executed; closeout rejected. The [canonical result](production-b-family-c1-9-result.md)
+records all 17 corrected v8 assets, the complete GPU boundary, B1-B3 results,
+and six figures. B1 misses the fixed closeout ceiling; B2 and B3 pass their
+existing rules. The acceptance gate remains open. Preserve this evidence and
+investigate the identified cache-construction versus historical-baseline
+difference before deciding whether a corrected run is required.
+
 - Compile and verify all 17 canonical GPU assets in a new immutable run.
 - Generate the complete B1 production table and derived 31-channel cube.
 - Run the combined B1-B3 scorer so B1, B2, and B3 consume that one manifest.
@@ -36,6 +43,10 @@ manifest is immutable.
 
 
 ### C1.10 - Record Closure
+
+Status: open because C1.9 did not meet its fixed B1 closeout ceiling. The failed
+execution and its passing component checks are recorded; no C1 release closure
+is claimed.
 
 - Record the accepted run ID, production revision, asset-set identity, result
   hashes, score, controls, and verification commands in the

@@ -6,6 +6,10 @@ Related owners: [qualification](../../production-algorithm32/qualification/color
 
 ## Appearance Sequence
 
+The separate [canonical B1-B3 run](../../poc-experiments/benchmarks/production-b-family-c1-9-result.md)
+is executed with all six B1 figures. Its fixed B1 closeout ceiling fails, so the
+B-family release acceptance item remains unchecked despite favorable B2/B3.
+
 The immutable production cadence is under
 `tmp/extraterrestrial/production-color-reset/runs/`:
 
