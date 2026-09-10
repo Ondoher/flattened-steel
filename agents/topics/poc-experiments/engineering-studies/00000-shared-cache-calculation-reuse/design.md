@@ -51,6 +51,13 @@ Append one event at process start, every phase transition, at least once every 3
 
 ### Comparison authority
 
+The owner's selected B1 reproduction authority is accepted Color Reset run `000065`
+and its inherited accepted point-local `000545` table, as identified in
+[status](status.md#owner-selected-reproduction-target). The current-v8 set is
+an optimization exactness control, not proof of parity with that selected
+target. Preserve the original benchmark ceiling while investigating differences
+in physical inputs, recurrence, cache lookup, ground policy, and view quadrature.
+
 Initial controls are the 109 dense application caches under
 `server/flat32/data/one-degree-bin-covered-runtime-packages-20260830-1/`
 and the accepted shared package identified by the

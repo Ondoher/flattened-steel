@@ -1,8 +1,87 @@
 # Shared Cache Calculation Reuse Experiment Status
 
-Status: first candidate E0-E6 and Bruneton verification R0 complete; original runtime-improvement objective remains open at R1.
+Status: R0b diagnosis complete; B1 bypasses the accepted local Sun-angle cache dimension. Route correction/qualification R0c precedes runtime-improvement R1.
 
 ## Current State
+
+### Owner-Selected Reproduction Target
+
+The owner identifies `tmp/extraterrestrial/color-reset/runs/000065-color-reset-qualification/`
+as the required comparison. Its B1 target is **11.554012538468113**
+mW m^-2 sr^-1 nm^-1, carried from accepted point-local run `000545`.
+Its table is `data/b1-point-local-direct40-w27-q30.tsv`, SHA-256
+`e6d62e23ec0184cc9941e8305d4ea9e69691cf996d5bce8523afb641830ce634`.
+All 47 target artifacts and their aggregate identity have been verified. Run 65
+is accepted with every gate passing. Its B1 table is byte-identical to run 64,
+so the initial numerical analysis remains valid; the changed figure/replay
+outcomes do not change the physical score.
+
+Do not confuse this result with the **11.820391604126252** operational ceiling
+from earlier reflection-completed F68 run `000479`. Current v8 scores
+**11.831044211622888**, a gap of **0.2770316731547755** (2.3977%) from the selected
+point-local target. R0 established unchanged v8 scores, not reproduction of
+this target. The prior 12:45 ground-contact explanation concerns the older
+comparison and does not establish the cause of this target gap.
+
+The selected target uses the actual-point point-local N4 scene-cache compiler,
+packed altitude/local-Sun-angle lookup, Geometry atmosphere endpoint, and
+quadratic-near-observer Q30 view integration. Current B1 v8 instead uses one
+source-aligned Sun angle per scene and uniform 40-interval view integration.
+
+### Located Benchmark Routing Defect
+
+- `scripts/algorithm32/production-b-experiments/DistantSunProfileCompilerInputs.js` creates `solarZenith.count = 1` and selects `production-source-aligned-v1`.
+- `scripts/experiments/b1-directional-sky-radiance/production-gpu-browser.js` selects `B1AssetBackedDistantSunLightSource`.
+- `scripts/algorithm32/production-b-experiments/B1Direct40AssetCache.js` samples by altitude, outgoing direction, and wavelength, with no local Sun-angle dimension.
+- In contrast, `src/flat32/Algorithm32Runtime.js` uses `DistantSunSharedCache`. Its shader computes `dot(normalize(positionMeters), directionToSource)`, resolves the local zenith coordinate, interpolates altitude/zenith rows, and transforms directions into the actual-point frame.
+
+The benchmark is therefore not exercising the central point-local algorithm
+that restored illuminated upper-atmosphere scattering during observer twilight.
+This locates a construction/consumer routing defect. It does not establish that
+every remaining numerical contribution will vanish once that route is corrected.
+No production implementation or historical evidence was modified in this audit.
+
+The active Flat32 shared route selects shared assets in `Flat32Application`,
+passes them through `SphericalDistantMode`, and installs the shared consumer.
+Its generation owner `DistantSunSharedCacheGenerationInventory` selects
+`scene-cache-receiver-local-v1` with `SOLAR_ZENITH_180_DOMAIN_OWNER`; it has not
+lost this dimension. The incorrect benchmark adapter is a separate production
+support path. Thus the audit finds a B1 qualification-route defect, not evidence
+that the active Flat32 shared-cache implementation lost its local-angle logic.
+Conversely, successful B1 v8 execution cannot qualify that active shared path.
+
+The experiment's `run-direct40.js` imported the B1 adapter's input conversion
+and required exact agreement with its previous build-request hash. This explains
+why the wrong comparison model was rebuilt successfully: the proof tested v8
+self-equivalence without checking the accepted point-local algorithm identity.
+Focused independent review found no material issue in this routing diagnosis
+or the bounded data/view proofs. Local typecheck and formatting checks pass.
+
+### Bounded Numerical Localization
+
+Authenticated table analysis covers all 55,080 values. Across the 42,687 scored
+values, current-versus-target RMS difference is 5.564445898699032 mW m^-2 sr^-1
+nm^-1. Differences occur at all 17 times; 13 scores worsen and four improve.
+The largest pointwise difference is at 10:30, grid (5,0), 407 nm: target
+0.10907597043547136 versus current 0.08352082967758179 W m^-2 sr^-1 nm^-1.
+The largest per-time score regression is 10:15: 9.098047426653475 to
+10.32295772999677 mW m^-2 sr^-1 nm^-1. This is not localized to 12:45.
+
+A four-variant CPU-only proof at 10:15 reuses the exact same current R32F cache.
+Uniform-40 reproduces the recorded GPU table at RMS 1.4788182438294386e-8 and
+maximum 1.10543388637252e-7 W m^-2 sr^-1 nm^-1, within the existing parity limits.
+Changing only to quadratic-30 improves the measurement score to 9.8396966013046,
+but moves farther from the target table (RMS 5.917060169156981 to
+6.785343603453455 mW m^-2 sr^-1 nm^-1). View quadrature alone cannot reproduce
+the target; the missing local-angle cache path remains a material difference.
+
+Immutable evidence below `tmp/experiments/00000-shared-cache-calculation-reuse/`:
+
+- Table localization: `runs/2026-09-10T23-42-42-576Z-target-difference-6f9e7cd2-b54b-422a-9fcb-27a583928284/`.
+- View intervention: `runs/2026-09-10T23-48-49-925Z-view-isolation-045710df-bc0a-4765-9965-5b6b73f79232/`. The earlier run completed calculation but failed serializing mutable profile objects; it remains preserved.
+- Authority/routing verification: `runs/2026-09-10T23-50-15-805Z-target-authority-51edcb67-557c-4059-9016-7522b5c510f6/`. Verifies run 65's complete artifact set, exact 64/65 table equality, both analysis runs' artifact hashes, and inspected routing source identities. Target artifact-set SHA-256: `1f5fa1226d1520847fa900fea14870144e6c07f1cbecd11dc0ff4246d2b8bfe1`.
+
+### First Candidate Inventory
 
 The existing-data inventory found 70,756 requested rows and 5,494 unique rows
 across 109 application caches. That sharing is already implemented. The new

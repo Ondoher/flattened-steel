@@ -7,11 +7,12 @@ Canonical entry document: [Shared Cache Calculation Reuse](poc-experiments/engin
 
 ## Immediate Focus
 
-The first resource-reuse candidate is complete, and the Bruneton results have
-been reverified using the existing data. The original goal of meaningful runtime
-savings through reusable programs and unique-work execution remains open.
-The next implementation gate is the small reusable-program prototype in the
-plan. The status owns evidence; the design owns dependencies and containment.
+The owner identifies `tmp/extraterrestrial/color-reset/runs/000065-color-reset-qualification`
+as correctness authority. Diagnosis confirms that the B1 adapter bypasses the
+point-local Sun-angle dimension used by Flat32's shared-cache path. The status
+owns the routing evidence, score distinction, and exact 64/65 table equivalence.
+R0b diagnosis is complete; R0c must correct and qualify the benchmark route
+before R1 reusable-program optimization. The original runtime goal remains open.
 Continue the owner's reduced review/testing cadence and preserve parent evidence.
 
 The separate production benchmark decision remains with the

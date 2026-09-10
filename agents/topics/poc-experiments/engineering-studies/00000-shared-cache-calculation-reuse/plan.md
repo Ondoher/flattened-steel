@@ -17,11 +17,14 @@ Can dependency-based planning and retained GPU execution reproduce the applicati
 ## Owner-Directed Follow-Up
 
 - [x] R0: Reuse the completed direct-40 data to verify the Bruneton B1-B3 results. Authenticate exact cache equivalence, rescore the existing final-view measurements, preserve the benchmark ceiling and prior rejection, and retain the six figures in a new immutable run.
+- [x] R0b: Locate the difference against accepted Color Reset run `000065` and its inherited point-local `000545` table. The exact 64/65 table bridge preserves initial analysis. Source tracing establishes that B1 construction/consumption omits the accepted per-point Sun-angle dimension; the bounded same-cache view intervention does not close the gap. The status owns evidence. R0 only reverified the existing v8 baseline.
+- [ ] R0c: Correct and qualify the B1 route against the accepted point-local algorithm, including its local Sun-angle dimension and Q30 view integration. Pin matching physical inputs and use a bounded proof before any full rebuild. Existing v8 payloads cannot supply the absent dimension; successful v8 self-comparison is not target correctness. Preserve all prior benchmark records and original thresholds.
 - [ ] R1: Prototype reusable algorithm-stage programs with changing inputs supplied as uniforms or buffers. Use two wavelengths and two scenes from existing application data, including repeated requirements. Require exact results, no additional compilation for compatible input changes, no additional calculation for repeated requirements, and a measured elapsed-time reduction before widening execution. If this gate fails, fix the mechanism before a full run.
 
-R0 is the current requested verification task. R1 restores the original
-optimization objective; completion of the first candidate does not establish
-that objective or an overall speedup.
+R0b diagnosis is complete; R0c is the next correctness gate. R1 restores
+the original optimization objective after target parity is established;
+completion of the first candidate does not establish that objective or an
+overall speedup.
 
 ## First Effort Checkpoint
 

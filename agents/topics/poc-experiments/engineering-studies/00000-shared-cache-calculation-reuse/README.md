@@ -30,8 +30,10 @@ calculation, bounded residency, lifecycle, and direct-40 compatibility proofs
 have passed. Retain this candidate as exactness and lifecycle evidence;
 overall runtime improvement is not established. See [status](status.md) for
 run identities, measured results, and the candidate disposition. The original
-runtime-improvement objective remains open; the plan now records the small
-reusable-program gate before any further full execution.
+runtime-improvement objective remains open. Diagnosis found that the B1 adapter
+bypasses the accepted local Sun-angle cache dimension. The plan prioritizes
+correcting and qualifying that route against accepted Color Reset run 65 before
+the small reusable-program optimization gate.
 
 The separate production qualification decision remains with the
 [ground-contact investigation](../../benchmarks/production-b-family-ground-contact-investigation.md).
