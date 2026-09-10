@@ -50,7 +50,8 @@ module.exports = function configureFlat32Karma(config) {
 		proxies: {...cacheProxies, ...stellarCatalogProxies},
 		reporters: ['spec'],
 		client: {
-			args: fullCache ? ['full-cache'] : ['basic-cache'],
+			args: [fullCache ? 'full-cache' : 'basic-cache',
+				...(process.env.FLAT32_GREP ? ['--grep', process.env.FLAT32_GREP] : [])],
 			captureConsole: true,
 			jasmine: {
 				random: false,

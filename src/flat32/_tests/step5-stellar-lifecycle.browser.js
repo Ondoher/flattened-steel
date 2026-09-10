@@ -2,6 +2,29 @@ import {Algorithm32Runtime} from '../Algorithm32Runtime.js';
 import {ThreeSceneRuntime} from '../ThreeSceneRuntime.js';
 
 describe('Flat32 Step 5 stellar lifecycle', () => {
+	it('publishes prepared state before rendering and excludes a canceled frame operation', async () => {
+		const runtime = new ThreeSceneRuntime(document.createElement('canvas'), fail);
+		const events = [];
+		spyOn(window, 'requestAnimationFrame').and.returnValue(1);
+		runtime._started = true;
+		runtime._renderOperation = () => events.push('render');
+		const canceled = new AbortController();
+		const rejected = runtime
+			.atFrameBoundary(() => events.push('stale'), canceled.signal)
+			.catch(() => events.push('canceled'));
+		canceled.abort();
+		const published = runtime.atFrameBoundary(
+			() => events.push('complete-cache-and-light'),
+			new AbortController().signal,
+		);
+		expect(events).toEqual([]);
+		runtime._renderFrame();
+		await Promise.all([published, rejected]);
+		expect(events.slice(0, 2)).toEqual(['complete-cache-and-light', 'render']);
+		expect(events).not.toContain('stale');
+		runtime.dispose();
+	});
+
 	it('reads the post-swap composer buffer that retains direct scene color', () => {
 		const remove = jasmine.createSpy('removeContextLifecycleParticipant');
 		const sceneTarget = {width: 8, height: 6};

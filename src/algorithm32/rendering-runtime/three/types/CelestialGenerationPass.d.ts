@@ -1,5 +1,7 @@
 /** Runtime methods required from the optional stellar child of the celestial coordinator. */
 interface CelestialGenerationStellarChild extends StellarScreenPaletteGenerationPipelineParticipant {
+	/** Call this method to update accepted observation uniforms without replacing stage programs. */
+	setObservation(observation: GeometryObservation): void;
 	/** Execute generation for the captured frame. */
 	render(renderer: ShaderRuntimePassRenderer): void;
 	/** Allocate and initialize renderer-owned resources. */
@@ -13,6 +15,8 @@ interface CelestialGenerationStellarChild extends StellarScreenPaletteGeneration
 
 /** Runtime methods required from the source-local Sun child of the celestial coordinator. */
 interface CelestialGenerationSunChild {
+	/** Call this method to update the matching accepted Sun placement. */
+	setObservation(observation: GeometryObservation): void;
 	readonly stages: readonly CelestialGenerationStageDescription[];
 	readonly publicationState: Readonly<{
 		readonly active: CelestialSunTileGeneration | null;

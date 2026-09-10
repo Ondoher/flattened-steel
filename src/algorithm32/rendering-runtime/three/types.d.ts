@@ -324,6 +324,8 @@ type ShaderRuntimeComposer = {
 
 /** Type for an installed runtime shader artifact. */
 type ShaderRuntimeArtifact = {
+	/** Call this method to publish an accepted celestial observation without rebuilding the installed shader. */
+	publishObservation?(observation: GeometryObservation): void;
 	/**
 	 * Call this method to prepare the installed program for its first render.
 	 *

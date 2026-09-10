@@ -26,6 +26,7 @@ export class ModeController {
 		/** @type {'spherical-distant' | 'flat-local' | null} */
 		this._sceneKind = null;
 		this._activeMode = null;
+		this._activeConfigurationIdentity = '';
 		this._disposed = false;
 	}
 
@@ -81,8 +82,17 @@ export class ModeController {
 		/** @type {Algorithm32Runtime | null} */
 		let candidate = null;
 		let sceneChanged = false;
+		const configurationIdentity = JSON.stringify({...state, observation: undefined});
 
 		try {
+			if (
+				kind === this._currentKind &&
+				kind === 'spherical-distant' &&
+				configurationIdentity === this._activeConfigurationIdentity &&
+				this._activeRuntime?.canUpdateSharedScene?.()
+			) {
+				return await this._activeRuntime.updateSharedScene(state, {signal: preparationCancellation.signal});
+			}
 			mode = await this._createMode(kind, state, {signal: preparationCancellation.signal});
 			if (this._disposed || generation !== this._generation) {
 				mode.dispose();
@@ -117,6 +127,7 @@ export class ModeController {
 			this._activeRuntime = candidate;
 			this._currentKind = kind;
 			this._activeMode = mode;
+			this._activeConfigurationIdentity = configurationIdentity;
 			replaced?.dispose({restoreRendering: false});
 			return summary;
 		} catch (error) {

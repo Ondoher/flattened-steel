@@ -45,6 +45,30 @@ export class ReceiverEnvironmentLightController {
 		return this._active;
 	}
 
+	/** Call this method to adopt a complete independently prepared live-scene measurement.
+	 * @param {ReceiverEnvironmentLightMeasurement} measurement - Complete native spectral light state.
+	 * @returns {ReceiverEnvironmentLightMeasurement} - Revalidated current measurement.
+	 */
+	adoptPreparedMeasurement(measurement) {
+		if (this._disposed) throw new Error('Receiver environment-light controller is disposed.');
+		const accepted = this._calculator.combineReceiverLight({
+			identity: measurement.identity,
+			directNormal: measurement.directNormal,
+			directHorizontal: measurement.directHorizontal,
+			diffuseHorizontal: measurement.diffuseHorizontal,
+			stellarAdaptationLuminance: measurement.stellarAdaptationLuminance,
+		});
+		this._generation += 1;
+		this._activeRequestIdentity = null;
+		this._active = accepted;
+		this._directLight = {
+			...this._directLight,
+			directNormal: accepted.directNormal,
+			directHorizontal: accepted.directHorizontal,
+		};
+		return accepted;
+	}
+
 	/**
 	 * Build and atomically publish one complete receiver-local measurement.
 	 * A rejected or incomplete batch leaves the prior measurement active.

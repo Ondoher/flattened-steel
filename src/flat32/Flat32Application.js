@@ -6,6 +6,7 @@ import {FlatLocalMode} from './FlatLocalMode.js';
 import {ModeController} from './ModeController.js';
 import {PointerLookController} from './PointerLookController.js';
 import {SphericalDistantMode} from './SphericalDistantMode.js';
+import SharedDistantCacheAssets from './SharedDistantCacheAssets.js';
 import {createDistantSunSceneState} from './DistantSunSceneState.js';
 import {ThreeSceneRuntime} from './ThreeSceneRuntime.js';
 import {resolveFlat32ProductionSelections} from './Flat32ProductionSelections.js';
@@ -62,6 +63,7 @@ export class Flat32Application {
 		this._locationTimeRefreshTimer = null;
 		this._locationTimeController = new LocationTimeController();
 		this._disposed = false;
+		this._sharedCacheAssets = new SharedDistantCacheAssets();
 		this._handleRuntimeFailure = this._handleRuntimeFailure.bind(this);
 		this._handleAtmosphereFailure = this._handleAtmosphereFailure.bind(this);
 		this._handleBeforeUnload = this._handleBeforeUnload.bind(this);
@@ -205,13 +207,14 @@ export class Flat32Application {
 	 * @param {'ready' | 'dark'} [distantSunCacheState] - Selected scattering-cache state.
 	 * @returns {SphericalDistantMode} The configured mode.
 	 */
-	_createSphericalDistantMode(sceneState, sceneCacheAsset, distantSunCacheState = 'ready') {
+	_createSphericalDistantMode(sceneState, sceneCacheAsset, distantSunCacheState = 'ready', sharedCache = undefined) {
 		return new SphericalDistantMode({
 			sceneState,
 			sceneScale: ATMOSPHERE_SCENE_SCALE,
 			sourceAngularRadius: ATMOSPHERE_SOURCE_ANGULAR_RADIUS,
 			maximumScatteringOrder: this._maximumScatteringOrder,
 			sceneCacheAsset,
+			sharedCache,
 			distantSunCacheState,
 			...this._productionSelections,
 			brightest2000StellarCatalogDefinition: this._brightest2000StellarCatalogDefinition,
@@ -239,6 +242,14 @@ export class Flat32Application {
 		}
 		if (resolution.status !== 'ready') {
 			throw new RangeError('No qualified distant-Sun scene cache covers the selected solar zenith.');
+		}
+		if (resolution.cacheFormat === 'algorithm32-distant-sun-shared-block-v1') {
+			const sharedCache = await this._sharedCacheAssets.select(
+				resolution.asset,
+				resolution.representativeSolarZenithDegrees,
+				request.signal,
+			);
+			return this._createSphericalDistantMode(sceneState, undefined, 'ready', sharedCache);
 		}
 		if (this._sceneSummary !== null) {
 			this._view.showDistantSunCacheState(this._sceneSummary, 'loading', sceneState.solarZenithDegrees);
@@ -474,6 +485,7 @@ export class Flat32Application {
 		window.removeEventListener('beforeunload', this._handleBeforeUnload);
 		this._modeController?.dispose();
 		this._modeController = null;
+		this._sharedCacheAssets.dispose();
 		this._pointerLookController?.dispose();
 		this._pointerLookController = null;
 		this._endpointScene?.dispose();

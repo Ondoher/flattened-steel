@@ -34,6 +34,16 @@ interface CacheRuntimeBinding {
 	/** Backend id value. */ readonly backendId: string;
 }
 
+/** Complete cache-owned live publication consumed without shader recompilation. */
+type CacheRuntimePublication = Readonly<{
+	/** Identity that changes whenever bindings or cache-owned scalar values change. */
+	identity: string;
+	/** Complete current opaque cache bindings; an empty collection denotes a procedural state. */
+	bindings: CacheRuntimeBindings;
+	/** Current cache-owned uniform values, keyed by shader declaration value keys. */
+	values: Readonly<Record<string, unknown>>;
+}>;
+
 /** Immutable texture formats accepted by the resident-asset upload boundary.
  * - **"R32F"** - One Float32 scalar per texel.
  * - **"RGBA32F"** - Four Float32 packet components per texel.

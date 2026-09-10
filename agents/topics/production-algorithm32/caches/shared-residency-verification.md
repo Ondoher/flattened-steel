@@ -48,8 +48,10 @@ Prediction alone cannot force an additional allocation.
 A read-only run of the new package loader and metadata builder against the
 [P2 immutable package](shared-generation-qualification.md) authenticated 114
 metadata artifacts totaling 2,374,864 bytes. Independent coordinate comparisons
-accepted all 70,115 packed rows in scenes 0-107 and the scene-108 dark state in
-approximately 1.93 seconds. The trusted root hash was
+now accepts all 70,756 packed rows in scenes 0-108 and the explicit `null` dark
+state in approximately 2.09 seconds. P6 corrected the earlier ordinal-108 dark
+assumption: ordinal 108 covers input angles below the 108-degree dark boundary.
+The trusted root hash was
 `eee22091d2f1deb8e992f22be47243a07e7f4bc9462d25ee89683352cca19069`.
 This check exercises new metadata consumption; P2's exact spectral generation
 and all-control reconstruction evidence is reused without regeneration.

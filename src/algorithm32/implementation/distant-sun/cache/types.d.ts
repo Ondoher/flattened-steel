@@ -1825,3 +1825,8 @@ type DistantSunSharedCacheControllerDiagnostics = {
 	/** Whether a complete current candidate awaits its frame boundary. */ candidateReady: boolean;
 	/** Exact currently allocated atlas bytes, excluding driver overhead. */ gpuBytes: number;
 };
+/** Authenticated shared-cache selection before a renderer attachment exists. */
+type DistantSunSharedCacheSelection = Omit<DistantSunSharedCacheControllerDefinition, 'backend'> & {
+	/** Catalog ordinal 0-108, or null when the requested input angle is at least 108 degrees. */
+	sceneOrdinal: number | null;
+};

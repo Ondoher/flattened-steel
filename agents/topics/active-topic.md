@@ -11,7 +11,8 @@ P2 generates and verifies all 109 controls exactly. P3 now owns bounded browser
 transport, authenticated Worker packet preparation, and explicit host pins.
 P4 now owns persistent renderer storage and exact GPU packet/metadata probes.
 P5 now owns authenticated metadata ingress, bounded residency, prediction, and
-frame-boundary publication. Continue P6 shader/live-runtime integration, then P7-P8.
+frame-boundary publication. P6 now integrates the packet shader and stable
+live runtime with coherent scene/light publication. Continue P7-P8.
 Preserve sealed evidence and change deployed selection only after qualification.
 
 Session effort assessment: report by 2026-09-10 15:52 UTC (08:52 Pacific), or at

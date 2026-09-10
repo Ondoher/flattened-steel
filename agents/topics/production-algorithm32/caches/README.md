@@ -16,7 +16,9 @@ P4 renderer-owned packet-atlas primitives are implemented and
 [checked through exact GPU probes](shared-atlas-verification.md).
 P5 residency and atomic publication are implemented and
 [checked against exact metadata and ownership boundaries](shared-residency-verification.md).
-P6 shader and stable live-runtime integration are next. Historical POC, P0-P10, and PA0-PA7
+P6 shader and stable live-runtime integration are implemented and
+[checked at the shader and publication boundaries](shared-runtime-verification.md).
+P7 qualification and P8 activation are next. Historical POC, P0-P10, and PA0-PA7
 execution remains archived and is not reopened.
 
 ## Working Documents

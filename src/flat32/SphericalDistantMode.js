@@ -11,6 +11,7 @@ import {
 } from '../algorithm32/sampling-domains/index.js';
 import {DEFAULT_NATIVE_PRODUCTION_PROFILE} from '../algorithm32/profiles/native-15/native-15-profile.js';
 import {createFlat32ColorDisplayModel} from './Flat32ColorDisplayModel.js';
+import {createDistantSunSceneState} from './DistantSunSceneState.js';
 import {
 	FLAT32_STELLAR_CATALOG_IDS,
 	requireImplementedFlat32ProductionSelections,
@@ -32,6 +33,7 @@ export class SphericalDistantMode {
 	 *   sourceAngularRadius: Angle,
 	 *   maximumScatteringOrder: SupportedCacheScatteringOrder,
 	 *   sceneCacheAsset?: DistantSunSceneCacheAssetSelection,
+	 *   sharedCache?: DistantSunSharedCacheSelection,
 	 *   distantSunCacheState?: 'ready' | 'dark',
 	 *   celestialSourcesEnabled?: boolean,
 	 *   colorDisplayModelConfiguration?: Flat32ColorDisplayModelConfiguration,
@@ -43,6 +45,8 @@ export class SphericalDistantMode {
 	 * owned by its constants module.
 	 */
 	constructor(configuration) {
+		if (configuration.sharedCache && configuration.maximumScatteringOrder !== 4)
+			throw new RangeError('Shared distant-Sun packages require the qualified N4 scattering configuration.');
 		const selections = resolveFlat32ProductionSelections(configuration);
 		const presentationFilterRegistry = new ViewPresentationFilterRegistry(selections.presentationFilters, {
 			scotopicLuminanceWeights: configuration.scotopicLuminanceWeights,
@@ -58,6 +62,7 @@ export class SphericalDistantMode {
 		const lightSource = new DistantSunLightSource({
 			angularRadius: configuration.sourceAngularRadius,
 			sceneCacheAsset: configuration.sceneCacheAsset,
+			sharedCache: configuration.sharedCache,
 			darkScattering: configuration.distantSunCacheState === 'dark',
 		});
 		const catalogDefinition =
@@ -108,6 +113,41 @@ export class SphericalDistantMode {
 			});
 		}
 		this._disposed = false;
+		this._liveSceneState = configuration.sceneState;
+	}
+
+	/** Call this method to prepare an independent physical scene snapshot for shared-cache playback.
+	 * @param {GeometryObservation} observation - Requested time and location.
+	 * @returns {Flat32PreparedDistantScene} - Independent geometry/source and an assignment-only mode publication.
+	 */
+	prepareLiveScene(observation) {
+		this._assertUsable();
+		const sceneState = createDistantSunSceneState({
+			observation,
+			observerHeight: this._geometry.configuration.observerHeight,
+			observerUpDirection: this._geometry.configuration.observerUpDirection,
+		});
+		const source = new DistantSunLightSource({
+			angularRadius: this._lightSource.configuration.angularRadius,
+			sourceIrradiance: this._lightSource.configuration.sourceIrradiance,
+		});
+		sceneState.geometry.configureLightSource({
+			lightSource: source,
+			observation,
+			placement: {kind: 'distant-direction', directionToLight: sceneState.directionToSourceModel},
+		});
+		const publishSource = this._lightSource.prepareSharedDirection(sceneState.directionToSourceModel);
+		const publishGeometry = this._geometry.prepareSharedPublication(sceneState.geometry, this._lightSource);
+		return {
+			sceneState,
+			source,
+			publish: () => {
+				publishSource();
+				publishGeometry();
+				this._liveSceneState = sceneState;
+				this._distantSunCacheState = sceneState.solarZenithDegrees >= 108 ? 'dark' : 'ready';
+			},
+		};
 	}
 
 	/**

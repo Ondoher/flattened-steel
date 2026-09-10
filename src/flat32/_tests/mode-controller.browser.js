@@ -55,6 +55,65 @@ function createRuntime(name, events, setupFailure = null) {
 }
 
 describe('Flat32 mode transaction', () => {
+	it('reuses one shared runtime for observation changes and rebuilds for configuration changes', async () => {
+		const events = [];
+		let release;
+		let reject;
+		let created = 0;
+		const runtime = createRuntime('shared', events);
+		Object.assign(runtime, {
+			canUpdateSharedScene: () => true,
+			updateSharedScene: (_state, request) =>
+				new Promise((resolve, fail) => {
+					release = () => {
+						events.push('live:published');
+						resolve({pairing: 'shared'});
+					};
+					reject = fail;
+					request.signal.addEventListener('abort', () => fail(new Error('superseded')), {once: true});
+				}),
+		});
+		const controller = new ModeController(
+			/** @type {any} */ ({
+				endpointScene: {},
+				onFailure() {},
+				createMode: () => {
+					created += 1;
+					return createMode('shared', events);
+				},
+				createRuntime: () => runtime,
+				sceneRuntime: {
+					createAtmosphereComposer: () => createComposer('shared', events),
+					restoreDirectRendering() {},
+				},
+			}),
+		);
+		const state = /** @type {Flat32ApplicationState} */ (
+			/** @type {unknown} */ ({selection: 'original', observation: {instant: 'first'}})
+		);
+		await controller.switchTo('spherical-distant', state);
+		const changing = controller.switchTo('spherical-distant', {
+			...state,
+			observation: {...state.observation, instant: 'second'},
+		});
+		expect(created).toBe(1);
+		expect(events.filter((event) => event === 'shared:setup').length).toBe(1);
+		expect(events).not.toContain('live:published');
+		release();
+		await changing;
+		const failed = controller.switchTo('spherical-distant', state);
+		reject(new Error('held'));
+		await expectAsync(failed).toBeRejectedWithError('held');
+		expect(controller.currentKind).toBe('spherical-distant');
+		expect(created).toBe(1);
+		await controller.switchTo(
+			'spherical-distant',
+			/** @type {Flat32ApplicationState} */ ({...state, selection: 'changed'}),
+		);
+		expect(created).toBe(2);
+		controller.dispose();
+	});
+
 	it('retains the shader-bypass selection across a mode replacement', async () => {
 		const events = [];
 		const controller = new ModeController(

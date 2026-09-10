@@ -400,6 +400,8 @@ interface GpuScatteringCache extends ScatteringCache {
 	 * @returns - The result produced by the operation.
 	 */
 	getRuntimeBindings(): CacheRuntimeBindings;
+	/** Call this method to obtain an optional complete live publication without rebuilding shader source. */
+	getRuntimePublication?(): CacheRuntimePublication;
 }
 
 /** Type that supplies one renderer attachment's cache-construction capability. */

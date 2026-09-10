@@ -71,14 +71,14 @@ export default class DistantSunSharedCacheMetadata {
 	/**
 	 * Call this method to build one complete current-generation publication without exposing mutable slot state.
 	 *
-	 * @param {number} sceneOrdinal - Requested scene, including the texture-free 108 state.
+	 * @param {number | null} sceneOrdinal - Requested scene ordinal, or null for texture-free darkness.
 	 * @param {number} generation - Current transaction generation.
 	 * @param {readonly DistantSunSharedCacheAtlasSlot[]} slots - Successfully uploaded slots.
 	 * @param {number} layerCount - Allocated atlas capacity.
 	 * @returns {DistantSunSharedCachePublicationSnapshot} - Validated complete snapshot.
 	 */
 	build(sceneOrdinal, generation, slots, layerCount) {
-		if (sceneOrdinal === 108)
+		if (sceneOrdinal === null)
 			return this._contracts.acceptPublicationSnapshot({
 				schemaId: DISTANT_SUN_SHARED_CACHE_PUBLICATION_SCHEMA_ID,
 				generation,

@@ -106,7 +106,7 @@ describe('DistantSunSceneCacheResolver', () => {
 		expect(requestedSignal).toBe(controller.signal);
 	});
 
-	it('rejects unversioned responses and shared responses at the dense rollout boundary', async () => {
+	it('rejects unversioned responses and dense descriptors mislabeled as shared', async () => {
 		const expected = resolveDistantSunSceneCache(catalog(), 10, '/scene-caches/');
 		for (const incompatible of [
 			{...expected, schemaId: undefined},
@@ -117,7 +117,7 @@ describe('DistantSunSceneCacheResolver', () => {
 					return incompatible;
 				},
 			});
-			await expectAsync(resolve(10)).toBeRejectedWithError(/response is incompatible/u);
+			await expectAsync(resolve(10)).toBeRejectedWithError(/incompatible/u);
 		}
 	});
 

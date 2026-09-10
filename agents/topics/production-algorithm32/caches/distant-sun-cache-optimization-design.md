@@ -539,6 +539,15 @@ again. No synchronization speedup has yet been measured.
 
 ## Evidence Identity And Reproduction
 
+P6's [runtime verification](shared-runtime-verification.md) resolves two
+implementation conflicts. Catalog ordinal 108 covers input angles
+`[107.5,108)` and remains illuminated; an explicit `null` selection denotes
+input-angle darkness. The dark publication has no cache-data atlas or metadata.
+A stable WebGL program retains 36 bytes of correctly typed zero sampler
+placeholders because active integer sampler types are validated even when a
+branch omits texture reads. References to texture-free darkness mean no
+cache-data textures, rather than no renderer placeholder textures.
+
 The accepted storage, transport, and generator identities are owned by the
 [D0 decision](../../poc-experiments/engineering-studies/distant-sun-cache-optimization/decision.md).
 The accepted atlas, packet-renderer, native-4K, animation, and final-audit

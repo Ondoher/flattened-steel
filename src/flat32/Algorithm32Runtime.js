@@ -2,6 +2,8 @@ import * as THREE from 'three';
 
 import {Algorithm32Bindings, ThreeCacheBackend} from '../algorithm32/implementation/index.js';
 import {SceneMath} from '../algorithm32/math/index.js';
+import {SphericalDistantMode} from './SphericalDistantMode.js';
+import DistantSunSharedCache from '../algorithm32/implementation/distant-sun/cache/DistantSunSharedCache.js';
 
 /**
  * Own one transactional production Algorithm32 attachment for Flat32.
@@ -49,6 +51,12 @@ export class Algorithm32Runtime {
 		this._installed = false;
 		this._published = false;
 		this._disposed = false;
+		/** Live selection cancellation owner. @type {AbortController | null} */
+		this._liveCancellation = null;
+		/** Predictive refill cancellation owner. @type {AbortController | null} */
+		this._predictionCancellation = null;
+		/** Last installed runtime summary. @type {Flat32AtmosphereSummary | null} */
+		this._lastSummary = null;
 		this._removeContextLifecycleParticipant = this._sceneRuntime.addContextLifecycleParticipant(this);
 		this._renderAtmosphereFrame = this._renderAtmosphereFrame.bind(this);
 		this._yieldCacheBuildControl = this._yieldCacheBuildControl.bind(this);
@@ -59,9 +67,119 @@ export class Algorithm32Runtime {
 		};
 	}
 
+	/** Call this method to determine whether the installed mode supports stable shared-cache scene changes.
+	 * @returns {boolean} - Whether a live shared attachment is installed.
+	 */
+	canUpdateSharedScene() {
+		return (
+			this._installed &&
+			this._mode instanceof SphericalDistantMode &&
+			this._mode.lightSource.sharedCacheAttachment !== null
+		);
+	}
+
+	/** Call this method after publication to refill look-ahead slots released by the former visible scene.
+	 * @param {import('../algorithm32/implementation/distant-sun/cache/DistantSunSharedCacheAttachment.js').default} attachment - Stable cache owner.
+	 * @param {number} ordinal - Unchanged visible scene.
+	 * @returns {Promise<void>} - Bounded background preparation; failures hold the visible frame.
+	 */
+	async _refillSharedPrediction(attachment, ordinal) {
+		this._predictionCancellation?.abort();
+		const cancellation = (this._predictionCancellation = new AbortController());
+		try {
+			const candidate = await attachment.prepareScene(ordinal, {}, cancellation.signal);
+			if (!candidate) return;
+			await this._sceneRuntime.atFrameBoundary(() => {
+				cancellation.signal.throwIfAborted();
+				this._assertUsable();
+				attachment.publishPrepared(candidate.snapshot.generation);
+				this._sceneRuntime.canvas.dataset.flat32SharedGeneration = String(candidate.snapshot.generation);
+			}, cancellation.signal);
+		} catch {
+			if (this._predictionCancellation === cancellation) attachment.cancelPreparation();
+		} finally {
+			if (this._predictionCancellation === cancellation) this._predictionCancellation = null;
+		}
+	}
+
+	/** Call this method to prepare then publish a coherent distant scene without rebuilding the runtime.
+	 * @param {Flat32ApplicationState} state - Requested application observation.
+	 * @param {{signal: AbortSignal}} request - Mode-controller cancellation.
+	 * @returns {Promise<Flat32AtmosphereSummary>} - Updated stable-runtime summary.
+	 */
+	async updateSharedScene(state, request) {
+		this._assertUsable();
+		if (!this.canUpdateSharedScene()) throw new Error('Installed runtime does not support shared scene changes.');
+		this._liveCancellation?.abort();
+		this._predictionCancellation?.abort();
+		this._predictionCancellation = null;
+		const cancellation = (this._liveCancellation = new AbortController());
+		const abort = () => cancellation.abort(request.signal.reason);
+		request.signal.throwIfAborted();
+		request.signal.addEventListener('abort', abort, {once: true});
+		const mode = /** @type {SphericalDistantMode} */ (this._mode);
+		const attachment = mode.lightSource.sharedCacheAttachment;
+		let view;
+		let committed = false;
+		try {
+			const prepared = mode.prepareLiveScene(state.observation);
+			const degrees = prepared.sceneState.solarZenithDegrees;
+			const ordinal = degrees >= 108 ? null : Math.floor(degrees + 0.5);
+			const candidate = await attachment.prepareScene(ordinal, {}, cancellation.signal);
+			if (!candidate)
+				throw new Error(
+					attachment.diagnostics().lastError || 'Shared scene preparation held the previous frame.',
+				);
+			view = new DistantSunSharedCache(this._cacheBackend, candidate);
+			const measurement = await this._shaderHandle.prepareReceiverEnvironmentLight({
+				THREE,
+				renderer: this._sceneRuntime.renderer,
+				backend: this._cacheBackend,
+				geometry: prepared.sceneState.geometry,
+				lightSource: prepared.source,
+				observation: state.observation,
+				scatteringCache: view,
+				identity: `flat32-shared:${candidate.snapshot.generation}:${state.observation.instant}:${degrees}`,
+				signal: cancellation.signal,
+			});
+			cancellation.signal.throwIfAborted();
+			await this._sceneRuntime.atFrameBoundary(() => {
+				cancellation.signal.throwIfAborted();
+				this._assertUsable();
+				attachment.publishPrepared(candidate.snapshot.generation);
+				prepared.publish();
+				this._bindingValues['lightSource.direction'] = new THREE.Vector3(
+					...prepared.sceneState.directionToSourceModel,
+				);
+				this._shaderHandle.publishReceiverEnvironmentLight(measurement, state.observation);
+				this._endpointScene.updateDistantSunLighting(
+					prepared.sceneState.directionToSourceModel,
+					mode.algorithm32.receiverLight,
+					mode.algorithm32.config.config.color,
+				);
+				this._sceneRuntime.refreshShadowMaps();
+				this._sceneRuntime.canvas.dataset.flat32SharedSceneOrdinal =
+					ordinal === null ? 'dark' : String(ordinal);
+				this._sceneRuntime.canvas.dataset.flat32SharedGeneration = String(candidate.snapshot.generation);
+				committed = true;
+			}, cancellation.signal);
+			this._lastSummary = {...this._lastSummary, ...mode.describe(), runtimeFrameCount: this._runtimeFrameCount};
+			if (ordinal !== null && attachment.diagnostics().predictedScene === -1)
+				void this._refillSharedPrediction(attachment, ordinal);
+			return this._lastSummary;
+		} finally {
+			if (!committed && this._liveCancellation === cancellation) attachment.cancelPreparation();
+			view?.dispose();
+			request.signal.removeEventListener('abort', abort);
+			if (this._liveCancellation === cancellation) this._liveCancellation = null;
+		}
+	}
+
 	/** Release renderer-owned resources while their invalid WebGL context remains lost. */
 	handleContextLoss() {
 		if (this._disposed) return;
+		this._liveCancellation?.abort();
+		this._predictionCancellation?.abort();
 		this._shaderHandle?.handleContextLoss?.();
 		this._disposeSetupResources();
 	}
@@ -410,6 +528,10 @@ export class Algorithm32Runtime {
 		this._composer = this._preparedComposer ?? this._sceneRuntime.prepareAtmosphereComposer();
 		const sceneDepthMax = this._resolveSceneDepthMax();
 		this._bindingValues = Algorithm32Bindings.create(THREE, sceneDepthMax);
+		if (this._mode instanceof SphericalDistantMode && this._mode.lightSource.configuration.sharedCache)
+			this._bindingValues['lightSource.direction'] = new THREE.Vector3(
+				...this._mode.lightSource.configuration.directionToLight,
+			);
 		this._cacheBackend = new ThreeCacheBackend({
 			THREE,
 			renderer: this._sceneRuntime.renderer,
@@ -492,7 +614,7 @@ export class Algorithm32Runtime {
 			this._sceneRuntime.canvas.dataset.flat32AtmosphereSceneInputPixel = preflight.sceneInputPixel.join(',');
 			if (!this._deferPublication) this.publish();
 
-			return /** @type {Flat32AtmosphereSummary} */ ({
+			this._lastSummary = /** @type {Flat32AtmosphereSummary} */ ({
 				...modeSummary,
 				runtimeFrameCount: this._runtimeFrameCount,
 				renderErrorCount: runtimeDiagnostics.runtime?.renderErrorCount ?? 0,
@@ -501,6 +623,7 @@ export class Algorithm32Runtime {
 				outputPixel: preflight.outputPixel,
 				sceneInputPixel: preflight.sceneInputPixel,
 			});
+			return this._lastSummary;
 		} catch (error) {
 			this._sceneRuntime.restoreDirectRendering();
 			this._disposeSetupResources();
@@ -553,6 +676,9 @@ export class Algorithm32Runtime {
 		}
 
 		this._disposed = true;
+		this._liveCancellation?.abort();
+		this._predictionCancellation?.abort();
+		this._predictionCancellation = null;
 		this._published = false;
 		this._removeContextLifecycleParticipant();
 		this._setupGeneration += 1;

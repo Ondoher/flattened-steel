@@ -183,6 +183,68 @@ export class Algorithm32ShaderHandle {
 		this._renderer = renderer;
 	}
 
+	/** Call this method to measure a complete candidate receiver state without altering the visible facade.
+	 * @param {Algorithm32ReceiverPreparationRequest} request - Candidate geometry, source, cache, and GPU capabilities.
+	 * @returns {Promise<ReceiverEnvironmentLightMeasurement>} - Complete unpublished receiver measurement.
+	 */
+	async prepareReceiverEnvironmentLight(request) {
+		this._assertUsable();
+		request.signal?.throwIfAborted();
+		const model = Object.create(this._facade._model);
+		Object.defineProperties(model, {
+			geometry: {value: request.geometry},
+			lightSource: {value: request.lightSource},
+			celestialSources: {value: null},
+		});
+		const calculator = new LocalLightLevelCalculator({lightSource: request.lightSource});
+		const roster = this._facade._model.celestialSources;
+		const candidateRoster =
+			roster?.family === 'spherical-sun-stars-radial-v1' ? {...roster, sun: request.lightSource} : null;
+		const directLight = calculator.measureConfiguredReceiverDirectLight({
+			geometry: request.geometry,
+			atmosphere: model.atmosphere,
+			observation: request.observation,
+			celestialSources: candidateRoster,
+		});
+		const controller = new ReceiverEnvironmentLightController({
+			calculator,
+			directLight,
+			identity: request.identity,
+		});
+		const sampler = new ReceiverEnvironmentLightTransportSampler({
+			THREE: request.THREE,
+			renderer: request.renderer,
+			backend: request.backend,
+			model,
+			scatteringCache: request.scatteringCache,
+		});
+		const reducer = new ReceiverEnvironmentLightGpuReducer({backend: request.backend});
+		try {
+			const measurement = await controller.build({
+				identity: request.identity,
+				signal: request.signal,
+				sampleIncomingRadiance: () => sampler.sample({signal: request.signal}),
+				reduceIncomingRadiance: (radiances) => reducer.reduce({radiances, signal: request.signal}),
+			});
+			this._assertUsable();
+			request.signal?.throwIfAborted();
+			return measurement;
+		} finally {
+			controller.dispose();
+		}
+	}
+
+	/** Call this method at the live scene boundary to install complete receiver light and celestial observation.
+	 * @param {ReceiverEnvironmentLightMeasurement} measurement - Complete candidate lighting.
+	 * @param {GeometryObservation} observation - Matching accepted observation.
+	 * @returns {void}
+	 */
+	publishReceiverEnvironmentLight(measurement, observation) {
+		this._assertUsable();
+		this._facade._adoptPreparedReceiverLight(measurement);
+		this._buildResult.runtime?.publishObservation?.(observation);
+	}
+
 	/** Measure the active common-path environment and publish complete receiver light atomically. */
 	async measureReceiverEnvironmentLight({THREE, renderer, backend, signal, diagnostics = false}) {
 		this._assertUsable();
@@ -404,6 +466,8 @@ export class Algorithm32ShaderHandle {
 	}
 }
 import {ReceiverEnvironmentLightGpuReducer} from '../scene-lighting/ReceiverEnvironmentLightGpuReducer.js';
+import {LocalLightLevelCalculator} from '../scene-lighting/LocalLightLevelCalculator.js';
+import {ReceiverEnvironmentLightController} from '../scene-lighting/ReceiverEnvironmentLightController.js';
 import {ReceiverEnvironmentLightTransportCpuSampler} from '../scene-lighting/ReceiverEnvironmentLightTransportCpuSampler.js';
 import {ReceiverEnvironmentLightTransportSampler} from '../scene-lighting/ReceiverEnvironmentLightTransportSampler.js';
 import {RECEIVER_ENVIRONMENT_LIGHT_QUADRATURE} from '../scene-lighting/ReceiverEnvironmentLightQuadrature.js';

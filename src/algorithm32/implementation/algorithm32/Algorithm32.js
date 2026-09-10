@@ -972,6 +972,21 @@ export class Algorithm32 {
 		return measurement;
 	}
 
+	/** Called by an installed shader handle to publish a completely prepared live receiver state.
+	 * @param {ReceiverEnvironmentLightMeasurement} prepared - Complete native spectral measurement.
+	 * @returns {void}
+	 */
+	_adoptPreparedReceiverLight(prepared) {
+		this._assertUsable();
+		const measurement = this._receiverEnvironmentLightController.adoptPreparedMeasurement(prepared);
+		this._colorRuntimeBindingValues['color.totalHorizontalIlluminance.value'] =
+			measurement.photopicTotalHorizontalIlluminance.value;
+		this._colorRuntimeBindingValues['presentation.stellar.adaptationLuminanceCdM2'] =
+			measurement.stellarAdaptationLuminance.value;
+		this._colorRuntimeBindingValues['presentation.stellar.receiverLightIdentity'] = measurement.identity;
+		this.setAdaptingLuminance(measurement.totalHorizontalLuminanceProxy);
+	}
+
 	/**
 	 * Call this method to build and attach the runtime shader integration. The returned handle owns Algorithm32-specific shader resources, binding lifecycle, resizing, configuration refresh, and disposal for the installed pass. Setup rejects for invalid configuration, cache construction, shader assembly, or runtime installation failure; supersession rejects with an abort error and callers must discard the rejected handle.
 	 *

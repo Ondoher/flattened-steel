@@ -159,6 +159,50 @@ export function createDistantSunSceneCacheCatalogResolver(catalog, assetBaseUrl 
 function requireResolution(value, assetBaseUrl, requestedSolarZenithDegrees) {
 	if (
 		value?.schemaId === FLAT32_DISTANT_SUN_CACHE_RESOLUTION_SCHEMA_ID &&
+		value.cacheFormat === 'algorithm32-distant-sun-shared-block-v1' &&
+		value.requestedSolarZenithDegrees === requestedSolarZenithDegrees
+	) {
+		if (value.status === 'dark' && requestedSolarZenithDegrees >= 108) return value;
+		const asset = value.asset;
+		if (
+			value.status !== 'ready' ||
+			requestedSolarZenithDegrees >= 108 ||
+			value.representativeSolarZenithDegrees !== Math.floor(requestedSolarZenithDegrees + 0.5) ||
+			!asset ||
+			!/^[a-f0-9]{64}$/u.test(asset.packageSetIdentity) ||
+			asset.report?.path !== 'package-set.json' ||
+			!Number.isSafeInteger(asset.report.byteLength) ||
+			asset.report.byteLength <= 0 ||
+			asset.report.byteLength > 32 * 1024 * 1024 ||
+			!/^[a-f0-9]{64}$/u.test(asset.report.sha256)
+		)
+			throw new TypeError('Shared-cache resolution identity is incompatible.');
+		const base = new URL(assetBaseUrl, globalThis.location?.href ?? 'http://localhost/');
+		const root = new URL(asset.rootUrl, globalThis.location?.href ?? 'http://localhost/');
+		if (
+			root.origin !== base.origin ||
+			root.pathname !== `${base.pathname}${asset.packageSetIdentity}/` ||
+			root.username ||
+			root.password ||
+			root.search ||
+			root.hash
+		)
+			throw new RangeError('Shared-cache resolution root is uncontained.');
+		const qualification = asset.transitionQualification;
+		if (
+			qualification &&
+			(typeof qualification.evidenceId !== 'string' ||
+				!qualification.evidenceId ||
+				typeof qualification.targetId !== 'string' ||
+				!qualification.targetId ||
+				!Number.isSafeInteger(qualification.maximumBytes) ||
+				qualification.maximumBytes < 859963392)
+		)
+			throw new TypeError('Shared-cache transition qualification is incompatible.');
+		return value;
+	}
+	if (
+		value?.schemaId === FLAT32_DISTANT_SUN_CACHE_RESOLUTION_SCHEMA_ID &&
 		value?.cacheFormat === FLAT32_DISTANT_SUN_DENSE_CACHE_FORMAT_ID &&
 		value?.status === 'ready' &&
 		value.requestedSolarZenithDegrees === requestedSolarZenithDegrees &&

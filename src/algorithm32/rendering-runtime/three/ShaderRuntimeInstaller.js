@@ -131,6 +131,42 @@ export class ShaderRuntimeInstaller {
 	}
 
 	/**
+	 * Called to update a cache's complete opaque binding publication on the installed shader.
+	 *
+	 * @param {ShaderAssemblyResult} assembly - Installed declarations.
+	 * @param {ShaderRuntimeUniformMap} uniforms - Installed uniform records.
+	 * @param {CacheGpuBackend} backend - Renderer binding owner.
+	 * @param {GpuScatteringCache | null} cache - Optional live cache owner.
+	 * @returns {() => void} - Frame-boundary refresh operation.
+	 */
+	_createCachePublicationRefresher(assembly, uniforms, backend, cache) {
+		let identity;
+		let previousKeys = new Set();
+		const textureDeclarations = assembly.contributions.flatMap((contribution) => contribution.textures);
+		const uniformDeclarations = assembly.contributions.flatMap((contribution) => contribution.uniforms);
+		return () => {
+			const publication = cache?.getRuntimePublication?.();
+			if (!publication || publication.identity === identity) return;
+			/** Opaque cache texture destinations. @type {ShaderRuntimeUniformMap} */
+			const cacheUniforms = {};
+			for (const declaration of textureDeclarations)
+				cacheUniforms[declaration.valueKey] = uniforms[declaration.name];
+			const assignments = Object.entries(publication.values).map(([key, value]) => {
+				const declaration = uniformDeclarations.find((item) => item.valueKey === key);
+				if (!key.startsWith('cache.') || !declaration)
+					throw new TypeError('Live cache publication has an undeclared uniform.');
+				return {uniform: uniforms[declaration.name], value: this._normalizeShaderUniformValue(key, value)};
+			});
+			backend.installRuntimeBindings({bindings: publication.bindings, uniforms: cacheUniforms});
+			const bound = new Set(publication.bindings.bindings.map((binding) => binding.valueKey));
+			for (const key of previousKeys) if (!bound.has(key)) cacheUniforms[key].value = null;
+			for (const assignment of assignments) assignment.uniform.value = assignment.value;
+			previousKeys = bound;
+			identity = publication.identity;
+		};
+	}
+
+	/**
 	 * Called by ShaderRuntimeInstaller to determine whether a prepared required binding has a usable value.
 	 *
 	 * @param {ShaderRuntimeBindingValues} bindingValues - The prepared values.
@@ -583,6 +619,7 @@ export class ShaderRuntimeInstaller {
 			const initialBindingValues = {
 				...preparedBindingValues,
 				...runtimeSceneInputs.bindingValues,
+				...buildContext.scatteringCache?.getRuntimePublication?.().values,
 			};
 			const runtimeBindings = this._collectRuntimeBindings(buildContext);
 			/** @type {ShaderRuntimeUniformMap} */
@@ -605,6 +642,7 @@ export class ShaderRuntimeInstaller {
 			}
 			const refreshUniformValues = () => {
 				refreshPreparedUniformValues();
+				refreshCachePublication();
 				if (!celestialGenerationPass) return;
 				const generatedValues = celestialGenerationPass.consumerBindingValues();
 				for (const contribution of assembly.contributions) {
@@ -620,6 +658,12 @@ export class ShaderRuntimeInstaller {
 					}
 				}
 			};
+			const refreshCachePublication = this._createCachePublicationRefresher(
+				assembly,
+				uniforms,
+				request.setup.cacheBackend,
+				buildContext.scatteringCache,
+			);
 			refreshUniformValues();
 			if (runtimeBindings) {
 				/** @type {ShaderRuntimeUniformMap} */
@@ -680,6 +724,7 @@ export class ShaderRuntimeInstaller {
 					pass.enabled = true;
 				},
 				celestialGenerationParticipant: celestialGenerationPass,
+				publishObservation: (observation) => celestialGenerationPass?.setObservation(observation),
 				/** Called by install to dispose. */ dispose: () => {
 					this._removeComposerPass(composer, pass);
 					pass.dispose();

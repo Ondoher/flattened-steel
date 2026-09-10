@@ -302,7 +302,7 @@ type Flat32DistantSunCacheNonReadyStatus = 'dark' | 'unsupported';
 type Flat32DistantSunCacheResolution =
 	| Readonly<{
 			readonly schemaId: 'flat32-distant-sun-cache-resolution-v2';
-			readonly cacheFormat: Flat32DistantSunCacheFormatId;
+			readonly cacheFormat: 'algorithm32-distant-sun-dense-scene-v1';
 			readonly status: 'ready';
 			readonly requestedSolarZenithDegrees: number;
 			readonly representativeSolarZenithDegrees: number;
@@ -310,10 +310,26 @@ type Flat32DistantSunCacheResolution =
 	  }>
 	| Readonly<{
 			readonly schemaId: 'flat32-distant-sun-cache-resolution-v2';
+			readonly cacheFormat: 'algorithm32-distant-sun-shared-block-v1';
+			readonly status: 'ready';
+			readonly requestedSolarZenithDegrees: number;
+			readonly representativeSolarZenithDegrees: number;
+			readonly asset: Flat32SharedCacheAssetSelection;
+	  }>
+	| Readonly<{
+			readonly schemaId: 'flat32-distant-sun-cache-resolution-v2';
 			readonly cacheFormat: Flat32DistantSunCacheFormatId;
 			readonly status: Flat32DistantSunCacheNonReadyStatus;
 			readonly requestedSolarZenithDegrees: number;
 	  }>;
+
+/** Trusted immutable shared-package root returned by the explicit deployment selection. */
+type Flat32SharedCacheAssetSelection = {
+	/** Same-origin immutable package directory URL. */ rootUrl: string;
+	/** Content-addressed package-set identity matching the final root directory. */ packageSetIdentity: string;
+	/** Exact trusted package-set report bytes. */ report: DistantSunSharedCacheFileIdentity;
+	/** Optional independently qualified dual-atlas transition policy for this target. */ transitionQualification?: DistantSunSharedCacheMemoryQualification;
+};
 
 interface Flat32AtmosphereSummary extends SphericalDistantModeSummary {
 	pairing: 'spherical/distant' | 'flat/local';
@@ -325,3 +341,18 @@ interface Flat32AtmosphereSummary extends SphericalDistantModeSummary {
 	outputPixel: readonly [number, number, number, number];
 	sceneInputPixel: readonly [number, number, number, number];
 }
+/** Independently prepared physical inputs for one coherent distant-Sun scene. */
+type Flat32PreparedDistantScene = {
+	/** Accepted observation, geometry, and exact Sun direction. */ sceneState: Flat32DistantSunSceneState;
+	/** Independent candidate source for receiver-light measurement. */ source: LightSourceModel &
+		DistantSunCelestialSource;
+	/** Call this method to assign the prepared source and geometry state at a frame boundary. */ publish(): void;
+};
+/** One bounded frame-boundary state publication and its caller cancellation. */
+type Flat32FrameBoundaryOperation = {
+	/** Call this method to assign the complete prepared state. */ operation(): void;
+	/** Call this method to resolve completed publication. */ resolve(): void;
+	/** Call this method to reject unavailable or failed publication. */ reject(reason: unknown): void;
+	/** Caller cancellation signal. */ signal: AbortSignal;
+	/** Call this method to remove a canceled queued publication. */ cancel(): void;
+};

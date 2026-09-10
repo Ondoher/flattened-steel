@@ -16,6 +16,37 @@ import {
 } from './consts.js';
 
 export class ThreeSceneRuntime {
+	/** Pending application publications consumed before the next complete render.
+	 * @type {Set<Flat32FrameBoundaryOperation>}
+	 */
+	_frameBoundaryOperations = new Set();
+
+	/** Call this method to publish one prepared state immediately before the next render operation.
+	 * @param {() => void} operation - Synchronous complete-state publication.
+	 * @param {AbortSignal} signal - Caller-owned cancellation.
+	 * @returns {Promise<void>} - Completion at the frame boundary.
+	 */
+	atFrameBoundary(operation, signal) {
+		if (this._disposed || !this._started) return Promise.reject(new Error('Scene renderer is not running.'));
+		signal.throwIfAborted();
+		if (this._frameBoundaryOperations.size >= 4)
+			return Promise.reject(new Error('Frame publication queue is full.'));
+		return new Promise((resolve, reject) => {
+			const pending = {
+				operation,
+				resolve,
+				reject,
+				signal,
+				cancel: () => {
+					this._frameBoundaryOperations.delete(pending);
+					signal.removeEventListener('abort', pending.cancel);
+					reject(signal.reason);
+				},
+			};
+			signal.addEventListener('abort', pending.cancel, {once: true});
+			this._frameBoundaryOperations.add(pending);
+		});
+	}
 	/**
 	 * @param {HTMLCanvasElement} canvas - Receives the solid scene.
 	 * @param {(message: string) => void} onFailure - Reports browser failures.
@@ -304,6 +335,17 @@ void main() {
 		}
 
 		try {
+			for (const pending of this._frameBoundaryOperations) {
+				this._frameBoundaryOperations.delete(pending);
+				pending.signal.removeEventListener('abort', pending.cancel);
+				try {
+					pending.signal.throwIfAborted();
+					pending.operation();
+					pending.resolve();
+				} catch (error) {
+					pending.reject(error);
+				}
+			}
 			this._renderOperation();
 			this._frameCount += 1;
 			this._canvas.dataset.flat32FrameCount = String(this._frameCount);
@@ -530,6 +572,11 @@ void main() {
 		}
 
 		this._disposed = true;
+		for (const pending of this._frameBoundaryOperations) {
+			pending.signal.removeEventListener('abort', pending.cancel);
+			pending.reject(new Error('Scene renderer was disposed before publication.'));
+		}
+		this._frameBoundaryOperations.clear();
 		this._started = false;
 		this._resumeAfterContextRestoration = false;
 		if (this._frameRequest !== null) {

@@ -2,6 +2,7 @@ import {DistantSunCacheProvider} from './cache/DistantSunCacheProvider.js';
 import DistantSunSceneCacheAssetLoader from './cache/DistantSunSceneCacheAssetLoader.js';
 import DistantSunSceneCacheController from './cache/DistantSunSceneCacheController.js';
 import DistantSunDarkCacheController from './cache/DistantSunDarkCacheController.js';
+import DistantSunSharedCacheAttachment from './cache/DistantSunSharedCacheAttachment.js';
 import {DistantSunShaderContributor} from './DistantSunShaderContributor.js';
 import {DistantSunSceneLightingAdapter} from './three/DistantSunSceneLightingAdapter.js';
 import {LightSourceRequestValues} from '../../light-source-support/LightSourceRequestValues.js';
@@ -27,6 +28,10 @@ import {DistantSunCelestialCacheController} from './celestial/DistantSunCelestia
  * @implements {DistantSunCelestialCacheModuleContributor}
  */
 export class DistantSunLightSource {
+	/** Stable shared-cache attachment created by the shader builder.
+	 * @type {DistantSunSharedCacheAttachment | null}
+	 */
+	_sharedCacheAttachment = null;
 	/**
 	 * Lazily derived celestial view of this atmospheric Sun.
 	 * @type {DistantSunCelestialSourceDefinition | null}
@@ -86,6 +91,8 @@ export class DistantSunLightSource {
 		if (configuration.darkScattering === true && configuration.sceneCacheAsset !== undefined) {
 			throw new TypeError('DistantSunLightSource cannot select both a scene-cache asset and dark scattering.');
 		}
+		if (configuration.sharedCache && (configuration.sceneCacheAsset || configuration.darkScattering))
+			throw new TypeError('Shared-cache selection owns its ready and dark states.');
 
 		this._configuration = null;
 		this._celestialSourceDefinition = null;
@@ -97,6 +104,7 @@ export class DistantSunLightSource {
 			angularRadius: AngleMath.inRadians(angularRadiusRadians),
 			sceneCacheAsset: configuration.sceneCacheAsset,
 			darkScattering: configuration.darkScattering === true,
+			sharedCache: configuration.sharedCache,
 		};
 	}
 
@@ -350,6 +358,13 @@ if (!cacheCelestialSupported(directionIndex, receiverIndex)) {
 	 */
 	createCacheController({backend}) {
 		const configuration = this._requireConfiguration('createCacheController');
+		if (configuration.sharedCache) {
+			const packetBackend = /** @type {CachePacketAtlasBackend} */ (backend);
+			if (typeof packetBackend.allocatePersistentArray !== 'function')
+				throw new TypeError('Shared cache requires the packet-atlas backend capability.');
+			this._sharedCacheAttachment = new DistantSunSharedCacheAttachment(packetBackend, configuration.sharedCache);
+			return this._sharedCacheAttachment;
+		}
 		if (configuration.darkScattering) {
 			return new DistantSunDarkCacheController(backend);
 		}
@@ -360,6 +375,45 @@ if (!cacheCelestialSupported(directionIndex, receiverIndex)) {
 			backend,
 			asset: configuration.sceneCacheAsset,
 		});
+	}
+
+	/** Call this method to obtain the stable shared attachment after shader setup.
+	 * @returns {DistantSunSharedCacheAttachment | null} - Shared attachment, or null for another cache policy.
+	 */
+	get sharedCacheAttachment() {
+		return this._sharedCacheAttachment;
+	}
+
+	/** Call this method at a shared-cache publication boundary to replace live source direction.
+	 * Physical irradiance and apparent radius remain owned by the original source.
+	 * @param {UnitVector3} direction - Validated scene direction toward the Sun.
+	 * @returns {void}
+	 */
+	publishSharedDirection(direction) {
+		this.prepareSharedDirection(direction)();
+	}
+
+	/** Call this method to validate and stage source direction owners before an atomic live publication.
+	 * @param {UnitVector3} direction - Candidate unit direction.
+	 * @returns {() => void} - Nonthrowing assignment-only publication.
+	 */
+	prepareSharedDirection(direction) {
+		const previous = this._requireConfiguration('publishSharedDirection');
+		if (!previous.sharedCache) throw new Error('Live direction publication requires the shared-cache policy.');
+		const directionToLight = LightSourceRequestValues.normalizeDirection(
+			direction,
+			'Shared-cache live Sun direction',
+		);
+		const configuration = {...previous, directionToLight};
+		const shaderContributor = new DistantSunShaderContributor(configuration);
+		const sceneAdapter = new DistantSunSceneLightingAdapter(this, configuration);
+		const cacheProvider = new DistantSunCacheProvider(this, configuration);
+		return () => {
+			this._configuration = configuration;
+			this._shaderContributor = shaderContributor;
+			this._sceneAdapter = sceneAdapter;
+			this._cacheProvider = cacheProvider;
+		};
 	}
 
 	/**

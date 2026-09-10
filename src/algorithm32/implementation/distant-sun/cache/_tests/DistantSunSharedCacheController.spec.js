@@ -100,7 +100,7 @@ describe('Shared-cache residency and publication', () => {
 		fixture = createFixture(true);
 		fixture.defer = true;
 		const stale = fixture.controller.requestScene(0);
-		expect(await fixture.controller.requestScene(108)).toBeTrue();
+		expect(await fixture.controller.requestScene(null)).toBeTrue();
 		expect(fixture.controller.publishFrame().snapshot.status).toBe('dark');
 		fixture.resolvePending();
 		expect(await stale).toBeFalse();
@@ -109,9 +109,20 @@ describe('Shared-cache residency and publication', () => {
 		expect(fixture.activePins).toBe(0);
 		fixture.controller.dispose();
 		fixture = createFixture();
-		await fixture.controller.requestScene(108);
+		await fixture.controller.requestScene(null);
 		expect(fixture.controller.publishFrame().bindings).toEqual([]);
 		expect(fixture.backend.liveArrays).toBe(0);
+	});
+
+	it('keeps catalog scene 108 available below the separate input-angle darkness boundary', async () => {
+		fixture = createFixture();
+		expect(await fixture.controller.requestScene(108)).toBeTrue();
+		const frame = fixture.controller.publishFrame();
+		expect(frame.snapshot.status).toBe('ready');
+		expect(frame.snapshot.sceneOrdinal).toBe(108);
+		expect(frame.snapshot.requiredBlockIds.length).toBe(18);
+		expect(await fixture.controller.requestScene(null)).toBeTrue();
+		expect(fixture.controller.publishFrame().snapshot.status).toBe('dark');
 	});
 
 	it('invalidates lost generations and reuploads a complete scene after restoration', async () => {

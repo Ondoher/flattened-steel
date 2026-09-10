@@ -180,6 +180,30 @@ export class StellarScreenPaletteGenerationPass {
 		return uniforms;
 	}
 
+	/** Call this method to update live observation uniforms while retaining the fixed stellar programs.
+	 * @param {GeometryObservation} observation - Accepted live observation.
+	 * @returns {void}
+	 */
+	setObservation(observation) {
+		const contribution = this._geometry.createStellarGenerationShaderContribution({observation});
+		const assignments = contribution.uniforms.map((uniform) => ({
+			name: uniform.name,
+			value:
+				uniform.type === 'mat4'
+					? new this._THREE.Matrix4().fromArray(/** @type {number[]} */ (uniform.defaultValue))
+					: uniform.type === 'ivec2'
+						? new this._THREE.Vector2(.../** @type {[number, number]} */ (uniform.defaultValue))
+						: uniform.defaultValue,
+		}));
+		for (const assignment of assignments) {
+			this._pointUniforms[assignment.name].value = assignment.value;
+			this._paletteUniforms[assignment.name].value = assignment.value;
+		}
+		this._observation = observation;
+		this._geometryContribution = contribution;
+		this.markDirty('configuration');
+	}
+
 	/** Create the fixed point and fullscreen draw objects. */
 	_createStageDraws() {
 		const THREE = this._THREE;

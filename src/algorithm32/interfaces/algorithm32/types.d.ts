@@ -278,6 +278,15 @@ type ShaderPerformanceCallback =
  * Control an installed Algorithm32 runtime shader integration.
  */
 interface ShaderHandle {
+	/** Call this method to measure a complete candidate receiver state without publishing it. */
+	prepareReceiverEnvironmentLight(
+		request: Algorithm32ReceiverPreparationRequest,
+	): Promise<ReceiverEnvironmentLightMeasurement>;
+	/** Call this method to publish matching prepared receiver light and celestial observation. */
+	publishReceiverEnvironmentLight(
+		measurement: ReceiverEnvironmentLightMeasurement,
+		observation: GeometryObservation,
+	): void;
 	/** Measure the installed common-path environment and publish complete receiver light. */
 	measureReceiverEnvironmentLight(
 		request: Readonly<{

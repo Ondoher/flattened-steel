@@ -206,6 +206,17 @@ void main() {
 		);
 	}
 
+	/** Call this method to refresh accepted source placement at the live scene boundary.
+	 * @param {GeometryObservation} observation - Matching accepted observation.
+	 * @returns {void}
+	 */
+	setObservation(observation) {
+		const placement = this._geometry.resolveCelestialPlacements({roster: this._roster, observation})[0];
+		this._observation = observation;
+		this._placement = placement;
+		this.markDirty('configuration');
+	}
+
 	/** Resolve screen placement, apparent scale, compact shape, and reuse identity. */
 	_projection(view) {
 		let modelCenter;

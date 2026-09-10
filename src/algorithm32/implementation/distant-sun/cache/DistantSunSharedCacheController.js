@@ -198,7 +198,7 @@ export default class DistantSunSharedCacheController {
 				this._route.length && routeIndex >= 0
 					? this._route[routeIndex + offset]
 					: ordinal + this._direction * offset;
-			if (next === undefined || next < 0 || next >= 108) break;
+			if (next === undefined || next < 0 || next > 108) break;
 			const union = [...new Set([...ids, ...this._graph.scenes[next].requiredBlockIds])];
 			if (union.length > this._layers) break;
 			if (predicted < 0) predicted = next;
@@ -269,7 +269,7 @@ export default class DistantSunSharedCacheController {
 		if (this._layers !== DISTANT_SUN_SHARED_CACHE_DEFAULT_RESIDENT_LAYER_COUNT) {
 			const ids = new Set(
 				sceneOrdinals
-					.filter((ordinal) => ordinal < 108)
+					.filter((ordinal) => ordinal <= 108)
 					.flatMap((ordinal) => this._graph.scenes[ordinal].requiredBlockIds),
 			);
 			const qualified = this._definition.routeQualification.blockIds;
@@ -285,16 +285,15 @@ export default class DistantSunSharedCacheController {
 	 * Call this method to prepare a current/predicted window outside the presentation path.
 	 * Failure or supersession returns false and preserves the last-good publication.
 	 *
-	 * @param {number} sceneOrdinal - Representative scene ordinal, with 108 selecting darkness.
+	 * @param {number | null} sceneOrdinal - Representative scene ordinal, or null when input angle is at least 108 degrees.
 	 * @param {DistantSunSharedCacheSceneRequest} options - Optional route position and velocity.
 	 * @returns {Promise<boolean>} - Whether this request produced a complete frame candidate.
 	 */
 	async requestScene(sceneOrdinal, options = {}) {
 		if (this._disposed) throw new Error('Shared-cache controller is disposed.');
 		if (
-			!Number.isSafeInteger(sceneOrdinal) ||
-			sceneOrdinal < 0 ||
-			sceneOrdinal > 108 ||
+			(sceneOrdinal !== null &&
+				(!Number.isSafeInteger(sceneOrdinal) || sceneOrdinal < 0 || sceneOrdinal > 108)) ||
 			(options.velocityDegreesPerSecond !== undefined && !Number.isFinite(options.velocityDegreesPerSecond))
 		)
 			throw new RangeError('Shared-cache scene or velocity is invalid.');
@@ -306,13 +305,13 @@ export default class DistantSunSharedCacheController {
 		this._counters.requests += 1;
 		const delta =
 			options.velocityDegreesPerSecond ??
-			(this._lastRequested === undefined ? 1 : sceneOrdinal - this._lastRequested);
+			(sceneOrdinal === null ? 0 : this._lastRequested === undefined ? 1 : sceneOrdinal - this._lastRequested);
 		if (delta) this._direction = Math.sign(delta);
-		this._lastRequested = sceneOrdinal;
+		if (sceneOrdinal !== null) this._lastRequested = sceneOrdinal;
 		try {
-			if (sceneOrdinal === 108) {
+			if (sceneOrdinal === null) {
 				this._candidate = {
-					snapshot: this._metadata.build(108, generation, [], this._layers),
+					snapshot: this._metadata.build(null, generation, [], this._layers),
 					metadataTextures: [],
 					bindings: [],
 					predictedBlockIds: [],
@@ -417,6 +416,21 @@ export default class DistantSunSharedCacheController {
 			}
 			return false;
 		}
+	}
+
+	/** Call this method to inspect a borrowed complete candidate for off-frame lighting preparation.
+	 * @returns {DistantSunSharedCacheFrame | undefined} - Complete candidate, invalidated by supersession.
+	 */
+	getPreparedFrame() {
+		return this._candidate;
+	}
+
+	/** Call this method to cancel candidate preparation while preserving the visible scene.
+	 * @returns {void}
+	 */
+	cancelPreparation() {
+		this._cancel();
+		this._generation += 1;
 	}
 
 	/**

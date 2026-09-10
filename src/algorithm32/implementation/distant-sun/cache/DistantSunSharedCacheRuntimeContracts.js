@@ -455,7 +455,7 @@ export default class DistantSunSharedCacheRuntimeContracts {
 		const sceneOrdinal = this._requireInteger(
 			snapshot.sceneOrdinal,
 			0,
-			107,
+			108,
 			'Shared-cache publication scene ordinal',
 		);
 		if (snapshot.representativeSolarZenithDegrees !== sceneOrdinal) {

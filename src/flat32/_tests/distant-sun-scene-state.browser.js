@@ -31,6 +31,38 @@ const ASSET = {
 };
 
 describe('Flat32 distant-Sun scene state', () => {
+	it('stages shared Sun and geometry changes without altering the visible physical scene', () => {
+		const sceneState = createDistantSunSceneState({
+			observation: OBSERVATION,
+			observerHeight: ATMOSPHERE_OBSERVER_HEIGHT,
+			observerUpDirection: ATMOSPHERE_OBSERVER_UP_DIRECTION,
+		});
+		const mode = new SphericalDistantMode({
+			stellarCatalog: 'brightest-500',
+			sceneState,
+			sceneScale: ATMOSPHERE_SCENE_SCALE,
+			sourceAngularRadius: ATMOSPHERE_SOURCE_ANGULAR_RADIUS,
+			maximumScatteringOrder: 4,
+			sharedCache: /** @type {any} */ ({sceneOrdinal: 100}),
+		});
+		try {
+			const geometry = mode.geometry;
+			const source = mode.lightSource;
+			const before = [...source.configuration.directionToLight];
+			const prepared = mode.prepareLiveScene({...OBSERVATION, instant: '2024-06-21T05:26:03.503Z'});
+			expect(source.configuration.directionToLight).toEqual(before);
+			expect(geometry.configuration.directionToSource).toEqual(before);
+			expect(prepared.sceneState.directionToSourceModel).not.toEqual(before);
+			prepared.publish();
+			expect(mode.geometry).toBe(geometry);
+			expect(mode.lightSource).toBe(source);
+			expect(source.configuration.directionToLight).toEqual(prepared.sceneState.directionToSourceModel);
+			expect(geometry.configuration.directionToSource).toEqual(prepared.sceneState.directionToSourceModel);
+		} finally {
+			mode.dispose();
+		}
+	});
+
 	it('derives one live placement and scalar from the observation', () => {
 		const sceneState = createDistantSunSceneState({
 			observation: OBSERVATION,

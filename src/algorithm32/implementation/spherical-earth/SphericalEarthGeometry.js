@@ -341,6 +341,39 @@ export class SphericalEarthGeometry {
 		return normalizedPlacement;
 	}
 
+	/** Call this method to stage a same-shape live observation while retaining this geometry owner.
+	 * @param {SphericalEarthGeometry} prepared - Independently configured candidate geometry.
+	 * @param {GeometryLightSourceConfigurationRequest['lightSource']} lightSource - Stable source owner.
+	 * @returns {() => void} - Assignment-only publication after caller-owned source direction changes.
+	 */
+	prepareSharedPublication(prepared, lightSource) {
+		this._assertConfigured();
+		prepared._assertConfigured();
+		if (JSON.stringify(this._shapeConfiguration) !== JSON.stringify(prepared._shapeConfiguration))
+			throw new RangeError(
+				'Live shared-cache publication cannot change physical geometry or coordinate domains.',
+			);
+		const configuration = prepared._configuration;
+		const domain = new SphericalCelestialContributionDomain({
+			geometry: this,
+			bottomRadius: configuration.bottomRadius,
+			topRadius: configuration.topRadius,
+			observerHeight: configuration.observerHeight,
+			observation: configuration.observation,
+			lightSource,
+			directionToSource: configuration.directionToSource,
+		});
+		return () => {
+			this._configuration = configuration;
+			this._binding = {...prepared._binding, lightSource};
+			this._scatteringCacheGeometry = prepared._scatteringCacheGeometry;
+			this._cacheModuleProvider = prepared._cacheModuleProvider;
+			this._shaderContributor = prepared._shaderContributor;
+			this._sceneAdapter = prepared._sceneAdapter;
+			this._celestialContributionDomain = domain;
+		};
+	}
+
 	/**
 	 * The immutable normalized geometry configuration.
 	 *

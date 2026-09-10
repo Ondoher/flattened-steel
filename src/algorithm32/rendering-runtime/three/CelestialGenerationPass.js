@@ -69,6 +69,15 @@ export class CelestialGenerationPass {
 		this._sun.markDirty(reason);
 	}
 
+	/** Call this method at a scene boundary to update matching stellar and Sun observation values.
+	 * @param {GeometryObservation} observation - Accepted live observation.
+	 * @returns {void}
+	 */
+	setObservation(observation) {
+		this._stellar?.setObservation(observation);
+		this._sun.setObservation(observation);
+	}
+
 	async prepare(renderer) {
 		if (this._disposed) throw new Error('Cannot prepare a disposed celestial generation pass.');
 		await this._stellar?.prepare(renderer);

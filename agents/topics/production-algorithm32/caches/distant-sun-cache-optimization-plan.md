@@ -1,7 +1,7 @@
 # Distant-Sun Shared-Block Cache Production Plan
 
-Status: D1 and P1-P5 are implemented and verified at their selected phase scope.
-P6 shader and stable live-runtime integration is next. The contained experiments
+Status: D1 and P1-P6 are implemented and verified at their selected phase scope.
+P7 release qualification is next. The contained experiments
 remain closed; P7 qualification and P8 activation remain pending.
 
 This plan executes the
@@ -88,7 +88,8 @@ owner-provided periodic credit readings show excessive cost.
 
 The P3 assessment passed with approximately 25 minutes of implementation and
 five minutes of focused review. The latest owner-provided credit reading is
-76%, holding at that value while P4 completed and P5 advanced. Continue under
+74%, including some light use in another project. The owner reports this remains
+reasonable while P6 completes. Continue under
 this cadence and report progress; reevaluate if later readings or redundant
 work show excessive consumption.
 
@@ -128,7 +129,7 @@ artifacts stay only in the P7 output root.
 - [x] P3 — Implement production browser transport and Worker preparation.
 - [x] P4 — Implement renderer-owned packet-atlas primitives.
 - [x] P5 — Implement residency, predictive preparation, and atomic publication.
-- [ ] P6 — Integrate the packet shader and stable live runtime.
+- [x] P6 — Integrate the packet shader and stable live runtime.
 - [ ] P7 — Generate and qualify the release candidate.
 - [ ] P8 — Publish, observe, roll back if necessary, and remove the bridge.
 
@@ -312,23 +313,30 @@ change time of day without rebuilding the atmosphere runtime.
 
 Work:
 
-- [ ] Replace dense packed-row addressing with altitude-ledger and row-to-slot
+- [x] Replace dense packed-row addressing with altitude-ledger and row-to-slot
   metadata lookup while retaining the four hardware-filtered RGBA reads and
   Native15 spectral arithmetic.
-- [ ] Remove the scalar `R32F` manual-bilinear candidate from production scope.
-- [ ] Add live binding values for scene ordinal and distant-Sun direction and
+- [x] Remove the scalar `R32F` manual-bilinear candidate from production scope.
+- [x] Add live binding values for scene ordinal and distant-Sun direction and
   refresh them without recompilation.
-- [ ] Reuse one source/cache controller and one installed shader across scene
+- [x] Reuse one source/cache controller and one installed shader across scene
   changes rather than constructing a new `SphericalDistantMode` for every bin.
-- [ ] Publish cache selection, atmospheric Sun direction, celestial Sun
+- [x] Publish cache selection, atmospheric Sun direction, celestial Sun
   placement, receiver environment light, endpoint illumination, shadow-light
   direction, and shadow refresh coherently.
-- [ ] Preserve the immediate texture-free dark state and the direct-scene
+- [x] Preserve the dark state without cache-data textures and the direct-scene
   fallback on preparation failure.
 
 Completeness: a production animation traverses multiple one-degree scenes with
 one compiled shader/runtime. Captured state proves every rendered frame uses a
 coherent cache, Sun, ambient-light, celestial, and shadow selection.
+
+Under the selected incremental cadence, [P6 focused evidence](shared-runtime-verification.md)
+covers exact shader lookup and dark output, stable mode reuse, physical scene
+staging, frame-boundary ordering, and affected lifecycle. P7 supplies complete
+production animation captures and rendered-control comparison. The linked
+record resolves ordinal 108 versus input-angle darkness and the 36-byte typed
+sampler placeholders needed to retain one compiled program.
 
 ## P7 — Release-Candidate Qualification
 
@@ -417,7 +425,7 @@ checkpoint.
 
 ## Current State And Next Action
 
-D0, D1, and P1-P5 are implemented and verified at their selected phase scope. The production generator's
+D0, D1, and P1-P6 are implemented and verified at their selected phase scope. The production generator's
 [qualified immutable run](shared-generation-qualification.md) reconstructs all
 109 controls exactly, authenticates the persisted graph, and meets the
 storage, generation-time, working-disk, and Node-memory bounds. Active
@@ -428,5 +436,6 @@ transfer/recovery. [P4 GPU probes](shared-atlas-verification.md) establish exact
 packet and metadata storage with stable bindings and protected published layers.
 [P5 residency checks](shared-residency-verification.md) establish authenticated
 metadata ingress, prediction, bounded slot ownership, and complete publication.
-Continue P6-P8 in the declared checkpoint order; P7 retains
+[P6 runtime checks](shared-runtime-verification.md) establish stable shader
+lookup and coherent live scene publication. Continue P7-P8 in the declared checkpoint order; P7 retains
 the complete integration and cross-cutting review gate.

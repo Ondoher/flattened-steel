@@ -55,6 +55,8 @@ type Algorithm32PreparedConfig = {
 
 /** Facade operations used by one installed Algorithm32 shader handle. */
 interface Algorithm32ShaderHandleFacade {
+	/** Call this method to adopt a fully prepared receiver state at the live scene publication boundary. */
+	_adoptPreparedReceiverLight(measurement: ReceiverEnvironmentLightMeasurement): void;
 	readonly _model: SharedModel;
 	readonly _localLightLevelCalculator: LocalLightLevelCalculator;
 	_publishReceiverEnvironmentLight(
@@ -108,4 +110,17 @@ type Algorithm32ShaderHandleState = {
 	readonly setup: ShaderSetupRequest;
 	/** Currently installed shader build result. */
 	readonly buildResult: ShaderBuildResult;
+};
+/** Independent receiver-light preparation for an unpublished live scene. */
+type Algorithm32ReceiverPreparationRequest = {
+	/** Renderer library capability. */ THREE: unknown;
+	/** Renderer used for bounded environment sampling. */ renderer: unknown;
+	/** Renderer-owned cache and reduction backend. */ backend: CacheGpuBackend & CacheProbeReader;
+	/** Candidate configured physical geometry. */ geometry: GeometryModel;
+	/** Candidate configured distant source with unchanged irradiance and radius. */ lightSource: LightSourceModel &
+		DistantSunCelestialSource;
+	/** Candidate observation. */ observation: GeometryObservation;
+	/** Borrowed complete candidate cache facade. */ scatteringCache: GpuScatteringCache;
+	/** Complete candidate selection identity. */ identity: string;
+	/** Preparation cancellation. */ signal?: AbortSignal;
 };
