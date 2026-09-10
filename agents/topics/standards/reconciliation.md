@@ -42,6 +42,33 @@ checkpoint-adviser activation record below.
 
 ## Summary
 
+### Calculation Reuse Experiment Execution
+
+The 2026-09-10 request to execute the complete experiment plan, following the
+reported normalization prerequisite, authorizes this focused reconciliation
+under the owner's standing direction to resolve routine questions with judgment.
+The added `experiments/00000-shared-cache-calculation-reuse/AGENTS.md` records
+operational containment and progress obligations, without selecting standards.
+
+- Finding CR-001: the new instruction input requires attestation refresh.
+  Recommendation and recorded disposition: `already-covered`; retain its
+  operational instructions and include it in the audited surface.
+- Finding CR-002: the planned retained WebGL execution proof needs a local HTTP
+  host, which generic `code` omits. Recommendation and recorded disposition:
+  `already-covered`; reuse the existing `proof-tools` set for this experiment
+  folder. No canonical rule or overlay change is needed.
+- Authorization basis: execution of the plan and its disclosed readiness
+  prerequisite, with delegated judgment; no new manual review is claimed.
+
+The prior eight inputs remain unchanged. The only applicability change is the
+narrow experiment assignment. Historical evidence and production scopes remain
+unchanged. This audit has no unresolved disposition or precedence ambiguity.
+
+Reconciliation validates nine inputs with fingerprint
+`sha256:20d422bf089b4c0f1fa0b46ed6ab3ee26d1042041d9c6bee2a5cf06e86c64f57`.
+The generated guide write/check passes with source fingerprint
+`sha256:21204f6363f5a601571976a9b0f27a5211f537da46e2101a1df88be744b9d5a4`.
+
 ### Checkpoint Adviser Activation
 
 The 2026-09-10 request to enable the check-in adviser authorizes the repository

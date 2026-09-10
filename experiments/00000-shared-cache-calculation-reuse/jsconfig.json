@@ -1,0 +1,30 @@
+{
+	"compilerOptions": {
+		"allowJs": true,
+		"checkJs": true,
+		"maxNodeModuleJsDepth": 0,
+		"module": "NodeNext",
+		"moduleResolution": "NodeNext",
+		"target": "ES2022",
+		"noEmit": true,
+		"skipLibCheck": true,
+		"strict": false,
+		"types": ["node"],
+		"typeRoots": ["../../node_modules/@types"]
+	},
+	"include": [
+		"ApplicationControls.js",
+		"ApplicationTileProof.js",
+		"CacheWorkPlanner.js",
+		"CompilerDerivation.js",
+		"ExperimentRun.js",
+		"GpuProofHost.js",
+		"RetainedGpuSession.js",
+		"run-application.js",
+		"run-inventory.js",
+		"types.d.ts",
+		"../../scripts/algorithm32/solar-zenith-cache/types.d.ts",
+		"../../src/algorithm32/**/*.d.ts"
+	],
+	"exclude": ["../../node_modules/**", "../../src/algorithm32/**/node_modules/**"]
+}

@@ -2,8 +2,8 @@
 	"schemaVersion": 1,
 	"status": "normalized",
 	"manifest": "agents/topics/standards/manifest.md",
-	"normalizedAt": "2026-09-10T12:58:18.670Z",
-	"repositoryStandardsFingerprint": "sha256:04d7baaa3c0727864de581a63eadbd4e0972a00d7e5507c38ae857f467643ae3",
+	"normalizedAt": "2026-09-10T22:08:38.127Z",
+	"repositoryStandardsFingerprint": "sha256:20d422bf089b4c0f1fa0b46ed6ab3ee26d1042041d9c6bee2a5cf06e86c64f57",
 	"pendingDivergences": 0,
 	"deferredDivergences": 0,
 	"inputs": [
@@ -13,11 +13,15 @@
 		},
 		{
 			"path": "agents/topics/standards/manifest.md",
-			"sha256": "f1c312317b07394e2feda5bd6602247f374ce55828147287596dcab9f4549057"
+			"sha256": "46ac705174b0034c61caef9d54502ed9f2534c4615abe3f6609c9fa782aef420"
 		},
 		{
 			"path": "agents/topics/standards/overlay.md",
 			"sha256": "5b67d2e2a7016b3d1f9d1cbe20d1892aeca479a01e641cefc4ef0354d31b8793"
+		},
+		{
+			"path": "experiments/00000-shared-cache-calculation-reuse/AGENTS.md",
+			"sha256": "f7662a4c8c5fcbf8689ab22ca331533e9eb6a8e3538e996e0c293ad803927b9e"
 		},
 		{
 			"path": "experiments/distant-sun-cache-optimization/AGENTS.md",
