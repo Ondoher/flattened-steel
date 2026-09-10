@@ -3,7 +3,7 @@ import {CUBED_SPHERE_W27_DIRECTION_DOMAIN_OWNER} from '../../../../sampling-doma
 import {SOLAR_ZENITH_180_DOMAIN_OWNER} from '../../../../sampling-domains/solar-zenith/consts.js';
 import {NATIVE_15_SPECTRAL_BASIS} from '../../../../profiles/native-15/native-15-profile.js';
 import DistantSunSceneCache from '../DistantSunSceneCache.js';
-import DistantSunSceneCacheAssetLoader from '../DistantSunSceneCacheAssetLoader.js';
+import DistantSunSceneCacheAssetLoader from './reference/DistantSunSceneCacheAssetLoader.js';
 import DistantSunSceneCacheLedger from '../DistantSunSceneCacheLedger.js';
 
 function createLedger() {

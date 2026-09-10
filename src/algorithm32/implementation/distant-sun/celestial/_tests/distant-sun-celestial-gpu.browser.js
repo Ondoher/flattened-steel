@@ -4,7 +4,7 @@ import {CanonicalAtmosphere, DistantSunLightSource, SphericalEarthGeometry} from
 import {CANONICAL_ATMOSPHERE_CONSTANTS} from '../../../canonical-atmosphere/consts.js';
 import {DEFAULT_DISTANT_SUN_CONSTRUCTION_DOMAIN_SELECTION} from '../../cache/consts.js';
 import DistantSunSceneCache from '../../cache/DistantSunSceneCache.js';
-import DistantSunSceneCacheController from '../../cache/DistantSunSceneCacheController.js';
+import DistantSunSceneCacheController from '../../cache/_tests/reference/DistantSunSceneCacheController.js';
 import DistantSunSceneCacheLedger from '../../cache/DistantSunSceneCacheLedger.js';
 import {
 	createNativeExecutionProfile,

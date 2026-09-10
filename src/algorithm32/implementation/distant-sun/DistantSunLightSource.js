@@ -1,6 +1,4 @@
 import {DistantSunCacheProvider} from './cache/DistantSunCacheProvider.js';
-import DistantSunSceneCacheAssetLoader from './cache/DistantSunSceneCacheAssetLoader.js';
-import DistantSunSceneCacheController from './cache/DistantSunSceneCacheController.js';
 import DistantSunDarkCacheController from './cache/DistantSunDarkCacheController.js';
 import DistantSunSharedCacheAttachment from './cache/DistantSunSharedCacheAttachment.js';
 import {DistantSunShaderContributor} from './DistantSunShaderContributor.js';
@@ -368,13 +366,7 @@ if (!cacheCelestialSupported(directionIndex, receiverIndex)) {
 		if (configuration.darkScattering) {
 			return new DistantSunDarkCacheController(backend);
 		}
-		if (!configuration.sceneCacheAsset) {
-			throw new Error('Distant-Sun runtime requires an exact prebuilt scene-cache asset.');
-		}
-		return new DistantSunSceneCacheController({
-			backend,
-			asset: configuration.sceneCacheAsset,
-		});
+		throw new Error('Distant-Sun runtime requires an authenticated shared-cache selection.');
 	}
 
 	/** Call this method to obtain the stable shared attachment after shader setup.
@@ -422,18 +414,6 @@ if (!cacheCelestialSupported(directionIndex, receiverIndex)) {
 			this._sceneAdapter = sceneAdapter;
 			this._cacheProvider = cacheProvider;
 		};
-	}
-
-	/**
-	 * Call this method to create one attachment-owned offline scene-cache loader.
-	 * Selection and publication remain owned by the later runtime cutover.
-	 *
-	 * @param {DistantSunSceneCacheAssetLoaderDefinition} request - Backend, static asset root, and optional Web adapters.
-	 * @returns {DistantSunSceneCacheAssetLoader} - Exact manifest-backed loader.
-	 */
-	createSceneCacheAssetLoader(request) {
-		this._requireConfiguration('createSceneCacheAssetLoader');
-		return new DistantSunSceneCacheAssetLoader(request);
 	}
 
 	/**

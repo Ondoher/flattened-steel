@@ -1,7 +1,5 @@
 import * as THREE from 'three';
 
-import DistantSunSceneCacheAssetLoader from '../cache/DistantSunSceneCacheAssetLoader.js';
-import DistantSunSceneCacheController from '../cache/DistantSunSceneCacheController.js';
 import DistantSunDarkCacheController from '../cache/DistantSunDarkCacheController.js';
 import {DistantSunLightSource} from '../DistantSunLightSource.js';
 import {NATIVE_SOURCE_IRRADIANCE_DENSITY} from '../../../profiles/index.js';
@@ -126,26 +124,6 @@ describe('DistantSunLightSource', /** Called by Jasmine to register the named te
 		});
 	});
 
-	it('creates an independent cache controller for each renderer attachment', /** Called by Jasmine to exercise the named behavior. */ () => {
-		const source = createDistantSource({sceneCacheAsset: createSceneCacheAsset()});
-		const backend = /** @type {CacheGpuBackend} */ ({});
-		const scheduler = /** @type {CacheBuildScheduler} */ ({
-			/**
-			 * Called by scheduler to yield control. The promise rejects if the scheduler cannot yield; this scheduling operation is not cancellable once started.
-			 */ yieldControl: async () => {},
-		});
-		const model = /** @type {Algorithm32ExecutionModel} */ (/** @type {unknown} */ ({lightSource: source}));
-		const first = source.createCacheController({model, backend, scheduler});
-		const second = source.createCacheController({model, backend, scheduler});
-
-		expect(first instanceof DistantSunSceneCacheController).toBeTrue();
-		expect(second instanceof DistantSunSceneCacheController).toBeTrue();
-		expect(second).not.toBe(first);
-		expect(first.active).toBeNull();
-		first.dispose();
-		second.dispose();
-	});
-
 	it('rejects runtime cache creation when no exact prebuilt asset was selected', () => {
 		const source = createDistantSource();
 		expect(() =>
@@ -153,7 +131,7 @@ describe('DistantSunLightSource', /** Called by Jasmine to register the named te
 				model: /** @type {SharedModel} */ ({}),
 				backend: /** @type {CacheGpuBackend} */ ({}),
 			}),
-		).toThrowError(/exact prebuilt scene-cache asset/);
+		).toThrowError(/authenticated shared-cache selection/);
 	});
 
 	it('uses one texture-free zero-scattering cache for every configured dark state', async () => {
@@ -187,18 +165,6 @@ describe('DistantSunLightSource', /** Called by Jasmine to register the named te
 					darkScattering: true,
 				}),
 		).toThrowError(/cannot select both/);
-	});
-
-	it('creates an attachment-owned exact offline scene-cache loader without selecting it', () => {
-		const source = createDistantSource();
-		const loader = source.createSceneCacheAssetLoader({
-			backend: /** @type {CacheGpuBackend} */ ({}),
-			assetRoot: 'https://example.invalid/cache/',
-			fetch: async () => /** @type {Response} */ ({}),
-			subtleCrypto: /** @type {SubtleCrypto} */ ({}),
-		});
-
-		expect(loader instanceof DistantSunSceneCacheAssetLoader).toBeTrue();
 	});
 
 	it('contributes its accepted source direction from live configuration', /** Called by Jasmine to exercise the named behavior. */ () => {

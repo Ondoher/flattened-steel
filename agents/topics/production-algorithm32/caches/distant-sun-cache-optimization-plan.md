@@ -1,15 +1,16 @@
 # Distant-Sun Shared-Block Cache Production Plan
 
-Status: D1 and P1-P7 are implemented and qualified at their declared scope.
-P7 accepts bounded discrete time selection; continuous time animation remains
-unqualified. The contained experiments remain closed. P8 activation is next.
+Status: D1 and P1-P8 are complete at their declared scope. The shared package is
+published, observed, accepted, and selected; the temporary dense bridge is removed.
+Bounded discrete time selection is qualified. Continuous time animation remains
+unqualified at unchanged production Q30. The contained experiments remain closed.
 
 This plan executes the
 [distant-Sun cache optimization design](distant-sun-cache-optimization-design.md).
 The design owns representation and architectural decisions. This document owns
 dependency order, trackable work, completeness requirements, qualification,
-and rollout. The existing one-degree package set and dense runtime remain the
-production control until P8 accepts the replacement.
+and rollout. [P8 rollout](shared-runtime-rollout.md) owns the selected package,
+observation, rollback evidence, final acceptance, and retained numerical controls.
 
 ## Completion Target
 
@@ -56,7 +57,7 @@ The promotion is complete only when:
 | Prediction | Preload the initial window; at least one-scene look-ahead, expanded from declared route and animation velocity when preparation time permits |
 | Route-resident option | Allowed only when the exact route fits a device-qualified allocation; the accepted 62-layer route is not a whole-inventory guarantee |
 | Miss behavior | Hold the last-good scene until a complete successor is ready |
-| Rollback | Current dense packages and loader remain selected by an explicit temporary switch through observation |
+| Rollback | Selection rollback was observed before bridge removal; immutable evidence and the prior checkpoint are retained |
 
 No stage may change spectral resolution, angular or altitude domains,
 interpolation, recurrence order, or physical inputs. Temporal interpolation,
@@ -131,7 +132,7 @@ artifacts stay only in the P7 output root.
 - [x] P5 — Implement residency, predictive preparation, and atomic publication.
 - [x] P6 — Integrate the packet shader and stable live runtime.
 - [x] P7 — Generate and qualify the release candidate at its declared performance boundary.
-- [ ] P8 — Publish, observe, roll back if necessary, and remove the bridge.
+- [x] P8 — Publish, observe, verify rollback, and remove the bridge.
 
 Historical C0-E3 results and D0 identities are owned by the
 [storage experiment decision](../../poc-experiments/engineering-studies/distant-sun-cache-optimization/decision.md).
@@ -373,8 +374,8 @@ Work:
 
 Completeness: exactness and lifecycle gates pass unconditionally. The complete
 set is at most 600 MB, generation is at most 15 minutes on the comparison
-machine, normal prepared animation stays ahead of presentation, and accepted
-targets remain within declared host/GPU memory. A missed performance target
+machine, prepared discrete selections remain coherent, and accepted
+targets remain within declared host/GPU memory. A missed continuous-animation performance target
 causes review; it never relaxes correctness.
 
 [Final qualification](shared-runtime-qualification.md) accepts bounded discrete
@@ -389,18 +390,18 @@ one production path.
 
 Work:
 
-- [ ] Publish the immutable set under a new content-addressed root and verify
+- [x] Publish the immutable set under a new content-addressed root and verify
   containment, caching, content type, and complete-file serving.
-- [ ] Change only the explicit catalog/runtime selection after deployed
+- [x] Change only the explicit catalog/runtime selection after deployed
   identities match the P7 qualification record.
-- [ ] Retain the previous immutable package set and dense loader as rollback
+- [x] Retain the previous immutable package set and dense loader as rollback
   during the observation window. Rollback changes selection and never edits
   either set.
-- [ ] Record production observations, any rollback, and the final acceptance
+- [x] Record production observations, any rollback, and the final acceptance
   decision.
-- [ ] After acceptance, remove the dense loader, old generator path, temporary
+- [x] After acceptance, remove the dense loader, old generator path, temporary
   switch, and duplicated active inventory while preserving designated evidence.
-- [ ] Update cache design, current dataflow, deployment inventory, status, and
+- [x] Update cache design, current dataflow, deployment inventory, status, and
   release documents to describe only current production behavior.
 
 Completeness: one production shared-block packet path remains, rollback evidence
@@ -428,21 +429,17 @@ Do not combine format contracts, generator changes, renderer primitives,
 runtime activation, qualification evidence, or deployment selection in one
 checkpoint.
 
-## Current State And Next Action
+## Current State
 
-D0, D1, and P1-P6 are implemented and verified at their selected phase scope. The production generator's
-[qualified immutable run](shared-generation-qualification.md) reconstructs all
-109 controls exactly, authenticates the persisted graph, and meets the
-storage, generation-time, working-disk, and Node-memory bounds. Active
-selection and deployed assets remain unchanged. The
-[P3 transport checks](shared-transport-verification.md) prove exact decoded and
-packet bytes, bounded retention, coalescing, cancellation, and real Worker
-transfer/recovery. [P4 GPU probes](shared-atlas-verification.md) establish exact
-packet and metadata storage with stable bindings and protected published layers.
-[P5 residency checks](shared-residency-verification.md) establish authenticated
-metadata ingress, prediction, bounded slot ownership, and complete publication.
-[P6 runtime checks](shared-runtime-verification.md) establish stable shader
-lookup and coherent live scene publication. [P7 final qualification](shared-runtime-qualification.md)
-records complete numerical evidence, target bounds, strict restoration and
-disposal, and the approved consolidated reviews. Continue P8 publication,
-rollback observation, acceptance, and removal of the temporary bridge.
+D0, D1, and P1-P8 are complete. The exact shared inventory is published and
+selected by the actual production router. Local observation and selection
+rollback passed before bridge removal. The production runtime has one shared
+path; dense loaders are reference-test only and the original dense package
+set remains an operational numerical oracle outside the served inventory.
+
+The [qualification owner](shared-runtime-qualification.md) records numerical,
+lifecycle, memory, and performance limits. The [rollout owner](shared-runtime-rollout.md)
+records publication, rollback, final application/dependency verification, and
+consolidated reviews. Continuous time animation remains unqualified at Q30;
+bounded discrete selection with coherent holds is accepted. No full standards
+ledger or external deployment is claimed.

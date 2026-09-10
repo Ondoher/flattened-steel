@@ -2,11 +2,11 @@ import {
 	CUBED_SPHERE_W27_DIRECTION_DOMAIN_OWNER,
 	NATIVE_48_POSITION_DOMAIN_OWNER,
 	SOLAR_ZENITH_180_DOMAIN_OWNER,
-} from '../../../sampling-domains/index.js';
-import {NATIVE_15_SPECTRAL_BASIS} from '../../../profiles/index.js';
-import DistantSunSceneCache from './DistantSunSceneCache.js';
-import DistantSunSceneCacheLedger from './DistantSunSceneCacheLedger.js';
-import DistantSunSceneCacheManifest from './DistantSunSceneCacheManifest.js';
+} from '../../../../../sampling-domains/index.js';
+import {NATIVE_15_SPECTRAL_BASIS} from '../../../../../profiles/index.js';
+import DistantSunSceneCache from '../../DistantSunSceneCache.js';
+import DistantSunSceneCacheLedger from '../../DistantSunSceneCacheLedger.js';
+import DistantSunSceneCacheManifest from '../../DistantSunSceneCacheManifest.js';
 
 /** External asset loader and validator for one complete point-local distant-Sun cache. */
 export default class DistantSunSceneCacheAssetLoader {

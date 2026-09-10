@@ -17,9 +17,11 @@ completion-evidence categories. The
 final-view position lookup and its evidence. The
 [outgoing reconstruction contract](outgoing-reconstruction.md) owns the exact
 W27 direction lookup and its evidence. The
-[solar-zenith cache design](solar-zenith-cache-design.md) owns the active
-successor research representation and does not alter these implemented
-interfaces before promotion. Its
+[shared-block optimization design](distant-sun-cache-optimization-design.md)
+owns the promoted distant-Sun representation and runtime adaptation; its
+[rollout record](shared-runtime-rollout.md) owns current deployment selection.
+The earlier [solar-zenith cache design](solar-zenith-cache-design.md) remains
+the numerical point-local representation owner. Its
 [distant-Sun execution plan](../../../../archives/topics/topic-consolidation-20260906/agents/topics/algorithm32/cache/distant-sun-solar-zenith-cache-plan.md) owns the
 contained phase order and evidence gates. The
 [production implementation plan](../architecture-contracts/production-implementation-plan.md)

@@ -4,6 +4,8 @@
 	"include": [
 		"DistantSunSharedRuntime*.js",
 		"qualify-shared-runtime.js",
+		"publish-shared-runtime.js",
+		"verify-shared-runtime-dependencies.js",
 		"*.d.ts",
 		"../../../src/algorithm32/**/*.d.ts",
 		"../../../src/flat32/**/*.d.ts",

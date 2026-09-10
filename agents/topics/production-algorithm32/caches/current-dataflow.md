@@ -210,93 +210,48 @@ backend, and scheduler owners; the controller then applies its direct plan
 reuse key to each cache request.
 
 
-## Offline And Resident Point-Local Adoption
+## Shared-Block Distant-Sun Runtime
 
-The PA2 production command under `scripts/algorithm32/solar-zenith-cache`
-executes the qualified actual-point N4 GPU recurrence offline, one Native15
-wavelength at a time. It consumes canonical production Native48, Z180, W27,
-reflection-completed F68, and Native15 owners plus a scene definition, then
-emits a content-addressed oracle payload, exact-seam derivative, W27 index,
-packed-row ledger, manifest, hashes, and derivation record. The San Jose
-nautical rebuild exactly matches the sealed P9/P10 payload identities.
+The production generator evaluates the unchanged Native15/N4 recurrence over
+5,494 shared physical coordinates and stores 89 authenticated 8x8 blocks. The
+single content-addressed package reconstructs all 109 dense controls exactly;
+its numerical and generation evidence is owned by
+[shared generation qualification](shared-generation-qualification.md).
+The retained dense inventory is a reference-only generator/verifier input and
+is absent from the served production inventory.
 
-No runtime owner imports the compiler or executes this recurrence. The PA3
-asset loader verifies the exact manifest and compatibility identities, rebuilds
-the executable packed ledger, verifies hashes and payload shapes, scans all
-Native15 values, and checks the complete logical-to-unique W27 map before GPU
-ownership begins. The loader transposes those unchanged floats into a logical
-W27 face-grid atlas with four RGBA channel groups. `ThreeCacheBackend` eagerly
-uploads the `648 x 27 x retainedRows` RGBA32F atlas and the validated
-`4374 x 1` R16UI provenance index as two opaque bindings.
-`DistantSunSceneCache` derives local solar zenith and the source-relative
-outgoing frame at the actual physical path point, combines at most four
-altitude/zenith rows, and emits a non-value for unsupported ledger rows rather
-than clamping or returning zero.
+Flat32 computes the physical observer direction and solar zenith, sends only
+the scalar to its server resolver, and authenticates the selected package's
+complete metadata graph. The persistent module Worker authenticates, decompresses,
+and packetizes complete blocks. Four bounded transport jobs feed explicit host
+pins and a 64 MiB unpinned LRU. No complete dense scene is reconstructed by the
+production browser.
 
-The resident shader resolves four packed ledger rows, support state, and
-altitude/solar-zenith weights once per path point. Hardware bilinear sampling
-performs the four W27 direction taps for each of four RGBA spectral groups.
-This reduces the Q30 maximum from 7,200 scalar cache reads to 480 atlas reads
-per output pixel without changing any Native15 source value.
+The source-owned shared attachment maintains the current/predicted window in a
+24-layer RGBA32F packet atlas. A row-to-slot map and altitude ledger provide
+exact addressing while retaining the four hardware-filtered RGBA spectral
+reads. Native15 arithmetic, the geometry-owned endpoint, N4, and the Q30
+quadratic-near-observer final-view integration are unchanged.
 
-`DistantSunLightSource.createCacheController()` now requires the exact selected
-asset and creates its attachment-owned manifest loader/controller directly.
-The selected asset direction is installed as Geometry's explicit distant
-source placement, avoiding a nearby ephemeris recomputation. Algorithm32's
-live transport retains Geometry's first scene-object, ground, or atmosphere
-endpoint and evaluates 30 intervals whose normalized boundaries are squared;
-each interval samples cumulative density at its distance midpoint and applies
-half-interval extinction on both sides of that contribution. Endpoint
-composition remains spectral path radiance plus attenuated captured scene
-color at the display boundary.
+Time updates stage complete cache and receiver-light state, then publish the
+cache, atmospheric direction, geometry, celestial placement, endpoint lighting,
+and shadows at one frame boundary. One runtime and compiled shader survive
+ordinary time changes. Prediction misses preserve the complete last-good frame.
+Only the explicitly qualified package/device/browser/backend may allocate a
+second atlas for otherwise incompatible large jumps.
 
-The distant scene-cache controller now serializes generation-local loads,
-reuses only an exact active identity, preserves the last complete cache on
-failure, disposes superseded candidates, and atomically swaps complete
-two-texture binding groups. It enforces the qualified exact-seam logical-byte
-limits and reports resident, atomic-transition, and transition-plus-staging
-payloads separately from opaque driver overhead. Context loss releases invalid
-renderer objects while their original context is lost; the source retains its
-exact asset selection and reconstructs the complete cache after restoration.
+Input angles below 108 degrees remain illuminated, including ordinal 108 for
+[107.5, 108). Input 108 and above selects darkness using the same shared runtime:
+no encoded block requests or cache-data atlas, with 36 bytes of typed sampler
+placeholders needed by the stable shader. Context loss releases old GPU resources
+while the context is lost; restoration rebuilds the latest physical observation
+and authenticated cache selection, including clean subsequent disposal.
 
-The default Flat32 application derives the live distant-Sun direction and
-observer solar zenith from its observation, submits only the scalar zenith to
-the server resolver, and loads the returned content-addressed package. An
-explicit dark response instead publishes one shared texture-free cache whose
-cumulative Native15 scattering density is zero. That state downloads no cache
-payload and keeps spherical geometry, transport, scene composition, and stars
-inside the ordinary Algorithm32 shader. An unsupported spherical scene still
-fails cache preparation explicitly and preserves the application's direct
-scene fallback; it never falls back to receiver-column construction. PA5
-publication/lifecycle and PA6 production qualification are complete. PA6
-retains fresh B1 scores and six figures, exact oracle/seam parity, six live
-scene assets, all declared endpoint classes, complete W27 rotation, and named
-RTX 2060 timing/resource evidence. PA7 run `000585` emits all six runtime-only
-packages at `901,034,856` bytes. The older celestial-composition fixture now
-supplies a complete production-shaped exact asset through the real scene-cache
-controller and passes inside the unfiltered `23/23` WebGL gate.
-
-Those six packages are retained qualification evidence. A verified generated
-construction inventory covers every integer solar-
-zenith angle from 0 through 108 degrees. It contains 109 unique cache packages,
-`17,411,056,920` oracle bytes, and `16,154,147,172` exact-runtime bytes. The
-inventory and independent verification record retain their original
-repository-relative paths inside the verified archives linked from the
-[production status](../README.md). That verification matched every package
-manifest, ledger, R32F payload, and R16UI index SHA-256. The application keeps
-one scene cache resident and atomically swap complete caches; total
-offline/deployed storage, rather than steady resident size, scales with the
-number of angle bins. The bin-covered runtime inventory at
-`server/flat32/data/one-degree-bin-covered-runtime-packages-20260830-1`
-contains 109 packages,
-`17,230,339,148` total bytes, and a `161,192,508`-byte maximum resident cache.
-It owns half-up, half-open bins across `[0, 108)` and returns explicit darkness
-at 108 degrees. All dark angles share the procedural zero-scattering runtime
-state rather than multiplying the offline inventory. Its union ledgers cover
-both bin edges, and all 5,494 shared
-physical coordinates are byte-identical across their construction parents.
-The server selects the exact catalog record and returns its content-addressed
-manifest/package URLs. Static
-storage or a CDN serves the large immutable files; the server does not calculate
-the Sun position, execute recurrence, or return the payload inside its resolver
-response.
+The production host serves only complete, authenticated, allowlisted shared
+artifacts with immutable caching. It rejects the retired dense inventory and
+never evaluates the atmospheric recurrence. The
+[rollout owner](shared-runtime-rollout.md) records the selected identity,
+publication, rollback, local host observation, and retained references.
+[Runtime qualification](shared-runtime-qualification.md) owns timing and memory:
+bounded discrete time changes are accepted, while continuous time animation
+at the experiment's Q10 cadence remains unqualified at production Q30.

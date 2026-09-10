@@ -1,7 +1,8 @@
 # Shared Runtime Qualification
 
 Status: P7 qualification accepted for bounded discrete time selection on the
-declared target. Production selection remains dense until P8 publication.
+declared target. [P8 rollout](shared-runtime-rollout.md) subsequently published
+and selected this package and removed the temporary dense bridge.
 This document owns the combined release
 evidence; the [plan](distant-sun-cache-optimization-plan.md) owns completion.
 
@@ -127,7 +128,7 @@ reviews are complete. The evidence review's cleanup finding is fixed and its
 focused follow-up approved. A concurrent first-use reducer ownership guard is
 covered by a passing GPU test: two simultaneous reductions and later reuse link
 one GL program, preserve the numerical result, and leave zero programs after
-owner disposal. The router bridge is the remaining P8 rollout requirement.
+owner disposal. The router bridge and its subsequent removal are recorded by the P8 rollout owner.
 
 The performance review accepts the measured bounded discrete-selection behavior
 with coherent holds. Continuous time animation at the experiment's Q10 cadence
@@ -136,4 +137,4 @@ precedence over claiming that cadence. This is an explicit performance-boundary
 decision under the owner's authorization to resolve remaining questions, and
 does not relax any data, numerical, or lifecycle gate. Larger residency remains
 disabled unless the observed device/browser/backend matches its qualified target.
-P8 publication, observation, and bridge cleanup remain pending.
+P8 publication, observation, and bridge cleanup are complete in the linked rollout record.

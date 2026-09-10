@@ -158,112 +158,50 @@ export function createDistantSunSceneCacheCatalogResolver(catalog, assetBaseUrl 
 /** Called by HTTP resolution to reject an unversioned, foreign-format, or uncontained response. */
 function requireResolution(value, assetBaseUrl, requestedSolarZenithDegrees) {
 	if (
-		value?.schemaId === FLAT32_DISTANT_SUN_CACHE_RESOLUTION_SCHEMA_ID &&
-		value.cacheFormat === 'algorithm32-distant-sun-shared-block-v1' &&
-		value.requestedSolarZenithDegrees === requestedSolarZenithDegrees
-	) {
-		if (value.status === 'dark' && requestedSolarZenithDegrees >= 108) return value;
-		const asset = value.asset;
-		if (
-			value.status !== 'ready' ||
-			requestedSolarZenithDegrees >= 108 ||
-			value.representativeSolarZenithDegrees !== Math.floor(requestedSolarZenithDegrees + 0.5) ||
-			!asset ||
-			!/^[a-f0-9]{64}$/u.test(asset.packageSetIdentity) ||
-			asset.report?.path !== 'package-set.json' ||
-			!Number.isSafeInteger(asset.report.byteLength) ||
-			asset.report.byteLength <= 0 ||
-			asset.report.byteLength > 32 * 1024 * 1024 ||
-			!/^[a-f0-9]{64}$/u.test(asset.report.sha256)
-		)
-			throw new TypeError('Shared-cache resolution identity is incompatible.');
-		const base = new URL(assetBaseUrl, globalThis.location?.href ?? 'http://localhost/');
-		const root = new URL(asset.rootUrl, globalThis.location?.href ?? 'http://localhost/');
-		if (
-			root.origin !== base.origin ||
-			root.pathname !== `${base.pathname}${asset.packageSetIdentity}/` ||
-			root.username ||
-			root.password ||
-			root.search ||
-			root.hash
-		)
-			throw new RangeError('Shared-cache resolution root is uncontained.');
-		const qualification = asset.transitionQualification;
-		if (
-			qualification &&
-			(typeof qualification.evidenceId !== 'string' ||
-				!qualification.evidenceId ||
-				typeof qualification.targetId !== 'string' ||
-				!qualification.targetId ||
-				!Number.isSafeInteger(qualification.maximumBytes) ||
-				qualification.maximumBytes < 859963392)
-		)
-			throw new TypeError('Shared-cache transition qualification is incompatible.');
-		return value;
-	}
+		value?.schemaId !== FLAT32_DISTANT_SUN_CACHE_RESOLUTION_SCHEMA_ID ||
+		value.cacheFormat !== 'algorithm32-distant-sun-shared-block-v1' ||
+		value.requestedSolarZenithDegrees !== requestedSolarZenithDegrees
+	)
+		throw new TypeError('Distant-Sun cache-resolution response is incompatible.');
+	const dark = value.status === 'dark' && requestedSolarZenithDegrees >= 108;
+	const asset = value.asset;
 	if (
-		value?.schemaId === FLAT32_DISTANT_SUN_CACHE_RESOLUTION_SCHEMA_ID &&
-		value?.cacheFormat === FLAT32_DISTANT_SUN_DENSE_CACHE_FORMAT_ID &&
-		value?.status === 'ready' &&
-		value.requestedSolarZenithDegrees === requestedSolarZenithDegrees &&
-		Number.isInteger(value.representativeSolarZenithDegrees) &&
-		typeof value.asset?.assetRoot === 'string' &&
-		typeof value.asset?.loadRequest?.manifestPath === 'string' &&
-		typeof value.asset?.loadRequest?.manifestSha256 === 'string' &&
-		typeof value.asset?.loadRequest?.cacheIdentity === 'string' &&
-		value.asset?.loadRequest?.expected?.sceneSun
-	) {
-		const pageUrl = globalThis.location?.href ?? 'http://localhost/';
-		const expectedAssetBaseUrl = new URL(requireBaseUrl(assetBaseUrl), pageUrl);
-		const assetRoot = new URL(value.asset.assetRoot, pageUrl);
-		const relativeAssetRoot = assetRoot.href.slice(expectedAssetBaseUrl.href.length);
-		const packageMatch = relativeAssetRoot.match(/^packages\/([a-f0-9]{64})\/$/u);
-		const cacheIdentityMatch = value.asset.loadRequest.cacheIdentity.match(
-			/^algorithm32-distant-sun-scene-cache-sha256:([a-f0-9]{64})$/u,
-		);
-		const manifestMatch = value.asset.loadRequest.manifestPath.match(
-			/^scene-cache-manifest-([a-f0-9]{64})\.json$/u,
-		);
-		const expected = value.asset.loadRequest.expected;
-		const direction = expected.sceneSun?.directionToSourceUpEastNorth;
-		const instantMilliseconds = Date.parse(expected.sceneSun?.instant);
-		if (
-			assetRoot.origin !== expectedAssetBaseUrl.origin ||
-			!assetRoot.href.startsWith(expectedAssetBaseUrl.href) ||
-			packageMatch === null ||
-			cacheIdentityMatch === null ||
-			cacheIdentityMatch[1] !== packageMatch[1] ||
-			manifestMatch === null ||
-			manifestMatch[1] !== value.asset.loadRequest.manifestSha256 ||
-			value.representativeSolarZenithDegrees !== Math.floor(requestedSolarZenithDegrees + 0.5) ||
-			expected.sceneSun.id !==
-				`solar-zenith-${String(value.representativeSolarZenithDegrees).padStart(3, '0')}-degrees` ||
-			typeof expected.sceneSun.instant !== 'string' ||
-			!Number.isFinite(instantMilliseconds) ||
-			new Date(instantMilliseconds).toISOString() !== expected.sceneSun.instant ||
-			!Array.isArray(direction) ||
-			direction.length !== 3 ||
-			direction.some((component) => !Number.isFinite(component)) ||
-			Math.abs(Math.hypot(...direction) - 1) > 1e-10 ||
-			typeof expected.sceneSun.sourceIdentity !== 'string' ||
-			expected.sceneSun.sourceIdentity.length === 0 ||
-			['atmosphereIdentity', 'geometryIdentity', 'groundIdentity', 'numericalIdentity'].some(
-				(identityName) => typeof expected[identityName] !== 'string' || expected[identityName].length === 0,
-			)
-		) {
-			throw new TypeError('Distant-Sun cache-resolution asset identity is incompatible or uncontained.');
-		}
-		return value;
-	}
+		(!dark &&
+			(value.status !== 'ready' ||
+				requestedSolarZenithDegrees >= 108 ||
+				value.representativeSolarZenithDegrees !== Math.floor(requestedSolarZenithDegrees + 0.5))) ||
+		!asset ||
+		!/^[a-f0-9]{64}$/u.test(asset.packageSetIdentity) ||
+		asset.report?.path !== 'package-set.json' ||
+		!Number.isSafeInteger(asset.report.byteLength) ||
+		asset.report.byteLength <= 0 ||
+		asset.report.byteLength > 32 * 1024 * 1024 ||
+		!/^[a-f0-9]{64}$/u.test(asset.report.sha256)
+	)
+		throw new TypeError('Shared-cache resolution identity is incompatible.');
+	const base = new URL(assetBaseUrl, globalThis.location?.href ?? 'http://localhost/');
+	const root = new URL(asset.rootUrl, globalThis.location?.href ?? 'http://localhost/');
 	if (
-		value?.schemaId === FLAT32_DISTANT_SUN_CACHE_RESOLUTION_SCHEMA_ID &&
-		value?.cacheFormat === FLAT32_DISTANT_SUN_DENSE_CACHE_FORMAT_ID &&
-		(value?.status === 'dark' || value?.status === 'unsupported') &&
-		value.requestedSolarZenithDegrees === requestedSolarZenithDegrees
-	) {
-		return value;
-	}
-	throw new TypeError('Distant-Sun cache-resolution response is incompatible.');
+		root.origin !== base.origin ||
+		root.pathname !== `${base.pathname}${asset.packageSetIdentity}/` ||
+		root.username ||
+		root.password ||
+		root.search ||
+		root.hash
+	)
+		throw new RangeError('Shared-cache resolution root is uncontained.');
+	const qualification = asset.transitionQualification;
+	if (
+		qualification &&
+		(typeof qualification.evidenceId !== 'string' ||
+			!qualification.evidenceId ||
+			typeof qualification.targetId !== 'string' ||
+			!qualification.targetId ||
+			!Number.isSafeInteger(qualification.maximumBytes) ||
+			qualification.maximumBytes !== 859963392)
+	)
+		throw new TypeError('Shared-cache transition qualification is incompatible.');
+	return value;
 }
 
 /**

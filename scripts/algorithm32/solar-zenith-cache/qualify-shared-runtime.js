@@ -5,6 +5,8 @@ import {createServer} from 'node:http';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import puppeteer from 'puppeteer';
+import express from 'express';
+import registerFlat32Routes from '../../../server/flat32-router.js';
 import {rollup} from 'rollup';
 import {nodeResolve} from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
@@ -18,6 +20,8 @@ const files = new Files(repository);
 const performanceOnly = process.argv.includes('--performance');
 const motionOnly = process.argv.includes('--motion');
 const lifecycleOnly = process.argv.includes('--lifecycle');
+const rollout = process.argv.includes('--rollout');
+const darkStart = process.argv.includes('--dark-start');
 const dual = process.argv.includes('--dual');
 const recordingParent = process.argv.find((argument) => argument.startsWith('--record='))?.slice(9);
 const full = process.argv.includes('--full') || performanceOnly;
@@ -34,6 +38,8 @@ await files.directory(run);
 const profile = await files.directory(`${run}/browser-profile`);
 const sourcePath = 'scripts/algorithm32/solar-zenith-cache/DistantSunSharedRuntimeQualificationBrowser.js';
 const prefix = `/${randomBytes(18).toString('hex')}/`;
+const productionRouter = express();
+if (rollout) await registerFlat32Routes(null, productionRouter, {getRouterRoot: () => prefix.slice(0, -1)});
 const shared = await new SharedService(await files.resolve(parent)).load(report);
 const dense = await createDistantSunSceneCachePackageService();
 const oracle = await new Oracle().load(files, parent, report);
@@ -83,6 +89,13 @@ const server = createServer(async (request, response) => {
 			return;
 		}
 		const route = decodeURIComponent(url.pathname.slice(prefix.length));
+		if (rollout && (route === 'api/shared' || route.startsWith('scene-caches/'))) {
+			request.url = route === 'api/shared' ? `/api/distant-sun-scene-cache${url.search}` : `/${route}`;
+			productionRouter(request, response, (error) => {
+				response.writeHead(error ? 500 : 404).end();
+			});
+			return;
+		}
 		const send = (body, type = 'application/json', immutable = false) => {
 			response.writeHead(200, {
 				'content-type': type,
@@ -175,6 +188,8 @@ for (const name of [
 }
 for (const source of [
 	'server/flat32/features/shared-cache/DistantSunSharedCachePackageService.js',
+	'server/flat32/features/shared-cache/selection.js',
+	'server/flat32-router.js',
 	'dist/flat32/shared-cache-worker.js',
 ]) {
 	const bytes = await files.read(source);
@@ -232,7 +247,12 @@ try {
 	await page.waitForFunction(() => Boolean(globalThis.sharedQualification));
 	console.log(JSON.stringify({run, phase: 'browser-ready'}));
 	const started = performance.now();
-	result.initial = await page.evaluate(() => globalThis.sharedQualification.start('shared'));
+	result.initial = await page.evaluate(
+		(dark) => globalThis.sharedQualification.start('shared', dark ? 108.001 : 90),
+		darkStart,
+	);
+	if (darkStart && (result.initial.cache.gpuBytes !== 0 || result.initial.transport.requests !== 0))
+		throw new Error('Initial darkness requested cache block data.');
 	result.coldMilliseconds = performance.now() - started;
 	console.log(
 		JSON.stringify({phase: 'shared-ready', coldMilliseconds: result.coldMilliseconds, state: result.initial}),

@@ -161,17 +161,22 @@ export default class DistantSunSharedCachePackageService {
 			schemaId: FLAT32_DISTANT_SUN_CACHE_RESOLUTION_SCHEMA_ID,
 			cacheFormat: FLAT32_DISTANT_SUN_SHARED_CACHE_FORMAT_ID,
 			requestedSolarZenithDegrees: degrees,
+			asset: {
+				rootUrl: `${base}${this._identity}/`,
+				packageSetIdentity: this._identity,
+				report: {...this._report},
+				transitionQualification: {
+					evidenceId: 'sha256:4544d8f0f881d9f32208adab945858b614cef22ee80b2ded0eb078ec4f2e5dce',
+					targetId: 'NVIDIA GeForce RTX 2060 / Chrome 153 / ANGLE D3D11',
+					maximumBytes: 859963392,
+				},
+			},
 		});
 		if (degrees >= 108) return {...common, status: 'dark'};
 		return {
 			...common,
 			status: 'ready',
 			representativeSolarZenithDegrees: Math.floor(degrees + 0.5),
-			asset: {
-				rootUrl: `${base}${this._identity}/`,
-				packageSetIdentity: this._identity,
-				report: {...this._report},
-			},
 		};
 	}
 

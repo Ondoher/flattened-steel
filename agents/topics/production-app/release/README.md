@@ -6,6 +6,11 @@ Start with the closeout plan: C1-C5 remain open and C6 depends on them. D1-D11 r
 
 ## Working Documents
 
+The distant-Sun shared-cache promotion is recorded separately in the
+[P8 rollout owner](../../production-algorithm32/caches/shared-runtime-rollout.md).
+Its local publication and acceptance do not close the outstanding application
+release dispositions above.
+
 - [Ambient-Light Appearance Acceptance](ambient-light-acceptance.md)
 - [Production Ambient-Light Design](ambient-light-design.md)
 - [Production Color Reset Implementation Plan](color-reset-implementation-plan.md)

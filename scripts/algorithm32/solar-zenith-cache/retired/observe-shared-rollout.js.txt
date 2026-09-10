@@ -1,0 +1,53 @@
+import assert from 'node:assert/strict';
+import {randomUUID} from 'node:crypto';
+import {fileURLToPath} from 'node:url';
+import express from 'express';
+import registerFlat32Routes from '../../../server/flat32-router.js';
+import Files from './DistantSunSharedCacheGenerationFiles.js';
+import {SHARED_PACKAGE_IDENTITY, SHARED_PACKAGE_REPORT} from '../../../server/flat32/features/shared-cache/selection.js';
+
+const files = new Files(fileURLToPath(new URL('../../../', import.meta.url)));
+const run = `tmp/production-algorithm32/distant-sun-shared-block-cache/qualification/${new Date().toISOString().replace(/[:.]/gu, '-')}-${randomUUID()}`;
+await files.directory(run);
+const observations = [];
+const previous = process.env.FLAT32_DISTANT_SUN_ROLLOUT;
+try {
+	for (const selection of ['shared', 'dense', 'shared']) {
+		process.env.FLAT32_DISTANT_SUN_ROLLOUT = selection;
+		const app = express();
+		await registerFlat32Routes(app, app, {getRouterRoot: () => ''});
+		const server = app.listen(0, '127.0.0.1');
+		await new Promise((resolve) => server.once('listening', resolve));
+		const origin = `http://127.0.0.1:${server.address().port}`;
+		try {
+			const response = await fetch(`${origin}/api/distant-sun-scene-cache?solarZenithDegrees=90`);
+			assert.equal(response.status, 200);
+			const value = await response.json();
+			assert.equal(value.cacheFormat, selection === 'shared' ? 'algorithm32-distant-sun-shared-block-v1' : 'algorithm32-distant-sun-dense-scene-v1');
+			const root = selection === 'shared' ? value.asset.rootUrl : value.asset.assetRoot;
+			const artifact = selection === 'shared' ? SHARED_PACKAGE_REPORT : {path: value.asset.loadRequest.manifestPath, sha256: value.asset.loadRequest.manifestSha256};
+			const served = await fetch(origin + root + artifact.path, {headers: {Range: 'bytes=0-9'}});
+			const bytes = Buffer.from(await served.arrayBuffer());
+			assert.equal(served.status, 200);
+			assert.equal(files.hash(bytes), artifact.sha256);
+			assert.equal(Number(served.headers.get('content-length')), bytes.length);
+			assert.match(served.headers.get('cache-control'), /immutable/u);
+			assert.match(served.headers.get('content-type'), /application\/json/u);
+			if (selection === 'shared') {
+				assert.equal(value.asset.packageSetIdentity, SHARED_PACKAGE_IDENTITY);
+				assert.equal((await fetch(`${origin}/scene-caches/${SHARED_PACKAGE_IDENTITY}/unlisted.json`)).status, 404);
+			}
+			assert.equal((await fetch(`${origin}/api/distant-sun-scene-cache?solarZenithDegrees=90&extra=1`)).status, 400);
+			observations.push({selection, resolution: value, status: served.status, headers: Object.fromEntries(served.headers), bytes: bytes.length, sha256: files.hash(bytes)});
+		} finally {
+			server.closeAllConnections();
+			await new Promise((resolve) => server.close(resolve));
+		}
+	}
+} finally {
+	if (previous === undefined) delete process.env.FLAT32_DISTANT_SUN_ROLLOUT;
+	else process.env.FLAT32_DISTANT_SUN_ROLLOUT = previous;
+}
+const router = await files.read('server/flat32-router.js');
+await files.write(`${run}/rollback-router.js`, router);
+console.log(JSON.stringify(await files.write(`${run}/result.json`, Buffer.from(JSON.stringify({accepted: true, operation: 'production router shared to dense rollback to shared selection; complete response under Range request', routerSha256: files.hash(router), report: SHARED_PACKAGE_REPORT, node: process.version, observations}, null, 2) + '\n'))));

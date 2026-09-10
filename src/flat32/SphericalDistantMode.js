@@ -63,7 +63,7 @@ export class SphericalDistantMode {
 			angularRadius: configuration.sourceAngularRadius,
 			sceneCacheAsset: configuration.sceneCacheAsset,
 			sharedCache: configuration.sharedCache,
-			darkScattering: configuration.distantSunCacheState === 'dark',
+			darkScattering: configuration.distantSunCacheState === 'dark' && !configuration.sharedCache,
 		});
 		const catalogDefinition =
 			selections.stellarCatalog === FLAT32_STELLAR_CATALOG_IDS.BRIGHTEST_2000

@@ -1,7 +1,7 @@
 # Flat32 Distant-Sun Cache Data
 
 This directory owns the extracted runtime data served by
-`DistantSunSceneCachePackageService`. Large generated packages are ignored by
+`features/shared-cache/DistantSunSharedCachePackageService`. Large generated packages are ignored by
 Git; this README is the tracked contract for their location and provenance.
 
 It also owns the local-only Color Reset P5 stellar package at
@@ -26,35 +26,31 @@ rows in the
 [project-wide research register](../../../references/followup.md#missing-third-party-sources-or-canonical-registrations)
 close.
 
-The qualified local package root is:
+The selected immutable shared package lives at:
 
 ```text
-server/flat32/data/one-degree-bin-covered-runtime-packages-20260830-1/
+server/flat32/data/shared-block/7e80317f53c79d0d5a30ebc006630213a2e758008c62a3abb14d2534a8cc2b99/
 ```
 
-It contains 109 one-degree packages, the accepted package report, and the
-content-addressed runtime catalog. `FLAT32_DISTANT_SUN_CACHE_ROOT` may still
-select a deployed package root without changing application code.
+Run `npm run publish:algorithm32:shared-runtime` to copy and authenticate the
+qualified immutable parent. The tracked selection pins the report identity;
+there is no dense rollout switch. The package is 505,724,079 bytes and the
+server serves only its allowlisted, authenticated complete artifacts.
+[Rollout evidence and current policy](../../../agents/topics/production-algorithm32/caches/shared-runtime-rollout.md)
+are owned by the production cache topic.
 
-## Retained Offline Builder
+## Operational Numerical Reference
 
-The canonical inventory builder and its complete production-owned compiler
-implementation remain under:
+`one-degree-bin-covered-runtime-packages-20260830-1/` retains the 109 original
+dense controls solely for shared generation and exact verification. It is not
+served and is not a second deployed cache inventory. Its exact bytes remain
+required by the production generator; deleting this extracted oracle would
+break that owner. The original pre-color-reset archive and index remain intact,
+including `extraterrestrial-production-adoption-runtime-active-output-2026-08-31.zip`.
 
-```text
-scripts/algorithm32/solar-zenith-cache/
-```
-
-The primary entry point is
-`build-one-degree-scene-cache-inventory.js`. It uses
-`DistantSunSceneCacheOfflineCompiler.js`,
-`DistantSunSceneCacheGpuCompiler.js`, and
-`DistantSunSceneCacheCompilerInputs.js`. The resulting inventory is checked by
-`verify-one-degree-scene-cache-inventory.js`, and
-`assemble-bin-covered-runtime-packages.js` produces the bin-covered runtime
-package set. Construction and assembly remain offline operations under
-`tmp/extraterrestrial`; only an accepted immutable runtime derivative is
-promoted here.
-
-The current package set is also preserved in the local pre-color-reset archive
-as `extraterrestrial-production-adoption-runtime-active-output-2026-08-31.zip`.
+The active offline command is `npm run build:algorithm32:distant-sun-cache:shared`.
+Common numerical compiler/input owners remain under
+`scripts/algorithm32/solar-zenith-cache/`. Former dense inventory commands are
+retired; their exact source bytes and restoration instructions are under that
+folder's `retired/` directory. All new generated qualification output belongs
+under the ignored production shared-cache output root, never a sealed experiment.

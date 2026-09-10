@@ -1,4 +1,6 @@
 import {Flat32Application} from '../../../src/flat32/Flat32Application.js';
+import {DistantSunLightSource} from '../../../src/algorithm32/implementation/distant-sun/DistantSunLightSource.js';
+import ReferenceDenseController from '../../../src/algorithm32/implementation/distant-sun/cache/_tests/reference/DistantSunSceneCacheController.js';
 import {SphericalDistantMode} from '../../../src/flat32/SphericalDistantMode.js';
 import {ReceiverEnvironmentLightTransportSampler} from '../../../src/algorithm32/implementation/scene-lighting/ReceiverEnvironmentLightTransportSampler.js';
 import {ReceiverEnvironmentLightGpuReducer} from '../../../src/algorithm32/implementation/scene-lighting/ReceiverEnvironmentLightGpuReducer.js';
@@ -281,11 +283,13 @@ export default class DistantSunSharedRuntimeQualificationBrowser {
 		}
 		const afterMiss = this.snapshot();
 		if (
-			!held ||
-			beforeMiss.cache.sceneOrdinal !== afterMiss.cache.sceneOrdinal ||
-			beforeMiss.receiverIdentity !== afterMiss.receiverIdentity
+			held &&
+			(beforeMiss.cache.sceneOrdinal !== afterMiss.cache.sceneOrdinal ||
+				beforeMiss.receiverIdentity !== afterMiss.receiverIdentity)
 		)
 			throw new Error('Bounded seek did not preserve the complete visible state.');
+		if (!held && afterMiss.cache.sceneOrdinal !== 20)
+			throw new Error('Qualified seek did not publish its requested scene.');
 		const dark = await this.transition(108.001);
 		if (dark.after.cache.gpuBytes !== 0 || dark.after.cache.sceneOrdinal !== null)
 			throw new Error('Darkness retained data atlas resources.');
@@ -346,16 +350,33 @@ export default class DistantSunSharedRuntimeQualificationBrowser {
 	 */
 	dispose() {
 		this._application?.dispose();
+		this._restoreReferenceController?.();
+		this._restoreReferenceController = undefined;
 		for (const {owner, method, operation} of this._instrumentedMethods ?? []) owner.prototype[method] = operation;
 		this._instrumentedMethods = [];
 	}
 	/** Call this method to start the real production application with an explicit qualification selection.
 	 *
 	 * @param {SharedQualificationSelection} selection - Shared candidate or dense control.
+	 * @param {number} [initialDegrees] - Initial physical input, including the dark boundary.
 	 *
 	 * @returns {Promise<SharedQualificationSnapshot>} - Initial measured application state.
 	 */
-	async start(selection) {
+	async start(selection, initialDegrees = 90) {
+		if (selection === 'dense') {
+			const original = DistantSunLightSource.prototype.createCacheController;
+			DistantSunLightSource.prototype.createCacheController = function (request) {
+				return this.configuration.sceneCacheAsset
+					? new ReferenceDenseController({
+							backend: request.backend,
+							asset: this.configuration.sceneCacheAsset,
+						})
+					: original.call(this, request);
+			};
+			this._restoreReferenceController = () => {
+				DistantSunLightSource.prototype.createCacheController = original;
+			};
+		}
 		this._samples = [];
 		this._preparationStages = [];
 		this._instrumentedMethods = [];
@@ -411,6 +432,17 @@ export default class DistantSunSharedRuntimeQualificationBrowser {
 				if (this._samples.length > 4096) this._samples.shift();
 			},
 		});
+		if (selection === 'dense') {
+			// Qualification-only control adapter; the production application rejects dense selections.
+			this._application._prepareSphericalDistantMode = async function (state, request) {
+				const scene = this._createSphericalDistantSceneState(state);
+				const url = new URL('api/dense', location.href);
+				url.searchParams.set('solarZenithDegrees', String(scene.solarZenithDegrees));
+				const value = await (await fetch(url, {signal: request.signal})).json();
+				request.signal.throwIfAborted();
+				return this._createSphericalDistantMode(scene, value.asset, value.status);
+			};
+		}
 		// Select the ordinary San Jose preset so the qualification route includes sunset and darkness.
 		const locationController = this._application._locationTimeController;
 		const defaultStart = locationController.start.bind(locationController);
@@ -418,7 +450,7 @@ export default class DistantSunSharedRuntimeQualificationBrowser {
 		const selectTime = locationController.selectTime.bind(locationController);
 		locationController.selectTime = (state, index) => {
 			const selected = selectTime(state, index);
-			return {...selected, observation: this._observation(90, selected.observation)};
+			return {...selected, observation: this._observation(initialDegrees, selected.observation)};
 		};
 		this._application.start();
 		const deadline = performance.now() + 180000;

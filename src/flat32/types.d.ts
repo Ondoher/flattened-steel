@@ -302,6 +302,13 @@ type Flat32DistantSunCacheNonReadyStatus = 'dark' | 'unsupported';
 type Flat32DistantSunCacheResolution =
 	| Readonly<{
 			readonly schemaId: 'flat32-distant-sun-cache-resolution-v2';
+			readonly cacheFormat: 'algorithm32-distant-sun-shared-block-v1';
+			readonly status: 'dark';
+			readonly requestedSolarZenithDegrees: number;
+			readonly asset: Flat32SharedCacheAssetSelection;
+	  }>
+	| Readonly<{
+			readonly schemaId: 'flat32-distant-sun-cache-resolution-v2';
 			readonly cacheFormat: 'algorithm32-distant-sun-dense-scene-v1';
 			readonly status: 'ready';
 			readonly requestedSolarZenithDegrees: number;
@@ -318,7 +325,7 @@ type Flat32DistantSunCacheResolution =
 	  }>
 	| Readonly<{
 			readonly schemaId: 'flat32-distant-sun-cache-resolution-v2';
-			readonly cacheFormat: Flat32DistantSunCacheFormatId;
+			readonly cacheFormat: 'algorithm32-distant-sun-dense-scene-v1';
 			readonly status: Flat32DistantSunCacheNonReadyStatus;
 			readonly requestedSolarZenithDegrees: number;
 	  }>;

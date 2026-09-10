@@ -3,6 +3,8 @@ import {
 	createDistantSunSceneCacheHttpResolver,
 	resolveDistantSunSceneCache,
 } from '../DistantSunSceneCacheResolver.js';
+import SharedDistantCacheAssets from '../SharedDistantCacheAssets.js';
+import DistantSunSharedCacheTransport from '../../algorithm32/implementation/distant-sun/cache/DistantSunSharedCacheTransport.js';
 import {
 	FLAT32_DISTANT_SUN_CACHE_RESOLUTION_SCHEMA_ID,
 	FLAT32_DISTANT_SUN_DENSE_CACHE_FORMAT_ID,
@@ -51,7 +53,53 @@ function catalog() {
 	};
 }
 
+function shared(degrees) {
+	const identity = 'a'.repeat(64);
+	return {
+		schemaId: FLAT32_DISTANT_SUN_CACHE_RESOLUTION_SCHEMA_ID,
+		cacheFormat: FLAT32_DISTANT_SUN_SHARED_CACHE_FORMAT_ID,
+		status: degrees >= 108 ? 'dark' : 'ready',
+		requestedSolarZenithDegrees: degrees,
+		representativeSolarZenithDegrees: Math.floor(degrees + 0.5),
+		asset: {
+			packageSetIdentity: identity,
+			rootUrl: `/scene-caches/${identity}/`,
+			report: {path: 'package-set.json', byteLength: 3000, sha256: 'b'.repeat(64)},
+		},
+	};
+}
+
 describe('DistantSunSceneCacheResolver', () => {
+	it('permits the larger allocation only on the measured package, renderer, browser, and evidence', async () => {
+		const asset = shared(90).asset;
+		asset.packageSetIdentity = '7e80317f53c79d0d5a30ebc006630213a2e758008c62a3abb14d2534a8cc2b99';
+		asset.transitionQualification = {
+			evidenceId: 'sha256:4544d8f0f881d9f32208adab945858b614cef22ee80b2ded0eb078ec4f2e5dce',
+			targetId: 'NVIDIA GeForce RTX 2060 / Chrome 153 / ANGLE D3D11',
+			maximumBytes: 859963392,
+		};
+		const owner = new SharedDistantCacheAssets();
+		owner._package = {};
+		owner._identity = asset.report.sha256;
+		const previousTransport = DistantSunSharedCacheTransport.current;
+		DistantSunSharedCacheTransport.current = {};
+		try {
+			const agent = spyOnProperty(navigator, 'userAgent', 'get').and.returnValue('Chrome/153.0.0.0');
+			let renderer = 'ANGLE (NVIDIA, NVIDIA GeForce RTX 2060 (0x00001F15) Direct3D11 vs_5_0 ps_5_0, D3D11)';
+			const context = {getExtension: () => ({UNMASKED_RENDERER_WEBGL: 1}), getParameter: () => renderer};
+			const signal = new AbortController().signal;
+			expect((await owner.select(asset, 90, signal, context)).maximumGpuBytes).toBe(859963392);
+			agent.and.returnValue('Chrome/154.0.0.0');
+			expect((await owner.select(asset, 90, signal, context)).maximumGpuBytes).toBe(429981696);
+			agent.and.returnValue('Chrome/153.0.0.0');
+			renderer = renderer.replace('RTX 2060', 'RTX 3060');
+			expect((await owner.select(asset, 90, signal, context)).maximumGpuBytes).toBe(429981696);
+			expect((await owner.select(asset, null, signal)).transitionQualification).toBeUndefined();
+		} finally {
+			owner.dispose();
+			DistantSunSharedCacheTransport.current = previousTransport;
+		}
+	});
 	it('owns deterministic nearest-integer half-up bins and content-addressed descriptors', () => {
 		const resolve = createDistantSunSceneCacheCatalogResolver(catalog(), '/assets/distant-sun');
 		const lower = resolve(10.499999);
@@ -86,7 +134,7 @@ describe('DistantSunSceneCacheResolver', () => {
 	});
 
 	it('sends only the scalar solar zenith to the HTTP entry point', async () => {
-		const expected = resolveDistantSunSceneCache(catalog(), 99.745, '/scene-caches/');
+		const expected = shared(99.745);
 		let requestedUrl = null;
 		let requestedSignal = null;
 		const io = {
@@ -109,6 +157,7 @@ describe('DistantSunSceneCacheResolver', () => {
 	it('rejects unversioned responses and dense descriptors mislabeled as shared', async () => {
 		const expected = resolveDistantSunSceneCache(catalog(), 10, '/scene-caches/');
 		for (const incompatible of [
+			expected,
 			{...expected, schemaId: undefined},
 			{...expected, cacheFormat: FLAT32_DISTANT_SUN_SHARED_CACHE_FORMAT_ID},
 		]) {
@@ -148,40 +197,25 @@ describe('DistantSunSceneCacheResolver', () => {
 		expect(requestCount).toBe(0);
 	});
 
-	it('rejects uncontained and internally inconsistent ready responses', async () => {
-		const expected = resolveDistantSunSceneCache(catalog(), 10, '/scene-caches/');
-		const resolveWith = (incompatible) =>
-			createDistantSunSceneCacheHttpResolver('/api/distant-sun-scene-cache', {
+	it('rejects uncontained and malformed shared identities, including dark selections', async () => {
+		const expected = shared(10);
+		for (const asset of [
+			{...expected.asset, rootUrl: 'https://foreign.invalid/scene-caches/'},
+			{...expected.asset, report: {...expected.asset.report, sha256: 'invalid'}},
+			{...expected.asset, packageSetIdentity: 'e'.repeat(64)},
+		]) {
+			const resolve = createDistantSunSceneCacheHttpResolver('/api/distant-sun-scene-cache', {
 				async requestJson() {
-					return incompatible;
+					return {...expected, asset};
 				},
 			});
-		const foreignAsset = {
-			...expected,
-			asset: {...expected.asset, assetRoot: 'https://foreign.invalid/scene-caches/packages/ignored/'},
-		};
-		const wrongManifestHash = {
-			...expected,
-			asset: {
-				...expected.asset,
-				loadRequest: {...expected.asset.loadRequest, manifestSha256: 'f'.repeat(64)},
-			},
-		};
-		const wrongCacheIdentity = {
-			...expected,
-			asset: {
-				...expected.asset,
-				loadRequest: {
-					...expected.asset.loadRequest,
-					cacheIdentity: `algorithm32-distant-sun-scene-cache-sha256:${'e'.repeat(64)}`,
-				},
-			},
-		};
-
-		for (const incompatible of [foreignAsset, wrongManifestHash, wrongCacheIdentity]) {
-			await expectAsync(resolveWith(incompatible)(10)).toBeRejectedWithError(
-				/identity is incompatible or uncontained/u,
-			);
+			await expectAsync(resolve(10)).toBeRejectedWithError(/incompatible|uncontained/u);
 		}
+		const resolveDark = createDistantSunSceneCacheHttpResolver('/api/distant-sun-scene-cache', {
+			async requestJson() {
+				return shared(108);
+			},
+		});
+		expect((await resolveDark(108)).status).toBe('dark');
 	});
 });

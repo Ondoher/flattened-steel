@@ -3,14 +3,14 @@ import {
 	DISTANT_SUN_SCENE_CACHE_MAXIMUM_RESIDENT_BYTES,
 	DISTANT_SUN_SCENE_CACHE_MAXIMUM_TRANSITION_BYTES,
 	DISTANT_SUN_SCENE_CACHE_MAXIMUM_TRANSITION_WITH_STAGING_BYTES,
-} from './consts.js';
+} from '../../consts.js';
 
 /** Own transactional publication of exact asset-backed distant-Sun scene caches. */
 export default class DistantSunSceneCacheController {
 	/** @type {CacheGpuBackend} */ _backend;
 	/** @type {DistantSunSceneCacheLoaderFactory} */ _loaderFactory;
 	/** @type {DistantSunSceneCacheAssetSelection} */ _asset;
-	/** @type {import('./DistantSunSceneCache.js').default | null} */ _active = null;
+	/** @type {import('../../DistantSunSceneCache.js').default | null} */ _active = null;
 	/** @type {Promise<void>} */ _tail = Promise.resolve();
 	/** @type {AbortController | null} */ _latestCancellation = null;
 	/** @type {number} */ _generation = 0;

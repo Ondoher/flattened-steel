@@ -234,27 +234,16 @@ export class Flat32Application {
 			error.name = 'AbortError';
 			throw error;
 		}
-		if (resolution.status === 'dark') {
-			if (this._sceneSummary !== null) {
-				this._view.showDistantSunCacheState(this._sceneSummary, 'dark', sceneState.solarZenithDegrees);
-			}
-			return this._createSphericalDistantMode(sceneState, undefined, 'dark');
-		}
-		if (resolution.status !== 'ready') {
-			throw new RangeError('No qualified distant-Sun scene cache covers the selected solar zenith.');
-		}
-		if (resolution.cacheFormat === 'algorithm32-distant-sun-shared-block-v1') {
+		if ('cacheFormat' in resolution && resolution.cacheFormat === 'algorithm32-distant-sun-shared-block-v1') {
 			const sharedCache = await this._sharedCacheAssets.select(
 				resolution.asset,
-				resolution.representativeSolarZenithDegrees,
+				resolution.status === 'dark' ? null : resolution.representativeSolarZenithDegrees,
 				request.signal,
+				this._sceneRuntime.renderer.getContext(),
 			);
-			return this._createSphericalDistantMode(sceneState, undefined, 'ready', sharedCache);
+			return this._createSphericalDistantMode(sceneState, undefined, resolution.status, sharedCache);
 		}
-		if (this._sceneSummary !== null) {
-			this._view.showDistantSunCacheState(this._sceneSummary, 'loading', sceneState.solarZenithDegrees);
-		}
-		return this._createSphericalDistantMode(sceneState, resolution.asset, 'ready');
+		throw new RangeError('The production distant-Sun runtime requires a qualified shared package.');
 	}
 
 	/** Create the fixed selected production flat/local mode. */

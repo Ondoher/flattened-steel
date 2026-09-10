@@ -1,7 +1,7 @@
 import {createReadStream} from 'node:fs';
 import path from 'node:path';
 
-import {createDistantSunSceneCachePackageService} from './flat32/DistantSunSceneCachePackageService.js';
+import {createProductionSharedCacheService} from './flat32/features/shared-cache/selection.js';
 import {createStellarCatalogPackageService} from './flat32/StellarCatalogPackageService.js';
 import {createHumanVisionFilterPackageService} from './flat32/HumanVisionFilterPackageService.js';
 
@@ -28,7 +28,7 @@ export default async function registerFlat32Routes(_expressApplication, router, 
 	let humanVisionService = null;
 	let humanVisionSetupError = null;
 	try {
-		service = await createDistantSunSceneCachePackageService();
+		service = await createProductionSharedCacheService();
 	} catch (error) {
 		setupError = error;
 	}
@@ -47,7 +47,7 @@ export default async function registerFlat32Routes(_expressApplication, router, 
 
 	router.get('/api/distant-sun-scene-cache', (request, response) => {
 		if (service === null) {
-			sendJson(response, 503, {error: `Distant-Sun cache service is unavailable: ${errorMessage(setupError)}`});
+			sendJson(response, 503, {error: 'Distant-Sun cache service is unavailable.'});
 			return;
 		}
 		if (Object.keys(request.query).some((name) => name !== 'solarZenithDegrees')) {
@@ -66,18 +66,20 @@ export default async function registerFlat32Routes(_expressApplication, router, 
 
 	router.get('/scene-caches/*', async (request, response, next) => {
 		if (service === null) {
-			sendJson(response, 503, {error: `Distant-Sun cache service is unavailable: ${errorMessage(setupError)}`});
+			sendJson(response, 503, {error: 'Distant-Sun cache service is unavailable.'});
 			return;
 		}
 		try {
 			const asset = await service.resolveAsset(request.params[0]);
-			const extension = path.extname(asset.path);
-			response.status(200).set({
-				'cache-control': 'public, max-age=31536000, immutable',
-				'content-length': String(asset.byteLength),
-				'content-type': extension === '.json' ? 'application/json' : 'application/octet-stream',
-			});
-			createReadStream(asset.path).on('error', next).pipe(response);
+			response
+				.status(200)
+				.set({
+					'cache-control': 'public, max-age=31536000, immutable',
+					'content-length': String(asset.byteLength),
+					'content-type': asset.contentType,
+					'accept-ranges': 'none',
+				})
+				.send(asset.bytes);
 		} catch (error) {
 			if (error?.code === 'ENOENT' || error instanceof RangeError) {
 				sendJson(response, 404, {error: 'Distant-Sun cache asset was not found.'});

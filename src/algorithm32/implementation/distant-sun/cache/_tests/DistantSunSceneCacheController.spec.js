@@ -1,4 +1,4 @@
-import DistantSunSceneCacheController from '../DistantSunSceneCacheController.js';
+import DistantSunSceneCacheController from './reference/DistantSunSceneCacheController.js';
 import {DISTANT_SUN_SCENE_CACHE_MAXIMUM_RESIDENT_BYTES} from '../consts.js';
 
 const RESIDENT_BYTES = 150_235_908;
