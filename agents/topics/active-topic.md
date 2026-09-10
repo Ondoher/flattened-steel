@@ -7,9 +7,9 @@ Canonical entry document: [Shared Cache Calculation Reuse](poc-experiments/engin
 
 ## Immediate Focus
 
-The application inventory and retained GPU proofs have passed; direct-40
-compatibility is in progress. The status document owns run identities and
-remaining gates. The design owns calculation dependencies and containment.
+The experiment plan is complete, including direct-40 compatibility and final
+artifact verification. The status document owns run identities, measured
+results, and the retain decision. The design owns dependencies and containment.
 Continue the owner's reduced review/testing cadence and preserve parent evidence.
 
 The separate production benchmark decision remains with the

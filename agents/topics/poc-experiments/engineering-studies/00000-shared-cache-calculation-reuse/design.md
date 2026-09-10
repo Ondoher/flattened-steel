@@ -99,8 +99,8 @@ Counting unique final results does not establish minimum intermediate work.
 
 ### Retained execution and bounded resources
 
-Use one application and retained GPU context; compile each required compatible
-program variant once per session. Reuse allocations and batch compatible work.
+Use one application and retained GPU context; reuse each compatible program
+variant while resident within the program budget. Reuse allocations and batch compatible work.
 Multiple algorithm stages may require distinct retained shaders. Investigate
 shared spectral coefficients, sampling, geometry, paths, and phase terms only
 where dependency analysis proves reuse. Preserve arithmetic order for exactness.
@@ -110,8 +110,6 @@ obey explicit resource budgets. Metadata and persistent inventory may grow with
 unique work. Spill completed results into the new run and reload without
 recomputation. Prove mapping validity, ordering, eviction, invalidation, and
 failure cleanup. Resource exhaustion must fail explicitly, never drop scenes.
-
-### Proof and measurement policy
 
 ### Selected first candidate
 
@@ -161,10 +159,12 @@ lifecycle, and containment review, following the owner's reduced review cadence.
 Reuse unchanged evidence. Pin meaningful improvement criteria from the inventory
 findings before expensive execution; no speedup is claimed at scaffold time.
 
-## Open Questions
+## Follow-up Questions Outside This Candidate
 
-- Which additional operations repeat beyond the qualified common-field generator?
-- What inventory granularity avoids excessive metadata and I/O?
-- Which intermediates lack oracle evidence, and what smallest proof establishes them?
-- Which program variants remain invariant across wavelengths and profiles?
-- What resource budgets and improvement criteria should govern execution?
+The selected candidate establishes exact-source program reuse, texture pooling,
+field-boundary waits, and row-level persistent inventory under the budgets above.
+Its measured results and disposition belong to [status](status.md).
+
+- Can geometry or other intermediates be shared beyond the qualified common field while preserving arithmetic and discrete sampling?
+- Would another inventory granularity reduce metadata and I/O under an equivalent end-to-end workload?
+- What additional intermediate oracle evidence would qualify those calculation changes?

@@ -37,7 +37,7 @@ export default class PersistedInventory {
 
 	/** Call this method to read an exact result, evicting memory without recomputing it.
 	 * @param {string} configurationIdentity - Complete requested dependency identity.
-	 * @param {number[]} coordinate - Requested altitude/Sun-angle indexes.
+	 * @param {readonly number[]} coordinate - Requested altitude/Sun-angle indexes.
 	 * @param {number} channel - Requested spectral channel.
 	 * @returns {Promise<Buffer>} - Owned copy of the exact persisted row.
 	 */

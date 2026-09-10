@@ -13,18 +13,10 @@
 		"typeRoots": ["../../node_modules/@types"]
 	},
 	"include": [
-		"ApplicationControls.js",
-		"ApplicationTileProof.js",
-		"CacheWorkPlanner.js",
-		"CompilerDerivation.js",
-		"ExperimentRun.js",
-		"GpuProofHost.js",
-		"RetainedGpuSession.js",
-		"run-application.js",
-		"run-inventory.js",
+		"*.js",
 		"types.d.ts",
 		"../../scripts/algorithm32/solar-zenith-cache/types.d.ts",
 		"../../src/algorithm32/**/*.d.ts"
 	],
-	"exclude": ["../../node_modules/**", "../../src/algorithm32/**/node_modules/**"]
+	"exclude": ["../../node_modules/**", "../../src/algorithm32/**/node_modules/**", "browser.js", "run-direct40.js"]
 }

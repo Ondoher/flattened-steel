@@ -11,8 +11,8 @@ Can dependency-based planning and retained GPU execution reproduce the applicati
 - [x] E2: Build a planning-only proof with empty, repeated, reordered, overlapping, and larger input lists, plus dependency changes that must prevent reuse. Reconstruct every control exactly through inventory indexes. Distinguish storage savings from avoided work.
 - [x] E3: Select supported optimizations and pin resource budgets and improvement criteria. Implement the smallest retained GPU execution proof, with immutable runs and progress reporting before long operations. Establish exact computation on a focused subset before widening.
 - [x] E4: Recompute all application controls and verify exact reconstruction. Compare work counts and phase costs with the qualified shared generator. Exercise bounded residency, reload, cancellation, cleanup, and increasing inputs; report metadata, disk, and memory growth.
-- [ ] E5: Verify compatibility against existing 17-scene direct-40 data with its correct ground contribution and complete profile. Keep fixed benchmark acceptance separate from optimization equivalence.
-- [ ] E6: Consolidate correctness, lifecycle, containment, provenance, and performance evidence; decide whether to reject, iterate, retain, or propose promotion.
+- [x] E5: Verify compatibility against existing 17-scene direct-40 data with its correct ground contribution and complete profile. Keep fixed benchmark acceptance separate from optimization equivalence.
+- [x] E6: Consolidate correctness, lifecycle, containment, provenance, and performance evidence; decide whether to reject, iterate, retain, or propose promotion. Retain the qualified experimental candidate; overall runtime improvement and production promotion remain unclaimed.
 
 ## First Effort Checkpoint
 

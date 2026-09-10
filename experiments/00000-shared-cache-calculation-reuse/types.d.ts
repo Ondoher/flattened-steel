@@ -16,7 +16,7 @@ type CacheReuseProgress = {
 type CacheReuseSceneRequest = {
 	/** Caller-owned scene identity. */ id: string;
 	/** Complete numerical configuration identity, never inferred from time proximity. */ configurationIdentity: string;
-	/** Ordered altitude/Sun-angle index pairs. */ coordinates: number[][];
+	/** Ordered altitude/Sun-angle index pairs. */ coordinates: readonly (readonly number[])[];
 };
 /** Shared work inventory and original request ordering. */
 type CacheReusePlan = {
@@ -53,8 +53,11 @@ type CacheReuseControls = {
 /** Explicit GPU job with input-driven channel selection. */
 type CacheReuseGpuJob = {
 	/** Requested calculation identity. */ id: string;
-	/** Complete numerical compiler input. */ buildRequest: DistantSunSceneCacheCompilerBuildRequest;
-	/** Ordered packed output row layout. */ ledger: DistantSunSceneCacheLedgerRecord;
+	/** Complete numerical compiler input. */ buildRequest?: DistantSunSceneCacheCompilerBuildRequest;
+	/** Ordered packed output row layout. */ ledger?: Pick<
+		DistantSunSceneCacheLedgerRecord,
+		'rows' | 'retainedBlockCount'
+	>;
 	/** Requested channel indexes. */ wavelengths: number[];
 };
 
@@ -99,7 +102,19 @@ type CacheReuseGpuResult = {
 type CacheReusePersistedDefinition = {
 	/** Complete numerical dependency identity. */ configurationIdentity: string;
 	/** Authenticated payload identity. */ artifact: DistantSunSharedCacheFileIdentity;
-	/** Ordered row coordinates. */ coordinates: number[][];
+	/** Ordered row coordinates. */ coordinates: readonly (readonly number[])[];
 	/** Spectral channel count. */ channels: number;
 	/** Byte width of a single unique-direction row. */ rowBytes: number;
+};
+
+/** Verified scientific artifact set plus supplemental retained-workspace identities. */
+type CacheReuseVerifiedRun = {
+	/** Immutable parent run path. */ root: string;
+	/** All declared artifact checks passed. */ accepted: boolean;
+	/** Number of original scientific artifacts. */ scientificArtifactCount: number;
+	/** Number of all retained ordinary files. */ retainedFileCount: number;
+	/** Total retained bytes, including runtime workspace. */ retainedBytes: number;
+	/** Measured identities without mutating the source run. */ identities: DistantSunSharedCacheFileIdentity[];
+	/** Original result, not a new numerical acceptance decision. */ result: unknown;
+	/** Precise verifier claim and limitations. */ scope: string;
 };

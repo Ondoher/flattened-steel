@@ -25,9 +25,11 @@ The baseline already shares common fields; additional savings must be measured
 against that generator. The separate 17-scene, 40-spectrum Bruneton set follows
 after the application proofs. Scene counts come from inputs, not fixed limits.
 
-The application inventory, planner, retained GPU calculation, bounded residency,
-and host lifecycle proofs have passed. Direct-40 compatibility is in progress.
-See [status](status.md) for exact run identities and remaining work.
+The experiment plan is complete. Application reconstruction, retained GPU
+calculation, bounded residency, lifecycle, and direct-40 compatibility proofs
+have passed. Retain this candidate as exactness and lifecycle evidence;
+overall runtime improvement is not established. See [status](status.md) for
+run identities, measured results, and the final disposition.
 
 The separate production qualification decision remains with the
 [ground-contact investigation](../../benchmarks/production-b-family-ground-contact-investigation.md).

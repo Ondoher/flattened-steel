@@ -10,7 +10,8 @@ import GpuProofHost from './GpuProofHost.js';
 
 const run = new ExperimentRun();
 await run.start('direct40');
-let output;
+/** Currently open run-owned payload, closed on every terminal path. @type {SharedGenerationFileHandle | null} */
+let output = null;
 try {
 	const root = 'tmp/extraterrestrial/production-color-reset/p8/c1-9-canonical-v8-assets-000001';
 	const manifestHash = '7b5d94048dc51a45b42d3e5ed62f147b88578eeef372535dd6437d590660deb5';
@@ -38,7 +39,7 @@ try {
 		assert.equal(CanonicalValueHash.sha256Value(inputs.buildRequest), evidence.buildRequestContentHash);
 		const buildRequest = JSON.parse(
 			JSON.stringify(inputs.buildRequest, (_key, value) =>
-				ArrayBuffer.isView(value) ? Array.from(value) : value,
+				ArrayBuffer.isView(value) ? Array.from(/** @type {Float64Array} */ (value)) : value,
 			),
 		);
 		const rows = buildRequest.transportSpec.domains.position.nodes.map((node, altitudeIndex) => ({
@@ -73,7 +74,7 @@ try {
 	});
 	const sourceRoot = 'experiments/00000-shared-cache-calculation-reuse';
 	const sources = new Map([
-		['compiler.js', compiler],
+		['compiler.js', Buffer.from(compiler)],
 		['RetainedGpuSession.js', await run.read(`${sourceRoot}/RetainedGpuSession.js`)],
 		['browser.js', await run.read(`${sourceRoot}/browser.js`)],
 	]);
