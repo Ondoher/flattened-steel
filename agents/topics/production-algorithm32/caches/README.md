@@ -12,7 +12,9 @@ P2 shared-inventory generation is implemented and
 [qualified against all 109 controls](shared-generation-qualification.md).
 P3 browser transport and Worker preparation is implemented and
 [checked at its production boundaries](shared-transport-verification.md).
-P4 renderer-owned packet-atlas primitives are next. Historical POC, P0-P10, and PA0-PA7
+P4 renderer-owned packet-atlas primitives are implemented and
+[checked through exact GPU probes](shared-atlas-verification.md).
+P5 residency and atomic publication are next. Historical POC, P0-P10, and PA0-PA7
 execution remains archived and is not reopened.
 
 ## Working Documents

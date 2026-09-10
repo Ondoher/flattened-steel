@@ -1,3 +1,33 @@
+/** Private renderer-preservation capability shared by persistent texture operations. */
+interface ThreeCacheRendererPreserver {
+	/** Call this method to execute one operation while restoring caller-owned renderer state. */
+	run<T>(operation: () => T): T;
+}
+
+/** Persistent array's renderer-owned dependencies and immutable allocation request. */
+type ThreeCachePersistentArrayDefinition = {
+	/** Backend-owned Three/WebGL dependencies. */
+	backend: ThreeCacheBackendRecord;
+	/** Immutable storage request and allocation budget. */
+	request: CachePersistentArrayRequest;
+	/** Existing backend renderer-state preservation capability. */
+	preserve: ThreeCacheRendererPreserver;
+};
+
+/** Private persistent array capability, never exposed through a runtime handle. */
+interface ThreeCachePersistentArrayOwner {
+	/** Call this method to resolve the live Three texture inside the renderer adapter. */
+	resolveTexture(): ThreeCacheBackendTexture;
+	/** Call this method to upload a complete unprotected layer. */
+	upload(layer: number, identity: string, values: Float32Array): void;
+	/** Call this method to replace the protected published-layer set. */
+	protect(layers: readonly number[]): void;
+	/** Call this method to inspect context and uploaded identities. */
+	state(): CachePersistentArrayState;
+	/** Call this method to detach listeners and dispose GPU storage. */
+	dispose(): void;
+}
+
 /** Three runtime values required by the cache backend boundary. */
 type ThreeCacheBackendNamespace = Readonly<{
 	/** Three release-revision runtime value. */
@@ -8,6 +38,12 @@ type ThreeCacheBackendNamespace = Readonly<{
 	RGBAFormat: unknown;
 	/** Red integer texture-format runtime value. */
 	RedIntegerFormat: unknown;
+	/** Two-component integer metadata format. */
+	RGIntegerFormat: unknown;
+	/** Four-component integer metadata format. */
+	RGBAIntegerFormat: unknown;
+	/** Signed 32-bit integer texture type. */
+	IntType: unknown;
 	/** Float texture-type runtime value. */
 	FloatType: unknown;
 	/** Unsigned-short texture-type runtime value. */

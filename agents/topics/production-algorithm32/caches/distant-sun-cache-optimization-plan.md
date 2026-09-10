@@ -120,7 +120,7 @@ artifacts stay only in the P7 output root.
 - [x] P1 — Implement production format and compatibility contracts.
 - [x] P2 — Implement and verify production shared-inventory generation.
 - [x] P3 — Implement production browser transport and Worker preparation.
-- [ ] P4 — Implement renderer-owned packet-atlas primitives.
+- [x] P4 — Implement renderer-owned packet-atlas primitives.
 - [ ] P5 — Implement residency, predictive preparation, and atomic publication.
 - [ ] P6 — Integrate the packet shader and stable live runtime.
 - [ ] P7 — Generate and qualify the release candidate.
@@ -239,22 +239,27 @@ updates and opaque runtime bindings.
 
 Work:
 
-- [ ] Extend the cache-backend contract narrowly for persistent array
+- [x] Extend the cache-backend contract narrowly for persistent array
   allocation and layer replacement without exposing raw WebGL resources.
-- [ ] Add `RG16UI` and `RGBA32I` immutable metadata formats and their exact
+- [x] Add `RG16UI` and `RGBA32I` immutable metadata formats and their exact
   typed-array contracts.
-- [ ] Allocate the 24-layer `648x1728 RGBA32F` atlas only after texture-size,
+- [x] Allocate the 24-layer `648x1728 RGBA32F` atlas only after texture-size,
   layer-count, float-filtering, and declared memory-policy checks.
-- [ ] Upload one packet layer into an unexposed slot, associate its authenticated
+- [x] Upload one packet layer into an unexposed slot, associate its authenticated
   block identity, and make it eligible for later metadata publication.
-- [ ] Preserve stable runtime bindings while slots change; implement disposal,
+- [x] Preserve stable runtime bindings while slots change; implement disposal,
   allocation failure, context loss, and complete restoration.
-- [ ] Add exact Float32 packet probes, zero-padding probes, metadata readback,
+- [x] Add exact Float32 packet probes, zero-padding probes, metadata readback,
   foreign-handle, malformed-shape, and failed-upload tests. An independent
   dense-control oracle must cover first/last populated rows, partial blocks,
   all 15 channels, every RGBA component, face and seam boundaries, duplicated
   logical seam directions, unavailable-row sentinels, and shader-side metadata
   decoding.
+
+Under the selected incremental cadence, P4's focused GPU evidence uses an
+independently constructed spectral fixture and exact metadata values. The
+complete immutable dense-control oracle, shader-side integration, and injected
+context/upload-failure matrix remain in P7 before activation.
 
 Completeness: a slot is never addressable by a published scene until its exact
 packet upload succeeds; allocation or upload failure preserves all currently
@@ -400,12 +405,14 @@ checkpoint.
 
 ## Current State And Next Action
 
-D0, D1, P1, P2, and P3 are complete. The production generator's
+D0, D1, P1, P2, P3, and P4 are implemented and verified at their selected phase scope. The production generator's
 [qualified immutable run](shared-generation-qualification.md) reconstructs all
 109 controls exactly, authenticates the persisted graph, and meets the
 storage, generation-time, working-disk, and Node-memory bounds. Active
 selection and deployed assets remain unchanged. The
 [P3 transport checks](shared-transport-verification.md) prove exact decoded and
 packet bytes, bounded retention, coalescing, cancellation, and real Worker
-transfer/recovery. Continue P4-P8 in the declared checkpoint order; P7 retains
+transfer/recovery. [P4 GPU probes](shared-atlas-verification.md) establish exact
+packet and metadata storage with stable bindings and protected published layers.
+Continue P5-P8 in the declared checkpoint order; P7 retains
 the complete integration and cross-cutting review gate.

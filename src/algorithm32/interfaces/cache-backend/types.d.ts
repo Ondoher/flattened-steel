@@ -34,8 +34,14 @@ interface CacheRuntimeBinding {
 	/** Backend id value. */ readonly backendId: string;
 }
 
-/** Immutable texture formats accepted by the resident-asset upload boundary. */
-type CacheImmutableTextureFormat = 'R32F' | 'RGBA32F' | 'R16UI';
+/** Immutable texture formats accepted by the resident-asset upload boundary.
+ * - **"R32F"** - One Float32 scalar per texel.
+ * - **"RGBA32F"** - Four Float32 packet components per texel.
+ * - **"R16UI"** - One unsigned 16-bit direction index per texel.
+ * - **"RG16UI"** - Unsigned 16-bit resident slot and block-row addresses.
+ * - **"RGBA32I"** - Four signed 32-bit altitude-ledger components.
+ */
+type CacheImmutableTextureFormat = 'R32F' | 'RGBA32F' | 'R16UI' | 'RG16UI' | 'RGBA32I';
 
 /** Executable shape of one immutable resident texture. */
 type CacheImmutableTextureStorage = Readonly<{
@@ -49,7 +55,7 @@ type CacheImmutableTextureStorage = Readonly<{
 type CacheImmutableTextureUploadRequest = Readonly<{
 	/** Stable texture identity. */ readonly id: string;
 	/** Exact executable texture storage. */ readonly storage: CacheImmutableTextureStorage;
-	/** Typed immutable source values. */ readonly values: Float32Array | Uint16Array;
+	/** Typed immutable source values. */ readonly values: Float32Array | Uint16Array | Int32Array;
 	/** Shader value populated by the resulting binding. */ readonly valueKey: CacheRuntimeValueKey;
 }>;
 
@@ -66,6 +72,11 @@ interface CacheImmutableTexture {
  * Shader value populated by one completed GPU field.
  *
  * - **"cache.cumulativeScatteringDensity"** - The retained cumulative atmospheric scattering field.
+ * - **"cache.sceneCumulativeScatteringDensity"** - The dense scene packet field during rollout.
+ * - **"cache.sceneLogicalToUniqueDirection"** - The dense scene direction-index map during rollout.
+ * - **"cache.sharedPacketAtlas"** - The persistent shared RGBA packet array.
+ * - **"cache.sharedRowAddress"** - The scene-row to resident-slot address table.
+ * - **"cache.sharedAltitudeLedger"** - The signed scene/altitude interpolation ledger.
  * - **"cache.celestial.sunTransport"** - The distant-Sun direct-transport field.
  * - **"cache.celestial.starTransport"** - The stellar point-set direct-transport field.
  * - **"cache.celestial.localSunRadiance"** - The Flat finite-Sun radiance field.
@@ -75,6 +86,9 @@ type CacheRuntimeValueKey =
 	| 'cache.cumulativeScatteringDensity'
 	| 'cache.sceneCumulativeScatteringDensity'
 	| 'cache.sceneLogicalToUniqueDirection'
+	| 'cache.sharedPacketAtlas'
+	| 'cache.sharedRowAddress'
+	| 'cache.sharedAltitudeLedger'
 	| 'cache.celestial.sunTransport'
 	| 'cache.celestial.starTransport'
 	| 'cache.celestial.localSunRadiance'
@@ -147,6 +161,85 @@ interface CacheGpuBackend {
 	 */
 	installRuntimeBindings(request: CacheRuntimeBindingInstallRequest): void;
 	/** Call this method to dispose. */ dispose(): void;
+}
+
+/** Persistent RGBA32F array allocation with an explicit payload budget. */
+type CachePersistentArrayRequest = Readonly<{
+	/** Stable array identity. */
+	id: string;
+	/** Exact RGBA32F storage shape. */
+	storage: CacheImmutableTextureStorage;
+	/** Shader value supplied by the stable binding. */
+	valueKey: CacheRuntimeValueKey;
+	/** Caller-declared maximum allocation in bytes, excluding driver overhead. */
+	maximumBytes: number;
+}>;
+
+/** Opaque persistent array with stable shader binding across layer replacements. */
+interface CachePersistentArray {
+	/** Stable array identity. */
+	readonly id: string;
+	/** Immutable storage dimensions and format. */
+	readonly storage: CacheImmutableTextureStorage;
+	/** Backend ownership identity. */
+	readonly backendId: string;
+	/** Stable opaque runtime binding. */
+	readonly runtimeBinding: CacheRuntimeBinding;
+	/** Exact allocated GPU payload size. */
+	readonly byteLength: number;
+	/** Call this method to dispose the array exactly once. */
+	dispose(): void;
+}
+
+/** Complete authenticated layer replacement request. */
+type CachePersistentArrayUpload = Readonly<{
+	/** Backend-owned array handle. */
+	array: CachePersistentArray;
+	/** Unprotected destination layer. */
+	layer: number;
+	/** Authenticated logical block and decoded/layout identity. */
+	identity: string;
+	/** Complete layer of RGBA32F values, copied synchronously without retaining host bytes. */
+	values: Float32Array;
+}>;
+
+/** Persistent array state after upload, context loss, or restoration. */
+type CachePersistentArrayState = Readonly<{
+	/** Context generation, advanced on each loss. */
+	generation: number;
+	/** Whether GPU storage is unavailable. */
+	unavailable: boolean;
+	/** Authenticated identity of each successfully uploaded layer. */
+	layerIdentities: readonly (string | undefined)[];
+	/** Currently protected published layers. */
+	protectedLayers: readonly number[];
+}>;
+
+/** Selected exact texel address for bounded backend diagnostics. */
+type CacheTextureTexel = Readonly<{
+	/** Column within one layer. */
+	x: number;
+	/** Row within one layer. */
+	y: number;
+	/** Array layer, zero for 2D metadata. */
+	layer: number;
+}>;
+
+/** Narrow persistent-array extension to the ordinary cache backend. */
+interface CachePacketAtlasBackend extends CacheGpuBackend {
+	/** Call this method to allocate a bounded array; unsupported capability or allocation failure throws. */
+	allocatePersistentArray(request: CachePersistentArrayRequest): CachePersistentArray;
+	/** Call this method to replace an unprotected layer; failed uploads never establish an identity. */
+	uploadPersistentArrayLayer(request: CachePersistentArrayUpload): void;
+	/** Call this method to protect the complete set of published layers; missing or invalid layers throw. */
+	protectPersistentArrayLayers(array: CachePersistentArray, layers: readonly number[]): void;
+	/** Call this method to inspect uploaded identities and context readiness through an opaque handle. */
+	getPersistentArrayState(array: CachePersistentArray): CachePersistentArrayState;
+	/** Call this method to read at most 256 selected RGBA texels for exact diagnostics. */
+	readTextureTexels(
+		texture: CacheImmutableTexture | CachePersistentArray,
+		coordinates: readonly CacheTextureTexel[],
+	): Float32Array | Int32Array | Uint32Array;
 }
 
 /** Yield construction only at executor-declared safe boundaries. */

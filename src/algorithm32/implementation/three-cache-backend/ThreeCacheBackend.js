@@ -1,5 +1,6 @@
 import {CacheBuildModules} from '../../shader-assembly/cache-pass/CacheBuildModules.js';
 import {CACHE_WAVELENGTH_LAYER_BINDING_NAME} from '../../shader-assembly/cache-pass/consts.js';
+import ThreeCachePersistentArray from './ThreeCachePersistentArray.js';
 import {
 	MAXIMUM_THREE_CACHE_PROBE_SCALAR_COUNT,
 	THREE_CACHE_CANONICAL_UNIT_SCALE,
@@ -39,6 +40,7 @@ let backendSequence = 0;
  * Three/WebGL2 adapter for Algorithm32's opaque GPU cache backend.
  *
  * @implements {CacheGpuBackend}
+ * @implements {CachePacketAtlasBackend}
  * @implements {CacheProbeReader}
  */
 export class ThreeCacheBackend {
@@ -410,6 +412,8 @@ export class ThreeCacheBackend {
 		if (bindingRecord.field) {
 			return this._requireFieldRecord(bindingRecord.field, backend, 'Runtime cache binding field').target.texture;
 		}
+		if (bindingRecord.persistentArray)
+			return this._requirePersistentArray(bindingRecord.persistentArray, backend).resolveTexture();
 		const immutable = bindingRecord.immutableTexture;
 		const record = immutable ? IMMUTABLE_TEXTURE_RECORDS.get(immutable) : null;
 		if (!record || record.backend !== backend) {
@@ -417,6 +421,19 @@ export class ThreeCacheBackend {
 		}
 		if (record.disposed) throw new Error('Runtime cache immutable texture has been disposed.');
 		return record.texture;
+	}
+
+	/**
+	 * Called to validate opaque persistent-array ownership before accessing renderer storage.
+	 *
+	 * @param {CachePersistentArray} array - Candidate handle.
+	 * @param {ThreeCacheBackendRecord} backend - Required renderer owner.
+	 * @returns {ThreeCachePersistentArrayOwner} - Private live array owner.
+	 */
+	_requirePersistentArray(array, backend) {
+		const owner = backend.persistentArrays.get(array);
+		if (!owner) throw new TypeError('Persistent array must be a live opaque handle owned by this backend.');
+		return owner;
 	}
 
 	/**
@@ -754,6 +771,7 @@ export class ThreeCacheBackend {
 			fields: new Set(),
 			programs: new Set(),
 			immutableTextures: new Set(),
+			persistentArrays: new Map(),
 			runtimeBindingSequence: 0,
 			disposed: false,
 		});
@@ -910,13 +928,18 @@ export class ThreeCacheBackend {
 		) {
 			throw new RangeError("Immutable cache texture exceeds this backend's texture capabilities.");
 		}
-		const componentCount = storage.format === 'RGBA32F' ? 4 : 1;
+		const componentCount =
+			storage.format === 'RGBA32F' || storage.format === 'RGBA32I' ? 4 : storage.format === 'RG16UI' ? 2 : 1;
 		const scalarCount = storage.width * storage.height * storage.layers * componentCount;
 		const isFloat =
 			(storage.format === 'R32F' || storage.format === 'RGBA32F') && request.values instanceof Float32Array;
 		const isUnsignedInteger =
-			storage.format === 'R16UI' && storage.layers === 1 && request.values instanceof Uint16Array;
-		if ((!isFloat && !isUnsignedInteger) || request.values.length !== scalarCount) {
+			(storage.format === 'R16UI' || storage.format === 'RG16UI') &&
+			storage.layers === 1 &&
+			request.values instanceof Uint16Array;
+		const isSignedInteger =
+			storage.format === 'RGBA32I' && storage.layers === 1 && request.values instanceof Int32Array;
+		if ((!isFloat && !isUnsignedInteger && !isSignedInteger) || request.values.length !== scalarCount) {
 			throw new TypeError('Immutable cache texture payload type or scalar count is incompatible.');
 		}
 		if (typeof backend.renderer.initTexture !== 'function') {
@@ -935,8 +958,16 @@ export class ThreeCacheBackend {
 				? backend.THREE.RGBAFormat
 				: isFloat
 					? backend.THREE.RedFormat
-					: backend.THREE.RedIntegerFormat;
-		texture.type = isFloat ? backend.THREE.FloatType : backend.THREE.UnsignedShortType;
+					: storage.format === 'RG16UI'
+						? backend.THREE.RGIntegerFormat
+						: isSignedInteger
+							? backend.THREE.RGBAIntegerFormat
+							: backend.THREE.RedIntegerFormat;
+		texture.type = isFloat
+			? backend.THREE.FloatType
+			: isSignedInteger
+				? backend.THREE.IntType
+				: backend.THREE.UnsignedShortType;
 		texture.internalFormat = storage.format;
 		texture.minFilter = storage.format === 'RGBA32F' ? backend.THREE.LinearFilter : backend.THREE.NearestFilter;
 		texture.magFilter = storage.format === 'RGBA32F' ? backend.THREE.LinearFilter : backend.THREE.NearestFilter;
@@ -968,6 +999,177 @@ export class ThreeCacheBackend {
 	}
 
 	/**
+	 * Call this method to allocate a persistent RGBA32F array with a stable opaque runtime binding.
+	 * Capability, budget, and allocation failures throw before a handle becomes visible.
+	 *
+	 * @param {CachePersistentArrayRequest} request - Immutable dimensions, identity, and declared payload budget.
+	 * @returns {CachePersistentArray} - Opaque array owner.
+	 */
+	allocatePersistentArray(request) {
+		const backend = this._requireBackendRecord(this);
+		const owner = new ThreeCachePersistentArray({
+			backend,
+			request,
+			preserve: {run: (operation) => this._withRendererState(backend, operation)},
+		});
+		backend.runtimeBindingSequence += 1;
+		const binding = this._createRuntimeBindingHandle(
+			`${this.id}:array:${backend.runtimeBindingSequence}:${request.id}`,
+			request.valueKey,
+			request.id,
+			this.id,
+		);
+		const storage = {...request.storage};
+		const handle = {
+			id: request.id,
+			storage,
+			backendId: this.id,
+			runtimeBinding: binding,
+			byteLength: storage.width * storage.height * storage.layers * 16,
+			dispose: () => {
+				owner.dispose();
+				backend.persistentArrays.delete(handle);
+			},
+		};
+		backend.persistentArrays.set(handle, owner);
+		RUNTIME_BINDING_RECORDS.set(binding, {backend, persistentArray: handle});
+		return handle;
+	}
+
+	/**
+	 * Call this method to upload a complete authenticated layer without replacing its stable binding.
+	 * Foreign handles, protected layers, invalid data, or failed uploads throw without publishing a layer identity.
+	 *
+	 * @param {CachePersistentArrayUpload} request - Array, unprotected layer, identity, and exact values.
+	 * @returns {void}
+	 */
+	uploadPersistentArrayLayer(request) {
+		this._requirePersistentArray(request.array, this._requireBackendRecord(this)).upload(
+			request.layer,
+			request.identity,
+			request.values,
+		);
+	}
+
+	/**
+	 * Call this method to atomically protect a complete published-layer set from replacement.
+	 *
+	 * @param {CachePersistentArray} array - Opaque array owner.
+	 * @param {readonly number[]} layers - Complete uploaded layer set.
+	 * @returns {void}
+	 */
+	protectPersistentArrayLayers(array, layers) {
+		this._requirePersistentArray(array, this._requireBackendRecord(this)).protect(layers);
+	}
+
+	/**
+	 * Call this method to inspect context generation, uploaded identities, and protected layers.
+	 *
+	 * @param {CachePersistentArray} array - Opaque array owner.
+	 * @returns {CachePersistentArrayState} - Current array state.
+	 */
+	getPersistentArrayState(array) {
+		return this._requirePersistentArray(array, this._requireBackendRecord(this)).state();
+	}
+
+	/**
+	 * Call this method to read at most 256 exact RGBA texels from an owned uploaded texture.
+	 * Invalid coordinates, foreign handles, lost contexts, or failed readback throw. GPU objects remain private.
+	 *
+	 * @param {CacheImmutableTexture | CachePersistentArray} texture - Opaque texture owner.
+	 * @param {readonly CacheTextureTexel[]} coordinates - Bounded selected texel coordinates.
+	 * @returns {Float32Array | Int32Array | Uint32Array} - Four components per selected texel.
+	 */
+	readTextureTexels(texture, coordinates) {
+		const backend = this._requireBackendRecord(this),
+			context = backend.context;
+		const persistent = backend.persistentArrays.get(/** @type {CachePersistentArray} */ (texture));
+		const immutable = IMMUTABLE_TEXTURE_RECORDS.get(/** @type {CacheImmutableTexture} */ (texture));
+		if (!persistent && (!immutable || immutable.backend !== backend || immutable.disposed))
+			throw new TypeError('Texture probe requires a live backend-owned handle.');
+		const resource = persistent ? persistent.resolveTexture() : immutable.texture;
+		const {width, height, layers, format} = texture.storage;
+		if (!Array.isArray(coordinates) || coordinates.length > 256 || context.isContextLost())
+			throw new RangeError('Texture probe is oversized or its context is lost.');
+		for (const coordinate of coordinates) {
+			this._boundedIndex(coordinate.x, width - 1, 'Texture probe column');
+			this._boundedIndex(coordinate.y, height - 1, 'Texture probe row');
+			this._boundedIndex(coordinate.layer, layers - 1, 'Texture probe layer');
+			if (persistent && !persistent.state().layerIdentities[coordinate.layer])
+				throw new Error('Texture probe layer has not been uploaded.');
+		}
+		const integer = format === 'R16UI' || format === 'RG16UI' || format === 'RGBA32I';
+		const values =
+			format === 'RGBA32I'
+				? new Int32Array(coordinates.length * 4)
+				: integer
+					? new Uint32Array(coordinates.length * 4)
+					: new Float32Array(coordinates.length * 4);
+		const gpuTexture = backend.renderer.properties.get(resource).__webglTexture;
+		if (!gpuTexture) throw new Error('Texture probe has no GPU allocation.');
+		const framebuffer = context.createFramebuffer();
+		if (!framebuffer) throw new Error('Texture probe framebuffer allocation failed.');
+		const readFramebuffer = context.getParameter(context.READ_FRAMEBUFFER_BINDING),
+			drawFramebuffer = context.getParameter(context.DRAW_FRAMEBUFFER_BINDING);
+		const readBuffer = context.getParameter(context.READ_BUFFER),
+			packBuffer = context.getParameter(context.PIXEL_PACK_BUFFER_BINDING);
+		const packKeys = [
+			context.PACK_ALIGNMENT,
+			context.PACK_ROW_LENGTH,
+			context.PACK_SKIP_PIXELS,
+			context.PACK_SKIP_ROWS,
+		];
+		const packValues = packKeys.map((key) => context.getParameter(key));
+		try {
+			if (context.getError() !== context.NO_ERROR)
+				throw new Error('Texture probe requires a healthy WebGL context.');
+			context.bindFramebuffer(context.FRAMEBUFFER, framebuffer);
+			context.bindBuffer(context.PIXEL_PACK_BUFFER, null);
+			packKeys.forEach((key, index) => context.pixelStorei(key, index === 0 ? 1 : 0));
+			for (let index = 0; index < coordinates.length; index += 1) {
+				const coordinate = coordinates[index];
+				if (persistent || layers > 1)
+					context.framebufferTextureLayer(
+						context.FRAMEBUFFER,
+						context.COLOR_ATTACHMENT0,
+						gpuTexture,
+						0,
+						coordinate.layer,
+					);
+				else
+					context.framebufferTexture2D(
+						context.FRAMEBUFFER,
+						context.COLOR_ATTACHMENT0,
+						context.TEXTURE_2D,
+						gpuTexture,
+						0,
+					);
+				if (context.checkFramebufferStatus(context.FRAMEBUFFER) !== context.FRAMEBUFFER_COMPLETE)
+					throw new Error('Texture probe framebuffer is incomplete.');
+				context.readBuffer(context.COLOR_ATTACHMENT0);
+				context.readPixels(
+					coordinate.x,
+					coordinate.y,
+					1,
+					1,
+					integer ? context.RGBA_INTEGER : context.RGBA,
+					format === 'RGBA32I' ? context.INT : integer ? context.UNSIGNED_INT : context.FLOAT,
+					values.subarray(index * 4, index * 4 + 4),
+				);
+				if (context.getError() !== context.NO_ERROR) throw new Error('Texture probe readback failed.');
+			}
+			return values;
+		} finally {
+			context.bindFramebuffer(context.DRAW_FRAMEBUFFER, drawFramebuffer);
+			context.bindFramebuffer(context.READ_FRAMEBUFFER, readFramebuffer);
+			context.readBuffer(readBuffer);
+			context.bindBuffer(context.PIXEL_PACK_BUFFER, packBuffer);
+			packKeys.forEach((key, index) => context.pixelStorei(key, packValues[index]));
+			context.deleteFramebuffer(framebuffer);
+		}
+	}
+
+	/**
 	 * Call this method to resolve opaque cache handles inside the renderer adapter
 	 * and install their private textures into already-created shader uniforms.
 	 *
@@ -979,15 +1181,16 @@ export class ThreeCacheBackend {
 	installRuntimeBindings(request) {
 		const backend = this._requireBackendRecord(this);
 
-		for (const binding of request.bindings.bindings) {
+		const assignments = request.bindings.bindings.map((binding) => {
 			const texture = this._requireRuntimeBindingTexture(binding, backend);
 			const uniform = request.uniforms[binding.valueKey];
 			if (!uniform) {
 				throw new TypeError(`Runtime cache uniform ${binding.valueKey} is unavailable.`);
 			}
 
-			uniform.value = texture;
-		}
+			return {uniform, texture};
+		});
+		for (const {uniform, texture} of assignments) uniform.value = texture;
 	}
 
 	/**
@@ -1118,6 +1321,13 @@ export class ThreeCacheBackend {
 		for (const texture of [...backend.immutableTextures]) {
 			try {
 				texture.dispose();
+			} catch (error) {
+				disposalError ??= error;
+			}
+		}
+		for (const array of [...backend.persistentArrays.keys()]) {
+			try {
+				array.dispose();
 			} catch (error) {
 				disposalError ??= error;
 			}

@@ -34,6 +34,8 @@ type ThreeCacheBackendUniform = {
 
 /** Mutable Three texture state required by scalar cache resources. */
 type ThreeCacheBackendTexture = {
+	/** Source upload readiness, allowing allocation without a host-sized data array. */
+	source: {dataReady: boolean};
 	/** Pixel format of the texture. */
 	format: number;
 	/** Scalar data type of the texture. */
@@ -103,14 +105,14 @@ type ThreeCacheBackendDataTexture = ThreeCacheBackendTexture;
 
 /** Two-dimensional scalar data-texture constructor used by packed bindings. */
 type ThreeCacheBackendDataTextureConstructor = new (
-	data: Float32Array | Uint16Array,
+	data: Float32Array | Uint16Array | Int32Array,
 	width: number,
 	height: number,
 ) => ThreeCacheBackendDataTexture;
 
 /** Array scalar data-texture constructor used by packed bindings. */
 type ThreeCacheBackendDataArrayTextureConstructor = new (
-	data: Float32Array | Uint16Array,
+	data: Float32Array | Uint16Array | Int32Array | null,
 	width: number,
 	height: number,
 	depth: number,
@@ -217,6 +219,12 @@ type ThreeCacheBackendResourceNamespace = Readonly<{
 	RGBAFormat: 1023;
 	/** Red integer texture format constant used by index resources. */
 	RedIntegerFormat: 1029;
+	/** Two-component unsigned integer metadata format. */
+	RGIntegerFormat: number;
+	/** Four-component signed integer metadata format. */
+	RGBAIntegerFormat: number;
+	/** Signed 32-bit integer texture type. */
+	IntType: number;
 	/** Float texture data-type constant used by scalar cache resources. */
 	FloatType: 1015;
 	/** Unsigned-short data-type constant used by index resources. */
@@ -361,6 +369,10 @@ type ThreeCacheBackendRendererOperations = Readonly<{
 	render(scene: ThreeCacheBackendScene, camera: ThreeCacheBackendCamera): void;
 	/** Call this method to eagerly initialize one immutable data texture. */
 	initTexture(texture: ThreeCacheBackendTexture): void;
+	/** Internal renderer texture properties used only by the adapter. */
+	properties: {get(texture: ThreeCacheBackendTexture): {__webglTexture?: WebGLTexture}};
+	/** Call this method to invalidate cached WebGL state after eager texture initialization. */
+	resetState(): void;
 }>;
 
 /** Renderer state required by cache operations that temporarily mutate Three. */
@@ -389,6 +401,8 @@ type ThreeCacheBackendRecord = ThreeCacheBackendRendererRecord & {
 	programs: Set<CacheGpuProgram>;
 	/** Active immutable resident textures owned by the backend. */
 	immutableTextures: Set<CacheImmutableTexture>;
+	/** Opaque persistent arrays owned by this backend. */
+	persistentArrays: Map<CachePersistentArray, ThreeCachePersistentArrayOwner>;
 	/** Sequence used to identify runtime bindings. */
 	runtimeBindingSequence: number;
 	/** Disposal state of the backend. */
@@ -456,6 +470,8 @@ type ThreeCacheBackendRuntimeBindingRecord = Readonly<{
 	field?: GpuCacheField;
 	/** Opaque immutable texture associated with the binding. */
 	immutableTexture?: CacheImmutableTexture;
+	/** Opaque persistent texture array associated with the binding. */
+	persistentArray?: CachePersistentArray;
 }>;
 
 /** Restoration callback for caller-owned renderer state. */
@@ -470,7 +486,7 @@ type ThreeCacheBackendRendererOperation<T> =
 	 */ () => T;
 
 /** Three/WebGL2 adapter for Algorithm32's opaque GPU cache backend contract. */
-class ThreeCacheBackend implements CacheGpuBackend, CacheProbeReader {
+class ThreeCacheBackend implements CacheGpuBackend, CachePacketAtlasBackend, CacheProbeReader {
 	/**
 	 * Creates a Three/WebGL2 cache backend after validating the renderer's
 	 * scalar-array capabilities and framebuffer support.
@@ -517,6 +533,19 @@ class ThreeCacheBackend implements CacheGpuBackend, CacheProbeReader {
 	createRuntimeBinding(request: CacheRuntimeBindingRequest): CacheRuntimeBinding;
 	/** Validate and eagerly upload one immutable resident texture. */
 	uploadImmutableTexture(request: CacheImmutableTextureUploadRequest): CacheImmutableTexture;
+	/** Call this method to allocate a bounded persistent RGBA32F array. */
+	allocatePersistentArray(request: CachePersistentArrayRequest): CachePersistentArray;
+	/** Call this method to replace one unprotected persistent-array layer. */
+	uploadPersistentArrayLayer(request: CachePersistentArrayUpload): void;
+	/** Call this method to atomically replace the published-layer protection set. */
+	protectPersistentArrayLayers(array: CachePersistentArray, layers: readonly number[]): void;
+	/** Call this method to inspect context generation and authenticated upload state. */
+	getPersistentArrayState(array: CachePersistentArray): CachePersistentArrayState;
+	/** Call this method to read bounded exact RGBA texels through opaque handles. */
+	readTextureTexels(
+		texture: CacheImmutableTexture | CachePersistentArray,
+		coordinates: readonly CacheTextureTexel[],
+	): Float32Array | Int32Array | Uint32Array;
 	/**
 	 * Call this method to resolve opaque bindings and install their private
 	 * textures into already-created renderer uniforms.

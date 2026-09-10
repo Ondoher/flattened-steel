@@ -9,7 +9,8 @@ Canonical entry document: [Caches](production-algorithm32/caches/README.md).
 
 P2 generates and verifies all 109 controls exactly. P3 now owns bounded browser
 transport, authenticated Worker packet preparation, and explicit host pins.
-Continue P4 renderer-owned packet-atlas primitives, then the whole P5-P8 plan.
+P4 now owns persistent renderer storage and exact GPU packet/metadata probes.
+Continue P5 residency, prediction, and atomic publication, then P6-P8.
 Preserve sealed evidence and change deployed selection only after qualification.
 
 Session effort assessment: report by 2026-09-10 15:52 UTC (08:52 Pacific), or at
