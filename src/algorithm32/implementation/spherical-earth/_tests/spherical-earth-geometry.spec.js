@@ -1,7 +1,13 @@
 import * as THREE from 'three';
 
-import {CUBED_SPHERE_W27_DIRECTION_DOMAIN_OWNER, NATIVE_48_POSITION_NODES} from '../../../sampling-domains/index.js';
+import {
+	CUBED_SPHERE_W27_DIRECTION_DOMAIN_OWNER,
+	NATIVE_48_POSITION_DOMAIN_OWNER,
+	NATIVE_48_POSITION_NODES,
+	REFLECTION_COMPLETED_FIBONACCI_68_DIRECTION_DOMAIN_OWNER,
+} from '../../../sampling-domains/index.js';
 import {SphericalEarthGeometry} from '../SphericalEarthGeometry.js';
+import {SphericalScatteringCacheGeometry} from '../SphericalScatteringCacheGeometry.js';
 
 describe('SphericalEarthGeometry', /** Called by Jasmine to register the named test suite. */ () => {
 	it('exposes normalized spherical geometry and its executable frame facts', /** Called by Jasmine to exercise the named behavior. */ () => {
@@ -721,6 +727,37 @@ describe('SphericalEarthGeometry', /** Called by Jasmine to register the named t
 				direction: outward,
 			}).endDistance,
 		).toEqual(meters(10));
+	});
+
+	it('blocks shallow inward ground rays at planetary scale in both geometry owners', () => {
+		const geometry = createNativeCacheGeometry({observerUpDirection: [0, 0, 1]});
+		const cacheGeometry = new SphericalScatteringCacheGeometry(
+			{
+				...geometry.configuration,
+				directionToSource: [-0.3270630836508046, 0.16118281212570254, 0.9311551108102651],
+			},
+			NATIVE_48_POSITION_DOMAIN_OWNER,
+			CUBED_SPHERE_W27_DIRECTION_DOMAIN_OWNER,
+		);
+		const groundOrigin = position([0, 0, 6360000]);
+		for (const localDirection of REFLECTION_COMPLETED_FIBONACCI_68_DIRECTION_DOMAIN_OWNER.unitVectors) {
+			const physicalDirection = cacheGeometry.expressPhysicalIncomingRadianceDirection(localDirection);
+			const inward = physicalDirection[2] < 0;
+			expect(cacheGeometry.isIncomingGroundContactBlocked(localDirection)).toBe(inward);
+			expect(geometry.distanceToGroundBoundary(groundOrigin, physicalDirection)).toBe(inward ? 0 : null);
+		}
+	});
+
+	it('resolves planetary radial ground distances without losing a small receiver height', () => {
+		const geometry = createNativeCacheGeometry({observerUpDirection: [0, 0, 1]});
+		for (const height of [0.001, 1, 1250, 60000]) {
+			const radius = 6360000 + height;
+			expect(geometry.distanceToGroundBoundary(position([0, 0, radius]), [0, 0, -1])).toBeCloseTo(
+				radius - 6360000,
+				8,
+			);
+			expect(geometry.distanceToGroundBoundary(position([0, 0, radius]), [1, 0, 0])).toBeNull();
+		}
 	});
 
 	it('clamps boundary-scale binary64 roundoff to a zero-distance hit', /** Called by Jasmine to exercise the named behavior. */ () => {

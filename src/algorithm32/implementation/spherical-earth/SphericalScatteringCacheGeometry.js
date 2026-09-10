@@ -288,6 +288,10 @@ export class SphericalScatteringCacheGeometry {
 		const radius = VectorMath.length(origin);
 		const radialDirectionCosine = VectorMath.dot(origin, direction) / radius;
 		const bottomRadiusMeters = this._configuration.bottomRadius.value;
+		// An inward ray starting on the surface intersects at zero before any root subtraction.
+		if (radius === bottomRadiusMeters && radialDirectionCosine < 0) {
+			return 0;
+		}
 		const discriminant =
 			radius * radius * (radialDirectionCosine * radialDirectionCosine - 1) +
 			bottomRadiusMeters * bottomRadiusMeters;

@@ -63,7 +63,13 @@ all 42,687 cube scalars exactly match their parent table, and all six figures
 match the original generator's lengths and hashes. Its SHA-256 is
 `bc7a64cad139b54bc3c71b92bca358dbb34c7f39b6856bc4b5eeb1268c19aa68`.
 
-## Failure Localization And Next Work
+## Failure Localization And Follow-Up
+
+The subsequent [ground-contact investigation](production-b-family-ground-contact-investigation.md)
+confirms matching direct-40 profiles and locates the material discrepancy in
+the historical 12:45 ground-contact classification. Its isolated replay and
+CPU correction resolve that numerical cause. The original rejection below
+remains unchanged; the follow-up owns the remaining benchmark-authority decision.
 
 The first regenerated asset and direction map exactly reproduce the accepted
 C1.8 v8 payload hashes. The historical GPU table that supplied the closeout
@@ -85,11 +91,8 @@ wrapper pins the parent report, both source-table derivations, exact hashes,
 helper implementation, and actual meaning of the legacy labels. The original
 diagnostic is preserved unchanged.
 
-The evidence points away from a final-view shader error for the largest
-historical discrepancy. Next, compare the corrected offline cache construction
-with an independent CPU construction at 12:45, and reconcile any proven
-implementation discrepancy with the governing numerical authority. Do not
-tune the result or relax the threshold. A prior single-condition full CPU
-construction took about 78 minutes; that expensive follow-up was not silently
-added to this qualification run. Reuse this complete set and the existing
-bounded evidence wherever their inputs remain unchanged.
+The same-asset evidence points away from a final-view shader error for the
+largest historical discrepancy. The linked follow-up subsequently isolated
+the cause through bounded historical GPU interventions without requiring the
+previously considered 78-minute independent CPU construction. Reuse this
+complete set and existing bounded evidence wherever inputs remain unchanged.

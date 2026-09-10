@@ -583,6 +583,10 @@ export class SphericalEarthGeometry {
 		const directionVector = GeometryDirections.normalizeDirection(direction, 'Ground boundary direction');
 		const radius = VectorMath.length(originVector);
 		const radialDirectionCosine = VectorMath.dot(originVector, directionVector) / radius;
+		// An inward ray starting on the surface intersects at zero before any root subtraction.
+		if (radius === this._configuration.bottomRadius.value && radialDirectionCosine < 0) {
+			return 0;
+		}
 		const discriminant =
 			radius * radius * (radialDirectionCosine * radialDirectionCosine - 1) +
 			this._configuration.bottomRadius.value * this._configuration.bottomRadius.value;

@@ -10,9 +10,12 @@ Canonical entry document: [Qualification](production-algorithm32/qualification/R
 C1.1-C1.8 are complete. The full corrected 17-condition C1.9 run is executed
 and recorded. B1 misses the fixed closeout ceiling; B2 and B3 pass their
 existing rules. Six B1 figures and all failed acceptance evidence are preserved.
-C1.10 and release C1 remain open. The result owner identifies the next bounded
-cache-construction versus historical-baseline investigation; no new full CPU
-construction or compiler correction has been performed.
+C1.10 and release C1 remain open. The follow-up confirms identical direct-40
+profiles and causally identifies a historical 12:45 ground-contact error.
+Both CPU geometry owners now resolve exact inward surface contact analytically.
+The offline compiler already classifies these contacts correctly. The fixed ceiling
+remains unchanged; the remaining work is the benchmark-authority decision
+described in the investigation owner, before any new acceptance run.
 
 Reuse completed correctness evidence and apply focused review to changed work.
 The owner approved consolidated reviews and waived the full standards ledger.
@@ -34,4 +37,5 @@ unchanged exact numerical evidence in future work.
 2. [Production qualification entry](production-algorithm32/qualification/README.md)
 3. [B-family implementation and fixed boundary](production-algorithm32/qualification/production-b-experiment-wiring-plan.md)
 4. [Canonical execution and closure](poc-experiments/benchmarks/production-b-experiment-wiring-plan.md)
-5. [Executed C1.9 result and next investigation](poc-experiments/benchmarks/production-b-family-c1-9-result.md)
+5. [Executed C1.9 result](poc-experiments/benchmarks/production-b-family-c1-9-result.md)
+6. [Ground-contact cause, correction, and remaining decision](poc-experiments/benchmarks/production-b-family-ground-contact-investigation.md)

@@ -26,9 +26,11 @@ Produce and accept one fresh production GPU B-family record in which:
 Status: executed; closeout rejected. The [canonical result](production-b-family-c1-9-result.md)
 records all 17 corrected v8 assets, the complete GPU boundary, B1-B3 results,
 and six figures. B1 misses the fixed closeout ceiling; B2 and B3 pass their
-existing rules. The acceptance gate remains open. Preserve this evidence and
-investigate the identified cache-construction versus historical-baseline
-difference before deciding whether a corrected run is required.
+existing rules. The acceptance gate remains open. The
+[follow-up investigation](production-b-family-ground-contact-investigation.md)
+identifies a historical ground-contact defect and records its CPU correction.
+Preserve the failed evidence and resolve the defective-reference qualification
+contract before deciding whether another acceptance run is required.
 
 - Compile and verify all 17 canonical GPU assets in a new immutable run.
 - Generate the complete B1 production table and derived 31-channel cube.
