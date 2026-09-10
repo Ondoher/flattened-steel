@@ -1,6 +1,241 @@
 /** Configured facade surface retained by the distant-Sun cache provider. */
 type DistantSunCacheProviderSource = DistantSunCacheSource & DistantSunPrimaryScatteringLightSource;
 
+/** Selected bounded decoder implementation.
+ * - **"native"** - Feature-detected browser Zstandard stream.
+ * - **"wasm"** - Pinned decoder-only WebAssembly fallback.
+ */
+type DistantSunSharedCacheDecoderKind = 'native' | 'wasm';
+/** Feature-detected native stream constructor, including optional browser Zstandard support. */
+type DistantSunSharedCacheNativeStreamConstructor = new (format: string) => TransformStream<Uint8Array, Uint8Array>;
+/** Transferred block preparation input. */
+type DistantSunSharedCachePreparationRequest = {
+	/** Authenticated configuration-owned block descriptor. */
+	block: DistantSunSharedCacheBlockDescriptor;
+	/** Exclusively owned complete encoded frame. */
+	encoded: ArrayBuffer;
+	/** Exact W27 map copied for transfer. */
+	logicalToUniqueIndex: Uint16Array;
+	/** Authenticated exact direction-map identity. */
+	logicalToUniqueIndexSha256: string;
+};
+/** Bounded stage measurements for one prepared packet. */
+type DistantSunSharedCachePreparationTimings = {
+	/** Encoded and direction-map authentication duration. */
+	authenticationMilliseconds: number;
+	/** Decoder duration, including first initialization. */
+	decodeMilliseconds: number;
+	/** Inverse shuffle, decoded authentication, and spectral validation duration. */
+	inverseAndValidationMilliseconds: number;
+	/** Exact packet construction duration. */
+	packetMilliseconds: number;
+	/** Actual decoder implementation. */
+	decoder: DistantSunSharedCacheDecoderKind;
+};
+/** Complete authenticated packet and its preparation timings. */
+type DistantSunSharedCachePreparationResult = {
+	/** Exclusively transferred packet storage. */
+	packet: DistantSunSharedCachePacketBlock;
+	/** Bounded stage measurements. */
+	timings: DistantSunSharedCachePreparationTimings;
+};
+/** Worker protocol operation.
+ * - **"prepare"** - Transfer and authenticate one block.
+ * - **"cancel"** - Cancel the active matching block.
+ */
+type DistantSunSharedCacheWorkerOperation = 'prepare' | 'cancel';
+/** Main-thread to Worker protocol. */
+type DistantSunSharedCacheWorkerMessage = {
+	/** Monotonically increasing job identity. */
+	requestId: number;
+	/** Protocol operation. */
+	kind: DistantSunSharedCacheWorkerOperation;
+	/** Transferred preparation values, present for prepare. */
+	request?: DistantSunSharedCachePreparationRequest;
+};
+/** Worker terminal response. */
+type DistantSunSharedCacheWorkerResponse = {
+	/** Original job identity. */
+	requestId: number;
+	/** Authenticated result on success. */
+	result?: DistantSunSharedCachePreparationResult;
+	/** Safe failure diagnostic on rejection. */
+	error?: string;
+};
+/** Persistent asynchronous preparation capability. */
+interface DistantSunSharedCachePreparationClient {
+	/**
+	 * Call this method to transfer one preparation request; failure or cancellation rejects.
+	 * @param request - Exclusively owned input buffers.
+	 * @param signal - Subscriber-accounted cancellation.
+	 * @returns - Authenticated packet and timings.
+	 */
+	prepare(
+		request: DistantSunSharedCachePreparationRequest,
+		signal: AbortSignal,
+	): Promise<DistantSunSharedCachePreparationResult>;
+	/** Call this method to reject pending work and release all Worker resources. */
+	dispose(): void;
+}
+/** Worker-client construction options. */
+type DistantSunSharedCacheWorkerClientDefinition = {
+	/** Built same-origin module Worker URL. */
+	workerUrl: string;
+	/** Worker construction capability. */
+	createWorker?: (url: string) => Worker;
+};
+/** Queued Worker job with one terminal subscriber continuation. */
+type DistantSunSharedCacheWorkerJob = {
+	/** Monotonically increasing job identity. */
+	requestId: number;
+	/** Transferred input, released after dispatch. */
+	request?: DistantSunSharedCachePreparationRequest;
+	/** Cancellation source. */
+	signal: AbortSignal;
+	/** Matching abort listener. */
+	cancel: () => void;
+	/** Success continuation. */
+	resolve: (value: DistantSunSharedCachePreparationResult) => void;
+	/** Failure continuation. */
+	reject: (reason: unknown) => void;
+};
+/** Explicit packet retention owner category.
+ * - **"published"** - Active GPU window lifetime.
+ * - **"candidate"** - Unpublished transaction lifetime.
+ * - **"predicted"** - Predicted future window lifetime.
+ * - **"prepared-route"** - Explicitly budgeted route lifetime.
+ */
+type DistantSunSharedCachePinKind = 'published' | 'candidate' | 'predicted' | 'prepared-route';
+/** Pin owner and optional route-specific admission ceiling. */
+type DistantSunSharedCachePin = {
+	/** Resource lifetime category. */
+	kind: DistantSunSharedCachePinKind;
+	/** Stable transaction, window, or route owner. */
+	owner: string;
+	/** Required prepared-route host ceiling, including pending packets. */
+	maximumBytes?: number;
+};
+/** Retained or reserved packet with explicit pin ownership. */
+type DistantSunSharedCacheRetentionEntry = {
+	/** Decoded and direction-layout compatibility identity. */
+	signature: string;
+	/** Authenticated packet, absent while preparation is pending. */
+	packet?: DistantSunSharedCachePacketBlock;
+	/** Independently releasable pin tokens. */
+	pins: Map<symbol, DistantSunSharedCachePin>;
+	/** Monotonic least-recently-used sequence. */
+	lastUse: number;
+};
+/** Packet lease whose arrays remain owned by the transport cache. */
+type DistantSunSharedCachePacketLease = {
+	/** Borrowed immutable packet; consumers must neither modify nor transfer its buffer. */
+	packet: DistantSunSharedCachePacketBlock;
+	/** Call this method to change the explicit pin owner or category. */
+	repin: (pin: DistantSunSharedCachePin) => void;
+	/** Call this method to release this lease exactly once; repeated calls are harmless. */
+	release: () => void;
+};
+/** Complete browser block subscription. */
+type DistantSunSharedCacheBlockRequest = {
+	/** Contained content-addressed complete artifact URL. */
+	url: string;
+	/** Authenticated block descriptor. */
+	block: DistantSunSharedCacheBlockDescriptor;
+	/** Authenticated canonical W27 direction map. */
+	logicalToUniqueIndex: Uint16Array;
+	/** Exact direction-map identity. */
+	logicalToUniqueIndexSha256: string;
+	/** Explicit packet lifetime owner. */
+	pin: DistantSunSharedCachePin;
+	/** Independent subscriber cancellation. */
+	signal: AbortSignal;
+};
+/** Transport dependencies and memory admission policy. */
+type DistantSunSharedCacheTransportDefinition = {
+	/** Persistent preparation capability. */
+	preparer: DistantSunSharedCachePreparationClient;
+	/** Complete artifact fetch capability. */
+	fetch?: typeof fetch;
+	/** Total pinned packet admission ceiling. */
+	maximumPinnedBytes?: number;
+};
+
+/** Bounded retention resource totals. */
+type DistantSunSharedCacheRetentionDiagnostics = {
+	/** Bytes reserved by live pins, including pending preparation. */
+	pinnedBytes: number;
+	/** Unpinned retained packet bytes. */
+	unpinnedBytes: number;
+	/** Reserved packet bytes still awaiting preparation. */
+	pendingBytes: number;
+	/** Number of independently releasable pins per lifetime category. */
+	pins: Record<DistantSunSharedCachePinKind, number>;
+	/** Total evictions since construction. */
+	evictions: number;
+	/** Configured admission ceiling. */
+	maximumPinnedBytes: number;
+};
+
+/** Bounded transport counters and current resource facts. */
+type DistantSunSharedCacheTransportDiagnostics = {
+	/** Total admitted subscriber requests. */
+	requests: number;
+	/** Subscribers joined to existing preparations. */
+	coalesced: number;
+	/** Requests served from retained packets. */
+	reused: number;
+	/** Successfully completed artifact preparations. */
+	completed: number;
+	/** Canceled subscribers. */
+	canceled: number;
+	/** Failed artifact preparations excluding cancellation. */
+	failed: number;
+	/** Maximum simultaneous complete artifact jobs. */
+	peakActive: number;
+	/** Most recent job queue delay. */
+	lastQueueMilliseconds: number;
+	/** Most recent complete network read duration. */
+	lastFetchMilliseconds: number;
+	/** Active complete artifact jobs. */
+	active: number;
+	/** Queued complete artifact jobs. */
+	queued: number;
+	/** Coalesced artifact map entries. */
+	inflight: number;
+	/** Most recently completed Worker stages. */
+	lastPreparation?: DistantSunSharedCachePreparationTimings;
+	/** Current pin and LRU facts. */
+	retention: DistantSunSharedCacheRetentionDiagnostics;
+};
+/** Subscriber continuation for one coalesced artifact preparation. */
+type DistantSunSharedCacheTransportSubscriber = {
+	/** Independent subscriber cancellation. */
+	signal: AbortSignal;
+	/** Original logical block identity, which may alias identical encoded bytes. */
+	logicalBlockId: string;
+	/** Reserved pin token. */
+	token: symbol;
+	/** Matching cancellation listener. */
+	cancel: () => void;
+	/** Success continuation. */
+	resolve: (lease: DistantSunSharedCachePacketLease) => void;
+	/** Failure continuation. */
+	reject: (reason: unknown) => void;
+};
+/** One complete network-to-packet job shared by active subscribers. */
+type DistantSunSharedCacheTransportJob = {
+	/** Encoded artifact identity. */
+	key: string;
+	/** Snapshot of the first compatible request. */
+	request: DistantSunSharedCacheBlockRequest;
+	/** Underlying cancellation after the final subscriber leaves. */
+	cancellation: AbortController;
+	/** Independently cancelable subscribers. */
+	subscribers: Set<DistantSunSharedCacheTransportSubscriber>;
+	/** Queue admission timestamp. */
+	queuedAt: number;
+};
+
 /** Definition of source-owned executable packing for one distant-Sun CPU field. */
 type DistantSunFieldPackingDefinition = Readonly<{
 	/** Unique identifier for the field packing. */

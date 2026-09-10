@@ -16,6 +16,7 @@
 	},
 	"devDependencies": {
 		"@polylith/server": "^1.1.0",
+		"@rollup/plugin-node-resolve": "13.3.0",
 		"@types/react": "^18.3.31",
 		"@types/react-dom": "^18.3.7",
 		"@types/three": "^0.180.0",
@@ -28,6 +29,7 @@
 		"karma-spec-reporter": "^0.0.36",
 		"prettier": "3.9.6",
 		"puppeteer": "^19.4.1",
+		"rollup": "2.80.0",
 		"typescript": "^5.9.3"
 	},
 	"nodemonConfig": {
@@ -71,7 +73,8 @@
 		"test:algorithm32": "jasmine --config=spec/support/jasmine-algorithm32.json",
 		"test:algorithm32:three": "karma start spec/support/karma-algorithm32-three.conf.cjs --single-run",
 		"clean:flat32": "node scripts/flat32/clean-build-output.js",
-		"build:flat32": "npm run clean:flat32 && polylith build flat32",
+		"build:flat32": "npm run clean:flat32 && polylith build flat32 && npm run build:algorithm32:shared-worker",
+		"build:algorithm32:shared-worker": "node scripts/algorithm32/solar-zenith-cache/build-shared-cache-worker.js",
 		"package:flat32:distant-sun-caches": "node scripts/algorithm32/solar-zenith-cache/assemble-bin-covered-runtime-packages.js",
 		"build:test:flat32": "polylith test flat32 --group browser",
 		"karma:flat32": "karma start spec/support/karma-flat32.conf.cjs --single-run",
@@ -98,7 +101,7 @@
 		"dev:tests": "polylith test -a -w",
 		"dev:watch": "polylith watch --all -v false",
 		"dev:serve": "nodemon",
-		"build": "polylith build --all",
+		"build": "polylith build --all && npm run build:algorithm32:shared-worker",
 		"start": "polylith serve --all"
 	},
 	"type": "module"

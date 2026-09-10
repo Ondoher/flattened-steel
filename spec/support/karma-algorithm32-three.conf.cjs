@@ -89,6 +89,7 @@ module.exports = function configureAlgorithm32ThreeKarma(config) {
 		basePath: '../..',
 		frameworks: ['jasmine'],
 		files: [
+			{pattern: 'dist/flat32/shared-cache-worker.js', included: false, served: true, watched: false},
 			{
 				pattern: 'node_modules/three/build/*.js',
 				included: false,

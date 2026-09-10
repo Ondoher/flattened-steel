@@ -65,6 +65,29 @@ the known horizon appearance defect are outside this plan.
 
 ## Verification Ownership And Placement
 
+### Incremental Verification Cadence
+
+The project owner selected this cadence during production promotion to limit
+repeated testing and review. P3-P6 each receive targeted calculation and data
+correctness checks and one focused review of the changed implementation before
+checkpointing. A correction reopens only its affected checks and review;
+unchanged source and documentation-only edits do not restart all review lanes.
+Checks that prevent corrupt data or partial publication remain immediate.
+
+P7 owns the complete integration, lifecycle, fault, memory, performance, and
+cross-cutting standards review. Its final compliance ledger covers the complete
+promotion scope. Earlier exactness evidence remains valid unless a change
+affects its calculation, representation, or authenticated inputs; in particular,
+the complete P2 generator run is not repeated for browser-only changes.
+An intermediate focused review is not a claim that P7 qualification is complete.
+
+The current session reports at its 30-minute effort assessment or the P3
+checkpoint, whichever occurs first. Continue when verified implementation is
+advancing at a reasonable rate. Stop for reevaluation if redundant work or
+owner-provided periodic credit readings show excessive cost.
+
+### Production Owners
+
 All tests and evidence are production-owned. No P1-P8 work may create or use
 an experimental unit-test tree.
 
@@ -96,7 +119,7 @@ artifacts stay only in the P7 output root.
 - [x] D1 — Select the production GPU packet, residency, publication, and live-runtime architecture.
 - [x] P1 — Implement production format and compatibility contracts.
 - [x] P2 — Implement and verify production shared-inventory generation.
-- [ ] P3 — Implement production browser transport and Worker preparation.
+- [x] P3 — Implement production browser transport and Worker preparation.
 - [ ] P4 — Implement renderer-owned packet-atlas primitives.
 - [ ] P5 — Implement residency, predictive preparation, and atomic publication.
 - [ ] P6 — Integrate the packet shader and stable live runtime.
@@ -190,17 +213,17 @@ the visible animation path.
 
 Work:
 
-- [ ] Implement the repository-owned decoder interface, persistent module
+- [x] Implement the repository-owned decoder interface, persistent module
   Worker, native feature detection, and pinned WASM fallback.
-- [ ] Implement the process-wide four-request scheduler, encoded-artifact
+- [x] Implement the process-wide four-request scheduler, encoded-artifact
   in-flight map, subscriber accounting, and transferable ownership.
-- [ ] Validate encoded framing/hash, decoded bound/hash, inverse shuffle, and
+- [x] Validate encoded framing/hash, decoded bound/hash, inverse shuffle, and
   exact spectral layout inside the Worker.
-- [ ] Add Worker-side RGBA packet construction where measurement confirms that
+- [x] Add Worker-side RGBA packet construction where measurement confirms that
   transferring packet-ready blocks respects the selected memory bound.
-- [ ] Implement decoded and packet-ready retention with explicit published,
+- [x] Implement decoded and packet-ready retention with explicit published,
   candidate, predicted, and prepared-route pins.
-- [ ] Expose bounded diagnostics for requests, coalescing, queueing, decode,
+- [x] Expose bounded diagnostics for requests, coalescing, queueing, decode,
   authentication, packet construction, transfer, pins, eviction, cancellation,
   and failure.
 
@@ -377,9 +400,12 @@ checkpoint.
 
 ## Current State And Next Action
 
-D0, D1, P1, and P2 are complete. The production generator's
+D0, D1, P1, P2, and P3 are complete. The production generator's
 [qualified immutable run](shared-generation-qualification.md) reconstructs all
 109 controls exactly, authenticates the persisted graph, and meets the
 storage, generation-time, working-disk, and Node-memory bounds. Active
-selection and deployed assets remain unchanged. Continue P3 browser transport
-and Worker preparation, then P4-P8 in the declared checkpoint order.
+selection and deployed assets remain unchanged. The
+[P3 transport checks](shared-transport-verification.md) prove exact decoded and
+packet bytes, bounded retention, coalescing, cancellation, and real Worker
+transfer/recovery. Continue P4-P8 in the declared checkpoint order; P7 retains
+the complete integration and cross-cutting review gate.

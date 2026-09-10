@@ -7,10 +7,15 @@ Canonical entry document: [Caches](production-algorithm32/caches/README.md).
 
 ## Immediate Focus
 
-P2 now generates and verifies all 109 controls exactly in a bounded immutable
-shared-inventory run. Continue P3 browser transport and Worker preparation;
-the whole P3-P8 promotion remains in scope. Preserve sealed evidence and
-change deployed selection only after release qualification.
+P2 generates and verifies all 109 controls exactly. P3 now owns bounded browser
+transport, authenticated Worker packet preparation, and explicit host pins.
+Continue P4 renderer-owned packet-atlas primitives, then the whole P5-P8 plan.
+Preserve sealed evidence and change deployed selection only after qualification.
+
+Session effort assessment: report by 2026-09-10 15:52 UTC (08:52 Pacific), or at
+the P3 checkpoint if sooner. Continue when verified implementation is advancing
+at a reasonable rate; stop for reevaluation if redundant work or owner-provided
+credit readings show excessive cost. The owner checks credit use periodically.
 
 ## Minimal Reload Sources
 

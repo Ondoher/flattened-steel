@@ -165,6 +165,22 @@ export const DISTANT_SUN_SHARED_CACHE_DEFAULT_RESIDENT_LAYER_COUNT = 24;
 /** Unavailable row-address component stored in RG16UI metadata. */
 export const DISTANT_SUN_SHARED_CACHE_UNAVAILABLE_ROW_ADDRESS = 0xffff;
 
+/** Fixed byte length of one packet-ready RGBA32F block. */
+export const DISTANT_SUN_SHARED_CACHE_PACKET_BYTES = 648 * 1728 * 4 * 4;
+/** Maximum concurrent complete artifact preparations across browser transactions. */
+export const DISTANT_SUN_SHARED_CACHE_REQUEST_LIMIT = 4;
+/** Ordinary unpinned packet retention budget. */
+export const DISTANT_SUN_SHARED_CACHE_LRU_BYTES = 64 * 1024 * 1024;
+/** Default host pin admission budget, excluding the separately bounded LRU and active decode. */
+export const DISTANT_SUN_SHARED_CACHE_PIN_BYTES = 768 * 1024 * 1024;
+/** Maximum encoded frame length accepted before network or decoder allocation. */
+export const DISTANT_SUN_SHARED_CACHE_MAXIMUM_ENCODED_BYTES = 16 * 1024 * 1024;
+/** Deadline for one Worker preparation, including initialization and authentication. */
+export const DISTANT_SUN_SHARED_CACHE_WORKER_TIMEOUT = 30_000;
+/** Qualified decoder-only fallback source supplied by the pinned Three r180 installation. */
+export const DISTANT_SUN_SHARED_CACHE_DECODER_SHA256 =
+	'5cbf818e842628a4464e748594a6deae18ceddda3c2f541e7b3a0ff5fc7611e2';
+
 /** Largest four-layer RGBA32F runtime derivative, including its logical-direction index. */
 export const DISTANT_SUN_SCENE_CACHE_MAXIMUM_RESIDENT_BYTES = 185_326_380;
 /** Largest qualified two-cache atomic-publication footprint. */
