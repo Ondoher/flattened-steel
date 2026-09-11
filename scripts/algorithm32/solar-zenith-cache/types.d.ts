@@ -172,6 +172,113 @@ type DistantSunSceneCacheWavelengthRequest = {
 /** JSON-safe compiler execution diagnostics; individual retained proof consumers validate their required fields. */
 type DistantSunSceneCacheWavelengthResult = Readonly<Record<string, unknown>>;
 
+/** One explicitly requested receiver-local scene. */
+type DistantSunPointLocalScene = {
+	/** Caller-owned scene identity. */ id: string;
+	/** Observer-to-Sun zenith angle in degrees. */ zenithDegrees: number;
+	/** Observer height above the spherical ground in meters. */ observerAltitudeMeters: number;
+	/** Optional observation instant or exact input label. */ instant?: string;
+	/** Optional complete per-scene production-profile identity. */ profileIdentity?: Readonly<Record<string, string>>;
+};
+/** One bounded group of shared altitude/local-Sun-angle coordinates. */
+type DistantSunPointLocalBlock = {
+	/** Production 8x8 tile origin. */ tile: {altitudeIndex: number; solarZenithIndex: number};
+	/** Populated coordinates retained by this bounded block. */ coordinates: number[][];
+};
+/** One requested scene and its ordered reconstruction indexes. */
+type DistantSunPointLocalSceneInventory = {
+	/** Position in the caller's scene list. */ ordinal: number;
+	/** Exact caller input. */ request: DistantSunPointLocalScene;
+	/** Interpolation-closed production ledger. */ ledger: DistantSunSceneCacheLedgerRecord;
+	/** Coordinate keys in scene payload order. */ keys: string[];
+	/** Index into the shared coordinate inventory for every scene row. */ indexes: number[];
+};
+/** Complete input-driven receiver-local shared inventory. */
+type DistantSunPointLocalInventory = {
+	/** Complete physical and numerical compiler request. */ buildRequest: DistantSunSceneCacheCompilerBuildRequest;
+	/** Ordered scene consumers, including duplicates. */ scenes: DistantSunPointLocalSceneInventory[];
+	/** Sorted unique altitude/local-Sun-angle coordinates. */ coordinates: number[][];
+	/** Bounded block ownership. */ blocks: DistantSunPointLocalBlock[];
+	/** Little-endian logical-to-unique W27 map. */ directionBytes: Buffer;
+	/** Seam-deduplicated outgoing-direction count. */ uniqueDirectionCount: number;
+	/** Logical W27 outgoing-direction count. */ logicalDirectionCount: number;
+	/** Materialized spectral-channel count. */ channelCount: number;
+	/** Materialized indexes into the complete spectral basis. */ wavelengths: number[];
+	/** Maximum decoded bytes in one encoded block. */ maximumDecodedBlockBytes: number;
+	/** Maximum encoded bytes in one stored block. */ maximumEncodedBlockBytes: number;
+	/** Compiler extraction ledger for the complete union. */ unionLedger: DistantSunSceneCacheLedgerRecord;
+};
+/** One encoded point-local cache block. */
+type DistantSunPointLocalPackageBlock = DistantSunPointLocalBlock & {
+	/** Canonical block ordinal. */ ordinal: number;
+	/** Decoded staging identity. */ decoded: {byteLength: number; sha256: string};
+	/** Encoded repository artifact. */ encoded: DistantSunSharedCacheFileIdentity;
+	/** Reversible codec identity. */ codec: string;
+};
+/** Serialized production point-local cache. */
+type DistantSunPointLocalPackageRecord = {
+	/** Format identity. */ schemaId: string;
+	/** Complete package content identity. */ packageIdentity: string;
+	/** Compiler identity. */ compilerIdentity: string;
+	/** Serialized physical/numerical request. */ buildRequest: DistantSunSceneCacheCompilerBuildRequest;
+	/** Physical quantity and units. */ physicalQuantity: Readonly<Record<string, string>>;
+	/** Serialized dimensions and ordering. */ layout: {
+		id: string;
+		channelCount: number;
+		wavelengthIndexes: number[];
+		logicalDirectionCount: number;
+		uniqueDirectionCount: number;
+		coordinateCount: number;
+		maximumDecodedBlockBytes: number;
+		maximumEncodedBlockBytes: number;
+	};
+	/** Sorted shared coordinate inventory. */ coordinates: number[][];
+	/** Ordered scene reconstruction indexes. */ scenes: DistantSunPointLocalSceneInventory[];
+	/** Complete bounded block inventory. */ blocks: DistantSunPointLocalPackageBlock[];
+	/** Logical-to-unique W27 map. */ directionMap: DistantSunSharedCacheFileIdentity;
+};
+/** Inputs to the point-local package finalizer. */
+type DistantSunPointLocalPackageWriteRequest = {
+	/** Repository artifact owner. */ files: SharedGenerationFiles;
+	/** New package root. */ root: string;
+	/** Completed decoded staging root. */ stagingRoot: string;
+	/** Validated inventory. */ inventory: DistantSunPointLocalInventory;
+	/** Production implementation identity. */ implementation: DistantSunSharedCacheImplementationIdentity & {
+		sources?: Readonly<Record<string, unknown>>[];
+	};
+	/** Browser/GPU execution evidence. */ gpu: SharedGenerationGpuResult;
+	/** Caller cancellation. */ signal: AbortSignal;
+	/** Durable packaging progress. */ progress?: (event: Readonly<Record<string, unknown>>) => Promise<void>;
+};
+/** One production point-local compiler invocation. */
+type DistantSunPointLocalCompileRequest = {
+	/** New repository-relative run directory. */ outputDirectory: string;
+	/** Complete physical/numerical construction request. */ buildRequest: DistantSunSceneCacheCompilerBuildRequest;
+	/** Ordered scene list. */ scenes: DistantSunPointLocalScene[];
+	/** Selected spectral indexes. */ wavelengths: number[];
+	/** Caller-owned cancellation. */ signal: AbortSignal;
+	/** Optional durable progress observer. */ onProgress?: (
+		event: Readonly<Record<string, unknown>>,
+	) => void | Promise<void>;
+};
+/** Accepted compiler result and work accounting. */
+type DistantSunPointLocalCompileResult = {
+	/** Successful completion. */ accepted: boolean;
+	/** Production compiler identity. */ compilerIdentity: string;
+	/** Repository-relative immutable run root. */ outputDirectory: string;
+	/** Serialized cache identity. */ packageIdentity: string;
+	/** Package manifest artifact. */ manifest: DistantSunSharedCacheFileIdentity;
+	/** Input artifact. */ input: DistantSunSharedCacheFileIdentity;
+	/** Implementation artifact. */ implementation: DistantSunSharedCacheFileIdentity;
+	/** Requested scene count. */ sceneCount: number;
+	/** Materialized channel count. */ channelCount: number;
+	/** Unique coordinate count. */ coordinateCount: number;
+	/** Encoded block count. */ blockCount: number;
+	/** Decoded shared staging bytes. */ stagedBytes: number;
+	/** Browser/GPU execution evidence. */ gpu: SharedGenerationGpuResult;
+	/** Complete wall time in milliseconds. */ elapsedMilliseconds: number;
+};
+
 /** Complete normalized input set for one offline distant-Sun scene-cache build. */
 type DistantSunSceneCacheCompilerInputSet = Readonly<{
 	/** Stable production compiler identity. */

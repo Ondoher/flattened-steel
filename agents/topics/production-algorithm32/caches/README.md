@@ -30,6 +30,7 @@ execution remains archived and is not reopened.
 - [Algorithm32 Current Dataflow](current-dataflow.md)
 - [Distant-Sun Cache Optimization Design](distant-sun-cache-optimization-design.md)
 - [Distant-Sun Cache Optimization Implementation Plan](distant-sun-cache-optimization-plan.md)
+- [Point-Local Compiler Promotion Plan](point-local-compiler-promotion-plan.md)
 - [Flat Geometry And Local-Source Extension Contract](extension-contract.md)
 - [Flat/Local GPU Transport Offload Plan](gpu-transport-offload-plan.md)
 - [Selected Outgoing Reconstruction](outgoing-reconstruction.md)

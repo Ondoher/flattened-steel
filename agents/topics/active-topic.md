@@ -1,27 +1,21 @@
 # Active Topic
 
-Current active topic: `point-local-cache-builder`.
-Focus: Create an extensible point-local builder and indexed cache that can support the Bruneton profile and reproduce accepted run 65 after cache expansion.
+Current active topic: `production-point-local-cache-compiler`.
+Focus: The accepted input-driven point-local cache builder is now promoted into the production Algorithm32 offline compiler, with the current Native15 production path preserved.
 
-Canonical entry document: [Point-Local Cache Builder](poc-experiments/engineering-studies/point-local-cache-builder/README.md).
+Canonical entry document: [Production Algorithm32 caches](production-algorithm32/caches/README.md).
 
 ## Immediate Focus
 
-The contained builder experiment has passed application compatibility,
-Bruneton qualification against accepted Color Reset run 65, and the complete
-300 DU ozone follow-up. Final evidence verification passed; the experiment
-status owns results, run dispositions, and remaining boundaries. Preserve
-previous evidence and the reduced review cadence. Production promotion requires
-its own plan.
-
-The separate production benchmark decision remains with the
-[ground-contact investigation](poc-experiments/benchmarks/production-b-family-ground-contact-investigation.md).
-The Flat32 time-change delay investigation remains deferred.
+The production compiler now owns arbitrary scene lists, receiver-local shared
+inventory, explicit wavelength selection, generalized staging, and indexed
+package reading. Focused Native15 compatibility, end-to-end application-data,
+and authenticated Direct40 qualifications pass. Runtime adoption of the new
+package, ozone/horizon appearance, and Flat32 animation latency remain deferred.
 
 ## Minimal Reload Sources
 
 1. [Repository workflow instructions](../../AGENTS.md)
-2. [Experiment entry](poc-experiments/engineering-studies/point-local-cache-builder/README.md)
-3. [Experiment design](poc-experiments/engineering-studies/point-local-cache-builder/design.md)
-4. [Experiment plan](poc-experiments/engineering-studies/point-local-cache-builder/plan.md)
-5. [Experiment status](poc-experiments/engineering-studies/point-local-cache-builder/status.md)
+2. [Production cache entry](production-algorithm32/caches/README.md)
+3. [Point-local compiler promotion plan](production-algorithm32/caches/point-local-compiler-promotion-plan.md)
+4. [Accepted experiment status](poc-experiments/engineering-studies/point-local-cache-builder/status.md)
