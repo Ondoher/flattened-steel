@@ -7,12 +7,12 @@ Canonical entry document: [Shared Cache Calculation Reuse](poc-experiments/engin
 
 ## Immediate Focus
 
-The owner identifies `tmp/extraterrestrial/color-reset/runs/000065-color-reset-qualification`
-as correctness authority. Diagnosis confirms that the B1 adapter bypasses the
-point-local Sun-angle dimension used by Flat32's shared-cache path. The status
-owns the routing evidence, score distinction, and exact 64/65 table equivalence.
-R0b diagnosis is complete; R0c must correct and qualify the benchmark route
-before R1 reusable-program optimization. The original runtime goal remains open.
+The owner reset the immediate task to evaluating optimizations in the current
+production point-local shared-cache builder. The current-builder evaluation
+linked by the plan owns the baseline, opportunities, and small proof gates.
+No optimization implementation has started. Accepted Color Reset run 65 remains
+the later B1 correctness authority; the old B1 adapter must not be the starting
+point. The status preserves the completed routing diagnosis and earlier evidence.
 Continue the owner's reduced review/testing cadence and preserve parent evidence.
 
 The separate production benchmark decision remains with the

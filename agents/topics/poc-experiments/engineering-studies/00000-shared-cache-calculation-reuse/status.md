@@ -1,8 +1,14 @@
 # Shared Cache Calculation Reuse Experiment Status
 
-Status: R0b diagnosis complete; B1 bypasses the accepted local Sun-angle cache dimension. Route correction/qualification R0c precedes runtime-improvement R1.
+Status: current production point-local builder evaluation complete; optimization implementation has not started. B1 routing diagnosis remains preserved for later profile qualification.
 
 ## Current State
+
+The owner reset the current task to evaluating the actual shared-cache builder.
+[Current Builder Evaluation](current-builder-evaluation.md) owns that analysis:
+existing sharing, measured costs, candidate calculation/resource/I/O reuse, and
+bounded proof gates. This is a read-only source/evidence evaluation. No new
+generation, benchmark execution, or implementation change was made for it.
 
 ### Owner-Selected Reproduction Target
 
