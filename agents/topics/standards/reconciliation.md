@@ -42,6 +42,26 @@ checkpoint-adviser activation record below.
 
 ## Summary
 
+### Point-Local Builder Experiment Execution
+
+The owner's instruction to proceed with the recorded five-step plan authorizes
+its disclosed scaffold-readiness prerequisite, under standing delegated judgment.
+The focused audit identifies two changes, both `already-covered` dispositions:
+
+- PCB-001: `experiments/point-local-cache-builder/AGENTS.md` adds operational
+  containment and progress instructions; include it in the attested inputs.
+- PCB-002: the planned browser proof host requires the existing `proof-tools`
+  set rather than the inherited `code` set. Add a narrow assignment for this
+  experiment, retaining all canonical rules and the existing overlay unchanged.
+
+These dispositions implement the authorized experiment using existing standards;
+no new manual review or shared-skill repair authorization is claimed. Prior
+instruction inputs are unchanged, and no ambiguity or deferred item was found
+in this focused scope. Attestation validation passed with ten inputs and identity
+`sha256:c2deb9aab8f7a0c595f376b7b5934ad1e5fffca5670ce260ed3343c81b55e8f9`.
+The generated guide check reports current at source fingerprint
+`sha256:c143c9ed31fd08d1571ca878edb0695a9921bd3d87eccdb33cdd8a18f629f535`.
+
 ### Calculation Reuse Experiment Execution
 
 The 2026-09-10 request to execute the complete experiment plan, following the

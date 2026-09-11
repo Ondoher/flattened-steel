@@ -1,0 +1,547 @@
+{
+	"derivation": {
+		"sourcePath": "experiments/extraterrestrial/solar-zenith-cache/point-local-scene-cache/b1PointLocalInputs.js",
+		"sha256": "e6308b2e48a8c15c46942fb96b213ee4dddd103214d21e241c2810441b94d37c",
+		"operation": "createB1Direct40Channels({groundAlbedoScale:1}) and B1_SUN_STATES",
+		"node": "v25.4.0"
+	},
+	"channels": [
+		{
+			"centerNanometers": 360,
+			"sourceIrradianceDensityWattsPerSquareMeterPerNanometer": 1.13419,
+			"rayleighScatteringPerMeter": 0.00006678276651860077,
+			"mieExtinctionPerMeter": 0.00007548084348202988,
+			"groundAlbedo": 0.018
+		},
+		{
+			"centerNanometers": 371.75,
+			"sourceIrradianceDensityWattsPerSquareMeterPerNanometer": 1.09801,
+			"rayleighScatteringPerMeter": 0.000058451746737923375,
+			"mieExtinctionPerMeter": 0.00007356613902186056,
+			"groundAlbedo": 0.019
+		},
+		{
+			"centerNanometers": 383.5,
+			"sourceIrradianceDensityWattsPerSquareMeterPerNanometer": 1.03541,
+			"rayleighScatteringPerMeter": 0.000051360165810660744,
+			"mieExtinctionPerMeter": 0.0000717573597189769,
+			"groundAlbedo": 0.01935
+		},
+		{
+			"centerNanometers": 395.25,
+			"sourceIrradianceDensityWattsPerSquareMeterPerNanometer": 1.45086,
+			"rayleighScatteringPerMeter": 0.00004530160858550806,
+			"mieExtinctionPerMeter": 0.00007004566171725641,
+			"groundAlbedo": 0.02105
+		},
+		{
+			"centerNanometers": 407,
+			"sourceIrradianceDensityWattsPerSquareMeterPerNanometer": 1.72453,
+			"rayleighScatteringPerMeter": 0.00004010378595224875,
+			"mieExtinctionPerMeter": 0.00006842317425546999,
+			"groundAlbedo": 0.0234
+		},
+		{
+			"centerNanometers": 418.75,
+			"sourceIrradianceDensityWattsPerSquareMeterPerNanometer": 1.654,
+			"rayleighScatteringPerMeter": 0.00003561194579400333,
+			"mieExtinctionPerMeter": 0.00006688286822486988,
+			"groundAlbedo": 0.026625
+		},
+		{
+			"centerNanometers": 430.5,
+			"sourceIrradianceDensityWattsPerSquareMeterPerNanometer": 1.70536,
+			"rayleighScatteringPerMeter": 0.000031753807259855634,
+			"mieExtinctionPerMeter": 0.0000654184455935531,
+			"groundAlbedo": 0.02905
+		},
+		{
+			"centerNanometers": 442.25,
+			"sourceIrradianceDensityWattsPerSquareMeterPerNanometer": 1.97393,
+			"rayleighScatteringPerMeter": 0.00002842912510410883,
+			"mieExtinctionPerMeter": 0.00006402424591723446,
+			"groundAlbedo": 0.030225
+		},
+		{
+			"centerNanometers": 454,
+			"sourceIrradianceDensityWattsPerSquareMeterPerNanometer": 2.03543,
+			"rayleighScatteringPerMeter": 0.000025524382842865074,
+			"mieExtinctionPerMeter": 0.00006269516692127806,
+			"groundAlbedo": 0.0314
+		},
+		{
+			"centerNanometers": 465.75,
+			"sourceIrradianceDensityWattsPerSquareMeterPerNanometer": 2.00643,
+			"rayleighScatteringPerMeter": 0.00002298175579539145,
+			"mieExtinctionPerMeter": 0.00006142659673371964,
+			"groundAlbedo": 0.032
+		},
+		{
+			"centerNanometers": 477.5,
+			"sourceIrradianceDensityWattsPerSquareMeterPerNanometer": 1.95531,
+			"rayleighScatteringPerMeter": 0.000020743419280955022,
+			"mieExtinctionPerMeter": 0.000060214355814742196,
+			"groundAlbedo": 0.032
+		},
+		{
+			"centerNanometers": 489.25,
+			"sourceIrradianceDensityWattsPerSquareMeterPerNanometer": 1.95426,
+			"rayleighScatteringPerMeter": 0.000018760317115491394,
+			"mieExtinctionPerMeter": 0.00005905464699512322,
+			"groundAlbedo": 0.032925
+		},
+		{
+			"centerNanometers": 501,
+			"sourceIrradianceDensityWattsPerSquareMeterPerNanometer": 1.92438,
+			"rayleighScatteringPerMeter": 0.00001702415477512493,
+			"mieExtinctionPerMeter": 0.00005794401232728453,
+			"groundAlbedo": 0.035500000000000004
+		},
+		{
+			"centerNanometers": 512.75,
+			"sourceIrradianceDensityWattsPerSquareMeterPerNanometer": 1.82092,
+			"rayleighScatteringPerMeter": 0.000015490141830927264,
+			"mieExtinctionPerMeter": 0.00005687929568484347,
+			"groundAlbedo": 0.04412500000000001
+		},
+		{
+			"centerNanometers": 524.5,
+			"sourceIrradianceDensityWattsPerSquareMeterPerNanometer": 1.88517,
+			"rayleighScatteringPerMeter": 0.00001412249333703498,
+			"mieExtinctionPerMeter": 0.00005585761023293591,
+			"groundAlbedo": 0.06309999999999999
+		},
+		{
+			"centerNanometers": 536.25,
+			"sourceIrradianceDensityWattsPerSquareMeterPerNanometer": 1.85545,
+			"rayleighScatteringPerMeter": 0.000012895614762631871,
+			"mieExtinctionPerMeter": 0.00005487631004193423,
+			"groundAlbedo": 0.079875
+		},
+		{
+			"centerNanometers": 548,
+			"sourceIrradianceDensityWattsPerSquareMeterPerNanometer": 1.85083,
+			"rayleighScatteringPerMeter": 0.000011801922543031648,
+			"mieExtinctionPerMeter": 0.00005393296523910391,
+			"groundAlbedo": 0.088
+		},
+		{
+			"centerNanometers": 559.75,
+			"sourceIrradianceDensityWattsPerSquareMeterPerNanometer": 1.82758,
+			"rayleighScatteringPerMeter": 0.00001081771803858967,
+			"mieExtinctionPerMeter": 0.00005302534019209133,
+			"groundAlbedo": 0.089
+		},
+		{
+			"centerNanometers": 571.5,
+			"sourceIrradianceDensityWattsPerSquareMeterPerNanometer": 1.84475,
+			"rayleighScatteringPerMeter": 0.000009945276318711827,
+			"mieExtinctionPerMeter": 0.00005215137429947158,
+			"groundAlbedo": 0.07750000000000001
+		},
+		{
+			"centerNanometers": 583.25,
+			"sourceIrradianceDensityWattsPerSquareMeterPerNanometer": 1.78771,
+			"rayleighScatteringPerMeter": 0.000009157343947806773,
+			"mieExtinctionPerMeter": 0.00005130916503047121,
+			"groundAlbedo": 0.06705000000000001
+		},
+		{
+			"centerNanometers": 595,
+			"sourceIrradianceDensityWattsPerSquareMeterPerNanometer": 1.76683,
+			"rayleighScatteringPerMeter": 0.00000844429927817879,
+			"mieExtinctionPerMeter": 0.00005049695291121953,
+			"groundAlbedo": 0.062
+		},
+		{
+			"centerNanometers": 606.75,
+			"sourceIrradianceDensityWattsPerSquareMeterPerNanometer": 1.70858,
+			"rayleighScatteringPerMeter": 0.000007798440251943363,
+			"mieExtinctionPerMeter": 0.00004971310820068876,
+			"groundAlbedo": 0.058300000000000005
+		},
+		{
+			"centerNanometers": 618.5,
+			"sourceIrradianceDensityWattsPerSquareMeterPerNanometer": 1.68278,
+			"rayleighScatteringPerMeter": 0.00000721206481121599,
+			"mieExtinctionPerMeter": 0.00004895611903761656,
+			"groundAlbedo": 0.05274999999999999
+		},
+		{
+			"centerNanometers": 630.25,
+			"sourceIrradianceDensityWattsPerSquareMeterPerNanometer": 1.63849,
+			"rayleighScatteringPerMeter": 0.000006679295693364798,
+			"mieExtinctionPerMeter": 0.000048224580871569545,
+			"groundAlbedo": 0.050925
+		},
+		{
+			"centerNanometers": 642,
+			"sourceIrradianceDensityWattsPerSquareMeterPerNanometer": 1.59608,
+			"rayleighScatteringPerMeter": 0.000006198995363686841,
+			"mieExtinctionPerMeter": 0.00004751718701802987,
+			"groundAlbedo": 0.04680000000000001
+		},
+		{
+			"centerNanometers": 653.75,
+			"sourceIrradianceDensityWattsPerSquareMeterPerNanometer": 1.52211,
+			"rayleighScatteringPerMeter": 0.0000057607838180177686,
+			"mieExtinctionPerMeter": 0.000046832720199875406,
+			"groundAlbedo": 0.040875
+		},
+		{
+			"centerNanometers": 665.5,
+			"sourceIrradianceDensityWattsPerSquareMeterPerNanometer": 1.52468,
+			"rayleighScatteringPerMeter": 0.000005359399958356469,
+			"mieExtinctionPerMeter": 0.000046170044956612455,
+			"groundAlbedo": 0.0368
+		},
+		{
+			"centerNanometers": 677.25,
+			"sourceIrradianceDensityWattsPerSquareMeterPerNanometer": 1.47836,
+			"rayleighScatteringPerMeter": 0.000004991881454747362,
+			"mieExtinctionPerMeter": 0.00004552810081880382,
+			"groundAlbedo": 0.035
+		},
+		{
+			"centerNanometers": 689,
+			"sourceIrradianceDensityWattsPerSquareMeterPerNanometer": 1.4485,
+			"rayleighScatteringPerMeter": 0.000004655076388117713,
+			"mieExtinctionPerMeter": 0.00004490589615880109,
+			"groundAlbedo": 0.04219999999999999
+		},
+		{
+			"centerNanometers": 700.75,
+			"sourceIrradianceDensityWattsPerSquareMeterPerNanometer": 1.40522,
+			"rayleighScatteringPerMeter": 0.000004347017771377012,
+			"mieExtinctionPerMeter": 0.00004430250264053586,
+			"groundAlbedo": 0.09217500000000019
+		},
+		{
+			"centerNanometers": 712.5,
+			"sourceIrradianceDensityWattsPerSquareMeterPerNanometer": 1.35526,
+			"rayleighScatteringPerMeter": 0.0000040650276582454195,
+			"mieExtinctionPerMeter": 0.00004371705020107783,
+			"groundAlbedo": 0.1755
+		},
+		{
+			"centerNanometers": 724.25,
+			"sourceIrradianceDensityWattsPerSquareMeterPerNanometer": 1.32788,
+			"rayleighScatteringPerMeter": 0.0000038052668691005007,
+			"mieExtinctionPerMeter": 0.0000431487225051971,
+			"groundAlbedo": 0.27649999999999975
+		},
+		{
+			"centerNanometers": 736,
+			"sourceIrradianceDensityWattsPerSquareMeterPerNanometer": 1.28834,
+			"rayleighScatteringPerMeter": 0.0000035654129372570787,
+			"mieExtinctionPerMeter": 0.00004259675282149765,
+			"groundAlbedo": 0.39580000000000015
+		},
+		{
+			"centerNanometers": 747.75,
+			"sourceIrradianceDensityWattsPerSquareMeterPerNanometer": 1.26938,
+			"rayleighScatteringPerMeter": 0.0000033440202456968355,
+			"mieExtinctionPerMeter": 0.00004206042027500297,
+			"groundAlbedo": 0.4958999999999999
+		},
+		{
+			"centerNanometers": 759.5,
+			"sourceIrradianceDensityWattsPerSquareMeterPerNanometer": 1.23241,
+			"rayleighScatteringPerMeter": 0.000003138742629094947,
+			"mieExtinctionPerMeter": 0.00004153904643652812,
+			"groundAlbedo": 0.5510000000000002
+		},
+		{
+			"centerNanometers": 771.25,
+			"sourceIrradianceDensityWattsPerSquareMeterPerNanometer": 1.20345,
+			"rayleighScatteringPerMeter": 0.000002950125156163243,
+			"mieExtinctionPerMeter": 0.0000410319922138934,
+			"groundAlbedo": 0.572
+		},
+		{
+			"centerNanometers": 783,
+			"sourceIrradianceDensityWattsPerSquareMeterPerNanometer": 1.17087,
+			"rayleighScatteringPerMeter": 0.000002775869058856192,
+			"mieExtinctionPerMeter": 0.00004053865501413159,
+			"groundAlbedo": 0.5795999999999999
+		},
+		{
+			"centerNanometers": 794.75,
+			"sourceIrradianceDensityWattsPerSquareMeterPerNanometer": 1.1344,
+			"rayleighScatteringPerMeter": 0.0000026139599528039976,
+			"mieExtinctionPerMeter": 0.000040058466149403123,
+			"groundAlbedo": 0.58385
+		},
+		{
+			"centerNanometers": 806.5,
+			"sourceIrradianceDensityWattsPerSquareMeterPerNanometer": 1.11012,
+			"rayleighScatteringPerMeter": 0.000002482053324541921,
+			"mieExtinctionPerMeter": 0.00003959088846243923,
+			"groundAlbedo": 0.587
+		},
+		{
+			"centerNanometers": 818.25,
+			"sourceIrradianceDensityWattsPerSquareMeterPerNanometer": 1.07147,
+			"rayleighScatteringPerMeter": 0.0000023687738270405328,
+			"mieExtinctionPerMeter": 0.00003913541415004526,
+			"groundAlbedo": 0.587
+		}
+	],
+	"scenes": [
+		{
+			"time": "09:30",
+			"zenithDegrees": 48.93794688168912,
+			"fittedAzimuthDegrees": 91.14246195784821,
+			"id": "b1-0930",
+			"cacheIdentity": "b1-0930-point-local-direct40-w27-n4-v1",
+			"observerSolarZenithDegrees": 48.93794688168912,
+			"support": {
+				"bottomRadiusMeters": 6360000,
+				"topRadiusMeters": 6420000,
+				"observer": {
+					"heightMeters": 0
+				}
+			}
+		},
+		{
+			"time": "09:45",
+			"zenithDegrees": 46.208826302122404,
+			"fittedAzimuthDegrees": 93.89430417529859,
+			"id": "b1-0945",
+			"cacheIdentity": "b1-0945-point-local-direct40-w27-n4-v1",
+			"observerSolarZenithDegrees": 46.208826302122404,
+			"support": {
+				"bottomRadiusMeters": 6360000,
+				"topRadiusMeters": 6420000,
+				"observer": {
+					"heightMeters": 0
+				}
+			}
+		},
+		{
+			"time": "10:00",
+			"zenithDegrees": 43.5080686512456,
+			"fittedAzimuthDegrees": 96.23317650653027,
+			"id": "b1-1000",
+			"cacheIdentity": "b1-1000-point-local-direct40-w27-n4-v1",
+			"observerSolarZenithDegrees": 43.5080686512456,
+			"support": {
+				"bottomRadiusMeters": 6360000,
+				"topRadiusMeters": 6420000,
+				"observer": {
+					"heightMeters": 0
+				}
+			}
+		},
+		{
+			"time": "10:15",
+			"zenithDegrees": 40.84600718432722,
+			"fittedAzimuthDegrees": 98.59994923191232,
+			"id": "b1-1015",
+			"cacheIdentity": "b1-1015-point-local-direct40-w27-n4-v1",
+			"observerSolarZenithDegrees": 40.84600718432722,
+			"support": {
+				"bottomRadiusMeters": 6360000,
+				"topRadiusMeters": 6420000,
+				"observer": {
+					"heightMeters": 0
+				}
+			}
+		},
+		{
+			"time": "10:30",
+			"zenithDegrees": 38.23521556629407,
+			"fittedAzimuthDegrees": 100.64372859730334,
+			"id": "b1-1030",
+			"cacheIdentity": "b1-1030-point-local-direct40-w27-n4-v1",
+			"observerSolarZenithDegrees": 38.23521556629407,
+			"support": {
+				"bottomRadiusMeters": 6360000,
+				"topRadiusMeters": 6420000,
+				"observer": {
+					"heightMeters": 0
+				}
+			}
+		},
+		{
+			"time": "10:45",
+			"zenithDegrees": 35.691221383967786,
+			"fittedAzimuthDegrees": 104.8234287657915,
+			"id": "b1-1045",
+			"cacheIdentity": "b1-1045-point-local-direct40-w27-n4-v1",
+			"observerSolarZenithDegrees": 35.691221383967786,
+			"support": {
+				"bottomRadiusMeters": 6360000,
+				"topRadiusMeters": 6420000,
+				"observer": {
+					"heightMeters": 0
+				}
+			}
+		},
+		{
+			"time": "11:00",
+			"zenithDegrees": 33.23342195045843,
+			"fittedAzimuthDegrees": 108.20914751464628,
+			"id": "b1-1100",
+			"cacheIdentity": "b1-1100-point-local-direct40-w27-n4-v1",
+			"observerSolarZenithDegrees": 33.23342195045843,
+			"support": {
+				"bottomRadiusMeters": 6360000,
+				"topRadiusMeters": 6420000,
+				"observer": {
+					"heightMeters": 0
+				}
+			}
+		},
+		{
+			"time": "11:15",
+			"zenithDegrees": 30.886221441278117,
+			"fittedAzimuthDegrees": 111.68270889819306,
+			"id": "b1-1115",
+			"cacheIdentity": "b1-1115-point-local-direct40-w27-n4-v1",
+			"observerSolarZenithDegrees": 30.886221441278117,
+			"support": {
+				"bottomRadiusMeters": 6360000,
+				"topRadiusMeters": 6420000,
+				"observer": {
+					"heightMeters": 0
+				}
+			}
+		},
+		{
+			"time": "11:30",
+			"zenithDegrees": 28.6803513716398,
+			"fittedAzimuthDegrees": 116.93611340645329,
+			"id": "b1-1130",
+			"cacheIdentity": "b1-1130-point-local-direct40-w27-n4-v1",
+			"observerSolarZenithDegrees": 28.6803513716398,
+			"support": {
+				"bottomRadiusMeters": 6360000,
+				"topRadiusMeters": 6420000,
+				"observer": {
+					"heightMeters": 0
+				}
+			}
+		},
+		{
+			"time": "11:45",
+			"zenithDegrees": 26.65419890757803,
+			"fittedAzimuthDegrees": 122.26567982930705,
+			"id": "b1-1145",
+			"cacheIdentity": "b1-1145-point-local-direct40-w27-n4-v1",
+			"observerSolarZenithDegrees": 26.65419890757803,
+			"support": {
+				"bottomRadiusMeters": 6360000,
+				"topRadiusMeters": 6420000,
+				"observer": {
+					"heightMeters": 0
+				}
+			}
+		},
+		{
+			"time": "12:00",
+			"zenithDegrees": 24.85469403287468,
+			"fittedAzimuthDegrees": 130.75858093979636,
+			"id": "b1-1200",
+			"cacheIdentity": "b1-1200-point-local-direct40-w27-n4-v1",
+			"observerSolarZenithDegrees": 24.85469403287468,
+			"support": {
+				"bottomRadiusMeters": 6360000,
+				"topRadiusMeters": 6420000,
+				"observer": {
+					"heightMeters": 0
+				}
+			}
+		},
+		{
+			"time": "12:15",
+			"zenithDegrees": 23.336871257149493,
+			"fittedAzimuthDegrees": 134.8682819681534,
+			"id": "b1-1215",
+			"cacheIdentity": "b1-1215-point-local-direct40-w27-n4-v1",
+			"observerSolarZenithDegrees": 23.336871257149493,
+			"support": {
+				"bottomRadiusMeters": 6360000,
+				"topRadiusMeters": 6420000,
+				"observer": {
+					"heightMeters": 0
+				}
+			}
+		},
+		{
+			"time": "12:30",
+			"zenithDegrees": 22.160769064673403,
+			"fittedAzimuthDegrees": 143.97853686677962,
+			"id": "b1-1230",
+			"cacheIdentity": "b1-1230-point-local-direct40-w27-n4-v1",
+			"observerSolarZenithDegrees": 22.160769064673403,
+			"support": {
+				"bottomRadiusMeters": 6360000,
+				"topRadiusMeters": 6420000,
+				"observer": {
+					"heightMeters": 0
+				}
+			}
+		},
+		{
+			"time": "12:45",
+			"zenithDegrees": 21.384402520503635,
+			"fittedAzimuthDegrees": 153.76505878947935,
+			"id": "b1-1245",
+			"cacheIdentity": "b1-1245-point-local-direct40-w27-n4-v1",
+			"observerSolarZenithDegrees": 21.384402520503635,
+			"support": {
+				"bottomRadiusMeters": 6360000,
+				"topRadiusMeters": 6420000,
+				"observer": {
+					"heightMeters": 0
+				}
+			}
+		},
+		{
+			"time": "13:00",
+			"zenithDegrees": 21.05302520512781,
+			"fittedAzimuthDegrees": 162.57770113145415,
+			"id": "b1-1300",
+			"cacheIdentity": "b1-1300-point-local-direct40-w27-n4-v1",
+			"observerSolarZenithDegrees": 21.05302520512781,
+			"support": {
+				"bottomRadiusMeters": 6360000,
+				"topRadiusMeters": 6420000,
+				"observer": {
+					"heightMeters": 0
+				}
+			}
+		},
+		{
+			"time": "13:15",
+			"zenithDegrees": 21.187917283518857,
+			"fittedAzimuthDegrees": 174.2693750288133,
+			"id": "b1-1315",
+			"cacheIdentity": "b1-1315-point-local-direct40-w27-n4-v1",
+			"observerSolarZenithDegrees": 21.187917283518857,
+			"support": {
+				"bottomRadiusMeters": 6360000,
+				"topRadiusMeters": 6420000,
+				"observer": {
+					"heightMeters": 0
+				}
+			}
+		},
+		{
+			"time": "13:30",
+			"zenithDegrees": 21.78023114746797,
+			"fittedAzimuthDegrees": 179.87345331399575,
+			"id": "b1-1330",
+			"cacheIdentity": "b1-1330-point-local-direct40-w27-n4-v1",
+			"observerSolarZenithDegrees": 21.78023114746797,
+			"support": {
+				"bottomRadiusMeters": 6360000,
+				"topRadiusMeters": 6420000,
+				"observer": {
+					"heightMeters": 0
+				}
+			}
+		}
+	]
+}

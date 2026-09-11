@@ -2,8 +2,8 @@
 	"schemaVersion": 1,
 	"status": "normalized",
 	"manifest": "agents/topics/standards/manifest.md",
-	"normalizedAt": "2026-09-10T22:08:38.127Z",
-	"repositoryStandardsFingerprint": "sha256:20d422bf089b4c0f1fa0b46ed6ab3ee26d1042041d9c6bee2a5cf06e86c64f57",
+	"normalizedAt": "2026-09-11T00:23:40.180Z",
+	"repositoryStandardsFingerprint": "sha256:c2deb9aab8f7a0c595f376b7b5934ad1e5fffca5670ce260ed3343c81b55e8f9",
 	"pendingDivergences": 0,
 	"deferredDivergences": 0,
 	"inputs": [
@@ -13,7 +13,7 @@
 		},
 		{
 			"path": "agents/topics/standards/manifest.md",
-			"sha256": "46ac705174b0034c61caef9d54502ed9f2534c4615abe3f6609c9fa782aef420"
+			"sha256": "b89b9df0d3abf64a448ef5ad1e9bf37515e5c2be4dc8f4d6b62748f1f39b4bec"
 		},
 		{
 			"path": "agents/topics/standards/overlay.md",
@@ -38,6 +38,10 @@
 		{
 			"path": "experiments/gpu-resident-shared-block-cache/AGENTS.md",
 			"sha256": "a49c22da8a23c5eaafa005102a31581b48a43d62b132e42d77480dd35afd7942"
+		},
+		{
+			"path": "experiments/point-local-cache-builder/AGENTS.md",
+			"sha256": "0b64eed05574bbf35cc2caf01f7de2de4036a1839f936cdcf8bd582004acee3f"
 		},
 		{
 			"path": "tmp/flat32-pinned-ea262115/AGENTS.md",

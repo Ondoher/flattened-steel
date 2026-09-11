@@ -2,10 +2,11 @@
 
 Focus: Measured alternatives and retained or rejected mechanisms.
 
-Closed experimental lanes remain closed. The selected calculation-reuse study has its own entry below. For other retained proposals, start with closed-lanes-and-candidates.md; each needs a selected study and evidence boundary before execution.
+Closed experimental lanes remain closed. The selected point-local builder study has its own entry below. For other retained proposals, start with closed-lanes-and-candidates.md; each needs a selected study and evidence boundary before execution.
 
 ## Working Documents
 
+- [Point-Local Cache Builder Experiment](point-local-cache-builder/README.md)
 - [Shared Cache Calculation Reuse Experiment](00000-shared-cache-calculation-reuse/README.md)
 - [Algorithm32 Cache Interface Design](cache-design.md)
 - [Closed Lanes And Unselected Studies](closed-lanes-and-candidates.md)

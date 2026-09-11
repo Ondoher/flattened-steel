@@ -1,0 +1,24 @@
+{
+	"compilerOptions": {
+		"resolveJsonModule": true,
+		"allowJs": true,
+		"checkJs": true,
+		"maxNodeModuleJsDepth": 0,
+		"module": "NodeNext",
+		"moduleResolution": "NodeNext",
+		"target": "ES2022",
+		"noEmit": true,
+		"skipLibCheck": true,
+		"strict": false,
+		"types": ["node"],
+		"typeRoots": ["../../node_modules/@types"]
+	},
+	"include": [
+		"*.js",
+		"types.d.ts",
+		"../../scripts/algorithm32/solar-zenith-cache/types.d.ts",
+		"../../src/algorithm32/**/*.d.ts",
+		"../00000-shared-cache-calculation-reuse/types.d.ts"
+	],
+	"exclude": ["../../node_modules/**", "../../src/algorithm32/**/node_modules/**", "browser.js"]
+}
