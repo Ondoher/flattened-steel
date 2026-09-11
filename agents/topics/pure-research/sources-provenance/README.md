@@ -8,7 +8,6 @@ The canonical bibliography, working facts, official-experiment register, source 
 
 - [Camera Spectral-Color Prior-Art Research](camera-spectral-color-prior-art-research.md)
 - [Production Color Reset Design](color-reset-design.md)
-- [Production Color Reset Implementation Plan](color-reset-implementation-plan.md)
 - [Color Reset Production Promotion Manifest](color-reset-promotion-manifest.md)
 - [Extraterrestrial Experiment Promotions](extraterrestrial-promotions.md)
 - [Extraterrestrial Fact Accounting](fact-accounting.md)

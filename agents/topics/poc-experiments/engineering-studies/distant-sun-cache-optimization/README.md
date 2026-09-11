@@ -16,7 +16,7 @@ cache storage and generation time without changing accepted runtime results.
 - [Status](status.md)
 - [D0 decision](decision.md)
 - [Production design](../../../production-algorithm32/caches/distant-sun-cache-optimization-design.md)
-- [Production implementation plan](../../../production-algorithm32/caches/distant-sun-cache-optimization-plan.md)
+- [Production implementation plan](../../../../../archives/topics/production-algorithm32-release-20260911/agents/topics/production-algorithm32/caches/distant-sun-cache-optimization-plan.md)
 
 ## Repository Surfaces
 

@@ -2,7 +2,10 @@
 
 Focus: Complete execution configurations and their propagation.
 
-Step 3.12 propagation is closed. Start with stage-13-status.md for its remaining CPU-reporting, fallback-audit, and fixture follow-ups; do not repeat completed propagation from the historical plan.
+Step 3.12 propagation and the production Bruneton compatibility item are
+closed. The CPU-reporting, fallback-audit, and fixture follow-ups recorded in
+[stage-13-status.md](stage-13-status.md) are deferred under Production MVP
+requirement M2; do not repeat completed propagation from the historical plan.
 
 ## Working Documents
 

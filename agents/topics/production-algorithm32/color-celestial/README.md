@@ -7,7 +7,6 @@ Color Reset, brightest-2,000, ordered human filters, atomic receiver light, and 
 ## Working Documents
 
 - [Production Color Reset Design](color-reset-design.md)
-- [Production Color Reset Implementation Plan](color-reset-implementation-plan.md)
 - [Color Reset Production Promotion Manifest](color-reset-promotion-manifest.md)
 - [Algorithm32 Current Dataflow](current-dataflow.md)
 - [Extraterrestrial Source Interface Contract](interface-contract.md)

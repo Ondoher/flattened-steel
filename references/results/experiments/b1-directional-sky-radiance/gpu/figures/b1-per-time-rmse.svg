@@ -2,7 +2,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="710" viewBox="0 0 1200 710" role="img" aria-labelledby="title description">
 <title id="title">B1 Algorithm32 profile directional spectral-radiance error over time</title>
 <desc id="description">Selected order-4 Algorithm32 per-time RMSE against Kider directional spectral radiance, shown with published Figure 5 values and optional local model cross-checks.</desc>
-<metadata id="provenance">{&quot;generator&quot;:&quot;scripts/experiments/generate-benchmark-figures.js&quot;,&quot;observable&quot;:&quot;B1 per-time spectral-radiance RMSE&quot;,&quot;status&quot;:&quot;Algorithm32 is the selected J4 result and is shown on all 17 conditions; published Figure 5 values remain the primary external model reference&quot;,&quot;profileFamily&quot;:&quot;paper&quot;,&quot;candidateLabel&quot;:&quot;Algorithm32&quot;,&quot;selectedMaximumScatteringOrder&quot;:4,&quot;measurements&quot;:{&quot;path&quot;:&quot;references/results/experiments/b1-directional-sky-radiance/measurement-boundary.tsv&quot;,&quot;sha256&quot;:&quot;a751d56dc0d8deb87958cbc9e811204a38f2b86101c732109c3503dfcfedad74&quot;},&quot;publishedModels&quot;:{&quot;path&quot;:&quot;references/results/experiments/b1-directional-sky-radiance/published-models.tsv&quot;,&quot;sha256&quot;:&quot;4e11e9ebc6c8cf2eb85e608d86a750b827a17d13582f4b89f035b71824b204f4&quot;},&quot;algorithm32Boundary&quot;:{&quot;path&quot;:&quot;references/results/experiments/b1-directional-sky-radiance/gpu/algorithm32-current-production-gpu-j4.tsv&quot;,&quot;sha256&quot;:&quot;d366ba11a0697aa471f8a822da9ccc9964a67bfcfb18cad0764de62a33583a7f&quot;,&quot;provenance&quot;:{&quot;path&quot;:&quot;references/results/experiments/b1-directional-sky-radiance/gpu/algorithm32-current-production-gpu-default-provenance.json&quot;,&quot;sha256&quot;:&quot;a88771c686a3067e07cecadab26a67d4e8659d9a076b056ae1ecc1e91a8770ac&quot;,&quot;label&quot;:&quot;Algorithm32 Paper&quot;,&quot;identity&quot;:&quot;Algorithm32 Paper&quot;,&quot;controls&quot;:{&quot;pathIntervalCount&quot;:40,&quot;sourceTransmittanceIntervalCount&quot;:20,&quot;incidentDirectionCount&quot;:68,&quot;incidentAltitudeBinCount&quot;:48},&quot;runId&quot;:&quot;current-production-b1-gpu-shaders-20260813T022114257Z&quot;},&quot;identity&quot;:&quot;Algorithm32 Paper; direct 40-coordinate point-sample transport; no native-15 projection&quot;}}</metadata>
+<metadata id="provenance">{&quot;generator&quot;:&quot;scripts/experiments/generate-benchmark-figures.js&quot;,&quot;observable&quot;:&quot;B1 per-time spectral-radiance RMSE&quot;,&quot;status&quot;:&quot;Algorithm32 is the selected J4 result and is shown on all 17 conditions; published Figure 5 values remain the primary external model reference&quot;,&quot;profileFamily&quot;:&quot;paper&quot;,&quot;candidateLabel&quot;:&quot;Algorithm32&quot;,&quot;selectedMaximumScatteringOrder&quot;:4,&quot;measurements&quot;:{&quot;path&quot;:&quot;references/results/experiments/b1-directional-sky-radiance/measurement-boundary.tsv&quot;,&quot;sha256&quot;:&quot;a751d56dc0d8deb87958cbc9e811204a38f2b86101c732109c3503dfcfedad74&quot;},&quot;publishedModels&quot;:{&quot;path&quot;:&quot;references/results/experiments/b1-directional-sky-radiance/published-models.tsv&quot;,&quot;sha256&quot;:&quot;4e11e9ebc6c8cf2eb85e608d86a750b827a17d13582f4b89f035b71824b204f4&quot;},&quot;algorithm32Boundary&quot;:{&quot;path&quot;:&quot;references/results/experiments/b1-directional-sky-radiance/gpu/algorithm32-paper-proposed.tsv&quot;,&quot;sha256&quot;:&quot;20a8fdca9ab86d7dded9c832b1b3fb1ead18a0947a1951850008489ff1cd7010&quot;,&quot;provenance&quot;:{&quot;path&quot;:&quot;references/results/experiments/b1-directional-sky-radiance/gpu/algorithm32-paper-boundary-provenance.json&quot;,&quot;sha256&quot;:&quot;95ed76c97e141cc5b1f5f0566db39f09b7fca6141f066f510cfeea1ab6e5489a&quot;,&quot;label&quot;:&quot;Algorithm32 Paper&quot;,&quot;identity&quot;:&quot;Algorithm32 Paper&quot;,&quot;controls&quot;:{&quot;pathIntervalCount&quot;:30,&quot;sourceTransmittanceIntervalCount&quot;:20,&quot;incidentDirectionCount&quot;:68,&quot;incidentAltitudeBinCount&quot;:48,&quot;pathSampleDistribution&quot;:&quot;quadratic-near-observer-v1&quot;},&quot;runId&quot;:&quot;current-production-b1-gpu-shaders-20260911T182339616Z&quot;},&quot;identity&quot;:&quot;Algorithm32 Paper; direct 40-coordinate point-sample transport; no native-15 projection&quot;},&quot;figureColorControl&quot;:{&quot;schemaId&quot;:&quot;algorithm32-b1-figure-color-control-v1&quot;,&quot;selectionId&quot;:&quot;basic-bruneton&quot;,&quot;implementationId&quot;:&quot;bruneton-figure1-display&quot;,&quot;role&quot;:&quot;six-b1-visual-comparison-figures-only&quot;,&quot;artifactCount&quot;:6,&quot;participatesInPhysicalScoring&quot;:false}}</metadata>
 <style>
 text{font-family:Arial,Helvetica,sans-serif;fill:#202124}
 .title{font-size:24px;font-weight:700}
@@ -214,24 +214,24 @@ text{font-family:Arial,Helvetica,sans-serif;fill:#202124}
 <circle cx="809.5" cy="537.847" r="2.2" fill="#222222" stroke="#222222" stroke-width="1.5" opacity="0.52"/>
 <circle cx="860.75" cy="536.15" r="2.2" fill="#222222" stroke="#222222" stroke-width="1.5" opacity="0.52"/>
 <circle cx="912" cy="531.843" r="2.2" fill="#222222" stroke="#222222" stroke-width="1.5" opacity="0.52"/>
-<path d="M92,527.666 L143.25,534.818 L194.5,536.111 L245.75,539.482 L297,544.816 L348.25,543.289 L399.5,532.551 L450.75,534.881 L502,542.338 L553.25,541.559 L604.5,540.48 L655.75,516.313 L707,503.127 L758.25,530.86 L809.5,535.142 L860.75,533.813 L912,530.059" fill="none" stroke="#b00020" stroke-width="2" opacity="1"/>
-<circle cx="92" cy="527.666" r="2.2" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
-<circle cx="143.25" cy="534.818" r="2.2" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
-<circle cx="194.5" cy="536.111" r="2.2" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
-<circle cx="245.75" cy="539.482" r="2.2" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
-<circle cx="297" cy="544.816" r="2.2" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
-<circle cx="348.25" cy="543.289" r="2.2" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
-<circle cx="399.5" cy="532.551" r="2.2" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
-<circle cx="450.75" cy="534.881" r="2.2" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
-<circle cx="502" cy="542.338" r="2.2" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
-<circle cx="553.25" cy="541.559" r="2.2" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
-<circle cx="604.5" cy="540.48" r="2.2" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
-<circle cx="655.75" cy="516.313" r="2.2" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
-<circle cx="707" cy="503.127" r="2.2" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
-<circle cx="758.25" cy="530.86" r="2.2" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
-<circle cx="809.5" cy="535.142" r="2.2" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
-<circle cx="860.75" cy="533.813" r="2.2" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
-<circle cx="912" cy="530.059" r="2.2" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
+<path d="M92,526 L143.25,537.986 L194.5,540.431 L245.75,545.239 L297,549.084 L348.25,544.084 L399.5,530.231 L450.75,537.396 L502,546.322 L553.25,546.944 L604.5,543.578 L655.75,514.47 L707,500.689 L758.25,530.17 L809.5,537.632 L860.75,535.225 L912,530.889" fill="none" stroke="#b00020" stroke-width="2" opacity="1"/>
+<circle cx="92" cy="526" r="2.2" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
+<circle cx="143.25" cy="537.986" r="2.2" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
+<circle cx="194.5" cy="540.431" r="2.2" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
+<circle cx="245.75" cy="545.239" r="2.2" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
+<circle cx="297" cy="549.084" r="2.2" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
+<circle cx="348.25" cy="544.084" r="2.2" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
+<circle cx="399.5" cy="530.231" r="2.2" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
+<circle cx="450.75" cy="537.396" r="2.2" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
+<circle cx="502" cy="546.322" r="2.2" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
+<circle cx="553.25" cy="546.944" r="2.2" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
+<circle cx="604.5" cy="543.578" r="2.2" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
+<circle cx="655.75" cy="514.47" r="2.2" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
+<circle cx="707" cy="500.689" r="2.2" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
+<circle cx="758.25" cy="530.17" r="2.2" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
+<circle cx="809.5" cy="537.632" r="2.2" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
+<circle cx="860.75" cy="535.225" r="2.2" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
+<circle cx="912" cy="530.889" r="2.2" fill="#b00020" stroke="#b00020" stroke-width="1.5" opacity="1"/>
 <path d="M245.75,465.91 L251.75,471.91 L245.75,477.91 L239.75,471.91 Z" fill="#ffffff" stroke="#0072b2" stroke-width="2.5"/>
 <path d="M450.75,456.04 L456.75,462.04 L450.75,468.04 L444.75,462.04 Z" fill="#ffffff" stroke="#0072b2" stroke-width="2.5"/>
 <path d="M860.75,450.4 L866.75,456.4 L860.75,462.4 L854.75,456.4 Z" fill="#ffffff" stroke="#0072b2" stroke-width="2.5"/>

@@ -19,9 +19,14 @@ P6 shader and stable live-runtime integration are implemented and
 [checked at the shader and publication boundaries](shared-runtime-verification.md).
 [P7 combined qualification](shared-runtime-qualification.md) is accepted for
 bounded discrete time selection on the declared target;
-[P8 publication, rollback observation, acceptance, and bridge removal](shared-runtime-rollout.md)
+[P8 publication, rollback observation, acceptance, and bridge removal](../../../../archives/topics/production-algorithm32-release-20260911/agents/topics/production-algorithm32/caches/shared-runtime-rollout.md)
 are complete. Historical POC, P0-P10, and PA0-PA7
 execution remains archived and is not reopened.
+
+The [point-local compiler promotion](../../../../archives/topics/production-algorithm32-release-20260911/agents/topics/production-algorithm32/caches/point-local-compiler-promotion-plan.md) is
+also closed. Production now has one generalized compiler, exact Native15 cache
+payload compatibility, authenticated Direct40 reconstruction, and an official
+Q30 Bruneton B1 reproduction through current production GPU transport.
 
 ## Working Documents
 
@@ -29,8 +34,6 @@ execution remains archived and is not reopened.
 - [Algorithm32 Cache Interface Design](cache-design.md)
 - [Algorithm32 Current Dataflow](current-dataflow.md)
 - [Distant-Sun Cache Optimization Design](distant-sun-cache-optimization-design.md)
-- [Distant-Sun Cache Optimization Implementation Plan](distant-sun-cache-optimization-plan.md)
-- [Point-Local Compiler Promotion Plan](point-local-compiler-promotion-plan.md)
 - [Flat Geometry And Local-Source Extension Contract](extension-contract.md)
 - [Flat/Local GPU Transport Offload Plan](gpu-transport-offload-plan.md)
 - [Selected Outgoing Reconstruction](outgoing-reconstruction.md)

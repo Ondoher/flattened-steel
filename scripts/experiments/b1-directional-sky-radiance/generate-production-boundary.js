@@ -1,19 +1,24 @@
 import {createHash} from 'node:crypto';
 import {copyFileSync, mkdirSync, mkdtempSync, readdirSync, rmSync, writeFileSync} from 'node:fs';
-import {join, resolve} from 'node:path';
-import {pathToFileURL} from 'node:url';
+import {dirname, join, relative, resolve} from 'node:path';
+import {fileURLToPath, pathToFileURL} from 'node:url';
+import DistantSunSharedCacheGenerationFiles from '../../algorithm32/solar-zenith-cache/DistantSunSharedCacheGenerationFiles.js';
 
 import {Algorithm32} from '../../../src/algorithm32/implementation/algorithm32/Algorithm32.js';
 import {SharedModel} from '../../../src/algorithm32/implementation/algorithm32/model/SharedModel.js';
 import {DistantSunCpuCache} from '../../../src/algorithm32/implementation/distant-sun/cache/DistantSunCpuCache.js';
 import {B1_PHYSICAL_MEASUREMENT_BOUNDARY} from '../../algorithm32/production-b-experiments/B1MeasurementBoundary.js';
 import {makeCube} from '../b3-matched-atmosphere-solver/cube.js';
-import {CAPTURE_TIMES, loadKiderDataset} from './benchmark.js';
+import {CAPTURE_TIMES, loadKiderDataset, EXPECTED_DATASET_FINGERPRINTS} from './benchmark.js';
+import B1ReferenceInputs from './B1ReferenceInputs.js';
 import {createBrunetonProductionProfile, createViewDirection} from './production-profile.js';
 import {ProductionGpuHost} from './ProductionGpuHost.js';
 import {ProductionRun} from './ProductionRun.js';
 import {publishProductionB1Result} from './publish-production-result.js';
 import {resolveProductionResultRoot} from '../production-result-paths.js';
+import B1PointLocalCacheAssets, {
+	B1_POINT_LOCAL_COMPILER_IDENTITY,
+} from '../../algorithm32/production-b-experiments/B1PointLocalCacheAssets.js';
 
 const INCOMING_VARIANT_METADATA = Object.freeze({
 	'production-68': Object.freeze({profileFamily: 'paper', profileSuffix: '', presentationSuffix: ''}),
@@ -62,6 +67,7 @@ const INCOMING_VARIANT_METADATA = Object.freeze({
 	}),
 });
 const CPU_REFERENCE_COMPILER_IDENTITY = 'algorithm32-b1-cpu-reference-binary64-v1';
+const REPOSITORY_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../../..');
 
 function parseList(value, label) {
 	if (!value) throw new Error(`${label} requires a comma-separated value.`);
@@ -73,7 +79,7 @@ function parseList(value, label) {
 
 export function parseArguments(argv) {
 	const options = {
-		backend: 'cpu',
+		backend: 'gpu',
 		orders: [...ProductionRun.REQUIRED_ORDERS],
 		conditions: [...CAPTURE_TIMES],
 		incomingDirectionVariant: 'production-68',
@@ -155,7 +161,8 @@ export function parseArguments(argv) {
  */
 function allocateRunDirectory(outputRoot, backend, requestedStagingRoot) {
 	mkdirSync(outputRoot, {recursive: true});
-	const stagingRoot = requestedStagingRoot ?? resolve('tmp/algorithm32-bruneton-paper/b1-production-staging');
+	const stagingRoot =
+		requestedStagingRoot ?? resolve(REPOSITORY_ROOT, 'tmp/algorithm32-bruneton-paper/b1-production-staging');
 	mkdirSync(stagingRoot, {recursive: true});
 	const runId = `current-production-b1-${backend === 'gpu' ? 'gpu-shaders' : 'cpu-reference'}-${new Date()
 		.toISOString()
@@ -212,7 +219,7 @@ function tableHeader() {
 }
 
 export async function runGeneration(options = {}) {
-	const backend = options.backend ?? 'cpu';
+	const backend = options.backend ?? 'gpu';
 	if (!['cpu', 'gpu'].includes(backend)) throw new RangeError('Generation backend must be cpu or gpu.');
 	const orders = options.orders ?? ProductionRun.REQUIRED_ORDERS;
 	const requestedTimes = options.conditions ?? CAPTURE_TIMES;
@@ -232,6 +239,10 @@ export async function runGeneration(options = {}) {
 		throw new Error('A bounded or experimental production generation requires an explicit --output-root.');
 	}
 	const dataset = loadKiderDataset();
+	for (const [key, expected] of Object.entries(EXPECTED_DATASET_FINGERPRINTS))
+		if (dataset[key] !== expected)
+			throw new Error(`Official B1 measurement ${key} differs from the pinned baseline.`);
+	const referenceInputs = {bundle: B1ReferenceInputs.identity(), ...EXPECTED_DATASET_FINGERPRINTS};
 	const conditions = requestedTimes.map((time) => dataset.conditions.find((condition) => condition.time === time));
 	const profiles = conditions.flatMap((condition) =>
 		orders.map((order) =>
@@ -256,16 +267,41 @@ export async function runGeneration(options = {}) {
 			profiles: profiles.map((profile) => ({id: profile.id, contentHash: profile.contentHash})),
 		};
 	}
-	if (backend === 'gpu' && (!options.assetSetDirectory || !options.productionRevision)) {
-		throw new Error('Production GPU generation requires --asset-set and --production-revision.');
+	const runtimeSourceIdentity = backend === 'gpu' ? await B1PointLocalCacheAssets.sourceIdentity() : null;
+	if (backend === 'gpu' && !options.assetSetDirectory) {
+		if (!completeCanonicalSelection)
+			throw new Error('Automatic production cache generation requires the canonical B1 selection.');
+		const compiled = await B1PointLocalCacheAssets.compileSet({
+			conditions: conditions.map((condition) => ({
+				id: `b1-${condition.time}`,
+				localTime: condition.time,
+				fittedAzimuthDegrees: condition.sun.fittedAzimuthDegrees,
+			})),
+			sourceIdentity: runtimeSourceIdentity,
+			referenceInputs,
+			onProgress: (progress) => process.stderr.write(`[B1 compiler] ${JSON.stringify(progress)}\n`),
+		});
+		options = {
+			...options,
+			assetSetDirectory: compiled.outputDirectory,
+			productionRevision: compiled.productionRevision,
+		};
 	}
+	if (backend === 'gpu' && !options.productionRevision)
+		throw new Error('Reusing an asset set requires its --production-revision identity.');
 
-	const {runId, runDirectory, outputDirectory} = allocateRunDirectory(outputRoot, backend, options.stagingRoot);
+	const outputFiles = new DistantSunSharedCacheGenerationFiles(REPOSITORY_ROOT);
+	const stagingRoot =
+		options.stagingRoot ?? resolve(REPOSITORY_ROOT, 'tmp/algorithm32-bruneton-paper/b1-production-staging');
+	for (const directory of [outputRoot, stagingRoot])
+		await outputFiles.directory(relative(REPOSITORY_ROOT, directory).replaceAll('\\', '/'));
+	const {runId, runDirectory, outputDirectory} = allocateRunDirectory(outputRoot, backend, stagingRoot);
 	const startedAt = new Date().toISOString();
 	const outputs = [];
 	const gpuProgressLogPath =
 		backend === 'gpu'
-			? (options.progressLogPath ?? resolve('tmp/algorithm32-bruneton-paper/b1-production-gpu-progress.log'))
+			? (options.progressLogPath ??
+				resolve(REPOSITORY_ROOT, 'tmp/algorithm32-bruneton-paper/b1-production-gpu-progress.log'))
 			: null;
 	const gpuHost =
 		backend === 'gpu'
@@ -283,6 +319,7 @@ export async function runGeneration(options = {}) {
 		await gpuHost?.open();
 		gpuAssetInputs = gpuHost?.assetSetProvenance ?? null;
 		for (const order of orders) {
+			let viewPath;
 			const lines = [tableHeader()];
 			const profileRecords = [];
 			const cubeValues = [];
@@ -294,6 +331,7 @@ export async function runGeneration(options = {}) {
 					maximumScatteringOrder: order,
 					incomingDirectionVariant,
 				});
+				viewPath = profile.numerical.viewPath;
 				process.stderr.write(`[B1 ${condition.time} J${order} ${backend}] constructing production cache\n`);
 				let algorithm = null;
 				let cache = null;
@@ -386,6 +424,12 @@ export async function runGeneration(options = {}) {
 						? 'production GPU cache construction and production final-view transport shader with native spectral readout'
 						: 'production binary64 CPU cache construction and reference final-view evaluation',
 				gpuCapabilities: backend === 'gpu' ? gpuCapabilities : null,
+				runtimeSourceIdentity,
+				referenceInputs,
+				cacheRepresentation:
+					gpuAssetInputs?.compilerIdentity === B1_POINT_LOCAL_COMPILER_IDENTITY
+						? 'receiver-local-native48-z180-w27'
+						: 'source-aligned-native48-w27',
 				gpuConditionDiagnostics: backend === 'gpu' ? gpuConditionDiagnostics : null,
 				modelNameInBenchmarkTables: 'proposed',
 				profileId: `paper-j${order}${variantMetadata.profileSuffix}`,
@@ -404,13 +448,25 @@ export async function runGeneration(options = {}) {
 					projection: 'identity-direct-40',
 				},
 				numericalControls: {
-					pathIntervalCount: 40,
+					pathIntervalCount: viewPath.intervalCount,
+					...(viewPath.sampleDistribution === null
+						? {}
+						: {pathSampleDistribution: viewPath.sampleDistribution.kind}),
 					sourceTransmittanceIntervalCount: 20,
 					incidentDirectionCount: selectedIncomingDirectionDomain.directionCount,
 					incidentAltitudeBinCount: 48,
 					incomingDirectionDomain: selectedIncomingDirectionDomain.id,
-					scatteringOutputDomain: 'source-aligned-boundary-inclusive-gnomonic-cubed-sphere-w27',
+					scatteringOutputDomain:
+						gpuAssetInputs?.compilerIdentity === B1_POINT_LOCAL_COMPILER_IDENTITY
+							? 'receiver-local-boundary-inclusive-gnomonic-cubed-sphere-w27'
+							: 'source-aligned-boundary-inclusive-gnomonic-cubed-sphere-w27',
 					scatteringOutputFaceWidth: 27,
+					...(gpuAssetInputs?.compilerIdentity === B1_POINT_LOCAL_COMPILER_IDENTITY
+						? {
+								outgoingInterpolation: 'shader-bilinear-f32',
+								solarZenithEvaluation: 'range-reduced-atan-series-17',
+							}
+						: {}),
 					scatteringOutputDirectionCount: 4374,
 					positionNodeCount: 48,
 					positionLookup: 'view-only-linear-physical-altitude-over-actual-nodes',
@@ -487,6 +543,8 @@ export async function runGeneration(options = {}) {
 			kind: completeCanonicalSelection ? 'canonical-candidate' : 'bounded-or-diagnostic',
 			publicationEligible: completeCanonicalSelection,
 		},
+		runtimeSourceIdentity,
+		referenceInputs,
 		productionRevision: gpuAssetInputs?.productionRevision ?? null,
 		compilerIdentity: gpuAssetInputs?.compilerIdentity ?? CPU_REFERENCE_COMPILER_IDENTITY,
 		assetSetIdentity: gpuAssetInputs?.assetSetIdentity ?? null,

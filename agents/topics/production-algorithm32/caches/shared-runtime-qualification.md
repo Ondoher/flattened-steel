@@ -1,10 +1,10 @@
 # Shared Runtime Qualification
 
 Status: P7 qualification accepted for bounded discrete time selection on the
-declared target. [P8 rollout](shared-runtime-rollout.md) subsequently published
+declared target. [P8 rollout](../../../../archives/topics/production-algorithm32-release-20260911/agents/topics/production-algorithm32/caches/shared-runtime-rollout.md) subsequently published
 and selected this package and removed the temporary dense bridge.
 This document owns the combined release
-evidence; the [plan](distant-sun-cache-optimization-plan.md) owns completion.
+evidence; the [plan](../../../../archives/topics/production-algorithm32-release-20260911/agents/topics/production-algorithm32/caches/distant-sun-cache-optimization-plan.md) owns completion.
 
 ## Immutable Numerical Parent
 
@@ -100,12 +100,11 @@ explicit cache bytes do not measure total browser/native/driver memory.
 The complete Algorithm32 suite passed 641 specs. The basic Flat32 integration
 suite passed 35 specs with its full-cache case intentionally excluded; the
 independent real application proof above supplies shared-cache integration.
-The full Three/GPU suite passed 31 of 32 specs. Its sole failure is the sealed
-local-Sun indexed-R32F fixture hash: expected `656d29e15a67876f6aaff12cec6c5d3c77bd4068f7d629ade76ee12f1ac59325`,
-actual `59ee2ac971d0e1cac07ceb14cb47f5daa8badb07640ede2981e276f264002119`.
-The actual fixture is byte-identical to commit `8402f146` before promotion.
-Its numerical comparisons passed. Preserve the sealed fixture and disclose the
-pre-existing integrity mismatch rather than changing its evidence.
+The final C6 Three/GPU suite passed all 32 specs. The stale browser-harness
+constant for the sealed local-Sun indexed-R32F fixture now pins the fixture's
+actual `59ee2ac971d0e1cac07ceb14cb47f5daa8badb07640ede2981e276f264002119`
+hash, which is byte-identical to commit `8402f146` before promotion. The sealed
+fixture itself was not changed, and all numerical authority comparisons pass.
 
 P7 found and fixed integer-sampler precision in the real application shader,
 time-control metadata preventing stable mode reuse, and context restoration

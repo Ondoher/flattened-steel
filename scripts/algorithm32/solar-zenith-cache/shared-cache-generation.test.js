@@ -6,11 +6,12 @@ import {fileURLToPath} from 'node:url';
 import {test} from 'node:test';
 import {getEventListeners} from 'node:events';
 import {createConnection} from 'node:net';
+import {spawnSync} from 'node:child_process';
 import DistantSunSharedCacheGenerationCodec from './DistantSunSharedCacheGenerationCodec.js';
 import DistantSunSharedCacheGenerationFiles from './DistantSunSharedCacheGenerationFiles.js';
-import DistantSunSharedCacheGenerationStaging from './DistantSunSharedCacheGenerationStaging.js';
+import DistantSunPointLocalCacheStaging from './DistantSunPointLocalCacheStaging.js';
 import DistantSunSharedCacheGenerator from './DistantSunSharedCacheGenerator.js';
-import DistantSunSharedCacheGenerationHost from './DistantSunSharedCacheGenerationHost.js';
+import DistantSunPointLocalCacheCompilerHost from './DistantSunPointLocalCacheCompilerHost.js';
 import DistantSunSharedCacheGenerationInventory from './DistantSunSharedCacheGenerationInventory.js';
 import {SHARED_GENERATION_RUN_ROOT} from './consts.js';
 
@@ -20,6 +21,10 @@ function fixture() {
 	for (let logical = 0; logical < 4374; logical += 1) directionBytes.writeUInt16LE(logical % 4058, logical * 2);
 	return {
 		directionBytes,
+		logicalDirectionCount: 4374,
+		uniqueDirectionCount: 4058,
+		channelCount: 15,
+		wavelengths: Array.from({length: 15}, (_unused, index) => index),
 		coordinates: [
 			[0, 0],
 			[0, 1],
@@ -60,7 +65,7 @@ test('direct staging rejects gaps and duplicates and preserves wavelength-row-di
 	const repositoryRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
 	const files = new DistantSunSharedCacheGenerationFiles(repositoryRoot);
 	const runRoot = `${SHARED_GENERATION_RUN_ROOT}/fault-proof-${randomUUID()}`;
-	const staging = new DistantSunSharedCacheGenerationStaging(fixture());
+	const staging = new DistantSunPointLocalCacheStaging(fixture());
 	await staging.allocate(files, runRoot);
 	try {
 		assert.throws(() => staging.complete(), /incomplete/u);
@@ -94,14 +99,14 @@ test('seam bit disagreement and invalid spectra cannot complete or publish a blo
 	const files = new DistantSunSharedCacheGenerationFiles(repositoryRoot);
 	for (const fault of ['seam', 'negative', 'nonfinite']) {
 		const runRoot = `${SHARED_GENERATION_RUN_ROOT}/fault-proof-${randomUUID()}`;
-		const staging = new DistantSunSharedCacheGenerationStaging(fixture());
+		const staging = new DistantSunPointLocalCacheStaging(fixture());
 		await staging.allocate(files, runRoot);
 		try {
 			const bytes = tile(0);
 			if (fault === 'seam') bytes.writeUInt32LE(0x80000000, 4058 * 4);
 			if (fault === 'negative') bytes.writeFloatLE(-1, 4);
 			if (fault === 'nonfinite') bytes.writeFloatLE(Number.NaN, 4);
-			await assert.rejects(staging.accept(0, 0, bytes), /seam|invalid spectral/u);
+			await assert.rejects(staging.accept(0, 0, bytes), /seam|nonfinite or negative/u);
 			assert.throws(() => staging.complete(), /incomplete/u);
 		} finally {
 			await staging.close();
@@ -127,6 +132,23 @@ test('filesystem and generator ingress reject traversal and precancelled executi
 		}),
 		/proof cancellation/u,
 	);
+});
+
+test('production command rejects ambiguous explicit inputs before generation', () => {
+	const entry = fileURLToPath(new URL('./generate-shared-cache.js', import.meta.url));
+	for (const argumentsList of [
+		['--input', 'input.json'],
+		['--output', 'tmp/example'],
+		['--unknown', 'value'],
+		['--chrome', 'first', '--chrome', 'second'],
+		['--input', '--output'],
+	]) {
+		const result = spawnSync(process.execPath, [entry, ...argumentsList], {encoding: 'utf8', timeout: 10000});
+		assert.equal(result.error, undefined);
+		assert.equal(result.status, 1);
+		assert.match(result.stderr, /Usage:|requires both --input and --output/u);
+		assert.equal(result.stdout, '');
+	}
 });
 
 test('cancellation during an allocated run leaves a failure record and no published package', async () => {
@@ -162,7 +184,13 @@ for (const scenario of [
 	test(`GPU host ${scenario} rejects and releases its child, server, and abort listener`, async () => {
 		const repositoryRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
 		const files = new DistantSunSharedCacheGenerationFiles(repositoryRoot);
-		const inventory = await new DistantSunSharedCacheGenerationInventory().load(files);
+		const inventory = {
+			...(await new DistantSunSharedCacheGenerationInventory().load(files)),
+			logicalDirectionCount: 4374,
+			uniqueDirectionCount: 4058,
+			channelCount: 15,
+			wavelengths: Array.from({length: 15}, (_unused, index) => index),
+		};
 		const runRoot = `${SHARED_GENERATION_RUN_ROOT}/host-fault-proof-${randomUUID()}`;
 		await files.directory(runRoot);
 		const cancellation = new AbortController();
@@ -176,21 +204,21 @@ for (const scenario of [
 		const browserSource = Buffer.from(`export default class HostProofBrowser { async run() { ${operation} } }`);
 		const hostFiles = Object.create(files);
 		hostFiles.read = async (relativePath, expected, maximumBytes) =>
-			relativePath.endsWith('/DistantSunSharedCacheGeneratorBrowser.js')
+			relativePath.endsWith('/DistantSunPointLocalCacheCompilerBrowser.js')
 				? browserSource
 				: files.read(relativePath, expected, maximumBytes);
 		const expectedFailure =
 			scenario === 'cancel-after-launch'
 				? /host proof cancellation/u
 				: scenario === 'deadline'
-					? /deadline/u
+					? /exceeded/u
 					: scenario === 'browser-exit'
 						? /exited before completion/u
 						: scenario === 'rejected-completion'
 							? /host proof rejection/u
 							: /JSON|Unexpected token/u;
 		await assert.rejects(
-			new DistantSunSharedCacheGenerationHost().run({
+			new DistantSunPointLocalCacheCompilerHost().run({
 				files: hostFiles,
 				runRoot,
 				inventory,

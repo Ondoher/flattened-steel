@@ -14,17 +14,32 @@ export default class DistantSunSceneCache {
 	/** @type {CacheRuntimeBindings} */ _runtimeBindings;
 	/** @type {DistantSunSceneCacheResourceReport} */ _resources;
 	/** @type {boolean} */ _disposed = false;
+	/** Number of explicit spectral channels represented by the atlas. @type {number} */ _spectralChannelCount;
+	/** Explicit shader interpolation preserves weights beyond texture-filter precision. @type {boolean} */ _shaderInterpolation;
 
 	/**
 	 * @param {DistantSunSceneCacheDefinition} definition - Accepted manifest, ledger, and uploaded textures.
 	 */
 	constructor(definition) {
+		const interpolation = definition.directionInterpolation ?? 'texture-bilinear';
+		if (!['texture-bilinear', 'shader-bilinear'].includes(interpolation)) {
+			throw new RangeError('Distant-Sun scene cache direction interpolation is unsupported.');
+		}
+		this._shaderInterpolation = interpolation === 'shader-bilinear';
+		this._spectralChannelCount = definition.spectralChannelCount ?? 15;
+		if (
+			!Number.isInteger(this._spectralChannelCount) ||
+			this._spectralChannelCount < 1 ||
+			this._spectralChannelCount > 64
+		) {
+			throw new RangeError('Distant-Sun scene cache requires between 1 and 64 spectral channels.');
+		}
 		if (definition.ledger.rows.length !== 48) {
 			throw new RangeError('Distant-Sun scene cache requires all 48 Native altitude ledger owners.');
 		}
 		if (
 			definition.cumulativeTexture.storage.format !== 'RGBA32F' ||
-			definition.cumulativeTexture.storage.width !== 648 ||
+			definition.cumulativeTexture.storage.width !== 162 * Math.ceil(this._spectralChannelCount / 4) ||
 			definition.cumulativeTexture.storage.height !== 27 ||
 			definition.cumulativeTexture.storage.layers !== definition.ledger.retainedBlockCount
 		) {
@@ -91,6 +106,57 @@ export default class DistantSunSceneCache {
 		const firstZenith = this._ledger.rows.map((row) => row.firstSolarZenithIndex).join(', ');
 		const lastZenith = this._ledger.rows.map((row) => row.lastSolarZenithIndex).join(', ');
 		const firstPacked = this._ledger.rows.map((row) => row.firstPackedRow).join(', ');
+		const groups = Array.from({length: Math.ceil(this._spectralChannelCount / 4)}, (_unused, index) => index);
+		const atlasWidth = groups.length * 162;
+		const declarations = groups.map((index) => `\tvec4 density${index} = vec4(0.0);`).join('\n');
+		const samples = groups
+			.map((index) =>
+				this._shaderInterpolation
+					? `\t\tdensity${index} += weight * distantSceneBilinear(${index * 162} + int(faceOffset), directionCoordinate.yz, packedRows[rowTap]);`
+					: `\t\tdensity${index} += weight * texture(${SCENE_CACHE_SAMPLER_NAME}, vec3((${index === 0 ? '' : `${index * 162}.0 + `}faceOffset + directionCoordinate.y + 0.5) / ${atlasWidth}.0, atlasY, atlasLayer));`,
+			)
+			.join('\n');
+		const interpolationHelper = this._shaderInterpolation
+			? `// Range-reduced atan series: |r| <= tan(pi/8), remainder <= |r|^19/19.
+// This avoids driver-dependent acos/atan approximation in interpolation coordinates.
+float distantSceneSolarZenith(vec3 up, vec3 source) {
+	float cosine = dot(up, source);
+	float sine = length(cross(up, source));
+	float absoluteCosine = abs(cosine);
+	float ratio = min(sine, absoluteCosine) / max(max(sine, absoluteCosine), 1.0e-20);
+	bool reduced = ratio > 0.414213562373095;
+	float r = reduced ? (ratio - 1.0) / (ratio + 1.0) : ratio;
+	float square = r * r;
+	float polynomial = 1.0 / 17.0;
+	polynomial = -1.0 / 15.0 + square * polynomial;
+	polynomial = 1.0 / 13.0 + square * polynomial;
+	polynomial = -1.0 / 11.0 + square * polynomial;
+	polynomial = 1.0 / 9.0 + square * polynomial;
+	polynomial = -1.0 / 7.0 + square * polynomial;
+	polynomial = 1.0 / 5.0 + square * polynomial;
+	polynomial = -1.0 / 3.0 + square * polynomial;
+	float angle = r * (1.0 + square * polynomial);
+	if (reduced) angle += 0.7853981633974483;
+	if (sine > absoluteCosine) angle = 1.5707963267948966 - angle;
+	return cosine < 0.0 ? 3.141592653589793 - angle : angle;
+}
+
+vec4 distantSceneBilinear(int faceOffset, vec2 grid, int layer) {
+	ivec2 lower = ivec2(floor(grid));
+	ivec2 upper = min(lower + ivec2(1), ivec2(26));
+	vec2 fraction = grid - vec2(lower);
+	vec4 p00 = texelFetch(${SCENE_CACHE_SAMPLER_NAME}, ivec3(faceOffset + lower.x, lower.y, layer), 0);
+	vec4 p10 = texelFetch(${SCENE_CACHE_SAMPLER_NAME}, ivec3(faceOffset + upper.x, lower.y, layer), 0);
+	vec4 p01 = texelFetch(${SCENE_CACHE_SAMPLER_NAME}, ivec3(faceOffset + lower.x, upper.y, layer), 0);
+	vec4 p11 = texelFetch(${SCENE_CACHE_SAMPLER_NAME}, ivec3(faceOffset + upper.x, upper.y, layer), 0);
+	return mix(mix(p00, p10, fraction.x), mix(p01, p11, fraction.x), fraction.y);
+}`
+			: '';
+		const assignments = Array.from(
+			{length: this._spectralChannelCount},
+			(_unused, index) =>
+				`\tdensity.channels[${index}] = supported ? density${Math.floor(index / 4)}.${'xyzw'[index % 4]} : unsupportedValue;`,
+		).join('\n');
 
 		return ShaderContributions.createShaderContribution({
 			id: 'cache-distant-sun-point-local-scene',
@@ -176,6 +242,8 @@ vec3 distantSceneDirectionCoordinate(vec3 direction) {
 	return vec3(float(faceIndex), uGrid, vGrid);
 }
 
+${interpolationHelper}
+
 SpectralValue sampleCumulativeScatteringDensity(
 	vec3 positionMeters,
 	AtmosphereCoordinate atmosphereCoordinate,
@@ -190,7 +258,8 @@ SpectralValue sampleCumulativeScatteringDensity(
 		physicalOutgoingDirection
 	));
 	float muS = clamp(dot(normalize(positionMeters), directionToSource), -1.0, 1.0);
-	float zenithCoordinate = clamp((acos(muS) - 0.008726646259971648) / 0.017453292519943295, 0.0, 179.0);
+	float solarZenith = ${this._shaderInterpolation ? 'distantSceneSolarZenith(normalize(positionMeters), directionToSource)' : 'acos(muS)'};
+	float zenithCoordinate = clamp((solarZenith - 0.008726646259971648) / 0.017453292519943295, 0.0, 179.0);
 	int lowerZenithIndex = int(floor(zenithCoordinate));
 	int upperZenithIndex = int(ceil(zenithCoordinate));
 	float upperZenithWeight = zenithCoordinate - float(lowerZenithIndex);
@@ -212,38 +281,18 @@ SpectralValue sampleCumulativeScatteringDensity(
 	for (int rowTap = 0; rowTap < 4; rowTap += 1) {
 		if (altitudeZenithWeights[rowTap] > 0.0 && packedRows[rowTap] < 0) supported = false;
 	}
-	vec4 density0 = vec4(0.0);
-	vec4 density1 = vec4(0.0);
-	vec4 density2 = vec4(0.0);
-	vec4 density3 = vec4(0.0);
+${declarations}
 	for (int rowTap = 0; rowTap < 4; rowTap += 1) {
 		if (altitudeZenithWeights[rowTap] <= 0.0 || packedRows[rowTap] < 0) continue;
 		float weight = altitudeZenithWeights[rowTap];
 		float faceOffset = directionCoordinate.x * 27.0;
 		float atlasY = (directionCoordinate.z + 0.5) / 27.0;
 		float atlasLayer = float(packedRows[rowTap]);
-		density0 += weight * texture(${SCENE_CACHE_SAMPLER_NAME}, vec3((faceOffset + directionCoordinate.y + 0.5) / 648.0, atlasY, atlasLayer));
-		density1 += weight * texture(${SCENE_CACHE_SAMPLER_NAME}, vec3((162.0 + faceOffset + directionCoordinate.y + 0.5) / 648.0, atlasY, atlasLayer));
-		density2 += weight * texture(${SCENE_CACHE_SAMPLER_NAME}, vec3((324.0 + faceOffset + directionCoordinate.y + 0.5) / 648.0, atlasY, atlasLayer));
-		density3 += weight * texture(${SCENE_CACHE_SAMPLER_NAME}, vec3((486.0 + faceOffset + directionCoordinate.y + 0.5) / 648.0, atlasY, atlasLayer));
+${samples}
 	}
 	float unsupportedValue = uintBitsToFloat(0x7fc00000u);
 	SpectralValue density;
-	density.channels[0] = supported ? density0.x : unsupportedValue;
-	density.channels[1] = supported ? density0.y : unsupportedValue;
-	density.channels[2] = supported ? density0.z : unsupportedValue;
-	density.channels[3] = supported ? density0.w : unsupportedValue;
-	density.channels[4] = supported ? density1.x : unsupportedValue;
-	density.channels[5] = supported ? density1.y : unsupportedValue;
-	density.channels[6] = supported ? density1.z : unsupportedValue;
-	density.channels[7] = supported ? density1.w : unsupportedValue;
-	density.channels[8] = supported ? density2.x : unsupportedValue;
-	density.channels[9] = supported ? density2.y : unsupportedValue;
-	density.channels[10] = supported ? density2.z : unsupportedValue;
-	density.channels[11] = supported ? density2.w : unsupportedValue;
-	density.channels[12] = supported ? density3.x : unsupportedValue;
-	density.channels[13] = supported ? density3.y : unsupportedValue;
-	density.channels[14] = supported ? density3.z : unsupportedValue;
+${assignments}
 	return density;
 }`,
 				),

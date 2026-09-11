@@ -26,3 +26,23 @@ export const SHARED_GENERATION_SOURCE_ROOT = 'scripts/algorithm32/solar-zenith-c
 export const SHARED_GENERATION_MAXIMUM_WORKING_BYTES = 2 * 1024 * 1024 * 1024;
 /** Qualified Node generator process RSS ceiling, distinct from browser/driver overhead. */
 export const SHARED_GENERATION_MAXIMUM_NODE_RSS_BYTES = 1024 * 1024 * 1024;
+
+/** Unified production compiler identity for both supported package outputs. */
+export const DISTANT_SUN_POINT_LOCAL_CACHE_COMPILER_IDENTITY = 'algorithm32-production-shared-cache-generator';
+/** Ignored output boundary for explicit-input compiler runs. */
+export const DISTANT_SUN_POINT_LOCAL_CACHE_OUTPUT_ROOT = 'tmp/algorithm32/point-local-cache-compiler';
+/** Complete direct source owners for the expanded compilation workflow. */
+export const SHARED_COMPILER_SOURCE_NAMES = [
+	'DistantSunSharedCacheGenerator.js',
+	'DistantSunPointLocalCacheCompilerBrowser.js',
+	'DistantSunPointLocalCacheCompilerHost.js',
+	'DistantSunPointLocalCacheInventory.js',
+	'DistantSunPointLocalCachePackage.js',
+	'DistantSunPointLocalCacheReader.js',
+	'DistantSunPointLocalCacheStaging.js',
+	'DistantSunPointLocalProfileCompilerInputs.js',
+	'DistantSunSceneCacheGpuCompiler.js',
+	'DistantSunSharedCacheGenerationCodec.js',
+	'DistantSunSharedCacheGenerationFiles.js',
+	'consts.js',
+];

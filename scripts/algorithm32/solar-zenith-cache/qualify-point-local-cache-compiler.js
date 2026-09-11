@@ -8,7 +8,7 @@ import DistantSunPointLocalCacheReader from './DistantSunPointLocalCacheReader.j
 import DistantSunSharedCacheGenerationFiles from './DistantSunSharedCacheGenerationFiles.js';
 import {DistantSunPointLocalProfileCompilerInputs} from './DistantSunPointLocalProfileCompilerInputs.js';
 import {DISTANT_SUN_POINT_LOCAL_CACHE_SCHEMA_ID} from './DistantSunPointLocalCachePackage.js';
-import {DISTANT_SUN_POINT_LOCAL_CACHE_COMPILER_IDENTITY} from './DistantSunPointLocalCacheCompiler.js';
+import {DISTANT_SUN_POINT_LOCAL_CACHE_COMPILER_IDENTITY} from './consts.js';
 
 const repositoryRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
 const files = new DistantSunSharedCacheGenerationFiles(repositoryRoot);
@@ -146,7 +146,7 @@ const record = {
 	compilerIdentity: DISTANT_SUN_POINT_LOCAL_CACHE_COMPILER_IDENTITY,
 	implementation: {
 		id: DISTANT_SUN_POINT_LOCAL_CACHE_COMPILER_IDENTITY,
-		version: '1.0.0',
+		version: '2.0.0',
 		sha256: files.hash(currentGpuCompiler),
 	},
 	buildRequest: productionInput.buildRequest,

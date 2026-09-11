@@ -119,6 +119,6 @@ Experiment results are evidence, not production architecture. Promotion uses
 the existing production-owned
 [design](../../../production-algorithm32/caches/distant-sun-cache-optimization-design.md)
 and
-[implementation plan](../../../production-algorithm32/caches/distant-sun-cache-optimization-plan.md),
+[implementation plan](../../../../../archives/topics/production-algorithm32-release-20260911/agents/topics/production-algorithm32/caches/distant-sun-cache-optimization-plan.md),
 requires explicit production execution authority, and must adapt accepted
 mechanisms without importing this experiment at runtime.

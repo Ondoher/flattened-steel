@@ -271,7 +271,11 @@ export class Flat32Application {
 			const atmosphereSummary = await this._modeController.switchTo(state.modeKind, state);
 			if (atmosphereSummary !== null && !this._disposed) {
 				this._publishedState = state;
-				this._view.showAtmosphereReady(this._sceneSummary, atmosphereSummary);
+				const solarZenithDegrees =
+					state.modeKind === 'spherical-distant'
+						? this._createSphericalDistantSceneState(state).solarZenithDegrees
+						: undefined;
+				this._view.showAtmosphereReady(this._sceneSummary, atmosphereSummary, solarZenithDegrees);
 			}
 		} catch (error) {
 			if (!this._disposed && this._sceneSummary !== null) {

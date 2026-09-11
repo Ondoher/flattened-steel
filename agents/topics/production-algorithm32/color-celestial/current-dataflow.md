@@ -127,7 +127,7 @@ The nonstellar Flat/local mode explicitly receives an empty stellar-filter
 list; returning to spherical/distant restores the application selection.
 The current architecture and execution order are owned by the
 [Production Color Reset Design](color-reset-design.md) and
-[Production Color Reset Implementation Plan](../../production-app/release/color-reset-implementation-plan.md).
+[Production Color Reset Implementation Plan](../../../../archives/topics/production-algorithm32-release-20260911/agents/topics/production-app/release/color-reset-implementation-plan.md).
 The [promotion manifest](color-reset-promotion-manifest.md) owns the P0
 evidence, production-owner, fixed-500, qualification, and redistribution
 inventory.
@@ -180,7 +180,7 @@ and ordered disposal. Host resizing changes only scene capture and final
 composition pixels; it does not reduce the cache domains or the six 4096
 shadow maps.
 
-The [Flat32 one-degree scene-cache hookup plan](../../production-app/runtime-integration/flat32-one-degree-cache-hookup-plan.md)
+The [Flat32 one-degree scene-cache hookup plan](../../../../archives/topics/production-algorithm32-release-20260911/agents/topics/production-app/runtime-integration/flat32-one-degree-cache-hookup-plan.md)
 is complete. Flat32 preserves the observation's live source direction for
 placement while resolving its scalar solar zenith, validating the selected
 offline package, and atomically publishing the new cache.

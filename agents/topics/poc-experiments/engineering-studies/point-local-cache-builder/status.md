@@ -98,7 +98,7 @@ run changed source layout only; no calculation rerun was necessary.
 ## Remaining Boundaries
 
 No blocker to experiment completion. Production promotion is complete under the
-[production point-local compiler plan](../../../production-algorithm32/caches/point-local-compiler-promotion-plan.md);
+[production point-local compiler plan](../../../../../archives/topics/production-algorithm32-release-20260911/agents/topics/production-algorithm32/caches/point-local-compiler-promotion-plan.md);
 runtime adoption remains a separate decision. The application proof deliberately
 samples two wavelengths and daylight/twilight scenes; it is not a new full
 109-scene qualification. The Bruneton comparison covers the full requested 17

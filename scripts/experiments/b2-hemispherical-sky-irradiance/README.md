@@ -2,10 +2,11 @@
 
 This directory reconstructs Bruneton Figure 8's 360--720 nm diffuse-sky
 irradiance curve from the same 17-by-81 Kider directional spectral-radiance
-field used by B1 and independently scores the production Algorithm32 Default
-boundary and the retained Algorithm32 J2 through J5 cumulative caches. All
-five candidates pass through the same
-Figure 8 transform; B2 does not apply a candidate-specific correction.
+field used by B1. The official production workflow scores the current
+cache-backed cumulative-J4 boundary selected by the authenticated B1 manifest.
+The retained five-profile Default/J2--J5 workflow remains available for
+historical order comparisons. Every candidate passes through the same Figure
+8 transform; B2 does not apply a candidate-specific correction.
 
 It deliberately does not treat the separate Kider broadband global-horizontal
 pyranometer series as the Figure 8 measurement. This stage is an aggregate of
@@ -13,11 +14,18 @@ B1's measurement field, not an independent measured observable.
 
 Run from the repository root:
 
-Current production execution uses the J4 asset-backed B1 manifest and combined
-`score:algorithm32:b1-b3-production` command with a separate fresh P8
-`--output-root`. The [2026-09-10 result](../../../agents/topics/poc-experiments/benchmarks/production-b-family-c1-9-result.md)
-is favorable for B2, while the independent B1 closeout ceiling remains failed.
-Historical candidate results below remain comparison evidence.
+The current official GPU result consumes the same corrected production
+manifest as B1 and is favorable: RMSE `2.406574 W m^-2`, bias
+`-0.825717 W m^-2`, and worst absolute residual `4.452763 W m^-2` at
+11:00. Reproduce B2 alone or publish the complete B-family record with:
+
+```text
+npm run score:algorithm32:b2-production:official
+npm run score:algorithm32:b1-b3-production:official
+```
+
+The combined command is the official publication workflow. It proves that B2
+integrates the exact table scored by B1 and used to derive B3.
 
 ```text
 node --test --test-isolation=none scripts/experiments/b2-hemispherical-sky-irradiance/run.test.js
@@ -31,12 +39,11 @@ selected as one immutable unit rather than as five unrelated table paths. The
 manifest enforces one backend for every order:
 
 ```text
-node scripts/experiments/b2-hemispherical-sky-irradiance/run.js --production-run references/results/experiments/b1-directional-sky-radiance/cpu
+node scripts/experiments/b2-hemispherical-sky-irradiance/run.js --production-run references/results/experiments/b1-directional-sky-radiance/gpu/manifest.json
 ```
 
-The combined `score:algorithm32:b1-b3-production` command documented by B1 is
-the preferred complete workflow. It guarantees that B2 integrates the same
-tables scored by B1 and converted into B3 cubes.
+The production manifest selects one current production J4 boundary. It does
+not require the legacy five-profile comparison to accept the official B2 run.
 
 These default commands use the published Figure 8 result as the external
 reference and do not regenerate the paper's model curves.

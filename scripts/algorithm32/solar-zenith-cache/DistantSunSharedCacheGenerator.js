@@ -1,22 +1,77 @@
 import {randomUUID} from 'node:crypto';
-import {lstat, mkdir, readdir, rename} from 'node:fs/promises';
+import {lstat, mkdir, readdir, realpath, rename} from 'node:fs/promises';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import DistantSunSharedCacheGenerationFiles from './DistantSunSharedCacheGenerationFiles.js';
 import DistantSunSharedCacheGenerationInventory from './DistantSunSharedCacheGenerationInventory.js';
-import DistantSunSharedCacheGenerationStaging from './DistantSunSharedCacheGenerationStaging.js';
-import DistantSunSharedCacheGenerationHost from './DistantSunSharedCacheGenerationHost.js';
+import DistantSunPointLocalCacheStaging from './DistantSunPointLocalCacheStaging.js';
+import DistantSunPointLocalCacheInventory from './DistantSunPointLocalCacheInventory.js';
+import DistantSunPointLocalCachePackage from './DistantSunPointLocalCachePackage.js';
+import DistantSunPointLocalCacheCompilerHost from './DistantSunPointLocalCacheCompilerHost.js';
 import DistantSunSharedCacheGenerationPackage from './DistantSunSharedCacheGenerationPackage.js';
 import DistantSunSharedCacheGenerationVerifier from './DistantSunSharedCacheGenerationVerifier.js';
 import {
 	SHARED_GENERATION_RUN_ROOT,
+	DISTANT_SUN_POINT_LOCAL_CACHE_COMPILER_IDENTITY,
+	DISTANT_SUN_POINT_LOCAL_CACHE_OUTPUT_ROOT,
+	SHARED_COMPILER_SOURCE_NAMES,
 	SHARED_GENERATION_SOURCE_ROOT,
 	SHARED_GENERATION_MAXIMUM_WORKING_BYTES,
 	SHARED_GENERATION_MAXIMUM_NODE_RSS_BYTES,
 } from './consts.js';
 
-/** Immutable production generation run owner from authenticated controls through atomic candidate publication. */
+/** Unified production cache compiler with Native15 runtime and explicit-input package serialization. */
 export default class DistantSunSharedCacheGenerator {
+	/** Absolute Chrome executable for explicit-input compilation. @type {string | undefined} */ chromePath;
+	/** GPU execution deadline in milliseconds. @type {number} */ maximumMilliseconds;
+	/** Repository identity derived from the compiler location. @readonly @type {string} */ repositoryRoot;
+	/**
+	 * Creates the production compiler with optional explicit-input execution settings.
+	 *
+	 * @param {SharedCompilerDefinition} [definition] - Browser and execution deadline for explicit-input compilation.
+	 */
+	constructor(definition = {}) {
+		this.chromePath = definition.chromePath;
+		this.maximumMilliseconds = definition.maximumMilliseconds ?? 900000;
+		this.repositoryRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
+	}
+
+	/**
+	 * Called by both package workflows to execute the same bounded compiler lifecycle.
+	 *
+	 * @param {SharedGenerationFiles} files - Repository-contained artifact owner.
+	 * @param {string} runRoot - New run's root.
+	 * @param {DistantSunPointLocalInventory} inventory - Accepted variable inventory.
+	 * @param {SharedCompilerExecution} options - Explicit browser and cancellation.
+	 * @param {(event: Readonly<Record<string, unknown>>) => Promise<void>} progress - Run progress owner.
+	 * @returns {Promise<SharedCompilerComputation>} - Complete GPU execution and staged-byte accounting.
+	 */
+	async _compute(files, runRoot, inventory, options, progress) {
+		const staging = new DistantSunPointLocalCacheStaging(inventory);
+		try {
+			await staging.allocate(files, `${runRoot}/staging`);
+			await progress({
+				phase: 'common-field-computation',
+				wavelengths: inventory.channelCount,
+				unionRows: inventory.coordinates.length,
+				blocks: inventory.blocks.length,
+			});
+			const gpu = await new DistantSunPointLocalCacheCompilerHost().run({
+				files,
+				runRoot,
+				inventory,
+				staging,
+				chromePath: options.chromePath,
+				maximumMilliseconds: options.maximumMilliseconds,
+				signal: options.signal,
+				progress,
+			});
+			return {gpu, stagedBytes: staging.complete()};
+		} finally {
+			await staging.close();
+		}
+	}
+
 	/**
 	 * Counts all ordinary candidate files without following aliases.
 	 *
@@ -35,6 +90,62 @@ export default class DistantSunSharedCacheGenerator {
 		}
 		return bytes;
 	}
+	/**
+	 * Called by explicit-input compilation to allocate an exclusive contained run.
+	 * Existing destinations, aliases and paths outside the output root reject.
+	 *
+	 * @param {SharedGenerationFiles} files - Repository-contained artifact owner.
+	 * @param {string} relativePath - New repository-relative output directory.
+	 * @returns {Promise<string>} - Exclusive contained run path.
+	 */
+	async _createRun(files, relativePath) {
+		if (
+			typeof relativePath !== 'string' ||
+			!/^[A-Za-z0-9._-]+(?:\/[A-Za-z0-9._-]+)*$/u.test(relativePath) ||
+			relativePath.split('/').some((part) => part === '.' || part === '..') ||
+			!relativePath.startsWith(`${DISTANT_SUN_POINT_LOCAL_CACHE_OUTPUT_ROOT}/`)
+		) {
+			throw new RangeError(
+				`Point-local compiler output must be below ${DISTANT_SUN_POINT_LOCAL_CACHE_OUTPUT_ROOT}/.`,
+			);
+		}
+		await files.resolve(path.posix.dirname(relativePath));
+		const absolute = path.join(this.repositoryRoot, ...relativePath.split('/'));
+		await lstat(absolute)
+			.then(() => {
+				throw new Error('Point-local compiler output directory must not already exist.');
+			})
+			.catch((error) => {
+				if (error.code !== 'ENOENT') throw error;
+			});
+		await mkdir(absolute, {recursive: false});
+		if ((await realpath(absolute)).toLowerCase() !== absolute.toLowerCase()) {
+			throw new Error('Point-local compiler output directory resolves through an alias.');
+		}
+		return relativePath;
+	}
+
+	/**
+	 * Called by explicit-input compilation to identify every direct compiler source owner.
+	 *
+	 * @param {SharedGenerationFiles} files - Repository-contained artifact owner.
+	 * @returns {Promise<SharedCompilerImplementation>} - Source identities for this execution.
+	 */
+	async _implementation(files) {
+		const sources = [];
+		for (const name of SHARED_COMPILER_SOURCE_NAMES) {
+			const relativePath = `${SHARED_GENERATION_SOURCE_ROOT}/${name}`;
+			const bytes = await files.read(relativePath);
+			sources.push({path: relativePath, byteLength: bytes.byteLength, sha256: files.hash(bytes)});
+		}
+		return {
+			id: DISTANT_SUN_POINT_LOCAL_CACHE_COMPILER_IDENTITY,
+			version: '2.0.0',
+			sha256: files.hash(JSON.stringify(sources)),
+			sources,
+		};
+	}
+
 	/**
 	 * Call this method to generate and qualify the complete production shared inventory.
 	 * Invalid execution options, failed controls, generation or verification failures, resource limits, or cancellation reject; callers must preserve prior runs.
@@ -86,7 +197,6 @@ export default class DistantSunSharedCacheGenerator {
 			process.stdout.write(`${JSON.stringify({runId, ...event})}\n`);
 			await options.onProgress?.(event);
 		};
-		let staging = null;
 		let publicationCommitted = false;
 		let sealed = false;
 		let publishedRoot = null;
@@ -96,7 +206,7 @@ export default class DistantSunSharedCacheGenerator {
 			const sources = [];
 			const names = (await readdir(await files.resolve(SHARED_GENERATION_SOURCE_ROOT)))
 				.filter((name) =>
-					/^(?:DistantSunSharedCache.*|DistantSunSceneCacheGpuCompiler|DistantSunSceneCacheCompilerInputs|consts|generate-shared-cache)\.js$/u.test(
+					/^(?:DistantSunSharedCache.*|DistantSunPointLocal.*|DistantSunSceneCacheGpuCompiler|DistantSunSceneCacheCompilerInputs|consts|generate-shared-cache)\.js$/u.test(
 						name,
 					),
 				)
@@ -115,7 +225,7 @@ export default class DistantSunSharedCacheGenerator {
 			const sourceArtifact = await files.write(`${runRoot}/implementation.json`, sourceBytes);
 			const implementation = {
 				id: 'algorithm32-production-shared-cache-generator',
-				version: '1.0.0',
+				version: '2.0.0',
 				sha256: sourceArtifact.sha256,
 			};
 			const parameters = {
@@ -132,25 +242,24 @@ export default class DistantSunSharedCacheGenerator {
 				{role: 'generator-source', artifact: sourceArtifact},
 				{role: 'common-field-parameters', artifact: parameterArtifact},
 			];
-			staging = new DistantSunSharedCacheGenerationStaging(inventory);
-			await staging.allocate(files, stagingRoot);
-			await progress({
-				phase: 'common-field-computation',
-				wavelengths: 15,
-				unionRows: inventory.coordinates.length,
-				blocks: inventory.blocks.length,
-			});
-			const gpu = await new DistantSunSharedCacheGenerationHost().run({
-				files,
-				runRoot,
-				inventory,
-				staging,
-				chromePath: options.chromePath,
-				signal,
-				progress,
-			});
-			const stagedBytes = staging.complete();
-			await staging.close();
+			const planned = new DistantSunPointLocalCacheInventory().create(
+				inventory.buildRequest,
+				inventory.scenes.map((scene) => ({
+					id: scene.manifest.sceneSun.id,
+					instant: scene.manifest.sceneSun.instant,
+					zenithDegrees: scene.ordinal,
+					observerAltitudeMeters: scene.ledger.support.observerAltitude.value,
+				})),
+				Array.from({length: 15}, (_unused, index) => index),
+			);
+			if (
+				JSON.stringify(planned.coordinates) !== JSON.stringify(inventory.coordinates) ||
+				JSON.stringify(planned.blocks) !== JSON.stringify(inventory.blocks) ||
+				!planned.directionBytes.equals(inventory.directionBytes)
+			) {
+				throw new Error('The expanded compiler inventory differs from the deployed Native15 layout.');
+			}
+			const {gpu, stagedBytes} = await this._compute(files, runRoot, planned, options, progress);
 			const gpuArtifact = await files.write(`${runRoot}/gpu.json`, Buffer.from(`${JSON.stringify(gpu)}\n`));
 			parents.push({role: 'common-field-gpu-execution', artifact: gpuArtifact});
 			const compressionStarted = performance.now();
@@ -270,7 +379,104 @@ export default class DistantSunSharedCacheGenerator {
 			throw error;
 		} finally {
 			clearInterval(monitor);
-			await staging?.close();
+		}
+	}
+	/**
+	 * Call this method to compile all requested scenes in one browser/GPU lifecycle and publish a complete immutable run record.
+	 * The output directory must not exist. Failure leaves it unpublished with a terminal failure record.
+	 *
+	 * @param {DistantSunPointLocalCompileRequest} request - Explicit output, calculation inputs, scenes, channels, and cancellation.
+	 * @returns {Promise<DistantSunPointLocalCompileResult>} - Package identity, work counts, and GPU measurements.
+	 */
+	async compile(request) {
+		if (!(request?.signal instanceof AbortSignal)) {
+			throw new TypeError('Point-local compiler requires a caller-owned AbortSignal.');
+		}
+		if (typeof this.chromePath !== 'string' || !path.isAbsolute(this.chromePath)) {
+			throw new TypeError('Compilation requires an absolute Chrome executable path.');
+		}
+		request.signal.throwIfAborted();
+		const files = new DistantSunSharedCacheGenerationFiles(this.repositoryRoot);
+		const runRoot = await this._createRun(files, request.outputDirectory);
+		const stagingRoot = `${runRoot}/staging`;
+		const packageRoot = `${runRoot}/package`;
+		const started = performance.now();
+		const progress = async (event) => {
+			request.signal.throwIfAborted();
+			const value = {...event, elapsedMilliseconds: performance.now() - started};
+			await files.progress(`${runRoot}/progress.json`, value);
+			await request.onProgress?.(value);
+		};
+		try {
+			await files.directory(packageRoot);
+			await progress({phase: 'inventory'});
+			const inventory = new DistantSunPointLocalCacheInventory().create(
+				request.buildRequest,
+				request.scenes,
+				request.wavelengths,
+			);
+			const implementation = await this._implementation(files);
+			const input = {
+				schemaId: 'algorithm32-point-local-compiler-input-v1',
+				buildRequest: request.buildRequest,
+				scenes: request.scenes,
+				wavelengths: request.wavelengths,
+			};
+			const inputArtifact = await files.write(`${runRoot}/input.json`, Buffer.from(`${JSON.stringify(input)}\n`));
+			const implementationArtifact = await files.write(
+				`${runRoot}/implementation.json`,
+				Buffer.from(`${JSON.stringify(implementation)}\n`),
+			);
+			const {gpu, stagedBytes} = await this._compute(
+				files,
+				runRoot,
+				inventory,
+				{
+					chromePath: this.chromePath,
+					maximumMilliseconds: this.maximumMilliseconds,
+					signal: request.signal,
+				},
+				progress,
+			);
+			await progress({phase: 'package'});
+			const packaged = await new DistantSunPointLocalCachePackage().write({
+				files,
+				root: packageRoot,
+				stagingRoot,
+				inventory,
+				implementation,
+				gpu,
+				signal: request.signal,
+				progress,
+			});
+			const result = {
+				accepted: true,
+				compilerIdentity: DISTANT_SUN_POINT_LOCAL_CACHE_COMPILER_IDENTITY,
+				outputDirectory: runRoot,
+				packageIdentity: packaged.packet.packageIdentity,
+				manifest: packaged.manifest,
+				input: inputArtifact,
+				implementation: implementationArtifact,
+				sceneCount: inventory.scenes.length,
+				channelCount: inventory.channelCount,
+				coordinateCount: inventory.coordinates.length,
+				blockCount: inventory.blocks.length,
+				stagedBytes,
+				gpu,
+				elapsedMilliseconds: performance.now() - started,
+			};
+			await files.progress(`${runRoot}/progress.json`, {phase: 'complete', accepted: true});
+			await files.write(`${runRoot}/complete.json`, Buffer.from(`${JSON.stringify(result)}\n`));
+			return result;
+		} catch (error) {
+			await files.write(
+				`${runRoot}/failure.json`,
+				Buffer.from(
+					`${JSON.stringify({accepted: false, error: error instanceof Error ? error.stack : String(error)})}\n`,
+				),
+			);
+			await files.progress(`${runRoot}/progress.json`, {phase: 'failed', accepted: false});
+			throw error;
 		}
 	}
 }

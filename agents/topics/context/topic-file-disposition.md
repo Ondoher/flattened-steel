@@ -46,16 +46,16 @@ The [section ledger](topic-section-disposition.md) owns split destinations;
 | `algorithm32/production/ambient-light-design.md` | Retired after extraction / archive | [Owner](../production-app/runtime-integration/ambient-light-design.md) |
 | `algorithm32/production/ambient-light-plan.md` | Retired after extraction / archive | [Owner](../production-app/release/ambient-light-acceptance.md) |
 | `algorithm32/production/color-reset-design.md` | Retired after extraction / archive | [Owner](../production-algorithm32/color-celestial/color-reset-design.md) |
-| `algorithm32/production/color-reset-implementation-plan.md` | Retired after extraction / archive | [Owner](../production-app/release/color-reset-implementation-plan.md) |
+| `algorithm32/production/color-reset-implementation-plan.md` | Retired after extraction / archive | [Owner](../../../archives/topics/production-algorithm32-release-20260911/agents/topics/production-app/release/color-reset-implementation-plan.md) |
 | `algorithm32/production/color-reset-production-qualification.md` | Retired after extraction / archive | [Owner](../production-app/release/color-reset-production-qualification.md) |
 | `algorithm32/production/color-reset-promotion-manifest.md` | Retired after extraction / archive | [Owner](../production-algorithm32/color-celestial/color-reset-promotion-manifest.md) |
 | `algorithm32/production/color-reset-source-gaps.md` | Retired after extraction / archive | [Owner](../../../references/followup.md) |
 | `algorithm32/production/color-star-cache-closeout-plan.md` | Retired after extraction / archive | [Owner](../production-app/release/color-star-cache-closeout-plan.md) |
 | `algorithm32/production/flat32-migration-inventory.md` | Retired after extraction / archive | [Owner](../production-app/runtime-integration/flat32-migration-inventory.md) |
-| `algorithm32/production/flat32-one-degree-cache-hookup-plan.md` | Retired after extraction / archive | [Owner](../production-app/runtime-integration/flat32-one-degree-cache-hookup-plan.md) |
+| `algorithm32/production/flat32-one-degree-cache-hookup-plan.md` | Retired after extraction / archive | [Owner](../../../archives/topics/production-algorithm32-release-20260911/agents/topics/production-app/runtime-integration/flat32-one-degree-cache-hookup-plan.md) |
 | `algorithm32/production/solar-zenith-cache-adoption-plan.md` | Retired after extraction / archive | [Owner](../../../archives/topics/topic-consolidation-20260906/agents/topics/algorithm32/production/solar-zenith-cache-adoption-plan.md) |
 | `algorithm32/production/solar-zenith-cache-pa0-inventory.md` | Retired after extraction / archive | [Owner](../../../archives/topics/topic-consolidation-20260906/agents/topics/algorithm32/production/solar-zenith-cache-pa0-inventory.md) |
-| `algorithm32/production/production-b-experiment-wiring-plan.md` | Retired after extraction / archive | [Owner](../poc-experiments/benchmarks/production-b-experiment-wiring-plan.md) |
+| `algorithm32/production/production-b-experiment-wiring-plan.md` | Retired after extraction / archive | [Owner](../../../archives/topics/production-algorithm32-release-20260911/agents/topics/poc-experiments/benchmarks/production-b-experiment-wiring-plan.md) |
 | `algorithm32/production/stage-9.6-containment-inventory.md` | Retired after extraction / archive | [Owner](../production-algorithm32/qualification/stage-9.6-containment-inventory.md) |
 | `algorithm32/production/star-parity-data-set.md` | Protected; archived locally with verified bytes | [Owner](../../../archives/topics/retired-20260906/agents/topics/algorithm32/production/star-parity-data-set.md) |
 | `algorithm32/production/notes.md` | Retired after extraction / archive | [Owner](../../../archives/topics/topic-consolidation-20260906/agents/topics/algorithm32/production/notes.md) |

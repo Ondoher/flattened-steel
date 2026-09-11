@@ -16,7 +16,7 @@ What directional spectral-radiance residuals result when the published measureme
     "aggregateLocator": "Sections 5.3, 6.4, 7.4, 8.4, 9.4, 10.4, 11.4, and 12.4; Section 3.4 for libRadtran",
     "implementation": "Bruneton clear-sky-models revision 4df2ec6609bc0127a478bd34fff29c94352579cc, atmosphere/comparisons.cc"
   },
-  "measurementRoot": "C:\\dev\\flattened-steel\\references\\downloads\\kider-clear-sky-framework-2014\\radiance-2013-05-27-bruneton-subset\\extracted\\",
+  "measurementRoot": "C:\\dev\\flattened-steel\\scripts\\experiments\\b1-directional-sky-radiance\\inputs\\",
   "captureDate": "2013-05-27",
   "captureClock": "local EDT; Bruneton adds four hours for UTC solar position",
   "location": {
@@ -247,31 +247,31 @@ Status: **SCORED**.
 
 Input table: `C:\dev\flattened-steel\references\results\experiments\b1-directional-sky-radiance\gpu\algorithm32-current-production-gpu-j4.tsv`
 
-Input table SHA-256: `d366ba11a0697aa471f8a822da9ccc9964a67bfcfb18cad0764de62a33583a7f`; bytes: 1180809.
+Input table SHA-256: `20a8fdca9ab86d7dded9c832b1b3fb1ead18a0947a1951850008489ff1cd7010`; bytes: 1181013.
 
 ### Algorithm32 Paper (published physical-input profile) metrics
 
 | local time | RMSE (mW m^-2 sr^-1 nm^-1) | maximum absolute residual (W m^-2 sr^-1 nm^-1) | threshold classification |
 | --- | ---: | ---: | --- |
-| 09:30 | 12.836926 | 7.829668e-2 | reported |
-| 09:45 | 11.315242 | 5.950517e-2 | reported |
-| 10:00 | 11.040177 | 5.470874e-2 | reported |
-| 10:15 | 10.322954 | 5.109780e-2 | favorable |
-| 10:30 | 9.188136 | 4.299147e-2 | reported |
-| 10:45 | 9.513006 | 6.220244e-2 | reported |
-| 11:00 | 11.797682 | 9.916119e-2 | reported |
-| 11:15 | 11.301898 | 8.023313e-2 | favorable |
-| 11:30 | 9.715355 | 5.261255e-2 | reported |
-| 11:45 | 9.880972 | 5.253153e-2 | reported |
-| 12:00 | 10.110572 | 5.045577e-2 | reported |
-| 12:15 | 15.252470 | 1.357914e-1 | reported |
-| 12:30 | 18.058182 | 1.781234e-1 | reported |
-| 12:45 | 12.157365 | 7.641910e-2 | reported |
-| 13:00 | 11.246285 | 4.835339e-2 | reported |
-| 13:15 | 11.529090 | 3.806328e-2 | favorable |
-| 13:30 | 12.327977 | 4.390303e-2 | reported |
+| 09:30 | 13.191457 | 9.439434e-2 | reported |
+| 09:45 | 10.641285 | 5.664140e-2 | reported |
+| 10:00 | 10.121014 | 5.421739e-2 | reported |
+| 10:15 | 9.098044 | 5.099367e-2 | favorable |
+| 10:30 | 8.280009 | 4.363924e-2 | reported |
+| 10:45 | 9.343761 | 7.542567e-2 | reported |
+| 11:00 | 12.291279 | 1.110834e-1 | reported |
+| 11:15 | 10.766705 | 9.143680e-2 | favorable |
+| 11:30 | 8.867563 | 5.095313e-2 | reported |
+| 11:45 | 8.735331 | 5.314118e-2 | reported |
+| 12:00 | 9.451456 | 5.272267e-2 | reported |
+| 12:15 | 15.644674 | 1.489892e-1 | reported |
+| 12:30 | 18.576710 | 1.915373e-1 | reported |
+| 12:45 | 12.304359 | 8.769862e-2 | reported |
+| 13:00 | 10.716562 | 4.512775e-2 | reported |
+| 13:15 | 11.228666 | 3.834084e-2 | favorable |
+| 13:30 | 12.151206 | 4.728410e-2 | reported |
 
-Candidate aggregate RMSE [Algorithm32-Paper]: 11.820392 mW m^-2 sr^-1 nm^-1.
+Candidate aggregate RMSE [Algorithm32-Paper]: 11.554014 mW m^-2 sr^-1 nm^-1.
 Algorithm32 Paper (published physical-input profile) boundary validity: passed (55080 finite values; 0 negative).
 
 ### Canonical B1 classification
@@ -280,14 +280,14 @@ Algorithm32 Paper (published physical-input profile) classification: **FAVORABLE
 
 | criterion | observed | favorable maximum | limited maximum | result |
 | --- | ---: | ---: | ---: | --- |
-| Aggregate RMSE | 11.820392 | 18.300000 | 41.500000 | favorable |
-| 10:15 RMSE | 10.322954 | 17.700000 | 39.900000 | favorable |
-| 11:15 RMSE | 11.301898 | 18.700000 | 42.800000 | favorable |
-| 13:15 RMSE | 11.529090 | 17.400000 | 40.500000 | favorable |
+| Aggregate RMSE | 11.554014 | 18.300000 | 41.500000 | favorable |
+| 10:15 RMSE | 9.098044 | 17.700000 | 39.900000 | favorable |
+| 11:15 RMSE | 10.766705 | 18.700000 | 42.800000 | favorable |
+| 13:15 RMSE | 11.228666 | 17.400000 | 40.500000 | favorable |
 
-Verified candidate provenance: `C:\dev\flattened-steel\references\results\experiments\b1-directional-sky-radiance\gpu\algorithm32-current-production-gpu-default-provenance.json` (SHA-256 `a88771c686a3067e07cecadab26a67d4e8659d9a076b056ae1ecc1e91a8770ac`; run `current-production-b1-gpu-shaders-20260813T022114257Z`; backend `gpu-production-shaders-r32f`; model `proposed`; 1377 rows; 40 transported spectral channels; controls 40/20/68/48; W27/4374/Jthrough4).
+Verified candidate provenance: `C:\dev\flattened-steel\references\results\experiments\b1-directional-sky-radiance\gpu\algorithm32-current-production-gpu-default-provenance.json` (SHA-256 `95ed76c97e141cc5b1f5f0566db39f09b7fca6141f066f510cfeea1ab6e5489a`; run `current-production-b1-gpu-shaders-20260911T182339616Z`; backend `gpu-production-shaders-r32f`; model `proposed`; 1377 rows; 40 transported spectral channels; controls 30/20/68/48; W27/4374/Jthrough4).
 
-Predeclared judgment rules: `C:\dev\flattened-steel\scripts\experiments\whole-algorithm-paper-judgment-rules.json` (SHA-256 `fd4f61f649fc3ed1b549e7ce8b7267d98e4f8c0bc7c31123ac13280a35788e29`).
+Predeclared judgment rules: `C:\dev\flattened-steel\scripts\experiments\whole-algorithm-paper-judgment-rules.json` (SHA-256 `d39313453bf1ade6a75fbf8f066404da902f7d7ab32f340c41750cdb2cf99062`).
 
 ## N-order proposed-method stage
 
@@ -317,7 +317,7 @@ No independently supplied Algorithm32₅ (paper profile; cumulative scattering t
 
 | candidate | role | controls | aggregate RMSE (mW m^-2 sr^-1 nm^-1) | boundary | classification |
 | --- | --- | --- | ---: | --- | --- |
-| Algorithm32 Paper (published physical-input profile) | canonical paper-input profile | 40/20/68/48; W27/4374/Jthrough4 | 11.820392 | valid | favorable |
+| Algorithm32 Paper (published physical-input profile) | canonical paper-input profile | 30/20/68/48; W27/4374/Jthrough4 | 11.554014 | valid | favorable |
 
 ## Conclusion
 

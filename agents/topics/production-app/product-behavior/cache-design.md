@@ -6,10 +6,10 @@ Related owners: [caches](../../production-algorithm32/caches/cache-design.md), [
 
 ## Deferred Follow-Up: Source-Relative Animation And In-Setup Reconfiguration
 
-Status: deferred mandatory MVP follow-up. This work is intentionally later
-than the current construction-time implementation, but Algorithm32 MVP cannot
-close until it is implemented and qualified. Resume it at production Stage 14
-with an explicit cache-transform investigation.
+Status: supporting design for
+[Production MVP requirement M1](../mvp/requirements.md#m1--compatible-time-and-location-animation).
+M1 owns scheduling and acceptance; this document retains the cache hypotheses
+and design constraints needed when that requirement resumes.
 
 The future MVP stage must animate both supported source/geometry families
 without constructing a complete replacement facade and scene for every clock

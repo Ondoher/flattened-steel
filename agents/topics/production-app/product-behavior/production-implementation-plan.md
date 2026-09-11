@@ -255,32 +255,7 @@ during migration.
 
 ### 14. Implement time/location animation with cache transforms
 
-**Status: deferred mandatory MVP follow-up; not started.** The initial
-geometry/source integration may construct a replacement geometry, facade,
-scene, and cache set for a time/location change, but MVP completion requires an
-in-place animation path.
-
-- Define the external clock/configuration ingress and the facade-mediated
-  update contract without allowing application code or light sources to perform
-  coordinate transforms.
-- Keep geometry as the sole owner of time/location interpretation and every
-  source/receiver-to-model transform.
-- Select and prove cache transforms or an equivalent reusable
-  parameterization for both spherical/distant and flat/local families so a
-  clock tick does not rebuild the complete source cache.
-- Compare transformed/reused cache results against independent full rebuilds
-  across representative locations, times, source elevations, azimuths, and
-  near-horizon cases before changing cache identity or reuse policy.
-- Retain the active facade, scene, GPU backend, compiled programs, and valid
-  cache resources across compatible ticks. Publish geometry state, cache
-  bindings, endpoint lighting, shadows, and displayed time atomically.
-- Coalesce rapid clock updates, cancel superseded preparation, preserve the
-  last published state on failure, and expose requested-versus-published time
-  without allowing a mixed generation.
-
-**Gate:** both MVP geometry/source families animate time and location through
-the facade with geometry-owned transforms, no complete cache rebuild on a
-compatible clock tick, rebuild-oracle parity under predeclared tolerances,
-atomic publication, latest-request-wins behavior, failure preservation, and
-passing CPU, browser, lifecycle, and resource gates. Failure blocks MVP
-completion.
+**Status: deferred and relocated.** The requirement, implementation boundary,
+and acceptance gate are now owned by
+[Production MVP requirement M1](../mvp/requirements.md#m1--compatible-time-and-location-animation).
+This stage is no longer current product-behavior work.

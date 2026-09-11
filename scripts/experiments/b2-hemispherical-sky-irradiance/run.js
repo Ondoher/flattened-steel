@@ -285,11 +285,13 @@ function assessProposedScore(score, outputValid, judgmentRules) {
 
 export function runExperiment(options = {}) {
 	if (typeof options === 'string') options = {datasetRoot: options};
+	let productionBoundary = null;
 	if (options.productionRunPath) {
 		if (options.profileFamily && options.profileFamily !== 'paper') {
 			throw new Error('--production-run uses the benchmark-owned paper profile family.');
 		}
 		const run = ProductionRun.load(options.productionRunPath);
+		productionBoundary = ProductionRun.boundaryRecord(run);
 		options = {
 			publishedModelsPath: PAPER_CANONICAL_INPUTS.publishedModelsPath,
 			judgmentRulesPath: PAPER_CANONICAL_INPUTS.judgmentRulesPath,
@@ -389,6 +391,7 @@ export function runExperiment(options = {}) {
 
 	return Object.freeze({
 		reproduction,
+		productionBoundary,
 		profileFamily,
 		candidateLabels,
 		publishedReferenceStage: Object.freeze({
@@ -455,6 +458,7 @@ function renderCandidateSummary(label, score, assessment) {
 export function renderReport(run) {
 	const {reproduction} = run;
 	const inputSummary = {
+		productionBoundary: run.productionBoundary,
 		scientificBoundary:
 			"Aggregate of B1's 17x81 measured directional spectral-radiance field; " +
 			'not pyranometer evidence and not an independent measurement observable.',
@@ -501,18 +505,22 @@ export function renderReport(run) {
 			proposedMethodDirectionalSpectra: run.proposedCurve
 				? `${run.candidateLabels.default} supplied and scored with predeclared judgment rules`
 				: `${run.candidateLabels.default} pending independently supplied boundary data`,
-			proposedJ2DirectionalSpectra: run.proposedJ2Curve
-				? `${run.candidateLabels.j2} supplied and independently scored with its pre-result judgment record`
-				: `${run.candidateLabels.j2} candidate not supplied`,
-			proposedJ3DirectionalSpectra: run.proposedJ3Curve
-				? `${run.candidateLabels.j3} supplied and independently scored with its pre-result judgment record`
-				: `${run.candidateLabels.j3} candidate not supplied`,
-			proposedJ4DirectionalSpectra: run.proposedJ4Curve
-				? `${run.candidateLabels.j4} supplied and independently scored with its pre-result judgment record`
-				: `${run.candidateLabels.j4} candidate not supplied`,
-			proposedJ5DirectionalSpectra: run.proposedJ5Curve
-				? `${run.candidateLabels.j5} supplied and independently scored with its pre-result judgment record`
-				: `${run.candidateLabels.j5} candidate not supplied`,
+			...(run.productionBoundary
+				? {}
+				: {
+						proposedJ2DirectionalSpectra: run.proposedJ2Curve
+							? `${run.candidateLabels.j2} supplied and independently scored with its pre-result judgment record`
+							: `${run.candidateLabels.j2} candidate not supplied`,
+						proposedJ3DirectionalSpectra: run.proposedJ3Curve
+							? `${run.candidateLabels.j3} supplied and independently scored with its pre-result judgment record`
+							: `${run.candidateLabels.j3} candidate not supplied`,
+						proposedJ4DirectionalSpectra: run.proposedJ4Curve
+							? `${run.candidateLabels.j4} supplied and independently scored with its pre-result judgment record`
+							: `${run.candidateLabels.j4} candidate not supplied`,
+						proposedJ5DirectionalSpectra: run.proposedJ5Curve
+							? `${run.candidateLabels.j5} supplied and independently scored with its pre-result judgment record`
+							: `${run.candidateLabels.j5} candidate not supplied`,
+					}),
 		},
 		proposedInput: run.proposedCurve
 			? {
@@ -617,14 +625,18 @@ export function renderReport(run) {
 		'',
 		'| iteration | local time | measured diffuse sky (W m^-2) | ' +
 			PUBLISHED_MODEL_NAMES.map((model) => `${MODEL_LABELS[model]} (W m^-2)`).join(' | ') +
-			` | ${run.candidateLabels.default} (W m^-2) | Default residual (W m^-2) | ` +
-			`${run.candidateLabels.j2} (W m^-2) | J2 residual (W m^-2) | ` +
-			`${run.candidateLabels.j3} (W m^-2) | J3 residual (W m^-2) | ` +
-			`${run.candidateLabels.j4} (W m^-2) | J4 residual (W m^-2) | ` +
-			`${run.candidateLabels.j5} (W m^-2) | J5 residual (W m^-2) | stage result |`,
+			(run.productionBoundary
+				? ` | ${run.candidateLabels.default} current-production J4 (W m^-2) | residual (W m^-2) | stage result |`
+				: ` | ${run.candidateLabels.default} (W m^-2) | Default residual (W m^-2) | ` +
+					`${run.candidateLabels.j2} (W m^-2) | J2 residual (W m^-2) | ` +
+					`${run.candidateLabels.j3} (W m^-2) | J3 residual (W m^-2) | ` +
+					`${run.candidateLabels.j4} (W m^-2) | J4 residual (W m^-2) | ` +
+					`${run.candidateLabels.j5} (W m^-2) | J5 residual (W m^-2) | stage result |`),
 		'| ---: | --- | ---: | ' +
 			PUBLISHED_MODEL_NAMES.map(() => '---:').join(' | ') +
-			' | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |',
+			(run.productionBoundary
+				? ' | ---: | ---: | --- |'
+				: ' | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |'),
 	];
 
 	reproduction.conditions.forEach((condition, index) => {
@@ -646,21 +658,25 @@ export function renderReport(run) {
 				).join(' | ') +
 				` | ${proposedCondition ? fixed(proposedCondition.proposed) : 'pending'} | ` +
 				`${proposedCondition ? fixed(proposedCondition.residual) : 'pending'} | ` +
-				`${proposedJ2Condition ? fixed(proposedJ2Condition.proposed) : 'pending'} | ` +
-				`${proposedJ2Condition ? fixed(proposedJ2Condition.residual) : 'pending'} | ` +
-				`${proposedJ3Condition ? fixed(proposedJ3Condition.proposed) : 'pending'} | ` +
-				`${proposedJ3Condition ? fixed(proposedJ3Condition.residual) : 'pending'} | ` +
-				`${proposedJ4Condition ? fixed(proposedJ4Condition.proposed) : 'pending'} | ` +
-				`${proposedJ4Condition ? fixed(proposedJ4Condition.residual) : 'pending'} | ` +
-				`${proposedJ5Condition ? fixed(proposedJ5Condition.proposed) : 'pending'} | ` +
-				`${proposedJ5Condition ? fixed(proposedJ5Condition.residual) : 'pending'} | ` +
+				(run.productionBoundary
+					? ''
+					: `${proposedJ2Condition ? fixed(proposedJ2Condition.proposed) : 'pending'} | ` +
+						`${proposedJ2Condition ? fixed(proposedJ2Condition.residual) : 'pending'} | ` +
+						`${proposedJ3Condition ? fixed(proposedJ3Condition.proposed) : 'pending'} | ` +
+						`${proposedJ3Condition ? fixed(proposedJ3Condition.residual) : 'pending'} | ` +
+						`${proposedJ4Condition ? fixed(proposedJ4Condition.proposed) : 'pending'} | ` +
+						`${proposedJ4Condition ? fixed(proposedJ4Condition.residual) : 'pending'} | ` +
+						`${proposedJ5Condition ? fixed(proposedJ5Condition.proposed) : 'pending'} | ` +
+						`${proposedJ5Condition ? fixed(proposedJ5Condition.residual) : 'pending'} | `) +
 				`${
 					condition.fileCount === 81 && condition.sampleCount === QUADRATURE.totalDirections
 						? modelCondition
 							? proposedCondition
-								? run.comparativeProfilesComplete
-									? 'measurement, source models, Default, and J2 through J5 aggregates scored'
-									: 'measurement, source models, and Default aggregate scored'
+								? run.productionBoundary
+									? 'measurement, source models, and current-production J4 aggregate scored'
+									: run.comparativeProfilesComplete
+										? 'measurement, source models, Default, and J2 through J5 aggregates scored'
+										: 'measurement, source models, and Default aggregate scored'
 								: 'measurement and source-model aggregates generated'
 							: 'measurement aggregate reproduced'
 						: 'incomplete'
@@ -702,13 +718,35 @@ export function renderReport(run) {
 					(run.publishedModels
 						? 'The nine source-model curves were also integrated from the complete pinned-source B1 spectral boundary. This generates the local Figure 8 model columns but does not by itself prove agreement with a separately digitized published plot. '
 						: 'The paper-model numeric columns remain pending. ') +
-					[
-						renderCandidateSummary(run.candidateLabels.default, run.proposedScore, run.proposedAssessment),
-						renderCandidateSummary(run.candidateLabels.j2, run.proposedJ2Score, run.proposedJ2Assessment),
-						renderCandidateSummary(run.candidateLabels.j3, run.proposedJ3Score, run.proposedJ3Assessment),
-						renderCandidateSummary(run.candidateLabels.j4, run.proposedJ4Score, run.proposedJ4Assessment),
-						renderCandidateSummary(run.candidateLabels.j5, run.proposedJ5Score, run.proposedJ5Assessment),
-					].join(' ')
+					(run.productionBoundary
+						? `${renderCandidateSummary(run.candidateLabels.default, run.proposedScore, run.proposedAssessment)} The authenticated production run selects cumulative J4; the retained five-profile comparison is a separate workflow.`
+						: [
+								renderCandidateSummary(
+									run.candidateLabels.default,
+									run.proposedScore,
+									run.proposedAssessment,
+								),
+								renderCandidateSummary(
+									run.candidateLabels.j2,
+									run.proposedJ2Score,
+									run.proposedJ2Assessment,
+								),
+								renderCandidateSummary(
+									run.candidateLabels.j3,
+									run.proposedJ3Score,
+									run.proposedJ3Assessment,
+								),
+								renderCandidateSummary(
+									run.candidateLabels.j4,
+									run.proposedJ4Score,
+									run.proposedJ4Assessment,
+								),
+								renderCandidateSummary(
+									run.candidateLabels.j5,
+									run.proposedJ5Score,
+									run.proposedJ5Assessment,
+								),
+							].join(' '))
 			: 'Incomplete. The Figure 8 measurement aggregate could not be regenerated for every declared condition.',
 		'',
 		'## Acceptance boundary',
@@ -717,11 +755,18 @@ export function renderReport(run) {
 		`- Published external Figure 8 reference adopted: ${run.publishedReferenceStage.status}.`,
 		`- Published paper-model columns completed: ${run.publishedModelColumnsStatus}.`,
 		`- ${run.candidateLabels.default} column completed: ${run.proposedMethodColumnStatus}.`,
-		`- ${run.candidateLabels.j2} column completed: ${run.proposedJ2ColumnStatus}.`,
-		`- ${run.candidateLabels.j3} column completed: ${run.proposedJ3ColumnStatus}.`,
-		`- ${run.candidateLabels.j4} column completed: ${run.proposedJ4ColumnStatus}.`,
-		`- ${run.candidateLabels.j5} column completed: ${run.proposedJ5ColumnStatus}.`,
-		`- All five candidate profiles scored: ${run.comparativeProfilesComplete ? 'yes' : 'no'}.`,
+		...(run.productionBoundary
+			? [
+					`- Authenticated current-production order: J${run.productionBoundary.order}.`,
+					'- Retained five-profile comparison: separate non-production workflow.',
+				]
+			: [
+					`- ${run.candidateLabels.j2} column completed: ${run.proposedJ2ColumnStatus}.`,
+					`- ${run.candidateLabels.j3} column completed: ${run.proposedJ3ColumnStatus}.`,
+					`- ${run.candidateLabels.j4} column completed: ${run.proposedJ4ColumnStatus}.`,
+					`- ${run.candidateLabels.j5} column completed: ${run.proposedJ5ColumnStatus}.`,
+					`- All five candidate profiles scored: ${run.comparativeProfilesComplete ? 'yes' : 'no'}.`,
+				]),
 		`- Full B2 accepted: ${run.fullBenchmarkAccepted ? 'yes' : 'no'}.`,
 	);
 	return `${lines.join('\n')}\n`;

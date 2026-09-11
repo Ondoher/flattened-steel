@@ -526,7 +526,21 @@ export function validateAlgorithm32ProfileProvenance(provenance, profileName) {
 				`${expected.physicalProfileContentHash}; received ${provenance.physicalProfileContentHash}.`,
 		);
 	}
-	for (const [name, value] of Object.entries(expected.controls)) {
+	const receiverLocal =
+		provenance.schema === 'algorithm32-current-production-b1-provenance-v2' &&
+		provenance.cacheRepresentation === 'receiver-local-native48-z180-w27' &&
+		['paper', 'paper-j4'].includes(provenance.profileId);
+	const controls = receiverLocal
+		? {
+				...expected.controls,
+				pathIntervalCount: 30,
+				pathSampleDistribution: 'quadratic-near-observer-v1',
+				...(Object.hasOwn(expected.controls, 'scatteringOutputDomain')
+					? {scatteringOutputDomain: 'receiver-local-boundary-inclusive-gnomonic-cubed-sphere-w27'}
+					: {}),
+			}
+		: expected.controls;
+	for (const [name, value] of Object.entries(controls)) {
 		if (provenance.numericalControls?.[name] !== value) {
 			throw new Error(
 				`${expected.label} provenance ${name} must be ${value}; ` +
@@ -537,7 +551,7 @@ export function validateAlgorithm32ProfileProvenance(provenance, profileName) {
 	return Object.freeze({
 		label: expected.label,
 		identity: expected.presentationName,
-		controls: expected.controls,
+		controls,
 		runId: provenance.runId,
 	});
 }

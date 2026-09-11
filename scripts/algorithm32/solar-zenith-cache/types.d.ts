@@ -612,3 +612,23 @@ type SharedQualificationOracleBlock = {
 	}[];
 	/** Equation used to derive expected bits from dense inputs. */ operation: string;
 };
+
+/** Browser settings for the unified production compiler. */
+type SharedCompilerDefinition = {
+	/** Absolute installed Chrome executable; required for explicit-input compilation. */ chromePath?: string;
+	/** Positive GPU deadline in milliseconds, at most 900000. */ maximumMilliseconds?: number;
+};
+/** Completed common compilation before package serialization. */
+type SharedCompilerComputation = {
+	/** Complete browser execution evidence. */ gpu: SharedGenerationGpuResult;
+	/** Exact unique-direction bytes written into staging. */ stagedBytes: number;
+};
+
+/** Execution settings accepted by the common compiler lifecycle. */
+type SharedCompilerExecution = SharedCompilerDefinition & {
+	/** Caller-owned cancellation, retained only for this invocation. */ signal: AbortSignal;
+};
+/** Source-authenticated identity of the expanded compilation implementation. */
+type SharedCompilerImplementation = DistantSunSharedCacheImplementationIdentity & {
+	/** Complete direct source identities used to derive the implementation digest. */ sources: DistantSunSharedCacheFileIdentity[];
+};

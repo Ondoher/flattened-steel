@@ -468,6 +468,7 @@ function scoreCandidateProfile({
 }
 
 export function runExperiment(options = {}) {
+	let productionBoundary = null;
 	if (options.productionRunPath) {
 		if (options.profileFamily && options.profileFamily !== 'paper') {
 			throw new TypeError('--production-run uses the benchmark-owned paper profile family.');
@@ -476,6 +477,7 @@ export function runExperiment(options = {}) {
 			throw new TypeError('--production-run requires --b1-result from B1 scoring of the same run.');
 		}
 		const run = ProductionRun.load(options.productionRunPath);
+		productionBoundary = ProductionRun.boundaryRecord(run);
 		options = {
 			measurementCubePath: PAPER_CANONICAL_INPUTS.measurementCubePath,
 			mismatchMapPath: PAPER_CANONICAL_INPUTS.mismatchMapPath,
@@ -586,7 +588,7 @@ export function runExperiment(options = {}) {
 				true,
 			),
 		);
-	} else {
+	} else if (!productionBoundary) {
 		stages.push(
 			stage(
 				'fixed',
@@ -616,7 +618,7 @@ export function runExperiment(options = {}) {
 				fixedTarget.accepted,
 			),
 		);
-	} else {
+	} else if (!productionBoundary) {
 		stages.push(
 			stage(
 				'published-score',
@@ -644,7 +646,7 @@ export function runExperiment(options = {}) {
 				coarse.accepted,
 			),
 		);
-	} else {
+	} else if (!productionBoundary) {
 		stages.push(
 			stage(
 				'coarse',
@@ -684,7 +686,7 @@ export function runExperiment(options = {}) {
 				true,
 			),
 		);
-	} else {
+	} else if (!productionBoundary) {
 		stages.push(
 			stage(
 				'proposed',
@@ -724,7 +726,7 @@ export function runExperiment(options = {}) {
 				true,
 			),
 		);
-	} else {
+	} else if (!productionBoundary) {
 		stages.push(
 			stage(
 				'proposed-j2',
@@ -764,7 +766,7 @@ export function runExperiment(options = {}) {
 				true,
 			),
 		);
-	} else {
+	} else if (!productionBoundary) {
 		stages.push(
 			stage(
 				'proposed-j3',
@@ -804,7 +806,7 @@ export function runExperiment(options = {}) {
 				true,
 			),
 		);
-	} else {
+	} else if (!productionBoundary) {
 		stages.push(
 			stage(
 				'proposed-j4',
@@ -844,7 +846,7 @@ export function runExperiment(options = {}) {
 				true,
 			),
 		);
-	} else {
+	} else if (!productionBoundary) {
 		stages.push(
 			stage(
 				'proposed-j5',
@@ -873,6 +875,7 @@ export function runExperiment(options = {}) {
 		experiment: EXPERIMENT,
 		name: NAME,
 		question: QUESTION,
+		productionBoundary,
 		candidateFamily,
 		inputs: Object.freeze(inputs),
 		contract,
@@ -1036,6 +1039,7 @@ export function renderReport(run, durableArtifacts = {}) {
 		'```json',
 		JSON.stringify(
 			{
+				productionBoundary: run.productionBoundary,
 				authorities: {
 					brunetonComparisonRevision: SOURCE_REVISION,
 					libRadtranVersion: LIBRADTRAN_VERSION,
@@ -1199,7 +1203,7 @@ export function renderReport(run, durableArtifacts = {}) {
 		'',
 		'## Acceptance meaning',
 		'',
-		`The paper and pinned comparison source are the authority for the published 550-case aerosol-search result; rerunning that search locally is an optional cross-check, not an acceptance prerequisite. Contract verification proves only that the runner encodes the published comparison boundary. A local fixed-case execution or supplied coarse table proves only the stated cross-check. Each candidate cube is independently scored against the same Kider measurements and its RMSE is placed beside the paper's published libRadtran RMSE; no candidate requires a locally regenerated libRadtran cube. Because the aerosol parameters were fitted to these measurements, these are in-sample comparisons rather than independent validation, and without a published pointwise libRadtran cube they do not establish sample-by-sample solver agreement. Each candidate requires its explicit mismatch map and pre-result judgment record. ${run.candidateFamily.displayLabels.default} is the selected family baseline; its J2 through J5 variants are the active n-order candidates.`,
+		`The paper and pinned comparison source are the authority for the published 550-case aerosol-search result; rerunning that search locally is an optional cross-check, not an acceptance prerequisite. Contract verification proves only that the runner encodes the published comparison boundary. A local fixed-case execution or supplied coarse table proves only the stated cross-check. Each candidate cube is independently scored against the same Kider measurements and its RMSE is placed beside the paper's published libRadtran RMSE; no candidate requires a locally regenerated libRadtran cube. Because the aerosol parameters were fitted to these measurements, these are in-sample comparisons rather than independent validation, and without a published pointwise libRadtran cube they do not establish sample-by-sample solver agreement. Each candidate requires its explicit mismatch map and pre-result judgment record. ${run.productionBoundary ? `This official run selects only the authenticated current-production cumulative J${run.productionBoundary.order} boundary; the retained five-profile comparison is a separate workflow.` : `${run.candidateFamily.displayLabels.default} is the selected family baseline; its J2 through J5 variants are the active n-order candidates.`}`,
 		'',
 		'## Conclusion',
 		'',

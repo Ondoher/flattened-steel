@@ -199,12 +199,7 @@ export default class B1Direct40OfflineAssetAdapter extends DistantSunSceneCacheO
 					channelCount: 40,
 				},
 			},
-			numerical: {
-				viewPathIntervalCount: 40,
-				sourcePathTransmittanceIntervalCount: 20,
-				cacheTransportIntervalCount: 40,
-				maximumScatteringOrder: 4,
-			},
+			numerical: B1Direct40CacheAssetManifest.createProfileBoundary(profile, condition).numerical,
 			layout: {axisOrder: B1_DIRECT40_CACHE_LAYOUT, scalarType: 'float32-little-endian'},
 			cumulativeScatteringDensity,
 			logicalToUniqueIndex,

@@ -4,6 +4,7 @@ import {lstat, readFile, realpath, stat} from 'node:fs/promises';
 import {createServer} from 'node:http';
 import path from 'node:path';
 
+import DistantSunSharedCachePackageService from '../../server/flat32/features/shared-cache/DistantSunSharedCachePackageService.js';
 import {resolveDistantSunSceneCache} from '../../src/flat32/DistantSunSceneCacheResolver.js';
 
 function argument(name, fallback = null) {
@@ -55,14 +56,31 @@ const applicationRoot =
 	applicationRootArgument === null
 		? null
 		: await ordinaryDirectory(path.resolve(applicationRootArgument), 'Flat32 application root');
-const report = JSON.parse(await readFile(await containedFile(packageRoot, 'package-report.json'), 'utf8'));
-if (report.schemaId !== 'algorithm32-distant-sun-bin-covered-runtime-package-set-v1' || report.accepted !== true) {
-	throw new Error('Runtime package report is incompatible.');
+const cacheFormat = argument('--cache-format', 'dense');
+if (cacheFormat !== 'dense' && cacheFormat !== 'shared') {
+	throw new RangeError('--cache-format must be dense or shared.');
 }
-const catalogFile = await containedFile(packageRoot, report.catalogPath);
-const catalogBytes = await readFile(catalogFile);
-if (sha256(catalogBytes) !== report.catalogSha256) throw new Error('Runtime catalog hash does not match its report.');
-const catalog = JSON.parse(catalogBytes.toString('utf8'));
+let catalog = null;
+let sharedService = null;
+if (cacheFormat === 'shared') {
+	const reportFile = await containedFile(packageRoot, 'package-set.json');
+	const reportBytes = await readFile(reportFile);
+	sharedService = await new DistantSunSharedCachePackageService(packageRoot).load({
+		path: 'package-set.json',
+		byteLength: reportBytes.length,
+		sha256: sha256(reportBytes),
+	});
+} else {
+	const report = JSON.parse(await readFile(await containedFile(packageRoot, 'package-report.json'), 'utf8'));
+	if (report.schemaId !== 'algorithm32-distant-sun-bin-covered-runtime-package-set-v1' || report.accepted !== true) {
+		throw new Error('Runtime package report is incompatible.');
+	}
+	const catalogFile = await containedFile(packageRoot, report.catalogPath);
+	const catalogBytes = await readFile(catalogFile);
+	if (sha256(catalogBytes) !== report.catalogSha256)
+		throw new Error('Runtime catalog hash does not match its report.');
+	catalog = JSON.parse(catalogBytes.toString('utf8'));
+}
 const assetBaseUrl = argument('--asset-base-url', '/scene-caches/');
 const requestedPort = Number(argument('--port', '0'));
 if (!Number.isInteger(requestedPort) || requestedPort < 0 || requestedPort > 65535) {
@@ -81,7 +99,10 @@ const server = createServer(async (request, response) => {
 			const solarZenithDegrees =
 				rawDegrees === null || rawDegrees.trim() === '' ? Number.NaN : Number(rawDegrees);
 			try {
-				const resolution = resolveDistantSunSceneCache(catalog, solarZenithDegrees, assetBaseUrl);
+				const resolution =
+					sharedService === null
+						? resolveDistantSunSceneCache(catalog, solarZenithDegrees, assetBaseUrl)
+						: sharedService.resolve(solarZenithDegrees, assetBaseUrl);
 				sendJson(response, 200, resolution);
 			} catch (error) {
 				sendJson(response, 400, {error: error instanceof Error ? error.message : String(error)});
@@ -90,6 +111,16 @@ const server = createServer(async (request, response) => {
 		}
 		if (request.method === 'GET' && url.pathname.startsWith('/scene-caches/')) {
 			const relativePath = decodeURIComponent(url.pathname.slice('/scene-caches/'.length));
+			if (sharedService !== null) {
+				const asset = await sharedService.resolveAsset(relativePath);
+				response.writeHead(200, {
+					'content-type': asset.contentType,
+					'content-length': asset.byteLength,
+					'cache-control': 'public, max-age=31536000, immutable',
+				});
+				response.end(asset.bytes);
+				return;
+			}
 			const file = await containedFile(packageRoot, relativePath);
 			const facts = await stat(file);
 			const extension = path.extname(file);

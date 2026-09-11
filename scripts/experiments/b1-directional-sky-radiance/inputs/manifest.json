@@ -1,0 +1,8 @@
+{
+	"schema": "b1-pinned-raw-inputs-v1",
+	"path": "kider-spectra.json.gz",
+	"encoding": "gzip-json-path-to-base64-original-bytes",
+	"fileCount": 1377,
+	"byteLength": 40967266,
+	"sha256": "cdadc4c4c84e902e2d1f27b2d2007de5cca7706f1abee12c7884af199cb5c572"
+}

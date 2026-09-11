@@ -1,0 +1,316 @@
+{
+  "schema": "algorithm32-current-production-b1-b3-scores-v3",
+  "scoreRunId": "000002-current-production-b1-b3-gpu-shaders",
+  "runId": "current-production-b1-gpu-shaders-20260911T182339616Z",
+  "backend": "gpu-production-shaders-r32f",
+  "productionManifestSha256": "c0c2547cc9560b0d821dd7f2aa33a41e1fc6f8eb9f9a3867559edb71f5683147",
+  "completedAt": "2026-09-11T19:14:12.392Z",
+  "outputRoot": "C:\\dev\\flattened-steel\\references\\results\\experiments",
+  "backendDirectory": "gpu",
+  "results": [
+    {
+      "name": "B1",
+      "file": "b1-result.md",
+      "publishedFile": "b1-directional-sky-radiance/gpu/result.md",
+      "sha256": "f724ee2157405a4cb575caf52ff1127f7447537788d8434452e8fcd057961e82"
+    },
+    {
+      "name": "B2",
+      "file": "b2-result.md",
+      "publishedFile": "b2-hemispherical-sky-irradiance/gpu/result.md",
+      "sha256": "118da4b0d52f24fc96ffd821e6eebaed9ec61c9212d1ee513cd43f42922f831d"
+    },
+    {
+      "name": "B3",
+      "file": "b3-result.md",
+      "publishedFile": "b3-matched-atmosphere-solver/gpu/result.md",
+      "sha256": "3473170c1e3abf50b33e2ff0005ba47b2a3310cd330ef4ba3590711958c1df02"
+    }
+  ],
+  "boundaries": [
+    {
+      "name": "algorithm32Spectra",
+      "path": "C:\\dev\\flattened-steel\\references\\results\\experiments\\b1-directional-sky-radiance\\gpu\\algorithm32-paper-proposed.tsv",
+      "sha256": "20a8fdca9ab86d7dded9c832b1b3fb1ead18a0947a1951850008489ff1cd7010"
+    },
+    {
+      "name": "algorithm32Provenance",
+      "path": "C:\\dev\\flattened-steel\\references\\results\\experiments\\b1-directional-sky-radiance\\gpu\\algorithm32-paper-boundary-provenance.json",
+      "sha256": "95ed76c97e141cc5b1f5f0566db39f09b7fca6141f066f510cfeea1ab6e5489a"
+    },
+    {
+      "name": "algorithm32Cube",
+      "path": "C:\\dev\\flattened-steel\\references\\results\\experiments\\b3-matched-atmosphere-solver\\gpu\\algorithm32-paper-proposed-cube.json",
+      "sha256": "04d2d9dcbcab6ac671b159adff4a8843161ba096dce05e8c42792ebaa78c3c9c"
+    }
+  ],
+  "physicalScoringBoundary": {
+    "schemaId": "algorithm32-b1-physical-measurement-boundary-v1",
+    "identity": "b1-direct40-post-transport-pre-color-rgba32f-v1",
+    "observable": "directional-spectral-radiance-density",
+    "stage": "post-transport-pre-color",
+    "spectralChannelCount": 40,
+    "gpuReadback": {
+      "format": "RGBA32F",
+      "channelsPerPass": 4,
+      "passCount": 10
+    },
+    "colorDisplayModel": null,
+    "displayEncoding": "none",
+    "toneMapping": "none",
+    "stellarPresentationFilters": []
+  },
+  "figureColorControl": {
+    "schemaId": "algorithm32-b1-figure-color-control-v1",
+    "selectionId": "basic-bruneton",
+    "implementationId": "bruneton-figure1-display",
+    "role": "six-b1-visual-comparison-figures-only",
+    "artifactCount": 6,
+    "participatesInPhysicalScoring": false
+  },
+  "figures": [
+    {
+      "path": "C:\\dev\\flattened-steel\\references\\results\\experiments\\b1-directional-sky-radiance\\gpu\\figures\\b1-per-time-rmse.svg",
+      "relativePath": "references/results/experiments/b1-directional-sky-radiance/gpu/figures/b1-per-time-rmse.svg",
+      "byteLength": 33736,
+      "sha256": "568718ffe18a43d092b22c0ee50ea39fd169a583b4e7db6ece618fc31daf543c"
+    },
+    {
+      "path": "C:\\dev\\flattened-steel\\references\\results\\experiments\\b1-directional-sky-radiance\\gpu\\figures\\b1-aggregate-rmse.svg",
+      "relativePath": "references/results/experiments/b1-directional-sky-radiance/gpu/figures/b1-aggregate-rmse.svg",
+      "byteLength": 9384,
+      "sha256": "b86f2f00e5d016e5ae85165c13f1d816b2e45971ee2a356d655b8314bc3f8563"
+    },
+    {
+      "path": "C:\\dev\\flattened-steel\\references\\results\\experiments\\b1-directional-sky-radiance\\gpu\\figures\\b1-figure5-algorithm32-10h15-z41.png",
+      "relativePath": "references/results/experiments/b1-directional-sky-radiance/gpu/figures/b1-figure5-algorithm32-10h15-z41.png",
+      "byteLength": 2660,
+      "sha256": "0049488d2776732b335de2895f17900a46096a7b6414abc8a8d819bd5436c53d"
+    },
+    {
+      "path": "C:\\dev\\flattened-steel\\references\\results\\experiments\\b1-directional-sky-radiance\\gpu\\figures\\b1-figure5-algorithm32-11h15-z31.png",
+      "relativePath": "references/results/experiments/b1-directional-sky-radiance/gpu/figures/b1-figure5-algorithm32-11h15-z31.png",
+      "byteLength": 2911,
+      "sha256": "9d1763866778017201eb01e857fb2029b71df217402deda188317d8d5961f458"
+    },
+    {
+      "path": "C:\\dev\\flattened-steel\\references\\results\\experiments\\b1-directional-sky-radiance\\gpu\\figures\\b1-figure5-algorithm32-13h15-z21.png",
+      "relativePath": "references/results/experiments/b1-directional-sky-radiance/gpu/figures/b1-figure5-algorithm32-13h15-z21.png",
+      "byteLength": 3006,
+      "sha256": "224122c3829b474714796266963ea44f6c8d2fb5776cfc595e959232fdc9571c"
+    },
+    {
+      "path": "C:\\dev\\flattened-steel\\references\\results\\experiments\\b1-directional-sky-radiance\\gpu\\figures\\b1-figure5-relative-error-domes.svg",
+      "relativePath": "references/results/experiments/b1-directional-sky-radiance/gpu/figures/b1-figure5-relative-error-domes.svg",
+      "byteLength": 212790,
+      "sha256": "9ccb3305b9d9ad8629b7a85f42ce26a95bbddc5d6ab4ce33cf17b269b36d1180"
+    },
+    {
+      "path": "C:\\dev\\flattened-steel\\references\\results\\experiments\\b2-hemispherical-sky-irradiance\\gpu\\figures\\b2-diffuse-sky-irradiance.svg",
+      "relativePath": "references/results/experiments/b2-hemispherical-sky-irradiance/gpu/figures/b2-diffuse-sky-irradiance.svg",
+      "byteLength": 32514,
+      "sha256": "1bde9938ea4b7fdc39dc73b9463a2fcbc9b5ff2be96ddb47ff1d2743fb13a3c4"
+    },
+    {
+      "path": "C:\\dev\\flattened-steel\\references\\results\\experiments\\b3-matched-atmosphere-solver\\gpu\\figures\\b3-fixed-baseline-residuals.svg",
+      "relativePath": "references/results/experiments/b3-matched-atmosphere-solver/gpu/figures/b3-fixed-baseline-residuals.svg",
+      "byteLength": 15573,
+      "sha256": "5f1079b3af8536c3f23b1e379b1be46e7b06fa5acc9a67e9705b5a4c0b160e77"
+    }
+  ],
+  "derivation": {
+    "schemaId": "algorithm32-current-production-b1-b3-score-derivation-v1",
+    "source": {
+      "runId": "current-production-b1-gpu-shaders-20260911T182339616Z",
+      "manifestSha256": "c0c2547cc9560b0d821dd7f2aa33a41e1fc6f8eb9f9a3867559edb71f5683147",
+      "productionRevision": "sha256:b9cb6142814132be78d841580f44f4f49b814de20820893d070e814bc8e3b7ab",
+      "compilerIdentity": "algorithm32-production-shared-cache-generator",
+      "assetSetIdentity": "algorithm32-b1-direct40-cache-set-sha256:19531e95cfca6a007a0bd72e2d73c7ea4855fd69a624e39b4e4009fa111d9f0c",
+      "assetIdentities": [
+        "algorithm32-b1-direct40-cache-sha256:fef3359ec5d2a54d32767557ad236ca7312490af37fd60af6bc080aa3573e3c2",
+        "algorithm32-b1-direct40-cache-sha256:4a25a6052da7bd7e904b8cd55e317762dd4e5bf4c03bf296990b4284e3ff72de",
+        "algorithm32-b1-direct40-cache-sha256:62db49425bf0376b170652883e03c0cae30406253eef60b20eeb69cd3b35abc8",
+        "algorithm32-b1-direct40-cache-sha256:51cad98997694ef4b866761104f845c2a2dd89687fa93305c04acc6c2f1ae74b",
+        "algorithm32-b1-direct40-cache-sha256:5bc0b43060ec0eaaee386a7edf9c548a6f6a90bf3dfe3f3d57b65e481db6f7a3",
+        "algorithm32-b1-direct40-cache-sha256:4811865562d46599dfe637e49b732740eed59f250292f99139f23915fb7b37fa",
+        "algorithm32-b1-direct40-cache-sha256:527dd6990af69e945328f756aa5c32a68f3b3a168f6d36057b78c6e9fddd3e54",
+        "algorithm32-b1-direct40-cache-sha256:6560e1262c11b0db4b4b57d2950b664c7c3ed2e55ee8da6d8cd500258d0b7f10",
+        "algorithm32-b1-direct40-cache-sha256:4cdbaf157f5fc399dab1a5a57fabb64bf7e04ae9320ffd015b283b8c12529813",
+        "algorithm32-b1-direct40-cache-sha256:3182580998b89afb194f26e83aecd1413aa41b212849225947ccf7e38ed8a0e2",
+        "algorithm32-b1-direct40-cache-sha256:ba9f78661af306ea1b1b2be90952fcc53e6d803b5f7253c577c8efceb7be2b3f",
+        "algorithm32-b1-direct40-cache-sha256:16f0aaef3d2c20b21a1486740b5413ce1822ef718fa972bd0a60ed34dc4d6472",
+        "algorithm32-b1-direct40-cache-sha256:7e7b0ddf4a49759b2049909b93b445d5118c05ce96fcfaa2e233753c6c1f2a67",
+        "algorithm32-b1-direct40-cache-sha256:486d85474029b8374ab7998f4ff67f1d6812ef67f5de3a28e0881d3a0a0719f6",
+        "algorithm32-b1-direct40-cache-sha256:67dcdf88afafb67d171855d06f73d103b2a0674dc3b687c3ebc3755ba848e7c8",
+        "algorithm32-b1-direct40-cache-sha256:d1b8d19cb7385c5c6ca5e324eddee1b0ad881106809606b6b147f5624a600765",
+        "algorithm32-b1-direct40-cache-sha256:dd4fe588719b0bb3762047b9b5a7afb5f442527fdef343ed30a7a2584140c7b3"
+      ],
+      "profileHashes": [
+        {
+          "order": 4,
+          "time": "09:30",
+          "id": "b1-bruneton-0930-j4-v1",
+          "contentHash": "sha256:b8fce920c3522325cf9c14691445a15a10d9c353225bae52d20fdcc2fe3e7657"
+        },
+        {
+          "order": 4,
+          "time": "09:45",
+          "id": "b1-bruneton-0945-j4-v1",
+          "contentHash": "sha256:be0a902d71d71d3d81abf30df4f3849edcbcc676da7a99e4f02e798b0212e86c"
+        },
+        {
+          "order": 4,
+          "time": "10:00",
+          "id": "b1-bruneton-1000-j4-v1",
+          "contentHash": "sha256:35c142834d72f6971b21c7a16e6b989f0a9fbe01ab23d735f8a5b7d0fc2f740f"
+        },
+        {
+          "order": 4,
+          "time": "10:15",
+          "id": "b1-bruneton-1015-j4-v1",
+          "contentHash": "sha256:90c1e04a33d134467c7d6410a33dd74fb879b8122c870a835ede05b398140884"
+        },
+        {
+          "order": 4,
+          "time": "10:30",
+          "id": "b1-bruneton-1030-j4-v1",
+          "contentHash": "sha256:4cd22363a9865d92d048cd243fba70722105c4addc0e3be9d86f44d72a0eafbd"
+        },
+        {
+          "order": 4,
+          "time": "10:45",
+          "id": "b1-bruneton-1045-j4-v1",
+          "contentHash": "sha256:41342de00227feee3c6f7c342b4eb8d45f5a8d0971b732802a417f6e8be0c46b"
+        },
+        {
+          "order": 4,
+          "time": "11:00",
+          "id": "b1-bruneton-1100-j4-v1",
+          "contentHash": "sha256:91b8f2a2a9721359ebfb6fd57e117ea2829146aacebc9a3e57174e939d9001fd"
+        },
+        {
+          "order": 4,
+          "time": "11:15",
+          "id": "b1-bruneton-1115-j4-v1",
+          "contentHash": "sha256:874e5169eb0e505bbe9f4ab156fb5a8a218006e1d2e44be7be6d60e459e69baa"
+        },
+        {
+          "order": 4,
+          "time": "11:30",
+          "id": "b1-bruneton-1130-j4-v1",
+          "contentHash": "sha256:e7c4b665eb803fe061651baad4c45a0b08845a0c4c5b5b8a1c0bf340d34add41"
+        },
+        {
+          "order": 4,
+          "time": "11:45",
+          "id": "b1-bruneton-1145-j4-v1",
+          "contentHash": "sha256:b50b6369224eecb04211bbfd2d154cd801819eb835fd6c7f25e52b256b1dc4c7"
+        },
+        {
+          "order": 4,
+          "time": "12:00",
+          "id": "b1-bruneton-1200-j4-v1",
+          "contentHash": "sha256:0b3d65326d78a24f669f07c56a45d9d2284faf619c30e3b1887d87f1e5a962a5"
+        },
+        {
+          "order": 4,
+          "time": "12:15",
+          "id": "b1-bruneton-1215-j4-v1",
+          "contentHash": "sha256:70eb1482584856c02bc96245eb2ababdd2d5ce49f64c8aaa126c8f7186dab95d"
+        },
+        {
+          "order": 4,
+          "time": "12:30",
+          "id": "b1-bruneton-1230-j4-v1",
+          "contentHash": "sha256:30a8d9fd5d5052320734b1fde9d4d196c7f93836ad9012bea01359e8752119bc"
+        },
+        {
+          "order": 4,
+          "time": "12:45",
+          "id": "b1-bruneton-1245-j4-v1",
+          "contentHash": "sha256:b0eadf48e5580cf6b8d33c9bc094bc29f508976f431869c35028e5ad7fc0c237"
+        },
+        {
+          "order": 4,
+          "time": "13:00",
+          "id": "b1-bruneton-1300-j4-v1",
+          "contentHash": "sha256:a87c7e7244cb1eaecbfadcdffae26aec396cd98ad95d17e2e851d684ae95af19"
+        },
+        {
+          "order": 4,
+          "time": "13:15",
+          "id": "b1-bruneton-1315-j4-v1",
+          "contentHash": "sha256:53bcd0fc4c0f39bfa5daa4bc652446d4d9938bf3076eed2ec97b8eeb0cb62b7d"
+        },
+        {
+          "order": 4,
+          "time": "13:30",
+          "id": "b1-bruneton-1330-j4-v1",
+          "contentHash": "sha256:914340e0b6b79304e20b43e35794931df15a59c35d7cb26255b35f1e76b55a76"
+        }
+      ],
+      "tableSha256": "20a8fdca9ab86d7dded9c832b1b3fb1ead18a0947a1951850008489ff1cd7010",
+      "provenanceSha256": "b2a8aee6c87f4c729a6c7baf442b181e992fc209b35297f0e33bafe420331905",
+      "cubeSha256": "04d2d9dcbcab6ac671b159adff4a8843161ba096dce05e8c42792ebaa78c3c9c"
+    },
+    "products": {
+      "b1": {
+        "operation": "score direct-40 directional radiance",
+        "reportSha256": "f724ee2157405a4cb575caf52ff1127f7447537788d8434452e8fcd057961e82"
+      },
+      "b2": {
+        "operation": "integrate the same B1 directional spectra",
+        "reportSha256": "118da4b0d52f24fc96ffd821e6eebaed9ec61c9212d1ee513cd43f42922f831d"
+      },
+      "b3": {
+        "operation": "score the 31-channel cube derived from the same B1 table",
+        "reportSha256": "3473170c1e3abf50b33e2ff0005ba47b2a3310cd330ef4ba3590711958c1df02"
+      },
+      "figures": {
+        "operation": "render the six B1 visual comparisons plus B2 and B3 diagnostics",
+        "colorControl": {
+          "schemaId": "algorithm32-b1-figure-color-control-v1",
+          "selectionId": "basic-bruneton",
+          "implementationId": "bruneton-figure1-display",
+          "role": "six-b1-visual-comparison-figures-only",
+          "artifactCount": 6,
+          "participatesInPhysicalScoring": false
+        },
+        "outputs": [
+          {
+            "relativePath": "references/results/experiments/b1-directional-sky-radiance/gpu/figures/b1-per-time-rmse.svg",
+            "sha256": "568718ffe18a43d092b22c0ee50ea39fd169a583b4e7db6ece618fc31daf543c"
+          },
+          {
+            "relativePath": "references/results/experiments/b1-directional-sky-radiance/gpu/figures/b1-aggregate-rmse.svg",
+            "sha256": "b86f2f00e5d016e5ae85165c13f1d816b2e45971ee2a356d655b8314bc3f8563"
+          },
+          {
+            "relativePath": "references/results/experiments/b1-directional-sky-radiance/gpu/figures/b1-figure5-algorithm32-10h15-z41.png",
+            "sha256": "0049488d2776732b335de2895f17900a46096a7b6414abc8a8d819bd5436c53d"
+          },
+          {
+            "relativePath": "references/results/experiments/b1-directional-sky-radiance/gpu/figures/b1-figure5-algorithm32-11h15-z31.png",
+            "sha256": "9d1763866778017201eb01e857fb2029b71df217402deda188317d8d5961f458"
+          },
+          {
+            "relativePath": "references/results/experiments/b1-directional-sky-radiance/gpu/figures/b1-figure5-algorithm32-13h15-z21.png",
+            "sha256": "224122c3829b474714796266963ea44f6c8d2fb5776cfc595e959232fdc9571c"
+          },
+          {
+            "relativePath": "references/results/experiments/b1-directional-sky-radiance/gpu/figures/b1-figure5-relative-error-domes.svg",
+            "sha256": "9ccb3305b9d9ad8629b7a85f42ce26a95bbddc5d6ab4ce33cf17b269b36d1180"
+          },
+          {
+            "relativePath": "references/results/experiments/b2-hemispherical-sky-irradiance/gpu/figures/b2-diffuse-sky-irradiance.svg",
+            "sha256": "1bde9938ea4b7fdc39dc73b9463a2fcbc9b5ff2be96ddb47ff1d2743fb13a3c4"
+          },
+          {
+            "relativePath": "references/results/experiments/b3-matched-atmosphere-solver/gpu/figures/b3-fixed-baseline-residuals.svg",
+            "sha256": "5f1079b3af8536c3f23b1e379b1be46e7b06fa5acc9a67e9705b5a4c0b160e77"
+          }
+        ]
+      }
+    }
+  }
+}

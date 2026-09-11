@@ -1,5 +1,9 @@
 # Shared-Inventory Generator Qualification
 
+The current generator incorporates the expanded point-local compiler. Its
+[consolidation and complete deployed-payload compatibility proof](../../../../archives/topics/production-algorithm32-release-20260911/agents/topics/production-algorithm32/caches/point-local-compiler-promotion-plan.md#production-compiler-consolidation)
+qualify that successor. The P2 release evidence below remains immutable.
+
 P2 is implemented and numerically qualified. The production generator computes
 one common field per Native15 wavelength, preserves the existing J1-J4 arithmetic,
 and writes bounded 64-row readbacks directly into 89 canonical `8x8` blocks.

@@ -18,73 +18,75 @@ manifest. In addition to the predeclared favorable B1 and B2 classification
 rules and B3 consistency rule, Color Reset closeout requires B1 aggregate RMSE
 at or below `11.820391604126252` mW m^-2 sr^-1 nm^-1.
 
-Fresh GPU generation now requires the complete production-owned direct-40
-asset set and its exact production revision. The host independently verifies
-all 17 assets before browser launch, selects the condition-matching asset, and
-loads it through the production immutable-texture backend. No runtime path
-constructs recurrence data. Physical scoring remains native-spectral and
-Color-free under `b1-direct40-post-transport-pre-color-rgba32f-v1`; the six
-B1 figures separately record `basic-bruneton` / `bruneton-figure1-display` as
-their figure-only Color control.
+The default official runner compiles the complete receiver-local Direct40 cache
+through `DistantSunSharedCacheGenerator`, then loads authenticated scene assets
+through the production `DistantSunSceneCache` and `ThreeCacheBackend`. Production
+GPU shaders perform final-view transport. The measurement seam reads all 40
+channels before Color; Basic Bruneton is used only to draw the figures.
 
-## Asset-Backed Regeneration Workflow
+## Run From A Clone
 
-The [2026-09-10 canonical v8 run](../../../agents/topics/poc-experiments/benchmarks/production-b-family-c1-9-result.md)
-completed all 17 conditions and six figures, but failed the fixed B1 closeout
-ceiling. Its favorable benchmark classification is not release acceptance.
-For new execution, pass explicit fresh `--output-root`, `--staging-root`, and
-`--progress-log` paths below `tmp/extraterrestrial/production-color-reset/p8/`.
-Run `score:algorithm32:b1-b3-production` with the resulting manifest and a
-separate fresh `--output-root`; never reuse an earlier output directory.
-
-The Stage 13 generator constructed the benchmark-owned direct-40 profile and
-has an explicit `--backend cpu|gpu` switch. Historically, both backends emitted the same
-40-channel table and cube schemas for the same 17 times and 81 exact benchmark
-view directions at the paper/default cumulative scattering order J4:
-
-- `cpu` builds the binary64 production reference cache and evaluates the
-  binary64 final-view reference. It is the default for compatibility.
-- `gpu` verifies and uploads the exact production R32F asset through
-  `ThreeCacheBackend`, executes the assembled production final-view transport
-  shader, and replaces only the display conversion with a benchmark-owned
-  float spectral readout. Ten RGBA32F reads retain all 40 native channels. It
-  does not perform final-view integration on the CPU.
-
-The CPU command remains usable as a reference. GPU generation requires the
-verified set and the revision recorded by that set:
+Install the locked dependencies with `npm ci`, then run:
 
 ```text
-npm run generate:algorithm32:b1-production:cpu
-npm run generate:algorithm32:b1-production:gpu -- --asset-set PATH_TO_ASSET_SET --production-revision EXACT_REVISION
+npm run generate:algorithm32:b1-production
 ```
 
-The canonical production profile uses the selected Z-up spherical/distant
-frame and exact-0 m first altitude node. Historical promotion run 043 completed all 17
-conditions in 127.3 seconds, scored `11.925778` mW aggregate RMSE, and produced
-the same J4 table SHA-256
-`50a6df87d73bf0b7979faa21675ecdb50099f4be02229313ab65518727bcd486`
-as the isolated retained-parity qualification. That historical score does not
-satisfy or replace the current Color Reset closeout threshold.
+This one command compiles all 17 conditions and 40 wavelengths, renders all
+55,080 directional spectral values, validates the production-run manifest,
+scores against the independent published benchmark, and regenerates the six
+figures. It requires Node.js 22 or newer and a Chrome-compatible WebGL2 GPU
+with float render targets and float linear filtering. System-installed Chrome is the default (the accepted baseline used Chrome 153); `CHROME_PATH` may identify another absolute executable.
+Drivers and hardware are recorded because cross-device float results need not
+be byte-identical. No external repository or contained experimental run is an
+implementation or data dependency.
 
-A complete canonical generation also scores B1 and writes all six figures
-owned by the original B1 experiment beneath the selected `cpu/figures/` or
-`gpu/figures/` directory: the per-time and aggregate RMSE charts, three local
-Figure 5 PNG panels, and the complete Figure 5 comparison chart. Bounded runs
-do not generate figures because the original charts require all 17 conditions.
-To publish the B1 report and figures from an already completed production run
-without rebuilding its cache, use:
+The pinned original measurements and published Figure 5 panels are tracked in
+[`inputs/`](inputs/README.md). Their original identities are verified before
+use. Existing reference spectra and scoring constants remain independent of
+the candidate. The selected researched baseline remains ozone-free, Direct40,
+Native48/Z180/F68/W27, J4, with 30 quadratic midpoint view intervals,
+20 source-transmittance intervals, and 40 cache-transport intervals. Future
+parameter changes follow the [profile mapping](execution-profile-mapping.md).
+The production cache lookup uses explicit shader bilinear weights and a
+range-reduced solar-angle calculation to reproduce the reference interpolation
+more accurately than the retained GPU filtering and inverse-trigonometry path.
+
+## Current Results And Documentation Links
+
+The official current output is
+[`references/results/experiments/b1-directional-sky-radiance/gpu/`](../../../references/results/experiments/b1-directional-sky-radiance/gpu/).
+Link documentation to its [`result.md`](../../../references/results/experiments/b1-directional-sky-radiance/gpu/result.md)
+or individual figures in `gpu/figures/`:
+
+- `b1-per-time-rmse.svg`
+- `b1-aggregate-rmse.svg`
+- `b1-figure5-algorithm32-10h15-z41.png`
+- `b1-figure5-algorithm32-11h15-z31.png`
+- `b1-figure5-algorithm32-13h15-z21.png`
+- `b1-figure5-relative-error-domes.svg`
+
+Successful official reruns replace these canonical results. Git history owns
+previous official values; they do not use contained experiments' immutable-run
+retention policy. Sealed experiments, historical qualifications, and archives
+remain immutable. Compiler work is allocated below ignored
+`tmp/algorithm32/point-local-cache-compiler/`; it is unnecessary for subsequent
+scoring of the committed canonical result. Manifests retain compiler, runtime
+source, profile, asset, payload, and GPU identities.
+
+To regenerate the report and six figures from the completed current table:
 
 ```text
-npm run score:algorithm32:b1-production -- PATH_TO_RUN
+npm run score:algorithm32:b1-production
 ```
 
-The unsuffixed command remains the CPU default. An explicitly requested order
-sweep is diagnostic rather than part of the canonical Bruneton reproduction.
-Pass a bounded J4 condition after the npm argument separator, for example:
-
-```text
-npm run generate:algorithm32:b1-production:gpu -- --conditions 09:30 --output-root tmp/extraterrestrial/production-color-reset/p8/NEW_OUTPUT --staging-root tmp/extraterrestrial/production-color-reset/p8/NEW_STAGING --asset-set PATH_TO_ASSET_SET --production-revision EXACT_REVISION
-```
+The CPU reference remains available as
+`npm run generate:algorithm32:b1-production:cpu`. To reuse a verified asset set
+for a GPU rerender, pass `--asset-set PATH --production-revision ID` after `--`
+to `generate:algorithm32:b1-production:gpu`. Its compilation revision and the
+new runtime source identity are recorded separately. Bounded selections require
+an explicit `--output-root` and a verified complete asset set; they do not
+replace the canonical 17-condition result or generate the official figures.
 
 ### Reflection-completed quadrature diagnostic
 

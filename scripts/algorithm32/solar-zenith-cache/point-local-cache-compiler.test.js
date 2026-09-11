@@ -7,7 +7,7 @@ import test from 'node:test';
 import {CanonicalValueHash} from '../../../src/algorithm32/value-identity/CanonicalValueHash.js';
 import {createBrunetonProductionProfile} from '../../experiments/b1-directional-sky-radiance/production-profile.js';
 import {DistantSunSceneCacheCompilerInputs} from './DistantSunSceneCacheCompilerInputs.js';
-import DistantSunPointLocalCacheCompiler from './DistantSunPointLocalCacheCompiler.js';
+import DistantSunSharedCacheGenerator from './DistantSunSharedCacheGenerator.js';
 import DistantSunPointLocalCacheInventory from './DistantSunPointLocalCacheInventory.js';
 import DistantSunPointLocalCachePackage from './DistantSunPointLocalCachePackage.js';
 import DistantSunPointLocalCacheReader from './DistantSunPointLocalCacheReader.js';
@@ -168,12 +168,18 @@ test('stages variable dimensions and package expansion preserves exact Float32 b
 	const channel = await reader.readChannel(files, packaged.packet, 1);
 	const expanded = reader.expand(files, packaged.packet, 0, channel, directions);
 	assert.deepEqual([...expanded], [110, 111, 112, 110, 100, 101, 102, 100]);
+	const unique = reader.expandUnique(files, packaged.packet, 0, channel);
+	assert.deepEqual(
+		[...new Float32Array(unique.buffer, unique.byteOffset, unique.length / 4)],
+		[110, 111, 112, 100, 101, 102],
+	);
 
 	const corrupt = structuredClone(packaged.packet);
 	corrupt.scenes[0].indexes[0] = 0;
 	const {packageIdentity: _discarded, ...record} = corrupt;
 	corrupt.packageIdentity = `sha256:${files.hash(JSON.stringify(record))}`;
 	assert.throws(() => reader.expand(files, corrupt, 0, channel, directions), /reconstruction index/u);
+	assert.throws(() => reader.expandUnique(files, corrupt, 0, channel), /reconstruction index/u);
 
 	const unbounded = structuredClone(packaged.packet);
 	unbounded.layout.maximumDecodedBlockBytes = Number.MAX_SAFE_INTEGER;
@@ -196,7 +202,7 @@ test('terminalizes package-directory setup failure inside a new compiler run', a
 		return originalDirectory.call(this, relativePath);
 	};
 	try {
-		const compiler = new DistantSunPointLocalCacheCompiler({chromePath: path.join(repositoryRoot, 'chrome.exe')});
+		const compiler = new DistantSunSharedCacheGenerator({chromePath: path.join(repositoryRoot, 'chrome.exe')});
 		await assert.rejects(
 			compiler.compile({
 				outputDirectory: runRoot,
@@ -242,7 +248,7 @@ test('rejects unsupported coordinate contracts and selections before GPU executi
 		() => new DistantSunPointLocalCacheInventory().create(input.buildRequest, [scene], [0, 0]),
 		/unique in-range/u,
 	);
-	const compiler = new DistantSunPointLocalCacheCompiler({chromePath: path.join(repositoryRoot, 'chrome.exe')});
+	const compiler = new DistantSunSharedCacheGenerator({chromePath: path.join(repositoryRoot, 'chrome.exe')});
 	const files = new DistantSunSharedCacheGenerationFiles(repositoryRoot);
 	await assert.rejects(compiler._createRun(files, 'src/generated-cache'), /must be below/u);
 	await assert.rejects(compiler._createRun(files, proofRoot), /must be below/u);

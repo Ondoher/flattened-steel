@@ -82,16 +82,15 @@ uses `experiments/<slug>/` for tracked source and
 does not reopen, relocate, or grant write access to an existing experiment,
 sealed run, archive, production tree, or external repository.
 
-The `production-algorithm32` work topic is an authorized production
-promotion lane. Work required by the production-owned
-[Color Reset release plan and linked implementation owners](agents/topics/production-app/release/color-reset-implementation-plan.md)
-may create and modify production implementation, contract, configuration,
-fixture, test, application, and documentation surfaces under `src/algorithm32`,
-`src/flat32`, and their ordinary repository-owned supporting paths. This
-authorization applies through P0-P9 and does not require renewed boundary
-approval for each planned production edit. The selected experimental
-algorithms must be adapted to existing production architecture and repository
-coding standards as defined by the production design and plan.
+The completed `production-algorithm32` promotion was an authorized production
+lane. The
+[completed-plan archive index](agents/topics/context/completed-production-plan-archive-index.md)
+records its retired P0-P9 plans and current design, qualification, and MVP
+successors. Production implementation, contract, configuration, fixture, test,
+application, and documentation surfaces under `src/algorithm32`, `src/flat32`,
+and their ordinary repository-owned supporting paths remain governed by those
+current owners. Experimental algorithms must be adapted to existing production
+architecture and repository coding standards before promotion.
 
 Do not create or run an experimental unit-test tree, suite, file, or
 test-framework dependency. Use focused self-verifying proof runners for

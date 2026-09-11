@@ -1,7 +1,7 @@
 # Algorithm32 External Benchmark Contract
 
-Status: retained CPU evidence is available; standalone production CPU/GPU
-experiments and official registration remain open.
+Status: the current production GPU B1--B3 suite is registered and accepted;
+retained CPU and five-profile evidence remains available for comparison.
 
 
 ## Scope And Canonical Ownership
@@ -21,8 +21,9 @@ Current retained result summaries are:
 - [B2 hemispherical irradiance](../../../../references/results/experiments/b2-hemispherical-sky-irradiance/result.md); and
 - [B3 matched-atmosphere solver comparison](../../../../references/results/experiments/b3-matched-atmosphere-solver/result.md).
 
-These retained artifacts are evidence inputs for recovery. They are not yet a
-registered, standalone production Algorithm32 validation suite.
+These retained artifacts remain evidence inputs for recovery. The separate
+current-production GPU reports registered in `/references/experiments.md`
+constitute the official B1--B3 suite.
 
 
 ## Benchmark Observables

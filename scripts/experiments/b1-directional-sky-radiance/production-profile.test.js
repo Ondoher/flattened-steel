@@ -20,7 +20,10 @@ test('constructs the benchmark-owned direct-40 profile through production ingres
 		profile.spectral.basis.channels.map((channel) => channel.center.value),
 		Array.from({length: 40}, (_, index) => 360 + (470 * index) / 40),
 	);
-	assert.equal(profile.numerical.viewPath.intervalCount, 40);
+	assert.deepEqual(profile.numerical.viewPath, {
+		intervalCount: 30,
+		sampleDistribution: {kind: 'quadratic-near-observer-v1'},
+	});
 	assert.equal(profile.numerical.sourcePathTransmittance.intervalCount, 20);
 	assert.equal(profile.numerical.cacheConstruction.transportIntervalCount, 40);
 	assert.equal(profile.numerical.cacheConstruction.maximumScatteringOrder, 4);

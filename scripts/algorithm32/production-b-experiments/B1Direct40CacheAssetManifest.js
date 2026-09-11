@@ -1,9 +1,15 @@
 import {CanonicalValueHash} from '../../../src/algorithm32/value-identity/CanonicalValueHash.js';
+import DistantSunSceneCacheLedger from '../../../src/algorithm32/implementation/distant-sun/cache/DistantSunSceneCacheLedger.js';
+import {SOLAR_ZENITH_180_DOMAIN_OWNER} from '../../../src/algorithm32/sampling-domains/solar-zenith/consts.js';
 
 export const B1_DIRECT40_CACHE_ASSET_MANIFEST_SCHEMA = 'algorithm32-b1-direct40-cache-asset-manifest-v1';
 export const B1_DIRECT40_CACHE_PAYLOAD_CODEC = 'algorithm32-b1-direct40-w27-exact-seam-f32le-v1';
 export const B1_DIRECT40_DIRECTION_INDEX_CODEC = 'algorithm32-b1-direct40-w27-logical-to-unique-u16le-v1';
 export const B1_DIRECT40_CACHE_LAYOUT = 'wavelength-major-position-major-unique-w27-direction';
+/** Receiver-local rows carry altitude and solar-zenith support instead of one source-aligned altitude column. */
+export const B1_POINT_LOCAL_CACHE_LAYOUT = 'wavelength-major-receiver-local-row-major-unique-w27-direction';
+/** Explicit version for assets materialized from the unified production compiler. */
+export const B1_POINT_LOCAL_CACHE_ASSET_SCHEMA = 'algorithm32-b1-point-local-cache-asset-manifest-v2';
 
 const ASSET_IDENTITY_PREFIX = 'algorithm32-b1-direct40-cache-sha256:';
 const SHA256 = /^[a-f0-9]{64}$/u;
@@ -109,6 +115,9 @@ function expectedProfileBoundary(profile, condition) {
 		},
 		numerical: {
 			viewPathIntervalCount: profile.numerical.viewPath.intervalCount,
+			...(profile.numerical.viewPath.sampleDistribution === null
+				? {}
+				: {viewPathSampleDistribution: profile.numerical.viewPath.sampleDistribution.kind}),
 			sourcePathTransmittanceIntervalCount: profile.numerical.sourcePathTransmittance.intervalCount,
 			cacheTransportIntervalCount: profile.numerical.cacheConstruction.transportIntervalCount,
 			maximumScatteringOrder: profile.numerical.cacheConstruction.maximumScatteringOrder,
@@ -118,6 +127,10 @@ function expectedProfileBoundary(profile, condition) {
 
 /** Exact content-addressed contract for one production-built B1 direct-40 cache asset. */
 export default class B1Direct40CacheAssetManifest {
+	/** Project the production profile's physical and numerical compatibility boundary. */
+	static createProfileBoundary(profile, condition) {
+		return expectedProfileBoundary(profile, condition);
+	}
 	/** Compute the complete-cache identity from every manifest field other than the identity itself. */
 	static computeAssetIdentity(record) {
 		return `${ASSET_IDENTITY_PREFIX}${CanonicalValueHash.sha256Value(identityPayload(record)).slice('sha256:'.length)}`;
@@ -125,13 +138,22 @@ export default class B1Direct40CacheAssetManifest {
 
 	/** Create a record whose asset identity covers its complete compatibility and payload boundary. */
 	static createRecord(definition) {
-		const record = {...definition, schemaId: B1_DIRECT40_CACHE_ASSET_MANIFEST_SCHEMA};
+		const record = {
+			...definition,
+			schemaId:
+				definition.layout?.axisOrder === B1_POINT_LOCAL_CACHE_LAYOUT
+					? B1_POINT_LOCAL_CACHE_ASSET_SCHEMA
+					: B1_DIRECT40_CACHE_ASSET_MANIFEST_SCHEMA,
+		};
 		return Object.freeze({...record, assetIdentity: this.computeAssetIdentity(record)});
 	}
 
 	/** Validate one serialized B1 cache-asset record. */
 	constructor(record) {
-		if (!record || record.schemaId !== B1_DIRECT40_CACHE_ASSET_MANIFEST_SCHEMA) {
+		if (
+			!record ||
+			![B1_DIRECT40_CACHE_ASSET_MANIFEST_SCHEMA, B1_POINT_LOCAL_CACHE_ASSET_SCHEMA].includes(record.schemaId)
+		) {
 			throw new RangeError('B1 direct-40 cache-asset manifest schema is incompatible.');
 		}
 		if (record.assetIdentity !== B1Direct40CacheAssetManifest.computeAssetIdentity(record)) {
@@ -176,18 +198,51 @@ export default class B1Direct40CacheAssetManifest {
 		) {
 			throw new RangeError('B1 direct-40 cache-asset domain shape is incompatible.');
 		}
-		if (JSON.stringify(record.numerical) !== JSON.stringify(REQUIRED_NUMERICAL)) {
+		const requiredNumerical =
+			record.numerical?.viewPathSampleDistribution === 'quadratic-near-observer-v1'
+				? {
+						viewPathIntervalCount: 30,
+						viewPathSampleDistribution: 'quadratic-near-observer-v1',
+						sourcePathTransmittanceIntervalCount: 20,
+						cacheTransportIntervalCount: 40,
+						maximumScatteringOrder: 4,
+					}
+				: REQUIRED_NUMERICAL;
+		if (JSON.stringify(record.numerical) !== JSON.stringify(requiredNumerical)) {
 			throw new RangeError('B1 direct-40 cache-asset numerical controls are incompatible.');
 		}
+		const pointLocal = record.schemaId === B1_POINT_LOCAL_CACHE_ASSET_SCHEMA;
+		let rowCount = REQUIRED_COUNTS.positions;
+		if (pointLocal) {
+			if (!Array.isArray(record.ledger?.rows) || record.ledger.rows.length !== 48)
+				throw new RangeError('Point-local asset requires all 48 altitude rows.');
+			rowCount = 0;
+			for (const [altitudeIndex, row] of record.ledger.rows.entries()) {
+				if (
+					row.altitudeIndex !== altitudeIndex ||
+					!Number.isInteger(row.firstSolarZenithIndex) ||
+					!Number.isInteger(row.lastSolarZenithIndex) ||
+					row.firstSolarZenithIndex < 0 ||
+					row.lastSolarZenithIndex >= 180 ||
+					row.firstSolarZenithIndex > row.lastSolarZenithIndex ||
+					row.firstPackedRow !== rowCount ||
+					row.packedRowCount !== row.lastSolarZenithIndex - row.firstSolarZenithIndex + 1
+				)
+					throw new RangeError('Point-local asset ledger is inconsistent.');
+				rowCount += row.packedRowCount;
+			}
+			if (record.ledger.retainedBlockCount !== rowCount)
+				throw new RangeError('Point-local asset ledger count differs.');
+		}
 		if (
-			record.layout?.axisOrder !== B1_DIRECT40_CACHE_LAYOUT ||
+			record.layout?.axisOrder !== (pointLocal ? B1_POINT_LOCAL_CACHE_LAYOUT : B1_DIRECT40_CACHE_LAYOUT) ||
 			record.layout?.scalarType !== 'float32-little-endian'
 		) {
 			throw new RangeError('B1 direct-40 cache-asset layout is incompatible.');
 		}
 		const cacheByteLength =
 			REQUIRED_COUNTS.spectralChannels *
-			REQUIRED_COUNTS.positions *
+			rowCount *
 			REQUIRED_COUNTS.uniqueOutgoingDirections *
 			Float32Array.BYTES_PER_ELEMENT;
 		const indexByteLength = REQUIRED_COUNTS.logicalOutgoingDirections * Uint16Array.BYTES_PER_ELEMENT;
@@ -224,6 +279,29 @@ export default class B1Direct40CacheAssetManifest {
 			if (JSON.stringify(this.record[key]) !== JSON.stringify(expected[key])) {
 				throw new RangeError(`B1 direct-40 cache asset is incompatible with the requested ${key} boundary.`);
 			}
+		}
+		if (this.record.schemaId === B1_POINT_LOCAL_CACHE_ASSET_SCHEMA) {
+			const {ledger} = this.record;
+			const constants = profile.models.atmosphere.constants;
+			const zenith = Math.acos(Math.max(-1, Math.min(1, expected.condition.directionToSource[2])));
+			if (
+				ledger.sceneSun.id !== condition.id ||
+				ledger.sceneSun.instant !== expected.condition.instant ||
+				ledger.sceneSun.sourceIdentity !== expected.condition.sourceIdentity ||
+				ledger.support.observerAltitude.value !== 0 ||
+				Math.abs(ledger.support.observerSolarZenith.value - zenith) > 1e-12 ||
+				JSON.stringify(ledger.support.bottomRadius) !== JSON.stringify(constants.bottomRadius) ||
+				JSON.stringify(ledger.support.topRadius) !== JSON.stringify(constants.topRadius) ||
+				ledger.support.completeCameraRotation !== true ||
+				ledger.support.arbitraryShortenedEndpoint !== true
+			)
+				throw new RangeError('Point-local ledger support does not match the B1 condition.');
+			DistantSunSceneCacheLedger.fromRecord(ledger, {
+				positionDomain: profile.domains.positions,
+				solarZenithDomain: SOLAR_ZENITH_180_DOMAIN_OWNER,
+				outgoingDirectionDomain: profile.domains.outgoingDirections,
+				spectralBasis: profile.spectral.basis,
+			});
 		}
 	}
 

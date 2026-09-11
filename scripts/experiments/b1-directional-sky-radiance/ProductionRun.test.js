@@ -5,7 +5,8 @@ import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import test from 'node:test';
 
-import {CAPTURE_TIMES} from './benchmark.js';
+import {CAPTURE_TIMES, EXPECTED_DATASET_FINGERPRINTS} from './benchmark.js';
+import B1ReferenceInputs from './B1ReferenceInputs.js';
 import {PAPER_PHYSICAL_PROFILE_CONTENT_HASH, PAPER_PHYSICAL_PROFILE_ID} from './candidate-provenance.js';
 import {B1_PHYSICAL_MEASUREMENT_BOUNDARY} from '../../algorithm32/production-b-experiments/B1MeasurementBoundary.js';
 import {B1_DIRECT40_OFFLINE_ASSET_ADAPTER_IDENTITY} from '../../algorithm32/production-b-experiments/B1Direct40OfflineAssetAdapter.js';
@@ -19,8 +20,15 @@ function sha256(text) {
 	return createHash('sha256').update(text).digest('hex');
 }
 
-function createCompleteRun(directory, {backend = 'cpu-reference-binary64'} = {}) {
+function createCompleteRun(directory, {backend = 'cpu-reference-binary64', pointLocal = false} = {}) {
 	const gpu = backend === 'gpu-production-shaders-r32f';
+	const sources = [{path: 'test.js', byteLength: 0, sha256: sha256('')}];
+	const receiverLocal = pointLocal
+		? {
+				runtimeSourceIdentity: {identity: `sha256:${sha256(JSON.stringify(sources))}`, sources},
+				referenceInputs: {bundle: B1ReferenceInputs.identity(), ...EXPECTED_DATASET_FINGERPRINTS},
+			}
+		: {};
 	const productionRevision = gpu ? 'test-production-revision' : null;
 	const assetSet = gpu
 		? B1Direct40CacheAssetSetManifest.createRecord({
@@ -56,6 +64,17 @@ function createCompleteRun(directory, {backend = 'cpu-reference-binary64'} = {})
 		}
 		const tableText = `${tableLines.join('\n')}\n`;
 		const provenanceRecord = {
+			...receiverLocal,
+			...(pointLocal
+				? {
+						cacheRepresentation: 'receiver-local-native48-z180-w27',
+						numericalControls: {
+							pathIntervalCount: 30,
+							pathSampleDistribution: 'quadratic-near-observer-v1',
+							scatteringOutputDomain: 'receiver-local-boundary-inclusive-gnomonic-cubed-sphere-w27',
+						},
+					}
+				: {}),
 			schema: 'algorithm32-current-production-b1-provenance-v2',
 			runId: 'test-run',
 			backend,
@@ -125,6 +144,7 @@ function createCompleteRun(directory, {backend = 'cpu-reference-binary64'} = {})
 	writeFileSync(
 		join(directory, 'manifest.json'),
 		JSON.stringify({
+			...receiverLocal,
 			schema: ProductionRun.MANIFEST_SCHEMA,
 			runId: 'test-run',
 			status: 'COMPLETE',
@@ -135,7 +155,9 @@ function createCompleteRun(directory, {backend = 'cpu-reference-binary64'} = {})
 			canonicality: {kind: 'canonical-candidate', publicationEligible: true},
 			productionRevision,
 			compilerIdentity: gpu
-				? B1_DIRECT40_OFFLINE_ASSET_ADAPTER_IDENTITY
+				? pointLocal
+					? 'algorithm32-production-shared-cache-generator'
+					: B1_DIRECT40_OFFLINE_ASSET_ADAPTER_IDENTITY
 				: 'algorithm32-b1-cpu-reference-binary64-v1',
 			assetSetIdentity: assetSet?.setIdentity ?? null,
 			assetSet,
@@ -188,6 +210,14 @@ test('resolves the Bruneton J4 scorer input from one complete production-run man
 		assert.match(paths.proposedPath, /j4\.tsv$/);
 		assert.match(paths.proposedProvenancePath, /default-provenance\.json$/);
 		assert.match(paths.proposedCubePath, /j4-cube\.json$/);
+		const boundary = ProductionRun.boundaryRecord(run);
+		assert.equal(boundary.schema, 'algorithm32-current-production-benchmark-boundary-v1');
+		assert.equal(boundary.runId, run.manifest.runId);
+		assert.equal(boundary.compilerIdentity, run.manifest.compilerIdentity);
+		assert.equal(boundary.assetSetIdentity, run.manifest.assetSetIdentity);
+		assert.equal(boundary.order, 4);
+		assert.equal(boundary.tableSha256, run.manifest.outputs[0].tableSha256);
+		assert.equal(boundary.cubeSha256, run.manifest.outputs[0].cubeSha256);
 	} finally {
 		rmSync(directory, {recursive: true, force: true});
 	}
@@ -199,6 +229,36 @@ test('rejects a production-run file changed after manifest finalization', () => 
 		createCompleteRun(directory);
 		writeFileSync(join(directory, 'j4.tsv'), 'changed\n');
 		assert.throws(() => ProductionRun.load(directory), /SHA-256/);
+	} finally {
+		rmSync(directory, {recursive: true, force: true});
+	}
+});
+
+test('canonical receiver-local results reject missing or changed Q30 controls even with valid hashes', () => {
+	const directory = mkdtempSync(join(tmpdir(), 'algorithm32-production-q30-'));
+	try {
+		for (const controls of [
+			{pathIntervalCount: 40},
+			{pathIntervalCount: 30},
+			{pathIntervalCount: 40, pathSampleDistribution: 'quadratic-near-observer-v1'},
+		]) {
+			createCompleteRun(directory, {backend: 'gpu-production-shaders-r32f', pointLocal: true});
+			assert.doesNotThrow(() => ProductionRun.load(directory));
+			const hashes = ['j4-provenance.json', 'default-provenance.json'].map((name) =>
+				mutateJson(join(directory, name), (provenance) => {
+					provenance.numericalControls = {
+						...controls,
+						scatteringOutputDomain: provenance.numericalControls.scatteringOutputDomain,
+					};
+				}),
+			);
+			mutateJson(join(directory, 'manifest.json'), (manifest) => {
+				manifest.outputs[0].provenanceSha256 = hashes[0];
+				manifest.outputs[0].defaultProvenanceSha256 = hashes[1];
+			});
+			assert.throws(() => ProductionRun.load(directory), /selected Q30 quadratic midpoint/u);
+			assert.doesNotThrow(() => ProductionRun.load(directory, {requireCanonical: false}));
+		}
 	} finally {
 		rmSync(directory, {recursive: true, force: true});
 	}

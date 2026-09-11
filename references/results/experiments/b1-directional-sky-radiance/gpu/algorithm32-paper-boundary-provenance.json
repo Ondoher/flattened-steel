@@ -1,0 +1,2341 @@
+{
+  "schema": "algorithm32-current-production-b1-provenance-v2",
+  "runId": "current-production-b1-gpu-shaders-20260911T182339616Z",
+  "backend": "gpu-production-shaders-r32f",
+  "executionBoundary": "production GPU cache construction and production final-view transport shader with native spectral readout",
+  "gpuCapabilities": {
+    "threeRevision": "180",
+    "webglVersion": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+    "shadingLanguageVersion": "WebGL GLSL ES 3.00 (OpenGL ES GLSL ES 3.0 Chromium)",
+    "renderer": "WebKit WebGL",
+    "unmaskedVendor": "Google Inc. (NVIDIA)",
+    "unmaskedRenderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 2060 (0x00001F15) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "maximumArrayLayers": 2048,
+    "maximumTextureSize": 16384
+  },
+  "runtimeSourceIdentity": {
+    "identity": "sha256:5e61b0313ab894fe05da81aa3dcd19a2739e0cec9fe7cd44c48527997a7b74cb",
+    "sources": [
+      {
+        "path": "node_modules/three/build/three.core.js",
+        "byteLength": 1403455,
+        "sha256": "eb077d2417f61d3e6d9264c317cabc4ea35769ed6b0ab533067292a550784c20"
+      },
+      {
+        "path": "node_modules/three/build/three.module.js",
+        "byteLength": 603113,
+        "sha256": "c8211c69345d2e9949dc7a8ac969380497aa0600a5a8ac6a459c8cd02dd9cb8a"
+      },
+      {
+        "path": "package-lock.json",
+        "byteLength": 340055,
+        "sha256": "c8746d41432884c3ee89e325c99de3876a667984aa89fcb8e56a8f05d128f1d7"
+      },
+      {
+        "path": "scripts/algorithm32/production-b-experiments/B1Direct40AssetCache.js",
+        "byteLength": 11298,
+        "sha256": "2592c6892957a9197d28c03b05ede27cb4d963e6decfae73080054111fcc0781"
+      },
+      {
+        "path": "scripts/algorithm32/production-b-experiments/B1Direct40CacheAssetManifest.js",
+        "byteLength": 13615,
+        "sha256": "c01ea3df5689b205f4a0f621b2a6d598fdb4a24b38a6753bd7e2e8a3be18bbb2"
+      },
+      {
+        "path": "scripts/algorithm32/production-b-experiments/B1Direct40CacheAssetSetManifest.js",
+        "byteLength": 3314,
+        "sha256": "ae01ba928c5a3ae5952f7faf953b0b75b58ebc6d74bd7826d0b01b92a4230076"
+      },
+      {
+        "path": "scripts/algorithm32/production-b-experiments/B1Direct40CacheAssetVerifier.js",
+        "byteLength": 11301,
+        "sha256": "be095b0723fefe7fc5adaafbe43e5e9ba382206705b94cbe47e1023a4b529d65"
+      },
+      {
+        "path": "scripts/algorithm32/production-b-experiments/B1Direct40OfflineAssetAdapter.js",
+        "byteLength": 11214,
+        "sha256": "034873980bd6f05be8a791f1109fe8dde9e2264ff82f3df1646db10742793e84"
+      },
+      {
+        "path": "scripts/algorithm32/production-b-experiments/B1MeasurementBoundary.js",
+        "byteLength": 2298,
+        "sha256": "8d9958ec3e8d6e53648f15b7cb0628c8be7b4b25869a1db196ef1a249d4233dd"
+      },
+      {
+        "path": "scripts/algorithm32/production-b-experiments/B1PointLocalCacheAssets.js",
+        "byteLength": 10128,
+        "sha256": "94a821539d2e140ea8db79f0710473d0f38e6d072f5367e5cf302b9bf0f47400"
+      },
+      {
+        "path": "scripts/algorithm32/production-b-experiments/DistantSunProfileCompilerInputs.js",
+        "byteLength": 7410,
+        "sha256": "c714a577aef692bfe61fd6ded4000bda0d04aead5c23103b875619cd61cd868f"
+      },
+      {
+        "path": "scripts/algorithm32/production-b-experiments/build-b1-direct40-cache-assets.js",
+        "byteLength": 1261,
+        "sha256": "5bd3300f301ec088ed478a00f6a59807b480532d07993e68104106be95c071f5"
+      },
+      {
+        "path": "scripts/algorithm32/production-b-experiments/compare-single-asset-cpu-reference.js",
+        "byteLength": 7866,
+        "sha256": "7265e22aa36216bfed83945d38de79602085a4e8059afd407eb9f8aaed63426e"
+      },
+      {
+        "path": "scripts/algorithm32/production-b-experiments/run-single-asset-parity-diagnostic.js",
+        "byteLength": 5539,
+        "sha256": "937db1455ec4c3934e4d95ca755402f7a5b9afb8d558d787d6a301bbb9b35c72"
+      },
+      {
+        "path": "scripts/algorithm32/production-b-experiments/runB1Direct40OfflineCompilerBrowser.js",
+        "byteLength": 3014,
+        "sha256": "ba30bf2512970ace1ce1d31425a7aa657b3afd6b8c9a4e597eaef1335137b923"
+      },
+      {
+        "path": "scripts/algorithm32/production-b-experiments/verify-b1-direct40-cache-assets.js",
+        "byteLength": 825,
+        "sha256": "77516bd005c5a9d5b82619868c875feb473c59c8043253fb6c33dd6108169187"
+      },
+      {
+        "path": "scripts/algorithm32/solar-zenith-cache/DistantSunBrunetonView.js",
+        "byteLength": 8441,
+        "sha256": "d1fd41fa275604a63aec05ba6a020f3d9ebbcbb9da0cc5d64e0a9f13cfff8eff"
+      },
+      {
+        "path": "scripts/algorithm32/solar-zenith-cache/DistantSunPointLocalCacheCompilerBrowser.js",
+        "byteLength": 3259,
+        "sha256": "c5f28458b01a12c5650a5e9b8a7de9648a38c754fac0223cf07c1d38963e1e42"
+      },
+      {
+        "path": "scripts/algorithm32/solar-zenith-cache/DistantSunPointLocalCacheCompilerHost.js",
+        "byteLength": 6638,
+        "sha256": "5f1ca77266ccc52158dd2d6d8e2eb84aa04186218eaed244ec3b1e1abb324920"
+      },
+      {
+        "path": "scripts/algorithm32/solar-zenith-cache/DistantSunPointLocalCacheInventory.js",
+        "byteLength": 9486,
+        "sha256": "a505cfdf8c869f7e0ad8b31821c003ca8ec323440c71260f896e76818a02364e"
+      },
+      {
+        "path": "scripts/algorithm32/solar-zenith-cache/DistantSunPointLocalCachePackage.js",
+        "byteLength": 3900,
+        "sha256": "42104fef79800e23e8d3e83c3943262ec8a65447775b502b4bd257dea8fc8a6e"
+      },
+      {
+        "path": "scripts/algorithm32/solar-zenith-cache/DistantSunPointLocalCacheReader.js",
+        "byteLength": 9875,
+        "sha256": "d8e1f98d37cc9e6265fe1b09a6ab3356e9e196eca08a3d045126a5da2f570578"
+      },
+      {
+        "path": "scripts/algorithm32/solar-zenith-cache/DistantSunPointLocalCacheStaging.js",
+        "byteLength": 5249,
+        "sha256": "374dfd76d0b2bf7cbeeeda41252dc4731e3618acc0b3d3ffb087ebdf72534ebb"
+      },
+      {
+        "path": "scripts/algorithm32/solar-zenith-cache/DistantSunPointLocalProfileCompilerInputs.js",
+        "byteLength": 9202,
+        "sha256": "d83cf6f194f6801d39222407899ef1d1464cd3108fa21b3e88f64235dc086923"
+      },
+      {
+        "path": "scripts/algorithm32/solar-zenith-cache/DistantSunSceneCacheCompilerInputs.js",
+        "byteLength": 5972,
+        "sha256": "2b1c9d06561fb32f92275676834501b551ee6fc33f2ea18f62104e05b1ea0420"
+      },
+      {
+        "path": "scripts/algorithm32/solar-zenith-cache/DistantSunSceneCacheGpuCompiler.js",
+        "byteLength": 59679,
+        "sha256": "5a6b87f567b19112b6635dfee5bf72371fb2411095a35e5060c6996b867420de"
+      },
+      {
+        "path": "scripts/algorithm32/solar-zenith-cache/DistantSunSceneCacheOfflineCompiler.js",
+        "byteLength": 20532,
+        "sha256": "18d17a26932533674dfc75e91f291e5d3e083ce47509d528a5e169594b05af28"
+      },
+      {
+        "path": "scripts/algorithm32/solar-zenith-cache/DistantSunSharedCacheGenerationCodec.js",
+        "byteLength": 2904,
+        "sha256": "a1de52d3c69506da15f96eb3a079f798e489ba860cffb913d20549b1ed4f6559"
+      },
+      {
+        "path": "scripts/algorithm32/solar-zenith-cache/DistantSunSharedCacheGenerationFiles.js",
+        "byteLength": 6303,
+        "sha256": "13d08a2a741b89585b97e18985ac1bae3827ce059f9189e4b339bd1ed4e4fc72"
+      },
+      {
+        "path": "scripts/algorithm32/solar-zenith-cache/DistantSunSharedCacheGenerationGraph.js",
+        "byteLength": 2659,
+        "sha256": "f57827f89b6a99fbb0e4b24d23179e217bad16709ee9f22e75df962bdd26400e"
+      },
+      {
+        "path": "scripts/algorithm32/solar-zenith-cache/DistantSunSharedCacheGenerationInventory.js",
+        "byteLength": 6635,
+        "sha256": "6939c9298d1049de70687ee33fe3a9f3e8efa94855800528fed563a1159272f9"
+      },
+      {
+        "path": "scripts/algorithm32/solar-zenith-cache/DistantSunSharedCacheGenerationPackage.js",
+        "byteLength": 11075,
+        "sha256": "e352544f936476c8582f7f4a36ee9d49260e68e6a500884113ae5658587fa75d"
+      },
+      {
+        "path": "scripts/algorithm32/solar-zenith-cache/DistantSunSharedCacheGenerationVerifier.js",
+        "byteLength": 5913,
+        "sha256": "b229106af53bbcf31305273552f51d1b1e2564a67b8f91d618da58d5ae286410"
+      },
+      {
+        "path": "scripts/algorithm32/solar-zenith-cache/DistantSunSharedCacheGenerator.js",
+        "byteLength": 20091,
+        "sha256": "6b60ad7183051f267bf9f1be53ae722c7f2bdf275ccfeda410a9c12680c346ee"
+      },
+      {
+        "path": "scripts/algorithm32/solar-zenith-cache/DistantSunSharedRuntimeOracle.js",
+        "byteLength": 3856,
+        "sha256": "cbd654748c198c2618e59050db56da5f2e505fc76c41eb0222cae9e354e43726"
+      },
+      {
+        "path": "scripts/algorithm32/solar-zenith-cache/DistantSunSharedRuntimeQualificationBrowser.js",
+        "byteLength": 20351,
+        "sha256": "0acfd75ed72f449457fd0b2d278a4807314cfd2ae9e702dd36f7cd65bae8beb3"
+      },
+      {
+        "path": "scripts/algorithm32/solar-zenith-cache/build-pa6-six-scene-caches.js",
+        "byteLength": 4191,
+        "sha256": "5fa00b8f49fdf6699e0cbf0d8be1a3c1d3d13ef55c242693db18e31b26db9a9e"
+      },
+      {
+        "path": "scripts/algorithm32/solar-zenith-cache/build-shared-cache-worker.js",
+        "byteLength": 1742,
+        "sha256": "fb3fe852be00b1a90cb3d46cac488680ad188297eef45100c03c5c16615d389c"
+      },
+      {
+        "path": "scripts/algorithm32/solar-zenith-cache/consts.js",
+        "byteLength": 3194,
+        "sha256": "ba5798752c2291d3a0e32ebec4c59e476ae90b64ba3475023c29f647ad12ce2a"
+      },
+      {
+        "path": "scripts/algorithm32/solar-zenith-cache/finalize-pa6-production-qualification.js",
+        "byteLength": 9084,
+        "sha256": "95caa8606a4451a8c9f9daa565a778ed730f7d15af67143caa728dcbb0117dc4"
+      },
+      {
+        "path": "scripts/algorithm32/solar-zenith-cache/generate-shared-cache.js",
+        "byteLength": 2333,
+        "sha256": "656a3bb063ce1881f19f472410f5c5e4a57ee93e64b0b9a603ed584d99c5bceb"
+      },
+      {
+        "path": "scripts/algorithm32/solar-zenith-cache/jsconfig.json",
+        "byteLength": 702,
+        "sha256": "909a8e2fb3ae35037216160de6c2d9881b400c18a51b9a449db03f3dd87a653f"
+      },
+      {
+        "path": "scripts/algorithm32/solar-zenith-cache/package-production-scene-caches.js",
+        "byteLength": 8567,
+        "sha256": "1385f7205d97bc6665e2bb648fe95283ea026fc3d4d01860cd99fb407dd9d60b"
+      },
+      {
+        "path": "scripts/algorithm32/solar-zenith-cache/publish-shared-runtime.js",
+        "byteLength": 3113,
+        "sha256": "7e2c39c18053a92db168b67b5d2d546926998f2daaa8d2bc1064ba12549bcdac"
+      },
+      {
+        "path": "scripts/algorithm32/solar-zenith-cache/qualify-one-degree-bin-support.js",
+        "byteLength": 5794,
+        "sha256": "b8b2147fa53c97e3aba6fd4493ab83e707abbcc186ebd7c7beb76b3366736cbd"
+      },
+      {
+        "path": "scripts/algorithm32/solar-zenith-cache/qualify-point-local-cache-compiler.js",
+        "byteLength": 10761,
+        "sha256": "d2b1b4fbbb242a589720641c642637c75edbe39440708a477e901e06bb89599c"
+      },
+      {
+        "path": "scripts/algorithm32/solar-zenith-cache/qualify-shared-runtime.js",
+        "byteLength": 20750,
+        "sha256": "ed281b9aa4ea293b4f5461b522a004ff63a0d6538d9e7fe6471d91547735c286"
+      },
+      {
+        "path": "scripts/algorithm32/solar-zenith-cache/runOfflineCompilerBrowser.js",
+        "byteLength": 3152,
+        "sha256": "8598cdbbd47f543adbb02a689c7f132ed1f75ae86912995abf21e51d852f11b3"
+      },
+      {
+        "path": "scripts/algorithm32/solar-zenith-cache/runPa3ResidentCacheBrowser.js",
+        "byteLength": 2911,
+        "sha256": "f2c376e6a3dd9f29c526ef18ab61aea06d0012de2e70c4f6b025f2f86c68f037"
+      },
+      {
+        "path": "scripts/algorithm32/solar-zenith-cache/runPa4LiveTransportBrowser.js",
+        "byteLength": 8794,
+        "sha256": "0a8d88e02c36fed7ce69196a3d54831e3ded09d0a1bbe980f997abcaa04868f4"
+      },
+      {
+        "path": "scripts/algorithm32/solar-zenith-cache/runPa5LifecycleBrowser.js",
+        "byteLength": 5763,
+        "sha256": "c21c2db6b326f128e5d7c3edd711f801b5f576da8f5fd09cb89f20422e9dc60a"
+      },
+      {
+        "path": "scripts/algorithm32/solar-zenith-cache/shared-runtime-jsconfig.json",
+        "byteLength": 550,
+        "sha256": "8b1a7c4719897c36364ea68fc333723ec420a6506c1a55f317ea30155a69cbbe"
+      },
+      {
+        "path": "scripts/algorithm32/solar-zenith-cache/verify-bruneton-production.js",
+        "byteLength": 15419,
+        "sha256": "3752a197d65c027d1fb0411742fcaf43016e5a663e59461f6f7e2f5b5d917a08"
+      },
+      {
+        "path": "scripts/algorithm32/solar-zenith-cache/verify-distant-sun-scene-cache-rebuild.js",
+        "byteLength": 3737,
+        "sha256": "3327c6ffe02606009af6beaec2f583eb4c5db601e7bd678892d5c7609220c714"
+      },
+      {
+        "path": "scripts/algorithm32/solar-zenith-cache/verify-pa3-resident-cache-browser.js",
+        "byteLength": 5677,
+        "sha256": "5172f25f853e4c23a9201f5c5635a7cbbb659ab55d81ad284dfbebeea8e5b4cb"
+      },
+      {
+        "path": "scripts/algorithm32/solar-zenith-cache/verify-pa4-live-transport-browser.js",
+        "byteLength": 6797,
+        "sha256": "07f21b6dac38e805df0491400e508cc354a4d12645dfd9354b2d0aedf09a9af6"
+      },
+      {
+        "path": "scripts/algorithm32/solar-zenith-cache/verify-pa5-lifecycle-browser.js",
+        "byteLength": 6292,
+        "sha256": "73610d6c2b45c0966f2ebf237baafdc05403893193b15d180c232fa57dc75227"
+      },
+      {
+        "path": "scripts/algorithm32/solar-zenith-cache/verify-pa6-production-qualification.js",
+        "byteLength": 8565,
+        "sha256": "f3a8a3b41a909d4fbc039942343fbb8dc7bbe50d24c23e18a81f3afd56c4ddd8"
+      },
+      {
+        "path": "scripts/algorithm32/solar-zenith-cache/verify-shared-cache-publication-failure.js",
+        "byteLength": 4379,
+        "sha256": "3553449f3e4d80e5185f02120713ec2b64ada0250a71d0b618cf21d0441acbd2"
+      },
+      {
+        "path": "scripts/algorithm32/solar-zenith-cache/verify-shared-compiler-compatibility.js",
+        "byteLength": 5646,
+        "sha256": "a5eae676f3cd7a3b27ce0048dc3443172634e382944e95317215c8216fb7acd3"
+      },
+      {
+        "path": "scripts/algorithm32/solar-zenith-cache/verify-shared-runtime-dependencies.js",
+        "byteLength": 2268,
+        "sha256": "26c142f23e21a2c2dc5b0f0be8f102c9113a35d1f17d3fc102697e7ec527baae"
+      },
+      {
+        "path": "scripts/experiments/b1-directional-sky-radiance/B1ReferenceInputs.js",
+        "byteLength": 1376,
+        "sha256": "66d4a83838d3e9c7c3fe25af278a81d26579eee205d85642d56c3784a4ff3bb8"
+      },
+      {
+        "path": "scripts/experiments/b1-directional-sky-radiance/BrunetonAngularIntegrationDirectionDomain.js",
+        "byteLength": 6738,
+        "sha256": "34a54b0eb38c0fba839fb98531686081f107b656450803c1f65e6493db0785ab"
+      },
+      {
+        "path": "scripts/experiments/b1-directional-sky-radiance/DensePairedFibonacciDirectionDomain.js",
+        "byteLength": 1790,
+        "sha256": "e1d0fa1e37b8f2910272ff0d121b03b67b5694a1e2bc2ec96612d10c597e38a3"
+      },
+      {
+        "path": "scripts/experiments/b1-directional-sky-radiance/OutgoingDirectionDiagnosticDomain.js",
+        "byteLength": 9595,
+        "sha256": "41efe18ec4785972a6e6ac4873f0d5e4a757e64124fa99d457d42fdd9f46f483"
+      },
+      {
+        "path": "scripts/experiments/b1-directional-sky-radiance/ProductionGpuHost.js",
+        "byteLength": 14976,
+        "sha256": "c9dccd079f758a178aa040863fa8adcd1f31f9f4d43d78560ff39be4757d6b42"
+      },
+      {
+        "path": "scripts/experiments/b1-directional-sky-radiance/ProductionProgressCacheBackend.js",
+        "byteLength": 4671,
+        "sha256": "9b8e4736007ae320245ed8ce4ad1c7b810328b92f687442f224c1073cf66d4bb"
+      },
+      {
+        "path": "scripts/experiments/b1-directional-sky-radiance/ProductionRun.js",
+        "byteLength": 20324,
+        "sha256": "9e7dfad5a7f8e788f6264aed693c95ec0a35e1857dd15f3c7c08c6100b81472c"
+      },
+      {
+        "path": "scripts/experiments/b1-directional-sky-radiance/ReflectionCompletedFibonacci136DirectionDomain.js",
+        "byteLength": 1780,
+        "sha256": "406d675ccb4d85a6e6d481adbd8e083b7c1d12974b3a73eb3cd8d425080da835"
+      },
+      {
+        "path": "scripts/experiments/b1-directional-sky-radiance/ReflectionCompletedFibonacci68DirectionDomain.js",
+        "byteLength": 1596,
+        "sha256": "1015042c9b9d2f693ba02217c63193a7f3d7ec97fc514462d96e8d4d69df35e1"
+      },
+      {
+        "path": "scripts/experiments/b1-directional-sky-radiance/analyze-order-residuals.js",
+        "byteLength": 5304,
+        "sha256": "34567e0aafe2c42ff571cf329e34aa9b98b1b0bc3128f13fafc1058910322f6b"
+      },
+      {
+        "path": "scripts/experiments/b1-directional-sky-radiance/benchmark-domain.js",
+        "byteLength": 5129,
+        "sha256": "ea6b6430a2989beae8089435cef0fc9f0f9c1d722ea59693192db6bec752491b"
+      },
+      {
+        "path": "scripts/experiments/b1-directional-sky-radiance/benchmark.js",
+        "byteLength": 21109,
+        "sha256": "3c746fab823e266ee1b4daa237174ac99646861757750e7761ccffe6f990fe77"
+      },
+      {
+        "path": "scripts/experiments/b1-directional-sky-radiance/candidate-provenance.js",
+        "byteLength": 13529,
+        "sha256": "5581f6842dbd860669be4f7dc942430e1bbc02e10fb3fd785a28b0a9eaca0f00"
+      },
+      {
+        "path": "scripts/experiments/b1-directional-sky-radiance/compare-production-backends.js",
+        "byteLength": 7076,
+        "sha256": "7a28fdddcf6c747b0cfb14e5db9e6fb666637e7ad1094c081f902bfbaa6c554c"
+      },
+      {
+        "path": "scripts/experiments/b1-directional-sky-radiance/diagnose-j1-representation.js",
+        "byteLength": 11984,
+        "sha256": "5cd304843efa99cedc8584738f98e38dc706438c6ae5144ee3f8f4a3a8fe0e79"
+      },
+      {
+        "path": "scripts/experiments/b1-directional-sky-radiance/diagnose-j2-angular-interpolation.js",
+        "byteLength": 2559,
+        "sha256": "d2304eeaa530e811c0e6be0cbf180518056ea06c929edb3d59b4736de591d81f"
+      },
+      {
+        "path": "scripts/experiments/b1-directional-sky-radiance/export-measurements.js",
+        "byteLength": 1358,
+        "sha256": "3acb465d27dbdb354d0445baabbb774aa3b517f34a9906e76115088bb46ed039"
+      },
+      {
+        "path": "scripts/experiments/b1-directional-sky-radiance/figure5.js",
+        "byteLength": 20552,
+        "sha256": "bd0182709c14d06e9c68b5dc33ce1bc60c510a82c66fc27a40bbda1e34623d0d"
+      },
+      {
+        "path": "scripts/experiments/b1-directional-sky-radiance/generate-production-boundary.js",
+        "byteLength": 24954,
+        "sha256": "3bffe95c3ba21525be8e4f2220e782a253af49e90abc153cb00043911ad8553c"
+      },
+      {
+        "path": "scripts/experiments/b1-directional-sky-radiance/j2-angular-gpu-browser.js",
+        "byteLength": 15076,
+        "sha256": "c4321f89583dace5109acb2ddfca14de2b86bce5103658d8db865543b4af21b7"
+      },
+      {
+        "path": "scripts/experiments/b1-directional-sky-radiance/production-gpu-browser.js",
+        "byteLength": 19289,
+        "sha256": "8357bac801526cd812b03c76dc489c8b9d3ca61dde2f5cdf6f23b08768647aff"
+      },
+      {
+        "path": "scripts/experiments/b1-directional-sky-radiance/production-profile.js",
+        "byteLength": 11393,
+        "sha256": "15c64e50b543fb85cadf7d3f71804e72c9eeba7ce16b0d293bdd554e6f70c636"
+      },
+      {
+        "path": "scripts/experiments/b1-directional-sky-radiance/publish-production-result.js",
+        "byteLength": 2869,
+        "sha256": "14f602b94e678879335c51b7181e326d172c10d526691bc682063f0b6fccc461"
+      },
+      {
+        "path": "scripts/experiments/b1-directional-sky-radiance/published-oracle.js",
+        "byteLength": 2638,
+        "sha256": "90bfb52bd40bbe32cca4593f5c9e680ac9979635dc94cbc4113321184d6a0b7e"
+      },
+      {
+        "path": "scripts/experiments/b1-directional-sky-radiance/run.js",
+        "byteLength": 31311,
+        "sha256": "2ad314f907d1a9097ff3078a15dc74302bb67f486cc43640885cba3388a6305c"
+      },
+      {
+        "path": "scripts/experiments/b1-directional-sky-radiance/save-result.js",
+        "byteLength": 1774,
+        "sha256": "65a060710858a92fecbf8e9d41126873440a88f90c2354dfe21917e4ffe34939"
+      },
+      {
+        "path": "scripts/experiments/b1-directional-sky-radiance/score-j2-angular-resolution.js",
+        "byteLength": 5122,
+        "sha256": "83b4e071cb9aeb9c1c4bf400fa7f6aa76d93fc86d50029fb92bcb9c3594987e0"
+      },
+      {
+        "path": "scripts/experiments/b1-directional-sky-radiance/score-production-run.js",
+        "byteLength": 11362,
+        "sha256": "e54f33b0e1b5357ac9232aaaf8d26c6a90a2cdba4a3f996bd3b6d6273f67ee04"
+      },
+      {
+        "path": "scripts/experiments/b2-hemispherical-sky-irradiance/benchmark.js",
+        "byteLength": 22459,
+        "sha256": "21a0c1fea321fb6b276d05511186b4999c995e405d9017b13680a3795d39df50"
+      },
+      {
+        "path": "scripts/experiments/b3-matched-atmosphere-solver/contract.js",
+        "byteLength": 11741,
+        "sha256": "1c869af38906682224a3ba6a2b6e619f10d6ce4b4863129b200537a0ae80b23f"
+      },
+      {
+        "path": "scripts/experiments/b3-matched-atmosphere-solver/cube.js",
+        "byteLength": 14296,
+        "sha256": "be48816a635fe945ef48fc5d8e4d52ae39b42d5102943ea91718e7a2749a7add"
+      },
+      {
+        "path": "scripts/experiments/benchmark-judgment.js",
+        "byteLength": 6533,
+        "sha256": "b6c322bac262a9a22a5ceaaed41786c67a6952416b18bfe6c50365a5e5a9f07c"
+      },
+      {
+        "path": "scripts/experiments/generate-benchmark-figures.js",
+        "byteLength": 63835,
+        "sha256": "d15f36a436b855c6c2ed16a5efe4905508356c60fe1419cedccf5a117620b289"
+      },
+      {
+        "path": "scripts/experiments/production-result-paths.js",
+        "byteLength": 1392,
+        "sha256": "ec2817c59c2817c6afb79726358e56f0f2b7e789974473be9a33861173fc3cdf"
+      },
+      {
+        "path": "src/algorithm32/atmospheric-transport/Algorithm32Transport.js",
+        "byteLength": 11583,
+        "sha256": "ba7e3ebef398dfcc3d5fa1be5b3ea4182467817fb94b24239705428b2809d22e"
+      },
+      {
+        "path": "src/algorithm32/atmospheric-transport/ScatteringOrderFieldOperations.js",
+        "byteLength": 8636,
+        "sha256": "f37660ee6a5c85152a579f5378f4d4d81ab4a835d271c23b4df993b29fc2daa9"
+      },
+      {
+        "path": "src/algorithm32/atmospheric-transport/cache/CacheOperations.js",
+        "byteLength": 10963,
+        "sha256": "dcbf68dbcba63f6dd3e99ee7810c2b72b88bf3e804bd5ba7b8e8bf933d58d0c8"
+      },
+      {
+        "path": "src/algorithm32/atmospheric-transport/cache/IntegratedCacheTransport.js",
+        "byteLength": 4214,
+        "sha256": "3aa2037332ca397c1b3204f0514dd4f2f679b3682a8e6de00b1b2f9083ac9cf3"
+      },
+      {
+        "path": "src/algorithm32/atmospheric-transport/cache/consts.js",
+        "byteLength": 1640,
+        "sha256": "54742b55cafa4298fda9e786176c64bc5efd314a0053334f6e91e31cdf6a95a1"
+      },
+      {
+        "path": "src/algorithm32/atmospheric-transport/consts.js",
+        "byteLength": 1152,
+        "sha256": "29a32417812840f07c6578249cc7cc7d8d978abc0cb2a9607015f66baefdbd56"
+      },
+      {
+        "path": "src/algorithm32/atmospheric-transport/later-order-scattering-density.js",
+        "byteLength": 7457,
+        "sha256": "4416e4f17c12693d8c6b54b666f8c73ee07eb7904b09313c7d528b1c9c377b58"
+      },
+      {
+        "path": "src/algorithm32/atmospheric-transport/scattering-density-transport.js",
+        "byteLength": 8449,
+        "sha256": "5d7dfd3f1c55afdd42c9584d3b5802a32c6b1f1f26564a792c177f7d9efc513e"
+      },
+      {
+        "path": "src/algorithm32/atmospheric-transport/spectral/SpectralCalculator.js",
+        "byteLength": 27825,
+        "sha256": "cdef53bbda951f5d9209bd6c31f7f5b995d6cf045fabf475a157343acb81ffa8"
+      },
+      {
+        "path": "src/algorithm32/celestial-contribution-cache/consts.js",
+        "byteLength": 538,
+        "sha256": "d7785fbefb7248245b1d2a50535959e08c6458ae578bb2f34ac9e1415faed821"
+      },
+      {
+        "path": "src/algorithm32/celestial-source-support/CelestialScreenPaletteConsumerShaderContribution.js",
+        "byteLength": 7439,
+        "sha256": "5cf98ef69832e9d53963daf87dd2dfc67528c7875d252fbb57b85da366467803"
+      },
+      {
+        "path": "src/algorithm32/celestial-source-support/CelestialSourceRoster.js",
+        "byteLength": 13350,
+        "sha256": "1beeb88ff7a6c0536960daa002fc303fd76495e3c311f3291aa6f87da4f00971"
+      },
+      {
+        "path": "src/algorithm32/celestial-source-support/CelestialSourceSupport.js",
+        "byteLength": 1935,
+        "sha256": "28bce802df143f847b8a9494be0efda9c20a474f1df0ddbe2d6e2838763ced20"
+      },
+      {
+        "path": "src/algorithm32/geometry-support/GeometryDirections.js",
+        "byteLength": 3047,
+        "sha256": "3a6cc10c1ebb8ed67261ef2a80d45b864bcb39a13f938b72643646707b977390"
+      },
+      {
+        "path": "src/algorithm32/geometry-support/GeometryVisualRequestValues.js",
+        "byteLength": 3589,
+        "sha256": "38515c278f45ba6de23e1cb38939e5cb301ceacb44e4cea806478a37fb1c9ee7"
+      },
+      {
+        "path": "src/algorithm32/geometry-support/solar/SolarPosition.js",
+        "byteLength": 6121,
+        "sha256": "676117a4bc65c1bdccc82f4a0a991be51bd27296c5af73172e596fb0841e7865"
+      },
+      {
+        "path": "src/algorithm32/gpu-cache-runtime/CacheGpuExecutor.js",
+        "byteLength": 2052,
+        "sha256": "dfd1431fde4f76452945340ac03788f20e2e91590f7791c022921aca189dae57"
+      },
+      {
+        "path": "src/algorithm32/gpu-cache-runtime/CacheValues.js",
+        "byteLength": 2564,
+        "sha256": "3d8c48c30b127b7d484164e39d9f22135303074038ea47257796ad9742b26efd"
+      },
+      {
+        "path": "src/algorithm32/gpu-cache-runtime/GpuFieldExecutor.js",
+        "byteLength": 18973,
+        "sha256": "d546ab905a96137b7ca126bf57ea29fa6ec0da80049153c8b00157427d9ca31c"
+      },
+      {
+        "path": "src/algorithm32/gpu-cache-runtime/consts.js",
+        "byteLength": 388,
+        "sha256": "7b2faaed37ffdc64d4e617a06fd478a394e40d7a8731eddb7eb10ef0529767a1"
+      },
+      {
+        "path": "src/algorithm32/ground-transport/cache/consts.js",
+        "byteLength": 533,
+        "sha256": "8406d84d605b53989c64f483c18d20738429b464929700e9d59949199c500493"
+      },
+      {
+        "path": "src/algorithm32/implementation/algorithm32/Algorithm32.js",
+        "byteLength": 41316,
+        "sha256": "763fe313be6c19258831eead5ec5c84cb46e19fe43f7e18a2483ae3ce555d73a"
+      },
+      {
+        "path": "src/algorithm32/implementation/algorithm32/Algorithm32ShaderHandle.js",
+        "byteLength": 19647,
+        "sha256": "86cffaecfd9b3aedaa3ff413ac295eaa85d08b486f15663555960e9c7bc71a29"
+      },
+      {
+        "path": "src/algorithm32/implementation/algorithm32/model/SharedModel.js",
+        "byteLength": 2025,
+        "sha256": "084a4c121870a574f3e5fc8c21280d44bf9815807f27aabeb210c672ebe1db66"
+      },
+      {
+        "path": "src/algorithm32/implementation/algorithm32/model/SpectralModel.js",
+        "byteLength": 2447,
+        "sha256": "e17884b4533920952a96489afb7d57a72f608fbdb986d33cff6c7adae64b79bd"
+      },
+      {
+        "path": "src/algorithm32/implementation/bruneton-color/BrunetonColorDisplayModel.js",
+        "byteLength": 25484,
+        "sha256": "64685fc79b205376e048c50860dfc631da12597b67cc312093b4c8a524af67ea"
+      },
+      {
+        "path": "src/algorithm32/implementation/bruneton-color/consts.js",
+        "byteLength": 20136,
+        "sha256": "fd718ca007c466d1352358c17c81ea5c50f0c3c00c968fd0cce7a2a57e6cdc40"
+      },
+      {
+        "path": "src/algorithm32/implementation/canonical-atmosphere/CanonicalAtmosphere.js",
+        "byteLength": 37857,
+        "sha256": "49204168dcca80b34480daba041860bc6c76346a73fd6a5dec08efebee7d0578"
+      },
+      {
+        "path": "src/algorithm32/implementation/canonical-atmosphere/consts.js",
+        "byteLength": 1674,
+        "sha256": "963105b88e4cabbc27a53544a4bd185f098ab9d77474c0bf39107483717aceaf"
+      },
+      {
+        "path": "src/algorithm32/implementation/color-reset-slope-078-p9/ColorResetSlope078P9ColorDisplayModel.js",
+        "byteLength": 8675,
+        "sha256": "cf8398cf3c1552f3ea4fc32d6b5c0105d4a65132d37858e4aaeff0c8003e8982"
+      },
+      {
+        "path": "src/algorithm32/implementation/color-reset-slope-078-p9/consts.js",
+        "byteLength": 501,
+        "sha256": "f3ca6b5958da006ed9570128019685a75efd080828e851c1dca0c49a01593263"
+      },
+      {
+        "path": "src/algorithm32/implementation/distant-sun/DistantSunLightSource.js",
+        "byteLength": 19881,
+        "sha256": "0a568b719dcd6e7d4dee7f1116a238057cfdd0e55052db46445130edc4455a27"
+      },
+      {
+        "path": "src/algorithm32/implementation/distant-sun/DistantSunShaderContributor.js",
+        "byteLength": 1423,
+        "sha256": "04b6f2bacf7fa39382ecbc170c0fbfe2c72cb44a0ea3868f3498fad8036e0acc"
+      },
+      {
+        "path": "src/algorithm32/implementation/distant-sun/cache/DistantSunCacheProvider.js",
+        "byteLength": 31489,
+        "sha256": "2b1a98e0f65bb2d047f6ef414f1e1d41d2441340a885510b2b148a1cb39b5f55"
+      },
+      {
+        "path": "src/algorithm32/implementation/distant-sun/cache/DistantSunConstructionDomainSelection.js",
+        "byteLength": 5867,
+        "sha256": "6a579dd954de2d0465f217fcb17d153df0e4ca425738a5f2eab5b327ebc1734c"
+      },
+      {
+        "path": "src/algorithm32/implementation/distant-sun/cache/DistantSunCpuCache.js",
+        "byteLength": 3999,
+        "sha256": "5c5a767f2b6716755bf00634df7b507c621cb591a25b92123e7eaf71b1c90a9c"
+      },
+      {
+        "path": "src/algorithm32/implementation/distant-sun/cache/DistantSunCpuMultipleScatteringEvaluator.js",
+        "byteLength": 28090,
+        "sha256": "8832d2f37644b55cd25282a678f1d5c14ed9f6940353c91503bb3609460ec465"
+      },
+      {
+        "path": "src/algorithm32/implementation/distant-sun/cache/DistantSunCpuPrimaryEvaluator.js",
+        "byteLength": 20242,
+        "sha256": "6045ca248c5f9dcaa2d19f3b92778b3b246d2962bff9fe35cb54937ec0c95a1f"
+      },
+      {
+        "path": "src/algorithm32/implementation/distant-sun/cache/DistantSunDarkCache.js",
+        "byteLength": 1633,
+        "sha256": "191e7e5bbf416e38190ad2899fe784a146ff3c2ba7b4e2e85311948b26653a7e"
+      },
+      {
+        "path": "src/algorithm32/implementation/distant-sun/cache/DistantSunDarkCacheController.js",
+        "byteLength": 1185,
+        "sha256": "c10c6d87391ea617a611e631fef9af6ee818b558351307532288237738eb1066"
+      },
+      {
+        "path": "src/algorithm32/implementation/distant-sun/cache/DistantSunFieldPacking.js",
+        "byteLength": 3319,
+        "sha256": "d7ad05b6cefdcf05ffadb3ab65bc939ed5566c71f43640b712473758cb601a5f"
+      },
+      {
+        "path": "src/algorithm32/implementation/distant-sun/cache/DistantSunSceneCache.js",
+        "byteLength": 14741,
+        "sha256": "108546a170aa9740b0056e0c0ce2c95a607942b43797b3760b58148bf922cbb7"
+      },
+      {
+        "path": "src/algorithm32/implementation/distant-sun/cache/DistantSunSceneCacheAtlas.js",
+        "byteLength": 1771,
+        "sha256": "ce6b5c816a879dbc1347df0a9de2883866564f9679c88de85e03c15a223d1c4a"
+      },
+      {
+        "path": "src/algorithm32/implementation/distant-sun/cache/DistantSunSceneCacheLedger.js",
+        "byteLength": 8804,
+        "sha256": "f7b5b8c5f1fe942b3405a12bb394a14301b0429fd40b8d811d05b619f22a0e28"
+      },
+      {
+        "path": "src/algorithm32/implementation/distant-sun/cache/DistantSunSceneCacheManifest.js",
+        "byteLength": 3966,
+        "sha256": "3a1b11819eade860b45429d9dce1cdcf83296a4d952d9d560ddab449304d5c68"
+      },
+      {
+        "path": "src/algorithm32/implementation/distant-sun/cache/DistantSunSharedCache.js",
+        "byteLength": 12028,
+        "sha256": "d593c0841c93d285d6ae746b1275d2479ec6a6b9f814ad424c118c1940a234b9"
+      },
+      {
+        "path": "src/algorithm32/implementation/distant-sun/cache/DistantSunSharedCacheAtlas.js",
+        "byteLength": 7838,
+        "sha256": "bd97abd0bee53100979aeaa93ad0bae56c2a28e251dfc50a7c1d2953bd03ed4d"
+      },
+      {
+        "path": "src/algorithm32/implementation/distant-sun/cache/DistantSunSharedCacheAttachment.js",
+        "byteLength": 4737,
+        "sha256": "745a1c3c637ca6836deeb9a9928003e08f14a58583b61215a64a20955d35eb61"
+      },
+      {
+        "path": "src/algorithm32/implementation/distant-sun/cache/DistantSunSharedCacheBlockPreparer.js",
+        "byteLength": 4493,
+        "sha256": "3f35d0f0ad762d656cfcacb91024e68184736fd1c4cb3a0355ca1b944486d6c0"
+      },
+      {
+        "path": "src/algorithm32/implementation/distant-sun/cache/DistantSunSharedCacheController.js",
+        "byteLength": 17821,
+        "sha256": "c54062be7628d507709c0f4a626e66539b47fd8c2cebe228cff2840bb924c2d2"
+      },
+      {
+        "path": "src/algorithm32/implementation/distant-sun/cache/DistantSunSharedCacheDecoder.js",
+        "byteLength": 6095,
+        "sha256": "c9352915416d9ffec1b9a61ac88d35f9158be6f8e7c6ed638c0456aecbf6a875"
+      },
+      {
+        "path": "src/algorithm32/implementation/distant-sun/cache/DistantSunSharedCacheFormat.js",
+        "byteLength": 41599,
+        "sha256": "82cfee18a118cc3c72a4639b8bf19724f94759d4251619cecf9d862eca450429"
+      },
+      {
+        "path": "src/algorithm32/implementation/distant-sun/cache/DistantSunSharedCacheMetadata.js",
+        "byteLength": 4490,
+        "sha256": "3981c8644b981f7ad59ec5e0c2e4ab88d2df347e5735217564ee63e0548b7c23"
+      },
+      {
+        "path": "src/algorithm32/implementation/distant-sun/cache/DistantSunSharedCachePackage.js",
+        "byteLength": 6043,
+        "sha256": "475cde50aa9f82549223a74bebf9694f91b09cbd050fe024aaae991d0dd529cf"
+      },
+      {
+        "path": "src/algorithm32/implementation/distant-sun/cache/DistantSunSharedCachePacketLayout.js",
+        "byteLength": 8269,
+        "sha256": "fa9896ce261b52d5349252fd1e2b23405d9ada1cc9a234e8941c5a2ed0d8250a"
+      },
+      {
+        "path": "src/algorithm32/implementation/distant-sun/cache/DistantSunSharedCacheRetention.js",
+        "byteLength": 6908,
+        "sha256": "4ec97f8548a182ff0cd78e737a6dab2630c97a1b294fd5cdff8edc053783d3a0"
+      },
+      {
+        "path": "src/algorithm32/implementation/distant-sun/cache/DistantSunSharedCacheRuntimeContracts.js",
+        "byteLength": 21433,
+        "sha256": "0883dc4fac35915fb42fcc7a2ba482ee84db8168d4acf0d19a603c3ca16a246b"
+      },
+      {
+        "path": "src/algorithm32/implementation/distant-sun/cache/DistantSunSharedCacheTransport.js",
+        "byteLength": 10848,
+        "sha256": "430d9954c2947172cde4ad3d451212bbf2cff3b3d03fa906d6480d20b2c5d125"
+      },
+      {
+        "path": "src/algorithm32/implementation/distant-sun/cache/DistantSunSharedCacheWorker.js",
+        "byteLength": 2395,
+        "sha256": "f100c9aad0a6a473ad0d4b86ff7fcc8e7d4d912c751f73229a9f480c367839b7"
+      },
+      {
+        "path": "src/algorithm32/implementation/distant-sun/cache/DistantSunSharedCacheWorkerClient.js",
+        "byteLength": 5937,
+        "sha256": "e1d4dca72d4da357aa0d1064b02774254ff3b4584c95ae68c5b84632e03c3008"
+      },
+      {
+        "path": "src/algorithm32/implementation/distant-sun/cache/consts.js",
+        "byteLength": 14405,
+        "sha256": "15a6fc8b4397228fa0798948bda0572192f20f000df16d47493722ea4caf8714"
+      },
+      {
+        "path": "src/algorithm32/implementation/distant-sun/cache/fixtures/algorithm32-production-native-n4-cpu-gpu-parity-oracle.json",
+        "byteLength": 40733,
+        "sha256": "1307a4614a9f95be71edfca63276f84420ca195343f4a8cc93cc0f035812ab0e"
+      },
+      {
+        "path": "src/algorithm32/implementation/distant-sun/cache/fixtures/gpu-cache-parity-policy.json",
+        "byteLength": 2690,
+        "sha256": "5549313db0a77bc3fa187866e1f6dd8bbd22c6dba2e018ca75242cbdda16e27e"
+      },
+      {
+        "path": "src/algorithm32/implementation/distant-sun/celestial/DistantSunCelestialCacheController.js",
+        "byteLength": 8060,
+        "sha256": "f1403d3a26dff8ac7c74baf04d165f1c45d0a38512669c9427b1c8aa7a572070"
+      },
+      {
+        "path": "src/algorithm32/implementation/distant-sun/celestial/DistantSunCelestialCacheResource.js",
+        "byteLength": 13034,
+        "sha256": "119b5c235cbb9bc0c2202117ffccbd085bd13c9d8bcc40a7ec224b4462c75d3b"
+      },
+      {
+        "path": "src/algorithm32/implementation/distant-sun/celestial/DistantSunCelestialCpuCache.js",
+        "byteLength": 11806,
+        "sha256": "55ff27195198c5aa0af070448769ead9af2d90a88adafc5789556b83bdedaebe"
+      },
+      {
+        "path": "src/algorithm32/implementation/distant-sun/celestial/DistantSunCelestialGpuBuilder.js",
+        "byteLength": 9635,
+        "sha256": "4cf807af93125c4eb7045ea8e41cb2208a9efd41d3515d6abc54a422e4dfb562"
+      },
+      {
+        "path": "src/algorithm32/implementation/distant-sun/celestial/consts.js",
+        "byteLength": 669,
+        "sha256": "1848dad39f731f67316070898e091d519d1b671f8c1ef7c8ba7a721c1339a33f"
+      },
+      {
+        "path": "src/algorithm32/implementation/distant-sun/three/DistantSunSceneLightingAdapter.js",
+        "byteLength": 23926,
+        "sha256": "3c4f55ec51eb6d0961f84ddf16b2ecd53ff025eb5b245ade4460c60912993106"
+      },
+      {
+        "path": "src/algorithm32/implementation/distant-sun/three/consts.js",
+        "byteLength": 668,
+        "sha256": "580c8e289bd7ba22db2d8368c4af59f6bf639f34a6afc9f2934e98dee7675520"
+      },
+      {
+        "path": "src/algorithm32/implementation/ferwerda-color/FerwerdaColorDisplayModel.js",
+        "byteLength": 17830,
+        "sha256": "30b6310d85c5e8160f647a3d0cacea0a9735fe20f71b4728a2e75fc7fd27ea73"
+      },
+      {
+        "path": "src/algorithm32/implementation/ferwerda-color/consts.js",
+        "byteLength": 1923,
+        "sha256": "560f615fb542bc27a4d133cd6aaa78666f39bf44c1a9893ee293957391ee9920"
+      },
+      {
+        "path": "src/algorithm32/implementation/flat-earth/FlatEarthGeometry.js",
+        "byteLength": 47766,
+        "sha256": "654de21c81f96b3dc795fc52d434c81b984a4fabe71c36a0179cb11d7a6bd88d"
+      },
+      {
+        "path": "src/algorithm32/implementation/flat-earth/FlatGeometryCacheModuleProvider.js",
+        "byteLength": 24067,
+        "sha256": "61dab0082d1c862a1f6a452d9259ec99da3719108b47541e80c51ba5cc5e943b"
+      },
+      {
+        "path": "src/algorithm32/implementation/flat-earth/FlatGeometryShaderContributor.js",
+        "byteLength": 18414,
+        "sha256": "978971295d5a7582aa9c496a9aae2cb951fa94f9dcaa624c4d4576e10de69d92"
+      },
+      {
+        "path": "src/algorithm32/implementation/flat-earth/FlatScatteringCacheGeometry.js",
+        "byteLength": 31373,
+        "sha256": "28d41d076a652afce555c4d6ac7e82fafda7ab13c43429a58f0e7dd874141ac2"
+      },
+      {
+        "path": "src/algorithm32/implementation/flat-earth/consts.js",
+        "byteLength": 2903,
+        "sha256": "f414cc9631dad8dd421e1782a4156f19f90beb7d34bf5a6658d33dae64c73a63"
+      },
+      {
+        "path": "src/algorithm32/implementation/flat-earth/synchronization/FlatSynchronizer.js",
+        "byteLength": 11058,
+        "sha256": "17c7c605a61e32bf8b1aabce191e87304db515a14312198f010541e28d35762f"
+      },
+      {
+        "path": "src/algorithm32/implementation/flat-earth/three/ExactFlatGroundObject.js",
+        "byteLength": 3465,
+        "sha256": "9383bff56c6b9450b7701afdec783fb415b869f6a84e415bd2fee641f3123109"
+      },
+      {
+        "path": "src/algorithm32/implementation/flat-earth/three/FlatGeometrySceneAdapter.js",
+        "byteLength": 14323,
+        "sha256": "6de4deee7183a8a50e7d76849f397c32b3581686e3e09529a37722b42f4f945f"
+      },
+      {
+        "path": "src/algorithm32/implementation/index.js",
+        "byteLength": 2919,
+        "sha256": "d1ebf8820d30822ea64593ad40f1f50fe6c43aff61b878de7868aefb3255d5a0"
+      },
+      {
+        "path": "src/algorithm32/implementation/local-sun/LocalSunLightSource.js",
+        "byteLength": 18813,
+        "sha256": "c18e71efb50fb1fee18bae22c7a47b6884a17678b04e2eba49ce68c8cff34407"
+      },
+      {
+        "path": "src/algorithm32/implementation/local-sun/LocalSunShaderContributor.js",
+        "byteLength": 1389,
+        "sha256": "184cd0b06bba76fd237225a79c3e7796c06aa88bbc72e57e2d5c3b99bcbbec45"
+      },
+      {
+        "path": "src/algorithm32/implementation/local-sun/cache/LocalSunCache.js",
+        "byteLength": 4359,
+        "sha256": "0fb5944e580de388fa97cc6b74819f9efc792720619e0c710eeab41b222447f2"
+      },
+      {
+        "path": "src/algorithm32/implementation/local-sun/cache/LocalSunCacheController.js",
+        "byteLength": 24218,
+        "sha256": "9f2d048604220bafae59d0311cf39f6a710875b78b1a0d088af9c8007de7867b"
+      },
+      {
+        "path": "src/algorithm32/implementation/local-sun/cache/LocalSunCacheProvider.js",
+        "byteLength": 35370,
+        "sha256": "6be5b69c53092cdfa61a8e0f213f8b9414c048001100868250c662a6211fbd34"
+      },
+      {
+        "path": "src/algorithm32/implementation/local-sun/cache/LocalSunCacheSource.js",
+        "byteLength": 13362,
+        "sha256": "2c183baf580c088613367ce74c961323fc382187f698405f05ee47ef23afeb5c"
+      },
+      {
+        "path": "src/algorithm32/implementation/local-sun/cache/LocalSunConstructionDomainSelection.js",
+        "byteLength": 8545,
+        "sha256": "1a9715046df432f2d8240c88638ef0d445259f9ffe6315676979844c7b089796"
+      },
+      {
+        "path": "src/algorithm32/implementation/local-sun/cache/LocalSunConstructionLightSource.js",
+        "byteLength": 2865,
+        "sha256": "3fd1f5409c47f3a813c5b3c024c51843c7858e425eb07bda14d6a686819f0620"
+      },
+      {
+        "path": "src/algorithm32/implementation/local-sun/cache/LocalSunCpuCache.js",
+        "byteLength": 3750,
+        "sha256": "d7b05f6697a3ddd83e5af32dfa42c463609b8558e3ce137093c820d7e19302a2"
+      },
+      {
+        "path": "src/algorithm32/implementation/local-sun/cache/LocalSunCpuFields.js",
+        "byteLength": 3567,
+        "sha256": "a1a2bc0b2ead6b9c42f8cf94b4c5a48bfc774d7b29c16d6736e4dc33ae77ac78"
+      },
+      {
+        "path": "src/algorithm32/implementation/local-sun/cache/LocalSunFieldPacking.js",
+        "byteLength": 3152,
+        "sha256": "0c8fb2c8ddd0dca420d364858d98a7f94836f3a0b488834ac4ca0293d22df800"
+      },
+      {
+        "path": "src/algorithm32/implementation/local-sun/cache/LocalSunShellFactCache.js",
+        "byteLength": 9511,
+        "sha256": "7187592cccc904cce8a1eda121a19bf35cc8eab824c38ef6ec6819d053bed0ce"
+      },
+      {
+        "path": "src/algorithm32/implementation/local-sun/cache/consts.js",
+        "byteLength": 4451,
+        "sha256": "b08fe07dd21449212b2b47226e33dc94e1a88f6f86d627d861ac2d1d7a6ac51d"
+      },
+      {
+        "path": "src/algorithm32/implementation/local-sun/cache/fixtures/local-sun-gpu-transport-cpu-authority-v2.json",
+        "byteLength": 267466,
+        "sha256": "c2a2018c5c3d5db0e737c695439365a976220b1c914c94c5e7dcaf2a88b27b9e"
+      },
+      {
+        "path": "src/algorithm32/implementation/local-sun/cache/fixtures/local-sun-gpu-transport-cpu-authority.json",
+        "byteLength": 267470,
+        "sha256": "dd4bdbf87ca05b9a7c45bf849fcc625d1aef1b90fe824ba8e33b424473e44430"
+      },
+      {
+        "path": "src/algorithm32/implementation/local-sun/cache/fixtures/local-sun-gpu-transport-indexed-r32f-v2.json",
+        "byteLength": 226114,
+        "sha256": "59ee2ac971d0e1cac07ceb14cb47f5daa8badb07640ede2981e276f264002119"
+      },
+      {
+        "path": "src/algorithm32/implementation/local-sun/cache/fixtures/local-sun-gpu-transport-offload-policy.json",
+        "byteLength": 1233,
+        "sha256": "4fe5c88cc8f23ea3e20acbc85533a3a3e17e230a395fb1533df88d4e60364543"
+      },
+      {
+        "path": "src/algorithm32/implementation/local-sun/celestial/FlatFiniteSunCacheController.js",
+        "byteLength": 2393,
+        "sha256": "9f21b00a870ef20141cc422e5589a0fa98c3fce7f9224fd81b3d20497e3c34d6"
+      },
+      {
+        "path": "src/algorithm32/implementation/local-sun/celestial/FlatFiniteSunCacheResource.js",
+        "byteLength": 7981,
+        "sha256": "36dd4018d35659285d4726bf718a959f7a5b836eb9db6993961a7b66c5745587"
+      },
+      {
+        "path": "src/algorithm32/implementation/local-sun/celestial/FlatFiniteSunGpuBuilder.js",
+        "byteLength": 4729,
+        "sha256": "ee18019fe25bd0ea1f380a4418e714de945616ac65e94efb6971ef26298222a8"
+      },
+      {
+        "path": "src/algorithm32/implementation/local-sun/celestial/consts.js",
+        "byteLength": 632,
+        "sha256": "4818f8d7b94186f36f6be9b67c75b0e6de6a1f8f9c34bf19b1c7d509d8ba8f04"
+      },
+      {
+        "path": "src/algorithm32/implementation/local-sun/consts.js",
+        "byteLength": 649,
+        "sha256": "d790037e49a1cdace024c3b905f266c590475cc159a67d2a70014b32dbeaa945"
+      },
+      {
+        "path": "src/algorithm32/implementation/local-sun/local-sun-geometry-pairing.js",
+        "byteLength": 1433,
+        "sha256": "bfe77f2efa2e76132d974140da7109e9f9eb42bae7f4b0315b8feecae26ac4fb"
+      },
+      {
+        "path": "src/algorithm32/implementation/local-sun/three/LocalSunSceneLightingAdapter.js",
+        "byteLength": 35676,
+        "sha256": "59e0d8245384da4edd3c7ca4be633eb39820c67efe27ba83606af5a75eb0e1b4"
+      },
+      {
+        "path": "src/algorithm32/implementation/presentation-filter/ViewPresentationFilterRegistry.js",
+        "byteLength": 13608,
+        "sha256": "9e2314697ac7bbee1bccd2432e669346a149d0c3cac8a29d79a3f681760f7109"
+      },
+      {
+        "path": "src/algorithm32/implementation/react-three/Algorithm32AtmosphereComposer.js",
+        "byteLength": 22844,
+        "sha256": "5d28ab939b749935eec5f480fc0591b459f5f396a763fbb960cd3f8cc6f40b92"
+      },
+      {
+        "path": "src/algorithm32/implementation/react-three/Algorithm32Bindings.js",
+        "byteLength": 3311,
+        "sha256": "5c973627cfd8bd48b94c61e542b8ff38a1340cf060a740a9b7e1033386787a49"
+      },
+      {
+        "path": "src/algorithm32/implementation/react-three/Algorithm32R3FAtmosphereComposer.js",
+        "byteLength": 1479,
+        "sha256": "6eeeb26ff2685bb2a668f137aeae3b3b941aa710624cb286a49ec890a1cef4cd"
+      },
+      {
+        "path": "src/algorithm32/implementation/react-three/Algorithm32R3FValues.js",
+        "byteLength": 1436,
+        "sha256": "7a83fd131203830475a3c13e3326b8e43f4c924077cfea23da9d3b6c6e279088"
+      },
+      {
+        "path": "src/algorithm32/implementation/react-three/Algorithm32ThreeResources.js",
+        "byteLength": 4764,
+        "sha256": "2f603dc027c6ba72ca43a9409060bebb8458d2c43ffdbccd7e98be52c37b54e9"
+      },
+      {
+        "path": "src/algorithm32/implementation/react-three/consts.js",
+        "byteLength": 186,
+        "sha256": "bb6da6de7862e3d39c4eb1240d5e1408278685166378abcc7a2c4f23cadb9153"
+      },
+      {
+        "path": "src/algorithm32/implementation/scene-lighting/LocalLightLevelCalculator.js",
+        "byteLength": 23546,
+        "sha256": "a9a387e0146c3f4cbcc4250f70ce809bd1bca687e71dc2f24e4b124ebc7b2f31"
+      },
+      {
+        "path": "src/algorithm32/implementation/scene-lighting/NeutralLambertianSceneLighting.js",
+        "byteLength": 4362,
+        "sha256": "3a377318c25bbc902b298bd87bd2962df174f596217235103becde980bfa422c"
+      },
+      {
+        "path": "src/algorithm32/implementation/scene-lighting/ReceiverEnvironmentLightController.js",
+        "byteLength": 6846,
+        "sha256": "c9c71a685f15e4e689da9d6d93c9cd0afc811cdd1eb505050c3c6b0a294a9039"
+      },
+      {
+        "path": "src/algorithm32/implementation/scene-lighting/ReceiverEnvironmentLightGpuReducer.js",
+        "byteLength": 6760,
+        "sha256": "5a49fd01198d06aeb4a1368c1069a65eeb14016d526c55d0983f3611909b8cdc"
+      },
+      {
+        "path": "src/algorithm32/implementation/scene-lighting/ReceiverEnvironmentLightQuadrature.js",
+        "byteLength": 1721,
+        "sha256": "642d913b91c8f6b217d26bf36215d30caac8b94f7cad8fd47fa1d59d956af630"
+      },
+      {
+        "path": "src/algorithm32/implementation/scene-lighting/ReceiverEnvironmentLightTransportCpuSampler.js",
+        "byteLength": 930,
+        "sha256": "9dbcad851561c951e9b67009fe9c80fa01a190e78e1a6f70ce8eb9ed24373400"
+      },
+      {
+        "path": "src/algorithm32/implementation/scene-lighting/ReceiverEnvironmentLightTransportSampler.js",
+        "byteLength": 7399,
+        "sha256": "2be7fe8d147a10162c29757875729961b1028d4d1c1f1b3e305b4edbf257dbf1"
+      },
+      {
+        "path": "src/algorithm32/implementation/scene-lighting/ReceiverEnvironmentLightTransportShader.js",
+        "byteLength": 5320,
+        "sha256": "259e7ccc3ed14086971a8269735eaf5ac60c17797c7f25c2bc3df0a19e505e9a"
+      },
+      {
+        "path": "src/algorithm32/implementation/spherical-earth/SphericalEarthGeometry.js",
+        "byteLength": 43599,
+        "sha256": "f392383d89786826d58ba4c242841bd273e3a4cbf9929d7123c8a9c269a35bc5"
+      },
+      {
+        "path": "src/algorithm32/implementation/spherical-earth/SphericalGeometryCacheModuleProvider.js",
+        "byteLength": 22011,
+        "sha256": "a50c69dc2418124c0ef4b3bf901fd20a02d640c3e27a8094e3769dd5c0e46e35"
+      },
+      {
+        "path": "src/algorithm32/implementation/spherical-earth/SphericalGeometryShaderContributor.js",
+        "byteLength": 14503,
+        "sha256": "ef9ac667191a12660d846ccea4e155cadd595142c68db0d273c307d040ce635b"
+      },
+      {
+        "path": "src/algorithm32/implementation/spherical-earth/SphericalScatteringCacheGeometry.js",
+        "byteLength": 28330,
+        "sha256": "5ed30682214dc0b1bc7ae38cf45e3ba2adf1e39efaffd59db9e82992f314a63e"
+      },
+      {
+        "path": "src/algorithm32/implementation/spherical-earth/SphericalStellarGenerationShaderContributor.js",
+        "byteLength": 11031,
+        "sha256": "6c0d9bcab55c5b5cd2c841d073a520c06dba7b10cad29d4d676e009a09eb378e"
+      },
+      {
+        "path": "src/algorithm32/implementation/spherical-earth/celestial/SphericalCelestialContributionDomain.js",
+        "byteLength": 31259,
+        "sha256": "410c60c9f650c2881826ee7a58b5896c3da88a17304c41bbe1171f21b52ad21c"
+      },
+      {
+        "path": "src/algorithm32/implementation/spherical-earth/consts.js",
+        "byteLength": 3026,
+        "sha256": "e3c72fc39fb0fbb2b1c14c04686b54b334e1f0701a28c1104c0eeb974e0a8f76"
+      },
+      {
+        "path": "src/algorithm32/implementation/spherical-earth/three/ExactSphereGroundObject.js",
+        "byteLength": 3577,
+        "sha256": "e51ee1b30446c94a8fe8fb06a2e878b073850705e26eada6a9bc3d490a3923ff"
+      },
+      {
+        "path": "src/algorithm32/implementation/spherical-earth/three/SphericalGeometrySceneAdapter.js",
+        "byteLength": 34568,
+        "sha256": "154de347b75bb836cc7339570b0fe16db2d0c4d9e89969c6394ddcc0ce217b7d"
+      },
+      {
+        "path": "src/algorithm32/implementation/star-field/Brightest2000StellarCatalogPackage.js",
+        "byteLength": 5137,
+        "sha256": "feeb805a4174fc4a3941623324ac1660c4d7ed3bd83187c12e6c647af108c19d"
+      },
+      {
+        "path": "src/algorithm32/implementation/star-field/StellarGenerationSourceTable.js",
+        "byteLength": 3860,
+        "sha256": "a25e6479e031b76bd20e22014b30174bc5eff5b3364eede50de20b24f29f8a81"
+      },
+      {
+        "path": "src/algorithm32/implementation/star-field/StellarPointPresentation.js",
+        "byteLength": 958,
+        "sha256": "7cb730fd4a91e84c28d438da0d99a63ddd3e152800ae7b3adad257bec2a292f8"
+      },
+      {
+        "path": "src/algorithm32/implementation/star-field/StellarPointSetCacheController.js",
+        "byteLength": 3160,
+        "sha256": "b5fbb011f6f21f3e11a4d5b1034a7c57c4e59bb52377374edf8d0f51081f50d5"
+      },
+      {
+        "path": "src/algorithm32/implementation/star-field/StellarPointSetCacheResource.js",
+        "byteLength": 7256,
+        "sha256": "f8ef07e63ff9c8ad007cca21c16b4cb89e914c986e00c2c494a2117806bccdfd"
+      },
+      {
+        "path": "src/algorithm32/implementation/star-field/StellarPointSetCpuCache.js",
+        "byteLength": 6851,
+        "sha256": "f61fa3e95175ec71bd1bfe14345742da71c212af1f76ef3dd7b5dca19e8e9f4b"
+      },
+      {
+        "path": "src/algorithm32/implementation/star-field/StellarPointSetGpuBuilder.js",
+        "byteLength": 5552,
+        "sha256": "d75e58e9dbdb51dea1a5aada431852ae58699afb1aec2e1b62f47558a5a5216b"
+      },
+      {
+        "path": "src/algorithm32/implementation/star-field/StellarPointSetSource.js",
+        "byteLength": 7904,
+        "sha256": "a62b8eaf6e79a82f32f8d6a6e23927f284c0a6697bf187b260c432ec023c1a19"
+      },
+      {
+        "path": "src/algorithm32/implementation/star-field/StellarScreenPaletteConsumerShaderContribution.js",
+        "byteLength": 2746,
+        "sha256": "d705521086523bfe61550e04a8089e9b0eeb991eb42c026989c840ce676a43ba"
+      },
+      {
+        "path": "src/algorithm32/implementation/star-field/StellarScreenPaletteGenerationIdentity.js",
+        "byteLength": 3739,
+        "sha256": "41a72312be3920a3f01c5bbf36bbac19c78da30e822672f17fb38c6e080c77c6"
+      },
+      {
+        "path": "src/algorithm32/implementation/star-field/StellarScreenPaletteGenerationPolicy.js",
+        "byteLength": 4854,
+        "sha256": "2510aa51c0549143c2276b379543ef390913486ed8598fe540eaf78664372d9e"
+      },
+      {
+        "path": "src/algorithm32/implementation/star-field/StellarScreenPaletteGenerationStages.js",
+        "byteLength": 8634,
+        "sha256": "7829b10ddaeb0d5979b5aa89744576aca7cd83aaf526aceb21f757837edb48fb"
+      },
+      {
+        "path": "src/algorithm32/implementation/star-field/consts.js",
+        "byteLength": 248273,
+        "sha256": "6d3a06d842d99feff4d562df60e056532a4f5d8c78589f8f67f13d9731c1ae91"
+      },
+      {
+        "path": "src/algorithm32/implementation/three-cache-backend/ThreeCacheBackend.js",
+        "byteLength": 49738,
+        "sha256": "8a014414235c301f0e5e3fa3fcc2e3be6078918bf31abf03b9d67771138b4c21"
+      },
+      {
+        "path": "src/algorithm32/implementation/three-cache-backend/ThreeCachePersistentArray.js",
+        "byteLength": 9126,
+        "sha256": "5b0b60589b8e7af1d00752198a52084b945c9dc578a6b8e9e3906f351abb7d7d"
+      },
+      {
+        "path": "src/algorithm32/implementation/three-cache-backend/consts.js",
+        "byteLength": 875,
+        "sha256": "b50c715fe0e9799361334fa552a576335022958686b09d175cd30a52d55f2278"
+      },
+      {
+        "path": "src/algorithm32/implementation/uniform-lambertian-ground/UniformLambertianGroundBoundary.js",
+        "byteLength": 6606,
+        "sha256": "858798b1b1f67ecde53807fd205642de01fe844c9bb89e5673a9fe78b24c9992"
+      },
+      {
+        "path": "src/algorithm32/implementation/uniform-lambertian-ground/consts.js",
+        "byteLength": 2598,
+        "sha256": "08a309a707c1ad7a5050993e36aa9caf05cd263f68d57bbdcb33da0ca38e6226"
+      },
+      {
+        "path": "src/algorithm32/jsconfig.json",
+        "byteLength": 400,
+        "sha256": "fd5276365cb9de1a26cdc3c57f8a4879d84dcc1f3164a833e45b721409b13e67"
+      },
+      {
+        "path": "src/algorithm32/light-source-support/LightSourceRequestValues.js",
+        "byteLength": 2233,
+        "sha256": "740070280da4fe91fa8b4d0a4768203545f51fa8c978be8d32ddd625102ae9f3"
+      },
+      {
+        "path": "src/algorithm32/light-source-support/cache/CpuDirectionalSpectralField.js",
+        "byteLength": 7158,
+        "sha256": "e4d99ee5aba864283e3e5d7c3069e6ffd16d9d6623b51a3af4fa07b1b4a6035c"
+      },
+      {
+        "path": "src/algorithm32/light-source-support/cache/consts.js",
+        "byteLength": 541,
+        "sha256": "b0679c802637ce49892de14ff635b81b1b5ab37b3119fa9d3eb82394961c21b9"
+      },
+      {
+        "path": "src/algorithm32/light-source-support/cache/index.js",
+        "byteLength": 107,
+        "sha256": "afa0f67c41dbf84dc55de6b8f97dd88100926cdc9a29943e77ae03bedb0a4134"
+      },
+      {
+        "path": "src/algorithm32/light-source-support/three/SceneLightingMath.js",
+        "byteLength": 1940,
+        "sha256": "8da7b929ef1c5da8bdbb39b25eeae79931ca52b3ef537754f066b9ad3e2d161f"
+      },
+      {
+        "path": "src/algorithm32/light-source-support/three/ThreeLighting.js",
+        "byteLength": 5616,
+        "sha256": "343b14dcbf846705232e4721f53f0ba639736ec6e2cade016d382d00c568b78d"
+      },
+      {
+        "path": "src/algorithm32/math/AngleMath.js",
+        "byteLength": 4784,
+        "sha256": "15257357628d3a170d7be1673f7981f9102ff72106f4d72fd5b5b8c19581ad8b"
+      },
+      {
+        "path": "src/algorithm32/math/ArrayMath.js",
+        "byteLength": 4921,
+        "sha256": "16aeefea1de682f59844271f995ab64be1c87b9b840016722e7abd9dba335de2"
+      },
+      {
+        "path": "src/algorithm32/math/DistanceMath.js",
+        "byteLength": 10817,
+        "sha256": "73f8114f40b8b6043df24e67a814656e4a299487414a0a04294b56455181f781"
+      },
+      {
+        "path": "src/algorithm32/math/PixelMath.js",
+        "byteLength": 6204,
+        "sha256": "4c3ac2965142426e2618f242ebd62a88bd77c622080fa2f988ee689bbba6acf6"
+      },
+      {
+        "path": "src/algorithm32/math/SampleMath.js",
+        "byteLength": 5084,
+        "sha256": "df8f5525828692c9a25fe227164f558f12c71eedeaf221934ad6f033e5a09357"
+      },
+      {
+        "path": "src/algorithm32/math/ScalarMath.js",
+        "byteLength": 3453,
+        "sha256": "e0f031d4ef2fad07b3c46086e2d4e9e6de5198832de387b7cd2893ee4c4db05c"
+      },
+      {
+        "path": "src/algorithm32/math/SceneMath.js",
+        "byteLength": 7819,
+        "sha256": "697b5faca541e1e1a393c71578887700472f38805395b9b1e9a6195675ed613d"
+      },
+      {
+        "path": "src/algorithm32/math/VectorMath.js",
+        "byteLength": 7220,
+        "sha256": "a60732d314a1ee8fcb6e195876e6232db7df6636423611459a15febffd957d5a"
+      },
+      {
+        "path": "src/algorithm32/math/WavelengthMath.js",
+        "byteLength": 4257,
+        "sha256": "3f02d88a4ec472a1818e7a411479805e5c665c88e1a7288d5277b5686058dd6c"
+      },
+      {
+        "path": "src/algorithm32/math/index.js",
+        "byteLength": 446,
+        "sha256": "e3b8c6ee9d5c64f8ae7244554eea7e8add52eddc6cafd30cfd5c7b75cd2eeeaf"
+      },
+      {
+        "path": "src/algorithm32/physical-quantities/UnitMath.js",
+        "byteLength": 7078,
+        "sha256": "b29844a1a0b2415277ad2b2dba1257c1f944b50a0b179d4f85e94fdede5fd852"
+      },
+      {
+        "path": "src/algorithm32/physical-quantities/consts.js",
+        "byteLength": 970,
+        "sha256": "cd6817dc75cec01740127a0b21afbe0307e6c938a80ec832e00b8ab5cb47e09f"
+      },
+      {
+        "path": "src/algorithm32/profiles/index.js",
+        "byteLength": 282,
+        "sha256": "27e9e5972af30bdad0ec6833bcce19847e4309e06f9fc648f4a55d0b3c2216ec"
+      },
+      {
+        "path": "src/algorithm32/profiles/native-15/consts.js",
+        "byteLength": 4601,
+        "sha256": "2f223b4aef4d2bd8f940b523b735489b14ebaace722b6085923eb749d75ca4ba"
+      },
+      {
+        "path": "src/algorithm32/profiles/native-15/native-15-profile.js",
+        "byteLength": 13775,
+        "sha256": "480aea8bc4e1636afbf58f7e92da63634564dadc10fa24a6a96b0fb7303f2532"
+      },
+      {
+        "path": "src/algorithm32/reference-evidence/fixtures/analytic-invariants.json",
+        "byteLength": 18866,
+        "sha256": "f902b5136886298bd5a4e51c4bef5631e636964bfb4b6cd6267db1b444b588bd"
+      },
+      {
+        "path": "src/algorithm32/reference-execution/Reference.js",
+        "byteLength": 5260,
+        "sha256": "7e4b2b450b9a07f8ed29c7a442b795f1bf3306cf77071525dcc525f278f592ac"
+      },
+      {
+        "path": "src/algorithm32/rendering-runtime/ShaderAssemblyPreparer.js",
+        "byteLength": 15206,
+        "sha256": "23c0be32a9a767e379e7712ba1bb4bde09279fbf4816662ac730ab510ebe2548"
+      },
+      {
+        "path": "src/algorithm32/rendering-runtime/ShaderBuilder.js",
+        "byteLength": 15598,
+        "sha256": "81529fee047e4faaa9a58f94da868dfeca76c7aa168a2f126791474351013b6d"
+      },
+      {
+        "path": "src/algorithm32/rendering-runtime/consts.js",
+        "byteLength": 815,
+        "sha256": "c791f476686a6775b928929b64f5780148ee1ed20bec6f5fb2494c42f7934469"
+      },
+      {
+        "path": "src/algorithm32/rendering-runtime/three/CelestialGenerationPass.js",
+        "byteLength": 4046,
+        "sha256": "1e7bb397d248217128d3355b6b5d5fda8e8d6e1cb503e9e8556c1a80fcc0f94d"
+      },
+      {
+        "path": "src/algorithm32/rendering-runtime/three/CelestialRenderViewSnapshot.js",
+        "byteLength": 4138,
+        "sha256": "274f6524e98d781ea60d33a47d2921de5c0fd4e3efac2f74970a9d420da02d5f"
+      },
+      {
+        "path": "src/algorithm32/rendering-runtime/three/SceneInputCapture.js",
+        "byteLength": 21335,
+        "sha256": "45ce2f83fd56a11f3957990dd3b6abb78f20999b1610402147d6cea967609922"
+      },
+      {
+        "path": "src/algorithm32/rendering-runtime/three/ShaderPassPerformanceTimer.js",
+        "byteLength": 9119,
+        "sha256": "a52b22ce30f3a564864741bdc06c505c020179bb9249465e8298f57384f94b89"
+      },
+      {
+        "path": "src/algorithm32/rendering-runtime/three/ShaderRuntimeInstaller.js",
+        "byteLength": 29526,
+        "sha256": "a9c912d17a103a4b3f083880f53909798b6b7ce153d280fa8e73abfc6da514c4"
+      },
+      {
+        "path": "src/algorithm32/rendering-runtime/three/ShaderRuntimePass.js",
+        "byteLength": 9905,
+        "sha256": "4e578eb97768d09b30b059ff4e71dd9950091da8c0901dfb6bdb83f905010d8c"
+      },
+      {
+        "path": "src/algorithm32/rendering-runtime/three/StellarScreenPaletteGenerationPass.js",
+        "byteLength": 20649,
+        "sha256": "9a704fddf10f13b7810acb1c908d2b57129f66323884a03ede5e5acdd09294a3"
+      },
+      {
+        "path": "src/algorithm32/rendering-runtime/three/SunDiskTileGenerationPass.js",
+        "byteLength": 17544,
+        "sha256": "13e423895f1bcc630c06c83ff7c0f29d437ad669c37ace9204321e43c99a5623"
+      },
+      {
+        "path": "src/algorithm32/rendering-runtime/three/consts.js",
+        "byteLength": 147,
+        "sha256": "3edf2e780df5c6edf2b6324629ddd23bfab68eabf929a2ca5ae1f1cd1843efb2"
+      },
+      {
+        "path": "src/algorithm32/sampling-domains/direction/cubed-sphere/CubedSphereDirectionDomain.js",
+        "byteLength": 17833,
+        "sha256": "2e0104fe8a4c652a40d85b3377e5fc81b37727dc17838315a32f78c2f92580fb"
+      },
+      {
+        "path": "src/algorithm32/sampling-domains/direction/cubed-sphere/consts.js",
+        "byteLength": 1123,
+        "sha256": "e06085d85e892cc79a64c4e9a7ae860e28f521c630c23103fe87f2fac229a5a4"
+      },
+      {
+        "path": "src/algorithm32/sampling-domains/direction/fibonacci/Fibonacci34DirectionDomain.js",
+        "byteLength": 3902,
+        "sha256": "8520122a5bd2cef132616e3299af03c9b63b7739b8d8af9cc0b60f22f3538b5c"
+      },
+      {
+        "path": "src/algorithm32/sampling-domains/direction/fibonacci/PairedFibonacci34DirectionDomain.js",
+        "byteLength": 4264,
+        "sha256": "9007145a20ebbb47683aa1989d5461ff75edf998eabea8f0bfc4986a357f71b3"
+      },
+      {
+        "path": "src/algorithm32/sampling-domains/direction/fibonacci/PairedRotatedFibonacci68DirectionDomain.js",
+        "byteLength": 2162,
+        "sha256": "f69f924a4f071fb7b2c5adc85085f8ca7bc0aecef907f4fee42ebd4e0c56cf13"
+      },
+      {
+        "path": "src/algorithm32/sampling-domains/direction/fibonacci/ReflectionCompletedFibonacci68DirectionDomain.js",
+        "byteLength": 1496,
+        "sha256": "18bda209df714678312dede7fa47a4240549a9ccfb6381b35a1a5f49e5e1bda5"
+      },
+      {
+        "path": "src/algorithm32/sampling-domains/direction/fibonacci/consts.js",
+        "byteLength": 1087,
+        "sha256": "72d678b8a01d06cd5cec5252368468915a3ab653934485c6036673a5b0ea4b01"
+      },
+      {
+        "path": "src/algorithm32/sampling-domains/index.js",
+        "byteLength": 1615,
+        "sha256": "94948a5a8669f2bd21098dbe0ccf8be665cd1c3d290b3241c9ddb8a496ae2659"
+      },
+      {
+        "path": "src/algorithm32/sampling-domains/position/spherical-native/SphericalNativePositionDomain.js",
+        "byteLength": 4503,
+        "sha256": "88a659d39c699f51398f98ba6ec7d277caee20ec6196084b24dceca00f265db9"
+      },
+      {
+        "path": "src/algorithm32/sampling-domains/position/spherical-native/consts.js",
+        "byteLength": 911,
+        "sha256": "e125a351494dcfa6afdae4135b94c50d62576e9715b6469865bd1d2242a6cdc2"
+      },
+      {
+        "path": "src/algorithm32/sampling-domains/solar-zenith/SolarZenithDomain.js",
+        "byteLength": 2386,
+        "sha256": "fa5ca475319d42489f002a0766fc1366a8b006b768d3cb0eeb96b10ff2eaeeb3"
+      },
+      {
+        "path": "src/algorithm32/sampling-domains/solar-zenith/consts.js",
+        "byteLength": 373,
+        "sha256": "40840905d7d1358b592c86a1303c2258417bd29b772b88c0e9c3416b7d2368a2"
+      },
+      {
+        "path": "src/algorithm32/shader-assembly/base/ShaderContributions.js",
+        "byteLength": 2767,
+        "sha256": "ca5eb9d382b1f0d74e8439b4eaf20569f86086e5f4bf3cee672afd3e53af20ab"
+      },
+      {
+        "path": "src/algorithm32/shader-assembly/base/ShaderSource.js",
+        "byteLength": 1386,
+        "sha256": "345d74059fe5ef172d6cc5a5b7da1aab1516a39cfd1b9550ad36194313a1b340"
+      },
+      {
+        "path": "src/algorithm32/shader-assembly/cache-pass/CacheBuildModules.js",
+        "byteLength": 3501,
+        "sha256": "ba773cb61e433636e1bd18f2d4f4bf2c5b35a50a870b3f96b5947a456f9cc75e"
+      },
+      {
+        "path": "src/algorithm32/shader-assembly/cache-pass/CachePassAssembler.js",
+        "byteLength": 12656,
+        "sha256": "7aa8310109b57a9bf6845e3d883ed61e54915e4668a2d1006e01de5d6de970be"
+      },
+      {
+        "path": "src/algorithm32/shader-assembly/cache-pass/consts.js",
+        "byteLength": 138,
+        "sha256": "fddd422e08f0cd5ee62bc550aa5756fa7c9c6c07ff83c9d9af6652580605bb00"
+      },
+      {
+        "path": "src/algorithm32/shader-assembly/runtime/Algorithm32ShaderAssembler.js",
+        "byteLength": 13229,
+        "sha256": "00b1a43bb02fac8eec84e6cae68a6aed3c15ec273f637fc49aea6b6b010412f0"
+      },
+      {
+        "path": "src/algorithm32/shader-assembly/runtime/ShaderCompatibilityValidator.js",
+        "byteLength": 3763,
+        "sha256": "99ae1e0d59b0b16288fe8c92e2316a076f02f54f755143efb25f91ed296caf73"
+      },
+      {
+        "path": "src/algorithm32/spectral-values/SpectralBasis.js",
+        "byteLength": 7729,
+        "sha256": "5f08ed112aa4fc7ac310314f0683b819be99762cd9f0ed8467b7d49463f1e5ae"
+      },
+      {
+        "path": "src/algorithm32/spectral-values/SpectralMath.js",
+        "byteLength": 16170,
+        "sha256": "3b239a09801d5bcc1c4020f50e6100ed0b565df767ec2216336e492aa78c1897"
+      },
+      {
+        "path": "src/algorithm32/spectral-values/SpectralPacket.js",
+        "byteLength": 7836,
+        "sha256": "c41e56ee0087565f0c3e7b2b901d52480448a7052764ee19891eedc29800c5fd"
+      },
+      {
+        "path": "src/algorithm32/spectral-values/consts.js",
+        "byteLength": 2838,
+        "sha256": "3d46bc0690ba14e130fc104ba54b8f9e5c375b9bdeccdd63390d75913a9ff68b"
+      },
+      {
+        "path": "src/algorithm32/spectral-values/index.js",
+        "byteLength": 411,
+        "sha256": "503f36a4adccda04c5074476a25e40a95d364963657af023c53cd4d52b2b4ebe"
+      },
+      {
+        "path": "src/algorithm32/time/TimeMath.js",
+        "byteLength": 1279,
+        "sha256": "5a5e37ffe465c15c3a8fffb13da9282e3c73956f4ed1ecd61ab589de960bf038"
+      },
+      {
+        "path": "src/algorithm32/validation/ValueValidation.js",
+        "byteLength": 5439,
+        "sha256": "eb71e4a4217e4253514cc2a8e2083137afd5d1555a1f1f0e41b45a6d8d086dfc"
+      },
+      {
+        "path": "src/algorithm32/value-identity/CanonicalValueHash.js",
+        "byteLength": 5602,
+        "sha256": "7ad3f83f16101e7e0eef4bf322b1468a8c0a398fb3a412fd0337837e4424042d"
+      },
+      {
+        "path": "src/algorithm32/value-identity/StableValueHash.js",
+        "byteLength": 3771,
+        "sha256": "548a2aad45bc62feaaaca6c5e459ec45efd839d1538e62b90ff4d446651d1a08"
+      }
+    ]
+  },
+  "referenceInputs": {
+    "bundle": {
+      "schema": "b1-pinned-raw-inputs-v1",
+      "path": "kider-spectra.json.gz",
+      "encoding": "gzip-json-path-to-base64-original-bytes",
+      "fileCount": 1377,
+      "byteLength": 40967266,
+      "sha256": "cdadc4c4c84e902e2d1f27b2d2007de5cca7706f1abee12c7884af199cb5c572"
+    },
+    "rawAcquisitionSha256": "cab6098aac3f5380ea981a27ef5b0531a9818c3a59aef7abcacb43f53f510de9",
+    "processedGridSha256": "18d5a3d02ffe688bf18afcc96bd39962de7a610870cc4bbe685fa6ac415be27e"
+  },
+  "cacheRepresentation": "receiver-local-native48-z180-w27",
+  "gpuConditionDiagnostics": [
+    {
+      "time": "09:30",
+      "assetSetIdentity": "algorithm32-b1-direct40-cache-set-sha256:19531e95cfca6a007a0bd72e2d73c7ea4855fd69a624e39b4e4009fa111d9f0c",
+      "assetIdentity": "algorithm32-b1-direct40-cache-sha256:fef3359ec5d2a54d32767557ad236ca7312490af37fd60af6bc080aa3573e3c2",
+      "shaderDiagnostics": {
+        "status": "installed",
+        "modelVersion": 1,
+        "runtime": {
+          "status": "ready",
+          "sourceHash": "fnv1a32:efb291e8",
+          "frameCount": 10,
+          "renderErrorCount": 0,
+          "lastRenderError": null,
+          "viewportSize": {
+            "width": 9,
+            "height": 9,
+            "units": "pixels"
+          },
+          "sceneInputCapture": null,
+          "celestialGeneration": null,
+          "stellarGeneration": null
+        }
+      },
+      "shaderSourceMetrics": {
+        "characterCount": 35128,
+        "utf8ByteCount": 35128,
+        "lineCount": 645
+      },
+      "executionTimings": {
+        "cacheGpuDrainDurationMilliseconds": null,
+        "finalShaderPreparationDurationMilliseconds": 2465.0999999940395,
+        "readbackDurationMilliseconds": 58.29999998211861
+      }
+    },
+    {
+      "time": "09:45",
+      "assetSetIdentity": "algorithm32-b1-direct40-cache-set-sha256:19531e95cfca6a007a0bd72e2d73c7ea4855fd69a624e39b4e4009fa111d9f0c",
+      "assetIdentity": "algorithm32-b1-direct40-cache-sha256:4a25a6052da7bd7e904b8cd55e317762dd4e5bf4c03bf296990b4284e3ff72de",
+      "shaderDiagnostics": {
+        "status": "installed",
+        "modelVersion": 1,
+        "runtime": {
+          "status": "ready",
+          "sourceHash": "fnv1a32:791bc7be",
+          "frameCount": 10,
+          "renderErrorCount": 0,
+          "lastRenderError": null,
+          "viewportSize": {
+            "width": 9,
+            "height": 9,
+            "units": "pixels"
+          },
+          "sceneInputCapture": null,
+          "celestialGeneration": null,
+          "stellarGeneration": null
+        }
+      },
+      "shaderSourceMetrics": {
+        "characterCount": 35128,
+        "utf8ByteCount": 35128,
+        "lineCount": 645
+      },
+      "executionTimings": {
+        "cacheGpuDrainDurationMilliseconds": null,
+        "finalShaderPreparationDurationMilliseconds": 2336.199999988079,
+        "readbackDurationMilliseconds": 96.7000000178814
+      }
+    },
+    {
+      "time": "10:00",
+      "assetSetIdentity": "algorithm32-b1-direct40-cache-set-sha256:19531e95cfca6a007a0bd72e2d73c7ea4855fd69a624e39b4e4009fa111d9f0c",
+      "assetIdentity": "algorithm32-b1-direct40-cache-sha256:62db49425bf0376b170652883e03c0cae30406253eef60b20eeb69cd3b35abc8",
+      "shaderDiagnostics": {
+        "status": "installed",
+        "modelVersion": 1,
+        "runtime": {
+          "status": "ready",
+          "sourceHash": "fnv1a32:49c72e9c",
+          "frameCount": 10,
+          "renderErrorCount": 0,
+          "lastRenderError": null,
+          "viewportSize": {
+            "width": 9,
+            "height": 9,
+            "units": "pixels"
+          },
+          "sceneInputCapture": null,
+          "celestialGeneration": null,
+          "stellarGeneration": null
+        }
+      },
+      "shaderSourceMetrics": {
+        "characterCount": 35128,
+        "utf8ByteCount": 35128,
+        "lineCount": 645
+      },
+      "executionTimings": {
+        "cacheGpuDrainDurationMilliseconds": null,
+        "finalShaderPreparationDurationMilliseconds": 2582.0999999940395,
+        "readbackDurationMilliseconds": 118.40000000596046
+      }
+    },
+    {
+      "time": "10:15",
+      "assetSetIdentity": "algorithm32-b1-direct40-cache-set-sha256:19531e95cfca6a007a0bd72e2d73c7ea4855fd69a624e39b4e4009fa111d9f0c",
+      "assetIdentity": "algorithm32-b1-direct40-cache-sha256:51cad98997694ef4b866761104f845c2a2dd89687fa93305c04acc6c2f1ae74b",
+      "shaderDiagnostics": {
+        "status": "installed",
+        "modelVersion": 1,
+        "runtime": {
+          "status": "ready",
+          "sourceHash": "fnv1a32:aac408e6",
+          "frameCount": 10,
+          "renderErrorCount": 0,
+          "lastRenderError": null,
+          "viewportSize": {
+            "width": 9,
+            "height": 9,
+            "units": "pixels"
+          },
+          "sceneInputCapture": null,
+          "celestialGeneration": null,
+          "stellarGeneration": null
+        }
+      },
+      "shaderSourceMetrics": {
+        "characterCount": 35128,
+        "utf8ByteCount": 35128,
+        "lineCount": 645
+      },
+      "executionTimings": {
+        "cacheGpuDrainDurationMilliseconds": null,
+        "finalShaderPreparationDurationMilliseconds": 2814.899999976158,
+        "readbackDurationMilliseconds": 141.59999999403954
+      }
+    },
+    {
+      "time": "10:30",
+      "assetSetIdentity": "algorithm32-b1-direct40-cache-set-sha256:19531e95cfca6a007a0bd72e2d73c7ea4855fd69a624e39b4e4009fa111d9f0c",
+      "assetIdentity": "algorithm32-b1-direct40-cache-sha256:5bc0b43060ec0eaaee386a7edf9c548a6f6a90bf3dfe3f3d57b65e481db6f7a3",
+      "shaderDiagnostics": {
+        "status": "installed",
+        "modelVersion": 1,
+        "runtime": {
+          "status": "ready",
+          "sourceHash": "fnv1a32:0281b8d8",
+          "frameCount": 10,
+          "renderErrorCount": 0,
+          "lastRenderError": null,
+          "viewportSize": {
+            "width": 9,
+            "height": 9,
+            "units": "pixels"
+          },
+          "sceneInputCapture": null,
+          "celestialGeneration": null,
+          "stellarGeneration": null
+        }
+      },
+      "shaderSourceMetrics": {
+        "characterCount": 35128,
+        "utf8ByteCount": 35128,
+        "lineCount": 645
+      },
+      "executionTimings": {
+        "cacheGpuDrainDurationMilliseconds": null,
+        "finalShaderPreparationDurationMilliseconds": 2444,
+        "readbackDurationMilliseconds": 77.30000001192093
+      }
+    },
+    {
+      "time": "10:45",
+      "assetSetIdentity": "algorithm32-b1-direct40-cache-set-sha256:19531e95cfca6a007a0bd72e2d73c7ea4855fd69a624e39b4e4009fa111d9f0c",
+      "assetIdentity": "algorithm32-b1-direct40-cache-sha256:4811865562d46599dfe637e49b732740eed59f250292f99139f23915fb7b37fa",
+      "shaderDiagnostics": {
+        "status": "installed",
+        "modelVersion": 1,
+        "runtime": {
+          "status": "ready",
+          "sourceHash": "fnv1a32:7e720177",
+          "frameCount": 10,
+          "renderErrorCount": 0,
+          "lastRenderError": null,
+          "viewportSize": {
+            "width": 9,
+            "height": 9,
+            "units": "pixels"
+          },
+          "sceneInputCapture": null,
+          "celestialGeneration": null,
+          "stellarGeneration": null
+        }
+      },
+      "shaderSourceMetrics": {
+        "characterCount": 35128,
+        "utf8ByteCount": 35128,
+        "lineCount": 645
+      },
+      "executionTimings": {
+        "cacheGpuDrainDurationMilliseconds": null,
+        "finalShaderPreparationDurationMilliseconds": 2432.300000011921,
+        "readbackDurationMilliseconds": 179.5
+      }
+    },
+    {
+      "time": "11:00",
+      "assetSetIdentity": "algorithm32-b1-direct40-cache-set-sha256:19531e95cfca6a007a0bd72e2d73c7ea4855fd69a624e39b4e4009fa111d9f0c",
+      "assetIdentity": "algorithm32-b1-direct40-cache-sha256:527dd6990af69e945328f756aa5c32a68f3b3a168f6d36057b78c6e9fddd3e54",
+      "shaderDiagnostics": {
+        "status": "installed",
+        "modelVersion": 1,
+        "runtime": {
+          "status": "ready",
+          "sourceHash": "fnv1a32:6dd3a11f",
+          "frameCount": 10,
+          "renderErrorCount": 0,
+          "lastRenderError": null,
+          "viewportSize": {
+            "width": 9,
+            "height": 9,
+            "units": "pixels"
+          },
+          "sceneInputCapture": null,
+          "celestialGeneration": null,
+          "stellarGeneration": null
+        }
+      },
+      "shaderSourceMetrics": {
+        "characterCount": 35128,
+        "utf8ByteCount": 35128,
+        "lineCount": 645
+      },
+      "executionTimings": {
+        "cacheGpuDrainDurationMilliseconds": null,
+        "finalShaderPreparationDurationMilliseconds": 2503.2000000178814,
+        "readbackDurationMilliseconds": 84.59999999403954
+      }
+    },
+    {
+      "time": "11:15",
+      "assetSetIdentity": "algorithm32-b1-direct40-cache-set-sha256:19531e95cfca6a007a0bd72e2d73c7ea4855fd69a624e39b4e4009fa111d9f0c",
+      "assetIdentity": "algorithm32-b1-direct40-cache-sha256:6560e1262c11b0db4b4b57d2950b664c7c3ed2e55ee8da6d8cd500258d0b7f10",
+      "shaderDiagnostics": {
+        "status": "installed",
+        "modelVersion": 1,
+        "runtime": {
+          "status": "ready",
+          "sourceHash": "fnv1a32:ff143a00",
+          "frameCount": 10,
+          "renderErrorCount": 0,
+          "lastRenderError": null,
+          "viewportSize": {
+            "width": 9,
+            "height": 9,
+            "units": "pixels"
+          },
+          "sceneInputCapture": null,
+          "celestialGeneration": null,
+          "stellarGeneration": null
+        }
+      },
+      "shaderSourceMetrics": {
+        "characterCount": 35128,
+        "utf8ByteCount": 35128,
+        "lineCount": 645
+      },
+      "executionTimings": {
+        "cacheGpuDrainDurationMilliseconds": null,
+        "finalShaderPreparationDurationMilliseconds": 2509.0999999940395,
+        "readbackDurationMilliseconds": 110.40000000596046
+      }
+    },
+    {
+      "time": "11:30",
+      "assetSetIdentity": "algorithm32-b1-direct40-cache-set-sha256:19531e95cfca6a007a0bd72e2d73c7ea4855fd69a624e39b4e4009fa111d9f0c",
+      "assetIdentity": "algorithm32-b1-direct40-cache-sha256:4cdbaf157f5fc399dab1a5a57fabb64bf7e04ae9320ffd015b283b8c12529813",
+      "shaderDiagnostics": {
+        "status": "installed",
+        "modelVersion": 1,
+        "runtime": {
+          "status": "ready",
+          "sourceHash": "fnv1a32:955f424f",
+          "frameCount": 10,
+          "renderErrorCount": 0,
+          "lastRenderError": null,
+          "viewportSize": {
+            "width": 9,
+            "height": 9,
+            "units": "pixels"
+          },
+          "sceneInputCapture": null,
+          "celestialGeneration": null,
+          "stellarGeneration": null
+        }
+      },
+      "shaderSourceMetrics": {
+        "characterCount": 35128,
+        "utf8ByteCount": 35128,
+        "lineCount": 645
+      },
+      "executionTimings": {
+        "cacheGpuDrainDurationMilliseconds": null,
+        "finalShaderPreparationDurationMilliseconds": 2542.800000011921,
+        "readbackDurationMilliseconds": 85.30000001192093
+      }
+    },
+    {
+      "time": "11:45",
+      "assetSetIdentity": "algorithm32-b1-direct40-cache-set-sha256:19531e95cfca6a007a0bd72e2d73c7ea4855fd69a624e39b4e4009fa111d9f0c",
+      "assetIdentity": "algorithm32-b1-direct40-cache-sha256:3182580998b89afb194f26e83aecd1413aa41b212849225947ccf7e38ed8a0e2",
+      "shaderDiagnostics": {
+        "status": "installed",
+        "modelVersion": 1,
+        "runtime": {
+          "status": "ready",
+          "sourceHash": "fnv1a32:066e629c",
+          "frameCount": 10,
+          "renderErrorCount": 0,
+          "lastRenderError": null,
+          "viewportSize": {
+            "width": 9,
+            "height": 9,
+            "units": "pixels"
+          },
+          "sceneInputCapture": null,
+          "celestialGeneration": null,
+          "stellarGeneration": null
+        }
+      },
+      "shaderSourceMetrics": {
+        "characterCount": 35128,
+        "utf8ByteCount": 35128,
+        "lineCount": 645
+      },
+      "executionTimings": {
+        "cacheGpuDrainDurationMilliseconds": null,
+        "finalShaderPreparationDurationMilliseconds": 2798.699999988079,
+        "readbackDurationMilliseconds": 171.5
+      }
+    },
+    {
+      "time": "12:00",
+      "assetSetIdentity": "algorithm32-b1-direct40-cache-set-sha256:19531e95cfca6a007a0bd72e2d73c7ea4855fd69a624e39b4e4009fa111d9f0c",
+      "assetIdentity": "algorithm32-b1-direct40-cache-sha256:ba9f78661af306ea1b1b2be90952fcc53e6d803b5f7253c577c8efceb7be2b3f",
+      "shaderDiagnostics": {
+        "status": "installed",
+        "modelVersion": 1,
+        "runtime": {
+          "status": "ready",
+          "sourceHash": "fnv1a32:91b7d43c",
+          "frameCount": 10,
+          "renderErrorCount": 0,
+          "lastRenderError": null,
+          "viewportSize": {
+            "width": 9,
+            "height": 9,
+            "units": "pixels"
+          },
+          "sceneInputCapture": null,
+          "celestialGeneration": null,
+          "stellarGeneration": null
+        }
+      },
+      "shaderSourceMetrics": {
+        "characterCount": 35128,
+        "utf8ByteCount": 35128,
+        "lineCount": 645
+      },
+      "executionTimings": {
+        "cacheGpuDrainDurationMilliseconds": null,
+        "finalShaderPreparationDurationMilliseconds": 2617.5999999940395,
+        "readbackDurationMilliseconds": 171.7999999821186
+      }
+    },
+    {
+      "time": "12:15",
+      "assetSetIdentity": "algorithm32-b1-direct40-cache-set-sha256:19531e95cfca6a007a0bd72e2d73c7ea4855fd69a624e39b4e4009fa111d9f0c",
+      "assetIdentity": "algorithm32-b1-direct40-cache-sha256:16f0aaef3d2c20b21a1486740b5413ce1822ef718fa972bd0a60ed34dc4d6472",
+      "shaderDiagnostics": {
+        "status": "installed",
+        "modelVersion": 1,
+        "runtime": {
+          "status": "ready",
+          "sourceHash": "fnv1a32:427b2c20",
+          "frameCount": 10,
+          "renderErrorCount": 0,
+          "lastRenderError": null,
+          "viewportSize": {
+            "width": 9,
+            "height": 9,
+            "units": "pixels"
+          },
+          "sceneInputCapture": null,
+          "celestialGeneration": null,
+          "stellarGeneration": null
+        }
+      },
+      "shaderSourceMetrics": {
+        "characterCount": 35128,
+        "utf8ByteCount": 35128,
+        "lineCount": 645
+      },
+      "executionTimings": {
+        "cacheGpuDrainDurationMilliseconds": null,
+        "finalShaderPreparationDurationMilliseconds": 2851,
+        "readbackDurationMilliseconds": 35
+      }
+    },
+    {
+      "time": "12:30",
+      "assetSetIdentity": "algorithm32-b1-direct40-cache-set-sha256:19531e95cfca6a007a0bd72e2d73c7ea4855fd69a624e39b4e4009fa111d9f0c",
+      "assetIdentity": "algorithm32-b1-direct40-cache-sha256:7e7b0ddf4a49759b2049909b93b445d5118c05ce96fcfaa2e233753c6c1f2a67",
+      "shaderDiagnostics": {
+        "status": "installed",
+        "modelVersion": 1,
+        "runtime": {
+          "status": "ready",
+          "sourceHash": "fnv1a32:43d8abb8",
+          "frameCount": 10,
+          "renderErrorCount": 0,
+          "lastRenderError": null,
+          "viewportSize": {
+            "width": 9,
+            "height": 9,
+            "units": "pixels"
+          },
+          "sceneInputCapture": null,
+          "celestialGeneration": null,
+          "stellarGeneration": null
+        }
+      },
+      "shaderSourceMetrics": {
+        "characterCount": 35128,
+        "utf8ByteCount": 35128,
+        "lineCount": 645
+      },
+      "executionTimings": {
+        "cacheGpuDrainDurationMilliseconds": null,
+        "finalShaderPreparationDurationMilliseconds": 2788,
+        "readbackDurationMilliseconds": 106.5
+      }
+    },
+    {
+      "time": "12:45",
+      "assetSetIdentity": "algorithm32-b1-direct40-cache-set-sha256:19531e95cfca6a007a0bd72e2d73c7ea4855fd69a624e39b4e4009fa111d9f0c",
+      "assetIdentity": "algorithm32-b1-direct40-cache-sha256:486d85474029b8374ab7998f4ff67f1d6812ef67f5de3a28e0881d3a0a0719f6",
+      "shaderDiagnostics": {
+        "status": "installed",
+        "modelVersion": 1,
+        "runtime": {
+          "status": "ready",
+          "sourceHash": "fnv1a32:efed01d7",
+          "frameCount": 10,
+          "renderErrorCount": 0,
+          "lastRenderError": null,
+          "viewportSize": {
+            "width": 9,
+            "height": 9,
+            "units": "pixels"
+          },
+          "sceneInputCapture": null,
+          "celestialGeneration": null,
+          "stellarGeneration": null
+        }
+      },
+      "shaderSourceMetrics": {
+        "characterCount": 35128,
+        "utf8ByteCount": 35128,
+        "lineCount": 645
+      },
+      "executionTimings": {
+        "cacheGpuDrainDurationMilliseconds": null,
+        "finalShaderPreparationDurationMilliseconds": 2629.800000011921,
+        "readbackDurationMilliseconds": 37.5
+      }
+    },
+    {
+      "time": "13:00",
+      "assetSetIdentity": "algorithm32-b1-direct40-cache-set-sha256:19531e95cfca6a007a0bd72e2d73c7ea4855fd69a624e39b4e4009fa111d9f0c",
+      "assetIdentity": "algorithm32-b1-direct40-cache-sha256:67dcdf88afafb67d171855d06f73d103b2a0674dc3b687c3ebc3755ba848e7c8",
+      "shaderDiagnostics": {
+        "status": "installed",
+        "modelVersion": 1,
+        "runtime": {
+          "status": "ready",
+          "sourceHash": "fnv1a32:b2614b51",
+          "frameCount": 10,
+          "renderErrorCount": 0,
+          "lastRenderError": null,
+          "viewportSize": {
+            "width": 9,
+            "height": 9,
+            "units": "pixels"
+          },
+          "sceneInputCapture": null,
+          "celestialGeneration": null,
+          "stellarGeneration": null
+        }
+      },
+      "shaderSourceMetrics": {
+        "characterCount": 35128,
+        "utf8ByteCount": 35128,
+        "lineCount": 645
+      },
+      "executionTimings": {
+        "cacheGpuDrainDurationMilliseconds": null,
+        "finalShaderPreparationDurationMilliseconds": 2456.5,
+        "readbackDurationMilliseconds": 87.80000001192093
+      }
+    },
+    {
+      "time": "13:15",
+      "assetSetIdentity": "algorithm32-b1-direct40-cache-set-sha256:19531e95cfca6a007a0bd72e2d73c7ea4855fd69a624e39b4e4009fa111d9f0c",
+      "assetIdentity": "algorithm32-b1-direct40-cache-sha256:d1b8d19cb7385c5c6ca5e324eddee1b0ad881106809606b6b147f5624a600765",
+      "shaderDiagnostics": {
+        "status": "installed",
+        "modelVersion": 1,
+        "runtime": {
+          "status": "ready",
+          "sourceHash": "fnv1a32:2b331daa",
+          "frameCount": 10,
+          "renderErrorCount": 0,
+          "lastRenderError": null,
+          "viewportSize": {
+            "width": 9,
+            "height": 9,
+            "units": "pixels"
+          },
+          "sceneInputCapture": null,
+          "celestialGeneration": null,
+          "stellarGeneration": null
+        }
+      },
+      "shaderSourceMetrics": {
+        "characterCount": 35128,
+        "utf8ByteCount": 35128,
+        "lineCount": 645
+      },
+      "executionTimings": {
+        "cacheGpuDrainDurationMilliseconds": null,
+        "finalShaderPreparationDurationMilliseconds": 2567.600000023842,
+        "readbackDurationMilliseconds": 173.5
+      }
+    },
+    {
+      "time": "13:30",
+      "assetSetIdentity": "algorithm32-b1-direct40-cache-set-sha256:19531e95cfca6a007a0bd72e2d73c7ea4855fd69a624e39b4e4009fa111d9f0c",
+      "assetIdentity": "algorithm32-b1-direct40-cache-sha256:dd4fe588719b0bb3762047b9b5a7afb5f442527fdef343ed30a7a2584140c7b3",
+      "shaderDiagnostics": {
+        "status": "installed",
+        "modelVersion": 1,
+        "runtime": {
+          "status": "ready",
+          "sourceHash": "fnv1a32:61d99c32",
+          "frameCount": 10,
+          "renderErrorCount": 0,
+          "lastRenderError": null,
+          "viewportSize": {
+            "width": 9,
+            "height": 9,
+            "units": "pixels"
+          },
+          "sceneInputCapture": null,
+          "celestialGeneration": null,
+          "stellarGeneration": null
+        }
+      },
+      "shaderSourceMetrics": {
+        "characterCount": 35128,
+        "utf8ByteCount": 35128,
+        "lineCount": 645
+      },
+      "executionTimings": {
+        "cacheGpuDrainDurationMilliseconds": null,
+        "finalShaderPreparationDurationMilliseconds": 2638.199999988079,
+        "readbackDurationMilliseconds": 70.69999998807907
+      }
+    }
+  ],
+  "modelNameInBenchmarkTables": "proposed",
+  "profileId": "paper",
+  "presentationName": "Algorithm32 Paper",
+  "physicalProfileId": "algorithm32-paper-comparison-v1",
+  "physicalProfileContentHash": "sha256:d47601d954167ca8775c0a88cd8ca9b9527ae8e74a6f42ae6041eec3244aeecc",
+  "order": 4,
+  "rowCount": 1377,
+  "completeCanonicalBoundary": true,
+  "physicalMeasurementBoundary": {
+    "schemaId": "algorithm32-b1-physical-measurement-boundary-v1",
+    "identity": "b1-direct40-post-transport-pre-color-rgba32f-v1",
+    "observable": "directional-spectral-radiance-density",
+    "stage": "post-transport-pre-color",
+    "spectralChannelCount": 40,
+    "gpuReadback": {
+      "format": "RGBA32F",
+      "channelsPerPass": 4,
+      "passCount": 10
+    },
+    "colorDisplayModel": null,
+    "displayEncoding": "none",
+    "toneMapping": "none",
+    "stellarPresentationFilters": []
+  },
+  "spectralChannelCount": 40,
+  "nativeSpectralBoundary": {
+    "channelCount": 40,
+    "centersNanometers": [
+      360,
+      371.75,
+      383.5,
+      395.25,
+      407,
+      418.75,
+      430.5,
+      442.25,
+      454,
+      465.75,
+      477.5,
+      489.25,
+      501,
+      512.75,
+      524.5,
+      536.25,
+      548,
+      559.75,
+      571.5,
+      583.25,
+      595,
+      606.75,
+      618.5,
+      630.25,
+      642,
+      653.75,
+      665.5,
+      677.25,
+      689,
+      700.75,
+      712.5,
+      724.25,
+      736,
+      747.75,
+      759.5,
+      771.25,
+      783,
+      794.75,
+      806.5,
+      818.25
+    ],
+    "sampleSemantics": "point-sampled-spectral-density",
+    "projection": "identity-direct-40"
+  },
+  "numericalControls": {
+    "pathIntervalCount": 30,
+    "pathSampleDistribution": "quadratic-near-observer-v1",
+    "sourceTransmittanceIntervalCount": 20,
+    "incidentDirectionCount": 68,
+    "incidentAltitudeBinCount": 48,
+    "incomingDirectionDomain": "algorithm32-reflection-completed-fibonacci-68-incoming-v1",
+    "scatteringOutputDomain": "receiver-local-boundary-inclusive-gnomonic-cubed-sphere-w27",
+    "scatteringOutputFaceWidth": 27,
+    "outgoingInterpolation": "shader-bilinear-f32",
+    "solarZenithEvaluation": "range-reduced-atan-series-17",
+    "scatteringOutputDirectionCount": 4374,
+    "positionNodeCount": 48,
+    "positionLookup": "view-only-linear-physical-altitude-over-actual-nodes",
+    "maximumScatteringOrder": 4
+  },
+  "table": {
+    "name": "algorithm32-current-production-gpu-j4.tsv",
+    "sha256": "20a8fdca9ab86d7dded9c832b1b3fb1ead18a0947a1951850008489ff1cd7010",
+    "byteLength": 1181013
+  },
+  "profiles": [
+    {
+      "id": "b1-bruneton-0930-j4-v1",
+      "contentHash": "sha256:b8fce920c3522325cf9c14691445a15a10d9c353225bae52d20fdcc2fe3e7657",
+      "time": "09:30",
+      "fittedAzimuthDegrees": 91.14246195784821
+    },
+    {
+      "id": "b1-bruneton-0945-j4-v1",
+      "contentHash": "sha256:be0a902d71d71d3d81abf30df4f3849edcbcc676da7a99e4f02e798b0212e86c",
+      "time": "09:45",
+      "fittedAzimuthDegrees": 93.89430417529859
+    },
+    {
+      "id": "b1-bruneton-1000-j4-v1",
+      "contentHash": "sha256:35c142834d72f6971b21c7a16e6b989f0a9fbe01ab23d735f8a5b7d0fc2f740f",
+      "time": "10:00",
+      "fittedAzimuthDegrees": 96.23317650653027
+    },
+    {
+      "id": "b1-bruneton-1015-j4-v1",
+      "contentHash": "sha256:90c1e04a33d134467c7d6410a33dd74fb879b8122c870a835ede05b398140884",
+      "time": "10:15",
+      "fittedAzimuthDegrees": 98.59994923191232
+    },
+    {
+      "id": "b1-bruneton-1030-j4-v1",
+      "contentHash": "sha256:4cd22363a9865d92d048cd243fba70722105c4addc0e3be9d86f44d72a0eafbd",
+      "time": "10:30",
+      "fittedAzimuthDegrees": 100.64372859730334
+    },
+    {
+      "id": "b1-bruneton-1045-j4-v1",
+      "contentHash": "sha256:41342de00227feee3c6f7c342b4eb8d45f5a8d0971b732802a417f6e8be0c46b",
+      "time": "10:45",
+      "fittedAzimuthDegrees": 104.8234287657915
+    },
+    {
+      "id": "b1-bruneton-1100-j4-v1",
+      "contentHash": "sha256:91b8f2a2a9721359ebfb6fd57e117ea2829146aacebc9a3e57174e939d9001fd",
+      "time": "11:00",
+      "fittedAzimuthDegrees": 108.20914751464628
+    },
+    {
+      "id": "b1-bruneton-1115-j4-v1",
+      "contentHash": "sha256:874e5169eb0e505bbe9f4ab156fb5a8a218006e1d2e44be7be6d60e459e69baa",
+      "time": "11:15",
+      "fittedAzimuthDegrees": 111.68270889819306
+    },
+    {
+      "id": "b1-bruneton-1130-j4-v1",
+      "contentHash": "sha256:e7c4b665eb803fe061651baad4c45a0b08845a0c4c5b5b8a1c0bf340d34add41",
+      "time": "11:30",
+      "fittedAzimuthDegrees": 116.93611340645329
+    },
+    {
+      "id": "b1-bruneton-1145-j4-v1",
+      "contentHash": "sha256:b50b6369224eecb04211bbfd2d154cd801819eb835fd6c7f25e52b256b1dc4c7",
+      "time": "11:45",
+      "fittedAzimuthDegrees": 122.26567982930705
+    },
+    {
+      "id": "b1-bruneton-1200-j4-v1",
+      "contentHash": "sha256:0b3d65326d78a24f669f07c56a45d9d2284faf619c30e3b1887d87f1e5a962a5",
+      "time": "12:00",
+      "fittedAzimuthDegrees": 130.75858093979636
+    },
+    {
+      "id": "b1-bruneton-1215-j4-v1",
+      "contentHash": "sha256:70eb1482584856c02bc96245eb2ababdd2d5ce49f64c8aaa126c8f7186dab95d",
+      "time": "12:15",
+      "fittedAzimuthDegrees": 134.8682819681534
+    },
+    {
+      "id": "b1-bruneton-1230-j4-v1",
+      "contentHash": "sha256:30a8d9fd5d5052320734b1fde9d4d196c7f93836ad9012bea01359e8752119bc",
+      "time": "12:30",
+      "fittedAzimuthDegrees": 143.97853686677962
+    },
+    {
+      "id": "b1-bruneton-1245-j4-v1",
+      "contentHash": "sha256:b0eadf48e5580cf6b8d33c9bc094bc29f508976f431869c35028e5ad7fc0c237",
+      "time": "12:45",
+      "fittedAzimuthDegrees": 153.76505878947935
+    },
+    {
+      "id": "b1-bruneton-1300-j4-v1",
+      "contentHash": "sha256:a87c7e7244cb1eaecbfadcdffae26aec396cd98ad95d17e2e851d684ae95af19",
+      "time": "13:00",
+      "fittedAzimuthDegrees": 162.57770113145415
+    },
+    {
+      "id": "b1-bruneton-1315-j4-v1",
+      "contentHash": "sha256:53bcd0fc4c0f39bfa5daa4bc652446d4d9938bf3076eed2ec97b8eeb0cb62b7d",
+      "time": "13:15",
+      "fittedAzimuthDegrees": 174.2693750288133
+    },
+    {
+      "id": "b1-bruneton-1330-j4-v1",
+      "contentHash": "sha256:914340e0b6b79304e20b43e35794931df15a59c35d7cb26255b35f1e76b55a76",
+      "time": "13:30",
+      "fittedAzimuthDegrees": 179.87345331399575
+    }
+  ]
+}

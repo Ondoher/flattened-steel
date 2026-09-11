@@ -171,6 +171,27 @@ export default class DistantSunPointLocalCacheReader {
 		return bytes;
 	}
 
+	/** Reconstruct exact unique-direction rows for one scene without calculating scattering. */
+	expandUnique(files, packet, sceneIndex, channel) {
+		this._accept(files, packet);
+		const scene = packet.scenes[sceneIndex];
+		const rowBytes = packet.layout.uniqueDirectionCount * 4;
+		if (!scene || channel.byteLength !== packet.layout.coordinateCount * rowBytes)
+			throw new RangeError('Point-local unique expansion shape is incompatible.');
+		const result = Buffer.alloc(scene.indexes.length * rowBytes);
+		for (const [row, index] of scene.indexes.entries()) {
+			if (
+				!Number.isInteger(index) ||
+				index < 0 ||
+				index >= packet.coordinates.length ||
+				packet.coordinates[index].join(':') !== scene.keys[row]
+			)
+				throw new RangeError('Point-local scene reconstruction index is incompatible.');
+			channel.copy(result, row * rowBytes, index * rowBytes, (index + 1) * rowBytes);
+		}
+		return result;
+	}
+
 	/** Reconstruct one scene's dense logical rows without performing scattering calculations. */
 	expand(files, packet, sceneIndex, channel, directions) {
 		this._accept(files, packet);

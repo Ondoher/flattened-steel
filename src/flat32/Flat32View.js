@@ -375,9 +375,10 @@ export class Flat32View {
 	 *
 	 * @param {Flat32SceneSummary} sceneSummary - Supplies installed scene facts.
 	 * @param {Flat32AtmosphereSummary} atmosphereSummary - Supplies runtime facts.
+	 * @param {number | undefined} solarZenithDegrees - Supplies the published distant-Sun scalar.
 	 * @returns {void}
 	 */
-	showAtmosphereReady(sceneSummary, atmosphereSummary) {
+	showAtmosphereReady(sceneSummary, atmosphereSummary, solarZenithDegrees = undefined) {
 		const shell = this._requireElement(this._shell, 'shell');
 		const status = this._requireElement(this._status, 'status');
 		const progress = this._requireElement(this._progress, 'progress');
@@ -389,6 +390,9 @@ export class Flat32View {
 		shell.dataset.flat32State = 'ready';
 		if (atmosphereSummary.pairing === 'spherical/distant') {
 			shell.dataset.flat32DistantSunCacheState = atmosphereSummary.distantSunCacheState;
+			if (Number.isFinite(solarZenithDegrees)) {
+				shell.dataset.flat32SolarZenithDegrees = String(solarZenithDegrees);
+			}
 		} else {
 			delete shell.dataset.flat32DistantSunCacheState;
 			delete shell.dataset.flat32SolarZenithDegrees;

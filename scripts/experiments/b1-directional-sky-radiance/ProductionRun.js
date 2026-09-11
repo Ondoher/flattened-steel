@@ -1,4 +1,7 @@
 import {createHash} from 'node:crypto';
+import {DISTANT_SUN_POINT_LOCAL_CACHE_COMPILER_IDENTITY as B1_POINT_LOCAL_COMPILER_IDENTITY} from '../../algorithm32/solar-zenith-cache/consts.js';
+import B1ReferenceInputs from './B1ReferenceInputs.js';
+import {EXPECTED_DATASET_FINGERPRINTS} from './benchmark.js';
 import {existsSync, readFileSync, statSync} from 'node:fs';
 import {basename, dirname, join, resolve} from 'node:path';
 
@@ -65,7 +68,7 @@ function verifyFile(runDirectory, record, nameKey, hashKey, label) {
 	return path;
 }
 
-function verifyProvenance(path, record, manifest) {
+function verifyProvenance(path, record, manifest, requireCanonical) {
 	const provenance = readJson(path, `J${record.order} provenance`);
 	if (provenance.schema !== 'algorithm32-current-production-b1-provenance-v2') {
 		throw new Error(`J${record.order} provenance schema is incompatible.`);
@@ -75,6 +78,26 @@ function verifyProvenance(path, record, manifest) {
 	}
 	if (provenance.backend !== manifest.backend) {
 		throw new Error(`J${record.order} provenance backend does not match its production run.`);
+	}
+	if (
+		requireCanonical &&
+		manifest.compilerIdentity === B1_POINT_LOCAL_COMPILER_IDENTITY &&
+		(provenance.numericalControls?.pathIntervalCount !== 30 ||
+			provenance.numericalControls?.pathSampleDistribution !== 'quadratic-near-observer-v1')
+	) {
+		throw new Error('Canonical receiver-local B1 requires the selected Q30 quadratic midpoint view.');
+	}
+	if (
+		manifest.compilerIdentity === B1_POINT_LOCAL_COMPILER_IDENTITY &&
+		(provenance.cacheRepresentation !== 'receiver-local-native48-z180-w27' ||
+			provenance.numericalControls?.scatteringOutputDomain !==
+				'receiver-local-boundary-inclusive-gnomonic-cubed-sphere-w27' ||
+			JSON.stringify(provenance.runtimeSourceIdentity) !== JSON.stringify(manifest.runtimeSourceIdentity) ||
+			JSON.stringify(provenance.referenceInputs) !== JSON.stringify(manifest.referenceInputs))
+	) {
+		throw new Error(
+			'Receiver-local production provenance does not match its runtime source and cache representation.',
+		);
 	}
 	if (
 		(manifest.backend === 'gpu-production-shaders-r32f' &&
@@ -249,8 +272,30 @@ function verifyRunDerivation(manifest, requireCanonical) {
 		}
 	}
 	if (manifest.backend === 'gpu-production-shaders-r32f') {
+		if (manifest.compilerIdentity === B1_POINT_LOCAL_COMPILER_IDENTITY) {
+			if (
+				JSON.stringify(manifest.referenceInputs) !==
+				JSON.stringify({bundle: B1ReferenceInputs.identity(), ...EXPECTED_DATASET_FINGERPRINTS})
+			)
+				throw new Error('Receiver-local production run reference inputs differ from the pinned benchmark.');
+			const source = manifest.runtimeSourceIdentity;
+			if (
+				!Array.isArray(source?.sources) ||
+				source.sources.length === 0 ||
+				source.sources.some(
+					(entry) =>
+						typeof entry.path !== 'string' ||
+						!SHA256.test(entry.sha256) ||
+						!Number.isInteger(entry.byteLength) ||
+						entry.byteLength < 0,
+				) ||
+				source.identity !== `sha256:${sha256(JSON.stringify(source.sources))}`
+			)
+				throw new Error('Receiver-local production run requires authenticated runtime source provenance.');
+		}
 		const assetSet = new B1Direct40CacheAssetSetManifest(manifest.assetSet).toRecord();
 		const acceptedCompilerIdentity =
+			manifest.compilerIdentity === B1_POINT_LOCAL_COMPILER_IDENTITY ||
 			manifest.compilerIdentity === B1_DIRECT40_OFFLINE_ASSET_ADAPTER_IDENTITY ||
 			(!requireCanonical &&
 				B1_DIRECT40_OFFLINE_ASSET_ADAPTER_LEGACY_IDENTITIES.includes(manifest.compilerIdentity));
@@ -366,7 +411,7 @@ function load(path, {requireCanonical = true} = {}) {
 			'provenanceSha256',
 			`J${record.order} provenance`,
 		);
-		const provenance = verifyProvenance(provenancePath, record, manifest);
+		const provenance = verifyProvenance(provenancePath, record, manifest, requireCanonical);
 		const tablePath = verifyFile(runDirectory, record, 'table', 'tableSha256', `J${record.order} table`);
 		verifyTable(tablePath, record.order, manifest.conditions, requireCanonical);
 		const cubePath = record.cube
@@ -408,6 +453,28 @@ function candidatePaths(run) {
 	});
 }
 
+/** Describe the authenticated production boundary consumed by downstream benchmarks. */
+function boundaryRecord(run) {
+	const output = run.outputsByOrder.get(4);
+	const record = run.manifest.outputs.find((candidate) => candidate.order === 4);
+	if (!output) throw new Error('Production benchmark boundary requires the selected J4 output.');
+	if (!record) throw new Error('Production benchmark manifest requires the selected J4 output record.');
+	return Object.freeze({
+		schema: 'algorithm32-current-production-benchmark-boundary-v1',
+		runId: run.manifest.runId,
+		backend: run.manifest.backend,
+		productionRevision: run.manifest.productionRevision,
+		compilerIdentity: run.manifest.compilerIdentity,
+		assetSetIdentity: run.manifest.assetSetIdentity,
+		manifestPath: run.manifestPath,
+		manifestSha256: sha256(readFileSync(run.manifestPath)),
+		order: 4,
+		tableSha256: record.tableSha256,
+		provenanceSha256: record.provenanceSha256,
+		cubeSha256: record.cubeSha256,
+	});
+}
+
 /** Validated current-production B1 run and scorer-input resolver. */
 export const ProductionRun = Object.freeze({
 	MANIFEST_SCHEMA,
@@ -419,4 +486,5 @@ export const ProductionRun = Object.freeze({
 	CANONICAL_DIRECTION_COUNT,
 	load,
 	candidatePaths,
+	boundaryRecord,
 });

@@ -134,9 +134,9 @@ accepts numerical Algorithm32 behavior.
   `GeometryConfigurableLightSource`. Applications, sources, caches, and renderer
   adapters must not independently project between coordinate systems. A
   time/location change creates replacement geometry, source, facade, scene,
-  and cache objects. In-place time/location animation is deferred
-  mandatory MVP work and requires a separately accepted cache transform in
-  production Stage 14.
+  and cache objects. In-place time/location animation is deferred under
+  [Production MVP requirement M1](../../production-app/mvp/requirements.md#m1--compatible-time-and-location-animation)
+  and requires a separately accepted cache transform.
 - Atmosphere behavior is externally implementable through the global
   `AtmosphereModel` interface. `CanonicalAtmosphere` is the standard public
   concrete implementation and belongs under

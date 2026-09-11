@@ -118,15 +118,6 @@ retired experiment, regenerate its output, or treat it as current authority.
 
 ### 16. Verify the single production strategy
 
-- Verify that the Stage 7 source-owned GPU cache and runtime sampler remain the
-  only production Algorithm32 strategy across the later ground, integration,
-  extraterrestrial, flat-geometry, and local-Sun work. Plain Algorithm32
-  continues to request order 4.
-- Audit for obsolete sampler fields or incident-strategy artifacts and treat
-  any finding as an earlier direct-cutover defect. Contract aliases, fallback
-  readers, translation bridges, and old/new switches are prohibited
-  throughout implementation and are never deferred to this stage.
-- Retain only the independent CPU oracle and fixtures needed for conformance.
-
-**Gate:** one strategy remains, supported builds/tests pass, and production
-has no import from research or legacy repositories.
+**Status: deferred and relocated.** The single-strategy audit, retained CPU
+oracle boundary, standalone dependency check, and gate are now owned by
+[Production MVP requirement M2](../../production-app/mvp/requirements.md#m2--algorithm32-production-hardening).

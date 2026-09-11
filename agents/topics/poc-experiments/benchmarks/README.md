@@ -2,14 +2,17 @@
 
 Focus: Independent B-family execution and scoring.
 
-Start with the production B-experiment execution plan for C1.9/C1.10. The production compiler and export implementation are owned by engine qualification; independent scorers and their acceptance rules remain here.
+Start with the production qualification for the rejected C1.9 record and
+completed C1.10 closure. The production compiler and export implementation are
+owned by engine qualification; independent scorers and their acceptance rules
+remain here. The completed execution plan is retained through the
+[archive index](../../context/completed-production-plan-archive-index.md).
 
 ## Working Documents
 
 - [Color Reset Production Qualification](color-reset-production-qualification.md)
 - [Algorithm32 External Benchmark Contract](external-benchmarks.md)
 - [Algorithm32 Figure 1 Diagnostic](figure1-diagnostic.md)
-- [Production B-Experiment Wiring Plan](production-b-experiment-wiring-plan.md)
 - [Retained Algorithm32 Experiment Definitions](retained-experiments.md)
 
 ## Context Boundary

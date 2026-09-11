@@ -2,18 +2,23 @@
 
 Focus: Release gates, deployment inputs, and owner decisions.
 
-Start with the closeout plan: C1-C5 remain open and C6 depends on them. D1-D11 retain explicit owner-disposition states. P8/P9 final release is not closed by implemented defaults or prior engineering gates.
+Start with the closeout ledger: C1, C2, C3, and C6 are complete, and C4 and C5
+are deferred to MVP M3. The P8/P9 engineering release is closed on the pinned
+Windows, Chrome, and RTX 2060 matrix, and its completed execution plans are
+retired through the
+[archive index](../../context/completed-production-plan-archive-index.md).
+D1-D11 retain explicit owner-disposition states. Engineering closure does not
+authorize public redistribution of the payloads reserved for M3.
 
 ## Working Documents
 
-The distant-Sun shared-cache promotion is recorded separately in the
-[P8 rollout owner](../../production-algorithm32/caches/shared-runtime-rollout.md).
+The distant-Sun shared-cache promotion is recorded by the current
+[runtime qualification](../../production-algorithm32/caches/shared-runtime-qualification.md).
 Its local publication and acceptance do not close the outstanding application
 release dispositions above.
 
 - [Ambient-Light Appearance Acceptance](ambient-light-acceptance.md)
 - [Production Ambient-Light Design](ambient-light-design.md)
-- [Production Color Reset Implementation Plan](color-reset-implementation-plan.md)
 - [Color Reset Production Qualification](color-reset-production-qualification.md)
 - [Color, Stellar Rendering, And Distant-Sun Closeout Plan](color-star-cache-closeout-plan.md)
 

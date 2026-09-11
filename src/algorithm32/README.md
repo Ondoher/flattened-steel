@@ -166,9 +166,11 @@ semantic daily event through `FlatEarthGeometry.resolveObservationInstant()`,
 but the geometry's private `FlatSynchronizer` performs that calculation and
 does not escape the feature. External code supplies the resulting time and
 location through facade observation configuration. A change creates a
-replacement geometry, facade, scene, and cache set. In-place time/location animation is
-deferred mandatory MVP work; production Stage 14 must provide cache transforms
-that avoid rebuilding for every clock tick.
+replacement geometry, facade, scene, and cache set. In-place time/location
+animation is deferred under
+[Production MVP requirement M1](../../agents/topics/production-app/mvp/requirements.md#m1--compatible-time-and-location-animation),
+which requires cache transforms or equivalent reuse that avoids rebuilding for
+every compatible clock tick.
 
 The current tree keeps cache sampling-domain classes under the non-public
 `sampling-domains` owner. Native-15 remains public readonly configuration under

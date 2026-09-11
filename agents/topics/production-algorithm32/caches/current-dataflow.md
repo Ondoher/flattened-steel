@@ -250,7 +250,7 @@ and authenticated cache selection, including clean subsequent disposal.
 The production host serves only complete, authenticated, allowlisted shared
 artifacts with immutable caching. It rejects the retired dense inventory and
 never evaluates the atmospheric recurrence. The
-[rollout owner](shared-runtime-rollout.md) records the selected identity,
+[rollout owner](../../../../archives/topics/production-algorithm32-release-20260911/agents/topics/production-algorithm32/caches/shared-runtime-rollout.md) records the selected identity,
 publication, rollback, local host observation, and retained references.
 [Runtime qualification](shared-runtime-qualification.md) owns timing and memory:
 bounded discrete time changes are accepted, while continuous time animation

@@ -321,8 +321,25 @@ export function verifyCandidateProvenance(path, profile) {
 		);
 	}
 	assertEqual(value?.rowCount, 1377, 'rowCount', path);
+	const selectedQuadraticView =
+		value.schema === 'algorithm32-current-production-b1-provenance-v2' &&
+		['paper', 'paper-j4'].includes(value.profileId) &&
+		value.numericalControls?.pathSampleDistribution === 'quadratic-near-observer-v1';
+	if (value.numericalControls?.pathSampleDistribution !== undefined && !selectedQuadraticView) {
+		throw new Error(`Unrecognized candidate view-path distribution in ${path}.`);
+	}
 	for (const [name, expected] of Object.entries(profile.controls)) {
-		assertEqual(value?.numericalControls?.[name], expected, `numericalControls.${name}`, path);
+		const receiverLocal =
+			value.cacheRepresentation === 'receiver-local-native48-z180-w27' &&
+			value.schema === 'algorithm32-current-production-b1-provenance-v2' &&
+			['paper', 'paper-j4'].includes(value.profileId);
+		const required =
+			receiverLocal && name === 'scatteringOutputDomain'
+				? 'receiver-local-boundary-inclusive-gnomonic-cubed-sphere-w27'
+				: selectedQuadraticView && name === 'pathIntervalCount'
+					? 30
+					: expected;
+		assertEqual(value?.numericalControls?.[name], required, `numericalControls.${name}`, path);
 	}
 
 	return Object.freeze({

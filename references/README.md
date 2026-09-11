@@ -15,6 +15,9 @@ evidence merely because they are present here.
   bibliography used by source and fixture citations.
 - [experiments.md](experiments.md) owns the official, repository-standalone
   experiment register.
+- [citation-and-retention-policy.md](citation-and-retention-policy.md#official-experiments)
+  owns the binding admission, parameter-change, rerun, and evidence-retention
+  rules for those experiments.
 - [downloads/manifest.json](downloads/manifest.json) owns admission of local
   reference payloads, including identity, provenance, checksum, exact
   consumer, transformation, and license disposition.

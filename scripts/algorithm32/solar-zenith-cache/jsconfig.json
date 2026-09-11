@@ -14,8 +14,8 @@
 	},
 	"include": [
 		"DistantSunPointLocalCache*.js",
+		"DistantSunBrunetonView.js",
 		"DistantSunPointLocalProfileCompilerInputs.js",
-		"compile-point-local-cache.js",
 		"DistantSunSharedCache*.js",
 		"generate-shared-cache.js",
 		"verify-shared-cache-publication-failure.js",

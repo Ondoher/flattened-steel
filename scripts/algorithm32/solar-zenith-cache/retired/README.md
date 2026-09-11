@@ -16,4 +16,26 @@ Restore the former dense construction commands at their original directory paths
 of `f1589984` with their declared immutable inputs when historical reproduction
 is needed. The temporary observer's actual router and successful shared/dense/
 shared result are retained in the P8 rollback run referenced by the
-[rollout owner](../../../../agents/topics/production-algorithm32/caches/shared-runtime-rollout.md).
+[rollout owner](../../../../archives/topics/production-algorithm32-release-20260911/agents/topics/production-algorithm32/caches/shared-runtime-rollout.md).
+
+## Compiler Consolidation Records
+
+These additional records match the exact source blobs at checkpoint
+`b2e4ac306df52797d4d7fa4fe53d27ff2526aabe`. Their bytes were compared directly
+with that commit after the complete Native15 compatibility proof passed.
+The current production generator and command own both default Native15 and
+explicit-input compilation; none of these records is imported at runtime.
+
+| Former filename                             | SHA-256                                                            |
+| ------------------------------------------- | ------------------------------------------------------------------ |
+| `DistantSunPointLocalCacheCompiler.js`      | `c1357ce9e2eb8bc7d4f9de967e476fc9dd84d6f4fac8250678723b35e2d496d7` |
+| `DistantSunSharedCacheGenerationHost.js`    | `e3cc859be9bf75153cd735bd1230c8701ed5c40f35ced33547e19760e63516ac` |
+| `DistantSunSharedCacheGenerationStaging.js` | `61e097d34f79fc7447d474876d8b552927c25bbf0d0699493771d7931ba504ab` |
+| `DistantSunSharedCacheGeneratorBrowser.js`  | `9c06fe457cea981837d67be0bd851140d30e13ce699a21620b249ccf05e6b612` |
+| `compile-point-local-cache.js`              | `ec4264e13eda7c3265834535e4d66716080a6500cd7b0a2aaf7a8a46c18c7914` |
+
+Verify each `.js.txt` file against the corresponding SHA-256 above. Historical
+experiment runners that record the former staging source should use the stated
+checkpoint in a separate checkout with their immutable inputs. See the
+[compiler consolidation owner](../../../../archives/topics/production-algorithm32-release-20260911/agents/topics/production-algorithm32/caches/point-local-compiler-promotion-plan.md#production-compiler-consolidation)
+for the replacement command and compatibility evidence.

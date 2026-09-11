@@ -137,10 +137,9 @@ evidence that a physically correct implementation should reproduce that
 score. The geometric conflict is resolved by blocking inward surface rays;
 reintroducing the leak to recover the old score would be incorrect.
 
-The original C1.9 rejection remains valid under its declared rule. C1.10 and
-release C1 stay open. A prospective, explicitly documented benchmark-authority
-decision must address the defective historical reference and freeze a valid
-qualification contract before another acceptance run. This investigation does
-not silently replace that contract, relax the ceiling, or claim scientific or
-release acceptance. Reuse the current asset set and preserved evidence unless
-the resulting contract requires different execution inputs.
+The original C1.9 rejection remains valid under its declared rule. At the time
+of this investigation, C1.10 and release C1 remained open pending an explicitly
+documented benchmark-authority decision and a new acceptance run. The current
+[B-family execution plan](../../../../archives/topics/production-algorithm32-release-20260911/agents/topics/poc-experiments/benchmarks/production-b-experiment-wiring-plan.md#c110---record-closure)
+records that later accepted run. This investigation did not replace the
+contract, relax the ceiling, or claim acceptance itself.

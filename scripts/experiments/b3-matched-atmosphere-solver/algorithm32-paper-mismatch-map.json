@@ -1,6 +1,6 @@
 {
 	"schema": "algorithm32-b3-mismatch-map-v1",
-	"subject": "Algorithm32 Paper CPU candidate evaluated with the published paper-comparison physical-input profile",
+	"subject": "Current-production cache-backed Algorithm32 Paper candidate evaluated with the published paper-comparison physical-input profile",
 	"mismatches": [
 		{
 			"field": "ground reflection",
@@ -8,15 +8,15 @@
 		},
 		{
 			"field": "multiple-scattering treatment",
-			"disposition": "Algorithm32 Paper uses the production Default second-order incident-radiance approximation rather than libRadtran DISORT's fuller multiple-scattering solution. Aggregate-score proximity does not establish component, order-by-order, or pointwise equality."
+			"disposition": "Algorithm32 Paper uses the production cumulative-through-order-4 incident-radiance approximation rather than libRadtran DISORT's fuller multiple-scattering solution. Aggregate-score proximity does not establish component, order-by-order, or pointwise equality."
 		},
 		{
 			"field": "incident angular quadrature",
-			"disposition": "Algorithm32 Paper uses the pinned 34-direction source-oriented equal-weight Fibonacci incoming quadrature; the retained libRadtran DISORT calculation uses 16 streams."
+			"disposition": "Algorithm32 Paper uses 34 pinned source-oriented equal-weight Fibonacci primary directions represented by the production reflection-completed 68-direction domain; the retained libRadtran DISORT calculation uses 16 streams."
 		},
 		{
 			"field": "vertical and path discretization",
-			"disposition": "Algorithm32 Paper uses analytic exponential density profiles, 48 physical altitude nodes, 40 view-path intervals, and 20 source-transmittance intervals; libRadtran uses its retained layered atmosphere and solver controls."
+			"disposition": "Algorithm32 Paper uses analytic exponential density profiles, 48 physical altitude nodes, 30 quadratically distributed view-path intervals, and 20 source-transmittance intervals; libRadtran uses its retained layered atmosphere and solver controls."
 		},
 		{
 			"field": "geometry approximation",

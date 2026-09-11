@@ -33,7 +33,7 @@ test('parses bounded production generation selections', () => {
 });
 
 test('defaults to the Bruneton comparison J4 production boundary', () => {
-	assert.equal(parseArguments([]).backend, 'cpu');
+	assert.equal(parseArguments([]).backend, 'gpu');
 	assert.deepEqual(parseArguments([]).orders, [4]);
 	assert.equal(parseArguments([]).measureGpuCompletion, false);
 	assert.equal(parseArguments([]).incomingDirectionVariant, 'production-68');
@@ -76,9 +76,12 @@ test('rejects duplicate work before allocating a production run', () => {
 	assert.throws(() => parseArguments(['--orders', '2,2']), /unique/);
 	assert.throws(() => parseArguments(['--conditions', '09:30,09:30']), /unique/);
 	assert.throws(() => parseArguments(['--backend', 'reference']), /cpu or gpu/);
-	assert.throws(() => parseArguments(['--measure-gpu-completion']), /requires --backend gpu/);
-	assert.throws(() => parseArguments(['--asset-set', 'cache-set']), /require --backend gpu/u);
-	assert.throws(() => parseArguments(['--production-revision', 'revision-1']), /require --backend gpu/u);
+	assert.throws(() => parseArguments(['--backend', 'cpu', '--measure-gpu-completion']), /requires --backend gpu/);
+	assert.throws(() => parseArguments(['--backend', 'cpu', '--asset-set', 'cache-set']), /require --backend gpu/u);
+	assert.throws(
+		() => parseArguments(['--backend', 'cpu', '--production-revision', 'revision-1']),
+		/require --backend gpu/u,
+	);
 	assert.throws(() => parseArguments(['--incoming-direction-variant', 'unknown']), /production-68/);
 	assert.throws(
 		() => parseFigureArguments(['--color-model', 'color-reset-slope-078-p9']),

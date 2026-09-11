@@ -8,9 +8,13 @@ and official experiment evidence belongs in [experiments.md](experiments.md).
 
 ## Color Reset Research Register
 
-This section is the sole current owner of Color Reset research status,
+This section is the sole detailed ledger for Color Reset research status,
 evidence boundaries, source/provenance work, experiment registration work,
-open questions, and investigation order.
+open questions, and investigation order. Production
+[MVP requirement M3](../agents/topics/production-app/mvp/requirements.md#m3--color-reset-scientific-authority)
+owns the first-MVP completion gate for these rows and their C5 license and
+redistribution decisions. Moving C4 and C5 changes scheduling only and does not
+accept, remove, or weaken any row or authorize public redistribution.
 
 ### Color Reset Researched Facts
 
@@ -140,7 +144,7 @@ to reproduce the selected equations and parameters exactly.
 2. Resolve BSC, Pickles, Johnson, and Vega provenance before distributing
    production-owned 2,000-member data (SRC-CR-005–007; EXP-CR-008–010).
 3. Resolve the low-light perception references and exact CIE locators before
-   final scientific/numerical-authority and release acceptance of the optional
+   final first-MVP scientific/numerical-authority acceptance of the optional
    filters (SRC-CR-008–012; EXP-CR-006/007).
 4. Register the bounded star presentation and negative 2,000-star appearance
    evidence before the integrated production appearance run

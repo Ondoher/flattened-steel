@@ -6,10 +6,43 @@ execution controls, output boundary, and result artifacts. A retained runner,
 passing self-check, historical record, or imported result is not official or
 citable until it satisfies the promotion checklist and is registered here.
 
+The binding admission, parameter-change, rerun, current-result, and historical
+evidence rules are the
+[Official Experiments policy](citation-and-retention-policy.md#official-experiments).
+The [promotion checklist](../agents/topics/poc-experiments/protocols/promotion-checklist.md)
+is its required operational review. Registration is explicit: absence from an
+official table in this file means the experiment is not citable.
+
 The required experiments below are not yet official experiments, so no fact
 may cite them until their self-contained definitions and results exist here.
 Their discovery provenance is maintained only in the working experiment
 backlog, not in this publication-facing index.
+
+## Official Bruneton Benchmark
+
+| Id | Definition and reproduction | Current result | Figures |
+| --- | --- | --- | --- |
+| B1 | [Directional spectral sky radiance; published Bruneton comparison parameters and current production Algorithm32](../scripts/experiments/b1-directional-sky-radiance/README.md) | [GPU report](results/experiments/b1-directional-sky-radiance/gpu/result.md) | [Six-figure index](results/experiments/b1-directional-sky-radiance/README.md) |
+| B2 | [Cosine-weighted hemispherical transform of the B1 directional field](../scripts/experiments/b2-hemispherical-sky-irradiance/README.md) | [GPU report](results/experiments/b2-hemispherical-sky-irradiance/gpu/result.md) | [Diffuse-sky irradiance](results/experiments/b2-hemispherical-sky-irradiance/gpu/figures/b2-diffuse-sky-irradiance.svg) |
+| B3 | [Matched-atmosphere solver context and mismatch declaration](../scripts/experiments/b3-matched-atmosphere-solver/README.md) | [GPU report](results/experiments/b3-matched-atmosphere-solver/gpu/result.md) | [Fixed-baseline residuals](results/experiments/b3-matched-atmosphere-solver/gpu/figures/b3-fixed-baseline-residuals.svg) |
+
+The registered current evidence set is combined score run
+[`000003-current-production-b1-b3-gpu-shaders`](results/experiments/b1-b3-production-scores/gpu/000003-current-production-b1-b3-gpu-shaders/manifest.json).
+Its manifest authenticates the one production input manifest, three reports,
+shared table and cube derivation, and eight figures. The stable report and
+figure links above are the citation-facing paths for this evidence set.
+
+`npm run generate:algorithm32:b1-production` regenerates B1 from tracked pinned
+inputs and the current production compiler/runtime.
+`npm run score:algorithm32:b1-b3-production:official` then publishes B1, B2,
+and B3 from that one authenticated manifest. Successful official runs replace
+the current result files; Git history retains earlier official values.
+The implementation, parameter mapping, physical scoring boundary, prerequisites,
+and scope of the result are owned by the linked definitions. B1 is the primary
+real-sky directional comparison. B2 integrates the same Kider measurement
+field, and B3 scores the cube derived from the same candidate table against
+those measurements while providing solver context. B2 and B3 are distinct
+views, not additional independent real-sky validation votes.
 
 ## Required Official Experiments
 

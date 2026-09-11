@@ -182,7 +182,7 @@ export default class DistantSunSceneCacheOfflineCompiler {
 				'--enable-gpu',
 				'--enable-webgl',
 				'--ignore-gpu-blocklist',
-				'--use-angle=d3d11',
+				...(process.platform === 'win32' ? ['--use-angle=d3d11'] : []),
 				'--disable-software-rasterizer',
 				'--disable-breakpad',
 				'--disable-crash-reporter',

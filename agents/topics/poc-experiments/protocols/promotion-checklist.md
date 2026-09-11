@@ -3,7 +3,10 @@
 Status: current publication gate.
 
 An experiment is referenceable only after every applicable item below is
-complete and its entry is added to `/references/experiments.md`.
+complete and its entry is added to `/references/experiments.md`. This checklist
+implements the binding
+[official-experiment policy](../../../../references/citation-and-retention-policy.md#official-experiments);
+it does not create a second authority.
 
 
 ## Definition And Evidence
@@ -20,6 +23,12 @@ complete and its entry is added to `/references/experiments.md`.
 - [ ] Predeclare the independent oracle, shared-code risk, tolerance,
   uncertainty budget, and any favorable/limited/adverse classification rules
   before viewing the deciding result.
+- [ ] Preserve accepted non-paper parameters for comparable reruns, or record
+  a technical reason and supporting evidence for each change before viewing
+  the deciding result. Score improvement alone is not sufficient.
+- [ ] Assign a protocol revision and, when the paper-facing question changes,
+  a new experiment ID for changes to the observable, case domain, external
+  source, oracle, threshold, or classification meaning.
 - [ ] Keep preimplementation experiments free of production, application,
   renderer, shader, cache, and external-repository dependencies.
 - [ ] For B1--B3 only, identify the exact promoted production revision and
@@ -37,8 +46,9 @@ complete and its entry is added to `/references/experiments.md`.
   generated cases are needed.
 - [ ] Make failure to execute or failure of the scientific criterion return a
   nonzero status.
-- [ ] Retain one current result and hash every result-bearing artifact needed
-  by the claim; archive superseded chronology separately.
+- [ ] Retain exactly one registered current result set and hash every
+  result-bearing artifact needed by the claim. Preserve numbered or sealed
+  source and score records as immutable audit evidence.
 - [ ] Verify runner self-checks independently of the production Jasmine lane.
   Migrating these self-checks from `node:test` to Jasmine later does not change
   the scientific boundary.
@@ -50,6 +60,9 @@ complete and its entry is added to `/references/experiments.md`.
   label, image, or historical result as authority.
 - [ ] Add the experiment to `/references/experiments.md` with definition,
   inputs, command, controls, output, result, artifact hashes, and claim limit.
+- [ ] For an official rerun, update the stable report, manifest, figures,
+  hashes, status, register, and affected fact consumers as one publication
+  change; reject mixed-run artifact sets.
 - [ ] Update each supported row in
   `/references/algorithm32-working-facts.md` to cite the official experiment;
   remove any `not yet created` placeholder only then.
@@ -65,9 +78,10 @@ complete and its entry is added to `/references/experiments.md`.
 - E1--E8: audit the existing runner/result pairs against this checklist and
   register only the facts each boundary actually establishes.
 - C1--C2: leave conditional until the corresponding broader claim is proposed.
-- B1--B3: retain current artifacts as research evidence; after production
-  promotion, regenerate the proposed boundary from production Algorithm32 and
-  accept the three-record set under predeclared combined judgment rules.
+- B1--B3: the current production-backed three-record set is official. Future
+  reruns must consume one authenticated production manifest, preserve B1 as
+  the primary real-sky comparison, and retain B2/B3 as dependent views under
+  the predeclared combined judgment rules.
 - XA1--XA3: implement from the current standalone definitions.
 - ER6/ER8 subjective globe cases: never promote them as experiment evidence;
   they remain rendering fixtures only.

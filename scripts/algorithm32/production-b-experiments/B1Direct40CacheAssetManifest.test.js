@@ -53,12 +53,7 @@ function definition(selectedProfile = profile()) {
 				channelCount: 40,
 			},
 		},
-		numerical: {
-			viewPathIntervalCount: 40,
-			sourcePathTransmittanceIntervalCount: 20,
-			cacheTransportIntervalCount: 40,
-			maximumScatteringOrder: 4,
-		},
+		numerical: B1Direct40CacheAssetManifest.createProfileBoundary(selectedProfile, CONDITION).numerical,
 		layout: {axisOrder: B1_DIRECT40_CACHE_LAYOUT, scalarType: 'float32-little-endian'},
 		cumulativeScatteringDensity: {
 			path: 'cumulative-scattering-density.f32',
@@ -105,6 +100,8 @@ test('rejects wrong domain shapes, numerical order, payload shapes, hashes, and 
 		[(value) => (value.domains.spectrum.channelCount = 15), /domain shape/u],
 		[(value) => (value.domains.incoming.count = 34), /domain shape/u],
 		[(value) => (value.numerical.maximumScatteringOrder = 3), /numerical controls/u],
+		[(value) => (value.numerical.viewPathIntervalCount = 40), /numerical controls/u],
+		[(value) => (value.numerical.viewPathSampleDistribution = 'uniform-distance'), /numerical controls/u],
 		[(value) => (value.cumulativeScatteringDensity.byteLength -= 4), /byte shape/u],
 		[(value) => (value.cumulativeScatteringDensity.sha256 = 'A'.repeat(64)), /lowercase SHA-256/u],
 		[(value) => (value.logicalToUniqueIndex.path = '../index.u16'), /asset-relative/u],

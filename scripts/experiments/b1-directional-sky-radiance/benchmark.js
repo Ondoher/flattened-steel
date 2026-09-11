@@ -2,6 +2,7 @@ import {createHash} from 'node:crypto';
 import {existsSync, readFileSync, readdirSync} from 'node:fs';
 import {basename, join} from 'node:path';
 import {fileURLToPath} from 'node:url';
+import B1ReferenceInputs from './B1ReferenceInputs.js';
 
 import {PUBLISHED_MODELS, PUBLISHED_RMSE_ORACLE, PUBLISHED_RMSE_TOLERANCE_MW} from './published-oracle.js';
 import {CAPTURE_TIMES, computeTheoreticalSunDirection, getSampleDirection, SPECTRUM} from './benchmark-domain.js';
@@ -266,8 +267,14 @@ function updateDoubleHash(hash, value, scratch) {
 function loadCondition(root, time, rawHash) {
 	const directoryName = `2013-05-27___${time.replace(':', '.')}.00`;
 	const directory = join(root, directoryName);
-	if (!existsSync(directory)) throw new Error(`Missing Kider capture directory: ${directory}`);
-	const entries = readdirSync(directory)
+	const bundled = root === B1ReferenceInputs.root ? B1ReferenceInputs.files() : null;
+	if (!bundled && !existsSync(directory)) throw new Error(`Missing Kider capture directory: ${directory}`);
+	const names = bundled
+		? Object.keys(bundled)
+				.filter((name) => name.startsWith(`${directoryName}/`))
+				.map((name) => basename(name))
+		: readdirSync(directory);
+	const entries = names
 		.filter((name) => name.endsWith('.asd.rad.txt'))
 		.map((name) => {
 			const path = join(directory, name);
@@ -282,7 +289,9 @@ function loadCondition(root, time, rawHash) {
 		if (bySample[identity.sampleIndex])
 			throw new Error(`${directoryName}: duplicate sample ${identity.sampleIndex}.`);
 		validateFilenameDirection(identity);
-		const buffer = readFileSync(path);
+		const buffer = bundled
+			? Buffer.from(bundled[`${directoryName}/${basename(path)}`], 'base64')
+			: readFileSync(path);
 		rawHash.update(`${time}\0${String(identity.sampleIndex).padStart(2, '0')}\0`);
 		rawHash.update(buffer);
 		const spectrum = resampleToBruneton40(parseKiderSpectrum(buffer.toString('utf8'), basename(path)));
@@ -331,7 +340,7 @@ function loadCondition(root, time, rawHash) {
 	});
 }
 
-export function loadKiderDataset(root = KIDER_ROOT) {
+export function loadKiderDataset(root = B1ReferenceInputs.root) {
 	const rawHash = createHash('sha256');
 	const conditions = CAPTURE_TIMES.map((time) => loadCondition(root, time, rawHash));
 	const processedHash = createHash('sha256');

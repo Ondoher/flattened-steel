@@ -269,6 +269,40 @@ test('argument parsing accepts J3 and J5 spectra, cube, and provenance paths', (
 	assert.equal(options.algorithm32J5Provenance, resolve('j5-provenance.json'));
 });
 
+test('Q30 receiver-local figure provenance preserves the selected view and rejects legacy controls', () => {
+	const receiverLocal = {
+		modelNameInBenchmarkTables: 'proposed',
+		profileId: 'paper',
+		presentationName: 'Algorithm32 Paper',
+		spectralBoundary: {channelCount: 40, projection: 'identity-direct-40'},
+		physicalProfileId: 'algorithm32-paper-comparison-v1',
+		physicalProfileContentHash: 'sha256:d47601d954167ca8775c0a88cd8ca9b9527ae8e74a6f42ae6041eec3244aeecc',
+		schema: 'algorithm32-current-production-b1-provenance-v2',
+		executionBoundary: 'production GPU Q30 final-view shader',
+		cacheRepresentation: 'receiver-local-native48-z180-w27',
+		numericalControls: {
+			sourceTransmittanceIntervalCount: 20,
+			incidentAltitudeBinCount: 48,
+			incidentDirectionCount: 68,
+			pathIntervalCount: 30,
+			pathSampleDistribution: 'quadratic-near-observer-v1',
+		},
+	};
+	assert.equal(validateAlgorithm32ProfileProvenance(receiverLocal, 'paper').controls.pathIntervalCount, 30);
+	for (const mutation of [
+		(value) => {
+			delete value.numericalControls.pathSampleDistribution;
+		},
+		(value) => {
+			value.numericalControls.pathIntervalCount = 40;
+		},
+	]) {
+		const changed = structuredClone(receiverLocal);
+		mutation(changed);
+		assert.throws(() => validateAlgorithm32ProfileProvenance(changed, 'paper'), /provenance path/);
+	}
+});
+
 test('paper profile provenance requires direct 40-coordinate spectral transport', () => {
 	const paper = {
 		schema: 'algorithm32-kider-boundary-provenance-v1',
@@ -287,6 +321,7 @@ test('paper profile provenance requires direct 40-coordinate spectral transport'
 		},
 	};
 	assert.equal(validateAlgorithm32ProfileProvenance(paper, 'paper').label, 'Algorithm32 Paper');
+
 	assert.equal(
 		validateAlgorithm32ProfileProvenance(
 			{

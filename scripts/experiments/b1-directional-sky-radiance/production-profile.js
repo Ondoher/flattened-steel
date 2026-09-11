@@ -220,7 +220,11 @@ export function createBrunetonProductionProfile({
 		outgoingDirections: CUBED_SPHERE_W27_DIRECTION_DOMAIN_OWNER,
 	};
 	const numerical = {
-		viewPath: {intervalCount: 40, sampleDistribution: null},
+		// Run 65 and point-local qualification 6 select Q30 for the official baseline.
+		viewPath:
+			incomingDirectionVariant === 'production-68'
+				? {intervalCount: 30, sampleDistribution: {kind: 'quadratic-near-observer-v1'}}
+				: {intervalCount: 40, sampleDistribution: null},
 		sourcePathTransmittance: {intervalCount: 20},
 		cacheConstruction: {transportIntervalCount: 40, maximumScatteringOrder},
 	};

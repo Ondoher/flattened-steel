@@ -1,11 +1,15 @@
 # B3 - Matched-Atmosphere Solver Benchmark
 
 Current production B3 consumes the 31-channel cube derived from the same
-asset-backed J4 B1 run and its same-run B1 report. Use the combined
-`score:algorithm32:b1-b3-production` command with a fresh P8 `--output-root`.
-The [2026-09-10 result](../../../agents/topics/poc-experiments/benchmarks/production-b-family-c1-9-result.md)
-is favorable and consistent for B3; the separate B1 closeout ceiling fails,
-so no accepted combined score record was published.
+asset-backed J4 B1 run and its same-run B1 report. The official result is
+accepted and favorable at `11.554014 mW m^-2 sr^-1 nm^-1`; it reproduces the
+B1 aggregate within `0.000001` and retains all five required mismatch
+declarations. Reproduce B3 alone or publish the complete B-family record with:
+
+```text
+npm run score:algorithm32:b3-production:official
+npm run score:algorithm32:b1-b3-production:official
+```
 
 This experiment adopts the published libRadtran result from Eric Bruneton's
 clear-sky comparison, with comparison source revision
@@ -26,11 +30,10 @@ interchangeable:
    libRadtran results at `alpha=0.8`, `beta=0.04`, and `g=0.7`;
 4. optional coarse-search cross-check consumes all 550 externally computed RMSE rows
    and checks that the published parameter triple is the published minimum;
-5. candidate scoring independently compares the unchanged Algorithm32 Default
-   cube and the Algorithm32 J2, J3, J4, and J5 n-order-cache cubes with the same Kider
-   measurement boundary, placing each RMSE beside the paper's published
-   libRadtran score after that candidate's mismatch map and pre-result judgment
-   record are supplied.
+5. candidate scoring compares the selected Algorithm32 cube with the same
+   Kider measurement boundary, placing its RMSE beside the paper's published
+   libRadtran score after its mismatch map and pre-result judgment record are
+   supplied. The legacy canonical workflow can score Default and J2--J5.
 
 The paper and pinned comparison source are sufficient authority for the
 published result; rerunning 9,350 solver conditions is not an acceptance gate.
@@ -40,23 +43,23 @@ sample-by-sample locally regenerated libRadtran cube is not required. Optional
 local solver runs remain useful provenance and regression cross-checks.
 Acceptance records the proposed score; it does not mean the score was favorable.
 
-Algorithm32 Default remains the unchanged comparison baseline. Algorithm32 J2,
-J3, J4, and J5 are separately generated and scored n-order-cache candidates. B3
-verifies each candidate against its exact candidate-labelled B1 aggregate
-within the predeclared `0.000001` tolerance and checks that candidate's nine
-required mismatch declarations. The canonical closeout requires all five
-candidates.
+The official production manifest selects cumulative J4 as one authenticated
+candidate and B3 verifies it against the exact same-run B1 aggregate within
+the predeclared `0.000001` tolerance. The retained canonical comparison can
+separately score Algorithm32 Default and J2--J5; it is not a prerequisite for
+the current-production result.
 
 ## Commands
 
 For a current-production run, use the combined scorer documented by B1. The
-standalone equivalent binds all five candidate cubes from one backend-identified
-generation manifest and the B1 report produced from that same run:
+standalone equivalent binds the selected candidate cube from one
+backend-identified generation manifest and the B1 report produced from that
+same run:
 
 ```powershell
 node scripts/experiments/b3-matched-atmosphere-solver/run.js `
-  --production-run references/results/experiments/b1-directional-sky-radiance/cpu `
-  --b1-result references/results/experiments/b1-b3-production-scores/cpu/NNNNNN-current-production-b1-b3-cpu-reference/b1-result.md
+  --production-run references/results/experiments/b1-directional-sky-radiance/gpu/manifest.json `
+  --b1-result references/results/experiments/b1-b3-production-scores/gpu/000003-current-production-b1-b3-gpu-shaders/b1-result.md
 ```
 
 The production cubes are deterministic 31-wavelength reductions of the exact
@@ -142,7 +145,7 @@ cross-check.
   with the paper's published libRadtran RMSE;
 - `--mismatch-map FILE`, whose JSON object has a `mismatches` array with a
   `field` and `disposition` for each mismatch. The Algorithm32 closeout
-  requires the nine declared model-difference fields and rejects omissions,
+  requires the five declared model-difference fields and rejects omissions,
   duplicates, or blank dispositions; and
 - `--judgment-rules FILE`, whose JSON object has
   `declaredBeforeProposedResults: true` and a nonempty `rules` array.

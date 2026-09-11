@@ -2,7 +2,9 @@ import {CUMULATIVE_SCATTERING_CACHE_VALUE_KEY} from '../../../src/algorithm32/gp
 import {DistantSunLightSource} from '../../../src/algorithm32/implementation/distant-sun/DistantSunLightSource.js';
 import {CUBED_SPHERE_W27_DIRECTION_DOMAIN_OWNER} from '../../../src/algorithm32/sampling-domains/index.js';
 import {ShaderContributions} from '../../../src/algorithm32/shader-assembly/base/ShaderContributions.js';
-import B1Direct40CacheAssetManifest from './B1Direct40CacheAssetManifest.js';
+import DistantSunSceneCache from '../../../src/algorithm32/implementation/distant-sun/cache/DistantSunSceneCache.js';
+import DistantSunSceneCacheAtlas from '../../../src/algorithm32/implementation/distant-sun/cache/DistantSunSceneCacheAtlas.js';
+import B1Direct40CacheAssetManifest, {B1_POINT_LOCAL_CACHE_ASSET_SCHEMA} from './B1Direct40CacheAssetManifest.js';
 
 const SAMPLER_NAME = 'uCumulativeScatteringDensityCache';
 
@@ -206,6 +208,48 @@ class B1Direct40AssetCacheLoader {
 			)
 		) {
 			throw new Error('B1 direct-40 runtime direction map is incompatible.');
+		}
+		if (manifest.record.schemaId === B1_POINT_LOCAL_CACHE_ASSET_SCHEMA) {
+			const ledger = manifest.record.ledger;
+			const values = DistantSunSceneCacheAtlas.pack(uniqueValues, logicalToUnique, ledger.retainedBlockCount, 40);
+			let cumulativeTexture = null;
+			let directionIndexTexture = null;
+			try {
+				cumulativeTexture = this._backend.uploadImmutableTexture({
+					id: `${manifest.record.assetIdentity}:receiver-local`,
+					storage: {format: 'RGBA32F', width: 1620, height: 27, layers: ledger.retainedBlockCount},
+					values,
+					valueKey: 'cache.sceneCumulativeScatteringDensity',
+				});
+				directionIndexTexture = this._backend.uploadImmutableTexture({
+					id: `${manifest.record.assetIdentity}:logical-index`,
+					storage: {format: 'R16UI', width: 4374, height: 1, layers: 1},
+					values: logicalToUnique,
+					valueKey: 'cache.sceneLogicalToUniqueDirection',
+				});
+				return new DistantSunSceneCache({
+					spectralChannelCount: 40,
+					directionInterpolation: 'shader-bilinear',
+					ledger,
+					cumulativeTexture,
+					directionIndexTexture,
+					manifest: {
+						record: {
+							cacheIdentity: manifest.record.assetIdentity,
+							exactSeamPayload: manifest.record.cumulativeScatteringDensity,
+							logicalToUniqueIndex: manifest.record.logicalToUniqueIndex,
+						},
+						requireCacheIdentity(identity) {
+							if (identity !== manifest.record.assetIdentity)
+								throw new Error('Receiver-local asset identity is incompatible.');
+						},
+					},
+				});
+			} catch (error) {
+				directionIndexTexture?.dispose();
+				cumulativeTexture?.dispose();
+				throw error;
+			}
 		}
 		const logicalValues = unpackLogicalField(uniqueValues, logicalToUnique);
 		const texture = this._backend.uploadImmutableTexture({

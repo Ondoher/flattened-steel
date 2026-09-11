@@ -91,7 +91,7 @@ Append one event at process start, every phase transition, at least once every 3
 - Production architecture and candidate defaults:
   [cache optimization design](../../../production-algorithm32/caches/distant-sun-cache-optimization-design.md).
 - Evidence gates and eventual promotion boundary:
-  [production implementation plan](../../../production-algorithm32/caches/distant-sun-cache-optimization-plan.md).
+  [production implementation plan](../../../../../archives/topics/production-algorithm32-release-20260911/agents/topics/production-algorithm32/caches/distant-sun-cache-optimization-plan.md).
 - Current package hashes, manifests, catalog, loader behavior, generator
   sources, browser version, Node version, GPU path, and operating environment
   must be pinned by the first run rather than inferred from mutable filenames.

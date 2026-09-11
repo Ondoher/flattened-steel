@@ -209,7 +209,13 @@ globalThis.algorithm32B1GpuReady = true;
 			headless: 'new',
 			protocolTimeout: 900000,
 			defaultViewport: {width: 64, height: 64, deviceScaleFactor: 1},
-			args: ['--enable-gpu', '--enable-webgl', '--ignore-gpu-blocklist', '--use-angle=d3d11'],
+			executablePath: process.env.CHROME_PATH ?? puppeteer.executablePath('chrome'),
+			args: [
+				'--enable-gpu',
+				'--enable-webgl',
+				'--ignore-gpu-blocklist',
+				...(process.platform === 'win32' ? ['--use-angle=d3d11'] : []),
+			],
 		});
 		this._page = await this._browser.newPage();
 		this._recordProgress('[B1 GPU progress] browser launched');

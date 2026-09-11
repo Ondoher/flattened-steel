@@ -1,5 +1,5 @@
 import {createHash} from 'node:crypto';
-import {copyFileSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync} from 'node:fs';
+import {copyFileSync, mkdirSync, readFileSync, readdirSync, writeFileSync} from 'node:fs';
 import {dirname, join, resolve} from 'node:path';
 import {pathToFileURL} from 'node:url';
 
@@ -138,22 +138,16 @@ export function scoreProductionRun(path, options = {}) {
 
 	const b1 = runB1({productionRunPath});
 	const b1Report = renderB1Report(b1);
+	mkdirSync(b1ResultDirectory, {recursive: true});
+	const publishedB1ResultPath = join(b1ResultDirectory, 'result.md');
+	writeFileSync(publishedB1ResultPath, b1Report, 'utf8');
 
 	const b2 = runB2({productionRunPath});
 	const b2Report = renderB2Report(b2);
 
-	mkdirSync(scoreRoot, {recursive: true});
-	const temporaryDirectory = mkdtempSync(join(scoreRoot, '.score-'));
-	let b3Report;
-	try {
-		const temporaryB1ResultPath = join(temporaryDirectory, 'b1-result.md');
-		writeFileSync(temporaryB1ResultPath, b1Report, 'utf8');
-		const b3 = runB3({productionRunPath, b1ResultPath: temporaryB1ResultPath});
-		assertProductionBFamilyCloseout({b1, b2, b3});
-		b3Report = renderB3Report(b3);
-	} finally {
-		rmSync(temporaryDirectory, {recursive: true, force: true});
-	}
+	const b3 = runB3({productionRunPath, b1ResultPath: publishedB1ResultPath});
+	assertProductionBFamilyCloseout({b1, b2, b3});
+	const b3Report = renderB3Report(b3);
 
 	const materialized = materializeCandidateBoundaries(productionRun, b1ResultDirectory, b3ResultDirectory);
 	const figureRun = generateBenchmarkFigures({
@@ -164,7 +158,6 @@ export function scoreProductionRun(path, options = {}) {
 		resultSubdirectory: backendDirectory,
 		...materialized.paths,
 	});
-	mkdirSync(b1ResultDirectory, {recursive: true});
 	mkdirSync(b2ResultDirectory, {recursive: true});
 	mkdirSync(b3ResultDirectory, {recursive: true});
 	writeFileSync(join(b1ResultDirectory, 'result.md'), b1Report, 'utf8');

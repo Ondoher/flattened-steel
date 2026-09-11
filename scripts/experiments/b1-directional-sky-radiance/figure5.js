@@ -7,12 +7,7 @@ import {deflateSync} from 'node:zlib';
 import {getSampleDirection, sampleHemisphericalScalar, scoreCondition} from './benchmark.js';
 import {MODEL_LABELS, PUBLISHED_MODELS, PUBLISHED_RMSE_ORACLE} from './published-oracle.js';
 
-export const FIGURE5_ASSET_ROOT = fileURLToPath(
-	new URL(
-		'../../../references/downloads/bruneton-clear-sky-models-arxiv-1612.04336/figure5-relative-error/',
-		import.meta.url,
-	),
-);
+export const FIGURE5_ASSET_ROOT = fileURLToPath(new URL('./inputs/figure5/', import.meta.url));
 
 export const FIGURE5_SCENES = Object.freeze([
 	Object.freeze({

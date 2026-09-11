@@ -4,6 +4,7 @@ Implement supported application behavior and coordinate release acceptance, depl
 
 ## Focus Areas
 
+- [mvp](mvp/README.md) — Deferred requirements that still block first-MVP completion.
 - [runtime-integration](runtime-integration/README.md) — Application attachment, lifecycle, state, and asset delivery.
 - [product-behavior](product-behavior/README.md) — Selected controls and explicit product backlog.
 - [release](release/README.md) — Release gates, deployment inputs, and owner decisions.

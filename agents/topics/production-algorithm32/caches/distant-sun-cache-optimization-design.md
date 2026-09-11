@@ -3,15 +3,15 @@
 Status: D1 and P1-P8 are complete. The qualified shared package is selected and
 the temporary dense bridge is removed. The contained experiments remain closed.
 [P7 qualification](shared-runtime-qualification.md) owns exactness, lifecycle,
-target bounds, and performance limits; [P8 rollout](shared-runtime-rollout.md)
+target bounds, and performance limits; [P8 rollout](../../../../archives/topics/production-algorithm32-release-20260911/agents/topics/production-algorithm32/caches/shared-runtime-rollout.md)
 owns publication, rollback observation, acceptance, and preserved references.
 
 This document owns the implemented reduction of distant-Sun cache storage,
 transfer size, and offline generation time. It is linked from the active
 [production closeout plan](../../production-app/release/color-star-cache-closeout-plan.md). The accepted
-[one-degree cache hookup](../../production-app/runtime-integration/flat32-one-degree-cache-hookup-plan.md) remains the
+[one-degree cache hookup](../../../../archives/topics/production-algorithm32-release-20260911/agents/topics/production-app/runtime-integration/flat32-one-degree-cache-hookup-plan.md) remains the
 owner of current runtime behavior and qualification. The
-[implementation plan](distant-sun-cache-optimization-plan.md) owns execution
+[implementation plan](../../../../archives/topics/production-algorithm32-release-20260911/agents/topics/production-algorithm32/caches/distant-sun-cache-optimization-plan.md) owns execution
 order, gates, and promotion.
 
 
@@ -649,5 +649,5 @@ Current completion: D0/D1 and P1-P8 are implemented and qualified. The
 [qualification owner](shared-runtime-qualification.md) records the exact data,
 lifecycle, memory, and measured performance boundary. Bounded discrete time
 selection is accepted; continuous time animation is unqualified at unchanged
-production Q30. The [rollout owner](shared-runtime-rollout.md) records the
+production Q30. The [rollout owner](../../../../archives/topics/production-algorithm32-release-20260911/agents/topics/production-algorithm32/caches/shared-runtime-rollout.md) records the
 accepted production selection and bridge removal.

@@ -408,7 +408,8 @@ describeFullCache('Flat32 scene application (full production cache)', () => {
 				shell.dataset.flat32Location === 'San Jose' &&
 				shell.dataset.flat32Time === 'Sunset +2h' &&
 				shell.dataset.flat32State === 'ready' &&
-				shell.dataset.flat32DistantSunCacheState === 'dark',
+				shell.dataset.flat32DistantSunCacheState === 'dark' &&
+				Number(shell.dataset.flat32SolarZenithDegrees) >= 108,
 			'the shared San Jose after-dark atmosphere publication',
 			300000,
 		);

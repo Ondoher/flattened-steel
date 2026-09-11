@@ -36,7 +36,7 @@ Run `npm run publish:algorithm32:shared-runtime` to copy and authenticate the
 qualified immutable parent. The tracked selection pins the report identity;
 there is no dense rollout switch. The package is 505,724,079 bytes and the
 server serves only its allowlisted, authenticated complete artifacts.
-[Rollout evidence and current policy](../../../agents/topics/production-algorithm32/caches/shared-runtime-rollout.md)
+[Rollout evidence and current policy](../../../archives/topics/production-algorithm32-release-20260911/agents/topics/production-algorithm32/caches/shared-runtime-rollout.md)
 are owned by the production cache topic.
 
 ## Operational Numerical Reference

@@ -53,12 +53,78 @@ paper-citable until resolved.
   passing self-check is not citable until the standalone definition and
   current result are registered.
 - The registered entry identifies the question, inputs, iteration domain,
-  runner command, oracle, controls, tolerances, result, hashes, claim boundary,
-  and non-claims. Follow the
+  official runner command, oracle, controls, tolerances, current result,
+  artifact hashes, claim boundary, and non-claims. Follow the
   [experiment promotion checklist](../agents/topics/poc-experiments/protocols/promotion-checklist.md).
 - Production Jasmine tests are conformance evidence, not official scientific
   experiments. Experiment runner self-checks remain part of the experiment
   even if they later use Jasmine.
+
+### Admission Rules
+
+An experiment becomes official only when all of these conditions hold:
+
+1. Its stable ID, paper-facing question, supported claims, and explicit
+   non-claims are registered in `/references/experiments.md`.
+2. Its complete physical and numerical boundary is declared before the
+   deciding run: source data, units, spectral basis, geometry, case domain,
+   parameters, oracle, tolerances, classification rules, and uncertainty or
+   mismatch treatment.
+3. Every external input has canonical source provenance. Every consumed local
+   payload and generated boundary has a content identity and derivation chain.
+4. A fresh clone can execute the documented official command using tracked
+   inputs and documented acquisitions. Missing prerequisites or a failed
+   acceptance criterion produce a nonzero exit status.
+5. The registered current result includes the complete case set, conclusion,
+   provenance, and hashes for every result-bearing table, report, manifest,
+   and figure needed to assess the claim.
+6. Independent scientific authority remains separate from the implementation
+   under test. A production-backed experiment may call production code only
+   when its registered question explicitly tests that production boundary;
+   its scorer, measurements, oracle, and judgment rules remain independent.
+
+Passing tests, producing a plausible image, matching a historical value, or
+placing output below `/references` satisfies none of these conditions by
+itself.
+
+### Parameter And Protocol Changes
+
+- Published-paper parameters and source-defined processing are authoritative
+  wherever the registered question claims to reproduce that publication.
+- Preserve previously accepted non-paper parameters for comparable reruns.
+  Change one only after recording a technical reason before the deciding run.
+  The new result must identify the changed value and evidence supporting the
+  change; score improvement alone is not a sufficient reason.
+- A change to the question, physical observable, case domain, external source,
+  oracle, acceptance threshold, or classification meaning creates a new
+  protocol revision. Assign a new experiment ID when old and new results no
+  longer answer the same paper-facing question.
+- An implementation change that preserves the registered scientific boundary
+  may keep the experiment ID. The replacement result must truthfully record
+  the new implementation, compiler, runtime, inputs, and artifact hashes.
+- Judgment rules and parameter-change rationales must exist before viewing the
+  result they judge. A later rule change cannot retroactively accept a failed
+  run.
+
+### Current Results And Historical Evidence
+
+- Each registered ID has exactly one citable current result set. Stable result
+  links in `/references/experiments.md` resolve to that set.
+- An authorized official rerun may replace those stable current-result files
+  only as one reviewed publication update. Update the report, manifest,
+  figures, hashes, status, and register together; never mix artifacts from
+  different runs.
+- Git history preserves earlier versions of replaced current-result files.
+  Numbered or sealed source and score records remain immutable and may coexist
+  as audit evidence. They are not current citation targets unless the register
+  explicitly selects them.
+- Failed, interrupted, bounded, diagnostic, and superseded runs remain clearly
+  labeled and cannot replace the current result or support its claim.
+- Rerunning a derived experiment never alters its parent evidence. The child
+  records the exact parent manifest and hashes it consumed.
+- If the official rerun changes a reported value, classification, limitation,
+  or supported fact, update every affected working-fact and documentation
+  consumer in the same change.
 
 ## Retained Payloads
 

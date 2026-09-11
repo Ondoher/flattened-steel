@@ -6,7 +6,6 @@ import {fileURLToPath, pathToFileURL} from 'node:url';
 import {
 	CAPTURE_TIMES,
 	EXPECTED_DATASET_FINGERPRINTS,
-	KIDER_ROOT,
 	SCORE_SAMPLE_INDICES,
 	SPECTRUM,
 	evaluatePublishedOracle,
@@ -336,7 +335,7 @@ export function runExperiment(options = {}) {
 	if (options.canonical) requireCanonicalCandidateOptions(options);
 	const profileFamily = requestedProfileFamily;
 	const candidateProfiles = resolveCandidateProfiles(profileFamily);
-	const dataset = loadKiderDataset(options.kiderRoot ?? KIDER_ROOT);
+	const dataset = loadKiderDataset(options.kiderRoot);
 	const measurementStage = Object.freeze({
 		status: 'READY',
 		completed: true,

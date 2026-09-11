@@ -14,6 +14,7 @@ bridge candidate; runs `000018` and `000019` are its matched sunset endpoint.
 At plus one hour the bridged hemisphere intensity is
 `0.000010643550067986926` and direct intensity is zero. At sunset they are
 `0.0902917757354653` and `0.0017027433434433892`, respectively. The new
-shader-on captures no longer saturate scene geometry. Owner appearance review,
-including whether plus-one-hour geometry is now too dark, remains open. Visual
-dissatisfaction is not permission to alter the atmosphere or Color algorithm.
+shader-on captures no longer saturate scene geometry. The project owner accepts
+the candidate, including the dark plus-one-hour geometry, without selecting a
+new calibration equation. This acceptance does not authorize an atmosphere or
+Color algorithm change.

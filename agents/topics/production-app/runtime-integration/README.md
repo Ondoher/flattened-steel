@@ -7,9 +7,7 @@ The supported Flat32 application owns engine attachment, atomic replacement, ass
 ## Working Documents
 
 - [Production Ambient-Light Design](ambient-light-design.md)
-- [Production Color Reset Implementation Plan](color-reset-implementation-plan.md)
 - [`flat32` Stage 11 Migration Inventory](flat32-migration-inventory.md)
-- [Flat32 One-Degree Scene-Cache Hookup](flat32-one-degree-cache-hookup-plan.md)
 - [Distant-Sun Solar-Zenith Scene-Cache Design](solar-zenith-cache-design.md)
 - [Testing](testing-contract.md)
 
