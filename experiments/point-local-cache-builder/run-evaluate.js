@@ -4,9 +4,12 @@ import CachePackage from './CachePackage.js';
 import BrunetonEvaluation from './BrunetonEvaluation.js';
 
 const run = new ExperimentRun();
-await run.start('b1-qualification');
+const ozone = process.argv.includes('--ozone');
+await run.start(ozone ? 'ozone-eval' : 'b1-qualification');
 try {
-	const source = 'tmp/experiments/point-local-cache-builder/00003-bruneton';
+	const source = ozone
+		? 'tmp/experiments/point-local-cache-builder/00008-b1-ozone'
+		: 'tmp/experiments/point-local-cache-builder/00003-bruneton';
 	const seal = JSON.parse((await run.read(source + '/sealed.json')).toString('utf8'));
 	const identity = seal.artifacts.find((artifact) => artifact.path === source + '/cache.json');
 	assert(identity, 'Parent run must contain a completed, hashed cache package.');
@@ -20,7 +23,9 @@ try {
 	});
 	await run.read('scripts/algorithm32/solar-zenith-cache/DistantSunSharedCacheGenerationCodec.js');
 	const directions = await run.read(packet.directionMap.path, packet.directionMap);
-	const result = await new BrunetonEvaluation().run(run, packet, new CachePackage(), directions);
+	const owner = new CachePackage();
+	if (ozone) await owner.prepareStaging(run, packet, source);
+	const result = await new BrunetonEvaluation().run(run, packet, owner, directions);
 	await run.finish(result.accepted ? 'accepted' : 'rejected', result);
 } catch (error) {
 	await run.finish('failed', {error: error.stack});

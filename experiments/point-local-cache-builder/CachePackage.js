@@ -15,12 +15,30 @@ export default class CachePackage {
 	 * @returns {Promise<void>} - Completion after bounded decoded blocks are persisted and identified.
 	 */
 	async prepare(run, packet) {
-		if (this._decoded.size) throw new Error('Reader already prepared.');
+		if (packet.blocks.every((block) => this._decoded.has(block.decodedSha256))) return;
+		if (this._decoded.size) throw new Error('Reader is only partially prepared.');
 		for (const [index, block] of packet.blocks.entries()) {
 			const bytes = new Codec().decode(await run.read(block.artifact.path, block.artifact), block.decodedBytes);
 			if (run.files.hash(bytes) !== block.decodedSha256) throw new Error('Decoded block mismatch.');
 			const artifact = await run.write(`decoded-${String(index).padStart(3, '0')}.f32`, bytes);
 			this._decoded.set(block.decodedSha256, artifact);
+		}
+	}
+
+	/** Call this method to authenticate and reuse a prior run's decoded staging blocks without copying them.
+	 * The sealed package supplies each expected decoded identity; the prior run remains read-only.
+	 * @param {BuilderRun} run - Current evidence owner.
+	 * @param {BuilderPackage} packet - Complete shared package.
+	 * @param {string} sourceRoot - Prior immutable run root containing staging blocks.
+	 * @returns {Promise<void>} - Completion after all decoded identities are authenticated.
+	 */
+	async prepareStaging(run, packet, sourceRoot) {
+		if (this._decoded.size) throw new Error('Reader already prepared.');
+		for (const [index, block] of packet.blocks.entries()) {
+			const path = `${sourceRoot}/staging/block-${String(index).padStart(3, '0')}.f32`;
+			const expected = {path, byteLength: block.decodedBytes, sha256: block.decodedSha256};
+			await run.read(path, expected, block.decodedBytes);
+			this._decoded.set(block.decodedSha256, expected);
 		}
 	}
 	/** Call this method to encode completed staging blocks with explicit domains and spectral selection.
@@ -33,17 +51,20 @@ export default class CachePackage {
 		const blocks = [];
 		for (const [index, block] of inventory.blocks.entries()) {
 			const name = `block-${String(index).padStart(3, '0')}`;
-			const bytes = await run.files.read(`${run.root}/staging/${name}.f32`);
+			const stagingPath = `${run.root}/staging/${name}.f32`;
+			const bytes = await run.files.read(stagingPath);
 			const expected = block.coordinates.length * inventory.channelCount * inventory.uniqueCount * 4;
 			if (bytes.length !== expected) throw new Error('Staging shape mismatch.');
+			const decodedSha256 = run.files.hash(bytes);
 			const encoded = codec.encode(bytes);
 			const artifact = await run.write(`${name}.zst`, encoded);
 			blocks.push({
 				coordinates: block.coordinates,
 				artifact,
 				decodedBytes: bytes.length,
-				decodedSha256: run.files.hash(bytes),
+				decodedSha256,
 			});
+			this._decoded.set(decodedSha256, {path: stagingPath, byteLength: bytes.length, sha256: decodedSha256});
 		}
 		const directionMap = await run.write('directions.u16', inventory.directionBytes);
 		const result = {

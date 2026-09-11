@@ -14,6 +14,8 @@ try {
 		'00003-bruneton',
 		'00004-run-controls',
 		'00006-b1-qualification',
+		'00008-b1-ozone',
+		'00009-ozone-eval',
 	];
 	const results = [];
 	for (const name of names) {
@@ -29,6 +31,14 @@ try {
 	const profiles = new ProfileInputs();
 	const planner = new CacheInventory();
 	const request = profiles.application();
+	const ozoneRequest = profiles.brunetonOzone();
+	const ozoneOffRequest = profiles.bruneton();
+	const normalizedOzoneRequest = JSON.parse(JSON.stringify(ozoneRequest));
+	normalizedOzoneRequest.id = ozoneOffRequest.id;
+	normalizedOzoneRequest.transportSpec.id = ozoneOffRequest.transportSpec.id;
+	normalizedOzoneRequest.transportSpec.atmosphere.id = ozoneOffRequest.transportSpec.atmosphere.id;
+	normalizedOzoneRequest.transportSpec.atmosphere.ozone = ozoneOffRequest.transportSpec.atmosphere.ozone;
+	assert.deepEqual(normalizedOzoneRequest, JSON.parse(JSON.stringify(ozoneOffRequest)));
 	const scene = {id: 'daylight', zenithDegrees: 40, observerAltitudeMeters: 1.7};
 	const original = planner.create(request, [scene], [0, 14]);
 	const changed = JSON.parse(JSON.stringify(request));
@@ -63,7 +73,7 @@ try {
 		duplicateRequests: 257,
 		uniqueWorkUnchanged: true,
 		implementationChange:
-			'Additional domain-shape and disabled-ozone consistency rejection only; no calculation or serialization change since qualification.',
+			'Bruneton 300 DU ozone follow-up; ozone is the only physical profile delta, with authenticated current-run staging reuse during evaluation.',
 	});
 	await run.read('tmp/experiments/point-local-cache-builder/00005-b1-qualification/progress.jsonl');
 	assert.equal(
@@ -71,10 +81,30 @@ try {
 		'accepted',
 		'Bruneton qualification must pass.',
 	);
+	const ozoneRoot = 'tmp/experiments/point-local-cache-builder/00009-ozone-eval';
+	const ozoneSeal = JSON.parse((await run.read(ozoneRoot + '/sealed.json')).toString('utf8'));
+	assert.equal(ozoneSeal.state, 'accepted', 'Ozone evaluation must pass.');
+	const ozoneComparisonPath = ozoneRoot + '/b1-comparison.json';
+	const ozoneComparison = JSON.parse(
+		(
+			await run.read(
+				ozoneComparisonPath,
+				ozoneSeal.artifacts.find((artifact) => artifact.path === ozoneComparisonPath),
+			)
+		).toString('utf8'),
+	);
+	assert.equal(ozoneComparison.mode, 'ozone-on-versus-authenticated-ozone-off-control');
+	assert.equal(ozoneComparison.comparedValues, 55080);
+	assert.equal(ozoneComparison.differentCount, 55080);
+	assert.equal(ozoneComparison.decreasedCount, 55080);
+	assert.equal(ozoneComparison.increasedCount, 0);
+	assert(ozoneComparison.maximumAbsoluteWatts > 0 && ozoneComparison.rmsWatts > 0);
 	await run.finish('accepted', {
 		verifiedRuns: results.length,
 		verifiedArtifacts: results.reduce((n, result) => n + result.artifacts, 0),
 		serializedExpansion: true,
+		ozoneProfileDeltaOnly: true,
+		ozoneComparedValues: ozoneComparison.comparedValues,
 	});
 } catch (error) {
 	await run.finish('failed', {error: error.stack});

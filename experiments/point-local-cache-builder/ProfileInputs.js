@@ -61,6 +61,33 @@ export default class ProfileInputs {
 		};
 	}
 
+	/** Call this method to add the retained Bruneton 300 DU ozone composition to Direct40.
+	 * Every other physical, spectral, geometric, and numerical input remains the no-ozone profile.
+	 * @returns {DistantSunSceneCacheCompilerBuildRequest} - Full point-local Direct40/N4 ozone request.
+	 */
+	brunetonOzone() {
+		const result = this.bruneton();
+		const applicationOzone = this.application().transportSpec.atmosphere.ozone;
+		return {
+			...result,
+			id: 'point-local-bruneton-ozone-builder-v1',
+			transportSpec: {
+				...result.transportSpec,
+				id: 'point-local-bruneton-ozone-transport-v1',
+				atmosphere: {
+					...result.transportSpec.atmosphere,
+					id: 'algorithm32-paper-comparison-plus-bruneton-earth-demo-ozone-300du-v1',
+					ozone: {
+						...applicationOzone,
+						maximumDensityPerCubicMeter:
+							(applicationOzone.dobsonUnits * applicationOzone.dobsonUnitMoleculesPerSquareMeter) /
+							applicationOzone.densityIntegralMeters,
+					},
+				},
+			},
+		};
+	}
+
 	/** Call this method to obtain scene inputs from the accepted B1 observer/Sun data.
 	 * @returns {BuilderScene[]} - Ordered input scenes, with counts determined by data.
 	 */

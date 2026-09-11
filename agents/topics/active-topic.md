@@ -7,11 +7,12 @@ Canonical entry document: [Point-Local Cache Builder](poc-experiments/engineerin
 
 ## Immediate Focus
 
-The contained builder experiment has passed application compatibility and
-Bruneton qualification against accepted Color Reset run 65. Final evidence
-verification passed; the experiment status owns results, run dispositions,
-and remaining boundaries. Preserve previous evidence and
-the reduced review cadence. Production promotion requires its own plan.
+The contained builder experiment has passed application compatibility,
+Bruneton qualification against accepted Color Reset run 65, and the complete
+300 DU ozone follow-up. Final evidence verification passed; the experiment
+status owns results, run dispositions, and remaining boundaries. Preserve
+previous evidence and the reduced review cadence. Production promotion requires
+its own plan.
 
 The separate production benchmark decision remains with the
 [ground-contact investigation](poc-experiments/benchmarks/production-b-family-ground-contact-investigation.md).

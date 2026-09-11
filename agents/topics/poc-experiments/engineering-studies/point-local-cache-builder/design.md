@@ -155,3 +155,21 @@ wavelength-major Float32 values, and exact W27 seam indexes. Qualification
 decodes each block once into a new-run derivative, then reads channel slices.
 Consumer comparison uses authenticated serialized metadata, matching the JSON
 configuration delivered to the GPU, including normalization of signed zero.
+
+## Ozone Follow-up
+
+The owner requested the same complete 17-scene, Direct40, F68, W27, N4, Q30
+workload with Bruneton's retained 300 DU ozone composition enabled. Preserve
+every accepted no-ozone input except profile identities and the ozone fields.
+Authenticate the commit-pinned 233 K cross-section table, its 10--25--40 km
+triangular density profile, 300 DU column, and 5.374e18 molecules m^-3 peak
+density before GPU execution. Apply absorption to cache construction and final
+cache-to-camera extinction; ozone does not add scattering or a phase function.
+
+The accepted no-ozone point-local table from run `00006` is the compatibility
+control. Compare all 55,080 values, benchmark scores, and the three selected
+figures. Acceptance means a complete authenticated, finite, nonnegative execution
+with a measurable ozone effect and recorded derivation. The comparison is
+diagnostic because there is no independent ozone-on radiance oracle. It does not
+establish ozone as a production default or claim that a score change is an
+accuracy improvement.

@@ -8,14 +8,21 @@ import CachePackage from './CachePackage.js';
 import ApplicationProof from './ApplicationProof.js';
 import ApplicationControls from '../00000-shared-cache-calculation-reuse/ApplicationControls.js';
 import GpuProofHost from '../00000-shared-cache-calculation-reuse/GpuProofHost.js';
+import {
+	BRUNETON_OZONE_AUTHORITY,
+	BRUNETON_OZONE_CROSS_SECTIONS_SQUARE_METERS,
+	maximumOzoneNumberDensityPerCubicMeter,
+	projectOzoneReference,
+} from '../extraterrestrial/ozone/BrunetonOzoneReference.js';
 
-const bruneton = process.argv.includes('--bruneton');
+const ozone = process.argv.includes('--bruneton-ozone');
+const bruneton = ozone || process.argv.includes('--bruneton');
 const run = new ExperimentRun();
-await run.start(bruneton ? 'bruneton' : 'app-proof');
+await run.start(ozone ? 'b1-ozone' : bruneton ? 'bruneton' : 'app-proof');
 let staging;
 try {
 	const profiles = new ProfileInputs();
-	const buildRequest = bruneton ? profiles.bruneton() : profiles.application();
+	const buildRequest = ozone ? profiles.brunetonOzone() : bruneton ? profiles.bruneton() : profiles.application();
 	const scenes = bruneton
 		? profiles.brunetonScenes()
 		: [
@@ -29,6 +36,49 @@ try {
 		inputArgument < 0
 			? {buildRequest, scenes, wavelengths}
 			: JSON.parse((await run.read(process.argv[inputArgument + 1])).toString('utf8'));
+	if (ozone) {
+		const ozoneInput = input.buildRequest.transportSpec.atmosphere.ozone;
+		await run.read('experiments/extraterrestrial/ozone/BrunetonOzoneReference.js');
+		const authoritySource = await run.read(BRUNETON_OZONE_AUTHORITY.sourcePath);
+		assert.equal(run.files.hash(authoritySource), BRUNETON_OZONE_AUTHORITY.sourceSha256);
+		assert.deepEqual(
+			{
+				id: ozoneInput.id,
+				absorptionEnabled: ozoneInput.absorptionEnabled,
+				temperatureKelvin: ozoneInput.temperatureKelvin,
+				dobsonUnits: ozoneInput.dobsonUnits,
+				dobsonUnitMoleculesPerSquareMeter: ozoneInput.dobsonUnitMoleculesPerSquareMeter,
+				densityIntegralMeters: ozoneInput.densityIntegralMeters,
+				profileAltitudesMeters: ozoneInput.profileAltitudesMeters,
+				crossSectionTable: ozoneInput.crossSectionTable,
+			},
+			{
+				id: BRUNETON_OZONE_AUTHORITY.id,
+				absorptionEnabled: true,
+				temperatureKelvin: BRUNETON_OZONE_AUTHORITY.temperatureKelvin,
+				dobsonUnits: BRUNETON_OZONE_AUTHORITY.dobsonUnits,
+				dobsonUnitMoleculesPerSquareMeter: BRUNETON_OZONE_AUTHORITY.dobsonUnitMoleculesPerSquareMeter,
+				densityIntegralMeters: BRUNETON_OZONE_AUTHORITY.densityIntegralMeters,
+				profileAltitudesMeters: BRUNETON_OZONE_AUTHORITY.profileAltitudesMeters,
+				crossSectionTable: {
+					minimumNanometers: BRUNETON_OZONE_AUTHORITY.tableMinimumNanometers,
+					maximumNanometers: BRUNETON_OZONE_AUTHORITY.tableMaximumNanometers,
+					spacingNanometers: BRUNETON_OZONE_AUTHORITY.tableSpacingNanometers,
+					units: BRUNETON_OZONE_AUTHORITY.crossSectionUnits,
+					values: [...BRUNETON_OZONE_CROSS_SECTIONS_SQUARE_METERS],
+				},
+			},
+		);
+		assert.equal(ozoneInput.maximumDensityPerCubicMeter, maximumOzoneNumberDensityPerCubicMeter());
+		await run.write('ozone-input.json', {
+			authority: BRUNETON_OZONE_AUTHORITY,
+			projectedChannels: projectOzoneReference(
+				input.buildRequest.transportSpec.domains.spectrum.channels.map((channel) => channel.centerNanometers),
+			),
+			comparison:
+				'Diagnostic comparison against the authenticated ozone-off point-local result; no independent ozone-on radiance oracle.',
+		});
+	}
 	const inventory = new CacheInventory().create(input.buildRequest, input.scenes, input.wavelengths);
 	await run.write('input.json', input);
 	await run.write('inventory.json', {...inventory, directionBytes: undefined});
@@ -111,7 +161,7 @@ try {
 		}
 	}
 	await run.finish(evaluation?.accepted === false ? 'rejected' : 'accepted', {
-		stage: bruneton ? 5 : 4,
+		stage: ozone ? 'ozone-follow-up' : bruneton ? 5 : 4,
 		uniqueRows: inventory.coordinates.length,
 		scenes: inventory.scenes.length,
 		wavelengths: inventory.wavelengths,

@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import {pathToFileURL} from 'node:url';
+import ProfileInputs from './ProfileInputs.js';
 
 /** Run-65 qualification using expanded cache values and the accepted Q30 view equation. */
 export default class BrunetonEvaluation {
@@ -12,6 +13,7 @@ export default class BrunetonEvaluation {
 	 * @returns {Promise<BuilderB1Result>} - Numerical agreement, benchmark scores, and figure identities.
 	 */
 	async run(run, packet, owner, directions) {
+		const ozoneEnabled = packet.buildRequest.transportSpec.atmosphere.ozone.absorptionEnabled;
 		const historicalRoot = 'experiments/extraterrestrial/solar-zenith-cache/point-local-scene-cache';
 		const integrationPath = historicalRoot + '/runB1PointLocalBrowser.js';
 		for (const path of [
@@ -32,14 +34,34 @@ export default class BrunetonEvaluation {
 		const figures = await import(
 			pathToFileURL(await run.files.resolve('scripts/experiments/b1-directional-sky-radiance/figure5.js')).href
 		);
-		const targetRoot = 'tmp/extraterrestrial/color-reset/runs/000065-color-reset-qualification';
-		const manifest = JSON.parse((await run.read(targetRoot + '/artifact-manifest.json')).toString('utf8'));
-		assert.equal(manifest.conclusion, 'accepted');
-		assert.equal(manifest.artifactSetSha256, '1f5fa1226d1520847fa900fea14870144e6c07f1cbecd11dc0ff4246d2b8bfe1');
-		for (const artifact of manifest.artifacts) await run.read(targetRoot + '/' + artifact.path, artifact);
-		const targetPath = targetRoot + '/data/b1-point-local-direct40-w27-q30.tsv';
-		const targetBytes = await run.read(targetPath);
-		assert.equal(run.files.hash(targetBytes), 'e6d62e23ec0184cc9941e8305d4ea9e69691cf996d5bce8523afb641830ce634');
+		let targetPath,
+			targetLabel = 'run 65';
+		if (ozoneEnabled) {
+			const targetRoot = 'tmp/experiments/point-local-cache-builder/00006-b1-qualification';
+			const targetSeal = JSON.parse((await run.read(targetRoot + '/sealed.json')).toString('utf8'));
+			assert.equal(targetSeal.state, 'accepted');
+			targetPath = targetRoot + '/b1.tsv';
+			await run.read(
+				targetPath,
+				targetSeal.artifacts.find((artifact) => artifact.path === targetPath),
+			);
+			targetLabel = 'ozone-off control';
+		} else {
+			const targetRoot = 'tmp/extraterrestrial/color-reset/runs/000065-color-reset-qualification';
+			const manifest = JSON.parse((await run.read(targetRoot + '/artifact-manifest.json')).toString('utf8'));
+			assert.equal(manifest.conclusion, 'accepted');
+			assert.equal(
+				manifest.artifactSetSha256,
+				'1f5fa1226d1520847fa900fea14870144e6c07f1cbecd11dc0ff4246d2b8bfe1',
+			);
+			for (const artifact of manifest.artifacts) await run.read(targetRoot + '/' + artifact.path, artifact);
+			targetPath = targetRoot + '/data/b1-point-local-direct40-w27-q30.tsv';
+			const targetBytes = await run.read(targetPath);
+			assert.equal(
+				run.files.hash(targetBytes),
+				'e6d62e23ec0184cc9941e8305d4ea9e69691cf996d5bce8523afb641830ce634',
+			);
+		}
 		const pinsRoot = 'tmp/experiments/point-local-cache-builder/00000-profiles';
 		const pinsSeal = JSON.parse((await run.read(pinsRoot + '/sealed.json')).toString('utf8'));
 		assert.equal(pinsSeal.state, 'accepted');
@@ -51,7 +73,10 @@ export default class BrunetonEvaluation {
 				)
 			).toString('utf8'),
 		);
-		assert.deepEqual(packet.buildRequest, pins.bruneton);
+		const expectedBuildRequest = ozoneEnabled
+			? JSON.parse(JSON.stringify(new ProfileInputs().brunetonOzone()))
+			: pins.bruneton;
+		assert.deepEqual(packet.buildRequest, expectedBuildRequest);
 		assert.deepEqual(
 			packet.scenes.map((scene) => scene.request),
 			pins.scenes,
@@ -63,14 +88,37 @@ export default class BrunetonEvaluation {
 		const spectra = packet.scenes.map(() => Array.from({length: 81}, () => Array(40).fill(0)));
 		const spec = packet.buildRequest.transportSpec;
 		const altitudeNodes = spec.domains.position.nodes.map((node) => node.altitudeMeters);
-		run.progress({phase: 'b1-decode', message: 'Authenticating and decoding each shared block once.'});
+		run.progress({phase: 'b1-decode', message: 'Preparing each authenticated shared block once.'});
 		await owner.prepare(run, packet);
 		for (let channelIndex = 0; channelIndex < packet.channelCount; channelIndex++) {
 			const channel = spec.domains.spectrum.channels[channelIndex];
 			const unique = await owner.readChannel(run, packet, channelIndex);
-			const extinction = (altitude) =>
-				channel.rayleighScatteringPerMeter * Math.exp(-altitude / spec.atmosphere.rayleighScaleHeightMeters) +
-				channel.mieExtinctionPerMeter * Math.exp(-altitude / spec.atmosphere.mieScaleHeightMeters);
+			const ozone = spec.atmosphere.ozone;
+			const coordinate =
+				(channel.centerNanometers - ozone.crossSectionTable.minimumNanometers) /
+				ozone.crossSectionTable.spacingNanometers;
+			const lower = Math.floor(coordinate),
+				upper = Math.min(ozone.crossSectionTable.values.length - 1, lower + 1),
+				fraction = coordinate - lower,
+				crossSection =
+					ozone.crossSectionTable.values[lower] * (1 - fraction) +
+					ozone.crossSectionTable.values[upper] * fraction;
+			const extinction = (altitude) => {
+				const densityScale =
+					altitude <= ozone.profileAltitudesMeters.bottom || altitude >= ozone.profileAltitudesMeters.top
+						? 0
+						: altitude <= ozone.profileAltitudesMeters.peak
+							? (altitude - ozone.profileAltitudesMeters.bottom) /
+								(ozone.profileAltitudesMeters.peak - ozone.profileAltitudesMeters.bottom)
+							: (ozone.profileAltitudesMeters.top - altitude) /
+								(ozone.profileAltitudesMeters.top - ozone.profileAltitudesMeters.peak);
+				return (
+					channel.rayleighScatteringPerMeter *
+						Math.exp(-altitude / spec.atmosphere.rayleighScaleHeightMeters) +
+					channel.mieExtinctionPerMeter * Math.exp(-altitude / spec.atmosphere.mieScaleHeightMeters) +
+					(ozone.absorptionEnabled ? ozone.maximumDensityPerCubicMeter * crossSection * densityScale : 0)
+				);
+			};
 			for (const [index, scene] of packet.scenes.entries()) {
 				const values = owner.expand(packet, index, unique, directions);
 				const ledger = {
@@ -124,9 +172,13 @@ export default class BrunetonEvaluation {
 			targetGrid = targets.values().next().value;
 		const score = benchmark.scoreModels(dataset, models).values().next().value;
 		const targetScore = benchmark.scoreModels(dataset, targets).values().next().value;
-		assert.equal(targetScore.aggregate.rmseMilliwatt, 11.554012538468113);
+		assert.equal(targetScore.aggregate.rmseMilliwatt, ozoneEnabled ? 11.554012509934566 : 11.554012538468113);
 		let count = 0,
 			sumSquares = 0,
+			sumSigned = 0,
+			differentCount = 0,
+			decreasedCount = 0,
+			increasedCount = 0,
 			maximum = 0,
 			worst = null;
 		for (const scene of packet.scenes)
@@ -139,6 +191,10 @@ export default class BrunetonEvaluation {
 						const delta = actual - expected;
 						count++;
 						sumSquares += delta * delta;
+						sumSigned += delta;
+						if (delta !== 0) differentCount++;
+						if (delta < 0) decreasedCount++;
+						if (delta > 0) increasedCount++;
 						if (Math.abs(delta) > maximum) {
 							maximum = Math.abs(delta);
 							worst = {time: scene.request.time, x, y, channel, actual, expected, delta};
@@ -163,18 +219,27 @@ export default class BrunetonEvaluation {
 			scoreDifference = score.aggregate.rmseMilliwatt - targetScore.aggregate.rmseMilliwatt;
 		const limits = pins.acceptance.bruneton;
 		const result = {
-			accepted:
-				maximum <= limits.allChannelMaximumAbsoluteWatts &&
-				rms <= limits.allChannelRmsWatts &&
-				Math.abs(scoreDifference) <= limits.scoreDifferenceMilliwatts,
+			accepted: ozoneEnabled
+				? count === 55080 && differentCount > 0 && rms > 0
+				: maximum <= limits.allChannelMaximumAbsoluteWatts &&
+					rms <= limits.allChannelRmsWatts &&
+					Math.abs(scoreDifference) <= limits.scoreDifferenceMilliwatts,
+			mode: ozoneEnabled ? 'ozone-on-versus-authenticated-ozone-off-control' : 'run-65-qualification',
+			comparisonMeaning: ozoneEnabled
+				? 'Diagnostic effect measurement; accepted execution evidence, not an independent ozone-on radiance oracle.'
+				: 'Correctness qualification against accepted run 65.',
 			comparedValues: count,
 			maximumAbsoluteWatts: maximum,
 			rmsWatts: rms,
+			meanSignedWatts: sumSigned / count,
+			differentCount,
+			decreasedCount,
+			increasedCount,
 			worst,
 			scoreDifferenceMilliwatts: scoreDifference,
 			candidateScore: score,
 			targetScore,
-			limits,
+			limits: ozoneEnabled ? null : limits,
 			imageComparisons,
 			table,
 			imageArtifacts,
@@ -189,7 +254,7 @@ export default class BrunetonEvaluation {
 		await run.write(
 			'b1-scores.svg',
 			Buffer.from(
-				`<svg xmlns="http://www.w3.org/2000/svg" width="850" height="520" viewBox="0 0 850 520"><rect width="850" height="520" fill="white"/><g font-family="sans-serif" font-size="13"><text x="30" y="25">B1 RMSE: run 65 (gray), candidate (blue); bar scale 20 px per mW m^-2 sr^-1 nm^-1</text>${rows}<text x="30" y="495">Aggregate: target ${targetScore.aggregate.rmseMilliwatt.toFixed(9)}, candidate ${score.aggregate.rmseMilliwatt.toFixed(9)}</text></g></svg>`,
+				`<svg xmlns="http://www.w3.org/2000/svg" width="850" height="520" viewBox="0 0 850 520"><rect width="850" height="520" fill="white"/><g font-family="sans-serif" font-size="13"><text x="30" y="25">B1 RMSE: ${targetLabel} (gray), candidate (blue); bar scale 20 px per mW m^-2 sr^-1 nm^-1</text>${rows}<text x="30" y="495">Aggregate: target ${targetScore.aggregate.rmseMilliwatt.toFixed(9)}, candidate ${score.aggregate.rmseMilliwatt.toFixed(9)}</text></g></svg>`,
 			),
 		);
 		return result;

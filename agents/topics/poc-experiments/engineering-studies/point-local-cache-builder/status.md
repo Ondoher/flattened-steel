@@ -1,6 +1,6 @@
 # Point-Local Cache Builder Experiment Status
 
-Status: complete; application compatibility, Bruneton qualification, and final evidence verification accepted.
+Status: complete; application, no-ozone Bruneton, and 300 DU ozone evidence accepted.
 
 ## Current State
 
@@ -34,6 +34,21 @@ proof covers 257 requests without additional unique coordinate work.
 - Qualification reused the saved cache, decoded each block once, and took
   approximately 2 minutes 38 seconds. This is an extensibility/correctness result;
   the experiment does not claim a new speedup over the current builder.
+- The ozone follow-up retained the same 17 scenes, 40 channels, 1,951 shared
+  coordinates, grass ground, F68/W27 domains, N4 cache, and Q30 final view. The
+  single GPU execution took 164.544 seconds.
+- Ozone decreased all 55,080 radiances. The ozone-on/off RMS difference is
+  0.0012799007571183687 W m^-2 sr^-1 nm^-1; mean signed difference is
+  -0.00070057941874008. The maximum decrease is 0.014062830593571884 at
+  09:30, direction (4, 7), and 571.5 nm.
+- B1 aggregate RMSE changed from 11.554012509934566 to 11.687280425413878
+  mW m^-2 sr^-1 nm^-1, a 0.13326791547931194 increase (1.153434%). Five of
+  17 conditions improved and twelve worsened. The largest improvement was
+  09:45 (-0.7124574129982939); the largest worsening was 11:00
+  (+0.4879137642945963), in the same RMSE units.
+- The strongest spectral effect is around the Chappuis band: the largest RMS
+  channel difference occurs at 571.5 nm, followed by 559.75, 595, and 583.25 nm.
+  All three selected figure renders differ from the ozone-off control.
 
 ## Evidence and Run Dispositions
 
@@ -50,12 +65,20 @@ All paths below are direct children of
 | `00005-b1-qualification` | interrupted, unsealed; excluded from sealed and accepted evidence | Process stopped after detecting repeated full-block decoding per wavelength. Preserve the partial attempt untouched. Its progress is diagnostic history only; it has no terminal manifest or acceptance claim. |
 | `00006-b1-qualification` | accepted, sealed | Reuses authenticated run 00003 cache with serialized metadata and one-time block decoding; full run 65 radiance, score, and figure comparison. |
 | `00007-verify` | accepted, sealed | Verifies 263 artifacts across six sealed parent runs, input rejection, 257-request sharing, and serialized cache expansion. |
+| `00008-b1-ozone` | failed, sealed; completed ozone cache retained | The only ozone GPU generation completed and packaged. Evaluation then encountered the known signed-zero versus serialized-zero metadata distinction. |
+| `00009-ozone-eval` | accepted, sealed | Authenticates and reuses run 00008 staging without GPU regeneration or decoded copies; compares the complete ozone result with run 00006. |
+| `00010-verify` | failed, sealed | First final verifier attempt applied the signed-zero-sensitive comparison to an in-memory control profile. |
+| `00011-verify` | accepted, sealed | Verifies 380 artifacts across eight sealed evidence runs, serialized expansion, the ozone-only profile delta, and all 55,080 ozone comparisons. |
 
 The cache is `00003-bruneton/cache.json`. Qualification artifacts are
 `00006-b1-qualification/b1-comparison.json`, `b1.tsv`, `b1-scores.svg`, and
 `b1-10h15.png`, `b1-11h15.png`, `b1-13h15.png` with adjacent `target-*.png` files.
 Run manifests retain implementation snapshots, tool identities, input hashes,
 derivation operations, and artifact identities.
+
+The ozone cache is `00008-b1-ozone/cache.json`. Ozone comparison artifacts are
+under `00009-ozone-eval/`: `b1-comparison.json`, `b1.tsv`, `b1-scores.svg`,
+three `b1-*.png` figures, and their adjacent ozone-off `target-*.png` controls.
 
 ## Review and Verification
 
@@ -66,8 +89,9 @@ unsealed run 00005 is resolved by the explicit excluded/interrupted disposition
 above, without reopening prior output. Verification follows the owner's
 consolidated review waiver; no exhaustive standards-compliance ledger is claimed.
 
-The final verifier passed sealed artifact hashes, serialized package expansion,
-invalid domain/ozone inputs, corrupt scene indexes, and duplicate-request sharing.
+The final verifier passed 380 sealed artifact hashes across eight evidence runs,
+serialized package expansion, invalid domain/ozone inputs, corrupt scene indexes,
+duplicate-request sharing, the ozone-only profile delta, and ozone result shape.
 Focused JavaScript type checking and formatting passed. Formatting after the
 run changed source layout only; no calculation rerun was necessary.
 
@@ -84,3 +108,12 @@ changing future experiment workflows needs separate authorization. The skill is
 unchanged; this experiment follows the owner's explicit unnumbered outer folder,
 direct five-digit runs starting at zero, and sixteen-character suffix limit.
 Historical experiment folders and runs remain untouched.
+
+## Ozone Follow-up
+
+The complete 17-scene, 40-channel point-local ozone workload is accepted as
+execution evidence. The pre-GPU gate authenticates every column, density-profile,
+table-coordinate, unit, and cross-section field used by both GPU construction
+and Q30 final-view extinction. Run `00006` is the authenticated ozone-off
+control. The result measures the ozone effect; no independent ozone-on radiance
+oracle exists, and the higher Kider RMSE does not establish an adoption decision.

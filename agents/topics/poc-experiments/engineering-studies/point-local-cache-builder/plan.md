@@ -76,3 +76,13 @@ contracts.
 ## Promotion Boundary
 
 Experiment results are evidence, not production architecture. Promotion requires a separate production-owned design, implementation plan, and verification boundary.
+
+## Ozone Follow-up
+
+- [x] Pin the 300 DU, 233 K retained Bruneton ozone table and density profile;
+  keep all other accepted Direct40/F68/W27/N4/Q30 inputs unchanged.
+- [x] Generate all 17 scenes in one point-local shared-cache execution with
+  ozone included in construction and final-view extinction.
+- [x] Compare all 55,080 radiances, B1 scores, and selected figures against the
+  authenticated ozone-off point-local control; record the diagnostic boundary.
+- [x] Complete focused verification, update current status, and checkpoint.
