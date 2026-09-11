@@ -89,10 +89,10 @@ Production now owns `DistantSunPointLocalCacheCompiler` and its profile,
 inventory, browser/host, staging, package, and reader collaborators under
 `scripts/algorithm32/solar-zenith-cache/`. The command
 `npm run build:algorithm32:point-local-cache -- --input INPUT.json --output
-REPOSITORY/RELATIVE/RUN --chrome ABSOLUTE_CHROME_PATH` compiles any accepted
-nonempty scene list and unique wavelength selection in one browser and WebGL2
-context. It executes one full recurrence per selected wavelength, independent
-of scene count.
+tmp/algorithm32/point-local-cache-compiler/RUN --chrome ABSOLUTE_CHROME_PATH`
+compiles any accepted nonempty scene list and unique wavelength selection in one
+browser and WebGL2 context. It executes one full recurrence per selected
+wavelength, independent of scene count.
 
 The final application end-to-end proof is
 `tmp/algorithm32/point-local-cache-compiler/app-proof-20260910-2`. It compiled

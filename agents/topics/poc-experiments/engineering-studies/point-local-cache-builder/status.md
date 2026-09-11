@@ -97,10 +97,12 @@ run changed source layout only; no calculation rerun was necessary.
 
 ## Remaining Boundaries
 
-No blocker to experiment completion. Production promotion requires a separate
-production-owned design and plan. The application proof deliberately samples
-two wavelengths and daylight/twilight scenes; it is not a new full 109-scene
-qualification. The Bruneton comparison covers the full requested 17 by 40 set.
+No blocker to experiment completion. Production promotion is complete under the
+[production point-local compiler plan](../../../production-algorithm32/caches/point-local-compiler-promotion-plan.md);
+runtime adoption remains a separate decision. The application proof deliberately
+samples two wavelengths and daylight/twilight scenes; it is not a new full
+109-scene qualification. The Bruneton comparison covers the full requested 17
+by 40 set.
 
 The shared `start-experiment` skill still specifies the wrong outer-folder
 numbering. Automatic approval review rejected its proposed repair because
