@@ -229,7 +229,9 @@ class B1Direct40AssetCacheLoader {
 				});
 				return new DistantSunSceneCache({
 					spectralChannelCount: 40,
+					positionDomain: this._profile.domains.positions,
 					directionInterpolation: 'shader-bilinear',
+					solarInterpolation: manifest.record.solarInterpolation,
 					ledger,
 					cumulativeTexture,
 					directionIndexTexture,

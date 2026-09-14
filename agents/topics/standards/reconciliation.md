@@ -4,6 +4,157 @@
 
 - Repository: `C:\dev\flattened-steel`
 - Canonical standards root: `C:\Users\gande\.codex\documentation\standards`
+- Standards governance: [Standards Governance](../../../../../Users/gande/.codex/documentation/standards/documentation.md)
+- Generated developer guide: [STANDARDS.md](../../../STANDARDS.md)
+- Audit date: 2026-09-11
+- Audit basis: commit `02fa8277c8d65e04ee3bdb187764a863ce8ad7f4`, a clean working tree before this report refresh, the current repository instruction surface, the current manifest and overlay, and the updated canonical standards. This is a standards configuration audit, not an application-code compliance review.
+- Phase: `reconciled`
+- Normalization status: `normalized`; zero pending or deferred divergences.
+
+## Summary
+
+The folder manifest and overlay parse successfully. All 14 canonical links in
+the manifest resolve beneath the canonical standards root. The current sets are
+acyclic, the root assignment exists, every assigned folder exists, and all nine
+sets are used directly or through inheritance. The repository has no obsolete
+`Applicable Files`, `Standards Review Scope`, or `Scope: topic:` controls in its
+current non-archived Markdown surface.
+
+The canonical standards have changed since the preceding full semantic audit.
+The current rules add stable review identities and expand multi-application,
+server-root, installation-registry, ownership, lifecycle, and verification
+detail. Those changes do not require a repository mapping or overlay change:
+
+- `src/flat/` and `src/flat32/` already have explicit application assignments;
+- `server/` has an explicit server assignment, and `server/flat32/data/` keeps
+  its narrower operational-asset assignment;
+- React bindings under `src/algorithm32/implementation/react-three/` and the
+  retained React comparison copies already use `react-library`;
+- every current browser proof-host subtree already uses `proof-tools`; and
+- the omitted optional standards still lack an evident current capability that
+  would select them.
+
+The three current overlay entries remain necessary and compatible. Canonical
+`types.md#General Types` does not supply the Algorithm32 scientific units,
+spectral-basis, provenance, or complete-profile requirement. Canonical
+`code-conventions.md#JavaScript And Module Shape` does not supply the local
+published-formula traceability rule, and `code-conventions.md#Validation And
+Failure Policy` does not supply the scientific-descriptor non-authority rule.
+
+| Recommended disposition | Count |
+| ----------------------- | ----: |
+| `promote-global` | 0 |
+| `add-local` | 0 |
+| `replace-local` | 0 |
+| `remove-local` | 0 |
+| `already-covered` | 0 |
+| `defer` | 0 |
+
+## Divergences
+
+None. This audit introduces no new developer decision and does not reopen the
+previously approved FM-001 through FM-014, PCB-001/002, or CR-001/002
+dispositions. Their exact decisions and completed evidence remain preserved in
+the prior reconciliation record below.
+
+## Configuration and reference findings
+
+- Missing applicable standards: none found.
+- Invalid or ambiguous standards sets or folder assignments: none; the shared
+  parser accepts all nine sets and 31 assignments.
+- Missing or malformed overlay: none; all three entries parse as section-specific
+  `ADD` rules scoped to `src/algorithm32/`.
+- Invalid overlay targets or scopes: none.
+- Nonspecific or unselected override targets: none.
+- Invalid folder-scoped overlay entries: none.
+- Conflicting applicable folder overrides: none.
+- Misplaced standards outside the overlay: none found. Root and nested
+  `AGENTS.md` files contain operational scope and evidence-preservation
+  instructions rather than competing engineering standards.
+- Local standards without canonical counterparts: the three intentional
+  Algorithm32 additions remain correctly owned by the overlay.
+- Broken references: no broken canonical manifest link found.
+- Ambiguous precedence: none.
+- Competing local sources: none. The ignored
+  `tmp/flat32-pinned-ea262115/AGENTS.md` is a retained historical snapshot
+  instruction file, is already discovered by the attestation helper, and does
+  not govern files outside that snapshot.
+- Attestation: recreated and validated with 10 audited inputs at
+  `sha256:94a9f53f9caf21166833ea7304b148522eaa6e7a59bec2791e330140d0e1bceb`.
+  The changed `AGENTS.md` wording is operational and does not alter standards
+  selection.
+- Generated guide: regenerated from the validated attestation and current at
+  source fingerprint
+  `sha256:b2428ef559a8e3f39b584637f3721280c0fe9482d0bdf7284689825d82bbaeab`.
+
+## Preserved developer decisions
+
+| Decision | Recorded disposition |
+| --- | --- |
+| FM-001 | `remove-local` |
+| FM-002 | `add-local` |
+| FM-003 | `add-local` |
+| FM-004 | `add-local` |
+| FM-005 | `add-local` |
+| FM-006 | `remove-local` |
+| FM-007 | `already-covered` |
+| FM-008 | `remove-local` |
+| FM-009 | `promote-global` |
+| FM-010 | `already-covered` |
+| FM-011 | `remove-local` |
+| FM-012 | `already-covered` |
+| FM-013 | `add-local` |
+| FM-014 | `add-local` |
+
+No new evidence materially changes these decisions, so none requires re-review.
+
+## Review gate
+
+- [x] The developer has manually reviewed this current audit.
+- [x] No developer decision remains `pending`.
+- [x] No decision-specific clarification is required.
+- [x] No source, folder, or precedence ambiguity remains.
+- [x] The developer explicitly requested reconciliation with
+  `$normalize-standards reconcile`.
+
+## Generated developer guide
+
+Reconcile mode refreshed and validated `normalization.json`, then ran
+`write-standards-guide` in write and check modes.
+
+- Guide status: `current`
+- Guide source fingerprint: `sha256:b2428ef559a8e3f39b584637f3721280c0fe9482d0bdf7284689825d82bbaeab`
+- Guide validation evidence: write mode reported `updated`; check mode reported
+  `current` against normalization fingerprint
+  `sha256:94a9f53f9caf21166833ea7304b148522eaa6e7a59bec2791e330140d0e1bceb`.
+
+## Final validation
+
+- [x] The current attestation has been recreated and validated.
+- [x] The manifest and overlay parse successfully.
+- [x] Every canonical manifest link resolves beneath the canonical standards root.
+- [x] No pending, ambiguous, or deferred divergence exists.
+- [x] The generated guide has been refreshed and reports `current`.
+
+Normalization status: `normalized`; all current decisions are applied, and no
+item is pending, ambiguous, or deferred.
+
+## Prior completed reconciliation record
+
+The following record preserves all earlier developer decisions, detailed
+comparisons, and validation evidence. Its former current-status and fingerprint
+claims are historical after the 2026-09-11 instruction and canonical-standards
+updates.
+
+<details>
+<summary>Prior completed reconciliation record</summary>
+
+# Standards Reconciliation
+
+## Status
+
+- Repository: `C:\dev\flattened-steel`
+- Canonical standards root: `C:\Users\gande\.codex\documentation\standards`
 - Standards governance: [documentation.md — Folder Standards Manifest](../../../../../Users/gande/.codex/documentation/standards/documentation.md#folder-standards-manifest)
 - Generated developer guide: [STANDARDS.md](../../../STANDARDS.md) is current and generated from the normalized folder configuration.
 - Audit date: 2026-09-09.
@@ -1456,5 +1607,7 @@ normalization status or reviewer eligibility.
 - [x] After attestation validation, `STANDARDS.md` was generated or refreshed and its check mode reports `current`.
 
 Normalization status: `normalized`
+
+</details>
 
 </details>

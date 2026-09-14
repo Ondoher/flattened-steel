@@ -1,3 +1,9 @@
+/** Progress from independent binary64 recurrence evaluation. */
+type StrobingReferenceProgress = Readonly<{
+	/** Number of memoized radiance evaluations. */ evaluations: number;
+	/** Pure radiance order currently being evaluated. */ order: number;
+}>;
+
 /** Exact scene and support supplied to the offline distant-Sun cache compiler. */
 type DistantSunSceneCacheCompilerScene = Readonly<{
 	/** Exact scene Sun state. */
@@ -14,31 +20,220 @@ type DistantSunSceneCacheCompilerBuildRequest = Readonly<{
 	transportSpec: DistantSunSceneCacheTransportSpec;
 }>;
 
-/** Physical and numerical data consumed by the unchanged offline recurrence. */
-type DistantSunSceneCacheTransportSpec = {
+/** Coordinate convention used to generate the offline recurrence.
+ * - **"scene-cache-receiver-local-v1"** - Receiver-local directions with tabulated local solar zenith.
+ * - **"production-source-aligned-v1"** - Production source-aligned directions for one supplied unit source vector.
+ */
+type DistantSunSceneCacheCoordinateContract = 'scene-cache-receiver-local-v1' | 'production-source-aligned-v1';
+
+/** Readonly shader inputs borrowed during one common-source generation call; optional fields retain compiler defaults. */
+type DistantSunSceneCacheCommonShaderRequest = Readonly<{
+	/** Spectral sample center in nanometers. */ wavelengthNanometers: number;
+	/** Unattenuated source irradiance density in watts per square meter per nanometer. */ sourceIrradiance: number;
+	/** Ozone molecular absorption cross section in square meters. */ ozoneCrossSection: number;
+	/** Peak ozone molecules per cubic meter; default 5.374e18. */ ozoneMaximumDensity?: number;
+	/** Sea-level Rayleigh scattering per meter; null or omission derives it from wavelength and coefficient scale. */ rayleighScattering?:
+		number | null;
+	/** Sea-level Mie extinction per meter; null or omission derives it from the Angstrom parameters. */ mieExtinction?:
+		number | null;
+	/** Dimensionless Lambertian ground reflectance; default zero. */ groundAlbedo?: number;
+	/** Spherical ground radius in meters; default 6360000. */ bottomRadiusMeters?: number;
+	/** Spherical atmosphere-top radius in meters; default 6420000. */ topRadiusMeters?: number;
+	/** Rayleigh exponential density scale height in meters; default 8000. */ rayleighScaleHeightMeters?: number;
+	/** Mie exponential density scale height in meters; default 1200. */ mieScaleHeightMeters?: number;
+	/** Rayleigh wavelength coefficient per meter with wavelength expressed in micrometers; default 0.00000124062. */ rayleighCoefficientScalePerMeter?: number;
+	/** Dimensionless Mie wavelength exponent; default 0.8. */ mieAngstromAlpha?: number;
+	/** Dimensionless Mie optical-depth scale; default 0.04. */ mieAngstromBeta?: number;
+	/** Dimensionless Mie scattering-to-extinction ratio; default 0.8. */ mieSingleScatteringAlbedo?: number;
+	/** Dimensionless Mie phase asymmetry; default 0.7. */ miePhaseFunctionG?: number;
+	/** Source-path optical-depth interval count; default 20. */ sourcePathTransmittanceIntervalCount?: number;
+	/** Incoming angular quadrature direction count; default 68. */ incomingDirectionCount?: number;
+	/** Radiance-transport intervals per integration segment; default 15. */ transportIntervalCount?: number;
+	/** Outgoing cubed-sphere nodes along each face edge; default 39. */ outgoingFaceWidth?: number;
+	/** Readonly ground-relative heights in meters; null or omission uses 48 nodes with zero at index zero and ((index + 0.5) / 48) * 60000 elsewhere. */ positionAltitudesMeters?:
+		readonly number[] | null;
+	/** Readonly local solar-zenith angles in degrees; null or omission uses 180 nodes at index + 0.5. */ solarZenithDegrees?:
+		readonly number[] | null;
+	/** Serialized coordinate identity validated against DistantSunSceneCacheCoordinateContract; default scene-cache-receiver-local-v1. */ coordinateContract?: string;
+	/** Readonly three-component unit source direction, required by the source-aligned convention; otherwise ignored. */ sourceDirection?:
+		readonly number[] | null;
+	/** Readonly explicit geometry policy; omission retains historical geometry equations. */ numericalPolicy?: DistantSunSceneCacheNumericalPolicy;
+}>;
+
+/** Readonly texture allocation inputs; upload data is borrowed and never mutated by the compiler. */
+type DistantSunSceneCacheTextureRequest = Readonly<{
+	/** Texture width in texels. */ width: number;
+	/** Texture height in texels. */ height: number;
+	/** WebGL sized internal format; default R32F. */ internalFormat?: number;
+	/** WebGL upload component format; default RED. */ format?: number;
+	/** WebGL upload scalar type; default FLOAT. */ type?: number;
+	/** Borrowed upload view; null or omission allocates storage without supplied pixels. */ data?: ArrayBufferView<ArrayBuffer> | null;
+}>;
+
+/** Live recurrence field owned and released by one wavelength invocation. */
+type DistantSunSceneCacheGpuField = Readonly<{
+	/** Invocation-local field identity. */ id: string;
+	/** Live texture handle, invalid after release. */ texture: WebGLTexture;
+	/** Direction-column count. */ width: number;
+	/** Altitude/solar-zenith row count. */ height: number;
+	/** Logical allocation size in bytes. */ bytes: number;
+}>;
+
+/** Readonly ordered three-component unit vectors borrowed from an accepted incoming or outgoing direction domain. */
+type DistantSunSceneCacheDirectionVectors = readonly (readonly number[])[];
+
+/** Readonly sampler binding tuple consumed by a recurrence pass. */
+type DistantSunSceneCacheTextureBinding = readonly [
+	/** Zero-based texture unit. */ unit: number,
+	/** Borrowed live compiler texture. */ texture: WebGLTexture,
+	/** GLSL sampler uniform name. */ name: string,
+	/** Diagnostic input field identity. */ fieldId: string,
+];
+
+/** Independently supplied uniform configuration capability for the currently bound program. */
+interface DistantSunSceneCacheUniformApplier {
+	/**
+	 * Called by drawField to configure pass-specific uniforms before drawing.
+	 * @param program - Borrowed linked program for this pass.
+	 * @returns Completion after the uniform updates.
+	 */
+	(program: WebGLProgram): void;
+}
+
+/** Readonly recurrence pass inputs; textures and callbacks remain owned by the invocation. */
+type DistantSunSceneCacheDrawFieldRequest = Readonly<{
+	/** Pass identity for progress, timing, and ledger events. */ id: string;
+	/** Linked recurrence program. */ program: WebGLProgram;
+	/** Live destination field. */ output: DistantSunSceneCacheGpuField;
+	/** Draw width in texels. */ width: number;
+	/** Readonly sampler bindings; omission supplies no inputs. */ inputs?: readonly DistantSunSceneCacheTextureBinding[];
+	/** Readonly uniform callbacks; omission applies no additional uniforms. */ uniforms?: readonly DistantSunSceneCacheUniformApplier[];
+}>;
+
+/** Mutable packed-row accumulator state private to a wavelength invocation. */
+type DistantSunSceneCacheGpuAccumulator = {
+	/** Borrowed readonly extraction request. */ readonly request: DistantSunSceneCacheCompilerExtraction;
+	/** Compiler-owned mapping from packed rows to recurrence rows. */ readonly sourceRows: Int32Array<ArrayBuffer>;
+	/** Compiler-owned integer row-map texture, deleted during cleanup. */ readonly rowMapTexture: WebGLTexture;
+	/** Compiler-owned ping-pong textures, both deleted during cleanup. */ readonly textures: readonly WebGLTexture[];
+	/** Mutable index of the latest complete accumulated field. */ activeIndex: number;
+};
+
+/** Mutable readback span assembled for one requested diagnostic row. */
+type DistantSunSceneCacheProbeSpan = {
+	/** First requested direction column, expanded during grouping. */ first: number;
+	/** Last requested direction column, expanded during grouping. */ last: number;
+	/** Compiler-owned contiguous readback values, present after row readback. */ values?: Float32Array<ArrayBuffer>;
+};
+
+/** Executable stable-root method.
+ * - **"stable-factored"** - Factored radial offset and reciprocal near root.
+ */
+type DistantSunSceneCacheRootMethod = 'stable-factored';
+
+/** Versioned candidate geometry policy; omission explicitly retains the legacy compiler control. */
+type DistantSunSceneCacheNumericalPolicy = Readonly<{
+	/** Diagnostic policy identity; algorithms use the explicit method and parameters. */ id: string;
+	/** Supported serialized policy revision. */ revision: 1 | 2;
+	/** Executable intersection method. */ rootMethod: DistantSunSceneCacheRootMethod;
+	/** Revision-two precise logical-origin representation. */ positionMethod?: DistantSunSceneCachePositionMethod;
+	/** One-sided surface evaluation height with metre units. */ surfaceLimit: Readonly<{
+		value: number;
+		units: 'meters';
+	}>;
+	/** Ground classification tolerance with metre units. */ surfaceTolerance: Readonly<{
+		value: number;
+		units: 'meters';
+	}>;
+	/** Positive intersection threshold with metre units. */ positiveRootTolerance: Readonly<{
+		value: number;
+		units: 'meters';
+	}>;
+}>;
+
+/** Logical-origin representation for revision-two numerical policies.
+ * - **"anchored-radial"** - Subtraction-free radial height anchored at the exact logical construction point.
+ */
+type DistantSunSceneCachePositionMethod = 'anchored-radial';
+
+/** Explicit candidate selections for production compiler projections. */
+type DistantSunSceneCacheCompilerOptions = Readonly<{
+	/** Explicit altitude construction owner; omission retains Native48. */ positionDomain?: SphericalNativePositionDomainSelection;
+	/** Stable-root surface candidate; omission retains historical equations. */ numericalPolicy?: DistantSunSceneCacheNumericalPolicy;
+	/** Required solar lookup support; omission retains the linear control. */ solarInterpolation?: DistantSunSolarInterpolationMethod;
+}>;
+
+/** Complete profile with the canonical model facts consumed by the point-local compiler.
+ * Native15 and Direct40 retain their own spectra, placement, altitude owner, and numerical controls.
+ */
+type DistantSunPointLocalExecutionProfile = Algorithm32ExecutionProfile &
+	Readonly<{
+		/** Canonical physical models, with explicit model-owned atmospheric constants. */
+		models: Algorithm32ExecutionModels &
+			Readonly<{
+				/** Distant uniform source with an executable source-kind discriminator. */
+				lightSource: LightSourceModel & Readonly<{/** Executable source category. */ kind: string}>;
+				/** Canonical atmosphere and its complete density/phase configuration. */
+				atmosphere: AtmosphereModel &
+					Readonly<{/** Physical atmosphere configuration. */ constants: CanonicalAtmosphereConstants}>;
+			}>;
+		/** Executable domains with the cubed-sphere reconstruction facts required by the compiler. */
+		domains: Algorithm32ExecutionDomains &
+			Readonly<{
+				/** Cubed-sphere outgoing reconstruction domain. */
+				outgoingDirections: ReconstructionDirectionDomain &
+					Readonly<{
+						/** Number of direction nodes along one cube-face edge. */ faceWidth: number;
+						/** Canonical positive face-centre probe indexes. */ positiveFaceCenterIndices: CubedSpherePositiveFaceCenterIndices;
+					}>;
+			}>;
+	}>;
+
+/** Accepted projection of one complete profile into the point-local recurrence. */
+type DistantSunPointLocalProfileInputSet = Readonly<{
+	/** Owner of the profile projection and compiler invocation. */ compilerIdentity: string;
+	/** Identity covering every executable construction input. */ numericalIdentity: string;
+	/** Provenance identity of the selected physical construction profile. */ constructionProfileIdentity: Readonly<{
+		/** Construction-profile name. */ id: string;
+		/** Hash of the retained construction-profile facts. */ contentHash: string;
+	}>;
+	/** Complete serialized receiver-local recurrence input. */ buildRequest: DistantSunSceneCacheCompilerBuildRequest;
+}>;
+
+/** Compiler numerics shared by Native15 and direct-40 projections. */
+type DistantSunSceneCacheCompilerNumerics = Readonly<{
+	/** Source optical-depth quadrature interval count. */ sourcePathTransmittanceIntervalCount: number;
+	/** Scattered-light transport quadrature interval count. */ transportIntervalCount: number;
+	/** Cumulative order ceiling. */ maximumScatteringOrder: number;
+	/** Explicit candidate geometry; absent for the historical control. */ geometryPolicy?: DistantSunSceneCacheNumericalPolicy;
+	/** Runtime reconstruction contract; omission retains the linear control. */ solarInterpolation?: DistantSunSolarInterpolationMethod;
+}>;
+
+/** Physical and numerical data consumed by the offline recurrence. */
+type DistantSunSceneCacheTransportSpec = Readonly<{
 	/** Stable serialized specification identity. */ id: string;
 	/** Physical source data. */ source: DistantSunSceneCacheCompilerSource;
 	/** Planet radii and identity. */ planet: DistantSunSceneCacheCompilerPlanet;
 	/** Atmospheric coefficients and ozone data. */ atmosphere: DistantSunSceneCacheCompilerAtmosphere;
 	/** Ground identity. */ ground: Readonly<Record<string, string>>;
-	/** Frozen interval counts and order. */ numerical: Readonly<Record<string, number>>;
+	/** Complete interval counts, order and optional candidate policy. */ numerical: DistantSunSceneCacheCompilerNumerics;
 	/** Frozen sample domains. */ domains: DistantSunSceneCacheCompilerDomains;
 	/** Optional accepted coordinate convention. */ shaderProfile?: DistantSunSceneCacheCompilerShaderProfile;
-};
+}>;
 /** Serialized source irradiance and optional source-aligned direction. */
-type DistantSunSceneCacheCompilerSource = {
+type DistantSunSceneCacheCompilerSource = Readonly<{
 	/** Source identity. */ id: string;
 	/** Native15 irradiance density values. */ spectralIrradianceDensity: readonly number[];
 	/** Optional source-aligned direction. */ directionToLight?: readonly number[];
-};
+}>;
 /** Spherical planet geometry in meters. */
-type DistantSunSceneCacheCompilerPlanet = {
+type DistantSunSceneCacheCompilerPlanet = Readonly<{
 	/** Geometry identity. */ id: string;
 	/** Ground radius in meters. */ bottomRadiusMeters: number;
 	/** Atmosphere radius in meters. */ topRadiusMeters: number;
-};
+}>;
 /** Frozen atmospheric numerical coefficients. */
-type DistantSunSceneCacheCompilerAtmosphere = {
+type DistantSunSceneCacheCompilerAtmosphere = Readonly<{
 	/** Atmosphere identity. */ id: string;
 	/** Rayleigh density scale in meters. */ rayleighScaleHeightMeters: number;
 	/** Mie density scale in meters. */ mieScaleHeightMeters: number;
@@ -48,9 +243,9 @@ type DistantSunSceneCacheCompilerAtmosphere = {
 	/** Mie single-scattering ratio. */ mieSingleScatteringAlbedo: number;
 	/** Mie asymmetry parameter. */ miePhaseFunctionG: number;
 	/** Ozone absorption specification. */ ozone: DistantSunSceneCacheCompilerOzone;
-};
+}>;
 /** Ozone profile and absorption table. */
-type DistantSunSceneCacheCompilerOzone = {
+type DistantSunSceneCacheCompilerOzone = Readonly<{
 	/** Stable ozone identity. */ id: string;
 	/** Absorption selection. */ absorptionEnabled: boolean;
 	/** Table temperature in kelvin. */ temperatureKelvin: number;
@@ -60,36 +255,36 @@ type DistantSunSceneCacheCompilerOzone = {
 	/** Profile knot altitudes in meters. */ profileAltitudesMeters: Readonly<Record<string, number>>;
 	/** Cross-section samples. */ crossSectionTable: DistantSunSceneCacheCompilerCrossSections;
 	/** Optional peak molecular density per cubic meter. */ maximumDensityPerCubicMeter?: number;
-};
+}>;
 /** Uniform wavelength-grid molecular cross sections. */
-type DistantSunSceneCacheCompilerCrossSections = {
+type DistantSunSceneCacheCompilerCrossSections = Readonly<{
 	/** First wavelength in nanometers. */ minimumNanometers: number;
 	/** Last wavelength in nanometers. */ maximumNanometers: number;
 	/** Sample spacing in nanometers. */ spacingNanometers: number;
 	/** Cross-section unit identifier. */ units: string;
 	/** Cross sections in square meters. */ values: readonly number[];
-};
+}>;
 /** Optional shader coordinate selection preserved from the accepted compiler. */
-type DistantSunSceneCacheCompilerShaderProfile = {
-	/** Coordinate convention identity. */ coordinateContract?: string;
-};
+type DistantSunSceneCacheCompilerShaderProfile = Readonly<{
+	/** Serialized coordinate identity validated at common-shader ingress against DistantSunSceneCacheCoordinateContract. */ coordinateContract?: string;
+}>;
 /** One frozen coordinate axis with scalar-valued sample records. */
-type DistantSunSceneCacheCompilerAxis = {
+type DistantSunSceneCacheCompilerAxis = Readonly<{
 	/** Domain identity. */ id: string;
 	/** Sample count. */ count: number;
 	/** Exact coordinates and ordinals. */ nodes: readonly Readonly<Record<string, number>>[];
-};
+}>;
 /** Serialized angular domain and optional cubed-sphere or quadrature data. */
-type DistantSunSceneCacheCompilerDirections = {
+type DistantSunSceneCacheCompilerDirections = Readonly<{
 	/** Direction-domain identity. */ id: string;
 	/** Direction count. */ directionCount: number;
-	/** Unit vectors in established order. */ unitVectors: readonly (readonly number[])[];
+	/** Unit vectors in established order. */ unitVectors: DistantSunSceneCacheDirectionVectors;
 	/** Optional cubed-sphere face width. */ faceWidth?: number;
 	/** Optional cubed-sphere face-center indices. */ positiveFaceCenterIndices?: Readonly<Record<string, number>>;
 	/** Optional quadrature weights in steradians. */ integrationWeightsSteradians?: readonly number[];
-};
+}>;
 /** Native spectral sample with optional physical coefficient overrides. */
-type DistantSunSceneCacheCompilerChannel = {
+type DistantSunSceneCacheCompilerChannel = Readonly<{
 	/** Stable sample identity. */ id: string;
 	/** Center wavelength in nanometers. */ centerNanometers: number;
 	/** Sample width in nanometers. */ binWidthNanometers: number;
@@ -97,80 +292,191 @@ type DistantSunSceneCacheCompilerChannel = {
 	/** Optional Rayleigh scattering per meter. */ rayleighScatteringPerMeter?: number;
 	/** Optional Mie extinction per meter. */ mieExtinctionPerMeter?: number;
 	/** Optional ground albedo. */ groundAlbedo?: number;
-};
+}>;
 /** Frozen spectral basis in compiler serialization. */
-type DistantSunSceneCacheCompilerSpectrum = {
+type DistantSunSceneCacheCompilerSpectrum = Readonly<{
 	/** Spectral-basis identity. */ id: string;
 	/** Ordered Native15 samples. */ channels: readonly DistantSunSceneCacheCompilerChannel[];
-};
+}>;
 /** Exact axes, directions, and wavelengths consumed by the compiler. */
-type DistantSunSceneCacheCompilerDomains = {
+type DistantSunSceneCacheCompilerDomains = Readonly<{
 	/** Altitude domain. */ position: DistantSunSceneCacheCompilerAxis;
 	/** Solar-zenith domain. */ solarZenith: DistantSunSceneCacheCompilerAxis;
 	/** Incoming quadrature domain. */ incoming: DistantSunSceneCacheCompilerDirections;
 	/** Outgoing cubed-sphere domain. */ outgoing: DistantSunSceneCacheCompilerDirections;
 	/** Native15 spectral domain. */ spectrum: DistantSunSceneCacheCompilerSpectrum;
-};
+}>;
 /** Complete scene extraction request for one recurrence. */
-type DistantSunSceneCacheCompilerExtraction = {
+type DistantSunSceneCacheCompilerExtraction = Readonly<{
 	/** Stable cache identity. */ cacheIdentity: string;
-	/** Exact populated-row extraction ledger. */ ledger: DistantSunSceneCacheLedgerRecord;
-};
+	/** Exact populated-row extraction ledger borrowed without mutation. */ ledger: DistantSunSceneCacheLedgerRecord;
+}>;
 /** Caller-owned spectral layer delivered after GPU readback. */
-type DistantSunSceneCacheCompilerLayer = {
+type DistantSunSceneCacheCompilerLayer = Readonly<{
 	/** Extraction ordinal. */ cacheIndex: number;
-	/** Native15 wavelength ordinal. */ wavelengthIndex: number;
-	/** Exact logical W27 values owned by the callback. */ values: Float32Array<ArrayBuffer>;
-};
+	/** Wavelength ordinal within the supplied spectral domain. */ wavelengthIndex: number;
+	/** Exact logical outgoing-direction values transferred to the callback; the compiler does not reuse this buffer. */ values: Float32Array<ArrayBuffer>;
+}>;
 /** Bounded contiguous readback tile; each callback settles before the next tile. */
-type DistantSunSceneCacheCompilerReadbackTile = DistantSunSceneCacheCompilerLayer & {
-	/** First populated extraction row. */ firstPackedRow: number;
-	/** Number of complete rows, from one through 64. */ rowCount: number;
-};
+type DistantSunSceneCacheCompilerReadbackTile = DistantSunSceneCacheCompilerLayer &
+	Readonly<{
+		/** First populated extraction row. */ firstPackedRow: number;
+		/** Number of complete rows, from one through 64. */ rowCount: number;
+	}>;
 /** Optional order-specific extraction used by retained proof callers. */
-type DistantSunSceneCacheCompilerOrderLayer = DistantSunSceneCacheCompilerLayer & {
-	/** Completed scattering order. */ order: number;
-};
+type DistantSunSceneCacheCompilerOrderLayer = DistantSunSceneCacheCompilerLayer &
+	Readonly<{
+		/** Completed scattering order. */ order: number;
+	}>;
 /** Exact diagnostic sample coordinate. */
-type DistantSunSceneCacheCompilerProbeCoordinate = {
-	/** Human-readable probe identity. */ label: string;
+type DistantSunSceneCacheCompilerProbeCoordinate = Readonly<{
+	/** Optional human-readable probe identity retained in the readback. */ label?: string;
 	/** Direction column. */ x: number;
 	/** Packed source row. */ y: number;
-};
+	/** Caller-owned metadata preserved by the coordinate copy. */ [property: string]: unknown;
+}>;
 /** One diagnostic field readback. */
-type DistantSunSceneCacheCompilerFieldProbes = {
+type DistantSunSceneCacheCompilerFieldProbes = Readonly<{
 	/** Field identity. */ fieldId: string;
 	/** Wavelength ordinal. */ wavelengthIndex: number;
-	/** Probe values in requested order. */ values: DistantSunSceneCacheCompilerProbeValue[];
-};
+	/** Readonly probe values in requested order; empty for fields with no requested coordinates. */ values: readonly DistantSunSceneCacheCompilerProbeValue[];
+}>;
 /** Diagnostic coordinate with its exact GPU value. */
-type DistantSunSceneCacheCompilerProbeValue = DistantSunSceneCacheCompilerProbeCoordinate & {
-	/** Readback scalar. */ value: number;
-};
+type DistantSunSceneCacheCompilerProbeValue = DistantSunSceneCacheCompilerProbeCoordinate &
+	Readonly<{
+		/** Readback scalar. */ value: number;
+	}>;
+
+/** Independently supplied observer capability; each delivery settles before the compiler continues. */
+interface DistantSunSceneCacheCompilerObserver<Value> {
+	/**
+	 * Called by compileDistantSunSceneCacheWavelength to deliver progress or newly allocated readback data.
+	 * A thrown error or rejection aborts this invocation; callers discard incomplete extraction.
+	 * @param value - Delivered value with ownership specified by its canonical contract.
+	 * @returns Immediate completion or an awaited delivery promise.
+	 */
+	(value: Value): void | Promise<void>;
+}
 /** One complete wavelength execution with optional bounded extraction callbacks. */
-type DistantSunSceneCacheWavelengthRequest = {
+type DistantSunSceneCacheWavelengthRequest = Readonly<{
 	/** Caller-owned WebGL2 context. */ gl: WebGL2RenderingContext;
 	/** Exact compiler inputs. */ buildRequest: DistantSunSceneCacheCompilerBuildRequest;
-	/** Native15 ordinal, default seven. */ wavelengthIndex?: number;
-	/** Awaited progress observer; rejection cancels execution. */ reportProgress?: (stage: string) => Promise<void>;
-	/** Whether to accumulate scene extraction fields. */ compileSceneCaches?: boolean;
-	/** Ordered extraction definitions. */ sceneCacheRequests?: DistantSunSceneCacheCompilerExtraction[];
-	/** Legacy complete-layer receiver. */ onSceneCacheLayer?: (
-		layer: DistantSunSceneCacheCompilerLayer,
-	) => Promise<void>;
-	/** Optional bounded receiver replacing complete-layer delivery. */ onSceneCacheTile?:
-		((tile: DistantSunSceneCacheCompilerReadbackTile) => Promise<void>) | null;
-	/** Requested tile bound, one through 64 rows. */ sceneCacheReadbackRowCount?: number;
-	/** Optional order-specific diagnostic receiver. */ onSceneCacheOrderLayer?:
-		((layer: DistantSunSceneCacheCompilerOrderLayer) => Promise<void>) | null;
-	/** Optional field-specific probe coordinates. */ fieldProbeCoordinates?: Readonly<
-		Record<string, DistantSunSceneCacheCompilerProbeCoordinate[]>
+	/** Ordinal within the supplied spectral domain, default seven. */ wavelengthIndex?: number;
+	/** Awaited progress observer; omission performs no observation, and rejection aborts execution. */ reportProgress?: DistantSunSceneCacheCompilerObserver<string>;
+	/** Whether to accumulate scene extraction fields; default false. */ compileSceneCaches?: boolean;
+	/** Readonly extraction definitions in callback index order; default empty. */ sceneCacheRequests?: readonly DistantSunSceneCacheCompilerExtraction[];
+	/** Complete-layer receiver when tile delivery is absent; omission discards completed layers. */ onSceneCacheLayer?: DistantSunSceneCacheCompilerObserver<DistantSunSceneCacheCompilerLayer>;
+	/** Bounded receiver replacing complete-layer delivery; null or omission disables tiles. */ onSceneCacheTile?: DistantSunSceneCacheCompilerObserver<DistantSunSceneCacheCompilerReadbackTile> | null;
+	/** Requested tile bound, one through 64 rows; default 64, checked only when a tile receiver exists. */ sceneCacheReadbackRowCount?: number;
+	/** Cumulative order-layer receiver; null or omission disables this diagnostic readback. */ onSceneCacheOrderLayer?: DistantSunSceneCacheCompilerObserver<DistantSunSceneCacheCompilerOrderLayer> | null;
+	/** Readonly field-specific probe coordinates, borrowed for this invocation; omission requests none. */ fieldProbeCoordinates?: Readonly<
+		Record<string, readonly DistantSunSceneCacheCompilerProbeCoordinate[]>
 	>;
-	/** Optional diagnostic probe receiver. */ onFieldProbes?:
-		((probes: DistantSunSceneCacheCompilerFieldProbes) => Promise<void>) | null;
-};
-/** JSON-safe compiler execution diagnostics; individual retained proof consumers validate their required fields. */
-type DistantSunSceneCacheWavelengthResult = Readonly<Record<string, unknown>>;
+	/** Awaited J1, L1, J2, L2, J3, L3, J4 probe deliveries; null or omission disables them. */ onFieldProbes?: DistantSunSceneCacheCompilerObserver<DistantSunSceneCacheCompilerFieldProbes> | null;
+}>;
+
+/** Version of the complete offline wavelength diagnostics.
+ * - **"algorithm32-distant-sun-offline-wavelength-result-v1"** - Recurrence fields, extraction probes, timings, and logical allocation ledger.
+ */
+type DistantSunSceneCacheWavelengthResultSchema = 'algorithm32-distant-sun-offline-wavelength-result-v1';
+
+/** Physical sample identity used during one completed recurrence. */
+type DistantSunSceneCacheWavelengthIdentity = Readonly<{
+	/** Ordinal in the supplied spectral domain. */ index: number;
+	/** Spectral sample center in nanometers. */ centerNanometers: number;
+	/** Unattenuated source irradiance density in watts per square meter per nanometer. */ sourceIrradianceDensityWattsPerSquareMeterPerNanometer: number;
+	/** Interpolated molecular ozone absorption cross section in square meters. */ ozoneCrossSectionSquareMeters: number;
+}>;
+
+/** Logical recurrence texture dimensions. */
+type DistantSunSceneCacheFieldLayout = Readonly<{
+	/** Outgoing direction columns in scattering-density fields. */ widthJ: number;
+	/** Incoming direction columns in radiance fields. */ widthL: number;
+	/** Altitude count times solar-zenith count. */ height: number;
+	/** Bytes per float32 component. */ scalarBytes: number;
+}>;
+
+/** Readonly WebGL implementation limits reported by the supplied context. */
+type DistantSunSceneCacheGpuCapabilities = Readonly<{
+	/** Maximum texture edge length in texels. */ maximumTextureSize: number;
+	/** Maximum viewport width and height in pixels, in that order. */ maximumViewport: readonly number[];
+}>;
+
+/** Pure scattering-density field samples captured before its release. */
+type DistantSunSceneCacheProjectionExposure = Readonly<{
+	/** Scattering-order label supplied by the recurrence schedule. */ order: string;
+	/** Sampled pure field identity. */ fieldId: string;
+	/** Readonly diagnostic values in configured probe order. */ values: readonly DistantSunSceneCacheCompilerProbeValue[];
+}>;
+
+/** One packed-row diagnostic comparison of the cumulative float32 sum. */
+type DistantSunSceneCacheAccumulationProbe = Readonly<{
+	/** Extraction request ordinal. */ cacheIndex: number;
+	/** Caller-supplied extraction identity. */ cacheIdentity: string;
+	/** Scattering order just accumulated. */ order: number;
+	/** Outgoing direction column. */ directionIndex: number;
+	/** Diagnostic packed extraction row. */ packedRow: number;
+	/** Corresponding full recurrence row. */ sourceRow: number;
+	/** Cumulative value before the addition, zero for first order. */ previous: number;
+	/** Pure scattering-density value added at this order. */ pure: number;
+	/** Read-back cumulative scattering-density value. */ cumulative: number;
+	/** Absolute difference from the binary64 sum of the two read-back addends. */ absoluteResidual: number;
+}>;
+
+/** Completed extraction measurements for one cache at one wavelength. */
+type DistantSunSceneCacheCompiledCache = Readonly<{
+	/** Extraction request ordinal. */ cacheIndex: number;
+	/** Caller-supplied extraction identity. */ cacheIdentity: string;
+	/** Complete packed extraction row count. */ packedRowCount: number;
+	/** Outgoing direction count times packed row count. */ scalarCount: number;
+	/** Complete logical float32 extraction size in bytes. */ logicalBytes: number;
+	/** Whether every extracted scalar is finite. */ finite: boolean;
+	/** Whether every extracted scalar is nonnegative. */ nonnegative: boolean;
+	/** Maximum extracted scalar, with zero as the initial bound. */ maximum: number;
+	/** Accumulated readPixels wall time in milliseconds. */ readbackMilliseconds: number;
+	/** Accumulated awaited callback wall time in milliseconds. */ deliveryMilliseconds: number;
+}>;
+
+/** Operation recorded in the logical recurrence-field lifetime ledger.
+ * - **"allocate"** - New field allocation and updated live bytes.
+ * - **"release"** - Deleted field and updated live bytes, including the post-delete texture check.
+ * - **"pass"** - Completed draw pass and its input/output field identities.
+ */
+type DistantSunSceneCacheLedgerOperation = 'allocate' | 'release' | 'pass';
+
+/** Readonly allocation, release, or pass event; optional facts are present only for their documented operations. */
+type DistantSunSceneCacheGpuLedgerEntry = Readonly<{
+	/** Recorded lifetime or draw operation. */ operation: DistantSunSceneCacheLedgerOperation;
+	/** Field identity for allocation/release, or pass identity for a draw. */ id: string;
+	/** Field allocation bytes; present for allocation and release. */ bytes?: number;
+	/** Live field bytes after the event; present for allocation and release. */ liveBytes?: number;
+	/** WebGL texture status after deletion; present for release. */ isTextureAfterDelete?: boolean;
+	/** Destination field identity; present for a pass. */ outputField?: string;
+	/** Readonly ordered input field identities; present for a pass. */ inputFields?: readonly string[];
+}>;
+
+/** Completed recurrence pass timing, including draws and awaited progress delivery. */
+type DistantSunSceneCacheGpuPassTiming = Readonly<{
+	/** Pass identity. */ id: string;
+	/** Pass wall time in milliseconds. */ milliseconds: number;
+	/** Destination field identity. */ outputField: string;
+	/** Readonly input field identities in sampler-binding order. */ inputFields: readonly string[];
+}>;
+
+/** Complete readonly diagnostics transferred to the caller after recurrence execution and resource cleanup. */
+type DistantSunSceneCacheWavelengthResult = Readonly<{
+	/** Serialized diagnostics version. */ schemaId: DistantSunSceneCacheWavelengthResultSchema;
+	/** Physical spectral sample used for execution. */ wavelength: DistantSunSceneCacheWavelengthIdentity;
+	/** Logical recurrence dimensions. */ fieldLayout: DistantSunSceneCacheFieldLayout;
+	/** Reported WebGL implementation limits. */ capabilities: DistantSunSceneCacheGpuCapabilities;
+	/** Pure J1 through J4 samples in recurrence order. */ projectionExposures: readonly DistantSunSceneCacheProjectionExposure[];
+	/** Cumulative extraction sum probes; empty when extraction is disabled. */ accumulationProbes: readonly DistantSunSceneCacheAccumulationProbe[];
+	/** Completed extraction diagnostics in request order; empty when extraction is disabled. */ compiledCaches: readonly DistantSunSceneCacheCompiledCache[];
+	/** Recurrence-field lifetime and draw events in execution order. */ ledger: readonly DistantSunSceneCacheGpuLedgerEntry[];
+	/** Completed pass timings in execution order. */ timings: readonly DistantSunSceneCacheGpuPassTiming[];
+	/** Peak logical live recurrence-field bytes, excluding direction and extraction textures. */ peakLiveFieldBytes: number;
+	/** Logical live recurrence-field bytes after scheduled releases and before final cleanup. */ finalLiveFieldBytes: number;
+}>;
 
 /** One explicitly requested receiver-local scene. */
 type DistantSunPointLocalScene = {
@@ -417,6 +723,13 @@ type SharedGenerationInventory = {
 	/** Complete sorted block set. */ blocks: SharedGenerationBlock[];
 	/** Common extraction ledger. */ unionLedger: DistantSunSceneCacheLedgerRecord;
 	/** Serialized compiler request. */ buildRequest: DistantSunSceneCacheCompilerBuildRequest;
+	/** Physical and numerical identities of the field being generated. */
+	configuration: {
+		atmosphereIdentity: string;
+		geometryIdentity: string;
+		groundIdentity: string;
+		numericalIdentity: string;
+	};
 	/** Exact logical-to-unique u16 bytes. */ directionBytes: Buffer;
 	/** Authenticated catalog parent. */ catalogArtifact: DistantSunSharedCacheFileIdentity;
 };
@@ -477,7 +790,7 @@ type SharedGenerationVerificationRequest = {
 type SharedGenerationVerificationResult = {
 	/** True only after every exact comparison. */ accepted: boolean;
 	/** Independently reconstructed identities. */ scenes: SharedGenerationSceneVerification[];
-	/** Total immutable control bytes compared. */ comparedBytes: number;
+	/** Total reconstructed generated-scene bytes verified. */ comparedBytes: number;
 	/** Encoded block validation time. */ blockVerificationMilliseconds: number;
 	/** Full verification time. */ elapsedMilliseconds: number;
 	/** Bounded row comparison allocation. */ comparisonBufferBytes: number;
@@ -485,7 +798,7 @@ type SharedGenerationVerificationResult = {
 	/** Authenticated persisted metadata byte count. */ metadataBytes: number;
 };
 /** Explicit generator execution dependencies. */
-type SharedGenerationRequest = {
+type SharedGenerationRequest = DistantSunSceneCacheCompilerOptions & {
 	/** Local GPU-capable Chrome executable. */ chromePath: string;
 	/** Caller-owned cancellation. */ signal: AbortSignal;
 	/** Observes completed durable progress events; rejection cancels generation before publication. */ onProgress?: (
@@ -595,13 +908,19 @@ type SharedQualificationLifecycle = {
 type SharedQualificationOracleBlock = {
 	/** Authenticated block identity. */ blockId: string;
 	/** Populated row count. */ rowCount: number;
-	/** Immutable dense payload identities and row selections. */ parents: {
-		row: number;
-		coordinate: readonly number[];
-		artifact: DistantSunSharedCacheFileIdentity;
-		denseRow: number;
-		denseRowCount: number;
-	}[];
+	/** Immutable dense payload identities or authenticated candidate decode. */ parents: (
+		| {
+				row: number;
+				coordinate: readonly number[];
+				artifact: DistantSunSharedCacheFileIdentity;
+				denseRow: number;
+				denseRowCount: number;
+		  }
+		| {
+				/** Authenticated encoded candidate block. */ artifact: DistantSunSharedCacheFileIdentity;
+				/** Expected decoded identity. */ decoded: Readonly<{byteLength: number; sha256: string}>;
+		  }
+	)[];
 	/** Exact expected RGBA bits at independently chosen packet coordinates. */ samples: {
 		row: number;
 		face: number;

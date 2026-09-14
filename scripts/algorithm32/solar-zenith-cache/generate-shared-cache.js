@@ -1,4 +1,5 @@
 import DistantSunSharedCacheGenerator from './DistantSunSharedCacheGenerator.js';
+import {DistantSunSceneCacheNumerics} from './DistantSunSceneCacheNumerics.js';
 import DistantSunSharedCacheGenerationFiles from './DistantSunSharedCacheGenerationFiles.js';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
@@ -13,7 +14,14 @@ try {
 		const name = process.argv[index];
 		const value = process.argv[index + 1];
 		if (
-			!['--input', '--output', '--chrome'].includes(name) ||
+			![
+				'--input',
+				'--output',
+				'--chrome',
+				'--surface-limit',
+				'--solar-interpolation',
+				'--numerical-policy',
+			].includes(name) ||
 			!value ||
 			value.startsWith('--') ||
 			argumentsByName.has(name)
@@ -25,6 +33,20 @@ try {
 		argumentsByName.set(name, value);
 	}
 	const inputPath = argumentsByName.get('--input');
+	const surfaceLimit = argumentsByName.get('--surface-limit');
+	const policyName = argumentsByName.get('--numerical-policy');
+	if (policyName !== undefined && (policyName !== 'anchored-radial' || surfaceLimit !== undefined))
+		throw new Error('Select either a surface limit or --numerical-policy anchored-radial.');
+	const numericalPolicy = policyName
+		? DistantSunSceneCacheNumerics.createAnchoredRadial()
+		: surfaceLimit === undefined
+			? undefined
+			: DistantSunSceneCacheNumerics.createSurfaceLimit(Number(surfaceLimit));
+	const solarInterpolation = argumentsByName.get('--solar-interpolation');
+	if (solarInterpolation !== undefined && !['linear', 'monotone-cubic'].includes(solarInterpolation))
+		throw new RangeError('Unsupported solar interpolation.');
+	if (inputPath && (numericalPolicy || solarInterpolation))
+		throw new Error('Explicit input owns its numerical policy and interpolation.');
 	const outputDirectory = argumentsByName.get('--output');
 	if (Boolean(inputPath) !== Boolean(outputDirectory)) {
 		throw new Error('Explicit compilation requires both --input and --output.');
@@ -50,7 +72,7 @@ try {
 			},
 		});
 	} else {
-		result = await generator.run({chromePath, signal: cancellation.signal});
+		result = await generator.run({chromePath, numericalPolicy, solarInterpolation, signal: cancellation.signal});
 	}
 	process.stdout.write(`${JSON.stringify(result)}\n`);
 } catch (error) {

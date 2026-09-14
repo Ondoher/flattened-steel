@@ -4,6 +4,14 @@ Focus: Engine conformance and production benchmark export.
 
 Related owners: [architecture-contracts](../architecture-contracts/production-implementation-plan.md), [transport-geometry](../transport-geometry/production-implementation-plan.md), [product-behavior](../../production-app/product-behavior/production-implementation-plan.md), [protocols](../../poc-experiments/protocols/production-implementation-plan.md).
 
+## Current Selected Work
+
+The [distant-Sun strobing promotion](../caches/distant-sun-strobing-promotion-plan.md)
+is the next selected production work. It owns the bounded cache/interpolation
+Bruneton qualification and separate color/recording checks; its
+[status](../caches/distant-sun-strobing-promotion-status.md) owns execution state.
+The broader deferred hardening scope below remains with MVP M2.
+
 ### 0. Establish the imported production baseline — implementation established; remaining evidence relocated
 
 - The source implementation has been copied into `src/algorithm32`; parity for
@@ -16,14 +24,12 @@ Related owners: [architecture-contracts](../architecture-contracts/production-im
   stale-fixture reconciliation are deferred under
   [Production MVP requirement M2](../../production-app/mvp/requirements.md#m2--algorithm32-production-hardening).
 
-
 ### 15. Harden spherical/distant Algorithm32
 
 **Status: deferred and relocated.** Parity, continuity, lifecycle, dome sanity,
 sealed-boundary reproduction, resource measurement, and declared performance
 budgets are now owned by
 [Production MVP requirement M2](../../production-app/mvp/requirements.md#m2--algorithm32-production-hardening).
-
 
 ## Verification Ladder
 
@@ -41,7 +47,6 @@ budgets are now owned by
 Images diagnose coherent artifacts but do not replace pre-display spectral
 checks. Implementation parity proves faithful implementation, not physical
 truth; external benchmarks retain that role.
-
 
 ## Follow-On Hardening Work
 

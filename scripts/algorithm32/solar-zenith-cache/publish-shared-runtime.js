@@ -11,7 +11,7 @@ import {
 
 const repository = fileURLToPath(new URL('../../../', import.meta.url));
 const files = new Files(repository);
-const parent = `tmp/production-algorithm32/distant-sun-shared-block-cache/runs/2026-09-10T14-57-40-947Z-f747d2ec-9571-474f-89e6-b0783bbf3752/published/${SHARED_PACKAGE_IDENTITY}`;
+const parent = `tmp/production-algorithm32/distant-sun-shared-block-cache/runs/2026-09-12T00-24-02-253Z-703e6867-62cf-43b2-a2e0-faa218aaa9a2/published/${SHARED_PACKAGE_IDENTITY}`;
 const output = path.relative(repository, SHARED_PACKAGE_ROOT).split(path.sep).join('/');
 const run = `tmp/production-algorithm32/distant-sun-shared-block-cache/qualification/${new Date().toISOString().replace(/[:.]/gu, '-')}-${randomUUID()}`;
 await files.directory(run);

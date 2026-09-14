@@ -197,6 +197,7 @@ globalThis.algorithm32B1GpuReady = true;
 				manifestSha256: asset.manifestSha256,
 				assetIdentity: asset.manifest.assetIdentity,
 				profile: asset.manifest.profile,
+				positionDomain: asset.manifest.domains.position.selection ?? 'native48',
 				directionToSource: asset.manifest.condition.directionToSource,
 			})),
 		};

@@ -2,6 +2,11 @@
 
 Focus: Cache construction, storage, reconstruction, loading, and optimization.
 
+Current work: [distant-Sun strobing promotion](distant-sun-strobing-promotion-plan.md),
+with progress and next actions in its
+[status](distant-sun-strobing-promotion-status.md). Existing accepted cache and
+compiler qualifications below remain baseline evidence for this new work.
+
 The shared-block distant-Sun cache is implemented, qualified, and adopted
 through the complete P1-P8 promotion plan. Its contained storage, generator, transport,
 residency, packet-rendering, animation, and final-audit experiments are closed.

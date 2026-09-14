@@ -1,3 +1,5 @@
+import {DistantSunSceneCacheNumerics} from './DistantSunSceneCacheNumerics.js';
+
 const VERTEX_SOURCE = `#version 300 es
 void main() {
 	vec2 position = gl_VertexID == 0 ? vec2(-1.0, -1.0)
@@ -6,16 +8,41 @@ void main() {
 	gl_Position = vec4(position, 0.0, 1.0);
 }`;
 
+/**
+ * Called by the GPU compiler helpers to reject an unmet execution requirement.
+ *
+ * @param {unknown} condition - Value whose truthiness establishes the requirement.
+ * @param {string} message - Caller-facing failure description.
+ * @returns {asserts condition} - Established truthiness when execution continues.
+ * @throws {Error} - When the requirement is not met.
+ */
 function requireCondition(condition, message) {
 	if (!condition) throw new Error(message);
 }
 
+/**
+ * Called by createDistantSunSceneCacheCommonShaderSource to serialize one finite GLSL constant.
+ *
+ * @param {number} value - Finite numerical shader input.
+ * @returns {string} - Exponential floating-point literal with a decimal point.
+ * @throws {RangeError} - When the shader constant is not finite.
+ */
 function formatFloat(value) {
 	if (!Number.isFinite(value)) throw new RangeError('Shader constant must be finite.');
 	const text = Number(value).toExponential(17).replace('e+', 'e');
 	return text.includes('.') ? text : `${text}.0`;
 }
 
+/**
+ * Called by createProgram to allocate and compile one shader stage.
+ *
+ * @param {WebGL2RenderingContext} gl - Caller-owned WebGL2 context.
+ * @param {number} type - WebGL vertex or fragment shader enum.
+ * @param {string} source - Complete shader source.
+ * @param {string} label - Shader identity for diagnostics.
+ * @returns {WebGLShader} - Compiled shader transferred to the program helper.
+ * @throws {Error} - When allocation or compilation fails; a failed compiled shader is deleted.
+ */
 function compileShader(gl, type, source, label) {
 	const shader = gl.createShader(type);
 	requireCondition(shader, `Could not allocate ${label} shader.`);
@@ -29,6 +56,15 @@ function compileShader(gl, type, source, label) {
 	return shader;
 }
 
+/**
+ * Called by compileDistantSunSceneCacheWavelength to link a fullscreen recurrence program.
+ *
+ * @param {WebGL2RenderingContext} gl - Caller-owned WebGL2 context.
+ * @param {string} fragmentSource - Complete recurrence fragment source.
+ * @param {string} label - Program identity for diagnostics.
+ * @returns {WebGLProgram} - Linked program owned by this compiler invocation.
+ * @throws {Error} - When shader creation, program allocation, or linking fails.
+ */
 function createProgram(gl, fragmentSource, label) {
 	const vertex = compileShader(gl, gl.VERTEX_SHADER, VERTEX_SOURCE, `${label} vertex`);
 	const fragment = compileShader(gl, gl.FRAGMENT_SHADER, fragmentSource, `${label} fragment`);
@@ -47,11 +83,27 @@ function createProgram(gl, fragmentSource, label) {
 	return program;
 }
 
+/**
+ * Called by the GPU compiler helpers to reject the next reported WebGL error.
+ *
+ * @param {WebGL2RenderingContext} gl - Caller-owned WebGL2 context.
+ * @param {string} label - Operation identity for diagnostics.
+ * @returns {void} - Completion after consuming an error-free WebGL status.
+ * @throws {Error} - When WebGL reports an error for the operation.
+ */
 function requireNoGlError(gl, label) {
 	const error = gl.getError();
 	if (error !== gl.NO_ERROR) throw new Error(`${label} produced WebGL error ${error}.`);
 }
 
+/**
+ * Called by the GPU compiler helpers to allocate a nearest-sampled, edge-clamped texture.
+ *
+ * @param {WebGL2RenderingContext} gl - Caller-owned WebGL2 context.
+ * @param {DistantSunSceneCacheTextureRequest} request - Readonly dimensions, format, and optional upload data.
+ * @returns {WebGLTexture} - Allocated texture owned by the requesting helper.
+ * @throws {Error} - When texture allocation or the WebGL upload fails.
+ */
 function createTexture(gl, {width, height, internalFormat = gl.R32F, format = gl.RED, type = gl.FLOAT, data = null}) {
 	const texture = gl.createTexture();
 	requireCondition(texture, 'Could not allocate GPU recurrence texture.');
@@ -65,6 +117,15 @@ function createTexture(gl, {width, height, internalFormat = gl.R32F, format = gl
 	return texture;
 }
 
+/**
+ * Called by compileDistantSunSceneCacheWavelength to upload direction vectors and quadrature weights.
+ *
+ * @param {WebGL2RenderingContext} gl - Caller-owned WebGL2 context.
+ * @param {DistantSunSceneCacheDirectionVectors} vectors - Readonly ordered three-component unit vectors.
+ * @param {readonly number[] | null} [weights=null] - Readonly weights in steradians; absent entries upload zero.
+ * @returns {WebGLTexture} - RGBA32F direction texture owned by this compiler invocation.
+ * @throws {Error} - When the direction texture cannot be allocated or uploaded.
+ */
 function createDirectionTexture(gl, vectors, weights = null) {
 	const data = new Float32Array(vectors.length * 4);
 	for (let index = 0; index < vectors.length; index += 1) {
@@ -82,6 +143,15 @@ function createDirectionTexture(gl, vectors, weights = null) {
 	});
 }
 
+/**
+ * Called by the GPU compiler helpers to attach a texture as the sole color target.
+ *
+ * @param {WebGL2RenderingContext} gl - Caller-owned WebGL2 context.
+ * @param {WebGLFramebuffer} framebuffer - Compiler-owned framebuffer reused for drawing and readback.
+ * @param {WebGLTexture} texture - Live compiler texture attached without transferring ownership.
+ * @returns {void} - Complete framebuffer bound to the supplied texture.
+ * @throws {Error} - When the resulting framebuffer is incomplete.
+ */
 function bindFramebuffer(gl, framebuffer, texture) {
 	gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
 	gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture, 0);
@@ -91,6 +161,16 @@ function bindFramebuffer(gl, framebuffer, texture) {
 	);
 }
 
+/**
+ * Call this method to generate the shared atmospheric recurrence GLSL for one wavelength.
+ * The readonly request is borrowed for this call. Omitted controls retain the defaults documented
+ * by its ambient contract; the selected coordinate system and numerical policy determine the equations.
+ *
+ * @param {DistantSunSceneCacheCommonShaderRequest} request - Physical constants, sample domains, and geometry policy.
+ * @returns {string} - Shared GLSL declarations and functions, without a fragment entry point.
+ * @throws {TypeError} - When the supplied numerical policy has an unsupported shape.
+ * @throws {RangeError} - When the coordinate contract, source direction, numerical policy, or emitted constant is invalid.
+ */
 export function createDistantSunSceneCacheCommonShaderSource({
 	wavelengthNanometers,
 	sourceIrradiance,
@@ -116,7 +196,10 @@ export function createDistantSunSceneCacheCommonShaderSource({
 	solarZenithDegrees = null,
 	coordinateContract = 'scene-cache-receiver-local-v1',
 	sourceDirection = null,
+	numericalPolicy = undefined,
 }) {
+	const geometryPolicy = DistantSunSceneCacheNumerics.accept(numericalPolicy);
+	const anchored = geometryPolicy?.positionMethod === 'anchored-radial';
 	if (!['scene-cache-receiver-local-v1', 'production-source-aligned-v1'].includes(coordinateContract)) {
 		throw new RangeError(`Unsupported offline recurrence coordinate contract: ${coordinateContract}.`);
 	}
@@ -136,12 +219,39 @@ export function createDistantSunSceneCacheCommonShaderSource({
 		positionAltitudesMeters ??
 		Array.from({length: 48}, (_unused, index) => (index === 0 ? 0 : ((index + 0.5) / 48) * 60000));
 	const zeniths = solarZenithDegrees ?? Array.from({length: 180}, (_unused, index) => index + 0.5);
+	/**
+	 * Called by createDistantSunSceneCacheCommonShaderSource to serialize a readonly GLSL constant array.
+	 *
+	 * @param {readonly number[]} values - Ordered finite shader constants.
+	 * @returns {string} - Comma-separated exponential literals.
+	 */
 	const floatArray = (values) => values.map(formatFloat).join(', ');
 	const sourceDirectionValue = sourceAligned ? sourceDirection : [0, 0, 1];
 	const sourceDirectionGlsl = `vec3(${sourceDirectionValue.map(formatFloat).join(', ')})`;
 	const directionExactTolerance = sourceAligned ? '1e-10' : '1e-5';
-	const altitudeAtPointSource = sourceAligned
-		? `float altitudeAtPoint(vec3 point) {
+	const altitudeAtPointSource = anchored
+		? `vec3 radialAnchorPoint = vec3(0.0);
+float radialAnchorHeight = 0.0;
+float radialAnchorCosine = 1.0;
+float radialAnchorZenithDegrees = 0.0;
+vec3 radialAnchorDirection = vec3(0.0);
+float radialAnchorDirectionCosine = 0.0;
+float radialProjection(vec3 point, vec3 direction) {
+	if (all(equal(point, radialAnchorPoint))) {
+		if (all(equal(direction, radialAnchorDirection))) return (BOTTOM_RADIUS + radialAnchorHeight) * radialAnchorDirectionCosine;
+		if (all(equal(direction, SOURCE_DIRECTION))) return (BOTTOM_RADIUS + radialAnchorHeight) * radialAnchorCosine;
+	}
+	return dot(point, direction);
+}
+float altitudeAtPoint(vec3 point) {
+	vec3 displacement = point - radialAnchorPoint;
+	float radius = BOTTOM_RADIUS + radialAnchorHeight;
+	float difference = 2.0 * dot(radialAnchorPoint, displacement) + dot(displacement, displacement);
+	float denominator = sqrt(max(0.0, radius * radius + difference)) + radius;
+	return max(0.0, radialAnchorHeight + difference / max(denominator, 1.0));
+}`
+		: sourceAligned
+			? `float altitudeAtPoint(vec3 point) {
 	float radialOffset = point.z - BOTTOM_RADIUS;
 	float transverseDistanceSquared = dot(point.xy, point.xy);
 	float radiusAtRadialOffset = BOTTOM_RADIUS + radialOffset;
@@ -151,21 +261,22 @@ export function createDistantSunSceneCacheCommonShaderSource({
 	)) + radiusAtRadialOffset;
 	return max(0.0, radialOffset + transverseDistanceSquared / max(curvatureDenominator, 1.0));
 }`
-		: `float altitudeAtPoint(vec3 point) {
+			: `float altitudeAtPoint(vec3 point) {
 	return max(0.0, length(point) - BOTTOM_RADIUS);
 }`;
-	const geometryIntersectionSource = sourceAligned
-		? `bool rayBlockedByGround(vec3 position, vec3 direction) {
+	const geometryIntersectionSource =
+		sourceAligned || anchored
+			? `bool rayBlockedByGround(vec3 position, vec3 direction) {
 	float height = altitudeAtPoint(position);
 	float radius = BOTTOM_RADIUS + height;
-	float halfLinear = dot(position, direction);
+	float halfLinear = ${anchored ? 'radialProjection(position, direction)' : 'dot(position, direction)'};
 	float constantTerm = height * (radius + BOTTOM_RADIUS);
 	float discriminant = halfLinear * halfLinear - constantTerm;
 	return halfLinear < 0.0 && discriminant >= 0.0;
 }
 float topBoundaryDistance(vec3 position, vec3 direction) {
 	float radius = BOTTOM_RADIUS + altitudeAtPoint(position);
-	float halfLinear = dot(position, direction);
+	float halfLinear = ${anchored ? 'radialProjection(position, direction)' : 'dot(position, direction)'};
 	float constantTerm = (radius - TOP_RADIUS) * (radius + TOP_RADIUS);
 	float root = sqrt(max(0.0, halfLinear * halfLinear - constantTerm));
 	return max(0.0, halfLinear >= 0.0 ? -constantTerm / (halfLinear + root) : -halfLinear + root);
@@ -173,7 +284,7 @@ float topBoundaryDistance(vec3 position, vec3 direction) {
 bool groundBoundaryHit(vec3 position, vec3 direction, out float distanceMeters) {
 	float height = altitudeAtPoint(position);
 	float radius = BOTTOM_RADIUS + height;
-	float halfLinear = dot(position, direction);
+	float halfLinear = ${anchored ? 'radialProjection(position, direction)' : 'dot(position, direction)'};
 	float constantTerm = height * (radius + BOTTOM_RADIUS);
 	float discriminant = halfLinear * halfLinear - constantTerm;
 	if (halfLinear >= 0.0 || discriminant < 0.0) return false;
@@ -181,7 +292,7 @@ bool groundBoundaryHit(vec3 position, vec3 direction, out float distanceMeters) 
 	distanceMeters = denominator == 0.0 ? 0.0 : max(0.0, constantTerm / denominator);
 	return true;
 }`
-		: `bool rayBlockedByGround(vec3 position, vec3 direction) {
+			: `bool rayBlockedByGround(vec3 position, vec3 direction) {
 	return firstPositiveRoot(sphereRoots(position, direction, BOTTOM_RADIUS)) < 1e29;
 }
 float topBoundaryDistance(vec3 position, vec3 direction) {
@@ -191,11 +302,21 @@ bool groundBoundaryHit(vec3 position, vec3 direction, out float distanceMeters) 
 	distanceMeters = firstPositiveRoot(sphereRoots(position, direction, BOTTOM_RADIUS));
 	return distanceMeters < 1e29;
 }`;
-	const atmosphereBranchSource = sourceAligned
+	const atmosphereBranchSource = anchored
 		? `float atmosphereBranchLength(vec3 origin, vec3 direction) {
+	float height = altitudeAtPoint(origin);
+	float projection = radialProjection(origin, direction);
+	if (height <= 0.0 && projection < 0.0) return -1.0;
+	if (height >= ATMOSPHERE_HEIGHT && projection >= 0.0) return -1.0;
+	float groundDistance;
+	bool hit = groundBoundaryHit(origin, direction, groundDistance);
+	return hit ? groundDistance : topBoundaryDistance(origin, direction);
+}`
+		: sourceAligned
+			? `float atmosphereBranchLength(vec3 origin, vec3 direction) {
 	return topBoundaryDistance(origin, direction);
 }`
-		: `float atmosphereBranchLength(vec3 origin, vec3 direction) {
+			: `float atmosphereBranchLength(vec3 origin, vec3 direction) {
 	float radius = length(origin);
 	float radialDirection = dot(origin, direction);
 	if (abs(radius - BOTTOM_RADIUS) <= 1.0 && radialDirection < -1e-7) return -1.0;
@@ -216,13 +337,23 @@ bool groundBoundaryHit(vec3 position, vec3 direction, out float distanceMeters) 
 	}
 	return firstPositiveRoot(sphereRoots(point, SOURCE_DIRECTION, BOTTOM_RADIUS)) >= 1e29;
 }`;
-	const representativePointSource = sourceAligned
+	const representativePointSource = anchored
 		? `vec3 representativePoint(int positionIndex, int solarZenithIndex) {
-	float radius = BOTTOM_RADIUS + altitudeForIndex(positionIndex);
+	radialAnchorHeight = altitudeForIndex(positionIndex);
+	radialAnchorDirection = vec3(0.0);
+	float radius = BOTTOM_RADIUS + radialAnchorHeight;
+	radialAnchorCosine = ${sourceAligned ? 'SOURCE_DIRECTION.z' : 'SOLAR_ZENITH_COSINES[solarZenithIndex]'};
+	radialAnchorZenithDegrees = ${sourceAligned ? formatFloat((Math.acos(sourceDirection[2]) * 180) / Math.PI) : 'SOLAR_ZENITH_DEGREES[solarZenithIndex]'};
+	radialAnchorPoint = ${sourceAligned ? 'vec3(0.0, 0.0, radius)' : 'vec3(radius * sqrt(max(0.0, 1.0 - radialAnchorCosine * radialAnchorCosine)), 0.0, radius * radialAnchorCosine)'};
+	return radialAnchorPoint;
+}`
+		: sourceAligned
+			? `vec3 representativePoint(int positionIndex, int solarZenithIndex) {
+	float radius = BOTTOM_RADIUS + ${geometryPolicy ? `max(altitudeForIndex(positionIndex), ${formatFloat(geometryPolicy.surfaceLimit.value)})` : 'altitudeForIndex(positionIndex)'};
 	return vec3(0.0, 0.0, radius);
 }`
-		: `vec3 representativePoint(int positionIndex, int solarZenithIndex) {
-	float radius = BOTTOM_RADIUS + altitudeForIndex(positionIndex);
+			: `vec3 representativePoint(int positionIndex, int solarZenithIndex) {
+	float radius = BOTTOM_RADIUS + ${geometryPolicy ? `max(altitudeForIndex(positionIndex), ${formatFloat(geometryPolicy.surfaceLimit.value)})` : 'altitudeForIndex(positionIndex)'};
 	float angle = radians(SOLAR_ZENITH_DEGREES[solarZenithIndex]);
 	float muS = cos(angle);
 	return vec3(radius * sqrt(max(0.0, 1.0 - muS * muS)), 0.0, radius * muS);
@@ -262,7 +393,9 @@ vec3 productionWorldToW27(vec3 worldDirection) {
 }
 
 vec3 incomingPhysicalDirection(vec3 point, vec3 localDirection) {
-	return productionLocalToWorld(localDirection, true);
+	vec3 direction = productionLocalToWorld(localDirection, true);
+	${anchored ? 'if (all(equal(point, radialAnchorPoint))) { radialAnchorDirection = direction; radialAnchorDirectionCosine = direction.z; }' : ''}
+	return direction;
 }
 vec3 phaseOutgoingDirection(vec3 point, vec3 localDirection) {
 	return productionLocalToWorld(localDirection, false);
@@ -275,7 +408,7 @@ vec3 outgoingLocalDirection(vec3 point, vec3 worldDirection) {
 }
 vec3 j1SourceDirection(int solarZenithIndex) { return SOURCE_DIRECTION; }
 float sourceZenithDegreesAtPoint(vec3 point) {
-	return degrees(acos(clamp(dot(normalize(point), SOURCE_DIRECTION), -1.0, 1.0)));
+	${anchored ? 'if (all(equal(point, radialAnchorPoint))) return radialAnchorZenithDegrees;\n\treturn degrees(atan(length(cross(point, SOURCE_DIRECTION)), dot(point, SOURCE_DIRECTION)));' : 'return degrees(acos(clamp(dot(normalize(point), SOURCE_DIRECTION), -1.0, 1.0)));'}
 }`
 		: `void sourceFrame(vec3 point, out vec3 xAxis, out vec3 yAxis, out vec3 zAxis) {
 	zAxis = normalize(point);
@@ -300,7 +433,11 @@ vec3 worldToLocal(vec3 point, vec3 worldDirection) {
 	return normalize(vec3(dot(worldDirection, xAxis), dot(worldDirection, yAxis), dot(worldDirection, zAxis)));
 }
 
-vec3 incomingPhysicalDirection(vec3 point, vec3 localDirection) { return localToWorld(point, localDirection); }
+vec3 incomingPhysicalDirection(vec3 point, vec3 localDirection) {
+	vec3 direction = localToWorld(point, localDirection);
+	${anchored ? 'if (all(equal(point, radialAnchorPoint))) { radialAnchorDirection = direction; radialAnchorDirectionCosine = localDirection.z; }' : ''}
+	return direction;
+}
 vec3 phaseOutgoingDirection(vec3 point, vec3 localDirection) { return localDirection; }
 vec3 phaseIncomingDirection(vec3 point, vec3 localDirection) { return localDirection; }
 vec3 outgoingLocalDirection(vec3 point, vec3 worldDirection) { return worldToLocal(point, worldDirection); }
@@ -309,7 +446,7 @@ vec3 j1SourceDirection(int solarZenithIndex) {
 	return vec3(sin(solarZenith), 0.0, cos(solarZenith));
 }
 float sourceZenithDegreesAtPoint(vec3 point) {
-	return degrees(acos(clamp(point.z / length(point), -1.0, 1.0)));
+	${anchored ? 'if (all(equal(point, radialAnchorPoint))) return radialAnchorZenithDegrees;\n\treturn degrees(atan(length(point.xy), point.z));' : 'return degrees(acos(clamp(point.z / length(point), -1.0, 1.0)));'}
 }`;
 	const positionStencilSource = sourceAligned
 		? `void positionStencil(float altitudeMeters, out int lower, out int upper, out float fraction) {
@@ -420,6 +557,7 @@ const float GROUND_ALBEDO = ${formatFloat(groundAlbedo)};
 const float OZONE_MAXIMUM_DENSITY = ${formatFloat(ozoneMaximumDensity)};
 const vec3 SOURCE_DIRECTION = ${sourceDirectionGlsl};
 const int POSITION_COUNT = ${altitudes.length};
+${anchored ? `const float SOLAR_ZENITH_COSINES[${zeniths.length}] = float[${zeniths.length}](${floatArray(zeniths.map((degrees) => Math.cos((degrees * Math.PI) / 180)))});` : ''}
 const int SOLAR_ZENITH_COUNT = ${zeniths.length};
 const int F68_COUNT = ${incomingDirectionCount};
 const int OUTGOING_FACE_WIDTH = ${outgoingFaceWidth};
@@ -452,8 +590,7 @@ float ozoneDensityScale(float altitudeMeters) {
 
 ${altitudeAtPointSource}
 
-Medium sampleMediumAtPoint(vec3 point) {
-	float altitudeMeters = altitudeAtPoint(point);
+${anchored ? 'Medium sampleMediumAtAltitude(float altitudeMeters) {' : 'Medium sampleMediumAtPoint(vec3 point) {\n\tfloat altitudeMeters = altitudeAtPoint(point);'}
 	float rayleighSeaLevel = EXPLICIT_RAYLEIGH_SCATTERING >= 0.0
 		? EXPLICIT_RAYLEIGH_SCATTERING
 		: RAYLEIGH_SCALE * pow(WAVELENGTH_MICROMETERS, -4.0);
@@ -472,6 +609,7 @@ Medium sampleMediumAtPoint(vec3 point) {
 	medium.extinction = rayleigh + mieExtinction + ozone;
 	return medium;
 }
+${anchored ? 'Medium sampleMediumAtPoint(vec3 point) { return sampleMediumAtAltitude(altitudeAtPoint(point)); }' : ''}
 
 float rayleighPhase(vec3 outgoingDirection, vec3 incomingDirection) {
 	float cosine = clamp(dot(outgoingDirection, incomingDirection), -1.0, 1.0);
@@ -487,11 +625,25 @@ float miePhase(vec3 outgoingDirection, vec3 incomingDirection) {
 }
 
 vec2 sphereRoots(vec3 origin, vec3 direction, float radius) {
-	float projection = dot(origin, direction);
-	float discriminant = projection * projection - (dot(origin, origin) - radius * radius);
+	float projection = ${anchored ? 'radialProjection(origin, direction)' : 'dot(origin, direction)'};
+${
+	geometryPolicy
+		? `	float originRadius = ${anchored ? 'BOTTOM_RADIUS + altitudeAtPoint(origin)' : 'length(origin)'};
+	float radialOffset = ${anchored ? 'altitudeAtPoint(origin) + (BOTTOM_RADIUS - radius)' : 'originRadius - radius'};
+	if (radius == BOTTOM_RADIUS && abs(radialOffset) <= ${formatFloat(geometryPolicy.surfaceTolerance.value)}) radialOffset = 0.0;
+	float constantTerm = radialOffset * (originRadius + radius);
+	float discriminant = projection * projection - constantTerm;`
+		: '\tfloat discriminant = projection * projection - (dot(origin, origin) - radius * radius);'
+}
 	if (discriminant < 0.0) return vec2(1e30);
 	float root = sqrt(max(0.0, discriminant));
-	return vec2(-projection - root, -projection + root);
+${
+	geometryPolicy
+		? `	float farRoot = -projection - (projection >= 0.0 ? root : -root);
+	float nearRoot = abs(farRoot) > 0.0 ? constantTerm / farRoot : 0.0;
+	return vec2(min(nearRoot, farRoot), max(nearRoot, farRoot));`
+		: '\treturn vec2(-projection - root, -projection + root);'
+}
 }
 
 float firstPositiveRoot(vec2 roots) {
@@ -507,15 +659,35 @@ ${atmosphereBranchSource}
 ${sourceVisibilitySource}
 
 float sourceTransmittance(vec3 point) {
+${
+	anchored
+		? `	float height = altitudeAtPoint(point);
+	float radius = BOTTOM_RADIUS + height;
+	float cosine = all(equal(point, radialAnchorPoint)) ? radialAnchorCosine : dot(normalize(point), SOURCE_DIRECTION);
+	float projection = radius * cosine;
+	float groundTerm = height * (radius + BOTTOM_RADIUS);
+	if (projection < 0.0 && projection * projection >= groundTerm) return 0.0;
+	float topTerm = (height - ATMOSPHERE_HEIGHT) * (radius + TOP_RADIUS);
+	float root = sqrt(max(0.0, projection * projection - topTerm));
+	float distanceMeters = projection >= 0.0 ? -topTerm / (projection + root) : -projection + root;`
+		: `
 	if (!sourceVisible(point)) return 0.0;
 	float distanceMeters = topBoundaryDistance(point, SOURCE_DIRECTION);
-	if (distanceMeters >= 1e29) return 1.0;
+	if (distanceMeters >= 1e29) return 1.0;`
+}
 	float intervalLength = distanceMeters / float(SOURCE_TRANSMITTANCE_INTERVAL_COUNT);
 	float opticalDepth = 0.0;
 	for (int index = 0; index <= SOURCE_TRANSMITTANCE_INTERVAL_COUNT; index += 1) {
 		float weight = index == 0 || index == SOURCE_TRANSMITTANCE_INTERVAL_COUNT ? 0.5 : 1.0;
-		vec3 samplePoint = point + SOURCE_DIRECTION * intervalLength * float(index);
-		opticalDepth += sampleMediumAtPoint(samplePoint).extinction * intervalLength * weight;
+${
+	anchored
+		? `		float distance = intervalLength * float(index);
+		float difference = distance * (2.0 * projection + distance);
+		float altitude = max(0.0, height + difference / (sqrt(max(0.0, radius * radius + difference)) + radius));
+		opticalDepth += sampleMediumAtAltitude(altitude).extinction * intervalLength * weight;`
+		: `		vec3 samplePoint = point + SOURCE_DIRECTION * intervalLength * float(index);
+		opticalDepth += sampleMediumAtPoint(samplePoint).extinction * intervalLength * weight;`
+}
 	}
 	return exp(-opticalDepth);
 }
@@ -547,36 +719,55 @@ int appendBreak(inout float breaks[5], int count, float value, float lengthMeter
 int branchBreaks(vec3 origin, vec3 direction, float lengthMeters, out float breaks[5]) {
 	int count = 1;
 	breaks[0] = 0.0;
-	float tangent = -dot(origin, direction);
+	float tangent = -${anchored ? 'radialProjection(origin, direction)' : 'dot(origin, direction)'};
 	count = appendBreak(breaks, count, tangent, lengthMeters);
 	vec3 perpendicularOrigin = origin - dot(origin, SOURCE_DIRECTION) * SOURCE_DIRECTION;
 	vec3 perpendicularDirection = direction - dot(direction, SOURCE_DIRECTION) * SOURCE_DIRECTION;
 	float a = dot(perpendicularDirection, perpendicularDirection);
 	float b = 2.0 * dot(perpendicularOrigin, perpendicularDirection);
-	float c = dot(perpendicularOrigin, perpendicularOrigin) - BOTTOM_RADIUS * BOTTOM_RADIUS;
+${
+	anchored
+		? `	float height = altitudeAtPoint(origin);
+	float sourceProjection = radialProjection(origin, SOURCE_DIRECTION);
+	float c = height * (2.0 * BOTTOM_RADIUS + height) - sourceProjection * sourceProjection;`
+		: '\tfloat c = dot(perpendicularOrigin, perpendicularOrigin) - BOTTOM_RADIUS * BOTTOM_RADIUS;'
+}
 	if (abs(a) > 1e-15) {
 		float discriminant = b * b - 4.0 * a * c;
 		if (discriminant >= 0.0) {
 			float root = sqrt(max(0.0, discriminant));
-			float first = (-b - root) / (2.0 * a);
-			float second = (-b + root) / (2.0 * a);
+${
+	anchored
+		? `			float q = -0.5 * (b + (b >= 0.0 ? root : -root));
+			float first = q / a;
+			float second = q == 0.0 ? first : c / q;`
+		: '\t\t\tfloat first = (-b - root) / (2.0 * a);\n\t\t\tfloat second = (-b + root) / (2.0 * a);'
+}
 			for (int candidateIndex = 0; candidateIndex < 2; candidateIndex += 1) {
 				float candidate = candidateIndex == 0 ? first : second;
 				if (candidate > 1e-3 && candidate < lengthMeters - 1e-3) {
-					float probe = min(1.0, min(candidate * 0.25, (lengthMeters - candidate) * 0.25));
+${
+	anchored
+		? `					if (discriminant > 0.0 && sourceProjection + dot(direction, SOURCE_DIRECTION) * candidate < 0.0) count = appendBreak(breaks, count, candidate, lengthMeters);`
+		: `					float probe = min(1.0, min(candidate * 0.25, (lengthMeters - candidate) * 0.25));
 					bool before = sourceVisible(origin + direction * (candidate - probe));
 					bool after = sourceVisible(origin + direction * (candidate + probe));
-					if (before != after) count = appendBreak(breaks, count, candidate, lengthMeters);
+					if (before != after) count = appendBreak(breaks, count, candidate, lengthMeters);`
+}
 				}
 			}
 		}
 	} else if (abs(b) > 1e-15) {
 		float candidate = -c / b;
 		if (candidate > 1e-3 && candidate < lengthMeters - 1e-3) {
-			float probe = min(1.0, min(candidate * 0.25, (lengthMeters - candidate) * 0.25));
+${
+	anchored
+		? `			if (sourceProjection + dot(direction, SOURCE_DIRECTION) * candidate < 0.0) count = appendBreak(breaks, count, candidate, lengthMeters);`
+		: `			float probe = min(1.0, min(candidate * 0.25, (lengthMeters - candidate) * 0.25));
 			bool before = sourceVisible(origin + direction * (candidate - probe));
 			bool after = sourceVisible(origin + direction * (candidate + probe));
-			if (before != after) count = appendBreak(breaks, count, candidate, lengthMeters);
+			if (before != after) count = appendBreak(breaks, count, candidate, lengthMeters);`
+}
 		}
 	}
 	breaks[count] = lengthMeters;
@@ -695,6 +886,12 @@ ${groundIncomingSource}
 `;
 }
 
+/**
+ * Called by compileDistantSunSceneCacheWavelength to compose the direct-scattering coefficient pass.
+ *
+ * @param {string} common - Shared wavelength-specific GLSL source.
+ * @returns {string} - Complete two-component direct-base fragment shader.
+ */
 function directBaseFragment(common) {
 	return `#version 300 es
 precision highp float;
@@ -713,6 +910,12 @@ void main() {
 }`;
 }
 
+/**
+ * Called by compileDistantSunSceneCacheWavelength to compose the first scattering-density pass.
+ *
+ * @param {string} common - Shared wavelength-specific GLSL source.
+ * @returns {string} - Complete first-order scattering-density fragment shader.
+ */
 function j1Fragment(common) {
 	return `#version 300 es
 precision highp float;
@@ -736,6 +939,13 @@ void main() {
 }`;
 }
 
+/**
+ * Called by compileDistantSunSceneCacheWavelength to compose the first radiance-transport pass.
+ *
+ * @param {string} common - Shared wavelength-specific GLSL source.
+ * @param {boolean} sourceAligned - Whether the source-aligned compensated summation applies.
+ * @returns {string} - Complete first-order radiance fragment shader.
+ */
 function l1Fragment(common, sourceAligned) {
 	const compensationDeclaration = sourceAligned ? 'float radianceCompensation = 0.0;' : '';
 	const radianceAddition = sourceAligned
@@ -793,6 +1003,13 @@ void main() {
 }`;
 }
 
+/**
+ * Called by compileDistantSunSceneCacheWavelength to compose a higher-order scattering-density pass.
+ *
+ * @param {string} common - Shared wavelength-specific GLSL source.
+ * @param {boolean} sourceAligned - Whether source-aligned ground input and compensated summation apply.
+ * @returns {string} - Complete higher-order scattering-density fragment shader.
+ */
 function scatterFragment(common, sourceAligned) {
 	const productionUniforms = sourceAligned
 		? 'uniform sampler2D uGroundIlluminationL;\nuniform int uScatteringOrder;\n'
@@ -844,6 +1061,13 @@ void main() {
 }`;
 }
 
+/**
+ * Called by compileDistantSunSceneCacheWavelength to compose a higher-order radiance-transport pass.
+ *
+ * @param {string} common - Shared wavelength-specific GLSL source.
+ * @param {boolean} sourceAligned - Whether source-aligned compensated radiance and irradiance summation apply.
+ * @returns {string} - Complete higher-order radiance fragment shader.
+ */
 function transportFragment(common, sourceAligned) {
 	const compensationDeclarations = sourceAligned
 		? 'float radianceCompensation = 0.0;\n\tfloat irradianceCompensation = 0.0;'
@@ -918,6 +1142,11 @@ void main() {
 }`;
 }
 
+/**
+ * Called by compileDistantSunSceneCacheWavelength to compose cumulative packed-row extraction.
+ *
+ * @returns {string} - Complete scalar scattering-density accumulator fragment shader.
+ */
 function packedRowAccumulatorFragment() {
 	return `#version 300 es
 precision highp float;
@@ -939,6 +1168,16 @@ void main() {
 }`;
 }
 
+/**
+ * Called by the GPU compiler drawing helpers to bind one sampler input.
+ *
+ * @param {WebGL2RenderingContext} gl - Caller-owned WebGL2 context.
+ * @param {WebGLTexture} texture - Borrowed live input texture.
+ * @param {number} unit - Zero-based texture unit.
+ * @param {WebGLProgram} program - Current linked program.
+ * @param {string} name - Sampler uniform name.
+ * @returns {void} - Texture unit and sampler uniform configured for drawing.
+ */
 function uploadTextureUnit(gl, texture, unit, program, name) {
 	gl.activeTexture(gl.TEXTURE0 + unit);
 	gl.bindTexture(gl.TEXTURE_2D, texture);
@@ -946,10 +1185,14 @@ function uploadTextureUnit(gl, texture, unit, program, name) {
 }
 
 /**
- * Call this method to execute one Native15 wavelength through the actual-point N4 recurrence.
+ * Call this method to execute one supplied spectral-domain wavelength through the actual-point N4 recurrence.
  * Tile delivery replaces complete-layer delivery when supplied. Each callback is awaited before
  * further readback. Invalid bounds, unsupported GPU capabilities, shader or readback failures, and
  * rejected callbacks abort execution; callers must discard incomplete extraction and preserve prior runs.
+ * The readonly request is borrowed for this invocation. Readback buffers transfer to their observers.
+ * Resources allocated before the guarded recurrence are not all covered by its cleanup on setup failure;
+ * the caller owns context disposal when setup rejects. The guarded recurrence cleans up its resources
+ * on success or rejection. The context remains caller-owned and its previous bindings are not restored.
  *
  * @param {DistantSunSceneCacheWavelengthRequest} request - Exact inputs, GPU context, and extraction observers.
  * @returns {Promise<DistantSunSceneCacheWavelengthResult>} - Complete execution and allocation diagnostics.
@@ -1020,11 +1263,13 @@ export async function compileDistantSunSceneCacheWavelength({
 		solarZenithDegrees: domains.solarZenith.nodes.map((node) => node.solarZenithDegrees),
 		coordinateContract,
 		sourceDirection: spec.source.directionToLight,
+		numericalPolicy: spec.numerical.geometryPolicy,
 	});
 	const widthJ = domains.outgoing.directionCount;
 	const widthL = domains.incoming.directionCount;
 	const height = domains.position.count * domains.solarZenith.count;
 	const maximumTextureSize = gl.getParameter(gl.MAX_TEXTURE_SIZE);
+	/** Reported maximum viewport dimensions in pixels. @type {number[]} */
 	const maximumViewport = Array.from(gl.getParameter(gl.MAX_VIEWPORT_DIMS));
 	requireCondition(
 		widthJ <= maximumTextureSize && height <= maximumTextureSize,
@@ -1053,11 +1298,24 @@ export async function compileDistantSunSceneCacheWavelength({
 			? createProgram(gl, packedRowAccumulatorFragment(), 'P2 packed-row accumulation')
 			: null,
 	};
+	/** Live recurrence fields owned by this invocation. @type {Map<string, DistantSunSceneCacheGpuField>} */
 	const resources = new Map();
+	/** Ordered logical field and pass events. @type {DistantSunSceneCacheGpuLedgerEntry[]} */
 	const ledger = [];
+	/** Completed recurrence pass timings. @type {DistantSunSceneCacheGpuPassTiming[]} */
 	const timings = [];
 	let liveBytes = 0;
 	let peakLiveBytes = 0;
+	/**
+	 * Called by compileDistantSunSceneCacheWavelength to register a live recurrence field and its logical bytes.
+	 *
+	 * @param {string} id - Unique field identity within this invocation.
+	 * @param {number} width - Direction-column count.
+	 * @param {number} [internalFormat=gl.R32F] - Sized WebGL component format.
+	 * @param {number} [format=gl.RED] - WebGL upload component format.
+	 * @param {number} [components=1] - Float32 components per texel for allocation accounting.
+	 * @returns {DistantSunSceneCacheGpuField} - Registered field owned until release or final cleanup.
+	 */
 	const allocate = (id, width, internalFormat = Number(gl.R32F), format = Number(gl.RED), components = 1) => {
 		const texture = createTexture(gl, {width, height, internalFormat, format});
 		const bytes = width * height * components * 4;
@@ -1067,6 +1325,13 @@ export async function compileDistantSunSceneCacheWavelength({
 		ledger.push({operation: 'allocate', id, bytes, liveBytes});
 		return resources.get(id);
 	};
+	/**
+	 * Called by compileDistantSunSceneCacheWavelength to delete a scheduled field and record its released bytes.
+	 *
+	 * @param {string} id - Currently live field identity.
+	 * @returns {void} - Field removed from live ownership and its texture deleted.
+	 * @throws {Error} - When the field is not registered as live.
+	 */
 	const release = (id) => {
 		const resource = resources.get(id);
 		requireCondition(resource, `Cannot release missing field ${id}.`);
@@ -1081,6 +1346,13 @@ export async function compileDistantSunSceneCacheWavelength({
 			isTextureAfterDelete: gl.isTexture(resource.texture),
 		});
 	};
+	/**
+	 * Called by compileDistantSunSceneCacheWavelength to draw each solar-zenith slice and record the completed pass.
+	 * WebGL failures and rejected progress observers reject the pass and abort the guarded recurrence.
+	 *
+	 * @param {DistantSunSceneCacheDrawFieldRequest} request - Readonly pass configuration and borrowed live fields.
+	 * @returns {Promise<void>} - Completion after drawing, progress delivery, and timing/ledger updates.
+	 */
 	const drawField = async ({id, program, output, width, inputs = [], uniforms = []}) => {
 		const started = performance.now();
 		bindFramebuffer(gl, framebuffer, output.texture);
@@ -1120,6 +1392,14 @@ export async function compileDistantSunSceneCacheWavelength({
 			y: probeZenithIndices[2] * domains.position.count + domains.position.count - 1,
 		},
 	];
+	/**
+	 * Called by compileDistantSunSceneCacheWavelength to read its three fixed pure-field diagnostic samples.
+	 *
+	 * @param {string} order - Scattering-order label for the sampled field.
+	 * @param {DistantSunSceneCacheGpuField} resource - Borrowed live scattering-density field.
+	 * @returns {DistantSunSceneCacheProjectionExposure} - Readonly diagnostic sample record.
+	 * @throws {Error} - When framebuffer setup or scalar readback fails.
+	 */
 	const probe = (order, resource) => {
 		bindFramebuffer(gl, framebuffer, resource.texture);
 		return {
@@ -1133,9 +1413,22 @@ export async function compileDistantSunSceneCacheWavelength({
 			}),
 		};
 	};
+	/** Completed pure-field diagnostic samples. @type {DistantSunSceneCacheProjectionExposure[]} */
 	const projectionExposures = [];
+	/** Completed cumulative-extraction sum probes. @type {DistantSunSceneCacheAccumulationProbe[]} */
 	const accumulationProbes = [];
+	/** Mutable extraction accumulators owned until final cleanup. @type {DistantSunSceneCacheGpuAccumulator[]} */
 	const cacheResources = [];
+	/**
+	 * Called by accumulateOrder to read one scalar from a borrowed compiler texture.
+	 *
+	 * @param {WebGLTexture} texture - Live single-component texture.
+	 * @param {number} x - Texture column in texels.
+	 * @param {number} y - Texture row in texels.
+	 * @param {string} label - Readback identity for diagnostics.
+	 * @returns {number} - Exact float32 scalar represented as a JavaScript number.
+	 * @throws {Error} - When framebuffer setup or scalar readback fails.
+	 */
 	const readScalar = (texture, x, y, label) => {
 		bindFramebuffer(gl, framebuffer, texture);
 		const value = new Float32Array(1);
@@ -1143,15 +1436,46 @@ export async function compileDistantSunSceneCacheWavelength({
 		requireNoGlError(gl, label);
 		return value[0];
 	};
+	/**
+	 * Called by compileDistantSunSceneCacheWavelength to deliver requested samples in their original coordinate order.
+	 * An enabled observer receives an empty values array for an unrequested field. WebGL or observer failure
+	 * rejects the operation and aborts the guarded recurrence.
+	 *
+	 * @param {string} fieldId - Field identity used to select the caller's readonly coordinates.
+	 * @param {DistantSunSceneCacheGpuField} resource - Borrowed live recurrence field.
+	 * @returns {Promise<void>} - Completion after optional readback and awaited observer delivery.
+	 */
 	const captureFieldProbes = async (fieldId, resource) => {
 		if (onFieldProbes === null) return;
 		const coordinates = fieldProbeCoordinates[fieldId] ?? [];
+		/** Mutable per-row readback bounds and allocated values. @type {Map<number, DistantSunSceneCacheProbeSpan>} */
+		const rows = new Map();
+		for (const coordinate of coordinates) {
+			const span = rows.get(coordinate.y) ?? {first: coordinate.x, last: coordinate.x};
+			span.first = Math.min(span.first, coordinate.x);
+			span.last = Math.max(span.last, coordinate.x);
+			rows.set(coordinate.y, span);
+		}
+		bindFramebuffer(gl, framebuffer, resource.texture);
+		for (const [row, span] of rows) {
+			span.values = new Float32Array(span.last - span.first + 1);
+			gl.readPixels(span.first, row, span.values.length, 1, gl.RED, gl.FLOAT, span.values);
+			requireNoGlError(gl, `P8 ${fieldId} probe row ${row}`);
+		}
 		const values = coordinates.map((coordinate) => ({
 			...coordinate,
-			value: readScalar(resource.texture, coordinate.x, coordinate.y, `P8 ${fieldId} probe ${coordinate.label}`),
+			value: rows.get(coordinate.y).values[coordinate.x - rows.get(coordinate.y).first],
 		}));
 		await onFieldProbes({fieldId, wavelengthIndex, values});
 	};
+	/**
+	 * Called by compileDistantSunSceneCacheWavelength to add one pure order into every packed-row accumulator.
+	 * WebGL, order-layer observer, and progress observer failures reject the operation and abort the guarded recurrence.
+	 *
+	 * @param {number} order - Scattering order from one through four.
+	 * @param {DistantSunSceneCacheGpuField} pureJ - Borrowed live pure scattering-density field for this order.
+	 * @returns {Promise<void>} - Completion after accumulation, diagnostic probes, and awaited observer deliveries.
+	 */
 	const accumulateOrder = async (order, pureJ) => {
 		for (let cacheIndex = 0; cacheIndex < cacheResources.length; cacheIndex += 1) {
 			const cacheState = cacheResources[cacheIndex];
@@ -1289,7 +1613,9 @@ export async function compileDistantSunSceneCacheWavelength({
 				[0, l1.texture, 'uPreviousL', 'L1'],
 				[1, f68Texture, 'uF68Directions', 'F68-directions'],
 				[2, outgoingDirectionTexture, 'uOutgoingDirections', 'outgoing-directions'],
-				...(sourceAligned ? [[3, l1.texture, 'uGroundIlluminationL', 'L1-ground-dummy']] : []),
+				.../** @type {DistantSunSceneCacheTextureBinding[]} */ (
+					sourceAligned ? [[3, l1.texture, 'uGroundIlluminationL', 'L1-ground-dummy']] : []
+				),
 			],
 			uniforms: sourceAligned
 				? [(program) => gl.uniform1i(gl.getUniformLocation(program, 'uScatteringOrder'), 2)]
@@ -1324,7 +1650,9 @@ export async function compileDistantSunSceneCacheWavelength({
 				[0, l2.texture, 'uPreviousL', 'L2'],
 				[1, f68Texture, 'uF68Directions', 'F68-directions'],
 				[2, outgoingDirectionTexture, 'uOutgoingDirections', 'outgoing-directions'],
-				...(sourceAligned ? [[3, l1.texture, 'uGroundIlluminationL', 'L1-ground']] : []),
+				.../** @type {DistantSunSceneCacheTextureBinding[]} */ (
+					sourceAligned ? [[3, l1.texture, 'uGroundIlluminationL', 'L1-ground']] : []
+				),
 			],
 			uniforms: sourceAligned
 				? [(program) => gl.uniform1i(gl.getUniformLocation(program, 'uScatteringOrder'), 3)]
@@ -1360,7 +1688,9 @@ export async function compileDistantSunSceneCacheWavelength({
 				[0, l3.texture, 'uPreviousL', 'L3'],
 				[1, f68Texture, 'uF68Directions', 'F68-directions'],
 				[2, outgoingDirectionTexture, 'uOutgoingDirections', 'outgoing-directions'],
-				...(sourceAligned ? [[3, l2.texture, 'uGroundIlluminationL', 'L2-ground']] : []),
+				.../** @type {DistantSunSceneCacheTextureBinding[]} */ (
+					sourceAligned ? [[3, l2.texture, 'uGroundIlluminationL', 'L2-ground']] : []
+				),
 			],
 			uniforms: sourceAligned
 				? [(program) => gl.uniform1i(gl.getUniformLocation(program, 'uScatteringOrder'), 4)]
@@ -1372,6 +1702,7 @@ export async function compileDistantSunSceneCacheWavelength({
 		release('J4');
 		release('L3');
 		if (sourceAligned) release('L2');
+		/** Completed per-cache extraction diagnostics. @type {DistantSunSceneCacheCompiledCache[]} */
 		const compiledCaches = [];
 		for (let cacheIndex = 0; cacheIndex < cacheResources.length; cacheIndex += 1) {
 			const cacheState = cacheResources[cacheIndex];

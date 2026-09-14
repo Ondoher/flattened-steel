@@ -1,6 +1,11 @@
 # Shared-Inventory Generator Qualification
 
-The current generator incorporates the expanded point-local compiler. Its
+The current generator incorporates the expanded point-local compiler and can
+regenerate a new physical configuration while retaining the sealed inventory's
+scene coverage, selection, coordinate, and ledger controls. It authenticates
+the persisted blocks and reconstructs every generated scene from those blocks;
+it does not require regenerated values to match a differently configured
+physical payload. Its
 [consolidation and complete deployed-payload compatibility proof](../../../../archives/topics/production-algorithm32-release-20260911/agents/topics/production-algorithm32/caches/point-local-compiler-promotion-plan.md#production-compiler-consolidation)
 qualify that successor. The P2 release evidence below remains immutable.
 

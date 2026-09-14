@@ -1,0 +1,25 @@
+{
+	"extends": "./jsconfig.json",
+	"include": [
+		"DistantSunBinary64Reference.js",
+		"DistantSunP2*.js",
+		"verify-strobing-physical-matrix.js",
+		"verify-strobing-p2-gpu-view.js",
+		"pin-strobing-promotion.js",
+		"probe-strobing-surface.js",
+		"probe-binary64-recurrence.js",
+		"diagnose-strobing-radiance.js",
+		"verify-strobing-lookup.js",
+		"verify-strobing-recurrence.js",
+		"verify-bruneton-production.js",
+		"runCubicLookupProofBrowser.js",
+		"runRecurrenceProofBrowser.js",
+		"*.d.ts",
+		"../../experiments/b1-directional-sky-radiance/types.d.ts",
+		"types/**/*.d.ts",
+		"../../../src/algorithm32/**/*.d.ts",
+		"../../../src/flat32/**/*.d.ts",
+		"../../../server/flat32/**/*.d.ts"
+	],
+	"exclude": ["*.test.js", "../../../node_modules/**"]
+}

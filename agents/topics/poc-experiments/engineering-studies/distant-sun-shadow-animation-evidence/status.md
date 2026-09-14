@@ -33,6 +33,43 @@ movement, time-dependent spectral illumination, visible celestial sources,
 and local Sun-aligned shadows at native 4K. The accepted film also provides
 external visual evidence of that result.
 
+## Appearance Continuation
+
+The [appearance continuation](continuation-plan.md) is active. Its diagnostic
+phase completed without changing the renderer or accepted film. Accepted run
+`1789171222384-creative-strobing-diagnosis` measured every encoded frame and
+found that the recurring brightness reversals straddle hard one-degree
+atmosphere-cache publications. Cache-boundary temporal curvature is 5.08 times
+the stable-frame level over the full image and 7.01 times in the upper sky; 33
+of the 40 strongest full-frame curvature events are cache-adjacent. Retained
+scene-light values are smoother at cache transitions, excluding their
+interpolation as the primary source. The strong monotonic changes at sunrise
+and sunset are distinct from this repeated flash pattern.
+
+The diagnosis artifact set is
+`d11dfb90549a3d0df8dc9a540b2c416ace03dc01a4c5774c25449d68cf9cd4e0`.
+No correction was applied. The plan intentionally defers cache continuity work
+until after the ozone-free horizon decision; F2 records the star disposition
+without a rendering change.
+
+F1 has built, authenticated, installed, and selected the complete ozone-free
+production-format cache. Generated run
+`2026-09-12T00-24-02-253Z-703e6867-62cf-43b2-a2e0-faa218aaa9a2` produced package
+identity `2243c1ab2c2d529131759b32d72cee2a2e4b32098e1cc450c0d48cf34ed4edc7`:
+109 scenes, 89 blocks, and 505,753,993 package bytes. Its 109 reconstructed
+scenes and production service/router admission pass. The former deployed
+package remains intact for rollback. F1 now awaits the owner's visual
+lower-horizon disposition from Flat32.
+The app bundle contains no cache-package or qualification-evidence allowlist;
+it validates the server-selected transition policy against the running GPU,
+ANGLE backend, Chrome major version, evidence format, and byte budget.
+
+F2 is closed without a renderer change. The owner inspected the existing stars
+in the native application and found their appearance acceptable. The earlier
+visibility concern is attributed to the recording or presentation path and is
+deferred unless it becomes a larger problem. The one-pixel production control
+remains selected; no footprint candidate was built.
+
 ## Creative Film And Verification
 
 - Accepted render: `1788974488678-creative-animation`.
@@ -124,9 +161,15 @@ not required to close this successful experiment.
 
 ## Next Action
 
-No experiment work remains. Preserve the accepted runs and source. Further
-recordings, revisions, horizon corrections, portability packaging, or local-Sun
-animation require a new continuation or topic. The last checkpoint is
+Preserve the accepted runs and source. The owner will finish inspecting the
+selected ozone-free F1 package in the normally started Flat32 app and record
+whether it improves the lower horizon. Preserve the former production package
+for rollback. F2 retains the current one-pixel stars with no change. The
+contained [Distant-Sun Recording Strobing Experiment](../distant-sun-recording-strobing/README.md)
+now owns correction and recording qualification for the diagnosed
+cache-publication flashing.
+Portability packaging and local-Sun animation remain outside that continuation.
+The last checkpoint is
 `90d285cb5c6fe86d9882ebba257bac9dd51b60fb`, made before the creative work; the
 finished creative source and closeout documentation remain uncommitted pending
 an explicit checkpoint request.

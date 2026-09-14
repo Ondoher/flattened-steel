@@ -1,13 +1,13 @@
 import {fileURLToPath} from 'node:url';
 import DistantSunSharedCachePackageService from './DistantSunSharedCachePackageService.js';
 
-/** Qualified immutable production package; selection never mutates package bytes. */
-export const SHARED_PACKAGE_IDENTITY = '7e80317f53c79d0d5a30ebc006630213a2e758008c62a3abb14d2534a8cc2b99';
-/** Exact P2 report accepted by P7. */
+/** Immutable package selected by the server deployment; selection never mutates package bytes. */
+export const SHARED_PACKAGE_IDENTITY = '2243c1ab2c2d529131759b32d72cee2a2e4b32098e1cc450c0d48cf34ed4edc7';
+/** Exact selected package report. */
 export const SHARED_PACKAGE_REPORT = Object.freeze({
 	path: 'package-set.json',
 	byteLength: 3268,
-	sha256: 'eee22091d2f1deb8e992f22be47243a07e7f4bc9462d25ee89683352cca19069',
+	sha256: 'cfb287edddcbeabb90224af61e6d253fc0ff78b92eb3bb6dc50b758cb3c3ac4e',
 });
 /** Repository-local immutable deployment destination. */
 export const SHARED_PACKAGE_ROOT = fileURLToPath(

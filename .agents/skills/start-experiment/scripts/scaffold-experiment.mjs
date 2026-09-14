@@ -1,15 +1,10 @@
 #!/usr/bin/env node
 
-import {lstat, mkdir, readFile, readdir, realpath, stat, writeFile} from 'node:fs/promises';
+import {lstat, mkdir, readFile, realpath, stat, writeFile} from 'node:fs/promises';
 import path from 'node:path';
 import {homedir} from 'node:os';
 import {pathToFileURL} from 'node:url';
 import process from 'node:process';
-
-/** Folder-name prefix pattern for numbered experiments. */
-const experimentPrefixPattern = /^(\d{5})-/u;
-/** Largest sequence representable by the five-digit folder prefix. */
-const maximumExperimentSequence = 99999;
 
 /**
  * Called by the command entry to report a terminal scaffold failure.
@@ -39,7 +34,6 @@ function parseArgs(argv) {
 		const value = argv[index + 1];
 		if (!value) throw new Error(`${key} requires a value.`);
 		if (key === '--repo') values.repo = value;
-		else if (key === '--prefix') values.prefix = value;
 		else if (key === '--slug') values.slug = value;
 		else if (key === '--title') values.title = value;
 		else if (key === '--objective') values.objective = value;
@@ -63,81 +57,17 @@ function requireSingleLine(name, value) {
 }
 
 /**
- * Called by scaffold modes to validate a five-digit sequence prefix.
+ * Called by scaffold modes to validate the unnumbered experiment folder identity.
  *
- * Rejects missing, multiline, and non-five-digit values before filesystem paths are derived.
- *
- * @param {string | undefined} value - Untrusted prefix argument.
- * @returns {string} - Validated five-digit prefix.
+ * @param {string | undefined} value - Untrusted experiment slug.
+ * @returns {string} - Validated descriptive kebab-case slug.
  */
-function requirePrefix(value) {
-	const prefix = requireSingleLine('prefix', value);
-	if (!/^\d{5}$/u.test(prefix)) throw new Error('prefix must contain exactly five decimal digits.');
-	return prefix;
-}
-
-/**
- * Called by prefix allocation to identify every managed experiment parent root.
- *
- * @param {string} repoRoot - Real repository root.
- * @returns {string[]} - Topic, authored-source, and generated-output parent roots.
- */
-function experimentParentRoots(repoRoot) {
-	return [
-		path.join(repoRoot, 'agents', 'topics', 'poc-experiments', 'engineering-studies'),
-		path.join(repoRoot, 'experiments'),
-		path.join(repoRoot, 'tmp', 'experiments'),
-	];
-}
-
-/**
- * Called by creation mode to allocate the next nonreused experiment prefix.
- *
- * Rejects conflicting identities, prefix-bearing non-directories or links, and exhaustion at `99999`.
- *
- * @param {string} repoRoot - Real repository root.
- * @returns {Promise<string>} - Next five-digit experiment prefix.
- */
-async function nextExperimentPrefix(repoRoot) {
-	const identitiesByPrefix = new Map();
-	for (const parentRoot of experimentParentRoots(repoRoot)) {
-		let parentInfo;
-		try {
-			parentInfo = await lstat(parentRoot);
-		} catch (error) {
-			if (error.code === 'ENOENT') continue;
-			throw error;
-		}
-		if (
-			!parentInfo.isDirectory() ||
-			parentInfo.isSymbolicLink() ||
-			(await realpath(parentRoot)).toLowerCase() !== parentRoot.toLowerCase()
-		) {
-			throw new Error(`Experiment parent is not a real directory: ${parentRoot}`);
-		}
-		const entries = await readdir(parentRoot, {withFileTypes: true});
-		for (const entry of entries) {
-			const match = experimentPrefixPattern.exec(entry.name);
-			if (!match) continue;
-			const entryPath = path.join(parentRoot, entry.name);
-			const info = await lstat(entryPath);
-			if (
-				!info.isDirectory() ||
-				info.isSymbolicLink() ||
-				(await realpath(entryPath)).toLowerCase() !== entryPath.toLowerCase()
-			) {
-				throw new Error(`Prefix-bearing experiment entry is not a real directory: ${entryPath}`);
-			}
-			const previousIdentity = identitiesByPrefix.get(match[1]);
-			if (previousIdentity && previousIdentity !== entry.name) {
-				throw new Error(`Experiment prefix ${match[1]} is already used by conflicting folder names.`);
-			}
-			identitiesByPrefix.set(match[1], entry.name);
-		}
+function requireExperimentSlug(value) {
+	const slug = requireSingleLine('slug', value);
+	if (!/^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/u.test(slug)) {
+		throw new Error('slug must be unnumbered descriptive kebab-case beginning with a letter.');
 	}
-	const highestSequence = Math.max(-1, ...Array.from(identitiesByPrefix.keys(), Number));
-	if (highestSequence >= maximumExperimentSequence) throw new Error('No five-digit experiment prefixes remain.');
-	return String(highestSequence + 1).padStart(5, '0');
+	return slug;
 }
 
 /**
@@ -247,7 +177,7 @@ function design({title, objective, acceptance, experimentFolder, outputContract}
  * @returns {string} - Complete plan Markdown.
  */
 function plan({title, acceptance}) {
-	return `# ${title} Experiment Plan\n\n## Acceptance Gate\n\n${acceptance}\n\n## Work\n\n- [ ] Pin inputs, comparison authorities, environment assumptions, and measurable acceptance criteria.\n- [ ] Design the smallest isolated implementation and runner.\n- [ ] Implement progress-file reporting for every operation expected to exceed one minute.\n- [ ] Execute focused proofs into a new run directory.\n- [ ] Verify artifact hashes, provenance, containment, and the terminal result.\n- [ ] Decide whether to reject, iterate, retain as evidence, or propose production promotion.\n\n## Promotion Boundary\n\nExperiment results are evidence, not production architecture. Promotion requires a separate production-owned design, implementation plan, and verification boundary.\n`;
+	return `# ${title} Experiment Plan\n\n## Acceptance Gate\n\n${acceptance}\n\n## Work\n\n- [ ] Pin inputs, comparison authorities, environment assumptions, and measurable acceptance criteria.\n- [ ] Design the smallest isolated implementation and runner.\n- [ ] Implement progress-file reporting for every operation expected to exceed one minute.\n- [ ] Type-check authored experiment code.\n- [ ] Execute focused proofs into a new run directory.\n- [ ] Verify artifact hashes, provenance, containment, and the terminal result.\n- [ ] Decide whether to reject, iterate, retain as evidence, or propose production promotion.\n\n## Promotion Boundary\n\nExperiment results are evidence, not production architecture. Promotion requires a separate production-owned design, implementation plan, and verification boundary.\n`;
 }
 
 /**
@@ -257,7 +187,45 @@ function plan({title, acceptance}) {
  * @returns {string} - Complete status Markdown.
  */
 function status({title, experimentFolder}) {
-	return `# ${title} Experiment Status\n\nStatus: initialized.\n\n## Current State\n\nThe topic, source root, and ignored output root are established. No implementation or run is accepted yet.\n\n## Latest Verification\n\n- Scaffold structure created.\n- Output root: \`tmp/experiments/${experimentFolder}/\`.\n- Accepted run: none.\n\n## Blockers\n\nNone recorded.\n\n## Next Action\n\nDefine pinned inputs and measurable acceptance criteria in the design and plan.\n`;
+	return `# ${title} Experiment Status\n\nStatus: initialized.\n\n## Current State\n\nThe topic, source root, ignored output root, and JavaScript type-check configuration are established. No implementation or run is accepted yet.\n\n## Latest Verification\n\n- Scaffold structure created.\n- Type-check configuration: \`experiments/${experimentFolder}/jsconfig.json\`.\n- Output root: \`tmp/experiments/${experimentFolder}/\`.\n- Accepted run: none.\n\n## Blockers\n\nNone recorded.\n\n## Next Action\n\nDefine pinned inputs and measurable acceptance criteria in the design and plan.\n`;
+}
+
+/**
+ * Called by creation mode to render the experiment JavaScript type-check configuration.
+ *
+ * @returns {string} - Complete jsconfig JSON.
+ */
+function typeConfiguration() {
+	return `${JSON.stringify(
+		{
+			compilerOptions: {
+				allowJs: true,
+				checkJs: true,
+				maxNodeModuleJsDepth: 0,
+				module: 'NodeNext',
+				moduleResolution: 'NodeNext',
+				noEmit: true,
+				skipLibCheck: true,
+				strict: false,
+				target: 'ES2022',
+				types: ['node'],
+				typeRoots: ['../../node_modules/@types'],
+			},
+			include: ['**/*.d.ts', '**/*.js', '**/*.mjs'],
+			exclude: ['../../node_modules/**', '**/node_modules/**'],
+		},
+		null,
+		'\t',
+	)}\n`;
+}
+
+/**
+ * Called by creation mode to render the experiment's initial ambient type owner.
+ *
+ * @returns {string} - Initial ambient declaration file content.
+ */
+function typeDeclarations() {
+	return '/** Ambient contracts owned by this contained experiment. */\n';
 }
 
 /**
@@ -267,7 +235,7 @@ function status({title, experimentFolder}) {
  * @returns {string} - Complete source-root instructions.
  */
 function sourceInstructions({title, experimentFolder}) {
-	return `# ${title} Experiment\n\nKeep authored implementation, fixtures, harnesses, runner source, configuration, and dependency manifests below this directory. Write every generated artifact below \`../../tmp/experiments/${experimentFolder}/\`; never write generated output into this source tree.\n\nRead the experiment [topic](../../agents/topics/poc-experiments/engineering-studies/${experimentFolder}/README.md), [design](../../agents/topics/poc-experiments/engineering-studies/${experimentFolder}/design.md), [plan](../../agents/topics/poc-experiments/engineering-studies/${experimentFolder}/plan.md), and [status](../../agents/topics/poc-experiments/engineering-studies/${experimentFolder}/status.md) before implementation.\n\nProduction and other experiments are read-only unless the engineer separately authorizes a broader write scope. Every long-running process must follow the design's monitorable-progress contract.\n`;
+	return `# ${title} Experiment\n\nKeep authored implementation, fixtures, harnesses, runner source, configuration, and dependency manifests below this directory. Write every generated artifact below \`../../tmp/experiments/${experimentFolder}/\`; never write generated output into this source tree.\n\nRead the experiment [topic](../../agents/topics/poc-experiments/engineering-studies/${experimentFolder}/README.md), [design](../../agents/topics/poc-experiments/engineering-studies/${experimentFolder}/design.md), [plan](../../agents/topics/poc-experiments/engineering-studies/${experimentFolder}/plan.md), and [status](../../agents/topics/poc-experiments/engineering-studies/${experimentFolder}/status.md) before implementation.\n\nProduction and other experiments are read-only unless the engineer separately authorizes a broader write scope. Every long-running process must follow the design's monitorable-progress contract. Run \`npx --no-install tsc -p experiments/${experimentFolder}/jsconfig.json\` after authored code changes. Follow the repository contained-experiment verification policy: canonical types.md review by contracts-reviewer is required in addition to type checking, with readiness, context refresh, and validated evidence managed through review-standards.\n`;
 }
 
 /**
@@ -286,6 +254,8 @@ async function validateStructure(paths) {
 		paths.plan,
 		paths.status,
 		paths.sourceInstructions,
+		paths.typeConfiguration,
+		paths.typeDeclarations,
 	];
 	const missing = [];
 	const malformed = [];
@@ -319,8 +289,8 @@ async function validateStructure(paths) {
 /**
  * Called by the executable entry to create or validate an experiment scaffold.
  *
- * Invalid arguments, unsafe filesystem boundaries, conflicting prefixes, existing destinations, and malformed
- * scaffolds are reported on standard error and set a nonzero process exit code.
+ * Invalid arguments, unsafe filesystem boundaries, existing destinations, and malformed scaffolds are reported on
+ * standard error and set a nonzero process exit code.
  *
  * @param {string[]} argv - Command-line arguments excluding the runtime and script paths.
  * @returns {Promise<void>}
@@ -328,24 +298,13 @@ async function validateStructure(paths) {
 async function main(argv = process.argv.slice(2)) {
 	try {
 		const args = parseArgs(argv);
-		const slug = requireSingleLine('slug', args.slug);
-		if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/u.test(slug)) throw new Error('slug must be descriptive kebab-case.');
+		const slug = requireExperimentSlug(args.slug);
 		const repoRoot = await realpath(path.resolve(requireSingleLine('repo', args.repo)));
 		for (const marker of ['.git', 'AGENTS.md', 'agents/topics/standards/manifest.md']) {
 			if (!(await pathExists(path.join(repoRoot, marker))))
 				throw new Error(`Repository marker is missing: ${marker}`);
 		}
-		let prefix;
-		if (args.check) {
-			prefix = requirePrefix(args.prefix);
-		} else {
-			const nextPrefix = await nextExperimentPrefix(repoRoot);
-			if (args.prefix && requirePrefix(args.prefix) !== nextPrefix) {
-				throw new Error(`The next experiment prefix is ${nextPrefix}.`);
-			}
-			prefix = nextPrefix;
-		}
-		const experimentFolder = `${prefix}-${slug}`;
+		const experimentFolder = slug;
 		const paths = {
 			repoRoot,
 			topicRoot: path.join(
@@ -365,6 +324,8 @@ async function main(argv = process.argv.slice(2)) {
 			plan: path.join(paths.topicRoot, 'plan.md'),
 			status: path.join(paths.topicRoot, 'status.md'),
 			sourceInstructions: path.join(paths.sourceRoot, 'AGENTS.md'),
+			typeConfiguration: path.join(paths.sourceRoot, 'jsconfig.json'),
+			typeDeclarations: path.join(paths.sourceRoot, 'types.d.ts'),
 		});
 		for (const destination of [paths.topicRoot, paths.sourceRoot, paths.outputRoot]) {
 			await validateDestination(repoRoot, destination);
@@ -373,7 +334,7 @@ async function main(argv = process.argv.slice(2)) {
 		if (args.check) {
 			await validateStructure(paths);
 			process.stdout.write(
-				`${JSON.stringify({ok: true, mode: 'check', prefix, slug, experimentFolder, standardsSet: assignment.set}, null, 2)}\n`,
+				`${JSON.stringify({ok: true, mode: 'check', slug, experimentFolder, standardsSet: assignment.set}, null, 2)}\n`,
 			);
 		} else {
 			const title = requireSingleLine('title', args.title);
@@ -404,10 +365,12 @@ async function main(argv = process.argv.slice(2)) {
 					encoding: 'utf8',
 					flag: 'wx',
 				}),
+				writeFile(paths.typeConfiguration, typeConfiguration(), {encoding: 'utf8', flag: 'wx'}),
+				writeFile(paths.typeDeclarations, typeDeclarations(), {encoding: 'utf8', flag: 'wx'}),
 			]);
 			await validateStructure(paths);
 			process.stdout.write(
-				`${JSON.stringify({ok: true, mode: 'create', prefix, slug, experimentFolder, standardsSet: assignment.set}, null, 2)}\n`,
+				`${JSON.stringify({ok: true, mode: 'create', slug, experimentFolder, standardsSet: assignment.set}, null, 2)}\n`,
 			);
 		}
 	} catch (error) {
@@ -415,7 +378,7 @@ async function main(argv = process.argv.slice(2)) {
 	}
 }
 
-export {main, nextExperimentPrefix, requirePrefix, validateStructure};
+export {main, requireExperimentSlug, validateStructure};
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
 	await main();

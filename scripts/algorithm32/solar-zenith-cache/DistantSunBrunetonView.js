@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import {getSampleDirection} from '../../experiments/b1-directional-sky-radiance/benchmark-domain.js';
 import {CUBED_SPHERE_W27_DIRECTION_DOMAIN_OWNER} from '../../../src/algorithm32/sampling-domains/direction/cubed-sphere/consts.js';
+import {DistantSunSolarInterpolation} from '../../../src/algorithm32/implementation/distant-sun/cache/DistantSunSolarInterpolation.js';
 
 /** Offline Q30 evaluator for the production compiler qualification, with production W27 reconstruction.
  * The midpoint extinction/density equation is adapted from accepted run 65's B1 view integrator.
@@ -38,8 +39,8 @@ export default class DistantSunBrunetonView {
 			[upper, fraction],
 		];
 	}
-	/** Resolve the receiver-local source frame and production logical W27 taps. */
-	_taps(spec, ledger, point, direction) {
+	/** Resolve the receiver-local source frame and production interpolation coordinates. */
+	_coordinates(spec, point, direction) {
 		const radius = Math.hypot(...point);
 		const up = this._normalize(point);
 		const cosine = Math.max(-1, Math.min(1, up[2]));
@@ -70,6 +71,11 @@ export default class DistantSunBrunetonView {
 			spec.domains.solarZenith.nodes.map((node) => node.solarZenithDegrees),
 			(Math.acos(cosine) * 180) / Math.PI,
 		);
+		return {altitudes, zeniths, outgoing};
+	}
+	/** Resolve the unchanged linear control in expanded scene-row order. */
+	_taps(spec, ledger, point, direction) {
+		const {altitudes, zeniths, outgoing} = this._coordinates(spec, point, direction);
 		const taps = [];
 		for (const [altitudeIndex, altitudeWeight] of altitudes)
 			for (const [zenithIndex, zenithWeight] of zeniths) {
@@ -87,6 +93,41 @@ export default class DistantSunBrunetonView {
 				}
 			}
 		return taps;
+	}
+	/** Resolve complete cubic stencils in shared-coordinate, unique-direction order.
+	 * @param {DistantSunSceneCacheTransportSpec} spec - Declared construction domains.
+	 * @param {DistantSunPointLocalPackageRecord} packet - Authenticated packet with cubic halo rows.
+	 * @param {Map<string, number>} indexes - Shared coordinate to packed row mapping.
+	 * @param {number[]} point - World position in meters.
+	 * @param {number[]} direction - World view direction.
+	 * @returns {BrunetonQualificationCubicAltitude[]} - Directional taps for each solar knot, then altitude weights.
+	 */
+	_cubic(spec, packet, indexes, point, direction) {
+		const {altitudes, zeniths, outgoing} = this._coordinates(spec, point, direction);
+		const last = spec.domains.solarZenith.nodes.length - 1;
+		const lower = zeniths.length === 2 ? zeniths[0][0] : Math.min(zeniths[0][0], last - 1);
+		const fraction = zeniths.length === 2 ? zeniths[1][1] : zeniths[0][0] === 0 ? 0 : 1;
+		const upper = lower + 1;
+		return altitudes.map(([altitudeIndex, weight]) => {
+			const at = (zenithIndex) => {
+				const row = indexes.get(`${altitudeIndex}:${zenithIndex}`);
+				assert.ok(row !== undefined, 'Q30 cubic query lacks required interior support.');
+				return outgoing.indices.map((logical, ordinal) => ({
+					index:
+						row * packet.layout.uniqueDirectionCount +
+						CUBED_SPHERE_W27_DIRECTION_DOMAIN_OWNER.logicalToUniqueDirectionIndices[logical],
+					weight: outgoing.weights[ordinal],
+				}));
+			};
+			return {
+				weight,
+				fraction,
+				previous: lower === 0 ? undefined : at(lower - 1),
+				lower: at(lower),
+				upper: at(upper),
+				next: upper === last ? undefined : at(upper + 1),
+			};
+		});
 	}
 	/** Construct one benchmark ray in the canonical world with the source along +Z. */
 	_ray(spec, scene, fittedAzimuthDegrees, gridX, gridY) {
@@ -116,17 +157,48 @@ export default class DistantSunBrunetonView {
 		return {origin, direction, length};
 	}
 	/**
-	 * Precompute the accepted Q30 geometry and interpolation weights for every requested B1 ray.
+	 * Call this method to prepare Q30 geometry and interpolation weights for every requested B1 ray.
+	 * An explicit diagnostic selection must exactly match the packet; omission requires all 17 scenes.
+	 *
 	 * @param {DistantSunPointLocalPackageRecord} packet - Authenticated production Direct40 package.
 	 * @param {BrunetonQualificationScene[]} scenes - Authenticated capture times and fitted azimuths in package order.
+	 * @param {BrunetonQualificationPreparationOptions} [options] - Optional bounded diagnostic selection.
 	 * @returns {BrunetonQualificationSample[][][]} - Scene, direction, interval samples.
 	 */
-	prepare(packet, scenes) {
+	prepare(packet, scenes, options = {}) {
 		const spec = packet.buildRequest.transportSpec;
+		const cubic = spec.numerical.solarInterpolation === 'monotone-cubic';
+		assert.ok(
+			spec.numerical.solarInterpolation === undefined ||
+				['linear', 'monotone-cubic'].includes(spec.numerical.solarInterpolation),
+			'Q30 solar interpolation method is unsupported.',
+		);
+		const indexes = cubic
+			? new Map(packet.coordinates.map((coordinate, index) => [coordinate.join(':'), index]))
+			: null;
+		if (cubic) {
+			assert.equal(indexes.size, packet.coordinates.length);
+			assert.equal(
+				packet.layout.uniqueDirectionCount,
+				CUBED_SPHERE_W27_DIRECTION_DOMAIN_OWNER.uniqueDirectionCount,
+			);
+		}
 		assert.equal(spec.atmosphere.ozone.absorptionEnabled, false);
 		assert.equal(packet.layout.logicalDirectionCount, 4374);
 		assert.equal(packet.layout.channelCount, 40);
-		assert.equal(packet.scenes.length, 17);
+		if (options.sceneIds === undefined) {
+			assert.equal(packet.scenes.length, 17, 'Full Bruneton preparation requires all 17 scenes.');
+		} else {
+			assert.ok(
+				Array.isArray(options.sceneIds) && options.sceneIds.length > 0 && options.sceneIds.length <= 17,
+				'Bounded Bruneton preparation requires an explicit nonempty selection of at most 17 scenes.',
+			);
+			assert.equal(new Set(options.sceneIds).size, options.sceneIds.length, 'Bounded scene IDs must be unique.');
+			assert.deepEqual(
+				packet.scenes.map((scene) => scene.request.id),
+				options.sceneIds,
+			);
+		}
 		assert.equal(scenes.length, packet.scenes.length);
 		assert.deepEqual(
 			packet.layout.wavelengthIndexes,
@@ -152,7 +224,9 @@ export default class DistantSunBrunetonView {
 					return {
 						step: end - start,
 						altitude: Math.max(0, Math.hypot(...point) - spec.planet.bottomRadiusMeters),
-						taps: this._taps(spec, scene.ledger, point, ray.direction),
+						...(cubic
+							? {cubic: this._cubic(spec, packet, indexes, point, ray.direction)}
+							: {taps: this._taps(spec, scene.ledger, point, ray.direction)}),
 					};
 				});
 			});
@@ -160,7 +234,7 @@ export default class DistantSunBrunetonView {
 	}
 	/**
 	 * Integrate one channel with midpoint density and two half-step extinction factors.
-	 * @param {Float32Array} values - Expanded production cache rows for one scene and wavelength.
+	 * @param {Float32Array} values - Linear: expanded scene logical rows; cubic: shared unique-direction rows, one wavelength.
 	 * @param {BrunetonQualificationSample[]} samples - Q30 intervals for one view ray.
 	 * @param {DistantSunSceneCacheCompilerBuildRequest} buildRequest - Explicit atmosphere and spectrum.
 	 * @param {number} channelIndex - Direct40 wavelength index.
@@ -178,7 +252,23 @@ export default class DistantSunBrunetonView {
 				channel.mieExtinctionPerMeter * Math.exp(-sample.altitude / spec.atmosphere.mieScaleHeightMeters);
 			const halfStep = Math.exp(-0.5 * extinction * sample.step);
 			transmittance *= halfStep;
-			const density = sample.taps.reduce((sum, tap) => sum + tap.weight * values[tap.index], 0);
+			const density = sample.cubic
+				? sample.cubic.reduce((sum, altitude) => {
+						const directionSample = (taps) =>
+							taps?.reduce((value, tap) => value + tap.weight * values[tap.index], 0);
+						return (
+							sum +
+							altitude.weight *
+								DistantSunSolarInterpolation.sample(
+									directionSample(altitude.previous),
+									directionSample(altitude.lower),
+									directionSample(altitude.upper),
+									directionSample(altitude.next),
+									altitude.fraction,
+								)
+						);
+					}, 0)
+				: sample.taps.reduce((sum, tap) => sum + tap.weight * values[tap.index], 0);
 			radiance += transmittance * density * sample.step;
 			transmittance *= halfStep;
 		}

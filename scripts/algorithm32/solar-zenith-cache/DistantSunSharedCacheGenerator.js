@@ -202,11 +202,11 @@ export default class DistantSunSharedCacheGenerator {
 		let publishedRoot = null;
 		try {
 			await progress({phase: 'control-authentication'});
-			const inventory = await new DistantSunSharedCacheGenerationInventory().load(files);
+			const inventory = await new DistantSunSharedCacheGenerationInventory().load(files, options);
 			const sources = [];
 			const names = (await readdir(await files.resolve(SHARED_GENERATION_SOURCE_ROOT)))
 				.filter((name) =>
-					/^(?:DistantSunSharedCache.*|DistantSunPointLocal.*|DistantSunSceneCacheGpuCompiler|DistantSunSceneCacheCompilerInputs|consts|generate-shared-cache)\.js$/u.test(
+					/^(?:DistantSunSharedCache.*|DistantSunPointLocal.*|DistantSunSceneCacheGpuCompiler|DistantSunSceneCacheNumerics|DistantSunSceneCacheCompilerInputs|consts|generate-shared-cache)\.js$/u.test(
 						name,
 					),
 				)

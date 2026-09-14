@@ -2,8 +2,6 @@
 type ExperimentScaffoldArguments = {
 	/** Repository root supplied by the caller. */
 	repo?: string;
-	/** Optional requested five-digit sequence prefix. */
-	prefix?: string;
 	/** Descriptive experiment slug. */
 	slug?: string;
 	/** Human-readable experiment title. */
@@ -36,6 +34,10 @@ type ExperimentScaffoldPaths = {
 	status: string;
 	/** Source-root instruction document. */
 	sourceInstructions: string;
+	/** Source-root JavaScript type-check configuration. */
+	typeConfiguration: string;
+	/** Source-root ambient experiment declarations. */
+	typeDeclarations: string;
 };
 
 /** Folder standards assignment returned for an experiment source root. */
@@ -48,7 +50,7 @@ type ExperimentStandardsAssignment = {
 type ExperimentDocumentOptions = {
 	/** Human-readable experiment title. */
 	title: string;
-	/** Allocated experiment folder identity. */
+	/** Unnumbered experiment folder identity. */
 	experimentFolder: string;
 };
 

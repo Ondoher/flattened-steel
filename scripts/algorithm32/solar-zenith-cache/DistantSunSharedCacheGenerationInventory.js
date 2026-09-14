@@ -16,9 +16,10 @@ export default class DistantSunSharedCacheGenerationInventory {
 	 * Missing, corrupt, incompatible, or incomplete control data rejects; callers must stop before generation.
 	 *
 	 * @param {SharedGenerationFiles} files - Repository-contained artifact reader.
+	 * @param {DistantSunSceneCacheCompilerOptions} [options] - Explicit candidate policy and lookup support.
 	 * @returns {Promise<SharedGenerationInventory>} - Validated control and common field request.
 	 */
-	async load(files) {
+	async load(files, options = {}) {
 		const root = SHARED_GENERATION_CONTROL_ROOT;
 		const catalogPath = `${root}/distant-sun-runtime-catalog-${SHARED_GENERATION_CONTROL_CATALOG_SHA256}.json`;
 		const catalogBytes = await files.read(catalogPath);
@@ -90,6 +91,23 @@ export default class DistantSunSharedCacheGenerationInventory {
 		}
 		const ordered = [...coordinates.values()].sort((a, b) => a[0] - b[0] || a[1] - b[1]);
 		if (ordered.length !== 5494) throw new Error('The control union differs from the accepted 5494 coordinates.');
+		if (options.solarInterpolation === 'monotone-cubic') {
+			for (const scene of scenes)
+				for (const row of scene.ledger.rows) {
+					for (
+						let zenith = Math.max(0, row.firstSolarZenithIndex - 1);
+						zenith <= Math.min(SOLAR_ZENITH_180_DOMAIN_OWNER.count - 1, row.lastSolarZenithIndex + 1);
+						zenith++
+					) {
+						coordinates.set(`${row.altitudeIndex}:${zenith}`, [row.altitudeIndex, zenith]);
+					}
+				}
+			ordered.splice(
+				0,
+				ordered.length,
+				...[...coordinates.values()].sort((left, right) => left[0] - right[0] || left[1] - right[1]),
+			);
+		}
 		const groups = new Map();
 		for (const [a, z] of ordered) {
 			const altitudeIndex = Math.floor(a / 8) * 8;
@@ -101,7 +119,8 @@ export default class DistantSunSharedCacheGenerationInventory {
 		const blocks = [...groups.values()].sort(
 			(a, b) => a.tile.altitudeIndex - b.tile.altitudeIndex || a.tile.solarZenithIndex - b.tile.solarZenithIndex,
 		);
-		if (blocks.length !== 89) throw new Error('The control union differs from the accepted 89 blocks.');
+		if (options.solarInterpolation !== 'monotone-cubic' && blocks.length !== 89)
+			throw new Error('The control union differs from the accepted 89 blocks.');
 		let firstPackedRow = 0;
 		const rows = scenes[0].ledger.rows.map((row) => {
 			const values = ordered.filter((c) => c[0] === row.altitudeIndex).map((c) => c[1]);
@@ -124,10 +143,13 @@ export default class DistantSunSharedCacheGenerationInventory {
 			oracleByteLength: ordered.length * 4374 * 15 * 4,
 			exactSeamByteLength: ordered.length * 4058 * 15 * 4 + 8748,
 		};
-		const input = DistantSunSceneCacheCompilerInputs.createInputSet({
-			sceneSun: scenes[0].manifest.sceneSun,
-			support: scenes[0].ledger.support,
-		});
+		const input = DistantSunSceneCacheCompilerInputs.createInputSet(
+			{
+				sceneSun: scenes[0].manifest.sceneSun,
+				support: scenes[0].ledger.support,
+			},
+			options,
+		);
 		const buildRequest = {
 			...input.buildRequest,
 			transportSpec: {
@@ -141,6 +163,12 @@ export default class DistantSunSharedCacheGenerationInventory {
 			blocks,
 			unionLedger,
 			buildRequest,
+			configuration: {
+				atmosphereIdentity: buildRequest.transportSpec.atmosphere.id,
+				geometryIdentity: buildRequest.transportSpec.planet.id,
+				groundIdentity: buildRequest.transportSpec.ground.id,
+				numericalIdentity: input.numericalIdentity,
+			},
 			directionBytes,
 			catalogArtifact: {
 				path: catalogPath,

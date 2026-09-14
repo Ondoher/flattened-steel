@@ -29,7 +29,11 @@ export default class DistantSunPointLocalCacheCompilerHost {
 			throw new RangeError('Point-local compiler deadline must be from one millisecond through 15 minutes.');
 		}
 		const prefix = `/${randomBytes(24).toString('hex')}/`;
-		const sourceNames = ['DistantSunPointLocalCacheCompilerBrowser.js', 'DistantSunSceneCacheGpuCompiler.js'];
+		const sourceNames = [
+			'DistantSunPointLocalCacheCompilerBrowser.js',
+			'DistantSunSceneCacheGpuCompiler.js',
+			'DistantSunSceneCacheNumerics.js',
+		];
 		const sources = new Map();
 		for (const name of sourceNames) {
 			sources.set(name, await options.files.read(`${SHARED_GENERATION_SOURCE_ROOT}/${name}`));
@@ -67,7 +71,7 @@ export default class DistantSunPointLocalCacheCompilerHost {
 						response,
 						200,
 						'text/html',
-						'<!doctype html><meta charset="utf-8"><script type="module">import Compiler from "./DistantSunPointLocalCacheCompilerBrowser.js";new Compiler().run();</script>',
+						'<!doctype html><meta charset="utf-8"><script type="module">try{const {default:Compiler}=await import("./DistantSunPointLocalCacheCompilerBrowser.js");await new Compiler().run();}catch(error){await fetch("./complete",{method:"POST",body:JSON.stringify({accepted:false,error:String(error)})});}</script>',
 					);
 				}
 				if (request.method === 'GET' && sources.has(route)) {
@@ -119,6 +123,9 @@ export default class DistantSunPointLocalCacheCompilerHost {
 			}
 		});
 		let child = null;
+		const heartbeat = setInterval(() => {
+			options.progress({phase: 'gpu-host-heartbeat'}).catch(rejectResult);
+		}, 25000);
 		const timer = setTimeout(
 			() => rejectResult(new Error(`Point-local GPU compilation exceeded ${maximumMilliseconds} milliseconds.`)),
 			maximumMilliseconds,
@@ -156,6 +163,7 @@ export default class DistantSunPointLocalCacheCompilerHost {
 			await options.progress({phase: 'browser-launched', processId: child.pid, hostPort: address.port});
 			return await completed;
 		} finally {
+			clearInterval(heartbeat);
 			clearTimeout(timer);
 			options.signal.removeEventListener('abort', abort);
 			if (child?.pid && child.exitCode === null) {

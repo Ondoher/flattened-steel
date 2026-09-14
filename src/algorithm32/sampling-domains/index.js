@@ -18,10 +18,12 @@ export {
 	REFLECTION_COMPLETED_FIBONACCI_68_DIRECTION_DOMAIN_OWNER,
 } from './direction/fibonacci/consts.js';
 export {default as SphericalNativePositionDomain} from './position/spherical-native/SphericalNativePositionDomain.js';
+export {SphericalNativePositionDomains} from './position/spherical-native/SphericalNativePositionDomains.js';
 export {
 	NATIVE_4_POSITION_DOMAIN_OWNER,
 	NATIVE_16_POSITION_DOMAIN_OWNER,
 	NATIVE_48_POSITION_DOMAIN_OWNER,
+	NATIVE_51_NEAR_GROUND_POSITION_DOMAIN_OWNER,
 	NATIVE_48_POSITION_COUNT,
 	NATIVE_48_POSITION_NODES,
 } from './position/spherical-native/consts.js';

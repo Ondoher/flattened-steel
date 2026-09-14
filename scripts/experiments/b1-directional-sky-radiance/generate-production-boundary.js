@@ -3,6 +3,7 @@ import {copyFileSync, mkdirSync, mkdtempSync, readdirSync, rmSync, writeFileSync
 import {dirname, join, relative, resolve} from 'node:path';
 import {fileURLToPath, pathToFileURL} from 'node:url';
 import DistantSunSharedCacheGenerationFiles from '../../algorithm32/solar-zenith-cache/DistantSunSharedCacheGenerationFiles.js';
+import {DistantSunSceneCacheNumerics} from '../../algorithm32/solar-zenith-cache/DistantSunSceneCacheNumerics.js';
 
 import {Algorithm32} from '../../../src/algorithm32/implementation/algorithm32/Algorithm32.js';
 import {SharedModel} from '../../../src/algorithm32/implementation/algorithm32/model/SharedModel.js';
@@ -100,6 +101,10 @@ export function parseArguments(argv) {
 			options.conditions = parseList(argv[++index], '--conditions');
 		} else if (argument === '--incoming-direction-variant') {
 			options.incomingDirectionVariant = argv[++index];
+		} else if (argument === '--position-domain') {
+			options.positionDomain = argv[++index];
+			if (!['native48', 'native51-near-ground'].includes(options.positionDomain))
+				throw new RangeError('--position-domain must select native48 or native51-near-ground.');
 		} else if (argument === '--output-root') {
 			const outputRoot = argv[++index];
 			if (!outputRoot) throw new Error('--output-root requires a path.');
@@ -116,6 +121,17 @@ export function parseArguments(argv) {
 			const assetSetDirectory = argv[++index];
 			if (!assetSetDirectory) throw new Error('--asset-set requires a path.');
 			options.assetSetDirectory = resolve(assetSetDirectory);
+		} else if (argument === '--surface-limit') {
+			if (options.numericalPolicy) throw new Error('Select one numerical policy.');
+			options.numericalPolicy = DistantSunSceneCacheNumerics.createSurfaceLimit(Number(argv[++index]));
+		} else if (argument === '--numerical-policy') {
+			if (options.numericalPolicy || argv[++index] !== 'anchored-radial')
+				throw new Error('Select one supported numerical policy.');
+			options.numericalPolicy = DistantSunSceneCacheNumerics.createAnchoredRadial();
+		} else if (argument === '--solar-interpolation') {
+			options.solarInterpolation = argv[++index];
+			if (!['linear', 'monotone-cubic'].includes(options.solarInterpolation))
+				throw new RangeError('Unsupported solar interpolation.');
 		} else if (argument === '--production-revision') {
 			options.productionRevision = argv[++index];
 			if (!options.productionRevision) throw new Error('--production-revision requires an identity.');
@@ -125,6 +141,12 @@ export function parseArguments(argv) {
 	}
 	if (!['cpu', 'gpu'].includes(options.backend)) {
 		throw new RangeError('--backend must be cpu or gpu.');
+	}
+	if (
+		(options.numericalPolicy || options.solarInterpolation) &&
+		(options.backend !== 'gpu' || options.assetSetDirectory)
+	) {
+		throw new Error('Candidate compiler options require freshly generated GPU assets.');
 	}
 	if (options.measureGpuCompletion && options.backend !== 'gpu') {
 		throw new Error('--measure-gpu-completion requires --backend gpu.');
@@ -224,6 +246,10 @@ export async function runGeneration(options = {}) {
 	const orders = options.orders ?? ProductionRun.REQUIRED_ORDERS;
 	const requestedTimes = options.conditions ?? CAPTURE_TIMES;
 	const incomingDirectionVariant = options.incomingDirectionVariant ?? 'production-68';
+	const positionDomain = options.positionDomain ?? 'native48';
+	if (positionDomain !== 'native48' && !options.dryRun && (!options.outputRoot || backend !== 'gpu')) {
+		throw new Error('A refined position domain requires GPU generation and an explicit --output-root.');
+	}
 	const variantMetadata = INCOMING_VARIANT_METADATA[incomingDirectionVariant];
 	if (variantMetadata === undefined)
 		throw new RangeError(`Unknown incoming-direction variant: ${incomingDirectionVariant}.`);
@@ -251,10 +277,12 @@ export async function runGeneration(options = {}) {
 				fittedAzimuthDegrees: condition.sun.fittedAzimuthDegrees,
 				maximumScatteringOrder: order,
 				incomingDirectionVariant,
+				positionDomain,
 			}),
 		),
 	);
 	const selectedIncomingDirectionDomain = profiles[0].domains.incomingDirections;
+	const selectedPositionDomain = profiles[0].domains.positions;
 
 	if (options.dryRun) {
 		for (const profile of profiles) {
@@ -272,6 +300,9 @@ export async function runGeneration(options = {}) {
 		if (!completeCanonicalSelection)
 			throw new Error('Automatic production cache generation requires the canonical B1 selection.');
 		const compiled = await B1PointLocalCacheAssets.compileSet({
+			numericalPolicy: options.numericalPolicy,
+			solarInterpolation: options.solarInterpolation,
+			positionDomain,
 			conditions: conditions.map((condition) => ({
 				id: `b1-${condition.time}`,
 				localTime: condition.time,
@@ -330,6 +361,7 @@ export async function runGeneration(options = {}) {
 					fittedAzimuthDegrees: condition.sun.fittedAzimuthDegrees,
 					maximumScatteringOrder: order,
 					incomingDirectionVariant,
+					positionDomain,
 				});
 				viewPath = profile.numerical.viewPath;
 				process.stderr.write(`[B1 ${condition.time} J${order} ${backend}] constructing production cache\n`);
@@ -345,6 +377,7 @@ export async function runGeneration(options = {}) {
 						fittedAzimuthDegrees: condition.sun.fittedAzimuthDegrees,
 						maximumScatteringOrder: order,
 						incomingDirectionVariant,
+						positionDomain,
 						measureGpuCompletion: options.measureGpuCompletion === true,
 					});
 					generatedGpuConditionCount += 1;
@@ -428,7 +461,7 @@ export async function runGeneration(options = {}) {
 				referenceInputs,
 				cacheRepresentation:
 					gpuAssetInputs?.compilerIdentity === B1_POINT_LOCAL_COMPILER_IDENTITY
-						? 'receiver-local-native48-z180-w27'
+						? `receiver-local-${positionDomain}-z180-w27`
 						: 'source-aligned-native48-w27',
 				gpuConditionDiagnostics: backend === 'gpu' ? gpuConditionDiagnostics : null,
 				modelNameInBenchmarkTables: 'proposed',
@@ -454,7 +487,7 @@ export async function runGeneration(options = {}) {
 						: {pathSampleDistribution: viewPath.sampleDistribution.kind}),
 					sourceTransmittanceIntervalCount: 20,
 					incidentDirectionCount: selectedIncomingDirectionDomain.directionCount,
-					incidentAltitudeBinCount: 48,
+					incidentAltitudeBinCount: selectedPositionDomain.count,
 					incomingDirectionDomain: selectedIncomingDirectionDomain.id,
 					scatteringOutputDomain:
 						gpuAssetInputs?.compilerIdentity === B1_POINT_LOCAL_COMPILER_IDENTITY
@@ -468,7 +501,16 @@ export async function runGeneration(options = {}) {
 							}
 						: {}),
 					scatteringOutputDirectionCount: 4374,
-					positionNodeCount: 48,
+					positionNodeCount: selectedPositionDomain.count,
+					...(positionDomain === 'native51-near-ground'
+						? {
+								positionDomain: {
+									selection: positionDomain,
+									id: selectedPositionDomain.id,
+									nodes: selectedPositionDomain.nodes,
+								},
+							}
+						: {}),
 					positionLookup: 'view-only-linear-physical-altitude-over-actual-nodes',
 					maximumScatteringOrder: order,
 				},
@@ -561,6 +603,7 @@ export async function runGeneration(options = {}) {
 		orders,
 		profileFamily,
 		incomingDirectionVariant,
+		...(positionDomain === 'native51-near-ground' ? {positionDomain} : {}),
 		outputs,
 	};
 	writeJson(join(runDirectory, 'manifest.json'), manifest);

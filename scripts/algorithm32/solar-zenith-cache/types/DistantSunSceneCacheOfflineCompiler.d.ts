@@ -31,12 +31,16 @@ type DistantSunSceneCacheSeamEncoding = Readonly<{
 }>;
 
 /** Request for one complete offline scene-cache package build. */
-type DistantSunSceneCacheOfflineCompileRequest = Readonly<{
-	/** Absolute or process-relative path of a nonexistent output directory. */
-	readonly outputDirectory: string;
-	/** Exact scene to compile; omission selects the first qualified nautical scene. */
-	readonly scene?: DistantSunSceneCacheCompilerScene;
-}>;
+type DistantSunSceneCacheOfflineCompileRequest = DistantSunSceneCacheCompilerOptions &
+	Readonly<{
+		/** Absolute or process-relative path of a nonexistent output directory. */
+		readonly outputDirectory: string;
+		/** Exact scene to compile; omission selects the first qualified nautical scene. */
+		readonly scene?: DistantSunSceneCacheCompilerScene;
+	}>;
+
+/** Compiler artifact before the runtime packager assigns a scalar selection interval. */
+type DistantSunSceneCacheOfflineManifest = Omit<DistantSunSceneCacheManifestRecord, 'selection'>;
 
 /** Complete result of one offline scene-cache package build. */
 type DistantSunSceneCacheOfflineCompileResult = Readonly<{
@@ -47,7 +51,7 @@ type DistantSunSceneCacheOfflineCompileResult = Readonly<{
 	/** Manifest SHA-256 hash. */
 	readonly manifestSha256: string;
 	/** Complete manifest record. */
-	readonly manifest: DistantSunSceneCacheManifestRecord;
+	readonly manifest: DistantSunSceneCacheOfflineManifest;
 	/** Complete compiler report. */
 	readonly report: Readonly<Record<string, unknown>>;
 }>;

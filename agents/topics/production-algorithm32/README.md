@@ -2,6 +2,16 @@
 
 Implement and qualify the production engine. Application behavior, independent experiment scoring, and external scientific authority have separate topic owners.
 
+## Active Work
+
+The next selected production work is the
+[distant-Sun strobing promotion](caches/distant-sun-strobing-promotion-plan.md).
+Focus: adapt the cache-generation and interpolation corrections to production,
+qualify them through Bruneton with its unchanged color model, and separately
+qualify the p2 color response and The Hours recording. The
+[promotion status](caches/distant-sun-strobing-promotion-status.md) owns the
+current phase and next actions.
+
 ## Focus Areas
 
 - [architecture-contracts](architecture-contracts/README.md) — Public engine capabilities, ownership, and dataflow.

@@ -6,6 +6,7 @@ import {
 	FIBONACCI_34_DIRECTION_DOMAIN_OWNER,
 	CUBED_SPHERE_W27_DIRECTION_DOMAIN_OWNER,
 	REFLECTION_COMPLETED_FIBONACCI_68_DIRECTION_DOMAIN_OWNER,
+	SphericalNativePositionDomains,
 	SphericalNativePositionDomain,
 } from '../../../src/algorithm32/sampling-domains/index.js';
 import {
@@ -62,6 +63,12 @@ function interpolateUniform(values, minimum, maximum, coordinate) {
 	return values[lowerIndex] * (1 - fraction) + values[upperIndex] * fraction;
 }
 
+/** Called by the B1 profile to resolve a unit direction from two angular coordinates.
+ *
+ * @param {number} zenithDegrees - Zenith angle in degrees.
+ * @param {number} azimuthDegrees - Horizontal azimuth in degrees.
+ * @returns {UnitVector3} - Unit direction in the benchmark frame.
+ */
 function directionFromZenithAzimuth(zenithDegrees, azimuthDegrees) {
 	const zenith = (zenithDegrees * Math.PI) / 180;
 	const azimuth = (azimuthDegrees * Math.PI) / 180;
@@ -87,6 +94,14 @@ export function createDirect40Basis() {
 	});
 }
 
+/** Called by the B1 profile to create a quantity-refined packet with its canonical units.
+ *
+ * @param {SpectralBasis} basis - Exact direct-40 spectral basis.
+ * @param {SpectralQuantity} quantity - Physical quantity represented by the values.
+ * @param {readonly number[]} values - Spectrum in the quantity's canonical units.
+ * @param {string} provenanceIdentity - Scientific authority for the spectrum.
+ * @returns {SpectralPacket} - Validated packet retaining its selected physical quantity.
+ */
 function createPacket(basis, quantity, values, provenanceIdentity) {
 	return new SpectralPacket({
 		basis,
@@ -102,12 +117,21 @@ function createPacket(basis, quantity, values, provenanceIdentity) {
 	});
 }
 
+/** Call this function to construct the complete direct-40 B1 profile with an explicit optional altitude refinement.
+ *
+ * @param {B1ProductionProfileOptions} options - Benchmark condition and numerical-domain selections.
+ * @returns {DistantSunPointLocalExecutionProfile} - Complete profile retaining the benchmark's physical atmosphere and spectrum.
+ */
 export function createBrunetonProductionProfile({
 	time,
 	fittedAzimuthDegrees,
 	maximumScatteringOrder = 4,
 	incomingDirectionVariant = 'production-68',
+	positionDomain = 'native48',
 }) {
+	const canonicalPositionDomain = SphericalNativePositionDomains.select(positionDomain);
+	const selectedPositionDomain =
+		positionDomain === 'native51-near-ground' ? canonicalPositionDomain : BRUNETON_POSITION_DOMAIN;
 	if (
 		![
 			'production-68',
@@ -126,32 +150,40 @@ export function createBrunetonProductionProfile({
 	const theoreticalSun = computeTheoreticalSunDirection(time);
 	const basis = createDirect40Basis();
 	const wavelengths = basis.channels.map((channel) => channel.center.value);
-	const sourceIrradianceDensity = createPacket(
-		basis,
-		SPECTRAL_QUANTITIES.IRRADIANCE_DENSITY,
-		SOLAR_IRRADIANCE,
-		`b1-bruneton-${BRUNETON_SOURCE_REVISION}:solar`,
+	const sourceIrradianceDensity = /** @type {SpectralIrradiancePacket} */ (
+		createPacket(
+			basis,
+			SPECTRAL_QUANTITIES.IRRADIANCE_DENSITY,
+			SOLAR_IRRADIANCE,
+			`b1-bruneton-${BRUNETON_SOURCE_REVISION}:solar`,
+		)
 	);
 	const temperatureCorrection = 273.16 / (273.16 + 15);
-	const rayleigh = createPacket(
-		basis,
-		SPECTRAL_QUANTITIES.SCATTERING_COEFFICIENT,
-		wavelengths.map(
-			(wavelength) => interpolateUniform(PENNDORF_SCATTERING, 360, 830, wavelength) * temperatureCorrection,
-		),
-		`b1-bruneton-${BRUNETON_SOURCE_REVISION}:penndorf`,
+	const rayleigh = /** @type {SpectralScatteringCoefficientPacket} */ (
+		createPacket(
+			basis,
+			SPECTRAL_QUANTITIES.SCATTERING_COEFFICIENT,
+			wavelengths.map(
+				(wavelength) => interpolateUniform(PENNDORF_SCATTERING, 360, 830, wavelength) * temperatureCorrection,
+			),
+			`b1-bruneton-${BRUNETON_SOURCE_REVISION}:penndorf`,
+		)
 	);
-	const mieExtinction = createPacket(
-		basis,
-		SPECTRAL_QUANTITIES.EXTINCTION_COEFFICIENT,
-		wavelengths.map((wavelength) => (0.04 * Math.pow(wavelength / 1000, -0.8)) / 1200),
-		`b1-bruneton-${BRUNETON_SOURCE_REVISION}:mie-extinction`,
+	const mieExtinction = /** @type {SpectralExtinctionCoefficientPacket} */ (
+		createPacket(
+			basis,
+			SPECTRAL_QUANTITIES.EXTINCTION_COEFFICIENT,
+			wavelengths.map((wavelength) => (0.04 * Math.pow(wavelength / 1000, -0.8)) / 1200),
+			`b1-bruneton-${BRUNETON_SOURCE_REVISION}:mie-extinction`,
+		)
 	);
-	const albedo = createPacket(
-		basis,
-		SPECTRAL_QUANTITIES.REFLECTANCE,
-		wavelengths.map((wavelength) => interpolateUniform(GRASS_ALBEDO, 360, 800, wavelength)),
-		`b1-bruneton-${BRUNETON_SOURCE_REVISION}:grass`,
+	const albedo = /** @type {SpectralReflectancePacket} */ (
+		createPacket(
+			basis,
+			SPECTRAL_QUANTITIES.REFLECTANCE,
+			wavelengths.map((wavelength) => interpolateUniform(GRASS_ALBEDO, 360, 800, wavelength)),
+			`b1-bruneton-${BRUNETON_SOURCE_REVISION}:grass`,
+		)
 	);
 	const lightSource = new DistantSunLightSource({
 		angularRadius: {value: 0.004675, units: 'radians'},
@@ -179,21 +211,21 @@ export function createBrunetonProductionProfile({
 		topRadius: {value: 6420000, units: 'meters'},
 		observerHeight: {value: 0, units: 'meters'},
 		observerUpDirection: [0, 0, 1],
-		cacheAltitudeBinCount: 48,
-		cacheBoundaryAltitude: BRUNETON_POSITION_DOMAIN.boundaryAltitude,
+		cacheAltitudeBinCount: selectedPositionDomain.count,
+		cacheBoundaryAltitude: selectedPositionDomain.boundaryAltitude,
 		sourceTransmittanceIntervalCount: 20,
 	});
 	const groundBoundary = new UniformLambertianGroundBoundary({
 		id: 'b1-bruneton-grass-v1',
 		albedo,
 	});
-	const observation = {
+	const observation = /** @type {GeometryObservation} */ ({
 		instant: utcInstantFor(time),
 		location: {
 			latitude: {value: 42.44337, units: 'degrees'},
 			longitude: {value: -76.48163, units: 'degrees'},
 		},
-	};
+	});
 	const directionToLight = directionFromZenithAzimuth(theoreticalSun.zenithDegrees, fittedAzimuthDegrees);
 	const brunetonAngularSampleCounts = {
 		'bruneton-angular-288': {polarSampleCount: 12, azimuthSampleCount: 24},
@@ -215,11 +247,11 @@ export function createBrunetonProductionProfile({
 								? FIBONACCI_34_DIRECTION_DOMAIN_OWNER
 								: REFLECTION_COMPLETED_FIBONACCI_68_DIRECTION_DOMAIN_OWNER;
 	const domains = {
-		positions: BRUNETON_POSITION_DOMAIN,
+		positions: selectedPositionDomain,
 		incomingDirections,
 		outgoingDirections: CUBED_SPHERE_W27_DIRECTION_DOMAIN_OWNER,
 	};
-	const numerical = {
+	const numerical = /** @type {Algorithm32ExecutionNumericalProfile} */ ({
 		// Run 65 and point-local qualification 6 select Q30 for the official baseline.
 		viewPath:
 			incomingDirectionVariant === 'production-68'
@@ -227,7 +259,7 @@ export function createBrunetonProductionProfile({
 				: {intervalCount: 40, sampleDistribution: null},
 		sourcePathTransmittance: {intervalCount: 20},
 		cacheConstruction: {transportIntervalCount: 40, maximumScatteringOrder},
-	};
+	});
 	const profileIdentity = {
 		authority: BRUNETON_SOURCE_REVISION,
 		time,
@@ -252,7 +284,7 @@ export function createBrunetonProductionProfile({
 		kind: 'algorithm32-execution-profile',
 		id: `b1-bruneton-${time.replace(':', '')}-j${maximumScatteringOrder}${
 			incomingDirectionVariant === 'production-68' ? '' : `-${incomingDirectionVariant}`
-		}-v1`,
+		}${positionDomain === 'native48' ? '' : `-${positionDomain}`}-v1`,
 		schemaRevision: PROFILE_SCHEMA_REVISION,
 		revision: 1,
 		contentHash: CanonicalValueHash.sha256Value(profileIdentity),

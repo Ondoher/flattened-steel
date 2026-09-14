@@ -95,13 +95,13 @@ export default class B1Direct40OfflineAssetAdapter extends DistantSunSceneCacheO
 		});
 	}
 
-	async compileCondition({outputDirectory: requestedOutput, condition, productionRevision}) {
+	async compileCondition({outputDirectory: requestedOutput, condition, productionRevision, numericalPolicy}) {
 		if (typeof productionRevision !== 'string' || productionRevision.length === 0) {
 			throw new TypeError('B1 direct-40 compilation requires an explicit production revision.');
 		}
 		const outputDirectory = await this._requireContainedTarget(requestedOutput);
 		const profile = this._createProfile(condition);
-		const inputSet = DistantSunProfileCompilerInputs.createInputSet(profile);
+		const inputSet = DistantSunProfileCompilerInputs.createInputSet(profile, {numericalPolicy});
 		const control = jsonControl({
 			condition,
 			compilerIdentity: inputSet.compilerIdentity,
@@ -226,7 +226,7 @@ export default class B1Direct40OfflineAssetAdapter extends DistantSunSceneCacheO
 		return {outputDirectory, manifestPath, manifestSha256, manifest: record, profile};
 	}
 
-	async compileSet({outputDirectory: requestedOutput, conditions, productionRevision}) {
+	async compileSet({outputDirectory: requestedOutput, conditions, productionRevision, numericalPolicy}) {
 		if (
 			!Array.isArray(conditions) ||
 			conditions.length !== CAPTURE_TIMES.length ||
@@ -239,6 +239,7 @@ export default class B1Direct40OfflineAssetAdapter extends DistantSunSceneCacheO
 		for (const condition of conditions) {
 			const directoryName = `condition-${condition.localTime.replace(':', '')}`;
 			const result = await this.compileCondition({
+				numericalPolicy,
 				outputDirectory: path.join(outputDirectory, directoryName),
 				condition,
 				productionRevision,

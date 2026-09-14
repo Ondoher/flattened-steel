@@ -1,6 +1,7 @@
 import {open} from 'node:fs/promises';
 import Inventory from './DistantSunSharedCacheGenerationInventory.js';
 import Graph from './DistantSunSharedCacheGenerationGraph.js';
+import Codec from './DistantSunSharedCacheGenerationCodec.js';
 
 /** Independent exact GPU probe values read from immutable dense control payloads. */
 export default class DistantSunSharedRuntimeOracle {
@@ -14,8 +15,9 @@ export default class DistantSunSharedRuntimeOracle {
 	 *
 	 * @returns {Promise<DistantSunSharedRuntimeOracle>} - Prepared read-only oracle.
 	 */
-	async load(files, root, report) {
+	async load(files, root, report, candidate = false) {
 		this._files = files;
+		this._candidateRoot = candidate ? root : undefined;
 		this._inventory = await new Inventory().load(files);
 		this._graph = await new Graph().read({
 			files,
@@ -43,9 +45,22 @@ export default class DistantSunSharedRuntimeOracle {
 		if (block.rowCount < 64) rows.push(block.rowCount);
 		const samples = [],
 			parents = [];
+		let decoded;
+		if (this._candidateRoot) {
+			const artifact = {...block.encoded, path: `${this._candidateRoot}/${block.encoded.path}`};
+			decoded = new Codec().decode(await this._files.read(artifact.path, artifact), block.decoded.byteLength);
+			if (this._files.hash(decoded) !== block.decoded.sha256)
+				throw new Error('Candidate oracle decoded hash mismatch.');
+			parents.push({artifact, decoded: block.decoded});
+		}
 		for (const row of [...new Set(rows)]) {
 			const channels = [];
-			if (row < block.rowCount) {
+			if (row < block.rowCount && decoded) {
+				for (let channel = 0; channel < 15; channel++) {
+					const start = (channel * block.rowCount + row) * 4058 * 4;
+					channels.push(decoded.subarray(start, start + 4058 * 4));
+				}
+			} else if (row < block.rowCount) {
 				const owner = this._coordinates.get(block.coordinates[row].join(':'));
 				const artifact = {
 					...owner.scene.manifest.exactSeamPayload,
@@ -101,8 +116,9 @@ export default class DistantSunSharedRuntimeOracle {
 			rowCount: block.rowCount,
 			parents,
 			samples,
-			operation:
-				'dense Float32 bits at ((channel * denseRowCount + denseRow) * 4058 + logicalToUnique[face*729+v*27+u]) * 4; padding and synthetic channel15 are zero',
+			operation: this._candidateRoot
+				? 'Authenticated candidate decode; Float32 bits at ((channel * blockRowCount + row) * 4058 + logicalToUnique[face*729+v*27+u]) * 4; padding and synthetic channel15 are zero'
+				: 'dense Float32 bits at ((channel * denseRowCount + denseRow) * 4058 + logicalToUnique[face*729+v*27+u]) * 4; padding and synthetic channel15 are zero',
 		};
 	}
 }

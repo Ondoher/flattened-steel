@@ -308,6 +308,7 @@ export async function generateGpuCondition(request) {
 	}
 	const baseProfile = createBrunetonProductionProfile(request);
 	if (
+		(request.positionDomain ?? 'native48') !== (request.asset.positionDomain ?? 'native48') ||
 		request.asset.profile.id !== baseProfile.id ||
 		request.asset.condition.fittedAzimuthDegrees !== request.fittedAzimuthDegrees ||
 		!Array.isArray(request.asset.directionToSource) ||

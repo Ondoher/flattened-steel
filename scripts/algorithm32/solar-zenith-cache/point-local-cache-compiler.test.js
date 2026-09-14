@@ -7,6 +7,7 @@ import test from 'node:test';
 import {CanonicalValueHash} from '../../../src/algorithm32/value-identity/CanonicalValueHash.js';
 import {createBrunetonProductionProfile} from '../../experiments/b1-directional-sky-radiance/production-profile.js';
 import {DistantSunSceneCacheCompilerInputs} from './DistantSunSceneCacheCompilerInputs.js';
+import {DistantSunSceneCacheNumerics} from './DistantSunSceneCacheNumerics.js';
 import DistantSunSharedCacheGenerator from './DistantSunSharedCacheGenerator.js';
 import DistantSunPointLocalCacheInventory from './DistantSunPointLocalCacheInventory.js';
 import DistantSunPointLocalCachePackage from './DistantSunPointLocalCachePackage.js';
@@ -14,6 +15,8 @@ import DistantSunPointLocalCacheReader from './DistantSunPointLocalCacheReader.j
 import DistantSunPointLocalCacheStaging from './DistantSunPointLocalCacheStaging.js';
 import DistantSunSharedCacheGenerationFiles from './DistantSunSharedCacheGenerationFiles.js';
 import {DistantSunPointLocalProfileCompilerInputs} from './DistantSunPointLocalProfileCompilerInputs.js';
+import {DISTANT_SUN_SCENE_CACHE_OZONE_CROSS_SECTIONS_SQUARE_METERS} from './consts.js';
+import {NATIVE_51_NEAR_GROUND_POSITION_DOMAIN_OWNER} from '../../../src/algorithm32/sampling-domains/index.js';
 
 const repositoryRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
 const proofRoot = 'tmp/algorithm32/point-local-cache-compiler';
@@ -73,6 +76,82 @@ function tile(channel) {
 	return bytes;
 }
 
+test('numerical candidates have distinct Native15 and Direct40 identities while retaining logical ground coordinates', () => {
+	const scene = DistantSunSceneCacheCompilerInputs.createQualifiedSanJoseNauticalScene();
+	const profile = createBrunetonProductionProfile({
+		time: '10:15',
+		fittedAzimuthDegrees: 98.59994923191232,
+		maximumScatteringOrder: 4,
+	});
+	const controls = [
+		DistantSunSceneCacheCompilerInputs.createInputSet(scene),
+		DistantSunPointLocalProfileCompilerInputs.createInputSet(profile),
+	];
+	const identities = controls.map((control) => new Set([control.numericalIdentity]));
+	for (const numericalPolicy of [2, 4, 8]
+		.map((height) => DistantSunSceneCacheNumerics.createSurfaceLimit(height))
+		.concat(DistantSunSceneCacheNumerics.createAnchoredRadial())) {
+		const options = /** @type {DistantSunSceneCacheCompilerOptions} */ ({
+			numericalPolicy,
+			solarInterpolation: 'monotone-cubic',
+		});
+		const candidates = [
+			DistantSunSceneCacheCompilerInputs.createInputSet(scene, options),
+			DistantSunPointLocalProfileCompilerInputs.createInputSet(profile, options),
+		];
+		for (const [index, candidate] of candidates.entries()) {
+			const spec = candidate.buildRequest.transportSpec;
+			assert.ok(
+				!identities[index].has(candidate.numericalIdentity),
+				'Numerical selections must not collide with a control or another candidate.',
+			);
+			identities[index].add(candidate.numericalIdentity);
+			assert.deepEqual(spec.numerical.geometryPolicy, numericalPolicy);
+			assert.equal(spec.numerical.solarInterpolation, 'monotone-cubic');
+			assert.deepEqual(spec.domains, controls[index].buildRequest.transportSpec.domains);
+			assert.equal(spec.domains.position.nodes[0].altitudeMeters, 0);
+		}
+	}
+	const input = DistantSunPointLocalProfileCompilerInputs.createBatch([profile], {
+		numericalPolicy: DistantSunSceneCacheNumerics.createAnchoredRadial(),
+		solarInterpolation: 'monotone-cubic',
+	});
+	const inventory = new DistantSunPointLocalCacheInventory().create(
+		input.buildRequest,
+		input.scenes,
+		input.wavelengths,
+	);
+	const coordinates = new Set(inventory.coordinates.map((coordinate) => coordinate.join(':')));
+	const linearInput = DistantSunPointLocalProfileCompilerInputs.createBatch([profile]);
+	const linearInventory = new DistantSunPointLocalCacheInventory().create(
+		linearInput.buildRequest,
+		linearInput.scenes,
+		linearInput.wavelengths,
+	);
+	for (const [sceneIndex, sceneRecord] of inventory.scenes.entries())
+		for (const row of linearInventory.scenes[sceneIndex].ledger.rows) {
+			const retained = sceneRecord.ledger.rows[row.altitudeIndex];
+			assert.equal(retained.firstSolarZenithIndex, Math.max(0, row.firstSolarZenithIndex - 1));
+			assert.equal(retained.lastSolarZenithIndex, Math.min(179, row.lastSolarZenithIndex + 1));
+			for (
+				let zenith = Math.max(0, row.firstSolarZenithIndex - 1);
+				zenith <= Math.min(179, row.lastSolarZenithIndex + 1);
+				zenith++
+			) {
+				assert.ok(
+					coordinates.has(`${row.altitudeIndex}:${zenith}`),
+					'The Direct40 candidate must include its complete cubic stencil.',
+				);
+				const packed = retained.firstPackedRow + zenith - retained.firstSolarZenithIndex;
+				assert.deepEqual(
+					inventory.coordinates[sceneRecord.indexes[packed]],
+					[row.altitudeIndex, zenith],
+					'The materialized scene must retain every cubic halo row.',
+				);
+			}
+		}
+});
+
 test('projects Direct40 into the receiver-local Z180 compiler and plans the accepted 17-scene union', async () => {
 	const control = await reference();
 	const profiles = control.scenes.map((scene) =>
@@ -119,11 +198,118 @@ test('preserves the fixed Native15 request and ledger identities', () => {
 	);
 	assert.equal(
 		CanonicalValueHash.sha256Value(input.buildRequest),
+		'sha256:e3daaf2ee2600caef707c3c1106ae6c03b25577b9f075316511c3c0962645e4b',
+	);
+	// Preserve the historical ozone control independently of the deployed no-ozone profile.
+	const historical = structuredClone(input.buildRequest);
+	historical.transportSpec.atmosphere.id = 'algorithm32-canonical-plus-bruneton-ozone-300du-v1';
+	const ozone = historical.transportSpec.atmosphere.ozone;
+	ozone.id = 'bruneton-earth-demo-ozone-34f14e7-v1';
+	ozone.absorptionEnabled = true;
+	ozone.dobsonUnits = 300;
+	delete ozone.maximumDensityPerCubicMeter;
+	ozone.crossSectionTable.values = DISTANT_SUN_SCENE_CACHE_OZONE_CROSS_SECTIONS_SQUARE_METERS;
+	assert.equal(
+		CanonicalValueHash.sha256Value(historical),
 		'sha256:364d05afddbe0fec61f8941fa25ae71b70835706102946f025689d29ff65bf04',
 	);
 	assert.equal(
 		CanonicalValueHash.sha256Value(input.ledger.toRecord()),
 		'sha256:b5e38741359b0e60ce6155a47941a000192c7aec1b6240d48bf3ab3bb032f671',
+	);
+});
+
+test('projects the named near-ground grid without changing any other transport input', async () => {
+	const control = await reference();
+	const options = {
+		numericalPolicy: DistantSunSceneCacheNumerics.createAnchoredRadial(),
+		solarInterpolation: 'monotone-cubic',
+	};
+	const profiles = control.scenes.map((scene) =>
+		createBrunetonProductionProfile({
+			time: scene.time,
+			fittedAzimuthDegrees: scene.fittedAzimuthDegrees,
+			maximumScatteringOrder: 4,
+			positionDomain: 'native51-near-ground',
+		}),
+	);
+	const originals = control.scenes.map((scene) =>
+		createBrunetonProductionProfile({
+			time: scene.time,
+			fittedAzimuthDegrees: scene.fittedAzimuthDegrees,
+			maximumScatteringOrder: 4,
+		}),
+	);
+	const input = DistantSunPointLocalProfileCompilerInputs.createBatch(profiles, {
+		...options,
+		positionDomain: 'native51-near-ground',
+		ids: control.scenes.map((scene) => scene.id),
+	});
+	const original = DistantSunPointLocalProfileCompilerInputs.createBatch(originals, options);
+	const comparable = structuredClone(input.buildRequest.transportSpec);
+	comparable.domains.position = original.buildRequest.transportSpec.domains.position;
+	assert.deepEqual(comparable, original.buildRequest.transportSpec);
+	assert.notEqual(input.numericalIdentity, original.numericalIdentity);
+	assert.notEqual(input.constructionProfileIdentity.contentHash, original.constructionProfileIdentity.contentHash);
+	assert.deepEqual(
+		input.buildRequest.transportSpec.domains.position.nodes.slice(0, 5).map((node) => node.altitudeMeters),
+		[0, 468.75, 937.5, 1406.25, 1875],
+	);
+	const inventory = new DistantSunPointLocalCacheInventory().create(
+		input.buildRequest,
+		input.scenes,
+		input.wavelengths,
+	);
+	assert.equal(inventory.coordinates.length, 2149);
+	assert.equal(inventory.blocks.length, 106);
+	assert.equal(inventory.coordinates.length * 4058 * 40 * 4, 1395302720);
+	for (const scene of inventory.scenes) {
+		assert.equal(scene.ledger.rows.length, 51);
+		for (const row of scene.ledger.rows) {
+			assert.deepEqual(
+				row.altitude,
+				NATIVE_51_NEAR_GROUND_POSITION_DOMAIN_OWNER.nodes[row.altitudeIndex].coordinate,
+			);
+			for (let zenith = row.firstSolarZenithIndex; zenith <= row.lastSolarZenithIndex; zenith += 1) {
+				const packed = row.firstPackedRow + zenith - row.firstSolarZenithIndex;
+				assert.deepEqual(inventory.coordinates[scene.indexes[packed]], [row.altitudeIndex, zenith]);
+			}
+		}
+	}
+	assert.throws(
+		() => DistantSunPointLocalProfileCompilerInputs.createBatch(profiles, {positionDomain: 'native48'}),
+		/disagrees/u,
+	);
+	const altered = structuredClone(input.buildRequest);
+	altered.transportSpec.domains.position.nodes[1].altitudeMeters = 500;
+	assert.throws(
+		() => new DistantSunPointLocalCacheInventory().create(altered, input.scenes, input.wavelengths),
+		/exact supported/u,
+	);
+	const mislabeled = structuredClone(input.buildRequest);
+	mislabeled.transportSpec.domains.position.id = original.buildRequest.transportSpec.domains.position.id;
+	assert.throws(
+		() => new DistantSunPointLocalCacheInventory().create(mislabeled, input.scenes, input.wavelengths),
+		/exact supported/u,
+	);
+});
+
+test('projects an explicit Native51 compiler request while explicit Native48 remains identical to omission', () => {
+	const scene = DistantSunSceneCacheCompilerInputs.createQualifiedSanJoseNauticalScene();
+	const original = DistantSunSceneCacheCompilerInputs.createInputSet(scene);
+	assert.deepEqual(DistantSunSceneCacheCompilerInputs.createInputSet(scene, {positionDomain: 'native48'}), original);
+	const candidate = DistantSunSceneCacheCompilerInputs.createInputSet(scene, {
+		positionDomain: 'native51-near-ground',
+	});
+	assert.equal(candidate.ledger.rows.length, 51);
+	assert.equal(candidate.buildRequest.transportSpec.domains.position.count, 51);
+	assert.notEqual(candidate.numericalIdentity, original.numericalIdentity);
+	const comparable = structuredClone(candidate.buildRequest.transportSpec);
+	comparable.domains.position = original.buildRequest.transportSpec.domains.position;
+	assert.deepEqual(comparable, original.buildRequest.transportSpec);
+	assert.throws(
+		() => DistantSunSceneCacheCompilerInputs.createInputSet(scene, {positionDomain: 'native96'}),
+		/Unsupported/u,
 	);
 });
 

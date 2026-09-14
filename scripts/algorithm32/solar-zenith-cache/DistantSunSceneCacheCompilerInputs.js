@@ -1,6 +1,7 @@
 import {
 	CUBED_SPHERE_W27_DIRECTION_DOMAIN_OWNER,
 	NATIVE_48_POSITION_DOMAIN_OWNER,
+	SphericalNativePositionDomains,
 	REFLECTION_COMPLETED_FIBONACCI_68_DIRECTION_DOMAIN_OWNER,
 	SOLAR_ZENITH_180_DOMAIN_OWNER,
 } from '../../../src/algorithm32/sampling-domains/index.js';
@@ -9,11 +10,9 @@ import {
 	NATIVE_SOURCE_IRRADIANCE_DENSITY,
 } from '../../../src/algorithm32/profiles/native-15/native-15-profile.js';
 import DistantSunSceneCacheLedger from '../../../src/algorithm32/implementation/distant-sun/cache/DistantSunSceneCacheLedger.js';
-import {
-	DISTANT_SUN_SCENE_CACHE_COMPILER_IDENTITY,
-	DISTANT_SUN_SCENE_CACHE_NUMERICAL_IDENTITY,
-	DISTANT_SUN_SCENE_CACHE_OZONE_CROSS_SECTIONS_SQUARE_METERS,
-} from './consts.js';
+import {DISTANT_SUN_SCENE_CACHE_COMPILER_IDENTITY, DISTANT_SUN_SCENE_CACHE_NUMERICAL_IDENTITY} from './consts.js';
+import {CanonicalValueHash} from '../../../src/algorithm32/value-identity/CanonicalValueHash.js';
+import {DistantSunSceneCacheNumerics} from './DistantSunSceneCacheNumerics.js';
 
 /** Cohesive production input owner for the offline distant-Sun scene-cache compiler. */
 export const DistantSunSceneCacheCompilerInputs = {
@@ -47,15 +46,23 @@ export const DistantSunSceneCacheCompilerInputs = {
 	},
 
 	/**
-	 * Call this method to create the exact executable Native48/Z180/W27/F68/Native15/N4 compiler request for one scene.
+	 * Call this method to create a Native48 or explicitly selected Native51/Z180/W27/F68/Native15/N4 request.
 	 *
 	 * @param {DistantSunSceneCacheCompilerScene} scene - The exact scene Sun state and fixed support.
+	 * @param {DistantSunSceneCacheCompilerOptions} [options] - Explicit candidate controls.
 	 * @returns {DistantSunSceneCacheCompilerInputSet} - The compiler request, ledger, scene, and identities.
 	 */
-	createInputSet(scene) {
+	createInputSet(scene, options = {}) {
+		const positionDomain = SphericalNativePositionDomains.select(options.positionDomain);
+		const geometryPolicy = DistantSunSceneCacheNumerics.accept(options.numericalPolicy);
+		if (
+			options.solarInterpolation !== undefined &&
+			!['linear', 'monotone-cubic'].includes(options.solarInterpolation)
+		)
+			throw new RangeError('Unsupported compiler solar interpolation.');
 		const ledger = new DistantSunSceneCacheLedger({
 			...scene,
-			positionDomain: NATIVE_48_POSITION_DOMAIN_OWNER,
+			positionDomain,
 			solarZenithDomain: SOLAR_ZENITH_180_DOMAIN_OWNER,
 			outgoingDirectionDomain: CUBED_SPHERE_W27_DIRECTION_DOMAIN_OWNER,
 			spectralBasis: NATIVE_15_SPECTRAL_BASIS,
@@ -68,9 +75,9 @@ export const DistantSunSceneCacheCompilerInputs = {
 		}));
 		const domains = {
 			position: {
-				id: NATIVE_48_POSITION_DOMAIN_OWNER.id,
-				count: NATIVE_48_POSITION_DOMAIN_OWNER.count,
-				nodes: NATIVE_48_POSITION_DOMAIN_OWNER.nodes.map((node) => ({
+				id: positionDomain.id,
+				count: positionDomain.count,
+				nodes: positionDomain.nodes.map((node) => ({
 					index: node.index,
 					altitudeMeters: node.coordinate.value,
 				})),
@@ -115,7 +122,7 @@ export const DistantSunSceneCacheCompilerInputs = {
 				topRadiusMeters: 6420000,
 			},
 			atmosphere: {
-				id: 'algorithm32-canonical-plus-bruneton-ozone-300du-v1',
+				id: 'algorithm32-canonical-no-ozone-v1',
 				rayleighScaleHeightMeters: 8000,
 				mieScaleHeightMeters: 1200,
 				rayleighCoefficientScalePerMeter: 0.00000124062,
@@ -124,24 +131,29 @@ export const DistantSunSceneCacheCompilerInputs = {
 				mieSingleScatteringAlbedo: 0.8,
 				miePhaseFunctionG: 0.7,
 				ozone: {
-					id: 'bruneton-earth-demo-ozone-34f14e7-v1',
-					absorptionEnabled: true,
+					id: 'algorithm32-disabled-ozone-v1',
+					absorptionEnabled: false,
 					temperatureKelvin: 233,
-					dobsonUnits: 300,
+					dobsonUnits: 0,
 					dobsonUnitMoleculesPerSquareMeter: 2.687e20,
 					densityIntegralMeters: 15000,
 					profileAltitudesMeters: {bottom: 10000, peak: 25000, top: 40000},
+					maximumDensityPerCubicMeter: 0,
 					crossSectionTable: {
 						minimumNanometers: 360,
 						maximumNanometers: 830,
 						spacingNanometers: 10,
 						units: 'm^2',
-						values: DISTANT_SUN_SCENE_CACHE_OZONE_CROSS_SECTIONS_SQUARE_METERS,
+						values: Array(48).fill(0),
 					},
 				},
 			},
 			ground: {id: 'algorithm32-canonical-black-ground-boundary-v1'},
 			numerical: {
+				...(geometryPolicy ? {geometryPolicy} : {}),
+				...(options.solarInterpolation === 'monotone-cubic'
+					? {solarInterpolation: options.solarInterpolation}
+					: {}),
 				sourcePathTransmittanceIntervalCount: 20,
 				transportIntervalCount: 15,
 				maximumScatteringOrder: 4,
@@ -151,7 +163,12 @@ export const DistantSunSceneCacheCompilerInputs = {
 
 		return {
 			compilerIdentity: DISTANT_SUN_SCENE_CACHE_COMPILER_IDENTITY,
-			numericalIdentity: DISTANT_SUN_SCENE_CACHE_NUMERICAL_IDENTITY,
+			numericalIdentity:
+				geometryPolicy ||
+				options.solarInterpolation === 'monotone-cubic' ||
+				positionDomain !== NATIVE_48_POSITION_DOMAIN_OWNER
+					? CanonicalValueHash.sha256Value(transportSpec)
+					: DISTANT_SUN_SCENE_CACHE_NUMERICAL_IDENTITY,
 			scene,
 			ledger,
 			buildRequest: {

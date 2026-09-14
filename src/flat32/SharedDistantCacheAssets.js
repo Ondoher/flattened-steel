@@ -3,6 +3,29 @@ import DistantSunSharedCacheTransport from '../algorithm32/implementation/distan
 import DistantSunSharedCacheWorkerClient from '../algorithm32/implementation/distant-sun/cache/DistantSunSharedCacheWorkerClient.js';
 import {DISTANT_SUN_SHARED_CACHE_PACKET_BYTES} from '../algorithm32/implementation/distant-sun/cache/consts.js';
 
+/**
+ * Admit a server-selected transition qualification only on its measured runtime target and complete byte budget.
+ * @param {DistantSunSharedCacheMemoryQualification | undefined} value - Server-selected qualification.
+ * @param {string} renderer - Unmasked WebGL renderer string.
+ * @returns {DistantSunSharedCacheMemoryQualification | undefined} - Admitted runtime policy.
+ */
+function admitTransitionQualification(value, renderer) {
+	const target = value?.targetId?.match(/^(.+) \/ Chrome ([1-9][0-9]*) \/ ANGLE (D3D11)$/u);
+	const browser = navigator.userAgent.match(/Chrome\/([1-9][0-9]*)\./u);
+	if (
+		!target ||
+		!browser ||
+		!/^sha256:[a-f0-9]{64}$/u.test(value.evidenceId) ||
+		!Number.isSafeInteger(value.maximumBytes) ||
+		value.maximumBytes < 48 * DISTANT_SUN_SHARED_CACHE_PACKET_BYTES ||
+		browser[1] !== target[2] ||
+		!renderer.includes(`${target[1]} (`) ||
+		!/Direct3D11.*D3D11/u.test(renderer)
+	)
+		return undefined;
+	return value;
+}
+
 /** Application-owned authenticated package reuse and sole persistent Worker transport. */
 export default class SharedDistantCacheAssets {
 	/** Authenticated selected package. @type {DistantSunSharedCachePackage | undefined} */
@@ -46,23 +69,14 @@ export default class SharedDistantCacheAssets {
 		}
 		const extension = context?.getExtension('WEBGL_debug_renderer_info');
 		const renderer = extension ? String(context.getParameter(extension.UNMASKED_RENDERER_WEBGL)) : '';
-		const qualified =
-			asset.packageSetIdentity === '7e80317f53c79d0d5a30ebc006630213a2e758008c62a3abb14d2534a8cc2b99' &&
-			asset.transitionQualification?.evidenceId ===
-				'sha256:4544d8f0f881d9f32208adab945858b614cef22ee80b2ded0eb078ec4f2e5dce' &&
-			asset.transitionQualification.targetId === 'NVIDIA GeForce RTX 2060 / Chrome 153 / ANGLE D3D11' &&
-			/NVIDIA GeForce RTX 2060 \(/u.test(renderer) &&
-			/Direct3D11.*D3D11/u.test(renderer) &&
-			/Chrome\/153\./u.test(navigator.userAgent);
-		const transitionQualification = qualified ? asset.transitionQualification : undefined;
+		const transitionQualification = admitTransitionQualification(asset.transitionQualification, renderer);
 		return {
 			package: this._package,
 			transport,
 			sceneOrdinal: ordinal,
-			maximumGpuBytes: transitionQualification
-				? 48 * DISTANT_SUN_SHARED_CACHE_PACKET_BYTES
-				: 24 * DISTANT_SUN_SHARED_CACHE_PACKET_BYTES,
+			maximumGpuBytes: transitionQualification?.maximumBytes ?? 24 * DISTANT_SUN_SHARED_CACHE_PACKET_BYTES,
 			transitionQualification,
+			solarInterpolation: asset.solarInterpolation,
 		};
 	}
 

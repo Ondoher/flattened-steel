@@ -191,6 +191,9 @@ function requireResolution(value, assetBaseUrl, requestedSolarZenithDegrees) {
 	)
 		throw new RangeError('Shared-cache resolution root is uncontained.');
 	const qualification = asset.transitionQualification;
+	if (asset.solarInterpolation !== undefined && !['linear', 'monotone-cubic'].includes(asset.solarInterpolation)) {
+		throw new TypeError('Shared-cache solar interpolation is incompatible.');
+	}
 	if (
 		qualification &&
 		(typeof qualification.evidenceId !== 'string' ||

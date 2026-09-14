@@ -1,4 +1,5 @@
 import SphericalNativePositionDomain from './SphericalNativePositionDomain.js';
+import NearGround51PositionDomain from './NearGround51PositionDomain.js';
 
 /** Supported executable native spherical position owners. */
 export const NATIVE_4_POSITION_DOMAIN_OWNER = new SphericalNativePositionDomain({
@@ -15,6 +16,11 @@ export const NATIVE_48_POSITION_DOMAIN_OWNER = new SphericalNativePositionDomain
 	id: 'algorithm32-native-48-position-v2',
 	count: 48,
 });
+
+/** Native48 with three additional point samples below 1,875 metres; existing heights remain exact. */
+export const NATIVE_51_NEAR_GROUND_POSITION_DOMAIN_OWNER = new NearGround51PositionDomain(
+	NATIVE_48_POSITION_DOMAIN_OWNER,
+);
 
 /** Established Native-48 position count. */
 export const NATIVE_48_POSITION_COUNT = NATIVE_48_POSITION_DOMAIN_OWNER.count;

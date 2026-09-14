@@ -31,6 +31,7 @@ import {
 	verifyCandidateProvenance,
 } from './candidate-provenance.js';
 import {N_ORDER_CANDIDATE_DEFINITIONS, parseArguments, renderReport, runExperiment} from './run.js';
+import {NATIVE_51_NEAR_GROUND_POSITION_DOMAIN_OWNER} from '../../../src/algorithm32/sampling-domains/position/spherical-native/consts.js';
 
 const dataset = loadKiderDataset();
 const resultDirectory = new URL(
@@ -368,6 +369,132 @@ test('paper candidate provenance identifies direct 40-coordinate transport', (t)
 		() => verifyCandidateProvenance(path, PAPER_CANDIDATE_PROFILES.default),
 		/physicalProfileContentHash/,
 	);
+});
+
+test('paper Native51 candidate provenance requires the exact named nodes and unchanged physical controls', (t) => {
+	const directory = mkdtempSync(join(tmpdir(), 'algorithm32-native51-provenance-'));
+	t.after(() => rmSync(directory, {recursive: true, force: true}));
+	const path = join(directory, 'candidate.json');
+	const profile = PAPER_CANDIDATE_PROFILES.j4;
+	const candidate = {
+		schema: 'algorithm32-current-production-b1-provenance-v2',
+		runId: 'native51-provenance-gate-test',
+		backend: 'gpu-production-shaders-r32f',
+		modelNameInBenchmarkTables: 'proposed',
+		profileId: profile.provenanceProfileId,
+		presentationName: profile.presentationName,
+		rowCount: 1377,
+		nativeSpectralBoundary: {channelCount: 40, projection: 'identity-direct-40'},
+		physicalProfileId: profile.physicalProfileId,
+		physicalProfileContentHash: profile.physicalProfileContentHash,
+		cacheRepresentation: 'receiver-local-native51-near-ground-z180-w27',
+		numericalControls: {
+			...profile.controls,
+			pathIntervalCount: 30,
+			pathSampleDistribution: 'quadratic-near-observer-v1',
+			incidentAltitudeBinCount: 51,
+			positionNodeCount: 51,
+			scatteringOutputDomain: 'receiver-local-boundary-inclusive-gnomonic-cubed-sphere-w27',
+			positionDomain: {
+				selection: 'native51-near-ground',
+				id: NATIVE_51_NEAR_GROUND_POSITION_DOMAIN_OWNER.id,
+				nodes: NATIVE_51_NEAR_GROUND_POSITION_DOMAIN_OWNER.nodes,
+			},
+		},
+	};
+	for (const selected of [profile, PAPER_CANDIDATE_PROFILES.default]) {
+		writeFileSync(
+			path,
+			JSON.stringify({
+				...candidate,
+				profileId: selected.provenanceProfileId,
+				presentationName: selected.presentationName,
+			}),
+		);
+		assert.equal(verifyCandidateProvenance(path, selected).numericalControls.positionNodeCount, 51);
+	}
+	for (const mutate of [
+		(value) => {
+			delete value.numericalControls.positionDomain;
+		},
+		(value) => {
+			value.numericalControls.positionDomain.selection = 'native48';
+		},
+		(value) => {
+			value.numericalControls.positionDomain.id = 'unregistered-51-node-domain';
+		},
+		(value) => {
+			value.numericalControls.positionDomain.nodes[1].coordinate.value = 469;
+		},
+		(value) => {
+			value.numericalControls.positionDomain.nodes[1].coordinate.units = 'kilometers';
+		},
+		(value) => {
+			value.numericalControls.incidentAltitudeBinCount = 48;
+		},
+		(value) => {
+			value.numericalControls.positionNodeCount = 48;
+		},
+		(value) => {
+			value.cacheRepresentation = 'receiver-local-native48-z180-w27';
+		},
+		(value) => {
+			value.backend = 'cpu-reference-binary64';
+		},
+		(value) => {
+			value.numericalControls.pathIntervalCount = 40;
+		},
+		(value) => {
+			delete value.numericalControls.pathSampleDistribution;
+		},
+		(value) => {
+			value.numericalControls.maximumScatteringOrder = 3;
+		},
+		(value) => {
+			value.numericalControls.incidentDirectionCount = 34;
+		},
+		(value) => {
+			value.numericalControls.scatteringOutputDomain =
+				'source-aligned-boundary-inclusive-gnomonic-cubed-sphere-w27';
+		},
+		(value) => {
+			value.numericalControls.sourceTransmittanceIntervalCount = 40;
+		},
+		(value) => {
+			value.physicalProfileContentHash = 'sha256:wrong';
+		},
+		(value) => {
+			value.nativeSpectralBoundary.channelCount = 15;
+		},
+		(value) => {
+			value.rowCount = 81;
+		},
+	]) {
+		const invalid = structuredClone(candidate);
+		mutate(invalid);
+		for (const selected of [profile, PAPER_CANDIDATE_PROFILES.default]) {
+			writeFileSync(
+				path,
+				JSON.stringify({
+					...invalid,
+					profileId: selected.provenanceProfileId,
+					presentationName: selected.presentationName,
+				}),
+			);
+			assert.throws(() => verifyCandidateProvenance(path, selected));
+		}
+	}
+	const original = structuredClone(candidate);
+	delete original.numericalControls.positionDomain;
+	original.numericalControls.incidentAltitudeBinCount = 48;
+	original.numericalControls.positionNodeCount = 48;
+	original.cacheRepresentation = 'receiver-local-native48-z180-w27';
+	writeFileSync(path, JSON.stringify(original));
+	assert.equal(verifyCandidateProvenance(path, profile).numericalControls.positionNodeCount, 48);
+	original.numericalControls.incidentAltitudeBinCount = 51;
+	original.numericalControls.positionNodeCount = 51;
+	writeFileSync(path, JSON.stringify(original));
+	assert.throws(() => verifyCandidateProvenance(path, profile), /incidentAltitudeBinCount/);
 });
 
 test('candidate labels require exact independently supplied production provenance', () => {

@@ -15,6 +15,59 @@ the global `review-standards` skill after its eligibility gates pass. Keep
 monitoring active for the session unless the user suspends it. The skill owns
 evaluation timing, readiness evidence, and adviser lifecycle.
 
+# Contained Experiment Verification
+
+Every experiment requires review of authored code against the canonical
+`types.md` standard by `contracts-reviewer`, in addition to its local type
+check. The experiment folder mappings must retain `types.md`, including any
+more-specific experiment assignment. Type-check success alone does not satisfy
+the required standards review.
+
+Initialize and refresh the reviewer through the global `review-standards`
+skill and its eligibility gates. Experiment work requires reviewer readiness,
+applicable context refresh, and validated review evidence before an
+implementation phase is reported complete. If startup is blocked, report the
+unmet review gate; do not waive it or claim the phase is complete.
+
+This requirement applies to existing and new experiments. Historical evidence
+remains immutable; it does not require reopening completed runs. Additional
+standards and reviewer lanes follow the folder mappings and governing
+instructions, not the mere use of a browser, server, or another capability.
+Experiment-specific proof execution and evidence gates remain governed by the
+experiment design and plan. Production promotion follows the production folder
+mappings and reviewer lifecycle.
+
+# Review Timing
+
+Batch standards review at stable, coherent implementation milestones. The
+primary agent owns day-to-day reasoning, self-review, and local checks; do not
+request a standards pass after each edit, diagnostic run, or candidate tweak.
+Resolve obvious issues and stabilize the intended code before requesting the
+required primary review and independent audit.
+
+Declare each review unit and capture its baseline before work begins. Adjacent
+plan phases that develop the same code may share one review milestone, but
+keep their implementation-completion gates open until that review validates.
+Use an early, narrowly scoped consultation only when an unresolved contract or
+ownership decision could cause substantial rework; consultation does not count
+as completed standards review.
+
+Before rerunning a review, identify what invalidated the existing evidence:
+reviewed source, relevant collaborators, contracts, standards, mappings, or
+governing context. Reuse evidence only while its original request remains
+valid under the evidence-ledger verifier. Never relabel an old report with a
+new fingerprint or omit obligations from a new request. Review affected lanes
+and the complete mapped inventory for the required unit, including relevant
+unchanged collaborators, without automatically expanding to the whole
+experiment or repository.
+
+Readiness refresh is distinct from source review. A routine progress update,
+an additional render from unchanged code, or a repeated successful check does
+not itself call for another source review; assess evidence freshness before
+any compliance claim. Final handoff validates applicable evidence and requests
+fresh review only where required. Checkpoint evaluation retains its separate
+whole-repository scope and suppresses duplicate advice for unchanged state.
+
 # Topic Bootstrap
 
 At the start of a session, read only

@@ -5,7 +5,7 @@ import {mkdir, mkdtemp, realpath, rm, rmdir, symlink, writeFile} from 'node:fs/p
 import {tmpdir} from 'node:os';
 import path from 'node:path';
 
-import {nextExperimentPrefix, requirePrefix, validateStructure} from './scaffold-experiment.mjs';
+import {requireExperimentSlug, validateStructure} from './scaffold-experiment.mjs';
 
 /**
  * Called by the proof runner to create the three managed experiment parent roots.
@@ -25,7 +25,7 @@ async function createManagedParents(repoRoot) {
  * Called by the proof runner to derive a complete scaffold path fixture.
  *
  * @param {string} repoRoot - Isolated proof repository root.
- * @param {string} experimentFolder - Experiment folder identity used by the fixture.
+ * @param {string} experimentFolder - Unnumbered experiment folder identity used by the fixture.
  * @returns {ExperimentScaffoldPaths} - Complete fixture paths.
  */
 function scaffoldPaths(repoRoot, experimentFolder) {
@@ -42,6 +42,8 @@ function scaffoldPaths(repoRoot, experimentFolder) {
 		plan: path.join(topicRoot, 'plan.md'),
 		status: path.join(topicRoot, 'status.md'),
 		sourceInstructions: path.join(sourceRoot, 'AGENTS.md'),
+		typeConfiguration: path.join(sourceRoot, 'jsconfig.json'),
+		typeDeclarations: path.join(sourceRoot, 'types.d.ts'),
 	};
 }
 
@@ -58,14 +60,22 @@ async function createScaffoldFixture(paths) {
 		mkdir(paths.outputRoot, {recursive: true}),
 	]);
 	await Promise.all(
-		[paths.topicReadme, paths.design, paths.plan, paths.status, paths.sourceInstructions].map((target) =>
+		[
+			paths.topicReadme,
+			paths.design,
+			paths.plan,
+			paths.status,
+			paths.sourceInstructions,
+			paths.typeConfiguration,
+			paths.typeDeclarations,
+		].map((target) =>
 			writeFile(target, 'fixture\n', 'utf8'),
 		),
 	);
 }
 
 /**
- * Called by the executable proof entry to verify prefix allocation and scaffold validation behavior.
+ * Called by the executable proof entry to verify unnumbered folder identity and scaffold validation behavior.
  *
  * Assertion failures reject the returned promise and make the proof command fail. The isolated temporary root is
  * verified as a direct child of the operating-system temporary directory before recursive cleanup.
@@ -74,53 +84,20 @@ async function createScaffoldFixture(paths) {
  */
 async function run() {
 	const temporaryRoot = await realpath(tmpdir());
-	const suiteRoot = await mkdtemp(path.join(temporaryRoot, 'start-experiment-prefix-'));
+	const suiteRoot = await mkdtemp(path.join(temporaryRoot, 'start-experiment-folder-'));
 	try {
-		const emptyRoot = path.join(suiteRoot, 'empty');
-		await createManagedParents(emptyRoot);
-		assert.equal(await nextExperimentPrefix(emptyRoot), '00000');
-
-		const incrementRoot = path.join(suiteRoot, 'increment');
-		await createManagedParents(incrementRoot);
-		await mkdir(path.join(incrementRoot, 'experiments', '00000-first'));
-		await mkdir(path.join(incrementRoot, 'tmp', 'experiments', '00002-partial'));
-		assert.equal(await nextExperimentPrefix(incrementRoot), '00003');
-
-		const conflictRoot = path.join(suiteRoot, 'conflict');
-		await createManagedParents(conflictRoot);
-		await mkdir(
-			path.join(conflictRoot, 'agents', 'topics', 'poc-experiments', 'engineering-studies', '00004-alpha'),
-		);
-		await mkdir(path.join(conflictRoot, 'experiments', '00004-beta'));
-		await assert.rejects(nextExperimentPrefix(conflictRoot), /prefix 00004 is already used/u);
-
-		const malformedRoot = path.join(suiteRoot, 'malformed');
-		await createManagedParents(malformedRoot);
-		await writeFile(path.join(malformedRoot, 'tmp', 'experiments', '00005-not-a-directory'), '', 'utf8');
-		await assert.rejects(nextExperimentPrefix(malformedRoot), /not a real directory/u);
-
-		const parentLinkRoot = path.join(suiteRoot, 'parent-link');
-		await createManagedParents(parentLinkRoot);
-		await rmdir(path.join(parentLinkRoot, 'experiments'));
-		const linkedParentTarget = path.join(parentLinkRoot, 'linked-parent-target');
-		await mkdir(linkedParentTarget);
-		await symlink(linkedParentTarget, path.join(parentLinkRoot, 'experiments'), 'junction');
-		await assert.rejects(nextExperimentPrefix(parentLinkRoot), /parent is not a real directory/u);
-
-		const exhaustedRoot = path.join(suiteRoot, 'exhausted');
-		await createManagedParents(exhaustedRoot);
-		await mkdir(path.join(exhaustedRoot, 'experiments', '99999-last'));
-		await assert.rejects(nextExperimentPrefix(exhaustedRoot), /No five-digit experiment prefixes remain/u);
-
-		assert.equal(requirePrefix('00000'), '00000');
-		assert.throws(() => requirePrefix('0000'), /exactly five decimal digits/u);
-		assert.throws(() => requirePrefix('abcde'), /exactly five decimal digits/u);
+		assert.equal(requireExperimentSlug('recording-strobe'), 'recording-strobe');
+		assert.throws(() => requireExperimentSlug('00001-recording-strobe'), /unnumbered/u);
+		assert.throws(() => requireExperimentSlug('Recording-Strobe'), /unnumbered/u);
 
 		const validationRoot = path.join(suiteRoot, 'validation');
 		await createManagedParents(validationRoot);
-		const paths = scaffoldPaths(validationRoot, '00000-validation');
+		const paths = scaffoldPaths(validationRoot, 'recording-strobe');
 		await createScaffoldFixture(paths);
 		await validateStructure(paths);
+		assert.equal(path.basename(paths.topicRoot), 'recording-strobe');
+		assert.equal(path.basename(paths.sourceRoot), 'recording-strobe');
+		assert.equal(path.basename(paths.outputRoot), 'recording-strobe');
 		await rmdir(paths.outputRoot);
 		await writeFile(paths.outputRoot, '', 'utf8');
 		await assert.rejects(validateStructure(paths), /must be a real directory/u);
@@ -130,7 +107,7 @@ async function run() {
 		await symlink(linkedOutputTarget, paths.outputRoot, 'junction');
 		await assert.rejects(validateStructure(paths), /must be a real directory/u);
 
-		process.stdout.write(`${JSON.stringify({ok: true, cases: 12})}\n`);
+		process.stdout.write(`${JSON.stringify({ok: true, cases: 9})}\n`);
 	} finally {
 		const resolvedSuiteRoot = await realpath(suiteRoot);
 		assert.equal(path.dirname(resolvedSuiteRoot).toLowerCase(), temporaryRoot.toLowerCase());

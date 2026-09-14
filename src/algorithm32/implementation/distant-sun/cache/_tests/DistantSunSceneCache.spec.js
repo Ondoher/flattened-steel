@@ -1,4 +1,7 @@
-import {NATIVE_48_POSITION_DOMAIN_OWNER} from '../../../../sampling-domains/position/spherical-native/consts.js';
+import {
+	NATIVE_48_POSITION_DOMAIN_OWNER,
+	NATIVE_51_NEAR_GROUND_POSITION_DOMAIN_OWNER,
+} from '../../../../sampling-domains/position/spherical-native/consts.js';
 import {CUBED_SPHERE_W27_DIRECTION_DOMAIN_OWNER} from '../../../../sampling-domains/direction/cubed-sphere/consts.js';
 import {SOLAR_ZENITH_180_DOMAIN_OWNER} from '../../../../sampling-domains/solar-zenith/consts.js';
 import {NATIVE_15_SPECTRAL_BASIS} from '../../../../profiles/native-15/native-15-profile.js';
@@ -6,7 +9,7 @@ import DistantSunSceneCache from '../DistantSunSceneCache.js';
 import DistantSunSceneCacheAssetLoader from './reference/DistantSunSceneCacheAssetLoader.js';
 import DistantSunSceneCacheLedger from '../DistantSunSceneCacheLedger.js';
 
-function createLedger() {
+function createLedger(positionDomain = NATIVE_48_POSITION_DOMAIN_OWNER) {
 	return new DistantSunSceneCacheLedger({
 		sceneSun: {
 			id: 'san-jose-nautical-twilight',
@@ -23,7 +26,7 @@ function createLedger() {
 			completeCameraRotation: true,
 			arbitraryShortenedEndpoint: true,
 		},
-		positionDomain: NATIVE_48_POSITION_DOMAIN_OWNER,
+		positionDomain,
 		solarZenithDomain: SOLAR_ZENITH_180_DOMAIN_OWNER,
 		outgoingDirectionDomain: CUBED_SPHERE_W27_DIRECTION_DOMAIN_OWNER,
 		spectralBasis: NATIVE_15_SPECTRAL_BASIS,
@@ -44,6 +47,48 @@ function texture(id, storage, valueKey) {
 }
 
 describe('DistantSunSceneCache', () => {
+	it('retains every selected Native51 ledger row in the runtime shader and rejects a mismatched grid', () => {
+		const positionDomain = NATIVE_51_NEAR_GROUND_POSITION_DOMAIN_OWNER;
+		const ledger = createLedger(positionDomain);
+		const definition = {
+			positionDomain,
+			ledger,
+			manifest: {
+				record: {
+					cacheIdentity: 'native51-scene',
+					exactSeamPayload: {byteLength: ledger.exactSeamByteLength - 8748},
+					logicalToUniqueIndex: {byteLength: 8748},
+				},
+				requireCacheIdentity() {},
+			},
+			cumulativeTexture: texture(
+				'native51-values',
+				{format: 'RGBA32F', width: 648, height: 27, layers: ledger.retainedBlockCount},
+				'cache.sceneCumulativeScatteringDensity',
+			),
+			directionIndexTexture: texture(
+				'native51-index',
+				{format: 'R16UI', width: 4374, height: 1, layers: 1},
+				'cache.sceneLogicalToUniqueDirection',
+			),
+		};
+		const cache = new DistantSunSceneCache(definition);
+		const source = cache.createShaderContribution().functions[0].code;
+		for (const name of ['FIRST_ZENITH', 'LAST_ZENITH', 'FIRST_PACKED_ROW']) {
+			expect(source).toContain(`DISTANT_SCENE_${name}[51] = int[51]`);
+		}
+		expect(cache.resources.residentTextureBytes.value).toBe(648 * 27 * ledger.retainedBlockCount * 16 + 8748);
+		expect(
+			() => new DistantSunSceneCache({...definition, positionDomain: NATIVE_48_POSITION_DOMAIN_OWNER}),
+		).toThrowError(/selected physical altitude/u);
+		const alteredLedger = {...ledger, rows: ledger.rows.map((row) => ({...row}))};
+		alteredLedger.rows[1].altitude = {value: 500, units: 'meters'};
+		expect(() => new DistantSunSceneCache({...definition, ledger: alteredLedger})).toThrowError(
+			/selected physical altitude/u,
+		);
+		cache.dispose();
+	});
+
 	it('repackages every Native15 scalar into the logical face-grid atlas without changing its value', () => {
 		const logicalToUnique = new Uint16Array(
 			CUBED_SPHERE_W27_DIRECTION_DOMAIN_OWNER.logicalToUniqueDirectionIndices,

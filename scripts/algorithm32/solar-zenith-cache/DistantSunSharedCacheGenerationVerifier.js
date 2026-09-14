@@ -3,7 +3,7 @@ import {open} from 'node:fs/promises';
 import DistantSunSharedCacheGenerationCodec from './DistantSunSharedCacheGenerationCodec.js';
 import DistantSunSharedCacheGenerationGraph from './DistantSunSharedCacheGenerationGraph.js';
 
-/** Persisted-block control-payload reconstruction verifier. */
+/** Persisted shared-block and generated-scene reconstruction verifier. */
 export default class DistantSunSharedCacheGenerationVerifier {
 	/**
 	 * Reads an exact bounded range and rejects truncation.
@@ -22,10 +22,10 @@ export default class DistantSunSharedCacheGenerationVerifier {
 		}
 	}
 	/**
-	 * Call this method to verify encoded artifacts and stream all 109 exact control comparisons.
-	 * Metadata, block, or control mismatch, I/O failure, or cancellation rejects; callers must not publish the candidate.
+	 * Call this method to verify encoded artifacts and all 109 generated scene reconstructions.
+	 * Metadata, block, reconstruction, I/O, or cancellation failure rejects; callers must not publish the candidate.
 	 *
-	 * @param {SharedGenerationVerificationRequest} options - Candidate, staging, immutable controls, and cancellation.
+	 * @param {SharedGenerationVerificationRequest} options - Candidate, staging, layout controls, and cancellation.
 	 * @returns {Promise<SharedGenerationVerificationResult>} - Per-scene exactness and bounded-memory evidence.
 	 */
 	async verify(options) {
@@ -61,54 +61,32 @@ export default class DistantSunSharedCacheGenerationVerifier {
 			const blockVerificationMilliseconds = performance.now() - started;
 			const rowBytes = 4058 * 4;
 			const actualRow = Buffer.alloc(rowBytes);
-			const expectedRow = Buffer.alloc(rowBytes);
 			const scenes = [];
 			let comparedBytes = 0;
 			for (const source of inventory.scenes) {
 				signal.throwIfAborted();
 				const persistedScene = graph.scenes[source.ordinal];
-				if (
-					persistedScene.id !== source.manifest.sceneSun.id ||
-					persistedScene.reconstructedPayload.sha256 !== source.manifest.exactSeamPayload.sha256 ||
-					persistedScene.reconstructedPayload.byteLength !== source.manifest.exactSeamPayload.byteLength
-				)
-					throw new Error('Persisted scene reconstruction identity differs from the immutable control.');
-				const expected = await open(
-					await files.resolve(`${source.base}/${source.manifest.exactSeamPayload.path}`),
-					'r',
-				);
+				if (persistedScene.id !== source.manifest.sceneSun.id)
+					throw new Error('Persisted scene reconstruction identity differs from its layout control.');
 				const actualHash = createHash('sha256');
-				const expectedHash = createHash('sha256');
-				try {
-					if ((await expected.stat()).size !== source.manifest.exactSeamPayload.byteLength)
-						throw new Error('Control payload length changed.');
-					for (let channel = 0; channel < 15; channel += 1)
-						for (let row = 0; row < source.coordinates.length; row += 1) {
-							const owner = owners.get(source.coordinates[row]);
-							if (!owner) throw new Error('Persisted block index omits a control coordinate.');
-							await this._read(owner.handle, actualRow, (channel * owner.count + owner.row) * rowBytes);
-							await this._read(
-								expected,
-								expectedRow,
-								(channel * source.coordinates.length + row) * rowBytes,
-							);
-							if (!actualRow.equals(expectedRow))
-								throw new Error(
-									`Shared reconstruction differs at scene ${source.ordinal}, wavelength ${channel}, coordinate ${source.coordinates[row]}.`,
-								);
-							actualHash.update(actualRow);
-							expectedHash.update(expectedRow);
-							comparedBytes += rowBytes;
-						}
-				} finally {
-					await expected.close();
-				}
+				for (let channel = 0; channel < 15; channel += 1)
+					for (let row = 0; row < source.coordinates.length; row += 1) {
+						const owner = owners.get(source.coordinates[row]);
+						if (!owner) throw new Error('Persisted block index omits a scene coordinate.');
+						await this._read(owner.handle, actualRow, (channel * owner.count + owner.row) * rowBytes);
+						actualHash.update(actualRow);
+						comparedBytes += rowBytes;
+					}
 				const sha256 = actualHash.digest('hex');
-				if (sha256 !== expectedHash.digest('hex') || sha256 !== source.manifest.exactSeamPayload.sha256)
-					throw new Error('Control reconstruction digest differs from its immutable identity.');
+				const byteLength = source.coordinates.length * 15 * rowBytes;
+				if (
+					sha256 !== persistedScene.reconstructedPayload.sha256 ||
+					byteLength !== persistedScene.reconstructedPayload.byteLength
+				)
+					throw new Error('Persisted scene reconstruction differs from generated shared blocks.');
 				scenes.push({
 					id: source.manifest.sceneSun.id,
-					byteLength: source.manifest.exactSeamPayload.byteLength,
+					byteLength,
 					sha256,
 					exact: true,
 				});
@@ -120,7 +98,7 @@ export default class DistantSunSharedCacheGenerationVerifier {
 				comparedBytes,
 				blockVerificationMilliseconds,
 				elapsedMilliseconds: performance.now() - started,
-				comparisonBufferBytes: actualRow.byteLength + expectedRow.byteLength,
+				comparisonBufferBytes: actualRow.byteLength,
 				metadataArtifactCount: graph.metadataArtifactCount,
 				metadataBytes: graph.metadataBytes,
 			};

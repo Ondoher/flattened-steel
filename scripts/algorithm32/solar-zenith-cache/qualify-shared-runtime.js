@@ -26,13 +26,35 @@ const dual = process.argv.includes('--dual');
 const recordingParent = process.argv.find((argument) => argument.startsWith('--record='))?.slice(9);
 const full = process.argv.includes('--full') || performanceOnly;
 const correctnessOnly = process.argv.includes('--correctness');
+const candidateRoot = process.argv.find((argument) => argument.startsWith('--package-root='))?.slice(15);
+const candidateHash = process.argv.find((argument) => argument.startsWith('--package-sha256='))?.slice(17);
+const selectedProfile = process.argv.find((argument) => argument.startsWith('--profile='))?.slice(10);
+const solarInterpolation =
+	process.argv.find((argument) => argument.startsWith('--solar-interpolation='))?.slice(22) ?? 'linear';
+if (!['linear', 'monotone-cubic'].includes(solarInterpolation))
+	throw new RangeError('Unsupported solar interpolation.');
+if (candidateRoot || candidateHash || selectedProfile) {
+	if (!candidateRoot || !/^[a-f0-9]{64}$/u.test(candidateHash ?? '') || selectedProfile !== 'native15-n4-q30') {
+		throw new Error(
+			'Candidate qualification requires --package-root, --package-sha256 and --profile=native15-n4-q30.',
+		);
+	}
+	if (rollout) throw new Error('Candidate selection cannot use the deployed rollout route.');
+}
 const parent =
+	candidateRoot ??
 	'tmp/production-algorithm32/distant-sun-shared-block-cache/runs/2026-09-10T14-57-40-947Z-f747d2ec-9571-474f-89e6-b0783bbf3752/published/7e80317f53c79d0d5a30ebc006630213a2e758008c62a3abb14d2534a8cc2b99';
-const report = {
-	path: 'package-set.json',
-	byteLength: 3268,
-	sha256: 'eee22091d2f1deb8e992f22be47243a07e7f4bc9462d25ee89683352cca19069',
-};
+const report = candidateRoot
+	? {
+			path: 'package-set.json',
+			byteLength: (await files.read(`${parent}/package-set.json`)).byteLength,
+			sha256: candidateHash,
+		}
+	: {
+			path: 'package-set.json',
+			byteLength: 3268,
+			sha256: 'eee22091d2f1deb8e992f22be47243a07e7f4bc9462d25ee89683352cca19069',
+		};
 const run = `tmp/production-algorithm32/distant-sun-shared-block-cache/qualification/${new Date().toISOString().replace(/[:.]/gu, '-')}-${randomUUID()}`;
 await files.directory(run);
 const profile = await files.directory(`${run}/browser-profile`);
@@ -42,7 +64,7 @@ const productionRouter = express();
 if (rollout) await registerFlat32Routes(null, productionRouter, {getRouterRoot: () => prefix.slice(0, -1)});
 const shared = await new SharedService(await files.resolve(parent)).load(report);
 const dense = await createDistantSunSceneCachePackageService();
-const oracle = await new Oracle().load(files, parent, report);
+const oracle = await new Oracle().load(files, parent, report, Boolean(candidateRoot));
 const oracles = new Map();
 const bundle = await rollup({
 	input: await files.resolve(sourcePath),
@@ -125,6 +147,10 @@ const server = createServer(async (request, response) => {
 				route === 'api/shared'
 					? shared.resolve(degrees, `${prefix}scene-caches/`)
 					: dense.resolve(degrees, `${prefix}dense-caches/`);
+			if (selection.cacheFormat === 'algorithm32-distant-sun-shared-block-v1') {
+				/** @type {Flat32SharedCacheAssetSelection} */ (selection.asset).solarInterpolation =
+					/** @type {DistantSunSolarInterpolationMethod} */ (solarInterpolation);
+			}
 			if (
 				dual &&
 				selection.cacheFormat === 'algorithm32-distant-sun-shared-block-v1' &&
@@ -204,6 +230,8 @@ let result = {
 	implementation,
 	tools: {node: process.version},
 	parameters: {
+		profile: selectedProfile ?? 'native15-n4-q30',
+		solarInterpolation,
 		nativeChannels: 15,
 		scatteringOrder: 4,
 		viewIntervals: 30,

@@ -3,7 +3,15 @@
 Status: **closed successfully**. The initial static composition and The Hours
 creative full-day animation are complete, owner-accepted, and independently
 verified. [Status](status.md) owns the accepted artifacts, verification,
-repeatability boundary, and deferred follow-up work.
+repeatability boundary, and deferred follow-up work. The active
+[appearance continuation](continuation-plan.md) addresses lower-horizon color,
+large-display star visibility, and brightness flashing without reopening the
+accepted evidence. Its brightness diagnosis is complete, and its ozone-free
+cache is selected for owner inspection. Native app inspection closed the star
+footprint concern without a renderer change; recording-specific mitigation is
+deferred. The contained
+[Distant-Sun Recording Strobing Experiment](../distant-sun-recording-strobing/README.md)
+owns the pending brightness correction and recording qualification.
 
 ## Objective
 
@@ -18,6 +26,7 @@ near-horizon rendering corrections and local-Sun animation are separate work.
 
 - [Design](design.md)
 - [Plan](plan.md)
+- [Appearance continuation plan](continuation-plan.md)
 - [Status](status.md)
 - [Next creative-animation prompt](../../../../../experiments/distant-sun-shadow-animation-evidence/prompts/new-animation.md)
 

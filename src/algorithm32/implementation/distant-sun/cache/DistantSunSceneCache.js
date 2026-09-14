@@ -1,4 +1,8 @@
 import {ShaderContributions} from '../../../shader-assembly/base/ShaderContributions.js';
+import {SOLAR_ZENITH_180_DOMAIN_OWNER} from '../../../sampling-domains/solar-zenith/consts.js';
+import {CUBED_SPHERE_W27_DIRECTION_DOMAIN_OWNER} from '../../../sampling-domains/direction/cubed-sphere/consts.js';
+import {DistantSunSolarInterpolation} from './DistantSunSolarInterpolation.js';
+import {SphericalNativePositionDomains} from '../../../sampling-domains/position/spherical-native/SphericalNativePositionDomains.js';
 
 const SCENE_CACHE_VALUE_KEY = 'cache.sceneCumulativeScatteringDensity';
 const SCENE_DIRECTION_INDEX_VALUE_KEY = 'cache.sceneLogicalToUniqueDirection';
@@ -16,6 +20,7 @@ export default class DistantSunSceneCache {
 	/** @type {boolean} */ _disposed = false;
 	/** Number of explicit spectral channels represented by the atlas. @type {number} */ _spectralChannelCount;
 	/** Explicit shader interpolation preserves weights beyond texture-filter precision. @type {boolean} */ _shaderInterpolation;
+	/** Accepted solar-angle sampling policy. @type {DistantSunSolarInterpolationMethod} */ _solarInterpolation;
 
 	/**
 	 * @param {DistantSunSceneCacheDefinition} definition - Accepted manifest, ledger, and uploaded textures.
@@ -26,6 +31,10 @@ export default class DistantSunSceneCache {
 			throw new RangeError('Distant-Sun scene cache direction interpolation is unsupported.');
 		}
 		this._shaderInterpolation = interpolation === 'shader-bilinear';
+		this._solarInterpolation = definition.solarInterpolation ?? 'linear';
+		if (!['linear', 'monotone-cubic'].includes(this._solarInterpolation)) {
+			throw new RangeError('Distant-Sun scene cache solar interpolation is unsupported.');
+		}
 		this._spectralChannelCount = definition.spectralChannelCount ?? 15;
 		if (
 			!Number.isInteger(this._spectralChannelCount) ||
@@ -34,8 +43,19 @@ export default class DistantSunSceneCache {
 		) {
 			throw new RangeError('Distant-Sun scene cache requires between 1 and 64 spectral channels.');
 		}
-		if (definition.ledger.rows.length !== 48) {
-			throw new RangeError('Distant-Sun scene cache requires all 48 Native altitude ledger owners.');
+		const positionDomain = SphericalNativePositionDomains.accept(
+			definition.positionDomain ?? SphericalNativePositionDomains.select(),
+		);
+		if (
+			definition.ledger.rows.length !== positionDomain.count ||
+			definition.ledger.rows.some(
+				(row, index) =>
+					row.altitudeIndex !== index ||
+					row.altitude.units !== 'meters' ||
+					!Object.is(row.altitude.value, positionDomain.nodes[index].coordinate.value),
+			)
+		) {
+			throw new RangeError('Distant-Sun scene cache requires every selected physical altitude ledger owner.');
 		}
 		if (
 			definition.cumulativeTexture.storage.format !== 'RGBA32F' ||
@@ -100,12 +120,75 @@ export default class DistantSunSceneCache {
 		return this._runtimeBindings;
 	}
 
+	/** Called by shader construction to sample four complete solar rows at one altitude.
+	 * Physical domain endpoints alone use one-sided slopes; missing retained interior
+	 * support produces the same unsupported result as the linear cache.
+	 *
+	 * @param {number} groupCount - Number of RGBA spectral groups in the accepted atlas.
+	 * @returns {string} - Cubic GLSL over the existing direction sampler and packed-row owner.
+	 */
+	_createCubicShaderSource(groupCount) {
+		const faceWidth = CUBED_SPHERE_W27_DIRECTION_DOMAIN_OWNER.faceWidth;
+		const planeWidth = CUBED_SPHERE_W27_DIRECTION_DOMAIN_OWNER.directionCount / faceWidth;
+		const lastIndex = SOLAR_ZENITH_180_DOMAIN_OWNER.count - 1;
+		const packetSample = this._shaderInterpolation
+			? `distantSceneBilinear(plane * ${planeWidth} + int(coordinate.x) * ${faceWidth}, coordinate.yz, row)`
+			: `texture(${SCENE_CACHE_SAMPLER_NAME}, vec3((float(plane * ${planeWidth}) + coordinate.x * ${faceWidth}.0 + coordinate.y + 0.5) / ${groupCount * planeWidth}.0, (coordinate.z + 0.5) / ${faceWidth}.0, float(row)))`;
+		return `${DistantSunSolarInterpolation.createShaderSource()}
+vec4 distantSceneCubicPacket(int row, vec3 coordinate, int plane) {
+	return ${packetSample};
+}
+vec4 distantSceneCubicDensity(int altitudeIndex, vec3 coordinate, float zenithCoordinate, int plane, out bool supported) {
+	int lowerIndex = min(int(floor(zenithCoordinate)), ${lastIndex - 1});
+	float fraction = zenithCoordinate - float(lowerIndex);
+	ivec4 rows;
+	supported = true;
+	for (int tap = 0; tap < 4; tap += 1) {
+		int zenithIndex = clamp(lowerIndex + tap - 1, 0, ${lastIndex});
+		rows[tap] = distantScenePackedRow(altitudeIndex, zenithIndex);
+		if (rows[tap] < 0) supported = false;
+	}
+	if (!supported) return vec4(0.0);
+	return distantSolarHermite(
+		distantSceneCubicPacket(rows.x, coordinate, plane),
+		distantSceneCubicPacket(rows.y, coordinate, plane),
+		distantSceneCubicPacket(rows.z, coordinate, plane),
+		distantSceneCubicPacket(rows.w, coordinate, plane),
+		fraction, lowerIndex == 0, lowerIndex + 1 == ${lastIndex});
+}
+`;
+	}
+
+	/** Called by shader construction to preserve altitude weights around cubic solar lookup.
+	 *
+	 * @param {readonly number[]} groups - Accepted RGBA spectral group indices.
+	 * @returns {string} - Spectral accumulators and complete support predicate.
+	 */
+	_createCubicSampleBody(groups) {
+		return `\tbool supported = true;
+${groups.map((group) => `\tvec4 density${group} = vec4(0.0);`).join('\n')}
+	for (int altitudeTap = 0; altitudeTap < 2; altitudeTap += 1) {
+		float weight = altitudeStencil.weights[altitudeTap];
+		if (weight <= 0.0) continue;
+		bool available;
+${groups
+	.map(
+		(
+			group,
+		) => `\t\tdensity${group} += weight * distantSceneCubicDensity(altitudeStencil.indices[altitudeTap], directionCoordinate, zenithCoordinate, ${group}, available);
+\t\tsupported = supported && available;`,
+	)
+	.join('\n')}
+	}`;
+	}
+
 	/** @returns {ShaderContribution} - Point-local 16-tap exact-seam lookup contribution. */
 	createShaderContribution() {
 		if (this._disposed) throw new Error('DistantSunSceneCache is disposed.');
 		const firstZenith = this._ledger.rows.map((row) => row.firstSolarZenithIndex).join(', ');
 		const lastZenith = this._ledger.rows.map((row) => row.lastSolarZenithIndex).join(', ');
 		const firstPacked = this._ledger.rows.map((row) => row.firstPackedRow).join(', ');
+		const altitudeCount = this._ledger.rows.length;
 		const groups = Array.from({length: Math.ceil(this._spectralChannelCount / 4)}, (_unused, index) => index);
 		const atlasWidth = groups.length * 162;
 		const declarations = groups.map((index) => `\tvec4 density${index} = vec4(0.0);`).join('\n');
@@ -158,6 +241,40 @@ vec4 distantSceneBilinear(int faceOffset, vec2 grid, int layer) {
 				`\tdensity.channels[${index}] = supported ? density${Math.floor(index / 4)}.${'xyzw'[index % 4]} : unsupportedValue;`,
 		).join('\n');
 
+		const samplingBody =
+			this._solarInterpolation === 'monotone-cubic'
+				? this._createCubicSampleBody(groups)
+				: `	int lowerZenithIndex = int(floor(zenithCoordinate));
+	int upperZenithIndex = int(ceil(zenithCoordinate));
+	float upperZenithWeight = zenithCoordinate - float(lowerZenithIndex);
+	ivec2 zenithIndices = ivec2(lowerZenithIndex, upperZenithIndex);
+	vec2 zenithWeights = vec2(1.0 - upperZenithWeight, upperZenithWeight);
+	ivec4 packedRows = ivec4(
+		distantScenePackedRow(altitudeStencil.indices.x, zenithIndices.x),
+		distantScenePackedRow(altitudeStencil.indices.x, zenithIndices.y),
+		distantScenePackedRow(altitudeStencil.indices.y, zenithIndices.x),
+		distantScenePackedRow(altitudeStencil.indices.y, zenithIndices.y)
+	);
+	vec4 altitudeZenithWeights = vec4(
+		altitudeStencil.weights.x * zenithWeights.x,
+		altitudeStencil.weights.x * zenithWeights.y,
+		altitudeStencil.weights.y * zenithWeights.x,
+		altitudeStencil.weights.y * zenithWeights.y
+	);
+	bool supported = true;
+	for (int rowTap = 0; rowTap < 4; rowTap += 1) {
+		if (altitudeZenithWeights[rowTap] > 0.0 && packedRows[rowTap] < 0) supported = false;
+	}
+${declarations}
+	for (int rowTap = 0; rowTap < 4; rowTap += 1) {
+		if (altitudeZenithWeights[rowTap] <= 0.0 || packedRows[rowTap] < 0) continue;
+		float weight = altitudeZenithWeights[rowTap];
+		float faceOffset = directionCoordinate.x * 27.0;
+		float atlasY = (directionCoordinate.z + 0.5) / 27.0;
+		float atlasLayer = float(packedRows[rowTap]);
+${samples}
+	}`;
+
 		return ShaderContributions.createShaderContribution({
 			id: 'cache-distant-sun-point-local-scene',
 			owner: 'cache',
@@ -184,9 +301,9 @@ vec4 distantSceneBilinear(int faceOffset, vec2 grid, int layer) {
 					'cache-distant-sun-scene-lookup',
 					'sampleScatteringCache',
 					0,
-					`const int DISTANT_SCENE_FIRST_ZENITH[48] = int[48](${firstZenith});
-const int DISTANT_SCENE_LAST_ZENITH[48] = int[48](${lastZenith});
-const int DISTANT_SCENE_FIRST_PACKED_ROW[48] = int[48](${firstPacked});
+					`const int DISTANT_SCENE_FIRST_ZENITH[${altitudeCount}] = int[${altitudeCount}](${firstZenith});
+const int DISTANT_SCENE_LAST_ZENITH[${altitudeCount}] = int[${altitudeCount}](${lastZenith});
+const int DISTANT_SCENE_FIRST_PACKED_ROW[${altitudeCount}] = int[${altitudeCount}](${firstPacked});
 
 int distantScenePackedRow(int altitudeIndex, int solarZenithIndex) {
 	int firstZenith = DISTANT_SCENE_FIRST_ZENITH[altitudeIndex];
@@ -242,7 +359,7 @@ vec3 distantSceneDirectionCoordinate(vec3 direction) {
 	return vec3(float(faceIndex), uGrid, vGrid);
 }
 
-${interpolationHelper}
+${interpolationHelper}${this._solarInterpolation === 'monotone-cubic' ? this._createCubicShaderSource(groups.length) : ''}
 
 SpectralValue sampleCumulativeScatteringDensity(
 	vec3 positionMeters,
@@ -260,36 +377,7 @@ SpectralValue sampleCumulativeScatteringDensity(
 	float muS = clamp(dot(normalize(positionMeters), directionToSource), -1.0, 1.0);
 	float solarZenith = ${this._shaderInterpolation ? 'distantSceneSolarZenith(normalize(positionMeters), directionToSource)' : 'acos(muS)'};
 	float zenithCoordinate = clamp((solarZenith - 0.008726646259971648) / 0.017453292519943295, 0.0, 179.0);
-	int lowerZenithIndex = int(floor(zenithCoordinate));
-	int upperZenithIndex = int(ceil(zenithCoordinate));
-	float upperZenithWeight = zenithCoordinate - float(lowerZenithIndex);
-	ivec2 zenithIndices = ivec2(lowerZenithIndex, upperZenithIndex);
-	vec2 zenithWeights = vec2(1.0 - upperZenithWeight, upperZenithWeight);
-	ivec4 packedRows = ivec4(
-		distantScenePackedRow(altitudeStencil.indices.x, zenithIndices.x),
-		distantScenePackedRow(altitudeStencil.indices.x, zenithIndices.y),
-		distantScenePackedRow(altitudeStencil.indices.y, zenithIndices.x),
-		distantScenePackedRow(altitudeStencil.indices.y, zenithIndices.y)
-	);
-	vec4 altitudeZenithWeights = vec4(
-		altitudeStencil.weights.x * zenithWeights.x,
-		altitudeStencil.weights.x * zenithWeights.y,
-		altitudeStencil.weights.y * zenithWeights.x,
-		altitudeStencil.weights.y * zenithWeights.y
-	);
-	bool supported = true;
-	for (int rowTap = 0; rowTap < 4; rowTap += 1) {
-		if (altitudeZenithWeights[rowTap] > 0.0 && packedRows[rowTap] < 0) supported = false;
-	}
-${declarations}
-	for (int rowTap = 0; rowTap < 4; rowTap += 1) {
-		if (altitudeZenithWeights[rowTap] <= 0.0 || packedRows[rowTap] < 0) continue;
-		float weight = altitudeZenithWeights[rowTap];
-		float faceOffset = directionCoordinate.x * 27.0;
-		float atlasY = (directionCoordinate.z + 0.5) / 27.0;
-		float atlasLayer = float(packedRows[rowTap]);
-${samples}
-	}
+${samplingBody}
 	float unsupportedValue = uintBitsToFloat(0x7fc00000u);
 	SpectralValue density;
 ${assignments}

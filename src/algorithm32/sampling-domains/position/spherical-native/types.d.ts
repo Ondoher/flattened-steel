@@ -4,8 +4,24 @@ type SphericalNativePositionDomainDefinition = Readonly<{
 	readonly id: string;
 	/** Supported number of nodes in the native spherical lattice. */
 	readonly count: 4 | 16 | 48;
-	/** Optional first-node altitude; defaults to the production 2-meter boundary. */
+	/** Optional first-node altitude; defaults to the production ground boundary at zero metres. */
 	readonly boundaryAltitude?: Distance;
+}>;
+
+/** Closed distant-Sun construction-grid selection; the default is Native48.
+ * - **"native48"** - Retained ground boundary and 47 native altitude-bin centres.
+ * - **"native51-near-ground"** - Native48 plus point samples at 468.75, 937.5, and 1406.25 metres.
+ */
+type SphericalNativePositionDomainSelection = 'native48' | 'native51-near-ground';
+
+/** Physical altitude-domain ingress; descriptive node metadata is not executable authority. */
+type SphericalNativePositionDomainInput = Readonly<{
+	/** Serialized identity checked after the physical grid is resolved. */
+	id: string;
+	/** Number of physical point samples. */
+	count: number;
+	/** Ordered, indexed point coordinates with explicit distance units. */
+	nodes: readonly Pick<PositionDomainNode, 'index' | 'coordinate'>[];
 }>;
 
 /** Executable native spherical position domain. */

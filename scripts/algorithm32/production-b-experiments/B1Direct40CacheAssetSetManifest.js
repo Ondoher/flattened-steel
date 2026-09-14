@@ -29,6 +29,17 @@ function requireRelativePath(value) {
 
 /** Ordered content identity binding all 17 production B1 cache assets. */
 export default class B1Direct40CacheAssetSetManifest {
+	/** Call this method to identify the complete B1 asset family for a selected construction domain.
+	 *
+	 * @param {SphericalNativePositionDomainSelection} [positionDomain] - Explicit grid selection; omission retains Native48.
+	 * @returns {string} - Versioned B1 asset family identity.
+	 */
+	static profileFamilyFor(positionDomain = 'native48') {
+		if (positionDomain === 'native48') return B1_DIRECT40_PROFILE_FAMILY;
+		if (positionDomain === 'native51-near-ground') return 'b1-bruneton-direct40-native51-near-ground-f68-w27-j4-v1';
+		throw new RangeError('B1 direct-40 position domain is unsupported.');
+	}
+
 	static computeSetIdentity(record) {
 		return `${SET_IDENTITY_PREFIX}${CanonicalValueHash.sha256Value(identityPayload(record)).slice('sha256:'.length)}`;
 	}
@@ -45,7 +56,7 @@ export default class B1Direct40CacheAssetSetManifest {
 		if (record.setIdentity !== B1Direct40CacheAssetSetManifest.computeSetIdentity(record)) {
 			throw new RangeError('B1 direct-40 cache asset-set identity does not cover the manifest content.');
 		}
-		if (record.profileFamily !== B1_DIRECT40_PROFILE_FAMILY) {
+		if (record.profileFamily !== B1Direct40CacheAssetSetManifest.profileFamilyFor(record.positionDomain)) {
 			throw new RangeError('B1 direct-40 cache asset-set profile family is incompatible.');
 		}
 		if (typeof record.productionRevision !== 'string' || record.productionRevision.length === 0) {

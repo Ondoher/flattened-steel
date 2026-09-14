@@ -11,7 +11,8 @@ export const DISTANT_SUN_SCENE_CACHE_OZONE_CROSS_SECTIONS_SQUARE_METERS = [
 export const DISTANT_SUN_SCENE_CACHE_COMPILER_IDENTITY = 'algorithm32-offline-native48-z180-w27-f68-native15-n4-v1';
 
 /** Complete numerical compatibility identity required by the qualified runtime asset. */
-export const DISTANT_SUN_SCENE_CACHE_NUMERICAL_IDENTITY = 'algorithm32-native48-z180-w27-f68-native15-n4-q30-ozone-v1';
+export const DISTANT_SUN_SCENE_CACHE_NUMERICAL_IDENTITY =
+	'algorithm32-native48-z180-w27-f68-native15-n4-q30-no-ozone-v1';
 
 /** Immutable dense control inventory selected by the production promotion plan. */
 export const SHARED_GENERATION_CONTROL_ROOT = 'server/flat32/data/one-degree-bin-covered-runtime-packages-20260830-1';
@@ -42,6 +43,7 @@ export const SHARED_COMPILER_SOURCE_NAMES = [
 	'DistantSunPointLocalCacheStaging.js',
 	'DistantSunPointLocalProfileCompilerInputs.js',
 	'DistantSunSceneCacheGpuCompiler.js',
+	'DistantSunSceneCacheNumerics.js',
 	'DistantSunSharedCacheGenerationCodec.js',
 	'DistantSunSharedCacheGenerationFiles.js',
 	'consts.js',

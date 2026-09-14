@@ -41,6 +41,37 @@ test('constructs the benchmark-owned direct-40 profile through production ingres
 	algorithm.dispose();
 });
 
+test('adds only the three named near-ground nodes while retaining the original profile by default', () => {
+	const options = {time: '09:30', fittedAzimuthDegrees: 179.5};
+	const original = createBrunetonProductionProfile(options);
+	const explicitOriginal = createBrunetonProductionProfile({...options, positionDomain: 'native48'});
+	const candidate = createBrunetonProductionProfile({...options, positionDomain: 'native51-near-ground'});
+	const algorithm = new Algorithm32({profile: candidate});
+	assert.equal(explicitOriginal.id, original.id);
+	assert.equal(explicitOriginal.contentHash, original.contentHash);
+	assert.equal(original.id, 'b1-bruneton-0930-j4-v1');
+	assert.equal(candidate.id, 'b1-bruneton-0930-j4-native51-near-ground-v1');
+	assert.notEqual(candidate.contentHash, original.contentHash);
+	assert.deepEqual(
+		candidate.domains.positions.nodes.slice(0, 5).map((node) => node.coordinate.value),
+		[0, 468.75, 937.5, 1406.25, 1875],
+	);
+	assert.deepEqual(
+		candidate.domains.positions.nodes
+			.filter((_node, index) => index === 0 || index >= 4)
+			.map((node) => node.coordinate.value),
+		original.domains.positions.nodes.map((node) => node.coordinate.value),
+	);
+	assert.equal(candidate.models.geometry.configuration.cacheAltitudeBinCount, 51);
+	assert.deepEqual(candidate.numerical, original.numerical);
+	assert.deepEqual(candidate.spectral, original.spectral);
+	assert.deepEqual(candidate.models.atmosphere, original.models.atmosphere);
+	assert.deepEqual(candidate.models.groundBoundary, original.models.groundBoundary);
+	assert.deepEqual(candidate.models.sourcePlacement, original.models.sourcePlacement);
+	assert.throws(() => createBrunetonProductionProfile({...options, positionDomain: 'native50'}), /selection/);
+	algorithm.dispose();
+});
+
 test('constructs the reflection-completed 136-direction experimental profile', () => {
 	const condition = loadKiderDataset().conditions[0];
 	const profile = createBrunetonProductionProfile({

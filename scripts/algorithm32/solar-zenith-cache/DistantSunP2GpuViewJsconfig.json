@@ -1,0 +1,11 @@
+{
+	"extends": "./jsconfig.json",
+	"include": [
+		"DistantSunP2GpuView*.js",
+		"verify-strobing-p2-gpu-view.js",
+		"*.d.ts",
+		"types/**/*.d.ts",
+		"../../../src/algorithm32/**/*.d.ts"
+	],
+	"exclude": ["*.test.js", "../../../node_modules/**"]
+}

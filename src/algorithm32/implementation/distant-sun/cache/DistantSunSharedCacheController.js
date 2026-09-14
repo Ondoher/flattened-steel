@@ -1,5 +1,6 @@
 import DistantSunSharedCacheAtlas from './DistantSunSharedCacheAtlas.js';
 import DistantSunSharedCacheMetadata from './DistantSunSharedCacheMetadata.js';
+import DistantSunSharedCacheSupport from './DistantSunSharedCacheSupport.js';
 import {
 	DISTANT_SUN_SHARED_CACHE_DEFAULT_RESIDENT_LAYER_COUNT,
 	DISTANT_SUN_SHARED_CACHE_PACKET_BYTES,
@@ -27,6 +28,8 @@ export default class DistantSunSharedCacheController {
 	 * @type {DistantSunSharedCacheMetadata}
 	 */
 	_metadata;
+	/** Candidate-only coordinate support owner. @type {DistantSunSharedCacheSupport | undefined} */
+	_support;
 	/**
 	 * Admitted layer count.
 	 *
@@ -110,6 +113,11 @@ export default class DistantSunSharedCacheController {
 	 * @param {DistantSunSharedCacheControllerDefinition} definition - Runtime capabilities and memory admission.
 	 */
 	constructor(definition) {
+		if (
+			definition.solarInterpolation !== undefined &&
+			!['linear', 'monotone-cubic'].includes(definition.solarInterpolation)
+		)
+			throw new RangeError('Shared-cache solar interpolation is unsupported.');
 		this._definition = {
 			...definition,
 			routeQualification: structuredClone(definition.routeQualification),
@@ -117,6 +125,8 @@ export default class DistantSunSharedCacheController {
 		};
 		this._graph = definition.package.getGraph();
 		this._metadata = new DistantSunSharedCacheMetadata(this._graph);
+		if (definition.solarInterpolation === 'monotone-cubic')
+			this._support = new DistantSunSharedCacheSupport(this._graph);
 		this._layers = definition.layers ?? DISTANT_SUN_SHARED_CACHE_DEFAULT_RESIDENT_LAYER_COUNT;
 		if (!Number.isSafeInteger(this._layers) || this._layers < 1 || this._layers > 89)
 			throw new RangeError('Shared-cache layer policy is invalid.');
@@ -181,7 +191,7 @@ export default class DistantSunSharedCacheController {
 	 * @returns {{ids: string[], predicted: number}} - Ordered block window and first predicted scene.
 	 */
 	_window(ordinal, options) {
-		const ids = [...this._graph.scenes[ordinal].requiredBlockIds];
+		const ids = this._requiredBlocks(ordinal);
 		if (this._layers !== DISTANT_SUN_SHARED_CACHE_DEFAULT_RESIDENT_LAYER_COUNT)
 			ids.push(...this._definition.routeQualification.blockIds.filter((id) => !ids.includes(id)));
 		if (ids.length > this._layers) throw new RangeError('Shared-cache scene exceeds atlas capacity.');
@@ -199,7 +209,7 @@ export default class DistantSunSharedCacheController {
 					? this._route[routeIndex + offset]
 					: ordinal + this._direction * offset;
 			if (next === undefined || next < 0 || next > 108) break;
-			const union = [...new Set([...ids, ...this._graph.scenes[next].requiredBlockIds])];
+			const union = [...new Set([...ids, ...this._requiredBlocks(next)])];
 			if (union.length > this._layers) break;
 			if (predicted < 0) predicted = next;
 			ids.splice(0, ids.length, ...union);
@@ -212,13 +222,22 @@ export default class DistantSunSharedCacheController {
 		return {ids, predicted};
 	}
 
+	/** Resolve complete required support before admitting optional predictions.
+	 * @param {number} ordinal - Accepted scene ordinal.
+	 * @returns {string[]} - Complete linear or cubic requirements.
+	 */
+	_requiredBlocks(ordinal) {
+		return this._support?.getRequiredBlocks(ordinal) ?? [...this._graph.scenes[ordinal].requiredBlockIds];
+	}
+
 	/**
 	 * Called to upload immutable metadata only after a complete candidate has been validated.
 	 *
 	 * @param {DistantSunSharedCachePublicationSnapshot} snapshot - Accepted complete publication.
+	 * @param {DistantSunSharedCacheCoordinateTable | undefined} coordinates - Optional complete cubic coordinate addresses.
 	 * @returns {CacheImmutableTexture[]} - Owned metadata textures, released on failure or retirement.
 	 */
-	_uploadMetadata(snapshot) {
+	_uploadMetadata(snapshot, coordinates = undefined) {
 		/**
 		 * Candidate-owned metadata resources.
 		 *
@@ -229,6 +248,7 @@ export default class DistantSunSharedCacheController {
 			for (const [table, valueKey] of /** @type {const} */ ([
 				[snapshot.rowAddressTable, 'cache.sharedRowAddress'],
 				[snapshot.altitudeLedgerTable, 'cache.sharedAltitudeLedger'],
+				[coordinates, 'cache.sharedCoordinateAddress'],
 			])) {
 				if (!table) continue;
 				textures.push(
@@ -268,9 +288,7 @@ export default class DistantSunSharedCacheController {
 			throw new RangeError('Shared-cache route is invalid.');
 		if (this._layers !== DISTANT_SUN_SHARED_CACHE_DEFAULT_RESIDENT_LAYER_COUNT) {
 			const ids = new Set(
-				sceneOrdinals
-					.filter((ordinal) => ordinal <= 108)
-					.flatMap((ordinal) => this._graph.scenes[ordinal].requiredBlockIds),
+				sceneOrdinals.filter((ordinal) => ordinal <= 108).flatMap((ordinal) => this._requiredBlocks(ordinal)),
 			);
 			const qualified = this._definition.routeQualification.blockIds;
 			if (ids.size !== qualified.length || qualified.some((id) => !ids.has(id)))
@@ -311,6 +329,7 @@ export default class DistantSunSharedCacheController {
 		try {
 			if (sceneOrdinal === null) {
 				this._candidate = {
+					solarInterpolation: this._definition.solarInterpolation,
 					snapshot: this._metadata.build(null, generation, [], this._layers),
 					metadataTextures: [],
 					bindings: [],
@@ -329,13 +348,13 @@ export default class DistantSunSharedCacheController {
 				);
 			if (!this._atlas.isCurrent()) this._atlas.resetAfterRestoration();
 			let atlas = this._atlas;
-			const required = this._graph.scenes[sceneOrdinal].requiredBlockIds;
+			const required = this._requiredBlocks(sceneOrdinal);
 			// Predictions must never force a transition allocation when the requested scene fits.
 			if (atlas.canFit(required)) {
 				while (!atlas.canFit(window.ids) && window.ids.length > required.length) window.ids.pop();
 				if (
 					window.predicted >= 0 &&
-					this._graph.scenes[window.predicted].requiredBlockIds.some((id) => !window.ids.includes(id))
+					this._requiredBlocks(window.predicted).some((id) => !window.ids.includes(id))
 				)
 					this._counters.predictedScene = -1;
 			}
@@ -396,9 +415,11 @@ export default class DistantSunSharedCacheController {
 				}
 			}
 			signal.throwIfAborted();
-			const snapshot = this._metadata.build(sceneOrdinal, generation, atlas.getSlots(), this._layers);
-			const metadataTextures = this._uploadMetadata(snapshot);
+			const snapshot = this._metadata.build(sceneOrdinal, generation, atlas.getSlots(), this._layers, required);
+			const coordinates = this._support?.buildCoordinateTable(atlas.getSlots());
+			const metadataTextures = this._uploadMetadata(snapshot, coordinates);
 			this._candidate = {
+				solarInterpolation: this._definition.solarInterpolation,
 				snapshot,
 				metadataTextures,
 				atlas,

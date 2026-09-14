@@ -13,6 +13,7 @@ With the existing application server serving `http://127.0.0.1:8081`:
 node experiments/distant-sun-shadow-animation-evidence/creative/run-creative-animation.js --preview
 node experiments/distant-sun-shadow-animation-evidence/creative/run-creative-animation.js --video
 node experiments/distant-sun-shadow-animation-evidence/creative/verify-creative-animation.js <completed-video-run-id>
+node experiments/distant-sun-shadow-animation-evidence/creative/diagnose-creative-strobing.js
 ```
 
 Each command allocates a new run below the experiment's ignored output root.

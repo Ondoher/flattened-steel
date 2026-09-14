@@ -1,4 +1,5 @@
 import {createHash} from 'node:crypto';
+import {NATIVE_51_NEAR_GROUND_POSITION_DOMAIN_OWNER} from '../../../src/algorithm32/sampling-domains/index.js';
 import {DISTANT_SUN_POINT_LOCAL_CACHE_COMPILER_IDENTITY as B1_POINT_LOCAL_COMPILER_IDENTITY} from '../../algorithm32/solar-zenith-cache/consts.js';
 import B1ReferenceInputs from './B1ReferenceInputs.js';
 import {EXPECTED_DATASET_FINGERPRINTS} from './benchmark.js';
@@ -89,7 +90,7 @@ function verifyProvenance(path, record, manifest, requireCanonical) {
 	}
 	if (
 		manifest.compilerIdentity === B1_POINT_LOCAL_COMPILER_IDENTITY &&
-		(provenance.cacheRepresentation !== 'receiver-local-native48-z180-w27' ||
+		(provenance.cacheRepresentation !== `receiver-local-${manifest.positionDomain ?? 'native48'}-z180-w27` ||
 			provenance.numericalControls?.scatteringOutputDomain !==
 				'receiver-local-boundary-inclusive-gnomonic-cubed-sphere-w27' ||
 			JSON.stringify(provenance.runtimeSourceIdentity) !== JSON.stringify(manifest.runtimeSourceIdentity) ||
@@ -98,6 +99,18 @@ function verifyProvenance(path, record, manifest, requireCanonical) {
 		throw new Error(
 			'Receiver-local production provenance does not match its runtime source and cache representation.',
 		);
+	}
+	if (manifest.positionDomain === 'native51-near-ground') {
+		const controls = provenance.numericalControls;
+		if (
+			controls?.positionNodeCount !== NATIVE_51_NEAR_GROUND_POSITION_DOMAIN_OWNER.count ||
+			controls?.incidentAltitudeBinCount !== NATIVE_51_NEAR_GROUND_POSITION_DOMAIN_OWNER.count ||
+			controls?.positionDomain?.selection !== manifest.positionDomain ||
+			controls?.positionDomain?.id !== NATIVE_51_NEAR_GROUND_POSITION_DOMAIN_OWNER.id ||
+			JSON.stringify(controls?.positionDomain?.nodes) !==
+				JSON.stringify(NATIVE_51_NEAR_GROUND_POSITION_DOMAIN_OWNER.nodes)
+		)
+			throw new Error('Refined B1 provenance does not identify the exact selected position nodes.');
 	}
 	if (
 		(manifest.backend === 'gpu-production-shaders-r32f' &&
@@ -232,6 +245,9 @@ function verifyCube(path, order, record, manifest) {
 }
 
 function verifyRunDerivation(manifest, requireCanonical) {
+	if (manifest.positionDomain !== undefined && manifest.positionDomain !== 'native51-near-ground') {
+		throw new Error('Production-run position domain is unsupported.');
+	}
 	const completeCanonicalSelection =
 		manifest.profileFamily === CANONICAL_PROFILE_FAMILY &&
 		manifest.incomingDirectionVariant === CANONICAL_INCOMING_DIRECTION_VARIANT &&
@@ -301,6 +317,9 @@ function verifyRunDerivation(manifest, requireCanonical) {
 				B1_DIRECT40_OFFLINE_ASSET_ADAPTER_LEGACY_IDENTITIES.includes(manifest.compilerIdentity));
 		if (
 			manifest.executionIdentity !== GPU_EXECUTION_IDENTITY ||
+			(manifest.positionDomain ?? 'native48') !== (assetSet.positionDomain ?? 'native48') ||
+			(manifest.positionDomain === 'native51-near-ground' &&
+				manifest.compilerIdentity !== B1_POINT_LOCAL_COMPILER_IDENTITY) ||
 			typeof manifest.productionRevision !== 'string' ||
 			manifest.productionRevision !== assetSet.productionRevision ||
 			!acceptedCompilerIdentity ||

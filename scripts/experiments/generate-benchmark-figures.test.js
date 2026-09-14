@@ -5,6 +5,7 @@ import {dirname, join, resolve} from 'node:path';
 import test from 'node:test';
 import {fileURLToPath} from 'node:url';
 
+import {NATIVE_51_NEAR_GROUND_POSITION_DOMAIN_OWNER} from '../../src/algorithm32/sampling-domains/position/spherical-native/consts.js';
 import {makeCube} from './b3-matched-atmosphere-solver/cube.js';
 import {PUBLISHED_MODELS} from './b1-directional-sky-radiance/published-oracle.js';
 import {
@@ -300,6 +301,85 @@ test('Q30 receiver-local figure provenance preserves the selected view and rejec
 		const changed = structuredClone(receiverLocal);
 		mutation(changed);
 		assert.throws(() => validateAlgorithm32ProfileProvenance(changed, 'paper'), /provenance path/);
+	}
+});
+
+test('Native51 figure provenance admits only the named GPU Q30 J4 boundary for both paper aliases', () => {
+	const owner = NATIVE_51_NEAR_GROUND_POSITION_DOMAIN_OWNER;
+	const refined = {
+		modelNameInBenchmarkTables: 'proposed',
+		profileId: 'paper',
+		presentationName: 'Algorithm32 Paper',
+		spectralBoundary: {channelCount: 40, projection: 'identity-direct-40'},
+		physicalProfileId: 'algorithm32-paper-comparison-v1',
+		physicalProfileContentHash: 'sha256:d47601d954167ca8775c0a88cd8ca9b9527ae8e74a6f42ae6041eec3244aeecc',
+		schema: 'algorithm32-current-production-b1-provenance-v2',
+		backend: 'gpu-production-shaders-r32f',
+		executionBoundary: 'production GPU Q30 final-view shader',
+		cacheRepresentation: 'receiver-local-native51-near-ground-z180-w27',
+		rowCount: 1377,
+		numericalControls: {
+			sourceTransmittanceIntervalCount: 20,
+			incidentAltitudeBinCount: 51,
+			incidentDirectionCount: 68,
+			pathIntervalCount: 30,
+			pathSampleDistribution: 'quadratic-near-observer-v1',
+			incomingDirectionDomain: 'algorithm32-reflection-completed-fibonacci-68-incoming-v1',
+			scatteringOutputDomain: 'receiver-local-boundary-inclusive-gnomonic-cubed-sphere-w27',
+			scatteringOutputFaceWidth: 27,
+			scatteringOutputDirectionCount: 4374,
+			positionNodeCount: 51,
+			positionLookup: 'view-only-linear-physical-altitude-over-actual-nodes',
+			maximumScatteringOrder: 4,
+			positionDomain: {id: owner.id, selection: 'native51-near-ground', nodes: owner.nodes},
+		},
+	};
+	const mutations = [
+		(value) => delete value.numericalControls.positionDomain,
+		(value) => delete value.numericalControls.positionDomain.selection,
+		(value) => (value.numericalControls.positionDomain.selection = 'native48'),
+		(value) => (value.numericalControls.positionDomain.id = 'unnamed-51'),
+		(value) => (value.numericalControls.positionDomain.nodes[1].coordinate.value += 1),
+		(value) => (value.numericalControls.positionDomain.nodes[1].coordinate.units = 'kilometers'),
+		(value) => (value.numericalControls.incidentAltitudeBinCount = 48),
+		(value) => (value.numericalControls.positionNodeCount = 48),
+		(value) => (value.cacheRepresentation = 'receiver-local-native48-z180-w27'),
+		(value) => (value.backend = 'cpu'),
+		(value) => (value.schema = 'algorithm32-kider-boundary-provenance-v1'),
+		(value) => (value.rowCount = 81),
+		(value) => (value.numericalControls.pathIntervalCount = 40),
+		(value) => delete value.numericalControls.pathSampleDistribution,
+		(value) => (value.numericalControls.maximumScatteringOrder = 3),
+		(value) => (value.numericalControls.incidentDirectionCount = 34),
+		(value) => (value.numericalControls.incomingDirectionDomain = 'unrecognized'),
+		(value) => (value.numericalControls.scatteringOutputDomain = 'source-aligned'),
+		(value) => (value.numericalControls.sourceTransmittanceIntervalCount = 40),
+		(value) => (value.physicalProfileContentHash = 'sha256:changed'),
+		(value) => (value.spectralBoundary.channelCount = 15),
+		(value) => (value.spectralBoundary.projection = 'native-15-resample'),
+	];
+	for (const [profileId, presentationName] of [
+		['paper', 'Algorithm32 Paper'],
+		['paper-j4', 'Algorithm32 Paper J4'],
+	]) {
+		const candidate = {...refined, profileId, presentationName};
+		const accepted = validateAlgorithm32ProfileProvenance(candidate, profileId);
+		assert.equal(accepted.controls.pathIntervalCount, 30);
+		assert.equal(accepted.controls.incidentAltitudeBinCount, 51);
+		assert.equal(accepted.controls.positionNodeCount, 51);
+		assert.equal(accepted.controls.maximumScatteringOrder, 4);
+		for (const mutate of mutations) {
+			const changed = structuredClone(candidate);
+			mutate(changed);
+			assert.throws(() => validateAlgorithm32ProfileProvenance(changed, profileId), /provenance|Position domain/);
+		}
+		const legacy = structuredClone(candidate);
+		delete legacy.numericalControls.positionDomain;
+		legacy.cacheRepresentation = 'receiver-local-native48-z180-w27';
+		assert.throws(() => validateAlgorithm32ProfileProvenance(legacy, profileId), /incidentAltitudeBinCount/);
+		legacy.numericalControls.incidentAltitudeBinCount = 48;
+		legacy.numericalControls.positionNodeCount = 48;
+		assert.equal(validateAlgorithm32ProfileProvenance(legacy, profileId).controls.incidentAltitudeBinCount, 48);
 	}
 });
 

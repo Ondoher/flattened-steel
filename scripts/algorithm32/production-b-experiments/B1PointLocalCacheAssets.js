@@ -15,7 +15,7 @@ import B1Direct40CacheAssetManifest, {
 	B1_DIRECT40_CACHE_PAYLOAD_CODEC,
 	B1_DIRECT40_DIRECTION_INDEX_CODEC,
 } from './B1Direct40CacheAssetManifest.js';
-import B1Direct40CacheAssetSetManifest, {B1_DIRECT40_PROFILE_FAMILY} from './B1Direct40CacheAssetSetManifest.js';
+import B1Direct40CacheAssetSetManifest from './B1Direct40CacheAssetSetManifest.js';
 import B1Direct40CacheAssetVerifier from './B1Direct40CacheAssetVerifier.js';
 
 export const B1_POINT_LOCAL_COMPILER_IDENTITY = 'algorithm32-production-shared-cache-generator';
@@ -90,7 +90,16 @@ export default class B1PointLocalCacheAssets {
 	}
 
 	/** Compile the complete canonical family once, then expand its authenticated scene indexes. */
-	static async compileSet({conditions, sourceIdentity, referenceInputs, signal, onProgress}) {
+	static async compileSet({
+		conditions,
+		sourceIdentity,
+		referenceInputs,
+		signal,
+		onProgress,
+		numericalPolicy,
+		solarInterpolation,
+		positionDomain,
+	}) {
 		signal ??= new AbortController().signal;
 		if (
 			conditions.length !== 17 ||
@@ -105,9 +114,13 @@ export default class B1PointLocalCacheAssets {
 				time: condition.localTime,
 				fittedAzimuthDegrees: condition.fittedAzimuthDegrees,
 				maximumScatteringOrder: 4,
+				positionDomain,
 			}),
 		);
 		const inputs = DistantSunPointLocalProfileCompilerInputs.createBatch(profiles, {
+			numericalPolicy,
+			solarInterpolation,
+			positionDomain,
 			ids: conditions.map((condition) => condition.id),
 		});
 		const compiler = new DistantSunSharedCacheGenerator({
@@ -175,6 +188,7 @@ export default class B1PointLocalCacheAssets {
 				...B1Direct40CacheAssetManifest.createProfileBoundary(profiles[index], conditions[index]),
 				layout: {axisOrder: B1_POINT_LOCAL_CACHE_LAYOUT, scalarType: 'float32-little-endian'},
 				ledger: packet.scenes[index].ledger,
+				...(solarInterpolation === undefined ? {} : {solarInterpolation}),
 				cumulativeScatteringDensity: {
 					path: 'density.f32',
 					byteLength: density.length,
@@ -210,7 +224,8 @@ export default class B1PointLocalCacheAssets {
 			});
 		}
 		const record = B1Direct40CacheAssetSetManifest.createRecord({
-			profileFamily: B1_DIRECT40_PROFILE_FAMILY,
+			profileFamily: B1Direct40CacheAssetSetManifest.profileFamilyFor(positionDomain),
+			...(positionDomain === 'native51-near-ground' ? {positionDomain} : {}),
 			productionRevision: sourceIdentity.identity,
 			assets,
 		});

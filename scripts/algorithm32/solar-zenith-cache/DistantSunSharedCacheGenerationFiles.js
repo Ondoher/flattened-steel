@@ -2,6 +2,7 @@ import {createHash} from 'node:crypto';
 import {lstatSync, realpathSync} from 'node:fs';
 import {lstat, mkdir, open, readFile, realpath, rename, writeFile} from 'node:fs/promises';
 import path from 'node:path';
+import {setTimeout as delay} from 'node:timers/promises';
 
 /**
  * Contained, exclusive filesystem owner for one production generation run.
@@ -14,6 +15,8 @@ export default class DistantSunSharedCacheGenerationFiles {
 	 *
 	 * @type {string}
 	 */ _root;
+	/** Serialized progress replacements for this filesystem owner. @type {Promise<void>} */
+	_progressTail = Promise.resolve();
 
 	/**
 	 * Creates a filesystem owner anchored to the repository identity. Invalid or aliased roots throw before use.
@@ -154,10 +157,27 @@ export default class DistantSunSharedCacheGenerationFiles {
 	 * @returns {Promise<void>} - Completion after replacement.
 	 */
 	async progress(relativePath, value) {
-		this._parts(relativePath);
-		await this.resolve(path.posix.dirname(relativePath));
-		const temporary = path.join(this._root, `${relativePath}.next`);
-		await writeFile(temporary, `${JSON.stringify(value)}\n`, {flag: 'wx'});
-		await rename(temporary, path.join(this._root, relativePath));
+		const operation = this._progressTail.then(async () => {
+			this._parts(relativePath);
+			await this.resolve(path.posix.dirname(relativePath));
+			const temporary = path.join(this._root, `${relativePath}.next`);
+			await writeFile(temporary, `${JSON.stringify(value)}\n`, {flag: 'wx'});
+			for (let attempt = 0; ; attempt++) {
+				try {
+					await rename(temporary, path.join(this._root, relativePath));
+					break;
+				} catch (error) {
+					if (
+						process.platform !== 'win32' ||
+						!['EPERM', 'EACCES', 'EBUSY'].includes(error.code) ||
+						attempt >= 7
+					)
+						throw error;
+					await delay(50 * (attempt + 1));
+				}
+			}
+		});
+		this._progressTail = operation;
+		await operation;
 	}
 }

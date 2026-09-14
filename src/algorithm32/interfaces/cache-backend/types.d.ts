@@ -86,6 +86,7 @@ interface CacheImmutableTexture {
  * - **"cache.sceneLogicalToUniqueDirection"** - The dense scene direction-index map during rollout.
  * - **"cache.sharedPacketAtlas"** - The persistent shared RGBA packet array.
  * - **"cache.sharedRowAddress"** - The scene-row to resident-slot address table.
+ * - **"cache.sharedCoordinateAddress"** - Complete cubic solar/altitude coordinate addresses.
  * - **"cache.sharedAltitudeLedger"** - The signed scene/altitude interpolation ledger.
  * - **"cache.celestial.sunTransport"** - The distant-Sun direct-transport field.
  * - **"cache.celestial.starTransport"** - The stellar point-set direct-transport field.
@@ -98,6 +99,7 @@ type CacheRuntimeValueKey =
 	| 'cache.sceneLogicalToUniqueDirection'
 	| 'cache.sharedPacketAtlas'
 	| 'cache.sharedRowAddress'
+	| 'cache.sharedCoordinateAddress'
 	| 'cache.sharedAltitudeLedger'
 	| 'cache.celestial.sunTransport'
 	| 'cache.celestial.starTransport'

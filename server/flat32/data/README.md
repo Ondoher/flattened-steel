@@ -29,23 +29,25 @@ close.
 The selected immutable shared package lives at:
 
 ```text
-server/flat32/data/shared-block/7e80317f53c79d0d5a30ebc006630213a2e758008c62a3abb14d2534a8cc2b99/
+server/flat32/data/shared-block/2243c1ab2c2d529131759b32d72cee2a2e4b32098e1cc450c0d48cf34ed4edc7/
 ```
 
 Run `npm run publish:algorithm32:shared-runtime` to copy and authenticate the
-qualified immutable parent. The tracked selection pins the report identity;
-there is no dense rollout switch. The package is 505,724,079 bytes and the
+generated immutable parent. The tracked server selection pins the report identity;
+there is no dense rollout switch. The selected ozone-free package is
+505,753,993 bytes and the
 server serves only its allowlisted, authenticated complete artifacts.
-[Rollout evidence and current policy](../../../archives/topics/production-algorithm32-release-20260911/agents/topics/production-algorithm32/caches/shared-runtime-rollout.md)
-are owned by the production cache topic.
+[Original rollout evidence](../../../archives/topics/production-algorithm32-release-20260911/agents/topics/production-algorithm32/caches/shared-runtime-rollout.md)
+is preserved by the production cache topic.
 
 ## Operational Numerical Reference
 
 `one-degree-bin-covered-runtime-packages-20260830-1/` retains the 109 original
-dense controls solely for shared generation and exact verification. It is not
-served and is not a second deployed cache inventory. Its exact bytes remain
-required by the production generator; deleting this extracted oracle would
-break that owner. The original pre-color-reset archive and index remain intact,
+dense controls as the shared generator's scene-coverage, selection, coordinate,
+and ledger controls. Regenerated physical values are verified from the new
+shared blocks rather than compared with those ozone-enabled payload values. The
+control inventory is not served and is not a second deployed cache inventory;
+deleting it would break the generator. The original pre-color-reset archive and index remain intact,
 including `extraterrestrial-production-adoption-runtime-active-output-2026-08-31.zip`.
 
 The active offline command is `npm run build:algorithm32:distant-sun-cache:shared`.

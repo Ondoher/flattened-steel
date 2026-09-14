@@ -1,4 +1,5 @@
 import {CanonicalValueHash} from '../../../src/algorithm32/value-identity/CanonicalValueHash.js';
+import {DistantSunSceneCacheNumerics} from '../solar-zenith-cache/DistantSunSceneCacheNumerics.js';
 
 export const DISTANT_SUN_PROFILE_COMPILER_IDENTITY = 'algorithm32-offline-profile-driven-w27-f68-j4-v8';
 
@@ -75,8 +76,9 @@ function spectrumChannels(profile) {
 
 /** Convert one explicit production profile into the reusable offline recurrence request. */
 export const DistantSunProfileCompilerInputs = Object.freeze({
-	createInputSet(profile) {
+	createInputSet(profile, options = {}) {
 		requireProfile(profile);
+		const geometryPolicy = DistantSunSceneCacheNumerics.accept(options.numericalPolicy);
 		const atmosphere = profile.models.atmosphere;
 		const constants = atmosphere.constants;
 		const position = profile.domains.positions;
@@ -152,6 +154,7 @@ export const DistantSunProfileCompilerInputs = Object.freeze({
 			},
 			ground: {id: profile.models.groundBoundary.id},
 			numerical: {
+				...(geometryPolicy ? {geometryPolicy} : {}),
 				sourcePathTransmittanceIntervalCount: profile.numerical.sourcePathTransmittance.intervalCount,
 				transportIntervalCount: profile.numerical.cacheConstruction.transportIntervalCount,
 				maximumScatteringOrder: profile.numerical.cacheConstruction.maximumScatteringOrder,

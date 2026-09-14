@@ -1,5 +1,7 @@
 import {createHash} from 'node:crypto';
 import {existsSync, readFileSync} from 'node:fs';
+import {NATIVE_51_NEAR_GROUND_POSITION_DOMAIN_OWNER} from '../../../src/algorithm32/sampling-domains/position/spherical-native/consts.js';
+import {SphericalNativePositionDomains} from '../../../src/algorithm32/sampling-domains/position/spherical-native/SphericalNativePositionDomains.js';
 
 const N_ORDER_CONTROLS = Object.freeze({
 	pathIntervalCount: 40,
@@ -328,17 +330,59 @@ export function verifyCandidateProvenance(path, profile) {
 	if (value.numericalControls?.pathSampleDistribution !== undefined && !selectedQuadraticView) {
 		throw new Error(`Unrecognized candidate view-path distribution in ${path}.`);
 	}
-	for (const [name, expected] of Object.entries(profile.controls)) {
+	const positionDomain = value.numericalControls?.positionDomain;
+	const refinedPositionDomain = positionDomain?.selection === 'native51-near-ground';
+	if (positionDomain !== undefined || value.cacheRepresentation === 'receiver-local-native51-near-ground-z180-w27') {
+		assertEqual(refinedPositionDomain, true, 'numericalControls.positionDomain.selection', path);
+		assertEqual(selectedQuadraticView, true, 'selected quadratic view for refined positions', path);
+		assertEqual(value.backend, 'gpu-production-shaders-r32f', 'backend for refined positions', path);
+		assertEqual(
+			value.cacheRepresentation,
+			'receiver-local-native51-near-ground-z180-w27',
+			'cacheRepresentation',
+			path,
+		);
+		assertEqual(
+			value.numericalControls.maximumScatteringOrder,
+			4,
+			'numericalControls.maximumScatteringOrder',
+			path,
+		);
+		assertEqual(
+			value.numericalControls.incidentAltitudeBinCount,
+			NATIVE_51_NEAR_GROUND_POSITION_DOMAIN_OWNER.count,
+			'numericalControls.incidentAltitudeBinCount',
+			path,
+		);
+		const acceptedDomain = SphericalNativePositionDomains.accept({
+			id: positionDomain.id,
+			count: value.numericalControls.positionNodeCount,
+			nodes: positionDomain.nodes,
+		});
+		assertEqual(
+			acceptedDomain === NATIVE_51_NEAR_GROUND_POSITION_DOMAIN_OWNER,
+			true,
+			'named Native51 position domain',
+			path,
+		);
+	}
+	const controls = refinedPositionDomain ? PAPER_CANDIDATE_PROFILES.j4.controls : profile.controls;
+	for (const [name, expected] of Object.entries(controls)) {
 		const receiverLocal =
-			value.cacheRepresentation === 'receiver-local-native48-z180-w27' &&
+			value.cacheRepresentation ===
+				(refinedPositionDomain
+					? 'receiver-local-native51-near-ground-z180-w27'
+					: 'receiver-local-native48-z180-w27') &&
 			value.schema === 'algorithm32-current-production-b1-provenance-v2' &&
 			['paper', 'paper-j4'].includes(value.profileId);
 		const required =
-			receiverLocal && name === 'scatteringOutputDomain'
-				? 'receiver-local-boundary-inclusive-gnomonic-cubed-sphere-w27'
-				: selectedQuadraticView && name === 'pathIntervalCount'
-					? 30
-					: expected;
+			refinedPositionDomain && ['incidentAltitudeBinCount', 'positionNodeCount'].includes(name)
+				? NATIVE_51_NEAR_GROUND_POSITION_DOMAIN_OWNER.count
+				: receiverLocal && name === 'scatteringOutputDomain'
+					? 'receiver-local-boundary-inclusive-gnomonic-cubed-sphere-w27'
+					: selectedQuadraticView && name === 'pathIntervalCount'
+						? 30
+						: expected;
 		assertEqual(value?.numericalControls?.[name], required, `numericalControls.${name}`, path);
 	}
 

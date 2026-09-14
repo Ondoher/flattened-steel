@@ -21,6 +21,13 @@ Standards:
 - [jsdoc.md](../../../../../Users/gande/.codex/documentation/standards/jsdoc.md) - Callable and declaration documentation.
 - [testing.md](../../../../../Users/gande/.codex/documentation/standards/testing.md) - Behavioral verification and lane boundaries.
 
+### `experiment`
+
+Extends: base
+Standards:
+
+- [types.md](../../../../../Users/gande/.codex/documentation/standards/types.md) - Required types-standard review and type checking for every experiment.
+
 ### `build`
 
 Extends: code
@@ -89,20 +96,7 @@ Standards:
 - `scripts/flat32/` - `server` - Application build, capture, and cache-service tooling.
 - `scripts/experiments/b1-directional-sky-radiance/` - `proof-tools` - Independent scoring and GPU HTTP proof host.
 - `scripts/experiments/algorithm32-frame-parity/` - `proof-tools` - Independent CPU/GPU frame comparison and HTTP proof hosts.
-- `experiments/` - `code` - Contained authored source and proof runners; operational no-unit-test instructions remain effective.
-- `experiments/point-local-cache-builder/` - `proof-tools` - Contained point-local cache builder and local HTTP browser proof host.
-- `experiments/00000-shared-cache-calculation-reuse/` - `proof-tools` - Contained inventory and retained WebGL execution proof with a local HTTP host.
-- `experiments/distant-sun-cache-optimization/` - `proof-tools` - Contained cache experiment with a local HTTP browser proof host.
-- `experiments/distant-sun-shadow-animation-evidence/` - `proof-tools` - Contained browser interception and WebGL evidence harness.
-- `experiments/gpu-resident-shared-block-cache/` - `proof-tools` - Contained GPU atlas and animation-prefetch experiment with a local HTTP browser proof host.
-- `experiments/extraterrestrial/runners/` - `proof-tools` - Contained HTTP/browser proof orchestration.
-- `experiments/extraterrestrial/color-reset/harness/` - `proof-tools` - Contained Color Reset browser host.
-- `experiments/extraterrestrial/color-reset/runners/` - `proof-tools` - Contained Color Reset HTTP/browser proof orchestration.
-- `experiments/extraterrestrial/solar-zenith-cache/point-local-scene-cache/` - `proof-tools` - Contained local scene-cache browser host.
-- `experiments/extraterrestrial/solar-zenith-cache/runners/` - `proof-tools` - Contained solar-zenith browser proof hosts.
-- `experiments/extraterrestrial/baseline/src/algorithm32/react/` - `react-library` - Sealed React comparison source; read-only, not a modernization target.
-- `experiments/extraterrestrial/candidate/src/algorithm32/react/` - `react-library` - Sealed React comparison source; read-only, not a modernization target.
-- `experiments/extraterrestrial/production-snapshots/sun-appearance-step-5-v1/src/algorithm32/implementation/react-three/` - `react-library` - Sealed React promotion snapshot; read-only.
+- `experiments/` - `experiment` - Every experiment requires types-standard review and type checking; deeper assignments retain types.md and may add standards.
 
 ## Repository Overlay
 

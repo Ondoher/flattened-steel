@@ -1,4 +1,6 @@
 import {ShaderContributions} from '../../../shader-assembly/base/ShaderContributions.js';
+import {SOLAR_ZENITH_180_DOMAIN_OWNER} from '../../../sampling-domains/index.js';
+import {DistantSunSharedCacheCubicLookup} from './DistantSunSharedCacheCubicLookup.js';
 
 /** Stable packet lookup and live publication surface; the controller owns its resources.
  * @implements {GpuScatteringCache}
@@ -21,6 +23,16 @@ export default class DistantSunSharedCache {
 		this._backendId = backend.id;
 		this._frame = frame;
 		try {
+			if (frame.solarInterpolation === 'monotone-cubic') {
+				this._zeros.push(
+					backend.uploadImmutableTexture({
+						id: 'shared-zero-coordinates',
+						valueKey: 'cache.sharedCoordinateAddress',
+						storage: {format: 'RG16UI', width: 1, height: 1, layers: 1},
+						values: new Uint16Array(2),
+					}),
+				);
+			}
 			const packet = backend.allocatePersistentArray({
 				id: 'shared-zero-packet',
 				valueKey: 'cache.sharedPacketAtlas',
@@ -62,6 +74,8 @@ export default class DistantSunSharedCache {
 	 */
 	publish(frame) {
 		if (this._disposed) throw new Error('Shared cache is disposed.');
+		if ((frame.solarInterpolation ?? 'linear') !== (this._frame.solarInterpolation ?? 'linear'))
+			throw new RangeError('Shared cache cannot change interpolation contracts within one facade.');
 		if (frame.bindings.some((binding) => binding.backendId !== this._backendId))
 			throw new TypeError('Shared cache publication has a foreign binding.');
 		this._frame = frame;
@@ -98,8 +112,9 @@ export default class DistantSunSharedCache {
 	 * @returns {ShaderContribution} - Stable source independent of selected scene.
 	 */
 	createShaderContribution() {
+		const cubic = this._frame.solarInterpolation === 'monotone-cubic';
 		return ShaderContributions.createShaderContribution({
-			id: 'cache-distant-sun-shared-packets',
+			id: cubic ? 'cache-distant-sun-shared-cubic-packets-v1' : 'cache-distant-sun-shared-packets',
 			owner: 'cache',
 			provides: ['cache.sampleCumulativeScatteringDensity'],
 			requires: [
@@ -122,6 +137,15 @@ export default class DistantSunSharedCache {
 				),
 			],
 			textures: [
+				...(cubic
+					? [
+							ShaderContributions.createShaderTextureDeclaration(
+								'uDistantSunSharedCoordinates',
+								'usampler2D',
+								'cache.sharedCoordinateAddress',
+							),
+						]
+					: []),
 				ShaderContributions.createShaderTextureDeclaration(
 					'uDistantSunSharedPackets',
 					'sampler2DArray',
@@ -143,7 +167,8 @@ export default class DistantSunSharedCache {
 					'cache-distant-sun-shared-lookup',
 					'sampleScatteringCache',
 					0,
-					`int distantScenePackedRow(int altitudeIndex, int solarZenithIndex) {
+					`${cubic ? DistantSunSharedCacheCubicLookup.createShaderSource() : ''}
+int distantScenePackedRow(int altitudeIndex, int solarZenithIndex) {
  ivec3 ledger = texelFetch(uDistantSunSharedAltitudes, ivec2(altitudeIndex, uDistantSunSharedScene), 0).rgb;
  if (solarZenithIndex < ledger.x || solarZenithIndex > ledger.y) return -1;
  return ledger.z + solarZenithIndex - ledger.x;
@@ -215,8 +240,11 @@ SpectralValue sampleCumulativeScatteringDensity(
 		physicalOutgoingDirection
 	));
 	float muS = clamp(dot(normalize(positionMeters), directionToSource), -1.0, 1.0);
-	float zenithCoordinate = clamp((acos(muS) - 0.008726646259971648) / 0.017453292519943295, 0.0, 179.0);
-	int lowerZenithIndex = int(floor(zenithCoordinate));
+	float zenithCoordinate = clamp((acos(muS) - ${SOLAR_ZENITH_180_DOMAIN_OWNER.firstCenter.value}) / ${SOLAR_ZENITH_180_DOMAIN_OWNER.spacing.value}, 0.0, ${SOLAR_ZENITH_180_DOMAIN_OWNER.count - 1}.0);
+${
+	cubic
+		? DistantSunSharedCacheCubicLookup.createSampleBody()
+		: `	int lowerZenithIndex = int(floor(zenithCoordinate));
 	int upperZenithIndex = int(ceil(zenithCoordinate));
 	float upperZenithWeight = zenithCoordinate - float(lowerZenithIndex);
 	ivec2 zenithIndices = ivec2(lowerZenithIndex, upperZenithIndex);
@@ -254,6 +282,8 @@ SpectralValue sampleCumulativeScatteringDensity(
 		density2 += weight * texture(uDistantSunSharedPackets, vec3((324.0 + faceOffset + directionCoordinate.y + 0.5) / 648.0, atlasY, atlasLayer));
 		density3 += weight * texture(uDistantSunSharedPackets, vec3((486.0 + faceOffset + directionCoordinate.y + 0.5) / 648.0, atlasY, atlasLayer));
 	}
+`
+}
 	float unsupportedValue = uintBitsToFloat(0x7fc00000u);
 	SpectralValue density;
 	density.channels[0] = supported ? density0.x : unsupportedValue;

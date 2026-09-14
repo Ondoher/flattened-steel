@@ -1,3 +1,5 @@
+import {createHash} from 'node:crypto';
+import {open} from 'node:fs/promises';
 import DistantSunSharedCacheFormat from '../../../src/algorithm32/implementation/distant-sun/cache/DistantSunSharedCacheFormat.js';
 import {
 	DISTANT_SUN_SHARED_CACHE_PACKAGE_SET_SCHEMA_ID,
@@ -87,6 +89,43 @@ export default class DistantSunSharedCacheGenerationPackage {
 		return this._write(`${folder}/${this._options.files.hash(bytes)}.json`, bytes);
 	}
 
+	/** Reconstruct one scene's exact wavelength-major payload identity from private staging. */
+	async _scenePayload(source, owners) {
+		const handles = new Map();
+		const rowBytes = 4058 * 4;
+		const row = Buffer.alloc(rowBytes);
+		const hash = createHash('sha256');
+		try {
+			for (let channel = 0; channel < 15; channel += 1) {
+				for (const coordinate of source.coordinates) {
+					const owner = owners.get(coordinate);
+					if (!owner) throw new Error('Scene reconstruction omits a generated coordinate.');
+					let handle = handles.get(owner.ordinal);
+					if (!handle) {
+						handle = await open(
+							await this._options.files.resolve(
+								`${this._options.stagingRoot}/block-${String(owner.ordinal).padStart(3, '0')}.f32`,
+							),
+							'r',
+						);
+						handles.set(owner.ordinal, handle);
+					}
+					let offset = 0;
+					const position = (channel * owner.count + owner.row) * rowBytes;
+					while (offset < rowBytes) {
+						const result = await handle.read(row, offset, rowBytes - offset, position + offset);
+						if (result.bytesRead === 0) throw new Error('Scene reconstruction staging was truncated.');
+						offset += result.bytesRead;
+					}
+					hash.update(row);
+				}
+			}
+			return {byteLength: source.coordinates.length * 15 * rowBytes, sha256: hash.digest('hex')};
+		} finally {
+			await Promise.all([...handles.values()].map((handle) => handle.close()));
+		}
+	}
+
 	/**
 	 * Call this method to finalize one block at a time and emit the validated package graph.
 	 * Invalid staging, codec failure, I/O failure, or cancellation rejects; callers must leave the candidate unpublished.
@@ -106,13 +145,13 @@ export default class DistantSunSharedCacheGenerationPackage {
 			decodedScalar: 'float32-little-endian',
 			implementation: {id: 'node-zstd', version: process.versions.zstd, sha256: implementation.sha256},
 		};
-		const first = inventory.scenes[0].manifest;
+		const physical = inventory.configuration;
 		const configurationIdentity = files.hash(
 			JSON.stringify({
-				atmosphere: first.atmosphereIdentity,
-				geometry: first.geometryIdentity,
-				ground: first.groundIdentity,
-				numerical: first.numericalIdentity,
+				atmosphere: physical.atmosphereIdentity,
+				geometry: physical.geometryIdentity,
+				ground: physical.groundIdentity,
+				numerical: physical.numericalIdentity,
 				direction: files.hash(inventory.directionBytes),
 				codecProfile,
 				grid: [8, 8],
@@ -161,10 +200,10 @@ export default class DistantSunSharedCacheGenerationPackage {
 		const configuration = {
 			schemaId: DISTANT_SUN_SHARED_CACHE_CONFIGURATION_SCHEMA_ID,
 			configurationIdentity,
-			atmosphereIdentity: first.atmosphereIdentity,
-			geometryIdentity: first.geometryIdentity,
-			groundIdentity: first.groundIdentity,
-			numericalIdentity: first.numericalIdentity,
+			atmosphereIdentity: physical.atmosphereIdentity,
+			geometryIdentity: physical.geometryIdentity,
+			groundIdentity: physical.groundIdentity,
+			numericalIdentity: physical.numericalIdentity,
 			directionLayout: {
 				id: 'algorithm32-distant-sun-w27-exact-seam-u16-v1',
 				uniqueDirectionCount: 4058,
@@ -194,15 +233,13 @@ export default class DistantSunSharedCacheGenerationPackage {
 		this._format.acceptBlockIndex(blockIndex, configuration);
 		const configurationArtifact = await this._json('configurations', configuration);
 		const owners = new Map();
-		for (const block of blocks)
-			for (const coordinate of block.coordinates) owners.set(coordinate.join(':'), block.id);
+		for (const [ordinal, block] of blocks.entries())
+			for (const [row, coordinate] of block.coordinates.entries())
+				owners.set(coordinate.join(':'), {id: block.id, ordinal, row, count: block.rowCount});
 		const scenes = [];
-		for (const source of inventory.scenes) {
+		for (const [sceneOrdinal, source] of inventory.scenes.entries()) {
 			signal.throwIfAborted();
-			const reconstructedPayload = {
-				byteLength: source.manifest.exactSeamPayload.byteLength,
-				sha256: source.manifest.exactSeamPayload.sha256,
-			};
+			const reconstructedPayload = await this._scenePayload(source, owners);
 			const scene = {
 				schemaId: DISTANT_SUN_SHARED_CACHE_SCENE_MANIFEST_SCHEMA_ID,
 				id: source.manifest.sceneSun.id,
@@ -211,20 +248,20 @@ export default class DistantSunSharedCacheGenerationPackage {
 				sceneSun: source.manifest.sceneSun,
 				compatibility: {
 					configurationIdentity,
-					atmosphereIdentity: first.atmosphereIdentity,
-					geometryIdentity: first.geometryIdentity,
-					groundIdentity: first.groundIdentity,
-					numericalIdentity: first.numericalIdentity,
+					atmosphereIdentity: physical.atmosphereIdentity,
+					geometryIdentity: physical.geometryIdentity,
+					groundIdentity: physical.groundIdentity,
+					numericalIdentity: physical.numericalIdentity,
 				},
 				ledger: source.ledger,
 				coordinates: source.coordinates.map((key) => key.split(':').map(Number)),
-				requiredBlockIds: [...new Set(source.coordinates.map((key) => owners.get(key)))],
+				requiredBlockIds: [...new Set(source.coordinates.map((key) => owners.get(key).id))],
 				reconstructedPayload,
 				derivation: this._derivation(
 					'shared-block-scene-reconstruction',
 					'scene-ledger-row-to-shared-block-row; wavelength-major-exact-Float32-copy',
 					[{role: 'reconstructed-scene', ...reconstructedPayload}],
-					[{role: 'control-scene', artifact: source.manifestArtifact}],
+					[{role: 'control-scene-layout', artifact: source.manifestArtifact}],
 				),
 			};
 			this._format.acceptSceneManifest(scene, configuration, blockIndex);
@@ -233,6 +270,7 @@ export default class DistantSunSharedCacheGenerationPackage {
 				representativeSolarZenithDegrees: source.ordinal,
 				manifest: await this._json('scenes', scene),
 			});
+			await progress({phase: 'scene-manifest', completed: sceneOrdinal + 1, total: inventory.scenes.length});
 		}
 		const catalog = {
 			schemaId: DISTANT_SUN_SHARED_CACHE_RUNTIME_CATALOG_SCHEMA_ID,

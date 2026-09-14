@@ -101,3 +101,11 @@ test('validates selected profiles through production ingress without building ca
 	assert.equal(result.profiles[0].id, 'b1-bruneton-0930-j4-v1');
 	assert.match(result.profiles[0].contentHash, /^sha256:[0-9a-f]{64}$/);
 });
+
+test('routes the explicit near-ground variant and requires isolated generated output', async () => {
+	const options = parseArguments(['--dry-run', '--position-domain', 'native51-near-ground', '--conditions', '09:30']);
+	const result = await runGeneration(options);
+	assert.equal(result.profiles[0].id, 'b1-bruneton-0930-j4-native51-near-ground-v1');
+	assert.throws(() => parseArguments(['--position-domain', 'native50']), /position-domain/);
+	await assert.rejects(runGeneration({positionDomain: 'native51-near-ground'}), /explicit --output-root/);
+});

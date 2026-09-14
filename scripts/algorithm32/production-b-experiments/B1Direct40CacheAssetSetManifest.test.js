@@ -49,3 +49,34 @@ test('rejects mutations not covered by a new set identity', () => {
 	record.assets[0].manifestSha256 = 'b'.repeat(64);
 	assert.throws(() => new B1Direct40CacheAssetSetManifest(record), /identity does not cover/u);
 });
+
+test('binds the refined family to its explicit domain while retaining all 17 conditions', () => {
+	const value = {
+		...definition(),
+		positionDomain: 'native51-near-ground',
+		profileFamily: B1Direct40CacheAssetSetManifest.profileFamilyFor('native51-near-ground'),
+	};
+	const record = B1Direct40CacheAssetSetManifest.createRecord(value);
+	assert.equal(new B1Direct40CacheAssetSetManifest(record).toRecord().positionDomain, 'native51-near-ground');
+	assert.throws(
+		() =>
+			new B1Direct40CacheAssetSetManifest(
+				B1Direct40CacheAssetSetManifest.createRecord({...value, positionDomain: undefined}),
+			),
+		/family/,
+	);
+	assert.throws(
+		() =>
+			new B1Direct40CacheAssetSetManifest(
+				B1Direct40CacheAssetSetManifest.createRecord({...value, profileFamily: B1_DIRECT40_PROFILE_FAMILY}),
+			),
+		/family/,
+	);
+	assert.throws(
+		() =>
+			new B1Direct40CacheAssetSetManifest(
+				B1Direct40CacheAssetSetManifest.createRecord({...value, assets: value.assets.slice(0, 1)}),
+			),
+		/all 17/,
+	);
+});

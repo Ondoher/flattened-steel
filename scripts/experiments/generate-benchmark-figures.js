@@ -3,6 +3,8 @@ import {existsSync, mkdirSync, readFileSync, writeFileSync} from 'node:fs';
 import {dirname, join, relative, resolve} from 'node:path';
 import {fileURLToPath, pathToFileURL} from 'node:url';
 
+import {NATIVE_51_NEAR_GROUND_POSITION_DOMAIN_OWNER} from '../../src/algorithm32/sampling-domains/position/spherical-native/consts.js';
+import {SphericalNativePositionDomains} from '../../src/algorithm32/sampling-domains/position/spherical-native/SphericalNativePositionDomains.js';
 import {CAPTURE_TIMES, SCORE_SAMPLE_INDICES, parseSpectraTsv} from './b1-directional-sky-radiance/benchmark.js';
 import {MODEL_LABELS, PUBLISHED_MODELS, PUBLISHED_RMSE_ORACLE} from './b1-directional-sky-radiance/published-oracle.js';
 import {
@@ -526,20 +528,52 @@ export function validateAlgorithm32ProfileProvenance(provenance, profileName) {
 				`${expected.physicalProfileContentHash}; received ${provenance.physicalProfileContentHash}.`,
 		);
 	}
+	const positionDomain = provenance.numericalControls?.positionDomain;
+	const refinedPositionDomain = positionDomain?.selection === 'native51-near-ground';
+	if (
+		positionDomain !== undefined ||
+		provenance.cacheRepresentation === 'receiver-local-native51-near-ground-z180-w27'
+	) {
+		if (
+			!refinedPositionDomain ||
+			provenance.schema !== 'algorithm32-current-production-b1-provenance-v2' ||
+			!['paper', 'paper-j4'].includes(provenance.profileId) ||
+			provenance.backend !== 'gpu-production-shaders-r32f' ||
+			provenance.cacheRepresentation !== 'receiver-local-native51-near-ground-z180-w27' ||
+			provenance.rowCount !== 1377 ||
+			SphericalNativePositionDomains.accept({
+				id: positionDomain.id,
+				count: provenance.numericalControls.positionNodeCount,
+				nodes: positionDomain.nodes,
+			}) !== NATIVE_51_NEAR_GROUND_POSITION_DOMAIN_OWNER
+		) {
+			throw new Error(`${expected.label} provenance must identify the named Native51 GPU boundary.`);
+		}
+	}
 	const receiverLocal =
 		provenance.schema === 'algorithm32-current-production-b1-provenance-v2' &&
-		provenance.cacheRepresentation === 'receiver-local-native48-z180-w27' &&
+		provenance.cacheRepresentation ===
+			(refinedPositionDomain
+				? 'receiver-local-native51-near-ground-z180-w27'
+				: 'receiver-local-native48-z180-w27') &&
 		['paper', 'paper-j4'].includes(provenance.profileId);
+	const requiredControls = refinedPositionDomain
+		? {
+				...ALGORITHM32_PROFILE_CONTRACTS['paper-j4'].controls,
+				incidentAltitudeBinCount: NATIVE_51_NEAR_GROUND_POSITION_DOMAIN_OWNER.count,
+				positionNodeCount: NATIVE_51_NEAR_GROUND_POSITION_DOMAIN_OWNER.count,
+			}
+		: expected.controls;
 	const controls = receiverLocal
 		? {
-				...expected.controls,
+				...requiredControls,
 				pathIntervalCount: 30,
 				pathSampleDistribution: 'quadratic-near-observer-v1',
-				...(Object.hasOwn(expected.controls, 'scatteringOutputDomain')
+				...(Object.hasOwn(requiredControls, 'scatteringOutputDomain')
 					? {scatteringOutputDomain: 'receiver-local-boundary-inclusive-gnomonic-cubed-sphere-w27'}
 					: {}),
 			}
-		: expected.controls;
+		: requiredControls;
 	for (const [name, value] of Object.entries(controls)) {
 		if (provenance.numericalControls?.[name] !== value) {
 			throw new Error(

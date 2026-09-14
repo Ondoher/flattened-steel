@@ -336,6 +336,7 @@ type Flat32SharedCacheAssetSelection = {
 	/** Content-addressed package-set identity matching the final root directory. */ packageSetIdentity: string;
 	/** Exact trusted package-set report bytes. */ report: DistantSunSharedCacheFileIdentity;
 	/** Optional independently qualified dual-atlas transition policy for this target. */ transitionQualification?: DistantSunSharedCacheMemoryQualification;
+	/** Explicit solar lookup; omission retains the linear control. */ solarInterpolation?: DistantSunSolarInterpolationMethod;
 };
 
 interface Flat32AtmosphereSummary extends SphericalDistantModeSummary {

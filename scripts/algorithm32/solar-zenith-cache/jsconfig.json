@@ -20,6 +20,7 @@
 		"generate-shared-cache.js",
 		"verify-shared-cache-publication-failure.js",
 		"*.d.ts",
+		"../../experiments/b1-directional-sky-radiance/types.d.ts",
 		"../../../src/algorithm32/**/*.d.ts"
 	],
 	"exclude": ["*.test.js", "../../../node_modules/**", "../../../src/algorithm32/**/node_modules/**"]

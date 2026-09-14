@@ -442,4 +442,6 @@ interface Window {
 	__creativeVerifyCapture(name: string, dataUrl: string): Promise<CreativeNodeFileIdentity>;
 	/** Call this method to append decoded inspection progress to the new verification run. */
 	__creativeVerifyProgress(event: CreativeNodeProgress): Promise<void>;
+	/** Call this method to append exact-frame strobing diagnosis progress. */
+	__creativeStrobingProgress(event: CreativeNodeProgress): Promise<void>;
 }

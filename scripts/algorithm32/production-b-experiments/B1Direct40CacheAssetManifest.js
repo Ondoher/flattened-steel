@@ -1,6 +1,7 @@
 import {CanonicalValueHash} from '../../../src/algorithm32/value-identity/CanonicalValueHash.js';
 import DistantSunSceneCacheLedger from '../../../src/algorithm32/implementation/distant-sun/cache/DistantSunSceneCacheLedger.js';
 import {SOLAR_ZENITH_180_DOMAIN_OWNER} from '../../../src/algorithm32/sampling-domains/solar-zenith/consts.js';
+import {NATIVE_51_NEAR_GROUND_POSITION_DOMAIN_OWNER} from '../../../src/algorithm32/sampling-domains/index.js';
 
 export const B1_DIRECT40_CACHE_ASSET_MANIFEST_SCHEMA = 'algorithm32-b1-direct40-cache-asset-manifest-v1';
 export const B1_DIRECT40_CACHE_PAYLOAD_CODEC = 'algorithm32-b1-direct40-w27-exact-seam-f32le-v1';
@@ -96,7 +97,13 @@ function expectedProfileBoundary(profile, condition) {
 			groundAlbedoContentHash: profile.models.groundBoundary.albedo.contentHash,
 		},
 		domains: {
-			position: {id: profile.domains.positions.id, count: profile.domains.positions.count},
+			position: {
+				id: profile.domains.positions.id,
+				count: profile.domains.positions.count,
+				...(profile.domains.positions.id === NATIVE_51_NEAR_GROUND_POSITION_DOMAIN_OWNER.id
+					? {selection: 'native51-near-ground', nodes: profile.domains.positions.nodes}
+					: {}),
+			},
 			incoming: {
 				id: profile.domains.incomingDirections.id,
 				count: profile.domains.incomingDirections.directionCount,
@@ -188,9 +195,23 @@ export default class B1Direct40CacheAssetManifest {
 			requireContentHash(value, label);
 		}
 		requireUnitVector(record.condition.directionToSource, 'Condition source direction');
+		const nearGround = record.domains.position.selection === 'native51-near-ground';
+		const positionCount = nearGround
+			? NATIVE_51_NEAR_GROUND_POSITION_DOMAIN_OWNER.count
+			: REQUIRED_COUNTS.positions;
+		if (
+			(nearGround &&
+				(record.schemaId !== B1_POINT_LOCAL_CACHE_ASSET_SCHEMA ||
+					record.domains.position.id !== NATIVE_51_NEAR_GROUND_POSITION_DOMAIN_OWNER.id ||
+					JSON.stringify(record.domains.position.nodes) !==
+						JSON.stringify(NATIVE_51_NEAR_GROUND_POSITION_DOMAIN_OWNER.nodes))) ||
+			(!nearGround && record.domains.position.selection !== undefined)
+		) {
+			throw new RangeError('B1 direct-40 position domain selection or explicit nodes are incompatible.');
+		}
 		if (
 			record.domains.spectrum.channelCount !== REQUIRED_COUNTS.spectralChannels ||
-			record.domains.position.count !== REQUIRED_COUNTS.positions ||
+			record.domains.position.count !== positionCount ||
 			record.domains.incoming.count !== REQUIRED_COUNTS.incomingDirections ||
 			record.domains.outgoing.faceWidth !== 27 ||
 			record.domains.outgoing.logicalCount !== REQUIRED_COUNTS.logicalOutgoingDirections ||
@@ -212,10 +233,16 @@ export default class B1Direct40CacheAssetManifest {
 			throw new RangeError('B1 direct-40 cache-asset numerical controls are incompatible.');
 		}
 		const pointLocal = record.schemaId === B1_POINT_LOCAL_CACHE_ASSET_SCHEMA;
-		let rowCount = REQUIRED_COUNTS.positions;
+		if (
+			record.solarInterpolation !== undefined &&
+			(!pointLocal || !['linear', 'monotone-cubic'].includes(record.solarInterpolation))
+		) {
+			throw new RangeError('B1 solar interpolation requires a supported receiver-local asset policy.');
+		}
+		let rowCount = positionCount;
 		if (pointLocal) {
-			if (!Array.isArray(record.ledger?.rows) || record.ledger.rows.length !== 48)
-				throw new RangeError('Point-local asset requires all 48 altitude rows.');
+			if (!Array.isArray(record.ledger?.rows) || record.ledger.rows.length !== positionCount)
+				throw new RangeError('Point-local asset requires every selected altitude row.');
 			rowCount = 0;
 			for (const [altitudeIndex, row] of record.ledger.rows.entries()) {
 				if (
@@ -296,12 +323,29 @@ export default class B1Direct40CacheAssetManifest {
 				ledger.support.arbitraryShortenedEndpoint !== true
 			)
 				throw new RangeError('Point-local ledger support does not match the B1 condition.');
-			DistantSunSceneCacheLedger.fromRecord(ledger, {
+			const domains = {
 				positionDomain: profile.domains.positions,
 				solarZenithDomain: SOLAR_ZENITH_180_DOMAIN_OWNER,
 				outgoingDirectionDomain: profile.domains.outgoingDirections,
 				spectralBasis: profile.spectral.basis,
-			});
+			};
+			DistantSunSceneCacheLedger.fromRecord(ledger, domains);
+			if (this.record.solarInterpolation === 'monotone-cubic') {
+				const minimum = new DistantSunSceneCacheLedger({
+					sceneSun: ledger.sceneSun,
+					support: ledger.support,
+					...domains,
+				});
+				const lastIndex = domains.solarZenithDomain.count - 1;
+				for (const row of minimum.rows) {
+					const retained = ledger.rows[row.altitudeIndex];
+					if (
+						retained.firstSolarZenithIndex > Math.max(0, row.firstSolarZenithIndex - 1) ||
+						retained.lastSolarZenithIndex < Math.min(lastIndex, row.lastSolarZenithIndex + 1)
+					)
+						throw new RangeError('Point-local cubic asset lacks required interior solar support.');
+				}
+			}
 		}
 	}
 

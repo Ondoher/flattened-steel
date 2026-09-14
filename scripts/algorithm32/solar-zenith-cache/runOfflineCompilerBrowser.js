@@ -35,7 +35,7 @@ export async function runOfflineCompilerBrowser() {
 		throw new Error('The offline distant-Sun compiler requires WebGL2.');
 	}
 
-	const inputSet = DistantSunSceneCacheCompilerInputs.createInputSet(control.scene);
+	const inputSet = DistantSunSceneCacheCompilerInputs.createInputSet(control.scene, control);
 	const debugRenderer = gl.getExtension('WEBGL_debug_renderer_info');
 	const wavelengths = [];
 	const started = performance.now();

@@ -135,6 +135,7 @@ export default class B1Direct40CacheAssetVerifier {
 			time: condition.localTime,
 			fittedAzimuthDegrees: condition.fittedAzimuthDegrees,
 			maximumScatteringOrder: 4,
+			positionDomain: source.record.domains.position.selection,
 		});
 		manifest.requireCompatibility(profile, {id: condition.id, localTime: condition.localTime});
 		if (productionRevision !== null && source.record.derivation.productionRevision !== productionRevision) {
@@ -205,6 +206,8 @@ export default class B1Direct40CacheAssetVerifier {
 				compilationPayloads,
 			});
 			if (
+				(verified.manifest.domains.position.selection ?? 'native48') !==
+					(source.record.positionDomain ?? 'native48') ||
 				verified.manifestRelativePath !== path.basename(expected.manifestPath) ||
 				verified.manifestSha256 !== expected.manifestSha256 ||
 				verified.manifest.assetIdentity !== expected.assetIdentity ||

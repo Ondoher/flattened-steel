@@ -105,8 +105,10 @@ export default class DistantSunSceneCacheOfflineCompiler {
 	 * Called by compilation to create a containment-checking loopback module and artifact server.
 	 *
 	 * @param {Map<string, Buffer>} uploads - The unique browser layer uploads.
-	 * @param {readonly DistantSunSceneCacheCompilerProgress[]} progress - The mutable progress collector.
-	 * @param {DistantSunSceneCacheCompilerScene} scene - The exact scene supplied to the browser compiler.
+	 * @param {DistantSunSceneCacheCompilerProgress[]} progress - The mutable progress collector.
+	 * @param {unknown} control - Complete browser compilation or proof request.
+	 * @param {string} browserModulePath - Repository-owned browser entry module.
+	 * @param {number} layerCount - Expected exclusive layer uploads.
 	 * @returns {import('node:http').Server} - The unstarted loopback server.
 	 */
 	_createServer(uploads, progress, control, browserModulePath, layerCount) {
@@ -366,9 +368,12 @@ export default class DistantSunSceneCacheOfflineCompiler {
 		try {
 			await new Promise((resolve, reject) => {
 				server.once('error', reject);
-				server.listen(0, '127.0.0.1', resolve);
+				server.listen(0, '127.0.0.1', () => resolve());
 			});
-			browserExecution = await this._executeBrowser(`http://127.0.0.1:${server.address().port}/`, profilePath);
+			const address = server.address();
+			if (!address || typeof address === 'string')
+				throw new Error('Offline compiler requires a loopback TCP listener.');
+			browserExecution = await this._executeBrowser(`http://127.0.0.1:${address.port}/`, profilePath);
 		} finally {
 			await new Promise((resolve) => server.close(() => resolve()));
 			await rm(profilePath, {recursive: true, force: true, maxRetries: 20, retryDelay: 250});
@@ -393,10 +398,10 @@ export default class DistantSunSceneCacheOfflineCompiler {
 	 */
 	async compile(request) {
 		const scene = request.scene ?? DistantSunSceneCacheCompilerInputs.createQualifiedSanJoseNauticalScene();
-		const inputSet = DistantSunSceneCacheCompilerInputs.createInputSet(scene);
+		const inputSet = DistantSunSceneCacheCompilerInputs.createInputSet(scene, request);
 		const {outputDirectory, layers, progress, browserExecution} = await this.compileLayers({
 			outputDirectory: request.outputDirectory,
-			control: {scene},
+			control: {scene, numericalPolicy: request.numericalPolicy},
 			browserModulePath: '/repository/scripts/algorithm32/solar-zenith-cache/runOfflineCompilerBrowser.js',
 			layerCount: 15,
 		});
@@ -458,7 +463,7 @@ export default class DistantSunSceneCacheOfflineCompiler {
 				maximumScatteringOrder: 4,
 				constructionTransportIntervals: 15,
 				viewRuntimeIdentity: 'Q30 quadratic-near-observer',
-				atmosphereIdentity: 'algorithm32-canonical-plus-bruneton-ozone-300du-v1',
+				atmosphereIdentity: inputSet.buildRequest.transportSpec.atmosphere.id,
 			},
 			tool: {node: process.version, platform: process.platform, architecture: process.arch},
 			outputs: {oraclePayload, exactSeamPayload, logicalToUniqueIndex, ledgerSha256},
@@ -474,9 +479,9 @@ export default class DistantSunSceneCacheOfflineCompiler {
 			schemaId: DISTANT_SUN_SCENE_CACHE_MANIFEST_SCHEMA_ID,
 			cacheIdentity,
 			sceneSun: inputSet.scene.sceneSun,
-			atmosphereIdentity: 'algorithm32-canonical-plus-bruneton-ozone-300du-v1',
-			geometryIdentity: 'algorithm32-spherical-earth-6360-6420km-v1',
-			groundIdentity: 'algorithm32-canonical-black-ground-boundary-v1',
+			atmosphereIdentity: inputSet.buildRequest.transportSpec.atmosphere.id,
+			geometryIdentity: inputSet.buildRequest.transportSpec.planet.id,
+			groundIdentity: inputSet.buildRequest.transportSpec.ground.id,
 			numericalIdentity: inputSet.numericalIdentity,
 			ledgerPath,
 			ledgerSha256,

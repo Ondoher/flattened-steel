@@ -2,7 +2,7 @@ import DistantSunSceneCacheLedger from '../../../src/algorithm32/implementation/
 import {NATIVE_15_SPECTRAL_BASIS} from '../../../src/algorithm32/profiles/native-15/native-15-profile.js';
 import {
 	CUBED_SPHERE_W27_DIRECTION_DOMAIN_OWNER,
-	NATIVE_48_POSITION_DOMAIN_OWNER,
+	SphericalNativePositionDomains,
 	SOLAR_ZENITH_180_DOMAIN_OWNER,
 } from '../../../src/algorithm32/sampling-domains/index.js';
 import {
@@ -33,6 +33,16 @@ export default class DistantSunPointLocalCacheInventory {
 	create(buildRequest, requests, wavelengths) {
 		const spec = buildRequest?.transportSpec;
 		const domains = spec?.domains;
+		const positionDomain = SphericalNativePositionDomains.accept({
+			id: domains?.position?.id,
+			count: domains?.position?.count,
+			nodes: Array.isArray(domains?.position?.nodes)
+				? domains.position.nodes.map((node) => ({
+						index: node?.index,
+						coordinate: {value: node?.altitudeMeters, units: 'meters'},
+					}))
+				: [],
+		});
 		if (
 			spec?.shaderProfile?.coordinateContract !== 'scene-cache-receiver-local-v1' ||
 			spec?.numerical?.maximumScatteringOrder !== 4
@@ -40,14 +50,9 @@ export default class DistantSunPointLocalCacheInventory {
 			throw new RangeError('Point-local compilation requires the receiver-local cumulative J4 contract.');
 		}
 		if (
-			domains?.position?.count !== NATIVE_48_POSITION_DOMAIN_OWNER.count ||
 			domains?.solarZenith?.count !== SOLAR_ZENITH_180_DOMAIN_OWNER.count ||
 			domains?.outgoing?.directionCount !== CUBED_SPHERE_W27_DIRECTION_DOMAIN_OWNER.directionCount ||
 			domains?.outgoing?.faceWidth !== CUBED_SPHERE_W27_DIRECTION_DOMAIN_OWNER.faceWidth ||
-			!sameValues(
-				domains.position.nodes.map((node) => node.altitudeMeters),
-				NATIVE_48_POSITION_DOMAIN_OWNER.nodes.map((node) => node.coordinate.value),
-			) ||
 			!sameValues(
 				domains.solarZenith.nodes.map((node) => node.muS),
 				SOLAR_ZENITH_180_DOMAIN_OWNER.nodes.map((node) => node.muS),
@@ -58,7 +63,7 @@ export default class DistantSunPointLocalCacheInventory {
 			) ||
 			!sameValues(domains.outgoing.unitVectors, CUBED_SPHERE_W27_DIRECTION_DOMAIN_OWNER.unitVectors)
 		) {
-			throw new RangeError('Point-local compilation requires the production Native48/Z180/W27 domains.');
+			throw new RangeError('Point-local compilation requires the production altitude/Z180/W27 domains.');
 		}
 		if (
 			domains.incoming.directionCount !== domains.incoming.unitVectors.length ||
@@ -84,12 +89,18 @@ export default class DistantSunPointLocalCacheInventory {
 		}
 
 		const spectralBasis = this._spectralBasis(domains.spectrum);
+		if (
+			spec.numerical.solarInterpolation !== undefined &&
+			!['linear', 'monotone-cubic'].includes(spec.numerical.solarInterpolation)
+		)
+			throw new RangeError('Point-local solar interpolation is unsupported.');
+		const padding = spec.numerical.solarInterpolation === 'monotone-cubic' ? 1 : 0;
 		const coordinatesByKey = new Map();
 		const scenes = requests.map((request, ordinal) => {
 			this._requireScene(request, spec);
 			const observerSolarZenithRadians = (request.zenithDegrees * Math.PI) / 180;
-			const ledger = new DistantSunSceneCacheLedger({
-				positionDomain: NATIVE_48_POSITION_DOMAIN_OWNER,
+			let ledger = new DistantSunSceneCacheLedger({
+				positionDomain,
 				solarZenithDomain: SOLAR_ZENITH_180_DOMAIN_OWNER,
 				outgoingDirectionDomain: CUBED_SPHERE_W27_DIRECTION_DOMAIN_OWNER,
 				spectralBasis,
@@ -113,6 +124,42 @@ export default class DistantSunPointLocalCacheInventory {
 					arbitraryShortenedEndpoint: true,
 				},
 			}).toRecord();
+			if (padding > 0) {
+				let retainedBlockCount = 0;
+				const rows = ledger.rows.map((row) => {
+					const firstSolarZenithIndex = Math.max(0, row.firstSolarZenithIndex - padding);
+					const lastSolarZenithIndex = Math.min(
+						domains.solarZenith.count - 1,
+						row.lastSolarZenithIndex + padding,
+					);
+					const packedRowCount = lastSolarZenithIndex - firstSolarZenithIndex + 1;
+					const expanded = {
+						...row,
+						firstSolarZenithIndex,
+						lastSolarZenithIndex,
+						firstPackedRow: retainedBlockCount,
+						packedRowCount,
+					};
+					retainedBlockCount += packedRowCount;
+					return expanded;
+				});
+				ledger = {
+					...ledger,
+					rows,
+					retainedBlockCount,
+					oracleByteLength:
+						retainedBlockCount *
+						domains.outgoing.directionCount *
+						spectralBasis.channelCount *
+						Float32Array.BYTES_PER_ELEMENT,
+					exactSeamByteLength:
+						retainedBlockCount *
+							CUBED_SPHERE_W27_DIRECTION_DOMAIN_OWNER.uniqueDirectionCount *
+							spectralBasis.channelCount *
+							Float32Array.BYTES_PER_ELEMENT +
+						domains.outgoing.directionCount * Uint16Array.BYTES_PER_ELEMENT,
+				};
+			}
 			const keys = [];
 			for (const row of ledger.rows) {
 				for (let zenith = row.firstSolarZenithIndex; zenith <= row.lastSolarZenithIndex; zenith += 1) {
@@ -139,7 +186,7 @@ export default class DistantSunPointLocalCacheInventory {
 			} else {
 				rows.push({
 					altitudeIndex,
-					altitude: NATIVE_48_POSITION_DOMAIN_OWNER.nodes[altitudeIndex].coordinate,
+					altitude: positionDomain.nodes[altitudeIndex].coordinate,
 					firstSolarZenithIndex: solarZenithIndex,
 					lastSolarZenithIndex: solarZenithIndex,
 					firstPackedRow: packedIndex,

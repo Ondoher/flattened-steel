@@ -1747,6 +1747,8 @@ type DistantSunSharedCacheRouteQualification = DistantSunSharedCacheMemoryQualif
 };
 /** Runtime capabilities and explicit memory admission for one shared-cache controller. */
 type DistantSunSharedCacheControllerDefinition = {
+	/** Explicit candidate reconstruction; omission preserves the deployed linear control. */
+	solarInterpolation?: DistantSunSolarInterpolationMethod;
 	/** Borrowed renderer resource owner. */
 	backend: CachePacketAtlasBackend;
 	/** Borrowed process-wide packet transport. */
@@ -1771,6 +1773,8 @@ type DistantSunSharedCacheSceneRequest = {
 };
 /** Complete controller-owned frame whose borrowed resources are valid until the next publication. */
 type DistantSunSharedCacheFrame = {
+	/** Fixed reconstruction contract; absent only for the legacy linear control. */
+	solarInterpolation?: DistantSunSolarInterpolationMethod;
 	/** Complete validated scene and row-address selection. */
 	snapshot: DistantSunSharedCachePublicationSnapshot;
 	/** Owned immutable GPU metadata released on retirement. */
@@ -1782,6 +1786,22 @@ type DistantSunSharedCacheFrame = {
 	/** Internal atlas capability, absent for texture-free darkness. */
 	atlas: DistantSunSharedCacheAtlasOwner | undefined;
 };
+/** Solar-angle reconstruction mode.
+ * - **"linear"** - Deployed two-knot interpolation control.
+ * - **"monotone-cubic"** - Complete four-knot shape-preserving candidate.
+ */
+type DistantSunSolarInterpolationMethod = 'linear' | 'monotone-cubic';
+
+/** Authenticated metadata consumed by cubic support planning before atlas attachment. */
+type DistantSunSharedCacheSupportInventory = Pick<DistantSunSharedCachePackageGraph, 'blockIndex' | 'scenes'>;
+
+/** Direct coordinate-address upload derived from authenticated resident blocks. */
+type DistantSunSharedCacheCoordinateTable = Readonly<{
+	/** Integer two-component texture format. */ format: CacheImmutableTextureFormat;
+	/** Solar-domain sample count. */ width: number;
+	/** Altitude-domain sample count. */ height: number;
+	/** Slot and block-row pairs, with explicit unavailable sentinels. */ values: Uint16Array;
+}>;
 /** Internal atlas lifecycle capability used by the controller-owned frame. */
 interface DistantSunSharedCacheAtlasOwner {
 	/** Opaque allocation handle. */
@@ -1830,3 +1850,21 @@ type DistantSunSharedCacheSelection = Omit<DistantSunSharedCacheControllerDefini
 	/** Catalog ordinal 0-108, or null when the requested input angle is at least 108 degrees. */
 	sceneOrdinal: number | null;
 };
+
+/** Direction reconstruction policy for a resident receiver-local scene cache.
+ * - **"texture-bilinear"** - Established hardware-filtered sampling.
+ * - **"shader-bilinear"** - Explicit Float32 bilinear weights for qualification.
+ */
+type DistantSunSceneDirectionInterpolationMethod = 'texture-bilinear' | 'shader-bilinear';
+
+/** Construction values for one completely uploaded point-local scene cache. */
+type DistantSunSceneCacheDefinition = Readonly<{
+	/** Executable altitude owner; omission retains the established Native48 domain. */ readonly positionDomain?: PositionDomain;
+	/** Solar interpolation selected by the authenticated asset; omission preserves linear sampling. */ readonly solarInterpolation?: DistantSunSolarInterpolationMethod;
+	/** Choose texture filtering or explicit shader bilinear weights; defaults to texture filtering. */ readonly directionInterpolation?: DistantSunSceneDirectionInterpolationMethod;
+	/** Explicit atlas channel count; omitted for the established Native15 package. */ readonly spectralChannelCount?: number;
+	/** Accepted exact manifest. */ readonly manifest: DistantSunSceneCacheAcceptedManifest;
+	/** Accepted executable packed-row ledger. */ readonly ledger: DistantSunSceneCacheLedger;
+	/** Uploaded exact-seam RGBA32F channel groups. */ readonly cumulativeTexture: CacheImmutableTexture;
+	/** Uploaded logical-W27 to unique-direction R16UI index. */ readonly directionIndexTexture: CacheImmutableTexture;
+}>;

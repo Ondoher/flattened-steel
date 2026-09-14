@@ -75,9 +75,10 @@ export default class DistantSunSharedCacheMetadata {
 	 * @param {number} generation - Current transaction generation.
 	 * @param {readonly DistantSunSharedCacheAtlasSlot[]} slots - Successfully uploaded slots.
 	 * @param {number} layerCount - Allocated atlas capacity.
+	 * @param {readonly string[]} [requiredBlockIds] - Complete candidate stencil when cubic reconstruction is selected.
 	 * @returns {DistantSunSharedCachePublicationSnapshot} - Validated complete snapshot.
 	 */
-	build(sceneOrdinal, generation, slots, layerCount) {
+	build(sceneOrdinal, generation, slots, layerCount, requiredBlockIds = undefined) {
 		if (sceneOrdinal === null)
 			return this._contracts.acceptPublicationSnapshot({
 				schemaId: DISTANT_SUN_SHARED_CACHE_PUBLICATION_SCHEMA_ID,
@@ -105,7 +106,7 @@ export default class DistantSunSharedCacheMetadata {
 			status: 'ready',
 			sceneOrdinal,
 			representativeSolarZenithDegrees: sceneOrdinal,
-			requiredBlockIds: [...this._graph.scenes[sceneOrdinal].requiredBlockIds],
+			requiredBlockIds: [...(requiredBlockIds ?? this._graph.scenes[sceneOrdinal].requiredBlockIds)],
 			residentSlots: slots.map((slot) => ({
 				schemaId: DISTANT_SUN_SHARED_CACHE_RESIDENT_SLOT_SCHEMA_ID,
 				generation,

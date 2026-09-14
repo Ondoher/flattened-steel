@@ -6,6 +6,42 @@ describe('Shared-cache residency and publication', () => {
 	let fixture;
 	afterEach(() => fixture?.controller.dispose());
 
+	it('publishes complete cubic support through forward and reverse scene traversal', async () => {
+		fixture = createFixture(true, true, true);
+		const route = [0, 1, 2, 1, 0];
+		fixture.controller.setRoute(route);
+		let previous;
+		for (const [routeIndex, ordinal] of route.entries()) {
+			expect(await fixture.controller.requestScene(ordinal, {routeIndex})).toBeTrue();
+			if (previous) expect(fixture.controller.diagnostics().sceneOrdinal).toBe(previous.snapshot.sceneOrdinal);
+			const frame = fixture.controller.publishFrame();
+			expect(frame.solarInterpolation).toBe('monotone-cubic');
+			expect(frame.snapshot.sceneOrdinal).toBe(ordinal);
+			const table = frame.metadataTextures.find(
+				(texture) => texture.valueKey === 'cache.sharedCoordinateAddress',
+			);
+			for (const row of fixture.graph.scenes[ordinal].ledger.rows) {
+				for (
+					let zenith = Math.max(0, row.firstSolarZenithIndex - 1);
+					zenith <= row.lastSolarZenithIndex + 1;
+					zenith++
+				) {
+					const address = (row.altitudeIndex * table.storage.width + zenith) * 2;
+					const slot = frame.snapshot.residentSlots.find(
+						(entry) => entry.slotIndex === table.values[address],
+					);
+					expect(slot).toBeDefined();
+					expect(frame.snapshot.requiredBlockIds).toContain(slot.logicalBlockId);
+					const block = fixture.graph.blockIndex.blocks.find((entry) => entry.id === slot.logicalBlockId);
+					expect(block.coordinates[table.values[address + 1]]).toEqual([row.altitudeIndex, zenith]);
+				}
+			}
+			expect(fixture.backend.liveArrays).toBe(1);
+			expect(fixture.backend.liveMetadata).toBe(3);
+			previous = frame;
+		}
+	});
+
 	it('preloads complete required rows and changes prepared scenes without requests or packet uploads', async () => {
 		fixture = createFixture();
 		expect(await fixture.controller.requestScene(0)).toBeTrue();
@@ -215,9 +251,9 @@ describe('Shared-cache residency and publication', () => {
 });
 
 /** Creates a deterministic independent coordinate oracle and resource-accounting capabilities. */
-function createFixture(transition = false, sliding = false) {
+function createFixture(transition = false, sliding = false, cubic = false) {
 	const blocks = [];
-	for (const base of [0, 48])
+	for (const base of cubic ? [0, 40] : [0, 48])
 		for (let altitude = 0; altitude < 48; altitude += 8)
 			for (let zenith = base; zenith < base + (sliding ? 40 : 24); zenith += 8) {
 				const coordinates = [];
@@ -232,22 +268,23 @@ function createFixture(transition = false, sliding = false) {
 			}
 	const scenes = Array.from({length: 109}, (_, ordinal) => {
 		const base = ordinal >= 50 ? 48 : sliding && ordinal <= 2 ? ordinal * 8 : 0;
+		const rowWidth = cubic ? 16 : 24;
 		const coordinates = [],
 			rows = [];
 		for (let altitude = 0; altitude < 48; altitude++) {
 			rows.push({
 				altitudeIndex: altitude,
 				firstSolarZenithIndex: base,
-				lastSolarZenithIndex: base + 23,
+				lastSolarZenithIndex: base + rowWidth - 1,
 				firstPackedRow: coordinates.length,
 			});
-			for (let z = base; z < base + 24; z++) coordinates.push([altitude, z]);
+			for (let z = base; z < base + rowWidth; z++) coordinates.push([altitude, z]);
 		}
 		return {
 			coordinates,
 			ledger: {rows},
 			requiredBlockIds: blocks
-				.filter((block) => block.coordinates[0][1] >= base && block.coordinates[0][1] < base + 24)
+				.filter((block) => block.coordinates[0][1] >= base && block.coordinates[0][1] < base + rowWidth)
 				.map((block) => block.id),
 		};
 	});
@@ -350,6 +387,7 @@ function createFixture(transition = false, sliding = false) {
 	};
 	fixture.backend = backend;
 	fixture.definition = {
+		solarInterpolation: cubic ? 'monotone-cubic' : undefined,
 		backend,
 		transport,
 		package: {getGraph: () => graph, getBlockUrl: (id) => `http://localhost/${id}`},

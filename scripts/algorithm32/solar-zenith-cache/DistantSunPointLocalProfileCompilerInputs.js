@@ -1,11 +1,21 @@
 import {CanonicalValueHash} from '../../../src/algorithm32/value-identity/CanonicalValueHash.js';
+import {SphericalNativePositionDomains} from '../../../src/algorithm32/sampling-domains/index.js';
 import {DistantSunSceneCacheCompilerInputs} from './DistantSunSceneCacheCompilerInputs.js';
+import {DistantSunSceneCacheNumerics} from './DistantSunSceneCacheNumerics.js';
 
 export const DISTANT_SUN_POINT_LOCAL_PROFILE_COMPILER_IDENTITY =
 	'algorithm32-offline-point-local-profile-driven-w27-z180-j4-v1';
 
 const EXPECTED_PROFILE_KIND = 'algorithm32-execution-profile';
 
+/**
+ * Called by profile projection to accept one complete distant-Sun configuration.
+ *
+ * @param {DistantSunPointLocalExecutionProfile} profile - External execution profile.
+ * @returns {SphericalNativePositionDomain} - Canonical physical altitude owner.
+ * @throws {TypeError} - Missing execution-profile contract.
+ * @throws {RangeError} - Unsupported physical models, domains, or numerical configuration.
+ */
 function requireProfile(profile) {
 	if (!profile || profile.kind !== EXPECTED_PROFILE_KIND) {
 		throw new TypeError('Point-local profile compilation requires one complete execution profile.');
@@ -19,17 +29,17 @@ function requireProfile(profile) {
 		throw new RangeError('Point-local profile compilation requires the canonical distant-Sun model.');
 	}
 	if (
-		profile.domains?.positions?.count !== 48 ||
 		profile.domains?.incomingDirections?.directionCount !== 68 ||
 		profile.domains?.outgoingDirections?.faceWidth !== 27 ||
 		profile.domains?.outgoingDirections?.directionCount !== 4374 ||
 		profile.numerical?.cacheConstruction?.maximumScatteringOrder !== 4
 	) {
-		throw new RangeError('Point-local profile compilation requires Native48/F68/W27 cumulative J4.');
+		throw new RangeError('Point-local profile compilation requires F68/W27 cumulative J4.');
 	}
 	if (profile.models.atmosphere.constants.ozoneAbsorptionEnabled !== false) {
 		throw new RangeError('Point-local profile projection currently requires the explicit no-ozone boundary.');
 	}
+	return SphericalNativePositionDomains.accept(profile.domains.positions);
 }
 
 function spectrumChannels(profile) {
@@ -58,9 +68,26 @@ function spectrumChannels(profile) {
 
 /** Project explicit production profiles and their placements into the receiver-local compiler contract. */
 export const DistantSunPointLocalProfileCompilerInputs = Object.freeze({
-	/** Create one scene-independent Z180 construction request from a compatible production profile. */
-	createInputSet(profile) {
-		requireProfile(profile);
+	/**
+	 * Call this method to project one scene-independent Z180 construction request.
+	 *
+	 * @param {DistantSunPointLocalExecutionProfile} profile - Complete production configuration.
+	 * @param {DistantSunSceneCacheCompilerOptions} [options] - Explicit candidate controls; a supplied grid selector must match the profile.
+	 * @returns {DistantSunPointLocalProfileInputSet} - Accepted construction request and identities.
+	 */
+	createInputSet(profile, options = {}) {
+		const positionDomainOwner = requireProfile(profile);
+		if (
+			options.positionDomain !== undefined &&
+			SphericalNativePositionDomains.select(options.positionDomain) !== positionDomainOwner
+		)
+			throw new RangeError('Compiler position-domain selection disagrees with the execution profile.');
+		const geometryPolicy = DistantSunSceneCacheNumerics.accept(options.numericalPolicy);
+		if (
+			options.solarInterpolation !== undefined &&
+			!['linear', 'monotone-cubic'].includes(options.solarInterpolation)
+		)
+			throw new RangeError('Unsupported compiler solar interpolation.');
 		const template = DistantSunSceneCacheCompilerInputs.createInputSet(
 			DistantSunSceneCacheCompilerInputs.createQualifiedSanJoseNauticalScene(),
 		).buildRequest.transportSpec;
@@ -139,6 +166,10 @@ export const DistantSunPointLocalProfileCompilerInputs = Object.freeze({
 			},
 			ground: {id: profile.models.groundBoundary.id},
 			numerical: {
+				...(geometryPolicy ? {geometryPolicy} : {}),
+				...(options.solarInterpolation === 'monotone-cubic'
+					? {solarInterpolation: options.solarInterpolation}
+					: {}),
 				sourcePathTransmittanceIntervalCount: profile.numerical.sourcePathTransmittance.intervalCount,
 				transportIntervalCount: profile.numerical.cacheConstruction.transportIntervalCount,
 				maximumScatteringOrder: profile.numerical.cacheConstruction.maximumScatteringOrder,
@@ -157,6 +188,7 @@ export const DistantSunPointLocalProfileCompilerInputs = Object.freeze({
 					geometry: profile.models.geometry.id,
 					ground: profile.models.groundBoundary,
 					numerical: profile.numerical.cacheConstruction,
+					...(positionDomainOwner.count === 51 ? {positionDomain: domains.position} : {}),
 				}),
 			}),
 			buildRequest: Object.freeze(buildRequest),
@@ -190,7 +222,16 @@ export const DistantSunPointLocalProfileCompilerInputs = Object.freeze({
 	},
 
 	/** Create one shared construction request and ordered scenes from an arbitrary compatible profile list. */
-	createBatch(profiles, {ids = profiles?.map((profile) => profile.id), observerAltitudeMeters = 0} = {}) {
+	createBatch(
+		profiles,
+		{
+			ids = profiles?.map((profile) => profile.id),
+			observerAltitudeMeters = 0,
+			numericalPolicy = undefined,
+			solarInterpolation = undefined,
+			positionDomain = undefined,
+		} = {},
+	) {
 		if (
 			!Array.isArray(profiles) ||
 			profiles.length === 0 ||
@@ -199,9 +240,17 @@ export const DistantSunPointLocalProfileCompilerInputs = Object.freeze({
 		) {
 			throw new RangeError('Point-local profile batching requires matching nonempty profile and scene-id lists.');
 		}
-		const input = DistantSunPointLocalProfileCompilerInputs.createInputSet(profiles[0]);
+		const input = DistantSunPointLocalProfileCompilerInputs.createInputSet(profiles[0], {
+			numericalPolicy,
+			solarInterpolation,
+			positionDomain,
+		});
 		const scenes = profiles.map((profile, index) => {
-			const candidate = DistantSunPointLocalProfileCompilerInputs.createInputSet(profile);
+			const candidate = DistantSunPointLocalProfileCompilerInputs.createInputSet(profile, {
+				numericalPolicy,
+				solarInterpolation,
+				positionDomain,
+			});
 			if (candidate.numericalIdentity !== input.numericalIdentity) {
 				throw new RangeError('Point-local profile batching requires one compatible construction profile.');
 			}

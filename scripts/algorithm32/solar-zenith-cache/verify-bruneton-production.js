@@ -11,6 +11,7 @@ import DistantSunSharedCacheGenerationFiles from './DistantSunSharedCacheGenerat
 import DistantSunPointLocalCacheReader from './DistantSunPointLocalCacheReader.js';
 import {DistantSunPointLocalProfileCompilerInputs} from './DistantSunPointLocalProfileCompilerInputs.js';
 import DistantSunBrunetonView from './DistantSunBrunetonView.js';
+import {DistantSunSceneCacheNumerics} from './DistantSunSceneCacheNumerics.js';
 import {
 	SHARED_COMPILER_SOURCE_NAMES,
 	SHARED_GENERATION_SOURCE_ROOT,
@@ -23,6 +24,29 @@ const outputRoot = `${DISTANT_SUN_POINT_LOCAL_CACHE_OUTPUT_ROOT}/bruneton-${rand
 const parents = [];
 const artifacts = [];
 const cancellation = new AbortController();
+const argumentsList = process.argv.slice(2);
+const usage =
+	'Usage: verify-bruneton-production.js [--surface-limit 2|4|8 | --numerical-policy anchored-radial] [--solar-interpolation linear|monotone-cubic]';
+assert.equal(argumentsList.length % 2, 0, usage);
+const options = new Map();
+for (let index = 0; index < argumentsList.length; index += 2) {
+	const flag = argumentsList[index];
+	assert.ok(
+		['--surface-limit', '--numerical-policy', '--solar-interpolation'].includes(flag) && !options.has(flag),
+		usage,
+	);
+	options.set(flag, argumentsList[index + 1]);
+}
+assert.ok(!options.has('--surface-limit') || !options.has('--numerical-policy'), usage);
+assert.ok(!options.has('--numerical-policy') || options.get('--numerical-policy') === 'anchored-radial', usage);
+const solarInterpolation = options.get('--solar-interpolation') ?? 'linear';
+assert.ok(['linear', 'monotone-cubic'].includes(solarInterpolation), usage);
+const numericalPolicy = options.has('--numerical-policy')
+	? DistantSunSceneCacheNumerics.createAnchoredRadial()
+	: options.has('--surface-limit')
+		? DistantSunSceneCacheNumerics.createSurfaceLimit(Number(options.get('--surface-limit')))
+		: undefined;
+const candidateMode = numericalPolicy !== undefined || solarInterpolation === 'monotone-cubic';
 const interrupt = () => cancellation.abort(new Error('Production Bruneton qualification interrupted.'));
 
 /** Authenticate an input and retain its exact consumed identity in the derivation record. */
@@ -86,7 +110,7 @@ async function validateDatasetTree(directory) {
 	}
 }
 
-/** Compare every finite nonnegative Direct40 radiance, preserving worst-case diagnostics. */
+/** Compare every finite nonnegative Direct40 radiance against historical Float32 regression evidence. */
 function compareRadiances(candidate, target, scenes) {
 	assert.equal(candidate.size, 17);
 	assert.equal(target.size, 17);
@@ -94,6 +118,7 @@ function compareRadiances(candidate, target, scenes) {
 	let squares = 0;
 	let maximumAbsoluteWatts = 0;
 	let worst = null;
+	const deltas = [];
 	for (const scene of scenes)
 		for (let gridX = 0; gridX < 9; gridX++)
 			for (let gridY = 0; gridY < 9; gridY++) {
@@ -106,6 +131,7 @@ function compareRadiances(candidate, target, scenes) {
 					const expected = targetSpectrum[channel];
 					assert.ok(Number.isFinite(actual) && actual >= 0 && Number.isFinite(expected) && expected >= 0);
 					const delta = actual - expected;
+					deltas.push({time: scene.time, gridX, gridY, channel, actual, expected, delta});
 					count++;
 					squares += delta * delta;
 					if (Math.abs(delta) > maximumAbsoluteWatts) {
@@ -115,7 +141,14 @@ function compareRadiances(candidate, target, scenes) {
 				}
 			}
 	assert.equal(count, 55080);
-	return {comparedValues: count, maximumAbsoluteWatts, rmsWatts: Math.sqrt(squares / count), worst};
+	return {
+		comparedValues: count,
+		maximumAbsoluteWatts,
+		rmsWatts: Math.sqrt(squares / count),
+		worst,
+		deltas,
+		role: 'historical-float32-regression-comparison; not an independent physical oracle',
+	};
 }
 
 await files.directory(DISTANT_SUN_POINT_LOCAL_CACHE_OUTPUT_ROOT);
@@ -124,11 +157,6 @@ await files.resolve(outputRoot);
 process.once('SIGINT', interrupt);
 process.once('SIGTERM', interrupt);
 try {
-	assert.equal(
-		process.argv.length,
-		2,
-		'This fixed qualification accepts no command-line arguments; use CHROME_PATH for the browser.',
-	);
 	const sources = await snapshotSources();
 	const verifierPath = 'tmp/experiments/point-local-cache-builder/00011-verify/sealed.json';
 	const verifier = JSON.parse(
@@ -172,11 +200,19 @@ try {
 		}),
 	);
 	const input = DistantSunPointLocalProfileCompilerInputs.createBatch(profiles, {
+		numericalPolicy,
+		solarInterpolation,
 		ids: pins.scenes.map((scene) => scene.id),
 	});
 	await writeArtifact('definition.json', {
 		operation:
-			'fresh production GPU compilation, encoded package decode, indexed scene expansion, binary64 Q30 view integration and full run-65 comparison',
+			'fresh production GPU compilation, encoded package decode, binary64 Q30 arithmetic over Float32 cache values and historical run-65 regression comparison',
+		solarInterpolation,
+		candidateMode,
+		candidateAcceptance: candidateMode
+			? {finiteNonnegativeRadiance: true, b1RmseCeilingMilliwatts: 11.820391604126252}
+			: null,
+		physicalAcceptance: 'Independent binary64 physical-field qualification is a separate required promotion gate.',
 		input,
 		scenes: pins.scenes,
 		viewIntegration: pins.viewIntegration,
@@ -200,27 +236,39 @@ try {
 	assert.equal(generated.accepted, true);
 	assert.equal(generated.sceneCount, 17);
 	assert.equal(generated.channelCount, 40);
-	assert.equal(generated.coordinateCount, 1951);
-	assert.equal(generated.blockCount, 96);
-	assert.deepEqual(packet.coordinates, optimized.coordinates);
-	assert.deepEqual(
-		packet.scenes.map((scene) => scene.indexes),
-		optimized.scenes.map((scene) => scene.indexes),
-	);
-	assert.deepEqual(
-		packet.blocks.map((block) => block.coordinates),
-		optimized.blocks.map((block) => block.coordinates),
-	);
-	const decodedBlocksExact = packet.blocks.every(
-		(block, ordinal) =>
-			block.decoded.sha256 === optimized.blocks[ordinal].decodedSha256 &&
-			block.decoded.byteLength === optimized.blocks[ordinal].decodedBytes,
-	);
-	const encodedBlocksExact = packet.blocks.every(
-		(block, ordinal) =>
-			block.encoded.sha256 === optimized.blocks[ordinal].artifact.sha256 &&
-			block.encoded.byteLength === optimized.blocks[ordinal].artifact.byteLength,
-	);
+	const topologyExact =
+		JSON.stringify(packet.coordinates) === JSON.stringify(optimized.coordinates) &&
+		JSON.stringify(packet.scenes.map((scene) => scene.indexes)) ===
+			JSON.stringify(optimized.scenes.map((scene) => scene.indexes)) &&
+		JSON.stringify(packet.blocks.map((block) => block.coordinates)) ===
+			JSON.stringify(optimized.blocks.map((block) => block.coordinates));
+	if (solarInterpolation === 'linear') {
+		assert.equal(generated.coordinateCount, 1951);
+		assert.equal(generated.blockCount, 96);
+		assert.deepEqual(packet.coordinates, optimized.coordinates);
+		assert.deepEqual(
+			packet.scenes.map((scene) => scene.indexes),
+			optimized.scenes.map((scene) => scene.indexes),
+		);
+		assert.deepEqual(
+			packet.blocks.map((block) => block.coordinates),
+			optimized.blocks.map((block) => block.coordinates),
+		);
+	}
+	const decodedBlocksExact =
+		topologyExact &&
+		packet.blocks.every(
+			(block, ordinal) =>
+				block.decoded.sha256 === optimized.blocks[ordinal].decodedSha256 &&
+				block.decoded.byteLength === optimized.blocks[ordinal].decodedBytes,
+		);
+	const encodedBlocksExact =
+		topologyExact &&
+		packet.blocks.every(
+			(block, ordinal) =>
+				block.encoded.sha256 === optimized.blocks[ordinal].artifact.sha256 &&
+				block.encoded.byteLength === optimized.blocks[ordinal].artifact.byteLength,
+		);
 	const reader = new DistantSunPointLocalCacheReader();
 	await reader.prepare(files, packet, `${outputRoot}/decoded`);
 	const directions = await reader.readDirectionMap(files, packet);
@@ -231,8 +279,12 @@ try {
 	for (let channel = 0; channel < 40; channel++) {
 		cancellation.signal.throwIfAborted();
 		const unique = await reader.readChannel(files, packet, channel);
+		const sharedValues =
+			solarInterpolation === 'monotone-cubic'
+				? new Float32Array(unique.buffer, unique.byteOffset, unique.byteLength / Float32Array.BYTES_PER_ELEMENT)
+				: null;
 		for (let scene = 0; scene < 17; scene++) {
-			const values = reader.expand(files, packet, scene, unique, directions);
+			const values = sharedValues ?? reader.expand(files, packet, scene, unique, directions);
 			for (let direction = 0; direction < 81; direction++)
 				spectra[scene][direction][channel] = view.integrate(
 					values,
@@ -273,8 +325,22 @@ try {
 	assert.equal(optimizedModels.size, 1);
 	const candidate = candidateModels.values().next().value;
 	const target = targetModels.values().next().value;
-	const comparison = compareRadiances(candidate, target, pins.scenes);
-	const optimizedComparison = compareRadiances(candidate, optimizedModels.values().next().value, pins.scenes);
+	const {deltas: targetDeltas, ...comparison} = compareRadiances(candidate, target, pins.scenes);
+	const {deltas: optimizedDeltas, ...optimizedComparison} = compareRadiances(
+		candidate,
+		optimizedModels.values().next().value,
+		pins.scenes,
+	);
+	const regressionDeltas = await writeArtifact('historical-radiance-deltas.json', {
+		role: 'Complete historical Float32 regression differences; independent physical acceptance is separate.',
+		operation: 'delta = candidate - historical reference for each scene, direction, and wavelength',
+		units: 'W m^-2 sr^-1 nm^-1',
+		candidate: table,
+		targetPath,
+		optimizedTablePath,
+		targetDeltas,
+		optimizedDeltas,
+	});
 	const candidateScore = benchmark.scoreModels(dataset, candidateModels).values().next().value;
 	const targetScore = benchmark.scoreModels(dataset, targetModels).values().next().value;
 	assert.equal(targetScore.aggregate.rmseMilliwatt, 11.554012538468113);
@@ -284,30 +350,64 @@ try {
 		const measured = dataset.conditions.find((condition) => condition.time === scene.time).grid;
 		const actual = figures.renderAlgorithm32Figure5Panel(candidate.get(scene.time), measured, scene);
 		const expected = figures.renderAlgorithm32Figure5Panel(target.get(scene.time), measured, scene);
+		assert.equal(actual.pixels.length, expected.pixels.length);
+		let maximumCodeValueDelta = 0;
+		let absoluteCodeValueDeltaSum = 0;
+		let differingPixels = 0;
+		for (let pixel = 0; pixel < actual.pixels.length; pixel += 4) {
+			let differs = false;
+			for (let component = 0; component < 3; component++) {
+				const difference = Math.abs(actual.pixels[pixel + component] - expected.pixels[pixel + component]);
+				maximumCodeValueDelta = Math.max(maximumCodeValueDelta, difference);
+				absoluteCodeValueDeltaSum += difference;
+				differs ||= difference !== 0;
+			}
+			if (differs) differingPixels++;
+		}
 		images.push({
 			time: scene.time,
 			candidate: await writeArtifact(`b1-${scene.fileTime}.png`, actual.png),
 			target: await writeArtifact(`target-${scene.fileTime}.png`, expected.png),
 			candidateRgbaSha256: actual.rgbaSha256,
 			targetRgbaSha256: expected.rgbaSha256,
+			displayRegression: {
+				units: 'absolute RGB code-value difference on the 0-255 scale; includes figure annotations',
+				maximumCodeValueDelta,
+				meanAbsoluteCodeValueDelta: absoluteCodeValueDeltaSum / ((actual.pixels.length / 4) * 3),
+				differingPixels,
+			},
 			exact: actual.rgbaSha256 === expected.rgbaSha256 && actual.png.equals(expected.png),
 		});
 	}
 	for (const source of sources) await files.read(source.path, source);
 	cancellation.signal.throwIfAborted();
 	const limits = pins.acceptance.bruneton;
-	const accepted =
+	const legacyAccepted =
 		decodedBlocksExact &&
 		encodedBlocksExact &&
 		comparison.maximumAbsoluteWatts <= limits.allChannelMaximumAbsoluteWatts &&
 		comparison.rmsWatts <= limits.allChannelRmsWatts &&
 		Math.abs(scoreDifferenceMilliwatts) <= limits.scoreDifferenceMilliwatts &&
 		images.every((image) => image.exact);
+	const accepted = candidateMode
+		? Number.isFinite(candidateScore.aggregate.rmseMilliwatt) &&
+			candidateScore.aggregate.rmseMilliwatt <= 11.820391604126252
+		: legacyAccepted;
 	const result = await writeArtifact('result.json', {
 		accepted,
+		numericalPolicy: numericalPolicy ?? null,
+		solarInterpolation,
+		acceptanceMode: candidateMode
+			? 'candidate-finite-nonnegative-radiance-and-fixed-b1-ceiling'
+			: 'unchanged-legacy-reproduction',
+		physicalAcceptance:
+			'Not established by historical Float32 regression comparisons; separate independent physical proof required.',
+		candidateB1RmseCeilingMilliwatts: candidateMode ? 11.820391604126252 : null,
 		generated,
 		comparison,
 		optimizedComparison,
+		regressionDeltas,
+		topologyExact,
 		decodedBlocksExact,
 		encodedBlocksExact,
 		candidateScore,
@@ -316,7 +416,7 @@ try {
 		limits,
 		images,
 		units: 'radiance W m^-2 sr^-1 nm^-1; benchmark RMSE mW m^-2 sr^-1 nm^-1',
-		view: 'production qualification Q30 CPU evaluator; application renderer not exercised',
+		view: `production qualification Q30 CPU evaluator with ${solarInterpolation} solar reconstruction; application renderer not exercised`,
 		dataset: {rawAcquisitionSha256: dataset.rawAcquisitionSha256, processedGridSha256: dataset.processedGridSha256},
 		tools: {node: process.version, versions: process.versions},
 		sources,
