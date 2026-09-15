@@ -212,6 +212,7 @@ export async function runGpu(options) {
 	requireCondition(
 		(expectedOrderCount === 4 && compilerReportSchema === 'algorithm32-distant-sun-offline-wavelength-result-v1') ||
 			(expectedOrderCount === 6 && compilerReportSchema === 'sky-order-wavelength-result-v1') ||
+			(expectedOrderCount === 4 && compilerReportSchema === 'sky-ground-boundary-wavelength-result-v1') ||
 			(expectedOrderCount === 4 && densityMode),
 		'GPU recurrence length and completion schema must be an explicitly supported pair.',
 	);

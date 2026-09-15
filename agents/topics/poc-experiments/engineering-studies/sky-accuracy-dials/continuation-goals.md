@@ -2,6 +2,13 @@
 
 Status: goals defined; independent continuation execution is authorized.
 
+Current priority: identify and quantify sources of inaccuracy before developing
+additional mitigations or tuning rules, as the owner directed. Use established
+causes, measured interactions and unresolved alternatives to choose the next
+test. Prefer a discriminating component or causal control over another setting
+sweep. A promising mitigation is not a substitute for locating its error source.
+Keep this work bounded and reuse the existing evidence to limit credit use.
+
 The owner explicitly authorizes adjusting the execution plan as needed to meet
 these goals, using independent judgment while the owner is away. Completion of
 a bounded batch does not establish completion of the scientific objective.
@@ -10,18 +17,49 @@ authority within the experiment's production, evidence and resource boundaries.
 
 ## Central Objective
 
-Understand why changes that improve the mathematical accuracy of a component
-can worsen agreement with Kider, and use that understanding to develop controls
-that improve measured accuracy by reducing identifiable errors.
+Locate departures from the governing physics and mathematical expectations,
+explain how their errors propagate and interact, and develop controls that
+predictably reduce those errors within a stated domain.
 
 The desired result is a set of dials with an explained, prospectively tested
-relationship between their settings, numerical error, computational cost and
-Kider score. A lower score obtained by preserving a compensating numerical
-bias does not qualify as an accuracy improvement.
+relationship between their settings, scientific correctness, numerical error
+and computational cost. Kider agreement is a separately reported observation
+comparison, not the standard of correctness or an admission gate for a
+scientifically justified refinement.
+
+## Standard Of Correctness
+
+State the scientific expectation before testing a change, and justify why it
+applies to the declared physical problem. Use the governing equations and
+boundary conditions, applicable conservation and normalization properties,
+nonnegativity, symmetry and limiting cases, and independently checked numerical
+references. Select only properties that hold under the model's assumptions;
+for example, energy accounting must include absorption and boundary fluxes.
+Quantify tolerances and unresolved reference error rather than treating an
+intuitive trend or a higher sample count as proof.
+
+Distinguish three questions:
+
+1. Is the physical formulation scientifically justified for the declared scope?
+2. Does the implementation accurately solve that formulation, including its
+   boundaries, and show the expected numerical convergence?
+3. How well does that solution agree with Kider observations?
+
+The third question cannot substitute for either of the first two. A Kider
+improvement cannot validate an incorrect calculation; a Kider regression
+cannot invalidate a demonstrated correctness improvement. A correctly solved
+model can still omit relevant physics or use inappropriate physical inputs.
+Likewise, correcting one component need not reduce the complete solver error
+while other components remain inaccurate. State the level of each claim.
+
+Known Kider residuals may guide where to investigate. They must not determine
+the expected correct answer, numerical tolerances, or selection of a bias.
+Preserve all previously registered score tests and outcomes as historical
+measurement evidence; they do not override this clarified correctness standard.
 
 This document owns the goals and success criteria for continuing the existing
-experiment. The [hypothesis report](results.md) owns completed findings and their
-limits; the [design](design.md) owns the current scientific and storage boundary;
+experiment. The [active findings](attribution-results.md) own current numerical results
+and limits; the [hypothesis report](results.md) preserves the first campaign; the [design](design.md) owns the current scientific and storage boundary;
 the [status](status.md) owns execution and review state. The completed
 [plan](plan.md) records the first campaign. The
 [continuation execution plan](continuation-plan.md) turns these goals into
@@ -42,7 +80,8 @@ in the cache. They include numeric settings and choices between methods:
 A runtime sampling change can qualify even when the stored cache is unchanged.
 For every candidate, record where the control acts and whether it requires
 regenerating the cache. Apply the same requirements for explained numerical
-error, predicted Kider effects, interactions and cost to all of these controls.
+error, scientific expectations, interactions and cost to all of these controls.
+Report predicted Kider effects separately wherever the comparison is available.
 
 ## What Must Be Explained
 
@@ -153,18 +192,19 @@ changed solver requires regenerating the affected recurrence.
 
 Each candidate dial should have a claim recorded before its target runs:
 
-| Required claim                   | Evidence needed                                                                                   |
-| -------------------------------- | ------------------------------------------------------------------------------------------------- |
-| Identifiable error being reduced | A controlled comparison with the appropriate numerical reference, including its uncertainty.      |
-| Expected response                | Predicted sign, magnitude and spatial/spectral pattern, with a stated range of validity.          |
-| Expected Kider effect            | A forecast derived from the radiance response and baseline residuals, with the score scope fixed. |
-| Interaction behavior             | Tested relevant combinations or explicit restrictions on combining the dial with other controls.  |
-| Cost                             | Measured work, runtime and memory/storage consequences, with measurement scope stated.            |
-| Falsification                    | Predeclared tolerances and conditions that would reject the prediction or limit the claim.        |
+| Required claim                   | Evidence needed                                                                                                        |
+| -------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| Identifiable error being reduced | A controlled comparison with the appropriate numerical reference, including its uncertainty.                           |
+| Expected response                | Predicted sign, magnitude and spatial/spectral pattern, with a stated range of validity.                               |
+| Scientific expectation           | A justified equation, property or reference target with a declared scope and error allowance.                          |
+| Separate Kider effect            | Where available, a forecast derived from radiance and baseline residuals; improvement is not required for correctness. |
+| Interaction behavior             | Tested relevant combinations or explicit restrictions on combining the dial with other controls.                       |
+| Cost                             | Measured work, runtime and memory/storage consequences, with measurement scope stated.                                 |
+| Falsification                    | Predeclared tolerances and conditions that would reject the prediction or limit the claim.                             |
 
 Assess complete radiance responses and per-condition/angular residuals; an
 aggregate score must not conceal a failed spatial prediction. Set numerical
-and practical score tolerances before target execution. Preserve the first
+and any separate score-prediction tolerances before target execution. Preserve the first
 campaign's failed gates and use new registrations for new hypotheses.
 
 The existing Kider measurements are already known. Withholding a new
@@ -172,27 +212,28 @@ configuration's output tests an intervention prediction. Claims of transfer
 require additional physical/observer conditions or genuinely independent
 measurement evidence, with that distinction stated explicitly.
 
-## Goal 5: Distinguish Understanding From A Useful Score Improvement
+## Goal 5: Qualify Scientific Accuracy Separately From Measurement Agreement
 
-The continuation has two related deliverables:
+The continuation has a primary deliverable and a separate observation report:
 
-1. Numerical controls with a predictable effect on independently assessed
-   numerical error.
-2. Accuracy controls whose reduction of identified error also produces
-   prospectively validated improvements in Kider agreement within a stated
-   domain.
+1. Controls with a predictable effect on scientifically justified properties
+   and independently assessed numerical error, with their scope and interactions
+   established.
+2. The resulting Kider agreement, including any gains, regressions and unresolved
+   discrepancies, without making a score gain a condition of the first result.
 
-The second is the desired stronger result. A candidate should not be selected
-because an under-resolved setting happens to offset another known error.
+Improving Kider agreement does not make a correctness claim stronger by itself.
+A candidate should not be selected because an under-resolved setting happens
+to offset another known error.
 Its benefit should be tested as the dominant related numerical errors are
 corrected, with remaining dependencies and uncertainty disclosed.
 
-| Observed outcome                                      | Interpretation                                                                                                                                                   |
-| ----------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Numerical error falls and Kider improves as predicted | Candidate accuracy dial; qualify its range, interactions and repeatability of the result across declared conditions.                                             |
-| Numerical error falls but Kider worsens               | Useful numerical refinement and an attribution problem; explain the lost compensation and remaining discrepancy. It has not qualified as a score-improving dial. |
-| Kider improves while numerical error grows            | Evidence of a fit benefit from numerical bias; do not present it as an accuracy dial.                                                                            |
-| Reference error or measurement effect is unresolved   | Limit the claim; a score change alone cannot settle the mechanism.                                                                                               |
+| Observed outcome                                      | Interpretation                                                                                                                                           |
+| ----------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Numerical error falls and Kider improves as predicted | Candidate numerical accuracy dial plus a separate observation-agreement benefit; qualify its scientific scope, range and interactions.                   |
+| Numerical error falls but Kider worsens               | Candidate numerical accuracy dial under the same scientific criteria; separately investigate the lost compensation or remaining observation discrepancy. |
+| Kider improves while numerical error grows            | Evidence of a fit benefit from numerical bias; do not present it as an accuracy dial.                                                                    |
+| Reference error or measurement effect is unresolved   | Limit the claim; a score change alone cannot settle the mechanism.                                                                                       |
 
 Do not impose universal monotonic Kider improvement on numerical convergence.
 A model can converge accurately while disagreeing with measurements. If the
@@ -217,12 +258,12 @@ Successful continuation should leave:
 - A clear account of persistent residuals, especially the solar hotspot and
   low-elevation errors, separating numerical attribution from untested
   physical or measurement explanations.
-- Compact reproducible evidence and an honest outcome if no additional
-  score-improving accuracy dial can yet be qualified.
+- Compact reproducible evidence and an honest outcome if a scientifically
+  justified accuracy dial or its predictable domain remains unqualified.
 
-The explanation objective can succeed even where a score-improving control
-does not. Report those outcomes separately; neither a lower RMSE nor an
-explanation of one mechanism establishes the whole objective.
+The correctness and predictability objectives can succeed even if Kider
+agreement worsens. Report observation agreement separately; neither a lower
+RMSE nor an explanation of one mechanism establishes the whole objective.
 
 ## Execution And Resource Boundary
 

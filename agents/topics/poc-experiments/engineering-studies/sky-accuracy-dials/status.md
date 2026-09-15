@@ -1,38 +1,73 @@
 # Predictable Sky Accuracy Dials Experiment Status
 
-Status: paused at the owner's requested manual checkpoint. The broader
-accuracy-tuning objective is partially achieved; the
-[compensation attribution plan](attribution-plan.md) owns the remaining work.
-The owner authorizes independent execution and adjustment of the plan to meet
-the goals. The current implementation unit develops bounded CPU references
-that separate radial and azimuth sampling, an exact decomposition of retained
-order contributions, and a positive-altitude first-order boundary pilot. These
-supply the next work connecting component errors to viewing-ray radiance.
-Attribution records through `00160` are sealed and no numerical job is running.
-Global allocation of the unchanged integration tolerance resolves the failed
-reference witnesses. The held angular reference is complete. Next scientific
-work is a positive-height local second-order pilot, followed by an independent
-second-order viewing-ray reference; neither has started.
+**Paused at the owner's request after 00223-at-regions.** The final test and
+write-up are complete. No experiment process is running and no following test
+has been started. Resume only when the owner asks to continue; do not treat
+this break as completion of the broader scientific objective.
 
-The first campaign and bounded C0-C6 batch are complete. C0 registration and
-C1 proofs, GPU admission, causal parity and physical-reference compensation
-assessment pass. The authorized compiler contract repair and fresh C1 mapped
-primary/audit review are complete and clean. C2-C4 construction/prediction source
-has passed its combined mapped review. The C2 support proof, local J2 reference
-matrix, ladder screens R0-R11 and sealed ladder assessment are accepted.
-The completed storage, physical first-order attribution, C3 assessment and C6
-reporting implementation milestone has clean mapped review evidence.
-All ten C3 captures and the retried mechanism assessment are accepted; C3 is
-complete. The C2 documentation, C3 coordinate-validation and C6 storage-repair
-unit validates clean in Hmiou3. C4's four captures, three prospective predictions
-and three assessments are accepted, completing its bounded execution. C5 is
-skipped because the complete seventeen-time N4 numerical reference required for
-admission is unavailable. C6 closure is accepted with its report and twelve
-figures. The bounded C0-C6 execution is complete, including the conditional C5
-skip. The final documentation and reporting-validator repair share a review
-unit whose validation artifact owns the gate and result; no clean result is
-predeclared here. The broader tuning objective remains partially achieved,
-separately from completion of the bounded execution plan.
+The [agent handoff](handoff.md) gives the resumption boundary. The
+[findings brief](accuracy-findings-brief.md) explains what is useful now, the
+[control map](accuracy-controls.md) records qualification across all controls,
+and the [detailed findings](attribution-results.md) own numerical evidence.
+Correctness follows the [scientific standard](continuation-goals.md#standard-of-correctness);
+Kider agreement is a separate observation comparison.
+
+## Last Completed Test
+
+The saved-node regional attribution is accepted as **00223-at-regions**. Both
+registered channel-8 atmospheric concentration predictions pass. All 89
+implementation checks and 50 manufactured proof checks pass, and the full POC
+type check passes. The original physical component rows and mirror admissions
+replay exactly. The remaining theta refinement response is concentrated near
+the horizon; this locates an observed response rather than absolute angular
+error. The earlier channel-8 reference-precision failure remains unchanged.
+
+The preceding theta-coordinate package is complete through 00222: three of
+four registered predictions pass and one improvement prediction is unresolved.
+The correction repairs an experimental Sun-aligned rule; it is not a 99%
+production improvement. The strongest predictable dial remains the held
+first-order source-count response after correcting representation.
+
+The registered [regional plan](angular-theta-regions-plan.md) is consumed and
+closed, including its single-attempt boundary. No additional angular ladder
+is admitted by its result. The recommended next substantial milestone, after
+the owner resumes, is complete-view qualification of corrected cached
+first-order reconstruction at fixed source count and fixed higher fields.
+The recurrence already evaluates direct first-order scattering at its query
+points. Final-view reconstruction changes leave those higher fields unchanged;
+source-count and higher-transport changes require separate propagation tests.
+
+## Current Resource Accounting
+
+Through 00223, total sealed evidence is **383,934,229 bytes**. Attribution C5
+uses **118,947,228 of 130,023,424 bytes**, leaving **11,076,196 bytes**. CPU-job
+usage is **21,820,164 milliseconds**, about 6.06 of 8 hours. GPU construction
+attempts remain **35 of 36**. All continuation phases share the unchanged
+global limits and the latest conserved allocation amendment.
+
+The final test retains 1,111,538 bytes and charges 94,457 CPU-job milliseconds.
+It used no new atmospheric integration, GPU job or saved incident arrays.
+The common allocator's 141,910-byte scratch ownership metadata was removed;
+cleanup confirms the owned scratch directory is absent. The findings record
+this narrow deviation from the plan's literal no-scratch wording. Historical
+evidence remains intact, and admission assumes no future owner cleanup.
+
+## Verification Boundary
+
+Formal standards review and checkpoint monitoring remain suspended under the
+owner's credit-saving direction. Focused proofs and local type checks support
+the numerical runs; they do not close the deferred implementation-review gate.
+The attribution source units, including angular-theta-regions and their direct
+collaborators, retain baseline commit 871690d334b4339f7aaee516dcc140dd00a3edaf.
+The broader objective and combined-solver qualification remain open.
+
+Source snapshots and exact prospective plans remain immutable within every
+sealed run. Production source remains read-only; only experiment source and
+owning documentation were changed in this continuation. The owner requested a
+checkpoint of the complete paused state with message
+`Checkpoint sky accuracy attribution and paused handoff`. Git history records
+the resulting commit identifier. The checkpoint preserves the deferred review
+baseline and does not resume scientific execution.
 
 ## Active Attribution Extension
 
@@ -61,16 +96,53 @@ monitoring are suspended. Continue scientific implementation and execution with
 focused local checks; batch the formal review at a later verification milestone.
 This explicit scheduling direction defers the existing gate and does not claim
 that incomplete review evidence is clean. Preserve the owner's checkpoint
-preapproval for any later recommended checkpoint. The owner has now separately
-requested a manual checkpoint and preaccepted its suggested message.
+preapproval for any later recommended checkpoint. The requested manual checkpoint
+is complete as `871690d334b4339f7aaee516dcc140dd00a3edaf`, with message
+`Checkpoint strobing improvements and sky accuracy experiments`. The owner
+directed work to continue afterward; this checkpoint is not an experiment stop.
 
-Runs `00152` through `00160` are sealed. The [active findings](attribution-results.md)
+Runs `00152` through `00192` are sealed. The [active findings](attribution-results.md)
 own their order decomposition, boundary checks, resolved reference witnesses and
-held angular comparisons. Focused local proofs and the complete experiment type
-check pass; this does not close the deferred standards-review gate. No production
-behavior or historical evidence is changed by this extension. The latest storage
-record contains 279,251,030 retained bytes and zero scratch bytes; this extension
-added 14,675,874 bytes. All existing storage limits remain in force.
+held angular comparisons, positive-height component pilot and completed angular
+factorial. The factorial completed 9,252 new incident evaluations and passed all
+308 predicates, including four additive and four near-surface checks. Their
+scientific limits and uncertainty comparisons are recorded in the findings.
+The one-through-four-worker executor passes 92 focused local parity and
+lifecycle checks; the complete experiment type check passes at that source
+milestone. The viewing geometry, manufactured attenuation integral, angular
+moments/branches and missing-point proof pass 13,911 checks. The first viewing-ray
+pilot `00163-p2-view-pilot` completed its two selected nodes under three angular
+rules: all 3,456 incident evaluations and 26 predicates pass. The coarse
+completion `00164-p2-view-coarse` evaluated fourteen further nodes, reusing
+only the two exact pilot points; all 24,192 new evaluations and 214 predicates
+pass. Additional outer-rule constructors pass 4,998 manufactured checks, and
+frozen-increment attribution algebra passes 42 checks. Simpson4 `00165` completed
+27,648 new incident evaluations at sixteen unique physical queries, with its
+nineteen weighted terms and all inner admissions complete. Assessment `00166`
+replays all 300 retained integrals and 64 historical order envelopes: four
+available outer predictions passed at that earlier stage. Their finer targets
+and complete reference admission subsequently pass in `00179`. Updated
+refinement/reuse proofs pass 168 checks and the angular executor passes 626
+manufactured checks. The pure angular/reference
+assessment passes 352 checks, including uncancelled path allowances and missing
+target rejection. The complete experiment type check passes after the report
+and serial-stage wrapper were added. The new conditional transfer additionally
+passes thirteen manufactured compensation checks, all five noon rule selections,
+and exact replay of the original complete Gaussian8 view. Altitude forecasts
+pass 98 manufactured checks; target preparation passes eight shared-knot checks.
+The assessment/next-prediction sequence passes 23 manufactured checks and the
+full experiment type check.
+The ground-boundary compiler passes 43 local checks; its capture adapter passes
+66 checks plus the full type and formatting checks. Composed GPU primitive-error
+proofs pass 1,056 checks; actual platform precision and observed ground differences
+remain target admission gates. The source-column pilot passes 38 local checks.
+These local checks do
+not close the deferred standards-review gate. No production behavior or
+historical evidence is changed by this extension. Total retained evidence
+through `00192`, including terminal seals, is 336,616,520 bytes. The failed
+coordinate harness remains charged and no prior evidence was removed.
+Runs `00152` through `00192` added 72,041,364 bytes. All existing
+storage limits remain in force.
 
 ## Continuation Goals
 

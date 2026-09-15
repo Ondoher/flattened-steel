@@ -3,6 +3,8 @@ import {readdirSync} from 'node:fs';
 import {outputRelative, readRepository, resolveRepository, storage, verifyRun} from '../io/files.mjs';
 import {accountInvalidEvidence} from './invalid-evidence.mjs';
 import {authenticateAllocationAmendment} from './allocations.mjs';
+import {authenticateResourceExtension} from './resource-extension/read.mjs';
+import {resourceExtensionSchema, resourceExtensionOrder} from './resource-extension/index.mjs';
 
 /** Count every authenticated artifact and the seal exactly once.
  * @param {DialFileIdentity} seal - Exact terminal seal identity.
@@ -54,7 +56,10 @@ export function campaignUsage(registration) {
 		C6: 0,
 		'failure-and-sealing-reserve': 0,
 	};
-	/** @type {SkyContinuationAllocationAmendmentRead | null} */ let allocationAmendment = null;
+	/** @type {SkyContinuationAllocationAmendmentRead | SkyContinuationResourceExtensionRead | null} */ let allocationAmendment =
+		null;
+	let resourceExtensionSeen = false;
+	let lastPriorSeal = registration.seal;
 	let gpuConstructions = 0,
 		fullCaptures = 0,
 		gpuElapsedMilliseconds = 0,
@@ -92,6 +97,33 @@ export function campaignUsage(registration) {
 				allocationAmendment = authenticateAllocationAmendment(registration, sealIdentity);
 			}
 		}
+		const isExtension = name.endsWith('-c-resource-ext') || parameters.resourceExtensionSchemaId !== undefined;
+		if (isExtension) {
+			assert.ok(!resourceExtensionSeen, 'Duplicate resource extensions are forbidden.');
+			resourceExtensionSeen = true;
+			assert.equal(parameters.resourceExtensionSchemaId, resourceExtensionSchema);
+			assert.equal(parameters.allocationAmendmentSchemaId, undefined);
+			assert.equal(parameters.jobKind, 'cpu');
+			assert.equal(parameters.scope, 'component');
+			assert.equal(parameters.phase, 'C6');
+			resourceExtensionOrder(sealIdentity, allocationAmendment, lastPriorSeal, seal.recipe.parents);
+			if (seal.state === 'accepted' && !excluded) {
+				allocationAmendment = authenticateResourceExtension(
+					registration,
+					sealIdentity,
+					allocationAmendment,
+					{
+						gpuConstructions,
+						fullCaptures,
+						gpuElapsedMilliseconds,
+						cpuElapsedMilliseconds,
+						newRetainedBytes: Object.values(retainedBytesByPhase).reduce((sum, bytes) => sum + bytes, 0),
+						retainedBytesByPhase: {...retainedBytesByPhase},
+					},
+					lastPriorSeal,
+				);
+			}
+		}
 		const phase = /** @type {SkyContinuationAllocationPhase} */ (
 			excluded ? 'failure-and-sealing-reserve' : parameters.phase
 		);
@@ -104,6 +136,7 @@ export function campaignUsage(registration) {
 			if (parameters.scope === 'full') fullCaptures++;
 			gpuElapsedMilliseconds += seal.result.jobElapsedMilliseconds;
 		} else cpuElapsedMilliseconds += seal.result.jobElapsedMilliseconds;
+		lastPriorSeal = sealIdentity;
 	}
 	const newRetainedBytes = storage().retainedBytes - registration.initialStorage.retainedBytes;
 	assert.equal(

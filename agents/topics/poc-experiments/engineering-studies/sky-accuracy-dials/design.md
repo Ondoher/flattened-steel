@@ -2,7 +2,11 @@
 
 ## Objective
 
-Develop experimentally validated accuracy controls for atmospheric scattering with prospective predictions, Kider measurement scores, interaction tests, and bounded storage.
+Develop predictable atmospheric-scattering accuracy controls judged against
+scientific expectations and independent numerical references, with interaction
+tests and bounded storage. The
+[continuation goals](continuation-goals.md#standard-of-correctness) own the
+correctness standard; Kider agreement is a separate observation comparison.
 
 ## Acceptance Question
 

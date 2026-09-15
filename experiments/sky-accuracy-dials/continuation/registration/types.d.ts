@@ -129,7 +129,8 @@ type DialContinuationInitialCounters = Readonly<{
 type DialContinuationResourceCounters = DialContinuationInitialCounters &
 	Readonly<{
 		/** Exact invalid records charged to this campaign and excluded from claims. */ invalidEvidence?: readonly SkyContinuationInvalidEvidence[];
-		/** The sole authenticated phase amendment, or null before it is registered. */ allocationAmendment: SkyContinuationAllocationAmendmentRead | null;
+		/** Latest authenticated fixed amendment/extension, or null before the original amendment. */ allocationAmendment:
+			SkyContinuationAllocationAmendmentRead | SkyContinuationResourceExtensionRead | null;
 		/** Effective exact phase caps, retaining all original construction/full-capture slots. */ effectivePhaseAllocations: readonly DialContinuationPhaseAllocation[];
 		/** Actual artifact-plus-seal bytes by declared phase, including failures; only the explicit extra invalid attempt uses the failure reserve. */ retainedBytesByPhase: Readonly<
 			Record<SkyContinuationAllocationPhase, number>

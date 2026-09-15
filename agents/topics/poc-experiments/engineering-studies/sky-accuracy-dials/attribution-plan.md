@@ -174,6 +174,96 @@ own dimensionally appropriate criterion before the target. Keep numerical
 accuracy, response predictability, useful Kider benefit and transfer claims
 separate.
 
+## Positive-height Second-order Pilot
+
+The next package B stage is `volume-j2-pilot`. Use the frozen C0 viewing rays
+`p-0930-5-7` and `p-1230-3-5`, which have opposite remaining residual signs in
+the retained decomposition. At radial heights 0.001, 1, 1000 and 8000 metres
+along each original outward ray, evaluate local second-order source density in
+channels 0 and 8. This pilot does not yet integrate the final viewing ray.
+
+At radius r, split incoming cosine at `mu_ground = -sqrt((r-R)(r+R))/r` and
+zero: ground-hit, inward-escaping and outward intervals. Use Gauss8 on each
+interval and 16 midpoint azimuth samples. Reuse reflection symmetry about the
+local source/radial plane, with separate phase weights for the two directions;
+this requires 192 incident representatives per position, 1536 in total.
+Independently evaluate two reflected witness rays per position, one ground-hit
+and one inward-escaping, for 16 additional evaluations. Check their separated
+components against the representative within joint empirical allowances and
+1e-12 W m^-2 sr^-1 nm^-1. Keep these actual symmetry checks separate from the
+manufactured geometry and phase-weight proofs.
+
+Use the admitted volume L1 evaluator with global outer-error allocation and
+unchanged physical admission. Retain atmospheric/direct-ground incident light
+times Rayleigh/Mie scattering as four separate components. The angular integral
+uses solid angle and phase, without an incoming cosine factor. Predict all
+incident components are admitted, all four contributions are nonnegative, and
+their sum agrees with an independently accumulated combined channel to binary64
+roundoff. Any unresolved incident makes the affected angular component unresolved.
+
+At 1 mm, predict the Rayleigh contribution from direct ground light agrees
+with `beta_R(0) * B0 / 2` within 0.1% plus propagated empirical allowances and
+1e-15 W m^-3 sr^-1 nm^-1. Here B0 is the independently evaluated direct
+Lambertian boundary radiance at the original surface point. The one-half follows
+from normalized, antipodally even Rayleigh phase over a hemisphere; it is not
+assumed for the forward-peaked Mie phase. This is a boundary-limit prediction,
+not a complete angular-accuracy qualification at positive height.
+
+Reserve 4 MiB and one CPU-job hour within C5 and the unchanged cumulative
+limits. Require twice the slowest measured incident cost times the remaining
+incident count to fit the scientific deadline, retaining a one-minute
+finalization reserve. Retain compact incident values/allowances and work counts;
+keep full diagnostics only for bounded unresolved witnesses. No GPU fields or
+scratch are required. A failed pilot redirects the reference work rather than
+qualifying partial sums. After the pilot, preregister independent radial/azimuth
+refinements and the viewing-ray integration matrix from its measured costs.
+
+## Positive-height Angular Factorial
+
+After accepted pilot `00161-volume-j2-pilot`, stage `volume-j2-angular` tests
+radial and azimuth refinement separately and together. Use its same two probes,
+channels 0/8 and heights 0.001, 1000 and 8000 m. Retain the original Gauss8 /
+azimuth16 midpoint values as the baseline, then run Gauss16/azimuth16,
+Gauss8/azimuth32 and Gauss16/azimuth32. This is a complete 2 x 2 comparison;
+the three new cells require 9,216 representatives plus 36 mirrored checks.
+Use the same intervals, incident admissions and four-component accounting.
+
+Before these outputs exist, predict the joint correction is approximately the
+sum of the individual corrections. For each of the four physical components,
+over the twelve target/channel scalars, require
+`norm(L_AB-L_A-L_B+L_0) <= 0.25*max(norm(L_A-L_0)+norm(L_B-L_0), 1e-15)`
+plus the norm of summed propagated incident allowances. Record the interaction
+vector as well as its norm; this is a numerical-response prediction, not an
+angular reference or Kider forecast. Report unresolved comparisons when incident
+allowances exceed 20% of the measured correction scale.
+
+For the four 1-mm atmospheric scalars, predict the joint-refined
+atmosphere-Rayleigh plus atmosphere-Mie sum agrees with the corresponding
+exact-ground outward reference from `00160-j2-ang-fine` within 0.05% of its
+absolute value plus both empirical incident/reference allowances and 1e-15
+density units. This is an explicitly approximate positive-height-limit
+prediction; the surface reference is not silently relabelled as a reference at
+the elevated point. Preserve any failure and its signed residual.
+
+Retain the original pilot and all inputs unchanged. The new run's definition
+freezes these formula predictions before evaluating any of the three new cells.
+Reserve 4 MiB and one CPU-hour, with unchanged cumulative admission and hard
+deadline. The original pilot's complete positions cost 9.9-14.7 seconds per 194
+incident evaluations, although individual maxima reach 264 ms. For this larger
+balanced matrix, after each complete position project twice the largest observed
+whole-position milliseconds per incident times the remaining count. This avoids
+charging every ray as the rare slowest ray; it changes only the resource
+forecast, not any numerical tolerance or hard limit. Cooperative per-ray
+deadline/headroom checks remain active throughout the first and later positions.
+Store rule counts and deterministic construction
+equations in the recipe, and exact evaluated directions in compact node evidence;
+do not duplicate the full planned direction arrays throughout provenance.
+
+The completed positive-height factorial admits the next
+[second-order viewing-ray reference stages](second-order-reference-plan.md).
+That owner freezes their physical quadratures, operational controls, predictions
+and per-stage limits; each new run retains both plan identities.
+
 ## Resources And Registration
 
 Preserve the design's hard limits: 512 MiB total retained evidence, 1 GiB live
