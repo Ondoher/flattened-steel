@@ -217,3 +217,5 @@ focused documents over directories or broad indexes.
 - Keep one canonical owner for each fact. Other documents should link to that
   owner instead of maintaining duplicate copies.
 - Archived material is evidence or history, not current guidance.
+
+Topics folder: agents/topics

@@ -1,10 +1,46 @@
 # What We Can Use From The Accuracy Experiments
 
-Assessment through `00223-at-regions`; execution is paused for the owner's break. The work has produced a useful explanation
-and several component corrections. It has not produced a generally qualified
-replacement solver. The strongest result is predictable first-order source
-refinement after correcting its representation. The recent angular work is
-narrower: it diagnoses and repairs a defect in an experimental sampling rule.
+Assessment through accepted **00235**. The [aerosol sensitivity](aerosol-sensitivity-results.md)
+improves selected visible agreement under one regional physical alternative.
+Use the [supported-wavelength breakdown](aerosol-sensitivity-results.md#supported-wavelength-interpretation):
+the owner excludes unsupported 360 nm. Phase and albedo separately improve
+both controls; their combination overshoots. Its outcome supports further attribution,
+not adoption or a claim that extra phase/spectral flexibility is itself proven.
+The
+[case evaluation](aerosol-cancellation-evaluation.md) interprets the specific
+numerical corrections under the owner's aerosol-model hypothesis. The
+[follow-up guide](follow-up-context.md) routes to all current evidence and
+preserves untested alternatives and data leads. Shared visible angular deficits
+and the weakly angular violet excess are separate targets. The
+[alternate rays](alternate-rays-results.md) establish cancellation outside the
+near-Sun region; the [matched comparison](reference-comparison-results.md)
+owns full retained scores. Aerosol dominance remains a hypothesis.
+
+The
+[cache-free stochastic reference](direct-convergence-results.md) includes all
+scattering orders in expectation and retains the main Kider disagreement.
+It isolates a concrete compensation: omitting later scattering hides an
+excess at D/360 nm. The report owns precision limits and the persistent
+near-Sun B/C directional contrast. No numerical setting was fitted to Kider.
+
+The earlier
+[solar-registration findings](solar-registration-results.md) identify sparse
+sampling/interpolation bias and strong regional inconsistency in the fitted
+solar axis. A sharp known-axis control shifts by up to 8.6 degrees; doubling
+both fitting quadrature dimensions changes real-data fits by at most 0.2
+degrees. Clock-only adjustment does not generalize better than a constant
+orientation offset. Neither a replacement axis nor a timing correction is
+qualified. Independent capture geometry is the next useful evidence.
+
+The [bounded second pass](remaining-factors-results.md) remains closed. Higher
+density/altitude repairs improve known numerical error while worsening the
+aggregate proxy; extra orders worsen every selected time group. Both GPU
+observation attempts failed without numerical output. Preserve the owner's
+[hold on adoption](status.md#owner-decision-preserve-conclusions-defer-adoption).
+
+The [first-pass results](targeted-improvements-results.md) still support joint
+first-order corrections despite lost beneficial error cancellation. No full
+Bruneton RMSE improvement or replacement solver is established.
 
 ## The Main Answer
 
@@ -12,10 +48,17 @@ More samples were improving individual calculations while exposing errors
 elsewhere that had previously canceled them. Those errors are structured,
 not random noise. We have separated several of them and demonstrated that
 correcting related terms together can restore the expected convergence.
-Scientific accuracy is measured against the declared equations and independent
-numerical references; Kider agreement is reported separately.
+Numerical accuracy is measured against the declared equations and independent
+references; Kider is the empirical target and is reported separately.
 
 ## What Is Actionable
+
+The [targeted decision table](targeted-improvements-results.md#which-changes-help)
+distinguishes corrections that help together from score gains caused by larger
+known error. Correct density, phase and columns jointly; increasing source
+samples then moves all tested scalars toward the reference. Phase alone improves
+the aggregate proxy while increasing numerical error, so it is not an acceptable
+score-driven choice. Higher-order light remained fixed.
 
 | Change                                                    | What the experiments establish                                                                                                                                                                                | Practical use and limit                                                                                                                                                                                    |
 | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -62,12 +105,45 @@ algorithm-tuning objective.
 
 ## Recommended Next Milestone
 
-Prioritize a bounded experiment extending the corrected cached first-order
-reconstruction from the bottom-interval probes to complete morning/noon viewing
-rays. Compare with the established independent first-order references at fixed
-source count and fixed higher-order fields; then report the separate effect on
-total radiance and Kider. This tests the useful range of the correction without
-claiming to change the recurrence.
+The completed [aerosol sensitivity](aerosol-sensitivity-results.md) improves
+selected visible deficits. On the supported wavelengths, phase and albedo
+separately help both controls while the joint change overshoots them.
+The next useful distinction is whether changed mean directionality and albedo
+level explain the improvement, or whether extra angular/spectral shape is
+needed. This is an unresolved question, not an automatic new execution matrix.
+The [hypothesis guide](follow-up-context.md) preserves alternative causes and
+input-quality limits. Preserve
+the [production source-refinement candidate](accuracy-controls.md#saved-production-follow-up-source-sample-refinement)
+for later full-solver qualification under the adoption hold.
+
+### Deferred Registration Follow-Up
+
+Use existing capture imagery or calibration records to anchor solar direction
+independently of the radiance-derived symmetry fit. The
+[registration analysis](solar-registration-results.md) has completed the
+wavelength, region, quadrature and known-axis checks; repeating them will not
+identify a physical clock or orientation error. Do not replace the fitted
+direction or tune physical coefficients solely to lower the score. The
+[second-pass report](remaining-factors-results.md) records why the small-angle
+GPU sensitivity remains unmeasured.
+Any later observation retry first needs a bounded non-radiance transport proof;
+no new run is active or admitted by these closed results.
+
+Apply the [running-shader cost constraint](design.md#running-shader-cost)
+when selecting a production candidate. Qualify corrected cache lookup and
+reconstruction at each sample, then assess accuracy and total work over the
+viewing ray. View sample count and placement remain candidate runtime controls;
+altitude-segmented and adaptive integration require separate assessment of
+sample-selection overhead and shader performance. Their measured query savings
+alone do not establish a runtime speedup. Source and incoming-angle integration
+must be precomputed or represented by a compatible sample evaluator.
+
+The bounded complete-ray experiment is now finished. Its
+[results](targeted-improvements-results.md) support joint first-order corrections
+and source refinement afterward, while showing why the old Kider score cannot
+be recovered by intentionally retaining first-order bias. A full-solver
+comparison with separately corrected higher-order behavior remains unqualified
+and is outside this closed first pass.
 
 The [existing first-radiance pass](../../../../../scripts/algorithm32/solar-zenith-cache/DistantSunSceneCacheGpuCompiler.js)
 integrates direct scattering evaluated at each query; it does not reconstruct
@@ -82,8 +158,9 @@ The final [saved-node angular diagnostic](angular-theta-regions-plan.md) passed
 both predictions in 00223: after the coordinate correction, the remaining
 refinement response concentrates near the horizon. This localizes a response
 and leaves the earlier reference uncertainty unchanged. It used no fresh
-atmospheric solves. No new ladder was started; work is paused at the owner's
-request, with the [agent handoff](handoff.md) ready for a later resumption.
+atmospheric solves. No new angular ladder was started. The targeted GPU first
+pass subsequently completed; the [agent handoff](handoff.md) records its closed
+execution boundary.
 
 The [detailed findings](attribution-results.md) own the measured values and
 limitations. Direct evidence is available for the

@@ -80,6 +80,8 @@ type SkyContinuationJobPhase = 'C1' | 'C2' | 'C3' | 'C4' | 'C5' | 'C6';
 type SkyContinuationAllocationPhase = 'C0' | SkyContinuationJobPhase | 'failure-and-sealing-reserve';
 /** Admission decision made from authenticated completed jobs and actual storage. */
 type SkyContinuationAdmission = Readonly<{
+	/** Exact prospective authorization when a scoped package consumes post-cap GPU attempts. */ gpuAuthorization?:
+		SkyRemainingGpuAuthorization | SkyDirectGpuAuthorization;
 	/** All previous completed resource debits. */ usage: DialContinuationResourceCounters;
 	/** Forecast next retained bytes, including its sealing allowance. */ allocatedBytes: number;
 	/** Current job timeout narrowed by remaining campaign time. */ timeoutMilliseconds: number;

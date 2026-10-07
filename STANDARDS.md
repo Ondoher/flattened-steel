@@ -8,14 +8,16 @@
 
 - Folder manifest: [`agents/topics/standards/manifest.md`](./agents/topics/standards/manifest.md)
 - Repository overlay: [`agents/topics/standards/overlay.md`](./agents/topics/standards/overlay.md)
-- Standards governance: [`documentation.md`](../../Users/gande/.codex/documentation/standards/documentation.md)
+- Standards governance: [`documentation.md`](https://github.com/Ondoher/polylith-skills/blob/main/documentation/standards/documentation.md)
 - First normalized: `2026-09-11T23:19:47.480Z`
 - Repository standards configuration fingerprint: `sha256:f0c899cff44d35ced4c80bc2c7bad73afd4cf6d63aabbce6b4f585bd85f45b72`
 - Local standards overlay fingerprint: `sha256:5b67d2e2a7016b3d1f9d1cbe20d1892aeca479a01e641cefc4ef0354d31b8793`
-- Selected canonical standards fingerprint: `sha256:c6fead2b7032e6fac8d90d69ee5c9fd56a2743495adf1ac6b02c0e0b4f5c8999`
-- Guide source fingerprint: `sha256:660121dc6c6496489a3a079fbe8d2d3a9a9beba0cdbff21bf16f83c6ab8793f3`
+- Selected canonical standards fingerprint: `sha256:d15413f396587935c93b983dc459aaf27c548c113ac0c308188e708670b4b0df`
+- Guide source fingerprint: `sha256:128a6991d475c1ad03dc1cae6851248b98e589b6c48984164a470065b7222fff`
 
 For each file, the longest matching folder assignment selects one named standards set. The set includes its inherited canonical standards, then matching folder-scoped overlay rules modify specific sections. This file is a readable projection only.
+
+Canonical links open the configured GitHub branch and show its latest published standards. Skills and reviewers still read local canonical files; the fingerprints above describe those local inputs, which may contain unpublished changes. Publish the governance checkout with `update-standards` to update the linked documents. Private repositories require GitHub access.
 
 ## Standards sets
 
@@ -25,8 +27,8 @@ Extends: `none`
 
 Adds:
 
-- [`documentation.md`](../../Users/gande/.codex/documentation/standards/documentation.md) — Folder applicability and standards governance.
-- [`project-foundation.md`](../../Users/gande/.codex/documentation/standards/project-foundation.md) — Repository and package boundaries.
+- [`documentation.md`](https://github.com/Ondoher/polylith-skills/blob/main/documentation/standards/documentation.md) — Folder applicability and standards governance.
+- [`project-foundation.md`](https://github.com/Ondoher/polylith-skills/blob/main/documentation/standards/project-foundation.md) — Repository and package boundaries.
 
 ### `code`
 
@@ -34,11 +36,11 @@ Extends: `base`
 
 Adds:
 
-- [`architecture.md`](../../Users/gande/.codex/documentation/standards/architecture.md) — Implementation ownership and dependency boundaries.
-- [`code-conventions.md`](../../Users/gande/.codex/documentation/standards/code-conventions.md) — JavaScript and formatting conventions.
-- [`types.md`](../../Users/gande/.codex/documentation/standards/types.md) — Ambient public and internal contracts.
-- [`jsdoc.md`](../../Users/gande/.codex/documentation/standards/jsdoc.md) — Callable and declaration documentation.
-- [`testing.md`](../../Users/gande/.codex/documentation/standards/testing.md) — Behavioral verification and lane boundaries.
+- [`architecture.md`](https://github.com/Ondoher/polylith-skills/blob/main/documentation/standards/architecture.md) — Implementation ownership and dependency boundaries.
+- [`code-conventions.md`](https://github.com/Ondoher/polylith-skills/blob/main/documentation/standards/code-conventions.md) — JavaScript and formatting conventions.
+- [`types.md`](https://github.com/Ondoher/polylith-skills/blob/main/documentation/standards/types.md) — Ambient public and internal contracts.
+- [`jsdoc.md`](https://github.com/Ondoher/polylith-skills/blob/main/documentation/standards/jsdoc.md) — Callable and declaration documentation.
+- [`testing.md`](https://github.com/Ondoher/polylith-skills/blob/main/documentation/standards/testing.md) — Behavioral verification and lane boundaries.
 
 ### `experiment`
 
@@ -46,7 +48,7 @@ Extends: `base`
 
 Adds:
 
-- [`types.md`](../../Users/gande/.codex/documentation/standards/types.md) — Required types-standard review and type checking for every experiment.
+- [`types.md`](https://github.com/Ondoher/polylith-skills/blob/main/documentation/standards/types.md) — Required types-standard review and type checking for every experiment.
 
 ### `build`
 
@@ -54,7 +56,7 @@ Extends: `code`
 
 Adds:
 
-- [`polylith.md`](../../Users/gande/.codex/documentation/standards/polylith.md) — Polylith build, activation, and deployment.
+- [`polylith.md`](https://github.com/Ondoher/polylith-skills/blob/main/documentation/standards/polylith.md) — Polylith build, activation, and deployment.
 
 ### `application`
 
@@ -62,7 +64,7 @@ Extends: `build`
 
 Adds:
 
-- [`remvc.md`](../../Users/gande/.codex/documentation/standards/remvc.md) — Application responsibility and lifecycle.
+- [`remvc.md`](https://github.com/Ondoher/polylith-skills/blob/main/documentation/standards/remvc.md) — Application responsibility and lifecycle.
 
 ### `http-application`
 
@@ -70,7 +72,7 @@ Extends: `application`
 
 Adds:
 
-- [`server.md`](../../Users/gande/.codex/documentation/standards/server.md) — HTTP ingress, transport, filesystem service, and failure boundaries.
+- [`server.md`](https://github.com/Ondoher/polylith-skills/blob/main/documentation/standards/server.md) — HTTP ingress, transport, filesystem service, and failure boundaries.
 
 ### `react-application`
 
@@ -78,7 +80,7 @@ Extends: `application`
 
 Adds:
 
-- [`react.md`](../../Users/gande/.codex/documentation/standards/react.md) — React presentation and adapter lifecycle.
+- [`react.md`](https://github.com/Ondoher/polylith-skills/blob/main/documentation/standards/react.md) — React presentation and adapter lifecycle.
 
 ### `react-library`
 
@@ -86,7 +88,7 @@ Extends: `code`
 
 Adds:
 
-- [`react.md`](../../Users/gande/.codex/documentation/standards/react.md) — React presentation and adapter lifecycle.
+- [`react.md`](https://github.com/Ondoher/polylith-skills/blob/main/documentation/standards/react.md) — React presentation and adapter lifecycle.
 
 ### `server`
 
@@ -94,7 +96,7 @@ Extends: `build`
 
 Adds:
 
-- [`server.md`](../../Users/gande/.codex/documentation/standards/server.md) — HTTP ingress, transport, filesystem service, and failure boundaries.
+- [`server.md`](https://github.com/Ondoher/polylith-skills/blob/main/documentation/standards/server.md) — HTTP ingress, transport, filesystem service, and failure boundaries.
 
 ### `proof-tools`
 
@@ -102,7 +104,7 @@ Extends: `code`
 
 Adds:
 
-- [`server.md`](../../Users/gande/.codex/documentation/standards/server.md) — HTTP ingress, transport, filesystem service, and failure boundaries.
+- [`server.md`](https://github.com/Ondoher/polylith-skills/blob/main/documentation/standards/server.md) — HTTP ingress, transport, filesystem service, and failure boundaries.
 
 ## Folder assignments
 
@@ -133,21 +135,21 @@ None.
 
 ### ADD: Production Algorithm32 scientific quantities, provenance, and profile completeness
 
-- Extends: `types.md#General Types`
+- Extends: [`types.md#General Types`](https://github.com/Ondoher/polylith-skills/blob/main/documentation/standards/types.md#general-types)
 - Scope: `folder:src/algorithm32/`
 - Rule: Public and durable Algorithm32 quantities must carry explicit units, physical quantity, spectral basis, point or bin meaning, and provenance identity; durable property names must remain unit-neutral and hold unit-bearing values, normalized local computational scalars may use unit suffixes, and radiometric names must distinguish source irradiance before source-path attenuation, incident irradiance after attenuation, and directional incident radiance. A scientific profile must be a named type with one documented default, caller-supplied overrides, every configurable option relevant to the profile, and every difference from the paper or reference configuration it represents.
 - Reason: Production Algorithm32 contracts must preserve the meaning, stage, and provenance of scientific values across CPU, GPU, cache, and serialization boundaries. Production Algorithm32 profiles encode selected scientific configurations whose defaults, options, and reference deviations must remain explicit.
 
 ### ADD: Production Algorithm32 reference-backed formula symbols
 
-- Extends: `code-conventions.md#JavaScript And Module Shape`
+- Extends: [`code-conventions.md#JavaScript And Module Shape`](https://github.com/Ondoher/polylith-skills/blob/main/documentation/standards/code-conventions.md#javascript-and-module-shape)
 - Scope: `folder:src/algorithm32/`
 - Rule: A scientific implementation may retain a published formula symbol only when owning documentation or an adjacent comment identifies its external authority and makes the code-to-formula mapping unambiguous.
 - Reason: Production Algorithm32 source must keep compact scientific notation traceable to its reference authority without weakening the general descriptive-identifier rule.
 
 ### ADD: Production Algorithm32 scientific descriptor non-authority
 
-- Extends: `code-conventions.md#Validation And Failure Policy`
+- Extends: [`code-conventions.md#Validation And Failure Policy`](https://github.com/Ondoher/polylith-skills/blob/main/documentation/standards/code-conventions.md#validation-and-failure-policy)
 - Scope: `folder:src/algorithm32/`
 - Rule: Scientific descriptors may identify, fingerprint, report, and diagnose evidence but must not validate executable facts, select algorithms, calculate indexing or packing, or recover executable facts.
 - Reason: Production Algorithm32 must keep executable numerical authority separate from descriptive evidence metadata.

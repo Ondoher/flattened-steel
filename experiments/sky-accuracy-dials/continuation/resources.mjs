@@ -1,10 +1,33 @@
 import assert from 'node:assert/strict';
+import {
+	aerosolPackageId,
+	aerosolAuthorization,
+	validateAerosol,
+	aerosolAllocations,
+} from './aerosol-sensitivity/authorization.mjs';
 import {readdirSync} from 'node:fs';
 import {outputRelative, readRepository, resolveRepository, storage, verifyRun} from '../io/files.mjs';
 import {accountInvalidEvidence} from './invalid-evidence.mjs';
 import {authenticateAllocationAmendment} from './allocations.mjs';
 import {authenticateResourceExtension} from './resource-extension/read.mjs';
 import {resourceExtensionSchema, resourceExtensionOrder} from './resource-extension/index.mjs';
+import {
+	alternatePackageId,
+	alternateAuthorization,
+	validateAlternate,
+	alternateAllocations,
+} from './direct-solver/alternate-authorization.mjs';
+import {directPackageId, directAuthorization, validateDirect} from './direct-solver/authorization.mjs';
+import {
+	convergencePackageId,
+	convergenceAuthorization,
+	validateConvergence,
+} from './direct-solver/convergence-authorization.mjs';
+import {
+	remainingGpuAuthorization,
+	remainingPackageId,
+	validateRemainingGpu,
+} from './remaining-factors/authorization.mjs';
 
 /** Count every authenticated artifact and the seal exactly once.
  * @param {DialFileIdentity} seal - Exact terminal seal identity.
@@ -59,6 +82,8 @@ export function campaignUsage(registration) {
 	/** @type {SkyContinuationAllocationAmendmentRead | SkyContinuationResourceExtensionRead | null} */ let allocationAmendment =
 		null;
 	let resourceExtensionSeen = false;
+	let alternateAllocationSeen = false;
+	let aerosolAllocationSeen = false;
 	let lastPriorSeal = registration.seal;
 	let gpuConstructions = 0,
 		fullCaptures = 0,
@@ -132,6 +157,58 @@ export function campaignUsage(registration) {
 		// additional failure reserve; this is not a generic retry exemption.
 		retainedBytesByPhase[phase] += retainedBytes(sealIdentity);
 		if (parameters.jobKind === 'gpu') {
+			if (gpuConstructions >= registration.budgets.constructionSlots) {
+				if (parameters.packageId === aerosolPackageId) {
+					assert.ok(!aerosolAllocationSeen);
+					assert.equal(parameters.phase, 'C5');
+					assert.equal(parameters.scope, 'component');
+					validateAerosol(
+						parameters.gpuAuthorization,
+						seal.recipe.parents,
+						gpuConstructions,
+						parameters.caseId,
+						seal.finishedAt,
+					);
+					aerosolAllocationSeen = true;
+				} else if (parameters.packageId === alternatePackageId) {
+					assert.ok(!alternateAllocationSeen);
+					assert.equal(parameters.phase, 'C5');
+					assert.equal(parameters.scope, 'component');
+					validateAlternate(
+						parameters.gpuAuthorization,
+						seal.recipe.parents,
+						gpuConstructions,
+						parameters.caseId,
+						seal.finishedAt,
+					);
+					alternateAllocationSeen = true;
+				} else if (parameters.packageId === convergencePackageId) {
+					validateConvergence(
+						parameters.gpuAuthorization,
+						seal.recipe.parents,
+						gpuConstructions,
+						parameters.caseId,
+						seal.finishedAt,
+					);
+				} else if (parameters.packageId === directPackageId) {
+					validateDirect(
+						parameters.gpuAuthorization,
+						seal.recipe.parents,
+						gpuConstructions,
+						parameters.caseId,
+						seal.finishedAt,
+					);
+				} else {
+					assert.equal(parameters.packageId, remainingPackageId);
+					validateRemainingGpu(
+						parameters.gpuAuthorization,
+						seal.recipe.parents,
+						gpuConstructions,
+						parameters.caseId,
+						seal.finishedAt,
+					);
+				}
+			}
 			gpuConstructions++;
 			if (parameters.scope === 'full') fullCaptures++;
 			gpuElapsedMilliseconds += seal.result.jobElapsedMilliseconds;
@@ -144,6 +221,10 @@ export function campaignUsage(registration) {
 		newRetainedBytes,
 		'Completed phase accounting must cover every retained continuation byte.',
 	);
+	const baseAllocations = allocationAmendment
+		? allocationAmendment.record.effectivePhaseAllocations
+		: structuredClone(registration.budgets.phaseAllocations);
+	const priorAllocations = alternateAllocationSeen ? alternateAllocations(baseAllocations) : baseAllocations;
 	return {
 		gpuConstructions,
 		fullCaptures,
@@ -152,9 +233,7 @@ export function campaignUsage(registration) {
 		newRetainedBytes,
 		...(invalidEvidence.length ? {invalidEvidence} : {}),
 		allocationAmendment,
-		effectivePhaseAllocations: allocationAmendment
-			? allocationAmendment.record.effectivePhaseAllocations
-			: structuredClone(registration.budgets.phaseAllocations),
+		effectivePhaseAllocations: aerosolAllocationSeen ? aerosolAllocations(priorAllocations) : priorAllocations,
 		retainedBytesByPhase,
 	};
 }
@@ -165,16 +244,36 @@ export function campaignUsage(registration) {
  * @param {SkyContinuationJobScope} scope - Declared output scope.
  * @param {number} allocatedBytes - Conservative forecast for this terminal record.
  * @param {SkyContinuationJobPhase} [phase] - Explicit phase receiving the forecast; C6 may consume its own report reserve.
+ * @param {string} [packageId] - Exact separately authorized bounded package, when consuming post-cap GPU slots.
  * @returns {SkyContinuationAdmission} Measured prior usage and bounded allowance.
  */
-export function admitJob(registration, kind, scope, allocatedBytes, phase = 'C1') {
-	const usage = campaignUsage(registration),
-		limits = registration.budgets,
+export function admitJob(registration, kind, scope, allocatedBytes, phase = 'C1', packageId) {
+	let usage = campaignUsage(registration);
+	const limits = registration.budgets,
 		current = storage();
 	assert.ok(Number.isSafeInteger(allocatedBytes) && allocatedBytes > 0);
 	assert.ok(['gpu', 'cpu'].includes(kind) && ['screen', 'full', 'component'].includes(scope));
 	assert.ok(['C1', 'C2', 'C3', 'C4', 'C5', 'C6'].includes(phase));
 	assert.ok(current.freeBytes >= limits.minimumFreeDiskBytes && current.scratchBytes < limits.liveScratchBytes);
+	if (packageId === aerosolPackageId) {
+		assert.equal(kind, 'gpu');
+		assert.equal(scope, 'component');
+		assert.equal(phase, 'C5');
+		assert.equal(usage.gpuConstructions, 41);
+		usage = {...usage, effectivePhaseAllocations: aerosolAllocations(usage.effectivePhaseAllocations)};
+	}
+	if (packageId === alternatePackageId) {
+		assert.equal(kind, 'gpu');
+		assert.equal(scope, 'component');
+		assert.equal(phase, 'C5');
+		assert.equal(usage.gpuConstructions, 40);
+		usage = {...usage, effectivePhaseAllocations: alternateAllocations(usage.effectivePhaseAllocations)};
+		assert.ok(
+			usage.effectivePhaseAllocations.find((a) => a.phase === 'C6').retainedBytes -
+				usage.retainedBytesByPhase.C6 >=
+				3 * 1024 ** 2,
+		);
+	}
 	for (const allocation of usage.effectivePhaseAllocations)
 		assert.ok(
 			usage.retainedBytesByPhase[allocation.phase] <= allocation.retainedBytes,
@@ -200,8 +299,30 @@ export function admitJob(registration, kind, scope, allocatedBytes, phase = 'C1'
 		usage.newRetainedBytes + allocatedBytes + protectedReserveBytes <= limits.newRetainedBytes,
 		'Continuation evidence allowance exhausted.',
 	);
+	/** @type {SkyRemainingGpuAuthorization|SkyDirectGpuAuthorization|undefined} */ let gpuAuthorization;
 	if (kind === 'gpu') {
-		assert.ok(usage.gpuConstructions < limits.constructionSlots, 'GPU construction allowance exhausted.');
+		if (packageId === aerosolPackageId) {
+			gpuAuthorization = aerosolAuthorization();
+			assert.equal(usage.gpuConstructions, gpuAuthorization.priorAttempts);
+			assert.ok(Date.now() < Date.parse(gpuAuthorization.deadline) - 30000);
+		} else if (packageId === alternatePackageId) {
+			gpuAuthorization = alternateAuthorization();
+			assert.equal(usage.gpuConstructions, gpuAuthorization.priorAttempts);
+			assert.ok(Date.now() < Date.parse(gpuAuthorization.deadline) - 30000);
+		} else if (packageId === convergencePackageId) {
+			gpuAuthorization = convergenceAuthorization();
+			assert.equal(usage.gpuConstructions, gpuAuthorization.priorAttempts);
+			assert.ok(Date.now() < Date.parse(gpuAuthorization.deadline) - 30000);
+		} else if (packageId === directPackageId) {
+			gpuAuthorization = directAuthorization();
+			assert.equal(usage.gpuConstructions, gpuAuthorization.priorAttempts);
+			assert.ok(Date.now() < Date.parse(gpuAuthorization.deadline) - 30000);
+		} else if (usage.gpuConstructions >= limits.constructionSlots && packageId === remainingPackageId) {
+			gpuAuthorization = remainingGpuAuthorization();
+			assert.equal(limits.constructionSlots, gpuAuthorization.originalSlots);
+			assert.ok(Date.now() < Date.parse(gpuAuthorization.deadline) - 30000);
+			assert.ok(usage.gpuConstructions < gpuAuthorization.originalSlots + gpuAuthorization.additionalSlots);
+		} else assert.ok(usage.gpuConstructions < limits.constructionSlots, 'GPU construction allowance exhausted.');
 		assert.ok(
 			scope !== 'full' || usage.fullCaptures < limits.fullCaptureSlots,
 			'Full capture allowance exhausted.',
@@ -221,6 +342,7 @@ export function admitJob(registration, kind, scope, allocatedBytes, phase = 'C1'
 	assert.ok(timeoutMilliseconds >= 1000, 'Continuation compute-time allowance exhausted.');
 	return {
 		usage,
+		...(gpuAuthorization ? {gpuAuthorization} : {}),
 		allocatedBytes,
 		timeoutMilliseconds,
 		phase,

@@ -1,8 +1,56 @@
 # Predictable Sky Accuracy Dials Experiment
 
-Execution is paused after 00223 at the owner's request. The
-[agent handoff](handoff.md) owns the resumption boundary; do not resume
-automatically.
+For resumption, read the [follow-up context and hypothesis guide](follow-up-context.md).
+It routes to the evidence owners and preserves the untested alternatives,
+additional Kider data leads and saved production follow-up.
+
+Current focus: the completed [aerosol phase/albedo sensitivity](aerosol-sensitivity-results.md).
+Use its [supported-wavelength interpretation](aerosol-sensitivity-results.md#supported-wavelength-interpretation):
+454-712.5 nm improve in aggregate; phase and albedo each improve both controls,
+but their combination overshoots. The owner excludes unsupported 360 nm from
+this diagnosis, with historical full scores preserved. The direct solver
+already avoids the identified approximation mechanisms; production adoption
+is still on hold. The [case evaluation](aerosol-cancellation-evaluation.md) owns the
+preceding hypotheses, using the [Sun-angle residual analysis](angular-residual-results.md).
+A shared visible deficit follows Sun angle after controlling time/elevation
+means, while the 360 nm excess has little conditional angular predictability.
+The report separates held-time diagnostics from physical attribution. No run
+is active and the adoption hold remains. The [alternate-ray reference](alternate-rays-results.md)
+owns the original-atmosphere reference; [regional results](reference-comparison-results.md)
+own the earlier full retained-data comparison.
+
+The [completed direct convergence results](direct-convergence-results.md)
+evaluate the [continuous mathematical target](idealized-model.md). The cache-free
+stochastic solver includes all scattering orders in expectation; the main
+Kider disagreements persist. Fifteen of 20 values meet the preset sampling
+precision, with the remaining widths reported explicitly. No run is active.
+The [earlier deterministic results](direct-solver-results.md) remain evidence.
+
+The [five diagnostic rays](diagnostic-rays.md) give concrete retained Kider
+mismatches to examine against that formulation, with exact selectors, signed
+spectral residuals and a same-time, same-elevation contrast pair.
+
+### Local Math Preview
+
+Open [Algorithm Idealization](idealized-model.md) in VS Code and press
+**Ctrl+Shift+V** for Markdown Preview, or **Ctrl+K, V** for preview beside the
+source. VS Code's built-in local KaTeX renderer handles the equations; its
+`markdown.math.enabled` setting defaults to `true`. Use `$...$` for inline
+math and `$$` on separate lines around display equations. See the
+[VS Code math documentation](https://code.visualstudio.com/docs/languages/markdown#_math-formula-rendering).
+
+The idealization document's 13 display equations were checked with the locally
+installed KaTeX renderer without network access. This checks equation rendering;
+it is not a numerical validation of the atmospheric model.
+
+## Evidence Routing
+
+The [solar-registration analysis](solar-registration-results.md) is complete
+through accepted 00228. Retained measurements and known-direction controls
+isolate sparse-representation bias and regional disagreement in the fitted
+solar axis. No timing/alignment correction or Kider RMSE gain is qualified.
+The prior [remaining-factors pass](remaining-factors-results.md) remains closed,
+including its two failed GPU observation attempts. No execution is active.
 
 The [findings brief](accuracy-findings-brief.md) summarizes what is useful now
 and the recommended next substantial milestone.

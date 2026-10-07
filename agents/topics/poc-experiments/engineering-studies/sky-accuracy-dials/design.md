@@ -6,9 +6,15 @@ Develop predictable atmospheric-scattering accuracy controls judged against
 scientific expectations and independent numerical references, with interaction
 tests and bounded storage. The
 [continuation goals](continuation-goals.md#standard-of-correctness) own the
-correctness standard; Kider agreement is a separate observation comparison.
+correctness standard; Kider is the empirical target, compared separately from
+numerical convergence against the governing equation.
 
 ## Acceptance Question
+
+The [continuous mathematical target](idealized-model.md) now states the proposed
+ideal formulation of this algorithm under its existing physical assumptions.
+It owns the exact transport equations; numerical implementations approximate
+that target, and observation comparison remains a separate operation.
 
 Can independently varied and combined numerical controls predict spectral changes and accuracy trends on unexecuted configurations without relying on cancellation or uncontrolled storage growth?
 
@@ -16,7 +22,8 @@ The first campaign is complete. The [continuation goals](continuation-goals.md)
 define the next scientific objective, and the
 [continuation execution plan](continuation-plan.md) owns its proposed cases,
 criteria and allocations within this experiment's existing boundaries.
-The owner has authorized independent execution. The [status](status.md) owns
+Independent execution is bounded by each registered package; completed plans
+do not authorize automatic extensions. The [status](status.md) owns
 completed implementation milestones, current work and review evidence.
 
 ## Isolation Boundary
@@ -148,6 +155,27 @@ the mechanism suggests them; do not infer independence from aggregate scores.
 | Precision and geometry            | Binary64 reference, stable roots, exact surface height and matched angular frames should bound arithmetic artifacts. Preserve anchored controls and use targeted probes rather than changing geometry alongside sampling.                                                                                                                                            |
 | Scattering orders                 | First assess sampling at fixed N4. The observed blue N4 contribution warrants a contained N5/N6 driver with unchanged physical inputs and bit-exact J1-J4 prefix checks. Retain a distinct six-order result schema and use channels 0/8 across all 17 times as an explicitly partial spectral diagnostic. Production remains fixed through J4.                       |
 | Atmosphere and observation model  | Keep physical inputs fixed until numerical effects are understood. Any later phase/profile or optical-footprint experiment must be separately identified, with a prediction and no claim that an unknown instrument response has been calibrated.                                                                                                                    |
+
+## Running Shader Cost
+
+The owner requires O(1), loop-free evaluation within each ray sample.
+Multiple samples along a ray are expected and permitted. For N samples,
+sample evaluation therefore costs O(N) per ray; a single complete-ray lookup
+is not required. The per-sample path, including called helpers, must contain
+no loops, including fixed-count loops.
+
+Use fixed-count cache lookups and bounded reconstruction arithmetic at each
+sample. Do not perform nested source-path integration, incoming-direction
+integration, scattering-order iteration or iterative reconstruction within
+a sample. Precomputation and independent reference integration may perform
+the additional work needed to improve accuracy.
+
+View sample count and placement remain possible runtime accuracy controls.
+Altitude-segmented or adaptive sampling may be considered at the outer ray
+integration level, provided sample evaluation stays loop-free and the sample
+selection overhead and total ray cost are assessed separately. Existing query
+savings do not establish a shader speedup. The practical per-sample lookup and
+instruction budget and total ray sample budget remain to be measured.
 
 ## Representation And Hardware
 

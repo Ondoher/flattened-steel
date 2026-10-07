@@ -1,5 +1,29 @@
 # Accuracy Controls: Current Qualification
 
+## Saved Production Follow-up: Source-sample Refinement
+
+- [ ] Investigate increasing sunlight-path source samples in the production
+  algorithm **after jointly correcting query density, query phase and
+  sunlight-column reconstruction**. Saved at the owner's request; adoption
+  remains on hold pending qualification.
+
+The [00224 source-refinement result](targeted-improvements-results.md#source-count-becomes-a-useful-dial-after-correction)
+provides the motivation: corrected S80-to-S160 refinement slightly improves
+the aggregate Kider proxy (about 0.0176 spectral mW RMSE), while moving every
+tested first-order scalar toward its numerical reference. Four of five time
+groups improve; 10:15 worsens slightly. This is selected-ray evidence with
+higher-order light fixed, not a demonstrated full production benchmark gain.
+The owning report retains the view-level guards on the numerical gain.
+
+For production evaluation, compare source counts with the corrected
+representation fixed, regenerate all higher orders affected by the source
+change, and measure full matched Kider/Bruneton benchmark scores alongside
+numerical error and generation cost. Source refinement belongs in
+precomputation; retain fixed, loop-free work within each runtime ray sample.
+This saved item does not start implementation or a new experiment.
+
+## Qualification Map
+
 This document maps the experimental findings to usable controls and unresolved
 qualification work. The [active findings](attribution-results.md) own measured
 values, reference allowances and evidence identities. The

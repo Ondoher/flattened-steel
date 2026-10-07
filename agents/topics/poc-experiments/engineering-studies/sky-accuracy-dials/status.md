@@ -1,73 +1,259 @@
 # Predictable Sky Accuracy Dials Experiment Status
 
-**Paused at the owner's request after 00223-at-regions.** The final test and
-write-up are complete. No experiment process is running and no following test
-has been started. Resume only when the owner asks to continue; do not treat
-this break as completion of the broader scientific objective.
+**Aerosol sensitivity complete as accepted 00234/00235.** The
+[results](aerosol-sensitivity-results.md) own the four-case direct GPU matrix,
+regional input limits and signed outcomes. The owner's current diagnosis
+excludes unsupported 360 nm and uses only 454-712.5 nm. Joint selected-set
+agreement improves, but phase and albedo together overshoot both controls;
+each intervention separately improves their supported-wavelength RMSE.
+All 120 numerical targets pass; no run remains active. The fixed package is
+consumed, and the production adoption hold remains. Historical evidence is intact.
 
-The [agent handoff](handoff.md) gives the resumption boundary. The
-[findings brief](accuracy-findings-brief.md) explains what is useful now, the
-[control map](accuracy-controls.md) records qualification across all controls,
-and the [detailed findings](attribution-results.md) own numerical evidence.
-Correctness follows the [scientific standard](continuation-goals.md#standard-of-correctness);
-Kider agreement is a separate observation comparison.
+**Follow-up context consolidated:** the [resumption guide](follow-up-context.md)
+links all current result owners, hypotheses and evidence limits, including
+the Kider weather/imagery leads. Active-topic reload now includes it. Older
+brief/framework guidance now includes the supported-wavelength geometry/order
+breakdown, direct-reference versus production distinction, and unselected next
+questions. Link/anchor and whitespace checks cover this documentation refresh.
+This documentation work starts no run or implementation.
 
-## Last Completed Test
+**Production follow-up saved:** investigate
+[source-sample refinement after reconstruction corrections](accuracy-controls.md#saved-production-follow-up-source-sample-refinement).
+The owner requested retaining this candidate; implementation and the adoption
+hold are unchanged.
 
-The saved-node regional attribution is accepted as **00223-at-regions**. Both
-registered channel-8 atmospheric concentration predictions pass. All 89
-implementation checks and 50 manufactured proof checks pass, and the full POC
-type check passes. The original physical component rows and mirror admissions
-replay exactly. The remaining theta refinement response is concentrated near
-the horizon; this locates an observed response rather than absolute angular
-error. The earlier channel-8 reference-precision failure remains unchanged.
+**Specific cancellation cases evaluated from retained evidence.** The
+[case report](aerosol-cancellation-evaluation.md) separates demonstrated
+numerical interactions from plausible aerosol explanations for the remaining
+Kider residual. It covers first-order reconstruction, phase evaluation,
+source refinement, higher-order repairs, missing orders, away-Sun witnesses,
+violet excess and the ground boundary. This is documentation synthesis only:
+no new run, model change or campaign resource debit. The adoption hold remains.
 
-The preceding theta-coordinate package is complete through 00222: three of
-four registered predictions pass and one improvement prediction is unresolved.
-The correction repairs an experimental Sun-aligned rule; it is not a 99%
-production improvement. The strongest predictable dial remains the held
-first-order source-count response after correcting representation.
+**Sun-angle analysis completed as accepted 00233.** The
+[results](angular-residual-results.md) own the full retained-data angular
+comparison. After exact time/elevation/wavelength centering, held-time angular
+prediction accounts for 41.1% of control squared residual and 43.6% of the
+reference mean, with positive aggregate skill at all 17 held times. These are
+conditional diagnostics, not full benchmark improvements or causal phase
+identification. The broad visible trough and weakly angular 360 nm excess are
+separate targets. No execution is active; the one CPU reporting run is consumed.
+Formal reviewers remain suspended; the [verification boundary](#verification-boundary)
+owns current checkpoint monitoring.
 
-The registered [regional plan](angular-theta-regions-plan.md) is consumed and
-closed, including its single-attempt boundary. No additional angular ladder
-is admitted by its result. The recommended next substantial milestone, after
-the owner resumes, is complete-view qualification of corrected cached
-first-order reconstruction at fixed source count and fixed higher fields.
-The recurrence already evaluates direct first-order scattering at its query
-points. Final-view reconstruction changes leave those higher fields unchanged;
-source-count and higher-transport changes require separate propagation tests.
+The [00232 direct results](alternate-rays-results.md) remain accepted. All
+30 numerical targets pass; removing approximations worsens selected-ray Kider
+RMSE. The GPU package is consumed and the adoption hold remains.
+
+**Empirical target clarified:** approach the published reference-model scores
+under the same full benchmark. The [retained-data comparison](reference-model-target.md)
+shows shared local mismatches and a smaller remaining gap to those models.
+All 20 selected measurement values match the retained benchmark boundary;
+this inspection added no model execution or campaign resource debit.
+
+**Direct convergence execution is complete as accepted 00230.** The
+[results](direct-convergence-results.md) own all-order stochastic estimates
+for the five rays, numerical uncertainty and unchanged Kider residuals.
+Fifteen of 20 values meet the preset sampling precision; all attenuation and
+termination contrasts pass. The full type check, 53 CPU manufactured checks,
+three GPU manufactured cases and all 20 first-order parity comparisons pass.
+No execution is active. Formal reviewers remain suspended; the
+[verification boundary](#verification-boundary) owns checkpoint monitoring.
+
+**Earlier deterministic evidence:** its first execution stopped with partial
+results. Run 00229 preserves all five rays/four wavelengths at four
+two-interaction profiles. The first third-interaction call timed out without
+output, so the overall run is sealed failed. The [results](direct-solver-results.md)
+own the completed comparisons, unresolved depth and timing limitations.
+The 46 manufactured checks, full experiment type check and 88 CPU/GPU scalar
+comparisons pass. No run or retry is active. Formal review remains deferred.
+
+The [idealized model](idealized-model.md) is the mathematical target for the
+direct implementation. It removes discretization and finite-order truncation
+while declaring the physical assumptions separately. The completed direct
+profiles approximate that target; they do not qualify the full solution.
+
+The requested [five-ray inspection set](diagnostic-rays.md) is identified from
+accepted 00224/00225 and original reference geometry. It preserves one fixed
+corrected-P1/frozen-higher comparison across four wavelengths, including the
+noon deficit/excess pair. Selection used retained data only and starts no run.
+
+**Solar-registration analysis is complete as accepted 00228-solar-register.**
+The [findings](solar-registration-results.md) isolate sparse-representation
+bias and regional disagreement in the fitted solar axis. No replacement
+geometry, clock correction or Kider RMSE improvement is qualified. The
+[fixed plan](solar-registration-plan.md) is consumed; no further run is active.
+
+The bounded remaining-factors pass is closed through 00227. The
+[results](remaining-factors-results.md) own the signed order accounting,
+observation audit and execution limitations. No further scientific run is active.
+The broader Bruneton RMSE improvement remains unestablished.
+
+## Owner Decision: Preserve Conclusions, Defer Adoption
+
+Preserve the demonstrated numerical-accuracy findings and their supporting
+evidence as the working correctness baseline. Hold the implementation
+recommendations pending reconciliation of why those improvements do not
+consistently improve Kider agreement. A worse proxy alone does not overturn
+the component evidence. The next investigation should explain that mismatch;
+this decision starts no new run or production change.
+
+## Last Completed Package
+
+Accepted **00235-aerosol-screen**, with input record **00234-aerosol-data**,
+consumes the [aerosol sensitivity plan](aerosol-sensitivity-plan.md). The
+[report](aerosol-sensitivity-results.md) owns all data/solver verification,
+uncertainty, scope and evidence identities.
+
+## Preceding Angular Package
+
+Accepted **00233-angular-residual** consumes the
+[Sun-angle analysis plan](angular-residual-plan.md). Retained spectra,
+geometry and direct estimates supply all inputs; no new atmosphere was
+calculated. The [report](angular-residual-results.md) owns held-time results,
+spectral/elevation contrasts, coverage limits and interpretation.
+The [00232 report](alternate-rays-results.md) owns the original-atmosphere direct
+reference reused by 00235; [00231](reference-comparison-results.md) owns regional comparisons.
+
+## Previous Direct Solver Package
+
+Accepted **00230-direct-converge** consumes the renewed single-job convergence
+plan. It includes 36,700,160 stochastic paths across the fixed controls and
+preserves all parent evidence. Its [report](direct-convergence-results.md)
+owns scientific conclusions and limitations. No production or full Bruneton
+benchmark change is included.
+
+## Prior Completed Analysis
+
+Accepted **00228-solar-register** replays all 17 original fitted azimuths,
+passes 247 manufactured checks, and retains 612 subset fits and 102 spectral
+transfers. The complete experiment type check and immutable-run verification
+pass. The analysis reuses existing measurements without a GPU attempt or new
+atmospheric integration. Its [report](solar-registration-results.md) owns
+interpretation and the independent-evidence requirement. No offset was applied.
+
+## Previous Bounded Packages
+
+Accepted **00225-remain-account** passes seven manufactured checks and 240
+matched order-prefix checks. It reuses corrected P1 and retained higher fields
+without new radiance integration. Density/altitude corrections improve all
+four available P2 reference errors but worsen the aggregate proxy. T320 gives
+only a 0.0017 mW gain. The conditional higher-cache factorial is skipped.
+
+Observation attempts **00226/00227** are interrupted/failed. The retry reached
+its five-minute DevTools evaluation timeout; neither returned a GPU matrix.
+All 160 selected raw spectral values and 40 original directions reproduce,
+and 42 manufactured checks pass. The complete experiment type check passes.
+These input/proof checks do not supply the missing observation sensitivity or
+GPU parity. Both failed attempts remain charged and immutable, with owned
+scratch removed. No third attempt is authorized by this closed package.
+
+The [first-pass result](targeted-improvements-results.md), **00224-targeted-gpu**,
+remains accepted: joint first-order corrections reduce selected numerical RMS
+from 9.010 to 0.048 mW while worsening the frozen-higher Kider proxy. Its 160
+raw-control and 32 source-column witnesses pass. Production remains unchanged.
+
+## Runtime Qualification
+
+The experimental corrected evaluator has one outer viewing-ray loop and no
+loops inside a sample or its helper closure. Source integration is precomputed.
+The observation cones are evidence-side comparisons. Runtime performance and
+full-solver accuracy remain unqualified; see the
+[running-shader constraint](design.md#running-shader-cost).
 
 ## Current Resource Accounting
 
-Through 00223, total sealed evidence is **383,934,229 bytes**. Attribution C5
-uses **118,947,228 of 130,023,424 bytes**, leaving **11,076,196 bytes**. CPU-job
-usage is **21,820,164 milliseconds**, about 6.06 of 8 hours. GPU construction
-attempts remain **35 of 36**. All continuation phases share the unchanged
-global limits and the latest conserved allocation amendment.
+Through 00235, total sealed evidence is **398,659,659 bytes**. Attribution C5
+uses **131,875,824 of 132,120,576 bytes**, leaving **244,752 bytes**. CPU-job
+usage is **22,068,612 milliseconds**, about 6.13 of 8 hours. All **42 GPU
+attempts** remain consumed; no package attempt remains. C6 uses
+**9,208,376 of 10,485,760 bytes**, leaving **1,277,384 bytes**. The latest
+plan prospectively transferred 1 MiB from C6 to C5, conserving total allocation.
 
-The final test retains 1,111,538 bytes and charges 94,457 CPU-job milliseconds.
-It used no new atmospheric integration, GPU job or saved incident arrays.
-The common allocator's 141,910-byte scratch ownership metadata was removed;
-cleanup confirms the owned scratch directory is absent. The findings record
-this narrow deviation from the plan's literal no-scratch wording. Historical
-evidence remains intact, and admission assumes no future owner cleanup.
+The aerosol data and GPU records retain **260,834 and 1,200,300 bytes** and
+charge **48,330 CPU-job ms and 138,267 GPU-job ms**. Main GPU evaluation takes
+79.52 seconds. GPU scratch peaks at 18,749,841 bytes and is absent. Numerical
+checks, immutable verification and complete accounting pass. It finishes at
+22:48:32 UTC within the fixed package stop. The report owns interpretation.
+
+The angular analysis retains **976,671 bytes** and charges **51,289 ms** of
+CPU-job elapsed time. It finished at 21:50:39 UTC within its ten-minute cap.
+Owned scratch peaked at 5,636 bytes and is absent. Source authentication,
+seal verification and campaign accounting pass; four standard-library PNG
+plots were inspected. No GPU job or new radiance integration was performed.
+
+The alternate-ray run retains **756,201 bytes** and charges **69,480 ms** of
+GPU-job elapsed time. Main hardware evaluation took 28.45 seconds. Owned
+scratch peaked at 15,159,804 bytes and is absent. It finished at 21:14:20 UTC
+within the 25-minute cap and inherited absolute stop. Source authentication,
+seal verification and campaign accounting pass. No numerical target is unresolved.
+
+The preceding 00231 matched comparison retains **559,329 bytes** and charges
+**42,620 ms** to C6 CPU reporting. Its immutable evidence is unchanged.
+
+The stochastic convergence run retains **457,624 bytes** and charges
+**65,685 ms** of GPU-job elapsed time. Owned scratch peaked at 15,158,917 bytes
+and is absent. It finished at 19:57:47 UTC within the 25-minute job cap.
+Seal verification and campaign accounting pass, with no source or heartbeat
+failures. The report owns the distinction between accepted evidence and the
+five unresolved sampling-precision targets.
+
+The direct-solver run retains **328,885 bytes** and charges **745,576 ms** of
+GPU-job elapsed time, including CPU parity checks and the final timeout. Owned
+scratch peaked at 24,243,337 bytes and is absent. It finished at 19:33:32 UTC,
+within the original session ceiling; its last in-flight call and cleanup
+exceeded the nominal 12-minute job envelope by 25.576 seconds. Structural seal
+verification and complete campaign accounting pass; this does not change its
+failed execution state or qualify a third-order result.
+
+The registration pass retains **558,446 bytes** and charges **60,384 ms** of
+CPU-job time. Its measured owned scratch peak is 76,734 bytes; the tree is
+absent. The fixed single-analysis scope is complete, within its 1 MiB and
+15-minute limits and the original 19:39 UTC session deadline.
+
+The preceding remaining-factors pass retains **4,678,278 bytes**: 1,956,097 for the accepted accounting,
+2,030,371 for the interrupted observation attempt and 691,810 for its failed
+retry. CPU accounting charges 45,825 ms. GPU-attempt accounting charges
+576,191 ms conservatively for the interruption and 367,645 ms for the retry.
+The interruption's scratch measurement at recovery is not an exact peak;
+the retry's observed peak is 67,845,881 bytes. Both trees are absent. No
+observation GPU timing or numerical output was returned.
 
 ## Verification Boundary
 
-Formal standards review and checkpoint monitoring remain suspended under the
-owner's credit-saving direction. Focused proofs and local type checks support
-the numerical runs; they do not close the deferred implementation-review gate.
-The attribution source units, including angular-theta-regions and their direct
-collaborators, retain baseline commit 871690d334b4339f7aaee516dcc140dd00a3edaf.
-The broader objective and combined-solver qualification remain open.
+Formal standards reviewers remain suspended under the owner's direction.
+Checkpoint monitoring is **active** after the 2026-10-07 bootstrap, with the
+owner's one-minute consultation limit and preapproved advised commits/messages.
+A fresh adviser returned `CHECKPOINT_URGENT` for the complete closed milestone
+through 00235, including its source, consumed plans, results and handoff context.
+Its suggested message is `Checkpoint sky accuracy dials through 00235`.
+The current skill makes checkpoint advice independent of calibration and formal
+standards review. Earlier blocked adviser attempts remain historical outcomes;
+the reviewer suspension was not reversed.
 
-Source snapshots and exact prospective plans remain immutable within every
-sealed run. Production source remains read-only; only experiment source and
-owning documentation were changed in this continuation. The owner requested a
-checkpoint of the complete paused state with message
-`Checkpoint sky accuracy attribution and paused handoff`. Git history records
-the resulting commit identifier. The checkpoint preserves the deferred review
-baseline and does not resume scientific execution.
+The [review-standards skill](C:/Users/gande/.codex/skills/review-standards/SKILL.md)
+requires for standards reviewers: "Missing or stale recorded calibration blocks
+startup." Current calibration fails with "Calibration inputs changed; rerun
+independent fixture review and seal". Reviewer definitions, durable normalization,
+folder mappings and formatting pass. Standing bootstrap authority recorded
+`Topics folder: agents/topics` in root AGENTS.md and refreshed root STANDARDS.md.
+The dirty governance checkout was validated read-only and was not synchronized.
+No production implementation was edited or global calibration repaired.
+Local proofs and type checks do not close the deferred source-review gate.
+
+The registration pass started from HEAD
+c7803b241f0f8f409226354dc4fb72484f25a5ec with prior dirty work preserved.
+Its initial experiment-source inventory SHA-256 was
+2342137086fe16863318978cf550c9aacdc9dcb2b8a0bbfbbfc01314257fa891.
+Its new source and consumed plan are preserved by the 00228 derivation record.
+
+The preceding remaining-factors pass started from the same HEAD with existing
+first-pass edits. Its initial tracked patch SHA-256 was
+b86d1f302c6cba4f6a6a7c4c35d19428c7c9e087b84417ecb5e4d35549fb9337.
+Earlier attribution units retain deferred baseline
+871690d334b4339f7aaee516dcc140dd00a3edaf. Source snapshots, consumed plans and
+historical run artifacts remain immutable. The [handoff](handoff.md) owns the
+resumption boundary; this closed package does not authorize another ladder.
 
 ## Active Attribution Extension
 
@@ -91,8 +277,8 @@ Its validation record is
 `.codex-tmp/review-standards/session-IMhmek/validation.json`. That artifact owns
 the implementation gate and no clean outcome is predeclared here.
 The owner subsequently directed that recurring reviews be limited because of
-credit use and saved for later verification. Reviewer agents and checkpoint
-monitoring are suspended. Continue scientific implementation and execution with
+credit use and saved for later verification. Reviewer agents remain suspended;
+checkpoint advice was subsequently reenabled with the limits above. Continue authorized work with
 focused local checks; batch the formal review at a later verification milestone.
 This explicit scheduling direction defers the existing gate and does not claim
 that incomplete review evidence is clean. Preserve the owner's checkpoint
@@ -311,11 +497,10 @@ copy operation or earlier experiments were removed.
 ## Continuation Execution
 
 The owner authorized independent execution and preapproved checkpoints and their
-suggested messages when the checkpoint adviser recommends one. The adviser
-last reported `NOT_READY` for a whole-repository checkpoint because unrelated
-production and strobing changes have separate qualification obligations. No
-checkpoint commit has been recommended. A fresh adviser evaluation follows
-final review validation.
+suggested messages when the checkpoint adviser recommends one. The
+[verification boundary](#verification-boundary) owns the current adviser result.
+Earlier continuation advice returned `NOT_READY` because the then-current
+whole-repository state included separate production and strobing work.
 
 Initial read-only storage measurement: 269,215,842,304 free bytes,
 157,501,882 retained experiment bytes and zero scratch. The continuation keeps

@@ -1,21 +1,70 @@
 # Sky Accuracy Dials: Continuation Goals
 
-Status: goals defined; independent continuation execution is authorized.
+The [completed aerosol sensitivity](aerosol-sensitivity-results.md) provides
+the first physical-input intervention. For current diagnosis the owner excludes
+unsupported 360 nm: use the [454-712.5 nm analysis](aerosol-sensitivity-results.md#supported-wavelength-interpretation).
+Phase and albedo each improve both controls separately; together they overshoot.
+Distinguish changed mean phase/SSA from additional shape flexibility and retain
+Sun-angle/time confounding before choosing more tests. Regional input is exploratory;
+the adopted physical atmosphere and production algorithm remain unchanged.
 
-Current priority: identify and quantify sources of inaccuracy before developing
-additional mitigations or tuning rules, as the owner directed. Use established
-causes, measured interactions and unresolved alternatives to choose the next
-test. Prefer a discriminating component or causal control over another setting
-sweep. A promising mitigation is not a substitute for locating its error source.
-Keep this work bounded and reuse the existing evidence to limit credit use.
+The [follow-up guide](follow-up-context.md) preserves the current hypothesis
+register, data leads, evidence ownership and owner constraints for resumption.
 
-The owner explicitly authorizes adjusting the execution plan as needed to meet
-these goals, using independent judgment while the owner is away. Completion of
-a bounded batch does not establish completion of the scientific objective.
-The active [compensation attribution plan](attribution-plan.md) follows that
-authority within the experiment's production, evidence and resource boundaries.
+The [case evaluation](aerosol-cancellation-evaluation.md) assesses the owner's
+working aerosol-model hypothesis against the specifically identified numerical
+corrections. It separates internal numerical cancellation from the remaining
+physical/observation mismatch, with broad visible angular shape and violet
+spectral excess as distinct targets. This synthesis selects no new run and
+does not establish aerosol dominance.
+
+The completed [Sun-angle analysis](angular-residual-results.md) establishes a
+shared angular component of visible Kider residuals after controlling exact
+time/elevation means. The 360 nm excess has much weaker angular predictability.
+Keep these separate when forming physical hypotheses; the conditional fits
+are neither phase-function retrievals nor production corrections. No new run
+is selected. The [alternate-ray reference](alternate-rays-results.md) and
+[regional comparison](reference-comparison-results.md) remain the numerical
+and full retained-data evidence. Preserve the adoption hold and near-Sun
+samples in full benchmark scores.
+
+The owner requested a direct implementation of the idealization with tunable
+granularity and no caches, then explicitly accepted statistical uncertainty.
+The [completed stochastic reference](direct-convergence-results.md) covers all
+five rays and four wavelengths with no fixed scattering-order cutoff. The
+large Kider disagreements persist; the report separates numerical precision
+from observation residuals. No new execution is active.
+
+Immediate direction: explain the supported-wavelength angular response and
+joint overshoot using the already verified direct calculation. The
+[idealized continuous algorithm](idealized-model.md) remains the numerical
+target; solving it accurately does not establish the captured physical state.
+The direct reference avoids the identified approximation mechanisms;
+production corrections remain deferred. No new run is selected.
+
+Earlier geometry context: the [solar-registration analysis](solar-registration-results.md) is
+complete through accepted 00228. It identifies estimator bias and regional
+inconsistency without qualifying replacement geometry. Preserve the owner's
+[adoption hold](status.md#owner-decision-preserve-conclusions-defer-adoption).
+The earlier [bounded second pass](remaining-factors-results.md) remains closed;
+observation GPU sensitivity is unmeasured after two failed attempts. Overall
+Bruneton RMSE improvement remains unestablished.
+
+Current priority: improve Bruneton RMSE using Kider agreement as a practical
+proxy, without selecting settings that balance known numerical inaccuracies.
+Preserve the tested first-order corrections and identify the remaining factors
+that help or cancel, so implementation cost can be traded against better behavior.
+Favor GPU evidence gathering and directional results over numerical precision;
+reuse compatible existing data. The consumed targeted and remaining-factors plans own their fixed
+scopes and three-hour stops. Earlier open-ended adaptive continuation authority
+does not apply to this package.
 
 ## Central Objective
+
+The owner's [reference-model target](reference-model-target.md) makes the
+empirical criterion concrete: approach the Bruneton/Elek and libRadtran
+scores on the same full Kider benchmark, without balancing known numerical
+errors. The retained five-ray comparison is diagnostic, not that full score.
 
 Locate departures from the governing physics and mathematical expectations,
 explain how their errors propagate and interact, and develop controls that
@@ -23,9 +72,11 @@ predictably reduce those errors within a stated domain.
 
 The desired result is a set of dials with an explained, prospectively tested
 relationship between their settings, scientific correctness, numerical error
-and computational cost. Kider agreement is a separately reported observation
-comparison, not the standard of correctness or an admission gate for a
-scientifically justified refinement.
+and computational cost. Kider measurements are the empirical correctness
+target. A converged equation supplies the numerical reference; agreement
+between numerical implementations alone does not validate the physical model.
+Report both comparisons, without admitting known numerical errors merely
+because they cancel a measurement residual.
 
 ## Standard Of Correctness
 
@@ -45,7 +96,8 @@ Distinguish three questions:
    boundaries, and show the expected numerical convergence?
 3. How well does that solution agree with Kider observations?
 
-The third question cannot substitute for either of the first two. A Kider
+The third question is the practical selection objective for the bounded first
+pass, subject to the first two as correctness constraints. A Kider
 improvement cannot validate an incorrect calculation; a Kider regression
 cannot invalidate a demonstrated correctness improvement. A correctly solved
 model can still omit relevant physics or use inappropriate physical inputs.
