@@ -208,6 +208,15 @@ export class Algorithm32ShaderHandle {
 			observation: request.observation,
 			celestialSources: candidateRoster,
 		});
+		if (request.environmentSample) {
+			return calculator.combineReceiverLight({
+				identity: request.identity,
+				directNormal: directLight.directNormal,
+				directHorizontal: directLight.directHorizontal,
+				diffuseHorizontal: request.environmentSample.diffuseHorizontal,
+				stellarAdaptationLuminance: request.environmentSample.stellarAdaptationLuminance,
+			});
+		}
 		const controller = new ReceiverEnvironmentLightController({
 			calculator,
 			directLight,

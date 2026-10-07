@@ -337,6 +337,16 @@ real paths, and progress at least every 30 seconds for long operations. Existing
 compiler/runtime runners may retain their established immutable output roots;
 the promotion index authenticates their child runs without relocating them.
 
+For the owner-selected 2026-10-07 independent P3 execution, all new temporary
+and qualification output uses `.codex-tmp/p3-strobing-20261007/` with exclusive
+sealed run children. This is P3's plan-owned ignored output root. Existing
+`tmp/` identities and relocated `D:\flattened-steel\archive\` parents remain
+immutable provenance; read-only input authentication records the relocation.
+The task baseline is
+`.codex-tmp/review-standards/session-eg11IP/p3-baseline.json`. The original
+coupled P1-P3 baseline remains preserved; the fresh review request must also
+include affected P1-P2 production owners and relevant unchanged collaborators.
+
 Production tests belong beside production owners or in existing production
 runners. Preserve historical runs and Star evidence. Do not introduce an
 experimental test tree or external repository dependency. Focus development

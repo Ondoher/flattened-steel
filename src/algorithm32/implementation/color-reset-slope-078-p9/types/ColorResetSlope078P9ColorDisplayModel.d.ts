@@ -1,10 +1,7 @@
-/** Fixed accepted slope-078/p9 response constants. */
-type ColorResetSlope078P9Curve = Readonly<{
-	readonly sunsetAmplitude: number;
-	readonly sunsetTransitionIlluminanceLux: number;
-	readonly sunsetRolloffPower: number;
-	readonly adaptationPivotIlluminanceLux: number;
-	readonly adaptationFloorIlluminanceLux: number;
-	readonly adaptationSoftnessLogUnits: number;
-	readonly adaptationExponent: number;
+/** Internal adaptation state used by the slope-078 gain equation. */
+type ColorResetSlope078AdaptationState = Readonly<{
+	/** Multiplicative dark-adaptation gain. */
+	readonly factor: number;
+	/** Logistic activation used by the analytic gain derivative. */
+	readonly activation: number;
 }>;

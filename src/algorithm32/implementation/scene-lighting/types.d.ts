@@ -187,3 +187,11 @@ type ReceiverEnvironmentLightGpuReductionRequest = {
 	/** Ordered radiance packets from every fixed receiver direction. */ radiances: readonly SpectralRadiancePacket[];
 	/** Caller-owned cancellation before publication. */ signal?: AbortSignal;
 };
+
+/** Physical environment inputs derived from retained receiver measurements. */
+type ReceiverEnvironmentSample = Readonly<{
+	/** Complete nonnegative basis-aligned diffuse-horizontal irradiance packet, with derivation provenance. */
+	diffuseHorizontal: SpectralIrradiancePacket;
+	/** Nonnegative physical sky adaptation luminance, in cd m^-2. */
+	stellarAdaptationLuminance: UnitValue<'cd m^-2'>;
+}>;

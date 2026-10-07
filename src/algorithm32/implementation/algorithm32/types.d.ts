@@ -123,4 +123,5 @@ type Algorithm32ReceiverPreparationRequest = {
 	/** Borrowed complete candidate cache facade. */ scatteringCache: GpuScatteringCache;
 	/** Complete candidate selection identity. */ identity: string;
 	/** Preparation cancellation. */ signal?: AbortSignal;
+	/** Optional derived environment sample; exact-time direct spectra are computed by the physical owner. */ environmentSample?: ReceiverEnvironmentSample;
 };

@@ -3,6 +3,9 @@ import * as THREE from 'three';
 import {LocalSunSceneLighting} from './LocalSunSceneLighting.js';
 import {ATMOSPHERE_SCENE_SCALE, GROUND_COLOR, GROUND_SIZE_SCENE_UNITS, SCENE_OBJECTS} from './consts.js';
 
+/** Ordinary endpoint geometry and physical receiver lighting.
+ * @implements {Flat32EndpointLighting}
+ */
 export class EndpointScene {
 	/**
 	 * @param {THREE.Scene} scene - Owns the rendered objects.

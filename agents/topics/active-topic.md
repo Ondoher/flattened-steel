@@ -2,7 +2,7 @@
 
 Current active topic: production-algorithm32.
 Focus: implement and qualify the production engine under its existing owners.
-Production context is restored; the next concrete task has not been selected.
+Selected task: independently execute P3 of the distant-Sun strobing promotion.
 
 Canonical entry document: [Production Algorithm32](production-algorithm32/README.md).
 
@@ -12,8 +12,8 @@ The [production entry](production-algorithm32/README.md) routes the existing
 distant-Sun strobing promotion. Its
 [status](production-algorithm32/caches/distant-sun-strobing-promotion-status.md)
 owns current implementation, qualification, review state and next actions.
-P2 physical qualification passed; P3, appearance acceptance and source-review
-completion remain open. Load the linked plan before selecting implementation.
+P2 physical qualification passed. P3 is authorized and active; appearance and
+source-review completion remain open. The linked plan owns P3's acceptance gates.
 
 Sky Accuracy Dials is parked under its
 [suspension and resumption boundary](poc-experiments/engineering-studies/sky-accuracy-dials/status.md#experiment-lifecycle).

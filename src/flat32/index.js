@@ -29,15 +29,14 @@ const colorModelQuery = searchParameters.get('colorModel');
 const stellarCatalogQuery = searchParameters.get('stellarCatalog');
 const stellarCatalog = /** @type {Flat32StellarCatalogId} */ (stellarCatalogQuery ?? 'brightest-2000');
 const stellarPresentation = searchParameters.get('stellarPresentation') ?? 'human';
-if (colorModelQuery !== null && !['basic-bruneton', 'color-reset-slope-078-p9'].includes(colorModelQuery)) {
+if (
+	colorModelQuery !== null &&
+	!['basic-bruneton', 'color-reset-slope-078-p9', 'color-reset-slope-078-p2'].includes(colorModelQuery)
+) {
 	throw new RangeError(`Unsupported Flat32 colorModel query selection: ${colorModelQuery}.`);
 }
 const colorDisplayModelConfiguration =
-	colorModelQuery === null
-		? null
-		: colorModelQuery === 'basic-bruneton'
-			? {model: /** @type {const} */ ('basic-bruneton')}
-			: {model: /** @type {const} */ ('color-reset-slope-078-p9')};
+	colorModelQuery === null ? null : {model: /** @type {Flat32FixedColorModelId} */ (colorModelQuery)};
 if (!['physical', 'chroma', 'mesopic', 'human'].includes(stellarPresentation)) {
 	throw new RangeError(`Unsupported Flat32 stellarPresentation query selection: ${stellarPresentation}.`);
 }

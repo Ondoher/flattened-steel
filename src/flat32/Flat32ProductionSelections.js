@@ -2,6 +2,7 @@ import {ViewPresentationFilterRegistry} from '../algorithm32/implementation/pres
 
 export const FLAT32_COLOR_MODEL_IDS = /** @type {const} */ ({
 	BASIC_BRUNETON: 'basic-bruneton',
+	COLOR_RESET_SLOPE_078_P2: 'color-reset-slope-078-p2',
 	COLOR_RESET_SLOPE_078_P9: 'color-reset-slope-078-p9',
 	FERWERDA_CONTROL: 'ferwerda-control',
 });

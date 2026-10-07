@@ -7,6 +7,16 @@ import {
 import {ATMOSPHERE_SCENE_SCALE} from '../consts.js';
 import {ViewPresentationFilterRegistry} from '../../algorithm32/implementation/presentation-filter/ViewPresentationFilterRegistry.js';
 describe('Flat32 Color selection', () => {
+	it('selects p2 explicitly while retaining p9 as the production default', () => {
+		const model = createFlat32ColorDisplayModel({model: 'color-reset-slope-078-p2'});
+		expect(model.id).toBe('color-reset-slope-078-p2');
+		expect(
+			resolveFlat32ProductionSelections({
+				colorDisplayModelConfiguration: {model: 'color-reset-slope-078-p2'},
+			}).colorDisplayModelConfiguration.model,
+		).toBe(model.id);
+		expect(createFlat32ColorDisplayModel().id).toBe('color-reset-slope-078-p9');
+	});
 	it('selects the accepted Color Reset model and brightest-2,000 catalog by default', () => {
 		const color = createFlat32ColorDisplayModel();
 		const selections = resolveFlat32ProductionSelections();

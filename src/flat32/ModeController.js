@@ -68,8 +68,17 @@ export class ModeController {
 		}
 	}
 
-	/** Prepare then publish one supported mode without disrupting the active one. */
-	async switchTo(kind, state) {
+	/**
+	 * Call this method to prepare then publish one supported mode without disrupting the active one.
+	 * Preparation failures reject and retain the last complete published state. A superseded request returns null.
+	 * Premeasured environment input requires an already installed shared spherical mode.
+	 *
+	 * @param {Flat32ModeKind} kind - Supported mode identity.
+	 * @param {Flat32ApplicationState} state - Complete selected observation and configuration.
+	 * @param {Flat32ScenePublicationRequest} [request] - Optional measured environment input.
+	 * @returns {Promise<Flat32AtmosphereSummary | null>} - Published summary, or null after supersession.
+	 */
+	async switchTo(kind, state, request = {}) {
 		if (this._disposed) throw new Error('Flat32 mode controller is disposed.');
 		const generation = ++this._generation;
 		this._preparationCancellation?.abort();
@@ -101,7 +110,13 @@ export class ModeController {
 				configurationIdentity === this._activeConfigurationIdentity &&
 				this._activeRuntime?.canUpdateSharedScene?.()
 			) {
-				return await this._activeRuntime.updateSharedScene(state, {signal: preparationCancellation.signal});
+				return await this._activeRuntime.updateSharedScene(state, {
+					signal: preparationCancellation.signal,
+					environmentSample: request.environmentSample,
+				});
+			}
+			if (request.environmentSample) {
+				throw new Error('Measured environment publication requires an installed shared spherical mode.');
 			}
 			mode = await this._createMode(kind, state, {signal: preparationCancellation.signal});
 			if (this._disposed || generation !== this._generation) {

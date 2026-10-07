@@ -10,17 +10,9 @@ import DistantSunSharedCache from '../algorithm32/implementation/distant-sun/cac
  */
 export class Algorithm32Runtime {
 	/**
-	 * @param {Readonly<{
-	 *   sceneRuntime: import('./ThreeSceneRuntime.js').ThreeSceneRuntime,
-	 *   endpointScene: import('./EndpointScene.js').EndpointScene,
-	 *   mode: import('./SphericalDistantMode.js').SphericalDistantMode | import('./FlatLocalMode.js').FlatLocalMode,
-	 *   onFailure: Flat32AtmosphereFailureHandler,
-	 *   composer?: import('three/examples/jsm/postprocessing/EffectComposer.js').EffectComposer,
-	 *   composerRenderTarget?: THREE.WebGLRenderTarget,
-	 *   deferPublication?: boolean,
-	 *   atmosphereEnabled?: boolean,
-	 *   performanceCallback?: ShaderPerformanceCallback
-	 * }>} configuration - Supplies the scene, fixed mode, and failure sink.
+	 * Creates one runtime candidate with independently owned scene and endpoint capabilities.
+	 *
+	 * @param {Flat32RuntimeConfiguration} configuration - Scene, mode and lifecycle collaborators.
 	 */
 	constructor(configuration) {
 		this._sceneRuntime = configuration.sceneRuntime;
@@ -104,7 +96,7 @@ export class Algorithm32Runtime {
 
 	/** Call this method to prepare then publish a coherent distant scene without rebuilding the runtime.
 	 * @param {Flat32ApplicationState} state - Requested application observation.
-	 * @param {{signal: AbortSignal}} request - Mode-controller cancellation.
+	 * @param {Flat32SharedSceneUpdateRequest} request - Cancellation and optional premeasured physical environment.
 	 * @returns {Promise<Flat32AtmosphereSummary>} - Updated stable-runtime summary.
 	 */
 	async updateSharedScene(state, request) {
@@ -141,6 +133,7 @@ export class Algorithm32Runtime {
 				scatteringCache: view,
 				identity: `flat32-shared:${candidate.snapshot.generation}:${state.observation.instant}:${degrees}`,
 				signal: cancellation.signal,
+				environmentSample: request.environmentSample,
 			});
 			cancellation.signal.throwIfAborted();
 			await this._sceneRuntime.atFrameBoundary(() => {
@@ -173,6 +166,36 @@ export class Algorithm32Runtime {
 			request.signal.removeEventListener('abort', abort);
 			if (this._liveCancellation === cancellation) this._liveCancellation = null;
 		}
+	}
+
+	/**
+	 * Call this method to inspect installed rendering state without exposing shader handles.
+	 * Disposed runtimes throw.
+	 *
+	 * @returns {Flat32RuntimeEvidenceSnapshot} - Caller-owned diagnostic snapshot.
+	 */
+	describeEvidence() {
+		this._assertUsable();
+		const diagnostics = this._shaderHandle?.getDiagnostics();
+		if (
+			diagnostics &&
+			(typeof diagnostics !== 'object' ||
+				!('status' in diagnostics) ||
+				typeof diagnostics.status !== 'string' ||
+				!('modelVersion' in diagnostics) ||
+				typeof diagnostics.modelVersion !== 'number')
+		) {
+			throw new Error('Algorithm32 shader evidence lacks installation/version facts.');
+		}
+		/** Verified renderer-independent facts. @type {Flat32ShaderEvidenceSnapshot | null} */
+		const facts = /** @type {Flat32ShaderEvidenceSnapshot | null} */ (diagnostics ?? null);
+		const shader = facts ? {status: facts.status, modelVersion: facts.modelVersion} : null;
+		return {
+			installed: this._installed,
+			frameCount: this._runtimeFrameCount,
+			shader,
+			shaderErrors: [...this._shaderErrors],
+		};
 	}
 
 	/** Release renderer-owned resources while their invalid WebGL context remains lost. */

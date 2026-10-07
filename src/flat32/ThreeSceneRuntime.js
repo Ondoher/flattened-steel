@@ -29,6 +29,14 @@ export class ThreeSceneRuntime {
 	atFrameBoundary(operation, signal) {
 		if (this._disposed || !this._started) return Promise.reject(new Error('Scene renderer is not running.'));
 		signal.throwIfAborted();
+		if (this._frameCadence === 'manual') {
+			try {
+				operation();
+				return Promise.resolve();
+			} catch (error) {
+				return Promise.reject(error);
+			}
+		}
 		if (this._frameBoundaryOperations.size >= 4)
 			return Promise.reject(new Error('Frame publication queue is full.'));
 		return new Promise((resolve, reject) => {
@@ -48,10 +56,21 @@ export class ThreeSceneRuntime {
 		});
 	}
 	/**
+	 * Creates a scene renderer with caller-selected cadence. Invalid cadence throws.
+	 *
 	 * @param {HTMLCanvasElement} canvas - Receives the solid scene.
 	 * @param {(message: string) => void} onFailure - Reports browser failures.
+	 * @param {Flat32SceneRuntimeConfiguration} [configuration] - Rendering cadence; browser frames by default.
 	 */
-	constructor(canvas, onFailure) {
+	constructor(canvas, onFailure, configuration = {}) {
+		const frameCadence = configuration.frameCadence ?? 'animation-frame';
+		if (!['animation-frame', 'manual'].includes(frameCadence)) {
+			throw new RangeError('Flat32 frame cadence must be animation-frame or manual.');
+		}
+		this._frameCadence = frameCadence;
+		const sceneColorPrecision = configuration.sceneColorPrecision ?? 'float16';
+		if (!['float16', 'float32'].includes(sceneColorPrecision)) throw new RangeError('Flat32 scene color precision is unsupported.');
+		this._sceneColorPrecision = sceneColorPrecision;
 		this._canvas = canvas;
 		this._onFailure = onFailure;
 		this._scene = new THREE.Scene();
@@ -290,7 +309,7 @@ void main() {
 			minFilter: THREE.LinearFilter,
 			magFilter: THREE.LinearFilter,
 			format: THREE.RGBAFormat,
-			type: THREE.HalfFloatType,
+			type: this._sceneColorPrecision === 'float32' ? THREE.FloatType : THREE.HalfFloatType,
 			depthBuffer: true,
 			stencilBuffer: false,
 		});
@@ -349,7 +368,9 @@ void main() {
 			this._renderOperation();
 			this._frameCount += 1;
 			this._canvas.dataset.flat32FrameCount = String(this._frameCount);
-			this._frameRequest = window.requestAnimationFrame(this._renderFrame);
+			if (this._frameCadence === 'animation-frame') {
+				this._frameRequest = window.requestAnimationFrame(this._renderFrame);
+			}
 		} catch (error) {
 			this._started = false;
 			this._frameRequest = null;
@@ -581,7 +602,23 @@ void main() {
 		window.addEventListener('resize', this._handleResize);
 		this._canvas.dataset.flat32RenderPath = 'direct-three';
 		this._started = true;
+		if (this._frameCadence === 'animation-frame') this._renderFrame();
+	}
+
+	/**
+	 * Call this method to render exactly one complete manual-cadence frame.
+	 * Disposed, stopped, or browser-cadence runtimes reject the operation. Render
+	 * failure is reported through the configured handler and also throws to the caller.
+	 *
+	 * @returns {number} - Completed render count after this frame.
+	 */
+	stepFrame() {
+		if (this._disposed || !this._started || this._frameCadence !== 'manual') {
+			throw new Error('Flat32 frame stepping requires a running manual-cadence runtime.');
+		}
 		this._renderFrame();
+		if (!this._started) throw new Error('Flat32 manual frame failed.');
+		return this._frameCount;
 	}
 
 	/**

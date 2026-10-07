@@ -1,6 +1,21 @@
 # Distant-Sun Strobing Production Promotion Status
 
-Current phase: the bounded 12:30 error attribution diagnostic is complete.
+Current phase: **P3 is authorized and active under independent execution.**
+Its baseline is `.codex-tmp/review-standards/session-eg11IP/p3-baseline.json`;
+new output and the decision/progress record are under
+`.codex-tmp/p3-strobing-20261007/`. The separately selectable p2 response and
+production-owned The Hours adapter are implemented. Actual GPU publication
+passes across all 109 scenes with complete cubic support and the existing
+two-atlas byte ceiling. Native early-ground diagnosis isolates the retained
+112/125 events to half-float scene-color storage: full-float removes both
+reversals with identical physical spectra, illuminance, cameras and Sun
+directions. Matched full-float daylight, sunrise and early-ground short proofs
+pass their lossless, independent-encoding and original-workflow gates using
+the declared 80 Mbps media candidate. Sunset source and independent encoding
+pass, but its browser encoding still exceeds the unchanged 1.5 ratio limit;
+additional encoder diagnosis remains active. The full film is gated on all
+short proofs. Native owner inspection and coupled source reviews remain open.
+The bounded 12:30 error attribution diagnostic is complete.
 The worst-ray regression is dominated by removal of first-order altitude
 interpolation overbrightness. Outgoing directional interpolation also dims
 that ray, by a smaller amount; actual incoming-quadrature error remains open.
@@ -12,7 +27,7 @@ physical and Bruneton
 qualification passes on its original Native48 grid. P0 controls,
 P1 implementation, and the complete physical matrix are recorded. The coupled
 P1-P3 source reviews and candidate appearance acceptance remain open, so formal
-implementation completion is not claimed. P3 and publication have not started.
+implementation completion is not claimed. Publication remains outside P3.
 
 The [plan](distant-sun-strobing-promotion-plan.md) owns phases and boundaries.
 The [acceptance policy](distant-sun-strobing-acceptance.md) owns the registered
@@ -144,18 +159,14 @@ complete pass remains open and is not included among the passing type checks.
 
 ## Next Actions
 
-1. Use the completed 12:30 attribution below to guide any further numerical
-   trial. Outgoing N1 interpolation accounts for only a small part of the
-   worst measured residual. Incoming angular integration remains a candidate
-   for a controlled convergence comparison; the uniform-input check alone
-   does not quantify its actual sky error. Preserve both grid controls and
-   the POC strobing requirements; no replacement is selected.
-2. Begin P3 when selected by the owner. Carry the selected POC baseline into
-   matched appearance comparisons before
-   selecting the anchored candidate. P3 owns p2, physical-light interpolation,
-   and the original film/recurrence gates.
-3. Complete proof-tool type cleanup and the planned batched primary/audit
-   reviews. Focused checks do not close these completion gates.
+1. Execute the selected P3 p2 model, production animation adapter and matched
+   short diagnostics. Retain Native48, the P2 physical candidate, and the POC
+   strobing baseline. Resolve recurrence before full-film rendering.
+2. Authenticate the unchanged candidate package and qualify all 109 scenes,
+   coherent lighting and the existing two-atlas budget.
+3. Complete automated film qualification and batched source reviews, then
+   present concrete native-resolution artifacts for owner inspection.
+   Publication and unrelated numerical trials remain unselected.
 
 ## Near-Ground Resolution Trial
 
@@ -522,7 +533,7 @@ historical and does not describe current checkpoint-monitoring eligibility.
 
 The 2026-10-07 topic transition restores production context while
 [Sky Accuracy Dials is suspended](../../poc-experiments/engineering-studies/sky-accuracy-dials/status.md#experiment-lifecycle).
-No next production implementation task is selected by this transition.
+The owner subsequently selected independent execution of P3.
 Its documentation baseline is
 `.codex-tmp/review-standards/session-hhktR8/baseline.json`, at HEAD
 `6cc5a283080ce14bfa31c44cfe3c52a712937c9e` with a clean initial worktree.
@@ -532,5 +543,7 @@ reactivation of folder-based reviews; the
 calibration, current activation session and experiment standards handoff.
 Checkpoint monitoring remains active independently, with the owner's standing
 advised-checkpoint approval and one-minute consultation limit. This governance
-work starts no production implementation, qualification run or deployment and
-claims no clean source review.
+work is complete. Current P3 reviewer readiness is recorded under
+`.codex-tmp/review-standards/session-eg11IP/`; it is readiness, not a clean
+source review. P3 implementation and qualification are active, with no
+publication or default switching authorized by this phase.

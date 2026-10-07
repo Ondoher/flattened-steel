@@ -1,0 +1,13 @@
+{
+	"extends": "../../../src/flat32/jsconfig.json",
+	"compilerOptions": {"types": ["node"], "maxNodeModuleJsDepth": 0},
+	"include": [
+		"../../../src/algorithm32/**/*.d.ts",
+		"../../../src/flat32/**/*.d.ts",
+		"../../algorithm32/solar-zenith-cache/*.d.ts",
+		"../../animation-evidence/**/*.d.ts",
+		"**/*.d.ts",
+		"**/*.js"
+	],
+	"exclude": ["../../../node_modules/**", "**/_tests/**"]
+}

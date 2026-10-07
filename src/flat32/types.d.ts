@@ -3,14 +3,40 @@ interface Window {
 	__flat32PerformanceSamples?: ShaderPerformanceSample[];
 }
 
-type Flat32ColorModelId = 'basic-bruneton' | 'color-reset-slope-078-p9' | 'ferwerda-control';
+/** Exact supported display-response identities.
+ *
+ * - **"basic-bruneton"** - Unchanged physical qualification display control.
+ * - **"color-reset-slope-078-p9"** - Existing production-default response.
+ * - **"color-reset-slope-078-p2"** - Separately selectable monotonic-brightness successor.
+ * - **"ferwerda-control"** - Explicit reference adaptation control.
+ */
+type Flat32ColorModelId =
+	'basic-bruneton' | 'color-reset-slope-078-p9' | 'color-reset-slope-078-p2' | 'ferwerda-control';
 
+/** Display responses whose fixed constants require only a model identity.
+ *
+ * - **"basic-bruneton"** - Unchanged Bruneton display control.
+ * - **"color-reset-slope-078-p9"** - Existing production-default response.
+ * - **"color-reset-slope-078-p2"** - Selectable monotonic successor.
+ */
+type Flat32FixedColorModelId = 'basic-bruneton' | 'color-reset-slope-078-p9' | 'color-reset-slope-078-p2';
+
+/** Explicit adaptation control identity.
+ *
+ * - **"ferwerda-control"** - Reference adaptation configuration.
+ */
+type Flat32AdaptationColorModelId = 'ferwerda-control';
+
+/** Caller-owned exact display selection; omission at application ingress retains p9. */
 type Flat32ColorDisplayModelConfiguration =
 	| Readonly<{
-			readonly model: 'basic-bruneton' | 'color-reset-slope-078-p9';
+			/** Exact fixed-response identity. */
+			readonly model: Flat32FixedColorModelId;
 	  }>
 	| Readonly<{
-			readonly model: 'ferwerda-control';
+			/** Explicit adaptation-control identity. */
+			readonly model: Flat32AdaptationColorModelId;
+			/** Nonnegative reference adaptation luminance, in cd m^-2. */
 			readonly adaptationLuminanceCdPerSquareMeter: number;
 	  }>;
 
@@ -78,7 +104,7 @@ interface Flat32AlgorithmRuntimeConfiguration {
 	/** Supply the scene owner. */
 	sceneRuntime: import('./ThreeSceneRuntime.js').ThreeSceneRuntime;
 	/** Supply ordinary endpoint-scene content. */
-	endpointScene: import('./EndpointScene.js').EndpointScene;
+	endpointScene: Flat32EndpointLighting;
 	/** Supply the supported atmospheric mode. */
 	mode: Flat32Mode;
 	/** Receive runtime failures. */
@@ -108,7 +134,7 @@ interface Flat32ModeControllerConfiguration {
 		configuration: Flat32AlgorithmRuntimeConfiguration,
 	) => import('./Algorithm32Runtime.js').Algorithm32Runtime;
 	/** Supply ordinary endpoint-scene content. */
-	endpointScene: import('./EndpointScene.js').EndpointScene;
+	endpointScene: Flat32EndpointLighting;
 	/** Receive scene preparation before candidate preflight. */
 	onPreparing: (kind: Flat32ModeKind, mode: Flat32Mode) => void;
 	/** Restore the last published scene after candidate failure. */
@@ -364,3 +390,90 @@ type Flat32FrameBoundaryOperation = {
 	/** Caller cancellation signal. */ signal: AbortSignal;
 	/** Call this method to remove a canceled queued publication. */ cancel(): void;
 };
+
+/** Renderer cadence selected by the scene owner.
+ *
+ * - **"animation-frame"** - Ordinary browser animation-frame rendering.
+ * - **"manual"** - Caller-owned complete frame stepping between publications.
+ */
+type Flat32FrameCadence = 'animation-frame' | 'manual';
+
+/** Caller-owned scene rendering configuration. */
+type Flat32SceneRuntimeConfiguration = Readonly<{
+	/** Cadence; omission selects ordinary browser animation frames. */
+	frameCadence?: Flat32FrameCadence;
+	/** Scene-linear color storage; omission retains the existing half-float path. */
+	sceneColorPrecision?: Flat32SceneColorPrecision;
+}>;
+
+/** Explicit scene-linear storage precision before physical display gain.
+ *
+ * - **"float16"** - Existing half-float production control.
+ * - **"float32"** - Full float precision for measured low-light composition.
+ */
+type Flat32SceneColorPrecision = 'float16' | 'float32';
+
+/** Independently implementable opaque endpoint and lighting capability. */
+interface Flat32EndpointLighting {
+	/** Apply matching physical source and receiver lighting before rendering. */
+	updateDistantSunLighting(
+		directionToSource: UnitVector3,
+		receiverLight: ReceiverEnvironmentLightMeasurement,
+		color: Color,
+	): void;
+	/** Return geometry bounds used to resolve physical scene depth. */
+	getSceneDepthEndpointPositions(): readonly ScenePosition[];
+}
+
+/** Optional premeasured environment input to stable shared-scene publication. */
+type Flat32ScenePublicationRequest = Readonly<{
+	/** Physical diffuse irradiance and adaptation for this observation; direct spectra remain exact-time. */
+	environmentSample?: ReceiverEnvironmentSample;
+}>;
+
+/** Shared-scene publication inputs with caller-owned cancellation. */
+type Flat32SharedSceneUpdateRequest = Flat32ScenePublicationRequest &
+	Readonly<{
+		/** Signal that cancels preparation before complete publication. */
+		signal: AbortSignal;
+	}>;
+
+/** Installed runtime diagnostics available without mutable rendering resources. */
+type Flat32RuntimeEvidenceSnapshot = Readonly<{
+	/** Whether the Algorithm32 path remains installed. */
+	installed: boolean;
+	/** Completed Algorithm32 frame count. */
+	frameCount: number;
+	/** Scalar shader installation and version facts; no renderer resources. */
+	shader: Flat32ShaderEvidenceSnapshot | null;
+	/** Independent copy of observed shader failures. */
+	shaderErrors: readonly string[];
+}>;
+
+/** Renderer-independent shader installation facts. */
+type Flat32ShaderEvidenceSnapshot = Readonly<{
+	/** Current shader installation status. */ status: string;
+	/** Current configured physical model version. */ modelVersion: number;
+}>;
+
+/** Direct-construction configuration for the production atmosphere runtime. */
+type Flat32RuntimeConfiguration = Readonly<{
+	/** Runtime-owned scene/rendering coordinator. */
+	sceneRuntime: import('./ThreeSceneRuntime.js').ThreeSceneRuntime;
+	/** Independently owned opaque endpoint lighting. */
+	endpointScene: Flat32EndpointLighting;
+	/** Supported atmosphere mode. */
+	mode: Flat32Mode;
+	/** Failure sink; a failed runtime restores ordinary scene rendering. */
+	onFailure: Flat32AtmosphereFailureHandler;
+	/** Isolated composer, otherwise borrowed from scene runtime. */
+	composer?: import('three/examples/jsm/postprocessing/EffectComposer.js').EffectComposer;
+	/** Isolated composer's owned target. */
+	composerRenderTarget?: import('three').WebGLRenderTarget;
+	/** Delay installation until controller publication. */
+	deferPublication?: boolean;
+	/** Initial atmosphere composition state; enabled by default. */
+	atmosphereEnabled?: boolean;
+	/** Optional performance measurement callback. */
+	performanceCallback?: ShaderPerformanceCallback;
+}>;
