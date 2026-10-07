@@ -9,11 +9,20 @@ const SHA256 = /^[a-f0-9]{64}$/u;
 const CONTENT_HASH = /^sha256:[a-f0-9]{64}$/u;
 const ASSET_IDENTITY = /^algorithm32-b1-direct40-cache-sha256:[a-f0-9]{64}$/u;
 
+/** Called by set identity computation to omit the derived identity from its own hash input.
+ *
+ * @param {object} record - Serialized set record.
+ * @returns {object} - Set payload without its derived identity.
+ */
 function identityPayload(record) {
 	const {setIdentity: _setIdentity, ...payload} = record;
 	return payload;
 }
 
+/** Called by set validation to reject noncanonical or escaping asset paths.
+ *
+ * @param {string} value - Set-relative asset path.
+ */
 function requireRelativePath(value) {
 	if (
 		typeof value !== 'string' ||
@@ -40,15 +49,29 @@ export default class B1Direct40CacheAssetSetManifest {
 		throw new RangeError('B1 direct-40 position domain is unsupported.');
 	}
 
+	/** Call this method to compute the canonical identity of a complete asset set.
+	 *
+	 * @param {object} record - Serialized set record.
+	 * @returns {string} - Content-addressed set identity.
+	 */
 	static computeSetIdentity(record) {
 		return `${SET_IDENTITY_PREFIX}${CanonicalValueHash.sha256Value(identityPayload(record)).slice('sha256:'.length)}`;
 	}
 
+	/** Call this method to identify a complete ordered asset set.
+	 *
+	 * @param {object} definition - Serialized set definition.
+	 * @returns {object} - Identified set record.
+	 */
 	static createRecord(definition) {
 		const record = {...definition, schemaId: B1_DIRECT40_CACHE_ASSET_SET_SCHEMA};
 		return Object.freeze({...record, setIdentity: this.computeSetIdentity(record)});
 	}
 
+	/** Creates a validator for one ordered set of benchmark asset identities.
+	 *
+	 * @param {object} record - Serialized set record to validate.
+	 */
 	constructor(record) {
 		if (!record || record.schemaId !== B1_DIRECT40_CACHE_ASSET_SET_SCHEMA) {
 			throw new RangeError('B1 direct-40 cache asset-set schema is incompatible.');
@@ -84,6 +107,10 @@ export default class B1Direct40CacheAssetSetManifest {
 		this.record = record;
 	}
 
+	/** Call this method to return the validated serialized asset-set record.
+	 *
+	 * @returns {object} - Validated set record.
+	 */
 	toRecord() {
 		return this.record;
 	}

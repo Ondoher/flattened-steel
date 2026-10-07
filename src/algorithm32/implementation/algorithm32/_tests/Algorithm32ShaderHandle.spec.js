@@ -5,10 +5,10 @@ import {NATIVE_15_SPECTRAL_BASIS} from '../../../profiles/index.js';
 /**
  * Called by this module to create build result. Conditional result values are selected from the accepted input and current state.
  *
- * @param modelVersion - The model version value accepted by the operation.
- * @param controller - The controller value accepted by the operation.
- * @param runtime - The runtime value accepted by the operation.
- * @returns - The result produced by the operation.
+ * @param {number} modelVersion - The model version value accepted by the operation.
+ * @param {object|null} controller - The controller value accepted by the operation.
+ * @param {object|null} runtime - The runtime value accepted by the operation.
+ * @returns {ShaderBuildResult} - The result produced by the operation.
  */
 function createBuildResult(modelVersion, controller = null, runtime = null) {
 	return {
@@ -39,9 +39,9 @@ function createBuildResult(modelVersion, controller = null, runtime = null) {
 /**
  * Called by this module to create controller.
  *
- * @param name - The name value accepted by the operation.
- * @param events - The events value accepted by the operation.
- * @returns - The result produced by the operation.
+ * @param {string} name - The name value accepted by the operation.
+ * @param {string[]} events - The events value accepted by the operation.
+ * @returns {object} - The result produced by the operation.
  */
 function createController(name, events = []) {
 	return {
@@ -57,9 +57,9 @@ function createController(name, events = []) {
 /**
  * Called by this module to create runtime.
  *
- * @param name - The name value accepted by the operation.
- * @param events - The events value accepted by the operation.
- * @returns - The result produced by the operation.
+ * @param {string} name - The name value accepted by the operation.
+ * @param {string[]} events - The events value accepted by the operation.
+ * @returns {object} - The result produced by the operation.
  */
 function createRuntime(name, events = []) {
 	return {
@@ -72,7 +72,7 @@ function createRuntime(name, events = []) {
 		/**
 		 * Called by create runtime to read diagnostics.
 		 *
-		 * @returns - The callback result returned to its caller.
+		 * @returns {object} - The callback result returned to its caller.
 		 */ getDiagnostics: () => ({name}),
 	};
 }
@@ -93,8 +93,8 @@ function createDeferredBuildResult() {
 /**
  * Called by this module to create state.
  *
- * @param options - The optional operation choices.
- * @returns - The result produced by the operation.
+ * @param {object} options - The optional operation choices.
+ * @returns {object} - The result produced by the operation.
  */
 function createState(options = {}) {
 	const oldController = options.oldController ?? createController('old');
@@ -127,10 +127,10 @@ function createState(options = {}) {
 			/**
 			 * Called by the Jasmine spy to handle one callback invocation.
 			 *
-			 * @param setup - The setup value accepted by the operation.
-			 * @param config - The config value accepted by the operation.
-			 * @param lifecycle - The lifecycle value accepted by the operation.
-			 * @returns - The callback result returned to its caller.
+			 * @param {object} setup - The setup value accepted by the operation.
+			 * @param {object} config - The config value accepted by the operation.
+			 * @param {object} lifecycle - The lifecycle value accepted by the operation.
+			 * @returns {object} - The callback result returned to its caller.
 			 */ (setup, config, lifecycle) => ({
 				setup,
 				config,
@@ -485,7 +485,7 @@ describe('Algorithm32ShaderHandle', /** Called by Jasmine to register the named 
 			/**
 			 * Called by Jasmine to invoke the operation whose outcome is asserted.
 			 *
-			 * @returns - The callback result returned to its caller.
+			 * @returns {object} - The callback result returned to its caller.
 			 */ () => handle.getDiagnostics(),
 		).toThrowError(/disposed/);
 	});
@@ -501,7 +501,7 @@ describe('Algorithm32ShaderHandle', /** Called by Jasmine to register the named 
 			/**
 			 * Called by Jasmine to invoke the operation whose outcome is asserted.
 			 *
-			 * @returns - The callback result returned to its caller.
+			 * @returns {object} - The callback result returned to its caller.
 			 */ () => handle.dispose(),
 		).toThrowError(/runtime disposal failed/);
 		expect(runtime.dispose).toHaveBeenCalledTimes(1);
@@ -511,7 +511,7 @@ describe('Algorithm32ShaderHandle', /** Called by Jasmine to register the named 
 			/**
 			 * Called by Jasmine to invoke the operation whose outcome is asserted.
 			 *
-			 * @returns - The callback result returned to its caller.
+			 * @returns {object} - The callback result returned to its caller.
 			 */ () => handle.getDiagnostics(),
 		).toThrowError(/disposed/);
 	});

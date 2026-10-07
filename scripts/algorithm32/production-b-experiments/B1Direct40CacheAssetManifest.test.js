@@ -11,10 +11,19 @@ import B1Direct40CacheAssetManifest, {
 const HASH = 'a'.repeat(64);
 const CONDITION = Object.freeze({id: 'b1-09:30', localTime: '09:30'});
 
+/** Called by manifest tests to create the registered unchanged physical profile.
+ *
+ * @returns {Algorithm32ExecutionProfile} - Benchmark execution profile.
+ */
 function profile() {
 	return createBrunetonProductionProfile({time: '09:30', fittedAzimuthDegrees: 179.5, maximumScatteringOrder: 4});
 }
 
+/** Called by manifest tests to assemble a valid serialized asset fixture.
+ *
+ * @param {Algorithm32ExecutionProfile} [selectedProfile] - Optional benchmark profile override.
+ * @returns {object} - Serialized asset fixture.
+ */
 function definition(selectedProfile = profile()) {
 	return {
 		profile: {

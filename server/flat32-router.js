@@ -1,7 +1,7 @@
 import {createReadStream} from 'node:fs';
 import path from 'node:path';
 
-import {createProductionSharedCacheService} from './flat32/features/shared-cache/selection.js';
+import {createProductionSharedCacheService} from './flat32/features/shared-cache/index.js';
 import {createStellarCatalogPackageService} from './flat32/StellarCatalogPackageService.js';
 import {createHumanVisionFilterPackageService} from './flat32/HumanVisionFilterPackageService.js';
 

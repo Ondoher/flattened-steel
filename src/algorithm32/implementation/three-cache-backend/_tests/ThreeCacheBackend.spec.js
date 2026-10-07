@@ -4,21 +4,23 @@ import {ThreeCacheBackend} from '../ThreeCacheBackend.js';
 class FakeVector4 {
 	/**
 	 * Creates a fake vector4 instance for the declared contract.
-	 * @param x - The x value accepted by the operation.
-	 * @param y - The y value accepted by the operation.
-	 * @param z - The z value accepted by the operation.
-	 * @param fourthComponent - The fourth component accepted by the operation.
+	 *
+	 * @param {number} x - The x value accepted by the operation.
+	 * @param {number} y - The y value accepted by the operation.
+	 * @param {number} z - The z value accepted by the operation.
+	 * @param {number} fourthComponent - The fourth component accepted by the operation.
 	 */ constructor(x = 0, y = 0, z = 0, fourthComponent = 0) {
 		this.set(x, y, z, fourthComponent);
 	}
 
 	/**
 	 * Call this method to set.
-	 * @param x - The x value accepted by the operation.
-	 * @param y - The y value accepted by the operation.
-	 * @param z - The z value accepted by the operation.
-	 * @param fourthComponent - The fourth component accepted by the operation.
-	 * @returns - The result produced by the operation.
+	 *
+	 * @param {number} x - The x value accepted by the operation.
+	 * @param {number} y - The y value accepted by the operation.
+	 * @param {number} z - The z value accepted by the operation.
+	 * @param {number} fourthComponent - The fourth component accepted by the operation.
+	 * @returns {FakeVector4} - The result produced by the operation.
 	 */ set(x, y, z, fourthComponent) {
 		this.x = x;
 		this.y = y;
@@ -29,7 +31,8 @@ class FakeVector4 {
 
 	/**
 	 * Call this method to clone.
-	 * @returns - The result produced by the operation.
+	 *
+	 * @returns {FakeVector4} - The result produced by the operation.
 	 */ clone() {
 		return new FakeVector4(this.x, this.y, this.z, this.w);
 	}
@@ -39,9 +42,10 @@ class FakeVector4 {
 class FakeVector3 {
 	/**
 	 * Creates a fake vector3 instance for the declared contract.
-	 * @param x - The x value accepted by the operation.
-	 * @param y - The y value accepted by the operation.
-	 * @param z - The z value accepted by the operation.
+	 *
+	 * @param {number} x - The x value accepted by the operation.
+	 * @param {number} y - The y value accepted by the operation.
+	 * @param {number} z - The z value accepted by the operation.
 	 */ constructor(x = 0, y = 0, z = 0) {
 		this.x = x;
 		this.y = y;
@@ -53,10 +57,11 @@ class FakeVector3 {
 class FakeTexture {
 	/**
 	 * Creates a fake texture instance for the declared contract.
-	 * @param values - The values value accepted by the operation.
-	 * @param width - The width value accepted by the operation.
-	 * @param height - The height value accepted by the operation.
-	 * @param depth - The depth value accepted by the operation.
+	 *
+	 * @param {ArrayLike<number>|null} values - The values value accepted by the operation.
+	 * @param {number} width - The width value accepted by the operation.
+	 * @param {number} height - The height value accepted by the operation.
+	 * @param {number} depth - The depth value accepted by the operation.
 	 */ constructor(values = null, width = 1, height = 1, depth = 1) {
 		this.values = values;
 		this.width = width;
@@ -79,10 +84,11 @@ class FakeDataArrayTexture extends FakeTexture {}
 class FakeArrayRenderTarget {
 	/**
 	 * Creates a fake array render target instance for the declared contract.
-	 * @param width - The width value accepted by the operation.
-	 * @param height - The height value accepted by the operation.
-	 * @param depth - The depth value accepted by the operation.
-	 * @param options - The optional operation choices.
+	 *
+	 * @param {number} width - The width value accepted by the operation.
+	 * @param {number} height - The height value accepted by the operation.
+	 * @param {number} depth - The depth value accepted by the operation.
+	 * @param {object} options - The optional operation choices.
 	 */ constructor(width, height, depth, options) {
 		this.width = width;
 		this.height = height;
@@ -108,8 +114,9 @@ class FakeGeometry {
 
 	/**
 	 * Call this method to set attribute.
-	 * @param name - The name value accepted by the operation.
-	 * @param value - The value accepted by the operation.
+	 *
+	 * @param {string} name - The name value accepted by the operation.
+	 * @param {object} value - The value accepted by the operation.
 	 */ setAttribute(name, value) {
 		this.attributes[name] = value;
 	}
@@ -123,8 +130,9 @@ class FakeGeometry {
 class FakeBufferAttribute {
 	/**
 	 * Creates a fake buffer attribute instance for the declared contract.
-	 * @param array - The array value accepted by the operation.
-	 * @param itemSize - The item size value accepted by the operation.
+	 *
+	 * @param {ArrayLike<number>} array - The array value accepted by the operation.
+	 * @param {number} itemSize - The item size value accepted by the operation.
 	 */ constructor(array, itemSize) {
 		this.array = array;
 		this.itemSize = itemSize;
@@ -135,7 +143,8 @@ class FakeBufferAttribute {
 class FakeMaterial {
 	/**
 	 * Creates a fake material instance for the declared contract.
-	 * @param configuration - The configuration value accepted by the operation.
+	 *
+	 * @param {object} configuration - The configuration value accepted by the operation.
 	 */ constructor(configuration) {
 		Object.assign(this, configuration);
 		this.disposeCount = 0;
@@ -150,8 +159,9 @@ class FakeMaterial {
 class FakeMesh {
 	/**
 	 * Creates a fake mesh instance for the declared contract.
-	 * @param geometry - The geometry value accepted by the operation.
-	 * @param material - The material value accepted by the operation.
+	 *
+	 * @param {FakeGeometry} geometry - The geometry value accepted by the operation.
+	 * @param {FakeMaterial} material - The material value accepted by the operation.
 	 */ constructor(geometry, material) {
 		this.geometry = geometry;
 		this.material = material;
@@ -167,7 +177,8 @@ class FakeScene {
 
 	/**
 	 * Call this method to add.
-	 * @param child - The child value accepted by the operation.
+	 *
+	 * @param {FakeMesh} child - The child value accepted by the operation.
 	 */ add(child) {
 		this.children.push(child);
 	}
@@ -201,16 +212,18 @@ class FakeContext {
 
 	/**
 	 * Call this method to read extension. Conditional result values are selected from the accepted input and current state.
-	 * @param name - The name value accepted by the operation.
-	 * @returns - The result produced by the operation.
+	 *
+	 * @param {string} name - The name value accepted by the operation.
+	 * @returns {object} - The result produced by the operation.
 	 */ getExtension(name) {
 		return name === 'EXT_color_buffer_float' && this.hasColorBufferFloat ? {} : null;
 	}
 
 	/**
 	 * Call this method to read parameter. It returns the value from the first satisfied branch, otherwise the operation's final fallback.
-	 * @param name - The name value accepted by the operation.
-	 * @returns - The result produced by the operation.
+	 *
+	 * @param {string} name - The name value accepted by the operation.
+	 * @returns {object} - The result produced by the operation.
 	 */ getParameter(name) {
 		if (name === this.MAX_TEXTURE_SIZE) {
 			return this.maximumTextureSize;
@@ -226,34 +239,38 @@ class FakeContext {
 
 	/**
 	 * Call this method to read shader precision format.
-	 * @returns - The result produced by the operation.
+	 *
+	 * @returns {object} - The result produced by the operation.
 	 */ getShaderPrecisionFormat() {
 		return {precision: 23};
 	}
 
 	/**
 	 * Call this method to check framebuffer status.
-	 * @returns - The result produced by the operation.
+	 *
+	 * @returns {object} - The result produced by the operation.
 	 */ checkFramebufferStatus() {
 		return this.framebufferStatus;
 	}
 
 	/**
 	 * Call this method to read buffer.
-	 * @param value - The value accepted by the operation.
+	 *
+	 * @param {object} value - The value accepted by the operation.
 	 */ readBuffer(value) {
 		this.readBufferValue = value;
 	}
 
 	/**
 	 * Call this method to read pixels.
-	 * @param x - The x value accepted by the operation.
-	 * @param y - The y value accepted by the operation.
-	 * @param width - The width value accepted by the operation.
-	 * @param height - The height value accepted by the operation.
-	 * @param format - The format value accepted by the operation.
-	 * @param type - The type value accepted by the operation.
-	 * @param output - The output value accepted by the operation.
+	 *
+	 * @param {number} x - The x value accepted by the operation.
+	 * @param {number} y - The y value accepted by the operation.
+	 * @param {number} width - The width value accepted by the operation.
+	 * @param {number} height - The height value accepted by the operation.
+	 * @param {number} format - The format value accepted by the operation.
+	 * @param {number} type - The type value accepted by the operation.
+	 * @param {Float32Array} output - The output value accepted by the operation.
 	 * @throws {Error} - When the operation cannot complete its caller-observable contract.
 	 */ readPixels(x, y, width, height, format, type, output) {
 		if (this.throwOnRead) {
@@ -268,7 +285,8 @@ class FakeContext {
 class FakeRenderer {
 	/**
 	 * Creates a fake renderer instance for the declared contract.
-	 * @param context - The execution context accepted by the operation.
+	 *
+	 * @param {FakeContext} context - The execution context accepted by the operation.
 	 */ constructor(context) {
 		this.capabilities = {isWebGL2: true};
 		this.context = context;
@@ -289,37 +307,42 @@ class FakeRenderer {
 
 	/**
 	 * Call this method to read context.
-	 * @returns - The result produced by the operation.
+	 *
+	 * @returns {FakeContext} - The result produced by the operation.
 	 */ getContext() {
 		return this.context;
 	}
 
 	/**
 	 * Call this method to read render target.
-	 * @returns - The result produced by the operation.
+	 *
+	 * @returns {FakeArrayRenderTarget|null} - The result produced by the operation.
 	 */ getRenderTarget() {
 		return this.target;
 	}
 
 	/**
 	 * Call this method to read active cube face.
-	 * @returns - The result produced by the operation.
+	 *
+	 * @returns {number} - The result produced by the operation.
 	 */ getActiveCubeFace() {
 		return this.layer;
 	}
 
 	/**
 	 * Call this method to read active mipmap level.
-	 * @returns - The result produced by the operation.
+	 *
+	 * @returns {number} - The result produced by the operation.
 	 */ getActiveMipmapLevel() {
 		return this.mipLevel;
 	}
 
 	/**
 	 * Call this method to set render target.
-	 * @param target - The target value accepted by the operation.
-	 * @param layer - The layer value accepted by the operation.
-	 * @param mipLevel - The mip level value accepted by the operation.
+	 *
+	 * @param {FakeArrayRenderTarget|null} target - The target value accepted by the operation.
+	 * @param {number} layer - The layer value accepted by the operation.
+	 * @param {number} mipLevel - The mip level value accepted by the operation.
 	 */ setRenderTarget(target, layer = 0, mipLevel = 0) {
 		this.target = target;
 		this.layer = layer;
@@ -328,18 +351,20 @@ class FakeRenderer {
 
 	/**
 	 * Call this method to read viewport.
-	 * @param target - The target value accepted by the operation.
-	 * @returns - The result produced by the operation.
+	 *
+	 * @param {FakeVector4} target - The target value accepted by the operation.
+	 * @returns {FakeVector4} - The result produced by the operation.
 	 */ getViewport(target) {
 		return target.set(this.viewport.x, this.viewport.y, this.viewport.z, this.viewport.w);
 	}
 
 	/**
 	 * Call this method to set viewport.
-	 * @param x - The x value accepted by the operation.
-	 * @param y - The y value accepted by the operation.
-	 * @param width - The width value accepted by the operation.
-	 * @param height - The height value accepted by the operation.
+	 *
+	 * @param {number|FakeVector4} x - The x value accepted by the operation.
+	 * @param {number} y - The y value accepted by the operation.
+	 * @param {number} width - The width value accepted by the operation.
+	 * @param {number} height - The height value accepted by the operation.
 	 */ setViewport(x, y, width, height) {
 		const value = x instanceof FakeVector4 ? x : new FakeVector4(x, y, width, height);
 		this.viewport = value.clone();
@@ -347,18 +372,20 @@ class FakeRenderer {
 
 	/**
 	 * Call this method to read scissor.
-	 * @param target - The target value accepted by the operation.
-	 * @returns - The result produced by the operation.
+	 *
+	 * @param {FakeVector4} target - The target value accepted by the operation.
+	 * @returns {FakeVector4} - The result produced by the operation.
 	 */ getScissor(target) {
 		return target.set(this.scissor.x, this.scissor.y, this.scissor.z, this.scissor.w);
 	}
 
 	/**
 	 * Call this method to set scissor.
-	 * @param x - The x value accepted by the operation.
-	 * @param y - The y value accepted by the operation.
-	 * @param width - The width value accepted by the operation.
-	 * @param height - The height value accepted by the operation.
+	 *
+	 * @param {number|FakeVector4} x - The x value accepted by the operation.
+	 * @param {number} y - The y value accepted by the operation.
+	 * @param {number} width - The width value accepted by the operation.
+	 * @param {number} height - The height value accepted by the operation.
 	 */ setScissor(x, y, width, height) {
 		const value = x instanceof FakeVector4 ? x : new FakeVector4(x, y, width, height);
 		this.scissor = value.clone();
@@ -366,21 +393,24 @@ class FakeRenderer {
 
 	/**
 	 * Call this method to read scissor test.
-	 * @returns - The result produced by the operation.
+	 *
+	 * @returns {boolean} - The result produced by the operation.
 	 */ getScissorTest() {
 		return this.scissorTest;
 	}
 
 	/**
 	 * Call this method to set scissor test.
-	 * @param value - The value accepted by the operation.
+	 *
+	 * @param {boolean} value - The value accepted by the operation.
 	 */ setScissorTest(value) {
 		this.scissorTest = value;
 	}
 
 	/**
 	 * Call this method to compile.
-	 * @param scene - The scene value accepted by the operation.
+	 *
+	 * @param {object} scene - The scene value accepted by the operation.
 	 * @throws {Error} - When the operation cannot complete its caller-observable contract.
 	 */ compile(scene) {
 		this.compileCount += 1;
@@ -392,7 +422,8 @@ class FakeRenderer {
 
 	/**
 	 * Call this method to render.
-	 * @param scene - The scene value accepted by the operation.
+	 *
+	 * @param {object} scene - The scene value accepted by the operation.
 	 * @throws {Error} - When the operation cannot complete its caller-observable contract.
 	 */ render(scene) {
 		this.renderCount += 1;
@@ -435,7 +466,8 @@ const FAKE_THREE = {
 
 /**
  * Called by this module to create harness.
- * @returns - The result produced by the operation.
+ *
+ * @returns {object} - The result produced by the operation.
  */
 function createHarness() {
 	const context = new FakeContext();
@@ -453,8 +485,9 @@ const TEST_FIELD_STORAGE = {
 
 /**
  * Called by this module to test field spec.
- * @param id - The id value accepted by the operation.
- * @returns - The result produced by the operation.
+ *
+ * @param {string} id - The id value accepted by the operation.
+ * @returns {object} - The result produced by the operation.
  */
 function testFieldSpec(id = 'test-output') {
 	return {
@@ -465,8 +498,9 @@ function testFieldSpec(id = 'test-output') {
 
 /**
  * Called by this module to scalar binding.
- * @param value - The value accepted by the operation.
- * @returns - The result produced by the operation.
+ *
+ * @param {number} value - The value accepted by the operation.
+ * @returns {object} - The result produced by the operation.
  */
 function scalarBinding(value) {
 	return {
@@ -483,8 +517,9 @@ function scalarBinding(value) {
 
 /**
  * Called by this module to scalar shader.
- * @param binding - The binding value accepted by the operation.
- * @returns - The result produced by the operation.
+ *
+ * @param {ShaderUniformBinding} binding - The binding value accepted by the operation.
+ * @returns {object} - The result produced by the operation.
  */
 function scalarShader(binding = scalarBinding(0)) {
 	return {
@@ -505,9 +540,10 @@ void main() {
 
 /**
  * Called by this module to capture state.
- * @param renderer - The renderer value accepted by the operation.
- * @param context - The execution context accepted by the operation.
- * @returns - The result produced by the operation.
+ *
+ * @param {FakeRenderer} renderer - The renderer value accepted by the operation.
+ * @param {FakeContext} context - The execution context accepted by the operation.
+ * @returns {object} - The result produced by the operation.
  */
 function captureState(renderer, context) {
 	return {
@@ -523,9 +559,10 @@ function captureState(renderer, context) {
 
 /**
  * Called by this module to expect state.
- * @param renderer - The renderer value accepted by the operation.
- * @param context - The execution context accepted by the operation.
- * @param expected - The expected value accepted by the operation.
+ *
+ * @param {FakeRenderer} renderer - The renderer value accepted by the operation.
+ * @param {FakeContext} context - The execution context accepted by the operation.
+ * @param {object} expected - The expected value accepted by the operation.
  */
 function expectState(renderer, context, expected) {
 	expect(renderer.target).toBe(expected.target);
@@ -568,7 +605,8 @@ describe('ThreeCacheBackend', /** Called by Jasmine to register the named test s
 		expect(
 			/**
 			 * Called by Jasmine to invoke the operation whose outcome is asserted.
-			 * @returns - The callback result returned to its caller.
+			 *
+			 * @returns {object} - The callback result returned to its caller.
 			 */ () => new ThreeCacheBackend({THREE: FAKE_THREE, renderer}),
 		).toThrowError(/requires WebGL2/u);
 		renderer.capabilities.isWebGL2 = true;
@@ -576,7 +614,8 @@ describe('ThreeCacheBackend', /** Called by Jasmine to register the named test s
 		expect(
 			/**
 			 * Called by Jasmine to invoke the operation whose outcome is asserted.
-			 * @returns - The callback result returned to its caller.
+			 *
+			 * @returns {object} - The callback result returned to its caller.
 			 */ () => new ThreeCacheBackend({THREE: FAKE_THREE, renderer}),
 		).toThrowError(/EXT_color_buffer_float/u);
 	});
@@ -759,7 +798,8 @@ describe('ThreeCacheBackend', /** Called by Jasmine to register the named test s
 		expect(
 			/**
 			 * Called by Jasmine to invoke the operation whose outcome is asserted.
-			 * @returns - The callback result returned to its caller.
+			 *
+			 * @returns {object} - The callback result returned to its caller.
 			 */ () => backend.submitLayer(request),
 		).toThrowError(/synthetic render failure/u);
 		expectState(renderer, context, expected);
@@ -835,7 +875,8 @@ describe('ThreeCacheBackend', /** Called by Jasmine to register the named test s
 		expect(
 			/**
 			 * Called by Jasmine to invoke the operation whose outcome is asserted.
-			 * @returns - The callback result returned to its caller.
+			 *
+			 * @returns {object} - The callback result returned to its caller.
 			 */ () =>
 				second.createRuntimeBinding({
 					field,
@@ -845,7 +886,8 @@ describe('ThreeCacheBackend', /** Called by Jasmine to register the named test s
 		expect(
 			/**
 			 * Called by Jasmine to invoke the operation whose outcome is asserted.
-			 * @returns - The callback result returned to its caller.
+			 *
+			 * @returns {object} - The callback result returned to its caller.
 			 */ () =>
 				second.installRuntimeBindings({
 					bindings: {backendId: first.id, bindings: [runtimeBinding]},
@@ -857,7 +899,8 @@ describe('ThreeCacheBackend', /** Called by Jasmine to register the named test s
 		expect(
 			/**
 			 * Called by Jasmine to invoke the operation whose outcome is asserted.
-			 * @returns - The callback result returned to its caller.
+			 *
+			 * @returns {object} - The callback result returned to its caller.
 			 */ () =>
 				first.installRuntimeBindings({
 					bindings: {
@@ -872,7 +915,8 @@ describe('ThreeCacheBackend', /** Called by Jasmine to register the named test s
 		expect(
 			/**
 			 * Called by Jasmine to invoke the operation whose outcome is asserted.
-			 * @returns - The callback result returned to its caller.
+			 *
+			 * @returns {object} - The callback result returned to its caller.
 			 */ () =>
 				first.installRuntimeBindings({
 					bindings: {backendId: first.id, bindings: [runtimeBinding]},
@@ -882,7 +926,8 @@ describe('ThreeCacheBackend', /** Called by Jasmine to register the named test s
 		expect(
 			/**
 			 * Called by Jasmine to invoke the operation whose outcome is asserted.
-			 * @returns - The callback result returned to its caller.
+			 *
+			 * @returns {object} - The callback result returned to its caller.
 			 */ () =>
 				first.submitLayer({
 					program,
@@ -909,7 +954,8 @@ describe('ThreeCacheBackend', /** Called by Jasmine to register the named test s
 		expect(
 			/**
 			 * Called by Jasmine to invoke the operation whose outcome is asserted.
-			 * @returns - The callback result returned to its caller.
+			 *
+			 * @returns {object} - The callback result returned to its caller.
 			 */ () =>
 				first.createRuntimeBinding({
 					field,
@@ -919,7 +965,8 @@ describe('ThreeCacheBackend', /** Called by Jasmine to register the named test s
 		expect(
 			/**
 			 * Called by Jasmine to invoke the operation whose outcome is asserted.
-			 * @returns - The callback result returned to its caller.
+			 *
+			 * @returns {object} - The callback result returned to its caller.
 			 */ () =>
 				first.installRuntimeBindings({
 					bindings: {backendId: first.id, bindings: [runtimeBinding]},

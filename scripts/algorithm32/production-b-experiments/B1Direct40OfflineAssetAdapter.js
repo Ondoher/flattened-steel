@@ -34,16 +34,31 @@ const BROWSER_MODULE =
 	'/repository/scripts/algorithm32/production-b-experiments/runB1Direct40OfflineCompilerBrowser.js';
 const LOGICAL_LAYER_BYTE_LENGTH = 48 * 4374 * Float32Array.BYTES_PER_ELEMENT;
 
+/** Called by asset materialization to hash exact input bytes.
+ *
+ * @param {Uint8Array|string} bytes - Payload bytes or canonical JSON text.
+ * @returns {string} - Lowercase SHA-256 digest.
+ */
 function sha256(bytes) {
 	return createHash('sha256').update(bytes).digest('hex');
 }
 
+/** Called by immutable output assembly to copy JSON-safe control data.
+ *
+ * @param {object} value - Serializable control data.
+ * @returns {object} - Independent JSON copy.
+ */
 function jsonControl(value) {
 	return JSON.parse(JSON.stringify(value, (_key, item) => (ArrayBuffer.isView(item) ? Array.from(item) : item)));
 }
 
 /** Production-owned adapter that emits immutable direct-40 cache assets for the B1 condition family. */
 export default class B1Direct40OfflineAssetAdapter extends DistantSunSceneCacheOfflineCompiler {
+	/** Called by materialization to validate an exclusive destination below the selected output root.
+	 *
+	 * @param {string} target - Absolute proposed output directory.
+	 * @returns {Promise<string>} - Checked absolute destination.
+	 */
 	async _requireContainedTarget(target) {
 		const resolved = path.resolve(target);
 		const allowedRoot = path.resolve(
@@ -63,6 +78,11 @@ export default class B1Direct40OfflineAssetAdapter extends DistantSunSceneCacheO
 		return resolved;
 	}
 
+	/** Called by asset-set assembly to allocate a new exclusive set directory.
+	 *
+	 * @param {string} target - Proposed set directory.
+	 * @returns {Promise<string>} - Checked new set directory.
+	 */
 	async _createSetDirectory(target) {
 		const outputDirectory = await this._requireContainedTarget(target);
 		await lstat(outputDirectory)
@@ -79,6 +99,11 @@ export default class B1Direct40OfflineAssetAdapter extends DistantSunSceneCacheO
 		return outputDirectory;
 	}
 
+	/** Called by condition compilation to build the unchanged physical benchmark profile.
+	 *
+	 * @param {object} condition - Registered benchmark Sun condition.
+	 * @returns {Algorithm32ExecutionProfile} - Complete physical production profile.
+	 */
 	_createProfile(condition) {
 		if (
 			!condition ||
@@ -95,6 +120,11 @@ export default class B1Direct40OfflineAssetAdapter extends DistantSunSceneCacheO
 		});
 	}
 
+	/** Call this method to compile and materialize one authenticated benchmark condition.
+	 *
+	 * @param {object} request - Condition, output, compiler, and source-identity inputs.
+	 * @returns {Promise<object>} - Materialized asset and its derivation identities.
+	 */
 	async compileCondition({outputDirectory: requestedOutput, condition, productionRevision, numericalPolicy}) {
 		if (typeof productionRevision !== 'string' || productionRevision.length === 0) {
 			throw new TypeError('B1 direct-40 compilation requires an explicit production revision.');
@@ -226,6 +256,11 @@ export default class B1Direct40OfflineAssetAdapter extends DistantSunSceneCacheO
 		return {outputDirectory, manifestPath, manifestSha256, manifest: record, profile};
 	}
 
+	/** Call this method to materialize the complete ordered benchmark asset family.
+	 *
+	 * @param {object} request - Set output, compiler, and source-identity inputs.
+	 * @returns {Promise<object>} - Complete set record and materialized asset results.
+	 */
 	async compileSet({outputDirectory: requestedOutput, conditions, productionRevision, numericalPolicy}) {
 		if (
 			!Array.isArray(conditions) ||

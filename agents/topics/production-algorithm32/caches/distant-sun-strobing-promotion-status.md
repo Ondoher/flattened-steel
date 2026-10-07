@@ -11,6 +11,16 @@ P4 baseline: `.codex-tmp/review-standards/session-cO9bp0/baseline.json`.
 P4 progress, preparation, verification, and decisions are retained under
 `.codex-tmp/p4-strobing-20261007/`. Broader coupled numerical source review and
 outstanding experiment reviews remain release gates.
+The first approval boundary is a proposed type-only repair in the unselected
+recording-strobing and shadow-animation experiment source roots. The outstanding
+contracts review found eight inline shared-shape violations; the current local
+type check also reports three diagnostics. The eleven-file proposed patch stays
+under the P4 output root, passes a virtual type check with zero diagnostics, and
+preserves executable JavaScript. Applying it requires explicit scope approval
+under the repository's experiment boundary. Complete coupled source review and
+deployment approval follow that repair; production qualification and compatible
+rollback preparation already pass. The task summary owns the exact patch,
+independent confirmation, production checks, and resumption instructions.
 The [release preparation](distant-sun-strobing-release.md) owns the concrete
 publication/default proposal and compatible rollback. Final P4 gate receipts
 are owned by `.codex-tmp/p4-strobing-20261007/summary.md` and its linked

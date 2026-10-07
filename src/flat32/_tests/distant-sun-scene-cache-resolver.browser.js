@@ -11,6 +11,10 @@ import {
 	FLAT32_DISTANT_SUN_SHARED_CACHE_FORMAT_ID,
 } from '../consts.js';
 
+/** Called by resolver tests to construct the full 109-scene selection catalog.
+ *
+ * @returns {object} - Complete dense catalog fixture.
+ */
 function catalog() {
 	return {
 		schemaId: 'algorithm32-distant-sun-runtime-catalog-v1',
@@ -53,6 +57,11 @@ function catalog() {
 	};
 }
 
+/** Called by resolver tests to construct a shared-cache response at the requested solar angle.
+ *
+ * @param {number} degrees - Requested solar zenith in degrees.
+ * @returns {object} - Ready or dark shared-cache response fixture.
+ */
 function shared(degrees) {
 	const identity = 'a'.repeat(64);
 	return {

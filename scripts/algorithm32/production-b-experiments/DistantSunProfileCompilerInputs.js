@@ -9,6 +9,10 @@ const EXPECTED_OUTGOING_FACE_WIDTH = 27;
 const EXPECTED_OUTGOING_COUNT = 4374;
 const EXPECTED_POSITION_COUNT = 48;
 
+/** Called by compiler-input assembly to reject unsupported physical or numerical profiles.
+ *
+ * @param {Algorithm32ExecutionProfile} profile - Complete production execution profile.
+ */
 function requireProfile(profile) {
 	if (!profile || profile.kind !== EXPECTED_PROFILE_KIND) {
 		throw new TypeError('Profile-driven distant-Sun compilation requires one complete execution profile.');
@@ -41,6 +45,11 @@ function requireProfile(profile) {
 	}
 }
 
+/** Called by compiler-input assembly to derive the exact explicit source zenith.
+ *
+ * @param {Algorithm32ExecutionProfile} profile - Profile with explicit distant-source placement.
+ * @returns {object} - Single indexed source-zenith node.
+ */
 function solarZenithNode(profile) {
 	const direction = profile.models.sourcePlacement.placement.directionToLight;
 	if (!Array.isArray(direction) || direction.length !== 3) {
@@ -50,6 +59,11 @@ function solarZenithNode(profile) {
 	return Object.freeze({index: 0, solarZenithDegrees: (Math.acos(cosine) * 180) / Math.PI, muS: cosine});
 }
 
+/** Called by compiler-input assembly to retain matched irradiance, scattering, and ground spectra.
+ *
+ * @param {Algorithm32ExecutionProfile} profile - Profile with matched spectral packets.
+ * @returns {object[]} - Ordered compiler spectral channel records.
+ */
 function spectrumChannels(profile) {
 	const basis = profile.spectral.basis;
 	const source = profile.spectral.sourceIrradianceDensity;
@@ -76,6 +90,12 @@ function spectrumChannels(profile) {
 
 /** Convert one explicit production profile into the reusable offline recurrence request. */
 export const DistantSunProfileCompilerInputs = Object.freeze({
+	/** Call this method to translate a validated execution profile into offline compiler inputs.
+	 *
+	 * @param {Algorithm32ExecutionProfile} profile - Complete supported production execution profile.
+	 * @param {object} [options] - Explicit compiler numerical-policy selection.
+	 * @returns {object} - Complete domains and transport specification.
+	 */
 	createInputSet(profile, options = {}) {
 		requireProfile(profile);
 		const geometryPolicy = DistantSunSceneCacheNumerics.accept(options.numericalPolicy);

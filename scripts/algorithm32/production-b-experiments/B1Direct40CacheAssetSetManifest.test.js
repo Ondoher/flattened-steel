@@ -6,6 +6,10 @@ import B1Direct40CacheAssetSetManifest, {B1_DIRECT40_PROFILE_FAMILY} from './B1D
 
 const HASH = 'a'.repeat(64);
 
+/** Called by asset-set tests to construct an ordered complete benchmark set.
+ *
+ * @returns {object} - Valid serialized set fixture.
+ */
 function definition() {
 	return {
 		profileFamily: B1_DIRECT40_PROFILE_FAMILY,

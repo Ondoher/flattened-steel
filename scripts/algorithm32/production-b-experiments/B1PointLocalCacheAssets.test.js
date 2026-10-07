@@ -34,6 +34,12 @@ test('preserves exact values across all 40 channels, multiple rows, and every W2
 	assert.throws(() => DistantSunSceneCacheAtlas.pack(new Float32Array(1), directions, 2, 40), /dimensions/);
 });
 
+/** Called by point-local tests to assemble exact interpolation and position-domain support.
+ *
+ * @param {DistantSunSolarInterpolationMethod} solarInterpolation - Selected source-angle interpolation.
+ * @param {SphericalNativePositionDomainSelection} positionDomain - Selected altitude construction domain.
+ * @returns {object} - Matched request, result, profile, and compiled cache fixture.
+ */
 function receiverLocalFixture(solarInterpolation, positionDomain) {
 	const condition = {id: 'b1-09:30', localTime: '09:30'};
 	const profile = createBrunetonProductionProfile({

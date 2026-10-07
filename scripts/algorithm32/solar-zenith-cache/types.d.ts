@@ -175,7 +175,11 @@ type DistantSunPointLocalExecutionProfile = Algorithm32ExecutionProfile &
 				lightSource: LightSourceModel & Readonly<{/** Executable source category. */ kind: string}>;
 				/** Canonical atmosphere and its complete density/phase configuration. */
 				atmosphere: AtmosphereModel &
-					Readonly<{/** Physical atmosphere configuration. */ constants: CanonicalAtmosphereConstants}>;
+					Readonly<{
+						/** Physical atmosphere configuration. */ constants: CanonicalAtmosphereConstants;
+						/** Exact sea-level Rayleigh packet aligned to the selected spectral basis. */ seaLevelRayleighScattering: SpectralScatteringCoefficientPacket;
+						/** Exact sea-level Mie extinction packet aligned to the selected spectral basis. */ seaLevelMieExtinction: SpectralExtinctionCoefficientPacket;
+					}>;
 			}>;
 		/** Executable domains with the cubed-sphere reconstruction facts required by the compiler. */
 		domains: Algorithm32ExecutionDomains &

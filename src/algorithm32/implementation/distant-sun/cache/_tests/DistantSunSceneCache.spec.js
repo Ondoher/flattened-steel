@@ -9,6 +9,11 @@ import DistantSunSceneCache from '../DistantSunSceneCache.js';
 import DistantSunSceneCacheAssetLoader from './reference/DistantSunSceneCacheAssetLoader.js';
 import DistantSunSceneCacheLedger from '../DistantSunSceneCacheLedger.js';
 
+/** Called by scene-cache tests to create matched runtime reconstruction support.
+ *
+ * @param {SphericalNativePositionDomain} [positionDomain] - Construction domain; omission retains Native48.
+ * @returns {DistantSunSceneCacheLedger} - Matched immutable scene ledger.
+ */
 function createLedger(positionDomain = NATIVE_48_POSITION_DOMAIN_OWNER) {
 	return new DistantSunSceneCacheLedger({
 		sceneSun: {
@@ -33,6 +38,13 @@ function createLedger(positionDomain = NATIVE_48_POSITION_DOMAIN_OWNER) {
 	});
 }
 
+/** Called by scene-cache tests to retain texture storage and its scalar binding identity.
+ *
+ * @param {string} id - Fixture texture identity.
+ * @param {CacheImmutableTextureStorage} storage - Declared texture storage.
+ * @param {string} valueKey - Scalar fixture binding key.
+ * @returns {object} - Texture storage fixture.
+ */
 function texture(id, storage, valueKey) {
 	return {
 		id,

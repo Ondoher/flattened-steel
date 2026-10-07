@@ -42,6 +42,11 @@ function requireProfile(profile) {
 	return SphericalNativePositionDomains.accept(profile.domains.positions);
 }
 
+/** Called by point-local compiler assembly to retain matched per-channel physical inputs.
+ *
+ * @param {DistantSunPointLocalExecutionProfile} profile - Complete canonical distant-Sun execution profile.
+ * @returns {DistantSunSceneCacheCompilerChannel[]} - Ordered compiler spectral channel records.
+ */
 function spectrumChannels(profile) {
 	const basis = profile.spectral.basis;
 	const source = profile.spectral.sourceIrradianceDensity;

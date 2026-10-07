@@ -12,10 +12,21 @@ import {createBrunetonProductionProfile} from '../../experiments/b1-directional-
 import B1Direct40CacheAssetManifest, {B1_POINT_LOCAL_CACHE_ASSET_SCHEMA} from './B1Direct40CacheAssetManifest.js';
 import B1Direct40CacheAssetSetManifest from './B1Direct40CacheAssetSetManifest.js';
 
+/** Called by evidence authentication to hash exact input bytes.
+ *
+ * @param {Uint8Array|string} bytes - Bytes or canonical JSON text to authenticate.
+ * @returns {string} - Lowercase SHA-256 digest.
+ */
 function sha256(bytes) {
 	return createHash('sha256').update(bytes).digest('hex');
 }
 
+/** Called by evidence reads to reject aliases and require an ordinary contained file.
+ *
+ * @param {string} root - Absolute evidence root.
+ * @param {string} relativePath - Evidence-relative file name.
+ * @returns {Promise<object>} - Checked target and filesystem facts.
+ */
 async function requireRealFile(root, relativePath) {
 	const target = path.resolve(root, relativePath);
 	const canonicalRoot = await realpath(root);
@@ -30,6 +41,13 @@ async function requireRealFile(root, relativePath) {
 	return {target: canonicalTarget, information};
 }
 
+/** Called by evidence authentication to read the sole content-addressed manifest.
+ *
+ * @param {string} directory - Absolute evidence directory.
+ * @param {RegExp} pattern - Accepted manifest filename pattern.
+ * @param {string} label - Evidence owner used in diagnostics.
+ * @returns {Promise<object>} - Authenticated manifest bytes, identity, and parsed record.
+ */
 async function readSingleManifest(directory, pattern, label) {
 	const names = (await readdir(directory)).filter((name) => pattern.test(name));
 	if (names.length !== 1) throw new Error(`${label} requires exactly one content-addressed manifest.`);

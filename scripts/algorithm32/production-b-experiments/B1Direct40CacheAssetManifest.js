@@ -29,14 +29,29 @@ const REQUIRED_NUMERICAL = Object.freeze({
 	maximumScatteringOrder: 4,
 });
 
+/** Called by manifest validation to reject an empty string.
+ *
+ * @param {string} value - Manifest field to validate.
+ * @param {string} label - Field name used in diagnostics.
+ */
 function requireString(value, label) {
 	if (typeof value !== 'string' || value.length === 0) throw new TypeError(`${label} must be a nonempty string.`);
 }
 
+/** Called by manifest validation to require canonical SHA-256 spelling.
+ *
+ * @param {string} value - Content identity to validate.
+ * @param {string} label - Field name used in diagnostics.
+ */
 function requireContentHash(value, label) {
 	if (!CONTENT_HASH.test(value)) throw new RangeError(`${label} must use canonical SHA-256 spelling.`);
 }
 
+/** Called by manifest validation to require a finite three-component unit vector.
+ *
+ * @param {number[]} value - Vector to validate.
+ * @param {string} label - Field name used in diagnostics.
+ */
 function requireUnitVector(value, label) {
 	if (
 		!Array.isArray(value) ||
@@ -48,6 +63,13 @@ function requireUnitVector(value, label) {
 	}
 }
 
+/** Called by manifest validation to check payload codec, path, size, and content identity.
+ *
+ * @param {object} payload - Serialized payload descriptor.
+ * @param {string} codec - Required codec identity.
+ * @param {number} expectedByteLength - Required payload size.
+ * @param {string} label - Field name used in diagnostics.
+ */
 function requirePayload(payload, codec, expectedByteLength, label) {
 	if (!payload || payload.codecId !== codec) throw new RangeError(`${label} codec identity is incompatible.`);
 	if (
@@ -64,11 +86,22 @@ function requirePayload(payload, codec, expectedByteLength, label) {
 	if (!SHA256.test(payload.sha256)) throw new RangeError(`${label} hash must be a lowercase SHA-256 value.`);
 }
 
+/** Called by identity computation to omit the derived identity from its own hash input.
+ *
+ * @param {object} record - Serialized manifest record.
+ * @returns {object} - Manifest payload without its derived identity.
+ */
 function identityPayload(record) {
 	const {assetIdentity: _assetIdentity, ...payload} = record;
 	return payload;
 }
 
+/** Called by asset compatibility to derive the exact physical and sampling profile boundary.
+ *
+ * @param {Algorithm32ExecutionProfile} profile - Complete production execution profile.
+ * @param {object} condition - Registered benchmark condition.
+ * @returns {object} - Expected serialized compatibility boundary.
+ */
 function expectedProfileBoundary(profile, condition) {
 	if (!profile || profile.kind !== 'algorithm32-execution-profile') {
 		throw new TypeError('B1 asset compatibility requires one production execution profile.');

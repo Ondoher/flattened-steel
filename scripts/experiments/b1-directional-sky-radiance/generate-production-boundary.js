@@ -70,6 +70,12 @@ const INCOMING_VARIANT_METADATA = Object.freeze({
 const CPU_REFERENCE_COMPILER_IDENTITY = 'algorithm32-b1-cpu-reference-binary64-v1';
 const REPOSITORY_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../../..');
 
+/** Called by command parsing to normalize a required comma-separated selection.
+ *
+ * @param {string} value - Raw comma-separated argument.
+ * @param {string} label - Command option used in diagnostics.
+ * @returns {string[]} - Trimmed nonempty selection tokens.
+ */
 function parseList(value, label) {
 	if (!value) throw new Error(`${label} requires a comma-separated value.`);
 	return value
@@ -78,6 +84,11 @@ function parseList(value, label) {
 		.filter(Boolean);
 }
 
+/** Call this method to validate explicit production generation command options.
+ *
+ * @param {string[]} argv - Command arguments excluding executable and script.
+ * @returns {object} - Validated generation selections.
+ */
 export function parseArguments(argv) {
 	const options = {
 		backend: 'gpu',
@@ -212,16 +223,33 @@ function publishRun(runDirectory, outputDirectory) {
 	rmSync(runDirectory, {recursive: true, force: true});
 }
 
+/** Called by immutable output assembly to authenticate canonical JSON text.
+ *
+ * @param {string} text - Exact serialized text.
+ * @returns {string} - Lowercase SHA-256 digest.
+ */
 function sha256(text) {
 	return createHash('sha256').update(text).digest('hex');
 }
 
+/** Called by generation to write one exclusive JSON artifact and return its identity.
+ *
+ * @param {string} path - Exclusive destination file.
+ * @param {object} value - JSON-safe artifact value.
+ * @returns {string} - SHA-256 digest of persisted canonical text.
+ */
 function writeJson(path, value) {
 	const text = `${JSON.stringify(value, null, 2)}\n`;
 	writeFileSync(path, text, {encoding: 'utf8', flag: 'wx'});
 	return sha256(text);
 }
 
+/** Called by generation to report distinct cache-construction progress states.
+ *
+ * @param {number} order - Requested scattering order.
+ * @param {string} time - Registered local benchmark time.
+ * @returns {Function} - Progress observer retaining its last reported state.
+ */
 function createProgressReporter(order, time) {
 	let previousKey = '';
 	return (progress) => {
@@ -234,12 +262,21 @@ function createProgressReporter(order, time) {
 	};
 }
 
+/** Called by benchmark output assembly to retain the fixed 40-channel table boundary.
+ *
+ * @returns {string} - Tab-separated measurement header.
+ */
 function tableHeader() {
 	return ['model', 'time', 'grid_x', 'grid_y', ...Array.from({length: 40}, (_, index) => `lambda_${index}`)].join(
 		'\t',
 	);
 }
 
+/** Call this method to execute the selected production benchmark generation and preserve immutable output.
+ *
+ * @param {object} [options] - Explicit backend, conditions, numerical policy, and output selections.
+ * @returns {Promise<object>} - Completed generation result and evidence paths.
+ */
 export async function runGeneration(options = {}) {
 	const backend = options.backend ?? 'gpu';
 	if (!['cpu', 'gpu'].includes(backend)) throw new RangeError('Generation backend must be cpu or gpu.');

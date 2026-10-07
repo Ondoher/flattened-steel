@@ -1,19 +1,13 @@
-import {createServer} from 'node:http';
+import {PolylithServer} from '@polylith/server';
+import {ProductionGpuAssetService} from '../../../server/flat32/features/production-gpu-proof/index.js';
 import {appendFileSync, mkdirSync, writeFileSync} from 'node:fs';
-import {readFile} from 'node:fs/promises';
-import {basename, dirname, extname, relative, resolve, sep} from 'node:path';
+import {basename, dirname, relative, resolve, sep} from 'node:path';
 import {fileURLToPath} from 'node:url';
 
 import puppeteer from 'puppeteer';
 import B1Direct40CacheAssetVerifier from '../../algorithm32/production-b-experiments/B1Direct40CacheAssetVerifier.js';
 
 const REPOSITORY_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../../..');
-const CONTENT_TYPES = {
-	'.css': 'text/css',
-	'.html': 'text/html',
-	'.js': 'text/javascript',
-	'.json': 'application/json',
-};
 
 /** Browser lifecycle that executes B1 conditions through production GPU shaders. */
 export class ProductionGpuHost {
@@ -86,36 +80,63 @@ globalThis.algorithm32B1GpuReady = true;
 		});
 	}
 
-	/**
-	 * Called by open to create the repository-local static module server.
+	/** Called by the registered loopback adapter to translate one bounded asset request.
 	 *
-	 * @returns {import('node:http').Server} - The unopened server.
+	 * @param {import('node:http').IncomingMessage} request - Loopback transport request.
+	 * @param {import('node:http').ServerResponse} response - Transport response owner.
+	 * @returns {Promise<void>} - Delivered input or a stable rejection.
 	 */
-	_createServer() {
-		return createServer(async (request, response) => {
-			try {
-				if (request.url === '/favicon.ico') {
-					response.writeHead(204).end();
-					return;
-				}
-				if (request.url === '/' || request.url?.startsWith('/?')) {
-					response.writeHead(200, {'Content-Type': 'text/html'});
-					response.end(this._entryDocument());
-					return;
-				}
-				const relativePath = decodeURIComponent(request.url?.split('?')[0] ?? '').replace(/^\/+/, '');
-				const path = resolve(REPOSITORY_ROOT, relativePath);
-				if (path !== REPOSITORY_ROOT && !path.startsWith(`${REPOSITORY_ROOT}${sep}`)) {
-					response.writeHead(403).end();
-					return;
-				}
-				const file = await readFile(path);
-				response.writeHead(200, {'Content-Type': CONTENT_TYPES[extname(path)] ?? 'application/octet-stream'});
-				response.end(file);
-			} catch {
-				response.writeHead(404).end();
+	async _serve(request, response) {
+		try {
+			if (request.method !== 'GET') {
+				response.writeHead(405).end();
+				return;
 			}
+			if (request.url === '/favicon.ico') {
+				response.writeHead(204).end();
+				return;
+			}
+			if (request.url === '/' || request.url?.startsWith('/?')) {
+				response.writeHead(200, {'Content-Type': 'text/html'}).end(this._entryDocument());
+				return;
+			}
+			const relativePath = decodeURIComponent(request.url?.split('?')[0] ?? '').replace(/^\/+/, '');
+			const asset = await this._assetService.read(relativePath);
+			response.writeHead(200, {'Content-Type': asset.contentType}).end(asset.bytes);
+		} catch (error) {
+			console.error('Production GPU asset request failed.', error);
+			response.writeHead(error instanceof RangeError ? 403 : 404).end();
+		}
+	}
+
+	/** Called by open to activate the proof route through the repository server lifecycle.
+	 *
+	 * @returns {Promise<import('node:http').Server>} - Unopened repository-owned listener.
+	 */
+	async _createServer() {
+		this._assetService = new ProductionGpuAssetService({
+			repositoryRoot: REPOSITORY_ROOT,
+			allowedDirectories: [
+				'src/algorithm32/',
+				'scripts/algorithm32/',
+				'scripts/experiments/b1-directional-sky-radiance/',
+				'node_modules/three/',
+				...this._assetSet.assets.map((asset) => asset.assetRoot.slice(1)),
+			],
 		});
+		this._polylith = new PolylithServer({}, []);
+		await this._polylith.create([
+			{
+				getRouterRoot: () => '/',
+				router: async (_application, router) => {
+					router.all('*', (request, response) => {
+						void this._serve(request, response);
+					});
+					return true;
+				},
+			},
+		]);
+		return this._polylith.server;
 	}
 
 	/**
@@ -202,7 +223,7 @@ globalThis.algorithm32B1GpuReady = true;
 			})),
 		};
 		this._recordProgress('[B1 GPU progress] browser launch started');
-		this._server = this._createServer();
+		this._server = await this._createServer();
 		await new Promise((resolveListen) => this._server.listen(0, '127.0.0.1', resolveListen));
 		const address = this._server.address();
 		const port = typeof address === 'object' && address !== null ? address.port : 0;
@@ -344,6 +365,8 @@ globalThis.algorithm32B1GpuReady = true;
 		this._browser = null;
 		this._server = null;
 		this._assetSet = null;
+		this._assetService = null;
+		this._polylith = null;
 		this._assetSetProvenance = null;
 		if (browser) {
 			await browser.close();
