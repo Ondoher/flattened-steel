@@ -1,5 +1,10 @@
 # `flat32` Application Migration
 
+The strobing promotion's [release preparation](../../agents/topics/production-algorithm32/caches/distant-sun-strobing-release.md)
+owns the qualified candidate package, proposed P2 default and compatible
+rollback. Active defaults remain P9 and linear cache interpolation until
+deployment approval; explicit P2 uses FP32 scene-linear storage.
+
 This directory contains the runnable Stage 11 application and the completed
 Stage 11.2 production-atmosphere attachment. Focused local owners
 provide the DOM shell, a host-sized Three renderer at the browser device-pixel

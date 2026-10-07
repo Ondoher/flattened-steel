@@ -103,7 +103,8 @@ test('retains the deployed receiver-local coordinate contract as the offline com
 
 	assert.ok(source.includes('float angle = radians(SOLAR_ZENITH_DEGREES[solarZenithIndex]);'));
 	assert.ok(source.includes('float solarZenith = radians(float(solarZenithIndex) + 0.5);'));
-	assert.ok(source.includes('return localToWorld(point, localDirection);'));
+	assert.ok(source.includes('vec3 direction = localToWorld(point, localDirection);'));
+	assert.ok(source.includes('return direction;'));
 	assert.ok(source.includes('return worldToLocal(point, worldDirection);'));
 	assert.ok(source.includes('POSITION_ALTITUDES[index + 1]'));
 	assert.ok(source.includes('return branchBreaks(origin, direction, lengthMeters, breaks);'));
@@ -151,14 +152,17 @@ test('rejects unsupported orders, incoming domains, and ozone profiles before br
 	);
 });
 
-test('preserves the fixed deployed Native15 compiler request and ledger identities', () => {
+test('preserves Native48 Native15 no-ozone compiler request and ledger identities', () => {
 	const scene = DistantSunSceneCacheCompilerInputs.createQualifiedSanJoseNauticalScene();
 	const input = DistantSunSceneCacheCompilerInputs.createInputSet(scene);
 
 	assert.equal(
 		CanonicalValueHash.sha256Value(input.buildRequest),
-		'sha256:364d05afddbe0fec61f8941fa25ae71b70835706102946f025689d29ff65bf04',
+		// P1 deliberately removed enabled ozone; P2 qualified this canonical no-ozone request.
+		'sha256:e3daaf2ee2600caef707c3c1106ae6c03b25577b9f075316511c3c0962645e4b',
 	);
+	assert.equal(input.buildRequest.transportSpec.atmosphere.ozone.absorptionEnabled, false);
+	assert.ok(input.buildRequest.transportSpec.atmosphere.ozone.crossSectionTable.values.every((value) => value === 0));
 	assert.equal(
 		CanonicalValueHash.sha256Value(input.ledger.toRecord()),
 		'sha256:b5e38741359b0e60ce6155a47941a000192c7aec1b6240d48bf3ab3bb032f671',

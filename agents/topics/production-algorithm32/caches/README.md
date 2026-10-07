@@ -1,5 +1,8 @@
 # Caches
 
+The selected strobing promotion's [release preparation](distant-sun-strobing-release.md)
+owns the proposed package/default selection and compatible rollback.
+
 Focus: Cache construction, storage, reconstruction, loading, and optimization.
 
 Current work: [distant-Sun strobing promotion](distant-sun-strobing-promotion-plan.md),

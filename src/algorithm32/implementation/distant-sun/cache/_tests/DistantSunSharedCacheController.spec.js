@@ -1,10 +1,47 @@
 import DistantSunSharedCacheController from '../DistantSunSharedCacheController.js';
 import DistantSunSharedCachePackage from '../DistantSunSharedCachePackage.js';
+import DistantSunSharedCacheSupport from '../DistantSunSharedCacheSupport.js';
 import {DISTANT_SUN_SHARED_CACHE_PACKET_BLOCK_SCHEMA_ID, DISTANT_SUN_SHARED_CACHE_PACKET_BYTES} from '../consts.js';
 
 describe('Shared-cache residency and publication', () => {
 	let fixture;
 	afterEach(() => fixture?.controller.dispose());
+
+	it('rejects a missing interior cubic neighbor before any atlas allocation', /** Called by Jasmine to prove complete-stencil admission. */ () => {
+		fixture = createFixture();
+		expect(
+			/** Called by Jasmine to exercise missing cubic support. */ () =>
+				new DistantSunSharedCacheSupport({
+					blockIndex: {blocks: [{id: 'center', coordinates: [[0, 1]]}]},
+					scenes: [
+						{
+							id: 'missing-neighbor',
+							requiredBlockIds: ['center'],
+							ledger: {rows: [{altitudeIndex: 0, firstSolarZenithIndex: 1, lastSolarZenithIndex: 1}]},
+						},
+					],
+				}),
+		).toThrowError(/omits interior coordinate 0:0/u);
+		expect(fixture.backend.liveArrays).toBe(0);
+	});
+
+	it('supersedes an isolated preparation without ever allocating a third atlas', /** Called by Jasmine to prove peak residency and last-good publication across cancellation. */ async () => {
+		fixture = createFixture(true);
+		await fixture.controller.requestScene(0);
+		const first = fixture.controller.publishFrame();
+		fixture.defer = true;
+		const stale = fixture.controller.requestScene(60);
+		const newest = fixture.controller.requestScene(80);
+		expect(fixture.controller.publishFrame()).toBe(first);
+		expect(fixture.backend.maximumLiveArrays).toBeLessThanOrEqual(2);
+		fixture.defer = false;
+		fixture.resolvePending();
+		expect(await stale).toBeFalse();
+		expect(await newest).toBeTrue();
+		expect(fixture.controller.publishFrame().snapshot.sceneOrdinal).toBe(80);
+		expect(fixture.backend.maximumLiveArrays).toBe(2);
+		expect(fixture.backend.liveArrays).toBe(1);
+	});
 
 	it('publishes complete cubic support through forward and reverse scene traversal', async () => {
 		fixture = createFixture(true, true, true);
@@ -330,11 +367,13 @@ function createFixture(transition = false, sliding = false, cubic = false) {
 	const states = new Map();
 	const backend = {
 		liveArrays: 0,
+		maximumLiveArrays: 0,
 		liveMetadata: 0,
 		uploads: 0,
 		failAtUpload: Infinity,
 		allocatePersistentArray: (request) => {
 			backend.liveArrays += 1;
+			backend.maximumLiveArrays = Math.max(backend.maximumLiveArrays, backend.liveArrays);
 			const handle = {
 				...request,
 				runtimeBinding: {valueKey: request.valueKey},

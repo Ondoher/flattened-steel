@@ -1,7 +1,7 @@
 import {randomUUID, randomBytes} from 'node:crypto';
 import {createReadStream} from 'node:fs';
 import {stat} from 'node:fs/promises';
-import {createServer} from 'node:http';
+import {PolylithServer} from '@polylith/server';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import puppeteer from 'puppeteer';
@@ -11,7 +11,7 @@ import {rollup} from 'rollup';
 import {nodeResolve} from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import Files from './DistantSunSharedCacheGenerationFiles.js';
-import SharedService from '../../../server/flat32/features/shared-cache/DistantSunSharedCachePackageService.js';
+import {DistantSunSharedCachePackageService as SharedService} from '../../../server/flat32/features/shared-cache/index.js';
 import Oracle from './DistantSunSharedRuntimeOracle.js';
 import {createDistantSunSceneCachePackageService} from '../../../server/flat32/DistantSunSceneCachePackageService.js';
 
@@ -26,6 +26,10 @@ const dual = process.argv.includes('--dual');
 const recordingParent = process.argv.find((argument) => argument.startsWith('--record='))?.slice(9);
 const full = process.argv.includes('--full') || performanceOnly;
 const correctnessOnly = process.argv.includes('--correctness');
+const colorModel =
+	process.argv.find((argument) => argument.startsWith('--color-model='))?.slice(14) ?? 'color-reset-slope-078-p9';
+if (!['color-reset-slope-078-p9', 'color-reset-slope-078-p2', 'basic-bruneton'].includes(colorModel))
+	throw new RangeError('Unsupported qualification color selection.');
 const candidateRoot = process.argv.find((argument) => argument.startsWith('--package-root='))?.slice(15);
 const candidateHash = process.argv.find((argument) => argument.startsWith('--package-sha256='))?.slice(17);
 const selectedProfile = process.argv.find((argument) => argument.startsWith('--profile='))?.slice(10);
@@ -55,14 +59,22 @@ const report = candidateRoot
 			byteLength: 3268,
 			sha256: 'eee22091d2f1deb8e992f22be47243a07e7f4bc9462d25ee89683352cca19069',
 		};
-const run = `tmp/production-algorithm32/distant-sun-shared-block-cache/qualification/${new Date().toISOString().replace(/[:.]/gu, '-')}-${randomUUID()}`;
+const outputRoot =
+	process.argv.find((argument) => argument.startsWith('--output-root='))?.slice(14) ??
+	'.codex-tmp/shared-runtime-qualification';
+if (!/^\.codex-tmp\/[A-Za-z0-9_-]+$/u.test(outputRoot))
+	throw new RangeError('Qualification requires a task-contained output root.');
+const run = `${outputRoot}/runs/${new Date().toISOString().replace(/[:.]/gu, '-')}-${randomUUID()}`;
 await files.directory(run);
 const profile = await files.directory(`${run}/browser-profile`);
 const sourcePath = 'scripts/algorithm32/solar-zenith-cache/DistantSunSharedRuntimeQualificationBrowser.js';
 const prefix = `/${randomBytes(18).toString('hex')}/`;
 const productionRouter = express();
 if (rollout) await registerFlat32Routes(null, productionRouter, {getRouterRoot: () => prefix.slice(0, -1)});
-const shared = await new SharedService(await files.resolve(parent)).load(report);
+const shared = await new SharedService(
+	await files.resolve(parent),
+	/** @type {DistantSunSolarInterpolationMethod} */ (solarInterpolation),
+).load(report);
 const dense = await createDistantSunSceneCachePackageService();
 const oracle = await new Oracle().load(files, parent, report, Boolean(candidateRoot));
 const oracles = new Map();
@@ -95,7 +107,7 @@ const html =
 let origin, browser;
 const requests = [],
 	consoleMessages = [];
-const server = createServer(async (request, response) => {
+const serve = async (request, response) => {
 	try {
 		if (request.method !== 'GET' || `http://${request.headers.host}` !== origin) {
 			response.writeHead(403).end();
@@ -201,7 +213,20 @@ const server = createServer(async (request, response) => {
 			.end(JSON.stringify({error: 'Qualification asset unavailable.'}));
 		console.error(error.message);
 	}
-});
+};
+const host = new PolylithServer({}, []);
+await host.create([
+	{
+		getRouterRoot: () => '/',
+		router: async (_application, router) => {
+			router.all('*', (request, response) => {
+				void serve(request, response);
+			});
+			return true;
+		},
+	},
+]);
+const server = host.server;
 const implementation = [];
 for (const name of [
 	'qualify-shared-runtime.js',
@@ -276,8 +301,8 @@ try {
 	console.log(JSON.stringify({run, phase: 'browser-ready'}));
 	const started = performance.now();
 	result.initial = await page.evaluate(
-		(dark) => globalThis.sharedQualification.start('shared', dark ? 108.001 : 90),
-		darkStart,
+		({dark, color}) => globalThis.sharedQualification.start('shared', dark ? 108.001 : 90, color),
+		{dark: darkStart, color: /** @type {Flat32FixedColorModelId} */ (colorModel)},
 	);
 	if (darkStart && (result.initial.cache.gpuBytes !== 0 || result.initial.transport.requests !== 0))
 		throw new Error('Initial darkness requested cache block data.');

@@ -1,14 +1,22 @@
 # Distant-Sun Strobing Production Promotion Status
 
-Current phase: **P3 closeout under independent execution.**
+Current phase: **P4 release preparation under independent execution.**
 All P3 functional and artifact gates pass, and native owner inspection is
 accepted. The final source-review disposition and implementation-completion
 gate are owned by the task's [completion record](../../../../.codex-tmp/p3-strobing-20261007/summary.md).
-Completion requires that record to link an exit-0 `CLEAN` mapped primary and
-independent-audit validation for the frozen P3 review unit. Until that evidence
-exists, the source-review gate remains open. P4 is not selected.
-Its baseline is `.codex-tmp/review-standards/session-eg11IP/p3-baseline.json`;
-new output and the decision/progress record are under
+That record links exit-0 `CLEAN` primary and independent-audit validation for
+the frozen P3 unit; P3 is complete. P4 is selected through the first owner
+approval, with publication and default switching awaiting deployment approval.
+P4 baseline: `.codex-tmp/review-standards/session-cO9bp0/baseline.json`.
+P4 progress, preparation, verification, and decisions are retained under
+`.codex-tmp/p4-strobing-20261007/`. Broader coupled numerical source review and
+outstanding experiment reviews remain release gates.
+The [release preparation](distant-sun-strobing-release.md) owns the concrete
+publication/default proposal and compatible rollback. Final P4 gate receipts
+are owned by `.codex-tmp/p4-strobing-20261007/summary.md` and its linked
+validation artifacts. Deployment awaits owner approval after those gates pass.
+P3's baseline is `.codex-tmp/review-standards/session-eg11IP/p3-baseline.json`;
+its output and decision/progress record are under
 `.codex-tmp/p3-strobing-20261007/`. The separately selectable p2 response and
 production-owned The Hours adapter are implemented. Actual GPU publication
 passes across all 109 scenes with complete cubic support and the existing
@@ -39,8 +47,8 @@ is selected; current Native48 defaults remain unchanged. The existing P2
 physical and Bruneton
 qualification passes on its original Native48 grid. P0 controls,
 P1 implementation, and the complete physical matrix are recorded. Formal P3
-implementation completion follows the validation condition above. Candidate
-appearance is accepted. Publication remains outside P3.
+implementation completion is recorded above. Candidate appearance is accepted.
+P4 is preparing publication; the active package and P9 default remain selected.
 
 The [plan](distant-sun-strobing-promotion-plan.md) owns phases and boundaries.
 The [acceptance policy](distant-sun-strobing-acceptance.md) owns the registered
@@ -227,12 +235,11 @@ complete pass remains open and is not included among the passing type checks.
 
 ## Next Actions
 
-1. Consult the P3 completion record for the final mapped review and audit
-   disposition. Any incomplete review gate must close before completion.
-2. Preserve accepted appearance artifacts and their sealed parent evidence.
-   Native owner inspection is complete.
-3. Keep publication, default switching and unrelated numerical trials outside
-   the selected P3 scope.
+1. Complete P4 release checks, coupled production and separate experiment reviews.
+   The P4 task completion record owns exact receipts and any remaining gates.
+2. Preserve accepted P3 artifacts and immutable physical/appearance parents.
+3. Present the concrete release preparation for deployment approval after gates
+   pass; publish and change active defaults only after that approval.
 
 ## Near-Ground Resolution Trial
 
@@ -611,6 +618,9 @@ calibration, current activation session and experiment standards handoff.
 Checkpoint monitoring remains active independently, with the owner's standing
 advised-checkpoint approval and one-minute consultation limit. This governance
 work is complete. Current P3 reviewer readiness is recorded under
-`.codex-tmp/review-standards/session-eg11IP/`; it is readiness, not a clean
-source review. P3 implementation and qualification are active, with no
-publication or default switching authorized by this phase.
+`.codex-tmp/review-standards/session-eg11IP/`; its completion record retains
+exit-0 CLEAN source review and independent audits for the 80-path P3 unit.
+P4 topic refresh uses `.codex-tmp/review-standards/session-cO9bp0/` with new
+readiness, baseline, coupled production review and separate experiment review.
+Readiness alone does not close those source-review gates. The owner selected
+P4 through the first approval; publication and default switching await approval.

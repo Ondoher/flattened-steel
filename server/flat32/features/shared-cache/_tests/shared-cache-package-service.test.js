@@ -12,7 +12,7 @@ import {SHARED_PACKAGE_ROOT, SHARED_PACKAGE_REPORT, SHARED_PACKAGE_IDENTITY} fro
 const repository = fileURLToPath(new URL('../../../../../', import.meta.url));
 const packageRoot = path.join(
 	repository,
-	'tmp/production-algorithm32/distant-sun-shared-block-cache/runs/2026-09-10T14-57-40-947Z-f747d2ec-9571-474f-89e6-b0783bbf3752/published/7e80317f53c79d0d5a30ebc006630213a2e758008c62a3abb14d2534a8cc2b99',
+	'server/flat32/data/shared-block/7e80317f53c79d0d5a30ebc006630213a2e758008c62a3abb14d2534a8cc2b99',
 );
 const report = {
 	path: 'package-set.json',

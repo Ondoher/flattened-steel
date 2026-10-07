@@ -18,7 +18,7 @@ export default class DistantSunSharedRuntimeOracle {
 	async load(files, root, report, candidate = false) {
 		this._files = files;
 		this._candidateRoot = candidate ? root : undefined;
-		this._inventory = await new Inventory().load(files);
+		this._inventory = candidate ? undefined : await new Inventory().load(files);
 		this._graph = await new Graph().read({
 			files,
 			candidateRoot: root,
@@ -26,7 +26,11 @@ export default class DistantSunSharedRuntimeOracle {
 			signal: new AbortController().signal,
 		});
 		this._coordinates = new Map();
-		for (const scene of this._inventory.scenes)
+		this._directionBytes = await files.read(
+			`${root}/${this._graph.configuration.directionLayout.logicalToUniqueIndex.path}`,
+			this._graph.configuration.directionLayout.logicalToUniqueIndex,
+		);
+		for (const scene of this._inventory?.scenes ?? [])
 			for (const [row, key] of scene.coordinates.entries())
 				if (!this._coordinates.has(key)) this._coordinates.set(key, {scene, row});
 		return this;
@@ -101,7 +105,7 @@ export default class DistantSunSharedRuntimeOracle {
 					[13, 26],
 				])
 					for (let packet = 0; packet < 4; packet++) {
-						const unique = this._inventory.directionBytes.readUInt16LE((face * 729 + v * 27 + u) * 2);
+						const unique = this._directionBytes.readUInt16LE((face * 729 + v * 27 + u) * 2);
 						const expected = Array.from({length: 4}, (_, component) => {
 							const channel = packet * 4 + component;
 							return row < block.rowCount && channel < 15

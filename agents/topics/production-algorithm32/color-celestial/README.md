@@ -1,5 +1,8 @@
 # Color Celestial
 
+The strobing promotion's [release preparation](../caches/distant-sun-strobing-release.md)
+owns the proposed P2 default; P9 remains active pending deployment approval.
+
 Focus: Color, receiver light, visible sources, and stellar presentation.
 
 Color Reset, brightest-2,000, ordered human filters, atomic receiver light, and q=24 one-pixel presentation are implemented. The production design and phase-specific owners below retain the selected equations. Moon and broader source families remain deferred.

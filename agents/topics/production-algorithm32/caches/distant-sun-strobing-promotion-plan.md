@@ -3,7 +3,8 @@
 Status: active production Algorithm32 work. P0 controls are established;
 P1 implementation and focused checks are recorded. P2 physical and Bruneton
 qualification passes, including the full matrix. P3 appearance artifacts are
-accepted by the owner; batched source-review completion gates remain open.
+accepted by the owner, and its 80-path source-review unit is complete. Broader
+coupled numerical source and experiment release reviews remain open in P4.
 Publication has not started.
 [Promotion status](distant-sun-strobing-promotion-status.md) owns current phase,
 readiness, and next actions. The
@@ -284,6 +285,14 @@ Gate: both physical qualification and production appearance pass, including the
 full source recurrence gate. The encoded-only pass remains insufficient.
 
 ## P4 - Final Cleanup, Reviews, And Publication
+
+Selected on 2026-10-07 under independent execution through the first owner
+approval. Complete qualification and prepare a concrete deployment proposal
+before requesting approval; publication and active default changes await that
+approval. New temporary and generated P4 output belongs exclusively under
+`.codex-tmp/p4-strobing-20261007/`, with new exclusive run children. Earlier
+sealed evidence remains read-only. P4 source baseline is
+`.codex-tmp/review-standards/session-cO9bp0/baseline.json`.
 
 - [ ] Run deferred failure/lifecycle checks: missing support, failed preparation,
       cancellation/supersession, large jumps, darkness, context loss/restoration,

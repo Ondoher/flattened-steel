@@ -6,7 +6,12 @@ import commonjs from '@rollup/plugin-commonjs';
 import Files from './DistantSunSharedCacheGenerationFiles.js';
 
 const files = new Files(fileURLToPath(new URL('../../../', import.meta.url)));
-const run = `tmp/production-algorithm32/distant-sun-shared-block-cache/qualification/${new Date().toISOString().replace(/[:.]/gu, '-')}-${randomUUID()}`;
+const outputRoot =
+	process.argv.find((argument) => argument.startsWith('--output-root='))?.slice(14) ??
+	'.codex-tmp/shared-runtime-dependencies';
+if (!/^\.codex-tmp\/[A-Za-z0-9_-]+$/u.test(outputRoot))
+	throw new RangeError('Dependency proof requires a task-contained output root.');
+const run = `${outputRoot}/runs/${new Date().toISOString().replace(/[:.]/gu, '-')}-${randomUUID()}`;
 await files.directory(run);
 const bundle = await rollup({
 	input: await files.resolve('src/flat32/Flat32Application.js'),

@@ -1,4 +1,5 @@
 import {Flat32Application} from '../../../src/flat32/Flat32Application.js';
+import {Algorithm32Runtime} from '../../../src/flat32/Algorithm32Runtime.js';
 import {DistantSunLightSource} from '../../../src/algorithm32/implementation/distant-sun/DistantSunLightSource.js';
 import ReferenceDenseController from '../../../src/algorithm32/implementation/distant-sun/cache/_tests/reference/DistantSunSceneCacheController.js';
 import {SphericalDistantMode} from '../../../src/flat32/SphericalDistantMode.js';
@@ -15,6 +16,17 @@ export default class DistantSunSharedRuntimeQualificationBrowser {
 	/** Blocks already checked against the independent oracle. */
 	_probedBlocks = new Set();
 
+	/** Call this method to require the concrete production owner before proof-only inspection.
+	 *
+	 * @returns {Algorithm32Runtime} - Current production runtime; incompatible owners throw.
+	 */
+	_runtime() {
+		const runtime = this._application._modeController._activeRuntime;
+		if (!(runtime instanceof Algorithm32Runtime))
+			throw new Error('Qualification requires the production runtime owner.');
+		return runtime;
+	}
+
 	/** Call this method to require the production shell before inspecting state.
 	 *
 	 * @returns {HTMLElement} - Installed shell.
@@ -30,7 +42,7 @@ export default class DistantSunSharedRuntimeQualificationBrowser {
 	 * @returns {SphericalDistantMode} - Current mode.
 	 */
 	_mode() {
-		const mode = this._application._modeController._activeRuntime._mode;
+		const mode = this._runtime()._mode;
 		if (!(mode instanceof SphericalDistantMode)) throw new Error('Qualification changed its declared geometry.');
 		return mode;
 	}
@@ -133,7 +145,7 @@ export default class DistantSunSharedRuntimeQualificationBrowser {
 	 */
 	snapshot() {
 		const application = this._application,
-			runtime = application._modeController._activeRuntime;
+			runtime = this._runtime();
 		const renderer = application._sceneRuntime.renderer,
 			gl = renderer.getContext();
 		const extension = gl.getExtension('WEBGL_debug_renderer_info');
@@ -164,7 +176,7 @@ export default class DistantSunSharedRuntimeQualificationBrowser {
 	 */
 	async pixels() {
 		await new Promise((resolve) => requestAnimationFrame(resolve));
-		const runtime = this._application._modeController._activeRuntime;
+		const runtime = this._runtime();
 		runtime._renderAtmosphereFrame();
 		const gl = this._application._sceneRuntime.renderer.getContext();
 		const bytes = new Uint8Array(gl.drawingBufferWidth * gl.drawingBufferHeight * 4);
@@ -181,7 +193,7 @@ export default class DistantSunSharedRuntimeQualificationBrowser {
 	 */
 	async probe() {
 		this._probedBlocks ??= new Set();
-		const runtime = this._application._modeController._activeRuntime;
+		const runtime = this._runtime();
 		const atlas = this._mode().lightSource.sharedCacheAttachment._controller._atlas;
 		let scalars = 0,
 			blocks = 0;
@@ -359,10 +371,11 @@ export default class DistantSunSharedRuntimeQualificationBrowser {
 	 *
 	 * @param {SharedQualificationSelection} selection - Shared candidate or dense control.
 	 * @param {number} [initialDegrees] - Initial physical input, including the dark boundary.
+	 * @param {Flat32FixedColorModelId} [colorModel] - Explicit application color selection; omission retains P9.
 	 *
 	 * @returns {Promise<SharedQualificationSnapshot>} - Initial measured application state.
 	 */
-	async start(selection, initialDegrees = 90) {
+	async start(selection, initialDegrees = 90, colorModel = 'color-reset-slope-078-p9') {
 		if (selection === 'dense') {
 			const original = DistantSunLightSource.prototype.createCacheController;
 			DistantSunLightSource.prototype.createCacheController = function (request) {
@@ -406,6 +419,7 @@ export default class DistantSunSharedRuntimeQualificationBrowser {
 			selection === 'shared' ? 'scene-caches/' : 'dense-caches/',
 		);
 		this._application = new Flat32Application(document.getElementById('main-content'), {
+			colorDisplayModelConfiguration: {model: colorModel},
 			initialFlatTimeIndex: 2,
 			cameraFieldOfViewDegrees: 78,
 			brightest2000StellarCatalogDefinition: definition,
@@ -459,7 +473,7 @@ export default class DistantSunSharedRuntimeQualificationBrowser {
 			await new Promise((resolve) => setTimeout(resolve, 50));
 		}
 		if (this._shell().dataset.flat32State !== 'ready') throw new Error(this._shell().textContent);
-		this._initialRuntime = this._application._modeController._activeRuntime;
+		this._initialRuntime = this._runtime();
 		this._initialHandle = this._initialRuntime._shaderHandle;
 		this._coherence = {
 			frames: 0,

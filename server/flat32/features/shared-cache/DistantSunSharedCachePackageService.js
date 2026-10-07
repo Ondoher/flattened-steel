@@ -19,12 +19,18 @@ export default class DistantSunSharedCachePackageService {
 	_report;
 	/** Content-addressed package identity. */
 	_identity = '';
+	/** Explicit application-selected solar interpolation policy. @type {DistantSunSolarInterpolationMethod} */
+	_solarInterpolation;
 
 	/** Creates a service with an implementation-derived repository boundary.
 	 *
 	 * @param {string} root - Candidate package directory.
+	 * @param {DistantSunSolarInterpolationMethod} [solarInterpolation] - Application-selected interpolation; omission retains linear behavior.
 	 */
-	constructor(root) {
+	constructor(root, solarInterpolation = 'linear') {
+		if (!['linear', 'monotone-cubic'].includes(solarInterpolation))
+			throw new RangeError('Unsupported shared package interpolation.');
+		this._solarInterpolation = solarInterpolation;
 		const repository = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../../..');
 		this._root = path.resolve(root);
 		const relative = path.relative(repository, this._root);
@@ -165,6 +171,7 @@ export default class DistantSunSharedCachePackageService {
 				rootUrl: `${base}${this._identity}/`,
 				packageSetIdentity: this._identity,
 				report: {...this._report},
+				solarInterpolation: this._solarInterpolation,
 				transitionQualification: {
 					evidenceId: 'sha256:4544d8f0f881d9f32208adab945858b614cef22ee80b2ded0eb078ec4f2e5dce',
 					targetId: 'NVIDIA GeForce RTX 2060 / Chrome 153 / ANGLE D3D11',

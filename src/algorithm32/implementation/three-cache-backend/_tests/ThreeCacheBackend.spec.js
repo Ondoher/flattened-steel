@@ -538,6 +538,21 @@ function expectState(renderer, context, expected) {
 }
 
 describe('ThreeCacheBackend', /** Called by Jasmine to register the named test suite. */ () => {
+	it('rejects a float scene texture without linear float sampling before upload', /** Called by Jasmine to prove the float-filter capability boundary. */ () => {
+		const {renderer} = createHarness();
+		const backend = new ThreeCacheBackend({THREE: FAKE_THREE, renderer});
+		expect(
+			/** Called by Jasmine to exercise unsupported float filtering. */ () =>
+				backend.uploadImmutableTexture({
+					id: 'unsupported-float',
+					valueKey: 'cache.test',
+					identity: 'float-filter-proof',
+					storage: {format: 'RGBA32F', width: 1, height: 1, layers: 1, xFastest: true, flipY: false},
+					values: new Float32Array(4),
+				}),
+		).toThrowError(/OES_texture_float_linear/u);
+		backend.dispose();
+	});
 	it('validates the selected WebGL2 R32F capability boundary', /** Called by Jasmine to exercise the named behavior. */ () => {
 		const {context, renderer} = createHarness();
 		const backend = new ThreeCacheBackend({THREE: FAKE_THREE, renderer});

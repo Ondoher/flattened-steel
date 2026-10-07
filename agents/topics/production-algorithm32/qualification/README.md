@@ -1,5 +1,10 @@
 # Qualification
 
+The strobing promotion's [status](../caches/distant-sun-strobing-promotion-status.md)
+owns its P2/P3 scientific evidence and P4 release gates; its
+[release preparation](../caches/distant-sun-strobing-release.md) owns proposed
+selections and rollback.
+
 Focus: Engine conformance and production benchmark export.
 
 Implementation conformance is separate from scientific authority and
