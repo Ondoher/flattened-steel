@@ -11,6 +11,14 @@ completed plans and saved follow-up questions do not authorize new execution.
 The [follow-up guide](follow-up-context.md) and [handoff](handoff.md) retain
 the scientific context needed for that resumption.
 
+The standards handoff retains the permanent `experiments/` assignment. No
+Sky Accuracy Dials-specific temporary assignment or overlay requires rollback.
+The repository [end-experiment skill](../../../../../.agents/skills/end-experiment/SKILL.md)
+now owns this distinction between suspension and final closure; production
+work resolves its own folder standards. Reviewer lifecycle follows the
+[current repository state](../../../standards/reviewer-status.md), while
+the experiment's deferred source reviews and adoption hold remain open.
+
 ## Retained Scientific State
 
 **Aerosol sensitivity complete as accepted 00234/00235.** The
@@ -51,8 +59,8 @@ reference mean, with positive aggregate skill at all 17 held times. These are
 conditional diagnostics, not full benchmark improvements or causal phase
 identification. The broad visible trough and weakly angular 360 nm excess are
 separate targets. No execution is active; the one CPU reporting run is consumed.
-Formal reviewers remain suspended; the [verification boundary](#verification-boundary)
-owns current checkpoint monitoring.
+The [verification boundary](#verification-boundary) owns current reviewer
+and checkpoint state; deferred experiment source reviews remain open.
 
 The [00232 direct results](alternate-rays-results.md) remain accepted. All
 30 numerical targets pass; removing approximations worsens selected-ray Kider
@@ -70,8 +78,8 @@ for the five rays, numerical uncertainty and unchanged Kider residuals.
 Fifteen of 20 values meet the preset sampling precision; all attenuation and
 termination contrasts pass. The full type check, 53 CPU manufactured checks,
 three GPU manufactured cases and all 20 first-order parity comparisons pass.
-No execution is active. Formal reviewers remain suspended; the
-[verification boundary](#verification-boundary) owns checkpoint monitoring.
+No execution is active. The
+[verification boundary](#verification-boundary) owns current reviewer and checkpoint state.
 
 **Earlier deterministic evidence:** its first execution stopped with partial
 results. Run 00229 preserves all five rays/four wavelengths at four
@@ -234,25 +242,18 @@ observation GPU timing or numerical output was returned.
 
 ## Verification Boundary
 
-Formal standards reviewers remain suspended under the owner's direction.
-Checkpoint monitoring is **active** after the 2026-10-07 bootstrap, with the
-owner's one-minute consultation limit and preapproved advised commits/messages.
-A fresh adviser returned `CHECKPOINT_URGENT` for the complete closed milestone
-through 00235, including its source, consumed plans, results and handoff context.
-Its suggested message is `Checkpoint sky accuracy dials through 00235`.
-The current skill makes checkpoint advice independent of calibration and formal
-standards review. Earlier blocked adviser attempts remain historical outcomes;
-the reviewer suspension was not reversed.
+The owner requested reactivation of folder-based standards reviews on
+2026-10-07. The [repository reviewer lifecycle](../../../standards/reviewer-status.md)
+owns current readiness and renewed calibration. This experiment remains
+suspended; its deferred source-review gates are still open. Local proofs,
+type checks and restored reviewer readiness do not constitute a clean review.
 
-The [review-standards skill](C:/Users/gande/.codex/skills/review-standards/SKILL.md)
-requires for standards reviewers: "Missing or stale recorded calibration blocks
-startup." Current calibration fails with "Calibration inputs changed; rerun
-independent fixture review and seal". Reviewer definitions, durable normalization,
-folder mappings and formatting pass. Standing bootstrap authority recorded
-`Topics folder: agents/topics` in root AGENTS.md and refreshed root STANDARDS.md.
-The dirty governance checkout was validated read-only and was not synchronized.
-No production implementation was edited or global calibration repaired.
-Local proofs and type checks do not close the deferred source-review gate.
+Checkpoint monitoring remains active with the owner's one-minute consultation
+limit and preapproved advised commits/messages. The closed milestone through
+00235 was checkpointed as `6cc5a283080ce14bfa31c44cfe3c52a712937c9e`, with
+message `Checkpoint sky accuracy dials through 00235`. Earlier blocked adviser
+attempts remain historical outcomes; current checkpoint advice is independent
+of calibration and formal source review.
 
 The registration pass started from HEAD
 c7803b241f0f8f409226354dc4fb72484f25a5ec with prior dirty work preserved.
@@ -290,8 +291,8 @@ Its validation record is
 `.codex-tmp/review-standards/session-IMhmek/validation.json`. That artifact owns
 the implementation gate and no clean outcome is predeclared here.
 The owner subsequently directed that recurring reviews be limited because of
-credit use and saved for later verification. Reviewer agents remain suspended;
-checkpoint advice was subsequently reenabled with the limits above. Continue authorized work with
+credit use and saved for later verification. Those deferred source-review gates remain open;
+current reviewer activation and checkpoint policy are recorded above. Continue authorized work with
 focused local checks; batch the formal review at a later verification milestone.
 This explicit scheduling direction defers the existing gate and does not claim
 that incomplete review evidence is clean. Preserve the owner's checkpoint

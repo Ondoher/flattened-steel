@@ -1,0 +1,4 @@
+interface:
+    display_name: 'End Experiment'
+    short_description: 'End or suspend an experiment and restore standards'
+    default_prompt: 'Use $end-experiment to end or suspend the current experiment and restore temporary standards changes.'

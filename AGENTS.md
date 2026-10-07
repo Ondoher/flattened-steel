@@ -37,6 +37,17 @@ Experiment-specific proof execution and evidence gates remain governed by the
 experiment design and plan. Production promotion follows the production folder
 mappings and reviewer lifecycle.
 
+# Experiment Lifecycle Handoff
+
+Use the repository [end-experiment skill](.agents/skills/end-experiment/SKILL.md)
+when the owner ends or suspends an experiment. Ending records a final
+disposition; suspension preserves a resumption boundary and requires a later
+owner selection before execution resumes. Both preserve immutable evidence and
+restore identified temporary standards configuration according to the
+[folder-scoped lifetime rule](agents/topics/standards/overlay.md#add-temporary-experiment-standards-lifetime).
+Keep the permanent experiment mapping. Returning to production uses production
+folder standards and refreshes reviewer context before implementation.
+
 # Review Timing
 
 Batch standards review at stable, coherent implementation milestones. The

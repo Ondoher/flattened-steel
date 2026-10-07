@@ -22,6 +22,17 @@ owns inherited evidence and unresolved recurrence, review, and inspection gates.
 
 ## P0 Evidence
 
+### Retained evidence location
+
+The owner relocated retained output to `D:\flattened-steel\archive\`.
+Original identities below remain unchanged: a recorded `tmp/<path>` resolves
+to `D:\flattened-steel\archive\<path>` for read-only evidence access.
+The original animation trace and film, fixed film and trace, pinned controls,
+color-delta artifacts, P2 index seal and artifacts, and candidate package
+metadata match their recorded hashes. This targeted check does not authenticate
+every descendant artifact. New production output remains under the plan's
+repository-local ignored output root; retained inputs are never overwritten.
+
 The accepted sealed run is
 `tmp/production-algorithm32/distant-sun-strobing-promotion/p0-7cdc7b2c-c7d5-4076-a1bb-2c8077ab2086/`.
 It authenticates the selected strobing mechanisms, original The Hours parents,
@@ -285,11 +296,11 @@ fixed order outgoing, solar angle, then altitude. Values below are signed mean
 spectral radiance in mW m^-2 sr^-1 nm^-1; positive adds brightness relative to
 the next analytic control.
 
-| First-order interpolation effect at (3,5) | Native48 | Native51 |
-| --- | ---: | ---: |
-| Outgoing W27 direction | -2.799787 | -2.519210 |
-| Solar angle | -0.002343 | -0.002105 |
-| Altitude | +16.881895 | +3.184251 |
+| First-order interpolation effect at (3,5) |   Native48 |  Native51 |
+| ----------------------------------------- | ---------: | --------: |
+| Outgoing W27 direction                    |  -2.799787 | -2.519210 |
+| Solar angle                               |  -0.002343 | -0.002105 |
+| Altitude                                  | +16.881895 | +3.184251 |
 
 This demonstrates opposing altitude and outgoing-direction biases within the
 fixed model. Native51 is closer to continuous first-order evaluation with
@@ -327,11 +338,11 @@ The execution chain below is under the promotion output root. Each closed run
 retains frozen wrapper/source, input/control/tool, operation, and artifact
 identities; parents remain immutable.
 
-| Role | Run | Seal SHA-256 |
-| --- | --- | --- |
-| All-81 ranking, geometry, sparse C4 and three-way control | `noon-plan-8c1a18ac-7d0e-4585-98bc-0856a9a01190` | `7d511238ea7878eaa24cb83d5732b6db361f74ea393cb81816d71ef66dfab102` |
-| Sparse J1-J4 GPU capture | `noon-recurrence-9d6960ad-2b90-414e-a54c-5efe7a758034` | `8b42d83823c8c13f3d69156f294aec662dce2696de53924d33986605e46ccf2d` |
-| Cumulative orders and analytic reconstruction | `noon-order-analysis-8f819c13-0772-49f6-a8f1-2f7490dc608b` | `ee961675856f3be085f72ba24cddc053f0aa4a36545fafb65c357a122ca3ad10` |
+| Role                                                      | Run                                                        | Seal SHA-256                                                       |
+| --------------------------------------------------------- | ---------------------------------------------------------- | ------------------------------------------------------------------ |
+| All-81 ranking, geometry, sparse C4 and three-way control | `noon-plan-8c1a18ac-7d0e-4585-98bc-0856a9a01190`           | `7d511238ea7878eaa24cb83d5732b6db361f74ea393cb81816d71ef66dfab102` |
+| Sparse J1-J4 GPU capture                                  | `noon-recurrence-9d6960ad-2b90-414e-a54c-5efe7a758034`     | `8b42d83823c8c13f3d69156f294aec662dce2696de53924d33986605e46ccf2d` |
+| Cumulative orders and analytic reconstruction             | `noon-order-analysis-8f819c13-0772-49f6-a8f1-2f7490dc608b` | `ee961675856f3be085f72ba24cddc053f0aa4a36545fafb65c357a122ca3ad10` |
 
 The incoming-direction manufactured-input check is sealed in
 `noon-incoming-4438c1d4-5bb0-4f1a-a9a1-bd69cb0357b3/` below the promotion output
@@ -515,10 +526,11 @@ No next production implementation task is selected by this transition.
 Its documentation baseline is
 `.codex-tmp/review-standards/session-hhktR8/baseline.json`, at HEAD
 `6cc5a283080ce14bfa31c44cfe3c52a712937c9e` with a clean initial worktree.
-Prior readiness is not reused as current readiness. Standards reviewers remain
-owner-suspended, and current calibration fails with "Calibration inputs changed;
-rerun independent fixture review and seal". Infrastructure, normalization and
-folder mappings pass. Checkpoint monitoring remains active independently of
-these standards-review gates, with the owner's standing advised-checkpoint
-approval and one-minute consultation limit. This transition starts no
-implementation, qualification run or deployment and claims no clean source review.
+Prior readiness is not reused as current readiness. The owner has requested
+reactivation of folder-based reviews; the
+[reviewer lifecycle](../../standards/reviewer-status.md) owns the renewed
+calibration, current activation session and experiment standards handoff.
+Checkpoint monitoring remains active independently, with the owner's standing
+advised-checkpoint approval and one-minute consultation limit. This governance
+work starts no production implementation, qualification run or deployment and
+claims no clean source review.

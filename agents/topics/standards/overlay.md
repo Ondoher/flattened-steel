@@ -1,5 +1,12 @@
 # Repository Standards Overlay
 
+## ADD: Temporary experiment standards lifetime
+
+Extends: documentation.md#Repository Standards Overlay
+Scope: folder:experiments/
+Rule: Temporary experiment-specific standards assignments and overlay entries must be scoped to the owning experiment folder, retain types.md, and state the lifecycle event or phase that ends their authorization. Their default lifetime is active execution, ending on suspension or final closure unless the owner explicitly selects another lifetime. Record the exact prior configuration and temporary changes in the experiment status as restoration provenance; that record does not select active standards. On ending or suspending the experiment, restore only the temporary configuration whose authorization ends at that transition, preserving permanent folder mappings and unrelated changes. A suspended experiment retains the deactivated configuration for compatibility checking at a future owner-selected resumption. Production work and promoted source resolve standards from their destination folders.
+Reason: Contained experiments need bounded standards differences and an explicit restoration path without weakening production standards or losing resumption context.
+
 ## ADD: Production Algorithm32 scientific quantities, provenance, and profile completeness
 
 Extends: types.md#General Types

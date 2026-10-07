@@ -10,10 +10,10 @@
 - Repository overlay: [`agents/topics/standards/overlay.md`](./agents/topics/standards/overlay.md)
 - Standards governance: [`documentation.md`](https://github.com/Ondoher/polylith-skills/blob/main/documentation/standards/documentation.md)
 - First normalized: `2026-09-11T23:19:47.480Z`
-- Repository standards configuration fingerprint: `sha256:f0c899cff44d35ced4c80bc2c7bad73afd4cf6d63aabbce6b4f585bd85f45b72`
-- Local standards overlay fingerprint: `sha256:5b67d2e2a7016b3d1f9d1cbe20d1892aeca479a01e641cefc4ef0354d31b8793`
+- Repository standards configuration fingerprint: `sha256:81d273be459279d61a883397e0c6c6d95f378c0779e3993ff4059ed2d8349c37`
+- Local standards overlay fingerprint: `sha256:5b28310018e8c1276d1c6b6dbfe3bc0c731c4a7f2f44b6d68b68fdf9e7b04dd9`
 - Selected canonical standards fingerprint: `sha256:d15413f396587935c93b983dc459aaf27c548c113ac0c308188e708670b4b0df`
-- Guide source fingerprint: `sha256:128a6991d475c1ad03dc1cae6851248b98e589b6c48984164a470065b7222fff`
+- Guide source fingerprint: `sha256:9a4f757a0989ef9990788717dc2c4158c948e6b37e6467b234606302f624f23d`
 
 For each file, the longest matching folder assignment selects one named standards set. The set includes its inherited canonical standards, then matching folder-scoped overlay rules modify specific sections. This file is a readable projection only.
 
@@ -132,6 +132,13 @@ Adds:
 None.
 
 ## Folder-specific additions and replacements
+
+### ADD: Temporary experiment standards lifetime
+
+- Extends: [`documentation.md#Repository Standards Overlay`](https://github.com/Ondoher/polylith-skills/blob/main/documentation/standards/documentation.md#repository-standards-overlay)
+- Scope: `folder:experiments/`
+- Rule: Temporary experiment-specific standards assignments and overlay entries must be scoped to the owning experiment folder, retain types.md, and state the lifecycle event or phase that ends their authorization. Their default lifetime is active execution, ending on suspension or final closure unless the owner explicitly selects another lifetime. Record the exact prior configuration and temporary changes in the experiment status as restoration provenance; that record does not select active standards. On ending or suspending the experiment, restore only the temporary configuration whose authorization ends at that transition, preserving permanent folder mappings and unrelated changes. A suspended experiment retains the deactivated configuration for compatibility checking at a future owner-selected resumption. Production work and promoted source resolve standards from their destination folders.
+- Reason: Contained experiments need bounded standards differences and an explicit restoration path without weakening production standards or losing resumption context.
 
 ### ADD: Production Algorithm32 scientific quantities, provenance, and profile completeness
 

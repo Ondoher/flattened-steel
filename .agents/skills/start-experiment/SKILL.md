@@ -20,6 +20,12 @@ Create one isolated experiment without granting it authority over production cod
 
 The scaffold command must stop rather than overwrite any existing topic, source, or output root. Never reuse an old output directory for a new experiment.
 
+## Standards lifetime and handoff
+
+Before introducing experiment-specific standards configuration, record the current folder assignment, any experiment-only set definitions, and relevant overlay entries in the experiment status as restoration provenance. Effective standards still come only from the manifest and overlay. Any temporary entry must identify its experiment folder and the lifecycle event or phase that ends its authorization; broader applicability requires a deliberate folder assignment and must retain `types.md`. Unless the owner specifies another lifetime, temporary configuration is active only during execution and is restored on suspension or final closure.
+
+Use the repository [end-experiment](../end-experiment/SKILL.md) skill when the owner ends or suspends the lane. It distinguishes a final outcome from a resumable suspension, restores identified temporary configuration, preserves evidence, and refreshes context when returning to another topic. The permanent experiment mapping remains in place; production work always resolves standards from its own destination folders.
+
 ## Folder identity
 
 Every new experiment uses its descriptive kebab-case `<slug>` as the identical, unnumbered folder name in all three managed roots. Sequence numbers belong to run folders, not experiment folders. The scaffold helper reports `experimentFolder: <slug>`; pass the same slug when running `--check`.
