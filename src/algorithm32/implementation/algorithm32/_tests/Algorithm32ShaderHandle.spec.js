@@ -1,4 +1,6 @@
 import {Algorithm32ShaderHandle} from '../Algorithm32ShaderHandle.js';
+import {SpectralPacket} from '../../../spectral-values/index.js';
+import {NATIVE_15_SPECTRAL_BASIS} from '../../../profiles/index.js';
 
 /**
  * Called by this module to create build result. Conditional result values are selected from the accepted input and current state.
@@ -74,7 +76,7 @@ function createRuntime(name, events = []) {
 /**
  * Create one externally settled promise for supersession tests.
  *
- * @returns {{promise: Promise<ShaderBuildResult>, resolve: (value: ShaderBuildResult) => void}} - Deferred build result.
+ * @returns {ShaderHandleDeferredBuildResult} - Deferred build result.
  */
 function createDeferredBuildResult() {
 	let resolve = /** @type {(value: ShaderBuildResult) => void} */ (() => {});
@@ -148,6 +150,55 @@ function createState(options = {}) {
 }
 
 describe('Algorithm32ShaderHandle', /** Called by Jasmine to register the named test suite. */ () => {
+	it('combines measured environment endpoints with newly sampled exact-time direct light', async () => {
+		const context = createState(),
+			handle = new Algorithm32ShaderHandle(context.state);
+		const direct = new SpectralPacket({
+			basis: NATIVE_15_SPECTRAL_BASIS,
+			quantity: 'spectral-irradiance-density',
+			units: 'W m^-2 nm^-1',
+			semantics: 'contiguous-wavelength-bin-average',
+			values: Array(15).fill(2),
+			provenanceIdentity: 'p3-exact-direct-fixture',
+		});
+		const diffuse = new SpectralPacket({
+			basis: NATIVE_15_SPECTRAL_BASIS,
+			quantity: 'spectral-irradiance-density',
+			units: 'W m^-2 nm^-1',
+			semantics: 'contiguous-wavelength-bin-average',
+			values: Array(15).fill(3),
+			provenanceIdentity: 'p3-measured-environment-fixture',
+		});
+		const source = {
+			sampleDirectLighting: jasmine
+				.createSpy('exact-time-direct')
+				.and.returnValue({sourceIrradiance: direct, directionToLight: [0, 0, 1]}),
+		};
+		const geometry = {
+			resolveViewRaySegment: () => ({ray: {origin: {coordinates: [0, 0, 1], units: 'meters'}}}),
+			resolveSourceRelativePosition: () => ({}),
+		};
+		const result = await handle.prepareReceiverEnvironmentLight(
+			/** @type {any} */ ({
+				geometry,
+				lightSource: source,
+				identity: 'p3-exact-publication',
+				signal: new AbortController().signal,
+				environmentSample: {
+					diffuseHorizontal: diffuse,
+					stellarAdaptationLuminance: {value: 0.25, units: 'cd m^-2'},
+				},
+			}),
+		);
+		expect(source.sampleDirectLighting).toHaveBeenCalledTimes(1);
+		expect(result.identity).toBe('p3-exact-publication');
+		expect(result.directNormal.values).toEqual(Array(15).fill(2));
+		expect(result.directHorizontal.values).toEqual(Array(15).fill(2));
+		expect(result.diffuseHorizontal).toBe(diffuse);
+		expect(result.totalHorizontal.values).toEqual(Array(15).fill(5));
+		expect(result.stellarAdaptationLuminance).toEqual({value: 0.25, units: 'cd m^-2'});
+		handle.dispose();
+	});
 	it('routes the installed cache and GPU reduction through atomic facade publication', async () => {
 		const context = createState();
 		const handle = new Algorithm32ShaderHandle(context.state);

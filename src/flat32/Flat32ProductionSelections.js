@@ -59,18 +59,18 @@ function acceptPresentationFilter(candidate, index) {
 		if (parameters.maximumRodContribution !== 0.5) {
 			throw new RangeError(`${label} maximumRodContribution must equal 0.5.`);
 		}
-		return Object.freeze({
+		return {
 			id: filter.id,
 			stage: filter.stage,
 			target: filter.target,
 			enabled: filter.enabled,
-			parameters: Object.freeze({
+			parameters: {
 				maximumRodContribution: acceptStrength(
 					parameters.maximumRodContribution,
 					`${label} maximumRodContribution`,
 				),
-			}),
-		});
+			},
+		};
 	}
 
 	if (filter.id === FLAT32_PRESENTATION_FILTER_IDS.HUMAN_LOW_LIGHT_CHROMA_V1) {
@@ -78,18 +78,18 @@ function acceptPresentationFilter(candidate, index) {
 		if (parameters.maximumChromaRetention !== 0.65) {
 			throw new RangeError(`${label} maximumChromaRetention must equal 0.65.`);
 		}
-		return Object.freeze({
+		return {
 			id: filter.id,
 			stage: filter.stage,
 			target: filter.target,
 			enabled: filter.enabled,
-			parameters: Object.freeze({
+			parameters: {
 				maximumChromaRetention: acceptStrength(
 					parameters.maximumChromaRetention,
 					`${label} maximumChromaRetention`,
 				),
-			}),
-		});
+			},
+		};
 	}
 
 	throw new RangeError(`${label} id is not supported.`);
@@ -106,7 +106,7 @@ function acceptPresentationFilters(value) {
 	if (mesopicIndex >= 0 && chromaIndex >= 0 && mesopicIndex > chromaIndex) {
 		throw new RangeError('Flat32 mesopic luminance must precede low-light chroma.');
 	}
-	return Object.freeze(filters);
+	return filters;
 }
 
 /**
@@ -131,15 +131,17 @@ export function resolveFlat32ColorDisplayModelConfiguration(configuration = {}) 
 		if (!Number.isFinite(luminance) || luminance < 0) {
 			throw new RangeError('Flat32 Ferwerda adaptation luminance must be finite and nonnegative.');
 		}
-		return Object.freeze({
+		return {
 			model: FLAT32_COLOR_MODEL_IDS.FERWERDA_CONTROL,
 			adaptationLuminanceCdPerSquareMeter: luminance,
-		});
+		};
 	}
-	return /** @type {Flat32ColorDisplayModelConfiguration} */ (Object.freeze({model}));
+	return /** @type {Flat32ColorDisplayModelConfiguration} */ ({model});
 }
 
-/** Normalize independent Color, celestial, catalog, and presentation-filter selections. */
+/** Normalize independent Color, celestial, catalog, and presentation-filter selections.
+ * @returns {Flat32ProductionSelections} - Accepted readonly production selections.
+ */
 export function resolveFlat32ProductionSelections(configuration = {}) {
 	const record = acceptRecord(configuration, 'Flat32 production selection configuration');
 	const celestialSourcesEnabled = record.celestialSourcesEnabled ?? true;
@@ -152,15 +154,20 @@ export function resolveFlat32ProductionSelections(configuration = {}) {
 	}
 	const presentationFilters = acceptPresentationFilters(record.presentationFilters ?? []);
 	const presentationFilterConfigurationIdentity = new ViewPresentationFilterRegistry(presentationFilters).identity;
-	return Object.freeze({
-		colorDisplayModelConfiguration: resolveFlat32ColorDisplayModelConfiguration(
-			record.colorDisplayModelConfiguration,
-		),
+	const colorDisplayModelConfiguration = resolveFlat32ColorDisplayModelConfiguration(
+		record.colorDisplayModelConfiguration,
+	);
+	return {
+		colorDisplayModelConfiguration,
+		sceneColorPrecision:
+			colorDisplayModelConfiguration.model === FLAT32_COLOR_MODEL_IDS.COLOR_RESET_SLOPE_078_P2
+				? 'float32'
+				: 'float16',
 		celestialSourcesEnabled,
 		stellarCatalog,
 		presentationFilters,
 		presentationFilterConfigurationIdentity,
-	});
+	};
 }
 
 /** Fail closed until P7 installs the P6 source-linear hooks in the compatible stellar generation. */

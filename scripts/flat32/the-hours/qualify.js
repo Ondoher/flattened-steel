@@ -8,9 +8,12 @@ import {TheHoursRecurrenceMeasurement} from './recurrence-measurement.js';
 import {TheHoursHost} from './TheHoursHost.js';
 
 const [parentRoot, manifestByteLength, manifestSha256] = process.argv.slice(2);
-const workflowBitrate = Number(process.argv.find((value) => value.startsWith('--workflow-bitrate='))?.split('=')[1] ?? 40000000);
+const workflowBitrate = Number(
+	process.argv.find((value) => value.startsWith('--workflow-bitrate='))?.split('=')[1] ?? 40000000,
+);
 const hardwareAcceleration = process.argv.includes('--software') ? 'prefer-software' : 'prefer-hardware';
-if (![40000000, 80000000, 160000000].includes(workflowBitrate)) throw new Error('Select a registered 40, 80 or 160Mbps encoding policy.');
+if (![40000000, 80000000, 160000000].includes(workflowBitrate))
+	throw new Error('Select a registered 40, 80 or 160Mbps encoding policy.');
 if (!/^[a-f0-9]{64}$/u.test(manifestSha256 ?? '') || !Number.isSafeInteger(Number(manifestByteLength)))
 	throw new Error('Supply the exact retained capture root, manifest byte length and SHA-256.');
 const run = new TheHoursRun({
@@ -24,7 +27,12 @@ const inputs = new TheHoursRetainedInputs({
 });
 await run.allocate('qualification');
 let heartbeatTail = Promise.resolve();
-const heartbeat = setInterval(/** Called while independent decoding or encoding is busy to retain bounded progress. */ () => {heartbeatTail = heartbeatTail.then(() => run.progress({phase: 'working', parentRoot}));}, 15000);
+const heartbeat = setInterval(
+	/** Called while independent decoding or encoding is busy to retain bounded progress. */ () => {
+		heartbeatTail = heartbeatTail.then(() => run.progress({phase: 'working', parentRoot}));
+	},
+	15000,
+);
 try {
 	await inputs.load();
 	const configuration = /** @type {TheHoursBrowserConfiguration} */ (await inputs.json('configuration.json'));
@@ -47,7 +55,11 @@ try {
 		width: configuration.width,
 		height: configuration.height,
 	});
-	const originalSource = await media.measure('lossless-original-detector', ['-framerate', '30', '-i', sequence], frameCount);
+	const originalSource = await media.measure(
+		'lossless-original-detector',
+		['-framerate', '30', '-i', sequence],
+		frameCount,
+	);
 	const maximumNativeMeanDifference = Math.max(
 		...source.flatMap((frame, index) =>
 			Object.entries(frame.regions).map(([region, value]) =>
@@ -85,16 +97,36 @@ try {
 		independentVideo,
 	]);
 	const encoded = await media.measure('independent-decoded', ['-i', independentVideo], frameCount);
-	const workflowControl = await media.measure('original-workflow-control-decoded', ['-i', originalWorkflow], frameCount);
-	let workflow = workflowControl, replay = null;
+	const workflowControl = await media.measure(
+		'original-workflow-control-decoded',
+		['-i', originalWorkflow],
+		frameCount,
+	);
+	let workflow = workflowControl,
+		replay = null;
 	if (workflowBitrate !== 40000000 || hardwareAcceleration === 'prefer-software') {
 		const host = new TheHoursHost({run, inputs});
 		try {
 			await host.start(configuration.width, configuration.height);
-			replay = await host.reencode({width: configuration.width, height: configuration.height, durationSeconds: configuration.durationSeconds, startSeconds: configuration.startSeconds, bitrate: workflowBitrate, hardwareAcceleration, mediabunnyModuleUrl: '/mediabunny.js', sourceMeans: trace.frames.map((frame) => frame.sourceRegions)});
-		} finally {await host.dispose();}
+			replay = await host.reencode({
+				width: configuration.width,
+				height: configuration.height,
+				durationSeconds: configuration.durationSeconds,
+				startSeconds: configuration.startSeconds,
+				bitrate: workflowBitrate,
+				hardwareAcceleration,
+				mediabunnyModuleUrl: '/mediabunny.js',
+				sourceMeans: trace.frames.map((frame) => frame.sourceRegions),
+			});
+		} finally {
+			await host.dispose();
+		}
 		await run.writeJson('workflow-replay.json', replay);
-		workflow = await media.measure('original-workflow-candidate-decoded', ['-i', await run.outputPath('recording/original-workflow.mp4')], frameCount);
+		workflow = await media.measure(
+			'original-workflow-candidate-decoded',
+			['-i', await run.outputPath('recording/original-workflow.mp4')],
+			frameCount,
+		);
 	}
 	const sourceTemporal = TheHoursTemporalMeasurement.evaluate(source, trace.frames),
 		originalSourceTemporal = TheHoursTemporalMeasurement.evaluate(originalSource, trace.frames),
@@ -108,13 +140,21 @@ try {
 					originalWorkflow: TheHoursHorizonMeasurement.evaluate(workflow, trace.frames),
 				}
 			: null;
-	const recurrence = configuration.startSeconds === 3 ? {source: TheHoursRecurrenceMeasurement.evaluate(source, trace.frames), independent: TheHoursRecurrenceMeasurement.evaluate(encoded, trace.frames), originalWorkflow: TheHoursRecurrenceMeasurement.evaluate(workflow, trace.frames)} : null;
+	const recurrence =
+		configuration.startSeconds === 3
+			? {
+					source: TheHoursRecurrenceMeasurement.evaluate(source, trace.frames),
+					independent: TheHoursRecurrenceMeasurement.evaluate(encoded, trace.frames),
+					originalWorkflow: TheHoursRecurrenceMeasurement.evaluate(workflow, trace.frames),
+				}
+			: null;
 	const pass =
 		sourceTemporal.pass &&
 		originalSourceTemporal.pass &&
 		encodedTemporal.pass &&
 		workflowTemporal.pass &&
-		(!horizon || Object.values(horizon).every((value) => value.pass)) && (!recurrence || Object.values(recurrence).every((value) => value.pass));
+		(!horizon || Object.values(horizon).every((value) => value.pass)) &&
+		(!recurrence || Object.values(recurrence).every((value) => value.pass));
 	const result = {
 		parentRoot,
 		frameCount,
@@ -141,11 +181,13 @@ try {
 				: [],
 		acceptance: 'Automated short detector only; native owner inspection and full-film gates remain open',
 	};
-	clearInterval(heartbeat); await heartbeatTail;
+	clearInterval(heartbeat);
+	await heartbeatTail;
 	console.log(await run.finish(pass ? 'accepted' : 'rejected', result));
 	if (!pass) process.exitCode = 2;
 } catch (error) {
-	clearInterval(heartbeat); await heartbeatTail;
+	clearInterval(heartbeat);
+	await heartbeatTail;
 	console.log(await run.finish('failed', {parentRoot, message: String(error), stack: error.stack}));
 	process.exitCode = 1;
 }

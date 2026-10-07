@@ -16,6 +16,11 @@ describe('Flat32 Color selection', () => {
 			}).colorDisplayModelConfiguration.model,
 		).toBe(model.id);
 		expect(createFlat32ColorDisplayModel().id).toBe('color-reset-slope-078-p9');
+		expect(
+			resolveFlat32ProductionSelections({colorDisplayModelConfiguration: {model: 'color-reset-slope-078-p2'}})
+				.sceneColorPrecision,
+		).toBe('float32');
+		expect(resolveFlat32ProductionSelections().sceneColorPrecision).toBe('float16');
 	});
 	it('selects the accepted Color Reset model and brightest-2,000 catalog by default', () => {
 		const color = createFlat32ColorDisplayModel();

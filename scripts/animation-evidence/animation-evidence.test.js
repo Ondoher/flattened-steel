@@ -177,6 +177,65 @@ test('bounded chunk sink preserves bytes, bounds memory, finalizes, and propagat
 	);
 });
 
+for (const failingStage of ['start', 'render', 'capture', 'addFrame', 'finalize']) {
+	test(`recording failure at ${failingStage} aborts its owned output and preserves the cause`, async () => {
+		const failure = new Error(`Failed ${failingStage}`);
+		const calls = [];
+		const operation = (stage) => {
+			calls.push(stage);
+			if (stage === failingStage) throw failure;
+		};
+		const recorder = new DeterministicCanvasRecorder({
+			mapping: [{slotIndex: 0, timestampMicroseconds: 0}],
+			framesPerSecond: 30,
+			presentationCanvas: {},
+			videoOutput: {
+				start: () => operation('start'),
+				addFrame: () => operation('addFrame'),
+				finalize: () => operation('finalize'),
+				getResult: () => operation('getResult'),
+				abort: (reason) => {
+					assert.equal(reason, failure);
+					calls.push('abort');
+				},
+			},
+			render: () => operation('render'),
+			capture: () => operation('capture'),
+			captureSlots: new Set([0]),
+		});
+		await assert.rejects(recorder.record(), (error) => error === failure);
+		assert.equal(calls.at(-1), 'abort');
+		assert.equal(calls.filter((stage) => stage === 'abort').length, 1);
+		assert.equal(calls.includes('getResult'), false);
+	});
+}
+
+test('recording cleanup failure retains both the original and cleanup causes', async () => {
+	const failure = new Error('Render failed'),
+		cleanupFailure = new Error('Encoder cancellation failed');
+	const recorder = new DeterministicCanvasRecorder({
+		mapping: [{slotIndex: 0, timestampMicroseconds: 0}],
+		framesPerSecond: 30,
+		presentationCanvas: {},
+		videoOutput: {
+			start() {},
+			addFrame() {},
+			finalize() {},
+			getResult() {},
+			abort() {
+				throw cleanupFailure;
+			},
+		},
+		render() {
+			throw failure;
+		},
+	});
+	await assert.rejects(
+		recorder.record(),
+		(error) => error instanceof AggregateError && error.errors[0] === failure && error.errors[1] === cleanupFailure,
+	);
+});
+
 test('Mediabunny adapter uses injected policy and exposes final packet evidence', async () => {
 	const calls = [];
 	class FakeOutput {
@@ -279,6 +338,40 @@ test('diagnostic timeline and player disclose holds, caller markers, and provena
 	assert.match(html, /Synthetic &lt;diagnostic&gt;/u);
 	assert.match(html, /held-presentation-slot/u);
 	assert.match(html, /Recording time is not animation performance/u);
+});
+
+test('Mediabunny adapter cancels partially started output exactly once', async () => {
+	const failure = new Error('Encoder startup failed');
+	let cancellationCalls = 0;
+	class FakeOutput {
+		addVideoTrack() {}
+		async start() {
+			throw failure;
+		}
+		async cancel() {
+			cancellationCalls += 1;
+		}
+	}
+	class FakeValue {}
+	const output = new MediabunnyCanvasOutput({
+		mediabunny: {
+			Output: FakeOutput,
+			CanvasSource: FakeValue,
+			AppendOnlyStreamTarget: FakeValue,
+			Mp4OutputFormat: FakeValue,
+			Quality: FakeValue,
+		},
+		canvas: {},
+		writable: new WritableStream(),
+		framesPerSecond: 30,
+		codec: 'avc',
+		bitrate: 1_000_000,
+	});
+	await assert.rejects(output.start(), (error) => error === failure);
+	await output.abort();
+	await output.abort();
+	assert.equal(cancellationCalls, 1);
+	assert.throws(() => output.getResult(), /has not finalized/u);
 });
 
 test('artifact manifests are sorted and content-addressed', async () => {

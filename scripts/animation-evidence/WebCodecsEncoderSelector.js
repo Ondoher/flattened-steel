@@ -19,7 +19,7 @@ function bytesToBase64(bytes) {
  * @returns {Readonly<Record<string, unknown>>} Stable configuration projection.
  */
 function normalizedConfiguration(configuration) {
-	return Object.freeze({
+	return {
 		codec: configuration.codec,
 		width: configuration.width,
 		height: configuration.height,
@@ -31,7 +31,7 @@ function normalizedConfiguration(configuration) {
 		scalabilityMode: configuration.scalabilityMode,
 		alpha: configuration.alpha,
 		avc: configuration.avc,
-	});
+	};
 }
 
 /**
@@ -41,7 +41,7 @@ function normalizedConfiguration(configuration) {
  */
 async function probe(candidate) {
 	const support = await VideoEncoder.isConfigSupported(candidate.config);
-	if (!support.supported) return Object.freeze({id: candidate.id, supported: false, configured: false});
+	if (!support.supported) return {id: candidate.id, supported: false, configured: false};
 	const resolvedConfig = support.config;
 	if (!resolvedConfig) throw new Error(`WebCodecs returned no resolved configuration for ${candidate.id}.`);
 	const canvas = new OffscreenCanvas(resolvedConfig.width, resolvedConfig.height);
@@ -59,18 +59,18 @@ async function probe(candidate) {
 			outputByteLength += chunk.byteLength;
 			if (metadata?.decoderConfig) {
 				const description = metadata.decoderConfig.description;
-				decoderConfig = Object.freeze({
+				decoderConfig = {
 					codec: metadata.decoderConfig.codec,
 					codedWidth: metadata.decoderConfig.codedWidth,
 					codedHeight: metadata.decoderConfig.codedHeight,
 					descriptionBase64: description
 						? bytesToBase64(new Uint8Array(/** @type {ArrayBuffer} */ (description)))
 						: null,
-				});
+				};
 			}
 		},
 		error: (error) => {
-			encodingError = Object.freeze({name: error.name, message: error.message});
+			encodingError = {name: error.name, message: error.message};
 		},
 	});
 	try {
@@ -79,7 +79,7 @@ async function probe(candidate) {
 		encoder.encode(frame, {keyFrame: true});
 		frame.close();
 		await encoder.flush();
-		return Object.freeze({
+		return {
 			id: candidate.id,
 			supported: true,
 			configured: encodingError === null && outputCount === 1 && outputByteLength > 0,
@@ -89,26 +89,26 @@ async function probe(candidate) {
 			outputByteLength,
 			decoderConfig,
 			encodingError,
-		});
+		};
 	} catch (error) {
-		return Object.freeze({
+		return {
 			id: candidate.id,
 			supported: true,
 			configured: false,
 			requestedConfig: normalizedConfiguration(candidate.config),
 			resolvedConfig: normalizedConfiguration(resolvedConfig),
-			encodingError: Object.freeze({
+			encodingError: {
 				name: error instanceof Error ? error.name : 'Error',
 				message: error instanceof Error ? error.message : String(error),
-			}),
-		});
+			},
+		};
 	} finally {
 		encoder.close();
 	}
 }
 
 /** WebCodecs capability selection that proves a candidate by encoding one frame. */
-export const WebCodecsEncoderSelector = Object.freeze({
+export const WebCodecsEncoderSelector = {
 	/**
 	 * Call this method to choose the first candidate that successfully encodes a probe frame.
 	 * @param {readonly AnimationEvidenceEncoderCandidate[]} candidates Ordered candidate policy owned by the caller.
@@ -128,13 +128,13 @@ export const WebCodecsEncoderSelector = Object.freeze({
 			const outcome = await probe(candidate);
 			outcomes.push(outcome);
 			if (outcome.configured === true) {
-				return Object.freeze({
+				return {
 					selectedCandidateId: candidate.id,
 					selectedConfig: normalizedConfiguration(candidate.config),
-					outcomes: Object.freeze(outcomes),
-				});
+					outcomes: outcomes,
+				};
 			}
 		}
 		throw new Error(`No WebCodecs candidate encoded a probe frame: ${JSON.stringify(outcomes)}`);
 	},
-});
+};

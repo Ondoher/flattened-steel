@@ -8,18 +8,47 @@ export const TheHoursRecurrenceMeasurement = {
 	 * @returns {TheHoursRecurrenceProof} - Exact retained target values and recurrence gate.
 	 */
 	evaluate(pixels, scene) {
-		if (pixels.length !== scene.length) throw new Error('Early-publication source and physical traces do not align.');
+		if (pixels.length !== scene.length)
+			throw new Error('Early-publication source and physical traces do not align.');
 		const publications = [112, 125].map((originalFrameIndex) => {
-			const index = scene.findIndex((frame) => Math.abs(frame.animationSeconds * 30 - originalFrameIndex) < 1e-10);
-			if (index < 2 || index + 1 >= pixels.length) throw new Error('Early-publication guard lacks the exact original neighbors.');
+			const index = scene.findIndex(
+				(frame) => Math.abs(frame.animationSeconds * 30 - originalFrameIndex) < 1e-10,
+			);
+			if (index < 2 || index + 1 >= pixels.length)
+				throw new Error('Early-publication guard lacks the exact original neighbors.');
 			const events = [index - 1, index].map((center) => {
-				const previous = pixels[center - 1].regions.lower.meanLuma, value = pixels[center].regions.lower.meanLuma, next = pixels[center + 1].regions.lower.meanLuma;
-				const incoming = value - previous, outgoing = next - value;
-				return {originalFrameIndex: Math.round(scene[center].animationSeconds * 30), previous, value, next, incoming, outgoing, curvature: Math.abs(outgoing - incoming), reversal: incoming * outgoing < 0};
+				const previous = pixels[center - 1].regions.lower.meanLuma,
+					value = pixels[center].regions.lower.meanLuma,
+					next = pixels[center + 1].regions.lower.meanLuma;
+				const incoming = value - previous,
+					outgoing = next - value;
+				return {
+					originalFrameIndex: Math.round(scene[center].animationSeconds * 30),
+					previous,
+					value,
+					next,
+					incoming,
+					outgoing,
+					curvature: Math.abs(outgoing - incoming),
+					reversal: incoming * outgoing < 0,
+				};
 			});
-			return {originalFrameIndex, publishedScene: scene[index].sharedScene ?? scene[index].cacheIdentity, previousScene: scene[index - 1].sharedScene ?? scene[index - 1].cacheIdentity, events, reversal: events.some((event) => event.reversal)};
+			return {
+				originalFrameIndex,
+				publishedScene: scene[index].sharedScene ?? scene[index].cacheIdentity,
+				previousScene: scene[index - 1].sharedScene ?? scene[index - 1].cacheIdentity,
+				events,
+				reversal: events.some((event) => event.reversal),
+			};
 		});
-		const reversingPublications = publications.filter((publication) => publication.reversal).map((publication) => publication.originalFrameIndex);
-		return {publications, reversingPublications, maximumDistinctPublications: 1, pass: reversingPublications.length <= 1};
+		const reversingPublications = publications
+			.filter((publication) => publication.reversal)
+			.map((publication) => publication.originalFrameIndex);
+		return {
+			publications,
+			reversingPublications,
+			maximumDistinctPublications: 1,
+			pass: reversingPublications.length <= 1,
+		};
 	},
 };

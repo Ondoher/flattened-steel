@@ -51,12 +51,12 @@ export class BoundedChunkSink {
 	 * @returns {AnimationEvidenceChunkSinkDiagnostics} Current transport diagnostics.
 	 */
 	diagnostics() {
-		return Object.freeze({
+		return {
 			batchCount: this.#batchIndex,
 			totalByteLength: this.#totalByteLength,
 			maximumBufferedBytes: this.#maximumBufferedBytes,
 			finalized: this.#finalized,
-		});
+		};
 	}
 
 	/**

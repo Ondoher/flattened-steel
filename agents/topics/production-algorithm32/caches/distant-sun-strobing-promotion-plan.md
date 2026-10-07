@@ -2,8 +2,9 @@
 
 Status: active production Algorithm32 work. P0 controls are established;
 P1 implementation and focused checks are recorded. P2 physical and Bruneton
-qualification passes, including the full matrix. P3 appearance and the batched
-source-review completion gates remain open. Publication has not started.
+qualification passes, including the full matrix. P3 appearance artifacts are
+accepted by the owner; batched source-review completion gates remain open.
+Publication has not started.
 [Promotion status](distant-sun-strobing-promotion-status.md) owns current phase,
 readiness, and next actions. The
 [experiment status](../../poc-experiments/engineering-studies/distant-sun-recording-strobing/status.md)
@@ -245,34 +246,39 @@ the coupled source-review or appearance gates.
 
 ## P3 - Integrate Color And Qualify The Production Animation
 
-- [ ] Implement the separately versioned p2 model and candidate application
+The checked items below record verified functional and artifact outcomes.
+Formal implementation completion also requires the final mapped primary/audit
+validation linked from the [promotion status](distant-sun-strobing-promotion-status.md).
+
+- [x] Implement the separately versioned p2 model and candidate application
       selection. Verify positive slope of `E * gain(E)` for nonnegative
       illuminance, CPU/GLSL agreement, physical-input bindings, and composed
       scene display. Preserve independent Basic Bruneton tests.
-- [ ] Adapt offline The Hours controls to production APIs and the existing
+- [x] Adapt offline The Hours controls to production APIs and the existing
       animation toolkit. Preserve measured-light endpoints and exact-time
       direct light. Remove bundle interception and temporary private geometry
       mutation from the production proof path.
-- [ ] Generate/authenticate the Native15/N4 production package and exercise all
+- [x] Generate/authenticate the Native15/N4 production package and exercise all
       109 scenes. Revalidate complete cubic support, cache/source/receiver-light
       identity coherence, and the admitted two-atlas byte budget.
-- [ ] Diagnose and resolve the early ground events with exact native frames and
+- [x] Diagnose and resolve the early ground events with exact native frames and
       physical traces. Preserve the original detector and failure evidence;
       changes in strongest-event ranking do not justify dropping events.
-- [ ] Repeat daytime, sunrise, and sunset diagnostics through lossless frames,
+- [x] Repeat daytime, sunrise, and sunset diagnostics through lossless frames,
       independent encoding, and the original recording workflow. Require
       curvature ratios at most 1.5 in every region and the existing
       distinct-publication recurrence gate. Require upper-sky wrong-direction
       excursion at most one mean 0-255 code value over each complete
       89.5-91.5-degree horizon crossing; retain other regional measurements.
-- [ ] After short diagnostics pass, regenerate the same **The Hours** film:
+- [x] After short diagnostics pass, regenerate the same **The Hours** film:
       3840 x 2160, 60 seconds, 30 fps, 1,800 frames, original seed, geometry,
       camera score, and astronomical timeline. Record promoted changes and
       verify every scene state/presentation slot, source and encoded recurrence,
       both horizons, and decoding consistency.
-- [ ] Deliver a 1024 x 576 copy, all diagnostic animations, synchronized
+- [x] Deliver a 1024 x 576 copy, all diagnostic animations, synchronized
       comparisons, and one artifact index. Retain unannotated recordings and
-      rejected outcomes. Obtain native-resolution owner inspection.
+      rejected outcomes. Obtain native-resolution owner inspection. Owner
+      acceptance is recorded in the [promotion status](distant-sun-strobing-promotion-status.md#p3-appearance-evidence).
 
 Gate: both physical qualification and production appearance pass, including the
 full source recurrence gate. The encoded-only pass remains insufficient.

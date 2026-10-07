@@ -15,6 +15,9 @@ import {
 	SCENE_BACKGROUND_COLOR,
 } from './consts.js';
 
+/** Renderer-owned scene, presentation targets and frame-boundary publication.
+ * @implements {Flat32SceneRuntimeCapability}
+ */
 export class ThreeSceneRuntime {
 	/** Pending application publications consumed before the next complete render.
 	 * @type {Set<Flat32FrameBoundaryOperation>}
@@ -69,7 +72,8 @@ export class ThreeSceneRuntime {
 		}
 		this._frameCadence = frameCadence;
 		const sceneColorPrecision = configuration.sceneColorPrecision ?? 'float16';
-		if (!['float16', 'float32'].includes(sceneColorPrecision)) throw new RangeError('Flat32 scene color precision is unsupported.');
+		if (!['float16', 'float32'].includes(sceneColorPrecision))
+			throw new RangeError('Flat32 scene color precision is unsupported.');
 		this._sceneColorPrecision = sceneColorPrecision;
 		this._canvas = canvas;
 		this._onFailure = onFailure;
@@ -434,7 +438,7 @@ void main() {
 			this._canvas.dataset.flat32ContextState = 'restored';
 			if (this._resumeAfterContextRestoration) {
 				this._started = true;
-				this._renderFrame();
+				if (this._frameCadence === 'animation-frame') this._renderFrame();
 			}
 		} catch (error) {
 			this._resumeAfterContextRestoration = false;

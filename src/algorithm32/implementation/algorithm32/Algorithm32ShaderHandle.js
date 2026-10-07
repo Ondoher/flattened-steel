@@ -1,26 +1,25 @@
-/** Runtime-local identities distinguish rebuilt cache objects without exposing backend resources. */
-const RECEIVER_LIGHT_CACHE_IDENTITIES = new WeakMap();
-let nextReceiverLightCacheIdentity = 1;
-
-/**
- * Return one stable identity for the lifetime of an installed cache object.
- * @param {GpuScatteringCache} cache - Installed cache object.
- * @returns {string} Runtime-local cache identity.
- */
-function receiverLightCacheIdentity(cache) {
-	let identity = RECEIVER_LIGHT_CACHE_IDENTITIES.get(cache);
-	if (identity === undefined) {
-		identity = `runtime-cache-${nextReceiverLightCacheIdentity}`;
-		nextReceiverLightCacheIdentity += 1;
-		RECEIVER_LIGHT_CACHE_IDENTITIES.set(cache, identity);
-	}
-	return identity;
-}
-
 /**
  * Control one installed Algorithm32 runtime shader integration.
  */
 export class Algorithm32ShaderHandle {
+	/** Shared cache-object identities preserve cross-handle packet provenance. */
+	static _receiverLightCacheIdentities = new WeakMap();
+	/** Next shared cache identity; independent of handle rebuild generations. */
+	static _nextReceiverLightCacheIdentity = 1;
+
+	/** Called by receiver preparation to identify one installed cache object.
+	 * @param {GpuScatteringCache} cache - Installed cache object.
+	 * @returns {string} - Stable runtime-local cache identity.
+	 */
+	_receiverLightCacheIdentity(cache) {
+		let identity = Algorithm32ShaderHandle._receiverLightCacheIdentities.get(cache);
+		if (identity === undefined) {
+			identity = `runtime-cache-${Algorithm32ShaderHandle._nextReceiverLightCacheIdentity}`;
+			Algorithm32ShaderHandle._nextReceiverLightCacheIdentity += 1;
+			Algorithm32ShaderHandle._receiverLightCacheIdentities.set(cache, identity);
+		}
+		return identity;
+	}
 	/**
 	 * Creates a shader handle.
 	 *
@@ -287,7 +286,7 @@ export class Algorithm32ShaderHandle {
 		let gpuRadiancesPromise = null;
 		const sampleGpuRadiances = () => (gpuRadiancesPromise ??= sampler.sample({signal}));
 		const measurement = await this._facade._publishReceiverEnvironmentLight({
-			identity: `receiver-environment-light:model-${buildResult.modelVersion}:profile-${this._facade._model.profile.contentHash}:${receiverLightCacheIdentity(scatteringCache)}`,
+			identity: `receiver-environment-light:model-${buildResult.modelVersion}:profile-${this._facade._model.profile.contentHash}:${this._receiverLightCacheIdentity(scatteringCache)}`,
 			signal,
 			sampleIncomingRadiance: sampleGpuRadiances,
 			reduceIncomingRadiance: (radiances) => reducer.reduce({radiances, signal}),

@@ -195,3 +195,46 @@ type ReceiverEnvironmentSample = Readonly<{
 	/** Nonnegative physical sky adaptation luminance, in cd m^-2. */
 	stellarAdaptationLuminance: UnitValue<'cd m^-2'>;
 }>;
+/** Physical reduction capability required by receiver-environment ownership. */
+interface ReceiverEnvironmentCalculator {
+	/** Reduce incoming samples to horizontal irradiance. */ measureEnvironmentIrradiance(
+		request: ReceiverEnvironmentLightReductionRequest,
+	): SpectralIrradiancePacket;
+	/** Reduce sky samples to the measured adaptation luminance. */ measureMedianSkyLuminance(
+		radiances: readonly SpectralRadiancePacket[],
+	): UnitValue<'cd m^-2'>;
+	/** Combine matching direct and diffuse light into one complete measurement. */ combineReceiverLight(
+		request: ReceiverLightCombinationRequest,
+	): ReceiverEnvironmentLightMeasurement;
+}
+
+/** Dependencies owned by one receiver environment-light controller. */
+type ReceiverEnvironmentControllerConfiguration = {
+	/** Independent physical reduction capability. */ calculator: ReceiverEnvironmentCalculator;
+	/** Fixed direct-light measurement for this scene. */ directLight: ReceiverDirectLightMeasurement;
+	/** Complete observation identity. */ identity: string;
+};
+
+/** Direct-normal result and source-center orientation at the configured receiver. */
+type ConfiguredDirectNormalMeasurement = {
+	/** Native direct-normal spectrum. */ directNormal: SpectralIrradiancePacket;
+	/** Cosine of the source center above the horizon. */ sourceCenterCosine: number;
+};
+
+/** Source-owned optional finite or angular extent metadata. */
+type ConfiguredDirectSourceMetadata = {
+	/** Distant source angular radius. */ angularRadius?: Angle;
+	/** Finite source physical radius. */ radius?: Distance;
+	/** Safe physical receiver/source separation. */ safeDistance?: Distance;
+	/** Actual receiver/source separation when available. */ distanceFromSource?: Distance | null;
+};
+
+/** Shared physical source facts used by direct-light reductions. */
+type ConfiguredDirectSourceFacts = {
+	/** Configured placement geometry. */ geometry: GeometryModel;
+	/** Geometry-owned receiver position. */ observerPosition: Position;
+	/** Source-owned direct lighting sample. */ directSample: DirectLightingSample;
+	/** Native source irradiance. */ sourceIrradiance: SpectralIrradiancePacket;
+	/** Source elevation in radians. */ elevationRadians: number;
+	/** Cosine of source center above the horizon. */ sourceCenterCosine: number;
+};

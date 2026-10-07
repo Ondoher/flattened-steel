@@ -16,7 +16,7 @@ export class ModeController {
 		this._onPublished = configuration.onPublished;
 		this._sceneRuntime = configuration.sceneRuntime;
 		this._atmosphereEnabled = configuration.atmosphereEnabled !== false;
-		/** @type {Algorithm32Runtime | null} */
+		/** @type {Flat32AlgorithmRuntimeCapability | null} */
 		this._activeRuntime = null;
 		this._generation = 0;
 		/** @type {AbortController | null} */
@@ -45,7 +45,7 @@ export class ModeController {
 	 * Dispose preparation resources not yet owned by a runtime candidate.
 	 *
 	 * @param {Flat32Mode | null} mode - Supplies the prepared mode.
-	 * @param {ReturnType<import('./ThreeSceneRuntime.js').ThreeSceneRuntime['createAtmosphereComposer']> | null} composer -
+	 * @param {Flat32AtmosphereComposerResources | null} composer -
 	 * Supplies isolated composer resources.
 	 * @returns {void}
 	 */
@@ -86,9 +86,9 @@ export class ModeController {
 		this._preparationCancellation = preparationCancellation;
 		/** @type {Flat32Mode | null} */
 		let mode = null;
-		/** @type {ReturnType<import('./ThreeSceneRuntime.js').ThreeSceneRuntime['createAtmosphereComposer']> | null} */
+		/** @type {Flat32AtmosphereComposerResources | null} */
 		let composer = null;
-		/** @type {Algorithm32Runtime | null} */
+		/** @type {Flat32AlgorithmRuntimeCapability | null} */
 		let candidate = null;
 		let sceneChanged = false;
 		const configurationIdentity = JSON.stringify({

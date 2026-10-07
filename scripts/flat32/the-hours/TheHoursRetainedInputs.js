@@ -53,7 +53,7 @@ export class TheHoursRetainedInputs {
 	 */
 	async json(relative) {
 		const artifact = this._artifacts.get(relative);
-		if (!artifact || artifact.byteLength > 32 * 1024 * 1024)
+		if (!artifact || artifact.byteLength > 64 * 1024 * 1024)
 			throw new Error('Parent JSON is missing or exceeds its bound.');
 		return JSON.parse(await readFile(await this.path(relative), 'utf8'));
 	}

@@ -1,7 +1,7 @@
 import {SpectralPacket} from '../../../src/algorithm32/spectral-values/index.js';
 /**
  * Source-informed, illustrative dry-sand reflectance and local reflected light.
- * See ground-reflectance.md for the reference, approximate values, and the
+ * See README.md for the original reference, approximate values, and the
  * explicit exclusion of atmospheric multiple-scattering ground feedback.
  */
 export const TheHoursDesertReflectance = {

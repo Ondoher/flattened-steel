@@ -2,6 +2,7 @@ import {createHash} from 'node:crypto';
 import {TheHoursRun} from './TheHoursRun.js';
 import {TheHoursPackageInputs} from './TheHoursPackageInputs.js';
 import {TheHoursHost} from './TheHoursHost.js';
+import {TheHoursShortGate} from './TheHoursShortGate.js';
 import {
 	THE_HOURS_PACKAGE_ROOT,
 	THE_HOURS_PACKAGE_REPORT,
@@ -11,7 +12,21 @@ import {
 } from './consts.js';
 
 const operation = process.argv[2] ?? 'proof';
-if (!['proof', 'scenes', 'daylight', 'sunrise', 'sunset', 'early-ground', 'early-ground-float32', 'daylight-float32', 'sunrise-float32', 'sunset-float32'].includes(operation))
+if (
+	![
+		'proof',
+		'scenes',
+		'film',
+		'daylight',
+		'sunrise',
+		'sunset',
+		'early-ground',
+		'early-ground-float32',
+		'daylight-float32',
+		'sunrise-float32',
+		'sunset-float32',
+	].includes(operation)
+)
 	throw new Error(
 		'Select a registered short proof operation. Full film requires a separate accepted short-proof gate.',
 	);
@@ -27,6 +42,14 @@ const heartbeat = setInterval(
 	15000,
 );
 try {
+	const gate =
+		operation === 'film'
+			? await new TheHoursShortGate(run).admit({
+					path: process.argv[3],
+					byteLength: Number(process.argv[4]),
+					sha256: process.argv[5],
+				})
+			: null;
 	const packageProof = await inputs.authenticate();
 	await run.writeJson('package-proof.json', packageProof);
 	const original = /** @type {TheHoursOriginalTrace} */ (await run.parentJson(THE_HOURS_ORIGINAL));
@@ -42,8 +65,8 @@ try {
 			control.seed !== 3202609)
 	)
 		throw new Error('Selected POC short control is incompatible.');
-	const width = operation.startsWith('early-ground') ? 3840 : 1280,
-		height = operation.startsWith('early-ground') ? 2160 : 720;
+	const width = operation === 'film' || operation.startsWith('early-ground') ? 3840 : 1280,
+		height = operation === 'film' || operation.startsWith('early-ground') ? 2160 : 720;
 	await host.start(width, height);
 	const proof = await host.proof();
 	await run.writeJson('gpu-proof.json', proof);
@@ -54,9 +77,14 @@ try {
 			width,
 			height,
 			colorModel: 'color-reset-slope-078-p2',
-			startSeconds: {scenes: 30, daylight: 16, sunrise: 10, sunset: 46, 'early-ground': 3}[controlName],
-			durationSeconds: operation === 'scenes' ? 0 : operation.startsWith('early-ground') ? 2 : 4,
-			sceneColorPrecision: operation === 'scenes' || operation.endsWith('-float32') ? 'float32' : 'float16',
+			startSeconds: {film: 0, scenes: 30, daylight: 16, sunrise: 10, sunset: 46, 'early-ground': 3}[controlName],
+			durationSeconds:
+				operation === 'film' ? 60 : operation === 'scenes' ? 0 : operation.startsWith('early-ground') ? 2 : 4,
+			sceneColorPrecision:
+				operation === 'film' || operation === 'scenes' || operation.endsWith('-float32')
+					? 'float32'
+					: 'float16',
+			bitrate: gate?.filmBitrate ?? 40000000,
 			fixedCamera: control?.fixedCamera,
 			originalPresentationFilters: THE_HOURS_PRESENTATION_FILTERS,
 			mediabunnyModuleUrl: '/mediabunny.js',

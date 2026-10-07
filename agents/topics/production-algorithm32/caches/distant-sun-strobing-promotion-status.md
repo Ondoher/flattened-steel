@@ -1,6 +1,12 @@
 # Distant-Sun Strobing Production Promotion Status
 
-Current phase: **P3 is authorized and active under independent execution.**
+Current phase: **P3 closeout under independent execution.**
+All P3 functional and artifact gates pass, and native owner inspection is
+accepted. The final source-review disposition and implementation-completion
+gate are owned by the task's [completion record](../../../../.codex-tmp/p3-strobing-20261007/summary.md).
+Completion requires that record to link an exit-0 `CLEAN` mapped primary and
+independent-audit validation for the frozen P3 review unit. Until that evidence
+exists, the source-review gate remains open. P4 is not selected.
 Its baseline is `.codex-tmp/review-standards/session-eg11IP/p3-baseline.json`;
 new output and the decision/progress record are under
 `.codex-tmp/p3-strobing-20261007/`. The separately selectable p2 response and
@@ -10,11 +16,18 @@ two-atlas byte ceiling. Native early-ground diagnosis isolates the retained
 112/125 events to half-float scene-color storage: full-float removes both
 reversals with identical physical spectra, illuminance, cameras and Sun
 directions. Matched full-float daylight, sunrise and early-ground short proofs
-pass their lossless, independent-encoding and original-workflow gates using
-the declared 80 Mbps media candidate. Sunset source and independent encoding
-pass, but its browser encoding still exceeds the unchanged 1.5 ratio limit;
-additional encoder diagnosis remains active. The full film is gated on all
-short proofs. Native owner inspection and coupled source reviews remain open.
+pass their lossless, independent-encoding and original-workflow gates. All
+matched 720p diagnostics, including sunset, pass at 160 Mbps; the native 4K
+early-ground proof passes at 80 Mbps. These declared media candidates retain
+the original AVC toolkit, source pixels, cadence and unchanged thresholds.
+The four sealed short proofs admitted the full native 1,800-frame film run.
+Its source and encoded temporal gates, both complete horizon crossings,
+explicit 112/125 recurrence checks, cadence and lossless milestone consistency
+all pass. The native recording, 1024 x 576 copy, synchronized POC comparisons
+and artifact index are delivered and accepted by the owner on 2026-10-07.
+The native-resolution inspection gate is closed. P3 source-review disposition
+follows the completion record above; broader final publication reviews remain
+part of P4.
 The bounded 12:30 error attribution diagnostic is complete.
 The worst-ray regression is dominated by removal of first-order altitude
 interpolation overbrightness. Outgoing directional interpolation also dims
@@ -25,15 +38,70 @@ but worsens aggregate B1 by 1.78% and nearly doubles B2 RMSE. No replacement
 is selected; current Native48 defaults remain unchanged. The existing P2
 physical and Bruneton
 qualification passes on its original Native48 grid. P0 controls,
-P1 implementation, and the complete physical matrix are recorded. The coupled
-P1-P3 source reviews and candidate appearance acceptance remain open, so formal
-implementation completion is not claimed. Publication remains outside P3.
+P1 implementation, and the complete physical matrix are recorded. Formal P3
+implementation completion follows the validation condition above. Candidate
+appearance is accepted. Publication remains outside P3.
 
 The [plan](distant-sun-strobing-promotion-plan.md) owns phases and boundaries.
 The [acceptance policy](distant-sun-strobing-acceptance.md) owns the registered
 full-spectrum matrix and tolerances. The
 [experiment status](../../poc-experiments/engineering-studies/distant-sun-recording-strobing/status.md)
 owns inherited evidence and unresolved recurrence, review, and inspection gates.
+
+## P3 Appearance Evidence
+
+New output is under `.codex-tmp/p3-strobing-20261007/runs/`. The native film is
+`2026-10-07T18-03-00-183Z-film-faa46587-29aa-4146-bfe4-8a87bd170cac/`;
+its 55,188-byte manifest has SHA-256
+`d60c457bf207d3f0453fc5d74fe3a1a76af44cde97e3dbc498d45e983b921a98`.
+All 1,800 original 30 fps state/presentation slots render with no held slots.
+The 4K original-workflow encoder uses the short-qualified 80 Mbps policy.
+
+Full-film qualification is
+`2026-10-07T18-36-14-508Z-film-qualification-5923ccd5-b2fe-4d87-938e-d61a82133c4a/`;
+its 11,362-byte manifest has SHA-256
+`d088687362dbb092756566103c01d43eb20838b89d801c8b3f2b8d269cae6aaf`.
+Source and encoded temporal ratios pass in every registered region. Each
+complete horizon window contains 44 frames; upper-sky wrong-direction
+excursion is zero in both source and encoded recordings. Native early-ground
+112/125 reversals are absent. The encoded result retains one reversing
+publication at 112, within the unchanged allowance of one. Nineteen lossless
+milestones agree with recorded native means within 2.84218e-14 code values.
+These automated gates accompany the owner's artifact acceptance below.
+
+The concrete review index is
+`2026-10-07T18-38-28-128Z-delivery-88ccec0e-9b72-412f-825f-998a7b585de3/index.html`.
+It links the unannotated native candidate, smaller review copy, all four
+qualified diagnostics and synchronized selected-POC comparisons. Rejected
+encoder candidates, the half-float control and failed attempts remain sealed
+under the same task root. Historical originals remain unchanged.
+
+The owner explicitly accepted the P3 artifacts on 2026-10-07. This closes the
+native-resolution owner inspection and artifact-acceptance gates for this exact
+delivery. The separate sealed receipt is
+`2026-10-07T19-00-25-069Z-owner-acceptance-185c902d-b722-4e35-a34e-d47c37d309ca/owner-acceptance.json`.
+It authenticates the delivery's 3,703-byte manifest, SHA-256
+`66483b1c020efb9197490d685636802d5e5b72b75d4d10bb8f9f213ff3854dba`,
+the review index and its full-film qualification parent. The sealed delivery's
+earlier pending-inspection text remains an immutable pre-acceptance snapshot.
+Artifact acceptance does not close standards-review gates or authorize P4
+publication or default switching.
+
+The proof host's first privacy review found independent HTTP lifecycle,
+route-owned file reads and internal browser error details. The revised host
+uses Polylith's server lifecycle, a transport-neutral asset service, and stable
+browser failure payloads. Fresh GPU/color admission passes in
+`2026-10-07T18-40-12-684Z-proof-cdb7f5cf-fc6c-49a2-9c1a-e6d63729005b/`.
+Earlier reviewer reports are retained; edits invalidate their source evidence.
+The closeout fixes place public proof-asset access behind its feature entry,
+replace local implementation type bridges with named ambient capabilities,
+express readonly intent in contracts, and release encoder ownership on failed
+recording. All 651 Algorithm32 specs, 14 animation-tool tests, affected type
+checks and formatting pass. Fresh actual GPU/color admission passes in
+`2026-10-07T20-06-29-040Z-proof-6b4637a0-a5ad-43bf-9d34-506a6e48f9b7/`.
+These ownership and contract fixes preserve the accepted numerical/rendering
+path; the accepted film and its qualification remain immutable. Final mapped
+review validity is determined by the linked completion record.
 
 ## P0 Evidence
 
@@ -145,8 +213,8 @@ The owner requires preservation of the POC's demonstrated strobing
 improvements. Its selected four-metre/cubic correction is the behavioral
 baseline; the anchored numerical candidate must pass matched appearance
 diagnostics before replacement. Physical accuracy alone does not authorize
-that replacement. The p2 color response and physical-light interpolation remain
-planned P3 work, and the original POC evidence is unchanged.
+that replacement. The p2 color response and physical-light interpolation are
+implemented in the active P3 candidate; the original POC evidence is unchanged.
 
 Focused scalar interpolation, 12 controller publication tests, and six
 point-local compiler tests pass. The latter retain legacy identities and check
@@ -159,14 +227,12 @@ complete pass remains open and is not included among the passing type checks.
 
 ## Next Actions
 
-1. Execute the selected P3 p2 model, production animation adapter and matched
-   short diagnostics. Retain Native48, the P2 physical candidate, and the POC
-   strobing baseline. Resolve recurrence before full-film rendering.
-2. Authenticate the unchanged candidate package and qualify all 109 scenes,
-   coherent lighting and the existing two-atlas budget.
-3. Complete automated film qualification and batched source reviews, then
-   present concrete native-resolution artifacts for owner inspection.
-   Publication and unrelated numerical trials remain unselected.
+1. Consult the P3 completion record for the final mapped review and audit
+   disposition. Any incomplete review gate must close before completion.
+2. Preserve accepted appearance artifacts and their sealed parent evidence.
+   Native owner inspection is complete.
+3. Keep publication, default switching and unrelated numerical trials outside
+   the selected P3 scope.
 
 ## Near-Ground Resolution Trial
 
@@ -368,7 +434,7 @@ retain this limitation. Its seal SHA-256 is
 Neither this diagnostic nor CPU/GPU agreement establishes a continuum
 solution or changes the selected cache. The task baseline is
 `.codex-tmp/review-standards/session-p5WTNi/baseline.json`; the coupled P1-P3
-review and appearance gates remain open.
+review gates remain open. Current appearance acceptance is recorded above.
 
 ## P2 Execution
 
@@ -526,7 +592,8 @@ captured before these edits, is
 Architecture consultation supports the explicit coordinate-address contract;
 it is not a source review or audit. The plan batches coupled numerical/color
 review after P1–P3 stabilize. Those implementation-completion review gates,
-outstanding experiment reviews, and appearance gates remain open.
+outstanding experiment reviews remain open. Current P3 appearance acceptance
+is recorded above.
 Earlier P2 handoff advice returned `NOT_READY` under the former adviser policy;
 no checkpoint or deployment was performed for that handoff. That result is
 historical and does not describe current checkpoint-monitoring eligibility.

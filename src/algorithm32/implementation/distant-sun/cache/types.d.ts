@@ -1868,3 +1868,21 @@ type DistantSunSceneCacheDefinition = Readonly<{
 	/** Uploaded exact-seam RGBA32F channel groups. */ readonly cumulativeTexture: CacheImmutableTexture;
 	/** Uploaded logical-W27 to unique-direction R16UI index. */ readonly directionIndexTexture: CacheImmutableTexture;
 }>;
+/** Stable shared-scene preparation and atomic publication capability. */
+interface DistantSunSharedScenePublication {
+	/** Prepare complete support while retaining the visible scene. */ prepareScene(
+		sceneOrdinal: number | null,
+		options: DistantSunSharedCacheSceneRequest,
+		signal?: AbortSignal,
+	): Promise<DistantSunSharedCacheFrame | undefined>;
+	/** Publish exactly the completed preparation generation. */ publishPrepared(
+		generation: number,
+	): DistantSunSharedCacheFrame;
+	/** Cancel only unpublished preparation. */ cancelPreparation(): void;
+}
+
+/** Ordered required and predicted block window for one scene. */
+type DistantSunSharedBlockWindow = {
+	/** Complete ordered block identities. */ ids: string[];
+	/** First predicted scene ordinal. */ predicted: number;
+};

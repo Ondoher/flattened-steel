@@ -21,27 +21,14 @@ import {
 /**
  * Own the fixed spherical-geometry/distant-Sun Algorithm32 application mode.
  *
+ * @implements {Flat32Mode}
  * The selected native production profile retains Native48 positions,
  * reflection-completed Fibonacci-68 incoming directions, W27 outgoing directions, and all native
  * 15 spectral channels. Omitted ground selects the canonical-black boundary.
  */
 export class SphericalDistantMode {
 	/**
-	 * @param {Readonly<{
-	 *   sceneState: Flat32DistantSunSceneState,
-	 *   sceneScale: SceneScale,
-	 *   sourceAngularRadius: Angle,
-	 *   maximumScatteringOrder: SupportedCacheScatteringOrder,
-	 *   sceneCacheAsset?: DistantSunSceneCacheAssetSelection,
-	 *   sharedCache?: DistantSunSharedCacheSelection,
-	 *   distantSunCacheState?: 'ready' | 'dark',
-	 *   celestialSourcesEnabled?: boolean,
-	 *   colorDisplayModelConfiguration?: Flat32ColorDisplayModelConfiguration,
-	 *   stellarCatalog?: Flat32StellarCatalogId,
-	 *   brightest2000StellarCatalogDefinition?: ReturnType<import('../algorithm32/implementation/star-field/Brightest2000StellarCatalogPackage.js').createBrightest2000StellarCatalogDefinition>,
-	 *   presentationFilters?: readonly Flat32PresentationFilterConfiguration[]
-	 *   scotopicLuminanceWeights?: ArrayLike<number>
-	 * }>} configuration - Supplies the Flat32 application selections that are
+	 * @param {Flat32SphericalDistantModeConfiguration<SphericalEarthGeometry>} configuration - Supplies the Flat32 application selections that are
 	 * owned by its constants module.
 	 */
 	constructor(configuration) {

@@ -9,7 +9,7 @@ import {ATMOSPHERE_SCENE_SCALE, GROUND_COLOR, GROUND_SIZE_SCENE_UNITS, SCENE_OBJ
 export class EndpointScene {
 	/**
 	 * @param {THREE.Scene} scene - Owns the rendered objects.
-	 * @param {Readonly<{ reviewObjectsEnabled?: boolean }>} [configuration]
+	 * @param {Flat32EndpointSceneConfiguration} [configuration]
 	 * Supplies diagnostic-only scene visibility without changing the default.
 	 */
 	constructor(scene, configuration = {}) {

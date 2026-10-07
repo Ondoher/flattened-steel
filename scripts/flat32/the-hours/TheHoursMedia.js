@@ -8,7 +8,7 @@ import Files from '../../algorithm32/solar-zenith-cache/DistantSunSharedCacheGen
 /** Pinned independent encoder and unchanged regional decoded-pixel measurements. */
 export class TheHoursMedia {
 	/** Creates a media owner for one new proof run.
-	 * @param {import('./TheHoursRun.js').TheHoursRun} run - Active contained output owner.
+	 * @param {TheHoursRunCapability} run - Active contained output owner.
 	 */
 	constructor(run) {
 		this._run = run;

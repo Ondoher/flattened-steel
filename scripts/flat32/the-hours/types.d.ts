@@ -293,7 +293,7 @@ type TheHoursLightingSample = Readonly<{
 /** Exact production candidate inputs owned by one active run. */
 type TheHoursPackageInputConfiguration = Readonly<{
 	/** Active run capability; parent reads authenticate immutable inputs. */
-	run: import('./TheHoursRun.js').TheHoursRun;
+	run: TheHoursRunCapability;
 	/** Evidence-root-relative selected package directory. */
 	packageRoot: string;
 	/** Pinned package-relative report identity. */
@@ -354,6 +354,7 @@ type TheHoursGpuProofResult = Readonly<{
 }>;
 /** Complete native replay controls, provided after parent authentication. */
 type TheHoursBrowserConfiguration = Readonly<{
+	/** Explicit AVC workflow target bitrate. */ bitrate?: number;
 	/** Authenticated original full choreography. */ original: TheHoursOriginalTrace;
 	/** Native frame width in pixels. */ width: number;
 	/** Native frame height in pixels. */ height: number;
@@ -373,7 +374,7 @@ type TheHoursSceneFrame = TheHoursMeasuredSceneFrame &
 		/** Exact-time physical Sun direction. */ directionToSunModel: UnitVector3;
 		/** Recoverable native camera pose. */ camera: TheHoursCameraSnapshot;
 		/** Native-pixel source means in all pinned masks. */ sourceRegions: TheHoursPixelRegions;
-	/** Complete coherent cache state. */ sharedCache: DistantSunSharedCacheControllerDiagnostics;
+		/** Complete coherent cache state. */ sharedCache: DistantSunSharedCacheControllerDiagnostics;
 		/** Identity of combined exact direct and measured/interpolated environment. */ receiverLightIdentity: string;
 		/** Complete actual physical receiver-light values. */ receiverLight: ReceiverEnvironmentLightMeasurement;
 		/** Scene light and shared-shadow resource facts. */ lighting: TheHoursDesertSceneLightingDescription;
@@ -405,7 +406,7 @@ type TheHoursBrowserResult = Readonly<{
 }>;
 /** Loopback host dependencies, owned by the same active proof. */
 type TheHoursHostConfiguration = Readonly<{
-	/** Active output capability. */ run: import('./TheHoursRun.js').TheHoursRun;
+	/** Active output capability. */ run: TheHoursRunCapability;
 	/** Authenticated read-only artifact capability. */ inputs: TheHoursInputArtifacts;
 }>;
 
@@ -445,9 +446,10 @@ type TheHoursReplayConfiguration = Readonly<{
 	/** Every original native regional RGB/code mean. */ sourceMeans: readonly TheHoursPixelRegions[];
 }>;
 /** Exact native replay validation and complete recording facts. */
-type TheHoursReplayResult = TheHoursRecordingResult & Readonly<{
-	/** Maximum regional RGB/code mean change after exact PNG reconstruction. */ maximumNativeMeanDifference: number;
-}>;
+type TheHoursReplayResult = TheHoursRecordingResult &
+	Readonly<{
+		/** Maximum regional RGB/code mean change after exact PNG reconstruction. */ maximumNativeMeanDifference: number;
+	}>;
 /** One actual complete native production scene publication. */
 type TheHoursSceneTraversalCase = Readonly<{
 	/** Required representative scene ordinal. */ ordinal: number;
@@ -493,7 +495,7 @@ type TheHoursArtifactManifest = Readonly<{
 }>;
 /** Pinned retained proof input supplied to independent analysis. */
 type TheHoursRetainedInputConfiguration = Readonly<{
-	/** New child run with read-only parent capability. */ run: import('./TheHoursRun.js').TheHoursRun;
+	/** New child run with read-only parent capability. */ run: TheHoursRunCapability;
 	/** Exact completed capture run. */ parentRoot: string;
 	/** Externally pinned manifest byte identity. */ manifest: TheHoursArtifactIdentity;
 }>;
@@ -531,3 +533,85 @@ type TheHoursRecurrenceProof = Readonly<{
 	/** Original accepted distinct-publication allowance. */ maximumDistinctPublications: number;
 	/** Both targets satisfy the original allowance. */ pass: boolean;
 }>;
+
+/** Exact task-local selection of accepted short qualification manifests. */
+type TheHoursShortSelection = Readonly<{
+	/** Versioned complete short-proof selection schema. */ schemaId: string;
+	/** One unique manifest for each required short operation. */ proofs: readonly Readonly<{
+		/** Registered daylight, sunrise, sunset or early-ground operation. */ name: string;
+		/** Exact accepted sealed qualification manifest identity. */ manifest: TheHoursArtifactIdentity;
+	}>[];
+}>;
+/** Authenticated short result fields required for full-film admission. */
+type TheHoursShortQualification = Readonly<{
+	/** Exact matched physical/source capture root. */ parentRoot: string;
+	/** Aggregate source and encoded scientific gate. */ pass: boolean;
+	/** Complete short presentation count. */ frameCount: number;
+	/** Declared original-workflow candidate bitrate. */ workflowBitrate: number;
+	/** Native source detector result. */ sourceTemporal: TheHoursTemporalResult;
+	/** Original scaled lossless detector result. */ originalSourceTemporal: TheHoursTemporalResult;
+	/** Independent x264 detector result. */ encodedTemporal: TheHoursTemporalResult;
+	/** Original-workflow candidate detector result. */ workflowTemporal: TheHoursTemporalResult;
+	/** Maximum exact-native decoded mean discrepancy. */ maximumNativeMeanDifference: number;
+	/** Exact source replay and original-workflow facts. */ replay: TheHoursReplayResult;
+	/** Complete sunrise/sunset detector results, absent for other clips. */ horizon: Record<
+		string,
+		TheHoursHorizonResult
+	> | null;
+	/** Explicit retained112/125 publication results, present for early-ground. */ recurrence: Record<
+		string,
+		TheHoursRecurrenceProof
+	> | null;
+}>;
+/** Full-film admission with explicit resolution-specific encoder policies. */
+type TheHoursShortAdmission = Readonly<{
+	/** Pinned gate, closed manifests and authenticated result artifacts. */ parents: readonly TheHoursArtifactIdentity[];
+	/** Qualified native4K workflow bitrate. */ filmBitrate: number;
+	/** Qualified720p diagnostic workflow bitrate. */ diagnosticBitrate: number;
+}>;
+
+/** Retained public encoder packet evidence used to verify full-film cadence. */
+type TheHoursVideoOutput = Readonly<{
+	/** All encoded video packets in delivery order. */ packets: readonly TheHoursEncodedPacket[];
+}>;
+
+/** Exact encoded-packet position and presentation timestamp. */
+type TheHoursEncodedPacket = Readonly<{
+	/** Zero-based position in the finalized video packet roster. */ packetIndex: number;
+	/** Exact original30FPS rounded presentation timestamp. */ timestampMicroseconds: number;
+}>;
+
+/** Bounded full-film outcome fields consumed by the delivery owner. */
+type TheHoursFilmQualificationSummary = Readonly<{
+	/** Exact closed native-film parent root. */ parentRoot: string;
+	/** Aggregate full-film scientific result. */ pass: boolean;
+}>;
+
+/** Concrete linked review-media index with an explicit human inspection gate. */
+type TheHoursDeliveryResult = Readonly<{
+	/** Automated full-film scientific result, independent of delivery completion. */ automatedPass: boolean;
+	/** Required native-resolution owner acceptance remains pending. */ ownerInspection: string;
+	/** Unannotated originals and synchronized derived comparisons. */ links: readonly Readonly<{
+		/** Human-readable artifact description. */ label: string;
+		/** Task-local relative media reference. */ href: string;
+	}>[];
+}>;
+/** Repository-derived output ownership and authenticated immutable-parent access. */
+interface TheHoursRunCapability {
+	/** Absolute root derived from the owning repository module. */ readonly repositoryRoot: string;
+	/** Allocate one exclusive run. */ allocate(label: string): Promise<string>;
+	/** Resolve an ordinary immutable parent artifact. */ parentPath(relative: string): Promise<string>;
+	/** Authenticate exact parent bytes. */ authenticate(
+		expected: TheHoursArtifactIdentity,
+	): Promise<TheHoursArtifactIdentity>;
+	/** Read a bounded authenticated parent value. */ parentJson(expected: TheHoursArtifactIdentity): Promise<unknown>;
+	/** Create an exclusive output directory. */ directory(relative: string): Promise<string>;
+	/** Resolve an ordinary output artifact. */ outputPath(relative: string): Promise<string>;
+	/** Write one new output artifact. */ write(relative: string, bytes: string | Uint8Array): Promise<void>;
+	/** Write one new JSON artifact. */ writeJson(relative: string, value: unknown): Promise<void>;
+	/** Append active progress. */ progress(value: Readonly<Record<string, unknown>>): Promise<void>;
+	/** Seal output once with its honest disposition. */ finish(
+		disposition: TheHoursRunDisposition,
+		result: unknown,
+	): Promise<string>;
+}

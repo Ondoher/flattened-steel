@@ -6,6 +6,7 @@
 		"../../../src/flat32/**/*.d.ts",
 		"../../algorithm32/solar-zenith-cache/*.d.ts",
 		"../../animation-evidence/**/*.d.ts",
+		"../../../server/flat32/features/the-hours-proof/**/*.d.ts",
 		"**/*.d.ts",
 		"**/*.js"
 	],

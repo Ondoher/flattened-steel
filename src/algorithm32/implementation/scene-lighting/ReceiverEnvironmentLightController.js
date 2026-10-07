@@ -8,7 +8,7 @@ import {LocalLightLevelCalculator} from './LocalLightLevelCalculator.js';
 /** Atomic owner of the receiver-local environmental-light measurement. */
 export class ReceiverEnvironmentLightController {
 	/**
-	 * @param {{calculator: LocalLightLevelCalculator, directLight: ReceiverDirectLightMeasurement, identity: string}} dependencies - Physical reduction owner and fixed direct state.
+	 * @param {ReceiverEnvironmentControllerConfiguration} dependencies - Physical reduction owner and fixed direct state.
 	 */
 	constructor({calculator, directLight, identity}) {
 		if (typeof calculator?.measureEnvironmentIrradiance !== 'function') {
@@ -33,7 +33,7 @@ export class ReceiverEnvironmentLightController {
 		});
 	}
 
-	/** @type {LocalLightLevelCalculator} */ _calculator;
+	/** @type {ReceiverEnvironmentCalculator} */ _calculator;
 	/** @type {ReceiverDirectLightMeasurement} */ _directLight;
 	/** @type {ReceiverEnvironmentLightMeasurement | null} */ _active;
 	/** @type {string | null} */ _activeRequestIdentity = null;

@@ -20,6 +20,8 @@ export class MediabunnyCanvasOutput {
 	#packets = [];
 	/** @type {string | null} */
 	#mimeType = null;
+	/** Cancellation has been requested exactly once. */
+	#aborted = false;
 
 	/**
 	 * Creates a Mediabunny adapter without importing or pinning the caller's module.
@@ -65,18 +67,16 @@ export class MediabunnyCanvasOutput {
 			fullCodecString: this.#configuration.fullCodecString,
 			contentHint: 'detail',
 			onEncoderConfig: (/** @type {Readonly<Record<string, unknown>>} */ config) =>
-				this.#encoderConfigurations.push(Object.freeze({...config})),
+				this.#encoderConfigurations.push({...config}),
 			onEncodedPacket: (packet) =>
-				this.#packets.push(
-					Object.freeze({
-						packetIndex: this.#packets.length,
-						type: packet.type,
-						timestampMicroseconds: packet.microsecondTimestamp,
-						durationMicroseconds: packet.microsecondDuration,
-						sequenceNumber: packet.sequenceNumber,
-						byteLength: packet.byteLength,
-					}),
-				),
+				this.#packets.push({
+					packetIndex: this.#packets.length,
+					type: packet.type,
+					timestampMicroseconds: packet.microsecondTimestamp,
+					durationMicroseconds: packet.microsecondDuration,
+					sequenceNumber: packet.sequenceNumber,
+					byteLength: packet.byteLength,
+				}),
 		});
 		this.#output.addVideoTrack(this.#videoSource, {frameRate: this.#configuration.framesPerSecond});
 		if (this.#configuration.metadata) this.#output.setMetadataTags(this.#configuration.metadata);
@@ -88,7 +88,7 @@ export class MediabunnyCanvasOutput {
 	 * @param {CanvasImageSource} canvas Presentation canvas; must be the configured canvas.
 	 * @param {number} timestampSeconds Exact media timestamp in seconds.
 	 * @param {number} durationSeconds Exact frame duration in seconds.
-	 * @param {Readonly<{keyFrame: boolean}>} options Frame encoding options.
+	 * @param {AnimationFrameEncodingOptions} options Frame encoding options.
 	 * @returns {Promise<void>} Add completion promise.
 	 */
 	async addFrame(canvas, timestampSeconds, durationSeconds, options) {
@@ -107,16 +107,26 @@ export class MediabunnyCanvasOutput {
 		this.#mimeType = await this.#output.getMimeType();
 	}
 
+	/** Call this method to release the encoder and output target after recording failure.
+	 * @returns {Promise<void>} - Cancellation and owned resource release complete.
+	 */
+	async abort() {
+		if (!this.#output || this.#mimeType || this.#aborted) return;
+		this.#aborted = true;
+		await this.#output.cancel();
+		this.#videoSource = null;
+	}
+
 	/**
 	 * Call this method to read immutable codec, packet, and container evidence after finalization.
 	 * @returns {Readonly<Record<string, unknown>>} Output evidence.
 	 */
 	getResult() {
 		if (!this.#mimeType) throw new Error('Mediabunny output has not finalized.');
-		return Object.freeze({
+		return {
 			mimeType: this.#mimeType,
-			encoderConfigurations: Object.freeze([...this.#encoderConfigurations]),
-			packets: Object.freeze([...this.#packets]),
-		});
+			encoderConfigurations: [...this.#encoderConfigurations],
+			packets: [...this.#packets],
+		};
 	}
 }

@@ -1,4 +1,3 @@
-import {readFile} from 'node:fs/promises';
 import DistantSunSharedCacheFormat from '../../../src/algorithm32/implementation/distant-sun/cache/DistantSunSharedCacheFormat.js';
 import DistantSunSharedCacheSupport from '../../../src/algorithm32/implementation/distant-sun/cache/DistantSunSharedCacheSupport.js';
 

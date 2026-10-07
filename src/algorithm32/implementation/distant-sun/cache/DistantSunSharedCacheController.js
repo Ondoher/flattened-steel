@@ -188,7 +188,7 @@ export default class DistantSunSharedCacheController {
 	 *
 	 * @param {number} ordinal - Current scene.
 	 * @param {DistantSunSharedCacheSceneRequest} options - Route position and measured velocity.
-	 * @returns {{ids: string[], predicted: number}} - Ordered block window and first predicted scene.
+	 * @returns {DistantSunSharedBlockWindow} - Ordered block window and first predicted scene.
 	 */
 	_window(ordinal, options) {
 		const ids = this._requiredBlocks(ordinal);

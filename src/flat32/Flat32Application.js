@@ -190,7 +190,7 @@ export class Flat32Application {
 	/**
 	 * Create the live spherical/distant scene state before cache resolution.
 	 *
-	 * @returns {Flat32DistantSunSceneState} Return geometry and the scalar resolver input.
+	 * @returns {Flat32DistantSunSceneState<SphericalDistantMode['geometry']>} Return geometry and the scalar resolver input.
 	 */
 	_createSphericalDistantSceneState(state) {
 		return createDistantSunSceneState({
@@ -202,7 +202,7 @@ export class Flat32Application {
 
 	/**
 	 * Create one mode from a resolved live state and optional exact package.
-	 * @param {Flat32DistantSunSceneState} sceneState - Live geometry and source placement.
+	 * @param {Flat32DistantSunSceneState<SphericalDistantMode['geometry']>} sceneState - Live geometry and source placement.
 	 * @param {DistantSunSceneCacheAssetSelection | undefined} sceneCacheAsset - Optional exact non-dark package.
 	 * @param {'ready' | 'dark'} [distantSunCacheState] - Selected scattering-cache state.
 	 * @returns {SphericalDistantMode} The configured mode.
@@ -349,7 +349,9 @@ export class Flat32Application {
 		};
 		this._renderControls();
 		try {
-			this._sceneRuntime = new ThreeSceneRuntime(this._view.canvas, this._handleRuntimeFailure);
+			this._sceneRuntime = new ThreeSceneRuntime(this._view.canvas, this._handleRuntimeFailure, {
+				sceneColorPrecision: this._productionSelections.sceneColorPrecision,
+			});
 			if (this._cameraDirectionScene !== null) {
 				const camera = this._sceneRuntime.camera;
 				camera.lookAt(

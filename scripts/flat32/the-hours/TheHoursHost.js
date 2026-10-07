@@ -1,5 +1,5 @@
 import {createHash} from 'node:crypto';
-import {createServer} from 'node:http';
+import {PolylithServer} from '@polylith/server';
 import {readFile, open, lstat, realpath, readdir} from 'node:fs/promises';
 import path from 'node:path';
 import {rollup} from 'rollup';
@@ -8,6 +8,7 @@ import commonjs from '@rollup/plugin-commonjs';
 import puppeteer from 'puppeteer';
 import Files from '../../algorithm32/solar-zenith-cache/DistantSunSharedCacheGenerationFiles.js';
 import {DISTANT_SUN_SHARED_CACHE_DECODER_SHA256} from '../../../src/algorithm32/implementation/distant-sun/cache/consts.js';
+import {TheHoursAssetService} from '../../../server/flat32/features/the-hours-proof/index.js';
 
 /** Loopback-only proof host; outputs and browser profile belong to one new run. */
 export class TheHoursHost {
@@ -19,6 +20,7 @@ export class TheHoursHost {
 		this._inputs = configuration.inputs;
 		this._files = new Files(this._run.repositoryRoot);
 		this._assets = new Map();
+		this._assetService = new TheHoursAssetService({run: this._run, inputs: this._inputs, assets: this._assets});
 		this._source = new Map();
 		this._chunkIndex = 0;
 		this._videoFinalized = false;
@@ -133,27 +135,16 @@ export class TheHoursHost {
 				);
 				return;
 			}
-			let absolute;
-			if (route.startsWith('/cache/')) absolute = await this._inputs.path(route.slice(7));
-			else if (route === '/browser.js' || route === '/shared-cache-worker.js')
-				absolute = await this._run.outputPath(route.slice(1));
-			else absolute = this._assets.get(route);
-			if (!absolute) {
+			const asset = await this._assetService.read(route);
+			if (!asset) {
 				response.writeHead(404).end();
 				return;
 			}
-			const bytes = await readFile(absolute);
-			response.setHeader(
-				'Content-Type',
-				route.endsWith('.js')
-					? 'text/javascript'
-					: route.endsWith('.json')
-						? 'application/json'
-						: 'application/octet-stream',
-			);
-			response.end(bytes);
+			response.setHeader('Content-Type', asset.contentType);
+			response.end(asset.bytes);
 		} catch (error) {
-			response.writeHead(400).end(String(error));
+			console.error('The Hours asset request failed.', error);
+			response.writeHead(400, {'Content-Type': 'application/json'}).end('{"error":"asset-request-failed"}');
 		}
 	}
 
@@ -226,9 +217,19 @@ export class TheHoursHost {
 			'server/flat32/data/human-vision-filter-package-v1',
 		);
 		await this._run.writeJson('repository-inputs.json', [...this._source.values()]);
-		this._server = createServer((request, response) => {
-			void this._serve(request, response);
-		});
+		this._polylith = new PolylithServer({}, []);
+		await this._polylith.create([
+			{
+				getRouterRoot: () => '/',
+				router: async (_application, router) => {
+					router.all('*', (request, response) => {
+						void this._serve(request, response);
+					});
+					return true;
+				},
+			},
+		]);
+		this._server = this._polylith.server;
 		await new Promise((resolve, reject) => {
 			this._server.once('error', reject);
 			this._server.listen(0, '127.0.0.1', () => resolve(undefined));
@@ -242,7 +243,7 @@ export class TheHoursHost {
 			executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe',
 			userDataDir: await this._run.directory('profile'),
 			env: {...process.env, TEMP: browserTemporary, TMP: browserTemporary},
-			protocolTimeout: 300000,
+			protocolTimeout: 3600000,
 			args: [
 				'--enable-gpu',
 				'--enable-webgl',
@@ -310,7 +311,8 @@ export class TheHoursHost {
 	 */
 	reencode(configuration) {
 		return this._page.evaluate(async (value) => {
-			const moduleUrl = '/browser.js'; const {TheHoursReplayBrowser} = await import(moduleUrl);
+			const moduleUrl = '/browser.js';
+			const {TheHoursReplayBrowser} = await import(moduleUrl);
 			return new TheHoursReplayBrowser(value).record();
 		}, configuration);
 	}
@@ -320,7 +322,17 @@ export class TheHoursHost {
 	 * @returns {Promise<TheHoursSceneTraversalResult>} - All 109 coherent native publications.
 	 */
 	qualifyScenes(configuration) {
-		return this._page.evaluate(async (value) => {const moduleUrl = '/browser.js'; const {TheHoursBrowser} = await import(moduleUrl); const session = new TheHoursBrowser(value); try {await session.prepare(); return await session.qualifyScenes();} finally {session.dispose();}}, configuration);
+		return this._page.evaluate(async (value) => {
+			const moduleUrl = '/browser.js';
+			const {TheHoursBrowser} = await import(moduleUrl);
+			const session = new TheHoursBrowser(value);
+			try {
+				await session.prepare();
+				return await session.qualifyScenes();
+			} finally {
+				session.dispose();
+			}
+		}, configuration);
 	}
 
 	/** Call this method to release browser, video and listener before run sealing.

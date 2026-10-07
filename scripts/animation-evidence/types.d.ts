@@ -107,6 +107,8 @@ type AnimationEvidenceVideoOutput = Readonly<{
 	) => void | Promise<void>;
 	readonly finalize: () => void | Promise<void>;
 	readonly getResult: () => unknown | Promise<unknown>;
+	/** Release owned output resources on failure; optional for legacy stateless adapters. */
+	readonly abort?: (reason: unknown) => void | Promise<void>;
 }>;
 
 /** Configuration for deterministic canvas replay and recording. */
@@ -169,6 +171,8 @@ type AnimationEvidenceMediabunnyOutput = {
 	setMetadataTags(tags: Readonly<Record<string, string>>): void;
 	start(): Promise<void>;
 	finalize(): Promise<void>;
+	/** Cancel incomplete output and release its encoders and writable target. */
+	cancel(): Promise<void>;
 	getMimeType(): Promise<string>;
 };
 
@@ -228,4 +232,8 @@ type AnimationEvidenceDiagnosticDocumentConfiguration = Readonly<{
 	readonly timeline: readonly AnimationEvidenceDiagnosticEntry[];
 	readonly disclosure: string;
 	readonly provenance: Readonly<Record<string, unknown>>;
+}>;
+/** Caller-owned options for one encoded canvas frame. */
+type AnimationFrameEncodingOptions = Readonly<{
+	/** Whether this presentation begins a key frame. */ keyFrame: boolean;
 }>;

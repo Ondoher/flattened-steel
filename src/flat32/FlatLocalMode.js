@@ -114,7 +114,9 @@ export class FlatLocalMode {
 		return this._sceneScale;
 	}
 
-	/** Describe the selected production flat/local realization. */
+	/** Describe the selected production flat/local realization.
+	 * @returns {Flat32ModeSummary} - Selected physical domains and pairing.
+	 */
 	describe() {
 		this._assertUsable();
 		return {

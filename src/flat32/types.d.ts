@@ -60,6 +60,8 @@ type Flat32PresentationFilterConfiguration =
 
 interface Flat32ProductionSelections {
 	readonly colorDisplayModelConfiguration: Flat32ColorDisplayModelConfiguration;
+	/** Scene-linear storage required by the selected display response; p2 uses float32. */
+	readonly sceneColorPrecision: Flat32SceneColorPrecision;
 	readonly celestialSourcesEnabled: boolean;
 	readonly stellarCatalog: Flat32StellarCatalogId;
 	readonly presentationFilters: readonly Flat32PresentationFilterConfiguration[];
@@ -97,12 +99,106 @@ interface Flat32ContextLifecycleParticipant {
 type Flat32AtmosphereFailureHandler = (message: string) => void;
 type Flat32PointerLookChangeHandler = (locked: boolean) => void;
 type Flat32ModeKind = 'spherical-distant' | 'flat-local';
-type Flat32Mode = import('./SphericalDistantMode.js').SphericalDistantMode | import('./FlatLocalMode.js').FlatLocalMode;
+
+/** Independently owned atmosphere mode used by transactional runtime installation. */
+interface Flat32Mode {
+	/** Production facade owned by this mode. */ readonly algorithm32: Algorithm32Facade;
+	/** Physical geometry owned by this mode. */ readonly geometry: GeometryModel;
+	/** Scene-to-physical scale. */ readonly sceneScale: SceneScale;
+	/** Return the configured domain and pairing facts. */ describe(): Flat32ModeSummary;
+	/** Release this mode's resources once. */ dispose(): void;
+}
+
+/** Configured domains of a supported atmosphere mode. */
+type Flat32ModeSummary = Omit<SphericalDistantModeSummary, 'pairing' | 'distantSunCacheState'> & {
+	/** Physical pairing. */ pairing: 'spherical/distant' | 'flat/local';
+	/** Distant source cache state when this is a spherical mode. */ distantSunCacheState?: 'ready' | 'dark';
+	/** Local observer dome selection when this is a flat mode. */ observerDomeEnabled?: boolean;
+};
+
+/** Isolated composer resources owned by one preparation transaction. */
+type Flat32AtmosphereComposerResources = Readonly<{
+	/** Composer that borrows the configured scene. */ composer: import('three/examples/jsm/postprocessing/EffectComposer.js').EffectComposer;
+	/** Render target owned by the composer transaction. */ renderTarget: import('three').WebGLRenderTarget;
+	/** Scene input pass installed in the composer. */ renderPass: import('three/examples/jsm/postprocessing/RenderPass.js').RenderPass;
+}>;
+
+/** Independently implementable scene and renderer coordination required by atmosphere installation. */
+interface Flat32SceneRuntimeCapability {
+	/** Scene receiving atmosphere integration. */ readonly scene: import('three').Scene;
+	/** Output canvas and diagnostic data. */ readonly canvas: HTMLCanvasElement;
+	/** Current perspective camera. */ readonly camera: import('three').PerspectiveCamera;
+	/** Renderer borrowed for installation and rendering. */ readonly renderer: import('three').WebGLRenderer;
+	/** Current unit-bearing output extent. */ readonly viewportSize: PixelSize;
+	/** Register context loss and restoration ownership; return its remover. */ addContextLifecycleParticipant(
+		participant: Flat32ContextLifecycleParticipant,
+	): () => void;
+	/** Publish a complete prepared state between frames. */ atFrameBoundary(
+		operation: () => void,
+		signal: AbortSignal,
+	): Promise<void>;
+	/** Request new matching shadow maps. */ refreshShadowMaps(): void;
+	/** Borrow the ordinary atmosphere composer. */ prepareAtmosphereComposer(): import('three/examples/jsm/postprocessing/EffectComposer.js').EffectComposer;
+	/** Create an independently owned preparation composer. */ createAtmosphereComposer(): Flat32AtmosphereComposerResources;
+	/** Install the completed atmosphere frame operation. */ installRenderOperation(
+		operation: Flat32RenderOperation,
+	): void;
+	/** Restore the direct lit scene. */ restoreDirectRendering(): void;
+}
+
+/** Independently implementable atmosphere runtime publication and teardown. */
+interface Flat32AlgorithmRuntimeCapability {
+	/** Prepare and preflight the isolated candidate. */ setup(): Promise<Flat32AtmosphereSummary>;
+	/** Publish the complete candidate. */ publish(): void;
+	/** Select composition or direct rendering. */ setAtmosphereEnabled(enabled: boolean): void;
+	/** Report whether stable shared-cache updates are supported. */ canUpdateSharedScene(): boolean;
+	/** Prepare and publish one matching shared scene. */ updateSharedScene(
+		state: Flat32ApplicationState,
+		request: Flat32SharedSceneUpdateRequest,
+	): Promise<Flat32AtmosphereSummary>;
+	/** Release resources and optionally restore direct rendering. */ dispose(
+		request?: Flat32RuntimeDisposalRequest,
+	): void;
+}
+
+/** Teardown ownership selected by a runtime transaction. */
+type Flat32RuntimeDisposalRequest = Readonly<{
+	/** Restore direct rendering unless a replacement has already published. */ restoreRendering?: boolean;
+}>;
+
+/** Physical observation and observer geometry for a distant scene. */
+type Flat32DistantSunSceneConfiguration = Readonly<{
+	/** Accepted time and location. */ observation: GeometryObservation;
+	/** Physical height above spherical ground. */ observerHeight: Distance;
+	/** Model-space local vertical. */ observerUpDirection: UnitVector3;
+}>;
+
+/** Caller-owned endpoint scene selection. */
+type Flat32EndpointSceneConfiguration = Readonly<{
+	/** Include the fixed matte review objects. */ reviewObjectsEnabled?: boolean;
+}>;
+
+/** Caller-owned spherical mode selections; geometry remains independently supplied. */
+type Flat32SphericalDistantModeConfiguration<Geometry extends GeometryModel = GeometryModel> = Readonly<{
+	/** Coherent accepted observation and geometry. */ sceneState: Flat32DistantSunSceneState<Geometry>;
+	/** Physical length represented by one scene unit. */ sceneScale: SceneScale;
+	/** Physical Sun angular radius. */ sourceAngularRadius: Angle;
+	/** Qualified number of scattering orders. */ maximumScatteringOrder: SupportedCacheScatteringOrder;
+	/** Optional authenticated dense scene asset. */ sceneCacheAsset?: DistantSunSceneCacheAssetSelection;
+	/** Optional authenticated shared-cache runtime selection. */ sharedCache?: DistantSunSharedCacheSelection;
+	/** Explicit distant cache state. */ distantSunCacheState?: 'ready' | 'dark';
+	/** Include Sun and stellar presentation. */ celestialSourcesEnabled?: boolean;
+	/** Separately selected display response. */ colorDisplayModelConfiguration?: Flat32ColorDisplayModelConfiguration;
+	/** Selected stellar catalog. */ stellarCatalog?: Flat32StellarCatalogId;
+	/** Authenticated bright-star catalog definition. */ brightest2000StellarCatalogDefinition?: Brightest2000StellarCatalogDefinition;
+	/** Selected presentation filters. */ presentationFilters?: readonly Flat32PresentationFilterConfiguration[];
+	/** Optional measured low-light weights. */ scotopicLuminanceWeights?: ArrayLike<number>;
+}>;
 
 /** Configure one isolated Algorithm32 runtime candidate. */
 interface Flat32AlgorithmRuntimeConfiguration {
 	/** Supply the scene owner. */
-	sceneRuntime: import('./ThreeSceneRuntime.js').ThreeSceneRuntime;
+	sceneRuntime: Flat32SceneRuntimeCapability;
 	/** Supply ordinary endpoint-scene content. */
 	endpointScene: Flat32EndpointLighting;
 	/** Supply the supported atmospheric mode. */
@@ -130,9 +226,7 @@ interface Flat32ModeControllerConfiguration {
 		request: Readonly<{readonly signal: AbortSignal}>,
 	) => Flat32Mode | Promise<Flat32Mode>;
 	/** Optionally create an observable runtime boundary for focused tests. */
-	createRuntime?: (
-		configuration: Flat32AlgorithmRuntimeConfiguration,
-	) => import('./Algorithm32Runtime.js').Algorithm32Runtime;
+	createRuntime?: (configuration: Flat32AlgorithmRuntimeConfiguration) => Flat32AlgorithmRuntimeCapability;
 	/** Supply ordinary endpoint-scene content. */
 	endpointScene: Flat32EndpointLighting;
 	/** Receive scene preparation before candidate preflight. */
@@ -144,7 +238,7 @@ interface Flat32ModeControllerConfiguration {
 	/** Receive a successfully published mode and state. */
 	onPublished: (kind: Flat32ModeKind, mode: Flat32Mode, state: Flat32ApplicationState) => void;
 	/** Supply the Three scene and isolated-composer owner. */
-	sceneRuntime: import('./ThreeSceneRuntime.js').ThreeSceneRuntime;
+	sceneRuntime: Flat32SceneRuntimeCapability;
 }
 
 interface Flat32LocationTimeState {
@@ -268,9 +362,9 @@ interface SphericalDistantModeSummary {
 }
 
 /** Live spherical/distant scene placement and its cache-selection scalar. */
-interface Flat32DistantSunSceneState {
+interface Flat32DistantSunSceneState<Geometry extends GeometryModel = GeometryModel> {
 	readonly observation: GeometryObservation;
-	readonly geometry: import('../algorithm32/implementation/spherical-earth/SphericalEarthGeometry.js').SphericalEarthGeometry;
+	readonly geometry: Geometry;
 	readonly directionToSourceModel: UnitVector3;
 	readonly observerSolarZenith: Angle;
 	readonly solarZenithDegrees: number;
@@ -459,7 +553,7 @@ type Flat32ShaderEvidenceSnapshot = Readonly<{
 /** Direct-construction configuration for the production atmosphere runtime. */
 type Flat32RuntimeConfiguration = Readonly<{
 	/** Runtime-owned scene/rendering coordinator. */
-	sceneRuntime: import('./ThreeSceneRuntime.js').ThreeSceneRuntime;
+	sceneRuntime: Flat32SceneRuntimeCapability;
 	/** Independently owned opaque endpoint lighting. */
 	endpointScene: Flat32EndpointLighting;
 	/** Supported atmosphere mode. */

@@ -12,8 +12,9 @@ The [production entry](production-algorithm32/README.md) routes the existing
 distant-Sun strobing promotion. Its
 [status](production-algorithm32/caches/distant-sun-strobing-promotion-status.md)
 owns current implementation, qualification, review state and next actions.
-P2 physical qualification passed. P3 is authorized and active; appearance and
-source-review completion remain open. The linked plan owns P3's acceptance gates.
+P2 physical qualification passed. P3 functional gates, artifacts and native
+owner inspection pass. The promotion status links the completion record that
+owns final P3 source-review validation and closure. P4 remains unselected.
 
 Sky Accuracy Dials is parked under its
 [suspension and resumption boundary](poc-experiments/engineering-studies/sky-accuracy-dials/status.md#experiment-lifecycle).

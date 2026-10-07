@@ -2,6 +2,7 @@ import {ColorResetSlope078P2ColorDisplayModel} from '../../../src/algorithm32/im
 import {ColorResetSlope078P9ColorDisplayModel} from '../../../src/algorithm32/implementation/color-reset-slope-078-p9/ColorResetSlope078P9ColorDisplayModel.js';
 import {BrunetonColorDisplayModel} from '../../../src/algorithm32/implementation/bruneton-color/BrunetonColorDisplayModel.js';
 import {NATIVE_15_SPECTRAL_BASIS} from '../../../src/algorithm32/profiles/index.js';
+import {COLOR_RESET_SLOPE_078_P2_CURVE} from '../../../src/algorithm32/implementation/color-reset-slope-078-p2/consts.js';
 import {
 	DISTANT_SUN_SHARED_CACHE_PACKET_WIDTH,
 	DISTANT_SUN_SHARED_CACHE_PACKET_HEIGHT,
@@ -33,23 +34,62 @@ export class TheHoursGpuProof {
 	 * @returns {TheHoursMonotonicProof} - Three intervals covering all nonnegative illuminance.
 	 */
 	_monotonicity() {
-		const baseElasticity = (illuminance) => {
-			const square = (illuminance / 980) ** 2;
-			return (7 * square) / ((1 + square) * (4.5 + square));
-		};
-		const adaptationBound = (illuminance) => 0.78 / (1 + ((illuminance + 0.02) / 385) ** 10);
+		const curve = COLOR_RESET_SLOPE_078_P2_CURVE;
+		const pivot = curve.adaptationPivotIlluminanceLux,
+			middle = 500,
+			scale = Math.sqrt(1 + curve.sunsetAmplitude);
+		if (curve.sunsetRolloffPower !== 2 || middle > curve.sunsetTransitionIlluminanceLux * Math.sqrt(scale))
+			throw new Error(
+				'P2 analytic interval proof needs its registered power and increasing base-elasticity intervals.',
+			);
 		const bounds = [
-			{lowerLux: 0, upperLux: 385, negativeElasticityUpperBound: baseElasticity(385) + 0.78},
-			{lowerLux: 385, upperLux: 500, negativeElasticityUpperBound: baseElasticity(500) + adaptationBound(385)},
 			{
-				lowerLux: 500,
+				lowerLux: 0,
+				upperLux: pivot,
+				negativeElasticityUpperBound: this._baseElasticity(pivot) + curve.adaptationExponent,
+			},
+			{
+				lowerLux: pivot,
+				upperLux: middle,
+				negativeElasticityUpperBound: this._baseElasticity(middle) + this._adaptationBound(pivot),
+			},
+			{
+				lowerLux: middle,
 				upperLux: null,
-				negativeElasticityUpperBound: (2 * (Math.sqrt(4.5) - 1)) / (Math.sqrt(4.5) + 1) + adaptationBound(500),
+				negativeElasticityUpperBound:
+					(curve.sunsetRolloffPower * (scale - 1)) / (scale + 1) + this._adaptationBound(middle),
 			},
 		];
 		if (!bounds.every((interval) => interval.negativeElasticityUpperBound < 1))
 			throw new Error('P2 analytic brightness proof failed.');
 		return {equation: 'd(E*gain)/dE = gain * (1 + d(log gain)/d(log E)); dark endpoint gain > 0', bounds};
+	}
+
+	/** Called by the interval proof to bound the negative elasticity of the common sunset term.
+	 * @param {number} illuminance - Nonnegative physical lux.
+	 * @returns {number} - Exact sunset-term negative elasticity.
+	 */
+	_baseElasticity(illuminance) {
+		const curve = COLOR_RESET_SLOPE_078_P2_CURVE,
+			square = (illuminance / curve.sunsetTransitionIlluminanceLux) ** curve.sunsetRolloffPower;
+		return (
+			(curve.sunsetRolloffPower * curve.sunsetAmplitude * square) /
+			((1 + square) * (1 + curve.sunsetAmplitude + square))
+		);
+	}
+
+	/** Called by the interval proof to bound adaptation's decreasing negative elasticity.
+	 * @param {number} illuminance - Nonnegative physical lux.
+	 * @returns {number} - Conservative adaptation negative-elasticity bound.
+	 */
+	_adaptationBound(illuminance) {
+		const curve = COLOR_RESET_SLOPE_078_P2_CURVE;
+		return (
+			curve.adaptationExponent /
+			(1 +
+				((illuminance + curve.adaptationFloorIlluminanceLux) / curve.adaptationPivotIlluminanceLux) **
+					(1 / curve.adaptationSoftnessLogUnits))
+		);
 	}
 
 	/**

@@ -7,6 +7,7 @@ import DistantSunSharedCache from '../algorithm32/implementation/distant-sun/cac
 
 /**
  * Own one transactional production Algorithm32 attachment for Flat32.
+ * @implements {Flat32AlgorithmRuntimeCapability}
  */
 export class Algorithm32Runtime {
 	/**
@@ -71,7 +72,7 @@ export class Algorithm32Runtime {
 	}
 
 	/** Call this method after publication to refill look-ahead slots released by the former visible scene.
-	 * @param {import('../algorithm32/implementation/distant-sun/cache/DistantSunSharedCacheAttachment.js').default} attachment - Stable cache owner.
+	 * @param {DistantSunSharedScenePublication} attachment - Stable cache owner.
 	 * @param {number} ordinal - Unchanged visible scene.
 	 * @returns {Promise<void>} - Bounded background preparation; failures hold the visible frame.
 	 */
@@ -614,9 +615,7 @@ export class Algorithm32Runtime {
 				throw error;
 			}
 			if (this._mode.describe().pairing === 'spherical/distant') {
-				const distantMode = /** @type {import('./SphericalDistantMode.js').SphericalDistantMode} */ (
-					this._mode
-				);
+				const distantMode = /** @type {SphericalDistantMode} */ (this._mode);
 				const color = distantMode.algorithm32.config.config.color;
 				this._endpointScene.updateDistantSunLighting(
 					distantMode.geometry.configuration.directionToSource,

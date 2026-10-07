@@ -15,7 +15,9 @@ const WARD_LUMINANCE_EXPONENT = 0.4;
 /** Published Ward visibility-gain exponent. */
 const WARD_GAIN_EXPONENT = 2.5;
 
-/** Production calculator for receiver-local light levels and exposure composition. */
+/** Production calculator for receiver-local light levels and exposure composition.
+ * @implements {ReceiverEnvironmentCalculator}
+ */
 export class LocalLightLevelCalculator {
 	/**
 	 * Create a receiver-local calculator optionally bound to one configured primary source.
@@ -42,7 +44,7 @@ export class LocalLightLevelCalculator {
 	 * transmittance when the request supplies an atmosphere.
 	 *
 	 * @param {ConfiguredLocalDirectLightRequest} request - Geometry, observation, and optional roster.
-	 * @returns {{directNormal: SpectralIrradiancePacket, sourceCenterCosine: number}} - Existing direct-normal result and source-center orientation.
+	 * @returns {ConfiguredDirectNormalMeasurement} - Existing direct-normal result and source-center orientation.
 	 */
 	_measureConfiguredDirectNormal(request) {
 		const {geometry, observerPosition, directSample, sourceIrradiance, elevationRadians, sourceCenterCosine} =
@@ -60,9 +62,7 @@ export class LocalLightLevelCalculator {
 		}
 
 		if (visibleFraction === null) {
-			const metadata = /** @type {{angularRadius?: Angle, radius?: Distance, safeDistance?: Distance}} */ (
-				directSample.metadata ?? {}
-			);
+			const metadata = /** @type {ConfiguredDirectSourceMetadata} */ (directSample.metadata ?? {});
 			let angularRadiusRadians = 0;
 			if (metadata.angularRadius !== undefined) {
 				angularRadiusRadians = AngleMath.toRadians(metadata.angularRadius);
@@ -88,7 +88,7 @@ export class LocalLightLevelCalculator {
 			})
 		);
 		if (request.atmosphere) {
-			const metadata = /** @type {{distanceFromSource?: Distance | null}} */ (directSample.metadata ?? {});
+			const metadata = /** @type {ConfiguredDirectSourceMetadata} */ (directSample.metadata ?? {});
 			const sourcePath = geometry.resolveAtmospherePath({
 				ray: {origin: observerPosition, direction: directSample.directionToLight},
 				sourcePathLimit: {
@@ -142,14 +142,14 @@ export class LocalLightLevelCalculator {
 				provenanceIdentity: `receiver-direct-horizontal:${directNormal.contentHash}:source-center-cosine-${sourceCenterCosine}`,
 			})
 		);
-		return Object.freeze({
+		return {
 			directNormal,
 			directHorizontal,
 			sourceCenterCosine,
 			photopicDirectNormalIlluminance: this.measureDirectIrradiance(directNormal).photopicDirectIlluminance,
 			photopicDirectHorizontalIlluminance:
 				this.measureDirectIrradiance(directHorizontal).photopicDirectIlluminance,
-		});
+		};
 	}
 
 	/**
@@ -194,7 +194,7 @@ export class LocalLightLevelCalculator {
 			throw new RangeError('Stellar adaptation luminance must be finite, nonnegative, and use cd m^-2.');
 		}
 
-		return Object.freeze({
+		return {
 			identity: request.identity,
 			directNormal,
 			directHorizontal,
@@ -205,8 +205,8 @@ export class LocalLightLevelCalculator {
 			photopicDiffuseHorizontalIlluminance: diffuseHorizontalPhotopic.photopicDirectIlluminance,
 			photopicTotalHorizontalIlluminance: totalHorizontalPhotopic.photopicDirectIlluminance,
 			totalHorizontalLuminanceProxy: totalHorizontalPhotopic.adaptingLuminanceProxy,
-			stellarAdaptationLuminance: Object.freeze({...stellarAdaptationLuminance}),
-		});
+			stellarAdaptationLuminance: {...stellarAdaptationLuminance},
+		};
 	}
 
 	/** Approximate the physical unmasked-sky median from the fixed receiver hemisphere samples. */
@@ -238,7 +238,7 @@ export class LocalLightLevelCalculator {
 		const middle = Math.floor(luminances.length / 2);
 		const value =
 			luminances.length % 2 === 0 ? (luminances[middle - 1] + luminances[middle]) / 2 : luminances[middle];
-		return Object.freeze({value, units: /** @type {const} */ ('cd m^-2')});
+		return {value, units: /** @type {const} */ ('cd m^-2')};
 	}
 
 	/** Assert one finite nonnegative spectral irradiance packet. */
@@ -329,7 +329,7 @@ export class LocalLightLevelCalculator {
 	 * Sample the configured source once and derive its receiver-local elevation.
 	 *
 	 * @param {ConfiguredLocalDirectLightRequest} request - Geometry and observation inputs.
-	 * @returns {{geometry: GeometryModel, observerPosition: Position, directSample: DirectLightingSample, sourceIrradiance: SpectralIrradiancePacket, elevationRadians: number, sourceCenterCosine: number}} - Shared source facts.
+	 * @returns {ConfiguredDirectSourceFacts} - Shared source facts.
 	 */
 	_sampleConfiguredDirectSource(request) {
 		if (this._lightSource === null) {

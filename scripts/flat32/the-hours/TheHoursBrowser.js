@@ -67,7 +67,7 @@ export class TheHoursBrowser {
 	 * Called by scene preparation to resolve the exact production geometry and astronomy.
 	 *
 	 * @param {Flat32ApplicationState} state - Complete original observation.
-	 * @returns {Flat32DistantSunSceneState} - Exact physical scene state.
+	 * @returns {Flat32DistantSunSceneState<SphericalDistantMode['geometry']>} - Exact physical scene state.
 	 */
 	_sceneState(state) {
 		return createDistantSunSceneState({
@@ -141,7 +141,7 @@ export class TheHoursBrowser {
 	 *
 	 * @param {number} seconds - Original score position.
 	 * @param {boolean} interpolate - Whether to use retained measured environment endpoints.
-	 * @returns {Promise<Flat32DistantSunSceneState>} - Complete matching physical state.
+	 * @returns {Promise<Flat32DistantSunSceneState<SphericalDistantMode['geometry']>>} - Complete matching physical state.
 	 */
 	async _publish(seconds, interpolate) {
 		const state = this._clock.stateAt(seconds);
@@ -347,7 +347,12 @@ export class TheHoursBrowser {
 	 * @returns {Promise<TheHoursBrowserResult>} - Complete frame trace and independent recording facts.
 	 */
 	async record() {
-		const facts = await new TheHoursRecorder({...this._configuration, presentation: this._presentation, render: this._render.bind(this), capture: this._capture.bind(this)}).record();
+		const facts = await new TheHoursRecorder({
+			...this._configuration,
+			presentation: this._presentation,
+			render: this._render.bind(this),
+			capture: this._capture.bind(this),
+		}).record();
 		return {...facts, frames: this._frames, scene: this._observatory.describe()};
 	}
 
@@ -358,25 +363,65 @@ export class TheHoursBrowser {
 	 * @returns {Promise<TheHoursSceneTraversalResult>} - Actual complete source/receiver/cache and resource facts.
 	 */
 	async qualifyScenes() {
-		const seed = this._clock.stateAt(30), subsolar = SolarPosition.resolveSubsolarLocation(seed.observation.instant);
-		const latitude = AngleMath.toRadians(subsolar.latitude), longitude = AngleMath.toRadians(subsolar.longitude);
+		const seed = this._clock.stateAt(30),
+			subsolar = SolarPosition.resolveSubsolarLocation(seed.observation.instant);
+		const latitude = AngleMath.toRadians(subsolar.latitude),
+			longitude = AngleMath.toRadians(subsolar.longitude);
 		/** Complete actual production publications. @type {TheHoursSceneTraversalCase[]} */
 		const scenes = [];
 		for (let ordinal = 0; ordinal <= 108; ordinal += 1) {
-			const targetZenithDegrees = ordinal === 108 ? 107.75 : ordinal, angle = targetZenithDegrees * Math.PI / 180;
+			const targetZenithDegrees = ordinal === 108 ? 107.75 : ordinal,
+				angle = (targetZenithDegrees * Math.PI) / 180;
 			const observerLatitude = Math.asin(Math.sin(latitude) * Math.cos(angle));
 			const rawLongitude = longitude + Math.atan2(Math.sin(angle), Math.cos(latitude) * Math.cos(angle));
-			const state = {...seed, locationLabel: `Synthetic complete-cache qualification ${ordinal}`, observation: {...seed.observation, location: {latitude: AngleMath.inRadians(observerLatitude), longitude: AngleMath.inRadians(Math.atan2(Math.sin(rawLongitude), Math.cos(rawLongitude)))}}};
+			const state = {
+				...seed,
+				locationLabel: `Synthetic complete-cache qualification ${ordinal}`,
+				observation: {
+					...seed.observation,
+					location: {
+						latitude: AngleMath.inRadians(observerLatitude),
+						longitude: AngleMath.inRadians(Math.atan2(Math.sin(rawLongitude), Math.cos(rawLongitude))),
+					},
+				},
+			};
 			const result = await this._controller.switchTo('spherical-distant', state);
 			if (!result || this._failures.length) throw new Error('Complete-scene publication failed.');
-			const scene = this._sceneState(state), cache = this._mode.lightSource.sharedCacheAttachment.diagnostics();
+			const scene = this._sceneState(state),
+				cache = this._mode.lightSource.sharedCacheAttachment.diagnostics();
 			this._sceneRuntime.stepFrame();
-			const receiver = this._mode.algorithm32.receiverLight, lighting = this._lighting.describe(), runtime = this._runtime.describeEvidence();
-			if (Math.abs(scene.solarZenithDegrees - targetZenithDegrees) > 1e-5 || cache.sceneOrdinal !== ordinal || cache.failures || cache.gpuBytes > 859963392 || lighting.receiverLightIdentity !== receiver.identity || !runtime.installed || runtime.shaderErrors.length) throw new Error(`Scene ${ordinal} failed coherent native publication.`);
-			scenes.push({ordinal, targetZenithDegrees, actualZenithDegrees: scene.solarZenithDegrees, observation: state.observation, sourceDirection: [...this._mode.geometry.configuration.directionToSource], cache, receiver, lighting, runtime});
+			const receiver = this._mode.algorithm32.receiverLight,
+				lighting = this._lighting.describe(),
+				runtime = this._runtime.describeEvidence();
+			if (
+				Math.abs(scene.solarZenithDegrees - targetZenithDegrees) > 1e-5 ||
+				cache.sceneOrdinal !== ordinal ||
+				cache.failures ||
+				cache.gpuBytes > 859963392 ||
+				lighting.receiverLightIdentity !== receiver.identity ||
+				!runtime.installed ||
+				runtime.shaderErrors.length
+			)
+				throw new Error(`Scene ${ordinal} failed coherent native publication.`);
+			scenes.push({
+				ordinal,
+				targetZenithDegrees,
+				actualZenithDegrees: scene.solarZenithDegrees,
+				observation: state.observation,
+				sourceDirection: [...this._mode.geometry.configuration.directionToSource],
+				cache,
+				receiver,
+				lighting,
+				runtime,
+			});
 			await window.__theHoursProgress({phase: 'complete-scene-publication', completed: ordinal + 1, total: 109});
 		}
-		return {scenes, count: scenes.length, maximumCacheGpuBytes: Math.max(...scenes.map((scene) => scene.cache.gpuBytes)), pass: scenes.length === 109};
+		return {
+			scenes,
+			count: scenes.length,
+			maximumCacheGpuBytes: Math.max(...scenes.map((scene) => scene.cache.gpuBytes)),
+			pass: scenes.length === 109,
+		};
 	}
 
 	/**

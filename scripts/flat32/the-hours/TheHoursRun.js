@@ -5,7 +5,9 @@ import {fileURLToPath} from 'node:url';
 import path from 'node:path';
 import Files from '../../algorithm32/solar-zenith-cache/DistantSunSharedCacheGenerationFiles.js';
 
-/** Repository-derived exclusive proof output and read-only parent evidence access. */
+/** Repository-derived exclusive proof output and read-only parent evidence access.
+ * @implements {TheHoursRunCapability}
+ */
 export class TheHoursRun {
 	/**
 	 * Creates an output owner. Allocation is explicit and never reopens a sealed run.
@@ -28,7 +30,9 @@ export class TheHoursRun {
 	/** Immutable repository identity derived from this module's location.
 	 * @returns {string} - Absolute ordinary repository root.
 	 */
-	get repositoryRoot() {return this._repositoryRoot;}
+	get repositoryRoot() {
+		return this._repositoryRoot;
+	}
 
 	/**
 	 * Called by artifact operations to reject writes before allocation or after sealing.

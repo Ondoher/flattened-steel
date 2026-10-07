@@ -2,6 +2,32 @@ import {Algorithm32Runtime} from '../Algorithm32Runtime.js';
 import {ThreeSceneRuntime} from '../ThreeSceneRuntime.js';
 
 describe('Flat32 Step 5 stellar lifecycle', () => {
+	it('publishes a complete state between deterministic manual frames', async () => {
+		const runtime = new ThreeSceneRuntime(document.createElement('canvas'), fail, {frameCadence: 'manual'});
+		const events = [];
+		const schedule = spyOn(window, 'requestAnimationFrame').and.returnValue(1);
+		runtime._started = true;
+		runtime._renderOperation = () => events.push('render');
+		await runtime.atFrameBoundary(() => events.push('complete-cache-and-light'), new AbortController().signal);
+		expect(events).toEqual(['complete-cache-and-light']);
+		expect(runtime.stepFrame()).toBe(1);
+		expect(runtime.stepFrame()).toBe(2);
+		expect(events).toEqual(['complete-cache-and-light', 'render', 'render']);
+		expect(schedule).not.toHaveBeenCalled();
+		runtime.dispose();
+	});
+
+	it('stores candidate scene-linear color in full float without changing its viewport', () => {
+		const runtime = new ThreeSceneRuntime(document.createElement('canvas'), fail, {sceneColorPrecision: 'float32'});
+		runtime._viewportSize = {width: 16, height: 9};
+		const target = runtime._createComposerRenderTarget();
+		expect(target.width).toBe(16);
+		expect(target.height).toBe(9);
+		expect(target.texture.type).toBe(1015);
+		expect(target.depthBuffer).toBeTrue();
+		target.dispose();
+		runtime.dispose();
+	});
 	it('publishes prepared state before rendering and excludes a canceled frame operation', async () => {
 		const runtime = new ThreeSceneRuntime(document.createElement('canvas'), fail);
 		const events = [];

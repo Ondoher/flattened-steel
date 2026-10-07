@@ -7,12 +7,8 @@ import AngleMath from '../algorithm32/math/AngleMath.js';
  * Create the one Flat32 owner for live spherical/distant placement and the
  * scalar solar zenith used to select an offline cache package.
  *
- * @param {Readonly<{
- *   observation: GeometryObservation,
- *   observerHeight: Distance,
- *   observerUpDirection: UnitVector3
- * }>} configuration - Scene observation and observer geometry.
- * @returns {Flat32DistantSunSceneState} - Geometry plus live source state.
+ * @param {Flat32DistantSunSceneConfiguration} configuration - Scene observation and observer geometry.
+ * @returns {Flat32DistantSunSceneState<SphericalEarthGeometry>} - Geometry plus live source state.
  */
 export function createDistantSunSceneState(configuration) {
 	const profile = DEFAULT_NATIVE_PRODUCTION_PROFILE;
@@ -28,11 +24,11 @@ export function createDistantSunSceneState(configuration) {
 	});
 	const placement = geometry.resolveDistantSunSceneState(configuration.observation);
 
-	return Object.freeze({
+	return {
 		observation: configuration.observation,
 		geometry,
 		directionToSourceModel: placement.directionToSourceModel,
 		observerSolarZenith: placement.observerSolarZenith,
 		solarZenithDegrees: AngleMath.toDegrees(placement.observerSolarZenith),
-	});
+	};
 }
