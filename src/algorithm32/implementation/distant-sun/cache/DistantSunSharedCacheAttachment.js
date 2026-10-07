@@ -3,6 +3,7 @@ import DistantSunSharedCacheController from './DistantSunSharedCacheController.j
 
 /** Stable renderer attachment joining cache construction to predictive scene publication.
  * @implements {CacheController}
+ * @implements {DistantSunSharedScenePublication}
  */
 export default class DistantSunSharedCacheAttachment {
 	/** Borrowed renderer capability. @type {CachePacketAtlasBackend} */

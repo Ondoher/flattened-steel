@@ -22,18 +22,15 @@ import {
 	FLAT_OBSERVER_DOME_MAX_VIEW_RAY_EXTENT,
 } from './consts.js';
 
-/** Own Flat32's accepted production flat-geometry/local-Sun configuration. */
+/** Production flat-geometry/local-source atmosphere mode.
+ *
+ * @implements {Flat32Mode}
+ */
 export class FlatLocalMode {
 	/**
-	 * @param {Readonly<{
-	 *   sceneScale: SceneScale,
-	 *   observation: GeometryObservation,
-	 *   maximumScatteringOrder: SupportedCacheScatteringOrder,
-	 *   celestialSourcesEnabled?: boolean,
-	 *   colorDisplayModelConfiguration?: Flat32ColorDisplayModelConfiguration,
-	 *   stellarCatalog?: Flat32StellarCatalogId,
-	 *   presentationFilters?: readonly Flat32PresentationFilterConfiguration[]
-	 * }>} configuration - Supplies application-owned runtime selections.
+	 * Creates one production flat/local mode with the caller's runtime selections.
+	 *
+	 * @param {Flat32LocalModeConfiguration} configuration - Application-owned runtime selections.
 	 */
 	constructor(configuration) {
 		const selections = resolveFlat32ProductionSelections(configuration);
@@ -97,24 +94,41 @@ export class FlatLocalMode {
 		this._disposed = false;
 	}
 
+	/** Called by this mode's accessors to reject use after disposal.
+	 *
+	 * @returns {void} - Live mode ownership checked.
+	 */
 	_assertUsable() {
 		if (this._disposed) throw new Error('Flat32 flat/local mode is disposed.');
 	}
 
+	/** Configured production facade owned by this mode.
+	 *
+	 * @returns {Algorithm32Facade} - Live configured facade.
+	 */
 	get algorithm32() {
 		this._assertUsable();
 		return this._algorithm32;
 	}
+	/** Physical flat geometry owned by this mode.
+	 *
+	 * @returns {FlatEarthGeometry} - Live configured flat geometry.
+	 */
 	get geometry() {
 		this._assertUsable();
 		return this._geometry;
 	}
+	/** Physical length represented by one scene unit.
+	 *
+	 * @returns {SceneScale} - Configured scene scale.
+	 */
 	get sceneScale() {
 		this._assertUsable();
 		return this._sceneScale;
 	}
 
-	/** Describe the selected production flat/local realization.
+	/** Call this method to describe the selected production flat/local realization.
+	 *
 	 * @returns {Flat32ModeSummary} - Selected physical domains and pairing.
 	 */
 	describe() {
@@ -130,6 +144,10 @@ export class FlatLocalMode {
 		};
 	}
 
+	/** Call this method to release the mode's facade and shader resources once.
+	 *
+	 * @returns {void} - Owned resources released.
+	 */
 	dispose() {
 		if (this._disposed) return;
 		this._disposed = true;

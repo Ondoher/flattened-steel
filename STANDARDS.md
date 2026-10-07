@@ -12,8 +12,8 @@
 - First normalized: `2026-09-11T23:19:47.480Z`
 - Repository standards configuration fingerprint: `sha256:81d273be459279d61a883397e0c6c6d95f378c0779e3993ff4059ed2d8349c37`
 - Local standards overlay fingerprint: `sha256:5b28310018e8c1276d1c6b6dbfe3bc0c731c4a7f2f44b6d68b68fdf9e7b04dd9`
-- Selected canonical standards fingerprint: `sha256:d15413f396587935c93b983dc459aaf27c548c113ac0c308188e708670b4b0df`
-- Guide source fingerprint: `sha256:9a4f757a0989ef9990788717dc2c4158c948e6b37e6467b234606302f624f23d`
+- Selected canonical standards fingerprint: `sha256:903b801f67640b1c060ee503085aa7fa81cdd31b91f8d6f34dceccc21b5f2a8d`
+- Guide source fingerprint: `sha256:f49543072f326e6036b0325a5ae96de4b5cb1c038779aefc3f089dd68bf003df`
 
 For each file, the longest matching folder assignment selects one named standards set. The set includes its inherited canonical standards, then matching folder-scoped overlay rules modify specific sections. This file is a readable projection only.
 

@@ -100,6 +100,17 @@ type Flat32AtmosphereFailureHandler = (message: string) => void;
 type Flat32PointerLookChangeHandler = (locked: boolean) => void;
 type Flat32ModeKind = 'spherical-distant' | 'flat-local';
 
+/** Caller-owned physical and presentation selections for a flat/local mode. */
+type Flat32LocalModeConfiguration = Readonly<{
+	/** Physical length represented by one scene unit. */ sceneScale: SceneScale;
+	/** Accepted geographic receiver and exact instant. */ observation: GeometryObservation;
+	/** Qualified number of scattering orders. */ maximumScatteringOrder: SupportedCacheScatteringOrder;
+	/** Include visible celestial sources. */ celestialSourcesEnabled?: boolean;
+	/** Independently selected display response. */ colorDisplayModelConfiguration?: Flat32ColorDisplayModelConfiguration;
+	/** Selected stellar catalog. */ stellarCatalog?: Flat32StellarCatalogId;
+	/** Ordered presentation filter selections. */ presentationFilters?: readonly Flat32PresentationFilterConfiguration[];
+}>;
+
 /** Independently owned atmosphere mode used by transactional runtime installation. */
 interface Flat32Mode {
 	/** Production facade owned by this mode. */ readonly algorithm32: Algorithm32Facade;
