@@ -1,5 +1,18 @@
 # Predictable Sky Accuracy Dials Experiment Status
 
+## Experiment Lifecycle
+
+**Suspended at the owner's request on 2026-10-07.** No execution is active.
+Work has switched to production Algorithm32 through the repository
+[active topic](../../../active-topic.md). Findings through accepted 00235,
+all immutable evidence, resource accounting and the production adoption hold
+remain preserved. Resume this experiment only when the owner selects it again;
+completed plans and saved follow-up questions do not authorize new execution.
+The [follow-up guide](follow-up-context.md) and [handoff](handoff.md) retain
+the scientific context needed for that resumption.
+
+## Retained Scientific State
+
 **Aerosol sensitivity complete as accepted 00234/00235.** The
 [results](aerosol-sensitivity-results.md) own the four-case direct GPU matrix,
 regional input limits and signed outcomes. The owner's current diagnosis

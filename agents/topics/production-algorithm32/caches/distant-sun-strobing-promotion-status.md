@@ -495,7 +495,7 @@ Index acceptance means evidence authentication, not phase or release acceptance.
 
 ## Review State
 
-Production reviewer readiness was initialized under
+Historical production reviewer readiness was initialized under
 `.codex-tmp/review-standards/session-8U4MoL/`; P2 handoff artifacts use
 `.codex-tmp/review-standards/session-SWjOjV/`. The implementation baseline,
 captured before these edits, is
@@ -504,8 +504,21 @@ captured before these edits, is
 Architecture consultation supports the explicit coordinate-address contract;
 it is not a source review or audit. The plan batches coupled numerical/color
 review after P1–P3 stabilize. Those implementation-completion review gates,
-outstanding experiment reviews, and checkpoint readiness remain open.
-Checkpoint readiness remains `NOT_READY`: numerical qualification passes, but
-appearance and validated primary/audit review gates remain outstanding.
-Formatting preflight and the repository formatting check pass. No checkpoint
-or deployment was performed.
+outstanding experiment reviews, and appearance gates remain open.
+Earlier P2 handoff advice returned `NOT_READY` under the former adviser policy;
+no checkpoint or deployment was performed for that handoff. That result is
+historical and does not describe current checkpoint-monitoring eligibility.
+
+The 2026-10-07 topic transition restores production context while
+[Sky Accuracy Dials is suspended](../../poc-experiments/engineering-studies/sky-accuracy-dials/status.md#experiment-lifecycle).
+No next production implementation task is selected by this transition.
+Its documentation baseline is
+`.codex-tmp/review-standards/session-hhktR8/baseline.json`, at HEAD
+`6cc5a283080ce14bfa31c44cfe3c52a712937c9e` with a clean initial worktree.
+Prior readiness is not reused as current readiness. Standards reviewers remain
+owner-suspended, and current calibration fails with "Calibration inputs changed;
+rerun independent fixture review and seal". Infrastructure, normalization and
+folder mappings pass. Checkpoint monitoring remains active independently of
+these standards-review gates, with the owner's standing advised-checkpoint
+approval and one-minute consultation limit. This transition starts no
+implementation, qualification run or deployment and claims no clean source review.

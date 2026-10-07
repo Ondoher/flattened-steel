@@ -1,5 +1,9 @@
 # Sky Accuracy Dials: Agent Handoff
 
+Consult the [experiment lifecycle](status.md#experiment-lifecycle) before
+resuming work. It records the owner's suspension and the switch to production
+Algorithm32; the scientific context below is retained for later resumption.
+
 **Latest completed package: [00235 aerosol sensitivity](aerosol-sensitivity-results.md).**
 The fixed direct-solver phase/albedo factorial uses one same-day Toronto
 retrieval retained in 00234. Follow the owner's latest restriction: interpret

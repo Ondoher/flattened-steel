@@ -4,7 +4,9 @@ For resumption, read the [follow-up context and hypothesis guide](follow-up-cont
 It routes to the evidence owners and preserves the untested alternatives,
 additional Kider data leads and saved production follow-up.
 
-Current focus: the completed [aerosol phase/albedo sensitivity](aerosol-sensitivity-results.md).
+The [experiment lifecycle](status.md#experiment-lifecycle) owns suspension
+and resumption. Last completed scientific focus: the
+[aerosol phase/albedo sensitivity](aerosol-sensitivity-results.md).
 Use its [supported-wavelength interpretation](aerosol-sensitivity-results.md#supported-wavelength-interpretation):
 454-712.5 nm improve in aggregate; phase and albedo each improve both controls,
 but their combination overshoots. The owner excludes unsupported 360 nm from
