@@ -2,10 +2,12 @@ import {createHash} from 'node:crypto';
 import {readFile} from 'node:fs/promises';
 
 /** Read-only admission of exact artifacts from one completed, sealed task run.
+ *
  * @implements {TheHoursInputArtifacts}
  */
 export class TheHoursRetainedInputs {
 	/** Creates a parent reader anchored to the selected task's run boundary.
+	 *
 	 * @param {TheHoursRetainedInputConfiguration} configuration - Parent run, pinned manifest and new child capability.
 	 */
 	constructor(configuration) {
@@ -18,6 +20,7 @@ export class TheHoursRetainedInputs {
 	}
 
 	/** Call this method to validate the closed parent artifact set against its pinned manifest.
+	 *
 	 * @returns {Promise<void>} - Exact manifest and complete artifact-set identity admitted.
 	 */
 	async load() {
@@ -37,6 +40,7 @@ export class TheHoursRetainedInputs {
 	}
 
 	/** Call this method to authenticate a declared artifact before independent consumption.
+	 *
 	 * @param {string} relative - Exact run-relative manifest entry.
 	 * @returns {Promise<string>} - Checked immutable ordinary parent path.
 	 */
@@ -48,6 +52,7 @@ export class TheHoursRetainedInputs {
 	}
 
 	/** Call this method to read a bounded exact declared parent JSON artifact.
+	 *
 	 * @param {string} relative - Exact manifest entry.
 	 * @returns {Promise<unknown>} - Complete parsed value after authentication.
 	 */

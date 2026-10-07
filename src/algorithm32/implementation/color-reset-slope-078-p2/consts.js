@@ -2,6 +2,7 @@
 export const COLOR_RESET_SLOPE_078_P2_ID = 'color-reset-slope-078-p2';
 
 /** Fixed response with a positive illuminance-times-gain slope.
+ *
  * @type {ColorResetSlope078Curve}
  */
 export const COLOR_RESET_SLOPE_078_P2_CURVE = {

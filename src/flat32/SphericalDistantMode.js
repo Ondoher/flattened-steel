@@ -104,6 +104,7 @@ export class SphericalDistantMode {
 	}
 
 	/** Call this method to prepare an independent physical scene snapshot for shared-cache playback.
+	 *
 	 * @param {GeometryObservation} observation - Requested time and location.
 	 * @returns {Flat32PreparedDistantScene} - Independent geometry/source and an assignment-only mode publication.
 	 */
@@ -163,6 +164,7 @@ export class SphericalDistantMode {
 	}
 
 	/** Call this method after context loss to rebuild from the last published observation.
+	 *
 	 * @returns {void}
 	 */
 	prepareContextRestoration() {

@@ -16,15 +16,18 @@ import {
 } from './consts.js';
 
 /** Renderer-owned scene, presentation targets and frame-boundary publication.
+ *
  * @implements {Flat32SceneRuntimeCapability}
  */
 export class ThreeSceneRuntime {
 	/** Pending application publications consumed before the next complete render.
+	 *
 	 * @type {Set<Flat32FrameBoundaryOperation>}
 	 */
 	_frameBoundaryOperations = new Set();
 
 	/** Call this method to publish one prepared state immediately before the next render operation.
+	 *
 	 * @param {() => void} operation - Synchronous complete-state publication.
 	 * @param {AbortSignal} signal - Caller-owned cancellation.
 	 * @returns {Promise<void>} - Completion at the frame boundary.
@@ -254,7 +257,7 @@ export class ThreeSceneRuntime {
 		const viewportSize = this.viewportSize;
 		const composer = new EffectComposer(renderer, this._createComposerRenderTarget());
 		const renderPass = new RenderPass(this._scene, this._camera);
-		const displayPass = new ShaderPass({
+		let displayPass = new ShaderPass({
 			uniforms: {
 				tDiffuse: {value: null},
 			},
@@ -309,7 +312,7 @@ void main() {
 	 */
 	_createComposerRenderTarget() {
 		const viewportSize = this.viewportSize;
-		const target = new THREE.WebGLRenderTarget(viewportSize.width, viewportSize.height, {
+		let target = new THREE.WebGLRenderTarget(viewportSize.width, viewportSize.height, {
 			minFilter: THREE.LinearFilter,
 			magFilter: THREE.LinearFilter,
 			format: THREE.RGBAFormat,

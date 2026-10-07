@@ -11,7 +11,7 @@ export const TheHoursHorizonMeasurement = {
 	evaluate(pixels, scene) {
 		if (pixels.length !== scene.length || pixels.some((frame, index) => frame.frameIndex !== index))
 			throw new Error('Horizon pixels must match every ordered scene frame.');
-		const windows = [];
+		let windows = [];
 		/** @type {readonly [string, number, number, number][]} */
 		const intervals = [
 			['sunrise', 10, 14, 1],
@@ -37,7 +37,7 @@ export const TheHoursHorizonMeasurement = {
 			)
 				throw new Error('Horizon gate needs the complete 89.5-91.5 degree interval.');
 			/** @type {TheHoursHorizonResult['windows'][number]['regions']} */
-			const regions = {};
+			let regions = {};
 			for (const region of ['upper', 'horizon', 'lower', 'full']) {
 				let best = -Infinity,
 					excursion = 0,

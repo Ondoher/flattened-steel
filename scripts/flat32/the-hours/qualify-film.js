@@ -11,7 +11,6 @@ if (!Number.isSafeInteger(Number(manifestBytes)) || !/^[a-f0-9]{64}$/u.test(mani
 	throw new Error('Supply the exact sealed film root and manifest identity.');
 const run = new TheHoursRun({
 	outputRoot: '.codex-tmp/p3-strobing-20261007/runs',
-	evidenceRoot: 'C:/dev/flattened-steel',
 });
 const inputs = new TheHoursRetainedInputs({
 	run,

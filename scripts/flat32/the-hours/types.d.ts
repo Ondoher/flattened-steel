@@ -248,8 +248,8 @@ type TheHoursArtifactIdentity = Readonly<{
 type TheHoursRunConfiguration = Readonly<{
 	/** Ignored repository-relative task runs directory. */
 	outputRoot: string;
-	/** Explicit read-only relocated evidence root. */
-	evidenceRoot: string;
+	/** Read-only evidence root; relative paths resolve from the repository, which is the default. */
+	evidenceRoot?: string;
 }>;
 
 /** Final automated proof disposition.

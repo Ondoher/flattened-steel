@@ -30,7 +30,10 @@ if (
 	throw new Error(
 		'Select a registered short proof operation. Full film requires a separate accepted short-proof gate.',
 	);
-const run = new TheHoursRun({outputRoot: '.codex-tmp/p3-strobing-20261007/runs', evidenceRoot: 'D:/flattened-steel'});
+const evidenceRoot = process.env.ALGORITHM32_THE_HOURS_EVIDENCE_ROOT;
+if (!evidenceRoot)
+	throw new Error('Set ALGORITHM32_THE_HOURS_EVIDENCE_ROOT to the read-only comparison evidence root.');
+const run = new TheHoursRun({outputRoot: '.codex-tmp/p3-strobing-20261007/runs', evidenceRoot});
 const inputs = new TheHoursPackageInputs({run, packageRoot: THE_HOURS_PACKAGE_ROOT, report: THE_HOURS_PACKAGE_REPORT});
 const host = new TheHoursHost({run, inputs});
 await run.allocate(operation);

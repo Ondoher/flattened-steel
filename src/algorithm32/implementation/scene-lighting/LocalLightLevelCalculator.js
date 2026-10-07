@@ -16,11 +16,13 @@ const WARD_LUMINANCE_EXPONENT = 0.4;
 const WARD_GAIN_EXPONENT = 2.5;
 
 /** Production calculator for receiver-local light levels and exposure composition.
+ *
  * @implements {ReceiverEnvironmentCalculator}
  */
 export class LocalLightLevelCalculator {
 	/**
 	 * Create a receiver-local calculator optionally bound to one configured primary source.
+	 *
 	 * @param {LocalLightLevelCalculatorConfiguration} [configuration] - Optional primary source owner.
 	 */
 	constructor(configuration = {}) {
@@ -284,7 +286,7 @@ export class LocalLightLevelCalculator {
 				units: SPECTRAL_UNITS.RADIANCE_DENSITY,
 			})
 		);
-		const values = new Float64Array(first.basis.channelCount);
+		let values = new Float64Array(first.basis.channelCount);
 		let weightSum = 0;
 
 		for (const sample of request.samples) {

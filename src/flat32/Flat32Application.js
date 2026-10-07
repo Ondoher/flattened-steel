@@ -202,6 +202,7 @@ export class Flat32Application {
 
 	/**
 	 * Create one mode from a resolved live state and optional exact package.
+	 *
 	 * @param {Flat32DistantSunSceneState<SphericalDistantMode['geometry']>} sceneState - Live geometry and source placement.
 	 * @param {DistantSunSceneCacheAssetSelection | undefined} sceneCacheAsset - Optional exact non-dark package.
 	 * @param {'ready' | 'dark'} [distantSunCacheState] - Selected scattering-cache state.
@@ -230,7 +231,7 @@ export class Flat32Application {
 		}
 		const resolution = await this._resolveDistantSunSceneCacheAsset(sceneState.solarZenithDegrees, request);
 		if (request.signal.aborted) {
-			const error = new Error('Distant-Sun cache resolution was cancelled or superseded.');
+			let error = new Error('Distant-Sun cache resolution was cancelled or superseded.');
 			error.name = 'AbortError';
 			throw error;
 		}

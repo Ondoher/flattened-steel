@@ -66,6 +66,7 @@ export class TheHoursGpuProof {
 	}
 
 	/** Called by the interval proof to bound the negative elasticity of the common sunset term.
+	 *
 	 * @param {number} illuminance - Nonnegative physical lux.
 	 * @returns {number} - Exact sunset-term negative elasticity.
 	 */
@@ -79,6 +80,7 @@ export class TheHoursGpuProof {
 	}
 
 	/** Called by the interval proof to bound adaptation's decreasing negative elasticity.
+	 *
 	 * @param {number} illuminance - Nonnegative physical lux.
 	 * @returns {number} - Conservative adaptation negative-elasticity bound.
 	 */
@@ -110,7 +112,7 @@ export class TheHoursGpuProof {
 		if (!hardware || !chrome || !/Direct3D11.*D3D11/u.test(renderer))
 			throw new Error('The measured two-atlas policy requires the declared ANGLE D3D11 target.');
 		const framebuffer = context.createFramebuffer();
-		const textures = [];
+		let textures = [];
 		try {
 			for (let atlas = 0; atlas < 2; atlas += 1) {
 				const texture = context.createTexture();
@@ -180,7 +182,7 @@ export class TheHoursGpuProof {
 		context.bindFramebuffer(context.FRAMEBUFFER, framebuffer);
 		context.framebufferTexture2D(context.FRAMEBUFFER, context.COLOR_ATTACHMENT0, context.TEXTURE_2D, texture, 0);
 		context.viewport(0, 0, 1, 1);
-		const results = [];
+		let results = [];
 		try {
 			for (const model of [
 				new ColorResetSlope078P2ColorDisplayModel(),

@@ -20,6 +20,7 @@ export class BoundedChunkSink {
 
 	/**
 	 * Creates a bounded encoded-chunk sink with caller-owned batch publication and finalization.
+	 *
 	 * @param {AnimationEvidenceChunkSinkConfiguration} configuration Sink configuration.
 	 */
 	constructor(configuration) {
@@ -32,14 +33,15 @@ export class BoundedChunkSink {
 		this.#publishBatch = configuration.publishBatch;
 		this.#finalize = configuration.finalize;
 		this.#writable = new WritableStream({
-			write: (chunk) => this.#write(chunk),
-			close: () => this.#close(),
-			abort: () => this.#discard(),
+			write: (chunk) => this._write(chunk),
+			close: () => this._close(),
+			abort: () => this._discard(),
 		});
 	}
 
 	/**
 	 * Call this method to obtain the WritableStream accepted by a streaming container muxer.
+	 *
 	 * @returns {WritableStream<Uint8Array>} Bounded writable stream.
 	 */
 	writable() {
@@ -48,6 +50,7 @@ export class BoundedChunkSink {
 
 	/**
 	 * Call this method to read immutable transport diagnostics.
+	 *
 	 * @returns {AnimationEvidenceChunkSinkDiagnostics} Current transport diagnostics.
 	 */
 	diagnostics() {
@@ -61,10 +64,11 @@ export class BoundedChunkSink {
 
 	/**
 	 * Call this method internally to split and retain one incoming chunk within the configured bound.
+	 *
 	 * @param {Uint8Array} chunk Incoming byte chunk.
 	 * @returns {Promise<void>} Completion promise.
 	 */
-	async #write(chunk) {
+	async _write(chunk) {
 		if (!(chunk instanceof Uint8Array)) throw new TypeError('Encoded chunks must be Uint8Array values.');
 		if (this.#finalized) throw new Error('Cannot write after chunk-sink finalization.');
 		let offset = 0;
@@ -77,17 +81,18 @@ export class BoundedChunkSink {
 			this.#totalByteLength += copy.byteLength;
 			offset += length;
 			this.#maximumBufferedBytes = Math.max(this.#maximumBufferedBytes, this.#retainedBytes);
-			if (this.#retainedBytes === this.#maximumBatchBytes) await this.#flush();
+			if (this.#retainedBytes === this.#maximumBatchBytes) await this._flush();
 		}
 	}
 
 	/**
 	 * Call this method internally to publish the retained byte batch.
+	 *
 	 * @returns {Promise<void>} Completion promise.
 	 */
-	async #flush() {
+	async _flush() {
 		if (this.#retainedBytes === 0) return;
-		const bytes = new Uint8Array(this.#retainedBytes);
+		let bytes = new Uint8Array(this.#retainedBytes);
 		let offset = 0;
 		for (const chunk of this.#retained) {
 			bytes.set(chunk, offset);
@@ -101,20 +106,22 @@ export class BoundedChunkSink {
 
 	/**
 	 * Call this method internally when the WritableStream closes successfully.
+	 *
 	 * @returns {Promise<void>} Completion promise.
 	 */
-	async #close() {
+	async _close() {
 		if (this.#finalized) return;
-		await this.#flush();
+		await this._flush();
 		await this.#finalize();
 		this.#finalized = true;
 	}
 
 	/**
 	 * Call this method internally to discard buffered bytes after a stream abort.
+	 *
 	 * @returns {void}
 	 */
-	#discard() {
+	_discard() {
 		this.#retained = [];
 		this.#retainedBytes = 0;
 	}

@@ -8,6 +8,7 @@ import Files from '../../algorithm32/solar-zenith-cache/DistantSunSharedCacheGen
 /** Pinned independent encoder and unchanged regional decoded-pixel measurements. */
 export class TheHoursMedia {
 	/** Creates a media owner for one new proof run.
+	 *
 	 * @param {TheHoursRunCapability} run - Active contained output owner.
 	 */
 	constructor(run) {
@@ -15,6 +16,7 @@ export class TheHoursMedia {
 	}
 
 	/** Call this method to execute one pinned media operation and retain exact command/tool identities.
+	 *
 	 * @param {string} name - Safe unique operation name.
 	 * @param {readonly string[]} argumentsList - Arguments passed without a shell.
 	 * @param {(chunk: Buffer) => void} [consume] - Bounded streaming stdout consumer.
@@ -61,6 +63,7 @@ export class TheHoursMedia {
 	/** Call this method to measure every decoded frame with the original masks and arithmetic.
 	 * The default 320 by 180 area reduction preserves the retained encoded detector.
 	 * Native lossless validation passes the original dimensions, avoiding resampling.
+	 *
 	 * @param {string} name - Unique operation identity.
 	 * @param {readonly string[]} inputArguments - Checked image sequence or video input arguments.
 	 * @param {number} expectedFrames - Required complete presentation count.
@@ -75,7 +78,7 @@ export class TheHoursMedia {
 		let pending = Buffer.alloc(0);
 		/** Prior decoded pixels. @type {Buffer | undefined} */ let previous;
 		/** Pixels two presentations earlier. @type {Buffer | undefined} */ let beforePrevious;
-		/** Complete retained regional source measurements. @type {TheHoursPixelFrame[]} */ const frames = [];
+		/** Complete retained regional source measurements. @type {TheHoursPixelFrame[]} */ let frames = [];
 		await this.execute(
 			name,
 			[
@@ -96,7 +99,7 @@ export class TheHoursMedia {
 				while (pending.length >= frameBytes) {
 					const frame = Buffer.from(pending.subarray(0, frameBytes));
 					pending = pending.subarray(frameBytes);
-					/** One exact ordered decoded frame. @type {TheHoursPixelFrame} */ const result = {
+					/** One exact ordered decoded frame. @type {TheHoursPixelFrame} */ let result = {
 						frameIndex: frames.length,
 						regions: {},
 					};

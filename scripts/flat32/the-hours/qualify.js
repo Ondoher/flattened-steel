@@ -18,7 +18,6 @@ if (!/^[a-f0-9]{64}$/u.test(manifestSha256 ?? '') || !Number.isSafeInteger(Numbe
 	throw new Error('Supply the exact retained capture root, manifest byte length and SHA-256.');
 const run = new TheHoursRun({
 	outputRoot: '.codex-tmp/p3-strobing-20261007/runs',
-	evidenceRoot: 'C:/dev/flattened-steel',
 });
 const inputs = new TheHoursRetainedInputs({
 	run,

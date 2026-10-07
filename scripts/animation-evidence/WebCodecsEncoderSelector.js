@@ -2,6 +2,7 @@
 
 /**
  * Call this function to convert bytes to a browser-safe base64 string.
+ *
  * @param {Uint8Array} bytes Bytes to encode.
  * @returns {string} Base64 representation.
  */
@@ -15,6 +16,7 @@ function bytesToBase64(bytes) {
 
 /**
  * Call this function to project a browser-resolved encoder configuration into stable evidence fields.
+ *
  * @param {VideoEncoderConfig} configuration Encoder configuration.
  * @returns {Readonly<Record<string, unknown>>} Stable configuration projection.
  */
@@ -36,6 +38,7 @@ function normalizedConfiguration(configuration) {
 
 /**
  * Call this function to probe one supported WebCodecs configuration with an encoded frame.
+ *
  * @param {AnimationEvidenceEncoderCandidate} candidate Candidate to test.
  * @returns {Promise<AnimationEvidenceEncoderProbe>} Probe outcome.
  */
@@ -111,6 +114,7 @@ async function probe(candidate) {
 export const WebCodecsEncoderSelector = {
 	/**
 	 * Call this method to choose the first candidate that successfully encodes a probe frame.
+	 *
 	 * @param {readonly AnimationEvidenceEncoderCandidate[]} candidates Ordered candidate policy owned by the caller.
 	 * @returns {Promise<Readonly<{selectedCandidateId: string; selectedConfig: Readonly<Record<string, unknown>>; outcomes: readonly AnimationEvidenceEncoderProbe[]}>>} Selected configuration and complete probe evidence.
 	 */
@@ -121,7 +125,7 @@ export const WebCodecsEncoderSelector = {
 		if (!Array.isArray(candidates) || candidates.length === 0) {
 			throw new TypeError('At least one encoder candidate is required.');
 		}
-		const outcomes = [];
+		let outcomes = [];
 		for (const candidate of candidates) {
 			if (!candidate.id || !candidate.config)
 				throw new TypeError('Every encoder candidate needs an id and config.');

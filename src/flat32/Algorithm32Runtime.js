@@ -7,6 +7,7 @@ import DistantSunSharedCache from '../algorithm32/implementation/distant-sun/cac
 
 /**
  * Own one transactional production Algorithm32 attachment for Flat32.
+ *
  * @implements {Flat32AlgorithmRuntimeCapability}
  */
 export class Algorithm32Runtime {
@@ -61,6 +62,7 @@ export class Algorithm32Runtime {
 	}
 
 	/** Call this method to determine whether the installed mode supports stable shared-cache scene changes.
+	 *
 	 * @returns {boolean} - Whether a live shared attachment is installed.
 	 */
 	canUpdateSharedScene() {
@@ -72,6 +74,7 @@ export class Algorithm32Runtime {
 	}
 
 	/** Call this method after publication to refill look-ahead slots released by the former visible scene.
+	 *
 	 * @param {DistantSunSharedScenePublication} attachment - Stable cache owner.
 	 * @param {number} ordinal - Unchanged visible scene.
 	 * @returns {Promise<void>} - Bounded background preparation; failures hold the visible frame.
@@ -96,6 +99,7 @@ export class Algorithm32Runtime {
 	}
 
 	/** Call this method to prepare then publish a coherent distant scene without rebuilding the runtime.
+	 *
 	 * @param {Flat32ApplicationState} state - Requested application observation.
 	 * @param {Flat32SharedSceneUpdateRequest} request - Cancellation and optional premeasured physical environment.
 	 * @returns {Promise<Flat32AtmosphereSummary>} - Updated stable-runtime summary.
@@ -294,7 +298,7 @@ export class Algorithm32Runtime {
 	 * @returns {number[]} Return the drained numeric error identities.
 	 */
 	_drainWebGlErrors(context) {
-		const errors = [];
+		let errors = [];
 
 		for (let error = context.getError(); error !== context.NO_ERROR; error = context.getError()) {
 			errors.push(error);
@@ -590,14 +594,14 @@ export class Algorithm32Runtime {
 				performanceMaxPendingQueries: 4,
 			});
 			if (this._disposed || cancellation.signal.aborted || generation !== this._setupGeneration) {
-				const error = new Error('Flat32 Algorithm32 setup was superseded.');
+				let error = new Error('Flat32 Algorithm32 setup was superseded.');
 
 				error.name = 'AbortError';
 				throw error;
 			}
 			await this._shaderHandle.prepare(this._sceneRuntime.renderer);
 			if (this._disposed || cancellation.signal.aborted || generation !== this._setupGeneration) {
-				const error = new Error('Flat32 Algorithm32 preparation was superseded.');
+				let error = new Error('Flat32 Algorithm32 preparation was superseded.');
 
 				error.name = 'AbortError';
 				throw error;
@@ -609,7 +613,7 @@ export class Algorithm32Runtime {
 				signal: cancellation.signal,
 			});
 			if (this._disposed || cancellation.signal.aborted || generation !== this._setupGeneration) {
-				const error = new Error('Flat32 receiver-light measurement was superseded.');
+				let error = new Error('Flat32 receiver-light measurement was superseded.');
 
 				error.name = 'AbortError';
 				throw error;

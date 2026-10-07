@@ -1,6 +1,5 @@
 import {copyFile, constants} from 'node:fs/promises';
 import path from 'node:path';
-import {TheHoursRun} from './TheHoursRun.js';
 import {TheHoursRetainedInputs} from './TheHoursRetainedInputs.js';
 import {TheHoursMedia} from './TheHoursMedia.js';
 import {THE_HOURS_SHORT_CONTROLS} from './consts.js';
@@ -8,18 +7,18 @@ import {THE_HOURS_SHORT_CONTROLS} from './consts.js';
 /** Derived review media and synchronized index, preserving every parent recording. */
 export class TheHoursDeliverables {
 	/** Creates a delivery owner for one newly allocated run.
-	 * @param {TheHoursRun} run - Active task-contained output capability.
+	 *
+	 * @param {TheHoursRunCapability} run - Active task-contained output capability.
+	 * @param {TheHoursRunCapability} archive - Explicit read-only comparison evidence capability.
 	 */
-	constructor(run) {
+	constructor(run, archive) {
 		this._run = run;
 		this._media = new TheHoursMedia(run);
-		this._archive = new TheHoursRun({
-			outputRoot: '.codex-tmp/p3-strobing-20261007/runs',
-			evidenceRoot: 'D:/flattened-steel',
-		});
+		this._archive = archive;
 	}
 
 	/** Called by delivery to admit a closed exact task-local parent.
+	 *
 	 * @param {TheHoursArtifactIdentity} manifest - Complete closed parent manifest identity.
 	 * @returns {Promise<TheHoursRetainedInputs>} - Authenticated read-only parent capability.
 	 */
@@ -34,6 +33,7 @@ export class TheHoursDeliverables {
 	}
 
 	/** Called by delivery to retain an exact unannotated recording and make a side-by-side derivative.
+	 *
 	 * @param {string} name - Registered film/short operation.
 	 * @param {string} candidate - Checked candidate recording.
 	 * @param {TheHoursArtifactIdentity} original - Exact read-only archive recording.
@@ -73,6 +73,7 @@ export class TheHoursDeliverables {
 
 	/** Call this method to assemble exact recordings, synchronized comparisons and one review index.
 	 * Rejected automated film outcomes remain deliverable and visibly rejected.
+	 *
 	 * @param {TheHoursArtifactIdentity} qualificationManifest - Exact closed full-film qualification manifest.
 	 * @returns {Promise<TheHoursDeliveryResult>} - Automated disposition and inspectable linked media.
 	 */
@@ -98,7 +99,7 @@ export class TheHoursDeliverables {
 			sunrise: {byteLength: 5542984, sha256: 'a0cdc4baf7967248508d3c45c92289c0d82f923b71065f7f45c00b92255a8cde'},
 			daylight: {byteLength: 4448589, sha256: '87d86868bf4cf6b79696c256dd2284d6bd3fa23508b183843f1e3c19f1573c62'},
 		};
-		const links = [
+		let links = [
 			{
 				label: 'Native4K production candidate',
 				href: `../${result.parentRoot.split('/').at(-1)}/recording/original-workflow.mp4`,
@@ -112,7 +113,7 @@ export class TheHoursDeliverables {
 				href: 'deliverables/comparison-film.mp4',
 			},
 		];
-		const parents = [qualificationManifest, filmPin, original];
+		let parents = [qualificationManifest, filmPin, original];
 		for (const pin of admission.parents.filter((parent) => parent.path.endsWith('/artifact-manifest.json'))) {
 			const short = await this._reader(pin),
 				shortResult = /** @type {TheHoursShortQualification} */ (await short.json('result.json'));

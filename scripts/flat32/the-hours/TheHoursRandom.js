@@ -1,4 +1,5 @@
 /** Replay-seeded noncryptographic generator preserving the original binary64 recurrence.
+ *
  * @implements {TheHoursObservatoryRandomSource}
  */
 export class TheHoursRandom {

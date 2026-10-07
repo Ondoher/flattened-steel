@@ -7,6 +7,7 @@ import {DISTANT_SUN_SHARED_CACHE_PACKET_BYTES} from '../algorithm32/implementati
 export default class SharedDistantCacheAssets {
 	/**
 	 * Admit a server-selected transition qualification only on its measured runtime target and complete byte budget.
+	 *
 	 * @param {DistantSunSharedCacheMemoryQualification | undefined} value - Server-selected qualification.
 	 * @param {string} renderer - Unmasked WebGL renderer string.
 	 * @returns {DistantSunSharedCacheMemoryQualification | undefined} - Admitted runtime policy.
@@ -38,6 +39,7 @@ export default class SharedDistantCacheAssets {
 	_disposed = false;
 
 	/** Call this method to authenticate a selected package and obtain one renderer-independent runtime selection.
+	 *
 	 * @param {Flat32SharedCacheAssetSelection} asset - Validated server selection.
 	 * @param {number | null} ordinal - Representative catalog scene, or darkness.
 	 * @param {AbortSignal} signal - Application preparation cancellation.
@@ -81,6 +83,7 @@ export default class SharedDistantCacheAssets {
 	}
 
 	/** Call this method to release this application's Worker and retained host pins after runtimes dispose.
+	 *
 	 * @returns {void}
 	 */
 	dispose() {

@@ -6,6 +6,7 @@ import path from 'node:path';
 import Files from '../../algorithm32/solar-zenith-cache/DistantSunSharedCacheGenerationFiles.js';
 
 /** Repository-derived exclusive proof output and read-only parent evidence access.
+ *
  * @implements {TheHoursRunCapability}
  */
 export class TheHoursRun {
@@ -20,7 +21,7 @@ export class TheHoursRun {
 			throw new RangeError('The Hours output must be a task-contained .codex-tmp runs directory.');
 		}
 		this._files = new Files(this.repositoryRoot);
-		this._evidence = new Files(configuration.evidenceRoot);
+		this._evidence = new Files(path.resolve(this.repositoryRoot, configuration.evidenceRoot ?? '.'));
 		this._outputRoot = configuration.outputRoot;
 		this._sealed = false;
 		this._runRelative = '';
@@ -28,6 +29,7 @@ export class TheHoursRun {
 	}
 
 	/** Immutable repository identity derived from this module's location.
+	 *
 	 * @returns {string} - Absolute ordinary repository root.
 	 */
 	get repositoryRoot() {
@@ -208,7 +210,7 @@ export class TheHoursRun {
 			(await realpath(absolute)).toLowerCase() !== absolute.toLowerCase()
 		)
 			throw new Error('The Hours inventory resolves through an alias.');
-		const artifacts = [];
+		let artifacts = [];
 		for (const entry of await readdir(absolute, {withFileTypes: true})) {
 			const child = relative ? `${relative}/${entry.name}` : entry.name;
 			if (entry.isSymbolicLink()) throw new Error('The Hours output contains an alias.');

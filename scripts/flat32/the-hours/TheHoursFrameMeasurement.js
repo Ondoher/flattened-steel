@@ -23,7 +23,7 @@ export class TheHoursFrameMeasurement {
 		}
 		this._context.drawImage(source, 0, 0);
 		const bytes = this._context.getImageData(0, 0, width, height).data;
-		/** @type {Record<string, TheHoursPixelRegion>} */ const regions = {};
+		/** @type {Record<string, TheHoursPixelRegion>} */ let regions = {};
 		for (const [name, first, last] of [
 			['upper', 0, height / 3],
 			['horizon', height / 3, (height * 2) / 3],

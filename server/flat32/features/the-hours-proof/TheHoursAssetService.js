@@ -3,6 +3,7 @@ import {readFile} from 'node:fs/promises';
 /** Authenticated proof-asset reads behind the loopback transport boundary. */
 export class TheHoursAssetService {
 	/** Creates an asset reader without opening a socket.
+	 *
 	 * @param {TheHoursAssetServiceConfiguration} configuration - Exact authenticated input and output capabilities.
 	 */
 	constructor(configuration) {
@@ -10,6 +11,7 @@ export class TheHoursAssetService {
 	}
 
 	/** Call this method to read one exact allowed proof asset.
+	 *
 	 * @param {string} route - Parsed request pathname.
 	 * @returns {Promise<TheHoursAssetResponse|null>} - Complete asset bytes and media type, or an absent route.
 	 */

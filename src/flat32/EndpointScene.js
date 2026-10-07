@@ -4,6 +4,7 @@ import {LocalSunSceneLighting} from './LocalSunSceneLighting.js';
 import {ATMOSPHERE_SCENE_SCALE, GROUND_COLOR, GROUND_SIZE_SCENE_UNITS, SCENE_OBJECTS} from './consts.js';
 
 /** Ordinary endpoint geometry and physical receiver lighting.
+ *
  * @implements {Flat32EndpointLighting}
  */
 export class EndpointScene {
@@ -102,7 +103,7 @@ export class EndpointScene {
 			metalness: 0.02,
 			roughness: 0.72,
 		});
-		const mesh = new THREE.Mesh(boxGeometry, material);
+		let mesh = new THREE.Mesh(boxGeometry, material);
 
 		mesh.name = `flat32-review-object-${index + 1}`;
 		const center = surfaceGeometry.mapGroundOffsetToScenePoint(
@@ -241,7 +242,7 @@ export class EndpointScene {
 		}
 
 		/** @type {ScenePosition[]} */
-		const positions = [];
+		let positions = [];
 
 		this._group.updateWorldMatrix(true, true);
 		for (const mesh of this._meshes) {

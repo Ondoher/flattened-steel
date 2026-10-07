@@ -8,6 +8,7 @@ export class Algorithm32ShaderHandle {
 	static _nextReceiverLightCacheIdentity = 1;
 
 	/** Called by receiver preparation to identify one installed cache object.
+	 *
 	 * @param {GpuScatteringCache} cache - Installed cache object.
 	 * @returns {string} - Stable runtime-local cache identity.
 	 */
@@ -72,7 +73,7 @@ export class Algorithm32ShaderHandle {
 	 * @returns {void} - No return value.
 	 */
 	_disposeBuildResult(buildResult = this._buildResult, preservedControllers = new Set()) {
-		const disposalErrors = [];
+		let disposalErrors = [];
 		try {
 			buildResult?.runtime?.dispose?.();
 		} catch (error) {
@@ -118,7 +119,7 @@ export class Algorithm32ShaderHandle {
 	async setConfig(config, options = {}) {
 		this._assertUsable();
 		if (options.signal?.aborted) {
-			const error = new Error('Algorithm32 shader rebuild was aborted by the caller.');
+			let error = new Error('Algorithm32 shader rebuild was aborted by the caller.');
 			error.name = 'AbortError';
 			throw error;
 		}
@@ -144,7 +145,7 @@ export class Algorithm32ShaderHandle {
 				await nextBuildResult.runtime?.prepare?.(this._renderer);
 			}
 			if (this._disposed || cancellation.signal.aborted || generation !== this._generation) {
-				const error = new Error('Algorithm32 shader rebuild was superseded.');
+				let error = new Error('Algorithm32 shader rebuild was superseded.');
 				error.name = 'AbortError';
 				throw error;
 			}
@@ -185,6 +186,7 @@ export class Algorithm32ShaderHandle {
 	}
 
 	/** Call this method to measure a complete candidate receiver state without altering the visible facade.
+	 *
 	 * @param {Algorithm32ReceiverPreparationRequest} request - Candidate geometry, source, cache, and GPU capabilities.
 	 * @returns {Promise<ReceiverEnvironmentLightMeasurement>} - Complete unpublished receiver measurement.
 	 */
@@ -249,6 +251,7 @@ export class Algorithm32ShaderHandle {
 	}
 
 	/** Call this method at the live scene boundary to install complete receiver light and celestial observation.
+	 *
 	 * @param {ReceiverEnvironmentLightMeasurement} measurement - Complete candidate lighting.
 	 * @param {GeometryObservation} observation - Matching accepted observation.
 	 * @returns {void}
@@ -307,7 +310,7 @@ export class Algorithm32ShaderHandle {
 					position: request.context.position,
 					physicalOutgoingDirection: request.context.physicalOutgoingDirection,
 				});
-				const values = new Float64Array(basis.channelCount);
+				let values = new Float64Array(basis.channelCount);
 				for (let positionTap = 0; positionTap < positionStencil.indices.length; positionTap += 1) {
 					for (let directionTap = 0; directionTap < directionStencil.indices.length; directionTap += 1) {
 						const positionIndex = positionStencil.indices[positionTap];

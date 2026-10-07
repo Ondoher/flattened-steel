@@ -46,6 +46,7 @@ export class ReceiverEnvironmentLightController {
 	}
 
 	/** Call this method to adopt a complete independently prepared live-scene measurement.
+	 *
 	 * @param {ReceiverEnvironmentLightMeasurement} measurement - Complete native spectral light state.
 	 * @returns {ReceiverEnvironmentLightMeasurement} - Revalidated current measurement.
 	 */
@@ -136,7 +137,7 @@ export class ReceiverEnvironmentLightController {
 	/** Reject aborted, disposed, or superseded work before publication. */
 	_assertBuildCurrent(generation, signal) {
 		if (signal?.aborted) {
-			const error = new Error('Receiver environment-light build was cancelled.');
+			let error = new Error('Receiver environment-light build was cancelled.');
 			error.name = 'AbortError';
 			throw error;
 		}

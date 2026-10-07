@@ -8,6 +8,7 @@ import {
 /** Original ideal-cadence recording workflow shared by live rendering and exact lossless replay. */
 export class TheHoursRecorder {
 	/** Creates a recorder around a caller-owned native presentation.
+	 *
 	 * @param {TheHoursRecorderConfiguration} configuration - Explicit source, cadence and encoder policy.
 	 */
 	constructor(configuration) {
@@ -15,6 +16,7 @@ export class TheHoursRecorder {
 	}
 
 	/** Called by the original byte bridge to deliver bounded batches without argument-spread overflow.
+	 *
 	 * @param {Uint8Array} bytes - Complete bounded bytes.
 	 * @returns {string} - Base64 bridge payload.
 	 */
@@ -26,6 +28,7 @@ export class TheHoursRecorder {
 	}
 
 	/** Call this method to record every original ideal slot through the retained reusable workflow.
+	 *
 	 * @returns {Promise<TheHoursRecordingResult>} - Complete codec, cadence and byte-delivery facts.
 	 */
 	async record() {

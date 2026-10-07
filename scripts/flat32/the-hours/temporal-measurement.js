@@ -17,7 +17,7 @@ export const TheHoursTemporalMeasurement = {
 				? [index]
 				: [],
 		);
-		/** @type {TheHoursTemporalResult} */ const result = {boundaries, regions: {}, pass: true};
+		/** @type {TheHoursTemporalResult} */ let result = {boundaries, regions: {}, pass: true};
 		for (const name of ['full', 'upper', 'horizon', 'lower']) {
 			const events = pixels.slice(1, -1).map((frame, offset) => {
 				const index = offset + 1;

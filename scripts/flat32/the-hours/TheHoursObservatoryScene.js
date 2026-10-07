@@ -96,7 +96,7 @@ export class TheHoursObservatoryScene {
 	 * @returns {THREE.Mesh} - Attached scene mesh.
 	 */
 	_mesh(geometry, material, name, castShadow = true) {
-		const mesh = new this._three.Mesh(geometry, material);
+		let mesh = new this._three.Mesh(geometry, material);
 		mesh.name = name;
 		mesh.castShadow = castShadow;
 		mesh.receiveShadow = true;
@@ -192,14 +192,14 @@ export class TheHoursObservatoryScene {
 	 */
 	_createTerrain() {
 		const angularSegments = 320;
-		const radii = [0];
+		let radii = [0];
 		for (let radialIndex = 1; radialIndex <= 60; radialIndex += 1) radii.push(radialIndex * 8);
 		for (let radialIndex = 1; radialIndex <= 100; radialIndex += 1) {
 			radii.push(480 + (radialIndex / 100) ** 2.65 * 259520);
 		}
-		const positions = [];
-		const colors = [];
-		const indices = [];
+		let positions = [];
+		let colors = [];
+		let indices = [];
 		for (const radius of radii) {
 			for (let angularIndex = 0; angularIndex <= angularSegments; angularIndex += 1) {
 				const angle = (angularIndex / angularSegments) * Math.PI * 2;
@@ -263,7 +263,7 @@ export class TheHoursObservatoryScene {
 		);
 		geometry.rotateX(-Math.PI / 2);
 		const positions = geometry.getAttribute('position');
-		const colors = new Float32Array(positions.count * 3);
+		let colors = new Float32Array(positions.count * 3);
 		for (let vertexIndex = 0; vertexIndex < positions.count; vertexIndex += 1) {
 			const eastMeters = positions.getX(vertexIndex) * 1000;
 			const southMeters = positions.getZ(vertexIndex) * 1000;
@@ -595,7 +595,7 @@ export class TheHoursObservatoryScene {
 	 */
 	_batchStaticMeshes() {
 		/** @type {Map<string, THREE.Mesh[]>} Material and shadow-policy buckets. */
-		const buckets = new Map();
+		let buckets = new Map();
 		for (const mesh of this.meshes) {
 			if (mesh === this.ground || mesh === this.terrain) continue;
 			const material = /** @type {THREE.Material} */ (mesh.material);
@@ -607,7 +607,7 @@ export class TheHoursObservatoryScene {
 		this.group.updateWorldMatrix(true, true);
 		this.meshes = [this.ground, this.terrain];
 		for (const bucket of buckets.values()) {
-			const geometries = [];
+			let geometries = [];
 			for (const mesh of bucket) {
 				const baked = mesh.geometry.index ? mesh.geometry.toNonIndexed() : mesh.geometry.clone();
 				baked.applyMatrix4(mesh.matrixWorld);
@@ -619,7 +619,7 @@ export class TheHoursObservatoryScene {
 			for (const sourceGeometry of geometries) sourceGeometry.dispose();
 			if (geometry === null) throw new Error('TheHoursObservatory static geometry could not be merged.');
 			geometry.computeBoundingSphere();
-			const mesh = new this._three.Mesh(geometry, bucket[0].material);
+			let mesh = new this._three.Mesh(geometry, bucket[0].material);
 			mesh.name = `baked-${bucket[0].name}`;
 			mesh.castShadow = bucket[0].castShadow;
 			mesh.receiveShadow = true;
@@ -648,7 +648,7 @@ export class TheHoursObservatoryScene {
 	 */
 	getSceneDepthEndpointPositions() {
 		/** @type {ScenePosition[]} Physical-depth endpoint bounds. */
-		const positions = [];
+		let positions = [];
 		this.group.updateWorldMatrix(true, true);
 		for (const mesh of this.meshes) {
 			const bounds = new this._three.Box3().setFromObject(mesh, true);

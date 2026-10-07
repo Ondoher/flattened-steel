@@ -3,8 +3,8 @@ import {ThreeSceneRuntime} from '../ThreeSceneRuntime.js';
 
 describe('Flat32 Step 5 stellar lifecycle', () => {
 	it('publishes a complete state between deterministic manual frames', async () => {
-		const runtime = new ThreeSceneRuntime(document.createElement('canvas'), fail, {frameCadence: 'manual'});
-		const events = [];
+		let runtime = new ThreeSceneRuntime(document.createElement('canvas'), fail, {frameCadence: 'manual'});
+		let events = [];
 		const schedule = spyOn(window, 'requestAnimationFrame').and.returnValue(1);
 		runtime._started = true;
 		runtime._renderOperation = () => events.push('render');
@@ -18,7 +18,7 @@ describe('Flat32 Step 5 stellar lifecycle', () => {
 	});
 
 	it('stores candidate scene-linear color in full float without changing its viewport', () => {
-		const runtime = new ThreeSceneRuntime(document.createElement('canvas'), fail, {sceneColorPrecision: 'float32'});
+		let runtime = new ThreeSceneRuntime(document.createElement('canvas'), fail, {sceneColorPrecision: 'float32'});
 		runtime._viewportSize = {width: 16, height: 9};
 		const target = runtime._createComposerRenderTarget();
 		expect(target.width).toBe(16);
@@ -29,8 +29,8 @@ describe('Flat32 Step 5 stellar lifecycle', () => {
 		runtime.dispose();
 	});
 	it('publishes prepared state before rendering and excludes a canceled frame operation', async () => {
-		const runtime = new ThreeSceneRuntime(document.createElement('canvas'), fail);
-		const events = [];
+		let runtime = new ThreeSceneRuntime(document.createElement('canvas'), fail);
+		let events = [];
 		spyOn(window, 'requestAnimationFrame').and.returnValue(1);
 		runtime._started = true;
 		runtime._renderOperation = () => events.push('render');
@@ -68,7 +68,7 @@ describe('Flat32 Step 5 stellar lifecycle', () => {
 			getContext: () => context,
 			setRenderTarget: jasmine.createSpy('setRenderTarget'),
 		};
-		const runtime = new Algorithm32Runtime({
+		let runtime = new Algorithm32Runtime({
 			sceneRuntime: {
 				addContextLifecycleParticipant: () => remove,
 				restoreDirectRendering: jasmine.createSpy('restoreDirectRendering'),
@@ -87,9 +87,9 @@ describe('Flat32 Step 5 stellar lifecycle', () => {
 
 	it('waits for registered context restoration before resuming frame rendering', async () => {
 		const canvas = document.createElement('canvas');
-		const failures = [];
-		const runtime = new ThreeSceneRuntime(canvas, (message) => failures.push(message));
-		const events = [];
+		let failures = [];
+		let runtime = new ThreeSceneRuntime(canvas, (message) => failures.push(message));
+		let events = [];
 		const remove = runtime.addContextLifecycleParticipant({
 			handleContextLoss() {
 				events.push('lost');
@@ -127,7 +127,7 @@ describe('Flat32 Step 5 stellar lifecycle', () => {
 			restoreDirectRendering: jasmine.createSpy('restoreDirectRendering'),
 		};
 		const mode = {dispose: jasmine.createSpy('mode.dispose')};
-		const runtime = new Algorithm32Runtime({
+		let runtime = new Algorithm32Runtime({
 			sceneRuntime,
 			endpointScene: {},
 			mode,
@@ -176,7 +176,7 @@ describe('Flat32 Step 5 stellar lifecycle', () => {
 			renderer,
 			restoreDirectRendering: jasmine.createSpy('restoreDirectRendering'),
 		};
-		const runtime = new Algorithm32Runtime({
+		let runtime = new Algorithm32Runtime({
 			sceneRuntime,
 			endpointScene: {},
 			mode: {dispose: jasmine.createSpy('mode.dispose')},

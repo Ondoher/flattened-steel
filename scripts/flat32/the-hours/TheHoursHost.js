@@ -13,6 +13,7 @@ import {TheHoursAssetService} from '../../../server/flat32/features/the-hours-pr
 /** Loopback-only proof host; outputs and browser profile belong to one new run. */
 export class TheHoursHost {
 	/** Creates a host without opening a socket or launching a browser.
+	 *
 	 * @param {TheHoursHostConfiguration} configuration - Active output and authenticated package capabilities.
 	 */
 	constructor(configuration) {
@@ -27,6 +28,7 @@ export class TheHoursHost {
 	}
 
 	/** Called by build and asset delivery to retain exact ordinary repository source identities.
+	 *
 	 * @param {string} relative - Repository-owned input path.
 	 * @returns {Promise<string>} - Checked absolute path.
 	 */
@@ -54,6 +56,7 @@ export class TheHoursHost {
 	}
 
 	/** Called by startup to bundle production modules exclusively inside the active run.
+	 *
 	 * @param {string} input - Repository-owned module entry.
 	 * @param {string} output - New run-relative bundle artifact.
 	 * @returns {Promise<void>} - Exact source inventory and bundle persisted.
@@ -94,6 +97,7 @@ export class TheHoursHost {
 	}
 
 	/** Called by startup to register a production asset package and its declared artifacts.
+	 *
 	 * @param {string} route - Exact public package route.
 	 * @param {string} root - Ordinary repository package directory.
 	 * @returns {Promise<void>} - Read-only route allowlist recorded.
@@ -117,6 +121,7 @@ export class TheHoursHost {
 	}
 
 	/** Called by the loopback listener to serve only authenticated inputs and this run's bundles.
+	 *
 	 * @param {import('node:http').IncomingMessage} request - Loopback request.
 	 * @param {import('node:http').ServerResponse} response - Response owner.
 	 * @returns {Promise<void>} - Exact bounded route delivered or rejected.
@@ -149,6 +154,7 @@ export class TheHoursHost {
 	}
 
 	/** Called by the video bridge to append one bounded sequential batch exactly once.
+	 *
 	 * @param {number} index - Next expected batch index.
 	 * @param {string} encoded - Base64 batch from the browser.
 	 * @returns {Promise<void>} - Complete bytes persisted.
@@ -167,6 +173,7 @@ export class TheHoursHost {
 	}
 
 	/** Called by the video bridge to close and synchronize the output once.
+	 *
 	 * @returns {Promise<void>} - Durable closed video artifact.
 	 */
 	async _videoFinalize() {
@@ -178,6 +185,7 @@ export class TheHoursHost {
 	}
 
 	/** Call this method to prepare pinned bundles and actual Chrome without changing deployed assets.
+	 *
 	 * @param {number} width - Native capture width.
 	 * @param {number} height - Native capture height.
 	 * @returns {Promise<void>} - Browser and exact source inventory ready.
@@ -276,6 +284,7 @@ export class TheHoursHost {
 	}
 
 	/** Call this method to exercise actual target allocation and production GLSL.
+	 *
 	 * @returns {Promise<TheHoursGpuProofResult>} - Actual admitted GPU and color evidence.
 	 */
 	proof() {
@@ -288,6 +297,7 @@ export class TheHoursHost {
 	}
 
 	/** Call this method to record a configured original production scene through normal owners.
+	 *
 	 * @param {TheHoursBrowserConfiguration} configuration - Authenticated controls and measured admission.
 	 * @returns {Promise<TheHoursBrowserResult>} - Complete physical and native source trace.
 	 */
@@ -306,6 +316,7 @@ export class TheHoursHost {
 	}
 
 	/** Call this method to replay exact native PNGs through the original reusable media workflow.
+	 *
 	 * @param {TheHoursReplayConfiguration} configuration - Retained source and declared encoding candidate.
 	 * @returns {Promise<TheHoursReplayResult>} - Exact native replay and complete media facts.
 	 */
@@ -318,6 +329,7 @@ export class TheHoursHost {
 	}
 
 	/** Call this method to exercise complete production scene publication with actual measured receiver light.
+	 *
 	 * @param {TheHoursBrowserConfiguration} configuration - Authenticated native candidate and actual target admission.
 	 * @returns {Promise<TheHoursSceneTraversalResult>} - All 109 coherent native publications.
 	 */
@@ -336,6 +348,7 @@ export class TheHoursHost {
 	}
 
 	/** Call this method to release browser, video and listener before run sealing.
+	 *
 	 * @returns {Promise<void>} - External writers closed.
 	 */
 	async dispose() {

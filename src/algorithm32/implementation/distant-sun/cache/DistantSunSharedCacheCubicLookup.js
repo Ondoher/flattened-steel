@@ -8,6 +8,7 @@ import {DistantSunSolarInterpolation} from './DistantSunSolarInterpolation.js';
 /** Cubic packet lookup shared by the production facade and matched GPU qualification. */
 export const DistantSunSharedCacheCubicLookup = {
 	/** Emit domain- and packet-contract-derived sampling functions.
+	 *
 	 * @returns {string} - GLSL using the production packet and coordinate-address samplers.
 	 */
 	createShaderSource() {
@@ -53,6 +54,7 @@ vec4 distantCubicDensity(int altitudeIndex, vec3 directionCoordinate, float zeni
 	},
 
 	/** Emit the altitude interpolation that surrounds the cubic solar lookup.
+	 *
 	 * @returns {string} - Spectral density accumulators and explicit support state.
 	 */
 	createSampleBody() {

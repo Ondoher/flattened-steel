@@ -3,6 +3,7 @@ export const TheHoursRecurrenceMeasurement = {
 	/** Call this method to retain and assess both original early-ground publication neighborhoods.
 	 * Missing exact neighboring source frames throw. The original distinct-publication
 	 * allowance remains one; every target is assessed even outside the ranked extrema.
+	 *
 	 * @param {readonly TheHoursPixelFrame[]} pixels - Complete ordered native or decoded source.
 	 * @param {readonly TheHoursMeasuredSceneFrame[]} scene - Matching original choreography positions.
 	 * @returns {TheHoursRecurrenceProof} - Exact retained target values and recurrence gate.

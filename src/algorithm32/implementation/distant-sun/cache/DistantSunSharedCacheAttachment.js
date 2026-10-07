@@ -2,6 +2,7 @@ import DistantSunSharedCache from './DistantSunSharedCache.js';
 import DistantSunSharedCacheController from './DistantSunSharedCacheController.js';
 
 /** Stable renderer attachment joining cache construction to predictive scene publication.
+ *
  * @implements {CacheController}
  * @implements {DistantSunSharedScenePublication}
  */
@@ -18,6 +19,7 @@ export default class DistantSunSharedCacheAttachment {
 	_disposed = false;
 
 	/** Creates one renderer-owned shared-cache attachment.
+	 *
 	 * @param {CachePacketAtlasBackend} backend - Renderer capability.
 	 * @param {DistantSunSharedCacheSelection} selection - Authenticated package, transport, and admitted memory policy.
 	 */
@@ -33,6 +35,7 @@ export default class DistantSunSharedCacheAttachment {
 	}
 
 	/** Call this method to preload the initial predictive window and install its stable cache facade.
+	 *
 	 * @param {ScatteringCacheBuildRequest} request - Initial setup cancellation.
 	 * @returns {Promise<DistantSunSharedCache>} - Stable shader-facing resource.
 	 */
@@ -46,6 +49,7 @@ export default class DistantSunSharedCacheAttachment {
 	}
 
 	/** Call this method to prepare one complete candidate while the previous scene remains visible.
+	 *
 	 * @param {number | null} sceneOrdinal - Cache scene or explicit darkness.
 	 * @param {DistantSunSharedCacheSceneRequest} options - Route and velocity hints.
 	 * @param {AbortSignal} [signal] - Caller cancellation.
@@ -66,6 +70,7 @@ export default class DistantSunSharedCacheAttachment {
 	}
 
 	/** Call this method at one frame boundary after all matching lighting preparation succeeds.
+	 *
 	 * @param {number} generation - Exact prepared candidate generation.
 	 * @returns {DistantSunSharedCacheFrame} - Atomically published frame.
 	 */
@@ -86,6 +91,7 @@ export default class DistantSunSharedCacheAttachment {
 	}
 
 	/** Call this method to set a declared preparation route.
+	 *
 	 * @param {readonly number[]} route - Ordered scene selections.
 	 * @returns {void}
 	 */
@@ -94,6 +100,7 @@ export default class DistantSunSharedCacheAttachment {
 	}
 
 	/** Call this method to inspect bounded residency and preparation diagnostics.
+	 *
 	 * @returns {DistantSunSharedCacheControllerDiagnostics} - Current diagnostics.
 	 */
 	diagnostics() {
@@ -101,6 +108,7 @@ export default class DistantSunSharedCacheAttachment {
 	}
 
 	/** Call this method to cancel unpublished preparation without touching the current frame.
+	 *
 	 * @returns {void}
 	 */
 	cancelPreparation() {
@@ -108,6 +116,7 @@ export default class DistantSunSharedCacheAttachment {
 	}
 
 	/** Call this method to release the attachment and its GPU resources once.
+	 *
 	 * @returns {void}
 	 */
 	dispose() {

@@ -111,6 +111,7 @@ function acceptPresentationFilters(value) {
 
 /**
  * Normalize one exact Color configuration and reject aliases or unknown parameters.
+ *
  * @returns {Flat32ColorDisplayModelConfiguration} The accepted exact configuration.
  */
 export function resolveFlat32ColorDisplayModelConfiguration(configuration = {}) {
@@ -140,6 +141,7 @@ export function resolveFlat32ColorDisplayModelConfiguration(configuration = {}) 
 }
 
 /** Normalize independent Color, celestial, catalog, and presentation-filter selections.
+ *
  * @returns {Flat32ProductionSelections} - Accepted readonly production selections.
  */
 export function resolveFlat32ProductionSelections(configuration = {}) {

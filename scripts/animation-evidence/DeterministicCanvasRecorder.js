@@ -7,6 +7,7 @@ export class DeterministicCanvasRecorder {
 
 	/**
 	 * Called by construction to require a contiguous, fixed-cadence mapping.
+	 *
 	 * @param {readonly AnimationEvidenceReplayEntry[]} mapping Candidate replay mapping.
 	 * @returns {void}
 	 */
@@ -30,6 +31,7 @@ export class DeterministicCanvasRecorder {
 
 	/**
 	 * Creates a recorder around caller-owned rendering, canvas, encoding, and evidence callbacks.
+	 *
 	 * @param {AnimationEvidenceRecorderConfiguration} configuration Recorder configuration.
 	 */
 	constructor(configuration) {
@@ -46,6 +48,7 @@ export class DeterministicCanvasRecorder {
 
 	/**
 	 * Call this method to deterministically replay and record every configured presentation slot.
+	 *
 	 * @returns {Promise<AnimationEvidenceRecorderResult>} Recording result and caller-owned output result.
 	 */
 	async record() {
@@ -59,7 +62,7 @@ export class DeterministicCanvasRecorder {
 		}
 		let renderedSourceStateCount = 0;
 		let heldOutputSlotCount = 0;
-		const captures = [];
+		let captures = [];
 		try {
 			await configuration.videoOutput.start();
 			for (const entry of configuration.mapping) {

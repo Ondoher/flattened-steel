@@ -13,6 +13,11 @@ records and sealed accepted/rejected runs belong to
 Each run records source, dependency, tool, input and output identities. SHA-256
 manifests and exact parent pins preserve the complete derivation chain.
 
+Capture and comparison delivery require the explicit environment setting
+`ALGORITHM32_THE_HOURS_EVIDENCE_ROOT` pointing to the read-only relocated
+evidence directory. No machine-specific path is embedded in the adapter.
+Task-local qualification paths resolve from this repository identity.
+
 Run `node capture.js proof` for complete package metadata/encoded-block
 authentication, actual two-atlas GPU allocation/readback and P2/P9/Basic
 CPU/GLSL color checks. `scenes` traverses all109 production scene ordinals

@@ -4,6 +4,7 @@ import {TheHoursFrameMeasurement} from './TheHoursFrameMeasurement.js';
 /** Exact native lossless replay through the original recorder without repeating physical rendering. */
 export class TheHoursReplayBrowser {
 	/** Creates a replay around authenticated retained source artifacts.
+	 *
 	 * @param {TheHoursReplayConfiguration} configuration - Complete original source means and declared media policy.
 	 */
 	constructor(configuration) {
@@ -16,6 +17,7 @@ export class TheHoursReplayBrowser {
 	}
 
 	/** Called by recording to reconstruct one exact retained native image.
+	 *
 	 * @param {number} seconds - Original score position.
 	 * @returns {Promise<void>} - Complete native pixels validated against source means.
 	 */
@@ -48,6 +50,7 @@ export class TheHoursReplayBrowser {
 	}
 
 	/** Call this method to record exact source frames with explicit candidate encoding controls.
+	 *
 	 * @returns {Promise<TheHoursReplayResult>} - Unchanged source proof and original-workflow media facts.
 	 */
 	async record() {

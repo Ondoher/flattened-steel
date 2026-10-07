@@ -2,6 +2,7 @@
 export const COLOR_RESET_SLOPE_078_P9_ID = 'color-reset-slope-078-p9';
 
 /** Fixed response selected by the accepted slope-078/p9 evidence.
+ *
  * @type {ColorResetSlope078Curve}
  */
 export const COLOR_RESET_SLOPE_078_P9_CURVE = {

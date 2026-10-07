@@ -5,6 +5,7 @@ import Files from '../../algorithm32/solar-zenith-cache/DistantSunSharedCacheGen
 /** Read-only admission of four exact accepted short proofs before full-film work. */
 export class TheHoursShortGate {
 	/** Creates a gate without allocating output or admitting evidence.
+	 *
 	 * @param {TheHoursRunCapability} run - Repository identity and new output capability.
 	 */
 	constructor(run) {
@@ -13,6 +14,7 @@ export class TheHoursShortGate {
 	}
 
 	/** Called by admission to validate a bounded exact task-owned JSON artifact.
+	 *
 	 * @param {TheHoursArtifactIdentity} identity - Complete pinned byte identity.
 	 * @returns {Promise<unknown>} - Authenticated parsed JSON.
 	 */
@@ -30,6 +32,7 @@ export class TheHoursShortGate {
 
 	/** Call this method to admit four closed independently qualified short evidence chains.
 	 * Native4K uses qualified80Mbps; matched720p diagnostics use qualified160Mbps.
+	 *
 	 * @param {TheHoursArtifactIdentity} identity - Exact gate selection artifact.
 	 * @returns {Promise<TheHoursShortAdmission>} - Parents and selected film policy.
 	 */
@@ -37,7 +40,7 @@ export class TheHoursShortGate {
 		const selection = /** @type {TheHoursShortSelection} */ (await this._json(identity));
 		if (selection.schemaId !== 'algorithm32-the-hours-short-selection-v1' || selection.proofs.length !== 4)
 			throw new Error('Full film requires four declared short proofs.');
-		const names = new Set(),
+		let names = new Set(),
 			parents = [identity];
 		for (const proof of selection.proofs) {
 			if (!['daylight', 'sunrise', 'sunset', 'early-ground'].includes(proof.name) || names.has(proof.name))

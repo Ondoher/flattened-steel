@@ -61,7 +61,7 @@ const chromaFilter = {
 };
 const presentationFilters = stellarPresentation === 'physical' ? [] : [mesopicFilter, chromaFilter];
 const humanVisionPackage = mesopicFilter.enabled ? await loadHumanVisionFilterPackage() : null;
-const performanceSamples = [];
+let performanceSamples = [];
 const performanceCallback =
 	searchParameters.get('performance') === '1'
 		? /** @param {ShaderPerformanceSample} sample */ (sample) => {

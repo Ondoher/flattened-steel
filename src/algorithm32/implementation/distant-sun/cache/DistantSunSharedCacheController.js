@@ -223,6 +223,7 @@ export default class DistantSunSharedCacheController {
 	}
 
 	/** Resolve complete required support before admitting optional predictions.
+	 *
 	 * @param {number} ordinal - Accepted scene ordinal.
 	 * @returns {string[]} - Complete linear or cubic requirements.
 	 */
@@ -243,7 +244,7 @@ export default class DistantSunSharedCacheController {
 		 *
 		 * @type {CacheImmutableTexture[]}
 		 */
-		const textures = [];
+		let textures = [];
 		try {
 			for (const [table, valueKey] of /** @type {const} */ ([
 				[snapshot.rowAddressTable, 'cache.sharedRowAddress'],
@@ -440,6 +441,7 @@ export default class DistantSunSharedCacheController {
 	}
 
 	/** Call this method to inspect a borrowed complete candidate for off-frame lighting preparation.
+	 *
 	 * @returns {DistantSunSharedCacheFrame | undefined} - Complete candidate, invalidated by supersession.
 	 */
 	getPreparedFrame() {
@@ -447,6 +449,7 @@ export default class DistantSunSharedCacheController {
 	}
 
 	/** Call this method to cancel candidate preparation while preserving the visible scene.
+	 *
 	 * @returns {void}
 	 */
 	cancelPreparation() {

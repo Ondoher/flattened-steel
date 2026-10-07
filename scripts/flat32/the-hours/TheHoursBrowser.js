@@ -156,6 +156,7 @@ export class TheHoursBrowser {
 	}
 
 	/** Called by the score to install one authenticated exact native camera pose.
+	 *
 	 * @param {TheHoursCameraSnapshot} camera - Original frame or selected control pose.
 	 * @returns {void} - Complete projection and scene matrices updated.
 	 */
@@ -360,6 +361,7 @@ export class TheHoursBrowser {
 	 * A synthetic great-circle observer route covers zeniths unavailable in the film's
 	 * fixed San Jose day. Scene 108 uses 107.75 degrees, within its visible half-degree
 	 * interval; explicit darkness remains the ordinary cutoff at 108 degrees.
+	 *
 	 * @returns {Promise<TheHoursSceneTraversalResult>} - Actual complete source/receiver/cache and resource facts.
 	 */
 	async qualifyScenes() {
@@ -368,7 +370,7 @@ export class TheHoursBrowser {
 		const latitude = AngleMath.toRadians(subsolar.latitude),
 			longitude = AngleMath.toRadians(subsolar.longitude);
 		/** Complete actual production publications. @type {TheHoursSceneTraversalCase[]} */
-		const scenes = [];
+		let scenes = [];
 		for (let ordinal = 0; ordinal <= 108; ordinal += 1) {
 			const targetZenithDegrees = ordinal === 108 ? 107.75 : ordinal,
 				angle = (targetZenithDegrees * Math.PI) / 180;

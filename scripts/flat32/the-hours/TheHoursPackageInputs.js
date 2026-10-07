@@ -2,6 +2,7 @@ import DistantSunSharedCacheFormat from '../../../src/algorithm32/implementation
 import DistantSunSharedCacheSupport from '../../../src/algorithm32/implementation/distant-sun/cache/DistantSunSharedCacheSupport.js';
 
 /** Read-only complete Native15 package authentication and cubic inventory proof.
+ *
  * @implements {TheHoursInputArtifacts}
  */
 export class TheHoursPackageInputs {
@@ -45,7 +46,7 @@ export class TheHoursPackageInputs {
 		const direction = configuration.directionLayout.logicalToUniqueIndex;
 		this._allowed.set(direction.path, direction);
 		await this._run.authenticate({...direction, path: `${this._root}/${direction.path}`});
-		const scenes = [];
+		let scenes = [];
 		for (const entry of catalog.scenes)
 			scenes.push(format.parseSceneManifest(await this._json(entry.manifest), configuration, blockIndex));
 		if (

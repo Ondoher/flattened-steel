@@ -25,6 +25,7 @@ export class MediabunnyCanvasOutput {
 
 	/**
 	 * Creates a Mediabunny adapter without importing or pinning the caller's module.
+	 *
 	 * @param {AnimationEvidenceMediabunnyOutputConfiguration} configuration Caller-owned muxer and codec policy.
 	 */
 	constructor(configuration) {
@@ -44,6 +45,7 @@ export class MediabunnyCanvasOutput {
 
 	/**
 	 * Call this method to initialize the fragmented MP4 output and canvas video track.
+	 *
 	 * @returns {Promise<void>} Start completion promise.
 	 */
 	async start() {
@@ -85,6 +87,7 @@ export class MediabunnyCanvasOutput {
 
 	/**
 	 * Call this method to add the current canvas image at an exact media timestamp.
+	 *
 	 * @param {CanvasImageSource} canvas Presentation canvas; must be the configured canvas.
 	 * @param {number} timestampSeconds Exact media timestamp in seconds.
 	 * @param {number} durationSeconds Exact frame duration in seconds.
@@ -99,6 +102,7 @@ export class MediabunnyCanvasOutput {
 
 	/**
 	 * Call this method to finalize the MP4 container and its writable target.
+	 *
 	 * @returns {Promise<void>} Finalization completion promise.
 	 */
 	async finalize() {
@@ -108,6 +112,7 @@ export class MediabunnyCanvasOutput {
 	}
 
 	/** Call this method to release the encoder and output target after recording failure.
+	 *
 	 * @returns {Promise<void>} - Cancellation and owned resource release complete.
 	 */
 	async abort() {
@@ -119,6 +124,7 @@ export class MediabunnyCanvasOutput {
 
 	/**
 	 * Call this method to read immutable codec, packet, and container evidence after finalization.
+	 *
 	 * @returns {Readonly<Record<string, unknown>>} Output evidence.
 	 */
 	getResult() {
