@@ -5,7 +5,7 @@ import {fileURLToPath} from 'node:url';
 import Service from '../DistantSunSharedCachePackageService.js';
 import express from 'express';
 import {existsSync} from 'node:fs';
-import {createHash} from 'node:crypto';
+import {createHash, randomUUID} from 'node:crypto';
 import registerFlat32Routes from '../../../../flat32-router.js';
 import {
 	SHARED_PACKAGE_ROOT,
@@ -70,6 +70,57 @@ test('shared service rejects untrusted report bytes, oversized input, and extern
 	await assert.rejects(new Service(packageRoot).load({...report, sha256: '0'.repeat(64)}));
 	await assert.rejects(new Service(packageRoot).load({...report, byteLength: 33 * 1024 * 1024}));
 	await assert.rejects(new Service(packageRoot).load({...report, path: '../package-set.json'}));
+});
+
+test('production asset startup failures retain server diagnostics and return opaque client errors', async () => {
+	const previousStellarRoot = process.env.FLAT32_STELLAR_CATALOG_ROOT;
+	const previousHumanVisionRoot = process.env.FLAT32_HUMAN_VISION_FILTER_ROOT;
+	const previousConsoleError = console.error;
+	const diagnostics = [];
+	const missingRoot = path.resolve(
+		repository,
+		process.env.ALGORITHM32_PROOF_TEST_OUTPUT_ROOT ?? '.codex-tmp/shared-cache-server-test',
+		`private-missing-package-${randomUUID()}`,
+	);
+	assert.equal(existsSync(missingRoot), false);
+	let server;
+	try {
+		process.env.FLAT32_STELLAR_CATALOG_ROOT = missingRoot;
+		process.env.FLAT32_HUMAN_VISION_FILTER_ROOT = missingRoot;
+		console.error = (...values) => diagnostics.push(values);
+		const app = express();
+		await registerFlat32Routes(app, app, {getRouterRoot: () => ''});
+		server = app.listen(0, '127.0.0.1');
+		await new Promise((resolve) => server.once('listening', resolve));
+		const origin = `http://127.0.0.1:${server.address().port}`;
+		for (const [route, message] of [
+			[
+				'stellar-catalogs/brightest-2000-stellar-package-v1/manifest.json',
+				'Stellar catalog service is unavailable.',
+			],
+			[
+				'presentation-filters/human-vision-filter-package-v1/manifest.json',
+				'Human-vision filter service is unavailable.',
+			],
+		]) {
+			const response = await fetch(`${origin}/${route}`);
+			assert.equal(response.status, 503);
+			assert.equal(response.headers.get('cache-control'), 'no-store');
+			assert.deepEqual(await response.json(), {error: message});
+		}
+		assert.equal(diagnostics.length, 2);
+		assert.ok(diagnostics.every((values) => values[1] instanceof Error && values[1].message.includes(missingRoot)));
+	} finally {
+		console.error = previousConsoleError;
+		if (previousStellarRoot === undefined) delete process.env.FLAT32_STELLAR_CATALOG_ROOT;
+		else process.env.FLAT32_STELLAR_CATALOG_ROOT = previousStellarRoot;
+		if (previousHumanVisionRoot === undefined) delete process.env.FLAT32_HUMAN_VISION_FILTER_ROOT;
+		else process.env.FLAT32_HUMAN_VISION_FILTER_ROOT = previousHumanVisionRoot;
+		if (server) {
+			server.closeAllConnections();
+			await new Promise((resolve) => server.close(resolve));
+		}
+	}
 });
 
 test(

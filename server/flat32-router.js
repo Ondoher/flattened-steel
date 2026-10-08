@@ -22,25 +22,22 @@ function errorMessage(error) {
 /** Mount the scalar resolver and immutable cache assets beneath Flat32's application slug. */
 export default async function registerFlat32Routes(_expressApplication, router, flat32Application) {
 	let service = null;
-	let setupError = null;
 	let stellarService = null;
-	let stellarSetupError = null;
 	let humanVisionService = null;
-	let humanVisionSetupError = null;
 	try {
 		service = await createProductionSharedCacheService();
 	} catch (error) {
-		setupError = error;
+		console.error('Flat32 Distant-Sun cache setup failed.', error);
 	}
 	try {
 		stellarService = await createStellarCatalogPackageService();
 	} catch (error) {
-		stellarSetupError = error;
+		console.error('Flat32 stellar catalog setup failed.', error);
 	}
 	try {
 		humanVisionService = await createHumanVisionFilterPackageService();
 	} catch (error) {
-		humanVisionSetupError = error;
+		console.error('Flat32 human-vision filter setup failed.', error);
 	}
 	const routerRoot = flat32Application.getRouterRoot().replace(/\/$/u, '');
 	const assetBaseUrl = `${routerRoot}/scene-caches/`;
@@ -92,7 +89,7 @@ export default async function registerFlat32Routes(_expressApplication, router, 
 	router.get('/stellar-catalogs/brightest-2000-stellar-package-v1/*', async (request, response, next) => {
 		if (stellarService === null) {
 			sendJson(response, 503, {
-				error: `Stellar catalog service is unavailable: ${errorMessage(stellarSetupError)}`,
+				error: 'Stellar catalog service is unavailable.',
 			});
 			return;
 		}
@@ -116,7 +113,7 @@ export default async function registerFlat32Routes(_expressApplication, router, 
 	router.get('/presentation-filters/human-vision-filter-package-v1/*', async (request, response, next) => {
 		if (humanVisionService === null) {
 			sendJson(response, 503, {
-				error: `Human-vision filter service is unavailable: ${errorMessage(humanVisionSetupError)}`,
+				error: 'Human-vision filter service is unavailable.',
 			});
 			return;
 		}
