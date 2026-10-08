@@ -262,7 +262,7 @@ type CreativeSolarApplication = {
 	/** Cancellation of delayed UI-driven mode changes. */
 	_cancelLocationTimeRefresh(): void;
 	/** Pure astronomical scene-state construction. */
-	_createSphericalDistantSceneState(state: Flat32ApplicationState): Flat32DistantSunSceneState;
+	_createSphericalDistantSceneState(state: Flat32ApplicationState): Flat32DistantSunSceneState<CreativeSolarGeometry>;
 	/** CPU-only source, geometry, spectral color, and direct-light construction. */
 	_createSphericalDistantMode(
 		state: Flat32DistantSunSceneState,

@@ -243,3 +243,34 @@ type StrobingHorizonEvidence = {
 		/** Sealed three-path analysis run identity. */ analysisId: string;
 	}[];
 };
+
+/** Ordered scene frames read from an immutable film capture. */
+type StrobingFilmSceneTrace = {
+	/** Deterministic frames in presentation order. */ frames: StrobingFilmSceneFrame[];
+};
+/** Ordered decoded pixel measurements from an immutable analysis artifact. */
+type StrobingPixelTrace = {
+	/** Pixel measurements in presentation order. */ frames: StrobingPixelFrame[];
+};
+/** Temporal analysis of immutable native source frames. */
+type StrobingSourceTemporalAnalysis = {
+	/** Source temporal result. */ source: StrobingTemporalResult;
+};
+/** Paired native-source and encoded temporal analysis. */
+type StrobingEncodedTemporalAnalysis = StrobingSourceTemporalAnalysis & {
+	/** Encoded temporal result. */ encoded: StrobingTemporalResult;
+};
+/** One recorded coordinate in the atmospheric cubic proof. */
+type StrobingCubicFieldRow = {
+	/** Sample altitude in metres. */ altitude: number;
+	/** Solar zenith in degrees. */ zenithDegrees: number;
+	/** Mean sampled direction count. */ meanDirections: number;
+};
+/** Recorded field input for the cubic proof. */
+type StrobingCubicField = {
+	/** Rows in the recorded compiler order. */ rows: StrobingCubicFieldRow[];
+};
+/** Wavelength request for the experiment's concrete surface-limit compiler. */
+type StrobingDistantSunSceneCacheWavelengthRequest = Omit<DistantSunSceneCacheWavelengthRequest, 'buildRequest'> & {
+	/** Concrete experiment build request with its numerical extension. */ readonly buildRequest: StrobingCompilerBuildRequest;
+};

@@ -72,7 +72,7 @@ try {
 		StrobingRun.repositoryRoot,
 		`${StrobingRun.outputRelative}/runs/00012-field-compile`,
 	);
-	const field = /** @type {{rows: {altitude:number, zenithDegrees:number, meanDirections:number}[]}} */ (
+	const field = /** @type {StrobingCubicField} */ (
 		await StrobingRun.readJson(fieldRoot, 'field.json')
 	);
 	let intervals = 0,

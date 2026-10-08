@@ -294,11 +294,11 @@ approval. New temporary and generated P4 output belongs exclusively under
 sealed evidence remains read-only. P4 source baseline is
 `.codex-tmp/review-standards/session-cO9bp0/baseline.json`.
 
-- [ ] Run deferred failure/lifecycle checks: missing support, failed preparation,
+- [x] Run deferred failure/lifecycle checks: missing support, failed preparation,
       cancellation/supersession, large jumps, darkness, context loss/restoration,
       replacement, and disposal. Preserve old coherent state on failure without
       admitting a third atlas.
-- [ ] Run relevant compiler/generation/benchmark tests, Algorithm32 Node and
+- [x] Run relevant compiler/generation/benchmark tests, Algorithm32 Node and
       WebGL suites, full-cache Flat32 integration, changed-tooling tests, types,
       build, runtime-dependency verification, and formatting. Existing entrypoints
       include `test:algorithm32`, `test:algorithm32:three`,
@@ -313,7 +313,7 @@ sealed evidence remains read-only. P4 source baseline is
       application and proof-tool paths. Resolve exact paths and collaborators
       at each milestone; additional lanes follow actual mappings. Complete
       outstanding experiment reviews as their own unit.
-- [ ] Update production cache, color, application, and qualification owners with
+- [x] Update production cache, color, application, and qualification owners with
       source/package/color identities, evidence, remaining limits, and a verified
       compatible prior selection for rollback.
 - [ ] Prepare the concrete cache publication and application-default change

@@ -17,11 +17,11 @@ try {
 			StrobingRun.repositoryRoot,
 			`${StrobingRun.outputRelative}/runs/${analysisId}`,
 		);
-		const trace = /** @type {{frames:StrobingFilmSceneFrame[]}} */ (
+		const trace = /** @type {StrobingFilmSceneTrace} */ (
 			await StrobingRun.readJson(filmRoot, 'scene-trace.json')
 		);
 		const source = trace.frames.map((frame, frameIndex) => ({frameIndex, regions: frame.sourceRegions}));
-		const decoded = /** @type {{frames:StrobingPixelFrame[]}} */ (
+		const decoded = /** @type {StrobingPixelTrace} */ (
 			await StrobingRun.readJson(analysisRoot, 'film-pixels.json')
 		);
 		const results = {

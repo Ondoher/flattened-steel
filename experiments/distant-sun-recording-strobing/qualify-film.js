@@ -19,7 +19,7 @@ try {
 	)
 		throw new Error('The film run did not authenticate.');
 	await run.writeJson('film-parent.json', {root: path.relative(root, filmRoot), ...manifest});
-	const trace = /** @type {{frames: StrobingFilmSceneFrame[]}} */ (
+	const trace = /** @type {StrobingFilmSceneTrace} */ (
 		await StrobingRun.readJson(filmRoot, 'scene-trace.json')
 	);
 	const configuration = /** @type {StrobingRenderConfiguration} */ (
@@ -38,7 +38,7 @@ try {
 		root,
 		'tmp/experiments/distant-sun-shadow-animation-evidence/runs/1788974488678-creative-animation',
 	);
-	const originalTrace = /** @type {{frames: StrobingFilmSceneFrame[]}} */ (
+	const originalTrace = /** @type {StrobingFilmSceneTrace} */ (
 		await StrobingRun.readJson(originalRoot, 'scene-trace.json')
 	);
 	const choreography = trace.frames.map((frame, index) => ({

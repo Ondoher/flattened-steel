@@ -963,7 +963,7 @@ function uploadTextureUnit(gl, texture, unit, program, name) {
  * further readback. Invalid bounds, unsupported GPU capabilities, shader or readback failures, and
  * rejected callbacks abort execution; callers must discard incomplete extraction and preserve prior runs.
  *
- * @param {DistantSunSceneCacheWavelengthRequest} request - Exact inputs, GPU context, and extraction observers.
+ * @param {StrobingDistantSunSceneCacheWavelengthRequest} request - Exact inputs, GPU context, and extraction observers.
  * @returns {Promise<DistantSunSceneCacheWavelengthResult>} - Complete execution and allocation diagnostics.
  */
 export async function compileDistantSunSceneCacheWavelength({

@@ -20,16 +20,16 @@ try {
 			throw new Error('Color-delta parent failed authentication.');
 		parents.push({id, root, artifactSetSha256: manifest.artifactSetSha256});
 	}
-	const before = /** @type {{frames:StrobingFilmSceneFrame[]}} */ (
+	const before = /** @type {StrobingFilmSceneTrace} */ (
 		await StrobingRun.readJson(parents[0].root, 'scene-trace.json')
 	);
-	const after = /** @type {{frames:StrobingFilmSceneFrame[]}} */ (
+	const after = /** @type {StrobingFilmSceneTrace} */ (
 		await StrobingRun.readJson(parents[2].root, 'scene-trace.json')
 	);
-	const previous = /** @type {{source:StrobingTemporalResult}} */ (
+	const previous = /** @type {StrobingSourceTemporalAnalysis} */ (
 		await StrobingRun.readJson(parents[1].root, 'analysis.json')
 	);
-	const current = /** @type {{source:StrobingTemporalResult,encoded:StrobingTemporalResult}} */ (
+	const current = /** @type {StrobingEncodedTemporalAnalysis} */ (
 		await StrobingRun.readJson(parents[3].root, 'analysis.json')
 	);
 	const qualification = /** @type {StrobingRunResult} */ (await StrobingRun.readJson(parents[3].root, 'result.json'));

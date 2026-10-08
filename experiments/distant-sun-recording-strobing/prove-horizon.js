@@ -34,7 +34,7 @@ try {
 		const configuration = /** @type {StrobingRenderConfiguration} */ (
 			await StrobingRun.readJson(capture, 'configuration.json')
 		);
-		const trace = /** @type {{frames:StrobingFilmSceneFrame[]}} */ (
+		const trace = /** @type {StrobingFilmSceneTrace} */ (
 			await StrobingRun.readJson(capture, 'scene-trace.json')
 		);
 		const analysisResult = /** @type {StrobingRunResult} */ (await StrobingRun.readJson(analysis, 'result.json'));
@@ -55,7 +55,7 @@ try {
 			),
 		};
 		for (const name of ['source', 'original-recorder', 'retained-encode']) {
-			const pixels = /** @type {{frames:StrobingPixelFrame[]}} */ (
+			const pixels = /** @type {StrobingPixelTrace} */ (
 				await StrobingRun.readJson(analysis, `${name}-pixels.json`)
 			);
 			measurements[name] = StrobingHorizonMeasurement.evaluate(pixels.frames, frames);

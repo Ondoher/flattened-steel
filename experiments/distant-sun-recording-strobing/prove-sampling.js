@@ -9,7 +9,7 @@ try {
 		StrobingRun.repositoryRoot,
 		`${StrobingRun.outputRelative}/runs/00021-fixed-film`,
 	);
-	const trace = /** @type {{frames: StrobingFilmSceneFrame[]}} */ (
+	const trace = /** @type {StrobingFilmSceneTrace} */ (
 		await StrobingRun.readJson(root, 'scene-trace.json')
 	);
 	const comparisons = [],

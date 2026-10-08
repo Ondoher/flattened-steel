@@ -349,7 +349,7 @@ async function main() {
 		if ([7, 10, 46].includes(options.startSeconds)) {
 			const original =
 				'tmp/experiments/distant-sun-shadow-animation-evidence/runs/1788974488678-creative-animation';
-			const trace = /** @type {{frames: StrobingFilmSceneFrame[]}} */ (
+			const trace = /** @type {StrobingFilmSceneTrace} */ (
 				await StrobingRun.readJson(REPOSITORY_ROOT, `${original}/scene-trace.json`)
 			);
 			const cameraFrame = (options.startSeconds + 2) * 30;

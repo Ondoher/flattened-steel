@@ -14,7 +14,7 @@ try {
 	);
 	if ((await StrobingRun.inventory(parent, manifest.excludedPaths)).artifactSetSha256 !== manifest.artifactSetSha256)
 		throw new Error('Guard-proof parent did not authenticate.');
-	const trace = /** @type {{frames:StrobingFilmSceneFrame[]}} */ (
+	const trace = /** @type {StrobingFilmSceneTrace} */ (
 		await StrobingRun.readJson(parent, 'scene-trace.json')
 	);
 	const frames = trace.frames;

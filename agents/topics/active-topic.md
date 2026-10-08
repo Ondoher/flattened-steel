@@ -2,8 +2,9 @@
 
 Current active topic: production-algorithm32.
 Focus: implement and qualify the production engine under its existing owners.
-Selected task: independently execute P4 of the distant-Sun strobing promotion
-through its first owner approval, before publication or default switching.
+Selected task: complete the owner-approved P4 experiment type-only repair and
+remaining source reviews. Publication and default switching require separate
+deployment approval.
 
 Canonical entry document: [Production Algorithm32](production-algorithm32/README.md).
 
@@ -15,9 +16,11 @@ distant-Sun strobing promotion. Its
 owns current implementation, qualification, review state and next actions.
 P2 physical qualification passed. P3 functional gates, artifacts and native
 owner inspection pass. The promotion status links the completion record that
-owns final P3 source-review validation and closure. P4 is selected through
-release qualification and a concrete deployment proposal; deployment awaits
-owner approval.
+owns final P3 source-review validation and closure. P4 release qualification
+passed. The owner-approved eleven-file experiment type-only repair is applied
+and its real type check passes. Final source reviews are the immediate work;
+the promotion status links their disposition. Deployment awaits separate owner
+approval.
 
 Sky Accuracy Dials is parked under its
 [suspension and resumption boundary](poc-experiments/engineering-studies/sky-accuracy-dials/status.md#experiment-lifecycle).
