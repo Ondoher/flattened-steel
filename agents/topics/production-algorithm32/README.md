@@ -4,7 +4,7 @@ Implement and qualify the production engine. Application behavior, independent e
 
 ## Active Work
 
-The next selected production work is the
+The selected production work is the
 [distant-Sun strobing promotion](caches/distant-sun-strobing-promotion-plan.md).
 Focus: adapt the cache-generation and interpolation corrections to production,
 qualify them through Bruneton with its unchanged color model, and separately

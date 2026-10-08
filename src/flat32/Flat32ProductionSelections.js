@@ -116,7 +116,7 @@ function acceptPresentationFilters(value) {
  */
 export function resolveFlat32ColorDisplayModelConfiguration(configuration = {}) {
 	const record = acceptRecord(configuration, 'Flat32 Color configuration');
-	const candidateModel = record.model ?? FLAT32_COLOR_MODEL_IDS.COLOR_RESET_SLOPE_078_P9;
+	const candidateModel = record.model ?? FLAT32_COLOR_MODEL_IDS.COLOR_RESET_SLOPE_078_P2;
 	if (!COLOR_MODEL_IDS.has(candidateModel)) {
 		throw new RangeError(`Flat32 Color model ${String(candidateModel)} is not supported.`);
 	}

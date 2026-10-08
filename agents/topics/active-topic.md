@@ -2,25 +2,18 @@
 
 Current active topic: production-algorithm32.
 Focus: implement and qualify the production engine under its existing owners.
-Selected task: complete the owner-approved P4 experiment type-only repair and
-remaining source reviews. Publication and default switching require separate
-deployment approval.
+Selected task: close out the owner-approved P4 deployment. Native48 with cubic
+interpolation, P2 color and FP32 scene storage is deployed and verified.
 
 Canonical entry document: [Production Algorithm32](production-algorithm32/README.md).
 
 ## Immediate Focus
 
-The [production entry](production-algorithm32/README.md) routes the existing
-distant-Sun strobing promotion. Its
-[status](production-algorithm32/caches/distant-sun-strobing-promotion-status.md)
-owns current implementation, qualification, review state and next actions.
-P2 physical qualification passed. P3 functional gates, artifacts and native
-owner inspection pass. The promotion status links the completion record that
-owns final P3 source-review validation and closure. P4 release qualification
-passed. The owner-approved eleven-file experiment type-only repair is applied
-and its real type check passes. Final source reviews are the immediate work;
-the promotion status links their disposition. Deployment awaits separate owner
-approval.
+The [promotion status](production-algorithm32/caches/distant-sun-strobing-promotion-status.md)
+routes current deployment and final review disposition. The release owner records
+active selections and compatible rollback. P2 scientific qualification and
+owner-accepted P3 artifacts remain preserved. The P4 completion record owns final
+checks, source-review validation, checkpoint and completion disposition.
 
 Sky Accuracy Dials is parked under its
 [suspension and resumption boundary](poc-experiments/engineering-studies/sky-accuracy-dials/status.md#experiment-lifecycle).

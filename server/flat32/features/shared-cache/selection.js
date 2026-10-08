@@ -2,14 +2,20 @@ import {fileURLToPath} from 'node:url';
 import DistantSunSharedCachePackageService from './DistantSunSharedCachePackageService.js';
 
 /** Immutable package selected by the server deployment; selection never mutates package bytes. */
-export const SHARED_PACKAGE_IDENTITY = '2243c1ab2c2d529131759b32d72cee2a2e4b32098e1cc450c0d48cf34ed4edc7';
-/** Application-owned interpolation selection; retained until deployment approval. */
-export const SHARED_PACKAGE_SOLAR_INTERPOLATION = /** @type {const} */ ('linear');
+export const SHARED_PACKAGE_IDENTITY = '9a30749c6d4e6c23d7a84839788c068133051fbbd9bd93d07de8b18a6ee432ec';
+/** Application-owned interpolation selected by the approved deployment. */
+export const SHARED_PACKAGE_SOLAR_INTERPOLATION = /** @type {const} */ ('monotone-cubic');
+/** Measured P4 target qualification; the browser admits it only on the matching GPU and browser major. */
+export const SHARED_PACKAGE_TRANSITION_QUALIFICATION = /** @type {const} */ ({
+	evidenceId: 'sha256:be6251513e360b6b57bc8f0f9db899849e9e9701038767e5d8fd5a827bd75f0b',
+	targetId: 'NVIDIA GeForce RTX 2060 / Chrome 154 / ANGLE D3D11',
+	maximumBytes: 859963392,
+});
 /** Exact selected package report. */
 export const SHARED_PACKAGE_REPORT = /** @type {const} */ ({
 	path: 'package-set.json',
 	byteLength: 3268,
-	sha256: 'cfb287edddcbeabb90224af61e6d253fc0ff78b92eb3bb6dc50b758cb3c3ac4e',
+	sha256: 'bee0301de150115a5c068c492b20e5e631f4bd7da4104b4f847d4564dda3145e',
 });
 /** Repository-local immutable deployment destination. */
 export const SHARED_PACKAGE_ROOT = fileURLToPath(
@@ -21,7 +27,9 @@ export const SHARED_PACKAGE_ROOT = fileURLToPath(
  * @returns {Promise<DistantSunSharedCachePackageService>} - Authenticated selected service; invalid package bytes reject startup.
  */
 export async function createProductionSharedCacheService() {
-	return new DistantSunSharedCachePackageService(SHARED_PACKAGE_ROOT, SHARED_PACKAGE_SOLAR_INTERPOLATION).load(
-		SHARED_PACKAGE_REPORT,
-	);
+	return new DistantSunSharedCachePackageService(
+		SHARED_PACKAGE_ROOT,
+		SHARED_PACKAGE_SOLAR_INTERPOLATION,
+		SHARED_PACKAGE_TRANSITION_QUALIFICATION,
+	).load(SHARED_PACKAGE_REPORT);
 }

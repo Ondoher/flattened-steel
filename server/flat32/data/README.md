@@ -29,14 +29,15 @@ close.
 The selected immutable shared package lives at:
 
 ```text
-server/flat32/data/shared-block/2243c1ab2c2d529131759b32d72cee2a2e4b32098e1cc450c0d48cf34ed4edc7/
+server/flat32/data/shared-block/9a30749c6d4e6c23d7a84839788c068133051fbbd9bd93d07de8b18a6ee432ec/
 ```
 
-Run `npm run publish:algorithm32:shared-runtime` to copy and authenticate the
-generated immutable parent. The tracked server selection pins the report identity;
-there is no dense rollout switch. The selected ozone-free package is
-505,753,993 bytes and the
-server serves only its allowlisted, authenticated complete artifacts.
+Use the explicit publication command in the
+[strobing release](../../../agents/topics/production-algorithm32/caches/distant-sun-strobing-release.md).
+Its active selection, report identity, current target memory qualification and
+compatible rollback are owned there. The deployed ozone-free Native48 package
+contains 204 artifacts, 506,706,259 bytes; the prior 2243 package remains intact
+for rollback. The server serves only allowlisted authenticated complete files.
 [Original rollout evidence](../../../archives/topics/production-algorithm32-release-20260911/agents/topics/production-algorithm32/caches/shared-runtime-rollout.md)
 is preserved by the production cache topic.
 

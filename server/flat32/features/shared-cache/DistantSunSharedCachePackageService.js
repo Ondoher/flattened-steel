@@ -21,16 +21,37 @@ export default class DistantSunSharedCachePackageService {
 	_identity = '';
 	/** Explicit application-selected solar interpolation policy. @type {DistantSunSolarInterpolationMethod} */
 	_solarInterpolation;
+	/** Deployment-selected target memory evidence. @type {Readonly<DistantSunSharedCacheMemoryQualification>} */
+	_transitionQualification;
 
 	/** Creates a service with an implementation-derived repository boundary.
 	 *
 	 * @param {string} root - Candidate package directory.
 	 * @param {DistantSunSolarInterpolationMethod} [solarInterpolation] - Application-selected interpolation; omission retains linear behavior.
+	 * @param {DistantSunSharedCacheMemoryQualification} [transitionQualification] - Qualified target and two-atlas byte limit; omission retains the historical Chrome 153 qualification.
 	 */
-	constructor(root, solarInterpolation = 'linear') {
+	constructor(
+		root,
+		solarInterpolation = 'linear',
+		transitionQualification = {
+			evidenceId: 'sha256:4544d8f0f881d9f32208adab945858b614cef22ee80b2ded0eb078ec4f2e5dce',
+			targetId: 'NVIDIA GeForce RTX 2060 / Chrome 153 / ANGLE D3D11',
+			maximumBytes: 859963392,
+		},
+	) {
 		if (!['linear', 'monotone-cubic'].includes(solarInterpolation))
 			throw new RangeError('Unsupported shared package interpolation.');
 		this._solarInterpolation = solarInterpolation;
+		if (
+			!transitionQualification ||
+			!/^sha256:[a-f0-9]{64}$/u.test(transitionQualification.evidenceId) ||
+			!/^.+ \/ Chrome [1-9][0-9]* \/ ANGLE D3D11$/u.test(transitionQualification.targetId) ||
+			!Number.isSafeInteger(transitionQualification.maximumBytes) ||
+			transitionQualification.maximumBytes < 1 ||
+			transitionQualification.maximumBytes > 859963392
+		)
+			throw new RangeError('Invalid shared package transition qualification.');
+		this._transitionQualification = Object.freeze({...transitionQualification});
 		const repository = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../../..');
 		this._root = path.resolve(root);
 		const relative = path.relative(repository, this._root);
@@ -172,11 +193,7 @@ export default class DistantSunSharedCachePackageService {
 				packageSetIdentity: this._identity,
 				report: {...this._report},
 				solarInterpolation: this._solarInterpolation,
-				transitionQualification: {
-					evidenceId: 'sha256:4544d8f0f881d9f32208adab945858b614cef22ee80b2ded0eb078ec4f2e5dce',
-					targetId: 'NVIDIA GeForce RTX 2060 / Chrome 153 / ANGLE D3D11',
-					maximumBytes: 859963392,
-				},
+				transitionQualification: {...this._transitionQualification},
 			},
 		});
 		if (degrees >= 108) return {...common, status: 'dark'};

@@ -7,7 +7,12 @@ import express from 'express';
 import {existsSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import registerFlat32Routes from '../../../../flat32-router.js';
-import {SHARED_PACKAGE_ROOT, SHARED_PACKAGE_REPORT, SHARED_PACKAGE_IDENTITY} from '../selection.js';
+import {
+	SHARED_PACKAGE_ROOT,
+	SHARED_PACKAGE_REPORT,
+	SHARED_PACKAGE_IDENTITY,
+	SHARED_PACKAGE_TRANSITION_QUALIFICATION,
+} from '../selection.js';
 
 const repository = fileURLToPath(new URL('../../../../../', import.meta.url));
 const packageRoot = path.join(
@@ -25,6 +30,7 @@ test('shared service authenticates graph, preserves the final illuminated bin, a
 	const ready = service.resolve(107.75, '/flat32/scene-caches/');
 	assert.equal(ready.status, 'ready');
 	assert.equal(ready.representativeSolarZenithDegrees, 108);
+	assert.equal(ready.asset.transitionQualification.targetId, 'NVIDIA GeForce RTX 2060 / Chrome 153 / ANGLE D3D11');
 	assert.equal(service.resolve(108, '/flat32/scene-caches/').status, 'dark');
 	const asset = await service.resolveAsset(`${ready.asset.packageSetIdentity}/package-set.json`);
 	assert.equal(asset.byteLength, report.byteLength);
@@ -43,8 +49,24 @@ test('shared service authenticates graph, preserves the final illuminated bin, a
 	await assert.rejects(service.load(report));
 });
 
+test('shared service retains selected transition evidence without caller or response mutation', async () => {
+	const qualification = {...SHARED_PACKAGE_TRANSITION_QUALIFICATION};
+	const service = await new Service(packageRoot, 'monotone-cubic', qualification).load(report);
+	qualification.maximumBytes = 1;
+	const ready = service.resolve(45, '/flat32/scene-caches/');
+	assert.deepEqual(ready.asset.transitionQualification, SHARED_PACKAGE_TRANSITION_QUALIFICATION);
+	ready.asset.transitionQualification.maximumBytes = 1;
+	assert.deepEqual(
+		service.resolve(60, '/flat32/scene-caches/').asset.transitionQualification,
+		SHARED_PACKAGE_TRANSITION_QUALIFICATION,
+	);
+});
+
 test('shared service rejects untrusted report bytes, oversized input, and external roots', async () => {
 	assert.throws(() => new Service(path.parse(repository).root));
+	assert.throws(
+		() => new Service(packageRoot, 'linear', {...SHARED_PACKAGE_TRANSITION_QUALIFICATION, maximumBytes: 859963393}),
+	);
 	await assert.rejects(new Service(packageRoot).load({...report, sha256: '0'.repeat(64)}));
 	await assert.rejects(new Service(packageRoot).load({...report, byteLength: 33 * 1024 * 1024}));
 	await assert.rejects(new Service(packageRoot).load({...report, path: '../package-set.json'}));
@@ -66,6 +88,8 @@ test(
 			assert.equal(ready.cacheFormat, 'algorithm32-distant-sun-shared-block-v1');
 			assert.equal(ready.representativeSolarZenithDegrees, 108);
 			assert.equal(ready.asset.packageSetIdentity, SHARED_PACKAGE_IDENTITY);
+			assert.equal(ready.asset.solarInterpolation, 'monotone-cubic');
+			assert.deepEqual(ready.asset.transitionQualification, SHARED_PACKAGE_TRANSITION_QUALIFICATION);
 			const dark = await (await fetch(`${origin}/api/distant-sun-scene-cache?solarZenithDegrees=108`)).json();
 			assert.equal(dark.status, 'dark');
 			assert.deepEqual(dark.asset, ready.asset);

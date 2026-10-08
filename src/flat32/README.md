@@ -1,9 +1,8 @@
 # `flat32` Application Migration
 
-The strobing promotion's [release preparation](../../agents/topics/production-algorithm32/caches/distant-sun-strobing-release.md)
-owns the qualified candidate package, proposed P2 default and compatible
-rollback. Active defaults remain P9 and linear cache interpolation until
-deployment approval; explicit P2 uses FP32 scene-linear storage.
+The strobing promotion's [release](../../agents/topics/production-algorithm32/caches/distant-sun-strobing-release.md)
+owns the deployed Native48/cubic/P2/FP32 selection, target qualification and
+compatible P9/linear rollback. P9 and Basic Bruneton remain explicit controls.
 
 This directory contains the runnable Stage 11 application and the completed
 Stage 11.2 production-atmosphere attachment. Focused local owners
@@ -86,15 +85,16 @@ scene capture and
 final-composition resolution only. It does not reduce the production cache
 domains or the six 4096 shadow maps.
 
-The composer captures the ordinary Three scene in a half-float renderer-linear
-sRGB target before the atmosphere pass. The retained E8 projection maps
+The composer captures the ordinary Three scene in a full-float renderer-linear
+sRGB target for the P2 default before the atmosphere pass; explicit P9 retains
+its half-float target. The retained E8 projection maps
 atmospheric native-15 path radiance to linear sRGB;
 the compositor averages spectral
 transmittance into RGB bands, attenuates the captured scene for an
 in-atmosphere endpoint, and combines both terms at the single display
 boundary. Scene RGB is not atmospheric cache or transport data.
 
-The ordinary application uses the fixed `ColorResetSlope078P9ColorDisplayModel`.
+The ordinary application uses the fixed `ColorResetSlope078P2ColorDisplayModel`.
 Algorithm32 publishes one camera-independent total-horizontal photopic-
 illuminance condition from the same atomic receiver-light generation as the
 direct and diffuse spectra. Color Reset applies its fixed common source-linear
@@ -104,8 +104,8 @@ time labels, solar zenith, the camera, framebuffer pixels, or source classes.
 
 Color, celestial enablement, stellar catalog, and ordered presentation filters
 now use independent exact selections. `basic-bruneton` no longer disables
-celestial sources, and `color-reset-slope-078-p9` selects the implemented fixed
-candidate and is now the omission/default behavior. The live application
+celestial sources, and `color-reset-slope-078-p2` selects the omission/default behavior. The explicit
+`color-reset-slope-078-p9` selection retains the prior response for rollback. The live application
 retains `?colorModel=basic-bruneton` as its exact control query value; the
 superseded source-luminance-lift route has been removed and unknown values
 fail closed. Brightest-2,000 and enabled-

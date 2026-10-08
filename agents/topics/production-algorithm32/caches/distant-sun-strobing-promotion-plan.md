@@ -1,11 +1,11 @@
 # Strobing Correction Production-Promotion Plan
 
-Status: active production Algorithm32 work. P0 controls are established;
-P1 implementation and focused checks are recorded. P2 physical and Bruneton
-qualification passes, including the full matrix. P3 appearance artifacts are
-accepted by the owner, and its 80-path source-review unit is complete. Broader
-coupled numerical source and experiment release reviews remain open in P4.
-Publication has not started.
+Status: production deployment verified. P0 controls, P1 implementation and
+P2 physical/Bruneton qualification pass. P3 appearance artifacts are accepted
+and its source-review unit is complete. P4 pre-deployment coupled production
+and separate experiment gates validate CLEAN. The owner-approved package and
+defaults are applied; loaded identities and live rendering pass. The P4
+completion record owns the final focused deployment gate and closeout disposition.
 [Promotion status](distant-sun-strobing-promotion-status.md) owns current phase,
 readiness, and next actions. The
 [experiment status](../../poc-experiments/engineering-studies/distant-sun-recording-strobing/status.md)
@@ -286,12 +286,13 @@ full source recurrence gate. The encoded-only pass remains insufficient.
 
 ## P4 - Final Cleanup, Reviews, And Publication
 
-Selected on 2026-10-07 under independent execution through the first owner
-approval. Complete qualification and prepare a concrete deployment proposal
-before requesting approval; publication and active default changes await that
-approval. New temporary and generated P4 output belongs exclusively under
-`.codex-tmp/p4-strobing-20261007/`, with new exclusive run children. Earlier
-sealed evidence remains read-only. P4 source baseline is
+Selected on 2026-10-07 under independent execution. The owner separately
+approved the exact publication and default selections after source qualification.
+Deployment and actual application rendering are verified. The
+[completion record](../../../../.codex-tmp/p4-strobing-20261007/summary.md)
+owns final checks, focused deployment source validation and closure. New output
+remains under `.codex-tmp/p4-strobing-20261007/` in exclusive run children;
+sealed parents are read-only. The original P4 source baseline remains
 `.codex-tmp/review-standards/session-cO9bp0/baseline.json`.
 
 - [x] Run deferred failure/lifecycle checks: missing support, failed preparation,
@@ -307,16 +308,19 @@ sealed evidence remains read-only. P4 source baseline is
       `typecheck:flat32`, `typecheck:algorithm32:shared-generation`,
       `typecheck:algorithm32:shared-runtime`, and
       `verify:flat32:shared-runtime-dependencies`.
-- [ ] Validate mapped primary reviews and independent audits through
+- [x] Validate pre-deployment mapped primary reviews and independent audits through
       `review-standards`. Expected production lanes are architecture,
       contracts/types, verification, and privacy/security for the server-mapped
       application and proof-tool paths. Resolve exact paths and collaborators
       at each milestone; additional lanes follow actual mappings. Complete
-      outstanding experiment reviews as their own unit.
+      outstanding experiment reviews as their own unit. Frozen 185-path production
+      and 37-path experiment gates validate CLEAN. The completion record owns
+      the separate focused post-deployment gate; this checkbox records the
+      pre-deployment milestone.
 - [x] Update production cache, color, application, and qualification owners with
       source/package/color identities, evidence, remaining limits, and a verified
       compatible prior selection for rollback.
-- [ ] Prepare the concrete cache publication and application-default change
+- [x] Prepare the concrete cache publication and application-default change
       after all gates pass. Apply `publish:algorithm32:shared-runtime` and
       default selection through the production workflow when deployment is
       authorized, then check loaded identities and a short rendering sequence.

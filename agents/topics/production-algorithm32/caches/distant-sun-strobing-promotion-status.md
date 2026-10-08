@@ -1,29 +1,31 @@
 # Distant-Sun Strobing Production Promotion Status
 
-Current phase: **P4 release preparation under independent execution.**
-All P3 functional and artifact gates pass, and native owner inspection is
-accepted. The final source-review disposition and implementation-completion
-gate are owned by the task's [completion record](../../../../.codex-tmp/p3-strobing-20261007/summary.md).
-That record links exit-0 `CLEAN` primary and independent-audit validation for
-the frozen P3 unit; P3 is complete. The first P4 scope approval is accepted;
-publication and default switching await separate deployment approval.
-P4 baseline: `.codex-tmp/review-standards/session-cO9bp0/baseline.json`.
-P4 progress, preparation, verification, and decisions are retained under
-`.codex-tmp/p4-strobing-20261007/`. Broader coupled numerical source review and
-outstanding experiment reviews remain release gates.
-The owner-approved eleven-file type-only repair is applied in the recording-
-strobing and shadow-animation experiment source roots. All applied hashes match
-the approved patch; the nine JavaScript executable ASTs are unchanged. The real
-experiment type check passes with zero diagnostics. Complete the separate
-experiment and coupled production source reviews; their final disposition is
-owned by the task summary and maintained validation receipts.
-Production qualification and compatible rollback preparation already pass.
-The task summary owns the approved patch, application evidence, source-review
-disposition, and next actions. Historical experiment evidence remains immutable.
-The [release preparation](distant-sun-strobing-release.md) owns the concrete
-publication/default proposal and compatible rollback. Final P4 gate receipts
-are owned by `.codex-tmp/p4-strobing-20261007/summary.md` and its linked
-validation artifacts. Deployment awaits owner approval after those gates pass.
+Current phase: **P4 deployment verified; final disposition is owned by the completion record.**
+The owner approved publication and activation of Native48/cubic/P2/FP32 after
+the separate experiment and coupled production source gates validated CLEAN.
+The candidate is published, the approved selections are applied, and the rebuilt
+application passes actual HTTP identity, RGBA32F allocation and live GPU rendering
+checks at initial state, solar noon and sunset. Location changes succeed on the
+qualified RTX 2060 / Chrome 154 / ANGLE D3D11 target with the existing two-atlas
+limit. The retained P9/linear package also passes fresh target lifecycle checks.
+The [release](distant-sun-strobing-release.md) owns active selection and rollback.
+
+The [P4 completion record](../../../../.codex-tmp/p4-strobing-20261007/summary.md)
+owns final check receipts, the focused deployment review gate, checkpoint and
+completion disposition. The pre-deployment 185-path production and 37-path
+experiment source gates retain their frozen identities. The owner-approved
+experiment type repair and subsequent B1 contract fixes are committed; their
+qualification, source-review and executable-equivalence receipts remain linked
+by that record. Historical experiment evidence is immutable.
+
+P3 is complete: all functional and artifact gates pass and native owner
+inspection is accepted. Its final source-review validation belongs to the
+[P3 completion record](../../../../.codex-tmp/p3-strobing-20261007/summary.md).
+P4's original baseline is
+`.codex-tmp/review-standards/session-cO9bp0/baseline.json`; the approved deployment
+baseline is `deployment-authorized-baseline-95d0.json` in that session. All new
+P4 output and decisions remain under `.codex-tmp/p4-strobing-20261007/`.
+
 P3's baseline is `.codex-tmp/review-standards/session-eg11IP/p3-baseline.json`;
 its output and decision/progress record are under
 `.codex-tmp/p3-strobing-20261007/`. The separately selectable p2 response and
@@ -43,21 +45,20 @@ explicit 112/125 recurrence checks, cadence and lossless milestone consistency
 all pass. The native recording, 1024 x 576 copy, synchronized POC comparisons
 and artifact index are delivered and accepted by the owner on 2026-10-07.
 The native-resolution inspection gate is closed. P3 source-review disposition
-follows the completion record above; broader final publication reviews remain
-part of P4.
+follows the completion record above; final deployment disposition belongs to the P4 completion record.
 The bounded 12:30 error attribution diagnostic is complete.
 The worst-ray regression is dominated by removal of first-order altitude
 interpolation overbrightness. Outgoing directional interpolation also dims
 that ray, by a smaller amount; actual incoming-quadrature error remains open.
 The owner-authorized three-sample near-ground resolution trial is complete.
 It fits the GPU budget and improves seven of 17 B1 conditions,
-but worsens aggregate B1 by 1.78% and nearly doubles B2 RMSE. No replacement
-is selected; current Native48 defaults remain unchanged. The existing P2
+but worsens aggregate B1 by 1.78% and nearly doubles B2 RMSE. No Native51 replacement
+is selected; the deployed construction grid remains Native48. The existing P2
 physical and Bruneton
 qualification passes on its original Native48 grid. P0 controls,
 P1 implementation, and the complete physical matrix are recorded. Formal P3
 implementation completion is recorded above. Candidate appearance is accepted.
-P4 is preparing publication; the active package and P9 default remain selected.
+The approved P4 deployment is verified; active selections are owned by the release document.
 
 The [plan](distant-sun-strobing-promotion-plan.md) owns phases and boundaries.
 The [acceptance policy](distant-sun-strobing-acceptance.md) owns the registered
@@ -244,11 +245,10 @@ complete pass remains open and is not included among the passing type checks.
 
 ## Next Actions
 
-1. Complete P4 release checks, coupled production and separate experiment reviews.
-   The P4 task completion record owns exact receipts and any remaining gates.
-2. Preserve accepted P3 artifacts and immutable physical/appearance parents.
-3. Present the concrete release preparation for deployment approval after gates
-   pass; publish and change active defaults only after that approval.
+Follow the [P4 completion record](../../../../.codex-tmp/p4-strobing-20261007/summary.md)
+for final deployment review and closeout disposition. Preserve accepted P3
+artifacts, physical qualification parents and both immutable deployed packages.
+No subsequent production task or suspended experiment is selected by closeout.
 
 ## Near-Ground Resolution Trial
 
@@ -599,37 +599,18 @@ Index acceptance means evidence authentication, not phase or release acceptance.
 
 ## Review State
 
-Historical production reviewer readiness was initialized under
-`.codex-tmp/review-standards/session-8U4MoL/`; P2 handoff artifacts use
-`.codex-tmp/review-standards/session-SWjOjV/`. The implementation baseline,
-captured before these edits, is
-`.codex-tmp/review-standards/session-vMBn7N/baseline.json`, at HEAD
-`02fa8277c8d65e04ee3bdb187764a863ce8ad7f4` with pre-existing dirty work preserved.
-Architecture consultation supports the explicit coordinate-address contract;
-it is not a source review or audit. The plan batches coupled numerical/color
-review after P1–P3 stabilize. Those implementation-completion review gates,
-outstanding experiment reviews remain open. Current P3 appearance acceptance
-is recorded above.
-Earlier P2 handoff advice returned `NOT_READY` under the former adviser policy;
-no checkpoint or deployment was performed for that handoff. That result is
-historical and does not describe current checkpoint-monitoring eligibility.
+The [P3 completion record](../../../../.codex-tmp/p3-strobing-20261007/summary.md)
+owns its validated 80-path source unit. The
+[P4 completion record](../../../../.codex-tmp/p4-strobing-20261007/summary.md)
+owns the frozen pre-deployment production/experiment gates and current focused
+deployment gate. Readiness alone does not establish source compliance. Prior
+reports, baselines, findings and independent disagreements retain their original
+identities; final validation applies to the exact reviewed source and context.
 
-The 2026-10-07 topic transition restores production context while
-[Sky Accuracy Dials is suspended](../../poc-experiments/engineering-studies/sky-accuracy-dials/status.md#experiment-lifecycle).
-The owner subsequently selected independent execution of P3.
-Its documentation baseline is
-`.codex-tmp/review-standards/session-hhktR8/baseline.json`, at HEAD
-`6cc5a283080ce14bfa31c44cfe3c52a712937c9e` with a clean initial worktree.
-Prior readiness is not reused as current readiness. The owner has requested
-reactivation of folder-based reviews; the
-[reviewer lifecycle](../../standards/reviewer-status.md) owns the renewed
-calibration, current activation session and experiment standards handoff.
-Checkpoint monitoring remains active independently, with the owner's standing
-advised-checkpoint approval and one-minute consultation limit. This governance
-work is complete. Current P3 reviewer readiness is recorded under
-`.codex-tmp/review-standards/session-eg11IP/`; its completion record retains
-exit-0 CLEAN source review and independent audits for the 80-path P3 unit.
-P4 topic refresh uses `.codex-tmp/review-standards/session-cO9bp0/` with new
-readiness, baseline, coupled production review and separate experiment review.
-Readiness alone does not close those source-review gates. The owner selected
-P4 through the first approval; publication and default switching await approval.
+Production context is active while
+[Sky Accuracy Dials remains suspended](../../poc-experiments/engineering-studies/sky-accuracy-dials/status.md#experiment-lifecycle).
+Folder-based reviewer activation is owned by the
+[reviewer lifecycle](../../standards/reviewer-status.md). Checkpoint monitoring
+remains active with standing advised-message approval and the one-minute
+consultation limit. Deployment approval is recorded separately from P3 artifact
+acceptance and the experiment repair approval. No Git push is authorized.

@@ -7,7 +7,7 @@ import {
 import {ATMOSPHERE_SCENE_SCALE} from '../consts.js';
 import {ViewPresentationFilterRegistry} from '../../algorithm32/implementation/presentation-filter/ViewPresentationFilterRegistry.js';
 describe('Flat32 Color selection', () => {
-	it('selects p2 explicitly while retaining p9 as the production default', () => {
+	it('selects p2 by default while retaining p9 for rollback', () => {
 		const model = createFlat32ColorDisplayModel({model: 'color-reset-slope-078-p2'});
 		expect(model.id).toBe('color-reset-slope-078-p2');
 		expect(
@@ -15,19 +15,23 @@ describe('Flat32 Color selection', () => {
 				colorDisplayModelConfiguration: {model: 'color-reset-slope-078-p2'},
 			}).colorDisplayModelConfiguration.model,
 		).toBe(model.id);
-		expect(createFlat32ColorDisplayModel().id).toBe('color-reset-slope-078-p9');
+		expect(createFlat32ColorDisplayModel().id).toBe('color-reset-slope-078-p2');
 		expect(
 			resolveFlat32ProductionSelections({colorDisplayModelConfiguration: {model: 'color-reset-slope-078-p2'}})
 				.sceneColorPrecision,
 		).toBe('float32');
-		expect(resolveFlat32ProductionSelections().sceneColorPrecision).toBe('float16');
+		expect(resolveFlat32ProductionSelections().sceneColorPrecision).toBe('float32');
+		expect(
+			resolveFlat32ProductionSelections({colorDisplayModelConfiguration: {model: 'color-reset-slope-078-p9'}})
+				.sceneColorPrecision,
+		).toBe('float16');
 	});
 	it('selects the accepted Color Reset model and brightest-2,000 catalog by default', () => {
 		const color = createFlat32ColorDisplayModel();
 		const selections = resolveFlat32ProductionSelections();
 
-		expect(color.id).toBe('color-reset-slope-078-p9');
-		expect(selections.colorDisplayModelConfiguration.model).toBe('color-reset-slope-078-p9');
+		expect(color.id).toBe('color-reset-slope-078-p2');
+		expect(selections.colorDisplayModelConfiguration.model).toBe('color-reset-slope-078-p2');
 		expect(selections.stellarCatalog).toBe('brightest-2000');
 		expect(selections.presentationFilters).toEqual([]);
 	});
@@ -42,7 +46,7 @@ describe('Flat32 Color selection', () => {
 		expect(ferwerda.adaptation.luminance).toEqual({value: 0.001, units: 'cd m^-2'});
 		expect(ferwerda.adaptation.kind).toBe('qualified-starlight-reference');
 		expect(bruneton.id).toBe('bruneton-figure1-display');
-		expect(createFlat32ColorDisplayModel().id).toBe('color-reset-slope-078-p9');
+		expect(createFlat32ColorDisplayModel().id).toBe('color-reset-slope-078-p2');
 		expect(resolveFlat32ProductionSelections({stellarCatalog: 'brightest-500'}).stellarCatalog).toBe(
 			'brightest-500',
 		);
