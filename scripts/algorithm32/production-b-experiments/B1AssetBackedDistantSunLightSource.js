@@ -6,63 +6,21 @@ import DistantSunSceneCache from '../../../src/algorithm32/implementation/distan
 import DistantSunSceneCacheAtlas from '../../../src/algorithm32/implementation/distant-sun/cache/DistantSunSceneCacheAtlas.js';
 import B1Direct40CacheAssetManifest, {B1_POINT_LOCAL_CACHE_ASSET_SCHEMA} from './B1Direct40CacheAssetManifest.js';
 
+/** Shader sampler identity shared by the retained direct-40 contribution. */
 const SAMPLER_NAME = 'uCumulativeScatteringDensityCache';
 
-async function sha256(bytes) {
-	const copy = new Uint8Array(bytes.byteLength);
-	copy.set(bytes);
-	const digest = new Uint8Array(await globalThis.crypto.subtle.digest('SHA-256', copy.buffer));
-	return Array.from(digest, (value) => value.toString(16).padStart(2, '0')).join('');
-}
-
-function resolveAssetPath(root, relativePath) {
-	if (
-		!relativePath ||
-		relativePath.startsWith('/') ||
-		relativePath.includes(':') ||
-		relativePath.includes('..') ||
-		relativePath.includes('\\')
-	) {
-		throw new RangeError('B1 direct-40 runtime asset path must be relative and contained.');
-	}
-	const resolved = new URL(relativePath, root).href;
-	if (!resolved.startsWith(root)) throw new RangeError('B1 direct-40 runtime asset escapes its root.');
-	return resolved;
-}
-
-async function readAsset(root, relativePath, signal) {
-	const response = await fetch(resolveAssetPath(root, relativePath), {signal});
-	if (!response.ok) throw new Error(`B1 direct-40 runtime asset load failed (${response.status}).`);
-	return new Uint8Array(await response.arrayBuffer());
-}
-
-function unpackLogicalField(uniqueValues, logicalToUnique) {
-	const uniqueCount = CUBED_SPHERE_W27_DIRECTION_DOMAIN_OWNER.uniqueDirectionCount;
-	const logicalCount = CUBED_SPHERE_W27_DIRECTION_DOMAIN_OWNER.directionCount;
-	const positionCount = 48;
-	const channelCount = 40;
-	const logical = new Float32Array(channelCount * positionCount * logicalCount);
-	for (let channel = 0; channel < channelCount; channel += 1) {
-		for (let position = 0; position < positionCount; position += 1) {
-			const sourceBase = (channel * positionCount + position) * uniqueCount;
-			const targetBase = (channel * positionCount + position) * logicalCount;
-			for (let direction = 0; direction < logicalCount; direction += 1) {
-				const value = uniqueValues[sourceBase + logicalToUnique[direction]];
-				if (!Number.isFinite(value) || value < 0) {
-					throw new RangeError('B1 direct-40 runtime cache values must be finite and nonnegative.');
-				}
-				logical[targetBase + direction] = value;
-			}
-		}
-	}
-	return logical;
-}
-
+/** Attachment-owned immutable legacy B1 field and its renderer binding. */
 class B1Direct40AssetCacheResource {
+	/**
+	 * Creates the sole disposal owner for one authenticated manifest and uploaded texture.
+	 *
+	 * @param {B1AssetCacheResourceDefinition} definition - Verified manifest and transferred texture ownership.
+	 */
 	constructor({manifest, texture}) {
 		this._manifest = manifest;
 		this._texture = texture;
 		this._disposed = false;
+		/** Logical byte allocations owned by this exact legacy cache. @type {DistantSunSceneCacheResourceReport} */
 		this.resources = {
 			residentTextureBytes: {value: 40 * 48 * 4374 * Float32Array.BYTES_PER_ELEMENT, units: 'bytes'},
 			hostStagingBytes: {
@@ -75,15 +33,30 @@ class B1Direct40AssetCacheResource {
 		};
 	}
 
+	/**
+	 * Stable authenticated asset identity retained after disposal.
+	 *
+	 * @returns {string} - Exact authenticated cache identity.
+	 */
 	get cacheIdentity() {
 		return this._manifest.record.assetIdentity;
 	}
 
+	/**
+	 * Call this method to obtain the live opaque texture binding. Disposed resources throw Error.
+	 *
+	 * @returns {CacheRuntimeBindings} - Binding packet owned by this cache's backend.
+	 */
 	getRuntimeBindings() {
 		if (this._disposed) throw new Error('B1 direct-40 asset cache is disposed.');
 		return {backendId: this._texture.backendId, bindings: [this._texture.runtimeBinding]};
 	}
 
+	/**
+	 * Call this method to contribute the retained direct-40 cumulative-field lookup. Disposed resources throw Error.
+	 *
+	 * @returns {ShaderContribution} - Cache-owned source, sampler and binding requirements.
+	 */
 	createShaderContribution() {
 		if (this._disposed) throw new Error('B1 direct-40 asset cache is disposed.');
 		return ShaderContributions.createShaderContribution({
@@ -155,6 +128,11 @@ class B1Direct40AssetCacheResource {
 		});
 	}
 
+	/**
+	 * Call this method to release the owned texture exactly once; repeated disposal is safe.
+	 *
+	 * @returns {void} - No return value.
+	 */
 	dispose() {
 		if (this._disposed) return;
 		this._disposed = true;
@@ -162,18 +140,111 @@ class B1Direct40AssetCacheResource {
 	}
 }
 
+/** Attachment-local loader for an exact B1 condition and production profile. */
 class B1Direct40AssetCacheLoader {
+	/**
+	 * Creates a loader that borrows its renderer backend and immutable selection facts.
+	 *
+	 * @param {B1AssetCacheLoaderDefinition} definition - Backend, verified asset selection and execution profile.
+	 */
 	constructor({backend, asset, profile}) {
 		this._backend = backend;
 		this._asset = asset;
 		this._profile = profile;
 	}
 
+	/**
+	 * Called by asset loading to authenticate the exact borrowed payload bytes.
+	 *
+	 * @param {Uint8Array} bytes - Read-only payload bytes.
+	 * @returns {Promise<string>} - Lowercase SHA-256 identity; digest failures reject the load.
+	 */
+	async _sha256(bytes) {
+		const copy = new Uint8Array(bytes.byteLength);
+		copy.set(bytes);
+		const digest = new Uint8Array(await globalThis.crypto.subtle.digest('SHA-256', copy.buffer));
+		return Array.from(digest, (value) => value.toString(16).padStart(2, '0')).join('');
+	}
+
+	/**
+	 * Called by asset reads to resolve one contained relative URL. Invalid or escaping paths throw RangeError.
+	 *
+	 * @param {string} root - Absolute asset-root URL with a trailing slash.
+	 * @param {string} relativePath - Asset-relative payload path.
+	 * @returns {string} - Contained absolute payload URL.
+	 */
+	_resolveAssetPath(root, relativePath) {
+		if (
+			!relativePath ||
+			relativePath.startsWith('/') ||
+			relativePath.includes(':') ||
+			relativePath.includes('..') ||
+			relativePath.includes('\\')
+		) {
+			throw new RangeError('B1 direct-40 runtime asset path must be relative and contained.');
+		}
+		const resolved = new URL(relativePath, root).href;
+		if (!resolved.startsWith(root)) throw new RangeError('B1 direct-40 runtime asset escapes its root.');
+		return resolved;
+	}
+
+	/**
+	 * Called by asset loading to read one payload. Invalid paths, failed HTTP responses and fetch cancellation reject
+	 * the load; the caller retains its prior cache and may retry with a new request.
+	 *
+	 * @param {string} root - Absolute asset-root URL with a trailing slash.
+	 * @param {string} relativePath - Asset-relative payload path.
+	 * @param {AbortSignal} [signal] - Optional cancellation owned by the current load request.
+	 * @returns {Promise<Uint8Array>} - Newly owned exact response bytes.
+	 */
+	async _readAsset(root, relativePath, signal) {
+		const response = await fetch(this._resolveAssetPath(root, relativePath), {signal});
+		if (!response.ok) throw new Error(`B1 direct-40 runtime asset load failed (${response.status}).`);
+		return new Uint8Array(await response.arrayBuffer());
+	}
+
+	/**
+	 * Called by legacy asset loading to expand exact W27 seam copies. Nonfinite or negative values throw RangeError.
+	 *
+	 * @param {Float32Array} uniqueValues - Borrowed wavelength/altitude/unique-direction scalar field.
+	 * @param {Uint16Array} logicalToUnique - Borrowed logical-to-unique direction index map.
+	 * @returns {Float32Array} - Newly owned wavelength/altitude/logical-direction field.
+	 */
+	_unpackLogicalField(uniqueValues, logicalToUnique) {
+		const uniqueCount = CUBED_SPHERE_W27_DIRECTION_DOMAIN_OWNER.uniqueDirectionCount;
+		const logicalCount = CUBED_SPHERE_W27_DIRECTION_DOMAIN_OWNER.directionCount;
+		const positionCount = 48;
+		const channelCount = 40;
+		const logical = new Float32Array(channelCount * positionCount * logicalCount);
+		for (let channel = 0; channel < channelCount; channel += 1) {
+			for (let position = 0; position < positionCount; position += 1) {
+				const sourceBase = (channel * positionCount + position) * uniqueCount;
+				const targetBase = (channel * positionCount + position) * logicalCount;
+				for (let direction = 0; direction < logicalCount; direction += 1) {
+					const value = uniqueValues[sourceBase + logicalToUnique[direction]];
+					if (!Number.isFinite(value) || value < 0) {
+						throw new RangeError('B1 direct-40 runtime cache values must be finite and nonnegative.');
+					}
+					logical[targetBase + direction] = value;
+				}
+			}
+		}
+		return logical;
+	}
+
+	/**
+	 * Call this method to authenticate and upload one exact B1 cache. Path, hash, compatibility, fetch and upload
+	 * failures reject; cancellation rejects through fetch. Partial uploads are disposed before rejection, and the
+	 * caller must retain any prior published cache rather than publish a partial replacement.
+	 *
+	 * @param {ScatteringCacheBuildRequest} [request] - Optional per-attempt cancellation.
+	 * @returns {Promise<GpuScatteringCache>} - Complete newly owned legacy or receiver-local GPU cache.
+	 */
 	async load({signal} = {}) {
 		const root = new URL(this._asset.assetRoot, globalThis.location.href).href;
 		const assetRoot = root.endsWith('/') ? root : `${root}/`;
-		const manifestBytes = await readAsset(assetRoot, this._asset.manifestPath, signal);
-		if ((await sha256(manifestBytes)) !== this._asset.manifestSha256) {
+		const manifestBytes = await this._readAsset(assetRoot, this._asset.manifestPath, signal);
+		if ((await this._sha256(manifestBytes)) !== this._asset.manifestSha256) {
 			throw new Error('B1 direct-40 runtime manifest hash is incompatible.');
 		}
 		const manifest = new B1Direct40CacheAssetManifest(
@@ -184,14 +255,14 @@ class B1Direct40AssetCacheLoader {
 		}
 		manifest.requireCompatibility(this._profile, this._asset.condition);
 		const [uniqueBytes, indexBytes] = await Promise.all([
-			readAsset(assetRoot, manifest.record.cumulativeScatteringDensity.path, signal),
-			readAsset(assetRoot, manifest.record.logicalToUniqueIndex.path, signal),
+			this._readAsset(assetRoot, manifest.record.cumulativeScatteringDensity.path, signal),
+			this._readAsset(assetRoot, manifest.record.logicalToUniqueIndex.path, signal),
 		]);
 		if (
 			uniqueBytes.byteLength !== manifest.record.cumulativeScatteringDensity.byteLength ||
-			(await sha256(uniqueBytes)) !== manifest.record.cumulativeScatteringDensity.sha256 ||
+			(await this._sha256(uniqueBytes)) !== manifest.record.cumulativeScatteringDensity.sha256 ||
 			indexBytes.byteLength !== manifest.record.logicalToUniqueIndex.byteLength ||
-			(await sha256(indexBytes)) !== manifest.record.logicalToUniqueIndex.sha256
+			(await this._sha256(indexBytes)) !== manifest.record.logicalToUniqueIndex.sha256
 		) {
 			throw new Error('B1 direct-40 runtime payload identity failed.');
 		}
@@ -241,6 +312,12 @@ class B1Direct40AssetCacheLoader {
 							exactSeamPayload: manifest.record.cumulativeScatteringDensity,
 							logicalToUniqueIndex: manifest.record.logicalToUniqueIndex,
 						},
+						/**
+						 * Call this method to require the authenticated cache identity; a mismatch throws Error.
+						 *
+						 * @param {string} identity - Required exact cache identity.
+						 * @returns {void} - No return value.
+						 */
 						requireCacheIdentity(identity) {
 							if (identity !== manifest.record.assetIdentity)
 								throw new Error('Receiver-local asset identity is incompatible.');
@@ -253,7 +330,7 @@ class B1Direct40AssetCacheLoader {
 				throw error;
 			}
 		}
-		const logicalValues = unpackLogicalField(uniqueValues, logicalToUnique);
+		const logicalValues = this._unpackLogicalField(uniqueValues, logicalToUnique);
 		const texture = this._backend.uploadImmutableTexture({
 			id: `${manifest.record.assetIdentity}:logical-field`,
 			storage: {format: 'R32F', width: 4374, height: 48, layers: 40},
@@ -264,19 +341,37 @@ class B1Direct40AssetCacheLoader {
 	}
 }
 
+/** Renderer-attachment owner of one lazily loaded exact B1 cache. */
 class B1Direct40AssetCacheController {
+	/**
+	 * Creates an attachment-local cache loader and empty publication state.
+	 *
+	 * @param {B1AssetCacheLoaderDefinition} definition - Borrowed backend, asset selection and execution profile.
+	 */
 	constructor(definition) {
 		this._loader = new B1Direct40AssetCacheLoader(definition);
 		this._active = null;
 		this._disposed = false;
 	}
 
+	/**
+	 * Call this method to load or reuse this attachment's complete exact cache. A disposed controller throws Error;
+	 * authentication, compatibility, cancellation and backend failures reject without publishing an incomplete cache.
+	 *
+	 * @param {ScatteringCacheBuildRequest} [request] - Optional per-attempt cancellation.
+	 * @returns {Promise<GpuScatteringCache>} - Complete cache retained until this controller is disposed.
+	 */
 	async createScatteringCache(request = {}) {
 		if (this._disposed) throw new Error('B1 direct-40 asset cache controller is disposed.');
 		this._active ??= await this._loader.load(request);
 		return this._active;
 	}
 
+	/**
+	 * Call this method to dispose the retained cache and prevent later loading; repeated disposal is safe.
+	 *
+	 * @returns {void} - No return value.
+	 */
 	dispose() {
 		if (this._disposed) return;
 		this._disposed = true;
@@ -287,6 +382,11 @@ class B1Direct40AssetCacheController {
 
 /** Distant-Sun facade whose cache controller can only load one verified B1 asset. */
 export class B1AssetBackedDistantSunLightSource extends DistantSunLightSource {
+	/**
+	 * Creates a distant source whose renderer attachment can load only the selected exact B1 cache.
+	 *
+	 * @param {B1AssetBackedSourceDefinition} definition - Execution profile and optional exact asset selection.
+	 */
 	constructor({profile, asset}) {
 		super({
 			angularRadius: {value: 0.004675, units: 'radians'},
@@ -297,6 +397,13 @@ export class B1AssetBackedDistantSunLightSource extends DistantSunLightSource {
 		this._b1Profile = profile;
 	}
 
+	/**
+	 * Call this method to create the renderer-owned exact-asset controller. Missing geometry placement or an absent
+	 * verified asset throws Error; callers must configure placement and supply the qualified selection first.
+	 *
+	 * @param {B1AssetCacheBackendRequest} request - Renderer-owned immutable-texture upload capability.
+	 * @returns {B1AssetCacheControllerCapability} - Attachment-local cache construction and disposal owner.
+	 */
 	createCacheController({backend}) {
 		this.configuration;
 		if (!this._b1Asset) throw new Error('B1 GPU production requires a verified exact cache asset.');

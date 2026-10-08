@@ -10,7 +10,7 @@ import {
 } from '../../algorithm32/production-b-experiments/B1MeasurementBoundary.js';
 import {ProductionProgressCacheBackend} from './ProductionProgressCacheBackend.js';
 import {createBrunetonProductionProfile, createViewDirection} from './production-profile.js';
-import {B1AssetBackedDistantSunLightSource} from '../../algorithm32/production-b-experiments/B1Direct40AssetCache.js';
+import {B1AssetBackedDistantSunLightSource} from '../../algorithm32/production-b-experiments/B1AssetBackedDistantSunLightSource.js';
 
 const GRID_WIDTH = 9;
 const CHANNELS_PER_READ = 4;
@@ -22,7 +22,7 @@ let session = null;
  * after production geometry reconstruction, then exposes four post-transport spectral
  * channels without applying display conversion.
  *
- * @returns {{createShaderContribution(request: ShaderContributionRequest): ShaderContribution}} - The benchmark readout owner.
+ * @returns {B1SpectralReadoutOwner} - The benchmark readout owner.
  */
 function createSpectralReadoutOwner() {
 	const viewDirections = [];
@@ -111,7 +111,7 @@ state.ray.direction = B1_VIEW_DIRECTIONS[b1DirectionIndex];`,
 /**
  * Called by the browser harness to create one WebGL2 renderer with the required float target support.
  *
- * @returns {{renderer: THREE.WebGLRenderer, context: WebGL2RenderingContext, canvas: HTMLCanvasElement}} - The GPU resources.
+ * @returns {B1GpuProofRendererResources} - The GPU resources.
  */
 function createRenderer() {
 	const canvas = document.createElement('canvas');
@@ -170,7 +170,12 @@ function createZeroTexture() {
 function createComposer() {
 	return {
 		passes: [],
-		/** @param {unknown} pass - The installed pass. */
+		/**
+		 * Call this method to retain the installed proof pass in presentation order.
+		 *
+		 * @param {unknown} pass - The installed pass.
+		 * @returns {void} - No return value.
+		 */
 		addPass(pass) {
 			this.passes.push(pass);
 		},

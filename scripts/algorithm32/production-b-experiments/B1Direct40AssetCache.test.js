@@ -2,8 +2,13 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 
 import {createBrunetonProductionProfile} from '../../experiments/b1-directional-sky-radiance/production-profile.js';
-import {B1AssetBackedDistantSunLightSource} from './B1Direct40AssetCache.js';
+import {B1AssetBackedDistantSunLightSource} from './B1AssetBackedDistantSunLightSource.js';
 
+/**
+ * Called by these source tests to obtain the canonical registered B1 execution profile.
+ *
+ * @returns {Algorithm32ExecutionProfile} - Exact Native48/Direct40 production control.
+ */
 function profile() {
 	return createBrunetonProductionProfile({
 		time: '09:30',
