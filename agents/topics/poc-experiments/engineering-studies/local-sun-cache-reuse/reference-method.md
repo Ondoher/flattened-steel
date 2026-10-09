@@ -341,6 +341,20 @@ or any physical gate has converged.
 
 ## Finite Native Operator Bounds
 
+The separate primary-angular diagnostic preserves every helper in an
+authenticated frozen native source and substitutes only its entry. Reproduce
+seven declared parent scalar J2 quantities before independently refining polar
+and azimuth integration to a common finest grid. Polar rules are derived through
+a fixed eight-azimuth product and checked against their analytic mass, so their
+normalization does not vary with azimuth count. The optional existing positive
+quadrant-Gaussian rule clusters azimuth samples at the physical cylinder tangent
+meridians. Its direct weighted sum uses unchanged continuous primary transport
+and physical Rayleigh/Mie phase factors. Inputs retain every angle, weight,
+case, parent, source transformation and transitive generator implementation.
+Passing these selected diagnostics cannot replace complete field, higher-order,
+view, combined-uncertainty or candidate acceptance gates. The original
+uniform controls remain immutable evidence.
+
 The separate `prove-native-operators.js` proof reads an authenticated exported
 native run. It preserves every numerical helper in that run's frozen C# source
 and substitutes only a new entry between unique checked anchors. The derived

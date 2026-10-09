@@ -985,6 +985,42 @@ type LocalSunHostResourceSample = {
 	/** UTC measurement instant. */ timestamp:string;
 };
 
+/** One bounded response from the wrapper-owned persistent native collector. */
+type LocalSunOwnedResourceReply = {
+	/** Fixed sequenced wire protocol. */ schema:'win32-owned-tree-resource-v2';
+	/** Increasing request identity. */ sequence:number;
+	/** Requested current owned root. */ rootPid:number;
+	/** Committed private memory across measured owned processes. */ privateBytes:number;
+	/** Summed resident sets, including shared pages. */ workingSetBytes:number;
+	/** Measured positive process identities, including wrapper and collector. */ pids:number[];
+	/** Native census elapsed time, milliseconds. */ collectorMilliseconds:number;
+};
+
+/** One outstanding request; the collector cannot accept overlapping ownership samples. */
+type LocalSunOwnedTelemetryPending = {
+	/** Exact increasing wire identity. */ sequence:number;
+	/** Requested owned root PID. */ rootPid:number;
+	/** Unchanged ten-second response deadline. */ timer:ReturnType<typeof setTimeout>;
+	/** Resolve only a checked matching response. */ resolve:(sample:LocalSunHostResourceSample)=>void;
+	/** Reject original measurement or process failure. */ reject:(error:Error)=>void;
+};
+
+/** Explicit lifetime of one source-pinned owned collector. */
+type LocalSunOwnedResourceSampler = {
+	/** Measure one live owned root; overlapping requests are rejected. */ sample:(rootPid:number)=>Promise<LocalSunHostResourceSample>;
+	/** Close stdin, await exit, and retire only the owned collector if needed. */ stop:()=>Promise<void>;
+};
+
+/** Bounded process-failure metadata retained by the resource wrapper. */
+type LocalSunHostResourceFailure = {
+	/** Original concrete failure message. */ message:string;
+	/** Exit or symbolic failure code, when available. */ code:string|number|null;
+	/** Whether the process API reports terminating its child. */ killed:boolean|null;
+	/** Observed process signal, when available. */ signal:string|null;
+	/** At most8192characters of reported stdout. */ stdout:string;
+	/** At most8192characters of reported stderr. */ stderr:string;
+};
+
 /** Independently integrated receiver ray with its positive angular weight. */
 type LocalSunNativeWeightedView = LocalSunNativeViewResult & {
 	/** Cosine-weighted solid-angle contribution. */ weight:number;
@@ -1101,4 +1137,43 @@ type LocalSunNativePositiveOperatorMeasurement = {
 	/** Number of replayed field positions. */ positions:number;
 	/** Number of distinct exact query points. */ queryPoints:number;
 	/** Measured elapsed replay time, milliseconds. */ elapsedMilliseconds:number;
+};
+
+/** Authenticated frozen input used by the scalar primary-angular diagnostic. */
+type LocalSunPrimaryAngularInput = LocalSunNativeOperatorInput & {
+	/** Declared horizontal cylinder radius, metres. */ radius:number;
+	/** Incoming polar quadrature masses. */ muWeights:number[];
+	/** Explicit outgoing support retained for the unchanged primary helper. */ outgoingMu:number[];
+	/** Frozen incoming polar rule identity. */ polarRule:string;
+	/** Frozen positive piecewise path rule identity. */ pathRule:string;
+};
+/** One selected physical primary-scattering query, independent of candidate values. */
+type LocalSunPrimaryAngularCase = {
+	/** Stable diagnostic label. */ name:string;
+	/** Physical Cartesian point, metres. */ point:number[];
+	/** Unit propagation direction. */ direction:number[];
+	/** Native spectral channel index. */ channel:number;
+	/** Exact parent query inventory index. */ parentIndex:number;
+};
+/** One independent incoming quadrature used by the diagnostic. */
+type LocalSunPrimaryAngularLevel = {
+	/** Stable refinement-grid identity. */ name:string;
+	/** Ordered incoming polar cosine nodes. */ mu:number[];
+	/** Positive polar quadrature masses. */ muWeights:number[];
+	/** Uniform cyclic azimuth count. */ phi:number;
+	/** Optional declared positive quadrant-Gaussian azimuth rule; absent means uniform midpoint. */ azimuth?:LocalSunReferenceAzimuthNode[];
+};
+/** One complete scalar J2 result row from the frozen native helpers. */
+type LocalSunPrimaryAngularMeasurement = {
+	/** Exact input grid identity. */ name:string;
+	/** Actual polar node count. */ polarCount:number;
+	/** Actual cyclic azimuth count. */ azimuthCount:number;
+	/** Scalar J2 values in the exact declared case order. */ values:number[];
+};
+/** Versioned native diagnostic result validated before producing evidence. */
+type LocalSunPrimaryAngularResult = {
+	/** Native result schema. */ schema:'native-primary-angular-v1';
+	/** Complete ordered grid measurement inventory. */ measurements:LocalSunPrimaryAngularMeasurement[];
+	/** Measured native execution duration, milliseconds. */ elapsedMilliseconds:number;
+	/** Largest actual primary path quadrature count. */ maximumPathSamples:number;
 };

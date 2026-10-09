@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Web.Script.Serialization;
 
 /// <summary>Read a Toolhelp process snapshot and memory of only the wrapper, collector and owned child tree; never manage processes or write files.</summary>
@@ -30,10 +31,31 @@ internal static class OwnedProcessTelemetry {
     [DllImport("psapi.dll",SetLastError=true)] private static extern bool GetProcessMemoryInfo(IntPtr handle,ref Counters counters,uint bytes);
     [DllImport("kernel32.dll",SetLastError=true)] private static extern bool CloseHandle(IntPtr handle);
 
-    /// <summary>Validate two live-owner identifiers, enumerate parent links, and emit only measured owned PIDs and byte totals.</summary>
+    /// <summary>Keep one owned collector alive; read bounded sequenced requests and emit one measured response per request.</summary>
     public static void Main(string[] args) {
-        int root,wrapper;
-        if(args.Length!=2 || !Int32.TryParse(args[0],out root) || root<=0 || !Int32.TryParse(args[1],out wrapper) || wrapper<=0)throw new ArgumentException("Positive child and wrapper PIDs required.");
+        int wrapper;
+        if(args.Length!=1 || !Int32.TryParse(args[0],out wrapper) || wrapper<=0)throw new ArgumentException("Positive wrapper PID required.");
+        int previous=0;string record;
+        while((record=ReadRequest())!=null) {
+            var values=record.Split('\t');int sequence,root;
+            if(values.Length!=2 || !Int32.TryParse(values[0],out sequence) || sequence<=previous || !Int32.TryParse(values[1],out root) || root<=0)throw new ArgumentException("Increasing sequence and positive root PID required.");
+            Measure(root,wrapper,sequence);previous=sequence;
+        }
+    }
+
+    /// <summary>Reject oversized or non-ASCII requests before allocating an unbounded input line; EOF ends the owned collector.</summary>
+    private static string ReadRequest() {
+        var text=new StringBuilder();int character;
+        while((character=Console.In.Read())!=-1) {
+            if(character=='\n')return text.ToString();
+            if(character!='\t' && (character<'0' || character>'9') || text.Length>=128)throw new ArgumentException("Invalid bounded telemetry request.");
+            text.Append((char)character);
+        }
+        return text.Length==0 ? null : text.ToString();
+    }
+
+    /// <summary>Enumerate parent links and read only the wrapper, collector and current owned child tree.</summary>
+    private static void Measure(int root,int wrapper,int sequence) {
         var watch=Stopwatch.StartNew();var parents=new Dictionary<uint,uint>();
         var snapshot=CreateToolhelp32Snapshot(2,0);
         if(snapshot==new IntPtr(-1))throw new Win32Exception(Marshal.GetLastWin32Error());
@@ -43,6 +65,11 @@ internal static class OwnedProcessTelemetry {
             do {parents[entry.Pid]=entry.Parent;entry.Size=(uint)Marshal.SizeOf(typeof(Entry));}while(Next(snapshot,ref entry));
             int error=Marshal.GetLastWin32Error();if(error!=18)throw new Win32Exception(error);
         } finally {CloseHandle(snapshot);}
+        if(root!=wrapper && parents.ContainsKey((uint)root)) {
+            uint ancestor=(uint)root;var seen=new HashSet<uint>();
+            while(ancestor!=(uint)wrapper && seen.Add(ancestor) && parents.ContainsKey(ancestor))ancestor=parents[ancestor];
+            if(ancestor!=(uint)wrapper)throw new InvalidOperationException("Requested live root is not owned by the wrapper.");
+        }
         var owned=new HashSet<uint> {(uint)root};bool changed;
         do {changed=false;foreach(var pair in parents)if(owned.Contains(pair.Value) && owned.Add(pair.Key))changed=true;}while(changed);
         owned.Add((uint)wrapper);owned.Add((uint)Process.GetCurrentProcess().Id);
@@ -61,6 +88,7 @@ internal static class OwnedProcessTelemetry {
             } finally {CloseHandle(handle);}
         }
         if(!measured.Contains((uint)wrapper))throw new InvalidOperationException("Live wrapper memory was not measured.");
-        Console.WriteLine(new JavaScriptSerializer().Serialize(new {schema="win32-owned-tree-resource-v1",privateBytes=privateBytes,workingSetBytes=workingBytes,pids=measured.ToArray(),collectorMilliseconds=watch.Elapsed.TotalMilliseconds}));
+        Console.WriteLine(new JavaScriptSerializer().Serialize(new {schema="win32-owned-tree-resource-v2",sequence=sequence,rootPid=root,privateBytes=privateBytes,workingSetBytes=workingBytes,pids=measured.ToArray(),collectorMilliseconds=watch.Elapsed.TotalMilliseconds}));
+        Console.Out.Flush();
     }
 }

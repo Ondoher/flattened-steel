@@ -1054,3 +1054,113 @@ Both include outgoing mu=0, so this case retains an incoming-integration error
 independent of the new outgoing spacing. Keep that limitation explicit. Run
 00454 tests N64 under wrapper 00453, unchanged 45-minute and memory limits,
 to form a matched 16/32/64 family before selecting another reference change.
+
+Local checkpoint `64321806` saves the 15-path reference/telemetry correction.
+A fresh approved read-only token/access probe succeeds; exact pre-staging,
+staged-byte and staged-whitespace checks pass. Git emits an object-write warning
+during the successful commit, but the named tree object is readable, every
+committed file matches the accepted bytes, and the worktree is clean immediately
+after verification. No push or permission/ACL changes occur. Feed the exact
+multiline message through Git stdin to avoid conflicting skill requirements
+about temporary message-file location; no message file is created.
+
+Question: can a small primary-only diagnostic isolate incoming polar versus
+azimuth uncertainty before more full recurrence refinements? Decision: derive
+an entry from the exact frozen native source and preserve every physical helper.
+Evaluate selected independently chosen source/boundary/horizon cases at separate
+incoming polar and azimuth refinements, with a common finest grid and an exact
+parent-level reproduction check. No candidate values enter or change. This is
+diagnostic evidence only, not a full construction or acceptance substitute.
+Capture baseline `.codex-tmp/review-standards/session-c62h6i/baseline.json`
+before source edits; run the proof only after the current heavy job finishes.
+
+Wrapper 00453 stops native attempt 00454 because its native collector command
+fails after repeated valid samples. Peak measured private memory is 806,268,928
+bytes, minimum machine free memory 11,992,559,616 bytes: no measured threshold
+breach. The current error message omits exit/signal/timeout details, so the cause
+cannot be assigned. Preserve the incomplete child and repair diagnostics before
+repeating the long workload. Short native-collector proofs remain useful but do
+not establish long-job reliability.
+
+Diagnostic wrapper 00455 fails before computation because its label exceeds the
+16-character run-name contract. Rename it `p3-primary-angle`. Runs 00457/00459
+then reproduce all seven parent J2 quantities and finish in 4,969/18,796 ms.
+Selected polar/azimuth uncertainty magnitudes fit the budget, but the ground
+boundary's azimuth reduction criterion fails. The source edit invalidates the
+first diagnostic request. Its architecture audit also catches a multiline quote
+incorrectly assigned to line 1; preserve that original primary as invalid
+evidence and require exact single-line source quotes in the fresh request.
+
+Run 00461 fails its product-rule normalization check before native computation
+at high azimuth count. Derive each polar rule through one fixed eight-azimuth
+product, check its analytic mass, and refine azimuth independently rather than
+duplicating identical polar weights. This also removes avoidable direction-array
+allocation. Run 00463 finishes the uniform 256-by-2,048 diagnostic in 91,605 ms
+but the boundary azimuth reduction remains inconclusive.
+
+Question: can the existing positive quadrant-Gaussian azimuth rule resolve that
+boundary more efficiently? Decision: test it with the original continuous primary
+transport and phase factors, retaining exact parent reproduction and a common
+finest 256-by-512 grid. Add the complete transitive generator source closure to
+the early snapshot; no candidate inputs enter. Run 00465 finishes in 41,249 ms
+under wrapper 00464: all seven selected polar and azimuth magnitude/reduction
+checks pass. Maximum azimuth uncertainty is 0.00006162 comparison tolerances;
+maximum polar uncertainty is 0.00005396. Wrapper peak private memory is
+202,047,488 bytes, minimum free memory 12,900,925,440 bytes. These are selected
+scalar primary J2 diagnostics, not a complete field or higher-order qualification.
+Fresh primary/audit source validation for the stabilized diagnostic is required.
+
+The stabilized primary-angular diagnostic has exit-0 CLEAN source validation at
+`.codex-tmp/review-standards/session-c62h6i/validation-v2.json`, fingerprint
+`732af097eaa17dc1eac6a9526a4c7ddf277276a415d25921b4e1ddd62f58343c`.
+It covers architecture 3,161, contracts 411 and verification 138 obligations,
+each with an actual distinct primary and independent audit. Verification scope
+is the two unchanged imported production-constant collaborators, not an added
+experiment testing lane. The first architecture transport retained a wrongly
+escaped line splitter and corrupted truncated base64; preserve its invalid
+attempt. The actual replacement primary rereads single physical LF lines and
+transfers entirely within one Node process; its digest is
+`3487109fcf85bcd0da2bdeaf28bee3c5ff8505783ccb111ad0458c62c9d5223c`.
+The independent audit verifies every quoted line. This completes that captured
+diagnostic source unit, not P3-P5 physical qualification.
+
+Question: can the monitor avoid repeatedly starting a managed executable while
+retaining strict fail-closed sampling? Decision: keep one source-pinned collector
+alive throughout each owned job, warm it before launching computation, and use
+bounded increasing sequence/root requests with checked matching responses.
+Capture genuine pre-edit baseline `session-Tcrd8i/baseline.json`; both required
+lanes acknowledge readiness `18d0b6963c4bf81cefd60ddf72c3c8e3bc28b03961e214ea911ce957ca7be454`.
+The read-only census, ten-second response deadline, five-second sample scheduling,
+8 GiB owned-memory limit/reserve, exclusive capability and 90-minute ceiling are
+unchanged. EOF retires the owned collector, with bounded collector-only cleanup.
+Retain bounded original exit/code/signal/timeout output in resource failures.
+This repairs a plausible startup dependency; it does not assign the earlier
+unrecorded failure's exact cause. Guarded admission 00466/00467 passes with
+85,073,920 peak private bytes and 12,933,246,976 minimum free bytes. Local type
+and whitespace checks pass. Sustained runtime proof and the repair's fresh
+source-review validation remain open.
+
+Sustained guarded replay 00468/00469 completes the same diagnostic in 36,724 ms,
+with all seven polar/azimuth cases passing and identical measurements to 00465.
+The persistent collector responds throughout and retires normally; wrapper peak
+private memory is 197,849,088 bytes, minimum free memory 12,750,757,888 bytes.
+Include the warmup measurement in peaks and enforce the same stop thresholds
+before launching heavy computation. The source unit is stabilized for review;
+long-job reliability still requires the next full reference attempt.
+
+Run 00470 deliberately tightens the owned limit to 1 MiB. The measured warmup
+is 80,998,400 private bytes, so the guard rejects it before launching a child
+proof. Its result records the original structured failure, the collector retires,
+and the exclusive lock is removed. Exit 1 is the expected prelaunch rejection
+for this focused check, not another unexplained telemetry failure. Existing
+admission/replay checks and local type/whitespace checks remain passing.
+
+The persistent telemetry unit validates exit-0 CLEAN at
+`.codex-tmp/review-standards/session-Tcrd8i/validation.json`, fingerprint
+`b6addb71af0f5ddd3a7f1c8028214c0d48715b84146e9d8d36a4c88efb35aef3`,
+covering architecture 1,366 and contracts 102 obligations with distinct actual
+primary/audit actors. This applies to the captured source unit and context;
+subsequent governing-document updates require readiness refresh and the final
+experiment handoff must validate current applicable evidence. Long-job
+monitoring and complete native accuracy remain open. The adviser recommends
+saving the diagnostic/monitor correction as a coherent local checkpoint.
