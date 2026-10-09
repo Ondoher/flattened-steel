@@ -1,0 +1,181 @@
+{
+	"schema": "local-sun-cache-reuse-gates-v1",
+	"status": "frozen-before-candidate-evaluation",
+	"authority": "Project engineering limits; no observational or published scientific accuracy claim.",
+	"quantities": [
+		{
+			"id": "J1",
+			"units": "W m^-3 sr^-1 nm^-1",
+			"absolute": 1e-12,
+			"cpuGpuRelative": 0.002,
+			"reuseRelative": 0.0001,
+			"physicalRelative": 0.1
+		},
+		{
+			"id": "J2",
+			"units": "W m^-3 sr^-1 nm^-1",
+			"absolute": 1e-12,
+			"cpuGpuRelative": 0.002,
+			"reuseRelative": 0.0001,
+			"physicalRelative": 0.1
+		},
+		{
+			"id": "J3",
+			"units": "W m^-3 sr^-1 nm^-1",
+			"absolute": 1e-12,
+			"cpuGpuRelative": 0.002,
+			"reuseRelative": 0.0001,
+			"physicalRelative": 0.1
+		},
+		{
+			"id": "J4",
+			"units": "W m^-3 sr^-1 nm^-1",
+			"absolute": 1e-12,
+			"cpuGpuRelative": 0.002,
+			"reuseRelative": 0.0001,
+			"physicalRelative": 0.1
+		},
+		{
+			"id": "Jthrough4",
+			"units": "W m^-3 sr^-1 nm^-1",
+			"absolute": 1e-12,
+			"cpuGpuRelative": 0.002,
+			"reuseRelative": 0.0001,
+			"physicalRelative": 0.1
+		},
+		{
+			"id": "L1",
+			"units": "W m^-2 sr^-1 nm^-1",
+			"absolute": 1e-9,
+			"cpuGpuRelative": 0.002,
+			"reuseRelative": 0.0001,
+			"physicalRelative": 0.1
+		},
+		{
+			"id": "L2",
+			"units": "W m^-2 sr^-1 nm^-1",
+			"absolute": 1e-9,
+			"cpuGpuRelative": 0.002,
+			"reuseRelative": 0.0001,
+			"physicalRelative": 0.1
+		},
+		{
+			"id": "L3",
+			"units": "W m^-2 sr^-1 nm^-1",
+			"absolute": 1e-9,
+			"cpuGpuRelative": 0.002,
+			"reuseRelative": 0.0001,
+			"physicalRelative": 0.1
+		},
+		{
+			"id": "viewRadiance",
+			"units": "W m^-2 sr^-1 nm^-1",
+			"absolute": 1e-9,
+			"cpuGpuRelative": 0.002,
+			"reuseRelative": 0.0001,
+			"physicalRelative": 0.1
+		},
+		{
+			"id": "directNormal",
+			"units": "W m^-2 nm^-1",
+			"absolute": 1e-9,
+			"cpuGpuRelative": 0.002,
+			"reuseRelative": 0.0001,
+			"physicalRelative": 0.02
+		},
+		{
+			"id": "diffuseHorizontal",
+			"units": "W m^-2 nm^-1",
+			"absolute": 1e-9,
+			"cpuGpuRelative": 0.002,
+			"reuseRelative": 0.0001,
+			"physicalRelative": 0.1
+		},
+		{
+			"id": "transmittance",
+			"units": "1",
+			"absolute": 1e-7,
+			"cpuGpuRelative": 0.002,
+			"reuseRelative": 0.0001,
+			"physicalRelative": 0.02
+		}
+	],
+	"comparison": {
+		"channelRule": "abs(candidate-reference) <= absolute + relative*abs(reference); all 15 channels required",
+		"spatialMaximumNormalizedLInf": 0.1,
+		"spatialMaximumP95NormalizedRms": 0.02,
+		"normalizationFloor": 1e-30,
+		"normalizedLInf": "max_c(abs(candidate_c-reference_c))/max(max_c(abs(reference_c)),1e-30)",
+		"normalizedRms": "sqrt(mean_c(((candidate_c-reference_c)/max(max_c(abs(reference_c)),1e-30))^2))",
+		"p95": "sorted metrics at index ceil(0.95*n)-1; no averaging across failing states/orders",
+		"spatialCompatibility": "Inherited definitions and limits only. Historical policy used W3/Fibonacci34/4.8Mm; current W27/reflection-completed68/4.828032Mm and larger domains are new required measurements.",
+		"baselineFailure": "Report baseline physical failure and still require candidate physical limits. Agreement with failing baseline does not pass.",
+		"referenceUncertainty": "Accept only if error plus reference budget <= limit; reject only if error minus budget > limit; otherwise inconclusive and gate remains open.",
+		"finite": true,
+		"negativeTolerance": "At most each quantity's absolute bound; report all negative values."
+	},
+	"reference": {
+		"authority": "reference-method.md; continuous analytic primary queries and independently refined binary64 recurrence grids, never candidate texture resampling",
+		"maximumBudgetFractionOfAcceptanceLimit": 0.1,
+		"pathIntervalLevels": [60, 120, 240, 480, 960],
+		"receiverDirectionLevels": [128, 256, 512, 1024],
+		"spatialLevels": "production z/rho fractions plus every midpoint, then bisect each interval again; keep exact withheld queries",
+		"angularLevels": "independent Gauss-Legendre mu x uniform azimuth product quadrature: 8x16, 16x32, 32x64; refined angular representation independent of W27",
+		"convergence": "Require three levels, last two differences decreasing by at least a factor of two, and twice the last difference <= one tenth of the applicable acceptance threshold in every compared channel. Otherwise refine to the declared cap or mark inconclusive. This is an empirical uncertainty estimate, not a rigorous mathematical bound.",
+		"analyticInvariants": [
+			"zero path T=1",
+			"path reciprocity",
+			"segment multiplicativity",
+			"0<=T<=1",
+			"inverse-square unattenuated irradiance",
+			"rotation/translation equivalence of continuous primary field",
+			"black-ground contribution zero",
+			"pure-order cumulative sum"
+		]
+	},
+	"matrix": {
+		"development": ["flat-0", "flat-45", "flat-135", "flat-180"],
+		"untouchedHoldout": "flat-90; frozen placements may be inspected, no candidate results until policy is frozen",
+		"primaryNumerical": ["flat-0", "flat-90", "flat-180"],
+		"intermediateNumerical": "flat-45 and flat-135 require complete-ray spectra, receivers, CPU/GPU and reuse parity, coverage and temporal checks; complete field-order matrix belongs to primary states",
+		"allVisual": ["flat-0", "flat-45", "flat-90", "flat-135", "flat-180"],
+		"spatial": "All 285 nodes for field parity; 18x14 cell centers for spatial reconstruction; axis/top/ground/outer boundaries plus +/-1m interior offsets. Independent reference sentinels are Cartesian product z=[5,250,1500,7000,25000,62500,99000]m and rho/R=[0,1/96,0.19,0.51,0.93,1], excluding outside points.",
+		"directions": "All production outgoing directions for field parity; independent sentinels normalize([1,0,0],[0,1,0],[0,0,1],[1,1,0],[1,0,1],[1,1,1],[-1,2,3]); every cube seam sentinel perturbed by +/-1e-5 before normalization",
+		"rotationDegrees": [0, 17, 45, 90, 135, 180, 271],
+		"translationsMeters": [
+			[0, 0],
+			[250, 0],
+			[0, -1000],
+			[10000, 10000]
+		],
+		"viewRays": "9x9 pixel-center grid at the fixture's 720x414/FOV70 camera, plus exact horizon and elevation +/-0.01 degrees at azimuths 0,45,90,135,180; all 15 channels",
+		"temporal": "120 successive exact states around each standard angle at 30Hz presentation cadence mapped to a 24h/60s film clock; 1801 film frame/endpoint states coverage only during P1",
+		"policyComparisons": [
+			"fresh current per-state policy versus fresh candidate fixed coverage",
+			"fresh candidate versus reused candidate identical coverage",
+			"candidate versus independent continuous/refined reference"
+		]
+	},
+	"completeRay": {"maximumEndpointDifferenceMeters": 0.01, "uncoveredSamplesAllowed": 0, "silentClampAllowed": false},
+	"temporal": {
+		"maximumNormalizedFirstDifferenceResidual": 0.002,
+		"maximumNormalizedSecondDifferenceResidual": 0.004,
+		"normalization": "difference of reused and fresh temporal derivatives divided by max trajectory peak fresh spectrum,1e-30",
+		"displayMaximumAbsoluteByteDifference": 2,
+		"displayP95AbsoluteByteDifference": 1,
+		"presentationInterpolationDuringQualification": false
+	},
+	"resources": {
+		"calibration": "freeze-acceptance.js binds these criteria to the measured selected production control before candidate execution",
+		"maximumCombinedLogicalPayloadBytes": 1200000000,
+		"maximumBuildMilliseconds": 30000,
+		"maximumReplacementMilliseconds": 30000,
+		"maximumPreparedMilliseconds": 60000,
+		"maximumWarmFrameP95": "1.25 * measured baseline warm-frame p95 + 2 ms, at identical camera/viewport; five calibration samples, P5 needs one warmup plus seven measured repetitions",
+		"maximumResponsivenessGapMilliseconds": 100,
+		"minimumBuildsAvoidedFractionInsideQualifiedReuseRegion": 0.9,
+		"memoryMeaning": "Combined active, staging, immutable input and persistent payload bytes; physical device/driver bytes remain separately observed where telemetry exists. Successful allocation on the pinned GPU is also required; logical accounting cannot replace allocation admission.",
+		"minimumRetainedActiveCachesDuringReplacement": 1,
+		"timeoutsOrAllocationFailures": "failed/incomplete required cell; smaller profiles cannot substitute"
+	}
+}

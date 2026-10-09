@@ -1,0 +1,25 @@
+{
+	"compilerOptions": {
+		"allowJs": true,
+		"checkJs": true,
+		"esModuleInterop": true,
+		"maxNodeModuleJsDepth": 0,
+		"module": "NodeNext",
+		"moduleResolution": "NodeNext",
+		"noEmit": true,
+		"skipLibCheck": true,
+		"strict": false,
+		"target": "ES2022",
+		"types": ["node"],
+		"typeRoots": ["../../node_modules/@types"]
+	},
+	"include": [
+		"../../scripts/flat32/the-hours/types.d.ts",
+		"../../src/algorithm32/**/*.d.ts",
+		"../../src/flat32/**/*.d.ts",
+		"**/*.d.ts",
+		"**/*.js",
+		"**/*.mjs"
+	],
+	"exclude": ["../../node_modules/**", "**/node_modules/**"]
+}

@@ -2,10 +2,13 @@
 
 Focus: Measured alternatives and retained or rejected mechanisms.
 
-Closed experimental lanes remain closed. The selected point-local builder study has its own entry below. For other retained proposals, start with closed-lanes-and-candidates.md; each needs a selected study and evidence boundary before execution.
+The selected study is [Local-Sun Cache Reuse](local-sun-cache-reuse/README.md).
+Closed and suspended experimental lanes retain their existing dispositions.
+Other proposals need a selected study and evidence boundary before execution.
 
 ## Working Documents
 
+- [Local-Sun Cache Reuse Experiment](local-sun-cache-reuse/README.md)
 - [Predictable Sky Accuracy Dials](sky-accuracy-dials/README.md)
 - [Point-Local Cache Builder Experiment](point-local-cache-builder/README.md)
 - [Shared Cache Calculation Reuse Experiment](00000-shared-cache-calculation-reuse/README.md)

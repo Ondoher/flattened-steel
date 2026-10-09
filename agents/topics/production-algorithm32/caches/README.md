@@ -5,10 +5,13 @@ owns the deployed package/default selection and qualified compatible rollback.
 
 Focus: Cache construction, storage, reconstruction, loading, and optimization.
 
-Current work: [distant-Sun strobing promotion](distant-sun-strobing-promotion-plan.md),
-with progress and next actions in its
-[status](distant-sun-strobing-promotion-status.md). Existing accepted cache and
-compiler qualifications below remain baseline evidence for this new work.
+The [local-Sun cache transfer assessment](local-sun-transfer-assessment.md)
+owns the initial findings. Follow-up work is activated in the contained
+[Local-Sun Cache Reuse experiment](../../poc-experiments/engineering-studies/local-sun-cache-reuse/README.md),
+which owns the execution plan and current status. Production remains read-only
+for that lane. The completed
+[distant-Sun strobing promotion](distant-sun-strobing-promotion-status.md)
+and existing accepted cache and compiler qualifications remain comparison evidence.
 
 The shared-block distant-Sun cache is implemented, qualified, and adopted
 through the complete P1-P8 promotion plan. Its contained storage, generator, transport,
@@ -38,6 +41,8 @@ Q30 Bruneton B1 reproduction through current production GPU transport.
 
 ## Working Documents
 
+- [Local-Sun Cache Transfer Assessment](local-sun-transfer-assessment.md)
+- [Local-Sun Cache Reuse Experiment](../../poc-experiments/engineering-studies/local-sun-cache-reuse/README.md)
 - [Selected Scattering Cache Contract](cache-contract.md)
 - [Algorithm32 Cache Interface Design](cache-design.md)
 - [Algorithm32 Current Dataflow](current-dataflow.md)
