@@ -271,3 +271,26 @@ export function nativeViewRadiance(grid, state, direction, order) {
 		retainedLength: cuts.at(-1),
 	};
 }
+
+/** Measure the finite view's positive attenuation/extinction operator without any source fields.
+ * @param {LocalSunNativeFieldGrid} grid - Authenticated independent geometry and medium; fields are unused.
+ * @param {LocalSunFrozenPlacement} state - Exact physical view state.
+ * @param {readonly number[]} direction - Unit physical direction.
+ * @param {number} order - The consumer's Gaussian path order.
+ * @returns {LocalSunNativeKernelMassResult} - Per-channel positive mass and actual quadrature count.
+ */
+export function nativeViewKernelMass(grid, state, direction, order) {
+	const path=nativeViewPath(state,grid.radius,direction),cuts=pathCuts(grid,path),taps=gaussRule(order),mass=new Array(15).fill(0);
+	let samples=0;
+	for(let i=1;i<cuts.length;i++) {
+		const half=(cuts[i]-cuts[i-1])/2,mid=cuts[i-1]+half;
+		for(const tap of taps) {
+			const t=mid+half*tap.node,z=Math.max(0,Math.min(grid.top,path.point[2]+path.direction[2]*t));
+			const tau=primaryOpticalDepth(path.point[2],z,Math.max(t,Math.abs(z-path.point[2])));
+			for(let c=0;c<15;c++)mass[c]+=half*tap.weight*Math.exp(-tau[c])*(grid.betaR[c]*Math.exp(-z/grid.rayleighHeight)+grid.betaM[c]*Math.exp(-z/grid.mieHeight));
+			samples++;
+		}
+	}
+	if(mass.some(value=>!Number.isFinite(value) || value<0))throw new Error('Invalid positive view kernel mass.');
+	return {mass,samples};
+}

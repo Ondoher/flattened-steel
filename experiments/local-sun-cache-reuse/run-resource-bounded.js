@@ -1,22 +1,39 @@
 import path from 'node:path';
 import os from 'node:os';
-import {readFile, open, unlink} from 'node:fs/promises';
+import {readFile, open, unlink, mkdir} from 'node:fs/promises';
 import {spawn, execFile} from 'node:child_process';
 import {promisify} from 'node:util';
 import {randomUUID} from 'node:crypto';
 import {ExperimentRun} from './ExperimentRun.js';
 import {repositoryRoot, outputRoot, checkPath, hash} from './run-boundary.js';
 
+/** Compile a source-pinned native collector once into this wrapper's new run.
+ * @param {ExperimentRun} run - Owned new output root and provenance writer.
+ * @returns {Promise<string>} - Checked collector executable; no WMI service or extra dependency.
+ */
+async function prepareTelemetry(run) {
+	const source=path.join(repositoryRoot,'experiments/local-sun-cache-reuse/OwnedProcessTelemetry.cs');await checkPath(repositoryRoot,source);
+	const bytes=await readFile(source);await run.write('OwnedProcessTelemetry.cs',bytes);
+	const executable=path.join(run.root,'OwnedProcessTelemetry.exe'),scratch=path.join(run.root,'compiler-tmp');
+	await checkPath(run.root,executable);await checkPath(run.root,scratch);await mkdir(scratch);
+	const compiler='C:/Windows/Microsoft.NET/Framework64/v4.0.30319/csc.exe';
+	const compileArgs=['/nologo','/optimize+','/platform:x64','/target:exe','/reference:System.Web.Extensions.dll','/out:'+executable,path.join(run.root,'OwnedProcessTelemetry.cs')];
+	await run.write('telemetry-inputs.json',JSON.stringify({schema:'native-owned-telemetry-input-v1',sourceSha256:hash(bytes),compiler,compilerIdentity:hash(await readFile(compiler)),compileArgs,
+		operation:'Toolhelp32 read-only PID/parent snapshot; close ownership over the child tree, add wrapper/collector, and sum current PROCESS_MEMORY_COUNTERS_EX PrivateUsage and WorkingSetSize. Missing exited processes may be skipped; access/read failures fail closed.',
+		apiSources:['https://learn.microsoft.com/en-us/windows/win32/api/tlhelp32/ns-tlhelp32-processentry32w','https://learn.microsoft.com/en-us/windows/win32/api/psapi/ns-psapi-process_memory_counters_ex']},null,'\t'));
+	const result=await promisify(execFile)(compiler,compileArgs,{windowsHide:true,timeout:10000,env:{...process.env,TEMP:scratch,TMP:scratch}});
+	await run.write('telemetry-compile.txt',result.stdout+result.stderr);return executable;
+}
+
 /** Inspect only this wrapper and the descendants of its owned child.
  * @param {number} rootPid - Owned child process identifier.
+ * @param {string} collector - Checked run-owned source-pinned native executable.
  * @returns {Promise<LocalSunHostResourceSample>} - Working-set and committed private-memory sums; shared pages may be counted more than once.
  */
-async function sample(rootPid) {
-	const script = `$all = @(Get-CimInstance Win32_Process); $owned = [System.Collections.Generic.HashSet[int]]::new(); [void]$owned.Add(${rootPid}); do { $changed = $false; foreach ($item in $all) { if ($owned.Contains([int]$item.ParentProcessId) -and $owned.Add([int]$item.ProcessId)) { $changed = $true } } } while ($changed); [void]$owned.Add(${process.pid}); $private = 0L; $working = 0L; $pids = @(); foreach ($id in $owned) { $proc = Get-Process -Id $id -ErrorAction SilentlyContinue; if ($proc) { $private += $proc.PrivateMemorySize64; $working += $proc.WorkingSet64; $pids += $id } }; @{ privateBytes = $private; workingSetBytes = $working; pids = $pids } | ConvertTo-Json -Compress`;
-	const {stdout} = await promisify(execFile)('C:/Windows/System32/WindowsPowerShell/v1.0/powershell.exe',
-		['-NoProfile', '-NonInteractive', '-Command', script], {windowsHide: true, timeout: 10000});
+async function sample(rootPid,collector) {
+	const {stdout} = await promisify(execFile)(collector,[String(rootPid),String(process.pid)],{windowsHide:true,timeout:10000});
 	const parsed = JSON.parse(stdout);
-	if (!Number.isFinite(parsed.privateBytes) || !Number.isFinite(parsed.workingSetBytes) || !Array.isArray(parsed.pids))
+	if (parsed.schema!=='win32-owned-tree-resource-v1' || !Number.isSafeInteger(parsed.privateBytes) || parsed.privateBytes<0 || !Number.isSafeInteger(parsed.workingSetBytes) || parsed.workingSetBytes<0 || !Array.isArray(parsed.pids) || !parsed.pids.includes(process.pid) || parsed.pids.some((/** @type {number} */ pid)=>!Number.isSafeInteger(pid) || pid<=0) || !Number.isFinite(parsed.collectorMilliseconds) || parsed.collectorMilliseconds<0)
 		throw new Error('Owned process resource measurement is unavailable.');
 	return {...parsed, freeBytes: os.freemem(), timestamp: new Date().toISOString()};
 }
@@ -66,7 +83,8 @@ async function main() {
 		try {await handle.writeFile(ownership);} finally {await handle.close();}
 		if (os.freemem() < reserveBytes) throw new Error('Free-memory reserve is unavailable before launch.');
 		// Fail closed if process telemetry cannot be collected before computation.
-		await sample(process.pid);
+		const collector=await prepareTelemetry(run);
+		await sample(process.pid,collector);
 		child = spawn(process.execPath, ['--max-old-space-size=2048', file, ...arguments_], {
 			cwd: repositoryRoot, windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'],
 			env: {...process.env, NODE_OPTIONS: '--max-old-space-size=2048', LOCAL_SUN_HEAVY_EXECUTION: ownership},
@@ -85,7 +103,7 @@ async function main() {
 		child.stderr.on('data', bytes => {const value = String(bytes); stderr = (stderr + value).slice(-32768); process.stderr.write(value);});
 		while (!ended) {
 			if (!child.pid) throw new Error('Owned child PID unavailable.');
-			const observed = await sample(child.pid);
+			const observed = await sample(child.pid,collector);
 			peakPrivateBytes = Math.max(peakPrivateBytes, observed.privateBytes);
 			peakWorkingSetBytes = Math.max(peakWorkingSetBytes, observed.workingSetBytes);
 			minimumFreeBytes = Math.min(minimumFreeBytes, observed.freeBytes);

@@ -45,7 +45,13 @@ internal static class ShellReference {
         for(int i=1;i<Z.Length;i++)if(Z[i]<=Z[i-1])throw new ArgumentException("Unordered altitude support.");
         for(int i=1;i<Rho.Length;i++)if(Rho[i]<=Rho[i-1])throw new ArgumentException("Unordered radial support.");
         for(int i=1;i<Mu.Length;i++)if(Mu[i]<=Mu[i-1])throw new ArgumentException("Unordered angular support.");
-        OutMu=new double[Mu.Length+2];OutMu[0]=-1;OutMu[OutMu.Length-1]=1;Array.Copy(Mu,0,OutMu,1,Mu.Length);
+        if(input.ContainsKey("outgoingMu")) {
+            OutMu=Numbers(input["outgoingMu"]);
+            if(OutMu.Length!=Mu.Length+1 || OutMu[0]!=-1 || OutMu[OutMu.Length-1]!=1 || !OutMu.Contains(0.0))throw new ArgumentException("Incomplete nested outgoing support.");
+            for(int i=0;i<OutMu.Length;i++)if(Double.IsNaN(OutMu[i]) || Double.IsInfinity(OutMu[i]) || (i>0 && OutMu[i]<=OutMu[i-1]))throw new ArgumentException("Unordered outgoing support.");
+        } else {
+            OutMu=new double[Mu.Length+2];OutMu[0]=-1;OutMu[OutMu.Length-1]=1;Array.Copy(Mu,0,OutMu,1,Mu.Length);
+        }
         PositionCount=checked(Z.Length*Rho.Length);IncomingCount=checked(Mu.Length*Phi);OutgoingCount=checked(OutMu.Length*Phi);
         if(Piecewise)BuildGaussRule(Intervals/30);
         PhiCos=new double[Phi];PhiSin=new double[Phi];for(int i=0;i<Phi;i++){PhiCos[i]=Math.Cos(2*Math.PI*i/Phi);PhiSin[i]=Math.Sin(2*Math.PI*i/Phi);}

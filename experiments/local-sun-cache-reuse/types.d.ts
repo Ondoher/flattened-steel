@@ -224,6 +224,12 @@ type LocalSunNativeFieldGrid = {
 	/** Mie density height, meters. */ mieHeight:number;
 	/** Three orders J2/J3/J4, each holding fifteen binary64 normalized source functions. */ fields:Float64Array[][];
 };
+
+/** Source-independent finite-view transport operator measurement. */
+type LocalSunNativeKernelMassResult = {
+	/** Fifteen positive attenuation/extinction weight sums. */ mass:number[];
+	/** Actual Gaussian quadrature taps in the retained physical segment. */ samples:number;
+};
 /** Finite independently solved observer-dome path in canonical source coordinates. */
 type LocalSunNativeViewPath = {
 	/** Physical start point, meters. */ point:number[];
@@ -314,6 +320,7 @@ type LocalSunNativeReferenceLevel = {
 		/** Independent horizontal support, meters. */ radial:number[];
 		/** Independent altitude support, meters. */ altitudes:number[];
 		/** Independent incoming polar cosines. */ mu:number[];
+		/** Optional independently nested outgoing interpolation support. */ outgoingMu?:number[];
 		/** Cyclic incoming azimuth resolution. */ phi:number;
 		/** Simpson interval count. */ intervals:number;
 		/** Batch-common optical-tail path policy. */ spectralBatch:number;
@@ -970,6 +977,7 @@ type LocalSunArtifactDigest = {
 
 /** One sampled aggregate of the guard and its owned child tree. */
 type LocalSunHostResourceSample = {
+	/** Native collector's internal elapsed census/read time, milliseconds. */ collectorMilliseconds?:number;
 	/** Committed private memory summed across owned processes. */ privateBytes:number;
 	/** Resident working sets; shared pages can be counted more than once. */ workingSetBytes:number;
 	/** Owned process identifiers present at measurement. */ pids:number[];
@@ -1038,3 +1046,59 @@ type LocalSunShellIncomingPolicy = 'control'|'partitioned'|'partitioned-midpoint
  * - **"geometric-density"** - Geometric/extinction normalization.
  */
 type LocalSunShellReconstructionPolicy = 'incident-density'|'geometric-density';
+
+/** Nested outgoing interpolation support's sine exponent.
+ * - **2** - Original symmetric sine-squared support.
+ * - **4** - Nested refinement with denser horizon support.
+ */
+type LocalSunNativeOutgoingPower = 2|4;
+
+/** Authenticated native constants and axes used by the separate operator-bound proof.
+ * The original input's other properties are preserved when deriving the replay input.
+ */
+type LocalSunNativeOperatorInput = {
+	/** Source altitude above the flat ground, metres. */ height:number;
+	/** Upper atmosphere altitude, metres. */ top:number;
+	/** Rayleigh density scale height, metres. */ rayleighHeight:number;
+	/** Mie density scale height, metres. */ mieHeight:number;
+	/** Cornette-Shanks asymmetry, in [0,1). */ g:number;
+	/** Mie scattering albedo, in [0,1]. */ albedo:number;
+	/** Fifteen ground-level Rayleigh extinction coefficients, inverse metres. */ betaR:number[];
+	/** Fifteen ground-level Mie extinction coefficients, inverse metres. */ betaM:number[];
+	/** Fifteen unattenuated source irradiances at the reference distance. */ irradiance:number[];
+	/** Nonnegative source power multiplier. */ sourceScale:number;
+	/** Positive source normalization distance, metres. */ referenceDistance:number;
+	/** Native integration interval parameter. */ intervals:number;
+	/** Executed incoming polar cosine nodes. */ mu:number[];
+	/** Executed periodic incoming azimuth count. */ phi:number;
+	/** Native periodic origin offset, zero or one half. */ phiOffset:number;
+	/** Number of spectral channels sharing a packet path, one through three. */ spectralBatch:number;
+	/** Exact query inventory whose kernel cases must all be replayed. */ queries:LocalSunNativeOperatorQuery[];
+	/** Ordered horizontal-distance field support, metres. */ radial:number[];
+	/** Ordered field altitude support, metres. */ altitudes:number[];
+};
+
+/** One exact physical point and propagation direction in the native replay inventory. */
+type LocalSunNativeOperatorQuery = {
+	/** Three-dimensional physical Cartesian point, metres. */ point:number[];
+	/** Three-dimensional unit propagation direction. */ direction:number[];
+};
+
+/** Analytic upper envelope for one normalized continuous primary source channel. */
+type LocalSunNativePrimaryEnvelope = {
+	/** Maximum interval endpoint bound on J1 divided by local extinction. */ maximum:number;
+	/** Lower and upper altitude endpoints of the maximizing interval, metres. */ interval:number[];
+};
+
+/** Source-independent positive-kernel maxima from the exact frozen native helpers. */
+type LocalSunNativePositiveOperatorMeasurement = {
+	/** Versioned replay result identity. */ schema:'native-positive-operator-v1';
+	/** Primary and higher-order maximum transport masses, fifteen channels each. */ maximumKernelMass:number[][];
+	/** Maximum executed outgoing grid phase-row mass. */ phaseGridMaximum:number;
+	/** Maximum exact query outgoing phase-row mass. */ phaseQueryMaximum:number;
+	/** Largest actual quadrature count recorded by the native path helper. */ maximumPathSamples:number;
+	/** Count of replayed transport kernel cases. */ cases:number;
+	/** Number of replayed field positions. */ positions:number;
+	/** Number of distinct exact query points. */ queryPoints:number;
+	/** Measured elapsed replay time, milliseconds. */ elapsedMilliseconds:number;
+};

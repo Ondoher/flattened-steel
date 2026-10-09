@@ -1,6 +1,6 @@
 # Local-Sun Cache Reuse Experiment Status
 
-Status: independent execution resumed with resource controls implemented and focused proofs passing. The endpoint-supported reference correction has validated primary/audit source review; its angular family remains physically inconclusive. Bounded spatial qualification is running. P3-P5 remain incomplete. Stop before generating the video.
+Status: independent execution is running the guarded 64-node horizon-support reference. Repeated CIM resource-monitor failures were followed by a native process collector repair; its real guarded admission proof and captured primary/audit source review pass. The completed 8/16/32 horizon-support family remains physically inconclusive. The finite-operator bound proof has validated source review. P3-P5 remain incomplete. Stop before generating the video.
 
 ## Current State
 
@@ -194,20 +194,30 @@ starts with compact diagnostics and enforced aggregate memory admission,
 followed by decisive physical accuracy, the remaining visual/motion matrix,
 performance and expanded coverage, and required source reviews/handoff.
 Streaming authentication, compact frame histories and the owned-tree resource
-guard are implemented and under focused verification. They do not close the
+guard are implemented. The repaired native collector passes guarded admission
+in 00448/00449; 00450/00451 completes the 32-node calculation without a monitor
+error. The captured repair unit has CLEAN primary/audit validation. Convergence
+00452 remains inconclusive; 00453 now guards the 64-node calculation in 00454.
+These checks do not close the
 application performance or whole-matrix gates.
-The matched horizon-sinh5 angular reference remains inconclusive in 00394/00403.
-The next control uses positive support at both hemisphere endpoints and removes
-unused grid cuts from analytic primary transport. Analytic calibration passes;
-fresh three-level native construction evidence is being measured before the
-remaining browser matrix. The reference method owns this correction's equations.
+The matched horizon-sinh5, dual-endpoint and nested-outgoing angular controls
+remain inconclusive. The latest three-level result is 00431: primary L1 is
+bit-identical, while higher-order channels retain convergence-rate failures and
+some interpolated fields/transport also exceed their uncertainty budgets.
+The separate finite-operator proof in 00433/00435 replays the frozen source without
+altering its fields. Its repaired source unit has validated review; its numerical bounds
+cannot substitute for spatial/angular/path convergence. Diagnose and correct
+the remaining reference integration before launching the remaining browser
+matrix. The reference method owns numerical equations, and the execution record
+owns exact measurements and parent evidence.
 The captured implementation baselines remain available; governing-context
 changes must be included in review refresh before further implementation.
 Production promotion remains unselected. P6 retains the Union Glacier December
 solstice recording, identical scene setup and 180-to-540-degree sweep, after
 qualification and the owner recording approval boundary; P7 owns closeout.
 
-A local P0 checkpoint was recommended and preauthorized by the invoked skill,
-but automatic approval review rejected staging/committing without direct owner
-acceptance. No staging or commit occurred; the owner has reselected execution.
-checkpoint approval remains open.
+The reselected independent execution created local checkpoints `66017327`
+(contained prototype and explicit open gates) and `38cfe900` (line-ending repair).
+The execution record owns their verification and the corrected checkpoint
+procedure. No push or production promotion occurred. Subsequent numerical
+corrections remain uncommitted work and require their own coherent checkpoint.

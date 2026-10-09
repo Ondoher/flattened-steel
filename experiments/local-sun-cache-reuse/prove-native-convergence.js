@@ -21,7 +21,7 @@ async function main() {
 			if(typeof sourceHash!=='string' || !/^[0-9a-f]{64}$/u.test(sourceHash))throw new Error('Missing independent reference source identity.');sourceHashes.push(sourceHash);
 		}
 		if(sourceHashes.some(value=>value!==sourceHashes[0]))throw new Error('One-dimensional convergence requires identical native implementation source.');
-		const omitted=dimension==='spatial' ? ['radial','altitudes'] : dimension==='angular' ? ['mu','muWeights','phi'] : ['intervals'];
+		const omitted=dimension==='spatial' ? ['radial','altitudes'] : dimension==='angular' ? ['mu','muWeights','phi','outgoingMu'] : ['intervals'];
 		const normalized=levels.map(l=>Object.fromEntries(Object.entries(l.input).filter(([key])=>!omitted.includes(key) && key!=='threads')));
 		if(normalized.some(v=>JSON.stringify(v)!==JSON.stringify(normalized[0])))throw new Error('Refinement changes more than the declared reference dimension.');
 		if(levels.some(l=>l.result.packets.length!==l.input.queries.length || l.input.spectralBatch!==levels[0].input.spectralBatch))throw new Error('Reference inventory or path policy mismatch.');
@@ -29,6 +29,7 @@ async function main() {
 			const a=levels[i-1].input,b=levels[i].input;
 			if(dimension==='path' && b.intervals!==a.intervals*2 || dimension==='angular' && (b.mu.length!==a.mu.length*2 || b.phi!==a.phi*2) ||
 				dimension==='spatial' && (b.radial.length!==(a.radial.length-1)*2+1 || b.altitudes.length!==(a.altitudes.length-1)*2+1))throw new Error('Reference levels are not successive independent bisections.');
+			if(dimension==='angular' && (a.outgoingMu || b.outgoingMu) && (!a.outgoingMu || !b.outgoingMu || b.outgoingMu.length!==(a.outgoingMu.length-1)*2+1 || a.outgoingMu.some((value,index)=>b.outgoingMu[index*2]!==value)))throw new Error('Outgoing support is not an exact nested bisection.');
 		}
 		const identities=[];
 		for(const name of ['prove-native-convergence.js','ExperimentRun.js','parent-evidence.js','run-boundary.js']) {

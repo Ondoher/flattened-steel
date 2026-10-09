@@ -6,6 +6,7 @@ import {ExperimentRun} from './ExperimentRun.js';
 import {readParent} from './parent-evidence.js';
 import {independentDirections} from './secondary-oracle.js';
 import {nativeHemisphereQuadrature} from './native-hemisphere-quadrature.js';
+import {nativeNestedOutgoingPolarSupport} from './native-outgoing-polar.js';
 import {repositoryRoot,checkPath,hash} from './run-boundary.js';
 import {requireHeavyExecution} from './heavy-execution-admission.js';
 import {CANONICAL_ATMOSPHERE_CONSTANTS as atmosphere} from '../../src/algorithm32/implementation/canonical-atmosphere/consts.js';
@@ -43,6 +44,8 @@ async function main() {
 		const queries=capture.results.find(r=>r.candidate)?.secondary;
 		if(!queries?.length || !recipe.state.source.distanceFalloff || recipe.state.source.radius.value>recipe.layout.height-recipe.layout.top)throw new Error('Unsupported independent physical query/source.');
 		const dualEndpoint=process.argv.includes('--hemisphere-sine');
+		const quarticOutgoing=process.argv.includes('--outgoing-quartic');
+		const nestedOutgoing=process.argv.includes('--nested-outgoing') || quarticOutgoing;
 		const hemisphere=process.argv.includes('--hemisphere') || dualEndpoint,phi=muCount*2;
 		const directionRule=hemisphere ? nativeHemisphereQuadrature(muCount,phi,dualEndpoint) : independentDirections(muCount,phi,'sinh5');
 		const nodes=directionRule.filter((_,i)=>i%phi===0).sort((a,b)=>a.direction[2]-b.direction[2]);
@@ -54,6 +57,7 @@ async function main() {
 		baseRadial.sort((a,b)=>a-b);
 		const input={schema:'binary64-flat-recurrence-input-v1',height:recipe.layout.height,top:recipe.layout.top,radius:recipe.layout.maximumRho,
 			...(hemisphere ? {polarRule:dualEndpoint ? 'hemisphere-sine2-v1' : 'hemisphere-sinh5-v1'} : {}),
+			...(nestedOutgoing ? {outgoingPolarRule:quarticOutgoing ? 'nested-sine4-v1' : 'nested-sine2-v1',outgoingMu:nativeNestedOutgoingPolarSupport(muCount,quarticOutgoing ? 4 : 2)} : {}),
 			altitudes:refine(state.geometry.cacheAltitudeNodes.map((/** @type {Distance} */ n)=>n.value),spatial),
 			radial:refine([...new Set(baseRadial)],spatial),
 			mu:nodes.map(n=>n.direction[2]),muWeights:nodes.map(n=>n.weight*phi/(2*Math.PI)),phi,phiOffset:process.argv.includes('--midpoint') ? .5 : 0,intervals,threads,spectralBatch,pathRule,
@@ -66,12 +70,14 @@ async function main() {
 		await checkPath(repositoryRoot,source);
 		const frozenSourceName=process.argv.find(value=>value.startsWith('--source-run='))?.slice('--source-run='.length);
 		const frozenSource=frozenSourceName ? await readParent(frozenSourceName,'ShellReference.cs') : null;
+		if(quarticOutgoing && frozenSource)throw new Error('Quartic outgoing control requires the current explicit-support reference source.');
 		const sourceBytes=frozenSource?.bytes ?? await readFile(source);await run.write('ShellReference.cs',sourceBytes);
 		const exportFields=process.argv.includes('--export-fields');
 		if(exportFields && frozenSource)throw new Error('Frozen historical source does not own the new export protocol.');
 		const implementation=[];
 		for(const relative of ['experiments/local-sun-cache-reuse/run-native-reference.js','experiments/local-sun-cache-reuse/heavy-execution-admission.js','experiments/local-sun-cache-reuse/secondary-oracle.js','experiments/local-sun-cache-reuse/primary-oracle.js',
 			'experiments/local-sun-cache-reuse/native-hemisphere-quadrature.js',
+			'experiments/local-sun-cache-reuse/native-outgoing-polar.js',
 			'experiments/local-sun-cache-reuse/ExperimentRun.js','experiments/local-sun-cache-reuse/parent-evidence.js','experiments/local-sun-cache-reuse/run-boundary.js',
 			'src/algorithm32/implementation/canonical-atmosphere/consts.js','src/algorithm32/profiles/native-15/consts.js']) {
 			const target=path.join(repositoryRoot,relative);await checkPath(repositoryRoot,target);const bytes=await readFile(target);
@@ -86,7 +92,7 @@ async function main() {
 		const executionArgs=[path.join(run.root,'input.json'),output,...(exportFields ? [fieldDirectory] : [])];
 		await run.write('inputs.json',JSON.stringify({schema:'native-reference-provenance-v1',parents:[recipeParent,captureParent,controlParent,gateParent,...(frozenSource ? [frozenSource] : [])].map(({bytes,...identity})=>identity),implementation,
 			operation:'Independent binary64 recurrence on bisected rho/z tensor grid and Gaussian sinh5/product azimuth domain. Simpson-squared or piecewise Gaussian transport is explicitly selected; the latter splits at reference rho/z/azimuth interpolation knots, physical density levels, closest approach and optical-depth levels. Interpolate J/extinction. Exact complex phase Fourier convolution is checked against direct scalar sums. Packet mode shares continuous columns/phase and retains tau>=32 in every channel; every path/angular policy requires fresh convergence evidence.',
-			parameters:{spatial,muCount,phi,hemisphere,dualEndpoint,phiOffset:input.phiOffset,intervals,threads:input.threads,spectralBatch,pathRule,piecewiseGaussOrder:pathRule==='piecewise-gauss-v1' ? intervals/30 : null,boundarySupport:process.argv.includes('--boundary-support'),boundaryExtinction,boundaryExtinctionLengthMultiples:[.125,.25,.5,1,2,4,8,16,32,64]},sourceSha256:hash(sourceBytes),tools:{node:process.version,compiler,compilerSha256:hash(await readFile(compiler)),compileArgs},command:process.argv.slice(1),
+			parameters:{spatial,muCount,phi,hemisphere,dualEndpoint,nestedOutgoing,quarticOutgoing,phiOffset:input.phiOffset,intervals,threads:input.threads,spectralBatch,pathRule,piecewiseGaussOrder:pathRule==='piecewise-gauss-v1' ? intervals/30 : null,boundarySupport:process.argv.includes('--boundary-support'),boundaryExtinction,boundaryExtinctionLengthMultiples:[.125,.25,.5,1,2,4,8,16,32,64]},sourceSha256:hash(sourceBytes),tools:{node:process.version,compiler,compilerSha256:hash(await readFile(compiler)),compileArgs},command:process.argv.slice(1),
 			exportFields,executionArgs,limitations:'Developmental reference until separate spatial/angular/path convergence and tail budgets pass; no candidate data enters native computation. Optional raw grids are independently computed source functions, not candidate data. Frozen source selection retains its original hash and parent derivation.'},null,'\t'));
 		const compiled=await promisify(execFile)(compiler,compileArgs,{windowsHide:true,env:{...process.env,TEMP:scratch,TMP:scratch}});
 		await run.write('compile.txt',compiled.stdout+compiled.stderr);await run.progress('native','Compiled independent binary64 recurrence.');

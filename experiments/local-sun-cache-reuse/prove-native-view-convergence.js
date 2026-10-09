@@ -97,7 +97,7 @@ async function main() {
 			dimension === 'spatial'
 				? ['radial', 'altitudes']
 				: dimension === 'angular'
-					? ['mu', 'muWeights', 'phi']
+					? ['mu', 'muWeights', 'phi', 'outgoingMu']
 					: dimension === 'construction-path'
 						? ['intervals']
 						: [];
@@ -123,6 +123,10 @@ async function main() {
 						y.altitudes.length !== (x.altitudes.length - 1) * 2 + 1))
 			)
 				throw new Error('Reference levels are not successive independent bisections.');
+			if (dimension === 'angular' && (x.outgoingMu || y.outgoingMu) &&
+				(!x.outgoingMu || !y.outgoingMu || y.outgoingMu.length !== (x.outgoingMu.length - 1) * 2 + 1 ||
+					x.outgoingMu.some((value, index) => y.outgoingMu[index * 2] !== value)))
+				throw new Error('Outgoing support is not an exact nested bisection.');
 			if (
 				(dimension === 'receiver' && a.receiverRule?.startsWith('product-')) ||
 				(dimension.startsWith('receiver-') &&

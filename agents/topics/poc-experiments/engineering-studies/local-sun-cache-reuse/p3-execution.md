@@ -873,3 +873,184 @@ Architecture covers 1,707 obligations and contracts 119. This applies to the
 reviewed correction and captured context, not complete P3-P5 source or physical
 qualification. Subsequent governing-context changes require a fresh final
 request; preserved reports are never relabeled.
+
+Question: can changing interpolation support explain nonmonotone angular
+differences even after the phase-integral calibration passes? Decision: test
+an independent nested outgoing-polar support, keeping incoming quadrature,
+physical equations and all acceptance limits fixed. The existing reference
+stores outgoing values at nonnested Gaussian incoming nodes plus the poles;
+each bisection moves those interpolation knots. The proposed control stores
+outgoing values at symmetric hemisphere `sin(pi*k/(2*n))^2` nodes, including
+zero and both poles, so doubled levels retain every old interpolation node.
+This is a hypothesis, not a claim that all remaining error is interpolation.
+The current spatial run has already compiled its own frozen source copy and
+continues unchanged. Capture a new correction baseline under
+`.codex-tmp/review-standards/session-EU8ZD9/` before coding. All comparison
+families require fresh matched native source and consumer identities.
+
+Local checkpoint `66017327` saves the contained prototype and open gates.
+The parent erroneously continued to commit after the staged whitespace check
+reported CRLF line endings. Repair checkpoint `38cfe900` converts the eight
+affected authored text files to LF, with no text changes under
+`--ignore-space-at-eol`; staged whitespace and local type checks then pass.
+No protected run, C# source, production implementation or commit history was
+rewritten. Future dependent evidence uses the actual new closure identities.
+
+Both required lanes acknowledge nested-reference readiness request
+`80d72b1926ef4c6075fec525ae146a1ac9a263601229827a87433c0b593d4fdc`.
+Run 00422 passes ordered/finite, pole/horizon, symmetry and exact nesting checks
+for outgoing levels 8 through 128, alongside the unchanged angular analytic
+calibrations. Local type checking and whitespace checks pass. Incoming quadrature
+is unchanged. Physical angular convergence and source review remain open until
+fresh native families and primary/independent audit validation complete.
+
+Nested-reference primary/independent audit validation is exit-0 CLEAN at
+`.codex-tmp/review-standards/session-EU8ZD9/validation.json`, fingerprint
+`49b7a656e5500a31c31fa96bcc833734b6cc37586dd4c2b7efd29fdf561b733c`.
+It covers 2,049 architecture and 153 contracts obligations in that captured unit.
+Runs 00424/00428 complete its first two angular levels in 83,636/305,030 ms;
+the fine level is running alone. Primary query L1 and direct J2 in 00424 are
+bit-identical to 00406, as expected for an outgoing-interpolation-only change.
+The source review does not close physical or broad P3-P5 completion gates.
+
+Run 00421 completes the former source's spatial level 1 in 977,611 ms, under
+wrapper 00420: peak private memory 904,568,832 bytes, minimum free memory
+13,824,933,888 bytes. Its complete-view consumer 00426 has zero raw sky/receiver
+failures and a maximum receiver residual of 0.23914 comparison tolerances.
+Spatial changes are largest around rho=6,341,820 m, within the coarse grid's
+4,172,250-to-8,344,500 m interval. These two levels do not establish convergence.
+
+Question: do loose operator norms prevent a useful numerical roundoff/tail
+bound even when fields converge? The current generic phase bound is 18.2062,
+while the measured finite phase-row mass is near one. Decision: build a separate
+finite-operator bound proof, with baseline under
+`.codex-tmp/review-standards/session-tSnPNl/`, without altering native fields.
+Derive a checked new bound program from the exact frozen native source in a new
+run, replacing only its entry with an authored operator-measurement entry. Replay
+all executed grid/query transport kernel cases with no source-field values;
+retain positive kernel masses and sample counts. Read authenticated field
+maxima one artifact at a time. Bound the continuous primary source with analytic
+altitude-interval endpoint envelopes, not fitted or sampled maxima. Combine
+finite phase norms, transport norms, stored field envelopes and conservative
+floating-point margins to rederive tails/roundoff. This proof cannot waive
+spatial/angular/path convergence, and every derivative records its parents,
+source transformation, equations and tool identities.
+
+Run 00430 completes the finest nested-outgoing level in 1,270,302 ms under
+wrapper 00429: peak private memory 793,759,744 bytes, minimum free machine
+memory 15,424,831,488 bytes. Run 00431 retains unresolved angular higher orders.
+Primary L1 is bit-identical; direct J2/J3/J4 uncertainty magnitudes fit the
+individual 0.1 budgets, but their reduction-rate criteria do not all pass.
+Grid J2 reaches 0.14434 comparison tolerances and L2 reaches 0.31907, above
+the allowed 0.1 uncertainty fraction. Nested support did not resolve the
+physical qualification problem; it is not accepted as an accuracy remedy.
+
+Run 00433 executes the separate finite-operator replay for native parent 00424
+under wrapper 00432. It replays 1,547,380 cases at 475 grid positions and 42
+distinct query points in 30,983 ms. Maximum positive phase mass is 1.00000000356,
+and the transport masses are approximately one. The largest rederived radiance
+roundoff bound is 3.93145e-11, and the tail bound is 2.44703e-14. Wrapper peak
+private memory is 174,936,064 bytes, minimum free memory 16,835,379,200 bytes.
+Local type checking and whitespace checks pass. These are finite-construction
+bounds from an unreviewed proof unit, not qualified physical accuracy. Required
+source review, consumer arithmetic and empirical convergence remain separate
+open gates. No additional browser matrix or video was launched.
+
+Run 00435 repeats the operator proof on middle native parent 00428 with the
+final entry-snapshot and exact-case inventory checks. Its phase norm is
+1.00000000002912; largest radiance roundoff is 8.60838e-11 and tail is
+2.44702e-14. Wrapper 00434 peaks at 187,396,096 private bytes with minimum
+free memory 15,762,649,088 bytes. No physical acceptance is inferred.
+
+The finite-operator review request
+`.codex-tmp/review-standards/session-tSnPNl/operator-request.json` has architecture
+primary/audit reports covering 2,220 rows each. Contracts primary covers 170
+rows and finds an inline complex query contract in `types.d.ts`. The repair
+extracts documented `LocalSunNativeOperatorQuery`; local type checking passes.
+That authored type change invalidates the captured request's freshness. Preserve
+the reports as original findings evidence; prepare a fresh request and complete
+required primary/audit validation before reporting this unit complete. The
+separate native integration/convergence issue remains open.
+
+The repaired finite-operator unit has exit-0 CLEAN validation at
+`.codex-tmp/review-standards/session-tSnPNl/operator-v2-validation.json`,
+fingerprint `428d5b7d9c388850b46f80fc3368b68fda6c692d405d9ed60fd5e73df51280c6`.
+It covers 2,220 architecture and 170 contracts obligations, with actual distinct
+primary/audit actors. The new context/type repair is reviewed rather than
+relabeling v1. This is finite-operator source completion, not P3-P5 qualification.
+
+After the interruption, no heavy native process or execution lock remained;
+the local type check passes. The interruption is not an unresolved runtime
+error. The owner explicitly asks to continue while explaining accuracy.
+
+Question: does the nested sine-squared outgoing support underresolve the
+horizon relative to incoming integration? At the finest 64-node level, the
+first positive incoming cosine is 4.61801e-6, while stored outgoing support
+starts at 0.00240764. Decision: test a separately identified nested sine-fourth
+support. Squaring that stored coordinate again places the first node at
+5.79671e-6 while preserving exact nested support, zero and poles. Keep incoming
+quadrature, C# physical helpers and acceptance gates unchanged. This can address
+interpolated fields/transport; it cannot fix the separate direct J2 rate failures.
+Declare the coherent horizon-support correction with baseline
+`.codex-tmp/review-standards/session-4avMFH/baseline.json` before coding. Use a
+bounded 8/16/32 family first; inspect its result before any larger refinement.
+
+Horizon-support source validation is exit-0 CLEAN at
+`.codex-tmp/review-standards/session-4avMFH/validation.json`, fingerprint
+`4242c588accb3496a900cbea504f4b12361a8b676e94ed6049fcbe3e1aa27661`.
+It covers 1,707 architecture and 119 contracts obligations with distinct
+primary/audit actors. Run 00438 passes both geometric support powers and
+unchanged analytic integration checks. Runs 00440/00442 complete the first
+two native levels in 23,054/93,456 ms. Physical convergence remains open.
+The finest former-family operator replay 00437 also completes: maximum
+roundoff 2.61959e-10 and tail 2.44702e-14. Its wrapper peaks at 187,944,960
+private bytes; minimum free memory is 15,268,982,784 bytes.
+
+Wrappers 00443 and 00445 stop the 32-node reference and its new-run retry
+because the PowerShell/CIM resource census fails. Their largest measured
+private memory is 287,776,768/201,670,656 bytes, well below 8 GiB. The owned
+child trees are stopped; incomplete native attempts 00444/00446 are never
+reopened. The numerical equations did not yield these monitoring failures.
+The local checkpoint adviser recommends a coherent save, but approved
+`git add -A` fails inserting the log blob with Permission denied. Read-only
+inspection confirms no staged changes and the existing inherited Git deny
+ACLs; do not change protections or treat this as an approval-review rejection.
+
+Question: how to preserve enforced resource sampling after repeated local
+CIM failures? Decision: replace that service dependency with a small native
+Toolhelp process snapshot plus owned-process memory readings. Retain the
+exclusive lock, exact ownership closure, five-second scheduling, 10-second
+sampler timeout, fail-closed behavior, 8 GiB limits and 90-minute ceiling.
+Compile a pinned source once into each new wrapper run, record compiler/source
+identities, and exercise the real guard before retrying the reference. Declare
+this telemetry repair with baseline
+`.codex-tmp/review-standards/session-BZzuqX/baseline.json` before coding.
+
+Run 00447 fails before launch because the new compiler-identity capture calls
+a two-argument hashing helper with one argument. Replace it with a direct hash
+of the read-only compiler bytes. Local type and whitespace checks then pass.
+Guarded admission 00448/00449 passes with the native collector: peak owned
+private memory 145,072,128 bytes, minimum machine free memory 13,465,001,984
+bytes, and a 28.08 ms measured collector call. The source repair's required
+primary/audit review remains open. The fresh 32-node quartic-support reference
+00451 runs alone under wrapper 00450 with unchanged 45-minute, 8 GiB owned
+memory and 8 GiB reserve limits. Repeated live samples are succeeding; no
+physical acceptance is inferred from monitor recovery.
+
+The telemetry repair's captured primary/audit source unit has exit-0 CLEAN
+validation at `.codex-tmp/review-standards/session-BZzuqX/validation.json`,
+fingerprint `82b929e9d24ae2b55a5cb707fbd7100f4bf896d9d57dbcead9b83d1217f88e60`:
+1,537 architecture and 119 contracts obligations with distinct audit actors.
+Reference 00451 completes in 325,724 ms; wrapper 00450 records no failure,
+363,270,144 peak private bytes and 12,863,401,984 minimum free bytes.
+Three-level angular proof 00452 remains inconclusive. The dominant near-source
+L2 change shrinks from 9.45149e-5 to 1.92035e-5, but its uncertainty is still
+0.79270 comparison tolerances versus the allowed 0.1; L1 remains bit-identical.
+
+Question: does the outgoing horizon layout address every limiting horizontal
+case? Decision: no. At [31,041,540,0,99,000], direction [1,0,0], channel 1,
+quartic N32 L2 is exactly the prior squared N32 value 2.1048887140019637e-7.
+Both include outgoing mu=0, so this case retains an incoming-integration error
+independent of the new outgoing spacing. Keep that limitation explicit. Run
+00454 tests N64 under wrapper 00453, unchanged 45-minute and memory limits,
+to form a matched 16/32/64 family before selecting another reference change.

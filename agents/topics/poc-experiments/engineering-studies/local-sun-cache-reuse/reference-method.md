@@ -312,3 +312,76 @@ at all required interpolation knots. The changed native source receives a
 new hash and fresh calibration/refinement evidence; old runs are never relabeled.
 All candidate equations, withheld queries, limits and uncertainty gates remain
 unchanged. This is a reference-integration correction unit, not candidate tuning.
+
+An optional `nested-sine2-v1` outgoing field support separates interpolation
+nodes from the Gaussian incoming integration nodes. For `N` incoming polar
+nodes, use `n=N/2` outgoing intervals on each hemisphere and
+`mu_k=sin(pi*k/(2*n))^2`, `k=0..n`, reflected about zero. The outgoing field
+therefore has `N+1` strictly ordered nodes including the horizon and both poles.
+Successive doubled levels retain every previous node exactly. Incoming nodes,
+weights, azimuth integration, positive tensor interpolation and physical
+equations remain unchanged. This addresses moving interpolation knots rather
+than assuming the incoming quadrature is converged. Its optional explicit
+outgoing array is part of the native input and provenance; native and complete
+view angular proofs verify exact nested bisection in addition to their original
+three-level uncertainty and reduction checks. A new native source hash requires
+fresh matched families. Geometric nesting alone supplies no physical authority.
+
+The distinct `nested-sine4-v1` control uses the fourth power of that sine
+instead of its square. It preserves the same node count, exact nested
+bisection, horizon and poles while placing more support near horizontal
+directions. At N=64 its first positive cosine is approximately 5.797e-6,
+compared with the squared control's 0.002408 and the incoming quadrature's
+4.618e-6. Incoming integration and frozen C# helpers are unchanged. Record the
+new rule and complete source closure in every run; families cannot mix these
+rules. Calibrate geometry and nesting before a bounded 8/16/32 construction
+family, and inspect it before larger refinements. This is an independent
+interpolation-resolution hypothesis, not a claim that direct J2 integration
+or any physical gate has converged.
+
+## Finite Native Operator Bounds
+
+The separate `prove-native-operators.js` proof reads an authenticated exported
+native run. It preserves every numerical helper in that run's frozen C# source
+and substitutes only a new entry between unique checked anchors. The derived
+program replays every grid packet, distinct exact-query incoming ray and explicit
+query transport case for primary and higher-order partitions, without using
+source-function values. Verify its complete case/position/query inventory.
+Retain the maximum per-channel positive attenuation/extinction kernel mass and
+the maximum finite phase-row mass. These measure the executed discretization;
+they do not establish continuous spatial or angular accuracy.
+
+For each channel, bound the continuous normalized primary source by intervals
+of 125 metres in altitude. Above the flat atmosphere, axial incidence
+`I0*scale*(referenceDistance/(H-z))^2*exp(-tauVertical(z,top))` is an upper bound
+at every horizontal distance and increases with altitude. The Rayleigh/Mie
+fraction is monotone when `HM<HR`; its phase-peak mixture is therefore bounded
+by the larger endpoint mixture. Multiply upper-end incidence by that mixture,
+then take the maximum interval bound. No sampled or candidate maximum enters
+this analytic primary envelope.
+
+Read each authenticated J2/J3/J4 binary64 field separately and retain its
+maximum absolute coefficient. Let `P` be the finite phase norm, `K1` the primary
+transport norm, `K` the higher-order transport norm including the admitted
+two-micrometre spatial-coordinate roundoff allowance, `A_n` the normalized
+source envelopes and `B_1=K1*A_1`, `B_n=K*A_n`. Use the existing conservative
+64-epsilon arithmetic model with the actual path sample count `s` and incoming
+angular count `q`:
+
+```text
+delta L1 = 64*eps*s*B1
+delta S_n = P*(delta L_(n-1) + 64*eps*q*B_(n-1))
+delta L_n = K*(delta S_n + 64*eps*s*A_n)
+tail L1 = A1*exp(-32)
+tail S_n = P*tail L_(n-1)
+tail L_n = K*tail S_n + A_n*exp(-32)
+```
+
+These rederived finite-construction bounds preserve the original arithmetic
+model; they are not a formal proof of every framework transcendental operation.
+Record original/derived source hashes, exact substitution, tools, input/field
+parents, equations and maxima. Multiply normalized source bounds by physical
+extinction for J comparisons. View/receiver arithmetic and all empirical
+spatial/angular/path uncertainties remain separate and must be included before
+any complete physical acceptance. A smaller arithmetic estimate cannot qualify
+an unresolved integration axis.
