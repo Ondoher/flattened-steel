@@ -1,10 +1,14 @@
 # Local-Sun Cache Reuse Experiment Status
 
 Current disposition, 2026-10-11: P0-P5, P5-Celestial and selected follow-ups
-are delivered. The selected continuous 90-second San Jose winter-solstice film
-is recorded and passes full decoded-media qualification. The
-[film execution record](p6-execution.md) owns delivery links and the required
-source-review receipt. Owner creative acceptance remains pending.
+are delivered. The v4 continuous 90-second San Jose winter-solstice film is
+recorded and passes its decoded-media qualification; the
+[v4 execution record](p6-execution.md) preserves delivery and review authority.
+The owner liked that film and selected the [shadow revision](p6-shadow-revision.md)
+to keep ground shadows visible during the Sun's traverse. Its native 4K film and
+compact review copy are media-qualified and delivered for owner creative
+acceptance. Implementation completion is determined by the revision's exact
+conditional source-review receipt. No capture or qualification job remains.
 P7 lifecycle closeout, production promotion and publication remain unselected.
 The [successor handoff](handoff.md) owns restart guidance and source entrypoints.
 
@@ -19,11 +23,11 @@ The [successor handoff](handoff.md) owns restart guidance and source entrypoints
 | P3-D/E | Delivered. [Movement](p3-movement.md) establishes admitted horizontal reuse; [disposition](p3-disposition.md) advances the candidate. |
 | P4-P5 | Delivered. [Application](p4-application.md) owns lifecycle/publication; [P5 qualification](p5-qualification.md) owns ten passing sky/colored-scene pairs, 1,200 matched states and combined source-review authority. |
 | P5-Celestial and follow-ups | Delivered. [Celestial delivery](p5-celestial.md) owns initial images/short preview; current presentation and corrections are linked below. |
-| P6 | Film recorded and media qualified; owner creative acceptance pending. [Film plan](plan.md#p6--reproduce-the-local-sun-full-orbit-film) owns the frozen parameters and acceptance; [execution](p6-execution.md) owns results, decisions and the implementation-review gate. |
+| P6 | v5 media-qualified and delivered for owner creative acceptance. [Film plan](plan.md#p6--reproduce-the-local-sun-full-orbit-film) owns the frozen recipe and gates; [revision](p6-shadow-revision.md) owns native/review videos, measurements and exact conditional source-review authority. [v4 execution](p6-execution.md) preserves previous delivery and evidence. |
 | P7 | Unselected. Owner disposition and end-experiment handoff follow the film. |
 
-Linked source-review receipts are CLEAN for their recorded units. They are not
-a fresh review of today's documentation edits. Before further implementation,
+Earlier source-review receipts retain their recorded units and outcomes; the
+revision's exact receipt determines its own completion. Before further implementation,
 refresh readiness, declare the review unit/baseline and validate applicable
 evidence through review-standards.
 
@@ -51,14 +55,16 @@ selections remain unchanged; production adoption remains unselected.
 | Union Glacier Flat180, calibrated Sun, p2, human-vision filters, 60-degree horizontal FOV, 1024 by 768 | [Central-view capture](central-view-capture.md), image 00725 |
 | San Jose spherical/distant sunset, ordinary production scene, same central FOV/current presentation | [Spherical sunset capture](spherical-sunset-capture.md), latest image 00733 |
 | Earlier local Union Glacier/San Jose ground and object comparisons | [Ground-scene captures](celestial-ground-scene.md), 00714/00716/00718 |
+| Current 4K film with visible ground shadows | [v5 delivery](p6-shadow-revision.md#delivery), native 00781 and complete qualification/review copy 00783 |
 
 Central-view FOV and calibrated radius remain selectable still-image modes.
-The newly selected [P6 recipe](plan.md#p6--reproduce-the-local-sun-full-orbit-film)
-owns its fixed-radius source, narrow circuit lens, new camera score and
-San Jose location. It supersedes the identical Union Glacier replay requirement.
-Current still controls use 1024 by 768; the film uses 1920 by 1080 to retain
-disc detail with a wider cinematic composition. Older proof reproductions
-retain their recorded raster. Existing six-box images do not qualify the new scene.
+The current [P6 plan](plan.md#p6--reproduce-the-local-sun-full-orbit-film)
+retains the fixed-radius source, San Jose physical day and continuous camera
+score while selecting a shadow-visible composition revision. Its frozen
+3840-by-2160 recipe trades some disc pixel diameter for visible ground;
+the [revision record](p6-shadow-revision.md) owns predictions and verification.
+Ordinary still controls remain 1024 by 768. The delivered v4 film and older
+proofs retain their recorded rasters and identities.
 
 ## Evidence Limits And Deferred Work
 
@@ -80,11 +86,12 @@ informational and select no implementation or additional capture.
 
 ## Next Action
 
-Inspect the delivered [P6 film](p6-execution.md#delivery) for creative acceptance.
-The film record links its complete San Jose trajectory proof, native media
-qualification and mapped source-review authority. No capture or qualification
-job remains. Preserve the sealed runs; any revision creates new evidence and
-requires an appropriate fresh review unit. P7 remains unselected.
+Inspect the delivered [native and review videos](p6-shadow-revision.md#delivery)
+for owner creative acceptance. The revision record preserves final-media
+qualification, failed diagnostic attempts, corrected post-encode controls and
+the exact conditional source-review receipt. A matching `CLEAN` receipt supplies
+implementation completion authority; media success alone does not. Preserve
+v4 and v5 runs and receipts. P7 remains unselected.
 
 Use JavaScript; Python may support suitable tasks. No native-helper exception
 exists. The [P6 resource selection](plan.md#execution-budget-and-review-milestone)

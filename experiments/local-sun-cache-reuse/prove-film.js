@@ -6,7 +6,13 @@ import {nodeResolve} from '@rollup/plugin-node-resolve';
 import {ExperimentRun} from './ExperimentRun.js';
 import {createSanJoseWinterControls} from './san-jose-winter-controls.js';
 import {resolveShellState} from './resolve-shell-state.js';
-import {sampleFilmClock} from './film-director.js';
+import {
+	sampleFilmClock,
+	sampleFilmCamera,
+	FILM_NATIVE_WIDTH,
+	FILM_NATIVE_HEIGHT,
+	FILM_CIRCUIT_FOV_DEGREES,
+} from './film-director.js';
 import {readParent} from './parent-evidence.js';
 import {shellStencil} from './shell-layout.js';
 import {repositoryRoot, checkPath, hash, hashFile} from './run-boundary.js';
@@ -76,6 +82,18 @@ async function main() {
 			];
 			const distance = Math.hypot(...delta),
 				azimuth = (Math.atan2(delta[0], delta[1]) * 180) / Math.PI;
+			const observerDelta = source.map((value, axis) => value - observer[axis]),
+				observerDistance = Math.hypot(...observerDelta);
+			/** @type {UnitVector3} */ const direction = [
+				observerDelta[0] / observerDistance,
+				observerDelta[1] / observerDistance,
+				observerDelta[2] / observerDistance,
+			];
+			const pose = sampleFilmCamera(clock.filmSeconds, direction),
+				look = pose.targetScene.map((value, axis) => value - camera[axis] / 1000);
+			const bottomRayElevationDegrees =
+				(Math.atan2(look[1], Math.hypot(look[0], look[2])) * 180) / Math.PI -
+				clock.verticalFieldOfViewDegrees / 2;
 			if (slot) bearing += ((azimuth - previous + 540) % 360) - 180;
 			else bearing = azimuth;
 			previous = azimuth;
@@ -85,8 +103,12 @@ async function main() {
 			)
 				throw new Error('Film source clock is not strictly increasing throughout its circuit.');
 			priorInstant = Date.parse(instant);
-			if (clock.filmSeconds >= 10 && clock.filmSeconds <= 80 && clock.verticalFieldOfViewDegrees !== 18)
-				throw new Error('Circuit lens changed.');
+			if (
+				clock.filmSeconds >= 10 &&
+				clock.filmSeconds <= 80 &&
+				(clock.verticalFieldOfViewDegrees !== FILM_CIRCUIT_FOV_DEGREES || bottomRayElevationDegrees >= 0)
+			)
+				throw new Error('Circuit lens changed or floor is outside the lower view.');
 			if (
 				state.source.radius.value !== 25749.504 ||
 				state.geometry.localLightSourceHeight.value !== 4828032 ||
@@ -127,6 +149,11 @@ async function main() {
 				maximumRhoMeters: maximumRho,
 				marginMeters: margin,
 				compactStencilQueries: layout.rows.length,
+				bottomRayElevationDegrees,
+				bottomRayGroundDistanceMeters:
+					bottomRayElevationDegrees < 0
+						? (observer[2] + camera[1]) / -Math.sin((bottomRayElevationDegrees * Math.PI) / 180)
+						: null,
 			});
 			/** @type {LocalSunFilmGeometryRow} */ const row = {
 				slot,
@@ -137,8 +164,9 @@ async function main() {
 				distanceMeters: distance,
 				radiusMeters: state.source.radius.value,
 				verticalFieldOfViewDegrees: clock.verticalFieldOfViewDegrees,
+				bottomRayElevationDegrees,
 				diameterPixels:
-					(1080 * state.source.radius.value) /
+					(FILM_NATIVE_HEIGHT * state.source.radius.value) /
 					(Math.sqrt(distance * distance - state.source.radius.value ** 2) *
 						Math.tan((clock.verticalFieldOfViewDegrees * Math.PI) / 360)),
 			};
@@ -152,8 +180,8 @@ async function main() {
 			winding = circuit.at(-1).unwrappedBearingDegrees - circuit[0].unwrappedBearingDegrees;
 		if (
 			Math.abs(Math.abs(winding) - 360) > 0.2 ||
-			near < 20 ||
-			far < 8 ||
+			near < 14 ||
+			far < 6 ||
 			near / far < 2.2 ||
 			near / far > 2.4 ||
 			circuit.at(-1).sourcePhaseDegrees !== 540
@@ -188,10 +216,11 @@ async function main() {
 					command: process.argv,
 					node: process.version,
 					controls,
+					viewportSize: {width: FILM_NATIVE_WIDTH, height: FILM_NATIVE_HEIGHT},
 					parents: parents.map(({bytes, ...identity}) => identity),
 					sources,
 					operation:
-						'Sample all 2700 ideal slots plus endpoint; resolve physical state independently and unwrap atan2(east,north); estimate projected diameter from physical radius/distance and actual lens. Bound every finite camera ray by source horizontal offset + actual camera horizontal offset + production sceneSkyRayLimit, then require admitted compact stencils at every shell altitude.',
+						'Sample all 2700 ideal slots plus endpoint; resolve physical state independently and unwrap atan2(east,north); use the unchanged authoritative on-axis producer diameter from physical radius/distance and actual lens. Require the circuit bottom view ray to point below the horizontal plane. Bound every finite camera ray by source horizontal offset + actual camera horizontal offset + production sceneSkyRayLimit, then require admitted compact stencils at every shell altitude.',
 				},
 				null,
 				'\t',
@@ -219,6 +248,15 @@ async function main() {
 					nearDiameterPixels: near,
 					farDiameterPixels: far,
 					ratio: near / far,
+					floorFraming: {
+						allCircuitBottomRaysBelowHorizon: true,
+						minimumBottomRayElevationDegrees: Math.min(
+							...circuit.map((row) => row.bottomRayElevationDegrees),
+						),
+						maximumBottomRayElevationDegrees: Math.max(
+							...circuit.map((row) => row.bottomRayElevationDegrees),
+						),
+					},
 					geometrySha256: hash(JSON.stringify(rows)),
 					coverage: {
 						minimumMarginMeters: minimumCoverageMargin,

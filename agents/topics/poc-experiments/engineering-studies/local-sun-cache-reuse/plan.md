@@ -15,9 +15,13 @@ The owner selected creative P6 film work on 2026-10-11, including flexible
 scene/camera design, one continuous shot without overlays, a one-to-two-minute
 duration and autonomous AFK execution. The selected recipe below is 90 seconds
 at San Jose on the winter-solstice basis. P7, production promotion, push and
-publication remain unselected. The new film is recorded; the
-[execution record](p6-execution.md) owns its media qualification, source-review
-authority and remaining owner creative acceptance.
+publication remain unselected. The v4 film is delivered with preserved
+[execution evidence](p6-execution.md). The owner liked v4 and selected a
+[shadow revision](p6-shadow-revision.md) to show ground shadows as the Sun
+traverses the sky. The v5 native 4K film and compact review copy are media-qualified
+and delivered for owner creative acceptance. The recipe and gates below were
+frozen before capture; the revision record's exact conditional receipt determines
+implementation completion.
 
 Experiment identity: `local-sun-cache-reuse`.
 
@@ -250,8 +254,9 @@ Keep the 70-degree vertical FOV for these stills, derive camera aspect from
 the selected raster, and record the dimensions in each new recipe/result.
 The celestial capture launcher now selects this size explicitly. Other
 ordinary control runners retain this selection. Under the owner's later creative
-latitude and AFK resource instruction, P6 selects its own 1080p cinematic raster
-below, preserving resolved disc detail while widening the composition.
+latitude and AFK resource instruction, P6 selects its own cinematic raster
+below. The current shadow revision selects a 4K raster to preserve
+resolved disc detail while widening the composition; v4 remains 1080p evidence.
 
 Keep both a sky-only view and, when receiver integration is ready in P4, the
 familiar ground composition with six colored boxes: the near yellow box,
@@ -497,8 +502,9 @@ the retained specifications below. The [status](status.md) links their current
 owners, and the [handoff](handoff.md) distinguishes current adapters from
 superseded historical bundles. Recorded reviews retain their frozen scope.
 
-The owner has selected the creative P6 work below. Execute its recipe and
-preview/qualification sequence, preserving completed phase evidence. The
+The selected P6 shadow revision is captured and media-qualified for owner
+creative acceptance. Its record owns the exact conditional source-review
+completion authority, preserving v4 and all completed phase evidence. The
 owner's current AFK resource authorization applies only to P6; earlier 6 GiB
 exceptions remain expired. The P6 section owns the new location, camera,
 duration, scene and resource decisions and supersedes earlier film assumptions.
@@ -860,6 +866,16 @@ full circuit, and clearly reveal its physical apparent-size change with
 distance. The owner chose **one continuous shot, no overlays**, and a duration
 between one and two minutes. The selected target is **90 seconds**.
 
+After inspecting v4, the owner liked the film and requested visible ground
+shadows during the Sun's traverse, suggesting that walls could move outward.
+The [shadow revision](p6-shadow-revision.md) owns this change's decisions,
+progress and results. v4 remains immutable comparison evidence. Native stills,
+the native motion excerpt and full preview 00777/00779 establish the composition.
+The following **v5 recipe and acceptance gates were frozen before final capture**.
+Final 00781/00783 media qualification passes; implementation completion follows
+the exact conditional receipt in the revision record and owner creative
+acceptance remains separate.
+
 This section supersedes earlier P6 references to the identical Union Glacier
 observatory replay, original camera score, fixed 60-second duration and
 1,800-frame delivery. Historical P0-P5 recipes and evidence retain their
@@ -867,20 +883,20 @@ original locations, rasters, time mappings and claims.
 
 #### Selected Parameters And Location
 
-| Parameter | Selected value |
+| Parameter | Frozen v5 selection |
 | --- | --- |
 | Location | San Jose, latitude 37.3382 degrees, longitude -121.8863 degrees |
 | Date basis | Winter solstice, December 21, 2024; production resolver basis `2024-12-21T09:20:00.000Z` |
 | Source cycle | One increasing 24-hour circuit, Flat180 through Flat540; begin with the far-side boundary immediately before that date's closest approach |
-| Delivery | 90 seconds, 30 fps, 1920 by 1080, 2,700 distinct rendered slots |
+| Delivery | 90 seconds, 30 fps, 3840 by 2160, 2,700 distinct rendered slots plus a separate exact endpoint |
 | Editing | One continuous camera take; no cuts, captions, compass, orbit diagram, progress display or other overlays |
-| Scene | `circular-meridian-observatory-v4`, seed `3202609`, adapted from The Hours' architectural and lighting vocabulary |
+| Scene | `circular-meridian-observatory-v5`, seed `3202609`, retaining v4's architectural vocabulary and continuous floor with the expanded dimensions below |
 | Camera | Moving dolly and crane with Sun-following bearing; smooth wide opening and closing |
-| Lens | 45-degree vertical FOV at opening/closing; fixed 18-degree vertical FOV throughout the central full circuit |
+| Lens | 60-degree vertical FOV at opening/closing; fixed 45-degree vertical FOV throughout the central full circuit; circuit Sun at NDC y=0.82, about 9% below the top |
 | Sun | Existing fixed 16-statute-mile physical radius, 3,000-mile source-height policy, unchanged source power and spectra |
 | Presentation | Current p2 and qualified human-vision celestial presentation; actual measured receiver illumination |
 | Audio | Silent |
-| Encoding | Existing deterministic recorder, streamed H.264 MP4; start at 20 Mbps native and inspect decoded quality |
+| Encoding | Existing deterministic recorder, streamed H.264 MP4 at 45 Mbps native |
 
 San Jose is selected under the owner's permitted alternative because it places
 the observer **inside** the source's projected orbit. The model's source
@@ -894,10 +910,17 @@ The source/evidence basis is production
 and the preserved [Union Glacier recipe](../../../../../tmp/experiments/local-sun-cache-reuse/runs/00725-p5-celestial/recipe.json)
 and [San Jose recipe](../../../../../tmp/experiments/local-sun-cache-reuse/runs/00716-p5-celestial/recipe.json).
 San Jose's near/far distances are approximately 8,294/19,058 km, giving roughly
-a **2.30-fold diameter change**. With the selected fixed radius and narrow lens,
-the predicted disc diameter is approximately **21 pixels near and 9 pixels
-far** at the final raster. These are geometric planning estimates; new GPU and
-decoded-image measurements must verify visibility and coverage.
+a **2.30-fold diameter change**. The selected 45-degree/4K composition gives
+approximately **16 pixels near and 7 pixels far**, compared with v4's approximately
+21/9 geometric pixels at 1080p. This deliberately trades some disc pixel size
+for visible ground shadows. Both near and far discs must remain readable, with
+the physical ratio preserved. New GPU and decoded-image measurements must
+verify the estimates before acceptance; no size gain or changing physical radius
+is selected. Frozen native minimum diameters are 14 near and 6 far pixels;
+the decoded ratio must be within 15% relative to the exact geometric ratio
+(approximately 2.2977). Every decoded frame retains the existing 3-pixel width
+agreement, positive-contrast and support requirements. No tolerance is changed
+by the low-resolution preview's pixel quantization.
 
 Derive the actual start instant through the production location/time path;
 if its Flat180 resolver selects the following far-side boundary, choose the
@@ -908,9 +931,11 @@ schedule, or force equal beginning/end pixels.
 
 The derived interval is `2024-12-21T08:05:23.319Z` through
 `2024-12-22T08:05:23.319Z`. Exact-state proof 00752 measures approximately
-359.921 degrees of apparent bearing winding over the nominal full circuit;
+359.921 degrees of apparent bearing winding for v4 over the nominal full circuit;
 the small departure from exactly 360 degrees reflects the resolved seasonal
-source motion. The [execution record](p6-execution.md) owns measured results.
+source motion. The [v4 execution record](p6-execution.md) owns those measurements.
+The revised camera, larger scene and raster require new trajectory and coverage
+evidence even though the physical-day selection is retained.
 
 #### Scene And Continuous Camera Score
 
@@ -924,20 +949,35 @@ Create four visually distinct, unlabeled landmarks around the court: a split
 gateway at the far-side starting bearing, a colonnade, a taller stepped tower
 toward closest approach, and low terraces/offset arches. The opening establishes
 the gateway; the full panorama passes the distinct landmarks and returns to
-that gateway. Keep the Sun unobscured. Size and place the skyline to remain in
-the narrow view below the Sun along the actual trajectory; do not enlarge the
+that gateway. Keep the Sun unobscured and include enough ground to read the
+monuments' moving shadows along the actual trajectory. Do not enlarge the
 Sun or alter its physical path to fit the scenery.
 
-The frozen v4 court uses a continuous stone floor with three flush brass bands
-and distinct shadow-casting monuments. Final-raster stills replaced raised tile
-seams that distracted at the grazing opening view. Floor surfaces receive the
-monuments' shadows, and adjoining floor regions do not overlap.
+Retain v4's continuous stone floor, three flush brass bands and distinct
+shadow-casting monuments. Its raised-seam correction and delivered evidence
+remain preserved. The selected revision expands the court to about 430 m radius
+and uses 36 perimeter pylons at 420 m with interrupted lintels. Place the gateway,
+colonnade, tower and arches at 360, 380, 395 and 370 m respectively. Retain their
+original absolute heights, derived at the old 258/216/229/238/232 m ring/landmark
+radii; do not recalculate heights from the expanded placements. This gives
+approximately 56-160 m ring pylons and a 147 m tower. Their predicted roughly
+200 m shadows terminate around 196-207 m from the center, inside the visible
+floor. Eight sparse 30 m gnomons at 180 m provide selected depth/shadow references.
+The native stills and full preview qualify this composition; adjoining floor
+regions must remain nonoverlapping.
+
+v4's 18-degree circuit lens leaves even its bottom ray about 2.77-23.70 degrees
+above the horizon. Moving walls alone therefore cannot reveal the floor during
+that circuit. The selected 45-degree lens and higher Sun placement address the
+ray geometry; the wider court then supplies useful receiving ground and room
+for visible architectural shadows. The [revision record](p6-shadow-revision.md)
+owns accepted native still and full-preview shadow measurements and inspection.
 
 | Film time | Action |
 | --- | --- |
-| 0-10 seconds | Move into the courtyard and rise from 6 to 8 m; smoothly narrow vertical FOV from 45 to 18 degrees. Hold the initial physical source instant while the camera moves. |
-| 10-80 seconds | Complete the entire physical source circuit with the lens fixed at 18 degrees. Track the Sun in the upper third while the court's landmarks pass beneath it. Combine a small figure-eight dolly, approximately 12 m east/west and 8 m north/south, with an 8-12 m camera altitude. |
-| 80-90 seconds | After completing the circuit, pull back and lower to 6 m while widening from 18 to 45 degrees, revealing the returning gateway and court. Hold the final source instant while the camera continues moving. |
+| 0-10 seconds | Retain the courtyard move and rise from 6 to 8 m; smoothly narrow vertical FOV from 60 to 45 degrees. Hold the initial physical source instant while the camera moves. |
+| 10-80 seconds | Complete the entire physical source circuit at the fixed 45-degree lens, with Sun NDC y=0.82. Retain the figure-eight dolly, approximately 12 m east/west and 8 m north/south, and 8-12 m camera altitude. Keep receiving ground and moving architectural shadows legible. |
+| 80-90 seconds | Retain the return move and lower to 6 m, smoothly widening from 45 to 60 degrees to reveal the gateway and court. Hold the final source instant while the camera continues moving. |
 
 Use smooth position/orientation/FOV curves, including matched zero-velocity
 transitions at the opening, orbit and closing boundaries. Over the central
@@ -947,7 +987,7 @@ the integrated ramp to exactly one day. The nominal unwrapped source phase is
 `180 + 360 * progress`; resolve the actual source facts from the associated
 instant. Keep both in the trace.
 
-Keep the Sun near the same upper-third screen position during the fixed-lens
+Keep the Sun at the same selected upper-screen position during the fixed-lens
 circuit. Its growth and shrinkage must result from finite-source geometry,
 not a changing radius, screen-space gain or compensating zoom. The full
 far-near-far comparison occurs within that unchanged lens. The moving
@@ -975,8 +1015,10 @@ the earlier Union Glacier P5 trajectory does not by itself qualify this route.
 Preserve the qualified shared celestial transmission and contained Sun-disc
 coverage correction. Use actual finite-source position for direct illumination,
 disc placement and the scene shadow direction. Begin with one shared 4096-square
-shadow map, admitting its actual scene resources and measuring the local-source
-directional approximation over the occupied scene.
+shadow map with a 1,100 m shared extent and focus
+`[0, 40, 0]` for the expanded court. Admit actual scene resources and measure the local-source directional
+approximation over the enlarged occupied scene. Qualify shadow coverage and
+detail from actual renders; v4's smaller-scene measurements do not qualify it.
 
 Retain the existing film presentation method of measured one-second diffuse
 and adaptation endpoints with its established monotone cubic interpolation,
@@ -1003,6 +1045,21 @@ choices provide headroom on the inspected approximately 32 GiB machine; they
 are execution choices under the owner's current instruction, not permanent
 defaults. Restore the standard controls after this P6 work.
 
+The initial 4K resource estimate adds about 0.77 GB to v4's approximately
+1.38 GB logical peak. Select an explicit **P6-film-only 2.4 GB logical payload
+bound** for the revised raster and its render targets before preview. This is
+a declared composition/resource tradeoff; cache shapes and payloads are
+unchanged, and the ordinary 1.6 GB application gate retains its scope. Record
+actual logical allocations and sampled process memory separately. The 12 GiB
+owned-process guard remains the independent execution ceiling; its headroom
+does not establish physical VRAM consumption or replace allocation admission.
+
+The accepted native motion excerpt supports an approximately 18-minute final
+render estimate, including startup, within the selected 45-minute capture guard.
+Its 31.6-second qualification supports a full native qualifier estimate below
+five minutes; keep that job's ten-minute guard. These are workload estimates,
+not revised limits or measured final-job results.
+
 Do not compile or execute temporary native monitoring helpers. Existing media
 encoding dependencies remain available. The resource authorization changes
 neither the JavaScript requirement nor immutable-run boundaries. Generated
@@ -1010,23 +1067,34 @@ output uses this experiment's declared output root rather than the generic
 independent-execution scratch location. Review artifacts use the existing
 ignored review-service root.
 
-The coherent implementation unit is the complete P6 scene/camera/clock,
-frame adapter, recorder host, resource selection and focused proofs, together
-with relevant unchanged collaborators. Its baseline is
-`.codex-tmp/review-standards/session-fFecAL/baseline.json`.
+The current coherent implementation unit is the P6 shadow/composition revision:
+scene and camera framing, raster/media controls, affected trajectory/shadow
+proofs and relevant unchanged frame/lighting/recording collaborators. Its baseline
+at `62fd5f66` is `.codex-tmp/review-standards/session-HOgzfK/baseline.json`.
+The delivered v4 baseline and receipt remain linked by [its record](p6-execution.md).
 Refresh reviewer context before implementation. Stabilize the working preview,
 run the local type check, then obtain mapped primary review and independent
 audit and validate the evidence before claiming implementation completion.
 
 #### Preview, Capture And Acceptance
 
-1. Freeze derived site/clock/source facts, scene seed and recipe. Produce
-   near/far composition stills at the final 18-degree lens and raster, verifying
-   that the disc and foreground remain readable with no occlusion or clipping.
+Native stills 00767, native motion 00769/00771 and full preview 00777/00779
+complete the preparatory composition/preview checks below. Final capture
+00781 and complete qualification 00783 pass the frozen v5 recipe/media gates.
+The retained workflow below states their requirements; source completion is
+receipt-governed and owner creative acceptance remains separate.
+
+1. Retain the site/physical-clock/source selection and scene seed. Produce
+   native-raster near/far/intermediate composition stills for the candidate
+   lens, Sun placement and expanded court. Verify visible receiving ground and
+   directional monument shadows together with an unobscured, readable Sun.
+   Finalize scene dimensions, shadow extent, lens/framing and disc thresholds
+   from those stills, recording the deliberate pixel-size tradeoff before capture.
 2. Deliver a short representative moving preview, then an inexpensive complete
    orbit preview covering the continuous score. Inspect actual rendered frames,
-   scene composition, visibility, camera motion, size contrast and the returning
-   gateway. Revise the scene/camera using that evidence and record changes.
+   scene composition, visible ground-shadow movement across the circuit,
+   camera motion, Sun size contrast and the returning gateway. Revise the
+   scene/camera using that evidence and record changes.
 3. Check CPU/GPU camera/source/coverage facts, complete trajectory admission,
    shared-cache reuse/replacement and cleanup. Record frame-time/memory estimates
    from the preview before the full bounded job. Freeze the final recipe and
@@ -1041,18 +1109,31 @@ audit and validate the evidence before claiming implementation completion.
    absence of GL errors, and decoded motion/solar-edge continuity.
 6. The final-raster near/far disc must remain clearly resolved, with a measured
    diameter ratio consistent with the approximately 2.30 geometric ratio.
-   Target at least 20 near pixels and 8 far pixels; failure requires recipe or
-   presentation diagnosis before acceptance, not an arbitrary source-size gain.
+   Frozen native gates require at least 14 near pixels and 6 far pixels at
+   4K, replacing v4's 20/8 targets to admit the wider floor-visible composition.
+   The ratio gate remains within 15% relative to the exact geometric ratio;
+   every decoded frame retains 3-pixel width agreement, positive contrast and
+   support checks. Failure requires recipe or presentation
+   diagnosis before acceptance, not an arbitrary source-size gain.
    Inspect beginning, close approach, far side, each landmark and both lens
    transitions. No overlays, cuts or scene occlusions may substitute for a
-   legible circuit.
+   legible circuit. Visible ground shadows are a new acceptance requirement:
+   inspect representative near, far and intermediate circuit views and the
+   moving preview for readable cast shadows that move with the actual Sun,
+   without floor seams, self-shadow artifacts or clipped shadow-map coverage.
+   Each of the five matched shadow controls must retain at least
+   `max(64, 0.1% of ground-region pixels)` with a positive luma difference of
+   at least 8 byte levels and mean affected-pixel contrast at least 10. Controls
+   run after primary-frame encoding and restore exact light settings; diagnostic
+   PNG rerender equality remains informational, with mismatches retained.
 7. Deliver the native MP4, a compact review copy, selected lossless stills,
    recipe, timing/resource report and complete derivation/source/media hashes.
    Keep media compression observations separate from physical/caching claims.
    Owner inspection of the film remains final creative acceptance.
 
-**Exit:** a verified continuous 90-second cinematic film meeting the three
-visual requirements, validated implementation-review evidence, recorded
+**Exit:** a verified continuous 90-second cinematic film meeting the existing
+visual requirements and new ground-shadow visibility requirement, validated
+revision implementation-review evidence, recorded
 limitations and owner visual acceptance. P7 lifecycle disposition, production
 promotion, push and publication remain separately selected actions.
 

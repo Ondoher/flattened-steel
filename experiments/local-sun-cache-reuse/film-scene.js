@@ -5,6 +5,7 @@ import {TheHoursDesertSceneLighting} from '../../scripts/flat32/the-hours/TheHou
 import {NeutralLambertianSceneLighting, NEUTRAL_LAMBERTIAN_REFLECTANCE} from '../../src/algorithm32/implementation/scene-lighting/NeutralLambertianSceneLighting.js';
 import {SceneInputCapture} from '../../src/algorithm32/rendering-runtime/three/SceneInputCapture.js';
 import {CelestialGenerationPass} from '../../src/algorithm32/rendering-runtime/three/CelestialGenerationPass.js';
+import {FILM_CIRCUIT_FOV_DEGREES, FILM_BOOKEND_FOV_DEGREES} from './film-director.js';
 
 /** Persistent fictional observatory, camera, measured light bridge and shared shadow.
  * Exact physical frames borrow this owner; staging records lighting without
@@ -46,6 +47,10 @@ export class LocalSunFilmScene {
 	_borrowers = 0;
 	_geometryBytes = 0;
 	_seed;
+	/** Frozen-by-contract construction facts retained in each scene description. @type {LocalSunFilmSceneConstruction} */
+	_construction = {courtRadiusMeters: 430, courtHeightMeters: 1.68, ringRadiusMeters: 420, ringHeightReferenceRadiusMeters: 258, ringPylonCount: 36, ringLintelCount: 12, innerGnomonCount: 8, innerGnomonRadiusMeters: 180, innerGnomonHeightMeters: 30};
+	/** Shared orthographic shadow coverage in meters. @type {number} */
+	_shadowExtentMeters = 1100;
 
 	/** Build reproducible flat-ground architecture around the actual source path.
 	 * @param {LocalSunFilmSceneConfiguration} configuration - Raster, seed and complete physical skyline samples.
@@ -58,7 +63,7 @@ export class LocalSunFilmScene {
 		if (!Array.isArray(skylineSamples) || skylineSamples.length < 24 || skylineSamples.some(sample => !Number.isFinite(sample.azimuthDegrees) || !Number.isFinite(sample.elevationDegrees) || sample.elevationDegrees < 8 || sample.elevationDegrees > 60)) throw new RangeError('Film skyline requires at least 24 valid actual full-orbit samples.');
 		this._seed = seed;
 		this._skyline = skylineSamples.map(sample => ({...sample}));
-		this.camera = new THREE.PerspectiveCamera(45, width / height, 0.001, 500);
+		this.camera = new THREE.PerspectiveCamera(FILM_BOOKEND_FOV_DEGREES, width / height, 0.001, 500);
 		this.camera.position.set(0, 0.008, 0);
 		this.camera.lookAt(0, 0.15, -1);
 		this.colorTarget = new THREE.WebGLRenderTarget(width, height, {format: THREE.RGBAFormat, type: THREE.FloatType, minFilter: THREE.NearestFilter, magFilter: THREE.NearestFilter, depthBuffer: true, stencilBuffer: false});
@@ -75,15 +80,16 @@ export class LocalSunFilmScene {
 		plane.rotateX(-Math.PI / 2);
 		plane.translate(0, -0.0002, 0);
 		this._part(plane, ground, false);
-		for (let tier = 0; tier < 3; tier++) this._cylinder(174 - 8 * tier, 0.42, [0, 0.21 + tier * 0.42, 0], tier % 2 ? stone : shade, false);
+		const courtRadius = this._construction.courtRadiusMeters;
+		for (let tier = 0; tier < 3; tier++) this._cylinder(courtRadius + 24 - 8 * tier, 0.42, [0, 0.21 + tier * 0.42, 0], tier % 2 ? stone : shade, false);
 		// A single continuous top replaces the raised paving seams that became
 		// distracting dark edges in the backlit, grazing-angle wide bookends.
 		// The wall is open-ended: the following adjoining regions are its only
 		// top surface, so the flush brass bands never overlap a hidden stone cap.
-		const courtWall = new THREE.CylinderGeometry(0.15, 0.15, 0.00042, 128, 1, true);
+		const courtWall = new THREE.CylinderGeometry(courtRadius / 1000, courtRadius / 1000, 0.00042, 128, 1, true);
 		courtWall.translate(0, 0.00147, 0);
 		this._part(courtWall, stone, false);
-		const boundaries = [0, 81.5, 82.5, 115.5, 116.5, 147.5, 148.5, 150];
+		const boundaries = [0, 139.5, 140.5, 279.5, 280.5, 419.5, 420.5, courtRadius];
 		for (let band = 0; band < boundaries.length - 1; band++) {
 			const inner = boundaries[band] / 1000, outer = boundaries[band + 1] / 1000;
 			const paving = inner === 0 ? new THREE.CircleGeometry(outer, 128) : new THREE.RingGeometry(inner, outer, 128, 1);
@@ -91,26 +97,47 @@ export class LocalSunFilmScene {
 			paving.translate(0, 0.00168, 0);
 			this._part(paving, band % 2 === 1 ? brass : stone, false);
 		}
-		// One slender pair every five degrees keeps a readable, varied skyline
-		// under the Sun even at the fixed eighteen-degree central lens.
-		for (let index = 0; index < 72; index++) {
-			const bearing = index * 5;
-			const radius = 258 + 4 * Math.sin((index + seed) * 1.618);
-			const top = this._skylineHeight(bearing, radius);
+		// Keep the original absolute skyline heights while opening the court.
+		// Thirty-six pillars and twelve separated lintels leave distinct cast
+		// shadows instead of the former dense, continuous perimeter shadow grid.
+		for (let index = 0; index < this._construction.ringPylonCount; index++) {
+			const bearing = index * 10;
+			const jitter = 4 * Math.sin((index * 2 + seed) * 1.618);
+			const radius = this._construction.ringRadiusMeters + jitter;
+			const referenceRadius = this._construction.ringHeightReferenceRadiusMeters + jitter;
+			const top = this._skylineHeight(bearing, referenceRadius);
 			const center = this._radial(bearing, radius, top / 2);
 			this._box([3.1, top, 4.8], center, bearing, index % 3 === 0 ? shade : stone);
 			this._box([5.8, 2.8, 7.1], this._radial(bearing, radius, top - 1.4), bearing, edge);
 			this._box([3.5, 1.1, 5.4], this._radial(bearing, radius, top - 5), bearing, brass);
-			const spanTop = Math.min(top, this._skylineHeight(bearing + 5, radius)) - 7;
-			this._box([22.8, 3.5, 4.4], this._radial(bearing + 2.5, radius, spanTop), bearing + 2.5, index % 2 ? shade : stone);
+			if (index % 3 === 0) {
+				const nextJitter = 4 * Math.sin(((index + 1) * 2 + seed) * 1.618);
+				const nextRadius = this._construction.ringRadiusMeters + nextJitter;
+				const spanTop = Math.min(top, this._skylineHeight(bearing + 10, this._construction.ringHeightReferenceRadiusMeters + nextJitter)) - 7;
+				const first = this._radial(bearing, radius, spanTop), second = this._radial(bearing + 10, nextRadius, spanTop);
+				/** @type {LocalSunFilmSceneTriple} */
+				const middle = [(first[0] + second[0]) / 2, spanTop, (first[2] + second[2]) / 2];
+				const span = Math.hypot(second[0] - first[0], second[2] - first[2]);
+				const orientation = Math.atan2(second[2] - first[2], second[0] - first[0]) * 180 / Math.PI;
+				this._box([span + 3.1, 3.5, 4.4], middle, orientation, index % 2 ? shade : stone);
+			}
 		}
 		const start = skylineSamples[0].azimuthDegrees;
+		for (let index = 0; index < this._construction.innerGnomonCount; index++) {
+			const bearing = start + 22.5 + index * 45;
+			const radius = this._construction.innerGnomonRadiusMeters;
+			const floorHeight = this._construction.courtHeightMeters, height = this._construction.innerGnomonHeightMeters;
+			this._box([4, 0.5, 4], this._radial(bearing, radius, floorHeight + 0.25), bearing, edge);
+			this._box([2.2, height - 0.5, 2.2], this._radial(bearing, radius, floorHeight + 0.5 + (height - 0.5) / 2), bearing, stone);
+			this._box([3.2, 0.8, 3.2], this._radial(bearing, radius, floorHeight + height - 0.4), bearing, edge);
+			this._box([2.5, 0.25, 2.5], this._radial(bearing, radius, floorHeight + height - 1.8), bearing, brass);
+		}
 		this._gateway(start, stone, edge, basalt, brass);
 		this._colonnade(start + 90, stone, edge, basalt);
 		this._tower(start + 180, stone, edge, basalt, brass);
 		this._arches(start + 270, stone, edge, basalt);
 		this._batch();
-		this.lighting = new TheHoursDesertSceneLighting({three: THREE, parent: this.scene, shadowExtentMeters: 720, shadowFocusMeters: [0, 80, 0], groundBounceStrength: 0.25, neutralReflectance: NEUTRAL_LAMBERTIAN_REFLECTANCE, neutralLambertianClass: NeutralLambertianSceneLighting});
+		this.lighting = new TheHoursDesertSceneLighting({three: THREE, parent: this.scene, shadowExtentMeters: this._shadowExtentMeters, shadowFocusMeters: [0, 40, 0], groundBounceStrength: 0.25, neutralReflectance: NEUTRAL_LAMBERTIAN_REFLECTANCE, neutralLambertianClass: NeutralLambertianSceneLighting});
 		this.scene.name = 'local-sun-the-meridian-circular-observatory';
 		this.scene.userData.constructionSeed = seed;
 	}
@@ -189,7 +216,7 @@ export class LocalSunFilmScene {
 
 	/** Choose a skyline below all nearby actual Sun samples, including a camera-motion margin.
 	 * @param {number} bearing - Landmark bearing, degrees east from north.
-	 * @param {number} radius - Landmark radius, meters.
+	 * @param {number} radius - Original v4 construction radius, meters; moving the architecture never scales its height.
 	 * @returns {number} - Maximum authored height above ground, meters.
 	 */
 	_skylineHeight(bearing, radius) {
@@ -209,9 +236,9 @@ export class LocalSunFilmScene {
 	 * @returns {void} - Gateway geometry is queued for batching.
 	 */
 	_gateway(bearing, stone, edge, basalt, brass) {
-		const radius = 216, top = this._skylineHeight(bearing, radius);
+		const radius = 360, top = this._skylineHeight(bearing, 216);
 		for (const side of [-1, 1]) {
-			const angle = bearing + side * 4.7;
+			const angle = bearing + side * 4.7 * 216 / radius;
 			this._box([13, top, 18], this._radial(angle, radius, top / 2), angle, stone);
 			this._box([16, 4, 21], this._radial(angle, radius, top - 2), angle, edge);
 			this._box([3.2, top * 0.72, 0.7], this._radial(angle, radius - 9.4, top * 0.5), angle, basalt);
@@ -229,9 +256,9 @@ export class LocalSunFilmScene {
 	 * @returns {void} - Colonnade geometry is queued for batching.
 	 */
 	_colonnade(bearing, stone, edge, basalt) {
-		const radius = 229, top = this._skylineHeight(bearing, radius);
+		const radius = 380, top = this._skylineHeight(bearing, 229);
 		for (let index = -3; index <= 3; index++) {
-			const angle = bearing + index * 3.8, height = this._skylineHeight(angle, radius);
+			const angle = bearing + index * 3.8 * 229 / radius, height = this._skylineHeight(bearing + index * 3.8, 229);
 			this._cylinder(3.6, height - 5, this._radial(angle, radius, (height - 5) / 2), stone);
 			this._box([9.8, 3, 9.8], this._radial(angle, radius, height - 1.5), angle, edge);
 			this._box([7.2, 2, 7.2], this._radial(angle, radius, height - 5), angle, basalt);
@@ -248,7 +275,7 @@ export class LocalSunFilmScene {
 	 * @returns {void} - Tower geometry is queued for batching.
 	 */
 	_tower(bearing, stone, edge, basalt, brass) {
-		const radius = 238, top = this._skylineHeight(bearing, radius);
+		const radius = 395, top = this._skylineHeight(bearing, 238);
 		for (let tier = 0; tier < 4; tier++) {
 			const width = 50 - tier * 10, height = top / 4;
 			this._box([width, height, width * 0.65], this._radial(bearing, radius, height * (tier + 0.5)), bearing, tier % 2 ? edge : stone);
@@ -266,11 +293,11 @@ export class LocalSunFilmScene {
 	 * @returns {void} - Open arch geometry is queued for batching.
 	 */
 	_arches(bearing, stone, edge, basalt) {
-		const radius = 232, top = this._skylineHeight(bearing, radius);
+		const radius = 370, top = this._skylineHeight(bearing, 232);
 		for (let index = -1; index <= 1; index++) {
-			const angle = bearing + index * 7, depth = radius + index * 7, height = this._skylineHeight(angle, depth) - Math.abs(index) * 4;
+			const angle = bearing + index * 7 * 232 / radius, depth = radius + index * 7, height = this._skylineHeight(bearing + index * 7, 232 + index * 7) - Math.abs(index) * 4;
 			const archRadius = 10, spring = height - archRadius - 1.7;
-			for (const side of [-1, 1]) this._box([3.4, spring, 6], this._radial(angle + side * 2.47, depth, spring / 2), angle, stone);
+			for (const side of [-1, 1]) this._box([3.4, spring, 6], this._radial(angle + side * Math.asin(archRadius / depth) * 180 / Math.PI, depth, spring / 2), angle, stone);
 			const arch = new THREE.TorusGeometry(archRadius / 1000, 1.7 / 1000, 8, 32, Math.PI);
 			arch.rotateY(-angle * Math.PI / 180);
 			const center = this._radial(angle, depth, spring);
@@ -308,7 +335,7 @@ export class LocalSunFilmScene {
 	 */
 	applyCamera(pose) {
 		if (this._disposed) throw new Error('Film scene is disposed.');
-		if (!Number.isFinite(pose.filmSeconds) || pose.filmSeconds < 0 || pose.filmSeconds > 90 || !Number.isFinite(pose.verticalFieldOfViewDegrees) || pose.verticalFieldOfViewDegrees < 18 || pose.verticalFieldOfViewDegrees > 45 || [...pose.cameraMeters, ...pose.targetScene].some(value => !Number.isFinite(value))) throw new RangeError('Film camera pose must be a finite director sample.');
+		if (!Number.isFinite(pose.filmSeconds) || pose.filmSeconds < 0 || pose.filmSeconds > 90 || !Number.isFinite(pose.verticalFieldOfViewDegrees) || pose.verticalFieldOfViewDegrees < FILM_CIRCUIT_FOV_DEGREES || pose.verticalFieldOfViewDegrees > FILM_BOOKEND_FOV_DEGREES || [...pose.cameraMeters, ...pose.targetScene].some(value => !Number.isFinite(value))) throw new RangeError('Film camera pose must be a finite director sample.');
 		this.camera.position.set(pose.cameraMeters[0] / 1000, pose.cameraMeters[1] / 1000, pose.cameraMeters[2] / 1000);
 		this.camera.fov = pose.verticalFieldOfViewDegrees;
 		this.camera.lookAt(...pose.targetScene);
@@ -358,7 +385,7 @@ export class LocalSunFilmScene {
 		const light = this.lighting.directionalLight;
 		const focus = light.target.position;
 		const direction = new THREE.Vector3(source[0], source[1], source[2]).sub(focus).normalize();
-		light.position.copy(focus).addScaledVector(direction, 1.44);
+		light.position.copy(focus).addScaledVector(direction, Math.max(1, this._shadowExtentMeters / 500));
 		light.userData.directionToSource = direction.toArray();
 		light.userData.lightingPolicy = 'measured-receiver-spectrum-shared-finite-source-focus-v1';
 		light.shadow.needsUpdate = true;
@@ -411,7 +438,7 @@ export class LocalSunFilmScene {
 	 * @returns {LocalSunFilmSceneDescription} - Detached serializable provenance and approximation facts.
 	 */
 	describe() {
-		return {identity: 'circular-meridian-observatory-v4', seed: this._seed, landmarks: this._landmarks.map(value => ({...value})), meshCount: this._meshes.length, geometryBytes: this._geometryBytes, persistentBytes: this.resourceBounds(), disposed: this._disposed, filmSeconds: this._pose?.filmSeconds ?? null, lighting: this.lighting.describe(), maximumDirectionErrorDegrees: this._directionError, sourceScene: this._sourceScene ? [...this._sourceScene] : null, receiverIdentity: this._receiverIdentity};
+		return {identity: 'circular-meridian-observatory-v5', seed: this._seed, construction: {...this._construction}, landmarks: this._landmarks.map(value => ({...value})), meshCount: this._meshes.length, geometryBytes: this._geometryBytes, persistentBytes: this.resourceBounds(), disposed: this._disposed, filmSeconds: this._pose?.filmSeconds ?? null, lighting: this.lighting.describe(), maximumDirectionErrorDegrees: this._directionError, sourceScene: this._sourceScene ? [...this._sourceScene] : null, receiverIdentity: this._receiverIdentity};
 	}
 
 	/** Dispose film-owned resources after all borrowed frame leases have ended.

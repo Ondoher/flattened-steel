@@ -11,6 +11,7 @@ import {repositoryRoot, checkPath, hash, hashFile} from './run-boundary.js';
 import {requireHeavyExecution} from './heavy-execution-admission.js';
 import {deriveFilmControls} from './prove-film.js';
 import {createFilmVariant} from './film-variant.js';
+import {FILM_NATIVE_WIDTH, FILM_NATIVE_HEIGHT} from './film-director.js';
 const commonjs = createRequire(import.meta.url)('@rollup/plugin-commonjs');
 
 /** Capture one explicitly bounded film stage into a new immutable run.
@@ -121,12 +122,16 @@ async function main() {
 		const implementationIdentity = hash(JSON.stringify(identities));
 		/** @type {LocalSunFilmRecipe} */ const recipe = {
 			stage,
-			viewportSize: {width: preview ? 640 : 1920, height: preview ? 360 : 1080, units: 'pixels'},
+			viewportSize: {
+				width: preview ? 960 : FILM_NATIVE_WIDTH,
+				height: preview ? 540 : FILM_NATIVE_HEIGHT,
+				units: 'pixels',
+			},
 			framesPerSecond: preview ? 6 : 30,
 			durationSeconds: 90,
 			segmentStartSeconds: stage === 'motion' ? 40 : 0,
 			segmentDurationSeconds: stage === 'motion' ? 10 : 90,
-			bitrate: preview ? 4000000 : 20000000,
+			bitrate: preview ? 6000000 : 45000000,
 			implementationIdentity,
 			startObservation: controls.startObservation,
 			seed: 3202609,
@@ -245,8 +250,8 @@ async function main() {
 			if (
 				typeof name !== 'string' ||
 				!(
-					/^(trace|lighting|proof|scene|milestones)\.json$/u.test(name) ||
-					/^(milestone-[a-z0-9-]+|endpoint90)\.png$/u.test(name)
+					/^(trace|lighting|proof|scene|milestones|shadow-restoration-\d+)\.json$/u.test(name) ||
+					/^(milestone-[a-z0-9-]+|shadow-control-\d+|shadow-restored-\d+|endpoint90)\.png$/u.test(name)
 				) ||
 				typeof value !== 'string' ||
 				value.length > 32 * 1024 * 1024

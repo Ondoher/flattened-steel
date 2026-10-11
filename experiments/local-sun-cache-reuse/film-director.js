@@ -1,3 +1,16 @@
+/** Native width of the ground-shadow revision, pixels. */
+export const FILM_NATIVE_WIDTH = 3840;
+/** Native height of the ground-shadow revision, pixels. */
+export const FILM_NATIVE_HEIGHT = 2160;
+/** Fixed vertical lens for the complete physical circuit, degrees. */
+export const FILM_CIRCUIT_FOV_DEGREES = 45;
+/** Wide opening and closing vertical lens, degrees. */
+export const FILM_BOOKEND_FOV_DEGREES = 60;
+/** Sun center in vertical normalized device coordinates; leaves ground below. */
+export const FILM_SUN_VERTICAL_NDC = 0.82;
+/** P6-only logical payload ceiling for 4K render targets; ordinary application policy is unchanged. */
+export const FILM_MAXIMUM_LOGICAL_BYTES = 2400000000;
+
 /** Smooth a normalized camera transition with zero first and second endpoint derivatives.
  * @param {number} fraction - Unit-interval transition position.
  * @returns {number} - Eased fraction.
@@ -30,20 +43,20 @@ export function sampleFilmClock(seconds) {
 	const phase = sourceProgress * 2 * Math.PI;
 	/** @type {LocalSunFilmSceneTriple} */
 	let cameraMeters = [12 * Math.sin(phase), 10 - 2 * Math.cos(phase), 8 * Math.sin(2 * phase)];
-	let verticalFieldOfViewDegrees = 18;
+	let verticalFieldOfViewDegrees = FILM_CIRCUIT_FOV_DEGREES;
 	if (seconds < 10) {
 		const approach = ease(seconds / 10);
 		cameraMeters = [-16 * (1 - approach), 6 + 2 * approach, 28 * (1 - approach)];
-		verticalFieldOfViewDegrees = 45 - 27 * approach;
+		verticalFieldOfViewDegrees = FILM_BOOKEND_FOV_DEGREES - (FILM_BOOKEND_FOV_DEGREES - FILM_CIRCUIT_FOV_DEGREES) * approach;
 	} else if (seconds > 80) {
 		const departure = ease((seconds - 80) / 10);
 		cameraMeters = [16 * departure, 8 - 2 * departure, 28 * departure];
-		verticalFieldOfViewDegrees = 18 + 27 * departure;
+		verticalFieldOfViewDegrees = FILM_CIRCUIT_FOV_DEGREES + (FILM_BOOKEND_FOV_DEGREES - FILM_CIRCUIT_FOV_DEGREES) * departure;
 	}
 	return {filmSeconds: seconds, sourceProgress, sourcePhaseDegrees: 180 + 360 * sourceProgress, verticalFieldOfViewDegrees, cameraMeters};
 }
 
-/** Aim the Sun at a fixed upper-third location while retaining the physical clock.
+/** Aim the Sun high in the frame so the floor remains visible throughout the physical circuit.
  * @param {number} seconds - Film time in [0, 90].
  * @param {UnitVector3} directionToSource - Physical observer-to-Sun east/north/up unit vector.
  * @returns {LocalSunFilmCameraSample} - Camera position in meters and look target in scene units.
@@ -54,7 +67,7 @@ export function sampleFilmCamera(seconds, directionToSource) {
 	const clock = sampleFilmClock(seconds);
 	const azimuth = Math.atan2(directionToSource[0], directionToSource[1]);
 	const elevation = Math.asin(Math.max(-1, Math.min(1, directionToSource[2])));
-	const lookElevation = elevation - Math.atan(0.32 * Math.tan(clock.verticalFieldOfViewDegrees * Math.PI / 360));
+	const lookElevation = elevation - Math.atan(FILM_SUN_VERTICAL_NDC * Math.tan(clock.verticalFieldOfViewDegrees * Math.PI / 360));
 	const cosine = Math.cos(lookElevation);
 	/** @type {LocalSunFilmSceneTriple} */
 	const targetScene = [clock.cameraMeters[0] / 1000 + Math.sin(azimuth) * cosine, clock.cameraMeters[1] / 1000 + Math.sin(lookElevation), clock.cameraMeters[2] / 1000 - Math.cos(azimuth) * cosine];

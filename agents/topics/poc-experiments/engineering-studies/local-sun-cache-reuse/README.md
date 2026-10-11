@@ -9,8 +9,13 @@ P5-Celestial and selected follow-ups are delivered. The owner selected the
 [creative full-circuit film](plan.md#p6--reproduce-the-local-sun-full-orbit-film):
 90 seconds at San Jose on the winter-solstice basis, one continuous shot,
 no overlays, dynamic camera movement and clearly visible disc-size change.
-The [film execution record](p6-execution.md) owns the recorded native video,
-qualification, decisions and remaining owner creative acceptance.
+The owner liked the delivered v4 film and selected a
+[shadow revision](p6-shadow-revision.md) to show ground shadows throughout the
+Sun's traverse. The v5 native 4K film and compact review copy are media-qualified
+and delivered for owner creative acceptance. The revision record owns the
+exact conditional source-review completion authority.
+The [v4 film execution record](p6-execution.md)
+preserves the recorded video, measurements and original review authority.
 P7 and production promotion remain
 unselected; the experiment is not ended or formally suspended.
 
@@ -39,6 +44,8 @@ chronology belongs to [shell execution](p3-execution.md), not current readiness.
   choices, reproduction and the remaining film sequence.
 - [Execution summary](execution-summary.md): P0-P1 outcomes, decisions and limitations.
 - [P6 film execution](p6-execution.md): video delivery, decisions, evidence and review authority.
+- [P6 shadow revision](p6-shadow-revision.md): current video delivery, shadow
+  visibility, decisions, measured qualification and revision completion authority.
 - [P2 execution](p2-execution.md): rotation results, decisions and completion gates.
 - [Method transfer and verification](reference-method.md): current evidence policy,
   informative cancellation/ozone context and preserved historical reference derivations.

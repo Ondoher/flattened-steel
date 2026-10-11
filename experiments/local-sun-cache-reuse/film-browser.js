@@ -18,7 +18,7 @@ import {ShellFramePublication} from './shell-frame-publication.js';
 import {shellResourceBounds} from './shell-resource-bounds.js';
 import {readCelestialShader} from './celestial-proof.js';
 import {LocalSunFilmScene} from './film-scene.js';
-import {sampleFilmClock, sampleFilmCamera} from './film-director.js';
+import {sampleFilmClock, sampleFilmCamera, FILM_NATIVE_WIDTH, FILM_NATIVE_HEIGHT, FILM_MAXIMUM_LOGICAL_BYTES} from './film-director.js';
 
 const bridge = /** @type {LocalSunFilmBridge} */ (/** @type {unknown} */ (globalThis));
 
@@ -30,6 +30,20 @@ function encodeBytes(bytes) {
 	let binary = '';
 	for (let offset = 0; offset < bytes.length; offset += 0x8000) binary += String.fromCharCode(...bytes.subarray(offset, offset + 0x8000));
 	return btoa(binary);
+}
+
+/** Normalize detached camera facts to the numbers that survive the JSON wire.
+ * CanonicalValueHash distinguishes signed zero, while JSON serialization does
+ * not. Normalize evidence before hashing and serialization; never mutate the
+ * physical camera or its matrices.
+ * @param {readonly number[]} values - Detached actual camera vector components.
+ * @returns {number[]} - Finite JSON-compatible components with positive zero.
+ */
+function cameraWireValues(values) {
+	return values.map(value => {
+		if (!Number.isFinite(value)) throw new Error('Film camera evidence contains a nonfinite component.');
+		return value === 0 ? 0 : value;
+	});
 }
 
 /** Resolve astronomical placement at one score time; synthetic rotation is never used.
@@ -98,10 +112,10 @@ async function proveDisc(frame, renderer) {
  */
 function validateRecipe(input) {
 	if (!['stills', 'motion', 'preview', 'final'].includes(input.stage) || input.durationSeconds !== 90 || !Number.isFinite(Date.parse(input.startObservation.instant))) throw new Error('Invalid film stage, duration or start instant.');
-	if (input.viewportSize.units !== 'pixels' || !Number.isSafeInteger(input.viewportSize.width) || !Number.isSafeInteger(input.viewportSize.height) || input.viewportSize.width < 1 || input.viewportSize.height < 1 || input.viewportSize.width > 1920 || input.viewportSize.height > 1080 || input.viewportSize.width * 9 !== input.viewportSize.height * 16) throw new Error('Film raster must be bounded 16:9.');
+	if (input.viewportSize.units !== 'pixels' || !Number.isSafeInteger(input.viewportSize.width) || !Number.isSafeInteger(input.viewportSize.height) || input.viewportSize.width < 1 || input.viewportSize.height < 1 || input.viewportSize.width > FILM_NATIVE_WIDTH || input.viewportSize.height > FILM_NATIVE_HEIGHT || input.viewportSize.width * 9 !== input.viewportSize.height * 16) throw new Error('Film raster must be bounded 16:9.');
 	if (!Number.isSafeInteger(input.framesPerSecond) || input.framesPerSecond < 1 || input.framesPerSecond > 30 || !Number.isSafeInteger(input.segmentDurationSeconds * input.framesPerSecond) || input.segmentDurationSeconds <= 0 || input.segmentStartSeconds < 0 || input.segmentStartSeconds + input.segmentDurationSeconds > 90) throw new Error('Invalid film segment cadence.');
-	if (!Number.isSafeInteger(input.bitrate) || input.bitrate < 100000 || input.bitrate > 40000000 || !Number.isSafeInteger(input.seed) || !input.implementationIdentity || !input.base.shellLayout) throw new Error('Incomplete film construction controls.');
-	if (input.stage === 'final' && (input.framesPerSecond !== 30 || input.segmentStartSeconds !== 0 || input.segmentDurationSeconds !== 90 || input.viewportSize.width !== 1920 || input.viewportSize.height !== 1080)) throw new Error('Final film must preserve the frozen native recipe.');
+	if (!Number.isSafeInteger(input.bitrate) || input.bitrate < 100000 || input.bitrate > 50000000 || !Number.isSafeInteger(input.seed) || !input.implementationIdentity || !input.base.shellLayout) throw new Error('Incomplete film construction controls.');
+	if (input.stage === 'final' && (input.framesPerSecond !== 30 || input.segmentStartSeconds !== 0 || input.segmentDurationSeconds !== 90 || input.viewportSize.width !== FILM_NATIVE_WIDTH || input.viewportSize.height !== FILM_NATIVE_HEIGHT)) throw new Error('Final film must preserve the frozen native recipe.');
 }
 
 /** Render exact astronomical states through one persistent scene and streamed recorder.
@@ -119,9 +133,10 @@ async function run(input) {
 	renderer.outputColorSpace = THREE.LinearSRGBColorSpace; renderer.toneMapping = THREE.NoToneMapping;
 	renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 	renderer.debug.onShaderError = (context, program, vertex, fragment) => {throw new Error('Film shader failure: ' + context.getProgramInfoLog(program) + context.getShaderInfoLog(vertex) + context.getShaderInfoLog(fragment));};
-	const publisher = new ShellFramePublication(1600000000), samples = new TheHoursLightingSamples();
+	const publisher = new ShellFramePublication(FILM_MAXIMUM_LOGICAL_BYTES), samples = new TheHoursLightingSamples();
 	/** @type {LocalSunFilmScene|null} */ let scene = null;
 	/** @type {LocalSunShellFrameLease|null} */ let recordingLease = null;
+	/** @type {LocalSunFilmPendingShadowControl|null} */ let pendingShadowControl = null;
 	/** @type {LocalSunFilmTraceRow[]} */ const rows = [];
 	/** @type {LocalSunFilmMilestone[]} */ const milestones = [];
 	/** @type {GpuScatteringCache|null} */ let firstCache = null;
@@ -206,7 +221,8 @@ async function run(input) {
 			const pose = sampleFilmCamera(seconds, frame.directionToSource); persistent.applyCamera(pose);
 			frame.celestial.render();
 			const camera = frame.celestial.camera, material = materialFor(frame), source = frame.source.position.coordinates, observer = frame.owners.geometry.configuration.observerPosition.coordinates;
-			const cameraMeters = camera.position.toArray().map(value => value * 1000);
+			const cameraMeters = cameraWireValues(camera.position.toArray().map(value => value * 1000));
+			const cameraDirection = cameraWireValues(camera.getWorldDirection(new THREE.Vector3()).toArray());
 			const sourceDistance = Math.hypot(source[0] - observer[0] - cameraMeters[0], source[1] - observer[1] + cameraMeters[2], source[2] - observer[2] - cameraMeters[1]);
 			const sourceRadius = frame.owners.source.celestialSourceDefinition.radius.value, radius = Number(material.uniforms.uSunRadiusPixels.value);
 			const expectedRadius = Math.tan(Math.asin(sourceRadius / sourceDistance)) * Math.abs(camera.projectionMatrix.elements[5]) * input.viewportSize.height / 2;
@@ -214,28 +230,98 @@ async function run(input) {
 			if (sourceRadius !== 16 * 1609.344 || Math.abs(radius - expectedRadius) > 1e-6 || c[0] - radius < 0 || c[0] + radius >= input.viewportSize.width || c[1] - radius < 0 || c[1] + radius >= input.viewportSize.height) throw new Error('Film physical radius, projected size or visibility failed.');
 			const glError = gl.getError(); maximumGlError = Math.max(maximumGlError, glError);
 			if (glError) throw new Error('Film draw returned GL error ' + glError);
-			rows.push({slot, timestampMicroseconds: Math.round(slot * 1000000 / input.framesPerSecond), filmSeconds: seconds, sourceProgress: pose.sourceProgress, sourcePhaseDegrees: pose.sourcePhaseDegrees, observation: frame.observation, frameIdentity: frame.identity, cacheIdentity, cacheReused: frame.cache === firstCache, cameraMeters, cameraDirection: camera.getWorldDirection(new THREE.Vector3()).toArray(), verticalFieldOfViewDegrees: camera.fov, sourcePositionMeters: [...source], sunAzimuthDegrees: pose.sunAzimuthDegrees, sunElevationDegrees: pose.sunElevationDegrees, sourceDistanceMeters: sourceDistance, sourceRadiusMeters: sourceRadius, sunRadiusPixels: radius, expectedSunRadiusPixels: expectedRadius, sunCenterPixels: c, exactReceiverIdentity: exact.identity, presentationReceiverIdentity: receiver.identity, directNormalIdentity: receiver.directNormal.contentHash, diffuseIdentity: receiver.diffuseHorizontal.contentHash, adaptationLuminanceCdM2: receiver.stellarAdaptationLuminance.value, preparedMilliseconds: performance.now() - preparationStarted, glError});
+			rows.push({slot, timestampMicroseconds: Math.round(slot * 1000000 / input.framesPerSecond), filmSeconds: seconds, sourceProgress: pose.sourceProgress, sourcePhaseDegrees: pose.sourcePhaseDegrees, observation: frame.observation, frameIdentity: frame.identity, cacheIdentity, cacheReused: frame.cache === firstCache, cameraMeters, cameraDirection, verticalFieldOfViewDegrees: camera.fov, sourcePositionMeters: [...source], sunAzimuthDegrees: pose.sunAzimuthDegrees, sunElevationDegrees: pose.sunElevationDegrees, sourceDistanceMeters: sourceDistance, sourceRadiusMeters: sourceRadius, sunRadiusPixels: radius, expectedSunRadiusPixels: expectedRadius, sunCenterPixels: c, exactReceiverIdentity: exact.identity, presentationReceiverIdentity: receiver.identity, directNormalIdentity: receiver.directNormal.contentHash, diffuseIdentity: receiver.diffuseHorizontal.contentHash, adaptationLuminanceCdM2: receiver.stellarAdaptationLuminance.value, preparedMilliseconds: performance.now() - preparationStarted, glError});
 		}
 
-		/** Retain one sparse lossless image and actual final-raster disc support proof.
+		/** Capture one matched diagnostic after primary pixels have crossed their retention boundary.
+		 * @param {LocalSunShellPublishedFrame} frame - Exact leased frame retained for both images.
+		 * @param {LocalSunFilmTraceRow} row - Actual same-frame camera, clock and publication facts.
+		 * @param {string} shadowOnArtifact - Already retained primary lossless image.
+		 * @param {string} shadowOnImageIdentity - Original lossless PNG data-URL identity.
+		 * @param {LocalSunFilmShadowControlTiming} controlTiming - Encoder acceptance or an explicitly unencoded still.
+		 * @returns {Promise<LocalSunFilmShadowControl>} - Complete pair derivation with image identities and GL health.
+		 */
+		async function captureShadowControl(frame, row, shadowOnArtifact, shadowOnImageIdentity, controlTiming) {
+			const light = persistent.lighting.directionalLight, originalShadowIntensity = light.shadow.intensity;
+			if (light.castShadow !== true || originalShadowIntensity !== 1) throw new Error('Film shadow control requires the selected full-intensity shadow-enabled light.');
+			const shadowOffArtifact = `shadow-control-${row.slot}.png`;
+			let shadowOffDataUrl = '', restoredDataUrl = '', disabledGlError = 0, restoredGlError = 0;
+			/** @type {string|null} */ let restoredArtifact = null;
+			try {
+				// Installed Three uploads shadow.intensity as the dynamic shadowIntensity
+				// uniform. Its shader evaluates mix(1.0, shadow, shadowIntensity), so zero
+				// removes attenuation without changing shadow counts or program topology.
+				light.shadow.intensity = 0;
+				frame.celestial.render();
+				if (light.castShadow !== true) throw new Error('Shadow control unexpectedly changed the shadow-caster topology.');
+				disabledGlError = gl.getError(); maximumGlError = Math.max(maximumGlError, disabledGlError);
+				if (disabledGlError) throw new Error('Shadow-off control draw returned GL error ' + disabledGlError);
+				shadowOffDataUrl = canvas.toDataURL('image/png');
+				await bridge.localSunFilmArtifact(shadowOffArtifact, JSON.stringify({dataUrl: shadowOffDataUrl}));
+			} finally {
+				light.shadow.intensity = originalShadowIntensity;
+				light.shadow.needsUpdate = true;
+				frame.celestial.render();
+				restoredGlError = gl.getError(); maximumGlError = Math.max(maximumGlError, restoredGlError);
+				if (restoredGlError) throw new Error('Restored shadow-on film draw returned GL error ' + restoredGlError);
+				restoredDataUrl = canvas.toDataURL('image/png');
+				const restoredImageIdentity = CanonicalValueHash.sha256Value(restoredDataUrl);
+				if (restoredImageIdentity !== shadowOnImageIdentity || light.castShadow !== true || light.shadow.intensity !== originalShadowIntensity) {
+					restoredArtifact = `shadow-restored-${row.slot}.png`;
+					await bridge.localSunFilmArtifact(restoredArtifact, JSON.stringify({dataUrl: restoredDataUrl}));
+					await bridge.localSunFilmArtifact(`shadow-restoration-${row.slot}.json`, JSON.stringify({schema: 'local-sun-p6-shadow-restoration-v2', implementationIdentity: input.implementationIdentity, shadowOnArtifact, shadowOffArtifact, restoredArtifact, controlTiming, frameIdentity: frame.identity, presentationReceiverIdentity: row.presentationReceiverIdentity, cacheIdentity: frame.cacheIdentity, slot: row.slot, filmSeconds: row.filmSeconds, cameraMeters: row.cameraMeters, cameraDirection: row.cameraDirection, verticalFieldOfViewDegrees: row.verticalFieldOfViewDegrees, shadowOnImageIdentity, restoredImageIdentity, restoredPixelsIdentical: restoredImageIdentity === shadowOnImageIdentity, originalShadowIntensity, restoredShadowIntensity: light.shadow.intensity, castShadow: light.castShadow, disabledGlError, restoredGlError}));
+				}
+				if (light.castShadow !== true || light.shadow.intensity !== originalShadowIntensity) throw new Error('Shadow diagnostic failed to restore the exact light configuration.');
+			}
+			const derivation = {
+				implementationIdentity: input.implementationIdentity, shadowOnArtifact, shadowOffArtifact, restoredArtifact, controlTiming, frameIdentity: frame.identity, presentationReceiverIdentity: row.presentationReceiverIdentity, cacheIdentity: frame.cacheIdentity,
+				cameraIdentity: CanonicalValueHash.sha256Value({cameraMeters: row.cameraMeters, cameraDirection: row.cameraDirection, verticalFieldOfViewDegrees: row.verticalFieldOfViewDegrees}),
+				filmSeconds: row.filmSeconds, slot: row.slot, viewportSize: input.viewportSize,
+				operation: 'Run after the encoder accepts the original frame, or after retaining an explicitly unencoded still. Hold the leased exact frame, receiver, camera, materials, shadow-caster topology and atmospheric cache; keep directionalLight.castShadow true; change only directionalLight.shadow.intensity from 1 to 0 (Three shadowIntensity uniform, mix(1,shadow,intensity)); render and retain the control PNG; restore intensity 1 in finally and redraw. Require exact light-configuration restoration; report PNG identity equality as information because diagnostic pixels cannot enter the already accepted encoded slot. Finish this control before releasing the lease or preparing the next frame.',
+				imageIdentityPolicy: 'CanonicalValueHash.sha256Value of the complete PNG data URL; host file SHA-256 separately authenticates artifact bytes',
+				shadowOnImageIdentity, shadowOffImageIdentity: CanonicalValueHash.sha256Value(shadowOffDataUrl), restoredImageIdentity: CanonicalValueHash.sha256Value(restoredDataUrl),
+				restoredPixelsIdentical: CanonicalValueHash.sha256Value(restoredDataUrl) === shadowOnImageIdentity, originalShadowIntensity, controlShadowIntensity: 0, restoredShadowIntensity: light.shadow.intensity, castShadow: light.castShadow, disabledGlError, restoredGlError,
+			};
+			return {identity: CanonicalValueHash.sha256Value(derivation), ...derivation};
+		}
+
+		/** Complete the single queued control before releasing its frame or preparing another state.
+		 * @param {LocalSunFilmShadowControlTiming} controlTiming - Required pixel-retention boundary already crossed.
+		 * @returns {Promise<void>} - Matching milestone evidence is completed; no diagnostic frame is encoded.
+		 */
+		async function flushShadowControl(controlTiming) {
+			const pending = pendingShadowControl;
+			if (!pending) return;
+			pendingShadowControl = null;
+			if (!recordingLease || recordingLease.frame.identity !== pending.row.frameIdentity) throw new Error('Pending shadow control lost its exact frame lease.');
+			const shadowControl = await captureShadowControl(recordingLease.frame, pending.row, pending.shadowOnArtifact, pending.shadowOnImageIdentity, controlTiming);
+			milestones[pending.milestoneIndex] = {...milestones[pending.milestoneIndex], shadowControl};
+		}
+
+		/** Retain one sparse lossless image, disc proof and matched circuit shadow control.
 		 * @param {string} name - Host-whitelisted unique PNG name.
 		 * @returns {Promise<string>} - Retained artifact name; no PNG remains in recorder memory.
 		 */
 		async function capture(name) {
 			if (!recordingLease) throw new Error('Capture requires a leased presented frame.');
+			if (pendingShadowControl) throw new Error('Previous shadow control must finish before another capture.');
 			const frame = recordingLease.frame, disc = await proveDisc(frame, renderer);
 			frame.celestial.render();
-			await bridge.localSunFilmArtifact(name, JSON.stringify({dataUrl: canvas.toDataURL('image/png')}));
-			const filmSeconds = rows.at(-1).filmSeconds;
-			milestones.push({name, filmSeconds, disc, exactReceiver: frame.receiver, presentationEnvironment: samples.sample(filmSeconds)});
+			const captureGlError = gl.getError(); maximumGlError = Math.max(maximumGlError, captureGlError);
+			if (captureGlError) throw new Error('Film milestone draw returned GL error ' + captureGlError);
+			const dataUrl = canvas.toDataURL('image/png');
+			await bridge.localSunFilmArtifact(name, JSON.stringify({dataUrl}));
+			const row = rows.at(-1), filmSeconds = row.filmSeconds;
+			if (filmSeconds >= 10 && filmSeconds <= 80) pendingShadowControl = {row, shadowOnArtifact: name, shadowOnImageIdentity: CanonicalValueHash.sha256Value(dataUrl), milestoneIndex: milestones.length};
+			milestones.push({name, filmSeconds, disc, exactReceiver: frame.receiver, presentationEnvironment: samples.sample(filmSeconds), shadowControl: null});
 			return name;
 		}
 
 		const milestoneSeconds = [0, 10, 27.5, 45, 62.5, 80];
 		if (input.stage === 'stills') {
 			for (const [slot, seconds] of [...milestoneSeconds, 90].entries()) {
-				try {await render(seconds, slot); await capture(seconds === 90 ? 'endpoint90.png' : `milestone-${slot}.png`);}
-				finally {recordingLease?.release(); recordingLease = null;}
+				try {await render(seconds, slot); await capture(seconds === 90 ? 'endpoint90.png' : `milestone-${slot}.png`); await flushShadowControl('unencoded-still');}
+				finally {pendingShadowControl = null; recordingLease?.release(); recordingLease = null;}
 				await bridge.localSunFilmProgress('stills', 'Rendered composition control.', slot + 1, 7);
 			}
 		} else {
@@ -245,25 +331,29 @@ async function run(input) {
 			const output = new MediabunnyCanvasOutput({mediabunny: /** @type {AnimationEvidenceMediabunnyModule} */ (/** @type {unknown} */ (mediabunny)), canvas, writable: sink.writable(), framesPerSecond: input.framesPerSecond, codec: 'avc', fullCodecString: 'avc1.640034', hardwareAcceleration: String(encoderSelection.selectedConfig.hardwareAcceleration), bitrate: input.bitrate, metadata: {title: 'A circuit of the local Sun', comment: 'Hypothetical flat/local geometry. Deterministic offline cinematic rendering; physical emitter radius unchanged.'}});
 			const mapping = Array.from({length: input.segmentDurationSeconds * input.framesPerSecond}, (_, slotIndex) => ({slotIndex, mappingKind: 'ideal-choreography', timestampMicroseconds: Math.round(slotIndex * 1000000 / input.framesPerSecond), mappingEquationId: 'local-sun-p6-ideal-clock-v1', sourceFrameId: slotIndex, sourceAnimationCallbackMicroseconds: Math.round(slotIndex * 1000000 / input.framesPerSecond), heldFromPreviousSlot: false, measuredFrameAdvance: slotIndex === 0 ? 0 : 1, state: {animationSeconds: input.segmentStartSeconds + slotIndex / input.framesPerSecond}}));
 			const captureSlots = new Set(milestoneSeconds.map(seconds => Math.round((seconds - input.segmentStartSeconds) * input.framesPerSecond)).filter(slot => slot >= 0 && slot < mapping.length));
-			/** Release the leased frame only after the awaited encoder accepts its pixels. @type {AnimationEvidenceVideoOutput} */
-			const leasedOutput = {start: () => output.start(), addFrame: async (image, timestamp, duration, options) => {try {await output.addFrame(image, timestamp, duration, options);} finally {recordingLease?.release(); recordingLease = null;}}, finalize: () => output.finalize(), abort: () => output.abort(), getResult: () => output.getResult()};
+			/** Mediabunny CanvasSource.add constructs a VideoSample/immutable VideoFrame
+			 * from the canvas before its awaited add completes. Only then may diagnostic
+			 * rendering mutate the canvas; finish it before releasing this exact frame.
+			 * @type {AnimationEvidenceVideoOutput}
+			 */
+			const leasedOutput = {start: () => output.start(), addFrame: async (image, timestamp, duration, options) => {try {await output.addFrame(image, timestamp, duration, options); await flushShadowControl('after-encode');} finally {pendingShadowControl = null; recordingLease?.release(); recordingLease = null;}}, finalize: () => output.finalize(), abort: () => output.abort(), getResult: () => output.getResult()};
 			recording = await new DeterministicCanvasRecorder({mapping, framesPerSecond: input.framesPerSecond, presentationCanvas: canvas, videoOutput: leasedOutput, render: entry => render(/** @type {TheHoursReplayState} */ (entry.state).animationSeconds, entry.slotIndex), captureSlots, capture: entry => capture(`milestone-${entry.slotIndex}.png`), reportProgress: (completed, total) => bridge.localSunFilmProgress('record', 'Rendered and encoded distinct ideal states.', completed, total)}).record();
 			sinkDiagnostics = sink.diagnostics();
 			if (input.stage !== 'motion') {
-				try {await render(90, mapping.length); await capture('endpoint90.png');}
-				finally {recordingLease?.release(); recordingLease = null;}
+				try {await render(90, mapping.length); await capture('endpoint90.png'); await flushShadowControl('unencoded-still');}
+				finally {pendingShadowControl = null; recordingLease?.release(); recordingLease = null;}
 			}
 		}
 		const sceneDescription = persistent.describe(), cacheCount = publisher.resources.size, peakAdmittedBytes = publisher.peakAdmittedBytes;
 		await bridge.localSunFilmArtifact('trace.json', JSON.stringify({schema: 'local-sun-p6-trace-v1', rows, endpointIsSeparate: input.stage !== 'motion' && input.stage !== 'stills'}));
-		await bridge.localSunFilmArtifact('milestones.json', JSON.stringify({schema: 'local-sun-p6-milestones-v1', milestones}));
+		await bridge.localSunFilmArtifact('milestones.json', JSON.stringify({schema: 'local-sun-p6-milestones-v2', milestones}));
 		const finalGeneration = publisher.active?.celestial?.generation;
 		publisher.dispose(); await publisher.tail; verifyRetired(finalGeneration);
 		persistent.dispose(); scene = null;
 		if (publisher.cleanupErrors.length || publisher.resources.size) throw new Error('Film frame/cache cleanup failed: ' + publisher.cleanupErrors.join('; '));
 		return JSON.stringify({schema: 'local-sun-p6-film-v1', stage: input.stage, frames: recording?.frameCount ?? rows.length, fps: input.framesPerSecond, duration: input.stage === 'stills' ? 0 : input.segmentDurationSeconds, viewportSize: input.viewportSize, glError: maximumGlError, cacheCount, cleanup: {resources: publisher.resources.size, errors: publisher.cleanupErrors, persistentSceneDisposed: true, ...retirement}, elapsedMilliseconds: performance.now() - started, preparedCount, peakAdmittedBytes, resources, scene: sceneDescription, lightingIdentity, milestones, recording, encoderSelection, sinkDiagnostics});
 	} finally {
-		recordingLease?.release(); publisher.dispose(); await publisher.tail; scene?.dispose();
+		pendingShadowControl = null; recordingLease?.release(); publisher.dispose(); await publisher.tail; scene?.dispose();
 		renderer.dispose(); renderer.forceContextLoss(); canvas.remove();
 	}
 }

@@ -18,7 +18,10 @@ validation of a flat Earth or local Sun. The owner subsequently selected P3-A0
 analysis, now complete in the [abstraction inventory](abstraction-inventory.md).
 The [status](status.md) owns the delivered P0-P5, P5-Celestial and selected
 follow-up dispositions and links their source-review authority. The owner has
-selected creative P6 film work under the updated plan.
+selected the [P6 ground-shadow revision](p6-shadow-revision.md) after the delivered
+v4 film. Its native 4K delivery is media-qualified for owner creative acceptance;
+the current plan owns its frozen composition and the revision record owns exact
+conditional source-review completion authority.
 
 ## Assumptions And Abstraction Boundaries
 
@@ -118,6 +121,10 @@ transient backend copies and GPU phase textures have separate lifetimes.
 Admission bounds and observed allocations both remain subject to the unchanged
 combined payload limit. Diagnostic field readbacks are identified separately
 from application-persistent payload, never silently included in a memory claim.
+The current 4K P6 film revision has an explicit plan-owned 2.4 GB logical payload
+bound for its larger render targets; this does not change cache payloads or the
+ordinary 1.6 GB application gate. The [revision record](p6-shadow-revision.md)
+owns the estimate and required actual measurements.
 
 The final film's new scene recipe, source-relative camera score,
 shared shadows and measured-light interpolation belong to

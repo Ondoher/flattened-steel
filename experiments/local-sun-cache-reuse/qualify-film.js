@@ -3,10 +3,18 @@ import {readFile, access} from 'node:fs/promises';
 import {spawn} from 'node:child_process';
 import ffmpeg from 'ffmpeg-static';
 import {Input, FilePathSource, ALL_FORMATS, EncodedPacketSink} from 'mediabunny';
+import {PNG} from 'pngjs';
 import {ExperimentRun} from './ExperimentRun.js';
 import {readParent} from './parent-evidence.js';
 import {repositoryRoot, outputRoot, checkPath, hash, hashFile} from './run-boundary.js';
 import {requireHeavyExecution} from './heavy-execution-admission.js';
+import {
+	FILM_NATIVE_WIDTH,
+	FILM_NATIVE_HEIGHT,
+	FILM_CIRCUIT_FOV_DEGREES,
+	FILM_MAXIMUM_LOGICAL_BYTES,
+} from './film-director.js';
+import {CanonicalValueHash} from '../../src/algorithm32/value-identity/CanonicalValueHash.js';
 
 /** Independently decode every presentation and qualify the frozen film/guard pair.
  * @returns {Promise<void>} - New evidence and compact review copy; parent files stay immutable.
@@ -42,18 +50,20 @@ async function main() {
 			height = recipe.viewportSize.height;
 		if (
 			recipe.stage === 'final' &&
-			(width !== 1920 ||
-				height !== 1080 ||
+			(width !== FILM_NATIVE_WIDTH ||
+				height !== FILM_NATIVE_HEIGHT ||
 				recipe.framesPerSecond !== 30 ||
 				recipe.segmentDurationSeconds !== 90 ||
 				expectedFrames !== 2700)
 		)
-			throw new Error('Final recipe differs from the frozen 1080p delivery.');
+			throw new Error('Final recipe differs from the frozen native delivery.');
 		if (
 			result.schema !== 'local-sun-p6-film-v1' ||
 			result.frames !== expectedFrames ||
 			result.glError !== 0 ||
 			result.cacheCount !== 1 ||
+			!Number.isSafeInteger(result.peakAdmittedBytes) ||
+			result.peakAdmittedBytes > FILM_MAXIMUM_LOGICAL_BYTES ||
 			result.cleanup?.resources !== 0 ||
 			result.cleanup?.errors?.length !== 0 ||
 			result.cleanup?.persistentSceneDisposed !== true
@@ -134,8 +144,16 @@ async function main() {
 			if (instant < priorInstant || row.sourcePhaseDegrees < priorPhase) throw new Error('Source time reversed.');
 			priorInstant = instant;
 			priorPhase = row.sourcePhaseDegrees;
-			if (row.filmSeconds >= 10 && row.filmSeconds <= 80 && Math.abs(row.verticalFieldOfViewDegrees - 18) > 1e-8)
-				throw new Error('Circuit FOV changed.');
+			if (row.filmSeconds >= 10 && row.filmSeconds <= 80) {
+				const bottomRayElevationDegrees =
+					(Math.asin(row.cameraDirection[1]) * 180) / Math.PI - row.verticalFieldOfViewDegrees / 2;
+				if (
+					Math.abs(row.verticalFieldOfViewDegrees - FILM_CIRCUIT_FOV_DEGREES) > 1e-8 ||
+					!Number.isFinite(bottomRayElevationDegrees) ||
+					bottomRayElevationDegrees >= 0
+				)
+					throw new Error('Circuit FOV changed or floor left the lower view.');
+			}
 			if (
 				index < expectedFrames &&
 				(row.timestampMicroseconds !== Math.round((index * 1000000) / recipe.framesPerSecond) ||
@@ -153,6 +171,188 @@ async function main() {
 				rows.at(-1).filmSeconds !== 90)
 		)
 			throw new Error('Complete orbit/endpoint absent.');
+		const milestoneInput = /** @type {LocalSunFilmMilestonesArtifact} */ (await load(filmName, 'milestones.json'));
+		if (milestoneInput.schema !== 'local-sun-p6-milestones-v2' || !Array.isArray(milestoneInput.milestones))
+			throw new Error('Matched shadow milestone evidence is absent.');
+		const expectedShadowSeconds = [10, 27.5, 45, 62.5, 80].filter(
+			(seconds) =>
+				seconds >= recipe.segmentStartSeconds &&
+				seconds < recipe.segmentStartSeconds + recipe.segmentDurationSeconds,
+		);
+		const shadowContributions = [];
+		for (const seconds of expectedShadowSeconds) {
+			const milestone = milestoneInput.milestones.find((value) => value.filmSeconds === seconds),
+				control = milestone?.shadowControl;
+			const slot = Math.round((seconds - recipe.segmentStartSeconds) * recipe.framesPerSecond),
+				row = frames[slot];
+			if (
+				!control ||
+				!row ||
+				control.slot !== slot ||
+				control.filmSeconds !== seconds ||
+				control.shadowOnArtifact !== `milestone-${slot}.png` ||
+				control.shadowOffArtifact !== `shadow-control-${slot}.png` ||
+				milestone.name !== control.shadowOnArtifact ||
+				control.frameIdentity !== row.frameIdentity ||
+				control.presentationReceiverIdentity !== row.presentationReceiverIdentity ||
+				control.cacheIdentity !== row.cacheIdentity ||
+				control.viewportSize.width !== width ||
+				control.viewportSize.height !== height ||
+				control.controlTiming !== 'after-encode' ||
+				typeof control.restoredPixelsIdentical !== 'boolean' ||
+				control.castShadow !== true ||
+				control.originalShadowIntensity !== 1 ||
+				control.controlShadowIntensity !== 0 ||
+				control.restoredShadowIntensity !== 1 ||
+				control.disabledGlError !== 0 ||
+				control.restoredGlError !== 0
+			)
+				throw new Error(
+					'Shadow control was not isolated after encoding with exact light configuration restoration at ' +
+						seconds,
+				);
+			const {identity, ...derivation} = control;
+			if (
+				identity !== CanonicalValueHash.sha256Value(derivation) ||
+				control.cameraIdentity !==
+					CanonicalValueHash.sha256Value({
+						cameraMeters: row.cameraMeters,
+						cameraDirection: row.cameraDirection,
+						verticalFieldOfViewDegrees: row.verticalFieldOfViewDegrees,
+					})
+			)
+				throw new Error('Shadow-control derivation/camera identity mismatch.');
+			const onParent = await readParent(filmName, control.shadowOnArtifact),
+				offParent = await readParent(filmName, control.shadowOffArtifact);
+			parents.push(...[onParent, offParent].map(({bytes, ...parent}) => parent));
+			const onBytes = Buffer.from(onParent.bytes),
+				offBytes = Buffer.from(offParent.bytes);
+			// CanonicalValueHash serializes strings with JSON.stringify; use the same
+			// exact bytes through Node's bounded native hash for large PNG data URLs.
+			if (
+				'sha256:' + hash(JSON.stringify('data:image/png;base64,' + onBytes.toString('base64'))) !==
+					control.shadowOnImageIdentity ||
+				'sha256:' + hash(JSON.stringify('data:image/png;base64,' + offBytes.toString('base64'))) !==
+					control.shadowOffImageIdentity
+			)
+				throw new Error('Shadow pair PNG identities differ from the rendered control.');
+			const on = PNG.sync.read(onBytes),
+				off = PNG.sync.read(offBytes);
+			if (on.width !== width || off.width !== width || on.height !== height || off.height !== height)
+				throw new Error('Shadow pair raster mismatch.');
+			let restoredPixelDifferenceCount = 0,
+				restoredMaximumChannelDifference = 0;
+			if (!control.restoredPixelsIdentical) {
+				if (control.restoredArtifact !== `shadow-restored-${slot}.png`)
+					throw new Error('Nonidentical diagnostic rerender lacks its retained restored PNG.');
+				const restoredParent = await readParent(filmName, control.restoredArtifact);
+				parents.push({...restoredParent, bytes: undefined});
+				const restoredBytes = Buffer.from(restoredParent.bytes);
+				if (
+					'sha256:' + hash(JSON.stringify('data:image/png;base64,' + restoredBytes.toString('base64'))) !==
+					control.restoredImageIdentity
+				)
+					throw new Error('Restored diagnostic PNG identity mismatch.');
+				const restored = PNG.sync.read(restoredBytes);
+				if (restored.width !== width || restored.height !== height)
+					throw new Error('Restored diagnostic raster mismatch.');
+				for (let offset = 0; offset < on.data.length; offset += 4) {
+					let changed = false;
+					for (let channel = 0; channel < 3; channel++) {
+						const difference = Math.abs(on.data[offset + channel] - restored.data[offset + channel]);
+						changed ||= difference !== 0;
+						restoredMaximumChannelDifference = Math.max(restoredMaximumChannelDifference, difference);
+					}
+					if (changed) restoredPixelDifferenceCount++;
+				}
+			} else if (
+				control.restoredImageIdentity !== control.shadowOnImageIdentity ||
+				control.restoredArtifact !== null
+			)
+				throw new Error('Identical rerender metadata is inconsistent.');
+			const pitch = Math.asin(row.cameraDirection[1]),
+				horizonRow =
+					(height * (1 + Math.tan(pitch) / Math.tan((row.verticalFieldOfViewDegrees * Math.PI) / 360))) / 2;
+			const top = Math.max(0, Math.min(height, Math.ceil(horizonRow) + 2)),
+				regionPixels = width * (height - top);
+			if (top < 0 || top >= height || regionPixels <= 0) throw new Error('Shadow ground-view region is empty.');
+			let affectedPixels = 0,
+				affectedDelta = 0,
+				totalDelta = 0,
+				maximumDelta = 0,
+				reversePixels = 0;
+			for (let offset = top * width * 4; offset < width * height * 4; offset += 4) {
+				const delta =
+					0.2126 * (off.data[offset] - on.data[offset]) +
+					0.7152 * (off.data[offset + 1] - on.data[offset + 1]) +
+					0.0722 * (off.data[offset + 2] - on.data[offset + 2]);
+				totalDelta += delta;
+				maximumDelta = Math.max(maximumDelta, delta);
+				if (delta >= 8) {
+					affectedPixels++;
+					affectedDelta += delta;
+				}
+				if (delta < -3) reversePixels++;
+			}
+			const minimumAffectedPixels = Math.max(64, Math.ceil(regionPixels * 0.001)),
+				meanAffectedContrast = affectedPixels ? affectedDelta / affectedPixels : 0;
+			const passed = affectedPixels >= minimumAffectedPixels && meanAffectedContrast >= 10;
+			for (const [label, image] of [
+				['on', on],
+				['off', off],
+			]) {
+				const crop = new PNG({width, height: height - top});
+				image.data.copy(crop.data, 0, top * width * 4);
+				await run.write(`shadow-${label}-${slot}-ground.png`, PNG.sync.write(crop));
+			}
+			shadowContributions.push({
+				filmSeconds: seconds,
+				slot,
+				controlIdentity: identity,
+				controlTiming: control.controlTiming,
+				restoredPixelsIdentical: control.restoredPixelsIdentical,
+				restoredArtifact: control.restoredArtifact,
+				restoredPixelDifferenceCount,
+				restoredMaximumChannelDifference,
+				shadowOnArtifact: control.shadowOnArtifact,
+				shadowOffArtifact: control.shadowOffArtifact,
+				horizonRow,
+				region: {left: 0, top, width, height: height - top, pixels: regionPixels},
+				affectedPixels,
+				minimumAffectedPixels,
+				affectedFraction: affectedPixels / regionPixels,
+				meanAffectedContrast,
+				minimumMeanAffectedContrast: 10,
+				meanRegionDifference: totalDelta / regionPixels,
+				maximumDelta,
+				reversePixels,
+				passed,
+			});
+			await run.progress(
+				'shadow-pair',
+				JSON.stringify({filmSeconds: seconds, affectedPixels, meanAffectedContrast, passed}),
+			);
+		}
+		await run.write(
+			'shadow-contributions.json',
+			JSON.stringify(
+				{
+					schema: 'local-sun-p6-shadow-contribution-v1',
+					operation:
+						'Authenticate matched lossless shadow-on/off PNGs, after-encode timing and exact light-configuration restoration; the primary film frame is accepted by the encoder before diagnostic draws. Record any restored diagnostic rerender pixel differences without imposing an equality gate. Compare byte-scale luma from two pixels below the projected horizon to the image bottom; count at least 8-level positive differences and require at least max(64,0.1% region) pixels with mean affected contrast at least 10. Retain unmodified on/off region crops.',
+					rows: shadowContributions,
+					limitation:
+						'These paired images establish visible shadow contribution in the lower ground-view region, which may contain foreground objects. Static contribution metrics do not establish shadow motion; compare successive landmarks/crops and inspect the continuous film separately.',
+				},
+				null,
+				'\t',
+			),
+		);
+		if (
+			shadowContributions.length !== expectedShadowSeconds.length ||
+			shadowContributions.some((row) => !row.passed)
+		)
+			throw new Error('A circuit milestone lacks meaningful shadow contrast in the ground-view region.');
 		const native = path.join(outputRoot, 'runs', filmName, 'native.mp4');
 		await checkPath(outputRoot, native);
 		const media = new Input({source: new FilePathSource(native), formats: ALL_FORMATS});
@@ -240,7 +440,8 @@ async function main() {
 		}
 		/** @type {LocalSunFilmDecodedRow[]} */ const decoded = [];
 		const frameBytes = width * height * 3;
-		let pending = Buffer.alloc(0),
+		const assembly = Buffer.alloc(frameBytes);
+		let assembledBytes = 0,
 			previous,
 			duplicateFrames = 0,
 			minimumSolarContrast = Infinity;
@@ -261,10 +462,15 @@ async function main() {
 				'pipe:1',
 			],
 			(chunk) => {
-				pending = Buffer.concat([pending, chunk]);
-				while (pending.length >= frameBytes) {
-					const pixels = Buffer.from(pending.subarray(0, frameBytes));
-					pending = pending.subarray(frameBytes);
+				let offset = 0;
+				while (offset < chunk.length) {
+					const copied = Math.min(frameBytes - assembledBytes, chunk.length - offset);
+					chunk.copy(assembly, assembledBytes, offset, offset + copied);
+					assembledBytes += copied;
+					offset += copied;
+					if (assembledBytes < frameBytes) continue;
+					const pixels = Buffer.from(assembly);
+					assembledBytes = 0;
 					const index = decoded.length,
 						row = frames[index];
 					if (!row) throw new Error('Decoder produced excess frames.');
@@ -346,7 +552,7 @@ async function main() {
 				}
 			},
 		);
-		if (pending.length || decoded.length !== expectedFrames)
+		if (assembledBytes || decoded.length !== expectedFrames)
 			throw new Error('Decoder did not produce every complete frame.');
 		const circuit = frames
 				.map((row, index) => ({row, decoded: decoded[index]}))
@@ -366,8 +572,8 @@ async function main() {
 			recipe.stage === 'final' &&
 			(!near ||
 				!far ||
-				near.decoded.solarCoreDiameterPixels < 20 ||
-				far.decoded.solarCoreDiameterPixels < 8 ||
+				near.decoded.solarCoreDiameterPixels < 14 ||
+				far.decoded.solarCoreDiameterPixels < 6 ||
 				Math.abs(measuredRatio / expectedRatio - 1) > 0.15)
 		)
 			throw new Error('Final decoded near/far disc-size gate failed.');
@@ -434,6 +640,14 @@ async function main() {
 				...(await hashFile(repositoryRoot, file)),
 			});
 		}
+		for (const relative of [
+			'experiments/local-sun-cache-reuse/film-director.js',
+			'src/algorithm32/value-identity/CanonicalValueHash.js',
+			'src/algorithm32/validation/ValueValidation.js',
+			'node_modules/pngjs/package.json',
+			'node_modules/pngjs/lib/png.js',
+		])
+			sources.push({path: relative, ...(await hashFile(repositoryRoot, path.join(repositoryRoot, relative)))});
 		await run.write(
 			'inputs.json',
 			JSON.stringify(
@@ -445,7 +659,7 @@ async function main() {
 					node: process.version,
 					decoder: decoderIdentity,
 					operation:
-						'Authenticate parents/source closure; verify exact-state trace and MP4 packet timestamps; independently decode every native frame and measure local solar support; encode a review derivative into this new run.',
+						'Authenticate parents/source closure and matched shadow-control PNGs; verify exact-state trace and MP4 packet timestamps; independently decode every native frame and measure local solar support using one fixed-size assembly buffer plus current/prior frames, without growing concatenation; encode a review derivative into this new run.',
 					native: await hashFile(outputRoot, native),
 					review: await hashFile(run.root, review),
 				},
@@ -471,6 +685,7 @@ async function main() {
 					expectedRatio,
 					duplicatePixelFrames: duplicateFrames,
 					minimumSolarContrast,
+					shadowContributions,
 					resources: {
 						peakPrivateBytes: guard.peakPrivateBytes,
 						peakWorkingSetBytes: guard.peakWorkingSetBytes,

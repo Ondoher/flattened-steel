@@ -1765,6 +1765,7 @@ type LocalSunFilmSceneConfiguration = {
 type LocalSunFilmSceneDescription = {
 	/** Stable scene construction identity. */ identity: string;
 	/** Recorded deterministic construction seed. */ seed: number;
+	/** Authored court and shadow-caster dimensions retained for reproduction. */ construction: LocalSunFilmSceneConstruction;
 	/** Semantic landmark names and their geometric locations; these are never drawn. */ landmarks: readonly LocalSunFilmLandmark[];
 	/** Number of final batched scene meshes. */ meshCount: number;
 	/** Actual CPU vertex/index attribute bytes owned by the meshes. */ geometryBytes: number;
@@ -1776,6 +1777,19 @@ type LocalSunFilmSceneDescription = {
 	/** World-space finite source, in observer-local scene units, for the latest frame. */ sourceScene: LocalSunFilmSceneTriple | null;
 	/** Received same-frame light packet identity, including any declared interpolation. */ receiverIdentity: string | null;
 };
+
+/** Exact dimensions and counts of the film's court and shadow-casting architecture. */
+type LocalSunFilmSceneConstruction = Readonly<{
+	/** Outer court radius in metres. */ courtRadiusMeters: number;
+	/** Outer architectural ring radius in metres. */ ringRadiusMeters: number;
+	/** Original reference radius used to derive ring heights from the source skyline, metres. */ ringHeightReferenceRadiusMeters: number;
+	/** Number of discrete ring pylons. */ ringPylonCount: number;
+	/** Number of retained ring lintels. */ ringLintelCount: number;
+	/** Number of inner shadow-casting gnomons. */ innerGnomonCount: number;
+	/** Radial placement of the inner gnomons, metres. */ innerGnomonRadiusMeters: number;
+	/** Gnomon height above the court in metres. */ innerGnomonHeightMeters: number;
+	/** Court surface height above the model ground, metres. */ courtHeightMeters: number;
+}>;
 
 /** Authored landmark location used by the film's geometric and visual proof. */
 type LocalSunFilmLandmark = {
@@ -1835,8 +1849,8 @@ type LocalSunFilmTraceRow = Readonly<{
 	/** Distinct complete rendered-state identity. */ frameIdentity: string;
 	/** Shared canonical atmospheric cache identity. */ cacheIdentity: string;
 	/** Same GPU cache object survived since first preparation. */ cacheReused: boolean;
-	/** Actual camera coordinates in observer-local scene metres. */ cameraMeters: readonly number[];
-	/** Actual camera unit direction in scene coordinates. */ cameraDirection: readonly number[];
+	/** Actual camera coordinates in observer-local scene metres; evidence signed zeros are normalized to positive zero for JSON. */ cameraMeters: readonly number[];
+	/** Actual camera unit direction in scene coordinates; evidence signed zeros are normalized to positive zero for JSON. */ cameraDirection: readonly number[];
 	/** Actual vertical lens angle, degrees. */ verticalFieldOfViewDegrees: number;
 	/** Actual finite-source center in model metres. */ sourcePositionMeters: readonly number[];
 	/** Actual Sun bearing at the nominal observer, degrees. */ sunAzimuthDegrees: number;
@@ -1881,6 +1895,56 @@ type LocalSunFilmMilestone = Readonly<{
 	/** Actual same-frame GPU consumer proof. */ disc: LocalSunFilmDiscProof;
 	/** Separate unsmoothed exact-state physical receiver measurement. */ exactReceiver: ReceiverEnvironmentLightMeasurement;
 	/** Measured-endpoint interpolation used only for the film environment. */ presentationEnvironment: ReceiverEnvironmentSample;
+	/** Matched shadow-on/off image pair for circuit captures; null at wide bookends. */ shadowControl: LocalSunFilmShadowControl | null;
+}>;
+
+/** Parsed sparse milestone evidence and its matched shadow controls. */
+type LocalSunFilmMilestonesArtifact = Readonly<{
+	/** Versioned milestone artifact schema. */ schema: string;
+	/** Ordered sparse controls with pair provenance where applicable. */ milestones: readonly LocalSunFilmMilestone[];
+}>;
+
+/** Matched diagnostic pair changing only the shared directional light's shadow attenuation. */
+type LocalSunFilmShadowControl = Readonly<{
+	/** Canonical hash binding the full pair derivation and restored presentation. */ identity: string;
+	/** Frozen browser bundle and asset implementation identity used for both images. */ implementationIdentity: string;
+	/** Lossless primary image with the selected film shadows. */ shadowOnArtifact: string;
+	/** Lossless matched diagnostic image with shared-light shadow attenuation set to zero. */ shadowOffArtifact: string;
+	/** Restored image retained when its lossless bytes differ; null when identical. */ restoredArtifact: string | null;
+	/** Control execution boundary protecting encoded pixels from diagnostic rendering. */ controlTiming: LocalSunFilmShadowControlTiming;
+	/** Exact prepared physical frame held for both images. */ frameIdentity: string;
+	/** Matching exact-direct/interpolated-environment receiver publication. */ presentationReceiverIdentity: string;
+	/** Unchanged canonical atmospheric cache identity. */ cacheIdentity: string;
+	/** Hash of actual camera position, direction and lens as JSON wire facts; signed zeros are normalized before hashing. */ cameraIdentity: string;
+	/** Authored circuit score position, seconds. */ filmSeconds: number;
+	/** Trace slot identifying this sparse capture. */ slot: number;
+	/** Actual matched capture raster. */ viewportSize: PixelSize;
+	/** Exact diagnostic intervention and restoration procedure. */ operation: string;
+	/** Algorithm identifying canonical JSON hashing of the PNG data URL, distinct from host file hashes. */ imageIdentityPolicy: string;
+	/** Identity of the original shadow-on PNG data URL. */ shadowOnImageIdentity: string;
+	/** Identity of the diagnostic shadow-off PNG data URL. */ shadowOffImageIdentity: string;
+	/** Identity of the restored shadow-on PNG data URL after the diagnostic draw; the primary frame was already encoded or retained as an unencoded still. */ restoredImageIdentity: string;
+	/** Informational equality of original/restored PNG identities; encoded pixels were accepted before the control. */ restoredPixelsIdentical: boolean;
+	/** Original shadow attenuation intensity, required one for the film. */ originalShadowIntensity: number;
+	/** Diagnostic shadow attenuation intensity, required zero. */ controlShadowIntensity: number;
+	/** Restored shadow attenuation intensity, required one before releasing the frame lease or preparing another state. */ restoredShadowIntensity: number;
+	/** Light's shadow-casting flag, required to remain true throughout the control. */ castShadow: boolean;
+	/** Actual GL status after the disabled-shadow control draw. */ disabledGlError: number;
+	/** Actual GL status after restoring and redrawing the film frame. */ restoredGlError: number;
+}>;
+
+/** Serialized shadow-control execution boundary.
+ * - **"after-encode"** - The encoder has already accepted the original frame pixels.
+ * - **"unencoded-still"** - The original still has been retained and this state is not an encoded slot.
+ */
+type LocalSunFilmShadowControlTiming = 'after-encode' | 'unencoded-still';
+
+/** One pending sparse control, retaining metadata while the current frame lease stays alive. */
+type LocalSunFilmPendingShadowControl = Readonly<{
+	/** Exact already-presented frame and camera facts. */ row: LocalSunFilmTraceRow;
+	/** Retained original lossless image name. */ shadowOnArtifact: string;
+	/** Canonical PNG-data-URL identity of the original image; no image bytes are retained. */ shadowOnImageIdentity: string;
+	/** Index of the milestone to complete after the diagnostic. */ milestoneIndex: number;
 }>;
 
 /** Validated resource counters read from one retired celestial child. */
@@ -1921,6 +1985,7 @@ type LocalSunFilmGeometryRow = Readonly<{
 	/** Actual source center to moving camera distance, metres. */ distanceMeters: number;
 	/** Physical source radius, metres. */ radiusMeters: number;
 	/** Actual vertical camera lens. */ verticalFieldOfViewDegrees: number;
+	/** Actual center-bottom camera-ray elevation; a negative value exposes the ground. */ bottomRayElevationDegrees: number;
 	/** On-axis geometric diameter estimate at the final raster. */ diameterPixels: number;
 }>;
 
@@ -1939,6 +2004,7 @@ type LocalSunFilmHostResult = Readonly<{
 	/** Complete encoded frame count. */ frames: number;
 	/** Maximum observed GL error code. */ glError: number;
 	/** Canonical GPU cache count before disposal. */ cacheCount: number;
+	/** Largest conservatively admitted logical active/staging payload, bytes. */ peakAdmittedBytes: number;
 	/** Resource disposal receipts. */ cleanup: Readonly<{
 		/** Remaining atmospheric resources. */ resources: number;
 		/** Disposal failures. */ errors: readonly string[];

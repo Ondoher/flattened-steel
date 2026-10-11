@@ -1,9 +1,12 @@
 # Creative P6 Film Execution
 
-Current state: the continuous 90-second 1080p film is recorded and passes full
-decoded-media qualification. The [plan](plan.md#p6--reproduce-the-local-sun-full-orbit-film)
-owns its selected parameters. Owner creative acceptance remains pending.
-Implementation completion is governed by the source-review receipt below;
+Preserved v4 delivery: the continuous 90-second 1080p film is recorded and passes
+its full decoded-media qualification. The owner liked v4 and selected the
+[current shadow revision](p6-shadow-revision.md), whose v5 native 4K delivery is
+media-qualified for owner creative acceptance. This record retains v4's
+measurements, decisions, recipe and review scope; the current plan and revision
+own subsequent composition changes. v4 implementation completion is governed
+by the source-review receipt below;
 neither an accepted media run nor this document substitutes for that gate.
 
 ## Delivery
@@ -182,5 +185,6 @@ The pre-film checkpoint is `bea65881` ("Checkpoint local-Sun cache qualification
 and celestial follow-ups"). The delivery checkpoint contains this record and
 is identified by Git history for this path; its message is preapproved through
 the independent-execution workflow. No push or publication is selected.
-Resume with the native video and this record. Further creative changes require
-a new recipe/run; P7 closure or suspension remains an owner-selected action.
+Use the native video and this record as immutable comparison evidence for the
+selected [shadow revision](p6-shadow-revision.md). Its new recipe, runs and review
+unit do not alter v4's evidence. P7 closure or suspension remains unselected.

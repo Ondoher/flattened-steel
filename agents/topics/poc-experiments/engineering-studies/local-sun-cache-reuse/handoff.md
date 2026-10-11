@@ -6,21 +6,22 @@ The [status](status.md) owns current disposition; the [plan](plan.md) owns
 execution requirements. This document routes resumption without duplicating
 the detailed measurement records.
 
-## Where Execution Stopped
+## Current Execution Boundary
 
-P0–P5, P5-Celestial and selected follow-ups are delivered. The P6 native film is
-recorded in run 00754. The [film execution record](p6-execution.md) owns the
-delivery, current verification gates and source-review receipt.
-The owner selected creative P6 work on 2026-10-11, replacing the earlier stop
-before video. The current plan owns the 90-second continuous San Jose film,
-new scene/camera latitude, no-overlay requirement and scoped AFK resource use.
+P0–P5, P5-Celestial and selected follow-ups are delivered. The v4 P6 native film
+in run 00754 remains preserved with its [execution record](p6-execution.md),
+decoded qualification and source-review receipt. The owner liked v4 and selected
+the [shadow revision](p6-shadow-revision.md), including moving walls outward
+where useful. The v5 native 4K film and compact review copy are media-qualified
+and delivered for owner creative acceptance. The revision's exact conditional
+receipt determines source completion.
+The plan retains the 90-second
+continuous San Jose physical day, fixed Sun, p2, no overlays and P6 resource use.
 P7 closure/suspension, promotion and publication remain unselected.
 The experiment is still the governing topic and has not been formally suspended.
 
-The next owner action is creative inspection of the delivered film. Prior
-questions about iPhone FOV, possible color/FOV presets and close-up sunset
-gradients were informational. They select no new experiment, preset,
-implementation or render.
+Resume with the delivered videos and revision record; no capture job remains.
+Earlier informational iPhone/preset discussions do not alter this selection.
 
 Before any new implementation, read [design](design.md), experiment-local
 [instructions](../../../../../experiments/local-sun-cache-reuse/AGENTS.md), the
@@ -47,6 +48,8 @@ Owners retain physical parameters, derivations, parent inventories and limits.
 | Optional overhead-calibrated radius | [Sun-size calibration](sun-size-calibration.md) | `00723-sun-size-proof/result.json`, GPU `00721-p5-celestial` |
 | Union Glacier central-view image | [Central-view capture](central-view-capture.md) | `00725-p5-celestial/flat-180-combined.png` |
 | Latest spherical/distant comparison | [Spherical sunset capture](spherical-sunset-capture.md) | `00733-globe-sunset/san-jose-sunset.png` |
+| Preserved v4 P6 delivery | [Film execution](p6-execution.md) | `00754-p6-film/native.mp4`, `00756-p6-film-report/result.json` |
+| Current P6 shadow revision | [Revision record and delivery](p6-shadow-revision.md) | Native `00781-p6-film`, qualification/review `00783-p6-film-report`; conditional source receipt `session-HOgzfK/validation-shadow.json` |
 
 The short 00674 preview is two seconds/24 frames at one physical state with a
 small camera pan. It is not the P6 full-orbit film. P0/P1's original solstice
@@ -131,15 +134,16 @@ state; verify actual published observation and actual camera before accepting.
 
 ## Next Execution Boundary
 
-Follow the selected [P6 plan](plan.md#p6--reproduce-the-local-sun-full-orbit-film).
-It is the canonical owner for location, source size, scene, continuous camera,
-clock/FOV phases, media settings, review baseline and scoped resource limits.
-The [execution record](p6-execution.md) supplies the frozen recipe, native and
-review videos, run chain, verification authority and reproduction commands.
-Do not repeat capture merely to resume context. Owner creative acceptance is
-separate from technical qualification; P7 lifecycle disposition still requires
-selection. Any later revision needs a new immutable run and a newly declared
-review unit, preserving the delivered source and media identities.
+Follow the current [P6 plan](plan.md#p6--reproduce-the-local-sun-full-orbit-film)
+and [shadow revision](p6-shadow-revision.md). The revision's frozen 4K recipe
+uses a 45-degree circuit lens and higher screen placement of the Sun to include
+the floor; moving walls alone cannot fix v4's entirely upward circuit rays.
+The native media and five shadow controls pass complete qualification. Owner
+creative inspection is the next delivery boundary; implementation completion
+requires the exact matching `CLEAN` receipt linked by the revision. Do not repeat
+capture merely to reload context. Further selected changes need new immutable
+runs and appropriately refreshed source-review evidence. Preserve v4 and v5
+identities; P7 lifecycle disposition remains unselected.
 
 ## Boundaries And Operational Discipline
 

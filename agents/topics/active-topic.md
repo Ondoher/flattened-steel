@@ -9,12 +9,16 @@ Canonical entry: [Local-Sun Cache Reuse Experiment](poc-experiments/engineering-
 ## Immediate Focus
 
 P0-P5, P5-Celestial and selected celestial/camera follow-ups are delivered.
-The selected P6 film is recorded: 90 seconds at San Jose on the winter-solstice
-basis, one continuous moving shot, no overlays, and true disc-size change.
-The [film execution record](poc-experiments/engineering-studies/local-sun-cache-reuse/p6-execution.md)
-owns delivery links, measured qualification, source-review authority and remaining
-owner creative acceptance. P7, production promotion and publication remain
-unselected.
+The owner liked the delivered P6 v4 film and selected a revision that keeps
+ground shadows visible as the Sun traverses the sky. The
+[shadow revision](poc-experiments/engineering-studies/local-sun-cache-reuse/p6-shadow-revision.md)
+owns delivery, decisions, measurements and completion authority. The v5 native
+4K film and compact review copy are media-qualified and delivered for owner
+creative acceptance. Implementation completion follows the revision's exact
+conditional source-review receipt. The
+[v4 execution record](poc-experiments/engineering-studies/local-sun-cache-reuse/p6-execution.md)
+preserves its delivered video and qualification. P7, production promotion and
+publication remain unselected.
 
 The [handoff](poc-experiments/engineering-studies/local-sun-cache-reuse/handoff.md)
 routes a successor to source, evidence, defaults and constraints.
@@ -30,6 +34,7 @@ close-up, iPhone FOV and preset discussions were informational only.
 4. [Successor handoff](poc-experiments/engineering-studies/local-sun-cache-reuse/handoff.md)
 5. [Current status](poc-experiments/engineering-studies/local-sun-cache-reuse/status.md)
 6. [Execution plan](poc-experiments/engineering-studies/local-sun-cache-reuse/plan.md)
+7. [P6 shadow revision](poc-experiments/engineering-studies/local-sun-cache-reuse/p6-shadow-revision.md)
 
 Before implementation, also load the design required by experiment-local
 instructions and focused owners named by the handoff. Refresh reviewer context
