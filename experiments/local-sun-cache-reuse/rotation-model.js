@@ -119,8 +119,10 @@ export function createOwners(recipe, degrees) {
 			outgoingDirections: domains.outgoingDirectionDomain,
 		},
 		execution: state.execution,
+		...(recipe.celestial ? {celestialSources:{id:'experiment-shell-local-sun-visible-v1',family:/** @type {const} */('flat-local-finite-sun-v1'),localSun:source}} : {}),
 	});
-	const facade = new Algorithm32({profile, color: createFlat32ColorDisplayModel()});
+	const presentationFilterRegistry = recipe.celestial?.presentationFilterRegistry ?? null;
+	const facade = new Algorithm32({profile, color: createFlat32ColorDisplayModel({}, presentationFilterRegistry), presentationFilterRegistry});
 	const model = new SharedModel({profile, version: 1});
 	if(recipe.shellRuntime) {
 		facade._reference.dispose();

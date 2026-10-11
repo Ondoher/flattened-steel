@@ -3,34 +3,68 @@
 ## Status And Acceptance Question
 
 Activated on 2026-10-08 through `start-experiment` at the owner's request.
-This is the canonical execution plan for the contained lane. The owner selected
-P0-P1 through `independent-execution` on 2026-10-08; those phases are complete.
-The original P2 investigation completed through its counterexample exit. The owner
-requested the corrective continuation below on 2026-10-08 and selected
-its independent execution. Its measured result and completion authority are recorded in [P2 corrections](p2-corrections.md).
-The owner has now recast P3 onward around a new Euclidean source-centered shell
-layout, integrating empty-inner-band omission from the first prototype and
-retaining the final recording. Independent P3-P5 execution is selected, stopping
-before P6 recording or a fatal flaw without a viable authorized workaround.
-The [execution record](p3-execution.md) owns prototype progress and explicit
-numerical correctness workarounds; phase completion gates remain open.
-Production promotion remains unselected.
-The owner reselected remaining-plan execution on 2026-10-09 after terminating
-the overnight workload because of memory pressure and editor unresponsiveness.
-The [status](status.md#next-action) owns the current resumption milestone.
-Stop before generating the video.
-Local checkpoints follow that skill's
-authorization and actual approval gates; no push or publication is selected.
+This is the canonical execution plan for the contained lane. P0–P5,
+[P5-Celestial](#p5-celestial--integrate-the-sun-disc-and-stars) and the selected
+celestial/camera follow-ups are delivered. The [status](status.md) owns phase
+disposition and links each record's numerical and source-review authority.
+The [successor handoff](handoff.md) routes current implementation and evidence.
+Original P2 counterexamples and earlier prototype results remain historical
+comparison evidence for the Euclidean source-centered replacement layout.
+
+No heavy job remains. Execution stops before P6 recording; P6/P7, production
+promotion, push and publication remain unselected. Completion of celestial
+integration does not start the video or formally end/suspend the experiment.
 
 Experiment identity: `local-sun-cache-reuse`.
 
-Determine whether a Euclidean source-centered shell layout can accurately
-represent the local-Sun multiple-scattering fields with useful measured memory
+Determine whether a Euclidean source-centered shell layout can defensibly
+represent the declared local-Sun multiple-scattering model with useful measured memory
 and construction cost, omitting nonintersecting inner bands from both storage
 and calculation. Then establish its horizontal reuse region and in-app
 rebuilding with coherent lighting. Layout accuracy, resource benefit and reuse
 are separate conclusions. A change of source height rebuilds the cache in the
 app; a separate Sun-angle axis or precomputed height inventory is not planned.
+
+## Model Defensibility And Acceptance Basis
+
+The owner selected this basis on 2026-10-09. Preserve inherited mathematics and
+extrapolate its consequences under explicit flat/local geometry and source
+inputs. Borrow demonstrated distant/spherical method support only where
+equations, profiles and numerical assumptions are compatible. Qualify shell
+approximation and reuse separately. A new globally converged independent
+higher-order solver is no longer a prerequisite. No empirical validation of
+the hypothetical geometry or source is claimed.
+
+The [design](design.md#assumptions-and-abstraction-boundaries) owns assumptions
+and conceptual contracts. P3-A0 below produces the mathematical abstraction
+inventory and defense; [reference-method.md](reference-method.md#current-evidence-policy)
+owns the current evidence policy. Do not rewrite working modules merely to
+create a new abstraction framework.
+
+The owner's subsequent clarification sets the current depth of defense:
+interpolation and integration need a sound mathematical explanation, explicit
+assumptions and ordinary correctness checks. Heavy research and experiments
+to estimate error bounds are deferred to later owner-selected work; they are
+not current completion or pre-recording gates. The
+[evidence policy](reference-method.md#current-depth-of-numerical-defense) owns
+this distinction. Do not claim a quantified accuracy result without measuring it.
+
+| Claim                             | Required support                                                                                             | Limit on the conclusion                                                                          |
+| --------------------------------- | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------ |
+| Inherited method support          | Exact equation/implementation/profile mapping to actual distant/spherical qualification and its limitations. | Does not validate flat geometry, a local Sun or every new parameter regime.                      |
+| Flat/local adaptation consistency | Analytic invariants, compatible shared-method comparisons and local geometry/source/ground contract checks.  | Does not establish a globally converged higher-order solution.                                   |
+| Shell approximation and omission  | Mathematical rationale, stated assumptions/limits, complete support and compact/unculled equivalence.        | Quantified approximation error is deferred; old-cache agreement alone is not an accuracy target. |
+| Reuse and application correctness | Same-policy fresh/reused fields/rays, admission, CPU/GPU checks and coherent lifecycle publication.          | Shared-implementation agreement alone cannot establish physical accuracy.                        |
+| Visual and resource suitability   | Frozen five-state images, exact-time motion and bounded performance/memory measurements.                     | Attractive images or an offline film do not prove numerical accuracy.                            |
+
+Each claim records supporting source/run identities, tested domain, result and
+limitation. Keep existing numerical limits wherever their quantity, metric and
+comparison role remain compatible. P3-A must version the changed evidence/gate
+contract before scoring new results, explicitly superseding the old universal
+reference prerequisite. Do not silently reinterpret the frozen old fixture.
+Historical failures/inconclusive cells retain their original disposition.
+Unresolved focused evidence limits its affected claim/domain; reproducible
+contract violations block that claim. Neither can become a pass by relabeling.
 
 The [transfer assessment](../../../production-algorithm32/caches/local-sun-transfer-assessment.md) owns the source
 findings and initial probe. The probe did not build a complete cache or run a
@@ -100,11 +134,12 @@ full N4/W27 qualification or in-app lifecycle work.
 | V1: first rotation reuse     | Early P2, bounded diagnostic profile | Fresh versus reused skies for fixed-offset rotations derived from Flat 0, shown side by side and through a blink/wipe comparison, plus a labeled amplified difference image. Does reuse preserve the appearance?                                                       |
 | V2: moving Sun               | Before declaring P2 complete         | A short fixed-offset rotation clip derived from Flat 0 and paired fresh/reused stills at selected non-cardinal poses. Are changes continuous, and do the paired poses agree? Repeat the decisive comparison at the selected profile before claiming its qualification. |
 | V3a: first shell-layout sky  | P3-B, first fresh candidate fields   | Flat 0 current-grid control, fresh shell candidate and amplified difference PNGs, with shell-intersection/storage diagnostics. Is the new layout plausible before any movement claim?                                                                                  |
-| V3b: layout cadence          | P3-C                                 | Fresh candidate versus current-grid controls across Flat 0/45/90/135/180, plus bounded compact-versus-unculled checks and independent numerical results. Does layout construction retain accuracy and what allocation/work was omitted?                                |
-| V3c: movement comparison     | P3-D                                 | Fresh versus reused shell-candidate stills and a short motion clip, with layout-change differences kept separate. Which transforms actually qualify?                                                                                                                   |
-| V4: app lighting and rebuild | P4                                   | The familiar six-box ground scene across the five degree-based time presets, plus a height-change/rebuild clip. Do sky, Sun, atmospheric attenuation, receivers and ordinary scene shadows stay coherent during reuse and replacement?                                 |
-| V5: qualification comparison | P5                                   | Selected-profile comparisons, motion clips and an accuracy/resource summary for the owner’s disposition.                                                                                                                                                               |
-| V6: full local-Sun film      | P6, final execution milestone        | Reproduce The Hours with the identical scene setup, changing to the local Sun at Union Glacier on the December solstice and a full clockwise orbit from 180° through 540°, followed by owner inspection.                                                               |
+| V3b: layout cadence          | P3-C                                 | Fresh candidate/current-grid Flat 0/45/90/135/180 PNGs, compact/unculled results and focused method checks. Separate appearance changes from supported model claims.                                                                                                   |
+| V3c: movement comparison     | P3-D                                 | Fresh/reused PNGs at non-cardinal poses and exact-time traces. Keep layout differences separate and identify the passing transforms/domain.                                                                                                                            |
+| V4: app lighting and rebuild | P4                                   | Familiar six-box five-state plates plus before/during/after replacement PNGs. Inspect exact-state sky, source, receivers and ordinary shadows.                                                                                                                         |
+| V5: qualification comparison | P5                                   | Selected-profile images, exact-time trajectory data and a claim-by-claim model/resource report for owner disposition.                                                                                                                                                  |
+| V5a/V5b: celestial integration | P5-Celestial | Close/intermediate/far Sun-disc images, then a labeled star-only diagnostic, combined sky images and a short motion preview before owner visual review. |
+| V6: full local-Sun film      | P6, final execution milestone        | Reproduce The Hours with the identical scene setup, changing to the local Sun at Union Glacier on December 14, 2024 and a full clockwise orbit from 180° through 540°, followed by owner inspection.                                                                   |
 
 V0 establishes a visible control, not a reuse result. Prefer the selected
 production profile when it can produce the first render promptly; otherwise
@@ -122,14 +157,17 @@ amplification. Identify profile/order, shell policy, source placement, radius,
 revision, cache build/reuse state, run and numerical-review status beside every
 artifact. A diagnostic or failed comparison must remain visibly marked as such.
 
-Publish each visual milestone as a sealed run with a standalone image or clip
+The current pre-video boundary defers new encoded clips, including diagnostic
+clips, to separately selected recording work. Use direct PNGs and compact
+exact-time trajectory data for V3-V5. Historical clips remain unchanged.
+Publish each new visual milestone as a sealed run with standalone images
 and a compact Markdown/JSON record linking its matching controls, difference views,
 parameters and current interpretation. Update experiment status with that link
 and bring it to the owner's attention when available; preserve it when later
-runs supersede its conclusions. Early motion clips may show only the reused
-path with paired stills at selected poses; label that limitation. P5 still
-requires the frozen temporal matrix, rather than treating those clips as
-per-frame fresh-versus-reused numerical proof.
+runs supersede its conclusions. Historical early clips show only the reused
+path with paired stills at selected poses; retain that limitation. New V3-V5
+deliveries use PNGs and numerical traces. P5 requires the frozen temporal
+matrix, rather than treating selected stills as per-frame fresh/reused proof.
 
 These are progress review points, not additional mandatory approval pauses.
 Continue authorized execution after delivery unless the owner asks to stop or
@@ -201,6 +239,14 @@ Additional camera views are separate labeled controls, identical within each
 fresh/reused pair. Freeze current production color/FP32 display selections in
 P1 rather than silently adopting an older fixture's display configuration.
 
+The owner selected **1024 by 768 pixels** for rendering going forward on
+2026-10-10. This supersedes the initial fixture raster for new captures and
+the future recording; historical images retain their original dimensions.
+Keep the 70-degree vertical FOV for these stills, derive camera aspect from
+the selected raster, and record the dimensions in each new recipe/result.
+The celestial capture launcher now selects this size explicitly. Other
+future runners must honor this selection when they are next executed.
+
 Keep both a sky-only view and, when receiver integration is ready in P4, the
 familiar ground composition with six colored boxes: the near yellow box,
 nearby blue building-sized box, mid white box, far orange box, distant cyan
@@ -253,7 +299,10 @@ phase starts. Declare review units and capture their baselines before coding.
 Adjacent implementation phases may share a coherent review milestone, but
 their completion gates stay open until the required review validates.
 
-P0-P2 below retain the completed investigation's scope and history, with exact
+P0-P2 below retain the completed investigation's scope and historical acceptance
+basis; their independent-reference requirements do not override the current
+owner-selected P3 evidence policy. P3-A records the versioned change without
+altering their results. P0-P2 retain exact
 outcomes owned by their execution records. Their old branch/optimization
 instructions do not govern the recast P3-P7 work. New-layout qualification
 cannot inherit a pass merely because the P2 control passed a rotation matrix.
@@ -286,13 +335,14 @@ earlier probe's `4,800,000 m` source height must not substitute for the app valu
 
 Define a finite placement/camera trajectory and a fixed source-centered radius
 that covers every construction/query point required by the chosen workload.
-Include the final film's December-solstice, full-orbit placements and camera
+Include the final film's December 14, 2024 full-orbit placements and camera
 score in coverage planning, even though film execution is last. Freeze its
 year/date basis, clock, unchanged scene identity and recording recipe before P6.
-The film uses December as explicitly selected by the owner; use 2024 as the
-reference year to match the original film unless the owner selects another.
-Resolve and record the exact December-solstice date/instant before execution;
-do not substitute the standard fixture's December 14 date.
+The owner selected **December 14, 2024** for the final film. Resolve and record
+the Flat 180 start instant for that date through the production location/time
+path. This supersedes the earlier December-solstice selection. Preserve the
+original frozen film clock/coverage evidence; derive updated film inputs and
+full-trajectory coverage into a new run before P6.
 Include the primary Flat 0/90/180 states in the eventual qualification workload,
 with Flat 45/135 included in the visual cadence and their numerical obligations
 frozen here. Pin the five resolved times/placements before candidate evaluation,
@@ -436,28 +486,40 @@ the former deferred pre-recording schedule is superseded.
 
 ### Remaining Work And Execution Controls
 
-Before resuming numerical or browser work, complete these steps in order.
-They supplement P3-P5; existing accuracy and completion gates remain open.
+P3–P5 and P5-Celestial are delivered; do not restart completed phases from
+the retained specifications below. The [status](status.md) links their current
+owners, and the [handoff](handoff.md) distinguishes current adapters from
+superseded historical bundles. Recorded reviews retain their frozen scope.
 
-1. Reduce diagnostic retention: retain allocation events once, with compact
-   per-frame measurements and event references, rather than repeating cumulative
-   histories in every frame and aggregate. Preserve all prior evidence unchanged.
-2. Establish and enforce an aggregate process-memory ceiling and free-memory
-   reserve before launching jobs. Account for native arrays, JavaScript objects,
-   browser/worker processes, verification and capture overhead, alongside the
-   application's logical resource budget. Run one heavy job at a time, with
-   bounded duration and a recorded stop condition; inspect interrupted runs
-   without reopening or overwriting them.
-3. Finish the decisive higher-order scattering and receiver-light reference
-   convergence checks, then evaluate the candidate's physical accuracy. Old-cache
-   renders explain behavioral changes; matching them is not an accuracy target.
-4. Complete the five-state old/new visual cadence and remaining fresh/reused
-   motion cells in bounded batches. Retain the completed Flat 0 temporal proof.
-5. Finish repeated build/replacement performance, expanded-coverage accuracy
-   and resource qualification through the experimental application path.
-6. Validate required source reviews and current handoff documentation before
-   reporting P3-P5 complete. P6 recording remains behind the owner approval
-   boundary and retains the agreed scene and full-orbit setup.
+Remaining work begins only when the owner selects P6:
+
+1. Refresh reviewer context/readiness and capture the new implementation-unit
+   baseline. Use the current JavaScript monitoring/launch path; no native-helper
+   exception exists. Default controls remain the 8 GiB free-memory reserve,
+   8 GiB owned-process ceiling, ten-minute jobs and serialized heavy execution.
+   Earlier phase-scoped 6 GiB exceptions have expired.
+2. Establish experiment-owned replay equality with the original observatory,
+   derive the December 14, 2024 Union Glacier Flat180→540 clock, and verify the
+   current scene/celestial trajectory against the existing P5 support evidence.
+3. Deliver the composition still, low-resolution orbit preview and short
+   wrap/replacement checks before full capture. Freeze the film recipe and
+   media/temporal gates; preserve the original camera score and the selected
+   1024×768 raster. Optional central FOV/calibrated Sun trials do not silently
+   replace original camera rules or the fixed-radius default.
+4. Execute and verify the complete P6 film, then obtain owner visual acceptance.
+   P7 records disposition and uses end-experiment for closure or suspension.
+   Production adoption requires a separate selection.
+
+For every diagnostic name one question, assumption/abstraction, input domain,
+expected invariant, discriminator and stop condition before execution. Start
+with a subset designed for a ten-minute maximum. Limit an unresolved question
+to two planned diagnostic rounds before writing a disposition or revised
+bounded hypothesis; do not automatically double resolution or launch an
+overnight sweep. A larger run must be specifically justified in the current
+plan with estimated cost and the claim it can resolve. The existing 45/90-minute
+wrapper ceilings are not permission for open-ended reference development.
+Report findings at these boundaries and keep visual delivery independent of
+unrelated analysis. No numerical tolerance is loosened to make a result pass.
 
 ### P3 — Develop And Qualify The Shell Layout
 
@@ -465,7 +527,51 @@ This replaces the previous translation-policy branch investigation. Use a
 correctness-first fresh build before testing reuse. Keep layout-change error,
 empty-band omission error and movement/reuse error separate.
 
-- [ ] **P3-A: freeze the layout and proof contract.** Specify Euclidean shell
+- [x] **P3-A0: analyze abstractions and defend mathematical transfer.** Completed
+      in [abstraction-inventory.md](abstraction-inventory.md), with a hashed reading
+      manifest, dependency map, derived equations, informative Dials/ozone context
+      and bounded verification recommendations. This completes analysis only.
+      The preserved step specification follows: produce
+      an authored `abstraction-inventory.md` in this topic, source-bound to the
+      selected distant/spherical and local implementations and actual evidence.
+      This is analysis, not a new transport implementation. Inventory every
+      relevant abstraction: atmosphere coefficients/density, geometry/path
+      boundaries, source illumination/disk, spectral units, phase laws,
+      attenuation, scattering-order recurrence, ground reflection, receiver
+      integration, numerical discretization/truncation, cache coordinates and
+      interpolation, empty-band admission, movement identity and presentation.
+      Include each abstraction's responsibility, mathematical inputs/outputs
+      and units, original equation and evidence, preserved mathematics,
+      flat/local substitutions, their derived consequences, assumptions and
+      validity domain, implementation mapping, defense, focused proof and open
+      limitations. Classify each change as exact geometry/input substitution,
+      inherited numerical approximation, new approximation or unsupported claim.
+      Trace changed ray intervals/density arguments, finite-distance dilution
+      and position-varying source/phase angles through the same transport laws;
+      preserve ground terms, pure-order recurrence and spectral accounting.
+      Explain why radius/altitude plus outgoing direction suffices only under
+      the stated symmetry assumptions. Do not infer unchanged numerical error
+      from unchanged equations or inherit spherical shadow/twilight behavior.
+      Identify any implementation that actually changes the mathematics;
+      defend it explicitly or leave it unresolved rather than silently adopting
+      it. Exit with an inspectable inventory, dependency map, transfer gaps and
+      bounded verification recommendations. Owner inspection is a touch-point;
+      source implementation remains subject to its separate review gates.
+      Include an informative subsection on compensating errors using the
+      preserved `sky-accuracy-dials` findings. Explain how changes in path
+      lengths, local source directions, density/phase reconstruction and order
+      accounting could change cancellation; classify evidence versus hypothesis.
+      Give ozone explicit treatment: pin enabled/disabled status, absorption
+      spectrum/profile and source/view/recurrence paths, and identify missing
+      evidence. The owner selects this material as informative only: no new
+      cancellation campaign, ozone change, automatic correction adoption,
+      acceptance oracle or resumption of the suspended experiment is selected.
+- [x] **P3-A: freeze the layout and proof contract.** Deliverables are pinned in
+      [p3-contract.md](p3-contract.md); its completion-authority section requires
+      current validated source review before phase completion is reported.
+      The layout, gate identity, small topology proofs and script monitor are
+      recorded there. No P3-B capture or accuracy study was run.
+      Preserved specification: specify Euclidean shell
       bounds, field-resolution nodes and altitude/cross-section sampling, without
       equating the 2,048 source-strength bands with full field layers. Derive
       conservative atmospheric intersections for the complete construction and
@@ -474,52 +580,87 @@ empty-band omission error and movement/reuse error separate.
       angular frames and cross-shell stencils. Inventory all pure, transported
       and cumulative fields and preserve recurrence across shells. Keep necessary
       source facts and vacuum ray segments even where scattering bands are empty.
-      Freeze compatible P1 limits and additional layout/omission measurements
-      before candidate results, recording any new gate identity and rationale.
+      Use P3-A0 to freeze the claim/evidence map and compatible P1 limits,
+      mathematical transfer/approximation defenses, ordinary correctness checks
+      and layout/omission measurements
+      before new scoring. Record a new gate identity and the superseded global
+      reference prerequisite and current deferral of approximation error estimates;
+      preserve prior results and compatible correctness/resource limits.
       Capture the review baseline and refresh reviewer context before coding.
-- [ ] **P3-B: build the first fresh candidate.** Allocate and compute only
+- [x] **P3-B: build the first fresh candidate.** The owner-selected
+      [fresh Flat0 delivery](p3-first-image.md) records V3a, construction/work
+      observations and receipt-governed completion. Phase completion requires
+      its matching exit-0 CLEAN source review; later qualification stays open.
+      Allocate and compute only
       admitted scattering samples from the outset. Implement matching CPU/GPU
       construction and lookup, with explicit out-of-coverage rejection. Deliver
       V3a at Flat 0 promptly, labeling any bounded diagnostic profile. Record
       total/admitted/omitted bands, retained sample counts, actual allocated bytes
       and executed work; distinguish potential storage from actual GPU resources.
-- [ ] **P3-C: qualify fresh-layout accuracy and omission.** Deliver V3b across
+- [x] **Focused lower-band diagnostic, owner-selected supplemental request.**
+      The [source trace](lower-band-source-trace.md) records measured Flat0
+      order/path/spectral contributions, an analytic Flat180 source comparison
+      and receipt-governed completion. The dedicated Flat180 trace is incomplete
+      after its resource stop. This does not select the full P3-C matrix or tune
+      rendering policies.
+- [x] **P3-C: numerical delivery accepted; implementation completion is receipt-governed.**
+      The [qualification record](p3-layout-qualification.md) owns the matching
+      source-review gate. Preserved specification: deliver V3b across
       the frozen Flat 0/45/90/135/180 cadence. Compare fresh old-grid controls
-      against fresh candidates, then candidates against the independent reference
-      and spatial refinement. Verify complete fields/rays, every spectral channel,
+      against fresh candidates as behavior controls. Separately evaluate the
+      P3-A0 adaptation/approximation claims through their mathematical rationale,
+      assumptions and ordinary analytic/implementation correctness checks.
+      Spatial/angular/path/order sensitivity and quantified error estimates are
+      deferred to later owner-selected work. Shared-path parity is labeled
+      consistency, not independent physical truth.
+      Verify complete required fields/rays, every spectral channel,
       axis limits, ground/top boundaries, curved valid-domain edges, band seams,
       compact-address round trips and off-grid support. In bounded proof runs,
       compare the compact candidate with an equivalent unculled candidate using
       identical occupied samples and physical equations. Tangent/uncertain bands
       remain admitted. Measure omission savings and whole-layout costs separately;
       fewer bands alone does not prove lower total memory or better accuracy.
-- [ ] **P3-D: prove source movement.** Compare transformed reuse against newly
+- [x] **P3-D numerical delivery: prove source movement.** Compare transformed reuse against newly
       built shell candidates at identical candidate coverage and source policy.
       Recheck the P2 non-cardinal rotation matrix and physical axis continuity;
       then test horizontal translations and the standard orbital-time placements.
-      Deliver V3c paired stills and a short clip. Derive shell policy and coverage
+      Deliver V3c paired PNGs and exact-time traces. Derive shell policy and coverage
       identity independently of observer placement before excluding placement
       from construction identity. Include endpoint precision and complete rays;
       inherited P2 parity does not establish these new-layout properties.
-- [ ] **P3-E: decide the candidate.** Record distinct accuracy, omission,
+      Numerical qualification is accepted in [P3-D movement](p3-movement.md).
+      Implementation completion remains open until its matching primary/audit
+      validation is exit-0 CLEAN; a missing or stale receipt keeps it open.
+- [x] **P3-E: decide the candidate.** Delivered in [candidate disposition](p3-disposition.md),
+      with combined source-review authority in [P5 qualification](p5-qualification.md).
+      The retained specification follows: record distinct accuracy, omission,
       resource and reuse results, exact admitted domain and unresolved cells.
       Validate applicable primary/independent source review before completion.
-      A correct fresh layout with limited or rejected reuse can advance with an
-      explicit fresh-build fallback. An inaccurate or inadmissible layout remains
-      rejected/incomplete; memory savings cannot waive its accuracy gates.
+      State whether each result supports inherited methods, adaptation
+      consistency, approximation, omission or reuse, and its domain/limitations.
+      A defensible fresh layout with limited or rejected reuse can advance with an
+      explicit fresh-build fallback. Demonstrated mathematical or implementation
+      defects and inadmissible queries still require correction or rejection.
+      Unmeasured approximation error is disclosed and deferred; it does not by
+      itself block this experiment's current defensibility goal.
 
 Changing source height rebuilds nodes, intersections and compact addressing.
 Out-of-coverage movement requests a replacement build; it never silently clamps
 to existing fields. A source-centered reference alone does not prove translation
 invariance when construction boundaries or the source-amplitude policy move.
 
-**Exit:** a qualified fresh shell-layout candidate with validated omission and
-an explicit reuse region, or documented rejection. Keep failed cells and old
+**Exit:** a fresh shell-layout disposition under the revised evidence contract,
+with defended assumptions/abstractions, disclosed unmeasured approximation error, validated
+omission and an explicit reuse region, or documented rejection/incomplete claims.
+Keep failed cells and old
 controls immutable. If the new layout is rejected, record that result before
 choosing an already qualified fallback for the still-required film; an attractive
 fallback recording must not be labeled success of the new layout.
 
 ### P4 — Implement In-App Construction And Coherent Publication
+
+Accepted behavior: [P4 application record](p4-application.md). Current source
+completion is derived from the complete P3-E–P5 receipt linked by P5.
 
 Keep experimental adapters and any adapted implementations inside the source
 root. Read production collaborators without changing their contracts or adding
@@ -540,9 +681,11 @@ placement-dependent field or source-policy identity explicit.
 Build on the GPU in the app, retain complete interpolation support and define
 ownership of shared fields, active/staging resources and their disposal.
 Publish one compatible frame state: cache transform, exact current source
-facts, direct light, receiver sky lighting, source disk and scene shadow
+facts, direct light, receiver sky lighting and scene shadow
 direction. Receiver lighting for this comparison is evaluated at the frame's
 state; do not hide discrepancies with the recording's one-second interpolation.
+Visible Sun-disc and stellar composition are qualified separately in
+P5-Celestial; the completed P4/P5 application did not enable its celestial roster.
 
 Exercise unchanged-cache reuse, horizontal movement, height/atmosphere/source
 changes, camera coverage exits, supersession, failure, cancellation and
@@ -554,18 +697,48 @@ cost of preserving old and staging replacement caches simultaneously.
 validated lifecycle evidence, including deliberate failed/cancelled builds,
 with the V4 lighting/rebuild comparison published.
 
-### P5 — Qualify Accuracy, Motion And Benefit
+### P5 — Qualify Defensibility, Motion And Benefit
 
-Run the frozen matrix on the declared GPU with the selected profile. Compare
+Accepted numerical delivery: [P5 claim matrix](p5-qualification.md), all ten
+complete pairs. Its matching validated source receipt governs implementation
+completion. P5 captures have ended; its temporary reserve exception is no
+longer selected. P6 remains unselected. The retained specification follows.
+
+Run the revised P3-A claim matrix on the declared GPU with the selected profile.
+Keep inherited method support, adaptation consistency, numerical approximation,
+reuse, visual suitability and measured benefit as separate conclusions. Compare
 fresh current-policy, fresh selected-candidate and reused selected-candidate
 outputs under identical physical states, camera paths and display settings.
 Capture physical fields/rays and displayed frames separately. Include Sun
 motion, observer movement, domain-edge approach and a height change/rebuild.
 Include the required five-state sky-only and colored-box cadence plates and
-the primary three-state numerical comparisons. Record intermediate numerical
-checks according to the frozen P1 matrix rather than inferring them from images.
+the primary three-state consistency comparisons. Record intermediate correctness
+checks under the revised P3-A contract, preserving compatible P1 limits.
+Absolute approximation error estimates are deferred; images do not supply them.
 If only a narrower reuse region qualifies, explicitly report which standard
 states it excludes; it does not satisfy the complete three-state claim.
+
+For the 120-state exact-time trajectories, independently construct one canonical
+control field and one reused field for each of the five frozen states, in both
+sky-only and ordinary colored-box workloads. Each running application evaluates
+all original exact-time states, all 96 view rays and Native15 receiver packets.
+Authenticate complete input/source identities, check canonical field identity
+and actual cache reuse at every frame, and compare spectra, displayed images
+and first/second differences. This is independently constructed trajectory
+consistency, not 120 fresh constructions per trajectory. The unchanged-policy
+P3-D complete-field covariance proofs supply separate construction-invariance
+support. This avoids hundreds of redundant builds while preserving the current
+claim distinction. If bounded chunks are needed, retain every original slot and
+join derivative comparisons across chunk boundaries. Each job has an explicit
+ten-minute guard with the existing 8 GiB ceiling and default free-memory reserve.
+On 2026-10-10 the owner approved a temporary 6 GiB machine reserve for the
+remaining P5 captures only. Use the explicit P5 exception flag; omit it after
+P5. The ten-minute deadline and 8 GiB process ceiling are unchanged.
+The full matrix has 20 serialized jobs (five states, two workloads, two cache
+instances) and 2,400 captures. The initial 120-state job indicates roughly
+three minutes per job, so allow approximately one hour in total while retaining
+the per-job guard and progress reporting. It resolves the finite declared P5
+trajectory cells; it is not a reference-convergence or resolution sweep.
 
 Measure cold build time, replacement latency, number of builds avoided,
 per-frame lookup/receiver cost, logical and observed allocations, peak active
@@ -574,13 +747,29 @@ repetition policy, median and tail behavior; include harness overhead and
 measurement uncertainty. Full-profile timeouts or allocation failures are
 failed/incomplete cells, not evidence supplied by smaller profiles.
 
+The owner accepts the observed approximately 30-36-second fresh build as a
+startup cost and, on 2026-10-10, directs that performance checks be relaxed.
+Startup/replacement latency, warm draw cost, page responsiveness and measured
+build avoidance are informative observations, not completion thresholds.
+Retain the original targets and report whether observations met them; do not
+edit frozen fixtures or relabel historical results. Actual unchanged-cache
+reuse, exact-state consistency, lifecycle correctness and coverage remain
+required. The existing 8 GiB owned-memory ceiling, default 8 GiB machine reserve
+(with the explicit remaining-P5 exception above),
+exclusive heavy-job ownership and ten-minute job deadline remain execution
+controls. No performance optimization campaign is required for completion.
+
 Observe frame differences and lighting/shadow continuity along exact-time
-trajectories. A layout must pass numerical, temporal, lifecycle and resource
-gates. Report layout cost and omission savings separately from reuse/build-avoidance
-benefit; claim useful reuse only when its frozen benefit and accuracy gates pass. Do not infer
+trajectories. A layout must pass current mathematical/implementation correctness,
+temporal, lifecycle and resource gates. Report layout cost and omission savings
+separately from measured reuse/build avoidance. Preserve fresh/reused
+consistency checks and report actual cache reuse; the historical percentage
+target is informative under the current owner timing disposition. Do not infer
 success from an attractive video or unchanged average frame time alone.
 
-**Exit:** an explicit pass/fail matrix with no unmeasured required cell, source
+**Exit:** a claim-by-claim defensibility report linking the P3-A0 inventory,
+assumptions, evidence and remaining extrapolation limits, plus an explicit
+pass/fail/inconclusive matrix with no unmeasured required cell, source
 and artifact identities, timing/memory results and an inspectable comparison
 Markdown/JSON record and direct captures delivering V5.
 
@@ -592,14 +781,91 @@ coverage along the full motion/film workload, including replacement builds at
 changed height. There is no separate late culling retrofit. New intersection or
 addressing changes invalidate affected qualification and review evidence.
 
+### P5-Celestial — Integrate The Sun Disc And Stars
+
+Selected before P6 at the owner's request on 2026-10-10. The completed P4/P5
+application integrates the atmospheric source and scene illumination, but its
+profile leaves the celestial roster unset. Neither the visible Sun disc nor
+stars were enabled in that earlier application. Existing numerical evidence keeps its atmospheric-cache
+and scene-lighting scope; preserve every sealed run and prior review artifact.
+
+The [celestial delivery](p5-celestial.md) now owns accepted focused numerical
+results, V5a/V5b images, the two-second preview and matching source-review
+completion authority. The current selected adapter enables the Sun and flat
+stars. Captures and cleanup have finished; the default 8 GiB reserve applies
+again. Stop for owner visual review before selecting P6.
+
+1. **Correct the records and define the unit.** Distinguish atmospheric-cache
+   qualification from celestial rendering readiness. Refresh governing reviewer
+   context and capture a baseline before implementation. Extend the abstraction
+   inventory with the stellar direction/transport assumptions; existing source
+   receipts do not qualify the new integration or changed governing context.
+   Trace the actual spherical stellar cache/generation path, including static
+   input reuse, collision aggregation, attenuation ownership, compatibility,
+   publication and disposal. The [operational design basis](p5-celestial-design.md#cache-and-runtime-operations)
+   owns that trace separately from the flat placement notes.
+2. **Connect the finite Sun disc.** Reuse the existing local-Sun celestial path
+   through contained adapters. Share the atmosphere's source position, radius,
+   spectrum and observation. Update live disc placement without rebuilding the
+   atmospheric cache solely for horizontal movement. Include celestial resources
+   in coherent publication, replacement, cancellation and disposal ownership.
+3. **Deliver V5a early.** Publish direct close/intermediate/far Sun-disc PNGs at
+   Flat0/90/180 using declared Sun-facing camera poses. Check angular size,
+   position, spectral attenuation and scene occlusion before adding stars.
+4. **Adapt stars to flat geometry.** Follow the owner-confirmed current
+   [flat-star design notes](p5-celestial-design.md#governing-star-notes).
+   Reuse the established catalog, spectra, rasterization and presentation
+   machinery. Apply shared live pole rotation to canonical catalog directions,
+   then the north-polar azimuthal-equidistant mapping onto the presentation dome.
+   Preserve the base-epoch overhead invariant and keep the dome separate from
+   physical flat-atmosphere transport. Record the concrete dome parameters and
+   rotation period; qualify their CPU/GPU mapping. Replace spherical direction
+   and transmission dependencies. Preserve the existing color/adaptation model. Stars
+   may correctly remain invisible against a bright sky; do not force visibility
+   or fabricate darkness to match the distant film.
+5. **Deliver V5b.** Publish a clearly labeled star-only diagnostic and combined
+   sky images under the actual lighting conditions, followed by a short motion
+   preview. Diagnostic isolation is evidence for the star path, not a substitute
+   for the combined physical state or the full P6 recording.
+6. **Qualify and hand off.** Run focused CPU/GPU spectral, geometry, motion,
+   occlusion, compatible-reuse, replacement and resource-cleanup proofs. Reuse
+   unaffected P5 evidence rather than repeating the full matrix. Complete mapped
+   primary review and independent audit for the new coherent unit, update status
+   with measured results and limitations, and stop for owner visual review.
+
+The owner explicitly relaxed the 8 GiB free-memory restriction for the upcoming
+AFK integration work, clarifying that higher memory use would not cause a
+hardship. Use a temporary **6 GiB machine free-memory reserve for P5-Celestial**
+as the execution choice, consistent with the earlier bounded capture experience.
+This is a new phase-scoped authorization; the old remaining-P5 exception stays
+inactive. Implement and validate the scoped guard/qualification selection before
+launching celestial jobs, and record the selected reserve and owner instruction
+in new run provenance. The launcher now provides the explicit phase-scoped flag.
+Restore the default 8 GiB reserve at phase completion or an owner-directed
+restoration; this exception does not authorize P6 recording.
+
+Prioritize integration over memory optimization. Keep GPU jobs serialized and
+clean up between runs. The 8 GiB owned-process ceiling, fail-closed monitoring
+and ten-minute job limit remain unchanged.
+Performance measurements remain informative; correctness and execution controls
+remain required. Keep implementation and evidence inside the experiment's
+declared roots, with compact reproducible artifacts and no full browser profiles
+or image-gallery pages. JavaScript remains the implementation language.
+
+**Exit:** validated celestial integration with V5a/V5b, focused proof results,
+explicit assumptions/limitations and fresh source-review evidence. Owner visual
+review and selection are required before the full video; P6 is not started by
+completion of this phase.
+
 ### P6 — Reproduce The Local-Sun Full-Orbit Film
 
 This is the final execution milestone, after P5 qualification of the layout,
-its integrated empty-band omission and any claimed reuse, and before lifecycle closeout.
+its integrated empty-band omission and any claimed reuse, P5-Celestial
+integration and owner visual review, and before lifecycle closeout.
 The owner requests the distant-Sun film reproduced for the local Sun at Union
-Glacier on the **December solstice**, running a full **360° clockwise orbit
-starting at Flat 180**. This selects December explicitly; it does not change
-the standard Union Glacier December 14 visual controls in earlier phases.
+Glacier on **December 14, 2024**, running a full **360° clockwise orbit
+starting at Flat 180**. This owner update supersedes the earlier solstice date.
+The standard Union Glacier visual controls in earlier phases remain preserved.
 
 Use the production
 [The Hours adapter](../../../../../scripts/flat32/the-hours/README.md) as the
@@ -608,12 +874,13 @@ read-only presentation and recording reference. The owner requires the
 observatory, seed/RNG sequence, assets, object identities and transforms,
 geometry/terrain, portal orientations, materials/textures, visual reflectance,
 local-bounce recipe, animation score, camera choreography, shadow setup,
-presentation filters and recording settings. Do not flatten or rebuild the
+presentation filters and recording settings, with the owner-selected
+1024-by-768 raster exception above. Do not flatten or rebuild the
 visual terrain, reposition portals for the new Sun, retheme the observatory
 for Antarctica, or substitute the earlier six-box review scene.
 
 The allowed changed inputs are the local-Sun source/flat atmospheric model,
-Union Glacier observation, December-solstice date and 180°–540° film clock.
+Union Glacier observation, December 14, 2024 date and 180°–540° film clock.
 Light direction, illumination, visibility and Sun-relative camera poses follow
 those changed inputs through the original scene/presentation equations. Keep
 the authored camera curves, key times, offsets, FOV and Sun-framing rule; do not
@@ -638,8 +905,9 @@ complete parent provenance; original sources and completed film evidence stay
 read-only. Scene-setup equality does not imply equal final pixels or MP4 bytes
 after the source/model and observation change.
 
-Retain the original delivery format: **3840 × 2160**, **30 fps**, **60 seconds**,
-with **1,800 distinct ideal scene states**. Use the existing repository-owned
+Use the owner-selected **1024 × 768** raster, superseding the original 4K
+delivery size. Retain **30 fps**, **60 seconds**, and **1,800 distinct ideal
+scene states**. Use the existing repository-owned
 animation-evidence recording capabilities through an experiment-local adapter.
 Treat offline encoding as a film workflow, not evidence of live 30-fps runtime
 performance. Deliver a native MP4, a smaller review copy, lossless milestone
@@ -647,8 +915,8 @@ stills and an inspectable index.
 
 #### Film Clock And Coverage
 
-Resolve the Flat 180 start instant for Union Glacier's pinned December-solstice
-date/year through the production location/time path. Keep a monotonically
+Resolve the Flat 180 start instant for Union Glacier's pinned December 14, 2024
+date through the production location/time path. Keep a monotonically
 increasing clock and unwrapped orbital phase:
 
 ```text
@@ -728,6 +996,47 @@ validated scene-setup equality, trace and media checks, declared reuse
 limitations, and owner visual
 acceptance. A failed or suspended film remains an explicit open deliverable.
 
+### Deferred Follow-Up — Shared Construction Values
+
+Defer the distant-cache-inspired construction optimizations to potential later
+work. The first candidate is a position/wavelength table containing the two
+direct-light scattering coefficients, including the selected local source
+falloff and attenuation, indexed by all outgoing directions. The local prototype
+already indexes a precomputed Mie phase matrix and reuses its canonical field
+across admitted horizontal Sun movement. A further candidate is reuse of path
+interpolation and attenuation tables across scattering orders, subject to their
+additional memory cost. Neither candidate has measured time savings, and
+neither is a current completion or recording gate. Any later implementation
+must preserve the selected equations and sampling policy and check output
+consistency and measured build/memory benefit.
+
+### Deferred Follow-Up — Gray Horizon Cast
+
+The owner observes a gray cast near the horizon in both the local-Sun images
+and the distant-Sun model, and identifies this as a motivation for the
+Sky Accuracy Dials experiments. Investigate later; this observation does not
+identify a cause or establish a defect in the new cache layout.
+
+Existing investigations are the starting point: the
+[earlier appearance review](../gpu-resident-shared-block-cache/design.md)
+described a horizon too gray instead of white, visible in the live application;
+the [ozone-free ablation](../distant-sun-shadow-animation-evidence/continuation-plan.md#f1--ozone-free-cache-ablation)
+built the matched candidate without establishing ozone as the cause.
+Accuracy Dials already investigated numerical cancellation, horizon-focused
+angular sampling and [aerosol phase/albedo sensitivity](../sky-accuracy-dials/aerosol-sensitivity-results.md).
+Its [scope limits](../sky-accuracy-dials/results.md#factors-not-resolved-by-this-campaign)
+leave app color/display and grazing-horizon appearance unqualified.
+
+Use those preserved results and the [current Dials hypotheses](../sky-accuracy-dials/follow-up-context.md)
+as informative context. Distinguish insufficient brightness from low color
+saturation; the recent local-Sun trace establishes near-neutral light plus
+tone-curve compression, not the cause of the distant-Sun gray-versus-white
+complaint. A future investigation should distinguish atmospheric transport and
+shared approximations from spectral-to-display conversion and adaptation,
+using matched low-elevation spectra and images. No correction,
+Dials resumption or additional experiment is selected. This follow-up does
+not add a completion or recording gate to the current plan.
+
 ### P7 — Decide And Close Or Suspend
 
 Report layout accuracy and admission, omitted work/storage and whole-layout
@@ -744,6 +1053,10 @@ gates. Preserve accepted, rejected, failed and interrupted runs in both cases.
 
 ## Proof, Review And Run Contract
 
+- Use JavaScript scripts and existing runtimes, with Python for suitable support.
+  Do not compile native helpers or package executable binaries. A specific
+  language/build exception requires explicit owner permission before proceeding.
+  No exception is currently approved; Norton exclusions do not grant one.
 - Use focused self-verifying proof runners. Do not create an experimental
   unit-test tree, test-framework dependency or suite.
 - Keep an experiment-local `jsconfig.json` with `allowJs`, `checkJs` and `noEmit`.

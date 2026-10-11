@@ -1,0 +1,74 @@
+{
+	"schema": "local-sun-p3-defensibility-contract-v1",
+	"authority": "Owner-selected mathematical defensibility and implementation correctness; no measured approximation error or empirical flat-world accuracy claim.",
+	"selection": {
+		"run": "00281-p3-selection",
+		"artifact": "selection.json",
+		"identity": "sha256:f5a3330e484602a6deaae09eb3c7aed520692955ff918987cdb829c82e1baeee"
+	},
+	"layout": {
+		"run": "00217-p3-layout-v2",
+		"artifact": "layout.json",
+		"schema": "local-sun-shell-layout-v9",
+		"nodes": 1049,
+		"height": 4828032,
+		"top": 100000,
+		"maximumRho": 33378000,
+		"units": "meters",
+		"interpolation": "euclidean-radius",
+		"reconstruction": "geometric-density"
+	},
+	"legacyGates": {"run": "00217-p3-layout-v2", "artifact": "gates.json", "schema": "local-sun-shell-layout-gates-v2"},
+	"physicalModel": {
+		"ground": "black: groundBoundary=null; visual materials do not contribute atmospheric reflection",
+		"ozone": "disabled; absorption remains zero; future owner selection required",
+		"geometry": "Horizontally uniform slab over a flat plane, source height strictly above top; finite construction cylinder is computational coverage.",
+		"source": "Frozen Native15 spectrum and finite isotropic source; pointwise direction and inverse-square scaling outside radius clamp; stored J1 retains 2048 held source-strength bands.",
+		"symmetry": "Positions use Euclidean source distance and altitude; outgoing direction retains angular dependence. Horizontal rigid transforms require matching source-centered domain and directional frames; height and physical-property changes rebuild.",
+		"boundaryAdmission": "Omit a band only when outer radius < height-top. Retain tangent/support bands and vacuum propagation. Nonintersecting bands receive neither scattering allocation nor construction work.",
+		"outsideCoverage": "Reject unsupported queries or request a replacement build; no silent clamping or outside-vacuum substitution.",
+		"support": "Compact per-altitude rows retain axis and outer-cylinder support; radius-excess arithmetic and positive Euclidean-radius stencils reconstruct across rows/bands.",
+		"orders": "Pure J1..J4, transported L1..L3 and Jthrough4=sum(J1..J4); consumers use cumulative density, recurrence uses the compatible preceding pure order. No all-orders claim."
+	},
+	"numericalPolicy": {
+		"incoming": "partitioned-polar40-midpoint-azimuth48-v1",
+		"outgoing": "cubed-sphere-W27",
+		"spectral": "Native15",
+		"maximumOrder": 4,
+		"format": "R32F",
+		"buildTransport": "column48-tail64",
+		"runtime": "analytic-columns-positive-column15-v1",
+		"sourceStrengthBands": 2048
+	},
+	"requiredClaims": [
+		"Trace preserved coefficients, units, phase, attenuation and pure-order equations to the abstraction inventory.",
+		"Defend normalized reconstruction and optical-column integration with stated assumptions, limits and ordinary analytic/implementation correctness checks.",
+		"Complete admitted support, compact address round trips, finite nonnegative fields, all 15 channels and complete rays; identify each physical quantity.",
+		"Compact/unculled comparison uses identical occupied nodes and equations; record omitted work and actual logical allocations separately from device telemetry.",
+		"CPU/GPU and fresh/reused parity use retained quantity limits and identical candidate policy; no claim of independent physical accuracy.",
+		"Frozen five-state visual cadence and exact-state receiver lighting; preserve Flat90 holdout and mutation rule.",
+		"Coherent publication, cancellation, failure, supersession and disposal; retained temporal, coverage, allocation and performance gates.",
+		"Mapped source review and local type check remain implementation-completion requirements."
+	],
+	"deferredClaims": [
+		"Independent global reference convergence",
+		"Quantified interpolation/integration error bounds",
+		"Spatial/angular/path/order sensitivity campaigns",
+		"Ozone adoption and cancellation experiments",
+		"Reflective atmospheric ground support"
+	],
+	"legacyDisposition": "Prior passes, failures and inconclusive results remain under their original identities. Deferred accuracy thresholds are retained as history, never represented as passed current gates.",
+	"consumerRule": "New scoring must name the frozen current contract/gate identity. Old hard-coded gate/reference runners do not automatically adopt this policy and must be adapted and reviewed before claiming a current result.",
+	"execution": {
+		"languages": "JavaScript; Python only for suitable support; no compiled helper or executable",
+		"maximumOwnedBytes": 8589934592,
+		"minimumFreeBytes": 8589934592,
+		"sampleIntervalMilliseconds": 5000,
+		"sampleDeadlineMilliseconds": 10000,
+		"maximumDiagnosticMilliseconds": 600000,
+		"maximumDiagnosticRounds": 2,
+		"maximumConcurrentHeavyJobs": 1,
+		"stopBeforeVideo": true,
+		"scope": "P3-A only; no candidate capture, video, production change or broad accuracy campaign"
+	}
+}

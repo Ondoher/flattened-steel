@@ -14,6 +14,8 @@ import {FlatEarthGeometry} from '../../src/algorithm32/implementation/flat-earth
 import {CANONICAL_ATMOSPHERE_CONSTANTS} from '../../src/algorithm32/implementation/canonical-atmosphere/consts.js';
 import {ShellReceiver} from './shell-receiver.js';
 import {ShellEndpointScene} from './shell-scene.js';
+import {installShellCelestial} from './shell-celestial.js';
+import {CelestialGenerationPass} from '../../src/algorithm32/rendering-runtime/three/CelestialGenerationPass.js';
 
 /** Keep live horizontal placement out of the owned runtime program's source identity.
  * Every frame still owns its exact uniform values; this changes no construction
@@ -144,6 +146,7 @@ export async function prepareShellApplicationFrame(recipe,degrees,renderer,phase
 	if(!recipe.shellLayout || !recipe.shellRuntime || !recipe.shellIncoming || recipe.diagnostic)throw new Error('Selected shell application controls required.');
 	const owners=createOwners(recipe,degrees),layout=recipe.shellLayout;
 	installShellLiveFrame(owners.geometry);
+	if(recipe.celestial)installShellCelestial(owners,recipe.celestial);
 	installShellLiveAtmosphere(/** @type {AtmosphereModel & CacheBuildContributor} */(owners.model.atmosphere),recipe.shellMieAlbedo ?? CANONICAL_ATMOSPHERE_CONSTANTS.mieSingleScatteringAlbedo);
 	/** @type {ShaderHandle|null} */ let handle=null;
 	/** @type {ShellReceiver|null} */ let receiverOwner=null;
@@ -165,13 +168,22 @@ export async function prepareShellApplicationFrame(recipe,degrees,renderer,phase
 		owners.source.createCacheController=()=>controller;
 		if(!(controller.backend instanceof ThreeCacheBackend))throw new Error('Shell application requires its resource-owned Three backend.');
 		if(recipe.shellScene)sceneOwner=new ShellEndpointScene(owners.geometry);
-		const camera=sceneOwner?.camera ?? new THREE.PerspectiveCamera(70,720/414,.002,500);
+		const viewport=renderer.getDrawingBufferSize(new THREE.Vector2());
+		const camera=sceneOwner?.camera ?? new THREE.PerspectiveCamera(70,viewport.x/viewport.y,.002,500);
+		camera.aspect=viewport.x/viewport.y;
+		if(recipe.horizontalFieldOfViewDegrees!==undefined){
+			const horizontal=recipe.horizontalFieldOfViewDegrees;
+			if(!Number.isFinite(horizontal)||!(horizontal>0&&horizontal<180))throw new RangeError('Horizontal capture FOV must lie strictly between zero and 180 degrees.');
+			camera.fov=2*Math.atan(Math.tan(horizontal*Math.PI/360)/camera.aspect)*180/Math.PI;
+		}
+		camera.updateProjectionMatrix();
 		camera.position.set(0,.005,0);camera.lookAt(0,.005,-1);
+		if(recipe.celestial?.sunFacing){const position=owners.source.configuration.position.coordinates,observer=owners.geometry.configuration.observerPosition.coordinates;camera.lookAt(position[0]-observer[0],position[2]-observer[2]+.005,-(position[1]-observer[1]));}
 		/** @type {ShaderRuntimeComposer} */ const composer={passes:[],addPass(pass){this.passes.push(pass);},removePass(pass){const index=this.passes.indexOf(pass);if(index>=0)this.passes.splice(index,1);}};
 		const bindings=Algorithm32Bindings.create(THREE,{value:500000,units:'meters'});
 		Algorithm32Bindings.update({bindingValues:bindings,camera,props:{config:{...owners.facade.config.config,geometry:owners.geometry},sceneScale:{value:1000,units:'meters-per-scene-unit'}}});
 		const setupStarted=performance.now();
-		handle=await owners.facade.setupShader({THREE,composer,scene:sceneOwner?.scene ?? new THREE.Scene(),camera,viewportSize:{width:720,height:414,units:'pixels'},sceneScale:{value:1000,units:'meters-per-scene-unit'},sceneDepthMax:{value:500000,units:'meters'},bindingValues:bindings,cacheBackend:controller.backend,signal:context.signal});
+		handle=await owners.facade.setupShader({THREE,composer,scene:sceneOwner?.scene ?? new THREE.Scene(),camera,viewportSize:{width:viewport.x,height:viewport.y,units:'pixels'},sceneScale:{value:1000,units:'meters-per-scene-unit'},sceneDepthMax:{value:500000,units:'meters'},bindingValues:bindings,cacheBackend:controller.backend,signal:context.signal});
 		const setup=performance.now()-setupStarted,viewStarted=performance.now(),cache=controller.active;
 		if(!cache)throw new Error('No complete cache for frame preparation.');
 		let view=0,receiverMilliseconds=0;
@@ -198,6 +210,7 @@ export async function prepareShellApplicationFrame(recipe,degrees,renderer,phase
 		if(sceneOwner){sceneOwner.setLighting(owners,receiver,directionToSource);await sceneOwner.prepare(renderer);context.signal.throwIfAborted();}
 		let disposed=false;
 		/** @type {LocalSunShellPublishedFrame} */ const frame={...identity,source,observation:recipe.state.observation,receiver,directionToSource,viewPass,cache,backend:controller.backend,owners,stageMilliseconds:{setup,view,receiver:receiverMilliseconds},shaderIdentities,
+			...(recipe.celestial ? {celestial:{camera,handle,generation:/** @type {CelestialGenerationPass} */(composer.passes.find(pass=>pass instanceof CelestialGenerationPass)),diagnostics:()=>handle.getDiagnostics(),render:()=>{const before=/** @type {LocalSunCelestialRenderDiagnostic} */(viewPass.getDiagnostics());Algorithm32Bindings.update({bindingValues:bindings,camera,props:{config:{...owners.facade.config.config,geometry:owners.geometry},sceneScale:{value:1000,units:'meters-per-scene-unit'}}});if(sceneOwner)sceneOwner.render(renderer,viewPass,composer);else{for(const pass of composer.passes)if(pass instanceof CelestialGenerationPass)pass.render(renderer);viewPass.renderToScreen=true;viewPass.render(renderer,null,null);}const after=/** @type {LocalSunCelestialRenderDiagnostic} */(viewPass.getDiagnostics());if(after.renderErrorCount!==before.renderErrorCount)throw new Error('Celestial frame draw failed: '+after.lastRenderError);}}} : {}),
 			...(sceneOwner ? {scene:sceneOwner,renderScene:()=>sceneOwner.render(renderer,viewPass,composer)} : {}),
 			dispose:()=>{if(disposed)return;disposed=true;try{sceneOwner?.dispose();}finally{try{receiverOwner?.dispose();}finally{try{handle?.dispose();}finally{owners.facade.dispose();}}}}};
 		completed=true;return frame;

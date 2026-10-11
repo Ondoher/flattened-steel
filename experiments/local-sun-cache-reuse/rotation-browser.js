@@ -1,3 +1,5 @@
+import {observeOrderField} from './layout-qualification/field-identity.js';
+import {RECEIVER_ENVIRONMENT_LIGHT_QUADRATURE} from '../../src/algorithm32/implementation/scene-lighting/ReceiverEnvironmentLightQuadrature.js';
 import {ShellFramePublication} from './shell-frame-publication.js';
 import {shellApplicationImage} from './shell-application-image.js';
 import * as THREE from 'three';
@@ -19,10 +21,10 @@ import {gpuRays} from './rotation-gpu.js';
 import {LocalSunShellFactCache} from '../../src/algorithm32/implementation/local-sun/cache/LocalSunShellFactCache.js';
 import {partitionedShellIncoming} from './shell-angular.js';
 import {prepareShellMiePhase} from './shell-phase.js';
-import {configureShellBackend,configureShellController,prepareShellApplicationFrame} from './shell-client.js';
+import {configureShellBackend, configureShellController, prepareShellApplicationFrame} from './shell-client.js';
 import {CanonicalValueHash} from '../../src/algorithm32/value-identity/CanonicalValueHash.js';
 import {CANONICAL_ATMOSPHERE_CONSTANTS} from '../../src/algorithm32/implementation/canonical-atmosphere/consts.js';
-import {shellNodeDirectionStencil,shellSpectralNodeWeight} from './shell-axis.js';
+import {shellNodeDirectionStencil, shellSpectralNodeWeight} from './shell-axis.js';
 import {FlatEarthGeometry} from '../../src/algorithm32/implementation/index.js';
 import {ShellResourceProof} from './shell-resource-proof.js';
 import {rebuildShellLayout} from './shell-layout-refinement.js';
@@ -55,10 +57,23 @@ async function emit(name, value) {
  * @param {readonly number[]} coordinates - Continuous physical meters.
  * @returns {LocalSunShellSpatialPoint} - Same node factors and weights used by sampleField.
  */
-function resolveSpatialPoint(geometry,coordinates) {
-	const position={coordinates:/** @type {UnitVector3} */([coordinates[0],coordinates[1],coordinates[2]]),units:/** @type {const} */('meters')};
-	const stencil=geometry.resolveScatteringCachePositionStencil({position,atmosphereCoordinate:geometry.resolveAtmosphereCoordinate(position)});
-	return {position,taps:stencil.indices.map((index,i)=>({index,weight:stencil.weights[i],spectral:Array.from({length:15},(_,c)=>shellSpectralNodeWeight(geometry,index,position,c))}))};
+function resolveSpatialPoint(geometry, coordinates) {
+	const position = {
+		coordinates: /** @type {UnitVector3} */ ([coordinates[0], coordinates[1], coordinates[2]]),
+		units: /** @type {const} */ ('meters'),
+	};
+	const stencil = geometry.resolveScatteringCachePositionStencil({
+		position,
+		atmosphereCoordinate: geometry.resolveAtmosphereCoordinate(position),
+	});
+	return {
+		position,
+		taps: stencil.indices.map((index, i) => ({
+			index,
+			weight: stencil.weights[i],
+			spectral: Array.from({length: 15}, (_, c) => shellSpectralNodeWeight(geometry, index, position, c)),
+		})),
+	};
 }
 
 /** Evaluate complete measured fields with shared point/angle support and unchanged arithmetic order.
@@ -68,14 +83,20 @@ function resolveSpatialPoint(geometry,coordinates) {
  * @param {UnitVector3} direction - Exact outgoing direction.
  * @returns {Float64Array[]} - Each field's independently accumulated spectral packet.
  */
-function spatialPackets(fields,geometry,point,direction) {
-	const packets=fields.map(()=>new Float64Array(15));
-	for(const tap of point.taps) {
-		const angles=shellNodeDirectionStencil(geometry,tap.index,point.position,direction);
-		for(let d=0;d<angles.indices.length;d++)for(let c=0;c<15;c++) {
-			const weight=tap.spectral[c]*tap.weight*angles.weights[d];
-			for(let f=0;f<fields.length;f++)packets[f][c]+=weight*fields[f].values[(c*fields[f].storage.height+tap.index)*fields[f].storage.width+angles.indices[d]];
-		}
+function spatialPackets(fields, geometry, point, direction) {
+	const packets = fields.map(() => new Float64Array(15));
+	for (const tap of point.taps) {
+		const angles = shellNodeDirectionStencil(geometry, tap.index, point.position, direction);
+		for (let d = 0; d < angles.indices.length; d++)
+			for (let c = 0; c < 15; c++) {
+				const weight = tap.spectral[c] * tap.weight * angles.weights[d];
+				for (let f = 0; f < fields.length; f++)
+					packets[f][c] +=
+						weight *
+						fields[f].values[
+							(c * fields[f].storage.height + tap.index) * fields[f].storage.width + angles.indices[d]
+						];
+			}
 	}
 	return packets;
 }
@@ -86,14 +107,23 @@ function spatialPackets(fields,geometry,point,direction) {
  * @param {Float64Array} expected - Independently reconstructed expected packet.
  * @returns {void} - Same limits, counts and maxima as residual(actual, expected, 1e-12, 1e-4).
  */
-function observeSpatial(result,actual,expected) {
-	for(let c=0;c<15;c++) {
-		const index=result.count++;
-		if(!Number.isFinite(actual[c]) || !Number.isFinite(expected[c])){result.nonfinite++;result.failures++;continue;}
-		if(actual[c]<-1e-12 || expected[c]<-1e-12)result.negative++;
-		const error=Math.abs(actual[c]-expected[c]),ratio=error/(1e-12+1e-4*Math.abs(expected[c]));
-		if(ratio>result.maximumRatio){result.maximumRatio=ratio;result.worstIndex=index;}
-		result.maximumAbsolute=Math.max(result.maximumAbsolute,error);if(ratio>1)result.failures++;
+function observeSpatial(result, actual, expected) {
+	for (let c = 0; c < 15; c++) {
+		const index = result.count++;
+		if (!Number.isFinite(actual[c]) || !Number.isFinite(expected[c])) {
+			result.nonfinite++;
+			result.failures++;
+			continue;
+		}
+		if (actual[c] < -1e-12 || expected[c] < -1e-12) result.negative++;
+		const error = Math.abs(actual[c] - expected[c]),
+			ratio = error / (1e-12 + 1e-4 * Math.abs(expected[c]));
+		if (ratio > result.maximumRatio) {
+			result.maximumRatio = ratio;
+			result.worstIndex = index;
+		}
+		result.maximumAbsolute = Math.max(result.maximumAbsolute, error);
+		if (ratio > 1) result.failures++;
 	}
 }
 
@@ -108,18 +138,23 @@ function observeSpatial(result,actual,expected) {
  * @param {LocalSunShellSpatialFieldPair[]} [batch] - Optional complete pure/cumulative fields evaluated with identical shared support.
  * @returns {LocalSunRotationSpatialResult[]} - Direct frame and strict inverse-transform residuals for every field.
  */
-function spatialChecks(owners, canonical, fresh, reused, degrees, layout,offset=[0,0],batch=[{fresh,reused}]) {
+function spatialChecks(owners, canonical, fresh, reused, degrees, layout, offset = [0, 0], batch = [{fresh, reused}]) {
 	const g = owners.geometry.configuration,
 		base = canonical.geometry.configuration;
 	const z = g.cacheAltitudeNodes.map((v) => v.value),
 		rho = g.cacheRadialNodes.map((v) => v.value);
 	const points = [];
-	if(layout) {
-		for(const row of layout.rows)for(let i=0;i<row.indices.length;i++) {
-			const node=layout.nodes[row.indices[i]];points.push([node.rho,node.z]);
-			if(i+1<row.indices.length)points.push([(node.rho+layout.nodes[row.indices[i+1]].rho)/2,node.z]);
-		}
-		for(let i=0;i<layout.rows.length-1;i++)for(const fraction of [0,.19,.51,.93,1])points.push([fraction*layout.maximumRho,(layout.rows[i].z+layout.rows[i+1].z)/2]);
+	if (layout) {
+		for (const row of layout.rows)
+			for (let i = 0; i < row.indices.length; i++) {
+				const node = layout.nodes[row.indices[i]];
+				points.push([node.rho, node.z]);
+				if (i + 1 < row.indices.length)
+					points.push([(node.rho + layout.nodes[row.indices[i + 1]].rho) / 2, node.z]);
+			}
+		for (let i = 0; i < layout.rows.length - 1; i++)
+			for (const fraction of [0, 0.19, 0.51, 0.93, 1])
+				points.push([fraction * layout.maximumRho, (layout.rows[i].z + layout.rows[i + 1].z) / 2]);
 	} else {
 		for (const h of z) for (const r of rho) points.push([r, h]);
 		for (let i = 0; i < z.length - 1; i++)
@@ -157,29 +192,62 @@ function spatialChecks(owners, canonical, fresh, reused, degrees, layout,offset=
 				d[axis] += e;
 				dirs.push(d);
 			}
-	const summaries=batch.map(()=>({directFrame:residual([],[],1e-12,1e-4),inverseTransformAwayFromAxis:residual([],[],1e-12,1e-4),inverseTransformAtAxis:residual([],[],1e-12,1e-4),implementationParity:residual([],[],1e-12,1e-4)}));
-	let pointIndex=0;
+	const summaries = batch.map(() => ({
+		directFrame: residual([], [], 1e-12, 1e-4),
+		inverseTransformAwayFromAxis: residual([], [], 1e-12, 1e-4),
+		inverseTransformAtAxis: residual([], [], 1e-12, 1e-4),
+		implementationParity: residual([], [], 1e-12, 1e-4),
+	}));
+	let pointIndex = 0;
 	for (const [r, h] of points)
 		for (const az of [0, 33]) {
 			const radialOffset = rotate([r, 0, h], az),
-				p = [g.sourceSubpoint.coordinates[0] + radialOffset[0], g.sourceSubpoint.coordinates[1] + radialOffset[1], h];
-			const bp = rotate([p[0]-offset[0],p[1]-offset[1],p[2]], -degrees);
-			const query=resolveSpatialPoint(owners.geometry,p),originalQuery=resolveSpatialPoint(canonical.geometry,bp);
+				p = [
+					g.sourceSubpoint.coordinates[0] + radialOffset[0],
+					g.sourceSubpoint.coordinates[1] + radialOffset[1],
+					h,
+				];
+			const bp = rotate([p[0] - offset[0], p[1] - offset[1], p[2]], -degrees);
+			const query = resolveSpatialPoint(owners.geometry, p),
+				originalQuery = resolveSpatialPoint(canonical.geometry, bp);
 			for (const d of dirs) {
-				const direction=unit(d),expected=spatialPackets(batch.map(pair=>pair.fresh),owners.geometry,query,direction),actual=spatialPackets(batch.map(pair=>pair.reused),owners.geometry,query,direction),original=spatialPackets(batch.map(pair=>pair.reused),canonical.geometry,originalQuery,rotate(direction,-degrees));
-				for(let f=0;f<batch.length;f++) {
-					observeSpatial(summaries[f].directFrame,actual[f],expected[f]);
-					observeSpatial(r===0 ? summaries[f].inverseTransformAtAxis : summaries[f].inverseTransformAwayFromAxis,original[f],expected[f]);
-					if(d===dirs[0] && [0,1,10,111,points.length*2-1].includes(pointIndex)) {
-						const legacy=sampleField(batch[f].fresh,owners.geometry,p,direction);
-						if(expected[f].some((value,c)=>value!==legacy[c]))throw new Error('Shared-support proof changed reconstruction arithmetic.');
-						observeSpatial(summaries[f].implementationParity,expected[f],legacy);
+				const direction = unit(d),
+					expected = spatialPackets(
+						batch.map((pair) => pair.fresh),
+						owners.geometry,
+						query,
+						direction,
+					),
+					actual = spatialPackets(
+						batch.map((pair) => pair.reused),
+						owners.geometry,
+						query,
+						direction,
+					),
+					original = spatialPackets(
+						batch.map((pair) => pair.reused),
+						canonical.geometry,
+						originalQuery,
+						rotate(direction, -degrees),
+					);
+				for (let f = 0; f < batch.length; f++) {
+					observeSpatial(summaries[f].directFrame, actual[f], expected[f]);
+					observeSpatial(
+						r === 0 ? summaries[f].inverseTransformAtAxis : summaries[f].inverseTransformAwayFromAxis,
+						original[f],
+						expected[f],
+					);
+					if (d === dirs[0] && [0, 1, 10, 111, points.length * 2 - 1].includes(pointIndex)) {
+						const legacy = sampleField(batch[f].fresh, owners.geometry, p, direction);
+						if (expected[f].some((value, c) => value !== legacy[c]))
+							throw new Error('Shared-support proof changed reconstruction arithmetic.');
+						observeSpatial(summaries[f].implementationParity, expected[f], legacy);
 					}
 				}
 			}
 			pointIndex++;
 		}
-	return summaries.map(summary=>({
+	return summaries.map((summary) => ({
 		queries: points.length * 2 * dirs.length,
 		directions: dirs.length,
 		spatialPoints: points.length * 2,
@@ -220,23 +288,40 @@ function axisApproach(owners, field) {
  * @returns {Promise<string>} - Serialized complete matrix result.
  */
 async function runRotation(recipe) {
-	if(recipe.shellLayout)recipe={...recipe,shellIncoming:partitionedShellIncoming(48,.5),shellRuntime:true,candidate:'precision',motion:false};
-	if(recipe.shellApplication)return runShellApplication(recipe);
+	if (recipe.shellLayout)
+		recipe = {
+			...recipe,
+			shellIncoming: partitionedShellIncoming(48, 0.5),
+			shellRuntime: true,
+			candidate: 'precision',
+			motion: false,
+		};
+	if (recipe.shellApplication) return runShellApplication(recipe);
 	const canvas = document.createElement('canvas');
 	document.body.append(canvas);
 	const gl = canvas.getContext('webgl2', {antialias: false, preserveDrawingBuffer: true});
 	if (!gl?.getExtension('EXT_color_buffer_float')) throw new Error('Float WebGL2 required.');
 	const renderer = new THREE.WebGLRenderer({canvas, context: gl});
-	renderer.debug.onShaderError=()=>{throw new Error('Experimental rotation shader compilation failed.');};
+	renderer.debug.onShaderError = () => {
+		throw new Error('Experimental rotation shader compilation failed.');
+	};
 	renderer.setSize(720, 414, false);
 	renderer.outputColorSpace = THREE.LinearSRGBColorSpace;
 	renderer.toneMapping = THREE.NoToneMapping;
 	const backend = new ThreeCacheBackend({THREE, renderer});
 	const compile = backend.compile.bind(backend);
-	if(recipe.shellLayout) {
-		const preparation=createOwners(recipe,0);
-		try {configureShellBackend(backend,recipe.shellLayout,await prepareShellMiePhase(preparation.domains,'/phase-worker.js'),'column48-tail64');}
-		finally {preparation.facade.dispose();}
+	if (recipe.shellLayout) {
+		const preparation = createOwners(recipe, 0);
+		try {
+			configureShellBackend(
+				backend,
+				recipe.shellLayout,
+				await prepareShellMiePhase(preparation.domains, '/phase-worker.js'),
+				'column48-tail64',
+			);
+		} finally {
+			preparation.facade.dispose();
+		}
 	}
 	if (recipe.candidate && recipe.candidate !== 'axis' && !recipe.shellLayout) {
 		backend.compile = (shader) =>
@@ -266,6 +351,8 @@ async function runRotation(recipe) {
 	}
 	const black = new THREE.DataTexture(new Float32Array(4), 1, 1, THREE.RGBAFormat, THREE.FloatType);
 	black.needsUpdate = true;
+	const canonicalIdentities = new Map();
+	let observedIdentities = new Map();
 	const fields = new Map(),
 		readbacks = [],
 		captureControllers = [];
@@ -286,8 +373,14 @@ async function runRotation(recipe) {
 				valueKey: 'cache.cumulativeScatteringDensity',
 			});
 			readbacks.push(
-				backend.readRuntimeBindingField(binding).then((field) => {
-					observedFields.set(request.output.id, field);
+				backend.readRuntimeBindingField(binding).then(async (field) => {
+					if (recipe.currentMovement) {
+						observedIdentities.set(
+							request.output.id,
+							await observeOrderField(request.output.id, field, recipe.shellLayout.nodes.length),
+						);
+						if (request.output.id === 'local-sun-j-through-4') observedFields.set(request.output.id, field);
+					} else observedFields.set(request.output.id, field);
 				}),
 			);
 		}
@@ -304,18 +397,36 @@ async function runRotation(recipe) {
 	const results = [],
 		directions = viewDirections();
 	try {
-		for (const pose of recipe.shellPoses ?? recipe.angles.map(degrees=>({degrees,offset:/** @type {[number,number]} */([0,0]),key:degrees}))) {
-			const {degrees,offset,key}=pose;
-			console.log(`${recipe.shellLayout ? 'P3 shell' : 'P2'} ${recipe.diagnostic ? 'diagnostic' : 'selected'} rotation ${degrees}, offset ${offset}: fresh build`);
-			const placedRecipe={...recipe,shellPlacementOffset:offset};
+		for (const pose of recipe.shellPoses ??
+			recipe.angles.map((degrees) => ({
+				degrees,
+				offset: /** @type {[number,number]} */ ([0, 0]),
+				key: degrees,
+			}))) {
+			const {degrees, offset, key} = pose;
+			console.log(
+				`${recipe.shellLayout ? 'P3 shell' : 'P2'} ${recipe.diagnostic ? 'diagnostic' : 'selected'} rotation ${degrees}, offset ${offset}: fresh build`,
+			);
+			const orbitalState = recipe.currentOrbitalStates?.[key - 2000] ?? recipe.currentOrbitalState;
+			const placedRecipe = {
+				...recipe,
+				...(key >= 2000 && orbitalState
+					? {state: orbitalState, shellPlacementOffset: /** @type {[number,number]} */ ([0, 0])}
+					: {shellPlacementOffset: offset}),
+			};
 			const owners = createOwners(placedRecipe, degrees),
 				camera = new THREE.PerspectiveCamera(70, 720 / 414, 0.002, 500);
 			camera.position.set(0, 0.005, 0);
 			camera.lookAt(0, 0.005, -1);
 			const createController = owners.source.createCacheController.bind(owners.source);
 			owners.source.createCacheController = (request) => {
-				const c = createController({...request,...(recipe.shellLayout ? {scheduler:{yieldControl:()=>new Promise(resolve=>setTimeout(resolve,0))}} : {})});
-				if(recipe.shellLayout)configureShellController(c,recipe.shellLayout);
+				const c = createController({
+					...request,
+					...(recipe.shellLayout
+						? {scheduler: {yieldControl: () => new Promise((resolve) => setTimeout(resolve, 0))}}
+						: {}),
+				});
+				if (recipe.shellLayout) configureShellController(c, recipe.shellLayout);
 				captureControllers.push(c);
 				return c;
 			};
@@ -341,6 +452,7 @@ async function runRotation(recipe) {
 			});
 			bindingCapture.current = null;
 			observedFields = new Map();
+			observedIdentities = new Map();
 			readbacks.length = 0;
 			let handle;
 			try {
@@ -366,9 +478,36 @@ async function runRotation(recipe) {
 					canonicalHandle = handle;
 					canonicalCache = cache;
 					for (const [id, f] of observedFields) fields.set(id, f);
+					for (const [id, f] of observedIdentities) canonicalIdentities.set(id, f);
 				}
 				const fieldComparisons = [];
-				for (const [id, f] of observedFields) {
+				if (recipe.currentMovement)
+					for (const [id, identityProof] of observedIdentities) {
+						const base = canonicalIdentities.get(id);
+						const equal =
+							base?.sha256 === identityProof.sha256 &&
+							JSON.stringify(base.storage) === JSON.stringify(identityProof.storage);
+						const count =
+							identityProof.storage.width * identityProof.storage.height * identityProof.storage.layers;
+						fieldComparisons.push({
+							id,
+							storage: identityProof.storage,
+							sha256: identityProof.sha256,
+							identityProof,
+							reuse: {
+								count,
+								failures: equal ? 0 : 1,
+								nonfinite: identityProof.nonfinite,
+								negative: identityProof.negativeBeyondAbsolute,
+								maximumAbsolute: equal ? 0 : Number.MAX_VALUE,
+								maximumRelative: equal ? 0 : Number.MAX_VALUE,
+								maximumRatio: equal ? 0 : Number.MAX_VALUE,
+							},
+							comparison:
+								'complete-byte-identity; zero residual follows identity, mismatch is rejected without a numerical error estimate',
+						});
+					}
+				for (const [id, f] of recipe.currentMovement ? [] : observedFields) {
 					const absolute = id.includes('-j') ? 1e-12 : 1e-9;
 					fieldComparisons.push({
 						id,
@@ -379,14 +518,35 @@ async function runRotation(recipe) {
 				}
 				const cumulative = observedFields.get('local-sun-j-through-4'),
 					reused = fields.get('local-sun-j-through-4');
-				const spatialResults=spatialChecks(owners,canonical,cumulative,reused,degrees,recipe.shellLayout,offset,[{fresh:cumulative,reused},...[1,2,3,4].map(order=>({fresh:observedFields.get(`local-sun-j${order}`),reused:fields.get(`local-sun-j${order}`)}))]);
-				const spatial=spatialResults[0],orderSpatial=[1,2,3,4].map(order=>({order,...spatialResults[order]}));
+				if (recipe.currentMovement) console.log(`P3-D ${key}: complete field identities ready; spatial probes`);
+				const spatialResults = spatialChecks(
+					owners,
+					canonical,
+					cumulative,
+					reused,
+					degrees,
+					recipe.shellLayout,
+					offset,
+					[
+						{fresh: cumulative, reused},
+						...(recipe.currentMovement
+							? []
+							: [1, 2, 3, 4].map((order) => ({
+									fresh: observedFields.get(`local-sun-j${order}`),
+									reused: fields.get(`local-sun-j${order}`),
+								}))),
+					],
+				);
+				const spatial = spatialResults[0],
+					orderSpatial = recipe.currentMovement
+						? []
+						: [1, 2, 3, 4].map((order) => ({order, ...spatialResults[order]}));
 				await handle.prepare(renderer);
 				const receiver = await handle.measureReceiverEnvironmentLight({
 					THREE,
 					renderer,
 					backend,
-					diagnostics: true,
+					diagnostics: !recipe.currentMovement,
 				});
 				const pass = /** @type {LocalSunControlViewPass} */ (composer.passes.at(-1));
 				pass.renderToScreen = true;
@@ -454,12 +614,29 @@ async function runRotation(recipe) {
 					canonicalGpuRays = gpuFresh;
 				}
 				const equivalentDirections = directions.map((d) => rotate(d, degrees));
-				const shifted=offset.some(value=>value!==0),equivalentOwners=shifted ? createOwners({...placedRecipe,shellObserverOffset:offset},degrees) : owners;
-				let equivalentCpu,equivalentGpu;
+				const shifted = offset.some((value) => value !== 0),
+					equivalentOwners = shifted
+						? createOwners({...placedRecipe, shellObserverOffset: offset}, degrees)
+						: owners;
+				let equivalentCpu, equivalentGpu;
 				try {
-					equivalentCpu=degrees===0 && !shifted ? freshRays : cpuRays(equivalentOwners,cumulative,equivalentDirections);
-					equivalentGpu=degrees===0 && !shifted ? gpuFresh : await gpuRays({owners:equivalentOwners,cache,backend,renderer,directions:equivalentDirections});
-				} finally {if(equivalentOwners!==owners)equivalentOwners.facade.dispose();}
+					equivalentCpu =
+						degrees === 0 && !shifted
+							? freshRays
+							: cpuRays(equivalentOwners, cumulative, equivalentDirections);
+					equivalentGpu =
+						degrees === 0 && !shifted
+							? gpuFresh
+							: await gpuRays({
+									owners: equivalentOwners,
+									cache,
+									backend,
+									renderer,
+									directions: equivalentDirections,
+								});
+				} finally {
+					if (equivalentOwners !== owners) equivalentOwners.facade.dispose();
+				}
 				const equivalentCpuResidual = residual(
 					equivalentCpu.flatMap((r) => r.radiance),
 					canonicalCpuRays.flatMap((r) => r.radiance),
@@ -503,10 +680,42 @@ async function runRotation(recipe) {
 					1e-7,
 					0.002,
 				);
+				const receiverDirections = RECEIVER_ENVIRONMENT_LIGHT_QUADRATURE.map((s) => s.directionLocal);
+				const receiverFresh = recipe.currentMovement
+					? await gpuRays({
+							owners,
+							cache,
+							backend,
+							renderer,
+							directions: receiverDirections,
+							receiverDirections: true,
+						})
+					: [];
+				const receiverReused = recipe.currentMovement
+					? await gpuRays({
+							owners,
+							cache: canonicalCache,
+							backend,
+							renderer,
+							directions: receiverDirections,
+							receiverDirections: true,
+						})
+					: [];
 				const entry = {
 					degrees,
-					translationMeters:offset,
-					artifactKey:key,
+					receiverReuse: recipe.currentMovement
+						? residual(
+								receiverReused.flatMap((r) => r.radiance),
+								receiverFresh.flatMap((r) => r.radiance),
+								1e-9,
+								1e-4,
+							)
+						: null,
+					receiverRays: {directions: receiverDirections, fresh: receiverFresh, reused: receiverReused},
+					translationMeters: offset,
+					stateId: key >= 2000 ? 'flat-' + [0, 45, 90, 135, 180][key - 2000] : 'flat-0',
+					exactTime: placedRecipe.state.observation,
+					artifactKey: key,
 					source: owners.source.configuration.position,
 					profile: {
 						positions: owners.domains.positionCount,
@@ -536,7 +745,7 @@ async function runRotation(recipe) {
 					spatial,
 					orderSpatial,
 					axisApproach: axisApproach(owners, cumulative),
-					sourceInvariants: sourceChecks(owners, canonical, degrees,offset),
+					sourceInvariants: sourceChecks(owners, canonical, degrees, offset),
 					coverage,
 					equivalentCoverage,
 					radiusDeltaMeters:
@@ -651,191 +860,604 @@ async function runRotation(recipe) {
  * @param {LocalSunShellApplicationCanvas} [providedCanvas] - Optional transferred application canvas owned by a worker.
  * @returns {Promise<string>} - Actual GPU application happy-path evidence; accuracy/lifecycle matrix stays separate.
  */
-export async function runShellApplication(recipe,providedCanvas) {
-	if(!recipe.shellLayout || !recipe.shellIncoming || !recipe.shellImplementationIdentity)throw new Error('Complete application identity required.');
-	const canvas=providedCanvas ?? document.createElement('canvas');if(!providedCanvas)document.body.append(/** @type {HTMLCanvasElement} */(canvas));
-	const gl=canvas.getContext('webgl2',{antialias:false,preserveDrawingBuffer:true});
-	if(!gl?.getExtension('EXT_color_buffer_float'))throw new Error('Float WebGL2 required.');
-	const webglResources=new ShellWebGlResources();webglResources.attach(gl);
-	const renderer=new THREE.WebGLRenderer({canvas,context:gl});
-	renderer.debug.onShaderError=()=>{throw new Error('Shell application shader compilation failed.');};
-	renderer.setSize(720,414,false);renderer.outputColorSpace=THREE.LinearSRGBColorSpace;renderer.toneMapping=THREE.NoToneMapping;
-	if(recipe.shellScene){renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFShadowMap;renderer.shadowMap.autoUpdate=false;renderer.shadowMap.needsUpdate=true;}
-	const black=new THREE.DataTexture(new Float32Array(4),1,1,THREE.RGBAFormat,THREE.FloatType);black.needsUpdate=true;
-	const publication=new ShellFramePublication(1200000000),preparation=createOwners(recipe,0);
-	const resourceProof=new ShellResourceProof();
-	/** @type {LocalSunRotationField|null} */ let canonicalField=null;
-	let readbackIdentity='';
-	const results=[],directions=viewDirections();
-	let displayedImage='';
-	/** @type {number[][]|null} */ let baselineRadiances=null;
-	let phaseGapMilliseconds=0,phaseLastPulse=performance.now();
-	const phasePulse=setInterval(()=>{const now=performance.now();phaseGapMilliseconds=Math.max(phaseGapMilliseconds,now-phaseLastPulse);phaseLastPulse=now;},8);
+export async function runShellApplication(recipe, providedCanvas) {
+	if (!recipe.shellLayout || !recipe.shellIncoming || !recipe.shellImplementationIdentity)
+		throw new Error('Complete application identity required.');
+	const canvas = providedCanvas ?? document.createElement('canvas');
+	if (!providedCanvas) document.body.append(/** @type {HTMLCanvasElement} */ (canvas));
+	const gl = canvas.getContext('webgl2', {antialias: false, preserveDrawingBuffer: true});
+	if (!gl?.getExtension('EXT_color_buffer_float')) throw new Error('Float WebGL2 required.');
+	const webglResources = new ShellWebGlResources();
+	webglResources.attach(gl);
+	const renderer = new THREE.WebGLRenderer({canvas, context: gl});
+	renderer.debug.onShaderError = () => {
+		throw new Error('Shell application shader compilation failed.');
+	};
+	renderer.setSize(720, 414, false);
+	renderer.outputColorSpace = THREE.LinearSRGBColorSpace;
+	renderer.toneMapping = THREE.NoToneMapping;
+	if (recipe.shellScene) {
+		renderer.shadowMap.enabled = true;
+		renderer.shadowMap.type = THREE.PCFShadowMap;
+		renderer.shadowMap.autoUpdate = false;
+		renderer.shadowMap.needsUpdate = true;
+	}
+	const black = new THREE.DataTexture(new Float32Array(4), 1, 1, THREE.RGBAFormat, THREE.FloatType);
+	black.needsUpdate = true;
+	const publication = new ShellFramePublication(1200000000),
+		preparation = createOwners(recipe, 0);
+	const resourceProof = new ShellResourceProof();
+	/** @type {LocalSunRotationField|null} */ let canonicalField = null;
+	let readbackIdentity = '';
+	const results = [],
+		directions = viewDirections();
+	let displayedImage = '';
+	/** @type {number[][]|null} */ let baselineRadiances = null;
+	let phaseGapMilliseconds = 0,
+		phaseLastPulse = performance.now();
+	const phasePulse = setInterval(() => {
+		const now = performance.now();
+		phaseGapMilliseconds = Math.max(phaseGapMilliseconds, now - phaseLastPulse);
+		phaseLastPulse = now;
+	}, 8);
 	try {
 		/** @type {CacheData} */ let phases;
-		try {phases=await prepareShellMiePhase(preparation.domains,'/phase-worker.js');}
-		finally {phaseGapMilliseconds=Math.max(phaseGapMilliseconds,performance.now()-phaseLastPulse);clearInterval(phasePulse);}
-		const capabilityBackend=new ThreeCacheBackend({THREE,renderer}),capabilities=capabilityBackend.capabilities;capabilityBackend.dispose();
+		try {
+			phases = await prepareShellMiePhase(preparation.domains, '/phase-worker.js');
+		} finally {
+			phaseGapMilliseconds = Math.max(phaseGapMilliseconds, performance.now() - phaseLastPulse);
+			clearInterval(phasePulse);
+		}
+		const capabilityBackend = new ThreeCacheBackend({THREE, renderer}),
+			capabilities = capabilityBackend.capabilities;
+		capabilityBackend.dispose();
 		/** Derive a developmental complete construction identity from actual prepared owners.
 		 * @param {LocalSunRotationRecipe} placed - Complete physical replacement controls.
 		 * @returns {string} - Canonical identity, with horizontal placement excluded only developmentally.
 		 */
-		const identify=placed=>{
-			const identityOwners=createOwners(placed,0),source=identityOwners.source.configuration;
-			try {return 'developmental-shell:'+CanonicalValueHash.sha256Value({schema:'shell-application-field-identity-v1',source:{...source,position:{...source.position,coordinates:[0,0,source.position.coordinates[2]]}},
-				atmosphere:{...CANONICAL_ATMOSPHERE_CONSTANTS,mieSingleScatteringAlbedo:placed.shellMieAlbedo ?? CANONICAL_ATMOSPHERE_CONSTANTS.mieSingleScatteringAlbedo},ground:'black-flat-vacuum-cylinder-v1',layout:placed.shellLayout,execution:placed.state.execution,
-				incoming:placed.shellIncoming,outgoing:identityOwners.domains.outgoingDirectionDomain.id,phase:phases.contentHash,transport:'column48-tail64',runtime:'analytic-columns-positive-column15-v1',format:'R32F',units:'meters-Native15',capabilities,implementation:placed.shellImplementationIdentity});}
-			finally {identityOwners.facade.dispose();}
+		const identify = (placed) => {
+			const identityOwners = createOwners(placed, 0),
+				source = identityOwners.source.configuration;
+			try {
+				return (
+					(recipe.currentApplication ? 'qualified-shell:' : 'developmental-shell:') +
+					CanonicalValueHash.sha256Value({
+						schema: 'shell-application-field-identity-v1',
+						source: {
+							...source,
+							position: {...source.position, coordinates: [0, 0, source.position.coordinates[2]]},
+						},
+						atmosphere: {
+							...CANONICAL_ATMOSPHERE_CONSTANTS,
+							mieSingleScatteringAlbedo:
+								placed.shellMieAlbedo ?? CANONICAL_ATMOSPHERE_CONSTANTS.mieSingleScatteringAlbedo,
+						},
+						ground: 'black-flat-vacuum-cylinder-v1',
+						layout: placed.shellLayout,
+						execution: placed.state.execution,
+						incoming: placed.shellIncoming,
+						outgoing: identityOwners.domains.outgoingDirectionDomain.id,
+						phase: phases.contentHash,
+						transport: 'column48-tail64',
+						runtime: 'analytic-columns-positive-column15-v1',
+						format: 'R32F',
+						units: 'meters-Native15',
+						capabilities,
+						implementation: placed.shellImplementationIdentity,
+					})
+				);
+			} finally {
+				identityOwners.facade.dispose();
+			}
 		};
-		const cacheIdentity=identify(recipe);
-		const initialBounds=shellResourceBounds(recipe,phases);
-		const {retainedCacheBytes,peakBuildBytes}=initialBounds;
-		const poses=recipe.shellPoses ?? recipe.angles.map(degrees=>({degrees,offset:/** @type {[number,number]} */([0,0]),key:degrees}));
+		const cacheIdentity = identify(recipe);
+		const initialBounds = shellResourceBounds(recipe, phases);
+		const {retainedCacheBytes, peakBuildBytes} = initialBounds;
+		const poses =
+			recipe.shellPoses ??
+			recipe.angles.map((degrees) => ({degrees, offset: /** @type {[number,number]} */ ([0, 0]), key: degrees}));
 		/** @type {{pose:{degrees:number,offset:readonly [number,number],key:number},placed:LocalSunRotationRecipe,label:string}[]} */
-		const requests=poses.map(pose=>({pose,placed:{...recipe,shellPlacementOffset:pose.offset},label:'horizontal-placement'}));
-		if(recipe.shellTemporalStates) {
-			if(!recipe.shellTemporalMode || recipe.shellLifecycle || recipe.shellReplacements || recipe.shellCoverageExit)throw new Error('Temporal execution has a separate exact-state inventory.');
-			requests.splice(0,requests.length,...recipe.shellTemporalStates.map(sample=>({pose:{degrees:0,offset:/** @type {[number,number]} */([0,0]),key:sample.slot},placed:{...recipe,state:sample.state},label:`exact-time-slot-${sample.slot}`})));
+		const requests = poses.map((pose) => ({
+			pose,
+			placed: {...recipe, shellPlacementOffset: pose.offset},
+			label: 'horizontal-placement',
+		}));
+		if (recipe.shellTemporalStates) {
+			if (
+				!recipe.shellTemporalMode ||
+				recipe.shellLifecycle ||
+				recipe.shellReplacements ||
+				recipe.shellCoverageExit
+			)
+				throw new Error('Temporal execution has a separate exact-state inventory.');
+			requests.splice(
+				0,
+				requests.length,
+				...recipe.shellTemporalStates.map((sample) => ({
+					pose: {degrees: 0, offset: /** @type {[number,number]} */ ([0, 0]), key: sample.slot},
+					placed: {...recipe, state: sample.state},
+					label: `exact-time-slot-${sample.slot}`,
+				})),
+			);
 		}
-		if(recipe.shellReplacements) {
-			const height=recipe.shellLayout.height+10000,coordinates=recipe.state.geometry.sourcePosition.coordinates;
-			const elevated={...recipe,shellLayout:rebuildShellLayout(recipe.state,recipe.shellLayout,height,recipe.shellLayout.maximumRho),
-				state:{...recipe.state,geometry:{...recipe.state.geometry,localLightSourceHeight:{value:height,units:/** @type {const} */('meters')},sourcePosition:{...recipe.state.geometry.sourcePosition,coordinates:/** @type {UnitVector3} */([coordinates[0],coordinates[1],height])}}}};
-			const atmosphere={...recipe,shellMieAlbedo:CANONICAL_ATMOSPHERE_CONSTANTS.mieSingleScatteringAlbedo*.9};
-			const power={...recipe,state:{...recipe.state,source:{...recipe.state.source,referenceSpectralIncidentScale:recipe.state.source.referenceSpectralIncidentScale*1.1}}};
-			for(const [index,item] of [{placed:elevated,label:'source-height-plus-10000m'},{placed:atmosphere,label:'mie-albedo-times-0.9'},{placed:power,label:'source-power-times-1.1'}].entries())requests.push({...item,pose:{degrees:0,offset:[0,0],key:2000+index}});
+		if (recipe.shellReplacements) {
+			const height = recipe.shellLayout.height + 10000,
+				coordinates = recipe.state.geometry.sourcePosition.coordinates;
+			const elevated = {
+				...recipe,
+				shellLayout: rebuildShellLayout(
+					recipe.state,
+					recipe.shellLayout,
+					height,
+					recipe.shellLayout.maximumRho,
+				),
+				state: {
+					...recipe.state,
+					geometry: {
+						...recipe.state.geometry,
+						localLightSourceHeight: {value: height, units: /** @type {const} */ ('meters')},
+						sourcePosition: {
+							...recipe.state.geometry.sourcePosition,
+							coordinates: /** @type {UnitVector3} */ ([coordinates[0], coordinates[1], height]),
+						},
+					},
+				},
+			};
+			const atmosphere = {
+				...recipe,
+				shellMieAlbedo: CANONICAL_ATMOSPHERE_CONSTANTS.mieSingleScatteringAlbedo * 0.9,
+			};
+			const power = {
+				...recipe,
+				state: {
+					...recipe.state,
+					source: {
+						...recipe.state.source,
+						referenceSpectralIncidentScale: recipe.state.source.referenceSpectralIncidentScale * 1.1,
+					},
+				},
+			};
+			for (const [index, item] of [
+				{placed: elevated, label: 'source-height-plus-10000m'},
+				{placed: atmosphere, label: 'mie-albedo-times-0.9'},
+				{placed: power, label: 'source-power-times-1.1'},
+			].entries())
+				requests.push({...item, pose: {degrees: 0, offset: [0, 0], key: 2000 + index}});
 		}
-		let coverageExit=null;
-		if(recipe.shellCoverageExit) {
-			if(recipe.shellReplacements || recipe.shellLifecycle)throw new Error('Coverage-exit proof owns a separate replacement inventory.');
-			requests.push({pose:{degrees:0,offset:[0,0],key:3000},placed:{...recipe,shellObserverOffset:[100,-50]},label:'observer-movement-within-coverage'});
-			const source=recipe.state.geometry.sourcePosition.coordinates,observer=recipe.state.geometry.observerPosition.coordinates;
-			const outside=recipe.shellLayout.maximumRho+1000;
-			let oldQueryRejected='';try {shellStencil(recipe.shellLayout,outside,observer[2]);}catch(error){oldQueryRejected=String(error);}
-			if(!oldQueryRejected)throw new Error('Coverage exit did not reject the old compact stencil.');
-			const offset=/** @type {[number,number]} */([source[0]+outside-observer[0],source[1]-observer[1]]);
-			const maximumRho=Math.ceil((outside+recipe.state.geometry.sceneSkyRayLimit.value+1000)/1000)*1000;
-			const replacementLayout=rebuildShellLayout(recipe.state,recipe.shellLayout,recipe.shellLayout.height,maximumRho);
-			coverageExit={oldMaximumRho:recipe.shellLayout.maximumRho,observerRho:outside,newMaximumRho:maximumRho,oldQueryRejected,omittedBands:replacementLayout.omittedBands,
-				claim:'Complete viewing reach is admitted by a new physical cylinder and compact field layout; independent accuracy of this larger domain remains a separate gate.'};
-			requests.push({pose:{degrees:0,offset:[0,0],key:3001},placed:{...recipe,shellObserverOffset:offset,shellLayout:replacementLayout},label:'observer-coverage-exit-fresh-domain'});
+		let coverageExit = null;
+		if (recipe.shellCoverageExit) {
+			if (recipe.shellReplacements || recipe.shellLifecycle)
+				throw new Error('Coverage-exit proof owns a separate replacement inventory.');
+			requests.push({
+				pose: {degrees: 0, offset: [0, 0], key: 3000},
+				placed: {...recipe, shellObserverOffset: [100, -50]},
+				label: 'observer-movement-within-coverage',
+			});
+			const source = recipe.state.geometry.sourcePosition.coordinates,
+				observer = recipe.state.geometry.observerPosition.coordinates;
+			const outside = recipe.shellLayout.maximumRho + 1000;
+			let oldQueryRejected = '';
+			try {
+				shellStencil(recipe.shellLayout, outside, observer[2]);
+			} catch (error) {
+				oldQueryRejected = String(error);
+			}
+			if (!oldQueryRejected) throw new Error('Coverage exit did not reject the old compact stencil.');
+			const offset = /** @type {[number,number]} */ ([
+				source[0] + outside - observer[0],
+				source[1] - observer[1],
+			]);
+			const maximumRho = Math.ceil((outside + recipe.state.geometry.sceneSkyRayLimit.value + 1000) / 1000) * 1000;
+			const replacementLayout = rebuildShellLayout(
+				recipe.state,
+				recipe.shellLayout,
+				recipe.shellLayout.height,
+				maximumRho,
+			);
+			coverageExit = {
+				oldMaximumRho: recipe.shellLayout.maximumRho,
+				observerRho: outside,
+				newMaximumRho: maximumRho,
+				oldQueryRejected,
+				omittedBands: replacementLayout.omittedBands,
+				claim: 'Complete viewing reach is admitted by a new physical cylinder and compact field layout; independent accuracy of this larger domain remains a separate gate.',
+			};
+			requests.push({
+				pose: {degrees: 0, offset: [0, 0], key: 3001},
+				placed: {...recipe, shellObserverOffset: offset, shellLayout: replacementLayout},
+				label: 'observer-coverage-exit-fresh-domain',
+			});
 		}
-		for(const {pose,placed,label} of requests) {
+		for (const {pose, placed, label} of requests) {
 			console.log(`P4 shell exact-state publication ${pose.key}: rotation ${pose.degrees}, XY +${pose.offset}`);
-			const physicalCacheIdentity=identify(placed);
-			const requestedCacheIdentity=physicalCacheIdentity+(recipe.shellTemporalMode==='fresh' ? `:forced-fresh-instance-${pose.key}` : ''),identity=requestedCacheIdentity+':frame:'+CanonicalValueHash.sha256Value({pose,observation:placed.state.observation});
-			const requestedBounds=shellResourceBounds(placed,phases);
-			const requestedRetained=requestedBounds.retainedCacheBytes,requestedPeak=requestedBounds.peakBuildBytes;
-			const prior=publication.active,started=performance.now();
-			const preserved=publication.acquireFrame.bind(publication),oldLease=prior ? preserved() : null;
-			if(prior?.scene)prior.scene.suspend();
-			let stayedComplete=true;
-			let lastPulse=started,maximumResponsivenessGapMilliseconds=0;
-			const pulse=setInterval(()=>{const now=performance.now();maximumResponsivenessGapMilliseconds=Math.max(maximumResponsivenessGapMilliseconds,now-lastPulse);lastPulse=now;if(publication.active!==prior)stayedComplete=false;},8);
-			/** @type {LocalSunShellPublishedFrame|null} */ let frame=null;
-			try {frame=await publication.request({identity,cacheIdentity:requestedCacheIdentity,retainedCacheBytes:requestedRetained,peakBuildBytes:requestedPeak,otherPersistentBytes:requestedBounds.otherPersistentBytes,
-				prepare:context=>prepareShellApplicationFrame(placed,pose.degrees,renderer,phases,context,{identity,cacheIdentity:requestedCacheIdentity},backend=>resourceProof.attach(backend))});}
-			finally {maximumResponsivenessGapMilliseconds=Math.max(maximumResponsivenessGapMilliseconds,performance.now()-lastPulse);clearInterval(pulse);if(!frame){prior?.scene?.resume();oldLease?.release();}}
-			const preparedMilliseconds=performance.now()-started;
-			if(!stayedComplete)throw new Error('Staging changed the previous published frame before complete preparation.');
-			let preservedPixelsBitIdentical=null;
-			if(oldLease) {if(oldLease.frame.renderScene){oldLease.frame.renderScene();gl.finish();preservedPixelsBitIdentical=await shellApplicationImage(canvas)===displayedImage;if(!preservedPixelsBitIdentical)throw new Error('Suspended scene changed the previous complete displayed pixels.');}else oldLease.frame.viewPass.render(renderer,null,{texture:black});gl.finish();oldLease.release();}
-			if(!(frame.backend instanceof ThreeCacheBackend))throw new Error('Unexpected application backend.');
-			const binding=frame.cache.getRuntimeBindings().bindings.find(binding=>binding.valueKey==='cache.cumulativeScatteringDensity');
-			if(!binding)throw new Error('Missing complete field binding.');
-			if(readbackIdentity!==requestedCacheIdentity) {canonicalField=null;canonicalField=await frame.backend.readRuntimeBindingField(binding);readbackIdentity=requestedCacheIdentity;}
-			const rays=cpuRays(frame.owners,canonicalField,directions),gpu=await gpuRays({owners:frame.owners,cache:frame.cache,backend:frame.backend,renderer,directions});
-			if(pose.key===0)baselineRadiances=gpu.map(ray=>[...ray.radiance]);
-			const powerLinearity=label==='source-power-times-1.1' && baselineRadiances ? residual(gpu.flatMap(ray=>ray.radiance),baselineRadiances.flat().map(value=>value*1.1),1e-9,.0001) : null;
-			if(powerLinearity?.failures)throw new Error('Source-power replacement failed the independent linearity invariant.');
-			if(frame.renderScene){renderer.shadowMap.needsUpdate=true;frame.renderScene();}else{frame.viewPass.renderToScreen=true;frame.viewPass.render(renderer,null,{texture:black});}gl.finish();
-			const warmFrameMilliseconds=[];
-			if(recipe.shellTemporalStates && (pose.key===60 || recipe.shellTemporalStates.length===2 && pose.key===0)) {
-				for(let repetition=0;repetition<8;repetition++) {
-					const tick=performance.now();
-					if(frame.renderScene)frame.renderScene();else frame.viewPass.render(renderer,null,{texture:black});
-					gl.finish();if(repetition>0)warmFrameMilliseconds.push(performance.now()-tick);
+			const physicalCacheIdentity = identify(placed);
+			const requestedCacheIdentity =
+					physicalCacheIdentity +
+					(recipe.shellTemporalMode === 'fresh' && !recipe.currentApplication ? `:forced-fresh-instance-${pose.key}` : ''),
+				identity =
+					requestedCacheIdentity +
+					':frame:' +
+					CanonicalValueHash.sha256Value({pose, observation: placed.state.observation});
+			const requestedBounds = shellResourceBounds(placed, phases);
+			const requestedRetained = requestedBounds.retainedCacheBytes,
+				requestedPeak = requestedBounds.peakBuildBytes;
+			const prior = publication.active,
+				started = performance.now();
+			const preserved = publication.acquireFrame.bind(publication),
+				oldLease = prior ? preserved() : null;
+			if (prior?.scene) prior.scene.suspend();
+			let stayedComplete = true;
+			let lastPulse = started,
+				maximumResponsivenessGapMilliseconds = 0;
+			const pulse = setInterval(() => {
+				const now = performance.now();
+				maximumResponsivenessGapMilliseconds = Math.max(maximumResponsivenessGapMilliseconds, now - lastPulse);
+				lastPulse = now;
+				if (publication.active !== prior) stayedComplete = false;
+			}, 8);
+			/** @type {LocalSunShellPublishedFrame|null} */ let frame = null;
+			try {
+				frame = await publication.request({
+					identity,
+					cacheIdentity: requestedCacheIdentity,
+					retainedCacheBytes: requestedRetained,
+					peakBuildBytes: requestedPeak,
+					otherPersistentBytes: requestedBounds.otherPersistentBytes,
+					prepare: (context) =>
+						prepareShellApplicationFrame(
+							placed,
+							pose.degrees,
+							renderer,
+							phases,
+							context,
+							{identity, cacheIdentity: requestedCacheIdentity},
+							(backend) => resourceProof.attach(backend),
+						),
+				});
+			} finally {
+				maximumResponsivenessGapMilliseconds = Math.max(
+					maximumResponsivenessGapMilliseconds,
+					performance.now() - lastPulse,
+				);
+				clearInterval(pulse);
+				if (!frame) {
+					prior?.scene?.resume();
+					oldLease?.release();
 				}
 			}
-			const image=await shellApplicationImage(canvas);displayedImage=image;await emit(`angle-${pose.key}-application.png`,{dataUrl:image});
-			const entry={degrees:pose.degrees,artifactKey:pose.key,translationMeters:pose.offset,label,identity,cacheIdentity:requestedCacheIdentity,physicalCacheIdentity,observation:placed.state.observation,source:frame.source,receiver:frame.receiver,directionToSource:frame.directionToSource,
-				preparedMilliseconds,stageMilliseconds:frame.stageMilliseconds,warmFrameMilliseconds,maximumResponsivenessGapMilliseconds,powerLinearity,preservedPixelsBitIdentical,resourceBounds:requestedBounds,scene:frame.scene?.describe(),webglResources:webglResources.snapshot(false),measuredGpuPackets:gpu.map(ray=>({radiance:ray.radiance,transmittance:ray.transmittance})),shaderIdentities:frame.shaderIdentities,reused:prior?.cache===frame.cache,previousCompleteDuringPreparation:stayedComplete,resources:publication.resources.size,retainedCacheBytes:requestedRetained,peakAdmittedBytes:publication.peakAdmittedBytes,
-				cpuGpu:residual(gpu.flatMap(ray=>ray.radiance),rays.flatMap(ray=>ray.radiance),1e-9,.002),transmission:residual(gpu.flatMap(ray=>ray.transmittance),rays.flatMap(ray=>ray.transmittance),1e-7,.002),
-				coverage:rayCoverage(frame.owners,rays),endpointMaximumMeters:Math.max(...gpu.map((ray,index)=>Math.abs(ray.end-rays[index].segment.endDistance.value))),
-				claim:'Actual GPU prepared publication and exact-state CPU/GPU checks. Developmental placement identity, no independent physical or resource/negative-lifecycle qualification. PNG shows the one published application frame.'};
-			await emit(`angle-${pose.key}.json`,entry);results.push(entry);
+			const preparedMilliseconds = performance.now() - started;
+			if (!stayedComplete)
+				throw new Error('Staging changed the previous published frame before complete preparation.');
+			let preservedPixelsBitIdentical = null;
+			if (oldLease) {
+				if (oldLease.frame.renderScene) {
+					oldLease.frame.renderScene();
+					gl.finish();
+					preservedPixelsBitIdentical = (await shellApplicationImage(canvas)) === displayedImage;
+					if (!preservedPixelsBitIdentical)
+						throw new Error('Suspended scene changed the previous complete displayed pixels.');
+				} else oldLease.frame.viewPass.render(renderer, null, {texture: black});
+				gl.finish();
+				oldLease.release();
+			}
+			if (!(frame.backend instanceof ThreeCacheBackend)) throw new Error('Unexpected application backend.');
+			const binding = frame.cache
+				.getRuntimeBindings()
+				.bindings.find((binding) => binding.valueKey === 'cache.cumulativeScatteringDensity');
+			if (!binding) throw new Error('Missing complete field binding.');
+			if (readbackIdentity !== requestedCacheIdentity) {
+				canonicalField = null;
+				canonicalField = await frame.backend.readRuntimeBindingField(binding);
+				readbackIdentity = requestedCacheIdentity;
+			}
+			const rays = cpuRays(frame.owners, canonicalField, directions),
+				gpu = await gpuRays({
+					owners: frame.owners,
+					cache: frame.cache,
+					backend: frame.backend,
+					renderer,
+					directions,
+				});
+			if (pose.key === 0) baselineRadiances = gpu.map((ray) => [...ray.radiance]);
+			const powerLinearity =
+				label === 'source-power-times-1.1' && baselineRadiances
+					? residual(
+							gpu.flatMap((ray) => ray.radiance),
+							baselineRadiances.flat().map((value) => value * 1.1),
+							1e-9,
+							0.0001,
+						)
+					: null;
+			if (powerLinearity?.failures)
+				throw new Error('Source-power replacement failed the independent linearity invariant.');
+			if (frame.renderScene) {
+				renderer.shadowMap.needsUpdate = true;
+				frame.renderScene();
+			} else {
+				frame.viewPass.renderToScreen = true;
+				frame.viewPass.render(renderer, null, {texture: black});
+			}
+			gl.finish();
+			const warmFrameMilliseconds = [];
+			if (
+				(recipe.currentApplication || recipe.shellTemporalStates) &&
+				(pose.key === 60 || (!recipe.shellTemporalStates && pose.key === 0) || (recipe.shellTemporalStates?.length === 2 && pose.key === 0))
+			) {
+				for (let repetition = 0; repetition < 8; repetition++) {
+					const tick = performance.now();
+					if (frame.renderScene) frame.renderScene();
+					else frame.viewPass.render(renderer, null, {texture: black});
+					gl.finish();
+					if (repetition > 0) warmFrameMilliseconds.push(performance.now() - tick);
+				}
+			}
+			const image = await shellApplicationImage(canvas);
+			displayedImage = image;
+			await emit(`angle-${pose.key}-application.png`, {dataUrl: image});
+			const entry = {
+				degrees: pose.degrees,
+				artifactKey: pose.key,
+				translationMeters: pose.offset,
+				label,
+				identity,
+				cacheIdentity: requestedCacheIdentity,
+				physicalCacheIdentity,
+				observation: placed.state.observation,
+				source: frame.source,
+				receiver: frame.receiver,
+				directionToSource: frame.directionToSource,
+				preparedMilliseconds,
+				stageMilliseconds: frame.stageMilliseconds,
+				warmFrameMilliseconds,
+				maximumResponsivenessGapMilliseconds,
+				powerLinearity,
+				preservedPixelsBitIdentical,
+				resourceBounds: requestedBounds,
+				scene: frame.scene?.describe(),
+				webglResources: webglResources.snapshot(false),
+				measuredGpuPackets: gpu.map((ray) => ({radiance: ray.radiance, transmittance: ray.transmittance})),
+				shaderIdentities: frame.shaderIdentities,
+				reused: prior?.cache === frame.cache,
+				previousCompleteDuringPreparation: stayedComplete,
+				resources: publication.resources.size,
+				retainedCacheBytes: requestedRetained,
+				peakAdmittedBytes: publication.peakAdmittedBytes,
+				cpuGpu: residual(
+					gpu.flatMap((ray) => ray.radiance),
+					rays.flatMap((ray) => ray.radiance),
+					1e-9,
+					0.002,
+				),
+				transmission: residual(
+					gpu.flatMap((ray) => ray.transmittance),
+					rays.flatMap((ray) => ray.transmittance),
+					1e-7,
+					0.002,
+				),
+				coverage: rayCoverage(frame.owners, rays),
+				endpointMaximumMeters: Math.max(
+					...gpu.map((ray, index) => Math.abs(ray.end - rays[index].segment.endDistance.value)),
+				),
+				claim: 'Actual GPU prepared publication and exact-state CPU/GPU checks. Developmental placement identity, no independent physical or resource/negative-lifecycle qualification. PNG shows the one published application frame.',
+			};
+			await emit(`angle-${pose.key}.json`, entry);
+			results.push(entry);
 		}
-		const lifecycle=[];
-		if(recipe.shellLifecycle) {
-			if(recipe.shellReplacements)throw new Error('Replacement and negative lifecycle proofs use separate resource inventories.');
-			const snapshot=publication.acquireFrame(),previous=snapshot.frame;
-			if(previous.scene)previous.scene.suspend();
-			const renderSnapshot=async()=>{if(previous.renderScene)previous.renderScene();else{previous.viewPass.renderToScreen=true;previous.viewPass.render(renderer,null,{texture:black});}gl.finish();if(previous.renderScene && await shellApplicationImage(canvas)!==displayedImage)throw new Error('Lifecycle changed the renderer-leased complete scene pixels.');};
-			/** @type {{mode:string,observed:string,preserved:boolean,resources:number}[]} */ const cases=[];
-			for(const mode of ['compile-failure','caller-cancel','resource-reject']) {
+		const lifecycle = [];
+		if (recipe.shellLifecycle) {
+			if (recipe.shellReplacements)
+				throw new Error('Replacement and negative lifecycle proofs use separate resource inventories.');
+			const snapshot = publication.acquireFrame(),
+				previous = snapshot.frame;
+			if (previous.scene) previous.scene.suspend();
+			const renderSnapshot = async () => {
+				if (previous.renderScene) previous.renderScene();
+				else {
+					previous.viewPass.renderToScreen = true;
+					previous.viewPass.render(renderer, null, {texture: black});
+				}
+				gl.finish();
+				if (previous.renderScene && (await shellApplicationImage(canvas)) !== displayedImage)
+					throw new Error('Lifecycle changed the renderer-leased complete scene pixels.');
+			};
+			/** @type {{mode:string,observed:string,preserved:boolean,resources:number}[]} */ const cases = [];
+			for (const mode of ['compile-failure', 'caller-cancel', 'resource-reject']) {
 				console.log(`P4 shell lifecycle: ${mode}`);
-				const cancellation=new AbortController(),nextKey=cacheIdentity+':deliberate-'+mode;
-				let observed='',hookCalled=false;
+				const cancellation = new AbortController(),
+					nextKey = cacheIdentity + ':deliberate-' + mode;
+				let observed = '',
+					hookCalled = false;
 				try {
-					await publication.request({identity:nextKey+':frame',cacheIdentity:nextKey,retainedCacheBytes,peakBuildBytes:mode==='resource-reject' ? 1200000001 : peakBuildBytes,otherPersistentBytes:initialBounds.otherPersistentBytes,signal:cancellation.signal,
-						prepare:context=>prepareShellApplicationFrame(recipe,0,renderer,phases,context,{identity:nextKey+':frame',cacheIdentity:nextKey},backend=>{
-							resourceProof.attach(backend);
-							hookCalled=true;
-							if(mode==='compile-failure')backend.compile=()=>{throw new Error('Deliberate experiment GPU compile failure.');};
-							else {const submit=backend.submitLayer.bind(backend);backend.submitLayer=request=>{submit(request);cancellation.abort(new DOMException('Deliberate caller cancellation after GPU submission.','AbortError'));};}
-						})});
-				} catch(error){observed=String(error);}
-				const preserved=publication.active===previous && publication.resources.size===1 && (mode!=='resource-reject' ? hookCalled : !hookCalled);
-				if(!observed || !preserved)throw new Error(`Shell lifecycle ${mode} did not preserve the prior complete frame.`);
-				await renderSnapshot();cases.push({mode,observed,preserved,resources:publication.resources.size});
+					await publication.request({
+						identity: nextKey + ':frame',
+						cacheIdentity: nextKey,
+						retainedCacheBytes,
+						peakBuildBytes: mode === 'resource-reject' ? 1200000001 : peakBuildBytes,
+						otherPersistentBytes: initialBounds.otherPersistentBytes,
+						signal: cancellation.signal,
+						prepare: (context) =>
+							prepareShellApplicationFrame(
+								recipe,
+								0,
+								renderer,
+								phases,
+								context,
+								{identity: nextKey + ':frame', cacheIdentity: nextKey},
+								(backend) => {
+									resourceProof.attach(backend);
+									hookCalled = true;
+									if (mode === 'compile-failure')
+										backend.compile = () => {
+											throw new Error('Deliberate experiment GPU compile failure.');
+										};
+									else {
+										const submit = backend.submitLayer.bind(backend);
+										backend.submitLayer = (request) => {
+											submit(request);
+											cancellation.abort(
+												new DOMException(
+													'Deliberate caller cancellation after GPU submission.',
+													'AbortError',
+												),
+											);
+										};
+									}
+								},
+							),
+					});
+				} catch (error) {
+					observed = String(error);
+				}
+				const preserved =
+					publication.active === previous &&
+					publication.resources.size === 1 &&
+					(mode !== 'resource-reject' ? hookCalled : !hookCalled);
+				if (!observed || !preserved)
+					throw new Error(`Shell lifecycle ${mode} did not preserve the prior complete frame.`);
+				await renderSnapshot();
+				cases.push({mode, observed, preserved, resources: publication.resources.size});
 			}
 			lifecycle.push(...cases);
 			console.log('P4 shell lifecycle: superseded GPU build');
-			const staleKey=cacheIdentity+':deliberate-supersession',replacementIdentity=cacheIdentity+':newer-frame';
-			/** @type {Promise<LocalSunShellPublishedFrame>|null} */ let replacement=null;
-			let superseded='',priorStayedComplete=false;
+			const staleKey = cacheIdentity + ':deliberate-supersession',
+				replacementIdentity = cacheIdentity + ':newer-frame';
+			/** @type {Promise<LocalSunShellPublishedFrame>|null} */ let replacement = null;
+			let superseded = '',
+				priorStayedComplete = false;
 			try {
-				await publication.request({identity:staleKey+':frame',cacheIdentity:staleKey,retainedCacheBytes,peakBuildBytes,otherPersistentBytes:initialBounds.otherPersistentBytes,
-					prepare:context=>prepareShellApplicationFrame(recipe,0,renderer,phases,context,{identity:staleKey+':frame',cacheIdentity:staleKey},backend=>{
-						resourceProof.attach(backend);
-						const submit=backend.submitLayer.bind(backend);let requested=false;
-						backend.submitLayer=request=>{
-							submit(request);
-							if(!requested) {
-								requested=true;priorStayedComplete=publication.active===previous;
-									replacement=publication.request({identity:replacementIdentity,cacheIdentity,retainedCacheBytes,peakBuildBytes,otherPersistentBytes:initialBounds.otherPersistentBytes,
-									prepare:next=>prepareShellApplicationFrame(recipe,17,renderer,phases,next,{identity:replacementIdentity,cacheIdentity})});
-								void replacement.catch(()=>{});
-							}
-						};
-					})});
-			} catch(error){superseded=String(error);}
-			if(!replacement || !superseded || !priorStayedComplete)throw new Error('Supersession did not cancel staging while preserving the previous complete frame.');
-			const newest=await replacement;
-			if(publication.active!==newest || newest.identity!==replacementIdentity || newest.cache!==previous.cache || publication.resources.size!==1)throw new Error('Supersession failed to publish the compatible newest complete frame.');
+				await publication.request({
+					identity: staleKey + ':frame',
+					cacheIdentity: staleKey,
+					retainedCacheBytes,
+					peakBuildBytes,
+					otherPersistentBytes: initialBounds.otherPersistentBytes,
+					prepare: (context) =>
+						prepareShellApplicationFrame(
+							recipe,
+							0,
+							renderer,
+							phases,
+							context,
+							{identity: staleKey + ':frame', cacheIdentity: staleKey},
+							(backend) => {
+								resourceProof.attach(backend);
+								const submit = backend.submitLayer.bind(backend);
+								let requested = false;
+								backend.submitLayer = (request) => {
+									submit(request);
+									if (!requested) {
+										requested = true;
+										priorStayedComplete = publication.active === previous;
+										replacement = publication.request({
+											identity: replacementIdentity,
+											cacheIdentity,
+											retainedCacheBytes,
+											peakBuildBytes,
+											otherPersistentBytes: initialBounds.otherPersistentBytes,
+											prepare: (next) =>
+												prepareShellApplicationFrame(recipe, 17, renderer, phases, next, {
+													identity: replacementIdentity,
+													cacheIdentity,
+												}),
+										});
+										void replacement.catch(() => {});
+									}
+								};
+							},
+						),
+				});
+			} catch (error) {
+				superseded = String(error);
+			}
+			if (!replacement || !superseded || !priorStayedComplete)
+				throw new Error('Supersession did not cancel staging while preserving the previous complete frame.');
+			const newest = await replacement;
+			if (
+				publication.active !== newest ||
+				newest.identity !== replacementIdentity ||
+				newest.cache !== previous.cache ||
+				publication.resources.size !== 1
+			)
+				throw new Error('Supersession failed to publish the compatible newest complete frame.');
 			await renderSnapshot();
-			lifecycle.push({mode:'superseded-GPU-build',observed:superseded,preserved:true,resources:publication.resources.size});
-			publication.dispose();await publication.tail;
-			if(publication.active!==null || publication.resources.size!==1)throw new Error('Disposal retired a renderer-leased frame too early.');
-			await renderSnapshot();snapshot.release();snapshot.release();
-			if(Array.from(publication.resources.keys()).length!==0 || publication.cleanupErrors.length)throw new Error('Final application resource cleanup failed.');
-			lifecycle.push({mode:'disposal-with-live-frame-lease',preserved:true,resources:0,observed:'Renderer snapshot survived owner disposal; final idempotent release retired the fields.'});
+			lifecycle.push({
+				mode: 'superseded-GPU-build',
+				observed: superseded,
+				preserved: true,
+				resources: publication.resources.size,
+			});
+			publication.dispose();
+			await publication.tail;
+			if (publication.active !== null || publication.resources.size !== 1)
+				throw new Error('Disposal retired a renderer-leased frame too early.');
+			await renderSnapshot();
+			snapshot.release();
+			snapshot.release();
+			if (Array.from(publication.resources.keys()).length !== 0 || publication.cleanupErrors.length)
+				throw new Error('Final application resource cleanup failed.');
+			lifecycle.push({
+				mode: 'disposal-with-live-frame-lease',
+				preserved: true,
+				resources: 0,
+				observed: 'Renderer snapshot survived owner disposal; final idempotent release retired the fields.',
+			});
 		}
-		const debug=gl.getExtension('WEBGL_debug_renderer_info'),errors=[];
-		for(let error=gl.getError();error!==gl.NO_ERROR;error=gl.getError())errors.push(error);
-		if(errors.length)throw new Error(`Shell application GL errors ${errors}`);
-		const resourceInventoryBeforeDisposal=resourceProof.snapshot();
-		publication.dispose();await publication.tail;
-		const resourceInventory=resourceProof.snapshot();
-		if(resourceInventory.fields!==0 || resourceInventory.data!==0)throw new Error('Observed backend resources survived final frame release.');
-		if(!(phases.values instanceof Float32Array))throw new Error('Transferred phase allocation identity changed.');
-		const glInventory=webglResources.snapshot(),maximumNodes=Math.max(...requests.map(request=>request.placed.shellLayout.nodes.length));
-		const applicationPayloadUpperBytes=glInventory.peak+Math.max(...resourceInventory.events.map(event=>event.data))+phases.values.byteLength+2*maximumNodes*320+3000000;
-		if(applicationPayloadUpperBytes>1200000000)throw new Error('Observed GL plus conservative host application payload exceeded the unchanged logical ceiling.');
-		return JSON.stringify({schema:'local-sun-shell-application-v1',results,lifecycle,coverageExit,phaseGapMilliseconds,resourceInventory,resourceInventoryBeforeDisposal,webglResources:glInventory,sharedHostPhaseBytes:phases.values.byteLength,
-			applicationPayload:{upperBytes:applicationPayloadUpperBytes,maximumBytes:1200000000,qualified:applicationPayloadUpperBytes<=1200000000,operation:'Sum independent GL peak, maximum transient backend host program-data copy, one shared host phase, two conservatively bounded cache-support host payloads and 3 MB geometry/global numeric payload. Separate maxima overestimate concurrency.',limitations:'Logical numeric application payload; full diagnostic field readbacks, JS object overhead, compiled driver programs and physical VRAM are excluded and not claimed below this ceiling.'},hardware:String(gl.getParameter(debug ? debug.UNMASKED_RENDERER_WEBGL : gl.RENDERER)),glErrors:errors,cleanupErrors:publication.cleanupErrors,
-			claim:'Actual GPU application publication, exact-state ray parity and the explicitly listed lifecycle cases. Physical selection, successful physical replacement, full resource admission and temporal qualification remain open.'});
-	} finally {clearInterval(phasePulse);publication.dispose();await publication.tail;preparation.facade.dispose();black.dispose();renderer.dispose();renderer.forceContextLoss();}
+		const debug = gl.getExtension('WEBGL_debug_renderer_info'),
+			errors = [];
+		for (let error = gl.getError(); error !== gl.NO_ERROR; error = gl.getError()) errors.push(error);
+		if (errors.length) throw new Error(`Shell application GL errors ${errors}`);
+		const resourceInventoryBeforeDisposal = resourceProof.snapshot();
+		publication.dispose();
+		await publication.tail;
+		const resourceInventory = resourceProof.snapshot();
+		if (resourceInventory.fields !== 0 || resourceInventory.data !== 0)
+			throw new Error('Observed backend resources survived final frame release.');
+		if (!(phases.values instanceof Float32Array)) throw new Error('Transferred phase allocation identity changed.');
+		const glInventory = webglResources.snapshot(),
+			maximumNodes = Math.max(...requests.map((request) => request.placed.shellLayout.nodes.length));
+		const applicationPayloadUpperBytes =
+			glInventory.peak +
+			Math.max(...resourceInventory.events.map((event) => event.data)) +
+			phases.values.byteLength +
+			2 * maximumNodes * 320 +
+			3000000;
+		if (applicationPayloadUpperBytes > 1200000000)
+			throw new Error(
+				'Observed GL plus conservative host application payload exceeded the unchanged logical ceiling.',
+			);
+		return JSON.stringify({
+			schema: 'local-sun-shell-application-v1',
+			results,
+			lifecycle,
+			coverageExit,
+			phaseGapMilliseconds,
+			resourceInventory,
+			resourceInventoryBeforeDisposal,
+			webglResources: glInventory,
+			sharedHostPhaseBytes: phases.values.byteLength,
+			applicationPayload: {
+				upperBytes: applicationPayloadUpperBytes,
+				maximumBytes: 1200000000,
+				qualified: applicationPayloadUpperBytes <= 1200000000,
+				operation:
+					'Sum independent GL peak, maximum transient backend host program-data copy, one shared host phase, two conservatively bounded cache-support host payloads and 3 MB geometry/global numeric payload. Separate maxima overestimate concurrency.',
+				limitations:
+					'Logical numeric application payload; full diagnostic field readbacks, JS object overhead, compiled driver programs and physical VRAM are excluded and not claimed below this ceiling.',
+			},
+			hardware: String(gl.getParameter(debug ? debug.UNMASKED_RENDERER_WEBGL : gl.RENDERER)),
+			glErrors: errors,
+			cleanupErrors: publication.cleanupErrors,
+			claim: 'Actual GPU application publication, exact-state ray parity and the explicitly listed lifecycle cases. Physical selection, successful physical replacement, full resource admission and temporal qualification remain open.',
+		});
+	} finally {
+		clearInterval(phasePulse);
+		publication.dispose();
+		await publication.tail;
+		preparation.facade.dispose();
+		black.dispose();
+		renderer.dispose();
+		renderer.forceContextLoss();
+	}
 }
 
 bridge.localSunRotation = runRotation;

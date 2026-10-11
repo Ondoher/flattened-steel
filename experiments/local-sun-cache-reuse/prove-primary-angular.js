@@ -28,11 +28,16 @@ async function main() {
 		const provenance=JSON.parse(new TextDecoder().decode(provenanceParent.bytes));
 		if(provenance.sourceSha256!==sourceParent.artifactSha256 || input.polarRule!=='hemisphere-sine2-v1' || input.phiOffset!==.5 || input.pathRule!=='piecewise-gauss-v1' || !input.outgoingMu || input.mu.length!==input.muWeights.length || input.queries.length!==parent.packets.length)throw new Error('Compatible frozen explicit-support native parent required.');
 		/** @type {LocalSunPrimaryAngularCase[]} */const cases=[];
+		const allDirections=process.argv.includes('--all-directions');
 		for(const [label,fraction,z,channel] of /** @type {Array<[string,number,number,number]>} */ ([
 			['source-ground',0,5,14],['middle-ground',.19,1500,14],['outer-middle',.93,62500,2],['outer-horizon',.93,99000,1],['boundary-ground',1,1500,14],['boundary-horizon',1,99000,1],['source-low',0,1500,14]])) {
-			const point=[input.radius*fraction,0,z],direction=[1,0,0],parentIndex=input.queries.findIndex(q=>q.point.every((v,i)=>v===point[i]) && q.direction.every((v,i)=>v===direction[i]));
-			if(parentIndex<0)throw new Error('Declared physical diagnostic case is absent from parent inventory.');
-			cases.push({name:label,point,direction,channel,parentIndex});
+			const point=[input.radius*fraction,0,z];
+			const matches=input.queries.map((query,index)=>({query,index})).filter(({query})=>query.point.every((v,i)=>v===point[i]) && (allDirections || query.direction.every((v,i)=>v===[1,0,0][i])));
+			if(matches.length!==(allDirections?7:1))throw new Error('Declared physical point/direction inventory is absent or ambiguous.');
+			for(const {query,index} of matches) {
+				if(query.direction.length!==3 || query.direction.some(v=>!Number.isFinite(v)) || Math.abs(Math.hypot(...query.direction)-1)>1e-12)throw new Error('Parent diagnostic direction is not a finite unit vector.');
+				cases.push({name:allDirections?label+'-q'+index:label,point,direction:query.direction,channel,parentIndex:index});
+			}
 		}
 		const base=process.argv.includes('--dense') ? 64 : 32,azimuthScale=process.argv.includes('--azimuth-refine') ? 4 : 1;
 		/** @type {LocalSunNativeAzimuthRule} */const azimuthRule=process.argv.includes('--quadrant-gauss') ? 'quadrant-gauss' : 'uniform';
@@ -59,7 +64,7 @@ async function main() {
 		for(const target of [scratch,executable,output])await checkPath(run.root,target);await mkdir(scratch);
 		const compileArgs=['/nologo','/optimize+','/platform:x64','/target:exe','/reference:System.Web.Extensions.dll','/out:'+executable,path.join(run.root,'PrimaryAngular.cs')];
 		await run.write('inputs.json',JSON.stringify({schema:'primary-angular-diagnostic-input-v1',parents:[reader.metadata,inputParent,sourceParent,provenanceParent].map(({bytes,...identity})=>identity),implementation,command:process.argv.slice(1),
-			derivation:{operation:'Substitute only the entry between unique anchors; preserve every frozen helper. Evaluate scalar continuous primary rays and continuous physical phase factors with declared positive angular weights. Reproduce seven parent J2 quantities, then separately bisect incoming polar/azimuth support to the declared common finest grid. Derive polar nodes/weights through a fixed eight-azimuth product. Azimuth uses uniform midpoint or existing quadrant-Gaussian nodes with analytic constant-mass normalization; polar normalization cannot depend on azimuth count. No field or candidate values enter computation.',startAnchor:start,endAnchor:end,parentSourceSha256:sourceParent.artifactSha256,entrySha256:hash(new TextEncoder().encode(entry)),derivedSourceSha256:hash(new TextEncoder().encode(derived)),base,azimuthScale,azimuthRule,cases,levels},
+			derivation:{operation:'Substitute only the entry between unique anchors; preserve every frozen helper. Evaluate scalar continuous primary rays and continuous physical phase factors with declared positive angular weights. Reproduce every selected parent J2 quantity, then separately bisect incoming polar/azimuth support to the declared common finest grid. Optional all-directions mode includes every existing seven-direction parent query at each selected point/channel. Compute each point/channel incoming array once and reuse it only for separate outgoing phase sums. Derive polar nodes/weights through a fixed eight-azimuth product. Azimuth uses uniform midpoint or existing quadrant-Gaussian nodes with analytic constant-mass normalization; polar normalization cannot depend on azimuth count. No field or candidate values enter computation.',startAnchor:start,endAnchor:end,parentSourceSha256:sourceParent.artifactSha256,entrySha256:hash(new TextEncoder().encode(entry)),derivedSourceSha256:hash(new TextEncoder().encode(derived)),base,azimuthScale,azimuthRule,allDirections,cases,levels},
 			tools:{node:process.version,compiler,compilerSha256:hash(await readFile(compiler)),compileArgs}},null,'\t'));
 		const compiled=await promisify(execFile)(compiler,compileArgs,{windowsHide:true,env:{...process.env,TEMP:scratch,TMP:scratch}});await run.write('compile.txt',compiled.stdout+compiled.stderr);
 		await new Promise((resolve,reject)=>{const child=spawn(executable,[path.join(run.root,'diagnostic-input.json'),output],{windowsHide:true,stdio:['ignore','pipe','pipe'],env:{...process.env,TEMP:scratch,TMP:scratch}});let failure='';

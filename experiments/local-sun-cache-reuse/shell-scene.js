@@ -3,6 +3,7 @@ import {EndpointScene} from '../../src/flat32/EndpointScene.js';
 import {SCENE_OBJECTS} from '../../src/flat32/consts.js';
 import {SceneInputCapture} from '../../src/algorithm32/rendering-runtime/three/SceneInputCapture.js';
 import {FlatEarthGeometry} from '../../src/algorithm32/implementation/flat-earth/FlatEarthGeometry.js';
+import {CelestialGenerationPass} from '../../src/algorithm32/rendering-runtime/three/CelestialGenerationPass.js';
 
 /** Own the ordinary six-box scene and its exact-state spectral lighting.
  * The per-object 4096 shadow maps, meshes, materials and camera policies come
@@ -83,9 +84,16 @@ export class ShellEndpointScene {
 				if(!this.rendered)throw new Error('Suspended frame has no complete pixels.');
 				renderer.setRenderTarget(null);renderer.render(this.snapshotScene,new THREE.Camera());return;
 			}
+			const viewport=renderer.getDrawingBufferSize(new THREE.Vector2());
+			if(this.colorTarget.width!==viewport.x || this.colorTarget.height!==viewport.y){
+				this.colorTarget.setSize(viewport.x,viewport.y);
+				this.snapshotTexture.dispose();this.snapshotTexture=new THREE.FramebufferTexture(viewport.x,viewport.y);
+				this.snapshotMaterial.uniforms.image.value=this.snapshotTexture;
+			}
 			renderer.setRenderTarget(this.colorTarget);renderer.clear();renderer.render(this.scene,this.camera);
 			for(const pass of composer.passes) {
 				if(pass===view)continue;
+				if(pass instanceof CelestialGenerationPass){pass.render(renderer);continue;}
 				if(!(pass instanceof SceneInputCapture))throw new Error('Unexpected shell scene collaborator.');
 				pass.capture(/** @type {SceneInputCaptureRenderer} */(/** @type {unknown} */(renderer)));
 			}

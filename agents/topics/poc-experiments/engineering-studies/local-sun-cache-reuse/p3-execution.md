@@ -1,13 +1,14 @@
 # Shell Layout Execution
 
-Owner-selected independent execution covers recast P3-P5. Stop before P6
-recording, or if a fatal flaw remains after viable authorized workarounds.
-P0-P2 evidence and production remain unchanged.
+This document preserves the historical shell-layout development chronology.
+The [status](status.md) owns current phase disposition and the [handoff](handoff.md)
+owns resumption guidance. Delivered P3-P5 and celestial follow-ups are recorded
+by their phase owners; P6 recording remains unselected.
 
-## Current State
+## Historical Baseline
 
-P3-A through P3-D and the P4 application prototype are in development. No new implementation milestone is
-complete. The coherent initial review unit now covers P3-A/P3-B geometry,
+The decisions and execution entries below retain their original context and
+do not describe current readiness. The initial review unit covered P3-A/P3-B geometry,
 addressing, CPU/GPU construction, first-image collaborators and the P3-C
 independent reference/proof collaborators developed with that same candidate.
 Its preimplementation whole-experiment baseline remains:
@@ -15,35 +16,35 @@ Its preimplementation whole-experiment baseline remains:
 Required standards readiness and final primary/audit evidence remain separate
 from numerical proofs and render delivery.
 
-## Decisions
+## Historical Execution Decisions
 
-| Question | Decision and reason |
-| --- | --- |
-| Where does generated evidence live? | New sealed runs under the declared experiment output root; this specific experiment boundary overrides the skill's generic scratch-output location. Review mechanics remain under `.codex-tmp/review-standards/`. |
-| What does execution authorize? | Recast P3-P5, including the standard images, numerical proofs and app/lifecycle/resource qualification. Stop at the recording boundary; do not capture P6 preview or final video. |
-| How is Euclidean radius made stable near the axis? | Evaluate radius excess over the altitude's axis distance using `e = rho^2 / (hypot(rho,h-z) + abs(h-z))`. Retain original physical coordinates and explicit axis support. Verify address/stencil behavior rather than subtracting rounded absolute radii. Exact storage nodes remain a P3-A decision. |
-| Does omitting scattering bands omit ray propagation? | No. Empty scattering bands have no samples or scattering build work, but required source facts, boundary support and vacuum transport remain. |
-| Can old reference and gate records qualify the layout? | No. Preserve P1 records; version the new topology/query matrix and state the physical truncation boundary explicitly before candidate results. Retain compatible quantity tolerances. |
-| What happens to the old axis discontinuity? | Diagnose a bounded spatial/frame treatment and compare against physical-reference limits. Do not assume the shell layout repairs it. Explicitly limit or reject a candidate that cannot pass; a broad angular redesign requires a separate recorded scope decision. |
-| Why did the first N4 build contain nonfinite fields? | Absolute large-cylinder quadratic arithmetic and rounded exit samples exposed out-of-domain transport that the old stencil clamped. Normalize the cylinder intersection using `(R-rho)/R`, retain explicit cylinder-exit identity, and sample its known boundary radius at the terminal construction tap. Do not admit arbitrary outside queries. Failed runs 00050-00055 remain immutable. |
-| Does the first finite N4 image establish accuracy? | No. Run 00056 has finite fields, zero GL errors, CPU/GPU ray parity and complete measured candidate coverage, but its sky is grossly brighter than the current control. Investigate long-path quadrature and spatial resolution before any acceptance. |
-| May the inherited transport quadrature be corrected? | Yes, as an explicit experiment-owned correctness workaround. The large fixed cylinder exposes coarse optically thick trapezoid intervals. Investigate analytic extinction columns and positive attenuation-weighted integration before enlarging sample counts; preserve physical equations, spectral/angular/order controls, original control and frozen tolerances. Record policy-change error separately from layout/reuse. |
-| What did the continuous primary probes expose? | Run 00058 identifies J1 amplitude clamping outside the old placement-dependent source table and insufficient L1 path resolution. Derive the existing 2048 equal-inverse-square source-amplitude bands from the candidate slab/cylinder; keep continuous direct/source-disk facts separate. Investigate 120 construction intervals while retaining the original 15-interval control. Path count is an explicit numerical policy change; Native15/W27/F68/N4 and tolerances stay pinned. |
-| How are images compared fairly? | Starting with run 00058, both paths use the control's measured adapting-luminance proxy. Earlier images are diagnostics with each path's own measured adaptation. Keep the newly measured spectra as physical observations, never normalize them to the control. |
-| How is the spatial axis limit repaired? | Reconstruct each axis-node contribution along one canonical meridian, using the physical direction's horizontal magnitude and vertical component. CPU, construction and runtime use the same node-specific rule. Nonaxis taps retain W27 reconstruction. Continuity alone does not qualify physical angular accuracy. |
-| Does F68 pass the new independent J2 diagnosis? | Not established. Refined continuous-primary/angular probes expose large discrepancies near the axis; simple phase normalization and polar midpoint recentering do not resolve them. Refine the independent uncertainty before rejection. As a numerical correctness workaround, investigate a distinct partitioned product incoming quadrature while keeping F68 as the unchanged control, outgoing W27/R32F/Native15/N4 and all acceptance limits. This changes numerical construction identity, never adds a Sun-angle spatial cache dimension or reuses P2 qualification. |
-| Which denser quadrature is being investigated? | Forty positive Gaussian polar taps partitioned around the flat horizon, initially 24 cyclic azimuths (960 incoming directions). Run 00073 is finite and passes the measured primary and CPU/GPU rays. A 48-azimuth midpoint variant (1920 incoming directions) addresses cylinder-tangent integration bias; it remains a separate developmental policy. Outgoing W27, spectral channels, order and tolerances remain unchanged. |
-| How is independent reference convergence improved? | Preserve old runs; integrate continuous primary transport using Simpson in `t=L*u^2`, then independently generated Gaussian polar integration under `mu=sinh(k*u)/sinh(k)` with its Jacobian. Increase k/resolution near the ground and refine azimuth quadrant endpoints at the physical cylinder tangents. Keep every original convergence and uncertainty limit. Rotational/reflection symmetry avoids duplicated L1 evaluations while retaining every phase tap. |
-| May rejected evidence supply reference values? | Yes, only through explicit rejected-parent admission, full immutable inventory authentication and exact physical/schema compatibility. Preserve each reference cell's convergence and uncertainty; a rejected candidate does not invalidate independently computed reference values, and an inconclusive reference cannot grant acceptance. |
-| Why is physical linear interpolation being replaced? | Independent off-grid J2 in run 00084 rejects the 457-node candidate, including roughly 36.5% error near the ground between coarse radial samples. Investigate interpolation of J after removing analytic extinction and continuous direct-incident decay, restoring that positive factor at the query. This uses physical equations without empirical fitting; stored J remains physical. Run 00087 improves accuracy but still fails. Bisect radial resolution seeds before another evaluation. |
-| What prevents the refined constant-table shader from compiling? | Run 00095 exceeds the D3D11 register limit. Stop that invalid capture and seal its failed evidence; use immutable scalar texture inputs for node log factors instead of large shader constant arrays. Add immediate construction/shader-error rejection. This is a viable implementation workaround, not a fatal flaw. |
-| Why did the 699-node first-order matrix still fail? | Run 00116 finds two failing packets between near-axis samples at 5/250 m. Mid-altitude-derived radii leave a large ground-row gap. Add ground-referenced shell radii for frozen radial seeds whose ground radius excess is at most one slab thickness. This is a geometry-derived refinement, not a fit to reference values. Run 00117 produces 775 retained nodes with the same six empty bands omitted. |
-| How is the independent recurrence made practical? | Use the installed framework compiler for owned binary64 source; share source-meridian reflection and invariant phase convolution, checking Fourier sums against direct scalar sums. Optional three-channel packets share continuous columns and phase while retaining separate spectral values. Their common optical-depth-32 endpoint changes the discrete path rule, so record a distinct policy and require fresh convergence. |
-| Why investigate a different construction path coordinate? | Coarse independent higher-order references show unresolved disagreements, especially at the outer cylinder. Uniform physical steps can miss source-function variation within optically thick intervals. Investigate squared-distance sampling with an optical-depth-64 integration prefix and positive attenuation weights. Run 00127 bounds the removed tails below one tenth of every absolute physical limit. Keep physical boundary/coverage identity intact and recheck accuracy; this tail bound does not validate the new quadrature. |
-| How is the phase preparation pause addressed? | Prepare the same invariant Mie matrix and canonical identity in a run-pinned worker, transfer its Float32 buffer and terminate the worker on success, failure or cancellation. Yield between GPU layers through the existing scheduler. Run 00126 preserves the complete cumulative field hash of run 00118; responsiveness, exclusive timing and complete app lifecycle gates remain open. |
-| Why replace the squared-distance trial? | Run 00128 fails four primary L1 checks at 99 km: 48 squared physical steps do not resolve the dense lower atmosphere on descending rays. Instead sample squared cumulative Rayleigh density column, with its analytic inverse; retain positive attenuation weights and the bounded tau-64 prefix. Run 00132 passes the measured primary probes and the complete withheld J1/J2 matrices. |
-| Why change independent reference path integration? | Runs 00131/00133 remain inconclusive after fixed Simpson refinements: interpolated source functions have path knots. Split independent Gaussian integration at reference rho/altitude/azimuth knots, closest approach and physical density/attenuation scales. A half-step incoming azimuth rule avoids sampling the narrow cylinder-tangent transition at its endpoint; retain exact complex Fourier kernels and direct-sum parity. Run 00141 passes all nine quantities' coarse three-level path checks; spatial/angular convergence remains required. |
-| Does the adapted construction module retain the inherited hash? | No. Recreate its identity from actual modified blocks and bindings through `CacheBuildModules.createBuildModule`. Earlier fresh-only evidence remains immutable and does not establish reuse. The new radius-excess support texture also removes a large dynamic shader constant array, while preserving R32F support values and explicit texture ownership. Verify it in a fresh capture before relying on it. |
+| Question                                                        | Decision and reason                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| --------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Where does generated evidence live?                             | New sealed runs under the declared experiment output root; this specific experiment boundary overrides the skill's generic scratch-output location. Review mechanics remain under `.codex-tmp/review-standards/`.                                                                                                                                                                                                                                                                                                                                                            |
+| What does execution authorize?                                  | Recast P3-P5, including the standard images, numerical proofs and app/lifecycle/resource qualification. Stop at the recording boundary; do not capture P6 preview or final video.                                                                                                                                                                                                                                                                                                                                                                                            |
+| How is Euclidean radius made stable near the axis?              | Evaluate radius excess over the altitude's axis distance using `e = rho^2 / (hypot(rho,h-z) + abs(h-z))`. Retain original physical coordinates and explicit axis support. Verify address/stencil behavior rather than subtracting rounded absolute radii. Exact storage nodes remain a P3-A decision.                                                                                                                                                                                                                                                                        |
+| Does omitting scattering bands omit ray propagation?            | No. Empty scattering bands have no samples or scattering build work, but required source facts, boundary support and vacuum transport remain.                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| Can old reference and gate records qualify the layout?          | No. Preserve P1 records; version the new topology/query matrix and state the physical truncation boundary explicitly before candidate results. Retain compatible quantity tolerances.                                                                                                                                                                                                                                                                                                                                                                                        |
+| What happens to the old axis discontinuity?                     | Diagnose a bounded spatial/frame treatment and compare against physical-reference limits. Do not assume the shell layout repairs it. Explicitly limit or reject a candidate that cannot pass; a broad angular redesign requires a separate recorded scope decision.                                                                                                                                                                                                                                                                                                          |
+| Why did the first N4 build contain nonfinite fields?            | Absolute large-cylinder quadratic arithmetic and rounded exit samples exposed out-of-domain transport that the old stencil clamped. Normalize the cylinder intersection using `(R-rho)/R`, retain explicit cylinder-exit identity, and sample its known boundary radius at the terminal construction tap. Do not admit arbitrary outside queries. Failed runs 00050-00055 remain immutable.                                                                                                                                                                                  |
+| Does the first finite N4 image establish accuracy?              | No. Run 00056 has finite fields, zero GL errors, CPU/GPU ray parity and complete measured candidate coverage, but its sky is grossly brighter than the current control. Investigate long-path quadrature and spatial resolution before any acceptance.                                                                                                                                                                                                                                                                                                                       |
+| May the inherited transport quadrature be corrected?            | Yes, as an explicit experiment-owned correctness workaround. The large fixed cylinder exposes coarse optically thick trapezoid intervals. Investigate analytic extinction columns and positive attenuation-weighted integration before enlarging sample counts; preserve physical equations, spectral/angular/order controls, original control and frozen tolerances. Record policy-change error separately from layout/reuse.                                                                                                                                               |
+| What did the continuous primary probes expose?                  | Run 00058 identifies J1 amplitude clamping outside the old placement-dependent source table and insufficient L1 path resolution. Derive the existing 2048 equal-inverse-square source-amplitude bands from the candidate slab/cylinder; keep continuous direct/source-disk facts separate. Investigate 120 construction intervals while retaining the original 15-interval control. Path count is an explicit numerical policy change; Native15/W27/F68/N4 and tolerances stay pinned.                                                                                       |
+| How are images compared fairly?                                 | Starting with run 00058, both paths use the control's measured adapting-luminance proxy. Earlier images are diagnostics with each path's own measured adaptation. Keep the newly measured spectra as physical observations, never normalize them to the control.                                                                                                                                                                                                                                                                                                             |
+| How is the spatial axis limit repaired?                         | Reconstruct each axis-node contribution along one canonical meridian, using the physical direction's horizontal magnitude and vertical component. CPU, construction and runtime use the same node-specific rule. Nonaxis taps retain W27 reconstruction. Continuity alone does not qualify physical angular accuracy.                                                                                                                                                                                                                                                        |
+| Does F68 pass the new independent J2 diagnosis?                 | Not established. Refined continuous-primary/angular probes expose large discrepancies near the axis; simple phase normalization and polar midpoint recentering do not resolve them. Refine the independent uncertainty before rejection. As a numerical correctness workaround, investigate a distinct partitioned product incoming quadrature while keeping F68 as the unchanged control, outgoing W27/R32F/Native15/N4 and all acceptance limits. This changes numerical construction identity, never adds a Sun-angle spatial cache dimension or reuses P2 qualification. |
+| Which denser quadrature is being investigated?                  | Forty positive Gaussian polar taps partitioned around the flat horizon, initially 24 cyclic azimuths (960 incoming directions). Run 00073 is finite and passes the measured primary and CPU/GPU rays. A 48-azimuth midpoint variant (1920 incoming directions) addresses cylinder-tangent integration bias; it remains a separate developmental policy. Outgoing W27, spectral channels, order and tolerances remain unchanged.                                                                                                                                              |
+| How is independent reference convergence improved?              | Preserve old runs; integrate continuous primary transport using Simpson in `t=L*u^2`, then independently generated Gaussian polar integration under `mu=sinh(k*u)/sinh(k)` with its Jacobian. Increase k/resolution near the ground and refine azimuth quadrant endpoints at the physical cylinder tangents. Keep every original convergence and uncertainty limit. Rotational/reflection symmetry avoids duplicated L1 evaluations while retaining every phase tap.                                                                                                         |
+| May rejected evidence supply reference values?                  | Yes, only through explicit rejected-parent admission, full immutable inventory authentication and exact physical/schema compatibility. Preserve each reference cell's convergence and uncertainty; a rejected candidate does not invalidate independently computed reference values, and an inconclusive reference cannot grant acceptance.                                                                                                                                                                                                                                  |
+| Why is physical linear interpolation being replaced?            | Independent off-grid J2 in run 00084 rejects the 457-node candidate, including roughly 36.5% error near the ground between coarse radial samples. Investigate interpolation of J after removing analytic extinction and continuous direct-incident decay, restoring that positive factor at the query. This uses physical equations without empirical fitting; stored J remains physical. Run 00087 improves accuracy but still fails. Bisect radial resolution seeds before another evaluation.                                                                             |
+| What prevents the refined constant-table shader from compiling? | Run 00095 exceeds the D3D11 register limit. Stop that invalid capture and seal its failed evidence; use immutable scalar texture inputs for node log factors instead of large shader constant arrays. Add immediate construction/shader-error rejection. This is a viable implementation workaround, not a fatal flaw.                                                                                                                                                                                                                                                       |
+| Why did the 699-node first-order matrix still fail?             | Run 00116 finds two failing packets between near-axis samples at 5/250 m. Mid-altitude-derived radii leave a large ground-row gap. Add ground-referenced shell radii for frozen radial seeds whose ground radius excess is at most one slab thickness. This is a geometry-derived refinement, not a fit to reference values. Run 00117 produces 775 retained nodes with the same six empty bands omitted.                                                                                                                                                                    |
+| How is the independent recurrence made practical?               | Use the installed framework compiler for owned binary64 source; share source-meridian reflection and invariant phase convolution, checking Fourier sums against direct scalar sums. Optional three-channel packets share continuous columns and phase while retaining separate spectral values. Their common optical-depth-32 endpoint changes the discrete path rule, so record a distinct policy and require fresh convergence.                                                                                                                                            |
+| Why investigate a different construction path coordinate?       | Coarse independent higher-order references show unresolved disagreements, especially at the outer cylinder. Uniform physical steps can miss source-function variation within optically thick intervals. Investigate squared-distance sampling with an optical-depth-64 integration prefix and positive attenuation weights. Run 00127 bounds the removed tails below one tenth of every absolute physical limit. Keep physical boundary/coverage identity intact and recheck accuracy; this tail bound does not validate the new quadrature.                                 |
+| How is the phase preparation pause addressed?                   | Prepare the same invariant Mie matrix and canonical identity in a run-pinned worker, transfer its Float32 buffer and terminate the worker on success, failure or cancellation. Yield between GPU layers through the existing scheduler. Run 00126 preserves the complete cumulative field hash of run 00118; responsiveness, exclusive timing and complete app lifecycle gates remain open.                                                                                                                                                                                  |
+| Why replace the squared-distance trial?                         | Run 00128 fails four primary L1 checks at 99 km: 48 squared physical steps do not resolve the dense lower atmosphere on descending rays. Instead sample squared cumulative Rayleigh density column, with its analytic inverse; retain positive attenuation weights and the bounded tau-64 prefix. Run 00132 passes the measured primary probes and the complete withheld J1/J2 matrices.                                                                                                                                                                                     |
+| Why change independent reference path integration?              | Runs 00131/00133 remain inconclusive after fixed Simpson refinements: interpolated source functions have path knots. Split independent Gaussian integration at reference rho/altitude/azimuth knots, closest approach and physical density/attenuation scales. A half-step incoming azimuth rule avoids sampling the narrow cylinder-tangent transition at its endpoint; retain exact complex Fourier kernels and direct-sum parity. Run 00141 passes all nine quantities' coarse three-level path checks; spatial/angular convergence remains required.                     |
+| Does the adapted construction module retain the inherited hash? | No. Recreate its identity from actual modified blocks and bindings through `CacheBuildModules.createBuildModule`. Earlier fresh-only evidence remains immutable and does not establish reuse. The new radius-excess support texture also removes a large dynamic shader constant array, while preserving R32F support values and explicit texture ownership. Verify it in a fresh capture before relying on it.                                                                                                                                                              |
 
 ## Saved Development Evidence
 
@@ -1164,3 +1165,271 @@ subsequent governing-document updates require readiness refresh and the final
 experiment handoff must validate current applicable evidence. Long-job
 monitoring and complete native accuracy remain open. The adviser recommends
 saving the diagnostic/monitor correction as a coherent local checkpoint.
+
+Checkpoint `d417a9c3` saves the eight-path diagnostic/collector unit after exact
+whole-state fingerprint, staged byte hashes and staged whitespace checks. Its
+message and every committed byte are verified; the worktree is clean immediately
+after verification. The adviser recommendation is preapproved by the standing
+independent-execution instruction. No push or protection changes occur.
+Retry wrapper 00471/native 00472 is a new 45-minute 64-node calculation with
+the unchanged quartic outgoing support and native source. Earlier incomplete
+00454 remains preserved. The persistent collector returns over 100 valid
+successive responses while 00472 reaches spectral batch 6; completion is pending.
+
+Question: do the seven horizontal primary diagnostics cover the other withheld
+outgoing directions that limit complete fields? Decision: add an optional
+`--all-directions` control containing all seven existing parent query directions
+at each of the seven selected physical points/channels, totaling 49 cases.
+Before coding, capture `session-dYOd0O/baseline.json` at checkpoint d417a9c3;
+all three mapped lanes acknowledge readiness
+`da52f08de4b5714cc081543164dddddbdd35bd5b4219068dd954efe54f580979`.
+Group only incoming calculation by exact physical point and spectral channel,
+then apply each outgoing direction's original phase sum separately. Default
+seven-case mode, physical helpers, weights and per-case parent reproduction
+are preserved. The new option validates its exact seven-direction inventory
+and finite unit vectors. Local type/whitespace checks pass. Default regression,
+the 49-case runtime proof and fresh source review remain open; queue them after
+the current full reference so only one heavy job executes at a time. This is
+diagnostic preparation, not complete native or candidate acceptance.
+
+Compile-only proof 00473 derives the exact new entry from authenticated native
+parent 00451 and passes the installed framework compiler in a new run. It
+records source anchors, parent/entry/derived hashes, compiler/arguments and the
+new executable identity. It executes no numerical calculation, so the only
+heavy job remains 00471/00472. The broader diagnostic source is stabilized
+for primary/independent review; default and expanded numerical proofs remain
+queued and its implementation-completion gate stays open.
+
+The directional source primary finds a TYPES-003 shared inline query shape in
+`LocalSunNativeReferenceLevel.input.queries`. Reuse the already documented
+`LocalSunNativeOperatorQuery` contract rather than duplicate its point/direction
+structure. This declaration repair changes no native input or calculation.
+Preserve the original request/reports as findings evidence; it invalidates their
+freshness. Prepare a new complete request and require actual fresh primary/audit
+validation, without relabeling existing ledgers. Numerical proofs remain queued.
+
+## 2026-10-09: Owner Stop And Model-Defensibility Recast
+
+Native 00472 completes in 1,326,609 ms under resource wrapper 00471. The
+wrapper reports no failure, peak private memory 846,376,960 bytes and minimum
+free machine memory 11,945,529,344 bytes. Convergence run 00474 retains
+unresolved higher-order angular channels; primary L1 passes. No complete
+physical qualification follows. The directional diagnostic source validates
+exit-0 CLEAN at `session-dYOd0O/validation-v2.json`, fingerprint
+`82577575e02f6de292b0e02920dfc581f4b3d7a11f1a812f99211d32cf816255`,
+with actual primary/independent audits. Numerical default/49-case proofs remain
+open: resource attempt 00475 fails before child launch with `spawn EPERM`.
+The owner stops execution; no retry or video follows.
+
+The owner requires JavaScript implementation/tooling, Python for suitable
+support, and no compiled helper/executable without a specific explicit exception.
+No C# exception is granted. A Norton parent-directory exclusion is reported
+configured by the owner, but does not alter language authorization or establish
+the cause of every prior runtime failure.
+
+Decision: reshape the plan around defensibility of the hypothetical model,
+using demonstrated compatible distant/spherical methods while preserving their
+mathematics and isolating flat/local assumptions. Supersede the global
+independently converged higher-order solver prerequisite; preserve its equations,
+run flags and source-review evidence as historical material. Existing numeric
+limits are not widened, and old failures are not relabeled.
+
+The owner adds first step P3-A0: an authored inventory of every abstraction,
+original mathematical inputs/outputs/units, inherited evidence, preserved laws,
+flat/local substitutions and derived consequences, implementation mapping,
+defense, validity domain and focused verification gaps. This planning change
+does not produce or complete that inventory. Conceptual responsibilities are
+geometry, source/boundary, shared transport, numerical approximation, cache
+representation, placement/publication and presentation; no framework rewrite
+is selected.
+
+The owner also points to Sky Accuracy Dials component-error cancellation,
+especially ozone, then specifies **informative only**. Its preserved reports
+inform the inventory and inference limits; no new correction/factorial campaign,
+ozone change, adoption or resumption of that suspended lane is selected.
+The inspected reports establish general cancellation; missing gaseous absorption
+is an untested lead in their follow-up context, and the exact ozone-specific
+evidence remains to be located rather than asserted.
+
+Current owners updated: plan, design, reference/evidence policy, status, README
+and active-topic. Future implementation needs refreshed reviewer context and
+owner reselection. The next numerical gate contract must have a new identity
+before scoring. The pre-video boundary, integrated empty-band omission,
+standard five-state images, app lifecycle/resource work and identical-scene
+Union Glacier December-solstice 180-to-540-degree recording remain preserved.
+
+## 2026-10-09: P3-A0 Abstraction Analysis Completed
+
+The owner selects the new analysis step only. Authored
+[abstraction-inventory.md](abstraction-inventory.md) inventories fifteen
+abstraction groups, physical quantities and dependency boundaries, preserves
+coefficient/phase/attenuation/order/ground mathematics and derives plane paths,
+local dilution, shell symmetry and empty-band admission. Its
+[source manifest](abstraction-inventory-sources.json) captures the inspected
+working-tree implementations and parent control/evidence identities.
+
+The analysis distinguishes held source bands, center-ray/disk calibration,
+normalized spatial interpolation, changed angular/path rules, finite coverage
+and order truncation from exact geometry substitutions. The actual prototype
+has black physical ground and zero ozone absorption. Reflective ground and
+local higher-order accuracy are not demonstrated by this document. Dials
+cancellation findings remain informative; no quantified ozone-specific result
+was located in the inspected reports. No correction, ozone change or suspended
+lane resumption follows.
+
+P3-A0 exits with an inspectable source-bound inventory, dependency map, transfer
+gaps and bounded proof recommendations. Document formatting, local links and
+whitespace are checked. No numerical run, compilation, source implementation,
+production change or video was executed. P3-A through P5 remain incomplete;
+implementation remains stopped pending owner selection. Future implementation
+still requires context refresh, script-based monitoring and its mapped reviews.
+
+## 2026-10-09: Owner Defers Approximation Error Estimation
+
+The owner clarifies that new interpolation/integration policies need to be
+mathematically defensible at this stage. Heavy research and targeted experiments
+to estimate numerical error bounds are later work, not current completion or
+pre-recording gates. The current evidence policy and P3/P5 plan now distinguish
+that deferral from ordinary mathematical/implementation correctness, omission,
+fresh/reused consistency, lifecycle, resources and required source reviews.
+Historical outcomes retain their dispositions; no measured absolute accuracy
+bound is asserted. The original P3-A0 report and its reading manifest remain
+unchanged; its error-estimation recommendations are governed by this later
+clarification. No implementation or experiment run resumes.
+
+## 2026-10-09: Inventory Notes Aligned With Deferred Error Estimation
+
+The current abstraction inventory now states the owner-selected defense depth
+explicitly. Equations, geometry derivations and limitations remain; language
+requiring quantitative approximation qualification is replaced with mathematical
+rationale and ordinary correctness checks. Numerical sensitivity/error-bound
+experiments are labeled deferred future work, not completion or pre-recording
+gates. The report reading manifest records the documentation revision and prior
+snapshot identity. No implementation or numerical outcome changes.
+
+## 2026-10-09: P3-A Contract And Script-Monitor Closeout
+
+The owner selects P3-A only. Baseline session-KIyAKe precedes the coherent
+contract-freezing and resource-monitor source unit. New contract run 00478
+preserves selection 00281/layout 00217, separates current correctness gates from
+deferred error estimates and authenticates parent evidence. Its 1,049-node,
+61-band/six-omitted layout passes 220 stencil probes, compact-node round trips
+and four explicit unsupported-query rejections. Initial contract run 00476 is
+preserved; 00478 captures the formatted source unit.
+
+Read-only CIM host access succeeds after sandbox denial. The replacement runs
+JavaScript with a fixed existing OS query; no compiler/helper binary is built.
+Script readiness 00477 passes child/exit, overlap, unknown-root and retirement
+checks. Full wrapper 00479 with tiny child proof 00480 exits 0, monitor failure
+null, peak private bytes 250,773,504, working-set bytes 258,322,432 and minimum
+free bytes 12,444,114,944. These are readiness proofs, not cache-performance or
+physical accuracy qualification. Limits, exclusive lock and fail-closed behavior
+remain. No other native scientific launcher becomes authorized.
+
+Local type checking passes. The [P3-A contract](p3-contract.md) owns frozen
+identities, limitations and phase-completion authority: current matching exit-0
+CLEAN primary/independent source-review validation is required. Source review
+refreshes the applicable work context; old receipts are not relabeled. No
+candidate capture, numerical accuracy study, production change or video runs.
+P3-B is the next selectable fresh-image milestone after that gate.
+
+## P3-C Execution ? 2026-10-09
+
+The first new image, Flat45 in `00492-p3-shell-v3a`, is accepted. Its
+candidate build took 26.45 seconds; the guarded parent `00491-resource-bound`
+recorded 5.23 GiB peak owned private bytes and remained above the 8 GiB
+free-memory reserve. This is visual delivery and existing ray/field evidence,
+not completion of the expanded layout checks.
+
+The current topology proof `00495-p3-stencil-proof` passed all 21,424 queries.
+Its maximum radius and altitude moment errors were respectively
+7.45e-9 m and 6.81e-13 m, within the existing ordinary-correctness allowances.
+
+The first expanded Flat0 attempt, guarded parent `00493-resource-bound`, hit
+the machine free-memory reserve after the candidate build. Its incomplete
+child `00494-p3-shell-v3a` is preserved. Recovery releases transported-field
+diagnostic arrays after recording their complete validity counts and hashes,
+and probes one wavelength texture plane at a time. These bookkeeping changes
+leave the GPU recurrence, occupied topology, all-channel inventory and
+acceptance limits unchanged. The second round, parent `00496-resource-bound`
+and incomplete child `00497-p3-shell-v3a`, also reached the reserve. Its
+candidate build completed in 28.91 seconds with finite cumulative values.
+
+Reassessment after these two failures changes diagnostic retention: complete
+pure-order readbacks contribute to one binary64 sum and are then released,
+with their complete validity inventory and hashes retained. This replaces
+four resident order arrays with one additive accumulator. Direct GPU/CPU
+lookup probes exercise the published cumulative field, the renderer's actual
+runtime quantity; they do not claim independent pure-order physics accuracy.
+The all-order omission proof still compares every occupied J1-J4, L1-L3 and
+cumulative scalar through byte identities. No acceptance limit or numerical
+policy is relaxed. Local type checking passes before the reassessed attempt.
+
+The additional `00498-resource-bound` attempt and child `00499-p3-shell-v3a`
+reached the reserve during construction. Removing unused intermediate-order
+readbacks from the old-grid behavior control reduced the retained diagnostic
+inventory; the next parent `00500-resource-bound` and child
+`00501-p3-shell-v3a` still reached the machine reserve. No owned experiment
+browser processes remained after cleanup. The owner's temporary exception
+above followed these stops.
+
+The first complete expanded check, `00503-p3-shell-v3a` under
+`00502-resource-bound`, passed 68,824,890 cumulative-order scalar comparisons,
+1,659,615 direct lookup channel comparisons, all view spectra/transmissions,
+axis continuity and ray coverage. It failed the unchanged 1 cm endpoint gate:
+the inherited ordinary FP32 observer-dome calculation differed from CPU by up
+to 9.8323 m near the horizon. This failed result is preserved and cannot serve
+as accepted parent evidence.
+
+The contained current candidate now uses the existing P2 compensated
+observer-dome adapter. It represents the same boundary calculation in two
+float parts and carries high/low diagnostic directions, preserving physical
+geometry, field policy and integration counts. Its current scope is the
+fixture's fixed observer; other receiver origins and movement remain later
+phase obligations. A collector deadline interrupted `00504-resource-bound`
+and child `00505-p3-shell-v3a` before rendering. Two successful collector
+recovery samples preceded the next attempt.
+
+`00507-p3-shell-v3a` under `00506-resource-bound` passes the complete Flat0
+checks with a maximum endpoint difference of 3.73e-9 m. Its instrumented
+build took 35.58 seconds, above the 30-second target; this is a recorded cost,
+not a performance pass. Its parent recorded 4,189,908,992 peak private bytes
+and 8,135,032,832 minimum free bytes, qualifying against the actual 6 GiB
+exception reserve. The equivalent unculled capture `00509-p3-shell-v3a`, guarded by
+`00508-resource-bound`, also passes. The accepted omission derivation
+`00510-p3-omission` proves all eight occupied fields bit-identical and every
+empty slot zero. Its 132 proof-only empty slots account for 103,926,240 bytes
+of avoided peak field allocation and 72,028,440 avoided scalar writes. This
+is a bounded equivalent-control saving, not an estimate for an arbitrary
+unculled grid or physical GPU memory. Its observed build took 44.21 seconds;
+no controlled timing benefit is claimed.
+
+The fixed-source Flat135 (`00512-p3-shell-v3a` / `00511-resource-bound`) and
+Flat45 (`00514-p3-shell-v3a` / `00513-resource-bound`) captures are accepted.
+Their ordinary builds took 27.79 and 28.41 seconds respectively. Both retain
+all seven order inventories, complete Native15 view rays, current GPU
+receiver packets, axis continuity and admitted support. The same 3.73e-9 m
+maximum endpoint difference is recorded at Flat135. Primary Flat180 and
+Flat90 checks, the final derivation and source review remain pending.
+
+Final fixed-source primary captures: Flat180 `00516-p3-shell-v3a` under `00515-resource-bound` and the untouched Flat90 holdout `00518-p3-shell-v3a` under `00517-resource-bound` both pass. The accepted `00519-p3-layout-report` authenticates all five cadence captures, their actual guarded parents, the current support proof and omission proof. The [current qualification record](p3-layout-qualification.md) owns the final scope, images, costs, limitations and receipt-governed completion.
+
+## P3-D Movement ? 2026-10-10
+
+The owner clarified P3-clean as P3-D and selected independent execution.
+Baseline session-P0m3QN preceded the JS adapter/DTO, frame-policy proof and
+qualifier changes. The bounded 00521/00522 pilot passed. The first matrix
+attempt 00523/00524 stopped because the monitor retained identities of already
+exited descendants and rejected a later reused PID. The JS monitor now retires
+only identities already absent from a validated census, preserving pinned
+roots, changed-live-identity rejection and current ownership checks. Focused
+real telemetry proof 00525 passes; the bounded retry 00526/00527 passed.
+
+Final groups 00527/00531/00533/00535/00537 and their guarded parents all pass.
+The 00529 policy proof resolves actual construction/coverage identity across
+five orbital states and two observer offsets. The accepted 00538 report
+authenticates 14 distinct poses (18 rows), complete field identities, spatial,
+view/receiver, source, coverage, image and endpoint comparisons. No P3-C memory
+exception was used. The [movement record](p3-movement.md) owns the final result,
+measurements, reproduction inputs, decisions and receipt-governed completion.
+No production code, C# compilation, video or Git state was changed.

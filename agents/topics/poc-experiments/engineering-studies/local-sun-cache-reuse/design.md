@@ -10,6 +10,78 @@ from horizontal reuse, in-app rebuilding and coherent lighting. Finish with
 the requested identical-scene full-orbit recording.
 The [plan](plan.md) owns the complete workload and acceptance sequence.
 
+On 2026-10-09 the owner changed the acceptance basis to model defensibility:
+trace demonstrated distant/spherical methods, isolate flat/local assumptions,
+and qualify the new numerical representation within its declared domain.
+This is conditional engineering support for a hypothetical model, not empirical
+validation of a flat Earth or local Sun. The owner subsequently selected P3-A0
+analysis, now complete in the [abstraction inventory](abstraction-inventory.md).
+The [status](status.md) owns the delivered P0-P5, P5-Celestial and selected
+follow-up dispositions and links their source-review authority. P6 recording
+remains unselected.
+
+## Assumptions And Abstraction Boundaries
+
+This section owns the model's assumptions and conceptual contracts. The completed
+P3-A0 [abstraction inventory](abstraction-inventory.md) owns their source-bound
+mathematical defense, actual recipe limits and focused verification gaps.
+Completed implementation gates and deferred qualification limits are recorded
+in [status](status.md) and the owning phase records.
+The owner accepts mathematical defensibility as the present requirement for
+interpolation/integration. Targeted numerical error estimation is deferred;
+the [evidence policy](reference-method.md#current-depth-of-numerical-defense)
+owns its separation from required ordinary correctness and engineering checks.
+The [current evidence policy](reference-method.md#current-evidence-policy)
+owns how to support claims. These boundaries describe responsibilities to
+inspect in existing code, not a requirement to create a new framework.
+
+| ID  | Assumption or approximation                                                                        | Responsibility                                                                             | Required defense and limit                                                                                                                                                                                                           |
+| --- | -------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| A1  | Flat physical ground and atmosphere slab; density depends on altitude, not horizontal position.    | Geometry supplies altitude, intersections and ray endpoints.                               | Derive plane/slab paths and coordinate transforms. Spherical twilight and planet-shadow evidence does not transfer to flat geometry.                                                                                                 |
+| A2  | Isotropic local emission with specified source height, radius, spectrum and power.                 | Source supplies calibrated incident spectra, directions and visible disk facts.            | State units/calibration distance, inverse-square behavior, source-distance domain and finite-disk versus center-ray approximation. Visible disk correctness does not prove irradiance correctness.                                   |
+| A3  | Selected scattering/extinction and phase laws apply to the hypothetical medium.                    | Shared physics supplies coefficients, phase factors, attenuation and recurrence.           | Trace exact equations, constants and compatible distant/spherical evidence. Profile differences, including ozone and wavelength basis, must be explicit. Shared mathematics does not automatically transfer numerical error bounds.  |
+| A4  | An explicit black or horizontally uniform reflective physical ground.                              | Boundary transport supplies reflection, incidence weighting and return-path contributions. | Pin the law/albedo and distinguish black, zero-reflectance and reflective evidence. Historical reflective qualification gaps remain visible. Scene terrain/materials are separate inputs.                                            |
+| A5  | Stationary scalar spectral transport with a declared maximum scattering order.                     | Order evaluation owns pure contributions and accumulation.                                 | Inventory inherited physical omissions and order truncation. Check pure/cumulative accounting; quantitative order sensitivity is deferred. Make no all-orders claim.                                                                 |
+| A6  | Finite coverage, quadrature, path cutoffs and precision approximate the model.                     | Numerical evaluation owns these policies, their rationale and limitations.                 | The cylinder and any outside-vacuum treatment are truncation assumptions, not consequences of flat geometry. Defend and disclose approximations; quantitative error bounds are deferred. Never hide unsupported queries by clamping. |
+| A7  | Euclidean radius, altitude and outgoing direction represent the source-relative field under A1-A4. | Cache representation owns samples, normalization, interpolation and compact addressing.    | Derive the coordinate reduction; check axis, boundaries and off-grid support. Distinguish source-amplitude bands from field samples. Layout changes must not alter physical source or scattering equations.                          |
+| A8  | Compatible horizontal rigid motion preserves this model.                                           | Placement owns transforms, admission and invalidation.                                     | Compare fresh/reused fields and rays. Rotate vectors as well as positions. Height changes, nonuniform medium/boundary and domain exits require rebuild or rejection.                                                                 |
+| A9  | Display response, receiver adaptation and scene shadows are consumer approximations.               | Presentation/publication owns one coherent frame state.                                    | Separate spectra from pixels. P3-P5 use exact-state lighting; P6 alone retains the agreed film smoothing and shared-shadow recipe. Images do not establish independent physical truth.                                               |
+
+For each assumption record the selected value/range, mathematical owner,
+dependencies, implementation identity, supporting evidence and limitation.
+Unknown support stays open rather than being inferred from appearance.
+
+The abstraction inventory also treats preserved `sky-accuracy-dials`
+cancellation findings as informative context, especially for ozone and
+attenuation. The [reference policy](reference-method.md#informative-cancellation-and-ozone-context)
+owns that evidence boundary. No ozone policy change or correction campaign is
+selected by this planning task.
+
+The defensible conceptual contracts are:
+
+- Geometry returns physical coordinates, directions and valid path intervals
+  in explicit units; it does not select phase laws, power or texture addresses.
+- Source and boundary operations supply spectral illumination and boundary
+  contributions at physical points; they do not select cache resolution or
+  display exposure.
+- Shared transport preserves attenuation, phase-weighted scattering and
+  recurrence with those inputs. Pure and cumulative orders retain distinct
+  meanings; presentation lighting cannot feed scattering recurrence.
+- Numerical evaluation applies named quadrature, precision, order and domain
+  controls. A numerical policy change is distinguished from a physical change.
+- Cache representation stores/reconstructs fields, restoring any reversible
+  normalization to the physical quantity. Empty-band omission removes storage
+  and construction work, not source facts, support or required ray propagation.
+- Placement/publication binds compatible source, field, transform, receiver
+  and shadow facts; presentation consumes the resulting state.
+
+The mathematical goal is to preserve the inherited transport/scattering laws
+and extrapolate their consequences with changed geometry/source/boundary
+inputs. Any changed law or additional approximation must be identified and
+defended explicitly, rather than described as a mere geometry substitution.
+Inherited accuracy supports compatible methods within their demonstrated
+regime, not a global flat/local accuracy percentage.
+
 ## Selected Physical And Construction Decisions
 
 Keep an isotropic finite source, altitude-dependent atmosphere, homogeneous
@@ -104,11 +176,13 @@ slot or silently clamp outside coverage. Compare compact and equivalent
 unculled candidate execution in bounded proof runs before acceptance. The
 plan owns these integrated gates, replacing the deferred pre-recording retrofit.
 This recast changes the development plan, not immutable P2 evidence or
-production code. Independent P3-P5 execution is selected. The
+production code. The [status](status.md) owns the delivered P3-P5 disposition;
+recording remains unselected. The
 [execution record](p3-execution.md) owns the stable radius-excess representation,
 fixed source-relative amplitude bounds, transport and angular diagnosis, and
 any explicitly revised numerical policy. Physical and source-review gates
-remain required; numerical repairs do not relax tolerances.
+remain required. The evidence revision does not retroactively pass old gates
+or authorize looser numerical tolerances.
 
 ## Isolation And Input Authority
 
@@ -161,12 +235,19 @@ immutable and does not become independent authority for flat-model accuracy.
 
 ### Host Resource Controls
 
-Heavy native-reference and browser workloads launch through the experiment's
-`run-resource-bounded.js`. It exclusively owns one heavy child tree, checks
-summed private and working-set memory every five seconds, and stops that owned
-tree if either exceeds 8 GiB, machine free physical memory falls below 8 GiB,
-telemetry becomes unavailable, or the declared duration expires. The default
-duration is 45 minutes; a measured bounded reference may declare up to 90 minutes.
+The current `run-resource-bounded.js` uses the qualified JavaScript/CIM collector;
+historical compiled monitoring remains read-only evidence and has no execution
+authorization. The wrapper exclusively owns one heavy child tree and checks
+summed private and working-set memory every five seconds, stopping that owned
+tree if either exceeds 8 GiB, machine free physical memory falls below the
+default 8 GiB reserve,
+telemetry becomes unavailable, or the declared duration expires. Selected
+execution uses a ten-minute job limit. The wrapper's historical 45/90-minute
+ceilings do not authorize longer jobs or automatic diagnostic escalation.
+The [current plan](plan.md#remaining-work-and-execution-controls) owns these
+execution limits. Earlier P5 and P5-Celestial 6 GiB reserve exceptions ended
+with their selected phases; the default 8 GiB reserve applies, including to
+any later selected P6 work.
 These are sampled stop thresholds, not kernel allocation caps or physical GPU
 memory claims. Child Node heaps are limited to 2 GiB. Lightweight derivation and
 review bookkeeping may proceed while the sole heavy job runs; their inputs and
@@ -191,6 +272,13 @@ Do not include credentials or unnecessary personal data. Console output is
 supplemental; it does not replace the progress file.
 
 ## Tooling And Launch Boundary
+
+Use JavaScript scripts with existing runtimes; Python may support suitable
+tasks. Do not compile helpers or package scripts into executable binaries.
+Any exception requires explicit owner permission for its specific scope before
+proceeding. No C# exception is approved. Preserve existing compiled-tool source
+and results as historical evidence; their launch paths are not eligible for
+resumed execution. The owner's Norton exclusion is not language authorization.
 
 Use existing repository npm dependencies: Node/TypeScript, Three, Puppeteer,
 Rollup and its plugins, PNG tools and Mediabunny. No dependency installation or

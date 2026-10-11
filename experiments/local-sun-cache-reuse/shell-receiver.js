@@ -29,12 +29,18 @@ export class ShellReceiver {
 	async prepare(request,observation,identity) {
 		if(this.disposed)throw new Error('Shell receiver is disposed.');
 		const {owners}=request,calculator=new LocalLightLevelCalculator({lightSource:owners.source});
+		// Receiver adaptation measures atmospheric sky, excluding visible celestial
+		// pixels, as in the normal facade's measurement model. Keep the real frame
+		// model/roster intact and override only this borrowed measurement view.
+		const measurementModel=Object.create(owners.model);
+		Object.defineProperty(measurementModel,'celestialSources',{value:null,enumerable:true});
+		const measurementOwners={...owners,model:measurementModel};
 		const directLight=calculator.measureConfiguredReceiverDirectLight({geometry:owners.geometry,atmosphere:owners.model.atmosphere,observation});
 		const controller=new ReceiverEnvironmentLightController({calculator,directLight,identity});
 		const directions=RECEIVER_ENVIRONMENT_LIGHT_QUADRATURE.map(sample=>owners.geometry.mapObserverLocalSceneDirectionToModelDirection([sample.directionLocal[0],sample.directionLocal[2],sample.directionLocal[1]]));
 		try {
 			return await controller.build({identity,signal:request.signal,sampleIncomingRadiance:async()=>{
-				const rays=await gpuRays({...request,directions,receiverDirections:true,cooperativeReadback:true,programRetention:this.program});
+				const rays=await gpuRays({...request,owners:measurementOwners,directions,receiverDirections:true,cooperativeReadback:true,programRetention:this.program});
 				return rays.map(ray=>/** @type {SpectralRadiancePacket} */(new SpectralPacket({basis:owners.model.spectral.basis,quantity:SPECTRAL_QUANTITIES.RADIANCE_DENSITY,units:SPECTRAL_UNITS.RADIANCE_DENSITY,
 					semantics:'contiguous-wavelength-bin-average',values:ray.radiance,provenanceIdentity:'shell-exact-cooperative-receiver-v1:'+owners.profile.contentHash})));
 			},reduceIncomingRadiance:radiances=>this.reducer.reduce({radiances,signal:request.signal})});

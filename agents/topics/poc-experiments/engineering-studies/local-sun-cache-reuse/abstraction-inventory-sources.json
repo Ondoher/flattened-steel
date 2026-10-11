@@ -1,0 +1,376 @@
+{
+	"schema": "local-sun-abstraction-reading-manifest-v1",
+	"date": "2026-10-09",
+	"repositoryHead": "d417a9c349528ceb0e66efad95f71c409ba9257d",
+	"sourceState": "Working-tree reading snapshot; not a complete validated runtime closure.",
+	"derivation": {
+		"operation": "Authored source inspection and algebraic derivation of preserved transport equations, flat/local substitutions, symmetry and approximation limits. Documentation-only revision applies the later owner-selected defense depth; no numerical execution.",
+		"implementation": "Primary-agent analysis recorded in the report; no numerical solver or compiled helper executed.",
+		"tools": {"node": "v25.4.0", "prettier": "3.9.6", "hash": "SHA-256 over exact file bytes"},
+		"materialParameters": "Selected model assumptions and pinned development recipe are recorded in the report; prior evidence retains its original scope.",
+		"parents": [
+			{
+				"path": "agents/topics/poc-experiments/engineering-studies/local-sun-cache-reuse/design.md",
+				"sha256": "baef0374ede8a2ce64d1912b2ce34dd356c9ce3c23bab7b8f9a122e29d4eb608"
+			},
+			{
+				"path": "agents/topics/poc-experiments/engineering-studies/local-sun-cache-reuse/p3-execution.md",
+				"sha256": "291555a4abc9023bea346e5f175894c5a97804e9dbb06bce7358d52f59834502"
+			},
+			{
+				"path": "agents/topics/poc-experiments/engineering-studies/local-sun-cache-reuse/plan.md",
+				"sha256": "c061a0fb19dfadc210f55f358b51d5fa0d6462ea62648a50341f320f73980c99"
+			},
+			{
+				"path": "agents/topics/poc-experiments/engineering-studies/local-sun-cache-reuse/reference-method.md",
+				"sha256": "7103007f57d6aed1d9acb16b8fe8502e38a7eca3cd6110f2666936a2012edc80"
+			},
+			{
+				"path": "agents/topics/poc-experiments/engineering-studies/local-sun-cache-reuse/status.md",
+				"sha256": "c002a99cb14c8f3f0fce3da2c3c462aa399fc5d9490384a96aa67312e4f2827b"
+			},
+			{
+				"path": "agents/topics/poc-experiments/engineering-studies/sky-accuracy-dials/accuracy-findings-brief.md",
+				"sha256": "dccfdc394c707f9f6d4c60ad5a7ec99354dd824ab26e569ad461d83629e5e8d7"
+			},
+			{
+				"path": "agents/topics/poc-experiments/engineering-studies/sky-accuracy-dials/follow-up-context.md",
+				"sha256": "53bc283b3d366505e77b331c2b05f84c515d739d69df140f7731868039a7290b"
+			},
+			{
+				"path": "agents/topics/poc-experiments/engineering-studies/sky-accuracy-dials/targeted-improvements-results.md",
+				"sha256": "27984b9c55769abd087479b74ad97d1eab18d0cd15d1f1249ddb78118c1a5926"
+			},
+			{
+				"path": "agents/topics/production-algorithm32/caches/distant-sun-strobing-acceptance.md",
+				"sha256": "a7bf41ecf133f0215095e63e91c7da2de7d0f3ef1703510f785a5cba6b734c1c"
+			},
+			{
+				"path": "agents/topics/production-algorithm32/caches/distant-sun-strobing-promotion-status.md",
+				"sha256": "266c2ba53c81751c85eaeb1631a86f77afa8d26e0cb731c6ff76b96378af0daa"
+			},
+			{
+				"path": "agents/topics/production-algorithm32/caches/local-sun-transfer-assessment.md",
+				"sha256": "86a23bada8f4c5915e91c9edc88f4fadb4fdf7f8f7d1c2e889b3786593c624dd"
+			},
+			{
+				"path": "agents/topics/production-algorithm32/qualification/ground-contract.md",
+				"sha256": "3e2335a8480a5368ac559d2931ee359cc39b3970d6232c4fd418e8ee33d2f01f"
+			},
+			{
+				"path": "experiments/local-sun-cache-reuse/rotation-model.js",
+				"sha256": "a6cfbf5115d2793667c11ed9f9be6e1f0e5cb81987c280c349ff58f6804636b6"
+			},
+			{
+				"path": "experiments/local-sun-cache-reuse/shell-angular.js",
+				"sha256": "a6ebe7d1e75d2df3bee4f23b50851cdf8521d647a5754c108b6d96eac6eb3bd3"
+			},
+			{
+				"path": "experiments/local-sun-cache-reuse/shell-frame-publication.js",
+				"sha256": "3e9e9e58a424dc86c9d9383538b8dfa69486121ed92e217cdc733b90bc50c82c"
+			},
+			{
+				"path": "experiments/local-sun-cache-reuse/shell-geometry.js",
+				"sha256": "7009d10ef0e128500bfb308420066942830a0b0164886dabb80f9fa869ef95f6"
+			},
+			{
+				"path": "experiments/local-sun-cache-reuse/shell-layout.js",
+				"sha256": "6081f726f979c6e221f37d3a715c6b4d52f9b3f8282fd618b6f6a1a2b3471d50"
+			},
+			{
+				"path": "experiments/local-sun-cache-reuse/shell-omission.js",
+				"sha256": "3e3ee38e8d1295ccd94e68c2365c0b2275b62d26d46ec21a30a8c293debff0d0"
+			},
+			{
+				"path": "experiments/local-sun-cache-reuse/shell-receiver.js",
+				"sha256": "8fdcafd9de3d4291b94243e76e41daeba6239a8b3734698fb87d5885669cf492"
+			},
+			{
+				"path": "experiments/local-sun-cache-reuse/shell-reconstruction.js",
+				"sha256": "7c5072fc52e7b03a2d52299d4748db53202fafd255514880b4d25936c6f3a037"
+			},
+			{
+				"path": "experiments/local-sun-cache-reuse/shell-runtime-math.js",
+				"sha256": "44a2f5f68a2989013ebb0fe9bc6b8e665d225911b3d25c4c1b79eef3045bb73b"
+			},
+			{
+				"path": "experiments/local-sun-cache-reuse/shell-runtime.js",
+				"sha256": "825f03cac2e407f93e694ccc15ce820caf869e368734997a4dadd4ce501a241f"
+			},
+			{
+				"path": "experiments/local-sun-cache-reuse/shell-source.js",
+				"sha256": "3c6cab83f94639d9ca5ac2f8571bae6e5c7cea2e59505e35ef10b094a7fc23ba"
+			},
+			{
+				"path": "experiments/local-sun-cache-reuse/shell-transport.js",
+				"sha256": "a237b91f672825c3ea45572a1be3339788779eade58f03cdd719650d1ea2ba5f"
+			},
+			{
+				"path": "experiments/sky-accuracy-dials/numerics/profile.js",
+				"sha256": "43b963220b5e71ac5f05a6eb3a953a120f04f9350d59c30b217bc4d4d9945411"
+			},
+			{
+				"path": "src/algorithm32/implementation/canonical-atmosphere/CanonicalAtmosphere.js",
+				"sha256": "49204168dcca80b34480daba041860bc6c76346a73fd6a5dec08efebee7d0578"
+			},
+			{
+				"path": "src/algorithm32/implementation/canonical-atmosphere/consts.js",
+				"sha256": "963105b88e4cabbc27a53544a4bd185f098ab9d77474c0bf39107483717aceaf"
+			},
+			{
+				"path": "src/algorithm32/implementation/distant-sun/DistantSunLightSource.js",
+				"sha256": "0a568b719dcd6e7d4dee7f1116a238057cfdd0e55052db46445130edc4455a27"
+			},
+			{
+				"path": "src/algorithm32/implementation/distant-sun/cache/DistantSunCpuMultipleScatteringEvaluator.js",
+				"sha256": "8832d2f37644b55cd25282a678f1d5c14ed9f6940353c91503bb3609460ec465"
+			},
+			{
+				"path": "src/algorithm32/implementation/distant-sun/cache/DistantSunCpuPrimaryEvaluator.js",
+				"sha256": "6045ca248c5f9dcaa2d19f3b92778b3b246d2962bff9fe35cb54937ec0c95a1f"
+			},
+			{
+				"path": "src/algorithm32/implementation/flat-earth/FlatEarthGeometry.js",
+				"sha256": "654de21c81f96b3dc795fc52d434c81b984a4fabe71c36a0179cb11d7a6bd88d"
+			},
+			{
+				"path": "src/algorithm32/implementation/local-sun/LocalSunLightSource.js",
+				"sha256": "c18e71efb50fb1fee18bae22c7a47b6884a17678b04e2eba49ce68c8cff34407"
+			},
+			{
+				"path": "src/algorithm32/implementation/local-sun/cache/LocalSunConstructionLightSource.js",
+				"sha256": "3fd1f5409c47f3a813c5b3c024c51843c7858e425eb07bda14d6a686819f0620"
+			},
+			{
+				"path": "src/algorithm32/implementation/local-sun/cache/LocalSunShellFactCache.js",
+				"sha256": "7187592cccc904cce8a1eda121a19bf35cc8eab824c38ef6ec6819d053bed0ce"
+			},
+			{
+				"path": "src/algorithm32/implementation/scene-lighting/ReceiverEnvironmentLightQuadrature.js",
+				"sha256": "642d913b91c8f6b217d26bf36215d30caac8b94f7cad8fd47fa1d59d956af630"
+			},
+			{
+				"path": "src/algorithm32/implementation/spherical-earth/SphericalEarthGeometry.js",
+				"sha256": "f392383d89786826d58ba4c242841bd273e3a4cbf9929d7123c8a9c269a35bc5"
+			},
+			{
+				"path": "src/algorithm32/implementation/uniform-lambertian-ground/UniformLambertianGroundBoundary.js",
+				"sha256": "858798b1b1f67ecde53807fd205642de01fe844c9bb89e5673a9fe78b24c9992"
+			},
+			{
+				"path": "src/algorithm32/profiles/native-15/consts.js",
+				"sha256": "2f223b4aef4d2bd8f940b523b735489b14ebaace722b6085923eb749d75ca4ba"
+			},
+			{
+				"path": "src/algorithm32/spectral-values/index.js",
+				"sha256": "503f36a4adccda04c5074476a25e40a95d364963657af023c53cd4d52b2b4ebe"
+			},
+			{
+				"path": "tmp/experiments/local-sun-cache-reuse/runs/00018-controls/controls.json",
+				"sha256": "4bc8d4073b34e794181c86703d5ab212e58b4d2d5068cce4008376ab075ae294"
+			},
+			{
+				"path": "tmp/experiments/local-sun-cache-reuse/runs/00281-p3-selection/selection.json",
+				"sha256": "b99e6af5098275ba6e003007eca5958d645f23def17da16810157fb5bbc56b7d"
+			}
+		]
+	},
+	"artifact": {
+		"path": "agents/topics/poc-experiments/engineering-studies/local-sun-cache-reuse/abstraction-inventory.md",
+		"sha256": "8536ec9a968c9cb20f15c1b17fffed7618b9f1293ae4bde929934965b5d5d609"
+	},
+	"limitation": "Hashes authenticate the reading basis only. Historical reported numerical outcomes were inspected through their authored owners, not independently rerun or recertified.",
+	"previousReadingSnapshots": [
+		{
+			"schema": "local-sun-abstraction-reading-manifest-v1",
+			"date": "2026-10-09",
+			"repositoryHead": "d417a9c349528ceb0e66efad95f71c409ba9257d",
+			"sourceState": "Working-tree reading snapshot; not a complete validated runtime closure.",
+			"derivation": {
+				"operation": "Authored source inspection and algebraic derivation of preserved transport equations, flat/local substitutions, symmetry and approximation limits.",
+				"implementation": "Primary-agent analysis recorded in the report; no numerical solver or compiled helper executed.",
+				"tools": {"node": "v25.4.0", "prettier": "3.9.6", "hash": "SHA-256 over exact file bytes"},
+				"materialParameters": "Selected model assumptions and pinned development recipe are recorded in the report; prior evidence retains its original scope.",
+				"parents": [
+					{
+						"path": "agents/topics/poc-experiments/engineering-studies/local-sun-cache-reuse/design.md",
+						"sha256": "f6fb3bf2984946654a1da92d5a0843ff211abf89f539bf90b1ee6d3fa2fba85c"
+					},
+					{
+						"path": "agents/topics/poc-experiments/engineering-studies/local-sun-cache-reuse/p3-execution.md",
+						"sha256": "0bd133d15d23d9f987420a231749dbbeeed9da85c7fe9743cd3aa482e5f1533e"
+					},
+					{
+						"path": "agents/topics/poc-experiments/engineering-studies/local-sun-cache-reuse/plan.md",
+						"sha256": "306cdfa18bfde58aa97c1f60979ea1a6f918b57fe70bb3de7a9d876de8ae42df"
+					},
+					{
+						"path": "agents/topics/poc-experiments/engineering-studies/local-sun-cache-reuse/reference-method.md",
+						"sha256": "3de132b158b20c870224ef063503c71d790247ecbf31de5f025aebfb4d44df93"
+					},
+					{
+						"path": "agents/topics/poc-experiments/engineering-studies/local-sun-cache-reuse/status.md",
+						"sha256": "23076569cfd0225c7770c244d4af245609c7070c6f672964d6ea67822f3b4c6b"
+					},
+					{
+						"path": "agents/topics/poc-experiments/engineering-studies/sky-accuracy-dials/accuracy-findings-brief.md",
+						"sha256": "dccfdc394c707f9f6d4c60ad5a7ec99354dd824ab26e569ad461d83629e5e8d7"
+					},
+					{
+						"path": "agents/topics/poc-experiments/engineering-studies/sky-accuracy-dials/follow-up-context.md",
+						"sha256": "53bc283b3d366505e77b331c2b05f84c515d739d69df140f7731868039a7290b"
+					},
+					{
+						"path": "agents/topics/poc-experiments/engineering-studies/sky-accuracy-dials/targeted-improvements-results.md",
+						"sha256": "27984b9c55769abd087479b74ad97d1eab18d0cd15d1f1249ddb78118c1a5926"
+					},
+					{
+						"path": "agents/topics/production-algorithm32/caches/distant-sun-strobing-acceptance.md",
+						"sha256": "a7bf41ecf133f0215095e63e91c7da2de7d0f3ef1703510f785a5cba6b734c1c"
+					},
+					{
+						"path": "agents/topics/production-algorithm32/caches/distant-sun-strobing-promotion-status.md",
+						"sha256": "266c2ba53c81751c85eaeb1631a86f77afa8d26e0cb731c6ff76b96378af0daa"
+					},
+					{
+						"path": "agents/topics/production-algorithm32/caches/local-sun-transfer-assessment.md",
+						"sha256": "86a23bada8f4c5915e91c9edc88f4fadb4fdf7f8f7d1c2e889b3786593c624dd"
+					},
+					{
+						"path": "agents/topics/production-algorithm32/qualification/ground-contract.md",
+						"sha256": "3e2335a8480a5368ac559d2931ee359cc39b3970d6232c4fd418e8ee33d2f01f"
+					},
+					{
+						"path": "experiments/local-sun-cache-reuse/rotation-model.js",
+						"sha256": "a6cfbf5115d2793667c11ed9f9be6e1f0e5cb81987c280c349ff58f6804636b6"
+					},
+					{
+						"path": "experiments/local-sun-cache-reuse/shell-angular.js",
+						"sha256": "a6ebe7d1e75d2df3bee4f23b50851cdf8521d647a5754c108b6d96eac6eb3bd3"
+					},
+					{
+						"path": "experiments/local-sun-cache-reuse/shell-frame-publication.js",
+						"sha256": "3e9e9e58a424dc86c9d9383538b8dfa69486121ed92e217cdc733b90bc50c82c"
+					},
+					{
+						"path": "experiments/local-sun-cache-reuse/shell-geometry.js",
+						"sha256": "7009d10ef0e128500bfb308420066942830a0b0164886dabb80f9fa869ef95f6"
+					},
+					{
+						"path": "experiments/local-sun-cache-reuse/shell-layout.js",
+						"sha256": "6081f726f979c6e221f37d3a715c6b4d52f9b3f8282fd618b6f6a1a2b3471d50"
+					},
+					{
+						"path": "experiments/local-sun-cache-reuse/shell-omission.js",
+						"sha256": "3e3ee38e8d1295ccd94e68c2365c0b2275b62d26d46ec21a30a8c293debff0d0"
+					},
+					{
+						"path": "experiments/local-sun-cache-reuse/shell-receiver.js",
+						"sha256": "8fdcafd9de3d4291b94243e76e41daeba6239a8b3734698fb87d5885669cf492"
+					},
+					{
+						"path": "experiments/local-sun-cache-reuse/shell-reconstruction.js",
+						"sha256": "7c5072fc52e7b03a2d52299d4748db53202fafd255514880b4d25936c6f3a037"
+					},
+					{
+						"path": "experiments/local-sun-cache-reuse/shell-runtime-math.js",
+						"sha256": "44a2f5f68a2989013ebb0fe9bc6b8e665d225911b3d25c4c1b79eef3045bb73b"
+					},
+					{
+						"path": "experiments/local-sun-cache-reuse/shell-runtime.js",
+						"sha256": "825f03cac2e407f93e694ccc15ce820caf869e368734997a4dadd4ce501a241f"
+					},
+					{
+						"path": "experiments/local-sun-cache-reuse/shell-source.js",
+						"sha256": "3c6cab83f94639d9ca5ac2f8571bae6e5c7cea2e59505e35ef10b094a7fc23ba"
+					},
+					{
+						"path": "experiments/local-sun-cache-reuse/shell-transport.js",
+						"sha256": "a237b91f672825c3ea45572a1be3339788779eade58f03cdd719650d1ea2ba5f"
+					},
+					{
+						"path": "experiments/sky-accuracy-dials/numerics/profile.js",
+						"sha256": "43b963220b5e71ac5f05a6eb3a953a120f04f9350d59c30b217bc4d4d9945411"
+					},
+					{
+						"path": "src/algorithm32/implementation/canonical-atmosphere/CanonicalAtmosphere.js",
+						"sha256": "49204168dcca80b34480daba041860bc6c76346a73fd6a5dec08efebee7d0578"
+					},
+					{
+						"path": "src/algorithm32/implementation/canonical-atmosphere/consts.js",
+						"sha256": "963105b88e4cabbc27a53544a4bd185f098ab9d77474c0bf39107483717aceaf"
+					},
+					{
+						"path": "src/algorithm32/implementation/distant-sun/DistantSunLightSource.js",
+						"sha256": "0a568b719dcd6e7d4dee7f1116a238057cfdd0e55052db46445130edc4455a27"
+					},
+					{
+						"path": "src/algorithm32/implementation/distant-sun/cache/DistantSunCpuMultipleScatteringEvaluator.js",
+						"sha256": "8832d2f37644b55cd25282a678f1d5c14ed9f6940353c91503bb3609460ec465"
+					},
+					{
+						"path": "src/algorithm32/implementation/distant-sun/cache/DistantSunCpuPrimaryEvaluator.js",
+						"sha256": "6045ca248c5f9dcaa2d19f3b92778b3b246d2962bff9fe35cb54937ec0c95a1f"
+					},
+					{
+						"path": "src/algorithm32/implementation/flat-earth/FlatEarthGeometry.js",
+						"sha256": "654de21c81f96b3dc795fc52d434c81b984a4fabe71c36a0179cb11d7a6bd88d"
+					},
+					{
+						"path": "src/algorithm32/implementation/local-sun/LocalSunLightSource.js",
+						"sha256": "c18e71efb50fb1fee18bae22c7a47b6884a17678b04e2eba49ce68c8cff34407"
+					},
+					{
+						"path": "src/algorithm32/implementation/local-sun/cache/LocalSunConstructionLightSource.js",
+						"sha256": "3fd1f5409c47f3a813c5b3c024c51843c7858e425eb07bda14d6a686819f0620"
+					},
+					{
+						"path": "src/algorithm32/implementation/local-sun/cache/LocalSunShellFactCache.js",
+						"sha256": "7187592cccc904cce8a1eda121a19bf35cc8eab824c38ef6ec6819d053bed0ce"
+					},
+					{
+						"path": "src/algorithm32/implementation/scene-lighting/ReceiverEnvironmentLightQuadrature.js",
+						"sha256": "642d913b91c8f6b217d26bf36215d30caac8b94f7cad8fd47fa1d59d956af630"
+					},
+					{
+						"path": "src/algorithm32/implementation/spherical-earth/SphericalEarthGeometry.js",
+						"sha256": "f392383d89786826d58ba4c242841bd273e3a4cbf9929d7123c8a9c269a35bc5"
+					},
+					{
+						"path": "src/algorithm32/implementation/uniform-lambertian-ground/UniformLambertianGroundBoundary.js",
+						"sha256": "858798b1b1f67ecde53807fd205642de01fe844c9bb89e5673a9fe78b24c9992"
+					},
+					{
+						"path": "src/algorithm32/profiles/native-15/consts.js",
+						"sha256": "2f223b4aef4d2bd8f940b523b735489b14ebaace722b6085923eb749d75ca4ba"
+					},
+					{
+						"path": "src/algorithm32/spectral-values/index.js",
+						"sha256": "503f36a4adccda04c5074476a25e40a95d364963657af023c53cd4d52b2b4ebe"
+					},
+					{
+						"path": "tmp/experiments/local-sun-cache-reuse/runs/00018-controls/controls.json",
+						"sha256": "4bc8d4073b34e794181c86703d5ab212e58b4d2d5068cce4008376ab075ae294"
+					},
+					{
+						"path": "tmp/experiments/local-sun-cache-reuse/runs/00281-p3-selection/selection.json",
+						"sha256": "b99e6af5098275ba6e003007eca5958d645f23def17da16810157fb5bbc56b7d"
+					}
+				]
+			},
+			"artifact": {
+				"path": "agents/topics/poc-experiments/engineering-studies/local-sun-cache-reuse/abstraction-inventory.md",
+				"sha256": "20651e799a5ec69af969536266dc002e252c5ba9bb8e3350afcd80a227fbdcb0"
+			},
+			"limitation": "Hashes authenticate the reading basis only. Historical reported numerical outcomes were inspected through their authored owners, not independently rerun or recertified.",
+			"identity": "sha256:0377ab7f217d9a0059cb699d8389574a5f3e3ad90203eb7108f3172df8291dd3"
+		}
+	],
+	"revision": {
+		"reason": "Align current inventory notes with owner clarification: mathematical defense now, quantified approximation error estimates deferred.",
+		"priorArtifactSha256": "20651e799a5ec69af969536266dc002e252c5ba9bb8e3350afcd80a227fbdcb0",
+		"priorManifestIdentity": "sha256:0377ab7f217d9a0059cb699d8389574a5f3e3ad90203eb7108f3172df8291dd3",
+		"numericalOutcomeChange": false
+	},
+	"identity": "sha256:e9336316d363b5697e08a235dce5e808afbe0bc0c9435ed6681aaebe666e2793"
+}

@@ -1,4 +1,148 @@
-# Independent Reference Method
+# Method Transfer And Focused Verification
+
+## Current Evidence Policy
+
+On 2026-10-09 the owner selected defensibility of the declared model through
+inherited mathematical methods, isolated flat/local assumptions and focused
+checks of their adaptation. The [design](design.md#assumptions-and-abstraction-boundaries)
+owns the assumptions and conceptual boundaries; the completed P3-A0
+[abstraction inventory](abstraction-inventory.md) owns the source-bound mathematical
+analysis and focused gaps before further implementation.
+Preserve the mathematics and derive what changes under new geometry and source
+inputs. A new globally converged higher-order reference is not a prerequisite.
+No empirical validation of hypothetical flat/local geometry is claimed.
+
+### Current Depth Of Numerical Defense
+
+The owner clarifies that new interpolation and integration policies need a
+defensible mathematical rationale at this stage. Explain the equations,
+assumptions, applicability, limiting behavior and known limitations; retain
+ordinary correctness checks for units, support, identities and implementation
+consistency. Heavy research, convergence campaigns and quantified error bounds
+are not prerequisites for continuing this experiment or preparing its film.
+
+Targeted experiments to estimate numerical error bounds are deferred to a
+later owner-selected effort. The P3-A0 inventory's resolution/order sensitivity
+and accuracy-estimation recommendations remain possible future work, not
+mandatory current gates. No error percentage is inferred or declared passed;
+historical outcomes keep their original dispositions. Required omission,
+fresh/reused consistency, lifecycle, resource and source-review gates remain.
+
+### Method Provenance And Mathematical Transfer
+
+The inventory must retain original equations and their inputs, outputs and
+units; map exact source implementations, numerical policies and actual accepted
+evidence; identify unchanged laws, changed geometry/source/boundary inputs and
+new approximations separately. Start from the read-only
+[transfer assessment](../../../production-algorithm32/caches/local-sun-transfer-assessment.md),
+[distant acceptance](../../../production-algorithm32/caches/distant-sun-strobing-acceptance.md),
+[distant status](../../../production-algorithm32/caches/distant-sun-strobing-promotion-status.md)
+and [ground contract](../../../production-algorithm32/qualification/ground-contract.md).
+Their claims have different domains and unresolved components. An aggregate
+Bruneton score or accepted recording does not certify every component law or
+numerical approximation independently. Authenticate precise retained evidence
+when using it to support a particular claim.
+
+For each transferred operation derive its flat/local consequences:
+
+- Preserve spectral scattering/extinction and phase equations; substitute
+  the declared altitude/density coordinates and local incoming directions.
+- Preserve `T = exp(-integral betaExt ds)`; derive plane/slab intersections and
+  source/view path intervals rather than retaining spherical path lengths.
+- Preserve scattering-order transport and angular recurrence; distinguish the
+  changed spatial illumination from the unchanged phase law. Ground terms and
+  pure/cumulative accounting cannot disappear in an abstraction.
+- Identify finite-distance source dilution, calibration and source angular-size
+  approximations explicitly. A distant-source approximation transfers only
+  where its assumptions are met; a finite-distance source changes illumination
+  along a path, not just one global Sun vector.
+- Derive source-relative shell addressing and symmetry from stated horizontal
+  homogeneity. Preserve outgoing directional dependence, altitude and boundary
+  effects even when no separate Sun-angle coordinate is needed.
+
+A common-assumption control may compare flat and spherical geometry over a
+bounded local patch with curvature sensitivity stated. A far-source control
+must preserve incident irradiance while increasing distance, and still use
+compatible geometry/medium/boundaries. Neither test implies entire images or
+the full flat/local field should equal spherical/distant results. If a compatible
+control is costly or ill-defined, document that limitation instead of creating
+another universal solver.
+
+### Focused Evidence And Honest Claims
+
+Use small JavaScript proof runners for analytic density/optical columns,
+zero-length/composed/reciprocal transmission, phase mass and symmetry, declared
+source scaling, boundary weighting and pure-order accumulation. Keep shared-
+implementation parity labeled consistency; it is not an independent accuracy
+proof. Focused direct evaluations may share physical constants/equations but
+must avoid the candidate lookup/addressing when testing cache approximation.
+
+Separate the mathematical defenses of domain/source policy, shell interpolation
+and integration from empty-band omission and reuse checks. Quantitative
+spatial/angular/path/order sensitivity is deferred under the current depth of
+defense above. Compare compact/unculled candidates
+with identical occupied samples. Probe axes, ground/top, shell seams, curved
+coverage edges and all required spectral channels. Use exact-state receiver
+spectra and complete rays; visible similarity cannot hide unsupported queries.
+Use independently known analytic/manufactured values where available. Retain
+uncertainty when a numerical reference supports an absolute claim; an unresolved
+reference only supplies a diagnostic comparison, not that accuracy claim.
+
+Retain compatible existing numeric limits and freeze the revised gate/claim
+contract in a new identity before scoring required current checks. Any later
+focused sensitivity check supports only its tested quantity/domain; absent
+error bounds remain explicit without blocking the present defensibility goal. Old
+global-reference failures are not retroactively passed or hidden. Do not claim
+overall error percentages from inherited method evidence or same-model parity.
+The [plan](plan.md#remaining-work-and-execution-controls) bounds diagnostic rounds
+and restores early direct-image milestones. No new compiled helper or executable
+is permitted without a specific owner exception; none is approved.
+
+### Informative Cancellation And Ozone Context
+
+The owner specifically selects the preserved `sky-accuracy-dials` work as
+informative only. Its
+[findings brief](../sky-accuracy-dials/accuracy-findings-brief.md),
+[targeted results](../sky-accuracy-dials/targeted-improvements-results.md) and
+[follow-up context](../sky-accuracy-dials/follow-up-context.md) document component
+interactions and their evidence limits. In tested spherical cases, density,
+sunlight-column and phase corrections interact, and a smaller numerical error
+can worsen an observational proxy after beneficial cancellation is removed.
+These observations warn against transferring an aggregate score as component
+validation; their measured signs/magnitudes are not local-Sun facts.
+
+P3-A0 should identify how flat/local path and phase changes might preserve,
+remove or reverse such compensation, and separate demonstrated mechanisms from
+unexecuted hypotheses. This adds no required factorial/correction campaign,
+adoption or execution in the suspended lane. Source/results there stay read-only.
+
+Inventory ozone explicitly: enabled/disabled setting in each evidence profile,
+absorption cross-section and altitude-density model, calibration/units, and
+every source, view and higher-order attenuation path affected. When enabled as
+pure absorption, the declared contribution is
+`betaO3(lambda,z) = sigmaO3(lambda) * nO3(z)` in total extinction; this is not an
+extra scattering term. Preserve the selected equation/profile and derive its
+columns under flat paths. Changing ozone requires consistent dependent fields
+and identity, not a final-color adjustment. Do not infer absence or validity of
+ozone from flat geometry alone.
+
+The linked distant acceptance explicitly disables ozone in both registered
+profiles. The inspected Dials brief establishes cancellation generally; its
+follow-up context lists missing gaseous absorption as untested, not an identified
+cause. Therefore this plan does not assert a demonstrated ozone cancellation.
+If the specific historical ozone finding cannot yet be located, record its
+provenance as open in the inventory. Ozone remains an explicit assumption and
+informative risk, not a newly enabled feature or an empirical local target.
+
+## Historical Global-Reference Approach
+
+The derivations below retain the former independently refined solver approach,
+equations, policies and their claim boundaries for interpretation of immutable
+runs. Its global convergence prerequisite has been superseded by the current
+owner-selected policy above. These sections are historical guidance, not a
+requirement to finish that solver or authorization to compile/run its C# tools.
+The equations and focused analytic checks remain useful when their assumptions
+match; individual old results keep their original qualification flags.
 
 The [gate fixture](../../../../../experiments/local-sun-cache-reuse/gates.json)
 freezes project engineering limits before a reuse candidate is implemented.
@@ -339,7 +483,7 @@ family, and inspect it before larger refinements. This is an independent
 interpolation-resolution hypothesis, not a claim that direct J2 integration
 or any physical gate has converged.
 
-## Finite Native Operator Bounds
+## Primary Angular Diagnostics
 
 The separate primary-angular diagnostic preserves every helper in an
 authenticated frozen native source and substitutes only its entry. Reproduce
@@ -351,9 +495,17 @@ quadrant-Gaussian rule clusters azimuth samples at the physical cylinder tangent
 meridians. Its direct weighted sum uses unchanged continuous primary transport
 and physical Rayleigh/Mie phase factors. Inputs retain every angle, weight,
 case, parent, source transformation and transitive generator implementation.
+The optional `--all-directions` control includes each selected point/channel's
+seven existing parent query directions, totaling 49 cases. Validate every unit
+vector and exact inventory and reproduce each parent value separately. Group
+the continuous incoming ray calculation only by exact point/channel; each
+outgoing direction retains its own physical phase sum. Sharing those incoming
+values changes neither the frozen transport helpers nor the angular rule.
 Passing these selected diagnostics cannot replace complete field, higher-order,
 view, combined-uncertainty or candidate acceptance gates. The original
 uniform controls remain immutable evidence.
+
+## Finite Native Operator Bounds
 
 The separate `prove-native-operators.js` proof reads an authenticated exported
 native run. It preserves every numerical helper in that run's frozen C# source

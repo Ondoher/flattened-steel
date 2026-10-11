@@ -1,236 +1,126 @@
 # Local-Sun Cache Reuse Experiment Status
 
-Status: independent execution has isolated incoming angular uncertainty with a focused primary-only diagnostic. The positive quadrant-Gaussian azimuth control passes both refinement axes at its seven selected cases, and its captured source review validates CLEAN. Complete higher-order qualification remains open. The interrupted 64-node reference remains incomplete after a collector-command failure below the measured memory limits. A persistent, warmed collector and structured failure metadata are implemented; admission, sustained sampling, prelaunch rejection and the repair's captured source validation pass. The next long reference must establish monitoring reliability for that workload. P3-P5 remain incomplete. Stop before generating the video.
+Current disposition, 2026-10-11: P0-P5, P5-Celestial and selected follow-ups
+are delivered. No heavy job remains. Stop before P6 recording: recording,
+P7 lifecycle closeout, production promotion and publication remain unselected.
+This is an execution boundary, not a completed or suspended experiment.
+The [successor handoff](handoff.md) owns restart guidance and source entrypoints.
 
-## Current State
+## Phase Disposition
 
-The owner invoked `start-experiment`. The source, topic and ignored output roots
-exist; the reviewed plan has moved here as its single execution owner. The
-active topic points here. The independently selected P0-P1 work has produced
-the full production-cache control image, resolved controls, coverage and frozen
-acceptance. P2 has delivered V1/V2 and the complete selected rotation matrix; its
-[execution record](p2-execution.md) owns P2 results, rejection and source-review completion authority. The film
-remains unexecuted.
-The owner-requested [P2 corrective continuation](plan.md#p2-corrective-continuation)
-has delivered its selected proof and five-state visual cadence; its [execution record](p2-corrections.md)
-owns results, limitations and final source-review completion authority for that
-captured context. Production implementation and selections are unchanged.
+| Work | Disposition and owning record |
+| --- | --- |
+| P0-P1 | Complete. [Execution summary](execution-summary.md) owns setup, control, frozen inputs and original acceptance. |
+| P2 and corrective continuation | Delivered with limitations/counterexamples. [P2 execution](p2-execution.md) and [corrections](p2-corrections.md) preserve original results as comparison evidence for the replacement layout. |
+| P3-A0/A | Complete. [Abstraction inventory](abstraction-inventory.md) defends transfer; [contract](p3-contract.md) pins layout and gates. |
+| P3-B/C | Delivered. [First images](p3-first-image.md), [lower-band trace](lower-band-source-trace.md) and [layout qualification](p3-layout-qualification.md) own visuals, path explanation, compact support and omission evidence. |
+| P3-D/E | Delivered. [Movement](p3-movement.md) establishes admitted horizontal reuse; [disposition](p3-disposition.md) advances the candidate. |
+| P4-P5 | Delivered. [Application](p4-application.md) owns lifecycle/publication; [P5 qualification](p5-qualification.md) owns ten passing sky/colored-scene pairs, 1,200 matched states and combined source-review authority. |
+| P5-Celestial and follow-ups | Delivered. [Celestial delivery](p5-celestial.md) owns initial images/short preview; current presentation and corrections are linked below. |
+| P6 | Unexecuted and unselected. [Film plan](plan.md#p6--reproduce-the-local-sun-full-orbit-film) owns scene equality, trajectory/composition checks, previews, recording and media verification. |
+| P7 | Unselected. Owner disposition and end-experiment handoff follow the film. |
 
-The owner recast P3 onward around a [Euclidean source-centered shell layout](design.md#preferred-spatial-reference).
-Skipping proven nonintersecting inner bands is now part of both allocation and
-construction from the first candidate, replacing the late optimization schedule.
-The [plan](plan.md#p3--develop-and-qualify-the-shell-layout) owns fresh-layout,
-omission and movement proofs, followed by in-app integration and qualification.
-V3a delivers the first Flat 0 shell-layout comparison before reuse testing;
-V3b completes the five-state layout cadence, and V3c shows movement comparisons.
-V0-V2 remain comparison evidence. P6 retains the identical-scene December-solstice
-Union Glacier full-orbit film. This request selected the plan recast; new
-implementation was subsequently selected through independent-execution up to
-the recording boundary. The [shell layout execution](p3-execution.md) owns
-current progress, decisions and new completion evidence; its review gates
-remain open during development.
+Linked source-review receipts are CLEAN for their recorded units. They are not
+a fresh review of today's documentation edits. Before further implementation,
+refresh readiness, declare the review unit/baseline and validate applicable
+evidence through review-standards.
 
-The preserved 998-node control has complete synthetic movement parity and an
-authenticated compact/unculled comparison. The current 1,049-node boundary
-refinement passes independent J1/J2 reconstruction; its raw J4 p95 error against
-the first spatial reference refinement is 1.71 percent. Higher-order reference
-convergence remains inconclusive, so this is not complete physical acceptance.
-The current layout also passes its measured synthetic rotation/translation and
-compact/unculled equivalence checks; omission saves 103,926,240 bytes of peak
-logical field storage in that comparison. Full orbital and physical qualification
-remain open. Old/new Flat 0 render comparisons are delivered; the full five-state
-old/new cadence remains unfinished. Old-cache agreement is a behavioral comparison,
-not the physical accuracy target.
-The ordinary six-box application scene now uses exact measured receiver lighting
-and its six unchanged per-object shadows. Height, albedo and power replacements
-preserve the old displayed pixels bit-for-bit and pass measured CPU/GPU rays.
-This is experimental browser runtime integration, not production application or
-public API integration. Deliberate failure, cancellation, supersession and disposal
-checks are delivered; overall P4 qualification remains open.
-Resource admission now counts the shared host phase once and distinguishes
-temporary program-copy lifetimes; allocation and timing qualification remain
-separate. The actual application coverage-exit replacement preserves old pixels,
-admits all measured rays and stays below the logical payload limit. Complete
-independent views have no raw physical-limit failures, and their view-path
-refinement passes; receiver-direction and native spatial/angular uncertainty
-remain open. The actual transferred-canvas application now keeps page scheduling
-gaps below 100 ms in the measured runs; runtime height/albedo inputs preserve
-shader identity and bring physical replacements below 30 seconds in one run.
-These are diagnostic timings under concurrent reference load, not repeated
-performance qualification. Full cadence,
-temporal/benefit qualification and final source reviews remain open.
-The [execution record](p3-execution.md) owns measurements and decisions.
-P5 has its captured review baseline, refreshed readiness and all 600 frozen
-exact-time physical inputs. The first full 120-state Flat0 reuse trajectory
-finishes with 119 builds avoided, zero measured CPU/GPU ray failures and a
-61.6 ms maximum page scheduling gap. Its separately built fresh control is
-complete: all temporal gates pass, with one-byte maximum and zero p95 RGB
-differences. The remaining colored-scene and sky-only temporal cells are
-unfinished after interruption; repeated benefit measurements remain open. Independent receiver
-polar and azimuth refinements now pass on the same finest 1,024-direction grid,
-using a calibrated physical primary-phase control variate. Complete native
-spatial/angular/path construction budgets remain open. No complete
-physical pass is claimed.
-Recording has not started.
+## Current Implementation And Reviewable Results
 
-## P1 Deliverables And Completion Authority
+The candidate addresses Euclidean source distance and altitude, omits six proven
+empty bands from storage and calculation, and supports qualified horizontal
+reuse. Height, medium, emission, ground, numerical policy or unsupported coverage
+changes require compatible replacement construction. P4 publishes sky and
+receiver lighting coherently; unsupported queries never silently clamp.
 
-- [V0 control image](../../../../../tmp/experiments/local-sun-cache-reuse/runs/00017-control-v0/flat-0.png):
-  production N4, 285 positions, W27, reflection-completed Fibonacci68, Native15;
-  current production color model and newly measured exact-state receiver light.
-  No reuse or temporal interpolation. GL checks and runtime diagnostics accompany
-  the capture; the black lower half is the black-ground sky-only control.
-- [Frozen controls](../../../../../tmp/experiments/local-sun-cache-reuse/runs/00018-controls/controls.json):
-  all five current cadence times/placements, exact per-state and fixed-coverage
-  axes, immutable historical overlap, December-solstice film clock and source identities.
-- [Film coverage](../../../../../tmp/experiments/local-sun-cache-reuse/runs/00018-controls/film-coverage.json):
-  all 1,800 ideal frame states plus the separate endpoint, through the original
-  camera score. The finite declared cylinder is 33,378,000 m; additional queries
-  require coverage checks. This does not validate the later scene composition.
-- [Frozen acceptance](../../../../../tmp/experiments/local-sun-cache-reuse/runs/00019-acceptance/acceptance.json)
-  and [gate fixture](../../../../../experiments/local-sun-cache-reuse/gates.json):
-  separate CPU/GPU, reuse, physical/reference, ray, temporal and resource limits.
-  Exact measured timing/allocation facts and parent hashes live in the acceptance.
-- [Reference method](reference-method.md) and
-  [analytic calibration](../../../../../tmp/experiments/local-sun-cache-reuse/runs/00019-acceptance/reference-calibration.json):
-  transmission invariants passed; higher-order convergence and candidate
-  qualification remain future measured obligations.
-- Completion authority: exit-0 `CLEAN` in the
-  [P1 primary/audit validation](../../../../../.codex-tmp/review-standards/session-rpZklY/validation-v2.json),
-  in addition to local type checking, formatting and sealed accepted runs.
-  Source review includes current P0 collaborators; the earlier P0 ledger is
-  retained historical evidence, not relabeled as P1 review.
-- [Execution summary](execution-summary.md): decisions, verification limits and
-  checkpoint disposition. Failed and developmental runs remain immutable.
+Current celestial composition uses ordinary accumulated view transmission at
+ray termination, applied once to incoming Sun/star spectra before adding path
+radiance. The extra full-slab star override is removed; see [boundary correction](celestial-boundary-correction.md).
+Shared globe [human-vision stellar filters](celestial-human-vision.md) use actual
+receiver adaptation. Faint stars are not artificially brightened.
 
-## Setup Verification
+The [Sun-disc correction](sun-disc-correction.md) is contained in the experiment.
+Mistaken production edits were reverted. Production implementation and default
+selections remain unchanged; production adoption remains unselected.
 
-Owner-directed retention update: future captures present PNGs directly and retain
-browser/tool identities and launch settings while removing temporary profiles
-before sealing. Existing sealed run inventories stay intact. This maintenance
-unit's review is separate from the preserved P0-P1 completion evidence:
-[retention review](../../../../../.codex-tmp/review-standards/session-zt982F/validation.json).
+| Selected result | Evidence owner |
+| --- | --- |
+| Optional overhead-calibrated Sun radius; fixed 16-mile default retained | [Calibration](sun-size-calibration.md), proof 00723 and GPU capture 00721 |
+| Union Glacier Flat180, calibrated Sun, p2, human-vision filters, 60-degree horizontal FOV, 1024 by 768 | [Central-view capture](central-view-capture.md), image 00725 |
+| San Jose spherical/distant sunset, ordinary production scene, same central FOV/current presentation | [Spherical sunset capture](spherical-sunset-capture.md), latest image 00733 |
+| Earlier local Union Glacier/San Jose ground and object comparisons | [Ground-scene captures](celestial-ground-scene.md), 00714/00716/00718 |
 
-- Scaffold structure and folder identity: maintained startup helper `--check`.
-- Effective source assignment: inherited permanent `experiments/` -> `experiment`.
-  Documentation resolves `agents/` -> `base`.
-- Local type check passed: `npx --no-install tsc -p experiments/local-sun-cache-reuse/jsconfig.json`.
-- Scaffold `--check`, ignored-output check, `git diff --check` and repository
-  `npm run format:check` passed.
-- CPU/browser setup evidence: [environment run](../../../../../tmp/experiments/local-sun-cache-reuse/runs/00002-environment/manifest.json).
-  Accepted: Chrome 154 on NVIDIA RTX 2060 / ANGLE D3D11, WebGL2, float
-  render targets and a secure loopback WebCodecs API. All closed artifact hashes
-  verified. This is not numerical or encoding qualification.
-  Runs `00000-environment` (sandbox process denial) and `00001-environment`
-  (accepted about-blank capability inspection) remain immutable; the latter
-  lacked a secure page for encoder detection, corrected by the new loopback run.
-- Setup source-review gate: [validated ledger](../../../../../.codex-tmp/review-standards/session-XHiRoB/validation.json).
-  P0 acceptance requires `CLEAN` architecture/contracts primary and independent
-  audit evidence, plus local checks and an accepted environment run.
-- Selected-profile control timing and allocation calibration: delivered in P1.
-  Reuse accuracy, motion, lifecycle/resource qualification and encoding remain
-  unmeasured P2-P6 obligations.
+Central-view FOV and calibrated radius are selectable still-image modes. They
+do not replace the film's original camera choreography or select a new global
+Sun-size default. Current celestial/globe captures and the future film use
+1024 by 768; older proof reproductions retain their recorded raster.
+That film remains Union Glacier, December 14, 2024, clockwise Flat180 through Flat540,
+with the identical original observatory otherwise. Six-box review images
+are not the observatory reproduction.
 
-## Standards Restoration Provenance
+## Evidence Limits And Deferred Work
 
-Before activation, the source root did not exist. Its nearest permanent
-assignment was and remains exactly:
+The owner accepts mathematical defensibility, isolated assumptions and ordinary
+correctness as the current basis. [Evidence policy](reference-method.md#current-evidence-policy)
+and the abstraction inventory own the defense. No measured absolute error bars
+or empirical flat/local validation are claimed. Black physical ground, disabled
+ozone and finite atmospheric view boundaries remain explicit assumptions.
+Visible scene materials do not restore atmospheric ground reflection.
 
-```text
-experiments/ -> experiment
-```
-
-The inherited set contains `documentation.md`, `project-foundation.md` and
-`types.md`. The matching existing overlay is
-`ADD: Temporary experiment standards lifetime`, scoped to `experiments/`.
-No more-specific assignment, experiment-only set, replacement, waiver or
-temporary overlay entry was introduced. The permanent ancestor mapping stays
-in place on closure or suspension; there is no temporary configuration to restore.
-Manifest and overlay were unchanged by activation, with pre-activation SHA-256:
-
-- Manifest: `25e9b39a9297cc7126ca8bf52c42eaea75c34354d47090e9825ca3791a9e59ee`.
-- Overlay: `5b28310018e8c1276d1c6b6dbfe3bc0c731c4a7f2f44b6d68b68fdf9e7b04dd9`.
-
-Future temporary differences must be folder-scoped, retain `types.md`, record
-their prior configuration and expiration, and be restored through `end-experiment`.
-Production always resolves its own destination-folder standards.
-
-## Activation Inputs
-
-The prepared plan's exact pre-transfer SHA-256 was
-`259e76746ebf43df2094a73e0dfa08f33409fddbc28fc88f08e4d73bf72a4369`.
-Its [retained review copy](../../../../../.codex-tmp/review-standards/session-XHiRoB/prepared-plan.md)
-preserves the migration input; this topic's plan is the current owner.
-The [assessment](../../../production-algorithm32/caches/local-sun-transfer-assessment.md)
-owns the initial CPU probe and scientific limitations.
-
-The original film trace remains under the read-only `D:/flattened-steel` root;
-the environment probe verifies its exact 3,212,518 bytes and pinned SHA-256.
-The mapped repository `archives/` directory was absent after relocation; setup
-recreated that empty directory to satisfy the scaffold's existing-folder check.
-No archive file was restored or changed.
-
-## Blockers And Open Gates
-
-Existing setup, frozen controls and P2 results remain available comparison
-inputs. The compact prototype and versioned gate contract are exercised; V3a
-images and independent primary/J2 diagnoses are linked by the
-[execution record](p3-execution.md). Higher-order physical accuracy is the
-current blocker to candidate selection. Receiver-light and native reference
-uncertainty, the full visual/motion matrix, repeated performance/resource
-qualification and expanded-domain physical accuracy remain open. The measured
-coverage-exit replacement exceeded the 30-second timing limit. Passing synthetic
-movement, omission and CPU/GPU proofs do not qualify the complete matrix.
-Reviewer readiness was refreshed for execution; final source review must validate
-before an implementation milestone is complete. The execution workload's total
-memory and duplicated diagnostic retention have been corrected for the resumed
-workload; focused proofs pass and final source review remains open.
+The owner accepts the warm lower band as defensible under these assumptions.
+The source trace retains its limitation: a dedicated Flat180 diagnostic was
+not completed; its analytic comparison is not a measured Flat180 trace.
+Sky Accuracy Dials remains suspended and informative only. Gray-horizon causes,
+ozone/ground reflection, targeted error bars and shared construction-value
+optimizations remain deferred. Roughly 36 seconds of startup is acceptable;
+reuse takes priority. Later iPhone/preset and sunset close-up discussions were
+informational and select no implementation or additional capture.
 
 ## Next Action
 
-The owner has reselected execution after the interruption. The
-[remaining-work sequence](plan.md#remaining-work-and-execution-controls) now
-starts with compact diagnostics and enforced aggregate memory admission,
-followed by decisive physical accuracy, the remaining visual/motion matrix,
-performance and expanded coverage, and required source reviews/handoff.
-Streaming authentication, compact frame histories and the owned-tree resource
-guard are implemented. The repaired native collector passes guarded admission
-in 00448/00449; 00450/00451 completes the 32-node calculation without a monitor
-error. The captured repair unit has CLEAN primary/audit validation. Convergence
-00452 remains inconclusive; 00453 stops the incomplete 64-node calculation in
-00454 after a collector command fails. The incomplete run is never reopened.
-Focused diagnostic 00465 passes selected primary polar/azimuth refinements with
-the existing positive quadrant-Gaussian rule. It does not qualify higher orders.
-The diagnostic's refreshed primary/audit source validation is CLEAN for its
-captured unit. The persistent collector repair warms one owned process before
-computation, checks increasing request/response identities, retains bounded
-exit/signal/timeout information, and preserves the existing resource limits.
-Guarded admission 00466/00467 and sustained diagnostic replay 00468/00469 pass;
-the latter reproduces all measurements from 00465, with normal collector cleanup.
-The repair's captured primary/audit source validation is CLEAN. Retry the
-incomplete 64-node reference only in a new run under the repaired guard, then
-inspect its matched convergence family and continue the integration correction.
-These checks do not close the
-application performance or whole-matrix gates.
-The matched horizon-sinh5, dual-endpoint and nested-outgoing angular controls
-remain inconclusive. The latest three-level result is 00452: primary L1 is
-bit-identical, while higher-order channels retain convergence-rate failures and
-some interpolated fields/transport also exceed their uncertainty budgets.
-The separate finite-operator proof in 00433/00435 replays the frozen source without
-altering its fields. Its repaired source unit has validated review; its numerical bounds
-cannot substitute for spatial/angular/path convergence. Diagnose and correct
-the remaining reference integration before launching the remaining browser
-matrix. The reference method owns numerical equations, and the execution record
-owns exact measurements and parent evidence.
-The captured implementation baselines remain available; governing-context
-changes must be included in review refresh before further implementation.
-Production promotion remains unselected. P6 retains the Union Glacier December
-solstice recording, identical scene setup and 180-to-540-degree sweep, after
-qualification and the owner recording approval boundary; P7 owns closeout.
+On owner selection of P6, follow the [handoff's film sequence](handoff.md#next-execution-boundary)
+and full plan. Existing P5 trajectory support is useful input; it does not
+replace scene equality, current celestial composition or decoded-film checks.
+No new render or video was started for this status update.
 
-The reselected independent execution created local checkpoints `66017327`
-(contained prototype and explicit open gates), `38cfe900` (line-ending repair),
-and `64321806` (bounded reference and native telemetry corrections).
-The execution record owns their verification and the corrected checkpoint
-procedure. No push or production promotion occurred. Subsequent numerical
-corrections remain uncommitted work and require their own coherent checkpoint.
+Use JavaScript; Python may support suitable tasks. No native-helper exception
+exists. Default controls are an 8 GiB free-memory reserve, 8 GiB owned-process
+ceiling, ten-minute jobs and serialized heavy execution. Earlier 6 GiB exceptions
+ended with their selected phases and do not extend to P6. Retain compact
+reproduction data and direct PNG/native-video artifacts; remove disposable
+profiles before sealing. Preserve historical runs and retained native-helper
+source without executing native helpers.
+The owner selected a whole-repository checkpoint, including the pre-existing
+native-helper edits. This selection grants no native-helper implementation or
+execution exception.
+
+## Standards Restoration Provenance
+
+Activation introduced no temporary standards configuration. The permanent
+`experiments/ -> experiment` assignment retains `documentation.md`,
+`project-foundation.md` and `types.md`; documentation resolves `agents/ -> base`.
+The existing `ADD: Temporary experiment standards lifetime` overlay applies.
+Keep the permanent mapping on closure/suspension; use end-experiment for that
+transition and restore any later recorded temporary differences.
+
+Pre-activation SHA-256 identities are retained for restoration provenance:
+
+- Manifest: `25e9b39a9297cc7126ca8bf52c42eaea75c34354d47090e9825ca3791a9e59ee`.
+- Overlay: `5b28310018e8c1276d1c6b6dbfe3bc0c731c4a7f2f44b6d68b68fdf9e7b04dd9`.
+- Prepared plan: `259e76746ebf43df2094a73e0dfa08f33409fddbc28fc88f08e4d73bf72a4369`;
+  [retained activation copy](../../../../../.codex-tmp/review-standards/session-XHiRoB/prepared-plan.md).
+
+The original film trace is pinned read-only input under `D:/flattened-steel`;
+the [environment record](../../../../../tmp/experiments/local-sun-cache-reuse/runs/00002-environment/manifest.json)
+owns its 3,212,518-byte identity/hash. Setup recreated only the absent empty
+`archives/` directory; no archive evidence was restored or changed.
+
+## P1 Deliverables And Completion Authority
+
+Historical frozen [controls](../../../../../tmp/experiments/local-sun-cache-reuse/runs/00018-controls/controls.json)
+and [film coverage](../../../../../tmp/experiments/local-sun-cache-reuse/runs/00018-controls/film-coverage.json)
+retain the original 33,378,000 m declared cylinder and solstice film clock.
+[Acceptance](../../../../../tmp/experiments/local-sun-cache-reuse/runs/00019-acceptance/acceptance.json)
+and [P1 validation](../../../../../.codex-tmp/review-standards/session-rpZklY/validation-v2.json)
+retain that phase's scope. [Execution summary](execution-summary.md) owns the
+results. These historical inputs do not select the old date for the current film.
