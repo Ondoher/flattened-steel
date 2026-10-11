@@ -64,8 +64,8 @@ function failureDetails(error) {
 	};
 }
 
-/** Run one experiment proof with exclusive ownership and sampled aggregate resource stop thresholds.
- * @returns {Promise<void>} - New immutable resource record and child output; no video, checkpoint or production mutation.
+/** Run one selected experiment workload with exclusive ownership and sampled resource stop thresholds.
+ * @returns {Promise<void>} - New immutable resource record and child output; P6 film requires its explicit scope flag.
  */
 async function main() {
 	const run = await ExperimentRun.create('resource-bound');
@@ -96,21 +96,68 @@ async function main() {
 		if (process.platform !== 'win32' || separator < 0)
 			throw new Error('Windows owned-process telemetry and explicit -- launcher boundary required.');
 		const [script, ...arguments_] = process.argv.slice(separator + 1);
+		const p6Film = flags.includes('--p6-film');
 		if (
 			!script ||
 			!/^[a-z0-9-]+\.js$/u.test(script) ||
-			arguments_.some((value) => /video|motion|\.mp4/iu.test(value))
+			(!p6Film && arguments_.some((value) => /video|motion|\.mp4/iu.test(value)))
 		)
-			throw new Error('An experiment launcher basename is required; video generation is outside this execution.');
+			throw new Error(
+				'An experiment launcher basename is required; motion/media work requires explicit P6 scope.',
+			);
 		const file = path.join(repositoryRoot, 'experiments/local-sun-cache-reuse', script);
 		await checkPath(repositoryRoot, file);
-		const maximumBytes = numberFlag('--max-owned-mib', 8192) * 1048576;
-		const reserveBytes = numberFlag('--reserve-mib', 8192) * 1048576;
-		const maximumMilliseconds = numberFlag('--minutes', 45) * 60000;
+		const p6Final =
+			p6Film && script === 'run-film.js' && arguments_.length === 1 && arguments_[0] === '--stage=final';
+		const maximumBytes = numberFlag('--max-owned-mib', p6Film ? 12288 : 8192) * 1048576;
+		const reserveBytes = numberFlag('--reserve-mib', p6Film ? 4096 : 8192) * 1048576;
+		const maximumMilliseconds = numberFlag('--minutes', p6Final ? 45 : 10) * 60000;
 		const p3Exception = flags.includes('--p3-c-reserve-exception');
 		const p5Exception = flags.includes('--p5-reserve-exception');
 		const celestialException = flags.includes('--p5-celestial-reserve-exception');
-		if(celestialException && (p3Exception || p5Exception || script!=='run-celestial.js' || arguments_.length!==1 || !['--stage=sun','--stage=combined'].includes(arguments_[0]) || maximumMilliseconds>600000 || reserveBytes!==6144*1048576))throw new Error('P5-Celestial exception requires its bounded stage launcher, ten-minute ceiling and exact 6 GiB reserve.');
+		if (
+			p6Film &&
+			(p3Exception ||
+				p5Exception ||
+				celestialException ||
+				!(
+					(script === 'run-film.js' &&
+						arguments_.length === 1 &&
+						/^--stage=(stills|motion|preview|final)$/u.test(arguments_[0])) ||
+					(script === 'qualify-film.js' &&
+						arguments_.length === 2 &&
+						arguments_.every((value) => /^\d{5}-[a-z0-9-]+$/u.test(value))) ||
+					(script === 'prove-film.js' && arguments_.length === 0)
+				))
+		)
+			throw new Error(
+				'P6 resources require an explicit film stage, film/guard qualification pair, or film proof.',
+			);
+		if (
+			flags.some(
+				(value) =>
+					![
+						'--p6-film',
+						'--p3-c-reserve-exception',
+						'--p5-reserve-exception',
+						'--p5-celestial-reserve-exception',
+					].includes(value) && !/^--(max-owned-mib|reserve-mib|minutes)=\d+$/u.test(value),
+			)
+		)
+			throw new Error('Unknown resource option.');
+		if (
+			celestialException &&
+			(p3Exception ||
+				p5Exception ||
+				script !== 'run-celestial.js' ||
+				arguments_.length !== 1 ||
+				!['--stage=sun', '--stage=combined'].includes(arguments_[0]) ||
+				maximumMilliseconds > 600000 ||
+				reserveBytes !== 6144 * 1048576)
+		)
+			throw new Error(
+				'P5-Celestial exception requires its bounded stage launcher, ten-minute ceiling and exact 6 GiB reserve.',
+			);
 		if (
 			p5Exception &&
 			(p3Exception ||
@@ -151,9 +198,9 @@ async function main() {
 				'The owner-selected P3-C reserve exception requires a current capture, ten-minute ceiling and exact 6 GiB reserve.',
 			);
 		if (
-			maximumMilliseconds > 90 * 60000 ||
-			maximumBytes > 8192 * 1048576 ||
-			reserveBytes < (p3Exception || p5Exception || celestialException ? 6144 : 8192) * 1048576
+			maximumMilliseconds > (p6Final ? 45 : 10) * 60000 ||
+			maximumBytes > (p6Film ? 12288 : 8192) * 1048576 ||
+			reserveBytes < (p6Film ? 4096 : p3Exception || p5Exception || celestialException ? 6144 : 8192) * 1048576
 		)
 			throw new Error(
 				'Execution may tighten but cannot relax the owned limit, applicable reserve or duration ceiling.',
@@ -173,27 +220,48 @@ async function main() {
 					command: process.argv.slice(1),
 					launcher: {script, sha256: hash(source), arguments: arguments_},
 					limits: {maximumBytes, reserveBytes, maximumMilliseconds, sampleIntervalMilliseconds: 5000},
-					temporaryException: p3Exception
+					temporaryException: p6Film
 						? {
 								authorization:
-									'Owner: "I\'ll make a short term exception", 2026-10-09; applied to the machine reserve for selected P3-C only.',
-								scope: 'P3-C current-contract captures only',
-								reserveMiB: 6144,
+									'Owner AFK resource authorization, 2026-10-11; P6 plan selects bounded film resources.',
+								scope: 'P6 film only; 45 minutes for final capture, ten minutes for previews/proofs/qualification',
+								reserveMiB: 4096,
+								maximumOwnedMiB: 12288,
 								defaultReserveMiB: 8192,
 								restoration:
-									'Omit the explicit exception flag; no default or historical evidence is changed.',
+									'Omit --p6-film outside P6; defaults remain 8 GiB reserve/owned and ten minutes.',
 							}
-						: p5Exception
+						: p3Exception
 							? {
 									authorization:
-										'Owner: "Approve 6 GiB reserve for remaining P5 captures", 2026-10-10.',
-									scope: 'Remaining P5 pinned current-application temporal captures only',
+										'Owner: "I\'ll make a short term exception", 2026-10-09; applied to the machine reserve for selected P3-C only.',
+									scope: 'P3-C current-contract captures only',
 									reserveMiB: 6144,
 									defaultReserveMiB: 8192,
 									restoration:
-										'Omit the explicit P5 exception flag after P5; default 8 GiB reserve is unchanged.',
+										'Omit the explicit exception flag; no default or historical evidence is changed.',
 								}
-							: celestialException ? {authorization:'Owner relaxed the 8 GiB free-memory restriction for AFK P5-Celestial, 2026-10-10; execution selects 6 GiB.',scope:'P5-Celestial bounded captures and short preview only; excludes P6',reserveMiB:6144,defaultReserveMiB:8192,restoration:'Omit the explicit celestial exception flag at phase completion; default remains unchanged.'} : null,
+							: p5Exception
+								? {
+										authorization:
+											'Owner: "Approve 6 GiB reserve for remaining P5 captures", 2026-10-10.',
+										scope: 'Remaining P5 pinned current-application temporal captures only',
+										reserveMiB: 6144,
+										defaultReserveMiB: 8192,
+										restoration:
+											'Omit the explicit P5 exception flag after P5; default 8 GiB reserve is unchanged.',
+									}
+								: celestialException
+									? {
+											authorization:
+												'Owner relaxed the 8 GiB free-memory restriction for AFK P5-Celestial, 2026-10-10; execution selects 6 GiB.',
+											scope: 'P5-Celestial bounded captures and short preview only; excludes P6',
+											reserveMiB: 6144,
+											defaultReserveMiB: 8192,
+											restoration:
+												'Omit the explicit celestial exception flag at phase completion; default remains unchanged.',
+										}
+									: null,
 					tools: {node: process.version, platform: process.platform},
 					totalBytes: os.totalmem(),
 					operation:

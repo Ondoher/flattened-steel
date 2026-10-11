@@ -26,7 +26,7 @@ export function installShellCelestial(owners, selection) {
 				center: {...placement.center, coordinates: [p[0] - o[0], p[2] - o[2], -(p[1] - o[1])]},
 			};
 		});
-	const builder = /** @type {import('../../src/algorithm32/rendering-runtime/ShaderBuilder.js').ShaderBuilder} */ (
+	const builder = /** @type {LocalSunCelestialBuildCoordinator} */ (
 		owners.facade._shaderBuilder
 	);
 	const preparer = builder._assemblyPreparer,
@@ -132,7 +132,7 @@ export function installShellCelestial(owners, selection) {
 		};
 		// The runtime installer owns a concrete executor contract; the adapter
 		// above checks only the explicit flat configuration and operations it uses.
-		return /** @type {import('../../src/algorithm32/rendering-runtime/three/StellarScreenPaletteGenerationPass.js').StellarScreenPaletteGenerationPass} */ (
+		return /** @type {StellarScreenPaletteGenerationPass} */ (
 			/** @type {unknown} */ (pass)
 		);
 	};

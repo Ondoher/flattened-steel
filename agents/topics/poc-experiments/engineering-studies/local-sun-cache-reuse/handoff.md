@@ -8,14 +8,16 @@ the detailed measurement records.
 
 ## Where Execution Stopped
 
-P0–P5, P5-Celestial and selected follow-ups are delivered. No render job remains;
-the heavy-execution lock and latest capture's browser profile are absent.
-P6 recording, P7 closure/suspension, promotion and publication remain unselected.
-Do not infer recording authorization from earlier independent-execution requests:
-the owner explicitly selected a stop before generating the video.
+P0–P5, P5-Celestial and selected follow-ups are delivered. The P6 native film is
+recorded in run 00754. The [film execution record](p6-execution.md) owns the
+delivery, current verification gates and source-review receipt.
+The owner selected creative P6 work on 2026-10-11, replacing the earlier stop
+before video. The current plan owns the 90-second continuous San Jose film,
+new scene/camera latitude, no-overlay requirement and scoped AFK resource use.
+P7 closure/suspension, promotion and publication remain unselected.
 The experiment is still the governing topic and has not been formally suspended.
 
-The current task is an owner-selected whole-repository checkpoint. Prior
+The next owner action is creative inspection of the delivered film. Prior
 questions about iPhone FOV, possible color/FOV presets and close-up sunset
 gradients were informational. They select no new experiment, preset,
 implementation or render.
@@ -48,7 +50,8 @@ Owners retain physical parameters, derivations, parent inventories and limits.
 
 The short 00674 preview is two seconds/24 frames at one physical state with a
 small camera pan. It is not the P6 full-orbit film. P0/P1's original solstice
-film clock is historical; use December 14, 2024 for current film derivation.
+film clocks are historical; the current San Jose winter-solstice clock is
+owned by P6.
 P5's `00610-p5-coverage` proves 1,801 future camera/source states under its recorded
 support policy, but does not qualify the finished observatory/celestial film.
 
@@ -78,8 +81,7 @@ before changes; its required primary/audit evidence must validate before closure
   mode preserves source power/reference irradiance. See its owner for details.
 - Current still captures use 1024×768. Optional `human-central` FOV is 60°
   horizontal, approximately 46.82645° vertical at 4:3. Standard still FOV remains
-  70° vertical. The film retains the original camera score/FOV; the central-view
-  trial does not replace that choreography.
+  70° vertical. P6 separately selects its new camera and lens score.
 - Black physical ground, disabled ozone, a homogeneous flat medium, finite
   local source and finite atmospheric view boundary are explicit assumptions.
   Visible ground/material reflectance is separate from atmospheric ground bounce.
@@ -109,6 +111,11 @@ Source entrypoints under `experiments/local-sun-cache-reuse/`:
   selected shared-service assets without modifying production application code.
 - `run-resource-bounded.js`, `resource-monitor/`, `ExperimentRun.js`: guarded
   launch, JavaScript telemetry, run allocation and finalization.
+- `film-director.js`, `film-scene.js`, `film-browser.js`, `film-variant.js`:
+  continuous score, persistent observatory, exact-frame borrower and contained
+  Sun-coverage derivative.
+- `run-film.js`, `prove-film.js`, `qualify-film.js`: bounded capture, exact-slot
+  geometric admission and full decoded-media qualification.
 
 These are reproduction commands, not instructions to launch another job now:
 
@@ -124,33 +131,15 @@ state; verify actual published observation and actual camera before accepting.
 
 ## Next Execution Boundary
 
-When the owner selects P6, follow the full film plan in this order:
-
-1. Read the original [The Hours adapter](../../../../../scripts/flat32/the-hours/README.md)
-   and pinned read-only D-drive film inputs. Prepare an experiment-owned replay
-   with a hashed scene-equality manifest: deterministic seed, assets, geometry,
-   transforms, materials, portals, camera score, shadows and presentation.
-2. Derive Union Glacier's December 14, 2024 Flat180 start instant and increasing
-   24-hour clock through Flat540. Preserve original Sun-relative camera rules;
-   do not repeat modulo-angle requests that jump the date backward.
-3. Recheck current scene endpoints, celestial inputs and full trajectory support
-   against the existing P5 coverage evidence. Reuse within its admitted domain;
-   otherwise await a compatible exact-state rebuild. Never clamp, hold a frame
-   or silently alter visual terrain/physical ground to make the replay fit.
-4. Deliver the scene-composition still, low-resolution orbit preview and short
-   wrap/replacement checks. Freeze the film recipe, including explicit Sun-size
-   mode and media/temporal gates. Calibrated size is optional; no global default
-   change or film-specific calibrated-radius selection has been made.
-5. Preserve the original scene's one shared 4096² shadow map and one-second
-   diffuse/adaptation samples with cubic interpolation. Sky/direct Sun/source
-   positions remain exact-time. Keep unsmoothed diagnostics separate.
-6. Record 1024×768, 30 fps, 60 seconds, 1,800 distinct ideal states plus a separate
-   lossless Flat540 endpoint. Verify decoded media, trace and provenance; deliver
-   native video, review copy and milestone stills. This is offline capture, not
-   proof of live 30 fps. Owner film review precedes P7 disposition.
-
-P6 is not yet implemented or executed. It requires its own authored adapter,
-review baseline and completion evidence. Production adoption remains separate.
+Follow the selected [P6 plan](plan.md#p6--reproduce-the-local-sun-full-orbit-film).
+It is the canonical owner for location, source size, scene, continuous camera,
+clock/FOV phases, media settings, review baseline and scoped resource limits.
+The [execution record](p6-execution.md) supplies the frozen recipe, native and
+review videos, run chain, verification authority and reproduction commands.
+Do not repeat capture merely to resume context. Owner creative acceptance is
+separate from technical qualification; P7 lifecycle disposition still requires
+selection. Any later revision needs a new immutable run and a newly declared
+review unit, preserving the delivered source and media identities.
 
 ## Boundaries And Operational Discipline
 
@@ -165,9 +154,9 @@ No C#/native-executable exception exists. Pre-existing native-helper edits must
 remain untouched and unexecuted. No experimental unit-test suite/framework is
 allowed; use focused self-verifying proof runners.
 
-Default heavy controls: 8 GiB free-memory reserve, 8 GiB aggregate owned-process
-ceiling, ten-minute job limit and one heavy job at a time. Previous phase-scoped
-6 GiB exceptions expired. Give each diagnostic a question, invariant, bounded
+Default heavy controls remain 8 GiB free-memory reserve, 8 GiB aggregate owned
+ceiling and ten-minute jobs. P6 uses its current plan-owned AFK exception;
+previous 6 GiB phase exceptions remain expired. Keep one heavy job at a time. Give each diagnostic a question, invariant, bounded
 domain, discriminator and stop condition; avoid automatic resolution escalation
 or overnight sweeps. Keep monitorable progress and clean up owned processes.
 

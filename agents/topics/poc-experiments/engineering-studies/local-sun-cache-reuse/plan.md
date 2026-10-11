@@ -11,9 +11,13 @@ The [successor handoff](handoff.md) routes current implementation and evidence.
 Original P2 counterexamples and earlier prototype results remain historical
 comparison evidence for the Euclidean source-centered replacement layout.
 
-No heavy job remains. Execution stops before P6 recording; P6/P7, production
-promotion, push and publication remain unselected. Completion of celestial
-integration does not start the video or formally end/suspend the experiment.
+The owner selected creative P6 film work on 2026-10-11, including flexible
+scene/camera design, one continuous shot without overlays, a one-to-two-minute
+duration and autonomous AFK execution. The selected recipe below is 90 seconds
+at San Jose on the winter-solstice basis. P7, production promotion, push and
+publication remain unselected. The new film is recorded; the
+[execution record](p6-execution.md) owns its media qualification, source-review
+authority and remaining owner creative acceptance.
 
 Experiment identity: `local-sun-cache-reuse`.
 
@@ -90,8 +94,8 @@ not a bound on final sky error. This experiment must establish its own evidence.
   in scope; value compression, cubic spatial interpolation, paging, shadow API
   changes and receiver-light timeline
   smoothing are deferred for cache qualification. The owner-selected final
-  film preserves the original scene setup, including its shared shadow adapter
-  and measured-light interpolation, as described in P6. This film-only recipe
+  film uses the creative scene/camera recipe and measured-light presentation
+  described in P6. This film-only recipe
   does not change the ordinary shadow control or public API. A measured
   problem may motivate a separately scoped
   follow-up; it must not silently enlarge this experiment.
@@ -139,7 +143,7 @@ full N4/W27 qualification or in-app lifecycle work.
 | V4: app lighting and rebuild | P4                                   | Familiar six-box five-state plates plus before/during/after replacement PNGs. Inspect exact-state sky, source, receivers and ordinary shadows.                                                                                                                         |
 | V5: qualification comparison | P5                                   | Selected-profile images, exact-time trajectory data and a claim-by-claim model/resource report for owner disposition.                                                                                                                                                  |
 | V5a/V5b: celestial integration | P5-Celestial | Close/intermediate/far Sun-disc images, then a labeled star-only diagnostic, combined sky images and a short motion preview before owner visual review. |
-| V6: full local-Sun film      | P6, final execution milestone        | Reproduce The Hours with the identical scene setup, changing to the local Sun at Union Glacier on December 14, 2024 and a full clockwise orbit from 180° through 540°, followed by owner inspection.                                                                   |
+| V6: full local-Sun film      | P6, final execution milestone        | Deliver the selected 90-second continuous San Jose winter-solstice film, with dynamic camera movement, a legible full circuit and true disc-size change, followed by owner inspection.                                                                   |
 
 V0 establishes a visible control, not a reuse result. Prefer the selected
 production profile when it can produce the first render promptly; otherwise
@@ -157,8 +161,8 @@ amplification. Identify profile/order, shell policy, source placement, radius,
 revision, cache build/reuse state, run and numerical-review status beside every
 artifact. A diagnostic or failed comparison must remain visibly marked as such.
 
-The current pre-video boundary defers new encoded clips, including diagnostic
-clips, to separately selected recording work. Use direct PNGs and compact
+The completed V3-V5 work used a pre-video boundary; the newly selected P6
+work now includes its own previews and full recording. Use direct PNGs and compact
 exact-time trajectory data for V3-V5. Historical clips remain unchanged.
 Publish each new visual milestone as a sealed run with standalone images
 and a compact Markdown/JSON record linking its matching controls, difference views,
@@ -245,7 +249,9 @@ the future recording; historical images retain their original dimensions.
 Keep the 70-degree vertical FOV for these stills, derive camera aspect from
 the selected raster, and record the dimensions in each new recipe/result.
 The celestial capture launcher now selects this size explicitly. Other
-future runners must honor this selection when they are next executed.
+ordinary control runners retain this selection. Under the owner's later creative
+latitude and AFK resource instruction, P6 selects its own 1080p cinematic raster
+below, preserving resolved disc detail while widening the composition.
 
 Keep both a sky-only view and, when receiver integration is ready in P4, the
 familiar ground composition with six colored boxes: the near yellow box,
@@ -491,24 +497,11 @@ the retained specifications below. The [status](status.md) links their current
 owners, and the [handoff](handoff.md) distinguishes current adapters from
 superseded historical bundles. Recorded reviews retain their frozen scope.
 
-Remaining work begins only when the owner selects P6:
-
-1. Refresh reviewer context/readiness and capture the new implementation-unit
-   baseline. Use the current JavaScript monitoring/launch path; no native-helper
-   exception exists. Default controls remain the 8 GiB free-memory reserve,
-   8 GiB owned-process ceiling, ten-minute jobs and serialized heavy execution.
-   Earlier phase-scoped 6 GiB exceptions have expired.
-2. Establish experiment-owned replay equality with the original observatory,
-   derive the December 14, 2024 Union Glacier Flat180→540 clock, and verify the
-   current scene/celestial trajectory against the existing P5 support evidence.
-3. Deliver the composition still, low-resolution orbit preview and short
-   wrap/replacement checks before full capture. Freeze the film recipe and
-   media/temporal gates; preserve the original camera score and the selected
-   1024×768 raster. Optional central FOV/calibrated Sun trials do not silently
-   replace original camera rules or the fixed-radius default.
-4. Execute and verify the complete P6 film, then obtain owner visual acceptance.
-   P7 records disposition and uses end-experiment for closure or suspension.
-   Production adoption requires a separate selection.
+The owner has selected the creative P6 work below. Execute its recipe and
+preview/qualification sequence, preserving completed phase evidence. The
+owner's current AFK resource authorization applies only to P6; earlier 6 GiB
+exceptions remain expired. The P6 section owns the new location, camera,
+duration, scene and resource decisions and supersedes earlier film assumptions.
 
 For every diagnostic name one question, assumption/abstraction, input domain,
 expected invariant, discriminator and stop condition before execution. Start
@@ -702,7 +695,7 @@ with the V4 lighting/rebuild comparison published.
 Accepted numerical delivery: [P5 claim matrix](p5-qualification.md), all ten
 complete pairs. Its matching validated source receipt governs implementation
 completion. P5 captures have ended; its temporary reserve exception is no
-longer selected. P6 remains unselected. The retained specification follows.
+longer selected. P6 is now selected below. The retained P5 specification follows.
 
 Run the revised P3-A claim matrix on the declared GPU with the selected profile.
 Keep inherited method support, adaptation consistency, numerical approximation,
@@ -793,7 +786,8 @@ The [celestial delivery](p5-celestial.md) now owns accepted focused numerical
 results, V5a/V5b images, the two-second preview and matching source-review
 completion authority. The current selected adapter enables the Sun and flat
 stars. Captures and cleanup have finished; the default 8 GiB reserve applies
-again. Stop for owner visual review before selecting P6.
+again. Its former stop for owner visual review was superseded by the owner's
+current P6 selection below.
 
 1. **Correct the records and define the unit.** Distinguish atmospheric-cache
    qualification from celestial rendering readiness. Refresh governing reviewer
@@ -859,142 +853,208 @@ completion of this phase.
 
 ### P6 — Reproduce The Local-Sun Full-Orbit Film
 
-This is the final execution milestone, after P5 qualification of the layout,
-its integrated empty-band omission and any claimed reuse, P5-Celestial
-integration and owner visual review, and before lifecycle closeout.
-The owner requests the distant-Sun film reproduced for the local Sun at Union
-Glacier on **December 14, 2024**, running a full **360° clockwise orbit
-starting at Flat 180**. This owner update supersedes the earlier solstice date.
-The standard Union Glacier visual controls in earlier phases remain preserved.
+The owner selected this creative film on 2026-10-11 and explicitly relaxed the
+old identical-scene and original-camera requirements. The film must be
+attractive, use dynamic camera movement, show the local Sun completing its
+full circuit, and clearly reveal its physical apparent-size change with
+distance. The owner chose **one continuous shot, no overlays**, and a duration
+between one and two minutes. The selected target is **90 seconds**.
 
-Use the production
-[The Hours adapter](../../../../../scripts/flat32/the-hours/README.md) as the
-read-only presentation and recording reference. The owner requires the
-**identical scene setup otherwise**. Preserve the original deterministic
-observatory, seed/RNG sequence, assets, object identities and transforms,
-geometry/terrain, portal orientations, materials/textures, visual reflectance,
-local-bounce recipe, animation score, camera choreography, shadow setup,
-presentation filters and recording settings, with the owner-selected
-1024-by-768 raster exception above. Do not flatten or rebuild the
-visual terrain, reposition portals for the new Sun, retheme the observatory
-for Antarctica, or substitute the earlier six-box review scene.
+This section supersedes earlier P6 references to the identical Union Glacier
+observatory replay, original camera score, fixed 60-second duration and
+1,800-frame delivery. Historical P0-P5 recipes and evidence retain their
+original locations, rasters, time mappings and claims.
 
-The allowed changed inputs are the local-Sun source/flat atmospheric model,
-Union Glacier observation, December 14, 2024 date and 180°–540° film clock.
-Light direction, illumination, visibility and Sun-relative camera poses follow
-those changed inputs through the original scene/presentation equations. Keep
-the authored camera curves, key times, offsets, FOV and Sun-framing rule; do not
-replay San Jose's old Sun direction or invent a new camera score. The original
-sky pixels, light spectra and source trajectory are not reused as local-Sun
-results.
+#### Selected Parameters And Location
 
-Keep authored visual ground/terrain separate from the new flat atmosphere's
-physical ground boundary. Preserve both the original visual geometry and the
-qualified flat transport contract. Resolve any incompatible scene endpoint
-or below-ground coverage during the composition proof; do not silently alter
-terrain or the physical model and claim an identical reproduction. A required
-scene change is an unresolved scope decision, not an automatic adaptation.
+| Parameter | Selected value |
+| --- | --- |
+| Location | San Jose, latitude 37.3382 degrees, longitude -121.8863 degrees |
+| Date basis | Winter solstice, December 21, 2024; production resolver basis `2024-12-21T09:20:00.000Z` |
+| Source cycle | One increasing 24-hour circuit, Flat180 through Flat540; begin with the far-side boundary immediately before that date's closest approach |
+| Delivery | 90 seconds, 30 fps, 1920 by 1080, 2,700 distinct rendered slots |
+| Editing | One continuous camera take; no cuts, captions, compass, orbit diagram, progress display or other overlays |
+| Scene | `circular-meridian-observatory-v4`, seed `3202609`, adapted from The Hours' architectural and lighting vocabulary |
+| Camera | Moving dolly and crane with Sun-following bearing; smooth wide opening and closing |
+| Lens | 45-degree vertical FOV at opening/closing; fixed 18-degree vertical FOV throughout the central full circuit |
+| Sun | Existing fixed 16-statute-mile physical radius, 3,000-mile source-height policy, unchanged source power and spectra |
+| Presentation | Current p2 and qualified human-vision celestial presentation; actual measured receiver illumination |
+| Audio | Silent |
+| Encoding | Existing deterministic recorder, streamed H.264 MP4; start at 20 Mbps native and inspect decoded quality |
 
-Pin an original-scene setup manifest and verify a new experiment-owned replay
-against it: seed and construction inputs, object inventory, canonical mesh
-attributes/indices and transforms, material/texture identities, portal
-directions, camera-score constants, lighting/shadow configuration and recording
-policy. Coordinate/unit conversions must preserve the represented scene points.
-Derive or copy new replay assets under the experiment roots with hashes and
-complete parent provenance; original sources and completed film evidence stay
-read-only. Scene-setup equality does not imply equal final pixels or MP4 bytes
-after the source/model and observation change.
+San Jose is selected under the owner's permitted alternative because it places
+the observer **inside** the source's projected orbit. The model's source
+bearing therefore completes a full turn around the observer. Union Glacier
+lies outside the source orbit: its apparent bearing swings roughly 84 degrees
+across the northern sky, even while the source completes its full physical
+circuit. That is a poorer match for an unmistakable full turn without overlays.
 
-Use the owner-selected **1024 × 768** raster, superseding the original 4K
-delivery size. Retain **30 fps**, **60 seconds**, and **1,800 distinct ideal
-scene states**. Use the existing repository-owned
-animation-evidence recording capabilities through an experiment-local adapter.
-Treat offline encoding as a film workflow, not evidence of live 30-fps runtime
-performance. Deliver a native MP4, a smaller review copy, lossless milestone
-stills and an inspectable index.
+The source/evidence basis is production
+[FlatEarthGeometry](../../../../../src/algorithm32/implementation/flat-earth/FlatEarthGeometry.js)
+and the preserved [Union Glacier recipe](../../../../../tmp/experiments/local-sun-cache-reuse/runs/00725-p5-celestial/recipe.json)
+and [San Jose recipe](../../../../../tmp/experiments/local-sun-cache-reuse/runs/00716-p5-celestial/recipe.json).
+San Jose's near/far distances are approximately 8,294/19,058 km, giving roughly
+a **2.30-fold diameter change**. With the selected fixed radius and narrow lens,
+the predicted disc diameter is approximately **21 pixels near and 9 pixels
+far** at the final raster. These are geometric planning estimates; new GPU and
+decoded-image measurements must verify visibility and coverage.
 
-#### Film Clock And Coverage
+Derive the actual start instant through the production location/time path;
+if its Flat180 resolver selects the following far-side boundary, choose the
+preceding boundary by moving back one day, then resolve every increasing
+instant normally. Record the actual UTC interval and seasonal drift. Do not
+repeat modulo-angle requests, impose a false astronomical sunset/darkness
+schedule, or force equal beginning/end pixels.
 
-Resolve the Flat 180 start instant for Union Glacier's pinned December 14, 2024
-date through the production location/time path. Keep a monotonically
-increasing clock and unwrapped orbital phase:
+The derived interval is `2024-12-21T08:05:23.319Z` through
+`2024-12-22T08:05:23.319Z`. Exact-state proof 00752 measures approximately
+359.921 degrees of apparent bearing winding over the nominal full circuit;
+the small departure from exactly 360 degrees reflects the resolved seasonal
+source motion. The [execution record](p6-execution.md) owns measured results.
 
-```text
-u = animationSeconds / 60
-unwrappedDegrees = 180 + 360 * u
-displayedDegrees = unwrappedDegrees modulo 360
-physicalInstant = startInstant + u * 24 hours
-```
+#### Scene And Continuous Camera Score
 
-Pin the frame-sampling convention to the original ideal recorder: encoded
-slots `i = 0..1799` use `animationSeconds = i / 30`. The declared interval ends
-at 60 seconds / 540°, with the last encoded sample one frame interval before
-that boundary. Render a separate lossless endpoint control at exactly 540° to
-verify the complete interval without adding a duplicated playback frame.
+Use a fictional sculptural observatory at the selected model location:
+warm pale stone, dark basalt accents, restrained brass details, open sky and
+low terrain. Adapt existing deterministic scene construction and measured-light
+collaborators where useful, with a pinned seed. This is an authored scene,
+not a claim to reproduce the real San Jose landscape.
 
-The displayed sequence crosses `180 → 225 → 270 → 315 → 0 → 45 → 90 → 135 → 180`.
-Derive physical source facts from each exact increasing instant, not repeated
-modulo-angle requests that can jump the date backward. Record seasonal/source
-drift across the day and the final-versus-initial physical differences; do not
-force equal end pixels or create an artificial loop closure. The local Sun's
-actual geometry and attenuation determine its appearance throughout the orbit.
-Do not impose the distant film's dawn, sunset or darkness schedule on it.
+Create four visually distinct, unlabeled landmarks around the court: a split
+gateway at the far-side starting bearing, a colonnade, a taller stepped tower
+toward closest approach, and low terraces/offset arches. The opening establishes
+the gateway; the full panorama passes the distinct landmarks and returns to
+that gateway. Keep the Sun unobscured. Size and place the skyline to remain in
+the narrow view below the Sun along the actual trajectory; do not enlarge the
+Sun or alter its physical path to fit the scenery.
 
-Qualify the full film trajectory's cache/ray coverage and camera-relative
-precision. Reuse only inside the P5-qualified region. Elsewhere, build a fresh
-compatible cache and wait for that exact state before capturing its ideal slot.
-Record each frame's reuse/rebuild choice and source/cache identity. A limited
-reuse result can therefore still produce the full requested film, but the
-film must not be labeled proof of unrestricted 360° reuse. If no correct,
-admitted full-profile path can supply a frame, retain the failed run and keep
-this milestone incomplete rather than filling it with a held or clamped state.
+The frozen v4 court uses a continuous stone floor with three flush brass bands
+and distinct shadow-casting monuments. Final-raster stills replaced raised tile
+seams that distracted at the grazing opening view. Floor surfaces receive the
+monuments' shadows, and adjoining floor regions do not overlap.
 
-#### Lighting, Preview And Acceptance
+| Film time | Action |
+| --- | --- |
+| 0-10 seconds | Move into the courtyard and rise from 6 to 8 m; smoothly narrow vertical FOV from 45 to 18 degrees. Hold the initial physical source instant while the camera moves. |
+| 10-80 seconds | Complete the entire physical source circuit with the lens fixed at 18 degrees. Track the Sun in the upper third while the court's landmarks pass beneath it. Combine a small figure-eight dolly, approximately 12 m east/west and 8 m north/south, with an 8-12 m camera altitude. |
+| 80-90 seconds | After completing the circuit, pull back and lower to 6 m while widening from 18 to 45 degrees, revealing the returning gateway and court. Hold the final source instant while the camera continues moving. |
 
-Use Algorithm32 local-Sun sky transport, source disk, distant-object composition
-and actual newly measured local-Sun receiver spectra. Adapt the
-camera's Sun-relative direction from the actual finite source and camera
-position; preserve the original smooth score and keep the Sun's motion legible.
-Maintain coherent direct light, diffuse light, source position and shadows.
-Preserve the original shared observatory shadow configuration and update it
-from the local Sun through an experiment-owned scene adapter. Pin the parent
-configuration, including its one 4096-by-4096 map, coverage/focus, full-strength
-direct contribution, bias and filtering; validate complete coverage, memory
-and the local-source directional approximation without retuning the setup.
-This does not modify ordinary Flat32 shadows or generalize a shadow API.
+Use smooth position/orientation/FOV curves, including matched zero-velocity
+transitions at the opening, orbit and closing boundaries. Over the central
+70 seconds, map one physical day monotonically with two-second smooth
+acceleration/deceleration ramps and a constant rate between them. Normalize
+the integrated ramp to exactly one day. The nominal unwrapped source phase is
+`180 + 360 * progress`; resolve the actual source facts from the associated
+instant. Keep both in the trace.
 
-Preserve the original one-second measured diffuse/adaptation endpoints and
-the same cubic interpolation/end conditions as the film's presentation recipe,
-using fresh local-Sun measurements rather than the distant-film sample values.
-Keep sky transport, source position/disk and direct spectra at the exact frame
-state. Retain the exact-state receiver comparison from P4/P5 and unsmoothed
-short film diagnostics separately so presentation interpolation cannot supply
-cache-accuracy or reuse evidence. The final film clearly declares the unchanged
-interpolation policy and its measured local-Sun parent inputs.
+Keep the Sun near the same upper-third screen position during the fixed-lens
+circuit. Its growth and shrinkage must result from finite-source geometry,
+not a changing radius, screen-space gain or compensating zoom. The full
+far-near-far comparison occurs within that unchanged lens. The moving
+foreground, coherent shadows and return to the starting landmark establish
+the camera's continuous panorama.
 
-Before a full native capture, validate the scene-setup equality manifest and
-deliver a composition still, a low-resolution
-whole-orbit preview and short selected-profile checks around the 360° angle
-wrap and any cache replacement. These remain late-stage V6 previews and do
-not postpone V0–V5. Freeze the film-specific temporal/source and decoded-video
-limits before evaluating the full capture; reuse applicable P5 limits and
-declare any image-region/encoder differences from the distant-film detector.
-Retain source-frame observations separately from encoding artifacts.
+#### Implementation And Lighting Boundary
 
-Verify all ideal slots, increasing physical times, unwrapped phase span,
-frame count/cadence, profile, cache/source/light coherence, complete coverage,
-source and decoded temporal behavior, unchanged scene-setup identity, and
-absence of render/GL errors.
-Capture lossless stills at the quarter-orbit milestones and the endpoint.
-Retain a per-frame trace of source position, phase/time, camera, field identity,
-lighting, shadow policy and build/reuse status, with complete derivation and
-artifact hashes. Owner inspection of the native video is the final visual
-acceptance decision; it does not authorize production promotion.
+Reuse the existing recording mechanics in
+[`scripts/animation-evidence`](../../../../../scripts/animation-evidence/README.md).
+Author only the experiment-owned scene, camera/clock score, shell-frame adapter,
+host orchestration and focused qualification needed for this film. Production,
+The Hours implementation, previous experiments, archives and sealed runs
+remain read-only. The original scene's equality gate is replaced by a frozen,
+reproducible **new film recipe** with source/asset/seed identities.
 
-**Exit:** the complete native and review films, preview/still artifacts,
-validated scene-setup equality, trace and media checks, declared reuse
-limitations, and owner visual
-acceptance. A failed or suspended film remains an explicit open deliverable.
+The film session owns one persistent scene/camera and bounded render/shadow
+resources. Exact physical frames borrow that scene and compatible atmospheric
+cache; disposing a frame must not dispose shared film resources. Serialize
+publication and rendering so staging cannot mutate visible lighting/camera
+state. Retain canonical field identity, compatible reuse and exact-state
+replacement behavior. Verify the complete San Jose source/camera/ray domain;
+the earlier Union Glacier P5 trajectory does not by itself qualify this route.
+
+Preserve the qualified shared celestial transmission and contained Sun-disc
+coverage correction. Use actual finite-source position for direct illumination,
+disc placement and the scene shadow direction. Begin with one shared 4096-square
+shadow map, admitting its actual scene resources and measuring the local-source
+directional approximation over the occupied scene.
+
+Retain the existing film presentation method of measured one-second diffuse
+and adaptation endpoints with its established monotone cubic interpolation,
+using new measurements for this scene and physical clock. Keep sky, source
+position/disc and direct spectra at the exact rendered state. Keep unsmoothed
+exact-state probes separate from presentation interpolation, and freeze endpoint
+and interpolation identities before capture.
+
+Use streamed, backpressured MP4 output through the existing bounded chunk sink
+and deterministic canvas recorder. Keep explicit milestone capture slots:
+the original The Hours wrapper's 60-second sparse-capture shortcut must not
+silently retain all 2,700 native PNGs for this 90-second film. Record every
+slot's compact trace and retain selected lossless stills.
+
+#### Execution Budget And Review Milestone
+
+The owner is AFK and explicitly permits greater computer-resource use for this
+P6 work. Use a **P6-only 4 GiB machine free-memory reserve**, **12 GiB aggregate
+owned-process ceiling**, and a **45-minute maximum for one final capture job**.
+Preview/diagnostic jobs remain bounded to ten minutes. Keep one GPU/browser
+job at a time, five-second telemetry, fail-closed monitoring, cancellation,
+owned-process cleanup and progress events at least every 30 seconds. These
+choices provide headroom on the inspected approximately 32 GiB machine; they
+are execution choices under the owner's current instruction, not permanent
+defaults. Restore the standard controls after this P6 work.
+
+Do not compile or execute temporary native monitoring helpers. Existing media
+encoding dependencies remain available. The resource authorization changes
+neither the JavaScript requirement nor immutable-run boundaries. Generated
+output uses this experiment's declared output root rather than the generic
+independent-execution scratch location. Review artifacts use the existing
+ignored review-service root.
+
+The coherent implementation unit is the complete P6 scene/camera/clock,
+frame adapter, recorder host, resource selection and focused proofs, together
+with relevant unchanged collaborators. Its baseline is
+`.codex-tmp/review-standards/session-fFecAL/baseline.json`.
+Refresh reviewer context before implementation. Stabilize the working preview,
+run the local type check, then obtain mapped primary review and independent
+audit and validate the evidence before claiming implementation completion.
+
+#### Preview, Capture And Acceptance
+
+1. Freeze derived site/clock/source facts, scene seed and recipe. Produce
+   near/far composition stills at the final 18-degree lens and raster, verifying
+   that the disc and foreground remain readable with no occlusion or clipping.
+2. Deliver a short representative moving preview, then an inexpensive complete
+   orbit preview covering the continuous score. Inspect actual rendered frames,
+   scene composition, visibility, camera motion, size contrast and the returning
+   gateway. Revise the scene/camera using that evidence and record changes.
+3. Check CPU/GPU camera/source/coverage facts, complete trajectory admission,
+   shared-cache reuse/replacement and cleanup. Record frame-time/memory estimates
+   from the preview before the full bounded job. Freeze the final recipe and
+   decoded-media gates before full capture.
+4. Record 2,700 distinct ideal camera/render states at `slot / 30` seconds;
+   use unique frame identities and no held/duplicated frames. The complete
+   physical circuit finishes at film time 80 seconds, within the encoded slots.
+   Retain an additional exact 90-second lossless endpoint control.
+5. Verify 90-second duration, 30 fps cadence, 2,700 frames, raster, codec,
+   increasing physical time during the circuit, the full source-phase/bearing
+   winding, fixed circuit FOV, projected disc-size trace, cache/light coherence,
+   absence of GL errors, and decoded motion/solar-edge continuity.
+6. The final-raster near/far disc must remain clearly resolved, with a measured
+   diameter ratio consistent with the approximately 2.30 geometric ratio.
+   Target at least 20 near pixels and 8 far pixels; failure requires recipe or
+   presentation diagnosis before acceptance, not an arbitrary source-size gain.
+   Inspect beginning, close approach, far side, each landmark and both lens
+   transitions. No overlays, cuts or scene occlusions may substitute for a
+   legible circuit.
+7. Deliver the native MP4, a compact review copy, selected lossless stills,
+   recipe, timing/resource report and complete derivation/source/media hashes.
+   Keep media compression observations separate from physical/caching claims.
+   Owner inspection of the film remains final creative acceptance.
+
+**Exit:** a verified continuous 90-second cinematic film meeting the three
+visual requirements, validated implementation-review evidence, recorded
+limitations and owner visual acceptance. P7 lifecycle disposition, production
+promotion, push and publication remain separately selected actions.
 
 ### Deferred Follow-Up — Shared Construction Values
 

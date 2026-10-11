@@ -7,7 +7,7 @@ multiple-scattering cache over a uniform flat atmosphere and ground. Omit
 nonintersecting inner bands from storage and construction from the first
 prototype. Establish layout accuracy and measured resource benefit separately
 from horizontal reuse, in-app rebuilding and coherent lighting. Finish with
-the requested identical-scene full-orbit recording.
+the requested creative full-orbit recording.
 The [plan](plan.md) owns the complete workload and acceptance sequence.
 
 On 2026-10-09 the owner changed the acceptance basis to model defensibility:
@@ -17,8 +17,8 @@ This is conditional engineering support for a hypothetical model, not empirical
 validation of a flat Earth or local Sun. The owner subsequently selected P3-A0
 analysis, now complete in the [abstraction inventory](abstraction-inventory.md).
 The [status](status.md) owns the delivered P0-P5, P5-Celestial and selected
-follow-up dispositions and links their source-review authority. P6 recording
-remains unselected.
+follow-up dispositions and links their source-review authority. The owner has
+selected creative P6 film work under the updated plan.
 
 ## Assumptions And Abstraction Boundaries
 
@@ -119,8 +119,8 @@ Admission bounds and observed allocations both remain subject to the unchanged
 combined payload limit. Diagnostic field readbacks are identified separately
 from application-persistent payload, never silently included in a memory claim.
 
-The final film's setup-equality requirement, source-relative camera score,
-unchanged shared shadows and measured-light interpolation belong to
+The final film's new scene recipe, source-relative camera score,
+shared shadows and measured-light interpolation belong to
 [P6](plan.md#p6--reproduce-the-local-sun-full-orbit-film).
 P1-P5 qualification uses the exact state without that presentation interpolation.
 Original visible terrain and the new flat physical ground are separate inputs;
@@ -177,7 +177,7 @@ unculled candidate execution in bounded proof runs before acceptance. The
 plan owns these integrated gates, replacing the deferred pre-recording retrofit.
 This recast changes the development plan, not immutable P2 evidence or
 production code. The [status](status.md) owns the delivered P3-P5 disposition;
-recording remains unselected. The
+the selected creative P6 work has its own recipe. The
 [execution record](p3-execution.md) owns the stable radius-excess representation,
 fixed source-relative amplitude bounds, transport and angular diagnosis, and
 any explicitly revised numerical policy. Physical and source-review gates
@@ -247,7 +247,9 @@ ceilings do not authorize longer jobs or automatic diagnostic escalation.
 The [current plan](plan.md#remaining-work-and-execution-controls) owns these
 execution limits. Earlier P5 and P5-Celestial 6 GiB reserve exceptions ended
 with their selected phases; the default 8 GiB reserve applies, including to
-any later selected P6 work.
+ordinary later work. The owner's new P6-only AFK resource selection is recorded
+in the [plan](plan.md#execution-budget-and-review-milestone); it supersedes these
+defaults for that phase and expires when the P6 work ends.
 These are sampled stop thresholds, not kernel allocation caps or physical GPU
 memory claims. Child Node heaps are limited to 2 GiB. Lightweight derivation and
 review bookkeeping may proceed while the sole heavy job runs; their inputs and

@@ -286,8 +286,29 @@ type LocalSunShellSceneSnapshot = {
 	/** Six ordinary lights with exact same-state facts. */ lights: LocalSunShellSceneLight[];
 };
 
+/** Scene capability shared by ordinary owned frames and persistent-film borrowers. */
+interface LocalSunShellFrameScene {
+	/** Scene consumed by the exact frame's depth and spectral composition. */ readonly scene: THREE.Scene;
+	/** Camera consumed by exact frame bindings; a borrower preserves the persistent owner. */ readonly camera: THREE.PerspectiveCamera;
+	/** Store a complete frame light packet; borrowers defer visible mutation until render. */ setLighting(
+		owners: LocalSunRotationOwners,
+		receiver: ReceiverEnvironmentLightMeasurement,
+		directionToSource: UnitVector3,
+	): void;
+	/** Prepare scene materials while preserving visible persistent state. */ prepare(renderer: THREE.WebGLRenderer): Promise<void>;
+	/** Draw only after the caller has published this frame and applied its camera. */ render(
+		renderer: THREE.WebGLRenderer,
+		view: LocalSunControlViewPass,
+		composer: ShaderRuntimeComposer,
+	): void;
+	/** Release the frame's scene ownership or borrower lease, idempotently. */ dispose(): void;
+}
+
+/** Optional scene construction boundary; persistent scenes return one staged borrower per frame. */
+type LocalSunShellSceneFactory = (owners: LocalSunRotationOwners) => LocalSunShellFrameScene;
+
 /** Frame-owned ordinary scene with exact-state lighting and preserved pixels. */
-interface LocalSunShellSceneContract {
+interface LocalSunShellSceneContract extends LocalSunShellFrameScene {
 	/** Frame-owned scene shared with preparation. */ readonly scene: THREE.Scene;
 	/** Frozen ordinary camera. */ readonly camera: THREE.PerspectiveCamera;
 	/** Apply exact measured light and finite-source directions. */ setLighting(
@@ -749,6 +770,7 @@ type LocalSunRotationCapture = {
 type LocalSunShellPublishedFrame = Readonly<{
 	/** Optional celestial generation owned by this exact frame. */ celestial?: LocalSunShellCelestialFrame;
 	/** Optional ordinary colored-box scene owned by this exact frame. */ scene?: LocalSunShellSceneContract;
+	/** Optional staged borrower over a persistent film scene, released with this frame. */ borrowedScene?: LocalSunShellFrameScene;
 	/** Render the complete ordinary scene or its preserved suspended snapshot. */ renderScene?: () => void;
 	/** Immutable live-frame identity, including placement/time. */ identity: string;
 	/** Complete canonical physical/numerical cache identity; caller owns qualification. */ cacheIdentity: string;
@@ -1436,6 +1458,19 @@ type LocalSunCelestialSelection = Readonly<{
 interface LocalSunFlatStarGeometry {
 	/** Exact live projection contribution. */ createStellarGenerationShaderContribution(request: LocalSunFlatStarObservationRequest): StellarGenerationGeometryShaderContribution;
 }
+/** Owned shader-builder capabilities adapted by the contained celestial bridge. */
+interface LocalSunCelestialBuildCoordinator extends ShaderBuildCoordinator {
+	/** Assembly owner whose contribution collection is adapted on this instance. */ readonly _assemblyPreparer: LocalSunCelestialAssemblyPreparer;
+	/** Runtime owner whose stellar pass factory is adapted on this instance. */ readonly _runtimeInstaller: LocalSunCelestialRuntimeInstaller;
+}
+/** Narrow contribution-collection capability required by the flat celestial adapter. */
+interface LocalSunCelestialAssemblyPreparer {
+	/** Collect current provider contributions before replacing the owned celestial consumer. */ _collectContributions(request: ShaderBuildRequest, context?: ShaderBuildContext): readonly ShaderContribution[];
+}
+/** Narrow stellar-generation factory capability required by the flat celestial adapter. */
+interface LocalSunCelestialRuntimeInstaller {
+	/** Create the owned stellar executor for the exact attachment request, or return null when disabled. */ _createStellarGenerationPass(request: ShaderBuildRequest): CelestialGenerationStellarChild | null;
+}
 /** Narrow bridge removes spherical-only policy declarations from generic pass construction. */
 type LocalSunFlatStarPassConstructor = new (configuration: LocalSunFlatStarPassConfiguration) => LocalSunFlatStarPassOwner;
 /** Shared executor operations and owned uniforms required by the flat adapter. */
@@ -1557,18 +1592,28 @@ type LocalSunCelestialCameraYawProof = Readonly<{
 }>;
 /** Owned camera turn and restoration state, never a production camera. */
 type LocalSunCelestialCameraTurn = Readonly<{
-	/** Original orientation for restoration before lifecycle checks. */ restoreQuaternion: import('three').Quaternion;
+	/** Original orientation for restoration before lifecycle checks. */ restoreQuaternion: THREE.Quaternion;
 	/** Detached facts retained in the capture result. */ proof: LocalSunCelestialCameraYawProof;
 }>;
 /** Identified bundle-only adaptation for a Flat180 still, or the bounded Flat0 scene comparison. */
 type LocalSunFlat180CelestialBundleVariant = Readonly<{
-	/** Bundle-only adaptations; shared source remains read-only. */ plugin: import('rollup').Plugin;
+	/** Bundle-only adaptations; shared source remains read-only. */ plugin: LocalSunBundleTransformPlugin;
 	/** Input/output identities and operation for each adapted module. */ derivations: readonly Readonly<{
 		/** Repository-relative input module. */ path: string;
 		/** Original module text hash. */ inputSha256: string;
 		/** Derived module text hash. */ outputSha256: string;
 		/** Applied contained adaptation. */ operation: string;
 	}>[];
+}>;
+/** Narrow synchronous module-transform capability supplied to the existing bundler. */
+interface LocalSunBundleTransformPlugin {
+	/** Stable diagnostic name identifying the contained adaptation. */ readonly name: string;
+	/** Return a derivative for a recognized module, or null to preserve its source. */ transform(source: string, id: string): LocalSunBundleTransformResult | null;
+}
+/** One recognized module's bundle-only source derivative. */
+type LocalSunBundleTransformResult = Readonly<{
+	/** Complete transformed JavaScript source. */ code: string;
+	/** No separate source map is produced by these authenticated text replacements. */ map: null;
 }>;
 /** Complete bounded browser capture input. */
 type LocalSunCelestialRecipe = Readonly<{
@@ -1681,4 +1726,259 @@ type LocalSunCelestialHumanVisionCase = Readonly<{
 	/** Shared equation's rod contribution. */ rodWeight: number;
 	/** CPU source-linear result. */ cpuRgb: readonly number[];
 	/** GPU source-linear result. */ gpuRgb: readonly number[];
+}>;
+
+/** Three finite east/up/south scene coordinates or meters, as named by each owner. */
+type LocalSunFilmSceneTriple = [number, number, number];
+
+/** Deterministic state of the physical clock and continuous dolly score. */
+type LocalSunFilmClockSample = {
+	/** Presentation time in seconds, from zero through ninety. */ filmSeconds: number;
+	/** Increasing normalized day progress, held at the opening and closing. */ sourceProgress: number;
+	/** Nominal unwrapped flat-source phase, from 180 through 540 degrees. */ sourcePhaseDegrees: number;
+	/** Actual vertical camera field of view, degrees. */ verticalFieldOfViewDegrees: number;
+	/** Camera east/up/south position relative to the observer, meters. */ cameraMeters: LocalSunFilmSceneTriple;
+};
+
+/** Physical Sun-following camera score sample. */
+type LocalSunFilmCameraSample = LocalSunFilmClockSample & {
+	/** Camera look target in east/up/south scene units of one kilometer. */ targetScene: LocalSunFilmSceneTriple;
+	/** Physical Sun elevation above the model horizon, degrees. */ sunElevationDegrees: number;
+	/** Physical Sun bearing eastward from north in [0, 360), degrees. */ sunAzimuthDegrees: number;
+};
+
+/** One actual trajectory sample used to keep the authored skyline below the Sun. */
+type LocalSunFilmSkylineSample = {
+	/** Source bearing eastward from north, degrees. */ azimuthDegrees: number;
+	/** Source elevation above the model horizon, degrees. */ elevationDegrees: number;
+};
+
+/** Constructor settings for the persistent fictional observatory. */
+type LocalSunFilmSceneConfiguration = {
+	/** Positive integer output raster width. */ width: number;
+	/** Positive integer output raster height. */ height: number;
+	/** Reproducible nonnegative integer scene seed. */ seed?: number;
+	/** Actual complete physical source trajectory, used for angular skyline design. */ skylineSamples: readonly LocalSunFilmSkylineSample[];
+};
+
+/** Detached persistent-resource and finite-source lighting facts. */
+type LocalSunFilmSceneDescription = {
+	/** Stable scene construction identity. */ identity: string;
+	/** Recorded deterministic construction seed. */ seed: number;
+	/** Semantic landmark names and their geometric locations; these are never drawn. */ landmarks: readonly LocalSunFilmLandmark[];
+	/** Number of final batched scene meshes. */ meshCount: number;
+	/** Actual CPU vertex/index attribute bytes owned by the meshes. */ geometryBytes: number;
+	/** Conservative admitted persistent payload including render/shadow targets. */ persistentBytes: number;
+	/** Whether the scene owner has released its resources. */ disposed: boolean;
+	/** Camera film time used for the latest rendered state. */ filmSeconds: number | null;
+	/** Current renderer lighting and shared-shadow facts. */ lighting: TheHoursDesertSceneLightingDescription;
+	/** Maximum directional-light approximation angle over every rendered state and the full scene bounds (east/south +/-3 km, height 0..300 m), degrees. */ maximumDirectionErrorDegrees: number | null;
+	/** World-space finite source, in observer-local scene units, for the latest frame. */ sourceScene: LocalSunFilmSceneTriple | null;
+	/** Received same-frame light packet identity, including any declared interpolation. */ receiverIdentity: string | null;
+};
+
+/** Authored landmark location used by the film's geometric and visual proof. */
+type LocalSunFilmLandmark = {
+	/** Semantic internal name, never displayed as text. */ name: string;
+	/** Bearing eastward from model north, degrees. */ azimuthDegrees: number;
+	/** Nominal distance from observer to landmark center, meters. */ radiusMeters: number;
+	/** Highest authored point of the landmark, meters above the model ground. */ topMeters: number;
+};
+
+/** A staged exact-frame light packet; storage does not mutate the persistent scene. */
+type LocalSunFilmPendingLight = {
+	/** Exact source/geometry/color owners borrowed for the frame's lifetime. */ owners: LocalSunRotationOwners;
+	/** Exact direct and measured or explicitly interpolated diffuse receiver packet. */ receiver: ReceiverEnvironmentLightMeasurement;
+	/** Exact physical observer-to-source model direction. */ directionToSource: UnitVector3;
+};
+
+/** Selected cinematic execution stage.
+ * - **"stills"** - Sparse final-raster composition controls without encoding.
+ * - **"motion"** - Short continuous representative excerpt.
+ * - **"preview"** - Reduced-raster full-score recording.
+ * - **"final"** - Complete native delivery recording.
+ */
+type LocalSunFilmStage = 'stills' | 'motion' | 'preview' | 'final';
+
+/** Host-authenticated physical, recording and presentation recipe. */
+type LocalSunFilmRecipe = Readonly<{
+	/** Explicit job purpose. */ stage: LocalSunFilmStage;
+	/** Actual render and encoded raster. */ viewportSize: PixelSize;
+	/** Integer ideal output cadence. */ framesPerSecond: number;
+	/** Complete authored score duration, seconds. */ durationSeconds: number;
+	/** First score time represented by the clip. */ segmentStartSeconds: number;
+	/** Encoded clip duration, seconds. */ segmentDurationSeconds: number;
+	/** Requested native AVC bitrate, bits per second. */ bitrate: number;
+	/** Complete bundled source identity. */ implementationIdentity: string;
+	/** Immutable selected shell layout and physical construction controls. */ base: LocalSunRotationRecipe;
+	/** Production-resolved preceding far-side instant and selected location. */ startObservation: GeometryObservation;
+	/** Pinned deterministic architectural seed. */ seed: number;
+}>;
+
+/** Explicit browser-to-host output capabilities for one new run. */
+interface LocalSunFilmBridge {
+	/** Start the selected owned film session. */ localSunFilm: {run: (recipe: LocalSunFilmRecipe) => Promise<string>};
+	/** Retain one uniquely named JSON artifact or bounded PNG data URL wrapper. */ localSunFilmArtifact(name: string, json: string): Promise<void>;
+	/** Append one ordered bounded MP4 chunk to the host-owned stream. */ localSunFilmVideoChunk(index: number, base64: string): Promise<void>;
+	/** Flush and close the complete MP4 stream. */ localSunFilmVideoFinalize(): Promise<void>;
+	/** Publish bounded job progress for external monitoring. */ localSunFilmProgress(phase: string, message: string, completed?: number, total?: number): Promise<void>;
+}
+
+/** Exact physical and displayed facts for one rendered score state. */
+type LocalSunFilmTraceRow = Readonly<{
+	/** Contiguous encoded slot, or sparse still index. */ slot: number;
+	/** Ideal media timestamp in microseconds. */ timestampMicroseconds: number;
+	/** Authored score time, seconds. */ filmSeconds: number;
+	/** Monotonic normalized full-day source clock. */ sourceProgress: number;
+	/** Nominal unwrapped source phase, degrees. */ sourcePhaseDegrees: number;
+	/** Exact production-resolved observation. */ observation: GeometryObservation;
+	/** Distinct complete rendered-state identity. */ frameIdentity: string;
+	/** Shared canonical atmospheric cache identity. */ cacheIdentity: string;
+	/** Same GPU cache object survived since first preparation. */ cacheReused: boolean;
+	/** Actual camera coordinates in observer-local scene metres. */ cameraMeters: readonly number[];
+	/** Actual camera unit direction in scene coordinates. */ cameraDirection: readonly number[];
+	/** Actual vertical lens angle, degrees. */ verticalFieldOfViewDegrees: number;
+	/** Actual finite-source center in model metres. */ sourcePositionMeters: readonly number[];
+	/** Actual Sun bearing at the nominal observer, degrees. */ sunAzimuthDegrees: number;
+	/** Actual Sun elevation at the nominal observer, degrees. */ sunElevationDegrees: number;
+	/** Finite source-to-camera distance, metres. */ sourceDistanceMeters: number;
+	/** Fixed physical emitter radius, metres. */ sourceRadiusMeters: number;
+	/** Actual projected producer radius, pixels. */ sunRadiusPixels: number;
+	/** Independent perspective radius calculation, pixels. */ expectedSunRadiusPixels: number;
+	/** Actual bound Sun center, bottom-left pixel coordinates. */ sunCenterPixels: readonly number[];
+	/** Unsmooothed exact-state receiver identity. */ exactReceiverIdentity: string;
+	/** Complete combined exact-direct/interpolated-environment identity. */ presentationReceiverIdentity: string;
+	/** Exact direct-normal spectral packet identity. */ directNormalIdentity: string;
+	/** Measured/interpolated diffuse spectral packet identity. */ diffuseIdentity: string;
+	/** Physical sky adaptation used by stellar presentation. */ adaptationLuminanceCdM2: number;
+	/** Preparation wall time including exact receiver readback. */ preparedMilliseconds: number;
+	/** Actual GL error after the presented draw. */ glError: number;
+}>;
+
+/** Complete derivative identities for the contained shader-only film adapter. */
+type LocalSunFilmBundleVariant = Readonly<{
+	/** Rollup transform retaining all other source text. */ plugin: LocalSunFlat180CelestialBundleVariant['plugin'];
+	/** Parent and derivative source hashes with exact operations. */ derivations: LocalSunFlat180CelestialBundleVariant['derivations'];
+}>;
+
+/** Actual coverage-consumer support measured around the projected Sun. */
+type LocalSunFilmDiscProof = Readonly<{
+	/** Producer projected radius in final-raster pixels. */ radiusPixels: number;
+	/** Bound projected center in bottom-left pixel coordinates. */ centerPixels: readonly number[];
+	/** Pixels with at least one percent coverage. */ coveredPixels: number;
+	/** Sum of fractional coverage at actual raster pixel centers. */ areaPixels: number;
+	/** Equivalent circular diameter derived from measured coverage area. */ diameterFromAreaPixels: number;
+	/** Bounding width of pixels above the coverage threshold. */ occupiedWidthPixels: number;
+	/** Bounding height of pixels above the coverage threshold. */ occupiedHeightPixels: number;
+	/** Covered pixels with a real scene-hit mask. */ occludedPixels: number;
+	/** Largest measured coverage fraction. */ maximumCoverage: number;
+}>;
+
+/** Sparse lossless frame and its independently measured disc support. */
+type LocalSunFilmMilestone = Readonly<{
+	/** Unique PNG artifact name. */ name: string;
+	/** Authored score time in seconds. */ filmSeconds: number;
+	/** Actual same-frame GPU consumer proof. */ disc: LocalSunFilmDiscProof;
+	/** Separate unsmoothed exact-state physical receiver measurement. */ exactReceiver: ReceiverEnvironmentLightMeasurement;
+	/** Measured-endpoint interpolation used only for the film environment. */ presentationEnvironment: ReceiverEnvironmentSample;
+}>;
+
+/** Validated resource counters read from one retired celestial child. */
+type LocalSunFilmChildRetirement = Readonly<{
+	/** Child's lifecycle status, checked for disposal. */ status: string;
+	/** Total targets allocated by this child. */ createdTargetCount: number;
+	/** Total targets disposed by this child. */ disposedTargetCount: number;
+	/** Number of failed generations, required to remain zero. */ failedGenerationCount: number;
+}>;
+
+/** Bounded view of an actual retired joint generation diagnostic. */
+type LocalSunFilmGenerationRetirement = Readonly<{
+	/** Coordinator lifecycle status. */ status: string;
+	/** Finite-Sun resource counters. */ sun: LocalSunFilmChildRetirement;
+	/** Optional stellar resource counters. */ stellar: LocalSunFilmChildRetirement | null;
+}>;
+
+/** CPU-frozen start of the exact San Jose film source clock. */
+type LocalSunFilmControls = Readonly<{
+	/** Observation immediately before the selected date's closest approach. */ startObservation: GeometryObservation;
+	/** Ordinary resolved physical controls at that observation. */ state: LocalSunFrozenPlacement;
+	/** Resolver inputs and exact resulting interval. */ derivation: Readonly<{
+		/** Published-minute solstice reference. */ dateBasis: string;
+		/** Following Flat180 resolver output, before moving back one day. */ resolvedFollowingBoundary: string;
+		/** Inclusive start instant. */ startInstant: string;
+		/** Complete physical circuit endpoint. */ endInstant: string;
+		/** Time derivation, including seasonal drift policy. */ operation: string;
+	}>;
+}>;
+
+/** Compact CPU trace sampled independently of GPU publication. */
+type LocalSunFilmGeometryRow = Readonly<{
+	/** Render slot, including an additional exact endpoint control. */ slot: number;
+	/** Film time in seconds. */ filmSeconds: number;
+	/** Resolved observation instant. */ instant: string;
+	/** Director's unwrapped nominal phase. */ sourcePhaseDegrees: number;
+	/** Continuous observer bearing, degrees. */ unwrappedBearingDegrees: number;
+	/** Actual source center to moving camera distance, metres. */ distanceMeters: number;
+	/** Physical source radius, metres. */ radiusMeters: number;
+	/** Actual vertical camera lens. */ verticalFieldOfViewDegrees: number;
+	/** On-axis geometric diameter estimate at the final raster. */ diameterPixels: number;
+}>;
+
+/** Decoded-frame measurements retained without storing complete rasters. */
+type LocalSunFilmDecodedRow = Readonly<{
+	/** Ordered decoded presentation slot. */ frame: number;
+	/** Sampled mean RGB luma, byte scale. */ meanLuma: number;
+	/** Sampled absolute difference from preceding decoded frame. */ adjacentMeanAbsolute: number | null;
+	/** SHA-256 of complete native decoded RGB bytes. */ sha256: string;
+	/** Measured bright core horizontal diameter in the expected Sun region. */ solarCoreDiameterPixels: number;
+}>;
+
+/** Browser result subset required by independent media qualification. */
+type LocalSunFilmHostResult = Readonly<{
+	/** Exact result contract identity. */ schema: string;
+	/** Complete encoded frame count. */ frames: number;
+	/** Maximum observed GL error code. */ glError: number;
+	/** Canonical GPU cache count before disposal. */ cacheCount: number;
+	/** Resource disposal receipts. */ cleanup: Readonly<{
+		/** Remaining atmospheric resources. */ resources: number;
+		/** Disposal failures. */ errors: readonly string[];
+		/** Persistent scene owner completed disposal. */ persistentSceneDisposed: boolean;
+	}>;
+}>;
+
+/** Capture provenance consumed by media qualification. */
+type LocalSunFilmHostInputs = Readonly<{
+	/** Complete executable and asset identities. */ sources: readonly LocalSunEnvironmentArtifactIdentity[];
+	/** Exact launch capability owner retained by the capture. */ resourceOwnership: LocalSunHeavyExecutionOwnership;
+}>;
+
+/** Exact trace artifact at the host parsing boundary. */
+type LocalSunFilmHostTrace = Readonly<{
+	/** Trace schema discriminator. */ schema: string;
+	/** Native ordered frames and optional separate endpoint. */ rows: LocalSunFilmTraceRow[];
+}>;
+
+/** Resource result subset needed for a film handoff. */
+type LocalSunFilmGuardResult = Readonly<{
+	/** Wrapper result discriminator. */ schema: string;
+	/** Child exit status. */ exitCode: number;
+	/** Failure reason, when present. */ failure: string | null;
+	/** All sampled thresholds passed. */ resourceQualified: boolean;
+	/** Aggregate private-memory sampled peak. */ peakPrivateBytes: number;
+	/** Aggregate resident-memory sampled peak. */ peakWorkingSetBytes: number;
+	/** Lowest sampled machine free bytes. */ minimumFreeBytes: number;
+}>;
+
+/** Explicit guarded launch inputs consumed by independent qualification. */
+type LocalSunFilmGuardInputs = Readonly<{
+	/** Original wrapper command tokens. */ command: readonly string[];
+	/** Child launcher identity and arguments. */ launcher: Readonly<{
+		/** Checked experiment script basename. */ script: string;
+		/** Exact script arguments. */ arguments: readonly string[];
+	}>;
+	/** Actual enforced thresholds. */ limits: Readonly<{
+		/** Aggregate private/resident ceiling. */ maximumBytes: number;
+		/** Machine free-memory reserve. */ reserveBytes: number;
+		/** Child wall-time stop threshold. */ maximumMilliseconds: number;
+	}>;
 }>;

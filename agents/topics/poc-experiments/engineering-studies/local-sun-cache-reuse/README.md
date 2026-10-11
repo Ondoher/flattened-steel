@@ -5,16 +5,19 @@ multiple-scattering cache, with integrated empty-band omission, qualified
 horizontal reuse, in-app rebuilding and coherent lighting.
 
 Activated by the owner through `start-experiment` on 2026-10-08. P0–P5,
-P5-Celestial and selected follow-ups are delivered. No heavy job remains.
-Execution stops before the identical-scene Union Glacier
-[December 14, 2024 recording](plan.md#p6--reproduce-the-local-sun-full-orbit-film).
-P6/P7 and production promotion remain unselected; the experiment is not ended
-or formally suspended.
+P5-Celestial and selected follow-ups are delivered. The owner selected the
+[creative full-circuit film](plan.md#p6--reproduce-the-local-sun-full-orbit-film):
+90 seconds at San Jose on the winter-solstice basis, one continuous shot,
+no overlays, dynamic camera movement and clearly visible disc-size change.
+The [film execution record](p6-execution.md) owns the recorded native video,
+qualification, decisions and remaining owner creative acceptance.
+P7 and production promotion remain
+unselected; the experiment is not ended or formally suspended.
 
 Start with the [successor handoff](handoff.md) for current source, evidence,
 defaults, operational constraints and the next execution boundary. The
 [status](status.md) owns phase disposition; the [plan](plan.md) owns execution
-requirements. The latest comparison is the
+requirements. The latest still comparison is the
 [spherical San Jose sunset](spherical-sunset-capture.md), run 00733.
 
 The [abstraction inventory](abstraction-inventory.md) isolates assumptions and
@@ -30,11 +33,12 @@ chronology belongs to [shell execution](p3-execution.md), not current readiness.
 - [Abstraction inventory](abstraction-inventory.md): completed P3-A0 mathematical
   analysis, source identities, transfer defenses, limitations and focused checks.
 - [Plan](plan.md): P0-P7, controls, gates, early reviewable images and the final
-  identical-scene Union Glacier film.
+  creative full-circuit film.
 - [Status](status.md): current phase, evidence, blockers and next action.
 - [Successor handoff](handoff.md): focused reload, source entrypoints, current
   choices, reproduction and the remaining film sequence.
 - [Execution summary](execution-summary.md): P0-P1 outcomes, decisions and limitations.
+- [P6 film execution](p6-execution.md): video delivery, decisions, evidence and review authority.
 - [P2 execution](p2-execution.md): rotation results, decisions and completion gates.
 - [Method transfer and verification](reference-method.md): current evidence policy,
   informative cancellation/ozone context and preserved historical reference derivations.

@@ -1,9 +1,11 @@
 # Local-Sun Cache Reuse Experiment Status
 
 Current disposition, 2026-10-11: P0-P5, P5-Celestial and selected follow-ups
-are delivered. No heavy job remains. Stop before P6 recording: recording,
+are delivered. The selected continuous 90-second San Jose winter-solstice film
+is recorded and passes full decoded-media qualification. The
+[film execution record](p6-execution.md) owns delivery links and the required
+source-review receipt. Owner creative acceptance remains pending.
 P7 lifecycle closeout, production promotion and publication remain unselected.
-This is an execution boundary, not a completed or suspended experiment.
 The [successor handoff](handoff.md) owns restart guidance and source entrypoints.
 
 ## Phase Disposition
@@ -17,7 +19,7 @@ The [successor handoff](handoff.md) owns restart guidance and source entrypoints
 | P3-D/E | Delivered. [Movement](p3-movement.md) establishes admitted horizontal reuse; [disposition](p3-disposition.md) advances the candidate. |
 | P4-P5 | Delivered. [Application](p4-application.md) owns lifecycle/publication; [P5 qualification](p5-qualification.md) owns ten passing sky/colored-scene pairs, 1,200 matched states and combined source-review authority. |
 | P5-Celestial and follow-ups | Delivered. [Celestial delivery](p5-celestial.md) owns initial images/short preview; current presentation and corrections are linked below. |
-| P6 | Unexecuted and unselected. [Film plan](plan.md#p6--reproduce-the-local-sun-full-orbit-film) owns scene equality, trajectory/composition checks, previews, recording and media verification. |
+| P6 | Film recorded and media qualified; owner creative acceptance pending. [Film plan](plan.md#p6--reproduce-the-local-sun-full-orbit-film) owns the frozen parameters and acceptance; [execution](p6-execution.md) owns results, decisions and the implementation-review gate. |
 | P7 | Unselected. Owner disposition and end-experiment handoff follow the film. |
 
 Linked source-review receipts are CLEAN for their recorded units. They are not
@@ -50,13 +52,13 @@ selections remain unchanged; production adoption remains unselected.
 | San Jose spherical/distant sunset, ordinary production scene, same central FOV/current presentation | [Spherical sunset capture](spherical-sunset-capture.md), latest image 00733 |
 | Earlier local Union Glacier/San Jose ground and object comparisons | [Ground-scene captures](celestial-ground-scene.md), 00714/00716/00718 |
 
-Central-view FOV and calibrated radius are selectable still-image modes. They
-do not replace the film's original camera choreography or select a new global
-Sun-size default. Current celestial/globe captures and the future film use
-1024 by 768; older proof reproductions retain their recorded raster.
-That film remains Union Glacier, December 14, 2024, clockwise Flat180 through Flat540,
-with the identical original observatory otherwise. Six-box review images
-are not the observatory reproduction.
+Central-view FOV and calibrated radius remain selectable still-image modes.
+The newly selected [P6 recipe](plan.md#p6--reproduce-the-local-sun-full-orbit-film)
+owns its fixed-radius source, narrow circuit lens, new camera score and
+San Jose location. It supersedes the identical Union Glacier replay requirement.
+Current still controls use 1024 by 768; the film uses 1920 by 1080 to retain
+disc detail with a wider cinematic composition. Older proof reproductions
+retain their recorded raster. Existing six-box images do not qualify the new scene.
 
 ## Evidence Limits And Deferred Work
 
@@ -78,15 +80,17 @@ informational and select no implementation or additional capture.
 
 ## Next Action
 
-On owner selection of P6, follow the [handoff's film sequence](handoff.md#next-execution-boundary)
-and full plan. Existing P5 trajectory support is useful input; it does not
-replace scene equality, current celestial composition or decoded-film checks.
-No new render or video was started for this status update.
+Inspect the delivered [P6 film](p6-execution.md#delivery) for creative acceptance.
+The film record links its complete San Jose trajectory proof, native media
+qualification and mapped source-review authority. No capture or qualification
+job remains. Preserve the sealed runs; any revision creates new evidence and
+requires an appropriate fresh review unit. P7 remains unselected.
 
 Use JavaScript; Python may support suitable tasks. No native-helper exception
-exists. Default controls are an 8 GiB free-memory reserve, 8 GiB owned-process
-ceiling, ten-minute jobs and serialized heavy execution. Earlier 6 GiB exceptions
-ended with their selected phases and do not extend to P6. Retain compact
+exists. The [P6 resource selection](plan.md#execution-budget-and-review-milestone)
+uses the owner's current AFK authorization. Default controls remain an 8 GiB
+free-memory reserve, 8 GiB owned-process ceiling and ten-minute jobs outside
+that scoped selection. Earlier 6 GiB exceptions remain expired. Retain compact
 reproduction data and direct PNG/native-video artifacts; remove disposable
 profiles before sealing. Preserve historical runs and retained native-helper
 source without executing native helpers.
