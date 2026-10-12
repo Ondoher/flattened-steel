@@ -12,13 +12,16 @@ The owner selected this production handoff on 2026-10-11. The
 [port plan](production-algorithm32/caches/local-sun-cache-promotion-plan.md)
 owns production responsibilities, scope, evidence and execution order; the
 [status](production-algorithm32/caches/local-sun-cache-promotion-status.md)
-owns current disposition and the next P0 contract/control unit.
+owns current disposition and the P0 contract/control receipt. The
+[P0 contract](production-algorithm32/caches/local-sun-cache-p0-contract.md)
+owns parameter applicability and the first P1 comparison boundary.
 
 The local-Sun experiment remains ended, with accepted evidence preserved by its
 [closeout](poc-experiments/engineering-studies/local-sun-cache-reuse/p7-closeout.md).
-This setup changes documentation only. Production implementation, profile/default
-selection, deployment and publication have not changed. P7 closeout and
-production planning retain their separate evidence and review scopes.
+P0 prepares production-owned independent fixtures and offline proof tools.
+Numerical runtime implementation, profile/default selection, deployment and
+publication have not changed. P7 closeout and production controls retain their
+separate evidence and review scopes.
 
 ## Minimal Reload Sources
 
@@ -27,8 +30,9 @@ production planning retain their separate evidence and review scopes.
 3. [Local-Sun port status](production-algorithm32/caches/local-sun-cache-promotion-status.md)
 4. [Local-Sun port plan](production-algorithm32/caches/local-sun-cache-promotion-plan.md)
 5. [Production architecture boundaries](production-algorithm32/architecture-contracts/architecture-boundaries.md)
+6. [Local-Sun P0 contracts and controls](production-algorithm32/caches/local-sun-cache-p0-contract.md)
 
-Before implementation, load the focused contracts and evidence selected by P0,
-capture its implementation baseline and confirm production reviewer readiness.
+Before P1 implementation, validate the matching P0 review receipt, load its
+selected contracts/evidence, capture a new baseline and confirm reviewer readiness.
 Standards follow destination folders; experiment mappings do not govern production.
 Existing receipts retain their original frozen scopes.

@@ -5,9 +5,10 @@
 Selected on 2026-10-11: return to `production-algorithm32` and prepare the next
 work to port the accepted local-Sun cache experiment. This is a production-owned
 adaptation plan. [Promotion status](local-sun-cache-promotion-status.md) owns
-phase disposition and the next execution unit. This setup prepares the work;
-production implementation, fixtures, defaults and deployed selections have not
-changed.
+phase disposition and the next execution unit. The
+[P0 contract/control unit](local-sun-cache-p0-contract.md) now prepares implementable
+contracts and production-owned independent controls. Numerical runtime
+implementation, defaults and deployed selections have not changed.
 
 The intended result is a production flat/local configuration that constructs the
 accepted compact source-centered cache, reuses it across admitted horizontal
@@ -26,7 +27,8 @@ does not reopen the experiment or grant empirical flat/local accuracy claims.
 
 ## Selected Scope
 
-Port the accepted numerical behavior through production owners:
+Port the accepted compact-cache and reuse behavior through production owners,
+using the shared production parameters selected below wherever applicable:
 
 - Euclidean-radius compact positions, stable radius-excess calculations, positive
   cross-row stencils, complete-support admission and omission of proven empty bands.
@@ -34,8 +36,10 @@ Port the accepted numerical behavior through production owners:
   source-axis directional limit; stored physical scattering density stays unmodified.
 - Source-centered bounds for the separate 2,048 source-amplitude bands, canonical
   construction coordinates and compatible horizontal reuse.
-- The selected incoming quadrature, analytic exponential columns, positive
-  optical-depth interval weights and construction/view numerical policies.
+- Applicable distant-cache incoming/outgoing and path controls, with explicitly
+  justified local source/geometry policies for analytic exponential columns and
+  positive optical-depth interval weights. P0 owns the applicability mapping and
+  comparison with the frozen experimental numerical controls.
 - CPU reference, GPU construction and runtime sampling, followed by staged
   cache/placement/shader/receiver publication and ordinary Flat32 integration.
 - Finite-Sun and stellar consumers needed to preserve the experiment's accepted
@@ -97,18 +101,87 @@ full-slab stellar attenuation. P4's selected shared filters are
 measured receiver state. These are a distinct consumer milestone, not part of
 proving compact atmospheric storage.
 
+## Experiment-Selected Cache Shape
+
+The accepted experiment dictates the local cache shape. Port its source-centered
+v9 Euclidean-radius compact topology, ragged altitude rows, cross-row support,
+physical band identities and admitted/omitted allocation rules from the
+[P3 contract](../../poc-experiments/engineering-studies/local-sun-cache-reuse/p3-contract.md)
+and [layout qualification](../../poc-experiments/engineering-studies/local-sun-cache-reuse/p3-layout-qualification.md).
+The frozen fidelity configuration has 1,049 positions, six omitted bands and
+55 admitted bands. P0 formalizes this selected shape; it does not reopen layout
+selection. Shape-dependent counts for other admitted configurations need their
+own explicit derivation and comparison under the same selected topology rules.
+
+The distant cache's applicable shared parameters operate within that shape.
+Its spherical Native48/solar-zenith position layout does not replace the local
+compact domain. Production interfaces and CPU/GPU packing remain owned by the
+existing production features and must preserve the selected logical shape,
+physical queries, field meanings and support behavior.
+
+## Shared Production Parameters
+
+Owner decision, 2026-10-12: the local cache must use the same parameters as the
+distant cache wherever they apply. The shared
+[execution profile](../execution-profiles/execution-profile-contract.md) remains
+the authority for common configuration, defaults and supported overrides.
+Consume those accepted values through existing production owners; do not create
+an independently tuned local copy of a shared parameter.
+
+P0 must pin the actual selected distant-cache configuration and its overrides,
+using the [current release](distant-sun-strobing-release.md) and executable
+profile/domain owners. Bare Native-15 builder defaults alone do not describe
+every deployed selection. Map each applicable parameter to the same meaning,
+units, value, default and supported override in the local configuration:
+
+- spectral basis and sample semantics, compatible source-spectrum inputs,
+  atmosphere coefficients, density profiles and phase parameters;
+- ozone and atmospheric ground selections where the local capability supports
+  them, preserving the existing explicit support/rejection boundary;
+- scattering maximum and supported orders, spectral precision, and applicable
+  incoming/outgoing direction, reconstruction and source/view/cache path controls;
+- common resource-admission controls where their ownership and measured quantity
+  agree, with local allocation and replacement-overlap costs measured separately.
+
+Finite-source position/height/radius/power and distance policy, flat geometry,
+source-centered coverage, compact spatial topology, source-amplitude bands and
+source-specific packing retain their local owners. Do not equate finite-source
+power with distant irradiance, or spherical/solar-zenith addresses with compact
+local positions. Within the experiment-selected shape, a distinct value or policy
+for a genuinely shared parameter needs a documented source/geometry applicability
+reason; an experimental setting or a separate cache implementation alone is not
+that reason. An unsupported shared selection
+must be reported explicitly rather than silently changed to a local default.
+
+The P0 parameter inventory must identify shared values and every local-only
+difference, with its executable owner, applicability reason and independent
+comparison requirements. This decision selects parameter alignment for the port;
+it changes no runtime default, deployment or sealed experiment artifact.
+
+The [P0 applicability inventory](local-sun-cache-p0-contract.md#parameter-applicability)
+records that flat horizon/cylinder geometry and optically thick exponential
+columns justify retaining the selected polar40/azimuth48 and column48-tail64
+construction/column15 view policies. A missing independent Sun-angle position
+axis does not remove outgoing angular dependence or per-tap source frames.
+These are explicit geometry-dependent policies; F68/15/Q30 replacement needs
+separate qualification. Source/geometry coupling redesign remains deferred.
+
 ## Evidence, Profile And Resource Decisions
 
-The initial fidelity target is the accepted profile: source height 4,828,032 m,
+The initial independent fidelity control is the accepted experimental profile:
+source height 4,828,032 m,
 source-centered cylinder radius 33,378,000 m, altitude 0-100,000 m, v9 compact
 layout with 1,049 positions, six omitted and 55 admitted geometric bands,
 Native15/W27/N4, scalar R32F, incoming partitioned polar40 / midpoint azimuth48
 (offset 0.5), column48-tail64
 construction and column15 runtime. Black atmospheric ground and disabled ozone
-are part of that comparison configuration, not permission to change unrelated
-production profiles.
+are part of that comparison configuration. Its frozen numerical values remain
+unchanged evidence; they do not select divergent local production defaults where
+the shared production parameters apply. P0 must identify and qualify any resulting
+production/control difference before extending an experimental comparison claim.
 
-P0 must resolve production-profile differences explicitly, including supported
+P0 must apply the shared-parameter decision and resolve production/control
+differences explicitly, including supported
 orders N1/N2/N4, configurable source heights, spectral inputs, medium families,
 source radius/power and coverage. A change of height, medium, ground, emission,
 spectral/numerical policy, coverage or implementation identity requires compatible
@@ -154,8 +227,21 @@ timing limit. Offline film timing establishes no interactive performance target.
 
 First execution unit; no numerical port or application default change yet.
 
+Deliverables and predeclared comparisons are owned by the
+[P0 contract](local-sun-cache-p0-contract.md); completion evidence is owned by
+[status](local-sun-cache-promotion-status.md). The first P1 capability is topology,
+admission and amplitude bounds/partition; held amplitudes and field outputs retain
+their separate numerical evidence gates.
+
 - Pin the production baseline and accepted experiment artifacts; preserve the
   already-reviewed P7 closeout edits as separate existing work.
+- Formalize the experiment-selected compact cache shape and its admission,
+  addressing and shape-dependent counts through production contracts; preserve
+  that shape while mapping applicable shared distant-cache parameters.
+- Pin the selected distant-cache parameter configuration and map shared values,
+  defaults and overrides into the local profile. Document every local-only
+  parameter or policy by source/geometry applicability and the comparison it
+  requires; retain the frozen experiment profile as a distinct fidelity control.
 - Inventory every accepted algorithm and required consumer correction against
   its production owner and independent output evidence. Resolve missing N1/N2,
   profile-family or celestial coverage before claiming those capabilities qualified.

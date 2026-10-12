@@ -26,6 +26,17 @@ capabilities to derive its deterministic reuse key. Equality may reuse only
 that controller's active cache; no copied owner snapshot or public
 construction-identity packet participates.
 
+The selected compact local successor has an explicit prospective exception for
+admitted horizontal rigid transforms. Its source-owned canonical construction
+identity remains immutable and excludes only qualified horizontal live placement;
+exact observation/placement and complete-support admission belong to a separately
+staged frame identity. Height and every intrinsic source/medium/numerical change
+still require compatible reconstruction. The
+[P0 contract](local-sun-cache-p0-contract.md#identity-preparation-and-publication)
+owns preparation, atomic publication, stale-result rejection and cache leases.
+P3 implements this exception; the current controller's immediate previous-cache
+disposal does not already satisfy it. The geometry continues to own all transforms.
+
 
 ## CPU And GPU Completion Contract
 

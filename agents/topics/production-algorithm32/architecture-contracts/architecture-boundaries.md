@@ -133,8 +133,14 @@ accepts numerical Algorithm32 behavior.
   readonly placement and installs it directly on the
   `GeometryConfigurableLightSource`. Applications, sources, caches, and renderer
   adapters must not independently project between coordinate systems. A
-  time/location change creates replacement geometry, source, facade, scene,
-  and cache objects. In-place time/location animation is deferred under
+  time/location change on the original local path creates replacement geometry,
+  source, facade, scene, and cache objects. The prospective qualified compact
+  local successor retains immutable canonical construction and stages geometry-owned
+  exact live placement with the complete frame, as specified by the
+  [P0 local contract](../caches/local-sun-cache-p0-contract.md#identity-preparation-and-publication).
+  This is an accepted implementation contract for P3, not current runtime behavior;
+  it does not permit private configuration mutation or implicit cross-pairing support.
+  Existing in-place time/location animation is deferred under
   [Production MVP requirement M1](../../production-app/mvp/requirements.md#m1--compatible-time-and-location-animation)
   and requires a separately accepted cache transform.
 - Atmosphere behavior is externally implementable through the global

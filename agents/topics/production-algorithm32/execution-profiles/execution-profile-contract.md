@@ -143,6 +143,20 @@ constructs its own complete profile. The facade accepts the profile as one
 selection rather than asking callers to reproduce its options. This prevents
 partial benchmark configuration from falling through to application defaults.
 
+## Prospective Compact Local Policy
+
+The [local P0 contract](../caches/local-sun-cache-p0-contract.md#complete-candidate-profile-and-support)
+selects one complete local candidate using applicable shared Native15 physical,
+spectral, order and W27 selections, with explicitly justified slab/source policies.
+P1 extends the numerical declarations/ingress with tagged analytic versus sampled
+source transmittance and local-column versus spherical transport. A count is
+mandatory and positive only for a policy that consumes it; reject conflicting
+or inapplicable overrides rather than silently ignoring them. Existing profiles
+retain their current shape and behavior until that extension is implemented.
+This does not add an executable builder, public export or qualified custom profile
+in P0. The complete local candidate's support/rejection and evidence boundaries
+remain owned by the linked contract.
+
 
 ## Step Boundary
 
