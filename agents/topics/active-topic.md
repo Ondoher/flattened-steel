@@ -1,42 +1,34 @@
 # Active Topic
 
-Current active topic: local-sun-cache-reuse.
-Focus: Euclidean source-centered local-Sun multiple-scattering cache, integrated
-empty-band omission, qualified horizontal reuse and coherent in-app rebuilding.
+Current active topic: production-algorithm32.
+Focus: prepare the production port of the accepted local-Sun compact cache,
+admitted horizontal reuse and coherent ordinary-application consumers.
 
-Canonical entry: [Local-Sun Cache Reuse Experiment](poc-experiments/engineering-studies/local-sun-cache-reuse/README.md).
+Canonical entry: [Production Algorithm32](production-algorithm32/README.md).
 
 ## Immediate Focus
 
-P0-P5, P5-Celestial and selected celestial/camera follow-ups are delivered.
-The owner liked the delivered P6 v4 film and selected a revision that keeps
-ground shadows visible as the Sun traverses the sky. The
-[shadow revision](poc-experiments/engineering-studies/local-sun-cache-reuse/p6-shadow-revision.md)
-owns delivery, decisions, measurements and completion authority. The v5 native
-4K film and compact review copy are media-qualified and delivered for owner
-creative acceptance. Implementation completion follows the revision's exact
-conditional source-review receipt. The
-[v4 execution record](poc-experiments/engineering-studies/local-sun-cache-reuse/p6-execution.md)
-preserves its delivered video and qualification. P7, production promotion and
-publication remain unselected.
+The owner selected this production handoff on 2026-10-11. The
+[port plan](production-algorithm32/caches/local-sun-cache-promotion-plan.md)
+owns production responsibilities, scope, evidence and execution order; the
+[status](production-algorithm32/caches/local-sun-cache-promotion-status.md)
+owns current disposition and the next P0 contract/control unit.
 
-The [handoff](poc-experiments/engineering-studies/local-sun-cache-reuse/handoff.md)
-routes a successor to source, evidence, defaults and constraints.
-The [status](poc-experiments/engineering-studies/local-sun-cache-reuse/status.md)
-owns phase disposition; the plan owns execution requirements. Subsequent
-close-up, iPhone FOV and preset discussions were informational only.
+The local-Sun experiment remains ended, with accepted evidence preserved by its
+[closeout](poc-experiments/engineering-studies/local-sun-cache-reuse/p7-closeout.md).
+This setup changes documentation only. Production implementation, profile/default
+selection, deployment and publication have not changed. P7 closeout and
+production planning retain their separate evidence and review scopes.
 
 ## Minimal Reload Sources
 
 1. [Repository workflow instructions](../../AGENTS.md)
-2. [Experiment entry](poc-experiments/engineering-studies/local-sun-cache-reuse/README.md)
-3. [Experiment-local instructions](../../experiments/local-sun-cache-reuse/AGENTS.md)
-4. [Successor handoff](poc-experiments/engineering-studies/local-sun-cache-reuse/handoff.md)
-5. [Current status](poc-experiments/engineering-studies/local-sun-cache-reuse/status.md)
-6. [Execution plan](poc-experiments/engineering-studies/local-sun-cache-reuse/plan.md)
-7. [P6 shadow revision](poc-experiments/engineering-studies/local-sun-cache-reuse/p6-shadow-revision.md)
+2. [Production entry](production-algorithm32/README.md)
+3. [Local-Sun port status](production-algorithm32/caches/local-sun-cache-promotion-status.md)
+4. [Local-Sun port plan](production-algorithm32/caches/local-sun-cache-promotion-plan.md)
+5. [Production architecture boundaries](production-algorithm32/architecture-contracts/architecture-boundaries.md)
 
-Before implementation, also load the design required by experiment-local
-instructions and focused owners named by the handoff. Refresh reviewer context
-through review-standards before a new implementation unit; existing receipts
-retain their original frozen scope.
+Before implementation, load the focused contracts and evidence selected by P0,
+capture its implementation baseline and confirm production reviewer readiness.
+Standards follow destination folders; experiment mappings do not govern production.
+Existing receipts retain their original frozen scopes.

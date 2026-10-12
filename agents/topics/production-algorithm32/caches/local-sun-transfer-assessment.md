@@ -12,10 +12,13 @@ radial-domain selection and controller identity prevent unrestricted reuse.
 Full-cache numerical, GPU, timing and appearance qualification remain future work.
 Source-review disposition is recorded separately under Assessment Verification.
 The owner activated the contained [Local-Sun Cache Reuse experiment](../../poc-experiments/engineering-studies/local-sun-cache-reuse/README.md)
-through `start-experiment` on 2026-10-08. Its
-[plan](../../poc-experiments/engineering-studies/local-sun-cache-reuse/plan.md)
-owns the development sequence and acceptance gates; its status owns execution.
-This assessment remains the owner of the initial findings and immutable probe.
+on 2026-10-08; it ended with an accepted contained outcome on 2026-10-11.
+Its [closeout](../../poc-experiments/engineering-studies/local-sun-cache-reuse/p7-closeout.md)
+owns the subsequent findings and limitations. The owner then selected
+[production-port preparation](local-sun-cache-promotion-plan.md), whose
+[status](local-sun-cache-promotion-status.md) owns next work. This assessment
+remains the owner of the initial findings and immutable probe; its early
+unqualified comparisons do not override later evidence or imply production adoption.
 
 ## Assessment Questions
 
@@ -213,10 +216,12 @@ separate from numerical/GPU adoption evidence and does not authorize a
 production implementation or default switch. Later documentation revisions
 require their own applicable review evidence.
 
-## Recommended Next Work
+## Historical Recommendations
 
-The [experiment plan](local-sun-cache-reuse-experiment-plan.md) owns development
-phases for the following recommendations. No experiment has been activated.
+The following recommendations informed the now-ended
+[experiment plan](local-sun-cache-reuse-experiment-plan.md). Its accepted results
+are preserved by the closeout above. Current work follows the separate
+[production port plan](local-sun-cache-promotion-plan.md).
 
 1. Pin the current flat/local profile, actual source trajectory, domain sizes,
    shell policy and hardware resource/timing control. Determine which real

@@ -2,6 +2,11 @@
 
 ## Objective And Acceptance
 
+This experiment ended on 2026-10-11 with an accepted contained outcome. The
+[P7 closeout](p7-closeout.md) owns final findings and the lifecycle handoff.
+The design remains a record of its model and reproduction boundaries; reopening
+requires a new owner selection.
+
 Develop and qualify a Euclidean source-centered shell layout for the local-Sun
 multiple-scattering cache over a uniform flat atmosphere and ground. Omit
 nonintersecting inner bands from storage and construction from the first
@@ -19,9 +24,9 @@ analysis, now complete in the [abstraction inventory](abstraction-inventory.md).
 The [status](status.md) owns the delivered P0-P5, P5-Celestial and selected
 follow-up dispositions and links their source-review authority. The owner has
 selected the [P6 ground-shadow revision](p6-shadow-revision.md) after the delivered
-v4 film. Its native 4K delivery is media-qualified for owner creative acceptance;
-the current plan owns its frozen composition and the revision record owns exact
-conditional source-review completion authority.
+v4 film. Its native 4K delivery is media-qualified and accepted by the owner;
+P6 is complete. The current plan owns its frozen composition and the revision
+record owns acceptance and exact `CLEAN` source-review completion authority.
 
 ## Assumptions And Abstraction Boundaries
 
@@ -121,10 +126,10 @@ transient backend copies and GPU phase textures have separate lifetimes.
 Admission bounds and observed allocations both remain subject to the unchanged
 combined payload limit. Diagnostic field readbacks are identified separately
 from application-persistent payload, never silently included in a memory claim.
-The current 4K P6 film revision has an explicit plan-owned 2.4 GB logical payload
+The accepted 4K P6 film revision used an explicit plan-owned 2.4 GB logical payload
 bound for its larger render targets; this does not change cache payloads or the
 ordinary 1.6 GB application gate. The [revision record](p6-shadow-revision.md)
-owns the estimate and required actual measurements.
+owns the estimate and actual measurements.
 
 The final film's new scene recipe, source-relative camera score,
 shared shadows and measured-light interpolation belong to
@@ -153,18 +158,20 @@ Apply the reference to all multiple-scattering spatial fields, retaining
 angular, spectral and scattering-order controls and transport between shells.
 The source table's 2,048 bands do not require 2,048 full scattering layers:
 source-amplitude bands and field-resolution nodes are distinct decisions.
-Exact sampling and memory savings remain unqualified.
+The [selected contract](p3-contract.md) and [layout qualification](p3-layout-qualification.md)
+own accepted sampling, omission and memory results.
 
-The developmental stencil holds Euclidean radius across altitude rows. Near
+The selected stencil holds Euclidean radius across altitude rows. Near
 the axis or curved outer boundary, positive fans connect admitted support while
 preserving the query's radius and altitude moments. Historical layouts without
 an explicit interpolation identity retain their horizontal-row control rule.
 CPU moment proofs do not establish GPU precision or physical-field accuracy.
 The analytic interpolation factor is a separately identified numerical policy:
 direct-attenuated extinction normalization and geometric-only extinction
-normalization are developmental alternatives. Neither changes stored physical
-J values, source equations or acceptance limits. The execution record owns
-their evidence and selection; no accepted policy is frozen yet.
+normalization were developmental alternatives. Neither changes stored physical
+J values, source equations or acceptance limits. The [P3 contract](p3-contract.md)
+freezes v9 geometric-density normalization; the execution record preserves the
+alternatives and their evidence.
 
 Build conservative atmosphere-intersection admission and compact storage into
 the first candidate. Bands proven empty receive neither scattering-sample
@@ -251,12 +258,12 @@ default 8 GiB reserve,
 telemetry becomes unavailable, or the declared duration expires. Selected
 execution uses a ten-minute job limit. The wrapper's historical 45/90-minute
 ceilings do not authorize longer jobs or automatic diagnostic escalation.
-The [current plan](plan.md#remaining-work-and-execution-controls) owns these
+The [retained plan](plan.md#remaining-work-and-execution-controls) owns these
 execution limits. Earlier P5 and P5-Celestial 6 GiB reserve exceptions ended
 with their selected phases; the default 8 GiB reserve applies, including to
-ordinary later work. The owner's new P6-only AFK resource selection is recorded
-in the [plan](plan.md#execution-budget-and-review-milestone); it supersedes these
-defaults for that phase and expires when the P6 work ends.
+ordinary later work. The P6-only AFK resource selection recorded in the
+[plan](plan.md#execution-budget-and-review-milestone) expired at P6 completion.
+The standard controls apply to subsequent work.
 These are sampled stop thresholds, not kernel allocation caps or physical GPU
 memory claims. Child Node heaps are limited to 2 GiB. Lightweight derivation and
 review bookkeeping may proceed while the sole heavy job runs; their inputs and

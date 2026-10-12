@@ -5,11 +5,13 @@ owns the deployed package/default selection and qualified compatible rollback.
 
 Focus: Cache construction, storage, reconstruction, loading, and optimization.
 
-The [local-Sun cache transfer assessment](local-sun-transfer-assessment.md)
-owns the initial findings. Follow-up work is activated in the contained
-[Local-Sun Cache Reuse experiment](../../poc-experiments/engineering-studies/local-sun-cache-reuse/README.md),
-which owns the execution plan and current status. Production remains read-only
-for that lane. The completed
+The [local-Sun production port plan](local-sun-cache-promotion-plan.md) owns the
+selected next work, and its [status](local-sun-cache-promotion-status.md) owns
+the P0 contract/control handoff. The contained
+[Local-Sun Cache Reuse experiment](../../poc-experiments/engineering-studies/local-sun-cache-reuse/README.md)
+is ended and accepted within its declared limits. The
+[transfer assessment](local-sun-transfer-assessment.md) retains the initial findings;
+the new production plan owns adaptation. The completed
 [distant-Sun strobing promotion](distant-sun-strobing-promotion-status.md)
 and existing accepted cache and compiler qualifications remain comparison evidence.
 
@@ -41,6 +43,8 @@ Q30 Bruneton B1 reproduction through current production GPU transport.
 
 ## Working Documents
 
+- [Local-Sun Cache Production Port Plan](local-sun-cache-promotion-plan.md)
+- [Local-Sun Cache Production Port Status](local-sun-cache-promotion-status.md)
 - [Local-Sun Cache Transfer Assessment](local-sun-transfer-assessment.md)
 - [Local-Sun Cache Reuse Experiment](../../poc-experiments/engineering-studies/local-sun-cache-reuse/README.md)
 - [Selected Scattering Cache Contract](cache-contract.md)

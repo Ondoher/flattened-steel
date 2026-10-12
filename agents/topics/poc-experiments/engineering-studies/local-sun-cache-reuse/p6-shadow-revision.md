@@ -8,10 +8,10 @@ owns current acceptance and execution requirements. The [v4 record](p6-execution
 preserves its 1080p film, measurements, source identities and review receipt.
 Native 4K v5 stills, the ten-second motion excerpt and corrected full preview
 00777/00779 are accepted. The v5 recipe and gates were frozen before final
-capture. Native recording 00781 and complete qualification 00783 are accepted;
-the revised film is delivered for owner creative acceptance. Implementation
-completion is determined by the exact source-review receipt below. P7 remains
-unselected.
+capture. Native recording 00781 and complete qualification 00783 are accepted.
+The owner has accepted the revised film; P6 is complete under the
+[owner acceptance](#owner-acceptance) and source-review authority below.
+The owner subsequently selected [P7 closeout](p7-closeout.md), which ends the experiment.
 
 ## Delivery
 
@@ -35,8 +35,16 @@ unselected.
 
 All 2,700 native frames and the five shadow controls pass qualification. Every
 final milestone and the separate endpoint were visually inspected, with clear
-floor shadows and an unobscured Sun. Media acceptance does not substitute for
-the conditional implementation-review gate or owner creative acceptance.
+floor shadows and an unobscured Sun. Media qualification, implementation review
+and owner creative acceptance are separately satisfied.
+
+## Owner Acceptance
+
+On 2026-10-11, the owner confirmed: "the video is accepted". This accepts the
+v5 ground-shadow film delivered as native run 00781 and review copy 00783.
+Together with complete decoded-media qualification and the `CLEAN` source-review
+receipt below, this satisfies the P6 exit requirements. The owner's subsequent
+P7 selection is recorded separately in the [closeout](p7-closeout.md).
 
 ## Frozen V5 Recipe And Gates
 
@@ -72,7 +80,7 @@ within the intended visible floor. These are planning predictions for this
 single candidate. Accepted native stills show clear long shadows on smooth floor
 with an unobscured Sun. The accepted full preview preserves clear cast shadows,
 distinct landmarks and a clean floor; the final native film passes its frozen
-media gates. Owner creative acceptance remains separate.
+media gates. Owner creative acceptance is recorded above.
 
 The candidate predicts approximately 16 near / 7 far geometric Sun pixels at
 4K, compared with v4's approximately 21 / 9 at 1080p. The wider view intentionally
@@ -95,8 +103,8 @@ equality outcome remains informational and retains its mismatch evidence.
 ## Verification And Completion Authority
 
 The recorded proofs, native stills, motion, full preview and final-media result
-satisfy steps 1-4 below. Step 5's source-completion outcome is determined by the
-exact receipt in the next section, followed by owner creative acceptance.
+satisfy steps 1-4 below. Step 5 is satisfied by the exact `CLEAN` receipt in the
+next section and the owner acceptance recorded above.
 The retained verification sequence is:
 
 1. Inspect native-raster near, far and intermediate stills together with the
@@ -124,12 +132,14 @@ The retained verification sequence is:
 The review baseline was captured at `62fd5f66` before revision implementation:
 `.codex-tmp/review-standards/session-HOgzfK/baseline.json`. Reviewer context must
 be refreshed from the updated current documents before code changes. The prior
-v4 receipt is preserved and supplies no new-scope completion authority. Revision
-implementation completion requires the exact
+v4 receipt is preserved and supplies no new-scope completion authority. The revision
 [source-review receipt](../../../../../.codex-tmp/review-standards/session-HOgzfK/validation-shadow.json)
-to exist and report `CLEAN` for its matching primary-review and independent-audit
-request. This conditional requirement anticipates no result; media acceptance
-alone cannot close it.
+reports `CLEAN` for its matching primary-review and independent-audit request,
+fingerprint `34356a1a0c4077e2ea5899db3f6ff62c0102db99b95f095cd43ff99cb5f33786`.
+It supplies implementation-completion authority for the frozen revision delivered
+in commit `44a710a3b441ee0e239d3d6cc64c615f6f1b781d`. The receipt retains that
+original scope; this subsequent owner-acceptance documentation update changes
+no implementation or recorded run evidence.
 
 The selected P6 capture used a 4 GiB machine free-memory
 reserve, 12 GiB owned-process ceiling, 45-minute final-capture limit and
@@ -204,9 +214,10 @@ were retained.
    The movie frame was already encoded and exact light settings were restored.
    Keep this diagnostic fact informational; it neither changes encoded pixels
    nor requires a new arbitrary equality tolerance.
-10. **Does delivery close the experiment?** No. Deliver the qualified film for
-    owner creative acceptance. Source completion follows its exact review receipt;
-    P7, closure/suspension, promotion, push and publication remain unselected.
+10. **Does film acceptance close the experiment?** No. Owner acceptance and the
+    exact source-review receipt complete P6;
+    the owner's subsequent P7 selection closes the experiment through the
+    [closeout](p7-closeout.md). Promotion, push and publication remain unselected.
 
 ## Progress And Results
 
@@ -303,10 +314,10 @@ were retained.
   memory 1,572,999,168 bytes, peak working set 1,545,900,032 bytes and minimum
   machine-free memory 15,907,004,416 bytes. The compact review copy contains
   3,732,672 bytes. All final native milestones and the exact endpoint were
-  visually inspected successfully. Media is qualified and delivered for owner
-  creative acceptance; implementation completion follows the exact review receipt.
-- P7, experiment closure/suspension, production promotion, push and publication
-  remain unselected.
+  visually inspected successfully. Media qualification is complete; source-review
+  completion and owner acceptance are recorded in their sections above.
+- The owner subsequently selected [P7 closeout](p7-closeout.md). Production
+  promotion, push and publication remain unselected.
 
 ## Verification, Limits And Handoff
 
@@ -314,7 +325,7 @@ The complete experiment JavaScript type check passed after the signed-zero
 correction: `npx --no-install tsc -p experiments/local-sun-cache-reuse/jsconfig.json`.
 No executable change followed that check. Scoped documentation formatting and
 whitespace checks pass. The required mapped primary review and independent
-audit are governed by the exact conditional receipt above, without relabeling
+audit are recorded by the exact `CLEAN` receipt above, without relabeling
 the v4 receipt or any earlier source/evidence identities.
 
 This is an offline cinematic capture, not measured live 30-fps performance or
@@ -328,5 +339,5 @@ immutable; no completed run is reopened.
 
 The local delivery checkpoint is identified by Git history for this record;
 its own hash is not embedded in the committed file. No push or publication is
-selected. Resume with the delivered native/review video and this record for
-owner creative inspection. P7 requires a separate selection.
+selected. The owner has accepted the delivered native/review video and P6 is
+complete. The subsequent [P7 closeout](p7-closeout.md) records the ended experiment.

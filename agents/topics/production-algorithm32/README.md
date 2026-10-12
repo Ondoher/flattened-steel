@@ -4,10 +4,14 @@ Implement and qualify the production engine. Application behavior, independent e
 
 ## Active Work
 
-The [local-Sun cache transfer assessment](caches/local-sun-transfer-assessment.md)
-is complete at its initial investigation boundary. Follow-up work is activated
-in the contained [Local-Sun Cache Reuse experiment](../poc-experiments/engineering-studies/local-sun-cache-reuse/README.md).
-Production remains a read-only comparison surface for that lane. The completed
+The owner selected preparation of the [local-Sun cache production port](caches/local-sun-cache-promotion-plan.md)
+on 2026-10-11. Its [status](caches/local-sun-cache-promotion-status.md) owns the
+next P0 contract/control unit. The accepted
+[Local-Sun Cache Reuse experiment](../poc-experiments/engineering-studies/local-sun-cache-reuse/README.md)
+is ended and remains immutable source/evidence input. Production adaptation
+must use current owners and standards; no implementation or default switch is
+claimed by planning setup. The [initial transfer assessment](caches/local-sun-transfer-assessment.md)
+retains its original investigation. The completed
 [distant-Sun promotion status](caches/distant-sun-strobing-promotion-status.md)
 and [release](caches/distant-sun-strobing-release.md) retain their evidence and
 deployed selections.

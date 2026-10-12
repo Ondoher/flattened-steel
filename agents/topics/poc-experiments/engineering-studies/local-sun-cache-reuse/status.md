@@ -1,16 +1,22 @@
 # Local-Sun Cache Reuse Experiment Status
 
-Current disposition, 2026-10-11: P0-P5, P5-Celestial and selected follow-ups
-are delivered. The v4 continuous 90-second San Jose winter-solstice film is
+Current disposition, 2026-10-11: **ended, accepted as a contained experiment**.
+The owner accepted the film and selected P7 closeout. P0-P7, P5-Celestial and
+selected follow-ups are delivered; the [closeout](p7-closeout.md) owns final
+findings, limitations, resource inventory and closeout-review authority.
+The v4 continuous 90-second San Jose winter-solstice film is
 recorded and passes its decoded-media qualification; the
 [v4 execution record](p6-execution.md) preserves delivery and review authority.
 The owner liked that film and selected the [shadow revision](p6-shadow-revision.md)
 to keep ground shadows visible during the Sun's traverse. Its native 4K film and
-compact review copy are media-qualified and delivered for owner creative
-acceptance. Implementation completion is determined by the revision's exact
-conditional source-review receipt. No capture or qualification job remains.
-P7 lifecycle closeout, production promotion and publication remain unselected.
-The [successor handoff](handoff.md) owns restart guidance and source entrypoints.
+compact review copy are media-qualified and accepted by the owner. P6 is complete;
+the revision records owner acceptance and the `CLEAN` source-review receipt.
+No capture or qualification job remains.
+The owner subsequently selected
+[production-port preparation](../../../production-algorithm32/caches/local-sun-cache-promotion-plan.md).
+That separate lane owns further adaptation; production adoption and publication
+are not claimed here. The [handoff](handoff.md) retains source and evidence
+entrypoints; reopening this experiment requires a new owner selection.
 
 ## Phase Disposition
 
@@ -23,11 +29,11 @@ The [successor handoff](handoff.md) owns restart guidance and source entrypoints
 | P3-D/E | Delivered. [Movement](p3-movement.md) establishes admitted horizontal reuse; [disposition](p3-disposition.md) advances the candidate. |
 | P4-P5 | Delivered. [Application](p4-application.md) owns lifecycle/publication; [P5 qualification](p5-qualification.md) owns ten passing sky/colored-scene pairs, 1,200 matched states and combined source-review authority. |
 | P5-Celestial and follow-ups | Delivered. [Celestial delivery](p5-celestial.md) owns initial images/short preview; current presentation and corrections are linked below. |
-| P6 | v5 media-qualified and delivered for owner creative acceptance. [Film plan](plan.md#p6--reproduce-the-local-sun-full-orbit-film) owns the frozen recipe and gates; [revision](p6-shadow-revision.md) owns native/review videos, measurements and exact conditional source-review authority. [v4 execution](p6-execution.md) preserves previous delivery and evidence. |
-| P7 | Unselected. Owner disposition and end-experiment handoff follow the film. |
+| P6 | Complete. The owner accepted the qualified v5 film. [Film plan](plan.md#p6--reproduce-the-local-sun-full-orbit-film) owns the frozen recipe and gates; [revision](p6-shadow-revision.md) owns native/review videos, measurements, owner acceptance and the exact `CLEAN` source-review receipt. [v4 execution](p6-execution.md) preserves previous delivery and evidence. |
+| P7 | Complete lifecycle closeout; ended with an accepted contained outcome. [Closeout](p7-closeout.md) owns final findings, evidence limits, inventory, restoration and its own documentation-review receipt. |
 
 Earlier source-review receipts retain their recorded units and outcomes; the
-revision's exact receipt determines its own completion. Before further implementation,
+revision's exact `CLEAN` receipt supplies its implementation-completion authority. Before further implementation,
 refresh readiness, declare the review unit/baseline and validate applicable
 evidence through review-standards.
 
@@ -84,20 +90,23 @@ optimizations remain deferred. Roughly 36 seconds of startup is acceptable;
 reuse takes priority. Later iPhone/preset and sunset close-up discussions were
 informational and select no implementation or additional capture.
 
-## Next Action
+<a id="next-action"></a>
 
-Inspect the delivered [native and review videos](p6-shadow-revision.md#delivery)
-for owner creative acceptance. The revision record preserves final-media
-qualification, failed diagnostic attempts, corrected post-encode controls and
-the exact conditional source-review receipt. A matching `CLEAN` receipt supplies
-implementation completion authority; media success alone does not. Preserve
-v4 and v5 runs and receipts. P7 remains unselected.
+## Final Disposition
+
+P6 is complete under the [recorded owner acceptance](p6-shadow-revision.md#owner-acceptance),
+final-media qualification and exact `CLEAN` source-review receipt. P7 records
+the accepted contained outcome in the [closeout](p7-closeout.md). No experiment
+execution remains selected. All sealed evidence and 21 historical incomplete attempts
+remain unchanged; no identifiable experiment process or lock remains. The final
+capture released all owned resources. The closeout links the detailed inventory
+and its separate documentation-review receipt; there is no pending film gate.
 
 Use JavaScript; Python may support suitable tasks. No native-helper exception
 exists. The [P6 resource selection](plan.md#execution-budget-and-review-milestone)
-uses the owner's current AFK authorization. Default controls remain an 8 GiB
-free-memory reserve, 8 GiB owned-process ceiling and ten-minute jobs outside
-that scoped selection. Earlier 6 GiB exceptions remain expired. Retain compact
+expired at P6 completion. Default controls apply: an 8 GiB free-memory reserve,
+8 GiB owned-process ceiling and ten-minute jobs. Earlier 6 GiB exceptions remain
+expired. Retain compact
 reproduction data and direct PNG/native-video artifacts; remove disposable
 profiles before sealing. Preserve historical runs and retained native-helper
 source without executing native helpers.
@@ -107,7 +116,11 @@ execution exception.
 
 ## Standards Restoration Provenance
 
-Activation introduced no temporary standards configuration. The permanent
+Activation introduced no temporary standards configuration. At P7 closure,
+current manifest and overlay hashes still match the recorded pre-activation
+values below; no temporary restoration was needed. Folder resolution and the
+normalization marker validate, and the generated standards guide is current.
+The permanent
 `experiments/ -> experiment` assignment retains `documentation.md`,
 `project-foundation.md` and `types.md`; documentation resolves `agents/ -> base`.
 The existing `ADD: Temporary experiment standards lifetime` overlay applies.

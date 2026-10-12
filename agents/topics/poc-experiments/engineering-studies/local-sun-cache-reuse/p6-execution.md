@@ -3,7 +3,7 @@
 Preserved v4 delivery: the continuous 90-second 1080p film is recorded and passes
 its full decoded-media qualification. The owner liked v4 and selected the
 [current shadow revision](p6-shadow-revision.md), whose v5 native 4K delivery is
-media-qualified for owner creative acceptance. This record retains v4's
+media-qualified and accepted by the owner. This record retains v4's
 measurements, decisions, recipe and review scope; the current plan and revision
 own subsequent composition changes. v4 implementation completion is governed
 by the source-review receipt below;
@@ -187,4 +187,5 @@ is identified by Git history for this path; its message is preapproved through
 the independent-execution workflow. No push or publication is selected.
 Use the native video and this record as immutable comparison evidence for the
 selected [shadow revision](p6-shadow-revision.md). Its new recipe, runs and review
-unit do not alter v4's evidence. P7 closure or suspension remains unselected.
+unit do not alter v4's evidence. The subsequent [P7 closeout](p7-closeout.md)
+records the ended experiment.

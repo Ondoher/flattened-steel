@@ -2,6 +2,12 @@
 
 ## Status And Acceptance Question
 
+Final disposition, 2026-10-11: **ended, accepted as a contained experiment**.
+The owner accepted the v5 film and selected P7 closeout. The
+[closeout](p7-closeout.md) records final findings, limitations, preserved evidence
+and the idle topic handoff. The specifications below remain reproduction and
+historical context; they select no further execution.
+
 Activated on 2026-10-08 through `start-experiment` at the owner's request.
 This is the canonical execution plan for the contained lane. P0–P5,
 [P5-Celestial](#p5-celestial--integrate-the-sun-disc-and-stars) and the selected
@@ -14,14 +20,14 @@ comparison evidence for the Euclidean source-centered replacement layout.
 The owner selected creative P6 film work on 2026-10-11, including flexible
 scene/camera design, one continuous shot without overlays, a one-to-two-minute
 duration and autonomous AFK execution. The selected recipe below is 90 seconds
-at San Jose on the winter-solstice basis. P7, production promotion, push and
-publication remain unselected. The v4 film is delivered with preserved
+at San Jose on the winter-solstice basis. P7 is complete; production promotion,
+push and publication remain unselected. The v4 film is delivered with preserved
 [execution evidence](p6-execution.md). The owner liked v4 and selected a
 [shadow revision](p6-shadow-revision.md) to show ground shadows as the Sun
 traverses the sky. The v5 native 4K film and compact review copy are media-qualified
-and delivered for owner creative acceptance. The recipe and gates below were
-frozen before capture; the revision record's exact conditional receipt determines
-implementation completion.
+and accepted by the owner. P6 is complete under the revision record's
+[owner acceptance](p6-shadow-revision.md#owner-acceptance) and exact `CLEAN`
+source-review receipt. The recipe and gates below were frozen before capture.
 
 Experiment identity: `local-sun-cache-reuse`.
 
@@ -502,12 +508,15 @@ the retained specifications below. The [status](status.md) links their current
 owners, and the [handoff](handoff.md) distinguishes current adapters from
 superseded historical bundles. Recorded reviews retain their frozen scope.
 
-The selected P6 shadow revision is captured and media-qualified for owner
-creative acceptance. Its record owns the exact conditional source-review
-completion authority, preserving v4 and all completed phase evidence. The
-owner's current AFK resource authorization applies only to P6; earlier 6 GiB
-exceptions remain expired. The P6 section owns the new location, camera,
+The selected P6 shadow revision is complete: captured, media-qualified, reviewed
+and accepted by the owner. Its record owns the acceptance and exact `CLEAN`
+source-review authority, preserving v4 and all completed phase evidence. The
+P6-only AFK resource authorization has expired; standard execution controls
+apply and earlier 6 GiB exceptions remain expired. The P6 section owns the location, camera,
 duration, scene and resource decisions and supersedes earlier film assumptions.
+
+P7 has ended the experiment. The following controls are retained for a future
+owner-selected reopening, not as an active task list.
 
 For every diagnostic name one question, assumption/abstraction, input domain,
 expected invariant, discriminator and stop condition before execution. Start
@@ -872,9 +881,8 @@ The [shadow revision](p6-shadow-revision.md) owns this change's decisions,
 progress and results. v4 remains immutable comparison evidence. Native stills,
 the native motion excerpt and full preview 00777/00779 establish the composition.
 The following **v5 recipe and acceptance gates were frozen before final capture**.
-Final 00781/00783 media qualification passes; implementation completion follows
-the exact conditional receipt in the revision record and owner creative
-acceptance remains separate.
+Final 00781/00783 media qualification passes. The revision record retains the
+exact `CLEAN` source-review receipt and owner creative acceptance; P6 is complete.
 
 This section supersedes earlier P6 references to the identical Union Glacier
 observatory replay, original camera score, fixed 60-second duration and
@@ -1035,8 +1043,12 @@ slot's compact trace and retain selected lossless stills.
 
 #### Execution Budget And Review Milestone
 
-The owner is AFK and explicitly permits greater computer-resource use for this
-P6 work. Use a **P6-only 4 GiB machine free-memory reserve**, **12 GiB aggregate
+P6 is complete and its resource exception has expired. The following records
+the controls selected for the completed capture; subsequent work uses the
+standard 8 GiB free-memory reserve, 8 GiB owned-process ceiling and ten-minute jobs.
+
+The owner permitted greater computer-resource use while AFK for this
+P6 work. The selection was a **P6-only 4 GiB machine free-memory reserve**, **12 GiB aggregate
 owned-process ceiling**, and a **45-minute maximum for one final capture job**.
 Preview/diagnostic jobs remain bounded to ten minutes. Keep one GPU/browser
 job at a time, five-second telemetry, fail-closed monitoring, cancellation,
@@ -1081,8 +1093,8 @@ audit and validate the evidence before claiming implementation completion.
 Native stills 00767, native motion 00769/00771 and full preview 00777/00779
 complete the preparatory composition/preview checks below. Final capture
 00781 and complete qualification 00783 pass the frozen v5 recipe/media gates.
-The retained workflow below states their requirements; source completion is
-receipt-governed and owner creative acceptance remains separate.
+The retained workflow below states their requirements. Source review and owner
+creative acceptance are separately satisfied, as recorded by the revision.
 
 1. Retain the site/physical-clock/source selection and scene seed. Produce
    native-raster near/far/intermediate composition stills for the candidate
@@ -1134,8 +1146,11 @@ receipt-governed and owner creative acceptance remains separate.
 **Exit:** a verified continuous 90-second cinematic film meeting the existing
 visual requirements and new ground-shadow visibility requirement, validated
 revision implementation-review evidence, recorded
-limitations and owner visual acceptance. P7 lifecycle disposition, production
-promotion, push and publication remain separately selected actions.
+limitations and owner visual acceptance. The owner subsequently selected P7
+closeout; production promotion, push and publication remain separate actions.
+
+**Exit satisfied:** the [revision record](p6-shadow-revision.md#owner-acceptance)
+records owner acceptance and links completed media qualification and source review.
 
 ### Deferred Follow-Up — Shared Construction Values
 
@@ -1179,6 +1194,12 @@ Dials resumption or additional experiment is selected. This follow-up does
 not add a completion or recording gate to the current plan.
 
 ### P7 — Decide And Close Or Suspend
+
+**Complete:** the owner selected closeout after accepting the film. The
+[P7 record](p7-closeout.md) reports the accepted contained outcome, final findings,
+limitations, resource inventory, preserved interruptions and standards restoration.
+Its separate review receipt owns closeout-documentation compliance. No next
+execution topic is selected. The retained requirements follow.
 
 Report layout accuracy and admission, omitted work/storage and whole-layout
 resource results, the useful reuse region, chosen shell policy, required rebuild

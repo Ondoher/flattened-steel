@@ -4,6 +4,10 @@ Focus: develop a Euclidean source-centered shell layout for the local-Sun
 multiple-scattering cache, with integrated empty-band omission, qualified
 horizontal reuse, in-app rebuilding and coherent lighting.
 
+Disposition: **ended, accepted as a contained experiment**, 2026-10-11.
+The owner selected P7 after accepting the film. The [closeout](p7-closeout.md)
+records final findings, limitations, preserved evidence and the idle handoff.
+
 Activated by the owner through `start-experiment` on 2026-10-08. P0–P5,
 P5-Celestial and selected follow-ups are delivered. The owner selected the
 [creative full-circuit film](plan.md#p6--reproduce-the-local-sun-full-orbit-film):
@@ -12,15 +16,17 @@ no overlays, dynamic camera movement and clearly visible disc-size change.
 The owner liked the delivered v4 film and selected a
 [shadow revision](p6-shadow-revision.md) to show ground shadows throughout the
 Sun's traverse. The v5 native 4K film and compact review copy are media-qualified
-and delivered for owner creative acceptance. The revision record owns the
-exact conditional source-review completion authority.
+and accepted by the owner. P6 is complete; the revision record owns the
+acceptance and exact `CLEAN` source-review completion authority.
 The [v4 film execution record](p6-execution.md)
 preserves the recorded video, measurements and original review authority.
-P7 and production promotion remain
-unselected; the experiment is not ended or formally suspended.
+P7 closes the experiment. Subsequent
+[production-port preparation](../../../production-algorithm32/caches/local-sun-cache-promotion-plan.md)
+has a separate owner and does not reopen this lane. Production adoption is not
+yet qualified; reopening the experiment requires a new owner selection.
 
 Start with the [successor handoff](handoff.md) for current source, evidence,
-defaults, operational constraints and the next execution boundary. The
+defaults, operational constraints and reopening boundaries. The
 [status](status.md) owns phase disposition; the [plan](plan.md) owns execution
 requirements. The latest still comparison is the
 [spherical San Jose sunset](spherical-sunset-capture.md), run 00733.
@@ -40,6 +46,7 @@ chronology belongs to [shell execution](p3-execution.md), not current readiness.
 - [Plan](plan.md): P0-P7, controls, gates, early reviewable images and the final
   creative full-circuit film.
 - [Status](status.md): current phase, evidence, blockers and next action.
+- [P7 closeout](p7-closeout.md): final findings, disposition, preserved evidence and lifecycle handoff.
 - [Successor handoff](handoff.md): focused reload, source entrypoints, current
   choices, reproduction and the remaining film sequence.
 - [Execution summary](execution-summary.md): P0-P1 outcomes, decisions and limitations.
