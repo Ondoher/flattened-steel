@@ -1,0 +1,6 @@
+{
+	"extends": "../normalization/jsconfig.json",
+	"compilerOptions": {"maxNodeModuleJsDepth": 0},
+	"include": ["*.js", "*.d.ts", "../*.d.ts", "../normalization/types.d.ts", "../../../../src/algorithm32/**/*.d.ts"],
+	"exclude": ["../../../../node_modules/**", "../../../../src/algorithm32/**/_tests/**"]
+}

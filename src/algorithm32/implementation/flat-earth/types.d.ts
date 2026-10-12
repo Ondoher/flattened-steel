@@ -86,6 +86,28 @@ type FlatCompactNodePositionRequest = Readonly<{
 	/** Actual allocated compact node address. */ positionIndex: number;
 }>;
 
+/** Geometry-owned bounded compact ray request; outside origins reject rather than clamp. */
+type FlatCompactRayRequest = Readonly<{
+	/** Geometry-paired compact support. */ topology: FlatCompactTopology;
+	/** Physical admitted origin. */ position: Position;
+	/** Physical unit ray direction. */ physicalDirection: UnitVector3;
+	/** Optional physical truncation, shorter than the nearest boundary. */ maximumDistance?: Distance;
+}>;
+/** Executable geometry-owned compact ray; its sampler distinguishes physical boundaries from interior prefixes. */
+interface FlatCompactRay {
+	/** Physical admitted origin. */ readonly origin: Position;
+	/** Physical unit direction. */ readonly direction: UnitVector3;
+	/** Physical bounded length. */ readonly length: Distance;
+	/** Ground, top, cylinder or explicitly shortened endpoint. */ readonly boundary:
+		'ground' | 'top-atmosphere' | 'cache-radial-boundary' | 'shortened';
+	/**
+	 * Call this method to resolve a physical position on the closed bounded ray.
+	 * @param distance - Unit-bearing distance from the origin.
+	 * @returns - Supported physical position; only the exact physical endpoint receives analytic boundary rounding.
+	 */
+	positionAt(distance: Distance): Position;
+}
+
 /** Physical reconstruction query for a topology created by a paired flat geometry. */
 type FlatCompactReconstructionRequest = ScatteringCacheDirectionRequest &
 	Readonly<{

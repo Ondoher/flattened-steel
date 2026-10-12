@@ -24,8 +24,10 @@ bounds/partition. The second bounded slice independently compares held amplitude
 and Native15 source semantics. The third bounded slice ports and compares the
 selected incoming measure. The fourth ports and compares per-tap ordinary/axis
 directional support. The fifth ports cache-owned normalization/restoration and
-geometry-owned node placement with existing physical models unchanged; matching
-slice receipts are linked in status. Full P1 fields, transport, GPU paths and
+geometry-owned node placement with existing physical models unchanged. The sixth
+ports selected-ray Column48/Tail64 cache integration, atmosphere-owned cache
+columns and geometry-owned ray endpoints; matching slice receipts are linked in
+status. Full P1 fields, transport/profile integration, GPU paths and
 consumers remain open.
 Profile/default selection, deployment and publication have not changed.
 P7 closeout and production controls retain their separate evidence/review scopes.

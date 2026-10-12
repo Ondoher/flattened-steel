@@ -45,6 +45,38 @@ type LocalSunCompactDensitySampleRequest = ScatteringCacheDirectionRequest &
 		/** Original physical field identity propagated to the reconstructed packet. */ provenanceIdentity: string;
 	}>;
 
+/** Existing physical owners plus geometry-owned compact ray capability. */
+type LocalSunCompactTransportDefinition = Readonly<{
+	/** Complete compact coordinate/ray owner. */ geometry: LocalSunCompactReconstructionGeometry &
+		Readonly<{
+			/** Call this method to resolve a closed physical compact ray. @param request - Paired support and physical ray. @returns - Supported geometry-owned ray. */
+			resolveCompactLocalSunCacheRay(request: FlatCompactRayRequest): FlatCompactRay;
+		}>;
+	/** Geometry-paired structural topology. */ topology: FlatCompactTopology;
+	/** Existing Native15 two-exponential physical medium. */ atmosphere: CanonicalCacheColumnAtmosphere;
+}>;
+/** Physical selected-ray request, before geometry resolves bounds. */
+type LocalSunCompactTransportRayRequest = Omit<FlatCompactRayRequest, 'topology'>;
+/** Physical read-only scattering-density input and original identity. */
+type LocalSunCompactTransportRequest = LocalSunCompactTransportRayRequest &
+	Pick<LocalSunCompactDensitySampleRequest, 'reader' | 'provenanceIdentity'>;
+/** Cache policy plan with distinct full-ray and per-channel retained-prefix semantics. */
+type LocalSunCompactTransportRayPlan = Readonly<{
+	/** Actual executable numerical policy. */ policyId: string;
+	/** Closed geometry-owned physical ray. */ ray: FlatCompactRay;
+	/** Native15 ordered prefixes. */ channels: readonly Readonly<{
+		/** Physical retained prefix length. */ retainedLength: Distance;
+		/** True only when the prefix reaches the full geometry ray endpoint. */ physicalEnd: boolean;
+		/** Closed ordered 49 physical distances. */ distances: readonly Distance[];
+	}>[];
+}>;
+/** Physical transported radiance plus transmittance to each retained prefix, not necessarily the full physical ray. */
+type LocalSunCompactTransportResult = Readonly<{
+	/** Complete qualified ray selection. */ plan: LocalSunCompactTransportRayPlan;
+	/** Physical spectral radiance. */ radiance: SpectralPacket;
+	/** Dimensionless retained-prefix transmittance. */ transmittance: SpectralPacket;
+}>;
+
 /** Physical local-Sun facade consumed by cache construction. */
 type LocalSunCacheProviderSource = LightSourceModel &
 	LocalSunConstructionContinuousSource &

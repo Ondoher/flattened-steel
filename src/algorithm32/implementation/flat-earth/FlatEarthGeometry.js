@@ -1128,6 +1128,18 @@ export class FlatEarthGeometry {
 		return this._scatteringCacheGeometry.expressPhysicalScatteringCacheDirection(request);
 	}
 
+	/** Call this method to create a geometry-owned compact ray and boundary-aware sample transform.
+	 *
+	 * @param {FlatCompactRayRequest} request - Paired compact support and physical ray.
+	 * @returns {FlatCompactRay} - Finite supported ray, with explicit physical/shortened boundary semantics.
+	 * @throws {RangeError} - Pairing, support, direction or shortening is invalid.
+	 */
+	resolveCompactLocalSunCacheRay(request) {
+		if (!this._configuration || !this._scatteringCacheGeometry)
+			throw new RangeError('Configured finite source required for compact rays.');
+		return this._scatteringCacheGeometry.resolveCompactLocalSunCacheRay(request);
+	}
+
 	/**
 	 * Call this method to resolve a source-owned cache coordinate into its reusable physical ray.
 	 *

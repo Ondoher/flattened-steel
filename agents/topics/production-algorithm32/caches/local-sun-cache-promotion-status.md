@@ -8,8 +8,9 @@ ordinary production/default/deployed selections are unchanged. The bounded
 P1 slices now implement geometry-owned compact positions/support, explicit
 source-distance bounds, independently compared held source amplitudes and the
 selected incoming quadrature, per-tap directional support and cache-owned
-geometric-density normalization/restoration. Field, transport and GPU paths
-remain open. The
+geometric-density normalization/restoration and selected-ray Column48/Tail64
+transport. Field construction, complete transport/profile integration and GPU
+paths remain open. The
 [P0 contract](local-sun-cache-p0-contract.md) owns the prepared contracts,
 parameter applicability, first-capability controls and resource admission.
 
@@ -26,7 +27,7 @@ frozen experiment remains the independent comparison control.
 | --- | --- |
 | Topic and planning setup | Prepared: current source mapping, architectural assessment, scope, phase sequence and minimal reload route. The setup-review receipt below determines documentation-review completion. |
 | P0 — contracts and controls | Delivered contract/control unit: independent topology and analytic-bound fixture, offline proof/type checks, profile/support/publication and resource policies. Completion requires the matching P0 review receipt below. |
-| P1 — compact domain and CPU | Bounded compact-domain, held-amplitude, incoming-quadrature, per-tap directional-support and normalization slices implemented and independently compared. Their matching review receipts below own completion. Remaining P1 field/transport work is open. |
+| P1 — compact domain and CPU | Bounded compact-domain, held-amplitude, incoming-quadrature, per-tap directional-support, normalization and selected-ray transport slices implemented and independently compared. Their matching review receipts below own completion. Remaining P1 field/transport integration is open. |
 | P2 — GPU construction/runtime | Planned; not started. |
 | P3 — reuse and frame publication | Planned; not started. |
 | P4 — Flat32/celestial consumers | Planned; not started. |
@@ -36,9 +37,9 @@ frozen experiment remains the independent comparison control.
 
 After the matching slice receipts validate, continue P1 from the
 [plan](local-sun-cache-promotion-plan.md#p1--port-compact-domain-source-bounds-and-cpu-reference)
-with selected column transport and complete profile/domain integration.
+with complete profile/domain integration and compact field/recurrence construction.
 Capture a new baseline and select
-independent field/ray outputs before implementing and accepting
+independent physical field/ray outputs before implementing and accepting
 those affected numerical capabilities. Automatic band/altitude seed-policy
 derivation for changed profiles/heights is also open; this first slice accepts
 explicit physical controls rather than claiming a complete profile builder.
@@ -155,6 +156,19 @@ regressions pass. Field construction/accuracy, transport, GPU, full profiles and
 reuse remain open.
 
 The [normalization review receipt](../../../../.codex-tmp/review-standards/session-xgtjTu/validation.json)
+owns this implementation/control/proof/current-state unit; only its matching
+`CLEAN` primary/audit aggregate establishes slice completion. Execution retains
+the 45-minute limit and stops after this selected unit.
+
+The sixth bounded P1 slice ports selected-ray cache transport, as owned by
+[transport qualification](local-sun-transport-qualification.md). New immutable
+`00015-transport` independently compares ray bounds, all 49 samples per channel,
+optical columns, positive weights, shortened/physical endpoint meanings and
+transported synthetic physical J. Existing physical models, stored J and ordinary
+defaults remain unchanged. Full physical fields, profile/recurrence integration,
+GPU and consumers remain open.
+
+The [transport review receipt](../../../../.codex-tmp/review-standards/session-JAkN9G/validation.json)
 owns this implementation/control/proof/current-state unit; only its matching
 `CLEAN` primary/audit aggregate establishes slice completion. Execution retains
 the 45-minute limit and stops after this selected unit.

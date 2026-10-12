@@ -874,6 +874,89 @@ export class FlatScatteringCacheGeometry {
 		return this._physicalCacheDirection(this._configuration, position, cacheDirection);
 	}
 
+	/** Call this method to bound a physical compact ray using its actual topology cylinder, independently of rectangular defaults.
+	 * The returned sampler corrects only analytic physical-endpoint roundoff; outside origins and interior samples reject.
+	 *
+	 * @param {FlatCompactRayRequest} request - Paired topology, physical origin/direction and optional shortening.
+	 * @returns {FlatCompactRay} - Closed geometry-owned physical ray and sampler.
+	 * @throws {TypeError} - Physical units or direction contract differs.
+	 * @throws {RangeError} - Pairing, origin, shortening or sampled support is invalid.
+	 */
+	resolveCompactLocalSunCacheRay(request) {
+		this._assertCompactTopologyPairing(request.topology);
+		let origin = DistanceMath.acceptPositionInMeters(request.position, 'Compact ray origin');
+		let direction = GeometryDirections.normalizeDirection(request.physicalDirection, 'Compact ray direction');
+		let radius = DistanceMath.toMeters(request.topology.coverageRadius),
+			top = DistanceMath.toMeters(request.topology.atmosphereTop);
+		let center = DistanceMath.toMetersPosition(this._configuration.sourceSubpoint);
+		request.topology.resolvePositionStencil({
+			horizontalDistance: DistanceMath.inMeters(Math.hypot(origin[0] - center[0], origin[1] - center[1])),
+			altitude: DistanceMath.inMeters(origin[2]),
+		});
+		let plane =
+			direction[2] > 0
+				? (top - origin[2]) / direction[2]
+				: direction[2] < 0
+					? -origin[2] / direction[2]
+					: Infinity;
+		let a = direction[0] ** 2 + direction[1] ** 2,
+			b = (origin[0] - center[0]) * direction[0] + (origin[1] - center[1]) * direction[1];
+		let rho = Math.hypot(origin[0] - center[0], origin[1] - center[1]),
+			radialRemainder = (radius - rho) * (radius + rho);
+		let root = Math.sqrt(Math.max(0, b * b + a * radialRemainder));
+		let cylinder =
+			a === 0 ? Infinity : b >= 0 ? (root + b === 0 ? 0 : radialRemainder / (root + b)) : (-b + root) / a;
+		let length = Math.min(plane, cylinder);
+		let boundary = /** @type {FlatCompactRay['boundary']} */ (
+			plane <= cylinder ? (direction[2] > 0 ? 'top-atmosphere' : 'ground') : 'cache-radial-boundary'
+		);
+		if (request.maximumDistance !== undefined) {
+			DistanceMath.assertDistance(request.maximumDistance, 'Compact ray shortening');
+			let maximum = DistanceMath.toMeters(request.maximumDistance);
+			if (maximum < 0) throw new RangeError('Nonnegative compact ray shortening required.');
+			if (maximum < length) {
+				length = maximum;
+				boundary = 'shortened';
+			}
+		}
+		if (!Number.isFinite(length) || length < 0) throw new RangeError('Finite compact ray bound required.');
+		return Object.freeze({
+			origin: DistanceMath.positionInMeters(origin),
+			direction,
+			length: DistanceMath.inMeters(length),
+			boundary,
+			/** Called by cache integration to obtain a supported point from this geometry-created ray.
+			 *
+			 * @param {Distance} distance - Physical distance along the closed ray.
+			 * @returns {Position} - Physical supported sample.
+			 * @throws {RangeError} - Distance or complete sample support is invalid.
+			 */
+			positionAt: (distance) => {
+				DistanceMath.assertDistance(distance, 'Compact ray sample distance');
+				let s = DistanceMath.toMeters(distance);
+				if (s < 0 || s > length) throw new RangeError('Compact ray sample is outside its bounded segment.');
+				let point = VectorMath.addScaled(origin, direction, s);
+				if (s === length) {
+					if (boundary === 'ground') point[2] = 0;
+					if (boundary === 'top-atmosphere') point[2] = top;
+					if (boundary === 'cache-radial-boundary' && length > 0) {
+						// Construct the analytic cylinder endpoint inward by four binary64 epsilons, below 0.01 m in this admitted control.
+						let scale =
+							(radius * (1 - 4 * Number.EPSILON)) /
+							Math.hypot(point[0] - center[0], point[1] - center[1]);
+						point[0] = center[0] + (point[0] - center[0]) * scale;
+						point[1] = center[1] + (point[1] - center[1]) * scale;
+					}
+				}
+				request.topology.resolvePositionStencil({
+					horizontalDistance: DistanceMath.inMeters(Math.hypot(point[0] - center[0], point[1] - center[1])),
+					altitude: DistanceMath.inMeters(point[2]),
+				});
+				return DistanceMath.positionInMeters(point);
+			},
+		});
+	}
+
 	/**
 	 * Call this method to resolve a source-owned cache coordinate into its reusable physical ray. Ground-bound rays retain the atmosphere segment up to their hit. The observer dome and scene cap never enter this reusable construction path.
 	 *
