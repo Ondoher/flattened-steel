@@ -811,11 +811,12 @@ export class LocalSunCacheProvider {
 	 *
 	 * @param {LocalSunCacheProviderDefinition} definition - The physical source and its normalized configuration.
 	 */
-	constructor({source, configuration}) {
+	constructor({source, configuration, sourceDistanceBounds}) {
 		this._source = source;
 		this._configuration = configuration;
 		this._constructionShellFactCache = new LocalSunShellFactCache({
 			sourceConfiguration: configuration,
+			sourceDistanceBounds,
 		});
 		this._constructionLightSource = new LocalSunConstructionLightSource({
 			source,

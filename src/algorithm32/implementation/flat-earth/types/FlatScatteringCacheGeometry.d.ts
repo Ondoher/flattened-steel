@@ -8,18 +8,6 @@ type FlatLocalCacheDirectionFrame = Readonly<{
 	vertical: UnitVector3;
 }>;
 
-/** Interpolation stencil on one ordered flat-cache axis. */
-type FlatCacheAxisStencil = Readonly<{
-	/** Lower node index. */
-	lowerIndex: number;
-	/** Upper node index. */
-	upperIndex: number;
-	/** Lower interpolation weight. */
-	lowerWeight: number;
-	/** Upper interpolation weight. */
-	upperWeight: number;
-}>;
-
 /** Flat/local coordinate metadata used by generic transport. */
 type FlatLocalCacheBuildCoordinateMetadata = Readonly<{
 	/** Physical construction position. */

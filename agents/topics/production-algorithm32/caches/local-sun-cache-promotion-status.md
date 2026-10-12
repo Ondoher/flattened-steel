@@ -4,7 +4,9 @@ Current disposition, 2026-10-12: the owner selected independent P0 execution for
 the production local-Sun cache port. The
 [plan](local-sun-cache-promotion-plan.md) owns scope, production responsibilities,
 evidence requirements and execution order. The accepted experiment remains ended;
-numerical runtime implementation and selections are unchanged. The
+ordinary production/default/deployed selections are unchanged. The first bounded
+P1 slice now implements geometry-owned compact positions/support and explicit
+source-distance bounds; field, angular/transport and GPU paths remain open. The
 [P0 contract](local-sun-cache-p0-contract.md) owns the prepared contracts,
 parameter applicability, first-capability controls and resource admission.
 
@@ -21,7 +23,7 @@ frozen experiment remains the independent comparison control.
 | --- | --- |
 | Topic and planning setup | Prepared: current source mapping, architectural assessment, scope, phase sequence and minimal reload route. The setup-review receipt below determines documentation-review completion. |
 | P0 — contracts and controls | Delivered contract/control unit: independent topology and analytic-bound fixture, offline proof/type checks, profile/support/publication and resource policies. Completion requires the matching P0 review receipt below. |
-| P1 — compact domain and CPU | Planned; not started. |
+| P1 — compact domain and CPU | First bounded slice implemented and independently compared: compact topology/admission, source bounds/partition and arbitrary-position packing. Its matching review receipt below owns completion. Remaining P1 field/directional/transport work is open. |
 | P2 — GPU construction/runtime | Planned; not started. |
 | P3 — reuse and frame publication | Planned; not started. |
 | P4 — Flat32/celestial consumers | Planned; not started. |
@@ -29,13 +31,23 @@ frozen experiment remains the independent comparison control.
 
 ## Next Work
 
-After the P0 receipt validates, start the first P1 slice from the
-[plan](local-sun-cache-promotion-plan.md#p1--port-compact-domain-source-bounds-and-cpu-reference):
-compact topology/admission and explicit source-amplitude bounds/partition against
-the prepared independent fixture. Capture a new implementation baseline. Held
-source amplitudes and field/ray scalar controls remain separate acceptance gates
-before their affected CPU capability becomes a GPU oracle. Preserve existing
-production defaults as controls.
+After the first-slice receipt validates, continue P1 from the
+[plan](local-sun-cache-promotion-plan.md#p1--port-compact-domain-source-bounds-and-cpu-reference)
+with profile/domain activation, selected incoming quadrature, per-tap directional
+reconstruction, normalization and transport. Capture a new baseline and select
+independent held-amplitude/field/ray outputs before implementing and accepting
+those affected numerical capabilities. Automatic band/altitude seed-policy
+derivation for changed profiles/heights is also open; this first slice accepts
+explicit physical controls rather than claiming a complete profile builder.
+Preserve existing production defaults as controls.
+
+The first slice implements `CompactLocalCacheTopology` through the flat geometry
+factory, with real ragged offsets/counts, stable radius excess, medium-derived
+cylinder-edge refinement, positive spatial stencils and explicit rejection. A
+narrow `SourceDistanceBounds` value flows through shell facts/provider; explicit
+support rejects outside distances while the named ordinary Flat32 control retains
+its existing lookup behavior. No ragged domain is silently fed to the current
+rectangular field/transport pipeline.
 
 Shared Native15, W27, physical coefficients, phase, order meanings and scalar
 precision align. The [applicability inventory](local-sun-cache-p0-contract.md#parameter-applicability)
@@ -47,7 +59,8 @@ Current runtime findings addressed by the prospective P0 contracts, to be
 implemented and qualified in P1-P4:
 
 - Rectangular position-domain assumptions cannot honestly describe the selected
-  1,049-node ragged topology.
+  1,049-node ragged topology. The new factory implements actual compact positions;
+  field/transport selection and packing adaptation still require the rest of P1/P2.
 - Source-axis interpolation needs direction support per spatial tap; normalization
   uses actual spectral/medium/source inputs rather than fixed experiment constants.
 - Local cache identity currently includes observation/placement, source and geometry
@@ -65,6 +78,26 @@ investigation, not the new implementation authority. No experimental runner,
 generated bundle or historical Star evidence becomes a production dependency.
 
 ## Verification And Handoff
+
+The first bounded P1 comparison is preserved in a new immutable
+[production run](../../../../tmp/production-local-sun-cache-promotion/runs/00002-compact-domain/comparison.json).
+The maintained entrypoint is
+`node scripts/algorithm32/local-sun-cache/compact-domain/LocalSunCompactDomainProof.js`;
+`--out <new-plan-run-directory>` preserves a fresh comparison and rejects an
+existing run. The copied P0 authority/manifest retains independent parents and
+derivation; exact implementation/tool/configuration identities accompany results.
+All 1,049 nodes/exact-node stencils, 22 rows, 61 bands, 2,049 source boundaries and
+11 independent sentinels compare under the P0 limits. All four outside-support
+sentinels and explicit source-distance endpoints reject correctly. Horizontal
+source placement leaves explicit amplitude bounds identical; this is not full
+cache reuse qualification. Engine/proof type checks and seven focused existing
+source regressions pass. No held-amplitude, field, GPU or application acceptance
+is claimed by this slice.
+
+The [first P1 slice review receipt](../../../../.codex-tmp/review-standards/session-ZSL45I/validation.json)
+owns its complete implementation/proof/current-state unit; only matching `CLEAN`
+primary/audit evidence establishes slice completion. The 45-minute execution limit
+applies to this slice, not completion of all P1.
 
 P0 derives a production-owned fixture from authenticated immutable contract/layout/
 gate parents and retains their complete original derivation record. Offline proof

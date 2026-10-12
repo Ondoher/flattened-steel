@@ -5,9 +5,29 @@ import {
 	LOCAL_SUN_SHELL_FACT_ID,
 	LOCAL_SUN_SHELL_MAP_RADIUS_METERS,
 } from './consts.js';
+import DistanceMath from '../../../math/DistanceMath.js';
 
 /** Fixed N=2048 local-Sun construction-fact owner with copy-returning accessors. */
 export class LocalSunShellFactCache {
+	/** Explicit-domain lookup requires complete source-distance support. @type {boolean} */
+	_explicitSourceBounds = false;
+
+	/** Called by source-bound ingress to normalize geometry-owned finite source support.
+	 *
+	 * @param {SourceDistanceBounds} bounds - Unit-bearing physical support extrema.
+	 * @returns {SourceDistanceBounds} - Copied finite ordered metre bounds.
+	 * @throws {RangeError} - Units, positive magnitudes or ordering are invalid.
+	 * @throws {TypeError} - A support endpoint is not a valid unit-bearing distance.
+	 */
+	_acceptSourceDistanceBounds(bounds) {
+		DistanceMath.assertDistance(bounds?.minimumDistance, 'Source support minimum');
+		DistanceMath.assertDistance(bounds?.maximumDistance, 'Source support maximum');
+		let minimum = DistanceMath.toMeters(bounds.minimumDistance);
+		let maximum = DistanceMath.toMeters(bounds.maximumDistance);
+		if (!Number.isFinite(minimum) || !Number.isFinite(maximum) || !(minimum > 0 && maximum > minimum))
+			throw new RangeError('Source support must have finite positive ordered bounds.');
+		return {minimumDistance: DistanceMath.inMeters(minimum), maximumDistance: DistanceMath.inMeters(maximum)};
+	}
 	/**
 	 * Called by local sun shell fact cache to copy the physical source facts that own the shell identity.
 	 *
@@ -89,7 +109,7 @@ export class LocalSunShellFactCache {
 	/**
 	 * Called by local sun shell fact cache to create all exact binary64 boundary radii.
 	 *
-	 * @param {LocalSunShellExecutableDomain} domain - The source-distance domain.
+	 * @param {SourceDistanceBounds} domain - The source-distance domain.
 	 * @returns {Float64Array} - The ordered equal-inverse-square boundaries.
 	 *
 	 */
@@ -182,15 +202,29 @@ export class LocalSunShellFactCache {
 	 * Creates a local sun shell fact cache instance that calls this constructor to create one fixed source-paired shell-fact owner.
 	 *
 	 * @param {LocalSunShellFactCacheConfiguration} configuration - The normalized physical source facts.
+	 * @throws {RangeError} - Explicit bounds are unordered or the finite source intersects that support.
+	 * @throws {TypeError} - An explicit support endpoint has invalid physical units or shape.
 	 *
 	 */
 	constructor(configuration) {
 		const source = this._copySourceFacts(configuration.sourceConfiguration);
-		const domain = this._deriveWholeFlatWorldSourceDomain(source.position);
+		this._explicitSourceBounds = configuration.sourceDistanceBounds !== undefined;
+		const domain =
+			configuration.sourceDistanceBounds === undefined
+				? this._deriveWholeFlatWorldSourceDomain(source.position)
+				: this._acceptSourceDistanceBounds(configuration.sourceDistanceBounds);
+		if (this._explicitSourceBounds && source.radius.value >= domain.minimumDistance.value)
+			throw new RangeError('Finite source intersects the selected atmospheric support.');
 		const boundaries = this._createEqualInverseSquareBoundaries(domain);
+		if (this._explicitSourceBounds) {
+			boundaries[0] = domain.minimumDistance.value;
+			boundaries[LOCAL_SUN_SHELL_COUNT] = domain.maximumDistance.value;
+		}
 		const heldIncidentScales = this._createHeldIncidentScales(boundaries, source);
 
-		this.id = LOCAL_SUN_SHELL_FACT_ID;
+		this.id = this._explicitSourceBounds
+			? `${LOCAL_SUN_SHELL_FACT_ID}:source-centered:${domain.minimumDistance.value}:${domain.maximumDistance.value}`
+			: LOCAL_SUN_SHELL_FACT_ID;
 		this._boundaries = Float64Array.from(boundaries);
 		this._heldIncidentScales = Float64Array.from(heldIncidentScales);
 		this._minimumDistance = {
@@ -284,13 +318,22 @@ export class LocalSunShellFactCache {
 
 	/**
 	 * Call this method to resolve higher-index boundary ownership and the precomputed held scale.
+	 * Explicit compact support rejects outside distances; the existing ordinary control retains its clamped lookup.
 	 *
 	 * @param {number} distanceFromSourceMeters - The source distance in meters.
 	 * @returns {LocalSunResolvedShell} - The containing shell facts.
+	 * @throws {RangeError} - A query falls outside explicit compact support or is nonfinite.
 	 */
 	resolveShell(distanceFromSourceMeters) {
 		const minimumDistanceMeters = this._minimumDistance.value;
 		const maximumDistanceMeters = this._maximumDistance.value;
+		if (
+			this._explicitSourceBounds &&
+			(!Number.isFinite(distanceFromSourceMeters) ||
+				distanceFromSourceMeters < minimumDistanceMeters ||
+				distanceFromSourceMeters > maximumDistanceMeters)
+		)
+			throw new RangeError('Source distance is outside explicit compact support.');
 		const distanceMeters = Math.max(
 			minimumDistanceMeters,
 			Math.min(maximumDistanceMeters, distanceFromSourceMeters),

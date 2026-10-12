@@ -12,6 +12,8 @@ type LocalSunCacheProviderDefinition = Readonly<{
 	readonly source: LocalSunCacheProviderSource;
 	/** Normalized source configuration retained by reference. */
 	readonly configuration: LocalSunLightSourceConfiguration;
+	/** Explicit geometry-derived amplitude support; omission retains the named ordinary Flat32 control domain. */
+	readonly sourceDistanceBounds?: SourceDistanceBounds;
 }>;
 
 /**
@@ -36,6 +38,8 @@ type LocalSunShellFactSourceConfiguration = Pick<
 type LocalSunShellFactCacheConfiguration = Readonly<{
 	/** Normalized physical source facts. */
 	readonly sourceConfiguration: LocalSunShellFactSourceConfiguration;
+	/** Explicit source-centered physical support; outside lookup rejects instead of clamping. Omission retains the existing production control. */
+	readonly sourceDistanceBounds?: SourceDistanceBounds;
 }>;
 
 /** Resolved containing shell. */

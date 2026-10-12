@@ -426,6 +426,19 @@ export class FlatEarthGeometry {
 		return this._scatteringCacheGeometry.createLocalSunCachePositionDomain(request);
 	}
 
+	/** Call this method to create geometry-owned compact positions and complete spatial support.
+	 *
+	 * @param {FlatCompactTopologyRequest} request - Complete source-centered topology and profile-derived refinement.
+	 * @returns {FlatCompactTopology} - Executable ragged positions, stencils and amplitude bounds.
+	 * @throws {RangeError} - Controls or paired geometry height/slab are incompatible.
+	 * @throws {Error} - The finite source has not been configured on this geometry.
+	 */
+	createCompactLocalSunCacheTopology(request) {
+		if (this._scatteringCacheGeometry === null)
+			throw new Error('Configure the finite source before creating compact topology.');
+		return this._scatteringCacheGeometry.createCompactLocalSunCacheTopology(request);
+	}
+
 	/**
 	 * Call this method to build packed local Jk-to-Lk transport data.
 	 *

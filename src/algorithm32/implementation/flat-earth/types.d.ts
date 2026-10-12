@@ -1,3 +1,85 @@
+/** Shared interpolation stencil on one geometry-owned physical axis. */
+type FlatCacheAxisStencil = Readonly<{
+	/** Lower node index. */ readonly lowerIndex: number;
+	/** Upper node index. */ readonly upperIndex: number;
+	/** Positive lower interpolation weight. */ readonly lowerWeight: number;
+	/** Positive upper interpolation weight, zero for an exact node. */ readonly upperWeight: number;
+}>;
+
+/** Accepted controls for v9 ragged physical positions; spectral/medium-derived refinement stays profile-owned. */
+type FlatCompactTopologyRequest = Readonly<{
+	/** Finite source-center height above flat ground. */ readonly sourceHeight: Distance;
+	/** Slab top altitude above flat ground. */ readonly atmosphereTop: Distance;
+	/** Source-centered horizontal coverage radius. */ readonly coverageRadius: Distance;
+	/** Ordered complete altitude controls, including ground and top. */ readonly altitudes: readonly Distance[];
+	/** Ordered physical band endpoints from zero through the cylinder's farthest source distance. */ readonly bandRadii: readonly Distance[];
+	/** Maximum spectral extinction coefficient at each altitude; physical inverse lengths aligned with altitudes. */ readonly boundaryExtinction: readonly InverseDistance[];
+	/** Positive ordered dimensionless multiples of local extinction length added inward from the cylinder. */ readonly boundaryExtinctionLengthMultiples: readonly number[];
+	/** Complete control/profile/medium derivation identity; it does not execute configuration. */ readonly provenanceIdentity: string;
+}>;
+
+/** Physical scattering band identity, independent of compact positions and source-amplitude intervals. */
+type FlatCompactBand = Readonly<{
+	/** Stable physical band address. */ readonly id: number;
+	/** Inner Euclidean source-distance endpoint. */ readonly innerRadius: Distance;
+	/** Outer Euclidean source-distance endpoint. */ readonly outerRadius: Distance;
+	/** False only for proven empty bands strictly below the slab's nearest distance. */ readonly admitted: boolean;
+}>;
+
+/** One readonly compact physical position in source-centered cylindrical coordinates. */
+type FlatCompactNode = Readonly<{
+	/** Contiguous allocated position address. */ readonly index: number;
+	/** Owning altitude-row address. */ readonly rowIndex: number;
+	/** Physical scattering band identity; never an amplitude-band address. */ readonly bandId: number;
+	/** Altitude above flat ground. */ readonly altitude: Distance;
+	/** Source-axis horizontal distance. */ readonly horizontalDistance: Distance;
+	/** Euclidean source-center distance. */ readonly sourceDistance: Distance;
+	/** Stable distance beyond the row's source-axis distance. */ readonly radiusExcess: Distance;
+}>;
+
+/** One contiguous ragged altitude row; no rectangular radial axis is implied. */
+type FlatCompactRow = Readonly<{
+	/** Altitude above flat ground. */ readonly altitude: Distance;
+	/** First allocated compact position. */ readonly offset: number;
+	/** Actual allocated positions in this row. */ readonly count: number;
+	/** Ordered physical radius-excess controls aligned with the row's positions. */ readonly radiusExcesses: readonly Distance[];
+}>;
+
+/** Source-centered physical query admitted only with complete positive spatial support. */
+type FlatCompactPositionQuery = Readonly<{
+	/** Nonnegative horizontal distance from the finite source's axis. */ readonly horizontalDistance: Distance;
+	/** Altitude above flat ground. */ readonly altitude: Distance;
+}>;
+
+/** Executable geometry-owned compact topology and spatial support; angular/field transport remains separate. */
+interface FlatCompactTopology {
+	/** Identity derived from accepted executable controls, never a configuration lookup key. */ readonly id: string;
+	/** Complete input/profile derivation identity. */ readonly provenanceIdentity: string;
+	/** Source-center height above ground. */ readonly sourceHeight: Distance;
+	/** Slab top altitude. */ readonly atmosphereTop: Distance;
+	/** Source-centered horizontal cylinder radius. */ readonly coverageRadius: Distance;
+	/** Actual allocated physical positions. */ readonly positionCount: number;
+	/** Readonly physical nodes, independent of packing dimensions. */ readonly nodes: readonly FlatCompactNode[];
+	/** Readonly contiguous altitude rows. */ readonly rows: readonly FlatCompactRow[];
+	/** All physical bands including omissions without allocated positions. */ readonly bands: readonly FlatCompactBand[];
+	/** Proven empty physical band identities. */ readonly omittedBands: readonly number[];
+	/** Geometry-derived amplitude support extrema, distinct from spatial bands. */ readonly sourceDistanceBounds: SourceDistanceBounds;
+	/**
+	 * Call this method to resolve an allocated compact address.
+	 *
+	 * @param index - Contiguous position address.
+	 * @returns - Readonly physical node; an unallocated address throws.
+	 */
+	positionAt(index: number): FlatCompactNode;
+	/**
+	 * Call this method to resolve complete positive spatial support.
+	 *
+	 * @param query - Source-centered physical coordinates.
+	 * @returns - Compact indices/weights; outside support throws without clamping.
+	 */
+	resolvePositionStencil(query: FlatCompactPositionQuery): ScatteringCachePositionStencil;
+}
+
 /** Type that configures flat Earth atmosphere geometry. */
 type FlatEarthGeometryConfig = {
 	/** Value that stores observer position with its physical unit. */

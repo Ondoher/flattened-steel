@@ -2,6 +2,7 @@ import {CacheValues} from '../../gpu-cache-runtime/CacheValues.js';
 import DistanceMath from '../../math/DistanceMath.js';
 import VectorMath from '../../math/VectorMath.js';
 import {GeometryDirections} from '../../geometry-support/GeometryDirections.js';
+import {CompactLocalCacheTopology} from './CompactLocalCacheTopology.js';
 import {FLAT_GEOMETRY_BOUNDARY_EPSILON, FLAT_INDEXED_TRANSPORT_TEXTURE_WIDTH} from './consts.js';
 
 /**
@@ -375,6 +376,24 @@ export class FlatScatteringCacheGeometry {
 			rhoCount: rhoNodes.length,
 			count: definitions.length,
 		};
+	}
+
+	/** Call this method to create the selected geometry-owned ragged topology from complete physical controls.
+	 * The selected source height and slab must match this geometry; activation in transport is a later P1 step.
+	 *
+	 * @param {FlatCompactTopologyRequest} request - Accepted physical configuration and medium-derived refinement.
+	 * @returns {FlatCompactTopology} - Actual compact positions, admission/stencils and source-distance bounds.
+	 * @throws {RangeError} - Topology inputs or paired height/slab are incompatible.
+	 */
+	createCompactLocalSunCacheTopology(request) {
+		let topology = new CompactLocalCacheTopology(request);
+		if (
+			topology.sourceHeight.value !== DistanceMath.toMeters(this._configuration.localLightSourceHeight) ||
+			topology.sourceHeight.value !== DistanceMath.toMetersPosition(this._configuration.sourcePosition)[2] ||
+			topology.atmosphereTop.value !== DistanceMath.toMeters(this._configuration.topAltitude)
+		)
+			throw new RangeError('Compact topology must match its paired geometry height/slab.');
+		return topology;
 	}
 
 	/**

@@ -94,3 +94,10 @@ interface LightSourceModel {
 	 */
 	configureThreeShadowObject?(object: unknown, request?: LightSourceThreeShadowConfigurationRequest): unknown;
 }
+/** Geometry-derived finite-source support extrema consumed by source-owned amplitude partitions.
+ * Lengths are Euclidean source-center distances; neither field values nor spectral data are stored here.
+ */
+type SourceDistanceBounds = Readonly<{
+	/** Nearest admitted source-center distance, finite and positive. */ readonly minimumDistance: Distance;
+	/** Farthest admitted source-center distance, strictly above the minimum. */ readonly maximumDistance: Distance;
+}>;
