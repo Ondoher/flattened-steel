@@ -775,21 +775,7 @@ export class FlatScatteringCacheGeometry {
 	 */
 	resolveCompactLocalSunCacheStencil(request) {
 		let topology = request.topology;
-		if (
-			!topology ||
-			typeof topology.positionAt !== 'function' ||
-			typeof topology.resolvePositionStencil !== 'function'
-		)
-			throw new RangeError('Compact reconstruction requires complete topology operations.');
-		DistanceMath.assertDistance(topology.sourceHeight, 'Compact topology source height');
-		DistanceMath.assertDistance(topology.atmosphereTop, 'Compact topology atmosphere top');
-		let height = DistanceMath.toMeters(topology.sourceHeight);
-		if (
-			height !== DistanceMath.toMeters(this._configuration.localLightSourceHeight) ||
-			height !== DistanceMath.toMetersPosition(this._configuration.sourcePosition)[2] ||
-			DistanceMath.toMeters(topology.atmosphereTop) !== DistanceMath.toMeters(this._configuration.topAltitude)
-		)
-			throw new RangeError('Compact reconstruction requires a paired geometry-owned topology.');
+		this._assertCompactTopologyPairing(topology);
 		let position = DistanceMath.acceptPositionInMeters(request.position, 'Compact reconstruction position');
 		let direction = GeometryDirections.normalizeDirection(
 			request.physicalOutgoingDirection,
@@ -816,6 +802,58 @@ export class FlatScatteringCacheGeometry {
 			directionStencil:
 				DistanceMath.toMeters(topology.positionAt(positionIndex).horizontalDistance) === 0 ? axis : ordinary,
 		}));
+	}
+
+	/** Called by compact lookup and node placement to require a compatible structural topology.
+	 *
+	 * @param {FlatCompactTopology} topology - Geometry-paired physical domain.
+	 * @returns {void} - No value.
+	 * @throws {RangeError} - Operations or geometry pairing are incompatible.
+	 * @throws {TypeError} - Pairing dimensions lack supported finite units.
+	 */
+	_assertCompactTopologyPairing(topology) {
+		if (
+			!topology ||
+			typeof topology.positionAt !== 'function' ||
+			typeof topology.resolvePositionStencil !== 'function'
+		)
+			throw new RangeError('Compact reconstruction requires complete topology operations.');
+		DistanceMath.assertDistance(topology.sourceHeight, 'Compact topology source height');
+		DistanceMath.assertDistance(topology.atmosphereTop, 'Compact topology atmosphere top');
+		let height = DistanceMath.toMeters(topology.sourceHeight);
+		if (
+			height !== DistanceMath.toMeters(this._configuration.localLightSourceHeight) ||
+			height !== DistanceMath.toMetersPosition(this._configuration.sourcePosition)[2] ||
+			DistanceMath.toMeters(topology.atmosphereTop) !== DistanceMath.toMeters(this._configuration.topAltitude)
+		)
+			throw new RangeError('Compact reconstruction requires a paired geometry-owned topology.');
+	}
+
+	/** Call this method to place an allocated compact node in the geometry's canonical source meridian.
+	 *
+	 * @param {FlatCompactNodePositionRequest} request - Paired topology and allocated position address.
+	 * @returns {Position} - Physical unit-bearing node position.
+	 * @throws {RangeError} - Pairing, address or node support is invalid.
+	 * @throws {TypeError} - Node or topology dimensions lack supported finite units.
+	 */
+	resolveCompactLocalSunCacheNodePosition(request) {
+		this._assertCompactTopologyPairing(request.topology);
+		let node = request.topology.positionAt(request.positionIndex);
+		DistanceMath.assertDistance(node.horizontalDistance, 'Compact node horizontal distance');
+		DistanceMath.assertDistance(node.altitude, 'Compact node altitude');
+		DistanceMath.assertDistance(request.topology.coverageRadius, 'Compact coverage radius');
+		let rho = DistanceMath.toMeters(node.horizontalDistance),
+			z = DistanceMath.toMeters(node.altitude);
+		if (
+			rho < 0 ||
+			rho > DistanceMath.toMeters(request.topology.coverageRadius) ||
+			z < 0 ||
+			z > DistanceMath.toMeters(request.topology.atmosphereTop)
+		)
+			throw new RangeError('Compact node is outside complete support.');
+		let subpoint = this._configuration.sourceSubpoint.coordinates,
+			radial = this._configuration.cacheRadialFallbackDirection;
+		return DistanceMath.positionInMeters([subpoint[0] + radial[0] * rho, subpoint[1] + radial[1] * rho, z]);
 	}
 
 	/**

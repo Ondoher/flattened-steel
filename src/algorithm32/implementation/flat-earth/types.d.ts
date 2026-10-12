@@ -81,6 +81,12 @@ interface FlatCompactTopology {
 }
 
 /** Physical reconstruction query for a topology created by a paired flat geometry. */
+type FlatCompactNodePositionRequest = Readonly<{
+	/** Structural topology with matching source height/slab. */ topology: FlatCompactTopology;
+	/** Actual allocated compact node address. */ positionIndex: number;
+}>;
+
+/** Physical reconstruction query for a topology created by a paired flat geometry. */
 type FlatCompactReconstructionRequest = ScatteringCacheDirectionRequest &
 	Readonly<{
 		/** Executable compact topology, with matching source height and slab. */ readonly topology: FlatCompactTopology;

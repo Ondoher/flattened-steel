@@ -1103,6 +1103,20 @@ export class FlatEarthGeometry {
 		return this._scatteringCacheGeometry.resolveCompactLocalSunCacheStencil(request);
 	}
 
+	/** Call this method to resolve an allocated compact node's canonical physical position.
+	 *
+	 * @param {FlatCompactNodePositionRequest} request - Paired topology and allocated address.
+	 * @returns {Position} - Geometry-owned physical node position.
+	 * @throws {RangeError} - Pairing, address or complete support is invalid.
+	 * @throws {TypeError} - Physical dimensions lack supported finite units.
+	 * @throws {Error} - A finite source has not been configured.
+	 */
+	resolveCompactLocalSunCacheNodePosition(request) {
+		if (this._scatteringCacheGeometry === null)
+			throw new Error('Configure the finite source before compact node placement.');
+		return this._scatteringCacheGeometry.resolveCompactLocalSunCacheNodePosition(request);
+	}
+
 	/**
 	 * Call this method to express one radial-frame cache direction in physical model space.
 	 *

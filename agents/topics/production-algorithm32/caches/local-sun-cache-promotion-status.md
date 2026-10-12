@@ -7,8 +7,9 @@ evidence requirements and execution order. The accepted experiment remains ended
 ordinary production/default/deployed selections are unchanged. The bounded
 P1 slices now implement geometry-owned compact positions/support, explicit
 source-distance bounds, independently compared held source amplitudes and the
-selected incoming quadrature and per-tap directional support. Field,
-normalization/transport and GPU paths remain open. The
+selected incoming quadrature, per-tap directional support and cache-owned
+geometric-density normalization/restoration. Field, transport and GPU paths
+remain open. The
 [P0 contract](local-sun-cache-p0-contract.md) owns the prepared contracts,
 parameter applicability, first-capability controls and resource admission.
 
@@ -25,7 +26,7 @@ frozen experiment remains the independent comparison control.
 | --- | --- |
 | Topic and planning setup | Prepared: current source mapping, architectural assessment, scope, phase sequence and minimal reload route. The setup-review receipt below determines documentation-review completion. |
 | P0 — contracts and controls | Delivered contract/control unit: independent topology and analytic-bound fixture, offline proof/type checks, profile/support/publication and resource policies. Completion requires the matching P0 review receipt below. |
-| P1 — compact domain and CPU | Bounded compact-domain, held-amplitude, incoming-quadrature and per-tap directional-support slices implemented and independently compared. Their matching review receipts below own completion. Remaining P1 field/normalization/transport work is open. |
+| P1 — compact domain and CPU | Bounded compact-domain, held-amplitude, incoming-quadrature, per-tap directional-support and normalization slices implemented and independently compared. Their matching review receipts below own completion. Remaining P1 field/transport work is open. |
 | P2 — GPU construction/runtime | Planned; not started. |
 | P3 — reuse and frame publication | Planned; not started. |
 | P4 — Flat32/celestial consumers | Planned; not started. |
@@ -35,8 +36,8 @@ frozen experiment remains the independent comparison control.
 
 After the matching slice receipts validate, continue P1 from the
 [plan](local-sun-cache-promotion-plan.md#p1--port-compact-domain-source-bounds-and-cpu-reference)
-with complete profile/domain activation, spectral normalization/restoration
-and selected column transport. Capture a new baseline and select
+with selected column transport and complete profile/domain integration.
+Capture a new baseline and select
 independent field/ray outputs before implementing and accepting
 those affected numerical capabilities. Automatic band/altitude seed-policy
 derivation for changed profiles/heights is also open; this first slice accepts
@@ -143,6 +144,20 @@ The [directional-support review receipt](../../../../.codex-tmp/review-standards
 owns this implementation/control/proof/current-state unit; only its matching
 `CLEAN` primary/audit aggregate establishes slice completion. This execution
 retains the 45-minute limit and stops after this selected unit.
+
+The fifth bounded P1 slice implements cache-owned geometric-density interpolation
+and geometry-owned canonical node placement, as owned by
+[normalization qualification](local-sun-normalization-qualification.md). Existing
+physical models and stored J remain unchanged. New immutable `00012-normalization`
+compares all node factors, independent ratios and restored synthetic physical J;
+engine/proof type checks, the directional proof and fifteen existing CPU-cache/W27
+regressions pass. Field construction/accuracy, transport, GPU, full profiles and
+reuse remain open.
+
+The [normalization review receipt](../../../../.codex-tmp/review-standards/session-xgtjTu/validation.json)
+owns this implementation/control/proof/current-state unit; only its matching
+`CLEAN` primary/audit aggregate establishes slice completion. Execution retains
+the 45-minute limit and stops after this selected unit.
 
 The [first P1 slice review receipt](../../../../.codex-tmp/review-standards/session-ZSL45I/validation.json)
 owns its complete implementation/proof/current-state unit; only matching `CLEAN`

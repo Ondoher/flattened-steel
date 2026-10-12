@@ -1,3 +1,50 @@
+/** Geometry-owned physical coordinates and compact node/reconstruction support required by the cache. */
+interface LocalSunCompactReconstructionGeometry extends Pick<
+	GeometryModel,
+	'resolveAtmosphereCoordinate' | 'resolveSourceRelativePosition'
+> {
+	/**
+	 * Call this method to resolve complete physical compact support.
+	 * @param request - Physical query with paired topology.
+	 * @returns - Positive spatial taps with per-tap angular support; unsupported input throws.
+	 */
+	resolveCompactLocalSunCacheStencil(
+		request: FlatCompactReconstructionRequest,
+	): readonly FlatCompactReconstructionTap[];
+	/**
+	 * Call this method to place an allocated node in the canonical source meridian.
+	 * @param request - Paired topology and allocated index.
+	 * @returns - Physical node position; unsupported pairing/address throws.
+	 */
+	resolveCompactLocalSunCacheNodePosition(request: FlatCompactNodePositionRequest): Position;
+}
+
+/** Fixed collaborators for geometric-density interpolation, without changes to their physical models. */
+type LocalSunCompactReconstructionDefinition = Readonly<{
+	/** Geometry-owned coordinates and compact support. */ geometry: LocalSunCompactReconstructionGeometry;
+	/** Structural compact domain paired with the geometry height/slab. */ topology: FlatCompactTopology;
+	/** Existing Native15 medium owner; positive extinction is required. */ atmosphere: Pick<
+		AtmosphereModel,
+		'spectralBasis' | 'sampleMedium'
+	>;
+}>;
+
+/** Positive spatial/angular support with dimensionless spectral restoration ratios. */
+type LocalSunCompactSpectralTap = FlatCompactReconstructionTap &
+	Readonly<{
+		/** Native15 query/node factor ratios; these are never normalized as interpolation weights. */ spectralScales: readonly number[];
+	}>;
+
+/** Physical J query with a read-only field collaborator and retained parent provenance. */
+type LocalSunCompactDensitySampleRequest = ScatteringCacheDirectionRequest &
+	Readonly<{
+		/** Stored physical scattering-density reader; no normalized or radiance samples. */ reader: Pick<
+			CpuDirectionalSpectralFieldReader,
+			'readScalar'
+		>;
+		/** Original physical field identity propagated to the reconstructed packet. */ provenanceIdentity: string;
+	}>;
+
 /** Physical local-Sun facade consumed by cache construction. */
 type LocalSunCacheProviderSource = LightSourceModel &
 	LocalSunConstructionContinuousSource &
