@@ -216,7 +216,7 @@ separately. No replacement-latency or frame-rate target is selected.
 | Capability / production owner | Independent authority and comparison requirement |
 | --- | --- |
 | Compact shape, omission, stencils / flat geometry and local packing | P0 fixture pins 00478 and authenticated pure helper; 00495 stencil and 00510 omission records support declared controls. P1 compares all nodes and exact-node identity plus sentinels; P2 compares occupied compact/unculled fields. |
-| Source-centered bounds / LocalSunShellFactCache and provider | Independent cylinder and inverse-square equations plus sealed-layout extrema. Full boundary vector prepared. Held source amplitudes need separate pinned scalar/reference output before their P1 acceptance. |
+| Source-centered bounds / LocalSunShellFactCache and provider | Independent cylinder and inverse-square equations plus sealed-layout extrema. Full boundary vector prepared. The bounded P1 [held-source qualification](local-sun-held-amplitude-qualification.md) separately pins and compares the frozen held-amplitude vector; status owns its receipt. |
 | Per-tap axis limit, normalized reconstruction, pure/cumulative recurrence / CPU cache and shared transport | Retained P3 abstraction/contract/layout qualification and 00519 report define the accepted algorithms. Whole-field hashes alone do not supply portable scalar gold; obtain independently derived matching field/ray diagnostics before CPU becomes an oracle. |
 | Incoming/column policies / domains, geometry, atmosphere and cache integration | Retained P3 decisions and controls, including 00132 trial and later selected-policy qualification. Preserve exact policy; independent N1/N2, changed-profile and scalar-output comparisons are still required before numerical acceptance. |
 | GPU construction/runtime / source GPU cache and shared transport | Accepted independently compared CPU plus retained policy/precision controls; no CPU/GPU parity claim yet. Declare all resources and prove cleanup/admission. |
@@ -226,7 +226,8 @@ separately. No replacement-latency or frame-rate target is selected.
 | Flat stars and shared vision / geometry, roster/catalog, stellar palette and filters | Same retained celestial authority: actual epoch/rotation/projection/parallax; authenticated current catalog; mesopic max rod 0.5 then low-light max chroma 0.65 from measured adaptation. No fake spherical roster or brightness gain. New selection compatibility requires its own control. |
 
 P0 closes the first-capability comparison-preparation gap through geometry data and
-analytic bounds. Held amplitudes, field/ray scalar diagnostics, additional profile
+analytic bounds. P1's selected held amplitudes have their separate qualification
+owner above. Field/ray scalar diagnostics, additional profile
 families, N1/N2, GPU, reuse and consumers remain explicit acceptance gates in the
 phases that implement them. This inventory does not turn aggregate reports,
 appearance captures or successful type checks into numerical gold.

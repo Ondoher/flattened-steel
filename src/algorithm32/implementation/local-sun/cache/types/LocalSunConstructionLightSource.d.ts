@@ -6,3 +6,6 @@ type LocalSunContinuousDirectLightingMetadata = Readonly<{
 	readonly incidentScale: number;
 }> &
 	Readonly<Record<string, unknown>>;
+
+/** Object-checked collaborator metadata; each consumed physical field is validated before narrowing. */
+type LocalSunConstructionMetadataIngress = Readonly<Record<string, unknown>>;

@@ -19,8 +19,9 @@ owns parameter applicability and the first P1 comparison boundary.
 The local-Sun experiment remains ended, with accepted evidence preserved by its
 [closeout](poc-experiments/engineering-studies/local-sun-cache-reuse/p7-closeout.md).
 P0 prepared independent fixtures and offline proof tools. The first bounded P1
-slice now implements compact geometry/admission and explicit source-distance
-bounds/partition, with its own comparison and review receipt in status. Full P1
+slice implements compact geometry/admission and explicit source-distance
+bounds/partition. The second bounded slice independently compares held amplitudes
+and Native15 source semantics, with its matching receipt in status. Full P1
 fields, directional/transport behavior, GPU paths and consumers remain open.
 Profile/default selection, deployment and publication have not changed.
 P7 closeout and production controls retain their separate evidence/review scopes.

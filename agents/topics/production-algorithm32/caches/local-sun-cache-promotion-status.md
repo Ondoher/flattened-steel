@@ -5,8 +5,9 @@ the production local-Sun cache port. The
 [plan](local-sun-cache-promotion-plan.md) owns scope, production responsibilities,
 evidence requirements and execution order. The accepted experiment remains ended;
 ordinary production/default/deployed selections are unchanged. The first bounded
-P1 slice now implements geometry-owned compact positions/support and explicit
-source-distance bounds; field, angular/transport and GPU paths remain open. The
+P1 slices now implement geometry-owned compact positions/support, explicit
+source-distance bounds and independently compared held source amplitudes;
+field, angular/transport and GPU paths remain open. The
 [P0 contract](local-sun-cache-p0-contract.md) owns the prepared contracts,
 parameter applicability, first-capability controls and resource admission.
 
@@ -23,7 +24,7 @@ frozen experiment remains the independent comparison control.
 | --- | --- |
 | Topic and planning setup | Prepared: current source mapping, architectural assessment, scope, phase sequence and minimal reload route. The setup-review receipt below determines documentation-review completion. |
 | P0 — contracts and controls | Delivered contract/control unit: independent topology and analytic-bound fixture, offline proof/type checks, profile/support/publication and resource policies. Completion requires the matching P0 review receipt below. |
-| P1 — compact domain and CPU | First bounded slice implemented and independently compared: compact topology/admission, source bounds/partition and arbitrary-position packing. Its matching review receipt below owns completion. Remaining P1 field/directional/transport work is open. |
+| P1 — compact domain and CPU | Bounded compact-domain and held-amplitude slices implemented and independently compared. Their matching review receipts below own completion. Remaining P1 field/directional/transport work is open. |
 | P2 — GPU construction/runtime | Planned; not started. |
 | P3 — reuse and frame publication | Planned; not started. |
 | P4 — Flat32/celestial consumers | Planned; not started. |
@@ -31,11 +32,11 @@ frozen experiment remains the independent comparison control.
 
 ## Next Work
 
-After the first-slice receipt validates, continue P1 from the
+After the matching slice receipts validate, continue P1 from the
 [plan](local-sun-cache-promotion-plan.md#p1--port-compact-domain-source-bounds-and-cpu-reference)
 with profile/domain activation, selected incoming quadrature, per-tap directional
 reconstruction, normalization and transport. Capture a new baseline and select
-independent held-amplitude/field/ray outputs before implementing and accepting
+independent field/ray outputs before implementing and accepting
 those affected numerical capabilities. Automatic band/altitude seed-policy
 derivation for changed profiles/heights is also open; this first slice accepts
 explicit physical controls rather than claiming a complete profile builder.
@@ -93,6 +94,23 @@ source placement leaves explicit amplitude bounds identical; this is not full
 cache reuse qualification. Engine/proof type checks and seven focused existing
 source regressions pass. No held-amplitude, field, GPU or application acceptance
 is claimed by this slice.
+
+The second bounded P1 slice independently qualifies the selected held source
+strength and Native15 construction/direct-light meaning, as owned by the
+[source qualification](local-sun-held-amplitude-qualification.md). Its new
+immutable `00006-held-amplitude` comparison covers all 2,048 held bands, 4,097
+continuous queries and 122,910 held/continuous spectral comparisons. Largest
+observed scalar discrepancy is 4.440892098500626e-16, and irradiance discrepancy
+is 8.881784197001252e-16 W m^-2 nm^-1, within predeclared binary64 limits.
+This accepts the existing source component under the frozen input only;
+scattering fields, transport, other profiles, GPU and complete frames remain open.
+The construction adapter now validates unknown collaborator metadata before using
+its physical distance/scale, with explicit failures and metre normalization.
+Engine/proof type checks and nine focused source regressions pass after this fix.
+
+The [held-amplitude review receipt](../../../../.codex-tmp/review-standards/session-nG2yqa/validation.json)
+owns this source/proof/current-state unit; only matching `CLEAN` primary/audit
+evidence establishes slice completion. This slice retains the 45-minute limit.
 
 The [first P1 slice review receipt](../../../../.codex-tmp/review-standards/session-ZSL45I/validation.json)
 owns its complete implementation/proof/current-state unit; only matching `CLEAN`

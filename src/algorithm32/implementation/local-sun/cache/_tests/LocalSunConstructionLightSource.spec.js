@@ -45,6 +45,56 @@ describe('LocalSunConstructionLightSource', /** Called by Jasmine to register th
 		);
 	});
 
+	it('rejects invalid continuous-source metadata before construction lookup', /** Called by Jasmine to verify the validated collaborator boundary. */ () => {
+		const source = createSource();
+		const facts = new LocalSunShellFactCache({sourceConfiguration: source.configuration});
+		const construction = new LocalSunConstructionLightSource({source, shellFactCache: facts});
+		const distance = (facts.boundaries[1] + facts.boundaries[2]) / 2;
+		const request = {
+			sourceRelativePosition: {
+				distanceFromSource: {value: distance, units: 'meters'},
+				directionToSource: [0, 0, 1],
+			},
+		};
+		const continuous = source.sampleDirectLighting(request);
+		const sample = spyOn(source, 'sampleDirectLighting');
+		for (const metadata of [
+			undefined,
+			{distanceFromSource: {value: distance, units: 'seconds'}, incidentScale: 1},
+			{distanceFromSource: {value: distance, units: 'meters'}, incidentScale: NaN},
+		]) {
+			sample.and.returnValue({...continuous, metadata});
+			expect(() => construction.sampleDirectLighting(request)).toThrowError(TypeError);
+		}
+		sample.and.returnValue({
+			...continuous,
+			metadata: {distanceFromSource: {value: distance, units: 'meters'}, incidentScale: -1},
+		});
+		expect(() => construction.sampleDirectLighting(request)).toThrowError(RangeError);
+	});
+
+	it('normalizes validated collaborator metadata distance to metres', /** Called by Jasmine to verify accepted physical units. */ () => {
+		const source = createSource();
+		const facts = new LocalSunShellFactCache({sourceConfiguration: source.configuration});
+		const construction = new LocalSunConstructionLightSource({source, shellFactCache: facts});
+		const distance = (facts.boundaries[1] + facts.boundaries[2]) / 2;
+		const request = {
+			sourceRelativePosition: {
+				distanceFromSource: {value: distance, units: 'meters'},
+				directionToSource: [0, 0, 1],
+			},
+		};
+		const continuous = source.sampleDirectLighting(request);
+		spyOn(source, 'sampleDirectLighting').and.returnValue({
+			...continuous,
+			metadata: {...continuous.metadata, distanceFromSource: {value: distance / 1000, units: 'kilometers'}},
+		});
+		const held = construction.sampleDirectLighting(request);
+		expect(held.metadata.distanceFromSource.units).toBe('meters');
+		expect(held.metadata.distanceFromSource.value).toBeCloseTo(distance, 7);
+		expect(held.metadata.shellIndex).toBe(1);
+	});
+
 	it('delegates the physical finite-source path limit', /** Called by Jasmine to exercise the named behavior. */ () => {
 		const source = createSource();
 		const constructionSource = new LocalSunConstructionLightSource({
