@@ -733,3 +733,84 @@ type LocalSunGpuTransportResidualSummary = Readonly<{
 	/** Nearest-rank p95 Float32 encoding distance. */
 	readonly p95UlpResidual: number;
 }>;
+
+/** Existing physical owners retained by the explicit compact construction profile. */
+type LocalSunCompactProfileModels = Readonly<{
+	/** Geometry owns all coordinates, placement and ray support. */ geometry: FlatEarthGeometry;
+	/** Unchanged accepted exponential medium. */ atmosphere: CanonicalAtmosphere;
+	/** Existing bound finite source. */ lightSource: LocalSunLightSource;
+	/** Explicit black atmospheric ground. */ groundBoundary: null;
+}>;
+/** Complete authored compact seed inputs; medium-dependent refinement is derived by the profile. */
+type LocalSunCompactTopologyControls = Readonly<{
+	/** Explicit source-centered cylinder radius. */ coverageRadius: Distance;
+	/** Ground-through-top altitude seeds. */ altitudes: readonly Distance[];
+	/** Complete Euclidean-radius bands from zero to the farthest cylinder source distance. */ bandRadii: readonly Distance[];
+	/** Positive ordered extinction-length refinement multiples. */ boundaryExtinctionLengthMultiples: readonly number[];
+}>;
+/** Complete physical input graph and topology controls for compact construction. */
+type LocalSunCompactConstructionProfileDefinition = LocalSunCompactProfileModels &
+	Readonly<{
+		/** Explicit controls; automatic changed-height seed generation remains open. */ topologyControls: LocalSunCompactTopologyControls;
+		/** Input ancestry identity, never an executable descriptor. */ provenanceIdentity: string;
+	}>;
+/** Tagged complete numerical selections; analytic source integration consumes no sampled count. */
+type LocalSunCompactNumericalPolicies = Readonly<{
+	/** Cache source-column policy. */ sourcePathTransmittance: Readonly<{kind: 'analytic-exponential-column-v1'}>;
+	/** Existing executable cache policy, with all material parameters. */ cacheTransport: Readonly<{
+		/** Geometry-dependent placement policy. */ kind: 'local-squared-rayleigh-column-v1';
+		/** Executable transport policy identity. */ id: string;
+		/** Positive retained prefix interval count. */ intervalCount: number;
+		/** Dimensionless per-channel attenuation prefix cutoff. */ opticalDepthCutoff: number;
+		/** Bounded optical prefix search iterations. */ prefixSearchIterations: number;
+	}>;
+	/** Prospective view selection, not yet connected to runtime consumers. */ viewPath: Readonly<{
+		/** Positive local view-column policy. */ kind: 'local-positive-column-v1';
+		/** Selected positive view interval count. */ intervalCount: number;
+	}>;
+	/** Shared requested cumulative order; complete recurrence remains open. */ maximumScatteringOrder: 4;
+	/** CPU reference and GPU scalar payload semantics. */ precision: Readonly<{
+		/** Reference scalar precision. */ cpu: 'binary64';
+		/** Prospective GPU storage format. */ gpu: 'scalar-r32f';
+	}>;
+}>;
+/** Real compact position adapter and executable domains, without rectangular axis properties. */
+type LocalSunCompactConstructionDomains = Readonly<{
+	/** Discriminant distinct from rectangular local domains. */ kind: 'local-sun-compact-construction-domains';
+	/** Geometry-owned real ragged topology. */ topology: FlatCompactTopology;
+	/** Actual physical node/count adapter. */ positions: PositionDomain;
+	/** Qualified polar40/azimuth48 incoming measure. */ incomingDirections: WeightedDirectionDomain;
+	/** Shared W27 outgoing owner. */ outgoingDirections: CubedSphereDirectionDomain;
+	/** Logical physical incoming packing; no resident buffer. */ radiancePacking: LocalSunFieldPacking;
+	/** Logical outgoing J packing; no resident buffer. */ scatteringDensityPacking: LocalSunFieldPacking;
+}>;
+/** Complete declared overlap input to the estimate; additional bytes must include all other owned resources. */
+type LocalSunCompactResourceEstimateRequest = Readonly<{
+	/** Retained old scattering fields. */ retainedScatteringFields: number;
+	/** Every other declared owned GPU resource. */ otherOwnedGpuBytes: UnitValue<'bytes'>;
+}>;
+/** Logical full-field estimates, distinct from measured or admitted runtime allocations. */
+type LocalSunCompactResourceEstimate = Readonly<{
+	/** One full physical J field in FP32 bytes. */
+	readonly scatteringFieldBytes: UnitValue<'bytes'>;
+	/** One incoming L field in FP32 bytes. */
+	readonly incomingRadianceBytes: UnitValue<'bytes'>;
+	/** Full incoming/outgoing phase payload in FP32 bytes. */
+	readonly phaseBytes: UnitValue<'bytes'>;
+	/** Conservative three-J/one-L/phase construction subtotal. */
+	readonly newConstructionSubtotalBytes: UnitValue<'bytes'>;
+	/** Declared retained old scattering fields. */
+	readonly retainedScatteringBytes: UnitValue<'bytes'>;
+	/** All caller-declared remaining owned resources. */
+	readonly otherOwnedGpuBytes: UnitValue<'bytes'>;
+	/** Complete declared subtotal, including overlap and additional bytes. */
+	readonly totalOwnedGpuEstimateBytes: UnitValue<'bytes'>;
+	/** P0 production logical allocation ceiling. */
+	readonly ownedGpuCeilingBytes: UnitValue<'bytes'>;
+	/** Arithmetic fit only; it does not authorize or measure allocation. */
+	readonly estimateFitsCeiling: boolean;
+	/** Five J and three L retained N4 binary64 buffers, excluding other working memory. */
+	readonly fullCpuRetainedSpectralBytes: UnitValue<'bytes'>;
+	/** This estimate operation allocates no spectral field. */
+	readonly spectralBuffersAllocated: 0;
+}>;

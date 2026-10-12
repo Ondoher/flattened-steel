@@ -61,13 +61,13 @@ export class LocalSunAssemblyProof {
 		return fixture;
 	}
 
-	/** Called by the proof to build actual physical owners from P0 input configuration, excluding expected outputs.
+	/** Call this method to build actual physical owners from P0 input configuration, excluding expected outputs.
 	 * The existing native profile supplies the shared calculator's spectral facts only; it is not represented as a complete compact compiler profile.
 	 *
 	 * @returns {LocalSunCompactCpuAssemblyDefinition} - Bound physical source, compact topology, medium and genuine shared calculator.
 	 * @throws {Error} - Physical P0 authority differs.
 	 */
-	_setup() {
+	createPhysicalDefinition() {
 		let input = 'src/algorithm32/implementation/local-sun/cache/fixtures/local-sun-compact-p0-controls.json';
 		if (this._controls.paths.hash(input) !== '74a7cb03fd646d6ec4754e45e46f7ed622c815d09cd82ceeef174819c3513db6')
 			throw new Error('P0 authority changed.');
@@ -154,7 +154,7 @@ export class LocalSunAssemblyProof {
 			freeBefore = os.freemem(),
 			started = performance.now();
 		if (freeBefore < 8 * 1024 ** 3) throw new Error('Eight GiB free-memory reserve required.');
-		let setup = this._setup(),
+		let setup = this.createPhysicalDefinition(),
 			candidate = new LocalSunCompactCpuAssembly(setup),
 			setupMilliseconds = performance.now() - started;
 		let domains = candidate.domains;

@@ -75,6 +75,7 @@ describe('local-Sun GPU cache plan', /** Called by Jasmine to register the named
 		});
 		const profile = /** @type {Algorithm32ExecutionProfile} */ (
 			/** @type {unknown} */ ({
+				kind: 'algorithm32-execution-profile',
 				id: 'test-local-direct-40-profile',
 				spectral: {basis},
 				domains: {

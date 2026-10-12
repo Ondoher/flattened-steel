@@ -9,6 +9,7 @@ import {
 	LOCAL_SUN_SCATTERING_DENSITY_PACKING_ID,
 } from './consts.js';
 import LocalSunFieldPacking from './LocalSunFieldPacking.js';
+import {LocalSunCompactConstructionProfile} from './LocalSunCompactConstructionProfile.js';
 
 /**
  * Coherent executable z-by-rho, reflection-completed Fibonacci-68, and cubed-sphere
@@ -162,6 +163,21 @@ export default class LocalSunConstructionDomainSelection {
 	 * @returns {LocalSunConstructionDomainSelection} - Profile-sized executable selection.
 	 */
 	static fromProfile(profile) {
+		if (profile?.kind !== 'algorithm32-execution-profile')
+			throw new TypeError(
+				'Sampled rectangular execution profile required; use fromCompactProfile for compact construction.',
+			);
+		let positions = /** @type {LocalSunPositionDomainOwner} */ (profile.domains.positions);
+		if (
+			!Array.isArray(positions.zNodes) ||
+			!Array.isArray(positions.rhoNodes) ||
+			positions.zNodes.length !== positions.zCount ||
+			positions.rhoNodes.length !== positions.rhoCount ||
+			positions.zCount * positions.rhoCount !== positions.count
+		)
+			throw new RangeError(
+				'Rectangular local position axes required; compact positions cannot enter this builder.',
+			);
 		const identityPrefix = `${profile.id}-local-sun`;
 
 		return new LocalSunConstructionDomainSelection({
@@ -177,5 +193,16 @@ export default class LocalSunConstructionDomainSelection {
 			radiancePackingId: `${identityPrefix}-radiance-packing-v1`,
 			scatteringDensityPackingId: `${identityPrefix}-scattering-density-packing-v1`,
 		});
+	}
+
+	/** Call this method to select the genuine compact profile's ragged domains without rectangular adaptation or field allocation.
+	 *
+	 * @param {unknown} profile - Complete explicit compact cache-construction profile.
+	 * @returns {LocalSunCompactConstructionDomains} - Accepted actual domains and logical packings.
+	 * @throws {TypeError} - The profile is not a genuine compact capability.
+	 * @throws {RangeError} - Retained physical facts changed after construction.
+	 */
+	static fromCompactProfile(profile) {
+		return LocalSunCompactConstructionProfile.assert(profile).domains;
 	}
 }

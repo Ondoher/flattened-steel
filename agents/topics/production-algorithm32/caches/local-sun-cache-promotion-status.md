@@ -9,8 +9,9 @@ P1 slices now implement geometry-owned compact positions/support, explicit
 source-distance bounds, independently compared held source amplitudes and the
 selected incoming quadrature, per-tap directional support and cache-owned
 geometric-density normalization/restoration and selected-ray Column48/Tail64
-transport and selected CPU construction/scattering-step assembly. Field construction,
-complete recurrence/profile integration and GPU
+transport, selected CPU construction/scattering-step assembly and a complete explicit
+compact cache-construction profile/selector connection. Full field construction,
+physical recurrence/ordinary runtime profile integration and GPU
 paths remain open. The
 [P0 contract](local-sun-cache-p0-contract.md) owns the prepared contracts,
 parameter applicability, first-capability controls and resource admission.
@@ -28,7 +29,7 @@ frozen experiment remains the independent comparison control.
 | --- | --- |
 | Topic and planning setup | Prepared: current source mapping, architectural assessment, scope, phase sequence and minimal reload route. The setup-review receipt below determines documentation-review completion. |
 | P0 — contracts and controls | Delivered contract/control unit: independent topology and analytic-bound fixture, offline proof/type checks, profile/support/publication and resource policies. Completion requires the matching P0 review receipt below. |
-| P1 — compact domain and CPU | Bounded compact-domain, held-amplitude, incoming-quadrature, per-tap directional-support, normalization, selected-ray transport and selected CPU assembly slices implemented and independently compared. Their matching review receipts below own completion. Remaining P1 physical field/recurrence/profile integration is open. |
+| P1 — compact domain and CPU | Bounded compact-domain, held-amplitude, incoming-quadrature, per-tap directional-support, normalization, selected-ray transport, selected CPU assembly and explicit compact construction-profile slices implemented and independently compared. Their matching review receipts below own completion. Remaining P1 physical field/recurrence/ordinary runtime profile integration is open. |
 | P2 — GPU construction/runtime | Planned; not started. |
 | P3 — reuse and frame publication | Planned; not started. |
 | P4 — Flat32/celestial consumers | Planned; not started. |
@@ -38,15 +39,19 @@ frozen experiment remains the independent comparison control.
 
 After the matching slice receipts validate, continue P1 from the
 [plan](local-sun-cache-promotion-plan.md#p1--port-compact-domain-source-bounds-and-cpu-reference)
-with complete profile/domain integration and independently controlled physical
-field/recurrence inputs. The selected assembly cost pilot does not admit a naive
+with independently controlled physical field/recurrence inputs and ordinary
+runtime profile integration. The complete explicit
+[compact construction profile](local-sun-compact-profile-qualification.md)
+now owns actual domains, tagged policies, physical inputs/identity and no-buffer
+resource estimates; existing sampled/rectangular runtime consumers retain a separate
+integration gate. The selected assembly cost pilot does not admit a naive
 full CPU recurrence run; retain bounded selected work and compatible immutable
 field inputs where appropriate. Complete production construction remains GPU work.
 Capture a new baseline and select
 independent physical field/ray outputs before implementing and accepting
 those affected numerical capabilities. Automatic band/altitude seed-policy
-derivation for changed profiles/heights is also open; this first slice accepts
-explicit physical controls rather than claiming a complete profile builder.
+derivation for changed profiles/heights is also open; the explicit construction
+profile requires authored seeds rather than claiming automatic changed-profile generation.
 Preserve existing production defaults as controls.
 
 The first slice implements `CompactLocalCacheTopology` through the flat geometry
@@ -184,12 +189,26 @@ construction path, as owned by [assembly qualification](local-sun-assembly-quali
 Immutable `00018-assembly` compares physical J1, two stored-primary transport rays
 and a separate manufactured full-measure L-to-J2 subset. Continuous direct/source
 semantics remain unchanged. Its cost pilot passes in 1.93 seconds but does not admit
-full CPU recurrence. Complete profiles/physical fields/GPU/runtime remain open.
+full CPU recurrence. Ordinary runtime profiles/physical fields/GPU/runtime remain open.
 
 The [selected assembly review receipt](../../../../.codex-tmp/review-standards/session-6xfayZ/validation.json)
 owns this implementation/control/proof/current-state unit; only its matching
 `CLEAN` primary/audit aggregate establishes slice completion. Execution retains
 the 45-minute limit and stops after this selected unit.
+
+The eighth bounded P1 slice connects a complete explicit compact cache-construction
+profile to the domain selector and qualified lazy CPU assembly. Its
+[qualification](local-sun-compact-profile-qualification.md) owns the construction
+boundary, policy applicability, identity/support and no-buffer resource estimates.
+Immutable `00020-compact-profile` compares all 1,049 physical nodes and 2,160
+independent primary values, eight ingress/support rejects and the P0 overlap arithmetic.
+Nine existing rectangular plan specs and engine/scoped proof type checks pass.
+Full physical fields/recurrence and ordinary runtime integration remain open.
+
+The [compact construction-profile review receipt](../../../../.codex-tmp/review-standards/session-JQtMIs/validation-final.json)
+owns this implementation/contracts/proof/current-state unit; only its matching
+`CLEAN` primary/audit aggregate establishes slice completion. Execution retains
+the 45-minute limit, a local checkpoint and stop; no full CPU construction is admitted.
 
 The [first P1 slice review receipt](../../../../.codex-tmp/review-standards/session-ZSL45I/validation.json)
 owns its complete implementation/proof/current-state unit; only matching `CLEAN`

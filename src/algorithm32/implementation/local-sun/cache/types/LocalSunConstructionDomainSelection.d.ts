@@ -77,4 +77,7 @@ export default class LocalSunConstructionDomainSelection {
 
 	/** Construct a profile-sized selection without Native domain fallbacks. */
 	static fromProfile(profile: Algorithm32ExecutionProfile): LocalSunConstructionDomainSelection;
+
+	/** Select actual compact domains with no rectangular axes or resident fields. */
+	static fromCompactProfile(profile: unknown): LocalSunCompactConstructionDomains;
 }

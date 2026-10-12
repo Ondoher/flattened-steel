@@ -13,6 +13,7 @@ import LocalSunFieldPacking from './LocalSunFieldPacking.js';
 import LocalSunConstructionLightSource from './LocalSunConstructionLightSource.js';
 import {LocalSunShellFactCache} from './LocalSunShellFactCache.js';
 import {LocalSunCompactTransport} from './LocalSunCompactTransport.js';
+import {LocalSunCompactConstructionProfile} from './LocalSunCompactConstructionProfile.js';
 
 /** Source-owned selected compact CPU construction; complete fields, recurrence and execution-profile activation remain separate. */
 export class LocalSunCompactCpuAssembly {
@@ -324,5 +325,36 @@ export class LocalSunCompactCpuAssembly {
 				units: 'bytes',
 			},
 		};
+	}
+
+	/** Call this method to connect the complete compact construction profile to the qualified selected CPU assembly.
+	 * The shared physical phase calculator remains an explicit collaborator; no full recurrence or ordinary runtime is started.
+	 *
+	 * @param {unknown} candidate - Genuine complete compact construction profile.
+	 * @param {LaterOrderScatteringCalculator} calculator - Existing source-neutral physical phase/scattering calculator.
+	 * @returns {LocalSunCompactCpuAssembly} - Lazy selected reference using the profile's actual domains and packings.
+	 * @throws {TypeError} - Profile or physical collaborator contracts are incompatible.
+	 * @throws {RangeError} - Retained facts, placement or spectral support changed.
+	 */
+	static fromCompactProfile(candidate, calculator) {
+		let profile = LocalSunCompactConstructionProfile.assert(candidate);
+		let {geometry, atmosphere, lightSource} = profile.models;
+		let domains = profile.domains;
+		let assembly = new LocalSunCompactCpuAssembly({
+			geometry,
+			atmosphere,
+			lightSource,
+			topology: domains.topology,
+			calculator,
+		});
+		assembly._domains = {
+			topology: domains.topology,
+			spectralBasis: profile.spectral.basis,
+			incomingDirections: domains.incomingDirections,
+			outgoingDirections: domains.outgoingDirections,
+			radiancePacking: domains.radiancePacking,
+			scatteringPacking: domains.scatteringDensityPacking,
+		};
+		return assembly;
 	}
 }

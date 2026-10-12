@@ -29,7 +29,10 @@ ports selected-ray Column48/Tail64 cache integration, atmosphere-owned cache
 columns and geometry-owned ray endpoints. The seventh connects selected compact
 CPU construction, primary J1 transport and a separate manufactured full-measure
 scattering step, with a bounded cost pilot; matching receipts are linked in status.
-Full P1 fields, recurrence/profile integration, GPU paths and
+The eighth connects a complete explicit compact cache-construction profile to
+actual domain selectors and lazy assembly, with independent physical-node/primary
+comparisons and no-buffer resource estimates. Ordinary runtime profile integration
+retains its separate gate. Full P1 fields, recurrence, GPU paths and
 consumers remain open.
 Profile/default selection, deployment and publication have not changed.
 P7 closeout and production controls retain their separate evidence/review scopes.
