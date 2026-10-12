@@ -1,0 +1,6 @@
+{
+	"extends": "../compact-domain/jsconfig.json",
+	"compilerOptions": {"maxNodeModuleJsDepth": 0},
+	"include": ["*.js", "*.d.ts", "types/*.d.ts", "../../../../src/algorithm32/**/*.d.ts"],
+	"exclude": ["../../../../node_modules/**", "../../../../src/algorithm32/**/_tests/**"]
+}

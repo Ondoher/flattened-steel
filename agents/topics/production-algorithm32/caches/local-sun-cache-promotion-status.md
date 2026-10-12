@@ -4,10 +4,11 @@ Current disposition, 2026-10-12: the owner selected independent P0 execution for
 the production local-Sun cache port. The
 [plan](local-sun-cache-promotion-plan.md) owns scope, production responsibilities,
 evidence requirements and execution order. The accepted experiment remains ended;
-ordinary production/default/deployed selections are unchanged. The first bounded
+ordinary production/default/deployed selections are unchanged. The bounded
 P1 slices now implement geometry-owned compact positions/support, explicit
-source-distance bounds and independently compared held source amplitudes;
-field, angular/transport and GPU paths remain open. The
+source-distance bounds, independently compared held source amplitudes and the
+selected incoming quadrature. Field, per-tap directional/transport and GPU paths
+remain open. The
 [P0 contract](local-sun-cache-p0-contract.md) owns the prepared contracts,
 parameter applicability, first-capability controls and resource admission.
 
@@ -24,7 +25,7 @@ frozen experiment remains the independent comparison control.
 | --- | --- |
 | Topic and planning setup | Prepared: current source mapping, architectural assessment, scope, phase sequence and minimal reload route. The setup-review receipt below determines documentation-review completion. |
 | P0 — contracts and controls | Delivered contract/control unit: independent topology and analytic-bound fixture, offline proof/type checks, profile/support/publication and resource policies. Completion requires the matching P0 review receipt below. |
-| P1 — compact domain and CPU | Bounded compact-domain and held-amplitude slices implemented and independently compared. Their matching review receipts below own completion. Remaining P1 field/directional/transport work is open. |
+| P1 — compact domain and CPU | Bounded compact-domain, held-amplitude and incoming-quadrature slices implemented and independently compared. Their matching review receipts below own completion. Remaining P1 field/directional/transport work is open. |
 | P2 — GPU construction/runtime | Planned; not started. |
 | P3 — reuse and frame publication | Planned; not started. |
 | P4 — Flat32/celestial consumers | Planned; not started. |
@@ -34,7 +35,7 @@ frozen experiment remains the independent comparison control.
 
 After the matching slice receipts validate, continue P1 from the
 [plan](local-sun-cache-promotion-plan.md#p1--port-compact-domain-source-bounds-and-cpu-reference)
-with profile/domain activation, selected incoming quadrature, per-tap directional
+with complete profile/domain activation, per-tap directional
 reconstruction, normalization and transport. Capture a new baseline and select
 independent field/ray outputs before implementing and accepting
 those affected numerical capabilities. Automatic band/altitude seed-policy
@@ -49,6 +50,10 @@ narrow `SourceDistanceBounds` value flows through shell facts/provider; explicit
 support rejects outside distances while the named ordinary Flat32 control retains
 its existing lookup behavior. No ragged domain is silently fed to the current
 rectangular field/transport pipeline.
+
+The selected incoming measure is now available through the sampling-domain
+facade as `FlatHorizonPartitionedDirectionDomain`. Its standalone domain proof
+does not activate a compact construction profile or qualify per-node transforms.
 
 Shared Native15, W27, physical coefficients, phase, order meanings and scalar
 precision align. The [applicability inventory](local-sun-cache-p0-contract.md#parameter-applicability)
@@ -111,6 +116,20 @@ Engine/proof type checks and nine focused source regressions pass after this fix
 The [held-amplitude review receipt](../../../../.codex-tmp/review-standards/session-nG2yqa/validation.json)
 owns this source/proof/current-state unit; only matching `CLEAN` primary/audit
 evidence establishes slice completion. This slice retains the 45-minute limit.
+
+The third bounded P1 slice ports and compares the selected incoming measure,
+owned by [incoming qualification](local-sun-incoming-quadrature-qualification.md).
+All 1,920 ordered vectors and positive weights match the retained independent
+historical controls exactly; full/half-sphere measure, horizon partitions and
+80 analytic band moments pass. The domain and its arrays are immutable. New run
+`00008-incoming-quadrature` preserves the copied authority and current tool/source
+identities. Engine/proof type checks and the two focused existing F68 regressions
+pass; per-tap transforms, fields, transport, GPU and activation remain open.
+
+The [incoming-quadrature review receipt](../../../../.codex-tmp/review-standards/session-G5Hn1i/validation.json)
+owns this implementation/control/proof/current-state unit; only its matching
+`CLEAN` primary/audit result establishes slice completion. This execution retains
+the 45-minute limit and stops after the selected unit.
 
 The [first P1 slice review receipt](../../../../.codex-tmp/review-standards/session-ZSL45I/validation.json)
 owns its complete implementation/proof/current-state unit; only matching `CLEAN`

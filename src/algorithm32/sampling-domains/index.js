@@ -11,6 +11,7 @@ export {default as Fibonacci34DirectionDomain} from './direction/fibonacci/Fibon
 export {default as PairedFibonacci34DirectionDomain} from './direction/fibonacci/PairedFibonacci34DirectionDomain.js';
 export {default as PairedRotatedFibonacci68DirectionDomain} from './direction/fibonacci/PairedRotatedFibonacci68DirectionDomain.js';
 export {default as ReflectionCompletedFibonacci68DirectionDomain} from './direction/fibonacci/ReflectionCompletedFibonacci68DirectionDomain.js';
+export {default as FlatHorizonPartitionedDirectionDomain} from './direction/horizon-partitioned/FlatHorizonPartitionedDirectionDomain.js';
 export {
 	FIBONACCI_34_DIRECTION_DOMAIN_OWNER,
 	PAIRED_FIBONACCI_34_DIRECTION_DOMAIN_OWNER,
