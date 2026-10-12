@@ -763,6 +763,61 @@ export class FlatScatteringCacheGeometry {
 		return this._outgoingDirectionDomain.resolveStencil(this.expressScatteringCacheDirection(request));
 	}
 
+	/** Call this method to resolve complete compact spatial support with a separate angular lookup at each tap.
+	 * Ordinary taps retain the query radial frame. Axis taps preserve horizontal magnitude and vertical
+	 * direction in the canonical meridian; there is no independent Sun-angle position axis.
+	 * This capability supplies interpolation support only, without spectral density restoration or field sampling.
+	 *
+	 * @param {FlatCompactReconstructionRequest} request - Paired compact topology and physical unit-bearing query.
+	 * @returns {readonly FlatCompactReconstructionTap[]} - Positive spatial taps with their W27 angular support.
+	 * @throws {RangeError} - Topology pairing, direction or complete spatial support is invalid.
+	 * @throws {TypeError} - Physical position or topology bounds lack finite supported distance units.
+	 */
+	resolveCompactLocalSunCacheStencil(request) {
+		let topology = request.topology;
+		if (
+			!topology ||
+			typeof topology.positionAt !== 'function' ||
+			typeof topology.resolvePositionStencil !== 'function'
+		)
+			throw new RangeError('Compact reconstruction requires complete topology operations.');
+		DistanceMath.assertDistance(topology.sourceHeight, 'Compact topology source height');
+		DistanceMath.assertDistance(topology.atmosphereTop, 'Compact topology atmosphere top');
+		let height = DistanceMath.toMeters(topology.sourceHeight);
+		if (
+			height !== DistanceMath.toMeters(this._configuration.localLightSourceHeight) ||
+			height !== DistanceMath.toMetersPosition(this._configuration.sourcePosition)[2] ||
+			DistanceMath.toMeters(topology.atmosphereTop) !== DistanceMath.toMeters(this._configuration.topAltitude)
+		)
+			throw new RangeError('Compact reconstruction requires a paired geometry-owned topology.');
+		let position = DistanceMath.acceptPositionInMeters(request.position, 'Compact reconstruction position');
+		let direction = GeometryDirections.normalizeDirection(
+			request.physicalOutgoingDirection,
+			'Compact reconstruction direction',
+		);
+		let subpoint = this._configuration.sourceSubpoint.coordinates;
+		let spatial = topology.resolvePositionStencil({
+			horizontalDistance: DistanceMath.inMeters(Math.hypot(position[0] - subpoint[0], position[1] - subpoint[1])),
+			altitude: DistanceMath.inMeters(position[2]),
+		});
+		let ordinary = this._outgoingDirectionDomain.resolveStencil(
+			this._localCacheDirection(this._configuration, position, direction),
+		);
+		let fallback = this._configuration.cacheRadialFallbackDirection;
+		let horizontal = Math.hypot(direction[0], direction[1]);
+		let projected = /** @type {UnitVector3} */ ([fallback[0] * horizontal, fallback[1] * horizontal, direction[2]]);
+		let axis = this.resolveScatteringCacheDirectionStencil({
+			position: this._configuration.sourceSubpoint,
+			physicalOutgoingDirection: projected,
+		});
+		return spatial.indices.map((positionIndex, index) => ({
+			positionIndex,
+			positionWeight: spatial.weights[index],
+			directionStencil:
+				DistanceMath.toMeters(topology.positionAt(positionIndex).horizontalDistance) === 0 ? axis : ordinary,
+		}));
+	}
+
 	/**
 	 * Call this method to express one radial-frame cache direction in physical model space.
 	 *

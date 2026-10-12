@@ -1088,6 +1088,21 @@ export class FlatEarthGeometry {
 		return this._scatteringCacheGeometry.resolveScatteringCacheDirectionStencil(request);
 	}
 
+	/** Call this method to resolve geometry-owned compact spatial and per-tap W27 angular support.
+	 * Axis taps use the retained canonical-meridian limit; ordinary taps use the query radial frame.
+	 *
+	 * @param {FlatCompactReconstructionRequest} request - Paired compact topology and physical query.
+	 * @returns {readonly FlatCompactReconstructionTap[]} - Positive spatial taps with separate angular support.
+	 * @throws {RangeError} - Topology pairing or complete query support is invalid.
+	 * @throws {TypeError} - Physical position or topology bounds lack finite supported distance units.
+	 * @throws {Error} - A finite source has not been configured.
+	 */
+	resolveCompactLocalSunCacheStencil(request) {
+		if (this._scatteringCacheGeometry === null)
+			throw new Error('Configure the finite source before compact reconstruction.');
+		return this._scatteringCacheGeometry.resolveCompactLocalSunCacheStencil(request);
+	}
+
 	/**
 	 * Call this method to express one radial-frame cache direction in physical model space.
 	 *

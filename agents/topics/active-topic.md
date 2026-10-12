@@ -22,8 +22,9 @@ P0 prepared independent fixtures and offline proof tools. The first bounded P1
 slice implements compact geometry/admission and explicit source-distance
 bounds/partition. The second bounded slice independently compares held amplitudes
 and Native15 source semantics. The third bounded slice ports and compares the
-selected incoming measure; matching slice receipts are linked in status. Full P1
-fields, directional/transport behavior, GPU paths and consumers remain open.
+selected incoming measure. The fourth ports and compares per-tap ordinary/axis
+directional support; matching slice receipts are linked in status. Full P1
+fields, normalization/transport, GPU paths and consumers remain open.
 Profile/default selection, deployment and publication have not changed.
 P7 closeout and production controls retain their separate evidence/review scopes.
 

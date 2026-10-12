@@ -1,0 +1,825 @@
+{
+	"schema": "local-sun-directional-controls-v1",
+	"cases": [
+		{
+			"angle": 0,
+			"direction": [1, 0, 0],
+			"normal": {
+				"indices": [364],
+				"weights": [1]
+			},
+			"axis": {
+				"indices": [364],
+				"weights": [1]
+			}
+		},
+		{
+			"angle": 0,
+			"direction": [-1, 0, 0],
+			"normal": {
+				"indices": [1093],
+				"weights": [1]
+			},
+			"axis": {
+				"indices": [364],
+				"weights": [1]
+			}
+		},
+		{
+			"angle": 0,
+			"direction": [0, 1, 0],
+			"normal": {
+				"indices": [1822],
+				"weights": [1]
+			},
+			"axis": {
+				"indices": [364],
+				"weights": [1]
+			}
+		},
+		{
+			"angle": 0,
+			"direction": [0, -1, 0],
+			"normal": {
+				"indices": [2551],
+				"weights": [1]
+			},
+			"axis": {
+				"indices": [364],
+				"weights": [1]
+			}
+		},
+		{
+			"angle": 0,
+			"direction": [0, 0, 1],
+			"normal": {
+				"indices": [3280],
+				"weights": [1]
+			},
+			"axis": {
+				"indices": [3280],
+				"weights": [1]
+			}
+		},
+		{
+			"angle": 0,
+			"direction": [0, 0, -1],
+			"normal": {
+				"indices": [4009],
+				"weights": [1]
+			},
+			"axis": {
+				"indices": [4009],
+				"weights": [1]
+			}
+		},
+		{
+			"angle": 0,
+			"direction": [0.5773502691896258, 0.5773502691896258, 0.5773502691896258],
+			"normal": {
+				"indices": [728],
+				"weights": [1]
+			},
+			"axis": {
+				"indices": [607, 634],
+				"weights": [0.8076118445748826, 0.19238815542511745]
+			}
+		},
+		{
+			"angle": 0,
+			"direction": [-0.5773502691896258, -0.5773502691896258, -0.5773502691896258],
+			"normal": {
+				"indices": [755],
+				"weights": [1]
+			},
+			"axis": {
+				"indices": [94, 121],
+				"weights": [0.19238815542511833, 0.8076118445748817]
+			}
+		},
+		{
+			"angle": 0,
+			"direction": [0.9167755402268202, 0.33920694988392347, -0.21085837425216863],
+			"normal": {
+				"indices": [287, 288, 314, 315],
+				"weights": [0.1880999999999978, 0.8019000000000024, 0.0018999999999999367, 0.00809999999999985]
+			},
+			"axis": {
+				"indices": [283, 310],
+				"weights": [0.8042069096168714, 0.19579309038312864]
+			}
+		},
+		{
+			"angle": 0,
+			"direction": [-0.2701275044138423, 0.8713790464962656, 0.40954815185324484],
+			"normal": {
+				"indices": [1988, 1989, 2015, 2016],
+				"weights": [0.8632999999999995, 0.02670000000000103, 0.10669999999999932, 0.003300000000000108]
+			},
+			"axis": {
+				"indices": [499, 526],
+				"weights": [0.16398873707408868, 0.8360112629259113]
+			}
+		},
+		{
+			"angle": 0,
+			"direction": [0.1731427414077059, -0.3736238104061022, 0.9112775863563468],
+			"normal": {
+				"indices": [3120, 3121, 3147, 3148],
+				"weights": [0.17490000000000042, 0.15509999999999965, 0.35510000000000075, 0.3148999999999992]
+			},
+			"axis": {
+				"indices": [3285, 3286],
+				"weights": [0.12549576559859688, 0.8745042344014031]
+			}
+		},
+		{
+			"angle": 0,
+			"direction": [0.6979368110139386, 0.6979368040345704, 0.16052546653320587],
+			"normal": {
+				"indices": [430, 431, 457, 458],
+				"weights": [1.300000036508181e-9, 0.00999999869999975, 1.287000036143127e-7, 0.9899998712999966]
+			},
+			"axis": {
+				"indices": [418, 445],
+				"weights": [0.8857507136809755, 0.11424928631902453]
+			}
+		},
+		{
+			"angle": 0,
+			"direction": [0.6979368040345704, 0.6979368110139386, 0.16052546653320587],
+			"normal": {
+				"indices": [1863, 1864, 1890, 1891],
+				"weights": [0.009999998699999766, 1.3000000209650587e-9, 0.9899998712999981, 1.2870000207554357e-7]
+			},
+			"axis": {
+				"indices": [418, 445],
+				"weights": [0.8857507136809755, 0.11424928631902453]
+			}
+		},
+		{
+			"angle": 1.5707963267948966,
+			"direction": [1, 0, 0],
+			"normal": {
+				"indices": [2551],
+				"weights": [1]
+			},
+			"axis": {
+				"indices": [364],
+				"weights": [1]
+			}
+		},
+		{
+			"angle": 1.5707963267948966,
+			"direction": [-1, 0, 0],
+			"normal": {
+				"indices": [1822],
+				"weights": [1]
+			},
+			"axis": {
+				"indices": [364],
+				"weights": [1]
+			}
+		},
+		{
+			"angle": 1.5707963267948966,
+			"direction": [0, 1, 0],
+			"normal": {
+				"indices": [364],
+				"weights": [1]
+			},
+			"axis": {
+				"indices": [364],
+				"weights": [1]
+			}
+		},
+		{
+			"angle": 1.5707963267948966,
+			"direction": [0, -1, 0],
+			"normal": {
+				"indices": [1093],
+				"weights": [1]
+			},
+			"axis": {
+				"indices": [364],
+				"weights": [1]
+			}
+		},
+		{
+			"angle": 1.5707963267948966,
+			"direction": [0, 0, 1],
+			"normal": {
+				"indices": [3280],
+				"weights": [1]
+			},
+			"axis": {
+				"indices": [3280],
+				"weights": [1]
+			}
+		},
+		{
+			"angle": 1.5707963267948966,
+			"direction": [0, 0, -1],
+			"normal": {
+				"indices": [4009],
+				"weights": [1]
+			},
+			"axis": {
+				"indices": [4009],
+				"weights": [1]
+			}
+		},
+		{
+			"angle": 1.5707963267948966,
+			"direction": [0.5773502691896258, 0.5773502691896258, 0.5773502691896258],
+			"normal": {
+				"indices": [702],
+				"weights": [1]
+			},
+			"axis": {
+				"indices": [607, 634],
+				"weights": [0.8076118445748826, 0.19238815542511745]
+			}
+		},
+		{
+			"angle": 1.5707963267948966,
+			"direction": [-0.5773502691896258, -0.5773502691896258, -0.5773502691896258],
+			"normal": {
+				"indices": [729],
+				"weights": [1]
+			},
+			"axis": {
+				"indices": [94, 121],
+				"weights": [0.19238815542511833, 0.8076118445748817]
+			}
+		},
+		{
+			"angle": 1.5707963267948966,
+			"direction": [0.9167755402268202, 0.33920694988392347, -0.21085837425216863],
+			"normal": {
+				"indices": [2474, 2475, 2501, 2502],
+				"weights": [0.1880999999999978, 0.8019000000000024, 0.0018999999999999367, 0.00809999999999985]
+			},
+			"axis": {
+				"indices": [283, 310],
+				"weights": [0.8042069096168714, 0.19579309038312864]
+			}
+		},
+		{
+			"angle": 1.5707963267948966,
+			"direction": [-0.2701275044138423, 0.8713790464962656, 0.40954815185324484],
+			"normal": {
+				"indices": [530, 531, 557, 558],
+				"weights": [0.8632999999999995, 0.02670000000000103, 0.10669999999999932, 0.003300000000000108]
+			},
+			"axis": {
+				"indices": [499, 526],
+				"weights": [0.16398873707408868, 0.8360112629259113]
+			}
+		},
+		{
+			"angle": 1.5707963267948966,
+			"direction": [0.1731427414077059, -0.3736238104061022, 0.9112775863563468],
+			"normal": {
+				"indices": [3193, 3194, 3220, 3221],
+				"weights": [0.15510000000000024, 0.3149000000000004, 0.17489999999999983, 0.3550999999999995]
+			},
+			"axis": {
+				"indices": [3285, 3286],
+				"weights": [0.12549576559859688, 0.8745042344014031]
+			}
+		},
+		{
+			"angle": 1.5707963267948966,
+			"direction": [0.6979368110139386, 0.6979368040345704, 0.16052546653320587],
+			"normal": {
+				"indices": [2617, 2618, 2644, 2645],
+				"weights": [1.300000036508181e-9, 0.00999999869999975, 1.287000036143127e-7, 0.9899998712999966]
+			},
+			"axis": {
+				"indices": [418, 445],
+				"weights": [0.8857507136809755, 0.11424928631902453]
+			}
+		},
+		{
+			"angle": 1.5707963267948966,
+			"direction": [0.6979368040345704, 0.6979368110139386, 0.16052546653320587],
+			"normal": {
+				"indices": [405, 406, 432, 433],
+				"weights": [0.009999998699999766, 1.3000000209650587e-9, 0.9899998712999981, 1.2870000207554357e-7]
+			},
+			"axis": {
+				"indices": [418, 445],
+				"weights": [0.8857507136809755, 0.11424928631902453]
+			}
+		},
+		{
+			"angle": 3.141592653589793,
+			"direction": [1, 0, 0],
+			"normal": {
+				"indices": [1093],
+				"weights": [1]
+			},
+			"axis": {
+				"indices": [364],
+				"weights": [1]
+			}
+		},
+		{
+			"angle": 3.141592653589793,
+			"direction": [-1, 0, 0],
+			"normal": {
+				"indices": [364],
+				"weights": [1]
+			},
+			"axis": {
+				"indices": [364],
+				"weights": [1]
+			}
+		},
+		{
+			"angle": 3.141592653589793,
+			"direction": [0, 1, 0],
+			"normal": {
+				"indices": [2551],
+				"weights": [1]
+			},
+			"axis": {
+				"indices": [364],
+				"weights": [1]
+			}
+		},
+		{
+			"angle": 3.141592653589793,
+			"direction": [0, -1, 0],
+			"normal": {
+				"indices": [1822],
+				"weights": [1]
+			},
+			"axis": {
+				"indices": [364],
+				"weights": [1]
+			}
+		},
+		{
+			"angle": 3.141592653589793,
+			"direction": [0, 0, 1],
+			"normal": {
+				"indices": [3280],
+				"weights": [1]
+			},
+			"axis": {
+				"indices": [3280],
+				"weights": [1]
+			}
+		},
+		{
+			"angle": 3.141592653589793,
+			"direction": [0, 0, -1],
+			"normal": {
+				"indices": [4009],
+				"weights": [1]
+			},
+			"axis": {
+				"indices": [4009],
+				"weights": [1]
+			}
+		},
+		{
+			"angle": 3.141592653589793,
+			"direction": [0.5773502691896258, 0.5773502691896258, 0.5773502691896258],
+			"normal": {
+				"indices": [2889],
+				"weights": [1]
+			},
+			"axis": {
+				"indices": [607, 634],
+				"weights": [0.8076118445748826, 0.19238815542511745]
+			}
+		},
+		{
+			"angle": 3.141592653589793,
+			"direction": [-0.5773502691896258, -0.5773502691896258, -0.5773502691896258],
+			"normal": {
+				"indices": [1458],
+				"weights": [1]
+			},
+			"axis": {
+				"indices": [94, 121],
+				"weights": [0.19238815542511833, 0.8076118445748817]
+			}
+		},
+		{
+			"angle": 3.141592653589793,
+			"direction": [0.9167755402268202, 0.33920694988392347, -0.21085837425216863],
+			"normal": {
+				"indices": [1016, 1017, 1043, 1044],
+				"weights": [0.1880999999999978, 0.8019000000000024, 0.0018999999999999367, 0.00809999999999985]
+			},
+			"axis": {
+				"indices": [283, 310],
+				"weights": [0.8042069096168714, 0.19579309038312864]
+			}
+		},
+		{
+			"angle": 3.141592653589793,
+			"direction": [-0.2701275044138423, 0.8713790464962656, 0.40954815185324484],
+			"normal": {
+				"indices": [2717, 2718, 2744, 2745],
+				"weights": [0.8632999999999995, 0.02670000000000103, 0.10669999999999932, 0.003300000000000108]
+			},
+			"axis": {
+				"indices": [499, 526],
+				"weights": [0.16398873707408868, 0.8360112629259113]
+			}
+		},
+		{
+			"angle": 3.141592653589793,
+			"direction": [0.1731427414077059, -0.3736238104061022, 0.9112775863563468],
+			"normal": {
+				"indices": [3412, 3413, 3439, 3440],
+				"weights": [0.31489999999999957, 0.3550999999999986, 0.15510000000000107, 0.17490000000000078]
+			},
+			"axis": {
+				"indices": [3285, 3286],
+				"weights": [0.12549576559859688, 0.8745042344014031]
+			}
+		},
+		{
+			"angle": 3.141592653589793,
+			"direction": [0.6979368110139386, 0.6979368040345704, 0.16052546653320587],
+			"normal": {
+				"indices": [1159, 1160, 1186, 1187],
+				"weights": [1.3000000009810441e-9, 0.009999998699999785, 1.2870000009712615e-7, 0.9899998713000001]
+			},
+			"axis": {
+				"indices": [418, 445],
+				"weights": [0.8857507136809755, 0.11424928631902453]
+			}
+		},
+		{
+			"angle": 3.141592653589793,
+			"direction": [0.6979368040345704, 0.6979368110139386, 0.16052546653320587],
+			"normal": {
+				"indices": [2592, 2593, 2619, 2620],
+				"weights": [0.009999998699999723, 1.3000000642637566e-9, 0.9899998712999939, 1.287000063621147e-7]
+			},
+			"axis": {
+				"indices": [418, 445],
+				"weights": [0.8857507136809755, 0.11424928631902453]
+			}
+		},
+		{
+			"angle": -1.5707963267948966,
+			"direction": [1, 0, 0],
+			"normal": {
+				"indices": [1822],
+				"weights": [1]
+			},
+			"axis": {
+				"indices": [364],
+				"weights": [1]
+			}
+		},
+		{
+			"angle": -1.5707963267948966,
+			"direction": [-1, 0, 0],
+			"normal": {
+				"indices": [2551],
+				"weights": [1]
+			},
+			"axis": {
+				"indices": [364],
+				"weights": [1]
+			}
+		},
+		{
+			"angle": -1.5707963267948966,
+			"direction": [0, 1, 0],
+			"normal": {
+				"indices": [1093],
+				"weights": [1]
+			},
+			"axis": {
+				"indices": [364],
+				"weights": [1]
+			}
+		},
+		{
+			"angle": -1.5707963267948966,
+			"direction": [0, -1, 0],
+			"normal": {
+				"indices": [364],
+				"weights": [1]
+			},
+			"axis": {
+				"indices": [364],
+				"weights": [1]
+			}
+		},
+		{
+			"angle": -1.5707963267948966,
+			"direction": [0, 0, 1],
+			"normal": {
+				"indices": [3280],
+				"weights": [1]
+			},
+			"axis": {
+				"indices": [3280],
+				"weights": [1]
+			}
+		},
+		{
+			"angle": -1.5707963267948966,
+			"direction": [0, 0, -1],
+			"normal": {
+				"indices": [4009],
+				"weights": [1]
+			},
+			"axis": {
+				"indices": [4009],
+				"weights": [1]
+			}
+		},
+		{
+			"angle": -1.5707963267948966,
+			"direction": [0.5773502691896258, 0.5773502691896258, 0.5773502691896258],
+			"normal": {
+				"indices": [1431],
+				"weights": [1]
+			},
+			"axis": {
+				"indices": [607, 634],
+				"weights": [0.8076118445748826, 0.19238815542511745]
+			}
+		},
+		{
+			"angle": -1.5707963267948966,
+			"direction": [-0.5773502691896258, -0.5773502691896258, -0.5773502691896258],
+			"normal": {
+				"indices": [0],
+				"weights": [1]
+			},
+			"axis": {
+				"indices": [94, 121],
+				"weights": [0.19238815542511833, 0.8076118445748817]
+			}
+		},
+		{
+			"angle": -1.5707963267948966,
+			"direction": [0.9167755402268202, 0.33920694988392347, -0.21085837425216863],
+			"normal": {
+				"indices": [1745, 1746, 1772, 1773],
+				"weights": [0.1881000000000013, 0.801899999999999, 0.0018999999999999722, 0.008099999999999814]
+			},
+			"axis": {
+				"indices": [283, 310],
+				"weights": [0.8042069096168714, 0.19579309038312864]
+			}
+		},
+		{
+			"angle": -1.5707963267948966,
+			"direction": [-0.2701275044138423, 0.8713790464962656, 0.40954815185324484],
+			"normal": {
+				"indices": [1259, 1260, 1286, 1287],
+				"weights": [0.8633000000000027, 0.026699999999997868, 0.10669999999999971, 0.0032999999999997172]
+			},
+			"axis": {
+				"indices": [499, 526],
+				"weights": [0.16398873707408868, 0.8360112629259113]
+			}
+		},
+		{
+			"angle": -1.5707963267948966,
+			"direction": [0.1731427414077059, -0.3736238104061022, 0.9112775863563468],
+			"normal": {
+				"indices": [3339, 3340, 3366, 3367],
+				"weights": [0.3550999999999998, 0.17490000000000136, 0.31489999999999835, 0.1551000000000005]
+			},
+			"axis": {
+				"indices": [3285, 3286],
+				"weights": [0.12549576559859688, 0.8745042344014031]
+			}
+		},
+		{
+			"angle": -1.5707963267948966,
+			"direction": [0.6979368110139386, 0.6979368040345704, 0.16052546653320587],
+			"normal": {
+				"indices": [1888, 1889, 1915, 1916],
+				"weights": [1.300000036508181e-9, 0.00999999869999975, 1.287000036143127e-7, 0.9899998712999966]
+			},
+			"axis": {
+				"indices": [418, 445],
+				"weights": [0.8857507136809755, 0.11424928631902453]
+			}
+		},
+		{
+			"angle": -1.5707963267948966,
+			"direction": [0.6979368040345704, 0.6979368110139386, 0.16052546653320587],
+			"normal": {
+				"indices": [1134, 1135, 1161, 1162],
+				"weights": [0.009999998699999766, 1.3000000209650587e-9, 0.9899998712999981, 1.2870000207554357e-7]
+			},
+			"axis": {
+				"indices": [418, 445],
+				"weights": [0.8857507136809755, 0.11424928631902453]
+			}
+		},
+		{
+			"angle": 0.37,
+			"direction": [1, 0, 0],
+			"normal": {
+				"indices": [358, 359],
+				"weights": [0.042221101526036975, 0.957778898473963]
+			},
+			"axis": {
+				"indices": [364],
+				"weights": [1]
+			}
+		},
+		{
+			"angle": 0.37,
+			"direction": [-1, 0, 0],
+			"normal": {
+				"indices": [1087, 1088],
+				"weights": [0.042221101526036975, 0.957778898473963]
+			},
+			"axis": {
+				"indices": [364],
+				"weights": [1]
+			}
+		},
+		{
+			"angle": 0.37,
+			"direction": [0, 1, 0],
+			"normal": {
+				"indices": [1816, 1817],
+				"weights": [0.042221101526036975, 0.957778898473963]
+			},
+			"axis": {
+				"indices": [364],
+				"weights": [1]
+			}
+		},
+		{
+			"angle": 0.37,
+			"direction": [0, -1, 0],
+			"normal": {
+				"indices": [2545, 2546],
+				"weights": [0.042221101526036975, 0.957778898473963]
+			},
+			"axis": {
+				"indices": [364],
+				"weights": [1]
+			}
+		},
+		{
+			"angle": 0.37,
+			"direction": [0, 0, 1],
+			"normal": {
+				"indices": [3280],
+				"weights": [1]
+			},
+			"axis": {
+				"indices": [3280],
+				"weights": [1]
+			}
+		},
+		{
+			"angle": 0.37,
+			"direction": [0, 0, -1],
+			"normal": {
+				"indices": [4009],
+				"weights": [1]
+			},
+			"axis": {
+				"indices": [4009],
+				"weights": [1]
+			}
+		},
+		{
+			"angle": 0.37,
+			"direction": [0.5773502691896258, 0.5773502691896258, 0.5773502691896258],
+			"normal": {
+				"indices": [639, 640, 666, 667],
+				"weights": [0.25370488610704556, 0.6994829786579321, 0.01245973420062086, 0.03435240103440151]
+			},
+			"axis": {
+				"indices": [607, 634],
+				"weights": [0.8076118445748826, 0.19238815542511745]
+			}
+		},
+		{
+			"angle": 0.37,
+			"direction": [-0.5773502691896258, -0.5773502691896258, -0.5773502691896258],
+			"normal": {
+				"indices": [801, 802, 828, 829],
+				"weights": [0.012459734200620978, 0.03435240103440183, 0.25370488610704545, 0.6994829786579317]
+			},
+			"axis": {
+				"indices": [94, 121],
+				"weights": [0.19238815542511833, 0.8076118445748817]
+			}
+		},
+		{
+			"angle": 0.37,
+			"direction": [0.9167755402268202, 0.33920694988392347, -0.21085837425216863],
+			"normal": {
+				"indices": [282, 283, 309, 310],
+				"weights": [0.16338586204245845, 0.6411631772683501, 0.03969170571204135, 0.15575925497715007]
+			},
+			"axis": {
+				"indices": [283, 310],
+				"weights": [0.8042069096168714, 0.19579309038312864]
+			}
+		},
+		{
+			"angle": 0.37,
+			"direction": [-0.2701275044138423, 0.8713790464962656, 0.40954815185324484],
+			"normal": {
+				"indices": [1956, 1957, 1983, 1984],
+				"weights": [0.13545400434828686, 0.01445461326402813, 0.7681231649015169, 0.08196821748616807]
+			},
+			"axis": {
+				"indices": [499, 526],
+				"weights": [0.16398873707408868, 0.8360112629259113]
+			}
+		},
+		{
+			"angle": 0.37,
+			"direction": [0.1731427414077059, -0.3736238104061022, 0.9112775863563468],
+			"normal": {
+				"indices": [3118, 3119, 3145, 3146],
+				"weights": [0.5386812691713398, 0.32381359986228014, 0.08588043955500164, 0.051624691411378314]
+			},
+			"axis": {
+				"indices": [3285, 3286],
+				"weights": [0.12549576559859688, 0.8745042344014031]
+			}
+		},
+		{
+			"angle": 0.37,
+			"direction": [0.6979368110139386, 0.6979368040345704, 0.16052546653320587],
+			"normal": {
+				"indices": [423, 424, 450, 451],
+				"weights": [0.1834495471458507, 0.505783655292242, 0.0827151508067675, 0.22805164675513978]
+			},
+			"axis": {
+				"indices": [418, 445],
+				"weights": [0.8857507136809755, 0.11424928631902453]
+			}
+		},
+		{
+			"angle": 0.37,
+			"direction": [0.6979368040345704, 0.6979368110139386, 0.16052546653320587],
+			"normal": {
+				"indices": [423, 424, 450, 451],
+				"weights": [0.183449437402156, 0.5057837548439721, 0.08271510526056217, 0.22805170249330972]
+			},
+			"axis": {
+				"indices": [418, 445],
+				"weights": [0.8857507136809755, 0.11424928631902453]
+			}
+		}
+	],
+	"limits": {
+		"weightAbsolute": 1e-12,
+		"weightSumAbsolute": 1e-12,
+		"exactNodeAbsolute": 1e-10,
+		"continuityAbsolute": 1e-10
+	},
+	"derivation": {
+		"parents": [
+			{
+				"path": "tmp/experiments/local-sun-cache-reuse/runs/00529-p3-frame-policy/source-shell-geometry.js",
+				"sha256": "7009d10ef0e128500bfb308420066942830a0b0164886dabb80f9fa869ef95f6"
+			},
+			{
+				"path": "tmp/experiments/local-sun-cache-reuse/runs/00529-p3-frame-policy/inputs.json",
+				"sha256": "224e3fa047894f71c91ee57b592dd54c5d6c3a326cf5391175f76664f75b7e24"
+			},
+			{
+				"path": "tmp/experiments/local-sun-cache-reuse/runs/00529-p3-frame-policy/manifest.json",
+				"sha256": "502673df1109ce395b5f5909ac52f25c0d9a8af22eda7a53a8502cac760b62d6"
+			},
+			{
+				"path": "experiments/local-sun-cache-reuse/shell-axis.js",
+				"sha256": "b5e6d4d7c2b2af3bd9bb84a8b2d173cc5f9d4ae6d0c9a9c38ba60aaf1df11c3f"
+			},
+			{
+				"path": "src/algorithm32/implementation/local-sun/cache/fixtures/local-sun-compact-p0-controls.json",
+				"sha256": "74a7cb03fd646d6ec4754e45e46f7ed622c815d09cd82ceeef174819c3513db6"
+			}
+		],
+		"historicalInputs": "{\n  \"parents\": [\n    {\n      \"run\": \"00478-p3-contract\",\n      \"manifestSha256\": \"bdbb5fad393122e9e7c44310f0b7b52823759af8bd60b468a2aa2bceb4b8639a\",\n      \"artifact\": \"layout.json\",\n      \"artifactSha256\": \"d1c7dea2b0587474de5930d75e8e91e9fb61d20ed92faefce2ab7a239a290864\"\n    },\n    {\n      \"run\": \"00018-controls\",\n      \"manifestSha256\": \"31865ce55ff284701a84a1268e9b9408ca26cb0b5b6b14094ef82772f59cb249\",\n      \"artifact\": \"controls.json\",\n      \"artifactSha256\": \"4bc8d4073b34e794181c86703d5ab212e58b4d2d5068cce4008376ab075ae294\"\n    }\n  ],\n  \"sources\": [\n    {\n      \"path\": \"prove-shell-frame-identity.js\",\n      \"sha256\": \"617731ce0232d0461d90e75e50d9a594afae22ba0e39a41bdb1d4caf2e258855\"\n    },\n    {\n      \"path\": \"rotation-model.js\",\n      \"sha256\": \"a6cfbf5115d2793667c11ed9f9be6e1f0e5cb81987c280c349ff58f6804636b6\"\n    },\n    {\n      \"path\": \"shell-source.js\",\n      \"sha256\": \"3c6cab83f94639d9ca5ac2f8571bae6e5c7cea2e59505e35ef10b094a7fc23ba\"\n    },\n    {\n      \"path\": \"shell-geometry.js\",\n      \"sha256\": \"7009d10ef0e128500bfb308420066942830a0b0164886dabb80f9fa869ef95f6\"\n    },\n    {\n      \"path\": \"shell-layout.js\",\n      \"sha256\": \"6081f726f979c6e221f37d3a715c6b4d52f9b3f8282fd618b6f6a1a2b3471d50\"\n    },\n    {\n      \"path\": \"shell-client.js\",\n      \"sha256\": \"0c808da976763175211791d25270751c346fa06046b162f5422bd44a1f1abc25\"\n    },\n    {\n      \"path\": \"shell-angular.js\",\n      \"sha256\": \"a6ebe7d1e75d2df3bee4f23b50851cdf8521d647a5754c108b6d96eac6eb3bd3\"\n    },\n    {\n      \"path\": \"ExperimentRun.js\",\n      \"sha256\": \"bf04c69f97d2f98dd959560bed51f12dbfcea3a6878dfd2128f4de1948e11f98\"\n    },\n    {\n      \"path\": \"parent-evidence.js\",\n      \"sha256\": \"0f511b38debd14ef0c468515e502dd9d3921547ed71635a8799c96f4ce0c6783\"\n    },\n    {\n      \"path\": \"run-boundary.js\",\n      \"sha256\": \"27049b98a73ec391b5a54f474b98416eafa821211468d00a905be4c8975d44c1\"\n    }\n  ],\n  \"command\": [\n    \"C:\\\\dev\\\\flattened-steel\\\\experiments\\\\local-sun-cache-reuse\\\\prove-shell-frame-identity.js\"\n  ],\n  \"tools\": {\n    \"node\": \"v25.4.0\"\n  },\n  \"operation\": \"Resolve actual source fact cache across five fixed orbital states and two observer offsets; compare full normalized source, 2049 boundaries, 2048 held scales, layout, medium, ground, execution and quadrature identities. Physical-domain identity contains no observer term. Compiler normalizes source XY and radial fallback, see configureShellBackend.\"\n}",
+		"historicalManifest": "{\n\t\"schema\": \"local-sun-cache-reuse-run-v1\",\n\t\"run\": \"00529-p3-frame-policy\",\n\t\"state\": \"accepted\",\n\t\"failure\": null,\n\t\"artifacts\": [\n\t\t{\n\t\t\t\"path\": \"inputs.json\",\n\t\t\t\"byteLength\": 2404,\n\t\t\t\"sha256\": \"224e3fa047894f71c91ee57b592dd54c5d6c3a326cf5391175f76664f75b7e24\"\n\t\t},\n\t\t{\n\t\t\t\"path\": \"policy.json\",\n\t\t\t\"byteLength\": 885632,\n\t\t\t\"sha256\": \"a61cd24e9b05a3fce0ba4cd1e5f75c482a11ddcedf1dfc07793a68225167b3da\"\n\t\t},\n\t\t{\n\t\t\t\"path\": \"progress.jsonl\",\n\t\t\t\"byteLength\": 196,\n\t\t\t\"sha256\": \"3f01e2cb2f5d2349a9b47ec234956ad0f1b82e8e15d72d4ad16d290c54708faa\"\n\t\t},\n\t\t{\n\t\t\t\"path\": \"result.json\",\n\t\t\t\"byteLength\": 6973,\n\t\t\t\"sha256\": \"0abb5760aed0d5dea0aefce3c48335c061e7c4137cfb75207666d1d1491a0a4d\"\n\t\t},\n\t\t{\n\t\t\t\"path\": \"source-ExperimentRun.js\",\n\t\t\t\"byteLength\": 5904,\n\t\t\t\"sha256\": \"bf04c69f97d2f98dd959560bed51f12dbfcea3a6878dfd2128f4de1948e11f98\"\n\t\t},\n\t\t{\n\t\t\t\"path\": \"source-parent-evidence.js\",\n\t\t\t\"byteLength\": 2096,\n\t\t\t\"sha256\": \"0f511b38debd14ef0c468515e502dd9d3921547ed71635a8799c96f4ce0c6783\"\n\t\t},\n\t\t{\n\t\t\t\"path\": \"source-prove-shell-frame-identity.js\",\n\t\t\t\"byteLength\": 5733,\n\t\t\t\"sha256\": \"617731ce0232d0461d90e75e50d9a594afae22ba0e39a41bdb1d4caf2e258855\"\n\t\t},\n\t\t{\n\t\t\t\"path\": \"source-rotation-model.js\",\n\t\t\t\"byteLength\": 16061,\n\t\t\t\"sha256\": \"a6cfbf5115d2793667c11ed9f9be6e1f0e5cb81987c280c349ff58f6804636b6\"\n\t\t},\n\t\t{\n\t\t\t\"path\": \"source-run-boundary.js\",\n\t\t\t\"byteLength\": 2260,\n\t\t\t\"sha256\": \"27049b98a73ec391b5a54f474b98416eafa821211468d00a905be4c8975d44c1\"\n\t\t},\n\t\t{\n\t\t\t\"path\": \"source-shell-angular.js\",\n\t\t\t\"byteLength\": 3630,\n\t\t\t\"sha256\": \"a6ebe7d1e75d2df3bee4f23b50851cdf8521d647a5754c108b6d96eac6eb3bd3\"\n\t\t},\n\t\t{\n\t\t\t\"path\": \"source-shell-client.js\",\n\t\t\t\"byteLength\": 16238,\n\t\t\t\"sha256\": \"0c808da976763175211791d25270751c346fa06046b162f5422bd44a1f1abc25\"\n\t\t},\n\t\t{\n\t\t\t\"path\": \"source-shell-geometry.js\",\n\t\t\t\"byteLength\": 8885,\n\t\t\t\"sha256\": \"7009d10ef0e128500bfb308420066942830a0b0164886dabb80f9fa869ef95f6\"\n\t\t},\n\t\t{\n\t\t\t\"path\": \"source-shell-layout.js\",\n\t\t\t\"byteLength\": 9638,\n\t\t\t\"sha256\": \"6081f726f979c6e221f37d3a715c6b4d52f9b3f8282fd618b6f6a1a2b3471d50\"\n\t\t},\n\t\t{\n\t\t\t\"path\": \"source-shell-source.js\",\n\t\t\t\"byteLength\": 2143,\n\t\t\t\"sha256\": \"3c6cab83f94639d9ca5ac2f8571bae6e5c7cea2e59505e35ef10b094a7fc23ba\"\n\t\t}\n\t]\n}\n",
+		"operation": "Independent dominant-face projection and W27 bilinear equations; ordinary local direction=(dx*cos(phi)+dy*sin(phi),-dx*sin(phi)+dy*cos(phi),dz); axis direction=(hypot(dx,dy),0,dz). First-face tie order and 1e-10 exact-grid convention retained. No candidate numerical imports or historical source execution.",
+		"producer": {
+			"path": "scripts/algorithm32/local-sun-cache/directional/LocalSunDirectionalControls.js",
+			"sha256": "2006a2594d83a8c956a187fad1444abda23beb402473a2a311ff5888bec8a854"
+		},
+		"tools": {
+			"node": "v25.4.0"
+		}
+	}
+}

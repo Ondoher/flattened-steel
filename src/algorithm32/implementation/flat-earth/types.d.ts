@@ -80,6 +80,19 @@ interface FlatCompactTopology {
 	resolvePositionStencil(query: FlatCompactPositionQuery): ScatteringCachePositionStencil;
 }
 
+/** Physical reconstruction query for a topology created by a paired flat geometry. */
+type FlatCompactReconstructionRequest = ScatteringCacheDirectionRequest &
+	Readonly<{
+		/** Executable compact topology, with matching source height and slab. */ readonly topology: FlatCompactTopology;
+	}>;
+
+/** One positive compact spatial contribution and its geometry-resolved angular support. */
+type FlatCompactReconstructionTap = Readonly<{
+	/** Actual allocated compact position address. */ readonly positionIndex: number;
+	/** Positive spatial weight; angular products are applied separately. */ readonly positionWeight: number;
+	/** W27 support resolved for this tap, including the axis canonical-meridian limit. */ readonly directionStencil: ScatteringCacheDirectionStencil;
+}>;
+
 /** Type that configures flat Earth atmosphere geometry. */
 type FlatEarthGeometryConfig = {
 	/** Value that stores observer position with its physical unit. */
