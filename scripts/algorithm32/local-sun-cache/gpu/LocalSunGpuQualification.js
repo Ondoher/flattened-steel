@@ -27,7 +27,10 @@ const OWNED_PROCESS_CEILING_BYTES = 8 * 1024 ** 3;
 
 /** Serialized, resource-bounded offline host for immutable production GPU qualification. */
 export class LocalSunGpuQualification {
-	/** Existing repository-identity/real-path boundary. @type {LocalSunNormalizationControls} */
+	/** Existing repository-identity/real-path boundary.
+	 *
+	 * @type {LocalSunNormalizationControls}
+	 */
 	_paths = new LocalSunAssemblyControls().paths;
 
 	/** Called by the host to sample the owned Node/Chrome process tree without inspecting command-line contents.
@@ -47,6 +50,7 @@ export class LocalSunGpuQualification {
 	}
 
 	/** Call this method to sample a sibling bounded proof's owned process tree with the existing host monitor.
+	 *
 	 * @param {number} rootPid - Explicit proof-owned browser/process root.
 	 * @returns {number} - Observed total working-set bytes, including this Node host.
 	 */

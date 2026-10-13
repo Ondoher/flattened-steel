@@ -173,6 +173,8 @@ export class ViewPresentationFilterRegistry {
 	_scotopicLuminanceWeights;
 
 	/**
+	 * Creates the ordered filter registry using authenticated optional local data.
+	 *
 	 * @param {readonly any[]} filters - Ordered registered filter selections.
 	 * @param {Readonly<{scotopicLuminanceWeights?: ArrayLike<number>}>} configuration - Optional authenticated local data.
 	 */
@@ -220,7 +222,7 @@ export class ViewPresentationFilterRegistry {
 		return this._filters.some((filter) => filter.enabled);
 	}
 
-	/** Apply only matching stellar source-linear filters; identity returns the original RGB object. */
+	/** Call this method to apply only matching stellar source-linear filters; identity returns the original RGB object. */
 	applySourceLinear(rgb, metadata) {
 		const applicable = this._filters.filter((filter) => filter.enabled && filter.target === metadata?.target);
 		if (applicable.length === 0) return rgb;
@@ -259,7 +261,7 @@ export class ViewPresentationFilterRegistry {
 		return result;
 	}
 
-	/** GLSL source-linear hook consumed by P7 without introducing a general callback surface. */
+	/** Call this method to create the GLSL source-linear hook consumed by P7 without introducing a general callback surface. */
 	createStellarSourceLinearShaderHook() {
 		const mesopicEnabled = this._filters.some(
 			({id, enabled}) => id === VIEW_PRESENTATION_FILTER_IDS.HUMAN_MESOPIC_LUMINANCE_V1 && enabled,
@@ -319,7 +321,7 @@ vec3 applyStellarSourceLinearPresentationFilters(
 		});
 	}
 
-	/** Contribute the selected source-linear hook and live adaptation scalar. */
+	/** Call this method to contribute the selected source-linear hook and live adaptation scalar. */
 	createShaderContribution() {
 		if (!this.enabled) throw new Error('Disabled presentation filters have no shader contribution.');
 		const hook = this.createStellarSourceLinearShaderHook();

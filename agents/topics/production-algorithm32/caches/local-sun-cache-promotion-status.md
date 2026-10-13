@@ -31,7 +31,7 @@ remains deferred.
 
 ## Next Work
 
-Validate P4's final mapped review and independent audit under the
+P5 qualification follows P4's matching CLEAN mapped review and independent audit under the
 [plan](local-sun-cache-promotion-plan.md#p4--integrate-ordinary-flat32-and-required-celestial-consumers).
 The [P4 closure](local-sun-p4-closure.md) owns its consumer boundary, independent
 controls, passed N1 proof and explicit higher-order admission limit.

@@ -18,7 +18,7 @@ export class SunDiskTileGenerationPass {
 	renderToScreen = false;
 
 	/**
-	 * Create one distant or finite source-local tile generator.
+	 * Creates one distant or finite source-local tile generator.
 	 *
 	 * @param {SunDiskTileGenerationPassConfiguration} configuration - Source, geometry, renderer, and view facts.
 	 */
@@ -209,6 +209,7 @@ void main() {
 	}
 
 	/** Call this method to refresh accepted source placement at the live scene boundary.
+	 *
 	 * @param {GeometryObservation} observation - Matching accepted observation.
 	 * @returns {void}
 	 */
@@ -363,7 +364,7 @@ void main() {
 		return {active: this._activeGeneration, staging: null, dirtyReason: this._dirtyReason};
 	}
 
-	/** Return nullable active values for joint-publication gating. */
+	/** Call this method to return nullable active values for joint-publication gating. */
 	bindingValues() {
 		if (
 			!this._activeTarget ||
@@ -386,12 +387,12 @@ void main() {
 		};
 	}
 
-	/** Return format-compatible exact-zero values until the desired tile is complete. */
+	/** Call this method to return format-compatible exact-zero values until the desired tile is complete. */
 	consumerBindingValues() {
 		return this.bindingValues() ?? this.zeroConsumerBindingValues();
 	}
 
-	/** Return an exact-zero tile with the unchanged shared source spectrum. */
+	/** Call this method to return an exact-zero tile with the unchanged shared source spectrum. */
 	zeroConsumerBindingValues() {
 		return {
 			'runtime.celestial.sunCoverageTile': this._zeroTexture,

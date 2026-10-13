@@ -45,6 +45,7 @@ export class FlatGeometryShaderContributor {
 		const cacheAltitudeNodesMeters = cacheAltitudeNodes.map(
 			/**
 			 * Called by Array.prototype.map to transform one collection value.
+			 *
 			 * @param {Distance} node - The unit-bearing altitude node.
 			 * @returns {number} - The altitude in meters.
 			 */ (node) => DistanceMath.toMeters(node),
@@ -52,6 +53,7 @@ export class FlatGeometryShaderContributor {
 		const cacheRadialNodesMeters = cacheRadialNodes.map(
 			/**
 			 * Called by Array.prototype.map to transform one collection value.
+			 *
 			 * @param {Distance} node - The unit-bearing radial node.
 			 * @returns {number} - The radius in meters.
 			 */ (node) => DistanceMath.toMeters(node),

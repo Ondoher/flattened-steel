@@ -13,24 +13,62 @@ import {LocalSunFrameCache} from './LocalSunFrameCache.js';
  * @implements {LocalSunFramePublicationController}
  */
 export class LocalSunFrameController {
-	/** Current externally owned backend and renderer staging operation. @type {LocalSunFrameControllerConfiguration} */ _configuration;
-	/** Entries include retired resources until their final borrower releases. @type {Set<LocalSunFrameCacheEntry>} */ _entries =
-		new Set();
-	/** Only controller-created prepared packets may be published. @type {Map<PreparedLocalSunFrame,LocalSunFrameRecord>} */ _records =
-		new Map();
-	/** Atomically displayed complete frame. @type {PreparedLocalSunFrame|null} */ _active = null;
-	/** Last successfully published exact request, retained across restoration failures. @type {LocalSunFrameRequest|null} */ _lastRequest =
-		null;
-	/** Latest accepted preparation cancellation. @type {AbortController|null} */ _cancellation = null;
-	/** Monotonic requested generation. @type {number} */ _generation = 0;
-	/** Context revision invalidates every old-context lease. @type {number} */ _contextRevision = 0;
-	/** Serialized build/stage tail; jobs never compete for construction resources. @type {Promise<void>} */ _tail =
-		Promise.resolve();
-	/** Lost contexts have no renderable frame. @type {boolean} */ _contextLost = false;
-	/** Owner disposal prevents future preparation. @type {boolean} */ _disposed = false;
-	/** Accepted stages still awaiting completion and cleanup. @type {number} */ _pendingOperations = 0;
-	/** Disposal completion, including the final cache borrower. @type {Promise<void>} */ _released;
-	/** Completion resolver retained by the resource owner. @type {() => void} */ _resolveReleased;
+	/** Current externally owned backend and renderer staging operation.
+	 *
+	 * @type {LocalSunFrameControllerConfiguration}
+	 */ _configuration;
+	/** Entries include retired resources until their final borrower releases.
+	 *
+	 * @type {Set<LocalSunFrameCacheEntry>}
+	 */ _entries = new Set();
+	/** Only controller-created prepared packets may be published.
+	 *
+	 * @type {Map<PreparedLocalSunFrame,LocalSunFrameRecord>}
+	 */ _records = new Map();
+	/** Atomically displayed complete frame.
+	 *
+	 * @type {PreparedLocalSunFrame|null}
+	 */ _active = null;
+	/** Last successfully published exact request, retained across restoration failures.
+	 *
+	 * @type {LocalSunFrameRequest|null}
+	 */ _lastRequest = null;
+	/** Latest accepted preparation cancellation.
+	 *
+	 * @type {AbortController|null}
+	 */ _cancellation = null;
+	/** Monotonic requested generation.
+	 *
+	 * @type {number}
+	 */ _generation = 0;
+	/** Context revision invalidates every old-context lease.
+	 *
+	 * @type {number}
+	 */ _contextRevision = 0;
+	/** Serialized build/stage tail; jobs never compete for construction resources.
+	 *
+	 * @type {Promise<void>}
+	 */ _tail = Promise.resolve();
+	/** Lost contexts have no renderable frame.
+	 *
+	 * @type {boolean}
+	 */ _contextLost = false;
+	/** Owner disposal prevents future preparation.
+	 *
+	 * @type {boolean}
+	 */ _disposed = false;
+	/** Accepted stages still awaiting completion and cleanup.
+	 *
+	 * @type {number}
+	 */ _pendingOperations = 0;
+	/** Disposal completion, including the final cache borrower.
+	 *
+	 * @type {Promise<void>}
+	 */ _released;
+	/** Completion resolver retained by the resource owner.
+	 *
+	 * @type {() => void}
+	 */ _resolveReleased;
 
 	/** Called by resource release and stage completion to notify the external backend owner.
 	 *
@@ -503,7 +541,7 @@ export class LocalSunFrameController {
 		});
 	}
 
-	/** Call this method at a frame boundary to replace the single complete active packet.
+	/** Call this method to replace the single complete active packet at a frame boundary.
 	 * No asynchronous component update occurs here; every consumer observes the same aggregate.
 	 *
 	 * @param {PreparedLocalSunFrame} frame - Controller-created current complete packet.

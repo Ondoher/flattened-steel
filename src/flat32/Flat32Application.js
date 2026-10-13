@@ -21,6 +21,8 @@ import {
 
 export class Flat32Application {
 	/**
+	 * Creates the application owner in the supplied root with explicit configuration.
+	 *
 	 * @param {HTMLElement} root - Hosts the application.
 	 * @param {Flat32ApplicationConfiguration} [configuration] - Supplies explicit diagnostic overrides. Omission
 	 * retains the ordinary production application configuration.
@@ -327,7 +329,7 @@ export class Flat32Application {
 	}
 
 	/**
-	 * Build the direct scene, then attach Algorithm32 asynchronously.
+	 * Call this method to build the direct scene, then attach Algorithm32 asynchronously.
 	 *
 	 * @returns {void}
 	 */
@@ -483,7 +485,7 @@ export class Flat32Application {
 	}
 
 	/**
-	 * Release the scene in reverse ownership order.
+	 * Call this method to release the scene in reverse ownership order.
 	 *
 	 * @returns {void}
 	 */

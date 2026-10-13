@@ -25,6 +25,12 @@ frame boundary; measured endpoint lighting is a reversible transaction coordinat
 with renderer installation. Requested controls remain pending until publication.
 Failure retains the previous complete frame and reports its reason.
 
+`Algorithm32Runtime.js` exceeds the 1,000-line source warning threshold. Its
+current responsibility remains runtime attachment, frame publication and awaited
+cleanup; numerical construction, geometry, lighting and celestial algorithms have
+separate owners. This size is called out for future ownership-based extraction
+when another runtime capability is added; the warning is not a hard size limit.
+
 Geometry owns conservative admission of the complete symmetric perspective
 camera cone, finite-source scene mapping and flat stellar epoch/rotation/dome
 projection and parallax. Unsupported asymmetric cameras or compact coverage are

@@ -100,6 +100,7 @@ export class ShaderRuntimeInstaller {
 		const liveUniforms = assembly.contributions.flatMap(
 			/**
 			 * Called by Array.prototype.flatMap to transform and flatten one collection value.
+			 *
 			 * @param contribution - The contribution value accepted by the operation.
 			 * @returns - The callback result returned to its caller.
 			 */ (contribution) =>
@@ -107,6 +108,7 @@ export class ShaderRuntimeInstaller {
 					.filter(
 						/**
 						 * Called by Array.prototype.filter to test whether one collection value is retained.
+						 *
 						 * @param uniform - The uniform value accepted by the operation.
 						 * @returns - The callback result returned to its caller.
 						 */ (uniform) => Object.hasOwn(bindingValues, uniform.valueKey),
@@ -114,6 +116,7 @@ export class ShaderRuntimeInstaller {
 					.map(
 						/**
 						 * Called by Array.prototype.map to transform one collection value.
+						 *
 						 * @param uniform - The uniform value accepted by the operation.
 						 * @returns - The callback result returned to its caller.
 						 */ (uniform) => ({
@@ -147,7 +150,10 @@ export class ShaderRuntimeInstaller {
 		return () => {
 			const publication = cache?.getRuntimePublication?.();
 			if (!publication || publication.identity === identity) return;
-			/** Opaque cache texture destinations. @type {ShaderRuntimeUniformMap} */
+			/** Opaque cache texture destinations.
+			 *
+			 * @type {ShaderRuntimeUniformMap}
+			 */
 			const cacheUniforms = {};
 			for (const declaration of textureDeclarations)
 				cacheUniforms[declaration.valueKey] = uniforms[declaration.name];
@@ -236,6 +242,7 @@ export class ShaderRuntimeInstaller {
 				![x, y, z].every(
 					/**
 					 * Called by Array.prototype.every to test one collection value against the shared condition.
+					 *
 					 * @param coordinate - The coordinate value accepted by the operation.
 					 * @returns - The callback result returned to its caller.
 					 */ (coordinate) => typeof coordinate === 'number' && Number.isFinite(coordinate),
@@ -400,6 +407,7 @@ export class ShaderRuntimeInstaller {
 				runtimeBindings?.bindings.map(
 					/**
 					 * Called by Array.prototype.map to transform one collection value.
+					 *
 					 * @param binding - The binding value accepted by the operation.
 					 * @returns - The callback result returned to its caller.
 					 */ (binding) => binding.valueKey,
@@ -713,6 +721,7 @@ export class ShaderRuntimeInstaller {
 			return {
 				/**
 				 * Called by install to prepare.
+				 *
 				 * @param renderer - The renderer value accepted by the operation.
 				 * @returns - The callback result returned to its caller.
 				 */ prepare: async (renderer) => {
@@ -739,6 +748,7 @@ export class ShaderRuntimeInstaller {
 				},
 				/**
 				 * Called by install to read diagnostics.
+				 *
 				 * @returns - The callback result returned to its caller.
 				 */ getDiagnostics: () => ({
 					...pass.getDiagnostics(),

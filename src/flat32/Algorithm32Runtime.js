@@ -20,11 +20,20 @@ export class Algorithm32Runtime {
 	 * @param {Flat32RuntimeConfiguration} configuration - Scene, mode and lifecycle collaborators.
 	 */
 	constructor(configuration) {
-		/** Explicit compact frame owner, independent from the distant shared attachment. @type {LocalSunFramePublicationController|null} */
+		/** Explicit compact frame owner, independent from the distant shared attachment.
+		 *
+		 * @type {LocalSunFramePublicationController|null}
+		 */
 		this._localFrameController = configuration.localFrameController ?? null;
-		/** Complete unpublished initial frame, released by its controller on cancellation. @type {PreparedLocalSunFrame|null} */
+		/** Complete unpublished initial frame, released by its controller on cancellation.
+		 *
+		 * @type {PreparedLocalSunFrame|null}
+		 */
 		this._pendingInitialLocalFrame = null;
-		/** Owned restored-backend cleanup after final valid borrower release. @type {Promise<void>} */
+		/** Owned restored-backend cleanup after final valid borrower release.
+		 *
+		 * @type {Promise<void>}
+		 */
 		this._localBackendRelease = Promise.resolve();
 		this._sceneRuntime = configuration.sceneRuntime;
 		this._endpointScene = configuration.endpointScene;
@@ -54,11 +63,20 @@ export class Algorithm32Runtime {
 		this._installed = false;
 		this._published = false;
 		this._disposed = false;
-		/** Live selection cancellation owner. @type {AbortController | null} */
+		/** Live selection cancellation owner.
+		 *
+		 * @type {AbortController | null}
+		 */
 		this._liveCancellation = null;
-		/** Predictive refill cancellation owner. @type {AbortController | null} */
+		/** Predictive refill cancellation owner.
+		 *
+		 * @type {AbortController | null}
+		 */
 		this._predictionCancellation = null;
-		/** Last installed runtime summary. @type {Flat32AtmosphereSummary | null} */
+		/** Last installed runtime summary.
+		 *
+		 * @type {Flat32AtmosphereSummary | null}
+		 */
 		this._lastSummary = null;
 		this._removeContextLifecycleParticipant = this._sceneRuntime.addContextLifecycleParticipant(this);
 		this._renderAtmosphereFrame = this._renderAtmosphereFrame.bind(this);
@@ -100,7 +118,7 @@ export class Algorithm32Runtime {
 		}
 	}
 
-	/** Call this method after disposal to await backend cleanup following pending stages and valid borrowers.
+	/** Call this method to await backend cleanup after disposal, pending stages and valid borrower release.
 	 *
 	 * @returns {Promise<void>} - Preserves any asynchronous backend-disposal failure for the caller.
 	 */
@@ -296,7 +314,10 @@ export class Algorithm32Runtime {
 		) {
 			throw new Error('Algorithm32 shader evidence lacks installation/version facts.');
 		}
-		/** Verified renderer-independent facts. @type {Flat32ShaderEvidenceSnapshot | null} */
+		/** Verified renderer-independent facts.
+		 *
+		 * @type {Flat32ShaderEvidenceSnapshot | null}
+		 */
 		const facts = /** @type {Flat32ShaderEvidenceSnapshot | null} */ (diagnostics ?? null);
 		const shader = facts ? {status: facts.status, modelVersion: facts.modelVersion} : null;
 		return {
@@ -681,7 +702,7 @@ export class Algorithm32Runtime {
 	}
 
 	/**
-	 * Build, preflight, and atomically install the production atmosphere.
+	 * Call this method to build, preflight, and atomically install the production atmosphere.
 	 *
 	 * @returns {Promise<Flat32AtmosphereSummary>} Resolve with installed facts.
 	 */
@@ -797,6 +818,7 @@ export class Algorithm32Runtime {
 	}
 
 	/** Called by ordinary compact preparation to account for scene shadows and two complete frame targets.
+	 *
 	 * @returns {UnitValue<'bytes'>} - Conservative declared additional GPU bytes; not an app minimum-RAM claim.
 	 */
 	_localFrameAdditionalBytes() {
@@ -806,6 +828,7 @@ export class Algorithm32Runtime {
 		return {value: 6 * 4096 * 4096 * 8 + width * height * 256 * 2 + 16 * 1024 * 1024, units: 'bytes'};
 	}
 	/** Called by setup to stage the explicit compact candidate through the ordinary complete-frame owners.
+	 *
 	 * @returns {Promise<Flat32AtmosphereSummary>} - Ready unpublished candidate or explicit admission failure.
 	 */
 	async _setupLocalFrames() {
@@ -933,7 +956,7 @@ export class Algorithm32Runtime {
 	}
 
 	/**
-	 * Restore direct rendering and release Algorithm32 resources in order.
+	 * Call this method to restore direct rendering and release Algorithm32 resources in order.
 	 *
 	 * @returns {void}
 	 */

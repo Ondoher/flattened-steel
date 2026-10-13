@@ -35,7 +35,10 @@ export class FlatLocalMode {
 	 * @param {Flat32LocalModeConfiguration} configuration - Application-owned runtime selections.
 	 */
 	constructor(configuration) {
-		/** Explicit compact successor; omission retains the production control. @type {LocalSunCompactConstructionProfile|null} */
+		/** Explicit compact successor; omission retains the production control.
+		 *
+		 * @type {LocalSunCompactConstructionProfile|null}
+		 */
 		this._compactProfile = null;
 		this._configuration = configuration;
 		const selections = resolveFlat32ProductionSelections(configuration);
@@ -171,6 +174,7 @@ export class FlatLocalMode {
 	}
 
 	/** Explicit compact selection, otherwise the unchanged rectangular control.
+	 *
 	 * @returns {LocalSunCompactConstructionProfile|null} - Current live physical selection.
 	 */
 	get compactProfile() {
@@ -178,6 +182,7 @@ export class FlatLocalMode {
 		return this._compactProfile;
 	}
 	/** Call this method to create an exact ordinary-observation candidate without changing displayed state.
+	 *
 	 * @param {GeometryObservation} observation - Requested time and location.
 	 * @param {UnitValue<'bytes'>} otherOwnedGpuBytes - Complete declared scene/frame overlap.
 	 * @param {Flat32LocalFrameViewRequest} view - Current symmetric ordinary camera cone.
@@ -206,7 +211,8 @@ export class FlatLocalMode {
 			otherOwnedGpuBytes,
 		};
 	}
-	/** Call this method only after successful complete frame publication.
+	/** Call this method to accept the committed live geometry only after successful complete frame publication.
+	 *
 	 * @param {PreparedLocalSunFrame} frame - Newly committed controller frame.
 	 * @returns {void} - Assignment-only live geometry update.
 	 */
@@ -215,6 +221,7 @@ export class FlatLocalMode {
 		this._geometry = /** @type {FlatEarthGeometry} */ (frame.profile.models.geometry);
 	}
 	/** Call this method to provide selected presentation and celestial collaborators to ordinary staging.
+	 *
 	 * @param {Flat32LocalFrameSceneCapability} sceneRuntime - Borrowed renderer and scene.
 	 * @param {Flat32EndpointLighting} endpointScene - Borrowed endpoint lighting owner.
 	 * @param {Distance} sceneDepthMax - Unit-bearing geometry depth cap.

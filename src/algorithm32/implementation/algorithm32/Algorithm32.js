@@ -1003,6 +1003,7 @@ export class Algorithm32 {
 	}
 
 	/** Called by an installed shader handle to publish a completely prepared live receiver state.
+	 *
 	 * @param {ReceiverEnvironmentLightMeasurement} prepared - Complete native spectral measurement.
 	 * @returns {void}
 	 */

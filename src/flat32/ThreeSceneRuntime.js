@@ -496,7 +496,7 @@ void main() {
 		return this._requireRenderer();
 	}
 
-	/** Request one new shadow-map render after a source-state change. */
+	/** Call this method to request one new shadow-map render after a source-state change. */
 	refreshShadowMaps() {
 		this._requireRenderer().shadowMap.needsUpdate = true;
 	}
@@ -515,7 +515,7 @@ void main() {
 	}
 
 	/**
-	 * Create or return the host-sized composer and its ordinary base render pass.
+	 * Call this method to create or return the host-sized composer and its ordinary base render pass.
 	 *
 	 * @returns {EffectComposer} Return the live composer.
 	 */
@@ -536,7 +536,7 @@ void main() {
 		return this._composer;
 	}
 
-	/** Create an isolated composer for transactional Algorithm32 preparation. */
+	/** Call this method to create an isolated composer for transactional Algorithm32 preparation. */
 	createAtmosphereComposer() {
 		if (this._disposed) {
 			throw new Error('Cannot create a composer on a disposed Three runtime.');
@@ -552,7 +552,7 @@ void main() {
 	}
 
 	/**
-	 * Atomically replace direct rendering with one validated frame operation.
+	 * Call this method to atomically replace direct rendering with one validated frame operation.
 	 *
 	 * @param {Flat32RenderOperation} operation - Renders one complete frame.
 	 * @returns {void}
@@ -568,7 +568,7 @@ void main() {
 	}
 
 	/**
-	 * Restore the ordinary scene as the active frame operation.
+	 * Call this method to restore the ordinary scene as the active frame operation.
 	 *
 	 * @returns {void}
 	 */
@@ -584,7 +584,7 @@ void main() {
 	}
 
 	/**
-	 * Create the renderer and begin the frame loop.
+	 * Call this method to create the renderer and begin the frame loop.
 	 *
 	 * @returns {void}
 	 */
@@ -633,7 +633,7 @@ void main() {
 	}
 
 	/**
-	 * Stop frames, detach browser listeners, and release the renderer.
+	 * Call this method to stop frames, detach browser listeners, and release the renderer.
 	 *
 	 * @returns {void}
 	 */

@@ -9,7 +9,10 @@ describe('Qualified compact ordinary-scene profile selection', () => {
 		instant: '2024-12-14T17:27:41.487Z',
 		location: {latitude: {value: 0, units: 'degrees'}, longitude: {value: 0, units: 'degrees'}},
 	};
-	/** Create the explicit supported ordinary profile. @returns {LocalSunCompactConstructionProfile} - Genuine physical selection. */
+	/** Create the explicit supported ordinary profile.
+	 *
+	 * @returns {LocalSunCompactConstructionProfile} - Genuine physical selection.
+	 */
 	function create() {
 		return new LocalSunCompactProfileSelection().create({
 			observation,

@@ -98,6 +98,7 @@ export class ShaderAssemblyPreparer {
 		const providesRuntime = contributions.some(
 			/**
 			 * Called by Array.prototype.some to test one collection value for a matching condition.
+			 *
 			 * @param contribution - The contribution value accepted by the operation.
 			 * @returns - The callback result returned to its caller.
 			 */ (contribution) =>
@@ -109,6 +110,7 @@ export class ShaderAssemblyPreparer {
 			contributions.some(
 				/**
 				 * Called by Array.prototype.some to test one collection value for a matching condition.
+				 *
 				 * @param contribution - The contribution value accepted by the operation.
 				 * @returns - The callback result returned to its caller.
 				 */ (contribution) => contribution.requires.includes('runtime.initialState'),

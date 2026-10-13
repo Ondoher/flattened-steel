@@ -37,6 +37,7 @@ export class FlatEarthGeometry {
 	}
 
 	/** Call this method to identify the fixed simulated stellar projection.
+	 *
 	 * @returns {FlatStellarEpochRelativeTransformIdentity} - Complete placement policy.
 	 */
 	describeStellarEpochRelativeTransform() {
@@ -47,6 +48,7 @@ export class FlatEarthGeometry {
 		).describeTransform();
 	}
 	/** Call this method to contribute geometry-owned flat-star GPU placement.
+	 *
 	 * @param {Readonly<{observation:GeometryObservation}>} request - Exact frame observation.
 	 * @returns {StellarGenerationGeometryShaderContribution} - CPU-matched placement operations.
 	 */
@@ -63,6 +65,7 @@ export class FlatEarthGeometry {
 		).createContribution();
 	}
 	/** Call this method to resolve the matching flat-star CPU presentation direction.
+	 *
 	 * @param {UnitVector3} direction - Accepted catalog unit direction.
 	 * @returns {UnitVector3} - Receiver-relative east/north/up direction.
 	 */
@@ -75,6 +78,7 @@ export class FlatEarthGeometry {
 	}
 
 	/** Call this method to conservatively admit every ray in one symmetric perspective view cone.
+	 *
 	 * @param {FlatCompactViewSupportRequest} request - Physical camera, cone and selected compact coverage.
 	 * @returns {LocalSunFrameSupportRay} - Worst outward-direction ray for controller admission.
 	 */
@@ -170,7 +174,7 @@ export class FlatEarthGeometry {
 	}
 
 	/**
-	 * Resolve one flat-world observation instant without exposing private synchronization support.
+	 * Call this method to resolve one flat-world observation instant without exposing private synchronization support.
 	 *
 	 * @param {FlatEarthObservationInstantRequest} request - The date, location, and event selection.
 	 * @returns {string} - The selected canonical UTC instant.
@@ -372,7 +376,7 @@ export class FlatEarthGeometry {
 	}
 
 	/**
-	 * Configure one finite local source from the construction-time observation.
+	 * Call this method to configure one finite local source from the construction-time observation.
 	 *
 	 * @param {GeometryLightSourceConfigurationRequest} request - The source and observation.
 	 */

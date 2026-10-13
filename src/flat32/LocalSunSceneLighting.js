@@ -19,6 +19,8 @@ import {
 
 export class LocalSunSceneLighting {
 	/**
+	 * Creates the source-light owner borrowing the parent group.
+	 *
 	 * @param {THREE.Group} parent - Owns the source-light group.
 	 */
 	constructor(parent) {
@@ -187,7 +189,7 @@ export class LocalSunSceneLighting {
 	}
 
 	/**
-	 * Update the checkpoint lights from the active production distant Sun.
+	 * Call this method to update the checkpoint lights from the active production distant Sun.
 	 *
 	 * @param {UnitVector3} directionToSource - Supplies the spherical model-space
 	 * direction in east/north/up order.
@@ -241,7 +243,7 @@ export class LocalSunSceneLighting {
 	}
 
 	/**
-	 * Update checkpoint lights from the active finite flat/local source.
+	 * Call this method to update checkpoint lights from the active finite flat/local source.
 	 *
 	 * @param {ScenePosition} sourceScenePosition - Supplies the geometry-mapped
 	 * observer-local source point.
@@ -274,6 +276,7 @@ export class LocalSunSceneLighting {
 	}
 
 	/** Call this method to stage finite-source directions and exact receiver colors without changing lights.
+	 *
 	 * @param {ScenePosition} sourceScenePosition - Geometry-mapped finite center.
 	 * @param {ReceiverEnvironmentLightMeasurement} receiverLight - Complete exact-state physical lighting.
 	 * @param {Color} color - Current spectral/display projection.
@@ -285,9 +288,10 @@ export class LocalSunSceneLighting {
 		if (
 			source.length !== 3 ||
 			source.some(
-				/** Called by source validation. @param {number} value - Coordinate. @returns {boolean} - Nonfinite flag. */ (
-					value,
-				) => !Number.isFinite(value),
+				/** Called by source validation.
+				 *
+				 * @param {number} value - Coordinate. @returns {boolean} - Nonfinite flag.
+				 */ (value) => !Number.isFinite(value),
 			)
 		)
 			throw new TypeError('Finite source scene point required.');
@@ -303,9 +307,10 @@ export class LocalSunSceneLighting {
 		const records = [];
 		for (const light of this._lights) {
 			const definition = SCENE_OBJECTS.find(
-				/** Called by scene lookup. @param {Flat32ReviewObjectDefinition} candidate - Object definition. @returns {boolean} - Matching object. */ (
-					candidate,
-				) => candidate.name === light.userData.reviewObjectKey,
+				/** Called by scene lookup.
+				 *
+				 * @param {Flat32ReviewObjectDefinition} candidate - Object definition. @returns {boolean} - Matching object.
+				 */ (candidate) => candidate.name === light.userData.reviewObjectKey,
 			);
 			const direction = definition ? this._directionBetween(definition.shadowFocus, source) : null;
 			records.push({
@@ -443,7 +448,7 @@ export class LocalSunSceneLighting {
 	}
 
 	/**
-	 * Report the current installed and allocated lighting state.
+	 * Call this method to report the current installed and allocated lighting state.
 	 *
 	 * @returns {LocalSunLightingSummary} Return aggregate source-light facts.
 	 */
@@ -456,7 +461,7 @@ export class LocalSunSceneLighting {
 	}
 
 	/**
-	 * Install every source-app Three light and shadow camera.
+	 * Call this method to install every source-app Three light and shadow camera.
 	 *
 	 * @returns {LocalSunLightingSummary} Return aggregate source-light facts.
 	 */
@@ -483,7 +488,7 @@ export class LocalSunSceneLighting {
 	}
 
 	/**
-	 * Remove every owned source light and target.
+	 * Call this method to remove every owned source light and target.
 	 *
 	 * @returns {void}
 	 */

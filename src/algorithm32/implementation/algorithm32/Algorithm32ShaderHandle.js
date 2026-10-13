@@ -253,7 +253,7 @@ export class Algorithm32ShaderHandle {
 		}
 	}
 
-	/** Call this method at the live scene boundary to install complete receiver light and celestial observation.
+	/** Call this method to install complete receiver light and celestial observation at the live scene boundary.
 	 *
 	 * @param {ReceiverEnvironmentLightMeasurement} measurement - Complete candidate lighting.
 	 * @param {GeometryObservation} observation - Matching accepted observation.
@@ -265,7 +265,7 @@ export class Algorithm32ShaderHandle {
 		this._buildResult.runtime?.publishObservation?.(observation);
 	}
 
-	/** Measure the active common-path environment and publish complete receiver light atomically. */
+	/** Call this method to measure the active common-path environment and publish complete receiver light atomically. */
 	async measureReceiverEnvironmentLight({THREE, renderer, backend, signal, diagnostics = false}) {
 		this._assertUsable();
 		const buildResult = this._buildResult;
@@ -426,13 +426,13 @@ export class Algorithm32ShaderHandle {
 		};
 	}
 
-	/** Mark renderer-owned celestial view products incompatible without rebuilding the shader graph. */
+	/** Call this method to mark renderer-owned celestial view products incompatible without rebuilding the shader graph. */
 	markCelestialViewDirty() {
 		this._assertUsable();
 		this._buildResult.celestialGenerationParticipant?.markDirty('view');
 	}
 
-	/** Invalidate renderer-owned celestial handles after WebGL context loss. */
+	/** Call this method to invalidate renderer-owned celestial handles after WebGL context loss. */
 	handleContextLoss() {
 		this._assertUsable();
 		this._receiverProgramRetention.material?.dispose();
@@ -442,7 +442,7 @@ export class Algorithm32ShaderHandle {
 		this._buildResult.celestialGenerationParticipant?.handleContextLoss();
 	}
 
-	/** Require normal celestial regeneration after WebGL context restoration. */
+	/** Call this method to require normal celestial regeneration after WebGL context restoration. */
 	handleContextRestoration() {
 		this._assertUsable();
 		this._buildResult.celestialGenerationParticipant?.handleContextRestoration();

@@ -19,25 +19,73 @@ import {CelestialSourceRoster} from '../../../celestial-source-support/Celestial
 
 /** Complete explicit compact cache-construction profile; ordinary runtime execution remains a separate integration gate. */
 export class LocalSunCompactConstructionProfile {
-	/** Discriminant rejected by ordinary sampled/rectangular profile consumers. @readonly @type {'local-sun-compact-construction-profile'} */
+	/** Discriminant rejected by ordinary sampled/rectangular profile consumers.
+	 *
+	 * @readonly
+	 *
+	 * @type {'local-sun-compact-construction-profile'}
+	 */
 	kind = 'local-sun-compact-construction-profile';
-	/** Named candidate policy. @readonly @type {string} */
+	/** Named candidate policy.
+	 *
+	 * @readonly
+	 *
+	 * @type {string}
+	 */
 	id = 'local-sun-compact-v9-native15-n4-v1';
-	/** Construction contract revision. @readonly @type {number} */
+	/** Construction contract revision.
+	 *
+	 * @readonly
+	 *
+	 * @type {number}
+	 */
 	revision = 1;
-	/** Accepted existing physical owners. @readonly @type {LocalSunCompactProfileModels} */
+	/** Accepted existing physical owners.
+	 *
+	 * @readonly
+	 *
+	 * @type {LocalSunCompactProfileModels}
+	 */
 	models;
-	/** Exact Native15 interpretation and source packet. @readonly @type {Algorithm32ExecutionSpectralProfile} */
+	/** Exact Native15 interpretation and source packet.
+	 *
+	 * @readonly
+	 *
+	 * @type {Algorithm32ExecutionSpectralProfile}
+	 */
 	spectral;
-	/** Complete tagged numerical choices, with no inapplicable sampled source count. @readonly @type {LocalSunCompactNumericalPolicies} */
+	/** Complete tagged numerical choices, with no inapplicable sampled source count.
+	 *
+	 * @readonly
+	 *
+	 * @type {LocalSunCompactNumericalPolicies}
+	 */
 	numerical;
-	/** Real ragged positions, qualified directions and logical packings. @readonly @type {LocalSunCompactConstructionDomains} */
+	/** Real ragged positions, qualified directions and logical packings.
+	 *
+	 * @readonly
+	 *
+	 * @type {LocalSunCompactConstructionDomains}
+	 */
 	domains;
-	/** Complete normalized executable facts; descriptive only. @readonly @type {string} */
+	/** Complete normalized executable facts; descriptive only.
+	 *
+	 * @readonly
+	 *
+	 * @type {string}
+	 */
 	contentHash;
-	/** Input derivation, separate from executable compatibility. @readonly @type {string} */
+	/** Input derivation, separate from executable compatibility.
+	 *
+	 * @readonly
+	 *
+	 * @type {string}
+	 */
 	provenanceIdentity;
-	/** Copied authored topology seeds, distinct from platform-derived floating-point nodes. @type {LocalSunCompactTopologyControls} */
+	/** Copied authored topology seeds, distinct from platform-derived floating-point nodes.
+	 *
+	 * @type {LocalSunCompactTopologyControls}
+	 */
 	_topologyControls;
 
 	/** Called by construction and consumer ingress to derive identity from actual accepted physical/numerical facts.
@@ -294,7 +342,7 @@ export class LocalSunCompactConstructionProfile {
 		this.contentHash = this._currentIdentity();
 	}
 
-	/** Call this method at consumer ingress to reject fabricated profiles or changed retained physical facts.
+	/** Call this method to reject fabricated profiles or changed retained physical facts at consumer ingress.
 	 *
 	 * @param {unknown} profile - Complete candidate construction profile.
 	 * @returns {LocalSunCompactConstructionProfile} - Genuine accepted profile with current identity.

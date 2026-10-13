@@ -12,7 +12,7 @@ const SUN_SURFACE_RADIANCE_VALUE_KEY = 'runtime.celestial.sunSurfaceRadiance';
 /** Shared fixed-cost stars-then-Sun celestial compositor contribution. */
 export class CelestialScreenPaletteConsumerShaderContribution {
 	/**
-	 * Create the shared consumer contribution owner.
+	 * Creates the shared consumer contribution owner.
 	 *
 	 * @param {Readonly<{includeStars: boolean, filteredStars?: boolean, surfaceRadiance: SpectralRadiancePacket}>} configuration - Enabled back layer and Sun spectrum.
 	 */
@@ -34,7 +34,7 @@ export class CelestialScreenPaletteConsumerShaderContribution {
 		);
 	}
 
-	/** Create the source-independent O(1) celestial contribution. */
+	/** Call this method to create the source-independent O(1) celestial contribution. */
 	createShaderContribution() {
 		const textures = [
 			ShaderContributions.createShaderTextureDeclaration('uSunCoverageTile', 'sampler2D', SUN_COVERAGE_VALUE_KEY),

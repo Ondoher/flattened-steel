@@ -5,7 +5,10 @@ import {resolveLocalSunFrameView} from './local-sun-frame-view.js';
 
 /** Renderer-owned isolated shader, receiver measurement and complete-frame preflight for the compact local source. */
 export class LocalSunFramePreparer {
-	/** External scene/renderer and explicit physical scale/depth choices. @type {Flat32LocalFramePreparerConfiguration} */ _configuration;
+	/** External scene/renderer and explicit physical scale/depth choices.
+	 *
+	 * @type {Flat32LocalFramePreparerConfiguration}
+	 */ _configuration;
 
 	/** Called by staging and rendering to refresh only this frame's camera/display bindings.
 	 *
@@ -107,6 +110,7 @@ export class LocalSunFramePreparer {
 	}
 
 	/** Called by staging, publication and rendering to admit the complete current camera cone.
+	 *
 	 * @param {LocalSunCompactConstructionProfile} profile - Exact live physical geometry and coverage.
 	 * @returns {void} - Supported view, otherwise explicit rejection before rendering.
 	 */

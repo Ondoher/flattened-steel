@@ -1,5 +1,7 @@
 export class Flat32View {
 	/**
+	 * Creates the application view borrowing the supplied shell root.
+	 *
 	 * @param {HTMLElement} root - Hosts the application shell.
 	 */
 	constructor(root) {
@@ -194,7 +196,7 @@ export class Flat32View {
 		return `${date.toISOString().slice(0, 16).replace('T', ' ')}Z / ${state.timeLabel}`;
 	}
 
-	/** Present the currently requested supported pairing. */
+	/** Call this method to present the currently requested supported pairing. */
 	showMode(pairing) {
 		const shell = this._requireElement(this._shell, 'shell');
 		const button = shell.querySelector('#flat32-mode-control');
@@ -207,7 +209,7 @@ export class Flat32View {
 		shell.dataset.flat32Mode = pairing;
 	}
 
-	/** Publish the source app's date/time display and selected time controls. */
+	/** Call this method to publish the source app's date/time display and selected time controls. */
 	showLocationTimeState(state) {
 		const shell = this._requireElement(this._shell, 'shell');
 		const location = shell.querySelector('#flat32-location-control');
@@ -237,7 +239,7 @@ export class Flat32View {
 		shell.dataset.flat32Time = state.timeLabel;
 	}
 
-	/** Render all controls from one authoritative application-state snapshot. */
+	/** Call this method to render all controls from one authoritative application-state snapshot. */
 	showApplicationState(state) {
 		this.showMode(state.modeKind === 'spherical-distant' ? 'spherical/distant' : 'flat/local');
 		this.showLocationTimeState(state);
@@ -247,6 +249,7 @@ export class Flat32View {
 	 * Require an initialized view element.
 	 *
 	 * @template {HTMLElement} T
+	 *
 	 * @param {T | null} element - Supplies the possibly absent element.
 	 * @param {string} name - Identifies the required element.
 	 * @returns {T} Return the initialized element.
@@ -269,7 +272,7 @@ export class Flat32View {
 	}
 
 	/**
-	 * Install the application shell.
+	 * Call this method to install the application shell.
 	 *
 	 * @returns {void}
 	 */
@@ -296,7 +299,7 @@ export class Flat32View {
 		this._requireElement(this._pairing, 'pairing');
 	}
 
-	/** Publish the exact production selections used by this application instance. */
+	/** Call this method to publish the exact production selections used by this application instance. */
 	showProductionSelections(selections) {
 		const shell = this._requireElement(this._shell, 'shell');
 		shell.dataset.flat32ColorModel = selections.colorDisplayModelConfiguration.model;
@@ -342,7 +345,7 @@ export class Flat32View {
 	}
 
 	/**
-	 * Present the working direct scene while the atmosphere builds.
+	 * Call this method to present the working direct scene while the atmosphere builds.
 	 *
 	 * @param {Flat32SceneSummary} sceneSummary - Supplies installed scene facts.
 	 * @param {Flat32ApplicationState} state - Supplies the exact requested state.
@@ -371,7 +374,7 @@ export class Flat32View {
 		if (atmosphereControl instanceof HTMLButtonElement) atmosphereControl.disabled = true;
 	}
 
-	/** Present one distant-Sun cache-resolution phase through the existing status surface. */
+	/** Call this method to present one distant-Sun cache-resolution phase through the existing status surface. */
 	showDistantSunCacheState(sceneSummary, cacheState, solarZenithDegrees) {
 		const shell = this._requireElement(this._shell, 'shell');
 		const status = this._requireElement(this._status, 'status');
@@ -392,7 +395,7 @@ export class Flat32View {
 	}
 
 	/**
-	 * Present the installed production atmosphere.
+	 * Call this method to present the installed production atmosphere.
 	 *
 	 * @param {Flat32SceneSummary} sceneSummary - Supplies installed scene facts.
 	 * @param {Flat32AtmosphereSummary} atmosphereSummary - Supplies runtime facts.
@@ -471,7 +474,7 @@ export class Flat32View {
 	}
 
 	/**
-	 * Present the current pointer-look affordance without changing atmosphere state.
+	 * Call this method to present the current pointer-look affordance without changing atmosphere state.
 	 *
 	 * @param {boolean} locked - Reports whether pointer look owns the mouse.
 	 * @returns {void}
@@ -487,7 +490,7 @@ export class Flat32View {
 	}
 
 	/**
-	 * Present a visible runtime failure.
+	 * Call this method to present a visible runtime failure.
 	 *
 	 * @param {string} message - Describes the failure.
 	 * @returns {void}
@@ -510,7 +513,7 @@ export class Flat32View {
 	}
 
 	/**
-	 * Mark the local application as stopped.
+	 * Call this method to mark the local application as stopped.
 	 *
 	 * @returns {void}
 	 */

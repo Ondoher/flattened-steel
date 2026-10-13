@@ -3,6 +3,8 @@ import {Algorithm32Runtime} from './Algorithm32Runtime.js';
 /** Own supported-mode preparation, atomic publication, and rollback. */
 export class ModeController {
 	/**
+	 * Creates the supported-mode coordinator borrowing application collaborators.
+	 *
 	 * @param {Readonly<Flat32ModeControllerConfiguration>} configuration -
 	 * Supplies application-owned collaborators.
 	 */

@@ -9,6 +9,8 @@ import {ATMOSPHERE_SCENE_SCALE, GROUND_COLOR, GROUND_SIZE_SCENE_UNITS, SCENE_OBJ
  */
 export class EndpointScene {
 	/**
+	 * Creates an endpoint owner borrowing the scene and selecting its visible objects.
+	 *
 	 * @param {THREE.Scene} scene - Owns the rendered objects.
 	 * @param {Flat32EndpointSceneConfiguration} [configuration]
 	 * Supplies diagnostic-only scene visibility without changing the default.
@@ -149,7 +151,7 @@ export class EndpointScene {
 	}
 
 	/**
-	 * Install the ordinary matte scene.
+	 * Call this method to install the ordinary matte scene.
 	 *
 	 * @returns {Flat32SceneSummary} Return aggregate scene-light facts.
 	 */
@@ -167,7 +169,7 @@ export class EndpointScene {
 		return this.describe();
 	}
 
-	/** Rebuild geometry-owned visual endpoints for a supported atmosphere mode. */
+	/** Call this method to rebuild geometry-owned visual endpoints for a supported atmosphere mode. */
 	applyMode(kind, geometry) {
 		if (this._group === null) {
 			throw new Error('Flat32 endpoint scene is not installed.');
@@ -183,7 +185,7 @@ export class EndpointScene {
 	}
 
 	/**
-	 * Report the current observable scene and shadow state.
+	 * Call this method to report the current observable scene and shadow state.
 	 *
 	 * @returns {Flat32SceneSummary} Return aggregate scene facts.
 	 */
@@ -211,7 +213,7 @@ export class EndpointScene {
 		};
 	}
 
-	/** Update scene lighting to match the active spherical/distant atmosphere. */
+	/** Call this method to update scene lighting to match the active spherical/distant atmosphere. */
 	updateDistantSunLighting(directionToSource, receiverLight, color) {
 		if (this._lighting === null) {
 			throw new Error('Flat32 endpoint scene is not installed.');
@@ -221,7 +223,7 @@ export class EndpointScene {
 	}
 
 	/**
-	 * Update scene lights from the active finite flat/local source.
+	 * Call this method to update scene lights from the active finite flat/local source.
 	 *
 	 * @param {ScenePosition} sourceScenePosition - Supplies the geometry-mapped
 	 * observer-local source point.
@@ -232,6 +234,7 @@ export class EndpointScene {
 	}
 
 	/** Call this method to prepare reversible exact-state local lighting without publishing it.
+	 *
 	 * @param {ScenePosition} sourceScenePosition - Geometry-owned scene point.
 	 * @param {ReceiverEnvironmentLightMeasurement} receiverLight - Exact measured spectra.
 	 * @param {Color} color - Selected physical spectral projection.
@@ -243,7 +246,7 @@ export class EndpointScene {
 	}
 
 	/**
-	 * Return scene-space corners that bound all opaque scene geometry.
+	 * Call this method to return scene-space corners that bound all opaque scene geometry.
 	 *
 	 * @returns {readonly ScenePosition[]} Return typed endpoint positions.
 	 */
@@ -278,7 +281,7 @@ export class EndpointScene {
 	}
 
 	/**
-	 * Remove and dispose every owned scene object.
+	 * Call this method to remove and dispose every owned scene object.
 	 *
 	 * @returns {void}
 	 */
