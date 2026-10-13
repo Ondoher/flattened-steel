@@ -180,32 +180,28 @@ export class FlatLocalMode {
 	/** Call this method to create an exact ordinary-observation candidate without changing displayed state.
 	 * @param {GeometryObservation} observation - Requested time and location.
 	 * @param {UnitValue<'bytes'>} otherOwnedGpuBytes - Complete declared scene/frame overlap.
+	 * @param {Flat32LocalFrameViewRequest} view - Current symmetric ordinary camera cone.
 	 * @returns {LocalSunFrameRequest} - Complete accepted request, or explicit unsupported coverage.
 	 */
-	createLocalFrameRequest(observation, otherOwnedGpuBytes) {
+	createLocalFrameRequest(observation, otherOwnedGpuBytes, view) {
 		this._assertUsable();
 		if (!this._compactProfile) throw new Error('Compact local selection required.');
 		const profile = this._compactProfile.createLiveProfile({
 			observation,
 			receiverPosition: this._geometry.configuration.observerPosition,
 		});
-		const source = profile.models.lightSource.configuration.position.coordinates;
-		const receiver = profile.models.geometry.configuration.observerPosition;
-		const delta = [receiver.coordinates[0] - source[0], receiver.coordinates[1] - source[1]];
-		const horizontal = Math.hypot(...delta);
-		if (
-			horizontal + DistanceMath.toMeters(FLAT_OBSERVER_DOME_MAX_VIEW_RAY_EXTENT) >
-			profile.domains.topology.coverageRadius.value
-		)
-			throw new RangeError(
-				'Ordinary observer dome exits compact cache coverage; compatible replacement or unsupported state required.',
-			);
-		const direction = /** @type {UnitVector3} */ (
-			horizontal === 0 ? [1, 0, 0] : [delta[0] / horizontal, delta[1] / horizontal, 0]
-		);
+		const geometry = /** @type {FlatEarthGeometry} */ (profile.models.geometry);
+		const ray = geometry.resolveCompactViewSupport({
+			origin: geometry.mapObserverLocalScenePointToModelPosition(view.cameraPosition, {
+				sceneScale: this._sceneScale,
+			}),
+			forward: geometry.mapObserverLocalSceneDirectionToModelDirection(view.cameraDirection),
+			halfAngle: view.halfAngle,
+			coverageRadius: profile.domains.topology.coverageRadius,
+		});
 		return {
 			profile,
-			viewRays: [{origin: receiver, direction}],
+			viewRays: [ray],
 			presentationIdentity: JSON.stringify(resolveFlat32ProductionSelections(this._configuration)),
 			otherOwnedGpuBytes,
 		};

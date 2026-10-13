@@ -1,0 +1,12 @@
+{
+	"extends": "../gpu/jsconfig.json",
+	"include": [
+		"LocalSunP4Qualification.js",
+		"LocalSunP4Controls.js",
+		"*.d.ts",
+		"../**/*.d.ts",
+		"../../../../src/algorithm32/**/*.d.ts",
+		"../../../../src/flat32/**/*.d.ts"
+	],
+	"exclude": ["../../../../node_modules/**", "../../../../src/algorithm32/**/_tests/**"]
+}

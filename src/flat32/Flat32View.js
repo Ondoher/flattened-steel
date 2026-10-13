@@ -99,7 +99,16 @@ export class Flat32View {
 		return shell;
 	}
 
-	/** Bind compact location/time control actions. */
+	/** Call this method to bind application-owned location/time actions to the ordinary controls.
+	 *
+	 * @param {Flat32ControlAction} onLocation - Advance the selected location.
+	 * @param {Flat32ControlSelectionAction} onTime - Select one location-time control.
+	 * @param {Flat32ControlAction} onBasis - Toggle the displayed time basis.
+	 * @param {Flat32ControlSelectionAction} onGlobeTime - Select one globe-time control.
+	 * @param {Flat32ControlAdjustmentAction} onHourOffset - Adjust the selected hour offset.
+	 * @param {Flat32ControlAdjustmentAction} onMinuteOffset - Adjust the selected minute offset.
+	 * @returns {void} - Controls dispatch to the application state owner.
+	 */
 	installLocationTimeControls(onLocation, onTime, onBasis, onGlobeTime, onHourOffset, onMinuteOffset) {
 		const shell = this._requireElement(this._shell, 'shell');
 		shell.querySelector('#flat32-location-control')?.addEventListener('click', onLocation);
@@ -124,19 +133,31 @@ export class Flat32View {
 		});
 	}
 
-	/** Bind supported-pair mode switching. */
+	/** Call this method to bind supported-pair switching to its application owner.
+	 *
+	 * @param {Flat32ControlAction} onMode - Application-owned mode transition.
+	 * @returns {void} - Control action installed.
+	 */
 	installModeControl(onMode) {
 		const shell = this._requireElement(this._shell, 'shell');
 		shell.querySelector('#flat32-mode-control')?.addEventListener('click', onMode);
 	}
 
-	/** Bind the diagnostic atmosphere-composition bypass. */
+	/** Call this method to bind the diagnostic atmosphere-composition toggle.
+	 *
+	 * @param {Flat32ControlAction} onToggle - Application-owned composition selection.
+	 * @returns {void} - Control action installed.
+	 */
 	installAtmosphereControl(onToggle) {
 		const shell = this._requireElement(this._shell, 'shell');
 		shell.querySelector('#flat32-atmosphere-control')?.addEventListener('click', onToggle);
 	}
 
-	/** Present whether the Algorithm32 atmosphere composition shader is visible. */
+	/** Call this method to present the selected atmosphere composition state.
+	 *
+	 * @param {boolean} enabled - Whether Algorithm32 composition is selected.
+	 * @returns {void} - Current control state presented.
+	 */
 	showAtmosphereShaderState(enabled) {
 		const shell = this._requireElement(this._shell, 'shell');
 		const button = shell.querySelector('#flat32-atmosphere-control');
@@ -152,7 +173,7 @@ export class Flat32View {
 	/**
 	 * Return the visible geometry/source description for one pairing.
 	 *
-	 * @param {'spherical/distant' | 'flat/local'} pairing - Supplies the pairing.
+	 * @param {Flat32Pairing} pairing - Supplies the pairing.
 	 * @returns {string} Return its visible description.
 	 */
 	_pairingLabel(pairing) {
@@ -340,7 +361,7 @@ export class Flat32View {
 
 		this._publishSceneSummary(sceneSummary);
 		shell.dataset.flat32State = 'setting-up-atmosphere';
-		status.textContent = `Scene ready. Building the full-domain production ${setupDescription}.`;
+		status.textContent = `Preparing the ${setupDescription}.`;
 		atmosphere.textContent = 'building';
 		progress.setAttribute('aria-label', `Setting up the ${setupDescription}`);
 		progress.setAttribute('aria-valuetext', setupDescription);
@@ -421,13 +442,14 @@ export class Flat32View {
 	}
 
 	/**
-	 * Preserve the direct scene and present an atmosphere-only failure.
+	 * Call this method to preserve the displayed scene and present an atmosphere failure.
 	 *
 	 * @param {Flat32SceneSummary} sceneSummary - Supplies retained scene facts.
 	 * @param {string} message - Describes the atmosphere failure.
+	 * @param {boolean} [retainedFrame=false] - A complete previously published atmosphere remains installed.
 	 * @returns {void}
 	 */
-	showAtmosphereFailure(sceneSummary, message) {
+	showAtmosphereFailure(sceneSummary, message, retainedFrame = false) {
 		const shell = this._requireElement(this._shell, 'shell');
 		const status = this._requireElement(this._status, 'status');
 		const progress = this._requireElement(this._progress, 'progress');
@@ -439,7 +461,9 @@ export class Flat32View {
 		if (shell.dataset.flat32DistantSunCacheState !== 'dark') {
 			shell.dataset.flat32DistantSunCacheState = 'failure';
 		}
-		status.textContent = 'The direct scene remains active; atmosphere setup failed.';
+		status.textContent = retainedFrame
+			? 'The previous scene remains displayed; the requested update failed.'
+			: 'The direct scene remains active; atmosphere setup failed.';
 		atmosphere.textContent = 'failed';
 		progress.hidden = true;
 		error.textContent = message;

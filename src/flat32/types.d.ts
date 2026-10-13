@@ -1,3 +1,23 @@
+/** Ordinary public geometry/source pairing.
+ *
+ * - **"spherical/distant"** - Spherical geometry with a distant Sun.
+ * - **"flat/local"** - Flat geometry with a finite local Sun.
+ */
+type Flat32Pairing = 'spherical/distant' | 'flat/local';
+
+/** Explicit compact candidate selection; omission retains the rectangular control.
+ *
+ * - **"compact-v9-native15"** - Qualified v9 compact physical family with native15 spectra.
+ */
+type Flat32LocalSunCachePolicy = 'compact-v9-native15';
+
+/** Application-owned action with no additional user input. */
+type Flat32ControlAction = () => void;
+/** Application-owned selection of one numbered location/time control. */
+type Flat32ControlSelectionAction = (index: number) => void;
+/** Application-owned signed delta in the control's hours or minutes. */
+type Flat32ControlAdjustmentAction = (offset: number) => void;
+
 /** Optional Flat32 lifecycle and performance hooks exposed by the browser host. */
 interface Window {
 	/** Release the installed browser application. */
@@ -106,7 +126,7 @@ type Flat32ProductionSelections = {
 /** Caller-owned initial scene, physical-cache and presentation selections. */
 type Flat32ApplicationConfiguration = {
 	/** Explicit compact candidate; omission retains the rectangular control. */
-	readonly localSunCachePolicy?: 'compact-v9-native15';
+	readonly localSunCachePolicy?: Flat32LocalSunCachePolicy;
 	/** Initial camera vertical field of view in degrees. */
 	readonly cameraFieldOfViewDegrees?: number;
 	/** Initial predefined local-Sun observation index. */
@@ -165,7 +185,7 @@ type Flat32ModeKind = 'spherical-distant' | 'flat-local';
 
 /** Caller-owned physical and presentation selections for a flat/local mode. */
 type Flat32LocalModeConfiguration = Readonly<{
-	/** Explicit candidate activation; omission retains the existing control. */ localSunCachePolicy?: 'compact-v9-native15';
+	/** Explicit candidate activation; omission retains the existing control. */ localSunCachePolicy?: Flat32LocalSunCachePolicy;
 	/** Authenticated extended catalog for selected stellar consumers. */ brightest2000StellarCatalogDefinition?: Brightest2000StellarCatalogDefinition;
 	/** Measured spectral weights for shared low-light filters. */ scotopicLuminanceWeights?: ArrayLike<number>;
 	/** Physical length represented by one scene unit. */ sceneScale: SceneScale;
@@ -188,8 +208,8 @@ interface Flat32Mode {
 
 /** Configured domains of a supported atmosphere mode. */
 type Flat32ModeSummary = Omit<SphericalDistantModeSummary, 'pairing' | 'distantSunCacheState'> & {
-	/** Physical pairing. */ pairing: 'spherical/distant' | 'flat/local';
-	/** Distant source cache state when this is a spherical mode. */ distantSunCacheState?: 'ready' | 'dark';
+	/** Physical pairing. */ pairing: Flat32Pairing;
+	/** Distant source cache state when this is a spherical mode. */ distantSunCacheState?: Flat32DistantSunCacheState;
 	/** Local observer dome selection when this is a flat mode. */ observerDomeEnabled?: boolean;
 };
 
@@ -272,7 +292,7 @@ type Flat32SphericalDistantModeConfiguration<Geometry extends GeometryModel = Ge
 	/** Qualified number of scattering orders. */ maximumScatteringOrder: SupportedCacheScatteringOrder;
 	/** Optional authenticated dense scene asset. */ sceneCacheAsset?: DistantSunSceneCacheAssetSelection;
 	/** Optional authenticated shared-cache runtime selection. */ sharedCache?: DistantSunSharedCacheSelection;
-	/** Explicit distant cache state. */ distantSunCacheState?: 'ready' | 'dark';
+	/** Explicit distant cache state. */ distantSunCacheState?: Flat32DistantSunCacheState;
 	/** Include Sun and stellar presentation. */ celestialSourcesEnabled?: boolean;
 	/** Separately selected display response. */ colorDisplayModelConfiguration?: Flat32ColorDisplayModelConfiguration;
 	/** Selected stellar catalog. */ stellarCatalog?: Flat32StellarCatalogId;
@@ -490,7 +510,7 @@ type SphericalDistantModeSummary = {
 	/** Spherical geometry paired with a distant source. */
 	pairing: 'spherical/distant';
 	/** Whether the selected cache is lighted and ready or texture-free dark. */
-	distantSunCacheState: 'ready' | 'dark';
+	distantSunCacheState: Flat32DistantSunCacheState;
 	/** Qualified maximum scattering order. */
 	maximumScatteringOrder: SupportedCacheScatteringOrder;
 	/** Number of cache positions. */
@@ -630,9 +650,9 @@ type Flat32SharedCacheAssetSelection = {
 
 /** Published atmosphere mode, composed-frame observations and setup timing. */
 type Flat32AtmosphereSummary = Omit<SphericalDistantModeSummary, 'pairing' | 'distantSunCacheState'> & {
-	/** Distant cache readiness; absent for flat/local modes. */ distantSunCacheState?: 'ready' | 'dark';
+	/** Distant cache readiness; absent for flat/local modes. */ distantSunCacheState?: Flat32DistantSunCacheState;
 	/** Published spherical/distant or flat/local geometry/source pairing. */
-	pairing: 'spherical/distant' | 'flat/local';
+	pairing: Flat32Pairing;
 	/** Whether the local observer dome is selected. */
 	observerDomeEnabled?: boolean;
 	/** Number of successfully composed runtime frames. */
@@ -758,6 +778,13 @@ type Flat32LocalFramePreparerConfiguration = Readonly<{
 /** Actual ordinary local-frame prepublication pixel observations. */
 type Flat32LocalFramePreflight = LocalSunFramePreflight;
 
+/** Renderer-owned camera facts passed to geometry for complete physical support admission. */
+type Flat32LocalFrameViewRequest = Readonly<{
+	/** Current camera origin in scene units. */ cameraPosition: ScenePosition;
+	/** Current scene-frame forward direction. */ cameraDirection: UnitVector3;
+	/** Symmetric perspective diagonal half-angle. */ halfAngle: Angle;
+}>;
+
 /** Ordinary shader counters used to reject incomplete composed frames. */
 type Flat32LocalFrameProgramDiagnostics = Readonly<{
 	/** Renderer compile/link report for the actual program. */ diagnostics?: Readonly<{
@@ -796,3 +823,9 @@ type Flat32RuntimeConfiguration = Readonly<{
 	/** Optional performance measurement callback. */
 	performanceCallback?: ShaderPerformanceCallback;
 }>;
+/** Distant cache readiness exposed by ordinary application summaries.
+ *
+ * - **"ready"** - A compatible source cache is installed.
+ * - **"dark"** - The qualified dark selection needs no source cache.
+ */
+type Flat32DistantSunCacheState = 'ready' | 'dark';

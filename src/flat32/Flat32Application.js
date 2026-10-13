@@ -213,7 +213,7 @@ export class Flat32Application {
 	 *
 	 * @param {Flat32DistantSunSceneState<SphericalDistantMode['geometry']>} sceneState - Live geometry and source placement.
 	 * @param {DistantSunSceneCacheAssetSelection | undefined} sceneCacheAsset - Optional exact non-dark package.
-	 * @param {'ready' | 'dark'} [distantSunCacheState] - Selected scattering-cache state.
+	 * @param {Flat32DistantSunCacheState} [distantSunCacheState] - Selected scattering-cache state.
 	 * @returns {SphericalDistantMode} The configured mode.
 	 */
 	_createSphericalDistantMode(sceneState, sceneCacheAsset, distantSunCacheState = 'ready', sharedCache = undefined) {
@@ -296,7 +296,11 @@ export class Flat32Application {
 					this._state = this._publishedState;
 					this._renderControls();
 				}
-				this._view.showAtmosphereFailure(this._sceneSummary, this._errorMessage(error));
+				this._view.showAtmosphereFailure(
+					this._sceneSummary,
+					this._errorMessage(error),
+					this._publishedState !== null,
+				);
 			}
 		}
 	}

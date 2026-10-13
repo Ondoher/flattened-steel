@@ -1,0 +1,11 @@
+{
+	"extends": "../../../../src/flat32/jsconfig.json",
+	"include": [
+		"LocalSunP4BrowserProof.js",
+		"LocalSunP4CelestialProof.js",
+		"*.d.ts",
+		"../../../../src/algorithm32/**/*.d.ts",
+		"../../../../src/flat32/**/*.d.ts"
+	],
+	"exclude": ["../../../../node_modules/**", "../../../../src/algorithm32/**/_tests/**"]
+}

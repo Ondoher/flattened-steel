@@ -1,0 +1,46 @@
+import {existsSync,mkdirSync,readFileSync,writeFileSync} from 'node:fs';
+import {dirname,resolve} from 'node:path';
+import {fileURLToPath} from 'node:url';
+import vm from 'node:vm';
+import {createHash} from 'node:crypto';
+import {LocalSunNormalizationControls} from '../normalization/LocalSunNormalizationControls.js';
+
+/** Offline independent celestial controls extracted from authenticated immutable accepted evidence. */
+export class LocalSunP4Controls {
+	/** Shared repository/real-path boundary. @type {LocalSunNormalizationControls} */ _paths=new LocalSunNormalizationControls();
+	/** Intended portable comparison authority; never an application runtime import. @type {string} */ fixturePath='src/algorithm32/implementation/flat-earth/fixtures/local-sun-p4-celestial-controls.json';
+	/** Call this method to derive fixed celestial expectations without executing a live production numerical owner.
+	 * @returns {LocalSunP4ControlsFixture} - Exact input vectors, accepted transform expectations and predeclared original gates.
+	 */
+	derive(){
+		const bundlePath='tmp/experiments/local-sun-cache-reuse/runs/00674-p5-celestial/bundle.js';
+		if(this._paths.hash(bundlePath)!=='0c65bb7570ad6fd3dd8f7576da808a185dc415772d6d7d18aa30d0da52d93192')throw new Error('Accepted immutable celestial oracle differs.');
+		const source=readFileSync(this._paths.checkedPath(bundlePath),'utf8');
+		const start=source.indexOf('function flatStarAngle('),end=source.indexOf('function createFlatStarGeometry(',start);
+		if(start<0||end<start||source.indexOf('function flatStarAngle(',start+1)!==-1)throw new Error('Frozen oracle extraction boundary differs.');
+		const oracle=source.slice(start,end);
+		if(!source.includes('irradianceToBoundaryRadianceScale: 1463996.1476640578'))throw new Error('Frozen one-pixel source presentation differs.');
+		const context=vm.createContext({Math,Date});new vm.Script(oracle,{filename:bundlePath+':flat-star-functions'}).runInContext(context,{timeout:1000});
+		const direction=/** @type {(catalog:readonly number[],observation:GeometryObservation,policy:FlatStellarProjectionPolicy,observer:readonly number[])=>UnitVector3} */(context.flatStarDirection);
+		const memberPath='server/flat32/data/brightest-2000-stellar-package-v1/members-rgba32f.bin';
+		if(this._paths.hash(memberPath)!=='14d72c452bbe8f794cce3cfd77634ae378842dedb3076c8f1a3f99de6811c4b2')throw new Error('Authenticated catalog input differs.');
+		const bytes=readFileSync(this._paths.checkedPath(memberPath));
+		const members=new Float32Array(bytes.buffer,bytes.byteOffset,bytes.byteLength/4);
+		const inputPath='tmp/production-local-sun-cache-promotion/runs/00068-p4-application/result.json';
+		const input=/** @type {LocalSunP4ApplicationReport} */(JSON.parse(readFileSync(this._paths.checkedPath(inputPath),'utf8')));
+		if(input.state!=='passed'||input.rows.length!==4)throw new Error('Exact source-control input record incomplete.');
+		const policy={epochMilliseconds:0,periodMilliseconds:86164090.5,projectionRadiusMeters:6360000,domeHeightMeters:Math.PI*6360000};
+		const observer=/** @type {readonly [number,number,number]} */([0,0,5]);
+		const rows=input.rows.map(/** Called by fixed-input oracle evaluation. @param {LocalSunP4ApplicationRow} row - Exact operational input, never numeric gold. @returns {LocalSunP4CelestialControlRow} - Independent frozen-algorithm expectations. */row=>{
+			const expectedDirections=[];for(let i=0;i<2000;i++)expectedDirections.push(direction([members[i*4],members[i*4+1],members[i*4+2]],row.observation,policy,observer));
+			return {action:row.action,observation:row.observation,expectedDirections};
+		});
+		const parents=[bundlePath,memberPath,inputPath,'tmp/experiments/local-sun-cache-reuse/runs/00675-celestial-report/result.json','tmp/experiments/local-sun-cache-reuse/runs/00714-p5-celestial/result.json'].map(/** Called by derivation inventory. @param {string} path - Immutable/data parent. @returns {Readonly<{path:string,sha256:string}>} - Exact parent identity. */path=>({path,sha256:this._paths.hash(path)}));
+		return {schema:'local-sun-p4-celestial-controls-v1',policy,observer,members:Array.from(members),rows,irradianceToBoundaryRadianceScale:{value:1463996.1476640578,units:'sr^-1'},gates:{continuousPixelAbsolute:0.1,integerPixelAbsolute:1,paletteRelative:1e-5,magnitudeAbsolute:1e-4},derivation:{parents,operation:'Extract exact Date/Math-only flatStarAngle and flatStarDirection from authenticated sealed combined bundle; evaluate accepted simulated projection over authenticated binary32 member directions and exact operational input states. The P4 N1 report supplies only observation inputs, not expected numeric values. The unchanged accepted one-pixel boundary scale is retained from the same sealed bundle. Original P5 raster/palette gates are retained before consumer scoring; this is implementation fidelity, not astronomical accuracy.',oracleSourceSha256:createHash('sha256').update(oracle).digest('hex'),producer:'scripts/algorithm32/local-sun-cache/application/LocalSunP4Controls.js',producerSha256:this._paths.hash('scripts/algorithm32/local-sun-cache/application/LocalSunP4Controls.js'),node:process.version}};
+	}
+	/** Call this method to write the newly authored comparison fixture once.
+	 * @returns {void} - Portable independent expectations saved without modifying parents.
+	 */
+	author(){const file=this._paths.checkedPath(this.fixturePath);if(existsSync(file))throw new Error('P4 fixture already authored; verify/reuse its exact identity.');mkdirSync(dirname(file),{recursive:true});writeFileSync(file,JSON.stringify(this.derive(),null,2),{flag:'wx'});console.log('Authored '+this.fixturePath);}
+}
+if(process.argv[1]&&fileURLToPath(import.meta.url)===resolve(process.argv[1]))new LocalSunP4Controls().author();

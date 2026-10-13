@@ -78,9 +78,14 @@ interface StellarScreenPaletteGeometryCapability {
 	 * @returns - The geometry-owned generation-stage contribution.
 	 */
 	createStellarGenerationShaderContribution(
-		request: Readonly<{readonly observation: GeometryObservation}>,
+		request: StellarGenerationGeometryRequest,
 	): StellarGenerationGeometryShaderContribution;
 }
+
+/** Exact fixed observation supplied to the geometry-owned stellar shader contribution. */
+type StellarGenerationGeometryRequest = Readonly<{
+	/** Geographic and UTC snapshot matching the configured geometry. */ observation: GeometryObservation;
+}>;
 
 /**
  * Geometry-resolved atmospheric light-source placement kind.

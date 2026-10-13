@@ -29,7 +29,9 @@ The [P3 boundary](production-algorithm32/caches/local-sun-p3-closure.md) records
 admitted reuse and atomic complete-frame publication, passing N1/N2/N4 and
 half-float proofs, lifecycle/browser checks and resource observations. Only its
 matching final CLEAN primary/audit receipt establishes P3 completion. P4 ordinary
-scene and required celestial integration is selected and in progress. Full-domain CPU
+scene and required celestial integration is delivered and awaiting its final
+mapped review/audit receipt. The [P4 closure](production-algorithm32/caches/local-sun-p4-closure.md)
+owns passed ordinary N1 proofs and the explicit higher-order allocation limit. Full-domain CPU
 recurrence remains unadmitted. Profile/default selection, deployment and
 publication have not changed. Ended experiment and prior receipts remain immutable.
 
@@ -43,8 +45,9 @@ publication have not changed. Ended experiment and prior receipts remain immutab
 6. [Local-Sun P2 closure](production-algorithm32/caches/local-sun-p2-closure.md)
 7. [Local-Sun P0 contracts and controls](production-algorithm32/caches/local-sun-cache-p0-contract.md)
 8. [Local-Sun P3 implementation and proof boundary](production-algorithm32/caches/local-sun-p3-closure.md)
+9. [Local-Sun P4 ordinary application and celestial boundary](production-algorithm32/caches/local-sun-p4-closure.md)
 
-Before a later implementation phase, validate the matching P3 review receipt,
+Before a later implementation phase, validate the matching P4 review receipt,
 load its selected contracts/evidence, capture a new baseline and confirm reviewer readiness.
 Standards follow destination folders; experiment mappings do not govern production.
 Existing receipts retain their original frozen scopes.

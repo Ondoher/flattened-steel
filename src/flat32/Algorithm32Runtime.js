@@ -3,6 +3,7 @@ import * as THREE from 'three';
 import {Algorithm32Bindings, ThreeCacheBackend, LocalSunFrameController} from '../algorithm32/implementation/index.js';
 import {FlatLocalMode} from './FlatLocalMode.js';
 import {LocalSunFramePreparer} from './LocalSunFramePreparer.js';
+import {resolveLocalSunFrameView} from './local-sun-frame-view.js';
 import {SceneMath} from '../algorithm32/math/index.js';
 import {SphericalDistantMode} from './SphericalDistantMode.js';
 import DistantSunSharedCache from '../algorithm32/implementation/distant-sun/cache/DistantSunSharedCache.js';
@@ -21,6 +22,8 @@ export class Algorithm32Runtime {
 	constructor(configuration) {
 		/** Explicit compact frame owner, independent from the distant shared attachment. @type {LocalSunFramePublicationController|null} */
 		this._localFrameController = configuration.localFrameController ?? null;
+		/** Complete unpublished initial frame, released by its controller on cancellation. @type {PreparedLocalSunFrame|null} */
+		this._pendingInitialLocalFrame = null;
 		/** Owned restored-backend cleanup after final valid borrower release. @type {Promise<void>} */
 		this._localBackendRelease = Promise.resolve();
 		this._sceneRuntime = configuration.sceneRuntime;
@@ -87,6 +90,8 @@ export class Algorithm32Runtime {
 	_renderLocalFrame() {
 		try {
 			this._localFrameController?.active?.contents.renderFrame();
+			const diagnostics = this._localFrameController?.active?.contents.getDiagnostics?.();
+			if (diagnostics) this._publishCelestialDiagnostics(/** @type {Flat32ShaderDiagnostics} */ (diagnostics));
 			this._runtimeFrameCount += 1;
 			this._sceneRuntime.canvas.dataset.flat32AtmosphereFrameCount = String(this._runtimeFrameCount);
 		} catch (error) {
@@ -129,6 +134,7 @@ export class Algorithm32Runtime {
 			signal.throwIfAborted();
 			this._assertUsable();
 			publication = this._localFrameController.publishPreparedLocalFrame(frame, () => {
+				frame.contents.validateView?.();
 				try {
 					frame.contents.sceneLighting?.publish();
 					this._sceneRuntime.installRenderOperation(() => this._renderLocalFrame());
@@ -182,7 +188,11 @@ export class Algorithm32Runtime {
 			const localRequest =
 				request.localFrameRequest ??
 				(this._mode instanceof FlatLocalMode
-					? this._mode.createLocalFrameRequest(state.observation, this._localFrameAdditionalBytes())
+					? this._mode.createLocalFrameRequest(
+							state.observation,
+							this._localFrameAdditionalBytes(),
+							resolveLocalSunFrameView(this._sceneRuntime.camera),
+						)
 					: null);
 			if (!localRequest) throw new TypeError('Complete accepted local frame request required.');
 			const frame = await this.prepareLocalFrame(localRequest, request.signal);
@@ -791,7 +801,9 @@ export class Algorithm32Runtime {
 	 */
 	_localFrameAdditionalBytes() {
 		const {width, height} = this._sceneRuntime.viewportSize;
-		return {value: 6 * 4096 * 4096 * 4 + width * height * 256 * 2 + 16 * 1024 * 1024, units: 'bytes'};
+		// Six ordinary RGBA8 shadow maps each also own a DEPTH_COMPONENT24
+		// attachment, conservatively reserved as four bytes per pixel.
+		return {value: 6 * 4096 * 4096 * 8 + width * height * 256 * 2 + 16 * 1024 * 1024, units: 'bytes'};
 	}
 	/** Called by setup to stage the explicit compact candidate through the ordinary complete-frame owners.
 	 * @returns {Promise<Flat32AtmosphereSummary>} - Ready unpublished candidate or explicit admission failure.
@@ -818,6 +830,7 @@ export class Algorithm32Runtime {
 				mode.createLocalFrameRequest(
 					mode.geometry.configuration.observation,
 					this._localFrameAdditionalBytes(),
+					resolveLocalSunFrameView(this._sceneRuntime.camera),
 				),
 				cancellation.signal,
 			);
@@ -836,10 +849,25 @@ export class Algorithm32Runtime {
 			if (!this._deferPublication) this.publish();
 			return this._lastSummary;
 		} catch (error) {
-			this._localFrameController.dispose();
-			await this._localFrameController.whenReleased();
-			backend.dispose();
+			const errors = [error];
+			try {
+				this._localFrameController.dispose();
+			} catch (cleanupError) {
+				errors.push(cleanupError);
+			}
+			try {
+				await this._localFrameController.whenReleased();
+			} catch (cleanupError) {
+				errors.push(cleanupError);
+			}
+			try {
+				backend.dispose();
+			} catch (cleanupError) {
+				errors.push(cleanupError);
+			}
 			this._cacheBackend = null;
+			this._pendingInitialLocalFrame = null;
+			if (errors.length > 1) throw new AggregateError(errors, 'Local frame setup and cleanup failed.');
 			throw error;
 		} finally {
 			if (this._setupCancellation === cancellation) this._setupCancellation = null;
@@ -859,6 +887,7 @@ export class Algorithm32Runtime {
 		if (this._pendingInitialLocalFrame && this._localFrameController) {
 			const frame = this._pendingInitialLocalFrame;
 			this._localFrameController.publishPreparedLocalFrame(frame, () => {
+				frame.contents.validateView?.();
 				try {
 					frame.contents.sceneLighting?.publish();
 					this._publishSelectedRenderOperation();

@@ -142,12 +142,14 @@ those public entries; the narrow entry owns no numerical or lifecycle behavior.
   `GeometryConfigurableLightSource`. Applications, sources, caches, and renderer
   adapters must not independently project between coordinate systems. A
   time/location change on the original local path creates replacement geometry,
-  source, facade, scene, and cache objects. The prospective qualified compact
+  source, facade, scene, and cache objects. The explicitly selected compact
   local successor retains immutable canonical construction and stages geometry-owned
   exact live placement with the complete frame, as specified by the
   [P0 local contract](../caches/local-sun-cache-p0-contract.md#identity-preparation-and-publication).
-  This is an accepted implementation contract for P3, not current runtime behavior;
-  it does not permit private configuration mutation or implicit cross-pairing support.
+  P3 implements the complete-frame controller; P4 connects it to ordinary Flat32
+  through explicit `compact-v9-native15` selection. Measured receiver lighting,
+  finite-Sun and geometry-owned flat-star resources share the exact live frame.
+  This does not permit private configuration mutation or implicit cross-pairing support.
   Existing in-place time/location animation is deferred under
   [Production MVP requirement M1](../../production-app/mvp/requirements.md#m1--compatible-time-and-location-animation)
   and requires a separately accepted cache transform.

@@ -4,16 +4,16 @@ import {LocalSunLightSource} from '../LocalSunLightSource.js';
 import {LocalSunCompactConstructionProfile} from './LocalSunCompactConstructionProfile.js';
 import {DEFAULT_NATIVE_PRODUCTION_PROFILE} from '../../../profiles/native-15/native-15-profile.js';
 
-/** Qualified v9 altitude seeds, in meters; refinement remains geometry/medium owned.
- * Derived from the accepted P0 compact controls, SHA-256 74a7cb03fd646d6ec4754e45e46f7ed622c815d09cd82ceeef174819c3513db6.
+/** Qualified v9 altitude seeds, in meters; refinement remains geometry/medium owned. Derived from the accepted P0 compact controls, SHA-256 74a7cb03fd646d6ec4754e45e46f7ed622c815d09cd82ceeef174819c3513db6.
+ *
  * @type {readonly number[]}
  */
 const ALTITUDE_METERS = [
 	0, 250, 500, 1000, 1500, 3000, 5000, 7000, 10000, 14000, 17000, 20000, 22500, 25000, 31250, 37500, 50000, 62500,
 	75000, 87500, 99000, 100000,
 ];
-/** Qualified v9 Euclidean-radius seeds, in meters, from the same P0 control.
- * This is an executable production selection; comparison fixtures are never runtime imports.
+/** Qualified v9 Euclidean-radius seeds, in meters, from the same P0 control. This is an executable production selection; comparison fixtures are never runtime imports.
+ *
  * @type {readonly number[]}
  */
 const BAND_RADIUS_METERS = [
@@ -31,6 +31,7 @@ const BAND_RADIUS_METERS = [
 /** Explicit qualified compact candidate; does not select application defaults. */
 export class LocalSunCompactProfileSelection {
 	/** Call this method to configure genuine physical owners for one exact observation.
+	 *
 	 * @param {LocalSunCompactProfileSelectionRequest} request - Observation, receiver and ordinary view support.
 	 * @returns {LocalSunCompactConstructionProfile} - Complete qualified construction/live profile.
 	 */
@@ -71,6 +72,7 @@ export class LocalSunCompactProfileSelection {
 		});
 	}
 	/** Called by seed adaptation to retain explicit physical units.
+	 *
 	 * @param {number} value - Seed length in meters.
 	 * @returns {Distance} - Unit-bearing seed.
 	 */

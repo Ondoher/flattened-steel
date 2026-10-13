@@ -2,7 +2,8 @@
 
 Current disposition, 2026-10-13: P3 is complete under its matching CLEAN
 primary/audit receipt. The owner selected P4 ordinary Flat32 and required
-celestial integration; implementation and qualification are in progress.
+celestial integration. Its ordinary N1 GPU and required celestial/failure proofs
+pass; the final P4 mapped primary/audit gate remains the completion authority.
 The [plan](local-sun-cache-promotion-plan.md) owns scope and sequence;
 [P0](local-sun-cache-p0-contract.md) owns parameter applicability, independent
 controls and resource policies. The ended experiment and all prior evidence
@@ -25,13 +26,15 @@ remains deferred.
 | P1 — compact domain and selected CPU reference | Complete under the final P1 closure receipt; full CPU recurrence remains unadmitted. |
 | P2 — GPU construction/runtime | Delivered genuine compact GPU graph and ordinary shared lookup/view consumers, qualified occupied fields, N1/N2/N4, omission and candidate cleanup. The matching CLEAN primary/audit receipt completes the phase. |
 | P3 — reuse and frame publication | Complete under its matching CLEAN primary/audit receipt; numerical, lifecycle and browser proofs pass. |
-| P4 — Flat32/celestial consumers | Selected; ordinary integration and required consumer qualification in progress. |
+| P4 — Flat32/celestial consumers | Delivered explicit ordinary N1 integration, measured lighting, finite Sun/flat stars and failure/retry/cancellation proofs. Only the matching final CLEAN primary/audit receipt completes the phase. |
 | P5 — qualification/adoption preparation | Planned; no adoption, deployment or publication selected. |
 
 ## Next Work
 
-Implement and qualify P4's normal-scene integration under the
+Validate P4's final mapped review and independent audit under the
 [plan](local-sun-cache-promotion-plan.md#p4--integrate-ordinary-flat32-and-required-celestial-consumers).
+The [P4 closure](local-sun-p4-closure.md) owns its consumer boundary, independent
+controls, passed N1 proof and explicit higher-order admission limit.
 The [P3 boundary](local-sun-p3-closure.md) owns immutable prior proof receipts,
 checks, measurements and qualification limits. The owner-authorized 4 GiB free-RAM reserve
 applies throughout execution of the whole promotion plan. App cache-build
@@ -229,3 +232,5 @@ Production reviewer context is refreshed through `review-standards` for the
 new route. No temporary standards changes are selected. The permanent experiment
 mapping remains intact. Current host controls are owned by P0 and the plan above;
 P6's expired resource exceptions do not carry into this port.
+- [P4 primary/audit receipt](../../../../.codex-tmp/review-standards/session-PmaV21/validation-p4.json): only its matching CLEAN outcome completes this ordinary application/celestial unit.
+- [P4 execution summary](../../../../.codex-tmp/review-standards/session-PmaV21/summary.md): decisions, proof receipts, measurements, qualification limits and checkpoints.

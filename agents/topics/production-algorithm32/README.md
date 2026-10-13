@@ -7,7 +7,8 @@ Implement and qualify the production engine. Application behavior, independent e
 The owner selected preparation of the [local-Sun cache production port](caches/local-sun-cache-promotion-plan.md)
 on 2026-10-11. Its [status](caches/local-sun-cache-promotion-status.md) owns the
 P0/P1/P2 receipts and the delivered P3 reuse and atomic frame publication boundary;
-only its matching final CLEAN receipt establishes P3 completion. P4 is unselected.
+only its matching final CLEAN receipt establishes P3 completion. P4 ordinary
+scene/celestial integration is selected; its own final review remains required.
 The [P2 closure](caches/local-sun-p2-closure.md) owns GPU/runtime qualification. The
 [P0 contract](caches/local-sun-cache-p0-contract.md) records applicability and
 prepared independent controls. The accepted

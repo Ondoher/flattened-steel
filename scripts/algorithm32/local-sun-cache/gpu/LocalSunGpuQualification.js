@@ -46,6 +46,14 @@ export class LocalSunGpuQualification {
 		);
 	}
 
+	/** Call this method to sample a sibling bounded proof's owned process tree with the existing host monitor.
+	 * @param {number} rootPid - Explicit proof-owned browser/process root.
+	 * @returns {number} - Observed total working-set bytes, including this Node host.
+	 */
+	sampleOwnedProcessBytes(rootPid) {
+		return this._processBytes(rootPid);
+	}
+
 	/** Called by execution to authenticate complete independent fields and their frozen whole-field identities.
 	 *
 	 * @returns {LocalSunGpuIndependentFields} - Immutable complete physical control inventory.

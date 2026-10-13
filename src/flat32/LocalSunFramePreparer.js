@@ -1,5 +1,7 @@
 import * as THREE from 'three';
 import {Algorithm32, Algorithm32Bindings} from '../algorithm32/implementation/frame-runtime/index.js';
+import {FlatEarthGeometry} from '../algorithm32/implementation/index.js';
+import {resolveLocalSunFrameView} from './local-sun-frame-view.js';
 
 /** Renderer-owned isolated shader, receiver measurement and complete-frame preflight for the compact local source. */
 export class LocalSunFramePreparer {
@@ -104,6 +106,23 @@ export class LocalSunFramePreparer {
 		this._configuration = configuration;
 	}
 
+	/** Called by staging, publication and rendering to admit the complete current camera cone.
+	 * @param {LocalSunCompactConstructionProfile} profile - Exact live physical geometry and coverage.
+	 * @returns {void} - Supported view, otherwise explicit rejection before rendering.
+	 */
+	_validateCurrentView(profile) {
+		const view = resolveLocalSunFrameView(this._configuration.sceneRuntime.camera);
+		const geometry = /** @type {FlatEarthGeometry} */ (profile.models.geometry);
+		geometry.resolveCompactViewSupport({
+			origin: geometry.mapObserverLocalScenePointToModelPosition(view.cameraPosition, {
+				sceneScale: this._configuration.sceneScale,
+			}),
+			forward: geometry.mapObserverLocalSceneDirectionToModelDirection(view.cameraDirection),
+			halfAngle: view.halfAngle,
+			coverageRadius: profile.domains.topology.coverageRadius,
+		});
+	}
+
 	/** Call this method to prepare a complete ordinary shader and measured exact-state receiver/celestial aggregate.
 	 * Failure releases all candidate-owned resources and the supplied borrowed cache controller.
 	 *
@@ -160,7 +179,7 @@ export class LocalSunFramePreparer {
 				request.profile.models.geometry.configuration.observation,
 			);
 			const sceneLighting = this._configuration.endpointScene?.prepareLocalSunLighting?.(
-				/** @type {import('../algorithm32/implementation/index.js').FlatEarthGeometry} */ (
+				/** @type {FlatEarthGeometry} */ (
 					request.profile.models.geometry
 				).mapModelPositionToObserverLocalScenePoint(request.profile.models.lightSource.configuration.position, {
 					sceneScale,
@@ -168,11 +187,14 @@ export class LocalSunFramePreparer {
 				receiverLight,
 				algorithm.config.config.color,
 			);
+			this._validateCurrentView(request.profile);
 			const preflight = this._preflight(handle, resources);
 			request.signal.throwIfAborted();
 			let disposed = false;
 			return {
 				shaderReady: true,
+				getDiagnostics: () => handle.getDiagnostics(),
+				validateView: () => this._validateCurrentView(request.profile),
 				preflight,
 				...(sceneLighting ? {sceneLighting} : {}),
 				receiverLight,
@@ -187,6 +209,7 @@ export class LocalSunFramePreparer {
 				bindingValues,
 				renderFrame: () => {
 					if (disposed) throw new Error('Retired local frame cannot render.');
+					this._validateCurrentView(request.profile);
 					this._updateBindings(bindingValues, algorithm);
 					resources.composer.renderToScreen = true;
 					resources.composer.render();

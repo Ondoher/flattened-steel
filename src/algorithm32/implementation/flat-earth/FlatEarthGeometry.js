@@ -74,6 +74,56 @@ export class FlatEarthGeometry {
 		).resolveDirection(direction);
 	}
 
+	/** Call this method to conservatively admit every ray in one symmetric perspective view cone.
+	 * @param {FlatCompactViewSupportRequest} request - Physical camera, cone and selected compact coverage.
+	 * @returns {LocalSunFrameSupportRay} - Worst outward-direction ray for controller admission.
+	 */
+	resolveCompactViewSupport(request) {
+		this._assertConfigured();
+		const origin = DistanceMath.toMetersPosition(request.origin),
+			source = this._configuration.sourcePosition.coordinates;
+		const forward = VectorMath.normalize(request.forward),
+			halfAngle = AngleMath.toRadians(request.halfAngle);
+		if (!Number.isFinite(halfAngle) || halfAngle < 0 || halfAngle >= Math.PI / 2)
+			throw new RangeError('Supported perspective cone required.');
+		const x = origin[0] - source[0],
+			y = origin[1] - source[1],
+			radius = Math.hypot(x, y);
+		const outward = /** @type {UnitVector3} */ (radius === 0 ? [1, 0, 0] : [x / radius, y / radius, 0]);
+		const cosine = Math.max(-1, Math.min(1, forward[0] * outward[0] + forward[1] * outward[1]));
+		const separation = Math.acos(cosine),
+			maximumCosine = Math.cos(Math.max(0, separation - halfAngle));
+		const extent = DistanceMath.toMeters(
+			this._configuration.observerCenteredDome?.maxObserverViewRayExtent ??
+				this._configuration.sceneSkyRayLimit ??
+				this._configuration.topAltitude,
+		);
+		const maximumRadius = Math.sqrt(
+			Math.max(radius * radius, radius * radius + extent * extent + 2 * radius * extent * maximumCosine),
+		);
+		if (maximumRadius > DistanceMath.toMeters(request.coverageRadius))
+			throw new RangeError('Requested perspective cone exits complete compact cache support.');
+		let direction = outward;
+		if (separation > halfAngle) {
+			const tangent = [outward[0] - forward[0] * cosine, outward[1] - forward[1] * cosine, -forward[2] * cosine];
+			let tangentLength = Math.hypot(...tangent);
+			if (tangentLength < 1e-12) {
+				const axis = Math.abs(forward[2]) < 0.9 ? [0, 0, 1] : [1, 0, 0];
+				tangent[0] = axis[0] - forward[0] * (forward[0] * axis[0] + forward[2] * axis[2]);
+				tangent[1] = -forward[1] * (forward[0] * axis[0] + forward[2] * axis[2]);
+				tangent[2] = axis[2] - forward[2] * (forward[0] * axis[0] + forward[2] * axis[2]);
+				tangentLength = Math.hypot(...tangent);
+			}
+			const normalized = VectorMath.normalize([
+				forward[0] * Math.cos(halfAngle) + (tangent[0] * Math.sin(halfAngle)) / tangentLength,
+				forward[1] * Math.cos(halfAngle) + (tangent[1] * Math.sin(halfAngle)) / tangentLength,
+				forward[2] * Math.cos(halfAngle) + (tangent[2] * Math.sin(halfAngle)) / tangentLength,
+			]);
+			direction = [normalized[0], normalized[1], normalized[2]];
+		}
+		return {origin: request.origin, direction};
+	}
+
 	/** Canonicalize sub-nanometer projection roundoff near an exact meter. */
 	_canonicalProjectionMeters(value) {
 		const nearestMeter = Math.round(value);

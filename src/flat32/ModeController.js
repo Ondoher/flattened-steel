@@ -21,9 +21,9 @@ export class ModeController {
 		this._generation = 0;
 		/** @type {AbortController | null} */
 		this._preparationCancellation = null;
-		/** @type {'spherical-distant' | 'flat-local' | null} */
+		/** @type {Flat32ModeKind|null} */
 		this._currentKind = null;
-		/** @type {'spherical-distant' | 'flat-local' | null} */
+		/** @type {Flat32ModeKind|null} */
 		this._sceneKind = null;
 		this._activeMode = null;
 		this._activeConfigurationIdentity = '';
@@ -175,11 +175,19 @@ export class ModeController {
 		}
 	}
 
+	/** Last successfully published supported mode, or null before publication.
+	 *
+	 * @returns {Flat32ModeKind|null} - Published mode kind.
+	 */
 	get currentKind() {
 		return this._currentKind;
 	}
 
-	/** Select Algorithm32 composition or the direct lit scene without rebuilding either. */
+	/** Call this method to select atmosphere composition without rebuilding the physical field.
+	 *
+	 * @param {boolean} enabled - Whether Algorithm32 composition is selected.
+	 * @returns {void} - Selection forwarded to the installed runtime.
+	 */
 	setAtmosphereEnabled(enabled) {
 		if (typeof enabled !== 'boolean') {
 			throw new TypeError('Flat32 atmosphere enabled state must be boolean.');
@@ -188,6 +196,10 @@ export class ModeController {
 		this._activeRuntime?.setAtmosphereEnabled(enabled);
 	}
 
+	/** Call this method to cancel pending preparation and release the installed runtime and mode.
+	 *
+	 * @returns {void} - Owned runtime and mode disposed idempotently.
+	 */
 	dispose() {
 		if (this._disposed) return;
 		this._disposed = true;

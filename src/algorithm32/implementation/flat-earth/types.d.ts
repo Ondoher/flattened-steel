@@ -1,9 +1,37 @@
+/** Compact physical ray endpoint classification.
+ *
+ * - **"ground"** - Flat ground intersection.
+ * - **"top-atmosphere"** - Slab-top intersection.
+ * - **"cache-radial-boundary"** - Compact source-centered cylinder boundary.
+ * - **"shortened"** - Caller-selected prefix before the physical boundary.
+ */
+type FlatCompactRayBoundary = 'ground' | 'top-atmosphere' | 'cache-radial-boundary' | 'shortened';
+
+/** Placement-derived properties absent from intrinsic flat shape configuration.
+ *
+ * - **"sourcePosition"** - Resolved finite source center.
+ * - **"sourceSubpoint"** - Ground subpoint beneath the source.
+ * - **"cacheRadialNodes"** - Source-dependent refined radial nodes.
+ * - **"cacheRadialMaximum"** - Placement-derived radial bound.
+ * - **"observation"** - Exact geographic/time placement snapshot.
+ */
+type FlatEarthGeometryPlacementProperty =
+	'sourcePosition' | 'sourceSubpoint' | 'cacheRadialNodes' | 'cacheRadialMaximum' | 'observation';
+
 /** Shared interpolation stencil on one geometry-owned physical axis. */
 type FlatCacheAxisStencil = Readonly<{
 	/** Lower node index. */ readonly lowerIndex: number;
 	/** Upper node index. */ readonly upperIndex: number;
 	/** Positive lower interpolation weight. */ readonly lowerWeight: number;
 	/** Positive upper interpolation weight, zero for an exact node. */ readonly upperWeight: number;
+}>;
+
+/** Complete physical support query for a symmetric ordinary perspective view. */
+type FlatCompactViewSupportRequest = Readonly<{
+	/** Camera origin in flat model coordinates. */ origin: Position;
+	/** Camera-forward unit direction in the same frame. */ forward: UnitVector3;
+	/** Diagonal angular cone half-width. */ halfAngle: Angle;
+	/** Selected source-centered compact cylinder radius. */ coverageRadius: Distance;
 }>;
 
 /** Accepted controls for v9 ragged physical positions; spectral/medium-derived refinement stays profile-owned. */
@@ -98,10 +126,10 @@ interface FlatCompactRay {
 	/** Physical admitted origin. */ readonly origin: Position;
 	/** Physical unit direction. */ readonly direction: UnitVector3;
 	/** Physical bounded length. */ readonly length: Distance;
-	/** Ground, top, cylinder or explicitly shortened endpoint. */ readonly boundary:
-		'ground' | 'top-atmosphere' | 'cache-radial-boundary' | 'shortened';
+	/** Ground, top, cylinder or explicitly shortened endpoint. */ readonly boundary: FlatCompactRayBoundary;
 	/**
 	 * Call this method to resolve a physical position on the closed bounded ray.
+	 *
 	 * @param distance - Unit-bearing distance from the origin.
 	 * @returns - Supported physical position; only the exact physical endpoint receives analytic boundary rounding.
 	 */
@@ -217,10 +245,7 @@ type FlatEarthGeometryConfiguration = Readonly<{
 
 /** Intrinsic flat configuration retained before source placement is resolved. */
 type FlatEarthGeometryShapeConfiguration = Readonly<
-	Omit<
-		FlatEarthGeometryConfiguration,
-		'sourcePosition' | 'sourceSubpoint' | 'cacheRadialNodes' | 'cacheRadialMaximum' | 'observation'
-	> &
+	Omit<FlatEarthGeometryConfiguration, FlatEarthGeometryPlacementProperty> &
 		Readonly<{
 			/** Optional caller-selected radial nodes awaiting a resolved bound. */
 			cacheRadialNodes: readonly Distance[] | undefined;
@@ -422,6 +447,8 @@ type FlatStellarProjectionPolicy = Readonly<{
 /** Internal geometry-owned stellar projection construction operation. */
 interface FlatStellarProjectionCapability {
 	/** Contribute fixed-observation GPU operations. */ createStellarGenerationShaderContribution(
-		request: Readonly<{observation: GeometryObservation}>,
+		request: StellarGenerationGeometryRequest,
 	): StellarGenerationGeometryShaderContribution;
 }
+/** Geometry uniform seed tuple: name, GLSL type and its explicit initial value. */
+type FlatStellarUniformSeed = readonly [name: string, type: string, value: unknown];
