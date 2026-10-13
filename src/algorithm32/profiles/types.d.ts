@@ -76,6 +76,8 @@ interface Algorithm32ExecutionModel {
 type Algorithm32ExecutionNumericalProfile = Readonly<{
 	/** Final-view path integration selection. */
 	readonly viewPath: Readonly<{
+		/** Optional geometry-qualified positive-column policy; omission retains the existing policy. */
+		readonly kind?: LocalSunCompactViewPolicyKind;
 		/** Positive integration interval count. */
 		readonly intervalCount: number;
 		/** Selected view-path sample placement; null selects uniform endpoint/trapezoid placement. */
@@ -83,8 +85,10 @@ type Algorithm32ExecutionNumericalProfile = Readonly<{
 	}>;
 	/** Sample-to-source optical-depth integration selection. */
 	readonly sourcePathTransmittance: Readonly<{
+		/** Analytic local transmission, or omitted for existing sampled profiles. */
+		readonly kind?: LocalSunCompactSourcePolicyKind;
 		/** Positive integration interval count. */
-		readonly intervalCount: number;
+		readonly intervalCount?: number;
 	}>;
 	/** Cache recurrence and transported-radiance integration selection. */
 	readonly cacheConstruction: Readonly<{
@@ -135,4 +139,6 @@ type Algorithm32ExecutionProfile = Readonly<{
 	readonly numerical: Algorithm32ExecutionNumericalProfile;
 	/** Executable cache-construction and reconstruction domains. */
 	readonly domains: Algorithm32ExecutionDomains;
+	/** Genuine compact construction capability, present only for the explicitly selected local successor. */
+	readonly compactConstruction?: LocalSunCompactConstructionProfile;
 }>;

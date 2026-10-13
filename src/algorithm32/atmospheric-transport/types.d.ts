@@ -339,3 +339,28 @@ type LaterOrderScatteringKernelInvocation = Readonly<{
 	/** Value that stores the mutable pure Jk writer. */
 	outputScattering: CpuDirectionalSpectralFieldWriter;
 }>;
+/** Complete borrowed-cache arguments for binary64 positive-column final-view transport. */
+type PositiveColumnViewReferenceRequest = Readonly<{
+	/** Genuine accepted execution model. */ model: SharedModel;
+	/** Accepted atmosphere capability with actual exponential coefficients. */ atmosphere: CanonicalCacheColumnAtmosphere;
+	/** Geometry-owned complete physical segment. */ segment: RaySegment;
+	/** Accepted endpoint schedule. */ points: readonly PathIntegrationPoint[];
+	/** Qualified read-only cumulative CPU field query. */ scatteringCache: CumulativeScatteringDensityCache;
+}>;
+/** Ordinary execution atmosphere with the accepted Native15 two-exponential view-column capability. */
+type PositiveColumnViewAtmosphere = AtmosphereModel & CanonicalCacheColumnAtmosphere;
+/** Complete model supplied to shared transport shader assembly. */
+type Algorithm32TransportShaderRequest = Readonly<{
+	/** Accepted physical, numerical and spectral execution model. */ model: SharedModel;
+}>;
+/** Shader path-placement policy used by shared transport.
+ * - **"uniform-distance"** - Uniform physical-distance endpoints.
+ * - **"quadratic-near-observer-v1"** - Qualified Q30 near-observer boundaries.
+ * - **"tangent-density-adaptive-v1"** - Full tangent-density endpoint adaptation.
+ * - **"tangent-density-adaptive-soft-v1"** - Blended tangent-density endpoint adaptation.
+ */
+type Algorithm32ViewPathSampleKind =
+	| 'uniform-distance'
+	| 'quadratic-near-observer-v1'
+	| 'tangent-density-adaptive-v1'
+	| 'tangent-density-adaptive-soft-v1';

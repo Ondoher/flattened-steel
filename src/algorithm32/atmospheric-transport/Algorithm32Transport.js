@@ -1,15 +1,20 @@
 import {ShaderContributions} from '../shader-assembly/base/ShaderContributions.js';
+import {PositiveColumnViewTransport} from './PositiveColumnViewTransport.js';
 import {
 	ALGORITHM32_TRANSPORT_MAIN_SYMBOLS,
 	TRANSPORT_PATH_INTERVAL_COUNT_UNIFORM_NAME,
 	TRANSPORT_PATH_INTERVAL_COUNT_VALUE_KEY,
 } from './consts.js';
 
-/** Implement the source- and geometry-neutral final-view transport. */
+/** Shared source- and geometry-neutral final-view transport.
+ *
+ * @implements {Algorithm32Transport}
+ */
 export class Algorithm32Transport {
 	/**
 	 * Call this method to return symbols needed by the complete Algorithm32 shader main path.
-	 * @returns - The result produced by the operation.
+	 *
+	 * @returns {readonly string[]} - Required shared transport symbols.
 	 */
 	mainRequiredShaderSymbols() {
 		return ALGORITHM32_TRANSPORT_MAIN_SYMBOLS;
@@ -17,8 +22,9 @@ export class Algorithm32Transport {
 
 	/**
 	 * Call this method to create the one cumulative-cache transport contribution.
-	 * @param request - The request accepted by the operation.
-	 * @returns - The result produced by the operation.
+	 *
+	 * @param {Algorithm32TransportShaderRequest} request - Accepted physical/numerical execution model.
+	 * @returns {ShaderContribution} - Complete shared path evaluator contribution.
 	 */
 	createShaderContribution(request) {
 		const options = request.model.profile.numerical.viewPath;
@@ -31,9 +37,13 @@ export class Algorithm32Transport {
 				'transport-evaluate-helper',
 				'evaluateTransport',
 				0,
-				pathSampleDistributionKind === 'quadratic-near-observer-v1'
-					? this._quadraticMidpointTransportBlock(pathSampleHelper)
-					: this._cumulativeTransportBlock(pathSampleHelper),
+				options.kind === 'local-positive-column-v1'
+					? new PositiveColumnViewTransport().createSource(
+							/** @type {PositiveColumnViewAtmosphere} */ (request.model.atmosphere),
+						)
+					: pathSampleDistributionKind === 'quadratic-near-observer-v1'
+						? this._quadraticMidpointTransportBlock(pathSampleHelper)
+						: this._cumulativeTransportBlock(pathSampleHelper),
 			),
 		];
 		const mainHooks = [
@@ -97,8 +107,9 @@ export class Algorithm32Transport {
 
 	/**
 	 * Called by algorithm32 transport to build the selected view-path sampling GLSL helper. It returns the value from the first satisfied branch, otherwise the operation's final fallback.
-	 * @param kind - The kind value accepted by the operation.
-	 * @returns - The result produced by the operation.
+	 *
+	 * @param {Algorithm32ViewPathSampleKind} kind - Accepted placement policy.
+	 * @returns {string} - Source for the selected physical-distance sampler.
 	 */
 	_transportPathSampleHelper(kind) {
 		if (kind === 'quadratic-near-observer-v1') {
@@ -186,7 +197,11 @@ float pathSampleMeasureMeters(ShaderState state, int pointIndex) {
 }`;
 	}
 
-	/** Build the qualified quadratic-boundary, midpoint-per-interval Q30 transport. */
+	/** Called by shared transport to emit the qualified quadratic-boundary Q30 midpoint operation.
+	 *
+	 * @param {string} pathSampleHelper - Geometry-neutral distance placement source.
+	 * @returns {string} - Complete midpoint path evaluator.
+	 */
 	_quadraticMidpointTransportBlock(pathSampleHelper) {
 		return `${pathSampleHelper}
 
@@ -233,8 +248,9 @@ void evaluatePathRadiance(inout ShaderState state) {
 
 	/**
 	 * Called by algorithm32 transport to integrate one already-cumulative local scattering-density field.
-	 * @param pathSampleHelper - The path sample helper value accepted by the operation.
-	 * @returns - The result produced by the operation.
+	 *
+	 * @param {string} pathSampleHelper - Accepted physical-distance placement source.
+	 * @returns {string} - Complete cumulative-cache path evaluator.
 	 */
 	_cumulativeTransportBlock(pathSampleHelper) {
 		return `SpectralValue computeTrapezoidSegmentTransmittance(MediumSample previousMedium, MediumSample currentMedium, float intervalLengthMeters) {

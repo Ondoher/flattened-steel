@@ -9,6 +9,7 @@ type LocalSunPhysicalControlManifest = Readonly<{
 }>;
 /** Selected physical values from one independently constructed field. */
 type LocalSunPhysicalControlField = Readonly<{
+	/** Independently selected outgoing packed direction addresses. */ directions: readonly number[];
 	/** Exact independently generated physical J scalars needed by fixed ray queries. */ sparse?: readonly (readonly [
 		number,
 		number,

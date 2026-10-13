@@ -18,27 +18,16 @@ owns parameter applicability and the first P1 comparison boundary.
 
 The local-Sun experiment remains ended, with accepted evidence preserved by its
 [closeout](poc-experiments/engineering-studies/local-sun-cache-reuse/p7-closeout.md).
-P0 prepared independent fixtures and offline proof tools. The first bounded P1
-slice implements compact geometry/admission and explicit source-distance
-bounds/partition. The second bounded slice independently compares held amplitudes
-and Native15 source semantics. The third bounded slice ports and compares the
-selected incoming measure. The fourth ports and compares per-tap ordinary/axis
-directional support. The fifth ports cache-owned normalization/restoration and
-geometry-owned node placement with existing physical models unchanged. The sixth
-ports selected-ray Column48/Tail64 cache integration, atmosphere-owned cache
-columns and geometry-owned ray endpoints. The seventh connects selected compact
-CPU construction, primary J1 transport and a separate manufactured full-measure
-scattering step, with a bounded cost pilot; matching receipts are linked in status.
-The complete compact profile now also executes selected physical J1-J4 and
-cumulative N1/N2/N4 with independently frozen L1-L3 inputs and complete selected
-construction rays. Continuous direct L1 is separate from held J1. The
-[P1 closure](production-algorithm32/caches/local-sun-p1-closure.md) owns numerical
-scope; status links the required final primary/audit receipt. After that receipt
-is CLEAN, the next phase is P2 production GPU construction and runtime lookup,
-including ordinary runtime profile consumers and full occupied-field/ray parity.
-Full-domain CPU construction is not admitted by the selected operator controls.
-Profile/default selection, deployment and publication have not changed.
-P7 closeout and production controls retain their separate evidence/review scopes.
+P0 prepared independent fixtures and offline proof tools. P1 completed compact
+geometry/support, source holds, incoming/directional measure, spectral restoration,
+selected physical CPU pure/cumulative operators and construction rays. The
+[P2 closure](production-algorithm32/caches/local-sun-p2-closure.md) owns the genuine
+compact GPU graph and ordinary lookup/view qualification, including full occupied
+fields, matched N1/N2/N4 rays, omission identity, resources and candidate cleanup.
+Only the matching final P2 CLEAN primary/audit receipt establishes completion.
+Next is P3: admitted reuse and atomic complete-frame publication. Full-domain CPU
+recurrence remains unadmitted. Profile/default selection, deployment and
+publication have not changed. Ended experiment and prior receipts remain immutable.
 
 ## Minimal Reload Sources
 
@@ -47,9 +36,10 @@ P7 closeout and production controls retain their separate evidence/review scopes
 3. [Local-Sun port status](production-algorithm32/caches/local-sun-cache-promotion-status.md)
 4. [Local-Sun port plan](production-algorithm32/caches/local-sun-cache-promotion-plan.md)
 5. [Production architecture boundaries](production-algorithm32/architecture-contracts/architecture-boundaries.md)
-6. [Local-Sun P0 contracts and controls](production-algorithm32/caches/local-sun-cache-p0-contract.md)
+6. [Local-Sun P2 closure](production-algorithm32/caches/local-sun-p2-closure.md)
+7. [Local-Sun P0 contracts and controls](production-algorithm32/caches/local-sun-cache-p0-contract.md)
 
-Before P1 implementation, validate the matching P0 review receipt, load its
+Before P3 implementation, validate the matching P2 review receipt, load its
 selected contracts/evidence, capture a new baseline and confirm reviewer readiness.
 Standards follow destination folders; experiment mappings do not govern production.
 Existing receipts retain their original frozen scopes.

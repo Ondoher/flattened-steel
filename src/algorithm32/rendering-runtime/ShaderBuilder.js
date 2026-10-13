@@ -255,7 +255,12 @@ export class ShaderBuilder {
 		let celestialQueryPacket = null;
 
 		try {
-			const scatteringCache = await scatteringCacheController.createScatteringCache({signal: request.signal});
+			const scatteringCache = await scatteringCacheController.createScatteringCache({
+				signal: request.signal,
+				...(request.setup.otherOwnedGpuBytes === undefined
+					? {}
+					: {otherOwnedGpuBytes: request.setup.otherOwnedGpuBytes}),
+			});
 			const roster = this.model.celestialSources;
 
 			if (roster != null) {

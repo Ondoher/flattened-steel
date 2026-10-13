@@ -141,49 +141,21 @@ export class Algorithm32ShaderAssembler {
 	 */
 	_blocksForSlot(contributions, slot, property) {
 		return contributions
-			.flatMap(
-				/**
-				 * Called by Array.prototype.flatMap to transform and flatten one collection value.
-				 * @param contribution - The contribution value accepted by the operation.
-				 * @returns - The callback result returned to its caller.
-				 */ (contribution) =>
-					this._listEntries(contribution, property)
-						.filter(
-							/**
-							 * Called by Array.prototype.filter to test whether one collection value is retained.
-							 * @param block - The block value accepted by the operation.
-							 * @returns - The callback result returned to its caller.
-							 */ (block) => block.slot === slot,
-						)
-						.map(
-							/**
-							 * Called by Array.prototype.map to transform one collection value.
-							 * @param block - The block value accepted by the operation.
-							 * @returns - The callback result returned to its caller.
-							 */ (block) => ({
-								contribution,
-								block,
-							}),
-						),
+			.flatMap((contribution) =>
+				this._listEntries(contribution, property)
+					.filter((block) => block.slot === slot)
+					.map((block) => ({
+						contribution,
+						block,
+					})),
 			)
 			.sort(
-				/**
-				 * Called by Array.prototype.sort to compare two collection values.
-				 * @param left - The left value accepted by the operation.
-				 * @param right - The right value accepted by the operation.
-				 * @returns - The callback result returned to its caller.
-				 */ (left, right) =>
+				(left, right) =>
 					left.block.order - right.block.order ||
 					this._compareContributions(left.contribution, right.contribution) ||
 					left.block.id.localeCompare(right.block.id),
 			)
-			.map(
-				/**
-				 * Called by Array.prototype.map to transform one collection value.
-				 * @param entry - The entry value accepted by the operation.
-				 * @returns - The callback result returned to its caller.
-				 */ (entry) => entry.block.code,
-			)
+			.map((entry) => entry.block.code)
 			.join('\n\n');
 	}
 
@@ -195,104 +167,36 @@ export class Algorithm32ShaderAssembler {
 	 */
 	_assembleFragmentShader(contributions) {
 		const defineSource = contributions
-			.flatMap(
-				/**
-				 * Called by Array.prototype.flatMap to transform and flatten one collection value.
-				 * @param contribution - The contribution value accepted by the operation.
-				 * @returns - The callback result returned to its caller.
-				 */ (contribution) =>
-					this._listEntries(contribution, 'defines').map(
-						/**
-						 * Called by Array.prototype.map to transform one collection value.
-						 * @param line - The line value accepted by the operation.
-						 * @returns - The callback result returned to its caller.
-						 */ (line) => ({
-							contribution,
-							line,
-						}),
-					),
+			.flatMap((contribution) =>
+				this._listEntries(contribution, 'defines').map((line) => ({
+					contribution,
+					line,
+				})),
 			)
-			.sort(
-				/**
-				 * Called by Array.prototype.sort to compare two collection values.
-				 * @param left - The left value accepted by the operation.
-				 * @param right - The right value accepted by the operation.
-				 * @returns - The callback result returned to its caller.
-				 */ (left, right) => this._compareByContributionThenLine(left, right),
-			)
-			.map(
-				/**
-				 * Called by Array.prototype.map to transform one collection value.
-				 * @param entry - The entry value accepted by the operation.
-				 * @returns - The callback result returned to its caller.
-				 */ (entry) => entry.line,
-			)
+			.sort((left, right) => this._compareByContributionThenLine(left, right))
+			.map((entry) => entry.line)
 			.join('\n');
 		const uniformSource = contributions
-			.flatMap(
-				/**
-				 * Called by Array.prototype.flatMap to transform and flatten one collection value.
-				 * @param contribution - The contribution value accepted by the operation.
-				 * @returns - The callback result returned to its caller.
-				 */ (contribution) =>
-					[
-						...this._listEntries(contribution, 'uniforms').map(
-							/**
-							 * Called by Array.prototype.map to transform one collection value.
-							 * @param uniform - The uniform value accepted by the operation.
-							 * @returns - The callback result returned to its caller.
-							 */ (uniform) => `uniform ${uniform.type} ${uniform.name};`,
-						),
-						...this._listEntries(contribution, 'textures').map(
-							/**
-							 * Called by Array.prototype.map to transform one collection value.
-							 * @param texture - The texture value accepted by the operation.
-							 * @returns - The callback result returned to its caller.
-							 */ (texture) => `uniform ${texture.type} ${texture.name};`,
-						),
-					].map(
-						/**
-						 * Called by Array.prototype.map to transform one collection value.
-						 * @param line - The line value accepted by the operation.
-						 * @returns - The callback result returned to its caller.
-						 */ (line) => ({
-							contribution,
-							line,
-						}),
+			.flatMap((contribution) =>
+				[
+					...this._listEntries(contribution, 'uniforms').map(
+						(uniform) => `uniform ${uniform.type} ${uniform.name};`,
 					),
+					...this._listEntries(contribution, 'textures').map(
+						(texture) => `uniform ${texture.type} ${texture.name};`,
+					),
+				].map((line) => ({
+					contribution,
+					line,
+				})),
 			)
-			.sort(
-				/**
-				 * Called by Array.prototype.sort to compare two collection values.
-				 * @param left - The left value accepted by the operation.
-				 * @param right - The right value accepted by the operation.
-				 * @returns - The callback result returned to its caller.
-				 */ (left, right) => this._compareByContributionThenLine(left, right),
-			)
-			.map(
-				/**
-				 * Called by Array.prototype.map to transform one collection value.
-				 * @param entry - The entry value accepted by the operation.
-				 * @returns - The callback result returned to its caller.
-				 */ (entry) => entry.line,
-			)
+			.sort((left, right) => this._compareByContributionThenLine(left, right))
+			.map((entry) => entry.line)
 			.join('\n');
-		const functionSource = SOURCE_SLOTS.map(
-			/**
-			 * Called by Array.prototype.map to transform one collection value.
-			 * @param slot - The slot value accepted by the operation.
-			 * @returns - The callback result returned to its caller.
-			 */ (slot) => this._blocksForSlot(contributions, slot, 'functions'),
-		)
+		const functionSource = SOURCE_SLOTS.map((slot) => this._blocksForSlot(contributions, slot, 'functions'))
 			.filter(Boolean)
 			.join('\n\n');
-		const hookSource = MAIN_HOOK_SLOTS.map(
-			/**
-			 * Called by Array.prototype.map to transform one collection value.
-			 * @param slot - The slot value accepted by the operation.
-			 * @returns - The callback result returned to its caller.
-			 */ (slot) => this._blocksForSlot(contributions, slot, 'mainHooks'),
-		)
+		const hookSource = MAIN_HOOK_SLOTS.map((slot) => this._blocksForSlot(contributions, slot, 'mainHooks'))
 			.filter(Boolean)
 			.join('\n\t');
 
@@ -353,31 +257,11 @@ void main() {
 			throw this._createShaderValidationError(validationReport);
 		}
 
-		const contributions = [...request.contributions].sort(
-			/**
-			 * Called by Array.prototype.sort to compare two collection values.
-			 * @param left - The left value accepted by the operation.
-			 * @param right - The right value accepted by the operation.
-			 * @returns - The callback result returned to its caller.
-			 */ (left, right) => this._compareContributions(left, right),
-		);
+		const contributions = [...request.contributions].sort((left, right) => this._compareContributions(left, right));
 		const fragmentShaderSource = this._assembleFragmentShader(contributions);
 		const bindingRequirements = contributions
-			.flatMap(
-				/**
-				 * Called by Array.prototype.flatMap to transform and flatten one collection value.
-				 * @param contribution - The contribution value accepted by the operation.
-				 * @returns - The callback result returned to its caller.
-				 */ (contribution) => contribution.bindingRequirements,
-			)
-			.sort(
-				/**
-				 * Called by Array.prototype.sort to compare two collection values.
-				 * @param leftBlock - The left block accepted by the operation.
-				 * @param rightBlock - The right block accepted by the operation.
-				 * @returns - The callback result returned to its caller.
-				 */ (leftBlock, rightBlock) => leftBlock.id.localeCompare(rightBlock.id),
-			);
+			.flatMap((contribution) => contribution.bindingRequirements)
+			.sort((leftBlock, rightBlock) => leftBlock.id.localeCompare(rightBlock.id));
 
 		return {
 			status: 'accepted',

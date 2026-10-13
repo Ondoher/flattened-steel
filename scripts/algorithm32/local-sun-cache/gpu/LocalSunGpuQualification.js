@@ -1,0 +1,418 @@
+import {
+	readFileSync,
+	writeFileSync,
+	mkdirSync,
+	existsSync,
+	createReadStream,
+	openSync,
+	writeSync,
+	closeSync,
+} from 'node:fs';
+import {createServer} from 'node:http';
+import {fileURLToPath} from 'node:url';
+import {execFileSync} from 'node:child_process';
+import os from 'node:os';
+import {resolve} from 'node:path';
+import {LocalSunNormalizationControls} from '../normalization/LocalSunNormalizationControls.js';
+import {rollup} from 'rollup';
+import {nodeResolve} from '@rollup/plugin-node-resolve';
+import puppeteer from 'puppeteer';
+import {LocalSunAssemblyControls} from '../assembly/LocalSunAssemblyControls.js';
+
+/** Serialized, resource-bounded offline host for immutable production GPU qualification. */
+export class LocalSunGpuQualification {
+	/** Existing repository-identity/real-path boundary. @type {LocalSunNormalizationControls} */
+	_paths = new LocalSunAssemblyControls().paths;
+
+	/** Called by the host to sample the owned Node/Chrome process tree without inspecting command-line contents.
+	 *
+	 * @param {number} browserPid - This job's owned Chrome root process.
+	 * @returns {number} - Sum of sampled working sets in bytes; shared pages may be counted more than once.
+	 */
+	_processBytes(browserPid) {
+		let script = `$rows=Get-CimInstance Win32_Process | Select-Object ProcessId,ParentProcessId,WorkingSetSize; $owned=@(${process.pid},${browserPid}); $changed=$true; while($changed){$changed=$false; foreach($row in $rows){if(($owned -contains [int]$row.ParentProcessId) -and -not($owned -contains [int]$row.ProcessId)){$owned+=[int]$row.ProcessId;$changed=$true}}}; ($rows | Where-Object {$owned -contains [int]$_.ProcessId} | Measure-Object -Property WorkingSetSize -Sum).Sum`;
+		return Number(
+			execFileSync('powershell.exe', ['-NoProfile', '-NonInteractive', '-Command', script], {
+				encoding: 'utf8',
+				windowsHide: true,
+				timeout: 10000,
+			}).trim(),
+		);
+	}
+
+	/** Called by execution to authenticate complete independent fields and their frozen whole-field identities.
+	 *
+	 * @returns {LocalSunGpuIndependentFields} - Immutable complete physical control inventory.
+	 * @throws {Error} - Independent inputs are missing, changed or incompatible.
+	 */
+	_readIndependentFields() {
+		let root = 'tmp/production-local-sun-cache-promotion/runs/00034-p2-independent-fields';
+		if (
+			this._paths.hash(
+				'tmp/production-local-sun-cache-promotion/runs/00023-physical-recurrence-controls/controls.json',
+			) !== '47f8caa14878f1329811b612cffb6ec911715d5a8fe3769e81f4a77c2de1216b' ||
+			this._paths.hash(
+				'tmp/production-local-sun-cache-promotion/runs/00023-physical-recurrence-controls/manifest.json',
+			) !== 'e80306d151411c478c6a5486acccf9e6b9b7e135f66baa49393e19b42bf98f7c' ||
+			this._paths.hash(root + '/manifest.json') !==
+				'362cfb7a5cb5488302b1b97eef42b47d1d718de9fb97740de2fa1a4769c2ab26'
+		)
+			throw new Error('Frozen parent identities changed');
+		let manifest = /** @type {LocalSunGpuIndependentFields} */ (
+			JSON.parse(readFileSync(this._paths.checkedPath(root + '/manifest.json'), 'utf8'))
+		);
+		if (
+			manifest.schema !== 'local-sun-independent-full-fields-v1' ||
+			manifest.state !== 'passed' ||
+			manifest.fields.length !== 8
+		)
+			throw new Error('Authenticated independent full fields required.');
+		let frozen = /** @type {LocalSunPhysicalControls} */ (
+			JSON.parse(
+				readFileSync(
+					this._paths.checkedPath(
+						'tmp/production-local-sun-cache-promotion/runs/00023-physical-recurrence-controls/controls.json',
+					),
+					'utf8',
+				),
+			)
+		);
+		for (let field of manifest.fields) {
+			let control = frozen.controls.find((control) => control.id === field.id);
+			if (
+				!control ||
+				field.sha256 !== control.observation.sha256 ||
+				this._paths.hash(root + '/' + field.path) !== field.sha256 ||
+				field.bytes !== control.width * control.height * 15 * 4
+			)
+				throw new Error('Independent field identity differs: ' + field.id);
+		}
+		return manifest;
+	}
+
+	/** Call this method to execute one explicitly selected GPU proof and seal its new evidence.
+	 * Failures preserve the new run with failed disposition and close the owned browser,
+	 * server and file handles. Jobs reject for unsupported inputs, changed parents,
+	 * low free memory, excessive sampled owned-process memory or the ten-minute deadline.
+	 *
+	 * @param {LocalSunGpuQualificationRequest} request - Exact order, new serial and bounded proof mode.
+	 * @returns {Promise<string>} - Repository-relative immutable result directory.
+	 */
+	async run(request) {
+		let started = performance.now();
+		if (
+			![1, 2, 4].includes(request.order) ||
+			!/^\d{5}$/.test(request.serial) ||
+			!['fields', 'runtime', 'omission', 'cleanup', 'zero'].includes(request.mode)
+		)
+			throw new RangeError('Supported order, five-digit new serial and declared GPU proof mode required.');
+		let destination = 'tmp/production-local-sun-cache-promotion/runs/' + request.serial + '-p2-' + request.mode;
+		let root = this._paths.checkedPath(destination);
+		if (existsSync(root)) throw new Error('New immutable qualification run required.');
+		let freeBefore = os.freemem();
+		if (freeBefore < 8 * 1024 ** 3) throw new Error('Eight GiB free-memory reserve required.');
+		let independent = this._readIndependentFields();
+		let p0Path = 'src/algorithm32/implementation/local-sun/cache/fixtures/local-sun-compact-p0-controls.json';
+		if (this._paths.hash(p0Path) !== '74a7cb03fd646d6ec4754e45e46f7ed622c815d09cd82ceeef174819c3513db6')
+			throw new Error('Frozen P0 inputs changed.');
+		let parentPaths = [
+			p0Path,
+			'tmp/production-local-sun-cache-promotion/runs/00023-physical-recurrence-controls/manifest.json',
+			'tmp/production-local-sun-cache-promotion/runs/00023-physical-recurrence-controls/controls.json',
+			'tmp/production-local-sun-cache-promotion/runs/00034-p2-independent-fields/manifest.json',
+			'experiments/local-sun-cache-reuse/shell-runtime-calculator.js',
+			'experiments/local-sun-cache-reuse/shell-runtime-math.js',
+			'experiments/local-sun-cache-reuse/shell-omission.js',
+		];
+		let parents = parentPaths.map((path) => ({path, sha256: this._paths.hash(path)}));
+		mkdirSync(root, {recursive: true});
+		let browser, server, interval, deadline;
+		/** @type {Map<string, LocalSunGpuFieldWriter>} */
+		let writers = new Map();
+		/** @type {LocalSunGpuHostSample[]} */
+		let samples = [];
+		/** @type {string[]} */
+		let diagnostics = [];
+		let failure;
+		try {
+			let bundle = await rollup({
+				input: this._paths.checkedPath('scripts/algorithm32/local-sun-cache/gpu/LocalSunGpuBrowserProof.js'),
+				plugins: [nodeResolve({browser: true})],
+				onwarn: (warning) => {
+					if (warning.code !== 'CIRCULAR_DEPENDENCY') throw new Error(warning.message);
+				},
+			});
+			let generated;
+			try {
+				generated = await bundle.generate({
+					format: 'iife',
+					name: 'LocalSunGpuProof',
+					inlineDynamicImports: true,
+				});
+			} finally {
+				await bundle.close();
+			}
+			let source = generated.output[0].code;
+			for (let path of bundle.watchFiles) {
+				let relative = path.replaceAll('\\', '/').split('/flattened-steel/')[1];
+				if (
+					relative &&
+					(relative.startsWith('src/') ||
+						relative.startsWith('scripts/') ||
+						relative.startsWith('experiments/'))
+				)
+					parents.push({path: relative, sha256: this._paths.hash(relative)});
+			}
+			writeFileSync(root + '/host.js', readFileSync(fileURLToPath(import.meta.url)), {flag: 'wx'});
+			writeFileSync(root + '/bundle.js', source, {flag: 'wx'});
+			server = createServer(async (incoming, response) => {
+				try {
+					let gold = /^\/gold\/(local-sun-[jl][1-4]|cumulative)$/.exec(incoming.url);
+					if (incoming.method === 'GET' && gold) {
+						let field = independent.fields.find((field) => field.id === gold[1]);
+						if (!field) throw new Error('Unknown independent field.');
+						response.setHeader('Content-Type', 'application/octet-stream');
+						response.setHeader('Content-Length', field.bytes);
+						let stream = createReadStream(
+							this._paths.checkedPath(
+								'tmp/production-local-sun-cache-promotion/runs/00034-p2-independent-fields/' +
+									field.path,
+							),
+						);
+						stream.on('error', (error) => response.destroy(error));
+						stream.pipe(response);
+						return;
+					}
+					let output = /^\/field\/(compact-(?:j[1-4]|l[1-3]|j-through-[124]))\/(\d+)$/.exec(incoming.url);
+					if (incoming.method === 'POST' && output && request.mode === 'fields') {
+						let fieldId = output[1],
+							offset = Number(output[2]);
+						let record = writers.get(fieldId);
+						if (!record) {
+							if (offset !== 0) throw new Error('First field offset must be zero.');
+							record = {
+								fd: openSync(this._paths.checkedPath(destination + '/' + fieldId + '.f32'), 'wx'),
+								received: 0,
+							};
+							writers.set(fieldId, record);
+						}
+						if (offset !== record.received) throw new Error('Candidate field offset mismatch.');
+						let count = 0;
+						for await (let chunk of incoming) {
+							count += chunk.length;
+							if (
+								count > 4194304 ||
+								record.received + chunk.length > 1049 * (fieldId.includes('-l') ? 1920 : 4374) * 15 * 4
+							)
+								throw new Error('Oversized field transfer.');
+							writeSync(record.fd, chunk);
+							record.received += chunk.length;
+						}
+						response.end('ok');
+						return;
+					}
+					if (incoming.method === 'GET' && incoming.url === '/bundle.js') {
+						response.setHeader('Content-Type', 'text/javascript');
+						response.end(source);
+						return;
+					}
+					if (incoming.method === 'GET' && incoming.url === '/') {
+						response.end('<script src="/bundle.js"></script>');
+						return;
+					}
+					response.statusCode = 404;
+					response.end();
+				} catch (error) {
+					response.statusCode = 500;
+					response.end(String(error));
+				}
+			});
+			await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));
+			let profilePath = this._paths.checkedPath(
+				'.codex-tmp/review-standards/session-ZtvAir/gpu-' + request.serial,
+			);
+			browser = await puppeteer.launch({
+				executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe',
+				headless: 'new',
+				userDataDir: profilePath,
+				args: [
+					'--enable-gpu',
+					'--use-angle=d3d11',
+					'--ignore-gpu-blocklist',
+					'--disable-background-timer-throttling',
+				],
+				protocolTimeout: 600000,
+			});
+			let page = await browser.newPage();
+			samples.push({
+				elapsedMilliseconds: performance.now() - started,
+				freeBytes: os.freemem(),
+				ownedProcessBytes: this._processBytes(browser.process().pid),
+			});
+			if (samples[0].freeBytes < 8 * 1024 ** 3 || samples[0].ownedProcessBytes > 8 * 1024 ** 3)
+				throw new Error('Qualification memory admission failed.');
+			page.on('console', (message) => {
+				diagnostics.push(message.text());
+				if (!message.text().includes('Program Info Log')) console.log(message.text());
+			});
+			page.on('pageerror', (error) => diagnostics.push(String(error)));
+			interval = setInterval(() => {
+				try {
+					let sample = {
+						elapsedMilliseconds: performance.now() - started,
+						freeBytes: os.freemem(),
+						ownedProcessBytes: this._processBytes(browser.process().pid),
+					};
+					samples.push(sample);
+					console.log(
+						'P2 ' +
+							request.mode +
+							' progress ' +
+							Math.round(sample.elapsedMilliseconds / 1000) +
+							's; free GiB=' +
+							(sample.freeBytes / 1024 ** 3).toFixed(2),
+					);
+					if (sample.freeBytes < 8 * 1024 ** 3 || sample.ownedProcessBytes > 8 * 1024 ** 3) {
+						failure = new Error('Qualification memory admission failed.');
+						browser.close();
+					}
+				} catch (error) {
+					failure = error;
+					browser.close();
+				}
+			}, 20000);
+			let address = server.address();
+			if (address === null || typeof address === 'string')
+				throw new Error('Owned loopback listener address required.');
+			await page.goto('http://127.0.0.1:' + address.port);
+			let input = /** @type {LocalSunGpuBrowserProofRequest} */ ({
+				p0: JSON.parse(readFileSync(this._paths.checkedPath(p0Path), 'utf8')),
+				controls: JSON.parse(readFileSync(this._paths.checkedPath(parentPaths[2]), 'utf8')),
+				order: request.order,
+				full: request.mode === 'fields',
+				runtime: request.mode === 'runtime' || request.mode === 'zero',
+				omission: request.mode === 'omission',
+				cleanup: request.mode === 'cleanup',
+				sourceScale: request.mode === 'zero' ? 0 : 1,
+			});
+			let result = await Promise.race([
+				page.evaluate(
+					(input) =>
+						/** @type {LocalSunGpuProofBrowserScope} */ (/** @type {unknown} */ (globalThis)).runCompactGpu(
+							input,
+						),
+					input,
+				),
+				new Promise((_, reject) => {
+					deadline = setTimeout(
+						() => {
+							failure = new Error('Ten-minute qualification deadline.');
+							reject(failure);
+						},
+						Math.max(1, 600000 - (performance.now() - started)),
+					);
+				}),
+			]);
+			if (failure) throw failure;
+			if (
+				result.state !== 'passed' ||
+				result.order !== request.order ||
+				result.glError !== 0 ||
+				result.observations.some(
+					(field) => field.nonfinite || field.comparison.failures || field.comparison.whole?.failures,
+				)
+			)
+				throw new Error('Owned browser result failed its declared gates.');
+			for (let record of writers.values()) {
+				closeSync(record.fd);
+				record.fd = null;
+			}
+			result.fields = [...writers].map(([id, record]) => ({
+				id,
+				path: id + '.f32',
+				bytes: record.received,
+				sha256: this._paths.hash(destination + '/' + id + '.f32'),
+			}));
+			for (let field of result.fields)
+				if (field.bytes !== 1049 * (field.id.includes('-l') ? 1920 : 4374) * 15 * 4)
+					throw new Error('Short complete candidate field.');
+			writeFileSync(
+				root + '/result.json',
+				JSON.stringify(
+					{
+						...result,
+						host: {
+							elapsedMilliseconds: performance.now() - started,
+							freeBeforeBytes: freeBefore,
+							rssAfterBytes: process.memoryUsage().rss,
+							samples,
+							limitation:
+								'Working-set samples are observations, include shared-page double counting and do not establish a continuous peak. Logical GPU payload is separate from driver memory.',
+						},
+					},
+					null,
+					2,
+				),
+				{flag: 'wx'},
+			);
+			writeFileSync(root + '/diagnostics.json', JSON.stringify(diagnostics), {flag: 'wx'});
+			writeFileSync(
+				root + '/manifest.json',
+				JSON.stringify(
+					{
+						schema: 'local-sun-p2-gpu-proof-v1',
+						state: 'passed',
+						selection: request,
+						parents,
+						operation:
+							'Production owner contributors and ordinary controller/cache; frozen full physical fields and selected CPU controls; original J/L/T/endpoint gates, exact omission identities and candidate-only resource cleanup. Zero mode is the analytic zero-intensity consequence with unchanged medium transmission.',
+						tools: {node: process.version, browser: await browser.version()},
+						artifacts: ['host.js', 'bundle.js', 'result.json', 'diagnostics.json'].map((path) => ({
+							path,
+							sha256: this._paths.hash(destination + '/' + path),
+						})),
+						fields: result.fields,
+					},
+					null,
+					2,
+				),
+				{flag: 'wx'},
+			);
+			console.log('PASSED ' + destination);
+			return destination;
+		} catch (error) {
+			writeFileSync(
+				root + '/manifest.json',
+				JSON.stringify(
+					{
+						schema: 'local-sun-p2-gpu-proof-v1',
+						state: 'failed',
+						selection: request,
+						parents,
+						error: String(failure ?? error),
+						elapsedMilliseconds: performance.now() - started,
+					},
+					null,
+					2,
+				),
+				{flag: 'wx'},
+			);
+			throw error;
+		} finally {
+			for (let record of writers.values()) if (record.fd !== null) closeSync(record.fd);
+			clearInterval(interval);
+			clearTimeout(deadline);
+			await browser?.close();
+			server?.closeAllConnections();
+			await new Promise((resolve) => (server ? server.close(resolve) : resolve()));
+		}
+	}
+}
+
+if (process.argv[1] && fileURLToPath(import.meta.url) === resolve(process.argv[1])) {
+	await new LocalSunGpuQualification().run({
+		order: /** @type {SupportedCacheScatteringOrder} */ (Number(process.argv[2])),
+		serial: process.argv[3],
+		mode: /** @type {LocalSunGpuQualificationMode} */ (process.argv[4] ?? 'fields'),
+	});
+}

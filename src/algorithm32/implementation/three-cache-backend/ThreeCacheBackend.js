@@ -205,13 +205,7 @@ export class ThreeCacheBackend {
 		const probeTarget = this._createScalarArrayTarget(THREE, 1, 1, 1);
 		const record = {THREE, renderer, context};
 		try {
-			this._withRendererState(
-				record,
-				/**
-				 * Called by the surrounding operation to handle one callback invocation.
-				 * @returns - The callback result returned to its caller.
-				 */ () => this._assertFramebufferComplete(record, probeTarget, 0),
-			);
+			this._withRendererState(record, () => this._assertFramebufferComplete(record, probeTarget, 0));
 		} finally {
 			probeTarget.dispose();
 		}
@@ -606,24 +600,19 @@ export class ThreeCacheBackend {
 		const dataResources = [];
 
 		try {
-			bindings.forEach(
-				/**
-				 * Called by Array.prototype.forEach to process one collection value.
-				 * @param binding - The binding value accepted by the operation.
-				 */ (binding) => {
-					if (this._isDataBinding(binding)) {
-						const texture = this._createDataTexture(THREE, binding.value);
-						dataResources.push(texture);
-						uniforms[binding.spec.name] = {value: texture};
-						return;
-					}
-					if (this._isUniformBinding(binding)) {
-						uniforms[binding.spec.name] = {
-							value: this._uniformValue(THREE, binding),
-						};
-					}
-				},
-			);
+			bindings.forEach((binding) => {
+				if (this._isDataBinding(binding)) {
+					const texture = this._createDataTexture(THREE, binding.value);
+					dataResources.push(texture);
+					uniforms[binding.spec.name] = {value: texture};
+					return;
+				}
+				if (this._isUniformBinding(binding)) {
+					uniforms[binding.spec.name] = {
+						value: this._uniformValue(THREE, binding),
+					};
+				}
+			});
 		} catch (error) {
 			for (const resource of dataResources) {
 				resource.dispose();
@@ -834,15 +823,10 @@ export class ThreeCacheBackend {
 		backend.programs.add(program);
 
 		try {
-			await this._withRendererState(
-				backend,
-				/**
-				 * Called by the surrounding operation to handle one callback invocation. Conditional result values are selected from the accepted input and current state.
-				 * @returns - The callback result returned to its caller.
-				 */ () =>
-					typeof backend.renderer.compileAsync === 'function'
-						? backend.renderer.compileAsync(record.scene, record.camera)
-						: backend.renderer.compile(record.scene, record.camera),
+			await this._withRendererState(backend, () =>
+				typeof backend.renderer.compileAsync === 'function'
+					? backend.renderer.compileAsync(record.scene, record.camera)
+					: backend.renderer.compile(record.scene, record.camera),
 			);
 		} catch (error) {
 			program.dispose();
@@ -875,6 +859,9 @@ export class ThreeCacheBackend {
 				backend.renderer.setScissor(0, 0, output.storage.width, output.storage.height);
 				backend.renderer.setScissorTest(false);
 				backend.renderer.render(program.scene, program.camera);
+				let error = backend.context.getError?.();
+				if (error !== undefined && error !== 0)
+					throw new Error('Cache GPU submission failed with WebGL error ' + error + '.');
 			},
 		);
 	}
@@ -1199,7 +1186,7 @@ export class ThreeCacheBackend {
 	 * readback per wavelength layer and preserves caller-owned renderer state.
 	 *
 	 * @param {CacheRuntimeBinding} binding - Resident field binding owned by this backend.
-	 * @returns {Promise<{storage: CacheFieldStorage, values: Float32Array}>} - Layer-major scalar values.
+	 * @returns {Promise<CacheScalarFieldReadback>} - Layer-major scalar values.
 	 */
 	async readRuntimeBindingField(binding) {
 		const backend = this._requireBackendRecord(this);
@@ -1208,21 +1195,27 @@ export class ThreeCacheBackend {
 		const layerSize = width * height;
 		const values = new Float32Array(layerSize * layers);
 
-		this._withRendererState(backend, () => {
-			for (let layer = 0; layer < layers; layer += 1) {
-				this._assertFramebufferComplete(backend, field.target, layer);
-				backend.context.readBuffer(backend.context.COLOR_ATTACHMENT0);
-				backend.context.readPixels(
-					0,
-					0,
-					width,
-					height,
-					backend.context.RED,
-					backend.context.FLOAT,
-					values.subarray(layer * layerSize, (layer + 1) * layerSize),
-				);
-			}
-		});
+		this._withRendererState(
+			backend,
+			/** Called by complete-field readback to inspect every wavelength while preserving the caller's render state.
+			 *
+			 * @returns {void} - Owned destination filled with complete physical scalars.
+			 */ () => {
+				for (let layer = 0; layer < layers; layer += 1) {
+					this._assertFramebufferComplete(backend, field.target, layer);
+					backend.context.readBuffer(backend.context.COLOR_ATTACHMENT0);
+					backend.context.readPixels(
+						0,
+						0,
+						width,
+						height,
+						backend.context.RED,
+						backend.context.FLOAT,
+						values.subarray(layer * layerSize, (layer + 1) * layerSize),
+					);
+				}
+			},
+		);
 
 		return {storage: field.storage, values};
 	}
@@ -1244,26 +1237,21 @@ export class ThreeCacheBackend {
 				`Cache probe requests are limited to ${MAXIMUM_THREE_CACHE_PROBE_SCALAR_COUNT} scalars.`,
 			);
 		}
-		const coordinates = request.coordinates.map(
-			/**
-			 * Called by Array.prototype.map to transform one collection value.
-			 * @param coordinate - The coordinate value accepted by the operation.
-			 * @param index - The zero-based index accepted by the operation.
-			 * @returns - The callback result returned to its caller.
-			 */ (coordinate, index) => this._acceptProbeCoordinate(coordinate, field.storage, index),
+		const coordinates = request.coordinates.map((coordinate, index) =>
+			this._acceptProbeCoordinate(coordinate, field.storage, index),
 		);
 
 		const samples = this._withRendererState(
 			backend,
-			/**
-			 * Called by the surrounding operation to handle one callback invocation.
-			 * @returns - The callback result returned to its caller.
+			/** Called by selected readback to preserve render state across all accepted scalar queries.
+			 *
+			 * @returns {CacheProbeResult['samples']} - Physical scalar values at accepted coordinates.
 			 */ () =>
 				coordinates.map(
-					/**
-					 * Called by Array.prototype.map to transform one collection value.
-					 * @param coordinate - The coordinate value accepted by the operation.
-					 * @returns - The callback result returned to its caller.
+					/** Called by selected readback to inspect one accepted physical scalar.
+					 *
+					 * @param {DirectionalSpectralFieldCoordinates} coordinate - Validated field address.
+					 * @returns {CacheProbeResult['samples'][number]} - Owned physical scalar and its address.
 					 */ (coordinate) => {
 						this._assertFramebufferComplete(backend, field.target, coordinate.wavelengthIndex);
 						backend.context.readBuffer(backend.context.COLOR_ATTACHMENT0);

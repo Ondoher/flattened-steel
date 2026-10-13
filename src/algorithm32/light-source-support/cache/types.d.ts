@@ -324,6 +324,8 @@ type ScatteringCacheSampleRequest = Readonly<{
 
 /** Type that describes transient inputs for a source-owned scattering-cache build. */
 type ScatteringCacheBuildRequest = Readonly<{
+	/** Complete declared additional GPU payload, including other controllers/frame/shadow resources; required for compact construction. */
+	otherOwnedGpuBytes?: UnitValue<'bytes'>;
 	/** Cancel this construction request. */
 	signal?: AbortSignal;
 }>;

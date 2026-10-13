@@ -24,21 +24,25 @@ import {assertLocalSunGeometryPairing} from '../local-sun-geometry-pairing.js';
 export class LocalSunCacheProvider {
 	/**
 	 * Physical local-Sun facade retained for dynamic dispatch.
+	 *
 	 * @type {LocalSunCacheProviderSource}
 	 */
 	_source;
 	/**
 	 * Normalized physical source configuration retained by reference.
+	 *
 	 * @type {LocalSunLightSourceConfiguration}
 	 */
 	_configuration;
 	/**
 	 * Eager source-owned shell facts shared by construction attachments.
+	 *
 	 * @type {LocalSunShellFactCache}
 	 */
 	_constructionShellFactCache;
 	/**
 	 * Eager construction-only shell-held light source.
+	 *
 	 * @type {LocalSunConstructionLightSource}
 	 */
 	_constructionLightSource;
@@ -298,11 +302,7 @@ export class LocalSunCacheProvider {
 			radianceUnitVectors: domainSelection.incomingUnitVectors,
 			radianceDirectionCount: domainSelection.incomingDirectionCount,
 			spectralChannelCount: domainSelection.spectralChannelCount,
-			/**
-			 * Called by build transported radiance to resolve position stencil.
-			 * @param input1 - The destructured input accepted by the operation.
-			 * @returns - The callback result returned to its caller.
-			 */ resolvePositionStencil: ({position, atmosphereCoordinate}) =>
+			resolvePositionStencil: ({position, atmosphereCoordinate}) =>
 				request.geometry.resolveScatteringCacheConstructionPositionStencil({
 					position,
 					atmosphereCoordinate,
@@ -310,13 +310,15 @@ export class LocalSunCacheProvider {
 				}),
 			/**
 			 * Called by build transported radiance to resolve direction stencil.
-			 * @param direction - The direction value accepted by the operation.
-			 * @returns - The callback result returned to its caller.
+			 *
+			 * @param {UnitVector3} direction - Accepted construction-frame direction.
+			 * @returns {ScatteringCacheDirectionStencil} - Positive outgoing angular support.
 			 */ resolveDirectionStencil: (direction) => domainSelection.resolveOutgoingDirectionStencil(direction),
 			/**
 			 * Called by build transported radiance to resolve build coordinate.
-			 * @param coordinate - The coordinate value accepted by the operation.
-			 * @returns - The callback result returned to its caller.
+			 *
+			 * @param {PureScatteringDensityBuildCoordinateRequest} coordinate - Accepted logical field address.
+			 * @returns {CacheBuildCoordinate} - Physical local-cache build coordinate.
 			 */ resolveBuildCoordinate: (coordinate) => ({
 				coordinateKey:
 					`local-z${domainSelection.zCount}` +
@@ -337,8 +339,9 @@ export class LocalSunCacheProvider {
 			}),
 			/**
 			 * Called by build transported radiance to resolve physical radiance direction.
-			 * @param coordinate - The coordinate value accepted by the operation.
-			 * @returns - The callback result returned to its caller.
+			 *
+			 * @param {PureScatteringDensityPhysicalRadianceDirectionRequest} coordinate - Accepted construction-frame address.
+			 * @returns {UnitVector3} - Geometry-owned physical ray direction.
 			 */ resolvePhysicalRadianceDirection: (coordinate) =>
 				request.geometry.expressPhysicalScatteringCacheDirection({
 					position: /** @type {Position} */ (coordinate.positionNode.metadata.position),
@@ -510,16 +513,11 @@ export class LocalSunCacheProvider {
 			atmosphereCoordinate,
 			positionAxes: request.domainSelection,
 		});
-		const physicalIncomingDirections = request.domainSelection.incomingUnitVectors.map(
-			/**
-			 * Called by Array.prototype.map to transform one collection value.
-			 * @param cacheDirection - The cache direction value accepted by the operation.
-			 * @returns - The callback result returned to its caller.
-			 */ (cacheDirection) =>
-				request.geometry.expressPhysicalScatteringCacheDirection({
-					position: groundIntersection.position,
-					cacheDirection,
-				}),
+		const physicalIncomingDirections = request.domainSelection.incomingUnitVectors.map((cacheDirection) =>
+			request.geometry.expressPhysicalScatteringCacheDirection({
+				position: groundIntersection.position,
+				cacheDirection,
+			}),
 		);
 		const weights = request.domainSelection.incomingIntegrationWeights.values;
 		const reflected = new Float64Array(spectralBasis.channelCount);
@@ -569,7 +567,9 @@ export class LocalSunCacheProvider {
 		return (
 			/**
 			 * Called by create ground incoming radiance contributor to handle one invocation of the declared operation.
-			 * @param input1 - The destructured input accepted by the operation.
+			 *
+			 * @param {LaterOrderIncomingRadianceContributionRequest} input1 - Accepted physical incoming augmentation.
+			 * @returns {void} - Incoming radiance updated at admitted ground intersections.
 			 */ ({position, spectralBasis, incomingDirectionCount, physicalIncomingDirections, incomingRadiance}) => {
 				for (let directionIndex = 0; directionIndex < incomingDirectionCount; directionIndex += 1) {
 					const incomingDirection = physicalIncomingDirections[directionIndex];
@@ -641,25 +641,13 @@ export class LocalSunCacheProvider {
 			outgoingDirectionCount: request.domainSelection.outgoingDirectionCount,
 			spectralBasis: request.domainSelection.spectralBasis,
 			spectralChannelCount: request.domainSelection.spectralChannelCount,
-			/**
-			 * Called by create later order scattering kernel to resolve physical position.
-			 * @param input1 - The destructured input accepted by the operation.
-			 * @returns - The callback result returned to its caller.
-			 */ resolvePhysicalPosition: ({positionNode}) => /** @type {Position} */ (positionNode.metadata.position),
-			/**
-			 * Called by create later order scattering kernel to resolve physical incoming direction.
-			 * @param directionRequest - The direction request value accepted by the operation.
-			 * @returns - The callback result returned to its caller.
-			 */ resolvePhysicalIncomingDirection: (directionRequest) =>
+			resolvePhysicalPosition: ({positionNode}) => /** @type {Position} */ (positionNode.metadata.position),
+			resolvePhysicalIncomingDirection: (directionRequest) =>
 				request.geometry.expressPhysicalScatteringCacheDirection({
 					position: directionRequest.position,
 					cacheDirection: directionRequest.cacheDirection,
 				}),
-			/**
-			 * Called by create later order scattering kernel to resolve physical outgoing direction.
-			 * @param directionRequest - The direction request value accepted by the operation.
-			 * @returns - The callback result returned to its caller.
-			 */ resolvePhysicalOutgoingDirection: (directionRequest) =>
+			resolvePhysicalOutgoingDirection: (directionRequest) =>
 				request.geometry.expressPhysicalScatteringCacheDirection({
 					position: directionRequest.position,
 					cacheDirection: directionRequest.cacheDirection,
@@ -679,8 +667,9 @@ export class LocalSunCacheProvider {
 		return {
 			/**
 			 * Called by create cpu recurrence operations to create scattering kernel.
-			 * @param input1 - The destructured input accepted by the operation.
-			 * @returns - The callback result returned to its caller.
+			 *
+			 * @param {CpuScatteringKernelBuildRequest} input1 - Physical pure-order request.
+			 * @returns {ScatteringOrderKernel} - Physical pure-order kernel.
 			 */ createScatteringKernel: ({scatteringOrder, groundIlluminationRadiance}) =>
 				this._createLaterOrderScatteringKernel({
 					geometry: context.request.geometry,
@@ -696,8 +685,9 @@ export class LocalSunCacheProvider {
 				}),
 			/**
 			 * Called by create cpu recurrence operations to build transported radiance.
-			 * @param input1 - The destructured input accepted by the operation.
-			 * @returns - The callback result returned to its caller.
+			 *
+			 * @param {CpuTransportedRadianceBuildRequest} input1 - Pure stored-field transport.
+			 * @returns {CpuDirectionalSpectralFieldContract} - Completed pure radiance field.
 			 */ buildTransportedRadiance: ({scatteringDensity, scatteringOrder, id}) =>
 				this._buildTransportedRadiance({
 					scatteringDensity,
@@ -855,6 +845,10 @@ export class LocalSunCacheProvider {
 	buildCpuScatteringCache(request) {
 		const model = request.model;
 		const profile = model.profile;
+		if (profile.compactConstruction !== undefined)
+			throw new RangeError(
+				'Full compact CPU recurrence is not admitted; use the qualified selected CPU reference.',
+			);
 		const geometry = /** @type {LocalSunCpuCacheGeometry} */ (/** @type {unknown} */ (model.geometry));
 		const atmosphere = model.atmosphere;
 		assertLocalSunGeometryPairing(this._configuration, geometry.configuration);

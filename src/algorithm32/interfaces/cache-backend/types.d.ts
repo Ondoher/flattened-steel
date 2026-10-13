@@ -5,6 +5,11 @@ interface GpuCacheField {
 	/** Backend id value. */ readonly backendId: string;
 	/** Call this method to dispose. */ dispose(): void;
 }
+/** Complete layer-major physical R32F diagnostic readback through an opaque binding. */
+type CacheScalarFieldReadback = Readonly<{
+	/** Executed field packing. */ storage: CacheFieldStorage;
+	/** Owned complete readback buffer; it never aliases the resident field. */ values: Float32Array;
+}>;
 
 /** Contract that exposes one opaque compiled cache-construction program. */
 interface CacheGpuProgram {
@@ -82,6 +87,12 @@ interface CacheImmutableTexture {
  * Shader value populated by one completed GPU field.
  *
  * - **"cache.cumulativeScatteringDensity"** - The retained cumulative atmospheric scattering field.
+ * - **"cache.compactPositions"** - Canonical ragged-node physical positions.
+ * - **"cache.compactExcesses"** - Ragged-node stable Euclidean radius excesses.
+ * - **"cache.compactIncomingDirections"** - Local horizon-partitioned incoming vectors.
+ * - **"cache.compactOutgoingDirections"** - Local W27 outgoing vectors.
+ * - **"cache.compactIncomingWeights"** - Positive incoming solid-angle weights.
+ * - **"cache.compactNodeFactors"** - Per-node Native15 normalization logarithms.
  * - **"cache.sceneCumulativeScatteringDensity"** - The dense scene packet field during rollout.
  * - **"cache.sceneLogicalToUniqueDirection"** - The dense scene direction-index map during rollout.
  * - **"cache.sharedPacketAtlas"** - The persistent shared RGBA packet array.
@@ -94,6 +105,12 @@ interface CacheImmutableTexture {
  * - **"lighting.receiverEnvironmentIrradiance"** - One receiver-local native-basis irradiance packet.
  */
 type CacheRuntimeValueKey =
+	| 'cache.compactPositions'
+	| 'cache.compactExcesses'
+	| 'cache.compactIncomingDirections'
+	| 'cache.compactOutgoingDirections'
+	| 'cache.compactIncomingWeights'
+	| 'cache.compactNodeFactors'
 	| 'cache.cumulativeScatteringDensity'
 	| 'cache.sceneCumulativeScatteringDensity'
 	| 'cache.sceneLogicalToUniqueDirection'

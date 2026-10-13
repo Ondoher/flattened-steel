@@ -2,7 +2,10 @@ import {CUMULATIVE_SCATTERING_CACHE_VALUE_KEY} from '../../../gpu-cache-runtime/
 import {ShaderContributions} from '../../../shader-assembly/base/ShaderContributions.js';
 import {LOCAL_SUN_CACHE_SHADER_CONTRIBUTION_ID, LOCAL_SUN_CUMULATIVE_SCATTERING_SAMPLER_NAME} from './consts.js';
 
-/** Object that owns one completed local-Sun cumulative GPU cache artifact. */
+/** Object that owns one completed local-Sun cumulative GPU cache artifact.
+ *
+ * @implements {GpuScatteringCache}
+ */
 export class LocalSunCache {
 	/**
 	 * Artifact value.
@@ -14,7 +17,7 @@ export class LocalSunCache {
 	/**
 	 * Resources value.
 	 *
-	 *  @type {LocalSunCacheResourceReport}
+	 *  @type {LocalSunCacheResourceReport | LocalSunCompactGpuResourceReport}
 	 *
 	 */
 	_resources;
@@ -25,7 +28,8 @@ export class LocalSunCache {
 	 *
 	 * @param {CacheBuildArtifact} artifact - Supplies the completed cumulative
 	 * field and opaque runtime binding.
-	 * @param {LocalSunCacheResourceReport} resources - Supplies actual
+	 *
+	 * @param {LocalSunCacheResourceReport | LocalSunCompactGpuResourceReport} resources - Supplies actual
 	 * construction and resident payload reporting.
 	 *
 	 */
@@ -37,7 +41,7 @@ export class LocalSunCache {
 	/**
 	 * Resources value.
 	 *
-	 *  @returns {LocalSunCacheResourceReport} - Actual construction resources.
+	 *  @returns {LocalSunCacheResourceReport | LocalSunCompactGpuResourceReport} - Actual construction resources.
 	 */
 	get resources() {
 		return this._resources;
@@ -45,7 +49,8 @@ export class LocalSunCache {
 
 	/**
 	 * Call this method to return opaque bindings for the privately owned cumulative field.
-	 * @returns - The result produced by the operation.
+	 *
+	 * @returns {CacheRuntimeBindings} - Backend-owned opaque field bindings.
 	 * @throws {Error} - When the operation cannot complete its caller-observable contract.
 	 */
 	getRuntimeBindings() {

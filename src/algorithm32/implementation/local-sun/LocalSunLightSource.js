@@ -30,21 +30,25 @@ export class LocalSunLightSource {
 	_celestialSourceDefinition;
 	/**
 	 * Normalized physical source configuration retained by reference.
+	 *
 	 * @type {LocalSunLightSourceConfiguration | null}
 	 */
 	_configuration;
 	/**
 	 * Source-owned cache construction and attachment provider.
+	 *
 	 * @type {LocalSunCacheProvider | null}
 	 */
 	_cacheProvider;
 	/**
 	 * Source-owned final-view shader contribution provider.
+	 *
 	 * @type {LocalSunShaderContributor | null}
 	 */
 	_shaderContributor;
 	/**
 	 * Source-owned endpoint scene-lighting adapter.
+	 *
 	 * @type {LocalSunSceneLightingAdapter | null}
 	 */
 	_sceneLightingAdapter;
@@ -54,6 +58,7 @@ export class LocalSunLightSource {
 	 *
 	 * @param {LocalSunLightSourceConfig} configuration - The source key,
 	 * finite-source calibration and scale.
+	 *
 	 * @throws {TypeError} - When an accepted value does not satisfy the required type or shape.
 	 * @throws {RangeError} - When an accepted value is outside the supported range.
 	 */
@@ -143,6 +148,7 @@ export class LocalSunLightSource {
 				values: configuration.sourceIrradiance.values.map(
 					/**
 					 * Called by Array.prototype.map to derive uniform source radiance.
+					 *
 					 * @param {number} value - One reference irradiance-density channel.
 					 * @returns {number} - The corresponding surface-radiance channel.
 					 */

@@ -7,7 +7,10 @@ import {
 } from './consts.js';
 import DistanceMath from '../../../math/DistanceMath.js';
 
-/** Fixed N=2048 local-Sun construction-fact owner with copy-returning accessors. */
+/** Fixed N=2048 local-Sun construction-fact owner with copy-returning accessors.
+ *
+ * @implements {LocalSunShellFactCache}
+ */
 export class LocalSunShellFactCache {
 	/** Explicit-domain lookup requires complete source-distance support. @type {boolean} */
 	_explicitSourceBounds = false;

@@ -736,11 +736,24 @@ type LocalSunGpuTransportResidualSummary = Readonly<{
 
 /** Existing physical owners retained by the explicit compact construction profile. */
 type LocalSunCompactProfileModels = Readonly<{
-	/** Geometry owns all coordinates, placement and ray support. */ geometry: FlatEarthGeometry;
-	/** Unchanged accepted exponential medium. */ atmosphere: CanonicalAtmosphere;
-	/** Existing bound finite source. */ lightSource: LocalSunLightSource;
+	/** Geometry owns all coordinates, placement and ray support. */ geometry: LocalSunCompactProfileGeometry;
+	/** Unchanged accepted exponential medium. */ atmosphere: LocalSunCompactProfileAtmosphere;
+	/** Existing bound finite source. */ lightSource: LocalSunCompactProfileSource;
 	/** Explicit black atmospheric ground. */ groundBoundary: null;
 }>;
+/** Accepted flat geometry capabilities retained by the complete compact profile. */
+type LocalSunCompactProfileGeometry = FlatCompactCacheShaderGeometry &
+	LocalSunCompactTransportDefinition['geometry'] &
+	Readonly<{
+		/** Call this method to construct the geometry-owned ragged domain from explicit accepted controls. */
+		createCompactLocalSunCacheTopology(request: FlatCompactTopologyRequest): FlatCompactTopology;
+		/** Call this method to rotate a cache-frame unit direction into the physical node frame. */
+		expressPhysicalScatteringCacheDirection(request: FlatScatteringCacheFramedDirectionRequest): UnitVector3;
+	}>;
+/** Accepted physical medium and legitimate construction contributor; no concrete implementation alias. */
+type LocalSunCompactProfileAtmosphere = AtmosphereModel & CanonicalExponentialCacheShaderAtmosphere;
+/** Bound finite physical source and geometry placement capability retained by the profile. */
+type LocalSunCompactProfileSource = LocalSunCacheProviderSource & GeometryConfigurableLightSource;
 /** Complete authored compact seed inputs; medium-dependent refinement is derived by the profile. */
 type LocalSunCompactTopologyControls = Readonly<{
 	/** Explicit source-centered cylinder radius. */ coverageRadius: Distance;
@@ -824,7 +837,7 @@ type LocalSunCompactCpuAssemblyDefinition = LocalSunCompactTransportDefinition &
 		/** Existing medium and physical phase owner. */ atmosphere: CanonicalCacheColumnAtmosphere &
 			Pick<AtmosphereModel, 'samplePhase'>;
 		/** Geometry-owned physical cache-frame transformation. */ geometry: LocalSunCompactTransportDefinition['geometry'] &
-			Pick<FlatEarthGeometry, 'expressPhysicalScatteringCacheDirection'>;
+			Pick<LocalSunCompactProfileGeometry, 'expressPhysicalScatteringCacheDirection'>;
 	}>;
 
 /** Actual ragged domain and direction-fastest logical packing; no rectangular axes or allocated full field. */
@@ -915,3 +928,19 @@ type LocalSunCompactOrderedIncomingRadianceAddress = LocalSunCompactIncomingRadi
 	Readonly<{
 		/** Physical pure radiance order required by the recurrence. */ radianceOrder: 1 | 2 | 3;
 	}>;
+/** Qualified compact final-view policy.
+ * - **"local-positive-column-v1"** - Positive source-function integration on analytic columns.
+ */
+type LocalSunCompactViewPolicyKind = 'local-positive-column-v1';
+
+/** Qualified compact source transmission policy.
+ * - **"analytic-exponential-column-v1"** - Exact exponential slab columns without sampled interval counts.
+ */
+type LocalSunCompactSourcePolicyKind = 'analytic-exponential-column-v1';
+/** Complete logical resource admission and observed compact cache payloads. */
+type LocalSunCompactGpuResourceReport = Readonly<{
+	/** Measured executor field/auxiliary peaks and resident physical field. */ executor: CacheBuildMemoryDiagnostics;
+	/** Complete preallocation estimate including declared external resources and overlap. */ admission: LocalSunCompactResourceEstimate;
+	/** Owned ordinary-runtime auxiliary scalar textures. */ retainedAuxiliaryBytes: UnitValue<'bytes'>;
+	/** CPU-expanded transport uploads remain absent. */ packedTransportData: UnitValue<'bytes'>;
+}>;

@@ -1,112 +1,61 @@
 # Local-Sun Cache Production Port Status
 
-Current disposition, 2026-10-12: the owner selected independent P0 execution for
-the production local-Sun cache port. The
-[plan](local-sun-cache-promotion-plan.md) owns scope, production responsibilities,
-evidence requirements and execution order. The accepted experiment remains ended;
-ordinary production/default/deployed selections are unchanged. The bounded
-P1 slices now implement geometry-owned compact positions/support, explicit
-source-distance bounds, independently compared held source amplitudes and the
-selected incoming quadrature, per-tap directional support and cache-owned
-geometric-density normalization/restoration and selected-ray Column48/Tail64
-transport and a complete explicit compact construction profile. The final
-[P1 CPU reference closure](local-sun-p1-closure.md) adds selected physical J1-J4,
-cumulative N1/N2/N4 and complete construction-ray comparisons against independently
-frozen physical inputs, with continuous direct-L1 isolation. Its matching final
-primary/audit receipt below determines P1 completion. Production GPU construction,
-full occupied fields and ordinary runtime profile/lookup integration belong to P2.
-The
-[P0 contract](local-sun-cache-p0-contract.md) owns the prepared contracts,
-parameter applicability, first-capability controls and resource admission.
+Current disposition, 2026-10-12: the owner authorized independent P2 execution.
+The [plan](local-sun-cache-promotion-plan.md) owns scope and sequence;
+[P0](local-sun-cache-p0-contract.md) owns parameter applicability, independent
+controls and resource policies. The ended experiment and all prior evidence
+remain immutable. Production defaults and deployed selections are unchanged.
 
-The owner selected [shared production parameter alignment](local-sun-cache-promotion-plan.md#shared-production-parameters)
-on 2026-10-12: local-cache parameters follow the distant cache wherever applicable.
-P0 now owns that mapping and the source/geometry reasons for local-only differences;
-the [experiment-selected compact cache shape](local-sun-cache-promotion-plan.md#experiment-selected-cache-shape)
-is fixed for the port. Shared distant parameters apply within that shape, and the
-frozen experiment remains the independent comparison control.
+The [P2 closure](local-sun-p2-closure.md) owns GPU/runtime behavior, independent
+numerical coverage, resource observations and qualification limits. Its full
+occupied-field, N1/N2/N4 runtime, equivalent omission and cleanup evidence passes.
+Final completion requires the matching CLEAN review receipt below. The local
+geometry retains its selected cache shape and geometry-dependent quadrature /
+column policies; shared spectral, medium, phase, order and precision parameters
+follow distant production wherever applicable. Source/geometry coupling redesign
+remains deferred.
 
 ## Phase Disposition
 
 | Work | Status |
 | --- | --- |
-| Topic and planning setup | Prepared: current source mapping, architectural assessment, scope, phase sequence and minimal reload route. The setup-review receipt below determines documentation-review completion. |
-| P0 — contracts and controls | Delivered contract/control unit: independent topology and analytic-bound fixture, offline proof/type checks, profile/support/publication and resource policies. Completion requires the matching P0 review receipt below. |
-| P1 — compact domain and CPU | Delivered compact domain/source bounds, physical profile, selected CPU pure/cumulative operators and independent physical construction rays. The matching CLEAN P1 closure receipt below completes the phase. Full-domain CPU construction is not claimed. |
-| P2 — GPU construction/runtime | Planned; not started. |
-| P3 — reuse and frame publication | Planned; not started. |
+| P0 — contracts and controls | Complete under its matching CLEAN receipt. |
+| P1 — compact domain and selected CPU reference | Complete under the final P1 closure receipt; full CPU recurrence remains unadmitted. |
+| P2 — GPU construction/runtime | Delivered genuine compact GPU graph and ordinary shared lookup/view consumers, qualified occupied fields, N1/N2/N4, omission and candidate cleanup. The matching CLEAN primary/audit receipt completes the phase. |
+| P3 — reuse and frame publication | Next; not started. |
 | P4 — Flat32/celestial consumers | Planned; not started. |
-| P5 — qualification/adoption preparation | Planned; no default switch, deployment or publication selected by setup. |
+| P5 — qualification/adoption preparation | Planned; no adoption, deployment or publication selected. |
 
 ## Next Work
 
-After the matching P1 closure receipt validates, start
-[P2 production GPU construction and runtime lookup](local-sun-cache-promotion-plan.md#p2--port-gpu-construction-and-runtime-lookup).
-Adapt ordinary runtime consumers to the genuine compact/analytic profile,
-implement legitimate GPU contributors and qualify full occupied fields and
-complete matched rays. The selected CPU reference and immutable physical inputs
-are available as bounded controls. A naive full-domain CPU recurrence remains
-unadmitted. Automatic seed-policy generation for changed heights/profiles requires
-new qualification; the complete profile consumes explicit authored seeds.
-Preserve existing production defaults as controls. The owner's full-P1 instruction
-supersedes the earlier individual-slice stops; each qualification job retains its
-own resource and ten-minute bound.
+After the P2 receipt validates, execute
+[P3 reuse and atomic complete-frame publication](local-sun-cache-promotion-plan.md#p3--add-reuse-and-atomic-complete-frame-publication).
+Canonical construction identity must be separated from exact live observation,
+source/receiver state and support admission. Stage cache leases, geometry/source
+bindings, shader readiness, receiver spectra and celestial inputs together.
+Qualify admitted transformations/day trajectories against fresh construction,
+plus failure, cancellation, supersession, context loss and borrower disposal.
+Changed height/medium/source/coverage must rebuild. Keep earlier usable state
+until a complete replacement is accepted. P4 owns normal-scene integration.
 
-The first slice implements `CompactLocalCacheTopology` through the flat geometry
-factory, with real ragged offsets/counts, stable radius excess, medium-derived
-cylinder-edge refinement, positive spatial stencils and explicit rejection. A
-narrow `SourceDistanceBounds` value flows through shell facts/provider; explicit
-support rejects outside distances while the named ordinary Flat32 control retains
-its existing lookup behavior. No ragged domain is silently fed to the current
-rectangular field/transport pipeline.
+## Completion Receipts
 
-The selected incoming measure is now available through the sampling-domain
-facade as `FlatHorizonPartitionedDirectionDomain`. Its standalone domain proof
-does not activate a compact construction profile. The selected assembly applies
-geometry-owned incoming/outgoing transforms at two canonical nodes. P1 now compares
-physical operators at those nodes; full field/transform-family coverage belongs to P2.
+- [P2 primary/audit receipt](../../../../.codex-tmp/review-standards/session-ZtvAir/validation.json): only its matching CLEAN outcome completes the authored P2 source/contracts/proof/current-state unit.
+- [P2 independent execution summary](../../../../.codex-tmp/review-standards/session-ZtvAir/summary.md): decisions, exact final proof receipts, checks, measurements and local checkpoint.
+- [P1 closure](local-sun-p1-closure.md) and [final primary/audit receipt](../../../../.codex-tmp/review-standards/session-G8UAej/validation-checkpoint.json): selected CPU pure/cumulative operators, continuous direct L1 isolation and independent physical construction rays.
+- [P0 primary/audit receipt](../../../../.codex-tmp/review-standards/session-xlu2SC/validation.json): independent contracts/controls and original precision/resource envelope.
 
-Shared Native15, W27, physical coefficients, phase, order meanings and scalar
-precision align. The [applicability inventory](local-sun-cache-p0-contract.md#parameter-applicability)
-preserves geometry-dependent horizon/cylinder quadrature and optical-column
-policies, including per-tap angular selection despite the missing independent
-Sun-angle position axis. Source/geometry coupling redesign remains deferred.
+Review follows production destination-folder mappings, including complete
+architecture/contracts/verification primary and independent audit ledgers.
+No standards waiver or experiment-only mapping applies. Eight-GiB reserve /
+owned-process and ten-minute serialized host controls apply; P6's expired
+exceptions do not carry forward. The permanent experiment mapping remains intact.
 
-Current runtime findings addressed by the prospective P0 contracts, to be
-implemented and qualified in P1-P4:
+## Earlier Qualification Receipts (Historical Scopes)
 
-- Rectangular position-domain assumptions cannot honestly describe the selected
-  1,049-node ragged topology. The new factory implements actual compact positions;
-  selected CPU field/transport packing is implemented; full GPU/runtime adaptation
-  remains P2 work.
-- Source-axis interpolation needs direction support per spatial tap; normalization
-  uses actual spectral/medium/source inputs rather than fixed experiment constants.
-- Local cache identity currently includes observation/placement, source and geometry
-  enforce one-time placement, and geometry shaders embed live placement constants.
-- Controller build cancellation is already present, but cache publication alone
-  does not stage a complete shader/receiver/celestial frame or borrower lifetime.
-- Flat32's fast time/location path is currently spherical-only; local scene-light
-  values need the accepted exact-state receiver path.
-
-The [closed experiment handoff](../../poc-experiments/engineering-studies/local-sun-cache-reuse/handoff.md)
-and [P7 findings](../../poc-experiments/engineering-studies/local-sun-cache-reuse/p7-closeout.md)
-route the unchanged source and evidence. The
-[initial transfer assessment](local-sun-transfer-assessment.md) remains an earlier
-investigation, not the new implementation authority. No experimental runner,
-generated bundle or historical Star evidence becomes a production dependency.
-
-## Verification And Handoff
-
-The [P1 closure](local-sun-p1-closure.md) owns the final physical comparison and
-its limits. Immutable physical-control run 00023 exactly reproduces all eight
-historical whole-field identities. The final selected proof preserves physical
-pure/cumulative N1/N2/N4 comparisons, complete L1-L3 construction rays and exact
-zero-source controls. Engine/scoped proof checks and all 656 existing Algorithm32
-Jasmine specifications pass. The
-[P1 closure review receipt](../../../../.codex-tmp/review-standards/session-G8UAej/validation-checkpoint.json)
-owns the final source/contracts/proof/current-state unit; only its matching
-`CLEAN` primary/audit aggregate establishes completion. Previous receipts below
-retain their original bounded scopes and do not describe today's remaining work.
+The following records preserve their original bounded scopes and stopping
+instructions. Current work and remaining obligations are owned above and by the
+phase closure documents.
 
 The first bounded P1 comparison is preserved in a new immutable
 [production run](../../../../tmp/production-local-sun-cache-promotion/runs/00002-compact-domain/comparison.json).
@@ -237,7 +186,7 @@ numerical outputs. No field generation, GPU/render, reuse, application or resour
 measurement is claimed.
 
 The P7 closeout and this production-planning setup form the documentation
-handoff. Resume at P2 above after the active topic's minimal reload and reviewer
+handoff. Resume at P3 above after the active topic's minimal reload and reviewer
 readiness checks; preserve the ended experiment and its immutable evidence.
 
 The [initial setup review receipt](../../../../.codex-tmp/review-standards/session-AccVDt/validation.json)

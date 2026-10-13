@@ -36,40 +36,22 @@ export const CacheValues = {
 		const body = {
 			kind: 'source-owned-cache-construction-plan',
 			id: planIdentifier,
-			fields: fields.map(
-				/**
-				 * Called by Array.prototype.map to transform one collection value.
-				 * @param field - The field value accepted by the operation.
-				 * @returns - The callback result returned to its caller.
-				 */ (field) => ({
-					id: field.id,
-					storage: field.storage,
-				}),
-			),
-			passes: passes.map(
-				/**
-				 * Called by Array.prototype.map to transform one collection value.
-				 * @param pass - The pass value accepted by the operation.
-				 * @returns - The callback result returned to its caller.
-				 */ (pass) => ({
-					id: pass.id,
-					kind: pass.kind,
-					order: pass.order,
-					inputs: pass.inputs,
-					output: pass.output,
-					modules: pass.modules.map(
-						/**
-						 * Called by Array.prototype.map to transform one collection value.
-						 * @param module - The module value accepted by the operation.
-						 * @returns - The callback result returned to its caller.
-						 */ (module) => ({
-							id: module.id,
-							owner: module.owner,
-							contentHash: module.contentHash,
-						}),
-					),
-				}),
-			),
+			fields: fields.map((field) => ({
+				id: field.id,
+				storage: field.storage,
+			})),
+			passes: passes.map((pass) => ({
+				id: pass.id,
+				kind: pass.kind,
+				order: pass.order,
+				inputs: pass.inputs,
+				output: pass.output,
+				modules: pass.modules.map((module) => ({
+					id: module.id,
+					owner: module.owner,
+					contentHash: module.contentHash,
+				})),
+			})),
 			reuseFacts,
 		};
 

@@ -9,7 +9,10 @@ const CACHE_OUTPUT_NAME = 'a32CacheOutput';
 /** Glsl preprocessor prefix constant. */
 const GLSL_PREPROCESSOR_PREFIX = '#';
 
-/** Renderer-neutral assembler of owner modules into cache-pass shaders. */
+/** Renderer-neutral assembler of owner modules into cache-pass shaders.
+ *
+ * @implements {CacheAssembler}
+ */
 export class CachePassAssembler {
 	/**
 	 * Called by module comparison to resolve one owner's deterministic tie-break position. Conditional result values are selected from the accepted input and current state.
@@ -51,50 +54,31 @@ export class CachePassAssembler {
 			}
 		}
 
-		const ordered = [];
+		/** @type {CacheBuildModule[]} */ const ordered = [];
 		const visited = new Set();
 		const visiting = new Set();
-		/**
-		 * Called by visit to visit.
-		 * @param module - The module value accepted by the operation.
-		 */ const visit = (module) => {
-			if (visited.has(module) || visiting.has(module)) {
-				return;
+		const roots = [...modules].sort((left, right) => this._compareModules(left, right));
+		for (const root of roots) {
+			/** @type {CacheModuleTraversalEntry[]} */ const stack = [{module: root, complete: false}];
+			while (stack.length > 0) {
+				const entry = stack.pop();
+				if (entry.complete) {
+					visiting.delete(entry.module);
+					visited.add(entry.module);
+					ordered.push(entry.module);
+					continue;
+				}
+				if (visited.has(entry.module) || visiting.has(entry.module)) continue;
+				visiting.add(entry.module);
+				stack.push({module: entry.module, complete: true});
+				const dependencies = entry.module.requires
+					.map((symbol) => providers.get(symbol))
+					.filter(Boolean)
+					.sort((left, right) => this._compareModules(left, right));
+				for (let index = dependencies.length - 1; index >= 0; index--)
+					stack.push({module: dependencies[index], complete: false});
 			}
-			visiting.add(module);
-			module.requires
-				.map(
-					/**
-					 * Called by Array.prototype.map to transform one collection value.
-					 * @param symbol - The symbol value accepted by the operation.
-					 * @returns - The callback result returned to its caller.
-					 */ (symbol) => providers.get(symbol),
-				)
-				.filter(Boolean)
-				.sort(
-					/**
-					 * Called by Array.prototype.sort to compare two collection values.
-					 * @param left - The left value accepted by the operation.
-					 * @param right - The right value accepted by the operation.
-					 * @returns - The callback result returned to its caller.
-					 */ (left, right) => this._compareModules(left, right),
-				)
-				.forEach(visit);
-			visiting.delete(module);
-			visited.add(module);
-			ordered.push(module);
-		};
-
-		[...modules]
-			.sort(
-				/**
-				 * Called by Array.prototype.sort to compare two collection values.
-				 * @param left - The left value accepted by the operation.
-				 * @param right - The right value accepted by the operation.
-				 * @returns - The callback result returned to its caller.
-				 */ (left, right) => this._compareModules(left, right),
-			)
-			.forEach(visit);
+		}
 		return ordered;
 	}
 
@@ -105,23 +89,11 @@ export class CachePassAssembler {
 	 * @returns {CacheShaderBlockEntry[]} - The source blocks paired with module positions.
 	 */
 	_collectBlocks(modules) {
-		return modules.flatMap(
-			/**
-			 * Called by Array.prototype.flatMap to transform and flatten one collection value.
-			 * @param module - The module value accepted by the operation.
-			 * @param moduleIndex - The module index value accepted by the operation.
-			 * @returns - The callback result returned to its caller.
-			 */ (module, moduleIndex) =>
-				module.blocks.map(
-					/**
-					 * Called by Array.prototype.map to transform one collection value.
-					 * @param block - The block value accepted by the operation.
-					 * @returns - The callback result returned to its caller.
-					 */ (block) => ({
-						block,
-						moduleIndex,
-					}),
-				),
+		return modules.flatMap((module, moduleIndex) =>
+			module.blocks.map((block) => ({
+				block,
+				moduleIndex,
+			})),
 		);
 	}
 
@@ -134,31 +106,14 @@ export class CachePassAssembler {
 	 */
 	_phaseSource(blocks, phase) {
 		return blocks
-			.filter(
-				/**
-				 * Called by Array.prototype.filter to test whether one collection value is retained.
-				 * @param entry - The entry value accepted by the operation.
-				 * @returns - The callback result returned to its caller.
-				 */ (entry) => entry.block.phase === phase,
-			)
+			.filter((entry) => entry.block.phase === phase)
 			.sort(
-				/**
-				 * Called by Array.prototype.sort to compare two collection values.
-				 * @param left - The left value accepted by the operation.
-				 * @param right - The right value accepted by the operation.
-				 * @returns - The callback result returned to its caller.
-				 */ (left, right) =>
+				(left, right) =>
 					left.moduleIndex - right.moduleIndex ||
 					left.block.order - right.block.order ||
 					left.block.id.localeCompare(right.block.id),
 			)
-			.map(
-				/**
-				 * Called by Array.prototype.map to transform one collection value.
-				 * @param entry - The entry value accepted by the operation.
-				 * @returns - The callback result returned to its caller.
-				 */ (entry) => entry.block.source,
-			)
+			.map((entry) => entry.block.source)
 			.join('\n\n');
 	}
 
@@ -194,20 +149,9 @@ export class CachePassAssembler {
 	 */
 	_collectBindings(modules) {
 		return modules
-			.flatMap(
-				/**
-				 * Called by Array.prototype.flatMap to transform and flatten one collection value.
-				 * @param module - The module value accepted by the operation.
-				 * @returns - The callback result returned to its caller.
-				 */ (module) => module.bindings,
-			)
+			.flatMap((module) => module.bindings)
 			.sort(
-				/**
-				 * Called by Array.prototype.sort to compare two collection values.
-				 * @param left - The left value accepted by the operation.
-				 * @param right - The right value accepted by the operation.
-				 * @returns - The callback result returned to its caller.
-				 */ (left, right) =>
+				(left, right) =>
 					left.spec.name.localeCompare(right.spec.name) || left.spec.id.localeCompare(right.spec.id),
 			);
 	}
@@ -221,13 +165,7 @@ export class CachePassAssembler {
 	_indentMainSource(source) {
 		return source
 			.split('\n')
-			.map(
-				/**
-				 * Called by Array.prototype.map to transform one collection value.
-				 * @param line - The line value accepted by the operation.
-				 * @returns - The callback result returned to its caller.
-				 */ (line) => `\t${line}`,
-			)
+			.map((line) => `\t${line}`)
 			.join('\n');
 	}
 
@@ -241,49 +179,21 @@ export class CachePassAssembler {
 	 */
 	_assembleSource(pass, modules, bindings) {
 		const inputDeclarations = pass.inputs
-			.map(
-				/**
-				 * Called by Array.prototype.map to transform one collection value.
-				 * @param id - The id value accepted by the operation.
-				 * @returns - The callback result returned to its caller.
-				 */ (id) => `uniform highp sampler2DArray ${CacheBuildModules.fieldInputBindingName(id)};`,
-			)
+			.map((id) => `uniform highp sampler2DArray ${CacheBuildModules.fieldInputBindingName(id)};`)
 			.sort()
 			.join('\n');
 		const defineSource = bindings
-			.filter(
-				/**
-				 * Called by Array.prototype.filter to test whether one collection value is retained.
-				 * @param binding - The binding value accepted by the operation.
-				 * @returns - The callback result returned to its caller.
-				 */ (binding) => binding.spec.kind === 'define',
-			)
+			.filter((binding) => binding.spec.kind === 'define')
 			.map(
-				/**
-				 * Called by Array.prototype.map to transform one collection value.
-				 * @param binding - The binding value accepted by the operation.
-				 * @returns - The callback result returned to its caller.
-				 */ (binding) =>
+				(binding) =>
 					`${GLSL_PREPROCESSOR_PREFIX}define ${binding.spec.name} ${this._defineLiteral(
 						/** @type {CacheDefineBinding} */ (binding).value,
 					)}`,
 			)
 			.join('\n');
 		const uniformSource = bindings
-			.filter(
-				/**
-				 * Called by Array.prototype.filter to test whether one collection value is retained.
-				 * @param binding - The binding value accepted by the operation.
-				 * @returns - The callback result returned to its caller.
-				 */ (binding) => binding.spec.kind !== 'define',
-			)
-			.map(
-				/**
-				 * Called by Array.prototype.map to transform one collection value.
-				 * @param binding - The binding value accepted by the operation.
-				 * @returns - The callback result returned to its caller.
-				 */ (binding) => this._uniformDeclaration(binding),
-			)
+			.filter((binding) => binding.spec.kind !== 'define')
+			.map((binding) => this._uniformDeclaration(binding))
 			.join('\n');
 		const blocks = this._collectBlocks(modules);
 		const declarations = this._phaseSource(blocks, 'declare');
@@ -330,16 +240,10 @@ export class CachePassAssembler {
 				id: output.id,
 				storage: output.storage,
 			},
-			modules: modules.map(
-				/**
-				 * Called by Array.prototype.map to transform one collection value.
-				 * @param module - The module value accepted by the operation.
-				 * @returns - The callback result returned to its caller.
-				 */ (module) => ({
-					id: module.id,
-					contentHash: module.contentHash,
-				}),
-			),
+			modules: modules.map((module) => ({
+				id: module.id,
+				contentHash: module.contentHash,
+			})),
 			sourceHash,
 		})}`;
 

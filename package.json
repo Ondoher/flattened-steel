@@ -1,6 +1,7 @@
 {
 	"name": "polylith-project",
 	"version": "0.1.0",
+	"private": true,
 	"description": "Initial setup for a polylith project",
 	"dependencies": {
 		"@polylith/browser": "^1.1.0",
@@ -70,6 +71,7 @@
 		"verify:algorithm32:human-vision-filters": "node scripts/algorithm32/verify-human-vision-filter-package.js",
 		"verify:flat32:distant-sun-performance": "node scripts/flat32/verify-distant-sun-runtime-performance.js",
 		"publish:algorithm32:shared-runtime": "node scripts/algorithm32/solar-zenith-cache/publish-shared-runtime.js",
+		"qualify:algorithm32:local-sun-gpu": "node scripts/algorithm32/local-sun-cache/gpu/LocalSunGpuQualification.js",
 		"test:algorithm32": "jasmine --config=spec/support/jasmine-algorithm32.json",
 		"test:algorithm32:three": "karma start spec/support/karma-algorithm32-three.conf.cjs --single-run",
 		"clean:flat32": "node scripts/flat32/clean-build-output.js",

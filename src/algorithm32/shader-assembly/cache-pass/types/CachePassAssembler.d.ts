@@ -5,6 +5,11 @@ type CacheShaderBlockEntry = Readonly<{
 	/** Deterministic position of the owning module. */
 	moduleIndex: number;
 }>;
+/** One explicit postorder module-traversal stack entry. */
+type CacheModuleTraversalEntry = Readonly<{
+	/** Module awaiting entry or completion. */ module: CacheBuildModule;
+	/** True after dependencies have been scheduled ahead of module publication. */ complete: boolean;
+}>;
 
 /** Renderer-neutral assembler of owner modules into cache-pass shaders. */
 class CachePassAssembler implements CacheAssembler {

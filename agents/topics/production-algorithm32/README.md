@@ -6,7 +6,8 @@ Implement and qualify the production engine. Application behavior, independent e
 
 The owner selected preparation of the [local-Sun cache production port](caches/local-sun-cache-promotion-plan.md)
 on 2026-10-11. Its [status](caches/local-sun-cache-promotion-status.md) owns the
-P0 contract/control and P1 closure receipts, with P2 GPU/runtime as the next boundary. The
+P0/P1/P2 receipts, with P3 reuse and atomic frame publication as the next boundary.
+The [P2 closure](caches/local-sun-p2-closure.md) owns GPU/runtime qualification. The
 [P0 contract](caches/local-sun-cache-p0-contract.md) records applicability and
 prepared independent controls. The accepted
 [Local-Sun Cache Reuse experiment](../poc-experiments/engineering-studies/local-sun-cache-reuse/README.md)

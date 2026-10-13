@@ -70,16 +70,7 @@ export class SpectralCalculator {
 	 * @returns {Float64Array<ArrayBuffer>} - Dimensionless transmittance.
 	 */
 	_sourceTransmittanceValues(opticalDepth) {
-		return Float64Array.from(
-			opticalDepth,
-			/**
-			 * Called by the surrounding operation to handle one callback invocation.
-
-			 *
-			 * @param value - The value accepted by the operation.
-			 * @returns - The callback result returned to its caller.
-			 */ (value) => Math.exp(-value),
-		);
+		return Float64Array.from(opticalDepth, (value) => Math.exp(-value));
 	}
 
 	/**
@@ -91,16 +82,8 @@ export class SpectralCalculator {
 	 * @returns {Float64Array<ArrayBuffer>} - Dimensionless segment transmittance.
 	 */
 	_trapezoidSegmentTransmittanceValues(previousExtinctionPerMeter, currentExtinctionPerMeter, intervalLengthMeters) {
-		return Float64Array.from(
-			previousExtinctionPerMeter,
-			/**
-			 * Called by the surrounding operation to handle one callback invocation.
-
-			 *
-			 * @param previous - The previous value accepted by the operation.
-			 * @param index - The zero-based index accepted by the operation.
-			 * @returns - The callback result returned to its caller.
-			 */ (previous, index) => Math.exp(-0.5 * (previous + currentExtinctionPerMeter[index]) * intervalLengthMeters),
+		return Float64Array.from(previousExtinctionPerMeter, (previous, index) =>
+			Math.exp(-0.5 * (previous + currentExtinctionPerMeter[index]) * intervalLengthMeters),
 		);
 	}
 
@@ -121,14 +104,8 @@ export class SpectralCalculator {
 	) {
 		return Float64Array.from(
 			rayleighScatteringPerMeter,
-			/**
-			 * Called by the surrounding operation to handle one callback invocation.
-
-			 *
-			 * @param rayleigh - The rayleigh value accepted by the operation.
-			 * @param index - The zero-based index accepted by the operation.
-			 * @returns - The callback result returned to its caller.
-			 */ (rayleigh, index) => rayleigh * rayleighPhasePerSteradian + mieScatteringPerMeter[index] * miePhasePerSteradian,
+			(rayleigh, index) =>
+				rayleigh * rayleighPhasePerSteradian + mieScatteringPerMeter[index] * miePhasePerSteradian,
 		);
 	}
 
@@ -151,14 +128,7 @@ export class SpectralCalculator {
 	) {
 		return Float64Array.from(
 			viewTransmittance,
-			/**
-			 * Called by the surrounding operation to handle one callback invocation.
-
-			 *
-			 * @param viewSurvival - The view survival value accepted by the operation.
-			 * @param index - The zero-based index accepted by the operation.
-			 * @returns - The callback result returned to its caller.
-			 */ (viewSurvival, index) =>
+			(viewSurvival, index) =>
 				viewSurvival *
 				sourceTransmittance[index] *
 				sourceIrradianceWattsPerSquareMeterPerNanometer[index] *
@@ -244,6 +214,12 @@ export class SpectralCalculator {
 		if (!Number.isInteger(pathIntervalCount) || pathIntervalCount < 1) {
 			throw new RangeError('pathIntervalCount must be a positive integer.');
 		}
+		if (this.dependencies.model?.profile.numerical.viewPath?.kind === 'local-positive-column-v1')
+			return new PositiveColumnViewTransport().createPathPoints(
+				viewRaySegment,
+				pathIntervalCount,
+				/** @type {PositiveColumnViewAtmosphere} */ (this.dependencies.model.atmosphere),
+			);
 
 		const startDistanceMeters = DistanceMath.toMeters(viewRaySegment.startDistance);
 		const endDistanceMeters = DistanceMath.toMeters(viewRaySegment.endDistance);
@@ -631,6 +607,14 @@ export class SpectralCalculator {
 	computeRadiance(viewRaySegment, pathIntegrationPoints, options) {
 		const {model} = this.dependencies;
 		if (!model) throw new TypeError('An execution model is required for cumulative ray transport.');
+		if (model.profile.numerical.viewPath?.kind === 'local-positive-column-v1')
+			return new PositiveColumnViewTransport().computeRadiance({
+				model,
+				atmosphere: /** @type {PositiveColumnViewAtmosphere} */ (model.atmosphere),
+				segment: viewRaySegment,
+				points: pathIntegrationPoints,
+				scatteringCache: options.scatteringCache,
+			});
 		const {geometry, atmosphere} = model;
 		const scatteringCache = options.scatteringCache;
 		const cacheContentIdentity = scatteringCache.sampleProvenanceIdentity;
@@ -734,3 +718,4 @@ export class SpectralCalculator {
 		};
 	}
 }
+import {PositiveColumnViewTransport} from '../PositiveColumnViewTransport.js';

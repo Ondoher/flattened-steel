@@ -560,9 +560,7 @@ class ThreeCacheBackend implements CacheGpuBackend, CachePacketAtlasBackend, Cac
 	 * @param binding - Resident field binding owned by this backend.
 	 * @returns Layer-major scalar field values and their storage layout.
 	 */
-	readRuntimeBindingField(
-		binding: CacheRuntimeBinding,
-	): Promise<Readonly<{storage: CacheFieldStorage; values: Float32Array}>>;
+	readRuntimeBindingField(binding: CacheRuntimeBinding): Promise<CacheScalarFieldReadback>;
 	/**
 	 * Call this method to read selected field scalars while restoring caller-owned
 	 * renderer state.

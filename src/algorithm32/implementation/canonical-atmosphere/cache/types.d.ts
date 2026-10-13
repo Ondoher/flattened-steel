@@ -18,3 +18,11 @@ type CanonicalCacheDensityColumnRequest = Omit<CanonicalCacheColumnRequest, 'wav
 	Readonly<{
 		/** Positive physical density scale height. */ scaleHeight: Distance;
 	}>;
+/** Accepted physical atmosphere and common-frame angular inventories for invariant Mie phase. */
+type CanonicalMiePhaseMatrixDefinition = Readonly<{
+	/** Canonical atmosphere owning the physical phase parameter. */ atmosphere: CanonicalCacheColumnAtmosphere;
+	/** Ordered full positive incoming measure. */ incoming: WeightedDirectionDomain;
+	/** Ordered outgoing physical cache directions. */ outgoing: CubedSphereDirectionDomain;
+}>;
+/** Existing canonical medium facts and legitimate construction contributor used by the analytic shader adapter. */
+type CanonicalExponentialCacheShaderAtmosphere = CanonicalCacheColumnAtmosphere & CacheBuildContributor;

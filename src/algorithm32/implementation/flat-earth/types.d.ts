@@ -355,6 +355,21 @@ type FlatCacheTransportDataRequest = Readonly<
 		}>
 >;
 
+/** Accepted collaborators for geometry-owned compact GPU semantics. */
+type FlatCompactCacheShaderDefinition = Readonly<{
+	/** Bound flat geometry, including canonical physical placement. */ geometry: FlatCompactCacheShaderGeometry;
+	/** Qualified ragged topology and physical support. */ topology: FlatCompactTopology;
+	/** Horizon-partitioned positive incoming quadrature. */ incomingDirections: WeightedDirectionDomain;
+	/** W27 outgoing domain in the same rotated frame. */ outgoingDirections: CubedSphereDirectionDomain;
+}>;
+/** Geometry-owned physical node placement and canonical flat configuration used by shader contributors. */
+type FlatCompactCacheShaderGeometry = GeometryModel &
+	Readonly<{
+		/** Canonical paired source/geometry placement and physical geometry facts. */ configuration: FlatEarthGeometryConfiguration;
+		/** Call this method to resolve an actual ragged node into the canonical physical meridian. */
+		resolveCompactLocalSunCacheNodePosition(request: FlatCompactNodePositionRequest): Position;
+	}>;
+
 /** Type that configures an observer-centered flat atmosphere dome. */
 type FlatObserverCenteredDomeConfig = {
 	/** Value that stores the dome center policy. */

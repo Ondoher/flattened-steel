@@ -56,15 +56,7 @@ function acceptNativeGroundAlbedo(packet) {
 		})
 	);
 
-	if (
-		albedo.values.some(
-			/**
-			 * Called by Array.prototype.some to test one collection value for a matching condition.
-			 * @param value - The value accepted by the operation.
-			 * @returns - The callback result returned to its caller.
-			 */ (value) => value < 0 || value > 1,
-		)
-	) {
+	if (albedo.values.some((value) => value < 0 || value > 1)) {
 		throw new RangeError('Native production profile albedo values must be in [0, 1].');
 	}
 
@@ -83,17 +75,11 @@ export const NATIVE_15_SPECTRAL_BASIS = new SpectralBasis({
 	id: 'algorithm32-native-15-spectral-basis-v1',
 	schemaRevision: SPECTRAL_BASIS_SCHEMA_REVISION,
 	semantics: SPECTRAL_SAMPLE_SEMANTICS.BIN_AVERAGE,
-	channels: CANONICAL_SPECTRAL_CHANNELS.map(
-		/**
-		 * Called by Array.prototype.map to transform one collection value.
-		 * @param channel - The channel value accepted by the operation.
-		 * @returns - The callback result returned to its caller.
-		 */ (channel) => ({
-			id: channel.name,
-			center: channel.wavelength,
-			width: channel.wavelengthBinWidth,
-		}),
-	),
+	channels: CANONICAL_SPECTRAL_CHANNELS.map((channel) => ({
+		id: channel.name,
+		center: channel.wavelength,
+		width: channel.wavelengthBinWidth,
+	})),
 });
 
 /**
@@ -110,13 +96,7 @@ export const NATIVE_SOURCE_IRRADIANCE_DENSITY = /** @type {SpectralIrradiancePac
 		units: SPECTRAL_UNITS.IRRADIANCE_DENSITY,
 		basis: NATIVE_15_SPECTRAL_BASIS,
 		semantics: NATIVE_15_SPECTRAL_BASIS.semantics,
-		values: CANONICAL_SPECTRAL_CHANNELS.map(
-			/**
-			 * Called by Array.prototype.map to transform one collection value.
-			 * @param channel - The channel value accepted by the operation.
-			 * @returns - The callback result returned to its caller.
-			 */ (channel) => channel.sourceIrradiance.value,
-		),
+		values: CANONICAL_SPECTRAL_CHANNELS.map((channel) => channel.sourceIrradiance.value),
 		provenanceIdentity: SOURCE_PROVENANCE_IDENTITY,
 	})
 );
@@ -205,6 +185,7 @@ export const DEFAULT_NATIVE_NUMERICAL_PROFILE = {
  *
  * @param {NativeProductionProfileOverrides} [options] - The identity,
  * spectral, physical-boundary, and numerical overrides.
+ *
  * @returns {NativeProductionProfile} - The constructed production profile.
  * @throws {TypeError} - When an accepted value does not satisfy the required type or shape.
  * @throws {RangeError} - When an accepted value is outside the supported range.

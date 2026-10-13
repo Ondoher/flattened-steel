@@ -4,6 +4,7 @@ import {SpectralBasis, SpectralPacket, SPECTRAL_QUANTITIES, SPECTRAL_UNITS} from
 import {
 	NATIVE_15_SPECTRAL_BASIS,
 	DEFAULT_NATIVE_NUMERICAL_PROFILE,
+	NATIVE_SOURCE_IRRADIANCE_DENSITY,
 } from '../../../profiles/native-15/native-15-profile.js';
 import {CanonicalAtmosphere} from '../../canonical-atmosphere/CanonicalAtmosphere.js';
 import {FlatEarthGeometry} from '../../flat-earth/FlatEarthGeometry.js';
@@ -12,6 +13,7 @@ import {CanonicalExponentialCacheColumn} from '../../canonical-atmosphere/cache/
 import FlatHorizonPartitionedDirectionDomain from '../../../sampling-domains/direction/horizon-partitioned/FlatHorizonPartitionedDirectionDomain.js';
 import {CUBED_SPHERE_W27_DIRECTION_DOMAIN_OWNER} from '../../../sampling-domains/direction/cubed-sphere/consts.js';
 import {LOCAL_SUN_COMPACT_TRANSPORT_POLICY} from './compact-transport-consts.js';
+import {LOCAL_SUN_COMPACT_QUALIFIED_RUNTIME_FAMILY} from './consts.js';
 import LocalSunFieldPacking from './LocalSunFieldPacking.js';
 
 /** Complete explicit compact cache-construction profile; ordinary runtime execution remains a separate integration gate. */
@@ -34,6 +36,8 @@ export class LocalSunCompactConstructionProfile {
 	contentHash;
 	/** Input derivation, separate from executable compatibility. @readonly @type {string} */
 	provenanceIdentity;
+	/** Copied authored topology seeds, distinct from platform-derived floating-point nodes. @type {LocalSunCompactTopologyControls} */
+	_topologyControls;
 
 	/** Called by construction and consumer ingress to derive identity from actual accepted physical/numerical facts.
 	 *
@@ -62,6 +66,7 @@ export class LocalSunCompactConstructionProfile {
 				height: geometry.configuration.localLightSourceHeight,
 				top: geometry.configuration.topAltitude,
 				projectionRadius: geometry.configuration.projectionRadius,
+				radialFallback: geometry.configuration.cacheRadialFallbackDirection,
 			},
 			medium: {
 				constants: atmosphere.constants,
@@ -85,6 +90,39 @@ export class LocalSunCompactConstructionProfile {
 			positions: this.domains.positions,
 			packings: {radiance: this.domains.radiancePacking, scattering: this.domains.scatteringDensityPacking},
 			numerical: this.numerical,
+		});
+	}
+
+	/** Called by runtime admission to compare actual physical/domain facts to the independently qualified family.
+	 * Requested order and incident scale are handled separately; labels and provenance do not execute configuration.
+	 *
+	 * @returns {string} - Comparison-only canonical physical-family signature.
+	 */
+	_runtimeFamilyIdentity() {
+		let {geometry, atmosphere, lightSource} = this.models;
+		let source = lightSource.configuration;
+		return CanonicalValueHash.sha256Value({
+			basis: this.spectral.basis.contentHash,
+			source: {
+				position: source.position,
+				radius: source.radius,
+				referenceDistance: source.referenceDistance,
+				falloff: source.distanceFalloff,
+			},
+			geometry: {
+				height: geometry.configuration.localLightSourceHeight,
+				top: geometry.configuration.topAltitude,
+				projectionRadius: geometry.configuration.projectionRadius,
+				radial: geometry.configuration.cacheRadialFallbackDirection,
+			},
+			medium: atmosphere.constants,
+			topology: this._topologyControls,
+			numerical: {
+				source: this.numerical.sourcePathTransmittance,
+				cache: this.numerical.cacheTransport,
+				view: this.numerical.viewPath,
+				precision: this.numerical.precision,
+			},
 		});
 	}
 
@@ -138,6 +176,12 @@ export class LocalSunCompactConstructionProfile {
 			)
 		)
 			throw new TypeError('Explicit compact seed controls required; extinction is derived from the medium.');
+		this._topologyControls = {
+			coverageRadius: {...topologyControls.coverageRadius},
+			altitudes: topologyControls.altitudes.map((value) => ({...value})),
+			bandRadii: topologyControls.bandRadii.map((value) => ({...value})),
+			boundaryExtinctionLengthMultiples: [...topologyControls.boundaryExtinctionLengthMultiples],
+		};
 		new CanonicalExponentialCacheColumn(atmosphere);
 		let canonical = new CanonicalAtmosphere();
 		if (
@@ -161,6 +205,8 @@ export class LocalSunCompactConstructionProfile {
 		DistanceMath.assertDistance(source.radius, 'Compact profile radius');
 		if (
 			geometry.resolveSourceRelativePosition({position: source.position}).distanceFromSource.value !== 0 ||
+			DistanceMath.toMetersPosition(source.position)[2] !==
+				DistanceMath.toMeters(geometry.configuration.localLightSourceHeight) ||
 			DistanceMath.toMeters(geometry.configuration.localLightSourceHeight) -
 				DistanceMath.toMeters(source.radius) <=
 				DistanceMath.toMeters(geometry.configuration.topAltitude)
@@ -260,6 +306,53 @@ export class LocalSunCompactConstructionProfile {
 		if (profile._currentIdentity() !== profile.contentHash)
 			throw new RangeError('Compact physical facts changed; replacement profile required.');
 		return profile;
+	}
+
+	/** Call this method to select the complete compact policy through the ordinary facade.
+	 * Canonical construction placement is already paired. Celestial and moving-frame
+	 * consumers are separate promotion phases; this explicit selection disables the roster.
+	 *
+	 * @returns {Algorithm32ExecutionProfile} - Complete profile with analytic source semantics.
+	 */
+	createExecutionProfile() {
+		LocalSunCompactConstructionProfile.assert(this);
+		if (
+			this._runtimeFamilyIdentity() !== LOCAL_SUN_COMPACT_QUALIFIED_RUNTIME_FAMILY ||
+			![0, 1].includes(this.models.lightSource.configuration.referenceSpectralIncidentScale) ||
+			CanonicalValueHash.sha256Value(this.spectral.sourceIrradianceDensity.values) !==
+				CanonicalValueHash.sha256Value(NATIVE_SOURCE_IRRADIANCE_DENSITY.values)
+		)
+			throw new RangeError(
+				'Changed compact physical/domain family requires independent qualification before runtime construction.',
+			);
+		return {
+			kind: 'algorithm32-execution-profile',
+			id: this.id,
+			schemaRevision: 'compact-local-runtime-v1',
+			revision: this.revision,
+			contentHash: this.contentHash,
+			provenanceIdentity: this.provenanceIdentity,
+			spectral: this.spectral,
+			models: {
+				...this.models,
+				celestialSources: null,
+				sourcePlacement: {
+					kind: 'explicit-geometry-placement',
+					observation: this.models.geometry.configuration.observation,
+					placement: {kind: 'finite-position', position: this.models.geometry.configuration.sourcePosition},
+				},
+			},
+			numerical: {
+				viewPath: {kind: 'local-positive-column-v1', intervalCount: 15, sampleDistribution: null},
+				sourcePathTransmittance: {kind: 'analytic-exponential-column-v1'},
+				cacheConstruction: {
+					transportIntervalCount: this.numerical.cacheTransport.intervalCount,
+					maximumScatteringOrder: this.numerical.maximumScatteringOrder,
+				},
+			},
+			domains: this.domains,
+			compactConstruction: this,
+		};
 	}
 
 	/** Call this method to estimate full-field spectral payloads before allocation, including declared retained/other GPU resources.

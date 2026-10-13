@@ -7,6 +7,8 @@ import {CachePassAssembler} from '../../../shader-assembly/cache-pass/CachePassA
 import {CacheBuildModules} from '../../../shader-assembly/cache-pass/CacheBuildModules.js';
 import {CacheValues} from '../../../gpu-cache-runtime/CacheValues.js';
 import {LocalSunCache} from './LocalSunCache.js';
+import {LocalSunCompactGpuPlan} from './LocalSunCompactGpuPlan.js';
+import {LocalSunCompactCache} from './LocalSunCompactCache.js';
 import LocalSunConstructionDomainSelection from './LocalSunConstructionDomainSelection.js';
 import {assertLocalSunGeometryPairing} from '../local-sun-geometry-pairing.js';
 import {LOCAL_SUN_CACHE_PLAN_ID, LOCAL_SUN_CACHE_REUSE_KEY_SCHEMA_REVISION} from './consts.js';
@@ -35,6 +37,8 @@ export class LocalSunCacheController {
 	_generation = 0;
 	/** Controller disposal state. @type {boolean} */
 	_disposed = false;
+	/** Explicit compact successor, absent for existing production selections. @type {LocalSunCompactGpuPlan | null} */
+	_compactPlan = null;
 
 	/**
 	 * Called by LocalSunCacheController to create a pure outgoing Jk field
@@ -191,13 +195,7 @@ export class LocalSunCacheController {
 	 * @returns {CachePass} - The cache pass.
 	 */
 	_createPass(definition) {
-		const modules = definition.contributors.map(
-			/**
-			 * Called by Array.prototype.map to transform one collection value.
-			 * @param contributor - The contributor value accepted by the operation.
-			 * @returns - The callback result returned to its caller.
-			 */ (contributor) => contributor.createCacheModule(definition.context),
-		);
+		const modules = definition.contributors.map((contributor) => contributor.createCacheModule(definition.context));
 
 		if (definition.includeGround) {
 			modules.push(
@@ -213,13 +211,7 @@ export class LocalSunCacheController {
 			id: definition.id,
 			kind: definition.context.kind,
 			order: definition.context.order,
-			inputs: definition.context.inputs.map(
-				/**
-				 * Called by Array.prototype.map to transform one collection value.
-				 * @param input - The input value accepted by the operation.
-				 * @returns - The callback result returned to its caller.
-				 */ (input) => input.id,
-			),
+			inputs: definition.context.inputs.map((input) => input.id),
 			output: definition.context.output.id,
 			modules,
 		};
@@ -350,6 +342,14 @@ export class LocalSunCacheController {
 		if (request.signal?.aborted === true) {
 			throw this._createAbortError('Local-Sun cache construction was aborted.');
 		}
+		if (this._compactPlan !== null) {
+			let other = request.otherOwnedGpuBytes;
+			if (other?.units !== 'bytes' || !Number.isSafeInteger(other.value) || other.value < 0)
+				throw new RangeError(
+					'Compact construction requires declared other owned GPU bytes, including external frame/old-cache resources.',
+				);
+			return {...request, otherOwnedGpuBytes: {...other}};
+		}
 
 		return request;
 	}
@@ -367,18 +367,10 @@ export class LocalSunCacheController {
 			return /** Called by link cancellation to handle one invocation of the declared operation. */ () => {};
 		}
 
-		/**
-		 * Called by abort to abort.
-		 * @returns - The callback result returned to its caller.
-		 */ const abort = () => controller.abort();
+		const abort = () => controller.abort();
 		signal.addEventListener('abort', abort, {once: true});
 
-		return (
-			/**
-			 * Called by link cancellation to handle one invocation of the declared operation.
-			 * @returns - The callback result returned to its caller.
-			 */ () => signal.removeEventListener('abort', abort)
-		);
+		return () => signal.removeEventListener('abort', abort);
 	}
 
 	/**
@@ -418,6 +410,47 @@ export class LocalSunCacheController {
 		if (this._active !== null && this._activeReuseKey === reuseKey) {
 			return this._active;
 		}
+		let compactResources;
+		if (this._compactPlan !== null) {
+			let other = request.otherOwnedGpuBytes;
+			if (other?.units !== 'bytes' || !Number.isSafeInteger(other.value) || other.value < 0)
+				throw new RangeError(
+					'Compact construction requires declared other owned GPU bytes, including external frame/old-cache resources.',
+				);
+			let auxiliaryBytes =
+				this._compactPlan.geometryShader
+					.createBindings()
+					.reduce(
+						(sum, binding) => sum + /** @type {CacheDataBinding} */ (binding).value.values.length * 4,
+						0,
+					) +
+				this._compactPlan.nodeFactors.values.length * 4;
+			let oldAuxiliary =
+				this._active instanceof LocalSunCompactCache ? this._active.resources.retainedAuxiliaryBytes.value : 0;
+			let estimate = this._compactPlan.profile.estimateResources({
+				retainedScatteringFields: this._active === null ? 0 : 1,
+				otherOwnedGpuBytes: {value: other.value + auxiliaryBytes * 2 + oldAuxiliary, units: 'bytes'},
+			});
+			if (!estimate.estimateFitsCeiling)
+				throw new RangeError('Compact GPU construction exceeds the P0 owned-allocation ceiling.');
+			let capabilities = this._backend.capabilities;
+			if (
+				!capabilities.supportsArrayRenderTargets ||
+				!capabilities.supportsFloatSampling ||
+				capabilities.scalarFormat !== 'R32F' ||
+				capabilities.maximumTextureSize < 4374 ||
+				capabilities.maximumArrayLayers < 15
+			)
+				throw new RangeError(
+					'Compact cache requires supported WebGL2 R32F array and auxiliary texture capabilities.',
+				);
+			compactResources = {
+				executor: null,
+				admission: estimate,
+				retainedAuxiliaryBytes: {value: auxiliaryBytes, units: /** @type {const} */ ('bytes')},
+				packedTransportData: {value: 0, units: /** @type {const} */ ('bytes')},
+			};
+		}
 
 		const artifact = await this._executor.execute(plan, {
 			scheduler: this._scheduler,
@@ -431,7 +464,19 @@ export class LocalSunCacheController {
 			throw error;
 		}
 
-		const cache = new LocalSunCache(artifact, this._source.createResourceReport(plan, artifact.diagnostics));
+		let cache;
+		try {
+			cache =
+				this._compactPlan === null
+					? new LocalSunCache(artifact, this._source.createResourceReport(plan, artifact.diagnostics))
+					: new LocalSunCompactCache(artifact, this._compactPlan, this._backend, {
+							...compactResources,
+							executor: artifact.diagnostics.memory,
+						});
+		} catch (error) {
+			artifact.dispose();
+			throw error;
+		}
 		const previous = this._active;
 		this._active = cache;
 		this._activeReuseKey = reuseKey;
@@ -451,6 +496,8 @@ export class LocalSunCacheController {
 		this._source = request.source;
 		this._backend = request.backend;
 		this._scheduler = request.scheduler;
+		if (request.model?.profile?.compactConstruction !== undefined)
+			this._compactPlan = new LocalSunCompactGpuPlan(request.model.profile.compactConstruction);
 		this._executor = new CacheGpuExecutor({
 			backend: this._backend,
 			assembler: new CachePassAssembler(),
@@ -459,7 +506,8 @@ export class LocalSunCacheController {
 
 	/**
 	 * Atomically published active local-Sun cache.
-	 * @returns - The active value.
+	 *
+	 * @returns {LocalSunCache|null} - Current owned cache, or no publication.
 	 */
 	get active() {
 		return this._active;
@@ -472,6 +520,11 @@ export class LocalSunCacheController {
 	 * @returns {LocalSunCachePlan} - The source-owned cache build plan.
 	 */
 	createBuildPlan() {
+		if (this._compactPlan !== null)
+			return {
+				...this._compactPlan.createBuildPlan(),
+				resources: {packedTransportData: {value: 0, units: 'bytes'}},
+			};
 		const profile = this._model.profile;
 		const geometry = /** @type {LocalSunCacheBuildGeometry} */ (/** @type {unknown} */ (this._model.geometry));
 		const atmosphere = /** @type {AtmosphereModel & CacheBuildContributor} */ (this._model.atmosphere);
@@ -672,12 +725,7 @@ export class LocalSunCacheController {
 		this._latestCancellation = cancellation;
 		const unlinkCancellation = this._linkCancellation(accepted.signal, cancellation);
 		const predecessor = this._tail;
-		const operation = predecessor.then(
-			/**
-			 * Called by the promise continuation to handle one callback invocation.
-			 * @returns - The callback result returned to its caller.
-			 */ () => this._executeGeneration(generation, accepted, cancellation),
-		);
+		const operation = predecessor.then(() => this._executeGeneration(generation, accepted, cancellation));
 		this._tail = operation.then(
 			/** Called by the promise continuation to handle one callback invocation. */ () => {},
 			/** Called by the promise continuation to handle one callback invocation. */ () => {},

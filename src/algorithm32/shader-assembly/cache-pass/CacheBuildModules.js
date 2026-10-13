@@ -10,14 +10,7 @@ export const CacheBuildModules = {
 	 */
 	fieldInputBindingName(fieldId) {
 		const bytes = new TextEncoder().encode(fieldId);
-		const encoded = Array.from(
-			bytes,
-			/**
-			 * Called by the surrounding operation to handle one callback invocation.
-			 * @param value - The value accepted by the operation.
-			 * @returns - The callback result returned to its caller.
-			 */ (value) => value.toString(16).padStart(2, '0'),
-		).join('');
+		const encoded = Array.from(bytes, (value) => value.toString(16).padStart(2, '0')).join('');
 		return `a32CacheField_${encoded}`;
 	},
 
@@ -53,22 +46,10 @@ export const CacheBuildModules = {
 	 */
 	createBuildModule(definition) {
 		const blocks = [...definition.blocks].sort(
-			/**
-			 * Called by Array.prototype.sort to compare two collection values.
-			 * @param left - The left value accepted by the operation.
-			 * @param right - The right value accepted by the operation.
-			 * @returns - The callback result returned to its caller.
-			 */ (left, right) =>
+			(left, right) =>
 				left.phase.localeCompare(right.phase) || left.order - right.order || left.id.localeCompare(right.id),
 		);
-		const bindings = [...definition.bindings].sort(
-			/**
-			 * Called by Array.prototype.sort to compare two collection values.
-			 * @param left - The left value accepted by the operation.
-			 * @param right - The right value accepted by the operation.
-			 * @returns - The callback result returned to its caller.
-			 */ (left, right) => left.spec.id.localeCompare(right.spec.id),
-		);
+		const bindings = [...definition.bindings].sort((left, right) => left.spec.id.localeCompare(right.spec.id));
 		const body = {
 			id: definition.id,
 			owner: definition.owner,
@@ -79,16 +60,10 @@ export const CacheBuildModules = {
 		};
 		const identity = {
 			...body,
-			bindings: bindings.map(
-				/**
-				 * Called by Array.prototype.map to transform one collection value.
-				 * @param binding - The binding value accepted by the operation.
-				 * @returns - The callback result returned to its caller.
-				 */ (binding) => ({
-					spec: binding.spec,
-					value: CacheBuildModules.bindingIdentity(binding),
-				}),
-			),
+			bindings: bindings.map((binding) => ({
+				spec: binding.spec,
+				value: CacheBuildModules.bindingIdentity(binding),
+			})),
 		};
 
 		return /** @type {CacheBuildModule} */ ({

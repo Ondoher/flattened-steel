@@ -192,6 +192,8 @@ type ShaderSetupRequest = {
 
 	/** Optional callback that yields cache construction at executor-defined boundaries. */
 	cacheBuildScheduler?: CacheBuildScheduler;
+	/** Additional owned GPU bytes including old frames, other caches and shader/shadow resources; required for explicit compact selection. */
+	otherOwnedGpuBytes?: UnitValue<'bytes'>;
 
 	/** Cancel an in-progress source-owned cache construction. */
 	signal?: AbortSignal;

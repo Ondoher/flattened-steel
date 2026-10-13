@@ -106,3 +106,9 @@ export const LOCAL_SUN_CACHE_REQUIREMENTS_BY_PASS = {
 
 /** Value that identifies position-dependent source irradiance used by reflected J2. */
 export const LOCAL_SUN_CACHE_IRRADIANCE_SYMBOL = 'lightSource.irradiance';
+/** Comparison-only admission signature of the P1/P2 qualified physical/domain family.
+ * Derived from accepted P0 inputs and whole-field P2 control identity; never constructs configuration.
+ * Source scale 1 is physically qualified; zero is the analytic black-source control.
+ */
+export const LOCAL_SUN_COMPACT_QUALIFIED_RUNTIME_FAMILY =
+	'sha256:a08bde33cee4570d588b20c6e2e7fb461805b0058245a4d8900cdf20d4cd8d1a';

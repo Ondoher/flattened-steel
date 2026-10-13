@@ -5,6 +5,7 @@ import {createNativeExecutionProfile, NATIVE_15_SPECTRAL_BASIS} from '../../prof
 import {CelestialSourceRoster} from '../../celestial-source-support/CelestialSourceRoster.js';
 import {DEFAULT_DISTANT_SUN_CONSTRUCTION_DOMAIN_SELECTION} from '../distant-sun/cache/consts.js';
 import LocalSunConstructionDomainSelection from '../local-sun/cache/LocalSunConstructionDomainSelection.js';
+import {LocalSunCompactConstructionProfile} from '../local-sun/cache/LocalSunCompactConstructionProfile.js';
 import {SpectralBasis, SpectralPacket} from '../../spectral-values/index.js';
 import {GeometryDirections} from '../../geometry-support/GeometryDirections.js';
 import DistanceMath from '../../math/DistanceMath.js';
@@ -287,6 +288,30 @@ export class Algorithm32 {
 		if (!profile || typeof profile !== 'object' || profile.kind !== 'algorithm32-execution-profile') {
 			throw new TypeError('Algorithm32 explicit profile must be a complete execution profile.');
 		}
+		if (profile.compactConstruction !== undefined) {
+			let compact = LocalSunCompactConstructionProfile.assert(profile.compactConstruction);
+			let expected = compact.createExecutionProfile();
+			if (
+				Object.hasOwn(profile.numerical.sourcePathTransmittance, 'intervalCount') ||
+				profile.contentHash !== compact.contentHash ||
+				profile.domains !== compact.domains ||
+				profile.models.geometry !== compact.models.geometry ||
+				profile.models.atmosphere !== compact.models.atmosphere ||
+				profile.models.lightSource !== compact.models.lightSource ||
+				profile.models.groundBoundary !== null ||
+				profile.models.celestialSources !== null ||
+				JSON.stringify(profile.numerical) !== JSON.stringify(expected.numerical) ||
+				JSON.stringify(profile.models.sourcePlacement) !== JSON.stringify(expected.models.sourcePlacement)
+			)
+				throw new RangeError(
+					'Compact runtime selection must retain its complete accepted profile and canonical placement.',
+				);
+		} else if (
+			profile.numerical?.sourcePathTransmittance?.kind !== undefined ||
+			profile.numerical?.viewPath?.kind !== undefined
+		) {
+			throw new RangeError('Analytic compact policies require a genuine compact construction capability.');
+		}
 		for (const [name, value] of [
 			['id', profile.id],
 			['schemaRevision', profile.schemaRevision],
@@ -380,10 +405,12 @@ export class Algorithm32 {
 		}
 		const numerical = profile.numerical;
 		this._assertProfileIntervalCount(numerical?.viewPath?.intervalCount, 'viewPath.intervalCount');
-		this._assertProfileIntervalCount(
-			numerical?.sourcePathTransmittance?.intervalCount,
-			'sourcePathTransmittance.intervalCount',
-		);
+		if (profile.compactConstruction === undefined) {
+			this._assertProfileIntervalCount(
+				numerical?.sourcePathTransmittance?.intervalCount,
+				'sourcePathTransmittance.intervalCount',
+			);
+		}
 		this._assertProfileIntervalCount(
 			numerical?.cacheConstruction?.transportIntervalCount,
 			'cacheConstruction.transportIntervalCount',
@@ -574,17 +601,19 @@ export class Algorithm32 {
 		if ('profile' in acceptedConfig) {
 			profile = acceptedConfig.profile;
 			const placementSelection = profile.models.sourcePlacement;
-			profile.models.geometry.configureLightSource({
-				lightSource: /** @type {LightSourceModel & GeometryConfigurableLightSource} */ (
-					profile.models.lightSource
-				),
-				observation: placementSelection.observation,
-				...(placementSelection.kind === 'explicit-geometry-placement'
-					? {placement: placementSelection.placement}
-					: {}),
-				domains: profile.domains,
-			});
-			profile.models.geometry.configureExecutionDomains?.(profile.domains);
+			if (profile.compactConstruction === undefined)
+				profile.models.geometry.configureLightSource({
+					lightSource: /** @type {LightSourceModel & GeometryConfigurableLightSource} */ (
+						profile.models.lightSource
+					),
+					observation: placementSelection.observation,
+					...(placementSelection.kind === 'explicit-geometry-placement'
+						? {placement: placementSelection.placement}
+						: {}),
+					domains: profile.domains,
+				});
+			if (profile.compactConstruction === undefined)
+				profile.models.geometry.configureExecutionDomains?.(profile.domains);
 		} else {
 			if (typeof acceptedConfig.geometry.configureLightSource !== 'function') {
 				throw new TypeError('Algorithm32 geometry must implement configureLightSource.');
@@ -767,6 +796,7 @@ export class Algorithm32 {
 	 * @param {ConfigSnapshot} config - Supplies the accepted config snapshot.
 	 * @param {ShaderBuildRequestOptions} [options] - Supplies replacement state
 	 * and cancellation.
+	 *
 	 * @returns {ShaderBuildRequest} - The internal build request.
 	 */
 	_createShaderBuildRequest(setup, config, options = {}) {
@@ -929,6 +959,7 @@ export class Algorithm32 {
 	 *
 	 * @param {Config} config - Supplies the replacement Algorithm32
 	 * configuration.
+	 *
 	 * @returns {ConfigSnapshot} - The accepted configuration snapshot.
 	 */
 	setConfig(config) {
@@ -992,6 +1023,7 @@ export class Algorithm32 {
 	 *
 	 * @param {ShaderSetupRequest} request - Supplies the caller-owned Three
 	 * runtime attachment handles.
+	 *
 	 * @returns {Promise<ShaderHandle>} - The installed runtime shader handle.
 	 * @throws {Error} - When the operation cannot complete its caller-observable contract.
 	 */
@@ -1054,6 +1086,7 @@ export class Algorithm32 {
 	 *
 	 * @param {EvaluationRequest} request - Supplies one accepted evaluation
 	 * request.
+	 *
 	 * @returns {EvaluationResult} - The spectral evaluation result.
 	 */
 	evaluate(request) {

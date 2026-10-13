@@ -121,6 +121,7 @@ export class CanonicalAtmosphere {
 	 *
 	 * @param {CanonicalAtmosphereConstants} constants - Supplies accepted
 	 * atmosphere constants.
+	 *
 	 * @returns {void} - No value.
 	 * @throws {TypeError} - When a scalar constant is not finite.
 	 * @throws {RangeError} - When a scale height is not positive and finite.
@@ -200,12 +201,8 @@ export class CanonicalAtmosphere {
 	_atmosphereConstantsBlock(facts, spectralBasis) {
 		const rayleighScaleHeightMeters = DistanceMath.toMeters(facts.rayleighScaleHeight);
 		const mieScaleHeightMeters = DistanceMath.toMeters(facts.mieScaleHeight);
-		const wavelengthMicrometers = spectralBasis.channels.map(
-			/**
-			 * Called by Array.prototype.map to transform one collection value.
-			 * @param channel - The channel value accepted by the operation.
-			 * @returns - The callback result returned to its caller.
-			 */ (channel) => this._wavelengthMicrometersForChannel(channel),
+		const wavelengthMicrometers = spectralBasis.channels.map((channel) =>
+			this._wavelengthMicrometersForChannel(channel),
 		);
 		const spectralChannelCount = spectralBasis.channelCount;
 
@@ -445,13 +442,7 @@ float cacheExtinction(${coordinateParameter}, int wavelengthIndex) {
 			quantity: 'wavelength',
 			units: 'nanometers',
 			shape: [this._spectralBasis.channelCount],
-			values: this._spectralBasis.channels.map(
-				/**
-				 * Called by Array.prototype.map to transform one collection value.
-				 * @param channel - The channel value accepted by the operation.
-				 * @returns - The callback result returned to its caller.
-				 */ (channel) => WavelengthMath.toNanometers(channel.center),
-			),
+			values: this._spectralBasis.channels.map((channel) => WavelengthMath.toNanometers(channel.center)),
 		});
 		/** @type {CacheBinding[]} */
 		const bindings = [
@@ -509,11 +500,7 @@ float cacheExtinction(${coordinateParameter}, int wavelengthIndex) {
 					},
 				],
 			]).map(
-				/**
-				 * Called by Array.prototype.map to transform one collection value.
-				 * @param input1 - The destructured input accepted by the operation.
-				 * @returns - The callback result returned to its caller.
-				 */ ([id, name, value]) =>
+				([id, name, value]) =>
 					/** @type {CacheBinding} */ ({
 						spec: {
 							id: `canonical-atmosphere-${id}`,
@@ -808,13 +795,7 @@ float cacheCelestialPathTransmittance(
 	 * @returns {readonly number[]} - Return the zero-valued spectrum.
 	 */
 	_zero() {
-		return Array.from(
-			{length: this._spectralBasis.channelCount},
-			/**
-			 * Called by the surrounding operation to handle one callback invocation.
-			 * @returns - The callback result returned to its caller.
-			 */ () => 0,
-		);
+		return Array.from({length: this._spectralBasis.channelCount}, () => 0);
 	}
 
 	/**
@@ -823,13 +804,7 @@ float cacheCelestialPathTransmittance(
 	 * @returns {number[]} - Return zero-valued working storage.
 	 */
 	_zeroMutable() {
-		return Array.from(
-			{length: this._spectralBasis.channelCount},
-			/**
-			 * Called by the surrounding operation to handle one callback invocation.
-			 * @returns - The callback result returned to its caller.
-			 */ () => 0,
-		);
+		return Array.from({length: this._spectralBasis.channelCount}, () => 0);
 	}
 
 	/**
@@ -865,6 +840,7 @@ float cacheCelestialPathTransmittance(
 	 *
 	 * @param {AtmosphereCoordinate} coordinate - Supplies the atmosphere
 	 * coordinate.
+	 *
 	 * @returns {AtmosphereSample} - The sampled medium coefficients.
 	 */
 	sampleMedium(coordinate) {
@@ -884,29 +860,13 @@ float cacheCelestialPathTransmittance(
 		);
 		const mieExtinctionValues = this._seaLevelMieExtinction.values.map((value) => density.mie * value);
 		const mieScatteringValues = mieExtinctionValues.map(
-			/**
-			 * Called by Array.prototype.map to transform one collection value.
-			 * @param value - The value accepted by the operation.
-			 * @returns - The callback result returned to its caller.
-			 */ (value) => value * this._constants.mieSingleScatteringAlbedo,
+			(value) => value * this._constants.mieSingleScatteringAlbedo,
 		);
 		const absorptionValues = this._zero();
 		const extinctionValues = rayleighScatteringValues.map(
-			/**
-			 * Called by Array.prototype.map to transform one collection value.
-			 * @param value - The value accepted by the operation.
-			 * @param index - The zero-based index accepted by the operation.
-			 * @returns - The callback result returned to its caller.
-			 */ (value, index) => value + mieExtinctionValues[index] + absorptionValues[index],
+			(value, index) => value + mieExtinctionValues[index] + absorptionValues[index],
 		);
-		const scatteringValues = rayleighScatteringValues.map(
-			/**
-			 * Called by Array.prototype.map to transform one collection value.
-			 * @param value - The value accepted by the operation.
-			 * @param index - The zero-based index accepted by the operation.
-			 * @returns - The callback result returned to its caller.
-			 */ (value, index) => value + mieScatteringValues[index],
-		);
+		const scatteringValues = rayleighScatteringValues.map((value, index) => value + mieScatteringValues[index]);
 		const rayleighScattering = /** @type {SpectralScatteringCoefficientPacket} */ (
 			this._createAtmospherePacket(
 				SPECTRAL_QUANTITIES.SCATTERING_COEFFICIENT,
@@ -1019,13 +979,7 @@ float cacheCelestialPathTransmittance(
 			this._createAtmospherePacket(
 				SPECTRAL_QUANTITIES.TRANSMITTANCE,
 				SPECTRAL_UNITS.DIMENSIONLESS,
-				opticalDepth.map(
-					/**
-					 * Called by Array.prototype.map to transform one collection value.
-					 * @param value - The value accepted by the operation.
-					 * @returns - The callback result returned to its caller.
-					 */ (value) => Math.exp(-value),
-				),
+				opticalDepth.map((value) => Math.exp(-value)),
 				'path-transmittance',
 			)
 		);

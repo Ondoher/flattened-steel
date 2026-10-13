@@ -22,6 +22,7 @@ import {
 
 /**
  * Flat z-up geometry for local-source atmosphere transport.
+ *
  * @implements {GeometryModel}
  * @implements {CacheBuildContributor}
  * @implements {CacheTransportDataProvider<FlatCacheTransportDataRequest>}
@@ -50,6 +51,7 @@ export class FlatEarthGeometry {
 
 	/**
 	 * Resolve the finite source center from one geographic observation.
+	 *
 	 * @param {GeometryObservation} observation - The normalized observation.
 	 * @returns {Position} - The finite source center in flat model space.
 	 */
@@ -89,6 +91,7 @@ export class FlatEarthGeometry {
 
 	/**
 	 * Called by FlatEarthGeometry to derive the configured final-view-only observer dome. It returns the value from the first satisfied branch, otherwise the operation's final fallback.
+	 *
 	 * @param {readonly number[]} observerPositionMeters - The observer position.
 	 * @param {FlatObserverCenteredDomeConfig | null} domeConfig - The dome config.
 	 * @returns {FlatObserverCenteredDomeFacts | null} - The derived dome facts.
@@ -140,18 +143,16 @@ export class FlatEarthGeometry {
 
 	/**
 	 * Called by FlatEarthGeometry to scale one selected dimensionless node-placement profile to its bound.
+	 *
 	 * @param {number} maximumMeters - The configured upper endpoint.
 	 * @param {FlatEarthGeometryNodePlacementFractions} fractions - The ordered
 	 * numerator/denominator fractions.
+	 *
 	 * @returns {readonly Distance[]} - The ordered unit-bearing nodes.
 	 */
 	_scaledDistanceNodes(maximumMeters, fractions) {
-		return fractions.map(
-			/**
-			 * Called by Array.prototype.map to transform one collection value.
-			 * @param input1 - The destructured input accepted by the operation.
-			 * @returns - The callback result returned to its caller.
-			 */ ([numerator, denominator]) => DistanceMath.inMeters((maximumMeters * numerator) / denominator),
+		return fractions.map(([numerator, denominator]) =>
+			DistanceMath.inMeters((maximumMeters * numerator) / denominator),
 		);
 	}
 
@@ -162,6 +163,7 @@ export class FlatEarthGeometry {
 	 * @param {number} maximumMeters - The allowed maximum.
 	 * @param {FlatEarthGeometryNodePlacementFractions} defaultFractions - The
 	 * selected default node-placement fractions.
+	 *
 	 * @param {string} label - The diagnostic label.
 	 * @returns {readonly Distance[]} - The normalized ordered nodes.
 	 * @throws {RangeError} - When an accepted value is outside the supported range.
@@ -175,23 +177,15 @@ export class FlatEarthGeometry {
 		}
 
 		let previousMeters = Number.NEGATIVE_INFINITY;
-		return values.map(
-			/**
-			 * Called by Array.prototype.map to transform one collection value.
-			 * @param distance - The distance value accepted by the operation.
-			 * @param index - The zero-based index accepted by the operation.
-			 * @returns - The callback result returned to its caller.
-			 * @throws {RangeError} - When an accepted value is outside the supported range.
-			 */ (distance, index) => {
-				DistanceMath.assertDistance(distance, `${label}[${index}]`);
-				const meters = DistanceMath.toMeters(distance);
-				if (meters < 0 || meters > maximumMeters || meters <= previousMeters) {
-					throw new RangeError(`${label} must be strictly increasing within the selected domain.`);
-				}
-				previousMeters = meters;
-				return DistanceMath.inMeters(meters);
-			},
-		);
+		return values.map((distance, index) => {
+			DistanceMath.assertDistance(distance, `${label}[${index}]`);
+			const meters = DistanceMath.toMeters(distance);
+			if (meters < 0 || meters > maximumMeters || meters <= previousMeters) {
+				throw new RangeError(`${label} must be strictly increasing within the selected domain.`);
+			}
+			previousMeters = meters;
+			return DistanceMath.inMeters(meters);
+		});
 	}
 
 	/**
@@ -199,6 +193,7 @@ export class FlatEarthGeometry {
 	 *
 	 * @param {FlatEarthGeometryConfig} configuration - The observer,
 	 * source, atmosphere domain, and integration policy.
+	 *
 	 * @throws {TypeError} - When an accepted value does not satisfy the required type or shape.
 	 * @throws {RangeError} - When an accepted value is outside the supported range.
 	 */
@@ -420,6 +415,7 @@ export class FlatEarthGeometry {
 	 *
 	 * @param {FlatLocalCachePositionDomainRequest} [request] - The optional
 	 * generated-axis count overrides.
+	 *
 	 * @returns {FlatLocalCachePositionDomain} - The executable domain packet.
 	 */
 	createLocalSunCachePositionDomain(request = {}) {
@@ -652,13 +648,7 @@ export class FlatEarthGeometry {
 			this.distanceToGroundBoundary(originPosition, direction),
 			this.distanceToTopAtmosphereBoundary(originPosition, direction),
 			this.distanceToObserverCenteredDomeBoundary(originPosition, direction),
-		].filter(
-			/**
-			 * Called by Array.prototype.filter to test whether one collection value is retained.
-			 * @param distance - The distance value accepted by the operation.
-			 * @returns - The callback result returned to its caller.
-			 */ (distance) => distance !== null,
-		);
+		].filter((distance) => distance !== null);
 
 		if (candidates.length > 0) {
 			return Math.min(...candidates);
@@ -697,6 +687,7 @@ export class FlatEarthGeometry {
 	 *
 	 * @param {Position} position - The
 	 * model-space position.
+	 *
 	 * @returns {AtmosphereCoordinate} - The atmosphere coordinate.
 	 */
 	resolveAtmosphereCoordinate(position) {
@@ -953,6 +944,7 @@ export class FlatEarthGeometry {
 
 	/**
 	 * Call this method to resolve the configured local-Sun center in Flat model space.
+	 *
 	 * @param {CelestialPlacementResolutionRequest} request - Accepted roster and observation.
 	 * @returns {readonly CelestialResolvedPlacement[]} - Sole finite-Sun placement.
 	 */
@@ -970,6 +962,7 @@ export class FlatEarthGeometry {
 
 	/**
 	 * Call this method to describe the sole source-relative construction sample.
+	 *
 	 * @param {CelestialBuildSampleRequest} request - Domain, placement, and coordinates.
 	 * @returns {CelestialBuildSample} - Geometry-owned finite-source sample.
 	 */
@@ -1000,6 +993,7 @@ export class FlatEarthGeometry {
 
 	/**
 	 * Call this method to create immutable Flat finite-Sun query facts.
+	 *
 	 * @param {CelestialSourceRoster} roster - Accepted Flat roster.
 	 * @param {readonly CelestialResolvedPlacement[]} placements - Geometry placements.
 	 * @returns {FlatFiniteSunCelestialQueryPacket} - Complete query packet.
@@ -1025,6 +1019,7 @@ export class FlatEarthGeometry {
 
 	/**
 	 * Call this method to publish no additional stencil for the source-relative field.
+	 *
 	 * @param {CelestialCacheShaderContributionRequest} _request - Trusted query request.
 	 * @returns {ShaderContribution} - Empty geometry-owned celestial contribution.
 	 */
@@ -1049,6 +1044,7 @@ export class FlatEarthGeometry {
 	 *
 	 * @param {FlatScatteringCachePositionStencilRequest} request - The
 	 * physical coordinates and an optional matching position domain.
+	 *
 	 * @returns {ScatteringCachePositionStencil} - The weighted taps, with up to four entries.
 	 */
 	resolveScatteringCachePositionStencil(request) {
@@ -1060,6 +1056,7 @@ export class FlatEarthGeometry {
 	 *
 	 * @param {FlatScatteringCachePositionStencilRequest} request - The
 	 * physical coordinates and an optional matching position domain.
+	 *
 	 * @returns {ScatteringCachePositionStencil} - The weighted taps, with up to four entries.
 	 */
 	resolveScatteringCacheConstructionPositionStencil(request) {
@@ -1071,6 +1068,7 @@ export class FlatEarthGeometry {
 	 *
 	 * @param {ScatteringCacheDirectionRequest} request - The physical
 	 * position and direction.
+	 *
 	 * @returns {UnitVector3} - The source-local direction.
 	 */
 	expressScatteringCacheDirection(request) {
@@ -1082,6 +1080,7 @@ export class FlatEarthGeometry {
 	 *
 	 * @param {ScatteringCacheDirectionRequest} request - The physical
 	 * position and direction.
+	 *
 	 * @returns {ScatteringCacheDirectionStencil} - The up to four W27 taps.
 	 */
 	resolveScatteringCacheDirectionStencil(request) {
@@ -1122,6 +1121,7 @@ export class FlatEarthGeometry {
 	 *
 	 * @param {FlatScatteringCacheFramedDirectionRequest} request - The
 	 * physical position and source-local direction.
+	 *
 	 * @returns {UnitVector3} - The physical direction.
 	 */
 	expressPhysicalScatteringCacheDirection(request) {
@@ -1212,6 +1212,7 @@ export class FlatEarthGeometry {
 	 *
 	 * @param {GeometryThreeEndpointObjectsRequest} [request] - The scene
 	 * scale, material, segmentation, and metadata overrides.
+	 *
 	 * @returns {GeometryThreeEndpointObjects} - The geometry-owned endpoint objects.
 	 */
 	createThreeEndpointObjects(request = {}) {
@@ -1223,6 +1224,7 @@ export class FlatEarthGeometry {
 	 *
 	 * @param {GeometrySceneDepthMaxRequest} [request] - The optional
 	 * endpoint extent and minimum cap policy.
+	 *
 	 * @returns {Distance} - The scene-depth cap.
 	 */
 	resolveSceneDepthMax(request = {}) {
