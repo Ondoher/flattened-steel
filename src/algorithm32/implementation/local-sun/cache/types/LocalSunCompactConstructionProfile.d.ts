@@ -14,6 +14,10 @@ class LocalSunCompactConstructionProfile {
 	static assert(profile: unknown): LocalSunCompactConstructionProfile;
 	/** Call this method to select analytic compact construction and lookup through the ordinary facade. */
 	createExecutionProfile(): Algorithm32ExecutionProfile;
+	/** Call this method to create an independently paired exact live profile. */
+	createLiveProfile(request: LocalSunLiveProfileRequest): LocalSunCompactConstructionProfile;
+	/** Call this method to canonicalize horizontal placement while retaining all construction physics. */
+	createCanonicalConstructionProfile(): LocalSunCompactConstructionProfile;
 	/** Call this method to estimate all declared logical owned GPU payload before admission. */
 	estimateResources(request: LocalSunCompactResourceEstimateRequest): LocalSunCompactResourceEstimate;
 }

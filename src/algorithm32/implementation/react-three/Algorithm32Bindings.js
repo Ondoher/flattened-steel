@@ -58,7 +58,7 @@ export const Algorithm32Bindings = {
 			bindingValues['geometry.cameraGroundRelativePosition']
 		);
 		const cameraScenePosition = camera.getWorldPosition(camera.position.clone());
-		const geometry = props.config.geometry;
+		const geometry = 'profile' in props.config ? props.config.profile.models.geometry : props.config.geometry;
 		const modelPosition = geometry.mapObserverLocalScenePointToModelPosition(
 			SceneMath.positionInSceneUnits([cameraScenePosition.x, cameraScenePosition.y, cameraScenePosition.z]),
 			{sceneScale: props.sceneScale},

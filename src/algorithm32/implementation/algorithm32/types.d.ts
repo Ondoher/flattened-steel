@@ -117,8 +117,7 @@ type Algorithm32ReceiverPreparationRequest = {
 	/** Renderer used for bounded environment sampling. */ renderer: unknown;
 	/** Renderer-owned cache and reduction backend. */ backend: CacheGpuBackend & CacheProbeReader;
 	/** Candidate configured physical geometry. */ geometry: GeometryModel;
-	/** Candidate configured distant source with unchanged irradiance and radius. */ lightSource: LightSourceModel &
-		DistantSunCelestialSource;
+	/** Candidate configured atmospheric source; placement/intrinsic facts remain its owner's contract. */ lightSource: LightSourceModel;
 	/** Candidate observation. */ observation: GeometryObservation;
 	/** Borrowed complete candidate cache facade. */ scatteringCache: GpuScatteringCache;
 	/** Complete candidate selection identity. */ identity: string;

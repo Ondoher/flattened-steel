@@ -1,3 +1,7 @@
+/** Genuine physical factory result, including the full geometry/source/medium capabilities needed by production profiles. */
+type LocalSunAssemblyPhysicalDefinition = LocalSunCompactCpuAssemblyDefinition &
+	Pick<LocalSunCompactProfileModels, 'geometry' | 'atmosphere' | 'lightSource'>;
+
 /** Frozen selected construction controls; physical values have their explicitly declared fixture units. */
 type LocalSunAssemblyFixture = Readonly<{
 	/** Portable authority schema. */ schema: string;

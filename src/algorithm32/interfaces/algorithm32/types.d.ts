@@ -175,6 +175,8 @@ type ShaderRuntimeConfig = {
 
 /** Type that provides caller-owned Three/runtime handles for shader setup. */
 type ShaderSetupRequest = {
+	/** Pre-admitted complete-frame lease, consumed and owned by automatic configured-model setup; caller retains responsibility before consumption or for explicit manual assembly. */
+	preparedScatteringCacheController?: CacheController;
 	/** Value that provides the caller's existing postprocess composer. */
 	composer: unknown;
 

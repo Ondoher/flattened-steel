@@ -32,6 +32,10 @@ export class LocalSunCompactGpuPlan {
 	constructor(candidate) {
 		let profile = LocalSunCompactConstructionProfile.assert(candidate);
 		profile.createExecutionProfile();
+		if (profile.models.lightSource.configuration.position.coordinates.slice(0, 2).some((value) => value !== 0))
+			throw new RangeError(
+				'Compact construction requires canonical horizontal placement; live frames must use an admitted cache lease.',
+			);
 		this.profile = profile;
 		let {geometry, atmosphere} = profile.models;
 		let {topology, incomingDirections, outgoingDirections} = profile.domains;

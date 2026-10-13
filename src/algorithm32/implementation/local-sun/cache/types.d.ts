@@ -747,13 +747,15 @@ type LocalSunCompactProfileGeometry = FlatCompactCacheShaderGeometry &
 	Readonly<{
 		/** Call this method to construct the geometry-owned ragged domain from explicit accepted controls. */
 		createCompactLocalSunCacheTopology(request: FlatCompactTopologyRequest): FlatCompactTopology;
+		/** Call this method to construct an independent geometry with exact live placement. */
+		createLocalFrameGeometry(request: FlatLocalFrameGeometryRequest): LocalSunCompactProfileGeometry;
 		/** Call this method to rotate a cache-frame unit direction into the physical node frame. */
 		expressPhysicalScatteringCacheDirection(request: FlatScatteringCacheFramedDirectionRequest): UnitVector3;
 	}>;
 /** Accepted physical medium and legitimate construction contributor; no concrete implementation alias. */
 type LocalSunCompactProfileAtmosphere = AtmosphereModel & CanonicalExponentialCacheShaderAtmosphere;
 /** Bound finite physical source and geometry placement capability retained by the profile. */
-type LocalSunCompactProfileSource = LocalSunCacheProviderSource & GeometryConfigurableLightSource;
+type LocalSunCompactProfileSource = LocalSunCacheProviderSource & GeometryConfigurableLightSource & LightSourceModel;
 /** Complete authored compact seed inputs; medium-dependent refinement is derived by the profile. */
 type LocalSunCompactTopologyControls = Readonly<{
 	/** Explicit source-centered cylinder radius. */ coverageRadius: Distance;

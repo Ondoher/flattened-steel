@@ -4,8 +4,9 @@
  * - **"omission"** - Exact equivalent unculled occupied fields and zero slots.
  * - **"cleanup"** - Required admission/cancellation/failure resource release.
  * - **"zero"** - Analytic black-source GPU fields and runtime queries.
+ * - **"reuse"** - Canonical field reuse and complete local-frame preparation/publication.
  */
-type LocalSunGpuQualificationMode = 'fields' | 'runtime' | 'omission' | 'cleanup' | 'zero';
+type LocalSunGpuQualificationMode = 'fields' | 'runtime' | 'omission' | 'cleanup' | 'zero' | 'reuse';
 /** Qualification disposition.
  * - **"passed"** - All declared comparisons passed.
  * - **"failed"** - A declared comparison or execution gate failed.
@@ -42,12 +43,16 @@ type LocalSunGpuRendererIdentity = Readonly<{
 }>;
 /** Explicit offline run selection. */
 type LocalSunGpuQualificationRequest = Readonly<{
+	/** Optional exact composer precision for explicit frame reuse proof; default float32. */ sceneColorPrecision?: Flat32SceneColorPrecision;
 	/** Actual requested ordinary order. */ order: SupportedCacheScatteringOrder;
 	/** New five-digit immutable output serial. */ serial: string;
 	/** Bounded proof unit. */ mode: LocalSunGpuQualificationMode;
 }>;
 /** Authenticated physical inputs supplied to the owned browser entry. */
 type LocalSunGpuBrowserProofRequest = Readonly<{
+	/** Explicit complete-frame composer storage, independent from R32F physical fields. */ sceneColorPrecision?: Flat32SceneColorPrecision;
+	/** Exact independently retained day controls, only for the explicit reuse lane. */ movement?: readonly LocalSunFrameGpuMovementState[];
+	/** Independently qualified P2 complete cumulative field identity. */ qualifiedFieldHash?: string;
 	/** Frozen P0 seed/input controls; candidate construction never reads expected numerical outputs. */ p0: LocalSunP0Fixture;
 	/** Independently frozen selected physical spectra. */ controls: LocalSunPhysicalControls;
 	/** Actual construction order. */ order: SupportedCacheScatteringOrder;
@@ -55,6 +60,7 @@ type LocalSunGpuBrowserProofRequest = Readonly<{
 	/** Ordinary runtime proof enabled. */ runtime: boolean;
 	/** Equivalent unculled proof enabled. */ omission: boolean;
 	/** Resource cleanup proof enabled. */ cleanup: boolean;
+	/** Complete local frame preparation/reuse proof enabled. */ reuse?: boolean;
 	/** Analytic source intensity control; omitted is the physical reference selection. */ sourceScale?: 0 | 1;
 }>;
 /** Owned offline browser RPC surface. */
@@ -249,6 +255,7 @@ type LocalSunGpuSavedField = Readonly<{
 }>;
 /** Browser qualification result; final completion also requires the independent standards ledger. */
 type LocalSunGpuBrowserProofReport = {
+	/** Optional complete local frame reuse/publication proof. */ reuse?: LocalSunFrameGpuProofReport;
 	/** Actual numerical disposition. */ state: LocalSunGpuProofState;
 	/** Executed ordinary order. */ order: SupportedCacheScatteringOrder;
 	/** Complete field observations. */ observations: readonly LocalSunGpuFieldObservation[];
@@ -264,3 +271,135 @@ type LocalSunGpuBrowserProofReport = {
 	/** Optional resource failure proof. */ cleanup?: LocalSunGpuCleanupProofReport;
 	/** New-run saved physical fields, when exported. */ fields?: readonly LocalSunGpuSavedField[];
 };
+
+/** Actual hardware/resource owners supplied to the complete-frame proof. */
+type LocalSunFrameGpuRenderer = import('three').WebGLRenderer;
+/** Actual retained Three program, owned solely by the offline physical probe. */
+type LocalSunFrameGpuMaterial = import('three').RawShaderMaterial;
+/** Mutable owner uniform values prepared for Three shader installation. */
+type LocalSunFrameGpuUniforms = Record<string, import('three').IUniform>;
+/** Opaque cache binding destination values, independently supplied to the real backend. */
+type LocalSunFrameGpuCacheUniforms = Record<string, {/** Destination uniform state. */ value: unknown}>;
+/** Actual hardware/resource owners supplied to the complete-frame proof. */
+type LocalSunFrameGpuProofRequest = Readonly<{
+	/** Selected ordinary compositor precision, default float32. */ sceneColorPrecision?: Flat32SceneColorPrecision;
+	/** Independently qualified canonical cumulative GPU identity. */ expectedFieldHash: string;
+	/** Exact historical observations and geometry placement controls. */ movement: readonly LocalSunFrameGpuMovementState[];
+	/** Genuine independently qualified physical family. */ profile: LocalSunCompactConstructionProfile;
+	/** Externally owned WebGL backend and receiver readback. */ backend: LocalSunGpuProofBackend & CacheProbeReader;
+	/** Current owned browser renderer. */ renderer: import('three').WebGLRenderer;
+	/** Per-copy canonical field/auxiliary bytes, after the initial proof owner has released its field. */ retainedBytes: number;
+}>;
+
+/** Independent physical sample inputs and current external GPU owners. */
+type LocalSunFrameGpuSamplesConfiguration = Readonly<{
+	/** Genuine current backend with opaque cache bindings. */ backend: LocalSunGpuProofBackend;
+	/** Current owned renderer. */ renderer: import('three').WebGLRenderer;
+	/** Authenticated independent CPU physical fields. */ fields: readonly Float32Array[];
+}>;
+/** Physical sample quantities and their independently compared residuals. */
+type LocalSunFrameGpuSampleResult = Readonly<{
+	/** Every negative J/L/T sample, without hiding or clamping it. */ negative: number;
+	/** Query-major, Native15-channel-major J-or-L / T / endpoint triplets. */ values: readonly number[];
+	/** Query quantity and complete/shortened endpoint selection. */ queries: readonly Readonly<{
+		mode: 0 | 1 | 2;
+		maximum: number;
+	}>[];
+	/** Original CPU/GPU quantity gate observations. */ cpu: LocalSunGpuScalarResidual;
+	/** Independent physical endpoint count and maximum absolute discrepancy. */ endpoints: Readonly<{
+		count: number;
+		maximumError: number;
+	}>;
+}>;
+/** Complete frame identity and actual binding observations. */
+type LocalSunFrameGpuFrameObservation = Readonly<{
+	/** Every negative physical GPU query value. */ negativeSamples: number;
+	/** Exact geographic observation staged for every consumer. */ observation: GeometryObservation;
+	/** Exact physical receiver position. */ receiverPosition: Position;
+	/** Reused complete-frame preparation duration in milliseconds, including receiver/shader work. */ prepareMilliseconds: number;
+	/** Independent complete control preparation duration in milliseconds. */ freshPrepareMilliseconds: number;
+	/** Exact measured-adaptation identity. */ adaptation: LocalSunGpuScalarResidual;
+	/** Predeclared motion or actual observation fixture. */ label: string;
+	/** Actual graph submissions for the reused field; zero after the initial build. */ reusedSubmissions: number;
+	/** Actual submissions for the independently rebuilt canonical control. */ freshSubmissions: number;
+	/** Matched lookup, radiance, transmission and endpoint comparisons. */ physical: LocalSunGpuScalarResidual;
+	/** Matched direct/diffuse receiver spectra and measured adaptation. */ receiver: LocalSunGpuScalarResidual;
+	/** Matched actual composed pixels. */ output: LocalSunGpuScalarResidual;
+	/** Independent CPU-field lookup/view comparison, at the original gate. */ cpu: LocalSunGpuScalarResidual;
+	/** Independent complete/shortened endpoint observations. */ endpoints: Readonly<{
+		count: number;
+		maximumError: number;
+	}>;
+	/** Exact reused physical quantities supporting the reported comparisons. */ samples: readonly number[];
+	/** Exact live state and generation. */ identity: string;
+	/** Canonical physical/numerical construction state. */ constructionIdentity: string;
+	/** Exact live source center. */ sourcePosition: Position;
+	/** Actual measured receiver state identity. */ receiverIdentity: string;
+	/** Actual opaque field/auxiliary count. */ bindings: number;
+	/** Earlier frame remains held until replacement is prepared. */ priorHeldDuringPreparation: boolean;
+}>;
+/** Actual complete-frame preparation and canonical reuse result. */
+type LocalSunFrameGpuProofReport = Readonly<{
+	/** Actual ordinary composer precision used for every frame. */ sceneColorPrecision: Flat32SceneColorPrecision;
+	/** Real backend resource accounting, distinct from driver memory and reserved renderer resources. */ ownership: Readonly<{
+		/** Peak live fields, auxiliary/program data and primitive-buffer bytes. */ peakObservedPayloadBytes: number;
+		/** External retained field and conservative complete-frame reservation. */ reservedExternalAndFrameBytes: number;
+		/** Observed peak plus external/reserved payload, below the frozen ceiling. */ completeObservedAdmissionBytes: number;
+		/** Successful real handles remaining after final lease disposal. */ handlesAfterDisposal: number;
+		/** Successful observed allocation payload remaining after disposal. */ bytesAfterDisposal: number;
+	}>;
+	/** Complete initial retained canonical field. */ baselineHash: LocalSunFrameGpuHash;
+	/** Separately constructed canonical control, inspected in full. */ freshHash: LocalSunFrameGpuHash;
+	/** Precisely states construction sharing and independent authority. */ comparisonMeaning: string;
+	/** Declared complete-frame gates passed. */ state: LocalSunGpuProofState;
+	/** Actual prepared/published observations. */ frames: readonly LocalSunFrameGpuFrameObservation[];
+}>;
+
+/** Independently constructed field receiving a bounded whole-field digest.
+ * - **"retained"** - Canonical field retained by the reused-frame control.
+ * - **"fresh"** - Separately rebuilt canonical comparison field.
+ */
+type LocalSunFrameGpuHashLabel = 'retained' | 'fresh';
+/** Offline initial-field readiness gate and serialized real renderer preparation. */
+type LocalSunFrameGpuStageSequencer = {
+	/** Initial independently completed canonical caches. */ readyCount: number;
+	/** Awaiting first canonical field, before admitting the second build. */ firstReady: Promise<void>;
+	/** Awaiting both independent fields before retaining view/receiver programs. */ pairReady: Promise<void>;
+	/** Notify first-field readiness. */ releaseFirst(): void;
+	/** Notify the initial pair or release cancelled staging. */ releasePair(): void;
+	/** Serial real shader/receiver stage completion. */ tail: Promise<void>;
+};
+/** Bounded host-owned streaming SHA-256 accumulation, with no duplicate full browser buffers. */
+type LocalSunFrameGpuDigestState = {
+	/** Native incremental digest owner for this one field. */ hash: import('node:crypto').Hash;
+	/** Exact cumulative received field bytes. */ received: number;
+	/** Completed hash, after exact byte-length validation. */ sha256: string | null;
+};
+/** Completed bounded whole-field digest from the owned host. */
+type LocalSunFrameGpuDigestReply = Readonly<{
+	/** Exact input field bytes hashed. */ bytes: number;
+	/** Complete raw FP32 field SHA-256. */ sha256: string;
+}>;
+/** Complete field identity/validity observation. */
+type LocalSunFrameGpuHash = Readonly<{
+	/** Exact complete FP32 payload identity. */ sha256: string;
+	/** All stored scalar values inspected. */ scalars: number;
+	/** Every observed negative value, without clamping. */ negative: number;
+}>;
+/** Authenticated immutable historical orbital fixture. */
+type LocalSunFrameGpuMovementState = Readonly<{
+	/** Exact instant and geographic site. */ observation: GeometryObservation;
+	/** Independently retained physical source center. */ sourcePosition: Position;
+	/** Independently retained receiver coordinates. */ receiverPosition: Position;
+}>;
+/** Predeclared actual-motion frame selection. */
+type LocalSunFrameGpuPose = LocalSunLiveProfileRequest &
+	Readonly<{
+		/** Explicit comparison case identity. */ label: string;
+		/** Independent day geometry control when placement is resolved. */ expectedSourcePosition?: Position;
+	}>;
+/** Actual ordinary composer capability and bounded readback. */
+type LocalSunFrameGpuScene = Readonly<{
+	/** Genuine scene/renderer/preparation owners. */ capability: Flat32LocalFrameSceneCapability;
+	/** Read the actual last completed composed target. */ readOutput(): readonly number[];
+}>;

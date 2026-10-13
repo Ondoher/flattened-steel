@@ -12,6 +12,7 @@
 		"../incoming-quadrature/types.d.ts",
 		"../transport/types.d.ts",
 		"../../../../src/algorithm32/**/*.d.ts",
+		"../../../../src/flat32/**/*.d.ts",
 		"../../../../experiments/local-sun-cache-reuse/types.d.ts"
 	],
 	"exclude": ["../../../../node_modules/**", "../../../../src/algorithm32/**/_tests/**"]

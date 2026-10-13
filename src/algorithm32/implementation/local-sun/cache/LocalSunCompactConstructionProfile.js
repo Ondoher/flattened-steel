@@ -104,7 +104,7 @@ export class LocalSunCompactConstructionProfile {
 		return CanonicalValueHash.sha256Value({
 			basis: this.spectral.basis.contentHash,
 			source: {
-				position: source.position,
+				position: {coordinates: [0, 0, source.position.coordinates[2]], units: 'meters'},
 				radius: source.radius,
 				referenceDistance: source.referenceDistance,
 				falloff: source.distanceFalloff,
@@ -306,6 +306,43 @@ export class LocalSunCompactConstructionProfile {
 		if (profile._currentIdentity() !== profile.contentHash)
 			throw new RangeError('Compact physical facts changed; replacement profile required.');
 		return profile;
+	}
+
+	/** Call this method to create exact live physical owners without mutating canonical construction.
+	 *
+	 * @param {LocalSunLiveProfileRequest} request - Observation, receiver and optional explicit horizontal placement.
+	 * @returns {LocalSunCompactConstructionProfile} - Independently paired live profile with the same physical controls.
+	 */
+	createLiveProfile(request) {
+		LocalSunCompactConstructionProfile.assert(this);
+		const lightSource = new LocalSunLightSource(this.models.lightSource.configuration);
+		const geometry = this.models.geometry.createLocalFrameGeometry({
+			...request,
+			lightSource,
+		});
+		return new LocalSunCompactConstructionProfile({
+			geometry,
+			lightSource,
+			atmosphere: this.models.atmosphere,
+			groundBoundary: null,
+			maximumScatteringOrder: this.numerical.maximumScatteringOrder,
+			topologyControls: this._topologyControls,
+			provenanceIdentity: this.provenanceIdentity,
+		});
+	}
+
+	/** Call this method to normalize horizontal placement before comparing or constructing a cache.
+	 * Exact observation and receiver state remain on the live profile; they never select construction reuse.
+	 *
+	 * @returns {LocalSunCompactConstructionProfile} - Genuine canonical construction selection.
+	 */
+	createCanonicalConstructionProfile() {
+		const source = this.models.lightSource.configuration.position.coordinates;
+		return this.createLiveProfile({
+			observation: this.models.geometry.configuration.observation,
+			receiverPosition: {coordinates: [0, 0, 2], units: 'meters'},
+			sourcePosition: {coordinates: [0, 0, source[2]], units: 'meters'},
+		});
 	}
 
 	/** Call this method to select the complete compact policy through the ordinary facade.

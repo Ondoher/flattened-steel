@@ -1,3 +1,9 @@
+/** Physical collaborators used by ordinary receiver transport shader assembly. */
+type ReceiverEnvironmentLightTransportShaderRequest = Readonly<{
+	/** Complete current physical/numerical model. */ model: SharedModel;
+	/** Live physical scattering cache, including admitted borrowed frame views. */ scatteringCache: GpuScatteringCache;
+}>;
+
 /** Optional construction binding for the receiver-local calculator. */
 type LocalLightLevelCalculatorConfiguration = Readonly<{
 	/** Configured primary source whose receiver-local direct sample is measured. */

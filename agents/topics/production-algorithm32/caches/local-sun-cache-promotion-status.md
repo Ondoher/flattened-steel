@@ -1,6 +1,8 @@
 # Local-Sun Cache Production Port Status
 
-Current disposition, 2026-10-12: the owner authorized independent P2 execution.
+Current disposition, 2026-10-13: the owner selected P3; its implementation and
+N1/N2/N4/half-float numerical and browser qualification are delivered. Only the
+matching final CLEAN primary/audit receipt establishes P3 completion.
 The [plan](local-sun-cache-promotion-plan.md) owns scope and sequence;
 [P0](local-sun-cache-p0-contract.md) owns parameter applicability, independent
 controls and resource policies. The ended experiment and all prior evidence
@@ -22,24 +24,34 @@ remains deferred.
 | P0 — contracts and controls | Complete under its matching CLEAN receipt. |
 | P1 — compact domain and selected CPU reference | Complete under the final P1 closure receipt; full CPU recurrence remains unadmitted. |
 | P2 — GPU construction/runtime | Delivered genuine compact GPU graph and ordinary shared lookup/view consumers, qualified occupied fields, N1/N2/N4, omission and candidate cleanup. The matching CLEAN primary/audit receipt completes the phase. |
-| P3 — reuse and frame publication | Next; not started. |
+| P3 — reuse and frame publication | Delivered source-owned leases, complete staging and atomic publication. N1/N2/N4 16-pose and half-float rendering proofs, type checks, lifecycle and browser checks pass. Only the matching final CLEAN primary/audit receipt completes the phase. |
 | P4 — Flat32/celestial consumers | Planned; not started. |
 | P5 — qualification/adoption preparation | Planned; no adoption, deployment or publication selected. |
 
 ## Next Work
 
-After the P2 receipt validates, execute
-[P3 reuse and atomic complete-frame publication](local-sun-cache-promotion-plan.md#p3--add-reuse-and-atomic-complete-frame-publication).
-Canonical construction identity must be separated from exact live observation,
-source/receiver state and support admission. Stage cache leases, geometry/source
-bindings, shader readiness, receiver spectra and celestial inputs together.
-Qualify admitted transformations/day trajectories against fresh construction,
-plus failure, cancellation, supersession, context loss and borrower disposal.
-Changed height/medium/source/coverage must rebuild. Keep earlier usable state
-until a complete replacement is accepted. P4 owns normal-scene integration.
+Validate P3's matching final primary/audit receipt before proceeding to a later
+phase. The [P3 boundary](local-sun-p3-closure.md) owns exact immutable proof
+receipts, checks, measurements and qualification limits. P4 owns normal-scene
+integration and has not started. The owner-authorized 4 GiB free-RAM reserve
+applies throughout execution of the whole promotion plan. App cache-build
+memory sizing remains a separate open question and blocks no plan phase.
+
+The complete mapped source-review ledgers and independent audits are still
+incomplete. Generic or nonexistent source anchors from attempted reports were
+rejected; no CLEAN receipt has been issued. Concrete recovery, public-entry,
+typing and behavior-grouping findings were repaired and their affected checks
+pass. A functional intermediate checkpoint preserves this work without closing
+the P3 completion gate.
+
+The [P3 implementation and evidence boundary](local-sun-p3-closure.md) records
+canonical/live ownership, publication, recovery, measured proofs and remaining
+qualification limits.
 
 ## Completion Receipts
 
+- [P3 primary/audit receipt](../../../../.codex-tmp/review-standards/session-KrjnnU/validation.json): only its matching CLEAN outcome completes the authored P3 source/contracts/proof/current-state unit.
+- [P3 independent execution summary](../../../../.codex-tmp/review-standards/session-KrjnnU/summary.md): decisions, proof/check receipts, measured resources, nonblocking app-memory question and checkpoint.
 - [P2 primary/audit receipt](../../../../.codex-tmp/review-standards/session-ZtvAir/validation.json): only its matching CLEAN outcome completes the authored P2 source/contracts/proof/current-state unit.
 - [P2 independent execution summary](../../../../.codex-tmp/review-standards/session-ZtvAir/summary.md): decisions, exact final proof receipts, checks, measurements and local checkpoint.
 - [P1 closure](local-sun-p1-closure.md) and [final primary/audit receipt](../../../../.codex-tmp/review-standards/session-G8UAej/validation-checkpoint.json): selected CPU pure/cumulative operators, continuous direct L1 isolation and independent physical construction rays.
@@ -47,8 +59,9 @@ until a complete replacement is accepted. P4 owns normal-scene integration.
 
 Review follows production destination-folder mappings, including complete
 architecture/contracts/verification primary and independent audit ledgers.
-No standards waiver or experiment-only mapping applies. Eight-GiB reserve /
-owned-process and ten-minute serialized host controls apply; P6's expired
+No standards waiver or experiment-only mapping applies. The owner-authorized
+4 GiB free-memory reserve, unchanged 8 GiB owned-process ceiling and ten-minute
+serialized host controls apply; P6's expired
 exceptions do not carry forward. The permanent experiment mapping remains intact.
 
 ## Earlier Qualification Receipts (Historical Scopes)
@@ -59,7 +72,7 @@ phase closure documents.
 
 The first bounded P1 comparison is preserved in a new immutable
 [production run](../../../../tmp/production-local-sun-cache-promotion/runs/00002-compact-domain/comparison.json).
-The maintained entrypoint is
+The direct invocation used by that historical P1 proof was
 `node scripts/algorithm32/local-sun-cache/compact-domain/LocalSunCompactDomainProof.js`;
 `--out <new-plan-run-directory>` preserves a fresh comparison and rejects an
 existing run. The copied P0 authority/manifest retains independent parents and
@@ -216,5 +229,5 @@ their original scopes; no numerical implementation acceptance is inferred.
 
 Production reviewer context is refreshed through `review-standards` for the
 new route. No temporary standards changes are selected. The permanent experiment
-mapping remains intact, and ordinary 8 GiB reserve/owned-process and ten-minute
-host controls apply. P6's expired resource exceptions do not carry into this port.
+mapping remains intact. Current host controls are owned by P0 and the plan above;
+P6's expired resource exceptions do not carry into this port.

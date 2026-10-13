@@ -1,10 +1,7 @@
 import {SPECTRAL_QUANTITIES, SPECTRAL_UNITS, SpectralPacket} from '../../spectral-values/index.js';
 import {RECEIVER_ENVIRONMENT_LIGHT_QUADRATURE} from './ReceiverEnvironmentLightQuadrature.js';
-import {
-	DIRECTION_TEXTURE_VALUE_KEY,
-	OUTPUT_CHANNEL_VALUE_KEY,
-	ReceiverEnvironmentLightTransportShader,
-} from './ReceiverEnvironmentLightTransportShader.js';
+import {ReceiverEnvironmentLightTransportShader} from './ReceiverEnvironmentLightTransportShader.js';
+import {DIRECTION_TEXTURE_VALUE_KEY, OUTPUT_CHANNEL_VALUE_KEY} from './consts.js';
 
 const VERTEX_SHADER = `#version 300 es
 precision highp float;

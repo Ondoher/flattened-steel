@@ -1,12 +1,15 @@
 import {Algorithm32Transport} from '../../atmospheric-transport/Algorithm32Transport.js';
 import {ShaderContributions} from '../../shader-assembly/base/ShaderContributions.js';
 import {Algorithm32ShaderAssembler} from '../../shader-assembly/runtime/Algorithm32ShaderAssembler.js';
+import {DIRECTION_TEXTURE_VALUE_KEY, OUTPUT_CHANNEL_VALUE_KEY} from './consts.js';
 
-const DIRECTION_TEXTURE_VALUE_KEY = 'lighting.receiverEnvironmentDirections';
-const OUTPUT_CHANNEL_VALUE_KEY = 'lighting.receiverEnvironmentOutputChannel';
-
-/** Assemble the normal production transport with a fixed receiver-direction ingress. */
+/** Normal production transport assembly with a fixed receiver-direction ingress. */
 export class ReceiverEnvironmentLightTransportShader {
+	/** Called by receiver assembly to define the normal runtime state and direction binding.
+	 *
+	 * @param {number} channelCount - Accepted physical spectral channel count.
+	 * @returns {ShaderContribution} - Receiver runtime contribution.
+	 */
 	_runtimeContribution(channelCount) {
 		return ShaderContributions.createShaderContribution({
 			id: 'runtime-receiver-environment-light',
@@ -52,6 +55,11 @@ ShaderState createInitialShaderState(vec2 uv) {
 		});
 	}
 
+	/** Called by receiver assembly to replace camera-ray ingress with fixed receiver directions.
+	 *
+	 * @param {ShaderContribution} geometryContribution - Geometry-owned normal contribution.
+	 * @returns {ShaderContribution} - Receiver-specific geometry ingress with unchanged physical path functions.
+	 */
 	_geometryContribution(geometryContribution) {
 		return {
 			...geometryContribution,
@@ -74,6 +82,10 @@ ShaderState createInitialShaderState(vec2 uv) {
 		};
 	}
 
+	/** Called by receiver assembly to expose one measured physical spectral channel.
+	 *
+	 * @returns {ShaderContribution} - Physical radiance output contribution.
+	 */
 	_outputContribution() {
 		return ShaderContributions.createShaderContribution({
 			id: 'lighting-receiver-environment-output',
@@ -99,12 +111,20 @@ ShaderState createInitialShaderState(vec2 uv) {
 		});
 	}
 
-	/** Assemble the shared path-radiance shader for one active model/cache pair. */
+	/** Call this method to assemble shared physical path radiance for one active model/cache pair.
+	 *
+	 * @param {ReceiverEnvironmentLightTransportShaderRequest} request - Complete physical model and live cache capability.
+	 * @returns {ShaderAssemblyResult} - Ordinary assembled physical receiver shader.
+	 */
 	create(request) {
 		const transport = new Algorithm32Transport();
+		const geometry = request.model.geometry.createShaderContribution({model: request.model});
+		const geometryContributions = Array.isArray(geometry)
+			? geometry.map((contribution) => this._geometryContribution(contribution))
+			: [this._geometryContribution(/** @type {ShaderContribution} */ (geometry))];
 		const contributions = [
 			this._runtimeContribution(request.model.spectral.basis.channelCount),
-			this._geometryContribution(request.model.geometry.createShaderContribution()),
+			...geometryContributions,
 			request.model.atmosphere.createShaderContribution({model: request.model}),
 			request.model.lightSource.createShaderContribution({model: request.model}),
 			request.scatteringCache.createShaderContribution({model: request.model}),
@@ -126,5 +146,3 @@ ShaderState createInitialShaderState(vec2 uv) {
 		});
 	}
 }
-
-export {DIRECTION_TEXTURE_VALUE_KEY, OUTPUT_CHANNEL_VALUE_KEY};

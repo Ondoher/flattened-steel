@@ -12,12 +12,18 @@ import {createServer} from 'node:http';
 import {fileURLToPath} from 'node:url';
 import {execFileSync} from 'node:child_process';
 import os from 'node:os';
+import {createHash} from 'node:crypto';
 import {resolve} from 'node:path';
 import {LocalSunNormalizationControls} from '../normalization/LocalSunNormalizationControls.js';
 import {rollup} from 'rollup';
 import {nodeResolve} from '@rollup/plugin-node-resolve';
 import puppeteer from 'puppeteer';
 import {LocalSunAssemblyControls} from '../assembly/LocalSunAssemblyControls.js';
+
+/** Owner-authorized free-memory reserve for subsequent runs, 2026-10-13. */
+const FREE_MEMORY_RESERVE_BYTES = 4 * 1024 ** 3;
+/** Unchanged sampled working-set ceiling for this job's owned process tree. */
+const OWNED_PROCESS_CEILING_BYTES = 8 * 1024 ** 3;
 
 /** Serialized, resource-bounded offline host for immutable production GPU qualification. */
 export class LocalSunGpuQualification {
@@ -103,14 +109,20 @@ export class LocalSunGpuQualification {
 		if (
 			![1, 2, 4].includes(request.order) ||
 			!/^\d{5}$/.test(request.serial) ||
-			!['fields', 'runtime', 'omission', 'cleanup', 'zero'].includes(request.mode)
+			!['fields', 'runtime', 'omission', 'cleanup', 'zero', 'reuse'].includes(request.mode) ||
+			!['float16', 'float32'].includes(request.sceneColorPrecision ?? 'float32') ||
+			(request.sceneColorPrecision !== undefined && request.mode !== 'reuse')
 		)
 			throw new RangeError('Supported order, five-digit new serial and declared GPU proof mode required.');
-		let destination = 'tmp/production-local-sun-cache-promotion/runs/' + request.serial + '-p2-' + request.mode;
+		let destination =
+			'tmp/production-local-sun-cache-promotion/runs/' +
+			request.serial +
+			(request.mode === 'reuse' ? '-p3-' : '-p2-') +
+			request.mode;
 		let root = this._paths.checkedPath(destination);
 		if (existsSync(root)) throw new Error('New immutable qualification run required.');
 		let freeBefore = os.freemem();
-		if (freeBefore < 8 * 1024 ** 3) throw new Error('Eight GiB free-memory reserve required.');
+		if (freeBefore < FREE_MEMORY_RESERVE_BYTES) throw new Error('Four GiB free-memory reserve required.');
 		let independent = this._readIndependentFields();
 		let p0Path = 'src/algorithm32/implementation/local-sun/cache/fixtures/local-sun-compact-p0-controls.json';
 		if (this._paths.hash(p0Path) !== '74a7cb03fd646d6ec4754e45e46f7ed622c815d09cd82ceeef174819c3513db6')
@@ -125,6 +137,33 @@ export class LocalSunGpuQualification {
 			'experiments/local-sun-cache-reuse/shell-omission.js',
 		];
 		let parents = parentPaths.map((path) => ({path, sha256: this._paths.hash(path)}));
+		/** @type {LocalSunFrameGpuMovementState[]} */ let movement = [];
+		let qualifiedFieldHash;
+		if (request.mode === 'reuse') {
+			const movementPath = 'tmp/experiments/local-sun-cache-reuse/runs/00535-p3-shell-move/inputs.json';
+			const fieldPath = 'tmp/production-local-sun-cache-promotion/runs/00035-p2-gpu-pilot/result.json';
+			if (
+				this._paths.hash(movementPath) !== '5f31e5758c743153b6dd25938031a2e5b3db003b486b460b2175e50ef0336cec' ||
+				this._paths.hash(fieldPath) !== '72c86d5aabfbbbae2a1fc451802a35669a502cc2f6bcfae5956e5949b6736163'
+			)
+				throw new Error('Frozen movement or independently qualified P2 field identity changed');
+			const input = JSON.parse(readFileSync(this._paths.checkedPath(movementPath), 'utf8'));
+			movement = input.parameters.currentOrbitalStates.map((state) => ({
+				observation: state.observation,
+				sourcePosition: state.geometry.sourcePosition,
+				receiverPosition: state.geometry.observerPosition,
+			}));
+			const fields = JSON.parse(readFileSync(this._paths.checkedPath(fieldPath), 'utf8'));
+			qualifiedFieldHash = fields.observations.find(
+				(field) => field.id === (request.order === 1 ? 'compact-j1' : 'compact-j-through-' + request.order),
+			)?.sha256;
+			if (movement.length !== 5 || !qualifiedFieldHash)
+				throw new Error('Required independent case or field control missing');
+			parents.push(
+				{path: movementPath, sha256: this._paths.hash(movementPath)},
+				{path: fieldPath, sha256: this._paths.hash(fieldPath)},
+			);
+		}
 		mkdirSync(root, {recursive: true});
 		let browser, server, interval, deadline;
 		/** @type {Map<string, LocalSunGpuFieldWriter>} */
@@ -133,6 +172,7 @@ export class LocalSunGpuQualification {
 		let samples = [];
 		/** @type {string[]} */
 		let diagnostics = [];
+		/** @type {Map<LocalSunFrameGpuHashLabel,LocalSunFrameGpuDigestState>} */ const frameDigests = new Map();
 		let failure;
 		try {
 			let bundle = await rollup({
@@ -167,6 +207,39 @@ export class LocalSunGpuQualification {
 			writeFileSync(root + '/bundle.js', source, {flag: 'wx'});
 			server = createServer(async (incoming, response) => {
 				try {
+					const digestUpload = /^\/frame-digest\/(retained|fresh)\/(\d+)$/.exec(incoming.url);
+					const digestRead = /^\/frame-digest\/(retained|fresh)$/.exec(incoming.url);
+					if (request.mode === 'reuse' && incoming.method === 'POST' && digestUpload) {
+						const id = /** @type {LocalSunFrameGpuHashLabel} */ (digestUpload[1]),
+							offset = Number(digestUpload[2]);
+						let record = frameDigests.get(id);
+						if (!record) {
+							if (offset !== 0) throw new Error('First field digest offset must be zero');
+							record = {hash: createHash('sha256'), received: 0, sha256: null};
+							frameDigests.set(id, record);
+						}
+						if (record.sha256 || offset !== record.received)
+							throw new Error('Duplicate or out-of-order whole-field digest transfer');
+						let bytes = 0;
+						for await (const chunk of incoming) {
+							bytes += chunk.length;
+							if (bytes > 2 * 1024 * 1024 || record.received + chunk.length > 275299560)
+								throw new Error('Bounded whole-field digest transfer exceeded its declared size');
+							record.hash.update(chunk);
+							record.received += chunk.length;
+						}
+						response.end('ok');
+						return;
+					}
+					if (request.mode === 'reuse' && incoming.method === 'GET' && digestRead) {
+						const record = frameDigests.get(/** @type {LocalSunFrameGpuHashLabel} */ (digestRead[1]));
+						if (!record || record.received !== 275299560)
+							throw new Error('Complete whole-field digest required');
+						record.sha256 ??= record.hash.digest('hex');
+						response.setHeader('Content-Type', 'application/json');
+						response.end(JSON.stringify({bytes: record.received, sha256: record.sha256}));
+						return;
+					}
 					let gold = /^\/gold\/(local-sun-[jl][1-4]|cumulative)$/.exec(incoming.url);
 					if (incoming.method === 'GET' && gold) {
 						let field = independent.fields.find((field) => field.id === gold[1]);
@@ -228,9 +301,7 @@ export class LocalSunGpuQualification {
 				}
 			});
 			await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));
-			let profilePath = this._paths.checkedPath(
-				'.codex-tmp/review-standards/session-ZtvAir/gpu-' + request.serial,
-			);
+			let profilePath = this._paths.checkedPath('.codex-tmp/local-sun-gpu-qualification/' + request.serial);
 			browser = await puppeteer.launch({
 				executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe',
 				headless: 'new',
@@ -249,7 +320,10 @@ export class LocalSunGpuQualification {
 				freeBytes: os.freemem(),
 				ownedProcessBytes: this._processBytes(browser.process().pid),
 			});
-			if (samples[0].freeBytes < 8 * 1024 ** 3 || samples[0].ownedProcessBytes > 8 * 1024 ** 3)
+			if (
+				samples[0].freeBytes < FREE_MEMORY_RESERVE_BYTES ||
+				samples[0].ownedProcessBytes > OWNED_PROCESS_CEILING_BYTES
+			)
 				throw new Error('Qualification memory admission failed.');
 			page.on('console', (message) => {
 				diagnostics.push(message.text());
@@ -265,14 +339,17 @@ export class LocalSunGpuQualification {
 					};
 					samples.push(sample);
 					console.log(
-						'P2 ' +
+						(request.mode === 'reuse' ? 'P3 ' : 'P2 ') +
 							request.mode +
 							' progress ' +
 							Math.round(sample.elapsedMilliseconds / 1000) +
 							's; free GiB=' +
 							(sample.freeBytes / 1024 ** 3).toFixed(2),
 					);
-					if (sample.freeBytes < 8 * 1024 ** 3 || sample.ownedProcessBytes > 8 * 1024 ** 3) {
+					if (
+						sample.freeBytes < FREE_MEMORY_RESERVE_BYTES ||
+						sample.ownedProcessBytes > OWNED_PROCESS_CEILING_BYTES
+					) {
 						failure = new Error('Qualification memory admission failed.');
 						browser.close();
 					}
@@ -293,6 +370,10 @@ export class LocalSunGpuQualification {
 				runtime: request.mode === 'runtime' || request.mode === 'zero',
 				omission: request.mode === 'omission',
 				cleanup: request.mode === 'cleanup',
+				reuse: request.mode === 'reuse',
+				movement,
+				qualifiedFieldHash,
+				sceneColorPrecision: request.sceneColorPrecision ?? 'float32',
 				sourceScale: request.mode === 'zero' ? 0 : 1,
 			});
 			let result = await Promise.race([
@@ -318,6 +399,7 @@ export class LocalSunGpuQualification {
 				result.state !== 'passed' ||
 				result.order !== request.order ||
 				result.glError !== 0 ||
+				(request.mode === 'reuse' && (result.reuse?.state !== 'passed' || result.reuse.frames.length !== 16)) ||
 				result.observations.some(
 					(field) => field.nonfinite || field.comparison.failures || field.comparison.whole?.failures,
 				)
@@ -344,6 +426,8 @@ export class LocalSunGpuQualification {
 						host: {
 							elapsedMilliseconds: performance.now() - started,
 							freeBeforeBytes: freeBefore,
+							freeMemoryReserveBytes: FREE_MEMORY_RESERVE_BYTES,
+							ownedProcessCeilingBytes: OWNED_PROCESS_CEILING_BYTES,
 							rssAfterBytes: process.memoryUsage().rss,
 							samples,
 							limitation:
@@ -360,12 +444,14 @@ export class LocalSunGpuQualification {
 				root + '/manifest.json',
 				JSON.stringify(
 					{
-						schema: 'local-sun-p2-gpu-proof-v1',
+						schema: request.mode === 'reuse' ? 'local-sun-p3-frame-proof-v1' : 'local-sun-p2-gpu-proof-v1',
 						state: 'passed',
 						selection: request,
 						parents,
 						operation:
-							'Production owner contributors and ordinary controller/cache; frozen full physical fields and selected CPU controls; original J/L/T/endpoint gates, exact omission identities and candidate-only resource cleanup. Zero mode is the analytic zero-intensity consequence with unchanged medium transmission.',
+							request.mode === 'reuse'
+								? 'Separate canonical production field constructions verified in full against qualified P2 identity. Sixteen independently staged exact live rotation/translation/day frames use unchanged physical owners, ordinary shaders and receiver measurements. Matched J/L/T/endpoint/receiver/composed-output fresh-reused comparisons use predeclared 0.0001 and original floors; physical CPU-field controls retain 0.002. Complete construction sharing is recorded explicitly.'
+								: 'Production owner contributors and ordinary controller/cache; frozen full physical fields and selected CPU controls; original J/L/T/endpoint gates, exact omission identities and candidate-only resource cleanup. Zero mode is the analytic zero-intensity consequence with unchanged medium transmission.',
 						tools: {node: process.version, browser: await browser.version()},
 						artifacts: ['host.js', 'bundle.js', 'result.json', 'diagnostics.json'].map((path) => ({
 							path,
@@ -381,15 +467,23 @@ export class LocalSunGpuQualification {
 			console.log('PASSED ' + destination);
 			return destination;
 		} catch (error) {
+			if (!existsSync(root + '/diagnostics.json'))
+				writeFileSync(root + '/diagnostics.json', JSON.stringify(diagnostics), {flag: 'wx'});
 			writeFileSync(
 				root + '/manifest.json',
 				JSON.stringify(
 					{
-						schema: 'local-sun-p2-gpu-proof-v1',
+						schema: request.mode === 'reuse' ? 'local-sun-p3-frame-proof-v1' : 'local-sun-p2-gpu-proof-v1',
 						state: 'failed',
 						selection: request,
 						parents,
 						error: String(failure ?? error),
+						freeMemoryReserveBytes: FREE_MEMORY_RESERVE_BYTES,
+						ownedProcessCeilingBytes: OWNED_PROCESS_CEILING_BYTES,
+						samples,
+						artifacts: [
+							{path: 'diagnostics.json', sha256: this._paths.hash(destination + '/diagnostics.json')},
+						],
 						elapsedMilliseconds: performance.now() - started,
 					},
 					null,
@@ -414,5 +508,8 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === resolve(process.argv[1
 		order: /** @type {SupportedCacheScatteringOrder} */ (Number(process.argv[2])),
 		serial: process.argv[3],
 		mode: /** @type {LocalSunGpuQualificationMode} */ (process.argv[4] ?? 'fields'),
+		...(process.argv[5] === undefined
+			? {}
+			: {sceneColorPrecision: /** @type {Flat32SceneColorPrecision} */ (process.argv[5])}),
 	});
 }

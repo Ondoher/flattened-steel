@@ -112,6 +112,14 @@ accepts numerical Algorithm32 behavior.
 
 ### Implementation placement
 
+The aggregate public concrete runtime entry remains
+`src/algorithm32/implementation/index.js`. Headless complete-frame consumers
+may use the documented narrow public entry
+`src/algorithm32/implementation/frame-runtime/index.js`, which re-exports the
+same `Algorithm32` facade and `Algorithm32Bindings` adapter while avoiding
+optional React component dependencies. Private owner modules remain behind
+those public entries; the narrow entry owns no numerical or lifecycle behavior.
+
 - Concrete caller-instantiable or caller-selectable implementations live under
   `src/algorithm32/implementation/`.
 - The current declaration-only interface tree and public implementation

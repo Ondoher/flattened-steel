@@ -61,7 +61,7 @@ export class LocalSunAssemblyProof {
 	 * The shared calculator receives the genuine atmosphere basis without an auxiliary execution profile.
 	 *
 	 * @param {number} [sourceScale=1] - Physical incident scale; zero supplies the analytic black-source control.
-	 * @returns {LocalSunCompactCpuAssemblyDefinition} - Bound physical source, compact topology, medium and genuine shared calculator.
+	 * @returns {LocalSunAssemblyPhysicalDefinition} - Bound complete physical owners, compact topology and genuine shared calculator.
 	 * @throws {Error} - Physical P0 authority differs.
 	 */
 	createPhysicalDefinition(sourceScale = 1) {
@@ -137,7 +137,7 @@ export class LocalSunAssemblyProof {
 		let fixture = this.readAuthority(),
 			freeBefore = os.freemem(),
 			started = performance.now();
-		if (freeBefore < 8 * 1024 ** 3) throw new Error('Eight GiB free-memory reserve required.');
+		if (freeBefore < 4 * 1024 ** 3) throw new Error('Four GiB free-memory reserve required.');
 		let setup = this.createPhysicalDefinition(),
 			candidate = new LocalSunCompactCpuAssembly(setup),
 			setupMilliseconds = performance.now() - started;

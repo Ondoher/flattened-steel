@@ -17,6 +17,10 @@ export class Algorithm32Runtime {
 	 * @param {Flat32RuntimeConfiguration} configuration - Scene, mode and lifecycle collaborators.
 	 */
 	constructor(configuration) {
+		/** Explicit compact frame owner, independent from the distant shared attachment. @type {LocalSunFramePublicationController|null} */
+		this._localFrameController = configuration.localFrameController ?? null;
+		/** Owned restored-backend cleanup after final valid borrower release. @type {Promise<void>} */
+		this._localBackendRelease = Promise.resolve();
 		this._sceneRuntime = configuration.sceneRuntime;
 		this._endpointScene = configuration.endpointScene;
 		this._mode = configuration.mode;
@@ -67,10 +71,66 @@ export class Algorithm32Runtime {
 	 */
 	canUpdateSharedScene() {
 		return (
-			this._installed &&
-			this._mode instanceof SphericalDistantMode &&
-			this._mode.lightSource.sharedCacheAttachment !== null
+			this._localFrameController !== null ||
+			(this._installed &&
+				this._mode instanceof SphericalDistantMode &&
+				this._mode.lightSource.sharedCacheAttachment !== null)
 		);
+	}
+
+	/** Called by the scene renderer to consume one complete current local-frame aggregate.
+	 *
+	 * @returns {void} - No value.
+	 */
+	_renderLocalFrame() {
+		try {
+			this._localFrameController?.active?.contents.renderFrame();
+		} catch (error) {
+			this._sceneRuntime.restoreDirectRendering();
+			this._onFailure(error);
+		}
+	}
+
+	/** Call this method after disposal to await backend cleanup following pending stages and valid borrowers.
+	 *
+	 * @returns {Promise<void>} - Preserves any asynchronous backend-disposal failure for the caller.
+	 */
+	whenLocalFrameResourcesReleased() {
+		return this._localBackendRelease;
+	}
+
+	/** Call this method to stage a complete local frame while the displayed frame keeps rendering.
+	 *
+	 * @param {LocalSunFrameRequest} request - Exact accepted physical/presentation state.
+	 * @param {AbortSignal} [signal] - Optional caller cancellation.
+	 * @returns {Promise<PreparedLocalSunFrame>} - Complete unpublished packet.
+	 */
+	prepareLocalFrame(request, signal) {
+		this._assertUsable();
+		if (!this._localFrameController) throw new Error('Explicit compact frame owner is required.');
+		return this._localFrameController.prepareLocalFrame(request, signal);
+	}
+
+	/** Call this method to publish all matching local components at one application frame boundary.
+	 *
+	 * @param {PreparedLocalSunFrame} frame - Controller-created current complete packet.
+	 * @param {AbortSignal} signal - Publication cancellation.
+	 * @returns {Promise<LocalSunFramePublication>} - Successful complete commit and distinct retirement errors.
+	 */
+	async publishPreparedLocalFrame(frame, signal) {
+		this._assertUsable();
+		if (!this._localFrameController) throw new Error('Explicit compact frame owner is required.');
+		let publication;
+		await this._sceneRuntime.atFrameBoundary(() => {
+			signal.throwIfAborted();
+			this._assertUsable();
+			publication = this._localFrameController.publishPreparedLocalFrame(frame, () => {
+				this._sceneRuntime.installRenderOperation(() => this._renderLocalFrame());
+			});
+			this._installed = true;
+			this._published = true;
+		}, signal);
+		return publication;
 	}
 
 	/** Call this method after publication to refill look-ahead slots released by the former visible scene.
@@ -106,6 +166,23 @@ export class Algorithm32Runtime {
 	 */
 	async updateSharedScene(state, request) {
 		this._assertUsable();
+		if (this._localFrameController) {
+			if (!request.localFrameRequest) throw new TypeError('Complete accepted local frame request required.');
+			const frame = await this.prepareLocalFrame(request.localFrameRequest, request.signal);
+			await this.publishPreparedLocalFrame(frame, request.signal);
+			return {
+				...this._lastSummary,
+				...this._mode.describe(),
+				pairing: 'flat/local',
+				maximumScatteringOrder: frame.profile.numerical.maximumScatteringOrder,
+				positionCount: frame.profile.domains.topology.positionCount,
+				incomingDirectionCount: frame.profile.domains.incomingDirections.directionCount,
+				outgoingDirectionCount: frame.profile.domains.outgoingDirections.directionCount,
+				spectralChannelCount: frame.profile.spectral.basis.channelCount,
+				observerDomeEnabled: frame.profile.models.geometry.configuration.observerCenteredDome !== null,
+				runtimeFrameCount: this._runtimeFrameCount,
+			};
+		}
 		if (!this.canUpdateSharedScene()) throw new Error('Installed runtime does not support shared scene changes.');
 		this._liveCancellation?.abort();
 		this._predictionCancellation?.abort();
@@ -203,9 +280,13 @@ export class Algorithm32Runtime {
 		};
 	}
 
-	/** Release renderer-owned resources while their invalid WebGL context remains lost. */
+	/** Call this method to release renderer-owned resources while their WebGL context remains lost.
+	 *
+	 * @returns {void} - Old GPU frame resources invalidated.
+	 */
 	handleContextLoss() {
 		if (this._disposed) return;
+		this._localFrameController?.handleContextLoss();
 		this._liveCancellation?.abort();
 		this._predictionCancellation?.abort();
 		this._shaderHandle?.handleContextLoss?.();
@@ -217,8 +298,38 @@ export class Algorithm32Runtime {
 	}
 
 	/** Rebuild all renderer-owned atmosphere and stellar resources through normal setup after restoration. */
+	/** Call this method to prepare and publish a complete replacement on the restored renderer.
+	 * A failed restoration releases its candidate and retains lost-context state for retry.
+	 *
+	 * @returns {Promise<void>} - Restored complete frame, or rejection for preparation/publication/cleanup failure.
+	 */
 	async handleContextRestoration() {
 		if (this._disposed) return;
+		if (this._localFrameController) {
+			const backend = new ThreeCacheBackend({THREE, renderer: this._sceneRuntime.renderer});
+			this._cacheBackend = backend;
+			try {
+				const frame = await this._localFrameController.restoreContext(backend);
+				if (frame) await this.publishPreparedLocalFrame(frame, new AbortController().signal);
+			} catch (error) {
+				const errors = [error];
+				try {
+					this._localFrameController.handleContextLoss();
+				} catch (cleanupError) {
+					errors.push(cleanupError);
+				}
+				try {
+					backend.dispose();
+				} catch (cleanupError) {
+					errors.push(cleanupError);
+				}
+				this._cacheBackend = null;
+				if (errors.length > 1)
+					throw new AggregateError(errors, 'Local context restoration and cleanup failed.');
+				throw error;
+			}
+			return;
+		}
 		if (this._mode instanceof SphericalDistantMode) this._mode.prepareContextRestoration();
 		await this.setup();
 	}
@@ -344,7 +455,11 @@ export class Algorithm32Runtime {
 		});
 	}
 
-	/** Publish concise celestial generation state for application diagnostics and regression gates. */
+	/** Called by frame rendering to publish concise celestial generation diagnostics.
+	 *
+	 * @param {Flat32ShaderDiagnostics|null|undefined} diagnostics - Observed shader-owned diagnostics.
+	 * @returns {void} - Available diagnostics copied to the application canvas.
+	 */
 	_publishCelestialDiagnostics(diagnostics) {
 		const canvas = this._sceneRuntime.canvas;
 		const brightnessProxy = this._mode.algorithm32?.brightnessProxy?.value;
@@ -521,14 +636,7 @@ export class Algorithm32Runtime {
 		try {
 			this._updateBindingValues();
 			this._composer.render();
-			const diagnostics =
-				/** @type {{
-				 *   runtime?: {
-				 *     frameCount?: number,
-				 *     renderErrorCount?: number,
-				 *     lastRenderError?: string | null
-				 *   }
-				 * }} */ (this._shaderHandle?.getDiagnostics());
+			const diagnostics = /** @type {Flat32ShaderDiagnostics} */ (this._shaderHandle?.getDiagnostics());
 			this._publishCelestialDiagnostics(diagnostics);
 
 			if ((diagnostics.runtime?.renderErrorCount ?? 0) !== 0) {
@@ -630,13 +738,7 @@ export class Algorithm32Runtime {
 			}
 			const preflight = this._preflightComposedFrame();
 			const modeSummary = this._mode.describe();
-			const runtimeDiagnostics =
-				/** @type {{
-				 *   runtime?: {
-				 *     frameCount?: number,
-				 *     renderErrorCount?: number
-				 *   }
-				 * }} */ (preflight.diagnostics);
+			const runtimeDiagnostics = /** @type {Flat32ShaderDiagnostics} */ (preflight.diagnostics);
 
 			this._runtimeFrameCount = runtimeDiagnostics.runtime?.frameCount ?? 1;
 			this._installed = true;
@@ -666,7 +768,10 @@ export class Algorithm32Runtime {
 		}
 	}
 
-	/** Atomically make a successfully preflighted runtime visible. */
+	/** Call this method to make a successfully preflighted runtime visible.
+	 *
+	 * @returns {void} - Complete runtime rendering installed, or rejection before preflight.
+	 */
 	publish() {
 		this._assertUsable();
 		if (!this._installed) {
@@ -677,16 +782,25 @@ export class Algorithm32Runtime {
 		this._publishSelectedRenderOperation();
 	}
 
-	/** Apply the diagnostic composition selection to a published runtime. */
+	/** Called by publication or composition selection to install the current complete rendering operation.
+	 *
+	 * @returns {void} - Selected rendering operation installed.
+	 */
 	_publishSelectedRenderOperation() {
 		if (this._atmosphereEnabled) {
-			this._sceneRuntime.installRenderOperation(this._renderAtmosphereFrame);
+			this._sceneRuntime.installRenderOperation(
+				this._localFrameController ? () => this._renderLocalFrame() : this._renderAtmosphereFrame,
+			);
 		} else {
 			this._sceneRuntime.restoreDirectRendering();
 		}
 	}
 
-	/** Select atmosphere composition or direct Three rendering without rebuilding resources. */
+	/** Call this method to select atmosphere composition or direct Three rendering without rebuilding resources.
+	 *
+	 * @param {boolean} enabled - Whether the published complete atmosphere frame renders.
+	 * @returns {void} - Selection applied to the current published runtime.
+	 */
 	setAtmosphereEnabled(enabled) {
 		this._assertUsable();
 		if (typeof enabled !== 'boolean') {
@@ -707,6 +821,12 @@ export class Algorithm32Runtime {
 		}
 
 		this._disposed = true;
+		const disposalErrors = [];
+		try {
+			this._localFrameController?.dispose();
+		} catch (error) {
+			disposalErrors.push(error);
+		}
 		this._liveCancellation?.abort();
 		this._predictionCancellation?.abort();
 		this._predictionCancellation = null;
@@ -716,17 +836,49 @@ export class Algorithm32Runtime {
 		this._setupCancellation?.abort();
 		this._setupCancellation = null;
 		if (restoreRendering) this._sceneRuntime.restoreDirectRendering();
-		this._shaderHandle?.dispose();
+		try {
+			this._shaderHandle?.dispose();
+		} catch (error) {
+			disposalErrors.push(error);
+		}
 		this._shaderHandle = null;
-		this._mode.dispose();
+		try {
+			this._mode.dispose();
+		} catch (error) {
+			disposalErrors.push(error);
+		}
 		this._bindingValues = null;
-		this._cacheBackend?.dispose();
+		if (this._localFrameController) {
+			const backend = this._cacheBackend;
+			this._localBackendRelease = this._localFrameController.whenReleased().then(() => {
+				backend?.dispose();
+			});
+			// Observe rejection now while preserving it on the public completion promise.
+			this._localBackendRelease.catch((error) => {
+				this._shaderErrors.push(String(error));
+			});
+		} else
+			try {
+				this._cacheBackend?.dispose();
+			} catch (error) {
+				disposalErrors.push(error);
+			}
 		this._cacheBackend = null;
 		if (this._ownsComposer) {
-			this._composer?.dispose();
-			this._preparedRenderTarget?.dispose();
+			try {
+				this._composer?.dispose();
+			} catch (error) {
+				disposalErrors.push(error);
+			}
+			try {
+				this._preparedRenderTarget?.dispose();
+			} catch (error) {
+				disposalErrors.push(error);
+			}
 		}
 		this._composer = null;
 		this._installed = false;
+		if (disposalErrors.length === 1) throw disposalErrors[0];
+		if (disposalErrors.length > 1) throw new AggregateError(disposalErrors, 'Flat32 runtime teardown failed.');
 	}
 }

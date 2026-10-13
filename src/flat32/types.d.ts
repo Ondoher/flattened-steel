@@ -159,6 +159,15 @@ interface Flat32SceneRuntimeCapability {
 
 /** Independently implementable atmosphere runtime publication and teardown. */
 interface Flat32AlgorithmRuntimeCapability {
+	/** Stage a complete explicit compact frame without publication. */ prepareLocalFrame(
+		request: LocalSunFrameRequest,
+		signal?: AbortSignal,
+	): Promise<PreparedLocalSunFrame>;
+	/** Publish one complete compact packet at the application frame boundary. */ publishPreparedLocalFrame(
+		frame: PreparedLocalSunFrame,
+		signal: AbortSignal,
+	): Promise<LocalSunFramePublication>;
+	/** Await backend teardown after pending stages and final valid borrowers release. */ whenLocalFrameResourcesReleased(): Promise<void>;
 	/** Prepare and preflight the isolated candidate. */ setup(): Promise<Flat32AtmosphereSummary>;
 	/** Publish the complete candidate. */ publish(): void;
 	/** Select composition or direct rendering. */ setAtmosphereEnabled(enabled: boolean): void;
@@ -323,6 +332,10 @@ interface Flat32ShaderDiagnostics {
 
 /** Describe the runtime facts checked after a composed frame. */
 interface Flat32ShaderRuntimeDiagnostics {
+	/** Observed complete celestial generation state, when the runtime owns that participant. */
+	celestialGeneration?: Flat32CelestialGenerationDiagnostics | null;
+	/** Observed stellar pass generation state, when present. */
+	stellarGeneration?: Flat32CelestialPassDiagnostics | null;
 	/** Store the completed frame count. */
 	frameCount?: number;
 	/** Store the number of runtime render failures. */
@@ -330,6 +343,33 @@ interface Flat32ShaderRuntimeDiagnostics {
 	/** Store the most recent runtime failure when present. */
 	lastRenderError?: string | null;
 }
+
+/** Consumer-visible projection of one completed Sun or stellar generation. */
+type Flat32CelestialPassCompletion = Pick<CelestialSunTileGeneration, 'completion'>;
+
+/** Consumer-visible publication projection; generation resources remain owned by the engine. */
+type Flat32CelestialPassPublication = Readonly<{
+	/** Completed generation marker, or unavailable before publication. */ active?: Flat32CelestialPassCompletion | null;
+}>;
+
+/** Observed pass facts used only for application diagnostics, never numerical authority. */
+type Flat32CelestialPassDiagnostics = Readonly<{
+	/** Provider-reported lifecycle state. */ status: string;
+	/** Number of completed generations. */ generationCount: number;
+	/** Provider-owned publication observation, when available. */ publicationState?: Flat32CelestialPassPublication;
+}>;
+
+/** Observed Sun pass with its existing coverage policy identity. */
+type Flat32SunPassDiagnostics = Flat32CelestialPassDiagnostics &
+	Readonly<{
+		/** Provider-reported coverage policy identity. */ policyIdentity: string;
+	}>;
+
+/** Observed aggregate celestial runtime facts used by the application diagnostic canvas. */
+type Flat32CelestialGenerationDiagnostics = Readonly<{
+	/** Provider-reported aggregate lifecycle state. */ status: string;
+	/** Sun pass observation, when configured. */ sun?: Flat32SunPassDiagnostics | null;
+}>;
 
 /** Describe the Three program diagnostic consulted by preflight. */
 interface Flat32ProgramDiagnostic {
@@ -539,6 +579,7 @@ type Flat32ScenePublicationRequest = Readonly<{
 /** Shared-scene publication inputs with caller-owned cancellation. */
 type Flat32SharedSceneUpdateRequest = Flat32ScenePublicationRequest &
 	Readonly<{
+		/** Explicit complete compact request; ordinary scene selection is P4. */ localFrameRequest?: LocalSunFrameRequest;
 		/** Signal that cancels preparation before complete publication. */
 		signal: AbortSignal;
 	}>;
@@ -561,8 +602,40 @@ type Flat32ShaderEvidenceSnapshot = Readonly<{
 	/** Current configured physical model version. */ modelVersion: number;
 }>;
 
+/** Complete renderer-owned inputs for local shader and receiver staging. */
+type Flat32LocalFrameSceneCapability = Pick<
+	Flat32SceneRuntimeCapability,
+	'scene' | 'camera' | 'renderer' | 'viewportSize' | 'createAtmosphereComposer'
+>;
+
+/** Complete renderer-owned inputs for local shader and receiver staging. */
+type Flat32LocalFramePreparerConfiguration = Readonly<{
+	/** Creates an independently owned display model for each staged frame. */
+	createColorModel: () => Color;
+	/** External scene/renderer/composer creation owner. */ sceneRuntime: Flat32LocalFrameSceneCapability;
+	/** Exact physical length represented by scene units. */ sceneScale: SceneScale;
+	/** Geometry-owned maximum encoded scene endpoint depth. */ sceneDepthMax: Distance;
+}>;
+
+/** Ordinary shader counters used to reject incomplete composed frames. */
+type Flat32LocalFrameProgramDiagnostics = Readonly<{
+	/** Renderer compile/link report for the actual program. */ diagnostics?: Readonly<{
+		/** Actual program link viability. */ runnable: boolean;
+	}>;
+}>;
+
+/** Ordinary shader counters used to reject incomplete composed frames. */
+type Flat32LocalFrameShaderDiagnostics = Readonly<{
+	/** Actual installed runtime counters. */ runtime?: Readonly<{
+		/** Successfully rendered composed frames. */ frameCount?: number;
+		/** Reported render/compile failures. */ renderErrorCount?: number;
+	}>;
+}>;
+
 /** Direct-construction configuration for the production atmosphere runtime. */
 type Flat32RuntimeConfiguration = Readonly<{
+	/** Explicit admitted compact frame owner; normal selection/adoption remains separate. */
+	localFrameController?: LocalSunFramePublicationController;
 	/** Runtime-owned scene/rendering coordinator. */
 	sceneRuntime: Flat32SceneRuntimeCapability;
 	/** Independently owned opaque endpoint lighting. */

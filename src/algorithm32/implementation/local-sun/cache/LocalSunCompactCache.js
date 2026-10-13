@@ -4,7 +4,10 @@ import {ShaderContributions} from '../../../shader-assembly/base/ShaderContribut
 import {CUMULATIVE_SCATTERING_CACHE_VALUE_KEY} from '../../../gpu-cache-runtime/consts.js';
 import {LOCAL_SUN_CUMULATIVE_SCATTERING_SAMPLER_NAME} from './consts.js';
 
-/** Completed compact cache with ordinary-runtime lookup and jointly owned auxiliary resources. */
+/** Completed compact cache with ordinary-runtime lookup and jointly owned auxiliary resources.
+ *
+ * @implements {LocalSunFrameCacheOwner}
+ */
 export class LocalSunCompactCache extends LocalSunCache {
 	/** Accepted physical/numerical plan and lookup semantics. @type {LocalSunCompactGpuPlan} */
 	_plan;
@@ -92,18 +95,28 @@ export class LocalSunCompactCache extends LocalSunCache {
 		};
 	}
 
-	/** Call this method to contribute the same normalized ragged/per-tap lookup used during construction.
+	/** Call this method to contribute ordinary canonical compact lookup.
 	 *
+	 * @returns {ShaderContribution} - Ordinary physical cache lookup.
+	 */
+	createShaderContribution() {
+		return this.createFrameShaderContribution(null);
+	}
+
+	/** Call this method to contribute geometry-transformed normalized lookup without changing stored values.
+	 *
+	 * @param {FlatLocalCacheTransformCapability|null} [transform] - Optional immutable geometry-owned live map.
 	 * @returns {ShaderContribution} - Ordinary shared-runtime cumulative physical-J query.
 	 * @throws {Error} - Cache was disposed.
 	 */
-	createShaderContribution() {
+	createFrameShaderContribution(transform = null) {
 		this.getRuntimeBindings();
 		return ShaderContributions.createShaderContribution({
 			id: 'local-sun-compact-runtime-cache-v1',
 			owner: 'cache',
 			provides: ['cache.sampleCumulativeScatteringDensity'],
 			requires: [],
+			uniforms: transform === null ? [] : transform.createShaderUniforms(),
 			textures: [
 				ShaderContributions.createShaderTextureDeclaration(
 					LOCAL_SUN_CUMULATIVE_SCATTERING_SAMPLER_NAME,
@@ -119,6 +132,7 @@ export class LocalSunCompactCache extends LocalSunCache {
 				),
 			],
 			functions: [
+				...(transform === null ? [] : transform.createShaderFunctions()),
 				ShaderContributions.createShaderSourceBlock(
 					'compact-cache-lookup-helpers',
 					'sampleScatteringCache',
@@ -132,6 +146,8 @@ export class LocalSunCompactCache extends LocalSunCache {
 					1,
 					`
 SpectralValue sampleCumulativeScatteringDensity(vec3 positionMeters,AtmosphereCoordinate atmosphereCoordinate,vec3 physicalOutgoingDirection) {
+	${transform === null ? '' : 'positionMeters=localCacheCanonicalPosition(positionMeters); physicalOutgoingDirection=localCacheCanonicalDirection(physicalOutgoingDirection);'}
+	positionMeters.z=atmosphereCoordinate.altitudeMeters;
 	SpectralValue density;
 	for(int channel=0;channel<SPECTRAL_CHANNEL_COUNT;++channel) density.channels[channel]=compactStoredDensity(positionMeters,physicalOutgoingDirection,channel,compactRho(positionMeters));
 	return density;

@@ -356,6 +356,21 @@ type FlatCacheTransportDataRequest = Readonly<
 >;
 
 /** Accepted collaborators for geometry-owned compact GPU semantics. */
+type FlatLocalCacheTransformDefinition = Readonly<{
+	/** Physical source center used by construction. */ canonicalSource: Position;
+	/** Exact live source center at the requested observation. */ liveSource: Position;
+	/** Live horizontal frame rotation in radians. */ rotationRadians: number;
+}>;
+
+/** Independent public geometry construction for one live observation. */
+type FlatLocalFrameGeometryRequest = Readonly<{
+	/** Normalized exact geographic observation. */ observation: GeometryObservation;
+	/** New source to pair with the new geometry. */ lightSource: LightSourceModel & GeometryConfigurableLightSource;
+	/** Physical observer/receiver location. */ receiverPosition: Position;
+	/** Optional explicit finite-source center; omitted resolves the observation. */ sourcePosition?: Position;
+}>;
+
+/** Accepted collaborators for geometry-owned compact GPU semantics. */
 type FlatCompactCacheShaderDefinition = Readonly<{
 	/** Bound flat geometry, including canonical physical placement. */ geometry: FlatCompactCacheShaderGeometry;
 	/** Qualified ragged topology and physical support. */ topology: FlatCompactTopology;

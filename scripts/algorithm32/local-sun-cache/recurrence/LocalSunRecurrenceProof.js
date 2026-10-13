@@ -140,7 +140,7 @@ export class LocalSunRecurrenceProof {
 	verify() {
 		let started = performance.now(),
 			freeBefore = os.freemem();
-		if (freeBefore < 8 * 1024 ** 3) throw new Error('Eight GiB free memory required.');
+		if (freeBefore < 4 * 1024 ** 3) throw new Error('Four GiB free memory required.');
 		let controls = this._readControls();
 		/** Locate one independently generated physical pure or cumulative field.
 		 *

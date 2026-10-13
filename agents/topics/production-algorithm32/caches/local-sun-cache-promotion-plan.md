@@ -216,10 +216,23 @@ comparison, not an automatically adopted production budget; the film's expired
 2.4 GB/AFK exception is not available.
 
 Use serialized qualification jobs with the current ordinary host controls:
-8 GiB free-memory reserve, 8 GiB owned-process ceiling, ten-minute bounded jobs,
+4 GiB free-memory reserve, 8 GiB owned-process ceiling, ten-minute bounded jobs,
 progress at least every 30 seconds and owned-resource cleanup. Split work at
 meaningful evidence boundaries if needed; do not silently extend a resource or
 timing limit. Offline film timing establishes no interactive performance target.
+
+Application cache-build memory sizing is a separate, open question. On
+2026-10-13 the owner explicitly directed that answering it must not block any
+phase of this plan. Preserve measured logical allocations and process/driver
+observations for that later answer; do not treat a production memory-budget or
+hardware-minimum decision as a prerequisite for continuing the plan. The
+plan-execution free-memory reserve above is distinct from app memory sizing.
+
+On 2026-10-13 the owner lowered only the free-memory reserve from 8 GiB to
+4 GiB throughout execution of this promotion plan, including subsequent phases
+and CPU/GPU proof runners, and retained the ability to interrupt if system
+responsiveness suffers. Earlier receipts retain their original 8 GiB policy.
+The owned-process ceiling, logical GPU budget and numerical gates are unchanged.
 
 ## Work Sequence
 

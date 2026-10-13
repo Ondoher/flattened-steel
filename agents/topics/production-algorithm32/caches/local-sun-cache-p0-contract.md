@@ -206,10 +206,24 @@ ceiling cannot be met; measure actual declared allocations and prevent peak
 overflow. Never dispose the displayed frame to force admission. Hardware lacking
 the needed texture/FP32/context capabilities returns explicit unsupported status.
 
-Qualification jobs serialize; retain 8 GiB free-memory reserve, 8 GiB owned-process
+Qualification jobs serialize; retain 4 GiB free-memory reserve, 8 GiB owned-process
 ceiling, ten-minute bound, progress within 30 seconds and owned-resource cleanup.
 Logical allocations, process samples and driver/GPU observations are reported
 separately. No replacement-latency or frame-rate target is selected.
+
+Application cache-build memory sizing remains an open question separate from
+the plan-execution reserve. On 2026-10-13 the owner directed that its answer
+must not block any plan phase. The original 1.6 GB logical allocation policy
+describes the current bounded implementation and prior measurements; it does
+not establish the app's eventual memory requirement or a prerequisite production
+budget decision. Retain measurements for the later sizing answer.
+
+The owner changed the free-memory reserve from 8 GiB to 4 GiB on 2026-10-13
+throughout execution of the whole promotion plan and may interrupt if system
+responsiveness suffers. All plan-owned CPU/GPU proof runners use that reserve
+for subsequent executions; ongoing GPU monitoring uses the same 4 GiB threshold.
+This supersedes only that host guard; the original P0/P1/P2 receipts and failed
+P3 runs retain their original policy and are not reclassified.
 
 ## Capability Evidence And Remaining Gates
 

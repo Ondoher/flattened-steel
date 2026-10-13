@@ -9,6 +9,7 @@ import {Algorithm32} from '../../../../src/algorithm32/implementation/algorithm3
 import {LocalSunRuntimeProof} from './LocalSunRuntimeProof.js';
 import {LocalSunOmissionProof} from './LocalSunOmissionProof.js';
 import {LocalSunGpuCleanupProof} from './LocalSunGpuCleanupProof.js';
+import {LocalSunFrameGpuProof} from './LocalSunFrameGpuProof.js';
 
 /** Production GPU construction and ordinary-cache proof entry used only by the bounded offline host. */
 export class LocalSunGpuBrowserProof {
@@ -17,7 +18,20 @@ export class LocalSunGpuBrowserProof {
 	 * @param {LocalSunGpuBrowserProofRequest} request - Authenticated physical controls and bounded qualification mode.
 	 * @returns {Promise<LocalSunGpuBrowserProofReport>} - Complete physical comparisons and logical resources.
 	 */
-	async verify({p0, controls, order, full, runtime, omission, cleanup, sourceScale = 1}) {
+	async verify({
+		p0,
+		controls,
+		order,
+		full,
+		runtime,
+		omission,
+		cleanup,
+		reuse = false,
+		movement = [],
+		qualifiedFieldHash,
+		sourceScale = 1,
+		sceneColorPrecision = 'float32',
+	}) {
 		let spatial = p0.controls;
 		let geometry = new FlatEarthGeometry({
 			topAltitude: {value: spatial.geometry.atmosphereTop.value, units: 'meters'},
@@ -295,6 +309,28 @@ export class LocalSunGpuBrowserProof {
 								provenanceIdentity: 'p0:74a7cb03:cleanup-control',
 							}),
 				});
+			}
+			if (reuse) {
+				backend.compile = compile;
+				backend.submitLayer = submit;
+				if (movement.length !== 5 || !qualifiedFieldHash)
+					throw new Error('Authenticated day controls and P2 field identity required');
+				const retainedBytes =
+					cache.resources.executor.residentFieldStorage.value + cache.resources.retainedAuxiliaryBytes.value;
+				// This completed control already supplied its qualified field observations.
+				// Release it before staging the old/new pair; no displayed frame is discarded.
+				controller.dispose();
+				controller = null;
+				result.reuse = await new LocalSunFrameGpuProof().verify({
+					profile,
+					backend,
+					renderer,
+					movement,
+					expectedFieldHash: qualifiedFieldHash,
+					sceneColorPrecision,
+					retainedBytes: retainedBytes,
+				});
+				result.glError = renderer.getContext().getError();
 			}
 			if (result.glError !== 0) throw new Error('WebGL error ' + result.glError);
 			return result;

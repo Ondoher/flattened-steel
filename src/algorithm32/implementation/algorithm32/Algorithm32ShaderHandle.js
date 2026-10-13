@@ -201,8 +201,11 @@ export class Algorithm32ShaderHandle {
 		});
 		const calculator = new LocalLightLevelCalculator({lightSource: request.lightSource});
 		const roster = this._facade._model.celestialSources;
+		const candidateSource = /** @type {LightSourceModel & DistantSunCelestialSource} */ (request.lightSource);
+		if (roster?.family === 'spherical-sun-stars-radial-v1' && candidateSource.kind !== 'distant-uniform-sun')
+			throw new RangeError('Distant receiver preparation requires its paired distant source.');
 		const candidateRoster =
-			roster?.family === 'spherical-sun-stars-radial-v1' ? {...roster, sun: request.lightSource} : null;
+			roster?.family === 'spherical-sun-stars-radial-v1' ? {...roster, sun: candidateSource} : null;
 		const directLight = calculator.measureConfiguredReceiverDirectLight({
 			geometry: request.geometry,
 			atmosphere: model.atmosphere,

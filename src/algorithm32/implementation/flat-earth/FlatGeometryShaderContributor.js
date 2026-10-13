@@ -25,9 +25,10 @@ export class FlatGeometryShaderContributor {
 	/**
 	 * Call this method to create the geometry-owned flat shader contribution. Conditional result values are selected from the accepted input and current state.
 	 *
+	 * @param {boolean} [compact] - Explicit compact model supplies its own complete stencils.
 	 * @returns {ShaderContribution} - The geometry contribution.
 	 */
-	createShaderContribution() {
+	createShaderContribution(compact = false) {
 		const facts = this._configuration;
 		const frame = facts.observerLocalSceneFrame;
 		const dome = facts.observerCenteredDome;
@@ -79,13 +80,23 @@ export class FlatGeometryShaderContributor {
 				'geometry.resolveAtmospherePath',
 				'geometry.atmosphereCoordinateTypes',
 				'geometry.resolveAtmosphereCoordinate',
-				'geometry.scatteringCacheStencilTypes',
-				'geometry.resolveScatteringCachePositionStencil',
-				'geometry.resolveScatteringCacheDirectionStencil',
+				...(compact
+					? []
+					: [
+							'geometry.scatteringCacheStencilTypes',
+							'geometry.resolveScatteringCachePositionStencil',
+							'geometry.resolveScatteringCacheDirectionStencil',
+						]),
 				'geometry.finiteCelestialAtmosphereSegment',
 			],
 			requires: ['runtime.initialState', 'runtime.depthTexture', 'runtime.sceneHitTexture'],
 			uniforms: [
+				ShaderContributions.createShaderUniformDeclaration(
+					'GEOMETRY_SOURCE_SUBPOINT_METERS',
+					'vec3',
+					'geometry.sourceSubpoint',
+					sourceSubpointMeters,
+				),
 				ShaderContributions.createShaderUniformDeclaration(
 					'uInverseProjectionMatrix',
 					'mat4',
@@ -143,11 +154,14 @@ struct CacheDirectionStencil {
 					0,
 					`const float GEOMETRY_TOP_ALTITUDE_METERS = ${ShaderSource.formatFloat(topAltitudeMeters)};
 const float GEOMETRY_SCENE_SKY_RAY_LIMIT_METERS = ${ShaderSource.formatFloat(sceneSkyRayLimitMeters)};
-const int GEOMETRY_CACHE_Z_COUNT = ${cacheAltitudeNodesMeters.length};
+${
+	compact
+		? ''
+		: `const int GEOMETRY_CACHE_Z_COUNT = ${cacheAltitudeNodesMeters.length};
 const int GEOMETRY_CACHE_RHO_COUNT = ${cacheRadialNodesMeters.length};
 const float GEOMETRY_CACHE_Z_NODES_METERS[${cacheAxisMaximumNodeCount}] = float[${cacheAxisMaximumNodeCount}](${ShaderSource.formatFloatArray(paddedCacheAltitudeNodesMeters)});
-const float GEOMETRY_CACHE_RHO_NODES_METERS[${cacheAxisMaximumNodeCount}] = float[${cacheAxisMaximumNodeCount}](${ShaderSource.formatFloatArray(paddedCacheRadialNodesMeters)});
-const vec3 GEOMETRY_SOURCE_SUBPOINT_METERS = ${ShaderSource.formatVec3(sourceSubpointMeters)};
+const float GEOMETRY_CACHE_RHO_NODES_METERS[${cacheAxisMaximumNodeCount}] = float[${cacheAxisMaximumNodeCount}](${ShaderSource.formatFloatArray(paddedCacheRadialNodesMeters)});`
+}
 const vec3 GEOMETRY_CACHE_RADIAL_FALLBACK = ${ShaderSource.formatVec3(cacheRadialFallbackDirection)};
 const vec3 GEOMETRY_OBSERVER_UP_DIRECTION = ${ShaderSource.formatVec3(frame.up)};
 const vec3 GEOMETRY_OBSERVER_RIGHT_DIRECTION = ${ShaderSource.formatVec3(frame.right)};
@@ -270,7 +284,7 @@ void chooseNearestBoundary(float candidateDistanceMeters, bool hasCandidate, ino
 }`,
 				),
 				ShaderContributions.createShaderSourceBlock(
-					'geometry-cache-stencils',
+					'geometry-atmosphere-coordinate',
 					'sampleScatteringCache',
 					0,
 					`AtmosphereCoordinate resolveAtmosphereCoordinate(
@@ -279,13 +293,29 @@ void chooseNearestBoundary(float candidateDistanceMeters, bool hasCandidate, ino
 ) {
 	vec3 positionMeters =
 		ray.originMeters + ray.direction * distanceMeters;
+	// Resolve analytic boundary coordinates exactly. FP32 multiply/add can place
+	// a computed top/ground endpoint one ULP outside its closed physical support.
+	if (ray.direction.z > 0.000001
+		&& distanceMeters == (GEOMETRY_TOP_ALTITUDE_METERS - ray.originMeters.z) / ray.direction.z) {
+		positionMeters.z = GEOMETRY_TOP_ALTITUDE_METERS;
+	} else if (ray.direction.z < -0.000001
+		&& distanceMeters == -ray.originMeters.z / ray.direction.z) {
+		positionMeters.z = 0.0;
+	}
 	return AtmosphereCoordinate(
 		positionMeters.z,
 		length(positionMeters.xy - GEOMETRY_SOURCE_SUBPOINT_METERS.xy)
 	);
-}
-
-void geometryCacheAxisStencil(
+}`,
+				),
+				...(compact
+					? []
+					: [
+							ShaderContributions.createShaderSourceBlock(
+								'geometry-cache-stencils',
+								'sampleScatteringCache',
+								0,
+								`void geometryCacheAxisStencil(
 	float coordinateMeters,
 	const int nodeCount,
 	const float nodesMeters[${Math.max(cacheAltitudeNodesMeters.length, cacheRadialNodesMeters.length)}],
@@ -483,7 +513,8 @@ CacheDirectionStencil resolveScatteringCacheDirectionStencil(
 		)
 	);
 }`,
-				),
+							),
+						]),
 				ShaderContributions.createShaderSourceBlock(
 					'geometry-finite-celestial-atmosphere-segment',
 					'resolvePathBounds',

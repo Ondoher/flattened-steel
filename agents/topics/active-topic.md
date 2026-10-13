@@ -25,7 +25,11 @@ selected physical CPU pure/cumulative operators and construction rays. The
 compact GPU graph and ordinary lookup/view qualification, including full occupied
 fields, matched N1/N2/N4 rays, omission identity, resources and candidate cleanup.
 Only the matching final P2 CLEAN primary/audit receipt establishes completion.
-Next is P3: admitted reuse and atomic complete-frame publication. Full-domain CPU
+The [P3 boundary](production-algorithm32/caches/local-sun-p3-closure.md) records
+admitted reuse and atomic complete-frame publication, passing N1/N2/N4 and
+half-float proofs, lifecycle/browser checks and resource observations. Only its
+matching final CLEAN primary/audit receipt establishes P3 completion. P4 ordinary
+scene integration is the next unselected phase. Full-domain CPU
 recurrence remains unadmitted. Profile/default selection, deployment and
 publication have not changed. Ended experiment and prior receipts remain immutable.
 
@@ -38,8 +42,9 @@ publication have not changed. Ended experiment and prior receipts remain immutab
 5. [Production architecture boundaries](production-algorithm32/architecture-contracts/architecture-boundaries.md)
 6. [Local-Sun P2 closure](production-algorithm32/caches/local-sun-p2-closure.md)
 7. [Local-Sun P0 contracts and controls](production-algorithm32/caches/local-sun-cache-p0-contract.md)
+8. [Local-Sun P3 implementation and proof boundary](production-algorithm32/caches/local-sun-p3-closure.md)
 
-Before P3 implementation, validate the matching P2 review receipt, load its
-selected contracts/evidence, capture a new baseline and confirm reviewer readiness.
+Before a later implementation phase, validate the matching P3 review receipt,
+load its selected contracts/evidence, capture a new baseline and confirm reviewer readiness.
 Standards follow destination folders; experiment mappings do not govern production.
 Existing receipts retain their original frozen scopes.

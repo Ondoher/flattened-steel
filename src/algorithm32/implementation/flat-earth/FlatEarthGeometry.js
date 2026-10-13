@@ -385,6 +385,51 @@ export class FlatEarthGeometry {
 		return this._configuration;
 	}
 
+	/** Call this method to create an independently bound live geometry through public configuration.
+	 *
+	 * @param {FlatLocalFrameGeometryRequest} request - Exact observation, source, receiver and optional explicit placement.
+	 * @returns {FlatEarthGeometry} - Independent geometry; this geometry remains unchanged.
+	 */
+	createLocalFrameGeometry(request) {
+		this._assertConfigured();
+		const instant = new Date(request.observation.instant);
+		if (
+			typeof request.observation.instant !== 'string' ||
+			!Number.isFinite(instant.getTime()) ||
+			instant.toISOString() !== request.observation.instant
+		)
+			throw new TypeError('Canonical exact UTC observation required.');
+		const latitude = AngleMath.toDegrees(request.observation.location.latitude);
+		const longitude = AngleMath.toDegrees(request.observation.location.longitude);
+		if (latitude < -90 || latitude > 90 || longitude < -180 || longitude > 180)
+			throw new RangeError('Live observation location is outside geographic bounds.');
+		const facts = this._configuration;
+		const geometry = new FlatEarthGeometry({
+			observerPosition: request.receiverPosition,
+			topAltitude: facts.topAltitude,
+			localLightSourceHeight: facts.localLightSourceHeight,
+			projectionRadius: facts.projectionRadius,
+			sceneSkyRayLimit: facts.sceneSkyRayLimit,
+			observerCenteredDome: facts.observerCenteredDome,
+			runtimeDiagnosticLimit: facts.runtimeDiagnosticLimit,
+			...(facts.cacheAltitudeNodesExplicit ? {cacheAltitudeNodes: facts.cacheAltitudeNodes} : {}),
+		});
+		geometry.configureLightSource({
+			lightSource: request.lightSource,
+			observation: {
+				instant: request.observation.instant,
+				location: {
+					latitude: {...request.observation.location.latitude},
+					longitude: {...request.observation.location.longitude},
+				},
+			},
+			...(request.sourcePosition === undefined
+				? {}
+				: {placement: {kind: 'finite-position', position: request.sourcePosition}}),
+		});
+		return geometry;
+	}
+
 	/**
 	 * The bounded runtime diagnostics recorded by tolerant paths.
 	 *
@@ -753,10 +798,13 @@ export class FlatEarthGeometry {
 	/**
 	 * Call this method to create the geometry-owned flat shader contribution.
 	 *
+	 * @param {ShaderContributionRequest} [request] - Optional configured-model context selecting its actual compact or rectangular domain.
 	 * @returns {ShaderContribution} - The geometry shader contribution.
 	 */
-	createShaderContribution() {
-		return this._shaderContributor.createShaderContribution();
+	createShaderContribution(request) {
+		return this._shaderContributor.createShaderContribution(
+			request?.model.profile.compactConstruction !== undefined,
+		);
 	}
 
 	/**

@@ -1,5 +1,6 @@
 import {LocalSunCacheProvider} from './cache/LocalSunCacheProvider.js';
 import {LocalSunCacheController} from './cache/LocalSunCacheController.js';
+import {LocalSunFrameController} from './cache/frames/LocalSunFrameController.js';
 import {LocalSunShaderContributor} from './LocalSunShaderContributor.js';
 import {LocalSunSceneLightingAdapter} from './three/LocalSunSceneLightingAdapter.js';
 import {
@@ -363,6 +364,15 @@ export class LocalSunLightSource {
 	createCacheController({model, backend, scheduler}) {
 		this._requireConfiguration('createCacheController');
 		return this._cacheProvider.createCacheController({model, backend, scheduler});
+	}
+
+	/** Call this method to create an explicit complete-frame staging/lease owner for qualified compact profiles.
+	 *
+	 * @param {LocalSunFrameControllerConfiguration} configuration - Backend and renderer-owned staging operation.
+	 * @returns {LocalSunFramePublicationController} - Source-owned frame lifecycle; no default activation is implied.
+	 */
+	createFrameController(configuration) {
+		return new LocalSunFrameController(configuration);
 	}
 
 	/**

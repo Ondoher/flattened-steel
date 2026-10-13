@@ -41,7 +41,7 @@ export class LocalSunCompactProfileProof {
 	verify() {
 		let started = performance.now();
 		let freeBefore = os.freemem();
-		if (freeBefore < 8 * 1024 ** 3) throw new Error('Eight GiB free-memory reserve required.');
+		if (freeBefore < 4 * 1024 ** 3) throw new Error('Four GiB free-memory reserve required.');
 		let base = new LocalSunAssemblyProof();
 		let authority = base.readAuthority();
 		let p0Path = 'src/algorithm32/implementation/local-sun/cache/fixtures/local-sun-compact-p0-controls.json';

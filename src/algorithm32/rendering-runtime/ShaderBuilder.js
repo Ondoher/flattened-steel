@@ -215,6 +215,7 @@ export class ShaderBuilder {
 		const previous = request.previousBuildResult;
 		const previousIdentity = previous?.scatteringCacheControllerIdentity;
 		const canReuseController = Boolean(
+			!request.setup.preparedScatteringCacheController &&
 			previous?.scatteringCacheController &&
 			previousIdentity &&
 			previousIdentity.source === scatteringCacheControllerIdentity.source &&
@@ -222,13 +223,15 @@ export class ShaderBuilder {
 			previousIdentity.scheduler === scatteringCacheControllerIdentity.scheduler,
 		);
 
-		const scatteringCacheController = canReuseController
-			? previous.scatteringCacheController
-			: this.model.lightSource.createCacheController({
-					model: this.model,
-					backend: request.setup.cacheBackend,
-					scheduler: request.setup.cacheBuildScheduler,
-				});
+		const scatteringCacheController =
+			request.setup.preparedScatteringCacheController ??
+			(canReuseController
+				? previous.scatteringCacheController
+				: this.model.lightSource.createCacheController({
+						model: this.model,
+						backend: request.setup.cacheBackend,
+						scheduler: request.setup.cacheBuildScheduler,
+					}));
 
 		/** @type {DistantSunCelestialCacheController | null} */
 		let distantSunCelestialCacheController = null;

@@ -94,14 +94,17 @@ spherical/local cross-pairings are not completion or parity requirements.
 
 `implementation/` is the public concrete implementation surface. Every
 immediate child names the feature it implements and owns that feature's
-complete private closure. `implementation/index.js` is the aggregate public
-runtime entry point and exports exactly `Algorithm32`,
-`BrunetonColorDisplayModel`, `CanonicalAtmosphere`,
-`DistantSunLightSource`, `FlatEarthGeometry`, `LocalSunLightSource`,
-`LocalLightLevelCalculator`, `SphericalEarthGeometry`, `StellarPointSetSource`, `ThreeCacheBackend`,
-`UniformLambertianGroundBoundary`, `Algorithm32AtmosphereComposer`,
-`Algorithm32Bindings`, `Algorithm32R3FAtmosphereComposer`,
-`Algorithm32R3FValues`, and `Algorithm32ThreeResources`.
+complete private closure. [implementation/index.js](implementation/index.js)
+is the aggregate public runtime entry; that entry owns the concrete facade,
+physical, color, lighting and renderer exports rather than duplicating their
+inventory here.
+
+`implementation/frame-runtime/index.js` is a second, narrow public runtime entry
+for headless complete-frame preparation. It exports the same `Algorithm32`
+facade and `Algorithm32Bindings` adapter without loading optional React component
+exports. Application consumers use this entry or the aggregate entry; the
+underlying feature modules remain private implementation closures. This entry
+owns no cache, source, geometry, receiver or resource lifecycle.
 
 `interfaces/` is declaration-only. It owns the global behavioral interfaces
 and public data contracts for Algorithm32, atmosphere, cache backend, color,
