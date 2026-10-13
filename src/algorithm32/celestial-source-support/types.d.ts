@@ -253,6 +253,8 @@ type CelestialSourceRosterIdentityFacts =
 			readonly id: string;
 			/** Flat finite-local-Sun family discriminator. */
 			readonly family: 'flat-local-finite-sun-v1';
+			/** Optional authenticated stellar identity; projection remains geometry owned. */
+			readonly stars: StellarPointSetSourceIdentityFacts | null;
 			/** Accepted finite-Sun identity facts. */
 			readonly localSun: FlatFiniteSunCelestialSourceIdentityFacts;
 	  }>;

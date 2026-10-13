@@ -15,6 +15,7 @@ import {CUBED_SPHERE_W27_DIRECTION_DOMAIN_OWNER} from '../../../sampling-domains
 import {LOCAL_SUN_COMPACT_TRANSPORT_POLICY} from './compact-transport-consts.js';
 import {LOCAL_SUN_COMPACT_QUALIFIED_RUNTIME_FAMILY} from './consts.js';
 import LocalSunFieldPacking from './LocalSunFieldPacking.js';
+import {CelestialSourceRoster} from '../../../celestial-source-support/CelestialSourceRoster.js';
 
 /** Complete explicit compact cache-construction profile; ordinary runtime execution remains a separate integration gate. */
 export class LocalSunCompactConstructionProfile {
@@ -350,8 +351,9 @@ export class LocalSunCompactConstructionProfile {
 	 * consumers are separate promotion phases; this explicit selection disables the roster.
 	 *
 	 * @returns {Algorithm32ExecutionProfile} - Complete profile with analytic source semantics.
+	 * @param {CelestialSourceRoster|null} [celestialSources] - Optional exact live celestial consumers; never part of canonical field construction.
 	 */
-	createExecutionProfile() {
+	createExecutionProfile(celestialSources = null) {
 		LocalSunCompactConstructionProfile.assert(this);
 		if (
 			this._runtimeFamilyIdentity() !== LOCAL_SUN_COMPACT_QUALIFIED_RUNTIME_FAMILY ||
@@ -362,17 +364,30 @@ export class LocalSunCompactConstructionProfile {
 			throw new RangeError(
 				'Changed compact physical/domain family requires independent qualification before runtime construction.',
 			);
+		const roster = CelestialSourceRoster.accept({
+			roster: celestialSources,
+			geometry: this.models.geometry,
+			lightSource: this.models.lightSource,
+			basis: this.spectral.basis,
+		});
+		const contentHash =
+			roster === null
+				? this.contentHash
+				: CanonicalValueHash.sha256Value({
+						construction: this.contentHash,
+						celestial: CelestialSourceRoster.describeIdentity(roster, this.spectral.basis),
+					});
 		return {
 			kind: 'algorithm32-execution-profile',
 			id: this.id,
 			schemaRevision: 'compact-local-runtime-v1',
 			revision: this.revision,
-			contentHash: this.contentHash,
+			contentHash,
 			provenanceIdentity: this.provenanceIdentity,
 			spectral: this.spectral,
 			models: {
 				...this.models,
-				celestialSources: null,
+				celestialSources: roster,
 				sourcePlacement: {
 					kind: 'explicit-geometry-placement',
 					observation: this.models.geometry.configuration.observation,

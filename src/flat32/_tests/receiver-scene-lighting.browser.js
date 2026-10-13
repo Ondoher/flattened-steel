@@ -27,6 +27,35 @@ function receiverLight(directValue, diffuseValue, identity) {
 }
 
 describe('Flat32 receiver-driven scene lighting', () => {
+	it('stages measured local lighting without changing the displayed lights, then publishes and restores it', () => {
+		const parent = new THREE.Group(),
+			lighting = new LocalSunSceneLighting(parent),
+			color = new BrunetonColorDisplayModel();
+		lighting.install();
+		const original = lighting.describe();
+		const group = parent.children[0],
+			ambient = group.children.find((object) => object instanceof THREE.HemisphereLight);
+		const previousRgb = ambient.color.toArray();
+		const transaction = lighting.prepareMeasuredLocalLighting(
+			{coordinates: [0, 4828, -2000], units: 'scene-units'},
+			receiverLight(2, 0.5, 'exact-local'),
+			color,
+		);
+		expect(lighting.describe()).toEqual(original);
+		expect(ambient.color.toArray()).toEqual(previousRgb);
+		transaction.publish();
+		expect(ambient.userData.receiverLightIdentity).toBe('exact-local');
+		expect(ambient.groundColor.toArray()).toEqual([0, 0, 0]);
+		expect(
+			group.children
+				.filter((object) => object instanceof THREE.DirectionalLight)
+				.every((light) => light.userData.receiverLightIdentity === 'exact-local'),
+		).toBeTrue();
+		transaction.revert();
+		expect(lighting.describe()).toEqual(original);
+		expect(ambient.color.toArray()).toEqual(previousRgb);
+		lighting.dispose();
+	});
 	it('routes direct-normal and diffuse-horizontal spectra to existing Three lights', () => {
 		const parent = new THREE.Group();
 		const lighting = new LocalSunSceneLighting(parent);

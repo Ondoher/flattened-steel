@@ -515,6 +515,7 @@ type CelestialGenerationRuntimeValueKey =
 	| 'runtime.celestial.stellarScreenIndex'
 	| 'runtime.celestial.stellarPalette'
 	| 'runtime.celestial.sunCoverageTile'
+	| 'runtime.celestial.sunRadiusPixels'
 	| 'runtime.celestial.sunSurfaceRadiance';
 
 /** Opaque renderer binding for one completed celestial generation output. */

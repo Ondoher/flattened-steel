@@ -187,6 +187,8 @@ type FlatLocalFiniteSunSourceRoster = Readonly<{
 	readonly family: 'flat-local-finite-sun-v1';
 	/** Exact configured light-source object implementing the finite-local capability. */
 	readonly localSun: FiniteLocalSunCelestialSource;
+	/** Optional authenticated catalog rendered through geometry-owned flat stellar projection. */
+	readonly stars?: StellarScreenPaletteSource | null;
 }>;
 
 /** Immutable celestial capability roster accepted by the production facade. */

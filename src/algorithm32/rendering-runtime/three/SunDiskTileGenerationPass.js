@@ -8,7 +8,7 @@ const TILE_SAMPLES_PER_PIXEL = 16;
 const TILE_MARGIN_PIXELS = 2;
 const TILE_TEXTURE_NAME = 'algorithm32-sun-continuous-coverage-tile';
 const ZERO_TILE_TEXTURE_NAME = 'algorithm32-sun-continuous-coverage-zero';
-const COVERAGE_POLICY_ID = 'analytic-circular-disk-pixel-overlap-field-s16-v1';
+const COVERAGE_POLICY_ID = 'analytic-disjoint-zero-circular-disk-pixel-overlap-field-s16-v2';
 
 /** Composer-compatible generation pass for one compact source-local Sun coverage tile. */
 export class SunDiskTileGenerationPass {
@@ -132,6 +132,8 @@ float sunCircleSegmentArea(vec2 left, vec2 right, float radiusPixels) {
 }
 
 float sunCircularDiskPixelCoverage(vec2 pixelCenter, float radiusPixels) {
+	vec2 nearestOffset = max(abs(pixelCenter) - vec2(0.5), vec2(0.0));
+	if (dot(nearestOffset, nearestOffset) >= radiusPixels * radiusPixels) return 0.0;
 	vec2 bottomLeft = pixelCenter + vec2(-0.5, -0.5);
 	vec2 bottomRight = pixelCenter + vec2(0.5, -0.5);
 	vec2 topRight = pixelCenter + vec2(0.5, 0.5);
@@ -232,7 +234,12 @@ void main() {
 			angularRadiusRadians = this._definition.angularRadius.value;
 			sourceVisible = this._placement.support.classification !== 'empty';
 		} else if (this._placement.kind === 'finite-local-sun' && this._definition.kind === 'finite-local-sun') {
-			modelCenter = SceneMath.toScenePosition(this._placement.center, this._sceneScale);
+			if (typeof this._geometry.mapModelPositionToObserverLocalScenePoint !== 'function') {
+				throw new TypeError('Finite Sun projection requires geometry-owned model-to-scene point mapping.');
+			}
+			modelCenter = this._geometry.mapModelPositionToObserverLocalScenePoint(this._placement.center, {
+				sceneScale: this._sceneScale,
+			}).coordinates;
 			homogeneous = 1;
 			const cameraWorldMatrix = CelestialRenderViewSnapshot._invertMatrix4([
 				...this._camera.matrixWorldInverse.elements,
@@ -369,6 +376,7 @@ void main() {
 		return {
 			'runtime.celestial.sunCoverageTile': this._activeTarget.texture,
 			'runtime.celestial.sunScreenCenterPixels': [...this._desiredProjection.centerPixels],
+			'runtime.celestial.sunRadiusPixels': this._desiredProjection.radiusPixels,
 			'runtime.celestial.sunTileResolution': [
 				this._desiredProjection.resolution,
 				this._desiredProjection.resolution,
@@ -388,6 +396,7 @@ void main() {
 		return {
 			'runtime.celestial.sunCoverageTile': this._zeroTexture,
 			'runtime.celestial.sunScreenCenterPixels': [-1000000, -1000000],
+			'runtime.celestial.sunRadiusPixels': 0,
 			'runtime.celestial.sunTileResolution': [1, 1],
 			'runtime.celestial.sunTileSamplesPerPixel': 1,
 			'runtime.celestial.sunSurfaceRadiance': [...this._definition.surfaceRadiance.values],

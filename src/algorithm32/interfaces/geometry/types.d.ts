@@ -20,7 +20,7 @@ type GeometryObservation = Readonly<{
  * The transform is evaluated once for the fixed configured observation. It is
  * not a live clock or animation contract.
  */
-type StellarEpochRelativeTransformIdentity = Readonly<{
+type SphericalStellarEpochRelativeTransformIdentity = Readonly<{
 	/** IAU 2000 three-angle precession from the catalog epoch to the observation instant. */
 	readonly precession: 'iau-2000-three-angle';
 	/** USNO mean sidereal-time rotation used at the observation instant. */
@@ -32,6 +32,21 @@ type StellarEpochRelativeTransformIdentity = Readonly<{
 	/** Receiver-local right-handed output basis ordered east, north, and up. */
 	readonly localFrame: 'east-north-up-rh-v1';
 }>;
+
+/** Qualified simulated flat-star epoch, polar projection and receiver parallax. */
+type FlatStellarEpochRelativeTransformIdentity = Readonly<{
+	/** Polar azimuthal map and ellipsoidal presentation dome. */ projection: 'azimuthal-equidistant-polar-dome-v1';
+	/** Fixed westward rotation; no spherical precession claim. */ rotation: 'westward-fixed-sidereal-period-v1';
+	/** Simulation epoch in Unix milliseconds. */ epochMilliseconds: number;
+	/** Simulation rotation period in milliseconds. */ periodMilliseconds: number;
+	/** Physical polar map scale. */ projectionRadius: Distance;
+	/** Physical presentation dome height. */ domeHeight: Distance;
+	/** Receiver-local right-handed east/north/up axes. */ localFrame: 'east-north-up-rh-v1';
+	/** Finite presentation-point parallax, independent of emission distance. */ parallax: 'receiver-relative-dome-point-v1';
+}>;
+/** Exact transform identity owned by the selected supported celestial geometry. */
+type StellarEpochRelativeTransformIdentity =
+	SphericalStellarEpochRelativeTransformIdentity | FlatStellarEpochRelativeTransformIdentity;
 
 /** Renderer-neutral fixed camera and viewport snapshot for celestial generation. */
 type CelestialRenderViewSnapshot = Readonly<{
@@ -315,6 +330,12 @@ interface CelestialGeometryCapability {
 	 * Distant-source renderers require this when the geometry scene frame is not identity.
 	 */
 	expressCelestialDirectionInScene?(modelDirection: UnitVector3): UnitVector3;
+
+	/** Map a finite celestial model point into the observer-local renderer frame. */
+	mapModelPositionToObserverLocalScenePoint?(
+		position: Position,
+		request: Readonly<{sceneScale: SceneScale}>,
+	): ScenePosition;
 
 	/**
 	 * Call this method to return the static celestial contribution domain owned by this geometry.

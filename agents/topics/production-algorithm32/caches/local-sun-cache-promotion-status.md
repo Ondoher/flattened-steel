@@ -1,8 +1,8 @@
 # Local-Sun Cache Production Port Status
 
-Current disposition, 2026-10-13: the owner selected P3; its implementation and
-N1/N2/N4/half-float numerical and browser qualification are delivered. Only the
-matching final CLEAN primary/audit receipt establishes P3 completion.
+Current disposition, 2026-10-13: P3 is complete under its matching CLEAN
+primary/audit receipt. The owner selected P4 ordinary Flat32 and required
+celestial integration; implementation and qualification are in progress.
 The [plan](local-sun-cache-promotion-plan.md) owns scope and sequence;
 [P0](local-sun-cache-p0-contract.md) owns parameter applicability, independent
 controls and resource policies. The ended experiment and all prior evidence
@@ -24,25 +24,23 @@ remains deferred.
 | P0 — contracts and controls | Complete under its matching CLEAN receipt. |
 | P1 — compact domain and selected CPU reference | Complete under the final P1 closure receipt; full CPU recurrence remains unadmitted. |
 | P2 — GPU construction/runtime | Delivered genuine compact GPU graph and ordinary shared lookup/view consumers, qualified occupied fields, N1/N2/N4, omission and candidate cleanup. The matching CLEAN primary/audit receipt completes the phase. |
-| P3 — reuse and frame publication | Delivered source-owned leases, complete staging and atomic publication. N1/N2/N4 16-pose and half-float rendering proofs, type checks, lifecycle and browser checks pass. Only the matching final CLEAN primary/audit receipt completes the phase. |
-| P4 — Flat32/celestial consumers | Planned; not started. |
+| P3 — reuse and frame publication | Complete under its matching CLEAN primary/audit receipt; numerical, lifecycle and browser proofs pass. |
+| P4 — Flat32/celestial consumers | Selected; ordinary integration and required consumer qualification in progress. |
 | P5 — qualification/adoption preparation | Planned; no adoption, deployment or publication selected. |
 
 ## Next Work
 
-Validate P3's matching final primary/audit receipt before proceeding to a later
-phase. The [P3 boundary](local-sun-p3-closure.md) owns exact immutable proof
-receipts, checks, measurements and qualification limits. P4 owns normal-scene
-integration and has not started. The owner-authorized 4 GiB free-RAM reserve
+Implement and qualify P4's normal-scene integration under the
+[plan](local-sun-cache-promotion-plan.md#p4--integrate-ordinary-flat32-and-required-celestial-consumers).
+The [P3 boundary](local-sun-p3-closure.md) owns immutable prior proof receipts,
+checks, measurements and qualification limits. The owner-authorized 4 GiB free-RAM reserve
 applies throughout execution of the whole promotion plan. App cache-build
 memory sizing remains a separate open question and blocks no plan phase.
 
-The complete mapped source-review ledgers and independent audits are still
-incomplete. Generic or nonexistent source anchors from attempted reports were
-rejected; no CLEAN receipt has been issued. Concrete recovery, public-entry,
-typing and behavior-grouping findings were repaired and their affected checks
-pass. A functional intermediate checkpoint preserves this work without closing
-the P3 completion gate.
+P3's complete mapped primary and independent audit ledgers validate CLEAN.
+The matching receipt below is its completion authority. The intermediate
+functional checkpoint and prior numerical evidence retain their original source
+identities. P4 requires its own mapped review and independent audit.
 
 The [P3 implementation and evidence boundary](local-sun-p3-closure.md) records
 canonical/live ownership, publication, recovery, measured proofs and remaining

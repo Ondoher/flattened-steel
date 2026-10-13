@@ -449,7 +449,11 @@ void main() {
 		}
 	}
 
-	/** Register one runtime participant that owns renderer resources across context cycles. */
+	/** Call this method to register one renderer-resource owner across context cycles.
+	 *
+	 * @param {Flat32ContextLifecycleParticipant} participant - Context loss and restoration owner.
+	 * @returns {Flat32ContextLifecycleRemoval} - Remove this participant from future context cycles.
+	 */
 	addContextLifecycleParticipant(participant) {
 		if (this._disposed) throw new Error('Cannot register context lifecycle on a disposed Three runtime.');
 		this._contextLifecycleParticipants.add(participant);

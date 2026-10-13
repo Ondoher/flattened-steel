@@ -45,15 +45,15 @@ export class FlatGeometryShaderContributor {
 		const cacheAltitudeNodesMeters = cacheAltitudeNodes.map(
 			/**
 			 * Called by Array.prototype.map to transform one collection value.
-			 * @param node - The node value accepted by the operation.
-			 * @returns - The callback result returned to its caller.
+			 * @param {Distance} node - The unit-bearing altitude node.
+			 * @returns {number} - The altitude in meters.
 			 */ (node) => DistanceMath.toMeters(node),
 		);
 		const cacheRadialNodesMeters = cacheRadialNodes.map(
 			/**
 			 * Called by Array.prototype.map to transform one collection value.
-			 * @param node - The node value accepted by the operation.
-			 * @returns - The callback result returned to its caller.
+			 * @param {Distance} node - The unit-bearing radial node.
+			 * @returns {number} - The radius in meters.
 			 */ (node) => DistanceMath.toMeters(node),
 		);
 		const cacheAxisMaximumNodeCount = Math.max(cacheAltitudeNodesMeters.length, cacheRadialNodesMeters.length);

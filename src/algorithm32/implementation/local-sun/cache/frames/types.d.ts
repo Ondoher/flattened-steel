@@ -70,12 +70,26 @@ type LocalSunFrameCelestialInputs = Readonly<{
 type LocalSunFrameRenderOperation = () => void;
 /** Independently staged shader, bindings, receiver and celestial input aggregate. */
 type LocalSunPreparedFrameContents = Readonly<{
+	/** Actual renderer preflight observations, when supplied by the ordinary preparation owner. */ preflight?: LocalSunFramePreflight;
+	/** Optional reversible ordinary endpoint lighting prepared without publication. */ sceneLighting?: LocalSunFrameSceneLighting;
 	/** Actual shader compilation and frame preflight succeeded. */ shaderReady: true;
 	/** Exact measured direct/diffuse light, with native basis and provenance. */ receiverLight: ReceiverEnvironmentLightMeasurement;
 	/** Exact matching celestial inputs; resource generation is P4. */ celestialInputs: LocalSunFrameCelestialInputs;
 	/** All geometry/source/cache shader binding values for this frame. */ bindingValues: Record<string, unknown>;
 	/** Render this complete staged frame, without mutating another frame. */ renderFrame: LocalSunFrameRenderOperation;
 	/** Release shader/receiver/celestial candidate resources exactly once. */ dispose(): void;
+}>;
+
+/** Assignment-only lighting transaction coordinated with complete frame installation. */
+interface LocalSunFrameSceneLighting {
+	/** Publish the exact measured candidate lighting. */ publish(): void;
+	/** Restore prior lighting if renderer installation rejects. */ revert(): void;
+}
+
+/** Observed prepublication scene input and composed output; excludes later lighting publication. */
+type LocalSunFramePreflight = Readonly<{
+	/** Actual staged composed RGBA pixel. */ outputPixel: readonly [number, number, number, number];
+	/** Actual staged ordinary scene-input RGBA pixel. */ sceneInputPixel: readonly [number, number, number, number];
 }>;
 /** External GPU construction and probe-reading capabilities consumed by complete frames. */
 interface LocalSunFrameBackend extends CacheGpuBackend, CacheProbeReader {}

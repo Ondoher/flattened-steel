@@ -29,7 +29,7 @@ The [P3 boundary](production-algorithm32/caches/local-sun-p3-closure.md) records
 admitted reuse and atomic complete-frame publication, passing N1/N2/N4 and
 half-float proofs, lifecycle/browser checks and resource observations. Only its
 matching final CLEAN primary/audit receipt establishes P3 completion. P4 ordinary
-scene integration is the next unselected phase. Full-domain CPU
+scene and required celestial integration is selected and in progress. Full-domain CPU
 recurrence remains unadmitted. Profile/default selection, deployment and
 publication have not changed. Ended experiment and prior receipts remain immutable.
 

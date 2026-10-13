@@ -1,6 +1,8 @@
 import * as THREE from 'three';
 
-import {Algorithm32Bindings, ThreeCacheBackend} from '../algorithm32/implementation/index.js';
+import {Algorithm32Bindings, ThreeCacheBackend, LocalSunFrameController} from '../algorithm32/implementation/index.js';
+import {FlatLocalMode} from './FlatLocalMode.js';
+import {LocalSunFramePreparer} from './LocalSunFramePreparer.js';
 import {SceneMath} from '../algorithm32/math/index.js';
 import {SphericalDistantMode} from './SphericalDistantMode.js';
 import DistantSunSharedCache from '../algorithm32/implementation/distant-sun/cache/DistantSunSharedCache.js';
@@ -85,6 +87,8 @@ export class Algorithm32Runtime {
 	_renderLocalFrame() {
 		try {
 			this._localFrameController?.active?.contents.renderFrame();
+			this._runtimeFrameCount += 1;
+			this._sceneRuntime.canvas.dataset.flat32AtmosphereFrameCount = String(this._runtimeFrameCount);
 		} catch (error) {
 			this._sceneRuntime.restoreDirectRendering();
 			this._onFailure(error);
@@ -125,8 +129,16 @@ export class Algorithm32Runtime {
 			signal.throwIfAborted();
 			this._assertUsable();
 			publication = this._localFrameController.publishPreparedLocalFrame(frame, () => {
-				this._sceneRuntime.installRenderOperation(() => this._renderLocalFrame());
+				try {
+					frame.contents.sceneLighting?.publish();
+					this._sceneRuntime.installRenderOperation(() => this._renderLocalFrame());
+				} catch (error) {
+					frame.contents.sceneLighting?.revert();
+					throw error;
+				}
 			});
+			if (this._mode instanceof FlatLocalMode) this._mode.acceptPublishedLocalFrame(frame);
+			if (frame.contents.sceneLighting) this._sceneRuntime.refreshShadowMaps();
 			this._installed = true;
 			this._published = true;
 		}, signal);
@@ -167,8 +179,13 @@ export class Algorithm32Runtime {
 	async updateSharedScene(state, request) {
 		this._assertUsable();
 		if (this._localFrameController) {
-			if (!request.localFrameRequest) throw new TypeError('Complete accepted local frame request required.');
-			const frame = await this.prepareLocalFrame(request.localFrameRequest, request.signal);
+			const localRequest =
+				request.localFrameRequest ??
+				(this._mode instanceof FlatLocalMode
+					? this._mode.createLocalFrameRequest(state.observation, this._localFrameAdditionalBytes())
+					: null);
+			if (!localRequest) throw new TypeError('Complete accepted local frame request required.');
+			const frame = await this.prepareLocalFrame(localRequest, request.signal);
 			await this.publishPreparedLocalFrame(frame, request.signal);
 			return {
 				...this._lastSummary,
@@ -660,6 +677,7 @@ export class Algorithm32Runtime {
 	 */
 	async setup() {
 		this._assertUsable();
+		if (this._mode instanceof FlatLocalMode && this._mode.compactProfile) return this._setupLocalFrames();
 		const generation = ++this._setupGeneration;
 		const setupStarted = performance.now();
 		const cancellation = new AbortController();
@@ -768,6 +786,66 @@ export class Algorithm32Runtime {
 		}
 	}
 
+	/** Called by ordinary compact preparation to account for scene shadows and two complete frame targets.
+	 * @returns {UnitValue<'bytes'>} - Conservative declared additional GPU bytes; not an app minimum-RAM claim.
+	 */
+	_localFrameAdditionalBytes() {
+		const {width, height} = this._sceneRuntime.viewportSize;
+		return {value: 6 * 4096 * 4096 * 4 + width * height * 256 * 2 + 16 * 1024 * 1024, units: 'bytes'};
+	}
+	/** Called by setup to stage the explicit compact candidate through the ordinary complete-frame owners.
+	 * @returns {Promise<Flat32AtmosphereSummary>} - Ready unpublished candidate or explicit admission failure.
+	 */
+	async _setupLocalFrames() {
+		const mode = /** @type {FlatLocalMode} */ (this._mode),
+			start = performance.now();
+		this._composer = this._preparedComposer;
+		const cancellation = new AbortController();
+		this._setupCancellation = cancellation;
+		const sceneDepthMax = this._resolveSceneDepthMax();
+		const backend = new ThreeCacheBackend({THREE, renderer: this._sceneRuntime.renderer});
+		this._cacheBackend = backend;
+		const preparer = new LocalSunFramePreparer(
+			mode.createLocalFramePreparerConfiguration(this._sceneRuntime, this._endpointScene, sceneDepthMax),
+		);
+		this._localFrameController = new LocalSunFrameController({
+			backend,
+			scheduler: this._cacheBuildScheduler,
+			stageFrame: (request) => preparer.prepare(request),
+		});
+		try {
+			this._pendingInitialLocalFrame = await this.prepareLocalFrame(
+				mode.createLocalFrameRequest(
+					mode.geometry.configuration.observation,
+					this._localFrameAdditionalBytes(),
+				),
+				cancellation.signal,
+			);
+			this._installed = true;
+			this._runtimeFrameCount = 1;
+			const preflight = this._pendingInitialLocalFrame.contents.preflight;
+			if (!preflight) throw new Error('Ordinary compact frame lacks actual preflight observations.');
+			this._lastSummary = {
+				...mode.describe(),
+				sceneDepthMax,
+				setupDurationMilliseconds: performance.now() - start,
+				runtimeFrameCount: 1,
+				renderErrorCount: 0,
+				...preflight,
+			};
+			if (!this._deferPublication) this.publish();
+			return this._lastSummary;
+		} catch (error) {
+			this._localFrameController.dispose();
+			await this._localFrameController.whenReleased();
+			backend.dispose();
+			this._cacheBackend = null;
+			throw error;
+		} finally {
+			if (this._setupCancellation === cancellation) this._setupCancellation = null;
+		}
+	}
+
 	/** Call this method to make a successfully preflighted runtime visible.
 	 *
 	 * @returns {void} - Complete runtime rendering installed, or rejection before preflight.
@@ -778,6 +856,21 @@ export class Algorithm32Runtime {
 			throw new Error('Cannot publish Flat32 atmosphere before preflight.');
 		}
 
+		if (this._pendingInitialLocalFrame && this._localFrameController) {
+			const frame = this._pendingInitialLocalFrame;
+			this._localFrameController.publishPreparedLocalFrame(frame, () => {
+				try {
+					frame.contents.sceneLighting?.publish();
+					this._publishSelectedRenderOperation();
+				} catch (error) {
+					frame.contents.sceneLighting?.revert();
+					throw error;
+				}
+			});
+			if (this._mode instanceof FlatLocalMode) this._mode.acceptPublishedLocalFrame(frame);
+			this._pendingInitialLocalFrame = null;
+			this._sceneRuntime.refreshShadowMaps();
+		}
 		this._published = true;
 		this._publishSelectedRenderOperation();
 	}

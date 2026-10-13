@@ -23,18 +23,24 @@ export class LocalSunFramePreparer {
 	 *
 	 * @param {ShaderHandle} handle - Independently staged shader.
 	 * @param {Flat32AtmosphereComposerResources} resources - Candidate composer/targets.
-	 * @returns {void} - No value.
+	 * @returns {Flat32LocalFramePreflight} - Actual staged scene-input and composed pixel observations.
 	 */
 	_preflight(handle, resources) {
 		const renderer = this._configuration.sceneRuntime.renderer;
 		const previous = renderer.getRenderTarget();
 		resources.composer.renderToScreen = false;
 		try {
+			const context = renderer.getContext(),
+				input = new Float32Array(4);
+			renderer.setRenderTarget(resources.renderTarget);
+			renderer.render(this._configuration.sceneRuntime.scene, this._configuration.sceneRuntime.camera);
+			context.readPixels(0, 0, 1, 1, context.RGBA, context.FLOAT, input);
+			if (context.getError() !== context.NO_ERROR || input.some((value) => !Number.isFinite(value)))
+				throw new Error('Local frame scene input readback failed.');
 			resources.composer.render();
 			const diagnostics = /** @type {Flat32LocalFrameShaderDiagnostics} */ (handle.getDiagnostics());
 			if ((diagnostics.runtime?.frameCount ?? 0) < 1 || (diagnostics.runtime?.renderErrorCount ?? 0) > 0)
 				throw new Error('Local frame preflight did not complete its ordinary shader frame.');
-			const context = renderer.getContext();
 			if (context.getError() !== context.NO_ERROR)
 				throw new Error('Local frame preflight reported a WebGL error.');
 			if (
@@ -55,6 +61,10 @@ export class LocalSunFramePreparer {
 				throw new Error('Local frame preflight output readback failed.');
 			if (pixels.some((value) => !Number.isFinite(value)))
 				throw new Error('Local frame preflight contains nonfinite composed output.');
+			return {
+				outputPixel: [pixels[0], pixels[1], pixels[2], pixels[3]],
+				sceneInputPixel: [input[0], input[1], input[2], input[3]],
+			};
 		} finally {
 			renderer.setRenderTarget(previous);
 		}
@@ -108,8 +118,11 @@ export class LocalSunFramePreparer {
 		if (!Number.isSafeInteger(estimatedBytes) || estimatedBytes > request.otherOwnedGpuBytes.value)
 			throw new RangeError('Declared frame budget must include conservative composer/shader/receiver resources.');
 		const algorithm = new Algorithm32({
-			profile: request.profile.createExecutionProfile(),
+			profile: request.profile.createExecutionProfile(
+				this._configuration.createCelestialSources?.(request.profile) ?? null,
+			),
 			color: this._configuration.createColorModel(),
+			presentationFilterRegistry: this._configuration.presentationFilterRegistry,
 		});
 		let resources;
 		try {
@@ -146,11 +159,22 @@ export class LocalSunFramePreparer {
 				receiverLight,
 				request.profile.models.geometry.configuration.observation,
 			);
-			this._preflight(handle, resources);
+			const sceneLighting = this._configuration.endpointScene?.prepareLocalSunLighting?.(
+				/** @type {import('../algorithm32/implementation/index.js').FlatEarthGeometry} */ (
+					request.profile.models.geometry
+				).mapModelPositionToObserverLocalScenePoint(request.profile.models.lightSource.configuration.position, {
+					sceneScale,
+				}),
+				receiverLight,
+				algorithm.config.config.color,
+			);
+			const preflight = this._preflight(handle, resources);
 			request.signal.throwIfAborted();
 			let disposed = false;
 			return {
 				shaderReady: true,
+				preflight,
+				...(sceneLighting ? {sceneLighting} : {}),
 				receiverLight,
 				celestialInputs: {
 					observation: request.profile.models.geometry.configuration.observation,

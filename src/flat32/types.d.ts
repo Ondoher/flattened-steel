@@ -1,5 +1,8 @@
+/** Optional Flat32 lifecycle and performance hooks exposed by the browser host. */
 interface Window {
+	/** Release the installed browser application. */
 	__flat32Cleanup?: () => void;
+	/** Collected shader performance observations. */
 	__flat32PerformanceSamples?: ShaderPerformanceSample[];
 }
 
@@ -40,68 +43,131 @@ type Flat32ColorDisplayModelConfiguration =
 			readonly adaptationLuminanceCdPerSquareMeter: number;
 	  }>;
 
+/** Supported bright-star catalog selections.
+ *
+ * - **"brightest-500"** - The 500 brightest catalog stars.
+ * - **"brightest-2000"** - The extended 2000-star catalog. */
 type Flat32StellarCatalogId = 'brightest-500' | 'brightest-2000';
+/** Supported source-linear stellar presentation filters.
+ *
+ * - **"human-mesopic-luminance-v1"** - Mesopic luminance response.
+ * - **"human-low-light-chroma-v1"** - Low-light chroma response. */
 type Flat32PresentationFilterId = 'human-mesopic-luminance-v1' | 'human-low-light-chroma-v1';
+/** Caller-owned stellar filter selection and its response parameters.
+ *
+ * - **human-mesopic-luminance-v1** - Mesopic luminance response with a rod-contribution bound.
+ * - **human-low-light-chroma-v1** - Low-light chroma response with a chroma-retention bound. */
 type Flat32PresentationFilterConfiguration =
 	| Readonly<{
+			/** Exact selected presentation filter. */
 			readonly id: 'human-mesopic-luminance-v1';
+			/** Apply the response in source-linear space. */
 			readonly stage: 'source-linear';
+			/** Apply the response to stellar sources. */
 			readonly target: 'stellar';
+			/** Whether this filter participates. */
 			readonly enabled: boolean;
-			readonly parameters: Readonly<{readonly maximumRodContribution: number}>;
+			/** Filter-specific response bounds. */
+			readonly parameters: Readonly<{
+				/** Maximum rod contribution to mesopic luminance. */ readonly maximumRodContribution: number;
+			}>;
 	  }>
 	| Readonly<{
+			/** Exact selected presentation filter. */
 			readonly id: 'human-low-light-chroma-v1';
+			/** Apply the response in source-linear space. */
 			readonly stage: 'source-linear';
+			/** Apply the response to stellar sources. */
 			readonly target: 'stellar';
+			/** Whether this filter participates. */
 			readonly enabled: boolean;
-			readonly parameters: Readonly<{readonly maximumChromaRetention: number}>;
+			/** Filter-specific response bounds. */
+			readonly parameters: Readonly<{
+				/** Maximum retained chroma in low-light response. */ readonly maximumChromaRetention: number;
+			}>;
 	  }>;
 
-interface Flat32ProductionSelections {
+/** Normalized display, celestial and presentation selections shared by scene consumers. */
+type Flat32ProductionSelections = {
+	/** Selected scene-linear display response and its physical adaptation controls. */
 	readonly colorDisplayModelConfiguration: Flat32ColorDisplayModelConfiguration;
 	/** Scene-linear storage required by the selected display response; p2 uses float32. */
 	readonly sceneColorPrecision: Flat32SceneColorPrecision;
+	/** Whether visible celestial-source rendering is selected. */
 	readonly celestialSourcesEnabled: boolean;
+	/** Exact selected bright-star catalog. */
 	readonly stellarCatalog: Flat32StellarCatalogId;
+	/** Ordered source-presentation filter selections. */
 	readonly presentationFilters: readonly Flat32PresentationFilterConfiguration[];
+	/** Identity of the selected ordered filter configuration. */
 	readonly presentationFilterConfigurationIdentity: string;
-}
+};
 
-interface Flat32ApplicationConfiguration {
+/** Caller-owned initial scene, physical-cache and presentation selections. */
+type Flat32ApplicationConfiguration = {
+	/** Explicit compact candidate; omission retains the rectangular control. */
+	readonly localSunCachePolicy?: 'compact-v9-native15';
+	/** Initial camera vertical field of view in degrees. */
 	readonly cameraFieldOfViewDegrees?: number;
+	/** Initial predefined local-Sun observation index. */
 	readonly initialFlatTimeIndex?: number;
+	/** Initial atmospheric geometry/source pairing. */
 	readonly initialModeKind?: 'spherical-distant' | 'flat-local';
+	/** Qualified maximum scattering order. */
 	readonly maximumScatteringOrder?: SupportedCacheScatteringOrder;
+	/** Include the fixed matte review objects. */
 	readonly reviewObjectsEnabled?: boolean;
+	/** Include visible celestial sources. */
 	readonly celestialSourcesEnabled?: boolean;
+	/** Selected display response and adaptation controls. */
 	readonly colorDisplayModelConfiguration?: Flat32ColorDisplayModelConfiguration;
+	/** Selected bright-star catalog. */
 	readonly stellarCatalog?: Flat32StellarCatalogId;
+	/** Authenticated extended stellar catalog definition. */
 	readonly brightest2000StellarCatalogDefinition?: Brightest2000StellarCatalogDefinition;
+	/** Measured spectral weights for low-light luminance. */
 	readonly scotopicLuminanceWeights?: ArrayLike<number>;
+	/** Ordered source-linear stellar filter selections. */
 	readonly presentationFilters?: readonly Flat32PresentationFilterConfiguration[];
+	/** Initial unit camera direction in scene coordinates. */
 	readonly cameraDirectionScene?: readonly [number, number, number];
+	/** Receive shader performance observations. */
 	readonly performanceCallback?: ShaderPerformanceCallback;
+	/** Enable atmosphere composition initially. */
 	readonly atmosphereShaderEnabled?: boolean;
+	/** Resolve the requested solar angle with optional caller cancellation. */
 	readonly resolveDistantSunSceneCacheAsset?: (
 		solarZenithDegrees: number,
 		request?: Flat32DistantSunCacheResolutionRequest,
 	) => Flat32DistantSunCacheResolution | Promise<Flat32DistantSunCacheResolution>;
-}
+};
 
+/** Render one complete installed scene frame. */
 type Flat32RenderOperation = () => void;
+/** Renderer-resource owner participating in context loss and restoration. */
 interface Flat32ContextLifecycleParticipant {
 	/** Invalidate renderer-owned handles synchronously on context loss. */
 	handleContextLoss(): void;
 	/** Recreate renderer-owned resources before frame rendering resumes. */
 	handleContextRestoration(): void | Promise<void>;
 }
+/** Remove a registered renderer-resource owner from future context cycles. */
+type Flat32ContextLifecycleRemoval = () => void;
+/** Receive a human-readable atmosphere preparation or rendering failure. */
 type Flat32AtmosphereFailureHandler = (message: string) => void;
+/** Receive changes to pointer-lock camera control. */
 type Flat32PointerLookChangeHandler = (locked: boolean) => void;
+/** Supported atmospheric geometry and source pairings.
+ *
+ * - **"spherical-distant"** - Spherical geometry with a distant source.
+ * - **"flat-local"** - Flat geometry with a finite local source. */
 type Flat32ModeKind = 'spherical-distant' | 'flat-local';
 
 /** Caller-owned physical and presentation selections for a flat/local mode. */
 type Flat32LocalModeConfiguration = Readonly<{
+	/** Explicit candidate activation; omission retains the existing control. */ localSunCachePolicy?: 'compact-v9-native15';
+	/** Authenticated extended catalog for selected stellar consumers. */ brightest2000StellarCatalogDefinition?: Brightest2000StellarCatalogDefinition;
+	/** Measured spectral weights for shared low-light filters. */ scotopicLuminanceWeights?: ArrayLike<number>;
 	/** Physical length represented by one scene unit. */ sceneScale: SceneScale;
 	/** Accepted geographic receiver and exact instant. */ observation: GeometryObservation;
 	/** Qualified number of scattering orders. */ maximumScatteringOrder: SupportedCacheScatteringOrder;
@@ -143,7 +209,7 @@ interface Flat32SceneRuntimeCapability {
 	/** Current unit-bearing output extent. */ readonly viewportSize: PixelSize;
 	/** Register context loss and restoration ownership; return its remover. */ addContextLifecycleParticipant(
 		participant: Flat32ContextLifecycleParticipant,
-	): () => void;
+	): Flat32ContextLifecycleRemoval;
 	/** Publish a complete prepared state between frames. */ atFrameBoundary(
 		operation: () => void,
 		signal: AbortSignal,
@@ -216,7 +282,7 @@ type Flat32SphericalDistantModeConfiguration<Geometry extends GeometryModel = Ge
 }>;
 
 /** Configure one isolated Algorithm32 runtime candidate. */
-interface Flat32AlgorithmRuntimeConfiguration {
+type Flat32AlgorithmRuntimeConfiguration = {
 	/** Supply the scene owner. */
 	sceneRuntime: Flat32SceneRuntimeCapability;
 	/** Supply ordinary endpoint-scene content. */
@@ -233,10 +299,10 @@ interface Flat32AlgorithmRuntimeConfiguration {
 	deferPublication: true;
 	/** Select atmosphere composition or the direct lit scene. */
 	atmosphereEnabled?: boolean;
-}
+};
 
 /** Configure transactional supported-mode ownership. */
-interface Flat32ModeControllerConfiguration {
+type Flat32ModeControllerConfiguration = {
 	/** Select atmosphere composition or the direct lit scene. */
 	atmosphereEnabled?: boolean;
 	/** Create the requested supported mode. */
@@ -259,25 +325,27 @@ interface Flat32ModeControllerConfiguration {
 	onPublished: (kind: Flat32ModeKind, mode: Flat32Mode, state: Flat32ApplicationState) => void;
 	/** Supply the Three scene and isolated-composer owner. */
 	sceneRuntime: Flat32SceneRuntimeCapability;
-}
+};
 
-interface Flat32LocationTimeState {
-	locationIndex: number;
-	flatTimeIndex: number;
-	globeTimeIndex: number;
-	globeHourOffset: number;
-	locationLabel: string;
-	timeLabel: string;
-	timeBasis: 'flat' | 'globe';
-	observation: GeometryObservation;
-}
+/** Selected location and time values delivered to scene-mode consumers. */
+type Flat32LocationTimeState = {
+	/** Index of the selected predefined geographic location. */ locationIndex: number;
+	/** Index of the selected local-Sun observation. */ flatTimeIndex: number;
+	/** Index of the selected distant-Sun observation. */ globeTimeIndex: number;
+	/** Distant-Sun time offset in hours. */ globeHourOffset: number;
+	/** Human-readable selected location label. */ locationLabel: string;
+	/** Human-readable selected observation-time label. */ timeLabel: string;
+	/** `flat` selects local-Sun time; `globe` selects distant-Sun time. */ timeBasis: 'flat' | 'globe';
+	/** Exact geographic location and instant for physical scene placement. */ observation: GeometryObservation;
+};
 
-interface Flat32ApplicationState extends Flat32LocationTimeState {
-	modeKind: 'spherical-distant' | 'flat-local';
-}
+/** Location/time state paired with the selected atmospheric scene mode. */
+type Flat32ApplicationState = Flat32LocationTimeState & {
+	/** Exact selected atmospheric geometry/source pairing. */ modeKind: Flat32ModeKind;
+};
 
 /** Describe one source-derived orthographic shadow camera. */
-interface Flat32ShadowCameraDefinition {
+type Flat32ShadowCameraDefinition = {
 	/** Store the lower camera bound. */
 	bottom: number;
 	/** Store the far camera bound. */
@@ -290,10 +358,10 @@ interface Flat32ShadowCameraDefinition {
 	right: number;
 	/** Store the upper camera bound. */
 	top: number;
-}
+};
 
 /** Describe one fixed matte review object. */
-interface Flat32ReviewObjectDefinition {
+type Flat32ReviewObjectDefinition = {
 	/** Store the material color. */
 	color: number;
 	/** Store the stable object name. */
@@ -310,28 +378,28 @@ interface Flat32ReviewObjectDefinition {
 	shadowFocus: [number, number, number];
 	/** Store the source-light distance. */
 	sourceLightDistance: number;
-}
+};
 
 /** Describe one completed Algorithm32 preflight frame. */
-interface Flat32AtmospherePreflight {
+type Flat32AtmospherePreflight = {
 	/** Store the shader/runtime diagnostic snapshot. */
 	diagnostics: Flat32ShaderDiagnostics;
 	/** Store the composed output pixel. */
 	outputPixel: readonly [number, number, number, number];
 	/** Store the captured scene-input pixel. */
 	sceneInputPixel: readonly [number, number, number, number];
-}
+};
 
 /** Describe runtime diagnostic facts required for publication. */
-interface Flat32ShaderDiagnostics {
+type Flat32ShaderDiagnostics = {
 	/** Store shader installation state. */
 	status?: string;
 	/** Store per-frame runtime diagnostics. */
 	runtime?: Flat32ShaderRuntimeDiagnostics;
-}
+};
 
 /** Describe the runtime facts checked after a composed frame. */
-interface Flat32ShaderRuntimeDiagnostics {
+type Flat32ShaderRuntimeDiagnostics = {
 	/** Observed complete celestial generation state, when the runtime owns that participant. */
 	celestialGeneration?: Flat32CelestialGenerationDiagnostics | null;
 	/** Observed stellar pass generation state, when present. */
@@ -342,7 +410,7 @@ interface Flat32ShaderRuntimeDiagnostics {
 	renderErrorCount?: number;
 	/** Store the most recent runtime failure when present. */
 	lastRenderError?: string | null;
-}
+};
 
 /** Consumer-visible projection of one completed Sun or stellar generation. */
 type Flat32CelestialPassCompletion = Pick<CelestialSunTileGeneration, 'completion'>;
@@ -372,60 +440,88 @@ type Flat32CelestialGenerationDiagnostics = Readonly<{
 }>;
 
 /** Describe the Three program diagnostic consulted by preflight. */
-interface Flat32ProgramDiagnostic {
+type Flat32ProgramDiagnostic = {
 	/** Store whether Three considers the program runnable. */
 	runnable?: boolean;
-}
+};
 
 /** Describe the minimum Three program state checked by Flat32. */
-interface Flat32ProgramInfo {
+type Flat32ProgramInfo = {
 	/** Store optional program diagnostics. */
 	diagnostics?: Flat32ProgramDiagnostic;
-}
+};
 
-interface LocalSunLightingSummary {
+/** Observed source lighting and shadow-map allocation for the endpoint scene. */
+type LocalSunLightingSummary = {
+	/** Number of installed source lights. */
 	sourceLightCount: number;
+	/** Number of ambient lights. */
 	ambientLightCount: number;
+	/** Number of directional lights. */
 	directionalLightCount: number;
+	/** Number of light target objects. */
 	targetCount: number;
+	/** Ambient light intensity. */
 	ambientIntensity: number;
+	/** Directional light intensity. */
 	directionalIntensity: number;
+	/** Whether matching shadow maps are installed. */
 	shadowMapsInstalled: boolean;
+	/** Number of installed shadow maps. */
 	shadowMapCount: number;
+	/** Shadow-map width in pixels. */
 	shadowMapWidth: number;
+	/** Shadow-map height in pixels. */
 	shadowMapHeight: number;
+	/** Number of shadow-map layers. */
 	shadowLayerCount: number;
-}
+};
 
-interface Flat32SceneSummary extends LocalSunLightingSummary {
+/** Endpoint lighting observations with shadow caster and receiver counts. */
+type Flat32SceneSummary = LocalSunLightingSummary & {
+	/** Number of scene objects casting shadows. */
 	shadowCasterCount: number;
+	/** Number of scene objects receiving shadows. */
 	shadowReceiverCount: number;
-}
+};
 
-interface SphericalDistantModeSummary {
+/** Selected spherical/distant pairing and physical cache-domain dimensions. */
+type SphericalDistantModeSummary = {
+	/** Spherical geometry paired with a distant source. */
 	pairing: 'spherical/distant';
+	/** Whether the selected cache is lighted and ready or texture-free dark. */
 	distantSunCacheState: 'ready' | 'dark';
+	/** Qualified maximum scattering order. */
 	maximumScatteringOrder: SupportedCacheScatteringOrder;
+	/** Number of cache positions. */
 	positionCount: number;
+	/** Number of incoming transport directions. */
 	incomingDirectionCount: number;
+	/** Number of outgoing radiance directions. */
 	outgoingDirectionCount: number;
+	/** Number of spectral channels. */
 	spectralChannelCount: number;
-}
+};
 
 /** Live spherical/distant scene placement and its cache-selection scalar. */
-interface Flat32DistantSunSceneState<Geometry extends GeometryModel = GeometryModel> {
+type Flat32DistantSunSceneState<Geometry extends GeometryModel = GeometryModel> = {
+	/** Accepted geographic location and instant. */
 	readonly observation: GeometryObservation;
+	/** Geometry owning this scene placement. */
 	readonly geometry: Geometry;
+	/** Unit direction toward the source in model coordinates. */
 	readonly directionToSourceModel: UnitVector3;
+	/** Unit-bearing observer solar zenith angle. */
 	readonly observerSolarZenith: Angle;
+	/** Solar zenith angle in degrees for cache selection. */
 	readonly solarZenithDegrees: number;
-}
+};
 
 /** Caller-owned cancellation input for one distant-Sun cache resolution. */
-interface Flat32DistantSunCacheResolutionRequest {
+type Flat32DistantSunCacheResolutionRequest = {
 	/** Optional signal that cancels only this caller's unresolved continuation. */
 	readonly signal?: AbortSignal;
-}
+};
 
 /** Shared event capability inherited by every registered Flat32 application service. */
 type EventBus = import('@polylith/core').EventBus;
@@ -470,34 +566,56 @@ type Flat32DistantSunCacheFormatId =
  */
 type Flat32DistantSunCacheNonReadyStatus = 'dark' | 'unsupported';
 
+/** Resolved distant-Sun cache selection. Shared dark results retain the authenticated shared asset; ready results identify the representative lighted angle and selected asset; dense non-ready results carry the requested angle without an asset. */
 type Flat32DistantSunCacheResolution =
 	| Readonly<{
+			/** Exact resolution schema identity. */
 			readonly schemaId: 'flat32-distant-sun-cache-resolution-v2';
+			/** Selected cache package representation. */
 			readonly cacheFormat: 'algorithm32-distant-sun-shared-block-v1';
+			/** Whether this selection is ready, dark or unsupported. */
 			readonly status: 'dark';
+			/** Exact requested solar angle in degrees. */
 			readonly requestedSolarZenithDegrees: number;
+			/** Authenticated selected cache asset. */
 			readonly asset: Flat32SharedCacheAssetSelection;
 	  }>
 	| Readonly<{
+			/** Exact resolution schema identity. */
 			readonly schemaId: 'flat32-distant-sun-cache-resolution-v2';
+			/** Selected cache package representation. */
 			readonly cacheFormat: 'algorithm32-distant-sun-dense-scene-v1';
+			/** Whether this selection is ready, dark or unsupported. */
 			readonly status: 'ready';
+			/** Exact requested solar angle in degrees. */
 			readonly requestedSolarZenithDegrees: number;
+			/** Representative angle of the resolved lighted cache. */
 			readonly representativeSolarZenithDegrees: number;
+			/** Authenticated selected cache asset. */
 			readonly asset: DistantSunSceneCacheAssetSelection;
 	  }>
 	| Readonly<{
+			/** Exact resolution schema identity. */
 			readonly schemaId: 'flat32-distant-sun-cache-resolution-v2';
+			/** Selected cache package representation. */
 			readonly cacheFormat: 'algorithm32-distant-sun-shared-block-v1';
+			/** Whether this selection is ready, dark or unsupported. */
 			readonly status: 'ready';
+			/** Exact requested solar angle in degrees. */
 			readonly requestedSolarZenithDegrees: number;
+			/** Representative angle of the resolved lighted cache. */
 			readonly representativeSolarZenithDegrees: number;
+			/** Authenticated selected cache asset. */
 			readonly asset: Flat32SharedCacheAssetSelection;
 	  }>
 	| Readonly<{
+			/** Exact resolution schema identity. */
 			readonly schemaId: 'flat32-distant-sun-cache-resolution-v2';
+			/** Selected cache package representation. */
 			readonly cacheFormat: 'algorithm32-distant-sun-dense-scene-v1';
+			/** Whether this selection is ready, dark or unsupported. */
 			readonly status: Flat32DistantSunCacheNonReadyStatus;
+			/** Exact requested solar angle in degrees. */
 			readonly requestedSolarZenithDegrees: number;
 	  }>;
 
@@ -510,16 +628,26 @@ type Flat32SharedCacheAssetSelection = {
 	/** Explicit solar lookup; omission retains the linear control. */ solarInterpolation?: DistantSunSolarInterpolationMethod;
 };
 
-interface Flat32AtmosphereSummary extends SphericalDistantModeSummary {
+/** Published atmosphere mode, composed-frame observations and setup timing. */
+type Flat32AtmosphereSummary = Omit<SphericalDistantModeSummary, 'pairing' | 'distantSunCacheState'> & {
+	/** Distant cache readiness; absent for flat/local modes. */ distantSunCacheState?: 'ready' | 'dark';
+	/** Published spherical/distant or flat/local geometry/source pairing. */
 	pairing: 'spherical/distant' | 'flat/local';
+	/** Whether the local observer dome is selected. */
 	observerDomeEnabled?: boolean;
+	/** Number of successfully composed runtime frames. */
 	runtimeFrameCount: number;
+	/** Number of runtime rendering failures. */
 	renderErrorCount: number;
+	/** Maximum unit-bearing encoded scene depth. */
 	sceneDepthMax: Distance;
+	/** Preparation duration in milliseconds. */
 	setupDurationMilliseconds: number;
+	/** Composed scene-linear RGBA output pixel. */
 	outputPixel: readonly [number, number, number, number];
+	/** Captured scene-linear RGBA input pixel. */
 	sceneInputPixel: readonly [number, number, number, number];
-}
+};
 /** Independently prepared physical inputs for one coherent distant-Sun scene. */
 type Flat32PreparedDistantScene = {
 	/** Accepted observation, geometry, and exact Sun direction. */ sceneState: Flat32DistantSunSceneState;
@@ -560,6 +688,11 @@ type Flat32SceneColorPrecision = 'float16' | 'float32';
 
 /** Independently implementable opaque endpoint and lighting capability. */
 interface Flat32EndpointLighting {
+	/** Prepare exact-state local endpoint lighting without changing the scene. */ prepareLocalSunLighting?(
+		sourceScenePosition: ScenePosition,
+		receiverLight: ReceiverEnvironmentLightMeasurement,
+		color: Color,
+	): LocalSunFrameSceneLighting;
 	/** Apply matching physical source and receiver lighting before rendering. */
 	updateDistantSunLighting(
 		directionToSource: UnitVector3,
@@ -610,12 +743,20 @@ type Flat32LocalFrameSceneCapability = Pick<
 
 /** Complete renderer-owned inputs for local shader and receiver staging. */
 type Flat32LocalFramePreparerConfiguration = Readonly<{
+	/** Optional genuine live celestial roster creation; canonical construction remains independent. */ createCelestialSources?: (
+		profile: LocalSunCompactConstructionProfile,
+	) => CelestialSourceRoster | null;
+	/** Optional selected shared stellar vision filters. */ presentationFilterRegistry?: ViewPresentationFilterRegistry;
+	/** Optional ordinary scene lighting transaction owner. */ endpointScene?: Flat32EndpointLighting;
 	/** Creates an independently owned display model for each staged frame. */
 	createColorModel: () => Color;
 	/** External scene/renderer/composer creation owner. */ sceneRuntime: Flat32LocalFrameSceneCapability;
 	/** Exact physical length represented by scene units. */ sceneScale: SceneScale;
 	/** Geometry-owned maximum encoded scene endpoint depth. */ sceneDepthMax: Distance;
 }>;
+
+/** Actual ordinary local-frame prepublication pixel observations. */
+type Flat32LocalFramePreflight = LocalSunFramePreflight;
 
 /** Ordinary shader counters used to reject incomplete composed frames. */
 type Flat32LocalFrameProgramDiagnostics = Readonly<{

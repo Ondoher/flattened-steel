@@ -13,7 +13,7 @@ class LocalSunCompactConstructionProfile {
 	/** Call this method to reject fabricated profiles and changed retained physical facts. */
 	static assert(profile: unknown): LocalSunCompactConstructionProfile;
 	/** Call this method to select analytic compact construction and lookup through the ordinary facade. */
-	createExecutionProfile(): Algorithm32ExecutionProfile;
+	createExecutionProfile(celestialSources?: CelestialSourceRoster | null): Algorithm32ExecutionProfile;
 	/** Call this method to create an independently paired exact live profile. */
 	createLiveProfile(request: LocalSunLiveProfileRequest): LocalSunCompactConstructionProfile;
 	/** Call this method to canonicalize horizontal placement while retaining all construction physics. */

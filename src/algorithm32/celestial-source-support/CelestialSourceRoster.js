@@ -326,6 +326,7 @@ function acceptCelestialSourceRoster(request) {
 			throw new RangeError('Flat finite celestial Sun must be the exact configured light source.');
 		}
 		acceptFiniteSun(localSun, request.basis);
+		if (roster.stars != null) acceptStars(roster.stars, request.basis);
 		return roster;
 	}
 	throw new RangeError('Algorithm32 celestial source roster family is not supported.');
@@ -351,6 +352,7 @@ function describeCelestialSourceRosterIdentity(roster, basis) {
 		id: roster.id,
 		family: roster.family,
 		localSun: acceptFiniteSun(roster.localSun, basis),
+		stars: roster.stars == null ? null : acceptStars(roster.stars, basis),
 	};
 }
 

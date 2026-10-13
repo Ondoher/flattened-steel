@@ -4,6 +4,7 @@ const STELLAR_SCREEN_INDEX_VALUE_KEY = 'runtime.celestial.stellarScreenIndex';
 const STELLAR_PALETTE_VALUE_KEY = 'runtime.celestial.stellarPalette';
 const SUN_COVERAGE_VALUE_KEY = 'runtime.celestial.sunCoverageTile';
 const SUN_SCREEN_CENTER_VALUE_KEY = 'runtime.celestial.sunScreenCenterPixels';
+const SUN_RADIUS_VALUE_KEY = 'runtime.celestial.sunRadiusPixels';
 const SUN_TILE_RESOLUTION_VALUE_KEY = 'runtime.celestial.sunTileResolution';
 const SUN_TILE_SCALE_VALUE_KEY = 'runtime.celestial.sunTileSamplesPerPixel';
 const SUN_SURFACE_RADIANCE_VALUE_KEY = 'runtime.celestial.sunSurfaceRadiance';
@@ -41,6 +42,7 @@ export class CelestialScreenPaletteConsumerShaderContribution {
 		const bindings = [
 			this._binding('runtime.celestial-sun-coverage-tile', 'texture', SUN_COVERAGE_VALUE_KEY),
 			this._binding('runtime.celestial-sun-screen-center', 'uniform', SUN_SCREEN_CENTER_VALUE_KEY),
+			this._binding('runtime.celestial-sun-radius', 'uniform', SUN_RADIUS_VALUE_KEY),
 			this._binding('runtime.celestial-sun-tile-resolution', 'uniform', SUN_TILE_RESOLUTION_VALUE_KEY),
 			this._binding('runtime.celestial-sun-tile-scale', 'uniform', SUN_TILE_SCALE_VALUE_KEY),
 			this._binding('runtime.celestial-sun-surface-radiance', 'uniform', SUN_SURFACE_RADIANCE_VALUE_KEY),
@@ -113,6 +115,12 @@ export class CelestialScreenPaletteConsumerShaderContribution {
 			requires: ['runtime.initialState', 'transport.evaluatePathRadiance'],
 			uniforms: [
 				ShaderContributions.createShaderUniformDeclaration(
+					'uSunRadiusPixels',
+					'float',
+					SUN_RADIUS_VALUE_KEY,
+					0,
+				),
+				ShaderContributions.createShaderUniformDeclaration(
 					'uSunScreenCenterPixels',
 					'vec2',
 					SUN_SCREEN_CENTER_VALUE_KEY,
@@ -156,6 +164,8 @@ export class CelestialScreenPaletteConsumerShaderContribution {
 					`float sampleSunCoverageTile(ShaderState state) {
 	vec2 screenPixelCenter = state.textureCoordinates * uViewportSizePixels;
 	vec2 relativePixelCenter = screenPixelCenter - uSunScreenCenterPixels;
+	vec2 nearestOffset = max(abs(relativePixelCenter) - vec2(0.5), vec2(0.0));
+	if (dot(nearestOffset, nearestOffset) >= uSunRadiusPixels * uSunRadiusPixels) return 0.0;
 	vec2 tileTexelCenter = relativePixelCenter * uSunTileSamplesPerPixel
 		+ 0.5 * uSunTileResolution;
 	vec2 tileCoordinates = tileTexelCenter / uSunTileResolution;

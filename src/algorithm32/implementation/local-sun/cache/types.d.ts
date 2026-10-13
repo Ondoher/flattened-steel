@@ -763,6 +763,14 @@ type LocalSunCompactTopologyControls = Readonly<{
 	/** Complete Euclidean-radius bands from zero to the farthest cylinder source distance. */ bandRadii: readonly Distance[];
 	/** Positive ordered extinction-length refinement multiples. */ boundaryExtinctionLengthMultiples: readonly number[];
 }>;
+
+/** Ordinary-scene inputs for the explicit qualified compact selection. */
+type LocalSunCompactProfileSelectionRequest = Readonly<{
+	/** Exact time and geographic location. */ observation: GeometryObservation;
+	/** Physical observer position in flat model coordinates. */ observerPosition: Position;
+	/** Existing ordinary observer-dome ray extent. */ viewRayLimit: Distance;
+	/** Qualified scattering order. */ maximumScatteringOrder: SupportedCacheScatteringOrder;
+}>;
 /** Complete physical input graph and topology controls for compact construction. */
 type LocalSunCompactConstructionProfileDefinition = LocalSunCompactProfileModels &
 	Readonly<{

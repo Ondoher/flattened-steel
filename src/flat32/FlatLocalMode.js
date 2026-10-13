@@ -3,6 +3,8 @@ import {
 	CanonicalAtmosphere,
 	FlatEarthGeometry,
 	LocalSunLightSource,
+	LocalSunCompactProfileSelection,
+	StellarPointSetSource,
 } from '../algorithm32/implementation/index.js';
 import {
 	CUBED_SPHERE_W27_DIRECTION_COUNT,
@@ -33,7 +35,48 @@ export class FlatLocalMode {
 	 * @param {Flat32LocalModeConfiguration} configuration - Application-owned runtime selections.
 	 */
 	constructor(configuration) {
+		/** Explicit compact successor; omission retains the production control. @type {LocalSunCompactConstructionProfile|null} */
+		this._compactProfile = null;
+		this._configuration = configuration;
 		const selections = resolveFlat32ProductionSelections(configuration);
+		if (configuration.localSunCachePolicy === 'compact-v9-native15') {
+			this._framePresentationRegistry = new ViewPresentationFilterRegistry(selections.presentationFilters, {
+				scotopicLuminanceWeights: configuration.scotopicLuminanceWeights,
+			});
+			requireImplementedFlat32ProductionSelections(selections, {
+				stellarCatalogUsed: true,
+				supportsStellarFilters: true,
+				presentationFilterRegistry: this._framePresentationRegistry,
+			});
+			if (selections.stellarCatalog === 'brightest-2000' && !configuration.brightest2000StellarCatalogDefinition)
+				throw new RangeError('Compact flat stars require the authenticated brightest-2000 package.');
+			this._frameStars = selections.celestialSourcesEnabled
+				? new StellarPointSetSource({
+						catalogDefinition:
+							selections.stellarCatalog === 'brightest-2000'
+								? configuration.brightest2000StellarCatalogDefinition
+								: undefined,
+					})
+				: null;
+			this._compactProfile = new LocalSunCompactProfileSelection().create({
+				observation: configuration.observation,
+				observerPosition: {
+					coordinates: [0, 0, DistanceMath.toMeters(ATMOSPHERE_OBSERVER_HEIGHT)],
+					units: 'meters',
+				},
+				viewRayLimit: FLAT_OBSERVER_DOME_MAX_VIEW_RAY_EXTENT,
+				maximumScatteringOrder: configuration.maximumScatteringOrder,
+			});
+			this._geometry = /** @type {FlatEarthGeometry} */ (this._compactProfile.models.geometry);
+			this._sceneScale = configuration.sceneScale;
+			this._maximumScatteringOrder = configuration.maximumScatteringOrder;
+			this._algorithm32 = new Algorithm32({
+				profile: this._compactProfile.createExecutionProfile(),
+				color: createFlat32ColorDisplayModel(selections.colorDisplayModelConfiguration),
+			});
+			this._disposed = false;
+			return;
+		}
 		const presentationFilterRegistry = new ViewPresentationFilterRegistry(selections.presentationFilters);
 		requireImplementedFlat32ProductionSelections(selections, {
 			presentationFilterRegistry,
@@ -127,12 +170,101 @@ export class FlatLocalMode {
 		return this._sceneScale;
 	}
 
+	/** Explicit compact selection, otherwise the unchanged rectangular control.
+	 * @returns {LocalSunCompactConstructionProfile|null} - Current live physical selection.
+	 */
+	get compactProfile() {
+		this._assertUsable();
+		return this._compactProfile;
+	}
+	/** Call this method to create an exact ordinary-observation candidate without changing displayed state.
+	 * @param {GeometryObservation} observation - Requested time and location.
+	 * @param {UnitValue<'bytes'>} otherOwnedGpuBytes - Complete declared scene/frame overlap.
+	 * @returns {LocalSunFrameRequest} - Complete accepted request, or explicit unsupported coverage.
+	 */
+	createLocalFrameRequest(observation, otherOwnedGpuBytes) {
+		this._assertUsable();
+		if (!this._compactProfile) throw new Error('Compact local selection required.');
+		const profile = this._compactProfile.createLiveProfile({
+			observation,
+			receiverPosition: this._geometry.configuration.observerPosition,
+		});
+		const source = profile.models.lightSource.configuration.position.coordinates;
+		const receiver = profile.models.geometry.configuration.observerPosition;
+		const delta = [receiver.coordinates[0] - source[0], receiver.coordinates[1] - source[1]];
+		const horizontal = Math.hypot(...delta);
+		if (
+			horizontal + DistanceMath.toMeters(FLAT_OBSERVER_DOME_MAX_VIEW_RAY_EXTENT) >
+			profile.domains.topology.coverageRadius.value
+		)
+			throw new RangeError(
+				'Ordinary observer dome exits compact cache coverage; compatible replacement or unsupported state required.',
+			);
+		const direction = /** @type {UnitVector3} */ (
+			horizontal === 0 ? [1, 0, 0] : [delta[0] / horizontal, delta[1] / horizontal, 0]
+		);
+		return {
+			profile,
+			viewRays: [{origin: receiver, direction}],
+			presentationIdentity: JSON.stringify(resolveFlat32ProductionSelections(this._configuration)),
+			otherOwnedGpuBytes,
+		};
+	}
+	/** Call this method only after successful complete frame publication.
+	 * @param {PreparedLocalSunFrame} frame - Newly committed controller frame.
+	 * @returns {void} - Assignment-only live geometry update.
+	 */
+	acceptPublishedLocalFrame(frame) {
+		this._compactProfile = frame.profile;
+		this._geometry = /** @type {FlatEarthGeometry} */ (frame.profile.models.geometry);
+	}
+	/** Call this method to provide selected presentation and celestial collaborators to ordinary staging.
+	 * @param {Flat32LocalFrameSceneCapability} sceneRuntime - Borrowed renderer and scene.
+	 * @param {Flat32EndpointLighting} endpointScene - Borrowed endpoint lighting owner.
+	 * @param {Distance} sceneDepthMax - Unit-bearing geometry depth cap.
+	 * @returns {Flat32LocalFramePreparerConfiguration} - Explicit complete staging inputs.
+	 */
+	createLocalFramePreparerConfiguration(sceneRuntime, endpointScene, sceneDepthMax) {
+		const selections = resolveFlat32ProductionSelections(this._configuration);
+		return {
+			sceneRuntime,
+			endpointScene,
+			sceneDepthMax,
+			sceneScale: this._sceneScale,
+			presentationFilterRegistry: this._framePresentationRegistry,
+			createColorModel: () =>
+				createFlat32ColorDisplayModel(
+					selections.colorDisplayModelConfiguration,
+					this._framePresentationRegistry,
+				),
+			createCelestialSources: (profile) =>
+				selections.celestialSourcesEnabled
+					? {
+							id: 'flat32-compact-sun-stars-v1',
+							family: 'flat-local-finite-sun-v1',
+							localSun: /** @type {LocalSunLightSource} */ (profile.models.lightSource),
+							stars: this._frameStars,
+						}
+					: null,
+		};
+	}
+
 	/** Call this method to describe the selected production flat/local realization.
 	 *
 	 * @returns {Flat32ModeSummary} - Selected physical domains and pairing.
 	 */
 	describe() {
 		this._assertUsable();
+		if (this._compactProfile)
+			return {
+				pairing: 'flat/local',
+				maximumScatteringOrder: this._maximumScatteringOrder,
+				positionCount: this._compactProfile.domains.topology.positionCount,
+				incomingDirectionCount: this._compactProfile.domains.incomingDirections.directionCount,
+				outgoingDirectionCount: CUBED_SPHERE_W27_DIRECTION_COUNT,
+				spectralChannelCount: this._compactProfile.spectral.basis.channelCount,
+				observerDomeEnabled: true,
+			};
 		return {
 			pairing: 'flat/local',
 			maximumScatteringOrder: this._maximumScatteringOrder,

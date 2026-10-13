@@ -1,5 +1,6 @@
 import {FlatGeometryCacheModuleProvider} from './FlatGeometryCacheModuleProvider.js';
 import {FlatGeometryShaderContributor} from './FlatGeometryShaderContributor.js';
+import {FlatStellarGenerationShaderContributor} from './FlatStellarGenerationShaderContributor.js';
 import {FlatScatteringCacheGeometry} from './FlatScatteringCacheGeometry.js';
 import {FlatGeometrySceneAdapter} from './three/FlatGeometrySceneAdapter.js';
 import {FlatSynchronizer} from './synchronization/FlatSynchronizer.js';
@@ -27,11 +28,50 @@ import {
  * @implements {CacheBuildContributor}
  * @implements {CacheTransportDataProvider<FlatCacheTransportDataRequest>}
  * @implements {CelestialGeometryCapability}
+ * @implements {StellarScreenPaletteGeometryCapability}
  */
 export class FlatEarthGeometry {
 	/** Flat finite-local-Sun celestial capability family. */
 	get celestialCapabilityFamily() {
 		return /** @type {const} */ ('flat-local-finite-sun-v1');
+	}
+
+	/** Call this method to identify the fixed simulated stellar projection.
+	 * @returns {FlatStellarEpochRelativeTransformIdentity} - Complete placement policy.
+	 */
+	describeStellarEpochRelativeTransform() {
+		this._assertConfigured();
+		return new FlatStellarGenerationShaderContributor(
+			this._configuration,
+			this._configuration.observation,
+		).describeTransform();
+	}
+	/** Call this method to contribute geometry-owned flat-star GPU placement.
+	 * @param {Readonly<{observation:GeometryObservation}>} request - Exact frame observation.
+	 * @returns {StellarGenerationGeometryShaderContribution} - CPU-matched placement operations.
+	 */
+	createStellarGenerationShaderContribution(request) {
+		this._assertConfigured();
+		if (
+			CanonicalValueHash.sha256Value(request.observation) !==
+			CanonicalValueHash.sha256Value(this._configuration.observation)
+		)
+			throw new RangeError('Flat stellar observation must match configured geometry.');
+		return new FlatStellarGenerationShaderContributor(
+			this._configuration,
+			request.observation,
+		).createContribution();
+	}
+	/** Call this method to resolve the matching flat-star CPU presentation direction.
+	 * @param {UnitVector3} direction - Accepted catalog unit direction.
+	 * @returns {UnitVector3} - Receiver-relative east/north/up direction.
+	 */
+	resolveStellarCatalogDirection(direction) {
+		this._assertConfigured();
+		return new FlatStellarGenerationShaderContributor(
+			this._configuration,
+			this._configuration.observation,
+		).resolveDirection(direction);
 	}
 
 	/** Canonicalize sub-nanometer projection roundoff near an exact meter. */

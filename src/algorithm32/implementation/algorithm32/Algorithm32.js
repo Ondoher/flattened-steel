@@ -290,16 +290,15 @@ export class Algorithm32 {
 		}
 		if (profile.compactConstruction !== undefined) {
 			let compact = LocalSunCompactConstructionProfile.assert(profile.compactConstruction);
-			let expected = compact.createExecutionProfile();
+			let expected = compact.createExecutionProfile(profile.models.celestialSources);
 			if (
 				Object.hasOwn(profile.numerical.sourcePathTransmittance, 'intervalCount') ||
-				profile.contentHash !== compact.contentHash ||
+				profile.contentHash !== expected.contentHash ||
 				profile.domains !== compact.domains ||
 				profile.models.geometry !== compact.models.geometry ||
 				profile.models.atmosphere !== compact.models.atmosphere ||
 				profile.models.lightSource !== compact.models.lightSource ||
 				profile.models.groundBoundary !== null ||
-				profile.models.celestialSources !== null ||
 				JSON.stringify(profile.numerical) !== JSON.stringify(expected.numerical) ||
 				JSON.stringify(profile.models.sourcePlacement) !== JSON.stringify(expected.models.sourcePlacement)
 			)

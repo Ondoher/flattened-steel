@@ -514,7 +514,7 @@ export class ShaderRuntimeInstaller {
 	 */
 	_createStellarGenerationPass(request) {
 		const roster = this._model.celestialSources;
-		if (roster?.family !== 'spherical-sun-stars-radial-v1' || !roster.stars) return null;
+		if (!roster?.stars) return null;
 		const source = /** @type {StellarPointSetCelestialSource & Partial<StellarScreenPaletteSource>} */ (
 			roster.stars
 		);

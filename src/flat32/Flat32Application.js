@@ -31,6 +31,12 @@ export class Flat32Application {
 		this._cameraFieldOfViewDegrees = configuration.cameraFieldOfViewDegrees ?? null;
 		this._initialFlatTimeIndex = configuration.initialFlatTimeIndex ?? 0;
 		this._initialModeKind = configuration.initialModeKind ?? 'spherical-distant';
+		if (
+			configuration.localSunCachePolicy !== undefined &&
+			configuration.localSunCachePolicy !== 'compact-v9-native15'
+		)
+			throw new RangeError('Unsupported Flat32 local cache policy.');
+		this._localSunCachePolicy = configuration.localSunCachePolicy;
 		this._maximumScatteringOrder =
 			configuration.maximumScatteringOrder ??
 			DEFAULT_NATIVE_PRODUCTION_PROFILE.numerical.cacheConstruction.maximumScatteringOrder;
@@ -73,7 +79,9 @@ export class Flat32Application {
 	/** Render every control from the one authoritative application state. */
 	_renderControls() {
 		if (this._state !== null) {
-			this._view.showApplicationState(this._state);
+			this._view.showApplicationState(
+				this._localSunCachePolicy && this._publishedState ? this._publishedState : this._state,
+			);
 		}
 	}
 
@@ -250,13 +258,16 @@ export class Flat32Application {
 	/** Create the fixed selected production flat/local mode. */
 	_createFlatLocalMode(state) {
 		return new FlatLocalMode({
+			localSunCachePolicy: this._localSunCachePolicy,
 			sceneScale: ATMOSPHERE_SCENE_SCALE,
 			observation: state.observation,
 			maximumScatteringOrder: this._maximumScatteringOrder,
 			...this._productionSelections,
-			// Flat/local has no stellar source; retain its fail-closed contract by
-			// removing stellar-only presentation stages at the application boundary.
-			presentationFilters: [],
+			// The retained rectangular control has no stellar source. The explicit
+			// compact candidate keeps the selected shared stellar filters.
+			presentationFilters: this._localSunCachePolicy ? this._productionSelections.presentationFilters : [],
+			brightest2000StellarCatalogDefinition: this._brightest2000StellarCatalogDefinition,
+			scotopicLuminanceWeights: this._scotopicLuminanceWeights,
 		});
 	}
 
@@ -272,6 +283,7 @@ export class Flat32Application {
 			const atmosphereSummary = await this._modeController.switchTo(state.modeKind, state);
 			if (atmosphereSummary !== null && !this._disposed) {
 				this._publishedState = state;
+				this._renderControls();
 				const solarZenithDegrees =
 					state.modeKind === 'spherical-distant'
 						? this._createSphericalDistantSceneState(state).solarZenithDegrees
@@ -394,7 +406,7 @@ export class Flat32Application {
 							distantMode.algorithm32.receiverLight,
 							distantMode.algorithm32.config.config.color,
 						);
-					} else {
+					} else if (!(mode instanceof FlatLocalMode) || !mode.compactProfile) {
 						const localMode = /** @type {FlatLocalMode} */ (mode);
 						this._endpointScene?.updateLocalSunLighting(
 							localMode.geometry.mapModelPositionToObserverLocalScenePoint(
@@ -423,7 +435,7 @@ export class Flat32Application {
 							distantMode.algorithm32.receiverLight,
 							distantMode.algorithm32.config.config.color,
 						);
-					} else {
+					} else if (!(mode instanceof FlatLocalMode) || !mode.compactProfile) {
 						const localMode = /** @type {FlatLocalMode} */ (mode);
 						this._endpointScene?.updateLocalSunLighting(
 							localMode.geometry.mapModelPositionToObserverLocalScenePoint(

@@ -231,6 +231,17 @@ export class EndpointScene {
 		this._lighting.updateFromLocalSun(sourceScenePosition);
 	}
 
+	/** Call this method to prepare reversible exact-state local lighting without publishing it.
+	 * @param {ScenePosition} sourceScenePosition - Geometry-owned scene point.
+	 * @param {ReceiverEnvironmentLightMeasurement} receiverLight - Exact measured spectra.
+	 * @param {Color} color - Selected physical spectral projection.
+	 * @returns {LocalSunFrameSceneLighting} - Frame-boundary publication and rollback.
+	 */
+	prepareLocalSunLighting(sourceScenePosition, receiverLight, color) {
+		if (!this._lighting) throw new Error('Endpoint lighting is not installed.');
+		return this._lighting.prepareMeasuredLocalLighting(sourceScenePosition, receiverLight, color);
+	}
+
 	/**
 	 * Return scene-space corners that bound all opaque scene geometry.
 	 *

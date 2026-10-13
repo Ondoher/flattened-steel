@@ -22,6 +22,8 @@ export {
 	native15ScotopicLuminance,
 } from './presentation-filter/ViewPresentationFilterRegistry.js';
 export {LocalLightLevelCalculator} from './scene-lighting/LocalLightLevelCalculator.js';
+export {LocalSunCompactProfileSelection} from './local-sun/cache/LocalSunCompactProfileSelection.js';
+export {LocalSunFrameController} from './local-sun/cache/frames/LocalSunFrameController.js';
 export {
 	NEUTRAL_LAMBERTIAN_REFLECTANCE,
 	NeutralLambertianSceneLighting,

@@ -106,14 +106,16 @@ export class ModeController {
 		try {
 			if (
 				kind === this._currentKind &&
-				kind === 'spherical-distant' &&
 				configurationIdentity === this._activeConfigurationIdentity &&
 				this._activeRuntime?.canUpdateSharedScene?.()
 			) {
-				return await this._activeRuntime.updateSharedScene(state, {
+				const summary = await this._activeRuntime.updateSharedScene(state, {
 					signal: preparationCancellation.signal,
 					environmentSample: request.environmentSample,
 				});
+				if (this._disposed || generation !== this._generation) return null;
+				this._onPublished?.(kind, this._activeMode, state);
+				return summary;
 			}
 			if (request.environmentSample) {
 				throw new Error('Measured environment publication requires an installed shared spherical mode.');

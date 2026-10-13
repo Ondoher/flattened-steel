@@ -375,9 +375,9 @@ globally replacing expected 285-position values. Focused browser lanes use
 `test:acceptance:lighting` command omits the engine Three/WebGL lane and is not
 sufficient by itself for this port.
 
-Standards follow destination folders. Engine source maps to `code`; Flat32 to
-`http-application`; ordinary scripts to `code`; topic documents to `base`.
-Do not inherit the contained experiment's narrower standards. Capture each
+Resolve destination-folder standards from the repository
+[manifest](../../standards/manifest.md) and [overlay](../../standards/overlay.md).
+Capture each
 implementation baseline before edits and batch primary review plus independent
 audit at coherent milestones, retaining required gates until validated. This
 planning unit has its own review and does not authorize a compliance claim for

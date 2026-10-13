@@ -273,6 +273,95 @@ export class LocalSunSceneLighting {
 		}
 	}
 
+	/** Call this method to stage finite-source directions and exact receiver colors without changing lights.
+	 * @param {ScenePosition} sourceScenePosition - Geometry-mapped finite center.
+	 * @param {ReceiverEnvironmentLightMeasurement} receiverLight - Complete exact-state physical lighting.
+	 * @param {Color} color - Current spectral/display projection.
+	 * @returns {LocalSunFrameSceneLighting} - Reversible frame-boundary lighting transaction.
+	 */
+	prepareMeasuredLocalLighting(sourceScenePosition, receiverLight, color) {
+		if (!this._group) throw new Error('Local scene lighting is not installed.');
+		const source = sourceScenePosition.coordinates;
+		if (
+			source.length !== 3 ||
+			source.some(
+				/** Called by source validation. @param {number} value - Coordinate. @returns {boolean} - Nonfinite flag. */ (
+					value,
+				) => !Number.isFinite(value),
+			)
+		)
+			throw new TypeError('Finite source scene point required.');
+		const response = new NeutralLambertianSceneLighting().evaluate({
+			identity: receiverLight.identity + ':flat32-local-neutral',
+			surfaceNormal: [0, 0, 1],
+			directionToSource: [0, 0, 1],
+			directNormal: receiverLight.directNormal,
+			diffuseIrradiance: receiverLight.diffuseHorizontal,
+		});
+		const direct = this._projectIncidentLinearRgb(color, response.directRadiance);
+		const diffuse = this._projectIncidentLinearRgb(color, response.diffuseRadiance);
+		const records = [];
+		for (const light of this._lights) {
+			const definition = SCENE_OBJECTS.find(
+				/** Called by scene lookup. @param {Flat32ReviewObjectDefinition} candidate - Object definition. @returns {boolean} - Matching object. */ (
+					candidate,
+				) => candidate.name === light.userData.reviewObjectKey,
+			);
+			const direction = definition ? this._directionBetween(definition.shadowFocus, source) : null;
+			records.push({
+				light,
+				definition,
+				direction,
+				color: light.color.clone(),
+				intensity: light.intensity,
+				position: light.position.clone(),
+				data: {...light.userData},
+				ground: light instanceof THREE.HemisphereLight ? light.groundColor.clone() : null,
+			});
+		}
+		const group = this._group,
+			previousData = {...group.userData};
+		let published = false;
+		return {
+			publish: () => {
+				if (published) return;
+				published = true;
+				for (const record of records) {
+					const {light, direction, definition} = record;
+					if (light instanceof THREE.HemisphereLight) {
+						this._applyLinearRgb(light, diffuse);
+						light.groundColor.setRGB(0, 0, 0);
+					} else if (light instanceof THREE.DirectionalLight && direction && definition) {
+						this._applyLinearRgb(light, direct, SCENE_OBJECTS.length);
+						light.position.set(
+							definition.shadowFocus[0] + direction[0] * definition.sourceLightDistance,
+							definition.shadowFocus[1] + direction[1] * definition.sourceLightDistance,
+							definition.shadowFocus[2] + direction[2] * definition.sourceLightDistance,
+						);
+						light.userData.directionToSource = direction;
+						light.shadow.needsUpdate = true;
+					}
+					light.userData.receiverLightIdentity = receiverLight.identity;
+				}
+				group.userData.receiverLightIdentity = receiverLight.identity;
+				group.userData.lightingPolicy = 'exact-state-measured-local-neutral-lambertian-v1';
+			},
+			revert: () => {
+				if (!published) return;
+				published = false;
+				for (const record of records) {
+					record.light.color.copy(record.color);
+					record.light.intensity = record.intensity;
+					record.light.position.copy(record.position);
+					record.light.userData = {...record.data};
+					if (record.light instanceof THREE.HemisphereLight && record.ground)
+						record.light.groundColor.copy(record.ground);
+				}
+				group.userData = {...previousData};
+			},
+		};
+	}
+
 	_directionBetween(from, to) {
 		const direction = [to[0] - from[0], to[1] - from[1], to[2] - from[2]];
 		const length = Math.hypot(...direction);

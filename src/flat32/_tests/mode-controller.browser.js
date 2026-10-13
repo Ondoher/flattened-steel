@@ -55,6 +55,35 @@ function createRuntime(name, events, setupFailure = null) {
 }
 
 describe('Flat32 mode transaction', () => {
+	it('routes admitted flat-local observation changes through the installed runtime', async () => {
+		const events = [],
+			mode = createMode('compact', events),
+			runtime = createRuntime('compact', events);
+		runtime.canUpdateSharedScene = () => true;
+		runtime.updateSharedScene = jasmine.createSpy('exact-local-update').and.resolveTo({pairing: 'flat/local'});
+		const create = jasmine.createSpy('create-mode').and.returnValue(mode);
+		const published = jasmine.createSpy('published');
+		const controller = new ModeController({
+			createMode: create,
+			createRuntime: () => runtime,
+			endpointScene: {},
+			onFailure() {},
+			onPublished: published,
+			sceneRuntime: {
+				createAtmosphereComposer: () => createComposer('compact', events),
+				restoreDirectRendering() {},
+			},
+		});
+		const first = {selection: 'compact', observation: {instant: 'first'}},
+			next = {...first, observation: {instant: 'next'}};
+		await controller.switchTo('flat-local', first);
+		await controller.switchTo('flat-local', next);
+		expect(create).toHaveBeenCalledTimes(1);
+		expect(runtime.updateSharedScene).toHaveBeenCalledTimes(1);
+		expect(runtime.updateSharedScene.calls.mostRecent().args[0]).toBe(next);
+		expect(published.calls.mostRecent().args).toEqual(['flat-local', mode, next]);
+		controller.dispose();
+	});
 	it('reuses one shared runtime for observation changes and rebuilds for configuration changes', async () => {
 		const events = [];
 		let release;

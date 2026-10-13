@@ -412,3 +412,16 @@ type FlatObserverCenteredDomeFacts = {
 	/** Value that stores the sphere radius. */
 	readonly sphereRadius: Distance;
 };
+/** Fixed flat-star simulation projection parameters derived from physical geometry. */
+type FlatStellarProjectionPolicy = Readonly<{
+	/** Unix epoch in milliseconds. */ epochMilliseconds: number;
+	/** Positive westward rotation period in milliseconds. */ periodMilliseconds: number;
+	/** Polar map scale in meters. */ projectionRadiusMeters: number;
+	/** Ellipsoidal presentation dome height in meters. */ domeHeightMeters: number;
+}>;
+/** Internal geometry-owned stellar projection construction operation. */
+interface FlatStellarProjectionCapability {
+	/** Contribute fixed-observation GPU operations. */ createStellarGenerationShaderContribution(
+		request: Readonly<{observation: GeometryObservation}>,
+	): StellarGenerationGeometryShaderContribution;
+}

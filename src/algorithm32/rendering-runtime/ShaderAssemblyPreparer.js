@@ -402,11 +402,8 @@ SpectralValue oneSpectral() {
 			const sun = roster.family === 'spherical-sun-stars-radial-v1' ? roster.sun : roster.localSun;
 			contributions.push(
 				new CelestialScreenPaletteConsumerShaderContribution({
-					includeStars: roster.family === 'spherical-sun-stars-radial-v1' && roster.stars != null,
-					filteredStars:
-						roster.family === 'spherical-sun-stars-radial-v1' &&
-						roster.stars != null &&
-						presentationFilterRegistry?.enabled === true,
+					includeStars: roster.stars != null,
+					filteredStars: roster.stars != null && presentationFilterRegistry?.enabled === true,
 					surfaceRadiance: sun.celestialSourceDefinition.surfaceRadiance,
 				}).createShaderContribution(),
 			);
