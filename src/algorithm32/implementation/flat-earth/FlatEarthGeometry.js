@@ -49,7 +49,7 @@ export class FlatEarthGeometry {
 	}
 	/** Call this method to contribute geometry-owned flat-star GPU placement.
 	 *
-	 * @param {Readonly<{observation:GeometryObservation}>} request - Exact frame observation.
+	 * @param {StellarGenerationGeometryRequest} request - Exact frame observation.
 	 * @returns {StellarGenerationGeometryShaderContribution} - CPU-matched placement operations.
 	 */
 	createStellarGenerationShaderContribution(request) {
@@ -391,13 +391,11 @@ export class FlatEarthGeometry {
 		if (request.placement === undefined) {
 			sourcePosition = this._resolveLocalSourcePosition(request.observation);
 		} else {
-			const explicitPlacement = /** @type {Readonly<{kind: 'finite-position', position: Position}>} */ (
-				request.placement
-			);
+			const explicitPlacement = /** @type {GeometryFiniteLightSourcePlacement} */ (request.placement);
 			DistanceMath.assertPosition(explicitPlacement.position, 'FlatEarthGeometry source placement');
 			sourcePosition = DistanceMath.positionInMeters(DistanceMath.toMetersPosition(explicitPlacement.position));
 		}
-		const placement = /** @type {Readonly<{kind: 'finite-position', position: Position}>} */ (
+		const placement = /** @type {GeometryFiniteLightSourcePlacement} */ (
 			request.placement ?? {
 				kind: 'finite-position',
 				position: sourcePosition,

@@ -1,3 +1,13 @@
+/** Immutable inputs borrowed by the fixed-cost stars-then-Sun consumer contribution. */
+type CelestialScreenPaletteConsumerConfiguration = Readonly<{
+	/** Whether the authenticated stellar palette back layer is enabled. */
+	readonly includeStars: boolean;
+	/** Optional source-linear stellar filter activation; omission disables that hook. */
+	readonly filteredStars?: boolean;
+	/** Physical source-owned Sun surface-radiance spectrum, without an additional view-transmission factor. */
+	readonly surfaceRadiance: SpectralRadiancePacket;
+}>;
+
 /** Stable executable identity supplied by one celestial source provider. */
 type CelestialSourceIdentity = Readonly<{
 	/** Stable source identifier. */

@@ -95,6 +95,14 @@ type StellarGenerationGeometryRequest = Readonly<{
  */
 type LightSourcePlacementKind = 'distant-direction' | 'finite-position';
 
+/** Immutable finite source center resolved by geometry in physical model coordinates. */
+type GeometryFiniteLightSourcePlacement = Readonly<{
+	/** Finite positional placement kind. */
+	readonly kind: 'finite-position';
+	/** Finite source center in model coordinates, expressed as unit-bearing distances. */
+	readonly position: Position;
+}>;
+
 /** Geometry-resolved placement installed on an atmospheric light source. */
 type GeometryResolvedLightSourcePlacement =
 	| Readonly<{
@@ -103,12 +111,7 @@ type GeometryResolvedLightSourcePlacement =
 			/** Normalized model-space direction toward the light. */
 			readonly directionToLight: UnitVector3;
 	  }>
-	| Readonly<{
-			/** Finite positional placement kind. */
-			readonly kind: 'finite-position';
-			/** Finite source center in model coordinates. */
-			readonly position: Position;
-	  }>;
+	| GeometryFiniteLightSourcePlacement;
 
 /** Request through which Algorithm32 asks geometry to bind one light source. */
 type GeometryLightSourceConfigurationRequest = Readonly<{

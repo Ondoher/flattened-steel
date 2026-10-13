@@ -176,7 +176,7 @@ export class ViewPresentationFilterRegistry {
 	 * Creates the ordered filter registry using authenticated optional local data.
 	 *
 	 * @param {readonly any[]} filters - Ordered registered filter selections.
-	 * @param {Readonly<{scotopicLuminanceWeights?: ArrayLike<number>}>} configuration - Optional authenticated local data.
+	 * @param {ViewPresentationFilterRegistryConfiguration} configuration - Optional authenticated local data.
 	 */
 	constructor(filters = [], configuration = {}) {
 		if (!Array.isArray(filters)) throw new TypeError('View-presentation filters must be an array.');

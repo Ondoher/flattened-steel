@@ -14,7 +14,7 @@ export class CelestialScreenPaletteConsumerShaderContribution {
 	/**
 	 * Creates the shared consumer contribution owner.
 	 *
-	 * @param {Readonly<{includeStars: boolean, filteredStars?: boolean, surfaceRadiance: SpectralRadiancePacket}>} configuration - Enabled back layer and Sun spectrum.
+	 * @param {CelestialScreenPaletteConsumerConfiguration} configuration - Enabled back layer and Sun spectrum.
 	 */
 	constructor(configuration) {
 		this._includeStars = configuration.includeStars;
