@@ -2,6 +2,7 @@ import {
 	SPECTRAL_QUANTITIES,
 	SPECTRAL_UNITS,
 	SpectralPacket as SpectralPacketClass,
+	SpectralBasis as SpectralBasisClass,
 	UnitMath,
 } from '../../spectral-values/index.js';
 import ArrayMath from '../../math/ArrayMath.js';
@@ -73,6 +74,8 @@ export class SpectralCalculator {
 			opticalDepth,
 			/**
 			 * Called by the surrounding operation to handle one callback invocation.
+
+			 *
 			 * @param value - The value accepted by the operation.
 			 * @returns - The callback result returned to its caller.
 			 */ (value) => Math.exp(-value),
@@ -92,11 +95,12 @@ export class SpectralCalculator {
 			previousExtinctionPerMeter,
 			/**
 			 * Called by the surrounding operation to handle one callback invocation.
+
+			 *
 			 * @param previous - The previous value accepted by the operation.
 			 * @param index - The zero-based index accepted by the operation.
 			 * @returns - The callback result returned to its caller.
-			 */ (previous, index) =>
-				Math.exp(-0.5 * (previous + currentExtinctionPerMeter[index]) * intervalLengthMeters),
+			 */ (previous, index) => Math.exp(-0.5 * (previous + currentExtinctionPerMeter[index]) * intervalLengthMeters),
 		);
 	}
 
@@ -119,11 +123,12 @@ export class SpectralCalculator {
 			rayleighScatteringPerMeter,
 			/**
 			 * Called by the surrounding operation to handle one callback invocation.
+
+			 *
 			 * @param rayleigh - The rayleigh value accepted by the operation.
 			 * @param index - The zero-based index accepted by the operation.
 			 * @returns - The callback result returned to its caller.
-			 */ (rayleigh, index) =>
-				rayleigh * rayleighPhasePerSteradian + mieScatteringPerMeter[index] * miePhasePerSteradian,
+			 */ (rayleigh, index) => rayleigh * rayleighPhasePerSteradian + mieScatteringPerMeter[index] * miePhasePerSteradian,
 		);
 	}
 
@@ -148,6 +153,8 @@ export class SpectralCalculator {
 			viewTransmittance,
 			/**
 			 * Called by the surrounding operation to handle one callback invocation.
+
+			 *
 			 * @param viewSurvival - The view survival value accepted by the operation.
 			 * @param index - The zero-based index accepted by the operation.
 			 * @returns - The callback result returned to its caller.
@@ -176,11 +183,26 @@ export class SpectralCalculator {
 	/**
 	 * Creates a spectral calculator from stable calculation collaborators.
 	 *
-	 * @param {SpectralCalculatorDependencies} dependencies - Supplies the aggregate execution model.
+	 * @param {SpectralCalculatorDependencies} dependencies - Supplies exactly one execution model or genuine packet-arithmetic basis.
 	 *
 	 */
 	constructor(dependencies) {
+		if (!dependencies || (dependencies.model === undefined) === (dependencies.spectralBasis === undefined))
+			throw new TypeError('Supply exactly one execution model or genuine spectral basis.');
+		if (dependencies.spectralBasis !== undefined) SpectralBasisClass.assert(dependencies.spectralBasis);
 		this._dependencies = {...dependencies};
+	}
+
+	/** Call this method to create shared packet/phase arithmetic from a genuine spectral basis.
+	 * Model-dependent ray operations require a full execution model.
+
+	 *
+	 * @param {SpectralBasis} basis - Accepted physical spectral interpretation.
+	 * @returns {SpectralCalculator} - Calculator without a fabricated execution profile.
+	 * @throws {TypeError} - The basis is not a validated spectral basis.
+	 */
+	static forScatteringBasis(basis) {
+		return new SpectralCalculator({spectralBasis: SpectralBasisClass.assert(basis)});
 	}
 
 	/**
@@ -201,7 +223,12 @@ export class SpectralCalculator {
 	 * @param {SpectralBasis | undefined} [basis] - Supplies the expected basis.
 	 * @returns {SpectralPacket} - The accepted packet.
 	 */
-	_acceptPacket(value, quantity, units, basis = this.dependencies.model.profile.spectral.basis) {
+	_acceptPacket(
+		value,
+		quantity,
+		units,
+		basis = this.dependencies.spectralBasis ?? this.dependencies.model?.profile.spectral.basis,
+	) {
 		return SpectralPacketClass.assert(value, basis === undefined ? {quantity, units} : {quantity, units, basis});
 	}
 
@@ -484,6 +511,7 @@ export class SpectralCalculator {
 	 */
 	computeDirectRadiance(viewRaySegment, pathIntegrationPoints) {
 		const {model} = this.dependencies;
+		if (!model) throw new TypeError('An execution model is required for direct ray transport.');
 		const {geometry, atmosphere, lightSource} = model;
 		const acceptedSpectralBasis = /** @type {SpectralBasis} */ (model.profile.spectral.basis);
 		const channelCount = acceptedSpectralBasis.channelCount;
@@ -602,6 +630,7 @@ export class SpectralCalculator {
 	 */
 	computeRadiance(viewRaySegment, pathIntegrationPoints, options) {
 		const {model} = this.dependencies;
+		if (!model) throw new TypeError('An execution model is required for cumulative ray transport.');
 		const {geometry, atmosphere} = model;
 		const scatteringCache = options.scatteringCache;
 		const cacheContentIdentity = scatteringCache.sampleProvenanceIdentity;

@@ -29,11 +29,14 @@ ports selected-ray Column48/Tail64 cache integration, atmosphere-owned cache
 columns and geometry-owned ray endpoints. The seventh connects selected compact
 CPU construction, primary J1 transport and a separate manufactured full-measure
 scattering step, with a bounded cost pilot; matching receipts are linked in status.
-The eighth connects a complete explicit compact cache-construction profile to
-actual domain selectors and lazy assembly, with independent physical-node/primary
-comparisons and no-buffer resource estimates. Ordinary runtime profile integration
-retains its separate gate. Full P1 fields, recurrence, GPU paths and
-consumers remain open.
+The complete compact profile now also executes selected physical J1-J4 and
+cumulative N1/N2/N4 with independently frozen L1-L3 inputs and complete selected
+construction rays. Continuous direct L1 is separate from held J1. The
+[P1 closure](production-algorithm32/caches/local-sun-p1-closure.md) owns numerical
+scope; status links the required final primary/audit receipt. After that receipt
+is CLEAN, the next phase is P2 production GPU construction and runtime lookup,
+including ordinary runtime profile consumers and full occupied-field/ray parity.
+Full-domain CPU construction is not admitted by the selected operator controls.
 Profile/default selection, deployment and publication have not changed.
 P7 closeout and production controls retain their separate evidence/review scopes.
 

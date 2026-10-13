@@ -751,6 +751,7 @@ type LocalSunCompactTopologyControls = Readonly<{
 /** Complete physical input graph and topology controls for compact construction. */
 type LocalSunCompactConstructionProfileDefinition = LocalSunCompactProfileModels &
 	Readonly<{
+		/** Requested order; omitted preserves shared N4 default. */ maximumScatteringOrder?: SupportedCacheScatteringOrder;
 		/** Explicit controls; automatic changed-height seed generation remains open. */ topologyControls: LocalSunCompactTopologyControls;
 		/** Input ancestry identity, never an executable descriptor. */ provenanceIdentity: string;
 	}>;
@@ -768,7 +769,7 @@ type LocalSunCompactNumericalPolicies = Readonly<{
 		/** Positive local view-column policy. */ kind: 'local-positive-column-v1';
 		/** Selected positive view interval count. */ intervalCount: number;
 	}>;
-	/** Shared requested cumulative order; complete recurrence remains open. */ maximumScatteringOrder: 4;
+	/** Explicit requested cumulative order. */ maximumScatteringOrder: SupportedCacheScatteringOrder;
 	/** CPU reference and GPU scalar payload semantics. */ precision: Readonly<{
 		/** Reference scalar precision. */ cpu: 'binary64';
 		/** Prospective GPU storage format. */ gpu: 'scalar-r32f';
@@ -809,8 +810,108 @@ type LocalSunCompactResourceEstimate = Readonly<{
 	readonly ownedGpuCeilingBytes: UnitValue<'bytes'>;
 	/** Arithmetic fit only; it does not authorize or measure allocation. */
 	readonly estimateFitsCeiling: boolean;
-	/** Five J and three L retained N4 binary64 buffers, excluding other working memory. */
+	/** Requested-order pure/cumulative J and preceding L binary64 buffers, excluding other working memory. */
 	readonly fullCpuRetainedSpectralBytes: UnitValue<'bytes'>;
 	/** This estimate operation allocates no spectral field. */
 	readonly spectralBuffersAllocated: 0;
 }>;
+
+/** Fixed existing physical collaborators and source-neutral shared phase calculator. */
+type LocalSunCompactCpuAssemblyDefinition = LocalSunCompactTransportDefinition &
+	Readonly<{
+		/** Existing bound source with complete normalized physical facts. */ lightSource: LocalSunCacheProviderSource;
+		/** Existing shared physical phase/scattering operation. */ calculator: LaterOrderScatteringCalculator;
+		/** Existing medium and physical phase owner. */ atmosphere: CanonicalCacheColumnAtmosphere &
+			Pick<AtmosphereModel, 'samplePhase'>;
+		/** Geometry-owned physical cache-frame transformation. */ geometry: LocalSunCompactTransportDefinition['geometry'] &
+			Pick<FlatEarthGeometry, 'expressPhysicalScatteringCacheDirection'>;
+	}>;
+
+/** Actual ragged domain and direction-fastest logical packing; no rectangular axes or allocated full field. */
+type LocalSunCompactCpuDomains = Readonly<{
+	/** Real compact nodes/admission. */ topology: FlatCompactTopology;
+	/** Shared Native15 physical interpretation. */ spectralBasis: SpectralBasis;
+	/** Qualified flat incoming measure. */ incomingDirections: WeightedDirectionDomain;
+	/** Shared W27 outgoing reconstruction. */ outgoingDirections: CubedSphereDirectionDomain;
+	/** Logical full-domain L packing, without a resident buffer. */ radiancePacking: LocalSunFieldPacking;
+	/** Logical full-domain J packing, without a resident buffer. */ scatteringPacking: LocalSunFieldPacking;
+}>;
+
+/** One allocated physical compact/W27 primary sample. */
+type LocalSunCompactPrimarySampleRequest = Readonly<{
+	/** Compact address. */ positionIndex: number;
+	/** W27 address. */ directionIndex: number;
+}>;
+
+/** Lazy physical-primary storage accounting, excluding implementation object overhead. */
+type LocalSunCompactPrimaryMemoUsage = Readonly<{
+	/** Retained logical node/direction spectra. */ spectra: number;
+	/** Binary64 spectral payload only. */ spectralPayload: UnitValue<'bytes'>;
+}>;
+
+/** Selected preceding physical L inputs to one full-measure J2, J3 or J4 scattering step. */
+type LocalSunCompactScatteringStepRequest = Readonly<{
+	/** Pure target order; omitted preserves the existing J2 operation. */ scatteringOrder?: 2 | 3 | 4;
+	/** Explicit unique compact addresses, at most eight. */ positionIndices: readonly number[];
+	/** Explicit unique W27 addresses, at most eight. */ outgoingDirectionIndices: readonly number[];
+	/** Incoming physical-field identity, distinct from claiming full recurrence. */ provenanceIdentity: string;
+	/**
+	 * Call this method to supply the preceding physical L spectrum at one selected compact/incoming address.
+	 *
+	 * @param request - Actual compact address and full-measure incoming index.
+	 * @returns - Basis-compatible physical radiance packet; signed finite samples are allowed.
+	 */
+	sampleIncomingRadiance(request: LocalSunCompactIncomingRadianceAddress): SpectralPacket;
+}>;
+
+/** Genuine sealed subset field with explicit maps to complete physical domains. */
+type LocalSunCompactSelectedScatteringResult = Readonly<{
+	/** Local field position slots mapped to compact addresses. */ positionIndices: readonly number[];
+	/** Local field direction slots mapped to W27 addresses. */ outgoingDirectionIndices: readonly number[];
+	/** Sealed physical pure J subset, not a complete compact field. */ field: CpuDirectionalSpectralFieldContract;
+	/** Exact previous/output binary64 buffers allocated for this step, excluding working blocks and object overhead. */ allocatedSpectralBytes: UnitValue<'bytes'>;
+}>;
+
+/** Independent physical incoming spectra used to qualify selected pure and cumulative construction. */
+type LocalSunCompactSelectedOrdersRequest = Readonly<{
+	/** Allocated compact nodes, at most eight. */ positionIndices: readonly number[];
+	/** Allocated W27 directions, at most eight. */ outgoingDirectionIndices: readonly number[];
+	/** Complete physical input derivation. */ provenanceIdentity: string;
+	/** Supply a preceding pure physical L spectrum at its true compact address. */
+	sampleIncomingRadiance(request: LocalSunCompactOrderedIncomingRadianceAddress): SpectralPacket;
+}>;
+
+/** Sealed selected outputs; explicit maps preserve their full-domain interpretation. */
+type LocalSunCompactSelectedOrdersResult = Readonly<{
+	/** Local-to-compact position map. */ positionIndices: readonly number[];
+	/** Local-to-W27 outgoing map. */ outgoingDirectionIndices: readonly number[];
+	/** Ordered physical pure J1 through the requested maximum. */ pureFields: readonly CpuDirectionalSpectralFieldContract[];
+	/** Sum of exactly the requested pure fields. */ cumulativeField: CpuDirectionalSpectralFieldContract;
+	/** Actual executed maximum, without silently substituting N4. */ maximumScatteringOrder: SupportedCacheScatteringOrder;
+}>;
+
+/** Physical arguments for one continuous direct-density sample. */
+type LocalSunCompactContinuousDensityRequest = Readonly<{
+	/** World-space physical sample. */ position: Position;
+	/** Physical outgoing unit vector. */ physicalDirection: UnitVector3;
+}>;
+
+/** Continuous physical-density input to the retained positive cache integrator. */
+type LocalSunCompactContinuousTransportRequest = LocalSunCompactTransportRayRequest &
+	Readonly<{
+		/** Derivation identity of the continuous input. */ provenanceIdentity: string;
+		/** Evaluate the physical scattering-density spectrum at a supported sample. */
+		sampleDensity(request: LocalSunCompactContinuousDensityRequest): SpectralPacket;
+	}>;
+
+/** Actual compact address of one preceding incoming spectrum. */
+type LocalSunCompactIncomingRadianceAddress = Readonly<{
+	/** Full compact physical position index. */ positionIndex: number;
+	/** Full polar40/azimuth48 incoming direction index. */ directionIndex: number;
+}>;
+
+/** Actual address and pure order of one preceding physical incoming spectrum. */
+type LocalSunCompactOrderedIncomingRadianceAddress = LocalSunCompactIncomingRadianceAddress &
+	Readonly<{
+		/** Physical pure radiance order required by the recurrence. */ radianceOrder: 1 | 2 | 3;
+	}>;

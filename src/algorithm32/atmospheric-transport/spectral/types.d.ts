@@ -1,8 +1,13 @@
 /** Type that supplies construction dependencies for the shared spectral calculator. */
-type SpectralCalculatorDependencies = {
-	/** Aggregate model that owns the accepted execution profile and components. */
-	readonly model: SharedModel;
-};
+type SpectralCalculatorDependencies =
+	| Readonly<{
+			/** Aggregate model that owns the accepted execution profile and components. */ model: SharedModel;
+			/** Full execution models already own their accepted basis. */ spectralBasis?: never;
+	  }>
+	| Readonly<{
+			/** Basis-only arithmetic has no execution model. */ model?: never;
+			/** Genuine basis for source-neutral packet and phase arithmetic. */ spectralBasis: SpectralBasis;
+	  }>;
 
 /**
  * Spectral-calculator method shared by direct-primary radiance builders.

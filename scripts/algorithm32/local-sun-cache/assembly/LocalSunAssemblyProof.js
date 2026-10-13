@@ -9,11 +9,7 @@ import {FlatEarthGeometry} from '../../../../src/algorithm32/implementation/flat
 import {LocalSunLightSource} from '../../../../src/algorithm32/implementation/local-sun/LocalSunLightSource.js';
 import {CanonicalAtmosphere} from '../../../../src/algorithm32/implementation/canonical-atmosphere/CanonicalAtmosphere.js';
 import {LocalSunCompactCpuAssembly} from '../../../../src/algorithm32/implementation/local-sun/cache/LocalSunCompactCpuAssembly.js';
-import {SharedModel} from '../../../../src/algorithm32/implementation/algorithm32/model/SharedModel.js';
 import {SpectralCalculator} from '../../../../src/algorithm32/atmospheric-transport/spectral/SpectralCalculator.js';
-import {createNativeExecutionProfile} from '../../../../src/algorithm32/profiles/native-15/native-15-profile.js';
-import {CUBED_SPHERE_W27_DIRECTION_DOMAIN_OWNER} from '../../../../src/algorithm32/sampling-domains/direction/cubed-sphere/consts.js';
-import FlatHorizonPartitionedDirectionDomain from '../../../../src/algorithm32/sampling-domains/direction/horizon-partitioned/FlatHorizonPartitionedDirectionDomain.js';
 import {SpectralPacket} from '../../../../src/algorithm32/spectral-values/index.js';
 import DistanceMath from '../../../../src/algorithm32/math/DistanceMath.js';
 
@@ -62,12 +58,13 @@ export class LocalSunAssemblyProof {
 	}
 
 	/** Call this method to build actual physical owners from P0 input configuration, excluding expected outputs.
-	 * The existing native profile supplies the shared calculator's spectral facts only; it is not represented as a complete compact compiler profile.
+	 * The shared calculator receives the genuine atmosphere basis without an auxiliary execution profile.
 	 *
+	 * @param {number} [sourceScale=1] - Physical incident scale; zero supplies the analytic black-source control.
 	 * @returns {LocalSunCompactCpuAssemblyDefinition} - Bound physical source, compact topology, medium and genuine shared calculator.
 	 * @throws {Error} - Physical P0 authority differs.
 	 */
-	createPhysicalDefinition() {
+	createPhysicalDefinition(sourceScale = 1) {
 		let input = 'src/algorithm32/implementation/local-sun/cache/fixtures/local-sun-compact-p0-controls.json';
 		if (this._controls.paths.hash(input) !== '74a7cb03fd646d6ec4754e45e46f7ed622c815d09cd82ceeef174819c3513db6')
 			throw new Error('P0 authority changed.');
@@ -83,7 +80,7 @@ export class LocalSunAssemblyProof {
 		let lightSource = new LocalSunLightSource({
 			sourceKey: 'compact-assembly-proof',
 			referenceDistance: DistanceMath.inMeters(4800000),
-			referenceSpectralIncidentScale: 1,
+			referenceSpectralIncidentScale: sourceScale,
 			radius: DistanceMath.inMeters(25749.504),
 			distanceFalloff: true,
 		});
@@ -126,20 +123,7 @@ export class LocalSunAssemblyProof {
 			boundaryExtinctionLengthMultiples: [0.25, 0.5, 1, 2, 4, 8, 16],
 			provenanceIdentity: 'p0:74a7cb03:selected-assembly-controls',
 		});
-		let profile = createNativeExecutionProfile({
-			geometry,
-			atmosphere,
-			lightSource,
-			groundBoundary: null,
-			observation,
-			execution: {},
-			domains: {
-				positions: geometry.createLocalSunCachePositionDomain(),
-				incomingDirections: new FlatHorizonPartitionedDirectionDomain(),
-				outgoingDirections: CUBED_SPHERE_W27_DIRECTION_DOMAIN_OWNER,
-			},
-		});
-		let calculator = new SpectralCalculator({model: new SharedModel({profile, version: 1})});
+		let calculator = SpectralCalculator.forScatteringBasis(atmosphere.spectralBasis);
 		return {geometry, atmosphere, topology, lightSource, calculator};
 	}
 

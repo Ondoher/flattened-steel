@@ -14,8 +14,10 @@ import LocalSunConstructionLightSource from './LocalSunConstructionLightSource.j
 import {LocalSunShellFactCache} from './LocalSunShellFactCache.js';
 import {LocalSunCompactTransport} from './LocalSunCompactTransport.js';
 import {LocalSunCompactConstructionProfile} from './LocalSunCompactConstructionProfile.js';
+import {SpectralCalculator} from '../../../atmospheric-transport/spectral/SpectralCalculator.js';
+import {ScatteringOrderFieldOperations} from '../../../atmospheric-transport/ScatteringOrderFieldOperations.js';
 
-/** Source-owned selected compact CPU construction; complete fields, recurrence and execution-profile activation remain separate. */
+/** Source-owned selected compact CPU reference with physical-order inputs; full-domain construction and runtime activation remain separate. */
 export class LocalSunCompactCpuAssembly {
 	/** Fixed physical collaborators and shared calculator. @type {LocalSunCompactCpuAssemblyDefinition} */
 	_definition;
@@ -29,6 +31,8 @@ export class LocalSunCompactCpuAssembly {
 	_heldSource;
 	/** Lazily retained physical primary spectra; no full-field allocation. @type {Map<number, SpectralPacket>} */
 	_primary = new Map();
+	/** Requested cumulative order, inherited from a genuine compact profile. @type {SupportedCacheScatteringOrder} */
+	_maximumScatteringOrder = 4;
 
 	/** Creates an explicit compact construction composition without changing defaults or physical models.
 	 *
@@ -54,7 +58,7 @@ export class LocalSunCompactCpuAssembly {
 		this._transport = new LocalSunCompactTransport(definition);
 		let incoming = new FlatHorizonPartitionedDirectionDomain(),
 			outgoing = CUBED_SPHERE_W27_DIRECTION_DOMAIN_OWNER;
-		this._domains = Object.freeze({
+		this._domains = {
 			topology,
 			spectralBasis: atmosphere.spectralBasis,
 			incomingDirections: incoming,
@@ -71,7 +75,7 @@ export class LocalSunCompactCpuAssembly {
 				positionCount: topology.positionCount,
 				wavelengthCount: atmosphere.spectralBasis.channelCount,
 			}),
-		});
+		};
 		let shellFacts = new LocalSunShellFactCache({
 			sourceConfiguration: configuration,
 			sourceDistanceBounds: topology.sourceDistanceBounds,
@@ -207,6 +211,93 @@ export class LocalSunCompactCpuAssembly {
 		});
 	}
 
+	/** Call this method to build continuous direct L1 without reading shell-held J1 or its memo.
+	 * The existing physical source, atmosphere and phase equations remain authoritative.
+
+	 *
+	 * @param {LocalSunCompactTransportRayRequest} request - Supported physical ray.
+	 * @returns {LocalSunCompactTransportResult} - Positive Column48/Tail64 direct radiance.
+	 * @throws {TypeError} - Physical packet or source contracts differ.
+	 * @throws {RangeError} - Source path or compact ray is unsupported.
+	 */
+	transportDirectRay(request) {
+		let {geometry, atmosphere, lightSource, topology, calculator} = this._definition;
+		return this._transport.integrateContinuousDensity({
+			...request,
+			provenanceIdentity: 'compact-continuous-direct:' + topology.provenanceIdentity,
+			/** Evaluate the unchanged physical direct scattering density at one physical sample.
+			 *
+			 * @param {LocalSunCompactContinuousDensityRequest} sample - Physical position and outgoing direction.
+			 * @returns {SpectralPacket} - Continuous direct density, independent of stored J1.
+			 */
+			sampleDensity: ({position, physicalDirection}) => {
+				let coordinate = geometry.resolveAtmosphereCoordinate(position),
+					medium = atmosphere.sampleMedium(coordinate);
+				let lighting = lightSource.sampleDirectLighting({
+					sourceRelativePosition: geometry.resolveSourceRelativePosition({
+						position,
+						atmosphereCoordinate: coordinate,
+					}),
+					spectralBasis: this._domains.spectralBasis,
+				});
+				let sourceRay = geometry.resolveCompactLocalSunCacheRay({
+					topology,
+					position,
+					physicalDirection: lighting.directionToLight,
+				});
+				if (sourceRay.boundary !== 'top-atmosphere')
+					throw new RangeError('The source path must leave through the atmosphere top.');
+				let start = DistanceMath.toMetersPosition(sourceRay.origin),
+					end = DistanceMath.toMetersPosition(sourceRay.positionAt(sourceRay.length));
+				let phase = atmosphere.samplePhase({
+					viewDirection: physicalDirection,
+					incomingDirection: lighting.directionToLight,
+				});
+				let coefficient = calculator.computeDirectScattering(
+					medium.rayleighScattering,
+					medium.mieScattering,
+					phase.rayleighPhase,
+					phase.miePhase,
+				);
+				let incident = SpectralPacketClass.assert(lighting.sourceIrradiance, {
+					basis: this._domains.spectralBasis,
+					quantity: SPECTRAL_QUANTITIES.IRRADIANCE_DENSITY,
+					units: SPECTRAL_UNITS.IRRADIANCE_DENSITY,
+				});
+				return new SpectralPacketClass({
+					basis: this._domains.spectralBasis,
+					quantity: SPECTRAL_QUANTITIES.SCATTERING_DENSITY,
+					units: SPECTRAL_UNITS.SCATTERING_DENSITY,
+					values: incident.values.map(
+						(v, c) =>
+							v *
+							coefficient.values[c] *
+							Math.exp(
+								-this._column.opticalDepth({
+									startAltitude: DistanceMath.inMeters(start[2]),
+									endAltitude: DistanceMath.inMeters(end[2]),
+									length: sourceRay.length,
+									wavelengthIndex: c,
+								}),
+							),
+					),
+					provenanceIdentity: 'continuous-direct:' + incident.provenanceIdentity,
+				});
+			},
+		});
+	}
+
+	/** Call this method to transport an identified physical pure or cumulative J field.
+	 *
+	 * @param {LocalSunCompactTransportRequest} request - Geometry-owned ray and full logical physical field reader.
+	 * @returns {LocalSunCompactTransportResult} - Positive selected-order transport.
+	 * @throws {TypeError} - Packet or field contracts differ.
+	 * @throws {RangeError} - Sampling support is invalid.
+	 */
+	transportScatteringRay(request) {
+		return this._transport.integrate(request);
+	}
+
 	/** Called by subset construction to validate unique allocated addresses before small field allocation.
 	 *
 	 * @param {readonly number[]} indices - Explicit logical selection.
@@ -222,11 +313,11 @@ export class LocalSunCompactCpuAssembly {
 			indices.some((i) => !Number.isSafeInteger(i) || i < 0 || i >= count)
 		)
 			throw new RangeError('Explicit unique allocated selection of at most eight entries required.');
-		return Object.freeze([...indices]);
+		return [...indices];
 	}
 
-	/** Call this method to build a real selected-position/outgoing pure J2 field from all qualified incoming radiance samples.
-	 * Caller-supplied L1 remains a separate typed input; this operation does not infer that it came from a complete primary field.
+	/** Call this method to build a real selected-position/outgoing pure J2, J3 or J4 field from all qualified incoming radiance samples.
+	 * Caller-supplied preceding L remains a separate typed input; this operation does not infer how that physical field was constructed.
 	 *
 	 * @param {LocalSunCompactScatteringStepRequest} request - Explicit subset and physical incoming-radiance provider.
 	 * @returns {LocalSunCompactSelectedScatteringResult} - Sealed subset field, address maps and exact spectral buffer allocation.
@@ -234,6 +325,9 @@ export class LocalSunCompactCpuAssembly {
 	 * @throws {RangeError} - Selection or incoming values are invalid.
 	 */
 	buildScatteringStep(request) {
+		let order = request.scatteringOrder ?? 2;
+		if (![2, 3, 4].includes(order) || order > this._maximumScatteringOrder)
+			throw new RangeError('A pure scattering order from two through four is required.');
 		let positions = this._selection(request.positionIndices, this._definition.topology.positionCount),
 			directions = this._selection(
 				request.outgoingDirectionIndices,
@@ -242,13 +336,13 @@ export class LocalSunCompactCpuAssembly {
 		let incomingCount = this._domains.incomingDirections.directionCount,
 			basis = this._domains.spectralBasis;
 		let incomingPacking = new LocalSunFieldPacking({
-			id: 'compact-selected-L1:' + positions.join(','),
+			id: 'compact-selected-L' + (order - 1) + ':' + positions.join(','),
 			directionCount: incomingCount,
 			positionCount: positions.length,
 			wavelengthCount: basis.channelCount,
 		});
 		let outgoingPacking = new LocalSunFieldPacking({
-			id: 'compact-selected-J2:' + positions.join(',') + ':' + directions.join(','),
+			id: 'compact-selected-J' + order + ':' + positions.join(',') + ':' + directions.join(','),
 			directionCount: directions.length,
 			positionCount: positions.length,
 			wavelengthCount: basis.channelCount,
@@ -256,13 +350,13 @@ export class LocalSunCompactCpuAssembly {
 		let previous = new CpuDirectionalSpectralField({
 			id: incomingPacking.id,
 			provenanceIdentity: request.provenanceIdentity,
-			order: {kind: 'pure', value: 1},
+			order: {kind: 'pure', value: order - 1},
 			packing: incomingPacking,
 		});
 		let output = new CpuDirectionalSpectralField({
 			id: outgoingPacking.id,
-			provenanceIdentity: request.provenanceIdentity + ':full-polar40az48-J2',
-			order: {kind: 'pure', value: 2},
+			provenanceIdentity: request.provenanceIdentity + ':full-polar40az48-J' + order,
+			order: {kind: 'pure', value: order},
 			packing: outgoingPacking,
 		});
 		let writer = previous.createWriter();
@@ -294,7 +388,7 @@ export class LocalSunCompactCpuAssembly {
 			geometry,
 			atmosphere,
 			calculator,
-			scatteringOrder: 2,
+			scatteringOrder: order,
 			positionNodes,
 			positionCount: positions.length,
 			incomingUnitVectors: this._domains.incomingDirections.unitVectors,
@@ -327,17 +421,89 @@ export class LocalSunCompactCpuAssembly {
 		};
 	}
 
+	/** Call this method to construct selected pure J1 through the requested order and their cumulative field.
+	 * Complete physical incoming fields remain explicit independent caller inputs; no full-domain CPU build is implied.
+
+	 *
+	 * @param {LocalSunCompactSelectedOrdersRequest} request - Selected addresses and identified preceding physical radiance inputs.
+	 * @returns {LocalSunCompactSelectedOrdersResult} - Genuine sealed pure and cumulative subset fields.
+	 * @throws {TypeError} - Physical radiance interpretation differs.
+	 * @throws {RangeError} - Selections or order inputs are unsupported.
+	 */
+	buildSelectedOrders(request) {
+		let positions = this._selection(request.positionIndices, this._domains.topology.positionCount);
+		let directions = this._selection(
+			request.outgoingDirectionIndices,
+			this._domains.outgoingDirections.directionCount,
+		);
+		let packing = new LocalSunFieldPacking({
+			id: 'compact-selected-orders:' + positions.join(',') + ':' + directions.join(','),
+			positionCount: positions.length,
+			directionCount: directions.length,
+			wavelengthCount: this._domains.spectralBasis.channelCount,
+		});
+		let primary = new CpuDirectionalSpectralField({
+			id: packing.id + ':J1',
+			provenanceIdentity: request.provenanceIdentity,
+			order: {kind: 'pure', value: 1},
+			packing,
+		});
+		let writer = primary.createWriter();
+		for (let [p, positionIndex] of positions.entries())
+			for (let [d, directionIndex] of directions.entries()) {
+				let packet = this.samplePrimaryScatteringDensity({positionIndex, directionIndex});
+				for (let c = 0; c < packet.values.length; c++)
+					writer.writeScalar({positionIndex: p, directionIndex: d, wavelengthIndex: c}, packet.values[c]);
+			}
+		primary.seal();
+		let pureFields = [primary];
+		for (let order = 2; order <= this._maximumScatteringOrder; order++) {
+			let result = this.buildScatteringStep({
+				positionIndices: positions,
+				outgoingDirectionIndices: directions,
+				scatteringOrder: /** @type {2 | 3 | 4} */ (order),
+				provenanceIdentity: request.provenanceIdentity + ':L' + (order - 1),
+				sampleIncomingRadiance: (address) =>
+					request.sampleIncomingRadiance({...address, radianceOrder: /** @type {1 | 2 | 3} */ (order - 1)}),
+			});
+			pureFields.push(/** @type {CpuDirectionalSpectralField} */ (result.field));
+		}
+		let cumulative = new CpuDirectionalSpectralField({
+			id: packing.id + ':cumulative',
+			provenanceIdentity: request.provenanceIdentity,
+			order: {
+				kind: 'cumulative-through',
+				value: this._maximumScatteringOrder,
+				included: pureFields.map((field) => field.order.value),
+			},
+			packing,
+		});
+		ScatteringOrderFieldOperations.accumulatePureScatteringFields({
+			pureFields,
+			cumulativeField: cumulative,
+			packing,
+		});
+		return {
+			positionIndices: positions,
+			outgoingDirectionIndices: directions,
+			pureFields,
+			cumulativeField: cumulative,
+			maximumScatteringOrder: this._maximumScatteringOrder,
+		};
+	}
+
 	/** Call this method to connect the complete compact construction profile to the qualified selected CPU assembly.
 	 * The shared physical phase calculator remains an explicit collaborator; no full recurrence or ordinary runtime is started.
 	 *
 	 * @param {unknown} candidate - Genuine complete compact construction profile.
-	 * @param {LaterOrderScatteringCalculator} calculator - Existing source-neutral physical phase/scattering calculator.
+	 * @param {LaterOrderScatteringCalculator} [calculator] - Optional shared calculator; otherwise the genuine profile basis supplies shared packet arithmetic.
 	 * @returns {LocalSunCompactCpuAssembly} - Lazy selected reference using the profile's actual domains and packings.
 	 * @throws {TypeError} - Profile or physical collaborator contracts are incompatible.
 	 * @throws {RangeError} - Retained facts, placement or spectral support changed.
 	 */
-	static fromCompactProfile(candidate, calculator) {
+	static fromCompactProfile(candidate, calculator = undefined) {
 		let profile = LocalSunCompactConstructionProfile.assert(candidate);
+		calculator ??= SpectralCalculator.forScatteringBasis(profile.spectral.basis);
 		let {geometry, atmosphere, lightSource} = profile.models;
 		let domains = profile.domains;
 		let assembly = new LocalSunCompactCpuAssembly({
@@ -355,6 +521,7 @@ export class LocalSunCompactCpuAssembly {
 			radiancePacking: domains.radiancePacking,
 			scatteringPacking: domains.scatteringDensityPacking,
 		};
+		assembly._maximumScatteringOrder = profile.numerical.maximumScatteringOrder;
 		return assembly;
 	}
 }

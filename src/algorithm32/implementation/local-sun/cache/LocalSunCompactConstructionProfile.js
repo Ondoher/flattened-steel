@@ -108,11 +108,18 @@ export class LocalSunCompactConstructionProfile {
 						'groundBoundary',
 						'topologyControls',
 						'provenanceIdentity',
+						'maximumScatteringOrder',
 					].includes(key),
 			)
 		)
 			throw new TypeError('Compact construction rejects unknown or inapplicable overrides.');
 		let {geometry, atmosphere, lightSource, topologyControls, provenanceIdentity} = definition;
+		let maximumScatteringOrder =
+			definition.maximumScatteringOrder ??
+			DEFAULT_NATIVE_NUMERICAL_PROFILE.cacheConstruction.maximumScatteringOrder;
+		if (![1, 2, 4].includes(maximumScatteringOrder))
+			throw new RangeError('Supported compact orders are N1, N2 and N4.');
+		this.id = 'local-sun-compact-v9-native15-n' + maximumScatteringOrder + '-v1';
 		if (
 			!(geometry instanceof FlatEarthGeometry) ||
 			!(atmosphere instanceof CanonicalAtmosphere) ||
@@ -214,13 +221,9 @@ export class LocalSunCompactConstructionProfile {
 				...LOCAL_SUN_COMPACT_TRANSPORT_POLICY,
 			},
 			viewPath: {kind: /** @type {const} */ ('local-positive-column-v1'), intervalCount: 15},
-			maximumScatteringOrder: /** @type {4} */ (
-				DEFAULT_NATIVE_NUMERICAL_PROFILE.cacheConstruction.maximumScatteringOrder
-			),
+			maximumScatteringOrder,
 			precision: {cpu: /** @type {const} */ ('binary64'), gpu: /** @type {const} */ ('scalar-r32f')},
 		};
-		if (this.numerical.maximumScatteringOrder !== 4)
-			throw new RangeError('Shared default order changed; compact control renewal required.');
 		this.domains = {
 			kind: /** @type {const} */ ('local-sun-compact-construction-domains'),
 			topology,
@@ -281,7 +284,9 @@ export class LocalSunCompactConstructionProfile {
 		let scatteringScalars = this.domains.scatteringDensityPacking.scalarCount;
 		let radianceScalars = this.domains.radiancePacking.scalarCount;
 		let phase = this.domains.incomingDirections.directionCount * this.domains.outgoingDirections.directionCount * 4;
-		let construction = 3 * scatteringScalars * 4 + radianceScalars * 4 + phase;
+		let order = this.numerical.maximumScatteringOrder;
+		let construction =
+			order === 1 ? 2 * scatteringScalars * 4 : 3 * scatteringScalars * 4 + radianceScalars * 4 + phase;
 		let total = construction + retained * scatteringScalars * 4 + other.value;
 		if (!Number.isSafeInteger(total)) throw new RangeError('Safe allocation estimate required.');
 		let bytes = /** @type {const} */ ('bytes');
@@ -295,7 +300,10 @@ export class LocalSunCompactConstructionProfile {
 			totalOwnedGpuEstimateBytes: {value: total, units: bytes},
 			ownedGpuCeilingBytes: {value: 1600000000, units: bytes},
 			estimateFitsCeiling: total <= 1600000000,
-			fullCpuRetainedSpectralBytes: {value: (5 * scatteringScalars + 3 * radianceScalars) * 8, units: bytes},
+			fullCpuRetainedSpectralBytes: {
+				value: ((order + 1) * scatteringScalars + (order - 1) * radianceScalars) * 8,
+				units: bytes,
+			},
 			spectralBuffersAllocated: 0,
 		};
 	}

@@ -118,13 +118,13 @@ export class LocalSunCompactTransport {
 			for (let i = 0; i < distances.length; i++)
 				if (i > 0 && distances[i].value < distances[i - 1].value)
 					throw new RangeError('Ordered compact transport samples required.');
-			return Object.freeze({
+			return {
 				retainedLength: DistanceMath.inMeters(retained),
 				physicalEnd: retained === full,
-				distances: Object.freeze(distances),
-			});
+				distances,
+			};
 		});
-		return Object.freeze({policyId: policy.id, ray, channels: Object.freeze(channels)});
+		return {policyId: policy.id, ray, channels};
 	}
 
 	/** Call this method to integrate reconstructed physical scattering density without rewriting stored field values.
@@ -136,6 +136,26 @@ export class LocalSunCompactTransport {
 	 * @throws {RangeError} - Samples, extinction or resulting output are unsupported/nonfinite.
 	 */
 	integrate(request) {
+		return this.integrateContinuousDensity({
+			...request,
+			sampleDensity: ({position, physicalDirection}) =>
+				this._reconstruction.sampleScatteringDensity({
+					position,
+					physicalOutgoingDirection: physicalDirection,
+					reader: request.reader,
+					provenanceIdentity: request.provenanceIdentity,
+				}),
+		});
+	}
+
+	/** Call this method to apply the same positive cache transport to a continuous physical density.
+	 *
+	 * @param {LocalSunCompactContinuousTransportRequest} request - Physical ray and basis-compatible density sampler.
+	 * @returns {LocalSunCompactTransportResult} - Physical radiance and prefix transmission.
+	 * @throws {TypeError} - Density quantity or spectral interpretation differs.
+	 * @throws {RangeError} - Ray, extinction or samples are unsupported.
+	 */
+	integrateContinuousDensity(request) {
 		let plan = this.createRayPlan(request),
 			radiance = [],
 			transmission = [];
@@ -147,12 +167,17 @@ export class LocalSunCompactTransport {
 				previousDistance = 0;
 			for (let [i, distance] of prefix.distances.entries()) {
 				let position = plan.ray.positionAt(distance);
-				let packet = this._reconstruction.sampleScatteringDensity({
-					position,
-					physicalOutgoingDirection: plan.ray.direction,
-					reader: request.reader,
-					provenanceIdentity: request.provenanceIdentity,
-				});
+				let packet = SpectralPacketClass.assert(
+					request.sampleDensity({
+						position,
+						physicalDirection: plan.ray.direction,
+					}),
+					{
+						basis: this._column.spectralBasis,
+						quantity: SPECTRAL_QUANTITIES.SCATTERING_DENSITY,
+						units: SPECTRAL_UNITS.SCATTERING_DENSITY,
+					},
+				);
 				let extinction = SpectralPacketClass.assert(
 					atmosphere.sampleMedium(geometry.resolveAtmosphereCoordinate(position)).extinction,
 					{

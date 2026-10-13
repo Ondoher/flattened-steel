@@ -1,9 +1,10 @@
 # Local-Sun Compact Construction Profile Qualification
 
-This eighth bounded P1 slice connects qualified compact components through a
-complete explicit cache-construction profile. The owner authorized 45 minutes,
-review, local checkpoint and stop. [Status](local-sun-cache-promotion-status.md)
-owns completion and the matching review receipt.
+This document owns the explicit compact cache-construction profile boundary.
+Its original eighth-slice evidence remains immutable. The later
+[P1 closure](local-sun-p1-closure.md) qualifies selected physical operators and
+explicit N1/N2/N4 execution. [Status](local-sun-cache-promotion-status.md) owns
+completion and the matching review receipts.
 
 ## Complete Construction Boundary
 
@@ -21,13 +22,15 @@ view policy, shared default N4 request and binary64/scalar-R32F precision. Unkno
 or inapplicable overrides, nonblack ground and changed canonical medium reject.
 Changed heights/source/coverage or other families require new independent numerical
 evidence; representation alone does not qualify them. Automatic seed generation,
-N1/N2 truncation and complete N4 physical recurrence remain open.
+full-domain construction and changed-profile qualification remain open. Selected
+N1/N2 truncation and physical J1-J4 operators are qualified by the P1 closure.
 
 The source-owned selector exposes fromCompactProfile and returns actual
 domains/packings. Existing fromProfile requires the sampled rectangular kind and
 consistent rectangular axes. Qualified selected CPU assembly consumes the complete
-construction profile and its packings lazily. It retains the genuine shared phase
-calculator as an explicit physical collaborator.
+construction profile and its packings lazily. Shared phase/packet arithmetic now
+uses the genuine profile basis directly; callers may also supply the existing
+source-neutral calculator capability.
 
 This is a complete **cache-construction** input graph, with explicit kind
 local-sun-compact-construction-profile. It is not an ordinary
@@ -99,7 +102,7 @@ remain below the plan-owned ignored root.
     node scripts/algorithm32/local-sun-cache/compact-profile/LocalSunCompactProfileProof.js --out <new-plan-run-directory>
     node node_modules/typescript/bin/tsc -p scripts/algorithm32/local-sun-cache/compact-profile/jsconfig.json
 
-Full physical fields/recurrence, ordinary runtime profile integration, GPU/parity,
+Full occupied production fields, ordinary runtime profile integration, GPU/parity,
 reuse/frame publication, celestial/application consumers and changed-profile
 qualification remain separate gates. This slice changes no physical model,
 source/geometry coupling design, default, deployment or historical evidence.
