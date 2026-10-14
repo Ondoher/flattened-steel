@@ -21,6 +21,12 @@ type LocalSunGpuTrajectoryId = 'flat-0' | 'flat-45' | 'flat-90' | 'flat-135' | '
 /** Installed CommonJS factory with an explicit Node interoperability boundary. */
 type LocalSunGpuCommonJsFactory = () => import('rollup').Plugin;
 
+/** Rollup-owned diagnostic delivered to the bounded proof host. */
+type LocalSunGpuRollupWarning = import('rollup').RollupWarning;
+
+/** Babel-owned JavaScript member path used for exact NODE_ENV substitution. */
+type LocalSunGpuEnvironmentMemberPath = import('@babel/traverse').NodePath<import('@babel/types').MemberExpression>;
+
 /** Optional bounded JavaScript environment substitution, with no additional source map. */
 type LocalSunGpuEnvironmentTransformResult = Readonly<{
 	/** Transformed module JavaScript, with no GLSL or physical-equation substitutions. */ code: string;

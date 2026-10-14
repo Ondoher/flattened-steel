@@ -14,6 +14,7 @@ import {LocalSunFrameGpuProof} from './LocalSunFrameGpuProof.js';
 /** Production GPU construction and ordinary-cache proof entry used only by the bounded offline host. */
 export class LocalSunGpuBrowserProof {
 	/** Call this method to construct and qualify the selected GPU/consumer control in the owned browser.
+	 * Rejects unsupported hardware/profile/support, failed construction or comparisons, missing authenticated movement/fields, failed frame preparation, or cleanup errors. The host preserves the failed run and closes this browser; retry only in a new run after correcting the cause.
 	 *
 	 * @param {LocalSunGpuBrowserProofRequest} request - Authenticated physical controls and bounded qualification mode.
 	 * @returns {Promise<LocalSunGpuBrowserProofReport>} - Complete physical comparisons and logical resources.
@@ -236,7 +237,13 @@ export class LocalSunGpuBrowserProof {
 			controller = lightSource.createCacheController({
 				model: algorithm._model,
 				backend,
-				scheduler: {yieldControl: () => new Promise((resolve) => setTimeout(resolve, 0))},
+				scheduler: {
+					/** Called by construction to yield to the browser event loop.
+					 *
+					 * @returns {Promise<void>} - Completion after the next timer turn.
+					 */
+					yieldControl: () => new Promise((resolve) => setTimeout(resolve, 0)),
+				},
 			});
 			let cache = await controller.createScatteringCache({
 				otherOwnedGpuBytes: {value: runtime ? 8 * 1024 ** 2 : 0, units: 'bytes'},
@@ -346,5 +353,10 @@ export class LocalSunGpuBrowserProof {
 }
 
 /** Owned offline browser RPC surface; application runtime never imports this entry. */
-let scope = /** @type {LocalSunGpuProofBrowserScope} */ (/** @type {unknown} */ (globalThis));
+let scope = /** @type {LocalSunGpuProofBrowserScope} */ (
+	/**
+	 *
+	 * @type {unknown}
+	 */ (globalThis)
+);
 scope.runCompactGpu = (request) => new LocalSunGpuBrowserProof().verify(request);

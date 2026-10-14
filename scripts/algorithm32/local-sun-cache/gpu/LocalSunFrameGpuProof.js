@@ -23,6 +23,10 @@ export class LocalSunFrameGpuProof {
 			camera,
 			renderer,
 			viewportSize: {width: 4, height: 4, units: /** @type {const} */ ('pixels')},
+			/** Called by frame preparation to allocate the isolated ordinary compositor.
+			 *
+			 * @returns {Flat32AtmosphereComposerResources} - Owned compositor, target and scene pass.
+			 */
 			createAtmosphereComposer: () => {
 				const renderTarget = new THREE.WebGLRenderTarget(4, 4, {
 					type: precision === 'float16' ? THREE.HalfFloatType : THREE.FloatType,
@@ -38,6 +42,11 @@ export class LocalSunFrameGpuProof {
 		};
 		return {
 			capability,
+			/** Called by the proof to read the last completed FP32 composed pixels.
+			 * Throws when no complete target exists or the WebGL readback fails; fail this proof run.
+			 *
+			 * @returns {readonly number[]} - Complete sixteen-pixel RGBA readback.
+			 */
 			readOutput: () => {
 				if (!current) throw new Error('No actual composed frame');
 				const values = new Float32Array(64);
@@ -103,6 +112,7 @@ export class LocalSunFrameGpuProof {
 	}
 
 	/** Called by field qualification to verify every scalar and retain exact physical identity.
+	 * Rejects failed readbacks, nonfinite fields, missing owned buffers, failed digest transfers or malformed/incomplete digests; fail this run and preserve its evidence. The borrowed cache lease is always released.
 	 *
 	 * @param {PreparedLocalSunFrame} frame - Published complete frame.
 	 * @param {LocalSunGpuProofBackend} backend - Current opaque field reader.
@@ -141,6 +151,7 @@ export class LocalSunFrameGpuProof {
 	}
 
 	/** Called by paired comparisons to enforce the original absolute-plus-relative reuse gate.
+	 * Throws on mismatched lengths or any nonfinite/out-of-gate comparison; fail the proof and preserve its diagnostics.
 	 *
 	 * @param {readonly number[]} actual - Reused physical values.
 	 * @param {readonly number[]} expected - Independently rebuilt field values at the same live state.
@@ -168,6 +179,7 @@ export class LocalSunFrameGpuProof {
 	}
 
 	/** Called by exact display/adaptation comparisons where no physical tolerance has been selected.
+	 * Throws on mismatched quantity lengths, nonfinite values or any exact-value difference; fail this proof without widening its gate.
 	 *
 	 * @param {readonly number[]} actual - Reused values.
 	 * @param {readonly number[]} expected - Fresh-control values.
@@ -185,6 +197,7 @@ export class LocalSunFrameGpuProof {
 	}
 
 	/** Called by actual backend instrumentation to reject excess payload before allocation.
+	 * Throws before allocation when observed payload plus reservations exceeds the frozen ceiling; stop this proof and release its candidate resources.
 	 *
 	 * @param {LocalSunGpuCandidateState} state - Successful live handle accounting.
 	 * @param {number} bytes - Candidate allocation payload.
@@ -197,6 +210,7 @@ export class LocalSunFrameGpuProof {
 	}
 
 	/** Called by observed successful teardown to preserve idempotent actual owner accounting.
+	 * Propagates underlying disposal failures; the proof fails and leaves that handle counted rather than claiming successful release.
 	 *
 	 * @param {LocalSunGpuCandidateState} state - Live handles and bytes.
 	 * @param {LocalSunGpuCandidateHandle} handle - Same real backend handle.
@@ -228,6 +242,7 @@ export class LocalSunFrameGpuProof {
 
 	/** Called by initial proof staging to construct both independent canonical fields before retaining compiler-heavy view programs.
 	 * GPU construction remains serial; actual shader/receiver stages also serialize after the pair is ready.
+	 * Rejects cancellation or ordinary preparation failure; the controller retains the displayed packet and releases the candidate.
 	 *
 	 * @param {LocalSunFramePreparer} preparer - Actual renderer-owned stage implementation.
 	 * @param {LocalSunFrameStageRequest} request - Genuine exact-state candidate and cache lease.
@@ -252,6 +267,7 @@ export class LocalSunFrameGpuProof {
 	}
 
 	/** Call this method to execute actual isolated shader/receiver stages and ordinary live cache lookup.
+	 * Rejects unsupported inputs, failed construction/staging/readbacks, mismatched field or live-frame identities, failed physical/receiver/display gates, excess allocations or leaked resources. Cancellation and preparation failures retain the previous packet. The host must seal failure and use a new serial for a corrected retry; cleanup awaits both cache owners.
 	 *
 	 * @param {LocalSunFrameGpuProofRequest} request - Accepted profile, owned renderer/backend and retained external bytes.
 	 * @returns {Promise<LocalSunFrameGpuProofReport>} - Actual preparation, publication and binding/resource evidence.
@@ -269,6 +285,10 @@ export class LocalSunFrameGpuProof {
 		const reusedScene = this._createScene(renderer, sceneColorPrecision),
 			freshScene = this._createScene(renderer, sceneColorPrecision);
 		const configuration = {
+			/** Called by frame preparation to obtain the selected production p2 color owner.
+			 *
+			 * @returns {Color} - Independently owned color model for the prepared frame.
+			 */
 			createColorModel: () => createFlat32ColorDisplayModel(),
 			sceneScale: {value: 1, units: /** @type {const} */ ('meters-per-scene-unit')},
 			sceneDepthMax: {value: 100000, units: /** @type {const} */ ('meters')},
@@ -280,7 +300,9 @@ export class LocalSunFrameGpuProof {
 			tail: Promise.resolve(),
 			firstReady: Promise.resolve(),
 			pairReady: Promise.resolve(),
+			/** Called during cleanup before the first readiness resolver is installed. */
 			releaseFirst: () => {},
+			/** Called during cleanup before the pair readiness resolver is installed. */
 			releasePair: () => {},
 		};
 		stages.firstReady = new Promise((resolve) => {
@@ -291,10 +313,22 @@ export class LocalSunFrameGpuProof {
 		});
 		const controller = new LocalSunFrameController({
 				backend,
+				/** Called by the frame controller to serialize this exact candidate's ordinary consumers.
+				 * Rejects on shader, receiver, cancellation or preparation failure; the controller retains the displayed packet.
+				 *
+				 * @param {LocalSunFrameStageRequest} request - Exact candidate profile and borrowed cache.
+				 * @returns {Promise<LocalSunPreparedFrameContents>} - Complete shader, receiver and celestial packet.
+				 */
 				stageFrame: (request) => this._stage(preparer, request, stages),
 			}),
 			freshController = new LocalSunFrameController({
 				backend,
+				/** Called by the frame controller to serialize this exact candidate's ordinary consumers.
+				 * Rejects on shader, receiver, cancellation or preparation failure; the controller retains the displayed packet.
+				 *
+				 * @param {LocalSunFrameStageRequest} request - Exact candidate profile and borrowed cache.
+				 * @returns {Promise<LocalSunPreparedFrameContents>} - Complete shader, receiver and celestial packet.
+				 */
 				stageFrame: (request) => this._stage(freshPreparer, request, stages),
 			});
 		const fields = [];

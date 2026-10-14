@@ -39,8 +39,10 @@ P4's matching review receipt is CLEAN. The owner selected P5 on 2026-10-13:
 qualify the accepted trajectories and shared consumers, measure costs and prepare
 an explicit candidate/rollback disposition. The
 [P5 qualification record](production-algorithm32/caches/local-sun-p5-qualification.md)
-owns its bounded matrix and adoption preparation. Defaults, deployment and
-publication require their separate adoption boundary.
+owns its delivered bounded matrix and adoption preparation. Final P5 review
+startup remains blocked by changed shared reviewer calibration; the qualification
+record owns that gate. Defaults, deployment and publication require their
+separate adoption boundary.
 
 ## Minimal Reload Sources
 
@@ -55,7 +57,7 @@ publication require their separate adoption boundary.
 9. [Local-Sun P4 ordinary application and celestial boundary](production-algorithm32/caches/local-sun-p4-closure.md)
 10. [Local-Sun P5 qualification and adoption preparation](production-algorithm32/caches/local-sun-p5-qualification.md)
 
-Before a later implementation phase, validate the matching P4 review receipt,
-load its selected contracts/evidence, capture a new baseline and confirm reviewer readiness.
+Before adoption or later implementation, resolve P5's open review gate, load its
+selected contracts/evidence, capture a new baseline and confirm reviewer readiness.
 Standards follow destination folders; experiment mappings do not govern production.
 Existing receipts retain their original frozen scopes.

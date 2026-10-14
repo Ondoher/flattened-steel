@@ -216,6 +216,11 @@ describe('Flat32 Color selection', () => {
 	});
 
 	it('keeps flat/local celestial enablement independent from basic Bruneton selection', () => {
+		/** Called by this suite to construct a mode with explicit celestial visibility.
+		 *
+		 * @param {boolean} celestialSourcesEnabled - Requested finite-source visibility.
+		 * @returns {FlatLocalMode} - Suite-owned mode; the calling spec disposes it.
+		 */
 		const createMode = (celestialSourcesEnabled) =>
 			new FlatLocalMode({
 				sceneScale: ATMOSPHERE_SCENE_SCALE,

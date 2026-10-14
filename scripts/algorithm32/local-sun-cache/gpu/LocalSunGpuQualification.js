@@ -258,7 +258,10 @@ export class LocalSunGpuQualification {
 								types,
 							}) => ({
 								visitor: {
-									/** Called by Babel to substitute only the exact NODE_ENV member expression. */
+									/** Called by Babel to substitute only the exact NODE_ENV member expression.
+									 *
+									 * @param {LocalSunGpuEnvironmentMemberPath} path - Babel-owned JavaScript member path.
+									 */
 									MemberExpression(path) {
 										if (path.matchesPattern('process.env.NODE_ENV'))
 											path.replaceWith(types.stringLiteral('production'));
@@ -275,7 +278,12 @@ export class LocalSunGpuQualification {
 				plugins: [
 					environment,
 					nodeResolve({browser: true}),
-					/** @type {LocalSunGpuCommonJsFactory} */ (/** @type {unknown} */ (commonjs))(),
+					/** @type {LocalSunGpuCommonJsFactory} */ (
+						/**
+						 *
+						 * @type {unknown}
+						 */ (commonjs)
+					)(),
 					babel({
 						babelHelpers: 'bundled',
 						babelrc: false,
@@ -285,6 +293,10 @@ export class LocalSunGpuQualification {
 						exclude: 'node_modules/**',
 					}),
 				],
+				/** Called by bundling to reject unexpected dependency warnings.
+				 *
+				 * @param {LocalSunGpuRollupWarning} warning - Bundler diagnostic; known internal cycles remain allowed.
+				 */
 				onwarn: (warning) => {
 					if (warning.code !== 'CIRCULAR_DEPENDENCY') throw new Error(warning.message);
 				},
@@ -487,9 +499,12 @@ export class LocalSunGpuQualification {
 			let result = await Promise.race([
 				page.evaluate(
 					(input) =>
-						/** @type {LocalSunGpuProofBrowserScope} */ (/** @type {unknown} */ (globalThis)).runCompactGpu(
-							input,
-						),
+						/** @type {LocalSunGpuProofBrowserScope} */ (
+							/**
+							 *
+							 * @type {unknown}
+							 */ (globalThis)
+						).runCompactGpu(input),
 					input,
 				),
 				new Promise((_, reject) => {

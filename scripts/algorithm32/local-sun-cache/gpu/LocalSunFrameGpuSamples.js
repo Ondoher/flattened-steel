@@ -14,11 +14,22 @@ export class LocalSunFrameGpuSamples {
 	 * @type {LocalSunFrameGpuCpuOracle|null}
 	 */ _cpuOracle = null;
 	/** First matched reuse is cross-checked by an independent repeated CPU evaluation. */ _cpuOracleCrosschecked = false;
-	/** Retained normal owner assembly; pose values are uniforms. @type {LocalSunFrameGpuMaterial|null} */ _material =
-		null;
-	/** Compiled fragment identity protects retained-program compatibility. @type {string|null} */ _source = null;
-	/** External physical CPU field inputs; never derived from this candidate. @type {readonly Float32Array[]} */ _fields;
-	/** External renderer and backend. @type {LocalSunFrameGpuSamplesConfiguration} */ _configuration;
+	/** Retained normal owner assembly; pose values are uniforms.
+	 *
+	 * @type {LocalSunFrameGpuMaterial|null}
+	 */ _material = null;
+	/** Compiled fragment identity protects retained-program compatibility.
+	 *
+	 * @type {string|null}
+	 */ _source = null;
+	/** External physical CPU field inputs; never derived from this candidate.
+	 *
+	 * @type {readonly Float32Array[]}
+	 */ _fields;
+	/** External renderer and backend.
+	 *
+	 * @type {LocalSunFrameGpuSamplesConfiguration}
+	 */ _configuration;
 
 	/** Creates one bounded probe over independently authenticated immutable physical fields.
 	 *
@@ -153,7 +164,8 @@ if(point.w==0.0) {
 		return queries;
 	}
 
-	/** Called by qualification to compare current live lookup/rays with independently generated physical CPU fields.
+	/** Call this method to compare current live lookup/rays with independently generated physical CPU fields.
+	 * Rejects incompatible retained shader source, GPU compilation/readback errors, nonfinite samples, failed endpoint/physical gates or a mismatched independently repeated oracle. The host must preserve the failed run; temporary GPU resources and the borrowed cache are always released.
 	 *
 	 * @param {PreparedLocalSunFrame} frame - Published complete packet.
 	 * @returns {Promise<LocalSunFrameGpuSampleResult>} - Actual GPU quantities and independent CPU residuals.
@@ -242,6 +254,11 @@ if(point.w==0.0) {
 					topology: profile.domains.topology,
 				});
 			const reader = {
+				/** Called by CPU reconstruction to read authenticated independent physical J fields.
+				 *
+				 * @param {DirectionalSpectralFieldCoordinates} address - Logical position, direction and wavelength indices.
+				 * @returns {number} - Cumulative independent scattering density.
+				 */
 				readScalar: ({positionIndex, directionIndex, wavelengthIndex}) =>
 					this._fields.reduce(
 						(sum, field) => sum + field[(wavelengthIndex * 1049 + positionIndex) * 4374 + directionIndex],
@@ -255,6 +272,12 @@ if(point.w==0.0) {
 				 */
 				dispose() {},
 				sampleProvenanceIdentity: 'authenticated-p2-independent-fields',
+				/** Called by CPU view transport to reconstruct this independent physical field.
+				 * Rejects unsupported spatial or directional support; fail the comparison rather than clamp.
+				 *
+				 * @param {ScatteringCacheSampleRequest} request - Physical sample context and matching geometry.
+				 * @returns {SpectralScatteringDensityPacket} - Independent Native15 scattering-density packet.
+				 */
 				sampleCumulativeScatteringDensity: ({context}) =>
 					reconstruction.sampleScatteringDensity({
 						...context,

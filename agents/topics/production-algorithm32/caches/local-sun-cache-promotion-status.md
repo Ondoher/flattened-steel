@@ -1,11 +1,13 @@
 # Local-Sun Cache Production Port Status
 
-Current disposition, 2026-10-13: P3 is complete under its matching CLEAN
-primary/audit receipt. The owner selected P4 ordinary Flat32 and required
-celestial integration. Its ordinary N1 GPU and required celestial/failure proofs
-pass, and its matching mapped primary/audit gate validates CLEAN. The owner
-selected P5 qualification and adoption preparation; execution is in progress under
-the [P5 qualification record](local-sun-p5-qualification.md).
+Current disposition, 2026-10-13: P0–P4 are complete under their matching CLEAN
+primary/audit receipts. P5's selected qualification matrix passes all 600 original
+trajectory states, current CPU/shared-boundary checks, 22 focused real WebGL tests
+and 45 basic Flat32 browser specs. Candidate/rollback preparation is delivered.
+Shared reviewer tooling changed since initial P5 readiness; its updated helper
+tests pass, but stale all-lane calibration still blocks final review startup. The
+[P5 qualification record](local-sun-p5-qualification.md) owns the bounded matrix,
+explicit N1 candidate, higher-order application limit and compatible rollback.
 The [plan](local-sun-cache-promotion-plan.md) owns scope and sequence;
 [P0](local-sun-cache-p0-contract.md) owns parameter applicability, independent
 controls and resource policies. The ended experiment and all prior evidence
@@ -28,31 +30,29 @@ remains deferred.
 | P1 — compact domain and selected CPU reference | Complete under the final P1 closure receipt; full CPU recurrence remains unadmitted. |
 | P2 — GPU construction/runtime | Delivered genuine compact GPU graph and ordinary shared lookup/view consumers, qualified occupied fields, N1/N2/N4, omission and candidate cleanup. The matching CLEAN primary/audit receipt completes the phase. |
 | P3 — reuse and frame publication | Complete under its matching CLEAN primary/audit receipt; numerical, lifecycle and browser proofs pass. |
-| P4 — Flat32/celestial consumers | Delivered explicit ordinary N1 integration, measured lighting, finite Sun/flat stars and failure/retry/cancellation proofs. Only the matching final CLEAN primary/audit receipt completes the phase. |
-| P5 — qualification/adoption preparation | Selected and in progress; no default switch, deployment or publication selected. |
+| P4 — Flat32/celestial consumers | Complete under its matching CLEAN primary/audit receipt; ordinary N1, celestial and failure/retry/cancellation proofs pass. |
+| P5 — qualification/adoption preparation | Selected qualification and candidate/rollback record delivered; final primary/audit review blocked by changed shared tooling/calibration. No default switch, deployment or publication selected. |
 
 ## Next Work
 
-P5 qualification follows P4's matching CLEAN mapped review and independent audit under the
-[plan](local-sun-cache-promotion-plan.md#p4--integrate-ordinary-flat32-and-required-celestial-consumers).
-The [P4 closure](local-sun-p4-closure.md) owns its consumer boundary, independent
-controls, passed N1 proof and explicit higher-order admission limit.
-The [P3 boundary](local-sun-p3-closure.md) owns immutable prior proof receipts,
-checks, measurements and qualification limits. The owner-authorized 4 GiB free-RAM reserve
-applies throughout execution of the whole promotion plan. App cache-build
-memory sizing remains a separate open question and blocks no plan phase.
+Run final P5 mapped primary/audit review once the maintained shared reviewer
+startup gates pass. The selected matrix, costs and candidate/rollback record
+are delivered; preserve every failed attempt and earlier numerical receipt.
+The [P4 closure](local-sun-p4-closure.md) owns the ordinary N1 and higher-order
+application boundary; the [P3 boundary](local-sun-p3-closure.md) owns earlier
+field reuse, lifecycle and precision proofs. Do not rerun unchanged scientific
+evidence merely to replace a review receipt.
 
-P3's complete mapped primary and independent audit ledgers validate CLEAN.
-The matching receipt below is its completion authority. The intermediate
-functional checkpoint and prior numerical evidence retain their original source
-identities. P4 requires its own mapped review and independent audit.
-
-The [P3 implementation and evidence boundary](local-sun-p3-closure.md) records
-canonical/live ownership, publication, recovery, measured proofs and remaining
-qualification limits.
+The owner-authorized 4 GiB free-RAM reserve applies throughout the plan.
+Application cache-build memory sizing remains a separate open question and
+blocks no phase. Prepare the explicit bounded N1 candidate and retained compatible
+rollback; default/deployed selection requires its separately recorded adoption
+boundary after evidence is reviewable.
 
 ## Completion Receipts
 
+- [P5 execution summary](../../../../.codex-tmp/review-standards/session-ZBnzAH/summary.md) and [current review-startup record](../../../../.codex-tmp/review-standards/session-ZBnzAH/review-status.json): delivered qualification/candidate work; final mapped primary/audit completion remains open until a matching CLEAN validation exists.
+- [P4 primary/audit receipt](../../../../.codex-tmp/review-standards/session-PmaV21/validation-p4.json): matching CLEAN completion for ordinary application, celestial and coherent-frame consumers.
 - [P3 primary/audit receipt](../../../../.codex-tmp/review-standards/session-KrjnnU/validation.json): only its matching CLEAN outcome completes the authored P3 source/contracts/proof/current-state unit.
 - [P3 independent execution summary](../../../../.codex-tmp/review-standards/session-KrjnnU/summary.md): decisions, proof/check receipts, measured resources, nonblocking app-memory question and checkpoint.
 - [P2 primary/audit receipt](../../../../.codex-tmp/review-standards/session-ZtvAir/validation.json): only its matching CLEAN outcome completes the authored P2 source/contracts/proof/current-state unit.
