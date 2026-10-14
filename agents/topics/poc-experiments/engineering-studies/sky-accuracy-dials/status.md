@@ -26,12 +26,21 @@ the primary numerical-accuracy metric on 2026-10-14. The
 [metric owner](reference-model-target.md#current-accuracy-metric) defines fixed
 paper inputs, spectral scoring, qualification and geometry limits. Kider scores
 remain secondary empirical comparisons. The goals, design and horizon plan now
-follow this decision. Existing results retain their original metrics; no scorer
-or production behavior changed, no new reference was qualified and no compute
-package was selected. Historical implementation-review receipts keep their
-original scopes; this is a separate documentation unit.
+follow this decision. Existing results retain their original metrics. The H8 map
+below uses retained libRadtran output without changing a scorer or production
+behavior or qualifying a new reference. Historical implementation-review receipts
+keep their original scopes.
 
 ## Retained Scientific State
+
+**H8 cancellation mapping is scientifically complete** as accepted 00250. The
+[cancellation-map results](cancellation-map-results.md) own the offline interactive
+map, conditional P1 decomposition, spatial coverage, independent P2 witnesses and
+matched N5/N6 contribution. The map diagnoses pointwise opposition at retained
+locations; its lowest elevation is 12.115 degrees, leaving the immediate horizon
+unmeasured. The report owns verification, resources and its coherent implementation
+review receipt. No run or additional compute package is active; production remains
+unchanged and earlier deferred reviews retain their scopes.
 
 The current horizon continuation's bounded scientific work is recorded in the
 [diagnosis results](horizon-diagnosis-results.md), including accepted 00239-00241
@@ -54,7 +63,8 @@ The owner-selected **H7 aerosol comparison is scientifically complete** as accep
 resources and matching implementation-review gate. Measured phase produces most
 of the warming in both N1 geometries; higher SSA adds a smaller coupled effect.
 The sampled upper sky remains blue. This partial-band regional material is not
-San Jose calibration or a production adoption. No further package is selected.
+San Jose calibration or a production adoption. H8 above is the subsequent
+retained-data diagnostic; no additional package is selected.
 
 **Aerosol sensitivity complete as accepted 00234/00235.** The
 [results](aerosol-sensitivity-results.md) own the four-case direct GPU matrix,

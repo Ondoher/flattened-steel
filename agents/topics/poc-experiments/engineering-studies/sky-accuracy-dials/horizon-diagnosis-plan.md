@@ -287,6 +287,50 @@ The H7 baseline is `.codex-tmp/review-standards/session-UQDsIf/baseline.json`.
 
 ## Resources And Evidence
 
+### H8: Component And Scattering-Order Cancellation Map
+
+The owner selected a map of compensating inaccuracies, including offsets arising
+during later scattering. Build one retained-data CPU report, without atmospheric
+recomputation or physical-input changes. Use paper-atmosphere 00224 numerical
+factorial results, independent P1 reference/geometry 00109/00110, libRadtran's
+authenticated published spectra, independent P2 witnesses 00179/00200, and the
+matched H order-1-through-6 diagnostics from 00171. Preserve all parents.
+
+Within P1, use a declared ordered telescoping decomposition: corrected remainder;
+density reconstruction; phase reconstruction; sunlight-column reconstruction;
+transmission/product grouping; split/combined grouping. Restore each inaccurate
+operation in that fixed order. These conditional contributions depend on that
+path and are not a unique allocation of interacting errors. Add the unisolated
+higher-order/reference gap so their signed sum reproduces baseline minus
+libRadtran. Verify pointwise additivity and the full SSE cross-term identity.
+Map negative cross terms as opposition and positive terms as reinforcement;
+opposition alone does not establish that dropping either term improves the score.
+
+At the four qualified P2 scalars, separate measured P1 error, measured P2 error
+and the unisolated later-order/reference remainder. Elsewhere retain the higher
+remainder as unknown rather than attributing it to P2 or later orders. Also show
+the measured order-5/6 increment and its effect on reference agreement, with
+unchanged first-four-order prefix checks. Positive radiance contributions are
+not themselves numerical errors. Later orders can contain compensating errors;
+missing independent tail truth remains an explicit coverage gap.
+
+Deliver an offline interactive HTML map, static figure and compact numerical
+decomposition, with filters for time/wavelength and sparse benchmark-grid views.
+Spatial cancellation is pointwise: opposing errors must occur at the same
+time, direction and wavelength. Distinguish horizon/upper-sky locations using
+their retained elevations; a signed mean over different locations is not evidence
+that local errors cancel. Show both net signed error and opposition strength,
+and leave unsampled positions blank. Pairwise aggregate cross terms accompany,
+but cannot replace, that spatial map.
+Do not fill unsampled sky positions or label the map as a complete sky survey.
+All claims are against retained libRadtran output; configuration/convergence
+qualification remains open. This is numerical diagnosis under fixed paper inputs.
+Limit the package to 120 seconds including temporary plotting-tool setup and
+2 MiB retained output, with ordinary
+disk/progress/immutable-run rules and no GPU/browser job. Batch the mapped source
+review once the coherent implementation is stable. Baseline:
+`.codex-tmp/review-standards/session-4zJwZ4/baseline.json`.
+
 Prior compute packages remain consumed. This continuation starts with H0 and does
 not renew the previous 42 GPU attempts or multi-hour campaigns. Register H1 before
 running it: one GPU job at a time, a ten-minute ceiling including setup, and at most
@@ -306,9 +350,9 @@ other experiments and earlier runs remain read-only. Adoption remains on hold.
 
 The [current accuracy criterion](reference-model-target.md#current-accuracy-metric)
 now uses qualified libRadtran agreement in place of Kider agreement to judge
-numerical accuracy. This documentation update changes no scorer, reference
-qualification status or completed scientific outcome. The next execution remains
-unselected and must use a prospectively bounded comparison.
+numerical accuracy. The [H8 cancellation map](cancellation-map-results.md) applies
+that criterion to retained paper-atmosphere component/order evidence. Exact
+reference configuration and convergence qualification remain open.
 
 Resumption and owner-selected witnesses are registered. Initial H0 source tracing
 establishes these implementation facts at baseline `64d049f563d96127a691e776f792a9954ba89e60`:
@@ -348,7 +392,11 @@ The selected [H3-H6](#next-actions-h3-h6) scientific sequence is recorded in the
 scientifically complete as accepted 00248/00249; the
 [aerosol horizon results](horizon-aerosol-results.md) own findings, charts,
 verification, resource accounting and its matching implementation-review gate.
-No further scientific package is selected.
+The selected H8 retained-data package is scientifically complete as accepted
+00250. The [cancellation-map results](cancellation-map-results.md) own its spatial
+coverage, conditional P1 decomposition, four independent P2 witnesses, N5/N6 effect,
+resources and matching implementation-review gate. No further scientific package
+is selected; immediate-horizon component references remain absent.
 The coherent H3-H6 implementation unit
 starts from `.codex-tmp/review-standards/session-b5Eogw/baseline.json`, captured
 before authored code changes; review is batched after the selected sequence.
