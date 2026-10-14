@@ -19,6 +19,18 @@ work resolves its own folder standards. Reviewer lifecycle follows the
 [current repository state](../../../standards/reviewer-status.md), while
 the experiment's deferred source reviews and adoption hold remain open.
 
+## Current Accuracy Criterion
+
+The owner selected **agreement with a verified, matched libRadtran solution** as
+the primary numerical-accuracy metric on 2026-10-14. The
+[metric owner](reference-model-target.md#current-accuracy-metric) defines fixed
+paper inputs, spectral scoring, qualification and geometry limits. Kider scores
+remain secondary empirical comparisons. The goals, design and horizon plan now
+follow this decision. Existing results retain their original metrics; no scorer
+or production behavior changed, no new reference was qualified and no compute
+package was selected. Historical implementation-review receipts keep their
+original scopes; this is a separate documentation unit.
+
 ## Retained Scientific State
 
 The current horizon continuation's bounded scientific work is recorded in the

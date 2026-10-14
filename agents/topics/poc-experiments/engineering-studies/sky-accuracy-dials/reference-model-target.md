@@ -5,7 +5,87 @@ authenticated production baselines, full regional scores and the limited
 direct-reference cancellation decomposition. It owns those newer conclusions;
 the selected direct/reference comparison below remains valid.
 
-## Owner criterion
+## Current Accuracy Metric
+
+On 2026-10-14 the owner selected **spectral-radiance agreement with a verified,
+matched libRadtran solution as the primary accuracy metric**, replacing Kider
+agreement for judging numerical accuracy. Compete with Bruneton on the paper's
+specified atmosphere and benchmark conditions. Kider remains a secondary empirical
+comparison; a gain or regression against Kider does not determine numerical merit.
+This section owns the current metric; historical scores below retain their
+original definitions and are not rescored or reinterpreted as libRadtran errors.
+
+### Fixed Problem And Reference Qualification
+
+For the paper comparison, freeze its physical parameters: aerosol Angstrom
+alpha 0.8 and beta 0.04, Cornette-Shanks shape parameter 0.7, SSA 0.8, aerosol
+scale height 1.2 km, and the remaining authenticated molecular, solar, ground,
+geometry and observation inputs. Do not refit them to Kider or substitute Toronto
+material while claiming the same paper benchmark. Alternative physical inputs
+remain separately labelled sensitivity studies.
+
+Before treating libRadtran as a numerical reference, authenticate the exact
+input packet, code/version and solver settings. Match spectral sampling and
+units, medium/profile representation, phase normalization and angle convention,
+source and observer geometry, boundaries, absorption and scattering-order scope.
+Check convergence of the chosen reference settings and quantify remaining error
+or uncertainty. Differences in formulation or configuration must be identified
+before attributing a candidate/libRadtran gap solely to numerical approximation.
+No software name or published RMSE by itself certifies a reference.
+
+Retained published-code libRadtran spectra are available through the provenance
+below. They are comparison data; this metric decision does not establish their
+configuration equivalence or convergence for every intended query. Until those
+checks pass, label comparisons as agreement with the retained libRadtran outputs,
+with numerical-reference qualification still open. Reuse verified evidence where
+applicable rather than requiring a fresh full reference run by default.
+
+### Scoring And Interpretation
+
+For the full paper boundary, use the same frozen sample selection, preprocessing
+and equal weighting: 17 times, 81 directions, scoring channels 0-30. Retain all
+40 transported wavelengths as before. For N matched scoring scalars, the primary
+score is `1000 * sqrt(sum((L_candidate - L_libRadtran)^2) / N)`, reported in
+spectral mW m^-2 sr^-1 nm^-1 when input densities are W m^-2 sr^-1 nm^-1.
+The reference is libRadtran radiance, not its aggregate Kider score. No target
+of 11.5 mW or arbitrary acceptable numerical gap is adopted for this new metric.
+Declare tolerances prospectively using the intended application error budget
+and qualified reference uncertainty.
+
+Report signed spectral residuals and time, elevation, Sun-angle and wavelength
+breakdowns alongside aggregate RMSE, preserving near-Sun and horizon witnesses.
+Partial probes remain diagnostic and cannot claim the full score. A different
+spectral basis, bin interpretation or order target needs an explicit compatible
+comparison; Native15/N1 horizon swatches are not the paper's full spectral result.
+
+Keep four comparisons distinct:
+
+- Candidate minus matched libRadtran: primary reference-radiance agreement,
+  qualified as numerical accuracy only within the established common problem.
+- Candidate minus an independent continuous reference: component, cache and
+  integration attribution, with that reference's own scope and uncertainty.
+- LibRadtran minus Kider: remaining reference-model/input/observation discrepancy,
+  including reference uncertainty; not automatically an aerosol error.
+- Candidate minus Kider: secondary empirical benchmark, preserved for paper
+  comparability and interpretation of compensation.
+
+Rank numerical accuracy by the qualified primary comparison and explain cost
+versus error separately. Conservation, normalization, nonnegativity and limiting
+cases remain correctness constraints. A Kider improvement cannot justify adding
+known numerical bias, and a Kider regression cannot veto a demonstrated numerical
+improvement. Agreement with libRadtran alone does not establish the real atmosphere.
+
+The spherical distant-source paper reference does not certify a finite local-Sun
+flat scene. Those cases continue to use independently checked continuous references
+with matching geometry/source/order until an equivalent libRadtran configuration
+is qualified. Retain that limitation explicitly; do not force a mismatched oracle.
+
+This is a documentation and assessment-policy change. No scorer implementation,
+new reference qualification, simulation, production change or compute package is
+completed or selected by adopting it. A later bounded package must register its
+exact comparison and resource allowance before execution.
+
+## Historical Kider Comparability
 
 The owner notes that the current algorithm already scores favorably and
 suspects this depends on balancing errors. Existing controlled experiments
@@ -15,12 +95,13 @@ favorable full-benchmark result is wholly explained by cancellation.
 Reference-model scores are therefore a target for a numerically justified
 implementation, not a reason to accept the current algorithm's known errors.
 
-The owner requires empirical correctness to approach the reference-model
-scores from Bruneton's Kider comparison. Numerical convergence alone is
-insufficient. The full matched benchmark should be competitive with the
+The preceding empirical goal was to approach the reference-model
+scores from Bruneton's Kider comparison. The full matched benchmark was to be
+competitive with the
 Bruneton/Elek **11.3 mW** and libRadtran **11.5 mW** aggregate spectral-radiance
 RMSE results, while avoiding improvements obtained by balancing known
-numerical inaccuracies. No arbitrary acceptable percentage gap is assumed.
+numerical inaccuracies. These values remain empirical comparators, not thresholds
+for the newly selected libRadtran-radiance accuracy metric.
 
 The existing [published score oracle](../../../../../scripts/experiments/b1-directional-sky-radiance/published-oracle.js)
 owns the paper transcription. The [retained benchmark report](../../../../../references/results/experiments/b1-directional-sky-radiance/result.md)

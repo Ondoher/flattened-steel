@@ -21,6 +21,16 @@ comparison. Do not infer a date or exact view ray from a screenshot.
 
 ## Controls And Stage Isolation
 
+The owner selected [matched libRadtran radiance agreement](reference-model-target.md#current-accuracy-metric)
+as the primary numerical-accuracy metric on 2026-10-14. Preserve the paper's fixed
+physical inputs for its competitive benchmark; Kider is secondary empirical
+evidence. Reference configuration equivalence and convergence must be qualified
+before calling a discrepancy numerical error. Flat/finite-Sun cases retain their
+matched continuous references until an equivalent libRadtran problem is established.
+H0-H7 evidence keeps its original definitions. H7's Toronto substitution remains
+a physical sensitivity, not a correction to the fixed paper benchmark. No new
+compute package is selected by this metric change.
+
 Use the ordinary current packed compact local-Sun configuration and current
 distant-Sun configuration. Authenticate actual selections rather than substituting
 an older experiment profile. Preserve each mode's geometry and physical inputs;
@@ -293,6 +303,12 @@ links, allocate a fresh run and preserve complete derivation identities. Product
 other experiments and earlier runs remain read-only. Adoption remains on hold.
 
 ## Current Progress
+
+The [current accuracy criterion](reference-model-target.md#current-accuracy-metric)
+now uses qualified libRadtran agreement in place of Kider agreement to judge
+numerical accuracy. This documentation update changes no scorer, reference
+qualification status or completed scientific outcome. The next execution remains
+unselected and must use a prospectively bounded comparison.
 
 Resumption and owner-selected witnesses are registered. Initial H0 source tracing
 establishes these implementation facts at baseline `64d049f563d96127a691e776f792a9954ba89e60`:

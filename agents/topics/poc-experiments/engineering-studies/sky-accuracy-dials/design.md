@@ -11,8 +11,10 @@ Develop predictable atmospheric-scattering accuracy controls judged against
 scientific expectations and independent numerical references, with interaction
 tests and bounded storage. The
 [continuation goals](continuation-goals.md#standard-of-correctness) own the
-correctness standard; Kider is the empirical target, compared separately from
-numerical convergence against the governing equation.
+correctness standard. The owner's
+[primary accuracy metric](reference-model-target.md#current-accuracy-metric) is
+agreement with a verified, matched libRadtran solution under the paper's fixed
+parameters. Kider remains a separate secondary empirical comparison.
 
 ## Acceptance Question
 
@@ -110,6 +112,13 @@ authenticated build request, condition geometry, measurement data, and needed
 source once; retain derivation links for later runs.
 
 ## Scientific Controls
+
+The [current metric owner](reference-model-target.md#current-accuracy-metric)
+defines reference qualification, spectral scoring and the separate flat/local-Sun
+boundary. The controls below retain the first campaign's frozen protocol and
+historical predictions; future accuracy assessments use the new primary metric
+and identify Kider residuals explicitly as empirical evidence. This change does
+not reopen consumed campaigns or alter their registered gates.
 
 Keep the matched Direct40, ground, atmosphere, collimated source, Z180 solar
 grid, anchored numerical policy, and Basic Bruneton physical B1 boundary as

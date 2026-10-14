@@ -1,5 +1,12 @@
 # Sky Accuracy Dials: Continuation Goals
 
+Current owner decision, 2026-10-14: judge numerical accuracy primarily by
+agreement with a verified, matched libRadtran solution under the paper's fixed
+physical parameters. The [reference-model target](reference-model-target.md#current-accuracy-metric)
+owns scoring, reference qualification and geometry limits. Kider agreement is a
+separate secondary empirical comparison. Existing results and consumed packages
+retain their original criteria; this change selects no additional computation.
+
 The [completed aerosol sensitivity](aerosol-sensitivity-results.md) provides
 the first physical-input intervention. For current diagnosis the owner excludes
 unsupported 360 nm: use the [454-712.5 nm analysis](aerosol-sensitivity-results.md#supported-wavelength-interpretation).
@@ -35,12 +42,13 @@ five rays and four wavelengths with no fixed scattering-order cutoff. The
 large Kider disagreements persist; the report separates numerical precision
 from observation residuals. No new execution is active.
 
-Immediate direction: explain the supported-wavelength angular response and
-joint overshoot using the already verified direct calculation. The
-[idealized continuous algorithm](idealized-model.md) remains the numerical
-target; solving it accurately does not establish the captured physical state.
-The direct reference avoids the identified approximation mechanisms;
-production corrections remain deferred. No new run is selected.
+Immediate assessment direction: qualify the retained libRadtran configuration
+against the fixed paper problem before attributing the direct-reference gap.
+The [idealized continuous algorithm](idealized-model.md) remains the equation
+target for independent attribution; solving it accurately does not establish
+the captured physical state or equivalence to a differently configured solver.
+The completed aerosol/horizon studies remain physical sensitivities with their
+original limits. Production corrections remain deferred. No new run is selected.
 
 Earlier geometry context: the [solar-registration analysis](solar-registration-results.md) is
 complete through accepted 00228. It identifies estimator bias and regional
@@ -50,8 +58,8 @@ The earlier [bounded second pass](remaining-factors-results.md) remains closed;
 observation GPU sensitivity is unmeasured after two failed attempts. Overall
 Bruneton RMSE improvement remains unestablished.
 
-Current priority: improve Bruneton RMSE using Kider agreement as a practical
-proxy, without selecting settings that balance known numerical inaccuracies.
+Current priority: reduce the qualified libRadtran radiance discrepancy under the
+paper's fixed atmosphere, without selecting settings that balance known errors.
 Preserve the tested first-order corrections and identify the remaining factors
 that help or cancel, so implementation cost can be traded against better behavior.
 Favor GPU evidence gathering and directional results over numerical precision;
@@ -61,10 +69,11 @@ does not apply to this package.
 
 ## Central Objective
 
-The owner's [reference-model target](reference-model-target.md) makes the
-empirical criterion concrete: approach the Bruneton/Elek and libRadtran
-scores on the same full Kider benchmark, without balancing known numerical
-errors. The retained five-ray comparison is diagnostic, not that full score.
+The owner's [reference-model target](reference-model-target.md#current-accuracy-metric)
+defines the primary numerical criterion: reproduce qualified libRadtran radiance
+for the same paper problem while measuring computational cost. Keep the full
+Kider comparison as secondary empirical evidence. The retained five-ray
+comparison is diagnostic, not a complete benchmark or qualified whole-solver oracle.
 
 Locate departures from the governing physics and mathematical expectations,
 explain how their errors propagate and interact, and develop controls that
@@ -72,9 +81,11 @@ predictably reduce those errors within a stated domain.
 
 The desired result is a set of dials with an explained, prospectively tested
 relationship between their settings, scientific correctness, numerical error
-and computational cost. Kider measurements are the empirical correctness
-target. A converged equation supplies the numerical reference; agreement
-between numerical implementations alone does not validate the physical model.
+and computational cost. A matched, convergence-checked libRadtran solution is
+the intended primary numerical reference for the paper comparison. Independently
+checked solutions of the same equations support attribution and other geometries.
+Kider measurements remain the empirical comparison; agreement between numerical
+implementations alone does not validate the physical model.
 Report both comparisons, without admitting known numerical errors merely
 because they cancel a measurement residual.
 
@@ -93,11 +104,13 @@ Distinguish three questions:
 
 1. Is the physical formulation scientifically justified for the declared scope?
 2. Does the implementation accurately solve that formulation, including its
-   boundaries, and show the expected numerical convergence?
+   boundaries, show expected convergence and approach the qualified matched
+   libRadtran reference where applicable?
 3. How well does that solution agree with Kider observations?
 
-The third question is the practical selection objective for the bounded first
-pass, subject to the first two as correctness constraints. A Kider
+The second question now owns numerical-accuracy selection. The third was the
+practical selection objective for the completed bounded first pass and remains
+a secondary empirical check. A Kider
 improvement cannot validate an incorrect calculation; a Kider regression
 cannot invalidate a demonstrated correctness improvement. A correctly solved
 model can still omit relevant physics or use inappropriate physical inputs.
@@ -314,8 +327,9 @@ Successful continuation should leave:
   justified accuracy dial or its predictable domain remains unqualified.
 
 The correctness and predictability objectives can succeed even if Kider
-agreement worsens. Report observation agreement separately; neither a lower
-RMSE nor an explanation of one mechanism establishes the whole objective.
+agreement worsens. Report reference-radiance accuracy and observation agreement
+separately, naming the reference for every RMSE. A lower aggregate score alone
+does not establish reference adequacy or the whole objective.
 
 ## Execution And Resource Boundary
 
