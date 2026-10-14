@@ -1,8 +1,8 @@
 # Sky Accuracy Dials: Agent Handoff
 
-Consult the [experiment lifecycle](status.md#experiment-lifecycle) before
-resuming work. It records the owner's suspension and the switch to production
-Algorithm32; the scientific context below is retained for later resumption.
+The owner resumed this experiment for [gray horizon diagnosis](horizon-diagnosis-plan.md).
+Start there and with the [experiment lifecycle](status.md#experiment-lifecycle).
+The scientific context below remains background for evidence reuse.
 
 **Latest completed package: [00235 aerosol sensitivity](aerosol-sensitivity-results.md).**
 The fixed direct-solver phase/albedo factorial uses one same-day Toronto
@@ -199,10 +199,9 @@ These are implementation follow-ups, not authorization for another GPU run.
   viewing-ray samples are allowed. Source integration is precomputed.
 - Production and other experiments remain read-only. Source/output writes stay
   inside this experiment's declared roots; owning topic documentation is allowed.
-- Standards reviewers remain suspended. Checkpoint advice is requested with
-  preapproved advised commits/messages and a one-minute limit; the
-  [verification boundary](status.md#verification-boundary) owns its current state.
-  Do not restart reviewers or repair global calibration without authorization.
+- Standards review follows the enabled repository lifecycle and folder mappings.
+  Checkpoint advice retains preapproved advised commits/messages and a one-minute
+  limit; the [verification boundary](status.md#verification-boundary) owns its state.
 - The type check passes; formal source review and full-solver qualification
   remain open. Preserve the deferred baseline and initial dirty-state record
   documented in status.md. Local checks are not a CLEAN standards review.

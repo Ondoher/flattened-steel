@@ -2,14 +2,14 @@
 
 ## Experiment Lifecycle
 
-**Suspended at the owner's request on 2026-10-07.** No execution is active.
-Work has switched to production Algorithm32 through the repository
-[active topic](../../../active-topic.md). Findings through accepted 00235,
-all immutable evidence, resource accounting and the production adoption hold
-remain preserved. Resume this experiment only when the owner selects it again;
-completed plans and saved follow-up questions do not authorize new execution.
+**Resumed at the owner's request on 2026-10-14 for gray horizon diagnosis.**
+The [horizon diagnosis plan](horizon-diagnosis-plan.md) owns current witnesses,
+hypotheses, progress and bounded execution. The repository
+[active topic](../../../active-topic.md) routes here. Findings through accepted
+00235, immutable evidence, historical resource accounting and the production
+adoption hold remain preserved. Closed compute packages are not renewed.
 The [follow-up guide](follow-up-context.md) and [handoff](handoff.md) retain
-the scientific context needed for that resumption.
+background context; they do not select the new diagnosis cases.
 
 The standards handoff retains the permanent `experiments/` assignment. No
 Sky Accuracy Dials-specific temporary assignment or overlay requires rollback.
@@ -20,6 +20,12 @@ work resolves its own folder standards. Reviewer lifecycle follows the
 the experiment's deferred source reviews and adoption hold remain open.
 
 ## Retained Scientific State
+
+The current horizon continuation's bounded scientific work is recorded in the
+[diagnosis results](horizon-diagnosis-results.md), including accepted 00239-00241
+and 00243, preserved recovery attempts and the matching implementation-review gate.
+It isolates pre-display Flat neutrality and shared display compression without
+selecting a production fix. Older scientific state follows below.
 
 **Aerosol sensitivity complete as accepted 00234/00235.** The
 [results](aerosol-sensitivity-results.md) own the four-case direct GPU matrix,
@@ -32,7 +38,7 @@ consumed, and the production adoption hold remains. Historical evidence is intac
 
 **Follow-up context consolidated:** the [resumption guide](follow-up-context.md)
 links all current result owners, hypotheses and evidence limits, including
-the Kider weather/imagery leads. Active-topic reload now includes it. Older
+the Kider weather/imagery leads. It remains background for this resumption. Older
 brief/framework guidance now includes the supported-wavelength geometry/order
 breakdown, direct-reference versus production distinction, and unselected next
 questions. Link/anchor and whitespace checks cover this documentation refresh.
@@ -184,6 +190,10 @@ full-solver accuracy remain unqualified; see the
 
 ## Current Resource Accounting
 
+The [horizon results](horizon-diagnosis-results.md#resources-and-recovery) own
+current continuation totals. The consumed earlier campaign accounting below
+remains historical through 00235 and is not renewed by this resumption.
+
 Through 00235, total sealed evidence is **398,659,659 bytes**. Attribution C5
 uses **131,875,824 of 132,120,576 bytes**, leaving **244,752 bytes**. CPU-job
 usage is **22,068,612 milliseconds**, about 6.13 of 8 hours. All **42 GPU
@@ -244,8 +254,8 @@ observation GPU timing or numerical output was returned.
 
 The owner requested reactivation of folder-based standards reviews on
 2026-10-07. The [repository reviewer lifecycle](../../../standards/reviewer-status.md)
-owns current readiness and renewed calibration. This experiment remains
-suspended; its deferred source-review gates are still open. Local proofs,
+owns current readiness and renewed calibration. Resumption does not close the
+experiment's deferred source-review gates. Local proofs,
 type checks and restored reviewer readiness do not constitute a clean review.
 
 Checkpoint monitoring remains active with the owner's one-minute consultation

@@ -2,6 +2,11 @@
 
 ## Objective
 
+The current continuation is the [gray horizon diagnosis](horizon-diagnosis-plan.md).
+It examines current local-Sun and distant-Sun paths, including display attribution
+and accuracy compensation, separately from the earlier Kider spectral benchmark.
+Existing isolation, provenance and resource boundaries continue to apply.
+
 Develop predictable atmospheric-scattering accuracy controls judged against
 scientific expectations and independent numerical references, with interaction
 tests and bounded storage. The

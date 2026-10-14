@@ -12,6 +12,11 @@
 		"types": ["node"],
 		"typeRoots": ["../../node_modules/@types"]
 	},
-	"include": ["**/*.d.ts", "**/*.js", "**/*.mjs"],
+	"include": [
+		"**/*.d.ts", "**/*.js", "**/*.mjs",
+		"../../src/algorithm32/**/*.d.ts",
+		"../../src/flat32/types.d.ts",
+		"../../server/flat32/features/shared-cache/types.d.ts"
+	],
 	"exclude": ["../../node_modules/**", "**/node_modules/**"]
 }

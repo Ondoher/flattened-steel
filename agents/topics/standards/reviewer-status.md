@@ -37,10 +37,10 @@ owns experiment-specific restoration requirements; the repository
 [end-experiment skill](../../../.agents/skills/end-experiment/SKILL.md) performs
 the handoff with distinct ended and suspended outcomes.
 
-Sky Accuracy Dials remains suspended. Reenabling standards reviews does not
-resume execution, adopt its candidates, reopen historical runs or close its
-deferred source-review gates. Production P1-P3 source review and appearance
-acceptance remain open under their existing owners.
+The [Sky Accuracy Dials lifecycle](../poc-experiments/engineering-studies/sky-accuracy-dials/status.md#experiment-lifecycle)
+owns its execution disposition. Reviewer readiness does not adopt candidates,
+reopen historical runs or close deferred source-review gates. Production phase
+review and appearance acceptance remain governed by their production owners.
 
 Checkpoint monitoring retains its independent policy and the owner's standing
 advised-checkpoint approval. Reviewer startup and final compliance results

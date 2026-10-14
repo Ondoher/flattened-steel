@@ -2,7 +2,8 @@
 
 ## Start here
 
-This is the resumption guide through the completed aerosol sensitivity pass.
+For current work, start with the [gray horizon diagnosis](horizon-diagnosis-plan.md).
+This document retains background through the completed aerosol sensitivity pass.
 It links the canonical results rather
 than replacing their detailed measurements, uncertainty or provenance.
 
@@ -67,10 +68,10 @@ The result document owns exact values and their retained-data derivation.
 - Near-Sun mismatch remains included in full scores but is set aside as the
   current work priority. Shared weakness there is not permission to remove it
   from the benchmark.
-- Formal reviewers remain suspended by the owner. Checkpoint advice is wanted,
-  with preapproved advised messages and a one-minute limit.
-  [Status](status.md#verification-boundary) owns that lifecycle and
-  current resource accounting; do not infer a fresh reviewer startup request.
+- Formal review follows the enabled repository lifecycle and folder mappings.
+  Checkpoint advice retains preapproved advised messages and a one-minute limit.
+  [Status](status.md#verification-boundary) owns the review boundary and historical
+  resource accounting.
 
 ## Evidence map and what each result establishes
 

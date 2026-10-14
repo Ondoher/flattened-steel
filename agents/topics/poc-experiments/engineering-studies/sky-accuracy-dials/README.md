@@ -1,8 +1,12 @@
 # Predictable Sky Accuracy Dials Experiment
 
-For resumption, read the [follow-up context and hypothesis guide](follow-up-context.md).
-It routes to the evidence owners and preserves the untested alternatives,
-additional Kider data leads and saved production follow-up.
+Current focus: the [gray horizon diagnosis](horizon-diagnosis-plan.md), selected
+by the owner on 2026-10-14. Start there for the San Jose solar-noon and Flat
+closest witnesses, accuracy interactions and bounded execution. The older
+[follow-up guide](follow-up-context.md) retains Kider evidence and hypotheses.
+
+The [bounded horizon results](horizon-diagnosis-results.md) now own the paired
+stage measurements, continuous local reference and species/display attribution.
 
 The [experiment lifecycle](status.md#experiment-lifecycle) owns suspension
 and resumption. Last completed scientific focus: the
