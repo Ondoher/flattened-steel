@@ -223,6 +223,58 @@ above a 1e-12 absolute floor. Retain sign reversals and misses. The comparison
 cannot establish actual aerosol phase/albedo from an expected image color.
 Limit H6 to 120 seconds CPU and 2 MiB new evidence, with no cache build or GPU job.
 
+## H7: Measured Aerosol Handling And Horizon Response
+
+The owner selected this next diagnostic experiment on 2026-10-14. Continue in the
+existing Sky Accuracy Dials lane. Reuse the authenticated phase/SSA retrieval and
+representation from [00234/00235](aerosol-sensitivity-results.md); do not replace
+the atmosphere by the uncalibrated g=0 endpoint used in H6.
+
+Implement experiment-owned wavelength-dependent normalized phase tables and SSA
+in the continuous reference. Use the same material handling in flat and spherical
+geometry. No production implementation, cache build or default change is selected.
+The retained Toronto Level 1.5 retrieval is a physical alternative, not a measured
+San Jose atmosphere. Keep its extinction/AOD, vertical profile and ground inputs
+out of this intervention: preserve each witness's existing medium and source.
+
+### Frozen Package
+
+- Parent inputs: accepted 00235's normalized 83-node phase tables and SSA bands;
+  accepted 00246's physical N1 ray configurations; accepted 00239's display state.
+- Rays: elevations 0.25/3/20 degrees, Sun-relative headings 0/90/180 degrees;
+  actual local finite-Sun flat case and actual distant-source spherical N1 case.
+- Four recomputed cases: original aerosol; measured phase only; measured SSA
+  only; measured phase and SSA together. Retain every signed spectral/color change
+  and the phase-by-SSA interaction rather than adding their isolated effects.
+- Spectral policy: interpolate normalized phase and SSA between supported
+  retrieval bands for Native15 centers at or above 440 nm. Keep the original phase
+  and SSA at the three lower centers, without extrapolating 440 nm into them.
+  Report this as a partial-band intervention, not a complete measured spectrum.
+- Validate table positivity, normalization, angle convention and wavelength
+  interpolation. Use 2048/4096 view intervals and 64/128 curved column nodes,
+  with <1e-4 relative refinement and <1e-10 parity to the retained N1 baseline.
+  Preserve prediction misses; do not alter acceptance tolerances after results.
+- Prediction: the broader measured off-Sun phase and higher visible SSA increase
+  the warm Mie contribution on the Flat 3-degree away-Sun ray. Phase+SSA should
+  increase its raw R/B ratio, without requiring every ray or model to improve.
+  The prior 39.1% selected-visible Kider improvement is not a horizon prediction
+  or a new full-benchmark score.
+- Produce a compact sampled-color SVG comparison at fixed baseline display
+  illuminance, plus a separately labelled equal-luminance diagnostic to distinguish
+  brightness from hue. Use the installed midpoint color convention for displayed
+  chips and retain independent bin-integrated color values as a cross-check.
+  These are labelled ray samples, not app screenshots or full-scene renders.
+- One CPU-only package: at most 180 seconds including setup/retention and 4 MiB
+  retained output, no automatic retry on cap exhaustion. Reuse parents read-only,
+  allocate a fresh run, publish progress between rays and preserve immutable seals.
+
+Assess whether the supported aerosol changes warm the horizon, how phase and SSA
+balance, whether upper sky is preserved, and whether display compression masks
+the raw change. Current distant N4, all-order aerosol transport, real-aerosol
+calibration and production promotion retain their separate unqualified status.
+Batch only the mapped experiment review at the stable implementation milestone.
+The H7 baseline is `.codex-tmp/review-standards/session-UQDsIf/baseline.json`.
+
 ## Resources And Evidence
 
 Prior compute packages remain consumed. This continuation starts with H0 and does
@@ -275,7 +327,12 @@ persists in the continuous N1 model; the shared display response compresses colo
 separation further. No production fix or distant N4 accuracy claim is made.
 That results document owns exact limits, recovery, resources and questions/decisions.
 The selected [H3-H6](#next-actions-h3-h6) scientific sequence is recorded in the
-[assumption results](horizon-assumption-results.md). No further run is selected.
+[assumption results](horizon-assumption-results.md). The owner-selected
+[H7 aerosol comparison](#h7-measured-aerosol-handling-and-horizon-response) is
+scientifically complete as accepted 00248/00249; the
+[aerosol horizon results](horizon-aerosol-results.md) own findings, charts,
+verification, resource accounting and its matching implementation-review gate.
+No further scientific package is selected.
 The coherent H3-H6 implementation unit
 starts from `.codex-tmp/review-standards/session-b5Eogw/baseline.json`, captured
 before authored code changes; review is batched after the selected sequence.

@@ -46,6 +46,61 @@ type HorizonTransportInput = Omit<HorizonContinuousInputs, 'length'> & {
     /** Spherical bottom radius, meters. */ radius: number;
     /** Atmosphere top above the surface, meters. */ topAltitude: number;
     /** Parallel irradiance multiplier, dimensionless. */ incidentScale: number;
+    /** Optional wavelength-dependent material phase; null entries keep the scalar phase law. */ aerosolPhaseTables?: (HorizonAerosolPhaseTable | null)[];
+    /** Optional wavelength-dependent SSA; extinction remains unchanged. */ aerosolAlbedos?: number[];
+};
+
+/** Normalized probability density over scattering cosine; solid-angle phase is pdf/(2 pi). */
+type HorizonAerosolPhaseTable = {
+    /** Strictly increasing cosine nodes from -1 to 1. */ mu: number[];
+    /** Positive density at nodes with unit piecewise-linear integral over cosine. */ pdf: number[];
+};
+
+/** One retained retrieval band, with independently joined phase and SSA provenance. */
+type HorizonAerosolBand = HorizonAerosolPhaseTable & {
+    /** Measured band wavelength, nm. */ wavelength: number;
+    /** Single-scattering albedo, dimensionless. */ albedo: number;
+};
+
+/** The same supported-band physical material supplied to both geometries. */
+type HorizonAerosolMaterial = {
+    /** Native15 phase tables; null means no supported-band intervention. */ phaseTables: (HorizonAerosolPhaseTable | null)[];
+    /** Native15 scattering albedos, including unchanged unsupported centers. */ albedos: number[];
+    /** Native15 indices where measured material properties are applied. */ changedChannels: number[];
+    /** Centers below the measured range, held at baseline properties, nm. */ unsupportedCenters: number[];
+};
+
+/** Read-only subset of an authenticated H5 geometry row used by H7. */
+type HorizonAerosolParentRow = {
+    /** Declared geometry/source case identity. */ name: string;
+    /** Elevation above local horizontal, degrees. */ elevationDegrees: number;
+    /** Azimuth relative to the local Sun horizontal projection, degrees. */ headingDegreesFromLocalSun: number;
+    /** Complete frozen medium, source and path configuration. */ inputs: HorizonTransportInput;
+    /** Native15 total N1 radiance density. */ spectrum: number[];
+    /** Native15 Rayleigh emission with combined extinction. */ rayleigh: number[];
+};
+
+/** One recomputed aerosol intervention and its two diagnostic display conventions. */
+type HorizonAerosolRow = {
+    /** Authenticated H5 geometry/source identity. */ geometry: string;
+    /** Local elevation, degrees. */ elevationDegrees: number;
+    /** Heading relative to the Sun, degrees. */ headingDegrees: number;
+    /** Material intervention identity from the runner's registered four cases. */ case: string;
+    /** Native15 total radiance density, W m^-2 sr^-1 nm^-1. */ spectrum: number[];
+    /** Rayleigh-only source with combined extinction. */ rayleigh: number[];
+    /** Mie-only source with combined extinction. */ mie: number[];
+    /** Installed midpoint convention, including signed linear RGB. */ midpoint: HorizonColorReading;
+    /** Independent constant-within-bin CIE integration cross-check. */ binIntegrated: HorizonColorReading;
+    /** Fixed baseline application receiver illuminance, lux. */ illuminanceLux: number;
+    /** Encoded installed p2 response at physical brightness. */ display: number[];
+    /** Baseline Y divided by variant Y for this ray, diagnostic only. */ equalLuminanceScale: number;
+    /** Encoded p2 response after equal-Y diagnostic scaling. */ equalLuminanceDisplay: number[];
+    /** Relative low/high quadrature difference with 1e-12 radiance floor. */ maximumRefinementRelative: number;
+    /** Joint-factor response, only attached to the combined row. */ interaction?: {
+        /** Combined minus phase minus SSA plus baseline radiance. */ observed: number[];
+        /** Analytic fixed-extinction N1 interaction radiance. */ predicted: number[];
+        /** Maximum absolute prediction residual, radiance-density units. */ maximumAbsoluteResidual: number;
+    };
 };
 
 /** Non-overlapping numerical strata of the same completed Simpson sum. */

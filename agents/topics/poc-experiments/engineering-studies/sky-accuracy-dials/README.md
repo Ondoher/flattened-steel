@@ -8,8 +8,10 @@ closest witnesses, accuracy interactions and bounded execution. The older
 The [bounded horizon results](horizon-diagnosis-results.md) now own the paired
 stage measurements, continuous local reference and species/display attribution.
 
+The current [H7 aerosol horizon results](horizon-aerosol-results.md) show the
+measured phase/SSA response in both N1 geometries, with sampled-color comparisons.
 The [experiment lifecycle](status.md#experiment-lifecycle) owns suspension
-and resumption. Last completed scientific focus: the
+and resumption. Earlier Kider scientific focus: the
 [aerosol phase/albedo sensitivity](aerosol-sensitivity-results.md).
 Use its [supported-wavelength interpretation](aerosol-sensitivity-results.md#supported-wavelength-interpretation):
 454-712.5 nm improve in aggregate; phase and albedo each improve both controls,

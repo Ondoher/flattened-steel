@@ -34,7 +34,15 @@ path attribution, same-order geometry/heading contrasts, phase/albedo sensitivit
 and the matching implementation-review gate. The current assumed aerosol phase
 can suppress warm off-Sun emission; changing it produces warm horizon ordering
 without making upper sky warm. This is not an aerosol calibration or production
-fix. No subsequent scientific package is selected.
+fix. The owner subsequently selected the H7 aerosol comparison below.
+
+The owner-selected **H7 aerosol comparison is scientifically complete** as accepted
+00248/00249. The [aerosol horizon results](horizon-aerosol-results.md) own the
+72-row phase/SSA factorial, sampled-color charts, provenance-completion repeat,
+resources and matching implementation-review gate. Measured phase produces most
+of the warming in both N1 geometries; higher SSA adds a smaller coupled effect.
+The sampled upper sky remains blue. This partial-band regional material is not
+San Jose calibration or a production adoption. No further package is selected.
 
 **Aerosol sensitivity complete as accepted 00234/00235.** The
 [results](aerosol-sensitivity-results.md) own the four-case direct GPU matrix,

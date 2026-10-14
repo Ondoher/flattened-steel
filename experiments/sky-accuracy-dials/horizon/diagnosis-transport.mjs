@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import {aerosolPhase} from './aerosol-optics.mjs';
 
 /** Positive Gauss-Legendre rule on [0,1], derived from the experiment's existing
  * direct-solver/math.mjs algorithm, without importing its unrelated recursive solver.
@@ -113,7 +114,10 @@ export function transport(input, intervals, columnCount = 64, trace = false) {
             viewTau[channel] = input.rayleigh[channel] * viewColumns[0] + input.mie[channel] * viewColumns[1];
             const common = weight * input.sourceIrradiance[channel] * dilution * Math.exp(-sourceTau[channel] - viewTau[channel]);
             const r = common * input.rayleigh[channel] * densityRayleigh * phaseRayleigh;
-            const m = common * input.albedo * input.mie[channel] * densityMie * phaseMie;
+            const materialTable = input.aerosolPhaseTables?.[channel];
+            const channelPhase = materialTable ? aerosolPhase(materialTable, cosine) : phaseMie;
+            const channelAlbedo = input.aerosolAlbedos?.[channel] ?? input.albedo;
+            const m = common * channelAlbedo * input.mie[channel] * densityMie * channelPhase;
             rayleigh[channel] += r; mie[channel] += m;
             segment.rayleigh[channel] += r; segment.mie[channel] += m;
         }
