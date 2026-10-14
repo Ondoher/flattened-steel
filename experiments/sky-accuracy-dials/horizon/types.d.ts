@@ -1,6 +1,96 @@
 /** Scene-linear RGB components before the display response, in red, green, blue order. */
 type HorizonLinearRgb = [red: number, green: number, blue: number];
 
+/** Color-matching quadrature used to separate parity from within-bin approximation.
+ * - **"midpoint"** - Sample matching functions at each channel center.
+ * - **"bin-integrated"** - Integrate matching functions with constant density inside each bin.
+ */
+type HorizonCmfRule = 'midpoint' | 'bin-integrated';
+
+/** Independent signed color reading before exposure or clipping. */
+type HorizonColorReading = {
+    /** Photometrically scaled CIE X/Y/Z; Y is luminance. */ xyz: number[];
+    /** CIE x/y, or null for black. */ xy: number[] | null;
+    /** Photopic luminance in cd m^-2 for input radiance W m^-2 sr^-1 nm^-1. */ luminanceCdPerM2: number;
+    /** Signed linear sRGB in the same photometric scale. */ rgb: number[];
+    /** Indices whose signed RGB values are negative, before clipping. */ negativeChannels: number[];
+    /** Signed red divided by blue, or null for a zero denominator. */ redBlueRatio: number | null;
+};
+
+/** Independent color arithmetic controls, retained with each H3 result. */
+type HorizonColorControls = {
+    /** D65 XYZ transformed to unit linear sRGB. */ white: number[];
+    /** Constant spectral-density color across the full declared basis. */ equalEnergy: HorizonColorReading;
+    /** Maximum relative basis-impulse additivity residual. */ maximumLinearityRelative: number;
+    /** Publisher-authenticated original CSV checksum. */ cieMd5: string;
+};
+
+/** Geometric medium in the continuous diagnostic.
+ * - **"flat"** - Exponential density above a plane.
+ * - **"spherical"** - Exponential density above a spherical surface.
+ */
+type HorizonDiagnosticGeometry = 'flat' | 'spherical';
+
+/** Source propagation for controlled physical contrasts.
+ * - **"finite"** - Actual local point-source position with inverse-square dilution.
+ * - **"parallel"** - Fixed direction and declared incident irradiance scale.
+ */
+type HorizonDiagnosticSource = 'finite' | 'parallel';
+
+/** Continuous N1 inputs extending the frozen local physical packet. */
+type HorizonTransportInput = Omit<HorizonContinuousInputs, 'length'> & {
+    /** Explicit flat observer-dome extent; absent for physical atmosphere exit. */ length?: number;
+    /** Explicit medium geometry. */ geometry: HorizonDiagnosticGeometry;
+    /** Explicit source propagation. */ sourceKind: HorizonDiagnosticSource;
+    /** Unit direction for a parallel source. */ sourceDirection: number[];
+    /** Spherical bottom radius, meters. */ radius: number;
+    /** Atmosphere top above the surface, meters. */ topAltitude: number;
+    /** Parallel irradiance multiplier, dimensionless. */ incidentScale: number;
+};
+
+/** Non-overlapping numerical strata of the same completed Simpson sum. */
+type HorizonTransportStratum = {
+    /** Inclusive lower distance in meters. */ lowMeters: number;
+    /** Upper distance in meters; last stratum includes the endpoint. */ highMeters: number;
+    /** Native15 Rayleigh radiance contributions. */ rayleigh: number[];
+    /** Native15 Mie radiance contributions. */ mie: number[];
+};
+
+/** Completed continuous N1 path integration and selected physical observations. */
+type HorizonTransportReading = {
+    /** Physical path length in meters. */ length: number;
+    /** Native15 total radiance W m^-2 sr^-1 nm^-1. */ spectrum: number[];
+    /** Rayleigh emission with combined extinction. */ rayleigh: number[];
+    /** Mie emission with combined extinction. */ mie: number[];
+    /** Distance-partitioned contributions; quadrature strata, not independently integrated bins. */ strata: HorizonTransportStratum[];
+    /** Selected physical observations along the path. */ samples: HorizonTransportSample[];
+    /** Relative partition additivity residual. */ maximumAdditiveRelative: number;
+};
+
+/** Physical observations at one Simpson node; optical depths are dimensionless. */
+type HorizonTransportSample = {
+    /** Distance from the observer, meters. */ distanceMeters: number;
+    /** Local altitude above the model surface, meters. */ altitudeMeters: number;
+    /** Rayleigh/Mie density columns toward the source, meters. */ sourceColumns: number[];
+    /** Rayleigh/Mie density columns toward the observer, meters. */ viewColumns: number[];
+    /** Native15 source-path optical depths. */ sourceTau: number[];
+    /** Native15 view-path optical depths. */ viewTau: number[];
+    /** Native15 source-path transmissions. */ sourceTransmittance: number[];
+    /** Native15 view-path transmissions. */ viewTransmittance: number[];
+    /** Cosine between sky-view direction and direction toward the source. */ cosine: number;
+    /** Rayleigh phase, sr^-1. */ phaseRayleigh: number;
+    /** Cornette-Shanks Mie phase, sr^-1. */ phaseMie: number;
+    /** Irradiance dilution relative to the source's reference distance. */ dilution: number;
+    /** Rayleigh density relative to its sea-level value. */ densityRayleigh: number;
+    /** Mie density relative to its sea-level value. */ densityMie: number;
+};
+
+/** Positive Gauss-Legendre column rule over the unit interval. */
+type HorizonGaussRule = {
+    /** Interior abscissae in [0,1]. */ nodes: number[];
+    /** Integration weights, summing to one. */ weights: number[];
+};
+
 /** One physical sky ray sampled using the installed camera projection. */
 type HorizonRayObservation = {
 	/** Screen coordinates in the original viewport, bottom-up. */

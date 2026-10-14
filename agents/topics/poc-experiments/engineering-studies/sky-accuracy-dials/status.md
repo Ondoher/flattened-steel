@@ -27,6 +27,15 @@ and 00243, preserved recovery attempts and the matching implementation-review ga
 It isolates pre-display Flat neutrality and shared display compression without
 selecting a production fix. Older scientific state follows below.
 
+The owner-selected [H3-H6 continuation](horizon-diagnosis-plan.md#next-actions-h3-h6)
+has completed bounded scientific runs 00244-00247. The
+[assumption results](horizon-assumption-results.md) own independent color checks,
+path attribution, same-order geometry/heading contrasts, phase/albedo sensitivities
+and the matching implementation-review gate. The current assumed aerosol phase
+can suppress warm off-Sun emission; changing it produces warm horizon ordering
+without making upper sky warm. This is not an aerosol calibration or production
+fix. No subsequent scientific package is selected.
+
 **Aerosol sensitivity complete as accepted 00234/00235.** The
 [results](aerosol-sensitivity-results.md) own the four-case direct GPU matrix,
 regional input limits and signed outcomes. The owner's current diagnosis

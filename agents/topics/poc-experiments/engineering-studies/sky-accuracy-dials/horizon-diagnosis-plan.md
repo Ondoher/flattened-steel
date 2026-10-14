@@ -85,6 +85,144 @@ evidence and aerosol sensitivity are comparison leads, not attribution for these
 screenshots. Verify enabled inputs before proposing absorption toggles; physical
 input comparisons must rebuild affected orders rather than mix incompatible fields.
 
+## Next Actions: H3-H6
+
+H3-H6's bounded scientific work is complete as accepted 00244-00247. The
+[assumption results](horizon-assumption-results.md) own findings, limitations and
+the matching implementation gate. The following sequence and registrations are
+retained as the executed plan; no additional package is automatically selected.
+
+The owner selected the following continuation after H0-H2. Its purpose is to
+identify the assumption responsible for the missing orange. The continuous local
+reference reused the installed spectral-to-RGB weights, so transport agreement
+does not independently validate color conversion. CPU/GPU display agreement also
+establishes implementation parity rather than correctness of the chosen mapping.
+
+1. **H3 - Independently check spectral-to-color conversion.** Start with the saved
+   local and distant spectra from accepted 00239-00241. Independently calculate
+   XYZ, chromaticity, luminance and linear RGB from documented color-matching data
+   and integration rules; do not reuse the installed projection weights or their
+   builder. Check wavelength/channel order, spectral-density units, wavelength
+   integration weights, normalization, matrix conventions and negative/clipped
+   values. Use simple known-spectrum controls and state the provenance of any
+   shared source tables. Compare before exposure and display mapping, then account
+   for those stages separately. Retain signed differences and numerical tolerances.
+   A warmer independent result would implicate conversion; agreement would narrow
+   the search while leaving the fifteen-channel spectral resolution unqualified.
+
+2. **H4 - Trace wavelength contributions along the Flat rays.** If H3 does not
+   explain the symptom, instrument a handful of the existing continuous N1 rays,
+   including the neutral band and an upper-sky control. Retain distance/altitude,
+   source and view extinction columns and transmittance, source-distance dilution,
+   and Rayleigh/Mie spectral contributions by path segment. Locate where the warm
+   contribution becomes insufficient or blue contribution dominates. Check source
+   spectrum, coefficients, phase-angle convention, units and geometric endpoints
+   against their defining equations. Keep combined extinction when attributing
+   emission; label any deliberate equation intervention as a diagnostic.
+
+3. **H5 - Compare matched scattering orders and explicit headings.** Begin with
+   N1 in both local and distant geometries, recording heading relative to the Sun
+   and a small common elevation set. Preserve and identify each witness's physical
+   inputs; use separately declared controls to isolate individual geometry/source
+   differences. Do not attribute the current local-N1/distant-N4 difference to
+   geometry alone. Examine distant N1 versus N4 only with compatible authenticated
+   order evidence or a separately bounded matched calculation. Report unavailable
+   reference support instead of substituting the older Kider configuration.
+
+4. **H6 - Test the implicated assumption.** Select a source-spectrum, extinction,
+   phase, geometry or conversion intervention only after the preceding evidence
+   identifies a candidate. Freeze the predicted signed spectral/color change,
+   uncertainty, inputs and stop conditions before generating its result. Change
+   one assumption at a time and recompute affected transport/orders consistently.
+   If two factors are implicated, register the small baseline/A/B/A+B comparison
+   under Accuracy Interactions. Check whether improvement exposes another error
+   that had been compensating for it; appearance alone does not establish a fix.
+
+**The owner's independent-execution request authorized H3-H6.**
+The executed H3 package uses accepted 00239-00241 and the unchanged original
+CIE CSV, with independently authored quadrature and the W3C D65 XYZ-to-linear-sRGB
+matrix. Compare the declared midpoint rule separately from bin-integrated matching
+functions; the latter assumes a constant spectrum within each bin and is not a
+recovered high-resolution spectrum. Controls verify the publisher CSV checksum,
+equal-energy chromaticity, D65 white and individual-bin linearity. Midpoint parity
+uses 1e-8 relative tolerance; retain matrix/within-bin changes without treating them
+as implementation failures. Limit H3 to 120 seconds CPU and 4 MiB new evidence,
+with no browser/GPU job or cache build. Freeze its recipe in a fresh run before
+computing, preserve all signed results, and continue only on attributable evidence.
+H4-H6 depend on the results; register their bounded packages before execution.
+Begin with a handful of reference
+rays, with no cache rebuild, broad accuracy sweep, production change or automatic
+N4 campaign. Earlier compute allocations remain consumed. Preserve parent runs and
+write every derivative into a fresh run under the existing experiment contract.
+
+Batch any authored-code review at a coherent milestone using bootstrap's existing
+folder-resolved rules, including the required types review. Do not add production
+review standards because the probes read production implementations, or request a
+new pass after each diagnostic run or candidate tweak. This documentation update
+does not initiate a reviewer round.
+
+### Registered H4 Package
+
+Accepted 00244 independently reproduces midpoint projection and leaves the Flat
+3-degree band nearly neutral under bin-integrated color matching. H4 therefore
+proceeds with the accepted 00241 continuous physical inputs and three existing
+center rays: 0.05, 3 and 20 degrees. Recompute the same continuous N1 equation at
+4096 Simpson intervals, retaining Rayleigh/Mie contributions in distance strata,
+source/view optical depths, density and phase values. Require relative radiance
+parity with 00241 within 1e-10 and additive stratum/species residual below 1e-12.
+Prediction: the neutral band combines nearby blue Rayleigh and warm Mie emission;
+distance-varying source attenuation/dilution and view extinction must explain the
+retained totals without an additional color operation. This is attribution, not
+an aerosol-removal simulation. Limit H4 to 120 seconds CPU and 2 MiB new evidence.
+
+### Registered H5 Package
+
+Accepted 00245 reproduces the prior N1 spectra to about 6e-15 relative and preserves
+the warm-Mie/blue-Rayleigh balance. H5 uses Native15 source/medium inputs, 5 m
+observer altitude, elevations 0.25/3/20 degrees and Sun-relative headings 0/90/180
+degrees. Retain the actual San Jose local finite-source placement and independently
+resolve the distant source placement through its current geometry owner.
+
+Use a controlled chain: flat finite source at its observed placement and top
+100 km; flat parallel source matched to its observer direction and irradiance;
+then the same parallel source in spherical geometry at the same top; then the
+60 km distant top; then actual distant observer Sun direction and Native15 incident
+irradiance. Each adjacent pair changes one declared geometric/source boundary.
+The first two cases retain each elevation's accepted observer-dome ray length,
+which is azimuth-invariant; spherical cases use the physical upper boundary.
+These are physical contrasts, not matched photographs or a cache accuracy claim.
+Use 2048/4096 Simpson view intervals and 64/128 Gauss nodes for curved optical
+columns; require <1e-4 relative refinement, retain failures without relaxation.
+Prediction: the neutral Flat band persists when replacing finite illumination by
+locally matched parallel illumination because effective scattering is relatively
+near the observer; source altitude/geometry can alter the balance without requiring
+a conversion defect. No compatible current N1/N4 order package is yet established;
+do not spend a new N4 campaign merely to complete this contrast. Limit H5 to
+120 seconds CPU and 4 MiB new evidence; progress/guards apply between rays.
+
+### Registered H6 Package
+
+Accepted 00246 retains a near-neutral 3-degree away-Sun Flat N1 band under matched
+parallel illumination; curvature makes the same-order control bluer. H4 shows
+strong blue near-path contributions balanced by warmer attenuated far-path light
+and warm Mie emission. At the observer on that ray, the current g=0.7 Mie phase
+value is about 0.01038 sr^-1 versus Rayleigh's 0.06353 sr^-1. Test this angular
+suppression and the assumed 0.8 scattering albedo as explicitly uncalibrated
+physical sensitivities, not accuracy refinements or recommended aerosol settings.
+
+Use the same 0.05/3/20-degree local rays and full combined extinction, with four
+recomputed N1 cases: baseline; A changes only Mie g to zero within the same
+Cornette-Shanks family; B changes only Mie single-scattering albedo to one; A+B.
+Zero g in this family has a Rayleigh-shaped phase, not an isotropic phase. Check
+phase normalization and forward-scattering direction separately. Prediction:
+A increases warm off-Sun Mie emission enough to give warm RGB ordering at 3 degrees,
+while the 20-degree control remains blue; B alone produces a smaller warm shift.
+Because albedo scales only the Mie source at fixed extinction, the spectral
+interaction must satisfy I_AB = 0.25 * (L_A - L_baseline), to 1e-10 relative
+above a 1e-12 absolute floor. Retain sign reversals and misses. The comparison
+cannot establish actual aerosol phase/albedo from an expected image color.
+Limit H6 to 120 seconds CPU and 2 MiB new evidence, with no cache build or GPU job.
+
 ## Resources And Evidence
 
 Prior compute packages remain consumed. This continuation starts with H0 and does
@@ -136,6 +274,11 @@ attribution and 00243 assessment. The Flat gray band exists before display and
 persists in the continuous N1 model; the shared display response compresses color
 separation further. No production fix or distant N4 accuracy claim is made.
 That results document owns exact limits, recovery, resources and questions/decisions.
+The selected [H3-H6](#next-actions-h3-h6) scientific sequence is recorded in the
+[assumption results](horizon-assumption-results.md). No further run is selected.
+The coherent H3-H6 implementation unit
+starts from `.codex-tmp/review-standards/session-b5Eogw/baseline.json`, captured
+before authored code changes; review is batched after the selected sequence.
 Implementation completion requires its matching current primary/audit receipt.
 Historical scientific status and deferred review boundaries remain in
 [status](status.md#verification-boundary). Reviewer lifecycle follows the
