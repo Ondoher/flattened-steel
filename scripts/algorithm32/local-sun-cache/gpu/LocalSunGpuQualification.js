@@ -112,9 +112,9 @@ export class LocalSunGpuQualification {
 	}
 
 	/** Call this method to execute one explicitly selected GPU proof and seal its new evidence.
-	 * Failures preserve the new run with failed disposition and close the owned browser,
-	 * server and file handles. Jobs reject for unsupported inputs, changed parents,
-	 * low free memory, excessive sampled owned-process memory or the ten-minute deadline.
+	 * Preflight rejection creates no run. After allocation, failures preserve the run
+	 * and close owned browser, server and file handles. Jobs reject for unsupported inputs,
+	 * changed parents, low free memory, excessive sampled process memory or the deadline.
 	 *
 	 * @param {LocalSunGpuQualificationRequest} request - Exact order, new serial and bounded proof mode.
 	 * @returns {Promise<string>} - Repository-relative immutable result directory.

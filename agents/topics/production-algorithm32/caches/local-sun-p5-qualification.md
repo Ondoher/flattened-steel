@@ -181,13 +181,12 @@ limits; they do not prevent finishing this bounded P5 qualification record.
 ## Completion
 
 The selected numerical, lifecycle/application regression and candidate/rollback
-preparation work is delivered. Final mapped primary/audit review is blocked:
-shared reviewer tooling changed after initial readiness and current calibration
-is stale. An initial validator regression run failed during that upgrade; the
-updated helper regression run passes, while maintained review startup still
-requires the new sealed all-lane calibration. Review startup must pass again
-before a compliance handoff. No prior receipt is rebound to the changed gate and
-no standards waiver is selected.
+preparation work is delivered. Patched shared reviewer readiness passes on
+2026-10-14 under the version 3 file/rule evidence contract. Only the matching
+[final P5 primary/audit CLEAN receipt](../../../../.codex-tmp/review-standards/session-ZBnzAH/validation-p5-v3.json)
+completes this unit. Reports are reviewed anew against the current contract;
+earlier blocked attempts and numerical evidence remain preserved. No prior
+receipt is rebound to the changed gate and no standards waiver is selected.
 
 Only the matching final CLEAN receipt completes the authored P5 unit. The local
 session is `.codex-tmp/review-standards/session-ZBnzAH/`; new proof output belongs

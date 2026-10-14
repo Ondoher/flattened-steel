@@ -1,11 +1,11 @@
 # Local-Sun Cache Production Port Status
 
-Current disposition, 2026-10-13: P0–P4 are complete under their matching CLEAN
+Current disposition, 2026-10-14: P0–P4 are complete under their matching CLEAN
 primary/audit receipts. P5's selected qualification matrix passes all 600 original
 trajectory states, current CPU/shared-boundary checks, 22 focused real WebGL tests
 and 45 basic Flat32 browser specs. Candidate/rollback preparation is delivered.
-Shared reviewer tooling changed since initial P5 readiness; its updated helper
-tests pass, but stale all-lane calibration still blocks final review startup. The
+Patched shared reviewer readiness now passes. Only P5's matching final mapped
+primary/audit CLEAN receipt establishes completion. The
 [P5 qualification record](local-sun-p5-qualification.md) owns the bounded matrix,
 explicit N1 candidate, higher-order application limit and compatible rollback.
 The [plan](local-sun-cache-promotion-plan.md) owns scope and sequence;
@@ -31,12 +31,12 @@ remains deferred.
 | P2 — GPU construction/runtime | Delivered genuine compact GPU graph and ordinary shared lookup/view consumers, qualified occupied fields, N1/N2/N4, omission and candidate cleanup. The matching CLEAN primary/audit receipt completes the phase. |
 | P3 — reuse and frame publication | Complete under its matching CLEAN primary/audit receipt; numerical, lifecycle and browser proofs pass. |
 | P4 — Flat32/celestial consumers | Complete under its matching CLEAN primary/audit receipt; ordinary N1, celestial and failure/retry/cancellation proofs pass. |
-| P5 — qualification/adoption preparation | Selected qualification and candidate/rollback record delivered; final primary/audit review blocked by changed shared tooling/calibration. No default switch, deployment or publication selected. |
+| P5 — qualification/adoption preparation | Selected qualification and candidate/rollback record delivered; matching final primary/audit CLEAN receipt establishes completion. No default switch, deployment or publication selected. |
 
 ## Next Work
 
-Run final P5 mapped primary/audit review once the maintained shared reviewer
-startup gates pass. The selected matrix, costs and candidate/rollback record
+Validate the matching final P5 mapped primary/audit receipt before closing the
+phase. The selected matrix, costs and candidate/rollback record
 are delivered; preserve every failed attempt and earlier numerical receipt.
 The [P4 closure](local-sun-p4-closure.md) owns the ordinary N1 and higher-order
 application boundary; the [P3 boundary](local-sun-p3-closure.md) owns earlier
@@ -51,7 +51,8 @@ boundary after evidence is reviewable.
 
 ## Completion Receipts
 
-- [P5 execution summary](../../../../.codex-tmp/review-standards/session-ZBnzAH/summary.md) and [current review-startup record](../../../../.codex-tmp/review-standards/session-ZBnzAH/review-status.json): delivered qualification/candidate work; final mapped primary/audit completion remains open until a matching CLEAN validation exists.
+- [P5 final primary/audit receipt](../../../../.codex-tmp/review-standards/session-ZBnzAH/validation-p5-v3.json): only its matching CLEAN outcome completes the P5 implementation/proof/current-state unit.
+- [P5 execution summary](../../../../.codex-tmp/review-standards/session-ZBnzAH/summary.md) and [review lifecycle record](../../../../.codex-tmp/review-standards/session-ZBnzAH/review-status.json): delivered qualification/candidate work, actual review outcome and resumption boundary.
 - [P4 primary/audit receipt](../../../../.codex-tmp/review-standards/session-PmaV21/validation-p4.json): matching CLEAN completion for ordinary application, celestial and coherent-frame consumers.
 - [P3 primary/audit receipt](../../../../.codex-tmp/review-standards/session-KrjnnU/validation.json): only its matching CLEAN outcome completes the authored P3 source/contracts/proof/current-state unit.
 - [P3 independent execution summary](../../../../.codex-tmp/review-standards/session-KrjnnU/summary.md): decisions, proof/check receipts, measured resources, nonblocking app-memory question and checkpoint.

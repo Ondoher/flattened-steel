@@ -39,10 +39,10 @@ P4's matching review receipt is CLEAN. The owner selected P5 on 2026-10-13:
 qualify the accepted trajectories and shared consumers, measure costs and prepare
 an explicit candidate/rollback disposition. The
 [P5 qualification record](production-algorithm32/caches/local-sun-p5-qualification.md)
-owns its delivered bounded matrix and adoption preparation. Final P5 review
-startup remains blocked by changed shared reviewer calibration; the qualification
-record owns that gate. Defaults, deployment and publication require their
-separate adoption boundary.
+owns its delivered bounded matrix and adoption preparation. Patched reviewer
+readiness passes on 2026-10-14; only the matching final P5 primary/audit CLEAN
+receipt establishes closure. The qualification record owns that gate. Defaults,
+deployment and publication require their separate adoption boundary.
 
 ## Minimal Reload Sources
 
