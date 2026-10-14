@@ -127,6 +127,10 @@ export class Algorithm32Runtime {
 	}
 
 	/** Call this method to stage a complete local frame while the displayed frame keeps rendering.
+	 * Disposal or a missing compact-frame owner throws synchronously; use a live compact runtime.
+	 * Invalid requests or unsupported views throw or reject; correct them before retrying.
+	 * Cancellation/supersession rejects with the abort reason; discard the candidate. Backend,
+	 * complete-frame staging or cleanup failures reject; retain the displayed frame and report the cause.
 	 *
 	 * @param {LocalSunFrameRequest} request - Exact accepted physical/presentation state.
 	 * @param {AbortSignal} [signal] - Optional caller cancellation.
@@ -139,6 +143,11 @@ export class Algorithm32Runtime {
 	}
 
 	/** Call this method to publish all matching local components at one application frame boundary.
+	 * Disposal, missing compact ownership, cancellation or stale/invalid packets reject;
+	 * discard the candidate and prepare on the current live runtime. View, lighting or renderer
+	 * installation failures before commit reject while retaining the controller's prior frame;
+	 * report the failed installation. Shadow refresh or post-commit mode updates may reject after
+	 * publication; inspect the active frame before recovery rather than assuming the commit was undone.
 	 *
 	 * @param {PreparedLocalSunFrame} frame - Controller-created current complete packet.
 	 * @param {AbortSignal} signal - Publication cancellation.
@@ -195,6 +204,12 @@ export class Algorithm32Runtime {
 	}
 
 	/** Call this method to prepare then publish a coherent distant scene without rebuilding the runtime.
+	 * Disposed or unsupported runtimes, malformed requests and unsupported local coverage reject;
+	 * correct the selection/request before retrying. Caller cancellation or supersession rejects;
+	 * discard that candidate. Cache preparation, receiver measurement or publication failure rejects;
+	 * retain the last complete frame on pre-commit failure and report the failing owner.
+	 * Post-commit lighting/shadow failures can reject after publication; inspect current publication
+	 * before recovery. Cleanup failures propagate; report them without reusing released candidates.
 	 *
 	 * @param {Flat32ApplicationState} state - Requested application observation.
 	 * @param {Flat32SharedSceneUpdateRequest} request - Cancellation and optional premeasured physical environment.
@@ -208,7 +223,7 @@ export class Algorithm32Runtime {
 				(this._mode instanceof FlatLocalMode
 					? this._mode.createLocalFrameRequest(
 							state.observation,
-							this._localFrameAdditionalBytes(),
+							this._localFrameOtherCacheBytes(),
 							resolveLocalSunFrameView(this._sceneRuntime.camera),
 						)
 					: null);
@@ -233,6 +248,9 @@ export class Algorithm32Runtime {
 		this._predictionCancellation?.abort();
 		this._predictionCancellation = null;
 		const cancellation = (this._liveCancellation = new AbortController());
+		/** Forward caller cancellation to this live-scene operation.
+		 * @returns {void} - Owned preparation is marked aborted.
+		 */
 		const abort = () => cancellation.abort(request.signal.reason);
 		request.signal.throwIfAborted();
 		request.signal.addEventListener('abort', abort, {once: true});
@@ -348,6 +366,8 @@ export class Algorithm32Runtime {
 	/** Rebuild all renderer-owned atmosphere and stellar resources through normal setup after restoration. */
 	/** Call this method to prepare and publish a complete replacement on the restored renderer.
 	 * A failed restoration releases its candidate and retains lost-context state for retry.
+	 * Restored-backend construction, complete-frame preparation/publication or cleanup failures reject;
+	 * report the failing operation, discard its candidate and retry with a valid restored renderer.
 	 *
 	 * @returns {Promise<void>} - Restored complete frame, or rejection for preparation/publication/cleanup failure.
 	 */
@@ -703,6 +723,12 @@ export class Algorithm32Runtime {
 
 	/**
 	 * Call this method to build, preflight, and atomically install the production atmosphere.
+	 * Disposed runtimes and invalid scene/profile/backend inputs reject; correct the owner/configuration.
+	 * Cancellation or supersession rejects with AbortError; discard that setup attempt. Shader/cache
+	 * setup, receiver measurement, preflight or installation failure rejects; stop using the candidate,
+	 * report the failed operation and dispose it before retrying. Cleanup failures also propagate;
+	 * inspect them rather than assuming all resources were released. Compact setup follows the
+	 * complete-frame owner's candidate cleanup and never publishes an incomplete packet.
 	 *
 	 * @returns {Promise<Flat32AtmosphereSummary>} Resolve with installed facts.
 	 */
@@ -817,17 +843,21 @@ export class Algorithm32Runtime {
 		}
 	}
 
-	/** Called by ordinary compact preparation to account for scene shadows and two complete frame targets.
+	/** Called by ordinary compact preparation to declare cache payload outside the frame controller's registry.
+	 * That controller accounts for its construction peak, auxiliary data and retained cache overlap.
+	 * Scene shadows, display targets and viewport-dependent staging are separate from cache accounting.
 	 *
-	 * @returns {UnitValue<'bytes'>} - Conservative declared additional GPU bytes; not an app minimum-RAM claim.
+	 * @returns {UnitValue<'bytes'>} - No external cache payload is owned by this local attachment.
 	 */
-	_localFrameAdditionalBytes() {
-		const {width, height} = this._sceneRuntime.viewportSize;
-		// Six ordinary RGBA8 shadow maps each also own a DEPTH_COMPONENT24
-		// attachment, conservatively reserved as four bytes per pixel.
-		return {value: 6 * 4096 * 4096 * 8 + width * height * 256 * 2 + 16 * 1024 * 1024, units: 'bytes'};
+	_localFrameOtherCacheBytes() {
+		return {value: 0, units: 'bytes'};
 	}
 	/** Called by setup to stage the explicit compact candidate through the ordinary complete-frame owners.
+	 * Invalid scene/backend configuration rejects; correct it before retrying. Cancellation rejects
+	 * with its abort reason; discard that attempt. Cache construction, shader/receiver staging or
+	 * absent preflight observations reject; retain the prior published frame and report the failed owner.
+	 * Candidate and backend teardown are attempted; AggregateError includes any cleanup failures.
+	 * Report every cause and create a valid replacement before publication.
 	 *
 	 * @returns {Promise<Flat32AtmosphereSummary>} - Ready unpublished candidate or explicit admission failure.
 	 */
@@ -840,19 +870,24 @@ export class Algorithm32Runtime {
 		const sceneDepthMax = this._resolveSceneDepthMax();
 		const backend = new ThreeCacheBackend({THREE, renderer: this._sceneRuntime.renderer});
 		this._cacheBackend = backend;
-		const preparer = new LocalSunFramePreparer(
-			mode.createLocalFramePreparerConfiguration(this._sceneRuntime, this._endpointScene, sceneDepthMax),
-		);
+		const preparer = new LocalSunFramePreparer({
+			...mode.createLocalFramePreparerConfiguration(this._sceneRuntime, this._endpointScene, sceneDepthMax),
+			performanceCallback: this._performanceCallback,
+		});
 		this._localFrameController = new LocalSunFrameController({
 			backend,
 			scheduler: this._cacheBuildScheduler,
+			/** Stage an isolated complete packet; rejection leaves the published packet in place.
+			 * @param {LocalSunFrameStageRequest} request - Accepted profile, cache borrow and cancellation.
+			 * @returns {Promise<LocalSunPreparedFrameContents>} - Prepared renderer/receiver/celestial aggregate.
+			 */
 			stageFrame: (request) => preparer.prepare(request),
 		});
 		try {
 			this._pendingInitialLocalFrame = await this.prepareLocalFrame(
 				mode.createLocalFrameRequest(
 					mode.geometry.configuration.observation,
-					this._localFrameAdditionalBytes(),
+					this._localFrameOtherCacheBytes(),
 					resolveLocalSunFrameView(this._sceneRuntime.camera),
 				),
 				cancellation.signal,
@@ -958,6 +993,7 @@ export class Algorithm32Runtime {
 	/**
 	 * Call this method to restore direct rendering and release Algorithm32 resources in order.
 	 *
+	 * @param {Flat32RuntimeDisposalRequest} [options] - Keep replacement rendering installed when restoration is false.
 	 * @returns {void}
 	 */
 	dispose({restoreRendering = true} = {}) {

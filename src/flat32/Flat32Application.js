@@ -22,6 +22,9 @@ import {
 export class Flat32Application {
 	/**
 	 * Creates the application owner in the supplied root with explicit configuration.
+	 * Unsupported cache policies or presentation selections throw before a usable application is returned.
+	 * The caller must correct its configuration before creating a replacement application.
+	 * Omitted order retains distant N4; an explicitly selected compact local cache defaults independently to N1.
 	 *
 	 * @param {HTMLElement} root - Hosts the application.
 	 * @param {Flat32ApplicationConfiguration} [configuration] - Supplies explicit diagnostic overrides. Omission
@@ -42,6 +45,8 @@ export class Flat32Application {
 		this._maximumScatteringOrder =
 			configuration.maximumScatteringOrder ??
 			DEFAULT_NATIVE_PRODUCTION_PROFILE.numerical.cacheConstruction.maximumScatteringOrder;
+		this._localMaximumScatteringOrder =
+			configuration.maximumScatteringOrder ?? (this._localSunCachePolicy ? 1 : this._maximumScatteringOrder);
 		this._reviewObjectsEnabled = configuration.reviewObjectsEnabled !== false;
 		this._productionSelections = productionSelections;
 		this._brightest2000StellarCatalogDefinition = configuration.brightest2000StellarCatalogDefinition;
@@ -95,7 +100,11 @@ export class Flat32Application {
 		}
 	}
 
-	/** Replace application state, render controls, then update the scene. */
+	/** Replace application state, render controls, then update the scene.
+	 *
+	 * @param {Flat32ApplicationState} state - Complete desired controls and observation.
+	 * @param {boolean} delayedSceneUpdate - Coalesce source changes before preparation when true.
+	 */
 	_commitState(state, delayedSceneUpdate) {
 		this._state = state;
 		this._renderControls();
@@ -110,7 +119,10 @@ export class Flat32Application {
 		void this._setupAtmosphere(state);
 	}
 
-	/** Merge a legacy location/time transition into application state. */
+	/** Merge a location/time transition while preserving the selected mode.
+	 *
+	 * @param {Flat32LocationTimeState} locationTimeState - Selected observation and control labels.
+	 */
 	_commitLocationTimeState(locationTimeState) {
 		const modeKind = this._state?.modeKind ?? 'spherical-distant';
 
@@ -123,7 +135,10 @@ export class Flat32Application {
 		);
 	}
 
-	/** Apply a pure location/time transition to current application state. */
+	/** Apply a pure location/time transition to current application state.
+	 *
+	 * @param {(state: Flat32ApplicationState) => Flat32LocationTimeState} transition - Existing location/time operation.
+	 */
 	_transitionLocationTime(transition) {
 		if (this._state === null) return;
 		this._commitLocationTimeState(transition(this._state));
@@ -199,7 +214,10 @@ export class Flat32Application {
 
 	/**
 	 * Create the live spherical/distant scene state before cache resolution.
+	 * Invalid observation or geometry input throws; the mode controller rejects that candidate and
+	 * retains the last complete frame. The caller must correct the observation before retrying.
 	 *
+	 * @param {Flat32ApplicationState} state - Exact current observer and observation.
 	 * @returns {Flat32DistantSunSceneState<SphericalDistantMode['geometry']>} Return geometry and the scalar resolver input.
 	 */
 	_createSphericalDistantSceneState(state) {
@@ -212,10 +230,13 @@ export class Flat32Application {
 
 	/**
 	 * Create one mode from a resolved live state and optional exact package.
+	 * Incompatible shared-cache order, physical inputs or missing authenticated stellar data throw.
+	 * The caller must correct the selection; candidate failure retains the last published mode.
 	 *
 	 * @param {Flat32DistantSunSceneState<SphericalDistantMode['geometry']>} sceneState - Live geometry and source placement.
 	 * @param {DistantSunSceneCacheAssetSelection | undefined} sceneCacheAsset - Optional exact non-dark package.
 	 * @param {Flat32DistantSunCacheState} [distantSunCacheState] - Selected scattering-cache state.
+	 * @param {DistantSunSharedCacheSelection} [sharedCache] - Borrowed qualified distant cache, when resolved.
 	 * @returns {SphericalDistantMode} The configured mode.
 	 */
 	_createSphericalDistantMode(sceneState, sceneCacheAsset, distantSunCacheState = 'ready', sharedCache = undefined) {
@@ -233,7 +254,13 @@ export class Flat32Application {
 		});
 	}
 
-	/** Resolve one exact offline package before constructing the runtime mode. */
+	/** Resolve one exact offline package before constructing the runtime mode.
+	 * Cancellation or unsupported packages reject; the mode controller preserves the last published frame.
+	 *
+	 * @param {Flat32ApplicationState} state - Exact selected observation.
+	 * @param {Parameters<Flat32ModeControllerConfiguration['createMode']>[2]} request - Cancellation signal for this candidate.
+	 * @returns {Promise<SphericalDistantMode>} - Resolved mode borrowing the selected shared package.
+	 */
 	async _prepareSphericalDistantMode(state, request) {
 		const sceneState = this._createSphericalDistantSceneState(state);
 		if (this._sceneSummary !== null) {
@@ -257,13 +284,19 @@ export class Flat32Application {
 		throw new RangeError('The production distant-Sun runtime requires a qualified shared package.');
 	}
 
-	/** Create the fixed selected production flat/local mode. */
+	/** Create the selected flat/local mode with its independent default order.
+	 * Invalid physical or stellar inputs throw; the caller retains the last published frame.
+	 * Correct unsupported inputs or load the required authenticated catalog before retrying.
+	 *
+	 * @param {Flat32ApplicationState} state - Exact selected local observation.
+	 * @returns {FlatLocalMode} - Candidate compact N1 mode, or the explicitly retained rectangular control.
+	 */
 	_createFlatLocalMode(state) {
 		return new FlatLocalMode({
 			localSunCachePolicy: this._localSunCachePolicy,
 			sceneScale: ATMOSPHERE_SCENE_SCALE,
 			observation: state.observation,
-			maximumScatteringOrder: this._maximumScatteringOrder,
+			maximumScatteringOrder: this._localMaximumScatteringOrder,
 			...this._productionSelections,
 			// The retained rectangular control has no stellar source. The explicit
 			// compact candidate keeps the selected shared stellar filters.
@@ -276,6 +309,7 @@ export class Flat32Application {
 	/**
 	 * Build and publish the atmosphere without blocking the direct scene.
 	 *
+	 * @param {Flat32ApplicationState} state - Complete desired observation and mode.
 	 * @returns {Promise<void>} Resolve after setup reaches a terminal state.
 	 */
 	async _setupAtmosphere(state) {
@@ -330,6 +364,10 @@ export class Flat32Application {
 
 	/**
 	 * Call this method to build the direct scene, then attach Algorithm32 asynchronously.
+	 * Calling after disposal throws; create a new application instead. Synchronous failures before
+	 * renderer setup propagate to the caller. Renderer/scene initialization failures are caught,
+	 * release owned candidates and display a failure, including missing required shadow maps.
+	 * Inspect that failure and dispose the failed instance before creating a corrected replacement.
 	 *
 	 * @returns {void}
 	 */
@@ -399,10 +437,18 @@ export class Flat32Application {
 				atmosphereEnabled: this._atmosphereShaderEnabled,
 				sceneRuntime: this._sceneRuntime,
 				endpointScene: this._endpointScene,
+				/** Stage candidate geometry before publication; the controller restores the previous mode on failure.
+				 * @param {Flat32ModeKind} kind - Candidate geometry/source pairing.
+				 * @param {Flat32Mode} mode - Candidate mode borrowing application state.
+				 */
 				onPreparing: (kind, mode) => {
 					this._endpointScene?.applyMode(kind, mode.geometry);
 					this._sceneSummary = this._endpointScene?.describe() ?? null;
 				},
+				/** Restore geometry and lighting from the last published mode after candidate failure.
+				 * @param {Flat32ModeKind} kind - Published geometry/source pairing.
+				 * @param {Flat32Mode} mode - Previously accepted mode.
+				 */
 				onReverted: (kind, mode) => {
 					this._endpointScene?.applyMode(kind, mode.geometry);
 					if (kind === 'spherical-distant') {
@@ -424,15 +470,30 @@ export class Flat32Application {
 					this._sceneSummary = this._endpointScene?.describe() ?? null;
 				},
 				onFailure: this._handleAtmosphereFailure,
+				/** Construct the requested candidate; synchronous errors and resolver rejection propagate to rollback.
+				 * @param {Flat32ModeKind} kind - Requested geometry/source pairing.
+				 * @param {Flat32ApplicationState} state - Exact candidate observation.
+				 * @param {Parameters<Flat32ModeControllerConfiguration['createMode']>[2]} request - Candidate cancellation signal.
+				 * @returns {Flat32Mode|Promise<Flat32Mode>} - Candidate owned by the mode controller.
+				 */
 				createMode: (kind, state, request) =>
 					kind === 'spherical-distant'
 						? this._prepareSphericalDistantMode(state, request)
 						: this._createFlatLocalMode(state),
+				/** Create an unpublished runtime; setup failures retain the prior published runtime.
+				 * @param {Flat32AlgorithmRuntimeConfiguration} runtimeConfiguration - Candidate scene and mode resources.
+				 * @returns {Algorithm32Runtime} - Runtime owned by the mode controller.
+				 */
 				createRuntime: (runtimeConfiguration) =>
 					new Algorithm32Runtime({
 						...runtimeConfiguration,
 						performanceCallback: this._performanceCallback,
 					}),
+				/** Apply lighting and control labels for the complete accepted frame.
+				 * @param {Flat32ModeKind} kind - Published geometry/source pairing.
+				 * @param {Flat32Mode} mode - Accepted mode supplying geometry and lighting.
+				 * @param {Flat32ApplicationState} state - Accepted exact observation.
+				 */
 				onPublished: (kind, mode, state) => {
 					if (kind === 'spherical-distant') {
 						const distantMode = /** @type {SphericalDistantMode} */ (mode);

@@ -18,7 +18,7 @@ function loadApplication(frame) {
 			},
 			{once: true},
 		);
-		frame.src = `/base/dist/flat32/index.html?browser-spec=${Date.now()}`;
+		frame.src = `/base/dist/flat32/index.html?localSunCache=rectangular&browser-spec=${Date.now()}`;
 		document.body.append(frame);
 	});
 }
@@ -36,6 +36,7 @@ function waitForCondition(targetWindow, condition, description, timeoutMilliseco
 	return new Promise((resolve, reject) => {
 		const deadline = performance.now() + timeoutMilliseconds;
 
+		/** Poll the observable condition until completion or reject the owning wait on deadline. */
 		function inspect() {
 			if (condition()) {
 				resolve();
@@ -65,7 +66,7 @@ async function waitForTwoFrames(targetWindow) {
 
 const describeFullCache = window.__karma__?.config?.args?.includes('full-cache') === true ? describe : xdescribe;
 
-describeFullCache('Flat32 scene application (full production cache)', () => {
+describeFullCache('Flat32 scene application (full production cache, explicit rectangular rollback)', () => {
 	/** @type {HTMLIFrameElement} */
 	let frame;
 	/** @type {Document} */

@@ -137,6 +137,7 @@ export class ThreeCacheBackend {
 	/**
 	 * Called by ThreeCacheBackend to require a complete R32F framebuffer for one
 	 * selected array layer.
+	 * An incomplete framebuffer throws with its status; stop that GPU operation and report the device failure.
 	 *
 	 * @param {ThreeCacheBackendRendererRecord} record - Accepted renderer state.
 	 * @param {ThreeCacheBackendScalarArrayTarget} target - Scalar array render target.
@@ -155,6 +156,8 @@ export class ThreeCacheBackend {
 	/**
 	 * Called by ThreeCacheBackend to inspect and validate renderer capabilities
 	 * required by the selected scalar array layout.
+	 * Missing WebGL2, float rendering, highp precision or valid texture limits throws; select a capable
+	 * renderer. Probe allocation/framebuffer/cleanup failures propagate; discard backend construction.
 	 *
 	 * @param {ThreeCacheBackendResourceNamespace} THREE - Three namespace used by the renderer.
 	 * @param {ThreeCacheBackendRendererOperations} renderer - Renderer accepted at the backend boundary.
@@ -216,6 +219,7 @@ export class ThreeCacheBackend {
 	/**
 	 * Called by ThreeCacheBackend to require the active private state for one
 	 * opaque backend handle.
+	 * Missing or disposed private state throws; create a live backend instead of reusing this handle.
 	 *
 	 * @param {ThreeCacheBackend} backend - Opaque backend handle.
 	 * @returns {ThreeCacheBackendRecord} - Active private backend state.
@@ -257,7 +261,8 @@ export class ThreeCacheBackend {
 		if (!record || record.disposed) return;
 		record.disposed = true;
 		try {
-			record.texture.dispose();
+			if (record.target) record.target.dispose();
+			else record.texture.dispose();
 		} finally {
 			record.backend.immutableTextures.delete(texture);
 		}
@@ -375,6 +380,7 @@ export class ThreeCacheBackend {
 	/**
 	 * Called by ThreeCacheBackend to require the active field associated with one
 	 * opaque runtime binding owned by the supplied backend.
+	 * Foreign/nonfield bindings throw TypeError and disposed fields throw Error; use a live field binding from this backend.
 	 *
 	 * @param {CacheRuntimeBinding} binding - Opaque runtime-binding handle.
 	 * @param {ThreeCacheBackendRecord} backend - Required backend ownership state.
@@ -393,7 +399,9 @@ export class ThreeCacheBackend {
 		return this._requireFieldRecord(bindingRecord.field, backend, 'Runtime cache binding field');
 	}
 
-	/**
+	/** Resolve a live field, persistent-array or immutable texture binding.
+	 * Foreign or missing texture ownership throws TypeError; disposed resources throw Error.
+	 * Acquire a live binding from this backend before attempting installation or readback.
 	 * @param {CacheRuntimeBinding} binding - Opaque runtime binding.
 	 * @param {ThreeCacheBackendRecord} backend - Required backend owner.
 	 * @returns {ThreeCacheBackendTexture} - Active private texture.
@@ -419,6 +427,7 @@ export class ThreeCacheBackend {
 
 	/**
 	 * Called to validate opaque persistent-array ownership before accessing renderer storage.
+	 * Missing or foreign handles throw TypeError; obtain a live array from this backend.
 	 *
 	 * @param {CachePersistentArray} array - Candidate handle.
 	 * @param {ThreeCacheBackendRecord} backend - Required renderer owner.
@@ -433,6 +442,7 @@ export class ThreeCacheBackend {
 	/**
 	 * Called by ThreeCacheBackend to require one active opaque field owned by the
 	 * supplied backend.
+	 * Foreign handles throw TypeError and disposed fields throw Error; use a live backend-owned field.
 	 *
 	 * @param {GpuCacheField} value - Opaque field handle.
 	 * @param {ThreeCacheBackendRecord} backend - Required backend ownership state.
@@ -456,6 +466,7 @@ export class ThreeCacheBackend {
 	/**
 	 * Called by ThreeCacheBackend to require one active opaque program owned by
 	 * the supplied backend.
+	 * Foreign handles throw TypeError and disposed programs throw Error; compile a live backend-owned program.
 	 *
 	 * @param {CacheGpuProgram} value - Opaque program handle.
 	 * @param {ThreeCacheBackendRecord} backend - Required backend ownership state.
@@ -478,6 +489,7 @@ export class ThreeCacheBackend {
 	/**
 	 * Called by ThreeCacheBackend to resolve a supported unit value to its
 	 * canonical GPU scalar.
+	 * Unsupported units throw RangeError; convert the value to a supported physical unit before submission.
 	 *
 	 * @param {UnitValue} value - Unit-bearing scalar value.
 	 * @param {string} label - Diagnostic label for unsupported units.
@@ -585,6 +597,8 @@ export class ThreeCacheBackend {
 	 * Called by ThreeCacheBackend to configure material uniforms and collect the
 	 * private data textures whose lifecycle the compiled program owns. Any
 	 * partially constructed textures are disposed before an error is rethrown.
+	 * Unsupported binding units, texture allocation or renderer-resource creation failures propagate;
+	 * correct the binding or report the allocation failure and discard the incomplete program.
 	 *
 	 * @param {ThreeCacheBackendResourceNamespace} THREE - Three namespace used for resource construction.
 	 * @param {readonly CacheBinding[]} bindings - Typed shader bindings.
@@ -627,6 +641,8 @@ export class ThreeCacheBackend {
 	 * Called by ThreeCacheBackend to allocate the private fullscreen-pass resource
 	 * cohort for one cache shader. Every successfully allocated resource is
 	 * disposed before a construction error is rethrown.
+	 * Binding conversion or GPU resource construction failures propagate after attempted cleanup;
+	 * discard the incomplete program and report any allocation or cleanup failure.
 	 *
 	 * @param {ThreeCacheBackendRecord} backend - Accepted private backend state.
 	 * @param {CacheShader} shader - Assembled cache shader.
@@ -739,6 +755,49 @@ export class ThreeCacheBackend {
 		};
 	}
 
+	/** Unpack a completed spectral texture at the diagnostic boundary only.
+	 * Readback/context/framebuffer failures throw; callers discard incomplete observations.
+	 * Production packing and lookup never invoke this CPU readback.
+	 *
+	 * @param {ThreeCacheBackendRecord} backend - Owning live renderer.
+	 * @param {ThreeCacheBackendImmutableTextureRecord} packed - Validated packed texture record.
+	 * @returns {CacheScalarFieldReadback} - Logical wavelength-major scalar values.
+	 */
+	_readPackedRuntimeField(backend, packed) {
+		const storage = packed.scalarStorage;
+		if (!storage || !packed.target) throw new TypeError('Packed diagnostic source is unavailable.');
+		const {width, height, layers} = storage,
+			count = width * height;
+		const values = new Float32Array(count * layers),
+			groupValues = new Float32Array(count * 4);
+		this._withRendererState(
+			backend,
+			/** Read and unpack every group while restoring the caller's render target.
+			 * @returns {void} - Logical diagnostic values have been populated.
+			 */ () => {
+				for (let group = 0; group < Math.ceil(layers / 4); group++) {
+					this._assertFramebufferComplete(backend, packed.target, group);
+					backend.context.readBuffer(backend.context.COLOR_ATTACHMENT0);
+					backend.context.readPixels(
+						0,
+						0,
+						width,
+						height,
+						backend.context.RGBA,
+						backend.context.FLOAT,
+						groupValues,
+					);
+					if (backend.context.getError() !== backend.context.NO_ERROR)
+						throw new Error('Packed spectral diagnostic readback failed.');
+					for (let component = 0; component < 4 && group * 4 + component < layers; component++)
+						for (let index = 0; index < count; index++)
+							values[(group * 4 + component) * count + index] = groupValues[index * 4 + component];
+				}
+			},
+		);
+		return {storage, values};
+	}
+
 	/**
 	 * Creates a Three/WebGL2 cache backend after validating the renderer's
 	 * scalar-array capabilities and framebuffer support.
@@ -798,6 +857,129 @@ export class ThreeCacheBackend {
 		FIELD_RECORDS.set(field, record);
 		backend.fields.add(field);
 		return field;
+	}
+
+	/** Pack a completed scalar field into four-float groups without a CPU readback.
+	 * Source ownership stays with the caller. Invalid ownership, unavailable context,
+	 * allocation, framebuffer, compile or copy failure throws after candidate cleanup;
+	 * callers must keep the previous published cache and discard this conversion.
+	 *
+	 * @param {CacheRuntimeFieldPackingRequest} request - Borrowed source and destination identity.
+	 * @returns {CacheImmutableTexture} - Complete immutable packed array with zero padding.
+	 */
+	packRuntimeField(request) {
+		const backend = this._requireBackendRecord(this);
+		const source = this._requireFieldRecord(request.source, backend, 'Spectral packing source');
+		const {width, height, layers} = source.storage;
+		if (!request.id || source.storage.format !== 'R32F' || backend.context.isContextLost())
+			throw new Error('Spectral packing requires an identified live scalar source.');
+		const storage = {format: /** @type {const} */ ('RGBA32F'), width, height, layers: Math.ceil(layers / 4)};
+		const target = new backend.THREE.WebGLArrayRenderTarget(width, height, storage.layers, {
+			format: backend.THREE.RGBAFormat,
+			type: backend.THREE.FloatType,
+			internalFormat: 'RGBA32F',
+			minFilter: backend.THREE.NearestFilter,
+			magFilter: backend.THREE.NearestFilter,
+			wrapS: backend.THREE.ClampToEdgeWrapping,
+			wrapT: backend.THREE.ClampToEdgeWrapping,
+			generateMipmaps: false,
+			depthBuffer: false,
+			stencilBuffer: false,
+		});
+		let program;
+		try {
+			program = this._createProgramResources(backend, {
+				id: request.id,
+				sourceHash: request.id,
+				bindings: [],
+				output: request.source,
+				source: `precision highp float; precision highp int; precision highp sampler2DArray;
+uniform sampler2DArray packingSource; uniform int packingGroup;
+out vec4 packingOutput;
+void main() {
+ ivec2 point=ivec2(gl_FragCoord.xy); vec4 value=vec4(0.0);
+ for(int component=0;component<4;++component) {
+  int channel=packingGroup*4+component;
+  if(channel<${layers}) value[component]=texelFetch(packingSource,ivec3(point,channel),0).r;
+ }
+ packingOutput=value;
+}`,
+			});
+			program.material.uniforms.packingSource = {value: source.target.texture};
+			program.material.uniforms.packingGroup = {value: 0};
+			this._withRendererState(
+				backend,
+				/** Convert all spectral groups while preserving the caller's renderer state.
+				 * @returns {void} - The candidate target contains every packed group.
+				 */ () => {
+					for (let group = 0; group < storage.layers; group++) {
+						this._assertFramebufferComplete(backend, target, group);
+						backend.renderer.setViewport(0, 0, width, height);
+						backend.renderer.setScissorTest(false);
+						program.material.uniforms.packingGroup.value = group;
+						backend.renderer.render(program.scene, program.camera);
+						if (backend.context.getError() !== backend.context.NO_ERROR)
+							throw new Error('Spectral GPU packing failed.');
+					}
+				},
+			);
+			if (backend.context.isContextLost()) throw new Error('Context lost during spectral packing.');
+			const cleanupErrors = [];
+			try {
+				program.geometry.dispose();
+			} catch (error) {
+				cleanupErrors.push(error);
+			}
+			try {
+				program.material.dispose();
+			} catch (error) {
+				cleanupErrors.push(error);
+			}
+			program = null;
+			if (cleanupErrors.length)
+				throw new AggregateError(cleanupErrors, 'Spectral packing scratch cleanup failed.');
+			backend.runtimeBindingSequence++;
+			const binding = this._createRuntimeBindingHandle(
+				`${this.id}:packed:${backend.runtimeBindingSequence}:${request.id}`,
+				request.valueKey,
+				request.id,
+				this.id,
+			);
+			const handle = this._createImmutableTextureHandle(
+				{...request, storage, values: new Float32Array(0)},
+				binding,
+				this.id,
+			);
+			IMMUTABLE_TEXTURE_RECORDS.set(handle, {
+				backend,
+				texture: target.texture,
+				target,
+				scalarStorage: source.storage,
+				disposed: false,
+			});
+			RUNTIME_BINDING_RECORDS.set(binding, {backend, immutableTexture: handle});
+			backend.immutableTextures.add(handle);
+			return handle;
+		} catch (error) {
+			const errors = [error];
+			try {
+				target.dispose();
+			} catch (cleanupError) {
+				errors.push(cleanupError);
+			}
+			try {
+				program?.geometry.dispose();
+			} catch (cleanupError) {
+				errors.push(cleanupError);
+			}
+			try {
+				program?.material.dispose();
+			} catch (cleanupError) {
+				errors.push(cleanupError);
+			}
+			if (errors.length > 1) throw new AggregateError(errors, 'Spectral packing and candidate cleanup failed.');
+			throw error;
+		}
 	}
 
 	/**
@@ -890,6 +1072,9 @@ export class ThreeCacheBackend {
 
 	/**
 	 * Call this method to validate and eagerly upload one immutable R32F, RGBA32F, or R16UI texture.
+	 * Invalid identity, dimensions, format, payload or filtering throws; correct the request before retrying.
+	 * Disposed backends, unavailable upload/float-filter capabilities and allocation/upload errors throw;
+	 * retain prior textures and report the backend failure. Failed candidate upload attempts texture cleanup.
 	 *
 	 * @param {CacheImmutableTextureUploadRequest} request - Exact typed payload and executable shape.
 	 * @returns {CacheImmutableTexture} - Opaque uploaded texture owner.
@@ -932,7 +1117,13 @@ export class ThreeCacheBackend {
 		if (typeof backend.renderer.initTexture !== 'function') {
 			throw new Error('ThreeCacheBackend renderer cannot eagerly upload immutable textures.');
 		}
-		if (storage.format === 'RGBA32F' && !backend.context.getExtension('OES_texture_float_linear')) {
+		if (request.filtering !== undefined && request.filtering !== 'nearest')
+			throw new RangeError('Immutable texture filtering is unsupported.');
+		if (
+			storage.format === 'RGBA32F' &&
+			request.filtering !== 'nearest' &&
+			!backend.context.getExtension('OES_texture_float_linear')
+		) {
 			throw new Error('ThreeCacheBackend requires OES_texture_float_linear for RGBA32F scene caches.');
 		}
 
@@ -956,8 +1147,11 @@ export class ThreeCacheBackend {
 				? backend.THREE.IntType
 				: backend.THREE.UnsignedShortType;
 		texture.internalFormat = storage.format;
-		texture.minFilter = storage.format === 'RGBA32F' ? backend.THREE.LinearFilter : backend.THREE.NearestFilter;
-		texture.magFilter = storage.format === 'RGBA32F' ? backend.THREE.LinearFilter : backend.THREE.NearestFilter;
+		texture.minFilter =
+			storage.format === 'RGBA32F' && request.filtering !== 'nearest'
+				? backend.THREE.LinearFilter
+				: backend.THREE.NearestFilter;
+		texture.magFilter = texture.minFilter;
 		texture.wrapS = backend.THREE.ClampToEdgeWrapping;
 		texture.wrapT = backend.THREE.ClampToEdgeWrapping;
 		texture.generateMipmaps = false;
@@ -997,7 +1191,13 @@ export class ThreeCacheBackend {
 		const owner = new ThreeCachePersistentArray({
 			backend,
 			request,
-			preserve: {run: (operation) => this._withRendererState(backend, operation)},
+			preserve: {
+				/** Execute an array operation while preserving renderer state; operation errors propagate to its caller.
+				 * @template T
+				 * @param {() => T} operation - Owned texture operation.
+				 * @returns {T} - Operation result after renderer state restoration.
+				 */ run: (operation) => this._withRendererState(backend, operation),
+			},
 		});
 		backend.runtimeBindingSequence += 1;
 		const binding = this._createRuntimeBindingHandle(
@@ -1013,6 +1213,7 @@ export class ThreeCacheBackend {
 			backendId: this.id,
 			runtimeBinding: binding,
 			byteLength: storage.width * storage.height * storage.layers * 16,
+			/** Release the private array and detach its context listeners once. */
 			dispose: () => {
 				owner.dispose();
 				backend.persistentArrays.delete(handle);
@@ -1115,7 +1316,7 @@ export class ThreeCacheBackend {
 			packKeys.forEach((key, index) => context.pixelStorei(key, index === 0 ? 1 : 0));
 			for (let index = 0; index < coordinates.length; index += 1) {
 				const coordinate = coordinates[index];
-				if (persistent || layers > 1)
+				if (persistent || immutable?.target || layers > 1)
 					context.framebufferTextureLayer(
 						context.FRAMEBUFFER,
 						context.COLOR_ATTACHMENT0,
@@ -1181,15 +1382,27 @@ export class ThreeCacheBackend {
 	}
 
 	/**
-	 * Call this method to read one complete resident scalar-array field through
-	 * its opaque runtime binding. This diagnostic boundary performs one rectangular
-	 * readback per wavelength layer and preserves caller-owned renderer state.
+	 * Call this method to read one complete resident field through its opaque runtime binding.
+	 * Scalar fields are read per wavelength; packed RGBA fields are unpacked into the same
+	 * logical wavelength-major values. Readback preserves caller-owned renderer state.
+	 * A disposed backend or foreign, disposed or incompatible binding rejects the promise;
+	 * acquire a live binding from this backend before retrying. Allocation, framebuffer or
+	 * WebGL readback failures reject without returning partial values; discard the diagnostic
+	 * result and report the device failure. Readback cannot be cancelled once started.
 	 *
 	 * @param {CacheRuntimeBinding} binding - Resident field binding owned by this backend.
 	 * @returns {Promise<CacheScalarFieldReadback>} - Layer-major scalar values.
 	 */
 	async readRuntimeBindingField(binding) {
 		const backend = this._requireBackendRecord(this);
+		const bindingRecord = RUNTIME_BINDING_RECORDS.get(binding);
+		const packed = bindingRecord?.immutableTexture
+			? IMMUTABLE_TEXTURE_RECORDS.get(bindingRecord.immutableTexture)
+			: null;
+		if (packed?.scalarStorage) {
+			this._requireRuntimeBindingTexture(binding, backend);
+			return this._readPackedRuntimeField(backend, packed);
+		}
 		const field = this._requireRuntimeBindingField(binding, backend);
 		const {width, height, layers} = field.storage;
 		const layerSize = width * height;

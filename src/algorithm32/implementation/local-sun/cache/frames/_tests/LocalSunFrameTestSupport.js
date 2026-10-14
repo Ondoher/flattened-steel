@@ -99,7 +99,13 @@ export class LocalSunFrameTestSupport {
 	 * @returns {GpuCacheField} - Virtual lifecycle field.
 	 */
 	allocateField(specification) {
-		const field = {...specification, backendId: this.id, dispose: () => this.handles.delete(field)};
+		const field = {
+			...specification,
+			backendId: this.id,
+			/** Release this virtual field handle.
+			 * @returns {boolean} - Whether the handle was still tracked.
+			 */ dispose: () => this.handles.delete(field),
+		};
 		this._track(field);
 		return field;
 	}
@@ -110,7 +116,13 @@ export class LocalSunFrameTestSupport {
 	 * @returns {CacheGpuProgram} - Virtual lifecycle program.
 	 */
 	compile(shader) {
-		const program = {id: shader.id, sourceHash: shader.sourceHash, dispose: () => this.handles.delete(program)};
+		const program = {
+			id: shader.id,
+			sourceHash: shader.sourceHash,
+			/** Release this virtual program handle.
+			 * @returns {boolean} - Whether the handle was still tracked.
+			 */ dispose: () => this.handles.delete(program),
+		};
 		this._track(program);
 		return program;
 	}
@@ -144,10 +156,29 @@ export class LocalSunFrameTestSupport {
 			storage: request.storage,
 			backendId: this.id,
 			runtimeBinding: {id: request.id, fieldId: request.id, valueKey: request.valueKey, backendId: this.id},
-			dispose: () => this.handles.delete(texture),
+			/** Release this virtual texture handle.
+			 * @returns {boolean} - Whether the handle was still tracked.
+			 */ dispose: () => this.handles.delete(texture),
 		};
 		this._track(texture);
 		return texture;
+	}
+
+	/** Simulate packed-resource ownership only; this backend makes no numerical GPU claim.
+	 * @param {CacheRuntimeFieldPackingRequest} request - Real controller-selected scalar source.
+	 * @returns {CacheImmutableTexture} - Virtual immutable packed handle.
+	 */
+	packRuntimeField(request) {
+		return this.uploadImmutableTexture({
+			id: request.id,
+			valueKey: request.valueKey,
+			storage: {
+				...request.source.storage,
+				format: 'RGBA32F',
+				layers: Math.ceil(request.source.storage.layers / 4),
+			},
+			values: new Float32Array(0),
+		});
 	}
 
 	/** Call this method to satisfy the virtual install contract; physical binding validation is browser-proof work.
@@ -192,9 +223,11 @@ export class LocalSunFrameTestSupport {
 				receiverLightIdentity: receiverLight.identity,
 			},
 			bindingValues: {frame: request.identity},
+			/** Render a live virtual packet; retired packets throw and must be discarded. */
 			renderFrame: () => {
 				if (disposed) throw new Error('Retired virtual frame');
 			},
+			/** Retire this virtual staged packet once and record the release. */
 			dispose: () => {
 				if (!disposed) {
 					disposed = true;

@@ -2,10 +2,94 @@ import {LocalSunFrameController} from '../LocalSunFrameController.js';
 import {LocalSunFrameTestSupport} from './LocalSunFrameTestSupport.js';
 
 describe('LocalSunFrameController complete publication and lease lifecycle', () => {
+	it('preserves the published frame and releases candidate fields when spectral packing fails', async () => {
+		const backend = new LocalSunFrameTestSupport();
+		const controller = new LocalSunFrameController({
+			backend,
+			/** Stage a virtual complete packet; failure preserves the published packet.
+			 * @param {LocalSunFrameStageRequest} request - Genuine controller-selected frame.
+			 * @returns {Promise<LocalSunPreparedFrameContents>} - Virtual lifecycle packet.
+			 */ stageFrame: (request) => backend.stage(request),
+		});
+		const first = await controller.prepareLocalFrame(
+			LocalSunFrameTestSupport.request(LocalSunFrameTestSupport.createProfile()),
+		);
+		controller.publishPreparedLocalFrame(first);
+		const retained = backend.handles.size;
+		backend.packRuntimeField = () => {
+			throw new Error('Injected spectral packing failure');
+		};
+		await expectAsync(
+			controller.prepareLocalFrame(LocalSunFrameTestSupport.request(LocalSunFrameTestSupport.createProfile(0))),
+		).toBeRejectedWithError('Injected spectral packing failure');
+		expect(controller.active).toBe(first);
+		expect(backend.handles.size).toBe(retained);
+		controller.dispose();
+		await controller.whenReleased();
+		expect(backend.handles.size).toBe(0);
+	});
+
+	it('builds the selected cache without rejecting a diagnostic software memory estimate', async () => {
+		const backend = new LocalSunFrameTestSupport();
+		const controller = new LocalSunFrameController({
+			backend,
+			/** Stage a virtual lifecycle packet; injected failures leave the published packet unchanged.
+			 * @param {LocalSunFrameStageRequest} request - Real controller-selected state and borrowed cache.
+			 * @returns {Promise<LocalSunPreparedFrameContents>} - Virtual packet, with no numerical GPU claim.
+			 */
+			stageFrame: (request) => backend.stage(request),
+		});
+		const frame = await controller.prepareLocalFrame({
+			...LocalSunFrameTestSupport.request(LocalSunFrameTestSupport.createProfile()),
+			otherOwnedGpuBytes: {value: 2000000000, units: 'bytes'},
+		});
+		expect(backend.submissions).toBeGreaterThan(0);
+		expect(frame.contents.shaderReady).toBeTrue();
+		controller.publishPreparedLocalFrame(frame);
+		expect(controller.active).toBe(frame);
+		controller.dispose();
+		await controller.whenReleased();
+		expect(backend.handles.size).toBe(0);
+	});
+
+	it('preserves the published frame when the GPU backend cannot allocate a replacement', async () => {
+		const backend = new LocalSunFrameTestSupport();
+		const controller = new LocalSunFrameController({
+			backend,
+			/** Stage a virtual lifecycle packet; injected failures leave the published packet unchanged.
+			 * @param {LocalSunFrameStageRequest} request - Real controller-selected state and borrowed cache.
+			 * @returns {Promise<LocalSunPreparedFrameContents>} - Virtual packet, with no numerical GPU claim.
+			 */
+			stageFrame: (request) => backend.stage(request),
+		});
+		const first = await controller.prepareLocalFrame(
+			LocalSunFrameTestSupport.request(LocalSunFrameTestSupport.createProfile()),
+		);
+		controller.publishPreparedLocalFrame(first);
+		backend.allocateField = () => {
+			throw new Error('GPU allocation failed');
+		};
+		await expectAsync(
+			controller.prepareLocalFrame(LocalSunFrameTestSupport.request(LocalSunFrameTestSupport.createProfile(0))),
+		).toBeRejectedWithError('GPU allocation failed');
+		expect(controller.active).toBe(first);
+		expect(backend.handles.size).toBe(7);
+		controller.dispose();
+		await controller.whenReleased();
+		expect(backend.handles.size).toBe(0);
+	});
+
 	describe('canonical reuse and retained borrowers', () => {
 		it('stages exact live state and reuses one field without changing the displayed frame until publication', async () => {
 			const backend = new LocalSunFrameTestSupport();
-			const controller = new LocalSunFrameController({backend, stageFrame: (request) => backend.stage(request)});
+			const controller = new LocalSunFrameController({
+				backend,
+				/** Stage a virtual lifecycle packet; injected failures leave the published packet unchanged.
+				 * @param {LocalSunFrameStageRequest} request - Real controller-selected state and borrowed cache.
+				 * @returns {Promise<LocalSunPreparedFrameContents>} - Virtual packet, with no numerical GPU claim.
+				 */
+				stageFrame: (request) => backend.stage(request),
+			});
 			const profile = LocalSunFrameTestSupport.createProfile();
 			const first = await controller.prepareLocalFrame(LocalSunFrameTestSupport.request(profile));
 			expect(controller.active).toBeNull();
@@ -48,7 +132,14 @@ describe('LocalSunFrameController complete publication and lease lifecycle', () 
 
 		it('rebuilds changed supported source strength and retires old resources only after borrower release', async () => {
 			const backend = new LocalSunFrameTestSupport();
-			const controller = new LocalSunFrameController({backend, stageFrame: (request) => backend.stage(request)});
+			const controller = new LocalSunFrameController({
+				backend,
+				/** Stage a virtual lifecycle packet; injected failures leave the published packet unchanged.
+				 * @param {LocalSunFrameStageRequest} request - Real controller-selected state and borrowed cache.
+				 * @returns {Promise<LocalSunPreparedFrameContents>} - Virtual packet, with no numerical GPU claim.
+				 */
+				stageFrame: (request) => backend.stage(request),
+			});
 			const first = await controller.prepareLocalFrame(
 				LocalSunFrameTestSupport.request(LocalSunFrameTestSupport.createProfile(1)),
 			);
@@ -75,6 +166,10 @@ describe('LocalSunFrameController complete publication and lease lifecycle', () 
 			let receiverFailure = false;
 			const controller = new LocalSunFrameController({
 				backend,
+				/** Stage a virtual lifecycle packet; injected failures leave the published packet unchanged.
+				 * @param {LocalSunFrameStageRequest} request - Real controller-selected state and borrowed cache.
+				 * @returns {Promise<LocalSunPreparedFrameContents>} - Virtual packet, with no numerical GPU claim.
+				 */
 				stageFrame: (request) => {
 					if (receiverFailure) throw new Error('receiver failure');
 					return backend.stage(request);
@@ -110,12 +205,6 @@ describe('LocalSunFrameController complete publication and lease lifecycle', () 
 			});
 			const submissions = backend.submissions;
 			await expectAsync(controller.prepareLocalFrame(LocalSunFrameTestSupport.request(outside))).toBeRejected();
-			await expectAsync(
-				controller.prepareLocalFrame({
-					...LocalSunFrameTestSupport.request(profile),
-					otherOwnedGpuBytes: {value: 2000000000, units: 'bytes'},
-				}),
-			).toBeRejected();
 			expect(backend.submissions).toBe(submissions);
 			expect(controller.active).toBe(first);
 			const nearEdge = profile.createLiveProfile({
@@ -154,6 +243,10 @@ describe('LocalSunFrameController complete publication and lease lifecycle', () 
 			});
 			const controller = new LocalSunFrameController({
 				backend,
+				/** Stage a virtual lifecycle packet; injected failures leave the published packet unchanged.
+				 * @param {LocalSunFrameStageRequest} request - Real controller-selected state and borrowed cache.
+				 * @returns {Promise<LocalSunPreparedFrameContents>} - Virtual packet, with no numerical GPU claim.
+				 */
 				stageFrame: async (request) => {
 					if (block) {
 						block = false;
@@ -187,7 +280,14 @@ describe('LocalSunFrameController complete publication and lease lifecycle', () 
 
 		it('cancels prepared publication, retains an immutable exact-state snapshot, and allows retry', async () => {
 			const backend = new LocalSunFrameTestSupport();
-			const controller = new LocalSunFrameController({backend, stageFrame: (request) => backend.stage(request)});
+			const controller = new LocalSunFrameController({
+				backend,
+				/** Stage a virtual lifecycle packet; injected failures leave the published packet unchanged.
+				 * @param {LocalSunFrameStageRequest} request - Real controller-selected state and borrowed cache.
+				 * @returns {Promise<LocalSunPreparedFrameContents>} - Virtual packet, with no numerical GPU claim.
+				 */
+				stageFrame: (request) => backend.stage(request),
+			});
 			const profile = LocalSunFrameTestSupport.createProfile();
 			const first = await controller.prepareLocalFrame(LocalSunFrameTestSupport.request(profile));
 			controller.publishPreparedLocalFrame(first);
@@ -208,7 +308,14 @@ describe('LocalSunFrameController complete publication and lease lifecycle', () 
 	describe('context loss and restoration', () => {
 		it('invalidates all old-context borrowers and restores a fresh complete retained request', async () => {
 			const backend = new LocalSunFrameTestSupport();
-			const controller = new LocalSunFrameController({backend, stageFrame: (request) => backend.stage(request)});
+			const controller = new LocalSunFrameController({
+				backend,
+				/** Stage a virtual lifecycle packet; injected failures leave the published packet unchanged.
+				 * @param {LocalSunFrameStageRequest} request - Real controller-selected state and borrowed cache.
+				 * @returns {Promise<LocalSunPreparedFrameContents>} - Virtual packet, with no numerical GPU claim.
+				 */
+				stageFrame: (request) => backend.stage(request),
+			});
 			const first = await controller.prepareLocalFrame(
 				LocalSunFrameTestSupport.request(LocalSunFrameTestSupport.createProfile()),
 			);
@@ -234,6 +341,10 @@ describe('LocalSunFrameController complete publication and lease lifecycle', () 
 			let failStage = false;
 			const controller = new LocalSunFrameController({
 				backend,
+				/** Stage a virtual lifecycle packet; injected failures leave the published packet unchanged.
+				 * @param {LocalSunFrameStageRequest} request - Real controller-selected state and borrowed cache.
+				 * @returns {Promise<LocalSunPreparedFrameContents>} - Virtual packet, with no numerical GPU claim.
+				 */
 				stageFrame: (request) =>
 					failStage ? Promise.reject(new Error('restoration stage failed')) : backend.stage(request),
 			});
@@ -268,7 +379,14 @@ describe('LocalSunFrameController complete publication and lease lifecycle', () 
 	describe('publication and complete resource retirement', () => {
 		it('holds the earlier complete frame when renderer installation rejects before commit, and permits retry', async () => {
 			const backend = new LocalSunFrameTestSupport(),
-				controller = new LocalSunFrameController({backend, stageFrame: (request) => backend.stage(request)});
+				controller = new LocalSunFrameController({
+					backend,
+					/** Stage a virtual lifecycle packet; injected failures leave the published packet unchanged.
+					 * @param {LocalSunFrameStageRequest} request - Real controller-selected state and borrowed cache.
+					 * @returns {Promise<LocalSunPreparedFrameContents>} - Virtual packet, with no numerical GPU claim.
+					 */
+					stageFrame: (request) => backend.stage(request),
+				});
 			const request = LocalSunFrameTestSupport.request(LocalSunFrameTestSupport.createProfile());
 			const first = await controller.prepareLocalFrame(request);
 			controller.publishPreparedLocalFrame(first);
@@ -295,11 +413,16 @@ describe('LocalSunFrameController complete publication and lease lifecycle', () 
 			let failRetirement = true;
 			const controller = new LocalSunFrameController({
 				backend,
+				/** Stage a virtual lifecycle packet; injected failures leave the published packet unchanged.
+				 * @param {LocalSunFrameStageRequest} request - Real controller-selected state and borrowed cache.
+				 * @returns {Promise<LocalSunPreparedFrameContents>} - Virtual packet, with no numerical GPU claim.
+				 */
 				stageFrame: async (request) => {
 					const contents = await backend.stage(request),
 						fails = failRetirement;
 					return {
 						...contents,
+						/** Release the virtual packet, then inject the selected retirement failure for the controller to report. */
 						dispose() {
 							contents.dispose();
 							if (fails) throw new Error('retirement failure');
@@ -333,6 +456,10 @@ describe('LocalSunFrameController complete publication and lease lifecycle', () 
 				});
 			const controller = new LocalSunFrameController({
 				backend,
+				/** Stage a virtual lifecycle packet; injected failures leave the published packet unchanged.
+				 * @param {LocalSunFrameStageRequest} request - Real controller-selected state and borrowed cache.
+				 * @returns {Promise<LocalSunPreparedFrameContents>} - Virtual packet, with no numerical GPU claim.
+				 */
 				stageFrame: async (request) => {
 					enter();
 					await gate;

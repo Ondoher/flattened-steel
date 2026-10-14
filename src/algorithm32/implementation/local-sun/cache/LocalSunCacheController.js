@@ -333,6 +333,8 @@ export class LocalSunCacheController {
 	/**
 	 * Called by LocalSunCacheController to accept semantic values at the
 	 * source-owned construction boundary.
+	 * An already-aborted signal throws AbortError; abandon that request. Invalid compact
+	 * byte accounting throws RangeError; supply nonnegative integral byte units before retrying.
 	 *
 	 * @param {ScatteringCacheBuildRequest} request - The untrusted construction request.
 	 * @returns {LocalSunAcceptedCacheBuildRequest} - The normalized request.
@@ -367,6 +369,9 @@ export class LocalSunCacheController {
 			return /** Called by link cancellation to handle one invocation of the declared operation. */ () => {};
 		}
 
+		/** Cancel the controller-owned build when the caller aborts.
+		 * @returns {void} - Owned cancellation is signalled.
+		 */
 		const abort = () => controller.abort();
 		signal.addEventListener('abort', abort, {once: true});
 
@@ -376,6 +381,7 @@ export class LocalSunCacheController {
 	/**
 	 * Called by LocalSunCacheController to require one generation to remain the
 	 * live controller request.
+	 * Disposal, cancellation or supersession throws AbortError; discard this generation's result.
 	 *
 	 * @param {number} generation - The candidate generation.
 	 * @param {AbortController} cancellation - The generation cancellation owner.
@@ -391,7 +397,11 @@ export class LocalSunCacheController {
 	/**
 	 * Called by LocalSunCacheController to build, reuse, or atomically publish
 	 * one accepted generation. Cancellation or supersession rejects with an
-	 * abort error; execution failure rejects while preserving the prior cache. Callers must discard a rejected result and treat cancellation as an incomplete operation.
+	 * abort error; discard that incomplete generation. Invalid byte accounting rejects with RangeError;
+	 * correct its units/value before retrying. Unsupported array/float/texture capabilities reject
+	 * with RangeError; select a capable backend. GPU execution, packing or upload failure rejects
+	 * while preserving the prior cache; discard the candidate and report the device failure.
+	 * Cleanup failure can accompany the original error in AggregateError; report both causes.
 	 *
 	 * @param {number} generation - The accepted generation.
 	 * @param {LocalSunAcceptedCacheBuildRequest} request - The accepted owners.
@@ -425,14 +435,25 @@ export class LocalSunCacheController {
 						0,
 					) +
 				this._compactPlan.nodeFactors.values.length * 4;
+			auxiliaryBytes += this._compactPlan.profile.domains.topology.positionCount * 4;
+			const runtimeDensityBytes =
+				this._compactPlan.profile.domains.topology.positionCount *
+				this._compactPlan.profile.domains.outgoingDirections.directionCount *
+				16 *
+				4;
+			const oldDensityBytes =
+				this._active instanceof LocalSunCompactCache ? this._active.resources.runtimeDensityBytes.value : 0;
 			let oldAuxiliary =
 				this._active instanceof LocalSunCompactCache ? this._active.resources.retainedAuxiliaryBytes.value : 0;
 			let estimate = this._compactPlan.profile.estimateResources({
-				retainedScatteringFields: this._active === null ? 0 : 1,
-				otherOwnedGpuBytes: {value: other.value + auxiliaryBytes * 2 + oldAuxiliary, units: 'bytes'},
+				retainedScatteringFields: 0,
+				otherOwnedGpuBytes: {
+					value: other.value + auxiliaryBytes * 2 + oldAuxiliary + oldDensityBytes + runtimeDensityBytes,
+					units: 'bytes',
+				},
 			});
-			if (!estimate.estimateFitsCeiling)
-				throw new RangeError('Compact GPU construction exceeds the P0 owned-allocation ceiling.');
+			// This estimate is diagnostic provenance, not a browser admission decision.
+			// Actual backend allocation/capability failures still reject the candidate.
 			let capabilities = this._backend.capabilities;
 			if (
 				!capabilities.supportsArrayRenderTargets ||
@@ -448,6 +469,13 @@ export class LocalSunCacheController {
 				executor: null,
 				admission: estimate,
 				retainedAuxiliaryBytes: {value: auxiliaryBytes, units: /** @type {const} */ ('bytes')},
+				runtimeDensityBytes: {value: runtimeDensityBytes, units: /** @type {const} */ ('bytes')},
+				packingOverlapBytes: {
+					value:
+						runtimeDensityBytes +
+						this._compactPlan.profile.domains.scatteringDensityPacking.scalarCount * 4,
+					units: /** @type {const} */ ('bytes'),
+				},
 				packedTransportData: {value: 0, units: /** @type {const} */ ('bytes')},
 			};
 		}
@@ -701,6 +729,10 @@ export class LocalSunCacheController {
 	 * Call this method to construct or reuse one complete cumulative scattering
 	 * cache. Newer requests supersede older generations; cancellation and
 	 * execution failure reject while preserving the last complete cache.
+	 * Discard cancelled or superseded requests. Disposed controllers reject; create a live owner.
+	 * Invalid byte accounting rejects; correct units and values before retrying. Unsupported GPU
+	 * capabilities, construction, packing or upload failures reject; report the failed backend
+	 * operation and keep the last complete cache. Cleanup failures also reject; report every cause.
 	 *
 	 * @param {ScatteringCacheBuildRequest} request - The physical owners and construction options.
 	 * @returns {Promise<LocalSunCache>} - The cache that became active.

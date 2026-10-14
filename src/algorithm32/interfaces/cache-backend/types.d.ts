@@ -68,6 +68,7 @@ type CacheImmutableTextureStorage = Readonly<{
 
 /** Request to validate, upload, and bind one immutable resident texture. */
 type CacheImmutableTextureUploadRequest = Readonly<{
+	/** Request exact texel sampling; omission preserves linear RGBA32F asset filtering. */ readonly filtering?: 'nearest';
 	/** Stable texture identity. */ readonly id: string;
 	/** Exact executable texture storage. */ readonly storage: CacheImmutableTextureStorage;
 	/** Typed immutable source values. */ readonly values: Float32Array | Uint16Array | Int32Array;
@@ -156,6 +157,14 @@ type CacheGpuCapabilities = Readonly<{
 
 /** Isolate renderer-specific GPU construction behind opaque handles. */
 interface CacheGpuBackend {
+	/** Pack a completed scalar field into immutable four-float spectral groups on the GPU.
+	 * Optional for scalar-only backends; compact runtime construction requires it.
+	 * Source ownership stays with the caller. Allocation/compile/copy failures throw
+	 * without publishing a texture; the caller retains its prior complete cache.
+	 * @param request - Owned source field and destination identity/binding key.
+	 * @returns - Completed immutable packed runtime texture.
+	 */
+	packRuntimeField?(request: CacheRuntimeFieldPackingRequest): CacheImmutableTexture;
 	/** Id value. */ readonly id: string;
 	/** Capabilities value. */ readonly capabilities: CacheGpuCapabilities;
 	/**
@@ -191,6 +200,13 @@ interface CacheGpuBackend {
 	installRuntimeBindings(request: CacheRuntimeBindingInstallRequest): void;
 	/** Call this method to dispose. */ dispose(): void;
 }
+
+/** GPU-only spectral packing with unchanged direction/position coordinates. */
+type CacheRuntimeFieldPackingRequest = Readonly<{
+	/** Completed scalar source borrowed only during conversion. */ source: GpuCacheField;
+	/** Versioned representation identity supplied by its cache owner. */ id: string;
+	/** Runtime shader binding supplied by the packed texture. */ valueKey: CacheRuntimeValueKey;
+}>;
 
 /** Persistent RGBA32F array allocation with an explicit payload budget. */
 type CachePersistentArrayRequest = Readonly<{

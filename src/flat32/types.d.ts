@@ -133,7 +133,7 @@ type Flat32ApplicationConfiguration = {
 	readonly initialFlatTimeIndex?: number;
 	/** Initial atmospheric geometry/source pairing. */
 	readonly initialModeKind?: 'spherical-distant' | 'flat-local';
-	/** Qualified maximum scattering order. */
+	/** Explicit order for both modes; omission uses distant N4 and compact local N1. */
 	readonly maximumScatteringOrder?: SupportedCacheScatteringOrder;
 	/** Include the fixed matte review objects. */
 	readonly reviewObjectsEnabled?: boolean;
@@ -763,6 +763,7 @@ type Flat32LocalFrameSceneCapability = Pick<
 
 /** Complete renderer-owned inputs for local shader and receiver staging. */
 type Flat32LocalFramePreparerConfiguration = Readonly<{
+	/** Optional existing per-pass GPU timing consumer; no collection when absent. */ performanceCallback?: ShaderPerformanceCallback;
 	/** Optional genuine live celestial roster creation; canonical construction remains independent. */ createCelestialSources?: (
 		profile: LocalSunCompactConstructionProfile,
 	) => CelestialSourceRoster | null;

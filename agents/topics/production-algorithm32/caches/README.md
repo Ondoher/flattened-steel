@@ -43,6 +43,7 @@ Q30 Bruneton B1 reproduction through current production GPU transport.
 
 ## Working Documents
 
+- [Local Sun Packed Runtime Cache Architecture and Plan](local-sun-packed-runtime-cache-plan.md)
 - [Local-Sun Cache Production Port Plan](local-sun-cache-promotion-plan.md)
 - [Local-Sun Cache Production Port Status](local-sun-cache-promotion-status.md)
 - [Local-Sun Cache Transfer Assessment](local-sun-transfer-assessment.md)

@@ -1,12 +1,18 @@
 # Active Topic
 
 Current active topic: production-algorithm32.
-Focus: prepare the production port of the accepted local-Sun compact cache,
-admitted horizontal reuse and coherent ordinary-application consumers.
+Focus: implement and qualify packed local-Sun runtime lookup while preserving
+the accepted compact cache, horizontal reuse and ordinary-application consumers.
 
 Canonical entry: [Production Algorithm32](production-algorithm32/README.md).
 
 ## Immediate Focus
+
+The owner authorized independent execution of the
+[packed runtime cache plan](production-algorithm32/caches/local-sun-packed-runtime-cache-plan.md)
+on 2026-10-14. It owns GPU spectral packing, shared lookup setup, timing and
+the combined current source-review gate, including the frontend memory-policy
+correction. Original promotion and adoption receipts retain their frozen scopes.
 
 The owner selected this production handoff on 2026-10-11. The
 [port plan](production-algorithm32/caches/local-sun-cache-promotion-plan.md)
@@ -31,33 +37,28 @@ half-float proofs, lifecycle/browser checks and resource observations. Only its
 matching final CLEAN primary/audit receipt establishes P3 completion. P4 ordinary
 scene and required celestial integration is delivered; its matching final CLEAN
 mapped review/audit receipt establishes completion. The [P4 closure](production-algorithm32/caches/local-sun-p4-closure.md)
-owns passed ordinary N1 proofs and the explicit higher-order allocation limit. Full-domain CPU
-recurrence remains unadmitted. Profile/default selection, deployment and
-publication have not changed. Ended experiment and prior receipts remain immutable.
+owns passed ordinary N1 proofs and the explicit higher-order allocation limit.
+Full-domain CPU recurrence remains unadmitted. Current application selection is
+owned by the adoption record below. Ended experiment and prior receipts remain immutable.
 
-P4's matching review receipt is CLEAN. The owner selected P5 on 2026-10-13:
-qualify the accepted trajectories and shared consumers, measure costs and prepare
-an explicit candidate/rollback disposition. The
+P0–P5 are complete under their matching receipts. The
 [P5 qualification record](production-algorithm32/caches/local-sun-p5-qualification.md)
-owns its delivered bounded matrix and adoption preparation. Patched reviewer
-readiness passes on 2026-10-14; only the matching final P5 primary/audit CLEAN
-receipt establishes closure. The qualification record owns that gate. Defaults,
-deployment and publication require their separate adoption boundary.
+owns the bounded matrix and candidate/rollback disposition. After P5's CLEAN
+review and checkpoint `803c2ff9`, the owner selected the ordinary Flat control's
+compact N1 configuration on 2026-10-14. The
+[Flat32 adoption record](production-algorithm32/caches/local-sun-flat32-adoption.md)
+owns that selection, the independent globe order, explicit rectangular rollback
+and its matching review gate. No deployment or publication was selected.
 
 ## Minimal Reload Sources
 
 1. [Repository workflow instructions](../../AGENTS.md)
 2. [Production entry](production-algorithm32/README.md)
-3. [Local-Sun port status](production-algorithm32/caches/local-sun-cache-promotion-status.md)
-4. [Local-Sun port plan](production-algorithm32/caches/local-sun-cache-promotion-plan.md)
+3. [Packed runtime cache plan](production-algorithm32/caches/local-sun-packed-runtime-cache-plan.md)
+4. [Flat32 compact local-Sun adoption](production-algorithm32/caches/local-sun-flat32-adoption.md)
 5. [Production architecture boundaries](production-algorithm32/architecture-contracts/architecture-boundaries.md)
-6. [Local-Sun P2 closure](production-algorithm32/caches/local-sun-p2-closure.md)
-7. [Local-Sun P0 contracts and controls](production-algorithm32/caches/local-sun-cache-p0-contract.md)
-8. [Local-Sun P3 implementation and proof boundary](production-algorithm32/caches/local-sun-p3-closure.md)
-9. [Local-Sun P4 ordinary application and celestial boundary](production-algorithm32/caches/local-sun-p4-closure.md)
-10. [Local-Sun P5 qualification and adoption preparation](production-algorithm32/caches/local-sun-p5-qualification.md)
 
-Before adoption or later implementation, resolve P5's open review gate, load its
-selected contracts/evidence, capture a new baseline and confirm reviewer readiness.
+For further implementation, load the selected adoption contracts/evidence,
+capture a new baseline and confirm reviewer readiness. P5's original review is closed.
 Standards follow destination folders; experiment mappings do not govern production.
 Existing receipts retain their original frozen scopes.

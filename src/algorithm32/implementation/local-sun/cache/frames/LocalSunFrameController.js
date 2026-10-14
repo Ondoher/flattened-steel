@@ -96,6 +96,7 @@ export class LocalSunFrameController {
 	}
 
 	/** Called by controller operations to reject disposed or unavailable rendering context.
+	 * Throws when disposed or context-lost; restore the context or create a new controller before work.
 	 *
 	 * @returns {void} - No value.
 	 */
@@ -105,6 +106,8 @@ export class LocalSunFrameController {
 	}
 
 	/** Called by stage boundaries to reject cancelled or superseded generations.
+	 * Unavailable controllers throw; cancelled signals propagate their reason and superseded generations
+	 * throw AbortError. Discard that candidate and retain only the latest valid request.
 	 *
 	 * @param {number} generation - Captured requested generation.
 	 * @param {AbortSignal} signal - Owned cancellation.
@@ -117,6 +120,8 @@ export class LocalSunFrameController {
 	}
 
 	/** Called by request ingress to validate complete accounting and accepted physical/live state.
+	 * Invalid profiles, byte units/values, presentation identity or physical rays throw;
+	 * correct the rejected input before preparing another candidate.
 	 *
 	 * @param {LocalSunFrameRequest} request - Complete frame request.
 	 * @returns {LocalSunFrameRequest} - Owned snapshot of accepted exact live facts.
@@ -147,6 +152,7 @@ export class LocalSunFrameController {
 	}
 
 	/** Called by request acceptance to validate and snapshot one complete physical support ray.
+	 * Invalid position, direction or optional distance throws; supply valid physical units and a nonzero direction.
 	 *
 	 * @param {LocalSunFrameSupportRay} ray - Unit-bearing live ray.
 	 * @returns {LocalSunFrameSupportRay} - Immutable owned ray snapshot.
@@ -188,6 +194,8 @@ export class LocalSunFrameController {
 	}
 
 	/** Called by preparation to bind exact live geometry to canonical cache coordinates and validate every ray.
+	 * Invalid transforms or rays outside complete cache support throw; correct the geometry or
+	 * select a supported view before preparing a replacement, retaining the displayed frame.
 	 *
 	 * @param {LocalSunFrameRequest} request - Accepted live request.
 	 * @param {LocalSunCompactConstructionProfile} canonical - Canonical physical profile.
@@ -226,6 +234,7 @@ export class LocalSunFrameController {
 	}
 
 	/** Called by lease retirement to dispose physical resources only after their final valid borrower releases.
+	 * Resource-owner disposal failures propagate after unregistering the retired entry; report them without reusing it.
 	 *
 	 * @param {LocalSunFrameCacheEntry} entry - Canonical resource registry entry.
 	 * @returns {void} - No value.
@@ -245,6 +254,8 @@ export class LocalSunFrameController {
 	}
 
 	/** Called by staging/borrowers to acquire a checked opaque view of one live context's physical cache.
+	 * A disposed/lost controller or retired, disposed or old-context entry throws;
+	 * acquire from a complete current frame after restoration instead.
 	 *
 	 * @param {LocalSunFrameCacheEntry} entry - Physical entry, not retired.
 	 * @param {FlatLocalCacheTransformCapability} transform - Immutable live geometry mapping.
@@ -258,10 +269,14 @@ export class LocalSunFrameController {
 		return new LocalSunFrameCache({
 			owner: entry.cache,
 			transform,
+			/** Release this borrow and collect a retired physical cache after its final borrower leaves.
+			 * Resource-owner cleanup failures propagate; report them and do not reuse the released borrow.
+			 */
 			release: () => {
 				entry.borrowers--;
 				this._collect(entry);
 			},
+			/** Reject an unavailable context or disposed entry; the caller must discard the lease and restore a valid frame. */
 			validate: () => {
 				if (entry.disposed || entry.contextRevision !== this._contextRevision || this._contextLost)
 					throw new Error('Cache lease context is unavailable.');
@@ -270,6 +285,8 @@ export class LocalSunFrameController {
 	}
 
 	/** Called by candidate failure/publication to retire one complete packet without touching other frame resources.
+	 * AggregateError reports any packet, lease or final-cache release failures after all releases
+	 * are attempted; report every cause and never reuse this retired packet.
 	 *
 	 * @param {LocalSunFrameRecord} record - Owned frame packet.
 	 * @returns {void} - No value.
@@ -300,7 +317,13 @@ export class LocalSunFrameController {
 		if (errors.length) throw new AggregateError(errors, 'Complete frame retirement failed.');
 	}
 
-	/** Called by preparation to retain or build a canonical entry under the complete old/new overlap ceiling.
+	/** Called by preparation to retain or build the already selected canonical cache.
+	 * Accounting reports retained overlap; it does not impose a frontend allocation ceiling.
+	 * Invalid canonical profiles reject; correct the profile before retrying. Cancellation rejects
+	 * with the build's abort reason; discard that incomplete entry. GPU capability, construction,
+	 * packing or upload failures reject; retain the displayed frame and report the backend failure.
+	 * An unexpected noncompact result rejects with TypeError; correct the configured cache owner.
+	 * AggregateError includes failed controller cleanup; report both construction and cleanup causes.
 	 *
 	 * @param {LocalSunCompactConstructionProfile} profile - Accepted canonical construction.
 	 * @param {LocalSunFrameRequest} request - Complete additional byte accounting.
@@ -313,8 +336,6 @@ export class LocalSunFrameController {
 			backend: this._configuration.backend.capabilities,
 		});
 		const retained = [...this._entries].reduce((sum, entry) => sum + (entry.disposed ? 0 : entry.retainedBytes), 0);
-		if (retained + request.otherOwnedGpuBytes.value > 1600000000)
-			throw new RangeError('Frame staging exceeds the owned GPU ceiling.');
 		const existing = [...this._entries].find((entry) => entry.key === key && !entry.retired && !entry.disposed);
 		if (existing) {
 			LocalSunCompactConstructionProfile.assert(existing.profile);
@@ -336,9 +357,7 @@ export class LocalSunFrameController {
 				profile,
 				controller,
 				cache,
-				retainedBytes:
-					profile.domains.scatteringDensityPacking.scalarCount * 4 +
-					cache.resources.retainedAuxiliaryBytes.value,
+				retainedBytes: cache.resources.runtimeDensityBytes.value + cache.resources.retainedAuxiliaryBytes.value,
 				borrowers: 0,
 				retired: false,
 				disposed: false,
@@ -357,6 +376,8 @@ export class LocalSunFrameController {
 	}
 
 	/** Called by preparation to validate receiver/celestial state before a packet can become publishable.
+	 * Incomplete shader operations, invalid spectral packets, mismatched identities, adaptation or
+	 * celestial placement throw; discard the staged packet and correct its staging owner.
 	 *
 	 * @param {LocalSunPreparedFrameContents} contents - Renderer-staged complete aggregate.
 	 * @param {LocalSunFrameRequest} request - Accepted exact live state.
@@ -402,6 +423,11 @@ export class LocalSunFrameController {
 	}
 
 	/** Called by the serialized preparation tail to build a complete packet while keeping the displayed frame unchanged.
+	 * Cancellation or supersession rejects with an abort reason; discard the obsolete candidate.
+	 * Unavailable controllers, invalid profiles, unsupported rays or changed live facts reject;
+	 * restore valid state or correct the request before retrying. Cache construction and complete-frame
+	 * staging/validation failures reject; retain the displayed frame and report the failed owner.
+	 * AggregateError includes candidate cleanup failures; report all causes without publishing partial state.
 	 *
 	 * @param {LocalSunFrameRequest} request - Accepted live state.
 	 * @param {number} generation - Owned generation.
@@ -441,6 +467,8 @@ export class LocalSunFrameController {
 				profile: request.profile,
 				contents,
 				/** Call this method to acquire one independently releasable current-frame cache view.
+				 * Retired or unpublished frames and unavailable cache contexts throw;
+				 * borrow only from the currently published frame after any context restoration.
 				 *
 				 * @returns {GpuScatteringCache} - Valid borrow retained until explicit disposal or context loss.
 				 */
@@ -478,6 +506,7 @@ export class LocalSunFrameController {
 	}
 
 	/** Creates a frame owner with an external backend and explicit complete staging operation.
+	 * Missing backend or staging function throws TypeError; correct the configuration before creating an owner.
 	 *
 	 * @param {LocalSunFrameControllerConfiguration} configuration - Accepted owners.
 	 */
@@ -507,6 +536,13 @@ export class LocalSunFrameController {
 	}
 
 	/** Call this method to stage an exact live frame; newer accepted requests supersede earlier preparations.
+	 * Unavailable controllers, already-aborted signals and invalid requests throw synchronously;
+	 * restore the controller or correct the request before retrying. Superseded-packet cleanup can
+	 * throw AggregateError; report those retired-resource failures. Once queued, cancellation or
+	 * supersession rejects with its abort reason; discard that candidate. Cache construction,
+	 * unsupported coverage, staging or state-validation failures reject while retaining the displayed
+	 * frame; correct the rejected physical/view input or report the failing backend/staging owner.
+	 * AggregateError includes candidate cleanup failures; report every cause and publish no partial frame.
 	 *
 	 * @param {LocalSunFrameRequest} request - Complete accepted physical/presentation state.
 	 * @param {AbortSignal} [signal] - Optional caller cancellation.
@@ -523,6 +559,9 @@ export class LocalSunFrameController {
 		const errors = [];
 		this._retireRecords(false, errors);
 		if (errors.length) throw new AggregateError(errors, 'Superseded frame cleanup failed.');
+		/** Forward caller cancellation to the current frame candidate.
+		 * @returns {void} - Candidate cancellation is signalled.
+		 */
 		const abort = () => cancellation.abort(signal.reason);
 		signal?.addEventListener('abort', abort, {once: true});
 		this._pendingOperations++;
@@ -543,6 +582,10 @@ export class LocalSunFrameController {
 
 	/** Call this method to replace the single complete active packet at a frame boundary.
 	 * No asynchronous component update occurs here; every consumer observes the same aggregate.
+	 * Unknown, retired, superseded, mutated or invalid complete packets and unavailable contexts throw
+	 * before commit; discard the packet and prepare a valid replacement. Installation errors propagate
+	 * before controller commit; the installer must restore any partially installed renderer state.
+	 * Post-commit retirement failures are returned separately; report them without undoing the new frame.
 	 *
 	 * @param {PreparedLocalSunFrame} frame - Controller-created current complete packet.
 	 * @param {LocalSunFrameRenderInstallation} [install] - Synchronous renderer installation after validation and before commit; failure retains the old frame.
@@ -581,6 +624,7 @@ export class LocalSunFrameController {
 	}
 
 	/** Call this method to cancel candidate preparation while keeping the last displayed frame.
+	 * AggregateError reports superseded-packet cleanup failures; report them and never reuse cancelled candidates.
 	 *
 	 * @returns {void} - No value.
 	 */
@@ -593,6 +637,8 @@ export class LocalSunFrameController {
 	}
 
 	/** Call this method to invalidate every GPU lease and withdraw the unrenderable lost-context frame.
+	 * AggregateError reports resource cleanup failures after invalidation; report every cause and
+	 * await a valid restored backend before requesting new frames.
 	 *
 	 * @returns {void} - No value.
 	 */
@@ -621,6 +667,10 @@ export class LocalSunFrameController {
 	}
 
 	/** Call this method to rebuild the last published complete request on an explicitly valid restored backend.
+	 * Disposal, absence of a lost context or a missing backend rejects; correct the lifecycle/backend first.
+	 * Rebuilding can reject for cancellation, unsupported request coverage, GPU construction or staging
+	 * failures, including aggregate cleanup failures; report the cause and prepare a valid replacement
+	 * on the restored controller. No rejected candidate may be published.
 	 *
 	 * @param {LocalSunFrameBackend} backend - Restored external backend.
 	 * @returns {Promise<PreparedLocalSunFrame|null>} - Complete unpublished restoration candidate, or no prior request.
@@ -634,6 +684,8 @@ export class LocalSunFrameController {
 	}
 
 	/** Call this method to retire all frames and reject future work; borrowed valid resources release on their final lease.
+	 * AggregateError reports packet or cache release failures after retirement; report all causes,
+	 * never reuse this controller and await whenReleased before disposing the external backend.
 	 *
 	 * @returns {void} - No value.
 	 */

@@ -55,7 +55,7 @@ type LocalSunFrameRequest = Readonly<{
 	/** Genuine live profile, independently paired with its source and geometry. */ profile: LocalSunCompactConstructionProfile;
 	/** Exact accepted frame rays; at least one is required. */ viewRays: readonly LocalSunFrameSupportRay[];
 	/** Identity of presentation state used by the staged shader and lighting. */ presentationIdentity: string;
-	/** Complete additional owned GPU bytes beyond registry-retained fields. */ otherOwnedGpuBytes: UnitValue<'bytes'>;
+	/** Additional cache payload outside registry-retained fields for diagnostic accounting; ordinary display/shadow targets are separate. */ otherOwnedGpuBytes: UnitValue<'bytes'>;
 }>;
 /** Exact geometry/source and measured-adaptation inputs staged for celestial consumers. */
 type LocalSunFrameCelestialInputs = Readonly<{
@@ -97,7 +97,7 @@ type LocalSunFramePreflight = Readonly<{
 interface LocalSunFrameBackend extends CacheGpuBackend, CacheProbeReader {}
 /** Staging facts delivered to the renderer-owned preparation operation. */
 type LocalSunFrameStageRequest = Readonly<{
-	/** Declared complete additional allocation peak, including candidate shaders/receiver/composer resources. */ otherOwnedGpuBytes: UnitValue<'bytes'>;
+	/** Additional diagnostic cache accounting; it does not limit renderer-owned display allocations. */ otherOwnedGpuBytes: UnitValue<'bytes'>;
 	/** Genuine exact-state profile. */ profile: LocalSunCompactConstructionProfile;
 	/** Borrowed construction cache exposed as an ordinary controller. */ cacheController: CacheController;
 	/** Current backend, replaced explicitly after context restoration. */ backend: LocalSunFrameBackend;

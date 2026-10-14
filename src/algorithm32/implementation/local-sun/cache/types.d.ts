@@ -829,9 +829,9 @@ type LocalSunCompactResourceEstimate = Readonly<{
 	readonly otherOwnedGpuBytes: UnitValue<'bytes'>;
 	/** Complete declared subtotal, including overlap and additional bytes. */
 	readonly totalOwnedGpuEstimateBytes: UnitValue<'bytes'>;
-	/** P0 production logical allocation ceiling. */
+	/** Historical P0 reference envelope for diagnostic comparison; not browser admission policy. */
 	readonly ownedGpuCeilingBytes: UnitValue<'bytes'>;
-	/** Arithmetic fit only; it does not authorize or measure allocation. */
+	/** Diagnostic arithmetic comparison only; it neither authorizes, rejects nor measures allocation. */
 	readonly estimateFitsCeiling: boolean;
 	/** Requested-order pure/cumulative J and preceding L binary64 buffers, excluding other working memory. */
 	readonly fullCpuRetainedSpectralBytes: UnitValue<'bytes'>;
@@ -949,8 +949,10 @@ type LocalSunCompactViewPolicyKind = 'local-positive-column-v1';
 type LocalSunCompactSourcePolicyKind = 'analytic-exponential-column-v1';
 /** Complete logical resource admission and observed compact cache payloads. */
 type LocalSunCompactGpuResourceReport = Readonly<{
-	/** Measured executor field/auxiliary peaks and resident physical field. */ executor: CacheBuildMemoryDiagnostics;
+	/** Retained four-group RGBA32F density after scalar construction storage retires. */ runtimeDensityBytes: UnitValue<'bytes'>;
+	/** Scalar result plus packed target during the once-per-cache conversion, excluding auxiliaries and prior frames. */ packingOverlapBytes: UnitValue<'bytes'>;
+	/** Historical construction-stage peaks and final scalar result before runtime packing/retirement. */ executor: CacheBuildMemoryDiagnostics;
 	/** Complete preallocation estimate including declared external resources and overlap. */ admission: LocalSunCompactResourceEstimate;
-	/** Owned ordinary-runtime auxiliary scalar textures. */ retainedAuxiliaryBytes: UnitValue<'bytes'>;
+	/** Owned ordinary-runtime metadata textures, including four-float normalization groups. */ retainedAuxiliaryBytes: UnitValue<'bytes'>;
 	/** CPU-expanded transport uploads remain absent. */ packedTransportData: UnitValue<'bytes'>;
 }>;

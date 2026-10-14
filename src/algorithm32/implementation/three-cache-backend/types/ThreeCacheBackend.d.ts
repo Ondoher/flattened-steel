@@ -63,11 +63,11 @@ type ThreeCacheBackendTexture = {
 /** Exact constructor options for one scalar R32F array render target. */
 type ThreeCacheBackendScalarArrayTargetOptions = Readonly<{
 	/** Red pixel format required by the scalar target. */
-	format: 1028;
+	format: 1028 | 1023;
 	/** Float scalar type required by the scalar target. */
 	type: 1015;
 	/** R32F GPU internal format required by the scalar target. */
-	internalFormat: 'R32F';
+	internalFormat: 'R32F' | 'RGBA32F';
 	/** Nearest-neighbor minification filter required by the scalar target. */
 	minFilter: 1003;
 	/** Nearest-neighbor magnification filter required by the scalar target. */
@@ -411,6 +411,8 @@ type ThreeCacheBackendRecord = ThreeCacheBackendRendererRecord & {
 
 /** Private mutable lifecycle state for one immutable resident texture. */
 type ThreeCacheBackendImmutableTextureRecord = {
+	/** Optional GPU-produced render target, disposed as one aggregate. */ target?: ThreeCacheBackendScalarArrayTarget;
+	/** Logical scalar layout retained only for diagnostic unpacking. */ scalarStorage?: CacheFieldStorage;
 	/** Backend state that owns the texture. */ backend: ThreeCacheBackendRecord;
 	/** Private renderer texture. */ texture: ThreeCacheBackendTexture;
 	/** Disposal state. */ disposed: boolean;

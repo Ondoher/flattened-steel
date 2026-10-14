@@ -128,7 +128,13 @@ export class LocalSunFramePreparer {
 	}
 
 	/** Call this method to prepare a complete ordinary shader and measured exact-state receiver/celestial aggregate.
-	 * Failure releases all candidate-owned resources and the supplied borrowed cache controller.
+	 * Caller cancellation rejects with the signal's reason; discard this incomplete candidate.
+	 * Invalid profile, celestial or color configuration rejects before staging; correct those inputs.
+	 * Renderer allocation, shader setup, receiver measurement or preflight failure rejects;
+	 * retain the published frame and report the failed device/setup operation before retrying.
+	 * Unsupported camera coverage rejects; move the camera into accepted support before retrying.
+	 * Staging failure attempts candidate and borrowed-cache cleanup; AggregateError includes any
+	 * cleanup failures alongside the original cause. Report every cause and never publish partial contents.
 	 *
 	 * @param {LocalSunFrameStageRequest} request - Exact live profile and canonical cache lease.
 	 * @returns {Promise<LocalSunPreparedFrameContents>} - Complete isolated frame, ready for atomic publication.
@@ -136,10 +142,8 @@ export class LocalSunFramePreparer {
 	async prepare(request) {
 		request.signal.throwIfAborted();
 		const {sceneRuntime, sceneScale, sceneDepthMax} = this._configuration;
-		const estimatedBytes =
-			sceneRuntime.viewportSize.width * sceneRuntime.viewportSize.height * 256 + 8 * 1024 * 1024;
-		if (!Number.isSafeInteger(estimatedBytes) || estimatedBytes > request.otherOwnedGpuBytes.value)
-			throw new RangeError('Declared frame budget must include conservative composer/shader/receiver resources.');
+		// Display targets are owned by the renderer and scale with its viewport.
+		// Their size is independent of the selected physical cache payload.
 		const algorithm = new Algorithm32({
 			profile: request.profile.createExecutionProfile(
 				this._configuration.createCelestialSources?.(request.profile) ?? null,
@@ -163,6 +167,9 @@ export class LocalSunFramePreparer {
 				bindingValues,
 				cacheBackend: request.backend,
 				preparedScatteringCacheController: request.cacheController,
+				performanceCallback: this._configuration.performanceCallback,
+				performanceSampleIntervalFrames: 1,
+				performanceMaxPendingQueries: 4,
 				signal: request.signal,
 			});
 			await handle.prepare(sceneRuntime.renderer);
@@ -197,7 +204,13 @@ export class LocalSunFramePreparer {
 			let disposed = false;
 			return {
 				shaderReady: true,
+				/** Report this packet's shader and resource observations.
+				 * @returns {Flat32LocalFrameShaderDiagnostics} - Current renderer-owned diagnostics.
+				 */
 				getDiagnostics: () => handle.getDiagnostics(),
+				/** Reject an unsupported current camera cone before publication or rendering; correct the view before retrying.
+				 * @returns {void} - Current view is supported.
+				 */
 				validateView: () => this._validateCurrentView(request.profile),
 				preflight,
 				...(sceneLighting ? {sceneLighting} : {}),
@@ -211,6 +224,10 @@ export class LocalSunFramePreparer {
 					receiverLightIdentity: receiverLight.identity,
 				},
 				bindingValues,
+				/** Render one live supported packet. Retired packets, unsupported views or renderer failures throw;
+				 * the caller stops this operation and reports failure before preparing a valid replacement.
+				 * @returns {void} - One complete frame is rendered.
+				 */
 				renderFrame: () => {
 					if (disposed) throw new Error('Retired local frame cannot render.');
 					this._validateCurrentView(request.profile);
@@ -218,6 +235,10 @@ export class LocalSunFramePreparer {
 					resources.composer.renderToScreen = true;
 					resources.composer.render();
 				},
+				/** Retire the packet and attempt every owned release once. Report aggregate cleanup failures;
+				 * a retired packet must not be rendered or reused after teardown.
+				 * @returns {void} - Packet resources have been released or their failures reported.
+				 */
 				dispose: () => {
 					if (disposed) return;
 					disposed = true;

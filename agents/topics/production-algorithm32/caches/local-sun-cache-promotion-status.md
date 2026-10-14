@@ -1,17 +1,18 @@
 # Local-Sun Cache Production Port Status
 
-Current disposition, 2026-10-14: P0–P4 are complete under their matching CLEAN
+Current disposition, 2026-10-14: P0–P5 are complete under their matching CLEAN
 primary/audit receipts. P5's selected qualification matrix passes all 600 original
 trajectory states, current CPU/shared-boundary checks, 22 focused real WebGL tests
 and 45 basic Flat32 browser specs. Candidate/rollback preparation is delivered.
-Patched shared reviewer readiness now passes. Only P5's matching final mapped
-primary/audit CLEAN receipt establishes completion. The
+P5's matching final mapped primary/audit receipt is CLEAN. The
 [P5 qualification record](local-sun-p5-qualification.md) owns the bounded matrix,
 explicit N1 candidate, higher-order application limit and compatible rollback.
 The [plan](local-sun-cache-promotion-plan.md) owns scope and sequence;
 [P0](local-sun-cache-p0-contract.md) owns parameter applicability, independent
 controls and resource policies. The ended experiment and all prior evidence
-remain immutable. Production defaults and deployed selections are unchanged.
+remain immutable. The owner has selected ordinary Flat-mode compact N1 adoption;
+the [adoption record](local-sun-flat32-adoption.md) owns the application selection,
+rollback and verification gate. Deployed selections are unchanged.
 
 The [P2 closure](local-sun-p2-closure.md) owns GPU/runtime behavior, independent
 numerical coverage, resource observations and qualification limits. Its full
@@ -31,13 +32,13 @@ remains deferred.
 | P2 — GPU construction/runtime | Delivered genuine compact GPU graph and ordinary shared lookup/view consumers, qualified occupied fields, N1/N2/N4, omission and candidate cleanup. The matching CLEAN primary/audit receipt completes the phase. |
 | P3 — reuse and frame publication | Complete under its matching CLEAN primary/audit receipt; numerical, lifecycle and browser proofs pass. |
 | P4 — Flat32/celestial consumers | Complete under its matching CLEAN primary/audit receipt; ordinary N1, celestial and failure/retry/cancellation proofs pass. |
-| P5 — qualification/adoption preparation | Selected qualification and candidate/rollback record delivered; matching final primary/audit CLEAN receipt establishes completion. No default switch, deployment or publication selected. |
+| P5 — qualification/adoption preparation | Complete under its matching final CLEAN receipt. Subsequent ordinary Flat selection is owned by the adoption record. |
 
 ## Next Work
 
-Validate the matching final P5 mapped primary/audit receipt before closing the
-phase. The selected matrix, costs and candidate/rollback record
-are delivered; preserve every failed attempt and earlier numerical receipt.
+Finish the owner-selected [Flat32 adoption](local-sun-flat32-adoption.md) using its
+application-selection checks and matching review gate. P5's matrix, costs and
+candidate/rollback record are complete; preserve every failed attempt and earlier receipt.
 The [P4 closure](local-sun-p4-closure.md) owns the ordinary N1 and higher-order
 application boundary; the [P3 boundary](local-sun-p3-closure.md) owns earlier
 field reuse, lifecycle and precision proofs. Do not rerun unchanged scientific
@@ -45,9 +46,8 @@ evidence merely to replace a review receipt.
 
 The owner-authorized 4 GiB free-RAM reserve applies throughout the plan.
 Application cache-build memory sizing remains a separate open question and
-blocks no phase. Prepare the explicit bounded N1 candidate and retained compatible
-rollback; default/deployed selection requires its separately recorded adoption
-boundary after evidence is reviewable.
+blocks no phase. The local Flat-mode selection is now authorized by the adoption
+record; deployment and publication retain their separate owner boundaries.
 
 ## Completion Receipts
 
