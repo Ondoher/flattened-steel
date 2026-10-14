@@ -78,10 +78,63 @@ export class LocalSunFrameController {
 		if (this._disposed && this._pendingOperations === 0 && this._entries.size === 0) this._resolveReleased();
 	}
 
+	/** Called by lease retirement to dispose physical resources only after their final valid borrower releases.
+	 * Resource-owner disposal failures propagate after unregistering the retired entry; report them without reusing it.
+	 *
+	 * @param {LocalSunFrameCacheEntry} entry - Canonical resource registry entry.
+	 * @returns {void} - No value.
+	 */
+	_collect(entry) {
+		if (entry.retired && entry.borrowers === 0) {
+			try {
+				if (!entry.disposed) {
+					entry.disposed = true;
+					entry.controller.dispose();
+				}
+			} finally {
+				this._entries.delete(entry);
+				this._notifyReleased();
+			}
+		}
+	}
+
+	/** Called by candidate failure/publication to retire one complete packet without touching other frame resources.
+	 * AggregateError reports any packet, lease or final-cache release failures after all releases
+	 * are attempted; report every cause and never reuse this retired packet.
+	 *
+	 * @param {LocalSunFrameRecord} record - Owned frame packet.
+	 * @returns {void} - No value.
+	 */
+	_retireFrame(record) {
+		if (record.retired) return;
+		record.retired = true;
+		this._records.delete(record.frame);
+		const errors = [];
+		try {
+			record.frame.contents.dispose();
+		} catch (error) {
+			errors.push(error);
+		}
+		try {
+			record.lease.dispose();
+		} catch (error) {
+			errors.push(error);
+		}
+		if (this._active?.constructionIdentity !== record.entry.key) {
+			record.entry.retired = true;
+			try {
+				this._collect(record.entry);
+			} catch (error) {
+				errors.push(error);
+			}
+		}
+		if (errors.length) throw new AggregateError(errors, 'Complete frame retirement failed.');
+	}
+
 	/** Called by lifecycle transitions to retire every selected packet before reporting cleanup errors.
 	 *
 	 * @param {boolean} includeActive - Whether the displayed packet must also retire.
-	 * @param {unknown[]} errors - Receives cleanup failures without stopping other teardown.
+	 * @param {unknown[]} errors - Cleanup-failure accumulator for independent teardown attempts.
 	 * @returns {void} - No value.
 	 */
 	_retireRecords(includeActive, errors) {
@@ -119,6 +172,27 @@ export class LocalSunFrameController {
 		if (generation !== this._generation) throw new DOMException('Local frame was superseded.', 'AbortError');
 	}
 
+	/** Called by request acceptance to validate and snapshot one complete physical support ray.
+	 * Invalid position, direction or optional distance throws; supply valid physical units and a nonzero direction.
+	 *
+	 * @param {LocalSunFrameSupportRay} ray - Unit-bearing live ray.
+	 * @returns {LocalSunFrameSupportRay} - Immutable owned ray snapshot.
+	 */
+	_copySupportRay(ray) {
+		DistanceMath.assertPosition(ray.origin, 'Frame ray origin');
+		const coordinates = DistanceMath.toMetersPosition(ray.origin);
+		const direction = GeometryDirections.directionTuple(ray.direction, 'Frame ray direction');
+		if (ray.length !== undefined) DistanceMath.assertDistance(ray.length, 'Frame ray length');
+		return {
+			origin: {
+				coordinates: [coordinates[0], coordinates[1], coordinates[2]],
+				units: 'meters',
+			},
+			direction: [direction[0], direction[1], direction[2]],
+			...(ray.length === undefined ? {} : {length: {...ray.length}}),
+		};
+	}
+
 	/** Called by request ingress to validate complete accounting and accepted physical/live state.
 	 * Invalid profiles, byte units/values, presentation identity or physical rays throw;
 	 * correct the rejected input before preparing another candidate.
@@ -148,27 +222,6 @@ export class LocalSunFrameController {
 			presentationIdentity: request.presentationIdentity,
 			otherOwnedGpuBytes: {...other},
 			viewRays: request.viewRays.map((ray) => this._copySupportRay(ray)),
-		};
-	}
-
-	/** Called by request acceptance to validate and snapshot one complete physical support ray.
-	 * Invalid position, direction or optional distance throws; supply valid physical units and a nonzero direction.
-	 *
-	 * @param {LocalSunFrameSupportRay} ray - Unit-bearing live ray.
-	 * @returns {LocalSunFrameSupportRay} - Immutable owned ray snapshot.
-	 */
-	_copySupportRay(ray) {
-		DistanceMath.assertPosition(ray.origin, 'Frame ray origin');
-		const coordinates = DistanceMath.toMetersPosition(ray.origin);
-		const direction = GeometryDirections.directionTuple(ray.direction, 'Frame ray direction');
-		if (ray.length !== undefined) DistanceMath.assertDistance(ray.length, 'Frame ray length');
-		return {
-			origin: {
-				coordinates: [coordinates[0], coordinates[1], coordinates[2]],
-				units: 'meters',
-			},
-			direction: [direction[0], direction[1], direction[2]],
-			...(ray.length === undefined ? {} : {length: {...ray.length}}),
 		};
 	}
 
@@ -233,26 +286,6 @@ export class LocalSunFrameController {
 		return transform;
 	}
 
-	/** Called by lease retirement to dispose physical resources only after their final valid borrower releases.
-	 * Resource-owner disposal failures propagate after unregistering the retired entry; report them without reusing it.
-	 *
-	 * @param {LocalSunFrameCacheEntry} entry - Canonical resource registry entry.
-	 * @returns {void} - No value.
-	 */
-	_collect(entry) {
-		if (entry.retired && entry.borrowers === 0) {
-			try {
-				if (!entry.disposed) {
-					entry.disposed = true;
-					entry.controller.dispose();
-				}
-			} finally {
-				this._entries.delete(entry);
-				this._notifyReleased();
-			}
-		}
-	}
-
 	/** Called by staging/borrowers to acquire a checked opaque view of one live context's physical cache.
 	 * A disposed/lost controller or retired, disposed or old-context entry throws;
 	 * acquire from a complete current frame after restoration instead.
@@ -282,39 +315,6 @@ export class LocalSunFrameController {
 					throw new Error('Cache lease context is unavailable.');
 			},
 		});
-	}
-
-	/** Called by candidate failure/publication to retire one complete packet without touching other frame resources.
-	 * AggregateError reports any packet, lease or final-cache release failures after all releases
-	 * are attempted; report every cause and never reuse this retired packet.
-	 *
-	 * @param {LocalSunFrameRecord} record - Owned frame packet.
-	 * @returns {void} - No value.
-	 */
-	_retireFrame(record) {
-		if (record.retired) return;
-		record.retired = true;
-		this._records.delete(record.frame);
-		const errors = [];
-		try {
-			record.frame.contents.dispose();
-		} catch (error) {
-			errors.push(error);
-		}
-		try {
-			record.lease.dispose();
-		} catch (error) {
-			errors.push(error);
-		}
-		if (this._active?.constructionIdentity !== record.entry.key) {
-			record.entry.retired = true;
-			try {
-				this._collect(record.entry);
-			} catch (error) {
-				errors.push(error);
-			}
-		}
-		if (errors.length) throw new AggregateError(errors, 'Complete frame retirement failed.');
 	}
 
 	/** Called by preparation to retain or build the already selected canonical cache.
@@ -560,6 +560,7 @@ export class LocalSunFrameController {
 		this._retireRecords(false, errors);
 		if (errors.length) throw new AggregateError(errors, 'Superseded frame cleanup failed.');
 		/** Forward caller cancellation to the current frame candidate.
+		 *
 		 * @returns {void} - Candidate cancellation is signalled.
 		 */
 		const abort = () => cancellation.abort(signal.reason);

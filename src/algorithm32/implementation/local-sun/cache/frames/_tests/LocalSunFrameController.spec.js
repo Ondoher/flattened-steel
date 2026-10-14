@@ -7,6 +7,7 @@ describe('LocalSunFrameController complete publication and lease lifecycle', () 
 		const controller = new LocalSunFrameController({
 			backend,
 			/** Stage a virtual complete packet; failure preserves the published packet.
+			 *
 			 * @param {LocalSunFrameStageRequest} request - Genuine controller-selected frame.
 			 * @returns {Promise<LocalSunPreparedFrameContents>} - Virtual lifecycle packet.
 			 */ stageFrame: (request) => backend.stage(request),
@@ -34,6 +35,7 @@ describe('LocalSunFrameController complete publication and lease lifecycle', () 
 		const controller = new LocalSunFrameController({
 			backend,
 			/** Stage a virtual lifecycle packet; injected failures leave the published packet unchanged.
+			 *
 			 * @param {LocalSunFrameStageRequest} request - Real controller-selected state and borrowed cache.
 			 * @returns {Promise<LocalSunPreparedFrameContents>} - Virtual packet, with no numerical GPU claim.
 			 */
@@ -57,6 +59,7 @@ describe('LocalSunFrameController complete publication and lease lifecycle', () 
 		const controller = new LocalSunFrameController({
 			backend,
 			/** Stage a virtual lifecycle packet; injected failures leave the published packet unchanged.
+			 *
 			 * @param {LocalSunFrameStageRequest} request - Real controller-selected state and borrowed cache.
 			 * @returns {Promise<LocalSunPreparedFrameContents>} - Virtual packet, with no numerical GPU claim.
 			 */
@@ -85,6 +88,7 @@ describe('LocalSunFrameController complete publication and lease lifecycle', () 
 			const controller = new LocalSunFrameController({
 				backend,
 				/** Stage a virtual lifecycle packet; injected failures leave the published packet unchanged.
+				 *
 				 * @param {LocalSunFrameStageRequest} request - Real controller-selected state and borrowed cache.
 				 * @returns {Promise<LocalSunPreparedFrameContents>} - Virtual packet, with no numerical GPU claim.
 				 */
@@ -135,6 +139,7 @@ describe('LocalSunFrameController complete publication and lease lifecycle', () 
 			const controller = new LocalSunFrameController({
 				backend,
 				/** Stage a virtual lifecycle packet; injected failures leave the published packet unchanged.
+				 *
 				 * @param {LocalSunFrameStageRequest} request - Real controller-selected state and borrowed cache.
 				 * @returns {Promise<LocalSunPreparedFrameContents>} - Virtual packet, with no numerical GPU claim.
 				 */
@@ -167,6 +172,7 @@ describe('LocalSunFrameController complete publication and lease lifecycle', () 
 			const controller = new LocalSunFrameController({
 				backend,
 				/** Stage a virtual lifecycle packet; injected failures leave the published packet unchanged.
+				 *
 				 * @param {LocalSunFrameStageRequest} request - Real controller-selected state and borrowed cache.
 				 * @returns {Promise<LocalSunPreparedFrameContents>} - Virtual packet, with no numerical GPU claim.
 				 */
@@ -244,6 +250,7 @@ describe('LocalSunFrameController complete publication and lease lifecycle', () 
 			const controller = new LocalSunFrameController({
 				backend,
 				/** Stage a virtual lifecycle packet; injected failures leave the published packet unchanged.
+				 *
 				 * @param {LocalSunFrameStageRequest} request - Real controller-selected state and borrowed cache.
 				 * @returns {Promise<LocalSunPreparedFrameContents>} - Virtual packet, with no numerical GPU claim.
 				 */
@@ -283,6 +290,7 @@ describe('LocalSunFrameController complete publication and lease lifecycle', () 
 			const controller = new LocalSunFrameController({
 				backend,
 				/** Stage a virtual lifecycle packet; injected failures leave the published packet unchanged.
+				 *
 				 * @param {LocalSunFrameStageRequest} request - Real controller-selected state and borrowed cache.
 				 * @returns {Promise<LocalSunPreparedFrameContents>} - Virtual packet, with no numerical GPU claim.
 				 */
@@ -311,6 +319,7 @@ describe('LocalSunFrameController complete publication and lease lifecycle', () 
 			const controller = new LocalSunFrameController({
 				backend,
 				/** Stage a virtual lifecycle packet; injected failures leave the published packet unchanged.
+				 *
 				 * @param {LocalSunFrameStageRequest} request - Real controller-selected state and borrowed cache.
 				 * @returns {Promise<LocalSunPreparedFrameContents>} - Virtual packet, with no numerical GPU claim.
 				 */
@@ -342,6 +351,7 @@ describe('LocalSunFrameController complete publication and lease lifecycle', () 
 			const controller = new LocalSunFrameController({
 				backend,
 				/** Stage a virtual lifecycle packet; injected failures leave the published packet unchanged.
+				 *
 				 * @param {LocalSunFrameStageRequest} request - Real controller-selected state and borrowed cache.
 				 * @returns {Promise<LocalSunPreparedFrameContents>} - Virtual packet, with no numerical GPU claim.
 				 */
@@ -382,6 +392,7 @@ describe('LocalSunFrameController complete publication and lease lifecycle', () 
 				controller = new LocalSunFrameController({
 					backend,
 					/** Stage a virtual lifecycle packet; injected failures leave the published packet unchanged.
+					 *
 					 * @param {LocalSunFrameStageRequest} request - Real controller-selected state and borrowed cache.
 					 * @returns {Promise<LocalSunPreparedFrameContents>} - Virtual packet, with no numerical GPU claim.
 					 */
@@ -414,6 +425,7 @@ describe('LocalSunFrameController complete publication and lease lifecycle', () 
 			const controller = new LocalSunFrameController({
 				backend,
 				/** Stage a virtual lifecycle packet; injected failures leave the published packet unchanged.
+				 *
 				 * @param {LocalSunFrameStageRequest} request - Real controller-selected state and borrowed cache.
 				 * @returns {Promise<LocalSunPreparedFrameContents>} - Virtual packet, with no numerical GPU claim.
 				 */
@@ -457,6 +469,7 @@ describe('LocalSunFrameController complete publication and lease lifecycle', () 
 			const controller = new LocalSunFrameController({
 				backend,
 				/** Stage a virtual lifecycle packet; injected failures leave the published packet unchanged.
+				 *
 				 * @param {LocalSunFrameStageRequest} request - Real controller-selected state and borrowed cache.
 				 * @returns {Promise<LocalSunPreparedFrameContents>} - Virtual packet, with no numerical GPU claim.
 				 */

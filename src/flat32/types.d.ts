@@ -20,7 +20,7 @@ type Flat32ControlAdjustmentAction = (offset: number) => void;
 
 /** Optional Flat32 lifecycle and performance hooks exposed by the browser host. */
 interface Window {
-	/** Release the installed browser application. */
+	/** Optional browser-host cleanup operation for the currently installed application. */
 	__flat32Cleanup?: () => void;
 	/** Collected shader performance observations. */
 	__flat32PerformanceSamples?: ShaderPerformanceSample[];
@@ -75,15 +75,15 @@ type Flat32StellarCatalogId = 'brightest-500' | 'brightest-2000';
 type Flat32PresentationFilterId = 'human-mesopic-luminance-v1' | 'human-low-light-chroma-v1';
 /** Caller-owned stellar filter selection and its response parameters.
  *
- * - **human-mesopic-luminance-v1** - Mesopic luminance response with a rod-contribution bound.
- * - **human-low-light-chroma-v1** - Low-light chroma response with a chroma-retention bound. */
+ * - **"human-mesopic-luminance-v1"** - Mesopic luminance response with a rod-contribution bound.
+ * - **"human-low-light-chroma-v1"** - Low-light chroma response with a chroma-retention bound. */
 type Flat32PresentationFilterConfiguration =
 	| Readonly<{
 			/** Exact selected presentation filter. */
 			readonly id: 'human-mesopic-luminance-v1';
-			/** Apply the response in source-linear space. */
+			/** Source-linear response stage. */
 			readonly stage: 'source-linear';
-			/** Apply the response to stellar sources. */
+			/** Stellar response target. */
 			readonly target: 'stellar';
 			/** Whether this filter participates. */
 			readonly enabled: boolean;
@@ -95,9 +95,9 @@ type Flat32PresentationFilterConfiguration =
 	| Readonly<{
 			/** Exact selected presentation filter. */
 			readonly id: 'human-low-light-chroma-v1';
-			/** Apply the response in source-linear space. */
+			/** Source-linear response stage. */
 			readonly stage: 'source-linear';
-			/** Apply the response to stellar sources. */
+			/** Stellar response target. */
 			readonly target: 'stellar';
 			/** Whether this filter participates. */
 			readonly enabled: boolean;
@@ -132,12 +132,12 @@ type Flat32ApplicationConfiguration = {
 	/** Initial predefined local-Sun observation index. */
 	readonly initialFlatTimeIndex?: number;
 	/** Initial atmospheric geometry/source pairing. */
-	readonly initialModeKind?: 'spherical-distant' | 'flat-local';
+	readonly initialModeKind?: Flat32ModeKind;
 	/** Explicit order for both modes; omission uses distant N4 and compact local N1. */
 	readonly maximumScatteringOrder?: SupportedCacheScatteringOrder;
-	/** Include the fixed matte review objects. */
+	/** Optional inclusion of the fixed matte review objects. */
 	readonly reviewObjectsEnabled?: boolean;
-	/** Include visible celestial sources. */
+	/** Optional inclusion of visible celestial sources. */
 	readonly celestialSourcesEnabled?: boolean;
 	/** Selected display response and adaptation controls. */
 	readonly colorDisplayModelConfiguration?: Flat32ColorDisplayModelConfiguration;
@@ -151,37 +151,44 @@ type Flat32ApplicationConfiguration = {
 	readonly presentationFilters?: readonly Flat32PresentationFilterConfiguration[];
 	/** Initial unit camera direction in scene coordinates. */
 	readonly cameraDirectionScene?: readonly [number, number, number];
-	/** Receive shader performance observations. */
+	/** Optional observer of shader performance observations. */
 	readonly performanceCallback?: ShaderPerformanceCallback;
 	/** Enable atmosphere composition initially. */
 	readonly atmosphereShaderEnabled?: boolean;
-	/** Resolve the requested solar angle with optional caller cancellation. */
+	/** Optional solar-angle cache resolver with caller cancellation. */
 	readonly resolveDistantSunSceneCacheAsset?: (
 		solarZenithDegrees: number,
 		request?: Flat32DistantSunCacheResolutionRequest,
 	) => Flat32DistantSunCacheResolution | Promise<Flat32DistantSunCacheResolution>;
 };
 
-/** Render one complete installed scene frame. */
+/** Operation that renders one complete installed scene frame. */
 type Flat32RenderOperation = () => void;
 /** Renderer-resource owner participating in context loss and restoration. */
 interface Flat32ContextLifecycleParticipant {
-	/** Invalidate renderer-owned handles synchronously on context loss. */
+	/** Call this method to invalidate renderer-owned handles synchronously on context loss. */
 	handleContextLoss(): void;
-	/** Recreate renderer-owned resources before frame rendering resumes. */
+	/** Call this method to recreate renderer-owned resources before frame rendering resumes. */
 	handleContextRestoration(): void | Promise<void>;
 }
-/** Remove a registered renderer-resource owner from future context cycles. */
+/** Operation that removes a registered renderer-resource owner from future context cycles. */
 type Flat32ContextLifecycleRemoval = () => void;
-/** Receive a human-readable atmosphere preparation or rendering failure. */
+/** Observer of human-readable atmosphere preparation or rendering failures. */
 type Flat32AtmosphereFailureHandler = (message: string) => void;
-/** Receive changes to pointer-lock camera control. */
+/** Observer of pointer-lock camera control changes. */
 type Flat32PointerLookChangeHandler = (locked: boolean) => void;
 /** Supported atmospheric geometry and source pairings.
  *
  * - **"spherical-distant"** - Spherical geometry with a distant source.
  * - **"flat-local"** - Flat geometry with a finite local source. */
 type Flat32ModeKind = 'spherical-distant' | 'flat-local';
+
+/** Scene owner whose time controls select the observation instant.
+ *
+ * - **"flat"** - Local-Sun observation time.
+ * - **"globe"** - Distant-Sun observation time.
+ */
+type Flat32TimeBasis = 'flat' | 'globe';
 
 /** Caller-owned physical and presentation selections for a flat/local mode. */
 type Flat32LocalModeConfiguration = Readonly<{
@@ -191,7 +198,7 @@ type Flat32LocalModeConfiguration = Readonly<{
 	/** Physical length represented by one scene unit. */ sceneScale: SceneScale;
 	/** Accepted geographic receiver and exact instant. */ observation: GeometryObservation;
 	/** Qualified number of scattering orders. */ maximumScatteringOrder: SupportedCacheScatteringOrder;
-	/** Include visible celestial sources. */ celestialSourcesEnabled?: boolean;
+	/** Optional inclusion of visible celestial sources. */ celestialSourcesEnabled?: boolean;
 	/** Independently selected display response. */ colorDisplayModelConfiguration?: Flat32ColorDisplayModelConfiguration;
 	/** Selected stellar catalog. */ stellarCatalog?: Flat32StellarCatalogId;
 	/** Ordered presentation filter selections. */ presentationFilters?: readonly Flat32PresentationFilterConfiguration[];
@@ -202,67 +209,197 @@ interface Flat32Mode {
 	/** Production facade owned by this mode. */ readonly algorithm32: Algorithm32Facade;
 	/** Physical geometry owned by this mode. */ readonly geometry: GeometryModel;
 	/** Scene-to-physical scale. */ readonly sceneScale: SceneScale;
-	/** Return the configured domain and pairing facts. */ describe(): Flat32ModeSummary;
-	/** Release this mode's resources once. */ dispose(): void;
+	/** Call this method to return the configured domain and pairing facts. */ describe(): Flat32ModeSummary;
+	/** Call this method to release this mode's resources once. */ dispose(): void;
 }
 
+/** Distant-mode summary properties replaced by pairing-neutral application summaries.
+ *
+ * - **"pairing"** - Geometry/source pairing generalized for both modes.
+ * - **"distantSunCacheState"** - Distant-only state made optional for local modes.
+ */
+type Flat32PairingSummaryKey = 'pairing' | 'distantSunCacheState';
+
 /** Configured domains of a supported atmosphere mode. */
-type Flat32ModeSummary = Omit<SphericalDistantModeSummary, 'pairing' | 'distantSunCacheState'> & {
+type Flat32ModeSummary = Omit<SphericalDistantModeSummary, Flat32PairingSummaryKey> & {
 	/** Physical pairing. */ pairing: Flat32Pairing;
 	/** Distant source cache state when this is a spherical mode. */ distantSunCacheState?: Flat32DistantSunCacheState;
 	/** Local observer dome selection when this is a flat mode. */ observerDomeEnabled?: boolean;
 };
 
+/** Render target borrowed for composition/readback and released by its transaction owner. */
+interface Flat32ComposerBuffer {
+	/** Width of the physical target in pixels. */ readonly width: number;
+	/** Height of the physical target in pixels. */ readonly height: number;
+	/** Renderer texture borrowed by shader passes; the target retains ownership. */ readonly texture: ShaderRuntimePassTexture;
+	/** Call this method to retire the target and its renderer allocation. */ dispose(): void;
+}
+
+/** Independently implementable composition operations consumed by atmosphere transactions. */
+interface Flat32AtmosphereComposer {
+	/** Current composed output target, borrowed until the next buffer swap. */ readonly readBuffer: Flat32ComposerBuffer;
+	/** Current input target, borrowed until the next buffer swap. */ readonly writeBuffer: Flat32ComposerBuffer;
+	/** Whether the final pass presents to the default framebuffer. */ renderToScreen: boolean;
+	/** Call this method to render the configured pass chain; renderer failures propagate. */ render(
+		deltaSeconds?: number,
+	): void;
+	/** Call this method to retire owned passes and composition resources. */ dispose(): void;
+}
+
+/** Borrowed scene graph operations needed by endpoint ownership and renderer submission. */
+interface Flat32SceneCapability {
+	/** Call this method to attach caller-owned renderer objects without transferring their disposal ownership. */ add(
+		...objects: object[]
+	): object;
+	/** Call this method to detach renderer objects before their owner releases them. */ remove(
+		...objects: object[]
+	): object;
+}
+
+/** Optional perspective subview; enabled subviews are rejected by compact view qualification. */
+type Flat32PerspectiveSubview = Readonly<{
+	/** Whether the camera currently uses an asymmetric view offset. */ enabled: boolean;
+}>;
+
+/** Checked perspective-camera operations consumed by view support and binding updates. */
+interface Flat32PerspectiveCameraCapability extends Algorithm32BindingsCamera {
+	/** Optional renderer subview selection. */ readonly view?: Flat32PerspectiveSubview | null;
+	/** Horizontal film offset; compact support requires zero. */ readonly filmOffset: number;
+	/** Positive horizontal-to-vertical viewport aspect ratio. */ readonly aspect: number;
+	/** Call this method to return the zoom-adjusted vertical field of view in degrees. */ getEffectiveFOV(): number;
+	/** Call this method to refresh world transforms before sampling the camera pose. */ updateWorldMatrix(
+		updateParents: boolean,
+		updateChildren: boolean,
+	): void;
+	/** Call this method to write the normalized world viewing direction into the supplied vector. */ getWorldDirection(
+		target: Algorithm32BindingsVector3,
+	): Algorithm32BindingsVector3;
+}
+
+/** Callback receiving the renderer's shader-link failure inputs for diagnostic collection. */
+type Flat32ShaderErrorHandler = (
+	context: WebGLRenderingContext | WebGL2RenderingContext,
+	program: WebGLProgram,
+	vertexShader: WebGLShader,
+	fragmentShader: WebGLShader,
+) => void;
+
+/** Mutable renderer diagnostic hooks temporarily replaced during preflight. */
+type Flat32RendererDebug = {
+	/** Whether renderer shader validation is enabled. */ checkShaderErrors: boolean;
+	/** Optional current shader-link failure observer, restored after preflight. */ onShaderError: Flat32ShaderErrorHandler | null;
+};
+
+/** Renderer-owned program handles inspected through separately validated diagnostic projections. */
+type Flat32RendererInfo = {
+	/** Current opaque program objects; the renderer retains ownership. */ readonly programs: readonly object[];
+};
+
+/** Checked renderer operations required by atmosphere staging, preflight and publication. */
+interface Flat32RendererCapability extends ShaderRuntimePassRenderer {
+	/** Device facts inspected by the cache backend at its ingress. */ readonly capabilities: Flat32RendererCapabilities;
+	/** Mutable shader error hooks preserved across candidate preflight. */ readonly debug: Flat32RendererDebug;
+	/** Renderer-owned compiled-program observations. */ readonly info: Flat32RendererInfo;
+	/** Call this method to borrow the live WebGL context for bounded physical readback. */ getContext():
+		WebGLRenderingContext | WebGL2RenderingContext;
+	/** Call this method to borrow the current render target or identify the default framebuffer. */ getRenderTarget(): Flat32ComposerBuffer | null;
+	/** Call this method to select a borrowed render target without changing its ownership. */ setRenderTarget(
+		target: ShaderRuntimePassRenderTarget | null,
+	): void;
+	/** Call this method to render the supplied opaque scene and camera handles. */ render(
+		scene: object,
+		camera: object,
+	): void;
+	/** Call this method to inspect the selected render-target face or array layer. */ getActiveCubeFace(): number;
+	/** Call this method to inspect the selected render-target mip level. */ getActiveMipmapLevel(): number;
+	/** Call this method to copy the current viewport into a caller-owned rectangle. */ getViewport(
+		target: Flat32RendererRectangle,
+	): Flat32RendererRectangle;
+	/** Call this method to copy the current scissor region into a caller-owned rectangle. */ getScissor(
+		target: Flat32RendererRectangle,
+	): Flat32RendererRectangle;
+	/** Call this method to inspect whether scissor testing is enabled. */ getScissorTest(): boolean;
+	/** Call this method to select a viewport in physical pixels. */ setViewport(
+		x: number,
+		y: number,
+		width: number,
+		height: number,
+	): void;
+	/** Call this method to select a scissor region in physical pixels. */ setScissor(
+		x: number,
+		y: number,
+		width: number,
+		height: number,
+	): void;
+	/** Call this method to select whether scissor testing is enabled. */ setScissorTest(enabled: boolean): void;
+	/** Call this method to upload a borrowed renderer texture through the cache adapter. */ initTexture(
+		texture: object,
+	): void;
+}
+
+/** Renderer capability facts inspected before allocating scalar cache arrays. */
+type Flat32RendererCapabilities = Readonly<{
+	/** Whether the renderer exposes the required WebGL2 API. */ isWebGL2: boolean;
+}>;
+
+/** Renderer rectangle copied during cache state preservation, with pixel-valued components. */
+type Flat32RendererRectangle = {
+	/** Horizontal origin in pixels. */ x: number;
+	/** Vertical origin in pixels. */ y: number;
+	/** Width in pixels, using the renderer's four-vector convention. */ z: number;
+	/** Height in pixels, using the renderer's four-vector convention. */ w: number;
+};
+
 /** Isolated composer resources owned by one preparation transaction. */
 type Flat32AtmosphereComposerResources = Readonly<{
-	/** Composer that borrows the configured scene. */ composer: import('three/examples/jsm/postprocessing/EffectComposer.js').EffectComposer;
-	/** Render target owned by the composer transaction. */ renderTarget: import('three').WebGLRenderTarget;
-	/** Scene input pass installed in the composer. */ renderPass: import('three/examples/jsm/postprocessing/RenderPass.js').RenderPass;
+	/** Composer that borrows the configured scene. */ composer: Flat32AtmosphereComposer;
+	/** Render target owned by the composer transaction. */ renderTarget: Flat32ComposerBuffer;
+	/** Scene input pass installed in the composer; its lifetime is owned by that composer. */ renderPass: object;
 }>;
 
 /** Independently implementable scene and renderer coordination required by atmosphere installation. */
 interface Flat32SceneRuntimeCapability {
-	/** Scene receiving atmosphere integration. */ readonly scene: import('three').Scene;
+	/** Scene receiving atmosphere integration. */ readonly scene: Flat32SceneCapability;
 	/** Output canvas and diagnostic data. */ readonly canvas: HTMLCanvasElement;
-	/** Current perspective camera. */ readonly camera: import('three').PerspectiveCamera;
-	/** Renderer borrowed for installation and rendering. */ readonly renderer: import('three').WebGLRenderer;
+	/** Current perspective camera. */ readonly camera: Flat32PerspectiveCameraCapability;
+	/** Renderer borrowed for installation and rendering. */ readonly renderer: Flat32RendererCapability;
 	/** Current unit-bearing output extent. */ readonly viewportSize: PixelSize;
-	/** Register context loss and restoration ownership; return its remover. */ addContextLifecycleParticipant(
+	/** Call this method to register context loss and restoration ownership; return its remover. */ addContextLifecycleParticipant(
 		participant: Flat32ContextLifecycleParticipant,
 	): Flat32ContextLifecycleRemoval;
-	/** Publish a complete prepared state between frames. */ atFrameBoundary(
+	/** Call this method to publish a complete prepared state between frames. */ atFrameBoundary(
 		operation: () => void,
 		signal: AbortSignal,
 	): Promise<void>;
-	/** Request new matching shadow maps. */ refreshShadowMaps(): void;
-	/** Borrow the ordinary atmosphere composer. */ prepareAtmosphereComposer(): import('three/examples/jsm/postprocessing/EffectComposer.js').EffectComposer;
-	/** Create an independently owned preparation composer. */ createAtmosphereComposer(): Flat32AtmosphereComposerResources;
-	/** Install the completed atmosphere frame operation. */ installRenderOperation(
+	/** Call this method to request new matching shadow maps. */ refreshShadowMaps(): void;
+	/** Call this method to borrow the ordinary atmosphere composer. */ prepareAtmosphereComposer(): Flat32AtmosphereComposer;
+	/** Call this method to create an independently owned preparation composer. */ createAtmosphereComposer(): Flat32AtmosphereComposerResources;
+	/** Call this method to install the completed atmosphere frame operation. */ installRenderOperation(
 		operation: Flat32RenderOperation,
 	): void;
-	/** Restore the direct lit scene. */ restoreDirectRendering(): void;
+	/** Call this method to restore the direct lit scene. */ restoreDirectRendering(): void;
 }
 
 /** Independently implementable atmosphere runtime publication and teardown. */
 interface Flat32AlgorithmRuntimeCapability {
-	/** Stage a complete explicit compact frame without publication. */ prepareLocalFrame(
+	/** Call this method to stage a complete explicit compact frame without publication. */ prepareLocalFrame(
 		request: LocalSunFrameRequest,
 		signal?: AbortSignal,
 	): Promise<PreparedLocalSunFrame>;
-	/** Publish one complete compact packet at the application frame boundary. */ publishPreparedLocalFrame(
+	/** Call this method to publish one complete compact packet at the application frame boundary. */ publishPreparedLocalFrame(
 		frame: PreparedLocalSunFrame,
 		signal: AbortSignal,
 	): Promise<LocalSunFramePublication>;
-	/** Await backend teardown after pending stages and final valid borrowers release. */ whenLocalFrameResourcesReleased(): Promise<void>;
-	/** Prepare and preflight the isolated candidate. */ setup(): Promise<Flat32AtmosphereSummary>;
-	/** Publish the complete candidate. */ publish(): void;
-	/** Select composition or direct rendering. */ setAtmosphereEnabled(enabled: boolean): void;
-	/** Report whether stable shared-cache updates are supported. */ canUpdateSharedScene(): boolean;
-	/** Prepare and publish one matching shared scene. */ updateSharedScene(
+	/** Call this method to await backend teardown after pending stages and final valid borrowers release. */ whenLocalFrameResourcesReleased(): Promise<void>;
+	/** Call this method to prepare and preflight the isolated candidate. */ setup(): Promise<Flat32AtmosphereSummary>;
+	/** Call this method to publish the complete candidate. */ publish(): void;
+	/** Call this method to select composition or direct rendering. */ setAtmosphereEnabled(enabled: boolean): void;
+	/** Call this method to report whether stable shared-cache updates are supported. */ canUpdateSharedScene(): boolean;
+	/** Call this method to prepare and publish one matching shared scene. */ updateSharedScene(
 		state: Flat32ApplicationState,
 		request: Flat32SharedSceneUpdateRequest,
 	): Promise<Flat32AtmosphereSummary>;
-	/** Release resources and optionally restore direct rendering. */ dispose(
+	/** Call this method to release resources and optionally restore direct rendering. */ dispose(
 		request?: Flat32RuntimeDisposalRequest,
 	): void;
 }
@@ -281,7 +418,7 @@ type Flat32DistantSunSceneConfiguration = Readonly<{
 
 /** Caller-owned endpoint scene selection. */
 type Flat32EndpointSceneConfiguration = Readonly<{
-	/** Include the fixed matte review objects. */ reviewObjectsEnabled?: boolean;
+	/** Optional inclusion of the fixed matte review objects. */ reviewObjectsEnabled?: boolean;
 }>;
 
 /** Caller-owned spherical mode selections; geometry remains independently supplied. */
@@ -293,7 +430,7 @@ type Flat32SphericalDistantModeConfiguration<Geometry extends GeometryModel = Ge
 	/** Optional authenticated dense scene asset. */ sceneCacheAsset?: DistantSunSceneCacheAssetSelection;
 	/** Optional authenticated shared-cache runtime selection. */ sharedCache?: DistantSunSharedCacheSelection;
 	/** Explicit distant cache state. */ distantSunCacheState?: Flat32DistantSunCacheState;
-	/** Include Sun and stellar presentation. */ celestialSourcesEnabled?: boolean;
+	/** Optional inclusion of Sun and stellar presentation. */ celestialSourcesEnabled?: boolean;
 	/** Separately selected display response. */ colorDisplayModelConfiguration?: Flat32ColorDisplayModelConfiguration;
 	/** Selected stellar catalog. */ stellarCatalog?: Flat32StellarCatalogId;
 	/** Authenticated bright-star catalog definition. */ brightest2000StellarCatalogDefinition?: Brightest2000StellarCatalogDefinition;
@@ -301,49 +438,49 @@ type Flat32SphericalDistantModeConfiguration<Geometry extends GeometryModel = Ge
 	/** Optional measured low-light weights. */ scotopicLuminanceWeights?: ArrayLike<number>;
 }>;
 
-/** Configure one isolated Algorithm32 runtime candidate. */
+/** Configuration of one isolated Algorithm32 runtime candidate. */
 type Flat32AlgorithmRuntimeConfiguration = {
-	/** Supply the scene owner. */
+	/** Borrowed scene owner. */
 	sceneRuntime: Flat32SceneRuntimeCapability;
-	/** Supply ordinary endpoint-scene content. */
+	/** Borrowed ordinary endpoint-scene content owner. */
 	endpointScene: Flat32EndpointLighting;
-	/** Supply the supported atmospheric mode. */
+	/** Supported atmospheric mode owned by this candidate. */
 	mode: Flat32Mode;
-	/** Receive runtime failures. */
+	/** Application observer of runtime failures. */
 	onFailure: Flat32AtmosphereFailureHandler;
-	/** Supply an isolated composer. */
-	composer: import('three/examples/jsm/postprocessing/EffectComposer.js').EffectComposer;
-	/** Supply the isolated composer's render target. */
-	composerRenderTarget: import('three').WebGLRenderTarget;
-	/** Defer installation until the mode transaction publishes. */
+	/** Isolated composer transferred to the runtime candidate. */
+	composer: Flat32AtmosphereComposer;
+	/** Isolated composer's render target, retired with that composer. */
+	composerRenderTarget: Flat32ComposerBuffer;
+	/** Required deferral of installation until the mode transaction publishes. */
 	deferPublication: true;
-	/** Select atmosphere composition or the direct lit scene. */
+	/** Optional atmosphere-composition selection; omission enables composition. */
 	atmosphereEnabled?: boolean;
 };
 
-/** Configure transactional supported-mode ownership. */
+/** Configuration of transactional supported-mode ownership. */
 type Flat32ModeControllerConfiguration = {
-	/** Select atmosphere composition or the direct lit scene. */
+	/** Optional atmosphere-composition selection; omission enables composition. */
 	atmosphereEnabled?: boolean;
-	/** Create the requested supported mode. */
+	/** Factory for the requested supported mode, with caller cancellation. */
 	createMode: (
 		kind: Flat32ModeKind,
 		state: Flat32ApplicationState,
 		request: Readonly<{readonly signal: AbortSignal}>,
 	) => Flat32Mode | Promise<Flat32Mode>;
-	/** Optionally create an observable runtime boundary for focused tests. */
+	/** Optional runtime factory override for focused tests. */
 	createRuntime?: (configuration: Flat32AlgorithmRuntimeConfiguration) => Flat32AlgorithmRuntimeCapability;
-	/** Supply ordinary endpoint-scene content. */
+	/** Borrowed ordinary endpoint-scene content owner. */
 	endpointScene: Flat32EndpointLighting;
-	/** Receive scene preparation before candidate preflight. */
+	/** Application observer of scene preparation before candidate preflight. */
 	onPreparing: (kind: Flat32ModeKind, mode: Flat32Mode) => void;
-	/** Restore the last published scene after candidate failure. */
+	/** Application callback that restores the last published scene after candidate failure. */
 	onReverted: (kind: Flat32ModeKind, mode: Flat32Mode) => void;
-	/** Receive runtime failures. */
+	/** Application observer of runtime failures. */
 	onFailure: Flat32AtmosphereFailureHandler;
-	/** Receive a successfully published mode and state. */
+	/** Application observer of a successfully published mode and state. */
 	onPublished: (kind: Flat32ModeKind, mode: Flat32Mode, state: Flat32ApplicationState) => void;
-	/** Supply the Three scene and isolated-composer owner. */
+	/** Borrowed Three scene and isolated-composer owner. */
 	sceneRuntime: Flat32SceneRuntimeCapability;
 };
 
@@ -355,7 +492,7 @@ type Flat32LocationTimeState = {
 	/** Distant-Sun time offset in hours. */ globeHourOffset: number;
 	/** Human-readable selected location label. */ locationLabel: string;
 	/** Human-readable selected observation-time label. */ timeLabel: string;
-	/** `flat` selects local-Sun time; `globe` selects distant-Sun time. */ timeBasis: 'flat' | 'globe';
+	/** Scene time controls used by this mode. */ timeBasis: Flat32TimeBasis;
 	/** Exact geographic location and instant for physical scene placement. */ observation: GeometryObservation;
 };
 
@@ -364,71 +501,71 @@ type Flat32ApplicationState = Flat32LocationTimeState & {
 	/** Exact selected atmospheric geometry/source pairing. */ modeKind: Flat32ModeKind;
 };
 
-/** Describe one source-derived orthographic shadow camera. */
+/** Source-derived orthographic shadow-camera bounds in scene units. */
 type Flat32ShadowCameraDefinition = {
-	/** Store the lower camera bound. */
+	/** Lower camera bound in scene units. */
 	bottom: number;
-	/** Store the far camera bound. */
+	/** Far camera bound in scene units. */
 	far: number;
-	/** Store the left camera bound. */
+	/** Left camera bound in scene units. */
 	left: number;
-	/** Store the near camera bound. */
+	/** Near camera bound in scene units. */
 	near: number;
-	/** Store the right camera bound. */
+	/** Right camera bound in scene units. */
 	right: number;
-	/** Store the upper camera bound. */
+	/** Upper camera bound in scene units. */
 	top: number;
 };
 
-/** Describe one fixed matte review object. */
+/** Fixed matte review object and its source-light shadow configuration. */
 type Flat32ReviewObjectDefinition = {
-	/** Store the material color. */
+	/** Material color encoded as a Three numeric color. */
 	color: number;
-	/** Store the stable object name. */
+	/** Stable review-object name. */
 	name: string;
-	/** Store the scene-space object position. */
+	/** Object position in scene units. */
 	position: [number, number, number];
-	/** Store the scene-space Y rotation. */
+	/** Object rotation about the scene Y axis in radians. */
 	rotationY: number;
-	/** Store the object dimensions. */
+	/** Object dimensions in scene units. */
 	size: [number, number, number];
-	/** Store the source-derived shadow camera. */
+	/** Source-derived shadow-camera bounds. */
 	shadowCamera: Flat32ShadowCameraDefinition;
-	/** Store the light target position. */
+	/** Light target position in scene units. */
 	shadowFocus: [number, number, number];
-	/** Store the source-light distance. */
+	/** Source-light distance in scene units. */
 	sourceLightDistance: number;
 };
 
-/** Describe one completed Algorithm32 preflight frame. */
+/** Completed Algorithm32 preflight observations borrowed by the publication check. */
 type Flat32AtmospherePreflight = {
-	/** Store the shader/runtime diagnostic snapshot. */
+	/** Shader/runtime diagnostic snapshot captured after preflight. */
 	diagnostics: Flat32ShaderDiagnostics;
-	/** Store the composed output pixel. */
+	/** Composed RGBA output pixel captured after preflight. */
 	outputPixel: readonly [number, number, number, number];
-	/** Store the captured scene-input pixel. */
+	/** RGBA scene-input pixel captured before composition. */
 	sceneInputPixel: readonly [number, number, number, number];
 };
 
-/** Describe runtime diagnostic facts required for publication. */
+/** Runtime diagnostic facts required for publication. */
 type Flat32ShaderDiagnostics = {
-	/** Store shader installation state. */
+	/** Shader installation state, when diagnostics are available. */
 	status?: string;
-	/** Store per-frame runtime diagnostics. */
+	/** Per-frame runtime diagnostics, when available. */
 	runtime?: Flat32ShaderRuntimeDiagnostics;
 };
 
-/** Describe the runtime facts checked after a composed frame. */
+/** Runtime facts checked after a composed frame. */
 type Flat32ShaderRuntimeDiagnostics = {
 	/** Observed complete celestial generation state, when the runtime owns that participant. */
 	celestialGeneration?: Flat32CelestialGenerationDiagnostics | null;
 	/** Observed stellar pass generation state, when present. */
 	stellarGeneration?: Flat32CelestialPassDiagnostics | null;
-	/** Store the completed frame count. */
+	/** Completed frame count, when reported by the runtime. */
 	frameCount?: number;
-	/** Store the number of runtime render failures. */
+	/** Runtime render-failure count, when reported. */
 	renderErrorCount?: number;
-	/** Store the most recent runtime failure when present. */
+	/** Most recent runtime failure, or null when the reporting runtime has none. */
 	lastRenderError?: string | null;
 };
 
@@ -459,15 +596,15 @@ type Flat32CelestialGenerationDiagnostics = Readonly<{
 	/** Sun pass observation, when configured. */ sun?: Flat32SunPassDiagnostics | null;
 }>;
 
-/** Describe the Three program diagnostic consulted by preflight. */
+/** Three program diagnostic consulted by preflight. */
 type Flat32ProgramDiagnostic = {
-	/** Store whether Three considers the program runnable. */
+	/** Optional Three indication that the compiled program is runnable. */
 	runnable?: boolean;
 };
 
-/** Describe the minimum Three program state checked by Flat32. */
+/** Minimum Three program state checked by Flat32. */
 type Flat32ProgramInfo = {
-	/** Store optional program diagnostics. */
+	/** Optional renderer-owned program diagnostics. */
 	diagnostics?: Flat32ProgramDiagnostic;
 };
 
@@ -649,7 +786,7 @@ type Flat32SharedCacheAssetSelection = {
 };
 
 /** Published atmosphere mode, composed-frame observations and setup timing. */
-type Flat32AtmosphereSummary = Omit<SphericalDistantModeSummary, 'pairing' | 'distantSunCacheState'> & {
+type Flat32AtmosphereSummary = Omit<SphericalDistantModeSummary, Flat32PairingSummaryKey> & {
 	/** Distant cache readiness; absent for flat/local modes. */ distantSunCacheState?: Flat32DistantSunCacheState;
 	/** Published spherical/distant or flat/local geometry/source pairing. */
 	pairing: Flat32Pairing;
@@ -708,18 +845,18 @@ type Flat32SceneColorPrecision = 'float16' | 'float32';
 
 /** Independently implementable opaque endpoint and lighting capability. */
 interface Flat32EndpointLighting {
-	/** Prepare exact-state local endpoint lighting without changing the scene. */ prepareLocalSunLighting?(
+	/** Call this method to prepare exact-state local endpoint lighting without changing the scene. */ prepareLocalSunLighting?(
 		sourceScenePosition: ScenePosition,
 		receiverLight: ReceiverEnvironmentLightMeasurement,
 		color: Color,
 	): LocalSunFrameSceneLighting;
-	/** Apply matching physical source and receiver lighting before rendering. */
+	/** Call this method to apply matching physical source and receiver lighting before rendering. */
 	updateDistantSunLighting(
 		directionToSource: UnitVector3,
 		receiverLight: ReceiverEnvironmentLightMeasurement,
 		color: Color,
 	): void;
-	/** Return geometry bounds used to resolve physical scene depth. */
+	/** Call this method to return geometry bounds used to resolve physical scene depth. */
 	getSceneDepthEndpointPositions(): readonly ScenePosition[];
 }
 
@@ -755,11 +892,18 @@ type Flat32ShaderEvidenceSnapshot = Readonly<{
 	/** Current configured physical model version. */ modelVersion: number;
 }>;
 
+/** Scene capabilities borrowed by local shader and receiver staging.
+ *
+ * - **"scene"** - Ordinary renderer scene.
+ * - **"camera"** - Checked perspective-camera operations.
+ * - **"renderer"** - Renderer operations and device facts.
+ * - **"viewportSize"** - Current physical viewport dimensions.
+ * - **"createAtmosphereComposer"** - Isolated composer creation.
+ */
+type Flat32LocalFrameSceneCapabilityKey = 'scene' | 'camera' | 'renderer' | 'viewportSize' | 'createAtmosphereComposer';
+
 /** Complete renderer-owned inputs for local shader and receiver staging. */
-type Flat32LocalFrameSceneCapability = Pick<
-	Flat32SceneRuntimeCapability,
-	'scene' | 'camera' | 'renderer' | 'viewportSize' | 'createAtmosphereComposer'
->;
+type Flat32LocalFrameSceneCapability = Pick<Flat32SceneRuntimeCapability, Flat32LocalFrameSceneCapabilityKey>;
 
 /** Complete renderer-owned inputs for local shader and receiver staging. */
 type Flat32LocalFramePreparerConfiguration = Readonly<{
@@ -769,7 +913,7 @@ type Flat32LocalFramePreparerConfiguration = Readonly<{
 	) => CelestialSourceRoster | null;
 	/** Optional selected shared stellar vision filters. */ presentationFilterRegistry?: ViewPresentationFilterRegistry;
 	/** Optional ordinary scene lighting transaction owner. */ endpointScene?: Flat32EndpointLighting;
-	/** Creates an independently owned display model for each staged frame. */
+	/** Factory for an independently owned display model for each staged frame. */
 	createColorModel: () => Color;
 	/** External scene/renderer/composer creation owner. */ sceneRuntime: Flat32LocalFrameSceneCapability;
 	/** Exact physical length represented by scene units. */ sceneScale: SceneScale;
@@ -814,9 +958,9 @@ type Flat32RuntimeConfiguration = Readonly<{
 	/** Failure sink; a failed runtime restores ordinary scene rendering. */
 	onFailure: Flat32AtmosphereFailureHandler;
 	/** Isolated composer, otherwise borrowed from scene runtime. */
-	composer?: import('three/examples/jsm/postprocessing/EffectComposer.js').EffectComposer;
+	composer?: Flat32AtmosphereComposer;
 	/** Isolated composer's owned target. */
-	composerRenderTarget?: import('three').WebGLRenderTarget;
+	composerRenderTarget?: Flat32ComposerBuffer;
 	/** Delay installation until controller publication. */
 	deferPublication?: boolean;
 	/** Initial atmosphere composition state; enabled by default. */

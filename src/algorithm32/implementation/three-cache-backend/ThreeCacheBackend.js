@@ -255,7 +255,12 @@ export class ThreeCacheBackend {
 		}
 	}
 
-	/** @param {CacheImmutableTexture} texture - Opaque immutable texture owner. */
+	/** Called by immutable texture retirement to release its private target or uploaded texture once.
+	 * Disposal failures propagate after unregistering ownership; report them without reusing the retired handle.
+	 *
+	 * @param {CacheImmutableTexture} texture - Opaque immutable texture owner.
+	 * @returns {void} - The retired texture is no longer registered.
+	 */
 	_disposeImmutableTexture(texture) {
 		const record = IMMUTABLE_TEXTURE_RECORDS.get(texture);
 		if (!record || record.disposed) return;
@@ -357,7 +362,8 @@ export class ThreeCacheBackend {
 		};
 	}
 
-	/**
+	/** Called by upload and GPU packing to create the opaque immutable owner and its disposal operation.
+	 *
 	 * @param {CacheImmutableTextureUploadRequest} request - Accepted immutable texture request.
 	 * @param {CacheRuntimeBinding} runtimeBinding - Opaque binding associated with the texture.
 	 * @param {string} backendId - Backend ownership identity.
@@ -375,68 +381,6 @@ export class ThreeCacheBackend {
 			},
 		});
 		return handle;
-	}
-
-	/**
-	 * Called by ThreeCacheBackend to require the active field associated with one
-	 * opaque runtime binding owned by the supplied backend.
-	 * Foreign/nonfield bindings throw TypeError and disposed fields throw Error; use a live field binding from this backend.
-	 *
-	 * @param {CacheRuntimeBinding} binding - Opaque runtime-binding handle.
-	 * @param {ThreeCacheBackendRecord} backend - Required backend ownership state.
-	 * @returns {ThreeCacheBackendFieldRecord} - Active private field state.
-	 * @throws {TypeError} - When an accepted value does not satisfy the required type or shape.
-	 */
-	_requireRuntimeBindingField(binding, backend) {
-		const bindingRecord = RUNTIME_BINDING_RECORDS.get(binding);
-		if (!bindingRecord || bindingRecord.backend !== backend) {
-			throw new TypeError('Runtime cache binding must be an opaque binding owned by this backend.');
-		}
-		if (!bindingRecord.field) {
-			throw new TypeError('Runtime cache binding does not represent a render field.');
-		}
-
-		return this._requireFieldRecord(bindingRecord.field, backend, 'Runtime cache binding field');
-	}
-
-	/** Resolve a live field, persistent-array or immutable texture binding.
-	 * Foreign or missing texture ownership throws TypeError; disposed resources throw Error.
-	 * Acquire a live binding from this backend before attempting installation or readback.
-	 * @param {CacheRuntimeBinding} binding - Opaque runtime binding.
-	 * @param {ThreeCacheBackendRecord} backend - Required backend owner.
-	 * @returns {ThreeCacheBackendTexture} - Active private texture.
-	 */
-	_requireRuntimeBindingTexture(binding, backend) {
-		const bindingRecord = RUNTIME_BINDING_RECORDS.get(binding);
-		if (!bindingRecord || bindingRecord.backend !== backend) {
-			throw new TypeError('Runtime cache binding must be an opaque binding owned by this backend.');
-		}
-		if (bindingRecord.field) {
-			return this._requireFieldRecord(bindingRecord.field, backend, 'Runtime cache binding field').target.texture;
-		}
-		if (bindingRecord.persistentArray)
-			return this._requirePersistentArray(bindingRecord.persistentArray, backend).resolveTexture();
-		const immutable = bindingRecord.immutableTexture;
-		const record = immutable ? IMMUTABLE_TEXTURE_RECORDS.get(immutable) : null;
-		if (!record || record.backend !== backend) {
-			throw new TypeError('Runtime cache binding has no backend-owned texture.');
-		}
-		if (record.disposed) throw new Error('Runtime cache immutable texture has been disposed.');
-		return record.texture;
-	}
-
-	/**
-	 * Called to validate opaque persistent-array ownership before accessing renderer storage.
-	 * Missing or foreign handles throw TypeError; obtain a live array from this backend.
-	 *
-	 * @param {CachePersistentArray} array - Candidate handle.
-	 * @param {ThreeCacheBackendRecord} backend - Required renderer owner.
-	 * @returns {ThreeCachePersistentArrayOwner} - Private live array owner.
-	 */
-	_requirePersistentArray(array, backend) {
-		const owner = backend.persistentArrays.get(array);
-		if (!owner) throw new TypeError('Persistent array must be a live opaque handle owned by this backend.');
-		return owner;
 	}
 
 	/**
@@ -461,6 +405,69 @@ export class ThreeCacheBackend {
 		}
 
 		return record;
+	}
+
+	/**
+	 * Called by ThreeCacheBackend to require the active field associated with one
+	 * opaque runtime binding owned by the supplied backend.
+	 * Foreign/nonfield bindings throw TypeError and disposed fields throw Error; use a live field binding from this backend.
+	 *
+	 * @param {CacheRuntimeBinding} binding - Opaque runtime-binding handle.
+	 * @param {ThreeCacheBackendRecord} backend - Required backend ownership state.
+	 * @returns {ThreeCacheBackendFieldRecord} - Active private field state.
+	 * @throws {TypeError} - When an accepted value does not satisfy the required type or shape.
+	 */
+	_requireRuntimeBindingField(binding, backend) {
+		const bindingRecord = RUNTIME_BINDING_RECORDS.get(binding);
+		if (!bindingRecord || bindingRecord.backend !== backend) {
+			throw new TypeError('Runtime cache binding must be an opaque binding owned by this backend.');
+		}
+		if (!bindingRecord.field) {
+			throw new TypeError('Runtime cache binding does not represent a render field.');
+		}
+
+		return this._requireFieldRecord(bindingRecord.field, backend, 'Runtime cache binding field');
+	}
+
+	/**
+	 * Called to validate opaque persistent-array ownership before accessing renderer storage.
+	 * Missing or foreign handles throw TypeError; obtain a live array from this backend.
+	 *
+	 * @param {CachePersistentArray} array - Candidate handle.
+	 * @param {ThreeCacheBackendRecord} backend - Required renderer owner.
+	 * @returns {ThreeCachePersistentArrayOwner} - Private live array owner.
+	 */
+	_requirePersistentArray(array, backend) {
+		const owner = backend.persistentArrays.get(array);
+		if (!owner) throw new TypeError('Persistent array must be a live opaque handle owned by this backend.');
+		return owner;
+	}
+
+	/** Resolve a live field, persistent-array or immutable texture binding.
+	 * Foreign or missing texture ownership throws TypeError; disposed resources throw Error.
+	 * Acquire a live binding from this backend before attempting installation or readback.
+	 *
+	 * @param {CacheRuntimeBinding} binding - Opaque runtime binding.
+	 * @param {ThreeCacheBackendRecord} backend - Required backend owner.
+	 * @returns {ThreeCacheBackendTexture} - Active private texture.
+	 */
+	_requireRuntimeBindingTexture(binding, backend) {
+		const bindingRecord = RUNTIME_BINDING_RECORDS.get(binding);
+		if (!bindingRecord || bindingRecord.backend !== backend) {
+			throw new TypeError('Runtime cache binding must be an opaque binding owned by this backend.');
+		}
+		if (bindingRecord.field) {
+			return this._requireFieldRecord(bindingRecord.field, backend, 'Runtime cache binding field').target.texture;
+		}
+		if (bindingRecord.persistentArray)
+			return this._requirePersistentArray(bindingRecord.persistentArray, backend).resolveTexture();
+		const immutable = bindingRecord.immutableTexture;
+		const record = immutable ? IMMUTABLE_TEXTURE_RECORDS.get(immutable) : null;
+		if (!record || record.backend !== backend) {
+			throw new TypeError('Runtime cache binding has no backend-owned texture.');
+		}
+		if (record.disposed) throw new Error('Runtime cache immutable texture has been disposed.');
+		return record.texture;
 	}
 
 	/**
@@ -529,11 +536,15 @@ export class ThreeCacheBackend {
 
 	/**
 	 * Called by ThreeCacheBackend to resolve one typed binding value to its Three
-	 * uniform representation. It returns the value from the first satisfied branch, otherwise the operation's final fallback.
+	 * uniform representation: vectors use Three vector objects, spectral packets use
+	 * float arrays, and scalar values retain their accepted representation.
+	 * Unsupported scalar or position units throw RangeError; convert the binding
+	 * to supported GPU units before rebuilding the material bindings.
 	 *
 	 * @param {ThreeCacheBackendResourceNamespace} THREE - Three namespace used for vector construction.
 	 * @param {CacheUniformBinding} binding - Typed uniform binding.
 	 * @returns {unknown} - Three uniform value.
+	 * @throws {RangeError} - Unsupported units in a scalar or position binding.
 	 */
 	_uniformValue(THREE, binding) {
 		const value = binding.value;
@@ -773,6 +784,7 @@ export class ThreeCacheBackend {
 		this._withRendererState(
 			backend,
 			/** Read and unpack every group while restoring the caller's render target.
+			 *
 			 * @returns {void} - Logical diagnostic values have been populated.
 			 */ () => {
 				for (let group = 0; group < Math.ceil(layers / 4); group++) {
@@ -859,7 +871,7 @@ export class ThreeCacheBackend {
 		return field;
 	}
 
-	/** Pack a completed scalar field into four-float groups without a CPU readback.
+	/** Call this method to pack a completed scalar field into four-float groups without a CPU readback.
 	 * Source ownership stays with the caller. Invalid ownership, unavailable context,
 	 * allocation, framebuffer, compile or copy failure throws after candidate cleanup;
 	 * callers must keep the previous published cache and discard this conversion.
@@ -910,6 +922,7 @@ void main() {
 			this._withRendererState(
 				backend,
 				/** Convert all spectral groups while preserving the caller's renderer state.
+				 *
 				 * @returns {void} - The candidate target contains every packed group.
 				 */ () => {
 					for (let group = 0; group < storage.layers; group++) {
@@ -1193,6 +1206,7 @@ void main() {
 			request,
 			preserve: {
 				/** Execute an array operation while preserving renderer state; operation errors propagate to its caller.
+				 *
 				 * @template T
 				 * @param {() => T} operation - Owned texture operation.
 				 * @returns {T} - Operation result after renderer state restoration.

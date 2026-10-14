@@ -15,29 +15,65 @@ import {LOCAL_SUN_CACHE_PLAN_ID, LOCAL_SUN_CACHE_REUSE_KEY_SCHEMA_REVISION} from
 
 /** Controller for local-Sun GPU cache construction within one runtime attachment. */
 export class LocalSunCacheController {
-	/** Configured local-Sun cache contributor. @type {LocalSunCacheBuildSource} */
+	/** Configured local-Sun cache contributor.
+	 *
+	 * @type {LocalSunCacheBuildSource}
+	 */
 	_source;
-	/** Aggregate execution model retained for the controller lifetime. @type {SharedModel} */
+	/** Aggregate execution model retained for the controller lifetime.
+	 *
+	 * @type {SharedModel}
+	 */
 	_model;
-	/** Externally owned GPU backend. @type {CacheGpuBackend} */
+	/** Externally owned GPU backend.
+	 *
+	 * @type {CacheGpuBackend}
+	 */
 	_backend;
-	/** Optional cache-build scheduler. @type {CacheBuildScheduler | undefined} */
+	/** Optional cache-build scheduler.
+	 *
+	 * @type {CacheBuildScheduler | undefined}
+	 */
 	_scheduler;
-	/** Renderer-neutral cache-plan executor. @type {CacheGpuExecutor} */
+	/** Renderer-neutral cache-plan executor.
+	 *
+	 * @type {CacheGpuExecutor}
+	 */
 	_executor;
-	/** Atomically published local-Sun cache. @type {LocalSunCache | null} */
+	/** Atomically published local-Sun cache.
+	 *
+	 * @type {LocalSunCache | null}
+	 */
 	_active = null;
-	/** Reuse identity of the active cache. @type {string | null} */
+	/** Reuse identity of the active cache.
+	 *
+	 * @type {string | null}
+	 */
 	_activeReuseKey = null;
-	/** Serialized completion tail for controller generations. @type {Promise<void>} */
+	/** Serialized completion tail for controller generations.
+	 *
+	 * @type {Promise<void>}
+	 */
 	_tail = Promise.resolve();
-	/** Cancellation owner for the latest generation. @type {AbortController | null} */
+	/** Cancellation owner for the latest generation.
+	 *
+	 * @type {AbortController | null}
+	 */
 	_latestCancellation = null;
-	/** Monotonic controller generation. @type {number} */
+	/** Monotonic controller generation.
+	 *
+	 * @type {number}
+	 */
 	_generation = 0;
-	/** Controller disposal state. @type {boolean} */
+	/** Controller disposal state.
+	 *
+	 * @type {boolean}
+	 */
 	_disposed = false;
-	/** Explicit compact successor, absent for existing production selections. @type {LocalSunCompactGpuPlan | null} */
+	/** Explicit compact successor, absent for existing production selections.
+	 *
+	 * @type {LocalSunCompactGpuPlan | null}
+	 */
 	_compactPlan = null;
 
 	/**
@@ -358,7 +394,8 @@ export class LocalSunCacheController {
 
 	/**
 	 * Called by LocalSunCacheController to link caller cancellation to one
-	 * controller-owned generation signal. It returns the value from the first satisfied branch, otherwise the operation's final fallback.
+	 * controller-owned generation signal. The returned callback removes the listener;
+	 * when no caller signal is supplied, it is a no-op.
 	 *
 	 * @param {AbortSignal | undefined} signal - The optional caller cancellation.
 	 * @param {AbortController} controller - The controller-owned cancellation.
@@ -370,6 +407,7 @@ export class LocalSunCacheController {
 		}
 
 		/** Cancel the controller-owned build when the caller aborts.
+		 *
 		 * @returns {void} - Owned cancellation is signalled.
 		 */
 		const abort = () => controller.abort();
@@ -392,153 +430,6 @@ export class LocalSunCacheController {
 		if (this._disposed || cancellation.signal.aborted || generation !== this._generation) {
 			throw this._createAbortError('Local-Sun cache construction was cancelled or superseded.');
 		}
-	}
-
-	/**
-	 * Called by LocalSunCacheController to build, reuse, or atomically publish
-	 * one accepted generation. Cancellation or supersession rejects with an
-	 * abort error; discard that incomplete generation. Invalid byte accounting rejects with RangeError;
-	 * correct its units/value before retrying. Unsupported array/float/texture capabilities reject
-	 * with RangeError; select a capable backend. GPU execution, packing or upload failure rejects
-	 * while preserving the prior cache; discard the candidate and report the device failure.
-	 * Cleanup failure can accompany the original error in AggregateError; report both causes.
-	 *
-	 * @param {number} generation - The accepted generation.
-	 * @param {LocalSunAcceptedCacheBuildRequest} request - The accepted owners.
-	 * @param {AbortController} cancellation - The generation cancellation owner.
-	 * @returns {Promise<LocalSunCache>} - The published cache.
-	 * @throws {Error} - When the operation cannot complete its caller-observable contract.
-	 */
-	async _executeGeneration(generation, request, cancellation) {
-		this._requireCurrentGeneration(generation, cancellation);
-
-		const plan = this.createBuildPlan();
-		const reuseKey = this._createReuseKey(plan, this._backend.capabilities);
-
-		this._requireCurrentGeneration(generation, cancellation);
-
-		if (this._active !== null && this._activeReuseKey === reuseKey) {
-			return this._active;
-		}
-		let compactResources;
-		if (this._compactPlan !== null) {
-			let other = request.otherOwnedGpuBytes;
-			if (other?.units !== 'bytes' || !Number.isSafeInteger(other.value) || other.value < 0)
-				throw new RangeError(
-					'Compact construction requires declared other owned GPU bytes, including external frame/old-cache resources.',
-				);
-			let auxiliaryBytes =
-				this._compactPlan.geometryShader
-					.createBindings()
-					.reduce(
-						(sum, binding) => sum + /** @type {CacheDataBinding} */ (binding).value.values.length * 4,
-						0,
-					) +
-				this._compactPlan.nodeFactors.values.length * 4;
-			auxiliaryBytes += this._compactPlan.profile.domains.topology.positionCount * 4;
-			const runtimeDensityBytes =
-				this._compactPlan.profile.domains.topology.positionCount *
-				this._compactPlan.profile.domains.outgoingDirections.directionCount *
-				16 *
-				4;
-			const oldDensityBytes =
-				this._active instanceof LocalSunCompactCache ? this._active.resources.runtimeDensityBytes.value : 0;
-			let oldAuxiliary =
-				this._active instanceof LocalSunCompactCache ? this._active.resources.retainedAuxiliaryBytes.value : 0;
-			let estimate = this._compactPlan.profile.estimateResources({
-				retainedScatteringFields: 0,
-				otherOwnedGpuBytes: {
-					value: other.value + auxiliaryBytes * 2 + oldAuxiliary + oldDensityBytes + runtimeDensityBytes,
-					units: 'bytes',
-				},
-			});
-			// This estimate is diagnostic provenance, not a browser admission decision.
-			// Actual backend allocation/capability failures still reject the candidate.
-			let capabilities = this._backend.capabilities;
-			if (
-				!capabilities.supportsArrayRenderTargets ||
-				!capabilities.supportsFloatSampling ||
-				capabilities.scalarFormat !== 'R32F' ||
-				capabilities.maximumTextureSize < 4374 ||
-				capabilities.maximumArrayLayers < 15
-			)
-				throw new RangeError(
-					'Compact cache requires supported WebGL2 R32F array and auxiliary texture capabilities.',
-				);
-			compactResources = {
-				executor: null,
-				admission: estimate,
-				retainedAuxiliaryBytes: {value: auxiliaryBytes, units: /** @type {const} */ ('bytes')},
-				runtimeDensityBytes: {value: runtimeDensityBytes, units: /** @type {const} */ ('bytes')},
-				packingOverlapBytes: {
-					value:
-						runtimeDensityBytes +
-						this._compactPlan.profile.domains.scatteringDensityPacking.scalarCount * 4,
-					units: /** @type {const} */ ('bytes'),
-				},
-				packedTransportData: {value: 0, units: /** @type {const} */ ('bytes')},
-			};
-		}
-
-		const artifact = await this._executor.execute(plan, {
-			scheduler: this._scheduler,
-			signal: cancellation.signal,
-		});
-
-		try {
-			this._requireCurrentGeneration(generation, cancellation);
-		} catch (error) {
-			artifact.dispose();
-			throw error;
-		}
-
-		let cache;
-		try {
-			cache =
-				this._compactPlan === null
-					? new LocalSunCache(artifact, this._source.createResourceReport(plan, artifact.diagnostics))
-					: new LocalSunCompactCache(artifact, this._compactPlan, this._backend, {
-							...compactResources,
-							executor: artifact.diagnostics.memory,
-						});
-		} catch (error) {
-			artifact.dispose();
-			throw error;
-		}
-		const previous = this._active;
-		this._active = cache;
-		this._activeReuseKey = reuseKey;
-		previous?.dispose();
-
-		return cache;
-	}
-
-	/**
-	 * Creates one per-runtime local-Sun cache controller without taking
-	 * ownership of its GPU backend.
-	 *
-	 * @param {LocalSunCacheControllerConfiguration} request - The construction collaborators.
-	 */
-	constructor(request) {
-		this._model = request.model;
-		this._source = request.source;
-		this._backend = request.backend;
-		this._scheduler = request.scheduler;
-		if (request.model?.profile?.compactConstruction !== undefined)
-			this._compactPlan = new LocalSunCompactGpuPlan(request.model.profile.compactConstruction);
-		this._executor = new CacheGpuExecutor({
-			backend: this._backend,
-			assembler: new CachePassAssembler(),
-		});
-	}
-
-	/**
-	 * Atomically published active local-Sun cache.
-	 *
-	 * @returns {LocalSunCache|null} - Current owned cache, or no publication.
-	 */
-	get active() {
-		return this._active;
 	}
 
 	/**
@@ -723,6 +614,153 @@ export class LocalSunCacheController {
 				},
 			},
 		});
+	}
+
+	/**
+	 * Called by LocalSunCacheController to build, reuse, or atomically publish
+	 * one accepted generation. Cancellation or supersession rejects with an
+	 * abort error; discard that incomplete generation. Invalid byte accounting rejects with RangeError;
+	 * correct its units/value before retrying. Unsupported array/float/texture capabilities reject
+	 * with RangeError; select a capable backend. GPU execution, packing or upload failure rejects
+	 * while preserving the prior cache; discard the candidate and report the device failure.
+	 * Cleanup failure can accompany the original error in AggregateError; report both causes.
+	 *
+	 * @param {number} generation - The accepted generation.
+	 * @param {LocalSunAcceptedCacheBuildRequest} request - The accepted owners.
+	 * @param {AbortController} cancellation - The generation cancellation owner.
+	 * @returns {Promise<LocalSunCache>} - The published cache.
+	 * @throws {Error} - When the operation cannot complete its caller-observable contract.
+	 */
+	async _executeGeneration(generation, request, cancellation) {
+		this._requireCurrentGeneration(generation, cancellation);
+
+		const plan = this.createBuildPlan();
+		const reuseKey = this._createReuseKey(plan, this._backend.capabilities);
+
+		this._requireCurrentGeneration(generation, cancellation);
+
+		if (this._active !== null && this._activeReuseKey === reuseKey) {
+			return this._active;
+		}
+		let compactResources;
+		if (this._compactPlan !== null) {
+			let other = request.otherOwnedGpuBytes;
+			if (other?.units !== 'bytes' || !Number.isSafeInteger(other.value) || other.value < 0)
+				throw new RangeError(
+					'Compact construction requires declared other owned GPU bytes, including external frame/old-cache resources.',
+				);
+			let auxiliaryBytes =
+				this._compactPlan.geometryShader
+					.createBindings()
+					.reduce(
+						(sum, binding) => sum + /** @type {CacheDataBinding} */ (binding).value.values.length * 4,
+						0,
+					) +
+				this._compactPlan.nodeFactors.values.length * 4;
+			auxiliaryBytes += this._compactPlan.profile.domains.topology.positionCount * 4;
+			const runtimeDensityBytes =
+				this._compactPlan.profile.domains.topology.positionCount *
+				this._compactPlan.profile.domains.outgoingDirections.directionCount *
+				16 *
+				4;
+			const oldDensityBytes =
+				this._active instanceof LocalSunCompactCache ? this._active.resources.runtimeDensityBytes.value : 0;
+			let oldAuxiliary =
+				this._active instanceof LocalSunCompactCache ? this._active.resources.retainedAuxiliaryBytes.value : 0;
+			let estimate = this._compactPlan.profile.estimateResources({
+				retainedScatteringFields: 0,
+				otherOwnedGpuBytes: {
+					value: other.value + auxiliaryBytes * 2 + oldAuxiliary + oldDensityBytes + runtimeDensityBytes,
+					units: 'bytes',
+				},
+			});
+			// This estimate is diagnostic provenance, not a browser admission decision.
+			// Actual backend allocation/capability failures still reject the candidate.
+			let capabilities = this._backend.capabilities;
+			if (
+				!capabilities.supportsArrayRenderTargets ||
+				!capabilities.supportsFloatSampling ||
+				capabilities.scalarFormat !== 'R32F' ||
+				capabilities.maximumTextureSize < 4374 ||
+				capabilities.maximumArrayLayers < 15
+			)
+				throw new RangeError(
+					'Compact cache requires supported WebGL2 R32F array and auxiliary texture capabilities.',
+				);
+			compactResources = {
+				executor: null,
+				admission: estimate,
+				retainedAuxiliaryBytes: {value: auxiliaryBytes, units: /** @type {const} */ ('bytes')},
+				runtimeDensityBytes: {value: runtimeDensityBytes, units: /** @type {const} */ ('bytes')},
+				packingOverlapBytes: {
+					value:
+						runtimeDensityBytes +
+						this._compactPlan.profile.domains.scatteringDensityPacking.scalarCount * 4,
+					units: /** @type {const} */ ('bytes'),
+				},
+				packedTransportData: {value: 0, units: /** @type {const} */ ('bytes')},
+			};
+		}
+
+		const artifact = await this._executor.execute(plan, {
+			scheduler: this._scheduler,
+			signal: cancellation.signal,
+		});
+
+		try {
+			this._requireCurrentGeneration(generation, cancellation);
+		} catch (error) {
+			artifact.dispose();
+			throw error;
+		}
+
+		let cache;
+		try {
+			cache =
+				this._compactPlan === null
+					? new LocalSunCache(artifact, this._source.createResourceReport(plan, artifact.diagnostics))
+					: new LocalSunCompactCache(artifact, this._compactPlan, this._backend, {
+							...compactResources,
+							executor: artifact.diagnostics.memory,
+						});
+		} catch (error) {
+			artifact.dispose();
+			throw error;
+		}
+		const previous = this._active;
+		this._active = cache;
+		this._activeReuseKey = reuseKey;
+		previous?.dispose();
+
+		return cache;
+	}
+
+	/**
+	 * Creates one per-runtime local-Sun cache controller without taking
+	 * ownership of its GPU backend.
+	 *
+	 * @param {LocalSunCacheControllerConfiguration} request - The construction collaborators.
+	 */
+	constructor(request) {
+		this._model = request.model;
+		this._source = request.source;
+		this._backend = request.backend;
+		this._scheduler = request.scheduler;
+		if (request.model?.profile?.compactConstruction !== undefined)
+			this._compactPlan = new LocalSunCompactGpuPlan(request.model.profile.compactConstruction);
+		this._executor = new CacheGpuExecutor({
+			backend: this._backend,
+			assembler: new CachePassAssembler(),
+		});
+	}
+
+	/**
+	 * Atomically published active local-Sun cache.
+	 *
+	 * @returns {LocalSunCache|null} - Current owned cache, or no publication.
+	 */
+	get active() {
+		return this._active;
 	}
 
 	/**

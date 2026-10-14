@@ -1,9 +1,9 @@
 /** Contract that exposes one opaque resident GPU field. */
 interface GpuCacheField {
-	/** Id value. */ readonly id: CacheFieldId;
-	/** Storage value. */ readonly storage: CacheFieldStorage;
-	/** Backend id value. */ readonly backendId: string;
-	/** Call this method to dispose. */ dispose(): void;
+	/** Stable logical field identity assigned by the construction plan. */ readonly id: CacheFieldId;
+	/** Executable dimensions and scalar format retained by the field owner. */ readonly storage: CacheFieldStorage;
+	/** Identity of the only backend allowed to resolve this opaque handle. */ readonly backendId: string;
+	/** Call this method to retire this field and release its renderer storage once. */ dispose(): void;
 }
 /** Complete layer-major physical R32F diagnostic readback through an opaque binding. */
 type CacheScalarFieldReadback = Readonly<{
@@ -13,30 +13,33 @@ type CacheScalarFieldReadback = Readonly<{
 
 /** Contract that exposes one opaque compiled cache-construction program. */
 interface CacheGpuProgram {
-	/** Id value. */ readonly id: string;
-	/** Source hash value. */ readonly sourceHash: string;
-	/** Call this method to dispose. */ dispose(): void;
+	/** Stable construction-pass identity supplied by its shader owner. */ readonly id: string;
+	/** Identity of the exact assembled shader source used for compilation. */ readonly sourceHash: string;
+	/** Call this method to release all renderer resources owned by this program once. */ dispose(): void;
 }
+
+/** Borrowed input field paired with its construction-plan binding identity. */
+type CacheLayerInput = Readonly<{
+	/** Logical input identity resolved by the submitted shader. */ id: CacheFieldId;
+	/** Live backend-owned input field; submission does not transfer ownership. */ field: GpuCacheField;
+}>;
 
 /** Submit one wavelength layer of one construction pass. */
 type CacheLayerSubmission = Readonly<{
-	/** Program value. */ program: CacheGpuProgram;
-	/** Inputs value. */ inputs: readonly Readonly<{
-		/** Id value. */ id: CacheFieldId;
-		/** Field value. */ field: GpuCacheField;
-	}>[];
-	/** Output value. */ output: GpuCacheField;
-	/** Layer value. */ layer: number;
-	/** Bindings value. */ bindings: readonly CacheBinding[];
+	/** Live compiled program borrowed for this synchronous submission. */ program: CacheGpuProgram;
+	/** Complete borrowed inputs matched to the program's logical field identities. */ inputs: readonly CacheLayerInput[];
+	/** Backend-owned field receiving this layer's physical scalar values. */ output: GpuCacheField;
+	/** Zero-based wavelength layer within the output field. */ layer: number;
+	/** Complete typed uniforms and data bindings required by the program. */ bindings: readonly CacheBinding[];
 }>;
 
 /** Contract that exposes one opaque runtime binding for a completed field. */
 interface CacheRuntimeBinding {
-	/** Id value. */ readonly id: string;
+	/** Stable renderer-issued identity of this opaque binding. */ readonly id: string;
 	/** Value that identifies the shader value populated by the owning renderer backend. */
 	readonly valueKey: CacheRuntimeValueKey;
-	/** Field id value. */ readonly fieldId: CacheFieldId;
-	/** Backend id value. */ readonly backendId: string;
+	/** Logical field or immutable representation identity referenced by this binding. */ readonly fieldId: CacheFieldId;
+	/** Identity of the backend that privately resolves the bound texture. */ readonly backendId: string;
 }
 
 /** Complete cache-owned live publication consumed without shader recompilation. */
@@ -134,67 +137,82 @@ type CacheRuntimeBindingRequest = Readonly<{
 
 /** Group completed cache bindings owned by one backend. */
 type CacheRuntimeBindings = Readonly<{
-	/** Backend id value. */ backendId: string;
-	/** Bindings value. */ bindings: readonly CacheRuntimeBinding[];
+	/** Shared backend ownership identity required for every binding in this collection. */ backendId: string;
+	/** Complete borrowed bindings whose resource owners outlive runtime installation. */ bindings: readonly CacheRuntimeBinding[];
 }>;
+
+/** Mutable renderer uniform slot populated by opaque cache-binding installation. */
+type CacheRuntimeUniform = {
+	/** Current renderer-private texture or scalar value; installation replaces it without transferring ownership. */ value: unknown;
+};
 
 /** Type that supplies renderer-owned uniforms that receive opaque completed-cache bindings. */
 type CacheRuntimeBindingInstallRequest = Readonly<{
-	/** Bindings value. */ bindings: CacheRuntimeBindings;
-	/** Uniforms value. */ uniforms: Record<string, {/** Value value. */ value: unknown}>;
+	/** Complete borrowed bindings owned by the installing backend. */ bindings: CacheRuntimeBindings;
+	/** Caller-owned mutable shader uniform slots indexed by declared runtime value key. */ uniforms: Record<
+		string,
+		CacheRuntimeUniform
+	>;
 }>;
 
 /** Type that describes renderer capabilities that affect construction identity. */
 type CacheGpuCapabilities = Readonly<{
-	/** Id value. */ id: string;
-	/** Api value. */ api: string;
-	/** Scalar format value. */ scalarFormat: 'R32F';
-	/** Supports array render targets value. */ supportsArrayRenderTargets: boolean;
-	/** Supports float sampling value. */ supportsFloatSampling: boolean;
-	/** Maximum texture size value. */ maximumTextureSize: number;
-	/** Maximum array layers value. */ maximumArrayLayers: number;
+	/** Stable identity of the inspected renderer capabilities, included in construction reuse keys. */ id: string;
+	/** Diagnostic renderer/API revision label. */ api: string;
+	/** Physical scalar construction format; each texel stores one Float32 value. */ scalarFormat: 'R32F';
+	/** Whether the device can render into scalar texture-array layers. */ supportsArrayRenderTargets: boolean;
+	/** Whether shader sampling supports floating-point textures. */ supportsFloatSampling: boolean;
+	/** Device maximum width or height in texels for one texture layer. */ maximumTextureSize: number;
+	/** Device maximum number of layers in a texture array. */ maximumArrayLayers: number;
 }>;
 
 /** Isolate renderer-specific GPU construction behind opaque handles. */
 interface CacheGpuBackend {
-	/** Pack a completed scalar field into immutable four-float spectral groups on the GPU.
+	/** Call this method to pack a completed scalar field into immutable four-float spectral groups on the GPU.
 	 * Optional for scalar-only backends; compact runtime construction requires it.
 	 * Source ownership stays with the caller. Allocation/compile/copy failures throw
 	 * without publishing a texture; the caller retains its prior complete cache.
+	 *
 	 * @param request - Owned source field and destination identity/binding key.
 	 * @returns - Completed immutable packed runtime texture.
 	 */
 	packRuntimeField?(request: CacheRuntimeFieldPackingRequest): CacheImmutableTexture;
-	/** Id value. */ readonly id: string;
-	/** Capabilities value. */ readonly capabilities: CacheGpuCapabilities;
+	/** Stable identity of this renderer backend and all handles it issues. */ readonly id: string;
+	/** Inspected immutable device facts used by construction and reuse compatibility. */ readonly capabilities: CacheGpuCapabilities;
 	/**
 	 * Call this method to allocate field.
+	 *
 	 * @param field - The field value accepted by the operation.
 	 * @returns - The result produced by the operation.
 	 */ allocateField(field: CacheFieldSpec): GpuCacheField;
 	/**
 	 * Call this method to compile.
+	 *
 	 * @param shader - The shader value accepted by the operation.
 	 * @returns - The result produced by the operation.
 	 */ compile(shader: CacheShader): CacheGpuProgram | Promise<CacheGpuProgram>;
 	/**
 	 * Call this method to submit one layer and restore every renderer state value before returning.
+	 *
 	 * @param request - The request accepted by the operation.
 	 */
 	submitLayer(request: CacheLayerSubmission): void;
 	/**
 	 * Call this method to create runtime binding.
+	 *
 	 * @param request - The resident field and its caller-selected shader value.
 	 * @returns - The result produced by the operation.
 	 */ createRuntimeBinding(request: CacheRuntimeBindingRequest): CacheRuntimeBinding;
 	/**
 	 * Call this method to validate and upload one immutable resident texture.
+	 *
 	 * @param request - Exact typed payload, storage, identity, and shader value.
 	 * @returns - Opaque uploaded texture owner and runtime binding.
 	 */
 	uploadImmutableTexture(request: CacheImmutableTextureUploadRequest): CacheImmutableTexture;
 	/**
 	 * Call this method to resolve opaque bindings privately and install their renderer resources.
+	 *
 	 * @param request - The request accepted by the operation.
 	 */
 	installRuntimeBindings(request: CacheRuntimeBindingInstallRequest): void;
@@ -291,6 +309,7 @@ interface CachePacketAtlasBackend extends CacheGpuBackend {
 interface CacheBuildScheduler {
 	/**
 	 * Call this method to yield control.
+	 *
 	 * @returns - The result produced by the operation.
 	 */ yieldControl(): Promise<void>;
 }

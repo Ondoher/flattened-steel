@@ -126,7 +126,8 @@ interface Algorithm32Facade {
 	setConfig(config: Config): ConfigSnapshot;
 
 	/**
-	 * Publish the current receiver-local adapting luminance and update the unsmoothed global Color exposure target.
+	 * Call this method to publish the current receiver-local adapting luminance and update the unsmoothed global Color exposure target.
+	 *
 	 * @param adaptingLuminanceProxy - Current receiver-local adapting luminance.
 	 * @returns - Accepted luminance and derived target modifier.
 	 */
@@ -197,7 +198,7 @@ type ShaderSetupRequest = {
 	/** Additional GPU payload outside this controller for explicit compact-cache diagnostics, independently of ordinary display/shadow sizing. It does not impose a browser allocation ceiling. */
 	otherOwnedGpuBytes?: UnitValue<'bytes'>;
 
-	/** Cancel an in-progress source-owned cache construction. */
+	/** Optional cancellation of an in-progress source-owned cache construction. */
 	signal?: AbortSignal;
 
 	/** Value that provides initial viewport dimensions for setup-created runtime resources. The composer may later resize the installed pass. */
@@ -266,7 +267,8 @@ type ShaderPerformanceSample = {
 	errorMessage?: string;
 
 	/**
-	 * Allow pass-specific metadata.
+	 * Optional pass-specific diagnostics supplied by the measured pass; values are observations
+	 * owned by that sample and do not authorize execution or change the declared duration units.
 	 */
 	[key: string]: unknown;
 };
@@ -275,12 +277,21 @@ type ShaderPerformanceSample = {
 type ShaderPerformanceCallback =
 	/**
 	 * Called by shader performance measurement to publish one completed sample.
+	 *
 	 * @param sample - The completed performance sample.
 	 */ (sample: ShaderPerformanceSample) => void;
 
-/**
- * Control an installed Algorithm32 runtime shader integration.
- */
+/** Borrowed renderer/backend inputs for publishing one installed receiver-light measurement. */
+type Algorithm32ReceiverMeasurementRequest = Readonly<{
+	/** Renderer resource namespace borrowed only for this measurement. */ readonly THREE: unknown;
+	/** Live renderer whose state is restored by measurement operations. */ readonly renderer: ShaderRuntimePassRenderer;
+	/** Borrowed backend supporting cache storage and bounded physical probes. */ readonly backend: CacheGpuBackend &
+		CacheProbeReader;
+	/** Optional cancellation; rejected measurements must not be published. */ readonly signal?: AbortSignal;
+	/** Optional collection of diagnostic observations alongside physical measurement. */ readonly diagnostics?: boolean;
+}>;
+
+/** Control an installed Algorithm32 runtime shader integration. */
 interface ShaderHandle {
 	/** Call this method to measure a complete candidate receiver state without publishing it. */
 	prepareReceiverEnvironmentLight(
@@ -291,37 +302,31 @@ interface ShaderHandle {
 		measurement: ReceiverEnvironmentLightMeasurement,
 		observation: GeometryObservation,
 	): void;
-	/** Measure the installed common-path environment and publish complete receiver light. */
+	/** Call this method to measure the installed common-path environment and publish complete receiver light. */
 	measureReceiverEnvironmentLight(
-		request: Readonly<{
-			readonly THREE: unknown;
-			readonly renderer: ShaderRuntimePassRenderer;
-			readonly backend: CacheGpuBackend & CacheProbeReader;
-			readonly signal?: AbortSignal;
-			readonly diagnostics?: boolean;
-		}>,
+		request: Algorithm32ReceiverMeasurementRequest,
 	): Promise<ReceiverEnvironmentLightMeasurement>;
 	/**
 	 * Call this method to prepare the installed runtime program for its first render.
 	 *
-	 * @param renderer - Supplies the runtime renderer.
+	 * @param renderer - Runtime renderer.
 	 * @returns - The result produced by the operation.
 	 */
 	prepare(renderer: ShaderRuntimePassRenderer): Promise<void>;
 
-	/** Mark installed celestial screen products dirty without rebuilding the shader graph. */
+	/** Call this method to mark installed celestial screen products dirty without rebuilding the shader graph. */
 	markCelestialViewDirty(): void;
 
-	/** Invalidate renderer-owned celestial resources after WebGL context loss. */
+	/** Call this method to invalidate renderer-owned celestial resources after WebGL context loss. */
 	handleContextLoss(): void;
 
-	/** Require normal celestial regeneration after WebGL context restoration. */
+	/** Call this method to require normal celestial regeneration after WebGL context restoration. */
 	handleContextRestoration(): void;
 
 	/**
 	 * Call this method to replace the facade/runtime shader configuration and refresh resources required by the installed pass.
 	 *
-	 * @param config - Supplies the replacement Algorithm32 configuration.
+	 * @param config - Replacement Algorithm32 configuration.
 	 * @returns - The accepted configuration snapshot.
 	 */
 	setConfig(config: Config, options?: ConfigReplacementOptions): Promise<ConfigSnapshot>;

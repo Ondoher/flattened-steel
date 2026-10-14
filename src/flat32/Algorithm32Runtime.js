@@ -9,7 +9,7 @@ import {SphericalDistantMode} from './SphericalDistantMode.js';
 import DistantSunSharedCache from '../algorithm32/implementation/distant-sun/cache/DistantSunSharedCache.js';
 
 /**
- * Own one transactional production Algorithm32 attachment for Flat32.
+ * Transactional production Algorithm32 attachment for Flat32.
  *
  * @implements {Flat32AlgorithmRuntimeCapability}
  */
@@ -35,33 +35,67 @@ export class Algorithm32Runtime {
 		 * @type {Promise<void>}
 		 */
 		this._localBackendRelease = Promise.resolve();
+		/** Borrowed scene, camera, renderer and frame-boundary owner. */
 		this._sceneRuntime = configuration.sceneRuntime;
+		/** Borrowed endpoint geometry and receiver-light publication owner. */
 		this._endpointScene = configuration.endpointScene;
+		/** Physical geometry/source mode owned by this runtime candidate. */
 		this._mode = configuration.mode;
+		/** Application failure observer for caught rendering errors. */
 		this._onFailure = configuration.onFailure;
+		/** Optional isolated composer supplied by the preparation transaction. */
 		this._preparedComposer = configuration.composer ?? null;
+		/** Optional isolated target retired with the supplied composer. */
 		this._preparedRenderTarget = configuration.composerRenderTarget ?? null;
+		/** Publication policy controlled by the surrounding mode transaction. */
 		this._deferPublication = configuration.deferPublication === true;
+		/** Current choice between composed atmosphere and direct scene rendering. */
 		this._atmosphereEnabled = configuration.atmosphereEnabled !== false;
+		/** Optional consumer of existing per-pass GPU timer observations. */
 		this._performanceCallback = configuration.performanceCallback;
+		/** Disposal ownership of an externally staged composer transferred into this runtime. */
 		this._ownsComposer = this._preparedComposer !== null;
-		/** @type {import('three/examples/jsm/postprocessing/EffectComposer.js').EffectComposer | null} */
+		/** Borrowed composition operations, or unavailable before setup.
+		 *
+		 * @type {Flat32AtmosphereComposer | null}
+		 */
 		this._composer = null;
-		/** @type {ThreeCacheBackend | null} */
+		/** Renderer cache backend retired after its last valid local borrower.
+		 *
+		 * @type {ThreeCacheBackend | null}
+		 */
 		this._cacheBackend = null;
-		/** @type {ShaderHandle | null} */
+		/** Installed ordinary shader handle, or unavailable before setup.
+		 *
+		 * @type {ShaderHandle | null}
+		 */
 		this._shaderHandle = null;
-		/** @type {Record<string, unknown> | null} */
+		/** Mutable values for this runtime's shader bindings.
+		 *
+		 * @type {Algorithm32BindingValues | null}
+		 */
 		this._bindingValues = null;
-		/** @type {AbortController | null} */
+		/** Cancellation owner for the current setup generation.
+		 *
+		 * @type {AbortController | null}
+		 */
 		this._setupCancellation = null;
-		/** @type {string[]} */
+		/** Collected shader compilation and asynchronous cleanup diagnostics.
+		 *
+		 * @type {string[]}
+		 */
 		this._shaderErrors = [];
+		/** Monotonic setup identity used to reject superseded preparations. */
 		this._setupGeneration = 0;
+		/** Number of complete frames observed through this attachment. */
 		this._runtimeFrameCount = 0;
+		/** Number of safe construction boundaries since the most recent browser yield. */
 		this._cacheYieldCount = 0;
+		/** Whether a complete candidate passed its rendering preflight. */
 		this._installed = false;
+		/** Whether this runtime's render operation has been published. */
 		this._published = false;
+		/** Terminal runtime lifetime flag preventing new work. */
 		this._disposed = false;
 		/** Live selection cancellation owner.
 		 *
@@ -78,11 +112,13 @@ export class Algorithm32Runtime {
 		 * @type {Flat32AtmosphereSummary | null}
 		 */
 		this._lastSummary = null;
+		/** Removal operation for this runtime's borrowed scene context-lifecycle subscription. */
 		this._removeContextLifecycleParticipant = this._sceneRuntime.addContextLifecycleParticipant(this);
 		this._renderAtmosphereFrame = this._renderAtmosphereFrame.bind(this);
 		this._yieldCacheBuildControl = this._yieldCacheBuildControl.bind(this);
 		this._captureShaderError = this._captureShaderError.bind(this);
 		this._handleShaderWarning = this._handleShaderWarning.bind(this);
+		/** Construction scheduler yielding only at executor-selected safe boundaries. */
 		this._cacheBuildScheduler = {
 			yieldControl: this._yieldCacheBuildControl,
 		};
@@ -99,6 +135,37 @@ export class Algorithm32Runtime {
 				this._mode instanceof SphericalDistantMode &&
 				this._mode.lightSource.sharedCacheAttachment !== null)
 		);
+	}
+
+	/** Called by frame rendering to publish concise celestial generation diagnostics.
+	 *
+	 * @param {Flat32ShaderDiagnostics|null|undefined} diagnostics - Observed shader-owned diagnostics.
+	 * @returns {void} - Available diagnostics copied to the application canvas.
+	 */
+	_publishCelestialDiagnostics(diagnostics) {
+		const canvas = this._sceneRuntime.canvas;
+		const brightnessProxy = this._mode.algorithm32?.brightnessProxy?.value;
+		if (canvas?.dataset && Number.isFinite(brightnessProxy)) {
+			canvas.dataset.flat32ColorBrightnessProxy = String(brightnessProxy);
+		}
+		const celestial = diagnostics?.runtime?.celestialGeneration;
+		if (celestial) {
+			this._sceneRuntime.canvas.dataset.flat32CelestialGenerationStatus = celestial.status;
+		}
+		const sun = celestial?.sun;
+		if (sun) {
+			this._sceneRuntime.canvas.dataset.flat32SunTileGenerationStatus = sun.status;
+			this._sceneRuntime.canvas.dataset.flat32SunTileGenerationCount = String(sun.generationCount);
+			this._sceneRuntime.canvas.dataset.flat32SunTileGenerationCompletion =
+				sun.publicationState?.active?.completion ?? 'none';
+			this._sceneRuntime.canvas.dataset.flat32SunTileCoveragePolicy = sun.policyIdentity;
+		}
+		const stellar = diagnostics?.runtime?.stellarGeneration;
+		if (!stellar) return;
+		this._sceneRuntime.canvas.dataset.flat32StellarGenerationStatus = stellar.status;
+		this._sceneRuntime.canvas.dataset.flat32StellarGenerationCount = String(stellar.generationCount);
+		this._sceneRuntime.canvas.dataset.flat32StellarGenerationCompletion =
+			stellar.publicationState?.active?.completion ?? 'none';
 	}
 
 	/** Called by the scene renderer to consume one complete current local-frame aggregate.
@@ -119,11 +186,25 @@ export class Algorithm32Runtime {
 	}
 
 	/** Call this method to await backend cleanup after disposal, pending stages and valid borrower release.
+	 * Backend disposal failure rejects; report that cleanup error and do not assume external
+	 * renderer resources were released successfully. A pending valid borrower delays completion.
 	 *
-	 * @returns {Promise<void>} - Preserves any asynchronous backend-disposal failure for the caller.
+	 * @returns {Promise<void>} - Cleanup completion carrying any asynchronous backend-disposal failure.
 	 */
 	whenLocalFrameResourcesReleased() {
 		return this._localBackendRelease;
+	}
+
+	/**
+	 * Require the runtime to remain usable.
+	 * A disposed runtime throws; callers must stop this operation and use a live runtime.
+	 *
+	 * @returns {void} - The runtime remains available for the requested operation.
+	 */
+	_assertUsable() {
+		if (this._disposed) {
+			throw new Error('Flat32 Algorithm32 runtime is disposed.');
+		}
 	}
 
 	/** Call this method to stage a complete local frame while the displayed frame keeps rendering.
@@ -203,6 +284,16 @@ export class Algorithm32Runtime {
 		}
 	}
 
+	/** Called by ordinary compact preparation to declare cache payload outside the frame controller's registry.
+	 * That controller accounts for its construction peak, auxiliary data and retained cache overlap.
+	 * Scene shadows, display targets and viewport-dependent staging are separate from cache accounting.
+	 *
+	 * @returns {UnitValue<'bytes'>} - No external cache payload is owned by this local attachment.
+	 */
+	_localFrameOtherCacheBytes() {
+		return {value: 0, units: 'bytes'};
+	}
+
 	/** Call this method to prepare then publish a coherent distant scene without rebuilding the runtime.
 	 * Disposed or unsupported runtimes, malformed requests and unsupported local coverage reject;
 	 * correct the selection/request before retrying. Caller cancellation or supersession rejects;
@@ -249,6 +340,7 @@ export class Algorithm32Runtime {
 		this._predictionCancellation = null;
 		const cancellation = (this._liveCancellation = new AbortController());
 		/** Forward caller cancellation to this live-scene operation.
+		 *
 		 * @returns {void} - Owned preparation is marked aborted.
 		 */
 		const abort = () => cancellation.abort(request.signal.reason);
@@ -316,6 +408,8 @@ export class Algorithm32Runtime {
 	/**
 	 * Call this method to inspect installed rendering state without exposing shader handles.
 	 * Disposed runtimes throw.
+	 * Missing or malformed shader status/version facts also throw; report the invalid evidence
+	 * and do not use that snapshot to establish installation or rendering success.
 	 *
 	 * @returns {Flat32RuntimeEvidenceSnapshot} - Caller-owned diagnostic snapshot.
 	 */
@@ -346,6 +440,20 @@ export class Algorithm32Runtime {
 		};
 	}
 
+	/**
+	 * Dispose resources created for a setup attempt, retaining the composer.
+	 *
+	 * @returns {void} - Setup-owned shader and cache resources released.
+	 */
+	_disposeSetupResources() {
+		this._shaderHandle?.dispose();
+		this._shaderHandle = null;
+		this._bindingValues = null;
+		this._cacheBackend?.dispose();
+		this._cacheBackend = null;
+		this._installed = false;
+	}
+
 	/** Call this method to release renderer-owned resources while their WebGL context remains lost.
 	 *
 	 * @returns {void} - Old GPU frame resources invalidated.
@@ -361,129 +469,6 @@ export class Algorithm32Runtime {
 			this._composer?.dispose();
 			this._preparedRenderTarget?.dispose();
 		}
-	}
-
-	/** Rebuild all renderer-owned atmosphere and stellar resources through normal setup after restoration. */
-	/** Call this method to prepare and publish a complete replacement on the restored renderer.
-	 * A failed restoration releases its candidate and retains lost-context state for retry.
-	 * Restored-backend construction, complete-frame preparation/publication or cleanup failures reject;
-	 * report the failing operation, discard its candidate and retry with a valid restored renderer.
-	 *
-	 * @returns {Promise<void>} - Restored complete frame, or rejection for preparation/publication/cleanup failure.
-	 */
-	async handleContextRestoration() {
-		if (this._disposed) return;
-		if (this._localFrameController) {
-			const backend = new ThreeCacheBackend({THREE, renderer: this._sceneRuntime.renderer});
-			this._cacheBackend = backend;
-			try {
-				const frame = await this._localFrameController.restoreContext(backend);
-				if (frame) await this.publishPreparedLocalFrame(frame, new AbortController().signal);
-			} catch (error) {
-				const errors = [error];
-				try {
-					this._localFrameController.handleContextLoss();
-				} catch (cleanupError) {
-					errors.push(cleanupError);
-				}
-				try {
-					backend.dispose();
-				} catch (cleanupError) {
-					errors.push(cleanupError);
-				}
-				this._cacheBackend = null;
-				if (errors.length > 1)
-					throw new AggregateError(errors, 'Local context restoration and cleanup failed.');
-				throw error;
-			}
-			return;
-		}
-		if (this._mode instanceof SphericalDistantMode) this._mode.prepareContextRestoration();
-		await this.setup();
-	}
-
-	/**
-	 * Normalize a caught setup or frame failure for presentation.
-	 *
-	 * @param {unknown} error - Supplies the caught value.
-	 * @returns {string} Return a readable message.
-	 */
-	_errorMessage(error) {
-		return error instanceof Error ? error.message : String(error);
-	}
-
-	/**
-	 * Require the runtime to remain usable.
-	 *
-	 * @returns {void}
-	 */
-	_assertUsable() {
-		if (this._disposed) {
-			throw new Error('Flat32 Algorithm32 runtime is disposed.');
-		}
-	}
-
-	/**
-	 * Yield one cache-build boundary to browser rendering and heartbeat tasks.
-	 *
-	 * @returns {Promise<void>} Resolve on a later browser task.
-	 */
-	_yieldCacheBuildControl() {
-		this._cacheYieldCount += 1;
-		this._sceneRuntime.canvas.dataset.flat32CacheYieldCount = String(this._cacheYieldCount);
-
-		return new Promise((resolve) => window.setTimeout(resolve, 0));
-	}
-
-	/**
-	 * Throw shader-pass warnings so a candidate cannot publish after failure.
-	 *
-	 * @param {string} message - Describes the warning boundary.
-	 * @param {unknown} error - Supplies the underlying failure.
-	 * @returns {never}
-	 */
-	_handleShaderWarning(message, error) {
-		if (error instanceof Error) {
-			throw error;
-		}
-
-		throw new Error(`${message}: ${String(error)}`);
-	}
-
-	/**
-	 * Capture concise WebGL compiler and linker diagnostics.
-	 *
-	 * @param {WebGLRenderingContext} context - Supplies shader log access.
-	 * @param {WebGLProgram} program - Supplies the linked program.
-	 * @param {WebGLShader} vertexShader - Supplies the vertex shader.
-	 * @param {WebGLShader} fragmentShader - Supplies the fragment shader.
-	 * @returns {void}
-	 */
-	_captureShaderError(context, program, vertexShader, fragmentShader) {
-		const programLog = context.getProgramInfoLog(program)?.trim() ?? '';
-		const vertexLog = context.getShaderInfoLog(vertexShader)?.trim() ?? '';
-		const fragmentLog = context.getShaderInfoLog(fragmentShader)?.trim() ?? '';
-		const details = [programLog, vertexLog, fragmentLog].filter((message) => message.length > 0);
-
-		this._shaderErrors.push(
-			details.length > 0 ? details.join(' | ') : 'WebGL reported an Algorithm32 shader link failure.',
-		);
-	}
-
-	/**
-	 * Drain the current WebGL error queue.
-	 *
-	 * @param {WebGL2RenderingContext} context - Supplies WebGL error state.
-	 * @returns {number[]} Return the drained numeric error identities.
-	 */
-	_drainWebGlErrors(context) {
-		let errors = [];
-
-		for (let error = context.getError(); error !== context.NO_ERROR; error = context.getError()) {
-			errors.push(error);
-		}
-
-		return errors;
 	}
 
 	/**
@@ -503,10 +488,140 @@ export class Algorithm32Runtime {
 		});
 	}
 
+	/** Called by publication or composition selection to install the current complete rendering operation.
+	 *
+	 * @returns {void} - Selected rendering operation installed.
+	 */
+	_publishSelectedRenderOperation() {
+		if (this._atmosphereEnabled) {
+			this._sceneRuntime.installRenderOperation(
+				this._localFrameController ? () => this._renderLocalFrame() : this._renderAtmosphereFrame,
+			);
+		} else {
+			this._sceneRuntime.restoreDirectRendering();
+		}
+	}
+
+	/** Call this method to make a successfully preflighted runtime visible.
+	 * Disposed/unprepared runtimes, stale frames or failed view validation throw before publication;
+	 * prepare a valid current candidate. Lighting/renderer installation errors propagate and local
+	 * lighting is reverted before controller commit. Later mode or shadow failures may throw after
+	 * publication; inspect the active frame before recovery instead of assuming publication was undone.
+	 *
+	 * @returns {void} - Complete runtime rendering installed, or rejection before preflight.
+	 */
+	publish() {
+		this._assertUsable();
+		if (!this._installed) {
+			throw new Error('Cannot publish Flat32 atmosphere before preflight.');
+		}
+
+		if (this._pendingInitialLocalFrame && this._localFrameController) {
+			const frame = this._pendingInitialLocalFrame;
+			this._localFrameController.publishPreparedLocalFrame(frame, () => {
+				frame.contents.validateView?.();
+				try {
+					frame.contents.sceneLighting?.publish();
+					this._publishSelectedRenderOperation();
+				} catch (error) {
+					frame.contents.sceneLighting?.revert();
+					throw error;
+				}
+			});
+			if (this._mode instanceof FlatLocalMode) this._mode.acceptPublishedLocalFrame(frame);
+			this._pendingInitialLocalFrame = null;
+			this._sceneRuntime.refreshShadowMaps();
+		}
+		this._published = true;
+		this._publishSelectedRenderOperation();
+	}
+
+	/** Called by setup to stage the explicit compact candidate through the ordinary complete-frame owners.
+	 * Invalid scene/backend configuration rejects; correct it before retrying. Cancellation rejects
+	 * with its abort reason; discard that attempt. Cache construction, shader/receiver staging or
+	 * absent preflight observations reject; retain the prior published frame and report the failed owner.
+	 * Candidate and backend teardown are attempted; AggregateError includes any cleanup failures.
+	 * Report every cause and create a valid replacement before publication.
+	 *
+	 * @returns {Promise<Flat32AtmosphereSummary>} - Ready unpublished candidate or explicit admission failure.
+	 */
+	async _setupLocalFrames() {
+		const mode = /** @type {FlatLocalMode} */ (this._mode),
+			start = performance.now();
+		this._composer = this._preparedComposer;
+		const cancellation = new AbortController();
+		this._setupCancellation = cancellation;
+		const sceneDepthMax = this._resolveSceneDepthMax();
+		const backend = new ThreeCacheBackend({THREE, renderer: this._sceneRuntime.renderer});
+		this._cacheBackend = backend;
+		const preparer = new LocalSunFramePreparer({
+			...mode.createLocalFramePreparerConfiguration(this._sceneRuntime, this._endpointScene, sceneDepthMax),
+			performanceCallback: this._performanceCallback,
+		});
+		this._localFrameController = new LocalSunFrameController({
+			backend,
+			scheduler: this._cacheBuildScheduler,
+			/** Stage an isolated complete packet; rejection leaves the published packet in place.
+			 *
+			 * @param {LocalSunFrameStageRequest} request - Accepted profile, cache borrow and cancellation.
+			 * @returns {Promise<LocalSunPreparedFrameContents>} - Prepared renderer/receiver/celestial aggregate.
+			 */
+			stageFrame: (request) => preparer.prepare(request),
+		});
+		try {
+			this._pendingInitialLocalFrame = await this.prepareLocalFrame(
+				mode.createLocalFrameRequest(
+					mode.geometry.configuration.observation,
+					this._localFrameOtherCacheBytes(),
+					resolveLocalSunFrameView(this._sceneRuntime.camera),
+				),
+				cancellation.signal,
+			);
+			this._installed = true;
+			this._runtimeFrameCount = 1;
+			const preflight = this._pendingInitialLocalFrame.contents.preflight;
+			if (!preflight) throw new Error('Ordinary compact frame lacks actual preflight observations.');
+			this._lastSummary = {
+				...mode.describe(),
+				sceneDepthMax,
+				setupDurationMilliseconds: performance.now() - start,
+				runtimeFrameCount: 1,
+				renderErrorCount: 0,
+				...preflight,
+			};
+			if (!this._deferPublication) this.publish();
+			return this._lastSummary;
+		} catch (error) {
+			const errors = [error];
+			try {
+				this._localFrameController.dispose();
+			} catch (cleanupError) {
+				errors.push(cleanupError);
+			}
+			try {
+				await this._localFrameController.whenReleased();
+			} catch (cleanupError) {
+				errors.push(cleanupError);
+			}
+			try {
+				backend.dispose();
+			} catch (cleanupError) {
+				errors.push(cleanupError);
+			}
+			this._cacheBackend = null;
+			this._pendingInitialLocalFrame = null;
+			if (errors.length > 1) throw new AggregateError(errors, 'Local frame setup and cleanup failed.');
+			throw error;
+		} finally {
+			if (this._setupCancellation === cancellation) this._setupCancellation = null;
+		}
+	}
+
 	/**
 	 * Refresh the mutable Algorithm32 camera bindings.
+	 * Missing binding storage throws; complete runtime setup before updating camera bindings.
 	 *
-	 * @returns {void}
+	 * @returns {void} - Camera binding values updated in place.
 	 */
 	_updateBindingValues() {
 		if (this._bindingValues === null) {
@@ -523,58 +638,20 @@ export class Algorithm32Runtime {
 		});
 	}
 
-	/** Called by frame rendering to publish concise celestial generation diagnostics.
-	 *
-	 * @param {Flat32ShaderDiagnostics|null|undefined} diagnostics - Observed shader-owned diagnostics.
-	 * @returns {void} - Available diagnostics copied to the application canvas.
-	 */
-	_publishCelestialDiagnostics(diagnostics) {
-		const canvas = this._sceneRuntime.canvas;
-		const brightnessProxy = this._mode.algorithm32?.brightnessProxy?.value;
-		if (canvas?.dataset && Number.isFinite(brightnessProxy)) {
-			canvas.dataset.flat32ColorBrightnessProxy = String(brightnessProxy);
-		}
-		const celestial = diagnostics?.runtime?.celestialGeneration;
-		if (celestial) {
-			this._sceneRuntime.canvas.dataset.flat32CelestialGenerationStatus = celestial.status;
-		}
-		const sun = celestial?.sun;
-		if (sun) {
-			this._sceneRuntime.canvas.dataset.flat32SunTileGenerationStatus = sun.status;
-			this._sceneRuntime.canvas.dataset.flat32SunTileGenerationCount = String(sun.generationCount);
-			this._sceneRuntime.canvas.dataset.flat32SunTileGenerationCompletion =
-				sun.publicationState?.active?.completion ?? 'none';
-			this._sceneRuntime.canvas.dataset.flat32SunTileCoveragePolicy = sun.policyIdentity;
-		}
-		const stellar = diagnostics?.runtime?.stellarGeneration;
-		if (!stellar) return;
-		this._sceneRuntime.canvas.dataset.flat32StellarGenerationStatus = stellar.status;
-		this._sceneRuntime.canvas.dataset.flat32StellarGenerationCount = String(stellar.generationCount);
-		this._sceneRuntime.canvas.dataset.flat32StellarGenerationCompletion =
-			stellar.publicationState?.active?.completion ?? 'none';
-	}
-
 	/**
-	 * Read one immediately rendered default-framebuffer pixel.
+	 * Drain the current WebGL error queue.
 	 *
-	 * @param {WebGL2RenderingContext} context - Supplies framebuffer access.
-	 * @returns {readonly [number, number, number, number]} Return RGBA bytes.
+	 * @param {WebGL2RenderingContext} context - WebGL error-state context.
+	 * @returns {number[]} Return the drained numeric error identities.
 	 */
-	_readOutputPixel(context) {
-		const viewportSize = this._sceneRuntime.viewportSize;
-		const pixel = new Uint8Array(4);
+	_drainWebGlErrors(context) {
+		let errors = [];
 
-		context.readPixels(
-			Math.floor(viewportSize.width / 2),
-			Math.floor(viewportSize.height / 2),
-			1,
-			1,
-			context.RGBA,
-			context.UNSIGNED_BYTE,
-			pixel,
-		);
+		for (let error = context.getError(); error !== context.NO_ERROR; error = context.getError()) {
+			errors.push(error);
+		}
 
-		return /** @type {const} */ ([pixel[0], pixel[1], pixel[2], pixel[3]]);
+		return errors;
 	}
 
 	/**
@@ -583,8 +660,10 @@ export class Algorithm32Runtime {
 	 * EffectComposer swaps its read and write buffers after the final runtime
 	 * pass. That pass renders to the screen, so the post-swap write buffer is
 	 * the buffer populated by the preceding scene RenderPass.
+	 * A missing composer or renderer readback failure throws; discard this diagnostic sample
+	 * and report the failed preflight. The previous render target is restored after readback.
 	 *
-	 * @param {THREE.WebGLRenderer} renderer - Supplies render-target readback.
+	 * @param {Flat32RendererCapability} renderer - Renderer capability for render-target readback.
 	 * @returns {readonly [number, number, number, number]} Return renderer-linear RGBA values.
 	 */
 	_readSceneInputPixel(renderer) {
@@ -616,7 +695,32 @@ export class Algorithm32Runtime {
 	}
 
 	/**
+	 * Read one immediately rendered default-framebuffer pixel.
+	 *
+	 * @param {WebGL2RenderingContext} context - WebGL framebuffer-access context.
+	 * @returns {readonly [number, number, number, number]} Return RGBA bytes.
+	 */
+	_readOutputPixel(context) {
+		const viewportSize = this._sceneRuntime.viewportSize;
+		const pixel = new Uint8Array(4);
+
+		context.readPixels(
+			Math.floor(viewportSize.width / 2),
+			Math.floor(viewportSize.height / 2),
+			1,
+			1,
+			context.RGBA,
+			context.UNSIGNED_BYTE,
+			pixel,
+		);
+
+		return /** @type {const} */ ([pixel[0], pixel[1], pixel[2], pixel[3]]);
+	}
+
+	/**
 	 * Require one real composed frame before publishing the candidate runtime.
+	 * Missing resources, incomplete shader execution, compilation/WebGL errors or invalid output
+	 * throw; discard the candidate, report the failed preflight and keep a valid prior rendering path.
 	 *
 	 * @returns {Flat32AtmospherePreflight} Return verified frame facts.
 	 */
@@ -674,50 +778,6 @@ export class Algorithm32Runtime {
 		} finally {
 			renderer.debug.checkShaderErrors = previousCheckShaderErrors;
 			renderer.debug.onShaderError = previousShaderErrorHandler;
-		}
-	}
-
-	/**
-	 * Dispose resources created for a setup attempt, retaining the composer.
-	 *
-	 * @returns {void}
-	 */
-	_disposeSetupResources() {
-		this._shaderHandle?.dispose();
-		this._shaderHandle = null;
-		this._bindingValues = null;
-		this._cacheBackend?.dispose();
-		this._cacheBackend = null;
-		this._installed = false;
-	}
-
-	/**
-	 * Render one installed Algorithm32 frame or restore the direct fallback.
-	 *
-	 * @returns {void}
-	 */
-	_renderAtmosphereFrame() {
-		if (!this._installed || this._composer === null) {
-			return;
-		}
-
-		try {
-			this._updateBindingValues();
-			this._composer.render();
-			const diagnostics = /** @type {Flat32ShaderDiagnostics} */ (this._shaderHandle?.getDiagnostics());
-			this._publishCelestialDiagnostics(diagnostics);
-
-			if ((diagnostics.runtime?.renderErrorCount ?? 0) !== 0) {
-				throw new Error(diagnostics.runtime?.lastRenderError ?? 'Algorithm32 runtime frame failed.');
-			}
-			this._runtimeFrameCount += 1;
-			this._sceneRuntime.canvas.dataset.flat32AtmosphereFrameCount = String(this._runtimeFrameCount);
-		} catch (error) {
-			this._installed = false;
-			this._sceneRuntime.restoreDirectRendering();
-			this._onFailure(
-				`Atmosphere rendering failed; the direct scene remains active. ${this._errorMessage(error)}`,
-			);
 		}
 	}
 
@@ -843,140 +903,138 @@ export class Algorithm32Runtime {
 		}
 	}
 
-	/** Called by ordinary compact preparation to declare cache payload outside the frame controller's registry.
-	 * That controller accounts for its construction peak, auxiliary data and retained cache overlap.
-	 * Scene shadows, display targets and viewport-dependent staging are separate from cache accounting.
+	/** Rebuild all renderer-owned atmosphere and stellar resources through normal setup after restoration. */
+	/** Call this method to prepare and publish a complete replacement on the restored renderer.
+	 * A failed restoration releases its candidate and retains lost-context state for retry.
+	 * Restored-backend construction, complete-frame preparation/publication or cleanup failures reject;
+	 * report the failing operation, discard its candidate and retry with a valid restored renderer.
 	 *
-	 * @returns {UnitValue<'bytes'>} - No external cache payload is owned by this local attachment.
+	 * @returns {Promise<void>} - Restored complete frame, or rejection for preparation/publication/cleanup failure.
 	 */
-	_localFrameOtherCacheBytes() {
-		return {value: 0, units: 'bytes'};
-	}
-	/** Called by setup to stage the explicit compact candidate through the ordinary complete-frame owners.
-	 * Invalid scene/backend configuration rejects; correct it before retrying. Cancellation rejects
-	 * with its abort reason; discard that attempt. Cache construction, shader/receiver staging or
-	 * absent preflight observations reject; retain the prior published frame and report the failed owner.
-	 * Candidate and backend teardown are attempted; AggregateError includes any cleanup failures.
-	 * Report every cause and create a valid replacement before publication.
-	 *
-	 * @returns {Promise<Flat32AtmosphereSummary>} - Ready unpublished candidate or explicit admission failure.
-	 */
-	async _setupLocalFrames() {
-		const mode = /** @type {FlatLocalMode} */ (this._mode),
-			start = performance.now();
-		this._composer = this._preparedComposer;
-		const cancellation = new AbortController();
-		this._setupCancellation = cancellation;
-		const sceneDepthMax = this._resolveSceneDepthMax();
-		const backend = new ThreeCacheBackend({THREE, renderer: this._sceneRuntime.renderer});
-		this._cacheBackend = backend;
-		const preparer = new LocalSunFramePreparer({
-			...mode.createLocalFramePreparerConfiguration(this._sceneRuntime, this._endpointScene, sceneDepthMax),
-			performanceCallback: this._performanceCallback,
-		});
-		this._localFrameController = new LocalSunFrameController({
-			backend,
-			scheduler: this._cacheBuildScheduler,
-			/** Stage an isolated complete packet; rejection leaves the published packet in place.
-			 * @param {LocalSunFrameStageRequest} request - Accepted profile, cache borrow and cancellation.
-			 * @returns {Promise<LocalSunPreparedFrameContents>} - Prepared renderer/receiver/celestial aggregate.
-			 */
-			stageFrame: (request) => preparer.prepare(request),
-		});
-		try {
-			this._pendingInitialLocalFrame = await this.prepareLocalFrame(
-				mode.createLocalFrameRequest(
-					mode.geometry.configuration.observation,
-					this._localFrameOtherCacheBytes(),
-					resolveLocalSunFrameView(this._sceneRuntime.camera),
-				),
-				cancellation.signal,
-			);
-			this._installed = true;
-			this._runtimeFrameCount = 1;
-			const preflight = this._pendingInitialLocalFrame.contents.preflight;
-			if (!preflight) throw new Error('Ordinary compact frame lacks actual preflight observations.');
-			this._lastSummary = {
-				...mode.describe(),
-				sceneDepthMax,
-				setupDurationMilliseconds: performance.now() - start,
-				runtimeFrameCount: 1,
-				renderErrorCount: 0,
-				...preflight,
-			};
-			if (!this._deferPublication) this.publish();
-			return this._lastSummary;
-		} catch (error) {
-			const errors = [error];
+	async handleContextRestoration() {
+		if (this._disposed) return;
+		if (this._localFrameController) {
+			const backend = new ThreeCacheBackend({THREE, renderer: this._sceneRuntime.renderer});
+			this._cacheBackend = backend;
 			try {
-				this._localFrameController.dispose();
-			} catch (cleanupError) {
-				errors.push(cleanupError);
-			}
-			try {
-				await this._localFrameController.whenReleased();
-			} catch (cleanupError) {
-				errors.push(cleanupError);
-			}
-			try {
-				backend.dispose();
-			} catch (cleanupError) {
-				errors.push(cleanupError);
-			}
-			this._cacheBackend = null;
-			this._pendingInitialLocalFrame = null;
-			if (errors.length > 1) throw new AggregateError(errors, 'Local frame setup and cleanup failed.');
-			throw error;
-		} finally {
-			if (this._setupCancellation === cancellation) this._setupCancellation = null;
-		}
-	}
-
-	/** Call this method to make a successfully preflighted runtime visible.
-	 *
-	 * @returns {void} - Complete runtime rendering installed, or rejection before preflight.
-	 */
-	publish() {
-		this._assertUsable();
-		if (!this._installed) {
-			throw new Error('Cannot publish Flat32 atmosphere before preflight.');
-		}
-
-		if (this._pendingInitialLocalFrame && this._localFrameController) {
-			const frame = this._pendingInitialLocalFrame;
-			this._localFrameController.publishPreparedLocalFrame(frame, () => {
-				frame.contents.validateView?.();
+				const frame = await this._localFrameController.restoreContext(backend);
+				if (frame) await this.publishPreparedLocalFrame(frame, new AbortController().signal);
+			} catch (error) {
+				const errors = [error];
 				try {
-					frame.contents.sceneLighting?.publish();
-					this._publishSelectedRenderOperation();
-				} catch (error) {
-					frame.contents.sceneLighting?.revert();
-					throw error;
+					this._localFrameController.handleContextLoss();
+				} catch (cleanupError) {
+					errors.push(cleanupError);
 				}
-			});
-			if (this._mode instanceof FlatLocalMode) this._mode.acceptPublishedLocalFrame(frame);
-			this._pendingInitialLocalFrame = null;
-			this._sceneRuntime.refreshShadowMaps();
+				try {
+					backend.dispose();
+				} catch (cleanupError) {
+					errors.push(cleanupError);
+				}
+				this._cacheBackend = null;
+				if (errors.length > 1)
+					throw new AggregateError(errors, 'Local context restoration and cleanup failed.');
+				throw error;
+			}
+			return;
 		}
-		this._published = true;
-		this._publishSelectedRenderOperation();
+		if (this._mode instanceof SphericalDistantMode) this._mode.prepareContextRestoration();
+		await this.setup();
 	}
 
-	/** Called by publication or composition selection to install the current complete rendering operation.
+	/**
+	 * Normalize a caught setup or frame failure for presentation.
 	 *
-	 * @returns {void} - Selected rendering operation installed.
+	 * @param {unknown} error - Caught failure value.
+	 * @returns {string} Return a readable message.
 	 */
-	_publishSelectedRenderOperation() {
-		if (this._atmosphereEnabled) {
-			this._sceneRuntime.installRenderOperation(
-				this._localFrameController ? () => this._renderLocalFrame() : this._renderAtmosphereFrame,
-			);
-		} else {
+	_errorMessage(error) {
+		return error instanceof Error ? error.message : String(error);
+	}
+
+	/**
+	 * Yield one cache-build boundary to browser rendering and heartbeat tasks.
+	 *
+	 * @returns {Promise<void>} - Completion on a later browser task.
+	 */
+	_yieldCacheBuildControl() {
+		this._cacheYieldCount += 1;
+		this._sceneRuntime.canvas.dataset.flat32CacheYieldCount = String(this._cacheYieldCount);
+
+		return new Promise((resolve) => window.setTimeout(resolve, 0));
+	}
+	/**
+	 * Throw shader-pass warnings so a candidate cannot publish after failure.
+	 * The original Error is rethrown, or a diagnostic Error is created for another
+	 * warning value; callers must reject this candidate and retain the displayed frame.
+	 *
+	 * @param {string} message - Warning-boundary message.
+	 * @param {unknown} error - Underlying warning failure.
+	 * @returns {never} - The warning always terminates candidate preparation.
+	 */
+	_handleShaderWarning(message, error) {
+		if (error instanceof Error) {
+			throw error;
+		}
+
+		throw new Error(`${message}: ${String(error)}`);
+	}
+
+	/**
+	 * Capture concise WebGL compiler and linker diagnostics.
+	 *
+	 * @param {WebGLRenderingContext} context - Shader-log WebGL context.
+	 * @param {WebGLProgram} program - Linked program.
+	 * @param {WebGLShader} vertexShader - Vertex shader.
+	 * @param {WebGLShader} fragmentShader - Fragment shader.
+	 * @returns {void} - Available compiler and linker messages appended to the runtime diagnostics.
+	 */
+	_captureShaderError(context, program, vertexShader, fragmentShader) {
+		const programLog = context.getProgramInfoLog(program)?.trim() ?? '';
+		const vertexLog = context.getShaderInfoLog(vertexShader)?.trim() ?? '';
+		const fragmentLog = context.getShaderInfoLog(fragmentShader)?.trim() ?? '';
+		const details = [programLog, vertexLog, fragmentLog].filter((message) => message.length > 0);
+
+		this._shaderErrors.push(
+			details.length > 0 ? details.join(' | ') : 'WebGL reported an Algorithm32 shader link failure.',
+		);
+	}
+
+	/**
+	 * Render one installed Algorithm32 frame or restore the direct fallback.
+	 * Binding, composition and reported shader failures are caught and sent to the
+	 * failure observer after direct rendering is restored; the host can report that diagnostic.
+	 *
+	 * @returns {void} - The atmosphere frame rendered, was unavailable, or triggered direct fallback.
+	 */
+	_renderAtmosphereFrame() {
+		if (!this._installed || this._composer === null) {
+			return;
+		}
+
+		try {
+			this._updateBindingValues();
+			this._composer.render();
+			const diagnostics = /** @type {Flat32ShaderDiagnostics} */ (this._shaderHandle?.getDiagnostics());
+			this._publishCelestialDiagnostics(diagnostics);
+
+			if ((diagnostics.runtime?.renderErrorCount ?? 0) !== 0) {
+				throw new Error(diagnostics.runtime?.lastRenderError ?? 'Algorithm32 runtime frame failed.');
+			}
+			this._runtimeFrameCount += 1;
+			this._sceneRuntime.canvas.dataset.flat32AtmosphereFrameCount = String(this._runtimeFrameCount);
+		} catch (error) {
+			this._installed = false;
 			this._sceneRuntime.restoreDirectRendering();
+			this._onFailure(
+				`Atmosphere rendering failed; the direct scene remains active. ${this._errorMessage(error)}`,
+			);
 		}
 	}
 
 	/** Call this method to select atmosphere composition or direct Three rendering without rebuilding resources.
+	 * Disposed runtimes throw; use a live owner. Nonboolean selections throw TypeError;
+	 * correct the value before retrying. Renderer installation failures propagate to the caller.
 	 *
 	 * @param {boolean} enabled - Whether the published complete atmosphere frame renders.
 	 * @returns {void} - Selection applied to the current published runtime.
@@ -992,9 +1050,13 @@ export class Algorithm32Runtime {
 
 	/**
 	 * Call this method to restore direct rendering and release Algorithm32 resources in order.
+	 * Resource-owner release failures propagate; collected failures are reported singly or in
+	 * AggregateError after attempted teardown. Report them and never reuse this disposed runtime.
+	 * Local backend disposal completes asynchronously; await whenLocalFrameResourcesReleased
+	 * and handle its rejection before assuming all external GPU ownership was released.
 	 *
-	 * @param {Flat32RuntimeDisposalRequest} [options] - Keep replacement rendering installed when restoration is false.
-	 * @returns {void}
+	 * @param {Flat32RuntimeDisposalRequest} [options] - Optional disposal policy retaining replacement rendering when restoration is false.
+	 * @returns {void} - Runtime ownership retired and synchronous teardown attempted.
 	 */
 	dispose({restoreRendering = true} = {}) {
 		if (this._disposed) {

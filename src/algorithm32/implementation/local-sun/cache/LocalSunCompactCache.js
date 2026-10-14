@@ -9,17 +9,35 @@ import {LOCAL_SUN_CUMULATIVE_SCATTERING_SAMPLER_NAME} from './consts.js';
  * @implements {LocalSunFrameCacheOwner}
  */
 export class LocalSunCompactCache extends LocalSunCache {
-	/** Accepted physical/numerical plan and lookup semantics. @type {LocalSunCompactGpuPlan} */
+	/** Accepted physical/numerical plan and lookup semantics.
+	 *
+	 * @type {LocalSunCompactGpuPlan}
+	 */
 	_plan;
-	/** Auxiliary textures owned for exactly this cache lifetime. @type {CacheImmutableTexture[]} */
+	/** Auxiliary textures owned for exactly this cache lifetime.
+	 *
+	 * @type {CacheImmutableTexture[]}
+	 */
 	_auxiliaryTextures = [];
-	/** Ordinary-runtime binding names paired with accepted data. @type {CacheBinding[]} */
+	/** Ordinary-runtime binding names paired with accepted data.
+	 *
+	 * @type {CacheBinding[]}
+	 */
 	_auxiliaryBindings;
-	/** Completed logical allocation report. @type {LocalSunCompactGpuResourceReport} */
+	/** Completed logical allocation report.
+	 *
+	 * @type {LocalSunCompactGpuResourceReport}
+	 */
 	_compactResources;
-	/** Immutable GPU-packed density, shared by every frame lease. @type {CacheImmutableTexture | null} */
+	/** Immutable GPU-packed density, shared by every frame lease.
+	 *
+	 * @type {CacheImmutableTexture | null}
+	 */
 	_packed = null;
-	/** Closed runtime keys for the privately owned auxiliary resources. @type {Record<string, CacheRuntimeValueKey>} */
+	/** Closed runtime keys for the privately owned auxiliary resources.
+	 *
+	 * @type {Record<string, CacheRuntimeValueKey>}
+	 */
 	_valueKeys = {
 		uCompactPositions: 'cache.compactPositions',
 		uCompactExcesses: 'cache.compactExcesses',
@@ -85,6 +103,35 @@ SpectralValue compactPackedDensity(vec3 position,vec3 direction) {
  for(int channel=0;channel<SPECTRAL_CHANNEL_COUNT;++channel)result.channels[channel]=densities[channel/4][channel%4];
  return result;
 }`;
+	}
+
+	/** Call this method to release physical field and every auxiliary texture exactly once.
+	 * Every release is attempted. AggregateError reports failed resource owners;
+	 * report those cleanup failures and never reuse this retired cache.
+	 *
+	 * @returns {void} - No value.
+	 */
+	dispose() {
+		let errors = [];
+		try {
+			this._packed?.dispose();
+		} catch (error) {
+			errors.push(error);
+		}
+		this._packed = null;
+		try {
+			super.dispose();
+		} catch (error) {
+			errors.push(error);
+		}
+		for (let texture of this._auxiliaryTextures)
+			try {
+				texture.dispose();
+			} catch (error) {
+				errors.push(error);
+			}
+		this._auxiliaryTextures = [];
+		if (errors.length) throw new AggregateError(errors, 'Compact cache resource cleanup failed.');
 	}
 
 	/** Creates a complete compact cache and transfers all artifact/auxiliary ownership.
@@ -183,16 +230,6 @@ SpectralValue compactPackedDensity(vec3 position,vec3 direction) {
 		};
 	}
 
-	/** Call this method to contribute ordinary canonical compact lookup.
-	 * A disposed cache or unavailable packed owner throws through binding validation;
-	 * discard the contribution attempt and prepare a complete replacement cache.
-	 *
-	 * @returns {ShaderContribution} - Ordinary physical cache lookup.
-	 */
-	createShaderContribution() {
-		return this.createFrameShaderContribution(null);
-	}
-
 	/** Call this method to contribute geometry-transformed normalized lookup without changing stored values.
 	 * A disposed cache or unavailable packed owner throws before contribution creation;
 	 * discard the attempt and prepare a complete replacement cache. Invalid transform contributions
@@ -267,32 +304,13 @@ SpectralValue sampleCumulativeScatteringDensity(vec3 positionMeters,AtmosphereCo
 		});
 	}
 
-	/** Call this method to release physical field and every auxiliary texture exactly once.
-	 * Every release is attempted. AggregateError reports failed resource owners;
-	 * report those cleanup failures and never reuse this retired cache.
+	/** Call this method to contribute ordinary canonical compact lookup.
+	 * A disposed cache or unavailable packed owner throws through binding validation;
+	 * discard the contribution attempt and prepare a complete replacement cache.
 	 *
-	 * @returns {void} - No value.
+	 * @returns {ShaderContribution} - Ordinary physical cache lookup.
 	 */
-	dispose() {
-		let errors = [];
-		try {
-			this._packed?.dispose();
-		} catch (error) {
-			errors.push(error);
-		}
-		this._packed = null;
-		try {
-			super.dispose();
-		} catch (error) {
-			errors.push(error);
-		}
-		for (let texture of this._auxiliaryTextures)
-			try {
-				texture.dispose();
-			} catch (error) {
-				errors.push(error);
-			}
-		this._auxiliaryTextures = [];
-		if (errors.length) throw new AggregateError(errors, 'Compact cache resource cleanup failed.');
+	createShaderContribution() {
+		return this.createFrameShaderContribution(null);
 	}
 }

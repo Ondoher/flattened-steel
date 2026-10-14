@@ -2,6 +2,9 @@ import * as THREE from '../../../../../node_modules/three/build/three.module.js'
 import {ThreeCacheBackend} from '../ThreeCacheBackend.js';
 
 /** Create a complete signed, channel- and address-coded physical scalar fixture on the GPU.
+ * Allocation, compilation, submission or program cleanup failure rejects; fail the fixture
+ * setup and let the test owner dispose the backend rather than inspect incomplete values.
+ *
  * @param {ThreeCacheBackend} backend - Backend that owns the fixture.
  * @returns {Promise<GpuCacheField>} - Completed 7 by 3 by 15 scalar field.
  */

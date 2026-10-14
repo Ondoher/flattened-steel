@@ -1,12 +1,16 @@
 /** Operations consumed from a geometry-owned immutable horizontal cache map. */
 interface FlatLocalCacheTransformCapability {
-	/** Map a physical live point to construction coordinates. */ toCanonicalPosition(position: Position): Position;
-	/** Express a live unit direction in construction coordinates. */ toCanonicalDirection(
+	/** Call this method to map a physical live point to construction coordinates. */ toCanonicalPosition(
+		position: Position,
+	): Position;
+	/** Call this method to express a live unit direction in construction coordinates. */ toCanonicalDirection(
 		direction: UnitVector3,
 	): UnitVector3;
-	/** Map a construction point into the live scene. */ toLivePosition(position: Position): Position;
-	/** Contribute executable transforms without patching assembled shader text. */ createShaderFunctions(): readonly ShaderSourceBlock[];
-	/** Supply exact staged geometry transform values without changing program source. */ createShaderUniforms(): readonly ShaderUniformDeclaration[];
+	/** Call this method to map a construction point into the live scene. */ toLivePosition(
+		position: Position,
+	): Position;
+	/** Call this method to contribute executable transforms without patching assembled shader text. */ createShaderFunctions(): readonly ShaderSourceBlock[];
+	/** Call this method to supply exact staged geometry transform values without changing program source. */ createShaderUniforms(): readonly ShaderUniformDeclaration[];
 }
 /** Exact live profile input; source placement is resolved by geometry when omitted. */
 type LocalSunLiveProfileRequest = Readonly<{
@@ -16,8 +20,8 @@ type LocalSunLiveProfileRequest = Readonly<{
 }>;
 /** Existing compact cache operations consumed by a leased runtime view. */
 interface LocalSunFrameCacheOwner {
-	/** Expose only opaque field/auxiliary handles. */ getRuntimeBindings(): CacheRuntimeBindings;
-	/** Contribute physical lookup through the geometry-owned live map. */ createFrameShaderContribution(
+	/** Call this method to expose only opaque field/auxiliary handles. */ getRuntimeBindings(): CacheRuntimeBindings;
+	/** Call this method to contribute physical lookup through the geometry-owned live map. */ createFrameShaderContribution(
 		transform: FlatLocalCacheTransformCapability,
 	): ShaderContribution;
 }
@@ -29,7 +33,7 @@ type LocalSunFrameLeaseValidation = () => void;
 type LocalSunFrameCacheLeaseDefinition = Readonly<{
 	/** Canonical physical cache retained by the registry. */ owner: LocalSunFrameCacheOwner;
 	/** Geometry-owned live mapping. */ transform: FlatLocalCacheTransformCapability;
-	/** Release this borrow without disposing other consumers. */ release: LocalSunFrameLeaseRelease;
+	/** Borrow-release operation preserving other consumers. */ release: LocalSunFrameLeaseRelease;
 	/** Require the captured context to remain current. */ validate: LocalSunFrameLeaseValidation;
 }>;
 /** Retained canonical construction and borrower accounting. */
@@ -78,14 +82,14 @@ type LocalSunPreparedFrameContents = Readonly<{
 	/** Exact measured direct/diffuse light, with native basis and provenance. */ receiverLight: ReceiverEnvironmentLightMeasurement;
 	/** Exact matching celestial inputs; resource generation is P4. */ celestialInputs: LocalSunFrameCelestialInputs;
 	/** All geometry/source/cache shader binding values for this frame. */ bindingValues: Record<string, unknown>;
-	/** Render this complete staged frame, without mutating another frame. */ renderFrame: LocalSunFrameRenderOperation;
-	/** Release shader/receiver/celestial candidate resources exactly once. */ dispose(): void;
+	/** Rendering operation for this complete staged frame, preserving other frames. */ renderFrame: LocalSunFrameRenderOperation;
+	/** Call this method to release shader/receiver/celestial candidate resources exactly once. */ dispose(): void;
 }>;
 
 /** Assignment-only lighting transaction coordinated with complete frame installation. */
 interface LocalSunFrameSceneLighting {
-	/** Publish the exact measured candidate lighting. */ publish(): void;
-	/** Restore prior lighting if renderer installation rejects. */ revert(): void;
+	/** Call this method to publish the exact measured candidate lighting. */ publish(): void;
+	/** Call this method to restore prior lighting if renderer installation rejects. */ revert(): void;
 }
 
 /** Observed prepublication scene input and composed output; excludes later lighting publication. */
@@ -102,7 +106,7 @@ type LocalSunFrameStageRequest = Readonly<{
 	/** Borrowed construction cache exposed as an ordinary controller. */ cacheController: CacheController;
 	/** Current backend, replaced explicitly after context restoration. */ backend: LocalSunFrameBackend;
 	/** Unique generation and exact requested facts. */ identity: string;
-	/** Cancel or reject stale preparation. */ signal: AbortSignal;
+	/** Cancellation signal for rejecting stale preparation. */ signal: AbortSignal;
 }>;
 /** Renderer-side operation that prepares a complete frame through normal shader/receiver owners. */
 type LocalSunFrameStageFactory = (request: LocalSunFrameStageRequest) => Promise<LocalSunPreparedFrameContents>;
@@ -120,7 +124,7 @@ type PreparedLocalSunFrame = Readonly<{
 	/** Immutable physical transform from this frame to construction. */ transform: FlatLocalCacheTransformCapability;
 	/** Independently paired live profile. */ profile: LocalSunCompactConstructionProfile;
 	/** Complete staged renderer, receiver and celestial state. */ contents: LocalSunPreparedFrameContents;
-	/** Borrow resources for another current-frame consumer. */ borrowCache(): GpuScatteringCache;
+	/** Call this method to borrow resources for another current-frame consumer. */ borrowCache(): GpuScatteringCache;
 }>;
 /** Controller-private prepared frame ownership, separate from its public readonly packet. */
 type LocalSunFrameRecord = {
@@ -143,20 +147,20 @@ type LocalSunFramePublication = Readonly<{
 type LocalSunFrameRenderInstallation = () => void;
 /** Explicit source-owned complete-frame preparation and publication capability. */
 interface LocalSunFramePublicationController {
-	/** Settles after disposal, pending cleanup and final valid cache borrower release. */ whenReleased(): Promise<void>;
+	/** Call this method to await disposal, pending cleanup and final valid cache borrower release. */ whenReleased(): Promise<void>;
 	/** Single displayed aggregate, or no available frame after loss. */ readonly active: PreparedLocalSunFrame | null;
-	/** Stage exact physical/receiver/shader state without replacing the displayed frame. */ prepareLocalFrame(
+	/** Call this method to stage exact physical/receiver/shader state without replacing the displayed frame. */ prepareLocalFrame(
 		request: LocalSunFrameRequest,
 		signal?: AbortSignal,
 	): Promise<PreparedLocalSunFrame>;
-	/** Commit one complete current-generation packet and report post-commit retirement independently. */ publishPreparedLocalFrame(
+	/** Call this method to commit one complete current-generation packet and report post-commit retirement independently. */ publishPreparedLocalFrame(
 		frame: PreparedLocalSunFrame,
 		install?: LocalSunFrameRenderInstallation,
 	): LocalSunFramePublication;
-	/** Cancel pending work while retaining the displayed frame. */ cancelPreparation(): void;
-	/** Invalidate lost-context resources and withdraw rendering. */ handleContextLoss(): void;
-	/** Rebuild a complete retained request on the restored backend. */ restoreContext(
+	/** Call this method to cancel pending work while retaining the displayed frame. */ cancelPreparation(): void;
+	/** Call this method to invalidate lost-context resources and withdraw rendering. */ handleContextLoss(): void;
+	/** Call this method to rebuild a complete retained request on the restored backend. */ restoreContext(
 		backend: LocalSunFrameBackend,
 	): Promise<PreparedLocalSunFrame | null>;
-	/** Retire frames and allow final borrower-driven resource release. */ dispose(): void;
+	/** Call this method to retire frames and allow final borrower-driven resource release. */ dispose(): void;
 }

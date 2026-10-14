@@ -8,11 +8,26 @@ import {SpectralMath} from '../../../../../spectral-values/index.js';
 
 /** Virtual resource backend and genuine accepted physical profiles for frame-lifecycle tests, without numerical GPU claims. */
 export class LocalSunFrameTestSupport {
-	/** Outstanding opaque owner handles. @type {Set<object>} */ handles = new Set();
-	/** Total submitted layers, for observable reuse assertions. @type {number} */ submissions = 0;
-	/** Completed staged-frame disposals. @type {number} */ stagedDisposals = 0;
-	/** Backend identity. @type {string} */ id = 'frame-lifecycle-spec';
-	/** Accepted virtual resource capabilities. @type {CacheGpuCapabilities} */ capabilities = {
+	/** Outstanding opaque owner handles.
+	 *
+	 * @type {Set<object>}
+	 */ handles = new Set();
+	/** Total submitted layers, for observable reuse assertions.
+	 *
+	 * @type {number}
+	 */ submissions = 0;
+	/** Completed staged-frame disposals.
+	 *
+	 * @type {number}
+	 */ stagedDisposals = 0;
+	/** Backend identity.
+	 *
+	 * @type {string}
+	 */ id = 'frame-lifecycle-spec';
+	/** Accepted virtual resource capabilities.
+	 *
+	 * @type {CacheGpuCapabilities}
+	 */ capabilities = {
 		id: 'frame-lifecycle-capabilities',
 		api: 'virtual resource lifecycle only',
 		scalarFormat: 'R32F',
@@ -103,6 +118,7 @@ export class LocalSunFrameTestSupport {
 			...specification,
 			backendId: this.id,
 			/** Release this virtual field handle.
+			 *
 			 * @returns {boolean} - Whether the handle was still tracked.
 			 */ dispose: () => this.handles.delete(field),
 		};
@@ -120,6 +136,7 @@ export class LocalSunFrameTestSupport {
 			id: shader.id,
 			sourceHash: shader.sourceHash,
 			/** Release this virtual program handle.
+			 *
 			 * @returns {boolean} - Whether the handle was still tracked.
 			 */ dispose: () => this.handles.delete(program),
 		};
@@ -157,6 +174,7 @@ export class LocalSunFrameTestSupport {
 			backendId: this.id,
 			runtimeBinding: {id: request.id, fieldId: request.id, valueKey: request.valueKey, backendId: this.id},
 			/** Release this virtual texture handle.
+			 *
 			 * @returns {boolean} - Whether the handle was still tracked.
 			 */ dispose: () => this.handles.delete(texture),
 		};
@@ -165,6 +183,7 @@ export class LocalSunFrameTestSupport {
 	}
 
 	/** Simulate packed-resource ownership only; this backend makes no numerical GPU claim.
+	 *
 	 * @param {CacheRuntimeFieldPackingRequest} request - Real controller-selected scalar source.
 	 * @returns {CacheImmutableTexture} - Virtual immutable packed handle.
 	 */
@@ -188,6 +207,8 @@ export class LocalSunFrameTestSupport {
 	installRuntimeBindings() {}
 
 	/** Call this method only when a lifecycle proof unexpectedly requests numerical data.
+	 * Always rejects because the virtual backend has no numerical field; fail that proof and
+	 * use a physical GPU proof for numerical assertions rather than accepting this as cache data.
 	 *
 	 * @returns {Promise<CacheProbeResult>} - Always rejects; no numerical gold exists in this backend.
 	 */

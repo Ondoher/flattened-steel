@@ -1,8 +1,10 @@
 import * as THREE from 'three';
 
 /** Call this function to resolve renderer view facts without projecting into physical coordinates.
+ * Asymmetric offsets or invalid perspective fields throw RangeError; correct the camera
+ * before requesting a supported compact frame.
  *
- * @param {THREE.PerspectiveCamera} camera - Current ordinary camera.
+ * @param {Flat32PerspectiveCameraCapability} camera - Current ordinary camera.
  * @returns {Flat32LocalFrameViewRequest} - Symmetric perspective cone and scene origin/direction.
  */
 export function resolveLocalSunFrameView(camera) {

@@ -60,14 +60,21 @@ type ThreeCacheBackendTexture = {
 	dispose(): void;
 };
 
-/** Exact constructor options for one scalar R32F array render target. */
+/** FP32 storage layout of a cache array render target.
+ *
+ * - **"R32F"** - One scalar per texel for construction fields.
+ * - **"RGBA32F"** - Four floats per texel for packed runtime lookup.
+ */
+type ThreeCacheBackendScalarArrayFormat = 'R32F' | 'RGBA32F';
+
+/** Exact constructor options for one scalar or packed FP32 array render target. */
 type ThreeCacheBackendScalarArrayTargetOptions = Readonly<{
-	/** Red pixel format required by the scalar target. */
+	/** Red or RGBA pixel format matching the selected storage layout. */
 	format: 1028 | 1023;
 	/** Float scalar type required by the scalar target. */
 	type: 1015;
-	/** R32F GPU internal format required by the scalar target. */
-	internalFormat: 'R32F' | 'RGBA32F';
+	/** FP32 GPU internal format matching the selected storage layout. */
+	internalFormat: ThreeCacheBackendScalarArrayFormat;
 	/** Nearest-neighbor minification filter required by the scalar target. */
 	minFilter: 1003;
 	/** Nearest-neighbor magnification filter required by the scalar target. */
@@ -131,6 +138,7 @@ type ThreeCacheBackendBufferAttributeConstructor = new (
 type ThreeCacheBackendBufferGeometry = {
 	/**
 	 * Call this method to install a named vertex attribute.
+	 *
 	 * @param name - The name value accepted by the operation.
 	 * @param attribute - The attribute value accepted by the operation.
 	 * @returns - The result produced by the operation.
@@ -194,6 +202,7 @@ type ThreeCacheBackendMeshConstructor = new (
 type ThreeCacheBackendScene = {
 	/**
 	 * Call this method to attach the fullscreen mesh to the scene.
+	 *
 	 * @param mesh - The mesh value accepted by the operation.
 	 * @returns - The result produced by the operation.
 	 */
@@ -275,43 +284,51 @@ type ThreeCacheBackendRendererOperations = Readonly<{
 	capabilities: ThreeCacheBackendRendererCapabilities;
 	/**
 	 * Call this method to access the renderer's WebGL context.
+	 *
 	 * @returns - The result produced by the operation.
 	 */
 	getContext(): WebGLRenderingContext | WebGL2RenderingContext;
 	/**
 	 * Call this method to access the renderer's active render target.
+	 *
 	 * @returns - The result produced by the operation.
 	 */
 	getRenderTarget(): object | null;
 	/**
 	 * Call this method to access the renderer's active cube face.
+	 *
 	 * @returns - The result produced by the operation.
 	 */
 	getActiveCubeFace(): number;
 	/**
 	 * Call this method to access the renderer's active mip level.
+	 *
 	 * @returns - The result produced by the operation.
 	 */
 	getActiveMipmapLevel(): number;
 	/**
 	 * Call this method to copy the renderer viewport into a vector.
+	 *
 	 * @param target - The target value accepted by the operation.
 	 * @returns - The result produced by the operation.
 	 */
 	getViewport(target: ThreeCacheBackendVector4): ThreeCacheBackendVector4;
 	/**
 	 * Call this method to copy the renderer scissor rectangle into a vector.
+	 *
 	 * @param target - The target value accepted by the operation.
 	 * @returns - The result produced by the operation.
 	 */
 	getScissor(target: ThreeCacheBackendVector4): ThreeCacheBackendVector4;
 	/**
 	 * Call this method to access the renderer's scissor-test state.
+	 *
 	 * @returns - The result produced by the operation.
 	 */
 	getScissorTest(): boolean;
 	/**
 	 * Call this method to select a render target, layer, and mip level.
+	 *
 	 * @param target - The target value accepted by the operation.
 	 * @param activeLayer - The active layer value accepted by the operation.
 	 * @param activeMipmapLevel - The active mipmap level value accepted by the operation.
@@ -319,11 +336,13 @@ type ThreeCacheBackendRendererOperations = Readonly<{
 	setRenderTarget(target: object | null, activeLayer?: number, activeMipmapLevel?: number): void;
 	/**
 	 * Call this method to restore a captured viewport vector. This overload accepts one captured viewport vector.
+	 *
 	 * @param viewport - The viewport value accepted by the operation.
 	 */
 	setViewport(viewport: ThreeCacheBackendVector4): void;
 	/**
 	 * Call this method to select a numeric viewport rectangle. This overload accepts explicit x, y, width, and height scalars.
+	 *
 	 * @param x - The x value accepted by the operation.
 	 * @param y - The y value accepted by the operation.
 	 * @param width - The width value accepted by the operation.
@@ -332,11 +351,13 @@ type ThreeCacheBackendRendererOperations = Readonly<{
 	setViewport(x: number, y: number, width: number, height: number): void;
 	/**
 	 * Call this method to restore a captured scissor vector. This overload accepts one captured scissor vector.
+	 *
 	 * @param scissor - The scissor value accepted by the operation.
 	 */
 	setScissor(scissor: ThreeCacheBackendVector4): void;
 	/**
 	 * Call this method to select a numeric scissor rectangle. This overload accepts explicit x, y, width, and height scalars.
+	 *
 	 * @param x - The x value accepted by the operation.
 	 * @param y - The y value accepted by the operation.
 	 * @param width - The width value accepted by the operation.
@@ -345,11 +366,13 @@ type ThreeCacheBackendRendererOperations = Readonly<{
 	setScissor(x: number, y: number, width: number, height: number): void;
 	/**
 	 * Call this method to select whether scissor testing is enabled.
+	 *
 	 * @param enabled - The enabled value accepted by the operation.
 	 */
 	setScissorTest(enabled: boolean): void;
 	/**
 	 * Call this method to optional asynchronous cache-program compilation operation.
+	 *
 	 * @param scene - The scene value accepted by the operation.
 	 * @param camera - The camera value accepted by the operation.
 	 * @returns - The result produced by the operation.
@@ -357,12 +380,14 @@ type ThreeCacheBackendRendererOperations = Readonly<{
 	compileAsync?(scene: ThreeCacheBackendScene, camera: ThreeCacheBackendCamera): Promise<void>;
 	/**
 	 * Call this method to compile one cache-program scene synchronously.
+	 *
 	 * @param scene - The scene value accepted by the operation.
 	 * @param camera - The camera value accepted by the operation.
 	 */
 	compile(scene: ThreeCacheBackendScene, camera: ThreeCacheBackendCamera): void;
 	/**
 	 * Call this method to render one cache-program scene.
+	 *
 	 * @param scene - The scene value accepted by the operation.
 	 * @param camera - The camera value accepted by the operation.
 	 */
@@ -484,6 +509,7 @@ type ThreeCacheBackendRendererStateRestorer =
 type ThreeCacheBackendRendererOperation<T> =
 	/**
 	 * Called by three cache backend renderer operation to handle one invocation of the declared operation.
+	 *
 	 * @returns - The callback result returned to its caller.
 	 */ () => T;
 
@@ -533,7 +559,7 @@ class ThreeCacheBackend implements CacheGpuBackend, CachePacketAtlasBackend, Cac
 	 * @returns - Opaque runtime binding.
 	 */
 	createRuntimeBinding(request: CacheRuntimeBindingRequest): CacheRuntimeBinding;
-	/** Validate and eagerly upload one immutable resident texture. */
+	/** Call this method to validate and eagerly upload one immutable resident texture. */
 	uploadImmutableTexture(request: CacheImmutableTextureUploadRequest): CacheImmutableTexture;
 	/** Call this method to allocate a bounded persistent RGBA32F array. */
 	allocatePersistentArray(request: CachePersistentArrayRequest): CachePersistentArray;

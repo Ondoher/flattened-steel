@@ -12,7 +12,7 @@ export class LocalSunFramePreparer {
 
 	/** Called by staging and rendering to refresh only this frame's camera/display bindings.
 	 *
-	 * @param {Record<string,unknown>} bindingValues - Candidate binding aggregate.
+	 * @param {Algorithm32BindingValues} bindingValues - Candidate binding aggregate.
 	 * @param {Algorithm32} algorithm - Candidate physical facade.
 	 * @returns {void} - No value.
 	 */
@@ -25,6 +25,8 @@ export class LocalSunFramePreparer {
 	}
 
 	/** Called by preparation to reject failed compilation or an incomplete real composed frame.
+	 * Scene/output readback errors, nonfinite pixels, incomplete shader frames or non-runnable
+	 * programs throw; discard the candidate and report the failed preflight before retrying.
 	 *
 	 * @param {ShaderHandle} handle - Independently staged shader.
 	 * @param {Flat32AtmosphereComposerResources} resources - Candidate composer/targets.
@@ -76,6 +78,8 @@ export class LocalSunFramePreparer {
 	}
 
 	/** Called by candidate teardown to attempt every owned disposal even when one resource owner fails.
+	 * AggregateError reports failed algorithm, composer or target disposal after every release
+	 * was attempted; report all causes and do not reuse the retired candidate.
 	 *
 	 * @param {Algorithm32} algorithm - Candidate facade owning its shader/receiver resources.
 	 * @param {Flat32AtmosphereComposerResources} resources - Candidate composer/targets.
@@ -205,10 +209,12 @@ export class LocalSunFramePreparer {
 			return {
 				shaderReady: true,
 				/** Report this packet's shader and resource observations.
+				 *
 				 * @returns {Flat32LocalFrameShaderDiagnostics} - Current renderer-owned diagnostics.
 				 */
 				getDiagnostics: () => handle.getDiagnostics(),
 				/** Reject an unsupported current camera cone before publication or rendering; correct the view before retrying.
+				 *
 				 * @returns {void} - Current view is supported.
 				 */
 				validateView: () => this._validateCurrentView(request.profile),
@@ -226,6 +232,7 @@ export class LocalSunFramePreparer {
 				bindingValues,
 				/** Render one live supported packet. Retired packets, unsupported views or renderer failures throw;
 				 * the caller stops this operation and reports failure before preparing a valid replacement.
+				 *
 				 * @returns {void} - One complete frame is rendered.
 				 */
 				renderFrame: () => {
@@ -237,6 +244,7 @@ export class LocalSunFramePreparer {
 				},
 				/** Retire the packet and attempt every owned release once. Report aggregate cleanup failures;
 				 * a retired packet must not be rendered or reused after teardown.
+				 *
 				 * @returns {void} - Packet resources have been released or their failures reported.
 				 */
 				dispose: () => {

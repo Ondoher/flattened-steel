@@ -1,6 +1,6 @@
 /** Type that identifies one executable cache plan for exact reuse comparison. */
 type CacheReuseIdentity = {
-	/** Value that identifies this value. */
+	/** Stable executable cache-plan identifier. */
 	readonly id: string;
 	/** Value that identifies the normalized content. */
 	readonly contentHash: string;
@@ -26,9 +26,9 @@ type SpectralFieldOrder =
 			readonly value: number;
 	  }
 	| {
-			/** Value that identifies the contract kind. */
+			/** Cumulative-through discriminator for a sum of pure orders. */
 			readonly kind: 'cumulative-through';
-			/** Value that stores the scalar value. */
+			/** Maximum scattering order included in the cumulative field. */
 			readonly value: number;
 			/** Value that stores the included pure scattering orders. */
 			readonly included: readonly number[];
@@ -43,15 +43,15 @@ type SpectralFieldOrderDefinition =
 			readonly value: number;
 	  }
 	| {
-			/** Value that identifies the contract kind. */
+			/** Cumulative-through discriminator for a sum of pure orders. */
 			readonly kind: 'cumulative-through';
-			/** Value that stores the scalar value. */
+			/** Maximum scattering order included in the cumulative field. */
 			readonly value: number;
 			/** Value that stores the included pure scattering orders. */
 			readonly included?: readonly number[];
 	  };
 
-/** Address one scalar in a directional spectral field. */
+/** Coordinates of one scalar in a directional spectral field. */
 type DirectionalSpectralFieldCoordinates = Readonly<{
 	/** Value that stores the direction-domain index. */
 	directionIndex: number;
@@ -72,7 +72,7 @@ interface DirectionalSpectralFieldPacking {
 	/**
 	 * Call this method to resolve the packed scalar offset for field coordinates.
 	 *
-	 * @param coordinates - Supplies the field coordinates.
+	 * @param coordinates - Physical field coordinates.
 	 * @returns - The packed scalar offset.
 	 */
 	offset(coordinates: DirectionalSpectralFieldCoordinates): number;
@@ -80,7 +80,7 @@ interface DirectionalSpectralFieldPacking {
 	/**
 	 * Call this method to resolve field coordinates at a packed scalar offset.
 	 *
-	 * @param offset - Supplies the packed scalar offset.
+	 * @param offset - Packed scalar offset.
 	 * @returns - The resolved field coordinates.
 	 */
 	coordinatesAt(offset: number): DirectionalSpectralFieldCoordinates;
@@ -111,14 +111,14 @@ type CpuDirectionalSpectralFieldReader = Readonly<{
 	/**
 	 * Call this method to read one scalar at physical field coordinates.
 	 *
-	 * @param coordinates - Supplies the field coordinates.
+	 * @param coordinates - Physical field coordinates.
 	 * @returns - The stored scalar value.
 	 */
 	readScalar(coordinates: DirectionalSpectralFieldCoordinates): number;
 	/**
 	 * Call this method to read one scalar at a packed offset.
 	 *
-	 * @param offset - Supplies the packed scalar offset.
+	 * @param offset - Packed scalar offset.
 	 * @returns - The stored scalar value.
 	 */
 	readScalarAtOffset(offset: number): number;
@@ -326,7 +326,7 @@ type ScatteringCacheSampleRequest = Readonly<{
 type ScatteringCacheBuildRequest = Readonly<{
 	/** Additional GPU payload outside this controller for compact-cache diagnostics. It does not impose a browser admission ceiling; ordinary display/shadow targets are accounted separately. */
 	otherOwnedGpuBytes?: UnitValue<'bytes'>;
-	/** Cancel this construction request. */
+	/** Optional caller cancellation for this construction request. */
 	signal?: AbortSignal;
 }>;
 
@@ -381,7 +381,7 @@ interface CpuScatteringCache extends ScatteringCache {
 	/**
 	 * Call this method to sample the cache from pairing-neutral physical context.
 	 *
-	 * @param request - Supplies resolved position and direction stencils.
+	 * @param request - Resolved position and direction stencils.
 	 * @returns - The cumulative local spectral scattering density.
 	 */
 	sampleCumulativeScatteringDensity(request: ScatteringCacheSampleRequest): SpectralScatteringDensityPacket;
@@ -392,13 +392,14 @@ interface GpuScatteringCache extends ScatteringCache {
 	/**
 	 * Call this method to contribute source-specific final-view lookup code and bindings.
 	 *
-	 * @param request - Supplies direct accepted shader build facts.
+	 * @param request - Direct accepted shader build facts.
 	 * @returns - One or more runtime shader contributions.
 	 */
 	createShaderContribution(request: ShaderContributionRequest): ShaderContribution | readonly ShaderContribution[];
 
 	/**
 	 * Call this method to return opaque runtime bindings for the privately owned cumulative field.
+	 *
 	 * @returns - The result produced by the operation.
 	 */
 	getRuntimeBindings(): CacheRuntimeBindings;
@@ -423,6 +424,7 @@ interface CacheController {
 
 	/**
 	 * Call this method to construct, reuse, and publish one complete source-owned cache.
+	 *
 	 * @param request - The request accepted by the operation.
 	 * @returns - The result produced by the operation.
 	 */

@@ -1,10 +1,29 @@
+/** Geometry operations borrowed by compact reconstruction.
+ *
+ * - **"resolveAtmosphereCoordinate"** - Physical atmosphere coordinate at a sample.
+ * - **"resolveSourceRelativePosition"** - Sample position in the source frame.
+ */
+type LocalSunCompactGeometryCoordinateKey = 'resolveAtmosphereCoordinate' | 'resolveSourceRelativePosition';
+
+/** Medium operations borrowed for spectral restoration.
+ *
+ * - **"spectralBasis"** - Ordered native wavelength basis.
+ * - **"sampleMedium"** - Physical medium coefficients at a sample.
+ */
+type LocalSunCompactReconstructionMediumKey = 'spectralBasis' | 'sampleMedium';
+
+/** Density inputs retained by a compact transport request.
+ *
+ * - **"reader"** - Read-only physical density field.
+ * - **"provenanceIdentity"** - Original density-field identity.
+ */
+type LocalSunCompactDensityInputKey = 'reader' | 'provenanceIdentity';
+
 /** Geometry-owned physical coordinates and compact node/reconstruction support required by the cache. */
-interface LocalSunCompactReconstructionGeometry extends Pick<
-	GeometryModel,
-	'resolveAtmosphereCoordinate' | 'resolveSourceRelativePosition'
-> {
+interface LocalSunCompactReconstructionGeometry extends Pick<GeometryModel, LocalSunCompactGeometryCoordinateKey> {
 	/**
 	 * Call this method to resolve complete physical compact support.
+	 *
 	 * @param request - Physical query with paired topology.
 	 * @returns - Positive spatial taps with per-tap angular support; unsupported input throws.
 	 */
@@ -13,6 +32,7 @@ interface LocalSunCompactReconstructionGeometry extends Pick<
 	): readonly FlatCompactReconstructionTap[];
 	/**
 	 * Call this method to place an allocated node in the canonical source meridian.
+	 *
 	 * @param request - Paired topology and allocated index.
 	 * @returns - Physical node position; unsupported pairing/address throws.
 	 */
@@ -25,7 +45,7 @@ type LocalSunCompactReconstructionDefinition = Readonly<{
 	/** Structural compact domain paired with the geometry height/slab. */ topology: FlatCompactTopology;
 	/** Existing Native15 medium owner; positive extinction is required. */ atmosphere: Pick<
 		AtmosphereModel,
-		'spectralBasis' | 'sampleMedium'
+		LocalSunCompactReconstructionMediumKey
 	>;
 }>;
 
@@ -49,7 +69,10 @@ type LocalSunCompactDensitySampleRequest = ScatteringCacheDirectionRequest &
 type LocalSunCompactTransportDefinition = Readonly<{
 	/** Complete compact coordinate/ray owner. */ geometry: LocalSunCompactReconstructionGeometry &
 		Readonly<{
-			/** Call this method to resolve a closed physical compact ray. @param request - Paired support and physical ray. @returns - Supported geometry-owned ray. */
+			/** Call this method to resolve a closed physical compact ray.
+			 *
+			 * @param request - Paired support and physical ray. @returns - Supported geometry-owned ray.
+			 */
 			resolveCompactLocalSunCacheRay(request: FlatCompactRayRequest): FlatCompactRay;
 		}>;
 	/** Geometry-paired structural topology. */ topology: FlatCompactTopology;
@@ -59,7 +82,7 @@ type LocalSunCompactTransportDefinition = Readonly<{
 type LocalSunCompactTransportRayRequest = Omit<FlatCompactRayRequest, 'topology'>;
 /** Physical read-only scattering-density input and original identity. */
 type LocalSunCompactTransportRequest = LocalSunCompactTransportRayRequest &
-	Pick<LocalSunCompactDensitySampleRequest, 'reader' | 'provenanceIdentity'>;
+	Pick<LocalSunCompactDensitySampleRequest, LocalSunCompactDensityInputKey>;
 /** Cache policy plan with distinct full-ray and per-channel retained-prefix semantics. */
 type LocalSunCompactTransportRayPlan = Readonly<{
 	/** Actual executable numerical policy. */ policyId: string;
@@ -163,6 +186,7 @@ interface LocalSunShellFactCache {
 	readonly resourceUsage: LocalSunShellFactResourceUsage;
 	/**
 	 * Call this method to resolve one finite source distance to its containing shell.
+	 *
 	 * @param distanceFromSourceMeters - The distance from source meters value accepted by the operation.
 	 * @returns - The result produced by the operation.
 	 */
@@ -177,18 +201,21 @@ type LocalSunConstructionContinuousSource = Readonly<{
 	readonly configuration: Pick<LocalSunLightSourceConfiguration, 'sourceIrradiance'>;
 	/**
 	 * Call this method to sample continuous direct lighting at one physical position.
+	 *
 	 * @param request - The request accepted by the operation.
 	 * @returns - The result produced by the operation.
 	 */
 	sampleDirectLighting(request?: object): DirectLightingSample;
 	/**
 	 * Call this method to resolve the finite source path limit.
+	 *
 	 * @param request - The request accepted by the operation.
 	 * @returns - The result produced by the operation.
 	 */
 	resolveSourcePathLimit(request: unknown): SourcePathLimit;
 	/**
 	 * Call this method to create the physical source's cache controller.
+	 *
 	 * @param request - The request accepted by the operation.
 	 * @returns - The result produced by the operation.
 	 */
@@ -231,6 +258,7 @@ interface LocalSunFieldPacking extends DirectionalSpectralFieldPacking {
 	readonly scalarCount: number;
 	/**
 	 * Call this method to recover logical coordinates from an offset.
+	 *
 	 * @param offset - The offset value accepted by the operation.
 	 * @returns - The result produced by the operation.
 	 */
@@ -323,6 +351,7 @@ interface LocalSunConstructionDomainSelection {
 	readonly scatteringDensityPacking: LocalSunFieldPacking;
 	/**
 	 * Call this method to resolve one source-local outgoing direction into W-domain taps.
+	 *
 	 * @param direction - The direction value accepted by the operation.
 	 * @returns - The result produced by the operation.
 	 */
@@ -353,6 +382,7 @@ type LocalSunConstructionDomainGeometryOptions = Readonly<{
 type LocalSunConstructionDomainGeometry = Readonly<{
 	/**
 	 * Call this method to create geometry-owned z-by-rho nodes.
+	 *
 	 * @param request - The request accepted by the operation.
 	 * @returns - The result produced by the operation.
 	 */
@@ -375,6 +405,7 @@ type LocalSunCacheBuildSource = CacheBuildContributor &
 		configuration: LocalSunLightSourceConfiguration;
 		/**
 		 * Call this method to report source facts, uploads, zero packed-transport accounting, and executor storage.
+		 *
 		 * @param plan - The plan value accepted by the operation.
 		 * @param diagnostics - The diagnostics value accepted by the operation.
 		 * @returns - The result produced by the operation.
@@ -469,6 +500,7 @@ type LocalSunCpuCumulativeFieldDefinition = Readonly<{
 type LocalSunPhysicalDirectionGeometry = Readonly<{
 	/**
 	 * Call this method to express one local cache direction at its physical position.
+	 *
 	 * @param request - The request accepted by the operation.
 	 * @returns - The result produced by the operation.
 	 */
@@ -479,6 +511,7 @@ type LocalSunPhysicalDirectionGeometry = Readonly<{
 type LocalSunConstructionPositionLookupGeometry = Readonly<{
 	/**
 	 * Call this method to resolve one selected local construction-position stencil.
+	 *
 	 * @param request - The request accepted by the operation.
 	 * @returns - The result produced by the operation.
 	 */
@@ -569,6 +602,7 @@ type LocalSunLaterOrderScatteringKernelRequest = Readonly<{
 type LocalSunCpuTransportedRadianceBuilder =
 	/**
 	 * Called by local sun cpu transported radiance builder to handle one invocation of the declared operation.
+	 *
 	 * @param request - The request accepted by the operation.
 	 * @returns - The callback result returned to its caller.
 	 */ (request: CpuTransportedRadianceBuildRequest) => CpuDirectionalSpectralFieldContract;
@@ -577,6 +611,7 @@ type LocalSunCpuTransportedRadianceBuilder =
 type LocalSunCpuCacheOperations = Readonly<{
 	/**
 	 * Call this method to create one physical pure-order scattering kernel.
+	 *
 	 * @param request - The request accepted by the operation.
 	 * @returns - The result produced by the operation.
 	 */
@@ -644,7 +679,7 @@ type LocalSunCpuCacheTestSource = LocalSunCacheProviderSource &
 /** Local-Sun provider seams retained by the CPU cache test fixture. */
 type LocalSunCpuCacheTestProvider = Readonly<{
 	/**
-	 * Called by local sun cpu cache test provider to execute the bounded internal recurrence.
+	 * Call this method to execute the bounded internal recurrence through the CPU cache test provider.
 	 *
 	 * @param request - Complete internal CPU cache request.
 	 * @returns - The completed CPU cache.
@@ -652,7 +687,7 @@ type LocalSunCpuCacheTestProvider = Readonly<{
 	 */
 	_buildCpuCache(request: LocalSunCpuCacheBuildRequest): LocalSunCpuCacheResult;
 	/**
-	 * Called by local sun cpu cache test provider to construct one later-order scattering kernel.
+	 * Call this method to construct one later-order scattering kernel through the CPU cache test provider.
 	 *
 	 * @param request - Later-order physical collaborators and options.
 	 * @returns - The configured scattering kernel.
@@ -660,7 +695,7 @@ type LocalSunCpuCacheTestProvider = Readonly<{
 	 */
 	_createLaterOrderScatteringKernel(request: LocalSunLaterOrderScatteringKernelRequest): ScatteringOrderKernel;
 	/**
-	 * Called by local sun cpu cache test provider to construct one stored-field radiance order.
+	 * Call this method to construct one stored-field radiance order through the CPU cache test provider.
 	 *
 	 * @param request - Stored field and physical transport collaborators.
 	 * @returns - The completed pure-radiance field.
@@ -900,7 +935,7 @@ type LocalSunCompactSelectedOrdersRequest = Readonly<{
 	/** Allocated compact nodes, at most eight. */ positionIndices: readonly number[];
 	/** Allocated W27 directions, at most eight. */ outgoingDirectionIndices: readonly number[];
 	/** Complete physical input derivation. */ provenanceIdentity: string;
-	/** Supply a preceding pure physical L spectrum at its true compact address. */
+	/** Call this method to supply a preceding pure physical L spectrum at its true compact address. */
 	sampleIncomingRadiance(request: LocalSunCompactOrderedIncomingRadianceAddress): SpectralPacket;
 }>;
 
@@ -923,7 +958,7 @@ type LocalSunCompactContinuousDensityRequest = Readonly<{
 type LocalSunCompactContinuousTransportRequest = LocalSunCompactTransportRayRequest &
 	Readonly<{
 		/** Derivation identity of the continuous input. */ provenanceIdentity: string;
-		/** Evaluate the physical scattering-density spectrum at a supported sample. */
+		/** Call this method to evaluate the physical scattering-density spectrum at a supported sample. */
 		sampleDensity(request: LocalSunCompactContinuousDensityRequest): SpectralPacket;
 	}>;
 

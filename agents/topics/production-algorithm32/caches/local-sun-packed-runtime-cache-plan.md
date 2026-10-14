@@ -105,7 +105,13 @@ excluding metadata, prior frames and driver overhead. Executor diagnostics refer
 to the earlier construction stage and do not describe current retained storage.
 These are logical payloads, not available-VRAM measurements or frontend quotas.
 
-Only the matching [CLEAN primary and independent audit receipt](../../../../.codex-tmp/review-standards/session-0bVWiv/validation.json)
+The full review continuation starts from checkpoint `04b9aeab`. Its corrections
+name the existing renderer/composer/camera capabilities in ambient contracts,
+clarify callable and failure documentation, and order support methods before
+their callers. These changes retain the executable algorithms and shader source.
+The original incomplete review remains preserved under `session-0bVWiv`.
+
+Only the matching [CLEAN primary and independent audit receipt](../../../../.codex-tmp/review-standards/session-xODvV0/validation.json)
 completes the implementation gate. That unit also covers the preceding frontend
 memory-policy correction against its current collaborators; the unfinished
 memory-only review and earlier completed adoption retain their original scopes.
