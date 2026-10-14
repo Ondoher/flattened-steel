@@ -9,6 +9,11 @@ import {DistanceMath} from '../../../../src/algorithm32/math/index.js';
 
 /** Retained ordinary lookup/view probe with independent frozen-field CPU controls at exact live poses. */
 export class LocalSunFrameGpuSamples {
+	/** Last independent CPU oracle, scoped to this immutable field set and exact profile/query tuple.
+	 *
+	 * @type {LocalSunFrameGpuCpuOracle|null}
+	 */ _cpuOracle = null;
+	/** First matched reuse is cross-checked by an independent repeated CPU evaluation. */ _cpuOracleCrosschecked = false;
 	/** Retained normal owner assembly; pose values are uniforms. @type {LocalSunFrameGpuMaterial|null} */ _material =
 		null;
 	/** Compiled fragment identity protects retained-program compatibility. @type {string|null} */ _source = null;
@@ -258,12 +263,20 @@ if(point.w==0.0) {
 					}),
 			};
 			const model = new SharedModel({profile: profile.createExecutionProfile(), version: 0});
+			const oracleKey = JSON.stringify([profile.contentHash, queries]);
+			const cachedOracle =
+				this._configuration.retainMatchedCpuOracle && this._cpuOracle?.key === oracleKey
+					? this._cpuOracle
+					: null;
+			const crosscheckOracle = cachedOracle !== null && !this._cpuOracleCrosschecked;
+			const reuseOracle = cachedOracle !== null && !crosscheckOracle;
+			const expectedValues = reuseOracle ? cachedOracle.values : new Float64Array(output.length);
 			const residual = {count: 0, failures: 0, maximumRatio: 0, maximumAbsolute: 0},
 				endpoints = {count: 0, maximumError: 0};
 			for (const [index, query] of queries.entries()) {
 				const position = {coordinates: query.position, units: /** @type {const} */ ('meters')};
 				let density, radiance;
-				if (query.mode === 0)
+				if (!reuseOracle && query.mode === 0)
 					density = cpuCache.sampleCumulativeScatteringDensity({
 						context: {
 							position,
@@ -272,7 +285,7 @@ if(point.w==0.0) {
 						},
 						geometry: profile.models.geometry,
 					});
-				else {
+				else if (!reuseOracle) {
 					const segment = profile.models.geometry.resolveViewRaySegment({
 						origin: position,
 						direction: query.direction,
@@ -281,19 +294,24 @@ if(point.w==0.0) {
 					const calculator = new SpectralCalculator({model});
 					const points = calculator.buildEndpointTrapezoidPathIntegrationPoints(segment, 15);
 					radiance = calculator.computeRadiance(segment, points, {scatteringCache: cpuCache});
+					expectedValues[index * 45 + 2] = DistanceMath.toMeters(segment.endDistance);
+				}
+				if (query.mode !== 0) {
 					endpoints.count++;
-					const error = Math.abs(output[index * 45 + 2] - DistanceMath.toMeters(segment.endDistance));
+					const error = Math.abs(output[index * 45 + 2] - expectedValues[index * 45 + 2]);
 					endpoints.maximumError = Math.max(endpoints.maximumError, error);
 					if (error > 0.01) throw new Error('Independent live ray endpoint exceeds its frozen gate.');
 				}
 				for (let channel = 0; channel < 15; channel++)
 					for (let component = 0; component < (query.mode === 0 ? 1 : 2); component++) {
-						const expected =
-							component === 1
+						const expected = reuseOracle
+							? expectedValues[(index * 15 + channel) * 3 + component]
+							: component === 1
 								? radiance.transmittance.values[channel]
 								: query.mode === 0
 									? density.values[channel]
 									: radiance.pathRadiance.values[channel];
+						expectedValues[(index * 15 + channel) * 3 + component] = expected;
 						const actual = output[(index * 15 + channel) * 3 + component],
 							error = Math.abs(actual - expected),
 							floor = component === 1 ? 1e-7 : query.mode === 0 ? 1e-12 : 1e-9;
@@ -306,7 +324,14 @@ if(point.w==0.0) {
 			}
 			if (residual.failures)
 				throw new Error('Independent live physical CPU/GPU comparison failed: ' + JSON.stringify(residual));
+			if (crosscheckOracle) {
+				if (expectedValues.some((value, index) => value !== cachedOracle.values[index]))
+					throw new Error('Repeated independent CPU oracle differs from its exact matched-input copy.');
+				this._cpuOracleCrosschecked = true;
+			}
+			if (this._configuration.retainMatchedCpuOracle) this._cpuOracle = {key: oracleKey, values: expectedValues};
 			return {
+				cpuOracleReused: reuseOracle,
 				values: Array.from(output),
 				queries: queries.map((query) => ({mode: query.mode, maximum: query.maximum})),
 				cpu: residual,
@@ -329,5 +354,6 @@ if(point.w==0.0) {
 	dispose() {
 		this._material?.dispose();
 		this._material = null;
+		this._cpuOracle = null;
 	}
 }

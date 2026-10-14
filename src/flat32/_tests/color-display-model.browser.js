@@ -7,6 +7,36 @@ import {
 import {ATMOSPHERE_SCENE_SCALE} from '../consts.js';
 import {ViewPresentationFilterRegistry} from '../../algorithm32/implementation/presentation-filter/ViewPresentationFilterRegistry.js';
 describe('Flat32 Color selection', () => {
+	it('constructs the explicit P5 rectangular rollback with p2 and compatible cleared stellar filters', () => {
+		const rollback = new FlatLocalMode({
+			sceneScale: ATMOSPHERE_SCENE_SCALE,
+			observation: {
+				instant: '2024-12-14T17:27:41.487Z',
+				location: {
+					latitude: {value: -79.768036, units: 'degrees'},
+					longitude: {value: -83.261666, units: 'degrees'},
+				},
+			},
+			maximumScatteringOrder: 1,
+			colorDisplayModelConfiguration: {model: 'color-reset-slope-078-p2'},
+			celestialSourcesEnabled: true,
+			stellarCatalog: 'brightest-2000',
+			presentationFilters: [],
+		});
+		try {
+			expect(rollback.compactProfile).toBeNull();
+			expect(rollback.describe()).toEqual(
+				jasmine.objectContaining({
+					pairing: 'flat/local',
+					maximumScatteringOrder: 1,
+					incomingDirectionCount: 68,
+					spectralChannelCount: 15,
+				}),
+			);
+		} finally {
+			rollback.dispose();
+		}
+	});
 	it('selects p2 by default while retaining p9 for rollback', () => {
 		const model = createFlat32ColorDisplayModel({model: 'color-reset-slope-078-p2'});
 		expect(model.id).toBe('color-reset-slope-078-p2');

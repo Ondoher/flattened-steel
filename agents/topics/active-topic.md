@@ -35,6 +35,13 @@ owns passed ordinary N1 proofs and the explicit higher-order allocation limit. F
 recurrence remains unadmitted. Profile/default selection, deployment and
 publication have not changed. Ended experiment and prior receipts remain immutable.
 
+P4's matching review receipt is CLEAN. The owner selected P5 on 2026-10-13:
+qualify the accepted trajectories and shared consumers, measure costs and prepare
+an explicit candidate/rollback disposition. The
+[P5 qualification record](production-algorithm32/caches/local-sun-p5-qualification.md)
+owns its bounded matrix and adoption preparation. Defaults, deployment and
+publication require their separate adoption boundary.
+
 ## Minimal Reload Sources
 
 1. [Repository workflow instructions](../../AGENTS.md)
@@ -46,6 +53,7 @@ publication have not changed. Ended experiment and prior receipts remain immutab
 7. [Local-Sun P0 contracts and controls](production-algorithm32/caches/local-sun-cache-p0-contract.md)
 8. [Local-Sun P3 implementation and proof boundary](production-algorithm32/caches/local-sun-p3-closure.md)
 9. [Local-Sun P4 ordinary application and celestial boundary](production-algorithm32/caches/local-sun-p4-closure.md)
+10. [Local-Sun P5 qualification and adoption preparation](production-algorithm32/caches/local-sun-p5-qualification.md)
 
 Before a later implementation phase, validate the matching P4 review receipt,
 load its selected contracts/evidence, capture a new baseline and confirm reviewer readiness.

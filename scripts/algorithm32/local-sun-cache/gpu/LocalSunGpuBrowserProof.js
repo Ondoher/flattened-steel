@@ -31,6 +31,7 @@ export class LocalSunGpuBrowserProof {
 		qualifiedFieldHash,
 		sourceScale = 1,
 		sceneColorPrecision = 'float32',
+		trajectoryPoses,
 	}) {
 		let spatial = p0.controls;
 		let geometry = new FlatEarthGeometry({
@@ -313,7 +314,7 @@ export class LocalSunGpuBrowserProof {
 			if (reuse) {
 				backend.compile = compile;
 				backend.submitLayer = submit;
-				if (movement.length !== 5 || !qualifiedFieldHash)
+				if ((!trajectoryPoses && movement.length !== 5) || !qualifiedFieldHash)
 					throw new Error('Authenticated day controls and P2 field identity required');
 				const retainedBytes =
 					cache.resources.executor.residentFieldStorage.value + cache.resources.retainedAuxiliaryBytes.value;
@@ -329,6 +330,7 @@ export class LocalSunGpuBrowserProof {
 					expectedFieldHash: qualifiedFieldHash,
 					sceneColorPrecision,
 					retainedBytes: retainedBytes,
+					poses: trajectoryPoses,
 				});
 				result.glError = renderer.getContext().getError();
 			}

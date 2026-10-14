@@ -15,8 +15,11 @@ import os from 'node:os';
 import {createHash} from 'node:crypto';
 import {resolve} from 'node:path';
 import {LocalSunNormalizationControls} from '../normalization/LocalSunNormalizationControls.js';
-import {rollup} from 'rollup';
+import {rollup, VERSION as rollupVersion} from 'rollup';
 import {nodeResolve} from '@rollup/plugin-node-resolve';
+import commonjs from '@rollup/plugin-commonjs';
+import {babel} from '@rollup/plugin-babel';
+import {transformSync} from '@babel/core';
 import puppeteer from 'puppeteer';
 import {LocalSunAssemblyControls} from '../assembly/LocalSunAssemblyControls.js';
 
@@ -118,19 +121,29 @@ export class LocalSunGpuQualification {
 	 */
 	async run(request) {
 		let started = performance.now();
+		const trajectoryMode = request.mode === 'trajectory';
+		const frameProof = request.mode === 'reuse' || trajectoryMode;
+		const schema = trajectoryMode
+			? 'local-sun-p5-trajectory-proof-v1'
+			: frameProof
+				? 'local-sun-p3-frame-proof-v1'
+				: 'local-sun-p2-gpu-proof-v1';
 		if (
 			![1, 2, 4].includes(request.order) ||
 			!/^\d{5}$/.test(request.serial) ||
-			!['fields', 'runtime', 'omission', 'cleanup', 'zero', 'reuse'].includes(request.mode) ||
+			!['fields', 'runtime', 'omission', 'cleanup', 'zero', 'reuse', 'trajectory'].includes(request.mode) ||
 			!['float16', 'float32'].includes(request.sceneColorPrecision ?? 'float32') ||
-			(request.sceneColorPrecision !== undefined && request.mode !== 'reuse')
+			(request.sceneColorPrecision !== undefined && !frameProof) ||
+			(trajectoryMode &&
+				(request.order !== 1 ||
+					!['flat-0', 'flat-45', 'flat-90', 'flat-135', 'flat-180'].includes(request.trajectory))) ||
+			(!trajectoryMode && request.trajectory !== undefined)
 		)
 			throw new RangeError('Supported order, five-digit new serial and declared GPU proof mode required.');
 		let destination =
 			'tmp/production-local-sun-cache-promotion/runs/' +
 			request.serial +
-			(request.mode === 'reuse' ? '-p3-' : '-p2-') +
-			request.mode;
+			(trajectoryMode ? '-p5-trajectory-' + request.trajectory : (frameProof ? '-p3-' : '-p2-') + request.mode);
 		let root = this._paths.checkedPath(destination);
 		if (existsSync(root)) throw new Error('New immutable qualification run required.');
 		let freeBefore = os.freemem();
@@ -151,7 +164,7 @@ export class LocalSunGpuQualification {
 		let parents = parentPaths.map((path) => ({path, sha256: this._paths.hash(path)}));
 		/** @type {LocalSunFrameGpuMovementState[]} */ let movement = [];
 		let qualifiedFieldHash;
-		if (request.mode === 'reuse') {
+		if (frameProof) {
 			const movementPath = 'tmp/experiments/local-sun-cache-reuse/runs/00535-p3-shell-move/inputs.json';
 			const fieldPath = 'tmp/production-local-sun-cache-promotion/runs/00035-p2-gpu-pilot/result.json';
 			if (
@@ -176,6 +189,44 @@ export class LocalSunGpuQualification {
 				{path: fieldPath, sha256: this._paths.hash(fieldPath)},
 			);
 		}
+		/** @type {readonly LocalSunFrameGpuPose[]|undefined} */ let trajectoryPoses;
+		if (trajectoryMode) {
+			const statesPath = 'tmp/experiments/local-sun-cache-reuse/runs/00265-p5-time-inputs/states.json';
+			const manifestPath = 'tmp/experiments/local-sun-cache-reuse/runs/00265-p5-time-inputs/manifest.json';
+			const statesHash = '58afc1e8b4bcf50e6897292f4649bc2d96807d791746bf9828f994ffa8a6c5cb';
+			if (this._paths.hash(statesPath) !== statesHash)
+				throw new Error('Authenticated P5 trajectory inputs changed.');
+			const manifest = JSON.parse(readFileSync(this._paths.checkedPath(manifestPath), 'utf8'));
+			if (
+				manifest.state !== 'accepted' ||
+				manifest.artifacts.find((artifact) => artifact.path === 'states.json')?.sha256 !== statesHash
+			)
+				throw new Error('Accepted P5 manifest does not authenticate the trajectory.');
+			const input = /** @type {LocalSunGpuTrajectoryInputs} */ (
+				JSON.parse(readFileSync(this._paths.checkedPath(statesPath), 'utf8'))
+			);
+			const trajectory = input.trajectories.find((candidate) => candidate.id === request.trajectory);
+			if (
+				input.schema !== 'shell-temporal-states-v1' ||
+				trajectory?.states.length !== 120 ||
+				trajectory.states.some((state, index) => state.slot !== index)
+			)
+				throw new Error('All 120 original ordered P5 slots are required.');
+			trajectoryPoses = trajectory.states.map(({slot, state}) => ({
+				label: request.trajectory + '-slot-' + slot,
+				observation: state.observation,
+				receiverPosition: state.geometry.observerPosition,
+				expectedSourcePosition: state.geometry.sourcePosition,
+			}));
+			for (const path of [
+				statesPath,
+				manifestPath,
+				'scripts/algorithm32/local-sun-cache/gpu/LocalSunGpuQualification.js',
+				'scripts/algorithm32/local-sun-cache/normalization/LocalSunNormalizationControls.js',
+				'package-lock.json',
+			])
+				parents.push({path, sha256: this._paths.hash(path)});
+		}
 		mkdirSync(root, {recursive: true});
 		let browser, server, interval, deadline;
 		/** @type {Map<string, LocalSunGpuFieldWriter>} */
@@ -187,9 +238,53 @@ export class LocalSunGpuQualification {
 		/** @type {Map<LocalSunFrameGpuHashLabel,LocalSunFrameGpuDigestState>} */ const frameDigests = new Map();
 		let failure;
 		try {
+			const environment = {
+				name: 'qualification-production-environment',
+				/** Called by offline bundling to resolve the exact installed application environment constant.
+				 *
+				 * @param {string} code - Installed module source.
+				 * @param {string} id - Exact source identity.
+				 * @returns {LocalSunGpuEnvironmentTransformResult} - Bounded AST substitution, or no applicable change.
+				 */
+				transform(code, id) {
+					if (!code.includes('process.env.NODE_ENV')) return null;
+					const result = transformSync(code, {
+						filename: id,
+						babelrc: false,
+						configFile: false,
+						presets: ['@babel/preset-react'],
+						plugins: [
+							/** Called by Babel setup to provide the bounded JavaScript environment visitor. */ ({
+								types,
+							}) => ({
+								visitor: {
+									/** Called by Babel to substitute only the exact NODE_ENV member expression. */
+									MemberExpression(path) {
+										if (path.matchesPattern('process.env.NODE_ENV'))
+											path.replaceWith(types.stringLiteral('production'));
+									},
+								},
+							}),
+						],
+					});
+					return {code: result.code, map: null};
+				},
+			};
 			let bundle = await rollup({
 				input: this._paths.checkedPath('scripts/algorithm32/local-sun-cache/gpu/LocalSunGpuBrowserProof.js'),
-				plugins: [nodeResolve({browser: true})],
+				plugins: [
+					environment,
+					nodeResolve({browser: true}),
+					/** @type {LocalSunGpuCommonJsFactory} */ (/** @type {unknown} */ (commonjs))(),
+					babel({
+						babelHelpers: 'bundled',
+						babelrc: false,
+						configFile: false,
+						presets: ['@babel/preset-react'],
+						extensions: ['.js', '.jsx'],
+						exclude: 'node_modules/**',
+					}),
+				],
 				onwarn: (warning) => {
 					if (warning.code !== 'CIRCULAR_DEPENDENCY') throw new Error(warning.message);
 				},
@@ -221,7 +316,7 @@ export class LocalSunGpuQualification {
 				try {
 					const digestUpload = /^\/frame-digest\/(retained|fresh)\/(\d+)$/.exec(incoming.url);
 					const digestRead = /^\/frame-digest\/(retained|fresh)$/.exec(incoming.url);
-					if (request.mode === 'reuse' && incoming.method === 'POST' && digestUpload) {
+					if (frameProof && incoming.method === 'POST' && digestUpload) {
 						const id = /** @type {LocalSunFrameGpuHashLabel} */ (digestUpload[1]),
 							offset = Number(digestUpload[2]);
 						let record = frameDigests.get(id);
@@ -243,7 +338,7 @@ export class LocalSunGpuQualification {
 						response.end('ok');
 						return;
 					}
-					if (request.mode === 'reuse' && incoming.method === 'GET' && digestRead) {
+					if (frameProof && incoming.method === 'GET' && digestRead) {
 						const record = frameDigests.get(/** @type {LocalSunFrameGpuHashLabel} */ (digestRead[1]));
 						if (!record || record.received !== 275299560)
 							throw new Error('Complete whole-field digest required');
@@ -351,7 +446,7 @@ export class LocalSunGpuQualification {
 					};
 					samples.push(sample);
 					console.log(
-						(request.mode === 'reuse' ? 'P3 ' : 'P2 ') +
+						(trajectoryMode ? 'P5 ' : frameProof ? 'P3 ' : 'P2 ') +
 							request.mode +
 							' progress ' +
 							Math.round(sample.elapsedMilliseconds / 1000) +
@@ -382,7 +477,8 @@ export class LocalSunGpuQualification {
 				runtime: request.mode === 'runtime' || request.mode === 'zero',
 				omission: request.mode === 'omission',
 				cleanup: request.mode === 'cleanup',
-				reuse: request.mode === 'reuse',
+				reuse: frameProof,
+				trajectoryPoses,
 				movement,
 				qualifiedFieldHash,
 				sceneColorPrecision: request.sceneColorPrecision ?? 'float32',
@@ -411,7 +507,8 @@ export class LocalSunGpuQualification {
 				result.state !== 'passed' ||
 				result.order !== request.order ||
 				result.glError !== 0 ||
-				(request.mode === 'reuse' && (result.reuse?.state !== 'passed' || result.reuse.frames.length !== 16)) ||
+				(frameProof &&
+					(result.reuse?.state !== 'passed' || result.reuse.frames.length !== (trajectoryMode ? 120 : 16))) ||
 				result.observations.some(
 					(field) => field.nonfinite || field.comparison.failures || field.comparison.whole?.failures,
 				)
@@ -456,15 +553,16 @@ export class LocalSunGpuQualification {
 				root + '/manifest.json',
 				JSON.stringify(
 					{
-						schema: request.mode === 'reuse' ? 'local-sun-p3-frame-proof-v1' : 'local-sun-p2-gpu-proof-v1',
+						schema,
 						state: 'passed',
 						selection: request,
 						parents,
-						operation:
-							request.mode === 'reuse'
+						operation: trajectoryMode
+							? 'All 120 authenticated original trajectory slots, two independent canonical N1 fields, exact live shader/receiver staging and unchanged CPU/paired/endpoint/adaptation/composed-pixel gates. This is not full-scene image or visible-celestial parity.'
+							: frameProof
 								? 'Separate canonical production field constructions verified in full against qualified P2 identity. Sixteen independently staged exact live rotation/translation/day frames use unchanged physical owners, ordinary shaders and receiver measurements. Matched J/L/T/endpoint/receiver/composed-output fresh-reused comparisons use predeclared 0.0001 and original floors; physical CPU-field controls retain 0.002. Complete construction sharing is recorded explicitly.'
 								: 'Production owner contributors and ordinary controller/cache; frozen full physical fields and selected CPU controls; original J/L/T/endpoint gates, exact omission identities and candidate-only resource cleanup. Zero mode is the analytic zero-intensity consequence with unchanged medium transmission.',
-						tools: {node: process.version, browser: await browser.version()},
+						tools: {node: process.version, browser: await browser.version(), rollup: rollupVersion},
 						artifacts: ['host.js', 'bundle.js', 'result.json', 'diagnostics.json'].map((path) => ({
 							path,
 							sha256: this._paths.hash(destination + '/' + path),
@@ -485,7 +583,7 @@ export class LocalSunGpuQualification {
 				root + '/manifest.json',
 				JSON.stringify(
 					{
-						schema: request.mode === 'reuse' ? 'local-sun-p3-frame-proof-v1' : 'local-sun-p2-gpu-proof-v1',
+						schema,
 						state: 'failed',
 						selection: request,
 						parents,
@@ -520,6 +618,9 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === resolve(process.argv[1
 		order: /** @type {SupportedCacheScatteringOrder} */ (Number(process.argv[2])),
 		serial: process.argv[3],
 		mode: /** @type {LocalSunGpuQualificationMode} */ (process.argv[4] ?? 'fields'),
+		...(process.argv[6] === undefined
+			? {}
+			: {trajectory: /** @type {LocalSunGpuTrajectoryId} */ (process.argv[6])}),
 		...(process.argv[5] === undefined
 			? {}
 			: {sceneColorPrecision: /** @type {Flat32SceneColorPrecision} */ (process.argv[5])}),

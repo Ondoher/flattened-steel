@@ -5,8 +5,45 @@
  * - **"cleanup"** - Required admission/cancellation/failure resource release.
  * - **"zero"** - Analytic black-source GPU fields and runtime queries.
  * - **"reuse"** - Canonical field reuse and complete local-frame preparation/publication.
+ * - **"trajectory"** - All 120 authenticated exact states of one accepted P5 trajectory.
  */
-type LocalSunGpuQualificationMode = 'fields' | 'runtime' | 'omission' | 'cleanup' | 'zero' | 'reuse';
+type LocalSunGpuQualificationMode = 'fields' | 'runtime' | 'omission' | 'cleanup' | 'zero' | 'reuse' | 'trajectory';
+
+/** Accepted P5 trajectory identity, preserving the frozen 120-slot observation sequence.
+ * - **"flat-0"** - Window centered on the accepted Flat0 observation.
+ * - **"flat-45"** - Window centered on the accepted Flat45 observation.
+ * - **"flat-90"** - Window centered on the accepted Flat90 observation.
+ * - **"flat-135"** - Window centered on the accepted Flat135 observation.
+ * - **"flat-180"** - Window centered on the accepted Flat180 observation.
+ */
+type LocalSunGpuTrajectoryId = 'flat-0' | 'flat-45' | 'flat-90' | 'flat-135' | 'flat-180';
+
+/** Installed CommonJS factory with an explicit Node interoperability boundary. */
+type LocalSunGpuCommonJsFactory = () => import('rollup').Plugin;
+
+/** Optional bounded JavaScript environment substitution, with no additional source map. */
+type LocalSunGpuEnvironmentTransformResult = Readonly<{
+	/** Transformed module JavaScript, with no GLSL or physical-equation substitutions. */ code: string;
+	/** No additional map for the bounded transform. */ map: null;
+}> | null;
+
+/** Read-only authenticated historical observation inputs; no candidate output or numerical gold is taken from this shape. */
+type LocalSunGpuTrajectoryInputs = Readonly<{
+	/** Historical schema identity. */ schema: 'shell-temporal-states-v1';
+	/** All five original, ordered observation windows. */ trajectories: readonly Readonly<{
+		/** Accepted window identity. */ id: LocalSunGpuTrajectoryId;
+		/** Exact historical slots, each retaining its original time, observer and source placement. */ states: readonly Readonly<{
+			/** Original slot, from zero through 119. */ slot: number;
+			/** Exact historical geometry data used only as independent input/control. */ state: Readonly<{
+				/** Geographic and UTC observation. */ observation: GeometryObservation;
+				/** Independently retained observer/source positions in meters. */ geometry: Readonly<{
+					/** Physical observer position. */ observerPosition: Position;
+					/** Independently resolved finite source position. */ sourcePosition: Position;
+				}>;
+			}>;
+		}>[];
+	}>[];
+}>;
 /** Qualification disposition.
  * - **"passed"** - All declared comparisons passed.
  * - **"failed"** - A declared comparison or execution gate failed.
@@ -43,6 +80,7 @@ type LocalSunGpuRendererIdentity = Readonly<{
 }>;
 /** Explicit offline run selection. */
 type LocalSunGpuQualificationRequest = Readonly<{
+	/** Required only by trajectory mode, with N1 and exactly120 original slots. */ trajectory?: LocalSunGpuTrajectoryId;
 	/** Optional exact composer precision for explicit frame reuse proof; default float32. */ sceneColorPrecision?: Flat32SceneColorPrecision;
 	/** Actual requested ordinary order. */ order: SupportedCacheScatteringOrder;
 	/** New five-digit immutable output serial. */ serial: string;
@@ -50,6 +88,7 @@ type LocalSunGpuQualificationRequest = Readonly<{
 }>;
 /** Authenticated physical inputs supplied to the owned browser entry. */
 type LocalSunGpuBrowserProofRequest = Readonly<{
+	/** Optional authenticated exact trajectory poses, replacing only the offline proof's default motion cases. */ trajectoryPoses?: readonly LocalSunFrameGpuPose[];
 	/** Explicit complete-frame composer storage, independent from R32F physical fields. */ sceneColorPrecision?: Flat32SceneColorPrecision;
 	/** Exact independently retained day controls, only for the explicit reuse lane. */ movement?: readonly LocalSunFrameGpuMovementState[];
 	/** Independently qualified P2 complete cumulative field identity. */ qualifiedFieldHash?: string;
@@ -282,6 +321,7 @@ type LocalSunFrameGpuUniforms = Record<string, import('three').IUniform>;
 type LocalSunFrameGpuCacheUniforms = Record<string, {/** Destination uniform state. */ value: unknown}>;
 /** Actual hardware/resource owners supplied to the complete-frame proof. */
 type LocalSunFrameGpuProofRequest = Readonly<{
+	/** Optional predeclared exact trajectory poses; omission retains the original sixteen-case proof. */ poses?: readonly LocalSunFrameGpuPose[];
 	/** Selected ordinary compositor precision, default float32. */ sceneColorPrecision?: Flat32SceneColorPrecision;
 	/** Independently qualified canonical cumulative GPU identity. */ expectedFieldHash: string;
 	/** Exact historical observations and geometry placement controls. */ movement: readonly LocalSunFrameGpuMovementState[];
@@ -293,12 +333,20 @@ type LocalSunFrameGpuProofRequest = Readonly<{
 
 /** Independent physical sample inputs and current external GPU owners. */
 type LocalSunFrameGpuSamplesConfiguration = Readonly<{
+	/** Optional P5 optimization: retain the last independent CPU oracle for identical profile/query inputs over this immutable field set. */ retainMatchedCpuOracle?: boolean;
 	/** Genuine current backend with opaque cache bindings. */ backend: LocalSunGpuProofBackend;
 	/** Current owned renderer. */ renderer: import('three').WebGLRenderer;
 	/** Authenticated independent CPU physical fields. */ fields: readonly Float32Array[];
 }>;
+/** Private independent CPU oracle retained only by one probe owner over its authenticated immutable fields. */
+type LocalSunFrameGpuCpuOracle = Readonly<{
+	/** Exact profile identity and complete FP32 physical query tuple. */ key: string;
+	/** Independent binary64 J/L/T and endpoint values, never derived from either candidate GPU output. */ values: Float64Array;
+}>;
+
 /** Physical sample quantities and their independently compared residuals. */
 type LocalSunFrameGpuSampleResult = Readonly<{
+	/** Independent CPU values reused for an exact matched profile/query tuple; every GPU comparison still executes. */ cpuOracleReused: boolean;
 	/** Every negative J/L/T sample, without hiding or clamping it. */ negative: number;
 	/** Query-major, Native15-channel-major J-or-L / T / endpoint triplets. */ values: readonly number[];
 	/** Query quantity and complete/shortened endpoint selection. */ queries: readonly Readonly<{
@@ -313,6 +361,10 @@ type LocalSunFrameGpuSampleResult = Readonly<{
 }>;
 /** Complete frame identity and actual binding observations. */
 type LocalSunFrameGpuFrameObservation = Readonly<{
+	/** Reused/fresh comparison's exact-input CPU oracle reuse flags; first matching reuse is independently cross-checked. */ cpuOracleReused: readonly [
+		boolean,
+		boolean,
+	];
 	/** Every negative physical GPU query value. */ negativeSamples: number;
 	/** Exact geographic observation staged for every consumer. */ observation: GeometryObservation;
 	/** Exact physical receiver position. */ receiverPosition: Position;

@@ -9,7 +9,9 @@ on 2026-10-11. Its [status](caches/local-sun-cache-promotion-status.md) owns the
 P0/P1/P2 receipts and the delivered P3 reuse and atomic frame publication boundary;
 only its matching final CLEAN receipt establishes P3 completion. P4 ordinary
 scene/celestial integration is delivered; its matching final CLEAN primary/audit
-receipt establishes completion. P5 qualification remains planned and unselected.
+receipt establishes completion. The owner selected P5 qualification and adoption
+preparation; its [qualification record](caches/local-sun-p5-qualification.md)
+owns the bounded matrix and candidate/rollback disposition.
 The [P2 closure](caches/local-sun-p2-closure.md) owns GPU/runtime qualification. The
 [P0 contract](caches/local-sun-cache-p0-contract.md) records applicability and
 prepared independent controls. The accepted

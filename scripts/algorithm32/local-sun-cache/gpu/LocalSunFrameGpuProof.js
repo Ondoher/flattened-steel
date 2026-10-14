@@ -264,6 +264,7 @@ export class LocalSunFrameGpuProof {
 		movement,
 		expectedFieldHash,
 		sceneColorPrecision = 'float32',
+		poses,
 	}) {
 		const reusedScene = this._createScene(renderer, sceneColorPrecision),
 			freshScene = this._createScene(renderer, sceneColorPrecision);
@@ -307,7 +308,12 @@ export class LocalSunFrameGpuProof {
 			if (!response.ok) throw new Error('Authenticated independent live controls unavailable');
 			fields.push(new Float32Array(await response.arrayBuffer()));
 		}
-		const samples = new LocalSunFrameGpuSamples({backend, renderer, fields});
+		const samples = new LocalSunFrameGpuSamples({
+			backend,
+			renderer,
+			fields,
+			retainMatchedCpuOracle: poses !== undefined,
+		});
 		const submit = backend.submitLayer.bind(backend);
 		const allocate = backend.allocateField.bind(backend),
 			compile = backend.compile.bind(backend),
@@ -362,7 +368,7 @@ export class LocalSunFrameGpuProof {
 		};
 		const frames = [];
 		try {
-			for (const [index, pose] of this._poses(profile, movement).entries()) {
+			for (const [index, pose] of (poses ?? this._poses(profile, movement)).entries()) {
 				console.log('P3 live frame ' + pose.label + '; prepare reused and independently rebuilt controls');
 				const live = profile.createLiveProfile(pose);
 				if (
@@ -506,6 +512,10 @@ export class LocalSunFrameGpuProof {
 						adaptation,
 						output,
 						cpu: reusedSamples.cpu,
+						cpuOracleReused: /** @type {const} */ ([
+							reusedSamples.cpuOracleReused,
+							freshSamples.cpuOracleReused,
+						]),
 						endpoints: reusedSamples.endpoints,
 						samples: reusedSamples.values,
 						negativeSamples: reusedSamples.negative,
