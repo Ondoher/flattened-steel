@@ -31,15 +31,17 @@ below uses retained libRadtran output without changing a scorer or production
 behavior or qualifying a new reference. Historical implementation-review receipts
 keep their original scopes.
 
-## Planned Hypothesis Tests
+## Hypothesis Test Package
 
-The owner requested a concrete plan for the four H9 hypotheses. The
-[H10-H14 test plan](hypothesis-test-plan.md) is prepared, not executed. It owns
-the reference audit, reconstruction/order comparison, exact Native48 low-ray
-attribution and matched Flat N1 species test, with predictions, falsifiers,
-uncertainty/replay gates and a 20-minute aggregate execution cap. No new run,
-simulation, parameter change or production work has started. The existing
-scientific findings below retain their original scopes.
+The owner selected the [H10-H14 test plan](hypothesis-test-plan.md) for independent
+execution. Its allocation is now consumed with incomplete numerical tests. The
+[hypothesis results](hypothesis-test-results.md) own the new pinned-reference phase
+finding, accepted audit/reporting runs 00252/00256, three preserved setup failures
+00253–00255, all four unresolved decisions, resources and resumption boundary.
+No GPU or horizon integration started. Current source corrects the identified
+harness defects but has not rerun those scientific stages. No job is active;
+further numerical attempts require a separately selected recovery package.
+Production and the earlier scientific findings retain their original scopes.
 
 ## Retained Scientific State
 

@@ -2,11 +2,12 @@
 
 ## Status And Objective
 
-**Planned, not executed.** The owner requested this plan after the
+**Executed with incomplete numerical stages; allocation consumed.** The
+[H10–H14 results](hypothesis-test-results.md) own the source audit, setup failures,
+four unresolved hypothesis decisions and resumption boundary. The owner requested this plan after the
 [H9 small-ray analysis](small-ray-cancellation-results.md#testable-hypotheses).
-It defines the next proposed execution package; planning does not start a run or
-renew earlier compute allocations. A later instruction to execute this plan selects
-the bounded package below, including its conditional branches and stop rules.
+It defines the selected bounded package and its original predictions and stop
+rules. Closed attempts are preserved; this document does not renew allocations.
 
 Determine which mechanisms explain the measured compensation, and whether a
 mathematical correction improves agreement with the appropriate independent
@@ -318,10 +319,10 @@ test separately; do not extend this package to obtain a favorable result.
 
 ## Execution Checklist
 
-- [ ] Owner selects execution; capture baseline, refresh readiness and freeze matrices.
-- [ ] H10: authenticate reference setup and register any specific intervention.
-- [ ] H11: complete or explicitly bound the missing reconstruction-by-order cells.
-- [ ] H12: replay Native48 and attribute the afternoon low-ray approximation.
-- [ ] H13: compare matched Flat cache/continuous species spectra.
-- [ ] H14: evaluate all four hypotheses, preserving misses and unresolved cases.
+- [x] Owner selects execution; capture baseline, refresh readiness and freeze matrices.
+- [ ] H10: source audit recorded as 00252; exact reference execution and historical GPU-attempt qualification remain incomplete.
+- [x] H11: consumed failed setup 00253; missing reconstruction-by-order cells explicitly bounded.
+- [ ] H12: consumed failed setup 00254; no Native48 replay or attribution completed.
+- [ ] H13: consumed failed setup 00255; no horizon integration completed.
+- [x] H14: 00256 records all four hypotheses unresolved, preserving prior evidence and failures.
 - [ ] Complete local verification, batched mapped review and resource/immutability handoff.
