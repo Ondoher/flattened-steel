@@ -85,6 +85,28 @@ new reference qualification, simulation, production change or compute package is
 completed or selected by adopting it. A later bounded package must register its
 exact comparison and resource allowance before execution.
 
+## Future Validation Sources
+
+The owner retained **AERONET (Aerosol Robotic Network)** as a future observational
+validation source beyond the Kider and Bruneton-paper comparisons. The
+[NASA AERONET database](https://aeronet.gsfc.nasa.gov/) provides globally distributed
+aerosol optical-depth observations and inversion products. This future work is
+not restricted to the earlier regional retrieval or the Kider capture.
+
+Potential uses include constraining aerosol loading and wavelength-dependent
+properties, then testing our predictions against suitably matched independent
+observations. Keep measured quantities distinct from inversion-derived properties,
+and distinguish data used to set atmospheric inputs from data held out to assess
+predictions. Match station, time, spectral bands, viewing geometry and uncertainty.
+Prefer Version 3 quality-assured Level 2.0 data where available, checking the
+requirements and availability of each product separately. The
+[existing source catalog](follow-up-context.md#regional-data-sources-for-the-kider-capture)
+retains inversion-service links and the limitations of the earlier regional use.
+
+This is a saved future direction. The current fixed-paper-atmosphere/libRadtran
+metric remains in force; no new acquisition, experiment, parameter change or
+production work is selected by this note.
+
 ## Historical Kider Comparability
 
 The owner notes that the current algorithm already scores favorably and
