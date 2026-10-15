@@ -704,7 +704,48 @@ scientifically complete at its bounded available/unsupported cells as accepted
 00267-00269. The [results](independent-horizon-reference-results.md) own findings,
 qualification, resources, decisions and the matching implementation-review receipt.
 
+## H27 Local-Horizon Brightness Attribution
+
+The owner selected a brightness diagnosis after supplying an actual local-Sun
+capture: a bright pale band falls toward a darker neutral/warm strip at ground.
+Low saturation alone does not establish darkness. The screenshot is a qualitative
+witness; its pixels are not registered to the retained camera.
+
+Freeze a CPU-first continuation using authenticated 00239 app stages and 00264
+physical inputs. Integrate independent local N1 away-Sun rays at elevations
+0.05, 0.25, 0.5, 1, 2, 3, 4, 5, 7, 10, 15 and 20 degrees, with 64/128-node
+log-distance quadrature. Retain physical luminance, species shares and weighted
+altitude. Trace source/extinction terms at view optical depths 0.1, 0.5, 1 and 2
+for Native15 channels 2, 6 and 9 on 0.05/3-degree rays. A source/view attenuation
+2x2 factorial is diagnostic removal of factors, not self-consistent replacement
+atmospheres. Compare it with the unchanged continuous N1 integral.
+
+Replay exact retained center-ray spectra through p2 at fixed original adaptation:
+current output, global -1/0/+1 EV, neutral at original luminance, and original
+color at common luminance. Add synthetic 18%/90% neutral Lambertian references
+using L = reflectance * recorded illuminance / pi. These are brightness anchors,
+not a requirement that an arbitrary reference maps to display white. Record
+relative display luminance separately from physical cd/m2; monitor luminance is
+not measured. Check the actual Three RawShaderMaterial framebuffer with neutral
+test values and an explicit sRGB-transfer control to determine whether renderer
+outputColorSpace adds encoding to that path. Any proposed output change remains
+a conditional diagnostic, not a production edit.
+
+Limit aggregate numerical execution to three minutes and new retained evidence
+to 2 MiB, with one tiny display-only GPU job, no cache build, full-sky run,
+parameter fitting or production changes. Setup repairs use fresh runs within
+the remaining cap. Apply existing storage, provenance, progress and immutable-run
+rules. One coherent review baseline was captured before authored changes at
+`.codex-tmp/review-standards/session-jBH3GK/baseline.json`; mapped review follows
+the stable result. No external accuracy score is claimed by this package.
+
 ## Current Progress
+
+The selected H27 brightness continuation is scientifically complete as accepted
+00270. The [brightness results](horizon-brightness-results.md) own its physical
+profile, optical-depth trace, conditional display-output concern and matching
+implementation-review gate. A full-app encoding intervention remains proposed;
+this package makes no production change. No numerical job is active.
 
 The [H21-H26 independent reference results](independent-horizon-reference-results.md)
 record completed numerical execution. Far light reddens, but does not dominate

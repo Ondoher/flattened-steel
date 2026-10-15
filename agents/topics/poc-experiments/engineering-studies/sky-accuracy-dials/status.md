@@ -31,6 +31,17 @@ below uses retained libRadtran output without changing a scorer or production
 behavior or qualifying a new reference. Historical implementation-review receipts
 keep their original scopes.
 
+## H27 Local-Horizon Brightness Diagnosis
+
+Accepted `00270-h27-brightness` completes the selected bounded numerical work.
+The [brightness results](horizon-brightness-results.md) own the physical dip,
+species/source-function trace, display replay, raw-material framebuffer proof,
+resources and remaining qualification. The sampled independent local N1 peak
+is above the horizon. Raw screen output can amplify its brightness deficit;
+encoding intent and a matched complete-app check remain open. Production is
+unchanged. Implementation completion requires the matching CLEAN receipt in
+`.codex-tmp/review-standards/session-jBH3GK/validation.json`.
+
 ## H21-H26 Independent Horizon Reference
 
 The owner-selected [H21-H26 plan](independent-horizon-reference-plan.md) is
