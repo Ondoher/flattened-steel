@@ -385,7 +385,142 @@ in `tmp/experiments/sky-accuracy-dials/`. Derive and real-path-check roots, reje
 links, allocate a fresh run and preserve complete derivation identities. Production,
 other experiments and earlier runs remain read-only. Adoption remains on hold.
 
+## Candidate: Separate Rayleigh And Mie Cache Reconstruction
+
+The owner requested preserving this candidate for future investigation: retain
+separate Rayleigh and Mie spectral coefficient fields so each can use its own
+density normalization, reconstruction and, if justified, altitude or angular
+sampling. These may be logical fields sharing coordinates and packed GPU storage.
+
+For each species, remove the known local density factor during cache construction,
+interpolate the coefficient, then restore that species' density at the actual
+query altitude exactly once before summing contributions. The current physical
+spectral contribution already includes density; multiplying it by density again
+would double-count it. First-scattering diagnostics show that merely splitting
+the combined payload has negligible effect in the tested cases; changing which
+factors are interpolated is the substantive intervention. The
+[component map](cancellation-map-results.md#conditional-first-order-attribution)
+and [latest tests](hypothesis-test-results.md) own that evidence and its limits.
+
+For multiple scattering, separate contributions by the species causing the
+current scattering event. Both fields must use the same coupled incoming light
+and combined atmospheric extinction, including paths with successive Rayleigh
+and Mie events. They are not independent single-species atmosphere solutions.
+Keep per-query evaluation to fixed cache lookups and bounded reconstruction
+arithmetic under the existing loop-free sample contract.
+
+The [H15 comparison](#h15-next-action-sparse-second-scattering-reconstruction)
+tests this candidate; its [results](species-reconstruction-results.md) own the
+completed local comparison and remaining qualification limits.
+Species-separated higher-order density factoring has earlier
+experimental evidence in the [continuation results](continuation-results.md),
+but that does not qualify a complete joint density/phase/column correction through
+later scattering. A future bounded comparison should separate split-only storage,
+density-normalized reconstruction and any additional species-specific interpolation
+changes, regenerate affected descendants, and assess spatial/spectral error and
+storage/lookup cost at fixed physical inputs. No orange-horizon improvement is
+assumed.
+
+## H15 Next Action: Sparse Second-Scattering Reconstruction
+
+Status: scientific comparison completed as accepted 00263 on 2026-10-15.
+The [H15 results](species-reconstruction-results.md) own component accuracy,
+cancellation, resources and the matching implementation-review gate.
+The hypothesis is that separate
+Rayleigh/Mie coefficients, with each local density restored at the query exactly
+once, reduce species reconstruction error compared with interpolating the physical
+contributions. A better total caused only by opposing species errors is insufficient.
+
+### Controls And Reference
+
+Use three representations with identical coordinates, support, precision,
+interpolation kernel, incoming light, combined extinction and integration rules:
+
+| Variant | Stored quantity | Query reconstruction |
+| --- | --- | --- |
+| A: combined control | Physical Rayleigh plus Mie source | Existing combined interpolation |
+| B: split control | Separate physical Rayleigh and Mie sources | Existing interpolation separately, then sum |
+| C: density-normalized | Separate coefficients with local species density removed | Interpolate each coefficient, restore its query density once, then sum |
+
+B minus A measures splitting/grouping; C minus B measures density normalization.
+Do not change phase law, source columns, material parameters, grid resolution or
+angular interpolation at the same time. Further species-specific grids/kernels
+are separate interventions. Both species share the same coupled incoming light
+and total atmospheric attenuation; these are not independent atmospheres.
+
+Start at second scattering with a frozen actual first-scattering incoming field,
+not a manufactured constant coefficient. Build only the union of cache supports
+needed by the selected queries. Independently evaluate each species' source at
+the exact query in binary64, without candidate interpolation, using that same
+incoming-light field and finite angular rule. This is a matched finite-rule
+reference for reconstruction, not proof that the incoming field, quadrature or
+complete atmospheric solution is physically exact. Independently check density,
+phase and summation arithmetic; record intentionally shared input dependencies.
+
+### Frozen Small Witness Set
+
+Use 454 nm (Direct40 channel 8) and the original Native48 afternoon rays
+`p-1330-0-4` and `p-1330-5-4` from 00260/00232. Authenticate their complete
+geometry, paper atmosphere and original source/transport/angular rules. Do not
+substitute the older H-profile results or Flat finite-source inputs.
+
+Select two off-node points in each of the first three positive-length near-ground
+altitude-cell segments traversed by each ray: one-third and two-thirds of the
+segment's ray distance, for twelve queries total. Register the exact positions,
+directions, enclosing cells and complete interpolation supports before evaluating
+candidate errors. Include the supporting cache nodes as parity controls. If the
+retained geometry cannot supply this selection, report the unsupported selection
+before candidate evaluation rather than choosing points from favorable results.
+
+### Measurements And Decisions
+
+At every query retain reference and reconstructed Rayleigh, Mie and summed
+sources; signed species errors; absolute/relative errors with a near-zero guard;
+and the signed cancellation cross term `2 * errorRayleigh * errorMie`. For A,
+assess its total only; do not infer unique species contributions from a combined
+payload. Report B/C species errors separately for both rays, including local
+regressions, and use the same frozen sample set for RMS comparisons.
+
+Freeze comparison allowances from reference arithmetic/refinement and node-parity
+checks before inspecting off-node candidate errors. Node values must reproduce
+the same physical source within those allowances. Support the broad hypothesis
+only if C reduces each species' RMS reconstruction error on both rays beyond its
+comparison allowance relative to B; report support restricted to one species or ray when
+that is all the evidence establishes. Below-allowance differences remain unresolved.
+If component errors shrink while total error grows, record exposed cancellation.
+If only the sum improves, or density normalization changes values without reducing
+component error, do not claim a demonstrated component-accuracy gain.
+
+### Execution Boundary And Follow-Up
+
+On execution selection, freeze a fresh admission/source identity and review
+baseline. Allow ten minutes aggregate execution including setup, reference work,
+retention and cleanup, with at most 4 MiB new retained evidence. Track implementation
+and review separately. Prefer sparse CPU evaluation; at most one serial GPU job
+may supply the sparse controls if existing tooling requires it. No full cache,
+full-sky sweep, new dependency or production change is included. Preserve every
+failed run; repair setup/reader faults within the remaining elapsed budget without
+automatically repeating a completed scientific comparison. Retain the experiment's
+existing disk, immutable-run, progress and relaxed operational-memory policies.
+
+Deliver one compact per-query error/cancellation table and a decision identifying
+which calculation improved or failed. Use the required local type check and one
+batched mapped review at the stable implementation milestone, not per query.
+
+If this reconstruction test supports the candidate, the next proposed qualification
+is an integrated pure-P2 comparison on witnesses with retained independent P2
+references, preserving their own profile identities. Consistent later-order
+propagation follows after that. Those stages need their own bounded registration;
+they do not automatically extend H15 or establish a libRadtran score improvement.
+
 ## Current Progress
+
+The selected [H15 comparison](#h15-next-action-sparse-second-scattering-reconstruction)
+is scientifically complete as accepted 00263. The
+[species reconstruction results](species-reconstruction-results.md) own the
+four supported ray/species RMS comparisons, retained local regressions and exact
+same-rule reference boundary. No numerical job is active. Its matching review
+session owns implementation completion separately from scientific acceptance.
 
 The [current accuracy criterion](reference-model-target.md#current-accuracy-metric)
 now uses qualified libRadtran agreement in place of Kider agreement to judge

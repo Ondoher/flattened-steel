@@ -45,6 +45,18 @@ explicit instruction to finish, within the aggregate compute/storage allocation;
 the H11 nominal retention-target deviation is documented. Production is unchanged,
 and unsupported full recurrence/reference qualifications remain explicit.
 
+## H15 Species Reconstruction
+
+The owner-selected [H15 comparison](horizon-diagnosis-plan.md#h15-next-action-sparse-second-scattering-reconstruction)
+is scientifically complete as accepted 00263. The
+[species reconstruction results](species-reconstruction-results.md) own its
+four supported local species/ray RMS comparisons, two retained Rayleigh regressions,
+error-cancellation evidence and same-finite-rule reference limitations. Density
+normalization is the substantive intervention; split-only storage is negligible.
+No numerical job is active. The report identifies the coherent baseline and
+matching final review owner. Integrated P2, full recurrence, libRadtran scoring
+and production adoption remain outside this completed local comparison.
+
 ## Retained Scientific State
 
 **H9 small-ray joining is scientifically complete** as accepted 00251. The
