@@ -37,9 +37,17 @@ type HypothesisSphericalRow = {
 };
 /** Result from the bounded browser capability. */
 type HypothesisSphericalResult = {
+	/** Optional compact queried fields preserved before reader evaluation. */ sparse?: HypothesisSparseCapture;
 	/** Actual device facts. */ renderer: string;
 	/** Compact scalar outputs. */ rows: HypothesisSphericalRow[];
 	/** Compiler allocation and timing evidence; no textures retained. */ reports: SkyGpuCompilerReport[];
+};
+/** Sparse GPU inputs retained for reproducible reader repair; never full textures. */
+type HypothesisSparseCapture = {
+	/** Original spectral channel. */ channel: number;
+	/** Exact sparse scalar query order. */ coordinates: SkyFieldCoordinate[];
+	/** Base64-encoded pure Float32 fields in order. */ encoded: string[];
+	/** Exact binary scalar convention. */ scalarFormat: 'float32-le-v1';
 };
 /** A source-backed reference setup comparison. */
 type HypothesisAuditEntry = {
@@ -208,4 +216,64 @@ type HypothesisFlatComparison = {
 	/** Same projection of corrected spectrum. */ correctedColor: HorizonColorReading;
 	/** Same projection of retained reference. */ referenceColor: HorizonColorReading;
 	/** Actual sparse payload and parity facts. */ cache: HypothesisFlatCacheReport;
+};
+/** Independent phase-only P1 species reading at one quadrature level. */
+type HypothesisPhaseP1Reading = {
+	/** Analytic-CS control total, W. */ total: number;
+	/** Rayleigh emission at unchanged combined extinction. */ rayleigh: number;
+	/** Mie emission at unchanged combined extinction. */ mie: number;
+	/** Same species weights with the adapter's represented Mie phase. */ adapter: number;
+};
+/** One fixed-paper phase-only diagnostic, not a new external/all-order solution. */
+type HypothesisPhaseP1Row = {
+	/** Original witness identifier. */ ray: string;
+	/** Direct40 index. */ channel: number;
+	/** Adapter divided by analytic phase. */ phaseRatio: number;
+	/** Fine quadrature reading. */ control: HypothesisPhaseP1Reading;
+	/** Coarse quadrature reading. */ coarse: HypothesisPhaseP1Reading;
+	/** Adapter minus control P1. */ p1ChangeW: number;
+	/** Empirical P1 refinement allowance. */ refinementAllowanceW: number;
+	/** Authenticated prior independent fine P1. */ retainedP1W: number;
+	/** Unchanged prior all-order estimate. */ retainedAllOrder: SmallRayEstimate;
+	/** Scope of the contrast. */ limit: string;
+};
+/** Retained optional H10 P1 contrast. */
+type HypothesisPhaseP1Packet = {
+	/** Six exact ray/channel contrasts. */ rows: HypothesisPhaseP1Row[];
+};
+/** Retained Native48 first-order factorial output. */
+type HypothesisNativeMatrixPacket = {
+	/** Original row/level identities. */ layout: readonly SkyTargetedRayLayout[];
+	/** Corresponding spectral indices. */ channels: number[];
+	/** Compact GPU readback and device facts. */ matrix: SkyTargetedGpuResult;
+};
+/** Retained matched Flat comparison. */
+type HypothesisFlatPacket = {
+	/** All three original center rays. */ rows: HypothesisFlatComparison[];
+};
+/** Scientific hypothesis decision; support is explicitly scope-limited.
+ * - **"supported within tested boundary"** - Registered evidence supports the named tested mechanism.
+ * - **"challenged"** - The tested prediction fails within its stated boundary.
+ * - **"unresolved"** - A required discriminating comparison remains unavailable or uncertain.
+ */
+type HypothesisDecision = 'supported within tested boundary' | 'challenged' | 'unresolved';
+/** One bounded hypothesis conclusion, including untested extensions. */
+type HypothesisDecisionRecord = {
+	/** Original hypothesis letter. */ hypothesis: string;
+	/** Decision for the stated scope. */ decision: HypothesisDecision;
+	/** Exact tested mechanism. */ boundary: string;
+	/** Observed result and uncertainty meaning. */ finding: string;
+	/** Explicit limit or missing comparison. */ remaining: string;
+};
+/** Retained assessment fields needed to preserve the original execution decisions. */
+type HypothesisQuestionPacket = {
+	/** Questions, selected actions and reasons carried forward from the parent assessment. */
+	questionDecisions: {
+		/** Question encountered during execution. */
+		question: string;
+		/** Action selected at that boundary. */
+		decision: string;
+		/** Evidence or constraint behind the action. */
+		reason: string;
+	}[];
 };

@@ -19,6 +19,7 @@ import {readParent, replayAllowance, compareErrors, requireUnusedStage} from './
 import {prepareNativeFirstOrder} from './first-order.mjs';
 import {targetedShaders} from '../continuation/targeted-improvements/kernels.mjs';
 import {runTargetedGpu} from '../continuation/targeted-improvements/browser.mjs';
+import {recoveryAdmissionRun} from './recovery.mjs';
 import {benchmarkRay} from '../numerics/view.js';
 
 /** Execute one registered raw replay, with the exact Native48 P1 matrix only after successful replay.
@@ -26,11 +27,11 @@ import {benchmarkRay} from '../numerics/view.js';
  * @param {HypothesisSphericalStage} stage @returns {Promise<void>}
  */
 export async function sphericalStage(stage) {
-	requireUnusedStage(stage === 'H11' ? 'h11-orders' : 'h12-native48');
+	const repairMilliseconds = requireUnusedStage(stage === 'H11' ? 'h11-orders-r2' : 'h12-native48-r2', true);
 	const started = Date.now(),
 		before = storage();
 	/** @type {DialFileIdentity[]} */ const parents = [];
-	const admission = /** @type {HypothesisAdmission} */ (readParent('00252-h10-audit', 'admission.json', parents));
+	const admission = /** @type {HypothesisAdmission} */ (readParent(recoveryAdmissionRun, 'admission.json', parents));
 	const control = /** @type {SkyGpuControl} */ (readParent('00103-c-r0-scr', 'control.json', parents));
 	const original = /** @type {HypothesisNativeSnapshot} */ (readParent('00000-inputs', 'controls.json', parents));
 	const registration = /** @type {SmallRayRegistration} */ (
@@ -80,8 +81,8 @@ export async function sphericalStage(stage) {
 					),
 				)
 			: [];
-	const deadline = started + admission.stageMilliseconds[stage];
-	const run = createRun(stage === 'H11' ? 'h11-orders' : 'h12-native48', {
+	const deadline = started + admission.stageMilliseconds[stage] - repairMilliseconds;
+	const run = createRun(stage === 'H11' ? 'h11-orders-r2' : 'h12-native48-r2', {
 		parents,
 		operation:
 			'New bounded ' +
@@ -95,7 +96,6 @@ export async function sphericalStage(stage) {
 			admission: parents[0],
 			selected,
 			channels,
-			request,
 			missingCell:
 				'Full joint query-density/phase/source-column correction through all affected later-order fields has no qualified driver. Species-density-only and analytic-P1/frozen-higher are not substitutes.',
 		},
@@ -104,8 +104,12 @@ export async function sphericalStage(stage) {
 	/** @type {NodeJS.Timeout|null} */ let watchdog = null;
 	let deadlineHit = false,
 		gpuAttempt = false;
+	let lastStorageGuard = 0;
 	const guard = () => {
-		run.guard();
+		if (Date.now() - lastStorageGuard > 10000) {
+			run.guard();
+			lastStorageGuard = Date.now();
+		}
 		assert.ok(Date.now() < deadline - 12000, 'Stage cleanup reserve reached.');
 	};
 	try {
@@ -124,12 +128,12 @@ export async function sphericalStage(stage) {
 		const attempts = readdirSync(resolveRepository('tmp/experiments/sky-accuracy-dials/runs')).filter(
 			(n) => Number(n.slice(0, 5)) >= admission.priorRunCount && /-h1[123]-/.test(n),
 		);
-		assert.equal(
-			attempts.filter((n) => n.endsWith(stage === 'H11' ? '-h11-orders' : '-h12-native48')).length,
-			1,
-			'Registered stage already consumed.',
-		);
-		assert.ok(attempts.length <= admission.maximumGpuAttempts);
+		const gpuDebits = attempts.filter((name) => {
+			if (name === run.path.split('/').at(-1)) return true;
+			const p = 'tmp/experiments/sky-accuracy-dials/runs/' + name + '/sealed.json';
+			return JSON.parse(readRepository(p).toString()).result.gpuAttempt === true;
+		}).length;
+		assert.ok(gpuDebits <= admission.maximumGpuAttempts);
 		run.progress('setup', 'Bundle only the registered sparse recurrence/query capability.');
 		const entry = 'hypothesis-entry';
 		const entrySource =
@@ -215,6 +219,13 @@ export async function sphericalStage(stage) {
 			'hypothesisRetain',
 			/** @param {HypothesisSphericalResult} value */ async (value) => {
 				guard();
+				if (value.sparse) {
+					run.write(
+						'sparse-' + value.sparse.channel + '.json.gz',
+						gzipSync(Buffer.from(JSON.stringify(value))),
+					);
+					return;
+				}
 				rows.push(...value.rows);
 				run.write('channel-' + value.rows[0].channel + '.json', value);
 			},

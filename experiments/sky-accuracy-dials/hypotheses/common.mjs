@@ -48,18 +48,27 @@ export function replayAllowance(retained) {
 	return Math.max(0.00002, Math.abs(retained) * 0.0002);
 }
 
-/** Refuse to reopen a consumed stage, including one whose setup failed before computation.
- * A future owner-selected package needs its own admission and names.
- * @param {string} name @returns {void}
+/** Refuse completed scientific stages; explicitly authorized repair debits prior failed elapsed time.
+ * Ordinary calls retain the strict rule. Repairs require the selected continuation authority.
+ * @param {string} name @param {boolean} [repairFailures] Owner-directed repair within the remaining stage cap.
+ * @returns {number} Elapsed milliseconds already consumed by failed repair runs.
  */
-export function requireUnusedStage(name) {
+export function requireUnusedStage(name, repairFailures = false) {
 	assert.match(name, /^[a-z0-9]+(?:-[a-z0-9]+)*$/);
-	assert.ok(
-		!readdirSync(resolveRepository('tmp/experiments/sky-accuracy-dials/runs')).some((entry) =>
-			entry.endsWith('-' + name),
-		),
-		'This single-attempt stage is consumed; select a new bounded package rather than retrying it.',
-	);
+	let elapsed = 0;
+	for (const entry of readdirSync(resolveRepository('tmp/experiments/sky-accuracy-dials/runs')).filter((entry) =>
+		entry.endsWith('-' + name),
+	)) {
+		const seal = verifyRun('tmp/experiments/sky-accuracy-dials/runs/' + entry),
+			value = JSON.parse(readRepository(seal.path, seal).toString());
+		assert.ok(
+			repairFailures && value.state === 'failed' && !value.result.deadlineHit,
+			'A completed scientific stage or reached deadline cannot be repeated automatically.',
+		);
+		assert.ok(Number.isFinite(value.result.elapsedMilliseconds));
+		elapsed += value.result.elapsedMilliseconds;
+	}
+	return elapsed;
 }
 
 /** Pin the static production collaborator closure without importing another experiment or changing its files.

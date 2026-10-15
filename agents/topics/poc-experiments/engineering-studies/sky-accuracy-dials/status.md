@@ -33,15 +33,17 @@ keep their original scopes.
 
 ## Hypothesis Test Package
 
-The owner selected the [H10-H14 test plan](hypothesis-test-plan.md) for independent
-execution. Its allocation is now consumed with incomplete numerical tests. The
-[hypothesis results](hypothesis-test-results.md) own the new pinned-reference phase
-finding, accepted audit/reporting runs 00252/00256, three preserved setup failures
-00253–00255, all four unresolved decisions, resources and resumption boundary.
-No GPU or horizon integration started. Current source corrects the identified
-harness defects but has not rerun those scientific stages. No job is active;
-further numerical attempts require a separately selected recovery package.
-Production and the earlier scientific findings retain their original scopes.
+The owner-directed [H10-H14 sequence](hypothesis-test-plan.md) is finished at its
+bounded available/unsupported comparison boundaries. The
+[hypothesis results](hypothesis-test-results.md) own accepted 00257/00259–00262:
+measured phase-only P1 response, exact raw N4/N6 replay, Native48 view/P1 factorial,
+matched Flat N1 cache comparison and final decisions. A's P1 mechanism and D's N1
+neutrality are supported; C's tested P1/view explanation is challenged; B's full
+corrected-reconstruction interaction remains unresolved. No job is active.
+All setup/reader failures are preserved. Repair continued under the owner's
+explicit instruction to finish, within the aggregate compute/storage allocation;
+the H11 nominal retention-target deviation is documented. Production is unchanged,
+and unsupported full recurrence/reference qualifications remain explicit.
 
 ## Retained Scientific State
 

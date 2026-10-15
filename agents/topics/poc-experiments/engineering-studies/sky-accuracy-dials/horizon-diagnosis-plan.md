@@ -366,8 +366,9 @@ falsifiers and stage admission rules. The proposed package starts with a referen
 audit, then bounds three targeted numerical comparisons and a final assessment
 to 20 minutes of aggregate execution, at most three serial GPU attempts and
 16 MiB of new retained evidence. The [hypothesis results](hypothesis-test-results.md)
-record a useful source audit, three setup failures and four unresolved decisions.
-Its allocation is consumed; no earlier compute allocation or completed run is reopened.
+record the completed owner-directed bounded sequence, including measured phase P1,
+raw order replay, Native48 attribution, Flat N1 cache evidence and explicit missing
+full recurrence cells. Failed runs remain immutable; no earlier run is reopened.
 
 Prior compute packages remain consumed. This continuation starts with H0 and does
 not renew the previous 42 GPU attempts or multi-hour campaigns. Register H1 before
@@ -437,8 +438,9 @@ resources and matching implementation-review gate. The owner-selected H9 join is
 scientifically complete as accepted 00251; the
 [small-ray results](small-ray-cancellation-results.md) own the new attribution,
 separate baseline/geometry boundaries and testable hypotheses. The
-[H10-H14 results](hypothesis-test-results.md) record the selected package's incomplete
-execution and resumption boundary. No scientific job is active. Flat near-horizon N1 path evidence exists in 00245;
+[H10-H14 results](hypothesis-test-results.md) record the finished bounded tests and
+their remaining scientific limits. No scientific job is active. Matched Flat
+near-horizon N1 cache/reference evidence is now in 00261; original path evidence is in 00245;
 matched near-horizon paper all-order component references remain absent.
 The coherent H3-H6 implementation unit
 starts from `.codex-tmp/review-standards/session-b5Eogw/baseline.json`, captured

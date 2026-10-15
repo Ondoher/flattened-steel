@@ -1,3 +1,5 @@
+import {startRecovery} from './recovery.mjs';
+import {finishRecovery} from './finish.mjs';
 import assert from 'node:assert/strict';
 import {readdirSync} from 'node:fs';
 import {createRun, identity, readRepository, resolveRepository, storage, verifyRun} from '../io/files.mjs';
@@ -146,8 +148,10 @@ function audit() {
 }
 
 const action = process.argv[2];
-if (action === 'audit') audit();
+if (action === 'finish') finishRecovery();
+else if (action === 'resume') startRecovery();
+else if (action === 'audit') audit();
 else if (action === 'H11' || action === 'H12') await sphericalStage(action);
 else if (action === 'H13') flatStage();
 else if (action === 'H14') assessHypotheses();
-else throw new Error('Expected audit, H11 or H12 action.');
+else throw new Error('Expected audit, resume, H11, H12, H13, H14 or finish action.');

@@ -81,6 +81,20 @@ export async function runSpherical(input, progress, retain, commonModule) {
 					}
 				},
 			});
+			// Preserve queried fields before reader evaluation, so repair never discards completed GPU work.
+			const encoded = pure.map((field) => {
+				const bytes = new Uint8Array(field.buffer);
+				let text = '';
+				for (let i = 0; i < bytes.length; i += 4096)
+					text += String.fromCharCode(...bytes.subarray(i, i + 4096));
+				return btoa(text);
+			});
+			await retain({
+				renderer,
+				rows: [],
+				reports: [report],
+				sparse: {channel, coordinates, encoded, scalarFormat: 'float32-le-v1'},
+			});
 			const local = pure.map((field) => field.slice(0, reference.coordinates.length));
 			const higher = [new Float32Array(reference.coordinates.length)],
 				cumulative = [];
@@ -103,8 +117,8 @@ export async function runSpherical(input, progress, retain, commonModule) {
 					(sample, slot) =>
 						input.kind === 'H'
 							? sampleDensity(local[0], sample, 'monotone-cubic') +
-								sampleDensity(higher[slots[slot] - 1], sample, 'monotone-cubic')
-							: sampleDensity(cumulative[slots[slot] - 1], sample, 'monotone-cubic'),
+								sampleDensity(higher[slots[slot - 1] - 1], sample, 'monotone-cubic')
+							: sampleDensity(cumulative[slots[slot - 1] - 1], sample, 'monotone-cubic'),
 					guard,
 				);
 			const first = evaluate([1, 2, 3, 4]);
@@ -121,9 +135,20 @@ export async function runSpherical(input, progress, retain, commonModule) {
 				reference,
 				channel,
 				'grouped',
-				(sample, slot) => sampleDensity(local[slot], sample, 'monotone-cubic'),
+				(sample, slot) => sampleDensity(local[slot - 1], sample, 'monotone-cubic'),
 				guard,
 			);
+			const pureTail =
+				input.maximumOrder === 6
+					? evaluateFixedDensityReference(
+							input.request,
+							reference,
+							channel,
+							'grouped',
+							(sample, slot) => sampleDensity(local[slot + 1], sample, 'monotone-cubic'),
+							guard,
+						)
+					: null;
 			/** @type {HypothesisSphericalRow[]} */ const rows = [];
 			for (const entry of ordinary)
 				for (let order = 1; order <= input.maximumOrder; order++) {
@@ -145,7 +170,12 @@ export async function runSpherical(input, progress, retain, commonModule) {
 						refinedW: ref.referenceW,
 						refinedAllowanceW: ref.allowanceW ?? 0,
 						refinedResolved: ref.resolved,
-						pureW: pureRead.rows.filter((p) => p.probeId === entry.probe.id).map((p) => p.referenceW),
+						pureW: [
+							...pureRead.rows.filter((p) => p.probeId === entry.probe.id).map((p) => p.referenceW),
+							...(pureTail?.rows
+								.filter((p) => p.probeId === entry.probe.id && p.order > 2)
+								.map((p) => p.referenceW) ?? []),
+						],
 					});
 				}
 			await retain({renderer, rows, reports: [report]});

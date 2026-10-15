@@ -1,3 +1,4 @@
+import {recoveryAdmissionRun} from './recovery.mjs';
 import assert from 'node:assert/strict';
 import {createRun, identity, storage, verifyRun, readRepository} from '../io/files.mjs';
 import {readParent, pinProductionClosure, requireUnusedStage} from './common.mjs';
@@ -213,7 +214,7 @@ function integrate(input, cache, count, guard) {
  * @returns {void}
  */
 export function flatStage() {
-	requireUnusedStage('h13-flat-cache');
+	const repairMilliseconds = requireUnusedStage('h13-flat-r2', true);
 	const started = Date.now(),
 		before = storage();
 	/** @type {DialFileIdentity[]} */ const parents = [];
@@ -221,8 +222,8 @@ export function flatStage() {
 	const observation = /** @type {HypothesisFlatObservation} */ (
 		readParent('00239-horizon-stages', 'local-observation.json', parents)
 	);
-	const admission = /** @type {HypothesisAdmission} */ (readParent('00252-h10-audit', 'admission.json', parents));
-	const deadline = started + admission.stageMilliseconds.H13;
+	const admission = /** @type {HypothesisAdmission} */ (readParent(recoveryAdmissionRun, 'admission.json', parents));
+	const deadline = started + admission.stageMilliseconds.H13 - repairMilliseconds;
 	const productionPaths = [
 		'src/algorithm32/implementation/local-sun/cache/LocalSunCompactProfileSelection.js',
 		'src/algorithm32/implementation/local-sun/cache/LocalSunCompactCpuAssembly.js',
@@ -231,7 +232,7 @@ export function flatStage() {
 	];
 	pinProductionClosure(productionPaths, parents);
 	parents.push(identity(ciePath));
-	const run = createRun('h13-flat-cache', {
+	const run = createRun('h13-flat-r2', {
 		parents,
 		operation:
 			'Sparse actual-topology Flat N1 physical-J control, independently authored species payload with summed-control parity, and new Float32 invariant-column cache with exact query restoration; fixed combined extinction, geometry and Native15 input.',

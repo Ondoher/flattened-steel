@@ -2,12 +2,16 @@
 
 ## Status And Objective
 
-**Executed with incomplete numerical stages; allocation consumed.** The
+**Owner-directed bounded execution is finished.** After the initial setup failures, the
+owner instructed the agent to finish and rejected treating pre-computation setup
+faults as consumed scientific attempts. Repair setup and continue in new immutable
+runs within the original compute/storage boundaries. The
 [H10–H14 results](hypothesis-test-results.md) own the source audit, setup failures,
 four unresolved hypothesis decisions and resumption boundary. The owner requested this plan after the
 [H9 small-ray analysis](small-ray-cancellation-results.md#testable-hypotheses).
 It defines the selected bounded package and its original predictions and stop
-rules. Closed attempts are preserved; this document does not renew allocations.
+rules, amended by that explicit completion instruction. Closed attempts remain
+immutable; successful scientific tests are not repeated automatically.
 
 Determine which mechanisms explain the measured compensation, and whether a
 mathematical correction improves agreement with the appropriate independent
@@ -267,8 +271,12 @@ Execute H10 first. B and C may share implementation scaffolding, but retain thei
 different baselines. Run GPU work serially, ordinarily H11, H12, H13; finish H14
 even if a previous hypothesis is unresolved. Do not spend an unavailable or
 unused stage's allowance on extra rays, count ladders, retries or another stage.
-Each attempted stage, including a failure, consumes its one allocation. If setup
-cannot fit its allowance, stop that stage and report the missing evidence.
+Repair setup failures and continue; a pre-computation validation or harness fault
+does not consume the scientific attempt. Charge actual elapsed work against the
+stage and aggregate limits, preserve every failed run, and do not repeat a
+successfully completed scientific test. Stop only at an actual execution/resource
+cap or an unsupported scientific boundary; report that boundary rather than
+substituting an unmatched comparison.
 
 On execution selection, register a new package-specific admission record with
 the current prior-attempt count, this plan/source identity, stage deadlines and
@@ -292,9 +300,10 @@ exclusive run allocation, parent/source/tool hashes, progress and sealing. Prese
 all previous runs; derivatives go into new runs. Emit progress at least every
 30 seconds and before each stage. Enforce deadlines in parent/watchdog code,
 reserve cleanup time inside each cap, and terminate only the owned process tree.
-No automatic retries, full-sky campaign, new dependency/native-helper build,
-parameter fitting, historical-evidence mutation or production promotion follows
-a failure or inconclusive result.
+Setup repairs follow the bounded continuation rule above. A scientific failure
+or inconclusive result does not authorize repeated computations, a full-sky
+campaign, new dependency/native-helper build, parameter fitting,
+historical-evidence mutation or production promotion.
 
 ## Implementation Review And Deliverables
 
@@ -320,9 +329,9 @@ test separately; do not extend this package to obtain a favorable result.
 ## Execution Checklist
 
 - [x] Owner selects execution; capture baseline, refresh readiness and freeze matrices.
-- [ ] H10: source audit recorded as 00252; exact reference execution and historical GPU-attempt qualification remain incomplete.
-- [x] H11: consumed failed setup 00253; missing reconstruction-by-order cells explicitly bounded.
-- [ ] H12: consumed failed setup 00254; no Native48 replay or attribution completed.
-- [ ] H13: consumed failed setup 00255; no horizon integration completed.
-- [x] H14: 00256 records all four hypotheses unresolved, preserving prior evidence and failures.
-- [ ] Complete local verification, batched mapped review and resource/immutability handoff.
+- [x] H10: 00252 source audit and 00257 phase-only P1 consequence; exact retained external execution/convergence remains unqualified.
+- [x] H11: 00259 raw N4/N6 replay and shared prefix pass; missing full corrected recurrence cells explicitly bounded.
+- [x] H12: 00260 exact Native48 replay, refined viewing and full fixed-S20 P1 factorial; tested explanation challenged; later corrected N4 remains unavailable.
+- [x] H13: 00261 matched current/corrected Flat cache species spectra pass the registered N1 gates.
+- [x] H14: 00262 evaluates all four hypotheses and retains uncertainty, failures, resources and unsupported boundaries.
+- Local verification and immutable-resource handoff pass; matching batched review evidence is owned by session-5f4w06, separately from scientific completion.

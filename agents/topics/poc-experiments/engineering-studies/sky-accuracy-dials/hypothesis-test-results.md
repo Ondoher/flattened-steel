@@ -2,148 +2,195 @@
 
 ## Current Disposition
 
-**The bounded package is closed with incomplete numerical tests.** H10 found a
-specific reference-phase representation discrepancy. H11–H13 failed in setup,
-before GPU execution or horizon integration. H14 recorded those failures and all
-four hypotheses remain unresolved. These harness failures are not scientific
-falsifications. Production, physical parameters and historical evidence are unchanged.
+**The bounded scientific sequence is finished at its available and unsupported
+comparison boundaries.** Accepted 00257/00259–00262 provide a phase-only P1
+contrast, qualified raw order replay, exact Native48 view/P1 factorial, matched
+Flat N1 cache comparison and joined assessment. Full jointly corrected later-order
+recurrence cells remain unavailable and explicitly unresolved. Finishing this
+bounded package does not mean every hypothesis or reference setting is resolved.
 
-The owner selected the [test plan](hypothesis-test-plan.md) through independent
-execution. Its single-attempt stage limits were enforced; unused time was not
-transferred and failed stages were not retried. The identified startup defects
-are corrected in current source, but those corrections have not been exercised
-by new scientific runs.
+After the owner instructed completion, the agent repaired setup/reader failures
+and continued. The overbroad no-retry rule was an agent-authored mistake, not a
+scientific requirement. Every failed run is preserved; completed scientific stages
+were not repeated. Production and physical parameters are unchanged. No job is active.
 
-## New Reference Finding
+Open the [offline decision sheet](../../../../../tmp/experiments/sky-accuracy-dials/runs/00262-h14-finish/assessment.html)
+or [complete assessment JSON](../../../../../tmp/experiments/sky-accuracy-dials/runs/00262-h14-finish/assessment.json).
+The JSON owns exact spectra, all 13 P1 modes, factorial interactions, shared-reference
+uncertainty, species, provenance, resources and the complete question/decision log.
+
+## Decisions
+
+| Hypothesis | Decision and tested boundary | Result | Remaining limit |
+| --- | --- | --- | --- |
+| A: phase/reference mismatch contributes near the Sun | Supported for phase-only P1 | Adapter phase raises P1 by 3.66–5.26%; its 454 nm P1 change is equivalent to 57–63% of the retained gap with higher light frozen. | All-order response and exact retained libRadtran input/convergence are unqualified. |
+| B: truncation is stronger at 360 than 454 nm after reconstruction correction | Raw spectral pattern confirmed; complete hypothesis unresolved | N4/N6 replay and shared-prefix checks pass to rounding; violet increments are larger. | Full corrected-reconstruction × order cells have no qualified producer. |
+| C: corrections materially remove the Native48 afternoon excess | Challenged for the tested view/P1 explanation | Low454 approximation falls only 19.08%, below 25%; upper454 worsens by 1.157 mW, above 0.5 mW. Both survive the comparison screens. | Joint correction propagated through later N4 fields is not measured. |
+| D: Flat N1 neutrality follows species/path balance | Supported for the matched N1 diagnostic | All 45 corrected scalars pass; 3° R/B moves only 0.990809 → 0.989226 and stays neutral. Upper control stays blue. | Geometry-specific CPU N1 algebra, not independent physical or GPU/production qualification. |
+
+Numerical agreement with the continuous equation and agreement with retained
+libRadtran are separate. Better mathematics can worsen the retained score;
+correcting one component can expose compensation elsewhere or at another ray.
+
+## A: Reference Phase Has A Measured P1 Consequence
 
 The pinned Bruneton `libradtran.cc` adapter computes 20 aerosol Legendre moments
-from 1000 midpoint samples with scattering cosine **0 to 1**, rather than the
-full sphere. Pinned libRadtran 2.0.1 `ancillary.c` divides each aerosol moment by
-moment zero when assembling its scattering representation. The arbitrary common
-scale therefore cancels; the forward-only angular distribution does not.
+from 1000 midpoint samples over scattering cosine **0 to 1**. Pinned libRadtran
+2.0.1 `ancillary.c` divides by moment zero. The common scale cancels; the
+forward-only distribution differs from the full-sphere analytic Cornette–Shanks
+law in the continuous solver.
 
-Independent full-sphere integration of the analytic Cornette–Shanks law at the
-fixed paper g=0.7 gives normalization 0.999999999999982. Its forward-hemisphere
-mass is 0.9363313642. The normalized 20-term adapter representation gives:
+At paper g=0.7, independent full-sphere normalization is 0.999999999999982;
+forward probability is 0.9363313642. The represented aerosol phase is 6.555–7.036%
+stronger on A/B/C. The P1 contrast keeps source, combined extinction and physical
+parameters fixed, separates Rayleigh/Mie emission, and changes only diagnostic Mie phase.
 
-| Registered ray | Adapter / continuous aerosol phase | Phase change |
+| Near-Sun ray | P1 increase at 360 nm | P1 increase at 454 nm | Relative P1 increase at 454 nm |
+| --- | ---: | ---: | ---: |
+| A: 09:30, grid 5/7 | 3.535 mW | 9.030 mW | 4.818% |
+| B: 12:30, grid 3/5 | 4.777 mW | 10.321 mW | 5.265% |
+| C: 12:30, grid 3/4 | 3.360 mW | 7.261 mW | 5.150% |
+
+All mW here are spectral mW m⁻² sr⁻¹ nm⁻¹. Fine/coarse quadratures also match
+the retained independent P1 producer. These are new radiance measurements, unlike
+the initial phase-only ratios. The 57–63% figure is a **frozen-higher size
+comparison**, not an all-order solver result.
+
+The [pinned match/difference/unknown ledger](../../../../../tmp/experiments/sky-accuracy-dials/runs/00252-h10-audit/audit.json)
+also records the adapter's 100-layer vertical representation and azimuth rounding
+to 0.25°. Exact emitted decks, effective solver/stream settings and retained-output
+convergence remain unqualified. No external solver was installed, compiled or
+executed. A verified matched reference remains necessary for a pure correctness score.
+
+## B: Order Effect Reproduced, Complete Interaction Missing
+
+Accepted 00259 regenerates raw H N1–N6. All eight selected N4/N6 replay scalars
+pass; maximum absolute difference from 00171 is 1.67e−16 W. Repeated N3/N4
+evaluations use the exact same generated prefix. Queried fields are preserved
+before reader evaluation; no full texture or cache package is retained.
+
+| Ray | N5/N6 increment at 360 nm | N5/N6 increment at 454 nm |
 | --- | ---: | ---: |
-| A: 09:30, grid 5/7 | 1.06757997 | +6.758% |
-| B: 12:30, grid 3/5 | 1.06555396 | +6.555% |
-| C: 12:30, grid 3/4 | 1.07036428 | +7.036% |
-| D: 12:30, grid 0/4 | 1.08857353 | +8.857% |
-| E: 12:30, grid 4/4 | 1.06695118 | +6.695% |
+| A: near Sun | 3.292 mW | 0.668 mW |
+| D: low elevation | 4.963 mW | 1.365 mW |
 
-These are **phase values, not radiance ratios or measured score improvements**.
-The exact emitted input deck, effective solver/stream settings and convergence
-of the retained published rows remain unqualified. The adapter also uses a
-100-layer vertical representation and rounds relative view azimuth to 0.25°.
-No new external solver was installed, compiled or executed. The source-backed
-match/difference/unknown ledger and exact hashes are in
-[00252 audit.json](../../../../../tmp/experiments/sky-accuracy-dials/runs/00252-h10-audit/audit.json).
+The spectral contrast is real in the raw control. It does not establish the
+conditional prediction after consistent reconstruction correction. Total error,
+higher-only error and retained libRadtran agreement are retained separately with
+the same uncertain direct reference. Pure-order readings do not become an additive
+allocation of nonlinear grouped interpolation.
 
-This identifies a concrete candidate explanation for part of the cache-free
-near-Sun deficit; it does not establish its all-order contribution. We must not
-interpret the current reference score as a pure numerical-correctness score until
-the representation and execution inputs are matched.
+The existing density-only driver leaves phase/column operations unchanged.
+An analytic-P1/frozen-higher substitution also fails to regenerate affected later
+light. Neither qualifies the missing factorial cells. The bounded plan permits
+reporting this unsupported representation boundary rather than fabricating a result.
 
-## Hypothesis Decisions
+## C: P1 Is Too Small To Explain The Native48 Excess
 
-| Hypothesis | Decision | Evidence and missing comparison |
+Accepted 00260 reproduces Native48 Q30/S20/T40 N4 at both original afternoon
+witnesses and 360/454/642 nm. Maximum replay discrepancy is 0.0000232 mW.
+Independent final-view quadratures resolve at all six scalars. The full 2×2×2
+density/phase/column P1 matrix and separated-transmission controls use **S20
+throughout**; the two legacy source slots are identical. Raw combined-P1 control
+parity passes its fixed-field screen.
+
+| Ray / wavelength | Original total approximation | Joint P1/view diagnostic |
+| --- | ---: | ---: |
+| Low, 360 nm | +0.714 mW | +0.393 mW |
+| Upper, 360 nm | −3.477 mW | −4.096 mW |
+| Low, 454 nm | +9.412 mW | +7.617 mW |
+| Upper, 454 nm | +0.311 mW | −1.468 mW |
+| Low, 642 nm | +7.192 mW | +5.397 mW |
+| Upper, 642 nm | +1.176 mW | −0.289 mW |
+
+The diagnostic is `refined total − refined cached P1 + corrected P1`, with the
+incremental remainder frozen. It is **not regenerated corrected N4**. Low454
+view refinement alone adds +0.453 mW; subsequent joint P1 correction removes
+about 2.248 mW, leaving +7.617 mW. Higher remainder approximation is +8.560 mW.
+The tested mechanism fails both prospective low-ray improvement and upper-control
+protection thresholds.
+
+This spatially exposes compensation: fixing P1 damages an upper ray whose small
+original total error depended on an opposing remainder. Every pair/triple factorial
+contrast is retained. Later-order reconstruction/transport remains the substantial
+unmeasured boundary; the entire excess cannot be assigned to P1.
+
+## D: A Closer Flat N1 Cache Remains Neutral
+
+Accepted 00261 uses 00245's exact finite source, Native15 spectrum and center rays,
+with the actual 1049-position topology. Held-shell physical-J control and
+independently authored Rayleigh/Mie payloads pass Float32 sum-parity checks at
+unchanged combined extinction. The new diagnostic caches the flat column
+invariant `K = C*mu/exp(-z/H) + H*exp((z-top)/H)`, then restores query columns,
+phase, density and dilution. Its invariant is constant; this N1-specific algebra
+cannot silently replace a later-order cache.
+
+| Elevation | Current-cache R/B | Corrected-cache R/B | Continuous N1 R/B | Largest current-cache spectral error |
+| --- | ---: | ---: | ---: | ---: |
+| 0.05° | 0.820008 | 0.817195 | 0.817195 | 0.667% |
+| 3° | 0.990809 | 0.989226 | 0.989226 | 0.614% |
+| 20° | 0.436576 | 0.434879 | 0.434879 | 1.346% |
+
+All 45 corrected channels pass the registered 0.1%/allowance screen with the same
+bin-integrated linear color projection. Approximately machine-level agreement is
+an algebraic cache check at shared fine Simpson quadrature, **not independent
+physical accuracy at machine precision**. Coarse/fine differences, separate
+species, parity and source identities are retained. Maximum R/B shift is only
+0.002813, below the registered 0.02 threshold.
+
+Under these fixed N1 assumptions, numerical cache correction does not restore
+orange. Species/phase/path balance remains the relevant explanation for this
+spectrum. Flat higher orders, ground/model choices, aerosol calibration and app
+display adoption were not changed or qualified.
+
+## Execution And Resources
+
+| Run | Outcome | Purpose |
 | --- | --- | --- |
-| A: angular/reference mismatch contributes to the near-Sun deficit | Unresolved | A real angle-dependent phase discrepancy is measured. Its P1/all-order radiance consequence and effective retained reference setup are not qualified. |
-| B: truncation matters more at 360 than 454 nm after reconstruction correction | Unresolved | Retained N4/N6 accounting is reproduced arithmetically. New raw replay and the full corrected-reconstruction/order matrix are absent. |
-| C: numerical corrections materially reduce the Native48 afternoon low-ray excess | Unresolved | Exact Native48 Q30/S20/T40 recipes are prepared. No new replay, view attribution or P1 factorial completed. The retained +9.412 mW low454 approximation is still unattributed. |
-| D: corrected Flat N1 converges toward the neutral continuous spectrum | Unresolved | Sparse actual-topology control and a geometry-specific N1 column-cache intervention are implemented; local payload parity passes. No new horizon spectrum or convergence decision exists. |
+| 00252 / 00256 | Accepted | Initial source audit and incomplete report. |
+| 00253–00255 | Failed setup | Preserved virtual-path, Windows-path and signed-zero faults. |
+| 00257 | Accepted | Owner-directed completion authority and phase P1 test. |
+| 00258 | Failed reader | J6 completed, then a zero-based reader assumption failed against the one-based reference API. |
+| 00259 | Accepted | Repaired raw H order replay/prefix. |
+| 00260 | Accepted | Native48 replay, view and P1 factorial. |
+| 00261 | Accepted | Matched Flat cache comparison. |
+| 00262 | Accepted | Final joined assessment and offline report. |
 
-The existing order data are not new confirmation: A360's higher-order error
-changes from −2.905 to +0.388 spectral mW with N5/N6, whereas A454 changes from
-+2.451 to +3.119 mW and worsens. D360 changes −6.711 to −1.748 mW; D454 changes
-−1.082 to +0.283 mW. H14 retains shared-reference SSE intervals and the original
-sampling flags. All five original sampling-precision misses remain unchanged.
+Recovery execution through final verification took about **122 seconds**, including
+the failed reader; implementation and standards review are separate. Three GPU
+attempts started and two completed scientific stages. Each numerical stage stayed
+within five minutes including repair. No memory guard blocked work, and there was
+no new dependency, native build, full-sky campaign or parameter fit.
 
-An analytic-P1/frozen-higher substitution is not a corrected recurrence. Existing
-species-density factoring does not correct every phase/column reconstruction in
-later scattering. The full B factorial and C higher-order response therefore
-remain missing even apart from the setup failures.
+Final retained total is **421,445,110 bytes**, scratch **zero**, and free disk
+**139,086,254,080 bytes**. Growth since H9 is **14,393,753 bytes**, within the
+original 16 MiB aggregate and 512 MiB experiment limits. Recovery adds 9,625,245
+bytes, within its 12 MiB admission. **H11 exceeded its nominal 4 MiB retention
+target:** accepted run 4,382,846 bytes plus preserved reader failure 2,559,307
+bytes. Repeated full-request metadata enlarged its seal; subsequent provenance
+was compacted. This deviation is recorded, not counted as a passed suballocation.
 
-## Execution And Failure Evidence
+The old admission's 194 is a lexical GPU-related-run count, not an authenticated
+historical attempt count. New package attempts are explicit. All prior evidence
+is preserved, derivatives use new runs, and every new seal/inventory and owned
+scratch cleanup verifies.
 
-| Run | Outcome | Execution through pre-seal retention | Result |
-| --- | --- | ---: | --- |
-| 00252-h10-audit | Accepted audit/registration | 7.224 s | Pinned source/phase audit and retained order accounting. Full reference/preflight qualification remains open. |
-| 00253-h11-orders | Failed setup | 6.599 s | Virtual bundle entry was incorrectly passed to physical-path validation. No GPU started. |
-| 00254-h12-native48 | Failed setup | 7.108 s | Installed Chrome path used slash spelling instead of the strict I/O owner's normalized Windows spelling. No GPU started. |
-| 00255-h13-flat-cache | Failed setup | 6.558 s | Deep equality rejected +0 versus −0 in the source position after JSON round-trip. No horizon integration started. |
-| 00256-h14-hypotheses | Accepted reporting | 7.479 s | Joined decision sheet, complete question/decision log, failures and resource limits. |
+## Verification And Completion Record
 
-The stage seals report **34.968 seconds** total before final sealing/verification.
-Measured whole-command elapsed totals, including post-seal verification, are
-approximately **47 seconds**; these are not implementation or review time.
-No stage approached its wall-clock cap. The package failed because of avoidable
-harness defects, not compute cost, memory pressure or adverse scientific results.
+Type checking, replay/prefix checks, independent phase P1 parity, Native48 control
+parity, Flat species additivity and registered spectral gates pass. Original
+stochastic precision flags and shared-reference uncertainty remain unchanged;
+sampling intervals are not relabeled total solver-error bounds. No experimental
+unit-test tree was introduced.
 
-New retained evidence is **4,768,508 bytes**. Final measured retained total is
-**411,819,865 bytes**, scratch is zero, and free space was **139,663,073,280 bytes**.
-All five seals/artifact inventories verify; all owned scratch cleanup records
-show absence. The H10 `priorGpuRunCount=194` is a lexical count of GPU-related
-recipes, **not an authenticated count of historical GPU attempts**. That admission
-limitation is recorded in H14; earlier authorizations were not changed or renewed.
+The complete question/decision/reason log is in 00262's JSON. It retains the
+superseded stopping decision, the owner's explicit correction, reader repair,
+sparse-output preservation, reference limits, missing recurrence cells,
+shared-quadrature qualification and retention deviation. No additional owner
+confirmation was needed to finish the authorized sequence.
 
-Open the [offline decision sheet](../../../../../tmp/experiments/sky-accuracy-dials/runs/00256-h14-hypotheses/assessment.html)
-or [exact assessment JSON](../../../../../tmp/experiments/sky-accuracy-dials/runs/00256-h14-hypotheses/assessment.json).
-Their parent seals preserve the full immutable derivation chain.
-
-## Implementation, Verification And Review
-
-The contained runner lives under `experiments/sky-accuracy-dials/hypotheses/`.
-It adapts the existing raw GPU driver with an explicit terminal order and the
-existing P1 preparation with the two Native48 witnesses, three channels and fixed
-S20 count. The production common-shader generator remains read-only.
-
-The Flat diagnostic uses the actual 1049-position topology, held-shell J1 source,
-physical-J reconstruction and Float32 scalar payload. It constructs Rayleigh/Mie
-payloads independently and compares their sum to the existing CPU J1 owner. The
-new N1-only representation caches the flat exponential column invariant
-`K = C * mu / exp(-z/H) + H * exp((z-top)/H)`, then restores query columns, phase,
-density and dilution. This is a geometry-specific diagnostic, not a production
-cache or a later-order solution. It is not qualified merely because its normalized
-column residual is algebraically constant.
-
-The local off-witness payload proof measured production-node/species relative
-difference 3.41e−16, Float32 summed-control relative difference 4.82e−8 and maximum
-column-invariant residual 1.82e−12 m. This is implementation proof, not a measured
-horizon result. Bundle generation and exact Native48 payload preparation were
-also checked. The experiment type check passes. No experimental unit-test tree
-or new dependency was introduced.
-
-One batched mapped review unit covers these source changes and current-state
-documents from baseline
-`.codex-tmp/review-standards/session-NNPdLo/baseline.json` at `3d9a9b8d`.
-Its completion remains pending until the matching ledger validates. Source review
-cannot convert failed scientific stages into completed hypothesis tests.
-
-## Questions And Decisions
-
-The [H14 JSON](../../../../../tmp/experiments/sky-accuracy-dials/runs/00256-h14-hypotheses/assessment.json)
-contains the complete question/decision/reason list. Decisions cover output-root
-ownership, pinned moment-zero normalization, limits on phase/radiance inference,
-missing full recurrence corrections, exact Native48 view/geometry, virtual-module
-validation, Windows path normalization, geometric signed zero, CPU-only Flat
-qualification, no automatic retries, no transfer of unused allocation and the
-unqualified historical GPU-attempt count. No owner answer was required to make
-these bounded decisions.
-
-## Resumption Boundary
-
-No scientific job is active. The selected package is consumed. The plan states:
-“Each attempted stage, including a failure, consumes its one allocation.”
-Corrections do not reopen 00253–00255 or authorize new attempts.
-
-A separately selected recovery package should first validate all startup paths
-without scientific computation, authenticate the attempt ledger and record fresh
-admission. C's exact Native48 replay/conditional P1 attribution and D's sparse
-three-ray N1 comparison are the smallest remaining executable targets. B's full
-corrected recurrence needs a qualified representation before another compute
-attempt; raw replay alone would not complete that factorial. Retain all current
-failed evidence and do not expand into full skies or count ladders.
+One batched recovery review unit starts at checkpoint `0c555dbd`, baseline
+`.codex-tmp/review-standards/session-5f4w06/baseline.json`. Matching primary,
+independent-audit and validation records in that directory own the implementation
+review verdict. Earlier receipts retain their original scopes. A scientific
+result or reviewer readiness alone does not establish standards completion.
