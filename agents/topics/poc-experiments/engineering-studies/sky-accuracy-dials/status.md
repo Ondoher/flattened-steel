@@ -31,6 +31,16 @@ below uses retained libRadtran output without changing a scorer or production
 behavior or qualifying a new reference. Historical implementation-review receipts
 keep their original scopes.
 
+## Planned Hypothesis Tests
+
+The owner requested a concrete plan for the four H9 hypotheses. The
+[H10-H14 test plan](hypothesis-test-plan.md) is prepared, not executed. It owns
+the reference audit, reconstruction/order comparison, exact Native48 low-ray
+attribution and matched Flat N1 species test, with predictions, falsifiers,
+uncertainty/replay gates and a 20-minute aggregate execution cap. No new run,
+simulation, parameter change or production work has started. The existing
+scientific findings below retain their original scopes.
+
 ## Retained Scientific State
 
 **H9 small-ray joining is scientifically complete** as accepted 00251. The

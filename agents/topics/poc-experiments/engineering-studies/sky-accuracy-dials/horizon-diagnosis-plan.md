@@ -358,6 +358,16 @@ without automatically executing those new tests. Batch one mapped review for thi
 coherent source/documentation unit. Baseline:
 `.codex-tmp/review-standards/session-RwbPUa/baseline.json`.
 
+### Proposed H10-H14: Test The Four Hypotheses
+
+The owner requested the [hypothesis test plan](hypothesis-test-plan.md) after H9.
+It owns the exact witnesses, profile/geometry boundaries, predicted outcomes,
+falsifiers and stage admission rules. The proposed package starts with a reference
+audit, then bounds three targeted numerical comparisons and a final assessment
+to 20 minutes of aggregate execution, at most three serial GPU attempts and
+16 MiB of new retained evidence. It is planned, not started; no earlier compute
+allocation or completed run is reopened.
+
 Prior compute packages remain consumed. This continuation starts with H0 and does
 not renew the previous 42 GPU attempts or multi-hour campaigns. Register H1 before
 running it: one GPU job at a time, a ten-minute ceiling including setup, and at most
@@ -425,8 +435,9 @@ coverage, conditional P1 decomposition, four independent P2 witnesses, N5/N6 eff
 resources and matching implementation-review gate. The owner-selected H9 join is
 scientifically complete as accepted 00251; the
 [small-ray results](small-ray-cancellation-results.md) own the new attribution,
-separate baseline/geometry boundaries and testable hypotheses. No additional
-compute package is selected. Flat near-horizon N1 path evidence exists in 00245;
+separate baseline/geometry boundaries and testable hypotheses. The
+[H10-H14 test plan](hypothesis-test-plan.md) is prepared for later execution
+selection; no hypothesis test has started. Flat near-horizon N1 path evidence exists in 00245;
 matched near-horizon paper all-order component references remain absent.
 The coherent H3-H6 implementation unit
 starts from `.codex-tmp/review-standards/session-b5Eogw/baseline.json`, captured
