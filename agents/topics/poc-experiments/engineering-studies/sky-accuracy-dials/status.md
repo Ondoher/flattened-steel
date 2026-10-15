@@ -31,6 +31,19 @@ below uses retained libRadtran output without changing a scorer or production
 behavior or qualifying a new reference. Historical implementation-review receipts
 keep their original scopes.
 
+## H28-H32 Migration Regression
+
+The [migration regression plan](horizon-migration-regression-plan.md) records the
+owner's requested before/after distant-horizon investigation. It separates
+historical reproduction, calculation/display attribution, independent-reference
+accuracy and localized cancellation on three initial rays. The selected bounded
+numerical work is complete as accepted 00271. The
+[migration results](horizon-migration-regression-results.md) own findings, exact
+historical reproduction gaps, resources and the matching implementation-review
+receipt at `.codex-tmp/review-standards/session-oqdBo1/validation.json`; implementation
+completion requires CLEAN validation. Existing completed packages remain closed;
+the H27 matched full-app encoding check remains a separate proposed follow-up.
+
 ## H27 Local-Horizon Brightness Diagnosis
 
 Accepted `00270-h27-brightness` completes the selected bounded numerical work.

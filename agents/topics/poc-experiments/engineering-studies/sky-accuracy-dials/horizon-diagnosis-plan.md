@@ -739,7 +739,25 @@ rules. One coherent review baseline was captured before authored changes at
 `.codex-tmp/review-standards/session-jBH3GK/baseline.json`; mapped review follows
 the stable result. No external accuracy score is claimed by this package.
 
+## H28-H32 Migration Regression
+
+The owner requested a plan to test the distant horizon's reported change during
+the local-solar-zenith cache migration. The
+[migration regression plan](horizon-migration-regression-plan.md) owns H28-H32:
+authenticated before/after versions, three matched rays, calculation/display
+attribution, independent N1/N4 checks, and localized cancellation tests. The
+selected bounded numerical package is complete as accepted 00271; the
+[migration results](horizon-migration-regression-results.md) own measured outcomes,
+unsupported historical N4 reproduction and the matching implementation-review gate.
+Historical score
+improvement and a physical explanation of current output do not qualify the
+reported horizon change. H27's matched full-app encoding check remains separate.
+
 ## Current Progress
+
+The selected [H28-H32](horizon-migration-regression-results.md) numerical package
+is complete at its available/unsupported cells as accepted 00271. No numerical
+job is active. Production and historical evidence remain unchanged.
 
 The selected H27 brightness continuation is scientifically complete as accepted
 00270. The [brightness results](horizon-brightness-results.md) own its physical
