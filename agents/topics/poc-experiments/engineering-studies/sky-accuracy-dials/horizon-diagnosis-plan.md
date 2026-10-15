@@ -690,13 +690,35 @@ baseline and confirm mapped readiness. Batch applicable review at the stable
 milestone, including required types review and local type checking, rather than
 per hypothesis or ray. The matching review receipt owns implementation completion.
 
+## H21-H26 Independent Horizon Reference
+
+The owner requested an independent test of the local orange-horizon expectation
+and companion distant-Sun horizon questions. The
+[independent horizon reference plan](independent-horizon-reference-plan.md)
+owns H21-H26: physical/input independence, simple-case qualification, a bounded
+spectral Monte Carlo witness set, distance/history attribution, source-proximity
+controls and cross-checks of distant angular/species errors. It inventories the
+existing spherical Monte Carlo and libRadtran evidence without treating them as
+already qualified for the current immediate horizons. The owner-selected work is
+scientifically complete at its bounded available/unsupported cells as accepted
+00267-00269. The [results](independent-horizon-reference-results.md) own findings,
+qualification, resources, decisions and the matching implementation-review receipt.
+
 ## Current Progress
+
+The [H21-H26 independent reference results](independent-horizon-reference-results.md)
+record completed numerical execution. Far light reddens, but does not dominate
+the combined horizon; additional orders shift the selected rays toward blue.
+The local app follows N1 closely, while the distant app has a substantial N4
+excess. Matched external libRadtran horizon qualification and unique attribution
+of that excess remain open. No numerical job is active or production fix selected.
 
 The owner-selected [H16-H20 horizon algorithm audit](#next-action-h16-h20-immediate-horizon-algorithm-audit)
 is scientifically complete as accepted 00264/00265. The
 [algorithm audit results](horizon-algorithm-results.md) own independent endpoints,
 actual-horizon N1/view controls, sparse P2 angular compensation and remaining
-N4/live-GPU/reference gaps. No numerical job is active and no follow-up is started.
+N4/live-GPU/reference gaps. Its runs remain closed; H21-H26 supplies the subsequent
+independent reference without changing those historical results.
 
 The selected [H15 comparison](#h15-next-action-sparse-second-scattering-reconstruction)
 is scientifically complete as accepted 00263. The

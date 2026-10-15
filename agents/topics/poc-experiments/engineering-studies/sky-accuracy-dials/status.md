@@ -31,6 +31,20 @@ below uses retained libRadtran output without changing a scorer or production
 behavior or qualifying a new reference. Historical implementation-review receipts
 keep their original scopes.
 
+## H21-H26 Independent Horizon Reference
+
+The owner-selected [H21-H26 plan](independent-horizon-reference-plan.md) is
+scientifically complete at its bounded available/unsupported cells as accepted
+00267-00269, with setup failure 00266 preserved. The
+[independent reference results](independent-horizon-reference-results.md) own
+qualification, full spectral witnesses, distance/order/species attribution,
+source-proximity controls, app comparisons and remaining limits. Far light
+reddens, but does not determine the combined horizon color. The local app
+closely follows N1; the distant app shows a substantial blue-weighted N4 excess.
+Matched libRadtran horizon output and unique attribution of that excess remain
+open. No numerical job is active and no production change is selected. The
+results document identifies the matching implementation-review receipt.
+
 ## H16-H20 Immediate-Horizon Algorithm Audit
 
 The owner-selected [H16-H20 audit](horizon-diagnosis-plan.md#next-action-h16-h20-immediate-horizon-algorithm-audit)
