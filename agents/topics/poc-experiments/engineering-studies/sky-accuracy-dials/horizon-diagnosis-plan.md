@@ -513,7 +513,190 @@ references, preserving their own profile identities. Consistent later-order
 propagation follows after that. Those stages need their own bounded registration;
 they do not automatically extend H15 or establish a libRadtran score improvement.
 
+## Next Action: H16-H20 Immediate-Horizon Algorithm Audit
+
+**Scientifically completed on 2026-10-15 as accepted 00264/00265.** The
+[algorithm audit results](horizon-algorithm-results.md) own measured decisions,
+reference qualifications and untested cells. The following registration is the
+executed plan and does not authorize automatic follow-up. Test whether
+path selection, boundary handling or omitted contributions explain the distant
+gray/blue horizon and the stronger Flat brown/gray horizon. A shared defect is
+a hypothesis, not an established explanation. Expected white/orange appearance
+is a diagnostic motivation, not a numerical reference or acceptance criterion.
+
+### Evidence Gap And Fixed Controls
+
+The earlier cache-free local reference takes its direction and path length from
+the installed observation in `horizon/reference.mjs`. H4/H5 also retain the
+accepted Flat extent. Agreement therefore checks transport within those bounds,
+not independent correctness of the bounds. H15's 12.115/71.919-degree rays do not
+qualify immediate-horizon behavior. Independent color projection and raw-spectrum
+neutrality make a conversion-only explanation lower priority.
+
+Freeze the exact retained San Jose solar-noon and Flat closest source/observer
+states; authenticate their parent artifacts and current source identities. Do not
+re-resolve time presets or infer camera headings from screenshots. Use the fixed
+paper material parameters under the [metric owner](reference-model-target.md#current-accuracy-metric),
+without Toronto substitutions, aerosol fitting or display tuning. Authenticate
+whether the retained app packets match them; if not, distinguish legacy app
+reproduction from the paper-material diagnostic and do not subtract them as one
+controlled intervention. Preserve each source's actual geometry and spectrum.
+
+Within each mode, use elevations 0.05, 0.25, 1, 3 and 20 degrees relative to the
+observer's local horizontal and Sun-relative azimuths 0, 90 and 180 degrees:
+30 sky rays across two modes. Start with the six away-Sun 0.05/3/20-degree rays;
+expand only inexpensive observations to the remaining registered rays. Exclude
+the solar disk. Independently classify sky/ground, including the spherical
+geometric horizon's depression below the local horizontal. Allow at most eight
+additional boundary-bracketing probes per mode, frozen from code thresholds and
+geometry before candidate evaluation. Do not mistake a tiny threshold artifact
+for an explanation of a band several degrees wide.
+
+Keep local N1 and distant N4 observations separate; use matched N1 controls to
+compare geometry/source effects. Additional-order contributions are inspected
+only within a mode with authenticated compatible fields. Use each mode's actual
+spectral basis for reproduction and all its required channels for color. Selected
+454/550/680 nm continuous probes may screen mechanisms, but are not RGB spectra,
+full paper scores or substitutes for transporting the actual basis.
+
+### Hypotheses, Predictions And Discriminating Tests
+
+**H16 - A path boundary omits material contributions at grazing elevations.**
+Derive ground, atmosphere-top and spherical exits independently in binary64 from
+physical positions and directions, without copying installed endpoints or calling
+the production intersection helper. Separately calculate the Flat observer dome,
+fallback ray limit and scene-depth termination. Record every candidate distance,
+the selected reason, endpoint altitude and source-ray occlusion/boundaries. The
+current approximately 1927 km Flat limit is a lead, not evidence of truncation.
+
+Compare independent and installed bounds, then integrate cumulative spectral
+radiance, species contributions, source/view optical depths and source dilution
+against physical distance. Split quadrature at actual material/boundary changes;
+check refinement without assuming a large fixed count is correct. Evaluate a
+diagnostic longer Flat domain at 2x/4x the installed cap only when it precedes
+the physical top exit, stopping at that exit. Otherwise bound the omitted tail
+using extinction/source constraints; if no defensible bound is available, retain
+the tail uncertainty. Do not extend through ground or beyond a real medium edge.
+
+Prediction: a premature endpoint changes low rays much more than the 20-degree
+control; a missing warm tail must add proportionally more red than blue. Reject
+that explanation on tested rays if independent endpoints agree and the omitted
+tail is below the frozen numerical allowance. A deliberate physical dome changed
+by extension is a domain-model sensitivity, not automatically a code bug. Missing
+white diffuse light is not established by a first-order tail test.
+
+**H17 - Grazing or near-ground cache queries use the wrong support or branch.**
+At the registered low rays, trace query altitude, angular/source coordinates,
+in-support status, selected cells/weights, clamps, branch decisions and payload
+normalization/restoration. Independently round-trip physical directions through
+the coordinate mapping. Check nodes, off-node supports and one-sided limits at
+the actual ground/tangent boundaries, preserving real visibility discontinuities.
+Compare reconstructed species/total sources with continuous N1 at identical
+positions and independently checked paths. Higher-order lookup parity alone is
+not a higher-order reference. Inspect spectral-group packing identities as part
+of the same trace rather than assuming the two modes share a representation.
+
+Prediction: an erroneous branch, zeroed support or clamp produces a localized
+spectral discrepancy aligned with that boundary, absent or weaker at 20 degrees.
+It is unsupported for the measured band if mappings and boundary values agree
+within allowance and direct lookup replacement leaves its spectrum unchanged.
+
+**H18 - View-ray accumulation underweights long-path contributions.**
+With endpoints and the queried source field held fixed, independently evaluate
+view optical depth and accumulation. Check step-length units, sample positions,
+interval weights, early exits and whether already attenuated quantities receive
+an extra attenuation factor. Source-path and view-path extinction are physically
+distinct; their coexistence is not evidence of double counting. Compare installed
+placement with an altitude/optical-depth-segmented integral and one refinement,
+keeping source reconstruction unchanged. Use analytic exponential columns and
+constant-source, constant-extinction segments as self-verifying controls.
+
+Prediction: the error grows with slant optical depth or spans missed by installed
+samples; restoring those contributions changes the low-ray spectrum while the
+upper control is stable. Reject on tested fields if the independent integral and
+installed accumulation agree within allowance. Only attribute a color mechanism
+when its measured signed spectral delta explains that change.
+
+**H19 - Incoming angular or ground-boundary contributions are underrepresented.**
+This is the conditional expensive stage. First audit authenticated distant pure
+orders and the local N1 target without building new caches. At no more than two
+near-ground points per mode on the registered 3-degree away-Sun ray, freeze the
+positions/supports before candidate evaluation. Partition the actual incoming
+source into sky, grazing, ground and Sun-facing regions. Integrate the same frozen
+incoming field using an independent boundary-split angular construction and one
+refinement; retain solid-angle weights, phase normalization and species terms.
+Include the atmospheric-side ground limit and direct reflected-ground contribution
+where required by the target equation, with combined atmospheric extinction.
+
+Prediction: a missed region gives a repeatable signed source deficit concentrated
+near ground, traceable to particular angles/species/orders. More diffuse radiance
+need not be white; inspect its spectrum before claiming it whitens the horizon.
+Separate angular integration error from an intentionally absent scattering order.
+Same-field refinement does not qualify the incoming field itself. Sparse source
+evidence cannot establish a final N4 correction or libRadtran score improvement;
+if descendant regeneration is necessary, specify that separate follow-up rather
+than substituting a frozen-field hybrid for a corrected total.
+
+**H20 - Background/depth composition amplifies a transport defect.**
+Use the same saved spectrum to compare path-only output, composition over black,
+ordinary scene composition and the installed display mapping. Record sky/ground
+hit masks, depth decoding, scene transmittance and exposure/adaptation inputs;
+hold adaptation fixed for the comparison. Use the boundary-bracketing probes to
+locate classification artifacts. No new color calibration is included.
+
+Prediction: a composition artifact appears after the path-only stage and follows
+the depth/hit boundary. Pre-display neutrality already excludes composition as
+the entire Flat explanation; report any amplification separately. Agreement at
+these stages rejects this mechanism at the observed rays, not all display states.
+
+### Execution Order, Attribution And Completion
+
+1. Authenticate inputs and freeze exact rays, implementations, tolerances and
+   expected signatures before evaluating interventions. Derive allowances from
+   analytic controls, node parity and independent reference refinement; retain
+   absolute and relative errors near zero rather than inventing a color threshold.
+2. Run H16 first. Reuse its independent geometry and columns for H17/H18. Replay
+   H20 cheaply from saved spectra. Run H19 only if compatible incoming data and
+   bounded sparse evaluation are available; otherwise identify the precise gap.
+3. Test one operation at a time. If two mechanisms produce material changes,
+   permit one registered baseline/A/B/A+B comparison on the same worst low ray
+   and its upper control, within the package allowance. Retain the spectral
+   interaction `L_AB - L_A - L_B + L_0`, not just changes in color or total error.
+4. Call a defect shared only after tracing an equivalent failing operation in
+   both modes and demonstrating its response independently in each. A common
+   visual band or improvement from unrelated interventions is insufficient.
+
+Proposed execution allowance: **20 minutes aggregate setup/compute/retention,
+at most one serial GPU observation attempt, and 12 MiB new retained evidence**.
+Prefer CPU sparse probes and reuse immutable parent data. No full cache rebuild,
+full-sky recurrence, new dependency, libRadtran installation/run, physical-parameter
+search or production edit is included. Budget implementation and required review
+separately from numerical execution; report each elapsed category explicitly.
+Repair setup/reader faults in fresh runs within the remaining allowance; do not
+treat a failed setup as a completed hypothesis test or repeat successful science
+without an identified invalidation. Reaching the allowance preserves measured
+results and explicit unsupported cells instead of silently broadening the run.
+
+Retain compact per-ray spectra, an endpoint/branch table, cumulative distance
+plots and a hypothesis verdict table: supported, rejected within measured scope,
+or unresolved, with uncertainty and coverage. A visual difference alone is not
+a correctness result. Use qualified matched libRadtran data only where available;
+do not invent a benchmark for unregistered horizon rays or finite local sources.
+Any full-basis candidate validation that cannot fit remains a declared next step.
+
+All existing source/output, immutable-run, disk/scratch, progress and operational
+memory rules apply. Before authored implementation, capture one coherent review
+baseline and confirm mapped readiness. Batch applicable review at the stable
+milestone, including required types review and local type checking, rather than
+per hypothesis or ray. The matching review receipt owns implementation completion.
+
 ## Current Progress
+
+The owner-selected [H16-H20 horizon algorithm audit](#next-action-h16-h20-immediate-horizon-algorithm-audit)
+is scientifically complete as accepted 00264/00265. The
+[algorithm audit results](horizon-algorithm-results.md) own independent endpoints,
+actual-horizon N1/view controls, sparse P2 angular compensation and remaining
+N4/live-GPU/reference gaps. No numerical job is active and no follow-up is started.
 
 The selected [H15 comparison](#h15-next-action-sparse-second-scattering-reconstruction)
 is scientifically complete as accepted 00263. The

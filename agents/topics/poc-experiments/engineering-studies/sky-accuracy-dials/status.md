@@ -31,6 +31,18 @@ below uses retained libRadtran output without changing a scorer or production
 behavior or qualifying a new reference. Historical implementation-review receipts
 keep their original scopes.
 
+## H16-H20 Immediate-Horizon Algorithm Audit
+
+The owner-selected [H16-H20 audit](horizon-diagnosis-plan.md#next-action-h16-h20-immediate-horizon-algorithm-audit)
+is scientifically complete as accepted 00264/00265. The
+[algorithm audit results](horizon-algorithm-results.md) own the endpoint/tail,
+view, support, composition and sparse incoming-angular decisions. Distant F68
+underestimates Mie while overestimating Rayleigh at the tested pure-P2 receivers;
+local 1920-direction agreement does not establish a shared defect. The report
+owns resources, reference limits and its matching implementation-review gate.
+No numerical job is active. Production and historical evidence are unchanged;
+full N4 propagation, live raster/GPU and matched libRadtran horizon cells remain open.
+
 ## Hypothesis Test Package
 
 The owner-directed [H10-H14 sequence](hypothesis-test-plan.md) is finished at its
