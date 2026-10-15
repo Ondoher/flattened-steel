@@ -33,13 +33,23 @@ keep their original scopes.
 
 ## Retained Scientific State
 
+**H9 small-ray joining is scientifically complete** as accepted 00251. The
+[small-ray cancellation results](small-ray-cancellation-results.md) own the
+five-ray P1/higher/reference split, separate six-ray Native48 comparison, Flat
+horizon attribution, input/uncertainty checks, resources and testable hypotheses.
+The large visible near-Sun deficit persists in the cache-free calculation; it
+cannot generally be assigned to missing cached higher orders. Alternate rays
+have a different score trend. No new atmospheric integration or production change
+was performed. The report's receipt owns this implementation-review gate; further
+hypothesis tests require bounded registration.
+
 **H8 cancellation mapping is scientifically complete** as accepted 00250. The
 [cancellation-map results](cancellation-map-results.md) own the offline interactive
 map, conditional P1 decomposition, spatial coverage, independent P2 witnesses and
 matched N5/N6 contribution. The map diagnoses pointwise opposition at retained
 locations; its lowest elevation is 12.115 degrees, leaving the immediate horizon
 unmeasured. The report owns verification, resources and its coherent implementation
-review receipt. No run or additional compute package is active; production remains
+review receipt. Its H9 continuation is recorded above; no run is active. Production remains
 unchanged and earlier deferred reviews retain their scopes.
 
 The current horizon continuation's bounded scientific work is recorded in the

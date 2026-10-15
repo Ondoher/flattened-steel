@@ -331,6 +331,33 @@ disk/progress/immutable-run rules and no GPU/browser job. Batch the mapped sourc
 review once the coherent implementation is stable. Baseline:
 `.codex-tmp/review-standards/session-4zJwZ4/baseline.json`.
 
+### H9: Join Retained Small-Ray References
+
+The owner selected this reporting package after H8. Join accepted 00230's five
+all-order stochastic rays to 00250's component decomposition at matching times,
+directions and channels. Verify physical inputs against 00103 and geometry against
+the original 00099 registration. Split the signed total residual into measured P1
+error, aggregate higher-order approximation/truncation error, and continuous-solver
+minus retained libRadtran. Preserve the direct sampling intervals, precision misses
+and the shared, opposing uncertainty in the last two terms. At the four independent
+P2 scalars, split out P2 error and the remaining order-three-plus approximation.
+Compare the matched N5/N6 increment without treating it as an error estimate.
+
+Include 00232's six alternate rays as a separately identified baseline/reference
+comparison, checking the same physical packet and published reference identities.
+Do not substitute its Native48 control for H8's H hybrid. Include 00245's actual
+Flat horizon species/distance attribution as a separate geometry and spectral
+boundary; never join it numerically to the spherical paper reference.
+
+Write one new immutable CPU-only report with compact numerical output and an
+offline table view. No atmospheric integration, cache build, GPU/browser job,
+dependency installation or parameter fitting. Limit execution through retention
+to 60 seconds and new evidence to 2 MiB; no automatic cap retry. Record testable
+hypotheses with predicted signs/locations, discriminating tests and falsifiers,
+without automatically executing those new tests. Batch one mapped review for this
+coherent source/documentation unit. Baseline:
+`.codex-tmp/review-standards/session-RwbPUa/baseline.json`.
+
 Prior compute packages remain consumed. This continuation starts with H0 and does
 not renew the previous 42 GPU attempts or multi-hour campaigns. Register H1 before
 running it: one GPU job at a time, a ten-minute ceiling including setup, and at most
@@ -395,8 +422,12 @@ verification, resource accounting and its matching implementation-review gate.
 The selected H8 retained-data package is scientifically complete as accepted
 00250. The [cancellation-map results](cancellation-map-results.md) own its spatial
 coverage, conditional P1 decomposition, four independent P2 witnesses, N5/N6 effect,
-resources and matching implementation-review gate. No further scientific package
-is selected; immediate-horizon component references remain absent.
+resources and matching implementation-review gate. The owner-selected H9 join is
+scientifically complete as accepted 00251; the
+[small-ray results](small-ray-cancellation-results.md) own the new attribution,
+separate baseline/geometry boundaries and testable hypotheses. No additional
+compute package is selected. Flat near-horizon N1 path evidence exists in 00245;
+matched near-horizon paper all-order component references remain absent.
 The coherent H3-H6 implementation unit
 starts from `.codex-tmp/review-standards/session-b5Eogw/baseline.json`, captured
 before authored code changes; review is batched after the selected sequence.
