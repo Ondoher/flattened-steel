@@ -7,6 +7,7 @@
 		"horizon:capture": "node local-horizon/run.mjs",
 		"horizon:evaluate": "node local-horizon/evaluate.mjs",
 		"horizon:qualify": "node local-horizon/recover.mjs",
-		"horizon:figures": "node local-horizon/present.mjs"
+		"horizon:figures": "node local-horizon/present.mjs",
+		"horizon:aerosol": "node local-horizon/aerosol.mjs"
 	}
 }

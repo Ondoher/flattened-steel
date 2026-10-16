@@ -3,6 +3,25 @@ type LocalHorizonRule = {
 	/** Ordered quadrature locations in [0,1]. */ nodes: number[];
 	/** Positive weights summing to one. */ weights: number[];
 };
+/** One ray of an aerosol-amplitude sensitivity intervention at fixed N1 order. */
+type LocalAerosolRay = {
+	/** Registered physical azimuth. */ heading: string;
+	/** Elevation in degrees. */ elevation: number;
+	/** Retained direction in model coordinates. */ direction: number[];
+	/** Fixed camera-ray endpoint, meters. */ end: number;
+	/** Full spectral density, W m^-2 sr^-1 nm^-1. */ spectrum: number[];
+	/** Physical XYZ, chromaticity and luminance. */ color: HorizonColorReading;
+	/** Extended-medium physical color, separate from the fixed camera domain. */ extendedColor: HorizonColorReading;
+	/** Largest relative 64/128 refinement discrepancy. */ refinement: number;
+	/** Separate Rayleigh and aerosol spectra at the same total extinction. */ species: number[][];
+	/** Additive spectral distance bins. */ bins: number[][];
+};
+/** Complete independent result for one physical aerosol amplitude. */
+type LocalAerosolCase = {
+	/** Fraction of the original aerosol extinction/scattering profile. */ fraction: number;
+	/** All physical parameters; only aerosol coefficients change between cases. */ medium: HorizonReferenceMedium;
+	/** Registered ray measurements. */ rows: LocalAerosolRay[];
+};
 /** Registered physical packet and unchanged current application measurements. */
 type LocalHorizonRegistration = {
 	/** Independent solver inputs, meters and spectral radiance/irradiance densities per nm. */ medium: HorizonReferenceMedium;

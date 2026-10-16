@@ -2,6 +2,11 @@
 
 ## Experiment Lifecycle
 
+The owner-selected [H39 aerosol reduction](flat-local-aerosol-results.md) has an
+accepted numerical run. That document owns its physical method, results, images
+and separate source-review gate. No GPU job remains active or further physical
+sweep is selected; the completed cache comparison below remains baseline evidence.
+
 **Reopened for owner-selected independent execution on 2026-10-16.**
 The [flat/local horizon plan](flat-local-horizon-plan.md) is the current continuation.
 Its [results](flat-local-horizon-results.md) meet the first scientific goal:

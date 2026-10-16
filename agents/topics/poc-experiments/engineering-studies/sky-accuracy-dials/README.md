@@ -1,5 +1,8 @@
 # Predictable Sky Accuracy Dials Experiment
 
+Current owner-selected follow-on: [H39 low-altitude aerosol reduction](flat-local-aerosol-results.md).
+This is a physical sensitivity test; production remains unchanged.
+
 **Reopened for owner-selected independent execution on 2026-10-16.** The
 [flat/local horizon results](flat-local-horizon-results.md) own the independent
 expected appearance, current-app comparison, physical explanation and uncertainty.
