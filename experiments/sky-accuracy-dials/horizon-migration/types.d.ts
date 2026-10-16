@@ -45,3 +45,84 @@ type HorizonMigrationBatches = {
 	/** Original independent transport groups. */ readonly groups: readonly HorizonReferenceGroup[];
 	/** Original app observations, comparison-only. */ readonly observations: readonly HorizonMigrationReadonly<HorizonAuditObservation>[];
 };
+/** Source-history calculation controls, independent of cache storage. */
+type HorizonSecondOrderControl = {
+	/** Immutable authenticated material and illumination packet. */ readonly input: HorizonMigrationMedium;
+	/** Physical receiver position, meters. */ readonly point: readonly number[];
+	/** Physical viewing direction. */ readonly outgoing: readonly number[];
+	/** Physical incoming angular nodes. */ readonly directions: readonly (readonly number[])[];
+	/** Corresponding positive solid angle, steradians. */ readonly weights: readonly number[];
+	/** Primary source position approximation under test. */ readonly kind: HorizonMigrationSourceKind;
+	/** Gauss nodes per physical path segment. */ readonly pathCount: number;
+};
+/** Ordered first/second species matrix with immutable Native15 spectra. */
+type HorizonSecondOrderHistory = readonly (readonly (readonly number[])[])[];
+/** Two immutable species spectra, ordered Rayleigh then Mie. */
+type HorizonSecondOrderIncident = readonly (readonly number[])[];
+/** Immutable H33 registration fields needed for the constant-light qualification. */
+type HorizonSecondOrderRegistration = {
+	/** Authenticated spherical paper-material packet. */ readonly input: HorizonMigrationMedium;
+	/** Frozen receiving points and outgoing directions. */ readonly receivers: readonly HorizonSecondOrderReceiver[];
+};
+/** Canonical receiver geometry shared by the physical and phase-only runners. */
+type HorizonSecondOrderReceiver = {
+	/** Elevation above the observer horizontal, degrees. */ readonly elevation: number;
+	/** Receiver altitude above spherical ground, meters. */ readonly height: number;
+	/** Receiver world coordinates, meters. */ readonly point: readonly number[];
+	/** World outgoing unit direction. */ readonly outgoing: readonly number[];
+};
+/** Independently callable deadline/progress capability supplied by the run owner. */
+interface HorizonSecondOrderGuard {
+	/** Check allocation and flush progress; failures abort the owning run. */
+	(): void;
+}
+/** Readonly subset of the retained angular qualification consumed for parity. */
+type HorizonSecondOrderQualification = {
+	/** Original independent receivers and their semantic selectors. */
+	readonly angular: readonly HorizonSecondOrderQualifiedReceiver[];
+};
+/** One source parity witness from the previous angular qualification packet. */
+type HorizonSecondOrderQualifiedReceiver = {
+	/** Original mode selector: zero local, one distant. */ readonly mode: number;
+	/** Registered receiver altitude, meters. */ readonly altitude: number;
+	/** Refined source with unchanged original meanings. */ readonly reference: HorizonMigrationReadonly<HorizonAuditAngular>;
+};
+/** Exact source-failure facts retained by the immutable producer seal. */
+type HorizonSecondOrderRecoverySeal = {
+	/** Original terminal disposition, including the failed physical producer. */ readonly state: string;
+	/** Exact source inventory captured before its computation. */ readonly sources: readonly HorizonMigrationReadonly<DialFileIdentity>[];
+	/** Changed source paths detected at finalization. */ readonly sourceFailures: readonly HorizonSecondOrderSourceFailure[];
+	/** Separate heartbeat failure, null when progress remained valid. */ readonly heartbeatFailure: string | null;
+	/** Original execution accounting. */ readonly result: HorizonMigrationReadonly<HorizonAuditTimingSeal>['result'];
+};
+/** One immutable source-integrity failure selector from the original producer. */
+type HorizonSecondOrderSourceFailure = {
+	/** Repository-relative source that changed during the run. */ readonly path: string;
+};
+/** Immutable complete receiver artifact qualified by the recovery. */
+type HorizonSecondOrderRecoveryReceiver = HorizonSecondOrderReceiver & {
+	/** Every original angular/position source packet. */ readonly controls: readonly HorizonSecondOrderRecordedControl[];
+};
+/** One recorded numerical control shared by the producer and recovery reader. */
+type HorizonSecondOrderRecordedControl = {
+	/** Frozen angular rule label. */ readonly rule: string;
+	/** Frozen primary-source evaluation selector. */ readonly kind: HorizonMigrationSourceKind;
+	/** Original four-history source result. */ readonly value: HorizonSecondOrderSource;
+};
+/** Minimal interrupted run definition retained before any finalization. */
+type HorizonSecondOrderInterruptedDefinition = {
+	/** Exclusive output identity of the stopped, unsealed run. */ readonly run: string;
+	/** Its original producer source identities. */ readonly sources: readonly HorizonMigrationReadonly<DialFileIdentity>[];
+	/** Its original derivation recipe, reused without modification. */ readonly recipe: HorizonMigrationReadonly<DialDerivation>;
+};
+/** Separate first- and second-scatter species, preserving complete spectra. */
+type HorizonSecondOrderSource = {
+	/** First species, then second species, then Native15 channel; R before M. */ readonly history: HorizonSecondOrderHistory;
+	/** Ground/grazing/sky histories under the same ordered species convention. */ readonly regions: Readonly<
+		Record<string, HorizonSecondOrderHistory>
+	>;
+	/** Sum over first species, indexed by final species then channel. */ readonly species: HorizonSecondOrderIncident;
+	/** Sum of all histories in W/(m3 sr nm). */ readonly spectrum: readonly number[];
+	/** Integrated solid angle in steradians. */ readonly solidAngle: number;
+	/** Maximum absolute history/species/region closure discrepancy. */ readonly closureAbsolute: number;
+};

@@ -1,8 +1,11 @@
 # Predictable Sky Accuracy Dials Experiment
 
-Current focus: the [gray horizon diagnosis](horizon-diagnosis-plan.md), selected
-by the owner on 2026-10-14. Start there for the San Jose solar-noon and Flat
-closest witnesses, accuracy interactions and bounded execution. The older
+**Suspended, not ended.** The [status lifecycle](status.md#experiment-lifecycle)
+and [resumption record](suspension.md) own the current boundary. The latest focus
+was the [gray horizon diagnosis](horizon-diagnosis-plan.md), with San Jose
+solar-noon and Flat closest witnesses. The proposed
+[angular-quadrature follow-up](../sky-angular-quadrature-plan.md) is a separate,
+unopened experiment. The older
 [follow-up guide](follow-up-context.md) retains Kider evidence and hypotheses.
 
 The [bounded horizon results](horizon-diagnosis-results.md) now own the paired

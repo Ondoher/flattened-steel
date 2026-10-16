@@ -2,12 +2,13 @@
 
 Focus: Measured alternatives and retained or rejected mechanisms.
 
-The selected study is [Local-Sun Cache Reuse](local-sun-cache-reuse/README.md).
-Closed and suspended experimental lanes retain their existing dispositions.
-Other proposals need a selected study and evidence boundary before execution.
+[Sky Cache Angular Quadrature](sky-angular-quadrature/README.md) is the active study;
+its planned execution is complete; see its results for the rejected standalone adoption. [Sky Accuracy Dials](sky-accuracy-dials/status.md#experiment-lifecycle)
+remains suspended. Other lanes retain their own dispositions.
 
 ## Working Documents
 
+- [Sky Cache Angular Quadrature Experiment](sky-angular-quadrature/README.md)
 - [Local-Sun Cache Reuse Experiment](local-sun-cache-reuse/README.md)
 - [Predictable Sky Accuracy Dials](sky-accuracy-dials/README.md)
 - [Point-Local Cache Builder Experiment](point-local-cache-builder/README.md)

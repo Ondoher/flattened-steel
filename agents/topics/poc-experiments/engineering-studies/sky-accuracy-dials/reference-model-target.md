@@ -7,13 +7,19 @@ the selected direct/reference comparison below remains valid.
 
 ## Current Accuracy Metric
 
-On 2026-10-14 the owner selected **spectral-radiance agreement with a verified,
-matched libRadtran solution as the primary accuracy metric**, replacing Kider
-agreement for judging numerical accuracy. Compete with Bruneton on the paper's
-specified atmosphere and benchmark conditions. Kider remains a secondary empirical
-comparison; a gain or regression against Kider does not determine numerical merit.
-This section owns the current metric; historical scores below retain their
-original definitions and are not rescored or reinterpreted as libRadtran errors.
+On 2026-10-15 the owner clarified two distinct requirements: **libRadtran is a
+reference for isolated mathematical/component tests; the full cache must match
+or improve the paper RMSE scores.** Full-cache acceptance uses the paper's
+original benchmark reference and protocol, not candidate-minus-libRadtran RMSE.
+Keep the paper atmosphere fixed and compare the current algorithm and selected
+paper model scores under identical scoring conditions.
+
+This section owns the metric distinction. The earlier 2026-10-14 work used
+qualified libRadtran agreement as its primary numerical diagnostic. Historical
+results keep their original definitions; this clarification neither rescales
+those results nor declares an existing full-cache candidate accepted. The
+[separate angular-quadrature proposal](../sky-angular-quadrature-plan.md) applies
+both requirements to the next experiment; this experiment remains suspended.
 
 ### Fixed Problem And Reference Qualification
 
@@ -44,13 +50,22 @@ applicable rather than requiring a fresh full reference run by default.
 
 For the full paper boundary, use the same frozen sample selection, preprocessing
 and equal weighting: 17 times, 81 directions, scoring channels 0-30. Retain all
-40 transported wavelengths as before. For N matched scoring scalars, the primary
-score is `1000 * sqrt(sum((L_candidate - L_libRadtran)^2) / N)`, reported in
-spectral mW m^-2 sr^-1 nm^-1 when input densities are W m^-2 sr^-1 nm^-1.
-The reference is libRadtran radiance, not its aggregate Kider score. No target
-of 11.5 mW or arbitrary acceptable numerical gap is adopted for this new metric.
-Declare tolerances prospectively using the intended application error budget
-and qualified reference uncertainty.
+40 transported wavelengths as before. Full-cache paper RMSE uses
+`1000 * sqrt(sum((L_candidate - L_paperMeasurement)^2) / N)`, reported in spectral
+mW m^-2 sr^-1 nm^-1 when input densities are W m^-2 sr^-1 nm^-1. Authenticate the
+paper measurement grid, preprocessing, aggregation and comparison values from the
+[retained B1 benchmark](../../../../../references/results/experiments/b1-directional-sky-radiance/result.md).
+Freeze the current algorithm baseline and selected published/reproduced paper
+comparators before evaluating the candidate; avoid rounding-based improvement
+claims. The full-cache acceptance gate is matching or improving those paper RMSE
+scores. Report a regression as a failed full-cache gate even if an isolated
+calculation is demonstrably more accurate.
+
+For isolated matched-reference tests, retain candidate-minus-libRadtran spectra
+and diagnostic RMSE using the same units and an explicitly qualified input/order
+scope. Declare numerical tolerances using reference uncertainty and convergence.
+These diagnostic residuals are not the full-cache paper RMSE or its acceptance
+threshold, and libRadtran's own Kider RMSE is not a substitute for its radiances.
 
 Report signed spectral residuals and time, elevation, Sun-angle and wavelength
 breakdowns alongside aggregate RMSE, preserving near-Sun and horizon witnesses.
@@ -60,20 +75,23 @@ comparison; Native15/N1 horizon swatches are not the paper's full spectral resul
 
 Keep four comparisons distinct:
 
-- Candidate minus matched libRadtran: primary reference-radiance agreement,
+- Candidate minus matched libRadtran: isolated reference-radiance agreement,
   qualified as numerical accuracy only within the established common problem.
 - Candidate minus an independent continuous reference: component, cache and
   integration attribution, with that reference's own scope and uncertainty.
 - LibRadtran minus Kider: remaining reference-model/input/observation discrepancy,
   including reference uncertainty; not automatically an aerosol error.
-- Candidate minus Kider: secondary empirical benchmark, preserved for paper
-  comparability and interpretation of compensation.
+- Candidate minus the paper's Kider measurement reference: full-cache paper
+  benchmark and acceptance gate under its frozen protocol.
 
-Rank numerical accuracy by the qualified primary comparison and explain cost
-versus error separately. Conservation, normalization, nonnegativity and limiting
-cases remain correctness constraints. A Kider improvement cannot justify adding
-known numerical bias, and a Kider regression cannot veto a demonstrated numerical
-improvement. Agreement with libRadtran alone does not establish the real atmosphere.
+Judge isolated numerical accuracy by qualified independent comparisons and full
+cache acceptance by the paper RMSE gate; report cost separately. Conservation,
+normalization, nonnegativity and limiting cases remain correctness constraints.
+An isolated improvement with a worse paper score is useful diagnosis, but does
+not qualify the full cache. Investigate compensating errors and their combined
+correction rather than fitting a known numerical bias or changing the frozen
+atmosphere to recover a score. LibRadtran agreement alone does not certify the
+full cache or establish the real atmosphere.
 
 The spherical distant-source paper reference does not certify a finite local-Sun
 flat scene. Those cases continue to use independently checked continuous references
@@ -103,8 +121,8 @@ requirements and availability of each product separately. The
 [existing source catalog](follow-up-context.md#regional-data-sources-for-the-kider-capture)
 retains inversion-service links and the limitations of the earlier regional use.
 
-This is a saved future direction. The current fixed-paper-atmosphere/libRadtran
-metric remains in force; no new acquisition, experiment, parameter change or
+This is a saved future direction. The current metric distinction above remains
+in force; no new acquisition, experiment, parameter change or
 production work is selected by this note.
 
 ## Historical Kider Comparability

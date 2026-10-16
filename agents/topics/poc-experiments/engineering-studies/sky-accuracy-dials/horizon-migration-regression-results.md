@@ -4,8 +4,12 @@
 
 The owner-selected [plan](horizon-migration-regression-plan.md) has completed its
 bounded available numerical comparisons as accepted **00271-h28-h32-migrate**.
-The exact historical white-to-dark change remains unproven: its original images
-and old N4 payloads are unavailable in this workspace. No production change was
+The exact historical white-to-dark change remains unproven: during this run its
+original images and old N4 payloads were not available in the working repository.
+The owner subsequently identified an external archive; the
+[archive evidence inventory](horizon-archive-evidence.md) owns newly verified
+image witnesses and candidate payloads. Those later discoveries do not alter
+run 00271 or qualify a matched spectral comparison. No production change was
 made. The completed sparse controls establish these narrower findings:
 
 1. The continuous N1 effect of replacing the observer column with actual-point

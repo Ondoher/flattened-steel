@@ -2,7 +2,9 @@
 
 ## Objective
 
-The current continuation is the [gray horizon diagnosis](horizon-diagnosis-plan.md).
+Execution is [suspended](status.md#experiment-lifecycle), with boundaries and
+resumption checks preserved in the [suspension record](suspension.md).
+The latest continuation is the [gray horizon diagnosis](horizon-diagnosis-plan.md).
 It examines current local-Sun and distant-Sun paths, including display attribution
 and accuracy compensation, separately from the earlier Kider spectral benchmark.
 Existing isolation, provenance and resource boundaries continue to apply.
@@ -12,9 +14,9 @@ scientific expectations and independent numerical references, with interaction
 tests and bounded storage. The
 [continuation goals](continuation-goals.md#standard-of-correctness) own the
 correctness standard. The owner's
-[primary accuracy metric](reference-model-target.md#current-accuracy-metric) is
-agreement with a verified, matched libRadtran solution under the paper's fixed
-parameters. Kider remains a separate secondary empirical comparison.
+[accuracy criteria](reference-model-target.md#current-accuracy-metric) distinguish
+isolated correctness against verified matched libRadtran from the full-cache
+requirement to match or improve paper RMSE under fixed paper parameters.
 
 ## Acceptance Question
 

@@ -2,12 +2,16 @@
 
 ## Experiment Lifecycle
 
-**Resumed at the owner's request on 2026-10-14 for gray horizon diagnosis.**
-The [horizon diagnosis plan](horizon-diagnosis-plan.md) owns current witnesses,
-hypotheses, progress and bounded execution. The repository
-[active topic](../../../active-topic.md) routes here. Findings through accepted
-00235, immutable evidence, historical resource accounting and the production
-adoption hold remain preserved. Closed compute packages are not renewed.
+**Suspended at the owner's request on 2026-10-15; not ended.**
+The [suspension and resumption record](suspension.md) preserves the latest H33
+milestone, exact evidence dispositions, remaining work, reload sources and
+compatibility checks. Execution resumes only after a later owner selection.
+The [horizon diagnosis plan](horizon-diagnosis-plan.md) retains witnesses,
+hypotheses and unexecuted work. Existing evidence, resource accounting and the
+production adoption hold remain preserved. Closed compute packages are not
+renewed. No execution topic is selected; the repository
+[active topic](../../../active-topic.md) now routes to preparation of a separate
+[angular-quadrature experiment proposal](../sky-angular-quadrature-plan.md).
 The [follow-up guide](follow-up-context.md) and [handoff](handoff.md) retain
 background context; they do not select the new diagnosis cases.
 
@@ -21,15 +25,32 @@ the experiment's deferred source reviews and adoption hold remain open.
 
 ## Current Accuracy Criterion
 
-The owner selected **agreement with a verified, matched libRadtran solution** as
-the primary numerical-accuracy metric on 2026-10-14. The
-[metric owner](reference-model-target.md#current-accuracy-metric) defines fixed
-paper inputs, spectral scoring, qualification and geometry limits. Kider scores
-remain secondary empirical comparisons. The goals, design and horizon plan now
-follow this decision. Existing results retain their original metrics. The H8 map
-below uses retained libRadtran output without changing a scorer or production
-behavior or qualifying a new reference. Historical implementation-review receipts
-keep their original scopes.
+The [metric owner](reference-model-target.md#current-accuracy-metric) records the
+2026-10-15 clarification: libRadtran supports isolated correctness tests; a full
+cache must match or improve the paper RMSE scores under fixed paper inputs and
+the original benchmark protocol. The earlier libRadtran-centered diagnostic work
+and its historical scores keep their original definitions. The H8 map below
+retains its scoped reference comparison without changing a scorer, production
+behavior or reference qualification. Existing implementation-review receipts keep
+their original scopes. The separate proposed experiment must pass the full-cache
+paper gate before adoption; this suspended lane is not reopened by the clarification.
+
+## H33 Second-Order Species Attribution
+
+The owner-selected [sparse species continuation](horizon-second-order-plan.md)
+is scientifically complete through accepted 00276/00274. Failed 00272 and
+interrupted repair 00275 remain preserved; 00276 qualifies the completed physical
+artifacts through exact executable-source equivalence and fresh control parity.
+The earlier 00273 phase qualification remains preserved and superseded. The
+[results](horizon-second-order-results.md) own four-history attribution,
+constant-field phase qualification, small positional effects and limits.
+F68 misses about 34-35% of Mie phase mass in the tested directions; physical
+P2 sources combine a Mie deficit with a Rayleigh excess and become too blue.
+This does not alone explain the current app's opposite-sign N4 brightness excess
+or establish the cause of the historical appearance change. No numerical job is
+active. Required implementation review is batched at
+`.codex-tmp/review-standards/session-VcDmJv/validation.json`; only CLEAN validation
+closes that gate. No production intervention or further run is selected.
 
 ## H28-H32 Migration Regression
 
@@ -43,6 +64,12 @@ historical reproduction gaps, resources and the matching implementation-review
 receipt at `.codex-tmp/review-standards/session-oqdBo1/validation.json`; implementation
 completion requires CLEAN validation. Existing completed packages remain closed;
 the H27 matched full-app encoding check remains a separate proposed follow-up.
+
+After that execution, the owner located the historical archive at
+`D:\flattened-steel`. The [archive evidence inventory](horizon-archive-evidence.md)
+owns verified earlier/later horizon images, recovered analysis and candidate
+payload locations. The visual witnesses are available; a matched before/after
+spectral comparison remains unqualified. Historical runs have not been reopened.
 
 ## H27 Local-Horizon Brightness Diagnosis
 

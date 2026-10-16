@@ -755,6 +755,18 @@ reported horizon change. H27's matched full-app encoding check remains separate.
 
 ## Current Progress
 
+Execution is [suspended, not ended](status.md#experiment-lifecycle). The
+[resumption record](suspension.md) preserves unconsumed questions and evidence;
+the separate [angular-quadrature proposal](../sky-angular-quadrature-plan.md)
+has not opened a new experiment. No further run in this lane is selected.
+
+The selected [H33 species attribution](horizon-second-order-results.md) is
+scientifically complete through accepted 00276/00274, preserving failed 00272,
+superseded 00273 and interrupted 00275 with their exact dispositions. Its
+[registration](horizon-second-order-plan.md) and results own species histories,
+phase-mass loss, positional controls and remaining propagation limits. Mapped
+implementation review is batched in session-VcDmJv. No numerical job is active.
+
 The selected [H28-H32](horizon-migration-regression-results.md) numerical package
 is complete at its available/unsupported cells as accepted 00271. No numerical
 job is active. Production and historical evidence remain unchanged.
@@ -786,10 +798,10 @@ four supported ray/species RMS comparisons, retained local regressions and exact
 same-rule reference boundary. No numerical job is active. Its matching review
 session owns implementation completion separately from scientific acceptance.
 
-The [current accuracy criterion](reference-model-target.md#current-accuracy-metric)
-now uses qualified libRadtran agreement in place of Kider agreement to judge
-numerical accuracy. The [H8 cancellation map](cancellation-map-results.md) applies
-that criterion to retained paper-atmosphere component/order evidence. Exact
+The [current accuracy criteria](reference-model-target.md#current-accuracy-metric)
+separate isolated libRadtran correctness tests from full-cache paper RMSE
+acceptance. The [H8 cancellation map](cancellation-map-results.md) retains its
+earlier scoped libRadtran assessment of paper-atmosphere component/order evidence. Exact
 reference configuration and convergence qualification remain open.
 
 Resumption and owner-selected witnesses are registered. Initial H0 source tracing

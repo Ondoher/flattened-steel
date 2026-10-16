@@ -1,25 +1,20 @@
 # Active Topic
 
-Current active topic: sky-accuracy-dials.
-Focus: diagnose the gray/muddy horizon in current local-Sun and distant-Sun
-cache paths, including accuracy compensation and stronger Flat symptoms.
+Current active topic: sky-angular-quadrature.
+Focus: qualify incoming angular integration, propagate corrections through N4, and meet or improve full-cache paper RMSE while preserving the runtime lookup representation.
 
-Canonical entry: [Sky Accuracy Dials](poc-experiments/engineering-studies/sky-accuracy-dials/README.md).
+Canonical entry: [Sky Cache Angular Quadrature](poc-experiments/engineering-studies/sky-angular-quadrature/README.md).
 
 ## Immediate Focus
 
-The owner reopened this experiment on 2026-10-14 for diagnosis first.
-The [horizon diagnosis plan](poc-experiments/engineering-studies/sky-accuracy-dials/horizon-diagnosis-plan.md)
-owns selected witnesses, hypotheses, bounded execution and current progress.
-Production and other experiments are read-only; historical evidence is immutable.
-Closed compute packages and prior reviews retain their original scopes.
+Autonomous Q0-Q4 numerical execution is complete, with standalone full-cache adoption rejected. The [results](poc-experiments/engineering-studies/sky-angular-quadrature/results.md) own the measured mathematical improvement, paper-score regression, order/spatial maps and visual comparisons. Required review state is owned by the status-linked native receipt. No numerical process is active. Owner review is next; no production promotion or parent-lane resumption is selected.
 
 ## Minimal Reload Sources
 
-1. [Experiment instructions](../../experiments/sky-accuracy-dials/AGENTS.md)
-2. [Experiment design and boundaries](poc-experiments/engineering-studies/sky-accuracy-dials/design.md)
-3. [Horizon diagnosis plan](poc-experiments/engineering-studies/sky-accuracy-dials/horizon-diagnosis-plan.md)
+1. [Repository instructions](../../AGENTS.md).
+2. [Experiment entry](poc-experiments/engineering-studies/sky-angular-quadrature/README.md).
+3. [Design](poc-experiments/engineering-studies/sky-angular-quadrature/design.md).
+4. [Plan](poc-experiments/engineering-studies/sky-angular-quadrature/plan.md).
+5. [Status](poc-experiments/engineering-studies/sky-angular-quadrature/status.md).
 
-Load older result owners only when their evidence is needed. Before authored code
-changes, also read the plan and status required by the experiment instructions,
-capture a new review baseline and confirm mapped reviewer readiness.
+Read source-root instructions before implementation. Load linked parent evidence only when the selected Q0-Q4 step needs it. Do not resume the suspended experiment without owner selection.
