@@ -1,13 +1,13 @@
 # Active Topic
 
 Current active topic: sky-altitude-reconstruction.
-Focus: isolate legacy single-bin versus current linear altitude reconstruction between scattering orders and measure the noon horizon effect on unchanged production F68 controls.
+Focus: report the completed full-paper RMSE comparison of legacy single-bin versus current linear inter-order altitude reconstruction, alongside the matched noon capture.
 
 Canonical entry: [Sky Inter-Order Altitude Reconstruction](poc-experiments/engineering-studies/sky-altitude-reconstruction/README.md).
 
 ## Immediate Focus
 
-Execute the owner-authorized bounded GPU diagnostic. The unsuccessful angular candidate is retired; production has no such change to revert. Preserve all sealed evidence and current production twilight. Sky Accuracy Dials remains suspended. No production promotion is authorized.
+The owner-authorized full-paper scoring extension has completed numerical execution and sealed its results. Its mapped review milestone is owned by the current experiment status and native receipt. Preserve all sealed evidence and current production twilight. Sky Accuracy Dials remains suspended. No production promotion or additional hypothesis is authorized.
 
 ## Minimal Reload Sources
 

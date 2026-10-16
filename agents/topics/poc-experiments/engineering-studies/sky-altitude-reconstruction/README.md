@@ -2,7 +2,7 @@
 
 Status: active contained experiment; execution authorized by the owner on 2026-10-15.
 
-Focus: isolate legacy single-bin altitude selection versus current linear altitude reconstruction inside higher-order cache transport, with current production F68 directions and fixed scene/display controls.
+Focus: isolate legacy single-bin altitude selection versus current linear reconstruction inside higher-order cache transport. The matched production noon capture and full-paper RMSE comparison are recorded in [results](results.md); production remains unchanged.
 
 [Design](design.md) owns controls, hypothesis and immutable output boundaries. [Plan](plan.md) owns steps and gates. [Status](status.md) owns execution state. Authored source: `experiments/sky-altitude-reconstruction/`; ignored output: `tmp/experiments/sky-altitude-reconstruction/`. [Source instructions](../../../../../experiments/sky-altitude-reconstruction/AGENTS.md) govern implementation.
 

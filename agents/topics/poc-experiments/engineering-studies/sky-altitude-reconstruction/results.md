@@ -32,7 +32,31 @@ The selected probe direction is receiver-local +Z, **zenith**. These are scatter
 - [Exact transform](../../../../../tmp/experiments/sky-altitude-reconstruction/runs/00000-altitude-noon/transform.json): two reversible replacements select the existing legacy stencil branch and rename the diagnostic export. Current production compiler bytes remain unchanged. The source graph, generated compiler, inputs, package identity, tool identity and packet/channel hashes are retained.
 - [Derived metrics](../../../../../tmp/experiments/sky-altitude-reconstruction/runs/00001-altitude-report/metrics.json): new accepted report run verifies the parent seal and derives measurements without repeating GPU science. Both run seals and their complete artifact inventories pass verification; owned scratch is absent.
 - Capture execution565.812s (9min25.812s), including setup; report derivation about1s. Logical candidate atlas429,981,696bytes, separately owned; whole-process/transient GPU peak was not measured. Owned scratch high water252,995,058bytes. No host/GPU free-memory admission guard was added.
-- No new paper RMSE, matched independent N4 correctness reference or candidate twilight qualification. This experiment neither promotes the legacy stencil nor proves which reconstruction is physically more accurate.
+- The noon capture alone supplies no paper RMSE, matched independent N4 correctness reference or candidate twilight qualification. The separately authorized benchmark extension below supplies the RMSE comparison. Neither phase promotes the legacy stencil or proves which reconstruction is physically more accurate.
+
+## Full Paper RMSE Follow-Up
+
+The slight subjective noon improvement does **not** carry through to the paper score. Under the established matched benchmark controls, legacy altitude selection worsens aggregate RMSE **11.1713%**.
+
+| Full paper boundary                 | Current linear | Legacy single-bin |                Change |
+| ----------------------------------- | -------------: | ----------------: | --------------------: |
+| Aggregate RMSE, mW m^-2 sr^-1 nm^-1 |      11.622914 |         12.921344 | +1.298430 (+11.1713%) |
+
+These are17times x81directions x31scored wavelengths =42,687 values, with all40 wavelengths transported. The profile is Native51/Direct40/F68/source20/transport40/Q30 monotone-cubic cumulative N4, paper atmosphere with ozone disabled and paper grass ground. It differs from the Native48/Native15/transport15/black-ground production noon capture. This compares the same stencil policy under benchmark conditions, rather than rescoring screenshot colors.
+
+![Full paper RMSE by time](../../../../../tmp/experiments/sky-altitude-reconstruction/runs/00004-paper-report/scores.svg)
+
+Sixteen of17time conditions worsen. Only13:30 improves,12.692887 to12.557179. The largest degradation is09:45,8.329640 to11.997964. Across1,377time/direction cells,483improve and894worsen after summing scored spectral squared errors. Positive SSE change is+1.884716 and negative change is-0.524324 (radiance units squared), giving net+1.360392. There is spatial cancellation, but deterioration dominates.
+
+![Paper-profile matched horizon witnesses](../../../../../tmp/experiments/sky-altitude-reconstruction/runs/00004-paper-report/horizon.svg)
+
+This image uses paper-profile ray spectra and a common fixed exposure; it is not another application screenshot. The actual matched noon PNG remains above. The derived report corrects inherited angular-candidate labels only, preserving every witness color and numerical value in the sealed capture.
+
+Baseline reuse is qualified by its accepted immutable seal, all14 served-source identities matching current bytes, and fresh channel16 exact GPU parity across all5,544 cumulative scalars and J1-J4 sparse field checks. Candidate J1/J2 pure and cumulative sparse hashes match at all40channels; only later transport responds. The score mapping and full registered boundary are checked by the canonical scorer; a signed spatial SSE expansion independently reproduces the score difference.
+
+Accepted capture `00003-paper-rmse` completed in361.296s (6min1.296s), including qualification, candidate execution, scoring and cleanup. It retains13,112,474bytes including its seal, below the20MiB allocation; owned scratch high water96,357,588bytes and cleanup absence are recorded. Accepted derived report `00004-paper-report` preserves shared-source identities, [full summary](../../../../../tmp/experiments/sky-altitude-reconstruction/runs/00004-paper-report/summary.json), and the correctly labeled comparisons. Both accepted inventories verify. One pre-definition allocation failed because the default Node path traversed a junction; it performed no science and remains explicitly failed with its recovery/heartbeat limitation. Use the canonical executable for reproduction.
+
+The full-cache adoption score gate fails. Retain current production and its twilight behavior. The observed slight warming is useful diagnostic evidence, but this isolated legacy policy is not an acceptable replacement on the measured benchmark. No matched libRadtran N4 or candidate twilight qualification is claimed.
 
 ## Conclusion And Follow-Up Boundary
 
