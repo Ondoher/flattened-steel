@@ -1,10 +1,12 @@
 # Sky Cache Angular Quadrature Experiment Status
 
-Status: active experiment; planned Q0-Q4 numerical execution complete. Standalone full-cache adoption rejected. No numerical process remains active.
+Status: active experiment; Q0-Q4 complete and Q5 production/candidate solar-noon images captured. The Q0-Q4 standalone adoption gate failed; investigation continues. No numerical process remains active.
 
 ## Current State
 
 The [results](results.md) own the scientific conclusion, exact scores, order/spatial attribution, visual evidence, costs and qualifications. The horizon-focused incoming rule improves the isolated angular calculation but worsens full-paper RMSE; retain diagnostic evidence without production promotion. Sky Accuracy Dials remains suspended and read-only.
+
+The [actual horizon capture](capture-results.md) owns the Q5 production-renderer comparison. The cross-Sun noon candidate remains gray-blue and appears slightly darker at the horizon; it does not provide the desired whitening in this view. Current production twilight is a later adoption constraint, not a completed candidate qualification.
 
 ## Evidence And Visuals
 
@@ -26,6 +28,8 @@ Source baseline: `.codex-tmp/review-standards/session-ad9QEx/baseline.json`, cap
 
 The [decision record](execution-decisions.md) and immutable allocation/amendment runs explain the targeted screen refinement, separate paper/app frames, reader repair and prospective storage increase. No source changes occurred during active numerical runs.
 
+Q5 has its own pre-implementation baseline and current mapped review receipt under `.codex-tmp/review-standards/session-HeYEAL/`. The `validation.json` receipt there owns Q5 implementation review state; the earlier receipt does not cover the new runner. Its local type check, terminal seal, image dimensions and resource cleanup checks pass.
+
 ## Next Action
 
-Owner review of the scientific result. No automatic retry, production promotion or resumption of the suspended parent is selected. The [results follow-up](results.md#disposition-and-follow-up) proposes a bounded independent higher-order transport/reconstruction investigation if the owner chooses it.
+Owner inspection of [Q5 actual horizon images](capture-results.md). Preserve current production twilight as a later regression requirement; no candidate twilight claim is established by noon. No further numerical run, production promotion or resumption of the suspended parent is selected. The [results follow-up](results.md#disposition-and-follow-up) remains a possible numerical investigation.

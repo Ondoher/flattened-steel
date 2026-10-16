@@ -2,6 +2,8 @@
 
 Status: active experiment; Q0-Q4 numerical execution complete. Standalone full-cache adoption rejected; [results](results.md) own the findings.
 
+Investigation continues. [Q5 actual noon horizon images](capture-results.md) compare current production with the angular rule adapted onto production settings. Preserve current production twilight behavior in any later adoption.
+
 ## Objective
 
 Qualify incoming angular integration, propagate corrections through N4, and match or improve full-cache paper RMSE while preserving the runtime lookup representation. Use matched libRadtran to diagnose isolated correctness and compensating errors.

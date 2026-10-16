@@ -7,7 +7,7 @@ Canonical entry: [Sky Cache Angular Quadrature](poc-experiments/engineering-stud
 
 ## Immediate Focus
 
-Autonomous Q0-Q4 numerical execution is complete, with standalone full-cache adoption rejected. The [results](poc-experiments/engineering-studies/sky-angular-quadrature/results.md) own the measured mathematical improvement, paper-score regression, order/spatial maps and visual comparisons. Required review state is owned by the status-linked native receipt. No numerical process is active. Owner review is next; no production promotion or parent-lane resumption is selected.
+Q0-Q4 numerical execution is complete; its standalone adoption gate failed. Investigation continues through [Q5 actual production/candidate horizon images](poc-experiments/engineering-studies/sky-angular-quadrature/capture-results.md), captured at San Jose solar noon using the hardware GPU. No numerical process is active. Preserve current production twilight behavior as a later adoption requirement. Q5's native review receipt owns implementation-completion state. The [results](poc-experiments/engineering-studies/sky-angular-quadrature/results.md) retain Q0-Q4 findings. No further run, production promotion or parent-lane resumption is selected.
 
 ## Minimal Reload Sources
 

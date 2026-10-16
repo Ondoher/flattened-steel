@@ -130,3 +130,16 @@ one; the owner should not have to wait for the final report to see the result.
 ## Execution Boundary
 
 The owner selected autonomous execution of Q0-Q4 through independent-execution on 2026-10-15. Execute the initial bounded package, then register subsequent allocations from measured costs. The source-review unit is the complete new experiment implementation plus relevant read-only numerical/compiler collaborators; baseline `.codex-tmp/review-standards/session-ad9QEx/baseline.json` preserves prior dirty work. Batch review at coherent numerical milestones; do not claim implementation completion before validated review.
+
+## Q5: Production And Candidate Horizon Capture
+
+The owner selected a side-by-side actual production/candidate horizon at San Jose solar noon, using the GPU where possible. Preserve current production twilight behavior as a requirement for any later adoption; this noon-only capture does not qualify candidate twilight. The Q0-Q4 score regression remains evidence and does not end investigation.
+
+- [x] Capture the unchanged deployed production app at its ordinary San Jose solar-noon preset, 1024 x 768, 60-degree horizontal FOV, five-degree pitch, cross-Sun heading to exclude the finite Sun from the horizon diagnostic.
+- [x] Authenticate the deployed package and reproduce its Native48/Native15, anchored-radial, 20-source/15-transport controls and monotone-cubic lookup. Require one fresh F68 channel to match deployed required-row probes within relative 1e-4 above a 1e-12 density floor before proceeding.
+- [x] Adapt only the qualified horizon2048 incoming inventory to those production controls; compile all four orders for all 15 wavelengths on hardware GPU. Preserve exact Float32 order accumulation and canonical exact-seam mapping.
+- [x] Upload a separately owned candidate atlas; borrow unchanged coordinate metadata and use the same production shader, scene, camera and fixed receiver-light/display state. Do not overwrite the original atlas, deployed package, production source, or earlier evidence. This is a contained atmosphere-only visual comparison, not an operational package promotion or the exact Native51/Direct40 B1 score profile.
+- [x] Save full production/candidate PNGs, a side-by-side PNG, actual runtime/camera/cache facts, source/asset/tool identities, numerical parity and candidate field/packet hashes. Retain the baseline image as early progress.
+- [x] Verify terminal seal, cleanup and local type check. [Capture results](capture-results.md) own measured outcomes and the native receipt owns mapped source-review completion. Baseline: `.codex-tmp/review-standards/session-HeYEAL/baseline.json`.
+
+Allocation: one registered noon pair plus a one-channel parity check, serial GPU work, at most ten minutes total execution and 16 MiB additional retained evidence within the existing 96 MiB root ceiling; scratch remains 1 GiB. No arbitrary host/GPU free-memory admission guard. Preserve a failed attempt and diagnose an actual failure before a targeted repair; never reopen a sealed run. Future twilight comparisons must use the current production cache as control and retain its twilight structure, not the historical pre-angle cache.

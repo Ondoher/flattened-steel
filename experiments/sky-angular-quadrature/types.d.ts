@@ -172,3 +172,9 @@ type AngularCapture = {
 	/** Exact construction and view controls. */ readonly control: AngularGpuControl;
 	/** Ordered channel records. */ readonly channels: readonly AngularCapturedChannel[];
 };
+
+/** Matched construction inputs for the contained production-renderer comparison. */
+type AngularHorizonControl = {
+	/** Exact deployed Native48/Native15/F68 numerical controls and receiver-local frame. */ readonly baseline: DistantSunSceneCacheCompilerBuildRequest;
+	/** Identical controls with only the qualified incoming direction inventory replaced. */ readonly candidate: DistantSunSceneCacheCompilerBuildRequest;
+};

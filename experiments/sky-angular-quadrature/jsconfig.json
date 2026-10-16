@@ -19,7 +19,8 @@
 		"../sky-accuracy-dials/**/*.d.ts",
 		"../../src/algorithm32/**/*.d.ts",
 		"../../src/flat32/types.d.ts",
-		"../../server/flat32/features/shared-cache/types.d.ts"
+		"../../server/flat32/features/shared-cache/types.d.ts",
+		"../../scripts/algorithm32/solar-zenith-cache/types.d.ts"
 	],
 	"exclude": ["../../node_modules/**", "**/node_modules/**"]
 }

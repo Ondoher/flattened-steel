@@ -201,6 +201,8 @@ cache-size admission.
 
 The comparison preserved the final cache representation and physical atmosphere. Q0 authenticated the backend and pinned inputs; Q1 selected the horizon-focused 2,048-direction rule; Q2 propagated it through N4 within a measured allocation. Q3-Q4 rejected standalone adoption because full-paper RMSE worsened despite improved isolated angular integration. The [results](results.md) own measured outcomes and the proposed follow-up; the [plan](plan.md) owns completion gates. The remaining scientific question is which independently qualified calculation could explain the compensating bias.
 
+The owner selected continued investigation through Q5 actual production-renderer noon captures. Preserve the current production cache's twilight behavior in any later correction; no historical-cache rollback is selected. Q5 adapts the incoming rule onto the deployed Native48/Native15 controls rather than treating the paper benchmark profile as the application. It holds receiver lighting and display state fixed to isolate atmospheric lookup changes. Noon images do not establish twilight preservation or production adoption.
+
 ## Registered Execution Refinement
 
 After the three uniform product rules failed the grazing-field gate, one targeted family of three positive horizon-concentrated rules was prospectively registered in `00002-q1-refine-reg`. It qualified the 2,048-direction member without changing physical inputs. This is a bounded refinement informed by a numerical miss, not a fit to paper measurement residuals.

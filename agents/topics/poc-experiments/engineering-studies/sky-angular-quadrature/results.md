@@ -2,6 +2,8 @@
 
 The planned Q0-Q4 numerical work is complete. **Reject this angular correction as a standalone full-cache change:** isolated integration improves, but aggregate paper RMSE worsens by 1.395%. No production source or cache asset was changed.
 
+The owner selected continued investigation rather than discarding the candidate. [Q5 actual production-renderer horizon images](capture-results.md) now compare the rule on production inputs at San Jose solar noon. Preserve current production twilight in any later adoption; this separate visual result does not revise the Q0-Q4 benchmark scores.
+
 ## Full Paper Result
 
 | Model                                               | Aggregate RMSE (mW m^-2 sr^-1 nm^-1) |
