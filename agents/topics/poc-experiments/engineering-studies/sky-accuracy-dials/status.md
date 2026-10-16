@@ -2,10 +2,11 @@
 
 ## Experiment Lifecycle
 
-The owner selected [H40 distant-Sun aerosol removal](distant-aerosol-results.md)
-after the completed [H39 local aerosol reduction](flat-local-aerosol-results.md).
-H40 owns its method, physical results, matched images and separate source-review
-gate. The completed cache comparison below remains baseline evidence.
+The owner selected [H41 residual tint diagnosis](horizon-tint-results.md) using
+the completed [H39 local](flat-local-aerosol-results.md) and
+[H40 distant](distant-aerosol-results.md) aerosol spectra. H41 owns its method,
+color comparisons and separate source-review gate. The completed physical
+and cache comparisons below remain baseline evidence.
 
 **Reopened for owner-selected independent execution on 2026-10-16.**
 The [flat/local horizon plan](flat-local-horizon-plan.md) is the current continuation.

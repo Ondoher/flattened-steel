@@ -1,8 +1,8 @@
 # Predictable Sky Accuracy Dials Experiment
 
-Current owner-selected follow-on: [H40 distant-Sun zero aerosol](distant-aerosol-results.md),
-following the completed [H39 local aerosol reduction](flat-local-aerosol-results.md).
-This is a physical sensitivity test; production remains unchanged.
+Current owner-selected follow-on: [H41 residual tint diagnosis](horizon-tint-results.md),
+using the completed [H39 local](flat-local-aerosol-results.md) and
+[H40 distant](distant-aerosol-results.md) aerosol tests. Production remains unchanged.
 
 **Reopened for owner-selected independent execution on 2026-10-16.** The
 [flat/local horizon results](flat-local-horizon-results.md) own the independent
