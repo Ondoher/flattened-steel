@@ -1,8 +1,11 @@
 # Sky Accuracy Dials Suspension And Resumption
 
-The [status lifecycle](status.md#experiment-lifecycle) owns the owner's explicit
-2026-10-15 suspension. The experiment is resumable, not ended or promoted.
-No new computation, source work or earlier package retry is selected here.
+**Historical suspension record, 2026-10-15.** The owner reopened the experiment
+for planning and then explicitly selected independent execution on 2026-10-16;
+the [current lifecycle](status.md#experiment-lifecycle) and
+[flat/local horizon plan](flat-local-horizon-plan.md) own that continuation.
+The suspension boundary below is preserved as history and resumption guidance,
+not authority to retry an earlier compute package.
 
 ## Preserved Boundary
 

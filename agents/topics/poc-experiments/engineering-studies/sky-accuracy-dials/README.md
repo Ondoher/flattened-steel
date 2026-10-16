@@ -1,11 +1,15 @@
 # Predictable Sky Accuracy Dials Experiment
 
-**Suspended, not ended.** The [status lifecycle](status.md#experiment-lifecycle)
-and [resumption record](suspension.md) own the current boundary. The latest focus
-was the [gray horizon diagnosis](horizon-diagnosis-plan.md), with San Jose
-solar-noon and Flat closest witnesses. The proposed
-[angular-quadrature follow-up](../sky-angular-quadrature-plan.md) is a separate,
-unopened experiment. The older
+**Reopened for owner-selected independent execution on 2026-10-16.** The
+[flat/local horizon results](flat-local-horizon-results.md) own the independent
+expected appearance, current-app comparison, physical explanation and uncertainty.
+The [plan](flat-local-horizon-plan.md) and [execution notes](flat-local-horizon-execution.md)
+retain scope, decisions and verification. The [status lifecycle](status.md#experiment-lifecycle)
+owns current work; the [suspension record](suspension.md) preserves the earlier boundary.
+The earlier [gray horizon diagnosis](horizon-diagnosis-plan.md) retains the
+San Jose solar-noon and Flat closest witnesses. The separate
+[angular-quadrature experiment](../sky-angular-quadrature/results.md) is ended.
+The older
 [follow-up guide](follow-up-context.md) retains Kider evidence and hypotheses.
 
 The [bounded horizon results](horizon-diagnosis-results.md) now own the paired

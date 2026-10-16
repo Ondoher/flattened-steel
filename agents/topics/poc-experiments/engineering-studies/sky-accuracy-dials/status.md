@@ -2,18 +2,22 @@
 
 ## Experiment Lifecycle
 
-**Suspended at the owner's request on 2026-10-15; not ended.**
-The [suspension and resumption record](suspension.md) preserves the latest H33
-milestone, exact evidence dispositions, remaining work, reload sources and
-compatibility checks. Execution resumes only after a later owner selection.
-The [horizon diagnosis plan](horizon-diagnosis-plan.md) retains witnesses,
-hypotheses and unexecuted work. Existing evidence, resource accounting and the
-production adoption hold remain preserved. Closed compute packages are not
-renewed. No execution topic is selected; the repository
-[active topic](../../../active-topic.md) now routes to preparation of a separate
-[angular-quadrature experiment proposal](../sky-angular-quadrature-plan.md).
-The [follow-up guide](follow-up-context.md) and [handoff](handoff.md) retain
-background context; they do not select the new diagnosis cases.
+**Reopened for owner-selected independent execution on 2026-10-16.**
+The [flat/local horizon plan](flat-local-horizon-plan.md) is the current continuation.
+Its [results](flat-local-horizon-results.md) meet the first scientific goal:
+independent expected appearance and physical reasons under explicit assumptions.
+No production change or promotion is selected. H34–H37
+scientific work is complete; H38 records conditional follow-ons. Implementation
+completion is determined separately by the source-review ledger referenced below.
+
+The [suspension record](suspension.md) preserves the 2026-10-15 H33 boundary,
+evidence dispositions and resumption checks. The planning inventory found 277
+terminal runs; this continuation adds immutable 00277–00286. Existing
+evidence, resource accounting and the production adoption hold remain preserved.
+Closed compute packages are not renewed. The [active topic](../../../active-topic.md)
+routes to this evaluation. The earlier
+[horizon diagnosis plan](horizon-diagnosis-plan.md), [follow-up guide](follow-up-context.md)
+and [handoff](handoff.md) retain background, not automatic execution authority.
 
 The standards handoff retains the permanent `experiments/` assignment. No
 Sky Accuracy Dials-specific temporary assignment or overlay requires rollback.
@@ -21,7 +25,28 @@ The repository [end-experiment skill](../../../../../.agents/skills/end-experime
 now owns this distinction between suspension and final closure; production
 work resolves its own folder standards. Reviewer lifecycle follows the
 [current repository state](../../../standards/reviewer-status.md), while
-the experiment's deferred source reviews and adoption hold remain open.
+the experiment's earlier deferred source reviews and adoption hold remain open.
+This continuation's readiness was refreshed under
+`.codex-tmp/review-standards/session-dEqSA3/`; its baseline captures prior planning
+edits. The final request and validation in that session own this coherent unit's
+source-review disposition, without relabelling historical review debts.
+
+## H34–H38 Independent Local Horizon Evaluation
+
+The [results owner](flat-local-horizon-results.md) records all scientific
+conclusions, quantitative comparisons, actual horizon images, physical plots and
+uncertainty. H34–H37 scientific work is complete within that stated scope; consult
+the results for interpretation rather than treating lifecycle status as a
+separate scientific authority.
+
+Capture 00281 remains failed by its whole-source integrity guard after report/type
+edits during rendering. Accepted recovery 00285 qualifies only the completed
+artifacts against unchanged executed source and retained controls. Accepted
+derivative reports 00283/00284 and figures 00286 preserve that chain; failed
+00277–00280/00282 are retained. Earlier science is reused without modification.
+The [execution notes](flat-local-horizon-execution.md) own decisions, resource
+measurements, verification boundaries and checkpoint reporting. No numerical job
+is active and no additional physical parameter sweep is selected.
 
 ## Current Accuracy Criterion
 
@@ -32,8 +57,9 @@ the original benchmark protocol. The earlier libRadtran-centered diagnostic work
 and its historical scores keep their original definitions. The H8 map below
 retains its scoped reference comparison without changing a scorer, production
 behavior or reference qualification. Existing implementation-review receipts keep
-their original scopes. The separate proposed experiment must pass the full-cache
-paper gate before adoption; this suspended lane is not reopened by the clarification.
+their original scopes. Any eventual full-cache proposal must pass the paper gate
+before adoption. The current independent evaluation changes no metric or
+production behavior.
 
 ## H33 Second-Order Species Attribution
 

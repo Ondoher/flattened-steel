@@ -1,5 +1,12 @@
 # Gray Horizon Diagnosis
 
+**Historical diagnosis registrations.** The current continuation is the
+[flat/local horizon plan](flat-local-horizon-plan.md), selected for independent
+execution on 2026-10-16. Its first goal is independent expected appearance with
+reported uncertainty. The original orange-horizon expectation below remains a
+recorded hypothesis, not a current acceptance target. No historical work item
+automatically resumes under the new draft.
+
 ## Selected Question
 
 The owner reopened Sky Accuracy Dials on 2026-10-14 to diagnose the gray/muddy

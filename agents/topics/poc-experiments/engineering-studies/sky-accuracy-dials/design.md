@@ -2,12 +2,14 @@
 
 ## Objective
 
-Execution is [suspended](status.md#experiment-lifecycle), with boundaries and
-resumption checks preserved in the [suspension record](suspension.md).
-The latest continuation is the [gray horizon diagnosis](horizon-diagnosis-plan.md).
-It examines current local-Sun and distant-Sun paths, including display attribution
-and accuracy compensation, separately from the earlier Kider spectral benchmark.
-Existing isolation, provenance and resource boundaries continue to apply.
+The current continuation is the [flat/local horizon plan](flat-local-horizon-plan.md),
+selected for independent execution on 2026-10-16. Its
+[results](flat-local-horizon-results.md) establish expected appearance and physical
+reasons under declared assumptions, without presuming production is wrong. The
+[lifecycle](status.md#experiment-lifecycle) owns current work; the historical
+[suspension record](suspension.md) retains resumption history. The earlier
+[gray horizon diagnosis](horizon-diagnosis-plan.md) remains evidence. Existing
+isolation, provenance and resource limits still apply.
 
 Develop predictable atmospheric-scattering accuracy controls judged against
 scientific expectations and independent numerical references, with interaction

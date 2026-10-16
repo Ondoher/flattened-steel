@@ -1,5 +1,10 @@
 # Predictable Sky Accuracy Dials Experiment Plan
 
+The current continuation is the owner-selected [flat/local horizon plan](flat-local-horizon-plan.md).
+Its [results](flat-local-horizon-results.md) and [execution notes](flat-local-horizon-execution.md)
+own current findings and completion gates. The original campaign below retains
+its historical work items and gates; completed steps do not activate new runs.
+
 ## Acceptance Gate
 
 Can independently varied and combined numerical controls predict spectral changes and accuracy trends on unexecuted configurations without relying on cancellation or uncontrolled storage growth?

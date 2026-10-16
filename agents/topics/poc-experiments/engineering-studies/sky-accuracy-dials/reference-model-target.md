@@ -18,8 +18,10 @@ This section owns the metric distinction. The earlier 2026-10-14 work used
 qualified libRadtran agreement as its primary numerical diagnostic. Historical
 results keep their original definitions; this clarification neither rescales
 those results nor declares an existing full-cache candidate accepted. The
-[separate angular-quadrature proposal](../sky-angular-quadrature-plan.md) applies
-both requirements to the next experiment; this experiment remains suspended.
+[angular-quadrature experiment](../sky-angular-quadrature/results.md) retained
+both requirements. The current [flat/local horizon plan](flat-local-horizon-plan.md)
+is owner-selected for independent evaluation; its [results](flat-local-horizon-results.md)
+change neither criterion and authorize no production promotion.
 
 ### Fixed Problem And Reference Qualification
 

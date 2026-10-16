@@ -1,0 +1,12 @@
+{
+	"name": "sky-accuracy-dials-experiment",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"typecheck": "tsc -p jsconfig.json",
+		"horizon:capture": "node local-horizon/run.mjs",
+		"horizon:evaluate": "node local-horizon/evaluate.mjs",
+		"horizon:qualify": "node local-horizon/recover.mjs",
+		"horizon:figures": "node local-horizon/present.mjs"
+	}
+}
