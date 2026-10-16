@@ -1,6 +1,6 @@
 # Sky Cache Angular Quadrature Experiment Status
 
-Status: active experiment; Q0-Q4 complete and Q5 production/candidate solar-noon images captured. The Q0-Q4 standalone adoption gate failed; investigation continues. No numerical process remains active.
+Status: ended on 2026-10-15 at the owner's request to discard the unsuccessful angular candidate. Q0-Q4 adoption rejected; Q5 captures retained. No process, browser, server or GPU job remains active.
 
 ## Current State
 
@@ -32,4 +32,4 @@ Q5 has its own pre-implementation baseline and current mapped review receipt und
 
 ## Next Action
 
-Owner inspection of [Q5 actual horizon images](capture-results.md). Preserve current production twilight as a later regression requirement; no candidate twilight claim is established by noon. No further numerical run, production promotion or resumption of the suspended parent is selected. The [results follow-up](results.md#disposition-and-follow-up) remains a possible numerical investigation.
+Final disposition: reject standalone adoption and retire the candidate from active investigation. All sealed runs, source, archived comparisons and failed attempts remain immutable. Q5 review is CLEAN at its existing receipt; no outstanding numerical process or source-review gate remains in the closed unit. Temporary standards restoration: none required; the permanent experiment mapping and shared overlay remain. Follow-up belongs to [Sky Inter-Order Altitude Reconstruction](../sky-altitude-reconstruction/README.md); production is unchanged and Sky Accuracy Dials remains suspended. Reopening this angular lane requires owner selection.

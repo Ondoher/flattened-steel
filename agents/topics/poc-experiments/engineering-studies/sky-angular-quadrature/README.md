@@ -1,8 +1,8 @@
 # Sky Cache Angular Quadrature Experiment
 
-Status: active experiment; Q0-Q4 numerical execution complete. Standalone full-cache adoption rejected; [results](results.md) own the findings.
+Status: ended on 2026-10-15; standalone angular candidate rejected for adoption. [Results](results.md) own the findings. Sealed evidence and source remain preserved.
 
-Investigation continues. [Q5 actual noon horizon images](capture-results.md) compare current production with the angular rule adapted onto production settings. Preserve current production twilight behavior in any later adoption.
+The owner retired the unsuccessful angular candidate. [Q5 noon images](capture-results.md) remain historical comparison evidence. Follow-up is owned by [Sky Inter-Order Altitude Reconstruction](../sky-altitude-reconstruction/README.md). No angular candidate was promoted into production.
 
 ## Objective
 

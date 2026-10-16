@@ -2,11 +2,11 @@
 
 Focus: Measured alternatives and retained or rejected mechanisms.
 
-[Sky Cache Angular Quadrature](sky-angular-quadrature/README.md) is the active study;
-its planned execution is complete; see its results for the rejected standalone adoption. [Sky Accuracy Dials](sky-accuracy-dials/status.md#experiment-lifecycle)
-remains suspended. Other lanes retain their own dispositions.
+[Sky Inter-Order Altitude Reconstruction](sky-altitude-reconstruction/README.md) is active. [Sky Cache Angular Quadrature](sky-angular-quadrature/README.md) ended with its standalone candidate rejected; its evidence remains preserved. [Sky Accuracy Dials](sky-accuracy-dials/status.md#experiment-lifecycle) remains suspended. Other lanes retain their own dispositions.
 
 ## Working Documents
+
+- [Sky Inter-Order Altitude Reconstruction](sky-altitude-reconstruction/README.md)
 
 - [Sky Cache Angular Quadrature Experiment](sky-angular-quadrature/README.md)
 - [Local-Sun Cache Reuse Experiment](local-sun-cache-reuse/README.md)

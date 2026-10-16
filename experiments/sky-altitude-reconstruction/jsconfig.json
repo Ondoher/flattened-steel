@@ -1,0 +1,27 @@
+{
+	"compilerOptions": {
+		"allowJs": true,
+		"checkJs": true,
+		"maxNodeModuleJsDepth": 0,
+		"module": "NodeNext",
+		"moduleResolution": "NodeNext",
+		"noEmit": true,
+		"skipLibCheck": true,
+		"strict": false,
+		"target": "ES2022",
+		"types": ["node"],
+		"typeRoots": ["../../node_modules/@types"]
+	},
+	"include": [
+		"**/*.d.ts",
+		"**/*.js",
+		"**/*.mjs",
+		"../sky-accuracy-dials/**/*.d.ts",
+		"../../src/algorithm32/**/*.d.ts",
+		"../../src/flat32/types.d.ts",
+		"../../server/flat32/features/shared-cache/types.d.ts",
+		"../../scripts/algorithm32/solar-zenith-cache/types.d.ts",
+		"../sky-angular-quadrature/**/*.d.ts"
+	],
+	"exclude": ["../../node_modules/**", "**/node_modules/**"]
+}
