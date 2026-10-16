@@ -1,5 +1,7 @@
 # Sky Inter-Order Altitude Reconstruction Experiment Design
 
+Disposition: ended as unsuccessful/rejected on 2026-10-16. This design retains the registered controls for the completed executions. Reopening requires owner selection and a current compatibility/readiness check; no new execution is queued. [Status](status.md) owns the lifecycle handoff.
+
 ## Objective
 
 Isolate legacy altitude-bin selection versus current linear reconstruction during higher-order cache transport and measure its horizon effect.

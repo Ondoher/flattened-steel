@@ -1,6 +1,6 @@
 # Sky Inter-Order Altitude Reconstruction
 
-Status: active contained experiment; execution authorized by the owner on 2026-10-15.
+Status: ended on 2026-10-16 at the owner's direction; outcome unsuccessful/rejected. [Status](status.md) owns the closure and preserved-evidence handoff.
 
 Focus: isolate legacy single-bin altitude selection versus current linear reconstruction inside higher-order cache transport. The matched production noon capture and full-paper RMSE comparison are recorded in [results](results.md); production remains unchanged.
 

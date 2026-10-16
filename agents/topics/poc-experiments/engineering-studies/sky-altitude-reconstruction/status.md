@@ -1,19 +1,29 @@
 # Altitude Reconstruction Status
 
-Status: active; the noon diagnostic and owner-authorized full-paper RMSE extension have finished numerical execution. No owned browser, server or GPU job remains.
+Status: **ended**, at the owner's direction on **2026-10-16**. Outcome: **unsuccessful/rejected**.
 
-## Current State
+## Final Disposition
 
-The [results](results.md) own the scientific conclusion and measurements. Legacy altitude selection changes higher orders and yields a slight noon visual change, but worsens full-paper RMSE11.17%. It fails the adoption score gate and does not restore the white horizon. The angular candidate was never promoted; its lane is ended/rejected and all original evidence remains preserved. Current production remains unchanged. Sky Accuracy Dials remains suspended.
+The [results](results.md) own the scientific findings: the slight visual improvement did not meet the full-cache paper RMSE adoption gate or explain the historic white horizon. Retain the current production cache and twilight behavior. No production changes were promoted.
 
-## Standards Restoration Provenance
+This experiment has no active next action. Its source and completed [plan](plan.md) remain available as evidence. Reopening requires owner selection and current standards/readiness compatibility checks. Sky Accuracy Dials remains suspended, and the angular candidate remains ended/rejected. No successor task is selected.
 
-Nearest permanent assignment: `experiments/` to `experiment`, inheriting base and retaining types.md. The nearest mapping is sufficient for this source root and its io subfolder. No experiment-specific set, assignment or overlay is added; no temporary configuration requires restoration. Manifest and overlay own applicability.
+## Preserved Evidence And Resources
 
-## Verification And Next Action
+All source under `experiments/sky-altitude-reconstruction/` and all five terminal runs under `tmp/experiments/sky-altitude-reconstruction/runs/` remain preserved:
 
-Accepted capture `00000-altitude-noon` and derived report `00001-altitude-report` are sealed and verified. J1/J2 invariance, production parity, all15 spectra, image dimensions and owned resource cleanup pass. Local type checking passes. No successful numerical rerun or production promotion is needed.
+- `00000-altitude-noon`: accepted capture, source-density probes and actual matched PNGs.
+- `00001-altitude-report`: accepted image metrics and numerical report.
+- `00002-paper-rmse`: failed pre-definition allocation, with explicit recovery and its retained heartbeat limitation; excluded from scientific proof.
+- `00003-paper-rmse`: accepted full-paper GPU comparison, baseline qualification and all40-channel evidence.
+- `00004-paper-report`: accepted summary and correctly labeled comparison images.
 
-The noon implementation has native CLEAN evidence in `.codex-tmp/review-standards/session-GvuoUl/validation.json`. The paper extension has its own pre-implementation baseline in `.codex-tmp/review-standards/session-NIaXhY/baseline.json`. Its [native validation receipt](../../../../../.codex-tmp/review-standards/session-NIaXhY/validation.json) is authoritative for the mapped architecture/contracts primary and source-first audit completion gate. Passing local checks does not replace that receipt.
+The accepted seals/inventories were verified at completion. Closure leaves every run, artifact, manifest and provenance record unchanged. Every run has a terminal seal and recorded scratch cleanup; the lane's scratch directory is empty. No owned browser, server, GPU job or unfinished run remains.
 
-Accepted `00003-paper-rmse` passes exact fresh baseline parity, all40-channel J1/J2 invariance, full42687-scalar scoring, seal/inventory verification and resource cleanup. Accepted `00004-paper-report` derives the summary and correctly labeled witness image without another GPU run. Failed pre-definition allocation `00002-paper-rmse` is retained with explicit recovery; its heartbeat gap disqualifies it from scientific evidence. No successful science was repeated. Source changes after capture add an early canonical-executable preflight, correct inherited image labels and add report-only derivation; they do not change the numerical intervention. No production change, new numerical phase or twilight qualification is selected.
+## Standards Restoration And Review Handoff
+
+The permanent `experiments/` to `experiment` assignment inherits base and retains mandatory types.md. No experiment-specific assignment, named set or overlay was added, so no temporary standards configuration requires restoration. Manifest and overlay remain unchanged; source and topic paths retain their folder mappings.
+
+The completed noon implementation's historical native CLEAN evidence remains in `.codex-tmp/review-standards/session-GvuoUl/validation.json`. The paper extension's [historical native CLEAN receipt](../../../../../.codex-tmp/review-standards/session-NIaXhY/validation.json) and exact-snapshot local checkpoint `c182f841` retain its architecture/contracts primary and source-first audit evidence. Closure changes lifecycle documentation only; it does not relabel those reports or reopen implementation review.
+
+The active-topic handoff now states that no execution topic is selected. Reviewer readiness is refreshed for that idle context; future implementation must load the newly selected topic and its applicable standards first.

@@ -1,5 +1,7 @@
 # Inter-Order Altitude Reconstruction Results
 
+Final disposition: closed as unsuccessful/rejected at the owner's direction on 2026-10-16. [Status](status.md) owns the lifecycle handoff; the scientific evidence below remains preserved.
+
 The legacy single-bin altitude stencil does **not** explain the old white horizon in the matched production noon view. It makes a measurable but very small difference: display-linear horizon luminance rises **0.0804%**. The hue remains blue-gray.
 
 ![Current production versus legacy altitude reconstruction](../../../../../tmp/experiments/sky-altitude-reconstruction/runs/00000-altitude-noon/comparison.png)

@@ -1,20 +1,17 @@
 # Active Topic
 
-Current active topic: sky-altitude-reconstruction.
-Focus: report the completed full-paper RMSE comparison of legacy single-bin versus current linear inter-order altitude reconstruction, alongside the matched noon capture.
+Current active topic: none selected.
+Focus: await owner selection after closing sky-altitude-reconstruction as unsuccessful on 2026-10-16.
 
-Canonical entry: [Sky Inter-Order Altitude Reconstruction](poc-experiments/engineering-studies/sky-altitude-reconstruction/README.md).
+Canonical entry: none selected. Last handoff: [closed altitude-reconstruction experiment](poc-experiments/engineering-studies/sky-altitude-reconstruction/status.md), retained as context.
 
 ## Immediate Focus
 
-The owner-authorized full-paper scoring extension has completed numerical execution and sealed its results. Its mapped review milestone is owned by the current experiment status and native receipt. Preserve all sealed evidence and current production twilight. Sky Accuracy Dials remains suspended. No production promotion or additional hypothesis is authorized.
+No execution is queued. The altitude-reconstruction experiment is ended with a rejected outcome; its source, images, numerical evidence and failed attempts remain preserved. Current production and its twilight behavior remain unchanged. Sky Accuracy Dials remains suspended. Reopening an experiment or selecting another task requires owner direction.
 
 ## Minimal Reload Sources
 
 1. [Repository instructions](../../AGENTS.md).
-2. [Experiment entry](poc-experiments/engineering-studies/sky-altitude-reconstruction/README.md).
-3. [Design](poc-experiments/engineering-studies/sky-altitude-reconstruction/design.md).
-4. [Plan](poc-experiments/engineering-studies/sky-altitude-reconstruction/plan.md).
-5. [Status](poc-experiments/engineering-studies/sky-altitude-reconstruction/status.md).
+2. [Last experiment handoff](poc-experiments/engineering-studies/sky-altitude-reconstruction/status.md).
 
-Read source instructions before implementation. Load linked prior evidence only for the selected step; never reopen or modify a sealed run.
+Load additional context only for the owner's selected task. Preserve every sealed run and artifact.
