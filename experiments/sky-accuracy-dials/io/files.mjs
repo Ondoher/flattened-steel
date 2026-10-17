@@ -25,8 +25,8 @@ export const outputRelative = 'tmp/experiments/sky-accuracy-dials';
 const sourceRelative = 'experiments/sky-accuracy-dials';
 const MiB = 1024 ** 2;
 const minimumFreeBytes = 40 * 1024 ** 3;
-// H59's proposed656MiB amendment awaits explicit owner approval. Preserve624MiB.
-const retainedLimit = 624 * MiB;
+// Owner approved656MiB retained disk for H59; system/GPU/scratch bounds unchanged.
+const retainedLimit = 656 * MiB;
 const scratchLimit = 1024 * MiB;
 
 /** Hash exact bytes. @param {Uint8Array|string} bytes @returns {string} */

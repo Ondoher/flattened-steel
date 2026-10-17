@@ -1,121 +1,147 @@
 # H59 Angular Interpolation Execution
 
-Status: executing the [approved plan](angular-interpolation-plan.md).
-Baseline Git: `73af9897`. Production and prior evidence are read-only.
+Status: completed the [approved plan](angular-interpolation-plan.md).
+[Results](angular-interpolation-results.md) own the scientific conclusions,
+full B1 score and images. Baseline Git: `73af9897`. Production and all prior
+immutable evidence remain unchanged. No further campaign is selected.
 
-## Progress
+## Completed Milestones And Evidence
 
-- Source-path audit confirmed the separate J1 final readout and analytic L1 build.
-- Implemented a paired queried-angle diagnostic and bounded transport controls.
-- Local experiment type check passes.
-- Accepted00371 reproduces saved corrected spectra exactly; original node probes
-  agree exactly and native angular readout replay differs by at most9.91e-8.
-- Three-band N1 direct-angle changes remove20-83% of dense-reference residuals;
-  eight of nine cells exceed the predeclared25% materiality target.
-- Accepted00372 measures four-row native transport controls;00374 injects eight
-  geometric rows distributed across all three witnesses. Later-order changes
-  reach the rays at3-140ppm in pure N3/N4. This bounded result is not a global
-  amplification or improvement claim.
-- Accepted00375 separates F68 from fresh256/512 incoming controls at eight rows;
-  original F68 L1 replay is exact. Refined rules are not fully converged and
-  are only a bounded factorial control.
-- Accepted00376 retains the inspected interim angular-effects PNG/SVG.
-- Accepted00377 completes the complementary L3 intervention. Equal-row mean
-  absolute deltaL3/deltaL2 is0.104,0.097,0.156 across screening bands: attenuation
-  on this limited support, not demonstrated amplification.
-- Full-spectrum00378 completed and retained channels0-11, then failed the disk
-  retention guard before channel12 could be written. Its source hashes, heartbeat
-  and cleanup pass; the run remains failed and immutable. Completed wavelength
-  packets are numerically reusable, not relabeled as a successful full run.
-- Measured retained evidence is657,261,884bytes (626.81MiB), including the large
-  terminal manifest written after the pre-seal guard. Prior evidence is preserved.
-- Proposed656MiB retention allowance requires owner approval after automatic
-  approval review rejected the resumed GPU command. The code retains624MiB while
-  permission is pending. No GPU/browser job is active.
-- The remaining28 wavelengths, full-color figures and conditional full-B1 score
-  await that capacity decision. No new external solver campaign was launched.
+- 00371: three-band GPU angular isolation; saved corrected cumulative spectra
+ and native node controls match exactly.
+- 00372: frozen-input transport screen on four initial rows.
+- 00374/00377: isolated L2/L3 injections on eight registered rows across the
+ three witnesses; unaffected prefixes match exactly.
+- 00375: fresh68/256/512 incoming-rule control, with exact native L1 replay.
+ The refinement pair is not a converged physical reference.
+- 00373/00376: immutable interim reports;00376's PNG was inspected.
+- 00379: complete40-band GPU validation, exact reuse of12 channels from00378,
+ and28 new wavelengths. Retains the compact GPU direct-base coefficients.
+- 00380: full17x81x40 B1 frozen-increment score,17 interval table, and Figure5
+ dome comparison. All55080 native N1 entries satisfy the replay allowance.
+- 00381: all40-band common-p2 swatches, N1 spectra and signed per-order errors
+ with reference intervals. Images were inspected.
+- 00382: post-run verification of all13 preceding runs, exact reuse, component
+ materiality, recurrence norms, combined interventions and arithmetic sensitivity.
+
+The numerical paper gate passes at11.5920225214mW versus original11.6229140283
+and corrected11.6684823920. This qualifies the experimental readout result;
+it does not qualify a production implementation or twilight behavior.
 
 ## Questions And Decisions
 
-1. Which paper baseline is the promotion target? Inspection of H55 controls
-   confirms transport40, not transport15. Correct the plan label, preserving
-   its original numerical RMSE target. H59 native replay remains normalized60.
-2. How should generated diagnostic artifacts be located? Use the approved
-   experiment-owned generated root and immutable allocator. This is the more
-   specific plan boundary; no scratch is written to arbitrary system folders.
-3. Can N1 final readout propagate into later builds? No: L1 evaluates the direct
-   source analytically. Preserve later compiled fields and report this invariant.
-4. How to recover failed launches?00369 stopped on a non-normalized executable
-   path; normalize it.00370 preserved a sandbox Chrome spawnEPERM; use the
-   permitted escalated launch route for00371. Neither failed run computed data.
-5. Which support should the recurrence test use? The initial transport screen
-   used four rows near the first ray. Register eight geometry-selected rows
-   distributed across all three rays before the injection tests.
-6. How to isolate angles without changing altitude or solar reconstruction?
-   Query the exact original anchors using identical direct-base or preceding-L
-   values, then apply the same final-view interpolation and attenuation.
+1. Which paper baseline is the target? H55 controls confirm transport40,
+   distinct from the earlier deployed15. Correct the plan label while preserving
+   its original numerical RMSE target; H59 native replay stays normalized60.
+2. Where should generated files live? Use the approved experiment-owned output
+   root and immutable allocator, the specific plan boundary. Keep authored
+   deliverables in the experiment/topic roots; no arbitrary system scratch.
+3. Can N1 readout propagate through L1? No: L1 evaluates direct scattering
+   analytically. Preserve compiled later orders and test N1 readout separately.
+4. How to recover launch failures?00369 stopped before computation on an
+   unnormalized executable path. Normalize it.00370 preserved Chrome spawnEPERM;
+   use the approved launch route for00371. Neither produced numerical data.
+5. Which recurrence support should be used? The initial transport screen used
+   four rows near ray1. Register eight geometry-selected rows distributed
+   across all three rays before the causal injection runs.
+6. How to isolate angles? Use identical GPU direct-base/preceding-L inputs and
+   original altitude/solar anchors. Change only outgoing-phase evaluation,
+   restore shader anchor globals, and retain original reconstruction operators.
+7. How to distinguish incoming quadrature? Freshly compute L1 at every new
+   direction with unchanged source20/transport60. Native F68 replay is exact.
+   Do not obtain the denser rule by interpolating68 values or call it converged.
+8. Why did disk usage exceed estimates? Full282KiB controls were repeated in
+   per-artifact derivations and terminal seals.00378 stopped at the retention
+   guard after retaining channels0-11; channel12 was computed but not written.
+   Preserve its failed immutable disposition, source/heartbeat validity and
+   completed outputs. Compact subsequent recipes using canonical control hashes.
+9. May the retention allowance change? Automatic approval review rejected the
+   attempted624to656MiB continuation because owner authorization was required.
+   Restore624 while waiting; ask explicitly. The owner approved656MiB retained
+   disk, after which00379 resumed. No workaround bypassed the rejection.
+   Scratch, GPU/system memory, free-disk and production limits did not change.
+10. How to avoid rerunning completed work? Verify the failed run and its artifact
+    hashes, exact control and adapted compiler identity, and full coefficient
+    shape. Copy12 complete packets byte-for-byte into00379; repeat replay/node
+    checks over all40 bands. Compute only28 remaining channels.
+11. Is full B1 warranted? The demonstrated N1 mechanism has a general factored
+    readout. Test it across the full boundary with identical GPU coefficients
+    and compiled later increments. Validate binary64/GPU phase replay first,
+    and retain a paired-arithmetic score to rule out a rounding-induced gain.
+12. What did local checks find? Three tuple/readonly declaration errors appeared
+    when the full-boundary reducer was added. Correct them without changing
+    measured shader equations; the complete experiment type check then passes.
+13. What may remain unresolved? Bounded row injections cannot determine global
+    recurrence behavior, and256/512 is not converged. State those limits and
+    preserve later-order discrepancies. Do not start an unrelated global
+    quadrature sweep, production promotion or twilight campaign.
 
-7. Why did storage exceed the estimate? Per-artifact derivation recipes repeated
-   the complete282KiB control packet. Earlier immutable manifests remain intact.
-   New recipes store a canonical control-value hash and separate control artifact;
-   identical wavelength reuse avoids recomputation. The proposed allowance changes
-   retained disk only, preserving1GiB scratch and40GiB free-disk requirements.
-8. Is a full-B1 follow-up warranted? N1 interpolation accounts for a material
-   residual and has a general coefficient/phase reconstruction. Implement a
-   frozen-increment full-B1 test with exact retained GPU coefficients, and require
-   explicit native/direct CPU-GPU replay checks before interpreting its score.
-   This is an experimental readout diagnostic, not a production promotion.
-9. What did local checks find? Three tuple/readonly declaration errors appeared
-   after adding the full-boundary reducer. Correct them without changing the
-   measured shader equations. The subsequent complete experiment type check passes.
+## Verification And Limits
 
-## Verification And Remaining Work
+Current experiment type checking and Git whitespace checks pass. Accepted and
+failed runs00369- 00381 all pass ordinary immutable-run verification; failed
+states are preserved. Source failures and heartbeat failures are empty.00382
+verifies exact byte reuse, component scores, unaffected prefixes and the combined
+interaction maximum5.56e-17. The paired-arithmetic B1 score differs by only
+0.0000108748mW and still passes the original paper gate.
 
-Current local type checking and diff whitespace checks pass. Replay, node,
-angular residual plots, bounded transport/propagation and the incoming-rule control
-are complete. Expanded spectral validation, full-color/final figures, full-B1
-qualification, final results and checkpoint advice remain pending. The checkpoint
-unit must not be described as the completed H59 campaign until those obligations
-or a clearly approved narrower scope are resolved.
-Full B1 validation is conditional on a broadly applicable candidate; sparse
-patches are diagnostic only. No production promotion is authorized.
+Native40-band witness replay and outgoing-node probes match exactly. Alternate
+GPU native-angular reconstruction differs by at most1.20e-7. Full-boundary
+binary64/GPU native N1 replay is within3.90e-6 and direct-angle witness replay
+within3.16e-6, below the declared5e-6 allowance. The native field build remains
+hardware GPU; only compact boundary reduction/color work uses CPU binary64.
 
-## Resume After Capacity Approval
+All final swatches, spectra, order errors and B1 dome PNGs were inspected.
+Bright near-Sun swatches compress visual differences; retained Y values and
+signed residuals make that limitation explicit. No full-scene or horizon
+appearance claim follows from these rays. No new external solver campaign,
+experimental unit-test tree, dedicated reviewer or independent audit was run.
+No standards-compliance claim is made. Production/runtime/twilight qualification
+is deferred to separately authorized adaptation, not hidden as completed work.
 
-The current guard remains624MiB. Do not execute a workaround around the rejected
-resume command. If the owner approves656MiB, change only retainedLimit in
-`experiments/sky-accuracy-dials/io/files.mjs`, update the active retention record,
-and run:
+## Timing, Resources And Checkpoints
+
+Measured phase wall times:00371 screen29.24s;00372 transport46.14s;
+00374 L2 intervention47.61s;00375 quadrature46.00s;00377 L3 intervention47.38s.
+Full-spectrum00378 spent92.09s before its disk-limit failure. Resumed00379 took
+223.06s including12-channel reuse and28 new GPU builds. Full B1 reduction and
+figures00380 took52.07s; final verification00382 took6.32s. These include staging,
+compilation, computation, readback, reduction and delivery as applicable; they
+are not isolated kernel times or total agent reasoning time.
+
+The renderer is hardware NVIDIA RTX2060 via ANGLE/D3D11; maximum texture width
+is16384. Native compiler-owned field peak is165,607,200bytes per wavelength,
+with final field bytes zero. That excludes context/driver and diagnostic memory,
+so it is not total GPU usage. Resumed-job scratch peak is16,496,565bytes.
+Final retained evidence is666,672,287bytes (635.79MiB), inside the approved656MiB
+allowance; live scratch is empty and final measured free disk exceeds112GB.
+All owned browser/solver clients exited; earlier evidence was never deleted.
+
+The checkpoint adviser recommended the coherent intermediate unit; local commit
+`e59b4bfe` records `Record H59 angular interpolation diagnostics`. The final adviser returned CHECKPOINT_URGENT and suggested
+`Complete H59 angular interpolation validation`. That checkpoint records completed
+validation and the approved disk allowance; its Git identity is reported in the
+handoff. Local checkpoint messages/commits are
+preauthorized by independent-execution; no push or publication is authorized.
+
+## Reproduction
+
+Each command allocates new immutable output; do not reopen the listed runs.
+Use the returned paths for later consumers:
 
 ```text
-node experiments/sky-accuracy-dials/angular-interpolation/run.mjs screen --full --reuse tmp/experiments/sky-accuracy-dials/runs/00378-h59-40-screen
+node experiments/sky-accuracy-dials/angular-interpolation/run.mjs screen
+node experiments/sky-accuracy-dials/angular-interpolation/run.mjs transport
+node experiments/sky-accuracy-dials/angular-interpolation/run.mjs L2
+node experiments/sky-accuracy-dials/angular-interpolation/run.mjs L3
+node experiments/sky-accuracy-dials/angular-interpolation/run.mjs quadrature
+node experiments/sky-accuracy-dials/angular-interpolation/run.mjs screen --full
+node experiments/sky-accuracy-dials/angular-interpolation/paper.mjs <full-run>
+node experiments/sky-accuracy-dials/angular-interpolation/report.mjs <full-run>
+node experiments/sky-accuracy-dials/angular-interpolation/verify.mjs
+node node_modules/typescript/bin/tsc -p experiments/sky-accuracy-dials/jsconfig.json
 ```
 
-This copies the12 immutable complete channels and computes only28 remaining
-wavelengths. The partial12 native cumulative spectra independently reproduce
-H55 exactly at all three witnesses and all four prefixes. The adapter source
-must match exactly, and the continued run repeats node and replay qualification.
-After it seals, run `report.mjs <new-full-run>` and `paper.mjs <new-full-run>`.
-The latter's full-boundary reducer is authored/type-checked, not yet executed;
-its CPU/GPU replay gates must pass before any RMSE claim. Final figures,
-immutable verification, source checks, cleanup and checkpoint remain required.
-
-## Intermediate Handoff
-
-The checkpoint adviser returned CHECKPOINT_URGENT for this coherent diagnostic
-unit and suggested `Record H59 angular interpolation diagnostics`. This does not
-qualify full H59 as complete. Dedicated standards reviewers/audits were not run.
-All owned browser clients exited, scratch is empty, and current type checking
-and Git whitespace checks pass. No push, production change or promotion occurred.
-
-Measured phase wall times: accepted00371 screen29.24s;00372 transport46.14s;
-00374 L2 intervention47.61s;00375 quadrature46.00s;00377 L3 intervention47.38s.
-These include compilation, GPU work, readback, reductions and artifact delivery;
-they are not isolated kernel times. Full-spectrum00378 spent92.09s before
-its disk-limit failure. Completed channel work is retained for reuse. End-to-end
-agent/tool time is longer and is not reported as pure numerical computation.
-
-The unresolved external action is explicit approval of the proposed656MiB
-retained-disk allowance. Automatic approval review rejected the resumed command
-because the persistent624MiB boundary lacked owner authorization for expansion.
-The allowance remains624MiB until approval; no indirect continuation is permitted.
+The executed recovery command was `run.mjs screen --full --reuse
+ tmp/experiments/sky-accuracy-dials/runs/00378-h59-40-screen`. It only reuses
+qualified complete packets and preserves the original failed run.

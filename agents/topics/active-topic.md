@@ -1,33 +1,32 @@
 # Active Topic
 
-Current active topic: sky-accuracy-dials, H59 angular interpolation execution.
-Focus: test whether outgoing angular interpolation contributes to selected-ray
-errors and how those errors affect readout, recurrence and cancellation.
+Current active topic: sky-accuracy-dials, completed H59 angular interpolation attribution.
+Focus: distinguish demonstrated first-order readout error from remaining
+higher-order inaccuracies and preserve the qualified full-B1 improvement.
 
 Canonical entry: [Sky Accuracy Dials](poc-experiments/engineering-studies/sky-accuracy-dials/README.md).
 
 ## Immediate Focus
 
-The [H59 plan](poc-experiments/engineering-studies/sky-accuracy-dials/angular-interpolation-plan.md)
-is authorized for independent execution. It separates N1 readout from
-higher-order lookup, holds incoming quadrature fixed for the decisive controls,
-and traces bounded interventions through N4. The [execution record](poc-experiments/engineering-studies/sky-accuracy-dials/angular-interpolation-execution.md)
-owns current progress and decisions. The three-band isolation and propagation tests are complete.
-Full-spectrum continuation awaits owner approval of a retained-disk allowance
-increase from624to656MiB. No numerical job is active.
+Completed [H59 results](poc-experiments/engineering-studies/sky-accuracy-dials/angular-interpolation-results.md)
+own the causal controls, all40-band comparisons and full B1 score. Exact-angle
+N1 readout removes46-92% of selected first-order brightness deficits. The general
+frozen-increment readout scores11.5920225mW versus original11.6229140 and
+corrected11.6684824. Remaining higher-order errors are not solved; bounded
+recurrence support and incoming-rule convergence limits remain explicit.
 
-Completed [H58 results](poc-experiments/engineering-studies/sky-accuracy-dials/worst-ray-orders-results.md)
-own the largest retained-libRadtran-disagreement ranking and the matched
-references reused by H59. The new plan does not establish interpolation as the
-cause. Production and all prior evidence remain unchanged.
+The [execution record](poc-experiments/engineering-studies/sky-accuracy-dials/angular-interpolation-execution.md)
+owns decisions, timing, failed-run preservation, exact12-wavelength reuse and
+verification. The owner approved656MiB retained disk. All owned jobs are stopped
+and scratch is empty. Production and all previous evidence remain unchanged.
 
-The experiment remains open under 624 MiB retained, 1 GiB scratch and 40 GiB
-free-disk bounds. Dedicated experiment reviewers remain disabled; checkpoint
-advice is separate from scientific qualification and commit authority.
+The experiment remains open; no additional execution or promotion is selected.
+Dedicated reviewers/audits remain disabled; checkpoint advice is separate from
+scientific qualification. Runtime/twilight adaptation is future work.
 
 ## Minimal Reload Sources
 
 1. [Repository instructions](../../AGENTS.md).
 2. [Experiment entry](poc-experiments/engineering-studies/sky-accuracy-dials/README.md).
-3. [H59 plan](poc-experiments/engineering-studies/sky-accuracy-dials/angular-interpolation-plan.md).
+3. [H59 results](poc-experiments/engineering-studies/sky-accuracy-dials/angular-interpolation-results.md).
 4. [H59 execution](poc-experiments/engineering-studies/sky-accuracy-dials/angular-interpolation-execution.md).

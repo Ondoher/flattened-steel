@@ -112,10 +112,17 @@ Append one event at process start, every phase transition, at least once every 3
 
 Budget against current disk space only. The owner's copy to another drive
 does not release space on C:. Initial observed free space was 50,601,861,120
-bytes. Stop starting work below 40 GiB free. Limit this experiment to 624 MiB
+bytes. Stop starting work below 40 GiB free. Limit this experiment to 656 MiB
 of retained evidence and 1 GiB of live scratch; enforce both before expensive
 work and before writes. Run one GPU job at a time. Do not use another drive
 or delete any previous experiment, production, or historical artifact.
+
+H59's owner-approved amendment raises624to656MiB retained disk after measuring
+657,261,884bytes including the failed partial run's terminal manifest. Earlier
+runs remain immutable; new recipes replace repeated full control objects with
+canonical control hashes. The [H59 execution record](angular-interpolation-execution.md)
+owns final totals and the exact12-wavelength reuse. Scratch, system/GPU memory,
+production-cache and free-disk requirements are unchanged.
 
 H58 raises the retained allowance from592 to624MiB. Observed retained evidence
 is604,303,609bytes, leaving16.4MB below the old bound. A bounded new GPU/reference

@@ -1,12 +1,21 @@
 # H59: Angular Interpolation And Scattering-Order Error
 
-Status: executing; full-spectrum continuation awaits the owner disk-budget decision.
-Under owner-selected independent execution, test whether cache
-angular interpolation explains part of the N1 deficit and the later-order
-excesses. Baseline Git: `73af9897`. The [execution record](angular-interpolation-execution.md)
-owns progress, decisions and verification.
+Status: completed under owner-selected independent execution. Baseline Git:
+`73af9897`. The [results](angular-interpolation-results.md) own findings and
+qualifications; the [execution record](angular-interpolation-execution.md) owns
+decisions, recovery, approved capacity and verification.
+
 This stays within the open sky-accuracy-dials experiment; production and prior
 evidence remain unchanged.
+
+## Completed Work
+
+- [x] A: actual lookup paths and exact native baseline replay.
+- [x] B: isolated N1 angular readout with dense-reference comparison.
+- [x] C: fixed-input higher-order lookups and bounded transport controls.
+- [x] D: separate fresh68/256/512 incoming-rule factorial control; convergence limit retained.
+- [x] E: isolated L2/L3 recurrence interventions and combined-readout interaction.
+- [x] F: all40-band validation, reference figures, full17x81x40 B1 scores/domes and verification.
 
 ## Question And Hypotheses
 
@@ -260,9 +269,11 @@ stage timings and remaining work. If a global bypass is too expensive, finish
 the bounded causal tests and state the global question remains open; do not
 silently substitute a different algorithm or launch an overnight sweep.
 
-The current624MiB retained cap has about30.4MiB headroom after H58. Target at
-most24MiB of new retained output including manifests/images, remeasure before
-allocation, and preserve sealing reserve. Keep1GiB scratch and40GiB free-disk
+The original624MiB cap exhausted during H59 because per-artifact manifests
+repeated full control packets. The owner explicitly approved656MiB retained disk;
+new recipes reference a compact canonical control hash. Reuse the12 completed
+immutable wavelengths and remeasure storage before further allocation, preserving
+sealing reserve. Keep1GiB scratch and40GiB free-disk
 bounds. A demonstrated shortage requires a specific measured capacity decision,
 not deletion of old evidence. No system-memory or production-cache limits change.
 

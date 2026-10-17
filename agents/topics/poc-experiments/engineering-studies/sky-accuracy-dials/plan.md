@@ -1,10 +1,10 @@
 # Predictable Sky Accuracy Dials Experiment Plan
 
-Executing [H59 angular interpolation tests](angular-interpolation-plan.md).
-The [execution record](angular-interpolation-execution.md) owns current findings,
-verification and decisions. The three-band isolation and propagation tests are
-complete; full-spectrum continuation awaits the owner retention-budget decision.
-Production and earlier evidence remain unchanged.
+Completed [H59 angular interpolation attribution](angular-interpolation-results.md).
+Exact-angle N1 readout removes46-92% of the selected brightness deficits and
+improves full B1 RMSE to11.5920mW, beating original11.6229 and corrected11.6685.
+Later-order discrepancies remain; bounded recurrence and incoming-rule limits are
+explicit. Production is unchanged and no follow-on campaign is selected.
 
 Completed [H58 largest-libRadtran-disagreement comparison](worst-ray-orders-results.md)
 ranks all1377 B1 cells and compares the three largest retained-reference errors
