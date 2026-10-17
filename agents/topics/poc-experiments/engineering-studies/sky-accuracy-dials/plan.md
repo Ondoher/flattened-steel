@@ -1,5 +1,11 @@
 # Predictable Sky Accuracy Dials Experiment Plan
 
+Executing [H59 angular interpolation tests](angular-interpolation-plan.md).
+The [execution record](angular-interpolation-execution.md) owns current findings,
+verification and decisions. The three-band isolation and propagation tests are
+complete; full-spectrum continuation awaits the owner retention-budget decision.
+Production and earlier evidence remain unchanged.
+
 Completed [H58 largest-libRadtran-disagreement comparison](worst-ray-orders-results.md)
 ranks all1377 B1 cells and compares the three largest retained-reference errors
 through scattering orders. Fresh matched libRadtran and independent references

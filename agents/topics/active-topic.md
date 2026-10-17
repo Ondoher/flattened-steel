@@ -1,36 +1,33 @@
 # Active Topic
 
-Current active topic: sky-accuracy-dials,completed H58 largest disagreements with libRadtran.
-Focus: distinguish retained-reference differences from order-specific cache errors
-using the largest spectral disagreements and fresh matched physical references.
+Current active topic: sky-accuracy-dials, H59 angular interpolation execution.
+Focus: test whether outgoing angular interpolation contributes to selected-ray
+errors and how those errors affect readout, recurrence and cancellation.
 
 Canonical entry: [Sky Accuracy Dials](poc-experiments/engineering-studies/sky-accuracy-dials/README.md).
 
 ## Immediate Focus
 
+The [H59 plan](poc-experiments/engineering-studies/sky-accuracy-dials/angular-interpolation-plan.md)
+is authorized for independent execution. It separates N1 readout from
+higher-order lookup, holds incoming quadrature fixed for the decisive controls,
+and traces bounded interventions through N4. The [execution record](poc-experiments/engineering-studies/sky-accuracy-dials/angular-interpolation-execution.md)
+owns current progress and decisions. The three-band isolation and propagation tests are complete.
+Full-spectrum continuation awaits owner approval of a retained-disk allowance
+increase from624to656MiB. No numerical job is active.
+
 Completed [H58 results](poc-experiments/engineering-studies/sky-accuracy-dials/worst-ray-orders-results.md)
-own the full1377-cell retained-libRadtran ranking and three selected rays:
-09:30/ray67,09:45/ray67,11:00/ray57. Fresh libRadtran and independent references
-agree in brightness within their intervals across all15 targets; the retained
-reference is substantially brighter. Concrete generator setup differences are
-recorded,not individually isolated. Smaller cache errors begin at N1 and are
-partly offset by later scattering. Neither full-sky accuracy nor a paper RMSE
-promotion win follows from this selected-ray package.
+own the largest retained-libRadtran-disagreement ranking and the matched
+references reused by H59. The new plan does not establish interpolation as the
+cause. Production and all prior evidence remain unchanged.
 
-External00365,independent00366,interim00367 and final00368 verify. Failed00364
-preserves a sandbox-blocked browser launch. Third-ray values reused from H57
-match exactly,including the disclosed external admission lineage. All numerical
-clients exited and scratch is empty. Types,figures,source/input and numerical
-checks pass. Dedicated experiment reviewers remain disabled;checkpoint advice
-accepts the coherent completed unit and remains separate from scientific qualification.
-
-Production and earlier evidence are unchanged. No further numerical campaign
-is selected. The experiment remains open under624MiB retained,1GiB scratch and
-40GiB free-disk bounds.
+The experiment remains open under 624 MiB retained, 1 GiB scratch and 40 GiB
+free-disk bounds. Dedicated experiment reviewers remain disabled; checkpoint
+advice is separate from scientific qualification and commit authority.
 
 ## Minimal Reload Sources
 
 1. [Repository instructions](../../AGENTS.md).
 2. [Experiment entry](poc-experiments/engineering-studies/sky-accuracy-dials/README.md).
-3. [H58 results](poc-experiments/engineering-studies/sky-accuracy-dials/worst-ray-orders-results.md).
-4. [H58 plan](poc-experiments/engineering-studies/sky-accuracy-dials/worst-ray-orders-plan.md).
+3. [H59 plan](poc-experiments/engineering-studies/sky-accuracy-dials/angular-interpolation-plan.md).
+4. [H59 execution](poc-experiments/engineering-studies/sky-accuracy-dials/angular-interpolation-execution.md).
