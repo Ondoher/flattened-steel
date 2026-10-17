@@ -1,0 +1,9 @@
+{
+	"distribution": "Ubuntu",
+	"user": "ondoher",
+	"wslExecutable": "C:/Program Files/WSL/wsl.exe",
+	"executable": "/home/ondoher/flattened-steel-libradtran-2.0.1-build-20260717/bin/uvspec",
+	"dataDirectory": "/home/ondoher/flattened-steel-libradtran-2.0.1-build-20260717/data",
+	"expectedVersion": "2.0.1-MYSTIC",
+	"expectedSha256": "0065ec2c8711c3b65924492549714cf9497f8acc87cc468cd6b09092eec78881"
+}

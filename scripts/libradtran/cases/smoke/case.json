@@ -1,0 +1,11 @@
+{
+	"purpose": "Operational three-wavelength clear-sky radiance smoke check, not a paper or horizon accuracy benchmark.",
+	"geometry": "DISORT plane-parallel standard US atmosphere; ground observer, solar zenith 30 degrees, viewing elevation 20 degrees, looking away from the Sun.",
+	"quantity": "Columns: wavelength and directional spectral sky radiance (lambda, uu).",
+	"units": "nm; mW m^-2 sr^-1 nm^-1",
+	"limitations": [
+		"No aerosol; default molecular absorption and standard atmospheric profiles.",
+		"Black surface; scalar unpolarized DISORT with 16 streams.",
+		"This checks invocation and finite positive output only; it does not establish matched inputs, horizon adequacy, convergence or local-source accuracy."
+	]
+}

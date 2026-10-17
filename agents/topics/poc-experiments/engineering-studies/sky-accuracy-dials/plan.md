@@ -1,9 +1,18 @@
 # Predictable Sky Accuracy Dials Experiment Plan
 
-The current continuation is the owner-selected [flat/local horizon plan](flat-local-horizon-plan.md).
-Its [results](flat-local-horizon-results.md) and [execution notes](flat-local-horizon-execution.md)
-own current findings and completion gates. The original campaign below retains
+H48-H52 [Toronto order attribution](toronto-order-attribution-results.md) is
+complete: saved0.05-degree order budgets, independent local references,
+component controls, propagation/cancellation tests and reviewable figures.
+The [plan](toronto-order-attribution-plan.md) retains the registered method.
+No additional numerical work or production promotion is selected.
+
+The completed continuation is the owner-selected [H47 Toronto three-method order comparison](libradtran-horizon-results.md#h47-toronto-three-method-order-comparison).
+Its registration and results own current findings, qualifications and completion
+gates. Completed H42/H43 retains its zero-aerosol comparison. The earlier [flat/local plan](flat-local-horizon-plan.md) remains historical
+guidance for that completed package. The original campaign below retains
 its historical work items and gates; completed steps do not activate new runs.
+Historical review-gate wording below records its original campaign; current
+work follows the repository's no-review experiment verification policy.
 
 ## Acceptance Gate
 

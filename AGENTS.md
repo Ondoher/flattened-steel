@@ -11,31 +11,30 @@ compaction, a known initialized session follows `active-topic.md` and its
 # Checkpoint Adviser
 
 During repository bootstrap, activate `checkpoint-advisor` monitoring through
-the global `review-standards` skill after its eligibility gates pass. Keep
+the global `review-standards` skill independently of standards-review eligibility. Keep
 monitoring active for the session unless the user suspends it. The skill owns
 evaluation timing, readiness evidence, and adviser lifecycle.
 
 # Contained Experiment Verification
 
-Every experiment requires review of authored code against the canonical
-`types.md` standard by `contracts-reviewer`, in addition to its local type
-check. The experiment folder mappings must retain `types.md`, including any
-more-specific experiment assignment. Type-check success alone does not satisfy
-the required standards review.
+All existing and future contained experiments run without dedicated standards
+reviewers or independent review audits. This covers experiment source, controls,
+owning topic documents, and experiment lifecycle/verification workflow changes.
+Do not start or refresh reviewer agents for this work during bootstrap, topic
+refresh, implementation, or handoff. Reviewer readiness, calibration, review
+requests, and compliance ledgers are not experiment completion gates. Do not
+claim a standards-compliance result merely because review is disabled.
 
-Initialize and refresh the reviewer through the global `review-standards`
-skill and its eligibility gates. Experiment work requires reviewer readiness,
-applicable context refresh, and validated review evidence before an
-implementation phase is reported complete. If startup is blocked, report the
-unmet review gate; do not waive it or claim the phase is complete.
+Keep checkpoint-advisor monitoring active. The primary agent owns self-review,
+local type checking after authored code changes, and the scientific, visual,
+performance, and immutable-evidence checks required by the experiment's design
+and plan. Retain the folder-mapped standards, including `types.md`, as authoring
+and self-review guidance; those mappings do not enable experiment reviewers.
 
-This requirement applies to existing and new experiments. Historical evidence
-remains immutable; it does not require reopening completed runs. Additional
-standards and reviewer lanes follow the folder mappings and governing
-instructions, not the mere use of a browser, server, or another capability.
-Experiment-specific proof execution and evidence gates remain governed by the
-experiment design and plan. Production promotion follows the production folder
-mappings and reviewer lifecycle.
+This owner-directed repository policy supersedes older experiment-local
+instructions or workflow text requiring reviewers. Preserve all historical
+review evidence and sealed runs. Production work and promotion use their
+destination folder standards and normal reviewer lifecycle.
 
 # Experiment Lifecycle Handoff
 
@@ -49,6 +48,9 @@ Keep the permanent experiment mapping. Returning to production uses production
 folder standards and refreshes reviewer context before implementation.
 
 # Review Timing
+
+The review timing below applies to work where reviewers are enabled. Contained
+experiments follow the verification policy above.
 
 Batch standards review at stable, coherent implementation milestones. The
 primary agent owns day-to-day reasoning, self-review, and local checks; do not

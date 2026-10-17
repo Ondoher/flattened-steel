@@ -1,8 +1,19 @@
 # Predictable Sky Accuracy Dials Experiment
 
-Current owner-selected follow-on: [H41 residual tint diagnosis](horizon-tint-results.md),
-using the completed [H39 local](flat-local-aerosol-results.md) and
-[H40 distant](distant-aerosol-results.md) aerosol tests. Production remains unchanged.
+Completed [H48-H52 Toronto horizon order attribution](toronto-order-attribution-results.md)
+locates the0.05-degree excess and demonstrates angular/transport error,
+propagation and cancellation. The [plan](toronto-order-attribution-plan.md) and
+[execution summary](toronto-order-attribution-execution.md) retain scope and
+verification. No further numerical campaign or production change is selected.
+
+Latest completed follow-on: [H47 Toronto three-method order comparison](libradtran-horizon-results.md#h47-toronto-three-method-order-comparison),
+using the completed [shared validation tool](../../../../../scripts/libradtran/README.md).
+H42 reference qualification and H43's matched production compiler/lookup comparison
+are scientifically complete, with new comparison images. Completed H44 compares
+the canonical 100% aerosol atmosphere against production N4, including final
+images, spectral residuals and physical-input/convergence checks. The [H41 residual tint
+diagnosis](horizon-tint-results.md) and H39/H40 remain immutable parents.
+Production source stays read-only; no local-source extension is selected.
 
 **Reopened for owner-selected independent execution on 2026-10-16.** The
 [flat/local horizon results](flat-local-horizon-results.md) own the independent

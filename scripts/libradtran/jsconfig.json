@@ -1,0 +1,16 @@
+{
+	"compilerOptions": {
+		"allowJs": true,
+		"checkJs": true,
+		"strict": true,
+		"noEmit": true,
+		"module": "NodeNext",
+		"moduleResolution": "NodeNext",
+		"target": "ES2023",
+		"types": ["node"],
+		"maxNodeModuleJsDepth": 0,
+		"skipLibCheck": true
+	},
+	"include": ["cli.js", "verify.js", "types.d.ts"],
+	"exclude": ["../../node_modules"]
+}

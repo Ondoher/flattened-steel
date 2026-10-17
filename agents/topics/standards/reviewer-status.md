@@ -5,6 +5,14 @@ session suspension is revoked. Runtime readiness and later source reviews
 remain separate; no production or experimental source is declared clean by
 reactivating the roster.
 
+The [repository experiment verification policy](../../../AGENTS.md#contained-experiment-verification)
+disables dedicated standards reviewers and audits for all existing and future
+contained experiments, their owning topic documents, and experiment workflow
+changes as of 2026-10-16. Do not initialize or refresh reviewer lanes for that
+work. Checkpoint-advisor monitoring remains active; local verification and
+immutable evidence checks continue. Production work retains the review mode
+above.
+
 ## Activation Evidence
 
 The activation session is
@@ -30,7 +38,8 @@ governing instructions, mappings, standards or work context change.
 
 The [manifest](manifest.md) and [overlay](overlay.md) remain the repository's
 standards configuration. The permanent `experiments/` assignment retains the
-narrow experiment set and mandatory `types.md`. Production paths retain their
+narrow experiment set and `types.md` for authoring and self-review guidance.
+Experiment mappings do not activate reviewers. Production paths retain their
 own broader sets. The
 [temporary lifetime rule](overlay.md#add-temporary-experiment-standards-lifetime)
 owns experiment-specific restoration requirements; the repository

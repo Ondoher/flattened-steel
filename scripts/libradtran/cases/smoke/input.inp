@@ -1,0 +1,16 @@
+# Operational smoke case. No paper-atmosphere or horizon-equivalence claim.
+data_files_path @LIBRADTRAN_DATA@/
+atmosphere_file @LIBRADTRAN_DATA@/atmmod/afglus.dat
+source solar @LIBRADTRAN_DATA@/solar_flux/atlas_plus_modtran
+wavelength_grid_file wavelengths.txt
+spline_file wavelengths.txt
+rte_solver disort
+number_of_streams 16
+sza 30
+phi0 0
+umu -0.3420201433256687
+phi 180
+zout 0
+albedo 0
+output_user lambda uu
+quiet

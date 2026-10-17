@@ -2,10 +2,20 @@
 
 ## Objective
 
-The current continuation is the [flat/local horizon plan](flat-local-horizon-plan.md),
-selected for independent execution on 2026-10-16. Its
-[results](flat-local-horizon-results.md) establish expected appearance and physical
-reasons under declared assumptions, without presuming production is wrong. The
+Completed continuation: [H48-H52 Toronto horizon order attribution](toronto-order-attribution-results.md).
+The selected0.05-degree probes demonstrate new angular/transport errors,
+inherited amplification and cancellation, with a contained diagnostic
+intervention and independent component references. No further campaign or
+production change is selected. The plan/execution record retain scope and limits.
+
+The completed continuation is the [H47 Toronto three-method order comparison](libradtran-horizon-results.md#h47-toronto-three-method-order-comparison),
+selected on 2026-10-16. It adds matched independent GPU N1, cumulative N4 and
+all-order estimates to saved H45/H46 production and libRadtran results, with
+three-angle color images, spectral plots, sampling and integration controls.
+Completed H44's result owner retains the physical registration, scattering-order and
+view/layer-refinement limits, uncertainty, images and measured residuals.
+The earlier [flat/local results](flat-local-horizon-results.md) remain evidence
+under their declared assumptions, without presuming production is wrong. The
 [lifecycle](status.md#experiment-lifecycle) owns current work; the historical
 [suspension record](suspension.md) retains resumption history. The earlier
 [gray horizon diagnosis](horizon-diagnosis-plan.md) remains evidence. Existing
@@ -57,7 +67,7 @@ behavior changes or promotion require separate authorization.
 
 - `sky-accuracy-dials` is the unnumbered experiment identity.
 - The experiment source root is `experiments/sky-accuracy-dials/`. Authored implementation, fixtures, harnesses, runner source, configuration, and dependency manifests belong there.
-- The experiment source root owns `jsconfig.json` with `allowJs`, `checkJs`, and `noEmit` enabled. Run its type check after authored code changes and satisfy the repository's required canonical `types.md` review through `review-standards` before reporting an implementation phase complete. A specific experiment may deliberately add standards, checks, or reviewer lanes through its folder mapping and governing instructions; capability use alone does not add them.
+- The experiment source root owns `jsconfig.json` with `allowJs`, `checkJs`, and `noEmit` enabled. Run its type check after authored code changes and self-review against mapped standards, including `types.md`. The repository experiment policy disables dedicated reviewers and independent audits; checkpoint advice and the experiment's scientific and evidence checks remain active.
 - The generated-output root is `tmp/experiments/sky-accuracy-dials/`. Builds, caches, browser profiles, reports, captures, diagnostics, renders, logs, progress records, temporary files, and other generated intermediates belong only there and must remain ignored by Git.
 - Derive repository, source, and output roots from the location of a checked-in repository marker rather than `process.cwd()`.
 - Real-path-check every read and write boundary. Reject symlinks, junctions, reparse points, and any resolved path outside its declared root.

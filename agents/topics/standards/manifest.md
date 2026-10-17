@@ -26,7 +26,7 @@ Standards:
 Extends: base
 Standards:
 
-- [types.md](../../../../../Users/gande/.codex/documentation/standards/types.md) - Required types-standard review and type checking for every experiment.
+- [types.md](../../../../../Users/gande/.codex/documentation/standards/types.md) - Experiment contract guidance for authoring, self-review, and local type checking; dedicated reviewers are disabled by repository policy.
 
 ### `build`
 
@@ -96,7 +96,7 @@ Standards:
 - `scripts/flat32/` - `server` - Application build, capture, and cache-service tooling.
 - `scripts/experiments/b1-directional-sky-radiance/` - `proof-tools` - Independent scoring and GPU HTTP proof host.
 - `scripts/experiments/algorithm32-frame-parity/` - `proof-tools` - Independent CPU/GPU frame comparison and HTTP proof hosts.
-- `experiments/` - `experiment` - Every experiment requires types-standard review and type checking; deeper assignments retain types.md and may add standards.
+- `experiments/` - `experiment` - Experiments retain types.md guidance and local type checking; deeper assignments may add standards but do not activate dedicated reviewers or audits.
 
 ## Repository Overlay
 

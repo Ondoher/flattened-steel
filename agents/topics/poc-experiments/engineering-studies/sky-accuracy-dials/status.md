@@ -2,11 +2,86 @@
 
 ## Experiment Lifecycle
 
-The owner selected [H41 residual tint diagnosis](horizon-tint-results.md) using
-the completed [H39 local](flat-local-aerosol-results.md) and
-[H40 distant](distant-aerosol-results.md) aerosol spectra. H41 owns its method,
-color comparisons and separate source-review gate. The completed physical
-and cache comparisons below remain baseline evidence.
+The [repository experiment verification policy](../../../../../AGENTS.md#contained-experiment-verification)
+disables all dedicated standards reviewers and independent audits for contained
+experiments and their owning topic documents. Checkpoint-advisor monitoring stays
+active. Local type checks, primary-agent self-review, and experiment proof and
+evidence checks remain required. Historical review records below retain their
+original scope; new work has no reviewer-readiness or compliance-ledger gate.
+
+The owner selected [H42 matched libRadtran horizon investigation](libradtran-horizon-results.md).
+H48-H52 [Toronto order attribution](toronto-order-attribution-results.md) is
+complete through selected final00342. Seventeen immutable runs00326-00342
+retain the saved-order budget, instrumented baselines, continuous local and
+angular references, frozen-input transport, recurrence interventions and final
+figures. The results owner records exact outcomes, six point-precision misses,
+the repaired reference-tangent arithmetic and unresolved residual attribution.
+Final local type checks, image inspection, run verification and cleanup pass.
+No additional compute or production change is selected. The
+[execution summary](toronto-order-attribution-execution.md) owns decisions,
+timings and checkpoint status.
+
+H47 is complete: GPU pilot00322 and matched independent measurement00323 feed
+final three-method, three-angle color/spectral report00325. Independent N1,
+cumulative N4 and all-order estimates are separate; full brightness agrees
+with libRadtran within0.2% at all rays. Sampling targets pass, paired integration
+controls are small, type checking and visual inspection pass, and all accepted
+runs verify. Failed spawn00321 and preliminary render00324 remain immutable.
+All owned jobs exited and scratch cleanup passed. The results owner retains
+exact numbers, limits and images. No production change or further numerical
+campaign is selected. Checkpoint advice remains separate from commit authority.
+H46 is complete: accepted pilot00318, 24-case measurement00319 and report00320
+add matched Toronto external N1 estimates, three-way N1 colors/spectra and
+updated first/full horizon colors. The result owner records the method,
+agreement, sampling and finite-epsilon intervals, and unmet individual-band
+precision targets. Source type checking, visual inspection and run verification
+pass; all owned jobs exited and scratch cleanup passed. The displayed direct
+N1 solver is distinct from the broader fixed-canonical GPU probe's separate
+order1–4/all-order capability, which is not yet Toronto-adapted. No further
+numerical campaign or production change is selected.
+H45 is complete: matched Toronto aerosol optical-material
+horizon probes, with unchanged H44 geometry/extinction. Its registration in the
+same results owner defines the contained optical adapter, independent phase/layer
+controls, repeated measurements and images. Implementation type checking passed;
+hardware run 00310, independent 20-case reference 00315 and final report 00316 are
+accepted and verified. Final paired colors, material-response image and spectra
+are linked by the results owner, which records the large production response,
+input matching, independent N1 and F68 normalization diagnostics, uncertainty
+and completed controls. Cancelled long-moment 00311 and wavelength-edge
+rejection 00313 remain immutable; direct-table pilots 00312/00314 pass. All owned
+jobs exited and scratch was cleaned. No further numerical campaign or
+production change is selected. Accepted display-only derivative00317 adds
+side-by-side N1/full colors and spectral plots from saved data; no transport
+was rerun. Its type check, visual inspection, run verification and scratch
+cleanup passed. The results owner links all figures and exact solver labels.
+Checkpoint advice remains separate from commits.
+H44 is complete through accepted pilot 00302, production 00303, numerical
+qualification 00307 and final report 00308. The results owner links final
+images, spectral residuals, input checks, layer/view controls and uncertainty.
+Aggregate 00304 remains unqualified for its two heartbeat gaps; all sixteen
+individual solver runs succeeded and were reauthenticated without rerunning
+transport. Progress images 00305/00306 remain immutable. Local type checking
+and qualified-run verification passed. All owned processes exited and scratch
+cleanup passed; no numerical run or further production change is selected.
+Dedicated experiment reviewers and audits remain disabled.
+Its registration and results own scientific scope and conclusions. The shared
+tool's completed setup is recorded under
+`.codex-tmp/review-standards/session-Hj5CLj/validation-r3.json` (CLEAN).
+H42 scientific qualification is complete through accepted 00295 and derivative
+00296; its results own all metrics and interpretation. Its completed pre-policy
+source review is preserved under `.codex-tmp/review-standards/session-ogp1vu/`.
+H43 scientific work is complete: accepted 00299 matches the production compiler
+and lookup to the reference, with comparison PNGs and metrics in derived 00300.
+The same result owner retains the conclusions and limits. Its pre-policy source
+review remains preserved in session-1iFHYX. All numerical jobs
+have exited. Earlier evidence remains immutable; production source is unchanged
+for H43. H44 is the separately selected numerical continuation above. The owner-selected display-only
+extension is accepted as derivative 00301, comparing the saved N4/all-order
+spectra through three display models. The same results owner links its images
+and conversion details. The extension's completed pre-policy review is retained
+in session-luoNfs/validation-r2.json. These are historical review records;
+new experiment work follows the no-review policy above. No transport was rerun
+for this extension.
 
 **Reopened for owner-selected independent execution on 2026-10-16.**
 The [flat/local horizon plan](flat-local-horizon-plan.md) is the current continuation.

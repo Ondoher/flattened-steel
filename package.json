@@ -46,6 +46,9 @@
 	},
 	"scripts": {
 		"format:check": "prettier --check .",
+		"libradtran": "node scripts/libradtran/cli.js",
+		"typecheck:libradtran": "tsc -p scripts/libradtran/jsconfig.json",
+		"verify:libradtran": "node scripts/libradtran/verify.js",
 		"test:animation-evidence": "node --test --test-isolation=none scripts/animation-evidence/animation-evidence.test.js",
 		"typecheck:animation-evidence": "tsc -p scripts/animation-evidence/jsconfig.json",
 		"verify:animation-evidence:browser": "node scripts/animation-evidence/verify-browser-compatibility.js",

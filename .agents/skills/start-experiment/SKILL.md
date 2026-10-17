@@ -16,7 +16,7 @@ Create one isolated experiment without granting it authority over production cod
 5. Validate existing normalization, then run `node <this-skill>/scripts/scaffold-experiment.mjs` with the repository, slug, title, objective, and acceptance question. The helper uses the slug as the experiment folder, uses the installed shared folder parser, and reports the complete experiment folder plus the source folder's selected set; it never changes applicability.
 6. Add the experiment to `agents/topics/poc-experiments/engineering-studies/README.md`, creating that concise routing index when absent.
 7. Unless the engineer requests scaffold-only creation, update `agents/topics/active-topic.md` to route to `agents/topics/poc-experiments/engineering-studies/<experiment-folder>/README.md`. Its minimal reload sources are repository `AGENTS.md`, then the experiment `README.md`, `design.md`, `plan.md`, and `status.md`.
-8. Follow the repository's contained-experiment verification policy: every experiment requires both its local type check and a `contracts-reviewer` review against canonical `types.md`. Initialize or refresh reviewer context through the global `review-standards` skill after its eligibility gates pass. Run the type check after authored code changes and require validated review evidence before reporting an implementation phase complete. Report blocked readiness or review honestly; a passing type check does not replace review. Follow any additional standards, checks, or reviewer lanes assigned to that specific experiment.
+8. Follow the repository's [contained-experiment verification policy](../../../AGENTS.md#contained-experiment-verification): do not initialize dedicated standards reviewers or independent audits. Keep checkpoint-advisor monitoring active. Run the local type check after authored code changes, self-review against the folder-mapped standards, and satisfy the experiment's scientific and evidence checks. Reviewer readiness and compliance ledgers are not experiment completion gates.
 
 The scaffold command must stop rather than overwrite any existing topic, source, or output root. Never reuse an old output directory for a new experiment.
 
@@ -59,7 +59,7 @@ The topic entry states the objective, governing documents, and repository surfac
 
 Keep authored implementation, fixtures, harnesses, and runner source under `experiments/<experiment-folder>/`. Keep every generated build, cache, capture, profile, report, log, progress record, and intermediate under `tmp/experiments/<experiment-folder>/`. Production and other experiments are read-only inputs unless the engineer separately authorizes promotion or cross-experiment changes.
 
-Each experiment owns `experiments/<experiment-folder>/jsconfig.json` with JavaScript type checking enabled and no emission. The repository's contained-experiment verification policy owns the required types review and its lifecycle. Every experiment folder assignment must retain `types.md`; a more-specific assignment may add standards but cannot remove this requirement. The experiment's own scientific, visual, performance, recording, and evidence gates still apply when its design or plan requires them.
+Each experiment owns `experiments/<experiment-folder>/jsconfig.json` with JavaScript type checking enabled and no emission. Every experiment folder assignment retains `types.md` as authoring and self-review guidance. A more-specific assignment may add standards; mappings do not enable dedicated reviewers or audits. The experiment's scientific, visual, performance, recording, and evidence gates still apply when its design or plan requires them.
 
 Every operation expected to run longer than one minute must write append-only progress events to its run's `progress.jsonl` at phase transitions and at least once every 30 seconds while active. Console output may supplement that file but cannot replace it. A monitor must be able to tail the file without attaching to the process.
 
@@ -72,7 +72,7 @@ After creation:
 - confirm the output root is ignored by Git;
 - confirm no generated file was written beneath the source root;
 - run `npx --no-install tsc -p experiments/<experiment-folder>/jsconfig.json` after authored implementation exists and before an implementation phase is reported complete;
-- confirm required types-review readiness and applicable context refresh through `review-standards`, or report the blocking gate; require validated review evidence for completed implementation phases;
+- confirm dedicated standards reviewers and audits are disabled and checkpoint-advisor monitoring remains active; complete self-review and the experiment's own proof/evidence gates;
 - run `quick_validate.py` when this skill itself changes.
 - run `node <this-skill>/scripts/verify-scaffold-experiment.mjs` when the scaffold helper or folder-identity contract changes.
 

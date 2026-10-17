@@ -40,7 +40,7 @@ Restore an experiment-only named set declaration only when its prior state is re
 
 Keep the repository's permanent `experiments/` assignment and mandatory `types.md`. Retained experimental source stays governed by its folder. Production files use their own broader folder mappings regardless of the active topic. Ending or suspending does not move source to production, grant a global waiver, or reopen historical review evidence.
 
-For suspension, retain the exact removed temporary entries and their prior configuration in the resumption record as provenance. That record is not active standards authority. A future resumption must check current mappings and compatibility before reinstating any still-authorized entries in the manifest or overlay and refreshing reviewers.
+For suspension, retain the exact removed temporary entries and their prior configuration in the resumption record as provenance. That record is not active standards authority. A future resumption must check current mappings and compatibility before reinstating any still-authorized entries in the manifest or overlay while keeping dedicated experiment reviewers and audits disabled under the repository experiment policy.
 
 Validate the manifest, overlay and representative experiment and destination paths after restoration. Refresh root `STANDARDS.md` through `write-standards-guide`; do not edit the generated guide manually or rewrite the durable first-normalization attestation.
 
@@ -52,9 +52,9 @@ For **ended** work, replace the active next action with the final disposition an
 
 For **suspended** work, also record the smallest useful reload set, the next unconsumed task, compatibility checks needed before resuming, and any temporary standards configuration that was deactivated. Preserve the experiment's production adoption hold.
 
-Select the next topic from the owner's request. If none is selected, update `active-topic.md` to state that no execution topic is selected and that the last experiment is ended or suspended awaiting owner selection. Retain links to its handoff as context, not an active execution queue; do not invent a production task. When changing topics, update `active-topic.md` with the canonical entry and minimal reload sources and run `review-standards` topic-refresh before further implementation.
+Select the next topic from the owner's request. If none is selected, update `active-topic.md` to state that no execution topic is selected and that the last experiment is ended or suspended awaiting owner selection. Retain links to its handoff as context, not an active execution queue; do not invent a production task. When changing topics, update `active-topic.md` with the canonical entry and minimal reload sources and reload the destination's instructions. For another contained experiment, keep dedicated reviewers and audits disabled. When returning to production, run `review-standards` topic-refresh before further implementation under the destination's review policy.
 
-Reviewer startup and source-review evidence remain governed by `review-standards`. Report a blocked refresh honestly while preserving the requested disposition; reviewer readiness never substitutes for source compliance. Consult an already-active checkpoint adviser after the coherent handoff under its existing policy. This skill does not independently authorize a commit.
+The repository's [contained-experiment verification policy](../../../AGENTS.md#contained-experiment-verification) disables dedicated experiment reviewers and audits. Preserve historical review records without treating their open gates as new experiment completion requirements. Production reviewer startup and source-review evidence remain governed by `review-standards`; report any blocked production refresh honestly while preserving the requested experiment disposition. Consult an already-active checkpoint adviser after the coherent handoff under its existing policy. This skill does not independently authorize a commit.
 
 ## Handoff result
 
