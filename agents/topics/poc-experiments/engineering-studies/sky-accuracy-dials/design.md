@@ -1,5 +1,7 @@
 # Predictable Sky Accuracy Dials Experiment Design
 
+Completed [H57 selected paper-ray order comparison](paper-ray-orders-results.md): all40 wavelengths for three adverse/control rays, matched independent GPU and libRadtran references, final swatches/spectra and pure-order cancellation diagrams in verified00363. The corrections reduce excess at one low ray but deepen a deficit at its counterpart; near the Sun, improved later-order contributions expose unchanged dim N1 light. External sampling limits and the disclosed post-compute monitoring repair remain explicit. Production is unchanged.
+
 Completed [H56 B1 regression diagnosis](paper-b1-diagnosis-results.md): both full Direct40 ablations and the factorial/order/reference ledgers are accepted through00351. Transport and normalization each worsen paper RMSE slightly; their changes expose existing radiance deficits and interact. The normalization second-order change helps the final fit, but third/fourth-order changes outweigh it. Reconstruction/rounding contributes negligibly. Toronto evidence is preserved; production is unchanged.
 
 ## Objective

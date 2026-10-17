@@ -1,5 +1,7 @@
 # H55 Bruneton B1: Paper Baseline40 And Normalized60
 
+The follow-on [H57 selected-ray order comparison](paper-ray-orders-results.md) diagnoses concrete cancellation witnesses against matched independent and libRadtran references. It does not change the full B1 scores below.
+
 The owner selected the full [paper comparison plan](paper-b1-plan.md), following
 H53/H54's selected-ray and full-scene observations. Completed accepted run `00347-h55-paper-b1` retains all 40 wavelengths and the
 requested interval scores and dome figures. Production remains unchanged.
