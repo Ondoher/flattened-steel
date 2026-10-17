@@ -1,5 +1,9 @@
 # Predictable Sky Accuracy Dials Experiment
 
+The [H54 selected-ray reference overlay](toronto-order-attribution-results.md#h54-selected-ray-with-libradtran)
+adds saved libRadtran references to 00342's 0.05-degree cumulative-order plots,
+with explicit N2/N3 gaps and an N4/all-orders distinction. No solver was rerun.
+
 Completed [H53 matched full-scene capture](scene-render-results.md) shows
 original15 and normalized60 caches in the actual production renderer, for
 canonical and Toronto optical material separately. The results own all image

@@ -28,6 +28,52 @@ All images are scientific swatches/plots, not app screenshots. SVG copies
 and complete numerical evidence accompany them in accepted
 [00342](../../../../../tmp/experiments/sky-accuracy-dials/runs/00342-h52-attribution/sealed.json).
 
+## H54: Selected Ray With libRadtran
+
+The owner clarified that the requested reference belongs beside 00342's single
+0.05-degree ray and cumulative N1-1 through N1-4 results, rather than in a full
+scene. Accepted [00346](../../../../../tmp/experiments/sky-accuracy-dials/runs/00346-h54-lib-overlay/sealed.json)
+adds the saved external references while preserving 00342 and every parent:
+
+- [Four-column colors](../../../../../tmp/experiments/sky-accuracy-dials/runs/00346-h54-lib-overlay/comparison.png):
+  original production, intervention, independent cumulative orders and libRadtran.
+- [Cumulative spectral overlays](../../../../../tmp/experiments/sky-accuracy-dials/runs/00346-h54-lib-overlay/spectra.png).
+- [Intervention/reference detail and spectral residuals](../../../../../tmp/experiments/sky-accuracy-dials/runs/00346-h54-lib-overlay/reference-detail.png).
+- [Exact spectra, metadata and derivation](../../../../../tmp/experiments/sky-accuracy-dials/runs/00346-h54-lib-overlay/analysis.json).
+
+The external column contains the saved H46 N1 finite-epsilon estimate in the
+first row and the all-orders libRadtran result in the final row. No external
+cumulative N2/N3 results were measured; those cells remain explicitly blank.
+The final row retains different order limits: intervention/independent N4
+versus libRadtran all orders. H47 estimates the above-four contribution at
+approximately 0.8% of full luminance for this ray. Neither omission nor the
+small tail is a reason to call the final reference an isolated N4 result.
+
+Direct comparison of saved means gives intervention Y 5206.33 versus external
+5280.51 cd/m2 (-1.405%). Their spectral means above 440 nm differ by about3%
+or less; the largest full-basis difference is approximately-9.80% at375.7nm.
+All uncertainty and finite-epsilon qualifications remain inherited; these
+residuals do not certify a globally accurate production correction. Colors
+retain 00342's fixed midpoint-CIE/production-p2 mapping without fitting.
+
+The report authenticates accepted H52/H47 parents and requires exactly equal
+original-production N1/N4 spectra before joining the external references.
+It uses the unchanged registered material, geometry, wavelengths and lux.
+No cache, atmospheric transport, libRadtran solver or scene rendering was
+rerun. Figure generation took9.566seconds from initial progress to terminal
+seal, including browser rasterization and evidence checks; this is not solver
+time. Source type checking, image inspection, run verification and cleanup pass.
+
+Execution decisions: (1) preserve the one-ray/four-cumulative-row scope;
+(2) derive a new report rather than editing immutable00342; (3) use only the
+available external N1 estimate and all-orders result, leaving N2/N3 blank;
+(4) add a full-spectrum detail/residual plot so the original production excess
+does not visually obscure close reference curves. No dedicated reviewers or
+audits ran. The checkpoint adviser recommends this completed derivative as
+`Add libRadtran overlay for the Toronto horizon attribution`; local checkpoint
+authorization follows independent-execution. Git history owns its identity.
+No production change, push or additional scientific campaign is selected.
+
 ## H48: Where The Excess Appears
 
 Accepted [00326](../../../../../tmp/experiments/sky-accuracy-dials/runs/00326-h48-order-budget/sealed.json)

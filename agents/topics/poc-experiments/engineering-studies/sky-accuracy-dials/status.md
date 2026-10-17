@@ -2,6 +2,13 @@
 
 ## Experiment Lifecycle
 
+Completed [H54 selected-ray libRadtran overlay](toronto-order-attribution-results.md#h54-selected-ray-with-libradtran)
+adds accepted00346 colors, cumulative spectra and reference/residual detail.
+Original00342 and all parents remain immutable. External N1 and all-orders
+references are correctly labeled; unavailable cumulative N2/N3 cells stay blank.
+No transport or scene calculation was rerun. Type checks, image inspection,
+run verification and cleanup pass. No further campaign or promotion is selected.
+
 Completed [H53 matched full-scene capture](scene-render-results.md) retains
 accepted canonical00343, Toronto00344 and derived report00345. Hardware GPU
 builds feed the unchanged production renderer with paired original15 and

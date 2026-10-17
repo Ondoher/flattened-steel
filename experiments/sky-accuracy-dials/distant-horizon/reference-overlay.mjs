@@ -1,0 +1,47 @@
+import assert from 'node:assert/strict';
+import {createRun,verifyRun,readRepository,identity} from '../io/files.mjs';
+import {colorimetry,ciePath} from '../horizon/diagnosis-color.mjs';
+import {runRoot,centers,rgb,panel,render} from './attribution-common.mjs';
+
+/** @typedef {{spectrum:number[],color:HorizonColorReading}} SpectralOverlayReading */
+/** @typedef {SpectralOverlayReading&{order:number,baseline:SpectralOverlayReading,independent:SpectralOverlayReading}} SpectralOverlayOrder */
+
+/** Add saved external references to the selected H52 ray, without rerunning any transport.
+ * @returns {Promise<void>} New immutable images/analysis; earlier report remains unchanged.
+ */
+async function main(){
+ assert.equal(process.argv.length,2);
+ const attribution=runRoot+'00342-h52-attribution',external=runRoot+'00325-h47-order-report',physical=runRoot+'00288-h40-distant';
+ const parents=[attribution,external,physical].map(verifyRun);
+ for(const parent of parents)assert.equal(JSON.parse(readRepository(parent.path,parent).toString()).state,'accepted');
+ /** Read and retain the exact authenticated input identity. @param {string} p @returns {unknown} Parsed immutable artifact. */
+ const read=p=>{const bytes=readRepository(p);parents.push(identity(p,bytes));return JSON.parse(bytes.toString());};
+ const orders=/** @type {{full:SpectralOverlayOrder[]}} */(read(attribution+'/analysis.json')).full;
+ const ext=/** @type {{external:HorizonTorontoExternalRow[]}} */(read(external+'/analysis.json')).external.find(r=>r.elevation===0.05);
+ const registration=/** @type {HorizonLibParent} */(read(physical+'/registration.json'));
+ assert.ok(ext);assert.equal(orders.length,4);
+ assert.deepEqual(orders[0].baseline.spectrum,ext.productionN1.spectrum);
+ assert.deepEqual(orders[3].baseline.spectrum,ext.productionFull.spectrum);
+ const references=[{order:1,label:'libRadtran N1 estimate',spectrum:ext.externalN1.spectrum,luminanceHalfWidth95:ext.externalN1.luminanceHalfWidth95},{order:4,label:'libRadtran all orders',spectrum:ext.externalFull.meanSpectrum,luminanceHalfWidth95:ext.externalFull.luminanceHalfWidth95}];
+ for(const r of [...references,...orders])assert.ok(r.spectrum.length===centers.length&&r.spectrum.every(v=>Number.isFinite(v)&&v>0));
+ parents.push(identity(ciePath),identity('src/algorithm32/implementation/color-reset-slope-078-p2/ColorResetSlope078P2ColorDisplayModel.js'));
+ const rows=orders.map(r=>{
+  const external=references.find(e=>e.order===r.order);
+  const externalColor=external?colorimetry(external.spectrum,'bin-integrated'):null;
+  const relativeSpectrum=external?r.spectrum.map((v,c)=>v/external.spectrum[c]-1):null;
+  return {...r,external:external?{...external,color:externalColor}:null,relativeToExternalY:external?r.color.luminanceCdPerM2/externalColor.luminanceCdPerM2-1:null,relativeSpectrum};
+ });
+ const run=createRun('h54-lib-overlay',{parents,operation:'Authenticate H52 cumulative spectra and H47 external N1/all-order references, require exact baseline-spectrum identity at the selected0.05-degree ray, and add external swatches/overlays using the unchanged fixed-p2 display. No transport, cache compilation or scene rendering.',parameters:{attribution,external,elevationDegrees:0.05,heading:'away from Sun',lux:registration.lux,orderMatching:'External N1 is a finite-epsilon estimate; all-order reference appears only beside cumulative N4. External N2/N3 are unavailable and remain blank.',display:'Same H52 midpoint CIE and production p2 swatches, no exposure fitting or normalization.'}});
+ let failure=null;
+ try{
+  const swatches=`<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="885"><rect width="100%" height="100%" fill="white"/><g font-family="sans-serif" fill="#111"><text x="25" y="32" font-size="24">H52 selected Toronto ray with libRadtran: 0.05 degrees, away from Sun</text><text x="25" y="60" font-size="15">Same saved spectra and fixed production p2 display. Original00342 is preserved; this report adds the external reference.</text>${['Original production','Diagnostic intervention','Independent cumulative','libRadtran reference'].map((v,j)=>`<text x="${145+j*415}" y="99" font-size="19">${v}</text>`).join('')}${rows.map((r,i)=>{const y=125+i*160;return `<text x="20" y="${y+38}" font-size="18">N1-${r.order}</text>${[r.baseline,r,r.independent,r.external].map((v,j)=>{const x=145+j*415;return v?`<rect x="${x}" y="${y}" width="380" height="82" fill="rgb(${rgb(v.spectrum,registration.lux).join(',')})"/><text x="${x}" y="${y+107}" font-size="14">Y ${v.color.luminanceCdPerM2.toFixed(1)} cd/m2; R/B ${v.color.redBlueRatio.toFixed(3)}</text>${j===3?`<text x="${x}" y="${y+132}" font-size="14">${r.external.label}; Y95 +/-${r.external.luminanceHalfWidth95.toFixed(1)}</text>`:''}`:`<rect x="${x}" y="${y}" width="380" height="82" fill="#eee"/><text x="${x+18}" y="${y+45}" font-size="16">No matched cumulative N${r.order} result</text>`;}).join('')}${r.external?`<text x="145" y="${y+132}" font-size="14">Intervention versus external: ${(100*r.relativeToExternalY).toFixed(2)}% luminance.</text>`:''}`;}).join('')}<text x="25" y="810" font-size="15">N1-2 and N1-3 libRadtran cells are deliberately unpopulated. Final external result includes orders above four.</text><text x="25" y="839" font-size="14">Toronto phase/SSA above440nm; original extinction and San Jose noon geometry. N1 finite-epsilon and sampling limits remain inherited.</text><text x="25" y="866" font-size="14">Scientific color swatches, not a full-scene libRadtran image. Exact spectra, limits and derivations: analysis.json.</text></g></svg>`;
+  const spectra=`<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="1230"><rect width="100%" height="100%" fill="white"/><g font-family="sans-serif"><text x="25" y="32" font-size="24">H52 selected-ray spectra with saved libRadtran references</text><text x="25" y="62" font-size="14">Magenta: original; blue: intervention; green: independent cumulative; dashed orange: external N1 estimate / all orders.</text>${rows.map((r,i)=>{const y=110+i*255,curves=[{s:r.baseline.spectrum,color:'#b22561'},{s:r.spectrum,color:'#166ec1'},{s:r.independent.spectrum,color:'#20834d'},...(r.external?[{s:r.external.spectrum,color:'#cf6a00',dash:true}]:[])];return `<text x="25" y="${y-14}" font-size="18">N1-${r.order}${r.external?' versus '+r.external.label:'; no external N'+r.order+' data'}</text>${panel(curves,85,y,1220,175)}<text x="85" y="${y+220}" font-size="13">W m^-2 sr^-1 nm^-1; actual Native15 samples, straight joins.</text>`;}).join('')}<text x="25" y="1175" font-size="14">Cumulative N4 and external all orders have different order limits; independent H47 tail is approximately0.8% of Y at this ray.</text><text x="25" y="1205" font-size="14">Sampling and finite-epsilon limitations remain inherited. No new numerical solve, fitting or production change.</text></g></svg>`;
+  const last=rows[3],rel=last.relativeSpectrum;
+  const detail=`<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="760"><rect width="100%" height="100%" fill="white"/><g font-family="sans-serif"><text x="25" y="32" font-size="24">Selected horizon: intervention and reference detail</text><text x="25" y="62" font-size="15">Blue: intervention N4. Green: independent N4. Dashed orange: libRadtran all orders. Original omitted here to show reference separation.</text>${panel([{s:last.spectrum,color:'#166ec1'},{s:last.independent.spectrum,color:'#20834d'},{s:last.external.spectrum,color:'#cf6a00',dash:true}],85,105,1220,230)}<text x="85" y="382" font-size="15">Spectral radiance in W m^-2 sr^-1 nm^-1. Candidate Y ${last.color.luminanceCdPerM2.toFixed(2)} versus external ${last.external.color.luminanceCdPerM2.toFixed(2)} cd/m2.</text><text x="25" y="430" font-size="18">Intervention / libRadtran - 1, per sampled wavelength</text>${panel([{s:rel.map(v=>100*v),color:'#166ec1'},{s:rel.map(()=>0),color:'#cf6a00',dash:true}],85,455,1220,180,-10)}<text x="85" y="684" font-size="14">Residual axis in percent. These are saved means; sampling intervals and the above-four tail remain separate.</text><text x="25" y="723" font-size="14">Below440nm retains canonical aerosol optics. Above440nm differences are about3% or less; this does not qualify a production fix.</text></g></svg>`;
+  run.write('analysis.json',{rows,wavelengthsNanometers:centers,lux:registration.lux,externalN1:ext.externalN1,externalFull:ext.externalFull,matching:{originalN1AndN4SpectraExactlyEqual:true,elevationDegrees:0.05},limits:['External N1 is the saved H46 finite-epsilon estimate, with its original precision limitations.','No external isolated cumulative N2/N3 spectra were generated.','libRadtran all orders includes an independent approximately0.8% tail above N4; keep this distinct from component errors.','Native15 straight-line joins are visual aids, not a dense spectral solve.','No new solver run, scene render, exposure fit, paper RMSE or production promotion.']});
+  await render(run,[{name:'comparison',svg:swatches,width:1800,height:885},{name:'spectra',svg:spectra,width:1400,height:1230},{name:'reference-detail',svg:detail,width:1400,height:760}]);
+ }catch(error){failure=error;}finally{run.finish(failure?'failed':'accepted',{failure:failure?String(failure):null});}
+ verifyRun(run.path);console.log(JSON.stringify({run:run.path,failure:failure?String(failure):null,relativeN4ToExternalY:rows[3].relativeToExternalY}));
+ if(failure)throw failure;
+}
+await main();
