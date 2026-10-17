@@ -1,5 +1,11 @@
 # Predictable Sky Accuracy Dials Experiment Status
 
+Stopped further [H60 incoming refinement](incoming-resolution-results.md) after
+clarifying that H59's N1 defect is outgoing-angle interpolation. The completed
+256-direction test improves higher-order error but worsens total selected-ray
+fit; it leaves N1 identical. Evidence and final
+verification are preserved. No new outgoing test or production change is selected.
+
 Completed [H59 angular interpolation attribution](angular-interpolation-results.md).
 Exact-angle N1 readout removes46-92% of the selected brightness deficits and
 improves full B1 RMSE to11.5920mW, beating original11.6229 and corrected11.6685.
