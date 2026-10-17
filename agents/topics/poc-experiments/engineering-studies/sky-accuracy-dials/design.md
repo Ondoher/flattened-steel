@@ -112,10 +112,16 @@ Append one event at process start, every phase transition, at least once every 3
 
 Budget against current disk space only. The owner's copy to another drive
 does not release space on C:. Initial observed free space was 50,601,861,120
-bytes. Stop starting work below 40 GiB free. Limit this experiment to 592 MiB
+bytes. Stop starting work below 40 GiB free. Limit this experiment to 624 MiB
 of retained evidence and 1 GiB of live scratch; enforce both before expensive
 work and before writes. Run one GPU job at a time. Do not use another drive
 or delete any previous experiment, production, or historical artifact.
+
+H58 raises the retained allowance from592 to624MiB. Observed retained evidence
+is604,303,609bytes, leaving16.4MB below the old bound. A bounded new GPU/reference
+package plus images and sealing reserve can exceed that headroom. The32MiB
+amendment preserves all earlier runs without deletion; free disk is113.9GB,
+live scratch is zero, and system/GPU memory and production limits are unchanged.
 
 H53 raises the retained allowance from 512 to 544 MiB to preserve both requested
 full-scene pairs, their sealed derivation records and the final comparison report.

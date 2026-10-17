@@ -4,7 +4,7 @@ import puppeteer from 'puppeteer';
 import {fragment, executeGpu} from '../horizon-reference/gpu.mjs';
 import {direct} from '../horizon-reference/math.mjs';
 import {createRun, readRepository, verifyRun, checkedAbsolute} from '../io/files.mjs';
-import {packet} from './packet.mjs';
+import {packet, reuseThird} from './packet.mjs';
 
 /** Add independent Lambertian reflection with explicit interaction counting.
  * @param {number} albedo @param {number} [offset=1] @returns {string}
@@ -40,11 +40,21 @@ async function main() {
 				{name: 'main', batches: 24, quadrature: 128, roulette: 8, seed: 0x21300000},
 				{name: 'control64', batches: 8, quadrature: 64, roulette: 8, seed: 0x21300000},
 			];
-	const run = createRun(pilot ? 'h57-gpu-pilot' : 'h57-independent', {
+	const reuse = p.campaign === 'h58' && !pilot;
+	const oldRoot = 'tmp/experiments/sky-accuracy-dials/runs/00355-h57-independent';
+	if (reuse) reuseThird(p, oldRoot);
+	const run = createRun(pilot ? `${p.campaign}-gpu-pilot` : `${p.campaign}-independent`, {
 		parents: p.parents,
 		operation:
 			'Independent cache-free backward Monte Carlo, analytic paper phase, exponential spherical medium and spectral Lambertian grass; separately tally interactions1-4 and compensated all orders.',
 		parameters: {
+			reusedRay: reuse
+				? {
+						ray: 2,
+						parent: oldRoot,
+						operation: 'Copy unchanged batches for the exactly matching third physical packet.',
+					}
+				: null,
 			channels,
 			paths,
 			profiles,
@@ -58,7 +68,15 @@ async function main() {
 		failure = null,
 		current = -1;
 	try {
+		if (reuse) {
+			const old = /** @type {PaperRayGpuBatch[]} */ (
+				JSON.parse(readRepository(oldRoot + '/batches.json').toString())
+			);
+			batches.push(...old.filter((b) => b.group === 2));
+			assert.equal(batches.length, 40 * 32);
+		}
 		run.write('packet.json', {rays: p.rays, centers: p.centers, grass: p.grass, channels, paths, profiles});
+		run.write('ranking.json', p.ranking);
 		const exact = [];
 		for (const channel of channels) {
 			for (const ray of p.rays) {
@@ -108,14 +126,16 @@ async function main() {
 			current = channel;
 			const shader = kernel(p.grass[channel]);
 			run.write(`kernel-${channel}.glsl`, shader);
-			const groups = p.rays.map((ray) => ({
-				id: ray.id,
-				medium: ray.medium,
-				origin: ray.origin,
-				direction: ray.direction,
-				end: ray.end,
-				channel,
-			}));
+			const groups = p.rays
+				.filter((_, i) => !reuse || i < 2)
+				.map((ray) => ({
+					id: ray.id,
+					medium: ray.medium,
+					origin: ray.origin,
+					direction: ray.direction,
+					end: ray.end,
+					channel,
+				}));
 			const result = await page.evaluate(executeGpu, shader, {
 				groups,
 				paths,

@@ -25,8 +25,8 @@ export const outputRelative = 'tmp/experiments/sky-accuracy-dials';
 const sourceRelative = 'experiments/sky-accuracy-dials';
 const MiB = 1024 ** 2;
 const minimumFreeBytes = 40 * 1024 ** 3;
-// H56 adds two complete Direct40 ablations and attribution images; preserve prior evidence.
-const retainedLimit = 592 * MiB;
+// H58 preserves prior evidence while adding two matched reference rays and diagnostic figures.
+const retainedLimit = 624 * MiB;
 const scratchLimit = 1024 * MiB;
 
 /** Hash exact bytes. @param {Uint8Array|string} bytes @returns {string} */

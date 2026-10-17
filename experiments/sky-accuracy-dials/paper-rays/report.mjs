@@ -6,6 +6,7 @@ import {packet} from './packet.mjs';
 import {color, rgb} from './color.mjs';
 import {orderBudget} from './order-budget.mjs';
 import {loadCase} from '../paper-b1/diagnosis-data.mjs';
+import {measuredFigures} from './measured.mjs';
 const labels = {
 	Baseline40: 'Paper baseline (T40)',
 	Corrected60: 'Corrected (T60 + norm)',
@@ -139,6 +140,14 @@ async function report(gpuRoot, libRoot) {
 		batches = /** @type {PaperRayGpuBatch[]} */ (g.value),
 		external = libRoot ? saved(libRoot, 'readings.json') : null,
 		readings = /** @type {PaperRayLibReading[]} */ (external?.value ?? []);
+	if (p.campaign === 'h58') {
+		for (const root of [gpuRoot, ...(libRoot ? [libRoot] : [])]) {
+			const input = JSON.parse(readRepository(root + '/packet.json').toString());
+			assert.deepEqual(input.rays, p.rays);
+			assert.deepEqual(input.centers, p.centers);
+			assert.deepEqual(input.grass, p.grass);
+		}
+	}
 	const cacheCases = [
 		{label: 'Baseline40', input: p.base},
 		{label: 'Corrected60', input: p.joint},
@@ -154,7 +163,7 @@ async function report(gpuRoot, libRoot) {
 		identity('src/algorithm32/implementation/color-reset-slope-078-p2/ColorResetSlope078P2ColorDisplayModel.js'),
 	];
 	const lux = color(p.rays[0].medium.sourceIrradiance, p.centers).Y;
-	const run = createRun(libRoot ? 'h57-order-report' : 'h57-progress', {
+	const run = createRun(libRoot ? `${p.campaign}-order-report` : `${p.campaign}-progress`, {
 		parents,
 		operation:
 			'Matched Direct40 cumulative1-4, separately reconstructed pure-order errors, all-order tails and swatches/spectra from authenticated numerical results, common CIE midpoint/p2 mapping and paper source illumination, with empirical uncertainty.',
@@ -169,6 +178,14 @@ async function report(gpuRoot, libRoot) {
 	let failure = null;
 	try {
 		const rows = [];
+		run.write('ranking.json', p.ranking);
+		run.write('selection.json', {
+			criterion:
+				p.campaign === 'h58'
+					? 'Largest corrected-cache absolute spectral RMSE versus retained libRadtran over all1377 time/ray cells and31 scored channels; not measured-paper error or change in error.'
+					: 'Largest signed score changes, not absolute RMSE.',
+			rays: p.rays,
+		});
 		for (let ray = 0; ray < 3; ray++) {
 			const witness = p.rays[ray],
 				index = witness.t * 81 + witness.x * 9 + witness.y;
@@ -415,6 +432,7 @@ async function report(gpuRoot, libRoot) {
 			orderFigure,
 			{name: 'swatches', svg: svg.join(''), width, height},
 			{name: 'spectra', svg: plots.join(''), width: spectraWidth, height: spectraHeight},
+			...(p.campaign === 'h58' ? measuredFigures(run, p, rows, lux) : []),
 		]);
 		const referenceRows = rows.filter((r) => r.method === 'Independent' || r.method === 'libRadtran');
 		run.write(
@@ -443,4 +461,4 @@ async function report(gpuRoot, libRoot) {
 const mode = process.argv[2];
 assert.ok(mode === 'qualify' || mode === 'report');
 if (mode === 'qualify') await qualify(process.argv[3], process.argv[4], process.argv[5]);
-else await report(process.argv[3], process.argv[4]);
+else await report(process.argv[3], process.argv[4] === '--worst-lib' ? undefined : process.argv[4]);

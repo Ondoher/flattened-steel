@@ -4,7 +4,7 @@ import path from 'node:path';
 import {createRun, identity, readRepository, checkedAbsolute, repositoryRoot, verifyRun, sha256} from '../io/files.mjs';
 import {moments} from '../distant-horizon/aerosol-reference.mjs';
 import {invoke} from '../distant-horizon/libradtran.mjs';
-import {packet} from './packet.mjs';
+import {packet, reuseThird} from './packet.mjs';
 import {releaseStaged} from './staging.mjs';
 
 /** Explicit spherical physical case; maxscatters includes surface reflection.
@@ -113,7 +113,7 @@ function bundle(p, config) {
 	files.set(
 		'case.json',
 		JSON.stringify({
-			purpose: 'H57 matched paper ray through diagnostic scattering orders',
+			purpose: `${p.campaign.toUpperCase()} matched paper ray through diagnostic scattering orders`,
 			geometry:
 				'Fully spherical, observer0m, spectral Lambertian grass; photon interaction count includes surface reflections.',
 			quantity: 'mc.rad.spc directional spectral radiance',
@@ -246,7 +246,7 @@ async function main() {
 				channels,
 			});
 	else
-		for (let ray = 0; ray < 3; ray++)
+		for (let ray = 0; ray < (p.campaign === 'h58' ? 2 : 3); ray++)
 			for (const order of [1, 2, 3, 4, 0])
 				for (let repeat = 0; repeat < 4; repeat++)
 					configs.push({
@@ -259,29 +259,51 @@ async function main() {
 						importance: false,
 						channels,
 					});
-	const run = createRun(pilot ? 'h57-lib-pilot' : near ? 'h57-near-control' : 'h57-libradtran', {
-		parents: [
-			...p.parents,
-			identity('scripts/libradtran/cli.js'),
-			identity('scripts/libradtran/worker.py'),
-			identity('scripts/libradtran/installation.json'),
-			identity('references/downloads/libradtran-2.0.1/libRadtran-2.0.1/libsrc_c/mystic.c'),
-		],
-		operation:
-			'Matched fully spherical MYSTIC through-interaction1/2/3/4 and all orders, explicit paper Direct40 medium/source/grass, repeated independent seeds and authenticated actual inputs.',
-		parameters: {
-			pilot,
-			near,
-			concurrency: pilot ? 1 : 2,
-			configs,
-			orderConvention:
-				'mc_maxscatters n; source counts surface reflection as an interaction; N1 independently validated before admission.',
+	const reuse = p.campaign === 'h58' && !pilot && !near;
+	const oldRoot = 'tmp/experiments/sky-accuracy-dials/runs/00361-h57-ref-data';
+	if (reuse) reuseThird(p, oldRoot);
+	const run = createRun(
+		pilot ? `${p.campaign}-lib-pilot` : near ? `${p.campaign}-near-control` : `${p.campaign}-libradtran`,
+		{
+			parents: [
+				...p.parents,
+				identity('scripts/libradtran/cli.js'),
+				identity('scripts/libradtran/worker.py'),
+				identity('scripts/libradtran/installation.json'),
+				identity('references/downloads/libradtran-2.0.1/libRadtran-2.0.1/libsrc_c/mystic.c'),
+			],
+			operation:
+				'Matched fully spherical MYSTIC through-interaction1/2/3/4 and all orders, explicit paper Direct40 medium/source/grass, repeated independent seeds and authenticated actual inputs.',
+			parameters: {
+				reusedRay: reuse
+					? {
+							ray: 2,
+							parent: oldRoot,
+							operation:
+								'Copy unchanged admitted reference readings for the exactly matching physical ray; original monitoring defect remains disclosed in parent.',
+						}
+					: null,
+				pilot,
+				near,
+				concurrency: pilot ? 1 : 2,
+				configs,
+				orderConvention:
+					'mc_maxscatters n; source counts surface reflection as an interaction; N1 independently validated before admission.',
+			},
 		},
-	});
+	);
 	/** @type {PaperRayLibReading[]} */ const readings = [];
 	let failure = null;
 	try {
+		if (reuse) {
+			const old = /** @type {PaperRayLibReading[]} */ (
+				JSON.parse(readRepository(oldRoot + '/readings.json').toString())
+			);
+			readings.push(...old.filter((r) => r.config.ray === 2));
+			assert.equal(readings.length, 20);
+		}
 		run.write('packet.json', {centers: p.centers, grass: p.grass, rays: p.rays, configs});
+		run.write('ranking.json', p.ranking);
 		let next = 0;
 		async function worker() {
 			while (next < configs.length) {
@@ -289,8 +311,8 @@ async function main() {
 				readings.push(await solve(run, p, config));
 				run.progress(
 					'cases',
-					`${readings.length}/${configs.length} cases complete`,
-					readings.length,
+					`${readings.length - (reuse ? 20 : 0)}/${configs.length} new cases complete${reuse ? '; 20 matching cases reused' : ''}`,
+					readings.length - (reuse ? 20 : 0),
 					configs.length,
 				);
 			}

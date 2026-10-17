@@ -1,5 +1,10 @@
 # H55 Bruneton B1: Paper Baseline40 And Normalized60
 
+The [H58 largest-libRadtran-disagreement comparison](worst-ray-orders-results.md)
+separates disagreement with retained full-B1 libRadtran from newly matched
+physical references at the largest-error rays. It does not alter these paper
+scores or the promotion gate.
+
 The follow-on [H57 selected-ray order comparison](paper-ray-orders-results.md) diagnoses concrete cancellation witnesses against matched independent and libRadtran references. It does not change the full B1 scores below.
 
 The owner selected the full [paper comparison plan](paper-b1-plan.md), following

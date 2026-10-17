@@ -16,6 +16,21 @@ type PaperRayWitness = {
 };
 /** Inputs shared by all three independent implementations; spectral arrays use Direct40. */
 type PaperRayPacket = {
+	campaign: 'h57' | 'h58';
+	ranking: {
+		time: string;
+		t: number;
+		ray: number;
+		x: number;
+		y: number;
+		elevation: number;
+		separation: number;
+		baselineSSE: number;
+		candidateSSE: number;
+		baselineRmse: number;
+		correctedRmse: number;
+	}[];
+	target: DialAnalysisBoundary;
 	parents: DialFileIdentity[];
 	centers: number[];
 	grass: number[];
