@@ -1,5 +1,7 @@
 # Predictable Sky Accuracy Dials Experiment
 
+Completed [H55 Bruneton B1 comparison](paper-b1-results.md): all 40 paper wavelengths, all 17 interval scores and Figure5 dome comparisons are retained in accepted run 00347. Aggregate RMSE rises from 11.6229 to 11.6685 (+0.3921%); the paper no-regression gate is not met. Exact baseline/J1 checks, local types, image inspection, immutable verification and cleanup pass. Production remains unchanged; the experiment stays open.
+
 The [H54 selected-ray reference overlay](toronto-order-attribution-results.md#h54-selected-ray-with-libradtran)
 adds saved libRadtran references to 00342's 0.05-degree cumulative-order plots,
 with explicit N2/N3 gaps and an N4/all-orders distinction. No solver was rerun.

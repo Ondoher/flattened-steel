@@ -36,7 +36,7 @@ export function acceptControls(input = {}) {
 		![48, 51, 55, 63].includes(controls.altitudeCount) ||
 		![27, 39, 51].includes(controls.outgoingWidth) ||
 		![20, 40, 80, 160].includes(controls.sourceIntervals) ||
-		![40, 80, 160, 320].includes(controls.transportIntervals)
+		![40, 60, 80, 160, 320].includes(controls.transportIntervals)
 	)
 		throw new RangeError('Unsupported numerical count.');
 	if (!['quadratic', 'altitude-segmented'].includes(controls.viewRule))

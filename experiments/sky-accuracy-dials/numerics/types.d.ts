@@ -47,7 +47,7 @@ type SkyControlInput = Readonly<{
 	/** Cubed-sphere face width: 27, 39 or 51. */ outgoingWidth?: number;
 	/** Incoming family and its explicit resolution. */ incoming?: SkyIncomingControl;
 	/** Source-path trapezoid interval count: 20, 40, 80 or 160. */ sourceIntervals?: number;
-	/** Recurrence-path interval count: 40, 80, 160 or 320. */ transportIntervals?: number;
+	/** Recurrence-path interval count: 40, 60, 80, 160 or 320. */ transportIntervals?: number;
 	/** Final-view interval placement; omission retains quadratic. */ viewRule?: SkyViewRule;
 	/** Quadratic total counts 30/60/120, or altitude-segment substeps 1/2/4/8/16. */ viewIntervals?: readonly number[];
 	/** Unique final-view solar operators; recurrence remains unchanged. */ solarInterpolations?: readonly SkySolarInterpolation[];

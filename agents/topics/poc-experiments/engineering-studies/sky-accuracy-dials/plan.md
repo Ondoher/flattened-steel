@@ -1,5 +1,7 @@
 # Predictable Sky Accuracy Dials Experiment Plan
 
+Completed [H55 Bruneton B1 comparison](paper-b1-results.md): all 40 paper wavelengths, all 17 interval scores and Figure5 dome comparisons are retained in accepted run 00347. Aggregate RMSE rises from 11.6229 to 11.6685 (+0.3921%); the paper no-regression gate is not met. Exact baseline/J1 checks, local types, image inspection, immutable verification and cleanup pass. Production remains unchanged; the experiment stays open.
+
 Completed [H53 full-scene capture](scene-render-results.md) follows the owner's
 [scene-only plan](scene-render-plan.md), with separate matched canonical and
 Toronto pairs and verified images. No additional campaign is selected.
