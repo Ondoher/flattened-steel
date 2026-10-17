@@ -16,12 +16,12 @@ for(const f of [loadPublishedFigure5Panels,renderAlgorithm32Figure5Panel,renderF
 function xml(v){return String(v).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;');}
 
 /** Common-scale progress or RMSE bars. No color-to-radiance conversion is applied.
- * @param {readonly B1ScalarRow[]} rows @param {string} title @param {string} [units]
+ * @param {readonly B1ScalarRow[]} rows @param {string} title @param {string} [units] @param {string} [candidateLabel]
  * @returns {string} Standalone SVG.
  */
-export function scalarFigure(rows,title,units='Spectral radiance W m^-2 sr^-1 nm^-1'){
+export function scalarFigure(rows,title,units='Spectral radiance W m^-2 sr^-1 nm^-1',candidateLabel='Normalized60'){
  const width=1050,height=130+rows.length*28,max=Math.max(1e-20,...rows.flatMap(r=>[r.baseline??0,r.candidate??0]));
- const out=[`<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}"><rect width="100%" height="100%" fill="white"/><g font-family="Arial" fill="#202124"><text x="20" y="30" font-size="18">${xml(title)}</text><text x="20" y="55" font-size="13">${xml(units)}</text><text x="20" y="79" fill="#4c78a8">Paper baseline40</text><text x="190" y="79" fill="#e07b32">Normalized60</text>`];
+ const out=[`<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}"><rect width="100%" height="100%" fill="white"/><g font-family="Arial" fill="#202124"><text x="20" y="30" font-size="18">${xml(title)}</text><text x="20" y="55" font-size="13">${xml(units)}</text><text x="20" y="79" fill="#4c78a8">Paper baseline40</text><text x="190" y="79" fill="#e07b32">${xml(candidateLabel)}</text>`];
  rows.forEach((r,i)=>{const y=100+i*28;out.push(`<text x="20" y="${y+12}" font-size="12">${xml(r.label)}</text>`);for(const [j,v] of [r.baseline,r.candidate].entries()){if(v===undefined)continue;out.push(`<rect x="110" y="${y+j*10}" width="${650*v/max}" height="8" fill="${j?'#e07b32':'#4c78a8'}"/><text x="${790+j*120}" y="${y+12}" font-size="12">${v.toFixed(6)}</text>`);}});
  return out.join('')+'</g></svg>';
 }
