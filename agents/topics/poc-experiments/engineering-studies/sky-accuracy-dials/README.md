@@ -1,5 +1,10 @@
 # Predictable Sky Accuracy Dials Experiment
 
+Completed [H53 matched full-scene capture](scene-render-results.md) shows
+original15 and normalized60 caches in the actual production renderer, for
+canonical and Toronto optical material separately. The results own all image
+links, measurements, execution decisions and limits; production is unchanged.
+
 Completed [H48-H52 Toronto horizon order attribution](toronto-order-attribution-results.md)
 locates the0.05-degree excess and demonstrates angular/transport error,
 propagation and cancellation. The [plan](toronto-order-attribution-plan.md) and

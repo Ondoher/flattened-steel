@@ -2,6 +2,11 @@
 
 ## Objective
 
+Completed [H53 matched full-scene capture](scene-render-results.md) adds actual
+production-renderer before/after images for canonical and Toronto optical
+material separately. Its results own appearance measurements, verification,
+timings and decisions. It does not promote the diagnostic change.
+
 Completed continuation: [H48-H52 Toronto horizon order attribution](toronto-order-attribution-results.md).
 The selected0.05-degree probes demonstrate new angular/transport errors,
 inherited amplification and cancellation, with a contained diagnostic
@@ -103,10 +108,19 @@ Append one event at process start, every phase transition, at least once every 3
 
 Budget against current disk space only. The owner's copy to another drive
 does not release space on C:. Initial observed free space was 50,601,861,120
-bytes. Stop starting work below 40 GiB free. Limit this experiment to 512 MiB
+bytes. Stop starting work below 40 GiB free. Limit this experiment to 544 MiB
 of retained evidence and 1 GiB of live scratch; enforce both before expensive
 work and before writes. Run one GPU job at a time. Do not use another drive
 or delete any previous experiment, production, or historical artifact.
+
+H53 raises the retained allowance from 512 to 544 MiB to preserve both requested
+full-scene pairs, their sealed derivation records and the final comparison report.
+After the two accepted captures, actual retained bytes were 540,116,069, including
+the second run's 11,086,416-byte final seal. Its sealing overhead exceeded the
+allocator's 2 MiB reserve and prevented allocating the small report. There were
+115,277,656,064 free disk bytes and no live scratch. This bounded amendment
+requires no numerical rerun, deletion or modification of earlier evidence;
+system/GPU memory limits and production cache configuration do not change.
 
 Reproducible bundles, browser profiles, uploads, and intermediate fields belong
 under `tmp/experiments/sky-accuracy-dials/scratch/<unique-owner>/`. Scratch is

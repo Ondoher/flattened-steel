@@ -1,5 +1,9 @@
 # Predictable Sky Accuracy Dials Experiment Plan
 
+Completed [H53 full-scene capture](scene-render-results.md) follows the owner's
+[scene-only plan](scene-render-plan.md), with separate matched canonical and
+Toronto pairs and verified images. No additional campaign is selected.
+
 H48-H52 [Toronto order attribution](toronto-order-attribution-results.md) is
 complete: saved0.05-degree order budgets, independent local references,
 component controls, propagation/cancellation tests and reviewable figures.

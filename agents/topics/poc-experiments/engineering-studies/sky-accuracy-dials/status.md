@@ -2,6 +2,16 @@
 
 ## Experiment Lifecycle
 
+Completed [H53 matched full-scene capture](scene-render-results.md) retains
+accepted canonical00343, Toronto00344 and derived report00345. Hardware GPU
+builds feed the unchanged production renderer with paired original15 and
+normalized60 caches. Canonical baseline/deployed cache witnesses and images
+match exactly; J1 invariance, final local type checks, image inspection, run
+verification and cleanup pass. The results own full images, measured display
+responses, timing limits, the clarified Toronto/deployed labels and the bounded
+544 MiB retention amendment. No further compute or production promotion is
+selected. Checkpoint advice remains separate from scientific qualification.
+
 The [repository experiment verification policy](../../../../../AGENTS.md#contained-experiment-verification)
 disables all dedicated standards reviewers and independent audits for contained
 experiments and their owning topic documents. Checkpoint-advisor monitoring stays
