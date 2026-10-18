@@ -1,5 +1,12 @@
 # Predictable Sky Accuracy Dials Experiment
 
+Completed: [H69-H70 adaptive incoming grids](adaptive-incoming-results.md).
+All3 layered designs fail the joint local gate after both paper/Toronto screens
+and fine-count rescue. Toronto finest worst errors12.61-25.00% exceed the Sun1024
+control's3.78%; none advances. Accepted00455/00456 own images and verification.
+[Execution decisions](adaptive-incoming-execution.md) preserve qualifications;
+conditional H71-H74 were not reached. Production unchanged; no job is active.
+
 Completed: [H68 Sun-focused incoming grids](incoming-sun-results.md). Mean local
 J2 error falls from130.2% with ordinary68 to4.27% with Sun256 and1.37% with
 Sun1024; hybrid1024 gives1.05% mean/4.13% worst. Accepted00449/00450 own all108

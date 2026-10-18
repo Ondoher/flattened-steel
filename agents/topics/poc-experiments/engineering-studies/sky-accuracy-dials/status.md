@@ -1,5 +1,14 @@
 # Predictable Sky Accuracy Dials Experiment Status
 
+Completed: [H69-H70 adaptive incoming grids](adaptive-incoming-results.md).
+All3 registered methods fail the joint local advancement gate after paper and
+Toronto screening, including fine-count rescue. Toronto fine mean/worst errors
+are6.18%/25.00% (A),4.53%/12.61% (B),3.62%/13.92% (C), versus Sun1024
+1.37%/3.78%. Accepted00454 retains264 cases;00455/00456 own figures and complete
+verification. Failed00453 and all qualifications remain explicit. Planned
+H71-H74 were not triggered; no held-out/full-cache/B1/scene claim. Production is
+unchanged and no job is active. [Execution summary](adaptive-incoming-execution.md).
+
 Completed: [H68 Sun-focused incoming quadrature](incoming-sun-results.md).
 Same-count focus improves local sunset J2; Sun256 mean/worst errors4.27%/18.56%,
 Sun1024 1.37%/3.78%, hybrid1024 1.05%/4.13%.00449/00450 retain108 cases, maps,

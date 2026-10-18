@@ -1,12 +1,19 @@
 # Active Topic
 
-Current active topic: sky-accuracy-dials, completed H68 Sun-focused incoming quadrature.
-Focus: review the improved local incoming integration and its limits before
-selecting any full-cache follow-on. Production is unchanged.
+Current active topic: sky-accuracy-dials, completed H69-H70 adaptive incoming screen.
+Focus: review the joint paper/Toronto rejection before selecting any follow-on.
+Production is unchanged; no job is active.
 
 Canonical entry: [Sky Accuracy Dials](poc-experiments/engineering-studies/sky-accuracy-dials/README.md).
 
 ## Immediate Focus
+
+The [adaptive incoming results](poc-experiments/engineering-studies/sky-accuracy-dials/adaptive-incoming-results.md)
+own all264 cases and accepted00455/00456 verification. All3 methods fail the
+joint local gate despite fine-count rescue. Conditional H71-H74 were not reached.
+The owner approved768MiB storage and authorized justified decisions while AFK. The
+[execution record](poc-experiments/engineering-studies/sky-accuracy-dials/adaptive-incoming-execution.md)
+owns decisions, recovery, qualifications and timing. No new run is selected.
 
 The [H68 results](poc-experiments/engineering-studies/sky-accuracy-dials/incoming-sun-results.md)
 own accepted00449/00450, all108 cases, three figures and the signed-zero verifier
@@ -26,5 +33,5 @@ qualifies each independent numerical estimate before attribution.
 
 1. [Repository instructions](../../AGENTS.md).
 2. [Experiment entry](poc-experiments/engineering-studies/sky-accuracy-dials/README.md).
-3. [H68 incoming-grid results](poc-experiments/engineering-studies/sky-accuracy-dials/incoming-sun-results.md).
-4. [H68 execution summary](poc-experiments/engineering-studies/sky-accuracy-dials/incoming-sun-execution.md).
+3. [Adaptive incoming results](poc-experiments/engineering-studies/sky-accuracy-dials/adaptive-incoming-results.md).
+4. [Adaptive execution summary](poc-experiments/engineering-studies/sky-accuracy-dials/adaptive-incoming-execution.md).

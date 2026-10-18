@@ -26,8 +26,8 @@ export const outputRelative = 'tmp/experiments/sky-accuracy-dials';
 const sourceRelative = 'experiments/sky-accuracy-dials';
 const MiB = 1024 ** 2;
 const minimumFreeBytes = 40 * 1024 ** 3;
-// Owner approved736MiB retained disk for H67 L1/J2 diagnosis; other bounds unchanged.
-const retainedLimit = 736 * MiB;
+// Owner approved768MiB for the H69-H74 two-atmosphere incoming campaign.
+const retainedLimit = 768 * MiB;
 const scratchLimit = 1024 * MiB;
 
 /** Hash exact bytes. @param {Uint8Array|string} bytes @returns {string} */

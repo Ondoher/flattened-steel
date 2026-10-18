@@ -112,10 +112,15 @@ Append one event at process start, every phase transition, at least once every 3
 
 Budget against current disk space only. The owner's copy to another drive
 does not release space on C:. Initial observed free space was 50,601,861,120
-bytes. Stop starting work below 40 GiB free. Limit this experiment to 736 MiB
+bytes. Stop starting work below 40 GiB free. Limit this experiment to 768 MiB
 of retained evidence and 1 GiB of live scratch; enforce both before expensive
 work and before writes. Run one GPU job at a time. Do not use another drive
 or delete any previous experiment, production, or historical artifact.
+
+The owner approved768MiB retained disk for H69-H74's two-atmosphere adaptive
+incoming campaign, then authorized further justified decisions while AFK.
+Starting retained evidence is766948749bytes, scratch0. Prior runs remain
+immutable; live scratch and free-disk bounds remain unchanged.
 
 H67's owner-approved amendment raises728to736MiB retained disk for the
 [sunset L1/J2 attribution](sunset-j2-results.md), including selected compiler
