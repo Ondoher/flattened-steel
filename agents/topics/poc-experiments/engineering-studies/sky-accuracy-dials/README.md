@@ -1,5 +1,14 @@
 # Predictable Sky Accuracy Dials Experiment
 
+Completed: [H75-H82 geometry-driven incoming refinement](geometry-incoming-results.md).
+No tested candidate qualifies against complete Sun-only accuracy/cost controls.
+The campaign isolates a base-layer alignment error and follows it through
+placement ensembles and component-only refinement; local fixes do not transfer
+across the development panel. [Execution and verification](geometry-incoming-execution.md)
+retain all decisions. Conditional fresh validation/native/B1/scenes were not
+triggered. Production is unchanged; the experiment remains open, with no job or
+further campaign selected.
+
 Completed: [H69-H70 adaptive incoming grids](adaptive-incoming-results.md).
 All3 layered designs fail the joint local gate after both paper/Toronto screens
 and fine-count rescue. Toronto finest worst errors12.61-25.00% exceed the Sun1024

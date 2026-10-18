@@ -1,37 +1,27 @@
 # Active Topic
 
-Current active topic: sky-accuracy-dials, completed H69-H70 adaptive incoming screen.
-Focus: review the joint paper/Toronto rejection before selecting any follow-on.
-Production is unchanged; no job is active.
+Current active topic: sky-accuracy-dials.
+Focus: completed H75-H82 geometry-driven incoming-grid refinement.
 
 Canonical entry: [Sky Accuracy Dials](poc-experiments/engineering-studies/sky-accuracy-dials/README.md).
 
 ## Immediate Focus
 
-The [adaptive incoming results](poc-experiments/engineering-studies/sky-accuracy-dials/adaptive-incoming-results.md)
-own all264 cases and accepted00455/00456 verification. All3 methods fail the
-joint local gate despite fine-count rescue. Conditional H71-H74 were not reached.
-The owner approved768MiB storage and authorized justified decisions while AFK. The
-[execution record](poc-experiments/engineering-studies/sky-accuracy-dials/adaptive-incoming-execution.md)
-owns decisions, recovery, qualifications and timing. No new run is selected.
+The [results](poc-experiments/engineering-studies/sky-accuracy-dials/geometry-incoming-results.md)
+own the negative candidate disposition and local base-layer alignment finding.
+The [execution summary](poc-experiments/engineering-studies/sky-accuracy-dials/geometry-incoming-execution.md)
+owns decisions, accepted00484 verification, preserved packaging failures,
+performance and checkpoint information.
 
-The [H68 results](poc-experiments/engineering-studies/sky-accuracy-dials/incoming-sun-results.md)
-own accepted00449/00450, all108 cases, three figures and the signed-zero verifier
-qualification. The [execution summary](poc-experiments/engineering-studies/sky-accuracy-dials/incoming-sun-execution.md)
-records every decision and verification. No job or further campaign is selected.
-The [H67 results](poc-experiments/engineering-studies/sky-accuracy-dials/sunset-j2-results.md)
-remain the owner of accepted00447/00448 independent local references. H68
-uses the existing736MiB allowance and preserves all prior evidence.
-The [H66 results](poc-experiments/engineering-studies/sky-accuracy-dials/camera-grid-results.md)
-remain the completed orientation control. Owner approved736MiB retained disk
-for H67; previous evidence stays immutable.
-The [H65 results](poc-experiments/engineering-studies/sky-accuracy-dials/presunset-probe-results.md)
-remain the independent reference owner. H67 retains source-density units and
-qualifies each independent numerical estimate before attribution.
+No tested candidate qualified for fresh validation or full-cache/B1/scene work.
+The12 reserved targets remain unexposed. Production is unchanged. The experiment
+remains open, with no active job or further campaign selected. Retained allowance
+is896MiB under the owner's AFK decision authority; prior evidence stays immutable.
+A new owner selection is needed before another campaign begins.
 
 ## Minimal Reload Sources
 
 1. [Repository instructions](../../AGENTS.md).
 2. [Experiment entry](poc-experiments/engineering-studies/sky-accuracy-dials/README.md).
-3. [Adaptive incoming results](poc-experiments/engineering-studies/sky-accuracy-dials/adaptive-incoming-results.md).
-4. [Adaptive execution summary](poc-experiments/engineering-studies/sky-accuracy-dials/adaptive-incoming-execution.md).
+3. [Geometry-driven refinement results](poc-experiments/engineering-studies/sky-accuracy-dials/geometry-incoming-results.md).
+4. [Completed refinement execution](poc-experiments/engineering-studies/sky-accuracy-dials/geometry-incoming-execution.md).

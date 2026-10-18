@@ -1,0 +1,12 @@
+import assert from 'node:assert/strict';
+import {createRun,verifyRun,storage} from '../io/files.mjs';
+import {read,make,eligible} from './common.mjs';
+
+const registrationRoot=process.argv[2];verifyRun(registrationRoot);const r=read(registrationRoot+'/registration.json.gz');
+const sun=n=>({id:`sun-midpoint-${n}`,kind:'sun',n,placement:'midpoint'});
+const waves=[
+ {id:'H76',hypothesis:'Preserving more Sun nodes improves old B; geometry adaptation adds value beyond the same fixed dusk allocation.',prediction:'Toronto error falls against old B without material paper regression; geometry wins beyond the near-ground dusk limit.',falsifier:'Sun-heavy and fixed-heavy remain dominated by the complete Sun-only control at1024.',configs:[256,1024].flatMap(n=>[sun(n),{id:`heavy-${n}`,kind:'layered',allocation:'sun-heavy',n,placement:'midpoint'},{id:`fixed-${n}`,kind:'layered',allocation:'fixed-heavy',n,placement:'midpoint'}])},
+ {id:'H77-H78',hypothesis:'Preserve1024 successful Sun positions while adding broad/horizon coverage; a narrower horizon proposal may reduce dilution.',prediction:'Additive1408 improves ground witnesses relative to Sun1408, with width.03 outperforming.1 if the horizon band is the missing support.',falsifier:'Both additive variants are dominated by Sun1408; a local improvement alone is an exploration lead, not qualification.',configs:[sun(1024),sun(1408),...[.1,.03].map(width=>({id:`add-1408-w${width}`,kind:'layered',n:1408,counts:[128,1024,256],placement:'midpoint',sunPlacement:'midpoint',width}))]},
+];
+const run=createRun('h76-wave-reg',{parents:[verifyRun(registrationRoot),verifyRun('tmp/experiments/sky-accuracy-dials/runs/00459-h79-report')],operation:'Register H76 and H77-H78 contrasts before scoring; midpoint controls retained, two materials and complete development panel.',parameters:{selection:'development',reservedUnexposed:true,expectedWork:'About0.8million continuous-L1 evaluations, serial hardware GPU; reference work separate.'}});
+try{for(const wave of waves){const preflight=[];for(const t of r.targets)for(const c of wave.configs){const g=make(c,t,r.profiles[0].control.medium.radius);preflight.push({target:t.id,config:c.id,passing:eligible(g),fine:eligible(g,true),area:g.relativeArea,moments:g.moments});}run.write(wave.id+'.json',{...wave,targets:'development',offsets:[0],preflight});}assert.equal(waves.length,2);run.finish('accepted',{waveCount:2});}catch(e){run.finish('failed',{failure:String(e)});throw e;}verifyRun(run.path);console.log(JSON.stringify({run:run.path,storage:storage()}));

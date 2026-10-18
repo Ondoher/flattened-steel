@@ -1,5 +1,16 @@
 # Predictable Sky Accuracy Dials Experiment Status
 
+Completed: [H75-H82 geometry-driven incoming refinement](geometry-incoming-results.md).
+The initial controlled tests and evidence-driven follow-ons produce no qualified
+candidate. Local base-layer alignment attribution succeeds, but fixed shifts,
+ensembles and component-only refinement fail the joint accuracy/cost gate.
+Accepted00484 verifies the complete evidence chain, exact derivative replay and
+local types. Failed00480/00481 packaging attempts remain preserved; no numerical
+GPU run failed. Reserved validation remains unexposed; conditional native/N4/B1/
+scene work was not triggered. No job is active, no next campaign is selected,
+production is unchanged, and the experiment remains open.
+[Execution summary and decisions](geometry-incoming-execution.md).
+
 Completed: [H69-H70 adaptive incoming grids](adaptive-incoming-results.md).
 All3 registered methods fail the joint local advancement gate after paper and
 Toronto screening, including fine-count rescue. Toronto fine mean/worst errors
@@ -144,7 +155,7 @@ agreement, sampling and finite-epsilon intervals, and unmet individual-band
 precision targets. Source type checking, visual inspection and run verification
 pass; all owned jobs exited and scratch cleanup passed. The displayed direct
 N1 solver is distinct from the broader fixed-canonical GPU probe's separate
-order1Ã¢â‚¬â€œ4/all-order capability, which is not yet Toronto-adapted. No further
+order1ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“4/all-order capability, which is not yet Toronto-adapted. No further
 numerical campaign or production change is selected.
 H45 is complete: matched Toronto aerosol optical-material
 horizon probes, with unchanged H44 geometry/extinction. Its registration in the
@@ -194,13 +205,13 @@ for this extension.
 The [flat/local horizon plan](flat-local-horizon-plan.md) is the current continuation.
 Its [results](flat-local-horizon-results.md) meet the first scientific goal:
 independent expected appearance and physical reasons under explicit assumptions.
-No production change or promotion is selected. H34Ã¢â‚¬â€œH37
+No production change or promotion is selected. H34ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“H37
 scientific work is complete; H38 records conditional follow-ons. Implementation
 completion is determined separately by the source-review ledger referenced below.
 
 The [suspension record](suspension.md) preserves the 2026-10-15 H33 boundary,
 evidence dispositions and resumption checks. The planning inventory found 277
-terminal runs; this continuation adds immutable 00277Ã¢â‚¬â€œ00286. Existing
+terminal runs; this continuation adds immutable 00277ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“00286. Existing
 evidence, resource accounting and the production adoption hold remain preserved.
 Closed compute packages are not renewed. The [active topic](../../../active-topic.md)
 routes to this evaluation. The earlier
@@ -219,11 +230,11 @@ This continuation's readiness was refreshed under
 edits. The final request and validation in that session own this coherent unit's
 source-review disposition, without relabelling historical review debts.
 
-## H34Ã¢â‚¬â€œH38 Independent Local Horizon Evaluation
+## H34ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“H38 Independent Local Horizon Evaluation
 
 The [results owner](flat-local-horizon-results.md) records all scientific
 conclusions, quantitative comparisons, actual horizon images, physical plots and
-uncertainty. H34Ã¢â‚¬â€œH37 scientific work is complete within that stated scope; consult
+uncertainty. H34ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“H37 scientific work is complete within that stated scope; consult
 the results for interpretation rather than treating lifecycle status as a
 separate scientific authority.
 
@@ -231,7 +242,7 @@ Capture 00281 remains failed by its whole-source integrity guard after report/ty
 edits during rendering. Accepted recovery 00285 qualifies only the completed
 artifacts against unchanged executed source and retained controls. Accepted
 derivative reports 00283/00284 and figures 00286 preserve that chain; failed
-00277Ã¢â‚¬â€œ00280/00282 are retained. Earlier science is reused without modification.
+00277ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“00280/00282 are retained. Earlier science is reused without modification.
 The [execution notes](flat-local-horizon-execution.md) own decisions, resource
 measurements, verification boundaries and checkpoint reporting. No numerical job
 is active and no additional physical parameter sweep is selected.
@@ -326,7 +337,7 @@ full N4 propagation, live raster/GPU and matched libRadtran horizon cells remain
 
 The owner-directed [H10-H14 sequence](hypothesis-test-plan.md) is finished at its
 bounded available/unsupported comparison boundaries. The
-[hypothesis results](hypothesis-test-results.md) own accepted 00257/00259Ã¢â‚¬â€œ00262:
+[hypothesis results](hypothesis-test-results.md) own accepted 00257/00259ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“00262:
 measured phase-only P1 response, exact raw N4/N6 replay, Native48 view/P1 factorial,
 matched Flat N1 cache comparison and final decisions. A's P1 mechanism and D's N1
 neutrality are supported; C's tested P1/view explanation is challenged; B's full
@@ -1183,7 +1194,7 @@ It retains 5,971,295 bytes, charges 616,957 CPU-job milliseconds and records
 successful cleanup of its owned scratch. Verification passes 104 manufactured
 checks and 57,919 actual table checks across 624 ordinary screen models and
 52 prior continuation records, recomputing all 24 C4 selectors. The largest
-recomputed C1 SSE-identity residual is 1.734723475976807e-18 WÃ‚Â². The
+recomputed C1 SSE-identity residual is 1.734723475976807e-18 WÃƒâ€šÃ‚Â². The
 [proof record](../../../../../tmp/experiments/sky-accuracy-dials/runs/00151-c6-closure/proof.json)
 retains those exact scopes.
 
