@@ -1,5 +1,9 @@
 # H62 Sun-Focused Cache Scene Results
 
+Completed owner-selected extension: sunset +60 minutes, with the same camera,
+atmosphere, display and three cache configurations. Its numerical/image evidence
+is qualified below; the original capture has one unmet progress-log interval.
+
 Status: complete. All five planned views, matched cache/lookup checks, runtime
 measurements and immutable verification are complete. Production is unchanged.
 The experiment stays open; additional owner-selected scenes may follow.
@@ -11,6 +15,48 @@ The [plan](outgoing-scene-plan.md) owns scope and the
 - [Three noon headings: toward, side and away](../../../../../tmp/experiments/sky-accuracy-dials/runs/00408-h62-report/noon-comparison.png)
 - [Sunset toward the Sun](../../../../../tmp/experiments/sky-accuracy-dials/runs/00408-h62-report/sunset-comparison.png)
 - [Thirty minutes after sunset](../../../../../tmp/experiments/sky-accuracy-dials/runs/00408-h62-report/twilight-comparison.png)
+- [Sixty minutes after sunset](../../../../../tmp/experiments/sky-accuracy-dials/runs/00416-h62-report/twilight60-comparison.png)
+
+## Additional One-Hour Twilight Scene
+
+The owner-selected extension uses2024-06-21T04:26:03.503Z, exactly60minutes
+after the same sunset, looking toward its azimuth at5degrees pitch. The Sun is
+9.745degrees below the horizon. Atmosphere, Native15/48, F68, all four orders,
+viewport1024x768 and production display are unchanged within the three-way pair.
+
+The narrow orange glow remains visible in all three images. Focused60 versus
+Corrected60 differs by at most1of255 display-channel codes, with mean absolute
+difference0.0269codes. Against deployed, the maximum is10codes. In the same fixed
+near-horizon image band, Focused60 is about9.35% lower in relative display
+luminance than deployed, and0.535% higher than Corrected60. As before, this is
+post-display image photometry with possible object occlusion, not a physical
+radiance measurement or an independent assessment of the expected sky.
+
+Twelve valid warmed GPU samples give medians43.24ms deployed,43.04ms corrected
+and44.78ms focused, an increment of1.74ms for the grid at this viewport. The paired
+capture takes663.69seconds including build/setup/upload/capture work. Actual
+packed replay over all15channels/four planes remains below2.93e-6relative,
+within the unchanged5e-6limit. The
+[source-density spectra](../../../../../tmp/experiments/sky-accuracy-dials/runs/00416-h62-report/twilight60-source-spectra.png)
+nearly overlay, with the same source-density rather than pixel-spectrum limits
+described below. Both final images were inspected.
+
+Capture00415 completed and sealed its images but failed strict post-run
+verification because one progress interval lasted73.772seconds versus the
+35second verifier limit. Its cause is unproven; the original evidence remains
+unchanged and its progress contract remains unmet. The new report00416 and
+extension verification independently authenticate the exact pinned original seal,
+all artifacts, runtime source graph, scientific controls, numerical checks and
+capture completeness. This qualifies scientific content without repairing or
+claiming success for the original monitoring gate. The report retains an explicit
+[qualification](../../../../../tmp/experiments/sky-accuracy-dials/runs/00416-h62-report/progress-qualification.json).
+Accepted [extension verification00417](../../../../../tmp/experiments/sky-accuracy-dials/runs/00417-h62-verify/verification.json)
+checks this additional scene and retains that same qualification; its own strict
+seal/progress validation passes. Final retained evidence is717,759,251bytes
+(684.51MiB), below720MiB, with zero scratch and104,462,299,136bytes free disk.
+No numerical or image rerun, evidence overwrite, global tolerance relaxation or
+production change was needed. Local source types and diff checks pass; owned
+GPU/browser resources have exited.
 
 Each sheet shows deployed Original15, Corrected60 ordinary W27, Focused60 k=.35,
 and absolute Focused-minus-Corrected display differences amplified8x. Individual

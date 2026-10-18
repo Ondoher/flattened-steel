@@ -3,7 +3,35 @@
 Status: complete. The [results](outgoing-scene-results.md) own findings, images,
 measurements and qualifications; the [plan](outgoing-scene-plan.md) owns scope.
 Initial source baseline:cc15df4c. Production is unchanged; no job is active.
-Additional owner scenes remain unselected.
+The owner-selected sunset +60-minute extension is complete with the progress-log
+qualification below. No further scene is selected.
+
+## Owner-Selected One-Hour Twilight Extension
+
+Baseline0ed61466, initially clean. Added only the contained twilight60 profile,
+explicit one-hour image label and extension checks. Sunset +60minutes means
+2024-06-21T04:26:03.503Z, using the same location/camera/display and three cases.
+GPU capture00415 finishes all three cases and their real lookup replay; its
+663.69second measurement includes setup/build/upload/capture work.
+
+The original terminal seal says accepted, with no source/heartbeat-callback error,
+but strict verifyRun subsequently rejects one73.772second event gap from
+01:33:44.580Z to01:34:58.352Z. The delayed heartbeat's cause is unproven. Preserve
+that failure instead of rerendering completed numerical work or altering its log.
+The focused evidence helper pins00415's exact132,165byte seal and SHA256,
+independently verifies complete artifact inventory/hashes, source graph, terminal
+state and the exact single known gap. Other runs still use strict verifyRun;
+an additional gap or changed original byte rejects qualification.
+
+Report00416 retains the qualification alongside the image, source-density plot
+and measurements. Accepted extension verification00417 checks the new instant is3600000ms
+after sunset, identical cache inputs/mapping/location to the +30minute parent,
+three captures,12 valid GPU timings each, complete real-channel replay and report
+agreement. The original progress contract remains unmet; only scientific content
+is independently qualified. Final images were inspected; source types and diff
+checks pass.00417's own strict immutable/progress verification passes.
+No production source, atmosphere tuning, exposure change, old run modification
+or extra GPU retry was introduced. Results own measured differences and links.
 
 ## Questions And Decisions
 

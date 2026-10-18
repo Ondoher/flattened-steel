@@ -54,11 +54,12 @@ def eotf(value):
 def summary(root):
     data = json.loads(checked(root + '/captures.json').read_text())
     result = json.loads(checked(root + '/result.json').read_text())
+    baseline = 'original' if result.get('atmosphereProfile') == 'toronto' else 'deployed'
     entries = []
     for heading in sorted({c['heading'] for c in data}):
-        images = {v: load(root, f'{v}-{heading}.png') for v in ['deployed', 'corrected', 'focused']}
+        images = {v: load(root, f'{v}-{heading}.png') for v in [baseline, 'corrected', 'focused']}
         item = {'heading': heading, 'focusedVsCorrected': diff_stats(images['focused'], images['corrected']),
-                'focusedVsDeployed': diff_stats(images['focused'], images['deployed']), 'variants': {}}
+                ('focusedVsOriginal' if baseline == 'original' else 'focusedVsDeployed'): diff_stats(images['focused'], images[baseline]), 'variants': {}}
         for capture in [c for c in data if c['heading'] == heading]:
             facts = capture['facts']
             timing = {}
@@ -84,27 +85,31 @@ def summary(root):
     if result['profile'] == 'noon':
         identity = diff_stats(load(root, 'corrected-180.png'), load(root, 'identity-180.png'))
         assert identity['maximumCodeDifference'] == 0, 'Identity publication changed decoded pixels'
-    return {'scene': result['profile'], 'entries': entries, 'identityPublication': identity,
+    return {'scene': result['profile'], 'atmosphereProfile': result.get('atmosphereProfile', 'canonical'), 'entries': entries, 'identityPublication': identity,
             'runtimeScope': '12 warmed samples per view, GPU timer when valid; CPU submit is separate.',
             'photometryScope': 'Display RGB codes and relative display luminance via sRGB EOTF after fixed production mapping; not pre-display physical sky radiance.',
-            'legacyIdentity': diff_stats(load('tmp/experiments/sky-accuracy-dials/runs/00343-h53-scene-prod','candidate-noon.png'),load(root,'corrected-180.png')) if result['profile']=='noon' else None,
+            'legacyIdentity': diff_stats(load('tmp/experiments/sky-accuracy-dials/runs/' + ('00344-h53-scene-tor' if baseline == 'original' else '00343-h53-scene-prod'),'candidate-noon.png'),load(root,'corrected-180.png')) if result['profile']=='noon' else None,
             'densitySpectra': {'corrected': result['baseline']['packetReports']['densitySpectra'],
                                'focused': result['candidate']['packetReports']['densitySpectra']}}
 
 
 def image(root):
     captures = json.loads(checked(root + '/captures.json').read_text())
-    scene = json.loads(checked(root + '/result.json').read_text())['profile']
+    result = json.loads(checked(root + '/result.json').read_text())
+    scene = result['profile']
+    toronto = result.get('atmosphereProfile') == 'toronto'
     headings = sorted({c['heading'] for c in captures})
     width, panel_h = 512, 384
     out = Image.new('RGB', (width*4, 72 + len(headings)*(panel_h+56)), 'white')
     draw = ImageDraw.Draw(out)
-    draw.text((15, 10), f'H62 | San Jose {scene} | fixed atmosphere, camera and production display', font=font(23), fill='#182332')
+    scene_label = 'sunset +60 minutes' if scene == 'twilight60' else scene
+    title = 'H63 | Toronto phase/SSA' if toronto else 'H62'
+    draw.text((15, 10), f'{title} | San Jose {scene_label} | matched camera and production display', font=font(23), fill='#182332')
     draw.text((15, 42), 'Native15 / Native48 / F68 / N1-4. Focused uses the H61 outgoing grid. Difference is absolute display-code difference x8.', font=font(17), fill='#334155')
     for row, heading in enumerate(headings):
-        images = [load(root, f'{v}-{heading}.png') for v in ['deployed', 'corrected', 'focused']]
+        images = [load(root, f'{v}-{heading}.png') for v in ['original' if toronto else 'deployed', 'corrected', 'focused']]
         diff = ImageChops.difference(images[1], images[2]).point(lambda value: min(255, value*8))
-        labels = ['Deployed: original15', 'Corrected60: ordinary grid', 'Focused60: Sun-focused grid', '|Focused - Corrected| x8']
+        labels = ['Toronto: Original15' if toronto else 'Deployed: original15', 'Corrected60: ordinary grid', 'Focused60: Sun-focused grid', '|Focused - Corrected| x8']
         top = 72 + row*(panel_h+56)
         for i, (im, label) in enumerate(zip(images+[diff], labels)):
             draw.text((i*width+12, top+4), f'{heading} deg | {label}', font=font(19), fill='#182332')
@@ -121,7 +126,8 @@ def spectra(root):
     pair = [result['baseline']['packetReports']['densitySpectra'], result['candidate']['packetReports']['densitySpectra']]
     out = Image.new('RGB', (1440, 430), 'white')
     draw = ImageDraw.Draw(out)
-    draw.text((16, 8), f"H62 | {result['profile']} | Observer-level cumulative source density",font=font(23),fill='#182332')
+    title = 'H63 | Toronto phase/SSA' if result.get('atmosphereProfile') == 'toronto' else 'H62'
+    draw.text((16, 8), f"{title} | {result['profile']} | Observer-level cumulative source density",font=font(23),fill='#182332')
     draw.text((16, 40), 'Not integrated pixel radiance. Corrected60: blue; Focused60: orange. Same linear scale within each panel.',font=font(17),fill='#334155')
     for i in range(3):
         x0,y0,w,h=60+i*475,110,380,245

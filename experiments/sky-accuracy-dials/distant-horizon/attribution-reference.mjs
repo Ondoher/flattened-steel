@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import path from 'node:path';
+import {pathToFileURL} from 'node:url';
 import {createHash} from 'node:crypto';
 import {gzipSync} from 'node:zlib';
 import puppeteer from 'puppeteer';
@@ -48,7 +49,7 @@ function tangentCpu(m,target,v,channel,material,count){
  * @param {string} shader @param {{directions:number[][],origin:number[],altitude:number,medium:HorizonReferenceMedium,channel:number,view:number}} request
  * @returns {Promise<{renderer:string,values:number[][]}>} Deterministic continuous direct L1 estimates per direction.
  */
-async function angularGpu(shader,request){
+export async function angularGpu(shader,request){
  const canvas=document.createElement('canvas'),gl=canvas.getContext('webgl2',{powerPreference:'high-performance',antialias:false});if(!gl||!gl.getExtension('EXT_color_buffer_float'))throw new Error('Float GPU required');const debug=gl.getExtension('WEBGL_debug_renderer_info'),renderer=String(gl.getParameter(debug?debug.UNMASKED_RENDERER_WEBGL:gl.RENDERER));if(/software|swiftshader|llvmpipe/i.test(renderer))throw new Error('Hardware required');
  const p=gl.createProgram(),shaders=[],textures=[],frame=gl.createFramebuffer();
  try{
@@ -64,15 +65,17 @@ async function angularGpu(shader,request){
 /** Continuous angular test: evaluate incident L1 directly at every quadrature direction.
  * @param {import('puppeteer').Page} page @param {DialRun} run @param {AttributionControl} control
  * @param {HorizonReferenceMedium} medium @param {number} channel @param {AttributionPoint} target
+ * @param {string[]} [rules] Angular rules selected by a later bounded diagnosis.
+ * @param {boolean} [qualifyTangents] Original binary64 tangent proof assumes sunlit paths; later dusk cases disable it and use paired quadrature/Monte Carlo controls.
  * @returns {Promise<unknown[]>} F68 and phase-importance rules, with species-separated J2 and convergence facts.
  */
-async function angular(page,run,control,medium,channel,target){
+export async function angular(page,run,control,medium,channel,target,rules=['F68','importance16','importance32','importance64'],qualifyTangents=true){
  const material=control.material,table=material.phaseTables[channel],ssa=material.albedos[channel],base=kernel(table,ssa).shader;
  const start=base.lastIndexOf('void main(){');assert.ok(start>0);
  const shader=base.slice(0,start)+`uniform sampler2D queries;uniform int viewQuadrature,queryCount;uniform float initialAltitude;float initialEnd(float mu){float r=R+initialAltitude,b=r*mu,c=initialAltitude*(2.0*R+initialAltitude),d=b*b-c;if(mu<0.0&&d>=0.0)return max(0.0,c/(-b+sqrt(d)));float ct=(initialAltitude-60000.0)*(2.0*R+initialAltitude+60000.0),s=sqrt(max(0.0,b*b-ct));return max(0.0,b>=0.0?-ct/(b+s):-b+s);}void main(){int i=int(gl_FragCoord.x)+256*int(gl_FragCoord.y);o0=vec4(0);o1=o0;o2=o0;o3=o0;if(i>=queryCount)return;vec4 query=texelFetch(queries,ivec2(i%256,i/256),0);vec3 v=query.xyz;float end=initialEnd(query.w);if(end<=0.0)return;float q=log(1.0+end/1000.0);vec2 sum=vec2(0);for(int j=0;j<viewQuadrature;j++){float u=viewQuadrature==64?X64[j]:X128[j],w=viewQuadrature==64?W64[j]:W128[j],t=1000.0*(exp(u*q)-1.0);vec3 x=origin+t*v;vec2 b=density(x);vec4 sun=sunlight(x);sum+=w*(t+1000.0)*q*exp(-tau(origin,v,t))*sun.w*b*vec2(1.0,W)*phases(dot(v,sun.xyz));}o0=vec4(sum,0,0);}`;
  const altitude=target.altitude,br=medium.rayleigh[channel]*Math.exp(-altitude/8000),bm=medium.mie[channel]*ssa*Math.exp(-altitude/1200);
  const result=[];
- for(const rule of ['F68','importance16','importance32','importance64']){
+ for(const rule of rules){
   /** @type {number[][]} */const directions=[];/** @type {number[][]} */const weights=[];
   if(rule==='F68')control.request.transportSpec.domains.incoming.unitVectors.forEach((local,j)=>{const v=world(local,target.point),c=Math.max(-1,Math.min(1,v.reduce((s,x,k)=>s+x*target.direction[k],0))),pr=phase(c,.7)[0],pm=table?aerosolPhase(table,c):phase(c,.7)[1],w=control.request.transportSpec.domains.incoming.integrationWeightsSteradians[j];directions.push(v);weights.push([br*pr*w,bm*pm*w]);});
   else{
@@ -88,8 +91,8 @@ async function angular(page,run,control,medium,channel,target){
   const record={rule,count:directions.length,rayleigh:sum[0],mie:sum[1],J2:sum[0]+sum[1],constantFieldMass:[0,1].map(k=>weights.reduce((s,w)=>s+w[k],0)/(k?bm:br)),directionIdentity:createHash('sha256').update(JSON.stringify({directions,weights})).digest('hex'),outputIdentity:createHash('sha256').update(JSON.stringify(evaluated.values)).digest('hex'),renderer:evaluated.renderer,retention:'Streaming deterministic quadrature reduction; recipe, input/output identities and sums retained. F68 retains all incident samples.',samples:rule==='F68'?{directions,weights,incident:evaluated.values}:undefined};result.push(record);
   if(rule==='F68'){
    const tangentProof=[];
-   for(let i=0;i<directions.length;i++)if(Math.abs(control.request.transportSpec.domains.incoming.unitVectors[i][2])<1e-12){const reference=tangentCpu(medium,target,directions[i],channel,material,128),coarse=tangentCpu(medium,target,directions[i],channel,material,64),gpu=evaluated.values[i];const error=(gpu[0]+gpu[1])/(reference[0]+reference[1])-1;assert.ok(Math.abs(error)<.002,'Exact horizontal L1 GPU/binary64 qualification');tangentProof.push({index:i,gpu,reference,relativeError:error,view64To128:(coarse[0]+coarse[1])/(reference[0]+reference[1])-1,initialRadialCosine:0,initialAltitude:0});}
-   result.push({rule:'surface-tangent-proof',tangentProof,method:'Initial shell intersection uses independently supplied physical altitude and binary64 radial cosine; exact tangents snap only below1e-12. Independent binary64 continuous integral validates each exact F68 tangent.'});
+   for(let i=0;i<directions.length;i++)if(qualifyTangents&&target.altitude===0&&Math.abs(control.request.transportSpec.domains.incoming.unitVectors[i][2])<1e-12){const reference=tangentCpu(medium,target,directions[i],channel,material,128),coarse=tangentCpu(medium,target,directions[i],channel,material,64),gpu=evaluated.values[i];const error=(gpu[0]+gpu[1])/(reference[0]+reference[1])-1;assert.ok(Math.abs(error)<.002,'Exact horizontal L1 GPU/binary64 qualification');tangentProof.push({index:i,gpu,reference,relativeError:error,view64To128:(coarse[0]+coarse[1])/(reference[0]+reference[1])-1,initialRadialCosine:0,initialAltitude:0});}
+   result.push({rule:'surface-tangent-proof',tangentProof,skipped:!qualifyTangents,method:qualifyTangents?'Initial shell intersection uses independently supplied physical altitude and binary64 radial cosine; exact tangents snap only below1e-12. Independent binary64 continuous integral validates each exact F68 tangent.':'Original no-shadow binary64 tangent proof is not applicable at dusk; no proof claimed by this empty record. Paired integration and independent local path estimates supply the new qualification.'});
    const coarse=await page.evaluate(angularGpu,shader,{directions,origin:target.point,altitude:target.altitude,medium,channel,view:64});const sums=[0,1].map(k=>coarse.values.reduce((s,L,i)=>s+(L[0]+L[1])*weights[i][k],0));result.push({rule:'F68-view64',J2:sums[0]+sums[1],relativeToView128:(sums[0]+sums[1])/record.J2-1});
   }
  }
@@ -128,4 +131,4 @@ async function main(){
  }catch(e){failure=e;}finally{await browser?.close().catch(e=>failure??=e);run.finish(failure?'failed':'accepted',{failure:failure?String(failure):null,readings:readings.length});}
  verifyRun(run.path);console.log(JSON.stringify({run:run.path,failure:failure?String(failure):null}));if(failure)throw failure;
 }
-await main();
+if(process.argv[1]&&import.meta.url===pathToFileURL(path.resolve(process.argv[1])).href)await main();

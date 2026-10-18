@@ -1,5 +1,28 @@
 # H62 Sun-Focused Cache Scene Renders
 
+## Owner-Selected Extension: Sunset Plus One Hour
+
+Completed, with the progress-log qualification recorded in the results.
+Selected on 2026-10-17 after the initial plan completed. Capture one additional
+toward-Sun horizon view at sunset +60 minutes, 2024-06-21T04:26:03.503Z,
+using the same San Jose location, atmosphere, viewport, pitch, exposure and three
+cache configurations. The retained +30-minute scene remains immutable.
+
+Baseline commit: 0ed61466; working tree initially clean. The implementation unit
+is the additional time profile, report label and focused evidence validation.
+GPU-first execution remains serial. Starting retained evidence is711,878,921bytes
+(678.90MiB), leaving about41.1MiB within720MiB. Estimate less than12MiB for this
+single capture, report and verification, with no full-cache retention.
+
+- [x] Extend the contained time profile and pass local source types.
+- [x] Render deployed, Corrected60 and Focused60 at the frozen instant.
+- [x] Inspect comparison/spectra images, validate controls and lookup replay,
+      record measurements and clean owned resources.
+
+No extra atmosphere tuning, paper rescoring or production promotion is included.
+
+## Completed Initial Plan
+
 Status: complete. The [results](outgoing-scene-results.md) own accepted images,
 lookup checks, runtime findings and qualifications; the
 [execution summary](outgoing-scene-execution.md) owns decisions and recovery.

@@ -1,10 +1,53 @@
 # Predictable Sky Accuracy Dials Experiment Status
 
+Completed: [H68 Sun-focused incoming quadrature](incoming-sun-results.md).
+Same-count focus improves local sunset J2; Sun256 mean/worst errors4.27%/18.56%,
+Sun1024 1.37%/3.78%, hybrid1024 1.05%/4.13%.00449/00450 retain108 cases, maps,
+figures and serialized-geometry verification. No job remains; production and
+paper-score qualification remain unchanged. [Execution decisions](incoming-sun-execution.md).
+
+Completed: [H67 sunset L1/J2 attribution](sunset-j2-results.md). Incoming angular
+integration creates the large local red J2 excess before later-order cache
+interpolation; input transport partly masks it. Accepted00447/00448 retain
+same-input algebra, continuous angular/local-path comparisons, figures and full
+microbatch verification. Failed00446 is preserved. Three-band selected-point
+scope,736MiB retained limit, no production promotion or active job.
+
+Completed: [H66 camera-facing outgoing grid](camera-grid-results.md). Same-count
+rigid rotation changes selected sunset brightness by-0.64%/-1.55%/-0.41%; the
+later-order excess persists. Accepted00445 owns replay, full15-band recurrence,
+images and verification; startup failures stay preserved. Production unchanged;
+no active job or further campaign selected.
+
+Completed: [H65 independent pre-sunset/sunset comparison](presunset-probe-results.md).
+The independent solver corroborates libRadtran at both times and all three rays;
+both corrected caches retain large later-order excesses. Accepted00441 verifies
+the data;00442 owns the shared lower-exposure preview. No job remains and
+production is unchanged.
+
+Completed: [H64 Toronto dusk independent brightness](twilight-reference-results.md).
+Matched libRadtran probes identify a substantial sunset later-order excess in
+both corrected caches; +30minute higher rays agree closely. Late-twilight sampling
+and layer limits remain explicit. Accepted00433 verifies the campaign; no job
+is active and production remains unchanged.
+
+Completed: [H63 Toronto scene campaign](toronto-scene-results.md), original15 versus
+ordinary/focused corrected60 at three noon headings, sunset and +30/+60minutes.
+The result owner records four image sheets, measurements and accepted00426
+verification with strict run/progress checks. All three configurations use
+matched measured phase/SSA. Production is unchanged; no owned GPU job remains.
+
+Completed owner-selected follow-on: [H62 sunset +60-minute scene](outgoing-scene-results.md#additional-one-hour-twilight-scene),
+with three GPU captures, final comparison/spectra, source checks and independently
+qualified numerical/image evidence. Capture00415's single73.772second monitoring
+gap remains an unmet original progress gate; report00416 discloses it explicitly.
+No GPU job or production change is active.
+
 Completed [H62 matched scene renders](outgoing-scene-results.md), comparing
 deployed, Corrected60 and Sun-focused60 in all five planned views. Final00414
 validates lookup/scene/control/cleanup evidence; the results own image links,
 timings and provenance qualifications. Production is unchanged and no job is
-active. Additional owner scenes remain unselected.
+active. The one-hour extension is linked above; further scenes remain unselected.
 
 Completed [H61 Sun-focused outgoing grid](outgoing-focus-results.md): same4374
 slots/F68 incoming,86% lower isolated N1 interpolation residual and full B1 RMSE
@@ -92,7 +135,7 @@ agreement, sampling and finite-epsilon intervals, and unmet individual-band
 precision targets. Source type checking, visual inspection and run verification
 pass; all owned jobs exited and scratch cleanup passed. The displayed direct
 N1 solver is distinct from the broader fixed-canonical GPU probe's separate
-order1–4/all-order capability, which is not yet Toronto-adapted. No further
+order1Ã¢â‚¬â€œ4/all-order capability, which is not yet Toronto-adapted. No further
 numerical campaign or production change is selected.
 H45 is complete: matched Toronto aerosol optical-material
 horizon probes, with unchanged H44 geometry/extinction. Its registration in the
@@ -142,13 +185,13 @@ for this extension.
 The [flat/local horizon plan](flat-local-horizon-plan.md) is the current continuation.
 Its [results](flat-local-horizon-results.md) meet the first scientific goal:
 independent expected appearance and physical reasons under explicit assumptions.
-No production change or promotion is selected. H34–H37
+No production change or promotion is selected. H34Ã¢â‚¬â€œH37
 scientific work is complete; H38 records conditional follow-ons. Implementation
 completion is determined separately by the source-review ledger referenced below.
 
 The [suspension record](suspension.md) preserves the 2026-10-15 H33 boundary,
 evidence dispositions and resumption checks. The planning inventory found 277
-terminal runs; this continuation adds immutable 00277–00286. Existing
+terminal runs; this continuation adds immutable 00277Ã¢â‚¬â€œ00286. Existing
 evidence, resource accounting and the production adoption hold remain preserved.
 Closed compute packages are not renewed. The [active topic](../../../active-topic.md)
 routes to this evaluation. The earlier
@@ -167,11 +210,11 @@ This continuation's readiness was refreshed under
 edits. The final request and validation in that session own this coherent unit's
 source-review disposition, without relabelling historical review debts.
 
-## H34–H38 Independent Local Horizon Evaluation
+## H34Ã¢â‚¬â€œH38 Independent Local Horizon Evaluation
 
 The [results owner](flat-local-horizon-results.md) records all scientific
 conclusions, quantitative comparisons, actual horizon images, physical plots and
-uncertainty. H34–H37 scientific work is complete within that stated scope; consult
+uncertainty. H34Ã¢â‚¬â€œH37 scientific work is complete within that stated scope; consult
 the results for interpretation rather than treating lifecycle status as a
 separate scientific authority.
 
@@ -179,7 +222,7 @@ Capture 00281 remains failed by its whole-source integrity guard after report/ty
 edits during rendering. Accepted recovery 00285 qualifies only the completed
 artifacts against unchanged executed source and retained controls. Accepted
 derivative reports 00283/00284 and figures 00286 preserve that chain; failed
-00277–00280/00282 are retained. Earlier science is reused without modification.
+00277Ã¢â‚¬â€œ00280/00282 are retained. Earlier science is reused without modification.
 The [execution notes](flat-local-horizon-execution.md) own decisions, resource
 measurements, verification boundaries and checkpoint reporting. No numerical job
 is active and no additional physical parameter sweep is selected.
@@ -274,7 +317,7 @@ full N4 propagation, live raster/GPU and matched libRadtran horizon cells remain
 
 The owner-directed [H10-H14 sequence](hypothesis-test-plan.md) is finished at its
 bounded available/unsupported comparison boundaries. The
-[hypothesis results](hypothesis-test-results.md) own accepted 00257/00259–00262:
+[hypothesis results](hypothesis-test-results.md) own accepted 00257/00259Ã¢â‚¬â€œ00262:
 measured phase-only P1 response, exact raw N4/N6 replay, Native48 view/P1 factorial,
 matched Flat N1 cache comparison and final decisions. A's P1 mechanism and D's N1
 neutrality are supported; C's tested P1/view explanation is challenged; B's full
@@ -1131,7 +1174,7 @@ It retains 5,971,295 bytes, charges 616,957 CPU-job milliseconds and records
 successful cleanup of its owned scratch. Verification passes 104 manufactured
 checks and 57,919 actual table checks across 624 ordinary screen models and
 52 prior continuation records, recomputing all 24 C4 selectors. The largest
-recomputed C1 SSE-identity residual is 1.734723475976807e-18 W². The
+recomputed C1 SSE-identity residual is 1.734723475976807e-18 WÃ‚Â². The
 [proof record](../../../../../tmp/experiments/sky-accuracy-dials/runs/00151-c6-closure/proof.json)
 retains those exact scopes.
 

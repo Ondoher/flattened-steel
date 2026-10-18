@@ -1,5 +1,7 @@
 import {packetProof} from './packet-proof.js';
 import {compileDistantSunSceneCacheWavelength as compileCandidate} from './compiler.js';
+import {compileDistantSunSceneCacheWavelength as compileOriginal} from './original-compiler.js';
+import {setTorontoMaterial} from '../distant-horizon/toronto-phase.js';
 import {lookupProof} from './proof.js';
 import {warp} from '../outgoing-focus/geometry.mjs';
 import {outgoingStencil,solarCubic} from '../numerics/math.js';
@@ -51,6 +53,7 @@ async function main() {
 	/** @type {CachePersistentArray | undefined} */ let candidateArray;
 	try {
 		/** @type {any} */ const control = await (await fetch('/comparison-control')).json();
+        if(control.material)setTorontoMaterial(control.material);
 		const proof=await lookupProof();if(control.scene==='proof'){publish('proof-ready',proof);return;}
  requireValue(JSON.stringify(control.observation)!=='undefined','Frozen observation missing');
 		await registry.start();
@@ -58,7 +61,7 @@ async function main() {
 		let selected = controller.start();
 		for (let i = 0; i < 2; i++) selected = controller.nextLocation(selected);
 		selected = controller.selectGlobeTime(selected, control.scene==='noon'?1:2);
- if(control.scene==='twilight')selected=controller.adjustGlobeMinuteOffset(selected,30);
+ if(control.scene==='twilight'||control.scene==='twilight60')selected=controller.adjustGlobeMinuteOffset(selected,control.scene==='twilight60'?60:30);
 		requireValue(
 			selected.locationLabel === 'San Jose',
 			'Wrong location preset.',
@@ -330,17 +333,17 @@ cancelAnimationFrame(/** @type {any} */(scene)._frameRequest);/** @type {any} */
 				const response = await fetch('/progress', {
 					method: 'POST',
 					headers: {'content-type': 'application/json'},
-					body: JSON.stringify({message, completed, total: 30}),
+					body: JSON.stringify({message, completed, total: control.material?45:30}),
 				});
 				requireValue(response.ok, 'Capture host rejected progress.');
 			}
-			/** Compile one complete N4 channel with exact ordered Float32 accumulation. @param {DistantSunSceneCacheCompilerBuildRequest} request @param {number} channel @param {readonly DistantSunSceneCacheCompilerProbeCoordinate[]} points @param {boolean} variant @returns {Promise<any>} */
+			/** Compile one complete N4 channel with exact ordered Float32 accumulation. @param {DistantSunSceneCacheCompilerBuildRequest} request @param {number} channel @param {readonly DistantSunSceneCacheCompilerProbeCoordinate[]} points @param {'original'|'corrected'|'focused'} variant @returns {Promise<any>} */
 			async function compile(request, channel, points, variant) {
 				const compileStart=performance.now();
  const total = new Float32Array(points.length);
 				let order = 0;
 				const orders = [];
-				await (variant ? compileCandidate : compileDistantSunSceneCacheWavelength)({
+				await (variant==='original'?compileOriginal:variant==='focused'?compileCandidate:compileDistantSunSceneCacheWavelength)({
 					gl: compute,
 					buildRequest: control.material ? {...request,transportSpec:{...request.transportSpec,atmosphere:{...request.transportSpec.atmosphere,mieSingleScatteringAlbedo:control.material.albedos[channel]}}}:request,
 					wavelengthIndex: channel,
@@ -378,15 +381,28 @@ cancelAnimationFrame(/** @type {any} */(scene)._frameRequest);/** @type {any} */
 					},
 				});
 				requireValue(order === 4, 'Incomplete N4 compile.');
-				facts.buildTimings.push({channel,variant:variant?'focused':'corrected',milliseconds:performance.now()-compileStart});return {total, orders};
+				facts.buildTimings.push({channel,variant,milliseconds:performance.now()-compileStart});return {total, orders};
 			}
 			try {
+                const originalOrders=[];
+                if(control.material){
+                  for(let channel=0;channel<15;channel++){
+                    await progress(`Toronto Original15 spectrum ${channel+1}/15`,channel);
+                    const original=await compile(control.original,channel,coordinates,'original');
+                    originalOrders[channel]=original.orders;pack(original.total,channel);
+                  }
+                  const originalPackets=await publishPackets(1);
+                  publish('original-ready',{...facts,profile:control.profile,renderer,packetReports:originalPackets});
+                  await new Promise(resolve=>trigger.addEventListener('click',()=>resolve(undefined),{once:true}));
+                  packets.forEach(p=>p.fill(0));
+                }
 				const baseChannels = [];
 				let maximumRelative = 0,
 					maximumAbsolute = 0;
 				for (const channel of (control.probeOnly?[7]:Array.from({length:15},(_,i)=>i))) {
 					await progress(`Baseline spectrum ${channel + 1}/15`, channel);
-					const base = await compile(control.baseline, channel, coordinates, false);
+					const base = await compile(control.baseline, channel, coordinates, 'corrected');
+                    if(control.material)requireValue(base.orders[0].every((v,i)=>v===originalOrders[channel][0][i]),'Original15/Corrected60 changed Toronto J1 witnesses');
 					pack(base.total,channel);
 					baseChannels[channel]={orders:base.orders};
 					if (channel === 7) {
@@ -405,16 +421,16 @@ cancelAnimationFrame(/** @type {any} */(scene)._frameRequest);/** @type {any} */
 				}
 				const baselinePackets=await publishPackets(1);
 				globalThis['__h62Identity']=async()=>{facade.publish({...originalFrame,h62Mapping:{schema:'h62-receiver-w27-sun-warp-v1',k:1},atlas:undefined,snapshot:{...originalFrame.snapshot,generation:originalFrame.snapshot.generation+2000000},bindings:[candidateArray.runtimeBinding,...originalFrame.bindings.slice(1)]});return view(180);};
-				publish('baseline-ready',{...facts,profile:control.profile,renderer,parity:{maximumRelative,maximumAbsolute,applicable:!control.material},packetReports:baselinePackets,elapsedMilliseconds:performance.now()-started});
+				publish('baseline-ready',{...facts,profile:control.profile,renderer,originalCorrectedFirstOrderWitnesses:control.material?true:null,parity:{maximumRelative,maximumAbsolute,applicable:!control.material},packetReports:baselinePackets,elapsedMilliseconds:performance.now()-started});
 				await new Promise(resolve=>trigger.addEventListener('click',()=>resolve(undefined),{once:true}));
 				packets.forEach(p=>p.fill(0));
 				const channelReports = [];
 				for (const channel of (control.probeOnly?[7]:Array.from({length:15},(_,i)=>i))) {
-					const {total, orders} = await compile(control.candidate, channel, coordinates, true);
+					const {total, orders} = await compile(control.candidate, channel, coordinates, 'focused');
 					orderProbes.push({channel, baseline: baseChannels[channel].orders, candidate: orders});
 					pack(total,channel);
 					channelReports.push({channel, sha256: await digest(new Uint8Array(total.buffer))});
-					await progress(`Candidate spectrum ${channel + 1}/15 completed.`, channel + 16);
+					await progress(`Candidate spectrum ${channel + 1}/15 completed.`, channel + (control.material?31:16));
 				}
 				const packetReports=await publishPackets(.35);
 				requireValue(

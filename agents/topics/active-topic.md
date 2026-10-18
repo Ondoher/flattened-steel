@@ -1,23 +1,30 @@
 # Active Topic
 
-Current active topic: sky-accuracy-dials, completed H62 Sun-focused scene renders.
-Focus: review matched noon/sunset/twilight images and measured lookup cost;
-await the owner's additional scene selection. Production remains unchanged.
+Current active topic: sky-accuracy-dials, completed H68 Sun-focused incoming quadrature.
+Focus: review the improved local incoming integration and its limits before
+selecting any full-cache follow-on. Production is unchanged.
 
 Canonical entry: [Sky Accuracy Dials](poc-experiments/engineering-studies/sky-accuracy-dials/README.md).
 
 ## Immediate Focus
 
-The [H62 results](poc-experiments/engineering-studies/sky-accuracy-dials/outgoing-scene-results.md)
-own accepted scene comparisons, timing and lookup/provenance qualifications. The
-[execution record](poc-experiments/engineering-studies/sky-accuracy-dials/outgoing-scene-execution.md)
-owns decisions, recovery and reproduction. Final00414 verifies; no job remains
-active. H61's paper findings remain separate. The experiment stays open; earlier
-evidence and production remain unchanged. Additional owner scenes have not started.
+The [H68 results](poc-experiments/engineering-studies/sky-accuracy-dials/incoming-sun-results.md)
+own accepted00449/00450, all108 cases, three figures and the signed-zero verifier
+qualification. The [execution summary](poc-experiments/engineering-studies/sky-accuracy-dials/incoming-sun-execution.md)
+records every decision and verification. No job or further campaign is selected.
+The [H67 results](poc-experiments/engineering-studies/sky-accuracy-dials/sunset-j2-results.md)
+remain the owner of accepted00447/00448 independent local references. H68
+uses the existing736MiB allowance and preserves all prior evidence.
+The [H66 results](poc-experiments/engineering-studies/sky-accuracy-dials/camera-grid-results.md)
+remain the completed orientation control. Owner approved736MiB retained disk
+for H67; previous evidence stays immutable.
+The [H65 results](poc-experiments/engineering-studies/sky-accuracy-dials/presunset-probe-results.md)
+remain the independent reference owner. H67 retains source-density units and
+qualifies each independent numerical estimate before attribution.
 
 ## Minimal Reload Sources
 
 1. [Repository instructions](../../AGENTS.md).
 2. [Experiment entry](poc-experiments/engineering-studies/sky-accuracy-dials/README.md).
-3. [H62 results](poc-experiments/engineering-studies/sky-accuracy-dials/outgoing-scene-results.md).
-4. [H62 execution](poc-experiments/engineering-studies/sky-accuracy-dials/outgoing-scene-execution.md).
+3. [H68 incoming-grid results](poc-experiments/engineering-studies/sky-accuracy-dials/incoming-sun-results.md).
+4. [H68 execution summary](poc-experiments/engineering-studies/sky-accuracy-dials/incoming-sun-execution.md).

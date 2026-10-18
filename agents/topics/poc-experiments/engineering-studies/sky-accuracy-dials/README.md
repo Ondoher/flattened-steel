@@ -1,9 +1,49 @@
 # Predictable Sky Accuracy Dials Experiment
 
+Completed: [H68 Sun-focused incoming grids](incoming-sun-results.md). Mean local
+J2 error falls from130.2% with ordinary68 to4.27% with Sun256 and1.37% with
+Sun1024; hybrid1024 gives1.05% mean/4.13% worst. Accepted00449/00450 own all108
+cases, raw/normalized figures, maps and verification. Local scope only; no
+full-cache correction, paper RMSE qualification, promotion or active job.
+
+Completed: [H67 sunset L1/J2 attribution](sunset-j2-results.md). At the selected
+sunlit exact node, sparse incoming F68 yields6.43x independent red J2 even with
+accurate L1; refined continuous angular integration gives1.00x. Smaller input
+errors partly cancel this. Accepted00447/00448 own probes, images and verification.
+Three-band/local scope only; no production correction or further run selected.
+
+Completed: [H66 camera-facing outgoing grid](camera-grid-results.md). Rotating
+the same-count dense region toward the primary sunset view changes brightness
+by only-0.64% there; the large later-order excess remains. Accepted00445 owns
+the replay, all15 camera wavelengths, images and verification. Production is
+unchanged; no job or further campaign is active.
+
+Completed: [H65 independent pre-sunset/sunset comparison](presunset-probe-results.md).
+The independent solver corroborates libRadtran at both times and all three rays;
+both corrected caches retain large later-order excesses. Accepted00441 verifies
+the data;00442 owns the shared lower-exposure preview. No job remains and
+production is unchanged.
+
+Completed: [H64 Toronto dusk independent brightness](twilight-reference-results.md).
+Matched libRadtran probes identify a substantial sunset later-order excess in
+both corrected caches; +30minute higher rays agree closely. Late-twilight sampling
+and layer limits remain explicit. Accepted00433 verifies the campaign; no job
+is active and production remains unchanged.
+
+Completed: [H63 matched Toronto scene comparisons](toronto-scene-results.md),
+all six H62 views with measured phase/SSA applied to every configuration.
+The results own four comparison sheets, runtime/lookup measurements and
+accepted00426 evidence. No GPU job is active; production and earlier evidence
+remain unchanged.
+
+Completed: the owner-selected [H62 sunset +60-minute comparison](outgoing-scene-results.md#additional-one-hour-twilight-scene),
+including final image, measurements and explicit progress-log qualification.
+Earlier evidence and production remain unchanged; no GPU job is active.
+
 Completed [H62 matched scene renders](outgoing-scene-results.md): three noon
 headings, sunset and twilight, matched lookup proofs and runtime measurements.
 The results own images and qualifications. Production is unchanged; no job is
-active. Additional owner scenes await selection.
+active. The additional one-hour scene is linked above; further scenes await selection.
 
 Completed [H61 Sun-focused outgoing grid](outgoing-focus-results.md): same4374
 slots/F68 incoming,86% lower isolated N1 interpolation residual and full B1 RMSE

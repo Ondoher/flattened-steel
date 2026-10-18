@@ -27,6 +27,7 @@ import {
 import {gzipSync} from 'node:zlib';
 import {normalized,compiler,facade,lookup,mapping} from './mapping.mjs';
 import {LocationTimeController} from '../../../src/flat32/LocationTimeController.js';
+import {originalPhase} from '../distant-horizon/toronto-phase.js';
 
 const commonjs = createRequire(import.meta.url)('@rollup/plugin-commonjs');
 
@@ -34,8 +35,10 @@ const commonjs = createRequire(import.meta.url)('@rollup/plugin-commonjs');
  * @returns {Promise<void>} Sealed images and provenance; failed runs retain their real state and owned resources are closed.
  */
 async function main() {
-	assert.equal(process.argv.length,3);
-	const profile=process.argv[2];assert.ok(['proof','network','noon-probe','noon','sunset','twilight'].includes(profile));
+	assert.ok(process.argv.length===3||process.argv.length===4);
+	const profile=process.argv[2];assert.ok(['proof','network','noon-probe','noon','sunset','twilight','twilight60'].includes(profile));
+	const atmosphereProfile=process.argv[3]??'canonical';assert.ok(['canonical','toronto'].includes(atmosphereProfile));
+	if(atmosphereProfile==='toronto')assert.ok(['noon','sunset','twilight','twilight60'].includes(profile));
 	const parents = /** @type {DialFileIdentity[]} */ ([]);
 	checkedAbsolute(path.resolve(SHARED_PACKAGE_ROOT));
 	const reportRelative = path
@@ -67,12 +70,18 @@ async function main() {
 		},
 	});
 	const adapted = {...baseline,id:'attribution-scene-60',transportSpec:{...baseline.transportSpec,numerical:{...baseline.transportSpec.numerical,transportIntervalCount:60}}};
-    const times=new LocationTimeController();let selected=times.start();for(let i=0;i<2;i++)selected=times.nextLocation(selected);selected=times.selectGlobeTime(selected,(profile.startsWith('noon')||profile==='network')?1:2);if(profile==='twilight')selected=times.adjustGlobeMinuteOffset(selected,30);
-    const control={baseline,candidate:adapted,profile:'canonical',material:null,scene:(profile==='noon-probe'||profile==='network')?'noon':profile,probeOnly:profile==='noon-probe',mapping,observation:selected.observation};
+    const times=new LocationTimeController();let selected=times.start();for(let i=0;i<2;i++)selected=times.nextLocation(selected);selected=times.selectGlobeTime(selected,(profile.startsWith('noon')||profile==='network')?1:2);if(profile==='twilight'||profile==='twilight60')selected=times.adjustGlobeMinuteOffset(selected,profile==='twilight60'?60:30);
+    const torontoParent='tmp/experiments/sky-accuracy-dials/runs/00310-h45-toronto-prod';
+    let material=null;
+    if(atmosphereProfile==='toronto'){parents.push(verifyRun(torontoParent),identity(torontoParent+'/control.json'));material=JSON.parse(readRepository(torontoParent+'/control.json').toString()).material;assert.ok(material&&material.albedos.length===15&&material.phaseTables.length===15);}
+    const originalRequest={...baseline,transportSpec:{...baseline.transportSpec,numerical:{...baseline.transportSpec.numerical,transportIntervalCount:15}}};
+    const control={baseline,candidate:adapted,original:originalRequest,profile:atmosphereProfile,material,scene:(profile==='noon-probe'||profile==='network')?'noon':profile,probeOnly:profile==='noon-probe',mapping,observation:selected.observation};
     const parent=verifyRun('tmp/experiments/sky-accuracy-dials/runs/00398-h61-verify');
     parents.push(parent);
-    const recipe={parents,operation:'H62 actual scene capture: Deployed Original15, Corrected60 and H61 Focused60; native48/15, all four orders, exact row-specific mapping. New contained bundles only.',parameters:{controlHash:sha256(JSON.stringify(control)),controlArtifact:'control.json',scene:profile,mapping,initialScenesOnly:true}};
-    const run=createRun('h62-'+profile,recipe);run.write('control.json',control);
+    if(profile==='twilight60')parents.push(verifyRun('tmp/experiments/sky-accuracy-dials/runs/00414-h62-verify'));
+    const recipe={parents,operation:atmosphereProfile==='toronto'?'H63 matched Toronto phase/SSA scene capture: freshly built Original15, Corrected60 and H61 Focused60; canonical aerosol amount/extinction and San Jose geometry retained. Canonical deployed startup is not the Toronto baseline.':'H62 actual scene capture: Deployed Original15, Corrected60 and H61 Focused60; native48/15, all four orders, exact row-specific mapping. New contained bundles only.',parameters:{controlHash:sha256(JSON.stringify(control)),controlArtifact:'control.json',scene:profile,atmosphereProfile,mapping,initialScenesOnly:profile!=='twilight60',minutesAfterSunset:profile==='twilight60'?60:profile==='twilight'?30:profile==='sunset'?0:null}};
+    const shortScene=profile==='twilight60'?'tw60':profile==='twilight'?'tw30':profile;
+    const run=createRun(atmosphereProfile==='toronto'?'h63-tor-'+shortScene:'h62-'+profile,recipe);run.write('control.json',control);
 	const started = performance.now();
 	/** @type {Awaited<ReturnType<typeof puppeteer.launch>>|undefined} */ let browser;
 	/** @type {ReturnType<typeof createServer>|undefined} */ let host;
@@ -83,20 +92,27 @@ async function main() {
 		files = [];
 	try {
 		const compilerPath = 'scripts/algorithm32/solar-zenith-cache/DistantSunSceneCacheGpuCompiler.js';
-		const original = readRepository(compilerPath).toString('utf8');
+		let original = readRepository(compilerPath).toString('utf8').replaceAll('\r\n','\n');
+        if(atmosphereProfile==='toronto'){
+          const phasePath=resolveRepository('experiments/sky-accuracy-dials/distant-horizon/toronto-phase.js').split(path.sep).join('/');
+          assert.equal(original.split(originalPhase).length,2);
+          original=`import {torontoPhaseGlsl} from '${phasePath}';\n`+original.replace(originalPhase,'${torontoPhaseGlsl(wavelengthNanometers)}');
+        }
         const baselineSource=compiler(normalized(original),1),transformed=compiler(normalized(original),mapping.k);
         const facadePath='src/algorithm32/implementation/distant-sun/cache/DistantSunSharedCache.js',lookupPath='src/algorithm32/implementation/distant-sun/cache/DistantSunSharedCacheCubicLookup.js';
         const facadeSource=facade(readRepository(facadePath).toString()),lookupSource=lookup(readRepository(lookupPath).toString());
         run.write('baseline-compiler.js.gz',gzipSync(Buffer.from(baselineSource)));
         run.write('candidate-compiler.js.gz',gzipSync(Buffer.from(transformed)));
+        if(atmosphereProfile==='toronto')run.write('original-compiler.js.gz',gzipSync(Buffer.from(original)));
         run.write('facade.js.gz',gzipSync(Buffer.from(facadeSource)));run.write('lookup.js.gz',gzipSync(Buffer.from(lookupSource)));
-        run.write('transform.json',{parents:[identity(compilerPath),identity(facadePath),identity(lookupPath)],mapping,baselineSha256:sha256(baselineSource),candidateSha256:sha256(transformed),facadeSha256:sha256(facadeSource),lookupSha256:sha256(lookupSource)});
+        run.write('transform.json',{parents:[identity(compilerPath),identity(facadePath),identity(lookupPath)],mapping,atmosphereProfile,materialHash:material?sha256(JSON.stringify(material)):null,originalSha256:sha256(original),baselineSha256:sha256(baselineSource),candidateSha256:sha256(transformed),facadeSha256:sha256(facadeSource),lookupSha256:sha256(lookupSource)});
         const shim=resolveRepository('experiments/sky-accuracy-dials/outgoing-scene/compiler.js');
+        const originalShim=resolveRepository('experiments/sky-accuracy-dials/outgoing-scene/original-compiler.js');
         const transformPlugin={name:'h62-contained-mapping',
           /** @param {string} source @param {string|undefined} importer */
-          async resolveId(source,importer){if(importer===shim&&source.startsWith('.'))return this.resolve(source,resolveRepository(compilerPath),{skipSelf:true});return null;},
+          async resolveId(source,importer){if((importer===shim||importer===originalShim)&&source.startsWith('.'))return this.resolve(source,resolveRepository(compilerPath),{skipSelf:true});return null;},
           /** @param {string} id @returns {string|null} */
-          load(id){if(id===shim)return transformed;if(id===resolveRepository(compilerPath))return baselineSource;if(id===resolveRepository(facadePath))return facadeSource;if(id===resolveRepository(lookupPath))return lookupSource;return null;}
+          load(id){if(id===shim)return transformed;if(id===originalShim)return original;if(id===resolveRepository(compilerPath))return baselineSource;if(id===resolveRepository(facadePath))return facadeSource;if(id===resolveRepository(lookupPath))return lookupSource;return null;}
         };
 		const service = await createProductionSharedCacheService(),
 			routes = new Map();
@@ -257,7 +273,7 @@ async function main() {
 		await page.setViewport({width: 1024, height: 768, deviceScaleFactor: 1});await page.bringToFront();
 		page.on('console', (message) => consoleMessages.push({type: message.type(), text: message.text(),location:message.location()}));
 		page.on('pageerror', (error) => consoleMessages.push({type: 'pageerror', text: error.message}));
-		run.progress('production', 'Load deployed app and exact San Jose solar-noon publication.');
+		run.progress('production', `Load deployed startup atlas and frozen San Jose ${profile} observation.`);
 		console.log(JSON.stringify({run:run.path,profile,phase:'starting'}));
 		await page.goto(`http://127.0.0.1:${address.port}`, {waitUntil: 'domcontentloaded', timeout: 30000});
 		/** Wait for the expected exact capture state or its actual failure. @param {string} expected @param {number} timeout @returns {Promise<unknown>} */
@@ -286,7 +302,11 @@ async function main() {
           const image=Buffer.from(await canvas.screenshot());const file=`${variant}-${heading}.png`;
           run.write(file,image);run.write(`${variant}-${heading}.json`,facts);captures.push({variant,heading,file,facts});run.progress('visual',`${run.path}/${file}`);console.log(JSON.stringify({run:run.path,capture:file}));
         }}
-        await capture('deployed');
+        let originalFacts=null;
+        if(atmosphereProfile==='toronto'){
+          await page.$eval('button#candidate-trigger',e=>e.click());
+          originalFacts=await wait('original-ready',1800000);await capture('original');
+        }else await capture('deployed');
         await page.$eval('button#candidate-trigger',e=>e.click());
         const baselineFacts=await wait('baseline-ready',1800000);await capture('corrected');
         const identityFacts=await page.evaluate(()=>globalThis['__h62Identity']());
@@ -298,13 +318,13 @@ async function main() {
         run.write('captures.json',captures);
 		run.write('result.json', {
 			accepted: true,
-			production,baseline:baselineFacts,profile,
+			production,original:originalFacts,baseline:baselineFacts,profile,atmosphereProfile,
 			candidate: candidateFacts,
 			servedCacheAssets: [...servedAssets.values()],
 			consoleMessages,
 			serverFailures,
 			elapsedMilliseconds: performance.now() - started,
-			scene:profile,mapping,scope:'Contained scene/runtime/twilight evidence; no production promotion.',
+			scene:profile,mapping,missingRequests,scope:'Contained scene/runtime/twilight evidence; no production promotion.',
 		});
 	} catch (error) {
 		failure = String(error);
