@@ -1,10 +1,16 @@
 # Predictable Sky Accuracy Dials Experiment
 
+Completed [H61 Sun-focused outgoing grid](outgoing-focus-results.md): same4374
+slots/F68 incoming,86% lower isolated N1 interpolation residual and full B1 RMSE
+11.59396 versus Corrected60 11.66848 and Original40 11.62291. The paper gate
+passes; production and earlier evidence remain unchanged.
+
 Stopped further [H60 incoming refinement](incoming-resolution-results.md) after
 clarifying that H59's N1 defect is outgoing-angle interpolation. The completed
 256-direction test improves higher-order error but worsens total selected-ray
 fit; it leaves N1 identical. Evidence and final
-verification are preserved. No new outgoing test or production change is selected.
+verification are preserved. H61 above owns the subsequent outgoing test;
+production remains unchanged.
 
 Completed [H59 angular interpolation attribution](angular-interpolation-results.md).
 Exact-angle N1 readout removes46-92% of the selected brightness deficits and
