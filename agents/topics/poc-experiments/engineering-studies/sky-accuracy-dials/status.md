@@ -1,5 +1,16 @@
 # Predictable Sky Accuracy Dials Experiment Status
 
+Completed: [H83-H88 exact F68 plus Sun overlay](f68-sun-overlay-results.md).
+No candidate qualifies after compact-window rejection, balanced +1024 rescue
+and the registered weights-only F68-share follow-on. Accepted00495 verifies
+360 measured/reused and 240 newly derived local spectral cases, types, exact
+weight/incident replay and cleanup. Both placements receive mathematical
+preflight; no prospective finalist earns second-placement radiance or reserved
+validation. Native recurrence, full B1 and scenes remain untriggered. The
+[execution record](f68-sun-overlay-execution.md) preserves decisions, failed00491
+CLI-dispatch recovery, resources and checkpoint. Production is unchanged;
+the experiment remains open with no active job or next campaign selected.
+
 Completed: [H75-H82 geometry-driven incoming refinement](geometry-incoming-results.md).
 The initial controlled tests and evidence-driven follow-ons produce no qualified
 candidate. Local base-layer alignment attribution succeeds, but fixed shifts,
@@ -7,8 +18,8 @@ ensembles and component-only refinement fail the joint accuracy/cost gate.
 Accepted00484 verifies the complete evidence chain, exact derivative replay and
 local types. Failed00480/00481 packaging attempts remain preserved; no numerical
 GPU run failed. Reserved validation remains unexposed; conditional native/N4/B1/
-scene work was not triggered. No job is active, no next campaign is selected,
-production is unchanged, and the experiment remains open.
+scene work was not triggered. The follow-on above owns current work;
+production is unchanged and the experiment remains open.
 [Execution summary and decisions](geometry-incoming-execution.md).
 
 Completed: [H69-H70 adaptive incoming grids](adaptive-incoming-results.md).
