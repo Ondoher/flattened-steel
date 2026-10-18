@@ -1,5 +1,10 @@
 # Predictable Sky Accuracy Dials Experiment
 
+Completed [H62 matched scene renders](outgoing-scene-results.md): three noon
+headings, sunset and twilight, matched lookup proofs and runtime measurements.
+The results own images and qualifications. Production is unchanged; no job is
+active. Additional owner scenes await selection.
+
 Completed [H61 Sun-focused outgoing grid](outgoing-focus-results.md): same4374
 slots/F68 incoming,86% lower isolated N1 interpolation residual and full B1 RMSE
 11.59396 versus Corrected60 11.66848 and Original40 11.62291. The paper gate

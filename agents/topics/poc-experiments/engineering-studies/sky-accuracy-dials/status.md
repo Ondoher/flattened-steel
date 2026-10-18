@@ -1,5 +1,11 @@
 # Predictable Sky Accuracy Dials Experiment Status
 
+Completed [H62 matched scene renders](outgoing-scene-results.md), comparing
+deployed, Corrected60 and Sun-focused60 in all five planned views. Final00414
+validates lookup/scene/control/cleanup evidence; the results own image links,
+timings and provenance qualifications. Production is unchanged and no job is
+active. Additional owner scenes remain unselected.
+
 Completed [H61 Sun-focused outgoing grid](outgoing-focus-results.md): same4374
 slots/F68 incoming,86% lower isolated N1 interpolation residual and full B1 RMSE
 11.59396 versus Corrected60 11.66848 and Original40 11.62291. The paper gate

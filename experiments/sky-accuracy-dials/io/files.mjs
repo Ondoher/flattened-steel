@@ -13,6 +13,7 @@ import {
 	realpathSync,
 	rmSync,
 	statfsSync,
+	unlinkSync,
 	writeFileSync,
 } from 'node:fs';
 import path from 'node:path';
@@ -25,8 +26,8 @@ export const outputRelative = 'tmp/experiments/sky-accuracy-dials';
 const sourceRelative = 'experiments/sky-accuracy-dials';
 const MiB = 1024 ** 2;
 const minimumFreeBytes = 40 * 1024 ** 3;
-// Owner approved656MiB retained disk for H59; system/GPU/scratch bounds unchanged.
-const retainedLimit = 656 * MiB;
+// Owner approved720MiB retained disk for H62; system/GPU/scratch bounds unchanged.
+const retainedLimit = 720 * MiB;
 const scratchLimit = 1024 * MiB;
 
 /** Hash exact bytes. @param {Uint8Array|string} bytes @returns {string} */
@@ -162,6 +163,42 @@ export function sourceIdentities() {
 	return listFiles(sourceRelative).map((name) => identity(name));
 }
 
+/** Reserve a sequence under a short exclusive lock shared by all allocator processes.
+ * Existing evidence, including historical shared prefixes, is never changed.
+ * @param {string} name @returns {string}
+ */
+function reserveRunDirectory(name) {
+	const lock = resolveRepository(`${outputRelative}/scratch/run-allocation.lock`, `${outputRelative}/scratch`, false);
+	const token = JSON.stringify({pid: process.pid, token: randomUUID()});
+	const deadline = Date.now() + 5000;
+	let descriptor;
+	while (descriptor === undefined) {
+		try { descriptor = openSync(lock, 'wx'); }
+		catch (error) {
+			if (error.code !== 'EEXIST' || Date.now() >= deadline) throw error;
+			Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 20);
+		}
+	}
+	try {
+		writeFileSync(descriptor, token); fsyncSync(descriptor);
+		let maximum = -1;
+		for (const entry of readdirSync(resolveRepository(`${outputRelative}/runs`))) {
+			assert.match(entry, /^\d{5}-[a-z0-9]+(?:-[a-z0-9]+)*$/u, 'Malformed run entry.');
+			assert.ok(entry.length <= 22);
+			assert.ok(lstatSync(resolveRepository(`${outputRelative}/runs/${entry}`)).isDirectory());
+			maximum = Math.max(maximum, Number(entry.slice(0, 5)));
+		}
+		assert.ok(maximum < 99999);
+		const runPath = `${outputRelative}/runs/${String(maximum + 1).padStart(5, '0')}-${name}`;
+		mkdirSync(resolveRepository(runPath, `${outputRelative}/runs`, false));
+		return runPath;
+	} finally {
+		closeSync(descriptor);
+		assert.equal(readFileSync(checkedAbsolute(lock), 'utf8'), token, 'Allocator lock ownership changed.');
+		unlinkSync(checkedAbsolute(lock));
+	}
+}
+
 /** Allocate a new immutable evidence run and its separately disposable scratch.
  * @param {string} name @param {DialDerivation} recipe @returns {DialRun}
  */
@@ -177,16 +214,7 @@ export function createRun(name, recipe) {
 	);
 	for (const directory of [`${outputRelative}/runs`, `${outputRelative}/scratch`])
 		mkdirSync(resolveRepository(directory, outputRelative, false), {recursive: true});
-	let maximum = -1;
-	for (const entry of readdirSync(resolveRepository(`${outputRelative}/runs`))) {
-		assert.match(entry, /^\d{5}-[a-z0-9]+(?:-[a-z0-9]+)*$/u, 'Malformed run entry.');
-		assert.ok(entry.length <= 22);
-		assert.ok(lstatSync(resolveRepository(`${outputRelative}/runs/${entry}`)).isDirectory());
-		maximum = Math.max(maximum, Number(entry.slice(0, 5)));
-	}
-	assert.ok(maximum < 99999);
-	const runPath = `${outputRelative}/runs/${String(maximum + 1).padStart(5, '0')}-${name}`;
-	mkdirSync(resolveRepository(runPath, `${outputRelative}/runs`, false));
+	const runPath = reserveRunDirectory(name);
 	const scratchRelative = `${outputRelative}/scratch/${randomUUID()}`;
 	const scratchPath = resolveRepository(scratchRelative, `${outputRelative}/scratch`, false);
 	mkdirSync(scratchPath);
