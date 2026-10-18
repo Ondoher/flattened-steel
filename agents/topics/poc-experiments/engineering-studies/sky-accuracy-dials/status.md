@@ -1,5 +1,16 @@
 # Predictable Sky Accuracy Dials Experiment Status
 
+Completed: [H89-H96 structured incoming grids](structured-incoming-results.md).
+No tested method qualifies after true/sham boundary attribution, polar/azimuth
+refinement, frozen validation, horizontal-plane repair, a1320field broad screen
+and stronger-concentration rescue. Local improvements do not survive protected
+cases and both constructions. Accepted00564 verifies2382measured cases plus
+528broad reused fields, references, provenance and local types. The22target IDs
+contain21unique physical geometries; deduplication preserves the rejection.
+Conditional H94native and H95B1/scenes were untriggered. No job or next campaign
+is selected; production is unchanged and the experiment stays open.
+[Complete execution decisions](structured-incoming-execution.md).
+
 Completed: [H83-H88 exact F68 plus Sun overlay](f68-sun-overlay-results.md).
 No candidate qualifies after compact-window rejection, balanced +1024 rescue
 and the registered weights-only F68-share follow-on. Accepted00495 verifies

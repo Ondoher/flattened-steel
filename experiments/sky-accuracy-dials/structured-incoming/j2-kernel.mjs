@@ -1,0 +1,3 @@
+import {kernel} from '../distant-horizon/toronto-orders.mjs';
+/** Original kernel with an earlier runtime roulette threshold; pure J2 precedes roulette. @param {any} table @param {number} albedo @returns {any} */
+export function j2Kernel(table,albedo){const generated=kernel(table,albedo);return {...generated,fullShader:generated.shader,roulette:2,qualifiedIndices:[2,12,13],meaning:'Shader bytes and all operations/RNG before the depth2 tally remain unchanged. Compensated roulette starts after J2 at depth2 instead of8, reducing later work. Only J2/species precision is qualified; later-order estimates have different sampling variance and are not qualified here.'};}

@@ -1,5 +1,12 @@
 # Predictable Sky Accuracy Dials Experiment Design
 
+Completed [H89-H96 structured incoming grids](structured-incoming-results.md).
+Ground/horizontal boundary alignment improves local J2, but the broad and
+stronger-concentration rules trade near-Sun numerator accuracy against off-axis
+phase-mass error. No candidate qualifies; accepted00564 verifies the evidence
+and local types. Native recurrence, full paper scoring and scenes were conditional
+and untriggered. Production is unchanged; the experiment remains open.
+
 Completed [H57 selected paper-ray order comparison](paper-ray-orders-results.md): all40 wavelengths for three adverse/control rays, matched independent GPU and libRadtran references, final swatches/spectra and pure-order cancellation diagrams in verified00363. The corrections reduce excess at one low ray but deepen a deficit at its counterpart; near the Sun, improved later-order contributions expose unchanged dim N1 light. External sampling limits and the disclosed post-compute monitoring repair remain explicit. Production is unchanged.
 
 Completed [H56 B1 regression diagnosis](paper-b1-diagnosis-results.md): both full Direct40 ablations and the factorial/order/reference ledgers are accepted through00351. Transport and normalization each worsen paper RMSE slightly; their changes expose existing radiance deficits and interact. The normalization second-order change helps the final fit, but third/fourth-order changes outweigh it. Reconstruction/rounding contributes negligibly. Toronto evidence is preserved; production is unchanged.
@@ -112,10 +119,26 @@ Append one event at process start, every phase transition, at least once every 3
 
 Budget against current disk space only. The owner's copy to another drive
 does not release space on C:. Initial observed free space was 50,601,861,120
-bytes. Stop starting work below 40 GiB free. Limit this experiment to 896 MiB
+bytes. Stop starting work below 40 GiB free. Limit this experiment to 1152 MiB
 of retained evidence and 1 GiB of live scratch; enforce both before expensive
 work and before writes. Run one GPU job at a time. Do not use another drive
 or delete any previous experiment, production, or historical artifact.
+
+### Budget amendment history
+
+H92's horizontal-boundary/complementary-resolution follow-on raised retained
+output1024to1152MiB under the owner's standing AFK authority. At that amendment
+retention was1022805452bytes (975.42MiB), scratch0; the estimate was50-100MiB of
+new field/reference/figure/proof work. Preserve every prior run, the
+2MiB sealing reserve,1GiB live scratch and40GiB free-disk minimum.
+
+H89-H96 raises retained disk from896to1024MiB under the owner's standing AFK
+authority. Starting retention is915833140bytes (873.41MiB), with no scratch and
+about95GiB free. Structured/boundary local screens, reference refinements,
+validation if earned and reviewable figures can require another40-120MiB.
+Retain compact recipes and stream numerical fields; any native/full-scene
+phase gets a fresh measured estimate. Scratch/free-disk bounds and all earlier
+evidence remain unchanged.
 
 H75-H82 raises retained disk from768to896MiB under the owner's explicit AFK
 authority to make decisions needed to proceed. Starting retention is776671024

@@ -1,5 +1,15 @@
 # Predictable Sky Accuracy Dials Experiment
 
+Completed: [H89-H96 structured incoming grids](structured-incoming-results.md).
+Physical ground/horizontal splits improve selected local J2 calculations, but
+the broad rule fails a qualified repeat-construction Mie-numerator witness.
+Stronger Sun concentration repairs that witness and creates sideways regressions.
+Accepted00564 verifies2382measured cases,528broad reuse derivations, independent
+histories, duplicate-geometry sensitivity and local types. No method qualifies;
+conditional native/B1/scenes were not triggered. Production unchanged; no job
+is active and the experiment stays open.
+[Execution decisions](structured-incoming-execution.md).
+
 Completed: [H83-H88 original F68 plus Sun-focused samples](f68-sun-overlay-results.md).
 Compact overlays fail the fixed-exterior geometry screen. Full-sphere balance
 and a targeted F68-share attenuation improve the baseline but do not qualify
@@ -15,7 +25,7 @@ placement ensembles and component-only refinement; local fixes do not transfer
 across the development panel. [Execution and verification](geometry-incoming-execution.md)
 retain all decisions. Conditional fresh validation/native/B1/scenes were not
 triggered. Production is unchanged; the experiment remains open. The proposed
-follow-on above owns current work.
+structured-grid plan above owns the next-work description.
 
 Completed: [H69-H70 adaptive incoming grids](adaptive-incoming-results.md).
 All3 layered designs fail the joint local gate after both paper/Toronto screens
