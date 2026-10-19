@@ -1,5 +1,18 @@
 # Predictable Sky Accuracy Dials Experiment Status
 
+Completed: [H113-H119 positive-mixture follow-up](positive-mixture-results.md).
+The fixed midpoint improves Toronto's 36-field local J2 estimates but worsens
+paper-atmosphere agreement versus complete Sun4096. Sun-gated and integrated-
+Rayleigh follow-ons do not establish both-profile qualification. GPU-hybrid
+weights work locally; binary transport lowers measured prototype elapsed times
+by about40-43%, without a native-build claim. Accepted00618 verifies90field
+derivatives, frozen decisions, operator/primitive checks, immutable evidence,
+transport parity, cleanup and local types. Strict numerical scopes remain explicit.
+Conditional broad/fresh/native/B1/scenes were untriggered. No job remains;
+production unchanged; experiment open. The [execution record](positive-mixture-execution.md)
+owns decisions, recovery, timings and resumption; the [plan](positive-mixture-plan.md)
+retains unchanged gates.
+
 Completed: [H105-H112 illumination-basis integration](illumination-basis-results.md).
 Accurate basis moments reproduce H100 without new illumination. A curved-sector
 model fails the near-Sun component gate; a fixed convex midpoint passes both

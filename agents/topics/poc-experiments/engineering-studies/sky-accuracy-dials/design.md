@@ -1,5 +1,18 @@
 # Predictable Sky Accuracy Dials Experiment Design
 
+Completed: [H113-H119 positive-mixture follow-up](positive-mixture-results.md).
+The fixed midpoint improves Toronto's 36-field local J2 estimates but worsens
+paper-atmosphere agreement versus complete Sun4096. Sun-gated and integrated-
+Rayleigh follow-ons do not establish both-profile qualification. GPU-hybrid
+weights work locally; binary transport lowers measured prototype elapsed times
+by about40-43%, without a native-build claim. Accepted00618 verifies90field
+derivatives, frozen decisions, operator/primitive checks, immutable evidence,
+transport parity, cleanup and local types. Strict numerical scopes remain explicit.
+Conditional broad/fresh/native/B1/scenes were untriggered. No job remains;
+production unchanged; experiment open. The [execution record](positive-mixture-execution.md)
+owns decisions, recovery, timings and resumption; the [plan](positive-mixture-plan.md)
+retains unchanged gates.
+
 Completed: [H105-H112 positive illumination bases](illumination-basis-results.md).
 Explicit positive basis weights reproduce H100 numerically; exact Toronto
 azimuth moments plus polar phase-knot tangencies separate integration error from
@@ -139,12 +152,18 @@ Append one event at process start, every phase transition, at least once every 3
 
 Budget against current disk space only. The owner's copy to another drive
 does not release space on C:. Initial observed free space was 50,601,861,120
-bytes. Stop starting work below 40 GiB free. Limit this experiment to 1152 MiB
+bytes. Stop starting work below 40 GiB free. Limit this experiment to 1184 MiB
 of retained evidence and 1 GiB of live scratch; enforce both before expensive
 work and before writes. Run one GPU job at a time. Do not use another drive
 or delete any previous experiment, production, or historical artifact.
 
 ### Budget amendment history
+
+H113's positive-mixture follow-up raises retained disk from 1152 to 1184 MiB
+under standing owner authority. Starting retained evidence is 1201242464 bytes
+(1145.47 MiB), scratch 0 and about 108.6 GiB free disk. Initial compact probes,
+figures and immutable manifests are estimated at 8-24 MiB. Preserve the 2 MiB
+seal reserve, 1 GiB scratch allowance, 40 GiB free minimum and all earlier runs.
 
 H92's horizontal-boundary/complementary-resolution follow-on raised retained
 output1024to1152MiB under the owner's standing AFK authority. At that amendment

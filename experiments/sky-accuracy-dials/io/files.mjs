@@ -26,8 +26,8 @@ export const outputRelative = 'tmp/experiments/sky-accuracy-dials';
 const sourceRelative = 'experiments/sky-accuracy-dials';
 const MiB = 1024 ** 2;
 const minimumFreeBytes = 40 * 1024 ** 3;
-// H92 horizontal follow-on:1152MiB retained under owner's explicit AFK budget-decision authority.
-const retainedLimit = 1152 * MiB;
+// H113 positive-mixture follow-on:1184MiB under standing owner budget-decision authority.
+const retainedLimit = 1184 * MiB;
 const scratchLimit = 1024 * MiB;
 
 /** Hash exact bytes. @param {Uint8Array|string} bytes @returns {string} */

@@ -1,42 +1,35 @@
 # Active Topic
 
 Current active topic: sky-accuracy-dials.
-Focus: completed H105-H112 illumination-basis investigation; exploratory/cost-limited lead.
+Focus: completed H113-H119 positive illumination-mixture investigation; no qualified replacement.
 
 Canonical entry: [Sky Accuracy Dials](poc-experiments/engineering-studies/sky-accuracy-dials/README.md).
 
 ## Immediate Focus
 
-The owner-selected [H105-H112 investigation](poc-experiments/engineering-studies/sky-accuracy-dials/illumination-basis-results.md)
-is complete. A positive basis engine reproduces H100 numerically; the new
-sector model fails a component gate. A fixed positive midpoint passes both
-exposed Toronto gain checks, but full protection/native practicality and B1
-remain unqualified. Accepted00594 verifies local identities, manufactured/
-limiting checks, immutable evidence, types and cleanup. The
-[basis execution record](poc-experiments/engineering-studies/sky-accuracy-dials/illumination-basis-execution.md)
-owns decisions, recovery, timings and resumption. No numerical job or new branch
-is selected. H109-H111 were untriggered. Production is unchanged; experiment open.
+The owner-selected [H113-H119 investigation](poc-experiments/engineering-studies/sky-accuracy-dials/positive-mixture-results.md)
+is complete. The fixed midpoint improves Toronto's local estimates but worsens
+paper-atmosphere agreement versus complete Sun4096. Two representation/species
+follow-ons and GPU-hybrid/binary-transport pilots were followed to a documented
+local disposition. Accepted00618 verifies90derivatives, frozen decisions,
+operator checks, immutable evidence, cleanup and types. No both-profile qualified
+accuracy/cost survivor; strict numerical limits remain explicit. Conditional
+broad/fresh/native/B1/scenes were untriggered. No numerical job remains.
 
-The completed [H97-H104 study](poc-experiments/engineering-studies/sky-accuracy-dials/phase-cell-integration-results.md)
-is the immutable starting evidence. Accurate phase integration alone fails its
-joint gains; bilinear reconstruction improves one witness without protected or
-practical qualification. Accepted00581 verifies the prior study. Production is
-unchanged and the experiment stays open.
+The [execution record](poc-experiments/engineering-studies/sky-accuracy-dials/positive-mixture-execution.md)
+owns consequential decisions, recovery, timings and resumption. Production is
+unchanged; experiment open. Further work needs owner selection of a supported
+lead rather than automatic full-cache expansion. The completed prior studies
+remain immutable starting evidence linked from the entry/results.
 
-The [prior execution record](poc-experiments/engineering-studies/sky-accuracy-dials/phase-cell-integration-execution.md)
-owns H97-H104 history. The basis plan retains the original scientific gates;
-the new results/execution documents own current conclusions. No production
-promotion is authorized. Any later practical continuation needs owner selection.
-
-Prior [H89-H96 results](poc-experiments/engineering-studies/sky-accuracy-dials/structured-incoming-results.md)
-remain the immutable starting evidence; no tested grid qualified. The old
-22target IDs represent21unique physical geometries and all are exposed.
-The eight H97 fresh validation tuples remain unexposed. Retained limit1152MiB;
-preserve every prior run, partial artifact and failed proof.
+The old22target IDs represent21unique exposed physical geometries. All eight
+H97 fresh validation tuples remain unexposed. Retained limit1184MiB; preserve
+all prior runs, partial artifacts and failed proofs. No standards reviewers or
+audits for contained experiments; checkpoint advice remains separate.
 
 ## Minimal Reload Sources
 
 1. [Repository instructions](../../AGENTS.md).
 2. [Experiment entry](poc-experiments/engineering-studies/sky-accuracy-dials/README.md).
-3. [Illumination-basis results](poc-experiments/engineering-studies/sky-accuracy-dials/illumination-basis-results.md).
-4. [Basis execution record](poc-experiments/engineering-studies/sky-accuracy-dials/illumination-basis-execution.md).
+3. [Positive-mixture results](poc-experiments/engineering-studies/sky-accuracy-dials/positive-mixture-results.md).
+4. [Positive-mixture execution](poc-experiments/engineering-studies/sky-accuracy-dials/positive-mixture-execution.md).
