@@ -1,5 +1,14 @@
 # Predictable Sky Accuracy Dials Experiment
 
+Completed: [H97-H104 phase-aware cell integration](phase-cell-integration-results.md).
+Accurate cell weights repair phase mass but fail joint accuracy gates across
+paper/Toronto. Positive bilinear illumination reconstruction improves one
+near-Sun witness, yet remains exploratory/cost-limited. Accepted00581 verifies
+72causal fields, geometry/phase proofs, two reconstruction variants, path and
+uncertainty checks, images, cleanup and types. Conditional broad/fresh/native/
+B1/scenes were untriggered. No job remains; production unchanged; experiment
+open. [Complete decisions and timings](phase-cell-integration-execution.md).
+
 Completed: [H89-H96 structured incoming grids](structured-incoming-results.md).
 Physical ground/horizontal splits improve selected local J2 calculations, but
 the broad rule fails a qualified repeat-construction Mie-numerator witness.

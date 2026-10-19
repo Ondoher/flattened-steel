@@ -1,5 +1,16 @@
 # Predictable Sky Accuracy Dials Experiment Status
 
+Completed: [H97-H104 phase-aware cell integration](phase-cell-integration-results.md).
+Both phase-only concentration rules fail their registered joint gains despite
+qualified phase mass. The bounded positive-reconstruction wave improves a
+near-Sun witness, but remains exploratory/cost-limited without joint protected
+qualification. Accepted00581 verifies72causal fields, geometry/phase proofs,
+two reconstruction variants, numerical/path uncertainty, decisions, images,
+local types and cleanup. H101broad/fresh,H102native,H103B1/scenes were conditional
+and untriggered. No job remains; no new light traces/fresh references or
+production changes. The experiment stays open; [execution decisions and timings](phase-cell-integration-execution.md)
+own the full record.
+
 Completed: [H89-H96 structured incoming grids](structured-incoming-results.md).
 No tested method qualifies after true/sham boundary attribution, polar/azimuth
 refinement, frozen validation, horizontal-plane repair, a1320field broad screen

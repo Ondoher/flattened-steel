@@ -1,5 +1,15 @@
 # Predictable Sky Accuracy Dials Experiment Design
 
+Completed: [phase-aware cell integration](phase-cell-integration-results.md).
+Shared illumination with accurate cell phase weights repairs mass but fails
+joint accuracy gains. Positive reconstruction provides a useful local near-Sun
+lead without protected/practical qualification. Accepted00581 verifies the
+72field causal screen, numerical geometry/phase/uncertainty/path proofs,
+reconstruction, images, cleanup and types. Conditional broad/native/B1/scenes
+were untriggered; fresh physical validation remains unexposed. Production
+unchanged; experiment open. The [execution record](phase-cell-integration-execution.md)
+owns complete decisions and timings.
+
 Completed [H89-H96 structured incoming grids](structured-incoming-results.md).
 Ground/horizontal boundary alignment improves local J2, but the broad and
 stronger-concentration rules trade near-Sun numerator accuracy against off-axis

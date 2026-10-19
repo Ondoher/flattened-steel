@@ -1,34 +1,34 @@
 # Active Topic
 
 Current active topic: sky-accuracy-dials.
-Focus: completed H89-H96 incoming-grid campaign; no tested method qualifies.
+Focus: completed H97-H104 phase-aware cell study; negative phase-only and exploratory reconstruction results.
 
 Canonical entry: [Sky Accuracy Dials](poc-experiments/engineering-studies/sky-accuracy-dials/README.md).
 
 ## Immediate Focus
 
-Completed owner-selected independent execution of H89-H96. The
-[results and images](poc-experiments/engineering-studies/sky-accuracy-dials/structured-incoming-results.md)
-own the outcome; the
-[execution record](poc-experiments/engineering-studies/sky-accuracy-dials/structured-incoming-execution.md)
-preserves every decision and recovery. Accepted00564 verifies68prior runs,
-2382measured cases,528broad scalar derivations, independent references and local
-types. No job or further campaign is selected; the experiment remains open.
+The selected [H97-H104 study](poc-experiments/engineering-studies/sky-accuracy-dials/phase-cell-integration-results.md)
+is complete. Accepted00581 verifies72same-L causal fields, cell/phase proofs,
+two positive reconstruction variants, independent output precision, path
+contrasts, decisions, cleanup and local types. Phase-only rules fail their
+registered joint gains. Bilinear reconstruction substantially improves one
+near-Sun witness, but remains exploratory/cost-limited and lacks joint protected
+qualification. Conditional broad/fresh/native/B1/scenes were not triggered.
+No job remains; production is unchanged and the experiment stays open.
 
-True ground/horizontal partitions help selected local J2 cases, but broad00557
-finds a qualified repeat-construction Mie-numerator regression. Stronger Sun
-concentration fixes that near-Sun witness and creates sideways phase-mass
-regressions;00561rejects both rescues early. The original frozen00530 rejection
-stands. No revised survivor earns new validation, native recurrence, B1 or scenes.
+The [execution record](poc-experiments/engineering-studies/sky-accuracy-dials/phase-cell-integration-execution.md)
+owns decisions, failed-run recovery, timings and resumption boundaries. Further
+scientific work awaits owner selection; no production promotion is authorized.
 
-The22broad target IDs contain21unique physical geometries: held-6/held-7 duplicate.
-The deduplicated sensitivity preserves rejection. Twelve twilight reference
-spectra retain sampling limits. All former reserved IDs are exposed development;
-a later revised method needs genuinely new frozen physical tuples. Production
-is unchanged. Retention1152MiB; prior evidence and failed proofs stay immutable.
+Prior [H89-H96 results](poc-experiments/engineering-studies/sky-accuracy-dials/structured-incoming-results.md)
+remain the immutable starting evidence; no tested grid qualified. The old
+22target IDs represent21unique physical geometries and all are exposed.
+The eight H97 fresh validation tuples remain unexposed. Retained limit1152MiB;
+preserve every prior run, partial artifact and failed proof.
 
 ## Minimal Reload Sources
 
 1. [Repository instructions](../../AGENTS.md).
 2. [Experiment entry](poc-experiments/engineering-studies/sky-accuracy-dials/README.md).
-3. [Structured incoming results](poc-experiments/engineering-studies/sky-accuracy-dials/structured-incoming-results.md).
+3. [Phase-aware cell integration results](poc-experiments/engineering-studies/sky-accuracy-dials/phase-cell-integration-results.md).
+4. [Execution record](poc-experiments/engineering-studies/sky-accuracy-dials/phase-cell-integration-execution.md).
