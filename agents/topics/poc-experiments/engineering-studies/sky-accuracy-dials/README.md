@@ -1,5 +1,14 @@
 # Predictable Sky Accuracy Dials Experiment
 
+Completed: [H105-H112 illumination bases and integrated phase weights](illumination-basis-results.md).
+The basis engine is numerically qualified as a small CPU calibration. The sector
+representation fails a component gate; a fixed positive midpoint passes both
+exposed Toronto gains but lacks full protection/practical qualification.
+Accepted00594 verifies12physical fields,32manufactures,40limiting configurations,
+immutable evidence, cleanup and local types. Broad/fresh/native/B1/scenes were
+untriggered. The [execution record](illumination-basis-execution.md) owns decisions
+and timings. No job remains; production unchanged; experiment open.
+
 Completed: [H97-H104 phase-aware cell integration](phase-cell-integration-results.md).
 Accurate cell weights repair phase mass but fail joint accuracy gates across
 paper/Toronto. Positive bilinear illumination reconstruction improves one

@@ -1,5 +1,16 @@
 # Predictable Sky Accuracy Dials Experiment Status
 
+Completed: [H105-H112 illumination-basis integration](illumination-basis-results.md).
+Accurate basis moments reproduce H100 without new illumination. A curved-sector
+model fails the near-Sun component gate; a fixed convex midpoint passes both
+exposed Toronto gains but remains exploratory/cost-limited, without full-panel,
+native or paper qualification. Accepted00594 verifies12physical comparisons,
+32manufactures,40limiting configurations,9moment primitives, immutable evidence,
+cleanup and types. All13allocations, including four failures, are preserved.
+No broad/fresh/native/B1/scenes were earned. No numerical job remains; production
+unchanged; experiment open. The [execution record](illumination-basis-execution.md)
+owns decisions, timings and the resumption boundary.
+
 Completed: [H97-H104 phase-aware cell integration](phase-cell-integration-results.md).
 Both phase-only concentration rules fail their registered joint gains despite
 qualified phase mass. The bounded positive-reconstruction wave improves a

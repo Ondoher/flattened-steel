@@ -1,5 +1,15 @@
 # Predictable Sky Accuracy Dials Experiment Design
 
+Completed: [H105-H112 positive illumination bases](illumination-basis-results.md).
+Explicit positive basis weights reproduce H100 numerically; exact Toronto
+azimuth moments plus polar phase-knot tangencies separate integration error from
+representation bias. A fixed convex midpoint improves the two exposed Toronto
+gains, but full protection/practical native cost remain unqualified. The
+[plan](illumination-basis-plan.md) retains gates, and the
+[execution record](illumination-basis-execution.md) owns decisions and timings.
+Accepted00594 closes the selected local route; broad/fresh/native/B1/scenes were
+untriggered. No numerical job remains. Production unchanged; experiment open.
+
 Completed: [phase-aware cell integration](phase-cell-integration-results.md).
 Shared illumination with accurate cell phase weights repairs mass but fails
 joint accuracy gains. Positive reconstruction provides a useful local near-Sun
