@@ -1,5 +1,17 @@
 # Predictable Sky Accuracy Dials Experiment
 
+Completed: [H120-H125 independent interior illumination diagnosis](interior-illumination-results.md).
+Independent probes establish material between-direction reconstruction error and
+resolve concrete cancellations across incoming light origins and angular regions.
+Reconstruction dominates three qualified controlled witnesses across both optical
+profiles; the tested source-phase-coordinate repair fails its registered gain.
+Accepted00634 verifies the final route and local types. No replacement, native
+build, N4/B1 or scene work is qualified; unresolved bounds remain explicit.
+Production is unchanged, no job remains and the experiment stays open. The
+[execution record](interior-illumination-execution.md) owns decisions and timings;
+the [plan](interior-illumination-plan.md) retains gates. Further work needs owner
+selection of a supported follow-on.
+
 Completed: [H113-H119 positive-mixture follow-up](positive-mixture-results.md).
 The fixed midpoint improves Toronto's 36-field local J2 estimates but worsens
 paper-atmosphere agreement versus complete Sun4096. Sun-gated and integrated-

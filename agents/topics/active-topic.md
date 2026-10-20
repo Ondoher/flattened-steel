@@ -1,35 +1,35 @@
 # Active Topic
 
 Current active topic: sky-accuracy-dials.
-Focus: completed H113-H119 positive illumination-mixture investigation; no qualified replacement.
+Focus: completed H120-H125 independent interior illumination diagnosis.
 
 Canonical entry: [Sky Accuracy Dials](poc-experiments/engineering-studies/sky-accuracy-dials/README.md).
 
 ## Immediate Focus
 
-The owner-selected [H113-H119 investigation](poc-experiments/engineering-studies/sky-accuracy-dials/positive-mixture-results.md)
-is complete. The fixed midpoint improves Toronto's local estimates but worsens
-paper-atmosphere agreement versus complete Sun4096. Two representation/species
-follow-ons and GPU-hybrid/binary-transport pilots were followed to a documented
-local disposition. Accepted00618 verifies90derivatives, frozen decisions,
-operator checks, immutable evidence, cleanup and types. No both-profile qualified
-accuracy/cost survivor; strict numerical limits remain explicit. Conditional
-broad/fresh/native/B1/scenes were untriggered. No numerical job remains.
+The owner-selected [H120-H125 investigation](poc-experiments/engineering-studies/sky-accuracy-dials/interior-illumination-results.md)
+is complete. Independent node/interior probes establish material reconstruction
+bias and concrete cancellation across incoming light origins and angular regions.
+The tested positive phase-coordinate repair fails its registered gain; no
+replacement is qualified. Accepted00634 replays the selected evidence, source and
+query identities, inherited controls, reservations, cleanup and local types.
+Unresolved numerical/reference bounds remain explicit. Production is unchanged.
 
-The [execution record](poc-experiments/engineering-studies/sky-accuracy-dials/positive-mixture-execution.md)
-owns consequential decisions, recovery, timings and resumption. Production is
-unchanged; experiment open. Further work needs owner selection of a supported
-lead rather than automatic full-cache expansion. The completed prior studies
-remain immutable starting evidence linked from the entry/results.
+No numerical job remains; the experiment stays open. Further execution needs
+owner selection of a supported follow-on rather than automatic native, N4, B1
+or scene expansion. The [execution record](poc-experiments/engineering-studies/sky-accuracy-dials/interior-illumination-execution.md)
+owns decisions, resource amendments, timing and the resumption boundary.
+The [completed plan](poc-experiments/engineering-studies/sky-accuracy-dials/interior-illumination-plan.md)
+retains unchanged gates. Prior studies remain immutable linked evidence.
 
-The old22target IDs represent21unique exposed physical geometries. All eight
-H97 fresh validation tuples remain unexposed. Retained limit1184MiB; preserve
-all prior runs, partial artifacts and failed proofs. No standards reviewers or
-audits for contained experiments; checkpoint advice remains separate.
+All eight H97 fresh physical tuples remain unexposed. Retained limit1408MiB;
+preserve prior runs, partial artifacts, failed proofs and recovery records.
+Dedicated standards reviewers/audits remain disabled for contained experiments;
+checkpoint advice remains separate.
 
 ## Minimal Reload Sources
 
 1. [Repository instructions](../../AGENTS.md).
 2. [Experiment entry](poc-experiments/engineering-studies/sky-accuracy-dials/README.md).
-3. [Positive-mixture results](poc-experiments/engineering-studies/sky-accuracy-dials/positive-mixture-results.md).
-4. [Positive-mixture execution](poc-experiments/engineering-studies/sky-accuracy-dials/positive-mixture-execution.md).
+3. [Interior-illumination results](poc-experiments/engineering-studies/sky-accuracy-dials/interior-illumination-results.md).
+4. [Interior-illumination execution](poc-experiments/engineering-studies/sky-accuracy-dials/interior-illumination-execution.md).

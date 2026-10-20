@@ -1,5 +1,13 @@
 # Predictable Sky Accuracy Dials Experiment Design
 
+Completed diagnosis: [H120-H125 interior illumination](interior-illumination-results.md).
+Independent node/interior light separates nodal transport, illumination-function
+reconstruction and phase integration. Their local errors can cancel; component
+and absolute-angular metrics must accompany signed totals. The tested positive
+source-phase-coordinate repair does not qualify. No production architecture or
+cache representation is adopted by this diagnostic. Accepted00634 verifies the
+selected route; production unchanged, experiment open, no active numerical job.
+
 Completed: [H113-H119 positive-mixture follow-up](positive-mixture-results.md).
 The fixed midpoint improves Toronto's 36-field local J2 estimates but worsens
 paper-atmosphere agreement versus complete Sun4096. Sun-gated and integrated-
