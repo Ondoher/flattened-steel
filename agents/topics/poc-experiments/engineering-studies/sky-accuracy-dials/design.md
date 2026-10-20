@@ -1,5 +1,40 @@
 # Predictable Sky Accuracy Dials Experiment Design
 
+## Cache-building complexity: report, do not gate
+
+For subsequent work in this experiment, the owner directs that cache-building
+complexity must not limit the accuracy investigation. Do not reject, stop or
+withhold an otherwise scientifically promising method solely because its builder
+is complicated or expensive. Accuracy and scientific evidence determine advancement.
+
+Report construction complexity and associated costs: measured or estimated build
+time, CPU/GPU work, peak memory, intermediate storage, additional illumination
+evaluations and scaling across scattering orders. Distinguish measurements from
+estimates. These are information for later engineering decisions, not experimental
+acceptance gates. This direction supersedes earlier complexity/cost-based gates
+for subsequent work; preserve completed plans and their historical dispositions.
+
+## Current scientific boundary
+
+The [H134-H140 plan](illumination-reconstruction-plan.md) proposes testing the
+supported representation in a single-profile builder and through complete
+recurrence and paper/scene comparisons. It applies the accuracy-first direction
+above, with construction costs retained in reports. Its bounded second-agent
+critique is incorporated; owner-authorized execution is active. The
+[execution record](illumination-reconstruction-execution.md) owns the current
+boundary and [results](illumination-reconstruction-results.md) own measured findings.
+
+Completed diagnostic: [H126-H133 reconstruction mechanisms](reconstruction-mechanisms-results.md).
+Source-phase-factored positive polar cubic and cached-node curvature refinement
+produce complementary local reconstruction gains across both optical profiles.
+Retain per-origin absolute errors alongside signed physical totals: the latter
+still lack protection precision in 27 of 36 cases. No production representation
+is adopted. Accepted00652 verifies the selected route and local types; production
+is unchanged, no job remains and the experiment stays open. The
+[execution record](reconstruction-mechanisms-execution.md) owns decisions,
+performance limits and completion. Single-profile native feasibility and full
+recurrence remain outside this completed diagnostic.
+
 Completed diagnosis: [H120-H125 interior illumination](interior-illumination-results.md).
 Independent node/interior light separates nodal transport, illumination-function
 reconstruction and phase integration. Their local errors can cancel; component
@@ -160,12 +195,24 @@ Append one event at process start, every phase transition, at least once every 3
 
 Budget against current disk space only. The owner's copy to another drive
 does not release space on C:. Initial observed free space was 50,601,861,120
-bytes. Stop starting work below 40 GiB free. Limit this experiment to 1184 MiB
+bytes. Stop starting work below 40 GiB free. Limit this experiment to 1536 MiB
 of retained evidence and 1 GiB of live scratch; enforce both before expensive
 work and before writes. Run one GPU job at a time. Do not use another drive
 or delete any previous experiment, production, or historical artifact.
 
 ### Budget amendment history
+
+H135 raises retained evidence from 1408 to 1536 MiB under standing owner budget
+authority. Measured retained bytes are 1,443,880,174 (about 1377 MiB), scratch 0;
+the new disjoint 32768-direction confirmation and builder evidence are forecast
+at 48-100 MiB. Preserve the sealing reserve, scratch/free-space limits and all
+prior immutable runs. This amendment concerns disk retention only.
+
+The preceding allocator allowance was 1408 MiB, carried into H126-H133 from its
+accepted parent campaign. H126-H133 required no increase and finished with
+about 1350 MiB retained and zero scratch. Its
+[execution record](reconstruction-mechanisms-execution.md) owns current measured
+storage; the earlier amendments below remain historical evidence.
 
 H113's positive-mixture follow-up raises retained disk from 1152 to 1184 MiB
 under standing owner authority. Starting retained evidence is 1201242464 bytes

@@ -1,5 +1,27 @@
 # Predictable Sky Accuracy Dials Experiment
 
+Active: [H134-H140 illumination reconstruction through the cache recurrence](illumination-reconstruction-plan.md).
+Tests active-profile refinement and phase-factored interpolation, then conditional
+four-order construction, full paper B1 and matched scenes. Accuracy gates govern
+advancement; build complexity/time/memory are reported. H134 and local development
+are complete; both reconstructions pass all36 local physical protections after
+independent precision recovery. Continuous operator integration and stronger
+physical transfer remain active; actual recurrence, B1 and scenes have not run. The
+[results](illumination-reconstruction-results.md) link native progress tables;
+the [execution record](illumination-reconstruction-execution.md) owns live state.
+
+Completed: [H126-H133 reconstruction mechanisms](reconstruction-mechanisms-results.md).
+All five screens and earned follow-ons are complete. Source-phase-factored polar
+cubic plus cached-node curvature refinement reduces measured absolute incoming
+reconstruction error by 61.5% paper / 72.7% Toronto across 36 exposed fields.
+All component protections pass; 27 physical-total protections remain inconclusive.
+Accepted00652 verifies the actual route, immutable evidence, cleanup and local
+types. No complete practical/physical replacement is admitted; production is
+unchanged, no job remains and the experiment stays open. The
+[execution record](reconstruction-mechanisms-execution.md) owns decisions, cost,
+recovery and completion; the [plan](reconstruction-mechanisms-plan.md) retains
+gates. Native, N4, B1 and scene follow-ons require a new selected scope.
+
 Completed: [H120-H125 independent interior illumination diagnosis](interior-illumination-results.md).
 Independent probes establish material between-direction reconstruction error and
 resolve concrete cancellations across incoming light origins and angular regions.

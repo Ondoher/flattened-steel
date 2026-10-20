@@ -1,0 +1,6 @@
+import {customAssess,linearPredictor} from './custom-metrics.mjs';
+import {polarModel} from './polar-cubic.mjs';
+import {lightBias,compare} from './metrics.mjs';
+/** Fixed composition of two earned mechanisms; no new nodes, reference fit or
+ * coefficient search. @param {any} f @param {any[]} qs @param {any} nodes @param {any} angular @param {any} refined @param {any} refinedNodes @param {(s:string)=>void} progress @returns {any} */
+export function combinedAssess(f,qs,nodes,angular,refined,refinedNodes,progress){const original=linearPredictor(f),oldFactored=linearPredictor(f,[true,true]),newLinear=linearPredictor(refined),newFactored=linearPredictor(refined,[true,true]),newErrors=refinedNodes.n256.map((_,i)=>lightBias(refinedNodes,i)),predictors={original,cubicFactored:(d,n,e)=>({...polarModel(f,d,n,e,[true,true]),control:oldFactored(d,n,e).values}),nodal:(d)=>newLinear(d,refinedNodes.n256,newErrors),combined:(d)=>({...polarModel(refined,d,refinedNodes.n256,newErrors,[true,true]),control:newFactored(d,refinedNodes.n256,newErrors).values})},a=customAssess(f,qs,nodes,angular,predictors,progress);return {...a,combinedAgainstCubic:compare(a.results.cubicFactored,a.results.combined),combinedAgainstNodal:compare(a.results.nodal,a.results.combined)};}

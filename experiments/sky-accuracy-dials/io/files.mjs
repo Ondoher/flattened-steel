@@ -26,8 +26,8 @@ export const outputRelative = 'tmp/experiments/sky-accuracy-dials';
 const sourceRelative = 'experiments/sky-accuracy-dials';
 const MiB = 1024 ** 2;
 const minimumFreeBytes = 40 * 1024 ** 3;
-// H122/H123 independent probe transfer and maximum131k precision:1408MiB under standing owner budget-decision authority.
-const retainedLimit = 1408 * MiB;
+// H135 independent confirmation and builder evidence:1536MiB under standing owner budget-decision authority.
+const retainedLimit = 1536 * MiB;
 const scratchLimit = 1024 * MiB;
 
 /** Hash exact bytes. @param {Uint8Array|string} bytes @returns {string} */

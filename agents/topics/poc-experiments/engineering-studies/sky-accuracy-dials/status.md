@@ -1,5 +1,26 @@
 # Predictable Sky Accuracy Dials Experiment Status
 
+Active work: [H134-H140 illumination reconstruction](illumination-reconstruction-plan.md).
+The plan covers local replication for a single active atmosphere, an actual
+builder slice, transfer, conditional four-order recurrence, B1 and twilight
+comparisons. Build complexity is reportable rather than a gate. H134 and local
+development and disjoint confirmation00658 are complete. Both reconstructions
+pass all36 local physical protections after precision recovery00673/00678.
+Continuous operator integration and stronger physical transfer remain active;
+actual own-field recurrence, B1 and observer scenes have not run. The
+[execution record](illumination-reconstruction-execution.md) owns the next action;
+[results](illumination-reconstruction-results.md) own completed findings.
+
+Completed: [H126-H133 reconstruction mechanisms](reconstruction-mechanisms-results.md).
+All five screens and earned follow-ons are complete; the strongest fixed
+composition passes both profile reconstruction-gain gates and all component
+protections across 36 exposed fields. Physical-total admission remains incomplete
+(9 pass, 27 inconclusive); no complete practical replacement qualifies.
+Accepted00652 replays the actual numerical route and passes local types. The
+[execution record](reconstruction-mechanisms-execution.md) owns decisions, timing,
+recovery and completion. Production is unchanged; no job remains; the experiment
+stays open. Further work requires a newly selected scope.
+
 Completed: [H120-H125 independent interior illumination diagnosis](interior-illumination-results.md).
 The selected diagnostic establishes material reconstruction bias with qualified
 component attribution across both optical profiles and explicit cancellation
