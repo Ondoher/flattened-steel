@@ -1,3 +1,4 @@
+import {DistantSunPointLocalCacheAerosolOptics as Aerosols} from './DistantSunPointLocalCacheAerosolOptics.js';
 import DistantSunSceneCacheLedger from '../../../src/algorithm32/implementation/distant-sun/cache/DistantSunSceneCacheLedger.js';
 import {NATIVE_15_SPECTRAL_BASIS} from '../../../src/algorithm32/profiles/native-15/native-15-profile.js';
 import {
@@ -88,6 +89,7 @@ export default class DistantSunPointLocalCacheInventory {
 			throw new RangeError('Point-local compilation requires scenes and unique in-range wavelength indexes.');
 		}
 
+		for (const channel of domains.spectrum.channels) Aerosols.acceptChannel(channel);
 		const spectralBasis = this._spectralBasis(domains.spectrum);
 		if (
 			spec.numerical.solarInterpolation !== undefined &&

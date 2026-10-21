@@ -198,10 +198,12 @@ for (const scenario of [
 		let hostPort = 0;
 		let operation = '';
 		if (scenario === 'rejected-completion')
-			operation = `await fetch(new URL('complete', import.meta.url), {method:'POST',body:JSON.stringify({accepted:false,error:'host proof rejection'})});`;
+			operation = `await fetch(new URL('complete', this.root), {method:'POST',body:JSON.stringify({accepted:false,error:'host proof rejection'})});`;
 		if (scenario === 'malformed-request')
-			operation = `await fetch(new URL('progress', import.meta.url), {method:'POST',body:'not-json'});`;
-		const browserSource = Buffer.from(`export default class HostProofBrowser { async run() { ${operation} } }`);
+			operation = `await fetch(new URL('progress', this.root), {method:'POST',body:'not-json'});`;
+		const browserSource = Buffer.from(
+			`export default class HostProofBrowser { constructor(root) { this.root = root; } async run() { ${operation} } }`,
+		);
 		const hostFiles = Object.create(files);
 		hostFiles.read = async (relativePath, expected, maximumBytes) =>
 			relativePath.endsWith('/DistantSunPointLocalCacheCompilerBrowser.js')

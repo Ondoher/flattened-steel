@@ -9,7 +9,7 @@ not ended; later incomplete hypotheses are not promotion inputs.
 
 P0's executable transfer contract is saved in the
 [transfer contract](sky-accuracy-promotion-contract.md). P1 implementation and
-its GPU qualification are in progress, paused at the owner's request. H61 report397, verifier398 and Toronto scene
+its GPU qualification are in progress, resumed at the owner's request. H61 report397, verifier398 and Toronto scene
 verifier426 authenticate read-only. The release uses Native48/Native15 with
 anchored geometry/cubic solar lookup; H61 paper qualification used Native51 and
 Direct40. Production defaults still use ordinary W27 and transport15; the explicit
@@ -42,9 +42,8 @@ critique remains applicable; scope and numerical gates are unchanged. This was
 a planning update only; the subsequent owner execution request started the
 implementation recorded below.
 
-Execution is paused at the owner's request. On resumption, score the completed
-Native48 candidate and build its matched control, then finish package/runtime and
-scene checks under the plan's numerical gates. The suspended experiment does not
+Next: finish Native15 shared-package verification and actual runtime/scene checks
+under the plan's numerical gates. The suspended experiment does not
 run. Stale calibration blocks reviewer startup and final compliance.
 
 ## Current execution and milestone evidence
@@ -81,8 +80,51 @@ paper B1 report in `paper-native51-report-02` gives aggregate RMSE
 0.0000018371348052mW. The Original40 comparison is11.62291402828908. Interval
 results and error-dome comparison images are preserved with the report seal.
 The full40-band Native48 candidate completed in `paper-native48-01`; its
-cross-grid comparison is descriptive, and matched-control scoring remains open.
+cross-grid comparison is descriptive. Its aggregate11.27205204948326 improves
+on the freshly generated, identically queried Native48 transport15 control's
+15.30298660938046. Both use anchored geometry, cubic solar lookup,40 wavelengths,
+17 times and81 rays. Reports and interval tables are retained in
+`paper-native48-report-01` and `paper-native48-control-report-01`. This passes
+the matched Native48 aggregate gate; individual interval differences remain visible.
 This is a scoped port qualification rather than a new scientific branch.
+
+Native15 generation completed in `native15-candidate-01`, with5542 union
+coordinates and90 blocks. Before generation, the actual Native48 pilot forecast
+estimated332s and1349366160 staging bytes; existing production resource gates
+remain unchanged. All15 GPU channels, compression, all109 scene manifests and
+persisted reconstruction verification completed. Final acceptance failed solely
+at the existing600000000-byte storage gate: candidate size725426183 bytes,
+elapsed433762ms and peak Node RSS256516096 bytes. The failed run and verified
+staged package remain immutable; adoption is held and no limit was relaxed.
+The production source snapshot now includes the shared numerical-policy module.
+The new service selection carries and checks the explicit package/lookup policy;
+deployed selection remains legacy. Toronto qualification now has an explicit
+validated per-channel phase-table/SSA adapter; it does not select a new default
+atmosphere. Twelve canonical emitted-shader witnesses remain byte-identical.
+
+Actual application renders use the verified staged package as qualification
+data, without relabeling the failed storage acceptance. Run `scenes-01` exposed
+Chrome155's rejection of the retained Chrome154 dual-atlas evidence. That attempt
+is preserved. Run `scenes-02` uses supported single-atlas darkness transitions
+between captures. Production's seven scenes and lifecycle checks passed; candidate
+captures and actual packed CPU/GPU lookup checks are progressing. The first
+paired noon image is `progress-images-01/noon-comparison.png` (production left,
+candidate right); fixed optics/camera/P2/FP32 produce a dimmer candidate horizon.
+This darkening is consistent with the earlier matched libRadtran and independent
+probe evidence; it is not itself a rejection criterion. Run02's candidate +30min
+lookup exceeded the5e-6 replay tolerance at5.0908583244e-6. A scoped runtime
+repair aligns solar-row angle arithmetic with retained H63's
+`(row + .5) * spacing`, without changing the map, builder fields or tolerance.
+Candidate-only requalification reuses the verified package and completed legacy
+captures. Run03 hit a local browser navigation timeout before a new capture;
+the following attempt increases navigation wait only, preserving failed records.
+
+The shared-generation lifecycle suite passes11 checks after its two synthetic
+browser fixtures were aligned with the explicit capability-root constructor.
+Engine/shared-generation and Flat32 type checks pass; the existing shared-package
+service suite passes6 checks, including server policy mismatch. Focused compiler
+and policy suites pass12 checks. Earlier sandbox process-launch failures are
+environment failures, superseded by the approved execution results.
 
 ## Decisions
 
@@ -97,8 +139,8 @@ Git writes now succeed through approved execution: a new diagnostic object was
 read back exactly and a unique metadata probe was created and removed without
 changing the index or HEAD. No ACL changes were made. The earlier handoff recovery
 snapshot remains below `.codex-tmp/sky-accuracy-promotion/`; it is not a Git commit.
-The owner explicitly requested a complete-state checkpoint with message
-preapproval. This checkpoint preserves incomplete work and does not establish
+The owner's complete-state checkpoint040442ed contains148 paths, with a clean
+worktree immediately afterward. It preserves incomplete work and does not establish
 production compliance, deployment readiness or adoption.
 
 - Use only transport60, discrete Mie normalization and outgoing focus k=.35.

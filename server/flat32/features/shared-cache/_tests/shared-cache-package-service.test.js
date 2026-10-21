@@ -174,3 +174,16 @@ test(
 		}
 	},
 );
+
+test(
+	'shared service rejects an immutable legacy package selected with focused lookup',
+	{skip: !existsSync(path.join(SHARED_PACKAGE_ROOT, 'package-set.json'))},
+	async () => {
+		await assert.rejects(
+			new Service(SHARED_PACKAGE_ROOT, 'monotone-cubic', undefined, 'corrected60-sun035').load(
+				SHARED_PACKAGE_REPORT,
+			),
+			/construction and selected lookup policies disagree/u,
+		);
+	},
+);

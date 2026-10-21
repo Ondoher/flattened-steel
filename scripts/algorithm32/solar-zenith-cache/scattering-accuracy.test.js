@@ -3,6 +3,7 @@ import test from 'node:test';
 import {DistantSunScatteringAccuracy as accuracy} from '../../../src/algorithm32/implementation/distant-sun/cache/DistantSunScatteringAccuracy.js';
 import {CUBED_SPHERE_W27_DIRECTION_DOMAIN_OWNER as outgoing} from '../../../src/algorithm32/sampling-domains/direction/cubed-sphere/consts.js';
 import {DistantSunSceneCacheCompilerInputs as inputs} from './DistantSunSceneCacheCompilerInputs.js';
+import {DistantSunPointLocalCacheAerosolOptics as aerosols} from './DistantSunPointLocalCacheAerosolOptics.js';
 
 test('retains the deployed input identity unless the corrected policy is explicitly selected', () => {
 	const scene = inputs.createQualifiedSanJoseNauticalScene();
@@ -15,6 +16,25 @@ test('retains the deployed input identity unless the corrected policy is explici
 	assert.deepEqual(corrected.buildRequest.transportSpec.domains, original.buildRequest.transportSpec.domains);
 	assert.deepEqual(corrected.buildRequest.transportSpec.atmosphere, original.buildRequest.transportSpec.atmosphere);
 	assert.notEqual(corrected.numericalIdentity, original.numericalIdentity);
+});
+
+test('explicit aerosol qualification material preserves extinction and changes complete input identity', () => {
+	const scene = inputs.createQualifiedSanJoseNauticalScene();
+	const original = inputs.createInputSet(scene);
+	const table = {mu: [-1, 0, 1], pdf: [0.25, 0.5, 0.75]};
+	const spectralAerosols = original.buildRequest.transportSpec.domains.spectrum.channels.map(() => ({
+		mieSingleScatteringAlbedo: 0.94,
+		miePhaseTable: table,
+	}));
+	const before = structuredClone(spectralAerosols);
+	const matched = inputs.createInputSet(scene, {spectralAerosols});
+	assert.deepEqual(matched.buildRequest.transportSpec.atmosphere, original.buildRequest.transportSpec.atmosphere);
+	assert.deepEqual(matched.buildRequest.transportSpec.numerical, original.buildRequest.transportSpec.numerical);
+	assert.notEqual(matched.numericalIdentity, original.numericalIdentity);
+	assert.deepEqual(spectralAerosols, before);
+	assert.equal(matched.buildRequest.transportSpec.domains.spectrum.channels[0].mieSingleScatteringAlbedo, 0.94);
+	assert.throws(() => aerosols.acceptTable({mu: [-1, 1], pdf: [1, 1]}), /integrate to one/u);
+	assert.throws(() => aerosols.acceptChannel({mieSingleScatteringAlbedo: 1.1}), /\[0, 1\]/u);
 });
 
 test('matches independently constructed half-angle directions including both axis limits', () => {

@@ -1,4 +1,5 @@
 import {registry} from '@polylith/core';
+import {DistantSunScatteringAccuracy} from '../algorithm32/implementation/distant-sun/cache/DistantSunScatteringAccuracy.js';
 import {FLAT32_DISTANT_SUN_CACHE_RESOLUTION_SCHEMA_ID, FLAT32_DISTANT_SUN_DENSE_CACHE_FORMAT_ID} from './consts.js';
 import './services/io.js';
 
@@ -191,6 +192,7 @@ function requireResolution(value, assetBaseUrl, requestedSolarZenithDegrees) {
 	)
 		throw new RangeError('Shared-cache resolution root is uncontained.');
 	const qualification = asset.transitionQualification;
+	DistantSunScatteringAccuracy.accept(asset.scatteringAccuracy);
 	if (asset.solarInterpolation !== undefined && !['linear', 'monotone-cubic'].includes(asset.solarInterpolation)) {
 		throw new TypeError('Shared-cache solar interpolation is incompatible.');
 	}

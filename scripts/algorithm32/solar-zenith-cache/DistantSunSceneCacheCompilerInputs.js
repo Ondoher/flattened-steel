@@ -1,3 +1,4 @@
+import {DistantSunPointLocalCacheAerosolOptics as Aerosols} from './DistantSunPointLocalCacheAerosolOptics.js';
 import {
 	CUBED_SPHERE_W27_DIRECTION_DOMAIN_OWNER,
 	NATIVE_48_POSITION_DOMAIN_OWNER,
@@ -109,7 +110,7 @@ export const DistantSunSceneCacheCompilerInputs = {
 			},
 			spectrum: {
 				id: NATIVE_15_SPECTRAL_BASIS.id,
-				channels: spectrumChannels,
+				channels: Aerosols.project(spectrumChannels, options.spectralAerosols),
 			},
 		};
 		const transportSpec = {
@@ -169,6 +170,7 @@ export const DistantSunSceneCacheCompilerInputs = {
 			numericalIdentity:
 				geometryPolicy ||
 				accuracy !== 'legacy' ||
+				options.spectralAerosols !== undefined ||
 				options.solarInterpolation === 'monotone-cubic' ||
 				positionDomain !== NATIVE_48_POSITION_DOMAIN_OWNER
 					? CanonicalValueHash.sha256Value(transportSpec)

@@ -34,6 +34,7 @@ export const DISTANT_SUN_POINT_LOCAL_CACHE_COMPILER_IDENTITY = 'algorithm32-prod
 export const DISTANT_SUN_POINT_LOCAL_CACHE_OUTPUT_ROOT = 'tmp/algorithm32/point-local-cache-compiler';
 /** Complete direct source owners for the expanded compilation workflow. */
 export const SHARED_COMPILER_SOURCE_NAMES = [
+	'DistantSunPointLocalCacheAerosolOptics.js',
 	'DistantSunSharedCacheGenerator.js',
 	'DistantSunPointLocalCacheCompilerBrowser.js',
 	'DistantSunPointLocalCacheCompilerHost.js',

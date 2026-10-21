@@ -73,7 +73,7 @@ export const DistantSunScatteringAccuracy = Object.freeze({
 		return `${this.createShaderSource()}
 vec3 distantSceneDirectionCoordinate(vec3 direction);
 vec3 distantSunRowCoordinate(vec3 direction, int row) {
-	float theta = ${domain.firstCenter.value.toExponential(17)} + float(row) * ${domain.spacing.value.toExponential(17)};
+	float theta = (float(row) + ${(domain.firstCenter.value / domain.spacing.value).toExponential(17)}) * ${domain.spacing.value.toExponential(17)};
 	vec3 sun = vec3(sin(theta), 0.0, cos(theta));
 	return distantSceneDirectionCoordinate(distantSunOutgoingMap(direction, sun, ${(1 / this.focus(method)).toExponential(17)}));
 }`;

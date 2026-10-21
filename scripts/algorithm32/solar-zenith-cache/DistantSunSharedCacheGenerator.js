@@ -171,10 +171,14 @@ export default class DistantSunSharedCacheGenerator {
 		const repositoryRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
 		const files = new DistantSunSharedCacheGenerationFiles(repositoryRoot);
 		await files.resolve('AGENTS.md');
-		const runs = await files.directory(SHARED_GENERATION_RUN_ROOT);
 		const runId = `${new Date().toISOString().replace(/[:.]/gu, '-')}-${randomUUID()}`;
-		await mkdir(path.join(runs, runId));
-		const runRoot = `${SHARED_GENERATION_RUN_ROOT}/${runId}`;
+		let runRoot;
+		if (options.outputDirectory !== undefined) runRoot = await this._createRun(files, options.outputDirectory);
+		else {
+			const runs = await files.directory(SHARED_GENERATION_RUN_ROOT);
+			await mkdir(path.join(runs, runId));
+			runRoot = `${SHARED_GENERATION_RUN_ROOT}/${runId}`;
+		}
 		const stagingRoot = `${runRoot}/staging`;
 		const candidateRoot = `${runRoot}/candidate`;
 		await files.directory(candidateRoot);
@@ -216,8 +220,10 @@ export default class DistantSunSharedCacheGenerator {
 					),
 				)
 				.sort();
-			for (const name of names) {
-				const relativePath = `${SHARED_GENERATION_SOURCE_ROOT}/${name}`;
+			for (const relativePath of [
+				...names.map((name) => `${SHARED_GENERATION_SOURCE_ROOT}/${name}`),
+				DISTANT_SUN_SCATTERING_ACCURACY_SOURCE,
+			]) {
 				const bytes = await files.read(relativePath);
 				sources.push({
 					path: relativePath,

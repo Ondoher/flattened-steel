@@ -30,6 +30,7 @@ export default class DistantSunPointLocalCacheCompilerHost {
 		}
 		const prefix = `/${randomBytes(24).toString('hex')}/`;
 		const sourceNames = [
+			`${SHARED_GENERATION_SOURCE_ROOT}/DistantSunPointLocalCacheAerosolOptics.js`,
 			`${SHARED_GENERATION_SOURCE_ROOT}/DistantSunPointLocalCacheCompilerBrowser.js`,
 			`${SHARED_GENERATION_SOURCE_ROOT}/DistantSunSceneCacheGpuCompiler.js`,
 			`${SHARED_GENERATION_SOURCE_ROOT}/DistantSunSceneCacheNumerics.js`,

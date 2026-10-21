@@ -4,6 +4,7 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 
 import DistantSunSharedCacheFormat from '../../../../src/algorithm32/implementation/distant-sun/cache/DistantSunSharedCacheFormat.js';
+import {DistantSunScatteringAccuracy} from '../../../../src/algorithm32/implementation/distant-sun/cache/DistantSunScatteringAccuracy.js';
 import {
 	FLAT32_DISTANT_SUN_CACHE_RESOLUTION_SCHEMA_ID,
 	FLAT32_DISTANT_SUN_SHARED_CACHE_FORMAT_ID,
@@ -21,6 +22,8 @@ export default class DistantSunSharedCachePackageService {
 	_identity = '';
 	/** Explicit application-selected solar interpolation policy. @type {DistantSunSolarInterpolationMethod} */
 	_solarInterpolation;
+	/** Explicit package/lookup policy required by this service selection. @type {DistantSunScatteringAccuracyMethod} */
+	_scatteringAccuracy;
 	/** Deployment-selected target memory evidence. @type {Readonly<DistantSunSharedCacheMemoryQualification>} */
 	_transitionQualification;
 
@@ -29,6 +32,7 @@ export default class DistantSunSharedCachePackageService {
 	 * @param {string} root - Candidate package directory.
 	 * @param {DistantSunSolarInterpolationMethod} [solarInterpolation] - Application-selected interpolation; omission retains linear behavior.
 	 * @param {DistantSunSharedCacheMemoryQualification} [transitionQualification] - Qualified target and two-atlas byte limit; omission retains the historical Chrome 153 qualification.
+	 * @param {DistantSunScatteringAccuracyMethod} [scatteringAccuracy] - Expected construction/lookup policy; omission retains legacy packages.
 	 */
 	constructor(
 		root,
@@ -38,7 +42,9 @@ export default class DistantSunSharedCachePackageService {
 			targetId: 'NVIDIA GeForce RTX 2060 / Chrome 153 / ANGLE D3D11',
 			maximumBytes: 859963392,
 		},
+		scatteringAccuracy = 'legacy',
 	) {
+		this._scatteringAccuracy = DistantSunScatteringAccuracy.accept(scatteringAccuracy);
 		if (!['linear', 'monotone-cubic'].includes(solarInterpolation))
 			throw new RangeError('Unsupported shared package interpolation.');
 		this._solarInterpolation = solarInterpolation;
@@ -148,6 +154,8 @@ export default class DistantSunSharedCachePackageService {
 		const configuration = format.parseConfigurationManifest(
 			(await read(report.configurations[0])).toString('utf8'),
 		);
+		if (DistantSunScatteringAccuracy.accept(configuration.scatteringAccuracy) !== this._scatteringAccuracy)
+			throw new Error('Shared package construction and selected lookup policies disagree.');
 		const blocks = format.parseBlockIndex((await read(configuration.blockIndex)).toString('utf8'), configuration);
 		await read(configuration.directionLayout.logicalToUniqueIndex);
 		const catalog = format.parseRuntimeCatalog((await read(report.runtimeCatalog)).toString('utf8'));
@@ -193,6 +201,7 @@ export default class DistantSunSharedCachePackageService {
 				packageSetIdentity: this._identity,
 				report: {...this._report},
 				solarInterpolation: this._solarInterpolation,
+				...(this._scatteringAccuracy === 'legacy' ? {} : {scatteringAccuracy: this._scatteringAccuracy}),
 				transitionQualification: {...this._transitionQualification},
 			},
 		});

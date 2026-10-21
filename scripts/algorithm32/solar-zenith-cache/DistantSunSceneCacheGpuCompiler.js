@@ -1,3 +1,4 @@
+import {DistantSunPointLocalCacheAerosolOptics as Aerosols} from './DistantSunPointLocalCacheAerosolOptics.js';
 import {DistantSunSceneCacheNumerics} from './DistantSunSceneCacheNumerics.js';
 import {DistantSunScatteringAccuracy} from '../../../src/algorithm32/implementation/distant-sun/cache/DistantSunScatteringAccuracy.js';
 
@@ -189,6 +190,7 @@ export function createDistantSunSceneCacheCommonShaderSource({
 	mieAngstromBeta = 0.04,
 	mieSingleScatteringAlbedo = 0.8,
 	miePhaseFunctionG = 0.7,
+	miePhaseTable = undefined,
 	sourcePathTransmittanceIntervalCount = 20,
 	incomingDirectionCount = 68,
 	transportIntervalCount = undefined,
@@ -623,12 +625,16 @@ float rayleighPhase(vec3 outgoingDirection, vec3 incomingDirection) {
 	return (3.0 / (16.0 * PI)) * (1.0 + cosine * cosine);
 }
 
-float miePhase(vec3 outgoingDirection, vec3 incomingDirection) {
+${
+	miePhaseTable === undefined
+		? `float miePhase(vec3 outgoingDirection, vec3 incomingDirection) {
 	float cosine = clamp(dot(outgoingDirection, incomingDirection), -1.0, 1.0);
 	float normalization = (3.0 / (8.0 * PI))
 		* ((1.0 - MIE_G * MIE_G) / (2.0 + MIE_G * MIE_G));
 	float denominator = max(1.0 + MIE_G * MIE_G - 2.0 * MIE_G * cosine, 1e-7);
 	return normalization * (1.0 + cosine * cosine) / pow(denominator, 1.5);
+}`
+		: Aerosols.createShaderSource(miePhaseTable)
 }
 
 vec2 sphereRoots(vec3 origin, vec3 direction, float radius) {
@@ -1272,7 +1278,8 @@ export async function compileDistantSunSceneCacheWavelength({
 		rayleighCoefficientScalePerMeter: spec.atmosphere.rayleighCoefficientScalePerMeter,
 		mieAngstromAlpha: spec.atmosphere.mieAngstromAlpha,
 		mieAngstromBeta: spec.atmosphere.mieAngstromBeta,
-		mieSingleScatteringAlbedo: spec.atmosphere.mieSingleScatteringAlbedo,
+		mieSingleScatteringAlbedo: channel.mieSingleScatteringAlbedo ?? spec.atmosphere.mieSingleScatteringAlbedo,
+		miePhaseTable: channel.miePhaseTable,
 		miePhaseFunctionG: spec.atmosphere.miePhaseFunctionG,
 		sourcePathTransmittanceIntervalCount: spec.numerical.sourcePathTransmittanceIntervalCount,
 		incomingDirectionCount: domains.incoming.directionCount,

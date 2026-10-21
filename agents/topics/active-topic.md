@@ -15,8 +15,9 @@ adaptation. The [status](production-algorithm32/caches/sky-accuracy-promotion-st
 owns execution, readiness and next action. P0's transfer contract is saved and
 P1's explicit production policy/compiler/lookup integration is under qualification.
 The full40-band Native51 GPU replay and B1 comparison pass; Native48 compiled
-and awaits matched-control scoring. Execution is paused at the owner's request.
-Approved Git writes now work; a complete-state checkpoint is requested. Deployed
+and passes matched transport15 control scoring. Execution resumed at the owner's
+request; full Native15 package verification and runtime qualification are active.
+Checkpoint040442ed preserves the initial integration. Deployed
 packages and defaults remain unchanged.
 
 The [suspension record](poc-experiments/engineering-studies/sky-accuracy-dials/suspension-2026-10-20.md)

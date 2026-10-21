@@ -1,3 +1,14 @@
+/** Normalized piecewise-linear aerosol probability per unit direction cosine. */
+type DistantSunMiePhaseTable = Readonly<{
+	/** Strictly increasing cosine nodes from -1 to 1. */ mu: readonly number[];
+	/** Nonnegative PDF samples; its trapezoidal integral is one. */ pdf: readonly number[];
+}>;
+/** Explicit aerosol material aligned with one compiler spectral channel. */
+type DistantSunSpectralAerosolOptics = Readonly<{
+	/** Scattering-to-extinction ratio in [0, 1]. */ mieSingleScatteringAlbedo: number;
+	/** Optional normalized phase table; omission retains analytic phase. */ miePhaseTable?: DistantSunMiePhaseTable;
+}>;
+
 /** Progress from independent binary64 recurrence evaluation. */
 type StrobingReferenceProgress = Readonly<{
 	/** Number of memoized radiance evaluations. */ evaluations: number;
@@ -28,6 +39,7 @@ type DistantSunSceneCacheCoordinateContract = 'scene-cache-receiver-local-v1' | 
 
 /** Readonly shader inputs borrowed during one common-source generation call; optional fields retain compiler defaults. */
 type DistantSunSceneCacheCommonShaderRequest = Readonly<{
+	/** Explicit normalized phase PDF; omission retains analytic Mie phase. */ miePhaseTable?: DistantSunMiePhaseTable;
 	/** Executable scattering correction and outgoing mapping; omission retains legacy. */ scatteringAccuracy?: DistantSunScatteringAccuracyMethod;
 	/** Spectral sample center in nanometers. */ wavelengthNanometers: number;
 	/** Unattenuated source irradiance density in watts per square meter per nanometer. */ sourceIrradiance: number;
@@ -159,6 +171,7 @@ type DistantSunSceneCachePositionMethod = 'anchored-radial';
 
 /** Explicit candidate selections for production compiler projections. */
 type DistantSunSceneCacheCompilerOptions = Readonly<{
+	/** Explicit matched per-channel aerosol optics; omission preserves canonical atmosphere inputs. */ spectralAerosols?: readonly DistantSunSpectralAerosolOptics[];
 	/** Explicit corrected construction/mapping; omission retains deployed legacy. */ scatteringAccuracy?: DistantSunScatteringAccuracyMethod;
 	/** Explicit altitude construction owner; omission retains Native48. */ positionDomain?: SphericalNativePositionDomainSelection;
 	/** Stable-root surface candidate; omission retains historical equations. */ numericalPolicy?: DistantSunSceneCacheNumericalPolicy;
@@ -292,6 +305,8 @@ type DistantSunSceneCacheCompilerDirections = Readonly<{
 }>;
 /** Native spectral sample with optional physical coefficient overrides. */
 type DistantSunSceneCacheCompilerChannel = Readonly<{
+	/** Explicit scattering-to-extinction ratio for this wavelength. */ mieSingleScatteringAlbedo?: number;
+	/** Explicit normalized azimuth-integrated phase PDF for this wavelength. */ miePhaseTable?: DistantSunMiePhaseTable;
 	/** Stable sample identity. */ id: string;
 	/** Center wavelength in nanometers. */ centerNanometers: number;
 	/** Sample width in nanometers. */ binWidthNanometers: number;
@@ -806,6 +821,7 @@ type SharedGenerationVerificationResult = {
 };
 /** Explicit generator execution dependencies. */
 type SharedGenerationRequest = DistantSunSceneCacheCompilerOptions & {
+	/** Optional exclusive contained run destination; omission retains the ordinary generated run root. */ outputDirectory?: string;
 	/** Local GPU-capable Chrome executable. */ chromePath: string;
 	/** Caller-owned cancellation. */ signal: AbortSignal;
 	/** Observes completed durable progress events; rejection cancels generation before publication. */ onProgress?: (

@@ -1,3 +1,4 @@
+import {DistantSunPointLocalCacheAerosolOptics as Aerosols} from './DistantSunPointLocalCacheAerosolOptics.js';
 import {DistantSunScatteringAccuracy} from '../../../src/algorithm32/implementation/distant-sun/cache/DistantSunScatteringAccuracy.js';
 import {CanonicalValueHash} from '../../../src/algorithm32/value-identity/CanonicalValueHash.js';
 import {SphericalNativePositionDomains} from '../../../src/algorithm32/sampling-domains/index.js';
@@ -100,7 +101,7 @@ export const DistantSunPointLocalProfileCompilerInputs = Object.freeze({
 		).buildRequest.transportSpec;
 		const atmosphere = profile.models.atmosphere;
 		const constants = atmosphere.constants;
-		const channels = spectrumChannels(profile);
+		const channels = Aerosols.project(spectrumChannels(profile), options.spectralAerosols);
 		const domains = {
 			position: {
 				id: profile.domains.positions.id,
@@ -199,6 +200,9 @@ export const DistantSunPointLocalProfileCompilerInputs = Object.freeze({
 					geometry: profile.models.geometry.id,
 					ground: profile.models.groundBoundary,
 					numerical: profile.numerical.cacheConstruction,
+					...(accuracy === 'legacy'
+						? {}
+						: {scatteringAccuracy: accuracy, effectiveNumerical: transportSpec.numerical}),
 					...(positionDomainOwner.count === 51 ? {positionDomain: domains.position} : {}),
 				}),
 			}),
@@ -242,6 +246,7 @@ export const DistantSunPointLocalProfileCompilerInputs = Object.freeze({
 			scatteringAccuracy = undefined,
 			solarInterpolation = undefined,
 			positionDomain = undefined,
+			spectralAerosols = undefined,
 		} = {},
 	) {
 		if (
@@ -257,6 +262,7 @@ export const DistantSunPointLocalProfileCompilerInputs = Object.freeze({
 			scatteringAccuracy,
 			solarInterpolation,
 			positionDomain,
+			spectralAerosols,
 		});
 		const scenes = profiles.map((profile, index) => {
 			const candidate = DistantSunPointLocalProfileCompilerInputs.createInputSet(profile, {
@@ -264,6 +270,7 @@ export const DistantSunPointLocalProfileCompilerInputs = Object.freeze({
 				scatteringAccuracy,
 				solarInterpolation,
 				positionDomain,
+				spectralAerosols,
 			});
 			if (candidate.numericalIdentity !== input.numericalIdentity) {
 				throw new RangeError('Point-local profile batching requires one compatible construction profile.');
