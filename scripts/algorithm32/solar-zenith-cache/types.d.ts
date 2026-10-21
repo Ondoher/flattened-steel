@@ -821,6 +821,7 @@ type SharedGenerationVerificationResult = {
 };
 /** Explicit generator execution dependencies. */
 type SharedGenerationRequest = DistantSunSceneCacheCompilerOptions & {
+	/** Additional repository-contained source evidence authenticated before generation and retained in every derivation. */ inputParents?: readonly DistantSunSharedCacheDerivationParent[];
 	/** Optional exclusive contained run destination; omission retains the ordinary generated run root. */ outputDirectory?: string;
 	/** Local GPU-capable Chrome executable. */ chromePath: string;
 	/** Caller-owned cancellation. */ signal: AbortSignal;

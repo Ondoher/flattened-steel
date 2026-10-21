@@ -17,7 +17,7 @@ candidate now has its own policy. The new
 package and matching forward/inverse map must move together.
 
 Explicit construction/mapping policy, compiler branches, per-row CPU and shader
-lookup, and package-policy bindings are being implemented. No deployment or
+lookup, and package-policy bindings are implemented and under qualification. No deployment or
 default activation has happened. Flat/local-Sun cache changes and atmospheric
 profile changes are outside the selected evidence boundary.
 
@@ -42,8 +42,10 @@ critique remains applicable; scope and numerical gates are unchanged. This was
 a planning update only; the subsequent owner execution request started the
 implementation recorded below.
 
-Next: finish Native15 shared-package verification and actual runtime/scene checks
-under the plan's numerical gates. The suspended experiment does not
+Next: finish matched Toronto package/scene qualification and persist actual
+lifecycle receipts, then prepare the candidate/rollback report under the plan's
+numerical gates. The canonical Native15 candidate passed reconstruction but
+failed the existing package-storage acceptance gate. The suspended experiment does not
 run. Stale calibration blocks reviewer startup and final compliance.
 
 ## Current execution and milestone evidence
@@ -59,8 +61,8 @@ half-angle expectations, inverse/unit/seam checks and unchanged legacy input
 identity. Production engine and shared-generation type checks pass. The existing
 point-local compiler suite passes8 tests; the engine suite passes675 specs.
 Five additional focused cases pass for shared/dense schema and bidirectional
-policy rejection, plus candidate publication/darkness/context restoration. Full
-runtime GPU qualification, the Native48 representation bridge and scenes remain open.
+policy rejection, plus candidate publication/darkness/context restoration. The Native48 representation bridge is now complete; actual runtime
+qualification and scene progress are recorded below.
 
 The new GPU pilot reuses only authenticated H61 data, with outputs below
 `.codex-tmp/sky-accuracy-promotion/`. Failed attempts01/02 remain preserved:
@@ -103,28 +105,75 @@ validated per-channel phase-table/SSA adapter; it does not select a new default
 atmosphere. Twelve canonical emitted-shader witnesses remain byte-identical.
 
 Actual application renders use the verified staged package as qualification
-data, without relabeling the failed storage acceptance. Run `scenes-01` exposed
-Chrome155's rejection of the retained Chrome154 dual-atlas evidence. That attempt
-is preserved. Run `scenes-02` uses supported single-atlas darkness transitions
-between captures. Production's seven scenes and lifecycle checks passed; candidate
-captures and actual packed CPU/GPU lookup checks are progressing. The first
-paired noon image is `progress-images-01/noon-comparison.png` (production left,
-candidate right); fixed optics/camera/P2/FP32 produce a dimmer candidate horizon.
-This darkening is consistent with the earlier matched libRadtran and independent
-probe evidence; it is not itself a rejection criterion. Run02's candidate +30min
-lookup exceeded the5e-6 replay tolerance at5.0908583244e-6. A scoped runtime
-repair aligns solar-row angle arithmetic with retained H63's
-`(row + .5) * spacing`, without changing the map, builder fields or tolerance.
-Candidate-only requalification reuses the verified package and completed legacy
-captures. Run03 hit a local browser navigation timeout before a new capture;
-the following attempt increases navigation wait only, preserving failed records.
+data, without relabeling the failed storage acceptance. Seven matched scenes
+(noon toward/side/away, sunset-10, sunset, +30 and +60minutes) are complete for
+current production and the canonical candidate. The fourteen full-scene images
+and real packaged CPU/GPU lookup results are authenticated in
+`scenes-report-01/result.json`; pairs are in `scenes-05/comparison-<scene>.png`.
+The first noon pair remains `progress-images-01/noon-comparison.png`.
+Fixed optics/camera/P2/FP32 produce a dimmer candidate horizon. The owner confirms
+that the earlier matched libRadtran and independent-probe tests agreed with this
+darker color; brightness preference is not a rejection criterion. No new physical
+truth claim is inferred from the scene renders.
+
+Preserved run01 exposed Chrome155's rejection of retained Chrome154 dual-atlas
+evidence. Captures use supported single-atlas darkness transitions; each resident
+atlas uses429981696 GPU bytes. This is separate from on-disk package storage.
+Run02's +30min lookup initially exceeded5e-6 at5.0908583244e-6. Aligning row-angle
+arithmetic with H63 did not explain that deviation. The proof compared a binary64
+solar query with the rounded Float32 query actually uploaded to the GPU. The
+corrected proof uses identical serialized inputs, then independent binary64
+interpolation; its tolerance is unchanged. Candidate +30min now measures
+5.7352093511e-7; +60min measures1.4862743540e-6. All fourteen captures satisfy
+5e-6 (maximum4.6702569484e-6), with no GL error or generation-coherence failure.
+Run03's navigation timeout and run05's source-graph reporting failure are retained.
+Report-only recovery authenticated completed captures and bundles without
+rerendering. Detailed lifecycle receipts were not retained by that failed report;
+a separate actual lifecycle run remains required.
+
+The full109-control Toronto candidate completed through the same production
+Native15/Native48 package route in677988ms. All109 persisted reconstructions
+passed. Its727455714-byte package also exceeds the existing600000000-byte
+storage gate, so it remains verified qualification data, not an accepted release. Its explicit measured per-channel phase/SSA
+material is authenticated through H63; the amount, density profile, camera and
+display stay fixed. The matched legacy15 Toronto control is in packaging/verification; scene pairs follow;
+these are qualification profiles, not deployed Toronto assets or new defaults.
 
 The shared-generation lifecycle suite passes11 checks after its two synthetic
 browser fixtures were aligned with the explicit capability-root constructor.
-Engine/shared-generation and Flat32 type checks pass; the existing shared-package
+The full engine suite now passes680 specs with no failures.
+Engine/shared-generation/shared-runtime and Flat32 type checks pass; the existing shared-package
 service suite passes6 checks, including server policy mismatch. Focused compiler
 and policy suites pass12 checks. Earlier sandbox process-launch failures are
 environment failures, superseded by the approved execution results.
+
+## Package preparation and measured cost
+
+The complete candidate and deployed package graphs authenticate read-only in
+`handoff-01/result.json`: each has204 artifacts,109 scenes and90 blocks. The
+canonical candidate is725426183 bytes versus506706259 deployed (+43.17%); its
+larger compressed payload does not change atlas dimensions. The proposed package
+is `8d185961cab8beb1e461cd1256be2875bb9a99e9f39e515b9288b92e5d2f6d37`, report
+3061 bytes/SHA-256 `76fcb62e8e70eececbbb7213591534042a38b8b28cfd577fda529de95034f5f7`.
+Prepared selection/rollback files and exact publication commands are below
+`handoff-01/`; they are not applied. The rollback file is byte-identical to the
+current Native48/cubic/P2/FP32 selection, not the older P9/linear predecessor.
+Publication now accepts explicit `--scattering-accuracy`; its actual CLI rejects
+a focused package paired with legacy lookup before copying any artifact
+(`publication-pairing-01/result.json`). Storage acceptance and production review
+must be resolved before the prepared commands can be used.
+
+`performance-01/frames.tsv` reports actual non-disjoint runtime-shader timer
+queries at1024x768 on RTX2060/Chrome155/ANGLE D3D11. Eight completed GPU samples
+per case give means41.03-43.22ms for production and42.25-46.00ms for candidate;
+paired increments are0.70-3.03ms. These serial measurements are observations,
+not a universal frame-rate guarantee. CPU submission and animation-frame wall
+time are not substituted for GPU duration. Both use429981696 resident atlas
+bytes; generated package storage, construction staging and GPU memory are
+separate quantities. Canonical construction's GPU execution took110707ms;
+Toronto's measured phase-table variant took275750ms. Whole canonical generation
+including compression/109 reconstruction checks took433762ms; Toronto677988ms.
+Build cost is reported, not used as a new scientific rejection threshold.
 
 ## Decisions
 
@@ -139,8 +188,9 @@ Git writes now succeed through approved execution: a new diagnostic object was
 read back exactly and a unique metadata probe was created and removed without
 changing the index or HEAD. No ACL changes were made. The earlier handoff recovery
 snapshot remains below `.codex-tmp/sky-accuracy-promotion/`; it is not a Git commit.
-The owner's complete-state checkpoint040442ed contains148 paths, with a clean
-worktree immediately afterward. It preserves incomplete work and does not establish
+Local checkpoint040442ed preserves148 paths of initial integration.
+Checkpointcf4a191e preserves the spectral-aerosol qualification adapter and
+matched Native48 evidence, with a clean worktree immediately afterward. It preserves incomplete work and does not establish
 production compliance, deployment readiness or adoption.
 
 - Use only transport60, discrete Mie normalization and outgoing focus k=.35.

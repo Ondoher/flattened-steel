@@ -253,6 +253,10 @@ export default class DistantSunSharedCacheGenerator {
 				{role: 'generator-source', artifact: sourceArtifact},
 				{role: 'common-field-parameters', artifact: parameterArtifact},
 			];
+			for (const parent of options.inputParents ?? []) {
+				await files.read(parent.artifact.path, parent.artifact);
+				parents.push(parent);
+			}
 			const planned = new DistantSunPointLocalCacheInventory().create(
 				inventory.buildRequest,
 				inventory.scenes.map((scene) => ({

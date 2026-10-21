@@ -16,8 +16,11 @@ owns execution, readiness and next action. P0's transfer contract is saved and
 P1's explicit production policy/compiler/lookup integration is under qualification.
 The full40-band Native51 GPU replay and B1 comparison pass; Native48 compiled
 and passes matched transport15 control scoring. Execution resumed at the owner's
-request; full Native15 package verification and runtime qualification are active.
-Checkpoint040442ed preserves the initial integration. Deployed
+request; Native15 canonical/Toronto reconstruction verification passes, with adoption
+held by the existing600000000-byte package-size gate and stale reviewer
+calibration. Fourteen canonical scene captures and packed GPU lookup checks
+pass; matched Toronto scenes and durable lifecycle receipts remain active.
+Checkpoints040442ed andcf4a191e preserve the implementation and qualification adapter. Deployed
 packages and defaults remain unchanged.
 
 The [suspension record](poc-experiments/engineering-studies/sky-accuracy-dials/suspension-2026-10-20.md)

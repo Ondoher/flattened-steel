@@ -6,6 +6,7 @@ import path from 'node:path';
 import Files from './DistantSunSharedCacheGenerationFiles.js';
 import {DistantSunSharedCachePackageService as Service} from '../../../server/flat32/features/shared-cache/index.js';
 import Graph from './DistantSunSharedCacheGenerationGraph.js';
+import {DistantSunScatteringAccuracy} from '../../../src/algorithm32/implementation/distant-sun/cache/DistantSunScatteringAccuracy.js';
 import {
 	SHARED_PACKAGE_IDENTITY,
 	SHARED_PACKAGE_REPORT,
@@ -17,7 +18,7 @@ const argumentsByName = new Map(
 	process.argv.slice(2).map(
 		/** Called by CLI ingress to admit supported named publication arguments. */ (value) => {
 			const match =
-				/^--(source-root|source-package|package-identity|report-sha256|report-bytes|task-root|prepare)=(.+)$/u.exec(
+				/^--(source-root|source-package|package-identity|report-sha256|report-bytes|task-root|prepare|scattering-accuracy)=(.+)$/u.exec(
 					value,
 				);
 			if (!match) throw new RangeError('Unsupported shared publication argument.');
@@ -26,6 +27,7 @@ const argumentsByName = new Map(
 	),
 );
 if (argumentsByName.size !== process.argv.length - 2) throw new RangeError('Duplicate publication argument.');
+const scatteringAccuracy = DistantSunScatteringAccuracy.accept(argumentsByName.get('scattering-accuracy'));
 const selectedIdentity = argumentsByName.get('package-identity') ?? SHARED_PACKAGE_IDENTITY;
 if (!/^[a-f0-9]{64}$/u.test(selectedIdentity)) throw new RangeError('Invalid publication package identity.');
 const taskRoot = argumentsByName.get('task-root') ?? '.codex-tmp/shared-runtime-publication';
@@ -63,6 +65,8 @@ const graph = await new Graph().read({
 });
 if (graph.report.packageSetIdentity !== selectedIdentity)
 	throw new Error('Publication source differs from qualified identity.');
+if (DistantSunScatteringAccuracy.accept(graph.configuration.scatteringAccuracy) !== scatteringAccuracy)
+	throw new Error('Publication package and lookup scattering policies differ.');
 let artifacts = [];
 let alreadyPublished = false;
 try {
@@ -93,7 +97,9 @@ for (const identity of identities) {
 	await files.read(`${output}/${identity.path}`, identity, 32 * 1024 * 1024);
 	artifacts.push(identity);
 }
-const deployed = await new Service(await files.resolve(output)).load(reportIdentity);
+const deployed = await new Service(await files.resolve(output), 'linear', undefined, scatteringAccuracy).load(
+	reportIdentity,
+);
 const selection = deployed.resolve(90, '/flat32/scene-caches/');
 if (
 	selection.status !== 'ready' ||
@@ -108,6 +114,7 @@ const result = {
 	report: reportIdentity,
 	sourceRoot: path.resolve(repository, argumentsByName.get('source-root') ?? '.'),
 	prepare: Boolean(prepare),
+	scatteringAccuracy,
 	output,
 	alreadyPublished,
 	operation:

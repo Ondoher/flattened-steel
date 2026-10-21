@@ -40,6 +40,7 @@ there is no outgoing quadrature Jacobian.
 | Dense runtime ingress and lookup | `DistantSunSceneCacheManifest.js`, `DistantSunSceneCache.js` in the runtime cache folder | Runtime manifest v3 carries corrected policy; existing v2 remains legacy; reject mismatched lookup |
 | Application selection | `src/flat32/SharedDistantCacheAssets.js` and its existing selection contract | Pass explicit expected policy; change no deployed default during implementation |
 | Server selection | `server/flat32/features/shared-cache/DistantSunSharedCachePackageService.js` | Require the selected package and lookup policy to agree before serving it; omission retains legacy |
+| Publication selection | `scripts/algorithm32/solar-zenith-cache/publish-shared-runtime.js` | Accept explicit `--scattering-accuracy`; authenticate package/policy agreement before copying, and verify the same policy after publication; omission stays legacy |
 | Matched Toronto qualification input | `scripts/algorithm32/solar-zenith-cache/DistantSunPointLocalCacheAerosolOptics.js` | Accept explicit per-channel SSA and normalized phase tables; preserve canonical fallback, aerosol extinction, density and amount |
 
 Qualification must exercise real packaged data, exact seams, row-specific cubic
