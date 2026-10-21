@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import {getSampleDirection} from '../../experiments/b1-directional-sky-radiance/benchmark-domain.js';
 import {CUBED_SPHERE_W27_DIRECTION_DOMAIN_OWNER} from '../../../src/algorithm32/sampling-domains/direction/cubed-sphere/consts.js';
 import {DistantSunSolarInterpolation} from '../../../src/algorithm32/implementation/distant-sun/cache/DistantSunSolarInterpolation.js';
+import {DistantSunScatteringAccuracy} from '../../../src/algorithm32/implementation/distant-sun/cache/DistantSunScatteringAccuracy.js';
 
 /** Offline Q30 evaluator for the production compiler qualification, with production W27 reconstruction.
  * The midpoint extinction/density equation is adapted from accepted run 65's B1 view integrator.
@@ -58,11 +59,13 @@ export default class DistantSunBrunetonView {
 		const tangent = this._normalize(horizontal);
 		const across = this._normalize(this._cross(up, tangent));
 		const unitDirection = this._normalize(direction);
-		const outgoing = CUBED_SPHERE_W27_DIRECTION_DOMAIN_OWNER.resolveStencil([
+		/** @type {UnitVector3} */
+		const local = [
 			this._dot(unitDirection, tangent),
 			this._dot(unitDirection, across),
 			this._dot(unitDirection, up),
-		]);
+		];
+		const outgoing = CUBED_SPHERE_W27_DIRECTION_DOMAIN_OWNER.resolveStencil(local);
 		const altitudes = this._linear(
 			spec.domains.position.nodes.map((node) => node.altitudeMeters),
 			radius - spec.planet.bottomRadiusMeters,
@@ -71,14 +74,32 @@ export default class DistantSunBrunetonView {
 			spec.domains.solarZenith.nodes.map((node) => node.solarZenithDegrees),
 			(Math.acos(cosine) * 180) / Math.PI,
 		);
-		return {altitudes, zeniths, outgoing};
+		return {altitudes, zeniths, outgoing, local};
+	}
+	/** Resolve one accepted physical query in its own solar row's outgoing grid.
+	 * @param {DistantSunSceneCacheTransportSpec} spec - Accepted construction specification.
+	 * @param {UnitVector3} local - Physical receiver-local direction.
+	 * @param {number} zenithIndex - Actual interpolation tap, not the query's solar angle.
+	 * @returns {ScatteringCacheDirectionStencil} - Bilinear logical direction support.
+	 */
+	_outgoing(spec, local, zenithIndex) {
+		const theta = (spec.domains.solarZenith.nodes[zenithIndex].solarZenithDegrees * Math.PI) / 180;
+		return CUBED_SPHERE_W27_DIRECTION_DOMAIN_OWNER.resolveStencil(
+			DistantSunScatteringAccuracy.map(
+				local,
+				[Math.sin(theta), 0, Math.cos(theta)],
+				spec.numerical.scatteringAccuracy ?? 'legacy',
+				true,
+			),
+		);
 	}
 	/** Resolve the unchanged linear control in expanded scene-row order. */
 	_taps(spec, ledger, point, direction) {
-		const {altitudes, zeniths, outgoing} = this._coordinates(spec, point, direction);
+		const {altitudes, zeniths, local} = this._coordinates(spec, point, direction);
 		const taps = [];
 		for (const [altitudeIndex, altitudeWeight] of altitudes)
 			for (const [zenithIndex, zenithWeight] of zeniths) {
+				const outgoing = this._outgoing(spec, local, zenithIndex);
 				const row = ledger.rows[altitudeIndex];
 				assert.ok(
 					row && zenithIndex >= row.firstSolarZenithIndex && zenithIndex <= row.lastSolarZenithIndex,
@@ -103,13 +124,14 @@ export default class DistantSunBrunetonView {
 	 * @returns {BrunetonQualificationCubicAltitude[]} - Directional taps for each solar knot, then altitude weights.
 	 */
 	_cubic(spec, packet, indexes, point, direction) {
-		const {altitudes, zeniths, outgoing} = this._coordinates(spec, point, direction);
+		const {altitudes, zeniths, local} = this._coordinates(spec, point, direction);
 		const last = spec.domains.solarZenith.nodes.length - 1;
 		const lower = zeniths.length === 2 ? zeniths[0][0] : Math.min(zeniths[0][0], last - 1);
 		const fraction = zeniths.length === 2 ? zeniths[1][1] : zeniths[0][0] === 0 ? 0 : 1;
 		const upper = lower + 1;
 		return altitudes.map(([altitudeIndex, weight]) => {
 			const at = (zenithIndex) => {
+				const outgoing = this._outgoing(spec, local, zenithIndex);
 				const row = indexes.get(`${altitudeIndex}:${zenithIndex}`);
 				assert.ok(row !== undefined, 'Q30 cubic query lacks required interior support.');
 				return outgoing.indices.map((logical, ordinal) => ({
@@ -185,7 +207,11 @@ export default class DistantSunBrunetonView {
 		}
 		assert.equal(spec.atmosphere.ozone.absorptionEnabled, false);
 		assert.equal(packet.layout.logicalDirectionCount, 4374);
-		assert.equal(packet.layout.channelCount, 40);
+		const expectedWavelengths = options.wavelengthIndexes ?? Array.from({length: 40}, (_unused, index) => index);
+		assert.ok(expectedWavelengths.length > 0 && expectedWavelengths.length <= 40);
+		assert.equal(new Set(expectedWavelengths).size, expectedWavelengths.length);
+		assert.ok(expectedWavelengths.every((index) => Number.isInteger(index) && index >= 0 && index < 40));
+		assert.equal(packet.layout.channelCount, expectedWavelengths.length);
 		if (options.sceneIds === undefined) {
 			assert.equal(packet.scenes.length, 17, 'Full Bruneton preparation requires all 17 scenes.');
 		} else {
@@ -200,10 +226,7 @@ export default class DistantSunBrunetonView {
 			);
 		}
 		assert.equal(scenes.length, packet.scenes.length);
-		assert.deepEqual(
-			packet.layout.wavelengthIndexes,
-			Array.from({length: 40}, (_unused, index) => index),
-		);
+		assert.deepEqual(packet.layout.wavelengthIndexes, expectedWavelengths);
 		return packet.scenes.map((scene, sceneIndex) => {
 			assert.equal(scene.request.id, scenes[sceneIndex].id);
 			assert.equal(scene.request.observerAltitudeMeters, 0);

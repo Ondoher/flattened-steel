@@ -79,6 +79,7 @@ export default class SharedDistantCacheAssets {
 			maximumGpuBytes: transitionQualification?.maximumBytes ?? 24 * DISTANT_SUN_SHARED_CACHE_PACKET_BYTES,
 			transitionQualification,
 			solarInterpolation: asset.solarInterpolation,
+			scatteringAccuracy: asset.scatteringAccuracy,
 		};
 	}
 

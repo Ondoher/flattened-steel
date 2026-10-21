@@ -1,4 +1,5 @@
 import {DistantSunSceneCacheNumerics} from './DistantSunSceneCacheNumerics.js';
+import {DistantSunScatteringAccuracy} from '../../../src/algorithm32/implementation/distant-sun/cache/DistantSunScatteringAccuracy.js';
 
 const VERTEX_SOURCE = `#version 300 es
 void main() {
@@ -190,15 +191,21 @@ export function createDistantSunSceneCacheCommonShaderSource({
 	miePhaseFunctionG = 0.7,
 	sourcePathTransmittanceIntervalCount = 20,
 	incomingDirectionCount = 68,
-	transportIntervalCount = 15,
+	transportIntervalCount = undefined,
 	outgoingFaceWidth = 39,
 	positionAltitudesMeters = null,
 	solarZenithDegrees = null,
 	coordinateContract = 'scene-cache-receiver-local-v1',
 	sourceDirection = null,
 	numericalPolicy = undefined,
+	scatteringAccuracy = 'legacy',
 }) {
 	const geometryPolicy = DistantSunSceneCacheNumerics.accept(numericalPolicy);
+	const accuracy = DistantSunScatteringAccuracy.accept(scatteringAccuracy);
+	const focus = DistantSunScatteringAccuracy.focus(accuracy);
+	const intervals = transportIntervalCount ?? DistantSunScatteringAccuracy.transportIntervals(accuracy, 15);
+	if (accuracy !== 'legacy' && intervals !== 60)
+		throw new RangeError('Corrected distant-Sun scattering requires 60 transport intervals.');
 	const anchored = geometryPolicy?.positionMethod === 'anchored-radial';
 	if (!['scene-cache-receiver-local-v1', 'production-source-aligned-v1'].includes(coordinateContract)) {
 		throw new RangeError(`Unsupported offline recurrence coordinate contract: ${coordinateContract}.`);
@@ -563,7 +570,7 @@ const int F68_COUNT = ${incomingDirectionCount};
 const int OUTGOING_FACE_WIDTH = ${outgoingFaceWidth};
 const int OUTGOING_CELL_WIDTH = ${outgoingCellWidth};
 const int OUTGOING_FACE_NODE_COUNT = ${outgoingFaceNodeCount};
-const int TRANSPORT_INTERVAL_COUNT = ${transportIntervalCount};
+const int TRANSPORT_INTERVAL_COUNT = ${intervals};
 const int SOURCE_TRANSMITTANCE_INTERVAL_COUNT = ${sourcePathTransmittanceIntervalCount};
 const float POSITION_ALTITUDES[POSITION_COUNT] = float[POSITION_COUNT](
 	${floatArray(altitudes)}
@@ -821,7 +828,16 @@ void directionFace(vec3 direction, out int faceIndex, out vec3 normal, out vec3 
 	if (projection > selected) { faceIndex = 5; normal = vec3(0.0, 0.0, -1.0); uAxis = vec3(-1.0, 0.0, 0.0); vAxis = vec3(0.0, 1.0, 0.0); }
 }
 
+${DistantSunScatteringAccuracy.createShaderSource()}
+
+vec3 cacheMappedOutgoingDirection(vec3 direction, int row, bool inverse) {
+	float scale = inverse ? 1.0 / ${formatFloat(focus)} : ${formatFloat(focus)};
+	vec3 sun = ${sourceAligned ? 'vec3(1.0, 0.0, 0.0)' : 'j1SourceDirection(row / POSITION_COUNT)'};
+	return distantSunOutgoingMap(direction, sun, scale);
+}
+
 float sampleJDirection(sampler2D field, int row, vec3 direction) {
+	direction = cacheMappedOutgoingDirection(direction, row, true);
 	vec3 normal;
 	vec3 uAxis;
 	vec3 vAxis;
@@ -930,7 +946,7 @@ void main() {
 	vec3 point = representativePoint(row % POSITION_COUNT, row / POSITION_COUNT);
 	vec3 outgoing = phaseOutgoingDirection(
 		point,
-		texelFetch(uOutgoingDirections, ivec2(directionIndex, 0), 0).xyz
+		cacheMappedOutgoingDirection(texelFetch(uOutgoingDirections, ivec2(directionIndex, 0), 0).xyz, row, false)
 	);
 	vec2 base = texelFetch(uDirectBase, ivec2(0, row), 0).rg;
 	vec3 sourceDirection = j1SourceDirection(row / POSITION_COUNT);
@@ -1008,9 +1024,10 @@ void main() {
  *
  * @param {string} common - Shared wavelength-specific GLSL source.
  * @param {boolean} sourceAligned - Whether source-aligned ground input and compensated summation apply.
+ * @param {boolean} normalizeMieMass - Preserve the discrete Mie phase mass in this higher-order pass.
  * @returns {string} - Complete higher-order scattering-density fragment shader.
  */
-function scatterFragment(common, sourceAligned) {
+function scatterFragment(common, sourceAligned, normalizeMieMass) {
 	const productionUniforms = sourceAligned
 		? 'uniform sampler2D uGroundIlluminationL;\nuniform int uScatteringOrder;\n'
 		: '';
@@ -1044,9 +1061,10 @@ void main() {
 	Medium medium = sampleMediumAtPoint(point);
 	vec3 outgoing = phaseOutgoingDirection(
 		point,
-		texelFetch(uOutgoingDirections, ivec2(outgoingIndex, 0), 0).xyz
+		cacheMappedOutgoingDirection(texelFetch(uOutgoingDirections, ivec2(outgoingIndex, 0), 0).xyz, row, false)
 	);
 	float sum = 0.0;
+	${normalizeMieMass ? 'float mieSum = 0.0; float mieMass = 0.0;' : ''}
 	${compensationDeclaration}
 	for (int incomingIndex = 0; incomingIndex < F68_COUNT; incomingIndex += 1) {
 		vec4 incomingRecord = texelFetch(uF68Directions, ivec2(incomingIndex, 0), 0);
@@ -1056,8 +1074,9 @@ void main() {
 		float scattering = medium.rayleighScattering * rayleighPhase(outgoing, incoming)
 			+ medium.mieScattering * miePhase(outgoing, incoming);
 		${sumAddition}
+		${normalizeMieMass ? 'mieSum += incomingRadiance * medium.mieScattering * miePhase(outgoing, incoming) * incomingRecord.w; mieMass += miePhase(outgoing, incoming) * incomingRecord.w;' : ''}
 	}
-	outputValue = sum;
+	outputValue = ${normalizeMieMass ? 'sum - mieSum + mieSum / max(mieMass, 1e-12)' : 'sum'};
 }`;
 }
 
@@ -1264,6 +1283,7 @@ export async function compileDistantSunSceneCacheWavelength({
 		coordinateContract,
 		sourceDirection: spec.source.directionToLight,
 		numericalPolicy: spec.numerical.geometryPolicy,
+		scatteringAccuracy: spec.numerical.scatteringAccuracy,
 	});
 	const widthJ = domains.outgoing.directionCount;
 	const widthL = domains.incoming.directionCount;
@@ -1292,7 +1312,15 @@ export async function compileDistantSunSceneCacheWavelength({
 		directBase: createProgram(gl, directBaseFragment(common), 'ZP3 direct base'),
 		j1: createProgram(gl, j1Fragment(common), 'ZP3 J1'),
 		l1: createProgram(gl, l1Fragment(common, sourceAligned), 'ZP3 L1'),
-		scatter: createProgram(gl, scatterFragment(common, sourceAligned), 'ZP3 scatter'),
+		scatter: createProgram(
+			gl,
+			scatterFragment(
+				common,
+				sourceAligned,
+				DistantSunScatteringAccuracy.accept(spec.numerical.scatteringAccuracy) !== 'legacy',
+			),
+			'ZP3 scatter',
+		),
 		transport: createProgram(gl, transportFragment(common, sourceAligned), 'ZP3 transport'),
 		projection: compileSceneCaches
 			? createProgram(gl, packedRowAccumulatorFragment(), 'P2 packed-row accumulation')

@@ -778,6 +778,7 @@ type Flat32DistantSunCacheResolution =
 
 /** Trusted immutable shared-package root returned by the explicit deployment selection. */
 type Flat32SharedCacheAssetSelection = {
+	/** Explicit expected numerical/mapping policy; omission retains legacy package lookup. */ scatteringAccuracy?: DistantSunScatteringAccuracyMethod;
 	/** Same-origin immutable package directory URL. */ rootUrl: string;
 	/** Content-addressed package-set identity matching the final root directory. */ packageSetIdentity: string;
 	/** Exact trusted package-set report bytes. */ report: DistantSunSharedCacheFileIdentity;

@@ -13,6 +13,7 @@ import DistantSunSceneCacheLedger from '../../../src/algorithm32/implementation/
 import {DISTANT_SUN_SCENE_CACHE_COMPILER_IDENTITY, DISTANT_SUN_SCENE_CACHE_NUMERICAL_IDENTITY} from './consts.js';
 import {CanonicalValueHash} from '../../../src/algorithm32/value-identity/CanonicalValueHash.js';
 import {DistantSunSceneCacheNumerics} from './DistantSunSceneCacheNumerics.js';
+import {DistantSunScatteringAccuracy} from '../../../src/algorithm32/implementation/distant-sun/cache/DistantSunScatteringAccuracy.js';
 
 /** Cohesive production input owner for the offline distant-Sun scene-cache compiler. */
 export const DistantSunSceneCacheCompilerInputs = {
@@ -55,6 +56,7 @@ export const DistantSunSceneCacheCompilerInputs = {
 	createInputSet(scene, options = {}) {
 		const positionDomain = SphericalNativePositionDomains.select(options.positionDomain);
 		const geometryPolicy = DistantSunSceneCacheNumerics.accept(options.numericalPolicy);
+		const accuracy = DistantSunScatteringAccuracy.accept(options.scatteringAccuracy);
 		if (
 			options.solarInterpolation !== undefined &&
 			!['linear', 'monotone-cubic'].includes(options.solarInterpolation)
@@ -150,12 +152,13 @@ export const DistantSunSceneCacheCompilerInputs = {
 			},
 			ground: {id: 'algorithm32-canonical-black-ground-boundary-v1'},
 			numerical: {
+				...(accuracy === 'legacy' ? {} : {scatteringAccuracy: accuracy}),
 				...(geometryPolicy ? {geometryPolicy} : {}),
 				...(options.solarInterpolation === 'monotone-cubic'
 					? {solarInterpolation: options.solarInterpolation}
 					: {}),
 				sourcePathTransmittanceIntervalCount: 20,
-				transportIntervalCount: 15,
+				transportIntervalCount: DistantSunScatteringAccuracy.transportIntervals(accuracy, 15),
 				maximumScatteringOrder: 4,
 			},
 			domains,
@@ -165,6 +168,7 @@ export const DistantSunSceneCacheCompilerInputs = {
 			compilerIdentity: DISTANT_SUN_SCENE_CACHE_COMPILER_IDENTITY,
 			numericalIdentity:
 				geometryPolicy ||
+				accuracy !== 'legacy' ||
 				options.solarInterpolation === 'monotone-cubic' ||
 				positionDomain !== NATIVE_48_POSITION_DOMAIN_OWNER
 					? CanonicalValueHash.sha256Value(transportSpec)

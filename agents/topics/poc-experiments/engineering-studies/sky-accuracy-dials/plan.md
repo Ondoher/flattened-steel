@@ -1,5 +1,9 @@
 # Predictable Sky Accuracy Dials Experiment Plan
 
+Current lifecycle: **suspended**,2026-10-20. The [suspension record](suspension-2026-10-20.md)
+owns resumption and production handoff. The work below is preserved, not an
+active execution queue.
+
 Completed [H61 Sun-focused outgoing grid](outgoing-focus-results.md): same4374
 slots/F68 incoming,86% lower isolated N1 interpolation residual and full B1 RMSE
 11.59396 versus Corrected60 11.66848 and Original40 11.62291. The paper gate

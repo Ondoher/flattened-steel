@@ -1,0 +1,20 @@
+import {parentPort,workerData} from 'node:worker_threads';
+import {base,read,direction,coordinates} from './common.mjs';
+import {modelField} from './model-field.mjs';
+import {fastModel} from './fast-model.mjs';
+import {projectionGrid} from './harmonic-grid.mjs';
+import {projectFft,fftProof} from './harmonic-fft.mjs';
+import {phaseMoments} from './phase-moments.mjs';
+import {convolve} from './harmonics.mjs';
+
+if(!parentPort)throw Error('FFT projection worker requires its owned parent');
+const port=parentPort,{profile,L,n,N}=workerData,started=Date.now();
+const progress=message=>port.postMessage({type:'progress',message});
+progress('Preparing unchanged native row and Fourier primitive controls');
+const primitive=fftProof(),z=modelField(profile,'node-89',8,true),model=z.models[0],sample=fastModel(model.field,model.nodes);
+const c=projectFft(projectionGrid(model.field,L,n),(mu,phi)=>sample(direction(model.field,mu,phi)),L,N,progress);
+const p=z.f.px,beta=[p.br*Math.exp(-p.h/8000),p.bm*p.ssa*Math.exp(-p.h/1200)],ray=Array.from({length:L+1},(_,l)=>l===0?1:l===2?.1:0),mie=phaseMoments(p.table,L),[mu,phi]=coordinates(z.f.mesh,z.f.out);
+const r=convolve(c,mu,phi,ray),m=convolve(c,mu,phi,mie),parts=[r[0]*beta[0],r[1]*beta[0],m[0]*beta[1],m[1]*beta[1]];
+const normalized=parts.reduce((s,x)=>s+x,0)/z.scale,reference=read(base+'00676-h136-fast-op/rows.json.gz').find(x=>x.profile===profile).levels.at(-1).normalized.native2D;
+port.postMessage({type:'result',value:{c,item:{profile,L,n,N,count:c.count,rings:c.rings,parts,normalized,reference,difference:normalized-reference,milliseconds:Date.now()-started,primitive}}},[...c.real.map(x=>x.buffer),...c.imag.map(x=>x.buffer)]);
+port.close();

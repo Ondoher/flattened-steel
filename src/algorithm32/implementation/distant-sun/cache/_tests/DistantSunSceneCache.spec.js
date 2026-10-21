@@ -59,6 +59,14 @@ function texture(id, storage, valueKey) {
 }
 
 describe('DistantSunSceneCache', () => {
+	it('rejects both directions of a dense package and lookup mapping mismatch', /** Called by Jasmine to prove policy rejection before resident-resource use. */ () => {
+		expect(
+			() => new DistantSunSceneCache({scatteringAccuracy: 'corrected60-sun035', manifest: {record: {}}}),
+		).toThrowError(/scattering policies differ/u);
+		expect(
+			() => new DistantSunSceneCache({manifest: {record: {scatteringAccuracy: 'corrected60-sun035'}}}),
+		).toThrowError(/scattering policies differ/u);
+	});
 	it('retains every selected Native51 ledger row in the runtime shader and rejects a mismatched grid', () => {
 		const positionDomain = NATIVE_51_NEAR_GROUND_POSITION_DOMAIN_OWNER;
 		const ledger = createLedger(positionDomain);

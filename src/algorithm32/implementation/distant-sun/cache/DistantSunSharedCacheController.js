@@ -1,3 +1,4 @@
+import {DistantSunScatteringAccuracy} from './DistantSunScatteringAccuracy.js';
 import DistantSunSharedCacheAtlas from './DistantSunSharedCacheAtlas.js';
 import DistantSunSharedCacheMetadata from './DistantSunSharedCacheMetadata.js';
 import DistantSunSharedCacheSupport from './DistantSunSharedCacheSupport.js';
@@ -124,6 +125,9 @@ export default class DistantSunSharedCacheController {
 			transitionQualification: structuredClone(definition.transitionQualification),
 		};
 		this._graph = definition.package.getGraph();
+		const accuracy = DistantSunScatteringAccuracy.accept(definition.scatteringAccuracy);
+		if (accuracy !== DistantSunScatteringAccuracy.accept(this._graph.configuration.scatteringAccuracy))
+			throw new RangeError('Shared-cache package and lookup scattering policies differ.');
 		this._metadata = new DistantSunSharedCacheMetadata(this._graph);
 		if (definition.solarInterpolation === 'monotone-cubic')
 			this._support = new DistantSunSharedCacheSupport(this._graph);
@@ -331,6 +335,7 @@ export default class DistantSunSharedCacheController {
 			if (sceneOrdinal === null) {
 				this._candidate = {
 					solarInterpolation: this._definition.solarInterpolation,
+					scatteringAccuracy: this._definition.scatteringAccuracy,
 					snapshot: this._metadata.build(null, generation, [], this._layers),
 					metadataTextures: [],
 					bindings: [],
@@ -421,6 +426,7 @@ export default class DistantSunSharedCacheController {
 			const metadataTextures = this._uploadMetadata(snapshot, coordinates);
 			this._candidate = {
 				solarInterpolation: this._definition.solarInterpolation,
+				scatteringAccuracy: this._definition.scatteringAccuracy,
 				snapshot,
 				metadataTextures,
 				atlas,

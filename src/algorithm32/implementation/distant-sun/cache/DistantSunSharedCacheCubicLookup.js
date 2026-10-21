@@ -4,14 +4,17 @@ import {
 } from '../../../sampling-domains/index.js';
 import {DISTANT_SUN_SHARED_CACHE_UNAVAILABLE_ROW_ADDRESS} from './consts.js';
 import {DistantSunSolarInterpolation} from './DistantSunSolarInterpolation.js';
+import {DistantSunScatteringAccuracy} from './DistantSunScatteringAccuracy.js';
 
 /** Cubic packet lookup shared by the production facade and matched GPU qualification. */
 export const DistantSunSharedCacheCubicLookup = {
 	/** Emit domain- and packet-contract-derived sampling functions.
 	 *
+	 * @param {DistantSunScatteringAccuracyMethod} [accuracy='legacy'] - Accepted outgoing mapping.
 	 * @returns {string} - GLSL using the production packet and coordinate-address samplers.
 	 */
-	createShaderSource() {
+	createShaderSource(accuracy = 'legacy') {
+		const focused = DistantSunScatteringAccuracy.focus(accuracy) !== 1;
 		const faceWidth = CUBED_SPHERE_W27_DIRECTION_DOMAIN_OWNER.faceWidth;
 		const planeWidth = CUBED_SPHERE_W27_DIRECTION_DOMAIN_OWNER.directionCount / faceWidth;
 		const lastIndex = SOLAR_ZENITH_180_DOMAIN_OWNER.count - 1;
@@ -32,7 +35,7 @@ vec4 distantCubicPacket(uvec2 address, vec3 coordinate, int plane) {
 		texelFetch(uDistantSunSharedPackets, ivec3(origin + upper, layer), 0), fraction.x);
 	return mix(lowerV, upperV, fraction.y);
 }
-vec4 distantCubicDensity(int altitudeIndex, vec3 directionCoordinate, float zenithCoordinate, int plane, out bool supported) {
+vec4 distantCubicDensity(int altitudeIndex, ${focused ? 'vec3 directionCoordinates[4]' : 'vec3 directionCoordinate'}, float zenithCoordinate, int plane, out bool supported) {
 	int lowerIndex = min(int(floor(zenithCoordinate)), ${lastIndex - 1});
 	float fraction = zenithCoordinate - float(lowerIndex);
 	uvec2 addresses[4];
@@ -44,10 +47,10 @@ vec4 distantCubicDensity(int altitudeIndex, vec3 directionCoordinate, float zeni
 	}
 	if (!supported) return vec4(0.0);
 	return distantSolarHermite(
-		distantCubicPacket(addresses[0], directionCoordinate, plane),
-		distantCubicPacket(addresses[1], directionCoordinate, plane),
-		distantCubicPacket(addresses[2], directionCoordinate, plane),
-		distantCubicPacket(addresses[3], directionCoordinate, plane),
+		distantCubicPacket(addresses[0], ${focused ? 'directionCoordinates[0]' : 'directionCoordinate'}, plane),
+		distantCubicPacket(addresses[1], ${focused ? 'directionCoordinates[1]' : 'directionCoordinate'}, plane),
+		distantCubicPacket(addresses[2], ${focused ? 'directionCoordinates[2]' : 'directionCoordinate'}, plane),
+		distantCubicPacket(addresses[3], ${focused ? 'directionCoordinates[3]' : 'directionCoordinate'}, plane),
 		fraction, lowerIndex == 0, lowerIndex + 1 == ${lastIndex});
 }
 `;
@@ -55,10 +58,21 @@ vec4 distantCubicDensity(int altitudeIndex, vec3 directionCoordinate, float zeni
 
 	/** Emit the altitude interpolation that surrounds the cubic solar lookup.
 	 *
+	 * @param {DistantSunScatteringAccuracyMethod} [accuracy='legacy'] - Accepted outgoing mapping.
 	 * @returns {string} - Spectral density accumulators and explicit support state.
 	 */
-	createSampleBody() {
+	createSampleBody(accuracy = 'legacy') {
+		const focused = DistantSunScatteringAccuracy.focus(accuracy) !== 1;
+		const last = SOLAR_ZENITH_180_DOMAIN_OWNER.count - 1;
 		return `
+	${
+		focused
+			? `vec3 directionCoordinates[4];
+	int directionLower = min(int(floor(zenithCoordinate)), ${last - 1});
+	for (int tap = 0; tap < 4; tap += 1)
+		directionCoordinates[tap] = distantSunRowCoordinate(outgoingDirection, clamp(directionLower + tap - 1, 0, ${last}));`
+			: ''
+	}
 	bool supported = true;
 	vec4 density0 = vec4(0.0), density1 = vec4(0.0), density2 = vec4(0.0), density3 = vec4(0.0);
 	for (int altitudeTap = 0; altitudeTap < 2; altitudeTap += 1) {
@@ -66,7 +80,7 @@ vec4 distantCubicDensity(int altitudeIndex, vec3 directionCoordinate, float zeni
 		if (weight <= 0.0) continue;
 		for (int plane = 0; plane < 4; plane += 1) {
 			bool available;
-			vec4 value = weight * distantCubicDensity(altitudeStencil.indices[altitudeTap], directionCoordinate, zenithCoordinate, plane, available);
+			vec4 value = weight * distantCubicDensity(altitudeStencil.indices[altitudeTap], ${focused ? 'directionCoordinates' : 'directionCoordinate'}, zenithCoordinate, plane, available);
 			supported = supported && available;
 			if (plane == 0) density0 += value;
 			else if (plane == 1) density1 += value;

@@ -1,5 +1,21 @@
 # Sky Accuracy Dials: Agent Handoff
 
+Current disposition: **suspended**,2026-10-20, not closed. Read the
+[suspension record](suspension-2026-10-20.md) for the current resumption boundary,
+retained evidence, process/standards inventory and selected production handoff.
+No experimental work runs without a new owner selection.
+
+Corrected60 + Sun-focused outgoing k=.35 is selected for
+[production integration](../../../production-algorithm32/caches/sky-accuracy-promotion-plan.md).
+H61/H63 supply its evidence. The latest H134-H140 conclusions are preserved
+separately; its unqualified branches are not promotion inputs. Production
+qualification and the experiment-adoption hold remain separate.
+
+## Historical handoff before this suspension
+
+The following notes are retained background, not current routing or authority.
+
+
 The owner resumed this experiment for [gray horizon diagnosis](horizon-diagnosis-plan.md).
 Start there and with the [experiment lifecycle](status.md#experiment-lifecycle).
 The scientific context below remains background for evidence reuse.

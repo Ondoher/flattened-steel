@@ -6,6 +6,7 @@ type DistantSunSceneCacheAcceptedManifest = Readonly<{
 
 /** Format-independent metadata consumed after an asset's own validation succeeds. */
 type DistantSunSceneCacheResidentManifestRecord = Readonly<{
+	/** Accepted numerical/mapping policy; absence identifies legacy data. */ scatteringAccuracy?: DistantSunScatteringAccuracyMethod;
 	/** Exact identity of the accepted asset. */ readonly cacheIdentity: string;
 	/** Size of the unique-direction field. */ readonly exactSeamPayload: Pick<
 		DistantSunSceneCacheManifestRecord['exactSeamPayload'],

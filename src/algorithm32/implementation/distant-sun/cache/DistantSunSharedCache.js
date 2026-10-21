@@ -1,6 +1,7 @@
 import {ShaderContributions} from '../../../shader-assembly/base/ShaderContributions.js';
 import {SOLAR_ZENITH_180_DOMAIN_OWNER} from '../../../sampling-domains/index.js';
 import {DistantSunSharedCacheCubicLookup} from './DistantSunSharedCacheCubicLookup.js';
+import {DistantSunScatteringAccuracy} from './DistantSunScatteringAccuracy.js';
 
 /** Stable packet lookup and live publication surface; the controller owns its resources.
  * @implements {GpuScatteringCache}
@@ -20,6 +21,7 @@ export default class DistantSunSharedCache {
 	 * @param {DistantSunSharedCacheFrame} frame - Borrowed initial frame.
 	 */
 	constructor(backend, frame) {
+		DistantSunScatteringAccuracy.accept(frame.scatteringAccuracy);
 		this._backendId = backend.id;
 		this._frame = frame;
 		try {
@@ -74,6 +76,8 @@ export default class DistantSunSharedCache {
 	 */
 	publish(frame) {
 		if (this._disposed) throw new Error('Shared cache is disposed.');
+		if ((frame.scatteringAccuracy ?? 'legacy') !== (this._frame.scatteringAccuracy ?? 'legacy'))
+			throw new RangeError('Shared cache cannot change outgoing mapping within one facade.');
 		if ((frame.solarInterpolation ?? 'linear') !== (this._frame.solarInterpolation ?? 'linear'))
 			throw new RangeError('Shared cache cannot change interpolation contracts within one facade.');
 		if (frame.bindings.some((binding) => binding.backendId !== this._backendId))
@@ -113,6 +117,8 @@ export default class DistantSunSharedCache {
 	 */
 	createShaderContribution() {
 		const cubic = this._frame.solarInterpolation === 'monotone-cubic';
+		const accuracy = this._frame.scatteringAccuracy ?? 'legacy';
+		const focused = DistantSunScatteringAccuracy.focus(accuracy) !== 1;
 		return ShaderContributions.createShaderContribution({
 			id: cubic ? 'cache-distant-sun-shared-cubic-packets-v1' : 'cache-distant-sun-shared-packets',
 			owner: 'cache',
@@ -167,7 +173,8 @@ export default class DistantSunSharedCache {
 					'cache-distant-sun-shared-lookup',
 					'sampleScatteringCache',
 					0,
-					`${cubic ? DistantSunSharedCacheCubicLookup.createShaderSource() : ''}
+					`${focused ? DistantSunScatteringAccuracy.createLookupShaderSource(accuracy, SOLAR_ZENITH_180_DOMAIN_OWNER) : ''}
+${cubic ? DistantSunSharedCacheCubicLookup.createShaderSource(accuracy) : ''}
 int distantScenePackedRow(int altitudeIndex, int solarZenithIndex) {
  ivec3 ledger = texelFetch(uDistantSunSharedAltitudes, ivec2(altitudeIndex, uDistantSunSharedScene), 0).rgb;
  if (solarZenithIndex < ledger.x || solarZenithIndex > ledger.y) return -1;
@@ -234,16 +241,17 @@ SpectralValue sampleCumulativeScatteringDensity(
  CachePositionStencil altitudeStencil =
 		resolveScatteringCachePositionStencil(atmosphereCoordinate);
 	vec3 directionToSource = directionToAtmosphericSource(positionMeters);
-	vec3 directionCoordinate = distantSceneDirectionCoordinate(distantSceneLocalOutgoingDirection(
+	vec3 outgoingDirection = distantSceneLocalOutgoingDirection(
 		positionMeters,
 		directionToSource,
 		physicalOutgoingDirection
-	));
+	);
+	vec3 directionCoordinate = distantSceneDirectionCoordinate(outgoingDirection);
 	float muS = clamp(dot(normalize(positionMeters), directionToSource), -1.0, 1.0);
 	float zenithCoordinate = clamp((acos(muS) - ${SOLAR_ZENITH_180_DOMAIN_OWNER.firstCenter.value}) / ${SOLAR_ZENITH_180_DOMAIN_OWNER.spacing.value}, 0.0, ${SOLAR_ZENITH_180_DOMAIN_OWNER.count - 1}.0);
 ${
 	cubic
-		? DistantSunSharedCacheCubicLookup.createSampleBody()
+		? DistantSunSharedCacheCubicLookup.createSampleBody(accuracy)
 		: `	int lowerZenithIndex = int(floor(zenithCoordinate));
 	int upperZenithIndex = int(ceil(zenithCoordinate));
 	float upperZenithWeight = zenithCoordinate - float(lowerZenithIndex);
@@ -272,6 +280,7 @@ ${
 	for (int rowTap = 0; rowTap < 4; rowTap += 1) {
 		if (altitudeZenithWeights[rowTap] <= 0.0 || packedRows[rowTap] < 0) continue;
 		float weight = altitudeZenithWeights[rowTap];
+		${focused ? 'vec3 directionCoordinate = distantSunRowCoordinate(outgoingDirection, zenithIndices[rowTap % 2]);' : ''}
 		float faceOffset = directionCoordinate.x * 27.0;
 		uvec2 address = texelFetch(uDistantSunSharedRows, ivec2(packedRows[rowTap], uDistantSunSharedScene), 0).rg;
   if (address.x == 65535u || address.y == 65535u) { supported = false; continue; }

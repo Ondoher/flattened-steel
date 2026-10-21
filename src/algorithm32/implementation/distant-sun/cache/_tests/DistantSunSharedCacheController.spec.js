@@ -7,6 +7,35 @@ describe('Shared-cache residency and publication', () => {
 	let fixture;
 	afterEach(() => fixture?.controller.dispose());
 
+	it('rejects both legacy/focused package and lookup mismatches before allocation', /** Called by Jasmine to prove explicit package-policy pairing. */ () => {
+		fixture = createFixture();
+		expect(
+			() =>
+				new DistantSunSharedCacheController({...fixture.definition, scatteringAccuracy: 'corrected60-sun035'}),
+		).toThrowError(/scattering policies differ/u);
+		fixture.graph.configuration.scatteringAccuracy = 'corrected60-sun035';
+		expect(() => new DistantSunSharedCacheController({...fixture.definition})).toThrowError(
+			/scattering policies differ/u,
+		);
+		expect(fixture.backend.liveArrays).toBe(0);
+	});
+
+	it('preserves the focused mapping through publication, darkness and restoration', /** Called by Jasmine to exercise candidate lifecycle with the existing resource owner. */ async () => {
+		fixture = createFixture(true, true, true, 'corrected60-sun035');
+		expect(await fixture.controller.requestScene(0)).toBeTrue();
+		expect(fixture.controller.publishFrame().scatteringAccuracy).toBe('corrected60-sun035');
+		expect(await fixture.controller.requestScene(null)).toBeTrue();
+		expect(fixture.controller.publishFrame().scatteringAccuracy).toBe('corrected60-sun035');
+		expect(fixture.controller.publishFrame().snapshot.status).toBe('dark');
+		expect(await fixture.controller.requestScene(1)).toBeTrue();
+		expect(fixture.controller.publishFrame().scatteringAccuracy).toBe('corrected60-sun035');
+		fixture.backend.lose();
+		expect(fixture.controller.publishFrame()).toBeUndefined();
+		fixture.backend.restore();
+		expect(await fixture.controller.requestScene(1)).toBeTrue();
+		expect(fixture.controller.publishFrame().scatteringAccuracy).toBe('corrected60-sun035');
+	});
+
 	it('rejects a missing interior cubic neighbor before any atlas allocation', /** Called by Jasmine to prove complete-stencil admission. */ () => {
 		fixture = createFixture();
 		expect(
@@ -288,7 +317,7 @@ describe('Shared-cache residency and publication', () => {
 });
 
 /** Creates a deterministic independent coordinate oracle and resource-accounting capabilities. */
-function createFixture(transition = false, sliding = false, cubic = false) {
+function createFixture(transition = false, sliding = false, cubic = false, scatteringAccuracy = undefined) {
 	const blocks = [];
 	for (const base of cubic ? [0, 40] : [0, 48])
 		for (let altitude = 0; altitude < 48; altitude += 8)
@@ -329,7 +358,7 @@ function createFixture(transition = false, sliding = false, cubic = false) {
 		blockIndex: {blocks},
 		scenes,
 		logicalToUniqueIndex: new Uint16Array(),
-		configuration: {directionLayout: {logicalToUniqueIndex: {sha256: 'b'.repeat(64)}}},
+		configuration: {scatteringAccuracy, directionLayout: {logicalToUniqueIndex: {sha256: 'b'.repeat(64)}}},
 	};
 	const values = new Float32Array(DISTANT_SUN_SHARED_CACHE_PACKET_BYTES / 4);
 	const fixture = {graph, activePins: 0, requests: 0, defer: false};
@@ -427,6 +456,7 @@ function createFixture(transition = false, sliding = false, cubic = false) {
 	fixture.backend = backend;
 	fixture.definition = {
 		solarInterpolation: cubic ? 'monotone-cubic' : undefined,
+		scatteringAccuracy,
 		backend,
 		transport,
 		package: {getGraph: () => graph, getBlockUrl: (id) => `http://localhost/${id}`},

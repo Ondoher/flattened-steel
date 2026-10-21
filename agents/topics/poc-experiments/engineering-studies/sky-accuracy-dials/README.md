@@ -1,14 +1,22 @@
 # Predictable Sky Accuracy Dials Experiment
 
-Active: [H134-H140 illumination reconstruction through the cache recurrence](illumination-reconstruction-plan.md).
-Tests active-profile refinement and phase-factored interpolation, then conditional
-four-order construction, full paper B1 and matched scenes. Accuracy gates govern
-advancement; build complexity/time/memory are reported. H134 and local development
-are complete; both reconstructions pass all36 local physical protections after
-independent precision recovery. Continuous operator integration and stronger
-physical transfer remain active; actual recurrence, B1 and scenes have not run. The
-[results](illumination-reconstruction-results.md) link native progress tables;
-the [execution record](illumination-reconstruction-execution.md) owns live state.
+Status: **suspended**,2026-10-20, at the owner's request; not closed.
+The [suspension record](suspension-2026-10-20.md) owns evidence, released resources,
+standards restoration and the exact resumption boundary. No scientific job is
+active. Resume only after the owner selects this experiment again.
+
+The completed Corrected60 + Sun-focused outgoing k=.35 result is selected for
+[production integration](../../../production-algorithm32/caches/sky-accuracy-promotion-plan.md).
+Its [H61 paper results](outgoing-focus-results.md) and [H63 Toronto scenes](toronto-scene-results.md)
+remain immutable evidence. Later incomplete reconstruction/altitude/phase-control
+branches are not selected for promotion. The experiment's production-adoption
+hold remains; production must independently adapt and qualify the selected result.
+
+The latest [illumination conclusions](illumination-reconstruction-results.md)
+and [execution record](illumination-reconstruction-execution.md) preserve the
+incomplete H134-H140 work. Its [plan](illumination-reconstruction-plan.md) remains
+available for a future owner-selected resumption, with all eight reserved tuples
+unexposed. Production is unchanged at this handoff.
 
 Completed: [H126-H133 reconstruction mechanisms](reconstruction-mechanisms-results.md).
 All five screens and earned follow-ons are complete. Source-phase-factored polar

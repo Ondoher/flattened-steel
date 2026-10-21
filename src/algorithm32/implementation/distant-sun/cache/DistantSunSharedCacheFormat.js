@@ -5,6 +5,7 @@ import {
 } from '../../../sampling-domains/index.js';
 import {NATIVE_15_SPECTRAL_BASIS} from '../../../profiles/index.js';
 import DistantSunSceneCacheLedger from './DistantSunSceneCacheLedger.js';
+import {DistantSunScatteringAccuracy} from './DistantSunScatteringAccuracy.js';
 import {
 	DISTANT_SUN_SCENE_CACHE_EXACT_SEAM_CODEC_ID,
 	DISTANT_SUN_SHARED_CACHE_BLOCK_ALTITUDE_COUNT,
@@ -13,6 +14,7 @@ import {
 	DISTANT_SUN_SHARED_CACHE_CODEC_PROFILE_SCHEMA_ID,
 	DISTANT_SUN_SHARED_CACHE_COMPRESSION_ID,
 	DISTANT_SUN_SHARED_CACHE_CONFIGURATION_SCHEMA_ID,
+	DISTANT_SUN_SHARED_CACHE_ACCURACY_CONFIGURATION_SCHEMA_ID,
 	DISTANT_SUN_SHARED_CACHE_DECODED_SCALAR_ID,
 	DISTANT_SUN_SHARED_CACHE_DERIVATION_SCHEMA_ID,
 	DISTANT_SUN_SHARED_CACHE_LOGICAL_DIRECTION_COUNT,
@@ -504,11 +506,13 @@ export default class DistantSunSharedCacheFormat {
 	 */
 	acceptConfigurationManifest(value) {
 		const manifest = this._requireRecord(value, 'Shared-cache configuration manifest');
+		const accuracySchema = manifest.schemaId === DISTANT_SUN_SHARED_CACHE_ACCURACY_CONFIGURATION_SCHEMA_ID;
 		this._requireExactKeys(
 			manifest,
 			[
 				'schemaId',
 				'configurationIdentity',
+				...(accuracySchema ? ['scatteringAccuracy'] : []),
 				'atmosphereIdentity',
 				'geometryIdentity',
 				'groundIdentity',
@@ -522,9 +526,11 @@ export default class DistantSunSharedCacheFormat {
 			],
 			'Shared-cache configuration manifest',
 		);
-		if (manifest.schemaId !== DISTANT_SUN_SHARED_CACHE_CONFIGURATION_SCHEMA_ID) {
+		if (manifest.schemaId !== DISTANT_SUN_SHARED_CACHE_CONFIGURATION_SCHEMA_ID && !accuracySchema) {
 			throw new RangeError('Shared-cache configuration schema is unsupported.');
 		}
+		if (accuracySchema && DistantSunScatteringAccuracy.accept(manifest.scatteringAccuracy) === 'legacy')
+			throw new RangeError('Accuracy configuration requires its explicit corrected scattering policy.');
 		this._requireSha256(manifest.configurationIdentity, 'Shared-cache configuration identity');
 		for (const identityName of ['atmosphereIdentity', 'geometryIdentity', 'groundIdentity', 'numericalIdentity']) {
 			this._requireString(manifest[identityName], `Shared-cache ${identityName}`);

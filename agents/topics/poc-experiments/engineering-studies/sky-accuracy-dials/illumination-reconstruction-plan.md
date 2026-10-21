@@ -1,6 +1,10 @@
 # H134-H140: reconstruct incoming illumination through the cache recurrence
 
-Status: active; owner requested independent execution. The
+Current lifecycle: **suspended**,2026-10-20. The [suspension record](suspension-2026-10-20.md)
+owns resumption and production handoff. The work below is preserved, not an
+active execution queue.
+
+Status: current execution wrapped at owner request; this plan is incomplete. The
 [execution record](illumination-reconstruction-execution.md) owns progress,
 decisions and evidence. The experiment remains open. This plan follows the completed
 [H126-H133 reconstruction investigation](reconstruction-mechanisms-results.md).
@@ -411,7 +415,7 @@ Diagnose actual device/allocation failures, reduce resident tiles or stream,
 preserve completed work and retry only affected operations with a new run.
 Do not invent new system/GPU reserve guards or automatic retry prohibitions.
 
-Current allowance is 1536 MiB retained evidence (H135 execution amendment),
+Current allowance is 1792 MiB retained evidence (H136 spectral execution amendment),
 1 GiB live scratch, 40 GiB free disk minimum. These are actual storage
 constraints, not scientific construction-cost gates. Forecast new-wave retention
 and use standing owner authority for justified allowance amendments before

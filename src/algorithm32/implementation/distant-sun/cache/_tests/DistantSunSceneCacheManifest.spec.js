@@ -1,10 +1,29 @@
 import {
 	DISTANT_SUN_SCENE_CACHE_EXACT_SEAM_CODEC_ID,
 	DISTANT_SUN_RUNTIME_SCENE_CACHE_MANIFEST_SCHEMA_ID,
+	DISTANT_SUN_ACCURACY_RUNTIME_SCENE_CACHE_MANIFEST_SCHEMA_ID,
 } from '../consts.js';
 import DistantSunSceneCacheManifest from '../DistantSunSceneCacheManifest.js';
 
 describe('DistantSunSceneCacheManifest', /** Called by Jasmine to register the named test suite. */ () => {
+	it('requires matching schema and explicit corrected policy for a focused dense asset', /** Called by Jasmine to prove dense policy ingress. */ () => {
+		const candidate = {
+			...createRecord(),
+			schemaId: DISTANT_SUN_ACCURACY_RUNTIME_SCENE_CACHE_MANIFEST_SCHEMA_ID,
+			scatteringAccuracy: 'corrected60-sun035',
+		};
+		expect(new DistantSunSceneCacheManifest(candidate).record.scatteringAccuracy).toBe('corrected60-sun035');
+		expect(
+			() =>
+				new DistantSunSceneCacheManifest({
+					...candidate,
+					schemaId: DISTANT_SUN_RUNTIME_SCENE_CACHE_MANIFEST_SCHEMA_ID,
+				}),
+		).toThrowError(/policy differ/u);
+		expect(() => new DistantSunSceneCacheManifest({...candidate, scatteringAccuracy: undefined})).toThrowError(
+			/policy differ/u,
+		);
+	});
 	it('accepts one complete content-addressed scene asset', /** Called by Jasmine to exercise the named behavior. */ () => {
 		const record = createRecord();
 		const manifest = new DistantSunSceneCacheManifest(record);

@@ -8,6 +8,7 @@ import {
 	DISTANT_SUN_SHARED_CACHE_BLOCK_INDEX_SCHEMA_ID,
 	DISTANT_SUN_SHARED_CACHE_CODEC_PROFILE_SCHEMA_ID,
 	DISTANT_SUN_SHARED_CACHE_CONFIGURATION_SCHEMA_ID,
+	DISTANT_SUN_SHARED_CACHE_ACCURACY_CONFIGURATION_SCHEMA_ID,
 	DISTANT_SUN_SHARED_CACHE_DERIVATION_SCHEMA_ID,
 	DISTANT_SUN_SHARED_CACHE_PACKAGE_SET_SCHEMA_ID,
 	DISTANT_SUN_SHARED_CACHE_ROW_BYTE_LENGTH,
@@ -19,6 +20,21 @@ import DistantSunSharedCacheFormat from '../DistantSunSharedCacheFormat.js';
 
 describe('DistantSunSharedCacheFormat', /** Called by Jasmine to register shared-format behavior. */ () => {
 	const format = new DistantSunSharedCacheFormat();
+
+	it('accepts explicit corrected policy only in its new configuration schema', /** Called by Jasmine to prove mapping-aware durable ingress. */ () => {
+		const original = createFixture().configuration;
+		const candidate = {
+			...original,
+			schemaId: DISTANT_SUN_SHARED_CACHE_ACCURACY_CONFIGURATION_SCHEMA_ID,
+			scatteringAccuracy: 'corrected60-sun035',
+		};
+		expect(format.parseConfigurationManifest(JSON.stringify(candidate))).toEqual(candidate);
+		expect(() =>
+			format.acceptConfigurationManifest({...original, scatteringAccuracy: 'corrected60-sun035'}),
+		).toThrow();
+		expect(() => format.acceptConfigurationManifest({...candidate, scatteringAccuracy: undefined})).toThrow();
+		expect(() => format.acceptConfigurationManifest({...candidate, scatteringAccuracy: 'unknown'})).toThrow();
+	});
 
 	it('accepts the selected codec, graph root, catalog, configuration, blocks, and scene', /** Called by Jasmine to exercise the complete positive ingress. */ () => {
 		const fixture = createFixture();

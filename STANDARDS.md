@@ -10,10 +10,10 @@
 - Repository overlay: [`agents/topics/standards/overlay.md`](./agents/topics/standards/overlay.md)
 - Standards governance: [`documentation.md`](https://github.com/Ondoher/polylith-skills/blob/main/documentation/standards/documentation.md)
 - First normalized: `2026-09-11T23:19:47.480Z`
-- Repository standards configuration fingerprint: `sha256:81d273be459279d61a883397e0c6c6d95f378c0779e3993ff4059ed2d8349c37`
+- Repository standards configuration fingerprint: `sha256:7a813af0df3914dcb454b6698344559d3519440af4811c54d2f1f8bcc17ef7f4`
 - Local standards overlay fingerprint: `sha256:5b28310018e8c1276d1c6b6dbfe3bc0c731c4a7f2f44b6d68b68fdf9e7b04dd9`
 - Selected canonical standards fingerprint: `sha256:903b801f67640b1c060ee503085aa7fa81cdd31b91f8d6f34dceccc21b5f2a8d`
-- Guide source fingerprint: `sha256:f49543072f326e6036b0325a5ae96de4b5cb1c038779aefc3f089dd68bf003df`
+- Guide source fingerprint: `sha256:fe95bfd9de052a017564398175fa8bd4f34ce6f36f3ace8e1a7cf53f8ccbe4ff`
 
 For each file, the longest matching folder assignment selects one named standards set. The set includes its inherited canonical standards, then matching folder-scoped overlay rules modify specific sections. This file is a readable projection only.
 
@@ -48,7 +48,7 @@ Extends: `base`
 
 Adds:
 
-- [`types.md`](https://github.com/Ondoher/polylith-skills/blob/main/documentation/standards/types.md) — Required types-standard review and type checking for every experiment.
+- [`types.md`](https://github.com/Ondoher/polylith-skills/blob/main/documentation/standards/types.md) — Experiment contract guidance for authoring, self-review, and local type checking; dedicated reviewers are disabled by repository policy.
 
 ### `build`
 
@@ -125,7 +125,7 @@ Adds:
 - `scripts/flat32/` → `server` — Application build, capture, and cache-service tooling.
 - `scripts/experiments/b1-directional-sky-radiance/` → `proof-tools` — Independent scoring and GPU HTTP proof host.
 - `scripts/experiments/algorithm32-frame-parity/` → `proof-tools` — Independent CPU/GPU frame comparison and HTTP proof hosts.
-- `experiments/` → `experiment` — Every experiment requires types-standard review and type checking; deeper assignments retain types.md and may add standards.
+- `experiments/` → `experiment` — Experiments retain types.md guidance and local type checking; deeper assignments may add standards but do not activate dedicated reviewers or audits.
 
 ## Repository-wide additions and replacements
 

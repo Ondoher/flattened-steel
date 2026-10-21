@@ -3,6 +3,7 @@ import {SOLAR_ZENITH_180_DOMAIN_OWNER} from '../../../sampling-domains/solar-zen
 import {CUBED_SPHERE_W27_DIRECTION_DOMAIN_OWNER} from '../../../sampling-domains/direction/cubed-sphere/consts.js';
 import {DistantSunSolarInterpolation} from './DistantSunSolarInterpolation.js';
 import {SphericalNativePositionDomains} from '../../../sampling-domains/position/spherical-native/SphericalNativePositionDomains.js';
+import {DistantSunScatteringAccuracy} from './DistantSunScatteringAccuracy.js';
 
 const SCENE_CACHE_VALUE_KEY = 'cache.sceneCumulativeScatteringDensity';
 const SCENE_DIRECTION_INDEX_VALUE_KEY = 'cache.sceneLogicalToUniqueDirection';
@@ -21,11 +22,18 @@ export default class DistantSunSceneCache {
 	/** Number of explicit spectral channels represented by the atlas. @type {number} */ _spectralChannelCount;
 	/** Explicit shader interpolation preserves weights beyond texture-filter precision. @type {boolean} */ _shaderInterpolation;
 	/** Accepted solar-angle sampling policy. @type {DistantSunSolarInterpolationMethod} */ _solarInterpolation;
+	/** Accepted scattering/mapping policy. @type {DistantSunScatteringAccuracyMethod} */ _scatteringAccuracy;
 
 	/**
 	 * @param {DistantSunSceneCacheDefinition} definition - Accepted manifest, ledger, and uploaded textures.
 	 */
 	constructor(definition) {
+		this._scatteringAccuracy = DistantSunScatteringAccuracy.accept(definition.scatteringAccuracy);
+		if (
+			this._scatteringAccuracy !==
+			DistantSunScatteringAccuracy.accept(definition.manifest.record.scatteringAccuracy)
+		)
+			throw new RangeError('Distant-Sun dense package and lookup scattering policies differ.');
 		const interpolation = definition.directionInterpolation ?? 'texture-bilinear';
 		if (!['texture-bilinear', 'shader-bilinear'].includes(interpolation)) {
 			throw new RangeError('Distant-Sun scene cache direction interpolation is unsupported.');
@@ -128,6 +136,7 @@ export default class DistantSunSceneCache {
 	 * @returns {string} - Cubic GLSL over the existing direction sampler and packed-row owner.
 	 */
 	_createCubicShaderSource(groupCount) {
+		const focused = DistantSunScatteringAccuracy.focus(this._scatteringAccuracy) !== 1;
 		const faceWidth = CUBED_SPHERE_W27_DIRECTION_DOMAIN_OWNER.faceWidth;
 		const planeWidth = CUBED_SPHERE_W27_DIRECTION_DOMAIN_OWNER.directionCount / faceWidth;
 		const lastIndex = SOLAR_ZENITH_180_DOMAIN_OWNER.count - 1;
@@ -138,7 +147,7 @@ export default class DistantSunSceneCache {
 vec4 distantSceneCubicPacket(int row, vec3 coordinate, int plane) {
 	return ${packetSample};
 }
-vec4 distantSceneCubicDensity(int altitudeIndex, vec3 coordinate, float zenithCoordinate, int plane, out bool supported) {
+vec4 distantSceneCubicDensity(int altitudeIndex, ${focused ? 'vec3 coordinates[4]' : 'vec3 coordinate'}, float zenithCoordinate, int plane, out bool supported) {
 	int lowerIndex = min(int(floor(zenithCoordinate)), ${lastIndex - 1});
 	float fraction = zenithCoordinate - float(lowerIndex);
 	ivec4 rows;
@@ -150,10 +159,10 @@ vec4 distantSceneCubicDensity(int altitudeIndex, vec3 coordinate, float zenithCo
 	}
 	if (!supported) return vec4(0.0);
 	return distantSolarHermite(
-		distantSceneCubicPacket(rows.x, coordinate, plane),
-		distantSceneCubicPacket(rows.y, coordinate, plane),
-		distantSceneCubicPacket(rows.z, coordinate, plane),
-		distantSceneCubicPacket(rows.w, coordinate, plane),
+		distantSceneCubicPacket(rows.x, ${focused ? 'coordinates[0]' : 'coordinate'}, plane),
+		distantSceneCubicPacket(rows.y, ${focused ? 'coordinates[1]' : 'coordinate'}, plane),
+		distantSceneCubicPacket(rows.z, ${focused ? 'coordinates[2]' : 'coordinate'}, plane),
+		distantSceneCubicPacket(rows.w, ${focused ? 'coordinates[3]' : 'coordinate'}, plane),
 		fraction, lowerIndex == 0, lowerIndex + 1 == ${lastIndex});
 }
 `;
@@ -165,7 +174,16 @@ vec4 distantSceneCubicDensity(int altitudeIndex, vec3 coordinate, float zenithCo
 	 * @returns {string} - Spectral accumulators and complete support predicate.
 	 */
 	_createCubicSampleBody(groups) {
-		return `\tbool supported = true;
+		const focused = DistantSunScatteringAccuracy.focus(this._scatteringAccuracy) !== 1;
+		return `${
+			focused
+				? `vec3 directionCoordinates[4];
+	int directionLower = min(int(floor(zenithCoordinate)), ${SOLAR_ZENITH_180_DOMAIN_OWNER.count - 2});
+	for (int tap = 0; tap < 4; tap += 1)
+		directionCoordinates[tap] = distantSunRowCoordinate(outgoingDirection, clamp(directionLower + tap - 1, 0, ${SOLAR_ZENITH_180_DOMAIN_OWNER.count - 1}));`
+				: ''
+		}
+	bool supported = true;
 ${groups.map((group) => `\tvec4 density${group} = vec4(0.0);`).join('\n')}
 	for (int altitudeTap = 0; altitudeTap < 2; altitudeTap += 1) {
 		float weight = altitudeStencil.weights[altitudeTap];
@@ -175,7 +193,7 @@ ${groups
 	.map(
 		(
 			group,
-		) => `\t\tdensity${group} += weight * distantSceneCubicDensity(altitudeStencil.indices[altitudeTap], directionCoordinate, zenithCoordinate, ${group}, available);
+		) => `\t\tdensity${group} += weight * distantSceneCubicDensity(altitudeStencil.indices[altitudeTap], ${focused ? 'directionCoordinates' : 'directionCoordinate'}, zenithCoordinate, ${group}, available);
 \t\tsupported = supported && available;`,
 	)
 	.join('\n')}
@@ -185,6 +203,7 @@ ${groups
 	/** @returns {ShaderContribution} - Point-local 16-tap exact-seam lookup contribution. */
 	createShaderContribution() {
 		if (this._disposed) throw new Error('DistantSunSceneCache is disposed.');
+		const focused = DistantSunScatteringAccuracy.focus(this._scatteringAccuracy) !== 1;
 		const firstZenith = this._ledger.rows.map((row) => row.firstSolarZenithIndex).join(', ');
 		const lastZenith = this._ledger.rows.map((row) => row.lastSolarZenithIndex).join(', ');
 		const firstPacked = this._ledger.rows.map((row) => row.firstPackedRow).join(', ');
@@ -269,6 +288,7 @@ ${declarations}
 	for (int rowTap = 0; rowTap < 4; rowTap += 1) {
 		if (altitudeZenithWeights[rowTap] <= 0.0 || packedRows[rowTap] < 0) continue;
 		float weight = altitudeZenithWeights[rowTap];
+		${focused ? 'vec3 directionCoordinate = distantSunRowCoordinate(outgoingDirection, zenithIndices[rowTap % 2]);' : ''}
 		float faceOffset = directionCoordinate.x * 27.0;
 		float atlasY = (directionCoordinate.z + 0.5) / 27.0;
 		float atlasLayer = float(packedRows[rowTap]);
@@ -359,6 +379,7 @@ vec3 distantSceneDirectionCoordinate(vec3 direction) {
 	return vec3(float(faceIndex), uGrid, vGrid);
 }
 
+${focused ? DistantSunScatteringAccuracy.createLookupShaderSource(this._scatteringAccuracy, SOLAR_ZENITH_180_DOMAIN_OWNER) : ''}
 ${interpolationHelper}${this._solarInterpolation === 'monotone-cubic' ? this._createCubicShaderSource(groups.length) : ''}
 
 SpectralValue sampleCumulativeScatteringDensity(
@@ -369,11 +390,12 @@ SpectralValue sampleCumulativeScatteringDensity(
 	CachePositionStencil altitudeStencil =
 		resolveScatteringCachePositionStencil(atmosphereCoordinate);
 	vec3 directionToSource = directionToAtmosphericSource(positionMeters);
-	vec3 directionCoordinate = distantSceneDirectionCoordinate(distantSceneLocalOutgoingDirection(
+	vec3 outgoingDirection = distantSceneLocalOutgoingDirection(
 		positionMeters,
 		directionToSource,
 		physicalOutgoingDirection
-	));
+	);
+	vec3 directionCoordinate = distantSceneDirectionCoordinate(outgoingDirection);
 	float muS = clamp(dot(normalize(positionMeters), directionToSource), -1.0, 1.0);
 	float solarZenith = ${this._shaderInterpolation ? 'distantSceneSolarZenith(normalize(positionMeters), directionToSource)' : 'acos(muS)'};
 	float zenithCoordinate = clamp((solarZenith - 0.008726646259971648) / 0.017453292519943295, 0.0, 179.0);

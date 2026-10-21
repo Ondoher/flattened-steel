@@ -2,7 +2,14 @@ import {compileDistantSunSceneCacheWavelength} from './DistantSunSceneCacheGpuCo
 
 /** Browser-side single-context executor for a variable point-local scene union. */
 export default class DistantSunPointLocalCacheCompilerBrowser {
-	/** @type {URL} */ _base = new URL('.', import.meta.url);
+	/** Run-scoped control capability supplied by the host. @type {URL} */ _base;
+
+	/** Create a browser executor without deriving its control routes from source-module placement.
+	 * @param {URL} [base] - Host-issued capability root; omission retains direct-module hosting.
+	 */
+	constructor(base = new URL('.', import.meta.url)) {
+		this._base = base;
+	}
 
 	async _post(route, value) {
 		const response = await fetch(new URL(route, this._base), {

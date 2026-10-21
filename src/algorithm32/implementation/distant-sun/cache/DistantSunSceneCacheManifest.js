@@ -1,7 +1,9 @@
 import {
 	DISTANT_SUN_SCENE_CACHE_EXACT_SEAM_CODEC_ID,
 	DISTANT_SUN_RUNTIME_SCENE_CACHE_MANIFEST_SCHEMA_ID,
+	DISTANT_SUN_ACCURACY_RUNTIME_SCENE_CACHE_MANIFEST_SCHEMA_ID,
 } from './consts.js';
+import {DistantSunScatteringAccuracy} from './DistantSunScatteringAccuracy.js';
 
 /** Accepted external manifest for one complete point-local distant-Sun scene cache. */
 export default class DistantSunSceneCacheManifest {
@@ -47,9 +49,13 @@ export default class DistantSunSceneCacheManifest {
 	 * @param {DistantSunSceneCacheManifestRecord} record - The serialized scene-cache manifest.
 	 */
 	constructor(record) {
-		if (record.schemaId !== DISTANT_SUN_RUNTIME_SCENE_CACHE_MANIFEST_SCHEMA_ID) {
+		const accuracySchema = record.schemaId === DISTANT_SUN_ACCURACY_RUNTIME_SCENE_CACHE_MANIFEST_SCHEMA_ID;
+		if (record.schemaId !== DISTANT_SUN_RUNTIME_SCENE_CACHE_MANIFEST_SCHEMA_ID && !accuracySchema) {
 			throw new RangeError('Distant-Sun scene-cache manifest schema is incompatible.');
 		}
+		const accuracy = DistantSunScatteringAccuracy.accept(record.scatteringAccuracy);
+		if (accuracySchema === (accuracy === 'legacy'))
+			throw new RangeError('Distant-Sun scene-cache schema and scattering policy differ.');
 		if (!record.cacheIdentity || !record.sceneSun?.id || !record.derivation) {
 			throw new RangeError('Distant-Sun scene-cache manifest identity and derivation are required.');
 		}

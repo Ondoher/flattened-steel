@@ -1,15 +1,33 @@
 # Predictable Sky Accuracy Dials Experiment Status
 
-Active work: [H134-H140 illumination reconstruction](illumination-reconstruction-plan.md).
-The plan covers local replication for a single active atmosphere, an actual
-builder slice, transfer, conditional four-order recurrence, B1 and twilight
-comparisons. Build complexity is reportable rather than a gate. H134 and local
-development and disjoint confirmation00658 are complete. Both reconstructions
-pass all36 local physical protections after precision recovery00673/00678.
-Continuous operator integration and stronger physical transfer remain active;
-actual own-field recurrence, B1 and observer scenes have not run. The
-[execution record](illumination-reconstruction-execution.md) owns the next action;
-[results](illumination-reconstruction-results.md) own completed findings.
+Disposition: **suspended**,2026-10-20 America/Los_Angeles, at owner request.
+The experiment is not closed. No experiment-owned process, browser, server,
+GPU job or scratch remains. Retained runs and failed attempts stay immutable.
+
+The [suspension record](suspension-2026-10-20.md) owns the current lifecycle
+inventory, exact accepted evidence identities, retained1792MiB allowance,
+resumption sources and standards restoration. There are no experiment-specific
+temporary standards entries to restore; the permanent experiment mapping and
+types.md remain. The generated root standards guide and folder resolution validate.
+
+The owner selected the completed Corrected60 + Sun-focused outgoing k=.35
+result for [production integration](../../../production-algorithm32/caches/sky-accuracy-promotion-plan.md).
+H61's full paper comparison and H63's Toronto scene evidence authenticate.
+The later H134-H140 plan remains incomplete, and no later branch is promoted.
+Its [conclusions](illumination-reconstruction-results.md) and
+[execution record](illumination-reconstruction-execution.md) preserve all findings.
+Production adoption remains a separate gate; no numerical production source,
+package, default or deployment has changed in this lifecycle handoff.
+
+Production context is selected next. Live reviewer calibration is stale/NOT_READY;
+no production reviewer started and no compliance result is claimed. That readiness
+issue does not block suspension. Future experiment work needs owner selection
+and the compatibility checks in the suspension record.
+
+## Historical completed packages and earlier lifecycle records
+
+The records below retain their original evidence and sequence; they are not
+an active execution queue. The suspension record above owns current state.
 
 Completed: [H126-H133 reconstruction mechanisms](reconstruction-mechanisms-results.md).
 All five screens and earned follow-ons are complete; the strongest fixed

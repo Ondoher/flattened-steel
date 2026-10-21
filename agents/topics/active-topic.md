@@ -1,49 +1,39 @@
 # Active Topic
 
-Current active topic: sky-accuracy-dials.
-Focus: executing H134-H140 illumination reconstruction through the cache recurrence.
+Current active topic: production-algorithm32/caches/sky-accuracy-promotion.
+Focus: integrate the completed Corrected60 + Sun-focused outgoing cache result.
 
-Canonical entry: [Sky Accuracy Dials](poc-experiments/engineering-studies/sky-accuracy-dials/README.md).
+Canonical entry: [Engine caches](production-algorithm32/caches/README.md).
 
-## Immediate Focus
+## Current boundary
 
-The owner requested a plan to test the proposed reconstruction method, with
-cache-building complexity reported rather than used as a limiting factor. The
-[H134-H140 plan](poc-experiments/engineering-studies/sky-accuracy-dials/illumination-reconstruction-plan.md)
-owns the authorized sequence: active-profile local validation, builder integration,
-transfer, four-order recurrence, full paper B1 and matched twilight scenes.
-The owner authorized independent execution. H134 authenticates accepted00652
-and freezes comparator/precision registration before new light evaluations. The
-[execution record](poc-experiments/engineering-studies/sky-accuracy-dials/illumination-reconstruction-execution.md)
-owns the current boundary, consequential decisions and artifact links. H134/H135
-are complete, including all36 local physical protections per reconstruction.
-H136 integration precision and H137 stronger physical transfer are active;
-actual own-field recurrence, B1 and scenes have not run. This is an intermediate
-checkpoint, not final qualification.
+The owner suspended Sky Accuracy Dials on2026-10-20 and selected its completed
+H61/H63 results for production integration. The
+[promotion plan](production-algorithm32/caches/sky-accuracy-promotion-plan.md)
+owns the selected transport60, Mie phase-mass normalization and outgoing k=.35
+adaptation. The [status](production-algorithm32/caches/sky-accuracy-promotion-status.md)
+owns execution, readiness and next action. P0's transfer contract is saved and
+P1's explicit production policy/compiler/lookup integration is under qualification.
+The full40-band Native51 GPU replay and B1 comparison pass; Native48 compiled
+and awaits matched-control scoring. Execution is paused at the owner's request.
+Approved Git writes now work; a complete-state checkpoint is requested. Deployed
+packages and defaults remain unchanged.
 
-All five hypotheses and earned local follow-ons are complete. The
-[results](poc-experiments/engineering-studies/sky-accuracy-dials/reconstruction-mechanisms-results.md)
-show complementary gains from source-phase-factored polar interpolation and
-cached-node curvature refinement across 36 exposed fields. All component
-protections pass, but 27 physical-total protections remain inconclusive; no
-complete practical/physical replacement is admitted. Accepted00652 replays the
-actual route and passes local types. The
-[execution record](poc-experiments/engineering-studies/sky-accuracy-dials/reconstruction-mechanisms-execution.md)
-owns decisions, timing, recovery and completion. The
-[plan](poc-experiments/engineering-studies/sky-accuracy-dials/reconstruction-mechanisms-plan.md)
-retains the gates. No job remains; production is unchanged and the experiment
-stays open. Their supported follow-on is described in the proposed plan above;
-production promotion and flat/local-Sun extrapolation remain outside that scope.
+The [suspension record](poc-experiments/engineering-studies/sky-accuracy-dials/suspension-2026-10-20.md)
+preserves the unfinished experiment, exact evidence, resources and resumption
+checks. No experiment job/scratch remains; later reconstruction/altitude/phase-
+control branches are not promotion inputs. Experimental execution requires a
+new owner selection. All eight reserved physical tuples remain unexposed.
 
-All eight H97 fresh physical tuples remain unexposed. Retained limit1536MiB;
-preserve prior runs, partial artifacts, failed proofs and recovery records.
-Dedicated standards reviewers/audits remain disabled for contained experiments;
-checkpoint advice remains separate.
+Production folder standards and normal reviewer lifecycle apply. Topic-refresh
+found stale live reviewer calibration/NOT_READY; no reviewers started. Preserve
+existing dirty work and immutable packages. Do not claim compliance, deployment
+or a focused local-Sun cache based on experimental evidence alone.
 
 ## Minimal Reload Sources
 
 1. [Repository instructions](../../AGENTS.md).
-2. [Experiment entry](poc-experiments/engineering-studies/sky-accuracy-dials/README.md).
-3. [Reconstruction-mechanism results](poc-experiments/engineering-studies/sky-accuracy-dials/reconstruction-mechanisms-results.md).
-4. [Illumination reconstruction plan](poc-experiments/engineering-studies/sky-accuracy-dials/illumination-reconstruction-plan.md).
-5. [Illumination reconstruction execution](poc-experiments/engineering-studies/sky-accuracy-dials/illumination-reconstruction-execution.md).
+2. [Cache entry](production-algorithm32/caches/README.md).
+3. [Promotion plan](production-algorithm32/caches/sky-accuracy-promotion-plan.md).
+4. [Promotion status](production-algorithm32/caches/sky-accuracy-promotion-status.md).
+5. [Suspension handoff](poc-experiments/engineering-studies/sky-accuracy-dials/suspension-2026-10-20.md).

@@ -48,3 +48,6 @@ export const SHARED_COMPILER_SOURCE_NAMES = [
 	'DistantSunSharedCacheGenerationFiles.js',
 	'consts.js',
 ];
+/** Runtime numerical owner imported by the compiler and fingerprinted with it. */
+export const DISTANT_SUN_SCATTERING_ACCURACY_SOURCE =
+	'src/algorithm32/implementation/distant-sun/cache/DistantSunScatteringAccuracy.js';

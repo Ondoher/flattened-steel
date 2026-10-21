@@ -88,6 +88,9 @@ export const DISTANT_SUN_SCENE_CACHE_MANIFEST_SCHEMA_ID = 'algorithm32-distant-s
 /** Runtime-only manifest excludes construction oracles and declares its scalar selection interval. */
 export const DISTANT_SUN_RUNTIME_SCENE_CACHE_MANIFEST_SCHEMA_ID =
 	'algorithm32-distant-sun-runtime-scene-cache-manifest-v2';
+/** Runtime manifest with an executable scattering/mapping policy. */
+export const DISTANT_SUN_ACCURACY_RUNTIME_SCENE_CACHE_MANIFEST_SCHEMA_ID =
+	'algorithm32-distant-sun-runtime-scene-cache-manifest-v3';
 /** Schema identity for one packed altitude/local-solar-zenith row ledger. */
 export const DISTANT_SUN_SCENE_CACHE_LEDGER_SCHEMA_ID = 'algorithm32-distant-sun-packed-row-ledger-v1';
 /** Codec identity for the uncompressed logical W27 correctness oracle. */
@@ -104,6 +107,9 @@ export const DISTANT_SUN_SHARED_CACHE_RUNTIME_CATALOG_SCHEMA_ID =
 /** Schema identity for one production shared-cache configuration manifest. */
 export const DISTANT_SUN_SHARED_CACHE_CONFIGURATION_SCHEMA_ID =
 	'algorithm32-distant-sun-shared-cache-configuration-manifest-v1';
+/** Shared configuration with an executable scattering/mapping policy. */
+export const DISTANT_SUN_SHARED_CACHE_ACCURACY_CONFIGURATION_SCHEMA_ID =
+	'algorithm32-distant-sun-shared-cache-configuration-manifest-v2';
 /** Schema identity for one production shared-cache block index. */
 export const DISTANT_SUN_SHARED_CACHE_BLOCK_INDEX_SCHEMA_ID = 'algorithm32-distant-sun-shared-cache-block-index-v1';
 /** Schema identity for one production shared-cache scene manifest. */

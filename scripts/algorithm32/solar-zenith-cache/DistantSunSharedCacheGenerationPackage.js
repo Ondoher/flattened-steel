@@ -4,6 +4,7 @@ import DistantSunSharedCacheFormat from '../../../src/algorithm32/implementation
 import {
 	DISTANT_SUN_SHARED_CACHE_PACKAGE_SET_SCHEMA_ID,
 	DISTANT_SUN_SHARED_CACHE_CONFIGURATION_SCHEMA_ID,
+	DISTANT_SUN_SHARED_CACHE_ACCURACY_CONFIGURATION_SCHEMA_ID,
 	DISTANT_SUN_SHARED_CACHE_BLOCK_INDEX_SCHEMA_ID,
 	DISTANT_SUN_SHARED_CACHE_SCENE_MANIFEST_SCHEMA_ID,
 	DISTANT_SUN_SHARED_CACHE_RUNTIME_CATALOG_SCHEMA_ID,
@@ -198,7 +199,12 @@ export default class DistantSunSharedCacheGenerationPackage {
 		const indexArtifact = await this._json('indexes', blockIndex);
 		const directionArtifact = await this._write('direction/logical-to-unique.u16', inventory.directionBytes);
 		const configuration = {
-			schemaId: DISTANT_SUN_SHARED_CACHE_CONFIGURATION_SCHEMA_ID,
+			schemaId: inventory.buildRequest.transportSpec.numerical.scatteringAccuracy
+				? DISTANT_SUN_SHARED_CACHE_ACCURACY_CONFIGURATION_SCHEMA_ID
+				: DISTANT_SUN_SHARED_CACHE_CONFIGURATION_SCHEMA_ID,
+			...(inventory.buildRequest.transportSpec.numerical.scatteringAccuracy
+				? {scatteringAccuracy: inventory.buildRequest.transportSpec.numerical.scatteringAccuracy}
+				: {}),
 			configurationIdentity,
 			atmosphereIdentity: physical.atmosphereIdentity,
 			geometryIdentity: physical.geometryIdentity,

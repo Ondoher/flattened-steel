@@ -1,12 +1,16 @@
 # Caches
 
+Selected work: [Corrected60 and Sun-focused outgoing cache production promotion](sky-accuracy-promotion-plan.md).
+Its [status](sky-accuracy-promotion-status.md) owns the preparation and gates.
+Sky Accuracy Dials is suspended; H61/H63 are read-only production inputs.
+
 The selected strobing promotion's [release](distant-sun-strobing-release.md)
 owns the deployed package/default selection and qualified compatible rollback.
 
 Focus: Cache construction, storage, reconstruction, loading, and optimization.
 
 The [local-Sun production port plan](local-sun-cache-promotion-plan.md) owns the
-selected next work, and its [status](local-sun-cache-promotion-status.md) owns
+local-Sun port, and its [status](local-sun-cache-promotion-status.md) owns
 the P0 contract/control handoff. The contained
 [Local-Sun Cache Reuse experiment](../../poc-experiments/engineering-studies/local-sun-cache-reuse/README.md)
 is ended and accepted within its declared limits. The

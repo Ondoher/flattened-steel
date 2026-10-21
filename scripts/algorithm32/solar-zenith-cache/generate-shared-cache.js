@@ -1,5 +1,6 @@
 import DistantSunSharedCacheGenerator from './DistantSunSharedCacheGenerator.js';
 import {DistantSunSceneCacheNumerics} from './DistantSunSceneCacheNumerics.js';
+import {DistantSunScatteringAccuracy} from '../../../src/algorithm32/implementation/distant-sun/cache/DistantSunScatteringAccuracy.js';
 import DistantSunSharedCacheGenerationFiles from './DistantSunSharedCacheGenerationFiles.js';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
@@ -21,6 +22,7 @@ try {
 				'--surface-limit',
 				'--solar-interpolation',
 				'--numerical-policy',
+				'--scattering-accuracy',
 			].includes(name) ||
 			!value ||
 			value.startsWith('--') ||
@@ -43,9 +45,10 @@ try {
 			? undefined
 			: DistantSunSceneCacheNumerics.createSurfaceLimit(Number(surfaceLimit));
 	const solarInterpolation = argumentsByName.get('--solar-interpolation');
+	const scatteringAccuracy = DistantSunScatteringAccuracy.accept(argumentsByName.get('--scattering-accuracy'));
 	if (solarInterpolation !== undefined && !['linear', 'monotone-cubic'].includes(solarInterpolation))
 		throw new RangeError('Unsupported solar interpolation.');
-	if (inputPath && (numericalPolicy || solarInterpolation))
+	if (inputPath && (numericalPolicy || solarInterpolation || scatteringAccuracy !== 'legacy'))
 		throw new Error('Explicit input owns its numerical policy and interpolation.');
 	const outputDirectory = argumentsByName.get('--output');
 	if (Boolean(inputPath) !== Boolean(outputDirectory)) {
@@ -72,7 +75,13 @@ try {
 			},
 		});
 	} else {
-		result = await generator.run({chromePath, numericalPolicy, solarInterpolation, signal: cancellation.signal});
+		result = await generator.run({
+			chromePath,
+			numericalPolicy,
+			solarInterpolation,
+			scatteringAccuracy,
+			signal: cancellation.signal,
+		});
 	}
 	process.stdout.write(`${JSON.stringify(result)}\n`);
 } catch (error) {

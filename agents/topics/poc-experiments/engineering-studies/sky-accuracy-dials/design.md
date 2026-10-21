@@ -1,5 +1,9 @@
 # Predictable Sky Accuracy Dials Experiment Design
 
+Current lifecycle: **suspended**,2026-10-20. The [suspension record](suspension-2026-10-20.md)
+owns resumption and production handoff. The work below is preserved, not an
+active execution queue.
+
 ## Cache-building complexity: report, do not gate
 
 For subsequent work in this experiment, the owner directs that cache-building
@@ -20,7 +24,8 @@ The [H134-H140 plan](illumination-reconstruction-plan.md) proposes testing the
 supported representation in a single-profile builder and through complete
 recurrence and paper/scene comparisons. It applies the accuracy-first direction
 above, with construction costs retained in reports. Its bounded second-agent
-critique is incorporated; owner-authorized execution is active. The
+critique is incorporated; the owner requested wrapping the current execution before
+full completion. The experiment remains open; no scientific job remains. The
 [execution record](illumination-reconstruction-execution.md) owns the current
 boundary and [results](illumination-reconstruction-results.md) own measured findings.
 
@@ -195,12 +200,26 @@ Append one event at process start, every phase transition, at least once every 3
 
 Budget against current disk space only. The owner's copy to another drive
 does not release space on C:. Initial observed free space was 50,601,861,120
-bytes. Stop starting work below 40 GiB free. Limit this experiment to 1536 MiB
+bytes. Stop starting work below 40 GiB free. Limit this experiment to 1792 MiB
 of retained evidence and 1 GiB of live scratch; enforce both before expensive
 work and before writes. Run one GPU job at a time. Do not use another drive
 or delete any previous experiment, production, or historical artifact.
 
 ### Budget amendment history
+
+H136's full spectral polar operator raises retained evidence1664-to1792MiB under
+standing owner authority, after all preceding scientific runs seal. Retained
+evidence is1,682,450,450bytes, scratch0, with about97GiB free. Forecast25-50MiB
+for the15-band source row, complete GPU/binary64 arrays, progress and subsequent
+verification/source recovery. Preserve existing scratch/free-space/sealing limits
+and every prior artifact. This changes disk retention only.
+
+H136/H137 raises retained evidence from1536 to1664MiB under standing owner
+authority, after00680 reached its immutable terminal state. Measured retention
+is1,608,527,544bytes, scratch0 and free disk108,123,430,912bytes. Forecast20-120MiB
+for the bounded polar screen/physical comparison, numerical replay and actual-input
+bridge plus earned follow-ons. Preserve all prior evidence, the sealing reserve
+and existing scratch/free-space limits. This changes disk retention only.
 
 H135 raises retained evidence from 1408 to 1536 MiB under standing owner budget
 authority. Measured retained bytes are 1,443,880,174 (about 1377 MiB), scratch 0;

@@ -1,0 +1,21 @@
+import assert from 'node:assert/strict';
+import {createRun,identity,storage} from '../io/files.mjs';
+import {launch} from '../geometry-incoming/common.mjs';
+import {assertIdleGpu} from '../structured-incoming/runtime.mjs';
+import {base,registration,setup,pack,verifyRun} from './common.mjs';
+import {ownedPartialField} from './partial-field.mjs';
+import {segmentResident,segmentResidentSource,finitePartialTransport} from './segment-transport.mjs';
+import {normalizedPartialField,densitySegmentKernel,densityPartialFinite,densityPartialExact} from './partial-density.mjs';
+
+const roots=(process.argv[2]??'').split(',').filter(Boolean).map(x=>x.startsWith(base)?x:base+x),extra=(process.argv[3]??'').split(',').filter(Boolean).map(x=>x.startsWith(base)?x:base+x),fields=[{id:'native',field:ownedPartialField(roots,[0,1875,3125,4375])}];if(extra.length)fields.push({id:'midpoint-refined',field:ownedPartialField([...roots,...extra],[0,937.5,1875,2500,3125,3750,4375])});
+const run=createRun('h138-density-gpu',{
+ parents:[verifyRun(base+'00745-h138-spatial'),...fields.flatMap(x=>x.field.parents)],operation:'Validate the actual hardware path adapter for the supported species-density-normalized altitude representation on the complete registered partial-path support. Keep the scalar physical-source interpolation control unchanged and validate it separately; normalized R/M split output is a deliberately different operator, compared with independent binary64 normalized finite transport. Retain every readback before arithmetic gates and do not mistake scalar-versus-split physical differences for a sum failure.',
+ parameters:{roots,extra,channel:8,solarZenithDegrees:89.5,segmentMeters:[0,4375],intervals:[60,120,240],finiteRelativeTolerance:1e-4,groundAlbedo:0,costIsGate:false},
+});let browser,failure;
+try{
+ const f=setup(registration(),'paper','node-89',8),results=[];assertIdleGpu(run.path);browser=await launch(run);const page=await browser.newPage();
+ for(const {id,field}of fields){const normalized=normalizedPartialField(field),exact=densityPartialExact(normalized,128);run.write(id+'-normalized-field.json.gz',pack(normalized));
+  for(const n of [60,120,240]){run.progress('normalized-own-field-GPU',`${id} intervals${n}`);const kernel=densitySegmentKernel(f,field.altitudes,n),started=Date.now(),gpu=await page.evaluate(segmentResident,{...kernel,widthJ:field.widthJ,rows:field.rows.length,widthL:1,outputRows:1,rayleigh:normalized.rayleigh,mie:normalized.mie,sum:field.sum,directions:field.rows.flatMap(()=>[0,0,1,0]),residentSource:segmentResidentSource()});run.write(`${id}-n${n}-raw.json.gz`,pack(gpu));const finite=densityPartialFinite(normalized,n),plainFinite=finitePartialTransport(field,n).reduce((a,b)=>a+b,0),split=gpu.split.slice(0,2),scalarPhysicalControl=gpu.scalar[0],finiteRelative=Math.max(...split.map((x,s)=>Math.abs(x-finite[s])/finite[s])),scalarControlRelative=Math.abs(scalarPhysicalControl-plainFinite)/plainFinite,item={id,n,split,scalarPhysicalControl,finite,plainFinite,exact,finiteRelative,scalarControlRelative,pathDiscretizationRelative:split.map((x,s)=>(x-exact[s])/exact[s]),milliseconds:Date.now()-started,renderer:gpu.renderer,parent:kernel.parent};run.write(`${id}-n${n}.json`,item);assert.ok(split.every(x=>Number.isFinite(x)&&x>=0)&&Number.isFinite(scalarPhysicalControl)&&scalarPhysicalControl>=0);assert.ok(finiteRelative<=1e-4&&scalarControlRelative<=1e-4,'Normalized or control GPU/finite arithmetic unresolved');results.push(item);console.log(JSON.stringify(item));}
+ }
+ await browser.close();browser=null;run.write('summary.json',{results,sourceParents:fields.flatMap(x=>x.field.rows.map(row=>identity(row.root+'/summary.json'))),scope:'Hardware finite-operation proof on actual own-source partial support. Scalar is the unnormalized control, split is density-normalized; their physical difference is intentional. No global cache, later-order, ground, B1 or image qualification.'});run.finish('accepted',{finiteOperatorQualified:true});console.log(JSON.stringify({run:run.path,storage:storage()}));
+}catch(error){failure=error;}finally{await browser?.close().catch(error=>failure??=error);if(failure)run.finish('failed',{failure:String(failure)});}verifyRun(run.path);if(failure)throw failure;

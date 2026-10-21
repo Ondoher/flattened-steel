@@ -7,6 +7,7 @@ type BrunetonQualificationScene = {
 
 /** Explicit scope for a diagnostic Q30 preparation, distinct from full benchmark qualification. */
 type BrunetonQualificationPreparationOptions = Readonly<{
+	/** Explicit bounded spectral selection; omission retains full Direct40 qualification. */ wavelengthIndexes?: readonly number[];
 	/** Explicit ordered packet scene IDs for a bounded diagnostic; omission retains the full 17-scene requirement. */
 	sceneIds?: readonly string[];
 }>;

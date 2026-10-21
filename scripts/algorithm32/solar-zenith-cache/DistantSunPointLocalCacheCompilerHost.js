@@ -1,7 +1,7 @@
 import {spawn} from 'node:child_process';
 import {randomBytes} from 'node:crypto';
 import {createServer} from 'node:http';
-import {SHARED_GENERATION_SOURCE_ROOT} from './consts.js';
+import {SHARED_GENERATION_SOURCE_ROOT, DISTANT_SUN_SCATTERING_ACCURACY_SOURCE} from './consts.js';
 
 /** Capability-scoped loopback host for one variable point-local compiler execution. */
 export default class DistantSunPointLocalCacheCompilerHost {
@@ -30,13 +30,14 @@ export default class DistantSunPointLocalCacheCompilerHost {
 		}
 		const prefix = `/${randomBytes(24).toString('hex')}/`;
 		const sourceNames = [
-			'DistantSunPointLocalCacheCompilerBrowser.js',
-			'DistantSunSceneCacheGpuCompiler.js',
-			'DistantSunSceneCacheNumerics.js',
+			`${SHARED_GENERATION_SOURCE_ROOT}/DistantSunPointLocalCacheCompilerBrowser.js`,
+			`${SHARED_GENERATION_SOURCE_ROOT}/DistantSunSceneCacheGpuCompiler.js`,
+			`${SHARED_GENERATION_SOURCE_ROOT}/DistantSunSceneCacheNumerics.js`,
+			DISTANT_SUN_SCATTERING_ACCURACY_SOURCE,
 		];
 		const sources = new Map();
 		for (const name of sourceNames) {
-			sources.set(name, await options.files.read(`${SHARED_GENERATION_SOURCE_ROOT}/${name}`));
+			sources.set(name, await options.files.read(name));
 		}
 		const profile = await options.files.directory(`${options.runRoot}/chrome-profile`);
 		const expectedReadbackBytes = 64 * options.inventory.logicalDirectionCount * Float32Array.BYTES_PER_ELEMENT;
@@ -71,7 +72,7 @@ export default class DistantSunPointLocalCacheCompilerHost {
 						response,
 						200,
 						'text/html',
-						'<!doctype html><meta charset="utf-8"><script type="module">try{const {default:Compiler}=await import("./DistantSunPointLocalCacheCompilerBrowser.js");await new Compiler().run();}catch(error){await fetch("./complete",{method:"POST",body:JSON.stringify({accepted:false,error:String(error)})});}</script>',
+						`<!doctype html><meta charset="utf-8"><script type="module">try{const {default:Compiler}=await import("./${SHARED_GENERATION_SOURCE_ROOT}/DistantSunPointLocalCacheCompilerBrowser.js");await new Compiler(new URL(".",location.href)).run();}catch(error){await fetch("./complete",{method:"POST",body:JSON.stringify({accepted:false,error:String(error)})});}</script>`,
 					);
 				}
 				if (request.method === 'GET' && sources.has(route)) {

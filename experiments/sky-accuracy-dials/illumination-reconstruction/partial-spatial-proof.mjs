@@ -1,0 +1,20 @@
+import assert from 'node:assert/strict';
+import {createRun,identity,storage} from '../io/files.mjs';
+import {base,read,verifyRun} from './common.mjs';
+import {ownedSourceRow} from './partial-field.mjs';
+
+const sourceRoots=['00725-h136-source-row','00738-h138-source-row','00740-h138-source-row'].map(x=>base+x),reference=base+'00744-h138-point-ref',physical=read(reference+'/summary.json'),rows=sourceRoots.map(ownedSourceRow),up=rows[0].nativeDirections.findIndex(d=>d[0]===0&&d[1]===0&&d[2]===1),run=createRun('h138-spatial',{
+ parents:[verifyRun(reference),...rows.flatMap(x=>[x.seal,x.parent])],
+ operation:'Separate native source-row discrepancies from between-height interpolation using actual own-L1/J2 rows and the already frozen independent local-density references. Native rows0/1875/3125m are complete, so inspect only their two pre-registered midpoints937.5/2500m. Existing linear interpolation is the control. Follow the previously successful H15 density-normalization hypothesis as an explicitly separate bounded derivative: divide each stored species by its exponential local density, interpolate the coefficient, and restore query density exactly once. No source radiance is replaced with reference truth; missing support is not filled.',
+ parameters:{heights:rows.map(x=>x.physical.h),queries:[937.5,2500],channel:8,sourceZenithDegrees:89.5,outgoing:[0,0,1],variants:['physical-density-linear','species-density-normalized-linear'],scaleHeights:[8000,1200],referenceIntervals:'Frozen744 32-batch three-standard-error plus finite-column sensitivity; statistical, not simultaneous deterministic bounds',costIsGate:false},
+});
+
+/** Compare positive species/total against the frozen statistical intervals.
+ * @param {number[]} value @param {any} ref @returns {any[]} */
+function compare(value,ref){return [...value,value[0]+value[1]].map((x,s)=>{const interval=ref.intervals[s+4];return {component:['Rayleigh','Mie','total'][s],value:x,reference:interval,relativeDifference:x/interval.mean-1,errorRange:{lower:x>interval.upper?x-interval.upper:x<interval.lower?interval.lower-x:0,upper:Math.max(Math.abs(x-interval.lower),Math.abs(x-interval.upper))},insideReportedInterval:x>=interval.lower&&x<=interval.upper};});}
+
+try{
+ assert.deepEqual(rows.map(x=>x.physical.h),[0,1875,3125]);assert.ok(up>=0);for(const row of rows){assert.deepEqual(row.nativeDirections,rows[0].nativeDirections);for(const k of ['radius','top','br','bm','ssa','irradiance'])assert.equal(row.physical[k],physical.physical[k]);assert.ok(Math.abs(row.physical.sun[2]-physical.physical.sun[2])<1e-14);}
+ const nodes=rows.map(row=>({height:row.physical.h,comparison:compare([row.rayleigh[up],row.mie[up]],physical.rows.find(x=>x.height===row.physical.h))})),queries=[937.5,2500].map((h,i)=>{run.progress('owned-spatial-stencil',`midpoint${h}`);const a=rows[i],b=rows[i+1],t=(h-a.physical.h)/(b.physical.h-a.physical.h),control=[a.rayleigh[up]*(1-t)+b.rayleigh[up]*t,a.mie[up]*(1-t)+b.mie[up]*t],normalized=['rayleigh','mie'].map((key,s)=>{const H=[8000,1200][s],x=a[key][up]*Math.exp(a.physical.h/H),y=b[key][up]*Math.exp(b.physical.h/H);return ((1-t)*x+t*y)*Math.exp(-h/H);}),ref=physical.rows.find(x=>x.height===h);return {height:h,control:compare(control,ref),densityNormalized:compare(normalized,ref),attribution:'Same stored source rows and angular rule; only species-specific density factor is moved outside altitude interpolation. Neither variant is refitted to a physical reference.'};});
+ const summary={nodes,queries,sourceRoots,reference:identity(reference+'/summary.json'),scope:'Two off-node radial-up pure-J2 source-density queries at one wavelength, no observer integration, hardware path claim, later orders, full cache, image or B1. Source-row and interpolation components remain distinct; statistical intervals are not full physical protections.'};run.write('summary.json',summary);run.finish('accepted',{queries:queries.length,diagnosticOnly:true});console.log(JSON.stringify({run:run.path,...summary,storage:storage()}));
+}catch(error){run.finish('failed',{failure:String(error)});throw error;}verifyRun(run.path);

@@ -15,6 +15,7 @@ import {
 	DISTANT_SUN_POINT_LOCAL_CACHE_COMPILER_IDENTITY,
 	DISTANT_SUN_POINT_LOCAL_CACHE_OUTPUT_ROOT,
 	SHARED_COMPILER_SOURCE_NAMES,
+	DISTANT_SUN_SCATTERING_ACCURACY_SOURCE,
 	SHARED_GENERATION_SOURCE_ROOT,
 	SHARED_GENERATION_MAXIMUM_WORKING_BYTES,
 	SHARED_GENERATION_MAXIMUM_NODE_RSS_BYTES,
@@ -103,7 +104,9 @@ export default class DistantSunSharedCacheGenerator {
 			typeof relativePath !== 'string' ||
 			!/^[A-Za-z0-9._-]+(?:\/[A-Za-z0-9._-]+)*$/u.test(relativePath) ||
 			relativePath.split('/').some((part) => part === '.' || part === '..') ||
-			!relativePath.startsWith(`${DISTANT_SUN_POINT_LOCAL_CACHE_OUTPUT_ROOT}/`)
+			![DISTANT_SUN_POINT_LOCAL_CACHE_OUTPUT_ROOT, '.codex-tmp/sky-accuracy-promotion'].some((root) =>
+				relativePath.startsWith(`${root}/`),
+			)
 		) {
 			throw new RangeError(
 				`Point-local compiler output must be below ${DISTANT_SUN_POINT_LOCAL_CACHE_OUTPUT_ROOT}/.`,
@@ -133,8 +136,10 @@ export default class DistantSunSharedCacheGenerator {
 	 */
 	async _implementation(files) {
 		const sources = [];
-		for (const name of SHARED_COMPILER_SOURCE_NAMES) {
-			const relativePath = `${SHARED_GENERATION_SOURCE_ROOT}/${name}`;
+		for (const relativePath of [
+			...SHARED_COMPILER_SOURCE_NAMES.map((name) => `${SHARED_GENERATION_SOURCE_ROOT}/${name}`),
+			DISTANT_SUN_SCATTERING_ACCURACY_SOURCE,
+		]) {
 			const bytes = await files.read(relativePath);
 			sources.push({path: relativePath, byteLength: bytes.byteLength, sha256: files.hash(bytes)});
 		}

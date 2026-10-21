@@ -28,6 +28,7 @@ type DistantSunSceneCacheCoordinateContract = 'scene-cache-receiver-local-v1' | 
 
 /** Readonly shader inputs borrowed during one common-source generation call; optional fields retain compiler defaults. */
 type DistantSunSceneCacheCommonShaderRequest = Readonly<{
+	/** Executable scattering correction and outgoing mapping; omission retains legacy. */ scatteringAccuracy?: DistantSunScatteringAccuracyMethod;
 	/** Spectral sample center in nanometers. */ wavelengthNanometers: number;
 	/** Unattenuated source irradiance density in watts per square meter per nanometer. */ sourceIrradiance: number;
 	/** Ozone molecular absorption cross section in square meters. */ ozoneCrossSection: number;
@@ -158,6 +159,7 @@ type DistantSunSceneCachePositionMethod = 'anchored-radial';
 
 /** Explicit candidate selections for production compiler projections. */
 type DistantSunSceneCacheCompilerOptions = Readonly<{
+	/** Explicit corrected construction/mapping; omission retains deployed legacy. */ scatteringAccuracy?: DistantSunScatteringAccuracyMethod;
 	/** Explicit altitude construction owner; omission retains Native48. */ positionDomain?: SphericalNativePositionDomainSelection;
 	/** Stable-root surface candidate; omission retains historical equations. */ numericalPolicy?: DistantSunSceneCacheNumericalPolicy;
 	/** Required solar lookup support; omission retains the linear control. */ solarInterpolation?: DistantSunSolarInterpolationMethod;
@@ -206,6 +208,7 @@ type DistantSunPointLocalProfileInputSet = Readonly<{
 
 /** Compiler numerics shared by Native15 and direct-40 projections. */
 type DistantSunSceneCacheCompilerNumerics = Readonly<{
+	/** Executable corrected construction/mapping; omission retains legacy. */ scatteringAccuracy?: DistantSunScatteringAccuracyMethod;
 	/** Source optical-depth quadrature interval count. */ sourcePathTransmittanceIntervalCount: number;
 	/** Scattered-light transport quadrature interval count. */ transportIntervalCount: number;
 	/** Cumulative order ceiling. */ maximumScatteringOrder: number;

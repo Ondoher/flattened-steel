@@ -1,0 +1,36 @@
+import assert from 'node:assert/strict';
+import {createRun,identity,sha256,storage} from '../io/files.mjs';
+import {direct} from '../interior-illumination/physics.mjs';
+import {base,read,verifyRun} from './common.mjs';
+import {ownedPartialField} from './partial-field.mjs';
+import {exactPartialTransport} from './segment-transport.mjs';
+import {normalizedPartialField,densityPartialExact} from './partial-density.mjs';
+import {pairedPartialQueries,pairedPhysicalValues} from './partial-paired-reference.mjs';
+import {proxyIntegralSensitivity,speciesBatchStats} from './proxy-sensitivity.mjs';
+import {precisionLight,writePrecisionTail} from './precision-light-store.mjs';
+
+const roots=['00725-h136-source-row','00746-h138-source-row','00738-h138-source-row','00750-h138-source-row','00740-h138-source-row','00755-h138-source-row','00743-h138-source-row'].map(x=>base+x),field=ownedPartialField(roots,[0,937.5,1875,2500,3125,3750,4375]),seed=684729251,counts=[65536,131072,262144],pchip=read(base+'00767-h138-pchip/summary.json').results.find(x=>x.id==='refined').comparison.map(x=>x.value);
+
+/** @param {number[][]} values @param {number} count @returns {number[][]} */
+function means(values,count){const n=count/32;return Array.from({length:32},(_,batch)=>{const sum=[0,0];for(let i=batch*n;i<(batch+1)*n;i++)values[i].forEach((x,s)=>sum[s]+=x);return sum.map(x=>x/n);});}
+/** @param {number} value @param {number} control @param {number} lo
+ * @param {number} hi @returns {any} */
+function delta(value,control,lo,hi){const at=[lo,hi,...[value,control].filter(x=>x>=lo&&x<=hi)],d=at.map(r=>(Math.abs(value-r)-Math.abs(control-r))/r);return {lower:Math.min(...d),upper:Math.max(...d),protectedAcrossReportedRange:Math.max(...d)<=.001};}
+
+/** Extend the deterministic stream, with all old physical work reused.
+ * @param {number} count @param {string} prefixRoot @returns {Promise<any>} */
+async function extend(count,prefixRoot){
+ const old=read(prefixRoot+'/summary.json'),prefixCount=old.count,run=createRun('h138-precision',{
+  parents:[verifyRun(prefixRoot),verifyRun(base+'00766-h138-paired-xref'),verifyRun(base+'00767-h138-pchip'),...field.parents],operation:'Resolve the refined normalized-cubic Rayleigh protection driver by extending the exact existing physical-query stream. Reuse every prefix direct-L1 value, trace only the additional queries at32/128 and64/256, and retain only new binary64 light tails with immutable prefix derivation. Fixed seven-row known-integral physical and normalized proxies use coefficient1. No physical data is fitted into a source cache or interpolation rule; both source variants were frozen in767.',
+  parameters:{count,seed,prefixRoot,prefixCount,sourceAltitudes:field.altitudes,batches:32,levels:[[32,128],[64,256]],protectionAllowance:.001,conditionalCounts:counts,queryIdentity:'SHA256 of little-endian binary64 [dx,dy,dz,height] stream; reproduce from frozen generator/seed',costIsGate:false},
+ });
+ try{
+  run.progress('extend-physical-proposal',`${prefixCount}->${count}`);const queries=pairedPartialQueries(field,count,seed),prefixQueries=pairedPartialQueries(field,prefixCount,seed);assert.deepEqual(queries.queries.slice(0,prefixCount*4),prefixQueries.queries);assert.deepEqual(queries.weights.slice(0,prefixCount),prefixQueries.weights);const qArray=Float64Array.from(queries.queries),queryIdentity=sha256(Buffer.from(qArray.buffer)),baseIntegrals={physical:exactPartialTransport(field,128),normalized:densityPartialExact(normalizedPartialField(field),128)},allowances={physical:proxyIntegralSensitivity(field,false),normalized:proxyIntegralSensitivity(field,true)},levels=[],lightTails={};
+  for(const [nv,nc]of [[32,128],[64,256]]){const light=precisionLight(prefixRoot,nv,nc),start=Date.now();assert.equal(light.length,prefixCount);for(let i=prefixCount;i<count;i++){if(i%64===0)run.progress('extend-cache-free-L1',`${nv}/${nc} query${i}/${count}`);const d=queries.queries.slice(i*4,i*4+3),h=queries.queries[i*4+3];light.push(direct({...field.physical,h},d,nv,nc));}lightTails[`${nv}-${nc}`]=writePrecisionTail(run,light,prefixCount,nv,nc);const physical=pairedPhysicalValues(field.physical,queries,light),variants={};for(const id of ['physical','normalized']){const residual=physical.map((v,i)=>v.map((x,s)=>x-queries.proxies[id][i*2+s]*queries.weights[i])),batches=means(residual,count),statistics=speciesBatchStats(batches),base=baseIntegrals[id],estimate=[...base,base[0]+base[1]].map((x,s)=>x+statistics.mean[s]);variants[id]={batches,statistics,estimate};}levels.push({nv,nc,variants,milliseconds:Date.now()-start});console.log(JSON.stringify({count,nv,nc,milliseconds:Date.now()-start}));}
+  const fine=levels[1],coarse=levels[0],comparisons={};for(const id of ['physical','normalized']){const paired=speciesBatchStats(fine.variants[id].batches.map((x,i)=>x.map((v,s)=>v-coarse.variants[id].batches[i][s]))),finite=paired.mean.map((x,s)=>2*(Math.abs(x)+paired.threeSE[s])),stats=fine.variants[id].statistics;comparisons[id]={intervals:fine.variants[id].estimate.map((x,s)=>({mean:x,threeSE:stats.threeSE[s],finiteSensitivity:finite[s],proxyNumericalSensitivity:allowances[id][s],lower:Math.max(0,x-stats.threeSE[s]-finite[s]-allowances[id][s]),upper:x+stats.threeSE[s]+finite[s]+allowances[id][s]}))};}
+  const closureStats=speciesBatchStats(fine.variants.physical.batches.map((x,i)=>x.map((v,s)=>v-fine.variants.normalized.batches[i][s]))),closure=[0,1,2].map(s=>{const a=baseIntegrals.physical,b=baseIntegrals.normalized,d=s<2?a[s]-b[s]:a[0]+a[1]-b[0]-b[1],value=d+closureStats.mean[s],allowance=closureStats.threeSE[s]+allowances.physical[s]+allowances.normalized[s];return {s,value,allowance,compatible:Math.abs(value)<=allowance};}),components=[0,1,2].map(s=>{const intervals=['physical','normalized'].map(id=>comparisons[id].intervals[s]),lower=Math.min(...intervals.map(x=>x.lower)),upper=Math.max(...intervals.map(x=>x.upper)),base=baseIntegrals.normalized,control=s<2?base[s]:base[0]+base[1];return {component:['last-Rayleigh/all-origins','last-Mie/all-origins','total'][s],reference:{lower,upper},linear:control,pchip:pchip[s],pchipRelativeErrorRange:[pchip[s]/upper-1,pchip[s]/lower-1],errorChange:delta(pchip[s],control,lower,upper)};}),protectedAll=components.every(x=>x.errorChange.protectedAcrossReportedRange),summary={physical:field.physical,count,seed,prefixRoot,prefixCount,queryIdentity,lightTails,baseIntegrals,allowances,levels,comparisons,closure,closureCompatible:closure.every(x=>x.compatible),components,protectedAll,scope:'Precision at one-wavelength short vertical pure-L2 derivative. Statistical and empirical sensitivities are retained; reported-range protection is not full-cache, later-order, Toronto-profile, scene or B1 admission.'};
+  run.write('summary.json',summary);run.finish('accepted',{protectedAll,closureCompatible:summary.closureCompatible});verifyRun(run.path);console.log(JSON.stringify({run:run.path,count,protectedAll,components,closureCompatible:summary.closureCompatible,storage:storage()}));return {root:run.path,...summary};
+ }catch(error){run.finish('failed',{failure:String(error)});throw error;}
+}
+
+let prefix=base+'00751-h138-paired-cpu';for(const count of counts){const result=await extend(count,prefix);prefix=result.root;if(result.protectedAll&&result.closureCompatible)break;}

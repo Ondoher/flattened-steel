@@ -1,3 +1,4 @@
+import {DistantSunScatteringAccuracy} from '../../../src/algorithm32/implementation/distant-sun/cache/DistantSunScatteringAccuracy.js';
 import {CanonicalValueHash} from '../../../src/algorithm32/value-identity/CanonicalValueHash.js';
 import {SphericalNativePositionDomains} from '../../../src/algorithm32/sampling-domains/index.js';
 import {DistantSunSceneCacheCompilerInputs} from './DistantSunSceneCacheCompilerInputs.js';
@@ -88,6 +89,7 @@ export const DistantSunPointLocalProfileCompilerInputs = Object.freeze({
 		)
 			throw new RangeError('Compiler position-domain selection disagrees with the execution profile.');
 		const geometryPolicy = DistantSunSceneCacheNumerics.accept(options.numericalPolicy);
+		const accuracy = DistantSunScatteringAccuracy.accept(options.scatteringAccuracy);
 		if (
 			options.solarInterpolation !== undefined &&
 			!['linear', 'monotone-cubic'].includes(options.solarInterpolation)
@@ -171,12 +173,16 @@ export const DistantSunPointLocalProfileCompilerInputs = Object.freeze({
 			},
 			ground: {id: profile.models.groundBoundary.id},
 			numerical: {
+				...(accuracy === 'legacy' ? {} : {scatteringAccuracy: accuracy}),
 				...(geometryPolicy ? {geometryPolicy} : {}),
 				...(options.solarInterpolation === 'monotone-cubic'
 					? {solarInterpolation: options.solarInterpolation}
 					: {}),
 				sourcePathTransmittanceIntervalCount: profile.numerical.sourcePathTransmittance.intervalCount,
-				transportIntervalCount: profile.numerical.cacheConstruction.transportIntervalCount,
+				transportIntervalCount: DistantSunScatteringAccuracy.transportIntervals(
+					accuracy,
+					profile.numerical.cacheConstruction.transportIntervalCount,
+				),
 				maximumScatteringOrder: profile.numerical.cacheConstruction.maximumScatteringOrder,
 			},
 			domains,
@@ -233,6 +239,7 @@ export const DistantSunPointLocalProfileCompilerInputs = Object.freeze({
 			ids = profiles?.map((profile) => profile.id),
 			observerAltitudeMeters = 0,
 			numericalPolicy = undefined,
+			scatteringAccuracy = undefined,
 			solarInterpolation = undefined,
 			positionDomain = undefined,
 		} = {},
@@ -247,12 +254,14 @@ export const DistantSunPointLocalProfileCompilerInputs = Object.freeze({
 		}
 		const input = DistantSunPointLocalProfileCompilerInputs.createInputSet(profiles[0], {
 			numericalPolicy,
+			scatteringAccuracy,
 			solarInterpolation,
 			positionDomain,
 		});
 		const scenes = profiles.map((profile, index) => {
 			const candidate = DistantSunPointLocalProfileCompilerInputs.createInputSet(profile, {
 				numericalPolicy,
+				scatteringAccuracy,
 				solarInterpolation,
 				positionDomain,
 			});

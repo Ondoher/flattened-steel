@@ -1137,6 +1137,7 @@ type DistantSunSceneCachePayloadReference = Readonly<{
 
 /** Serialized production manifest for one complete distant-Sun scene cache. */
 type DistantSunSceneCacheManifestRecord = Readonly<{
+	/** Executable numerical/mapping selection; absent in immutable legacy manifests. */ scatteringAccuracy?: DistantSunScatteringAccuracyMethod;
 	/** Manifest schema identity. */
 	readonly schemaId: string;
 	/** Stable complete-cache compatibility identity. */
@@ -1370,6 +1371,7 @@ type DistantSunSharedCacheBlockGrid = Readonly<{
 
 /** Physical, numerical, domain, block-grid, codec, and index identity for one shared inventory. */
 type DistantSunSharedCacheConfigurationManifest = Readonly<{
+	/** Executable numerical/mapping selection; required by the accuracy-v2 schema. */ scatteringAccuracy?: DistantSunScatteringAccuracyMethod;
 	/** Versioned configuration-manifest schema identity. */
 	readonly schemaId: string;
 	/** Lowercase SHA-256 of canonical physical, numerical, and layout facts. */
@@ -1747,6 +1749,7 @@ type DistantSunSharedCacheRouteQualification = DistantSunSharedCacheMemoryQualif
 };
 /** Runtime capabilities and explicit memory admission for one shared-cache controller. */
 type DistantSunSharedCacheControllerDefinition = {
+	/** Expected numerical/mapping policy, checked against the authenticated package. */ scatteringAccuracy?: DistantSunScatteringAccuracyMethod;
 	/** Explicit candidate reconstruction; omission preserves the deployed linear control. */
 	solarInterpolation?: DistantSunSolarInterpolationMethod;
 	/** Borrowed renderer resource owner. */
@@ -1773,6 +1776,7 @@ type DistantSunSharedCacheSceneRequest = {
 };
 /** Complete controller-owned frame whose borrowed resources are valid until the next publication. */
 type DistantSunSharedCacheFrame = {
+	/** Fixed accepted numerical/mapping policy. */ scatteringAccuracy?: DistantSunScatteringAccuracyMethod;
 	/** Fixed reconstruction contract; absent only for the legacy linear control. */
 	solarInterpolation?: DistantSunSolarInterpolationMethod;
 	/** Complete validated scene and row-address selection. */
@@ -1859,6 +1863,7 @@ type DistantSunSceneDirectionInterpolationMethod = 'texture-bilinear' | 'shader-
 
 /** Construction values for one completely uploaded point-local scene cache. */
 type DistantSunSceneCacheDefinition = Readonly<{
+	/** Expected numerical/mapping policy, checked against the accepted manifest. */ scatteringAccuracy?: DistantSunScatteringAccuracyMethod;
 	/** Executable altitude owner; omission retains the established Native48 domain. */ readonly positionDomain?: PositionDomain;
 	/** Solar interpolation selected by the authenticated asset; omission preserves linear sampling. */ readonly solarInterpolation?: DistantSunSolarInterpolationMethod;
 	/** Choose texture filtering or explicit shader bilinear weights; defaults to texture filtering. */ readonly directionInterpolation?: DistantSunSceneDirectionInterpolationMethod;
@@ -1886,3 +1891,9 @@ type DistantSunSharedBlockWindow = {
 	/** Complete ordered block identities. */ ids: string[];
 	/** First predicted scene ordinal. */ predicted: number;
 };
+/** Executable distant-Sun numerical policy. Omission at ingress retains legacy.
+ * corrected60 changes only higher-order transport and discrete Mie mass;
+ * corrected60-sun035 additionally changes outgoing representation. Neither
+ * changes atmosphere, incoming quadrature, direct N1 or final-view integration.
+ */
+type DistantSunScatteringAccuracyMethod = 'legacy' | 'corrected60' | 'corrected60-sun035';
