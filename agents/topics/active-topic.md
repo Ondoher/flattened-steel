@@ -18,9 +18,10 @@ The full40-band Native51 GPU replay and B1 comparison pass; Native48 compiled
 and passes matched transport15 control scoring. Execution resumed at the owner's
 request. All Native15 candidate reconstructions,28 actual scene captures, packed
 GPU lookup checks, four lifecycle receipts, local-cache isolation and rebuilt
-current-route checks pass within their declared scope. Adoption remains held by
-the existing600000000-byte on-disk package gate (candidate725426183 bytes) and
-stale reviewer calibration. Checkpoints040442ed,cf4a191e and35a9d023 preserve the
+current-route checks pass within their declared scope. The owner approved the
+increased cache size; both candidates pass the revised750000000-byte package
+ceiling and corresponding build-disk allowance without GPU recomputation.
+Adoption remains held by stale reviewer calibration and required production review. Checkpoints040442ed,cf4a191e and35a9d023 preserve the
 source work. The status owns final evidence, limitations and resumption actions.
 No job remains; deployed packages and defaults are unchanged.
 

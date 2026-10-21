@@ -17,6 +17,7 @@ import {
 	SHARED_COMPILER_SOURCE_NAMES,
 	DISTANT_SUN_SCATTERING_ACCURACY_SOURCE,
 	SHARED_GENERATION_SOURCE_ROOT,
+	SHARED_GENERATION_MAXIMUM_PACKAGE_BYTES,
 	SHARED_GENERATION_MAXIMUM_WORKING_BYTES,
 	SHARED_GENERATION_MAXIMUM_NODE_RSS_BYTES,
 } from './consts.js';
@@ -311,7 +312,7 @@ export default class DistantSunSharedCacheGenerator {
 			const candidateBytes = await this._bytes(await files.resolve(candidateRoot));
 			const workingBytesBeforePublication = await this._bytes(await files.resolve(runRoot));
 			const elapsedMilliseconds = performance.now() - started;
-			if (candidateBytes > 600000000 || elapsedMilliseconds > 900000)
+			if (candidateBytes > SHARED_GENERATION_MAXIMUM_PACKAGE_BYTES || elapsedMilliseconds > 900000)
 				throw new Error('The generated candidate exceeds the production storage or generation-time gate.');
 			if (
 				workingBytesBeforePublication > SHARED_GENERATION_MAXIMUM_WORKING_BYTES ||
@@ -328,6 +329,7 @@ export default class DistantSunSharedCacheGenerator {
 				packageSetIdentity: candidate.report.packageSetIdentity,
 				packageSetSha256: candidate.reportArtifact.sha256,
 				candidateBytes,
+				maximumPackageBytes: SHARED_GENERATION_MAXIMUM_PACKAGE_BYTES,
 				workingBytesBeforePublication,
 				maximumWorkingBytes: SHARED_GENERATION_MAXIMUM_WORKING_BYTES,
 				maximumNodeRssBytes: SHARED_GENERATION_MAXIMUM_NODE_RSS_BYTES,

@@ -837,6 +837,7 @@ type SharedGenerationRunResult = {
 	/** Package graph identity. */ packageSetIdentity: string;
 	/** Root report digest. */ packageSetSha256: string;
 	/** Complete candidate bytes. */ candidateBytes: number;
+	/** Owner-approved complete on-disk package ceiling. */ maximumPackageBytes: number;
 	/** Complete open run footprint before final acceptance records. */ workingBytesBeforePublication: number;
 	/** Declared logical working-disk ceiling. */ maximumWorkingBytes: number;
 	/** Declared Node process memory ceiling, excluding browser/driver overhead. */ maximumNodeRssBytes: number;

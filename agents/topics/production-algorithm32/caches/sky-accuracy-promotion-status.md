@@ -8,9 +8,9 @@ Sky Accuracy Dials remains [suspended](../../poc-experiments/engineering-studies
 ## Current disposition
 
 The selected production port passes its bounded numerical, package-reconstruction,
-application-rendering and lifecycle checks. **Adoption remains held** by the existing
-600000000-byte on-disk package acceptance gate and incomplete production standards
-review. No candidate deployment, default switch, remote publication or push occurred.
+application-rendering and lifecycle checks. The owner approved the increased
+on-disk cache size on2026-10-21; both qualified candidates pass the revised disk
+allowances. **Adoption remains held** by incomplete production standards review. No candidate deployment, default switch, remote publication or push occurred.
 P1/P2 implementation-completion claims retain the plan's required P3 review gate.
 
 The darker horizon is consistent with the earlier matched libRadtran and independent
@@ -21,8 +21,10 @@ not resumed. Atmospheric composition, aerosol amount, exposure and display defau
 were not changed to improve scores or appearance.
 
 The [final verification](../../../../.codex-tmp/sky-accuracy-promotion/final-verification-01/result.json)
-authenticates completed evidence and explicitly reports `adoptionReady:false`.
-All qualification outputs remain below `.codex-tmp/sky-accuracy-promotion/`.
+authenticates completed numerical/runtime evidence and reports `adoptionReady:false`.
+Its earlier storage hold is superseded only by the owner-approved
+[disk acceptance](../../../../.codex-tmp/sky-accuracy-promotion/size-approval-01/result.json);
+the historical report is unchanged. All qualification outputs remain below `.codex-tmp/sky-accuracy-promotion/`.
 
 ## Milestone report and gate dispositions
 
@@ -39,7 +41,7 @@ All qualification outputs remain below `.codex-tmp/sky-accuracy-promotion/`.
 | Runtime lifecycle | Pass on supported bounded route | Four actual receipts: supersession, held disjoint jumps, darkness releasing atlas, context restoration and zero coherence failures |
 | Flat/local isolation | Pass, smoke scope | Actual compact N1 frame; unchanged local defaults and coordinate-frame round trip; no qualification of focused mapping for local Sun |
 | Rebuilt current route and rollback preparation | Pass within stated scope | Fresh compiled Bootstrap/Worker, maintained server route, loaded current package; authenticated candidate/rollback files prepared |
-| Existing package-storage acceptance | Fail | Canonical candidate725426183 bytes; Toronto candidate727455714; limit600000000 |
+| Owner-approved package-storage acceptance | Pass | Canonical725426183 bytes and Toronto727455714 fit the revised750000000-byte ceiling; authenticated in size-approval-01 |
 | Required production standards review | Incomplete | Stale all-lane calibration prevents reviewer startup; no compliance claim |
 
 The ordinary Flat32 browser suite passes45 of46 cases; its explicitly opt-in full
@@ -133,8 +135,10 @@ predecessor. Its report/selection and package bytes remain unchanged.
 and [exact rollback selection](../../../../.codex-tmp/sky-accuracy-promotion/handoff-01/rollback-selection.js)
 are reviewable and unapplied. Publication accepts explicit `--scattering-accuracy`;
 the [actual CLI mismatch proof](../../../../.codex-tmp/sky-accuracy-promotion/publication-pairing-01/result.json)
-rejects unlike package/lookup policies before copying. Storage acceptance and
-production review must be resolved before using the prepared publication commands.
+rejects unlike package/lookup policies before copying. Owner-approved disk
+acceptance now passes; the prepared historical materials retain their original
+preapproval wording. Required production review and separate publication/activation
+authority remain outstanding before those commands can be used.
 
 | Resource | Canonical candidate | Toronto candidate | Toronto legacy control |
 | --- | ---: | ---: | ---: |
@@ -148,9 +152,17 @@ Current deployed package storage is506706259 bytes. The canonical candidate adds
 Node RSS, framebuffers and GPU atlas memory are separate quantities. These serial
 builds did not control GPU clocks or host load, so timings do not isolate the cost
 of changing interval count. Build complexity is reported, not a new scientific
-rejection threshold; the pre-existing600000000-byte storage gate remains intact.
-All candidate reconstructions remain valid qualification data despite that failure.
-Toronto legacy control passes the existing time, disk and host-memory gates.
+rejection threshold. The owner approved the increased on-disk cache size on
+2026-10-21. The production package ceiling is now750000000 bytes; the working-disk
+ceiling is2297483648 bytes (prior2GiB plus the same150000000-byte package growth),
+preserving staging/browser headroom. Node RSS, GPU memory and generation-time
+limits are unchanged. Current retained canonical/Toronto run footprints are
+2161826194 and2172848288 bytes, both within that working-disk allowance.
+The new disk-acceptance record reauthenticates all204 artifacts and reuses all109
+verified reconstructions per candidate, without GPU recomputation, publication or
+rewriting the original failed runs. Those historical failures retain the old600MB
+rule and are superseded only for disk acceptance. Toronto legacy control already
+passed its original time, disk and host-memory gates.
 
 [Measured frame timings](../../../../.codex-tmp/sky-accuracy-promotion/performance-01/frames.tsv)
 use eight valid non-disjoint runtime-shader timer queries per12-frame canonical
@@ -182,12 +194,12 @@ is retained under `session-VNveUf`. Checkpoints do not certify adoption or compl
 Readiness was rechecked after qualification and still reports
 `Stale all-lane calibration; prepare again`. The
 [review skill](C:/Users/gande/.codex/skills/review-standards/SKILL.md) states:
-?Missing or stale recorded calibration blocks startup.? No standards reviewer
+"Missing or stale recorded calibration blocks startup." No standards reviewer
 started; the required bounded production review and independent audits remain open.
 External governance definitions/calibration records were not silently repaired.
 
-Next action: resolve the725MB candidate versus600MB on-disk acceptance ceiling and
-restore reviewer readiness, then execute the plan's required production review and
-candidate admission. Reuse the completed packages and qualification evidence;
+Next action: restore reviewer readiness, then execute the plan's required bounded
+production review and complete candidate admission. The owner-approved disk
+increase is recorded and verified; it is no longer an adoption hold. Reuse the completed packages and qualification evidence;
 rebuilding their GPU fields is unnecessary unless source or physical inputs change.
 No qualification-owned browser, server or GPU job remains active.

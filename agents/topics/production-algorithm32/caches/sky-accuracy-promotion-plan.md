@@ -47,6 +47,18 @@ registered production compatibility assessment establishes applicability. Do
 not silently change Flat32's local cache, the local-light direction frame, or
 its selected assets through a shared default.
 
+## Owner-approved disk allowance
+
+On2026-10-21 the owner approved the increased on-disk cache size after reviewing
+725426183 candidate bytes versus506706259 deployed bytes. Use a750000000-byte
+production package ceiling, covering the measured canonical/Toronto candidates.
+Increase the prior2GiB build-disk ceiling by the same150000000-byte package
+allowance, to2297483648 bytes, preserving staging/browser headroom. This changes
+disk allowances only; GPU, Node memory, generation-time, numerical and review
+gates retain their existing scope. Approval of cache size does not activate or
+publish the candidate. Reauthenticate the completed packages in a new acceptance
+record and reuse verified GPU fields; preserve original failed runs and evidence.
+
 ## Retained authority and compatibility gaps
 
 The [H61 results](../../poc-experiments/engineering-studies/sky-accuracy-dials/outgoing-focus-results.md)

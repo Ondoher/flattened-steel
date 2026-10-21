@@ -23,8 +23,10 @@ export const SHARED_GENERATION_CONTROL_CATALOG_SHA256 =
 export const SHARED_GENERATION_RUN_ROOT = 'tmp/production-algorithm32/distant-sun-shared-block-cache/runs';
 /** Complete source owner directory for the production offline generator. */
 export const SHARED_GENERATION_SOURCE_ROOT = 'scripts/algorithm32/solar-zenith-cache';
-/** Qualified production generator working-disk ceiling, including private browser profile overhead. */
-export const SHARED_GENERATION_MAXIMUM_WORKING_BYTES = 2 * 1024 * 1024 * 1024;
+/** On-disk package ceiling after the owner's 2026-10-21 approval of the measured 725/727 MB candidates. */
+export const SHARED_GENERATION_MAXIMUM_PACKAGE_BYTES = 750000000;
+/** Production working-disk ceiling: prior 2 GiB plus the approved 150 MB package growth, retaining staging/browser headroom. */
+export const SHARED_GENERATION_MAXIMUM_WORKING_BYTES = 2 * 1024 * 1024 * 1024 + 150000000;
 /** Qualified Node generator process RSS ceiling, distinct from browser/driver overhead. */
 export const SHARED_GENERATION_MAXIMUM_NODE_RSS_BYTES = 1024 * 1024 * 1024;
 
