@@ -42,7 +42,8 @@ def bundle(path, contract, case, representation, scenario, streams, spacing=250)
     if z[-1]!=0:z.append(0)
     path.mkdir()
     def put(name,rows):
-        (path/name).write_text('\n'.join(rows)+'\n')
+        with (path/name).open('x',encoding='utf-8',newline='\n') as stream:
+            stream.write('\n'.join(rows)+'\n')
     put('wavelengths.txt',[str(c['wavelengthNanometers']) for c in channels])
     put('solar.txt',[f"{c['wavelengthNanometers']} {c['sourceIrradianceWattsPerSquareMeterPerNanometer']*1000:.16g}" for c in channels])
     put('albedo.txt',[f"{c['wavelengthNanometers']} {max(0,min(1,c['groundAlbedo']+scenario.get('albedoDelta',0))):.16g}" for c in channels])

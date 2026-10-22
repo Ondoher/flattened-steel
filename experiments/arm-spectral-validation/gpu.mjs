@@ -58,6 +58,7 @@ const contract = /** @type {ArmPhysicalContract} */ (
 const sceneBase = Inputs.createQualifiedSanJoseNauticalScene();
 const refinement = process.argv.includes('--refine');
 const convergence = process.argv.includes('--converge');
+const colorExtension = process.argv.includes('--color-extension');
 const requestBase = Inputs.createInputSet(sceneBase, {
 	scatteringAccuracy: 'corrected60-sun035',
 	solarInterpolation: 'monotone-cubic',
@@ -67,11 +68,13 @@ const abort = new AbortController();
 process.once('SIGINT', () => abort.abort());
 process.once('SIGTERM', () => abort.abort());
 const summaries = [];
-for (const variant of convergence
-	? ['source80', 'source160', 'native51-source160']
-	: refinement
-		? ['source40', 'native51']
-		: ['corrected', 'legacy']) {
+for (const variant of colorExtension
+	? ['corrected']
+	: convergence
+		? ['source80', 'source160', 'native51-source160']
+		: refinement
+			? ['source40', 'native51']
+			: ['corrected', 'legacy']) {
 	const base = (
 		variant.startsWith('native51')
 			? Inputs.createInputSet(sceneBase, {
@@ -125,7 +128,7 @@ for (const variant of convergence
 			domains: {
 				...base.domains,
 				spectrum: {
-					id: 'arm-nine-continuum-bands-v1',
+					id: contract.spectrumId ?? 'arm-nine-continuum-bands-v1',
 					contentHash: `sha256:${files.hash(JSON.stringify(channels))}`,
 					channels,
 				},
@@ -151,7 +154,16 @@ for (const variant of convergence
 	}));
 	const relative = path.relative(repository, path.join(root, variant)).split(path.sep).join('/');
 	const started = performance.now();
-	const wavelengths = refinement || convergence ? [4] : channels.map((_c, i) => i);
+	const wavelengths =
+		refinement || convergence
+			? [4]
+			: channels
+					.map((_c, i) => i)
+					.filter(
+						(i) =>
+							!colorExtension ||
+							!contract.reuseWavelengthNanometers.includes(channels[i].centerNanometers),
+					);
 	const result = await new LaneGenerator({
 		chromePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe',
 	}).compile({

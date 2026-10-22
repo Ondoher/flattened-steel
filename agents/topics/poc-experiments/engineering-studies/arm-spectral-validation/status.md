@@ -6,6 +6,11 @@ on2026-10-21. Absolute observational accuracy remains inconclusive. The
 interpretation limits and follow-on recommendations. No production change or
 deployment occurred. No numerical process remains active.
 
+The owner-requested [matched zenith swatches](color-swatches.md) are complete
+for both windows, with common exposure and a separate equal-luminance view.
+Runs00034-00038 extend visible coverage to400-800nm without changing the original
+nine-band comparison. The swatch report owns conversion details and limitations.
+
 ## M1 report
 
 Authenticated ARM access resolved the download dependency. Four complete,

@@ -9,6 +9,8 @@ No production source, asset, default or deployment changed.
 
 ## Reviewable results
 
+- [Matched zenith color swatches](color-swatches.md), with common exposure and
+  equal-luminance views from the later 400–800 nm spectral extension.
 - [Pilot spectra, 22:20-22:24 UTC](../../../../../tmp/experiments/arm-spectral-validation/runs/00032-comparison/pilot-spectra.svg)
 - [Reserved spectra, 22:00-22:04 UTC](../../../../../tmp/experiments/arm-spectral-validation/runs/00032-comparison/reserved-spectra.svg)
 - [Pilot residuals](../../../../../tmp/experiments/arm-spectral-validation/runs/00032-comparison/pilot-residuals.svg)

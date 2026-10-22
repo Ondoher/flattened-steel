@@ -1,5 +1,7 @@
 /** Frozen conditional physical inputs, with explicit radiometric units. */
 type ArmPhysicalContract = {
+	spectrumId?: string;
+	reuseWavelengthNanometers?: number[];
 	channels: {
 		wavelengthNanometers: number;
 		sourceIrradianceWattsPerSquareMeterPerNanometer: number;
