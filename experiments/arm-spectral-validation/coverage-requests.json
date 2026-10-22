@@ -1,0 +1,10 @@
+[
+	{"id": "iop-contents", "url": "https://iop-api.svcs.arm.gov/contents/2020/sgp/visvalidation/jones-twst/v2/"},
+	{"id": "twst-metadata", "url": "https://adc.arm.gov/elastic/metadata/_search?q=sgptwstC1.00&size=2"},
+	{"id": "sasze-metadata", "url": "https://adc.arm.gov/elastic/metadata/_search?q=sgpsaszevisC1.b1&size=2"},
+	{"id": "sonde-metadata", "url": "https://adc.arm.gov/elastic/metadata/_search?q=sgpsondewnpnC1.b1&size=2"},
+	{"id": "lidar-metadata", "url": "https://adc.arm.gov/elastic/metadata/_search?q=sgp%20AND%20rlprof&size=3"},
+	{"id": "aerosol-metadata", "url": "https://adc.arm.gov/elastic/metadata/_search?q=sgpcimel&size=3"},
+	{"id": "twst-files", "url": "https://adc.arm.gov/elastic/file_info/_search?q=sgptwstC1.00.20230822&size=2"},
+	{"id": "sasze-files", "url": "https://adc.arm.gov/elastic/file_info/_search?q=sgpsaszevisC1.b1.20230822&size=2"}
+]

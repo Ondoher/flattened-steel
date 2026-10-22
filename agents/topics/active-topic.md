@@ -1,45 +1,42 @@
 # Active Topic
 
-Current active topic: production-algorithm32/caches/sky-accuracy-promotion.
-Focus: integrate the completed Corrected60 + Sun-focused outgoing cache result.
+Current active topic: poc-experiments/engineering-studies/arm-spectral-validation.
+Focus: compare production distant-Sun spectral radiance with recent ARM
+observations and matched atmospheric profiles, including libRadtran as an
+independent second comparison.
 
-Canonical entry: [Engine caches](production-algorithm32/caches/README.md).
+Canonical entry: [ARM Spectral Validation](poc-experiments/engineering-studies/arm-spectral-validation/README.md).
 
 ## Current boundary
 
-The owner suspended Sky Accuracy Dials on2026-10-20 and selected its completed
-H61/H63 results for production integration. The
-[promotion plan](production-algorithm32/caches/sky-accuracy-promotion-plan.md)
-owns the selected transport60, Mie phase-mass normalization and outgoing k=.35
-adaptation. The [status](production-algorithm32/caches/sky-accuracy-promotion-status.md)
-owns execution, readiness and next action. P0's transfer contract is saved and
-P1's explicit production policy/compiler/lookup integration is under qualification.
-The full40-band Native51 GPU replay and B1 comparison pass; Native48 compiled
-and passes matched transport15 control scoring. Execution resumed at the owner's
-request. All Native15 candidate reconstructions,28 actual scene captures, packed
-GPU lookup checks, four lifecycle receipts, local-cache isolation and rebuilt
-current-route checks pass within their declared scope. The owner approved the
-increased cache size; both candidates pass the revised750000000-byte package
-ceiling and corresponding build-disk allowance without GPU recomputation.
-Adoption remains held by stale reviewer calibration and required production review. Checkpoints040442ed,cf4a191e and35a9d023 preserve the
-source work. The status owns final evidence, limitations and resumption actions.
-No job remains; deployed packages and defaults are unchanged.
+The owner authorized independent execution on 2026-10-21. The
+[plan](poc-experiments/engineering-studies/arm-spectral-validation/plan.md) owns
+M1-M4; the [status](poc-experiments/engineering-studies/arm-spectral-validation/status.md)
+owns the current M1 report and resumption point. Exact public metadata confirms
+22 August 2023 SGP SASZe a1 visible spectra, radiosonde and lidar files. Full
+measurement access requires ARM registration/token; the owner currently has no
+account or local files. M1 advancement is held for access, not scientifically
+rejected. No matched case, production/libRadtran run or RMSE is accepted yet.
+Resume acquisition/quality matching after access resolves, without new execution
+permission. Reuse the retained metadata/documentation and immutable report 00007.
+Measured spectra are the observational reference; libRadtran is mandatory.
+Zenith measurements do not establish horizon appearance.
 
-The [suspension record](poc-experiments/engineering-studies/sky-accuracy-dials/suspension-2026-10-20.md)
-preserves the unfinished experiment, exact evidence, resources and resumption
-checks. No experiment job/scratch remains; later reconstruction/altitude/phase-
-control branches are not promotion inputs. Experimental execution requires a
-new owner selection. All eight reserved physical tuples remain unexposed.
+Tracked source is `experiments/arm-spectral-validation/`; ignored output is
+`tmp/experiments/arm-spectral-validation/`. Production and other experiments
+are read-only. Sky Accuracy Dials remains suspended, with evidence and reserved
+tuples untouched. The [production promotion status](production-algorithm32/caches/sky-accuracy-promotion-status.md)
+retains prior integration/qualification and adoption boundaries; this topic
+selection does not activate the prepared candidate or change deployed defaults.
 
-Production folder standards and normal reviewer lifecycle apply. Topic-refresh
-found stale live reviewer calibration/NOT_READY; no reviewers started. Preserve
-existing dirty work and immutable packages. Do not claim compliance, deployment
-or a focused local-Sun cache based on experimental evidence alone.
+Contained-experiment verification applies. Dedicated standards reviewers/audits
+are disabled; checkpoint-advisor monitoring and primary scientific/self-review
+checks remain active. One create-plan critique applies to the initial plan.
 
 ## Minimal Reload Sources
 
 1. [Repository instructions](../../AGENTS.md).
-2. [Cache entry](production-algorithm32/caches/README.md).
-3. [Promotion plan](production-algorithm32/caches/sky-accuracy-promotion-plan.md).
-4. [Promotion status](production-algorithm32/caches/sky-accuracy-promotion-status.md).
-5. [Suspension handoff](poc-experiments/engineering-studies/sky-accuracy-dials/suspension-2026-10-20.md).
+2. [Experiment entry](poc-experiments/engineering-studies/arm-spectral-validation/README.md).
+3. [Design](poc-experiments/engineering-studies/arm-spectral-validation/design.md).
+4. [Plan](poc-experiments/engineering-studies/arm-spectral-validation/plan.md).
+5. [Status](poc-experiments/engineering-studies/arm-spectral-validation/status.md).

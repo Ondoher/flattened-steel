@@ -1,0 +1,42 @@
+[
+	{
+		"id": "twst-exact",
+		"url": "https://adc.arm.gov/elastic/metadata/_search?q=datastream.keyword%3AsgptwstC1.00&size=1&_source=datastream%2Cstart_date%2Cend_date%2CdataLevel%2Cdoi%2Climited_access%2Cdata_repository%2Cdatastream_abstract%2Clink_url%2Cpmt_var_names"
+	},
+	{
+		"id": "sasze-exact",
+		"url": "https://adc.arm.gov/elastic/metadata/_search?q=datastream.keyword%3AsgpsaszevisC1.a1&size=1&_source=datastream%2Cstart_date%2Cend_date%2CdataLevel%2Cdoi%2Climited_access%2Cdata_repository%2Cdatastream_abstract%2Clink_url%2Cpmt_var_names"
+	},
+	{
+		"id": "sonde-exact",
+		"url": "https://adc.arm.gov/elastic/metadata/_search?q=datastream.keyword%3AsgpsondewnpnC1.b1&size=1&_source=datastream%2Cstart_date%2Cend_date%2CdataLevel%2Cdoi%2Climited_access%2Cdata_repository%2Cdatastream_abstract%2Clink_url%2Cpmt_var_names"
+	},
+	{
+		"id": "lidar-exact",
+		"url": "https://adc.arm.gov/elastic/metadata/_search?q=datastream.keyword%3Asgprlproffex1thorC1.c0&size=1&_source=datastream%2Cstart_date%2Cend_date%2CdataLevel%2Cdoi%2Climited_access%2Cdata_repository%2Cdatastream_abstract%2Clink_url%2Cpmt_var_names"
+	},
+	{
+		"id": "aeronet-exact",
+		"url": "https://adc.arm.gov/elastic/metadata/_search?q=datastream.keyword%3AsgpcimelC1.a0&size=1&_source=datastream%2Cstart_date%2Cend_date%2CdataLevel%2Cdoi%2Climited_access%2Cdata_repository%2Cdatastream_abstract%2Clink_url%2Cpmt_var_names"
+	},
+	{
+		"id": "albedo-exact",
+		"url": "https://adc.arm.gov/elastic/metadata/_search?q=datastream.keyword%3Asgpsurfspecalb1mlawerC1.c0&size=1&_source=datastream%2Cstart_date%2Cend_date%2CdataLevel%2Cdoi%2Climited_access%2Cdata_repository%2Cdatastream_abstract%2Clink_url%2Cpmt_var_names"
+	},
+	{
+		"id": "twst-day",
+		"url": "https://adc.arm.gov/elastic/file_info/_search?q=datastream.keyword%3AsgptwstC1.00+AND+start_time%3A%5B2023-08-22T00%3A00%3A00Z+TO+2023-08-23T00%3A00%3A00Z%5D&size=5&_source=file_name%2Cfile_size%2Cstart_time%2Cend_time%2Cdatastream"
+	},
+	{
+		"id": "sasze-day",
+		"url": "https://adc.arm.gov/elastic/file_info/_search?q=datastream.keyword%3AsgpsaszevisC1.a1+AND+start_time%3A%5B2023-08-22T00%3A00%3A00Z+TO+2023-08-23T00%3A00%3A00Z%5D&size=5&_source=file_name%2Cfile_size%2Cstart_time%2Cend_time%2Cdatastream"
+	},
+	{
+		"id": "sonde-day",
+		"url": "https://adc.arm.gov/elastic/file_info/_search?q=datastream.keyword%3AsgpsondewnpnC1.b1+AND+start_time%3A%5B2023-08-22T00%3A00%3A00Z+TO+2023-08-23T00%3A00%3A00Z%5D&size=5&_source=file_name%2Cfile_size%2Cstart_time%2Cend_time%2Cdatastream"
+	},
+	{
+		"id": "lidar-day",
+		"url": "https://adc.arm.gov/elastic/file_info/_search?q=datastream.keyword%3Asgprlproffex1thorC1.c0+AND+start_time%3A%5B2023-08-22T00%3A00%3A00Z+TO+2023-08-23T00%3A00%3A00Z%5D&size=5&_source=file_name%2Cfile_size%2Cstart_time%2Cend_time%2Cdatastream"
+	}
+]

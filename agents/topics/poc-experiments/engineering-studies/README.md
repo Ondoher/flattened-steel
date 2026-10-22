@@ -2,10 +2,16 @@
 
 Focus: Measured alternatives and retained or rejected mechanisms.
 
-[Sky Inter-Order Altitude Reconstruction](sky-altitude-reconstruction/README.md) is active. [Sky Cache Angular Quadrature](sky-angular-quadrature/README.md) ended with its standalone candidate rejected; its evidence remains preserved. [Sky Accuracy Dials](sky-accuracy-dials/status.md#experiment-lifecycle) remains suspended. Other lanes retain their own dispositions.
+[ARM Spectral Validation](arm-spectral-validation/README.md) is selected for setup
+and planning. [Sky Inter-Order Altitude Reconstruction](sky-altitude-reconstruction/results.md)
+ended unsuccessfully. [Sky Cache Angular Quadrature](sky-angular-quadrature/README.md)
+ended with its standalone candidate rejected; its evidence remains preserved.
+[Sky Accuracy Dials](sky-accuracy-dials/status.md#experiment-lifecycle) remains
+suspended. Other lanes retain their own dispositions.
 
 ## Working Documents
 
+- [ARM Spectral Validation](arm-spectral-validation/README.md)
 - [Sky Inter-Order Altitude Reconstruction](sky-altitude-reconstruction/README.md)
 
 - [Sky Cache Angular Quadrature Experiment](sky-angular-quadrature/README.md)
