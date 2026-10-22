@@ -14,15 +14,12 @@ import {DEFAULT_NATIVE_PRODUCTION_PROFILE} from '../algorithm32/profiles/native-
 import DistanceMath from '../algorithm32/math/DistanceMath.js';
 import {createFlat32ColorDisplayModel} from './Flat32ColorDisplayModel.js';
 import {ViewPresentationFilterRegistry} from '../algorithm32/implementation/presentation-filter/ViewPresentationFilterRegistry.js';
+import {Flat32SceneControls} from './Flat32SceneControls.js';
 import {
 	requireImplementedFlat32ProductionSelections,
 	resolveFlat32ProductionSelections,
 } from './Flat32ProductionSelections.js';
-import {
-	ATMOSPHERE_OBSERVER_HEIGHT,
-	FLAT_ATMOSPHERE_TOP_ALTITUDE,
-	FLAT_OBSERVER_DOME_MAX_VIEW_RAY_EXTENT,
-} from './consts.js';
+import {FLAT_ATMOSPHERE_TOP_ALTITUDE, FLAT_OBSERVER_DOME_MAX_VIEW_RAY_EXTENT} from './consts.js';
 
 /** Production flat-geometry/local-source atmosphere mode.
  *
@@ -35,6 +32,7 @@ export class FlatLocalMode {
 	 * @param {Flat32LocalModeConfiguration} configuration - Application-owned runtime selections.
 	 */
 	constructor(configuration) {
+		const observerHeight = Flat32SceneControls.resolve(configuration).observerHeight;
 		/** Explicit compact successor; omission retains the production control.
 		 *
 		 * @type {LocalSunCompactConstructionProfile|null}
@@ -64,7 +62,7 @@ export class FlatLocalMode {
 			this._compactProfile = new LocalSunCompactProfileSelection().create({
 				observation: configuration.observation,
 				observerPosition: {
-					coordinates: [0, 0, DistanceMath.toMeters(ATMOSPHERE_OBSERVER_HEIGHT)],
+					coordinates: [0, 0, DistanceMath.toMeters(observerHeight)],
 					units: 'meters',
 				},
 				viewRayLimit: FLAT_OBSERVER_DOME_MAX_VIEW_RAY_EXTENT,
@@ -88,7 +86,7 @@ export class FlatLocalMode {
 		const profile = DEFAULT_NATIVE_PRODUCTION_PROFILE;
 		const spectralBasis = profile.spectral.basis;
 		const observerPosition = /** @type {Position} */ ({
-			coordinates: [0, 0, DistanceMath.toMeters(ATMOSPHERE_OBSERVER_HEIGHT)],
+			coordinates: [0, 0, DistanceMath.toMeters(observerHeight)],
 			units: 'meters',
 		});
 		const geometry = new FlatEarthGeometry({
@@ -163,6 +161,13 @@ export class FlatLocalMode {
 	get geometry() {
 		this._assertUsable();
 		return this._geometry;
+	}
+
+	/** Physical observer height above the flat surface.
+	 * @returns {Distance} - Geometry-owned height.
+	 */
+	get observerHeight() {
+		return DistanceMath.inMeters(this._geometry.configuration.observerPosition.coordinates[2]);
 	}
 	/** Physical length represented by one scene unit.
 	 *

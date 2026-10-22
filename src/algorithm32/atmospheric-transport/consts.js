@@ -22,3 +22,8 @@ export const ALGORITHM32_TRANSPORT_MAIN_SYMBOLS = [
 export const TRANSPORT_PATH_INTERVAL_COUNT_UNIFORM_NAME = 'uTransportPathIntervalCount';
 /** Transport path interval count value key constant. */
 export const TRANSPORT_PATH_INTERVAL_COUNT_VALUE_KEY = 'transport.pathIntervalCount';
+
+/** Presentation-only view transport control; physical receiver illumination remains unchanged. */
+export const ATMOSPHERIC_VIEW_ENABLED_VALUE_KEY = 'presentation.atmosphericViewEnabled';
+/** Uniform for the presentation-only atmospheric view control. */
+export const ATMOSPHERIC_VIEW_ENABLED_UNIFORM_NAME = 'uAtmosphericViewEnabled';

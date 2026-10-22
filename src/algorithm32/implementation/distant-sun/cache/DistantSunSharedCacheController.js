@@ -109,9 +109,9 @@ export default class DistantSunSharedCacheController {
 	};
 
 	/**
-	 * Creates a controller under the bounded default or an explicitly qualified route policy.
+	 * Creates a controller with bounded atlas residency and isolated scene transitions.
 	 *
-	 * @param {DistantSunSharedCacheControllerDefinition} definition - Runtime capabilities and memory admission.
+	 * @param {DistantSunSharedCacheControllerDefinition} definition - Runtime capabilities and atlas layout.
 	 */
 	constructor(definition) {
 		if (
@@ -135,8 +135,6 @@ export default class DistantSunSharedCacheController {
 		if (!Number.isSafeInteger(this._layers) || this._layers < 1 || this._layers > 89)
 			throw new RangeError('Shared-cache layer policy is invalid.');
 		const bytes = this._layers * DISTANT_SUN_SHARED_CACHE_PACKET_BYTES;
-		if (!Number.isSafeInteger(definition.maximumGpuBytes) || definition.maximumGpuBytes < bytes)
-			throw new RangeError('Shared-cache GPU memory policy cannot admit its atlas.');
 		if (
 			this._layers !== DISTANT_SUN_SHARED_CACHE_DEFAULT_RESIDENT_LAYER_COUNT &&
 			(!definition.routeQualification?.evidenceId ||
@@ -151,13 +149,6 @@ export default class DistantSunSharedCacheController {
 				))
 		)
 			throw new RangeError('Shared-cache larger atlas requires exact route and target qualification.');
-		if (
-			definition.maximumGpuBytes >= bytes * 2 &&
-			(!definition.transitionQualification?.evidenceId ||
-				!definition.transitionQualification.targetId ||
-				definition.transitionQualification.maximumBytes < bytes * 2)
-		)
-			throw new RangeError('Shared-cache dual-atlas transitions require target memory qualification.');
 	}
 
 	/**
@@ -365,8 +356,8 @@ export default class DistantSunSharedCacheController {
 					this._counters.predictedScene = -1;
 			}
 			if (!atlas.canFit(window.ids)) {
-				if (this._definition.maximumGpuBytes < this._layers * DISTANT_SUN_SHARED_CACHE_PACKET_BYTES * 2)
-					throw new RangeError('Shared-cache jump requires a qualified dual-atlas transition budget.');
+				// Preserve the visible atlas while attempting the replacement on the actual GPU.
+				// A historical byte allowance or device qualification is not an allocation failure.
 				atlas = new DistantSunSharedCacheAtlas(
 					this._definition.backend,
 					this._layers,

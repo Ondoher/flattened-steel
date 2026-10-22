@@ -1747,7 +1747,7 @@ type DistantSunSharedCacheRouteQualification = DistantSunSharedCacheMemoryQualif
 	/** Exact unique qualified route block set. */
 	blockIds: readonly string[];
 };
-/** Runtime capabilities and explicit memory admission for one shared-cache controller. */
+/** Runtime capabilities and bounded atlas layout for one shared-cache controller. */
 type DistantSunSharedCacheControllerDefinition = {
 	/** Expected numerical/mapping policy, checked against the authenticated package. */ scatteringAccuracy?: DistantSunScatteringAccuracyMethod;
 	/** Explicit candidate reconstruction; omission preserves the deployed linear control. */
@@ -1760,11 +1760,11 @@ type DistantSunSharedCacheControllerDefinition = {
 	package: DistantSunSharedCachePackageSource;
 	/** Fixed GPU layer capacity, defaulting to 24. */
 	layers?: number;
-	/** Total simultaneous atlas allocation ceiling. */
-	maximumGpuBytes: number;
+	/** Historical qualification-harness allowance, retained for existing callers; not a runtime allocation gate. */
+	maximumGpuBytes?: number;
 	/** Required qualification for any nondefault atlas capacity. */
 	routeQualification?: DistantSunSharedCacheRouteQualification;
-	/** Required qualification when admitting simultaneous current and candidate atlases. */
+	/** Historical transition evidence retained for existing qualification callers; not required for runtime allocation. */
 	transitionQualification?: DistantSunSharedCacheMemoryQualification;
 };
 /** Declared route position and velocity for one predictive request. */
@@ -1840,7 +1840,7 @@ type DistantSunSharedCacheControllerDiagnostics = {
 	/** Frame boundaries that held the prior publication. */ held: number;
 	/** Superseded preparation count. */ canceled: number;
 	/** Failed preparation count. */ failures: number;
-	/** Qualified dual-atlas transition count. */ transitions: number;
+	/** Attempted isolated dual-atlas transition count after successful allocation. */ transitions: number;
 	/** Most recent complete preparation duration. */ lastPreparationMilliseconds: number;
 	/** Most recent failure message, cleared on successful preparation. */ lastError: string;
 	/** First predicted scene ordinal, or -1 when no complete future scene fits. */ predictedScene: number;

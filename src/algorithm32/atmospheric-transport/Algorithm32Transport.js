@@ -1,6 +1,8 @@
 import {ShaderContributions} from '../shader-assembly/base/ShaderContributions.js';
 import {PositiveColumnViewTransport} from './PositiveColumnViewTransport.js';
 import {
+	ATMOSPHERIC_VIEW_ENABLED_UNIFORM_NAME,
+	ATMOSPHERIC_VIEW_ENABLED_VALUE_KEY,
 	ALGORITHM32_TRANSPORT_MAIN_SYMBOLS,
 	TRANSPORT_PATH_INTERVAL_COUNT_UNIFORM_NAME,
 	TRANSPORT_PATH_INTERVAL_COUNT_VALUE_KEY,
@@ -51,7 +53,12 @@ export class Algorithm32Transport {
 				'transport-main-evaluate',
 				'evaluateTransport',
 				0,
-				'evaluatePathRadiance(state);',
+				`if (${ATMOSPHERIC_VIEW_ENABLED_UNIFORM_NAME}) {
+	evaluatePathRadiance(state);
+} else {
+	state.pathRadiance = zeroSpectral();
+	state.transmittance = oneSpectral();
+}`,
 			),
 		];
 		const provides = ['transport.evaluatePathRadiance'];
@@ -93,6 +100,12 @@ export class Algorithm32Transport {
 				'cache.sampleCumulativeScatteringDensity',
 			],
 			uniforms: [
+				ShaderContributions.createShaderUniformDeclaration(
+					ATMOSPHERIC_VIEW_ENABLED_UNIFORM_NAME,
+					'bool',
+					ATMOSPHERIC_VIEW_ENABLED_VALUE_KEY,
+					true,
+				),
 				ShaderContributions.createShaderUniformDeclaration(
 					TRANSPORT_PATH_INTERVAL_COUNT_UNIFORM_NAME,
 					'int',

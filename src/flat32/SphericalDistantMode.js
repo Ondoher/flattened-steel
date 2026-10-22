@@ -195,6 +195,13 @@ export class SphericalDistantMode {
 		return this._geometry;
 	}
 
+	/** Physical observer height above the spherical surface.
+	 * @returns {Distance} - Geometry-owned normalized height.
+	 */
+	get observerHeight() {
+		return this._geometry.configuration.observerHeight;
+	}
+
 	/** Return the production distant-Sun owner used by this mode. */
 	get lightSource() {
 		this._assertUsable();

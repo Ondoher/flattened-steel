@@ -1,34 +1,9 @@
 import DistantSunSharedCachePackage from '../algorithm32/implementation/distant-sun/cache/DistantSunSharedCachePackage.js';
 import DistantSunSharedCacheTransport from '../algorithm32/implementation/distant-sun/cache/DistantSunSharedCacheTransport.js';
 import DistantSunSharedCacheWorkerClient from '../algorithm32/implementation/distant-sun/cache/DistantSunSharedCacheWorkerClient.js';
-import {DISTANT_SUN_SHARED_CACHE_PACKET_BYTES} from '../algorithm32/implementation/distant-sun/cache/consts.js';
 
 /** Application-owned authenticated package reuse and sole persistent Worker transport. */
 export default class SharedDistantCacheAssets {
-	/**
-	 * Admit a server-selected transition qualification only on its measured runtime target and complete byte budget.
-	 *
-	 * @param {DistantSunSharedCacheMemoryQualification | undefined} value - Server-selected qualification.
-	 * @param {string} renderer - Unmasked WebGL renderer string.
-	 * @returns {DistantSunSharedCacheMemoryQualification | undefined} - Admitted runtime policy.
-	 */
-	_admitTransitionQualification(value, renderer) {
-		const target = value?.targetId?.match(/^(.+) \/ Chrome ([1-9][0-9]*) \/ ANGLE (D3D11)$/u);
-		const browser = navigator.userAgent.match(/Chrome\/([1-9][0-9]*)\./u);
-		if (
-			!target ||
-			!browser ||
-			!/^sha256:[a-f0-9]{64}$/u.test(value.evidenceId) ||
-			!Number.isSafeInteger(value.maximumBytes) ||
-			value.maximumBytes < 48 * DISTANT_SUN_SHARED_CACHE_PACKET_BYTES ||
-			browser[1] !== target[2] ||
-			!renderer.includes(`${target[1]} (`) ||
-			!/Direct3D11.*D3D11/u.test(renderer)
-		)
-			return undefined;
-		return value;
-	}
-
 	/** Authenticated selected package. @type {DistantSunSharedCachePackage | undefined} */
 	_package;
 	/** Trusted package-root identity. */
@@ -43,10 +18,10 @@ export default class SharedDistantCacheAssets {
 	 * @param {Flat32SharedCacheAssetSelection} asset - Validated server selection.
 	 * @param {number | null} ordinal - Representative catalog scene, or darkness.
 	 * @param {AbortSignal} signal - Application preparation cancellation.
-	 * @param {WebGLRenderingContext | WebGL2RenderingContext} [context] - Actual rendering target, required for larger allocations.
-	 * @returns {Promise<DistantSunSharedCacheSelection>} - Authenticated package, transport, and explicit memory policy.
+	 * @param {WebGLRenderingContext | WebGL2RenderingContext} [_context] - Existing caller's rendering target; allocation checks belong to the backend.
+	 * @returns {Promise<DistantSunSharedCacheSelection>} - Authenticated package and transport without a device qualification gate.
 	 */
-	async select(asset, ordinal, signal, context) {
+	async select(asset, ordinal, signal, _context) {
 		if (this._disposed) throw new Error('Shared-cache asset owner is disposed.');
 		signal.throwIfAborted();
 		if (!this._package || this._identity !== asset.report.sha256) {
@@ -69,15 +44,10 @@ export default class SharedDistantCacheAssets {
 			});
 			this._ownedTransport = transport;
 		}
-		const extension = context?.getExtension('WEBGL_debug_renderer_info');
-		const renderer = extension ? String(context.getParameter(extension.UNMASKED_RENDERER_WEBGL)) : '';
-		const transitionQualification = this._admitTransitionQualification(asset.transitionQualification, renderer);
 		return {
 			package: this._package,
 			transport,
 			sceneOrdinal: ordinal,
-			maximumGpuBytes: transitionQualification?.maximumBytes ?? 24 * DISTANT_SUN_SHARED_CACHE_PACKET_BYTES,
-			transitionQualification,
 			solarInterpolation: asset.solarInterpolation,
 			scatteringAccuracy: asset.scatteringAccuracy,
 		};

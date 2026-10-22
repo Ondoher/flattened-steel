@@ -7,13 +7,14 @@ import {ModeController} from './ModeController.js';
 import {PointerLookController} from './PointerLookController.js';
 import {SphericalDistantMode} from './SphericalDistantMode.js';
 import SharedDistantCacheAssets from './SharedDistantCacheAssets.js';
+import {Flat32SceneControls} from './Flat32SceneControls.js';
+import DistanceMath from '../algorithm32/math/DistanceMath.js';
 import {createDistantSunSceneState} from './DistantSunSceneState.js';
 import {ThreeSceneRuntime} from './ThreeSceneRuntime.js';
 import {resolveFlat32ProductionSelections} from './Flat32ProductionSelections.js';
 import {DEFAULT_NATIVE_PRODUCTION_PROFILE} from '../algorithm32/profiles/native-15/native-15-profile.js';
 import {
 	FLAT32_DELAYED_SCENE_REFRESH_MILLISECONDS,
-	ATMOSPHERE_OBSERVER_HEIGHT,
 	ATMOSPHERE_OBSERVER_UP_DIRECTION,
 	ATMOSPHERE_SCENE_SCALE,
 	ATMOSPHERE_SOURCE_ANGULAR_RADIUS,
@@ -53,7 +54,7 @@ export class Flat32Application {
 		this._scotopicLuminanceWeights = configuration.scotopicLuminanceWeights;
 		this._cameraDirectionScene = configuration.cameraDirectionScene ?? null;
 		this._performanceCallback = configuration.performanceCallback;
-		this._atmosphereShaderEnabled = configuration.atmosphereShaderEnabled !== false;
+		this._initialSceneControls = Flat32SceneControls.resolve(configuration);
 		this._resolveDistantSunSceneCacheAsset =
 			configuration.resolveDistantSunSceneCacheAsset ??
 			((solarZenithDegrees) => ({status: 'unsupported', requestedSolarZenithDegrees: solarZenithDegrees}));
@@ -128,6 +129,7 @@ export class Flat32Application {
 
 		this._commitState(
 			{
+				...this._state,
 				...locationTimeState,
 				modeKind,
 			},
@@ -223,7 +225,7 @@ export class Flat32Application {
 	_createSphericalDistantSceneState(state) {
 		return createDistantSunSceneState({
 			observation: state.observation,
-			observerHeight: ATMOSPHERE_OBSERVER_HEIGHT,
+			observerHeight: state.observerHeight ?? this._initialSceneControls.observerHeight,
 			observerUpDirection: ATMOSPHERE_OBSERVER_UP_DIRECTION,
 		});
 	}
@@ -293,6 +295,7 @@ export class Flat32Application {
 	 */
 	_createFlatLocalMode(state) {
 		return new FlatLocalMode({
+			observerHeight: state.observerHeight ?? this._initialSceneControls.observerHeight,
 			localSunCachePolicy: this._localSunCachePolicy,
 			sceneScale: ATMOSPHERE_SCENE_SCALE,
 			observation: state.observation,
@@ -318,7 +321,7 @@ export class Flat32Application {
 		try {
 			const atmosphereSummary = await this._modeController.switchTo(state.modeKind, state);
 			if (atmosphereSummary !== null && !this._disposed) {
-				this._publishedState = state;
+				this._publishedState = {...state, skyRenderMode: this._state?.skyRenderMode ?? state.skyRenderMode};
 				this._renderControls();
 				const solarZenithDegrees =
 					state.modeKind === 'spherical-distant'
@@ -357,9 +360,23 @@ export class Flat32Application {
 
 	/** Toggle only final Algorithm32 composition, retaining the lit Three scene. */
 	_toggleAtmosphereShader() {
-		this._atmosphereShaderEnabled = !this._atmosphereShaderEnabled;
-		this._modeController?.setAtmosphereEnabled(this._atmosphereShaderEnabled);
-		this._view.showAtmosphereShaderState(this._atmosphereShaderEnabled);
+		if (!this._state) return;
+		const skyRenderMode = this._state.skyRenderMode === 'shader-off' ? 'full' : 'shader-off';
+		this._state = {...this._state, skyRenderMode};
+		if (this._publishedState) this._publishedState = {...this._publishedState, skyRenderMode};
+		this._modeController?.setSkyRenderMode(skyRenderMode);
+		this._view.showAtmosphereShaderState(skyRenderMode !== 'shader-off');
+	}
+
+	/** Called by geometry preparation and rollback to place the camera at the geometry-owned height.
+	 * The adapters map scene Y above ground, so the observer offset is applied exactly once.
+	 * @param {Flat32Mode} mode - Candidate or last accepted physical mode.
+	 * @returns {void} - Position updated without changing yaw, pitch or endpoint anchoring.
+	 */
+	_applyObserverHeight(mode) {
+		if (!this._sceneRuntime) return;
+		this._sceneRuntime.camera.position.y = DistanceMath.toMeters(mode.observerHeight) / mode.sceneScale.value;
+		this._sceneRuntime.camera.updateMatrixWorld(true);
 	}
 
 	/**
@@ -398,9 +415,10 @@ export class Flat32Application {
 		);
 		this._view.installModeControl(() => this._switchMode());
 		this._view.installAtmosphereControl(() => this._toggleAtmosphereShader());
-		this._view.showAtmosphereShaderState(this._atmosphereShaderEnabled);
+		this._view.showAtmosphereShaderState(this._initialSceneControls.skyRenderMode !== 'shader-off');
 		const initialLocationTimeState = this._locationTimeController.start();
 		this._state = {
+			...this._initialSceneControls,
 			...this._locationTimeController.selectTime(initialLocationTimeState, this._initialFlatTimeIndex),
 			modeKind: this._initialModeKind,
 		};
@@ -431,10 +449,11 @@ export class Flat32Application {
 					? this._createSphericalDistantMode(this._createSphericalDistantSceneState(this._state), undefined)
 					: this._createFlatLocalMode(this._state);
 
+			this._applyObserverHeight(initialSceneMode);
 			this._endpointScene.applyMode(this._state.modeKind, initialSceneMode.geometry);
 			initialSceneMode.dispose();
 			this._modeController = new ModeController({
-				atmosphereEnabled: this._atmosphereShaderEnabled,
+				skyRenderMode: this._state.skyRenderMode,
 				sceneRuntime: this._sceneRuntime,
 				endpointScene: this._endpointScene,
 				/** Stage candidate geometry before publication; the controller restores the previous mode on failure.
@@ -442,6 +461,7 @@ export class Flat32Application {
 				 * @param {Flat32Mode} mode - Candidate mode borrowing application state.
 				 */
 				onPreparing: (kind, mode) => {
+					this._applyObserverHeight(mode);
 					this._endpointScene?.applyMode(kind, mode.geometry);
 					this._sceneSummary = this._endpointScene?.describe() ?? null;
 				},
@@ -450,6 +470,7 @@ export class Flat32Application {
 				 * @param {Flat32Mode} mode - Previously accepted mode.
 				 */
 				onReverted: (kind, mode) => {
+					this._applyObserverHeight(mode);
 					this._endpointScene?.applyMode(kind, mode.geometry);
 					if (kind === 'spherical-distant') {
 						const distantMode = /** @type {SphericalDistantMode} */ (mode);

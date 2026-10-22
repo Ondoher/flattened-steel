@@ -79,36 +79,33 @@ function shared(degrees) {
 }
 
 describe('DistantSunSceneCacheResolver', () => {
-	it('permits the larger allocation from qualified evidence on the measured renderer and browser', async () => {
+	it('selects shared caches without imposing browser, device or transition-byte qualification', async () => {
 		const asset = shared(90).asset;
-		asset.transitionQualification = {
-			evidenceId: 'sha256:4544d8f0f881d9f32208adab945858b614cef22ee80b2ded0eb078ec4f2e5dce',
-			targetId: 'NVIDIA GeForce RTX 2060 / Chrome 153 / ANGLE D3D11',
-			maximumBytes: 859963392,
-		};
 		const owner = new SharedDistantCacheAssets();
 		owner._package = {};
 		owner._identity = asset.report.sha256;
 		const previousTransport = DistantSunSharedCacheTransport.current;
 		DistantSunSharedCacheTransport.current = {};
 		try {
-			const agent = spyOnProperty(navigator, 'userAgent', 'get').and.returnValue('Chrome/153.0.0.0');
-			let renderer = 'ANGLE (NVIDIA, NVIDIA GeForce RTX 2060 (0x00001F15) Direct3D11 vs_5_0 ps_5_0, D3D11)';
-			const context = {getExtension: () => ({UNMASKED_RENDERER_WEBGL: 1}), getParameter: () => renderer};
+			const context = {getExtension: jasmine.createSpy('getExtension').and.throwError('No renderer fingerprint')};
 			const signal = new AbortController().signal;
-			expect((await owner.select(asset, 90, signal, context)).maximumGpuBytes).toBe(859963392);
-			asset.packageSetIdentity = 'c'.repeat(64);
-			expect((await owner.select(asset, 90, signal, context)).maximumGpuBytes).toBe(859963392);
-			asset.transitionQualification.evidenceId = 'unqualified';
-			expect((await owner.select(asset, 90, signal, context)).maximumGpuBytes).toBe(429981696);
-			asset.transitionQualification.evidenceId =
-				'sha256:4544d8f0f881d9f32208adab945858b614cef22ee80b2ded0eb078ec4f2e5dce';
-			agent.and.returnValue('Chrome/154.0.0.0');
-			expect((await owner.select(asset, 90, signal, context)).maximumGpuBytes).toBe(429981696);
-			agent.and.returnValue('Chrome/153.0.0.0');
-			renderer = renderer.replace('RTX 2060', 'RTX 3060');
-			expect((await owner.select(asset, 90, signal, context)).maximumGpuBytes).toBe(429981696);
-			expect((await owner.select(asset, null, signal)).transitionQualification).toBeUndefined();
+			for (const qualification of [
+				undefined,
+				{
+					evidenceId: 'historical-proof',
+					targetId: 'a different GPU and browser',
+					maximumBytes: 429981696,
+				},
+			]) {
+				asset.transitionQualification = qualification;
+				const selection = await owner.select(asset, 90, signal, context);
+				expect(selection.sceneOrdinal).toBe(90);
+				expect(selection.transport).toBe(DistantSunSharedCacheTransport.current);
+				expect(selection.maximumGpuBytes).toBeUndefined();
+				expect(selection.transitionQualification).toBeUndefined();
+			}
+			expect(context.getExtension).not.toHaveBeenCalled();
+			expect((await owner.select(asset, null, signal)).sceneOrdinal).toBeNull();
 		} finally {
 			owner.dispose();
 			DistantSunSharedCacheTransport.current = previousTransport;

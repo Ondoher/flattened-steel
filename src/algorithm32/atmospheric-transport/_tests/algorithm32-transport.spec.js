@@ -2,6 +2,17 @@ import {DEFAULT_NATIVE_NUMERICAL_PROFILE} from '../../profiles/native-15/native-
 import {Algorithm32Transport} from '../Algorithm32Transport.js';
 
 describe('Algorithm32Transport', /** Called by Jasmine to register the named test suite. */ () => {
+	it('keeps view suppression separate from physical medium and celestial composition', () => {
+		const contribution = new Algorithm32Transport().createShaderContribution(createRequest({}, {}));
+		expect(contribution.uniforms).toContain(
+			jasmine.objectContaining({valueKey: 'presentation.atmosphericViewEnabled', defaultValue: true}),
+		);
+		const hook = contribution.mainHooks.find((block) => block.id === 'transport-main-evaluate').code;
+		expect(hook).toContain('if (uAtmosphericViewEnabled)');
+		expect(hook).toContain('state.pathRadiance = zeroSpectral();');
+		expect(hook).toContain('state.transmittance = oneSpectral();');
+		expect(contribution.provides).toContain('composition.composeSpectralRadiance');
+	});
 	it('owns one source- and geometry-neutral cumulative-cache transport', /** Called by Jasmine to exercise the named behavior. */ () => {
 		const contribution = new Algorithm32Transport().createShaderContribution(createRequest());
 		const code = shaderCode(contribution);
@@ -122,7 +133,9 @@ describe('Algorithm32Transport', /** Called by Jasmine to register the named tes
 		);
 		const code = shaderCode(contribution);
 
-		expect(contribution.uniforms[0].defaultValue).toBe(30);
+		expect(
+			contribution.uniforms.find((uniform) => uniform.valueKey === 'transport.pathIntervalCount').defaultValue,
+		).toBe(30);
 		expect(code).toContain('clamp(fraction * fraction, 0.0, 1.0)');
 		expect(code).toContain('0.5 * (startDistanceMeters + endDistanceMeters)');
 		expect(code).toContain('intervalIndex < uTransportPathIntervalCount');
@@ -147,18 +160,22 @@ describe('Algorithm32Transport', /** Called by Jasmine to register the named tes
 			}),
 		);
 
-		expect(configured.uniforms).toEqual([
-			{
-				name: 'uTransportPathIntervalCount',
-				type: 'int',
-				valueKey: 'transport.pathIntervalCount',
-				defaultValue: 12,
-			},
-		]);
+		expect(configured.uniforms).toEqual(
+			jasmine.arrayContaining([
+				{
+					name: 'uTransportPathIntervalCount',
+					type: 'int',
+					valueKey: 'transport.pathIntervalCount',
+					defaultValue: 12,
+				},
+			]),
+		);
 		expect(shaderCode(configured)).toContain('pointIndex <= uTransportPathIntervalCount');
 		expect(shaderCode(configured)).not.toContain('const int TRANSPORT_PATH_INTERVAL_COUNT');
 		expect(shaderCode(configured)).not.toContain('float pathSampleFraction');
-		expect(defaulted.uniforms[0].defaultValue).toBe(DEFAULT_NATIVE_NUMERICAL_PROFILE.viewPath.intervalCount);
+		expect(
+			defaulted.uniforms.find((uniform) => uniform.valueKey === 'transport.pathIntervalCount').defaultValue,
+		).toBe(DEFAULT_NATIVE_NUMERICAL_PROFILE.viewPath.intervalCount);
 	});
 });
 

@@ -6,6 +6,9 @@ Stage 11.1-11.3 and parts of 11.4-11.6 are implemented. Remaining interaction/mi
 
 ## Working Documents
 
+- [Shared-cache transition allocation](shared-cache-transition-status.md) — Remove policy-only transition failures while retaining real GPU failure handling.
+- [Controls execution and M1 evidence](sky-scene-controls-execution.md) — Runtime/height foundations, actual GPU comparisons and the local display-visibility limitation; later UI milestones await selection.
+- [Flat32 sky, scene and elevation controls plan](sky-scene-controls-plan.md) — Planning only: atmosphere-free celestial rendering, review-object visibility and observer-height presets; video scenes deferred.
 - [Algorithm32 Cache Interface Design](cache-design.md)
 - [`flat32` Stage 11 Migration Inventory](flat32-migration-inventory.md)
 - [Algorithm32 Production Implementation Plan](production-implementation-plan.md)

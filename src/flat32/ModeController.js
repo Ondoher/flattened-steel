@@ -1,4 +1,5 @@
 import {Algorithm32Runtime} from './Algorithm32Runtime.js';
+import {Flat32SceneControls} from './Flat32SceneControls.js';
 
 /** Own supported-mode preparation, atomic publication, and rollback. */
 export class ModeController {
@@ -17,7 +18,12 @@ export class ModeController {
 		this._onFailure = configuration.onFailure;
 		this._onPublished = configuration.onPublished;
 		this._sceneRuntime = configuration.sceneRuntime;
-		this._atmosphereEnabled = configuration.atmosphereEnabled !== false;
+		this._skyRenderMode = Flat32SceneControls.resolve({
+			skyRenderMode: configuration.skyRenderMode,
+			atmosphereShaderEnabled: configuration.atmosphereEnabled,
+		}).skyRenderMode;
+		this._sceneObserverHeight = null;
+		this._currentObserverHeight = null;
 		/** @type {Flat32AlgorithmRuntimeCapability | null} */
 		this._activeRuntime = null;
 		this._generation = 0;
@@ -62,6 +68,7 @@ export class ModeController {
 		if (sceneChanged && this._currentKind !== null && this._activeMode !== null) {
 			this._onReverted?.(this._currentKind, this._activeMode);
 			this._sceneKind = this._currentKind;
+			this._sceneObserverHeight = this._currentObserverHeight;
 		}
 		if (this._activeRuntime !== null) {
 			this._activeRuntime.publish();
@@ -93,8 +100,10 @@ export class ModeController {
 		/** @type {Flat32AlgorithmRuntimeCapability | null} */
 		let candidate = null;
 		let sceneChanged = false;
+		const observerHeight = Flat32SceneControls.resolve(state).observerHeight.value;
 		const configurationIdentity = JSON.stringify({
 			...state,
+			skyRenderMode: undefined,
 			observation: undefined,
 			locationIndex: undefined,
 			flatTimeIndex: undefined,
@@ -127,10 +136,11 @@ export class ModeController {
 				mode.dispose();
 				return null;
 			}
-			sceneChanged = kind !== this._sceneKind;
+			sceneChanged = kind !== this._sceneKind || observerHeight !== this._sceneObserverHeight;
 			if (sceneChanged) {
 				this._onPreparing?.(kind, mode);
 				this._sceneKind = kind;
+				this._sceneObserverHeight = observerHeight;
 			}
 			composer = this._sceneRuntime.createAtmosphereComposer();
 			candidate = this._createRuntime({
@@ -141,20 +151,21 @@ export class ModeController {
 				composer: composer.composer,
 				composerRenderTarget: composer.renderTarget,
 				deferPublication: true,
-				atmosphereEnabled: this._atmosphereEnabled,
+				skyRenderMode: this._skyRenderMode,
 			});
 			const summary = await candidate.setup();
 			if (this._disposed || generation !== this._generation) {
 				candidate.dispose({restoreRendering: false});
 				return null;
 			}
-			candidate.setAtmosphereEnabled(this._atmosphereEnabled);
+			candidate.setSkyRenderMode(this._skyRenderMode);
 			candidate.publish();
 			this._onPublished?.(kind, mode, state);
 			const replaced = this._activeRuntime;
 
 			this._activeRuntime = candidate;
 			this._currentKind = kind;
+			this._currentObserverHeight = observerHeight;
 			this._activeMode = mode;
 			this._activeConfigurationIdentity = configurationIdentity;
 			replaced?.dispose({restoreRendering: false});
@@ -191,11 +202,19 @@ export class ModeController {
 	 * @returns {void} - Selection forwarded to the installed runtime.
 	 */
 	setAtmosphereEnabled(enabled) {
-		if (typeof enabled !== 'boolean') {
-			throw new TypeError('Flat32 atmosphere enabled state must be boolean.');
-		}
-		this._atmosphereEnabled = enabled;
-		this._activeRuntime?.setAtmosphereEnabled(enabled);
+		if (typeof enabled !== 'boolean') throw new TypeError('Flat32 atmosphere enabled state must be boolean.');
+		this.setSkyRenderMode(Flat32SceneControls.resolve({atmosphereShaderEnabled: enabled}).skyRenderMode);
+	}
+
+	/** Call this method to forward one canonical view mode without replacing the physical runtime.
+	 * Unsupported modes throw before updating the selection; renderer failures propagate.
+	 * @param {Flat32SkyRenderMode} mode - Selected sky composition.
+	 * @returns {void} - Current and pending runtime publication use this selection.
+	 */
+	setSkyRenderMode(mode) {
+		if (typeof mode !== 'string') throw new TypeError('Flat32 sky render mode must be explicit.');
+		this._skyRenderMode = Flat32SceneControls.resolve({skyRenderMode: mode}).skyRenderMode;
+		this._activeRuntime?.setSkyRenderMode(this._skyRenderMode);
 	}
 
 	/** Call this method to cancel pending preparation and release the installed runtime and mode.

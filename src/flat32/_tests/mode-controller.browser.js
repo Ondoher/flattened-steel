@@ -42,9 +42,9 @@ function createRuntime(name, events, setupFailure = null) {
 			if (disposed) throw new Error(`${name} published after disposal.`);
 			events.push(`${name}:published`);
 		},
-		setAtmosphereEnabled(enabled) {
+		setSkyRenderMode(mode) {
 			if (disposed) throw new Error(`${name} selected after disposal.`);
-			events.push(`${name}:atmosphere:${enabled}`);
+			events.push(`${name}:atmosphere:${mode}`);
 		},
 		dispose({restoreRendering = true} = {}) {
 			if (disposed) return;
@@ -55,6 +55,47 @@ function createRuntime(name, events, setupFailure = null) {
 }
 
 describe('Flat32 mode transaction', () => {
+	it('stages a same-kind height change and restores the complete prior geometry on setup failure', async () => {
+		const events = [];
+		let height = 5;
+		const controller = new ModeController({
+			createMode: (_kind, state) => ({
+				...createMode(`height-${state.observerHeight.value}`, events),
+				observerHeight: state.observerHeight,
+			}),
+			createRuntime: ({mode}) =>
+				createRuntime(
+					mode.name,
+					events,
+					mode.observerHeight.value === 2000 ? new Error('height preparation failed') : null,
+				),
+			endpointScene: {},
+			onFailure() {},
+			onPublished() {},
+			onPreparing: (_kind, mode) => {
+				height = mode.observerHeight.value;
+			},
+			onReverted: (_kind, mode) => {
+				height = mode.observerHeight.value;
+			},
+			sceneRuntime: {
+				createAtmosphereComposer: () => createComposer('height', events),
+				restoreDirectRendering() {},
+			},
+		});
+		try {
+			for (const value of [5, 500]) {
+				await controller.switchTo('spherical-distant', {observerHeight: {value, units: 'meters'}});
+				expect(height).toBe(value);
+			}
+			await expectAsync(
+				controller.switchTo('spherical-distant', {observerHeight: {value: 2000, units: 'meters'}}),
+			).toBeRejectedWithError('height preparation failed');
+			expect(height).toBe(500);
+		} finally {
+			controller.dispose();
+		}
+	});
 	it('routes admitted flat-local observation changes through the installed runtime', async () => {
 		const events = [],
 			mode = createMode('compact', events),
@@ -155,8 +196,8 @@ describe('Flat32 mode transaction', () => {
 				createMode(kind) {
 					return createMode(kind, events);
 				},
-				createRuntime({mode, atmosphereEnabled}) {
-					events.push(`${mode.name}:constructed:${atmosphereEnabled}`);
+				createRuntime({mode, skyRenderMode}) {
+					events.push(`${mode.name}:constructed:${skyRenderMode}`);
 					return createRuntime(mode.name, events);
 				},
 				onPreparing() {},
@@ -173,12 +214,14 @@ describe('Flat32 mode transaction', () => {
 
 		await controller.switchTo('spherical-distant', /** @type {Flat32ApplicationState} */ ({}));
 		controller.setAtmosphereEnabled(false);
+		expect(() => controller.setAtmosphereEnabled(undefined)).toThrowError(TypeError);
+		expect(() => controller.setSkyRenderMode(undefined)).toThrowError(TypeError);
 		await controller.switchTo('flat-local', /** @type {Flat32ApplicationState} */ ({}));
 
-		expect(events).toContain('spherical-distant:constructed:true');
-		expect(events).toContain('spherical-distant:atmosphere:false');
-		expect(events).toContain('flat-local:constructed:false');
-		expect(events).toContain('flat-local:atmosphere:false');
+		expect(events).toContain('spherical-distant:constructed:full');
+		expect(events).toContain('spherical-distant:atmosphere:shader-off');
+		expect(events).toContain('flat-local:constructed:shader-off');
+		expect(events).toContain('flat-local:atmosphere:shader-off');
 		controller.dispose();
 	});
 

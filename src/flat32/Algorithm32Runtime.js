@@ -7,6 +7,8 @@ import {resolveLocalSunFrameView} from './local-sun-frame-view.js';
 import {SceneMath} from '../algorithm32/math/index.js';
 import {SphericalDistantMode} from './SphericalDistantMode.js';
 import DistantSunSharedCache from '../algorithm32/implementation/distant-sun/cache/DistantSunSharedCache.js';
+import {Flat32SceneControls} from './Flat32SceneControls.js';
+import {ATMOSPHERIC_VIEW_ENABLED_VALUE_KEY} from '../algorithm32/atmospheric-transport/consts.js';
 
 /**
  * Transactional production Algorithm32 attachment for Flat32.
@@ -49,8 +51,11 @@ export class Algorithm32Runtime {
 		this._preparedRenderTarget = configuration.composerRenderTarget ?? null;
 		/** Publication policy controlled by the surrounding mode transaction. */
 		this._deferPublication = configuration.deferPublication === true;
-		/** Current choice between composed atmosphere and direct scene rendering. */
-		this._atmosphereEnabled = configuration.atmosphereEnabled !== false;
+		/** Canonical sky composition, including the atmosphere-free celestial path. */
+		this._skyRenderMode = Flat32SceneControls.resolve({
+			skyRenderMode: configuration.skyRenderMode,
+			atmosphereShaderEnabled: configuration.atmosphereEnabled,
+		}).skyRenderMode;
 		/** Optional consumer of existing per-pass GPU timer observations. */
 		this._performanceCallback = configuration.performanceCallback;
 		/** Disposal ownership of an externally staged composer transferred into this runtime. */
@@ -493,7 +498,7 @@ export class Algorithm32Runtime {
 	 * @returns {void} - Selected rendering operation installed.
 	 */
 	_publishSelectedRenderOperation() {
-		if (this._atmosphereEnabled) {
+		if (this._skyRenderMode !== 'shader-off') {
 			this._sceneRuntime.installRenderOperation(
 				this._localFrameController ? () => this._renderLocalFrame() : this._renderAtmosphereFrame,
 			);
@@ -556,6 +561,7 @@ export class Algorithm32Runtime {
 		this._cacheBackend = backend;
 		const preparer = new LocalSunFramePreparer({
 			...mode.createLocalFramePreparerConfiguration(this._sceneRuntime, this._endpointScene, sceneDepthMax),
+			getSkyRenderMode: () => this._skyRenderMode,
 			performanceCallback: this._performanceCallback,
 		});
 		this._localFrameController = new LocalSunFrameController({
@@ -628,6 +634,7 @@ export class Algorithm32Runtime {
 			throw new Error('Flat32 Algorithm32 bindings are unavailable.');
 		}
 
+		this._bindingValues[ATMOSPHERIC_VIEW_ENABLED_VALUE_KEY] = this._skyRenderMode === 'full';
 		Algorithm32Bindings.update({
 			bindingValues: this._bindingValues,
 			camera: this._sceneRuntime.camera,
@@ -1040,11 +1047,20 @@ export class Algorithm32Runtime {
 	 * @returns {void} - Selection applied to the current published runtime.
 	 */
 	setAtmosphereEnabled(enabled) {
+		if (typeof enabled !== 'boolean') throw new TypeError('Flat32 atmosphere enabled state must be boolean.');
+		this.setSkyRenderMode(Flat32SceneControls.resolve({atmosphereShaderEnabled: enabled}).skyRenderMode);
+	}
+
+	/** Call this method to select view composition while retaining physical lighting and cache resources.
+	 * Disposed owners, unsupported modes or renderer installation failures throw; retain the accepted selection.
+	 *
+	 * @param {Flat32SkyRenderMode} mode - Complete canonical presentation selection.
+	 * @returns {void} - The installed render operation follows the selection.
+	 */
+	setSkyRenderMode(mode) {
 		this._assertUsable();
-		if (typeof enabled !== 'boolean') {
-			throw new TypeError('Flat32 atmosphere enabled state must be boolean.');
-		}
-		this._atmosphereEnabled = enabled;
+		if (typeof mode !== 'string') throw new TypeError('Flat32 sky render mode must be explicit.');
+		this._skyRenderMode = Flat32SceneControls.resolve({skyRenderMode: mode}).skyRenderMode;
 		if (this._published && this._installed) this._publishSelectedRenderOperation();
 	}
 

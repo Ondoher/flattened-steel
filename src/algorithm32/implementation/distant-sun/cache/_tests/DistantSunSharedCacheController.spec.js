@@ -21,9 +21,11 @@ describe('Shared-cache residency and publication', () => {
 	});
 
 	it('preserves the focused mapping through publication, darkness and restoration', /** Called by Jasmine to exercise candidate lifecycle with the existing resource owner. */ async () => {
-		fixture = createFixture(true, true, true, 'corrected60-sun035');
+		fixture = createFixture(false, true, true, 'corrected60-sun035');
 		expect(await fixture.controller.requestScene(0)).toBeTrue();
 		expect(fixture.controller.publishFrame().scatteringAccuracy).toBe('corrected60-sun035');
+		expect(await fixture.controller.requestScene(60)).toBeTrue();
+		expect(fixture.controller.publishFrame().snapshot.sceneOrdinal).toBe(60);
 		expect(await fixture.controller.requestScene(null)).toBeTrue();
 		expect(fixture.controller.publishFrame().scatteringAccuracy).toBe('corrected60-sun035');
 		expect(fixture.controller.publishFrame().snapshot.status).toBe('dark');
@@ -55,7 +57,7 @@ describe('Shared-cache residency and publication', () => {
 	});
 
 	it('supersedes an isolated preparation without ever allocating a third atlas', /** Called by Jasmine to prove peak residency and last-good publication across cancellation. */ async () => {
-		fixture = createFixture(true);
+		fixture = createFixture();
 		await fixture.controller.requestScene(0);
 		const first = fixture.controller.publishFrame();
 		fixture.defer = true;
@@ -139,15 +141,39 @@ describe('Shared-cache residency and publication', () => {
 		expect(fixture.activePins).toBe(18);
 	});
 
-	it('holds every published slot when a distant jump exceeds the admitted transition memory', async () => {
+	it('publishes distant jumps without transition qualification or an increased historical allowance', async () => {
 		fixture = createFixture();
 		await fixture.controller.requestScene(0);
 		const first = fixture.controller.publishFrame();
+		expect(await fixture.controller.requestScene(60)).toBeTrue();
+		expect(fixture.backend.liveArrays).toBe(2);
+		expect(fixture.controller.diagnostics().gpuBytes).toBe(48 * DISTANT_SUN_SHARED_CACHE_PACKET_BYTES);
+		expect(fixture.controller.diagnostics().lastError).toBe('');
+		expect(fixture.controller.publishFrame().snapshot.sceneOrdinal).toBe(60);
+		expect(fixture.backend.liveArrays).toBe(1);
+		expect(fixture.activePins).toBe(18);
+		expect(await fixture.controller.requestScene(0)).toBeTrue();
+		expect(fixture.controller.publishFrame().snapshot.sceneOrdinal).toBe(first.snapshot.sceneOrdinal);
+		expect(fixture.backend.liveArrays).toBe(1);
+		expect(fixture.controller.diagnostics().failures).toBe(0);
+	});
+
+	it('preserves the displayed scene and reports an actual GPU transition allocation failure', async () => {
+		fixture = createFixture();
+		await fixture.controller.requestScene(0);
+		const first = fixture.controller.publishFrame();
+		fixture.backend.failAtAllocation = 2;
 		expect(await fixture.controller.requestScene(60)).toBeFalse();
 		expect(fixture.controller.publishFrame()).toBe(first);
 		expect(fixture.backend.uploads).toBe(18);
 		expect(fixture.activePins).toBe(18);
-		expect(fixture.controller.diagnostics().lastError).toContain('transition budget');
+		expect(fixture.backend.liveArrays).toBe(1);
+		expect(fixture.controller.diagnostics().lastError).toBe('GPU allocation failed');
+		fixture.backend.failAtAllocation = Infinity;
+		expect(await fixture.controller.requestScene(60)).toBeTrue();
+		expect(fixture.controller.publishFrame().snapshot.sceneOrdinal).toBe(60);
+		expect(fixture.backend.liveArrays).toBe(1);
+		expect(fixture.controller.diagnostics().lastError).toBe('');
 	});
 
 	it('prioritizes visible and requested blocks, then deterministically evicts obsolete layers for prediction', async () => {
@@ -171,8 +197,8 @@ describe('Shared-cache residency and publication', () => {
 		expect(fixture.backend.uploads).toBe(30);
 	});
 
-	it('prepares a qualified isolated jump and releases the prior atlas only after complete publication', async () => {
-		fixture = createFixture(true);
+	it('prepares an isolated jump and releases the prior atlas only after complete publication', async () => {
+		fixture = createFixture();
 		await fixture.controller.requestScene(0);
 		const first = fixture.controller.publishFrame();
 		await fixture.controller.requestScene(60);
@@ -187,7 +213,7 @@ describe('Shared-cache residency and publication', () => {
 	});
 
 	it('preserves last-good pins and metadata after a failed isolated upload', async () => {
-		fixture = createFixture(true);
+		fixture = createFixture();
 		await fixture.controller.requestScene(0);
 		const first = fixture.controller.publishFrame();
 		fixture.backend.failAtUpload = 22;
@@ -196,6 +222,7 @@ describe('Shared-cache residency and publication', () => {
 		expect(fixture.activePins).toBe(18);
 		expect(fixture.backend.liveArrays).toBe(1);
 		expect(fixture.backend.liveMetadata).toBe(2);
+		expect(fixture.controller.diagnostics().lastError).toContain('upload');
 	});
 
 	it('rejects stale completion after darkness and never allocates textures for an initial dark state', async () => {
@@ -258,7 +285,7 @@ describe('Shared-cache residency and publication', () => {
 		expect(fixture.backend.liveMetadata).toBe(0);
 	});
 
-	it('rejects unqualified larger or transition allocations before allocating GPU storage', () => {
+	it('keeps larger-route layout qualification separate from runtime transition allocation', () => {
 		fixture = createFixture();
 		expect(
 			() =>
@@ -268,13 +295,10 @@ describe('Shared-cache residency and publication', () => {
 					maximumGpuBytes: 62 * DISTANT_SUN_SHARED_CACHE_PACKET_BYTES,
 				}),
 		).toThrowError(/qualification/u);
-		expect(
-			() =>
-				new DistantSunSharedCacheController({
-					...fixture.definition,
-					maximumGpuBytes: 48 * DISTANT_SUN_SHARED_CACHE_PACKET_BYTES,
-				}),
-		).toThrowError(/qualification/u);
+		for (const maximumGpuBytes of [undefined, 0, 48 * DISTANT_SUN_SHARED_CACHE_PACKET_BYTES]) {
+			const controller = new DistantSunSharedCacheController({...fixture.definition, maximumGpuBytes});
+			controller.dispose();
+		}
 		expect(fixture.backend.liveArrays).toBe(0);
 	});
 
@@ -400,7 +424,11 @@ function createFixture(transition = false, sliding = false, cubic = false, scatt
 		liveMetadata: 0,
 		uploads: 0,
 		failAtUpload: Infinity,
+		failAtAllocation: Infinity,
+		allocations: 0,
 		allocatePersistentArray: (request) => {
+			backend.allocations += 1;
+			if (backend.allocations === backend.failAtAllocation) throw new Error('GPU allocation failed');
 			backend.liveArrays += 1;
 			backend.maximumLiveArrays = Math.max(backend.maximumLiveArrays, backend.liveArrays);
 			const handle = {
