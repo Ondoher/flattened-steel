@@ -223,3 +223,13 @@ tracks; pre-cache geometry/unit/source witnesses; a separation rule and limits
 on held-out independence; pilot-only mandatory legacy control with value/cost
 gates for expansion; and corrected scaffold-contract linking/prose spacing.
 No recommendation was rejected. No additional review is required by this record.
+
+## Execution disposition
+
+The authorized pilot/confirmation campaign produced a sealed conditional three-way
+comparison and explicit numerical/input sensitivity. The [results](results.md)
+own the final report; [status](status.md) owns the resumption boundary. The
+absolute observational-accuracy gate remains unmet, so no certified accuracy or
+production-admission claim is made. Original gates and held-out selection were
+preserved. No further numerical expansion, deployment or lifecycle closure is
+implied by this disposition.

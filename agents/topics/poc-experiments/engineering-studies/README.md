@@ -2,8 +2,9 @@
 
 Focus: Measured alternatives and retained or rejected mechanisms.
 
-[ARM Spectral Validation](arm-spectral-validation/README.md) is selected for setup
-and planning. [Sky Inter-Order Altitude Reconstruction](sky-altitude-reconstruction/results.md)
+[ARM Spectral Validation](arm-spectral-validation/results.md) remains selected
+after its first conditional comparison; absolute accuracy is inconclusive.
+[Sky Inter-Order Altitude Reconstruction](sky-altitude-reconstruction/results.md)
 ended unsuccessfully. [Sky Cache Angular Quadrature](sky-angular-quadrature/README.md)
 ended with its standalone candidate rejected; its evidence remains preserved.
 [Sky Accuracy Dials](sky-accuracy-dials/status.md#experiment-lifecycle) remains

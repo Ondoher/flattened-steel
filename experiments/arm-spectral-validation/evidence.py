@@ -84,13 +84,19 @@ class Run:
             stream.write("\n")
 
     def __exit__(self, kind, value, traceback):
-        self.stop.set()
-        self.thread.join()
         state = "accepted" if kind is None else ("interrupted" if kind is KeyboardInterrupt else "failed")
         self.json("derivation.json", {"parents": self.parents, "scope": self.scope})
-        self.event("terminal", self.scope, state=state)
+        # Keep progress alive during potentially large cache/bundle hashing. Close
+        # the journal last so its final hash cannot race an append.
         artifacts = [{"path": path.relative_to(self.path).as_posix(), "bytes": path.stat().st_size,
-            "sha256": digest(path)} for path in sorted(self.path.rglob("*")) if path.is_file()]
+            "sha256": digest(path)} for path in sorted(self.path.rglob("*"))
+            if path.is_file() and path != self.path / "progress.jsonl"]
+        self.stop.set()
+        self.thread.join()
+        self.event("terminal", self.scope, state=state)
+        journal = self.path / "progress.jsonl"
+        artifacts.append({"path":"progress.jsonl", "bytes":journal.stat().st_size,"sha256":digest(journal)})
+        artifacts.sort(key=lambda artifact: artifact['path'])
         self.json("sealed.json", {"state": state, "finishedAt": utc(), "scope": self.scope, "artifacts": artifacts})
         print("Run: " + self.path.name, flush=True)
         return False

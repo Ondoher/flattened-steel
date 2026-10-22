@@ -9,17 +9,19 @@ Canonical entry: [ARM Spectral Validation](poc-experiments/engineering-studies/a
 
 ## Current boundary
 
-The owner authorized independent execution on 2026-10-21. The
-[plan](poc-experiments/engineering-studies/arm-spectral-validation/plan.md) owns
-M1-M4; the [status](poc-experiments/engineering-studies/arm-spectral-validation/status.md)
-owns the current M1 report and resumption point. Exact public metadata confirms
-22 August 2023 SGP SASZe a1 visible spectra, radiosonde and lidar files. ARM access is now supplied; the selected spectra, radiosondes and lidar
-payloads have been downloaded and decoded. M1 is screening actual quality,
-cloud coverage, calibration and the overlapping detector-saturation notice.
-No matched case or production/libRadtran score is accepted yet. Reuse retained
-runs00008-00014 and the current status; no new execution permission is needed.
-Measured spectra are the observational reference; libRadtran is mandatory.
-Zenith measurements do not establish horizon appearance.
+The owner authorized independent execution on2026-10-21. The
+[plan](poc-experiments/engineering-studies/arm-spectral-validation/plan.md)
+pilot/confirmation campaign is complete as conditional characterization. The
+[results](poc-experiments/engineering-studies/arm-spectral-validation/results.md)
+own scores, plots, sensitivity and conclusions; the
+[status](poc-experiments/engineering-studies/arm-spectral-validation/status.md)
+owns the current boundary. ARM payloads and optical inputs are retained,
+production GPU caches and matched libRadtran cases have run, and sealed evidence
+is verified. Absolute observational accuracy remains inconclusive because of
+calibration and matching limits; no production defect or superiority is established.
+No numerical process remains. Follow-on calibration/operator investigation needs
+an owner selection; existing numerical results are reusable read-only. Zenith
+measurements do not establish horizon appearance.
 
 Tracked source is `experiments/arm-spectral-validation/`; ignored output is
 `tmp/experiments/arm-spectral-validation/`. Production and other experiments

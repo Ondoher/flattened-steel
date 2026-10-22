@@ -1,15 +1,16 @@
 # ARM Spectral Validation Experiment
 
-Status: execution authorized; M1 metadata inventory retained, advancement held for ARM data access.
+Status: conditional pilot/confirmation comparison completed; absolute observational
+accuracy remains inconclusive. See [results](results.md) and [status](status.md).
 
 ## Objective
 
 Compare the production distant-Sun algorithm with recent measured ARM sky spectra using independently constrained, matched atmospheric profiles.
 
-ARM Southern Great Plains in 2023 is the first search target.22 August 2023 is an
-unqualified candidate, not a verified matched benchmark. Measured spectra are
-the observational reference; libRadtran is a required independent second
-comparison. No production defect or expected sky color is presumed.
+The first campaign uses ARM Southern Great Plains on 22 August 2023. Measured
+spectra are the observational reference; libRadtran is the independent second
+comparison. Calibration and matching limits prevent a definitive accuracy
+verdict. No production defect or expected sky color is presumed.
 
 ## Governing Documents
 
@@ -26,3 +27,12 @@ comparison. No production defect or expected sky color is presumed.
 The [production promotion status](../../../production-algorithm32/caches/sky-accuracy-promotion-status.md)
 owns the corrected implementation and its distinction from deployed legacy
 assets. Sky Accuracy Dials remains suspended; this lane does not reopen it.
+
+## First campaign
+
+The [results](results.md) contain the completed conditional ARM/production/libRadtran
+comparison and reviewable spectra. [Status](status.md) owns its interpretation and
+resumption boundary. The historical `report.py` generates the earlier pre-access
+inventory only; `comparison_report.py` owns the numerical comparison. Source
+runners retain exact parents in each new immutable run. Authenticated acquisition
+uses an interactive non-echoing prompt; never put credentials in arguments or files.

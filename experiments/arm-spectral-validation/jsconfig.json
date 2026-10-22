@@ -12,6 +12,13 @@
 		"types": ["node"],
 		"typeRoots": ["../../node_modules/@types"]
 	},
-	"include": ["**/*.d.ts", "**/*.js", "**/*.mjs"],
+	"include": [
+		"**/*.d.ts",
+		"**/*.js",
+		"**/*.mjs",
+		"../../src/algorithm32/**/*.d.ts",
+		"../../scripts/algorithm32/solar-zenith-cache/*.d.ts",
+		"../../scripts/experiments/b1-directional-sky-radiance/types.d.ts"
+	],
 	"exclude": ["../../node_modules/**", "**/node_modules/**"]
 }

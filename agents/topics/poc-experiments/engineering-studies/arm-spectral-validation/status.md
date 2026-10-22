@@ -1,8 +1,10 @@
 # ARM Spectral Validation Status
 
-State: M1 acquisition/screening complete for conditional characterization;
-M2 physical matching in progress. Independent execution remains authorized.
-No ARM-matched production or libRadtran accuracy scores exist yet.
+State: planned pilot and reserved-interval conditional characterization completed
+on2026-10-21. Absolute observational accuracy remains inconclusive. The
+[results report](results.md) owns scores, figures, numerical/input sensitivity,
+interpretation limits and follow-on recommendations. No production change or
+deployment occurred. No numerical process remains active.
 
 ## M1 report
 
@@ -56,24 +58,33 @@ The [nearby-date inventory](../../../../../tmp/experiments/arm-spectral-validati
 and frozen case preserve both levels. Level1.5 optical inputs remain conditional,
 with scenario sensitivity required; no missing value is interpreted as zero.
 
-Lidar extinction below its trustworthy overlap region, its smoothing/uncertainty,
+The physical contract retains assumptions about lidar overlap and smoothing,
 sonde time/altitude support, upper-atmosphere extension, spectral response,
-ozone/other gases and surface reflectance need explicit M2 treatment. Raw
-near-ground lidar spikes must not silently become a production aerosol profile.
+ozone/other gases and surface reflectance. Their remaining uncertainty limits
+interpretation. Raw near-ground lidar spikes were excluded from the projection.
 
-## M2 readiness and next work
+## M2-M4 report and next boundary
 
-The [libRadtran operational smoke](../../../../../tmp/experiments/arm-spectral-validation/runs/00022-solver-smoke/result.json)
-passes: the pinned installed2.0.1-MYSTIC executable produced finite positive
-zenith radiance at450/550/650 nm. The three-wavelength DISORT solve took0.123 s,
-excluding startup, input preparation and dependency hashing. This smoke uses a
-default atmosphere and is **not** an ARM or production comparison. The new
-contained runner retains executable and complete installed-data identities.
+The [physical contract](../../../../../tmp/experiments/arm-spectral-validation/runs/00025-physical-inputs/contract.json)
+freezes nine visible continuum bands, shared optical inputs, measured-constrained
+and exponential profiles, geometry, measurement operator and sensitivity scenarios.
+Both corrected and legacy-control caches were built with the actual production
+GPU compiler. Matched libRadtran full/projected cases, numerical refinements,
+input scenarios and the unchanged reserved-interval evaluation are complete.
+The absolute-accuracy gate remains unmet; results are conditional characterization,
+with uncertainty and operator limitations disclosed, rather than certification.
 
-Next: derive measured-constrained and production-representable profiles from
-atmospheric inputs alone; freeze source, phase, gases and common spectral
-operator; then judge which limited comparisons the remaining uncertainty permits.
-M3/M4 are not complete. Production and all other experiments remain read-only.
+The [comparison](../../../../../tmp/experiments/arm-spectral-validation/runs/00032-comparison/result.json)
+and [verification](../../../../../tmp/experiments/arm-spectral-validation/runs/00033-verification/result.json)
+are sealed. Corrected cache probes differ from projected libRadtran by3.15%/5.37%
+relative RMS in pilot/reserved windows. Both are much brighter than ARM. The
+results report owns the complete table and why the shared mismatch remains
+unattributed. No fitted exposure, gain, atmosphere or mask was applied.
+
+Next work, if selected by the owner: independently qualify SASZe calibration and
+the measurement operator for this epoch, then strengthen aerosol/surface/gas
+constraints. The numerical campaign does not need repeating to resume that work.
+The experiment remains selected; it has not been closed or suspended.
 
 ## Evidence and verification
 
@@ -82,6 +93,10 @@ superseded conclusions before credentials were supplied. Runs00008 onward own
 authenticated measurements, optical retrievals, quality screening and smoke.
 An accepted seal denotes operation integrity, not scientific acceptance.
 Run00005's historical JSON Lines defect remains disclosed and unmodified.
+Python AST and local TypeScript pass. Verification authenticates33 earlier runs,
+7461 artifacts and1067230155 bytes, including retained failed attempts. The native
+spectral plot was rendered and inspected. The historical00029 sealer has a349second
+heartbeat gap during hashing; the helper now keeps its heartbeat through hashing.
 No experimental unit-test suite, dedicated standards reviewer or independent
 review audit was started. Checkpoint-advisor monitoring remains active.
 
