@@ -1,7 +1,10 @@
 # ARM Spectral Validation Status
 
-State: planned pilot and reserved-interval conditional characterization completed
-on2026-10-21. Absolute observational accuracy remains inconclusive. The
+State: **suspended on 2026-10-21**, awaiting the owner's response from the AMUDIS
+researchers. The owner reports that the data-request email has been sent to
+Jens Duffert. This is a suspension, not closure; resume only after owner selection.
+The planned pilot and reserved-interval conditional characterization completed.
+Absolute observational accuracy remains inconclusive. The
 [results report](results.md) owns scores, figures, numerical/input sensitivity,
 interpretation limits and follow-on recommendations. No production change or
 deployment occurred. No numerical process remains active.
@@ -86,10 +89,49 @@ relative RMS in pilot/reserved windows. Both are much brighter than ARM. The
 results report owns the complete table and why the shared mismatch remains
 unattributed. No fitted exposure, gain, atmosphere or mask was applied.
 
-Next work, if selected by the owner: independently qualify SASZe calibration and
-the measurement operator for this epoch, then strengthen aerosol/surface/gas
-constraints. The numerical campaign does not need repeating to resume that work.
-The experiment remains selected; it has not been closed or suspended.
+## Suspension and resumption
+
+The owner's priority is measured spectral radiance across the full sky hemisphere,
+including low elevations, together with corresponding atmospheric information.
+The intended benchmark should improve on the atmospheric reconstruction used for
+the Kider/Bruneton comparison; it need not establish a fully certified atmosphere.
+Uncertainty is reported rather than made an automatic obstacle to useful comparison.
+The existing ARM zenith campaign remains useful supplemental evidence and does not
+establish whole-sky coverage.
+
+The next unconsumed task, after the owner selects resumption, is to inspect the
+AMUDIS reply and any offered files for complete clear-sky directional spectra,
+wavelengths, timestamps, angular/FOV information, quality/calibration metadata and
+coincident atmospheric profiles or aerosol optical properties. Request context:
+the [Hannover preprint](https://egusphere.copernicus.org/preprints/2025/egusphere-2025-1118/egusphere-2025-1118.pdf)
+uses January 2024 measurements and states that data/code are available on request.
+The owner requested a recent replacement or supplement for Kider measurements,
+including both sky-wide spectra and atmospheric profiles. No reply or dataset
+access has yet been confirmed. No automatic acquisition, numerical run, outreach
+or monitoring is queued.
+
+Other retained leads are [SKYSPECTRA](https://zenodo.org/records/8147546), whose
+Berlin export contains a nominal 145-patch grid with low-elevation centers at
+6 degrees and some missing directions, and the owner's downloaded
+[OpenHSI paper](../../../../../references/downloads/1-s2.0-S0038092X23004462-main.pdf).
+OpenHSI describes dense measured sky coverage but does not identify a numerical
+dataset download or a contemporaneous atmospheric profile in the paper. These
+are leads, not acquired or qualified whole-sky validation datasets.
+
+Minimal resumption reload: repository instructions, this status, the experiment
+entry, design and plan, then the owner's reply/files. Check current production
+compiler/policy identities, dataset provenance and spectral/angular/time matching
+before deriving new results. Reuse sealed ARM evidence read-only rather than
+repeating the completed campaign. SASZe calibration/operator investigation remains
+a possible separately selected follow-on, not the immediate queue.
+
+All 39 existing run directories through 00038 have seals. No unfinished run or
+owned Python, Node, Chrome, WSL or solver process was found during suspension.
+No resource termination was needed. No temporary experiment-specific standards
+entry was present to deactivate; the permanent experiment mapping and types.md
+remain. Folder resolution was checked for experiment, topic and production paths.
+There is no standards-review gate for this contained experiment and no production
+adoption or deployment is authorized. No next execution topic is selected.
 
 ## Evidence and verification
 

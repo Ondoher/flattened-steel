@@ -1,7 +1,9 @@
 # ARM Spectral Validation Experiment
 
-Status: conditional pilot/confirmation comparison completed; absolute observational
-accuracy remains inconclusive. See [results](results.md) and [status](status.md).
+Status: **suspended**, awaiting the owner's AMUDIS data-request response.
+The conditional ARM pilot/confirmation comparison is preserved; absolute
+observational accuracy remains inconclusive. See [results](results.md) and
+[status](status.md) for evidence and the resumption boundary.
 
 ## Objective
 
