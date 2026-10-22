@@ -12,9 +12,7 @@ export class ModeController {
 	constructor(configuration) {
 		this._createMode = configuration.createMode;
 		this._createRuntime = configuration.createRuntime ?? this._createAlgorithm32Runtime.bind(this);
-		this._endpointScene = configuration.endpointScene;
-		this._onPreparing = configuration.onPreparing;
-		this._onReverted = configuration.onReverted;
+		this._createSceneStage = configuration.createSceneStage;
 		this._onFailure = configuration.onFailure;
 		this._onPublished = configuration.onPublished;
 		this._sceneRuntime = configuration.sceneRuntime;
@@ -23,8 +21,7 @@ export class ModeController {
 			atmosphereShaderEnabled: configuration.atmosphereEnabled,
 		}).skyRenderMode;
 		this._sunPresentation = Flat32SceneControls.resolveSunPresentation(configuration);
-		this._sceneObserverHeight = null;
-		this._currentObserverHeight = null;
+		/** @type {Flat32SceneStage|null} */ this._activeStage = null;
 		/** @type {Flat32AlgorithmRuntimeCapability | null} */
 		this._activeRuntime = null;
 		this._generation = 0;
@@ -32,8 +29,6 @@ export class ModeController {
 		this._preparationCancellation = null;
 		/** @type {Flat32ModeKind|null} */
 		this._currentKind = null;
-		/** @type {Flat32ModeKind|null} */
-		this._sceneKind = null;
 		this._activeMode = null;
 		this._activeConfigurationIdentity = '';
 		this._disposed = false;
@@ -65,12 +60,7 @@ export class ModeController {
 	}
 
 	/** Restore the last published scene and render operation after failure. */
-	_restorePublishedState(sceneChanged) {
-		if (sceneChanged && this._currentKind !== null && this._activeMode !== null) {
-			this._onReverted?.(this._currentKind, this._activeMode);
-			this._sceneKind = this._currentKind;
-			this._sceneObserverHeight = this._currentObserverHeight;
-		}
+	_restorePublishedState() {
 		if (this._activeRuntime !== null) {
 			this._activeRuntime.publish();
 		} else {
@@ -100,13 +90,15 @@ export class ModeController {
 		let composer = null;
 		/** @type {Flat32AlgorithmRuntimeCapability | null} */
 		let candidate = null;
-		let sceneChanged = false;
-		const observerHeight = Flat32SceneControls.resolve(state).observerHeight.value;
+		/** @type {Flat32SceneStage|null} */ let stage = null;
+		let committed = false;
 		const configurationIdentity = JSON.stringify({
 			...state,
+			observerHeight: undefined,
 			skyRenderMode: undefined,
 			sunIlluminationScale: undefined,
 			sunDiscBrightnessScale: undefined,
+			reviewObjectsEnabled: undefined,
 			observation: undefined,
 			locationIndex: undefined,
 			flatTimeIndex: undefined,
@@ -128,9 +120,16 @@ export class ModeController {
 					environmentSample: request.environmentSample,
 				});
 				if (this._disposed || generation !== this._generation) return null;
-				this._onPublished?.(kind, this._activeMode, state);
+				this._onPublished?.(kind, this._activeMode, state, this._activeStage);
 				return summary;
 			}
+			if (
+				kind === this._currentKind &&
+				(state.observerHeight?.value ?? 5) !== (this._activeMode?.observerHeight?.value ?? 5)
+			)
+				throw new RangeError(
+					'Installed runtime does not support live elevation; retain the existing scene and cache.',
+				);
 			if (request.environmentSample) {
 				throw new Error('Measured environment publication requires an installed shared spherical mode.');
 			}
@@ -139,16 +138,11 @@ export class ModeController {
 				mode.dispose();
 				return null;
 			}
-			sceneChanged = kind !== this._sceneKind || observerHeight !== this._sceneObserverHeight;
-			if (sceneChanged) {
-				this._onPreparing?.(kind, mode);
-				this._sceneKind = kind;
-				this._sceneObserverHeight = observerHeight;
-			}
-			composer = this._sceneRuntime.createAtmosphereComposer();
+			stage = this._createSceneStage(mode, kind);
+			composer = stage.sceneRuntime.createAtmosphereComposer();
 			candidate = this._createRuntime({
-				sceneRuntime: this._sceneRuntime,
-				endpointScene: this._endpointScene,
+				sceneRuntime: stage.sceneRuntime,
+				endpointScene: stage.endpointScene,
 				mode,
 				onFailure: this._onFailure,
 				composer: composer.composer,
@@ -160,29 +154,40 @@ export class ModeController {
 			const summary = await candidate.setup();
 			if (this._disposed || generation !== this._generation) {
 				candidate.dispose({restoreRendering: false});
+				stage.dispose();
 				return null;
 			}
-			candidate.setSkyRenderMode(this._skyRenderMode);
-			candidate.setSunPresentation(this._sunPresentation);
-			candidate.publish();
-			this._onPublished?.(kind, mode, state);
 			const replaced = this._activeRuntime;
-
-			this._activeRuntime = candidate;
-			this._currentKind = kind;
-			this._currentObserverHeight = observerHeight;
-			this._activeMode = mode;
-			this._activeConfigurationIdentity = configurationIdentity;
+			const replacedStage = this._activeStage;
+			await this._sceneRuntime.atFrameBoundary(() => {
+				preparationCancellation.signal.throwIfAborted();
+				if (this._disposed || generation !== this._generation) throw new Error('Superseded scene publication.');
+				stage.publish();
+				candidate.setSkyRenderMode(this._skyRenderMode);
+				candidate.setSunPresentation(this._sunPresentation);
+				candidate.publish();
+				this._activeRuntime = candidate;
+				this._activeStage = stage;
+				this._currentKind = kind;
+				this._activeMode = mode;
+				this._activeConfigurationIdentity = configurationIdentity;
+				committed = true;
+				this._onPublished?.(kind, mode, state, stage);
+			}, preparationCancellation.signal);
 			replaced?.dispose({restoreRendering: false});
+			replacedStage?.dispose();
 			return summary;
 		} catch (error) {
+			if (committed) throw error;
 			if (candidate !== null) {
 				candidate.dispose({restoreRendering: false});
 			} else {
 				this._disposeUnownedCandidate(mode, composer);
 			}
+			stage?.revert();
+			stage?.dispose();
 			if (!this._disposed && generation === this._generation) {
-				this._restorePublishedState(sceneChanged);
+				this._restorePublishedState();
 			}
 			if (!this._disposed && generation === this._generation) throw error;
 			return null;
@@ -243,9 +248,10 @@ export class ModeController {
 		this._preparationCancellation?.abort();
 		this._preparationCancellation = null;
 		this._activeRuntime?.dispose();
+		this._activeStage?.dispose();
+		this._activeStage = null;
 		this._activeRuntime = null;
 		this._activeMode = null;
 		this._currentKind = null;
-		this._sceneKind = null;
 	}
 }

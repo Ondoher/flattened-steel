@@ -74,6 +74,7 @@ type LocalSunFrameCelestialInputs = Readonly<{
 type LocalSunFrameRenderOperation = () => void;
 /** Independently staged shader, bindings, receiver and celestial input aggregate. */
 type LocalSunPreparedFrameContents = Readonly<{
+	/** Optional reversible camera-only publication; scene and cache resources remain installed. */ sceneView?: LocalSunFrameSceneLighting;
 	/** Ordinary shader and complete celestial-generation counters for the application frame owner. */ getDiagnostics?: ShaderHandle['getDiagnostics'];
 	/** Revalidate the complete current camera cone before publication or rendering. */ validateView?: () => void;
 	/** Actual renderer preflight observations, when supplied by the ordinary preparation owner. */ preflight?: LocalSunFramePreflight;

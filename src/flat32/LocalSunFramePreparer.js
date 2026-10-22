@@ -14,13 +14,23 @@ export class LocalSunFramePreparer {
 	 *
 	 * @param {Algorithm32BindingValues} bindingValues - Candidate binding aggregate.
 	 * @param {Algorithm32} algorithm - Candidate physical facade.
+	 * @param {Flat32PerspectiveCameraCapability} [camera] - Isolated preparation camera, otherwise the accepted live camera.
 	 * @returns {void} - No value.
 	 */
-	_updateBindings(bindingValues, algorithm) {
+	_updateBindings(bindingValues, algorithm, camera = this._configuration.sceneRuntime.camera) {
 		this._configuration.updatePresentationBindings?.(bindingValues, algorithm);
+		const config = algorithm.config.config;
+		const geometry = 'profile' in config ? config.profile.models.geometry : config.geometry;
+		const position = camera.getWorldPosition(new THREE.Vector3());
+		bindingValues['geometry.sceneDepthMax'] = geometry.resolveSceneDepthMax({
+			camera,
+			cameraScenePosition: {coordinates: [position.x, position.y, position.z], units: 'scene-units'},
+			sceneScale: this._configuration.sceneScale,
+			endpointScenePositions: this._configuration.endpointScene?.getSceneDepthEndpointPositions() ?? [],
+		});
 		Algorithm32Bindings.update({
 			bindingValues,
-			camera: this._configuration.sceneRuntime.camera,
+			camera,
 			props: {config: algorithm.config.config, sceneScale: this._configuration.sceneScale},
 		});
 	}
@@ -31,9 +41,10 @@ export class LocalSunFramePreparer {
 	 *
 	 * @param {ShaderHandle} handle - Independently staged shader.
 	 * @param {Flat32AtmosphereComposerResources} resources - Candidate composer/targets.
+	 * @param {Flat32PerspectiveCameraCapability} camera - Isolated preparation camera.
 	 * @returns {Flat32LocalFramePreflight} - Actual staged scene-input and composed pixel observations.
 	 */
-	_preflight(handle, resources) {
+	_preflight(handle, resources, camera) {
 		const renderer = this._configuration.sceneRuntime.renderer;
 		const previous = renderer.getRenderTarget();
 		resources.composer.renderToScreen = false;
@@ -41,7 +52,7 @@ export class LocalSunFramePreparer {
 			const context = renderer.getContext(),
 				input = new Float32Array(4);
 			renderer.setRenderTarget(resources.renderTarget);
-			renderer.render(this._configuration.sceneRuntime.scene, this._configuration.sceneRuntime.camera);
+			renderer.render(this._configuration.sceneRuntime.scene, camera);
 			context.readPixels(0, 0, 1, 1, context.RGBA, context.FLOAT, input);
 			if (context.getError() !== context.NO_ERROR || input.some((value) => !Number.isFinite(value)))
 				throw new Error('Local frame scene input readback failed.');
@@ -117,10 +128,11 @@ export class LocalSunFramePreparer {
 	/** Called by staging, publication and rendering to admit the complete current camera cone.
 	 *
 	 * @param {LocalSunCompactConstructionProfile} profile - Exact live physical geometry and coverage.
+	 * @param {Flat32PerspectiveCameraCapability} [camera] - Isolated preparation camera, otherwise the accepted live camera.
 	 * @returns {void} - Supported view, otherwise explicit rejection before rendering.
 	 */
-	_validateCurrentView(profile) {
-		const view = resolveLocalSunFrameView(this._configuration.sceneRuntime.camera);
+	_validateCurrentView(profile, camera = this._configuration.sceneRuntime.camera) {
+		const view = resolveLocalSunFrameView(camera);
 		const geometry = /** @type {FlatEarthGeometry} */ (profile.models.geometry);
 		geometry.resolveCompactViewSupport({
 			origin: geometry.mapObserverLocalScenePointToModelPosition(view.cameraPosition, {
@@ -147,6 +159,10 @@ export class LocalSunFramePreparer {
 	async prepare(request) {
 		request.signal.throwIfAborted();
 		const {sceneRuntime, sceneScale, sceneDepthMax} = this._configuration;
+		const camera = /** @type {THREE.PerspectiveCamera} */ (sceneRuntime.camera).clone();
+		const height = request.profile.models.geometry.configuration.observerPosition.coordinates[2] / sceneScale.value;
+		camera.position.y = height;
+		camera.updateMatrixWorld(true);
 		// Display targets are owned by the renderer and scale with its viewport.
 		// Their size is independent of the selected physical cache payload.
 		const algorithm = new Algorithm32({
@@ -158,14 +174,14 @@ export class LocalSunFramePreparer {
 		});
 		let resources;
 		try {
-			resources = sceneRuntime.createAtmosphereComposer();
+			resources = sceneRuntime.createAtmosphereComposer({scene: sceneRuntime.scene, camera});
 			const bindingValues = Algorithm32Bindings.create(THREE, sceneDepthMax);
-			this._updateBindings(bindingValues, algorithm);
+			this._updateBindings(bindingValues, algorithm, camera);
 			const handle = await algorithm.setupShader({
 				THREE,
 				composer: resources.composer,
 				scene: sceneRuntime.scene,
-				camera: sceneRuntime.camera,
+				camera,
 				viewportSize: sceneRuntime.viewportSize,
 				sceneScale,
 				sceneDepthMax,
@@ -203,12 +219,28 @@ export class LocalSunFramePreparer {
 				receiverLight,
 				algorithm.config.config.color,
 			);
-			this._validateCurrentView(request.profile);
-			const preflight = this._preflight(handle, resources);
+			this._validateCurrentView(request.profile, camera);
+			const preflight = this._preflight(handle, resources, camera);
 			request.signal.throwIfAborted();
 			let disposed = false;
+			let previousHeight = sceneRuntime.camera.position.y;
 			return {
 				shaderReady: true,
+				// Reuse the actual camera, scene, objects and cache. Only the prepared view packet is replaced.
+				sceneView: {
+					publish: () => {
+						previousHeight = sceneRuntime.camera.position.y;
+						const position = sceneRuntime.camera.position;
+						position.set(position.x, height, position.z);
+						sceneRuntime.camera.updateMatrixWorld();
+						resources.renderPass.camera = sceneRuntime.camera;
+					},
+					revert: () => {
+						const position = sceneRuntime.camera.position;
+						position.set(position.x, previousHeight, position.z);
+						sceneRuntime.camera.updateMatrixWorld();
+					},
+				},
 				/** Report this packet's shader and resource observations.
 				 *
 				 * @returns {Flat32LocalFrameShaderDiagnostics} - Current renderer-owned diagnostics.
@@ -238,6 +270,7 @@ export class LocalSunFramePreparer {
 				 */
 				renderFrame: () => {
 					if (disposed) throw new Error('Retired local frame cannot render.');
+					camera.copy(/** @type {THREE.PerspectiveCamera} */ (sceneRuntime.camera));
 					this._validateCurrentView(request.profile);
 					this._updateBindings(bindingValues, algorithm);
 					resources.composer.renderToScreen = true;

@@ -301,20 +301,29 @@ export class TheHoursBrowser {
 			shadowFocusMeters: [0, 12, 0],
 		});
 		const endpoint = {
+			// This fixed physical replay does not offer illustrative Sun overrides.
+			setSunIlluminationScale: (scale) => {
+				if (scale !== 1) throw new RangeError('The Hours replay requires physical Sun illumination.');
+			},
 			updateDistantSunLighting: (direction, receiver, color) =>
 				this._lighting.updateFromDistantSun(direction, receiver, color),
 			getSceneDepthEndpointPositions: () => this._observatory.getSceneDepthEndpointPositions(),
 		};
 		this._controller = new ModeController({
 			sceneRuntime: this._sceneRuntime,
-			endpointScene: endpoint,
+			// The replay owns one fixed-height scene and its moving camera throughout.
+			createSceneStage: () => ({
+				sceneRuntime: this._sceneRuntime,
+				endpointScene: endpoint,
+				publish() {},
+				revert() {},
+				dispose() {},
+			}),
 			createMode: this._createMode.bind(this),
 			createRuntime: (configuration) => {
 				this._runtime = new Algorithm32Runtime(configuration);
 				return this._runtime;
 			},
-			onPreparing: () => undefined,
-			onReverted: () => undefined,
 			onFailure: (message) => this._failures.push(message),
 			onPublished: (_kind, mode) => {
 				this._mode = /** @type {SphericalDistantMode} */ (mode);

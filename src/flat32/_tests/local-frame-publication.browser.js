@@ -4,10 +4,50 @@ import {ThreeSceneRuntime} from '../ThreeSceneRuntime.js';
 // Virtual complete packets isolate the real application publication boundary.
 // Physical shader, receiver, field and numerical claims belong to the GPU proof.
 describe('Flat32 explicit local complete-frame publication', () => {
+	it('retains Shader off when a compact complete frame publishes', async () => {
+		const scene = {
+			canvas: {dataset: {}},
+			addContextLifecycleParticipant: () => () => {},
+			atFrameBoundary: async (operation) => operation(),
+			installRenderOperation: jasmine.createSpy('algorithm-frame'),
+			restoreDirectRendering: jasmine.createSpy('direct-frame'),
+			refreshShadowMaps() {},
+		};
+		const frame = {
+			contents: {sceneView: {publish: jasmine.createSpy('view'), revert: jasmine.createSpy('revert')}},
+		};
+		const owner = {
+			active: null,
+			publishPreparedLocalFrame(next, install) {
+				install();
+				this.active = next;
+				return {frame: next, retirementErrors: []};
+			},
+			dispose() {},
+			whenReleased: () => Promise.resolve(),
+		};
+		const runtime = new Algorithm32Runtime({
+			sceneRuntime: scene,
+			endpointScene: {setSunIlluminationScale() {}},
+			mode: {dispose() {}},
+			onFailure: fail,
+			localFrameController: owner,
+			skyRenderMode: 'shader-off',
+		});
+		try {
+			await runtime.publishPreparedLocalFrame(frame, new AbortController().signal);
+			expect(scene.restoreDirectRendering).toHaveBeenCalled();
+			expect(scene.installRenderOperation).not.toHaveBeenCalled();
+			expect(frame.contents.sceneView.publish).toHaveBeenCalled();
+		} finally {
+			runtime.dispose({restoreRendering: false});
+		}
+	});
 	it('restores staged exact lighting when renderer installation rejects before the frame commit', async () => {
 		const lighting = {publish: jasmine.createSpy('publish-lighting'), revert: jasmine.createSpy('revert-lighting')};
+		const view = {publish: jasmine.createSpy('camera'), revert: jasmine.createSpy('camera-reverted')};
 		const first = {},
-			next = {contents: {sceneLighting: lighting}};
+			next = {contents: {sceneLighting: lighting, sceneView: view}};
 		const owner = {
 			active: first,
 			publishPreparedLocalFrame(frame, install) {
@@ -29,7 +69,7 @@ describe('Flat32 explicit local complete-frame publication', () => {
 		};
 		const runtime = new Algorithm32Runtime({
 			sceneRuntime: scene,
-			endpointScene: {},
+			endpointScene: {setSunIlluminationScale() {}},
 			mode: {dispose() {}},
 			onFailure: fail,
 			localFrameController: owner,
@@ -40,6 +80,7 @@ describe('Flat32 explicit local complete-frame publication', () => {
 		expect(owner.active).toBe(first);
 		expect(lighting.publish).toHaveBeenCalledTimes(1);
 		expect(lighting.revert).toHaveBeenCalledTimes(1);
+		expect(view.revert).toHaveBeenCalledTimes(1);
 		runtime.dispose({restoreRendering: false});
 	});
 	it('holds the earlier complete packet until the real scene boundary, then renders the replacement', async () => {
@@ -69,7 +110,7 @@ describe('Flat32 explicit local complete-frame publication', () => {
 		};
 		const runtime = new Algorithm32Runtime({
 			sceneRuntime: scene,
-			endpointScene: {},
+			endpointScene: {setSunIlluminationScale() {}},
 			mode: {dispose() {}},
 			onFailure: fail,
 			localFrameController: owner,
@@ -117,7 +158,7 @@ describe('Flat32 explicit local complete-frame publication', () => {
 		};
 		const runtime = new Algorithm32Runtime({
 			sceneRuntime: scene,
-			endpointScene: {},
+			endpointScene: {setSunIlluminationScale() {}},
 			mode: {dispose() {}},
 			onFailure: fail,
 			localFrameController: owner,

@@ -7,8 +7,99 @@ import {Flat32Application} from '../Flat32Application.js';
 import {Algorithm32Bindings} from '../../algorithm32/implementation/react-three/Algorithm32Bindings.js';
 import {ATMOSPHERE_SCENE_SCALE, ATMOSPHERE_OBSERVER_UP_DIRECTION} from '../consts.js';
 import {LocalSunSceneLighting} from '../LocalSunSceneLighting.js';
+import {Flat32View} from '../Flat32View.js';
+import {ThreeSceneRuntime} from '../ThreeSceneRuntime.js';
+import {StagedSceneRuntime} from '../StagedSceneRuntime.js';
 
 describe('Flat32 scene control foundations', () => {
+	it('dispatches native three-state sky and Sun controls with explicit legacy availability', () => {
+		const root = document.createElement('div'),
+			view = new Flat32View(root);
+		view.start();
+		const actions = {
+			onSky: jasmine.createSpy('sky'),
+			onSun: jasmine.createSpy('sun'),
+			onObjects: jasmine.createSpy('objects'),
+			onElevation: jasmine.createSpy('height'),
+		};
+		view.installSceneControls(actions);
+		const app = new Flat32Application(document.createElement('div'), {
+			stellarCatalog: 'brightest-500',
+			presentationFilters: [],
+		});
+		const state = {
+			...app._locationTimeController.start(),
+			modeKind: 'flat-local',
+			skyRenderMode: 'no-atmosphere',
+			observerHeight: {value: 5, units: 'meters'},
+			sunIlluminationScale: 0,
+			sunDiscBrightnessScale: 0.25,
+		};
+		view.showSceneControls(state, true, {value: 500, units: 'meters'});
+		const sky = root.querySelector('#flat32-atmosphere-control');
+		expect(sky.tagName).toBe('SELECT');
+		expect(sky.hasAttribute('aria-pressed')).toBeFalse();
+		expect(root.querySelector('#flat32-sun-controls').hidden).toBeFalse();
+		expect(root.querySelector('#flat32-scene-control-status').textContent).toContain('showing 5 m');
+		sky.value = 'shader-off';
+		sky.dispatchEvent(new Event('change'));
+		expect(actions.onSky).toHaveBeenCalledWith('shader-off');
+		const illumination = root.querySelector('#flat32-sun-illumination');
+		illumination.value = '10';
+		illumination.dispatchEvent(new Event('change'));
+		expect(actions.onSun).toHaveBeenCalledWith({sunIlluminationScale: 0.1, sunDiscBrightnessScale: 0.25});
+		view.showSceneControls({...state, skyRenderMode: 'full'}, false);
+		expect(sky.querySelector('[value="no-atmosphere"]').disabled).toBeTrue();
+		expect(root.querySelector('#flat32-elevation-control').disabled).toBeTrue();
+		expect(root.querySelector('#flat32-sun-controls').hidden).toBeTrue();
+		view.dispose();
+		app.dispose();
+	});
+	it('keeps the accepted eye and endpoints intact until geometry-family scene publication, including rollback', () => {
+		const host = new ThreeSceneRuntime(document.createElement('canvas'), fail);
+		spyOn(host, 'refreshShadowMaps');
+		const mode = new FlatLocalMode({
+			observerHeight: {value: 500, units: 'meters'},
+			sceneScale: ATMOSPHERE_SCENE_SCALE,
+			observation: {
+				instant: '2024-06-21T07:00:00.000Z',
+				location: {
+					latitude: {value: 37.3382, units: 'degrees'},
+					longitude: {value: -121.8863, units: 'degrees'},
+				},
+			},
+			localSunCachePolicy: 'compact-v9-native15',
+			maximumScatteringOrder: 1,
+			stellarCatalog: 'brightest-500',
+			presentationFilters: [],
+		});
+		const originalCamera = host.camera,
+			originalScene = host.scene,
+			stage = new StagedSceneRuntime(host, mode, () => true);
+		try {
+			expect(host.camera).toBe(originalCamera);
+			expect(host.scene).toBe(originalScene);
+			expect(host.camera.position.y).toBe(0.005);
+			expect(stage.camera.position.y).toBe(0.5);
+			const visibleBounds = stage.endpointScene.getSceneDepthEndpointPositions().length;
+			stage.endpointScene.setObjectsVisible(false);
+			expect(stage.endpointScene.describe().shadowCasterCount).toBe(0);
+			expect(stage.endpointScene.getSceneDepthEndpointPositions().length).toBeLessThan(visibleBounds);
+			host.camera.rotation.y = 0.7;
+			host.camera.updateMatrixWorld(true);
+			stage.publish();
+			expect(host.camera).toBe(stage.camera);
+			expect(host.camera.position.y).toBe(0.5);
+			expect(host.camera.quaternion.toArray()).toEqual(originalCamera.quaternion.toArray());
+			stage.revert();
+			expect(host.camera).toBe(originalCamera);
+			expect(host.scene).toBe(originalScene);
+		} finally {
+			stage.dispose();
+			mode.dispose();
+			host.dispose();
+		}
+	});
 	it('accepts independent Sun fractions and preserves Sun-owned lighting through scaling and physical updates', () => {
 		expect(Flat32SceneControls.resolve().sunIlluminationScale).toBe(1);
 		expect(
@@ -40,6 +131,7 @@ describe('Flat32 scene control foundations', () => {
 		const root = document.createElement('div');
 		const app = new Flat32Application(root, {stellarCatalog: 'brightest-500', presentationFilters: []});
 		try {
+			app._view.start();
 			spyOn(app._view, 'showApplicationState');
 			app._state = {
 				...app._locationTimeController.start(),
@@ -143,4 +235,33 @@ describe('Flat32 scene control foundations', () => {
 			}
 		});
 	}
+	it('reuses one compact cache identity for live observer heights while leaving the installed profile unchanged', () => {
+		const observation = {
+			instant: '2024-06-21T07:00:00.000Z',
+			location: {latitude: {value: 37.3382, units: 'degrees'}, longitude: {value: -121.8863, units: 'degrees'}},
+		};
+		const mode = new FlatLocalMode({
+			observation,
+			sceneScale: ATMOSPHERE_SCENE_SCALE,
+			maximumScatteringOrder: 1,
+			localSunCachePolicy: 'compact-v9-native15',
+			stellarCatalog: 'brightest-500',
+			presentationFilters: [],
+		});
+		try {
+			const original = mode.compactProfile;
+			for (const height of [5, 500, 2000]) {
+				const profile = original.createLiveProfile({
+					observation,
+					receiverPosition: {coordinates: [0, 0, height], units: 'meters'},
+				});
+				expect(profile.contentHash).toBe(original.contentHash);
+				expect(profile.models.geometry.configuration.observerPosition.coordinates[2]).toBe(height);
+			}
+			expect(mode.compactProfile).toBe(original);
+			expect(mode.observerHeight.value).toBe(5);
+		} finally {
+			mode.dispose();
+		}
+	});
 });

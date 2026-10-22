@@ -1,10 +1,9 @@
 # Active Topic
 
 Current active topic: production-app/product-behavior/sky-scene-controls.
-Focus: M1a handoff: independent No-atmosphere Sun illumination and visible disc
-brightness, with adaptation following effective illumination. Runtime, actual GPU
-appearance and context-restoration verification are complete; the execution record
-links the local checkpoint receipt. M2-M4 remain unselected.
+Focus: functionally completed M1-M4 sky/Sun, object and elevation controls.
+Elevations reuse the installed cache and scene. Local qualification is complete;
+production standards sign-off awaits global reviewer calibration.
 
 Canonical entry: [Product behavior](production-app/product-behavior/README.md).
 Current status: [Controls execution](production-app/product-behavior/sky-scene-controls-execution.md).
@@ -14,7 +13,9 @@ Current status: [Controls execution](production-app/product-behavior/sky-scene-c
 The owner selected M1 of the
 [sky, scene and elevation controls plan](production-app/product-behavior/sky-scene-controls-plan.md)
 for independent execution on 2026-10-22, then explicitly selected M1a through
-independent-execution. M2-M4 implementation and video scenes are not selected.
+independent-execution, and has now selected the rest of the plan (M2-M4).
+All selected functionality is implemented and locally qualified. Video scene
+presets and remote publication remain unselected.
 M1's runtime/height foundations are implemented and evidenced. M1a proves local
 star visibility by reducing effective illumination independently from the disc,
 while preserving M1's physical measurement as the baseline. The execution record

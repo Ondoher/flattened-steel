@@ -341,7 +341,8 @@ export class SphericalEarthGeometry {
 		return normalizedPlacement;
 	}
 
-	/** Call this method to stage a same-shape live observation while retaining this geometry owner.
+	/** Call this method to stage a same-shape live observation and observer elevation while retaining this geometry owner.
+	 * Observer elevation is a runtime sampling position; it does not change the cached medium or sphere.
 	 * @param {SphericalEarthGeometry} prepared - Independently configured candidate geometry.
 	 * @param {GeometryLightSourceConfigurationRequest['lightSource']} lightSource - Stable source owner.
 	 * @returns {() => void} - Assignment-only publication after caller-owned source direction changes.
@@ -349,7 +350,10 @@ export class SphericalEarthGeometry {
 	prepareSharedPublication(prepared, lightSource) {
 		this._assertConfigured();
 		prepared._assertConfigured();
-		if (JSON.stringify(this._shapeConfiguration) !== JSON.stringify(prepared._shapeConfiguration))
+		if (
+			JSON.stringify({...this._shapeConfiguration, observerHeight: undefined}) !==
+			JSON.stringify({...prepared._shapeConfiguration, observerHeight: undefined})
+		)
 			throw new RangeError(
 				'Live shared-cache publication cannot change physical geometry or coordinate domains.',
 			);
@@ -364,6 +368,7 @@ export class SphericalEarthGeometry {
 			directionToSource: configuration.directionToSource,
 		});
 		return () => {
+			this._shapeConfiguration = prepared._shapeConfiguration;
 			this._configuration = configuration;
 			this._binding = {...prepared._binding, lightSource};
 			this._scatteringCacheGeometry = prepared._scatteringCacheGeometry;

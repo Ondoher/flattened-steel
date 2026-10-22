@@ -44,10 +44,19 @@ export class Flat32View {
 			</div>
 			<nav class="flat32-scene-controls" aria-label="Scene controls">
 				<button id="flat32-mode-control" type="button">Switch to Flat</button>
-				<button id="flat32-atmosphere-control" type="button" aria-pressed="true">
-					Atmosphere Shader: On
-				</button>
+				<label>Sky <select id="flat32-atmosphere-control">
+					<option value="full">Full</option><option value="no-atmosphere">No atmosphere</option><option value="shader-off">Shader off</option>
+				</select></label>
+				<button id="flat32-objects-control" type="button" aria-pressed="true">Objects: On</button>
+				<label>Elevation <select id="flat32-elevation-control"><option value="5">Current (5 m)</option><option value="500">500 m</option><option value="2000">2 km</option></select></label>
 				<button id="flat32-location-control" type="button">Location</button>
+				<fieldset id="flat32-sun-controls" hidden>
+					<legend>Sun presentation</legend>
+					<label>Illumination (%) <input id="flat32-sun-illumination" type="number" min="0" max="100" step="any" value="100"></label>
+					<label>Disc brightness (%) <input id="flat32-sun-disc" type="number" min="0" max="100" step="any" value="100"></label>
+					<small>Adaptation follows illumination. Full uses physical lighting.</small>
+				</fieldset>
+				<span id="flat32-scene-control-status" role="status"></span>
 			</nav>
 			<section class="flat32-time-panel" aria-label="Time controls">
 				<div id="flat32-time-value" class="flat32-time-value">Flat 0</div>
@@ -145,31 +154,86 @@ export class Flat32View {
 		shell.querySelector('#flat32-mode-control')?.addEventListener('click', onMode);
 	}
 
-	/** Call this method to bind the diagnostic atmosphere-composition toggle.
-	 *
-	 * @param {Flat32ControlAction} onToggle - Application-owned composition selection.
-	 * @returns {void} - Control action installed.
+	/** Call this method to bind native scene controls to application-owned selections.
+	 * @param {Flat32SceneControlActions} actions - State-owner callbacks; validation failures propagate.
+	 * @returns {void} - Native change/click listeners installed on the owned shell.
 	 */
-	installAtmosphereControl(onToggle) {
+	installSceneControls(actions) {
 		const shell = this._requireElement(this._shell, 'shell');
-		shell.querySelector('#flat32-atmosphere-control')?.addEventListener('click', onToggle);
+		const sky = /** @type {HTMLSelectElement} */ (shell.querySelector('#flat32-atmosphere-control'));
+		sky.addEventListener('change', () => actions.onSky(/** @type {Flat32SkyRenderMode} */ (sky.value)));
+		shell.querySelector('#flat32-objects-control').addEventListener('click', actions.onObjects);
+		const height = /** @type {HTMLSelectElement} */ (shell.querySelector('#flat32-elevation-control'));
+		height.addEventListener('change', () => actions.onElevation({value: Number(height.value), units: 'meters'}));
+		for (const id of ['flat32-sun-illumination', 'flat32-sun-disc']) {
+			const input = /** @type {HTMLInputElement} */ (shell.querySelector('#' + id));
+			input.addEventListener('change', () => {
+				if (!input.reportValidity() || input.value === '') return;
+				const illumination = /** @type {HTMLInputElement} */ (shell.querySelector('#flat32-sun-illumination'));
+				const disc = /** @type {HTMLInputElement} */ (shell.querySelector('#flat32-sun-disc'));
+				if (
+					!illumination.reportValidity() ||
+					!disc.reportValidity() ||
+					illumination.value === '' ||
+					disc.value === ''
+				)
+					return;
+				actions.onSun({
+					sunIlluminationScale: Number(illumination.value) / 100,
+					sunDiscBrightnessScale: Number(disc.value) / 100,
+				});
+			});
+		}
 	}
 
-	/** Call this method to present the selected atmosphere composition state.
-	 *
-	 * @param {boolean} enabled - Whether Algorithm32 composition is selected.
-	 * @returns {void} - Current control state presented.
+	/** Call this method to present accepted controls and a separately identified pending height.
+	 * @param {Flat32ApplicationState} state - Accepted physical state with current independent presentation choices.
+	 * @param {boolean} noAtmosphereSupported - Whether the selected local family includes stars.
+	 * @param {Distance|null} pendingHeight - Requested height while the previous complete frame remains displayed.
+	 * @param {boolean} legacyModeSwitchBlocked - Whether entering the starless legacy mode requires another sky selection.
+	 * @returns {void} - Native labels, selected values and availability updated.
 	 */
-	showAtmosphereShaderState(enabled) {
+	showSceneControls(state, noAtmosphereSupported, pendingHeight = null, legacyModeSwitchBlocked = false) {
 		const shell = this._requireElement(this._shell, 'shell');
-		const button = shell.querySelector('#flat32-atmosphere-control');
-
-		if (button instanceof HTMLButtonElement) {
-			button.textContent = `Atmosphere Shader: ${enabled ? 'On' : 'Off'}`;
-			button.setAttribute('aria-pressed', String(enabled));
-			button.classList.toggle('is-active', enabled);
-		}
-		shell.dataset.flat32AtmosphereShader = enabled ? 'enabled' : 'bypassed';
+		const sky = /** @type {HTMLSelectElement} */ (shell.querySelector('#flat32-atmosphere-control'));
+		sky.value = state.skyRenderMode ?? 'full';
+		/** @type {HTMLOptionElement} */ (sky.querySelector('option[value="no-atmosphere"]')).disabled =
+			!noAtmosphereSupported;
+		const objects = /** @type {HTMLButtonElement} */ (shell.querySelector('#flat32-objects-control'));
+		objects.textContent = `Objects: ${state.reviewObjectsEnabled === false ? 'Off' : 'On'}`;
+		objects.setAttribute('aria-pressed', String(state.reviewObjectsEnabled !== false));
+		/** @type {HTMLSelectElement} */ (shell.querySelector('#flat32-elevation-control')).value = String(
+			state.observerHeight?.value ?? 5,
+		);
+		/** @type {HTMLSelectElement} */ (shell.querySelector('#flat32-elevation-control')).disabled =
+			!noAtmosphereSupported;
+		/** @type {HTMLInputElement} */ (shell.querySelector('#flat32-sun-illumination')).value = String(
+			(state.sunIlluminationScale ?? 1) * 100,
+		);
+		/** @type {HTMLInputElement} */ (shell.querySelector('#flat32-sun-disc')).value = String(
+			(state.sunDiscBrightnessScale ?? 1) * 100,
+		);
+		/** @type {HTMLElement} */ (shell.querySelector('#flat32-sun-controls')).hidden = sky.value !== 'no-atmosphere';
+		/** @type {HTMLButtonElement} */ (shell.querySelector('#flat32-mode-control')).disabled =
+			legacyModeSwitchBlocked;
+		shell.querySelector('#flat32-scene-control-status').textContent = pendingHeight
+			? `Preparing ${pendingHeight.value} m; showing ${state.observerHeight?.value ?? 5} m.`
+			: legacyModeSwitchBlocked
+				? 'Select Full or Shader off to enter the legacy flat mode (no stellar source).'
+				: noAtmosphereSupported
+					? ''
+					: 'No atmosphere and live elevation presets are unavailable in legacy flat mode. Use the compact local mode for these controls.';
+		shell.dataset.flat32SkyRenderMode = sky.value;
+		shell.dataset.flat32AtmosphereShader = sky.value === 'shader-off' ? 'bypassed' : 'enabled';
+		shell.dataset.flat32ObserverHeightMeters = String(state.observerHeight?.value ?? 5);
+		shell.dataset.flat32ObjectsVisible = String(state.reviewObjectsEnabled !== false);
+		if (shell.dataset.flat32State === 'ready')
+			this._requireElement(this._atmosphere, 'atmosphere').textContent =
+				sky.value === 'full'
+					? 'installed'
+					: sky.value === 'no-atmosphere'
+						? 'No atmosphere (stars and Sun)'
+						: 'Shader off';
 	}
 
 	/**
@@ -341,7 +405,15 @@ export class Flat32View {
 			`${sceneSummary.targetCount} targets; ` +
 			`${sceneSummary.shadowMapCount} shadow maps at ` +
 			`${sceneSummary.shadowMapWidth} x ` +
-			`${sceneSummary.shadowMapHeight}, generated once).`;
+			`${sceneSummary.shadowMapHeight}, refreshed on scene changes).`;
+	}
+
+	/** Call this method to refresh the accepted scene's live object and lighting facts.
+	 * @param {Flat32SceneSummary} sceneSummary - Current accepted endpoint owner measurements.
+	 * @returns {void} - Status and diagnostic data attributes updated without changing readiness.
+	 */
+	showSceneSummary(sceneSummary) {
+		this._publishSceneSummary(sceneSummary);
 	}
 
 	/**

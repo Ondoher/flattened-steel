@@ -164,10 +164,11 @@ try {
 	if (atmosphereShader === 'bypassed') {
 		await page.evaluate(() => {
 			const control = document.querySelector('#flat32-atmosphere-control');
-			if (!(control instanceof HTMLButtonElement)) {
+			if (!(control instanceof HTMLSelectElement)) {
 				throw new Error('Flat32 atmosphere control is unavailable.');
 			}
-			control.click();
+			control.value = 'shader-off';
+			control.dispatchEvent(new Event('change', {bubbles: true}));
 		});
 		await page.waitForFunction(
 			() => {

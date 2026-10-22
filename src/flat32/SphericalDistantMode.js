@@ -106,13 +106,14 @@ export class SphericalDistantMode {
 	/** Call this method to prepare an independent physical scene snapshot for shared-cache playback.
 	 *
 	 * @param {GeometryObservation} observation - Requested time and location.
+	 * @param {Distance} [observerHeight] - Requested eye height within the installed cache's altitude support.
 	 * @returns {Flat32PreparedDistantScene} - Independent geometry/source and an assignment-only mode publication.
 	 */
-	prepareLiveScene(observation) {
+	prepareLiveScene(observation, observerHeight = this.observerHeight) {
 		this._assertUsable();
 		const sceneState = createDistantSunSceneState({
 			observation,
-			observerHeight: this._geometry.configuration.observerHeight,
+			observerHeight,
 			observerUpDirection: this._geometry.configuration.observerUpDirection,
 		});
 		const source = new DistantSunLightSource({

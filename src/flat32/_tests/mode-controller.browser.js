@@ -1,5 +1,23 @@
 import {ModeController} from '../ModeController.js';
 
+/** Create a coordinator with isolated fake visual stages and an explicit synchronous test boundary. */
+function createController(configuration) {
+	const host = {...configuration.sceneRuntime, atFrameBoundary: async (operation) => operation()};
+	return new ModeController({
+		...configuration,
+		sceneRuntime: host,
+		createSceneStage: (mode, kind) => ({
+			sceneRuntime: host,
+			endpointScene: configuration.endpointScene,
+			publish() {
+				configuration.onPreparing?.(kind, mode);
+			},
+			revert() {},
+			dispose() {},
+		}),
+	});
+}
+
 /** Create one observable fake supported mode. */
 function createMode(name, events) {
 	return {
@@ -65,7 +83,7 @@ describe('Flat32 mode transaction', () => {
 		const wait = new Promise((resolve) => {
 			release = resolve;
 		});
-		const controller = new ModeController({
+		const controller = createController({
 			createMode: () => createMode('sun', events),
 			createRuntime: () => {
 				const runtime = createRuntime('sun', events);
@@ -95,20 +113,23 @@ describe('Flat32 mode transaction', () => {
 			controller.dispose();
 		}
 	});
-	it('stages a same-kind height change and restores the complete prior geometry on setup failure', async () => {
+	it('updates height through the installed runtime without rebuilding the scene or cache, retaining the accepted height on failure', async () => {
 		const events = [];
 		let height = 5;
-		const controller = new ModeController({
+		const controller = createController({
 			createMode: (_kind, state) => ({
 				...createMode(`height-${state.observerHeight.value}`, events),
 				observerHeight: state.observerHeight,
 			}),
-			createRuntime: ({mode}) =>
-				createRuntime(
-					mode.name,
-					events,
-					mode.observerHeight.value === 2000 ? new Error('height preparation failed') : null,
-				),
+			createRuntime: ({mode}) => ({
+				...createRuntime(mode.name, events),
+				canUpdateSharedScene: () => true,
+				async updateSharedScene(state) {
+					if (state.observerHeight.value === 2000) throw new Error('height preparation failed');
+					height = state.observerHeight.value;
+					return {pairing: 'spherical/distant'};
+				},
+			}),
 			endpointScene: {},
 			onFailure() {},
 			onPublished() {},
@@ -132,6 +153,7 @@ describe('Flat32 mode transaction', () => {
 				controller.switchTo('spherical-distant', {observerHeight: {value: 2000, units: 'meters'}}),
 			).toBeRejectedWithError('height preparation failed');
 			expect(height).toBe(500);
+			expect(events.filter((event) => event.endsWith(':setup')).length).toBe(1);
 		} finally {
 			controller.dispose();
 		}
@@ -144,7 +166,7 @@ describe('Flat32 mode transaction', () => {
 		runtime.updateSharedScene = jasmine.createSpy('exact-local-update').and.resolveTo({pairing: 'flat/local'});
 		const create = jasmine.createSpy('create-mode').and.returnValue(mode);
 		const published = jasmine.createSpy('published');
-		const controller = new ModeController({
+		const controller = createController({
 			createMode: create,
 			createRuntime: () => runtime,
 			endpointScene: {},
@@ -162,7 +184,7 @@ describe('Flat32 mode transaction', () => {
 		expect(create).toHaveBeenCalledTimes(1);
 		expect(runtime.updateSharedScene).toHaveBeenCalledTimes(1);
 		expect(runtime.updateSharedScene.calls.mostRecent().args[0]).toBe(next);
-		expect(published.calls.mostRecent().args).toEqual(['flat-local', mode, next]);
+		expect(published.calls.mostRecent().args.slice(0, 3)).toEqual(['flat-local', mode, next]);
 		controller.dispose();
 	});
 	it('reuses one shared runtime for observation changes and rebuilds for configuration changes', async () => {
@@ -183,7 +205,7 @@ describe('Flat32 mode transaction', () => {
 					request.signal.addEventListener('abort', () => fail(new Error('superseded')), {once: true});
 				}),
 		});
-		const controller = new ModeController(
+		const controller = createController(
 			/** @type {any} */ ({
 				endpointScene: {},
 				onFailure() {},
@@ -228,7 +250,7 @@ describe('Flat32 mode transaction', () => {
 
 	it('retains the shader-bypass selection across a mode replacement', async () => {
 		const events = [];
-		const controller = new ModeController(
+		const controller = createController(
 			/** @type {any} */ ({
 				atmosphereEnabled: true,
 				endpointScene: {},
@@ -273,7 +295,7 @@ describe('Flat32 mode transaction', () => {
 			createRuntime('replacement', events, new Error('candidate failed')),
 		];
 		let composerIndex = 0;
-		const controller = new ModeController(
+		const controller = createController(
 			/** @type {any} */ ({
 				endpointScene: {},
 				onFailure() {},
@@ -313,7 +335,7 @@ describe('Flat32 mode transaction', () => {
 
 		expect(controller.currentKind).toBe('spherical-distant');
 		expect(events).toContain('replacement:runtime-disposed:false');
-		expect(events).toContain('revert:spherical-distant:baseline');
+		expect(events).not.toContain('prepare:flat-local');
 		expect(events.filter((event) => event === 'baseline:published').length).toBe(2);
 		expect(events).not.toContain('baseline:runtime-disposed:false');
 
@@ -323,7 +345,7 @@ describe('Flat32 mode transaction', () => {
 
 	it('disposes the isolated mode, composer, and target when runtime construction fails', async () => {
 		const events = [];
-		const controller = new ModeController(
+		const controller = createController(
 			/** @type {any} */ ({
 				endpointScene: {},
 				onFailure() {},
@@ -367,7 +389,7 @@ describe('Flat32 mode transaction', () => {
 
 	it('aborts asynchronous preparation and publishes only the newest request', async () => {
 		const events = [];
-		const controller = new ModeController(
+		const controller = createController(
 			/** @type {any} */ ({
 				endpointScene: {},
 				onFailure() {},

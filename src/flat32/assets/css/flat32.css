@@ -61,6 +61,53 @@ html[data-flat32-diagnostic^='flat0-wide-n'] .flat32-shell {
 	left: 0.75rem;
 	display: flex;
 	gap: 0.35rem;
+	flex-wrap: wrap;
+	align-items: center;
+	max-width: calc(100% - 11rem);
+	color: #edf7ff;
+	font-size: 0.8rem;
+}
+
+.flat32-scene-controls label {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.35rem;
+}
+.flat32-scene-controls select,
+.flat32-scene-controls input {
+	font: inherit;
+	color: #edf7ff;
+	background: #0d2030;
+	border: 1px solid #678297;
+	border-radius: 0.3rem;
+	padding: 0.35rem;
+}
+.flat32-scene-controls :is(select, input):focus-visible {
+	outline: 2px solid white;
+	outline-offset: 2px;
+}
+.flat32-scene-controls fieldset {
+	min-width: 0;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+	background: rgb(5 15 24 / 85%);
+	border: 1px solid #678297;
+	border-radius: 0.35rem;
+}
+.flat32-scene-controls fieldset[hidden] {
+	display: none;
+}
+.flat32-scene-controls input {
+	width: 5rem;
+}
+.flat32-scene-controls small {
+	flex-basis: 100%;
+}
+#flat32-scene-control-status {
+	flex-basis: 100%;
+	background: rgb(5 15 24 / 80%);
 }
 
 .flat32-scene-controls button,

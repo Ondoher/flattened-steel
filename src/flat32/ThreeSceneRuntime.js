@@ -538,26 +538,50 @@ void main() {
 
 		const candidate = this.createAtmosphereComposer();
 
-		this._composer = candidate.composer;
-		this._composerRenderTarget = candidate.renderTarget;
-		this._renderPass = candidate.renderPass;
+		this._composer = /** @type {EffectComposer} */ (candidate.composer);
+		this._composerRenderTarget = /** @type {THREE.WebGLRenderTarget} */ (candidate.renderTarget);
+		this._renderPass = /** @type {RenderPass} */ (candidate.renderPass);
 
 		return this._composer;
 	}
 
-	/** Call this method to create an isolated composer for transactional Algorithm32 preparation. */
-	createAtmosphereComposer() {
+	/** Call this method to create an isolated composer for transactional Algorithm32 preparation.
+	 * Allocation or disposal-state failures throw; discard the incomplete candidate.
+	 * @param {Flat32SceneViewSelection} [view] - Isolated candidate view, or this host's accepted view.
+	 * @returns {Flat32AtmosphereComposerResources} - Independently owned composition resources.
+	 */
+	createAtmosphereComposer(view = {scene: this._scene, camera: this._camera}) {
 		if (this._disposed) {
 			throw new Error('Cannot create a composer on a disposed Three runtime.');
 		}
 		const renderTarget = this._createComposerRenderTarget();
 		const composer = new EffectComposer(this._requireRenderer(), renderTarget);
-		const renderPass = new RenderPass(this._scene, this._camera);
+		const renderPass = new RenderPass(
+			/** @type {THREE.Scene} */ (view.scene),
+			/** @type {THREE.PerspectiveCamera} */ (view.camera),
+		);
 
 		composer.setPixelRatio(this._resolvePixelRatio());
 		composer.setSize(this.viewportSize.width, this.viewportSize.height);
 		composer.addPass(renderPass);
 		return {composer, renderTarget, renderPass};
+	}
+
+	/** Call this method to publish one prepared visual scene and camera before its next complete frame.
+	 * Disposed owners throw; discard the candidate. The caller retains the previous view for rollback.
+	 * @param {Flat32SceneViewSelection} view - Complete renderer-owned view with surface-anchored endpoints.
+	 * @returns {void} - Scene and camera installed together; existing direct display resources are retained.
+	 */
+	publishSceneView(view) {
+		if (this._disposed) throw new Error('Cannot publish a view on a disposed renderer.');
+		this._scene = /** @type {THREE.Scene} */ (view.scene);
+		this._camera = /** @type {THREE.PerspectiveCamera} */ (view.camera);
+		const pass = /** @type {RenderPass} */ (this._directDisplayComposer?.passes[0]);
+		if (pass) {
+			pass.scene = this._scene;
+			pass.camera = this._camera;
+		}
+		this.refreshShadowMaps();
 	}
 
 	/**

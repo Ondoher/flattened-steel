@@ -1,6 +1,8 @@
 # Flat32 sky, scene and elevation controls
 
-State: M1 and M1a are implemented and evidenced on 2026-10-22. M2-M4 await selection.
+State: all selected M1-M4 functionality is implemented and locally qualified.
+M4 production standards sign-off remains incomplete because global reviewer
+calibration is stale. The execution record owns the qualification and checkpoint.
 M1 retained the local stellar path under physical daylight adaptation. M1a now
 proves practical local star visibility when its illustrative Sun illumination is
 zero; preserve the M1 finding as baseline evidence.
@@ -239,12 +241,21 @@ Purpose: expose the two remaining independent app controls with coherent frames.
    field of view, location and absolute observation time as the observer moves.
    Geometric Sun direction/horizon and stellar projection follow each model's
    existing physical mapping, rather than freezing the wrong derived coordinates.
-3. Stage physical geometry, camera origin, view bounds, receiver-light evaluation,
+3. Update elevation using the installed cache, runtime, scene, camera and endpoint
+   objects. The owner's execution clarification prohibits rebuilding the scattering
+   cache or scene for an elevation change. All presets are within existing altitude
+   support. Prepare only observer-dependent view/receiver/celestial state, then
+   publish the camera position and matching physical state together. Local shader
+   preparation may remain necessary because the observer dome and stellar observer
+   inputs are currently part of its prepared view. Report that cost separately
+   from cache construction. Keep full isolated scene replacement for a change of
+   geometry/source family, not a height-only request.
+   Stage physical geometry, camera origin, view bounds, receiver-light evaluation,
    cache lookup and celestial frame consistently. Use existing cancellation and
    frame-boundary publication: rapid 5 m -> 500 m -> 2 km requests cannot publish
    stale work, and failed preparation retains the previous complete observer state.
-   Invalidate endpoint geometry on same-kind height changes, publish it with the
-   corresponding camera, and restore both on failure. Commit selected labels only
+   Retain surface-anchored endpoint geometry on same-kind height changes, publish
+   the camera with its corresponding observer state, and restore both on failure. Commit selected labels only
    with accepted state, with pending feedback if needed.
 4. Carry sky, object, height and both Sun-scale choices through location/time and geometry changes, context
    restoration and mode rebuilds. Invalidation must distinguish presentation-only
@@ -284,7 +295,9 @@ Estimate: 80-140 minutes, with the height mapping and local staging as main unkn
    counts settle at the expected steady state for the accepted configuration
    (allowing valid cache retention), and no stale/default state replaces a newer
    choice. Keep legacy rectangular compatibility checks separate from the six
-   supported geometry/height acceptance cases.
+   supported geometry/height acceptance cases. The retained starless rectangular
+   local diagnostic path does not offer live elevation; disable that control
+   explicitly rather than rebuilding its cache or scene as a fallback.
 3. Complete primary self-review. Required production standards review is one stable
    unit under repository Review Timing: changed application controls/state,
    composition/height integration, M1a illumination/disc/adaptation integration and
@@ -322,7 +335,8 @@ The owner subsequently selected M1 for independent execution, including its sour
 changes, proofs and local checkpoints. The owner subsequently requested M1a as
 the next planned step before the remaining controls, then explicitly selected
 M1a through independent-execution. M1a is now implemented and verified;
-M2-M4 and remote publication still await selection.
+The owner subsequently selected the rest of the plan (M2-M4). Local checkpoints
+remain authorized through independent-execution; remote publication is unselected.
 When execution is selected, update the active topic to this plan, refresh
 production reviewer context and capture the exact review-unit baseline before code
 changes. Keep checkpoint-advisor monitoring independent of reviewer readiness and

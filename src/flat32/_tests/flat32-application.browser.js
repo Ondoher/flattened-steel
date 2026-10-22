@@ -198,7 +198,9 @@ describeFullCache('Flat32 scene application (full production cache, explicit rec
 		expect(canvas.dataset.flat32SunTileGenerationStatus).toBe('ready');
 		expect(Number(canvas.dataset.flat32SunTileGenerationCount)).toBeGreaterThanOrEqual(1);
 		expect(canvas.dataset.flat32SunTileGenerationCompletion).toBe('complete');
-		expect(canvas.dataset.flat32SunTileCoveragePolicy).toBe('analytic-circular-disk-pixel-overlap-field-s16-v1');
+		expect(canvas.dataset.flat32SunTileCoveragePolicy).toBe(
+			'analytic-disjoint-zero-circular-disk-pixel-overlap-field-s16-v2',
+		);
 		expect(Number(shell.dataset.flat32AtmosphereSceneDepthMax)).toBeGreaterThan(300000);
 		const firstAtmosphereFrameCount = Number(canvas.dataset.flat32AtmosphereFrameCount);
 
@@ -219,14 +221,15 @@ describeFullCache('Flat32 scene application (full production cache, explicit rec
 
 		const atmosphereButton = shell.querySelector('#flat32-atmosphere-control');
 
-		expect(atmosphereButton instanceof frame.contentWindow.HTMLButtonElement).toBeTrue();
-		expect(atmosphereButton.textContent.trim()).toBe('Atmosphere Shader: On');
-		expect(atmosphereButton.getAttribute('aria-pressed')).toBe('true');
-		atmosphereButton.click();
+		expect(atmosphereButton instanceof frame.contentWindow.HTMLSelectElement).toBeTrue();
+		expect(atmosphereButton.value).toBe('full');
+		expect(atmosphereButton.hasAttribute('aria-pressed')).toBeFalse();
+		atmosphereButton.value = atmosphereButton.value === 'full' ? 'shader-off' : 'full';
+		atmosphereButton.dispatchEvent(new frame.contentWindow.Event('change', {bubbles: true}));
 		expect(shell.dataset.flat32AtmosphereShader).toBe('bypassed');
 		expect(canvas.dataset.flat32RenderPath).toBe('direct-three');
-		expect(atmosphereButton.textContent.trim()).toBe('Atmosphere Shader: Off');
-		expect(atmosphereButton.getAttribute('aria-pressed')).toBe('false');
+		expect(atmosphereButton.value).toBe('shader-off');
+
 		const directPixels = new Uint8Array(context.drawingBufferWidth * context.drawingBufferHeight * 4);
 		context.readPixels(
 			0,
@@ -254,19 +257,20 @@ describeFullCache('Flat32 scene application (full production cache, explicit rec
 		expect(context.getError()).toBe(context.NO_ERROR);
 		await waitForTwoFrames(frame.contentWindow);
 		expect(shell.dataset.flat32State).toBe('ready');
-		atmosphereButton.click();
+		atmosphereButton.value = atmosphereButton.value === 'full' ? 'shader-off' : 'full';
+		atmosphereButton.dispatchEvent(new frame.contentWindow.Event('change', {bubbles: true}));
 		expect(shell.dataset.flat32AtmosphereShader).toBe('enabled');
 		expect(canvas.dataset.flat32RenderPath).toBe('algorithm32');
-		expect(atmosphereButton.textContent.trim()).toBe('Atmosphere Shader: On');
+		expect(atmosphereButton.value).toBe('full');
 
 		const modeButton = shell.querySelector('#flat32-mode-control');
 
 		expect(modeButton instanceof frame.contentWindow.HTMLButtonElement).toBeTrue();
 		modeButton.click();
-		expect(modeButton.textContent).toBe('Switch to Globe');
-		expect(shell.dataset.flat32Mode).toBe('flat/local');
+		expect(modeButton.textContent).toBe('Switch to Flat');
+		expect(shell.dataset.flat32Mode).toBe('spherical/distant');
 		expect(shell.dataset.flat32State).toBe('setting-up-atmosphere');
-		expect(pairingState.textContent.trim()).toBe('Flat geometry \u00b7 local Sun');
+		expect(pairingState.textContent.trim()).toBe('Spherical geometry \u00b7 distant Sun');
 		expect(status.textContent).toContain('flat/local');
 		expect(status.textContent).toContain('Union Glacier');
 		expect(status.textContent).toContain('Flat 0');
@@ -288,6 +292,8 @@ describeFullCache('Flat32 scene application (full production cache, explicit rec
 		expect(shell.dataset.flat32AtmosphereSpectralChannelCount).toBe('15');
 		expect(shell.dataset.flat32AtmosphereObserverDome).toBe('true');
 		expect(modeButton.textContent).toBe('Switch to Globe');
+		expect(shell.dataset.flat32Mode).toBe('flat/local');
+		expect(pairingState.textContent.trim()).toBe('Flat geometry \u00b7 local Sun');
 		expect(status.textContent).toContain('production flat/local path');
 		expect(canvas.dataset.flat32SunTileGenerationStatus).toBe('ready');
 		expect(canvas.dataset.flat32SunTileGenerationCompletion).toBe('complete');
@@ -297,8 +303,8 @@ describeFullCache('Flat32 scene application (full production cache, explicit rec
 
 		expect(flat180Button instanceof frame.contentWindow.HTMLButtonElement).toBeTrue();
 		flat180Button.click();
-		expect(shell.dataset.flat32Time).toBe('Flat 180');
-		expect(flat180Button.classList.contains('is-active')).toBeTrue();
+		expect(shell.dataset.flat32Time).toBe('Flat 0');
+		expect(flat180Button.classList.contains('is-active')).toBeFalse();
 		await waitForCondition(
 			frame.contentWindow,
 			() => shell.dataset.flat32State === 'setting-up-atmosphere' && status.textContent.includes('Flat 180'),
@@ -317,13 +323,15 @@ describeFullCache('Flat32 scene application (full production cache, explicit rec
 			300000,
 		);
 		expect(shell.dataset.flat32AtmospherePairing).toBe('flat/local');
+		expect(shell.dataset.flat32Time).toBe('Flat 180');
+		expect(flat180Button.classList.contains('is-active')).toBeTrue();
 		expect(status.textContent).toContain('production flat/local path');
 		expect(shell.dataset.flat32AtmosphereOutputPixel).not.toBe(flatZeroOutputPixel);
 		modeButton.click();
-		expect(modeButton.textContent).toBe('Switch to Flat');
-		expect(shell.dataset.flat32Mode).toBe('spherical/distant');
+		expect(modeButton.textContent).toBe('Switch to Globe');
+		expect(shell.dataset.flat32Mode).toBe('flat/local');
 		expect(shell.dataset.flat32State).toBe('setting-up-atmosphere');
-		expect(pairingState.textContent.trim()).toBe('Spherical geometry \u00b7 distant Sun');
+		expect(pairingState.textContent.trim()).toBe('Flat geometry \u00b7 local Sun');
 		expect(status.textContent).toContain('Resolving the offline distant-Sun cache');
 		expect(atmosphereState.textContent).toContain('resolving cache');
 		expect(shell.dataset.flat32AtmospherePairing).toBe('flat/local');
@@ -336,6 +344,8 @@ describeFullCache('Flat32 scene application (full production cache, explicit rec
 		expect(shell.dataset.flat32State).toBe('ready');
 		expect(shell.dataset.flat32AtmospherePositionCount).toBe('48');
 		expect(modeButton.textContent).toBe('Switch to Flat');
+		expect(shell.dataset.flat32Mode).toBe('spherical/distant');
+		expect(pairingState.textContent.trim()).toBe('Spherical geometry \u00b7 distant Sun');
 		expect(status.textContent).toContain('production spherical/distant path');
 		const stellarGenerationCountBeforeResize = Number(canvas.dataset.flat32StellarGenerationCount);
 

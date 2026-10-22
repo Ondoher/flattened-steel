@@ -1,15 +1,22 @@
 # Sky, scene and elevation controls execution
 
-Selected work: M1 and subsequently M1a, authorized through independent-execution.
-M1 is checkpointed; M1a implementation and verification are complete. M2-M4 and video-scene presets
+Selected work: all milestones M1-M4 including M1a, authorized through independent-execution.
+M1 and M1a are checkpointed; M2-M4 are functionally implemented and qualified.
+Production standards sign-off remains incomplete under stale global calibration.
+Video-scene presets
 are not selected. ARM and Sky Accuracy Dials remain
 suspended. The [plan](sky-scene-controls-plan.md) owns the outcomes and later work.
 
 ## Current state
 
-M1's runtime and coordinate foundations are complete. The new controls are not yet
-exposed in the UI. M1a's independent No-atmosphere Sun illumination and
-disc-brightness controls are implemented and GPU-verified; M2-M4 remain unselected.
+All requested controls are exposed: Full / No atmosphere / Shader off, independent
+Sun percentages in No atmosphere, Objects On/Off, and 5/500/2000 m elevation.
+Elevation changes reuse the installed cache, runtime, scene, camera and objects.
+They update the physical eye, lighting and prepared view coherently. Full scene
+replacement remains confined to geometry/source-family replacement.
+The remaining-controls baseline is `.codex-tmp/review-standards/session-dqMRIJ/baseline.json`
+at checkpoint b49d3740. The M4 governing review retains the earlier M1 baseline so the entire
+controls unit remains in scope, including committed M1/M1a changes.
 The M1a baseline is
 `.codex-tmp/review-standards/session-sTAUst/baseline.json`; preceding plan edits
 are present in that baseline. Review readiness still reports stale all-lane
@@ -27,7 +34,7 @@ compliance or authorize external governance changes.
 - The app has one canonical `skyRenderMode` selection: `full`, `no-atmosphere`,
   `shader-off`. Existing application `atmosphereShaderEnabled` and runtime
   `atmosphereEnabled` callers retain their Full/Shader-off mapping. The explicit
-  mode wins when both are supplied. The existing two-state UI remains until M2.
+  mode wins when both are supplied. The UI now exposes the three canonical choices.
 - The shared transport main hook is the common shader seam for distant and compact
   local view composition. A typed binding controls whether it evaluates atmospheric
   transport or supplies zero atmospheric radiance and unity view transmission.
@@ -36,10 +43,11 @@ compliance or authorize external governance changes.
 - Both geometry adapters treat scene Y as height above ground, not an offset from
   the configured observer. Camera Y is height divided by the 1000 m/scene-unit
   scale; geometry and camera therefore receive the same height exactly once.
-- Physical observer changes must invalidate endpoint preparation within the same
-  geometry kind. The controller stages camera/endpoints together and restores both
-  through the existing rollback callback. Location/time state reconstruction must
-  retain independent selections.
+- Physical observer changes within the supported cache do not require a cache or
+  scene rebuild. The controller reuses installed resources and stages only the
+  new physical eye and matching view/receiver inputs. Geometry-family replacement
+  uses isolated scene preparation. Location/time reconstruction retains independent
+  selections; pending preparation cannot overwrite newer presentation choices.
 
 ## M1 evidence and disposition
 
@@ -273,19 +281,168 @@ owns its exact commit identity, whole-repository scope and checks; no remote pus
 is authorized. It includes the preceding accepted M1a plan revision. Source review
 and native UI controls remain deferred to their planned milestones.
 
-## Resumption boundary
+## M2 - Native sky and Sun controls
 
-M1 and M1a's implementation, appearance and lifecycle proofs are complete;
-the linked checkpoint receipts preserve their local commit identities. M1's
-physical lighting and visibility findings remain the baseline, rather than being
-relabeled as a physical defect.
+Implemented the native three-state Sky selector, independent percentage inputs
+visible only in No atmosphere, retained values and selected-state reporting.
+Objects uses an actual boolean pressed-state button; elevation uses a native
+select. Existing boolean application/runtime callers retain their Full/Shader-off
+mapping. The legacy rectangular local mode exposes No atmosphere and live
+elevation as unavailable; it remains usable in Full and Shader off. When that
+legacy destination is selected by configuration, the geometry switch is disabled
+in No atmosphere with guidance to choose Full or Shader off first.
 
-After M1a, on owner selection of M2, expose the three-state sky and Sun controls through
-normal UI state/labels, explicitly disable unsupported legacy rectangular behavior,
-and cover selected-mode propagation through all publication/restoration paths.
-Retain the M1 limitation as baseline evidence and qualify M1a's presentation behavior
-separately; do not relabel the physical baseline as defective.
-M3 owns the object toggle and public elevation controls, pending-height selection
-merges, complete frame-boundary camera/endpoint transactions and elevated renders.
-M4 owns combined qualification and the bounded production review. No video scenes,
-remote publishing or further numerical experiment was started.
+The [local UI capture](../../../../.codex-tmp/flat32-sky-scene-controls/m234-04/flat-local-controls-stars.png)
+shows actual existing stars at zero Sun illumination with a retained 20% disc.
+The [distant UI capture](../../../../.codex-tmp/flat32-sky-scene-controls/m234-04/spherical-distant-controls-stars.png)
+shows the same native controls. Both use San Jose, 2024-06-21 07:00 UTC,
+800 by 600 pixels, device scale one and the existing catalog/filter policy.
+The scratch initial-state seeding explicitly labels that observation; early
+`m234-02` UI images inherited an incorrect location label from the older proof
+helper and are not the final UI evidence.
+
+An actual publication defect was corrected: a later compact frame could reinstall
+Algorithm32 rendering after Shader off had been selected. Complete local frame
+publication now uses the same selected-render-operation owner as initial
+publication. Native controls do not recreate numerical caches when sky or Sun
+presentation changes.
+
+## M3 - Object visibility and cache-reusing elevations
+
+Objects Off hides all six review boxes, removes their depth bounds and shadows,
+and retains ground, lights and reversible object resources. Shadow maps refresh
+on visibility changes. The view's live scene diagnostics follow the accepted
+visibility/lighting selection.
+
+- [Local objects and shadows, On then Off](../../../../.codex-tmp/flat32-sky-scene-controls/m234-04/flat-local-objects-comparison.png).
+- [Distant objects and shadows, On then Off](../../../../.codex-tmp/flat32-sky-scene-controls/m234-04/spherical-distant-objects-comparison.png).
+- [Local 500 m](../../../../.codex-tmp/flat32-sky-scene-controls/m234-04/flat-local-height-500-8.png) and
+  [2 km](../../../../.codex-tmp/flat32-sky-scene-controls/m234-04/flat-local-height-2000-10.png).
+- [Distant 500 m](../../../../.codex-tmp/flat32-sky-scene-controls/m234-04/spherical-distant-height-500-24.png) and
+  [2 km](../../../../.codex-tmp/flat32-sky-scene-controls/m234-04/spherical-distant-height-2000-26.png).
+
+### Owner clarification and verification
+
+The owner clarified that elevation must not require a cache or scene rebuild.
+The [independent coordinate/cache witness](../../../../.codex-tmp/flat32-sky-scene-controls/height-cache-reuse-01.json)
+executes production bindings with the same installed 5 m geometry at all three
+camera heights. Model-space heights are exactly 5, 500 and 2000 m in both
+geometries. All three local live profiles have the same cache content identity
+and the same canonical construction identity. Observer height is a sampling
+position, not a different atmosphere or source field.
+
+The initial broad scene-replacement path, retained in `m234-02` evidence, was
+replaced for elevation-only requests. The
+[GPU reuse witness](../../../../.codex-tmp/flat32-sky-scene-controls/m234-04/result.json)
+checks object-reference identity, not just equal labels: runtime, scene, accepted
+camera, endpoint owner, every surface mesh, and local construction-cache object
+or distant shared attachment remain the same through 5 -> 500 -> 2000 -> 5 m.
+The local controller leases its existing canonical field; no second construction
+cache is built. The distant runtime uses the installed shared package.
+
+Only observer-dependent state is prepared. Distant preparation updates physical
+geometry/receiver lighting and moves the existing camera at the frame boundary.
+Local preparation reuses the field and scene while preparing the matching view,
+receiver and celestial packet. Its observer dome and finite-star observer inputs
+are currently part of shader preparation, so a previously unseen local elevation
+can still incur shader/view work. That is a remaining performance limitation,
+not a cache rebuild. View depth bounds follow the actual camera and visible
+endpoints rather than retaining the original 5 m horizon cap.
+
+Ground and boxes remain surface-anchored, yaw/pitch remains unchanged, and accepted
+labels stay with the displayed frame during preparation. New sky/Sun/object
+choices survive acceptance. Superseded work cannot publish. A failed preparation
+restores the accepted physical selection while retaining newer presentation
+choices. Full isolated scene/camera staging is retained only for geometry/source
+family replacement, with pointer-look rebound to the accepted camera.
+
+### Measured cost and scope
+
+On RTX 2060 / ANGLE D3D11 / HeadlessChrome 112, the final height matrix observed:
+
+| Update | Distant | Compact local |
+| --- | --- | --- |
+| First 500 m | 0.23 s | 10.68 s |
+| First 2 km | 0.23 s | 13.30 s |
+| Return to 5 m | 0.23 s | 1.12 s |
+
+These are request-to-settled-frame observations including renderer warmup and
+readiness polling, not isolated cache-build or frame-rate benchmarks. The local
+delay is retained as an optimization opportunity; it does not justify rebuilding
+the cache or scene. Runtime GPU object counts settle across elevation changes.
+The first Shader-off use lazily retains the existing direct-display resources;
+that one-time allocation is distinct from unbounded growth.
+
+## M4 - Combined qualification and handoff
+
+Both supported geometries pass the bounded hardware matrix: native sky modes,
+all three physical heights, objects On/Off, independent Sun choices during pending
+height changes, rapid supersession, daylight/night views and twilight smoke.
+Matched Full night captures have maximum encoded byte difference zero from the
+pre-M2 checkpoint b49d3740, using the changed-module overlay documented by the
+GPU runner. This is a controlled source overlay, not a full historical checkout.
+The distant package identity remains
+`8d185961cab8beb1e461cd1256be2875bb9a99e9f39e515b9288b92e5d2f6d37`.
+No atmosphere, cache-format, source spectrum or stellar-intensity parameter changed.
+
+The [final lifecycle proof](../../../../.codex-tmp/flat32-sky-scene-controls/m4-03/result.json)
+also verifies failed preparation at 500 m, retained independent choices, actual
+context loss/restoration, repeated mode cycles, location changes, geometry
+replacement and resizing. Context loss legitimately recreates lost GPU resources;
+it is separate from ordinary elevation changes. This final repeat includes the
+dynamic depth-bound correction. The earlier `m4-01` remains evidence of the first
+successful lifecycle run. `m4-02` stopped before browser startup because the app
+build was replacing the Worker file; running against the completed build repaired
+that runner-order error without a production source change.
+
+The full Algorithm32 lane passes: 683 specifications, zero failures, 220.9 seconds.
+The final selected browser run passes 59 cases (the separate full-cache case is
+excluded from that basic lane), including the added cache-identity case. Final
+app/Worker and browser bundles build. Both application type checks and the
+maintained The Hours caller type check pass. The final full-cache browser lane
+passes **all 60 cases**, including the legacy rectangular rendering, native
+controls, mode replacement, resize and restoration acceptance, in 151.5 seconds
+(`.codex-tmp/review-standards/session-dqMRIJ/browser-tests-full-04.log`). Initial
+attempts omitted the proxy or used a URL root that did not match Karma's nested
+application path; the root-containment check correctly rejected those inputs.
+The first fully configured run completed real rendering, mode replacement, resize
+and restoration but exposed stale harness expectations: the prior Sun coverage
+policy id, button text on the new select, and immediate requested labels before
+frame acceptance. Assertions now check the current v2 policy, actual selected
+value, and accepted labels before publication plus new labels after publication.
+The corrected full case passes; no production failure was hidden by loosening
+its rendering, pixel, cache, resize or restoration checks.
+Existing capture and
+The Hours callers were adapted only for the changed control/controller contracts;
+no video scene preset was added and no film was rerendered.
+
+Primary self-review covers resource reuse, failure ownership, current/pending state
+merges, actual coordinates and legacy availability. Required production standards
+review remains **INCOMPLETE**: final host preparation of the complete M1-M4 unit
+reports `Stale all-lane calibration; prepare again` in
+`.codex-tmp/review-standards/session-dqMRIJ/prepare-host.log`. No standards reviewer
+was started, and tests do not establish standards compliance. No global governance
+files were repaired or waived. Checkpoint advice is separate from that limitation.
+The adviser recommends `feat(flat32): add sky scene and elevation controls` for
+the complete coherent unit. The
+[local checkpoint receipt](../../../../.codex-tmp/flat32-sky-scene-controls/m234-checkpoint.json)
+owns the resulting commit, exact scope and final worktree state; no push is
+authorized. Repository formatting and patch whitespace checks pass. Initial
+PowerShell/nested checkpoint attempts were denied writes to Git objects. Direct
+approved host staging through `cmd.exe` with login disabled succeeded without ACL
+changes. That establishes the working launcher, not the precise cause of the
+earlier denial; no application repair or scientific rerun was required.
+
+Geometry/source-family replacement temporarily overlaps old and candidate scene,
+composer and shadow resources so the accepted frame remains usable. Elevation
+does not duplicate the scene or construction cache. Renderer counts are object
+counts, not a driver VRAM measurement; no new device-memory ceiling was imposed.
+
+## Remaining boundary
+
+Functional M1-M4 work and local qualification are complete. The remaining
+production compliance dependency is external reviewer calibration. Once repaired,
+prepare the complete controls review from the preserved M1 baseline and run only
+the affected mapped lanes; do not relabel old reviews or claim current compliance.
+Video presets, remote publication and further numerical experiments remain deferred.
+ARM and Sky Accuracy Dials remain suspended.

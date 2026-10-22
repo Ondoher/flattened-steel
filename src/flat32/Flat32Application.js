@@ -1,5 +1,6 @@
 import {Algorithm32Runtime} from './Algorithm32Runtime.js';
 import {EndpointScene} from './EndpointScene.js';
+import {StagedSceneRuntime} from './StagedSceneRuntime.js';
 import {Flat32View} from './Flat32View.js';
 import {LocationTimeController} from './LocationTimeController.js';
 import {FlatLocalMode} from './FlatLocalMode.js';
@@ -55,6 +56,12 @@ export class Flat32Application {
 		this._cameraDirectionScene = configuration.cameraDirectionScene ?? null;
 		this._performanceCallback = configuration.performanceCallback;
 		this._initialSceneControls = Flat32SceneControls.resolve(configuration);
+		if (
+			this._initialModeKind === 'flat-local' &&
+			!this._localSunCachePolicy &&
+			this._initialSceneControls.skyRenderMode === 'no-atmosphere'
+		)
+			throw new RangeError('No atmosphere is unavailable for the legacy flat mode (no stellar source).');
 		this._resolveDistantSunSceneCacheAsset =
 			configuration.resolveDistantSunSceneCacheAsset ??
 			((solarZenithDegrees) => ({status: 'unsupported', requestedSolarZenithDegrees: solarZenithDegrees}));
@@ -73,6 +80,7 @@ export class Flat32Application {
 		/** @type {Flat32ApplicationState | null} */
 		this._publishedState = null;
 		this._started = false;
+		/** Latest physical request; independent presentation changes do not supersede it. */ this._sceneRequestVersion = 0;
 		/** @type {number | null} */
 		this._locationTimeRefreshTimer = null;
 		this._locationTimeController = new LocationTimeController();
@@ -87,8 +95,29 @@ export class Flat32Application {
 	/** Render every control from the one authoritative application state. */
 	_renderControls() {
 		if (this._state !== null) {
-			this._view.showApplicationState(
-				this._localSunCachePolicy && this._publishedState ? this._publishedState : this._state,
+			if (this._endpointScene) {
+				this._sceneSummary = this._endpointScene.describe();
+				this._view.showSceneSummary(this._sceneSummary);
+			}
+			const visible = this._publishedState
+				? {
+						...this._publishedState,
+						skyRenderMode: this._state.skyRenderMode,
+						reviewObjectsEnabled: this._state.reviewObjectsEnabled,
+						sunIlluminationScale: this._state.sunIlluminationScale,
+						sunDiscBrightnessScale: this._state.sunDiscBrightnessScale,
+					}
+				: this._state;
+			this._view.showApplicationState(visible);
+			this._view.showSceneControls(
+				visible,
+				visible.modeKind !== 'flat-local' || Boolean(this._localSunCachePolicy),
+				this._publishedState && this._state.observerHeight?.value !== this._publishedState.observerHeight?.value
+					? this._state.observerHeight
+					: null,
+				!this._localSunCachePolicy &&
+					visible.modeKind === 'spherical-distant' &&
+					visible.skyRenderMode === 'no-atmosphere',
 			);
 		}
 	}
@@ -317,6 +346,7 @@ export class Flat32Application {
 	 */
 	async _setupAtmosphere(state) {
 		if (this._modeController === null || this._sceneSummary === null) return;
+		const requestVersion = ++this._sceneRequestVersion;
 		this._view.showAtmosphereSetup(this._sceneSummary, state);
 		try {
 			const atmosphereSummary = await this._modeController.switchTo(state.modeKind, state);
@@ -326,6 +356,7 @@ export class Flat32Application {
 					skyRenderMode: this._state?.skyRenderMode ?? state.skyRenderMode,
 					sunIlluminationScale: this._state?.sunIlluminationScale ?? state.sunIlluminationScale,
 					sunDiscBrightnessScale: this._state?.sunDiscBrightnessScale ?? state.sunDiscBrightnessScale,
+					reviewObjectsEnabled: this._state?.reviewObjectsEnabled ?? state.reviewObjectsEnabled,
 				};
 				this._renderControls();
 				const solarZenithDegrees =
@@ -333,11 +364,19 @@ export class Flat32Application {
 						? this._createSphericalDistantSceneState(state).solarZenithDegrees
 						: undefined;
 				this._view.showAtmosphereReady(this._sceneSummary, atmosphereSummary, solarZenithDegrees);
+				this._renderControls();
 			}
 		} catch (error) {
+			if (requestVersion !== this._sceneRequestVersion) return;
 			if (!this._disposed && this._sceneSummary !== null) {
-				if (this._state === state && this._publishedState !== null) {
-					this._state = this._publishedState;
+				if (this._publishedState !== null) {
+					this._state = {
+						...this._publishedState,
+						skyRenderMode: this._state.skyRenderMode,
+						reviewObjectsEnabled: this._state.reviewObjectsEnabled,
+						sunIlluminationScale: this._state.sunIlluminationScale,
+						sunDiscBrightnessScale: this._state.sunDiscBrightnessScale,
+					};
 					this._renderControls();
 				}
 				this._view.showAtmosphereFailure(
@@ -352,6 +391,12 @@ export class Flat32Application {
 	/** Switch to the other supported production geometry/source pairing. */
 	_switchMode() {
 		if (this._state === null) return;
+		if (
+			!this._localSunCachePolicy &&
+			this._state.modeKind === 'spherical-distant' &&
+			this._state.skyRenderMode === 'no-atmosphere'
+		)
+			return;
 		const nextKind = this._state.modeKind === 'flat-local' ? 'spherical-distant' : 'flat-local';
 
 		this._commitState(
@@ -363,14 +408,21 @@ export class Flat32Application {
 		);
 	}
 
-	/** Toggle only final Algorithm32 composition, retaining the lit Three scene. */
-	_toggleAtmosphereShader() {
+	/** Call this method to select sky composition without replacing physical caches.
+	 * Invalid or unsupported legacy selections throw before mutation; select an available mode.
+	 * @param {Flat32SkyRenderMode} mode - Explicit Full, No atmosphere or Shader off selection.
+	 * @returns {void} - Current and pending frames retain the accepted selection.
+	 */
+	setSkyRenderMode(mode) {
+		if (typeof mode !== 'string') throw new TypeError('Flat32 sky render mode must be explicit.');
 		if (!this._state) return;
-		const skyRenderMode = this._state.skyRenderMode === 'shader-off' ? 'full' : 'shader-off';
+		const skyRenderMode = Flat32SceneControls.resolve({skyRenderMode: mode}).skyRenderMode;
+		if (skyRenderMode === 'no-atmosphere' && this._state.modeKind === 'flat-local' && !this._localSunCachePolicy)
+			throw new RangeError('No atmosphere requires the compact local stellar source.');
+		this._modeController?.setSkyRenderMode(skyRenderMode);
 		this._state = {...this._state, skyRenderMode};
 		if (this._publishedState) this._publishedState = {...this._publishedState, skyRenderMode};
-		this._modeController?.setSkyRenderMode(skyRenderMode);
-		this._view.showAtmosphereShaderState(skyRenderMode !== 'shader-off');
+		this._renderControls();
 	}
 
 	/** Call this method to select illustrative Sun illumination and disc radiance without changing physical caches.
@@ -385,6 +437,36 @@ export class Flat32Application {
 		this._modeController?.setSunPresentation(accepted);
 		this._state = {...this._state, ...accepted};
 		if (this._publishedState) this._publishedState = {...this._publishedState, ...accepted};
+		this._renderControls();
+	}
+
+	/** Call this method to show or hide review boxes while retaining ground and lights.
+	 * Invalid booleans throw; use true or false. Renderer failures propagate for reporting.
+	 * @param {boolean} visible - Whether review boxes cast shadows and participate in scene depth.
+	 * @returns {void} - Active and pending presentation retain the selection.
+	 */
+	setObjectsVisible(visible) {
+		if (typeof visible !== 'boolean') throw new TypeError('Object visibility must be boolean.');
+		if (!this._state) return;
+		this._endpointScene?.setObjectsVisible(visible);
+		this._sceneSummary = this._endpointScene?.describe() ?? this._sceneSummary;
+		this._sceneRuntime?.refreshShadowMaps();
+		this._state = {...this._state, reviewObjectsEnabled: visible};
+		if (this._publishedState) this._publishedState = {...this._publishedState, reviewObjectsEnabled: visible};
+		this._renderControls();
+	}
+
+	/** Call this method to prepare a complete scene at a supported physical height.
+	 * Unsupported heights throw before preparation; choose 5, 500 or 2000 metres.
+	 * @param {Distance} height - Actual height above the model surface.
+	 * @returns {void} - Accepted labels remain until the requested frame publishes.
+	 */
+	setObserverHeight(height) {
+		if (!this._state) return;
+		if (this._state.modeKind === 'flat-local' && !this._localSunCachePolicy)
+			throw new RangeError('Live elevation requires the compact local runtime.');
+		const observerHeight = Flat32SceneControls.resolve({observerHeight: height}).observerHeight;
+		this._commitState({...this._state, observerHeight}, false);
 	}
 
 	/** Called by geometry preparation and rollback to place the camera at the geometry-owned height.
@@ -433,13 +515,18 @@ export class Flat32Application {
 				),
 		);
 		this._view.installModeControl(() => this._switchMode());
-		this._view.installAtmosphereControl(() => this._toggleAtmosphereShader());
-		this._view.showAtmosphereShaderState(this._initialSceneControls.skyRenderMode !== 'shader-off');
+		this._view.installSceneControls({
+			onSky: (mode) => this.setSkyRenderMode(mode),
+			onSun: (selection) => this.setSunPresentation(selection),
+			onObjects: () => this.setObjectsVisible(this._state?.reviewObjectsEnabled === false),
+			onElevation: (height) => this.setObserverHeight(height),
+		});
 		const initialLocationTimeState = this._locationTimeController.start();
 		this._state = {
 			...this._initialSceneControls,
 			...this._locationTimeController.selectTime(initialLocationTimeState, this._initialFlatTimeIndex),
 			modeKind: this._initialModeKind,
+			reviewObjectsEnabled: this._reviewObjectsEnabled,
 		};
 		this._renderControls();
 		try {
@@ -476,41 +563,12 @@ export class Flat32Application {
 				sunIlluminationScale: this._state.sunIlluminationScale,
 				sunDiscBrightnessScale: this._state.sunDiscBrightnessScale,
 				sceneRuntime: this._sceneRuntime,
-				endpointScene: this._endpointScene,
-				/** Stage candidate geometry before publication; the controller restores the previous mode on failure.
-				 * @param {Flat32ModeKind} kind - Candidate geometry/source pairing.
-				 * @param {Flat32Mode} mode - Candidate mode borrowing application state.
+				/** Create isolated visual resources; the displayed camera/endpoints remain unchanged.
+				 * @param {Flat32Mode} mode - Candidate physical mode.
+				 * @returns {Flat32SceneStage} - Reversible scene publication and owned resources.
 				 */
-				onPreparing: (kind, mode) => {
-					this._applyObserverHeight(mode);
-					this._endpointScene?.applyMode(kind, mode.geometry);
-					this._sceneSummary = this._endpointScene?.describe() ?? null;
-				},
-				/** Restore geometry and lighting from the last published mode after candidate failure.
-				 * @param {Flat32ModeKind} kind - Published geometry/source pairing.
-				 * @param {Flat32Mode} mode - Previously accepted mode.
-				 */
-				onReverted: (kind, mode) => {
-					this._applyObserverHeight(mode);
-					this._endpointScene?.applyMode(kind, mode.geometry);
-					if (kind === 'spherical-distant') {
-						const distantMode = /** @type {SphericalDistantMode} */ (mode);
-						this._endpointScene?.updateDistantSunLighting(
-							distantMode.geometry.configuration.directionToSource,
-							distantMode.algorithm32.receiverLight,
-							distantMode.algorithm32.config.config.color,
-						);
-					} else if (!(mode instanceof FlatLocalMode) || !mode.compactProfile) {
-						const localMode = /** @type {FlatLocalMode} */ (mode);
-						this._endpointScene?.updateLocalSunLighting(
-							localMode.geometry.mapModelPositionToObserverLocalScenePoint(
-								localMode.geometry.configuration.sourcePosition,
-								{sceneScale: localMode.sceneScale},
-							),
-						);
-					}
-					this._sceneSummary = this._endpointScene?.describe() ?? null;
-				},
+				createSceneStage: (mode) =>
+					new StagedSceneRuntime(this._sceneRuntime, mode, () => this._state?.reviewObjectsEnabled !== false),
 				onFailure: this._handleAtmosphereFailure,
 				/** Construct the requested candidate; synchronous errors and resolver rejection propagate to rollback.
 				 * @param {Flat32ModeKind} kind - Requested geometry/source pairing.
@@ -535,8 +593,14 @@ export class Flat32Application {
 				 * @param {Flat32ModeKind} kind - Published geometry/source pairing.
 				 * @param {Flat32Mode} mode - Accepted mode supplying geometry and lighting.
 				 * @param {Flat32ApplicationState} state - Accepted exact observation.
+				 * @param {Flat32SceneStage} stage - Accepted camera and endpoint resources.
 				 */
-				onPublished: (kind, mode, state) => {
+				onPublished: (kind, mode, state, stage) => {
+					const previous = this._endpointScene;
+					this._endpointScene = /** @type {EndpointScene} */ (stage.endpointScene);
+					this._endpointScene.setObjectsVisible(this._state?.reviewObjectsEnabled !== false);
+					this._pointerLookController?.setCamera(this._sceneRuntime.camera);
+					if (this._publishedState === null && previous !== this._endpointScene) previous?.dispose();
 					if (kind === 'spherical-distant') {
 						const distantMode = /** @type {SphericalDistantMode} */ (mode);
 						this._endpointScene?.updateDistantSunLighting(

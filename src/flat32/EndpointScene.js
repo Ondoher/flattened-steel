@@ -177,11 +177,22 @@ export class EndpointScene {
 
 		this._clearMeshes();
 		this._addMesh(this._createGround(geometry, kind));
-		if (this._reviewObjectsEnabled) {
-			for (const [index, definition] of SCENE_OBJECTS.entries()) {
-				this._addMesh(this._createReviewObject(definition, index, geometry));
-			}
+		for (const [index, definition] of SCENE_OBJECTS.entries()) {
+			const mesh = this._createReviewObject(definition, index, geometry);
+			mesh.visible = this._reviewObjectsEnabled;
+			this._addMesh(mesh);
 		}
+	}
+
+	/** Call this method to retain review meshes while toggling their visible/depth/shadow participation.
+	 * Nonboolean values throw before mutation; use a boolean selection.
+	 * @param {boolean} visible - Review boxes visible; ground always remains.
+	 * @returns {void} - Mesh visibility changed; caller requests updated shadow maps.
+	 */
+	setObjectsVisible(visible) {
+		if (typeof visible !== 'boolean') throw new TypeError('Object visibility must be boolean.');
+		this._reviewObjectsEnabled = visible;
+		for (const mesh of this._meshes) if (mesh.userData.shadowObjectKey) mesh.visible = visible;
 	}
 
 	/**
@@ -198,6 +209,7 @@ export class EndpointScene {
 		let shadowReceiverCount = 0;
 
 		for (const mesh of this._meshes) {
+			if (!mesh.visible) continue;
 			if (mesh.castShadow) {
 				shadowCasterCount += 1;
 			}
@@ -271,6 +283,7 @@ export class EndpointScene {
 
 		this._group.updateWorldMatrix(true, true);
 		for (const mesh of this._meshes) {
+			if (!mesh.visible) continue;
 			const bounds = new THREE.Box3().setFromObject(mesh, true);
 
 			if (bounds.isEmpty()) {

@@ -49,6 +49,14 @@ export class PointerLookController {
 		this._onChange(false);
 	}
 
+	/** Call this method to retain pointer-lock ownership while rebinding the accepted scene camera.
+	 * @param {import('three').PerspectiveCamera} camera - Newly published camera, retaining the current yaw and pitch.
+	 * @returns {void} - Subsequent pointer movement rotates the accepted camera.
+	 */
+	setCamera(camera) {
+		this._controls.object = camera;
+	}
+
 	/** Release pointer lock, listeners, and Three control resources. */
 	dispose() {
 		if (this._disposed) {

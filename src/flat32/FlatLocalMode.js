@@ -191,14 +191,22 @@ export class FlatLocalMode {
 	 * @param {GeometryObservation} observation - Requested time and location.
 	 * @param {UnitValue<'bytes'>} otherOwnedGpuBytes - Complete declared scene/frame overlap.
 	 * @param {Flat32LocalFrameViewRequest} view - Current symmetric ordinary camera cone.
+	 * @param {Distance} [observerHeight] - Requested receiver elevation; omission retains the accepted height.
 	 * @returns {LocalSunFrameRequest} - Complete accepted request, or explicit unsupported coverage.
 	 */
-	createLocalFrameRequest(observation, otherOwnedGpuBytes, view) {
+	createLocalFrameRequest(observation, otherOwnedGpuBytes, view, observerHeight = this.observerHeight) {
 		this._assertUsable();
 		if (!this._compactProfile) throw new Error('Compact local selection required.');
 		const profile = this._compactProfile.createLiveProfile({
 			observation,
-			receiverPosition: this._geometry.configuration.observerPosition,
+			receiverPosition: {
+				coordinates: [
+					this._geometry.configuration.observerPosition.coordinates[0],
+					this._geometry.configuration.observerPosition.coordinates[1],
+					DistanceMath.toMeters(observerHeight),
+				],
+				units: 'meters',
+			},
 		});
 		const geometry = /** @type {FlatEarthGeometry} */ (profile.models.geometry);
 		const ray = geometry.resolveCompactViewSupport({

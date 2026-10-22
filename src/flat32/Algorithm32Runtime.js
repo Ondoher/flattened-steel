@@ -8,6 +8,7 @@ import {SceneMath} from '../algorithm32/math/index.js';
 import {SphericalDistantMode} from './SphericalDistantMode.js';
 import DistantSunSharedCache from '../algorithm32/implementation/distant-sun/cache/DistantSunSharedCache.js';
 import {Flat32SceneControls} from './Flat32SceneControls.js';
+import DistanceMath from '../algorithm32/math/DistanceMath.js';
 import {ATMOSPHERIC_VIEW_ENABLED_VALUE_KEY} from '../algorithm32/atmospheric-transport/consts.js';
 import {SUN_DISC_BRIGHTNESS_SCALE_VALUE_KEY} from '../algorithm32/celestial-contribution-cache/consts.js';
 
@@ -250,12 +251,14 @@ export class Algorithm32Runtime {
 			signal.throwIfAborted();
 			this._assertUsable();
 			publication = this._localFrameController.publishPreparedLocalFrame(frame, () => {
-				frame.contents.validateView?.();
 				try {
+					frame.contents.sceneView?.publish();
+					frame.contents.validateView?.();
 					frame.contents.sceneLighting?.publish();
-					this._sceneRuntime.installRenderOperation(() => this._renderLocalFrame());
+					this._publishSelectedRenderOperation();
 				} catch (error) {
 					frame.contents.sceneLighting?.revert();
+					frame.contents.sceneView?.revert();
 					throw error;
 				}
 			});
@@ -317,13 +320,18 @@ export class Algorithm32Runtime {
 	async updateSharedScene(state, request) {
 		this._assertUsable();
 		if (this._localFrameController) {
+			const camera = /** @type {THREE.PerspectiveCamera} */ (this._sceneRuntime.camera).clone();
+			camera.position.y =
+				DistanceMath.toMeters(state.observerHeight ?? this._mode.observerHeight) / this._mode.sceneScale.value;
+			camera.updateMatrixWorld(true);
 			const localRequest =
 				request.localFrameRequest ??
 				(this._mode instanceof FlatLocalMode
 					? this._mode.createLocalFrameRequest(
 							state.observation,
 							this._localFrameOtherCacheBytes(),
-							resolveLocalSunFrameView(this._sceneRuntime.camera),
+							resolveLocalSunFrameView(camera),
+							state.observerHeight,
 						)
 					: null);
 			if (!localRequest) throw new TypeError('Complete accepted local frame request required.');
@@ -359,7 +367,7 @@ export class Algorithm32Runtime {
 		let view;
 		let committed = false;
 		try {
-			const prepared = mode.prepareLiveScene(state.observation);
+			const prepared = mode.prepareLiveScene(state.observation, state.observerHeight);
 			const degrees = prepared.sceneState.solarZenithDegrees;
 			const ordinal = degrees >= 108 ? null : Math.floor(degrees + 0.5);
 			const candidate = await attachment.prepareScene(ordinal, {}, cancellation.signal);
@@ -386,6 +394,13 @@ export class Algorithm32Runtime {
 				this._assertUsable();
 				attachment.publishPrepared(candidate.snapshot.generation);
 				prepared.publish();
+				const position = this._sceneRuntime.camera.position;
+				position.set(
+					position.x,
+					DistanceMath.toMeters(mode.observerHeight) / mode.sceneScale.value,
+					position.z,
+				);
+				this._sceneRuntime.camera.updateMatrixWorld();
 				this._bindingValues['lightSource.direction'] = new THREE.Vector3(
 					...prepared.sceneState.directionToSourceModel,
 				);
@@ -530,12 +545,14 @@ export class Algorithm32Runtime {
 		if (this._pendingInitialLocalFrame && this._localFrameController) {
 			const frame = this._pendingInitialLocalFrame;
 			this._localFrameController.publishPreparedLocalFrame(frame, () => {
-				frame.contents.validateView?.();
 				try {
+					frame.contents.sceneView?.publish();
+					frame.contents.validateView?.();
 					frame.contents.sceneLighting?.publish();
 					this._publishSelectedRenderOperation();
 				} catch (error) {
 					frame.contents.sceneLighting?.revert();
+					frame.contents.sceneView?.revert();
 					throw error;
 				}
 			});
@@ -641,6 +658,7 @@ export class Algorithm32Runtime {
 		}
 
 		this._updatePresentationBindings(this._bindingValues, this._mode.algorithm32);
+		this._bindingValues['geometry.sceneDepthMax'] = this._resolveSceneDepthMax();
 		Algorithm32Bindings.update({
 			bindingValues: this._bindingValues,
 			camera: this._sceneRuntime.camera,
