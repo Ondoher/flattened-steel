@@ -6,9 +6,17 @@ rendering checks pass. The [promotion status](distant-sun-strobing-promotion-sta
 routes phase and closeout; the [P4 completion record](../../../../.codex-tmp/p4-strobing-20261007/summary.md)
 owns final checks, source-review validation, checkpoint and completion disposition.
 
-## Active Selection
+## Current selection owner
 
-The deployed anchored Native48/Native15/N4 package is
+The owner switched the default to the corrected Sun-focused package on2026-10-22.
+The [sky accuracy promotion status](sky-accuracy-promotion-status.md#current-default-and-rollback)
+owns the current selection, immediate rollback, activation evidence and remaining
+production-review limitation. The strobing release details below retain the prior
+deployment's provenance; its package is now the immediate rollback.
+
+## Prior strobing selection
+
+The prior anchored Native48/Native15/N4 package is
 `9a30749c6d4e6c23d7a84839788c068133051fbbd9bd93d07de8b18a6ee432ec`.
 Its report is 3,268 bytes, SHA-256
 `bee0301de150115a5c068c492b20e5e631f4bd7da4104b4f847d4564dda3145e`.
@@ -54,7 +62,7 @@ supplies current P4 evidence through the service constructor without changing
 package bytes, interpolation equations or the target admission checks. All
 qualification outputs remain in new ignored task-owned run children.
 
-## Compatible Rollback
+## Historical strobing-release rollback
 
 The retained prior package is
 `2243c1ab2c2d529131759b32d72cee2a2e4b32098e1cc450c0d48cf34ed4edc7`:

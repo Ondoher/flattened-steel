@@ -10,8 +10,46 @@ Sky Accuracy Dials remains [suspended](../../poc-experiments/engineering-studies
 The selected production port passes its bounded numerical, package-reconstruction,
 application-rendering and lifecycle checks. The owner approved the increased
 on-disk cache size on2026-10-21; both qualified candidates pass the revised disk
-allowances. **Adoption remains held** by incomplete production standards review. No candidate deployment, default switch, remote publication or push occurred.
-P1/P2 implementation-completion claims retain the plan's required P3 review gate.
+allowances. On2026-10-22 the owner explicitly directed activation as the app's
+default. The canonical package is now published locally and selected with
+`corrected60-sun035` and monotone-cubic lookup. The app and Worker rebuilt, all
+eight server tests pass, and a fresh maintained-route GPU browser loads the new
+identity with atmosphere state `ready` and zero rendering errors.
+**Required production standards review remains incomplete** because live all-lane
+calibration is stale. Owner-directed activation does not establish a compliant
+handoff or satisfy the outstanding P3 review gate. No remote publication or push
+occurred. ARM Spectral Validation and Sky Accuracy Dials remain suspended.
+
+## Current default and rollback
+
+The default canonical package is
+`8d185961cab8beb1e461cd1256be2875bb9a99e9f39e515b9288b92e5d2f6d37`,
+725426183 bytes,109 scenes and90 blocks. Its report is3061 bytes with SHA-256
+`76fcb62e8e70eececbbb7213591534042a38b8b28cfd577fda529de95034f5f7`.
+Only the distant-Sun package/report and matching scattering policy changed.
+Native48/Native15/N4, P2/FP32, atmospheric composition, local-Sun defaults and
+target-specific transition admission retain their existing selections.
+
+The immediately preceding canonical package
+`9a30749c6d4e6c23d7a84839788c068133051fbbd9bd93d07de8b18a6ee432ec`
+remains intact. Restore the authenticated
+[rollback selection](../../../../.codex-tmp/sky-accuracy-promotion/handoff-01/rollback-selection.js)
+only after checking the current candidate-selection hash, then rebuild/restart
+and verify the loaded identity. Keep the legacy lookup and old report identity
+paired; do not replace immutable package bytes.
+
+Activation evidence:
+
+- [Baseline and owner authority](../../../../.codex-tmp/sky-accuracy-promotion/activation-20261022-01/baseline.json).
+- [Complete local publication](../../../../.codex-tmp/sky-accuracy-promotion/runs/2026-10-22T15-28-10-979Z-ac1c1499-6ba9-4c5f-9d93-cadecb3f8357/result.json).
+- [Actual rebuilt app and loaded HTTP identities](../../../../.codex-tmp/sky-accuracy-promotion/activation-route-20261022-01/result.json)
+  and [render](../../../../.codex-tmp/sky-accuracy-promotion/activation-route-20261022-01/current-route.png).
+
+The fresh browser is Chrome155, using the qualified single-atlas route. Its owned
+server and browser closed after verification. Existing unsupported dual-atlas
+target behavior was not broadened. Publication reauthenticated all204 artifacts;
+no GPU field was regenerated. Selected-server and shared-runtime local type
+checks pass. Existing local-cache circular-import and body-parser warnings remain.
 
 The darker horizon is consistent with the earlier matched libRadtran and independent
 probe results, as the owner confirmed. Brightness preference is not a rejection
@@ -21,28 +59,29 @@ not resumed. Atmospheric composition, aerosol amount, exposure and display defau
 were not changed to improve scores or appearance.
 
 The [final verification](../../../../.codex-tmp/sky-accuracy-promotion/final-verification-01/result.json)
-authenticates completed numerical/runtime evidence and reports `adoptionReady:false`.
+authenticates the earlier numerical/runtime evidence and reports its historical
+`adoptionReady:false`; it was not rewritten by activation.
 Its earlier storage hold is superseded only by the owner-approved
 [disk acceptance](../../../../.codex-tmp/sky-accuracy-promotion/size-approval-01/result.json);
 the historical report is unchanged. All qualification outputs remain below `.codex-tmp/sky-accuracy-promotion/`.
 
 ## Milestone report and gate dispositions
 
-| Gate | Result | Evidence and limits |
-| --- | --- | --- |
-| P0 ownership and compatibility contract | Pass | Named compiler, serializer, service, CPU/GPU and application owners; explicit legacy/candidate pairing |
-| P1 production adaptation and local checks | Pass within tested scope |680 engine specs;45 Flat32 browser cases; focused compiler/policy12, generation11 and server6 checks; applicable type checks |
-| Preserved analytic N1 | Pass, bounded witness | Nine exact Float32 J1 probes at three wavelengths and identical Native48/W27 nodes; not a whole-field proof |
-| Native51 full-spectrum paper reproduction | Pass |40 wavelengths,17 times,81 rays,31 scoring bands; sensitivity and aggregate gates below |
-| Matched Native48 paper route | Pass | Fresh legacy15 control and candidate use identical anchored/cubic physical queries |
-| Native15 persisted reconstruction | Pass | All109 scenes for canonical candidate, Toronto candidate and matched Toronto legacy control |
-| Matched actual scene rendering | Pass |28 captures: seven current/candidate scenes for each of canonical and Toronto optics |
-| Real packed CPU/GPU lookup | Pass | Maximum relative4.6702569484e-6 below unchanged5e-6; finite/nonnegative values and real packet probes |
-| Runtime lifecycle | Pass on supported bounded route | Four actual receipts: supersession, held disjoint jumps, darkness releasing atlas, context restoration and zero coherence failures |
-| Flat/local isolation | Pass, smoke scope | Actual compact N1 frame; unchanged local defaults and coordinate-frame round trip; no qualification of focused mapping for local Sun |
-| Rebuilt current route and rollback preparation | Pass within stated scope | Fresh compiled Bootstrap/Worker, maintained server route, loaded current package; authenticated candidate/rollback files prepared |
-| Owner-approved package-storage acceptance | Pass | Canonical725426183 bytes and Toronto727455714 fit the revised750000000-byte ceiling; authenticated in size-approval-01 |
-| Required production standards review | Incomplete | Stale all-lane calibration prevents reviewer startup; no compliance claim |
+| Gate                                           | Result                          | Evidence and limits                                                                                                                  |
+| ---------------------------------------------- | ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| P0 ownership and compatibility contract        | Pass                            | Named compiler, serializer, service, CPU/GPU and application owners; explicit legacy/candidate pairing                               |
+| P1 production adaptation and local checks      | Pass within tested scope        | 680 engine specs;45 Flat32 browser cases; focused compiler/policy12, generation11 and server6 checks; applicable type checks         |
+| Preserved analytic N1                          | Pass, bounded witness           | Nine exact Float32 J1 probes at three wavelengths and identical Native48/W27 nodes; not a whole-field proof                          |
+| Native51 full-spectrum paper reproduction      | Pass                            | 40 wavelengths,17 times,81 rays,31 scoring bands; sensitivity and aggregate gates below                                              |
+| Matched Native48 paper route                   | Pass                            | Fresh legacy15 control and candidate use identical anchored/cubic physical queries                                                   |
+| Native15 persisted reconstruction              | Pass                            | All109 scenes for canonical candidate, Toronto candidate and matched Toronto legacy control                                          |
+| Matched actual scene rendering                 | Pass                            | 28 captures: seven current/candidate scenes for each of canonical and Toronto optics                                                 |
+| Real packed CPU/GPU lookup                     | Pass                            | Maximum relative4.6702569484e-6 below unchanged5e-6; finite/nonnegative values and real packet probes                                |
+| Runtime lifecycle                              | Pass on supported bounded route | Four actual receipts: supersession, held disjoint jumps, darkness releasing atlas, context restoration and zero coherence failures   |
+| Flat/local isolation                           | Pass, smoke scope               | Actual compact N1 frame; unchanged local defaults and coordinate-frame round trip; no qualification of focused mapping for local Sun |
+| Rebuilt current route and rollback preparation | Pass within stated scope        | Fresh compiled Bootstrap/Worker, maintained server route, loaded current package; authenticated candidate/rollback files prepared    |
+| Owner-approved package-storage acceptance      | Pass                            | Canonical725426183 bytes and Toronto727455714 fit the revised750000000-byte ceiling; authenticated in size-approval-01               |
+| Required production standards review           | Incomplete                      | Stale all-lane calibration prevents reviewer startup; no compliance claim                                                            |
 
 The ordinary Flat32 browser suite passes45 of46 cases; its explicitly opt-in full
 rectangular-cache acceptance case is skipped. Actual shared-cache full scenes and
@@ -54,13 +93,13 @@ warnings remain visible during builds. Whole-repository formatting and
 
 ## Numerical results
 
-| Comparison | Aggregate spectral RMSE |
-| --- | ---: |
-| Authenticated H61 focused target, Native51 |11.593958857038787 |
-| Production compiler focused reproduction, Native51 |11.593960694173592 |
-| Retained Original40 paper control |11.62291402828908 |
-| Fresh matched legacy15 control, Native48 |15.30298660938046 |
-| Production focused candidate, Native48 |11.27205204948326 |
+| Comparison                                         | Aggregate spectral RMSE |
+| -------------------------------------------------- | ----------------------: |
+| Authenticated H61 focused target, Native51         |      11.593958857038787 |
+| Production compiler focused reproduction, Native51 |      11.593960694173592 |
+| Retained Original40 paper control                  |       11.62291402828908 |
+| Fresh matched legacy15 control, Native48           |       15.30298660938046 |
+| Production focused candidate, Native48             |       11.27205204948326 |
 
 Native51 aggregate replay deviation is0.0000018371348052mW, below the frozen
 0.0001 sensitivity budget. Maximum same-query spectral relative deviation is
@@ -86,10 +125,10 @@ Toronto means authenticated H63 per-channel aerosol phase/SSA with the same
 extinction, amount and density profile. Its legacy control is a qualification
 profile, not a deployed Toronto package.
 
-| Profile | Noon | Sunset | Sunset+60 | Complete capture/lookup record |
-| --- | --- | --- | --- | --- |
-| Canonical | [Pair](../../../../.codex-tmp/sky-accuracy-promotion/scenes-05/comparison-noon-toward.png) | [Pair](../../../../.codex-tmp/sky-accuracy-promotion/scenes-05/comparison-sunset.png) | [Pair](../../../../.codex-tmp/sky-accuracy-promotion/scenes-05/comparison-sunset-plus60.png) | [Fourteen captures](../../../../.codex-tmp/sky-accuracy-promotion/scenes-report-01/result.json) |
-| Toronto | [Pair](../../../../.codex-tmp/sky-accuracy-promotion/toronto-scenes-01/comparison-noon-toward.png) | [Pair](../../../../.codex-tmp/sky-accuracy-promotion/toronto-scenes-01/comparison-sunset.png) | [Pair](../../../../.codex-tmp/sky-accuracy-promotion/toronto-scenes-01/comparison-sunset-plus60.png) | [Fourteen captures](../../../../.codex-tmp/sky-accuracy-promotion/toronto-scenes-01/result.json) |
+| Profile   | Noon                                                                                               | Sunset                                                                                        | Sunset+60                                                                                            | Complete capture/lookup record                                                                   |
+| --------- | -------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| Canonical | [Pair](../../../../.codex-tmp/sky-accuracy-promotion/scenes-05/comparison-noon-toward.png)         | [Pair](../../../../.codex-tmp/sky-accuracy-promotion/scenes-05/comparison-sunset.png)         | [Pair](../../../../.codex-tmp/sky-accuracy-promotion/scenes-05/comparison-sunset-plus60.png)         | [Fourteen captures](../../../../.codex-tmp/sky-accuracy-promotion/scenes-report-01/result.json)  |
+| Toronto   | [Pair](../../../../.codex-tmp/sky-accuracy-promotion/toronto-scenes-01/comparison-noon-toward.png) | [Pair](../../../../.codex-tmp/sky-accuracy-promotion/toronto-scenes-01/comparison-sunset.png) | [Pair](../../../../.codex-tmp/sky-accuracy-promotion/toronto-scenes-01/comparison-sunset-plus60.png) | [Fourteen captures](../../../../.codex-tmp/sky-accuracy-promotion/toronto-scenes-01/result.json) |
 
 Left is the legacy production algorithm; right is the selected candidate. Toronto's
 legacy noon capture exhibits cyan over-brightening; the candidate removes that
@@ -125,29 +164,30 @@ authenticates every artifact of both current and candidate packages:204 artifact
 109 scenes and90 blocks each. The candidate is
 `8d185961cab8beb1e461cd1256be2875bb9a99e9f39e515b9288b92e5d2f6d37`, report3061 bytes,
 SHA-256 `76fcb62e8e70eececbbb7213591534042a38b8b28cfd577fda529de95034f5f7`.
-The rollback remains current package
+The immediate rollback is the preceding package
 `9a30749c6d4e6c23d7a84839788c068133051fbbd9bd93d07de8b18a6ee432ec`,
 Native48/Native15/N4, cubic/P2/FP32 and legacy lookup. It is not the older P9/linear
-predecessor. Its report/selection and package bytes remain unchanged.
+predecessor. Its retained rollback selection, report and package bytes remain unchanged.
 
 [Prepared publication commands](../../../../.codex-tmp/sky-accuracy-promotion/handoff-01/commands.md),
 [candidate selection](../../../../.codex-tmp/sky-accuracy-promotion/handoff-01/candidate-selection.js)
 and [exact rollback selection](../../../../.codex-tmp/sky-accuracy-promotion/handoff-01/rollback-selection.js)
-are reviewable and unapplied. Publication accepts explicit `--scattering-accuracy`;
+remain immutable preparation evidence; the owner-authorized local activation is
+recorded above. Publication accepts explicit `--scattering-accuracy`;
 the [actual CLI mismatch proof](../../../../.codex-tmp/sky-accuracy-promotion/publication-pairing-01/result.json)
 rejects unlike package/lookup policies before copying. Owner-approved disk
 acceptance now passes; the prepared historical materials retain their original
-preapproval wording. Required production review and separate publication/activation
-authority remain outstanding before those commands can be used.
+preapproval wording. The owner supplied local publication/activation authority on
+2026-10-22; required production review remains outstanding.
 
-| Resource | Canonical candidate | Toronto candidate | Toronto legacy control |
-| --- | ---: | ---: | ---: |
-| Package bytes |725426183 |727455714 |511160270 |
-| Whole generation, including compression and109 reconstructions |433.76s |677.99s |628.44s |
-| GPU execution |110.71s |275.75s |297.91s |
-| Actual shared atlas bytes |429981696 |429981696 |429981696 |
+| Resource                                                       | Canonical candidate | Toronto candidate | Toronto legacy control |
+| -------------------------------------------------------------- | ------------------: | ----------------: | ---------------------: |
+| Package bytes                                                  |           725426183 |         727455714 |              511160270 |
+| Whole generation, including compression and109 reconstructions |             433.76s |           677.99s |                628.44s |
+| GPU execution                                                  |             110.71s |           275.75s |                297.91s |
+| Actual shared atlas bytes                                      |           429981696 |         429981696 |              429981696 |
 
-Current deployed package storage is506706259 bytes. The canonical candidate adds
+The preceding default's package storage is506706259 bytes. The newly selected cache adds
 43.17% on disk while preserving atlas dimensions. Generated storage, staging,
 Node RSS, framebuffers and GPU atlas memory are separate quantities. These serial
 builds did not control GPU clocks or host load, so timings do not isolate the cost
@@ -198,8 +238,9 @@ Readiness was rechecked after qualification and still reports
 started; the required bounded production review and independent audits remain open.
 External governance definitions/calibration records were not silently repaired.
 
-Next action: restore reviewer readiness, then execute the plan's required bounded
-production review and complete candidate admission. The owner-approved disk
-increase is recorded and verified; it is no longer an adoption hold. Reuse the completed packages and qualification evidence;
-rebuilding their GPU fields is unnecessary unless source or physical inputs change.
+The requested default activation is complete. Remaining governance work is to
+restore reviewer readiness and execute the plan's required bounded production
+review; it is not represented as complete by this activation. Reuse the completed
+packages and qualification evidence. Rebuilding their GPU fields is unnecessary
+unless source or physical inputs change.
 No qualification-owned browser, server or GPU job remains active.

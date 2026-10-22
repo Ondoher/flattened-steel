@@ -2,7 +2,7 @@ import {fileURLToPath} from 'node:url';
 import DistantSunSharedCachePackageService from './DistantSunSharedCachePackageService.js';
 
 /** Immutable package selected by the server deployment; selection never mutates package bytes. */
-export const SHARED_PACKAGE_IDENTITY = '9a30749c6d4e6c23d7a84839788c068133051fbbd9bd93d07de8b18a6ee432ec';
+export const SHARED_PACKAGE_IDENTITY = '8d185961cab8beb1e461cd1256be2875bb9a99e9f39e515b9288b92e5d2f6d37';
 /** Application-owned interpolation selected by the approved deployment. */
 export const SHARED_PACKAGE_SOLAR_INTERPOLATION = /** @type {const} */ ('monotone-cubic');
 /** Measured P4 target qualification; the browser admits it only on the matching GPU and browser major. */
@@ -14,8 +14,8 @@ export const SHARED_PACKAGE_TRANSITION_QUALIFICATION = /** @type {const} */ ({
 /** Exact selected package report. */
 export const SHARED_PACKAGE_REPORT = /** @type {const} */ ({
 	path: 'package-set.json',
-	byteLength: 3268,
-	sha256: 'bee0301de150115a5c068c492b20e5e631f4bd7da4104b4f847d4564dda3145e',
+	byteLength: 3061,
+	sha256: '76fcb62e8e70eececbbb7213591534042a38b8b28cfd577fda529de95034f5f7',
 });
 /** Repository-local immutable deployment destination. */
 export const SHARED_PACKAGE_ROOT = fileURLToPath(
@@ -31,5 +31,6 @@ export async function createProductionSharedCacheService() {
 		SHARED_PACKAGE_ROOT,
 		SHARED_PACKAGE_SOLAR_INTERPOLATION,
 		SHARED_PACKAGE_TRANSITION_QUALIFICATION,
+		'corrected60-sun035',
 	).load(SHARED_PACKAGE_REPORT);
 }

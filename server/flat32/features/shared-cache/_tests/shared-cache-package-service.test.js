@@ -8,6 +8,7 @@ import {existsSync} from 'node:fs';
 import {createHash, randomUUID} from 'node:crypto';
 import registerFlat32Routes from '../../../../flat32-router.js';
 import {
+	createProductionSharedCacheService,
 	SHARED_PACKAGE_ROOT,
 	SHARED_PACKAGE_REPORT,
 	SHARED_PACKAGE_IDENTITY,
@@ -139,12 +140,13 @@ test(
 			assert.equal(ready.cacheFormat, 'algorithm32-distant-sun-shared-block-v1');
 			assert.equal(ready.representativeSolarZenithDegrees, 108);
 			assert.equal(ready.asset.packageSetIdentity, SHARED_PACKAGE_IDENTITY);
+			assert.equal(ready.asset.scatteringAccuracy, 'corrected60-sun035');
 			assert.equal(ready.asset.solarInterpolation, 'monotone-cubic');
 			assert.deepEqual(ready.asset.transitionQualification, SHARED_PACKAGE_TRANSITION_QUALIFICATION);
 			const dark = await (await fetch(`${origin}/api/distant-sun-scene-cache?solarZenithDegrees=108`)).json();
 			assert.equal(dark.status, 'dark');
 			assert.deepEqual(dark.asset, ready.asset);
-			const service = await new Service(SHARED_PACKAGE_ROOT).load(SHARED_PACKAGE_REPORT);
+			const service = await createProductionSharedCacheService();
 			const encoded = [...service._files.values()].find((identity) => identity.path.endsWith('.zst'));
 			assert.ok(encoded);
 			for (const identity of [SHARED_PACKAGE_REPORT, encoded]) {
@@ -177,12 +179,10 @@ test(
 
 test(
 	'shared service rejects an immutable legacy package selected with focused lookup',
-	{skip: !existsSync(path.join(SHARED_PACKAGE_ROOT, 'package-set.json'))},
+	{skip: !existsSync(path.join(packageRoot, 'package-set.json'))},
 	async () => {
 		await assert.rejects(
-			new Service(SHARED_PACKAGE_ROOT, 'monotone-cubic', undefined, 'corrected60-sun035').load(
-				SHARED_PACKAGE_REPORT,
-			),
+			new Service(packageRoot, 'monotone-cubic', undefined, 'corrected60-sun035').load(report),
 			/construction and selected lookup policies disagree/u,
 		);
 	},

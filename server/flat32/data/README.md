@@ -29,17 +29,16 @@ close.
 The selected immutable shared package lives at:
 
 ```text
-server/flat32/data/shared-block/9a30749c6d4e6c23d7a84839788c068133051fbbd9bd93d07de8b18a6ee432ec/
+server/flat32/data/shared-block/8d185961cab8beb1e461cd1256be2875bb9a99e9f39e515b9288b92e5d2f6d37/
 ```
 
-Use the explicit publication command in the
-[strobing release](../../../agents/topics/production-algorithm32/caches/distant-sun-strobing-release.md).
-Its active selection, report identity, current target memory qualification and
-compatible rollback are owned there. The deployed ozone-free Native48 package
-contains 204 artifacts, 506,706,259 bytes; the prior 2243 package remains intact
-for rollback. The server serves only allowlisted authenticated complete files.
-[Original rollout evidence](../../../archives/topics/production-algorithm32-release-20260911/agents/topics/production-algorithm32/caches/shared-runtime-rollout.md)
-is preserved by the production cache topic.
+The [sky accuracy promotion status](../../../agents/topics/production-algorithm32/caches/sky-accuracy-promotion-status.md#current-default-and-rollback)
+owns the owner-authorized default activation, report identity, publication evidence,
+review limitation and immediate rollback. The previous package remains intact.
+The server serves only allowlisted authenticated complete files, with the selected
+package's construction and runtime lookup policies explicitly paired.
+The [prior strobing release](../../../agents/topics/production-algorithm32/caches/distant-sun-strobing-release.md)
+retains the preceding deployment's provenance and historical rollout references.
 
 ## Operational Numerical Reference
 
