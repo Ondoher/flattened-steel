@@ -1,0 +1,22 @@
+[
+  {
+    "id": "aeronet-aod",
+    "url": "https://aeronet.gsfc.nasa.gov/cgi-bin/print_web_data_v3?site=Cart_Site&year=2023&month=8&day=22&year2=2023&month2=8&day2=22&AOD20=1&AVG=10&if_no_html=1"
+  },
+  {
+    "id": "aeronet-ssa",
+    "url": "https://aeronet.gsfc.nasa.gov/cgi-bin/print_web_data_inv_v3?site=Cart_Site&year=2023&month=8&day=22&year2=2023&month2=8&day2=22&product=SSA&ALM20=1&AVG=10&if_no_html=1"
+  },
+  {
+    "id": "aeronet-asy",
+    "url": "https://aeronet.gsfc.nasa.gov/cgi-bin/print_web_data_inv_v3?site=Cart_Site&year=2023&month=8&day=22&year2=2023&month2=8&day2=22&product=ASY&ALM20=1&AVG=10&if_no_html=1"
+  },
+  {
+    "id": "aeronet-pfn",
+    "url": "https://aeronet.gsfc.nasa.gov/cgi-bin/print_web_data_inv_v3?site=Cart_Site&year=2023&month=8&day=22&year2=2023&month2=8&day2=22&product=PFN&ALM20=1&AVG=10&if_no_html=1"
+  },
+  {
+    "id": "sasze-dqr",
+    "url": "https://adc.arm.gov/elastic/metadata/_search?q=datastream.keyword%3AsgpsaszevisC1.a1&size=1&_source=datastream%2Cdoi%2Cdqr_dates%2Cepoch_name%2Cepoch_desc%2Clink_url"
+  }
+]

@@ -1,0 +1,18 @@
+[
+  {
+    "id": "aeronet-aod-sgp",
+    "url": "https://aeronet.gsfc.nasa.gov/cgi-bin/print_web_data_v3?site=ARM_SGP&year=2023&month=8&day=22&year2=2023&month2=8&day2=22&AOD20=1&AVG=10&if_no_html=1"
+  },
+  {
+    "id": "aeronet-ssa-sgp",
+    "url": "https://aeronet.gsfc.nasa.gov/cgi-bin/print_web_data_inv_v3?site=ARM_SGP&year=2023&month=8&day=22&year2=2023&month2=8&day2=22&product=SSA&ALM20=1&AVG=10&if_no_html=1"
+  },
+  {
+    "id": "aeronet-asy-sgp",
+    "url": "https://aeronet.gsfc.nasa.gov/cgi-bin/print_web_data_inv_v3?site=ARM_SGP&year=2023&month=8&day=22&year2=2023&month2=8&day2=22&product=ASY&ALM20=1&AVG=10&if_no_html=1"
+  },
+  {
+    "id": "aeronet-pfn-sgp",
+    "url": "https://aeronet.gsfc.nasa.gov/cgi-bin/print_web_data_inv_v3?site=ARM_SGP&year=2023&month=8&day=22&year2=2023&month2=8&day2=22&product=PFN&ALM20=1&AVG=10&if_no_html=1"
+  }
+]

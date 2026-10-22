@@ -1,0 +1,4 @@
+[
+  {"id":"phase-level15","url":"https://aeronet.gsfc.nasa.gov/cgi-bin/print_web_data_inv_v3?site=ARM_SGP&year=2023&month=8&day=20&year2=2023&month2=8&day2=24&product=PFN&ALM15=1&AVG=10&if_no_html=1"},
+  {"id":"phase-level20","url":"https://aeronet.gsfc.nasa.gov/cgi-bin/print_web_data_inv_v3?site=ARM_SGP&year=2023&month=8&day=20&year2=2023&month2=8&day2=24&product=PFN&ALM20=1&AVG=10&if_no_html=1"}
+]

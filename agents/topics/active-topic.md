@@ -13,12 +13,11 @@ The owner authorized independent execution on 2026-10-21. The
 [plan](poc-experiments/engineering-studies/arm-spectral-validation/plan.md) owns
 M1-M4; the [status](poc-experiments/engineering-studies/arm-spectral-validation/status.md)
 owns the current M1 report and resumption point. Exact public metadata confirms
-22 August 2023 SGP SASZe a1 visible spectra, radiosonde and lidar files. Full
-measurement access requires ARM registration/token; the owner currently has no
-account or local files. M1 advancement is held for access, not scientifically
-rejected. No matched case, production/libRadtran run or RMSE is accepted yet.
-Resume acquisition/quality matching after access resolves, without new execution
-permission. Reuse the retained metadata/documentation and immutable report 00007.
+22 August 2023 SGP SASZe a1 visible spectra, radiosonde and lidar files. ARM access is now supplied; the selected spectra, radiosondes and lidar
+payloads have been downloaded and decoded. M1 is screening actual quality,
+cloud coverage, calibration and the overlapping detector-saturation notice.
+No matched case or production/libRadtran score is accepted yet. Reuse retained
+runs00008-00014 and the current status; no new execution permission is needed.
 Measured spectra are the observational reference; libRadtran is mandatory.
 Zenith measurements do not establish horizon appearance.
 

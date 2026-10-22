@@ -1,0 +1,14 @@
+[
+  {
+    "id": "sasze-raw",
+    "url": "https://adc.arm.gov/elastic/file_info/_search?q=datastream.keyword%3AsgpsaszeC1.00+AND+start_time%3A%5B2023-08-22T00%3A00%3A00Z+TO+2023-08-22T23%3A59%3A59Z%5D&size=5&_source=file_name%2Cfile_size%2Cstart_time%2Cend_time%2Cdatastream"
+  },
+  {
+    "id": "sasze-counts",
+    "url": "https://adc.arm.gov/elastic/file_info/_search?q=datastream.keyword%3AsgpsaszevisC1.a0+AND+start_time%3A%5B2023-08-22T00%3A00%3A00Z+TO+2023-08-22T23%3A59%3A59Z%5D&size=5&_source=file_name%2Cfile_size%2Cstart_time%2Cend_time%2Cdatastream"
+  },
+  {
+    "id": "aod",
+    "url": "https://adc.arm.gov/elastic/file_info/_search?q=datastream.keyword%3Asgpcsphotaodfiltqav3C1.a1+AND+start_time%3A%5B2023-08-22T00%3A00%3A00Z+TO+2023-08-22T23%3A59%3A59Z%5D&size=5&_source=file_name%2Cfile_size%2Cstart_time%2Cend_time%2Cdatastream"
+  }
+]

@@ -1,115 +1,94 @@
 # ARM Spectral Validation Status
 
-State: execution authorized, M1 advancement held for ARM data access, 2026-10-21.
-The plan is incomplete. Public metadata acquisition and reporting are complete;
-no measured spectra/profile payload, production cache build or libRadtran
-comparison has been accepted or run.
+State: M1 acquisition/screening complete for conditional characterization;
+M2 physical matching in progress. Independent execution remains authorized.
+No ARM-matched production or libRadtran accuracy scores exist yet.
 
-## M1 report: a real candidate exists; access and quality remain open
+## M1 report
 
-Exact public catalog queries confirm these 22 August 2023 SGP C1 files:
+Authenticated ARM access resolved the download dependency. Four complete,
+hashed 22 August 2023 SGP files are retained: calibrated SASZe visible zenith
+radiance, 11:30/23:31 UTC radiosondes and Raman-lidar profiles. Their combined
+size is 276593308 bytes. Credentials are absent from source and evidence.
+Native NetCDF decoding uses the existing Ubuntu libnetcdf; no package was installed.
 
-| Role                                        | File                                        | Catalog bytes |
-| ------------------------------------------- | ------------------------------------------- | ------------: |
-| Calibrated visible zenith spectra candidate | `sgpsaszevisC1.a1.20230822.000001.nc`       |     210641156 |
-| Morning radiosonde                          | `sgpsondewnpnC1.b1.20230822.113000.cdf`     |        582872 |
-| Evening radiosonde                          | `sgpsondewnpnC1.b1.20230822.233100.cdf`     |        537216 |
-| Aerosol extinction/profile                  | `sgprlproffex1thorC1.c0.20230822.000000.nc` |      64832064 |
+The [frozen case](../../../../../tmp/experiments/arm-spectral-validation/runs/00023-case-freeze/cases.json)
+selects 22:20-22:24 UTC as pilot and 22:00-22:04 as reserved confirmation.
+Selection used measured temporal variability, lidar cloud/rain flags and
+proximity to a co-located 22:21:37 AERONET inversion, before any prediction.
+The originally proposed 21:50 window varied by15-50% across visible bands and
+was rejected. The [stability proof](../../../../../tmp/experiments/arm-spectral-validation/runs/00021-stable-windows/result.json)
+owns the fixed eligibility rule and all candidate windows. Nearby intervals
+share calibration and atmosphere errors; they establish repeatability only.
 
-The four complete files total 276593308 bytes. Prefer a small authenticated
-subset where the service supports one. Exact filenames/byte counts are provider
-metadata, not content hashes or proof of calibration/clear sky/physical matching.
-The candidate is supported by actual file inventory; it remains scientifically
-unqualified. The 11:30 and 23:31 UTC soundings do not establish a simultaneous noon
-profile. Assess evolution and spatial/temporal uncertainty after acquisition.
+The pilot has120 spectra, apparent solar zenith56.6-57.3 degrees, no lidar
+cloud/rain flags and roughly1-4% standard deviation at440/550/675/780 nm.
+The reserved window has126 spectra and passes the same stability rule.
+Native W/(m2 um sr) is numerically equal to mW/(m2 nm sr). Heights in lidar
+are km above ground; sonde heights are meters above mean sea level.
 
-Prefer SASZe `a1` over TWST `00`: the instrument handbook identifies `a1` as
-calibrated zenith radiance; TWST's listed candidate is a 172871680-byte raw tar
-file. Actual SASZe response, calibration epoch, quality notices and cloud masks
-still need examination. The older handbook warns that absolute radiance
-uncertainty may be substantial; do not apply a 1-3% lamp uncertainty alone as
-whole-instrument uncertainty. Phase/SSA, surface albedo, gases/solar source and
-upper-profile extensions remain unqualified.
+- [Measured spectra](../../../../../tmp/experiments/arm-spectral-validation/runs/00023-case-freeze/spectra.svg)
+- [Measured particulate extinction](../../../../../tmp/experiments/arm-spectral-validation/runs/00023-case-freeze/extinction.svg)
+- [Case derivation and seal](../../../../../tmp/experiments/arm-spectral-validation/runs/00023-case-freeze/sealed.json)
 
-The PI archive contents API returned HTTP 401. The documented ordinary download
-route without required credentials returned HTTP 400. The public application
-uses authenticated data access, and ARM documents registration/token requirements.
-`limited_access:false` in product metadata does not mean anonymous downloading.
-The owner reports having neither an ARM account nor local files. No account was
-created, authentication bypass attempted or credential stored in evidence.
+## Quality and interpretation gates
 
-- [Authoritative M1 report](../../../../../tmp/experiments/arm-spectral-validation/runs/00007-m1-report/result.json)
-- [Candidate file inventory](../../../../../tmp/experiments/arm-spectral-validation/runs/00007-m1-report/candidate-files.tsv)
-- [Exact metadata acquisition](../../../../../tmp/experiments/arm-spectral-validation/runs/00003-exact-coverage/result.json)
-- [Documented access/calibration sources](../../../../../tmp/experiments/arm-spectral-validation/runs/00004-reference-access/result.json)
-- [Report seal](../../../../../tmp/experiments/arm-spectral-validation/runs/00007-m1-report/sealed.json)
+The calibrated stream identifies responsivity file
+`sgpsaszevisC1.20220508.200ms.dat`. DQR D210830.12 warns of transient saturation
+and the calibrated stream has no saturation flag. Pilot reconstructed
+dark-subtracted counts peak around2516 versus the cited65536 detector limit;
+this supports a low-signal subset but does not prove absence of raw saturation.
+The legitimate raw-data query returned403; TWST's cataloged raw tar returned404.
+Neither restriction was bypassed. Those attempts remain immutable evidence.
 
-Disposition: **M1 held for external access, not rejected for missing science**.
-M2 matched contracts, M3 scoring and M4 confirmation are not advanced. No RMSE,
-color swatch or libRadtran accuracy conclusion exists. Zenith remains the
-measurement direction; no horizon appearance is inferred.
+The ARM handbook describes absolute-calibration discrepancies around10% and
+additional instrument effects; the1-3% reference-lamp figure is not a whole
+instrument uncertainty. A defensible absolute upper bound for this particular
+calibration has not been established. Consequently this case does **not** pass
+the gate for a definitive observational accuracy verdict. Conditional spectra
+and represented-atmosphere solver comparisons may be reported with this limit;
+agreement must not be called validation within a fabricated confidence band.
 
-## Resumption point and decisions
+Co-located ARM_SGP AERONET Level2 AOD and retrieved asymmetry/albedo are available.
+Level2 SSA is missing at the low aerosol loading. A complete Level1.5 SSA and
+phase table is available at22:21:37; the Level2 phase export masks many values.
+The [nearby-date inventory](../../../../../tmp/experiments/arm-spectral-validation/runs/00019-phase-coverage/result.json)
+and frozen case preserve both levels. Level1.5 optical inputs remain conditional,
+with scenario sensitivity required; no missing value is interpreted as zero.
 
-1. Owner registers a free [ARM account](https://adc.arm.gov/armuserreg/) and
-   provides an authorized access route or the identified data files. The
-   [Live Data service](https://adc.arm.gov/armlive/) documents token acquisition.
-   Keep credentials out of chat, source, command histories and evidence. No
-   further permission to execute the saved plan is needed after access resolves.
-2. Acquire the smallest useful SASZe/profile interval into a new immutable run,
-   verify actual units/calibration/response/quality and choose a clear-sky case.
-   Choose held-out data before numerical tuning. Nearby dates remain permitted.
-3. Complete profile/optics/solar/albedo constraints and uncertainty bounds before
-   production or libRadtran computation. The installed Windows Python lacks
-   netCDF4/scipy/h5py/xarray; use an existing suitable decoder or authenticated
-   service conversion where available. Do not create a dependency install or
-   external configuration repair implicitly.
-4. Reuse the retained exact metadata and acquired documentation while fresh;
-   do not repeat completed requests merely to resume. Authenticate changed
-   metadata or newly selected files separately.
+Lidar extinction below its trustworthy overlap region, its smoothing/uncertainty,
+sonde time/altitude support, upper-atmosphere extension, spectral response,
+ozone/other gases and surface reflectance need explicit M2 treatment. Raw
+near-ground lidar spikes must not silently become a production aerosol profile.
 
-A unit-conversion witness was recorded without a physical solve:
-100 W m^-2 sr^-1 um^-1 = 0.1 W m^-2 sr^-1 nm^-1 = 100 mW m^-2 sr^-1 nm^-1.
-Actual file units still require verification. This is not a measured spectrum.
+## M2 readiness and next work
 
-## Execution record and verification
+The [libRadtran operational smoke](../../../../../tmp/experiments/arm-spectral-validation/runs/00022-solver-smoke/result.json)
+passes: the pinned installed2.0.1-MYSTIC executable produced finite positive
+zenith radiance at450/550/650 nm. The three-wavelength DISORT solve took0.123 s,
+excluding startup, input preparation and dependency hashing. This smoke uses a
+default atmosphere and is **not** an ARM or production comparison. The new
+contained runner retains executable and complete installed-data identities.
 
-The owner requested independent execution on 2026-10-21. Five bounded public
-acquisition runs retained 32 requests; total measured acquisition wall time was
-18.593 seconds, excluding research, implementation, approvals and reporting.
-Current retained output is 6487752 bytes. No GPU allocation or solver process
-was started; no experiment-owned process remains.
+Next: derive measured-constrained and production-representable profiles from
+atmospheric inputs alone; freeze source, phase, gases and common spectral
+operator; then judge which limited comparisons the remaining uncertainty permits.
+M3/M4 are not complete. Production and all other experiments remain read-only.
 
-Runs 00000-00004 retain raw HTTP responses and documentation, including failed
-access attempts. Broad catalog text searches were provisional; exact field/date
-queries in 00003 supersede their suitability for coverage claims. Inclusive date
-queries also returned 23 August files, which the report explicitly excludes.
-Runs 00005-00007 are report derivatives; 00005's progress JSON Lines formatting
-was repaired in new reports without modifying its sealed bytes. 00007 preserves
-exact tool/request-source snapshots and verifies all seven preceding seals.
-An accepted run seal denotes inventory/report integrity only, never acceptance
-of a scientific case. No unit-test suite was created.
+## Evidence and verification
 
-Local type checking and Python AST parsing pass. Scaffold/folder mapping,
-ignore-boundary, source/output separation, local file links and whitespace are
-verified. Direct Prettier API checking passes for 14 authored Markdown/configuration files;
-67 retained artifacts across eight runs pass hash verification. The superseded
-00005 progress-format defect is disclosed above. The local checkpoint preserves
-this bounded setup/acquisition slice; Git history owns its exact identity. The initial create-plan critique was incorporated;
-no dedicated standards reviewers/audits were started and no compliance claimed.
+Runs00000-00007 preserve the earlier access-feasibility inventory, including
+superseded conclusions before credentials were supplied. Runs00008 onward own
+authenticated measurements, optical retrievals, quality screening and smoke.
+An accepted seal denotes operation integrity, not scientific acceptance.
+Run00005's historical JSON Lines defect remains disclosed and unmodified.
+No experimental unit-test suite, dedicated standards reviewer or independent
+review audit was started. Checkpoint-advisor monitoring remains active.
 
-## Boundaries and standards restoration
+## Boundaries
 
-Source: `experiments/arm-spectral-validation/`. Output:
-`tmp/experiments/arm-spectral-validation/`. Production and other experiments
-remain read-only. Sky Accuracy Dials and its eight reserved tuples remain
-unselected/suspended. The [production promotion status](../../../production-algorithm32/caches/sky-accuracy-promotion-status.md)
-retains corrected-versus-deployed legacy identities and admission boundaries;
-this experiment neither deploys nor changes either.
-
-The permanent `experiments/` -> `experiment` set supplies base documentation,
-project-foundation and types.md. The only matching overlay is the shared
-experiment-lifetime rule. No lane-only assignment, set or overlay was added;
-there is nothing temporary to restore. Topic documents inherit `agents/` ->
-`base`. Normalization remains valid. Checkpoint-advisor monitoring is active
-independently; experimental calibration/compliance gates remain disabled.
+Tracked source: `experiments/arm-spectral-validation/`. Ignored output:
+`tmp/experiments/arm-spectral-validation/`. No production deployment/default
+change is authorized. Sky Accuracy Dials remains suspended. The permanent
+experiment standards mapping remains; no temporary overlay was added or needs
+restoration. Git history owns checkpoint identities.
