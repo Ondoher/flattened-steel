@@ -6,8 +6,36 @@ import {SphericalDistantMode} from '../SphericalDistantMode.js';
 import {Flat32Application} from '../Flat32Application.js';
 import {Algorithm32Bindings} from '../../algorithm32/implementation/react-three/Algorithm32Bindings.js';
 import {ATMOSPHERE_SCENE_SCALE, ATMOSPHERE_OBSERVER_UP_DIRECTION} from '../consts.js';
+import {LocalSunSceneLighting} from '../LocalSunSceneLighting.js';
 
 describe('Flat32 scene control foundations', () => {
+	it('accepts independent Sun fractions and preserves Sun-owned lighting through scaling and physical updates', () => {
+		expect(Flat32SceneControls.resolve().sunIlluminationScale).toBe(1);
+		expect(
+			Flat32SceneControls.resolveSunPresentation({sunIlluminationScale: 0, sunDiscBrightnessScale: 0.2}),
+		).toEqual({sunIlluminationScale: 0, sunDiscBrightnessScale: 0.2});
+		const parent = new THREE.Group(),
+			unrelated = new THREE.AmbientLight(0xffffff, 3);
+		parent.add(unrelated);
+		const lighting = new LocalSunSceneLighting(parent);
+		lighting.install();
+		try {
+			const raw = lighting.describe();
+			lighting.setSunIlluminationScale(0.25);
+			expect(lighting.describe().ambientIntensity).toBe(raw.ambientIntensity * 0.25);
+			expect(lighting.describe().directionalIntensity).toBeCloseTo(raw.directionalIntensity * 0.25, 12);
+			lighting.updateFromLocalSun({coordinates: [0, 100, 20], units: 'scene-units'});
+			expect(lighting.describe().directionalIntensity).toBeCloseTo(raw.directionalIntensity * 0.25, 12);
+			lighting.setSunIlluminationScale(0);
+			expect(lighting.describe().ambientIntensity).toBe(0);
+			expect(lighting.describe().directionalIntensity).toBe(0);
+			expect(unrelated.intensity).toBe(3);
+			lighting.setSunIlluminationScale(1);
+			expect(lighting.describe().directionalIntensity).toBeCloseTo(raw.directionalIntensity, 12);
+		} finally {
+			lighting.dispose();
+		}
+	});
 	it('retains independent controls when a location/time transition reconstructs application state', () => {
 		const root = document.createElement('div');
 		const app = new Flat32Application(root, {stellarCatalog: 'brightest-500', presentationFilters: []});
@@ -17,10 +45,14 @@ describe('Flat32 scene control foundations', () => {
 				...app._locationTimeController.start(),
 				modeKind: 'flat-local',
 				skyRenderMode: 'no-atmosphere',
+				sunIlluminationScale: 0.25,
+				sunDiscBrightnessScale: 0.5,
 				observerHeight: {value: 500, units: 'meters'},
 			};
 			app._commitLocationTimeState(app._locationTimeController.nextLocation(app._state));
 			expect(app._state.skyRenderMode).toBe('no-atmosphere');
+			expect(app._state.sunIlluminationScale).toBe(0.25);
+			expect(app._state.sunDiscBrightnessScale).toBe(0.5);
 			expect(app._state.observerHeight).toEqual({value: 500, units: 'meters'});
 			expect(app._state.modeKind).toBe('flat-local');
 		} finally {
@@ -29,6 +61,14 @@ describe('Flat32 scene control foundations', () => {
 	});
 
 	it('rejects unsupported controls instead of clamping or silently choosing another render mode', () => {
+		for (const value of [-0.1, 1.1, NaN, Infinity, null, '0.5']) {
+			expect(() => Flat32SceneControls.resolveSunPresentation({sunIlluminationScale: value})).toThrowError(
+				RangeError,
+			);
+			expect(() => Flat32SceneControls.resolveSunPresentation({sunDiscBrightnessScale: value})).toThrowError(
+				RangeError,
+			);
+		}
 		expect(() => Flat32SceneControls.resolve({skyRenderMode: 'unknown'})).toThrowError(/unsupported/);
 		expect(() => Flat32SceneControls.resolve({observerHeight: {value: 600, units: 'meters'}})).toThrowError(
 			/5 m, 500 m or 2 km/,

@@ -2,7 +2,6 @@ import * as THREE from 'three';
 import {Algorithm32, Algorithm32Bindings} from '../algorithm32/implementation/frame-runtime/index.js';
 import {FlatEarthGeometry} from '../algorithm32/implementation/index.js';
 import {resolveLocalSunFrameView} from './local-sun-frame-view.js';
-import {ATMOSPHERIC_VIEW_ENABLED_VALUE_KEY} from '../algorithm32/atmospheric-transport/consts.js';
 
 /** Renderer-owned isolated shader, receiver measurement and complete-frame preflight for the compact local source. */
 export class LocalSunFramePreparer {
@@ -18,8 +17,7 @@ export class LocalSunFramePreparer {
 	 * @returns {void} - No value.
 	 */
 	_updateBindings(bindingValues, algorithm) {
-		bindingValues[ATMOSPHERIC_VIEW_ENABLED_VALUE_KEY] =
-			(this._configuration.getSkyRenderMode?.() ?? 'full') === 'full';
+		this._configuration.updatePresentationBindings?.(bindingValues, algorithm);
 		Algorithm32Bindings.update({
 			bindingValues,
 			camera: this._configuration.sceneRuntime.camera,

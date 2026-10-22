@@ -25,17 +25,23 @@ export class ThreeSceneRuntime {
 	 * @type {Set<Flat32FrameBoundaryOperation>}
 	 */
 	_frameBoundaryOperations = new Set();
+	/** Restored-context publication boundary before rendering resumes; never enabled while context is lost. */
+	_restoringContext = false;
 
 	/** Call this method to publish one prepared state immediately before the next render operation.
+	 * During restored-context reconstruction, publication executes while rendering is suspended.
+	 * Disposed, stopped or lost-context owners reject; wait for a running/restoring owner.
+	 * Cancellation and callback failures propagate; discard or repair that candidate before retrying.
 	 *
 	 * @param {() => void} operation - Synchronous complete-state publication.
 	 * @param {AbortSignal} signal - Caller-owned cancellation.
 	 * @returns {Promise<void>} - Completion at the frame boundary.
 	 */
 	atFrameBoundary(operation, signal) {
-		if (this._disposed || !this._started) return Promise.reject(new Error('Scene renderer is not running.'));
+		if (this._disposed || (!this._started && !this._restoringContext))
+			return Promise.reject(new Error('Scene renderer is not running.'));
 		signal.throwIfAborted();
-		if (this._frameCadence === 'manual') {
+		if (this._frameCadence === 'manual' || this._restoringContext) {
 			try {
 				operation();
 				return Promise.resolve();
@@ -432,6 +438,7 @@ void main() {
 	 * @returns {Promise<void>} Resolve after every renderer resource owner has rebuilt.
 	 */
 	async _handleContextRestored() {
+		this._restoringContext = true;
 		try {
 			for (const participant of this._contextLifecycleParticipants) {
 				await participant.handleContextRestoration();
@@ -446,6 +453,8 @@ void main() {
 		} catch (error) {
 			this._resumeAfterContextRestoration = false;
 			this._onFailure(`WebGL context restoration failed: ${this._errorMessage(error)}`);
+		} finally {
+			this._restoringContext = false;
 		}
 	}
 

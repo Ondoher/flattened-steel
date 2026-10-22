@@ -9,6 +9,7 @@ import {SphericalDistantMode} from './SphericalDistantMode.js';
 import DistantSunSharedCache from '../algorithm32/implementation/distant-sun/cache/DistantSunSharedCache.js';
 import {Flat32SceneControls} from './Flat32SceneControls.js';
 import {ATMOSPHERIC_VIEW_ENABLED_VALUE_KEY} from '../algorithm32/atmospheric-transport/consts.js';
+import {SUN_DISC_BRIGHTNESS_SCALE_VALUE_KEY} from '../algorithm32/celestial-contribution-cache/consts.js';
 
 /**
  * Transactional production Algorithm32 attachment for Flat32.
@@ -56,6 +57,8 @@ export class Algorithm32Runtime {
 			skyRenderMode: configuration.skyRenderMode,
 			atmosphereShaderEnabled: configuration.atmosphereEnabled,
 		}).skyRenderMode;
+		/** Retained independent Sun presentation choices; effective only in No atmosphere. */
+		this._sunPresentation = Flat32SceneControls.resolveSunPresentation(configuration);
 		/** Optional consumer of existing per-pass GPU timer observations. */
 		this._performanceCallback = configuration.performanceCallback;
 		/** Disposal ownership of an externally staged composer transferred into this runtime. */
@@ -498,6 +501,9 @@ export class Algorithm32Runtime {
 	 * @returns {void} - Selected rendering operation installed.
 	 */
 	_publishSelectedRenderOperation() {
+		this._endpointScene.setSunIlluminationScale(
+			this._skyRenderMode === 'no-atmosphere' ? this._sunPresentation.sunIlluminationScale : 1,
+		);
 		if (this._skyRenderMode !== 'shader-off') {
 			this._sceneRuntime.installRenderOperation(
 				this._localFrameController ? () => this._renderLocalFrame() : this._renderAtmosphereFrame,
@@ -561,7 +567,7 @@ export class Algorithm32Runtime {
 		this._cacheBackend = backend;
 		const preparer = new LocalSunFramePreparer({
 			...mode.createLocalFramePreparerConfiguration(this._sceneRuntime, this._endpointScene, sceneDepthMax),
-			getSkyRenderMode: () => this._skyRenderMode,
+			updatePresentationBindings: (values, algorithm) => this._updatePresentationBindings(values, algorithm),
 			performanceCallback: this._performanceCallback,
 		});
 		this._localFrameController = new LocalSunFrameController({
@@ -634,7 +640,7 @@ export class Algorithm32Runtime {
 			throw new Error('Flat32 Algorithm32 bindings are unavailable.');
 		}
 
-		this._bindingValues[ATMOSPHERIC_VIEW_ENABLED_VALUE_KEY] = this._skyRenderMode === 'full';
+		this._updatePresentationBindings(this._bindingValues, this._mode.algorithm32);
 		Algorithm32Bindings.update({
 			bindingValues: this._bindingValues,
 			camera: this._sceneRuntime.camera,
@@ -643,6 +649,18 @@ export class Algorithm32Runtime {
 				sceneScale: this._mode.sceneScale,
 			},
 		});
+	}
+
+	/** Called by distant rendering and compact staging/rendering to update one coherent presentation.
+	 * @param {Algorithm32BindingValues} values - This complete frame's mutable camera/presentation bindings.
+	 * @param {Algorithm32Facade} algorithm - This complete frame's physical facade; raw measurements are retained.
+	 * @returns {void} - View transport, visible disc and receiver adaptation use the current selection.
+	 */
+	_updatePresentationBindings(values, algorithm) {
+		const illustrative = this._skyRenderMode === 'no-atmosphere';
+		values[ATMOSPHERIC_VIEW_ENABLED_VALUE_KEY] = this._skyRenderMode === 'full';
+		values[SUN_DISC_BRIGHTNESS_SCALE_VALUE_KEY] = illustrative ? this._sunPresentation.sunDiscBrightnessScale : 1;
+		algorithm.setReceiverLightPresentationScale(illustrative ? this._sunPresentation.sunIlluminationScale : 1);
 	}
 
 	/**
@@ -1061,6 +1079,18 @@ export class Algorithm32Runtime {
 		this._assertUsable();
 		if (typeof mode !== 'string') throw new TypeError('Flat32 sky render mode must be explicit.');
 		this._skyRenderMode = Flat32SceneControls.resolve({skyRenderMode: mode}).skyRenderMode;
+		if (this._published && this._installed) this._publishSelectedRenderOperation();
+	}
+
+	/** Call this method to retain independent No-atmosphere illumination and disc choices.
+	 * Disposed owners throw; use a live runtime. Invalid scales throw before mutation;
+	 * correct the input. Renderer/light publication failures propagate to the caller.
+	 * @param {Flat32SunPresentationConfiguration} selection - Complete or defaulted 0-1 fractions.
+	 * @returns {void} - Published lighting changes synchronously; composition reads the same choice next frame.
+	 */
+	setSunPresentation(selection) {
+		this._assertUsable();
+		this._sunPresentation = Flat32SceneControls.resolveSunPresentation(selection);
 		if (this._published && this._installed) this._publishSelectedRenderOperation();
 	}
 

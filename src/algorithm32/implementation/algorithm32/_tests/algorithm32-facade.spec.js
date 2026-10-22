@@ -315,6 +315,37 @@ function createCelestialConfig(id, rosterId) {
 }
 
 describe('Algorithm32', /** Called by Jasmine to register the named test suite. */ () => {
+	it('scales live receiver presentation while retaining raw measurements and later publications', () => {
+		const algorithm = new Algorithm32(createConfig('receiver-presentation'));
+		try {
+			const bindings = algorithm._createRuntimeBindingValues();
+			const physical = algorithm.receiverLight;
+			const rawLux = bindings['color.totalHorizontalIlluminance.value'];
+			const rawStellar = bindings['presentation.stellar.adaptationLuminanceCdM2'];
+			algorithm.setAdaptingLuminance({value: 20, units: 'cd m^-2'});
+			algorithm.setReceiverLightPresentationScale(0.25);
+			expect(bindings['color.totalHorizontalIlluminance.value']).toBe(rawLux * 0.25);
+			expect(bindings['presentation.stellar.adaptationLuminanceCdM2']).toBe(rawStellar * 0.25);
+			expect(bindings['color.brightnessProxy']).toBe(5);
+			expect(algorithm.receiverLight).toBe(physical);
+			expect(algorithm.brightnessProxy.value).toBe(20);
+			algorithm.setReceiverLightPresentationScale(0);
+			expect(bindings['color.totalHorizontalIlluminance.value']).toBe(0);
+			expect(bindings['presentation.stellar.adaptationLuminanceCdM2']).toBe(0);
+			expect(bindings['color.exposureModifier']).toBeCloseTo(10.50268593548108, 12);
+			algorithm.setAdaptingLuminance({value: 15, units: 'cd m^-2'});
+			expect(bindings['color.brightnessProxy']).toBe(0);
+			algorithm.setReceiverLightPresentationScale(1);
+			expect(bindings['color.brightnessProxy']).toBe(15);
+			expect(bindings['color.totalHorizontalIlluminance.value']).toBe(rawLux);
+			for (const scale of [-1, 1.01, NaN, Infinity]) {
+				expect(() => algorithm.setReceiverLightPresentationScale(scale)).toThrowError(RangeError);
+				expect(bindings['color.totalHorizontalIlluminance.value']).toBe(rawLux);
+			}
+		} finally {
+			algorithm.dispose();
+		}
+	});
 	it('creates a receiver-local lighting calculator with each prepared facade configuration', /** Called by Jasmine to exercise the named behavior. */ () => {
 		const algorithm32 = new Algorithm32(createConfig('local-light-calculator-a'));
 		const initialCalculator = algorithm32._localLightLevelCalculator;

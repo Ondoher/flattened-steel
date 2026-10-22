@@ -26,6 +26,10 @@ describe('CelestialScreenPaletteConsumerShaderContribution', () => {
 		expect(source).toContain('if (sunCoverage > 0.0)');
 		expect(source).toContain('* sunCoverage');
 		expect(source).toContain('* uSunSurfaceRadiance[channelIndex]');
+		expect(source).toContain('* uSunSurfaceRadiance[channelIndex] * uSunDiscBrightnessScale');
+		expect(
+			contribution.uniforms.find((uniform) => uniform.valueKey === 'presentation.sunDiscBrightnessScale'),
+		).toEqual(jasmine.objectContaining({name: 'uSunDiscBrightnessScale', defaultValue: 1}));
 		expect(source).toContain('if (state.sceneHitMask >= 0.5) return result;');
 		expect(contribution.diagnostics).toEqual(
 			jasmine.objectContaining({

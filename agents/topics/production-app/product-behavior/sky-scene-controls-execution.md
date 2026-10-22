@@ -1,13 +1,19 @@
 # Sky, scene and elevation controls execution
 
-Selected work: M1 only, authorized 2026-10-22 through independent-execution.
-M2-M4 and video-scene presets are not selected. ARM and Sky Accuracy Dials remain
+Selected work: M1 and subsequently M1a, authorized through independent-execution.
+M1 is checkpointed; M1a implementation and verification are complete. M2-M4 and video-scene presets
+are not selected. ARM and Sky Accuracy Dials remain
 suspended. The [plan](sky-scene-controls-plan.md) owns the outcomes and later work.
 
 ## Current state
 
 M1's runtime and coordinate foundations are complete. The new controls are not yet
-exposed in the UI; M2-M4 remain unselected. The pre-edit baseline is
+exposed in the UI. M1a's independent No-atmosphere Sun illumination and
+disc-brightness controls are implemented and GPU-verified; M2-M4 remain unselected.
+The M1a baseline is
+`.codex-tmp/review-standards/session-sTAUst/baseline.json`; preceding plan edits
+are present in that baseline. Review readiness still reports stale all-lane
+calibration; source review remains batched at M4. The M1 pre-edit baseline is
 `.codex-tmp/review-standards/session-oXe4fl/baseline.json`, at HEAD
 9423a8543729b11044e3d9176b51289233187a7a. It includes the previously completed,
 uncommitted transition-guard fix and planning documents; those are not attributed
@@ -153,12 +159,132 @@ setters. They do not change the valid Full/No-atmosphere GPU paths captured abov
 those unchanged valid-path captures are reused rather than rerendered for a
 validation-only edit.
 
+## M1a implementation, evidence and disposition
+
+M1a separates Sun illumination and visible disc radiance in No atmosphere.
+Both fractions are finite 0-1 values and default to one. The runtime retains them
+through other sky modes; Full and Shader off use ordinary physical lighting.
+Application state/configuration and `setSunPresentation` carry the choices, but
+native UI controls remain M2 work.
+
+### Decisions and ownership
+
+- `Flat32SceneControls` owns acceptance. Application/controller state retains the
+  latest independent choices through location/time reconstruction and pending
+  publication; presentation fractions are excluded from physical runtime identity.
+- `LocalSunSceneLighting` retains the unscaled renderer intensity of each existing
+  Sun-owned direct and diffuse light. Its reversible scale touches no unrelated
+  lights or shadow-map allocation. Physical lighting updates and rollback use the
+  newest presentation fraction rather than restoring stale effective intensities.
+- Algorithm32's `setReceiverLightPresentationScale` scales live receiver lux,
+  luminance and stellar-adaptation bindings. The existing exposure calculator and
+  Color Reset/filter policy consume those effective inputs. Physical receiver
+  packets, public physical measurement getters and source brightness remain intact.
+  This app's receiver measurement represents its Sun-derived illumination; no new
+  decomposition of lighting or replacement display model was introduced.
+- The shared `CelestialScreenPaletteConsumerShaderContribution` multiplies only
+  Sun-disc radiance. Existing stellar source intensities and physical occlusion
+  remain. Disc brightness does not feed receiver measurement/adaptation. Normal
+  display adaptation can still alter its final encoded appearance; this is an
+  independent radiance fraction rather than a promise of constant screen pixels.
+- The real context-restoration check exposed an existing local publication failure:
+  `Scene renderer is not running.` `ThreeSceneRuntime` now permits complete
+  publication during its restored-context boundary before animation resumes, while
+  continuing to reject publication into a lost or stopped context. The regression
+  case verifies publication precedes resumed rendering.
+
+### GPU appearance and measurements
+
+The [main GPU proof](../../../../.codex-tmp/flat32-sky-scene-controls/m1a-04/result.json)
+uses hardware RTX 2060 / ANGLE D3D11 / HeadlessChrome 112 at 640 by 480, device
+scale one. Both geometries use San Jose at 2024-06-21 07:00 UTC with the same
+observation, view, source definitions and existing display/filter policy.
+Full and default No atmosphere are pixel-identical to M1 controls: maximum byte
+difference zero in all four comparisons. The control overlays changed production
+JavaScript from checkpoint d3f41bd5; it is not a full historical checkout.
+
+The [local scene comparison](../../../../.codex-tmp/flat32-sky-scene-controls/m1a-04/flat-local-illumination-comparison.png)
+shows 100%, 10% and 0% illumination from left to right, with disc radiance at 100%.
+The Sun remains drawn as scene lighting is removed and existing stars become visible.
+
+| Local illumination | Physical receiver lux | Effective lux | Effective stellar adaptation, cd/m² | Nonblack sky pixels outside the disc |
+| --- | --- | --- | --- | --- |
+| 100% | 2727.7211 | 2727.7211 | 150.5237 | 0 |
+| 10% | 2727.7211 | 272.7721 | 15.0524 | 2 |
+| 0% | 2727.7211 | 0 | 0 | 103 |
+
+Pixel counts describe the top 200 screenshot rows, excluding a small box around
+the recorded disc center; they are not star counts. At zero illumination all 103
+positive pixels exceed five encoded byte levels. Raw stellar adaptation remains
+150.5237 cd/m². The normal night-adaptation floor remains inside the display model.
+The [derived observations](../../../../.codex-tmp/flat32-sky-scene-controls/m1a-observations-01/observations.json)
+authenticate unchanged stellar source/view identities and physical measurements.
+Palette-generation identity changes normally when effective adaptation changes;
+unchanged source intensity does not mean the filtered palette must have identical
+bytes. No stellar gain or replacement stars were added.
+
+The [disc comparison](../../../../.codex-tmp/flat32-sky-scene-controls/m1a-observations-01/flat-local-disc-comparison.png)
+holds illumination at zero and uses 100%, 0.001% and 0% disc radiance. A zero
+disc-radiance setting retains the Sun body's existing occlusion. The
+[distant night comparison](../../../../.codex-tmp/flat32-sky-scene-controls/m1a-04/spherical-distant-illumination-comparison.png)
+is unchanged across illumination fractions because that observation already has
+zero physical Sun illuminance. Neither geometry reports a GL or render error in
+the accepted main proof. The default cache package identity remains unchanged.
+
+Main setup-to-ready observations were 8.6-14.4 seconds, with warm-cache and shader
+reuse differences. These are setup observations, not a cache-build or frame-rate
+benchmark. Source changes require no cache package rebuild; a changed adaptation
+can trigger the ordinary stellar palette regeneration.
+
+### Verification and recovery
+
+- Full Algorithm32 lane: 683 specifications pass in 137.4 seconds. The two affected
+  shared celestial-consumer cases also pass after the final compositor connection.
+- Final browser lane: 55 cases pass; the separate full production-cache acceptance
+  case remains excluded from the basic lane. New checks cover independent fractions,
+  physical/effective separation, pending selection preservation, invalid input,
+  unrelated lights, measured lighting rollback and restored-context publication.
+- Both local type checks and fresh app/Worker and browser builds pass.
+- Failed GPU helpers are preserved separately: an absent diagnostic source lookup,
+  an oversized/unserializable resource diagnostic, and an initial connection to an
+  inactive legacy Sun consumer. The shared active consumer now owns disc scaling.
+  Main proof JSON is accepted; its PowerShell host reported a nonzero wrapper status
+  alongside a Puppeteer stderr warning, with no recorded proof/GL/render error.
+- The first lifecycle run preserves the real context-restoration failure above.
+  The [corrected lifecycle proof](../../../../.codex-tmp/flat32-sky-scene-controls/m1a-lifecycle-02/result.json)
+  exits successfully: both restored geometries retain zero illumination and 20%
+  disc radiance, with no GL/render errors. Shader off is pixel-identical to M1 in
+  both geometries, and re-entering No atmosphere restores the retained fractions.
+  Observed restoration times are 3.7 seconds local and 9.2 seconds distant, including
+  ordinary resource regeneration; these are not cache-build benchmarks.
+- The lifecycle proof's distant case is San Jose at 2024-06-21 20:00 UTC, looking
+  toward the Sun. Its physical receiver measurement is 117331.3567 lux while the
+  effective display input is zero. The
+  [actual restored daylight view](../../../../.codex-tmp/flat32-sky-scene-controls/m1a-lifecycle-02/spherical-distant-restored-context.png)
+  shows the retained disc and existing stars. Hardware/software match the main GPU
+  proof; browser tests separately use Chrome Headless 155.
+
+Production source review remains the single stable M4 unit and is incomplete;
+current calibration readiness still prevents standards reviewer startup. This
+milestone does not claim standards compliance. The checkpoint adviser recommends
+this coherent functional unit. The
+[local checkpoint receipt](../../../../.codex-tmp/flat32-sky-scene-controls/m1a-checkpoint.json)
+owns its exact commit identity, whole-repository scope and checks; no remote push
+is authorized. It includes the preceding accepted M1a plan revision. Source review
+and native UI controls remain deferred to their planned milestones.
+
 ## Resumption boundary
 
-M1 stops here. On owner selection of M2, expose the three-state sky control through
+M1 and M1a's implementation, appearance and lifecycle proofs are complete;
+the linked checkpoint receipts preserve their local commit identities. M1's
+physical lighting and visibility findings remain the baseline, rather than being
+relabeled as a physical defect.
+
+After M1a, on owner selection of M2, expose the three-state sky and Sun controls through
 normal UI state/labels, explicitly disable unsupported legacy rectangular behavior,
 and cover selected-mode propagation through all publication/restoration paths.
-Preserve the local display-visibility limitation and its physical explanation.
+Retain the M1 limitation as baseline evidence and qualify M1a's presentation behavior
+separately; do not relabel the physical baseline as defective.
 M3 owns the object toggle and public elevation controls, pending-height selection
 merges, complete frame-boundary camera/endpoint transactions and elevated renders.
 M4 owns combined qualification and the bounded production review. No video scenes,

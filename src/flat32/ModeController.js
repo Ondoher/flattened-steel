@@ -22,6 +22,7 @@ export class ModeController {
 			skyRenderMode: configuration.skyRenderMode,
 			atmosphereShaderEnabled: configuration.atmosphereEnabled,
 		}).skyRenderMode;
+		this._sunPresentation = Flat32SceneControls.resolveSunPresentation(configuration);
 		this._sceneObserverHeight = null;
 		this._currentObserverHeight = null;
 		/** @type {Flat32AlgorithmRuntimeCapability | null} */
@@ -104,6 +105,8 @@ export class ModeController {
 		const configurationIdentity = JSON.stringify({
 			...state,
 			skyRenderMode: undefined,
+			sunIlluminationScale: undefined,
+			sunDiscBrightnessScale: undefined,
 			observation: undefined,
 			locationIndex: undefined,
 			flatTimeIndex: undefined,
@@ -152,6 +155,7 @@ export class ModeController {
 				composerRenderTarget: composer.renderTarget,
 				deferPublication: true,
 				skyRenderMode: this._skyRenderMode,
+				...this._sunPresentation,
 			});
 			const summary = await candidate.setup();
 			if (this._disposed || generation !== this._generation) {
@@ -159,6 +163,7 @@ export class ModeController {
 				return null;
 			}
 			candidate.setSkyRenderMode(this._skyRenderMode);
+			candidate.setSunPresentation(this._sunPresentation);
 			candidate.publish();
 			this._onPublished?.(kind, mode, state);
 			const replaced = this._activeRuntime;
@@ -215,6 +220,16 @@ export class ModeController {
 		if (typeof mode !== 'string') throw new TypeError('Flat32 sky render mode must be explicit.');
 		this._skyRenderMode = Flat32SceneControls.resolve({skyRenderMode: mode}).skyRenderMode;
 		this._activeRuntime?.setSkyRenderMode(this._skyRenderMode);
+	}
+
+	/** Call this method to forward the newest independent Sun fractions, including pending publication.
+	 * Invalid scales throw before mutation; supply finite 0-1 fractions. Runtime failures propagate.
+	 * @param {Flat32SunPresentationConfiguration} selection - Retained No-atmosphere Sun choices.
+	 * @returns {void} - Active and future candidates share the latest selection.
+	 */
+	setSunPresentation(selection) {
+		this._sunPresentation = Flat32SceneControls.resolveSunPresentation(selection);
+		this._activeRuntime?.setSunPresentation(this._sunPresentation);
 	}
 
 	/** Call this method to cancel pending preparation and release the installed runtime and mode.

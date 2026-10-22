@@ -233,6 +233,17 @@ export class EndpointScene {
 		this._lighting.updateFromLocalSun(sourceScenePosition);
 	}
 
+	/** Call this method to apply an illustrative fraction to the existing Sun-owned lights.
+	 * Uninstalled lighting throws; install this owner first. Invalid scales propagate
+	 * RangeError before mutation; supply a finite fraction from zero through one.
+	 * @param {number} scale - Sun illumination fraction, independent from its visible disc.
+	 * @returns {void} - Owned direct and diffuse lights updated synchronously.
+	 */
+	setSunIlluminationScale(scale) {
+		if (!this._lighting) throw new Error('Endpoint lighting is not installed.');
+		this._lighting.setSunIlluminationScale(scale);
+	}
+
 	/** Call this method to prepare reversible exact-state local lighting without publishing it.
 	 *
 	 * @param {ScenePosition} sourceScenePosition - Geometry-owned scene point.

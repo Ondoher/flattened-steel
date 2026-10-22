@@ -31,6 +31,12 @@ export class LocalSunSceneLighting {
 		this._lights = [];
 		/** @type {THREE.Object3D[]} */
 		this._targets = [];
+		/** Current illustration scale, applied only to this owner's Sun-derived lights. */
+		this._illuminationScale = 1;
+		/** Unscaled renderer intensities, retained across reversible presentation changes.
+		 * @type {Map<THREE.Light, number>}
+		 */
+		this._physicalIntensities = new Map();
 	}
 
 	/**
@@ -163,13 +169,35 @@ export class LocalSunSceneLighting {
 		const peak = Math.max(...linearRgb.map(Math.abs));
 		if (peak === 0) {
 			light.color.setRGB(0, 0, 0);
-			light.intensity = 0;
+			this._setPhysicalIntensity(light, 0);
 			return;
 		}
 		light.color.r = linearRgb[0] / peak;
 		light.color.g = linearRgb[1] / peak;
 		light.color.b = linearRgb[2] / peak;
-		light.intensity = peak / divisor;
+		this._setPhysicalIntensity(light, peak / divisor);
+	}
+
+	/** Called by lighting updates to retain the physical renderer bridge before applying presentation.
+	 * @param {THREE.Light} light - Owned Sun-derived light.
+	 * @param {number} intensity - Unscaled renderer intensity.
+	 * @returns {void} - Both raw and effective intensities updated.
+	 */
+	_setPhysicalIntensity(light, intensity) {
+		this._physicalIntensities.set(light, intensity);
+		light.intensity = intensity * this._illuminationScale;
+	}
+
+	/** Call this method to scale this owner's Sun-derived lighting without changing other scene lights.
+	 * Invalid scales throw RangeError before mutation; supply a finite value from zero through one.
+	 * @param {number} scale - Accepted dimensionless illumination fraction.
+	 * @returns {void} - Existing lights updated without allocating shadow maps.
+	 */
+	setSunIlluminationScale(scale) {
+		if (!Number.isFinite(scale) || scale < 0 || scale > 1)
+			throw new RangeError('Sun illumination scale must be finite and between 0 and 1.');
+		this._illuminationScale = scale;
+		for (const [light, physical] of this._physicalIntensities) light.intensity = physical * scale;
 	}
 
 	/** Project Lambertian output to incident RGB and cross the physical-to-renderer bridge. */
@@ -255,7 +283,7 @@ export class LocalSunSceneLighting {
 			if (light instanceof THREE.HemisphereLight) {
 				light.color.set(LOCAL_SUN_LIGHT_COLOR);
 				light.groundColor.set(LOCAL_SUN_LIGHT_COLOR);
-				light.intensity = LOCAL_SUN_AMBIENT_LIGHT_INTENSITY;
+				this._setPhysicalIntensity(light, LOCAL_SUN_AMBIENT_LIGHT_INTENSITY);
 				continue;
 			}
 			if (!(light instanceof THREE.DirectionalLight)) continue;
@@ -264,7 +292,7 @@ export class LocalSunSceneLighting {
 			const direction = this._directionBetween(definition.shadowFocus, sourceCoordinates);
 
 			light.color.set(LOCAL_SUN_LIGHT_COLOR);
-			light.intensity = LOCAL_SUN_DIRECTIONAL_LIGHT_TOTAL_INTENSITY / SCENE_OBJECTS.length;
+			this._setPhysicalIntensity(light, LOCAL_SUN_DIRECTIONAL_LIGHT_TOTAL_INTENSITY / SCENE_OBJECTS.length);
 			light.position.set(
 				definition.shadowFocus[0] + direction[0] * definition.sourceLightDistance,
 				definition.shadowFocus[1] + direction[1] * definition.sourceLightDistance,
@@ -318,7 +346,7 @@ export class LocalSunSceneLighting {
 				definition,
 				direction,
 				color: light.color.clone(),
-				intensity: light.intensity,
+				intensity: this._physicalIntensities.get(light) ?? light.intensity,
 				position: light.position.clone(),
 				data: {...light.userData},
 				ground: light instanceof THREE.HemisphereLight ? light.groundColor.clone() : null,
@@ -356,7 +384,7 @@ export class LocalSunSceneLighting {
 				published = false;
 				for (const record of records) {
 					record.light.color.copy(record.color);
-					record.light.intensity = record.intensity;
+					this._setPhysicalIntensity(record.light, record.intensity);
 					record.light.position.copy(record.position);
 					record.light.userData = {...record.data};
 					if (record.light instanceof THREE.HemisphereLight && record.ground)
@@ -383,6 +411,7 @@ export class LocalSunSceneLighting {
 	 */
 	_addLight(light) {
 		this._lights.push(light);
+		this._setPhysicalIntensity(light, light.intensity);
 		this._requireGroup().add(light);
 	}
 
@@ -502,6 +531,7 @@ export class LocalSunSceneLighting {
 			light.dispose();
 		}
 		this._lights.length = 0;
+		this._physicalIntensities.clear();
 		this._targets.length = 0;
 		this._group.clear();
 		this._group = null;

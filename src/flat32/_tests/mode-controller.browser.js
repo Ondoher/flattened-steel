@@ -46,6 +46,9 @@ function createRuntime(name, events, setupFailure = null) {
 			if (disposed) throw new Error(`${name} selected after disposal.`);
 			events.push(`${name}:atmosphere:${mode}`);
 		},
+		setSunPresentation(selection) {
+			this.sunPresentation = {...selection};
+		},
 		dispose({restoreRendering = true} = {}) {
 			if (disposed) return;
 			disposed = true;
@@ -55,6 +58,43 @@ function createRuntime(name, events, setupFailure = null) {
 }
 
 describe('Flat32 mode transaction', () => {
+	it('publishes the newest Sun choices after pending runtime setup and rejects invalid changes', async () => {
+		const events = [],
+			runtimes = [];
+		let release;
+		const wait = new Promise((resolve) => {
+			release = resolve;
+		});
+		const controller = new ModeController({
+			createMode: () => createMode('sun', events),
+			createRuntime: () => {
+				const runtime = createRuntime('sun', events);
+				runtime.setup = async () => {
+					await wait;
+					return {pairing: 'sun'};
+				};
+				runtimes.push(runtime);
+				return runtime;
+			},
+			endpointScene: {},
+			onFailure() {},
+			onPublished() {},
+			sceneRuntime: {createAtmosphereComposer: () => createComposer('sun', events), restoreDirectRendering() {}},
+		});
+		try {
+			const pending = controller.switchTo('flat-local', {});
+			await Promise.resolve();
+			expect(runtimes.length).toBe(1);
+			controller.setSunPresentation({sunIlluminationScale: 0, sunDiscBrightnessScale: 0.5});
+			release();
+			await pending;
+			expect(runtimes[0].sunPresentation).toEqual({sunIlluminationScale: 0, sunDiscBrightnessScale: 0.5});
+			expect(() => controller.setSunPresentation({sunIlluminationScale: NaN})).toThrowError(RangeError);
+			expect(runtimes[0].sunPresentation).toEqual({sunIlluminationScale: 0, sunDiscBrightnessScale: 0.5});
+		} finally {
+			controller.dispose();
+		}
+	});
 	it('stages a same-kind height change and restores the complete prior geometry on setup failure', async () => {
 		const events = [];
 		let height = 5;

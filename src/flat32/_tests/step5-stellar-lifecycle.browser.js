@@ -96,7 +96,10 @@ describe('Flat32 Step 5 stellar lifecycle', () => {
 			},
 			async handleContextRestoration() {
 				events.push('restoring');
-				await Promise.resolve();
+				await runtime.atFrameBoundary(() => {
+					expect(runtime._started).toBeFalse();
+					events.push('published-before-resume');
+				}, new AbortController().signal);
 				events.push('restored');
 			},
 		});
@@ -110,7 +113,8 @@ describe('Flat32 Step 5 stellar lifecycle', () => {
 		expect(runtime._started).toBeFalse();
 		expect(canvas.dataset.flat32ContextState).toBe('lost');
 		await runtime._handleContextRestored();
-		expect(events).toEqual(['lost', 'restoring', 'restored']);
+		expect(events).toEqual(['lost', 'restoring', 'published-before-resume', 'restored']);
+		expect(runtime._restoringContext).toBeFalse();
 		expect(runtime._configureViewport).toHaveBeenCalledTimes(1);
 		expect(runtime._renderFrame).toHaveBeenCalledTimes(1);
 		expect(runtime._started).toBeTrue();

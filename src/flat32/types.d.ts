@@ -124,7 +124,7 @@ type Flat32ProductionSelections = {
 };
 
 /** Caller-owned initial scene, physical-cache and presentation selections. */
-type Flat32ApplicationConfiguration = {
+type Flat32ApplicationConfiguration = Flat32SunPresentationConfiguration & {
 	/** Canonical sky composition; overrides the existing boolean when supplied. */ readonly skyRenderMode?: Flat32SkyRenderMode;
 	/** Initial physical observer elevation above the model surface. */ readonly observerHeight?: Distance;
 	/** Explicit compact candidate; omission retains the rectangular control. */
@@ -191,14 +191,22 @@ type Flat32ModeKind = 'spherical-distant' | 'flat-local';
  * - **"shader-off"** - Existing direct lit-scene rendering.
  */
 type Flat32SkyRenderMode = 'full' | 'no-atmosphere' | 'shader-off';
+/** Initial illustrative Sun fractions; effective only in No atmosphere, each defaulting to one. */
+type Flat32SunPresentationConfiguration = Readonly<Partial<Flat32SunPresentationSelection>>;
+/** Complete independent Sun presentation fractions, retained when another sky mode is active. */
+type Flat32SunPresentationSelection = {
+	/** Finite 0-1 fraction for existing Sun-owned scene lighting and receiver adaptation. */ sunIlluminationScale: number;
+	/** Finite 0-1 visible-disc radiance multiplier; does not contribute receiver illumination. */ sunDiscBrightnessScale: number;
+};
 /** Initial controls, including existing application/proof-harness boolean input. */
-type Flat32SceneControlConfiguration = Readonly<{
-	/** Explicit mode wins over the legacy boolean. */ skyRenderMode?: Flat32SkyRenderMode;
-	/** Existing true/false callers map to Full/Shader off. */ atmosphereShaderEnabled?: boolean;
-	/** Selected height; omission retains 5 m. */ observerHeight?: Distance;
-}>;
+type Flat32SceneControlConfiguration = Flat32SunPresentationConfiguration &
+	Readonly<{
+		/** Explicit mode wins over the legacy boolean. */ skyRenderMode?: Flat32SkyRenderMode;
+		/** Existing true/false callers map to Full/Shader off. */ atmosphereShaderEnabled?: boolean;
+		/** Selected height; omission retains 5 m. */ observerHeight?: Distance;
+	}>;
 /** Accepted application-owned independent scene controls. */
-type Flat32SceneControlSelection = {
+type Flat32SceneControlSelection = Flat32SunPresentationSelection & {
 	/** Canonical view presentation. */ skyRenderMode: Flat32SkyRenderMode;
 	/** Height above ground, normalized to metres. */ observerHeight: Distance;
 };
@@ -404,6 +412,9 @@ interface Flat32SceneRuntimeCapability {
 
 /** Independently implementable atmosphere runtime publication and teardown. */
 interface Flat32AlgorithmRuntimeCapability {
+	/** Call this method to retain independent No-atmosphere Sun illumination and disc fractions. */ setSunPresentation(
+		selection: Flat32SunPresentationConfiguration,
+	): void;
 	/** Call this method to select view presentation without changing physical caches. */ setSkyRenderMode(
 		mode: Flat32SkyRenderMode,
 	): void;
@@ -464,7 +475,7 @@ type Flat32SphericalDistantModeConfiguration<Geometry extends GeometryModel = Ge
 }>;
 
 /** Configuration of one isolated Algorithm32 runtime candidate. */
-type Flat32AlgorithmRuntimeConfiguration = {
+type Flat32AlgorithmRuntimeConfiguration = Flat32SunPresentationConfiguration & {
 	/** Canonical presentation; overrides the existing boolean when supplied. */ skyRenderMode?: Flat32SkyRenderMode;
 	/** Borrowed scene owner. */
 	sceneRuntime: Flat32SceneRuntimeCapability;
@@ -485,7 +496,7 @@ type Flat32AlgorithmRuntimeConfiguration = {
 };
 
 /** Configuration of transactional supported-mode ownership. */
-type Flat32ModeControllerConfiguration = {
+type Flat32ModeControllerConfiguration = Flat32SunPresentationConfiguration & {
 	/** Canonical presentation; overrides the existing boolean when supplied. */ skyRenderMode?: Flat32SkyRenderMode;
 	/** Optional atmosphere-composition selection; omission enables composition. */
 	atmosphereEnabled?: boolean;
@@ -524,11 +535,12 @@ type Flat32LocationTimeState = {
 };
 
 /** Location/time state paired with the selected atmospheric scene mode. */
-type Flat32ApplicationState = Flat32LocationTimeState & {
-	/** Canonical view selection; optional only for existing direct controller harnesses. */ skyRenderMode?: Flat32SkyRenderMode;
-	/** Selected physical height; optional only for existing direct controller harnesses. */ observerHeight?: Distance;
-	/** Exact selected atmospheric geometry/source pairing. */ modeKind: Flat32ModeKind;
-};
+type Flat32ApplicationState = Flat32LocationTimeState &
+	Flat32SunPresentationConfiguration & {
+		/** Canonical view selection; optional only for existing direct controller harnesses. */ skyRenderMode?: Flat32SkyRenderMode;
+		/** Selected physical height; optional only for existing direct controller harnesses. */ observerHeight?: Distance;
+		/** Exact selected atmospheric geometry/source pairing. */ modeKind: Flat32ModeKind;
+	};
 
 /** Source-derived orthographic shadow-camera bounds in scene units. */
 type Flat32ShadowCameraDefinition = {
@@ -875,6 +887,9 @@ type Flat32SceneColorPrecision = 'float16' | 'float32';
 
 /** Independently implementable opaque endpoint and lighting capability. */
 interface Flat32EndpointLighting {
+	/** Call this method to scale only existing Sun-owned direct and diffuse scene lighting. */ setSunIlluminationScale(
+		scale: number,
+	): void;
 	/** Call this method to prepare exact-state local endpoint lighting without changing the scene. */ prepareLocalSunLighting?(
 		sourceScenePosition: ScenePosition,
 		receiverLight: ReceiverEnvironmentLightMeasurement,
@@ -937,7 +952,10 @@ type Flat32LocalFrameSceneCapability = Pick<Flat32SceneRuntimeCapability, Flat32
 
 /** Complete renderer-owned inputs for local shader and receiver staging. */
 type Flat32LocalFramePreparerConfiguration = Readonly<{
-	/** Current runtime selection, read again for each prepared/rendered frame. */ getSkyRenderMode?: () => Flat32SkyRenderMode;
+	/** Current runtime presentation, refreshed together before each staged/rendered frame. */ updatePresentationBindings?: (
+		values: Algorithm32BindingValues,
+		algorithm: Algorithm32Facade,
+	) => void;
 	/** Optional existing per-pass GPU timing consumer; no collection when absent. */ performanceCallback?: ShaderPerformanceCallback;
 	/** Optional genuine live celestial roster creation; canonical construction remains independent. */ createCelestialSources?: (
 		profile: LocalSunCompactConstructionProfile,
@@ -977,29 +995,31 @@ type Flat32LocalFrameShaderDiagnostics = Readonly<{
 }>;
 
 /** Direct-construction configuration for the production atmosphere runtime. */
-type Flat32RuntimeConfiguration = Readonly<{
-	/** Canonical presentation; overrides the existing boolean when supplied. */ skyRenderMode?: Flat32SkyRenderMode;
-	/** Explicit admitted compact frame owner; normal selection/adoption remains separate. */
-	localFrameController?: LocalSunFramePublicationController;
-	/** Runtime-owned scene/rendering coordinator. */
-	sceneRuntime: Flat32SceneRuntimeCapability;
-	/** Independently owned opaque endpoint lighting. */
-	endpointScene: Flat32EndpointLighting;
-	/** Supported atmosphere mode. */
-	mode: Flat32Mode;
-	/** Failure sink; a failed runtime restores ordinary scene rendering. */
-	onFailure: Flat32AtmosphereFailureHandler;
-	/** Isolated composer, otherwise borrowed from scene runtime. */
-	composer?: Flat32AtmosphereComposer;
-	/** Isolated composer's owned target. */
-	composerRenderTarget?: Flat32ComposerBuffer;
-	/** Delay installation until controller publication. */
-	deferPublication?: boolean;
-	/** Initial atmosphere composition state; enabled by default. */
-	atmosphereEnabled?: boolean;
-	/** Optional performance measurement callback. */
-	performanceCallback?: ShaderPerformanceCallback;
-}>;
+type Flat32RuntimeConfiguration = Readonly<
+	Flat32SunPresentationConfiguration & {
+		/** Canonical presentation; overrides the existing boolean when supplied. */ skyRenderMode?: Flat32SkyRenderMode;
+		/** Explicit admitted compact frame owner; normal selection/adoption remains separate. */
+		localFrameController?: LocalSunFramePublicationController;
+		/** Runtime-owned scene/rendering coordinator. */
+		sceneRuntime: Flat32SceneRuntimeCapability;
+		/** Independently owned opaque endpoint lighting. */
+		endpointScene: Flat32EndpointLighting;
+		/** Supported atmosphere mode. */
+		mode: Flat32Mode;
+		/** Failure sink; a failed runtime restores ordinary scene rendering. */
+		onFailure: Flat32AtmosphereFailureHandler;
+		/** Isolated composer, otherwise borrowed from scene runtime. */
+		composer?: Flat32AtmosphereComposer;
+		/** Isolated composer's owned target. */
+		composerRenderTarget?: Flat32ComposerBuffer;
+		/** Delay installation until controller publication. */
+		deferPublication?: boolean;
+		/** Initial atmosphere composition state; enabled by default. */
+		atmosphereEnabled?: boolean;
+		/** Optional performance measurement callback. */
+		performanceCallback?: ShaderPerformanceCallback;
+	}
+>;
 /** Distant cache readiness exposed by ordinary application summaries.
  *
  * - **"ready"** - A compatible source cache is installed.

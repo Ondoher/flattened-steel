@@ -27,6 +27,32 @@ function receiverLight(directValue, diffuseValue, identity) {
 }
 
 describe('Flat32 receiver-driven scene lighting', () => {
+	it('retains the newest illustration scale across measured publication and rollback', () => {
+		const lighting = new LocalSunSceneLighting(new THREE.Group()),
+			color = new BrunetonColorDisplayModel();
+		lighting.install();
+		try {
+			lighting.updateFromDistantSun([0, 0, 1], receiverLight(2, 0.5, 'accepted'), color);
+			const physical = lighting.describe();
+			lighting.setSunIlluminationScale(0.5);
+			const transaction = lighting.prepareMeasuredLocalLighting(
+				{coordinates: [0, 4828, -2000], units: 'scene-units'},
+				receiverLight(4, 1, 'pending'),
+				color,
+			);
+			lighting.setSunIlluminationScale(0);
+			transaction.publish();
+			expect(lighting.describe().directionalIntensity).toBe(0);
+			lighting.setSunIlluminationScale(0.25);
+			transaction.revert();
+			expect(lighting.describe().directionalIntensity).toBeCloseTo(physical.directionalIntensity * 0.25, 12);
+			expect(lighting.describe().ambientIntensity).toBeCloseTo(physical.ambientIntensity * 0.25, 12);
+			lighting.setSunIlluminationScale(1);
+			expect(lighting.describe().directionalIntensity).toBeCloseTo(physical.directionalIntensity, 12);
+		} finally {
+			lighting.dispose();
+		}
+	});
 	it('stages measured local lighting without changing the displayed lights, then publishes and restores it', () => {
 		const parent = new THREE.Group(),
 			lighting = new LocalSunSceneLighting(parent),

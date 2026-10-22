@@ -1,4 +1,8 @@
 import {ShaderContributions} from '../shader-assembly/base/ShaderContributions.js';
+import {
+	SUN_DISC_BRIGHTNESS_SCALE_VALUE_KEY,
+	SUN_DISC_BRIGHTNESS_SCALE_UNIFORM_NAME,
+} from '../celestial-contribution-cache/consts.js';
 
 const STELLAR_SCREEN_INDEX_VALUE_KEY = 'runtime.celestial.stellarScreenIndex';
 const STELLAR_PALETTE_VALUE_KEY = 'runtime.celestial.stellarPalette';
@@ -115,6 +119,12 @@ export class CelestialScreenPaletteConsumerShaderContribution {
 			requires: ['runtime.initialState', 'transport.evaluatePathRadiance'],
 			uniforms: [
 				ShaderContributions.createShaderUniformDeclaration(
+					SUN_DISC_BRIGHTNESS_SCALE_UNIFORM_NAME,
+					'float',
+					SUN_DISC_BRIGHTNESS_SCALE_VALUE_KEY,
+					1,
+				),
+				ShaderContributions.createShaderUniformDeclaration(
 					'uSunRadiusPixels',
 					'float',
 					SUN_RADIUS_VALUE_KEY,
@@ -183,7 +193,7 @@ ${evaluationSignature} {
 		for (int channelIndex = 0; channelIndex < SPECTRAL_CHANNEL_COUNT; channelIndex += 1) {
 			result.channels[channelIndex] = state.transmittance.channels[channelIndex]
 				* sunCoverage
-				* uSunSurfaceRadiance[channelIndex];
+				* uSunSurfaceRadiance[channelIndex] * ${SUN_DISC_BRIGHTNESS_SCALE_UNIFORM_NAME};
 		}
 		return result;
 	}

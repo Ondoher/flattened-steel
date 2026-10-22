@@ -1,8 +1,10 @@
 # Active Topic
 
 Current active topic: production-app/product-behavior/sky-scene-controls.
-Focus: M1 handoff only: established atmosphere-free celestial composition and coherent
-physical observer-height handling for distant and compact local modes.
+Focus: M1a handoff: independent No-atmosphere Sun illumination and visible disc
+brightness, with adaptation following effective illumination. Runtime, actual GPU
+appearance and context-restoration verification are complete; the execution record
+links the local checkpoint receipt. M2-M4 remain unselected.
 
 Canonical entry: [Product behavior](production-app/product-behavior/README.md).
 Current status: [Controls execution](production-app/product-behavior/sky-scene-controls-execution.md).
@@ -11,12 +13,14 @@ Current status: [Controls execution](production-app/product-behavior/sky-scene-c
 
 The owner selected M1 of the
 [sky, scene and elevation controls plan](production-app/product-behavior/sky-scene-controls-plan.md)
-for independent execution on 2026-10-22. M2-M4 and video scenes are not selected.
-M1's runtime/height foundations are implemented and evidenced. The local stellar
-path is retained, but practical star visibility is limited by the unchanged bright
-physical receiver/display adaptation; the execution record owns the finding.
+for independent execution on 2026-10-22, then explicitly selected M1a through
+independent-execution. M2-M4 implementation and video scenes are not selected.
+M1's runtime/height foundations are implemented and evidenced. M1a proves local
+star visibility by reducing effective illumination independently from the disc,
+while preserving M1's physical measurement as the baseline. The execution record
+owns the captures, measurements and restoration correction.
 The prior [transition fix](production-app/product-behavior/shared-cache-transition-status.md)
-is retained in the dirty baseline. The corrected
+was included in the M1 checkpoint. The corrected
 Sun-focused distant cache remains the active default; its
 [promotion status](production-algorithm32/caches/sky-accuracy-promotion-status.md)
 owns activation and the outstanding standards-review limitation. ARM Spectral

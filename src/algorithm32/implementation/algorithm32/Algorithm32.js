@@ -72,7 +72,7 @@ export class Algorithm32 {
 	_receiverEnvironmentLightController;
 
 	/**
-	 * Facade-owned live Color bindings shared by every installed runtime.
+	 * Facade-owned physical receiver and base Color values; live bindings derive optional presentation scaling.
 	 *
 	 * @type {Record<string, unknown>}
 	 */
@@ -84,6 +84,8 @@ export class Algorithm32 {
 		'presentation.stellar.adaptationLuminanceCdM2': 0,
 		'presentation.stellar.receiverLightIdentity': 'receiver-light:unconfigured',
 	};
+	/** Presentation-only multiplier for this facade's source-owned receiver adaptation; physical measurements stay intact. */
+	_receiverLightPresentationScale = 1;
 
 	/**
 	 * Value that stores the runtime shader builder.
@@ -853,25 +855,35 @@ export class Algorithm32 {
 		Object.defineProperty(combined, 'color.exposureModifier', {
 			configurable: false,
 			enumerable: true,
-			get: /** Return the current facade-owned exposure modifier. */ () =>
-				this._colorRuntimeBindingValues['color.exposureModifier'],
+			get: /** Return the exposure target for the effective receiver luminance. */ () =>
+				this._receiverLightPresentationScale === 1
+					? this._colorRuntimeBindingValues['color.exposureModifier']
+					: this._localLightLevelCalculator.deriveExposureModifier({
+							value:
+								Number(this._colorRuntimeBindingValues['color.brightnessProxy']) *
+								this._receiverLightPresentationScale,
+							units: 'cd m^-2',
+						}),
 		});
 		Object.defineProperty(combined, 'color.brightnessProxy', {
 			configurable: false,
 			enumerable: true,
 			get: /** Return the current facade-owned brightness proxy. */ () =>
-				this._colorRuntimeBindingValues['color.brightnessProxy'],
+				Number(this._colorRuntimeBindingValues['color.brightnessProxy']) * this._receiverLightPresentationScale,
 		});
 		Object.defineProperty(combined, 'color.totalHorizontalIlluminance.value', {
 			configurable: false,
 			enumerable: true,
 			get: /** Return the current facade-owned receiver illuminance. */ () =>
-				this._colorRuntimeBindingValues['color.totalHorizontalIlluminance.value'],
+				Number(this._colorRuntimeBindingValues['color.totalHorizontalIlluminance.value']) *
+				this._receiverLightPresentationScale,
 		});
 		Object.defineProperty(combined, 'presentation.stellar.adaptationLuminanceCdM2', {
 			enumerable: true,
 			configurable: false,
-			get: () => this._colorRuntimeBindingValues['presentation.stellar.adaptationLuminanceCdM2'],
+			get: () =>
+				Number(this._colorRuntimeBindingValues['presentation.stellar.adaptationLuminanceCdM2']) *
+				this._receiverLightPresentationScale,
 		});
 		Object.defineProperty(combined, 'presentation.stellar.receiverLightIdentity', {
 			enumerable: true,
@@ -969,6 +981,7 @@ export class Algorithm32 {
 
 	/**
 	 * Call this method to publish the unsmoothed global exposure target for one receiver-local adapting luminance.
+	 * This retains the physical value and target; live shader bindings apply any selected receiver presentation fraction.
 	 *
 	 * @param {UnitValue<'cd m^-2'>} adaptingLuminanceProxy - Current receiver-local adapting luminance.
 	 * @returns {LocalExposureAdaptation} - Accepted luminance and derived target modifier.
@@ -983,6 +996,22 @@ export class Algorithm32 {
 			adaptingLuminanceProxy: {...adaptingLuminanceProxy},
 			exposureModifier,
 		};
+	}
+
+	/** Call this method to scale source-owned receiver adaptation for an illustrative presentation.
+	 * Physical receiver packets, source brightness and stellar source intensity remain unchanged.
+	 * The scale applies to current and later receiver publications through live binding getters.
+	 * Disposed facades throw; use a live facade. Nonfinite or out-of-range values throw
+	 * RangeError before mutation; supply a finite value from zero through one.
+	 *
+	 * @param {number} scale - Dimensionless effective receiver multiplier; one restores physical adaptation.
+	 * @returns {void} - Subsequent shader frames consume coherent effective adaptation values.
+	 */
+	setReceiverLightPresentationScale(scale) {
+		this._assertUsable();
+		if (!Number.isFinite(scale) || scale < 0 || scale > 1)
+			throw new RangeError('Receiver-light presentation scale must be finite and between 0 and 1.');
+		this._receiverLightPresentationScale = scale;
 	}
 
 	/** Build and atomically publish the installed receiver-environment measurement. */

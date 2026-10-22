@@ -108,9 +108,9 @@ type ConfigSnapshot = {
 interface Algorithm32Facade {
 	/** Current accepted facade configuration snapshot. */
 	readonly config: ConfigSnapshot;
-	/** Current receiver-local Color brightness proxy. */
+	/** Physical receiver-local Color brightness proxy before optional presentation scaling. */
 	readonly brightnessProxy: UnitValue<'cd m^-2'>;
-	/** Current receiver total-horizontal photopic illuminance used by Color Reset. */
+	/** Physical receiver total-horizontal photopic illuminance before optional presentation scaling. */
 	readonly totalHorizontalIlluminance: UnitValue<'lux'>;
 	/** Last complete direct, diffuse, and total-horizontal receiver-light publication. */
 	readonly receiverLight: ReceiverEnvironmentLightMeasurement;
@@ -132,6 +132,8 @@ interface Algorithm32Facade {
 	 * @returns - Accepted luminance and derived target modifier.
 	 */
 	setAdaptingLuminance(adaptingLuminanceProxy: UnitValue<'cd m^-2'>): LocalExposureAdaptation;
+	/** Call this method to scale live receiver adaptation without changing physical measurements; finite 0-1 only. */
+	setReceiverLightPresentationScale(scale: number): void;
 
 	/**
 	 * Call this method to build and attach one runtime shader integration.

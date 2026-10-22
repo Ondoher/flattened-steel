@@ -321,7 +321,12 @@ export class Flat32Application {
 		try {
 			const atmosphereSummary = await this._modeController.switchTo(state.modeKind, state);
 			if (atmosphereSummary !== null && !this._disposed) {
-				this._publishedState = {...state, skyRenderMode: this._state?.skyRenderMode ?? state.skyRenderMode};
+				this._publishedState = {
+					...state,
+					skyRenderMode: this._state?.skyRenderMode ?? state.skyRenderMode,
+					sunIlluminationScale: this._state?.sunIlluminationScale ?? state.sunIlluminationScale,
+					sunDiscBrightnessScale: this._state?.sunDiscBrightnessScale ?? state.sunDiscBrightnessScale,
+				};
 				this._renderControls();
 				const solarZenithDegrees =
 					state.modeKind === 'spherical-distant'
@@ -366,6 +371,20 @@ export class Flat32Application {
 		if (this._publishedState) this._publishedState = {...this._publishedState, skyRenderMode};
 		this._modeController?.setSkyRenderMode(skyRenderMode);
 		this._view.showAtmosphereShaderState(skyRenderMode !== 'shader-off');
+	}
+
+	/** Call this method to select illustrative Sun illumination and disc radiance without changing physical caches.
+	 * An unstarted application throws; start it first. Invalid scales throw before mutation;
+	 * supply finite 0-1 fractions. Runtime publication failures propagate for host reporting.
+	 * @param {Flat32SunPresentationConfiguration} selection - Independent No-atmosphere Sun choices; omission of a field restores one.
+	 * @returns {void} - Current and pending publication retain these selections.
+	 */
+	setSunPresentation(selection) {
+		if (!this._state || this._disposed) throw new Error('Sun presentation requires a live started application.');
+		const accepted = Flat32SceneControls.resolveSunPresentation(selection);
+		this._modeController?.setSunPresentation(accepted);
+		this._state = {...this._state, ...accepted};
+		if (this._publishedState) this._publishedState = {...this._publishedState, ...accepted};
 	}
 
 	/** Called by geometry preparation and rollback to place the camera at the geometry-owned height.
@@ -454,6 +473,8 @@ export class Flat32Application {
 			initialSceneMode.dispose();
 			this._modeController = new ModeController({
 				skyRenderMode: this._state.skyRenderMode,
+				sunIlluminationScale: this._state.sunIlluminationScale,
+				sunDiscBrightnessScale: this._state.sunDiscBrightnessScale,
 				sceneRuntime: this._sceneRuntime,
 				endpointScene: this._endpointScene,
 				/** Stage candidate geometry before publication; the controller restores the previous mode on failure.
