@@ -67,11 +67,12 @@ The create-plan critique is a single explicitly scoped scientific plan critique,
 not a standards-review exception. Checkpoint advice remains enabled. Effective
 standards remain the inherited experiment set; no temporary overlay is introduced.
 
-The [follow-up plan](refinement-plan.md) proposes full-scattering `combo025`
+The [follow-up plan](refinement-plan.md) tested full-scattering `combo025`
 confirmation, fixed-column scale-height and spectral changes, finer loading and
 SSA tests, then conditional finalist comparisons. It retains these isolation and
 evidence rules. The first campaign's N1 claim boundary remains unchanged. The
-follow-up is independently critiqued and selected for independent execution.
+follow-up was independently critiqued and has completed independent execution;
+its refinement report owns the findings and qualification limits.
 Production changes remain outside this selection.
 
 ## Open Questions

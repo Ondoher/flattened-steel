@@ -1,8 +1,22 @@
 # Aerosol refinement and full-scattering confirmation
 
-Status: execution selected through independent-execution. Independent plan critique incorporated.
+Status: execution complete through independent-execution. Independent plan critique incorporated.
 The [first campaign](plan.md) and its
 [results](results.md) retain their original scope, criteria and accepted evidence.
+
+## Execution disposition
+
+- [x] M1: baseline/order observations, numerical diagnostics and matched references.
+- [x] M2: eleven unique one-factor profiles, physical invariants and GPU fields.
+- [x] M3: one initial full-order finalist across four protected conditions,
+  independent/external comparisons and one registered H1800 compromise gate.
+- [x] Final immutable proof, milestone report and current-state handoff.
+
+The [refinement report](refinement-results.md) owns observations, explicit failed
+or held targets, excluded artifacts, untriggered conditional work and costs.
+Completion means the investigation and its decisions are complete; it does not
+claim universal numerical qualification or external solar-halo precision.
+No production update or further run is selected.
 
 ## Outcome
 

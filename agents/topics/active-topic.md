@@ -1,18 +1,14 @@
 # Active Topic
 
 Current active topic: poc-experiments/engineering-studies/sky-aerosol-properties.
-Focus: executing aerosol-profile refinement and full-scattering confirmation of
-`combo025`, preserving solar glow while investigating the remaining gray horizon.
+Focus: completed aerosol-profile refinement and full-scattering confirmation of
+combo025; review the retained H2400 lead, elevated-view tradeoff and reference limits.
 
 Canonical entry: [Sky Aerosol Properties](poc-experiments/engineering-studies/sky-aerosol-properties/README.md).
-The owner selected a new contained experiment. Its first campaign is complete:
-420 independent N1 ray spectra and 42 GPU sky fields are verified. The combined
-25% loading/SSA0.95/g0.85 setting is a promising noon lead; lower-Sun and full-N4
-confirmation remain unresolved. Production settings are read-only.
-The follow-up refinement plan is selected for independent execution. Current
-progress and resumption instructions are in the linked status and refinement report.
-ARM Spectral Validation and Sky Accuracy Dials remain suspended. Production's
-on-demand rendering and zero-aerosol cache remain at their existing owners.
+The first campaign and follow-up M1-M3 investigation are complete. No run is queued;
+production settings are unchanged. This experiment remains active, awaiting owner
+selection of any next work. ARM Spectral Validation and Sky Accuracy Dials remain
+suspended. Production on-demand rendering and cache selection retain their owners.
 
 ## Minimal Reload Sources
 
@@ -21,3 +17,4 @@ on-demand rendering and zero-aerosol cache remain at their existing owners.
 3. [Design](poc-experiments/engineering-studies/sky-aerosol-properties/design.md).
 4. [Current plan](poc-experiments/engineering-studies/sky-aerosol-properties/refinement-plan.md).
 5. [Status](poc-experiments/engineering-studies/sky-aerosol-properties/status.md).
+6. [Refinement results](poc-experiments/engineering-studies/sky-aerosol-properties/refinement-results.md).

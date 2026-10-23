@@ -1,6 +1,6 @@
 # Sky aerosol properties Experiment
 
-Status: active; follow-up refinement and full-scattering confirmation executing.
+Status: active experiment; first campaign and follow-up refinement are complete.
 
 ## Objective
 
@@ -9,7 +9,7 @@ Identify aerosol properties that retain solar glow while reducing the brown or g
 ## Governing Documents
 
 - [Design](design.md)
-- [Current follow-up plan: aerosol refinement and N4 confirmation](refinement-plan.md) — Execution active.
+- [Current follow-up plan: aerosol refinement and N4 confirmation](refinement-plan.md) — Investigation complete; see its qualified/held claim boundaries.
 - [Follow-up execution and milestone reports](refinement-results.md)
 - [Completed first-campaign plan](plan.md)
 - [Status](status.md)
