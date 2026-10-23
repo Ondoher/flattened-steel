@@ -1,17 +1,18 @@
 # Active Topic
 
-Current active topic: production-app/product-behavior.
-Focus: add and verify a 10 km elevation option in both app modes, retaining the
-Bruneton atmosphere, current numerical corrections and cache/scene reuse.
+Current active topic: poc-experiments/engineering-studies/elevated-horizon-validation.
+Focus: determine whether the low-contrast 10 km globe horizon follows from the
+Bruneton profile or from transport/rendering, beginning with matched libRadtran.
 
-Canonical entry: [Product Behavior](production-app/product-behavior/README.md).
-The expanded cache and app are selected locally; seven served GPU scene checks
-pass. Sky Aerosol Properties remains ended. ARM Spectral Validation and Sky
-Accuracy Dials remain suspended. No Sun-disc rendering change is selected.
+Canonical entry: [Elevated Horizon Validation](poc-experiments/engineering-studies/elevated-horizon-validation/README.md).
+The new experiment is prepared; numerical execution has not begun. Production
+remains read-only. Sky Aerosol Properties remains ended. Sky Accuracy Dials and
+ARM Spectral Validation remain suspended.
 
 ## Minimal Reload Sources
 
 1. [Repository instructions](../../AGENTS.md).
-2. [Product behavior entry](production-app/product-behavior/README.md).
-3. [10 km elevation](production-app/product-behavior/ten-km-elevation.md).
-4. [Current Bruneton atmosphere](production-app/product-behavior/bruneton-atmosphere.md).
+2. [Experiment entry](poc-experiments/engineering-studies/elevated-horizon-validation/README.md).
+3. [Design](poc-experiments/engineering-studies/elevated-horizon-validation/design.md).
+4. [Plan](poc-experiments/engineering-studies/elevated-horizon-validation/plan.md).
+5. [Status](poc-experiments/engineering-studies/elevated-horizon-validation/status.md).

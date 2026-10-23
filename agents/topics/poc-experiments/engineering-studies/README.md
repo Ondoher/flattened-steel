@@ -2,17 +2,21 @@
 
 Focus: Measured alternatives and retained or rejected mechanisms.
 
-[ARM Spectral Validation](arm-spectral-validation/results.md) remains selected
-after its first conditional comparison; absolute accuracy is inconclusive.
+[Elevated Horizon Validation](elevated-horizon-validation/README.md) is prepared
+for a libRadtran-first comparison of the 10 km globe ground/sky boundary.
+[ARM Spectral Validation](arm-spectral-validation/status.md) and
+[Sky Accuracy Dials](sky-accuracy-dials/status.md#experiment-lifecycle) remain
+suspended. [Sky Aerosol Properties](sky-aerosol-properties/status.md) is ended;
+its former H2400 production selection was subsequently superseded.
 [Sky Inter-Order Altitude Reconstruction](sky-altitude-reconstruction/results.md)
 ended unsuccessfully. [Sky Cache Angular Quadrature](sky-angular-quadrature/README.md)
 ended with its standalone candidate rejected; its evidence remains preserved.
-[Sky Accuracy Dials](sky-accuracy-dials/status.md#experiment-lifecycle) remains
-suspended. Other lanes retain their own dispositions.
+Other lanes retain their own dispositions.
 
 ## Working Documents
 
-- [Sky Aerosol Properties](sky-aerosol-properties/README.md) — Active controlled study of absorption, loading and solar glow.
+- [Elevated Horizon Validation](elevated-horizon-validation/README.md) - Prepared, libRadtran first.
+- [Sky Aerosol Properties](sky-aerosol-properties/README.md) - Ended controlled study; preserved evidence.
 - [ARM Spectral Validation](arm-spectral-validation/README.md)
 - [Sky Inter-Order Altitude Reconstruction](sky-altitude-reconstruction/README.md)
 
