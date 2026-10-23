@@ -5,9 +5,10 @@ Focus: determine whether the low-contrast 10 km globe horizon follows from the
 Bruneton profile or from transport/rendering, beginning with matched libRadtran.
 
 Canonical entry: [Elevated Horizon Validation](poc-experiments/engineering-studies/elevated-horizon-validation/README.md).
-The baseline plan is complete with independent low-contrast horizon evidence and
-aerosol-loading controls. The published-profile follow-on is executing: OPAC data
-are acquired and qualified, and the 5 m/10 km radiance screen is running.
+The baseline and published-profile follow-on are complete and verified, including
+5 m/10 km comparisons, low-altitude solar-glow and dusk controls. Continental-clean
+improves low-altitude contrast but does not fix the 10 km horizon. Awaiting owner
+review; no further numerical work is queued.
 Production remains read-only. Sky Aerosol Properties
 remains ended. Sky Accuracy Dials and ARM Spectral Validation remain suspended.
 

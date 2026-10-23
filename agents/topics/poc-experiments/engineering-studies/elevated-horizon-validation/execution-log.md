@@ -2,6 +2,39 @@
 
 ## Published-profile follow-on, 2026-10-23
 
+- Completed the 12-case spectral-only control (00045), final combined report
+  (00046) and accepted final proof (00047). Totals: 309 comparison cases plus two
+  pilot cases; 16,478 artifact records authenticated. Source types/syntax and
+  input/color contracts pass. The final report replaces provisional current-state
+  prose; prior sealed reports are preserved.
+- Continental-clean passes the 5 m contrast gate, has a modest 2 km benefit, and
+  retains strong solar glow. No candidate resolves the 10 km appearance. Stronger
+  near-Sun sunset brightness is reported as a tradeoff, not hidden by exposure.
+- Completed the plan through its conditional solver-only path. Source audit shows
+  faithful OPAC rendering needs layered/height-dependent aerosol support across
+  cache and runtime; no fitted profile or production change was made. No new
+  cache/full app render, RH80 or ACTIVATE campaign was triggered. Remaining 1%
+  absolute precision and published angular-detail limits are explicit.
+- The checkpoint adviser recommended the final coherent unit with message
+  `feat(experiment): evaluate published aerosol profiles`, preapproved under
+  independent-execution. Local Git history and the execution handoff retain its
+  exact commit identity. M1 was committed as fa042599. A Python-wrapped Git staging attempt failed with filesystem access;
+  direct escalated host Git succeeded without ACL/settings changes.
+
+- The complete screen and earned controls contain 297 comparison cases; including
+  the pilot, proof 00044 authenticates 299 successful scientific cases and source
+  contracts. The initial combined fine run changed both wavelength quadrature and
+  optical layering, so a continental-only Q4/layers256 control is added before
+  final handoff. Twelve cases separate spectral and layer effects at both heights.
+- Shared native seeds imply possible covariance across profiles. Final analysis
+  uses empirical paired replicate differences, retaining measured covariance.
+  The early independent-variance annotation in reports 00027-00037 is superseded;
+  those artifacts remain preserved. The candidate's 5m gain still passes its
+  original gate. Report 00027 also contained incomplete progress-only rows and is
+  not the final comparison. A syntax-only orchestration failure allocated no run;
+  failed proof 00043 completed data authentication but could not spawn a checker
+  inside the sandbox; host proof 00044 succeeds.
+
 - Owner authorized the new plan through independent-execution, directed download
   failures to be logged and skipped, and added 5 m horizon comparisons.
 - Node HTTPS connections failed for both sources (00022); moved on to installed

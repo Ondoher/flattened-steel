@@ -10,6 +10,10 @@ import {
 	readFileSync,
 	realpathSync,
 	writeFileSync,
+	openSync,
+	readSync,
+	closeSync,
+	fstatSync,
 } from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
@@ -34,11 +38,29 @@ export function checked(relative) {
 
 /** Authenticate a read-only parent artifact. */
 export function identity(relative) {
-	const bytes = readFileSync(checked(relative));
+	const filename = checked(relative),
+		handle = openSync(filename, 'r');
+	const digest = createHash('sha256');
+	let bytes = 0;
+	try {
+		const before = fstatSync(handle),
+			buffer = Buffer.alloc(Math.min(before.size || 1, 1024 * 1024));
+		let count;
+		while ((count = readSync(handle, buffer, 0, buffer.length, null)) > 0) {
+			digest.update(buffer.subarray(0, count));
+			bytes += count;
+		}
+		const after = fstatSync(handle);
+		assert.equal(bytes, before.size);
+		assert.equal(after.size, before.size);
+		assert.equal(after.mtimeMs, before.mtimeMs);
+	} finally {
+		closeSync(handle);
+	}
 	return {
 		path: relative.replaceAll('\\', '/'),
-		bytes: bytes.length,
-		sha256: createHash('sha256').update(bytes).digest('hex'),
+		bytes,
+		sha256: digest.digest('hex'),
 	};
 }
 

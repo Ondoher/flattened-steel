@@ -1,36 +1,39 @@
 # Elevated Horizon Validation Status
 
-State: baseline execution complete and verified on 2026-10-23. The baseline and
-earned aerosol-loading branch are reported in [results](results.md). A new
-[published-profile plan](alternate-profiles-plan.md) is executing: data acquisition,
-property qualification and the pilot are complete, and the 5 m/10 km screen is
-running. Production is unchanged.
-No closure, suspension or promotion is implied.
+State: baseline and published-profile follow-on complete and verified on
+2026-10-23. Production is unchanged. No closure, suspension or promotion is implied.
 
 ## Current outcome and next action
 
-libRadtran reproduces a low-contrast 10 km horizon with the current Bruneton
-profile. Six limb rays agree with installed GPU N4 brightness within 1.3%; native
-band residuals reach about 6.3%, so no perfect spectral match is claimed. The
-actual depth silhouette is sharp, direct optical-depth checks support the strong
-attenuation and the component display arithmetic replays within 1.01e-7.
+The [baseline results](results.md) establish independently low 10 km contrast with
+Bruneton, a sharp actual depth silhouette, and matched GPU N4 brightness within
+1.3%. The [published-profile results](alternate-profiles-results.md) own all new
+candidate measurements and image links. Continental-clean improves the 5 m
+horizon and retains a stronger concentrated solar aureole, but does not fix the
+10 km horizon; its dusk brightness is an important tradeoff.
 
-Aerosols strengthen the effect, while molecular-only transport still produces
-substantial haze. No profile or algorithm is promoted. The [results](results.md)
-own numerical tables, appearance links, uncertainty, limits and measured costs.
-The [execution log](execution-log.md) owns consequential choices and recovery.
-The follow-on screen in run 00026-opac-screen is running serially. Next action is
-publish the first matched 5 m/10 km color strips and contrast, then refine only
-promising cases. The owner requires the 5 m horizon as well as the original
-10 km case. No production profile has been selected.
+Final combined report 00046 has 309 comparison cases. Accepted proof 00047
+validates 311 successful scientific cases including the pilot, 16,478 artifact
+records, source types/syntax and physical/input/color contracts. Spectral and
+layer refinements are separated; dark-ground 1% absolute precision remains
+unproven. Conditional full app scenes were not triggered because current profile
+configuration cannot faithfully represent the layered, height-dependent mixture.
+The compatibility finding and unmeasured integration costs are in the report.
 
-## Published-profile planning
+Next action: owner review of results. No numerical work remains queued. A faithful
+production implementation or new atmosphere acquisition is separate work. The
+[execution log](execution-log.md) owns decisions/recovery/checkpoint identities.
+M1 recovery checkpoint: fa042599. Final checkpoint unit:
+`feat(experiment): evaluate published aerosol profiles`; exact identity is in local
+Git history and the execution handoff.
+
+## Published-profile planning and completion
 
 The [follow-on results](alternate-profiles-results.md) own current milestone
 findings and links. Runs 00022/00023 preserve failed connections and successful
 acquisition; 00024 qualifies properties and 00025 is the accepted spherical pilot.
 Downloaded optical data and source recipes remain independent of production.
-Source type checking passes. All existing completed/failed evidence is preserved.
+Final proof 00047 passes. All existing completed/failed evidence is preserved.
 
 The follow-on preserves the completed baseline plan/results. Initial candidates
 are OPAC continental clean, maritime tropical and maritime clean, with documented

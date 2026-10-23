@@ -1,7 +1,8 @@
 # Elevated Horizon Validation
 
-Status: baseline execution complete and verified on 2026-10-23; published-profile
-follow-on executing with acquired OPAC data and 5 m/10 km probes. Production unchanged.
+Status: baseline and published-profile follow-on complete and verified on
+2026-10-23, including 5 m and 10 km horizons. Production unchanged; awaiting owner
+review. The experiment remains selected, without closure or promotion.
 
 Determine whether the low-contrast elevated globe horizon is justified by the
 selected atmosphere or arises from numerical transport or rendering. Start with
@@ -12,6 +13,8 @@ verdict that production or the Bruneton profile is wrong.
 ## Governing documents
 
 - [Results](results.md): matched comparison, profile controls and conclusions.
+- [Alternate profile results](alternate-profiles-results.md): published-model
+  horizon, solar-glow and dusk comparisons, plus scene implementation limits.
 - [Alternate profiles plan](alternate-profiles-plan.md): download and test
   published clean aerosol models; conditional scene renders and measured-data route.
 - [Execution log](execution-log.md): consequential choices and recovery.

@@ -1,10 +1,24 @@
 # Published Alternate Atmosphere Profiles Plan
 
-State: execution authorized through independent-execution on 2026-10-23. Record
-download failures and move to the next source/candidate as the owner requested.
+State: completed and verified on 2026-10-23 through independent-execution.
+Download failures were logged and skipped. Final dispositions and evidence are in
+[alternate profile results](alternate-profiles-results.md).
 The owner also requires the 5 m horizon in the initial screen. This is an exploratory follow-on within Elevated Horizon
 Validation. The [completed baseline plan](plan.md) and its [results](results.md)
 retain their original scope, criteria and conclusions.
+
+## Execution dispositions
+
+M1 complete: published recipes/optics acquired, qualified and piloted. M2 complete:
+5 m and 10 km screen, spectral/layer refinements and explicit remaining precision
+limits. M3 complete within earned scope: continental-clean at 2 km, 500 m near-Sun
+and both dusk presets. High-sky expansion and 80% RH/ACTIVATE were not triggered.
+M4 complete through its solver-only exit: current profile configuration cannot
+faithfully represent the layered, height-dependent mixture. Conditional GPU cache
+builds/full app captures were not performed; their costs remain unmeasured.
+Checked items below mean their decisions were resolved, including conditional
+work explicitly not triggered, rather than that every optional branch ran.
+No 1% absolute dark-ground or forward-radiance convergence is claimed.
 
 ## Outcome and boundaries
 
@@ -107,26 +121,26 @@ quantity recorded; never silently introduce ozone or other gases.
 Purpose: establish what is actually available and whether it meets the owner's
 lower-aerosol requirement before spending on radiance or cache builds.
 
-- [ ] Authenticate baseline inputs and inspect existing OPAC files read-only.
+- [x] Authenticate baseline inputs and inspect existing OPAC files read-only.
       Reuse exact available data by copying into a new run with parent hashes.
       Download missing original data and the smallest compatible optical library
       from the official links. Preserve archive, resolved URL, retrieval date,
       version, available publisher checksum, local SHA-256, citations and usage terms.
-- [ ] Inspect archive members before extraction; reject path escapes, links and
+- [x] Inspect archive members before extraction; reject path escapes, links and
       junctions. Keep extraction and any necessary data-format conversion in this
       lane. Do not alter the installed solver/data or run downloaded programs.
-- [ ] Reconcile original compositions, vertical/background layers, humidity
+- [x] Reconcile original compositions, vertical/background layers, humidity
       classes and NetCDF files. Confirm full phase representation, extinction,
       scattering/absorption, SSA, units and wavelength coverage. A parser/export
       adapter may use existing JS/Python runtimes; record transformations and
       quantify interpolation error. Do not substitute a fitted HG/CS lobe or a
       single fitted exponential and call it the original OPAC profile.
-- [ ] Publish a native table/CSV with AOD at 550 nm, absorption optical depth,
+- [x] Publish a native table/CSV with AOD at 550 nm, absorption optical depth,
       surface extinction, extinction at selected heights, aerosol column above
       the observer and integrated aerosol optical depth on the registered ground
       and sky paths. Include molecular contributions separately. Verify published
       reference values under the same humidity/layer conventions.
-- [ ] Run one cheap compatibility/geometry pilot with the existing fully spherical
+- [x] Run one cheap compatibility/geometry pilot with the existing fully spherical
       MYSTIC configuration and sensor altitude explicit. Verify resolved optical
       inputs, layer transitions and phase normalization, not just process success.
 
@@ -153,13 +167,13 @@ transfer/extraction size is not yet measured. Update the forecast after the pilo
 Purpose: find whether externally defined profiles materially change the observed
 effect, using libRadtran before implementing new caches.
 
-- [ ] Reuse or verify the existing 10 km, San Jose noon, anti-solar six-ray set,
+- [x] Reuse or verify the existing 10 km, San Jose noon, anti-solar six-ray set,
       and run the same horizon-relative offsets at the owner-requested 5 m height:
       horizon offsets -1, -.1, -.02, +.02, +.1, +1 degrees; horizon is approximately
       -3.210885 degrees at 10 km. Recompute the 5 m limb from the same radius.
       Retain exact sphere hit/miss and finite endpoints; do not
       interpret local horizontal as the elevated limb. Hold black ground fixed.
-- [ ] Compare baseline and the three usable published mixtures at 50% RH, publish
+- [x] Compare baseline and the three usable published mixtures at 50% RH, publish
       the initial strips, then prioritize documented 80% RH sensitivities for
       promising or diagnostically distinct cases. A full six-case humidity sweep
       runs only when the first results show it would resolve a live question.
@@ -168,12 +182,12 @@ effect, using libRadtran before implementing new caches.
       each native bin, not a point sample relabelled as bin energy. For candidates,
       converge layer resolution at profile discontinuities and the strongest limb
       rays. Bound spectral/phase interpolation and band-quadrature errors as well.
-- [ ] Begin with three independent replicate vectors for screening. Extend seeds,
+- [x] Begin with three independent replicate vectors for screening. Extend seeds,
       photons and affected convergence checks for possible finalists until paired
       contrast differences and radiance claims are resolved, or explicitly report
       them inconclusive. Use paired seeds only with justified covariance handling;
       do not assume that equal seed numbers guarantee noise cancellation.
-- [ ] Report spectra, Y, finite-path transmission, signed Michelson contrast at
+- [x] Report spectra, Y, finite-path transmission, signed Michelson contrast at
       the three offset pairs and total/path aerosol optical depth. Label direct
       optical-depth integrals separately from MYSTIC radiance outputs.
       Define C(delta)=(Y_above-Y_below)/(Y_above+Y_below), at delta=.02,.1,1
@@ -181,7 +195,7 @@ effect, using libRadtran before implementing new caches.
       Use empirical Student 95% intervals across full-spectrum replicate vectors
       for differences, retaining covariance when justified. Negligible denominators
       are unresolved; record sign inversions separately from contrast improvement.
-- [ ] As soon as qualified radiance exists, link common-exposure horizon color
+- [x] As soon as qualified radiance exists, link common-exposure horizon color
       strips beside baseline and molecular-only control. Images show essential
       color and spatial transition, using registered samples without fabricated
       smoothing. Keep numeric tables and status selectable in Markdown/CSV.
@@ -213,7 +227,7 @@ invocation time, excluding adapter development, analysis and GPU initialization.
 Purpose: prevent selecting a profile on one favorable ray while losing the
 near-Sun brightness or producing an undesirable low-elevation/sunset sky.
 
-- [ ] Advance at most two distinct promising candidates. Compare baseline,
+- [x] Advance at most two distinct promising candidates. Compare baseline,
       molecular-only control and those candidates at observer heights 500 m,
       2 km and 10 km, with geometric rays registered independently at each height.
       Start with 500 m noon near-Sun diffuse rays at 1, 3 and 10 degrees from the
@@ -226,15 +240,15 @@ near-Sun brightness or producing an undesirable low-elevation/sunset sky.
       Converge the forward-peak table/angular sampling or phase-moment truncation
       on the 1 degree ray: two refinements should change Y by less than 1%, or
       bound and report the residual. Phase normalization alone is insufficient.
-- [ ] For surviving candidates add the existing San Jose sunset and ten-minutes-
+- [x] For surviving candidates add the existing San Jose sunset and ten-minutes-
       before-sunset times, pinned by exact source/ephemeris metadata. Use spherical
       transport and document whether the Sun is above the observer's local limb.
       Expand angular samples only when a remaining transition needs resolution.
-- [ ] Publish fixed-exposure spectral/color comparisons and radiance ratios for
+- [x] Publish fixed-exposure spectral/color comparisons and radiance ratios for
       every sampled control, including adverse changes. H3 is supported only by
       a resolved diffuse near-Sun increase over the molecular-only control; use
       uncertainty rather than a visually saturated swatch to claim preserved glow.
-- [ ] Rank profile fidelity, loading, horizon contrast, near-Sun behavior and
+- [x] Rank profile fidelity, loading, horizon contrast, near-Sun behavior and
       sunset color separately. Do not collapse scientific suitability and owner
       appearance preference into one fitted score or promise universal improvement.
 
@@ -257,30 +271,30 @@ update after M2. Near-Sun Monte Carlo precision is a dominant uncertainty.
 Purpose: translate the radiance result into inspectable scene appearance without
 claiming that a simplified profile is the downloaded model.
 
-- [ ] Audit whether existing production transport/cache interfaces can preserve
+- [x] Audit whether existing production transport/cache interfaces can preserve
       the finalist's vertical layers, spectral absorption and full phase behavior.
       If feasible through an experiment-local configuration/adapter, build new
       isolated N4 caches with the existing corrected algorithm, outgoing grid and
       view/display policy held fixed. Authenticate exported physical quantities
       against the libRadtran input and compare selected rays before full scenes.
-- [ ] If faithful representation requires production changes, report that concrete
+- [x] If faithful representation requires production changes, report that concrete
       limitation. Do not modify production or silently fit profile parameters.
       Retain the qualified external strips as the physical evidence and specify
       the smallest separate integration work. A supported local controlled
       renderer is an alternative only when it preserves the same physical model
       and is labelled distinctly from the installed production app.
-- [ ] For faithful candidates capture identical globe scenes at 10 km noon,
+- [x] For faithful candidates capture identical globe scenes at 10 km noon,
       500 m noon toward the Sun, and 500 m sunset. Match camera/FOV, ground,
       lighting, exposure and object state; distinguish controlled black-ground
       atmospheric validation from the approximate green RGB app ground/lighting.
       Confirm depth masks and component compositing if the new adapter changes them.
       Scene images are necessary to judge actual horizon and solar glow appearance.
-- [ ] Measure adapter effort, cache build time, peak memory when available,
+- [x] Measure adapter effort, cache build time, peak memory when available,
       retained bytes, cache size and render cost. Complexity is reported, not an
       automatic rejection criterion. Disable new browser HTTP caching where
       practical before capture to avoid duplicating the large package in profiles;
       preserve all already sealed evidence.
-- [ ] Finish `alternate-profiles-results.md` with sources, exact assumptions,
+- [x] Finish `alternate-profiles-results.md` with sources, exact assumptions,
       milestone decisions, candidate ranking, limitations, untriggered work and a
       concrete recommendation. Update status with the resumption point. Keep
       the earlier baseline report intact. Promotion/default changes remain separate.

@@ -3,7 +3,9 @@
 Focus: Measured alternatives and retained or rejected mechanisms.
 
 [Elevated Horizon Validation](elevated-horizon-validation/README.md) has completed
-its matched 10 km libRadtran/GPU comparison and aerosol-loading controls.
+its matched 10 km libRadtran/GPU comparison and aerosol-loading controls. Its
+[published-profile follow-on](elevated-horizon-validation/alternate-profiles-results.md)
+is also complete, including 5 m horizons and low-altitude/dusk tradeoffs.
 [ARM Spectral Validation](arm-spectral-validation/status.md) and
 [Sky Accuracy Dials](sky-accuracy-dials/status.md#experiment-lifecycle) remain
 suspended. [Sky Aerosol Properties](sky-aerosol-properties/status.md) is ended;

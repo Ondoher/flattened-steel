@@ -18,6 +18,7 @@
 		"**/*.mjs",
 		"../../scripts/libradtran/types.d.ts",
 		"../../src/algorithm32/**/*.d.ts",
+		"../../src/flat32/**/*.d.ts",
 		"../sky-accuracy-dials/**/*.d.ts",
 		"../../scripts/algorithm32/solar-zenith-cache/**/*.d.ts"
 	],
