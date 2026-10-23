@@ -1758,11 +1758,11 @@ type DistantSunSharedCacheControllerDefinition = {
 	transport: DistantSunSharedCachePacketSource;
 	/** Authenticated package metadata owner. */
 	package: DistantSunSharedCachePackageSource;
-	/** Fixed GPU layer capacity, defaulting to 24. */
+	/** Explicit GPU layer capacity; omission selects at least24 and enough for the largest required scene. Actual device allocation remains authoritative. */
 	layers?: number;
 	/** Historical qualification-harness allowance, retained for existing callers; not a runtime allocation gate. */
 	maximumGpuBytes?: number;
-	/** Required qualification for any nondefault atlas capacity. */
+	/** Optional exact-route constraint for callers selecting a measured fixed route; ordinary package-derived capacity does not require it. */
 	routeQualification?: DistantSunSharedCacheRouteQualification;
 	/** Historical transition evidence retained for existing qualification callers; not required for runtime allocation. */
 	transitionQualification?: DistantSunSharedCacheMemoryQualification;

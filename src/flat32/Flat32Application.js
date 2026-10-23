@@ -459,7 +459,7 @@ export class Flat32Application {
 	}
 
 	/** Call this method to prepare a complete scene at a supported physical height.
-	 * Unsupported heights throw before preparation; choose 5, 100, 500, 2000 or 10000 metres.
+	 * Unsupported heights throw before preparation; choose 5, 100, 500, 2000, 10000 or 40000 metres.
 	 * @param {Distance} height - Actual height above the model surface.
 	 * @returns {void} - Accepted labels remain until the requested frame publishes.
 	 */

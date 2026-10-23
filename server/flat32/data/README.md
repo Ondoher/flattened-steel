@@ -26,15 +26,12 @@ rows in the
 [project-wide research register](../../../references/followup.md#missing-third-party-sources-or-canonical-registrations)
 close.
 
-The selected immutable shared package lives at:
-
-```text
-server/flat32/data/shared-block/8d185961cab8beb1e461cd1256be2875bb9a99e9f39e515b9288b92e5d2f6d37/
-```
-
-The [sky accuracy promotion status](../../../agents/topics/production-algorithm32/caches/sky-accuracy-promotion-status.md#current-default-and-rollback)
-owns the owner-authorized default activation, report identity, publication evidence,
-review limitation and immediate rollback. The previous package remains intact.
+The [40 km elevation integration](../../../agents/topics/production-app/product-behavior/forty-km-elevation.md)
+owns the current default package identity, report, activation evidence and rollback.
+Its immutable data lives below `server/flat32/data/shared-block/<package-identity>/`.
+Earlier package directories remain intact. The
+[sky accuracy promotion status](../../../agents/topics/production-algorithm32/caches/sky-accuracy-promotion-status.md#current-default-and-rollback)
+retains the earlier numerical promotion's provenance.
 The server serves only allowlisted authenticated complete files, with the selected
 package's construction and runtime lookup policies explicitly paired.
 The [prior strobing release](../../../agents/topics/production-algorithm32/caches/distant-sun-strobing-release.md)

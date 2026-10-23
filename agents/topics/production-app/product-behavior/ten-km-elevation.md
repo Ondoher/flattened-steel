@@ -1,7 +1,9 @@
 # 10 km elevation option
 
 Status: complete and locally activated on 2026-10-23. Served GPU checks pass.
-No remote deployment or push occurred.
+No remote deployment or push occurred. Current expanded coverage and package
+selection are now owned by [40 km elevation](forty-km-elevation.md); this document
+preserves the completed 10 km integration evidence.
 
 The elevation dropdown includes 10 km in both app modes. Physical camera and
 receiver elevation change together, reusing the installed scene and cache.
@@ -27,7 +29,7 @@ actual consumption follows active owners and releases.
 
 ## Cache and local activation
 
-Selected package:
+Package selected at the 10 km milestone:
 `f2c37c079d41f212a3905b4cccb18c0da84766ad374324c9ae8734b4ba1b4b42`.
 It contains 732384838 bytes (about 698.5 MiB). The full GPU generation,
 compression and reconstruction verification took 394465 ms (6.57 minutes).

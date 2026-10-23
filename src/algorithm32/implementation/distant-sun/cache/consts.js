@@ -166,7 +166,7 @@ export const DISTANT_SUN_SHARED_CACHE_ROW_BYTE_LENGTH =
 export const DISTANT_SUN_SHARED_CACHE_PACKET_WIDTH = 648;
 /** Selected packet-atlas layer height in RGBA texels. */
 export const DISTANT_SUN_SHARED_CACHE_PACKET_HEIGHT = 1728;
-/** Selected bounded packet-atlas resident layer count. */
+/** Baseline predictive capacity; a package requiring more layers expands the default before allocation. */
 export const DISTANT_SUN_SHARED_CACHE_DEFAULT_RESIDENT_LAYER_COUNT = 24;
 /** Unavailable row-address component stored in RG16UI metadata. */
 export const DISTANT_SUN_SHARED_CACHE_UNAVAILABLE_ROW_ADDRESS = 0xffff;

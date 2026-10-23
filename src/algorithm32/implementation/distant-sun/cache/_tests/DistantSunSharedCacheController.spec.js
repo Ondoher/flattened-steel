@@ -285,20 +285,32 @@ describe('Shared-cache residency and publication', () => {
 		expect(fixture.backend.liveMetadata).toBe(0);
 	});
 
-	it('keeps larger-route layout qualification separate from runtime transition allocation', () => {
+	it('admits larger atlas capacity without an administrative qualification requirement', () => {
 		fixture = createFixture();
-		expect(
-			() =>
-				new DistantSunSharedCacheController({
-					...fixture.definition,
-					layers: 62,
-					maximumGpuBytes: 62 * DISTANT_SUN_SHARED_CACHE_PACKET_BYTES,
-				}),
-		).toThrowError(/qualification/u);
+		const larger = new DistantSunSharedCacheController({...fixture.definition, layers: 62, maximumGpuBytes: 0});
+		larger.dispose();
 		for (const maximumGpuBytes of [undefined, 0, 48 * DISTANT_SUN_SHARED_CACHE_PACKET_BYTES]) {
 			const controller = new DistantSunSharedCacheController({...fixture.definition, maximumGpuBytes});
 			controller.dispose();
 		}
+		expect(fixture.backend.liveArrays).toBe(0);
+	});
+
+	it('sizes default residency for a package scene requiring29 blocks and releases the allocation', async () => {
+		fixture = createFixture();
+		fixture.graph.scenes[0].requiredBlockIds = fixture.graph.blockIndex.blocks
+			.slice(0, 29)
+			.map((block) => block.id);
+		const controller = new DistantSunSharedCacheController(fixture.definition);
+		try {
+			expect(await controller.requestScene(0)).toBeTrue();
+			const frame = controller.publishFrame();
+			expect(frame.snapshot.requiredBlockIds.length).toBe(29);
+			expect(frame.atlas.array.storage.layers).toBe(29);
+		} finally {
+			controller.dispose();
+		}
+		expect(fixture.activePins).toBe(0);
 		expect(fixture.backend.liveArrays).toBe(0);
 	});
 

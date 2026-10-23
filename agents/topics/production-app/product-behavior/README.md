@@ -6,6 +6,7 @@ Stage 11.1-11.3 and parts of 11.4-11.6 are implemented. Remaining interaction/mi
 
 ## Working Documents
 
+- [40 km elevation](forty-km-elevation.md) - Current elevation coverage, package selection and served GPU verification.
 - [10 km elevation](ten-km-elevation.md) - Expanded elevation presets, fixed ground coverage and matching cache.
 - [On-demand rendering](on-demand-rendering.md) — Idle scenes draw no frames; camera, controls, publication and visibility changes resume drawing. Matched GPU output is pixel-identical to the previous renderer.
 - [Original Bruneton atmosphere](bruneton-atmosphere.md) - Current physical profile in both modes, retaining numerical corrections and full elevation support.

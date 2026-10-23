@@ -5,6 +5,7 @@ import DistantSunSharedCacheSupport from './DistantSunSharedCacheSupport.js';
 import {
 	DISTANT_SUN_SHARED_CACHE_DEFAULT_RESIDENT_LAYER_COUNT,
 	DISTANT_SUN_SHARED_CACHE_PACKET_BYTES,
+	DISTANT_SUN_SHARED_CACHE_UNAVAILABLE_ROW_ADDRESS,
 } from './consts.js';
 
 /**
@@ -131,12 +132,21 @@ export default class DistantSunSharedCacheController {
 		this._metadata = new DistantSunSharedCacheMetadata(this._graph);
 		if (definition.solarInterpolation === 'monotone-cubic')
 			this._support = new DistantSunSharedCacheSupport(this._graph);
-		this._layers = definition.layers ?? DISTANT_SUN_SHARED_CACHE_DEFAULT_RESIDENT_LAYER_COUNT;
-		if (!Number.isSafeInteger(this._layers) || this._layers < 1 || this._layers > 89)
+		const requiredLayers = Math.max(
+			...this._graph.scenes.map((_scene, ordinal) => this._requiredBlocks(ordinal).length),
+		);
+		this._layers =
+			definition.layers ?? Math.max(DISTANT_SUN_SHARED_CACHE_DEFAULT_RESIDENT_LAYER_COUNT, requiredLayers);
+		if (
+			!Number.isSafeInteger(this._layers) ||
+			this._layers < 1 ||
+			this._layers >= DISTANT_SUN_SHARED_CACHE_UNAVAILABLE_ROW_ADDRESS ||
+			!Number.isSafeInteger(this._layers * DISTANT_SUN_SHARED_CACHE_PACKET_BYTES)
+		)
 			throw new RangeError('Shared-cache layer policy is invalid.');
 		const bytes = this._layers * DISTANT_SUN_SHARED_CACHE_PACKET_BYTES;
 		if (
-			this._layers !== DISTANT_SUN_SHARED_CACHE_DEFAULT_RESIDENT_LAYER_COUNT &&
+			definition.routeQualification &&
 			(!definition.routeQualification?.evidenceId ||
 				!definition.routeQualification.targetId ||
 				definition.routeQualification.maximumBytes < bytes ||
@@ -148,7 +158,7 @@ export default class DistantSunSharedCacheController {
 					(id) => !this._graph.blockIndex.blocks.some((block) => block.id === id),
 				))
 		)
-			throw new RangeError('Shared-cache larger atlas requires exact route and target qualification.');
+			throw new RangeError('Shared-cache route qualification is incompatible with the selected atlas.');
 	}
 
 	/**
@@ -187,7 +197,7 @@ export default class DistantSunSharedCacheController {
 	 */
 	_window(ordinal, options) {
 		const ids = this._requiredBlocks(ordinal);
-		if (this._layers !== DISTANT_SUN_SHARED_CACHE_DEFAULT_RESIDENT_LAYER_COUNT)
+		if (this._definition.routeQualification)
 			ids.push(...this._definition.routeQualification.blockIds.filter((id) => !ids.includes(id)));
 		if (ids.length > this._layers) throw new RangeError('Shared-cache scene exceeds atlas capacity.');
 		const routeIndex = options.routeIndex ?? this._route.indexOf(ordinal);
@@ -210,7 +220,7 @@ export default class DistantSunSharedCacheController {
 			ids.splice(0, ids.length, ...union);
 		}
 		if (
-			this._layers !== DISTANT_SUN_SHARED_CACHE_DEFAULT_RESIDENT_LAYER_COUNT &&
+			this._definition.routeQualification &&
 			ids.some((id) => !this._definition.routeQualification.blockIds.includes(id))
 		)
 			throw new RangeError('Shared-cache requested window is outside the qualified route.');
@@ -282,7 +292,7 @@ export default class DistantSunSharedCacheController {
 			sceneOrdinals.some((ordinal) => !Number.isSafeInteger(ordinal) || ordinal < 0 || ordinal > 108)
 		)
 			throw new RangeError('Shared-cache route is invalid.');
-		if (this._layers !== DISTANT_SUN_SHARED_CACHE_DEFAULT_RESIDENT_LAYER_COUNT) {
+		if (this._definition.routeQualification) {
 			const ids = new Set(
 				sceneOrdinals.filter((ordinal) => ordinal <= 108).flatMap((ordinal) => this._requiredBlocks(ordinal)),
 			);

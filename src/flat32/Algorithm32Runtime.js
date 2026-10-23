@@ -9,8 +9,12 @@ import {SphericalDistantMode} from './SphericalDistantMode.js';
 import DistantSunSharedCache from '../algorithm32/implementation/distant-sun/cache/DistantSunSharedCache.js';
 import {Flat32SceneControls} from './Flat32SceneControls.js';
 import DistanceMath from '../algorithm32/math/DistanceMath.js';
-import {ATMOSPHERIC_VIEW_ENABLED_VALUE_KEY} from '../algorithm32/atmospheric-transport/consts.js';
+import {
+	ATMOSPHERIC_VIEW_ENABLED_VALUE_KEY,
+	TRANSPORT_PATH_INTERVAL_COUNT_VALUE_KEY,
+} from '../algorithm32/atmospheric-transport/consts.js';
 import {SUN_DISC_BRIGHTNESS_SCALE_VALUE_KEY} from '../algorithm32/celestial-contribution-cache/consts.js';
+import {DISTANT_SUN_VIEW_INTERVAL_COUNT, DISTANT_SUN_HIGH_ALTITUDE_VIEW_INTERVAL_COUNT} from './consts.js';
 
 /**
  * Transactional production Algorithm32 attachment for Flat32.
@@ -667,6 +671,12 @@ export class Algorithm32Runtime {
 				sceneScale: this._mode.sceneScale,
 			},
 		});
+		if (this._mode instanceof SphericalDistantMode) {
+			this._bindingValues[TRANSPORT_PATH_INTERVAL_COUNT_VALUE_KEY] =
+				this._mode.observerHeight.value === 40000
+					? DISTANT_SUN_HIGH_ALTITUDE_VIEW_INTERVAL_COUNT
+					: DISTANT_SUN_VIEW_INTERVAL_COUNT;
+		}
 	}
 
 	/** Called by distant rendering and compact staging/rendering to update one coherent presentation.

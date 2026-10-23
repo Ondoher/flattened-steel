@@ -20,8 +20,8 @@ export const Flat32SceneControls = {
 		if (!['full', 'no-atmosphere', 'shader-off'].includes(skyRenderMode))
 			throw new RangeError('Flat32 sky render mode is unsupported.');
 		const height = DistanceMath.toMeters(configuration.observerHeight ?? ATMOSPHERE_OBSERVER_HEIGHT);
-		if (![5, 100, 500, 2000, 10000].includes(height))
-			throw new RangeError('Flat32 observer height must be 5 m, 100 m, 500 m, 2 km or 10 km.');
+		if (![5, 100, 500, 2000, 10000, 40000].includes(height))
+			throw new RangeError('Flat32 observer height must be 5 m, 100 m, 500 m, 2 km, 10 km or 40 km.');
 		return {
 			skyRenderMode,
 			observerHeight: DistanceMath.inMeters(height),

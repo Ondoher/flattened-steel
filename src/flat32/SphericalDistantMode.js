@@ -17,6 +17,7 @@ import {
 	requireImplementedFlat32ProductionSelections,
 	resolveFlat32ProductionSelections,
 } from './Flat32ProductionSelections.js';
+import {DISTANT_SUN_VIEW_INTERVAL_COUNT} from './consts.js';
 
 /**
  * Own the fixed spherical-geometry/distant-Sun Algorithm32 application mode.
@@ -88,7 +89,7 @@ export class SphericalDistantMode {
 				directionToLight: configuration.sceneState.directionToSourceModel,
 			},
 			execution: {
-				pathIntervalCount: 30,
+				pathIntervalCount: DISTANT_SUN_VIEW_INTERVAL_COUNT,
 				pathSampleDistribution: {kind: 'quadratic-near-observer-v1'},
 				maximumScatteringOrder: configuration.maximumScatteringOrder,
 			},

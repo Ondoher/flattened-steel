@@ -43,7 +43,7 @@ describe('Flat32 scene control foundations', () => {
 			ground.updateMatrixWorld(true);
 			const radius = state.geometry.configuration.bottomRadius.value / ATMOSPHERE_SCENE_SCALE.value;
 			const raycaster = new THREE.Raycaster();
-			for (const height of [5, 100, 500, 2000, 10000]) {
+			for (const height of [5, 100, 500, 2000, 10000, 40000]) {
 				const eye = height / ATMOSPHERE_SCENE_SCALE.value;
 				const horizonAngle = -Math.acos(radius / (radius + eye));
 				// Pair samples around diagonal mesh seams: CPU triangle edge tests can miss
@@ -135,6 +135,10 @@ describe('Flat32 scene control foundations', () => {
 		elevation.value = '10000';
 		elevation.dispatchEvent(new Event('change'));
 		expect(actions.onElevation).toHaveBeenCalledWith({value: 10000, units: 'meters'});
+		expect(elevation.querySelector('[value="40000"]').textContent).toBe('40 km');
+		elevation.value = '40000';
+		elevation.dispatchEvent(new Event('change', {bubbles: true}));
+		expect(actions.onElevation).toHaveBeenCalledWith({value: 40000, units: 'meters'});
 		const fov = root.querySelector('#flat32-fov-control');
 		expect(fov.value).toBe('50');
 		fov.value = '5';
@@ -308,7 +312,7 @@ describe('Flat32 scene control foundations', () => {
 		}
 		expect(() => Flat32SceneControls.resolve({skyRenderMode: 'unknown'})).toThrowError(/unsupported/);
 		expect(() => Flat32SceneControls.resolve({observerHeight: {value: 600, units: 'meters'}})).toThrowError(
-			/5 m, 100 m, 500 m, 2 km or 10 km/,
+			/5 m, 100 m, 500 m, 2 km, 10 km or 40 km/,
 		);
 	});
 	it('retains Full/Shader off boolean compatibility and accepts an explicit independent sky mode', () => {
@@ -320,7 +324,7 @@ describe('Flat32 scene control foundations', () => {
 		).toBe('no-atmosphere');
 	});
 
-	for (const height of [5, 100, 500, 2000, 10000]) {
+	for (const height of [5, 100, 500, 2000, 10000, 40000]) {
 		it(`maps the actual camera and receiver to ${height} metres in both supported geometries`, () => {
 			const observerHeight = Flat32SceneControls.resolve({
 				observerHeight: {value: height / 1000, units: 'kilometers'},
@@ -416,7 +420,7 @@ describe('Flat32 scene control foundations', () => {
 		});
 		try {
 			const original = mode.compactProfile;
-			for (const height of [5, 100, 500, 2000, 10000]) {
+			for (const height of [5, 100, 500, 2000, 10000, 40000]) {
 				const profile = original.createLiveProfile({
 					observation,
 					receiverPosition: {coordinates: [0, 0, height], units: 'meters'},

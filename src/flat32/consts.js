@@ -52,7 +52,11 @@ export const FLAT_OBSERVER_DOME_MAX_VIEW_RAY_EXTENT = {
 	value: 1926774,
 	units: 'meters',
 };
-export const CAMERA_FAR_SCENE_UNITS = 500;
+export const CAMERA_FAR_SCENE_UNITS = 1200;
+/** Ordinary globe final-view integration; cache construction and physical optics are independent. */
+export const DISTANT_SUN_VIEW_INTERVAL_COUNT = 30;
+/** Final-view integration for the 40 km globe preset, qualified by the high-altitude horizon checks. */
+export const DISTANT_SUN_HIGH_ALTITUDE_VIEW_INTERVAL_COUNT = 120;
 export const CAMERA_FIELD_OF_VIEW_DEGREES = 50;
 /** Vertical perspective framing presets; Natural approximates central-view framing, not total human vision. */
 export const FLAT32_FIELD_OF_VIEW_PRESETS = [
@@ -70,7 +74,7 @@ export const CAMERA_NEAR_SCENE_UNITS = 0.002;
 /** @type {[number, number, number]} */
 export const CAMERA_POSITION_SCENE = [0, 0.005, 0];
 export const GROUND_COLOR = 0x4fa33d;
-export const GROUND_SIZE_SCENE_UNITS = 900;
+export const GROUND_SIZE_SCENE_UNITS = 1800;
 export const LOCAL_SUN_AMBIENT_LIGHT_INTENSITY = 0.37943331351924703;
 /** Canonical distant-source brightness that maps source-owned scene lighting to unit scale. */
 export const DISTANT_SUN_SCENE_LIGHT_REFERENCE_BRIGHTNESS = {
