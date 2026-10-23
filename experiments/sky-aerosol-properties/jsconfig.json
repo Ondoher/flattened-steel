@@ -19,6 +19,8 @@
 	"include": [
 		"../../scripts/algorithm32/solar-zenith-cache/types.d.ts",
 		"../../src/algorithm32/**/*.d.ts",
+		"../../src/flat32/**/*.d.ts",
+		"../../server/flat32/**/*.d.ts",
 		"**/*.d.ts",
 		"**/*.js",
 		"**/*.mjs"

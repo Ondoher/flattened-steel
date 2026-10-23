@@ -302,3 +302,98 @@ M1-M3 and the bounded adaptive branch are complete, with their explicit qualifie
 held and rejected claim boundaries. App integration, a production cache selection,
 measured-profile claims and B1 scores are outside this execution. Any next campaign
 starts from this report and preserves these runs; no further run is queued.
+
+## Full-scene review follow-on
+
+Owner selected the recommended scene review after M1-M3 completed. Compare
+combo025/H1200 with fixed-column H2400 in the actual Flat32 renderer, using
+separate experiment-owned atlases and physically matching live media. Production
+assets/defaults remain read-only. The first batch is San Jose solar noon: away
+horizon at5m,500m,2km and Sun-centered close-ups at5m/2km. Fixed camera, objects,
+source, display illuminance and viewport apply within every material pair.
+
+Use the existing full272/60 Native51 recurrence controls and focused/cubic
+outgoing reconstruction. Map recurrence rows by exact physical height into the
+Native48 app atlas; runtime altitude interpolation remains Native48. Earlier retained probes are not an app atlas; build the requested
+complete rows anew, retaining their identities and packet/upload proof. Startup
+production assets supply address metadata only and are replaced before captures.
+The actual production view shader remains Q30/quadratic; this visual review does
+not replace the earlier96-interval spectral qualification. Freeze the display
+illuminance to the first campaign value to isolate material appearance.
+
+During capture development two adapter errors were corrected. Startup receiver
+lighting was originally retained after replacing the atlas; final captures instead
+remeasure lighting from the newly published atlas before updating object lights.
+More substantially, copying Native48 altitude ordinals into the Native51 compiler
+selected the wrong physical heights above the inserted low-altitude nodes. Final
+extraction maps each app address to an exactly equal compiler height and proves
+that mapping before accepting images. Runs00047-00054 remain sealed but are
+superseded and excluded from all scene-appearance conclusions. Their hash proofs
+establish byte integrity, not correctness of the old altitude correspondence.
+The M1-M3 solver observations were not produced by this adapter and are unaffected.
+
+The corrected full builds are runs00055 (H1200) and00056 (H2400). The accepted
+[primary scene proof/gallery](../../../../../tmp/experiments/sky-aerosol-properties/runs/00057-scene-report/comparison.html)
+contains five matched pairs: away-Sun horizon at5m,500m and2km, plus Sun-centered
+20-degree close-ups at5m and2km. Horizon views use50-degree vertical FOV.
+Left is always combo025/H1200; right is fixed-column H2400. The actual renderer,
+objects, direct Sun and stars are used. These are globe/distant-Sun noon scenes;
+flat/local-Sun and sunset changes have not been tested by this follow-on.
+
+Visual observation: the away-Sun horizon differences are subtle at this field of
+view. Both profiles retain a pale horizon and visible solar glow. The ground-level
+Sun surround is slightly weaker for H2400; at2km its solar surround is much
+brighter and broader in the displayed image. This is consistent with the earlier
+qualified elevated near-Sun tradeoff and supports reviewing height as part of
+profile selection. It does not establish that the brighter elevated appearance
+is incorrect. H2400 remains a candidate, not a selected production atmosphere.
+
+The primary mean absolute RGB code changes are0.37,0.56 and0.57 out of255 for
+the5m,500m and2km horizon images,4.61 for the5m Sun view and28.91 for the2km
+Sun view. These describe entire 8-bit screenshots including foreground; they are
+neither radiance percentages nor RMSE against an independent physical reference.
+Do not substitute them for the earlier selected-ray spectral measurements.
+
+Verification reconstructs every uploaded packet byte from retained cumulative
+source-density rows and compares its hash to the GPU upload record:22 populated
+slots and1408 coordinate rows per medium. It also proves exact physical-height
+correspondence, source and coefficient matching (maximum relative discrepancy
+4.44e-16), matching cameras/physical observer heights/display settings, finite
+nonnegative compiler results and released compiler fields. Startup package data
+provide addresses only; final scattering coefficients come from the new builds.
+The app still uses Native48 altitude interpolation and Q30/quadratic view
+integration, so these captures do not inherit the earlier Native51/Q96 spectral
+qualification as an exact runtime-equivalence claim.
+
+Build-and-capture times were133.3s for H1200 and121.0s for H2400 on RTX2060,
+ANGLE/D3D11 with installed Chrome155. Each retains about300MiB including raw rows,
+bundles, source/input identities, captures and immutable manifests. Sampled Node
+RSS at completion was800.2MiB and323.8MiB respectively; these are not peak process
+or GPU-driver measurements. The experiment atlas allocates24 RGBA32F layers of
+648x1728 pixels, about410MiB, with22 populated. The recurrence's reported logical
+texture allocation is separate; no measured total GPU-memory peak is claimed.
+One owned GPU browser is used at a time. Both builds met the30-second progress
+cadence (maximum gaps24.1s and24.9s). Owned browser scratch is removed after exit.
+
+The source is experiment-owned and type checking passes. Production source,
+cache assets and default selection remain unchanged from checkpoint868c7e2d.
+The checkpoint adviser recommends preserving this complete scene-review unit;
+no dedicated standards review or independent audit was requested.
+
+The [complete scene gallery](../../../../../tmp/experiments/sky-aerosol-properties/runs/00060-scene-brackets/comparison.html)
+adds shared one-eighth-exposure Sun views from runs00058/00059. Its
+[verification](../../../../../tmp/experiments/sky-aerosol-properties/runs/00060-scene-brackets/verification.json)
+authenticates the primary proof, equal uploaded packet hashes, identical physical
+inputs/cameras and the exact display-only RGB multiplier. Both primary and bracket
+images have0.0366% nearly white pixels, confined to the direct disk in visual
+inspection. The darker views help inspect the halo, but the primary surrounds
+were not simply clipped flat white. The bracket runs reused the corrected raw
+rows without rebuilding scattering and took50.3s/33.3s; both met progress cadence.
+
+Total retained follow-on evidence, including the excluded development captures,
+is1250.0MiB. All earlier runs remain intact. The experiment-owned browser instances
+are closed and scratch is empty. The scene-review task is complete: no render,
+reference calculation or production change is queued. Production adoption and
+additional times/flat scenes remain owner decisions. The local handoff checkpoint
+uses `feat(experiment): add corrected aerosol scene review`; its identity is in
+Git history and the execution reply. No push.

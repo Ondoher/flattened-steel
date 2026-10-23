@@ -1,13 +1,13 @@
 # Active Topic
 
 Current active topic: poc-experiments/engineering-studies/sky-aerosol-properties.
-Focus: completed aerosol-profile refinement and full-scattering confirmation of
-combo025; review the retained H2400 lead, elevated-view tradeoff and reference limits.
+Focus: full-scene review of combo025/H1200 versus fixed-column H2400,
+including ground,500m,2km and solar-halo views.
 
 Canonical entry: [Sky Aerosol Properties](poc-experiments/engineering-studies/sky-aerosol-properties/README.md).
-The first campaign and follow-up M1-M3 investigation are complete. No run is queued;
-production settings are unchanged. This experiment remains active, awaiting owner
-selection of any next work. ARM Spectral Validation and Sky Accuracy Dials remain
+The first campaign, follow-up M1-M3 investigation and selected full-scene review
+are complete. Corrected scene evidence is in runs00055-00060; no job is queued.
+Production settings are unchanged. ARM Spectral Validation and Sky Accuracy Dials remain
 suspended. Production on-demand rendering and cache selection retain their owners.
 
 ## Minimal Reload Sources

@@ -1,6 +1,6 @@
 # Sky aerosol properties status
 
-Status: active experiment; both selected campaigns are complete. No run is queued.
+Status: active experiment; M1-M3 and owner-selected full-scene review complete.
 Production source, atmosphere selection and cache assets remain unchanged.
 
 ## Current outcome
@@ -25,14 +25,18 @@ not universally passing numerical or external-reference targets.
 - Source: `experiments/sky-aerosol-properties/`; local type checking passes.
 - All earlier sealed runs and protected evidence remain intact. Explicit invalidations,
   failures and progress-cadence exceptions are recorded in the refinement report.
-- Owned browser/solver scratch is empty. No computation remains active.
+- Corrected scene builds: runs00055/00056; primary physical-height/packet proof00057.
+- [Complete scene gallery](../../../../../tmp/experiments/sky-aerosol-properties/runs/00060-scene-brackets/comparison.html): five primary pairs plus common Sun exposure brackets00058/00059.
+- Runs00047-00054 are preserved but excluded from scene conclusions; the report
+  explains corrected lighting and altitude-index adapter errors.
+- All owned scene browsers are closed and scratch is empty. No job is queued.
 - Recovery checkpoints: `b00c7f40`, `6368bb3a`; final handoff uses
   `docs(experiment): conclude aerosol refinement study` (see Git history).
 
 No blockers remain for the completed investigation. External solar-surround
 precision and a few cache/reference discrepancies remain scientific limitations,
-not unfinished mandatory transport jobs. Further profile selection, app captures,
-production integration or a new campaign requires an owner-selected next scope.
+not unfinished mandatory transport jobs. Full-scene comparisons are complete. Production integration, additional scenes or a new
+campaign still require a separately selected scope.
 
 ## Governance
 
