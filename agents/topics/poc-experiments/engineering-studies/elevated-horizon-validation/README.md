@@ -1,6 +1,7 @@
 # Elevated Horizon Validation
 
-Status: execution complete and verified on 2026-10-23; production unchanged.
+Status: baseline execution complete and verified on 2026-10-23; published-profile
+follow-on executing with acquired OPAC data and 5 m/10 km probes. Production unchanged.
 
 Determine whether the low-contrast elevated globe horizon is justified by the
 selected atmosphere or arises from numerical transport or rendering. Start with
@@ -11,11 +12,13 @@ verdict that production or the Bruneton profile is wrong.
 ## Governing documents
 
 - [Results](results.md): matched comparison, profile controls and conclusions.
+- [Alternate profiles plan](alternate-profiles-plan.md): download and test
+  published clean aerosol models; conditional scene renders and measured-data route.
 - [Execution log](execution-log.md): consequential choices and recovery.
 
 - [Design](design.md): baseline, comparison semantics and immutable output contract.
-- [Plan](plan.md): libRadtran-first milestones, decisions and permitted follow-ons.
-- [Status](status.md): setup verification and the next executable step.
+- [Completed baseline plan](plan.md): original libRadtran-first milestones and decisions.
+- [Status](status.md): current evidence, plan critique and the next executable step.
 
 ## Repository surfaces
 
@@ -25,5 +28,6 @@ verdict that production or the Bruneton profile is wrong.
 - [Current production baseline](../../../production-app/product-behavior/ten-km-elevation.md): read-only.
 - Other experiments and all earlier evidence remain read-only; none is reopened.
 
-The owner authorized execution through independent-execution. The completed
-comparison does not authorize production promotion or reopen another experiment.
+The owner authorized the completed baseline execution through independent-execution.
+The published-profile follow-on is also authorized through independent-execution. Neither
+plan authorizes production promotion or reopening another experiment.

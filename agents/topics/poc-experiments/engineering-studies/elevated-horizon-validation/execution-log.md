@@ -1,5 +1,20 @@
 # Elevated Horizon Validation Execution Log
 
+## Published-profile follow-on, 2026-10-23
+
+- Owner authorized the new plan through independent-execution, directed download
+  failures to be logged and skipped, and added 5 m horizon comparisons.
+- Node HTTPS connections failed for both sources (00022); moved on to installed
+  data and an authoritative API endpoint. Python system HTTPS worked without a
+  TLS bypass (00023). Downloaded both published archives once through that route.
+- Original OPAC and libRadtran's distributed mass presets are explicitly different.
+  Selected the complete published libRadtran variants for the first executable
+  comparison, with no fitted concentrations, phase functions or scale heights.
+- The property inventory (00024) identifies continental-clean as lower loading;
+  both marine cases are retained as controls. The spherical pilot (00025) passes.
+  The first full screen (00026) includes all three presets plus Bruneton at 5 m
+  and 10 km, with spectral quadrature inside each native source bin.
+
 2026-10-23. Owner invoked independent-execution for the saved plan. Production,
 the shared tool, and all older experiments remained read-only throughout.
 

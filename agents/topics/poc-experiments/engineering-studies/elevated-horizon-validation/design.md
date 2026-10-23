@@ -196,6 +196,29 @@ terminal manifest is finalized only after worker and host receipt close and all
 artifacts are hashed. Inspect resolved input, solver stderr and manifests as well
 as exit status. Do not restart WSL/services automatically or kill unrelated work.
 
+## Published-profile follow-on
+
+The owner's follow-on question is whether a published or measured cleaner aerosol
+profile provides useful horizon contrast while retaining low-elevation solar glow.
+The [alternate profiles plan](alternate-profiles-plan.md) owns this new comparison;
+the earlier baseline plan and results remain complete and unchanged. The owner
+authorized execution through independent-execution and added the 5 m horizon.
+
+Named OPAC mixtures and their published vertical/humidity prescriptions replace
+the aerosol model as a whole in explicitly labelled scenarios. The shared
+molecular/source/geometry/display baseline remains fixed initially. The original
+matched-baseline prohibition on substituting default aerosols does not prohibit
+these deliberate candidate changes. No measured full-atmosphere identity is
+claimed for a published aerosol model on the shared molecular background.
+
+Preserve the source-defined phase, absorption, layers and physical loading;
+document humidity choices and any interpolation. Do not fit an exponential or
+phase lobe to make a current production interface accept a different model.
+Candidate caches/scenes require a faithful experiment-local representation;
+otherwise retain the external results and report the required integration work.
+Existing isolation, progress, provenance and immutable-run rules continue to
+apply. Production/default changes and other experiments remain outside scope.
+
 ## Standards lifetime
 
 The existing permanent `experiments/` -> `experiment` assignment supplies base,

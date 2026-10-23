@@ -129,7 +129,7 @@ export function bundle(medium, config) {
 		.replace('phi 180', `phi ${config.azimuth ?? 180}`);
 	if (config.repeat !== undefined)
 		deck = deck.replace(/^mc_randomseed .*$/mu, `mc_randomseed ${100003 + config.repeat * 104729}`);
-	assert.ok(deck.includes('mc_spherical 1D') && deck.includes('mc_vroom off') && deck.includes('zout 10'));
+	assert.ok(deck.includes('mc_spherical 1D') && deck.includes('mc_vroom off') && deck.includes(`zout ${medium.observerAltitude / 1000}`));
 	files.set('input.inp', deck);
 	const metadata = JSON.parse(String(files.get('case.json')));
 	metadata.purpose =
@@ -158,7 +158,7 @@ export function bundle(medium, config) {
 			aerosolShapeColumn: column,
 			exportedDensityColumn: column * aerosolScale,
 			extinctionColumns: medium.mie.map((x) => x * column),
-			observerLevelIncluded: z.includes(10000),
+			observerLevelIncluded: z.includes(medium.observerAltitude),
 			phase: metadata.actualBinaryOpticalProof,
 		},
 	};

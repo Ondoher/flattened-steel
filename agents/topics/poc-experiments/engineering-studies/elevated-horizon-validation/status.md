@@ -1,9 +1,11 @@
 # Elevated Horizon Validation Status
 
-State: plan execution complete and verified on 2026-10-23. The baseline and earned
-aerosol-loading branch are reported in [results](results.md). Production is
-unchanged. The experiment remains selected for owner follow-up; no closure,
-suspension or promotion is implied.
+State: baseline execution complete and verified on 2026-10-23. The baseline and
+earned aerosol-loading branch are reported in [results](results.md). A new
+[published-profile plan](alternate-profiles-plan.md) is executing: data acquisition,
+property qualification and the pilot are complete, and the 5 m/10 km screen is
+running. Production is unchanged.
+No closure, suspension or promotion is implied.
 
 ## Current outcome and next action
 
@@ -17,8 +19,40 @@ Aerosols strengthen the effect, while molecular-only transport still produces
 substantial haze. No profile or algorithm is promoted. The [results](results.md)
 own numerical tables, appearance links, uncertainty, limits and measured costs.
 The [execution log](execution-log.md) owns consequential choices and recovery.
-No numerical work remains running. Next action is owner review of the report;
-new profile selection or production changes would be separately authorized work.
+The follow-on screen in run 00026-opac-screen is running serially. Next action is
+publish the first matched 5 m/10 km color strips and contrast, then refine only
+promising cases. The owner requires the 5 m horizon as well as the original
+10 km case. No production profile has been selected.
+
+## Published-profile planning
+
+The [follow-on results](alternate-profiles-results.md) own current milestone
+findings and links. Runs 00022/00023 preserve failed connections and successful
+acquisition; 00024 qualifies properties and 00025 is the accepted spherical pilot.
+Downloaded optical data and source recipes remain independent of production.
+Source type checking passes. All existing completed/failed evidence is preserved.
+
+The follow-on preserves the completed baseline plan/results. Initial candidates
+are OPAC continental clean, maritime tropical and maritime clean, with documented
+50% RH scenarios and conditional 80% RH sensitivities. Their actual optical loading must be
+measured before claiming that a profile is lower aerosol than production.
+The canonical sequence, sources, gates, estimates and adaptive ACTIVATE route
+are in the [new plan](alternate-profiles-plan.md). One read-only create-plan agent
+critique is complete. All five recommendations were incorporated:
+
+1. Define signed contrast, candidate-minus-baseline gain, 95% difference intervals
+   and the exact offset pairs eligible for follow-up.
+2. Pin near-Sun sampling directions/footprints/source convention and converge the
+   forward phase peak before claiming preserved solar glow.
+3. Prefer complete externally defined scenarios; distinguish any published
+   reconstruction from a newly assembled hybrid, which cannot satisfy this request.
+4. Bound vertical-placement attribution: different mixtures change more than height
+   distribution, even at similar AOD.
+5. Publish the initial 50% RH comparisons before conditional 80% RH sensitivities.
+
+No suggestions were rejected. Primary self-review checked the revised sequence;
+no additional critique or standards review is enabled. Numerical work follows
+the owner's execution authorization, with download failures logged and skipped.
 
 ## Latest verification
 
