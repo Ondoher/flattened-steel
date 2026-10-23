@@ -39,7 +39,8 @@ export function installProbe() {
 		const relative = mode.geometry.resolveSourceRelativePosition({position: mode.geometry.mapObserverLocalScenePointToModelPosition({coordinates: camera.position.toArray(), units: 'scene-units'}, {sceneScale: mode.sceneScale})});
 		const sun = mode.geometry.expressCelestialDirectionInScene ? mode.geometry.expressCelestialDirectionInScene(relative.directionToSource) : [relative.directionToSource[0], relative.directionToSource[2], -relative.directionToSource[1]];
 		const horizontal = Math.hypot(sun[0], sun[2]);
-		if (!G.twilightHeading || spec.resetHeading) G.twilightHeading = [sun[0] / horizontal, 0, sun[2] / horizontal];
+		if (spec.heading) G.twilightHeading = spec.heading;
+		else if (!G.twilightHeading || spec.resetHeading) G.twilightHeading = [sun[0] / horizontal, 0, sun[2] / horizontal];
 		const heading = G.twilightHeading, view = spec.view ?? 'limb';
 		let direction;
 		if (view === 'sun') direction = sun;
@@ -50,10 +51,10 @@ export function installProbe() {
 		}
 		camera.lookAt(camera.position.x + direction[0], camera.position.y + direction[1], camera.position.z + direction[2]); camera.updateMatrixWorld(true);
 		scene._renderOperation();
-		const composer = runtime._composer ?? G.twilightComposer;
+		const composer = G.twilightComposer ?? runtime._composer;
 		if (!composer) throw Error('Current composer unavailable');
 		const pass = composer.passes.find(p => p._material?.uniforms?.uColorResetTotalHorizontalIlluminanceLux);
-		if (!pass) throw Error('Production p2 pass unavailable');
+		if (!pass) throw Error('Production p2 pass unavailable: ' + JSON.stringify({runtime: runtime.constructor.name, passes: composer.passes.map(p => ({type: p.constructor.name, uniforms: Object.keys(p._material?.uniforms ?? {})}))}));
 		const renderer = scene.renderer, gl = renderer.getContext(), width = scene.canvas.width, height = scene.canvas.height;
 		const native = new Uint8Array(width * height * 4); renderer.setRenderTarget(null); gl.readPixels(0, 0, width, height, gl.RGBA, gl.UNSIGNED_BYTE, native);
 		const input = composer.readBuffer, original = pass._material;

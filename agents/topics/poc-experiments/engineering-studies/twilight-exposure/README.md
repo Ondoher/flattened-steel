@@ -1,7 +1,7 @@
 # Twilight Exposure Experiment
 
-State: execution active. M1 baseline and M2 screen are complete; two curve-only
-candidates advance to elevation/view regressions. No production promotion.
+State: M1–M4 campaign complete. Altitude-half is the best qualified prototype;
+global curves were rejected for excessive lower-elevation darkening. No production promotion.
 
 Investigate a display response that prevents the growing white twilight band,
 especially at high elevation, while retaining useful daylight, horizon color and
@@ -11,6 +11,7 @@ profiles, scattering caches and production app assets are read-only.
 
 ## Governing documents
 
+- [Results and handoff](results.md) contains conclusions, appearance links and limitations.
 - [Design](design.md) owns mechanisms, baseline and evidence boundaries.
 - [Plan](plan.md) owns milestones, gates and permitted adaptations.
 - [Status](status.md) owns progress, verification and the next step.

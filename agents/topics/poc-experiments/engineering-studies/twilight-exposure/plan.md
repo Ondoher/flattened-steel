@@ -1,6 +1,6 @@
 # Twilight Exposure Experiment Plan
 
-State: saved and revised after the scoped plan critique. This is an exploratory display-response
+State: M1–M4 complete; see [results](results.md). This is an exploratory display-response
 study. The owner invoked independent-execution on2026-10-23 and authorized this
 campaign. Production promotion remains a separate owner-selected task.
 
@@ -68,7 +68,7 @@ resolution step. Failure rejects the candidate, not unrelated mechanisms.
 Estimate20-40 minutes for cheap replay; GPU/meter implementation cost is conditional
 and must be estimated from M1 and the first small implementation before expansion.
 
-## M3 ? Elevation, time and view regressions
+## M3 - Elevation, time and view regressions (complete)
 
 Purpose: prove the correction is not a40 km/+50-minute fit.
 
@@ -94,7 +94,7 @@ Reject or refine a failed mechanism locally; do not silently drop failing height
 or accept a favorable average. Estimated40-80 minutes if a reusable HDR route works;
 otherwise estimate from measured GPU batches before running this expanded matrix.
 
-## M4 ? Reproducible conclusion and handoff
+## M4 - Reproducible conclusion and handoff (complete)
 
 1. Verify source/parent/artifact hashes, run containment, optical/cache identity,
    parameter records, closed resources and explicit terminal states. Re-run only

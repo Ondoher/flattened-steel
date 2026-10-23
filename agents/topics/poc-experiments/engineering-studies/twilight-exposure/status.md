@@ -1,73 +1,47 @@
-# Twilight Exposure Experiment Status
+# Twilight Exposure Status
 
-State: M1 and M2 complete. Two curve-only candidates advance to M3. No production
-code, operational cache or display selection has been changed by the experiment.
+State: authorized M1-M4 campaign complete. Altitude-half is the best retained
+prototype. Global curves are rejected for excessive ordinary-dusk darkening.
+Production source, selected display response and operational caches are unchanged.
 
-## M1 report ? baseline qualified
+## M1 report
 
-Accepted capture `00002-baseline` contains San Jose Globe40 km sunset+30,+40,+50,
-solar noon and genuine night (sunset+3 hours, Sun below -18 degrees), with fixed
-pose and1024x576 pixels. Every lossless linear capture re-encodes to native GPU
-within one byte in every channel. Stellar and atmosphere-only layers are retained
-for the primary twilight/night cases. Baseline capture took142.5 seconds wall
-including server/browser startup, cache preparation, compilation and readback.
+Accepted00002-baseline qualifies five pre-gain HDR captures within one byte of
+native GPU output.00004-calibrate seals geometric masks and guards before scoring.
+Earlier failed/superseded captures remain intact. The wrong-buffer diagnostic and
+sandbox startup recovery are recorded in the execution log.
 
-The first two runs remain intact:00000 failed the replay gate;00001 completed but
-its rerender controls are superseded. The probe used writeBuffer, although the
-production pass has needsSwap=false and consumes readBuffer. Correcting the input
-and asserting actual sampler texture identity fixes the mismatch without weakening
-the parity criterion.00003 is an explicitly sealed startup failure: the sandbox
-blocked the read-only Git child used for run metadata. The allocator now performs
-that check before run allocation; host execution repairs this environment issue.
+## M2 report
 
-Accepted registration `00004-calibrate` seals geometric band/disc/sky masks and
-comparison guards before candidate scoring. At+50 the geometric band is99.10%
-near white with native gain7632.29; frozen +30 gain41.80 reduces it to27.25%.
-The earlier52.49% figure measures the whole image, not this new band mask.
-Frozen exposure remains a causal control rather than appearance ground truth.
+00005-curve-screen advances half/matched lift from the pilot. Double lift and
+field meters fail lower-brightness guards; the highlight shoulder fails daylight
+and contrast guards. Pilot success does not constitute broad selection.
 
-## M2 report ? small screen complete
+## M3 report
 
-Accepted `00005-curve-screen` evaluates three curve-lift strengths, two isolated
-field-meter variants and a highlight shoulder over identical qualified HDR data.
-It also checks2401 illumination values per response, the daylight control and
-actual genuine-night sky/star pixels. Screening took about6 seconds wall.
+00008-regressions compares63 cases after recovering39 qualified payloads from
+failed00006-matrix into the00007 continuation. Global curves over-darken ordinary
+5 m dusk, triggering a bounded altitude-aware refinement rather than promotion.
+00010-matrix captures seven fresh25 km cases using an isolated page-only height
+extension and the unchanged physical pipeline.00011-regressions evaluates the
+resulting70-case matrix. Altitude-half preserves lower/Flat response, reduces
+high-altitude washout and passes protected daytime/night and all-stars-loss guards.
+Twilight stars still dim substantially, and a narrow bright limb returns at+100.
+Those tradeoffs remain explicit; no photographic calibration is claimed.
 
-- `curve-half` advances: +50 gain71.73; band white30.75% versus99.10% baseline.
-- `curve-match` advances: +50 gain41.80; band white27.26%.
-- `curve-double` fails the +30 lower-scene brightness guard.
-- P90/RMS field meters fail the lower-scene brightness guards; they are too dark.
-- Highlight-only shoulder fails contrast at+40/+50 and the daylight guard.
+## M4 report
 
-The advancing functions use only the original scalar illumination input, with a
-smooth low-light curve bend. They retain the zero-illumination night anchor and
-are exactly the production response above the existing385 lux pivot. They add no
-view-meter pass, source dimming, saturation slider or physical model change.
-These are primary-pilot results, not generalization or final selection.
+00013-verify passes eight manifest lineages, unchanged production parents,
+70 capture qualifications,12 direct-GPU comparisons within one byte, daytime/
+night controls, pose/FOV meter invariance, and dense response checks at seven
+heights. Local JavaScript type checking passes. Owned browser/server resources
+are closed. No standards reviewers/audits run and no compliance claim is made.
+No temporary standards configuration exists to restore.
 
-## Evidence
+## Results and next owner choice
 
-[Early gallery](../../../../../tmp/experiments/twilight-exposure/runs/00005-curve-screen/comparison.html)
-shows actual pixel appearance; [screen JSON](../../../../../tmp/experiments/twilight-exposure/runs/00005-curve-screen/results.json)
-retains all cases and failures. [Calibration](../../../../../tmp/experiments/twilight-exposure/runs/00004-calibrate/calibration.json)
-owns masks/guards. [Execution log](execution-log.md) owns chronology and decisions.
-All runs retain hashes, commands, parents, source snapshots and terminal states.
-
-## Next action
-
-Register the M3 matrix and carry only curve-half/curve-match to5 m,2 km,10 km,
-40 km sunset-through+60, daylight/night, other viewing directions and the held-out
-Union Glacier/Flat cases. Reuse the qualified M1 cases where physical view inputs
-match. Estimate about20 minutes for the capture batch, then inexpensive replay;
-update this estimate using the first completed batch.
-
-## Verification and standards lifetime
-
-Local experiment JavaScript type checking passes. All dedicated standards
-reviewers/audits remain disabled; checkpoint-advisor monitoring is independent.
-The inherited experiment mapping remains unchanged, including types.md guidance.
-No temporary standards configuration exists to restore. No compliance claim.
-
-## Blockers
-
-None. No external data or downloads are needed.
+[Results and handoff](results.md) owns measured conclusions, appearance links,
+branch dispositions, performance and limitations. [Execution log](execution-log.md)
+owns consequential decisions and recovery. All generated evidence is immutable.
+No campaign work or blocker remains. Await owner selection before production
+integration or a separate star-presentation study. No automatic promotion.

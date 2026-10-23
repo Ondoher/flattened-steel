@@ -5,7 +5,8 @@ Focus: establish a contained experiment to reduce excessive twilight display gai
 across elevation while preserving atmospheric spectra and useful sky appearance.
 
 Canonical entry: [Twilight Exposure](poc-experiments/engineering-studies/twilight-exposure/README.md).
-M1 and M2 are complete; two curve candidates advance to M3. Production is unchanged.
+M1–M4 are complete. Altitude-half is the best qualified prototype, with twilight-star
+and residual-limb tradeoffs. Production is unchanged; await owner selection.
 
 ## Minimal Reload Sources
 

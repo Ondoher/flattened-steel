@@ -21,4 +21,7 @@ type TwilightCase = {
 	view?: string;
 	fov?: number;
 	layers?: number[];
+	heading?: number[];
+	resetHeading?: boolean;
+	verifyCandidates?: boolean;
 };

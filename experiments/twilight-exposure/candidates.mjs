@@ -6,9 +6,13 @@ function lowLightWeight(lux, candidate) {
 }
 
 /** Candidate pre-tone response; metering and encoding branches remain explicitly separate. */
-export function response(candidate, lux, distribution, curve) {
+export function response(candidate, lux, distribution, curve, context = {height: 0, mode: ''}) {
 	let effectiveLux = lux;
 	if (candidate.kind === 'curve-lift') effectiveLux += candidate.liftLux * -Math.expm1(-lux / candidate.activationLux) * lowLightWeight(lux, candidate);
+	if (candidate.kind === 'altitude-curve-lift') {
+		const t = context.mode === 'spherical-distant' ? Math.max(0, Math.min(1, (context.height - candidate.heightStartMeters) / (candidate.heightEndMeters - candidate.heightStartMeters))) : 0;
+		effectiveLux += t * t * (3 - 2 * t) * candidate.liftLux * -Math.expm1(-lux / candidate.activationLux) * lowLightWeight(lux, candidate);
+	}
 	if (candidate.kind === 'view-meter') {
 		const proxy = Math.PI * (candidate.statistic === 'rms' ? distribution.rms : distribution.p90);
 		effectiveLux += Math.max(0, proxy - lux) * lowLightWeight(lux, candidate);

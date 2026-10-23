@@ -6,11 +6,18 @@ import {PNG} from 'pngjs';
 import {checked, createRun, identity, releaseBrowserWork, root, source} from './io.mjs';
 import {installProbe} from './browser.mjs';
 import {encodeChannel, flipRows, gainAt} from './display.mjs';
+import {campaign} from './campaign.mjs';
+import {response} from './candidates.mjs';
+import {refinement} from './refinement.mjs';
 
 const phase = process.argv[2] ?? 'baseline';
+const registry = phase === 'refine' ? refinement(process.argv[3]) : phase === 'campaign' || phase === 'resume' ? campaign(phase === 'resume' ? process.argv[3] : null) : null;
 const controls = JSON.parse(readFileSync(checked(source + '/controls.json'), 'utf8'));
 const inputs = ['AGENTS.md', source + '/AGENTS.md', 'src/flat32/Flat32Atmosphere.js', 'src/flat32/Flat32ProductionSelections.js', 'src/flat32/Flat32Application.js', 'src/flat32/Algorithm32Runtime.js', 'src/flat32/Flat32View.js', 'src/flat32/ModeController.js', 'src/algorithm32/implementation/color-reset-slope-078-p2/consts.js', 'src/algorithm32/implementation/color-reset-slope-078-p9/ColorResetSlope078P9ColorDisplayModel.js', 'src/algorithm32/implementation/bruneton-color/BrunetonColorDisplayModel.js', 'server/flat32/features/shared-cache/selection.js', 'dist/flat32/flat32.js', `server/flat32/data/shared-block/${controls.baseline.packageIdentity}/package-set.json`];
 const parents = inputs.map(identity);
+if (registry) for (const parent of [registry.baselinePath, registry.calibrationPath, registry.screenPath]) parents.push(identity(parent + '/manifest.json'));
+if (registry) for (const parent of new Set(registry.reuse.map(r => r.source))) if (!parents.some(p => p.path === parent + '/manifest.json')) parents.push(identity(parent + '/manifest.json'));
+if (registry?.refinementParent) parents.push(identity(registry.refinementParent + '/manifest.json'));
 const run = createRun(phase === 'baseline' ? 'baseline' : 'matrix', 'Capture actual production-derived pre-gain linear RGBA32F and native display images with frozen physical inputs', parents);
 const cases = /** @type {TwilightCase[]} */ (phase === 'baseline' ? [
 	{id: 'sj40-p30', location: 0, mode: 'spherical-distant', height: 40000, time: 'sunset', minutes: 30, layers: [0, 1, 2]},
@@ -18,7 +25,8 @@ const cases = /** @type {TwilightCase[]} */ (phase === 'baseline' ? [
 	{id: 'sj40-p50', location: 0, mode: 'spherical-distant', height: 40000, time: 'sunset', minutes: 50, layers: [0, 1, 2]},
 	{id: 'sj40-day', location: 0, mode: 'spherical-distant', height: 40000, time: 'noon', layers: [0]},
 	{id: 'sj40-night', location: 0, mode: 'spherical-distant', height: 40000, time: 'sunset', minutes: 180, layers: [0, 1, 2]},
-] : JSON.parse(readFileSync(checked(process.argv[3]), 'utf8')));
+] : registry?.cases ?? JSON.parse(readFileSync(checked(process.argv[3]), 'utf8')));
+if (registry) run.write('registered-campaign.json', registry);
 run.write('registered-cases.json', cases);
 run.write('registered-controls.json', controls);
 if (phase === 'baseline') for (const name of ['result.json', 'sunset-plus30-native.png', 'sunset-plus40-native.png', 'sunset-plus40-fixed30.png', 'sunset-plus50-native.png', 'sunset-plus50-fixed30.png']) {
@@ -28,7 +36,7 @@ if (phase === 'baseline') for (const name of ['result.json', 'sunset-plus30-nati
 
 let browser = null, server = null, logs = '', failure = null;
 const results = [], pageErrors = [];
-let frozenLux = null;
+let frozenLux = registry?.frozenLux ?? null;
 try {
 	run.progress('serve', 'Starting owned read-only production asset server');
 	server = spawn(process.execPath, [source + '/serve.mjs'], {cwd: root, windowsHide: true, stdio: ['ignore', 'pipe', 'pipe']});
@@ -51,6 +59,13 @@ try {
 		await page.waitForFunction(() => {const a = globalThis['proofApplication'];return document.querySelector('.flat32-shell').getAttribute('data-flat32-state') === 'ready' && !a._locationTimeRefreshTimer && a._publishedState?.observation.instant === a._state?.observation.instant && a._publishedState?.modeKind === a._state?.modeKind && a._publishedState?.observerHeight.value === a._state?.observerHeight.value;}, {timeout: 600000});
 	};
 	await ready(); await page.evaluate(installProbe);
+	if (registry?.experimentHeightMeters) await page.evaluate(height => {
+		const a = globalThis['proofApplication'], original = a.setObserverHeight.bind(a);
+		// Experiment-only valid intermediate height inside the existing 0–40 km cache.
+		// Retain the ordinary state/publication path; extend only this owned page's preset setter.
+		a.setObserverHeight = value => {if (value.value === height) a._commitState({...a._state, observerHeight: {value: height, units: 'meters'}}, false); else original(value);};
+		const option = document.createElement('option'); option.value = String(height); option.textContent = 'Experiment ' + height + ' m'; document.querySelector('#flat32-elevation-control').appendChild(option);
+	}, registry.experimentHeightMeters);
 	const choose = async (selector, value) => {await page.evaluate(({selector, value}) => {const item = /** @type {HTMLSelectElement} */ (document.querySelector(selector)); item.value = String(value); item.dispatchEvent(new Event('change', {bubbles: true}));}, {selector, value}); await ready();};
 	const click = async (selector) => {await page.evaluate(selector => /** @type {HTMLElement} */ (document.querySelector(selector)).click(), selector); await ready();};
 	for (const [index, spec] of cases.entries()) {
@@ -65,7 +80,7 @@ try {
 		await choose('#flat32-elevation-control', spec.height); await choose('#flat32-fov-control', spec.fov ?? 50);
 		await page.evaluate(() => window.dispatchEvent(new Event('resize'))); await new Promise(r => setTimeout(r, 400));
 		run.progress('capture', spec.id, {completed: index, total: cases.length});
-		const data = await page.evaluate(spec => globalThis['twilightCapture'](spec), {...spec, resetHeading: index === 0 || spec.location !== cases[index - 1]?.location || spec.mode !== cases[index - 1]?.mode});
+		const data = await page.evaluate(spec => globalThis['twilightCapture'](spec), {...spec, resetHeading: spec.resetHeading ?? (index === 0 || spec.location !== cases[index - 1]?.location || spec.mode !== cases[index - 1]?.mode)});
 		const {facts} = data; assert.equal(facts.width, 1024); assert.equal(facts.height, 576); assert.equal(facts.glError, 0); assert.equal(facts.state.observerHeight.value, spec.height); assert.equal(facts.state.modeKind, spec.mode);
 		if (spec.time === 'sunset' && spec.minutes === 180) assert.ok(facts.sunElevationDegrees < -18, 'Night control is not genuine night');
 		const native = flipRows(Buffer.from(data.native, 'base64'), 1024, 576, 4), png = new PNG({width: 1024, height: 576}); png.data = native; run.write(spec.id + '-native.png', PNG.sync.write(png));
@@ -80,9 +95,15 @@ try {
 		run.write(spec.id + '-reencoded.png', PNG.sync.write(reconstructed));
 		for (const [layer, bytes] of Object.entries(data.layers)) run.write(spec.id + '-layer' + layer + '.f32', flipRows(Buffer.from(bytes, 'base64'), 1024, 576, 16));
 		if (frozenLux === null) frozenLux = facts.meterLux;
-		const variants = await page.evaluate(variants => globalThis['twilightVariants'](variants), [{id: 'frozen30', effectiveLux: frozenLux}]);
+		const requests = [{id: 'frozen30', effectiveLux: frozenLux}];
+		if (spec.verifyCandidates && registry) for (let repeat = 0; repeat < 3; repeat++) {
+			requests.push({id: 'native-proof-' + repeat, effectiveLux: facts.meterLux});
+			for (const c of registry.candidates) requests.push({id: c.id + '-proof-' + repeat, effectiveLux: response(c, facts.meterLux, {p90: 0, rms: 0}, controls.baseline.curve, {height: spec.height, mode: spec.mode}).effectiveLux});
+		}
+		const variants = await page.evaluate(variants => globalThis['twilightVariants'](variants), requests);
 		for (const variant of variants) {const image = new PNG({width: 1024, height: 576}); image.data = flipRows(Buffer.from(variant.pixels, 'base64'), 1024, 576, 4); run.write(spec.id + '-' + variant.id + '.png', PNG.sync.write(image));}
-		run.write(spec.id + '.json', {spec, ...facts, parity}); results.push({id: spec.id, spec, ...facts, parity});
+		const variantTimings = variants.map(({pixels, ...timing}) => timing);
+		run.write(spec.id + '.json', {spec, ...facts, parity, variantTimings}); results.push({id: spec.id, spec, ...facts, parity, variantTimings});
 		// A failed replay qualification selects direct original-shader GPU evidence,
 		// not a weaker replay gate. Unqualified HDR is a diagnostic proxy only.
 		assert.deepEqual(pageErrors, []); console.log(JSON.stringify({run: run.path, id: spec.id, meterLux: facts.meterLux, parity}));
