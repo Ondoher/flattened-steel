@@ -1,6 +1,6 @@
 # Sky aerosol properties status
 
-Status: active experiment; M1-M3 and owner-selected full-scene review complete.
+Status: active experiment; profile-only scenes at production settings complete.
 Production source, atmosphere selection and cache assets remain unchanged.
 
 ## Current outcome
@@ -29,13 +29,18 @@ not universally passing numerical or external-reference targets.
 - [Complete scene gallery](../../../../../tmp/experiments/sky-aerosol-properties/runs/00060-scene-brackets/comparison.html): five primary pairs plus common Sun exposure brackets00058/00059.
 - Runs00047-00054 are preserved but excluded from scene conclusions; the report
   explains corrected lighting and altitude-index adapter errors.
-- All owned scene browsers are closed and scratch is empty. No job is queued.
+- Latest profile-only builds:00061 production atmosphere,00062 combo025,00063 H2400,
+  all using unchanged production Native48/F68 controls. Complete equality/packet
+  proof00064 and shared-exposure derivation proof00068 pass.
+- [Current profile-only gallery](../../../../../tmp/experiments/sky-aerosol-properties/runs/00068-scene-brackets/comparison.html)
+  supersedes the earlier diagnostic gallery for profile-only visual selection.
+- All owned jobs are closed and scratch is empty. No run is queued.
 - Recovery checkpoints: `b00c7f40`, `6368bb3a`; final handoff uses
   `docs(experiment): conclude aerosol refinement study` (see Git history).
 
 No blockers remain for the completed investigation. External solar-surround
 precision and a few cache/reference discrepancies remain scientific limitations,
-not unfinished mandatory transport jobs. Full-scene comparisons are complete. Production integration, additional scenes or a new
+not unfinished mandatory transport jobs. Profile-only full-scene comparisons are complete. Production integration, additional scenes or a new
 campaign still require a separately selected scope.
 
 ## Governance

@@ -397,3 +397,86 @@ reference calculation or production change is queued. Production adoption and
 additional times/flat scenes remain owner decisions. The local handoff checkpoint
 uses `feat(experiment): add corrected aerosol scene review`; its identity is in
 Git history and the execution reply. No push.
+
+## Production-numerics profile-only scene comparison
+
+Owner requires any numerical change to be rechecked against Bruneton before
+production adoption. Runs00055-00060 used diagnostic Native51/F272 construction,
+so they cannot establish a profile-only comparison to production. Preserve those
+runs and their qualified scope. This follow-on repeats the five scene views using
+the selected production package's exact build request, replacing only its
+atmosphere fields for each experimental profile. All source, planet, ground,
+spectral, angular, altitude, numerical and shader-profile settings remain equal.
+No production setting is changed and no new Bruneton score is claimed.
+
+Compare production zero-aerosol atmosphere, combo025/H1200 and fixed-column H2400.
+The zero-aerosol reference is rebuilt through the same compiler at production
+settings; it is clearly distinguished from an unmodified deployed-cache capture.
+Use Native48 positions,68 incoming directions,15 spectra,60 construction intervals,
+cumulative N1-4, production focused outgoing lookup/cubic solar interpolation and
+production Q30 view integration. Retain the same shared fixed display illuminance,
+viewport, objects, cameras and physical observer heights as the previous gallery.
+Primary renders use unmodified production display encoding; Sun views additionally
+get the same one-eighth exposure diagnostic. That shared exposure is a comparison
+control, not medium-dependent normal app adaptation.
+
+Primary builds are complete:00061 production zero-aerosol atmosphere,00062
+combo025/H1200,00063 fixed-column H2400. The accepted
+[primary profile-only gallery](../../../../../tmp/experiments/sky-aerosol-properties/runs/00064-scene-report/comparison.html)
+contains fifteen actual scene captures in five three-column comparisons. Left is
+the production atmosphere, middle is combo025, right is H2400. Each original
+capture is1024x576; the combined PNGs are3072x576 and can be opened at full size.
+
+The [verification](../../../../../tmp/experiments/sky-aerosol-properties/runs/00064-scene-report/verification.json)
+asserts complete request equality with selected production after substituting
+only atmosphere. Within atmosphere, only its identity and the aerosol scale
+height, loading, single-scattering albedo and phase shape may differ. Molecular
+coefficients, ozone choices, source, ground, planet, all sampling domains,
+numerical options and shader profile are fixed. The zero-aerosol request equals
+the production request without substitutions. Physical heights, camera/viewports,
+shared display context and live media match their controls. Every uploaded packet
+hash is reconstructed from retained rows:22 slots and1408 coordinate rows per
+profile. All compiler fields are finite/nonnegative and released after extraction.
+
+Visual conclusion at production settings: both aerosol profiles restore a broad
+solar surround relative to the current zero-aerosol atmosphere. H2400 is slightly
+weaker near the Sun at5m than combo025, but substantially brighter at2km. The
+wide away-Sun horizon differences are subtle. This preserves the qualitative
+profile tradeoff seen earlier while removing the experimental numerical changes
+from this comparison. It is an appearance result, not new independent transport
+qualification or an assertion about which synthetic atmosphere is most realistic.
+The earlier Native51/F272 reference residuals do not qualify these Native48/F68
+renders automatically. No Bruneton RMSE measurement or production change is made.
+
+For combo025 versus H2400, the mean screenshot RGB-code differences are0.39,0.56
+and0.64 out of255 for the5m/500m/2km horizons,4.62 for the5m Sun and28.91 for the
+2km Sun. All fifteen profile/view pair metrics are retained in the proof. These
+are display differences across entire screenshots, including objects, not physical
+radiance percentages or reference RMSE.
+
+Primary build-and-capture times are115.1s,111.6s and113.5s respectively on the
+RTX2060 / Chrome155 / ANGLE D3D11 lane. The retained primary runs occupy211.0,
+211.9 and212.3MiB. Completion-time sampled Node RSS is272.6,296.8 and135.9MiB;
+these are not peak process/browser/GPU measurements. Each build met the30-second
+progress cadence (maximum gap below25s). Atlas shape and allocation are unchanged
+from the preceding scene adapter; one owned GPU browser is active at a time.
+
+The [complete profile-only gallery](../../../../../tmp/experiments/sky-aerosol-properties/runs/00068-scene-brackets/comparison.html)
+adds six Sun captures at the common0.125 exposure, derived in runs00065-00067
+without rebuilding scattering. The
+[final derivation proof](../../../../../tmp/experiments/sky-aerosol-properties/runs/00068-scene-brackets/verification.json)
+authenticates the primary proof, matching packet hashes, exact display-only
+multiplier, unchanged physical inputs and camera/height/exposure pairing across
+all three profiles. Brackets took38.5s,51.0s and35.6s and met progress cadence.
+Near-white pixels remain0.0366% in every primary/bracket Sun image, confined to
+the direct disk on inspection. The surround differences are visible at both
+exposures; the primary views are not merely flat clipping artifacts.
+
+The completed follow-on retains659.3MiB, preserves all earlier evidence and
+leaves owned browser scratch empty. All owned GPU browsers are closed. Source
+type checking and the request/packet/height/capture/display proofs pass. No
+experimental unit-test suite or standards-review pass was introduced. The
+checkpoint adviser recommends this as a coherent local checkpoint under message
+`feat(experiment): add production-profile scene comparison`; its identity is in
+Git history and the execution reply. No push. No job remains queued; the next
+profile or scene selection is the owner's decision. Production remains unchanged.

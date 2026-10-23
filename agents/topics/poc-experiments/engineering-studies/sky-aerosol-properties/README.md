@@ -1,6 +1,6 @@
 # Sky aerosol properties Experiment
 
-Status: active experiment; first campaign, follow-up refinement and full-scene review are complete.
+Status: active experiment; prior campaigns and profile-only scenes at production settings complete.
 
 ## Objective
 
@@ -11,7 +11,8 @@ Identify aerosol properties that retain solar glow while reducing the brown or g
 - [Design](design.md)
 - [Current follow-up plan: aerosol refinement and N4 confirmation](refinement-plan.md) — Investigation complete; see its qualified/held claim boundaries.
 - [Follow-up execution and milestone reports](refinement-results.md)
-- [Full-scene review and corrected image gallery](refinement-results.md#full-scene-review-follow-on)
+- [Earlier diagnostic scene gallery](refinement-results.md#full-scene-review-follow-on)
+- [Profile-only scenes with production numerics](refinement-results.md#production-numerics-profile-only-scene-comparison)
 - [Completed first-campaign plan](plan.md)
 - [Status](status.md)
 - [Results and milestone reports](results.md)
