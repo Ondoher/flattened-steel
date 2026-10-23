@@ -1,0 +1,119 @@
+{
+  "schema": "twilight-exposure-controls-v1",
+  "baseline": {
+    "colorModel": "color-reset-slope-078-p2",
+    "scatteringAccuracy": "corrected60-sun035",
+    "solarInterpolation": "monotone-cubic",
+    "packageIdentity": "1e35e0ce4b064690d48ff9639c4c7a1ad557e1eb752716c9f2105a3ac8354e4b",
+    "curve": {
+      "sunsetAmplitude": 3.5,
+      "sunsetTransitionIlluminanceLux": 980,
+      "sunsetRolloffPower": 2,
+      "adaptationPivotIlluminanceLux": 385,
+      "adaptationFloorIlluminanceLux": 0.02,
+      "adaptationSoftnessLogUnits": 0.1,
+      "adaptationExponent": 0.78
+    }
+  },
+  "pilot": {
+    "location": "San Jose",
+    "mode": "spherical-distant",
+    "observerHeightsMeters": [
+      40000
+    ],
+    "minutesAfterSurfaceReferenceSunset": [
+      30,
+      40,
+      50
+    ],
+    "verticalFovDegrees": 50,
+    "viewportPixels": [
+      1024,
+      576
+    ],
+    "pitchDegrees": -6,
+    "headingPolicy": "fix local Sun azimuth at +30 minutes for the whole matched timeline",
+    "comparisons": [
+      "native",
+      "locked-plus30-exposure"
+    ]
+  },
+  "conditionalRegression": {
+    "observerHeightsMeters": [
+      5,
+      2000,
+      10000,
+      40000
+    ],
+    "minutesAfterSurfaceReferenceSunset": [
+      0,
+      10,
+      20,
+      30,
+      40,
+      50,
+      60
+    ],
+    "extraControls": [
+      "daylight",
+      "genuine-night",
+      "away-from-sun",
+      "zenith",
+      "sun-close-up-5deg",
+      "union-glacier",
+      "flat-local"
+    ]
+  },
+  "candidateMechanisms": [
+    "curve-only",
+    "visible-field-meter",
+    "highlight-shoulder"
+  ],
+  "candidateParameters": "Register finite candidate values and exact masks/guards in the first calibrated run before scoring; no candidate selected yet.",
+  "heldOut": [
+    {
+      "location": "Union Glacier",
+      "mode": "spherical-distant",
+      "controls": [
+        "solar-noon",
+        "sunset",
+        "sunset-plus50"
+      ],
+      "observerHeightsMeters": [
+        5,
+        40000
+      ]
+    },
+    {
+      "location": "Union Glacier",
+      "mode": "flat-local",
+      "controls": [
+        "flat0",
+        "flat180"
+      ],
+      "observerHeightsMeters": [
+        5,
+        40000
+      ]
+    },
+    {
+      "location": "San Jose",
+      "mode": "flat-local",
+      "controls": [
+        "flat0",
+        "flat180"
+      ],
+      "observerHeightsMeters": [
+        5,
+        40000
+      ]
+    }
+  ],
+  "nightControl": {
+    "location": "San Jose",
+    "mode": "spherical-distant",
+    "initialControl": "surface-reference-sunset-plus3h",
+    "maximumSolarElevationDegrees": -18,
+    "timestampPolicy": "Resolve and pin before candidate scoring; select later time if condition is unmet."
+  }
+}

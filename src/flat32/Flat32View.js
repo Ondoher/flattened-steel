@@ -53,6 +53,7 @@ export class Flat32View {
 				<label>Elevation <select id="flat32-elevation-control"><option value="5">Current (5 m)</option><option value="100">100 m</option><option value="500">500 m</option><option value="2000">2 km</option><option value="10000">10 km</option><option value="40000">40 km</option></select></label>
 				<label>Location <select id="flat32-location-control"></select></label>
 				<label>Vertical FOV <select id="flat32-fov-control" title="Vertical field of view. Natural is a central-view framing preset."></select></label>
+				<button id="flat32-center-sun-control" type="button">Center on Sun</button>
 				<fieldset id="flat32-sun-controls" hidden>
 					<legend>Sun presentation</legend>
 					<label>Illumination (%) <input id="flat32-sun-illumination" type="number" min="0" max="100" step="any" value="100"></label>
@@ -181,6 +182,7 @@ export class Flat32View {
 		const sky = /** @type {HTMLSelectElement} */ (shell.querySelector('#flat32-atmosphere-control'));
 		sky.addEventListener('change', () => actions.onSky(/** @type {Flat32SkyRenderMode} */ (sky.value)));
 		shell.querySelector('#flat32-objects-control').addEventListener('click', actions.onObjects);
+		shell.querySelector('#flat32-center-sun-control').addEventListener('click', actions.onCenterSun);
 		const height = /** @type {HTMLSelectElement} */ (shell.querySelector('#flat32-elevation-control'));
 		height.addEventListener('change', () => actions.onElevation({value: Number(height.value), units: 'meters'}));
 		const fieldOfView = /** @type {HTMLSelectElement} */ (shell.querySelector('#flat32-fov-control'));

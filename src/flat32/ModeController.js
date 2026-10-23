@@ -207,6 +207,14 @@ export class ModeController {
 		return this._currentKind;
 	}
 
+	/** Last successfully published physical mode, borrowed for current-scene actions.
+	 * The controller retains disposal and publication ownership.
+	 * @returns {Flat32Mode|null} - Published mode, or null before publication or after disposal.
+	 */
+	get currentMode() {
+		return this._activeMode;
+	}
+
 	/** Call this method to select atmosphere composition without rebuilding the physical field.
 	 *
 	 * @param {boolean} enabled - Whether Algorithm32 composition is selected.

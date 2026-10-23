@@ -204,6 +204,7 @@ type Flat32SunPresentationSelection = {
 type Flat32SceneControlActions = {
 	/** Explicit sky selection. */ onSky: (mode: Flat32SkyRenderMode) => void;
 	/** Independent Sun fractions. */ onSun: (selection: Flat32SunPresentationConfiguration) => void;
+	/** Aim the retained camera at the currently published Sun. */ onCenterSun: () => void;
 	/** Toggle review objects. */ onObjects: () => void;
 	/** Prepare a supported physical height. */ onElevation: (height: Distance) => void;
 	/** Select the camera's vertical field of view in degrees. */ onFieldOfView: (degrees: number) => void;

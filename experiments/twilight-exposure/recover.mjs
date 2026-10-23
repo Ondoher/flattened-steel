@@ -1,0 +1,14 @@
+import assert from 'node:assert/strict';
+import {appendFileSync, existsSync, readdirSync, writeFileSync} from 'node:fs';
+import {checked, identity} from './io.mjs';
+const relative = process.argv[2];
+assert.match(relative, /^tmp\/experiments\/twilight-exposure\/runs\/\d{5}-[a-z][a-z0-9-]{0,15}$/u);
+assert.ok(!existsSync(checked(relative) + '/manifest.json'), 'Never reopen terminal runs');
+const failure = {reason: process.argv[3], recovery: 'Finalize an unsealed startup failure; no prior terminal manifest exists and no scientific outputs are relabeled.', implementation: identity('experiments/twilight-exposure/recover.mjs')};
+writeFileSync(checked(relative) + '/failure.json', JSON.stringify(failure, null, 2) + '\n', {flag: 'wx'});
+appendFileSync(checked(relative) + '/progress.jsonl', JSON.stringify({timestamp: new Date().toISOString(), phase: 'complete', message: failure.reason, state: 'failed'}) + '\n');
+const artifacts = [];
+const walk = directory => {for (const entry of readdirSync(checked(directory), {withFileTypes: true})) {const item = directory + '/' + entry.name; if (entry.isDirectory()) walk(item); else artifacts.push(identity(item));}};
+walk(relative);
+writeFileSync(checked(relative) + '/manifest.json', JSON.stringify({state: 'failed', operation: 'Explicit unsealed-run recovery', failure, artifacts}, null, 2) + '\n', {flag: 'wx'});
+console.log(JSON.stringify({run: relative, state: 'failed', recovery: true}));

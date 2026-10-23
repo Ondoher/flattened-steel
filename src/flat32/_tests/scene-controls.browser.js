@@ -84,12 +84,15 @@ describe('Flat32 scene control foundations', () => {
 		view.start();
 		const actions = {
 			onSky: jasmine.createSpy('sky'),
+			onCenterSun: jasmine.createSpy('centerSun'),
 			onSun: jasmine.createSpy('sun'),
 			onObjects: jasmine.createSpy('objects'),
 			onElevation: jasmine.createSpy('height'),
 			onFieldOfView: jasmine.createSpy('fov'),
 		};
 		view.installSceneControls(actions);
+		root.querySelector('#flat32-center-sun-control').click();
+		expect(actions.onCenterSun).toHaveBeenCalledTimes(1);
 		const onLocation = jasmine.createSpy('location');
 		const noAction = () => {};
 		view.installLocationTimeControls(onLocation, noAction, noAction, noAction, noAction, noAction);
@@ -298,6 +301,73 @@ describe('Flat32 scene control foundations', () => {
 			}
 		} finally {
 			app.dispose();
+		}
+	});
+
+	it('centers the retained camera on the published Sun in both geometries without changing framing or physical state', () => {
+		const observation = {
+			instant: '2024-06-21T04:16:03.503Z',
+			location: {latitude: {value: 37.3382, units: 'degrees'}, longitude: {value: -121.8863, units: 'degrees'}},
+		};
+		const sceneState = createDistantSunSceneState({
+			observation,
+			observerHeight: {value: 40000, units: 'meters'},
+			observerUpDirection: ATMOSPHERE_OBSERVER_UP_DIRECTION,
+		});
+		const modes = [
+			new SphericalDistantMode({
+				sceneState,
+				sceneScale: ATMOSPHERE_SCENE_SCALE,
+				sourceAngularRadius: {value: 0.004675, units: 'radians'},
+				maximumScatteringOrder: 4,
+				stellarCatalog: 'brightest-500',
+				presentationFilters: [],
+			}),
+			new FlatLocalMode({
+				observation,
+				observerHeight: {value: 40000, units: 'meters'},
+				sceneScale: ATMOSPHERE_SCENE_SCALE,
+				localSunCachePolicy: 'compact-v9-native15',
+				stellarCatalog: 'brightest-500',
+				presentationFilters: [],
+			}),
+		];
+		for (const mode of modes) {
+			const app = new Flat32Application(document.createElement('div'), {
+				stellarCatalog: 'brightest-500',
+				presentationFilters: [],
+			});
+			const host = new ThreeSceneRuntime(document.createElement('canvas'), fail);
+			app._sceneRuntime = host;
+			app._modeController = {currentMode: mode, dispose() {}};
+			const camera = host.camera;
+			camera.position.y = 40;
+			camera.fov = 5;
+			const position = camera.position.clone(),
+				scene = host.scene,
+				facade = mode.algorithm32;
+			spyOn(host, 'requestRender');
+			try {
+				app.centerOnSun();
+				const aimed = camera.getWorldDirection(new THREE.Vector3()).toArray();
+				const physical = mode.geometry.mapObserverLocalSceneDirectionToModelDirection(aimed);
+				const eye = mode.geometry.mapObserverLocalScenePointToModelPosition(
+					{coordinates: camera.position.toArray(), units: 'scene-units'},
+					{
+						sceneScale: mode.sceneScale,
+					},
+				);
+				const toSun = mode.geometry.resolveSourceRelativePosition({position: eye}).directionToSource;
+				expect(physical.reduce((sum, value, index) => sum + value * toSun[index], 0)).toBeCloseTo(1, 12);
+				expect(camera.position.equals(position)).toBeTrue();
+				expect(camera.fov).toBe(5);
+				expect(host.scene).toBe(scene);
+				expect(mode.algorithm32).toBe(facade);
+				expect(host.requestRender).toHaveBeenCalledOnceWith();
+			} finally {
+				app.dispose();
+				mode.dispose();
+			}
 		}
 	});
 

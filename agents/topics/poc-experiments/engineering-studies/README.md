@@ -17,6 +17,8 @@ Other lanes retain their own dispositions.
 
 ## Working Documents
 
+- [Twilight Exposure](twilight-exposure/README.md) - Active setup for display gain, elevated-twilight clipping and protected sky appearance.
+
 - [Elevated Horizon Validation](elevated-horizon-validation/README.md) - Matched elevated-horizon comparison complete.
 - [Sky Aerosol Properties](sky-aerosol-properties/README.md) - Ended controlled study; preserved evidence.
 - [ARM Spectral Validation](arm-spectral-validation/README.md)

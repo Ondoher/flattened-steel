@@ -490,6 +490,38 @@ export class Flat32Application {
 		this._sceneRuntime.requestRender();
 	}
 
+	/** Aim the retained camera at the Sun in the displayed physical mode and request one redraw.
+	 * Before publication or after disposal this has no effect. A Sun behind the ground
+	 * remains occluded; framing, observer position and physical configuration are retained.
+	 * @returns {void} - Camera orientation updated when a published scene exists.
+	 */
+	centerOnSun() {
+		const mode = this._modeController?.currentMode;
+		if (this._disposed || !mode || !this._sceneRuntime) return;
+		const camera = this._sceneRuntime.camera;
+		let direction;
+		if (mode instanceof SphericalDistantMode) {
+			direction = mode.geometry.expressCelestialDirectionInScene(mode.geometry.configuration.directionToSource);
+		} else {
+			const geometry = mode.geometry;
+			const position = geometry.mapObserverLocalScenePointToModelPosition(
+				{coordinates: camera.position.toArray(), units: 'scene-units'},
+				{
+					sceneScale: mode.sceneScale,
+				},
+			);
+			const source = geometry.resolveSourceRelativePosition({position}).directionToSource;
+			direction = [source[0], source[2], -source[1]];
+		}
+		camera.lookAt(
+			camera.position.x + direction[0],
+			camera.position.y + direction[1],
+			camera.position.z + direction[2],
+		);
+		camera.updateMatrixWorld(true);
+		this._sceneRuntime.requestRender();
+	}
+
 	/** Called by geometry preparation and rollback to place the camera at the geometry-owned height.
 	 * The adapters map scene Y above ground, so the observer offset is applied exactly once.
 	 * @param {Flat32Mode} mode - Candidate or last accepted physical mode.
@@ -539,6 +571,7 @@ export class Flat32Application {
 		this._view.installModeControl(() => this._switchMode());
 		this._view.installSceneControls({
 			onSky: (mode) => this.setSkyRenderMode(mode),
+			onCenterSun: () => this.centerOnSun(),
 			onSun: (selection) => this.setSunPresentation(selection),
 			onObjects: () => this.setObjectsVisible(this._state?.reviewObjectsEnabled === false),
 			onElevation: (height) => this.setObserverHeight(height),
