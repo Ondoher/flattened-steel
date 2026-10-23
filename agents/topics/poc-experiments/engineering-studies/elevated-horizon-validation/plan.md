@@ -1,8 +1,8 @@
 # Elevated Horizon Validation Plan
 
-State: prepared; execution has not begun. Exploratory investigation, libRadtran
-first. Creation authorizes setup and this plan only; later execution follows the
-owner's instruction. Production and other experiments remain read-only.
+State: executed and verified on 2026-10-23. The owner invoked independent-execution.
+[Results](results.md) record all milestone dispositions, evidence and limits;
+[status](status.md) owns the resumption point. Production remains read-only.
 
 ## Outcome and starting point
 
@@ -28,34 +28,34 @@ execution is requested. Do not infer numerical execution from experiment setup.
 Purpose: verify that the external solver is calculating the intended atmosphere,
 altitude and ground/sky rays before investing in a comparison image.
 
-- [ ] Capture exact executable profile, cache/source hashes, source spectrum,
-  observer, Sun, camera, FOV, scene-depth/ground identity and display settings.
-  Treat the saved 10 km globe/noon case as provisional screenshot context; label
-  any unmatched screenshot settings explicitly.
-- [ ] Implement run allocation, path checks, artifact/parent hashes, terminal
-  manifest and 30-second progress heartbeat. Keep the shared tool read-only;
-  adapt its launcher AND Python worker inside this experiment, as specified by the
-  design, before even doctor. Include repository discovery, copy identities and
-  both output-root checks. Finalize the outer manifest after the host receipt.
-- [ ] Verify installed libRadtran and WSL through the established route; select
-  fully spherical scalar MYSTIC/VROOM-off, matched physics and 10 km observer.
-  Register all physical/unit differences and eliminate unintended defaults.
-- [ ] Register analytic ground/sky intersections and horizon depression. Capture
-  actual app mesh/depth classification and camera pixel rays too; record any
-  silhouette difference, angular footprint, antialiasing and output resolution. Pilot
-  rays at offsets -0.1 and +0.1 degrees from the true horizon, plus local
-  horizontal and a high-sky control. Use the actual screenshot azimuth when
-  recoverable; otherwise explicitly start with anti-solar and label that choice.
-- [ ] Start at three diagnostic wavelengths. Verify output angular/sign
-  conventions and surface sensitivity, finite outputs, seed variation and
-  vertical-grid behavior. Include 10 km as an explicit layer boundary and
-  independently check exported integrated optical depths.
-- [ ] Confirm matched black-ground boundary first. Test whether a neutral .2
-  Lambertian boundary can be represented equivalently before using it as an
-  end-to-end production comparison. Audit the cache boundary before paying for
-  additional albedo scans; first finish whichever shared-boundary comparison is
-  available without constructing a large new controlled solver. Qualify the solver's angular aperture near
-  the limb; retain exact tangent only as a boundary diagnostic.
+- [x] Capture exact executable profile, cache/source hashes, source spectrum,
+      observer, Sun, camera, FOV, scene-depth/ground identity and display settings.
+      Treat the saved 10 km globe/noon case as provisional screenshot context; label
+      any unmatched screenshot settings explicitly.
+- [x] Implement run allocation, path checks, artifact/parent hashes, terminal
+      manifest and 30-second progress heartbeat. Keep the shared tool read-only;
+      adapt its launcher AND Python worker inside this experiment, as specified by the
+      design, before even doctor. Include repository discovery, copy identities and
+      both output-root checks. Finalize the outer manifest after the host receipt.
+- [x] Verify installed libRadtran and WSL through the established route; select
+      fully spherical scalar MYSTIC/VROOM-off, matched physics and 10 km observer.
+      Register all physical/unit differences and eliminate unintended defaults.
+- [x] Register analytic ground/sky intersections and horizon depression. Capture
+      actual app mesh/depth classification and camera pixel rays too; record any
+      silhouette difference, angular footprint, antialiasing and output resolution. Pilot
+      rays at offsets -0.1 and +0.1 degrees from the true horizon, plus local
+      horizontal and a high-sky control. Use the actual screenshot azimuth when
+      recoverable; otherwise explicitly start with anti-solar and label that choice.
+- [x] Start at three diagnostic wavelengths. Verify output angular/sign
+      conventions and surface sensitivity, finite outputs, seed variation and
+      vertical-grid behavior. Include 10 km as an explicit layer boundary and
+      independently check exported integrated optical depths.
+- [x] Confirm matched black-ground boundary first. Test whether a neutral .2
+      Lambertian boundary can be represented equivalently before using it as an
+      end-to-end production comparison. Audit the cache boundary before paying for
+      additional albedo scans; first finish whichever shared-boundary comparison is
+      available without constructing a large new controlled solver. Qualify the solver's angular aperture near
+      the limb; retain exact tangent only as a boundary diagnostic.
 
 Deliverable: `results.md` M1 report with the matched-input ledger, pilot spectra,
 ray classifications, input-fidelity differences and measured solver throughput.
@@ -81,43 +81,45 @@ three-wavelength runtime alone.
 Purpose: answer the baseline question using matched rays on both sides of the
 boundary, with useful visual evidence before an expensive broad scan.
 
-- [ ] At the M1 azimuth, use horizon-relative offsets
-  -1, -.1, -.02, +.02, +.1 and +1 degrees as the initial six-ray set. Add local
-  horizontal and high-sky controls. Expand to intermediate angles only where
-  needed to resolve the transition, retaining exact angle/solid-angle meanings.
-- [ ] Acquire production N1-N4/full-at-N4 radiance and MYSTIC all-order radiance
-  in matched spectral bands. First finish one azimuth and publish its early
-  comparison; conditional additional azimuths are solar-facing and 90 degrees.
-  Keep direct Sun pixels separate from diffuse comparisons.
-- [ ] In all outcomes, capture actual app scene input/depth, finite-path T,
-  L_path and final color for a few ground rays and adjacent sky controls. Compare
-  optical depth with an independent direct path integral, then reproduce the
-  RGB compositing arithmetic. Agreement for black-ground transport alone does
-  not validate the actual green-ground fade. This small mandatory check precedes
-  any conclusion that the profile explains the entire app image.
-- [ ] Use at least three independent seeds for pilot uncertainty, extending
-  seeds/photon counts when noise prevents interpretation. Repeat key limb rays
-  with refined optical layers and spectral quadrature. Report uncertainty of
-  differences and contrast, not only uncertainty of each luminance separately.
-  Use independent full-spectrum replicate vectors to calculate Y and C per
-  replicate and empirical Student-t intervals across replicates. Preserve any
-  covariance from shared samples; otherwise combine independent errors explicitly.
-  Do not double-count photon and between-seed variance. Three seeds give only a
-  provisional noise estimate; require stability across further batches and photon
-  increases before claiming resolved agreement. State that empirical intervals
-  cannot guarantee coverage of rare histories or systematic errors.
-- [ ] Compare controlled black ground; add matched neutral ground only after M1
-  qualifies equivalent surface feedback. For actual green-ground app rendering,
-  record differences in spectral surface/scene lighting rather than silently
-  count them as atmospheric errors.
-- [ ] Publish a registered vertical horizon strip for production and libRadtran,
-  with identical exposure/color transform and essential geometric mask. The image
-  communicates actual color and spatial transition. Retain raw spectra and
-  brightness-vs-angle curves in CSV/JSON, with plots where their shape is useful.
-- [ ] Compute absolute Y, band residuals and signed paired contrast
-  C(delta)=(Y_above-Y_below)/(Y_above+Y_below) for delta=.02,.1,1 degrees.
-  Retain numerator/denominator and mark negligible denominators unresolved.
-  Estimate transition width only if a meaningful monotonic crossing exists.
+- [x] At the M1 azimuth, use horizon-relative offsets
+      -1, -.1, -.02, +.02, +.1 and +1 degrees as the initial six-ray set. Add local
+      horizontal and high-sky controls. Expand to intermediate angles only where
+      needed to resolve the transition, retaining exact angle/solid-angle meanings.
+- [x] Acquire installed production N4 radiance and MYSTIC all-order radiance
+      in matched spectral bands. N1-N4 decomposition is conditional on a resolved
+      residual requiring order attribution; the deployed final cache stores N4 only.
+      First finish one azimuth and publish its early
+      comparison; conditional additional azimuths are solar-facing and 90 degrees.
+      Keep direct Sun pixels separate from diffuse comparisons.
+- [x] In all outcomes, capture actual app scene input/depth, finite-path T,
+      L_path and final color for a few ground rays and adjacent sky controls. Compare
+      optical depth with an independent direct path integral, then reproduce the
+      RGB compositing arithmetic. Agreement for black-ground transport alone does
+      not validate the actual green-ground fade. This small mandatory check precedes
+      any conclusion that the profile explains the entire app image.
+- [x] Use at least three independent seeds for pilot uncertainty, extending
+      seeds/photon counts when noise prevents interpretation. Repeat key limb rays
+      with refined optical layers and spectral quadrature. Report uncertainty of
+      differences and contrast, not only uncertainty of each luminance separately.
+      Use independent full-spectrum replicate vectors to calculate Y and C per
+      replicate and empirical Student-t intervals across replicates. Preserve any
+      covariance from shared samples; otherwise combine independent errors explicitly.
+      Do not double-count photon and between-seed variance. Three seeds give only a
+      provisional noise estimate; require stability across further batches and photon
+      increases before claiming resolved agreement. State that empirical intervals
+      cannot guarantee coverage of rare histories or systematic errors.
+- [x] Compare controlled black ground; add matched neutral ground only after M1
+      qualifies equivalent surface feedback. For actual green-ground app rendering,
+      record differences in spectral surface/scene lighting rather than silently
+      count them as atmospheric errors.
+- [x] Publish a registered vertical horizon strip for production and libRadtran,
+      with identical exposure/color transform and essential geometric mask. The image
+      communicates actual color and spatial transition. Retain raw spectra and
+      brightness-vs-angle curves in CSV/JSON, with plots where their shape is useful.
+- [x] Compute absolute Y, band residuals and signed paired contrast
+      C(delta)=(Y_above-Y_below)/(Y_above+Y_below) for delta=.02,.1,1 degrees.
+      Retain numerator/denominator and mark negligible denominators unresolved.
+      Estimate transition width only if a meaningful monotonic crossing exists.
 
 Deliverable: M2 report in `results.md`, early/final strip links, spectra, contrast
 metrics, error bars and convergence controls. Publish useful artifacts as they
@@ -155,28 +157,28 @@ Choose the smallest branch supported by M2; do not launch all branches together.
 
 ### If the reference reproduces the low-contrast horizon
 
-- [ ] Hold solver, geometry, surface and display fixed. Start with baseline,
-  50% aerosol column and zero aerosols as mechanism controls. Preserve phase,
-  SSA and vertical shape while changing loading; zero aerosols is diagnostic,
-  not a proposed production default.
-- [ ] Separate molecular-only effects from aerosol sensitivity. If vertical
-  placement is the remaining question, compare an explicit fixed-column
-  redistribution with its extinction/SSA identities and near-ground controls.
-- [ ] Report changes in contrast, transmittance where independently available,
-  spectral color and solar-neighborhood brightness. Distinguish a profile-induced
-  difference from evidence that a particular real atmosphere is more accurate.
+- [x] Hold solver, geometry, surface and display fixed. Start with baseline,
+      50% aerosol column and zero aerosols as mechanism controls. Preserve phase,
+      SSA and vertical shape while changing loading; zero aerosols is diagnostic,
+      not a proposed production default.
+- [x] Separate molecular-only effects from aerosol sensitivity. If vertical
+      placement is the remaining question, compare an explicit fixed-column
+      redistribution with its extinction/SSA identities and near-ground controls.
+- [x] Report changes in contrast, transmittance where independently available,
+      spectral color and solar-neighborhood brightness. Distinguish a profile-induced
+      difference from evidence that a particular real atmosphere is more accurate.
 
-### If production and reference differ substantially
+### If production and reference differ substantially (not triggered)
 
-- [ ] Decompose actual app ground/depth input, finite-path T, L_path and final
+- Decompose actual app ground/depth input, finite-path T, L_path and final
   display. Compare with independent direct optical-depth integration and direct
   N1 probes where applicable, keeping those labelled independently from MYSTIC.
-- [ ] Check source/phase exports, ground/sky classification, path endpoints,
+- Check source/phase exports, ground/sky classification, path endpoints,
   below-observer geometry and output compositing before changing cache grids.
-- [ ] Test finer final-view integration, raw/full-resolution rendering and
+- Test finer final-view integration, raw/full-resolution rendering and
   cache interpolation independently. Only extend order-resolved or cache-build
   diagnostics when a falsifiable prediction connects them to the measured error.
-- [ ] Protect the already matched sky controls and the existing 2 km horizon.
+- Protect the already matched sky controls and the existing 2 km horizon.
   Isolate atmosphere from approximate scene lighting and surface feedback.
 
 Deliverable: M3 causal report with baseline/control comparisons, supported and
@@ -191,24 +193,24 @@ Conditional duration is unknown until the mechanism and pilot are identified.
 
 ## M4 - Synthesize and follow earned leads
 
-- [ ] Summarize what the evidence establishes about profile, transport, surface
-  lighting and display, separating observations from inference.
-- [ ] Extend to 2 km, another Sun time/azimuth, an independent solver or measured
-  atmospheric reference only when it discriminates a live explanation. A result
-  at 10 km/noon does not validate every elevation or sunset.
-- [ ] Before each adaptive branch, record supporting evidence, distinct mechanism,
-  falsifiable prediction, cheapest next comparison, input identities, cost forecast,
-  advance/reject/inconclusive criteria and cases to protect. Keep at most two
-  active branches; close redundant ones. Follow productive new evidence even if
-  the initially listed explanations have been exhausted.
-- [ ] At roughly 60 minutes and at each milestone, reassess information gained,
-  precision, remaining costs and next useful result. Time is monitoring guidance;
-  continue strong progress within authority. Stop blind repetition or widening
-  scope without a testable prediction, not a productive investigation merely
-  because a timer elapsed.
-- [ ] Finish with an overall `results.md` report, complete/inconclusive/rejected
-  branch dispositions, limitations, reusable evidence and explicit next action.
-  Promotion or closure/suspension uses its own owner-directed workflow.
+- [x] Summarize what the evidence establishes about profile, transport, surface
+      lighting and display, separating observations from inference.
+- [x] Extend to 2 km, another Sun time/azimuth, an independent solver or measured
+      atmospheric reference only when it discriminates a live explanation. A result
+      at 10 km/noon does not validate every elevation or sunset.
+- [x] Before each adaptive branch, record supporting evidence, distinct mechanism,
+      falsifiable prediction, cheapest next comparison, input identities, cost forecast,
+      advance/reject/inconclusive criteria and cases to protect. Keep at most two
+      active branches; close redundant ones. Follow productive new evidence even if
+      the initially listed explanations have been exhausted.
+- [x] At roughly 60 minutes and at each milestone, reassess information gained,
+      precision, remaining costs and next useful result. Time is monitoring guidance;
+      continue strong progress within authority. Stop blind repetition or widening
+      scope without a testable prediction, not a productive investigation merely
+      because a timer elapsed.
+- [x] Finish with an overall `results.md` report, complete/inconclusive/rejected
+      branch dispositions, limitations, reusable evidence and explicit next action.
+      Promotion or closure/suspension uses its own owner-directed workflow.
 
 ## Reporting, verification and recovery
 
@@ -238,3 +240,16 @@ they contradict the owner's goals; record the outcome in `status.md`.
 No dedicated standards reviewers or independent compliance audits are enabled.
 No recurring or additional review is requested. A future review need must name
 its precise trigger, question, smallest affected scope and completion condition.
+
+## Executed adaptations and conditional work
+
+All selected milestone outcomes are complete; checked conditional items mean the
+condition was assessed, not that every listed optional scan ran. The installed
+cache contains cumulative N4 only. Its within-1.3% limb brightness residual and
+resolved low contrast did not earn an order-resolved rebuild. Final-only GPU
+readback plus Q30/Q120 and direct T checks answered the appearance question.
+
+Neutral-ground feedback, vertical redistribution, other heights/azimuths/times,
+observational datasets and production promotion were not triggered. The mandatory
+actual-app component audit ran even though black-ground transport agreed.
+The single plan critique was completed during setup and was not repeated.

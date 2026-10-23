@@ -1,29 +1,56 @@
 # Elevated Horizon Validation Status
 
-State: prepared on 2026-10-23. The scaffold and libRadtran-first plan are saved;
-no solver, numerical scan or production update has begun. No result is accepted.
+State: plan execution complete and verified on 2026-10-23. The baseline and earned
+aerosol-loading branch are reported in [results](results.md). Production is
+unchanged. The experiment remains selected for owner follow-up; no closure,
+suspension or promotion is implied.
 
-## Current scope and next action
+## Current outcome and next action
 
-The [plan](plan.md) owns the sequence and scientific decision thresholds; the
-[design](design.md) owns comparison conditions and run/output boundaries.
-Next executable step: register the current production profile and exact 10 km
-ray geometry, then check the existing libRadtran installation and pilot it under
-M1 when execution is requested. Sun/view conventions, surface equivalence and
-spectral-bin matching must be qualified before appearance comparisons.
+libRadtran reproduces a low-contrast 10 km horizon with the current Bruneton
+profile. Six limb rays agree with installed GPU N4 brightness within 1.3%; native
+band residuals reach about 6.3%, so no perfect spectral match is claimed. The
+actual depth silhouette is sharp, direct optical-depth checks support the strong
+attenuation and the component display arithmetic replays within 1.01e-7.
+
+Aerosols strengthen the effect, while molecular-only transport still produces
+substantial haze. No profile or algorithm is promoted. The [results](results.md)
+own numerical tables, appearance links, uncertainty, limits and measured costs.
+The [execution log](execution-log.md) owns consequential choices and recovery.
+No numerical work remains running. Next action is owner review of the report;
+new profile selection or production changes would be separately authorized work.
+
+## Latest verification
+
+- Accepted final proof: `tmp/experiments/elevated-horizon-validation/runs/00020-final-verify/`.
+- Authenticated: 4402 artifacts and 79 successful external scientific cases.
+- Actual production GPU readback/scene/depth: run 00008.
+- Final matched baseline report: run 00019; aerosol mechanism report: run 00018.
+- Source type checking, solver input matching, geometry, package identity,
+  finite-path transmission and color-composition checks pass.
+- All earlier accepted and failed runs are preserved; incomplete report 00012 is
+  not accepted or consumed. No dedicated standards reviewers/audits ran.
+- Checkpoint-advisor monitoring remains active. No standards-compliance or new
+  B1 score is claimed. All owned app browsers/servers have closed.
+
+## Milestone dispositions
+
+M1 complete: qualified elevated spherical reference and independent ray-sign proof.
+M2 complete: matched spectra/contrast and mandatory actual-app component checks.
+M3 complete: evidence-earned loading controls; smaller loading/glow differences
+are explicitly inconclusive at retained precision. No neutral-ground feedback,
+order-by-order rebuild or vertical redistribution was earned.
+M4 complete: synthesis and follow-on boundaries recorded. Other times/azimuths,
+observed atmosphere validation and production promotion were not triggered.
 
 ## Setup verification
 
-[Setup run 00000-setup-checks](../../../../../tmp/experiments/elevated-horizon-validation/runs/00000-setup-checks/manifest.json)
-passes scaffold checking, durable normalization validation, folder resolution,
-ignored-output verification, ambient type checking and formatting diagnostics.
-This is an accepted setup proof, not a scientific result. There is no numerical
-implementation, experimental test suite or accepted atmospheric comparison yet.
-Production files were not changed. No solver or browser process was launched.
-
-Dedicated standards reviewers and independent compliance audits are disabled.
-Checkpoint-advisor monitoring remains active through the existing session adviser.
-No compliance result is claimed. Plan execution has not begun.
+The initial setup-only run 00000-setup-checks passes scaffold, durable
+normalization, folder mapping, ignored-output, initial ambient configuration and
+format checks. It predates execution and remains preserved separately from the
+accepted scientific evidence above. The existing experiment standards assignment
+and checkpoint-advisor monitoring remain active; dedicated standards review and
+independent compliance audits remain disabled.
 
 ## Plan critique incorporated
 
@@ -66,14 +93,15 @@ experiment. This is separate from the one bounded plan critique.
 
 Starting production commit: `e4b21c447598e783de22108f1afb73a5a47b1361`.
 Production app, tools and operational package remain unchanged by setup. Prior
-10 km capture records and earlier solver methods are read-only candidate inputs;
-execution must hash/authenticate them before reuse. Sky Accuracy Dials and ARM
+10 km capture records and earlier solver methods are read-only inputs;
+execution authenticated all reused scientific parent artifacts. Sky Accuracy Dials and ARM
 Spectral Validation remain suspended; Sky Aerosol Properties remains ended.
 No scientific run, accepted artifact or result from those lanes is modified.
 
-## Blockers and uncertainties
+## Blockers and remaining limits
 
-No setup blocker. WSL/tool operational availability and elevated-reference
-throughput have not been checked live during this setup. The app's RGB ground
-material is not automatically equivalent to a spectral Lambertian boundary.
-The design defines how to keep those comparisons honest.
+No blocker to the completed comparison. Sampling intervals are empirical, N4 versus
+all-orders is not isolated, and the actual green scene is not an exactly matched
+spectral Lambertian surface. No validation of actual San Jose conditions, all
+heights/times or cube lighting is claimed. The initial partial source-inventory
+limitation and actual retained disk costs are explicit in the results.

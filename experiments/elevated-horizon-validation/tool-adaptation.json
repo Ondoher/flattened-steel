@@ -1,0 +1,13 @@
+{
+	"upstream": {
+		"cli.js": "7f69e5d1432237fde94deb5cc342464ca6bfea76340c0ead7c204b3f64c31ebf",
+		"worker.py": "40661e315043176fc212cdbe3f16340ddbee4a30b97121cf9f035481d6414674"
+	},
+	"changes": [
+		"Require experiment run parent via HORIZON_TOOL_PARENT and allocate child tools directory.",
+		"Retain repository discovery from module ../../ and copy adapted source identities.",
+		"Check ignored experiment root and validate complete worker ancestry.",
+		"Solver invocation, data/executable authentication, copied case and host/worker receipts unchanged.",
+		"After a measured cold-start timeout, allow 120 seconds for WSL worker startup; retain solver/host deadlines and owned-child cleanup."
+	]
+}

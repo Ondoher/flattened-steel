@@ -5,8 +5,8 @@ Focus: determine whether the low-contrast 10 km globe horizon follows from the
 Bruneton profile or from transport/rendering, beginning with matched libRadtran.
 
 Canonical entry: [Elevated Horizon Validation](poc-experiments/engineering-studies/elevated-horizon-validation/README.md).
-The new experiment is prepared; numerical execution has not begun. Production
-remains read-only. Sky Aerosol Properties remains ended. Sky Accuracy Dials and
+The executed plan is complete with independent low-contrast horizon evidence and
+aerosol-loading controls; results await owner review. Production remains read-only. Sky Aerosol Properties remains ended. Sky Accuracy Dials and
 ARM Spectral Validation remain suspended.
 
 ## Minimal Reload Sources

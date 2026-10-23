@@ -2,8 +2,8 @@
 
 Focus: Measured alternatives and retained or rejected mechanisms.
 
-[Elevated Horizon Validation](elevated-horizon-validation/README.md) is prepared
-for a libRadtran-first comparison of the 10 km globe ground/sky boundary.
+[Elevated Horizon Validation](elevated-horizon-validation/README.md) has completed
+its matched 10 km libRadtran/GPU comparison and aerosol-loading controls.
 [ARM Spectral Validation](arm-spectral-validation/status.md) and
 [Sky Accuracy Dials](sky-accuracy-dials/status.md#experiment-lifecycle) remain
 suspended. [Sky Aerosol Properties](sky-aerosol-properties/status.md) is ended;
@@ -15,7 +15,7 @@ Other lanes retain their own dispositions.
 
 ## Working Documents
 
-- [Elevated Horizon Validation](elevated-horizon-validation/README.md) - Prepared, libRadtran first.
+- [Elevated Horizon Validation](elevated-horizon-validation/README.md) - Matched elevated-horizon comparison complete.
 - [Sky Aerosol Properties](sky-aerosol-properties/README.md) - Ended controlled study; preserved evidence.
 - [ARM Spectral Validation](arm-spectral-validation/README.md)
 - [Sky Inter-Order Altitude Reconstruction](sky-altitude-reconstruction/README.md)
