@@ -3,6 +3,7 @@ import {LocalSunCompactProfileSelection} from '../LocalSunCompactProfileSelectio
 import {Algorithm32} from '../../../algorithm32/Algorithm32.js';
 import {StellarPointSetSource} from '../../../star-field/StellarPointSetSource.js';
 import {FlatEarthGeometry} from '../../../flat-earth/FlatEarthGeometry.js';
+import {CanonicalAtmosphere} from '../../../canonical-atmosphere/CanonicalAtmosphere.js';
 
 describe('Qualified compact ordinary-scene profile selection', () => {
 	const observation = {
@@ -32,6 +33,41 @@ describe('Qualified compact ordinary-scene profile selection', () => {
 			expect(profile.domains.topology.rows[i].altitude).toEqual(control.rows[i].altitude);
 		expect(profile.domains.topology.coverageRadius).toEqual(control.geometry.coverageRadius);
 		expect(profile.numerical.maximumScatteringOrder).toBe(1);
+	});
+	it('uses supplied compatible media without a historical profile allow-list and keeps cache identities distinct', () => {
+		const canonical = create();
+		for (const height of [1800, 2400, 3200]) {
+			const atmosphere = new CanonicalAtmosphere({
+				constants: {
+					...canonical.models.atmosphere.constants,
+					mieScaleHeight: {value: height, units: 'meters'},
+					mieAngstromBeta: 0.01,
+					mieSingleScatteringAlbedo: 0.95,
+					miePhaseFunctionG: 0.85,
+				},
+			});
+			const profile = new LocalSunCompactProfileSelection().create({
+				observation,
+				observerPosition: {coordinates: [0, 0, 5], units: 'meters'},
+				viewRayLimit: {value: 1926774, units: 'meters'},
+				maximumScatteringOrder: 4,
+				atmosphere,
+			});
+			expect(profile.contentHash).not.toBe(canonical.contentHash);
+			expect(profile.createExecutionProfile().models.atmosphere).toBe(atmosphere);
+			const changed = new CanonicalAtmosphere({
+				constants: {...atmosphere.constants, ozoneAbsorptionEnabled: true},
+			});
+			expect(() =>
+				new LocalSunCompactProfileSelection().create({
+					observation,
+					observerPosition: {coordinates: [0, 0, 5], units: 'meters'},
+					viewRayLimit: {value: 1926774, units: 'meters'},
+					maximumScatteringOrder: 4,
+					atmosphere: changed,
+				}),
+			).toThrowError(/Ozone cache columns are unsupported/);
+		}
 	});
 	it('admits genuine local Sun and stars while leaving canonical construction roster-free', () => {
 		const profile = create();

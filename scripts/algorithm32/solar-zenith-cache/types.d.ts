@@ -169,8 +169,20 @@ type DistantSunSceneCacheNumericalPolicy = Readonly<{
  */
 type DistantSunSceneCachePositionMethod = 'anchored-radial';
 
+/** Complete aerosol constants for a caller-selected analytic exponential atmosphere.
+ * Omission at the compiler boundary retains the canonical paper aerosol model.
+ */
+type DistantSunSceneCacheAerosolConstants = Readonly<{
+	/** Positive aerosol exponential scale height in metres. */ mieScaleHeight: CanonicalAtmosphereConstants['mieScaleHeight'];
+	/** Finite dimensionless wavelength exponent. */ mieAngstromAlpha: number;
+	/** Nonnegative dimensionless optical-depth scale. */ mieAngstromBeta: number;
+	/** Scattering/extinction ratio in [0,1]. */ mieSingleScatteringAlbedo: number;
+	/** Cornette-Shanks asymmetry shape strictly between -1 and1. */ miePhaseFunctionG: number;
+}>;
+
 /** Explicit candidate selections for production compiler projections. */
 type DistantSunSceneCacheCompilerOptions = Readonly<{
+	/** Complete aerosol constants; mutually exclusive with the beta-only override. All non-aerosol physics and numerical settings retain their selections. */ aerosolConstants?: DistantSunSceneCacheAerosolConstants;
 	/** Optional nonnegative aerosol optical-depth scale; zero removes aerosol extinction and scattering. Default 0.04. Profile projections require agreement with their medium. */ mieAngstromBeta?: number;
 	/** Explicit matched per-channel aerosol optics; omission preserves canonical atmosphere inputs. */ spectralAerosols?: readonly DistantSunSpectralAerosolOptics[];
 	/** Explicit corrected construction/mapping; omission retains deployed legacy. */ scatteringAccuracy?: DistantSunScatteringAccuracyMethod;
@@ -775,7 +787,7 @@ type SharedGenerationGpuResult = {
 };
 /** Common host request shared by the private compiler and run owner. */
 type SharedGenerationHostRequest = {
-	/** Optional stricter host deadline in milliseconds; defaults to the 900,000 ms production ceiling. */ maximumMilliseconds?: number;
+	/** Optional caller-selected host deadline in milliseconds; omission permits continued monitored work. */ maximumMilliseconds?: number;
 	/** Repository filesystem owner. */ files: SharedGenerationFiles;
 	/** Exclusive open run root. */ runRoot: string;
 	/** Accepted control union. */ inventory: SharedGenerationInventory;
@@ -845,10 +857,7 @@ type SharedGenerationRunResult = {
 	/** Package graph identity. */ packageSetIdentity: string;
 	/** Root report digest. */ packageSetSha256: string;
 	/** Complete candidate bytes. */ candidateBytes: number;
-	/** Owner-approved complete on-disk package ceiling. */ maximumPackageBytes: number;
 	/** Complete open run footprint before final acceptance records. */ workingBytesBeforePublication: number;
-	/** Declared logical working-disk ceiling. */ maximumWorkingBytes: number;
-	/** Declared Node process memory ceiling, excluding browser/driver overhead. */ maximumNodeRssBytes: number;
 	/** Unique block staging bytes. */ stagedBytes: number;
 	/** Eliminated duplicated scene staging bytes. */ avoidedSceneStagingBytes: number;
 	/** Complete generation wall time. */ elapsedMilliseconds: number;
@@ -968,7 +977,7 @@ type SharedQualificationOracleBlock = {
 /** Browser settings for the unified production compiler. */
 type SharedCompilerDefinition = {
 	/** Absolute installed Chrome executable; required for explicit-input compilation. */ chromePath?: string;
-	/** Positive GPU deadline in milliseconds, at most 900000. */ maximumMilliseconds?: number;
+	/** Optional GPU deadline in milliseconds within the Node timer range; no default elapsed-time limit. */ maximumMilliseconds?: number;
 };
 /** Completed common compilation before package serialization. */
 type SharedCompilerComputation = {

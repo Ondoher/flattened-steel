@@ -372,8 +372,10 @@ describe('Flat32 scene control foundations', () => {
 					local.compactProfile.models.atmosphere,
 					distantMode.algorithm32.config.config.atmosphere,
 				]) {
-					expect(atmosphere.constants.mieAngstromBeta).toBe(0);
-					expect([...atmosphere.seaLevelMieExtinction.values].every((value) => value === 0)).toBeTrue();
+					expect(atmosphere.constants).toEqual(createFlat32Atmosphere().constants);
+					expect([...atmosphere.seaLevelMieExtinction.values]).toEqual([
+						...createFlat32Atmosphere().seaLevelMieExtinction.values,
+					]);
 					expect([...atmosphere.seaLevelRayleighScattering.values]).toEqual([
 						...new CanonicalAtmosphere().seaLevelRayleighScattering.values,
 					]);
@@ -384,10 +386,16 @@ describe('Flat32 scene control foundations', () => {
 			}
 		});
 	}
-	it('retains every Bruneton atmosphere constant except the application-selected aerosol amount', () => {
+	it('selects fixed-column H2400 aerosols without changing molecular or canonical library defaults', () => {
 		const canonical = new CanonicalAtmosphere();
-		const clear = createFlat32Atmosphere();
-		expect(clear.constants).toEqual({...canonical.constants, mieAngstromBeta: 0});
+		const selected = createFlat32Atmosphere();
+		expect(selected.constants).toEqual({
+			...canonical.constants,
+			mieScaleHeight: {value: 2400, units: 'meters'},
+			mieAngstromBeta: 0.010000000000138879,
+			mieSingleScatteringAlbedo: 0.95,
+			miePhaseFunctionG: 0.85,
+		});
 		expect(canonical.constants.mieAngstromBeta).toBe(0.04);
 	});
 	it('reuses one compact cache identity for live observer heights while leaving the installed profile unchanged', () => {

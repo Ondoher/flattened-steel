@@ -15,6 +15,21 @@ the global `review-standards` skill independently of standards-review eligibilit
 monitoring active for the session unless the user suspends it. The skill owns
 evaluation timing, readiness evidence, and adviser lifecycle.
 
+# Operational restrictions
+
+Owner-directed updates must not be blocked by arbitrary qualification allow-lists,
+previously accepted profile hashes, fixed resource budgets, elapsed-time budgets,
+or administrative review readiness. Retain a blocking restriction only when it
+prevents a concrete operational failure, invalid physical/numerical input, incompatible
+format or ownership, corrupted data, or unsafe allocation supported by actual device
+capabilities. Explain the specific failure it prevents. Measurements, independent
+comparisons, resource estimates and review limitations belong in reports; they do
+not independently prohibit an authorized update. This owner directive supersedes
+review-readiness or administrative completion gates as update vetoes; continue to
+report missing review evidence honestly and never claim unearned compliance.
+Preserve prior evidence and perform
+appropriate verification without turning its historical identities into an allow-list.
+
 # Contained Experiment Verification
 
 All existing and future contained experiments run without dedicated standards

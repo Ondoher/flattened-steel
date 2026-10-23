@@ -478,5 +478,27 @@ type checking and the request/packet/height/capture/display proofs pass. No
 experimental unit-test suite or standards-review pass was introduced. The
 checkpoint adviser recommends this as a coherent local checkpoint under message
 `feat(experiment): add production-profile scene comparison`; its identity is in
-Git history and the execution reply. No push. No job remains queued; the next
-profile or scene selection is the owner's decision. Production remains unchanged.
+Git history and the execution reply. No push. No job remains queued. Production
+remains unchanged.
+
+### Owner preference after scene review
+
+The owner identified fixed-column H2400 as the preferred profile after reviewing
+the production-numerics comparisons. Retain the same total aerosol column as
+combo025, scale height2400m, SSA0.95, phase shape g0.85 and spectral exponent0.8.
+The owner subsequently closed the experiment and explicitly authorized H2400
+production promotion. Its execution is owned by the production plan; no further
+experiment run is queued.
+A later integration should preserve production Native48/F68 and other numerical
+settings. Any numerical change requires a matched unchanged-paper-atmosphere
+Bruneton B1 check across all times before adoption.
+
+### Final experiment disposition
+
+Ended2026-10-22 through end-experiment. H2400 is accepted as the owner-selected
+physical profile for production integration, with all scientific limitations above
+retained. All68 runs, including failures and superseded observations, remain
+sealed and unchanged. No owned browser/job/scratch remains. No temporary standards
+configuration was introduced or removed; permanent mapping/types remain active.
+[Production promotion](../../../production-app/product-behavior/h2400-atmosphere-plan.md)
+is separately authorized and owns activation; closure does not certify it complete.

@@ -22,15 +22,12 @@ occurred. ARM Spectral Validation and Sky Accuracy Dials remain suspended.
 
 ## Current default and rollback
 
-The owner subsequently selected the Bruneton atmosphere with aerosol amount zero
-for both app modes on 2026-10-22. The current default also includes complete
-solar-coordinate coverage for all app elevations through 2 km, correcting an
-exact-sunset horizon gap without changing any previously stored spectral values.
-The algorithm remains corrected60/sun035 with monotone-cubic lookup. The
-[zero-aerosol atmosphere record](../../production-app/product-behavior/zero-aerosol-atmosphere.md)
-owns this physical selection, build, activation and new scene verification.
-The numerical scores and qualification captures below describe the original
-full-aerosol algorithm promotion; they are not new zero-aerosol paper scores.
+The current physical default is the owner-selected [fixed-column H2400 atmosphere](../../production-app/product-behavior/h2400-atmosphere.md)
+in both app modes. It supersedes the [zero-aerosol selection](../../production-app/product-behavior/zero-aerosol-atmosphere.md).
+The algorithm remains Native48/F68/Native15/N4 corrected60/sun035 with cubic solar
+lookup and complete observer support through2km. No new paper scores are claimed
+for the application-selected medium. The numerical scores and captures below
+remain evidence for the original full-aerosol algorithm promotion.
 
 The preceding full-aerosol package remains intact:
 `8d185961cab8beb1e461cd1256be2875bb9a99e9f39e515b9288b92e5d2f6d37`,

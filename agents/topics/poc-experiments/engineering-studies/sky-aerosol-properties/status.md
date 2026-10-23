@@ -1,7 +1,8 @@
 # Sky aerosol properties status
 
-Status: active experiment; profile-only scenes at production settings complete.
-Production source, atmosphere selection and cache assets remain unchanged.
+Status: ended2026-10-22; H2400 result accepted for separately owned production promotion.
+Experiment source and evidence remain immutable; production integration is separately
+owned by the [H2400 production report](../../../production-app/product-behavior/h2400-atmosphere.md).
 
 ## Current outcome
 
@@ -10,7 +11,9 @@ findings, physical/numerical controls, reference precision, gate dispositions,
 artifact links, corrections and costs. H2400 at fixed aerosol column is the
 strongest ground-level brightness lead while retaining solar glow; elevated
 views have a measured tradeoff. The H1800 compromise stopped at its registered
-early gate. No profile has been selected for production.
+early gate. The owner now prefers fixed-column H2400 following the profile-only
+scene review; see the report's owner preference. The owner explicitly requested production promotion; execution is owned by the
+[H2400 production plan](../../../production-app/product-behavior/h2400-atmosphere-plan.md).
 
 The [first-campaign report](results.md) retains its independent N1 scope.
 The [refinement plan](refinement-plan.md) is completed with explicit limitations,
@@ -40,13 +43,17 @@ not universally passing numerical or external-reference targets.
 
 No blockers remain for the completed investigation. External solar-surround
 precision and a few cache/reference discrepancies remain scientific limitations,
-not unfinished mandatory transport jobs. Profile-only full-scene comparisons are complete. Production integration, additional scenes or a new
-campaign still require a separately selected scope.
+not unfinished mandatory transport jobs. All selected experimental work is complete.
+Production integration is separately authorized and owned by the linked plan.
+Reopening this experiment requires a new owner selection.
 
 ## Governance
 
 Source/output writes remain in this experiment's declared roots; production and
 suspended studies are read-only. No temporary standards set or overlay was added.
 Dedicated standards reviewers/audits are disabled; checkpoint advice remains active.
-Do not claim standards compliance from that policy. The experiment has not been
-closed or suspended. Use the lifecycle skill if the owner later selects either.
+Do not claim standards compliance from that policy. End-experiment inventory found
+all68 runs sealed, scratch empty and no owned jobs. No temporary standards entries
+needed restoration; the permanent experiment/types mapping remains. Standards
+resolution and guide refresh succeeded. Production reviewer startup is blocked by
+stale global calibration; this does not change the ended experiment disposition.

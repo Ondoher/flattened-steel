@@ -49,13 +49,35 @@ export const DistantSunSceneCacheCompilerInputs = {
 
 	/**
 	 * Call this method to create a Native48 or explicitly selected Native51/Z180/W27/F68/Native15/N4 request.
+	 * Invalid aerosol constants or conflicting complete/beta-only overrides throw;
+	 * callers must correct their physical inputs before cache generation.
 	 *
 	 * @param {DistantSunSceneCacheCompilerScene} scene - The exact scene Sun state and fixed support.
 	 * @param {DistantSunSceneCacheCompilerOptions} [options] - Explicit candidate controls.
 	 * @returns {DistantSunSceneCacheCompilerInputSet} - The compiler request, ledger, scene, and identities.
 	 */
 	createInputSet(scene, options = {}) {
-		const mieAngstromBeta = options.mieAngstromBeta === undefined ? 0.04 : options.mieAngstromBeta;
+		const aerosols = options.aerosolConstants;
+		if (aerosols !== undefined && options.mieAngstromBeta !== undefined)
+			throw new RangeError('Select either complete aerosol constants or a beta-only override.');
+		if (
+			aerosols !== undefined &&
+			(aerosols.mieScaleHeight?.units !== 'meters' ||
+				!Number.isFinite(aerosols.mieScaleHeight.value) ||
+				aerosols.mieScaleHeight.value <= 0 ||
+				!Number.isFinite(aerosols.mieAngstromAlpha) ||
+				!Number.isFinite(aerosols.mieAngstromBeta) ||
+				aerosols.mieAngstromBeta < 0 ||
+				!Number.isFinite(aerosols.mieSingleScatteringAlbedo) ||
+				aerosols.mieSingleScatteringAlbedo < 0 ||
+				aerosols.mieSingleScatteringAlbedo > 1 ||
+				!Number.isFinite(aerosols.miePhaseFunctionG) ||
+				Math.abs(aerosols.miePhaseFunctionG) >= 1)
+		)
+			throw new RangeError(
+				'Compiler aerosol constants require a physical scale height, exponent, albedo and phase shape.',
+			);
+		const mieAngstromBeta = aerosols?.mieAngstromBeta ?? options.mieAngstromBeta ?? 0.04;
 		if (!Number.isFinite(mieAngstromBeta) || mieAngstromBeta < 0)
 			throw new RangeError('Compiler aerosol optical-depth scale must be finite and nonnegative.');
 		const positionDomain = SphericalNativePositionDomains.select(options.positionDomain);
@@ -128,14 +150,14 @@ export const DistantSunSceneCacheCompilerInputs = {
 				topRadiusMeters: 6420000,
 			},
 			atmosphere: {
-				id: 'algorithm32-canonical-no-ozone-v1',
+				id: aerosols ? 'algorithm32-configured-aerosols-no-ozone-v1' : 'algorithm32-canonical-no-ozone-v1',
 				rayleighScaleHeightMeters: 8000,
-				mieScaleHeightMeters: 1200,
+				mieScaleHeightMeters: aerosols?.mieScaleHeight.value ?? 1200,
 				rayleighCoefficientScalePerMeter: 0.00000124062,
-				mieAngstromAlpha: 0.8,
+				mieAngstromAlpha: aerosols?.mieAngstromAlpha ?? 0.8,
 				mieAngstromBeta,
-				mieSingleScatteringAlbedo: 0.8,
-				miePhaseFunctionG: 0.7,
+				mieSingleScatteringAlbedo: aerosols?.mieSingleScatteringAlbedo ?? 0.8,
+				miePhaseFunctionG: aerosols?.miePhaseFunctionG ?? 0.7,
 				ozone: {
 					id: 'algorithm32-disabled-ozone-v1',
 					absorptionEnabled: false,

@@ -16,6 +16,19 @@ import DistantSunSharedCacheGenerationInventory from './DistantSunSharedCacheGen
 import {SHARED_GENERATION_RUN_ROOT} from './consts.js';
 import DistantSunSharedCacheSupport from '../../../src/algorithm32/implementation/distant-sun/cache/DistantSunSharedCacheSupport.js';
 
+test('duplicate derivation roles reject before allocating a GPU generation run', async () => {
+	await assert.rejects(
+		new DistantSunSharedCacheGenerator().run({
+			chromePath: path.resolve('unneeded-chrome.exe'),
+			signal: new AbortController().signal,
+			inputParents: [
+				{role: 'generator-source', artifact: {path: 'unneeded', byteLength: 1, sha256: '0'.repeat(64)}},
+			],
+		}),
+		/parent roles must be unique/u,
+	);
+});
+
 test('elevated observer inventory retains original rows and closes both solar-bin edges through 2 km', async () => {
 	const repositoryRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
 	const files = new DistantSunSharedCacheGenerationFiles(repositoryRoot);

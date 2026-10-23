@@ -24,9 +24,14 @@ export default class DistantSunPointLocalCacheCompilerHost {
 	/** Launch one isolated browser, stream its tiles, and release every host resource before settling. */
 	async run(options) {
 		options.signal.throwIfAborted();
-		const maximumMilliseconds = options.maximumMilliseconds ?? 900000;
-		if (!Number.isInteger(maximumMilliseconds) || maximumMilliseconds < 1 || maximumMilliseconds > 900000) {
-			throw new RangeError('Point-local compiler deadline must be from one millisecond through 15 minutes.');
+		const maximumMilliseconds = options.maximumMilliseconds;
+		if (
+			maximumMilliseconds !== undefined &&
+			(!Number.isSafeInteger(maximumMilliseconds) || maximumMilliseconds < 1 || maximumMilliseconds > 2147483647)
+		) {
+			throw new RangeError(
+				'Explicit compiler deadline must fit the Node timer range (1 through 2147483647 milliseconds).',
+			);
 		}
 		const prefix = `/${randomBytes(24).toString('hex')}/`;
 		const sourceNames = [
@@ -128,10 +133,16 @@ export default class DistantSunPointLocalCacheCompilerHost {
 		const heartbeat = setInterval(() => {
 			options.progress({phase: 'gpu-host-heartbeat'}).catch(rejectResult);
 		}, 25000);
-		const timer = setTimeout(
-			() => rejectResult(new Error(`Point-local GPU compilation exceeded ${maximumMilliseconds} milliseconds.`)),
-			maximumMilliseconds,
-		);
+		const timer =
+			maximumMilliseconds === undefined
+				? undefined
+				: setTimeout(
+						() =>
+							rejectResult(
+								new Error(`Point-local GPU compilation exceeded ${maximumMilliseconds} milliseconds.`),
+							),
+						maximumMilliseconds,
+					);
 		const abort = () => rejectResult(options.signal.reason ?? new Error('Point-local compilation cancelled.'));
 		options.signal.addEventListener('abort', abort, {once: true});
 		try {

@@ -1,6 +1,6 @@
 # Sky aerosol properties Experiment
 
-Status: active experiment; prior campaigns and profile-only scenes at production settings complete.
+Status: ended2026-10-22; H2400 selected for separately owned production promotion.
 
 ## Objective
 

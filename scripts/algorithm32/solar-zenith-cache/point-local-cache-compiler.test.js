@@ -17,9 +17,48 @@ import DistantSunSharedCacheGenerationFiles from './DistantSunSharedCacheGenerat
 import {DistantSunPointLocalProfileCompilerInputs} from './DistantSunPointLocalProfileCompilerInputs.js';
 import {DISTANT_SUN_SCENE_CACHE_OZONE_CROSS_SECTIONS_SQUARE_METERS} from './consts.js';
 import {NATIVE_51_NEAR_GROUND_POSITION_DOMAIN_OWNER} from '../../../src/algorithm32/sampling-domains/index.js';
+import {createFlat32Atmosphere} from '../../../src/flat32/Flat32Atmosphere.js';
 
 const repositoryRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
 const proofRoot = 'tmp/algorithm32/point-local-cache-compiler';
+
+test('projects the complete selected app aerosol medium while preserving canonical defaults and numerics', () => {
+	const scene = DistantSunSceneCacheCompilerInputs.createQualifiedSanJoseNauticalScene();
+	const canonical = DistantSunSceneCacheCompilerInputs.createInputSet(scene).buildRequest;
+	const atmosphere = createFlat32Atmosphere();
+	const selected = DistantSunSceneCacheCompilerInputs.createInputSet(scene, {
+		aerosolConstants: atmosphere.constants,
+	}).buildRequest;
+	const expected = structuredClone(canonical);
+	expected.transportSpec.atmosphere = {
+		...canonical.transportSpec.atmosphere,
+		id: 'algorithm32-configured-aerosols-no-ozone-v1',
+		mieScaleHeightMeters: 2400,
+		mieAngstromBeta: 0.010000000000138879,
+		mieSingleScatteringAlbedo: 0.95,
+		miePhaseFunctionG: 0.85,
+	};
+	assert.deepEqual(selected, expected);
+	assert.equal(
+		DistantSunSceneCacheCompilerInputs.createInputSet(scene, {
+			aerosolConstants: {...atmosphere.constants, mieAngstromAlpha: -0.2},
+		}).buildRequest.transportSpec.atmosphere.mieAngstromAlpha,
+		-0.2,
+	);
+	assert.equal(canonical.transportSpec.atmosphere.mieScaleHeightMeters, 1200);
+	assert.equal(canonical.transportSpec.atmosphere.mieAngstromBeta, 0.04);
+	assert.equal(canonical.transportSpec.atmosphere.mieSingleScatteringAlbedo, 0.8);
+	assert.equal(canonical.transportSpec.atmosphere.miePhaseFunctionG, 0.7);
+	assert.ok(Math.abs(atmosphere.constants.mieAngstromBeta * -Math.expm1(-60000 / 2400) - 0.01) < 1e-16);
+	assert.throws(
+		() =>
+			DistantSunSceneCacheCompilerInputs.createInputSet(scene, {
+				aerosolConstants: atmosphere.constants,
+				mieAngstromBeta: 0,
+			}),
+		/complete aerosol constants/u,
+	);
+});
 
 async function reference() {
 	return JSON.parse(

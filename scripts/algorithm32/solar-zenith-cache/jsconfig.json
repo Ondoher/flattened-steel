@@ -18,6 +18,7 @@
 		"DistantSunPointLocalProfileCompilerInputs.js",
 		"DistantSunSharedCache*.js",
 		"generate-shared-cache.js",
+		"generate-flat32-shared-cache.js",
 		"verify-shared-cache-publication-failure.js",
 		"*.d.ts",
 		"../../experiments/b1-directional-sky-radiance/types.d.ts",

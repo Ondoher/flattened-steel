@@ -17,15 +17,12 @@ import {
 	SHARED_COMPILER_SOURCE_NAMES,
 	DISTANT_SUN_SCATTERING_ACCURACY_SOURCE,
 	SHARED_GENERATION_SOURCE_ROOT,
-	SHARED_GENERATION_MAXIMUM_PACKAGE_BYTES,
-	SHARED_GENERATION_MAXIMUM_WORKING_BYTES,
-	SHARED_GENERATION_MAXIMUM_NODE_RSS_BYTES,
 } from './consts.js';
 
 /** Unified production cache compiler with Native15 runtime and explicit-input package serialization. */
 export default class DistantSunSharedCacheGenerator {
 	/** Absolute Chrome executable for explicit-input compilation. @type {string | undefined} */ chromePath;
-	/** GPU execution deadline in milliseconds. @type {number} */ maximumMilliseconds;
+	/** Optional caller-selected GPU deadline in milliseconds. @type {number | undefined} */ maximumMilliseconds;
 	/** Repository identity derived from the compiler location. @readonly @type {string} */ repositoryRoot;
 	/**
 	 * Creates the production compiler with optional explicit-input execution settings.
@@ -34,7 +31,7 @@ export default class DistantSunSharedCacheGenerator {
 	 */
 	constructor(definition = {}) {
 		this.chromePath = definition.chromePath;
-		this.maximumMilliseconds = definition.maximumMilliseconds ?? 900000;
+		this.maximumMilliseconds = definition.maximumMilliseconds;
 		this.repositoryRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
 	}
 
@@ -154,7 +151,7 @@ export default class DistantSunSharedCacheGenerator {
 
 	/**
 	 * Call this method to generate and qualify the complete production shared inventory.
-	 * Invalid execution options, failed controls, generation or verification failures, resource limits, or cancellation reject; callers must preserve prior runs.
+	 * Invalid execution options, failed controls, generation or verification failures, or cancellation reject; callers must preserve prior runs.
 	 * Failures before the atomic rename leave the candidate unpublished. Later bookkeeping failures
 	 * preserve the complete publication and report its published and sealed states explicitly.
 	 *
@@ -168,6 +165,17 @@ export default class DistantSunSharedCacheGenerator {
 			!path.isAbsolute(options.chromePath)
 		)
 			throw new Error('Generation requires an absolute browser path and AbortSignal.');
+		const parentRoles = new Set([
+			'immutable-control-catalog',
+			'generator-source',
+			'common-field-parameters',
+			'common-field-gpu-execution',
+		]);
+		for (const parent of options.inputParents ?? []) {
+			if (!parent.role || parentRoles.has(parent.role))
+				throw new RangeError('Shared generation derivation parent roles must be unique.');
+			parentRoles.add(parent.role);
+		}
 		options.signal.throwIfAborted();
 		const repositoryRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
 		const files = new DistantSunSharedCacheGenerationFiles(repositoryRoot);
@@ -196,8 +204,6 @@ export default class DistantSunSharedCacheGenerator {
 		const progress = async (event) => {
 			signal.throwIfAborted();
 			sample();
-			if (peakRssBytes > SHARED_GENERATION_MAXIMUM_NODE_RSS_BYTES)
-				throw new Error('Generation exceeds the declared Node process memory bound.');
 			await files.progress(`${runRoot}/progress.json`, {
 				runId,
 				elapsedMilliseconds: performance.now() - started,
@@ -312,13 +318,6 @@ export default class DistantSunSharedCacheGenerator {
 			const candidateBytes = await this._bytes(await files.resolve(candidateRoot));
 			const workingBytesBeforePublication = await this._bytes(await files.resolve(runRoot));
 			const elapsedMilliseconds = performance.now() - started;
-			if (candidateBytes > SHARED_GENERATION_MAXIMUM_PACKAGE_BYTES || elapsedMilliseconds > 900000)
-				throw new Error('The generated candidate exceeds the production storage or generation-time gate.');
-			if (
-				workingBytesBeforePublication > SHARED_GENERATION_MAXIMUM_WORKING_BYTES ||
-				peakRssBytes > SHARED_GENERATION_MAXIMUM_NODE_RSS_BYTES
-			)
-				throw new Error('Generation exceeds the declared working-disk or Node memory bound.');
 			signal.throwIfAborted();
 			await files.directory(`${runRoot}/published`);
 			publishedRoot = `${runRoot}/published/${candidate.report.packageSetIdentity}`;
@@ -329,10 +328,7 @@ export default class DistantSunSharedCacheGenerator {
 				packageSetIdentity: candidate.report.packageSetIdentity,
 				packageSetSha256: candidate.reportArtifact.sha256,
 				candidateBytes,
-				maximumPackageBytes: SHARED_GENERATION_MAXIMUM_PACKAGE_BYTES,
 				workingBytesBeforePublication,
-				maximumWorkingBytes: SHARED_GENERATION_MAXIMUM_WORKING_BYTES,
-				maximumNodeRssBytes: SHARED_GENERATION_MAXIMUM_NODE_RSS_BYTES,
 				stagedBytes,
 				avoidedSceneStagingBytes: verification.comparedBytes,
 				elapsedMilliseconds,

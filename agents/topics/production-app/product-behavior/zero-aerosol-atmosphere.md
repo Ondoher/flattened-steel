@@ -1,17 +1,20 @@
 # Flat32 zero-aerosol atmosphere
 
+Superseded by the owner-selected [H2400 atmosphere](h2400-atmosphere.md). This
+record preserves the prior zero-aerosol deployment and rollback evidence.
+
 The owner selected the Bruneton atmosphere with 0% aerosol on 2026-10-22.
 This is an application atmosphere choice, not an atmospheric-algorithm correction
 or a claim that the previous cache was physically wrong. The molecular atmosphere,
 solar spectrum, density scale heights, phase parameters, ground boundary, numerical
 accuracy and display response retain their current owners and values.
 
-## Current state
+## Preserved preceding selection
 
 The rebuilt globe package uses `mieAngstromBeta=0`, anchored
 radial geometry, monotone-cubic solar interpolation and `corrected60-sun035`.
 It retains Native48 positions, Native15 wavelengths and cumulative N4, with all
-109 scene reconstructions verified before publication. The current local default is
+109 scene reconstructions verified before publication. The preceding local default was
 `0d7d357bd477c8b1ded2182c606433e58162dc275a793630c65066aeadd54e36`, with
 coverage through 2 km at both edges of every solar bin. It contains 717772319
 bytes and took 589080 ms (9.82 minutes) to build, compress and verify. Its report
@@ -31,7 +34,7 @@ remains intact for comparison: 714079361 bytes, built in 791968 ms (13.20 minute
 Its original build and atmosphere-composition comparisons remain under
 `.codex-tmp/flat32-zero-aerosol/`; those do not qualify elevated sunset coverage.
 
-Both app modes select the same zero aerosol amount for cache construction and
+Both app modes selected the same zero aerosol amount for cache construction and
 live atmospheric transport. Removing the aerosol amount removes its scattering
 and absorption together. Canonical library defaults remain the original paper
 values; the compact local selector accepts an explicitly supplied medium.
