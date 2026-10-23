@@ -22,12 +22,13 @@ occurred. ARM Spectral Validation and Sky Accuracy Dials remain suspended.
 
 ## Current default and rollback
 
-The current physical default is the owner-selected [fixed-column H2400 atmosphere](../../production-app/product-behavior/h2400-atmosphere.md)
-in both app modes. It supersedes the [zero-aerosol selection](../../production-app/product-behavior/zero-aerosol-atmosphere.md).
-The algorithm remains Native48/F68/Native15/N4 corrected60/sun035 with cubic solar
-lookup and complete observer support through2km. No new paper scores are claimed
-for the application-selected medium. The numerical scores and captures below
-remain evidence for the original full-aerosol algorithm promotion.
+The current physical default is the [restored original Bruneton atmosphere](../../production-app/product-behavior/bruneton-atmosphere.md)
+in both app modes. The owner rejected the [H2400 profile](../../production-app/product-behavior/h2400-atmosphere.md)
+after live review. The algorithm remains Native48/F68/Native15/N4 corrected60/sun035
+with cubic lookup and full observer support through2km; compact flat retains its
+existing N1 default. The new package preserves the elevated-horizon coverage fix.
+No new paper scores are claimed; the existing numerical results below remain
+historical algorithm qualification evidence.
 
 The preceding full-aerosol package remains intact:
 `8d185961cab8beb1e461cd1256be2875bb9a99e9f39e515b9288b92e5d2f6d37`,

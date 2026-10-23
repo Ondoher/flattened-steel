@@ -22,12 +22,19 @@ import {createFlat32Atmosphere} from '../../../src/flat32/Flat32Atmosphere.js';
 const repositoryRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
 const proofRoot = 'tmp/algorithm32/point-local-cache-compiler';
 
-test('projects the complete selected app aerosol medium while preserving canonical defaults and numerics', () => {
+test('projects complete configurable aerosols while preserving canonical defaults and numerics', () => {
 	const scene = DistantSunSceneCacheCompilerInputs.createQualifiedSanJoseNauticalScene();
 	const canonical = DistantSunSceneCacheCompilerInputs.createInputSet(scene).buildRequest;
 	const atmosphere = createFlat32Atmosphere();
+	const selectedConstants = {
+		...atmosphere.constants,
+		mieScaleHeight: {value: 2400, units: /** @type {const} */ ('meters')},
+		mieAngstromBeta: 0.010000000000138879,
+		mieSingleScatteringAlbedo: 0.95,
+		miePhaseFunctionG: 0.85,
+	};
 	const selected = DistantSunSceneCacheCompilerInputs.createInputSet(scene, {
-		aerosolConstants: atmosphere.constants,
+		aerosolConstants: selectedConstants,
 	}).buildRequest;
 	const expected = structuredClone(canonical);
 	expected.transportSpec.atmosphere = {
@@ -41,7 +48,7 @@ test('projects the complete selected app aerosol medium while preserving canonic
 	assert.deepEqual(selected, expected);
 	assert.equal(
 		DistantSunSceneCacheCompilerInputs.createInputSet(scene, {
-			aerosolConstants: {...atmosphere.constants, mieAngstromAlpha: -0.2},
+			aerosolConstants: {...selectedConstants, mieAngstromAlpha: -0.2},
 		}).buildRequest.transportSpec.atmosphere.mieAngstromAlpha,
 		-0.2,
 	);
@@ -49,11 +56,11 @@ test('projects the complete selected app aerosol medium while preserving canonic
 	assert.equal(canonical.transportSpec.atmosphere.mieAngstromBeta, 0.04);
 	assert.equal(canonical.transportSpec.atmosphere.mieSingleScatteringAlbedo, 0.8);
 	assert.equal(canonical.transportSpec.atmosphere.miePhaseFunctionG, 0.7);
-	assert.ok(Math.abs(atmosphere.constants.mieAngstromBeta * -Math.expm1(-60000 / 2400) - 0.01) < 1e-16);
+	assert.ok(Math.abs(selectedConstants.mieAngstromBeta * -Math.expm1(-60000 / 2400) - 0.01) < 1e-16);
 	assert.throws(
 		() =>
 			DistantSunSceneCacheCompilerInputs.createInputSet(scene, {
-				aerosolConstants: atmosphere.constants,
+				aerosolConstants: selectedConstants,
 				mieAngstromBeta: 0,
 			}),
 		/complete aerosol constants/u,

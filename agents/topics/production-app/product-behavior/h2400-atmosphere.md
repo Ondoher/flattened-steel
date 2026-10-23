@@ -1,9 +1,11 @@
 # H2400 production atmosphere
 
-Status: complete. Sky Aerosol Properties is ended; fixed-column H2400 is now the
-local production app default in globe and flat/local modes. The
-[completed plan](h2400-atmosphere-plan.md) owns the selected scope. No remote push
-or deployment occurred. Refresh the app after its local server has reloaded.
+Status: superseded by the [restored original Bruneton atmosphere](bruneton-atmosphere.md)
+on2026-10-22 after the owner rejected the live H2400 appearance. This document
+preserves the completed H2400 promotion, measurements, captures and rollback
+context. Sky Aerosol Properties remains ended and its evidence remains immutable.
+The [completed plan](h2400-atmosphere-plan.md) records that historical integration.
+No remote push or deployment occurred.
 
 ## Selected result and limits
 

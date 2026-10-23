@@ -1,6 +1,7 @@
 # H2400 production atmosphere promotion
 
-Status: completed locally2026-10-22. Independent plan critique incorporated;
+Status: completed locally2026-10-22; later superseded by the owner-directed
+[Bruneton restoration](bruneton-atmosphere.md). Independent plan critique incorporated;
 experiment ended, matching H2400 app/cache activated, nine served GPU views pass.
 The execution report owns final identities, checks and limitations.
 

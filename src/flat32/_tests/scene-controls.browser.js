@@ -386,18 +386,15 @@ describe('Flat32 scene control foundations', () => {
 			}
 		});
 	}
-	it('selects fixed-column H2400 aerosols without changing molecular or canonical library defaults', () => {
+	it('selects the original Bruneton atmosphere in both app modes', () => {
 		const canonical = new CanonicalAtmosphere();
-		const selected = createFlat32Atmosphere();
-		expect(selected.constants).toEqual({
-			...canonical.constants,
-			mieScaleHeight: {value: 2400, units: 'meters'},
-			mieAngstromBeta: 0.010000000000138879,
-			mieSingleScatteringAlbedo: 0.95,
-			miePhaseFunctionG: 0.85,
-		});
+		expect(createFlat32Atmosphere().constants).toEqual(canonical.constants);
 		expect(canonical.constants.mieAngstromBeta).toBe(0.04);
+		expect(canonical.constants.mieScaleHeight).toEqual({value: 1200, units: 'meters'});
+		expect(canonical.constants.mieSingleScatteringAlbedo).toBe(0.8);
+		expect(canonical.constants.miePhaseFunctionG).toBe(0.7);
 	});
+
 	it('reuses one compact cache identity for live observer heights while leaving the installed profile unchanged', () => {
 		const observation = {
 			instant: '2024-06-21T07:00:00.000Z',

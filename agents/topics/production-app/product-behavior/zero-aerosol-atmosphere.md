@@ -1,7 +1,7 @@
 # Flat32 zero-aerosol atmosphere
 
-Superseded by the owner-selected [H2400 atmosphere](h2400-atmosphere.md). This
-record preserves the prior zero-aerosol deployment and rollback evidence.
+Historical zero-aerosol deployment and rollback evidence. H2400 followed it; the
+current selection is the [restored original Bruneton atmosphere](bruneton-atmosphere.md).
 
 The owner selected the Bruneton atmosphere with 0% aerosol on 2026-10-22.
 This is an application atmosphere choice, not an atmospheric-algorithm correction
