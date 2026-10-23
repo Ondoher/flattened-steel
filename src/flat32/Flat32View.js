@@ -50,7 +50,7 @@ export class Flat32View {
 					<option value="full">Full</option><option value="no-atmosphere">No atmosphere</option><option value="shader-off">Shader off</option>
 				</select></label>
 				<button id="flat32-objects-control" type="button" aria-pressed="true">Objects: On</button>
-				<label>Elevation <select id="flat32-elevation-control"><option value="5">Current (5 m)</option><option value="100">100 m</option><option value="500">500 m</option><option value="2000">2 km</option></select></label>
+				<label>Elevation <select id="flat32-elevation-control"><option value="5">Current (5 m)</option><option value="100">100 m</option><option value="500">500 m</option><option value="2000">2 km</option><option value="10000">10 km</option></select></label>
 				<label>Location <select id="flat32-location-control"></select></label>
 				<label>Vertical FOV <select id="flat32-fov-control" title="Vertical field of view. Natural is a central-view framing preset."></select></label>
 				<fieldset id="flat32-sun-controls" hidden>

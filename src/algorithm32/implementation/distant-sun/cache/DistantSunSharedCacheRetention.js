@@ -1,6 +1,6 @@
 import {DISTANT_SUN_SHARED_CACHE_LRU_BYTES, DISTANT_SUN_SHARED_CACHE_PACKET_BYTES} from './consts.js';
 
-/** Byte-weighted packet retention with reserved admission and explicit owner pins. */
+/** Byte-weighted idle packet retention with explicit live owner pins. */
 export default class DistantSunSharedCacheRetention {
 	/** Packet entries indexed by authenticated encoded artifact.
 	 *
@@ -9,7 +9,7 @@ export default class DistantSunSharedCacheRetention {
 	_entries = new Map();
 	/** Monotonic access sequence. */
 	_sequence = 0;
-	/** Total pinned packet admission ceiling.
+	/** Soft total retention target; live pins may exceed it.
 	 *
 	 * @type {number}
 	 */
@@ -18,29 +18,23 @@ export default class DistantSunSharedCacheRetention {
 	_evictions = 0;
 
 	/**
-	 * Creates one bounded packet-retention owner
+	 * Creates one packet-retention owner with an idle eviction target
 	 *
-	 * @param {number} maximumPinnedBytes - Declared packet admission ceiling.
+	 * @param {number} maximumPinnedBytes - Soft retention target in bytes; never rejects required live pins.
 	 */
 	constructor(maximumPinnedBytes) {
-		if (
-			!Number.isSafeInteger(maximumPinnedBytes) ||
-			maximumPinnedBytes < DISTANT_SUN_SHARED_CACHE_PACKET_BYTES ||
-			maximumPinnedBytes > 2 ** 31
-		)
-			throw new RangeError('Shared-cache pin budget is invalid.');
+		if (!Number.isSafeInteger(maximumPinnedBytes) || maximumPinnedBytes < 0)
+			throw new RangeError('Shared-cache retention target is invalid.');
 		this._maximumPinnedBytes = maximumPinnedBytes;
 	}
 
 	/**
-	 * Called before pin admission to enforce global and route-specific budgets, including pending work
-	 *
-	 * @param {string} key - Encoded artifact identity
+	 * Validates pin ownership and consistent route metadata before reservation.
 	 *
 	 * @param {DistantSunSharedCachePin} pin - Explicit lifetime owner.
 	 * @returns {void}
 	 */
-	_requireAdmission(key, pin) {
+	_requireAdmission(pin) {
 		if (
 			!pin ||
 			!['published', 'candidate', 'predicted', 'prepared-route'].includes(pin.kind) ||
@@ -48,11 +42,11 @@ export default class DistantSunSharedCacheRetention {
 			!pin.owner
 		)
 			throw new TypeError('Shared-cache pin owner is invalid.');
-		let pinnedCount = 0;
-		let routeCount = 0;
-		for (const [entryKey, entry] of this._entries) {
+		if (pin.kind !== 'prepared-route') return;
+		if (!Number.isSafeInteger(pin.maximumBytes) || pin.maximumBytes < 0)
+			throw new RangeError('Shared-cache prepared-route estimate is invalid.');
+		for (const entry of this._entries.values()) {
 			if (
-				pin.kind === 'prepared-route' &&
 				Array.from(entry.pins.values()).some(
 					(item) =>
 						item.kind === 'prepared-route' &&
@@ -60,35 +54,23 @@ export default class DistantSunSharedCacheRetention {
 						item.maximumBytes !== pin.maximumBytes,
 				)
 			)
-				throw new RangeError('Shared-cache prepared-route owner has conflicting budgets.');
-			if (entry.pins.size && entryKey !== key) pinnedCount += 1;
-			if (
-				entryKey !== key &&
-				Array.from(entry.pins.values()).some(
-					(item) => item.kind === 'prepared-route' && item.owner === pin.owner,
-				)
-			)
-				routeCount += 1;
+				throw new RangeError('Shared-cache prepared-route owner has conflicting estimates.');
 		}
-		if ((pinnedCount + 1) * DISTANT_SUN_SHARED_CACHE_PACKET_BYTES > this._maximumPinnedBytes)
-			throw new RangeError('Shared-cache pinned packet budget is exhausted.');
-		if (
-			pin.kind === 'prepared-route' &&
-			(!Number.isSafeInteger(pin.maximumBytes) ||
-				pin.maximumBytes < DISTANT_SUN_SHARED_CACHE_PACKET_BYTES ||
-				(routeCount + 1) * DISTANT_SUN_SHARED_CACHE_PACKET_BYTES > pin.maximumBytes)
-		)
-			throw new RangeError('Shared-cache prepared-route budget is exhausted.');
 	}
 
-	/** Called after release to evict only unpinned packets above the ordinary byte budget. @returns {void} */
+	/** Evicts only idle packets; required live pins remain valid above the retention target. @returns {void} */
 	_evict() {
 		const unpinned = Array.from(this._entries)
 			.filter(([, entry]) => !entry.pins.size)
 			.sort((left, right) => left[1].lastUse - right[1].lastUse);
+		const pinnedBytes = (this._entries.size - unpinned.length) * DISTANT_SUN_SHARED_CACHE_PACKET_BYTES;
+		const idleTarget = Math.min(
+			DISTANT_SUN_SHARED_CACHE_LRU_BYTES,
+			Math.max(0, this._maximumPinnedBytes - pinnedBytes),
+		);
 		let bytes = unpinned.filter(([, entry]) => entry.packet).length * DISTANT_SUN_SHARED_CACHE_PACKET_BYTES;
 		for (const [key, entry] of unpinned) {
-			if (entry.packet && bytes <= DISTANT_SUN_SHARED_CACHE_LRU_BYTES) continue;
+			if (entry.packet && bytes <= idleTarget) continue;
 			this._entries.delete(key);
 			if (entry.packet) {
 				bytes -= DISTANT_SUN_SHARED_CACHE_PACKET_BYTES;
@@ -99,7 +81,7 @@ export default class DistantSunSharedCacheRetention {
 
 	/**
 	 * Call this method to reserve one independently releasable packet pin before preparation.
-	 * Invalid or over-budget owners throw without changing retention
+	 * Invalid owners or incompatible identities throw without changing retention
 	 *
 	 * @param {string} key - Encoded artifact identity
 	 *
@@ -109,7 +91,7 @@ export default class DistantSunSharedCacheRetention {
 	 * @returns {symbol} - Opaque pin token.
 	 */
 	reserve(key, pin, signature = '') {
-		this._requireAdmission(key, pin);
+		this._requireAdmission(pin);
 		const entry = this._entries.get(key) ?? {pins: new Map(), lastUse: 0, signature};
 		if (entry.signature !== signature)
 			throw new RangeError('Shared-cache coalesced artifact has conflicting decoded identities.');
@@ -117,6 +99,7 @@ export default class DistantSunSharedCacheRetention {
 		entry.pins.set(token, {...pin});
 		entry.lastUse = ++this._sequence;
 		this._entries.set(key, entry);
+		this._evict();
 		return token;
 	}
 
@@ -133,7 +116,7 @@ export default class DistantSunSharedCacheRetention {
 	repin(key, token, pin) {
 		const entry = this._entries.get(key);
 		if (!entry?.pins.has(token)) throw new Error('Shared-cache pin has been released.');
-		this._requireAdmission(key, pin);
+		this._requireAdmission(pin);
 		entry.pins.set(token, {...pin});
 	}
 
@@ -178,7 +161,7 @@ export default class DistantSunSharedCacheRetention {
 		this._evict();
 	}
 
-	/** Call this method to inspect bounded aggregate retention facts. @returns {DistantSunSharedCacheRetentionDiagnostics} - Current resource totals. */
+	/** Call this method to inspect aggregate retention facts. @returns {DistantSunSharedCacheRetentionDiagnostics} - Current resource totals. */
 	diagnostics() {
 		let pinnedBytes = 0,
 			unpinnedBytes = 0,

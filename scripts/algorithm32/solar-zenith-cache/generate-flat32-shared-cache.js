@@ -33,7 +33,7 @@ try {
 		solarInterpolation: 'monotone-cubic',
 		scatteringAccuracy: 'corrected60-sun035',
 		aerosolConstants: createFlat32Atmosphere().constants,
-		maximumObserverAltitudeMeters: 2000,
+		maximumObserverAltitudeMeters: 10000,
 		inputParents,
 		signal: cancellation.signal,
 	});

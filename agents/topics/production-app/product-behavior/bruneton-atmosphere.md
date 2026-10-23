@@ -4,6 +4,10 @@ Status: complete. Original Bruneton medium and matching cache are the local app
 default in both modes as of 2026-10-22; served GPU verification passes. The owner rejected the live
 H2400 appearance. No further atmosphere search or experiment reopening is selected.
 
+Current cache coverage and deployment are owned by the [10 km elevation record](ten-km-elevation.md).
+The restoration package below remains preserved; its physical/numerical values
+are unchanged by that extension.
+
 ## Physical selection and unchanged behavior
 
 Both modes use the canonical Bruneton atmosphere: aerosol scale height 1200 m,
@@ -23,7 +27,7 @@ requires exact canonical constants and all 15 coefficient channels. It verifies
 unchanged numerical inputs, domains and complete 5607-row coverage after only the
 medium is substituted. No new Bruneton RMSE measurement is claimed.
 
-## Cache and local activation
+## Restoration build and local activation evidence
 
 Package `1edb5237d6ecaa161225e4b76892e996071acba47a524a82dc34e584e2931ec7`
 contains 729387605 bytes, 90 blocks and 109 verified solar scenes. Generation,

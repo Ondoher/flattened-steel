@@ -78,7 +78,7 @@ export class EndpointScene {
 						heightSegments: 512,
 						groundVisualMesh: {
 							kind: 'local-spherical-patch',
-							// Fixed coverage outlasts the 2 km horizon without rebuilding on elevation changes.
+							// Fixed coverage outlasts the 10 km horizon without rebuilding on elevation changes.
 							xExtent: {value: GROUND_SIZE_SCENE_UNITS / 2, units: 'scene-units'},
 							zMin: {value: -GROUND_SIZE_SCENE_UNITS / 2, units: 'scene-units'},
 							zMax: {value: GROUND_SIZE_SCENE_UNITS / 2, units: 'scene-units'},

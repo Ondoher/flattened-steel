@@ -43,10 +43,15 @@ describe('Flat32 scene control foundations', () => {
 			ground.updateMatrixWorld(true);
 			const radius = state.geometry.configuration.bottomRadius.value / ATMOSPHERE_SCENE_SCALE.value;
 			const raycaster = new THREE.Raycaster();
-			for (const height of [5, 100, 500, 2000]) {
+			for (const height of [5, 100, 500, 2000, 10000]) {
 				const eye = height / ATMOSPHERE_SCENE_SCALE.value;
 				const horizonAngle = -Math.acos(radius / (radius + eye));
-				for (let heading = 0; heading < 360; heading += 45) {
+				// Pair samples around diagonal mesh seams: CPU triangle edge tests can miss
+				// an exact seam even when both neighbouring triangles cover the ray.
+				for (const heading of [
+					0, 44.999999, 45.000001, 90, 134.999999, 135.000001, 180, 224.999999, 225.000001, 270, 314.999999,
+					315.000001,
+				]) {
 					const yaw = (heading * Math.PI) / 180;
 					// Exact cardinal rays avoid roundoff putting a nearly coplanar ray on a triangle seam.
 					const right = Math.abs(Math.sin(yaw)) < 1e-12 ? 0 : Math.sin(yaw);
@@ -126,9 +131,10 @@ describe('Flat32 scene control foundations', () => {
 		illumination.dispatchEvent(new Event('change'));
 		expect(actions.onSun).toHaveBeenCalledWith({sunIlluminationScale: 0.1, sunDiscBrightnessScale: 0.25});
 		const elevation = root.querySelector('#flat32-elevation-control');
-		elevation.value = '100';
+		expect(elevation.querySelector('[value="10000"]').textContent).toBe('10 km');
+		elevation.value = '10000';
 		elevation.dispatchEvent(new Event('change'));
-		expect(actions.onElevation).toHaveBeenCalledWith({value: 100, units: 'meters'});
+		expect(actions.onElevation).toHaveBeenCalledWith({value: 10000, units: 'meters'});
 		const fov = root.querySelector('#flat32-fov-control');
 		expect(fov.value).toBe('50');
 		fov.value = '5';
@@ -302,7 +308,7 @@ describe('Flat32 scene control foundations', () => {
 		}
 		expect(() => Flat32SceneControls.resolve({skyRenderMode: 'unknown'})).toThrowError(/unsupported/);
 		expect(() => Flat32SceneControls.resolve({observerHeight: {value: 600, units: 'meters'}})).toThrowError(
-			/5 m, 100 m, 500 m or 2 km/,
+			/5 m, 100 m, 500 m, 2 km or 10 km/,
 		);
 	});
 	it('retains Full/Shader off boolean compatibility and accepts an explicit independent sky mode', () => {
@@ -314,7 +320,7 @@ describe('Flat32 scene control foundations', () => {
 		).toBe('no-atmosphere');
 	});
 
-	for (const height of [5, 100, 500, 2000]) {
+	for (const height of [5, 100, 500, 2000, 10000]) {
 		it(`maps the actual camera and receiver to ${height} metres in both supported geometries`, () => {
 			const observerHeight = Flat32SceneControls.resolve({
 				observerHeight: {value: height / 1000, units: 'kilometers'},
@@ -410,7 +416,7 @@ describe('Flat32 scene control foundations', () => {
 		});
 		try {
 			const original = mode.compactProfile;
-			for (const height of [5, 100, 500, 2000]) {
+			for (const height of [5, 100, 500, 2000, 10000]) {
 				const profile = original.createLiveProfile({
 					observation,
 					receiverPosition: {coordinates: [0, 0, height], units: 'meters'},

@@ -1,17 +1,17 @@
 # Active Topic
 
 Current active topic: production-app/product-behavior.
-Focus: original Bruneton atmosphere restored in both app modes, retaining current
-numerical corrections and complete 2 km observer coverage.
+Focus: add and verify a 10 km elevation option in both app modes, retaining the
+Bruneton atmosphere, current numerical corrections and cache/scene reuse.
 
 Canonical entry: [Product Behavior](production-app/product-behavior/README.md).
-The owner rejected H2400 after live review. Restoration and served GPU checks are complete; Sky Aerosol
-Properties remains ended. ARM Spectral Validation and Sky Accuracy Dials remain
-suspended. No numerical algorithm change is selected.
+The expanded cache and app are selected locally; seven served GPU scene checks
+pass. Sky Aerosol Properties remains ended. ARM Spectral Validation and Sky
+Accuracy Dials remain suspended. No Sun-disc rendering change is selected.
 
 ## Minimal Reload Sources
 
 1. [Repository instructions](../../AGENTS.md).
 2. [Product behavior entry](production-app/product-behavior/README.md).
-3. [Bruneton restoration](production-app/product-behavior/bruneton-atmosphere.md).
-4. [Preceding H2400 selection](production-app/product-behavior/h2400-atmosphere.md).
+3. [10 km elevation](production-app/product-behavior/ten-km-elevation.md).
+4. [Current Bruneton atmosphere](production-app/product-behavior/bruneton-atmosphere.md).

@@ -70,7 +70,7 @@ export const CAMERA_NEAR_SCENE_UNITS = 0.002;
 /** @type {[number, number, number]} */
 export const CAMERA_POSITION_SCENE = [0, 0.005, 0];
 export const GROUND_COLOR = 0x4fa33d;
-export const GROUND_SIZE_SCENE_UNITS = 600;
+export const GROUND_SIZE_SCENE_UNITS = 900;
 export const LOCAL_SUN_AMBIENT_LIGHT_INTENSITY = 0.37943331351924703;
 /** Canonical distant-source brightness that maps source-owned scene lighting to unit scale. */
 export const DISTANT_SUN_SCENE_LIGHT_REFERENCE_BRIGHTNESS = {

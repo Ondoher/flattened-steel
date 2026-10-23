@@ -103,16 +103,16 @@ type DistantSunSharedCacheWorkerJob = {
  * - **"published"** - Active GPU window lifetime.
  * - **"candidate"** - Unpublished transaction lifetime.
  * - **"predicted"** - Predicted future window lifetime.
- * - **"prepared-route"** - Explicitly budgeted route lifetime.
+ * - **"prepared-route"** - Explicitly owned route lifetime with a host-memory estimate.
  */
 type DistantSunSharedCachePinKind = 'published' | 'candidate' | 'predicted' | 'prepared-route';
-/** Pin owner and optional route-specific admission ceiling. */
+/** Pin owner and optional route-specific memory estimate. */
 type DistantSunSharedCachePin = {
 	/** Resource lifetime category. */
 	kind: DistantSunSharedCachePinKind;
 	/** Stable transaction, window, or route owner. */
 	owner: string;
-	/** Required prepared-route host ceiling, including pending packets. */
+	/** Required prepared-route host estimate, including pending packets; never an admission veto. */
 	maximumBytes?: number;
 };
 /** Retained or reserved packet with explicit pin ownership. */
@@ -150,17 +150,17 @@ type DistantSunSharedCacheBlockRequest = {
 	/** Independent subscriber cancellation. */
 	signal: AbortSignal;
 };
-/** Transport dependencies and memory admission policy. */
+/** Transport dependencies and idle retention policy. */
 type DistantSunSharedCacheTransportDefinition = {
 	/** Persistent preparation capability. */
 	preparer: DistantSunSharedCachePreparationClient;
 	/** Complete artifact fetch capability. */
 	fetch?: typeof fetch;
-	/** Total pinned packet admission ceiling. */
+	/** Soft total retention target; live required pins may exceed it (legacy field name). */
 	maximumPinnedBytes?: number;
 };
 
-/** Bounded retention resource totals. */
+/** Retention resource totals. */
 type DistantSunSharedCacheRetentionDiagnostics = {
 	/** Bytes reserved by live pins, including pending preparation. */
 	pinnedBytes: number;
@@ -172,7 +172,7 @@ type DistantSunSharedCacheRetentionDiagnostics = {
 	pins: Record<DistantSunSharedCachePinKind, number>;
 	/** Total evictions since construction. */
 	evictions: number;
-	/** Configured admission ceiling. */
+	/** Configured soft retention target, not a live-pin ceiling (legacy field name). */
 	maximumPinnedBytes: number;
 };
 

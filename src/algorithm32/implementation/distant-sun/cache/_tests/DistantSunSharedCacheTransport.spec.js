@@ -233,7 +233,7 @@ describe('Shared-cache transport accounting', () => {
 		expect(transport.diagnostics().retention.pinnedBytes).toBe(0);
 	});
 
-	it('enforces route admission, preserves pins, and evicts only unpinned packets above 64 MiB', () => {
+	it('preserves pins and evicts idle packets above 64 MiB', () => {
 		const retention = new DistantSunSharedCacheRetention(8 * DISTANT_SUN_SHARED_CACHE_PACKET_BYTES);
 		const pinned = retention.reserve('pinned', {kind: 'published', owner: 'window'});
 		retention.publish('pinned', packet);
@@ -246,19 +246,32 @@ describe('Shared-cache transport accounting', () => {
 		expect(retention.get('pinned')).toBe(packet);
 		expect(retention.diagnostics().evictions).toBe(2);
 		expect(retention.diagnostics().unpinnedBytes).toBe(3 * DISTANT_SUN_SHARED_CACHE_PACKET_BYTES);
-		retention.reserve('route-1', {
-			kind: 'prepared-route',
-			owner: 'route',
-			maximumBytes: DISTANT_SUN_SHARED_CACHE_PACKET_BYTES,
-		});
-		expect(() =>
-			retention.reserve('route-2', {
-				kind: 'prepared-route',
-				owner: 'route',
-				maximumBytes: DISTANT_SUN_SHARED_CACHE_PACKET_BYTES,
-			}),
-		).toThrowError(/budget/);
 		retention.release('pinned', pinned);
+		retention.dispose();
+	});
+	it('admits required working sets above the retention target and trims released packets', () => {
+		const retention = new DistantSunSharedCacheRetention(DISTANT_SUN_SHARED_CACHE_PACKET_BYTES);
+		const first = retention.reserve('first', {kind: 'published', owner: 'window'});
+		retention.publish('first', packet);
+		const routePin = {kind: 'prepared-route', owner: 'route', maximumBytes: DISTANT_SUN_SHARED_CACHE_PACKET_BYTES};
+		const second = retention.reserve('second', routePin);
+		retention.publish('second', packet);
+		const third = retention.reserve('third', routePin);
+		retention.publish('third', packet);
+		expect(retention.diagnostics().pinnedBytes).toBe(3 * DISTANT_SUN_SHARED_CACHE_PACKET_BYTES);
+		expect(retention.get('first')).toBe(packet);
+		expect(retention.get('second')).toBe(packet);
+		expect(retention.get('third')).toBe(packet);
+		expect(() => retention.reserve('invalid', {...routePin, maximumBytes: NaN})).toThrowError(/invalid/);
+		expect(() => retention.reserve('conflict', {...routePin, maximumBytes: 0})).toThrowError(/conflicting/);
+		retention.release('second', second);
+		expect(retention.get('second')).toBeUndefined();
+		expect(retention.get('first')).toBe(packet);
+		retention.release('third', third);
+		expect(retention.diagnostics().unpinnedBytes).toBe(0);
+		retention.release('first', first);
+		expect(retention.get('first')).toBe(packet);
+		expect(retention.diagnostics().pinnedBytes).toBe(0);
 		retention.dispose();
 	});
 });

@@ -29,21 +29,21 @@ test('duplicate derivation roles reject before allocating a GPU generation run',
 	);
 });
 
-test('elevated observer inventory retains original rows and closes both solar-bin edges through 2 km', async () => {
+test('elevated observer inventory retains original rows and closes both solar-bin edges through 10 km', async () => {
 	const repositoryRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
 	const files = new DistantSunSharedCacheGenerationFiles(repositoryRoot);
 	const owner = new DistantSunSharedCacheGenerationInventory();
 	const original = await owner.load(files, {solarInterpolation: 'monotone-cubic'});
 	const expanded = await owner.load(files, {
 		solarInterpolation: 'monotone-cubic',
-		maximumObserverAltitudeMeters: 2000,
+		maximumObserverAltitudeMeters: 10000,
 	});
 	assert.deepEqual(expanded.buildRequest, original.buildRequest, 'Coverage must not change scattering equations.');
 	assert.ok(expanded.coordinates.length > original.coordinates.length);
 	const all = new Set(expanded.coordinates.map((coordinate) => coordinate.join(':')));
 	for (const coordinate of original.coordinates) assert.ok(all.has(coordinate.join(':')));
 	for (const scene of expanded.scenes) {
-		assert.equal(scene.ledger.support.observerAltitude.value, 2000);
+		assert.equal(scene.ledger.support.observerAltitude.value, 10000);
 		for (const row of scene.ledger.rows) {
 			const old = original.scenes[scene.ordinal].ledger.rows[row.altitudeIndex];
 			assert.ok(row.firstSolarZenithIndex <= old.firstSolarZenithIndex);
@@ -52,7 +52,7 @@ test('elevated observer inventory retains original rows and closes both solar-bi
 			const nextAltitude =
 				row.altitudeIndex === 47 ? 60000 : scene.ledger.rows[row.altitudeIndex + 1].altitude.value;
 			const reachDegrees =
-				((Math.acos(6360000 / 6362000) + Math.acos(6360000 / (6360000 + nextAltitude))) * 180) / Math.PI;
+				((Math.acos(6360000 / 6370000) + Math.acos(6360000 / (6360000 + nextAltitude))) * 180) / Math.PI;
 			const first = Math.max(0, Math.floor(scene.manifest.selection.minimumInputDegrees - reachDegrees - 0.5));
 			const last = Math.min(
 				179,
