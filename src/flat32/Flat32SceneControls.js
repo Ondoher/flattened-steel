@@ -1,13 +1,13 @@
 import DistanceMath from '../algorithm32/math/DistanceMath.js';
-import {ATMOSPHERE_OBSERVER_HEIGHT} from './consts.js';
+import {ATMOSPHERE_OBSERVER_HEIGHT, CAMERA_FIELD_OF_VIEW_DEGREES} from './consts.js';
 
-/** Canonical sky, physical observer height and illustrative Sun presentation controls. */
+/** Canonical sky, observer height, camera framing and illustrative Sun presentation controls. */
 export const Flat32SceneControls = {
 	/** Call this method to resolve current controls, including existing boolean shader callers.
-	 * Invalid render modes, legacy booleans, Sun fractions or unsupported heights throw; correct the input before scene preparation.
+	 * Invalid render modes, legacy booleans, FOV, Sun fractions or unsupported heights throw; correct the input before scene preparation.
 	 *
-	 * @param {Flat32SceneControlConfiguration} [configuration] - Explicit choices; omission retains Full, 5 m and both Sun fractions at one.
-	 * @returns {Flat32SceneControlSelection} - Canonical sky, Sun choices and a fresh unit-bearing height.
+	 * @param {Flat32SceneControlConfiguration} [configuration] - Explicit choices; omission retains Full, 5 m, 50-degree vertical FOV and both Sun fractions at one.
+	 * @returns {Flat32SceneControlSelection} - Canonical sky, framing, Sun choices and a fresh unit-bearing height.
 	 */
 	resolve(configuration = {}) {
 		if (
@@ -20,13 +20,28 @@ export const Flat32SceneControls = {
 		if (!['full', 'no-atmosphere', 'shader-off'].includes(skyRenderMode))
 			throw new RangeError('Flat32 sky render mode is unsupported.');
 		const height = DistanceMath.toMeters(configuration.observerHeight ?? ATMOSPHERE_OBSERVER_HEIGHT);
-		if (![5, 500, 2000].includes(height))
-			throw new RangeError('Flat32 observer height must be 5 m, 500 m or 2 km.');
+		if (![5, 100, 500, 2000].includes(height))
+			throw new RangeError('Flat32 observer height must be 5 m, 100 m, 500 m or 2 km.');
 		return {
 			skyRenderMode,
 			observerHeight: DistanceMath.inMeters(height),
+			cameraFieldOfViewDegrees: this.resolveFieldOfView(
+				configuration.cameraFieldOfViewDegrees === undefined
+					? CAMERA_FIELD_OF_VIEW_DEGREES
+					: configuration.cameraFieldOfViewDegrees,
+			),
 			...this.resolveSunPresentation(configuration),
 		};
+	},
+	/** Accept a vertical perspective field of view, in degrees.
+	 * @param {number} degrees - Finite angle strictly between zero and 180.
+	 * @returns {number} - Accepted angle, without clamping.
+	 * @throws {RangeError} - Invalid or panoramic angles require a different input or projection.
+	 */
+	resolveFieldOfView(degrees) {
+		if (!Number.isFinite(degrees) || degrees <= 0 || degrees >= 180)
+			throw new RangeError('Vertical perspective FOV must be greater than 0° and less than 180°.');
+		return degrees;
 	},
 	/** Call this method to accept independent No-atmosphere Sun presentation controls.
 	 * Nonfinite or out-of-range scales throw RangeError before mutation; supply 0-1 fractions.

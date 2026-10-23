@@ -1,7 +1,131 @@
 import {Algorithm32Runtime} from '../Algorithm32Runtime.js';
 import {ThreeSceneRuntime} from '../ThreeSceneRuntime.js';
+import {PointerLookController} from '../PointerLookController.js';
 
 describe('Flat32 Step 5 stellar lifecycle', () => {
+	it('permits the initial resource frame while hidden and suspends subsequent display frames', () => {
+		const runtime = new ThreeSceneRuntime(document.createElement('canvas'), fail);
+		spyOnProperty(document, 'hidden', 'get').and.returnValue(true);
+		const schedule = spyOn(window, 'requestAnimationFrame');
+		runtime._started = true;
+		runtime._renderOperation = jasmine.createSpy('initial-resource-frame');
+		runtime._renderFrame();
+		expect(runtime._renderOperation).toHaveBeenCalledTimes(1);
+		runtime.requestRender();
+		runtime._renderFrame();
+		expect(runtime._renderOperation).toHaveBeenCalledTimes(1);
+		expect(schedule).not.toHaveBeenCalled();
+		runtime.dispose();
+	});
+	it('coalesces view changes into one frame and schedules no idle successor', () => {
+		const runtime = new ThreeSceneRuntime(document.createElement('canvas'), fail);
+		const callbacks = [];
+		const schedule = spyOn(window, 'requestAnimationFrame').and.callFake((callback) => {
+			callbacks.push(callback);
+			return callbacks.length;
+		});
+		runtime._started = true;
+		runtime._renderOperation = jasmine.createSpy('render');
+		for (let index = 0; index < 10; index++) runtime.requestRender();
+		expect(schedule).toHaveBeenCalledTimes(1);
+		callbacks[0](0);
+		expect(runtime._renderOperation).toHaveBeenCalledTimes(1);
+		expect(runtime._frameRequest).toBeNull();
+		expect(schedule).toHaveBeenCalledTimes(1);
+		runtime.requestRender();
+		callbacks[1](16);
+		expect(runtime._renderOperation).toHaveBeenCalledTimes(2);
+		expect(schedule).toHaveBeenCalledTimes(2);
+		runtime.dispose();
+	});
+
+	it('retains an invalidation raised during rendering and stops after that successor', () => {
+		const runtime = new ThreeSceneRuntime(document.createElement('canvas'), fail);
+		const callbacks = [];
+		spyOn(window, 'requestAnimationFrame').and.callFake((callback) => {
+			callbacks.push(callback);
+			return callbacks.length;
+		});
+		runtime._started = true;
+		let frames = 0;
+		runtime._renderOperation = () => {
+			if (++frames === 1) {
+				runtime.requestRender();
+				runtime.requestRender();
+			}
+		};
+		runtime.requestRender();
+		callbacks[0](0);
+		expect(callbacks.length).toBe(2);
+		callbacks[1](16);
+		expect(frames).toBe(2);
+		expect(callbacks.length).toBe(2);
+		runtime.dispose();
+	});
+
+	it('keeps hidden publications queued, then publishes and draws once when visible', async () => {
+		const runtime = new ThreeSceneRuntime(document.createElement('canvas'), fail);
+		const hidden = spyOnProperty(document, 'hidden', 'get').and.returnValue(false);
+		const callbacks = [],
+			events = [];
+		const cancel = spyOn(window, 'cancelAnimationFrame');
+		spyOn(window, 'requestAnimationFrame').and.callFake((callback) => {
+			callbacks.push(callback);
+			return callbacks.length;
+		});
+		runtime._started = true;
+		runtime._renderOperation = () => events.push('render');
+		runtime.requestRender();
+		hidden.and.returnValue(true);
+		runtime._handleVisibilityChange();
+		expect(cancel).toHaveBeenCalledWith(1);
+		const published = runtime.atFrameBoundary(() => {
+			events.push('publish');
+			runtime.requestRender();
+		}, new AbortController().signal);
+		expect(callbacks.length).toBe(1);
+		expect(events).toEqual([]);
+		hidden.and.returnValue(false);
+		runtime._handleVisibilityChange();
+		callbacks[1](16);
+		await published;
+		expect(events).toEqual(['publish', 'render']);
+		expect(callbacks.length).toBe(2);
+		runtime.dispose();
+	});
+
+	it('retains continuous frames only for an explicitly selected animation cadence', () => {
+		const runtime = new ThreeSceneRuntime(document.createElement('canvas'), fail, {
+			frameCadence: 'animation-frame',
+		});
+		const callbacks = [];
+		spyOn(window, 'requestAnimationFrame').and.callFake((callback) => {
+			callbacks.push(callback);
+			return callbacks.length;
+		});
+		const cancel = spyOn(window, 'cancelAnimationFrame');
+		runtime._started = true;
+		runtime._renderOperation = () => {};
+		runtime.requestRender();
+		callbacks[0](0);
+		expect(callbacks.length).toBe(2);
+		runtime.dispose();
+		expect(cancel).toHaveBeenCalledWith(2);
+	});
+
+	it('requests a frame on pointer camera changes and removes that listener on disposal', () => {
+		const host = new ThreeSceneRuntime(document.createElement('canvas'), fail);
+		const redraw = jasmine.createSpy('redraw');
+		const controls = new PointerLookController(host.canvas, host.camera, () => {}, redraw);
+		controls.start();
+		expect(redraw).not.toHaveBeenCalled();
+		controls._controls.dispatchEvent({type: 'change'});
+		expect(redraw).toHaveBeenCalledTimes(1);
+		controls.dispose();
+		controls._controls.dispatchEvent({type: 'change'});
+		expect(redraw).toHaveBeenCalledTimes(1);
+		host.dispose();
+	});
 	it('publishes a complete state between deterministic manual frames', async () => {
 		let runtime = new ThreeSceneRuntime(document.createElement('canvas'), fail, {frameCadence: 'manual'});
 		let events = [];
@@ -105,6 +229,7 @@ describe('Flat32 Step 5 stellar lifecycle', () => {
 		});
 		spyOn(runtime, '_configureViewport');
 		spyOn(runtime, '_renderFrame');
+		spyOn(runtime, 'requestRender');
 		runtime._started = true;
 		const event = {preventDefault: jasmine.createSpy('preventDefault')};
 
@@ -116,7 +241,8 @@ describe('Flat32 Step 5 stellar lifecycle', () => {
 		expect(events).toEqual(['lost', 'restoring', 'published-before-resume', 'restored']);
 		expect(runtime._restoringContext).toBeFalse();
 		expect(runtime._configureViewport).toHaveBeenCalledTimes(1);
-		expect(runtime._renderFrame).toHaveBeenCalledTimes(1);
+		expect(runtime._renderFrame).not.toHaveBeenCalled();
+		expect(runtime.requestRender).toHaveBeenCalledTimes(1);
 		expect(runtime._started).toBeTrue();
 		expect(canvas.dataset.flat32ContextState).toBe('restored');
 		expect(failures).toEqual([]);

@@ -1,0 +1,27 @@
+import assert from 'node:assert/strict';
+import {createRequire} from 'node:module';
+import {gunzipSync} from 'node:zlib';
+import {createRun,read,identity} from './io.mjs';
+import {authenticate,baseline,metrics,centers} from './refinement-common.mjs';
+import {color,rgbWeights} from './color.mjs';
+import {ColorResetSlope078P2ColorDisplayModel as Display} from '../../src/algorithm32/implementation/color-reset-slope-078-p2/ColorResetSlope078P2ColorDisplayModel.js';
+const source=process.argv[2];assert.match(source,/^tmp\/experiments\/sky-aerosol-properties\/runs\/\d{5}-refine-cache$/);
+const run=createRun('refine-colors',[authenticate(source),identity('experiments/sky-aerosol-properties/refinement-cache-report.mjs')]);let failure=null;
+try{
+ const {PNG}=createRequire(import.meta.url)('pngjs'),display=new Display(),control=JSON.parse(read(source+'/control.json').toString()),lux=JSON.parse(read('tmp/experiments/sky-aerosol-properties/runs/00001-property-refine/registration.json').toString()).fixedDisplayLux;
+ const channels=centers.map((_,i)=>JSON.parse(gunzipSync(read(source+`/channel-${i}.json.gz`)).toString()));const summary=[],panels=[];
+ for(let j=0;j<control.jobs.length;j++)for(let order=0;order<4;order++){
+  const rays=control.rays.map((r,i)=>{const spectrum=channels.map(c=>c.records[order].jobs[j].cumulative[i]),pure=channels.map(c=>c.records[order].jobs[j].pure[i]),refined=channels.map(c=>c.records[order].jobs[j].refinedRays?.[i]??spectrum[c.channel]);return {...r,spectrum,pure,refined,color:color(spectrum)};});
+  summary.push({job:control.jobs[j],order:order+1,rays,metrics:metrics(rays)});
+  if(order===0||order===3)for(const field of control.fields)for(const exposure of [1,.125]){
+   const png=new PNG({width:field.width,height:field.height});
+   for(let p=0;p<field.count;p++){const spectrum=channels.map(c=>c.records[order].jobs[j].cumulative[field.first+p]),rgb=/** @type {[number,number,number]} */([0,1,2].map(k=>spectrum.reduce((s,v,c)=>s+v*rgbWeights[c][k],0)*exposure)),displayed=display.linearSrgbToDisplayRgb(rgb,{value:lux,units:'lux'}),x=p%field.width,y=Math.floor(p/field.width),i=4*((field.height-1-y)*field.width+x);for(let k=0;k<3;k++)png.data[i+k]=Math.round(displayed[k]*255);png.data[i+3]=255;}
+   const file=`${control.jobs[j].id}-N${order+1}-${field.view}${exposure===1?'':'-bracket'}.png`;run.write(file,PNG.sync.write(png));panels.push({job:control.jobs[j].id,order:order+1,field:field.view,exposure,file});
+  }
+ }
+ const n1=summary.find(s=>s.job.id==='noon5'&&s.order===1),parity=baseline.rays.map(r=>{const q=n1.rays.find(v=>v.id===r.id);return {ray:r.id,relativeY:q.color.Y/r.color.Y-1,maximumSpectralRelative:Math.max(...r.spectrum.map((x,c)=>Math.abs(q.spectrum[c]/x-1)))};});
+ const convergence=summary.flatMap(s=>s.rays.map(r=>({job:s.job.id,order:s.order,ray:r.id,relativeY:color(r.refined).Y/r.color.Y-1})));
+ run.write('summary.json',summary);run.write('n1-parity.json',parity);run.write('view-refinement.json',convergence);run.write('metrics.tsv',['condition\torder\thorizonY\tx\ty\tnearY\tglow\thorizonOver3',...summary.map(s=>[s.job.id,s.order,s.metrics.horizonY,...s.metrics.xy,s.metrics.nearY,s.metrics.glow,s.metrics.horizonOver3].join('\t'))].join('\n')+'\n');
+ const html=`<!doctype html><meta charset="utf-8"><title>Combo025 scattering-order comparison</title><style>body{font:16px system-ui;background:#eee;color:#111}img{width:360px;image-rendering:auto}section{display:flex;gap:20px}figure{margin:0}h2{margin-top:2em}</style><h1>Combo025: N1 and cumulative N1–4</h1><p>Actual diffuse sky fields, no direct Sun disk or scene objects. Same material, geometry and P2 display. Near-Sun image is a rectilinear 24°×16° view. Horizon image looks away from the Sun. Primary exposure is identical; the 0.125 bracket is separately identified.</p>${control.jobs.map(j=>`<h2>${j.id}: ${j.height}m, solar zenith${j.zenith.toFixed(4)}°</h2>${['horizon','sun'].map(f=>`<h3>${f}</h3>${[1,.125].map(e=>`<p>Exposure ${e}</p><section>${panels.filter(p=>p.job===j.id&&p.field===f&&p.exposure===e).map(p=>`<figure><figcaption>${p.order===1?'N1':'N1–4'}</figcaption><img src="${p.file}"></figure>`).join('')}</section>`).join('')}`).join('')}`).join('')}<p>Physical measurements: <a href="metrics.tsv">TSV</a>. Cache/direct N1 disagreement and final-view96→192 interval changes are separate numerical diagnostics.</p>`;run.write('comparison.html',html);
+ run.write('display.json',{lux,exposures:[1,.125],source,parentInputs:identity(source+'/control.json'),operations:'spectral radiance → bin-integrated CIE XYZ → signed linear sRGB → unchanged P2; no fitted white balance or candidate-specific exposure'});console.log(JSON.stringify({run:run.relative,metrics:summary.map(s=>({job:s.job.id,N:s.order,...s.metrics})),parity,maximumViewChange:Math.max(...convergence.map(x=>Math.abs(x.relativeY)))}));
+}catch(e){failure=e;run.write('failure.json',{error:String(e)});console.error(e);}finally{run.finish(failure,{source,scope:'Physical spectral field comparisons; not app screenshots or measured atmosphere validation'});}if(failure)process.exitCode=1;

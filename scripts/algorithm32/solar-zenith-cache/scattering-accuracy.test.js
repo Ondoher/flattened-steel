@@ -18,6 +18,19 @@ test('retains the deployed input identity unless the corrected policy is explici
 	assert.notEqual(corrected.numericalIdentity, original.numericalIdentity);
 });
 
+test('zero aerosol amount changes the physical field identity while preserving other construction inputs', () => {
+	const scene = inputs.createQualifiedSanJoseNauticalScene();
+	const original = inputs.createInputSet(scene);
+	const clear = inputs.createInputSet(scene, {mieAngstromBeta: 0});
+	assert.deepEqual(clear.buildRequest.transportSpec, {
+		...original.buildRequest.transportSpec,
+		atmosphere: {...original.buildRequest.transportSpec.atmosphere, mieAngstromBeta: 0},
+	});
+	assert.notEqual(clear.numericalIdentity, original.numericalIdentity);
+	for (const value of [-1, NaN, Infinity, null, '0'])
+		assert.throws(() => inputs.createInputSet(scene, {mieAngstromBeta: value}), /finite and nonnegative/u);
+});
+
 test('explicit aerosol qualification material preserves extinction and changes complete input identity', () => {
 	const scene = inputs.createQualifiedSanJoseNauticalScene();
 	const original = inputs.createInputSet(scene);

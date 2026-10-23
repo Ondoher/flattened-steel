@@ -101,9 +101,22 @@ export class LocationTimeController {
 
 	/** Advance to the next legacy location preset. */
 	nextLocation(state) {
+		return this.selectLocation(state, (state.locationIndex + 1) % FLAT32_LOCATION_PRESETS.length);
+	}
+
+	/** Select a geographic preset while retaining the selected time basis and offsets.
+	 * @param {Flat32LocationTimeState} state - Current location and time selections.
+	 * @param {number} index - Requested geographic preset index.
+	 * @returns {Flat32LocationTimeState} - Resolved observation and labels for the chosen location.
+	 * @throws {RangeError} - An unsupported index leaves the current state unchanged.
+	 */
+	selectLocation(state, index) {
+		if (!Number.isInteger(index) || index < 0 || index >= FLAT32_LOCATION_PRESETS.length) {
+			throw new RangeError('Flat32 location preset index is unsupported.');
+		}
 		return this._resolveState({
 			...state,
-			locationIndex: (state.locationIndex + 1) % FLAT32_LOCATION_PRESETS.length,
+			locationIndex: index,
 		});
 	}
 

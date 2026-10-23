@@ -22,15 +22,25 @@ occurred. ARM Spectral Validation and Sky Accuracy Dials remain suspended.
 
 ## Current default and rollback
 
-The default canonical package is
+The owner subsequently selected the Bruneton atmosphere with aerosol amount zero
+for both app modes on 2026-10-22. The current default also includes complete
+solar-coordinate coverage for all app elevations through 2 km, correcting an
+exact-sunset horizon gap without changing any previously stored spectral values.
+The algorithm remains corrected60/sun035 with monotone-cubic lookup. The
+[zero-aerosol atmosphere record](../../production-app/product-behavior/zero-aerosol-atmosphere.md)
+owns this physical selection, build, activation and new scene verification.
+The numerical scores and qualification captures below describe the original
+full-aerosol algorithm promotion; they are not new zero-aerosol paper scores.
+
+The preceding full-aerosol package remains intact:
 `8d185961cab8beb1e461cd1256be2875bb9a99e9f39e515b9288b92e5d2f6d37`,
 725426183 bytes,109 scenes and90 blocks. Its report is3061 bytes with SHA-256
 `76fcb62e8e70eececbbb7213591534042a38b8b28cfd577fda529de95034f5f7`.
-Only the distant-Sun package/report and matching scattering policy changed.
+During that preceding activation, only the distant-Sun package/report and matching scattering policy changed.
 Native48/Native15/N4, P2/FP32, atmospheric composition, local-Sun defaults and
 target-specific transition admission retain their existing selections.
 
-The immediately preceding canonical package
+The older canonical package
 `9a30749c6d4e6c23d7a84839788c068133051fbbd9bd93d07de8b18a6ee432ec`
 remains intact. Restore the authenticated
 [rollback selection](../../../../.codex-tmp/sky-accuracy-promotion/handoff-01/rollback-selection.js)
@@ -238,7 +248,8 @@ Readiness was rechecked after qualification and still reports
 started; the required bounded production review and independent audits remain open.
 External governance definitions/calibration records were not silently repaired.
 
-The requested default activation is complete. Remaining governance work is to
+The original full-aerosol default activation is complete and is superseded by the
+owner-selected zero-aerosol atmosphere linked above. Remaining governance work is to
 restore reviewer readiness and execute the plan's required bounded production
 review; it is not represented as complete by this activation. Reuse the completed
 packages and qualification evidence. Rebuilding their GPU fields is unnecessary

@@ -54,6 +54,16 @@ export const FLAT_OBSERVER_DOME_MAX_VIEW_RAY_EXTENT = {
 };
 export const CAMERA_FAR_SCENE_UNITS = 500;
 export const CAMERA_FIELD_OF_VIEW_DEGREES = 50;
+/** Vertical perspective framing presets; Natural approximates central-view framing, not total human vision. */
+export const FLAT32_FIELD_OF_VIEW_PRESETS = [
+	{degrees: 120, label: 'Ultra-wide (120°)'},
+	{degrees: 90, label: 'Wide (90°)'},
+	{degrees: 50, label: 'Default (50°)'},
+	{degrees: 35, label: 'Natural (35°)'},
+	{degrees: 20, label: 'Close (20°)'},
+	{degrees: 5, label: 'Sunset zoom (5°)'},
+	{degrees: 2, label: 'Sun close-up (2°)'},
+];
 /** @type {[number, number, number]} */
 export const CAMERA_LOOK_AT_SCENE = [0, 0, -1];
 export const CAMERA_NEAR_SCENE_UNITS = 0.002;

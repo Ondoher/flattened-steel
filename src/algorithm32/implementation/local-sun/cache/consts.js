@@ -112,3 +112,9 @@ export const LOCAL_SUN_CACHE_IRRADIANCE_SYMBOL = 'lightSource.irradiance';
  */
 export const LOCAL_SUN_COMPACT_QUALIFIED_RUNTIME_FAMILY =
 	'sha256:a08bde33cee4570d588b20c6e2e7fb461805b0058245a4d8900cdf20d4cd8d1a';
+/** Exact zero-aerosol counterpart of the retained compact physical/domain family.
+ * Derived from the same canonical seed/source/density/numerical facts with only
+ * mieAngstromBeta set to zero; actual medium values remain in every cache identity.
+ */
+export const LOCAL_SUN_COMPACT_ZERO_AEROSOL_RUNTIME_FAMILY =
+	'sha256:4a7540feccaa91fbe4d55e1ddefaa65516c4ad481af844fecb6da1ce6ec60961';

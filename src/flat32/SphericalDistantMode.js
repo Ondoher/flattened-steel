@@ -1,5 +1,5 @@
 import {Algorithm32} from '../algorithm32/implementation/algorithm32/Algorithm32.js';
-import {CanonicalAtmosphere} from '../algorithm32/implementation/canonical-atmosphere/CanonicalAtmosphere.js';
+import {createFlat32Atmosphere} from './Flat32Atmosphere.js';
 import {DistantSunLightSource} from '../algorithm32/implementation/distant-sun/DistantSunLightSource.js';
 import {SphericalEarthGeometry} from '../algorithm32/implementation/spherical-earth/SphericalEarthGeometry.js';
 import {StellarPointSetSource} from '../algorithm32/implementation/star-field/StellarPointSetSource.js';
@@ -44,7 +44,7 @@ export class SphericalDistantMode {
 		});
 		const profile = DEFAULT_NATIVE_PRODUCTION_PROFILE;
 		const spectralBasis = profile.spectral.basis;
-		const atmosphere = new CanonicalAtmosphere();
+		const atmosphere = createFlat32Atmosphere();
 		const geometry = configuration.sceneState.geometry;
 		const lightSource = new DistantSunLightSource({
 			angularRadius: configuration.sourceAngularRadius,

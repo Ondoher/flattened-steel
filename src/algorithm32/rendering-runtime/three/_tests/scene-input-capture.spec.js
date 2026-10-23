@@ -85,6 +85,27 @@ describe('SceneInputCapture', /** Called by Jasmine to register the named test s
 		);
 	});
 
+	it('encodes each frame with the live physical depth range and rejects invalid changes before rendering', () => {
+		let depthMax = {value: 250, units: 'meters'};
+		const renderer = createRendererDouble();
+		const capture = new SceneInputCapture({
+			THREE: createThreeDouble(),
+			scene: createSceneDouble(),
+			camera: createCameraDouble(),
+			viewportSize: pixelSize(2, 2),
+			resolveSceneDepthMax: () => depthMax,
+		});
+		capture.capture(renderer);
+		expect(capture._depthMaterial.uniforms.uSceneDepthMaxMeters.value).toBe(250);
+		depthMax = {value: 0.5, units: 'kilometers'};
+		capture.capture(renderer);
+		expect(capture._depthMaterial.uniforms.uSceneDepthMaxMeters.value).toBe(500);
+		expect(capture.getDiagnostics().sceneDepthMax).toEqual(depthMax);
+		depthMax = {value: 0, units: 'meters'};
+		expect(() => capture.capture(renderer)).toThrowError(/must be positive/);
+		expect(renderer.render).toHaveBeenCalledTimes(4);
+	});
+
 	it('hides scene-input-excluded objects only during capture', /** Called by Jasmine to exercise the named behavior. */ () => {
 		const excludedObject = {
 			visible: true,

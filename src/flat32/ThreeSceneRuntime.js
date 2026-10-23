@@ -25,6 +25,10 @@ export class ThreeSceneRuntime {
 	 * @type {Set<Flat32FrameBoundaryOperation>}
 	 */
 	_frameBoundaryOperations = new Set();
+	/** Dirty state retained while hidden or suspended. */
+	_renderRequested = false;
+	/** Prevent publications within a frame from scheduling duplicate callbacks. */
+	_rendering = false;
 	/** Restored-context publication boundary before rendering resumes; never enabled while context is lost. */
 	_restoringContext = false;
 
@@ -65,6 +69,7 @@ export class ThreeSceneRuntime {
 			};
 			signal.addEventListener('abort', pending.cancel, {once: true});
 			this._frameBoundaryOperations.add(pending);
+			this.requestRender();
 		});
 	}
 	/**
@@ -72,12 +77,12 @@ export class ThreeSceneRuntime {
 	 *
 	 * @param {HTMLCanvasElement} canvas - Receives the solid scene.
 	 * @param {(message: string) => void} onFailure - Reports browser failures.
-	 * @param {Flat32SceneRuntimeConfiguration} [configuration] - Rendering cadence; browser frames by default.
+	 * @param {Flat32SceneRuntimeConfiguration} [configuration] - Rendering cadence; on-demand browser frames by default.
 	 */
 	constructor(canvas, onFailure, configuration = {}) {
-		const frameCadence = configuration.frameCadence ?? 'animation-frame';
-		if (!['animation-frame', 'manual'].includes(frameCadence)) {
-			throw new RangeError('Flat32 frame cadence must be animation-frame or manual.');
+		const frameCadence = configuration.frameCadence ?? 'on-demand';
+		if (!['on-demand', 'animation-frame', 'manual'].includes(frameCadence)) {
+			throw new RangeError('Flat32 frame cadence must be on-demand, animation-frame or manual.');
 		}
 		this._frameCadence = frameCadence;
 		const sceneColorPrecision = configuration.sceneColorPrecision ?? 'float16';
@@ -125,6 +130,7 @@ export class ThreeSceneRuntime {
 		this._handleContextLost = this._handleContextLost.bind(this);
 		this._handleContextRestored = this._handleContextRestored.bind(this);
 		this._handleResize = this._handleResize.bind(this);
+		this._handleVisibilityChange = this._handleVisibilityChange.bind(this);
 	}
 
 	/**
@@ -309,6 +315,31 @@ void main() {
 		}
 
 		this._configureViewport();
+		this.requestRender();
+	}
+
+	/** Request one complete browser frame, coalescing changes until it renders.
+	 * Hidden, stopped and lost-context owners retain the request until resumed.
+	 * Manual cadence remains entirely caller-owned; disposed owners ignore requests.
+	 * @returns {void} - At most one browser callback is pending.
+	 */
+	requestRender() {
+		if (this._disposed || this._frameCadence === 'manual') return;
+		this._renderRequested = true;
+		if (!this._started || document.hidden || this._rendering || this._frameRequest !== null) return;
+		this._frameRequest = window.requestAnimationFrame(this._renderFrame);
+	}
+
+	/** Suspend GPU drawing while hidden and redraw the accepted state when visible.
+	 * @returns {void} - Pending publications remain queued for the next visible frame.
+	 */
+	_handleVisibilityChange() {
+		if (document.hidden) {
+			if (this._frameRequest !== null) window.cancelAnimationFrame(this._frameRequest);
+			this._frameRequest = null;
+			return;
+		}
+		this.requestRender();
 	}
 
 	/**
@@ -357,15 +388,23 @@ void main() {
 	}
 
 	/**
-	 * Render one active scene frame and schedule the next.
+	 * Render queued publications and one active frame; idle on-demand owners stop here.
 	 *
 	 * @returns {void}
 	 */
 	_renderFrame() {
+		this._frameRequest = null;
 		if (this._disposed || !this._started) {
 			return;
 		}
+		// The first synchronous frame allocates Three's shadow maps before the
+		// application checks its startup resources. Later hidden frames wait.
+		if (this._frameCadence !== 'manual' && document.hidden && this._frameCount > 0) {
+			this._renderRequested = true;
+			return;
+		}
 
+		this._rendering = true;
 		try {
 			for (const pending of this._frameBoundaryOperations) {
 				this._frameBoundaryOperations.delete(pending);
@@ -378,17 +417,20 @@ void main() {
 					pending.reject(error);
 				}
 			}
+			// Publications above are included in this frame. Only changes raised
+			// during rendering itself require a successor frame.
+			this._renderRequested = false;
 			this._renderOperation();
 			this._frameCount += 1;
 			this._canvas.dataset.flat32FrameCount = String(this._frameCount);
-			if (this._frameCadence === 'animation-frame') {
-				this._frameRequest = window.requestAnimationFrame(this._renderFrame);
-			}
 		} catch (error) {
 			this._started = false;
 			this._frameRequest = null;
 			this._onFailure(`Flat32 frame rendering failed: ${this._errorMessage(error)}`);
+		} finally {
+			this._rendering = false;
 		}
+		if (this._started && (this._frameCadence === 'animation-frame' || this._renderRequested)) this.requestRender();
 	}
 
 	/**
@@ -448,7 +490,7 @@ void main() {
 			this._canvas.dataset.flat32ContextState = 'restored';
 			if (this._resumeAfterContextRestoration) {
 				this._started = true;
-				if (this._frameCadence === 'animation-frame') this._renderFrame();
+				this.requestRender();
 			}
 		} catch (error) {
 			this._resumeAfterContextRestoration = false;
@@ -508,6 +550,7 @@ void main() {
 	/** Call this method to request one new shadow-map render after a source-state change. */
 	refreshShadowMaps() {
 		this._requireRenderer().shadowMap.needsUpdate = true;
+		this.requestRender();
 	}
 
 	/**
@@ -598,6 +641,7 @@ void main() {
 		this._renderOperation = operation;
 		this._directDisplayEnabled = false;
 		this._canvas.dataset.flat32RenderPath = 'algorithm32';
+		this.requestRender();
 	}
 
 	/**
@@ -613,7 +657,7 @@ void main() {
 		this._directDisplayEnabled = true;
 		this._renderOperation = this._renderDirectScene.bind(this);
 		this._canvas.dataset.flat32RenderPath = 'direct-three';
-		if (this._started) this._renderDirectScene();
+		this.requestRender();
 	}
 
 	/**
@@ -644,9 +688,10 @@ void main() {
 		this._configureViewport();
 		this._createDirectDisplayComposer();
 		window.addEventListener('resize', this._handleResize);
+		document.addEventListener('visibilitychange', this._handleVisibilityChange);
 		this._canvas.dataset.flat32RenderPath = 'direct-three';
 		this._started = true;
-		if (this._frameCadence === 'animation-frame') this._renderFrame();
+		if (this._frameCadence !== 'manual') this._renderFrame();
 	}
 
 	/**
@@ -690,6 +735,7 @@ void main() {
 		this._canvas.removeEventListener('webglcontextlost', this._handleContextLost);
 		this._canvas.removeEventListener('webglcontextrestored', this._handleContextRestored);
 		window.removeEventListener('resize', this._handleResize);
+		document.removeEventListener('visibilitychange', this._handleVisibilityChange);
 		this._contextLifecycleParticipants.clear();
 		this._renderOperation = this._renderDirectScene.bind(this);
 		this._composer?.dispose();

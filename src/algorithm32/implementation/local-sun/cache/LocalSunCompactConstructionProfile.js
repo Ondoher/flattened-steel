@@ -13,7 +13,7 @@ import {CanonicalExponentialCacheColumn} from '../../canonical-atmosphere/cache/
 import FlatHorizonPartitionedDirectionDomain from '../../../sampling-domains/direction/horizon-partitioned/FlatHorizonPartitionedDirectionDomain.js';
 import {CUBED_SPHERE_W27_DIRECTION_DOMAIN_OWNER} from '../../../sampling-domains/direction/cubed-sphere/consts.js';
 import {LOCAL_SUN_COMPACT_TRANSPORT_POLICY} from './compact-transport-consts.js';
-import {LOCAL_SUN_COMPACT_QUALIFIED_RUNTIME_FAMILY} from './consts.js';
+import {LOCAL_SUN_COMPACT_QUALIFIED_RUNTIME_FAMILY, LOCAL_SUN_COMPACT_ZERO_AEROSOL_RUNTIME_FAMILY} from './consts.js';
 import LocalSunFieldPacking from './LocalSunFieldPacking.js';
 import {CelestialSourceRoster} from '../../../celestial-source-support/CelestialSourceRoster.js';
 
@@ -176,7 +176,8 @@ export class LocalSunCompactConstructionProfile {
 	}
 
 	/** Creates a complete construction selection from bound physical models and explicit topology seeds.
-	 * Shared spectral, medium, phase and order facts come from their existing owners. Changed physical families remain unsupported here.
+	 * Shared spectral, medium, phase and order facts come from their existing owners.
+	 * The canonical atmosphere and its exact zero-aerosol counterpart are supported; other changed physical families remain unsupported.
 	 *
 	 * @param {LocalSunCompactConstructionProfileDefinition} definition - Physical owners and complete topology seed controls.
 	 * @throws {TypeError} - Owner family, spectral semantics or ingress shape is unsupported.
@@ -233,6 +234,8 @@ export class LocalSunCompactConstructionProfile {
 		};
 		new CanonicalExponentialCacheColumn(atmosphere);
 		let canonical = new CanonicalAtmosphere();
+		if (atmosphere.constants.mieAngstromBeta === 0)
+			canonical = new CanonicalAtmosphere({constants: {...canonical.constants, mieAngstromBeta: 0}});
 		if (
 			CanonicalValueHash.sha256Value(atmosphere.constants) !==
 				CanonicalValueHash.sha256Value(canonical.constants) ||
@@ -404,7 +407,9 @@ export class LocalSunCompactConstructionProfile {
 	createExecutionProfile(celestialSources = null) {
 		LocalSunCompactConstructionProfile.assert(this);
 		if (
-			this._runtimeFamilyIdentity() !== LOCAL_SUN_COMPACT_QUALIFIED_RUNTIME_FAMILY ||
+			![LOCAL_SUN_COMPACT_QUALIFIED_RUNTIME_FAMILY, LOCAL_SUN_COMPACT_ZERO_AEROSOL_RUNTIME_FAMILY].includes(
+				this._runtimeFamilyIdentity(),
+			) ||
 			![0, 1].includes(this.models.lightSource.configuration.referenceSpectralIncidentScale) ||
 			CanonicalValueHash.sha256Value(this.spectral.sourceIrradianceDensity.values) !==
 				CanonicalValueHash.sha256Value(NATIVE_SOURCE_IRRADIANCE_DENSITY.values)

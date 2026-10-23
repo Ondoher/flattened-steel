@@ -399,16 +399,16 @@ describeFullCache('Flat32 scene application (full production cache, explicit rec
 		expect(canvas.dataset.flat32RenderPath).toBe('algorithm32');
 		expect(context.isContextLost()).toBeFalse();
 
-		const locationButton = shell.querySelector('#flat32-location-control');
+		const locationSelect = shell.querySelector('#flat32-location-control');
 		const timeBasisButton = shell.querySelector('#flat32-time-basis-control');
 		const sunsetButton = shell.querySelector('button[data-flat32-globe-time="2"]');
 		const hourPlusButton = shell.querySelector('button[data-flat32-hour-offset="1"]');
-		expect(locationButton instanceof frame.contentWindow.HTMLButtonElement).toBeTrue();
+		expect(locationSelect instanceof frame.contentWindow.HTMLSelectElement).toBeTrue();
 		expect(timeBasisButton instanceof frame.contentWindow.HTMLButtonElement).toBeTrue();
 		expect(sunsetButton instanceof frame.contentWindow.HTMLButtonElement).toBeTrue();
 		expect(hourPlusButton instanceof frame.contentWindow.HTMLButtonElement).toBeTrue();
-		locationButton.click();
-		locationButton.click();
+		locationSelect.value = '0';
+		locationSelect.dispatchEvent(new frame.contentWindow.Event('change', {bubbles: true}));
 		timeBasisButton.click();
 		sunsetButton.click();
 		hourPlusButton.click();

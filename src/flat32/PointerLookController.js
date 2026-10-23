@@ -6,10 +6,12 @@ export class PointerLookController {
 	 * @param {HTMLCanvasElement} canvas - Receives pointer-lock requests.
 	 * @param {import('three').PerspectiveCamera} camera - Rotates with pointer movement.
 	 * @param {Flat32PointerLookChangeHandler} onChange - Reports lock state changes.
+	 * @param {Flat32RenderRequest} requestRender - Requests a frame after actual camera rotation.
 	 */
-	constructor(canvas, camera, onChange) {
+	constructor(canvas, camera, onChange, requestRender) {
 		this._canvas = canvas;
 		this._onChange = onChange;
+		this._requestRender = requestRender;
 		this._controls = new PointerLockControls(camera, canvas);
 		this._disposed = false;
 		this._handleCanvasClick = this._handleCanvasClick.bind(this);
@@ -46,6 +48,7 @@ export class PointerLookController {
 		this._canvas.addEventListener('click', this._handleCanvasClick);
 		this._controls.addEventListener('lock', this._handleLock);
 		this._controls.addEventListener('unlock', this._handleUnlock);
+		this._controls.addEventListener('change', this._requestRender);
 		this._onChange(false);
 	}
 
@@ -55,6 +58,7 @@ export class PointerLookController {
 	 */
 	setCamera(camera) {
 		this._controls.object = camera;
+		this._requestRender();
 	}
 
 	/** Release pointer lock, listeners, and Three control resources. */
@@ -67,6 +71,7 @@ export class PointerLookController {
 		this._canvas.removeEventListener('click', this._handleCanvasClick);
 		this._controls.removeEventListener('lock', this._handleLock);
 		this._controls.removeEventListener('unlock', this._handleUnlock);
+		this._controls.removeEventListener('change', this._requestRender);
 		this._controls.unlock();
 		this._controls.dispose();
 	}

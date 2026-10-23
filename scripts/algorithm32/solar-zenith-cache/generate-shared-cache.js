@@ -23,6 +23,8 @@ try {
 				'--solar-interpolation',
 				'--numerical-policy',
 				'--scattering-accuracy',
+				'--mie-angstrom-beta',
+				'--maximum-observer-altitude-meters',
 			].includes(name) ||
 			!value ||
 			value.startsWith('--') ||
@@ -46,9 +48,29 @@ try {
 			: DistantSunSceneCacheNumerics.createSurfaceLimit(Number(surfaceLimit));
 	const solarInterpolation = argumentsByName.get('--solar-interpolation');
 	const scatteringAccuracy = DistantSunScatteringAccuracy.accept(argumentsByName.get('--scattering-accuracy'));
+	const aerosolArgument = argumentsByName.get('--mie-angstrom-beta');
+	const altitudeArgument = argumentsByName.get('--maximum-observer-altitude-meters');
+	const maximumObserverAltitudeMeters = altitudeArgument === undefined ? undefined : Number(altitudeArgument);
+	if (
+		maximumObserverAltitudeMeters !== undefined &&
+		(!Number.isFinite(maximumObserverAltitudeMeters) ||
+			maximumObserverAltitudeMeters < 0 ||
+			maximumObserverAltitudeMeters >= 60000)
+	)
+		throw new RangeError('Maximum observer altitude must be finite, nonnegative and below 60000 metres.');
+	const mieAngstromBeta = aerosolArgument === undefined ? undefined : Number(aerosolArgument);
+	if (mieAngstromBeta !== undefined && (!Number.isFinite(mieAngstromBeta) || mieAngstromBeta < 0))
+		throw new RangeError('Aerosol optical-depth scale must be finite and nonnegative.');
 	if (solarInterpolation !== undefined && !['linear', 'monotone-cubic'].includes(solarInterpolation))
 		throw new RangeError('Unsupported solar interpolation.');
-	if (inputPath && (numericalPolicy || solarInterpolation || scatteringAccuracy !== 'legacy'))
+	if (
+		inputPath &&
+		(numericalPolicy ||
+			solarInterpolation ||
+			scatteringAccuracy !== 'legacy' ||
+			aerosolArgument !== undefined ||
+			altitudeArgument !== undefined)
+	)
 		throw new Error('Explicit input owns its numerical policy and interpolation.');
 	const outputDirectory = argumentsByName.get('--output');
 	if (Boolean(inputPath) !== Boolean(outputDirectory)) {
@@ -80,6 +102,8 @@ try {
 			numericalPolicy,
 			solarInterpolation,
 			scatteringAccuracy,
+			mieAngstromBeta,
+			maximumObserverAltitudeMeters,
 			signal: cancellation.signal,
 		});
 	}

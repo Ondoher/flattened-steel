@@ -202,6 +202,17 @@ float positiveBoundaryDistance(float distanceMeters) {
 	return max(distanceMeters, 0.0);
 }
 
+float groundEndpointToleranceMeters(float distanceMeters, float verticalDirection) {
+	// RGB24 capture has one physical depth quantum. Allow roundoff across the
+	// capture projection/interpolation and inverse-view/normalization stages;
+	// the plane intersection amplifies direction error near the horizon.
+	float depthQuantumMeters = uSceneDepthMaxMeters / 16777214.0;
+	float fp32Error = 32.0 * 1.1920928955078125e-7;
+	float distanceErrorMeters = fp32Error * max(distanceMeters, 1.0);
+	float intersectionErrorMeters = distanceErrorMeters / max(abs(verticalDirection), fp32Error);
+	return depthQuantumMeters + distanceErrorMeters + intersectionErrorMeters;
+}
+
 bool observerDomeBoundaryDistance(vec3 originMeters, vec3 direction, out float distanceMeters) {
 	if (!GEOMETRY_OBSERVER_DOME_ENABLED) {
 		distanceMeters = 0.0;
@@ -264,25 +275,29 @@ void chooseNearestBoundary(float candidateDistanceMeters, bool hasCandidate, ino
 	bool hasDomeBoundary = observerDomeBoundaryDistance(ray.originMeters, ray.direction, domeDistanceMeters);
 	bool hasAtmosphereBoundary = false;
 	float boundaryDistanceMeters = 0.0;
-	bool usesGroundBoundary = false;
 
 	chooseNearestBoundary(topDistanceMeters, hasTopBoundary, boundaryDistanceMeters, hasAtmosphereBoundary);
-	bool groundWouldWin = hasGroundBoundary
-		&& (!hasAtmosphereBoundary || groundDistanceMeters <= boundaryDistanceMeters);
 	chooseNearestBoundary(groundDistanceMeters, hasGroundBoundary, boundaryDistanceMeters, hasAtmosphereBoundary);
-	usesGroundBoundary = groundWouldWin;
 	chooseNearestBoundary(domeDistanceMeters, hasDomeBoundary, boundaryDistanceMeters, hasAtmosphereBoundary);
 
 	float fallbackSkyDistanceMeters = max(GEOMETRY_SCENE_SKY_RAY_LIMIT_METERS, 0.0);
 	float selectedBoundaryDistanceMeters = hasAtmosphereBoundary
 		? boundaryDistanceMeters
 		: fallbackSkyDistanceMeters;
+	float endpointDistanceMeters = max(sceneTerminationMeters, 0.0);
+	bool groundIsNearestBoundary = hasGroundBoundary
+		&& groundDistanceMeters <= selectedBoundaryDistanceMeters;
+	if (hasSceneEndpoint && groundIsNearestBoundary
+		&& abs(endpointDistanceMeters - groundDistanceMeters)
+			<= groundEndpointToleranceMeters(groundDistanceMeters, ray.direction.z)) {
+		endpointDistanceMeters = groundDistanceMeters;
+	}
 	float endDistanceMeters = hasSceneEndpoint
-		? min(max(sceneTerminationMeters, 0.0), selectedBoundaryDistanceMeters)
+		? min(endpointDistanceMeters, selectedBoundaryDistanceMeters)
 		: selectedBoundaryDistanceMeters;
 	bool hasGroundEndpoint = hasGroundBoundary && groundDistanceMeters <= endDistanceMeters;
 	bool valid = endDistanceMeters >= 0.0;
-	return PathBounds(0.0, max(0.0, endDistanceMeters), sceneTerminationMeters, hasSceneEndpoint, hasGroundEndpoint, valid);
+	return PathBounds(0.0, max(0.0, endDistanceMeters), endpointDistanceMeters, hasSceneEndpoint, hasGroundEndpoint, valid);
 }`,
 				),
 				ShaderContributions.createShaderSourceBlock(

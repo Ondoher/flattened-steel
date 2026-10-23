@@ -801,6 +801,7 @@ type LocalSunCompactTopologyControls = Readonly<{
 
 /** Ordinary-scene inputs for the explicit qualified compact selection. */
 type LocalSunCompactProfileSelectionRequest = Readonly<{
+	/** Optional explicit medium; omission retains the qualified canonical atmosphere. */ atmosphere?: LocalSunCompactProfileAtmosphere;
 	/** Exact time and geographic location. */ observation: GeometryObservation;
 	/** Physical observer position in flat model coordinates. */ observerPosition: Position;
 	/** Existing ordinary observer-dome ray extent. */ viewRayLimit: Distance;

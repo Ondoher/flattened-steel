@@ -51,8 +51,10 @@ export class EndpointScene {
 	}
 
 	/**
-	 * Create the matte ground plane.
+	 * Create the matte ground surface, covering every heading through the highest supported eye's horizon.
 	 *
+	 * @param {Flat32Mode['geometry']} geometry - Supplies the physical ground surface.
+	 * @param {Flat32ModeKind} kind - Selects spherical or flat endpoint construction.
 	 * @returns {THREE.Mesh} Return the ground mesh.
 	 */
 	_createGround(geometry, kind) {
@@ -72,13 +74,14 @@ export class EndpointScene {
 			},
 			...(kind === 'spherical-distant'
 				? {
-						widthSegments: 256,
-						heightSegments: 256,
+						widthSegments: 512,
+						heightSegments: 512,
 						groundVisualMesh: {
 							kind: 'local-spherical-patch',
-							xExtentSceneUnits: GROUND_SIZE_SCENE_UNITS / 2,
-							zMinSceneUnits: -GROUND_SIZE_SCENE_UNITS / 2,
-							zMaxSceneUnits: GROUND_SIZE_SCENE_UNITS / 2,
+							// Fixed coverage outlasts the 2 km horizon without rebuilding on elevation changes.
+							xExtent: {value: GROUND_SIZE_SCENE_UNITS / 2, units: 'scene-units'},
+							zMin: {value: -GROUND_SIZE_SCENE_UNITS / 2, units: 'scene-units'},
+							zMax: {value: GROUND_SIZE_SCENE_UNITS / 2, units: 'scene-units'},
 						},
 					}
 				: {}),

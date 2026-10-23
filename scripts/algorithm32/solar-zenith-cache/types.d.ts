@@ -171,12 +171,20 @@ type DistantSunSceneCachePositionMethod = 'anchored-radial';
 
 /** Explicit candidate selections for production compiler projections. */
 type DistantSunSceneCacheCompilerOptions = Readonly<{
+	/** Optional nonnegative aerosol optical-depth scale; zero removes aerosol extinction and scattering. Default 0.04. Profile projections require agreement with their medium. */ mieAngstromBeta?: number;
 	/** Explicit matched per-channel aerosol optics; omission preserves canonical atmosphere inputs. */ spectralAerosols?: readonly DistantSunSpectralAerosolOptics[];
 	/** Explicit corrected construction/mapping; omission retains deployed legacy. */ scatteringAccuracy?: DistantSunScatteringAccuracyMethod;
 	/** Explicit altitude construction owner; omission retains Native48. */ positionDomain?: SphericalNativePositionDomainSelection;
 	/** Stable-root surface candidate; omission retains historical equations. */ numericalPolicy?: DistantSunSceneCacheNumericalPolicy;
 	/** Required solar lookup support; omission retains the linear control. */ solarInterpolation?: DistantSunSolarInterpolationMethod;
 }>;
+
+/** Shared-package field coverage in addition to the physical compiler selections. */
+type SharedGenerationInventoryOptions = DistantSunSceneCacheCompilerOptions &
+	Readonly<{
+		/** Optional maximum observer altitude in metres; expands every solar bin's visible-coordinate inventory without changing scattering equations. */
+		maximumObserverAltitudeMeters?: number;
+	}>;
 
 /** Complete profile with the canonical model facts consumed by the point-local compiler.
  * Native15 and Direct40 retain their own spectra, placement, altitude owner, and numerical controls.
@@ -820,7 +828,7 @@ type SharedGenerationVerificationResult = {
 	/** Authenticated persisted metadata byte count. */ metadataBytes: number;
 };
 /** Explicit generator execution dependencies. */
-type SharedGenerationRequest = DistantSunSceneCacheCompilerOptions & {
+type SharedGenerationRequest = SharedGenerationInventoryOptions & {
 	/** Additional repository-contained source evidence authenticated before generation and retained in every derivation. */ inputParents?: readonly DistantSunSharedCacheDerivationParent[];
 	/** Optional exclusive contained run destination; omission retains the ordinary generated run root. */ outputDirectory?: string;
 	/** Local GPU-capable Chrome executable. */ chromePath: string;

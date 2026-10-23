@@ -61,6 +61,12 @@ export class StagedSceneRuntime {
 	get viewportSize() {
 		return this._host.viewportSize;
 	}
+	/** Request drawing only when this candidate owns the displayed view.
+	 * @returns {void} - Preparation leaves the accepted image idle.
+	 */
+	requestRender() {
+		if (this._published) this._host.requestRender();
+	}
 	/** Call this method to register normal context ownership on the actual renderer.
 	 * @param {Flat32ContextLifecycleParticipant} participant - Candidate resource owner.
 	 * @returns {Flat32ContextLifecycleRemoval} - Removal operation.
@@ -110,7 +116,7 @@ export class StagedSceneRuntime {
 	restoreDirectRendering() {
 		if (this._published) this._host.restoreDirectRendering();
 	}
-	/** Call this method to atomically adopt the staged height and retain the latest yaw/pitch.
+	/** Call this method to atomically adopt the staged height and retain the latest yaw/pitch and lens.
 	 * Host failure propagates; invoke revert and retain the previous runtime.
 	 * @returns {void} - Complete candidate scene and camera installed.
 	 */
@@ -119,6 +125,8 @@ export class StagedSceneRuntime {
 		this._previous = {scene: this._host.scene, camera: this._host.camera};
 		this._camera.quaternion.copy(this._host.camera.quaternion);
 		this._camera.aspect = this._host.camera.aspect;
+		this._camera.fov = this._host.camera.fov;
+		this._camera.zoom = this._host.camera.zoom;
 		this._camera.updateProjectionMatrix();
 		this._camera.updateMatrixWorld(true);
 		this._host.publishSceneView({scene: this._scene, camera: this._camera});

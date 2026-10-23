@@ -146,9 +146,16 @@ describe('Flat32 mode transaction', () => {
 		});
 		try {
 			for (const value of [5, 500]) {
-				await controller.switchTo('spherical-distant', {observerHeight: {value, units: 'meters'}});
+				await controller.switchTo('spherical-distant', {
+					observerHeight: {value, units: 'meters'},
+					cameraFieldOfViewDegrees: value === 5 ? 50 : 5,
+				});
 				expect(height).toBe(value);
 			}
+			await controller.switchTo('spherical-distant', {
+				observerHeight: {value: 500, units: 'meters'},
+				cameraFieldOfViewDegrees: 120,
+			});
 			await expectAsync(
 				controller.switchTo('spherical-distant', {observerHeight: {value: 2000, units: 'meters'}}),
 			).toBeRejectedWithError('height preparation failed');

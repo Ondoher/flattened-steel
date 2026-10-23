@@ -188,6 +188,8 @@ type SceneInputCaptureConfiguration = {
 
 	/** Largest representable scene-hit distance. */
 	readonly sceneDepthMax?: Distance;
+	/** Optional synchronous live depth scale, read before each capture and shared with the decoder. */
+	readonly resolveSceneDepthMax?: () => Distance;
 
 	/** Renderer scene-to-physical scale. */
 	readonly sceneScale?: SceneScale;

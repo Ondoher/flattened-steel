@@ -1,39 +1,23 @@
 # Active Topic
 
-Current active topic: production-app/product-behavior/sky-scene-controls.
-Focus: functionally completed M1-M4 sky/Sun, object and elevation controls.
-Elevations reuse the installed cache and scene. Local qualification is complete;
-production standards sign-off awaits global reviewer calibration.
+Current active topic: poc-experiments/engineering-studies/sky-aerosol-properties.
+Focus: planned aerosol-profile refinement and full-scattering confirmation of
+`combo025`, preserving solar glow while investigating the remaining gray horizon.
 
-Canonical entry: [Product behavior](production-app/product-behavior/README.md).
-Current status: [Controls execution](production-app/product-behavior/sky-scene-controls-execution.md).
-
-## Current boundary
-
-The owner selected M1 of the
-[sky, scene and elevation controls plan](production-app/product-behavior/sky-scene-controls-plan.md)
-for independent execution on 2026-10-22, then explicitly selected M1a through
-independent-execution, and has now selected the rest of the plan (M2-M4).
-All selected functionality is implemented and locally qualified. Video scene
-presets and remote publication remain unselected.
-M1's runtime/height foundations are implemented and evidenced. M1a proves local
-star visibility by reducing effective illumination independently from the disc,
-while preserving M1's physical measurement as the baseline. The execution record
-owns the captures, measurements and restoration correction.
-The prior [transition fix](production-app/product-behavior/shared-cache-transition-status.md)
-was included in the M1 checkpoint. The corrected
-Sun-focused distant cache remains the active default; its
-[promotion status](production-algorithm32/caches/sky-accuracy-promotion-status.md)
-owns activation and the outstanding standards-review limitation. ARM Spectral
-Validation and Sky Accuracy Dials remain suspended.
-
-Production reviewer context was refreshed for M1; stale all-lane calibration
-still blocks standards reviewer startup. Folder standards govern the changed paths.
-Checkpoint advice remains independent of standards-review readiness.
+Canonical entry: [Sky Aerosol Properties](poc-experiments/engineering-studies/sky-aerosol-properties/README.md).
+The owner selected a new contained experiment. Its first campaign is complete:
+420 independent N1 ray spectra and 42 GPU sky fields are verified. The combined
+25% loading/SSA0.95/g0.85 setting is a promising noon lead; lower-Sun and full-N4
+confirmation remain unresolved. Production settings are read-only.
+The follow-up refinement plan is selected for independent execution. Current
+progress and resumption instructions are in the linked status and refinement report.
+ARM Spectral Validation and Sky Accuracy Dials remain suspended. Production's
+on-demand rendering and zero-aerosol cache remain at their existing owners.
 
 ## Minimal Reload Sources
 
 1. [Repository instructions](../../AGENTS.md).
-2. [Product behavior](production-app/product-behavior/README.md).
-3. [Controls execution](production-app/product-behavior/sky-scene-controls-execution.md).
-4. [Controls plan](production-app/product-behavior/sky-scene-controls-plan.md).
+2. [Experiment entry](poc-experiments/engineering-studies/sky-aerosol-properties/README.md).
+3. [Design](poc-experiments/engineering-studies/sky-aerosol-properties/design.md).
+4. [Current plan](poc-experiments/engineering-studies/sky-aerosol-properties/refinement-plan.md).
+5. [Status](poc-experiments/engineering-studies/sky-aerosol-properties/status.md).

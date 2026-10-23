@@ -361,6 +361,8 @@ export class ShaderRuntimeInstaller {
 				performanceSampleIntervalFrames: request.setup.performanceSampleIntervalFrames,
 				performanceMaxPendingQueries: request.setup.performanceMaxPendingQueries,
 				...captureConfig,
+				resolveSceneDepthMax: () =>
+					/** @type {Distance} */ (bindingValues['geometry.sceneDepthMax'] ?? captureConfig.sceneDepthMax),
 			});
 			const captureValues = sceneInputCapture.bindingValues();
 

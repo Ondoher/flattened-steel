@@ -448,6 +448,10 @@ void main() {
 	 * @type {Distance}
 	 */
 	_sceneDepthMax;
+	/** Frame-owned physical depth scale, when the caller updates camera/scene support.
+	 * @type {(() => Distance) | null}
+	 */
+	_resolveSceneDepthMax;
 
 	/**
 	 * Completed capture-frame count.
@@ -500,6 +504,9 @@ void main() {
 			configuration.sceneScale === undefined ? SceneMath.scaleInMetersPerSceneUnit(1) : configuration.sceneScale;
 		this._sceneDepthMax =
 			configuration.sceneDepthMax === undefined ? DistanceMath.inMeters(100000) : configuration.sceneDepthMax;
+		this._resolveSceneDepthMax = configuration.resolveSceneDepthMax ?? null;
+		if (this._resolveSceneDepthMax !== null && typeof this._resolveSceneDepthMax !== 'function')
+			throw new TypeError('SceneInputCapture.resolveSceneDepthMax must be a function.');
 		SceneMath.assertSceneScale(this._sceneScale, 'SceneInputCapture.sceneScale');
 		DistanceMath.assertDistance(this._sceneDepthMax, 'SceneInputCapture.sceneDepthMax');
 
@@ -660,12 +667,23 @@ void main() {
 	 *
 	 * @param {SceneInputCaptureRenderer} renderer - The active Three renderer.
 	 * @returns {void} - No value.
+	 * @throws {TypeError} - The live depth resolver supplies an invalid physical distance.
+	 * @throws {RangeError} - The live depth range is not positive.
 	 */
 	capture(renderer) {
 		this._assertUsable();
 
 		if (!this.enabled) {
 			return;
+		}
+
+		if (this._resolveSceneDepthMax) {
+			const depthMax = this._resolveSceneDepthMax();
+			DistanceMath.assertDistance(depthMax, 'SceneInputCapture.sceneDepthMax');
+			const depthMaxMeters = DistanceMath.toMeters(depthMax);
+			if (depthMaxMeters <= 0) throw new RangeError('SceneInputCapture.sceneDepthMax must be positive.');
+			this._sceneDepthMax = depthMax;
+			this._depthMaterial.uniforms.uSceneDepthMaxMeters.value = depthMaxMeters;
 		}
 
 		this._updateCameraWorldPosition(

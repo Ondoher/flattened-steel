@@ -6,6 +6,9 @@ Stage 11.1-11.3 and parts of 11.4-11.6 are implemented. Remaining interaction/mi
 
 ## Working Documents
 
+- [On-demand rendering](on-demand-rendering.md) — Idle scenes draw no frames; camera, controls, publication and visibility changes resume drawing. Matched GPU output is pixel-identical to the previous renderer.
+- [Zero-aerosol atmosphere](zero-aerosol-atmosphere.md) — Owner-selected Bruneton atmosphere with aerosol amount zero in both modes; package rebuild and matched scene checks.
+- [Elevated horizon cache coverage](elevated-horizon-cache-coverage.md) — Exact-sunset black strip corrected by covering all solar bins through 2 km; old spectral bytes preserved and seven matched GPU views pass.
 - [Shared-cache transition allocation](shared-cache-transition-status.md) — Remove policy-only transition failures while retaining real GPU failure handling.
 - [Sky, scene and elevation controls execution](sky-scene-controls-execution.md) — Native controls and cache/scene-reusing elevations are implemented and locally qualified, with actual GPU comparisons and recovery checks. Standards sign-off awaits reviewer calibration.
 - [Flat32 sky, scene and elevation controls plan](sky-scene-controls-plan.md) — Selected M1-M4 functionality is complete; the production review dependency remains open. Video scenes are deferred.

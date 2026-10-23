@@ -9,11 +9,151 @@ suspended. The [plan](sky-scene-controls-plan.md) owns the outcomes and later wo
 
 ## Current state
 
+The owner selected on-demand rendering to eliminate repeated atmosphere work
+while the view is unchanged. The renderer now requests frames for view changes
+and complete asynchronous publications, idles after drawing and suspends while
+the document is hidden. Explicit continuous and manual cadence remain available.
+All 69 basic browser cases, type checking and app/Worker builds pass. Actual GPU
+checks show zero idle frames, pixel-identical output, and working control,
+publication and tab-visibility wakeups in both modes; the
+[on-demand rendering record](on-demand-rendering.md) owns this follow-up.
+
+The recurring black globe-horizon strip reproduces at the exact San Jose Sunset
+preset, Sun-facing at 2 km and 50° vertical FOV. Its cause is missing resident
+solar-coordinate neighbours: the per-scene coverage was calculated at 1.7 m,
+although elevated rays reach farther around the sphere. Loading the missing
+blocks removes all 2,495 black pixels in a matched GPU control. The generator now
+derives every solar bin's complete coverage through 2 km, including interpolation
+neighbours. All 109 package reconstructions pass, and every previously stored
+spectral value is bit-identical. The corrected package is published locally and
+the running app server selects it. All seven matched elevation, zoom, resize and
+DPR captures have zero black pixels; the full-frame GPU spectral mask has zero
+non-finite values. All eight server tests pass. The [coverage diagnosis](elevated-horizon-cache-coverage.md) owns
+the causal evidence and qualification boundary; the
+[zero-aerosol atmosphere record](zero-aerosol-atmosphere.md) owns package selection
+and rollback. Earlier clean captures used Sunset minus ten minutes and did not
+establish the exact Sunset view's correctness. No atmosphere equation, runtime
+shader or ground geometry was changed for this correction.
+
 All requested controls are exposed: Full / No atmosphere / Shader off, independent
-Sun percentages in No atmosphere, Objects On/Off, and 5/500/2000 m elevation.
+Sun percentages in No atmosphere, Objects On/Off, and 5/100/500/2000 m elevation.
+The owner also selected a vertical-FOV dropdown: 120° Ultra-wide, 90° Wide,
+50° Default, 35° Natural, 20° Close, 5° Sunset zoom and 2° Sun close-up.
+Natural is a central-view framing approximation (about 59° horizontally at
+16:9), not a fixed physiological field of vision. The existing 50° vertical
+default remains. Supplied diagnostic angles such as 78° remain supported and
+display as Custom. The owner allowed omitting the requested full-horizon 360°
+option; it needs a separate panoramic rendering mode, beyond this perspective
+control. No invalid 360° camera setting or inactive option is exposed.
+Framing changes update the retained camera's projection and preserve its position,
+direction, scene, atmosphere and scattering cache. Location/time transitions,
+mode stages, elevation preparation and failure recovery retain the newest FOV.
+Staged cameras copy the live lens at publication. FOV is excluded from physical
+runtime identity. Normal viewport resize retains the selected vertical angle.
+Aim the view at the Sun before selecting a close-up; zoom does not redirect it.
+The app/Worker rebuild, Flat32 type check and all 63 basic browser cases pass.
+The [GPU FOV qualification](../../../../.codex-tmp/flat32-sky-scene-controls/fov-proof-01/result.json)
+passes 16 actual captures across globe and flat/local, exercising every preset
+and returning to default, plus one resize check in each mode. The Sun stays
+centered to floating-point rounding, with zero GL/runtime rendering errors and
+the same runtime, scene, camera, endpoint meshes and cache retained. The globe
+uses the resolved San Jose geometric sunset; flat/local uses the same observation
+and its own finite-Sun placement. Matched comparisons:
+[globe default vs 5° sunset zoom](../../../../.codex-tmp/flat32-sky-scene-controls/fov-proof-01/spherical-distant-default-vs-sunset-zoom.png),
+[flat/local default vs 5° zoom](../../../../.codex-tmp/flat32-sky-scene-controls/fov-proof-01/flat-local-default-vs-sunset-zoom.png).
+Left is 50°, right 5°, with identical observation, eye, direction and display;
+the images concatenate original captures without color changes. This is camera
+qualification, not a new atmosphere-accuracy claim. Final comment-only JSDoc
+clarification does not change the executable behavior captured in the retained
+bundle. Standards sign-off remains blocked by the existing calibration dependency.
+The location chooser is a labelled native dropdown for San Jose, Union Glacier
+and 85°S, 0°. It selects a preset directly and reflects the authoritative location
+index when state is published. Existing time basis/offsets, elevation, sky and
+Sun selections follow the ordinary location-change path. Script callers can
+still cycle through presets with `nextLocation`; the app uses `selectLocation`.
+The app/Worker and browser bundles rebuild successfully. All 13 focused controls
+cases pass, including dropdown dispatch, selected-state reflection, location
+validation and preservation of independent scene choices. Flat32 type checking,
+scoped formatting and patch whitespace checks pass. The full-cache acceptance
+test's location interaction is updated and compiled; its lengthy GPU lifecycle
+scenario was not rerun for this native-control change.
+The owner requested the additional 100 m preset to inspect horizon blending
+between the original 5 m and 500 m views. It uses the existing observer-update
+path and the same cache and scene; the amount of globe horizon haze remains
+unverified rather than accepted as physically correct from a screenshot.
+The 100 m addition passes Flat32 type checking, the app/Worker and browser-test
+builds, and all 11 focused scene-control browser checks, including physical
+camera coordinates in both geometries and unchanged compact cache identity.
 Elevation changes reuse the installed cache, runtime, scene, camera and objects.
 They update the physical eye, lighting and prepared view coherently. Full scene
 replacement remains confined to geometry/source-family replacement.
+Owner-reported flat/local ground artifacts at 500 m are now corrected. Captured
+surface hits within the RGB24 depth quantum and propagated FP32 error allowance
+are reconciled with the analytic ground endpoint, only when ground is the nearest
+physical boundary. The compositor's existing endpoint guard remains unchanged.
+Capture and shader decoding now read the same live physical depth range each
+frame, including after elevation changes. No cache field or atmosphere changed
+for this rendering correction.
+
+The globe's direction-dependent black horizon strip is also corrected. The app
+passed obsolete `xExtentSceneUnits` / `zMinSceneUnits` / `zMaxSceneUnits` names,
+which the geometry adapter ignored. Its default local patch was asymmetric
+(40 km half-width, -80 to +12 km depth at the original 5 m observer) and remained
+too small after elevation changes. There is one local spherical ground mesh,
+not a second high-resolution overlay. The app now supplies the adapter's typed
+`xExtent` / `zMin` / `zMax` distances: a fixed 600 km square centered on the
+observer, covering the approximately 160 km horizon at the maximum supported
+2 km elevation in every heading. The mesh uses 512 by 512 cells (524,288 triangles,
+four times the previous triangle count), retaining a smooth spherical surface.
+Elevation updates still reuse the scene, mesh and scattering cache.
+
+The [globe GPU proof](../../../../.codex-tmp/flat32-sky-scene-controls/globe-coverage-01/result.json)
+checks 5/100/500/2000 m at four headings against the analytic sphere horizon:
+all 6,247,144 expected ground pixels are covered, with zero missing pixels.
+The matched pre-fix patch missed 143,834 pixels. The gate allows two silhouette
+rows for tessellation/raster rounding; the corrected captures have zero missing
+pixels even before that allowance. Both variants retain the same current
+zero-aerosol atmosphere, package, shader, camera and display. Only the endpoint
+mesh source differs. All scene, mesh and cache reuse checks pass. Matched
+[500 m](../../../../.codex-tmp/flat32-sky-scene-controls/globe-coverage-report-01/comparison-500.png)
+and [2 km](../../../../.codex-tmp/flat32-sky-scene-controls/globe-coverage-report-01/comparison-2000.png)
+images show the old patch on the left, correction on the right; their
+[derivation record](../../../../.codex-tmp/flat32-sky-scene-controls/globe-coverage-report-01/report.json)
+authenticates the original captures and concatenation. The app and Worker rebuilt.
+All 13 focused browser cases pass, including ground-mesh ray intersections above
+and below the horizon at eight headings and all four heights. Flat32 type checking
+and scoped formatting pass. The first two new-test attempts are retained: one
+omitted source/geometry binding in its setup; the other used almost-cardinal
+floating-point rays on triangle seams. The accepted test initializes the normal
+mode owner and uses exact, normalized cardinal directions. Standards sign-off
+still awaits the existing reviewer-calibration dependency.
+
+The [final GPU regression](../../../../.codex-tmp/flat32-sky-scene-controls/ground-fix-03/result.json)
+covers 5/100/500/2000 m at three headings: 4,862,049 visible surface pixels,
+zero incorrect attenuation skips, compared with 2,178,713 skips in the retained
+baseline. [Ten actual shader boundary controls](../../../../.codex-tmp/flat32-sky-scene-controls/ground-fix-03/boundary-cases.json)
+also pass, including rounded ground hits, nearer objects, absent scene hits and
+genuine endpoints beyond ground, atmosphere top and dome. Actual matched images:
+[100 m](../../../../.codex-tmp/flat32-sky-scene-controls/ground-fix-03/comparison-100.png),
+[500 m](../../../../.codex-tmp/flat32-sky-scene-controls/ground-fix-03/comparison-500.png),
+[2 km](../../../../.codex-tmp/flat32-sky-scene-controls/ground-fix-03/comparison-2000.png).
+Left is the original view, right is the correction; both use the same zero-aerosol
+atmosphere, cache, camera and display. The app and Worker rebuilt successfully.
+All 43 focused CPU specs and engine/Flat32 type checks pass. Standards review
+remains unavailable under stale global reviewer calibration.
+
+The first fix used an insufficient roundoff allowance and its failed/diagnostic
+runs remain preserved. The final allowance includes 32 FP32 epsilon across
+capture projection/interpolation and inverse-view/normalization, propagated
+through the ground-plane division. This is bounded GPU qualification on the
+tested RTX 2060/Chrome 155 target, not a universal rounding-error proof.
+
+Initial diagnostic captures, shader source and observed uniforms remain in
+[ground diagnosis](../../../../.codex-tmp/flat32-sky-scene-controls/ground-diagnosis-02/result.json),
+with [before](../../../../.codex-tmp/flat32-sky-scene-controls/ground-diagnosis-02/before.png)
+and [diagnostic override](../../../../.codex-tmp/flat32-sky-scene-controls/ground-diagnosis-02/attenuated.png)
+images. Earlier local qualification did not catch this visual defect; removing
+the cutoff was a diagnostic override, not the production correction.
 The remaining-controls baseline is `.codex-tmp/review-standards/session-dqMRIJ/baseline.json`
 at checkpoint b49d3740. The M4 governing review retains the earlier M1 baseline so the entire
 controls unit remains in scope, including committed M1/M1a changes.

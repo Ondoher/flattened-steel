@@ -12,6 +12,7 @@ suspended. Other lanes retain their own dispositions.
 
 ## Working Documents
 
+- [Sky Aerosol Properties](sky-aerosol-properties/README.md) — Active controlled study of absorption, loading and solar glow.
 - [ARM Spectral Validation](arm-spectral-validation/README.md)
 - [Sky Inter-Order Altitude Reconstruction](sky-altitude-reconstruction/README.md)
 

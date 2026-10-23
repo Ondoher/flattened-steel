@@ -95,6 +95,7 @@ export class ModeController {
 		const configurationIdentity = JSON.stringify({
 			...state,
 			observerHeight: undefined,
+			cameraFieldOfViewDegrees: undefined,
 			skyRenderMode: undefined,
 			sunIlluminationScale: undefined,
 			sunDiscBrightnessScale: undefined,

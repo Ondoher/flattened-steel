@@ -11,15 +11,83 @@ import {SHARED_GENERATION_CONTROL_ROOT, SHARED_GENERATION_CONTROL_CATALOG_SHA256
 
 /** Immutable-control authenticator and common-coordinate-ledger builder. */
 export default class DistantSunSharedCacheGenerationInventory {
+	/** Expand authenticated layout coverage to the selected observer ceiling and both solar-bin edges.
+	 * The original ledger remains a subset; its protected source record is never modified.
+	 *
+	 * @param {DistantSunSceneCacheLedgerRecord} ledger - Authenticated layout control.
+	 * @param {DistantSunSharedCacheSceneSelection} selection - Physical solar-angle bin represented by the scene.
+	 * @param {number | undefined} maximumObserverAltitudeMeters - Requested observer ceiling in metres.
+	 * @returns {DistantSunSceneCacheLedgerRecord} - Interpolation-closed derived layout.
+	 */
+	_extendObserverSupport(ledger, selection, maximumObserverAltitudeMeters) {
+		if (maximumObserverAltitudeMeters === undefined) return ledger;
+		let height = Math.max(ledger.support.observerAltitude.value, maximumObserverAltitudeMeters);
+		let support = {
+			...ledger.support,
+			id: `${ledger.support.id}-observer-through-${height}m`,
+			observerAltitude: {value: height, units: /** @type {const} */ ('meters')},
+		};
+		let domains = {
+			positionDomain: NATIVE_48_POSITION_DOMAIN_OWNER,
+			solarZenithDomain: SOLAR_ZENITH_180_DOMAIN_OWNER,
+			outgoingDirectionDomain: CUBED_SPHERE_W27_DIRECTION_DOMAIN_OWNER,
+			spectralBasis: NATIVE_15_SPECTRAL_BASIS,
+		};
+		let edges = [selection.minimumInputDegrees, selection.maximumInputExclusiveDegrees].map(
+			(degrees) =>
+				new DistantSunSceneCacheLedger({
+					sceneSun: ledger.sceneSun,
+					support: {...support, observerSolarZenith: {value: (degrees * Math.PI) / 180, units: 'radians'}},
+					...domains,
+				}),
+		);
+		let firstPackedRow = 0;
+		let rows = ledger.rows.map((row, index) => {
+			let firstSolarZenithIndex = Math.min(row.firstSolarZenithIndex, edges[0].rows[index].firstSolarZenithIndex);
+			let lastSolarZenithIndex = Math.max(row.lastSolarZenithIndex, edges[1].rows[index].lastSolarZenithIndex);
+			let packedRowCount = lastSolarZenithIndex - firstSolarZenithIndex + 1;
+			let expanded = {...row, firstSolarZenithIndex, lastSolarZenithIndex, firstPackedRow, packedRowCount};
+			firstPackedRow += packedRowCount;
+			return expanded;
+		});
+		return DistantSunSceneCacheLedger.fromRecord(
+			{
+				...ledger,
+				support,
+				rows,
+				retainedBlockCount: firstPackedRow,
+				oracleByteLength:
+					firstPackedRow *
+					CUBED_SPHERE_W27_DIRECTION_DOMAIN_OWNER.directionCount *
+					NATIVE_15_SPECTRAL_BASIS.channelCount *
+					Float32Array.BYTES_PER_ELEMENT,
+				exactSeamByteLength:
+					firstPackedRow *
+						CUBED_SPHERE_W27_DIRECTION_DOMAIN_OWNER.uniqueDirectionCount *
+						NATIVE_15_SPECTRAL_BASIS.channelCount *
+						Float32Array.BYTES_PER_ELEMENT +
+					CUBED_SPHERE_W27_DIRECTION_DOMAIN_OWNER.directionCount * Uint16Array.BYTES_PER_ELEMENT,
+			},
+			domains,
+		).toRecord();
+	}
+
 	/**
 	 * Call this method to load all control metadata and derive the exact 8x8 union.
 	 * Missing, corrupt, incompatible, or incomplete control data rejects; callers must stop before generation.
 	 *
 	 * @param {SharedGenerationFiles} files - Repository-contained artifact reader.
-	 * @param {DistantSunSceneCacheCompilerOptions} [options] - Explicit candidate policy and lookup support.
+	 * @param {SharedGenerationInventoryOptions} [options] - Explicit candidate policy and lookup support.
 	 * @returns {Promise<SharedGenerationInventory>} - Validated control and common field request.
 	 */
 	async load(files, options = {}) {
+		if (
+			options.maximumObserverAltitudeMeters !== undefined &&
+			(!Number.isFinite(options.maximumObserverAltitudeMeters) ||
+				options.maximumObserverAltitudeMeters < 0 ||
+				options.maximumObserverAltitudeMeters >= 60000)
+		)
+			throw new RangeError('Maximum observer altitude must be finite, nonnegative and below 60000 metres.');
 		const root = SHARED_GENERATION_CONTROL_ROOT;
 		const catalogPath = `${root}/distant-sun-runtime-catalog-${SHARED_GENERATION_CONTROL_CATALOG_SHA256}.json`;
 		const catalogBytes = await files.read(catalogPath);
@@ -55,7 +123,7 @@ export default class DistantSunSharedCacheGenerationInventory {
 			const ledgerBytes = await files.read(`${base}/${manifest.ledgerPath}`);
 			if (files.hash(ledgerBytes) !== manifest.ledgerSha256)
 				throw new Error('Control ledger authentication failed.');
-			const ledger = DistantSunSceneCacheLedger.fromRecord(JSON.parse(ledgerBytes.toString('utf8')), {
+			let ledger = DistantSunSceneCacheLedger.fromRecord(JSON.parse(ledgerBytes.toString('utf8')), {
 				positionDomain: NATIVE_48_POSITION_DOMAIN_OWNER,
 				solarZenithDomain: SOLAR_ZENITH_180_DOMAIN_OWNER,
 				outgoingDirectionDomain: CUBED_SPHERE_W27_DIRECTION_DOMAIN_OWNER,
@@ -63,6 +131,7 @@ export default class DistantSunSharedCacheGenerationInventory {
 			}).toRecord();
 			if (manifest.exactSeamPayload.byteLength !== ledger.retainedBlockCount * 4058 * 15 * 4)
 				throw new Error('Control spectral length is incompatible.');
+			ledger = this._extendObserverSupport(ledger, manifest.selection, options.maximumObserverAltitudeMeters);
 			const indexBytes = await files.read(
 				`${base}/${manifest.logicalToUniqueIndex.path}`,
 				manifest.logicalToUniqueIndex,
@@ -90,7 +159,8 @@ export default class DistantSunSharedCacheGenerationInventory {
 			});
 		}
 		const ordered = [...coordinates.values()].sort((a, b) => a[0] - b[0] || a[1] - b[1]);
-		if (ordered.length !== 5494) throw new Error('The control union differs from the accepted 5494 coordinates.');
+		if (options.maximumObserverAltitudeMeters === undefined && ordered.length !== 5494)
+			throw new Error('The control union differs from the accepted 5494 coordinates.');
 		if (options.solarInterpolation === 'monotone-cubic') {
 			for (const scene of scenes)
 				for (const row of scene.ledger.rows) {
@@ -119,7 +189,11 @@ export default class DistantSunSharedCacheGenerationInventory {
 		const blocks = [...groups.values()].sort(
 			(a, b) => a.tile.altitudeIndex - b.tile.altitudeIndex || a.tile.solarZenithIndex - b.tile.solarZenithIndex,
 		);
-		if (options.solarInterpolation !== 'monotone-cubic' && blocks.length !== 89)
+		if (
+			options.maximumObserverAltitudeMeters === undefined &&
+			options.solarInterpolation !== 'monotone-cubic' &&
+			blocks.length !== 89
+		)
 			throw new Error('The control union differs from the accepted 89 blocks.');
 		let firstPackedRow = 0;
 		const rows = scenes[0].ledger.rows.map((row) => {

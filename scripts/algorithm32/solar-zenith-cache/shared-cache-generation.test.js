@@ -14,6 +14,54 @@ import DistantSunSharedCacheGenerator from './DistantSunSharedCacheGenerator.js'
 import DistantSunPointLocalCacheCompilerHost from './DistantSunPointLocalCacheCompilerHost.js';
 import DistantSunSharedCacheGenerationInventory from './DistantSunSharedCacheGenerationInventory.js';
 import {SHARED_GENERATION_RUN_ROOT} from './consts.js';
+import DistantSunSharedCacheSupport from '../../../src/algorithm32/implementation/distant-sun/cache/DistantSunSharedCacheSupport.js';
+
+test('elevated observer inventory retains original rows and closes both solar-bin edges through 2 km', async () => {
+	const repositoryRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
+	const files = new DistantSunSharedCacheGenerationFiles(repositoryRoot);
+	const owner = new DistantSunSharedCacheGenerationInventory();
+	const original = await owner.load(files, {solarInterpolation: 'monotone-cubic'});
+	const expanded = await owner.load(files, {
+		solarInterpolation: 'monotone-cubic',
+		maximumObserverAltitudeMeters: 2000,
+	});
+	assert.deepEqual(expanded.buildRequest, original.buildRequest, 'Coverage must not change scattering equations.');
+	assert.ok(expanded.coordinates.length > original.coordinates.length);
+	const all = new Set(expanded.coordinates.map((coordinate) => coordinate.join(':')));
+	for (const coordinate of original.coordinates) assert.ok(all.has(coordinate.join(':')));
+	for (const scene of expanded.scenes) {
+		assert.equal(scene.ledger.support.observerAltitude.value, 2000);
+		for (const row of scene.ledger.rows) {
+			const old = original.scenes[scene.ordinal].ledger.rows[row.altitudeIndex];
+			assert.ok(row.firstSolarZenithIndex <= old.firstSolarZenithIndex);
+			assert.ok(row.lastSolarZenithIndex >= old.lastSolarZenithIndex);
+			// Independent sphere visibility bound, including the full input bin.
+			const nextAltitude =
+				row.altitudeIndex === 47 ? 60000 : scene.ledger.rows[row.altitudeIndex + 1].altitude.value;
+			const reachDegrees =
+				((Math.acos(6360000 / 6362000) + Math.acos(6360000 / (6360000 + nextAltitude))) * 180) / Math.PI;
+			const first = Math.max(0, Math.floor(scene.manifest.selection.minimumInputDegrees - reachDegrees - 0.5));
+			const last = Math.min(
+				179,
+				Math.ceil(scene.manifest.selection.maximumInputExclusiveDegrees + reachDegrees - 0.5),
+			);
+			assert.ok(row.firstSolarZenithIndex <= first);
+			assert.ok(row.lastSolarZenithIndex >= last);
+			for (let z = Math.max(0, first - 1); z <= Math.min(179, last + 1); z++)
+				assert.ok(all.has(`${row.altitudeIndex}:${z}`));
+		}
+	}
+	// These actual Q30 sunset lookups were absent from the published resident window.
+	for (const altitude of [43, 44, 45]) assert.ok(all.has(`${altitude}:79`));
+	const graph = {
+		scenes: expanded.scenes.map((scene) => ({...scene, requiredBlockIds: []})),
+		blockIndex: {blocks: expanded.blocks.map((block, i) => ({...block, id: String(i)}))},
+	};
+	const support = new DistantSunSharedCacheSupport(graph);
+	for (let ordinal = 0; ordinal <= 108; ordinal++) assert.ok(support.getRequiredBlocks(ordinal).length <= 24);
+	for (const value of [-1, NaN, Infinity, 60000, '2000', null])
+		await assert.rejects(owner.load(files, {maximumObserverAltitudeMeters: value}), /observer altitude/u);
+});
 
 /** Creates a two-row control whose duplicated logical directions have independent expected bytes. */
 function fixture() {

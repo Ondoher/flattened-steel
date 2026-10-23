@@ -101,6 +101,8 @@ export const DistantSunPointLocalProfileCompilerInputs = Object.freeze({
 		).buildRequest.transportSpec;
 		const atmosphere = profile.models.atmosphere;
 		const constants = atmosphere.constants;
+		if (options.mieAngstromBeta !== undefined && options.mieAngstromBeta !== constants.mieAngstromBeta)
+			throw new RangeError('Compiler aerosol optical-depth scale disagrees with the execution profile.');
 		const channels = Aerosols.project(spectrumChannels(profile), options.spectralAerosols);
 		const domains = {
 			position: {

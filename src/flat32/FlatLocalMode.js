@@ -1,6 +1,5 @@
 import {
 	Algorithm32,
-	CanonicalAtmosphere,
 	FlatEarthGeometry,
 	LocalSunLightSource,
 	LocalSunCompactProfileSelection,
@@ -13,6 +12,7 @@ import {
 import {DEFAULT_NATIVE_PRODUCTION_PROFILE} from '../algorithm32/profiles/native-15/native-15-profile.js';
 import DistanceMath from '../algorithm32/math/DistanceMath.js';
 import {createFlat32ColorDisplayModel} from './Flat32ColorDisplayModel.js';
+import {createFlat32Atmosphere} from './Flat32Atmosphere.js';
 import {ViewPresentationFilterRegistry} from '../algorithm32/implementation/presentation-filter/ViewPresentationFilterRegistry.js';
 import {Flat32SceneControls} from './Flat32SceneControls.js';
 import {
@@ -67,6 +67,7 @@ export class FlatLocalMode {
 				},
 				viewRayLimit: FLAT_OBSERVER_DOME_MAX_VIEW_RAY_EXTENT,
 				maximumScatteringOrder: configuration.maximumScatteringOrder,
+				atmosphere: createFlat32Atmosphere(),
 			});
 			this._geometry = /** @type {FlatEarthGeometry} */ (this._compactProfile.models.geometry);
 			this._sceneScale = configuration.sceneScale;
@@ -123,7 +124,7 @@ export class FlatLocalMode {
 		this._spectralChannelCount = spectralBasis.channelCount;
 		this._algorithm32 = new Algorithm32({
 			lightSource,
-			atmosphere: new CanonicalAtmosphere(),
+			atmosphere: createFlat32Atmosphere(),
 			geometry,
 			groundBoundary: null,
 			color: createFlat32ColorDisplayModel(selections.colorDisplayModelConfiguration, presentationFilterRegistry),

@@ -59,7 +59,7 @@ export class LocalSunCompactProfileSelection {
 		return new LocalSunCompactConstructionProfile({
 			geometry,
 			lightSource,
-			atmosphere: new CanonicalAtmosphere(),
+			atmosphere: request.atmosphere ?? new CanonicalAtmosphere(),
 			groundBoundary: null,
 			maximumScatteringOrder: request.maximumScatteringOrder,
 			topologyControls: {

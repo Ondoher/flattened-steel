@@ -179,6 +179,8 @@ type Flat32ContextLifecycleRemoval = () => void;
 type Flat32AtmosphereFailureHandler = (message: string) => void;
 /** Observer of pointer-lock camera control changes. */
 type Flat32PointerLookChangeHandler = (locked: boolean) => void;
+/** Coalesced request to draw the latest accepted scene after a visible change. */
+type Flat32RenderRequest = () => void;
 /** Supported atmospheric geometry and source pairings.
  *
  * - **"spherical-distant"** - Spherical geometry with a distant source.
@@ -204,6 +206,7 @@ type Flat32SceneControlActions = {
 	/** Independent Sun fractions. */ onSun: (selection: Flat32SunPresentationConfiguration) => void;
 	/** Toggle review objects. */ onObjects: () => void;
 	/** Prepare a supported physical height. */ onElevation: (height: Distance) => void;
+	/** Select the camera's vertical field of view in degrees. */ onFieldOfView: (degrees: number) => void;
 };
 /** Initial controls, including existing application/proof-harness boolean input. */
 type Flat32SceneControlConfiguration = Flat32SunPresentationConfiguration &
@@ -211,11 +214,13 @@ type Flat32SceneControlConfiguration = Flat32SunPresentationConfiguration &
 		/** Explicit mode wins over the legacy boolean. */ skyRenderMode?: Flat32SkyRenderMode;
 		/** Existing true/false callers map to Full/Shader off. */ atmosphereShaderEnabled?: boolean;
 		/** Selected height; omission retains 5 m. */ observerHeight?: Distance;
+		/** Initial vertical perspective FOV in degrees; omission retains 50. */ cameraFieldOfViewDegrees?: number;
 	}>;
 /** Accepted application-owned independent scene controls. */
 type Flat32SceneControlSelection = Flat32SunPresentationSelection & {
 	/** Canonical view presentation. */ skyRenderMode: Flat32SkyRenderMode;
 	/** Height above ground, normalized to metres. */ observerHeight: Distance;
+	/** Vertical perspective FOV in degrees. */ cameraFieldOfViewDegrees: number;
 };
 
 /** Scene owner whose time controls select the observation instant.
@@ -412,6 +417,7 @@ interface Flat32SceneStage {
 
 /** Independently implementable scene and renderer coordination required by atmosphere installation. */
 interface Flat32SceneRuntimeCapability {
+	/** Call after changing the accepted view; manual owners retain caller-owned stepping. */ requestRender(): void;
 	/** Scene receiving atmosphere integration. */ readonly scene: Flat32SceneCapability;
 	/** Output canvas and diagnostic data. */ readonly canvas: HTMLCanvasElement;
 	/** Current perspective camera. */ readonly camera: Flat32PerspectiveCameraCapability;
@@ -564,6 +570,7 @@ type Flat32LocationTimeState = {
 /** Location/time state paired with the selected atmospheric scene mode. */
 type Flat32ApplicationState = Flat32LocationTimeState &
 	Flat32SunPresentationConfiguration & {
+		/** Live vertical perspective FOV in degrees; legacy callers omit it for the 50-degree default. */ cameraFieldOfViewDegrees?: number;
 		/** Retained review-object visibility; true by default. */ reviewObjectsEnabled?: boolean;
 		/** Canonical view selection; optional only for existing direct controller harnesses. */ skyRenderMode?: Flat32SkyRenderMode;
 		/** Selected physical height; optional only for existing direct controller harnesses. */ observerHeight?: Distance;
@@ -893,14 +900,15 @@ type Flat32FrameBoundaryOperation = {
 
 /** Renderer cadence selected by the scene owner.
  *
- * - **"animation-frame"** - Ordinary browser animation-frame rendering.
+ * - **"on-demand"** - Render only requested changes, coalesced on browser animation frames.
+ * - **"animation-frame"** - Explicit continuous browser animation-frame rendering.
  * - **"manual"** - Caller-owned complete frame stepping between publications.
  */
-type Flat32FrameCadence = 'animation-frame' | 'manual';
+type Flat32FrameCadence = 'on-demand' | 'animation-frame' | 'manual';
 
 /** Caller-owned scene rendering configuration. */
 type Flat32SceneRuntimeConfiguration = Readonly<{
-	/** Cadence; omission selects ordinary browser animation frames. */
+	/** Cadence; omission selects on-demand browser frames. */
 	frameCadence?: Flat32FrameCadence;
 	/** Scene-linear color storage; omission retains the existing half-float path. */
 	sceneColorPrecision?: Flat32SceneColorPrecision;

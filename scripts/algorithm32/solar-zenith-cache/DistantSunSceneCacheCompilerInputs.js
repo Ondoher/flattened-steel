@@ -55,6 +55,9 @@ export const DistantSunSceneCacheCompilerInputs = {
 	 * @returns {DistantSunSceneCacheCompilerInputSet} - The compiler request, ledger, scene, and identities.
 	 */
 	createInputSet(scene, options = {}) {
+		const mieAngstromBeta = options.mieAngstromBeta === undefined ? 0.04 : options.mieAngstromBeta;
+		if (!Number.isFinite(mieAngstromBeta) || mieAngstromBeta < 0)
+			throw new RangeError('Compiler aerosol optical-depth scale must be finite and nonnegative.');
 		const positionDomain = SphericalNativePositionDomains.select(options.positionDomain);
 		const geometryPolicy = DistantSunSceneCacheNumerics.accept(options.numericalPolicy);
 		const accuracy = DistantSunScatteringAccuracy.accept(options.scatteringAccuracy);
@@ -130,7 +133,7 @@ export const DistantSunSceneCacheCompilerInputs = {
 				mieScaleHeightMeters: 1200,
 				rayleighCoefficientScalePerMeter: 0.00000124062,
 				mieAngstromAlpha: 0.8,
-				mieAngstromBeta: 0.04,
+				mieAngstromBeta,
 				mieSingleScatteringAlbedo: 0.8,
 				miePhaseFunctionG: 0.7,
 				ozone: {
@@ -171,6 +174,7 @@ export const DistantSunSceneCacheCompilerInputs = {
 				geometryPolicy ||
 				accuracy !== 'legacy' ||
 				options.spectralAerosols !== undefined ||
+				options.mieAngstromBeta !== undefined ||
 				options.solarInterpolation === 'monotone-cubic' ||
 				positionDomain !== NATIVE_48_POSITION_DOMAIN_OWNER
 					? CanonicalValueHash.sha256Value(transportSpec)

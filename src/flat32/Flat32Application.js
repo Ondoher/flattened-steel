@@ -35,7 +35,6 @@ export class Flat32Application {
 	constructor(root, configuration = {}) {
 		const productionSelections = resolveFlat32ProductionSelections(configuration);
 		this._view = new Flat32View(root);
-		this._cameraFieldOfViewDegrees = configuration.cameraFieldOfViewDegrees ?? null;
 		this._initialFlatTimeIndex = configuration.initialFlatTimeIndex ?? 0;
 		this._initialModeKind = configuration.initialModeKind ?? 'spherical-distant';
 		if (
@@ -106,6 +105,7 @@ export class Flat32Application {
 						reviewObjectsEnabled: this._state.reviewObjectsEnabled,
 						sunIlluminationScale: this._state.sunIlluminationScale,
 						sunDiscBrightnessScale: this._state.sunDiscBrightnessScale,
+						cameraFieldOfViewDegrees: this._state.cameraFieldOfViewDegrees,
 					}
 				: this._state;
 			this._view.showApplicationState(visible);
@@ -357,6 +357,7 @@ export class Flat32Application {
 					sunIlluminationScale: this._state?.sunIlluminationScale ?? state.sunIlluminationScale,
 					sunDiscBrightnessScale: this._state?.sunDiscBrightnessScale ?? state.sunDiscBrightnessScale,
 					reviewObjectsEnabled: this._state?.reviewObjectsEnabled ?? state.reviewObjectsEnabled,
+					cameraFieldOfViewDegrees: this._state?.cameraFieldOfViewDegrees ?? state.cameraFieldOfViewDegrees,
 				};
 				this._renderControls();
 				const solarZenithDegrees =
@@ -376,6 +377,7 @@ export class Flat32Application {
 						reviewObjectsEnabled: this._state.reviewObjectsEnabled,
 						sunIlluminationScale: this._state.sunIlluminationScale,
 						sunDiscBrightnessScale: this._state.sunDiscBrightnessScale,
+						cameraFieldOfViewDegrees: this._state.cameraFieldOfViewDegrees,
 					};
 					this._renderControls();
 				}
@@ -457,7 +459,7 @@ export class Flat32Application {
 	}
 
 	/** Call this method to prepare a complete scene at a supported physical height.
-	 * Unsupported heights throw before preparation; choose 5, 500 or 2000 metres.
+	 * Unsupported heights throw before preparation; choose 5, 100, 500 or 2000 metres.
 	 * @param {Distance} height - Actual height above the model surface.
 	 * @returns {void} - Accepted labels remain until the requested frame publishes.
 	 */
@@ -467,6 +469,25 @@ export class Flat32Application {
 			throw new RangeError('Live elevation requires the compact local runtime.');
 		const observerHeight = Flat32SceneControls.resolve({observerHeight: height}).observerHeight;
 		this._commitState({...this._state, observerHeight}, false);
+	}
+
+	/** Change perspective framing on the retained camera without rebuilding the scene or scattering cache.
+	 * @param {number} degrees - Requested vertical field of view in degrees.
+	 * @returns {void} - Projection and current/published selections updated synchronously.
+	 * @throws {RangeError} - An invalid perspective angle leaves state and projection unchanged.
+	 * @throws {Error} - Start the application before selecting its live framing.
+	 */
+	setFieldOfView(degrees) {
+		const cameraFieldOfViewDegrees = Flat32SceneControls.resolveFieldOfView(degrees);
+		if (!this._state || !this._sceneRuntime || this._disposed)
+			throw new Error('Field of view requires a live application camera.');
+		const camera = this._sceneRuntime.camera;
+		camera.fov = cameraFieldOfViewDegrees;
+		camera.updateProjectionMatrix();
+		this._state = {...this._state, cameraFieldOfViewDegrees};
+		if (this._publishedState) this._publishedState = {...this._publishedState, cameraFieldOfViewDegrees};
+		this._renderControls();
+		this._sceneRuntime.requestRender();
 	}
 
 	/** Called by geometry preparation and rollback to place the camera at the geometry-owned height.
@@ -500,7 +521,8 @@ export class Flat32Application {
 		this._view.start();
 		this._view.showProductionSelections(this._productionSelections);
 		this._view.installLocationTimeControls(
-			() => this._transitionLocationTime((state) => this._locationTimeController.nextLocation(state)),
+			(index) =>
+				this._transitionLocationTime((state) => this._locationTimeController.selectLocation(state, index)),
 			(index) => this._transitionLocationTime((state) => this._locationTimeController.selectTime(state, index)),
 			() => this._transitionLocationTime((state) => this._locationTimeController.toggleTimeBasis(state)),
 			(index) =>
@@ -520,6 +542,7 @@ export class Flat32Application {
 			onSun: (selection) => this.setSunPresentation(selection),
 			onObjects: () => this.setObjectsVisible(this._state?.reviewObjectsEnabled === false),
 			onElevation: (height) => this.setObserverHeight(height),
+			onFieldOfView: (degrees) => this.setFieldOfView(degrees),
 		});
 		const initialLocationTimeState = this._locationTimeController.start();
 		this._state = {
@@ -545,10 +568,8 @@ export class Flat32Application {
 			this._endpointScene = new EndpointScene(this._sceneRuntime.scene, {
 				reviewObjectsEnabled: this._reviewObjectsEnabled,
 			});
-			if (this._cameraFieldOfViewDegrees !== null) {
-				this._sceneRuntime.camera.fov = this._cameraFieldOfViewDegrees;
-				this._sceneRuntime.camera.updateProjectionMatrix();
-			}
+			this._sceneRuntime.camera.fov = this._state.cameraFieldOfViewDegrees;
+			this._sceneRuntime.camera.updateProjectionMatrix();
 			this._endpointScene.install();
 			const initialSceneMode =
 				this._state.modeKind === 'spherical-distant'
@@ -626,6 +647,7 @@ export class Flat32Application {
 				this._view.canvas,
 				this._sceneRuntime.camera,
 				this._handlePointerLookChange,
+				() => this._sceneRuntime?.requestRender(),
 			);
 			this._pointerLookController.start();
 			const sceneSummary = this._endpointScene.describe();

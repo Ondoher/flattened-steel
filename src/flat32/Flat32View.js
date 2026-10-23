@@ -1,3 +1,5 @@
+import {FLAT32_LOCATION_PRESETS, FLAT32_FIELD_OF_VIEW_PRESETS, CAMERA_FIELD_OF_VIEW_DEGREES} from './consts.js';
+
 export class Flat32View {
 	/**
 	 * Creates the application view borrowing the supplied shell root.
@@ -48,8 +50,9 @@ export class Flat32View {
 					<option value="full">Full</option><option value="no-atmosphere">No atmosphere</option><option value="shader-off">Shader off</option>
 				</select></label>
 				<button id="flat32-objects-control" type="button" aria-pressed="true">Objects: On</button>
-				<label>Elevation <select id="flat32-elevation-control"><option value="5">Current (5 m)</option><option value="500">500 m</option><option value="2000">2 km</option></select></label>
-				<button id="flat32-location-control" type="button">Location</button>
+				<label>Elevation <select id="flat32-elevation-control"><option value="5">Current (5 m)</option><option value="100">100 m</option><option value="500">500 m</option><option value="2000">2 km</option></select></label>
+				<label>Location <select id="flat32-location-control"></select></label>
+				<label>Vertical FOV <select id="flat32-fov-control" title="Vertical field of view. Natural is a central-view framing preset."></select></label>
 				<fieldset id="flat32-sun-controls" hidden>
 					<legend>Sun presentation</legend>
 					<label>Illumination (%) <input id="flat32-sun-illumination" type="number" min="0" max="100" step="any" value="100"></label>
@@ -107,12 +110,26 @@ export class Flat32View {
 			</section>
 		`;
 
+		const location = shell.querySelector('#flat32-location-control');
+		for (const [index, preset] of FLAT32_LOCATION_PRESETS.entries()) {
+			const option = document.createElement('option');
+			option.value = String(index);
+			option.textContent = preset.label;
+			location.append(option);
+		}
+		const fieldOfView = shell.querySelector('#flat32-fov-control');
+		for (const preset of FLAT32_FIELD_OF_VIEW_PRESETS) {
+			const option = document.createElement('option');
+			option.value = String(preset.degrees);
+			option.textContent = preset.label;
+			fieldOfView.append(option);
+		}
 		return shell;
 	}
 
 	/** Call this method to bind application-owned location/time actions to the ordinary controls.
 	 *
-	 * @param {Flat32ControlAction} onLocation - Advance the selected location.
+	 * @param {Flat32ControlSelectionAction} onLocation - Select a location preset by index.
 	 * @param {Flat32ControlSelectionAction} onTime - Select one location-time control.
 	 * @param {Flat32ControlAction} onBasis - Toggle the displayed time basis.
 	 * @param {Flat32ControlSelectionAction} onGlobeTime - Select one globe-time control.
@@ -122,7 +139,8 @@ export class Flat32View {
 	 */
 	installLocationTimeControls(onLocation, onTime, onBasis, onGlobeTime, onHourOffset, onMinuteOffset) {
 		const shell = this._requireElement(this._shell, 'shell');
-		shell.querySelector('#flat32-location-control')?.addEventListener('click', onLocation);
+		const location = /** @type {HTMLSelectElement} */ (shell.querySelector('#flat32-location-control'));
+		location.addEventListener('change', () => onLocation(Number(location.value)));
 		shell.querySelectorAll('button[data-flat32-time]').forEach((button) => {
 			const timeButton = /** @type {HTMLButtonElement} */ (button);
 			timeButton.addEventListener('click', () => onTime(Number(timeButton.dataset.flat32Time)));
@@ -165,6 +183,8 @@ export class Flat32View {
 		shell.querySelector('#flat32-objects-control').addEventListener('click', actions.onObjects);
 		const height = /** @type {HTMLSelectElement} */ (shell.querySelector('#flat32-elevation-control'));
 		height.addEventListener('change', () => actions.onElevation({value: Number(height.value), units: 'meters'}));
+		const fieldOfView = /** @type {HTMLSelectElement} */ (shell.querySelector('#flat32-fov-control'));
+		fieldOfView.addEventListener('change', () => actions.onFieldOfView(Number(fieldOfView.value)));
 		for (const id of ['flat32-sun-illumination', 'flat32-sun-disc']) {
 			const input = /** @type {HTMLInputElement} */ (shell.querySelector('#' + id));
 			input.addEventListener('change', () => {
@@ -197,6 +217,17 @@ export class Flat32View {
 		const shell = this._requireElement(this._shell, 'shell');
 		const sky = /** @type {HTMLSelectElement} */ (shell.querySelector('#flat32-atmosphere-control'));
 		sky.value = state.skyRenderMode ?? 'full';
+		const fieldOfView = /** @type {HTMLSelectElement} */ (shell.querySelector('#flat32-fov-control'));
+		const degrees = state.cameraFieldOfViewDegrees ?? CAMERA_FIELD_OF_VIEW_DEGREES;
+		fieldOfView.querySelector('option[data-custom-fov]')?.remove();
+		if (!FLAT32_FIELD_OF_VIEW_PRESETS.some((preset) => preset.degrees === degrees)) {
+			const option = document.createElement('option');
+			option.value = String(degrees);
+			option.textContent = `Custom (${degrees}°)`;
+			option.dataset.customFov = 'true';
+			fieldOfView.append(option);
+		}
+		fieldOfView.value = String(degrees);
 		/** @type {HTMLOptionElement} */ (sky.querySelector('option[value="no-atmosphere"]')).disabled =
 			!noAtmosphereSupported;
 		const objects = /** @type {HTMLButtonElement} */ (shell.querySelector('#flat32-objects-control'));
@@ -226,6 +257,7 @@ export class Flat32View {
 		shell.dataset.flat32SkyRenderMode = sky.value;
 		shell.dataset.flat32AtmosphereShader = sky.value === 'shader-off' ? 'bypassed' : 'enabled';
 		shell.dataset.flat32ObserverHeightMeters = String(state.observerHeight?.value ?? 5);
+		shell.dataset.flat32VerticalFovDegrees = String(degrees);
 		shell.dataset.flat32ObjectsVisible = String(state.reviewObjectsEnabled !== false);
 		if (shell.dataset.flat32State === 'ready')
 			this._requireElement(this._atmosphere, 'atmosphere').textContent =
@@ -278,8 +310,8 @@ export class Flat32View {
 		const shell = this._requireElement(this._shell, 'shell');
 		const location = shell.querySelector('#flat32-location-control');
 
-		if (location instanceof HTMLButtonElement) {
-			location.textContent = state.locationLabel;
+		if (location instanceof HTMLSelectElement) {
+			location.value = String(state.locationIndex);
 		}
 		const basis = shell.querySelector('#flat32-time-basis-control');
 		if (basis instanceof HTMLButtonElement) {
