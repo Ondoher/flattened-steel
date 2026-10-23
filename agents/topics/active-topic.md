@@ -1,7 +1,7 @@
 # Active Topic
 
 Current active topic: poc-experiments/engineering-studies/sky-aerosol-properties.
-Focus: planned aerosol-profile refinement and full-scattering confirmation of
+Focus: executing aerosol-profile refinement and full-scattering confirmation of
 `combo025`, preserving solar glow while investigating the remaining gray horizon.
 
 Canonical entry: [Sky Aerosol Properties](poc-experiments/engineering-studies/sky-aerosol-properties/README.md).

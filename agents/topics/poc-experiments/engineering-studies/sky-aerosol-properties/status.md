@@ -35,19 +35,27 @@ are disabled; checkpoint-advisor monitoring remains active.
 
 ## Refinement execution boundary
 
-The owner selected independent execution. Runs 00004 and 00005 completed the
-two-ray external and single-band cache pilots. Run 00006 retains an invalidated
-multi-band observation: its experimental view shader incorrectly retained the
-first wavelength's attenuation constants. Production recurrence was unchanged.
-The query shader is now recreated for each band. The affected observations will
-be repeated in a new run; no multi-band conclusion uses 00006.
+Independent execution is active. [Refinement results](refinement-results.md) owns
+all current findings, gate decisions and verification limitations.
 
-Run 00007 is collecting repeated Native15 spherical libRadtran spectra. Run 00008
-is collecting eleven fixed-column N1 configurations, including actual GPU fields
-and tangent-frame halo checks. Initial H=1800/2400 m measurements brighten the N1
-horizon without meaningful solar-glow loss; full-scattering interpretation and
-independent N4 qualification remain pending. The next GPU task repeats the corrected
-cache observations, then runs the independent higher-order probe. New code type checks.
+- 00008: completed eleven-profile N1 screen and actual GPU fields.
+- 00009/00010: corrected68-direction order observations and gallery.
+- 00014/00015: completed fixed-material path and angular diagnostics.
+- 00016: completed higher-sample independent Native15 order reference.
+- 00020/00024: full272-direction baseline observations and gallery.
+- 00025/00026: H2400 full272-direction observations and gallery.
+- 00018: direct N1 controls across protected conditions.
+- 00023: active serial GPU continuation; independent H2400/baseline probes at
+  noon5m, noon500m/2km, and15° Sun. It reuses00020 after the00019 orchestration
+  attribution failure; the completed baseline was preserved.
+- 00007/00021/00022: active external baseline repeats, H2400 confirmation and
+  fixed-seed layer refinement. 00017/00028 completed external N1 photon controls.
+
+00006 remains invalidated for its wavelength-constant observation bug;00013
+remains failed for the production120-interval admission contract. The executable
+diagnostic fixes and all source changes remain inside the experiment boundary.
+New code type checks. Recovery checkpoint b00c7f40 preserves the earlier app work,
+first campaign and initial follow-up setup. No production setting changed here.
 
 ## Blockers
 
@@ -55,7 +63,7 @@ None recorded.
 
 ## Next Action
 
-Execute the saved follow-up plan. Its first step authenticates
-the existing evidence, registers complete `combo025` inputs and pilots two
-higher-order reference rays before building the first N1–4 cache. No confirmation
-campaign or production promotion has been executed here.
+Finish the00023 condition probes and external references. Derive the per-ray
+uncertainty/gate report with refinement-analyze.mjs, then run the bounded H1800
+compromise check recorded in refinement-results.md. Preserve conditional early
+rejections and report every unqualified condition; production promotion is separate.

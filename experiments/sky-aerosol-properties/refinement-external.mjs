@@ -44,8 +44,9 @@ async function execute(run,m,c){
 const run=createRun('refine-reference',[...parents(),identity('scripts/libradtran/worker.py'),identity('scripts/libradtran/installation.json')]);let failure=null;
 try{
  const m=medium(),pilot=process.argv.includes('--pilot'),channels=pilot?[2,5,8]:centers.map((_,i)=>i),readings=[];
- const H=Number(process.argv[process.argv.indexOf('--height')+1])||1200;m.mieHeight=H;Object.assign(m,medium(H));
+ const option=(n,d)=>process.argv.includes(n)?Number(process.argv[process.argv.indexOf(n)+1]):d;
+ const H=option('--height',1200);m.mieHeight=H;Object.assign(m,medium(H));
  run.write('registration.json',{medium:m,channels,pilot,projection:'Native15 midpoint optics, bin-average source',orderConvention:'mc_maxscatters upper cumulative bound; independently qualify',geometry:'mc_spherical1D, mc_vroom off',scope:'External solver operational pilot unless repeat/layer qualification passes'});
- for(const ray of ['h180-e0.05','sun-1'])for(let repeat=0;repeat<(pilot?1:4);repeat++)readings.push(await execute(run,m,{ray,channels,repeat,photons:pilot?10000:20000,layers:pilot?128:256,order:4}));
+ for(const ray of (process.argv.includes('--sun-only')?['sun-1']:process.argv.includes('--horizon-only')?['h180-e0.05']:['h180-e0.05','sun-1']))for(let repeat=0;repeat<option('--repeats',pilot?1:4);repeat++)readings.push(await execute(run,m,{ray,channels,repeat,photons:option('--photons',pilot?10000:20000),layers:option('--layers',pilot?128:256),order:option('--order',4)}));
  run.write('readings.json',readings);console.log(JSON.stringify({run:run.relative,readings}));
 }catch(e){failure=e;run.write('failure.json',{error:String(e)});console.error(e);}finally{run.finish(failure,{purpose:'Matched higher-order external pilot'});}if(failure)process.exitCode=1;

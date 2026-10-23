@@ -53,8 +53,9 @@ Append one event at process start, every phase transition, at least once every 3
 The first campaign is an independent N1 sensitivity study with spherical geometry,
 Native15 spectra, black ground and no gas absorption, refraction or polarization.
 It answers parameter mechanisms, not full production N4 accuracy or measured-sky truth.
-The original exponential vertical profile remains unchanged; no aerosol-free ground
-layer is introduced. Production source, assets and package selection remain read-only.
+The first campaign retained the original exponential vertical profile. The selected
+follow-up varies its scale height at fixed column; no aerosol-free ground layer is
+introduced. Production source, assets and package selection remain read-only.
 
 Use the existing independent binary64 reference equations and a separately evaluated
 GPU N1 implementation. Reuse prior physical source/geometry and original CIE inputs
@@ -70,8 +71,8 @@ The [follow-up plan](refinement-plan.md) proposes full-scattering `combo025`
 confirmation, fixed-column scale-height and spectral changes, finer loading and
 SSA tests, then conditional finalist comparisons. It retains these isolation and
 evidence rules. The first campaign's N1 claim boundary remains unchanged. The
-follow-up is prepared and independently critiqued; no follow-up execution or
-production change has been selected.
+follow-up is independently critiqued and selected for independent execution.
+Production changes remain outside this selection.
 
 ## Open Questions
 
