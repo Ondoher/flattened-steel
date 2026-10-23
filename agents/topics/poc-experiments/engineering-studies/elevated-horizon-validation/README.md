@@ -1,8 +1,7 @@
 # Elevated Horizon Validation
 
-Status: baseline and published-profile follow-on complete and verified on
-2026-10-23, including 5 m and 10 km horizons. Production unchanged; awaiting owner
-review. The experiment remains selected, without closure or promotion.
+Status: baseline, published-profile and 30/40 km resolution checks are complete
+on 2026-10-23. Production unchanged; high-altitude verification passed. The experiment remains selected, without closure or promotion.
 
 Determine whether the low-contrast elevated globe horizon is justified by the
 selected atmosphere or arises from numerical transport or rendering. Start with
@@ -11,6 +10,9 @@ A sharp shader-off boundary and pale shader-on ground are observations, not a
 verdict that production or the Bruneton profile is wrong.
 
 ## Governing documents
+
+- [High-altitude resolution results](high-altitude-results.md): 30/40 km cache,
+  view-integration and independent-reference checks.
 
 - [Results](results.md): matched comparison, profile controls and conclusions.
 - [Alternate profile results](alternate-profiles-results.md): published-model

@@ -1,7 +1,8 @@
 # Elevated Horizon Validation Status
 
 State: baseline and published-profile follow-on complete and verified on
-2026-10-23. Production is unchanged. No closure, suspension or promotion is implied.
+2026-10-23. Owner-authorized higher-altitude numerical checks are complete and verified.
+Production is unchanged. No closure, suspension or promotion is implied.
 
 ## Current outcome and next action
 
@@ -20,9 +21,17 @@ unproven. Conditional full app scenes were not triggered because current profile
 configuration cannot faithfully represent the layered, height-dependent mixture.
 The compatibility finding and unmeasured integration costs are in the report.
 
-Next action: owner review of results. No numerical work remains queued. A faithful
-production implementation or new atmosphere acquisition is separate work. The
-[execution log](execution-log.md) owns decisions/recovery/checkpoint identities.
+Latest evidence: [higher-altitude results](high-altitude-results.md). Current
+Native48/Sun035 recurrence remains numerically stable at 30/40 km in the tested
+noon anti-Sun rays. Q120 agrees with independent luminance within 0.5%; Q30 can
+suppress very narrow horizon contrast. Neither solver predicts a crisp horizon.
+Report 00058 authenticates 48 reference cases and 45 GPU wavelength builds; final
+proof 00059 passes replay, source types/syntax and resource-release checks. No higher-altitude package or app scene is activated.
+Next action: owner review. Production integration or another viewing condition
+is separate work. Completed checkpoint unit:
+`feat(experiment): qualify high-altitude horizon resolution` (exact identity in
+local Git history and final handoff). The execution log owns
+recovery/checkpoint identities.
 M1 recovery checkpoint: fa042599. Final checkpoint unit:
 `feat(experiment): evaluate published aerosol profiles`; exact identity is in local
 Git history and the execution handoff.

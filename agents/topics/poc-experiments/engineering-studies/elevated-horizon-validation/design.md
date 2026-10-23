@@ -227,3 +227,13 @@ standards-set definition is introduced. Suspension/closure therefore has no
 temporary standards changes to restore. Dedicated standards reviewers/audits are
 disabled; the plan's one scoped critique is not a standards-compliance review.
 Keep checkpoint-advisor monitoring active.
+
+## Authorized higher-altitude numerical follow-on
+
+The owner authorized checks at30/40 km on2026-10-23, with a10 km calibration.
+New isolated GPU recurrence fields may refine altitude/outgoing/source/transport
+resolution independently and compare analytic finite rays with spherical MYSTIC.
+Use the same Bruneton medium, noon Sun, black boundary and Native15 semantics.
+The production package remains read-only; extending its coverage or app elevation
+controls is separate work. Report spectral/contrast changes before any display
+conversion, uncertainty, numerical costs and unsupported generalizations.

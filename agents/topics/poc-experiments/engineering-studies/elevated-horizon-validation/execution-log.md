@@ -1,5 +1,41 @@
 # Elevated Horizon Validation Execution Log
 
+## High-altitude resolution checks, 2026-10-23
+
+- Numerical work complete: runs 00048-00056 contain 45 full GPU wavelength
+  recurrence builds and 48 MYSTIC reference cases. Final report 00058 authenticates
+  3,744 artifact records; proof 00059 replays every retained view from frozen GPU
+  values, passes types/syntax and checks released fields/device texture limits.
+- Native48 and Sun035 outgoing resolution show no growing breakdown at30/40 km
+  for these noon anti-Sun rays. Altitude refinement changes Y by at most0.68%;
+  Q120 agrees with MYSTIC luminance within0.5%. Q30 suppresses very narrow contrast,
+  so use Q120 as the next high-altitude scene diagnostic. Both solvers retain haze.
+- Kept the source/recurrence/angular branches at their bounded three-channel
+  screens after small changes; widened baseline and altitude to all15 bands.
+  No production coverage extension, new app elevation option or scene capture.
+- Failed report00057 found a JSON-serialization negative-zero comparison issue;
+  request verification now compares the actual serialized browser input. No
+  scientific rerun or protected-evidence modification was needed. Report00058
+  supersedes the failed analysis; all source/outputs remain preserved.
+- Checkpoint adviser recommended this completed unit as
+  `feat(experiment): qualify high-altitude horizon resolution`, preapproved under
+  independent-execution. Exact identity is retained in local Git history and the
+  final execution handoff.
+
+- Owner requested numerical checks before attempting a 30/40 km flat/globe
+  comparison. Reuse Bruneton optics and noon source, black boundary, no refraction.
+  Register six anti-Sun offsets around each true spherical limb; retain 10 km as
+  an installed-package readout control. No actual high-altitude app scene claimed.
+- Separate Native48 altitude, W27 outgoing, source20, recurrence60 and Q30 final
+  view resolution. Add midpoint altitude nodes below45 km (upper nodes unchanged),
+  W39 outgoing, source80 and recurrence120 in independent diagnostic rebuilds.
+  Only the contained bundled compiler admits recurrence120 while preserving the
+  corrected normalization/focus equations; shared production source is read-only.
+- Start three wavelengths, widen useful checks to all15 if supported. MYSTIC
+  solves matched Native15 spectra independently. Finite-path transmission has a
+  separate direct high-resolution integration control. Initial type issues were
+  repaired by deriving immutable inputs and constructing explicit vector tuples.
+
 ## Published-profile follow-on, 2026-10-23
 
 - Completed the 12-case spectral-only control (00045), final combined report
