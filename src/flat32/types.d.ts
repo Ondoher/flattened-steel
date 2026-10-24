@@ -29,20 +29,27 @@ interface Window {
 /** Exact supported display-response identities.
  *
  * - **"basic-bruneton"** - Unchanged physical qualification display control.
- * - **"color-reset-slope-078-p9"** - Existing production-default response.
+ * - **"color-reset-slope-078-p9"** - Explicit former display control.
  * - **"color-reset-slope-078-p2"** - Separately selectable monotonic-brightness successor.
+ * - **"color-reset-altitude-half-v1"** - Default altitude-aware frame display with native lower/Flat response.
  * - **"ferwerda-control"** - Explicit reference adaptation control.
  */
 type Flat32ColorModelId =
-	'basic-bruneton' | 'color-reset-slope-078-p9' | 'color-reset-slope-078-p2' | 'ferwerda-control';
+	| 'basic-bruneton'
+	| 'color-reset-slope-078-p9'
+	| 'color-reset-slope-078-p2'
+	| 'color-reset-altitude-half-v1'
+	| 'ferwerda-control';
 
 /** Display responses whose fixed constants require only a model identity.
  *
  * - **"basic-bruneton"** - Unchanged Bruneton display control.
- * - **"color-reset-slope-078-p9"** - Existing production-default response.
+ * - **"color-reset-slope-078-p9"** - Explicit former display control.
  * - **"color-reset-slope-078-p2"** - Selectable monotonic successor.
+ * - **"color-reset-altitude-half-v1"** - Default altitude-aware frame display.
  */
-type Flat32FixedColorModelId = 'basic-bruneton' | 'color-reset-slope-078-p9' | 'color-reset-slope-078-p2';
+type Flat32FixedColorModelId =
+	'basic-bruneton' | 'color-reset-slope-078-p9' | 'color-reset-slope-078-p2' | 'color-reset-altitude-half-v1';
 
 /** Explicit adaptation control identity.
  *
@@ -50,7 +57,7 @@ type Flat32FixedColorModelId = 'basic-bruneton' | 'color-reset-slope-078-p9' | '
  */
 type Flat32AdaptationColorModelId = 'ferwerda-control';
 
-/** Caller-owned exact display selection; omission at application ingress retains p9. */
+/** Caller-owned exact display selection; omission selects altitude-half v1. */
 type Flat32ColorDisplayModelConfiguration =
 	| Readonly<{
 			/** Exact fixed-response identity. */

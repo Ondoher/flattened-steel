@@ -1,8 +1,51 @@
 # High-altitude twilight exposure
 
-Status: diagnosis complete on 2026-10-23. Owner confirmed Globe / San Jose /
-40 km, at 30, 40 and 50 minutes after the app sunset preset. Production code,
-cache, optical profile and build remain unchanged by this diagnosis.
+Status: the owner accepted the completed experiment and authorized production
+promotion on 2026-10-23. `color-reset-altitude-half-v1` is implemented as the
+Flat32 default; actual served qualification is complete in the
+[promotion plan](twilight-exposure-promotion-plan.md). The contained experiment
+is ended and all sealed evidence is preserved.
+
+## Current display response
+
+The default retains the p2 gain/encoding and supplies it a separate display-only
+adaptation value. A smooth height weight is zero through 10 km and reaches its
+full correction at 40 km. At low twilight illumination this value restrains the
+large exposure increase that previously whitened the limb. The correction fades
+back to p2 by 385 lux and preserves the zero-light night anchor. Flat geometry
+and elevations through 10 km retain the previous response. Explicit p2/p9
+controls remain available; the new default retains float32 scene color.
+
+The raw receiver illuminance, stellar adaptation inputs, source/scene lighting,
+physical atmosphere and cache are unchanged. Illustrative No-atmosphere scaling
+is applied exactly once before deriving the display value. Both ordinary and
+staged compact frames refresh this value from their own facade. The additional
+calculation runs on the CPU during binding updates and introduces no GPU pass,
+ray sampling, atlas allocation or cache rebuild.
+
+At 40 km the accepted gain changes from about 280.63 to 63.40 at sunset +40
+minutes and from 7632.29 to 71.73 at +50. This is an empirical display correction,
+not validation of the complete high-altitude radiance field. Twilight stars
+remain dimmer and a narrow late bright limb remains. The completed
+[experiment results](../../poc-experiments/engineering-studies/twilight-exposure/results.md)
+own the 70-case comparison and limitations. Production source documents the
+exact [response parameters](../../../../src/algorithm32/implementation/color-reset-altitude-half-v1/README.md).
+
+Ten actual default-app images match the accepted prototype within one byte in
+every RGB channel, including 5 m, 25 km, 40 km and compact Flat controls. All 25
+live presentation/scale checks pass. Changing elevation from 40 km to 5 m and
+back retains the scene, runtime, cache backend, shader and composer. Types,
+formatting, 11 focused engine Color specs, 72 basic browser specs, 70 retained
+gain cases and app/worker/browser builds pass. There are no page/WebGL errors.
+The [production gallery](../../../../.codex-tmp/twilight-exposure-promotion/index.html)
+and [qualification report](../../../../.codex-tmp/twilight-exposure-promotion/report.json)
+retain matched images, physical/display controls, input identities and derivation.
+Standards reviewer calibration is stale; no standards sign-off is claimed.
+
+## Original diagnostic evidence
+
+The original diagnosis below established the p2 failure before promotion. Its
+native gain numbers describe the retained p2 control, not the new default.
 
 The production p2 exposure response causes most of the expanding white region.
 Five actual served GPU captures reproduce the issue with a fixed local camera
@@ -61,13 +104,10 @@ is the only cause.
 
 ## Disposition
 
-Keep physical cache/spectral calculations unchanged for this issue. Next work
-should compare exposure/adaptation and highlight-preserving display responses,
-including full-view and directional measures, while preserving independent
-stellar visibility and distinguishing the Sun disc from atmospheric path light.
-Slower temporal adaptation alone would delay the settled overexposure rather
-than remove it. A Sun-disc brightness adjustment alone would leave most of the
-broad clipped atmosphere unaffected. No replacement curve is selected or promoted.
+The exposure experiment is closed with altitude-half selected for the separately
+authorized production promotion above. Physical cache/spectral calculations stay
+unchanged. Slower temporal adaptation alone would delay settled overexposure;
+a Sun-disc brightness adjustment alone would leave the broad atmosphere affected.
 
 The separate [interactive shader performance diagnosis](shader-performance.md)
 remains complete with no optimization applied. Its recommended motion-quality

@@ -8,7 +8,8 @@ Stage 11.1-11.3 and parts of 11.4-11.6 are implemented. Remaining interaction/mi
 
 - [Center on Sun](center-on-sun.md) - Aim the retained camera at the Sun in the published scene.
 
-- [Twilight exposure](twilight-exposure.md) - Matched-frame confirmation of excessive display gain at 40 km.
+- [Twilight exposure](twilight-exposure.md) - Accepted altitude-aware display response and production qualification.
+- [Twilight exposure promotion](twilight-exposure-promotion-plan.md) - Experiment closure and implementation evidence.
 
 - [Interactive shader performance](shader-performance.md) - GPU frame-cost diagnosis and proposed motion-quality tier.
 

@@ -86,7 +86,7 @@ final-composition resolution only. It does not reduce the production cache
 domains or the six 4096 shadow maps.
 
 The composer captures the ordinary Three scene in a full-float renderer-linear
-sRGB target for the P2 default before the atmosphere pass; explicit P9 retains
+sRGB target for the altitude-half default and explicit P2 before the atmosphere pass; explicit P9 retains
 its half-float target. The retained E8 projection maps
 atmospheric native-15 path radiance to linear sRGB;
 the compositor averages spectral
@@ -94,18 +94,25 @@ transmittance into RGB bands, attenuates the captured scene for an
 in-atmosphere endpoint, and combines both terms at the single display
 boundary. Scene RGB is not atmospheric cache or transport data.
 
-The ordinary application uses the fixed `ColorResetSlope078P2ColorDisplayModel`.
+The ordinary application uses `ColorResetAltitudeHalfV1ColorDisplayModel`.
 Algorithm32 publishes one camera-independent total-horizontal photopic-
 illuminance condition from the same atomic receiver-light generation as the
-direct and diffuse spectra. Color Reset applies its fixed common source-linear
-gain before the unchanged Bruneton Figure-1 display encoding. It does not read
-time labels, solar zenith, the camera, framebuffer pixels, or source classes.
+direct and diffuse spectra. The runtime derives a distinct display-adaptation
+value using physical observer height in spherical geometry. It retains P2 in
+Flat and through 10 km, smoothly restrains high-altitude twilight exposure toward
+40 km, and returns to P2 at daylight/zero-light anchors. CPU scene-light conversion
+and stellar adaptation retain physical receiver measurements. Color Reset applies
+the resulting common frame gain before unchanged Bruneton Figure-1 display
+encoding. It does not read time labels, camera direction or framebuffer pixels.
+The [production behavior and qualification](../../agents/topics/production-app/product-behavior/twilight-exposure.md)
+own the accepted parameters, evidence and limitations.
 `basic-bruneton` remains the exact unadjusted physical and B1 control.
 
 Color, celestial enablement, stellar catalog, and ordered presentation filters
 now use independent exact selections. `basic-bruneton` no longer disables
-celestial sources, and `color-reset-slope-078-p2` selects the omission/default behavior. The explicit
-`color-reset-slope-078-p9` selection retains the prior response for rollback. The live application
+celestial sources. `color-reset-altitude-half-v1` selects the omission/default
+behavior; explicit `color-reset-slope-078-p2` and `color-reset-slope-078-p9`
+retain the prior controls. The live application
 retains `?colorModel=basic-bruneton` as its exact control query value; the
 superseded source-luminance-lift route has been removed and unknown values
 fail closed. Brightest-2,000 and enabled-

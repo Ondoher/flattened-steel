@@ -275,6 +275,13 @@ export class ColorResetSlope078P9ColorDisplayModel extends BrunetonColorDisplayM
 		return this.linearSrgbToDisplayRgb(super.composeSceneLinearSrgb(request), request.totalHorizontalIlluminance);
 	}
 
+	/** Return the physical receiver uniform used by the base frame display.
+	 * @returns {string} - Declared GLSL illuminance uniform name.
+	 */
+	_displayIlluminanceUniformName() {
+		return 'uColorResetTotalHorizontalIlluminanceLux';
+	}
+
 	/**
 	 * Called by shader assembly to emit the selected gain and unchanged final encoding.
 	 *
@@ -311,7 +318,7 @@ float colorResetDisplayGain(float totalHorizontalIlluminanceLux) {
 }
 
 vec4 encodeDisplayOutput(vec3 linearSrgb) {
-	vec3 exposedLinearSrgb = linearSrgb * colorResetDisplayGain(uColorResetTotalHorizontalIlluminanceLux);
+	vec3 exposedLinearSrgb = linearSrgb * colorResetDisplayGain(${this._displayIlluminanceUniformName()});
 	return vec4(clamp(
 		vec3(1.0) - exp(-max(exposedLinearSrgb, vec3(0.0)) * DISPLAY_TONE_MAP_K),
 		vec3(0.0),

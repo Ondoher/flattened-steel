@@ -111,7 +111,7 @@ describeFullCache('Flat32 scene application (full production cache, explicit rec
 		const initialPixelRatio = Number(canvas.dataset.flat32PixelRatio);
 
 		expect(['setting-up-atmosphere', 'ready']).toContain(shell.dataset.flat32State);
-		expect(shell.dataset.flat32ColorModel).toBe('color-reset-slope-078-p2');
+		expect(shell.dataset.flat32ColorModel).toBe('color-reset-altitude-half-v1');
 		expect(shell.dataset.flat32StellarCatalog).toBe('brightest-2000');
 		expect(shell.dataset.flat32PresentationFilters).toBe('human-mesopic-luminance-v1,human-low-light-chroma-v1');
 		expect(pairingState.textContent.trim()).toBe('Spherical geometry \u00b7 distant Sun');

@@ -6,6 +6,9 @@ import {LocalSunFramePreparer} from './LocalSunFramePreparer.js';
 import {resolveLocalSunFrameView} from './local-sun-frame-view.js';
 import {SceneMath} from '../algorithm32/math/index.js';
 import {SphericalDistantMode} from './SphericalDistantMode.js';
+import {SphericalEarthGeometry} from '../algorithm32/implementation/spherical-earth/SphericalEarthGeometry.js';
+import {ColorResetAltitudeHalfV1ColorDisplayModel} from '../algorithm32/implementation/color-reset-altitude-half-v1/ColorResetAltitudeHalfV1ColorDisplayModel.js';
+import {DISPLAY_ADAPTATION_ILLUMINANCE_VALUE_KEY} from '../algorithm32/implementation/color-reset-altitude-half-v1/consts.js';
 import DistantSunSharedCache from '../algorithm32/implementation/distant-sun/cache/DistantSunSharedCache.js';
 import {Flat32SceneControls} from './Flat32SceneControls.js';
 import DistanceMath from '../algorithm32/math/DistanceMath.js';
@@ -689,6 +692,24 @@ export class Algorithm32Runtime {
 		values[ATMOSPHERIC_VIEW_ENABLED_VALUE_KEY] = this._skyRenderMode === 'full';
 		values[SUN_DISC_BRIGHTNESS_SCALE_VALUE_KEY] = illustrative ? this._sunPresentation.sunDiscBrightnessScale : 1;
 		algorithm.setReceiverLightPresentationScale(illustrative ? this._sunPresentation.sunIlluminationScale : 1);
+		const config = algorithm.config.config;
+		const color = config.color;
+		if (color instanceof ColorResetAltitudeHalfV1ColorDisplayModel) {
+			const geometry = 'profile' in config ? config.profile.models.geometry : config.geometry;
+			const height =
+				geometry instanceof SphericalEarthGeometry
+					? geometry.configuration.observerHeight
+					: {value: 0, units: /** @type {const} */ ('meters')};
+			values[DISPLAY_ADAPTATION_ILLUMINANCE_VALUE_KEY] = color.displayAdaptationIlluminance(
+				{
+					value:
+						algorithm.totalHorizontalIlluminance.value *
+						(illustrative ? this._sunPresentation.sunIlluminationScale : 1),
+					units: 'lux',
+				},
+				height,
+			).value;
+		}
 	}
 
 	/**

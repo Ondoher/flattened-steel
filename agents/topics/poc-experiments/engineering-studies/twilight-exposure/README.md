@@ -1,7 +1,8 @@
 # Twilight Exposure Experiment
 
-State: M1–M4 campaign complete. Altitude-half is the best qualified prototype;
-global curves were rejected for excessive lower-elevation darkening. No production promotion.
+State: ended2026-10-23 by owner direction. Altitude-half is accepted for a
+separately authorized [production promotion](../../../production-app/product-behavior/twilight-exposure-promotion-plan.md).
+Global curves were rejected. Evidence is preserved.
 
 Investigate a display response that prevents the growing white twilight band,
 especially at high elevation, while retaining useful daylight, horizon color and
@@ -23,4 +24,4 @@ profiles, scattering caches and production app assets are read-only.
 - [Existing exposure diagnosis](../../../production-app/product-behavior/twilight-exposure.md)
   is parent evidence, not an experiment run or a selected replacement response.
 
-Starting this lane does not modify the app or authorize production promotion.
+This lane is closed; production implementation belongs to the linked promotion.

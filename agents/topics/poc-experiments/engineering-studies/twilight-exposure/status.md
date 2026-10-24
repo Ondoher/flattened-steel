@@ -1,8 +1,8 @@
 # Twilight Exposure Status
 
-State: authorized M1-M4 campaign complete. Altitude-half is the best retained
-prototype. Global curves are rejected for excessive ordinary-dusk darkening.
-Production source, selected display response and operational caches are unchanged.
+State: ended2026-10-23 by owner direction. Outcome: altitude-half accepted for
+separately authorized production integration. Global curves are rejected.
+The experiment itself made no production-source or operational-cache changes.
 
 ## M1 report
 
@@ -38,10 +38,22 @@ heights. Local JavaScript type checking passes. Owned browser/server resources
 are closed. No standards reviewers/audits run and no compliance claim is made.
 No temporary standards configuration exists to restore.
 
-## Results and next owner choice
+## Final disposition and production handoff
 
 [Results and handoff](results.md) owns measured conclusions, appearance links,
 branch dispositions, performance and limitations. [Execution log](execution-log.md)
 owns consequential decisions and recovery. All generated evidence is immutable.
-No campaign work or blocker remains. Await owner selection before production
-integration or a separate star-presentation study. No automatic promotion.
+The owner-requested [selected image page](../../../../../tmp/experiments/twilight-exposure/runs/00014-selected-images/index.html)
+shows14 representative scenes with recommended/production comparison and elevation
+filtering. Images are byte-identical copies; desktop/mobile controls and loading
+pass browser verification. No scientific scene rerender was needed.
+All15 runs are terminal; all failed/accepted evidence is retained. No owned browser
+profile remains and the experiment's browser/server resources are closed. No
+temporary standards assignment or overlay was introduced, so none is removed.
+Permanent experiment mappings and types guidance remain. The generated guide and
+representative destination mappings validate. Production reviewer refresh reports
+stale calibration; no reviewer started and no sign-off is claimed.
+
+No interrupted work or experiment acceptance gate remains. Next topic:
+[production promotion](../../../production-app/product-behavior/twilight-exposure-promotion-plan.md).
+Reopening this experiment requires new owner selection.

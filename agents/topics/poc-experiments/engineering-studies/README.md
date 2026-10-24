@@ -17,7 +17,8 @@ Other lanes retain their own dispositions.
 
 ## Working Documents
 
-- [Twilight Exposure](twilight-exposure/README.md) - Active setup for display gain, elevated-twilight clipping and protected sky appearance.
+- [Measured Clean Horizon Profiles](clean-horizon-profiles/README.md) - M1 source screen and color controls complete; ARM is the strongest lead, with full-profile qualification inconclusive.
+- [Twilight Exposure](twilight-exposure/README.md) - Ended; accepted display response promoted to production.
 
 - [Elevated Horizon Validation](elevated-horizon-validation/README.md) - Matched elevated-horizon comparison complete.
 - [Sky Aerosol Properties](sky-aerosol-properties/README.md) - Ended controlled study; preserved evidence.

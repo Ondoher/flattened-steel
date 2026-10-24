@@ -141,3 +141,15 @@ passes them all in a new immutable record, without rerendering scenes. The earli
 00012 record remains preserved. Final source formatting is LF-only and local
 JavaScript type checking passes. Checkpoint adviser recommends this completed
 unit with the preapproved message `feat(experiment): complete twilight exposure campaign`.
+
+## Selected images page
+
+Owner requested a page of recommended solution images.00014-selected-images
+copies14 native/prototype pairs without changing image bytes and assembles a
+recommended-only gallery with comparison/elevation controls. Desktop and mobile
+browser checks pass. The first synchronous copy phase delayed the heartbeat;
+the generator now reports each image copy. Verification initially waited on
+offscreen lazy images; a recorded, page-only eager-loading intervention releases
+that wait. The generator now sets eager loading during verification itself.
+The page's ordinary lazy loading and every scientific image remain unchanged.
+No new physical rendering or production change. Local type checking passes.

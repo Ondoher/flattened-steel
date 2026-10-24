@@ -210,6 +210,7 @@ export class LocalSunFramePreparer {
 				receiverLight,
 				request.profile.models.geometry.configuration.observation,
 			);
+			this._updateBindings(bindingValues, algorithm, camera);
 			const sceneLighting = this._configuration.endpointScene?.prepareLocalSunLighting?.(
 				/** @type {FlatEarthGeometry} */ (
 					request.profile.models.geometry

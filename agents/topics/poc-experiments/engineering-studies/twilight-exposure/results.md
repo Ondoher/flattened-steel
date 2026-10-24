@@ -1,5 +1,9 @@
 # Twilight Exposure Results
 
+Lifecycle: ended2026-10-23. The owner accepted the response and separately
+authorized [production integration](../../../production-app/product-behavior/twilight-exposure-promotion-plan.md).
+These results describe the experiment, not subsequent production changes.
+
 The best prototype is **altitude-half**: retain the current response in Flat and
 through10 km, then smoothly introduce a gentler twilight correction toward40 km.
 It reduces the reported high-altitude washout while preserving the tested lower
@@ -10,6 +14,7 @@ is complete; production files, selected response and operational caches are unch
 
 ## Review the appearance
 
+- [Selected recommended images](../../../../../tmp/experiments/twilight-exposure/runs/00014-selected-images/index.html):14 representative scenes, recommended-only by default, with production comparison and elevation filtering.
 - [Final70-case gallery](../../../../../tmp/experiments/twilight-exposure/runs/00011-regressions/comparison.html): native, fixed +30 gain, altitude-half.
 - [Per-case CSV](../../../../../tmp/experiments/twilight-exposure/runs/00011-regressions/summary.csv) and [full results](../../../../../tmp/experiments/twilight-exposure/runs/00011-regressions/results.json).
 - [Rejected global-curve comparison](../../../../../tmp/experiments/twilight-exposure/runs/00008-regressions/comparison.html).
@@ -183,5 +188,5 @@ handoff. No push. No required campaign checks remain open.
 Before production integration, carry the versioned response and its physical-height/
 geometry inputs into existing Color ownership, keep the physical meter separately
 observable, retain lower-elevation/Flat behavior, and preserve these regression
-fixtures. The next owner choice is whether the remaining bright limb and dimmer
-twilight stars are acceptable, or whether a separate presentation study is wanted.
+fixtures. The owner accepted the remaining bright-limb/twilight-star tradeoffs for
+the linked promotion. Any separate presentation study requires new selection.

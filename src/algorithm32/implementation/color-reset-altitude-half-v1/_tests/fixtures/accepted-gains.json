@@ -1,0 +1,989 @@
+{
+	"provenance": {
+		"parent": "tmp/experiments/twilight-exposure/runs/00011-regressions/results.json",
+		"sha256": "c4d4a58a171589eb874295aa5233e326f5af16078c800c93518d80d7b036c979",
+		"operation": "Select approved altitude-half per-case physical inputs, effective display controls and gains; no recomputation"
+	},
+	"cases": [
+		{
+			"id": "sj10000-night",
+			"mode": "spherical-distant",
+			"observerHeight": {
+				"value": 10000,
+				"units": "meters"
+			},
+			"illuminance": {
+				"value": 0,
+				"units": "lux"
+			},
+			"expectedDisplayIlluminance": 0,
+			"expectedGain": 9887.089970701136
+		},
+		{
+			"id": "sj10000-noon",
+			"mode": "spherical-distant",
+			"observerHeight": {
+				"value": 10000,
+				"units": "meters"
+			},
+			"illuminance": {
+				"value": 126972.693349229,
+				"units": "lux"
+			},
+			"expectedDisplayIlluminance": 126972.693349229,
+			"expectedGain": 1.0002084844467185
+		},
+		{
+			"id": "sj10000-p0",
+			"mode": "spherical-distant",
+			"observerHeight": {
+				"value": 10000,
+				"units": "meters"
+			},
+			"illuminance": {
+				"value": 1197.3382194678745,
+				"units": "lux"
+			},
+			"expectedDisplayIlluminance": 1197.3382194678745,
+			"expectedGain": 2.404084749293904
+		},
+		{
+			"id": "sj10000-p10",
+			"mode": "spherical-distant",
+			"observerHeight": {
+				"value": 10000,
+				"units": "meters"
+			},
+			"illuminance": {
+				"value": 684.5003003568658,
+				"units": "lux"
+			},
+			"expectedDisplayIlluminance": 684.5003003568658,
+			"expectedGain": 3.3531990980849935
+		},
+		{
+			"id": "sj10000-p20",
+			"mode": "spherical-distant",
+			"observerHeight": {
+				"value": 10000,
+				"units": "meters"
+			},
+			"illuminance": {
+				"value": 212.97383233329526,
+				"units": "lux"
+			},
+			"expectedDisplayIlluminance": 212.97383233329526,
+			"expectedGain": 6.891748211736505
+		},
+		{
+			"id": "sj10000-p30",
+			"mode": "spherical-distant",
+			"observerHeight": {
+				"value": 10000,
+				"units": "meters"
+			},
+			"illuminance": {
+				"value": 41.39266680711583,
+				"units": "lux"
+			},
+			"expectedDisplayIlluminance": 41.39266680711583,
+			"expectedGain": 25.580323762039797
+		},
+		{
+			"id": "sj10000-p40",
+			"mode": "spherical-distant",
+			"observerHeight": {
+				"value": 10000,
+				"units": "meters"
+			},
+			"illuminance": {
+				"value": 5.456684236284763,
+				"units": "lux"
+			},
+			"expectedDisplayIlluminance": 5.456684236284763,
+			"expectedGain": 124.11309424395078
+		},
+		{
+			"id": "sj10000-p50",
+			"mode": "spherical-distant",
+			"observerHeight": {
+				"value": 10000,
+				"units": "meters"
+			},
+			"illuminance": {
+				"value": 0.9336158733613528,
+				"units": "lux"
+			},
+			"expectedDisplayIlluminance": 0.9336158733613528,
+			"expectedGain": 485.24410546389356
+		},
+		{
+			"id": "sj10000-p60",
+			"mode": "spherical-distant",
+			"observerHeight": {
+				"value": 10000,
+				"units": "meters"
+			},
+			"illuminance": {
+				"value": 0.3081655001219464,
+				"units": "lux"
+			},
+			"expectedDisplayIlluminance": 0.3081655001219464,
+			"expectedGain": 1115.1142617777011
+		},
+		{
+			"id": "sj2000-night",
+			"mode": "spherical-distant",
+			"observerHeight": {
+				"value": 2000,
+				"units": "meters"
+			},
+			"illuminance": {
+				"value": 0,
+				"units": "lux"
+			},
+			"expectedDisplayIlluminance": 0,
+			"expectedGain": 9887.089970701136
+		},
+		{
+			"id": "sj2000-noon",
+			"mode": "spherical-distant",
+			"observerHeight": {
+				"value": 2000,
+				"units": "meters"
+			},
+			"illuminance": {
+				"value": 122603.22019687518,
+				"units": "lux"
+			},
+			"expectedDisplayIlluminance": 122603.22019687518,
+			"expectedGain": 1.0002236086987075
+		},
+		{
+			"id": "sj2000-p0",
+			"mode": "spherical-distant",
+			"observerHeight": {
+				"value": 2000,
+				"units": "meters"
+			},
+			"illuminance": {
+				"value": 1597.2487251609352,
+				"units": "lux"
+			},
+			"expectedDisplayIlluminance": 1597.2487251609352,
+			"expectedGain": 1.9572266243653522
+		},
+		{
+			"id": "sj2000-p10",
+			"mode": "spherical-distant",
+			"observerHeight": {
+				"value": 2000,
+				"units": "meters"
+			},
+			"illuminance": {
+				"value": 703.2427195738555,
+				"units": "lux"
+			},
+			"expectedDisplayIlluminance": 703.2427195738555,
+			"expectedGain": 3.310943038766677
+		},
+		{
+			"id": "sj2000-p20",
+			"mode": "spherical-distant",
+			"observerHeight": {
+				"value": 2000,
+				"units": "meters"
+			},
+			"illuminance": {
+				"value": 209.16924909252933,
+				"units": "lux"
+			},
+			"expectedDisplayIlluminance": 209.16924909252933,
+			"expectedGain": 6.997684204425964
+		},
+		{
+			"id": "sj2000-p30",
+			"mode": "spherical-distant",
+			"observerHeight": {
+				"value": 2000,
+				"units": "meters"
+			},
+			"illuminance": {
+				"value": 44.01416524616314,
+				"units": "lux"
+			},
+			"expectedDisplayIlluminance": 44.01416524616314,
+			"expectedGain": 24.380092491606913
+		},
+		{
+			"id": "sj2000-p40",
+			"mode": "spherical-distant",
+			"observerHeight": {
+				"value": 2000,
+				"units": "meters"
+			},
+			"illuminance": {
+				"value": 7.240126010200167,
+				"units": "lux"
+			},
+			"expectedDisplayIlluminance": 7.240126010200167,
+			"expectedGain": 99.61322556003657
+		},
+		{
+			"id": "sj2000-p50",
+			"mode": "spherical-distant",
+			"observerHeight": {
+				"value": 2000,
+				"units": "meters"
+			},
+			"illuminance": {
+				"value": 1.614022548435154,
+				"units": "lux"
+			},
+			"expectedDisplayIlluminance": 1.614022548435154,
+			"expectedGain": 318.80835270670997
+		},
+		{
+			"id": "sj2000-p60",
+			"mode": "spherical-distant",
+			"observerHeight": {
+				"value": 2000,
+				"units": "meters"
+			},
+			"illuminance": {
+				"value": 0.5474437917724962,
+				"units": "lux"
+			},
+			"expectedDisplayIlluminance": 0.5474437917724962,
+			"expectedGain": 727.4647520705477
+		},
+		{
+			"id": "sj25000-night",
+			"mode": "spherical-distant",
+			"observerHeight": {
+				"value": 25000,
+				"units": "meters"
+			},
+			"illuminance": {
+				"value": 0,
+				"units": "lux"
+			},
+			"expectedDisplayIlluminance": 0,
+			"expectedGain": 9887.089970701136
+		},
+		{
+			"id": "sj25000-noon",
+			"mode": "spherical-distant",
+			"observerHeight": {
+				"value": 25000,
+				"units": "meters"
+			},
+			"illuminance": {
+				"value": 128594.18933704804,
+				"units": "lux"
+			},
+			"expectedDisplayIlluminance": 128594.18933704804,
+			"expectedGain": 1.0002032601696282
+		},
+		{
+			"id": "sj25000-p30",
+			"mode": "spherical-distant",
+			"observerHeight": {
+				"value": 25000,
+				"units": "meters"
+			},
+			"illuminance": {
+				"value": 36.91394047016732,
+				"units": "lux"
+			},
+			"expectedDisplayIlluminance": 42.429500997026935,
+			"expectedGain": 25.08989320671531
+		},
+		{
+			"id": "sj25000-p40",
+			"mode": "spherical-distant",
+			"observerHeight": {
+				"value": 25000,
+				"units": "meters"
+			},
+			"illuminance": {
+				"value": 2.6356922849896702,
+				"units": "lux"
+			},
+			"expectedDisplayIlluminance": 8.151252811849284,
+			"expectedGain": 90.83712283940773
+		},
+		{
+			"id": "sj25000-p50",
+			"mode": "spherical-distant",
+			"observerHeight": {
+				"value": 25000,
+				"units": "meters"
+			},
+			"illuminance": {
+				"value": 0.10129398560566481,
+				"units": "lux"
+			},
+			"expectedDisplayIlluminance": 5.616854512465279,
+			"expectedGain": 121.35343187713914
+		},
+		{
+			"id": "sj25000-p60",
+			"mode": "spherical-distant",
+			"observerHeight": {
+				"value": 25000,
+				"units": "meters"
+			},
+			"illuminance": {
+				"value": 0.030748069044175357,
+				"units": "lux"
+			},
+			"expectedDisplayIlluminance": 5.54630859590379,
+			"expectedGain": 122.55148706574377
+		},
+		{
+			"id": "sj25000-p80",
+			"mode": "spherical-distant",
+			"observerHeight": {
+				"value": 25000,
+				"units": "meters"
+			},
+			"illuminance": {
+				"value": 0.0005758291454876557,
+				"units": "lux"
+			},
+			"expectedDisplayIlluminance": 5.5124694596230235,
+			"expectedGain": 123.13580551239448
+		},
+		{
+			"id": "sj40000-flat0",
+			"mode": "flat-local",
+			"observerHeight": {
+				"value": 40000,
+				"units": "meters"
+			},
+			"illuminance": {
+				"value": 115022.48652216278,
+				"units": "lux"
+			},
+			"expectedDisplayIlluminance": 115022.48652216278,
+			"expectedGain": 1.0002540523210939
+		},
+		{
+			"id": "sj40000-flat180",
+			"mode": "flat-local",
+			"observerHeight": {
+				"value": 40000,
+				"units": "meters"
+			},
+			"illuminance": {
+				"value": 5249.398874384643,
+				"units": "lux"
+			},
+			"expectedDisplayIlluminance": 5249.398874384643,
+			"expectedGain": 1.1178752498748008
+		},
+		{
+			"id": "sj40000-night",
+			"mode": "spherical-distant",
+			"observerHeight": {
+				"value": 40000,
+				"units": "meters"
+			},
+			"illuminance": {
+				"value": 0,
+				"units": "lux"
+			},
+			"expectedDisplayIlluminance": 0,
+			"expectedGain": 9887.089970701136
+		},
+		{
+			"id": "sj40000-noon",
+			"mode": "spherical-distant",
+			"observerHeight": {
+				"value": 40000,
+				"units": "meters"
+			},
+			"illuminance": {
+				"value": 128840.39064642332,
+				"units": "lux"
+			},
+			"expectedDisplayIlluminance": 128840.39064642332,
+			"expectedGain": 1.0002024841363708
+		},
+		{
+			"id": "sj40000-p0",
+			"mode": "spherical-distant",
+			"observerHeight": {
+				"value": 40000,
+				"units": "meters"
+			},
+			"illuminance": {
+				"value": 137.44731078760336,
+				"units": "lux"
+			},
+			"expectedDisplayIlluminance": 147.67016405247614,
+			"expectedGain": 9.337167678491804
+		},
+		{
+			"id": "sj40000-p0-close",
+			"mode": "spherical-distant",
+			"observerHeight": {
+				"value": 40000,
+				"units": "meters"
+			},
+			"illuminance": {
+				"value": 137.44731078760336,
+				"units": "lux"
+			},
+			"expectedDisplayIlluminance": 147.67016405247614,
+			"expectedGain": 9.337167678491804
+		},
+		{
+			"id": "sj40000-p10",
+			"mode": "spherical-distant",
+			"observerHeight": {
+				"value": 40000,
+				"units": "meters"
+			},
+			"illuminance": {
+				"value": 40.45440619905359,
+				"units": "lux"
+			},
+			"expectedDisplayIlluminance": 51.48552725277281,
+			"expectedGain": 21.562303479615508
+		},
+		{
+			"id": "sj40000-p100",
+			"mode": "spherical-distant",
+			"observerHeight": {
+				"value": 40000,
+				"units": "meters"
+			},
+			"illuminance": {
+				"value": 1.0616338440055725e-6,
+				"units": "lux"
+			},
+			"expectedDisplayIlluminance": 0.14779200263770587,
+			"expectedGain": 1881.6996072773272
+		},
+		{
+			"id": "sj40000-p120",
+			"mode": "spherical-distant",
+			"observerHeight": {
+				"value": 40000,
+				"units": "meters"
+			},
+			"illuminance": {
+				"value": 0,
+				"units": "lux"
+			},
+			"expectedDisplayIlluminance": 0,
+			"expectedGain": 9887.089970701136
+		},
+		{
+			"id": "sj40000-p20",
+			"mode": "spherical-distant",
+			"observerHeight": {
+				"value": 40000,
+				"units": "meters"
+			},
+			"illuminance": {
+				"value": 36.64043790587377,
+				"units": "lux"
+			},
+			"expectedDisplayIlluminance": 47.671558959593,
+			"expectedGain": 22.902841006122294
+		},
+		{
+			"id": "sj40000-p30",
+			"mode": "spherical-distant",
+			"observerHeight": {
+				"value": 40000,
+				"units": "meters"
+			},
+			"illuminance": {
+				"value": 22.070112945176607,
+				"units": "lux"
+			},
+			"expectedDisplayIlluminance": 33.101233998895836,
+			"expectedGain": 30.46517701700294
+		},
+		{
+			"id": "sj40000-p40",
+			"mode": "spherical-distant",
+			"observerHeight": {
+				"value": 40000,
+				"units": "meters"
+			},
+			"illuminance": {
+				"value": 1.9042914257982857,
+				"units": "lux"
+			},
+			"expectedDisplayIlluminance": 12.935412479517515,
+			"expectedGain": 63.40172409387612
+		},
+		{
+			"id": "sj40000-p50",
+			"mode": "spherical-distant",
+			"observerHeight": {
+				"value": 40000,
+				"units": "meters"
+			},
+			"illuminance": {
+				"value": 0.007870837738151098,
+				"units": "lux"
+			},
+			"expectedDisplayIlluminance": 11.03899189145738,
+			"expectedGain": 71.73496747949208
+		},
+		{
+			"id": "sj40000-p50-away",
+			"mode": "spherical-distant",
+			"observerHeight": {
+				"value": 40000,
+				"units": "meters"
+			},
+			"illuminance": {
+				"value": 0.007870837738151098,
+				"units": "lux"
+			},
+			"expectedDisplayIlluminance": 11.03899189145738,
+			"expectedGain": 71.73496747949208
+		},
+		{
+			"id": "sj40000-p50-close",
+			"mode": "spherical-distant",
+			"observerHeight": {
+				"value": 40000,
+				"units": "meters"
+			},
+			"illuminance": {
+				"value": 0.007870837738151098,
+				"units": "lux"
+			},
+			"expectedDisplayIlluminance": 11.03899189145738,
+			"expectedGain": 71.73496747949208
+		},
+		{
+			"id": "sj40000-p50-zenith",
+			"mode": "spherical-distant",
+			"observerHeight": {
+				"value": 40000,
+				"units": "meters"
+			},
+			"illuminance": {
+				"value": 0.007870837738151098,
+				"units": "lux"
+			},
+			"expectedDisplayIlluminance": 11.03899189145738,
+			"expectedGain": 71.73496747949208
+		},
+		{
+			"id": "sj40000-p60",
+			"mode": "spherical-distant",
+			"observerHeight": {
+				"value": 40000,
+				"units": "meters"
+			},
+			"illuminance": {
+				"value": 0.0015503548892980255,
+				"units": "lux"
+			},
+			"expectedDisplayIlluminance": 11.032671377838867,
+			"expectedGain": 71.76697067426076
+		},
+		{
+			"id": "sj40000-p70",
+			"mode": "spherical-distant",
+			"observerHeight": {
+				"value": 40000,
+				"units": "meters"
+			},
+			"illuminance": {
+				"value": 0.00025869276840043083,
+				"units": "lux"
+			},
+			"expectedDisplayIlluminance": 10.619079829140391,
+			"expectedGain": 73.93448500616931
+		},
+		{
+			"id": "sj40000-p80",
+			"mode": "spherical-distant",
+			"observerHeight": {
+				"value": 40000,
+				"units": "meters"
+			},
+			"illuminance": {
+				"value": 5.860864520023736e-5,
+				"units": "lux"
+			},
+			"expectedDisplayIlluminance": 5.792391878374619,
+			"expectedGain": 118.48497203880872
+		},
+		{
+			"id": "sj5-flat0",
+			"mode": "flat-local",
+			"observerHeight": {
+				"value": 5,
+				"units": "meters"
+			},
+			"illuminance": {
+				"value": 84840.61123190173,
+				"units": "lux"
+			},
+			"expectedDisplayIlluminance": 84840.61123190173,
+			"expectedGain": 1.0004669331151674
+		},
+		{
+			"id": "sj5-flat180",
+			"mode": "flat-local",
+			"observerHeight": {
+				"value": 5,
+				"units": "meters"
+			},
+			"illuminance": {
+				"value": 2572.8826137032,
+				"units": "lux"
+			},
+			"expectedDisplayIlluminance": 2572.8826137032,
+			"expectedGain": 1.4434491554799624
+		},
+		{
+			"id": "sj5-night",
+			"mode": "spherical-distant",
+			"observerHeight": {
+				"value": 5,
+				"units": "meters"
+			},
+			"illuminance": {
+				"value": 0,
+				"units": "lux"
+			},
+			"expectedDisplayIlluminance": 0,
+			"expectedGain": 9887.089970701136
+		},
+		{
+			"id": "sj5-noon",
+			"mode": "spherical-distant",
+			"observerHeight": {
+				"value": 5,
+				"units": "meters"
+			},
+			"illuminance": {
+				"value": 117382.15449916924,
+				"units": "lux"
+			},
+			"expectedDisplayIlluminance": 117382.15449916924,
+			"expectedGain": 1.0002439415462565
+		},
+		{
+			"id": "sj5-p0",
+			"mode": "spherical-distant",
+			"observerHeight": {
+				"value": 5,
+				"units": "meters"
+			},
+			"illuminance": {
+				"value": 1529.0754476446398,
+				"units": "lux"
+			},
+			"expectedDisplayIlluminance": 1529.0754476446398,
+			"expectedGain": 2.0190781709089536
+		},
+		{
+			"id": "sj5-p0-close",
+			"mode": "spherical-distant",
+			"observerHeight": {
+				"value": 5,
+				"units": "meters"
+			},
+			"illuminance": {
+				"value": 1529.0754476446398,
+				"units": "lux"
+			},
+			"expectedDisplayIlluminance": 1529.0754476446398,
+			"expectedGain": 2.0190781709089536
+		},
+		{
+			"id": "sj5-p10",
+			"mode": "spherical-distant",
+			"observerHeight": {
+				"value": 5,
+				"units": "meters"
+			},
+			"illuminance": {
+				"value": 661.3684449728302,
+				"units": "lux"
+			},
+			"expectedDisplayIlluminance": 661.3684449728302,
+			"expectedGain": 3.405948738150142
+		},
+		{
+			"id": "sj5-p20",
+			"mode": "spherical-distant",
+			"observerHeight": {
+				"value": 5,
+				"units": "meters"
+			},
+			"illuminance": {
+				"value": 198.99139587333417,
+				"units": "lux"
+			},
+			"expectedDisplayIlluminance": 198.99139587333417,
+			"expectedGain": 7.298059633890083
+		},
+		{
+			"id": "sj5-p30",
+			"mode": "spherical-distant",
+			"observerHeight": {
+				"value": 5,
+				"units": "meters"
+			},
+			"illuminance": {
+				"value": 42.18020627943576,
+				"units": "lux"
+			},
+			"expectedDisplayIlluminance": 42.18020627943576,
+			"expectedGain": 25.20585691649278
+		},
+		{
+			"id": "sj5-p40",
+			"mode": "spherical-distant",
+			"observerHeight": {
+				"value": 5,
+				"units": "meters"
+			},
+			"illuminance": {
+				"value": 6.952489929728329,
+				"units": "lux"
+			},
+			"expectedDisplayIlluminance": 6.952489929728329,
+			"expectedGain": 102.80454704079975
+		},
+		{
+			"id": "sj5-p50",
+			"mode": "spherical-distant",
+			"observerHeight": {
+				"value": 5,
+				"units": "meters"
+			},
+			"illuminance": {
+				"value": 1.55848467787903,
+				"units": "lux"
+			},
+			"expectedDisplayIlluminance": 1.55848467787903,
+			"expectedGain": 327.52430929727524
+		},
+		{
+			"id": "sj5-p50-away",
+			"mode": "spherical-distant",
+			"observerHeight": {
+				"value": 5,
+				"units": "meters"
+			},
+			"illuminance": {
+				"value": 1.55848467787903,
+				"units": "lux"
+			},
+			"expectedDisplayIlluminance": 1.55848467787903,
+			"expectedGain": 327.52430929727524
+		},
+		{
+			"id": "sj5-p50-close",
+			"mode": "spherical-distant",
+			"observerHeight": {
+				"value": 5,
+				"units": "meters"
+			},
+			"illuminance": {
+				"value": 1.55848467787903,
+				"units": "lux"
+			},
+			"expectedDisplayIlluminance": 1.55848467787903,
+			"expectedGain": 327.52430929727524
+		},
+		{
+			"id": "sj5-p50-zenith",
+			"mode": "spherical-distant",
+			"observerHeight": {
+				"value": 5,
+				"units": "meters"
+			},
+			"illuminance": {
+				"value": 1.55848467787903,
+				"units": "lux"
+			},
+			"expectedDisplayIlluminance": 1.55848467787903,
+			"expectedGain": 327.52430929727524
+		},
+		{
+			"id": "sj5-p60",
+			"mode": "spherical-distant",
+			"observerHeight": {
+				"value": 5,
+				"units": "meters"
+			},
+			"illuminance": {
+				"value": 0.5283666447962769,
+				"units": "lux"
+			},
+			"expectedDisplayIlluminance": 0.5283666447962769,
+			"expectedGain": 747.1303538407881
+		},
+		{
+			"id": "sj5-p80",
+			"mode": "spherical-distant",
+			"observerHeight": {
+				"value": 5,
+				"units": "meters"
+			},
+			"illuminance": {
+				"value": 0.036894839485023354,
+				"units": "lux"
+			},
+			"expectedDisplayIlluminance": 0.036894839485023354,
+			"expectedGain": 4374.365207478875
+		},
+		{
+			"id": "ug40000-flat0",
+			"mode": "flat-local",
+			"observerHeight": {
+				"value": 40000,
+				"units": "meters"
+			},
+			"illuminance": {
+				"value": 29687.15373321405,
+				"units": "lux"
+			},
+			"expectedDisplayIlluminance": 29687.15373321405,
+			"expectedGain": 1.0038098692458748
+		},
+		{
+			"id": "ug40000-flat180",
+			"mode": "flat-local",
+			"observerHeight": {
+				"value": 40000,
+				"units": "meters"
+			},
+			"illuminance": {
+				"value": 455.19784109907715,
+				"units": "lux"
+			},
+			"expectedDisplayIlluminance": 455.19784109907715,
+			"expectedGain": 3.9311628393111056
+		},
+		{
+			"id": "ug40000-noon",
+			"mode": "spherical-distant",
+			"observerHeight": {
+				"value": 40000,
+				"units": "meters"
+			},
+			"illuminance": {
+				"value": 73030.68978076658,
+				"units": "lux"
+			},
+			"expectedDisplayIlluminance": 73030.68978076658,
+			"expectedGain": 1.000630131505523
+		},
+		{
+			"id": "ug40000-p50",
+			"mode": "spherical-distant",
+			"observerHeight": {
+				"value": 40000,
+				"units": "meters"
+			},
+			"illuminance": {
+				"value": 72516.4951607154,
+				"units": "lux"
+			},
+			"expectedDisplayIlluminance": 72516.4951607154,
+			"expectedGain": 1.0006390977300892
+		},
+		{
+			"id": "ug40000-sunset",
+			"mode": "spherical-distant",
+			"observerHeight": {
+				"value": 40000,
+				"units": "meters"
+			},
+			"illuminance": {
+				"value": 73030.68978076658,
+				"units": "lux"
+			},
+			"expectedDisplayIlluminance": 73030.68978076658,
+			"expectedGain": 1.000630131505523
+		},
+		{
+			"id": "ug5-flat0",
+			"mode": "flat-local",
+			"observerHeight": {
+				"value": 5,
+				"units": "meters"
+			},
+			"illuminance": {
+				"value": 19004.479779056866,
+				"units": "lux"
+			},
+			"expectedDisplayIlluminance": 19004.479779056866,
+			"expectedGain": 1.009282285231793
+		},
+		{
+			"id": "ug5-flat180",
+			"mode": "flat-local",
+			"observerHeight": {
+				"value": 5,
+				"units": "meters"
+			},
+			"illuminance": {
+				"value": 146.88805967265156,
+				"units": "lux"
+			},
+			"expectedDisplayIlluminance": 146.88805967265156,
+			"expectedGain": 9.377617593313962
+		},
+		{
+			"id": "ug5-noon",
+			"mode": "spherical-distant",
+			"observerHeight": {
+				"value": 5,
+				"units": "meters"
+			},
+			"illuminance": {
+				"value": 61698.16398859211,
+				"units": "lux"
+			},
+			"expectedDisplayIlluminance": 61698.16398859211,
+			"expectedGain": 1.0008828077934258
+		},
+		{
+			"id": "ug5-p50",
+			"mode": "spherical-distant",
+			"observerHeight": {
+				"value": 5,
+				"units": "meters"
+			},
+			"illuminance": {
+				"value": 61294.76428032289,
+				"units": "lux"
+			},
+			"expectedDisplayIlluminance": 61294.76428032289,
+			"expectedGain": 1.0008944631111913
+		},
+		{
+			"id": "ug5-sunset",
+			"mode": "spherical-distant",
+			"observerHeight": {
+				"value": 5,
+				"units": "meters"
+			},
+			"illuminance": {
+				"value": 61698.16398859211,
+				"units": "lux"
+			},
+			"expectedDisplayIlluminance": 61698.16398859211,
+			"expectedGain": 1.0008828077934258
+		}
+	]
+}

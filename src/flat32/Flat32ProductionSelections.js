@@ -1,6 +1,7 @@
 import {ViewPresentationFilterRegistry} from '../algorithm32/implementation/presentation-filter/ViewPresentationFilterRegistry.js';
 
 export const FLAT32_COLOR_MODEL_IDS = /** @type {const} */ ({
+	COLOR_RESET_ALTITUDE_HALF_V1: 'color-reset-altitude-half-v1',
 	BASIC_BRUNETON: 'basic-bruneton',
 	COLOR_RESET_SLOPE_078_P2: 'color-reset-slope-078-p2',
 	COLOR_RESET_SLOPE_078_P9: 'color-reset-slope-078-p9',
@@ -116,7 +117,7 @@ function acceptPresentationFilters(value) {
  */
 export function resolveFlat32ColorDisplayModelConfiguration(configuration = {}) {
 	const record = acceptRecord(configuration, 'Flat32 Color configuration');
-	const candidateModel = record.model ?? FLAT32_COLOR_MODEL_IDS.COLOR_RESET_SLOPE_078_P2;
+	const candidateModel = record.model ?? FLAT32_COLOR_MODEL_IDS.COLOR_RESET_ALTITUDE_HALF_V1;
 	if (!COLOR_MODEL_IDS.has(candidateModel)) {
 		throw new RangeError(`Flat32 Color model ${String(candidateModel)} is not supported.`);
 	}
@@ -162,7 +163,8 @@ export function resolveFlat32ProductionSelections(configuration = {}) {
 	return {
 		colorDisplayModelConfiguration,
 		sceneColorPrecision:
-			colorDisplayModelConfiguration.model === FLAT32_COLOR_MODEL_IDS.COLOR_RESET_SLOPE_078_P2
+			colorDisplayModelConfiguration.model === FLAT32_COLOR_MODEL_IDS.COLOR_RESET_SLOPE_078_P2 ||
+			colorDisplayModelConfiguration.model === FLAT32_COLOR_MODEL_IDS.COLOR_RESET_ALTITUDE_HALF_V1
 				? 'float32'
 				: 'float16',
 		celestialSourcesEnabled,

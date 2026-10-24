@@ -45,7 +45,12 @@ export class Flat32Bootstrap {
 		const stellarPresentation = searchParameters.get('stellarPresentation') ?? 'human';
 		if (
 			colorModelQuery !== null &&
-			!['basic-bruneton', 'color-reset-slope-078-p9', 'color-reset-slope-078-p2'].includes(colorModelQuery)
+			![
+				'basic-bruneton',
+				'color-reset-slope-078-p9',
+				'color-reset-slope-078-p2',
+				'color-reset-altitude-half-v1',
+			].includes(colorModelQuery)
 		) {
 			throw new RangeError(`Unsupported Flat32 colorModel query selection: ${colorModelQuery}.`);
 		}
