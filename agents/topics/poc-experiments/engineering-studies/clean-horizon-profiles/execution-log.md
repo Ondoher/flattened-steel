@@ -122,3 +122,73 @@ earlier production test/render proofs; this lane's type/evidence verification
 passes. No experiment standards review or audit occurred. The engineering-studies
 index was corrected to the actual M1 state. The final response reports commit
 success/identifier from Git; no push is authorized.
+
+## Follow-on scene planning
+
+After local checkpoint 58b9b371, the owner requested a plan whose final goal is
+actual San Jose noon images at 5 m, 100 m, 500 m, 2 km and 40 km, then sunset at
+the same heights. The current sequence is scene-plan.md; the earlier plan and
+M1 results retain their original gates and claims. This request is planning-only.
+
+The new sequence uses an explicitly ARM-informed reconstruction with documented
+near-field, humidity, phase/spectral and upper-column assumptions. Incomplete
+observation coverage narrows the measured-profile claim rather than alone ending
+the image campaign. Physical consistency and actual renderer support still need
+proof. Default assumptions are common app ground-defined noon/sunset instants,
+Globe geometry, 50-degree vertical FOV, actual geometric limb in frame, and ten
+central-model conditions with matched Bruneton comparisons. Elevated observer
+sunset is not substituted for the common preset. Native display and pair-fixed
+exposure are separate appearance modes; raw radiance supports quantitative claims.
+
+The create-plan skill's one bounded read-only second-agent critique completed.
+All six suggestions were incorporated: early layer/phase representation proof;
+individual AOD timing rather than daily-column conflation; explicit numerical
+agreement/order-tail scope; finite targeted sensitivity checks; native-resolution
+inspection of every pair and time-transition recovery; and immutable gallery
+updates with pair-fixed exposure interpretation. No suggestion was rejected,
+and no additional standards review, approval pause, numerical run or render began.
+
+## S1 independent scene execution
+
+The owner invoked independent-execution for scene-plan.md on2026-10-24. Source
+and output stay in this experiment. No new reviewer or plan-critique campaign
+was introduced. Existing planning changes are retained for the next checkpoint.
+
+Resolved the exact app noon/sunset instants. Chose the acquired19:31:54December
+interval, its five valid paired green surface observations, individual AOD86s
+earlier and contemporaneous conditional phase. The source dataset/quality/timing
+audit is00026. No account credential or further data download was needed.
+
+Physical-model decisions, before candidate images: use a nonnegative tabulated
+shape with a300m mixed near-field prior, published OPAC humidity proxy and weak
+free/upper-background priors. Treat spectral shape/global phase/SSA as explicit
+factorization assumptions. Keep the AOD residual. The unrelated background shape
+was too strong in00028; weakening that unobserved prior in00029 improved column
+consistency without fitting pixels or forcing exact AOD. Register one-factor
+completions/phase/background alternatives, including an explicitly assumed tail
+above the published preset's35km boundary.00030 actual hardware WebGL proof passes.
+
+Implementation decision: use a contained atmosphere subclass for CPU/runtime/
+celestial medium sampling, and a contained build transform for compiler medium
+sampling. Keep the N4 recurrence, native15 basis and production numerical policy.
+The initial shared-atlas address layout is scaffolding only; candidate source
+density values are rebuilt and uploaded before receiver-light measurement/capture.
+Current production/earlier experiments are read-only inputs.
+
+Recovery: external helper asserted the old0.8SSA; use it only as a discarded
+scaffold and export candidate SSA/phase into the final binary library. Repair
+column-check slice indexing and required case metadata in new runs. Preserve/reuse
+the12 successful baseline reference spectra. The baseline scene compiler completed
+15channels in00032, then a legacy stellar-specific HDR assumption failed. Capture
+repair records total linear composition only and reuses complete authenticated
+cache rows with explicit coordinate remapping. These are implementation/helper
+failures, not evidence against the candidate atmosphere.
+
+The checkpoint adviser recommends the coherent S1/pipeline preservation point:
+`feat: add ARM-informed clean-horizon scene pipeline`, with bullets registering
+the December model/variants, contained sampling and reference/capture helpers,
+and the five-altitude noon/sunset sequence. Its message/local commit is preapproved
+by independent-execution. Current source type checking passes; no experiment unit
+tests or standards reviews were introduced.00035 retains all five Bruneton noon
+images with <=1RGB-byte replay error. Candidate/reference jobs continue below
+ignored output and do not alter the Git snapshot. Git owns the checkpoint identifier.

@@ -1,23 +1,26 @@
 # Measured Clean Horizon Profiles Experiment
 
-Status: M1 execution concluded with a partial/inconclusive input result; selected
-for owner review. No measured-profile scene finalist or production promotion.
+Status: follow-on independent scene execution, S1 complete and S2/S3 underway, for five altitudes at
+San Jose noon and sunset. Earlier M1 qualification remains partial/inconclusive;
+no measured-profile scene finalist or production promotion exists.
 
 ## Objective
 
-Find measurement-backed low-aerosol profiles that improve the visible globe horizon at 5 to 500 meters while retaining solar glow.
+Render an explicitly ARM-informed low-aerosol reconstruction at San Jose noon and
+sunset at 5 m, 100 m, 500 m, 2 km and 40 km, with matched Bruneton comparisons.
 
 ## Governing Documents
 
 - [Design](design.md)
-- [Plan](plan.md)
+- [Current scene plan](scene-plan.md)
+- [Earlier qualification plan](plan.md)
 - [Status](status.md)
 - [Results and color controls](results.md)
 
-Focus: the owner's near-ground horizon at 5-500 m. Start with NASA ATom
-measurement-derived profiles, screen with fully spherical libRadtran, then render
-actual scenes for supported finalists. Lower total aerosol loading alone does
-not establish a clearer horizon. Production profile, cache and display are read-only.
+Focus: actual scene images from the ARM lead, with reconstruction assumptions
+and appearance uncertainty visible. Near-ground clarity remains the motivation;
+2 km and 40 km extend the requested image matrix. Lower aerosol loading alone
+does not establish clarity. Production profile, cache and display are read-only.
 
 ## Repository Surfaces
 

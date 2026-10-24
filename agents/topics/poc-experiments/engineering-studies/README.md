@@ -17,7 +17,7 @@ Other lanes retain their own dispositions.
 
 ## Working Documents
 
-- [Measured Clean Horizon Profiles](clean-horizon-profiles/README.md) - M1 source screen and color controls complete; ARM is the strongest lead, with full-profile qualification inconclusive.
+- [Measured Clean Horizon Profiles](clean-horizon-profiles/README.md) - ARM-informed scene plan for San Jose noon/sunset at five heights; earlier M1 qualification remains inconclusive.
 - [Twilight Exposure](twilight-exposure/README.md) - Ended; accepted display response promoted to production.
 
 - [Elevated Horizon Validation](elevated-horizon-validation/README.md) - Matched elevated-horizon comparison complete.

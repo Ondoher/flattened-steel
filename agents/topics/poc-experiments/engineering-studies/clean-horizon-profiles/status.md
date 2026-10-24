@@ -1,9 +1,19 @@
 # Measured Clean Horizon Profiles Experiment Status
 
-Status: M1 execution concluded with partial/inconclusive qualification on 2026-10-24;
-selected for owner review. The experiment is not closed or promoted.
+Status: follow-on scene execution authorized on 2026-10-24; S1 complete, S2/S3 underway.
+Earlier M1 qualification remains partial/inconclusive. The experiment is not closed
+or promoted.
 
 ## Current State
+
+The owner requests final full-scene images at San Jose noon and sunset at 5 m,
+100 m, 500 m, 2 km and 40 km. The [current scene plan](scene-plan.md) targets those
+ten conditions with matched Bruneton images, faithful contained transport and
+explicit ARM reconstruction/uncertainty labels. The earlier qualification plan
+and its gated outcome are preserved. [Scene execution results](scene-results.md)
+own the new central reconstruction and sampler proof. The frozen model has AOD550
+0.02102 versus nearby observed0.01708, retaining its residual and assumptions.
+Hardware GPU/CPU sampler agreement passes; reference and full-scene work is underway.
 
 The [results](results.md) own source findings, color controls and the milestone
 disposition. ARM's 2023-12-05 SGP observations are the strongest new low-aerosol
@@ -27,6 +37,7 @@ experiment source/evidence was modified by this lane.
 - Paired surface optics use simultaneous QC=0 samples, separate impactor states, explicit STP/ambient-density conversion and retained humidity differences.
 - Raw near-field audit and primary handbooks establish the limits of the inherited 150 m screening convention and the lidar's 355 nm wavelength.
 - One independent plan critique completed; all seven recommendations incorporated in the plan.
+- A separate bounded critique of the follow-on scene plan completed; all six recommendations incorporated. This was planning advice, not a standards review or execution.
 - Checkpoint monitoring remains active; local commit details belong in the execution log.
 - Type-check configuration: `experiments/clean-horizon-profiles/jsconfig.json`.
 - Output root: `tmp/experiments/clean-horizon-profiles/`.
@@ -42,9 +53,15 @@ observations. These are evidence limits, not new runtime or update prohibitions.
 
 ## Resumption boundary
 
-The bounded M1 investigation is reported for owner review. The strongest follow-on
-is an explicitly constrained ARM December reconstruction: establish humidity and
-near-field completion bounds before candidate M2 spectra or scene construction.
+The bounded M1 investigation is complete as reported. The new plan begins with
+S1: reuse the acquired December ARM inputs, freeze a central reconstruction and
+documented humidity/near-field/phase/upper-column alternatives. Then obtain reference
+rays and actual scene pilots, complete noon and sunset image matrices, and verify
+the gallery. Modeling uncertainty is labeled rather than used alone to omit scenes.
+The owner authorized independent execution; proceed through the saved scene plan.
+Current new payloads:00029 reconstruction,00030 GPU proof,00031 reference baseline
+partial payloads and00032 complete baseline cache. Reference export and HDR capture
+repairs reuse those earlier immutable results; no actual scene pair is delivered yet.
 Do not repeat downloads, controls or failed-access attempts without changed inputs.
 Reuse sealed evidence read-only. [Execution log](execution-log.md) owns decisions.
 

@@ -2,11 +2,17 @@
 
 ## Objective
 
-Find measurement-backed low-aerosol profiles that improve the visible globe horizon at 5 to 500 meters while retaining solar glow.
+Produce ARM-informed low-aerosol full-scene comparisons at San Jose noon and
+sunset at 5 m, 100 m, 500 m, 2 km and 40 km, retaining the near-ground clarity and
+solar-glow question and reporting reconstruction uncertainty.
 
 ## Acceptance Question
 
-Can qualified clean ATom profiles, or the owner-authorized ARM fallback, provide visibly clearer near-ground horizons than Bruneton without arbitrary aerosol tuning?
+How does a documented ARM-informed reconstruction change actual horizon and Sun
+appearance versus Bruneton across the requested heights and times? A complete
+measured-atmosphere claim remains distinct from a renderable model with explicit
+assumptions. The current [scene plan](scene-plan.md) owns this follow-on sequence;
+the earlier [M1 results](results.md) retain their original qualification boundary.
 
 ## Isolation Boundary
 
@@ -50,11 +56,20 @@ Append one event at process start, every phase transition, at least once every 3
 
 ## Decisions
 
-This is exploratory profile selection, not a production numerical correction.
-The owner selected 5-500 m as the priority. Primary heights are 5, 100 and 500 m
-above common sea-level ground. Use San Jose noon, ten minutes before the app's
-ground-defined sunset, and sunset as controlled source geometries; these are not
-claims that the measured remote-ocean air mass occurred at San Jose.
+This is exploratory reconstruction and contained rendering, not a production
+numerical correction. The owner's follow-on request makes actual noon and sunset
+images at 5, 100, 500, 2,000 and 40,000 m above common ground the goal. Use common
+San Jose app noon and ground-defined sunset instants at every height; elevated
+observer sunset is a different event. The SGP air mass is an idealized transplant,
+not a claim about measured San Jose weather. Pre-sunset work from the earlier
+qualification plan is optional only if it answers a distinct new uncertainty.
+
+M1 did not qualify a complete observed ambient profile. The new scene sequence
+can proceed with labeled, defensible reconstruction assumptions and sensitivity
+images. Missing observations limit measured-profile claims rather than alone
+ending the image campaign. Do not silently turn a fitted exponential or g-only
+proxy into the observed ARM atmosphere. No image-quality or clarity threshold
+replaces delivery of the requested conditions.
 
 Baseline: current canonical Bruneton molecular/aerosol optics and source spectra.
 Retain a molecular-only control. First comparison changes only aerosols; measured
@@ -69,8 +84,10 @@ The [NASA catalog](https://catalog.data.gov/dataset/atom-comprehensive-aerosol-p
 lists ten optical wavelengths, one-minute data and one-kilometer profile bins.
 These are measurement-derived optics, not measured directional sky radiances.
 Resolve current revisions, access terms, units and quality flags before use.
-Initial browser research encountered ORNL redirects/403 responses; data access
-is an unresolved execution dependency. Credentials stay outside source/logs/chat.
+The completed M1 access audit found Earthdata authentication required for the
+official numerical file. Public derivatives and ARM inputs have been acquired;
+the results own their coverage and uncertainty. The current rendering lead is
+ARM SGP on December 5, 2023. Credentials stay outside source/logs/chat.
 
 Select contiguous observed ascents/descents or documented profile products using input properties before rendering:
 cloud-free validity, ambient near-surface extinction, coverage and column loading.
@@ -124,6 +141,7 @@ No production source, default, operational-cache or other-experiment modificatio
 
 ## Open Questions
 
-- Are clean ATom data accessible with adequate low-level and phase coverage?
-- Does visible improvement survive surface/phase/upper-column uncertainty?
-- Can a faithful contained renderer reproduce the reference benefit?
+- Which central ARM reconstruction and uncertainty completions are defensible?
+- How do those assumptions affect actual horizon and Sun appearance at all five heights?
+- What contained renderer adaptations are needed for the same optics in cache and live transport?
+- How much of each visible change is physical radiance versus the retained display response?
