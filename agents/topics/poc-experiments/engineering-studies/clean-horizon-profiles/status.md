@@ -31,9 +31,20 @@ owns the focused diagnosis.00062-horizon-bands contains the original/fine/path-o
 comparison and verification. Upper bright/gray bands originate in atmospheric
 path radiance;480 view intervals and exact-sphere ground clipping do not remove
 them. New spherical reference rays show a physical gradient plus a cached-field
-brightness/color distortion. Height sampling of the elevated aerosol layer and
-outgoing angular reconstruction remain unseparated hypotheses. No fix or profile
+brightness/color distortion. The executed height test below separates final height lookup from build propagation;
+remaining angular/field errors are unresolved. No fix or profile
 change is promoted; the images should not be called fully validated.
+
+## Height-hypothesis test complete
+
+[Height-test findings](scene-results.md#height-resolution-hypothesis-test) and
+[comparison gallery](../../../../../tmp/experiments/clean-horizon-profiles/runs/00072-height-results/index.html)
+own the executed58/76-height study. Height lookup changes the gray band; rebuilding
+orders with the original lookup changes little. Local height convergence is tight,
+but dense readout worsens nearby reference errors and the bright rim remains.
+The upper band's direct interpolation issue is1875-3125m, not the originally
+suspected0-1875m gap. Lower/upper lookup splits establish that localization.
+No height-only fix or production update is promoted.
 
 ## Verification and next boundary
 

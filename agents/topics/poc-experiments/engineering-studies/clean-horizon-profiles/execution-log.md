@@ -326,3 +326,80 @@ The whole-worktree unit contains eight experiment-source/owning-topic files,
 no production/data/binary or unrelated changes. Source types and the focused
 scientific/evidence checks pass. Git's resulting commit identity is reported
 in the response; no push is authorized.
+
+
+## Authorized height-resolution hypothesis test
+
+The owner explicitly requests testing the cache-height explanation. Preserve the
+physical model, N4, native15 spectrum, incoming/outgoing grids, source, view30,
+scene geometry and display. Retain all original48 height nodes and add the
+registered profile's lower-layer knots100/300/500/800/1000/1300/1600/2000m plus
+2500/3000m (58 total). If useful, a125m low-layer refinement supplies a convergence
+check. No profile fitting or production edits. Reuse libRadtran00059 reference rays.
+
+A contained texture/readout bridge first replays the original field with its
+original height grid and must agree with the original capture. Rebuild the full
+N4 field at refined heights; compare (a) reading only original48 nodes, isolating
+build propagation, and (b) reading all refined nodes, adding final lookup benefit.
+Render500m/2km noon at baseline physical scene lighting and identical frame gain;
+this isolates atmospheric path changes, not a complete lighting promotion.
+
+Primary hypotheses predict reduced2km gray-band brightness/color error versus
+reference at0.2/0.6/1.2degrees above the limb, with the upper+14.4%Y error and
+B/R1.102 versus1.236 as retained controls. Inspect the bright rim separately;
+reducing the gray band does not automatically validate the boundary discontinuity.
+If the refined build does not improve reference agreement or appearance, report
+that falsification rather than changing optics/angles. Record added build/storage
+cost. All derivations go to fresh immutable runs inside this experiment.
+
+
+## Height-test result and bounded follow-through
+
+00063 completed58-height N4 construction, original-grid and dense-grid readout
+with a native bridge control.00064/00065 reuse the00059 reference. Dense readout
+reduces the upper gray-band error but makes nearby rays20% high; build-only effect
+is <=0.5percentage point. Run the registered finer grid to assess convergence,
+not a new optics/angle branch.00066 uses76heights including125m lower spacing;
+00067/00068 show the same dense/coarse result.58->76changes sampled Y by <=0.076%
+and rendered RGB by at most one byte. Blanket refinement is not a sufficient fix.
+
+Geometry exposed a narrower issue in the original hypothesis: the1.2degree upper
+band ray bottoms at1946m, above the original first gap. Reuse the saved58-height
+field for two inexpensive readout splits, with no additional GPU build.00070 adds
+only nodes below1875m;00071 adds only2000/2500/3000m nodes above it. The upper sample
+is unaffected by lower-only lookup and improved by upper-only lookup. Thus locate
+the direct upper gray-band interpolation issue in1875-3125m; do not continue to
+attribute it specifically to0-1875m or to recursive order-error magnification.
+This split was a post-result mechanism diagnostic, not a predeclared acceptance
+comparison or a production-selected grid.
+
+The upper-only diagnostic lowers three-ray mean absolute Y discrepancy8.72->6.58%,
+but can preserve lower-grid error cancellation. Full refined grids give15.42/15.46%
+mean absolute error and16.82/16.87% relative Y RMSE, versus original9.72% RMSE.
+Physical/color correctness remains unresolved. The bright rim persists. Do not
+promote height refinement or adjust the atmosphere to hide the mismatch.
+
+00069 seals the first convergence gallery;00072 adds split metrics and is current.
+Both retain actual original/build-only/dense images at500m/2km, exact native float
+bridge equality, physical-input invariance and source type checks. Final00072
+rehashes all direct input artifacts and retained output-parent identities and
+verifies12image loads in a real browser with zero page errors. All new runs are
+accepted; resources are closed. Production and previous sealed evidence unchanged.
+Stop the bounded height test here; no broad new solver campaign or profile tuning.
+
+
+Checkpoint adviser: CHECKPOINT_RECOMMENDED for the completed bounded hypothesis
+unit. The continuing independent-execution authorization preapproves this message:
+
+```text
+feat: test clean-horizon cache height resolution
+
+- compare original, 58-height, and 76-height N4 field readouts
+- localize the upper gray-band interpolation effect above 1875 meters
+- record convergence, worsened reference fit, and the remaining bright-rim limit
+```
+
+Whole-worktree inspection contains nine experiment-source/owning-topic files,
+no generated data/binaries, credentials or unrelated changes. Source types and
+run00072 scientific/browser/evidence checks pass. Git supplies the final commit
+identifier in the response. No push is authorized.

@@ -298,12 +298,97 @@ It does not establish that the narrow rim is entirely artificial, or distinguish
 scattering-order truncation from spatial/angular cache reconstruction.
 
 The reconstruction has extinction550 about13.2/Mm around1-1.3km versus1.5/Mm at
-surface, while the native cache has no height node between0 and1875m. Resolving
-that elevated layer in the cache is the strongest next spatial-sampling test;
-outgoing-direction interpolation is another unseparated candidate. Neither was
-changed in this diagnosis. Exposure/blur is not an evidence-based correction.
+surface, while the native cache has no height node between0 and1875m. This motivated the executed height-resolution test below. The initial diagnosis
+did not change height or outgoing sampling; the new test separates height build
+propagation and final interpolation. Exposure/blur is not an evidence-based correction.
 
 The focused report validates all parent artifact hashes, image dimensions,
 float decomposition/baseline equality and local source types. Old galleries/runs
 remain immutable, including the initial failed diagnostic00058 (composer lookup,
 repaired in00060). No production source, profile, cache or display changed.
+
+
+## Height-resolution hypothesis test
+
+[Open the height-test gallery and ray tables](../../../../../tmp/experiments/clean-horizon-profiles/runs/00072-height-results/index.html).
+
+Conclusion: height interpolation contributes to the gray-band shape, but denser
+lower-atmosphere sampling alone is not a successful fix. The original claim about
+the0-1875m gap was too narrow: the upper gray-band ray stays above1945m. Its direct
+readout distortion occurs in the1875-3125m interval, with the aerosol layer's upper
+edge spread across too wide an interpolation cell. This localization is supported
+by a readout split, not inferred merely from a prettier image.
+
+The experiment retained every original48 height knot and added100,300,500,800,
+1000,1300,1600,2000,2500 and3000m (58total). A second construction also adds125m
+sampling below3km (76total). Optics/profile, N4, incoming/outgoing and solar grids,
+source, view30 and geometry were unchanged. Scene lighting and original frame gain
+were held fixed to isolate atmospheric path effects, rather than relighting each
+candidate. Actual GPU images at500m and2km noon are shown in the gallery.
+
+Each field was read through the original48-node grid and its refined grid.
+A separate texture bridge replays the original field with exactly matching linear
+float output at both heights; native display replay differs by at most one RGB byte.
+Build-only changes move the selected-ray Y error by less than0.5percentage point.
+The large image/ray change occurs during final height interpolation, rather than
+strong recursive magnification from constructing later scattering orders.
+
+Signed luminance discrepancy against the same spherical MYSTIC pilot means:
+
+| Readout and construction |0.2degrees above limb|0.6degrees|1.2degrees|
+| --- | --- | --- | --- |
+|Original48 / original48|-7.75%|-4.01%|+14.40%|
+|58build / original48|-7.91%|-4.41%|+13.90%|
+|58build / refined58|+20.50%|+19.82%|+5.95%|
+|76build / refined76|+20.54%|+19.91%|+5.95%|
+|58build / add lookup knots below1875m only|+21.03%|+20.76%|+13.90%|
+|58build / add lookup knots above1875m only|-8.44%|-5.35%|+5.95%|
+
+The final two rows are CPU replay diagnostics of the same retained58-height field;
+they do not claim additional full-scene split renders. The corresponding center
+rays have minimum heights518m,1322m and1946m. Adding only lower knots leaves the
+upper gray-band sample unchanged; adding2000/2500/3000m knots changes it to the
+same result as the full refinement. For that upper sample B/R improves from1.102
+to1.156, versus reference1.236, while nearby lower-band samples become too neutral
+under the full refinement. Physical/color accuracy is not established by removing
+one visible gray region.
+
+The58->76 dense refinement changes the three ray luminances by at most0.076%.
+Both full-frame comparisons differ by at most one RGB byte. This is good local
+height convergence, but the selected-ray mean absolute Y error gets worse:
+8.72% original,15.42% at58heights and15.46% at76heights. Relative Y RMSE across the
+same three means increases from9.72% to16.82/16.87%. These are three-direction
+metrics, not full-sky RMSE. The upper-only diagnostic has mean absolute error6.58%,
+but intentionally retaining a coarser lower grid is not a principled final fix;
+it can preserve cancellation of another error.
+
+At native resolution the upper gray strip is reduced under dense readout, the
+near-limb region changes brightness/color, and the bright rim persists. No broad
+black strips, missing support or stale state were found in the tested images.
+The coarse-readout ablations retain the original band pattern. Six images for
+58heights and six for76heights preserve original/build-only/dense comparisons.
+
+Cost:15-channel compile/extract/pack/retention took139.0s at58heights and244.1s
+at76heights; complete runs took229.0s and334.5s. Compiler-reported peak live field
+allocation was179.61/235.35MiB. The isolated noon textures occupy495.49/649.27MiB
+versus410.06MiB for their48-height bridge. These are selected32-solar-row texture
+capacities, not complete production-package sizes or observed device peaks.
+All180 solar positions were included in each N4 construction. Timings are observed
+wall times, not controlled benchmark speed ratios.
+
+Runs00063/00066 hold the fields/images;00064/00065 and00067/00068 hold dense/coarse
+reference replays;00070/00071 isolate lower/upper lookup knots.00069 is the earlier
+immutable result page;00072 adds the split and is the current complete report.
+It rehashes the input artifacts and output-parent manifest identities, proves
+non-height construction inputs equal, checks all original knots retained,
+validates bridge output and local source types, and loads all12 gallery images
+in a real browser without page errors. All new runs are accepted and owned
+browser resources/temp profiles are closed/removed.
+
+Disposition: the proposed first-gap explanation is only partly supported and
+needs the interval correction above. Reject blanket lower-height refinement as
+a sufficient solution to both horizon features. Another approximation remains;
+angular reconstruction, remaining height transitions and order/reference mismatch
+are not isolated by this test. Do not choose a coarse grid solely for a favorable
+reference score. No further grid escalation, profile tuning, production promotion
+or automatic experiment closure is part of this completed hypothesis test.

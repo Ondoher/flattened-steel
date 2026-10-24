@@ -9,8 +9,10 @@ All ten requested ARM-informed conditions and matched Bruneton views are rendere
 The scene report records reference discrepancies and physical assumptions; these
 are illustrative images, not a fully validated measured-profile replacement.
 Final evidence verification00057 passes; scene-results.md is the current report.
-Owner-review follow-up00062 diagnoses bright/gray horizon bands; see the final
-section of scene-results.md. Production is unchanged.
+Owner-review follow-up00062 diagnoses bright/gray horizon bands. The authorized
+58/76-height test is complete in00072-height-results; the final scene-results.md
+section owns findings. Height lookup affects the band but is not a sufficient fix;
+the upper gray ray samples the1875-3125m interval. Production is unchanged.
 
 ## Minimal Reload Sources
 
