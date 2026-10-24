@@ -16,11 +16,11 @@ const run=createRun('scene-reference','S2 matched full-spherical native15 refere
 const controller=new LocationTimeController(),location=controller.selectLocation(controller.start(),0);
 const scenes=mode==='pilot'?[{time:'noon',height:500},{time:'sunset',height:40000}]:mode==='rest'?[{time:'noon',height:5},{time:'sunset',height:500}]:[{time:'noon',height:5},{time:'noon',height:500},{time:'sunset',height:500},{time:'sunset',height:40000}];
 const configs=[];
-const jobs=mode==='sensitivity'?variants.map(p=>({time:p.id.includes('phase')||p.id.includes('upper')?'sunset':'noon',height:p.id.includes('upper')?40000:500,models:[p.id]})):scenes.map(s=>({...s,models:['bruneton',profile.id]}));
-for(const scene of jobs)for(const model of scene.models)for(const delta of [-.1,.1])for(let repeat=0;repeat<3;repeat++)for(const q of [-1,1]){
+const jobs=mode==='bands'?[{time:'noon',height:2000,models:[profile.id]}]:mode==='sensitivity'?variants.map(p=>({time:p.id.includes('phase')||p.id.includes('upper')?'sunset':'noon',height:p.id.includes('upper')?40000:500,models:[p.id]})):scenes.map(s=>({...s,models:['bruneton',profile.id]}));
+for(const scene of jobs)for(const model of scene.models)for(const delta of mode==='bands'?[.2,.6,1.2]:[-.1,.1])for(let repeat=0;repeat<3;repeat++)for(const q of [-1,1]){
 	const limb=-Math.acos(6360000/(6360000+scene.height))*180/Math.PI;
 	const pixelNode=Math.atan(Math.tan(25*Math.PI/180)/576/Math.sqrt(3))*180/Math.PI;
-	configs.push({...scene,model,delta,repeat,q,elevation:limb+delta+q*pixelNode,azimuth:pixelNode/Math.cos(limb*Math.PI/180),channels:mode==='sensitivity'?[6]:Array.from({length:15},(_,i)=>i),layers:512,photons:100000,vroomOff:true,epsilon:1,id:`${scene.time}-${scene.height}-${mode==='sensitivity'?'v'+variants.findIndex(p=>p.id===model):model==='bruneton'?'b':'a'}-${delta<0?'lo':'hi'}-${repeat}-${q<0?0:1}`});
+	configs.push({...scene,model,delta,repeat,q,elevation:limb+delta+q*pixelNode,azimuth:pixelNode/Math.cos(limb*Math.PI/180),channels:mode==='sensitivity'?[6]:Array.from({length:15},(_,i)=>i),layers:512,photons:100000,vroomOff:true,epsilon:1,id:`${scene.time}-${scene.height}-${mode==='sensitivity'?'v'+variants.findIndex(p=>p.id===model):model==='bruneton'?'b':'a'}-${mode==='bands'?'d'+delta:delta<0?'lo':'hi'}-${repeat}-${q<0?0:1}`});
 }
 run.write('registration.json',{mode,configs,finitePixel:'2x2 Gaussian footprint at image-center angular scale; +/- horizontal azimuth contributions are identical by spherical/source-plane reflection symmetry, requiring two distinct vertical rays. Weights1/2. This is a local center-pixel approximation, not a fitted edge.',assumptions:'Native15 bin-average optics/source, fixed scalar phase and SSA; fully spherical all-orders MYSTIC, black ground, no gas/refraction. Production cache N4/order tail is separate.'});
 const readings=[];let failure;

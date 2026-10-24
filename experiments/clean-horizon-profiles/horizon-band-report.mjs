@@ -1,0 +1,33 @@
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {gunzipSync} from 'node:zlib';
+import {PNG} from 'pngjs';
+import {createRun,checked,identity,command} from './io.mjs';
+
+const [scene,reference,comparison]=process.argv.slice(2),json=p=>JSON.parse(readFileSync(checked(p),'utf8'));
+const run=createRun('horizon-bands','Follow-up falsification of view-step and ground-edge explanations; compare gray-band rays with spherical reference',[scene,reference,comparison].map(p=>identity(p+'/manifest.json')));
+let failure;
+try{
+ for(const p of [scene,reference,comparison]){const m=json(p+'/manifest.json');assert.equal(m.state,'accepted');for(const a of m.artifacts)assert.equal(identity(a.path).sha256,a.sha256);}
+ const results=[];
+ const floats=p=>{const b=gunzipSync(readFileSync(checked(p)));return new Float32Array(b.buffer,b.byteOffset,b.length/4);};
+ for(const height of [500,2000]){
+  const prefix='noon-'+height,base=floats(scene+'/'+prefix+'-original-total.f32.gz'),path=floats(scene+'/'+prefix+'-original-path.f32.gz'),surface=floats(scene+'/'+prefix+'-original-scene.f32.gz'),fine=floats(scene+'/'+prefix+'-fine-total.f32.gz'),sphere=floats(scene+'/'+prefix+'-sphere-path.f32.gz'),endpoint=floats(scene+'/'+prefix+'-original-endpoint.f32.gz'),primary=floats(scene+'/'+prefix+'-linear.f32.gz');
+  let decompositionError=0,replayError=0,fineRelative=0,sphereSkyAbsolute=0;
+  for(let y=250;y<325;y++)for(let x=256;x<768;x++){const at=(y*1024+x)*4;for(let c=0;c<3;c++){
+   decompositionError=Math.max(decompositionError,Math.abs(base[at+c]-path[at+c]-surface[at+c])/Math.max(1,Math.abs(base[at+c])));
+   replayError=Math.max(replayError,Math.abs(base[at+c]-primary[at+c])/Math.max(1,Math.abs(primary[at+c])));
+   if(endpoint[at]<.5){fineRelative=Math.max(fineRelative,Math.abs(fine[at+c]/base[at+c]-1));sphereSkyAbsolute=Math.max(sphereSkyAbsolute,Math.abs(sphere[at+c]-path[at+c]));}
+  }}
+  assert.ok(decompositionError<1e-6&&replayError<1e-6);assert.equal(sphereSkyAbsolute,0);
+  for(const mode of ['original-total','fine-total','original-path']){const bytes=readFileSync(checked(scene+'/'+prefix+'-'+mode+'.png')),png=PNG.sync.read(bytes);assert.equal(png.width,1024);assert.equal(png.height,576);run.write(prefix+'-'+mode+'.png',bytes);}
+  results.push({height,decompositionError,replayError,maximumSkyBandRgbRelativeChangeAt480:fineRelative,sphereSkyAbsolute,region:{x:[256,767],y:[250,324]},claim:'The reported upper band is in path radiance; no sky-side change from exact-sphere endpoint clipping. Small view refinement change is not a source-field convergence proof.'});
+ }
+ const rays=json(comparison+'/comparison.json').outputs,rayResults=[];
+ for(const delta of [.2,.6,1.2]){const pair=rays.filter(r=>r.delta===delta&&r.intervals===30);assert.equal(pair.length,2);const average=key=>pair.reduce((s,r)=>s+r[key].luminanceCdPerM2,0)/2,rgb=key=>[0,1,2].map(c=>pair.reduce((s,r)=>s+r[key].rgb[c],0)/2),cacheRgb=rgb('color'),referenceRgb=rgb('referenceColor');rayResults.push({delta,cacheY:average('color'),referenceY:average('referenceColor'),relativeY:average('color')/average('referenceColor')-1,cacheRgb,referenceRgb,cacheBlueRed:cacheRgb[2]/cacheRgb[0],referenceBlueRed:referenceRgb[2]/referenceRgb[0]});}
+ const types=await command(run,'typecheck',['node_modules/typescript/bin/tsc','-p','experiments/clean-horizon-profiles/jsconfig.json']);assert.equal(types.code,0,types.stdout+types.stderr);
+ run.write('analysis.json',{results,rayResults,typecheck:'passed',reference:'18 native15 spherical MYSTIC cases, 3 pilot seeds, same finite pixel quadrature and physical model. All-orders reference versus N4; no order-tail separation.',conclusion:'The upper bands are atmospheric transport features, not created by exposure or green scene compositing. Fine view integration and exact-sphere clipping do not remove them. The physical profile produces variation too, but the cached field overbrightens and desaturates the upper gray-band sample. Height and outgoing-angle cache interpolation remain unseparated; the new profile has elevated aerosols not resolved by the 0-to1875m native height gap.',groundDiagnosticLimit:'Sphere-total is not a proposed fix: truncating at an analytic surface can disable scene attenuation when mesh endpoint is farther, introducing extra green and speckles. Path-only comparison is the clean ground-boundary falsification.'});
+ run.write('index.html','<!doctype html><meta charset="utf-8"><title>Horizon-band diagnosis</title><style>body{background:#18232d;color:#eee;font:16px system-ui;max-width:1500px;margin:25px auto;padding:15px}section{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}img{width:100%}figure{margin:0}td,th{padding:8px;border:1px solid #789}table{border-collapse:collapse}a{color:#9df}</style><h1>Horizon-band diagnosis</h1><p>Same atmosphere, field cache, camera and fixed original frame exposure. The band survives finer view integration and remains in the atmospheric path contribution alone. Images are diagnostic, not repaired final scenes.</p>'+results.map(r=>'<h2>'+r.height+' m noon</h2><section>'+[['original-total','Original 30 view intervals'],['fine-total','480 view intervals'],['original-path','Atmospheric path only; scene contribution removed']].map(([id,label])=>'<figure><img src="noon-'+r.height+'-'+id+'.png" alt="'+label+'"><figcaption>'+label+'</figcaption></figure>').join('')+'</section>').join('')+'<h2>Independent rays through the 2 km band</h2><p>Three-seed pilot means, two distinct finite-pixel quadrature nodes. Values compare N4 retained-field replay with all-orders spherical MYSTIC. They do not isolate order truncation from cache reconstruction.</p><table><tr><th>Above geometric limb</th><th>Field Y error</th><th>Field B/R</th><th>MYSTIC B/R</th></tr>'+rayResults.map(r=>'<tr><td>'+r.delta+' degrees</td><td>'+(r.relativeY*100).toFixed(1)+'%</td><td>'+r.cacheBlueRed.toFixed(3)+'</td><td>'+r.referenceBlueRed.toFixed(3)+'</td></tr>').join('')+'</table><p>The gray-band sample at 1.2 degrees is too bright and too neutral. The profile has a layer around 1-1.5 km, while its cache has no height node between ground and 1875 m. Height and angular interpolation remain hypotheses, not established causes. Do not remove this band by changing exposure or blurring the image.</p><p><a href="analysis.json">Analysis and verification</a></p>');
+ console.log(JSON.stringify({report:run.path+'/index.html',results,rayResults}));
+}catch(error){failure=String(error);run.write('failure.json',{message:failure});}
+run.finish(failure?'failed':'accepted',{failure});if(failure)process.exitCode=1;

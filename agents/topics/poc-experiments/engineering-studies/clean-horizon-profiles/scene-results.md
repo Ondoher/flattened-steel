@@ -100,7 +100,9 @@ is about6.45degrees above the visible limb, rather than sitting on that limb.
 Native-resolution inspection covered all20 primary images plus both uncertainty
 images. No broad black overlay strip or missing/stale frame was observed. Thin
 approximately one-pixel staircase/edge structure remains around some near-ground
-limbs; this capture does not prove subpixel geometric accuracy. The5m sunset
+limbs. Owner review also identified broader bright and gray bands above the limb;
+these are separate from the pixel-scale geometry issue and are investigated below.
+This capture does not prove subpixel geometric accuracy. The5m sunset
 object is visible; absence of objects in other frames is consistent with the
 unchanged scene and Sun-facing camera, not an object-removal setting. The native
 40km frames have extensive near-white regions. Keep the lower-exposure control
@@ -256,3 +258,52 @@ profile/cache/display was changed. The experiment remains available for owner
 review; no automatic promotion or closure is performed.
 
 [Execution log](execution-log.md) owns consequential decisions and checkpoints.
+
+
+## Owner-review follow-up: bright rim and gray band
+
+The owner identified a bright line immediately above the horizon and a broader
+gray area above it. Those are visible in the retained500m and2km noon frames;
+the earlier pixel-scale-edge note did not adequately describe this appearance.
+
+[Open the focused diagnostic comparison](../../../../../tmp/experiments/clean-horizon-profiles/runs/00062-horizon-bands/index.html).
+It shows the original,480-interval view and atmospheric-path-only image for both
+heights. Diagnostic run00060 reuses the exact original N4 field without a rebuild.
+Its baseline float output matches the retained scene exactly, and path plus
+attenuated scene composition reconstructs total radiance to better than6.3e-8
+relative in the tested horizon region. Thus this is the same appearance under
+controlled interventions, not a different source or exposure.
+
+Findings:
+
+- Both upper bands are present in atmospheric path radiance before exposure and
+  before adding green-ground color. The lower scene contribution does not create them.
+- Increasing view integration30->480 preserves the bands. Maximum sky-side RGB
+  change within the tested central horizon region is0.69% at500m and1.06% at2km.
+- Replacing mesh-only path termination with exact spherical ground clipping gives
+  zero sky-side path-radiance change in that region. The initial endpoint/overlay
+  explanation is not supported for these upper bands. The diagnostic total image
+  does change on the ground side because earlier truncation can disable scene
+  attenuation when the mesh endpoint lies farther; that version is not a fix.
+- Eighteen native15 spherical MYSTIC calculations in00059 test the2km band at
+  0.2,0.6 and1.2degrees above the limb, using three fixed pilot seeds and the
+  same finite-pixel quadrature. The reference also changes brightness/color with
+  angle. Our retained-field replay in00061 is about7.8% dim at0.2degrees,4.0%
+  dim at0.6degrees and14.4% bright at1.2degrees. At1.2degrees its linear B/R
+  ratio is1.102 versus reference1.236: it is too neutral as well as too bright.
+
+This supports a mixed interpretation: physical atmospheric structure exists, but
+our cached field distorts its brightness/color and exaggerates the gray region.
+It does not establish that the narrow rim is entirely artificial, or distinguish
+scattering-order truncation from spatial/angular cache reconstruction.
+
+The reconstruction has extinction550 about13.2/Mm around1-1.3km versus1.5/Mm at
+surface, while the native cache has no height node between0 and1875m. Resolving
+that elevated layer in the cache is the strongest next spatial-sampling test;
+outgoing-direction interpolation is another unseparated candidate. Neither was
+changed in this diagnosis. Exposure/blur is not an evidence-based correction.
+
+The focused report validates all parent artifact hashes, image dimensions,
+float decomposition/baseline equality and local source types. Old galleries/runs
+remain immutable, including the initial failed diagnostic00058 (composer lookup,
+repaired in00060). No production source, profile, cache or display changed.

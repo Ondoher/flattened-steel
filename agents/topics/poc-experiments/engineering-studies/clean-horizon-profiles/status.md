@@ -24,6 +24,17 @@ adapter is illustrative rather than fully validated. Direct-transmission and
 GPU sampler representation checks pass their stated bounds. No order-tail bound,
 five-seed benefit confirmation or full uncertainty/convergence grid is claimed.
 
+## Owner-review horizon-band diagnosis
+
+[Scene results](scene-results.md#owner-review-follow-up-bright-rim-and-gray-band)
+owns the focused diagnosis.00062-horizon-bands contains the original/fine/path-only
+comparison and verification. Upper bright/gray bands originate in atmospheric
+path radiance;480 view intervals and exact-sphere ground clipping do not remove
+them. New spherical reference rays show a physical gradient plus a cached-field
+brightness/color distortion. Height sampling of the elevated aerosol layer and
+outgoing angular reconstruction remain unseparated hypotheses. No fix or profile
+change is promoted; the images should not be called fully validated.
+
 ## Verification and next boundary
 
 All20 primary frames and two uncertainty frames were inspected at native size.

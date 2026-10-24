@@ -280,3 +280,49 @@ Whole-worktree inspection contains only this experiment's source and owning topi
 updates:15 files, about142KiB; no generated data/binary additions, credentials,
 merge/rebase or unrelated changes. Source types and final evidence checks pass.
 No push is authorized. The final response reports Git's resulting commit hash.
+
+
+## Owner-review horizon-band follow-up
+
+The owner reported a bright rim and broader gray region. This exceeds the earlier
+pixel-scale edge note. Reused the original noon ARM field to isolate view sampling,
+path/scene decomposition and exact spherical termination at500m/2km.00058 failed
+only its diagnostic composer lookup; preserve it, repair lookup and continue in
+00060. Source types pass. No new field-cache construction or production edit.
+
+Initial hypothesis that rendered ground termination causes the upper bands is
+falsified by the diagnostic: exact spherical clipping makes zero change to
+sky-side path radiance. It also introduces a scene-attenuation mismatch on the
+ground side, so the diagnostic total is explicitly not a fix. Thirty versus480
+view intervals changes tested sky RGB by at most1.06% and leaves the band intact.
+The band is present before exposure and ground-color composition.
+
+Ran18 native15 spherical MYSTIC pilots through the gray-band region at2km in00059;
+compared the same rays against retained N4 field replay in00061. Both physical
+variation and field distortion are present: the upper sample is14.4% too bright
+and too neutral (B/R1.102 versus1.236). These are three-seed pilot means, not a
+five-seed acceptance or isolated order-tail result.00062 seals comparison images,
+metrics, parent hash verification, decomposition/baseline checks and source types.
+
+Stop this bounded diagnosis after identifying what the current checks establish.
+Do not invent a profile/exposure correction or begin a broad cache redesign.
+Recommend a future elevated-layer height-resolution test before claiming a root
+cause; outgoing angular reconstruction/order effects remain unseparated.
+Update the owning scene report/status and preserve this coherent follow-up locally.
+
+
+Checkpoint adviser: CHECKPOINT_RECOMMENDED for this bounded follow-up. Suggested
+message is preapproved by the continuing independent-execution workflow:
+
+```text
+feat: diagnose clean-horizon rim and gray bands
+
+- add retained-field path, integration, and clipping diagnostics
+- compare the horizon band with spherical reference pilots
+- record cache brightness and color distortion with unresolved mechanisms
+```
+
+The whole-worktree unit contains eight experiment-source/owning-topic files,
+no production/data/binary or unrelated changes. Source types and the focused
+scientific/evidence checks pass. Git's resulting commit identity is reported
+in the response; no push is authorized.
