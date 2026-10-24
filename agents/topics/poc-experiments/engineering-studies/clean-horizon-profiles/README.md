@@ -1,8 +1,9 @@
 # Measured Clean Horizon Profiles Experiment
 
-Status: follow-on independent scene execution, S1 complete and S2/S3 underway, for five altitudes at
-San Jose noon and sunset. Earlier M1 qualification remains partial/inconclusive;
-no measured-profile scene finalist or production promotion exists.
+Status: all ten ARM-informed San Jose scene conditions are rendered, with matched
+Bruneton comparisons and targeted uncertainty images. Selected reference checks
+expose unresolved numerical errors, especially sunset500m. This is an illustrative
+reconstruction result; production is unchanged. See [scene results](scene-results.md).
 
 ## Objective
 

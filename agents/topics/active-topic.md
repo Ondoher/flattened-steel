@@ -5,10 +5,11 @@ Focus: execute actual ARM-informed atmosphere scene comparisons for San Jose noo
 and sunset at 5 m, 100 m, 500 m, 2 km and 40 km, with matched Bruneton images.
 
 Canonical entry: [Measured Clean Horizon Profiles](poc-experiments/engineering-studies/clean-horizon-profiles/README.md).
-Earlier independent execution concluded at M1 with partial/inconclusive full-profile
-qualification. The owner now requests a follow-on scene plan. This new sequence
-was authorized through independent-execution on 2026-10-24; S1 is complete,
-S2/S3 are underway, and all five Bruneton noon captures are retained.
+All ten requested ARM-informed conditions and matched Bruneton views are rendered.
+The scene report records reference discrepancies and physical assumptions; these
+are illustrative images, not a fully validated measured-profile replacement.
+Final evidence verification00057 passes; scene-results.md is the current report.
+Production is unchanged.
 
 ## Minimal Reload Sources
 

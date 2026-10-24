@@ -192,3 +192,91 @@ by independent-execution. Current source type checking passes; no experiment uni
 tests or standards reviews were introduced.00035 retains all five Bruneton noon
 images with <=1RGB-byte replay error. Candidate/reference jobs continue below
 ignored output and do not alter the Git snapshot. Git owns the checkpoint identifier.
+
+
+## S2-S4 scene completion and consequential decisions
+
+Checkpoint e0c4577ff89e657ea384eb14014c6b5f0b25e5e3 preserved the coherent S1/pipeline
+unit locally. Git initially printed an object-write warning, then completed the
+commit successfully; no ACL changes or push were performed.
+
+All primary scenes completed:00035/00037 noon baseline/ARM and00039/00041 sunset
+baseline/ARM. Noon was shared first in00038, then the full matrix in00044. Final
+00055 adds common lower exposure and uncertainty images from00045 phase and00047
+upper tail. Production display remains the primary mode; highlight diagnostics
+are derived from retained linear output, not separately tuned atmospheric inputs.
+
+Three-seed fully spherical MYSTIC pilots are00036/00040; one-green-band sensitivity
+is00046. Exact optical tables and conditional phase replace discarded legacy
+scaffolding.00050/00051 replay actual retained N4 source-density fields with an
+independent fine optical-depth check;00054 summarizes uncertainty and contrasts.
+Older00043 duplicated diagnostic rows due an over-specific grouping key, corrected
+in fresh runs.00042 cache-root lookup failed; repaired by following authenticated
+reuse provenance. Failed and superseded evidence remains unchanged.
+
+Decision from reference discrepancies: retain all requested images with a visible
+numerical-approximation label. Do not tune the profile or display to conceal the
+500m sunset field mismatch. Do not start a broad new algorithm/refinement campaign
+inside this image task. The current N48 near-ground height spacing and structured
+profile make interpolation a plausible limitation, but the all-orders comparison
+does not isolate it from order truncation. Record deferred quantitative checks
+in the report; do not claim five-seed confirmation or complete optical validation.
+
+The source/camera proof in00052 exercises actual noon/sunset/noon and5m/40km/5m
+transitions with retained coefficient rows. All six captures agree with their
+fresh counterparts within one RGB byte. No page refresh substitutes for transition.
+A separate reuse-only00056 measures forced frame completion with gl.finish across
+all requested heights; no additional physics compilation or performance search.
+
+Native inspection covers all20 primary and two uncertainty images. Thin pixel-scale
+limb steps remain; no broad overlay strip or stale capture was found. The phase
+proxy materially changes the500m Sun halo. The assumed upper tail materially
+changes the40km solar neighborhood even though sparse limb rays change only a few
+percent. This is why the uncertainty scenes accompany the directional statistics.
+
+S5 verification rehashes prior immutable artifacts and parent-run identities,
+checks the full image matrix, transition bounds, local authored types and actual
+browser controls. Final report is scene-results.md; earlier M1 results are intact.
+No production promotion, closure or additional standards review is authorized by
+this completion. Checkpoint advice remains the separate preservation workflow.
+
+
+## S5 final verification and disposition
+
+00057-scene-verify accepted. Rehashed11,060 artifacts from57 prior runs
+(46accepted,11failed), checked immutable output-parent identities, all20 primary
+images, two uncertainty images, native/fixed/lower gallery modes and time filters
+in an actual browser. Source types pass. Python helper syntax was checked without
+creating bytecode. All owned resources/temp profiles are closed/removed. Earlier
+failed/partial runs stay failed/partial. Total retained evidence after verification
+is about3281.5MiB; no arbitrary allowance gate was introduced.
+
+Frame timing00056 uses the authenticated noon cache, no physics rebuild. Three
+forced complete frames with gl.finish give median7.2-9.1ms across five heights
+at1024x576. These are controlled-view completion measurements rather than
+interactive performance or device peak-memory claims.
+
+The requested illustrative image campaign is complete. Quantitative optical
+qualification remains partial, notably500m sunset and absent order-tail/full
+uncertainty/convergence confirmation. Scene-results.md explicitly lists these
+limitations. No production promotion or experiment closure follows automatically.
+The final coherent source/report unit is ready for a preapproved local checkpoint;
+Git verification supplies the commit identifier, with no push.
+
+
+Final checkpoint advice: CHECKPOINT_URGENT. The adviser identified the complete
+image/reference/uncertainty/state/gallery/report unit as a useful preservation
+point and proposed this preapproved local message:
+
+```text
+feat: complete ARM-informed clean-horizon scene campaign
+
+- render matched noon and sunset comparisons across five observer heights
+- add reference, sensitivity, transition, gallery, and artifact verification evidence
+- record optical discrepancies and retain the reconstruction's non-promotion limits
+```
+
+Whole-worktree inspection contains only this experiment's source and owning topic
+updates:15 files, about142KiB; no generated data/binary additions, credentials,
+merge/rebase or unrelated changes. Source types and final evidence checks pass.
+No push is authorized. The final response reports Git's resulting commit hash.

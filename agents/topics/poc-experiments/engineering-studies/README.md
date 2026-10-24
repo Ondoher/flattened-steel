@@ -17,7 +17,7 @@ Other lanes retain their own dispositions.
 
 ## Working Documents
 
-- [Measured Clean Horizon Profiles](clean-horizon-profiles/README.md) - ARM-informed scene plan for San Jose noon/sunset at five heights; earlier M1 qualification remains inconclusive.
+- [Measured Clean Horizon Profiles](clean-horizon-profiles/README.md) - ARM-informed noon/sunset scenes at five heights delivered; sunset numerical/phase limits documented, no production promotion.
 - [Twilight Exposure](twilight-exposure/README.md) - Ended; accepted display response promoted to production.
 
 - [Elevated Horizon Validation](elevated-horizon-validation/README.md) - Matched elevated-horizon comparison complete.

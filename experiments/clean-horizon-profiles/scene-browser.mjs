@@ -38,7 +38,7 @@ export async function start(control){
  app.start();
  async function ready(height){const deadline=performance.now()+180000;while(performance.now()<deadline){const shell=document.querySelector('.flat32-shell');requireValue(!['failed','atmosphere-failed'].includes(shell?.getAttribute('data-flat32-state')),shell?.textContent??'');app._sceneRuntime?._renderFrame();if(shell?.getAttribute('data-flat32-state')==='ready'&&app._publishedState?.observerHeight?.value===height&&app._publishedState?.observation.instant===selected.observation.instant)return;await new Promise(r=>setTimeout(r,100));}throw Error('Scene publication timeout.');}
  await ready(5);globalThis['proofApplication']=app;installProbe();for(const h of [100,500,2000,40000,5]){app.setObserverHeight({value:h,units:'meters'});await ready(h);}const scene=app._sceneRuntime,runtime=app._modeController._activeRuntime,mode=runtime._mode,algorithm=mode.algorithm32,attachment=mode.lightSource.sharedCacheAttachment,atlas=attachment._controller._published.atlas;
- const initial=attachment._controller._published,slots=atlas.getSlots(),required=new Set(initial.snapshot.requiredBlockIds);
+ let initial=attachment._controller._published,slots=atlas.getSlots(),required=new Set(initial.snapshot.requiredBlockIds);
  requireValue(slots.length>0&&[...required].every(id=>slots.some(s=>s.block.id===id)),'Incomplete startup address atlas.');
  const atmosphere=algorithm.config.config.atmosphere;
  requireValue(atmosphere.constants.mieScaleHeight.value===control.medium.mieHeight&&atmosphere.constants.mieSingleScatteringAlbedo===control.medium.albedo&&atmosphere.constants.miePhaseFunctionG===control.medium.g,'Live material constants differ.');
@@ -70,8 +70,27 @@ export async function start(control){
  array=attachment._backend.allocatePersistentArray({id:'aerosol-scenes-'+control.medium.mieHeight,valueKey:'cache.sharedPacketAtlas',storage:atlas.array.storage,maximumBytes:atlas.array.byteLength});
  const packetReports=[];for(let i=0;i<slots.length;i++){const hash=await digest(new Uint8Array(packets[i].buffer));attachment._backend.uploadPersistentArrayLayer({array,layer:slots[i].index,identity:hash,values:packets[i]});packetReports.push({slot:slots[i].index,block:slots[i].block.id,sha256:hash});await globalThis['aerosolProgress']('Uploaded matched packet '+i+'/'+slots.length);}
  await globalThis['aerosolRetain']('build.json',{reports,packetReports,coefficientReuse:control.reuseRoot??null,logicalCandidateAtlasBytes:array.byteLength,material:control.medium,displayLux:control.fixedLux,viewPathIntervals:30,viewPathDistribution:'production quadratic-near-observer-v1'});
- const sun=state.geometry.expressCelestialDirectionInScene(state.directionToSourceModel),horizontal=Math.hypot(sun[0],sun[2]);
+ let sun=state.geometry.expressCelestialDirectionInScene(state.directionToSourceModel),horizontal=Math.hypot(sun[0],sun[2]);
  let measuredHeight=-1;
+ 
+ globalThis['aerosolSceneSetTime']=async(time)=>{
+  selected=controller.selectGlobeTime(app._state,time==='noon'?1:2);app._transitionLocationTime(()=>selected);await ready(app._state.observerHeight.value);
+  const active=app._modeController._activeRuntime._mode.lightSource.sharedCacheAttachment,current=active._controller._published;
+  slots=current.atlas.getSlots();const nextPackets=slots.map(()=>new Float32Array(current.atlas.array.storage.width*current.atlas.array.storage.height*4));
+  for(let channel=0;channel<15;channel++){
+   const originalValues=new Float32Array(await(await fetch('/reuse-channel-'+channel+'.bin')).arrayBuffer()),shift=Math.floor(channel/4)*162*4+channel%4;
+   for(let b=0;b<slots.length;b++)for(let row=0;row<slots[b].block.rowCount;row++){
+    const coordinate=slots[b].block.coordinates[row],originalRow=oldCoordinates.get(coordinate.join(':'));requireValue(originalRow!==undefined,'Transition coefficient row missing');
+    for(let d=0;d<count;d++)nextPackets[b][baseAddress[row*count+d]+shift]=originalValues[originalRow*count+d];
+   }
+  }
+  const previous=array;array=active._backend.allocatePersistentArray({id:'arm-transition-'+time,valueKey:'cache.sharedPacketAtlas',storage:current.atlas.array.storage,maximumBytes:current.atlas.array.byteLength});
+  for(let i=0;i<slots.length;i++)active._backend.uploadPersistentArrayLayer({array,layer:slots[i].index,identity:await digest(new Uint8Array(nextPackets[i].buffer)),values:nextPackets[i]});
+  previous.dispose();measuredHeight=-1;const nextState=createDistantSunSceneState({observation:selected.observation,observerHeight:app._state.observerHeight,observerUpDirection:[0,0,1]});
+  sun=nextState.geometry.expressCelestialDirectionInScene(nextState.directionToSourceModel);horizontal=Math.hypot(sun[0],sun[2]);
+  await globalThis['aerosolProgress']('Retained scene transitioned to '+time+' with authenticated source-density rows');
+ };
+
  globalThis['aerosolSceneView']=async(view)=>{
   scene._frameCadence='on-demand';if(app._publishedState.observerHeight.value!==view.height){app.setObserverHeight({value:view.height,units:'meters'});await ready(view.height);}
   const active=app._modeController._activeRuntime._mode.lightSource.sharedCacheAttachment,current=active._controller._published;

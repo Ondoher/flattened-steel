@@ -1,76 +1,47 @@
 # Measured Clean Horizon Profiles Experiment Status
 
-Status: follow-on scene execution authorized on 2026-10-24; S1 complete, S2/S3 underway.
-Earlier M1 qualification remains partial/inconclusive. The experiment is not closed
-or promoted.
+Status: requested illustrative scene campaign complete, with reference limitations.
+The experiment remains selected for owner review, with no production promotion
+or automatic closure. Earlier M1 measured-profile qualification is inconclusive.
 
-## Current State
+## Current result
 
-The owner requests final full-scene images at San Jose noon and sunset at 5 m,
-100 m, 500 m, 2 km and 40 km. The [current scene plan](scene-plan.md) targets those
-ten conditions with matched Bruneton images, faithful contained transport and
-explicit ARM reconstruction/uncertainty labels. The earlier qualification plan
-and its gated outcome are preserved. [Scene execution results](scene-results.md)
-own the new central reconstruction and sampler proof. The frozen model has AOD550
-0.02102 versus nearby observed0.01708, retaining its residual and assumptions.
-Hardware GPU/CPU sampler agreement passes; reference and full-scene work is underway.
+[Scene results](scene-results.md) owns the current model, appearance, reference
+errors, uncertainty checks, cost and verification. [Open the complete gallery](../../../../../tmp/experiments/clean-horizon-profiles/runs/00055-scene-gallery/index.html).
+All San Jose Globe noon and sunset views at5m,100m,500m,2km and40km are rendered,
+each with matched Bruneton, native/fixed/lower exposure, metadata and PNG download.
+Two additional images test phase shape at500m sunset and upper aerosols at40km sunset.
 
-The [results](results.md) own source findings, color controls and the milestone
-disposition. ARM's 2023-12-05 SGP observations are the strongest new low-aerosol
-lead. Official ATom numerical access needs Earthdata; acquired public derivatives
-do not supply complete ambient optics. ARM surface measurements, AERONET and
-lidar were downloaded and paired, but humidity growth, near-field calibration,
-spectral/angular phase and upper-column completion remain unresolved. No complete
-measured profile is qualified for the 5 m scene claim.
+The explicitly ARM-informed model reuses December2023 surface/AERONET/lidar data
+with documented near-field, humidity, phase/spectral and upper-layer assumptions.
+It is not measured San Jose weather. Its AOD550 is0.02102 versus the nearby
+observed0.01708; the residual is retained. No new credentials/downloads were needed.
 
-Matched Bruneton/molecular-only color controls at 5 and 500 m show meaningful
-clarity opportunity. Candidate M2, M3 adapter and M4 actual scenes were not
-triggered under the plan's input-completeness gate. No production or prior
-experiment source/evidence was modified by this lane.
+Near-ground noon views are less gray; sunset is brighter around the Sun. The40km
+limb remains broad and bright. Phase shape is a major uncertainty. Source-field
+replay disagrees substantially with spherical MYSTIC at500m sunset, so the
+adapter is illustrative rather than fully validated. Direct-transmission and
+GPU sampler representation checks pass their stated bounds. No order-tail bound,
+five-seed benefit confirmation or full uncertainty/convergence grid is claimed.
 
-## Latest Verification
+## Verification and next boundary
 
-- Scaffold check passed; normalization marker validates and effective mapping is experiment/base/types.
-- Output root remains Git-ignored. Runs 00000–00025 are terminal; failed attempts remain intact.
-- Local authored-source JavaScript/TypeScript check passes.
-- Final proof rehashed 2,330 artifacts from the preceding 25 runs, verified color controls and image artifacts.
-- Paired surface optics use simultaneous QC=0 samples, separate impactor states, explicit STP/ambient-density conversion and retained humidity differences.
-- Raw near-field audit and primary handbooks establish the limits of the inherited 150 m screening convention and the lidar's 355 nm wavelength.
-- One independent plan critique completed; all seven recommendations incorporated in the plan.
-- A separate bounded critique of the follow-on scene plan completed; all six recommendations incorporated. This was planning advice, not a standards review or execution.
-- Checkpoint monitoring remains active; local commit details belong in the execution log.
-- Type-check configuration: `experiments/clean-horizon-profiles/jsconfig.json`.
-- Output root: `tmp/experiments/clean-horizon-profiles/`.
-- Latest verification: `tmp/experiments/clean-horizon-profiles/runs/00025-verify/` (accepted).
+All20 primary frames and two uncertainty frames were inspected at native size.
+No broad black strip or stale frame was observed; thin pixel-scale limb steps
+remain visible. Native GPU versus CPU display replay is within one RGB byte.
+Noon/sunset/noon and5m/40km/5m transitions match fresh-state captures within one byte.
+Final verification00057 is accepted:11,060 artifacts rehashed, gallery modes and
+time filters checked in a real browser, local authored types passed. Earlier M1 evidence and failed attempts remain immutable.
 
-## Claim limits
-
-The acquired data support a low-aerosol lead, not a complete ambient profile or
-an appearance prediction. There is no account question pending. The user supplied
-ARM access; its credentials were used ephemerally and were not logged. Earthdata
-access would enable the official ATom numerical file but not its missing surface
-observations. These are evidence limits, not new runtime or update prohibitions.
-
-## Resumption boundary
-
-The bounded M1 investigation is complete as reported. The new plan begins with
-S1: reuse the acquired December ARM inputs, freeze a central reconstruction and
-documented humidity/near-field/phase/upper-column alternatives. Then obtain reference
-rays and actual scene pilots, complete noon and sunset image matrices, and verify
-the gallery. Modeling uncertainty is labeled rather than used alone to omit scenes.
-The owner authorized independent execution; proceed through the saved scene plan.
-Current new payloads:00029 reconstruction,00030 GPU proof,00031 reference baseline
-partial payloads and00032 complete baseline cache. Reference export and HDR capture
-repairs reuse those earlier immutable results; no actual scene pair is delivered yet.
-Do not repeat downloads, controls or failed-access attempts without changed inputs.
-Reuse sealed evidence read-only. [Execution log](execution-log.md) owns decisions.
+The owner may compare the gallery and choose any follow-on. No production cache,
+profile or display changed; no promotion is proposed from unresolved accuracy.
+Do not repeat downloads or completed cache builds without changed inputs.
+[Execution log](execution-log.md) owns decisions and local checkpoints.
 
 ## Standards provenance and lifecycle
 
-Inherited permanent assignment: `experiments/` -> `experiment` (base plus types.md).
-No experiment-specific set, deeper assignment or overlay entry was introduced;
-there is no temporary standards configuration to restore on closure/suspension.
-Production reviewer context is invalidated by this topic switch. Under repository
-policy no experiment standards reviewer or independent audit is started or refreshed.
-The create-plan critique is planning advice, not standards sign-off. Checkpoint
-adviser monitoring remains active and is refreshed with this selected context.
+Permanent assignment: experiments -> experiment (base plus types.md). No
+experiment-specific standards set, deeper assignment or overlay was added;
+there is no temporary configuration to restore at closure. Dedicated experiment
+standards reviewers and audits remain disabled; checkpoint monitoring is active.
+No standards-compliance result follows from that policy.

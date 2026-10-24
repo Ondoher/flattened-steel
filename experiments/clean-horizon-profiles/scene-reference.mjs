@@ -14,12 +14,13 @@ const variants=JSON.parse(readFileSync(checked(parent+'/variants.json'),'utf8'))
 const recovery=process.argv[4];if(recovery)assert.match(recovery,/^tmp\/experiments\/clean-horizon-profiles\/runs\/\d{5}-scene-reference$/u);
 const run=createRun('scene-reference','S2 matched full-spherical native15 reference with tabulated aerosol density and registered finite pixel quadrature',[identity(parent+'/manifest.json'),identity('scripts/libradtran/installation.json'),identity('experiments/sky-accuracy-dials/distant-horizon/toronto-direct.mjs'),...(recovery?[identity(recovery+'/manifest.json')]:[])]);
 const controller=new LocationTimeController(),location=controller.selectLocation(controller.start(),0);
-const scenes=mode==='pilot'?[{time:'noon',height:500},{time:'sunset',height:40000}]:[{time:'noon',height:5},{time:'noon',height:500},{time:'sunset',height:500},{time:'sunset',height:40000}];
+const scenes=mode==='pilot'?[{time:'noon',height:500},{time:'sunset',height:40000}]:mode==='rest'?[{time:'noon',height:5},{time:'sunset',height:500}]:[{time:'noon',height:5},{time:'noon',height:500},{time:'sunset',height:500},{time:'sunset',height:40000}];
 const configs=[];
-for(const scene of scenes)for(const model of ['bruneton',profile.id])for(const delta of [-.1,.1])for(let repeat=0;repeat<3;repeat++)for(const q of [-1,1]){
+const jobs=mode==='sensitivity'?variants.map(p=>({time:p.id.includes('phase')||p.id.includes('upper')?'sunset':'noon',height:p.id.includes('upper')?40000:500,models:[p.id]})):scenes.map(s=>({...s,models:['bruneton',profile.id]}));
+for(const scene of jobs)for(const model of scene.models)for(const delta of [-.1,.1])for(let repeat=0;repeat<3;repeat++)for(const q of [-1,1]){
 	const limb=-Math.acos(6360000/(6360000+scene.height))*180/Math.PI;
 	const pixelNode=Math.atan(Math.tan(25*Math.PI/180)/576/Math.sqrt(3))*180/Math.PI;
-	configs.push({...scene,model,delta,repeat,q,elevation:limb+delta+q*pixelNode,azimuth:pixelNode/Math.cos(limb*Math.PI/180),channels:Array.from({length:15},(_,i)=>i),layers:512,photons:100000,vroomOff:true,epsilon:1,id:`${scene.time}-${scene.height}-${model==='bruneton'?'b':'a'}-${delta<0?'lo':'hi'}-${repeat}-${q<0?0:1}`});
+	configs.push({...scene,model,delta,repeat,q,elevation:limb+delta+q*pixelNode,azimuth:pixelNode/Math.cos(limb*Math.PI/180),channels:mode==='sensitivity'?[6]:Array.from({length:15},(_,i)=>i),layers:512,photons:100000,vroomOff:true,epsilon:1,id:`${scene.time}-${scene.height}-${mode==='sensitivity'?'v'+variants.findIndex(p=>p.id===model):model==='bruneton'?'b':'a'}-${delta<0?'lo':'hi'}-${repeat}-${q<0?0:1}`});
 }
 run.write('registration.json',{mode,configs,finitePixel:'2x2 Gaussian footprint at image-center angular scale; +/- horizontal azimuth contributions are identical by spherical/source-plane reflection symmetry, requiring two distinct vertical rays. Weights1/2. This is a local center-pixel approximation, not a fitted edge.',assumptions:'Native15 bin-average optics/source, fixed scalar phase and SSA; fully spherical all-orders MYSTIC, black ground, no gas/refraction. Production cache N4/order tail is separate.'});
 const readings=[];let failure;
@@ -34,7 +35,7 @@ try{
   const selected=controller.selectGlobeTime(location,config.time==='noon'?1:2),state=createDistantSunSceneState({observation:selected.observation,observerHeight:{value:config.height,units:'meters'},observerUpDirection:[0,0,1]});
   const medium={...physical(),geometry:/** @type {const} */('spherical'),sourceKind:/** @type {const} */('parallel'),observerAltitude:config.height,zenithDegrees:state.solarZenithDegrees,sourcePosition:[0,0,1],referenceDistance:1};
   medium.sourceDirection=[0,-Math.sin(state.solarZenithDegrees*Math.PI/180),Math.cos(state.solarZenithDegrees*Math.PI/180)];
-  const candidate=config.model==='bruneton'?null:profile;
+  const candidate=config.model==='bruneton'?null:[profile,...variants].find(p=>p.id===config.model);assert.ok(config.model==='bruneton'||candidate);
   if(candidate){medium.mie=candidate.mie;medium.albedo=candidate.albedo;}
   const exported=bundle({...medium,albedo:.8},config),files=exported.files;
   if(candidate){
@@ -55,8 +56,8 @@ try{
   mkdirSync(run.absolute+'/tools',{recursive:true});const before=new Set(readdirSync(run.absolute+'/tools'));
   const result=await command(run,config.id,[source+'/cli.js','run','--case',checked(run.path+'/'+relative),'--timeout-seconds','1200'],{HORIZON_TOOL_PARENT:run.absolute});assert.equal(result.code,0,result.stdout+result.stderr);
   const child=readdirSync(run.absolute+'/tools').find(n=>!before.has(n));assert.ok(child);
-  const tool=run.path+'/tools/'+child,rows=readFileSync(checked(tool+'/execution/mc.rad.spc'),'utf8').trim().split(/\r?\n/u).map(line=>line.trim().split(/\s+/u).map(Number));assert.equal(rows.length,15);
-  const spectrum=rows.map((r,c)=>{assert.ok(Math.abs(r[0]-channels[c].center.value)<.002&&r.at(-1)>=0&&Number.isFinite(r.at(-1)));return r.at(-1)/1000;});
+  const tool=run.path+'/tools/'+child,rows=readFileSync(checked(tool+'/execution/mc.rad.spc'),'utf8').trim().split(/\r?\n/u).map(line=>line.trim().split(/\s+/u).map(Number));assert.equal(rows.length,config.channels.length);
+  const spectrum=rows.map((r,c)=>{assert.ok(Math.abs(r[0]-channels[config.channels[c]].center.value)<.002&&r.at(-1)>=0&&Number.isFinite(r.at(-1)));return r.at(-1)/1000;});
   const reading={config,spectrum,tool,seconds:result.seconds,observation:selected.observation};readings.push(reading);run.write('reading-'+config.id+'.json',reading);console.log(JSON.stringify({case:config.id,seconds:result.seconds}));
  }
  run.write('readings.json',readings);

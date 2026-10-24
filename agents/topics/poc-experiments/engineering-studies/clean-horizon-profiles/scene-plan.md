@@ -1,8 +1,12 @@
 # ARM-Informed San Jose Scene Plan
 
-State: independent execution authorized on 2026-10-24; S1 complete, S2/S3 underway. This is the
-current follow-on plan within the selected clean-horizon experiment. The earlier
-[plan](plan.md) and [M1 results](results.md) retain their original gates and findings.
+State: the requested10-condition image matrix and targeted uncertainty renders are
+complete under independent execution authorized on2026-10-24. S1 is complete;
+S2/S3 deliver pilot evidence and a functioning illustrative adapter, with the
+registered optical accuracy targets not fully met. S4 images and S5
+evidence verification/report are complete. [Scene results](scene-results.md)
+records the exact limitations and deferred quantitative checks. The earlier
+[plan](plan.md) and [M1 results](results.md) retain their original gates/findings.
 
 ## Outcome and scope
 
