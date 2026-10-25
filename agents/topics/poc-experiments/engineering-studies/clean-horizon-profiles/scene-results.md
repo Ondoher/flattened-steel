@@ -1199,3 +1199,30 @@ lighting remain. No normal-only, interactive-performance or new reference-accura
 claim is made. Capture wall times:318.9s Flat,104.5s Globe,18.8s publication/checks.
 No new Globe cache, production update or Bruneton score claim; all prior evidence
 remains immutable. The earlier100m comparison remains00137.
+
+
+## Expanded GreenSea gallery with100m and2km
+
+[Seven-height gallery](../../../../../tmp/experiments/clean-horizon-profiles/runs/00143-water-heights/index.html) adds the owner's100m and2000m entries to the
+50/40/30/20/10m list. Both Flat/local Closest and Globe/distant noon remain at
+20/35degree FOVs, same ARM/GreenSea inputs, tile/normal settings,20degree yaw,
+mode-specific horizon pitch and original objects5/6. The gallery defaults to2km
+and provides28primary2048x1152 images plus28all-hidden controls.
+
+00141Flat and00142Globe supply four new2km primary frames and four hidden controls.
+The Globe reuses00037's unchanged N4 field.00143 authenticates those captures and
+prior galleries00140/00137, reusing24primary images and24hidden controls without
+rerendering or changing their bytes. Prior metadata is copied byte-for-byte too;
+100m filenames receive a height prefix while their original metadata IDs remain.
+The derivation rows retain each parent image/metadata identity.
+
+All56frames pass actual height/FOV/camera/pitch, material/profile identity, ground
+geometry, selected object visibility, PNG dimensions and zero GL-error checks.
+All28gallery height/FOV/visibility combinations decode matching image names in a
+real browser; local authored types pass. The four new2km images were visually
+inspected; the24reused primary images retain their earlier inspections.2km shows
+the previously observed broad atmospheric shoulder and strong projected texture
+repetition. These are presentation results with the earlier material/transport
+limitations, not a numerical correction. Capture wall times114.3s Flat and65.6s
+Globe; no interactive-performance or new reference-accuracy claim. Production,
+Bruneton scores, cache configuration and all sealed evidence remain unchanged.

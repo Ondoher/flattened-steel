@@ -5,14 +5,18 @@ import puppeteer from 'puppeteer';
 import {PNG} from 'pngjs';
 import {createRun, checked, identity, command} from './io.mjs';
 
-const [flat, globe] = process.argv.slice(2);
+const [flat, globe, previousSeries, previous100] = process.argv.slice(2);
+assert.equal(Boolean(previousSeries), Boolean(previous100));
 const json = p => JSON.parse(readFileSync(checked(p), 'utf8'));
-const heights = [50, 40, 30, 20, 10], fovs = [20, 35];
-const run = createRun('water-heights', 'Verify and publish GreenSea Flat/Globe50-10m elevation series', [flat, globe].map(p => identity(p + '/manifest.json')));
+const heights = previousSeries ? [2000, 100, 50, 40, 30, 20, 10] : [50, 40, 30, 20, 10], fovs = [20, 35];
+const inputHeights = previousSeries ? [2000] : heights;
+const parents = [flat, globe, ...(previousSeries ? [previousSeries, previous100] : [])];
+const primaryFrames = heights.length * fovs.length * 2;
+const run = createRun('water-heights', 'Verify and publish GreenSea Flat/Globe elevation series with immutable image reuse', parents.map(p => identity(p + '/manifest.json')));
 const work = run.absolute + '/browser';
 let browser, failure;
 try {
-	for (const parent of [flat, globe]) {
+	for (const parent of parents) {
 		const manifest = json(parent + '/manifest.json');
 		assert.equal(manifest.state, 'accepted');
 		for (const artifact of manifest.artifacts) assert.equal(identity(artifact.path).sha256, artifact.sha256);
@@ -21,25 +25,39 @@ try {
 	assert.deepEqual(fc.profile, gc.profile);
 	assert.deepEqual(fc.groundTexture, gc.groundTexture);
 	assert.equal(fc.groundTexture.id, 'green-sea-static-v1');
-	assert.deepEqual(fc.heights, heights);
-	assert.deepEqual(gc.views.map(v => v.height), heights);
+	assert.deepEqual(fc.heights, inputHeights);
+	assert.deepEqual(gc.views.map(v => v.height), inputHeights);
+	for (const parent of [previousSeries, previous100].filter(Boolean)) {
+		const comparison = json(parent + '/comparison.json');
+		assert.equal(comparison.profile, fc.profile.id);
+		assert.deepEqual(comparison.groundTexture, fc.groundTexture);
+	}
 	for (const control of [fc, gc]) {
-		assert.deepEqual(control.objectHeights, heights);
+		assert.deepEqual(control.objectHeights, inputHeights);
 		assert.deepEqual(control.objectFovs, fovs);
 		assert.deepEqual(control.objectHeadings, [20]);
 		assert.deepEqual(control.retainedObjectIndices, [5, 6]);
 	}
 	const rows = [];
-	for (const height of heights) for (const fov of fovs) for (const [mode, parent] of [['flat', flat], ['globe', globe]]) {
+	for (const height of heights) for (const fov of fovs) for (const [mode, rawParent] of [['flat', flat], ['globe', globe]]) {
+		const parent = previousSeries && height !== 2000 ? (height === 100 ? previous100 : previousSeries) : rawParent;
+		const published = parent !== rawParent;
 		const pair = [];
 		for (const visible of [true, false]) {
 			const id = 'h' + height + '-yaw20-fov' + fov + (visible ? '-objects' : '-hidden');
-			const frame = json(parent + '/objects-' + id + '.json');
-			const encoded = readFileSync(checked(parent + '/objects-' + id + '.png64'), 'utf8');
-			assert.ok(encoded.startsWith('data:image/png;base64,'));
-			const bytes = Buffer.from(encoded.split(',')[1], 'base64'), png = PNG.sync.read(bytes);
+			const sourceId = published && height === 100 ? id.replace('h100-', '') : id;
+			const stem = parent + '/' + (published ? mode + '-' : 'objects-') + sourceId;
+			const frame = json(stem + '.json');
+			let bytes;
+			if (published) bytes = readFileSync(checked(stem + '.png'));
+			else {
+				const encoded = readFileSync(checked(stem + '.png64'), 'utf8');
+				assert.ok(encoded.startsWith('data:image/png;base64,'));
+				bytes = Buffer.from(encoded.split(',')[1], 'base64');
+			}
+			const png = PNG.sync.read(bytes);
 			assert.deepEqual([png.width, png.height], [2048, 1152]);
-			assert.equal(frame.id, id);
+			assert.equal(frame.id, sourceId);
 			assert.equal(frame.height.value, height);
 			assert.equal(frame.state.observerHeight.value, height);
 			assert.equal(frame.state.modeKind, mode === 'flat' ? 'flat-local' : 'spherical-distant');
@@ -69,8 +87,8 @@ try {
 			assert.equal(material.tileWidthMeters, 100);
 			assert.equal(material.normalStrength, 0.6);
 			run.write(mode + '-' + id + '.png', bytes);
-			run.write(mode + '-' + id + '.json', frame);
-			pair.push({png, frame});
+			run.write(mode + '-' + id + '.json', readFileSync(checked(stem + '.json')));
+			pair.push({png, frame, imageIdentity: identity(stem + (published ? '.png' : '.png64')), metadataIdentity: identity(stem + '.json')});
 		}
 		const [a, b] = pair;
 		assert.deepEqual(a.frame.camera, b.frame.camera);
@@ -86,10 +104,10 @@ try {
 		assert.ok(nonblack > 2048 * 1152 * 0.9);
 		assert.ok(changed > 0);
 		assert.ok(a.frame.objects.some(o => o.visible && o.inFrustum));
-		rows.push({height, fov, mode, pixelsChangedByMoreThanOne: changed, maximumRgbByteDifference: maximum, parent: identity(parent + '/objects-h' + height + '-yaw20-fov' + fov + '-objects.png64')});
+		rows.push({height, fov, mode, pixelsChangedByMoreThanOne: changed, maximumRgbByteDifference: maximum, reusedPublishedImage: published, parent: a.imageIdentity, parentMetadata: a.metadataIdentity});
 	}
-	run.write('comparison.json', {heights, fovs, rows, groundTexture: fc.groundTexture, profile: fc.profile.id, operation: 'Native PNG data URLs decoded byte-for-byte; same scene/material settings except requested elevation and corresponding horizon pitch. Matching all-hidden object controls retained.', scope: 'Static GreenSea material trial. Flat/local ClosestN1 versus Globe/distant noonN1-4 retain different source geometry/native adaptation. No reflective-water model, displacement, new atmosphere/cache or Bruneton score claim.'});
-	run.write('index.html', `<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>GreenSea elevation comparison</title><style>body{font:16px system-ui;background:#17222d;color:#eef;margin:24px}a{color:#9df}label{display:inline-block;margin:0 20px 12px 0}select{font:inherit}.pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}img{display:block;width:100%;height:auto}@media(max-width:1050px){.pair{grid-template-columns:1fr}}</style><h1>GreenSea:50m down to10m</h1><p>San Jose, same ARM atmosphere, original back two objects, horizon centered. Native2048x1152; click either image for full size.</p><label>Elevation <select id="height">${heights.map(h => `<option value="${h}">${h}m</option>`).join('')}</select></label><label>Vertical FOV <select id="fov">${fovs.map(f => `<option value="${f}">${f} degrees</option>`).join('')}</select></label><label><input type="checkbox" id="hidden"> Hide objects for comparison</label><div class="pair">${[['flat', 'Flat/local - Closest'], ['globe', 'Globe/distant - Noon']].map(([mode, label]) => `<article><h2>${label}</h2><a class="full" data-mode="${mode}" href="${mode}-h50-yaw20-fov20-objects.png"><img id="${mode}" src="${mode}-h50-yaw20-fov20-objects.png" alt="${label},GreenSea,50m"></a><p><a class="metadata" data-mode="${mode}" href="${mode}-h50-yaw20-fov20-objects.json">Metadata</a></p></article>`).join('')}</div><p>GreenSea color and normal maps on the existing matte ground:100m-wide repeating tiles, normal strength0.6. Static appearance only; repetition and fixed photographic lighting remain visible. Ground geometry/atmosphere are unchanged. Flat/localN1 and GlobeN1-4 retain different source geometry/native exposure.</p><p>Texture: Keith333, <a href="https://opengameart.org/content/water-batch-of-15-seamless-textures-with-normalmaps">OpenGameArt</a>, CC BY3.0; original images scaled/repeated as color/normal maps. <a href="comparison.json">Conditions and derivation</a>.</p><script>function update(){const h=document.querySelector('#height').value,f=document.querySelector('#fov').value,suffix=document.querySelector('#hidden').checked?'hidden':'objects';for(const mode of ['flat','globe']){const id=mode+'-h'+h+'-yaw20-fov'+f+'-'+suffix;document.getElementById(mode).src=id+'.png';document.getElementById(mode).alt=mode+',GreenSea,'+h+'m,'+f+'degree FOV';document.querySelector('a.full[data-mode="'+mode+'"]').href=id+'.png';document.querySelector('a.metadata[data-mode="'+mode+'"]').href=id+'.json';}}for(const id of ['height','fov','hidden'])document.getElementById(id).onchange=update;</script>`);
+	run.write('comparison.json', {heights, fovs, rows, groundTexture: fc.groundTexture, profile: fc.profile.id, operation: 'New native PNG data URLs decoded byte-for-byte; earlier published PNG bytes and metadata copied unchanged, with height added to100m filenames. Same scene/material settings except requested elevation and corresponding horizon pitch. Matching all-hidden object controls retained.', scope: 'Static GreenSea material trial. Flat/local ClosestN1 versus Globe/distant noonN1-4 retain different source geometry/native adaptation. No reflective-water model, displacement, new atmosphere/cache or Bruneton score claim.'});
+	run.write('index.html', `<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>GreenSea elevation comparison</title><style>body{font:16px system-ui;background:#17222d;color:#eef;margin:24px}a{color:#9df}label{display:inline-block;margin:0 20px 12px 0}select{font:inherit}.pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}img{display:block;width:100%;height:auto}@media(max-width:1050px){.pair{grid-template-columns:1fr}}</style><h1>GreenSea elevation comparison:10m to${heights[0]}m</h1><p>San Jose, same ARM atmosphere, original back two objects, horizon centered. Native2048x1152; click either image for full size.</p><label>Elevation <select id="height">${heights.map(h => `<option value="${h}">${h}m</option>`).join('')}</select></label><label>Vertical FOV <select id="fov">${fovs.map(f => `<option value="${f}">${f} degrees</option>`).join('')}</select></label><label><input type="checkbox" id="hidden"> Hide objects for comparison</label><div class="pair">${[['flat', 'Flat/local - Closest'], ['globe', 'Globe/distant - Noon']].map(([mode, label]) => `<article><h2>${label}</h2><a class="full" data-mode="${mode}" href="${mode}-h${heights[0]}-yaw20-fov20-objects.png"><img id="${mode}" src="${mode}-h${heights[0]}-yaw20-fov20-objects.png" alt="${label},GreenSea,${heights[0]}m"></a><p><a class="metadata" data-mode="${mode}" href="${mode}-h${heights[0]}-yaw20-fov20-objects.json">Metadata</a></p></article>`).join('')}</div><p>GreenSea color and normal maps on the existing matte ground:100m-wide repeating tiles, normal strength0.6. Static appearance only; repetition and fixed photographic lighting remain visible. Ground geometry/atmosphere are unchanged. Flat/localN1 and GlobeN1-4 retain different source geometry/native exposure.</p><p>Texture: Keith333, <a href="https://opengameart.org/content/water-batch-of-15-seamless-textures-with-normalmaps">OpenGameArt</a>, CC BY3.0; original images scaled/repeated as color/normal maps. <a href="comparison.json">Conditions and derivation</a>.</p><script>function update(){const h=document.querySelector('#height').value,f=document.querySelector('#fov').value,suffix=document.querySelector('#hidden').checked?'hidden':'objects';for(const mode of ['flat','globe']){const id=mode+'-h'+h+'-yaw20-fov'+f+'-'+suffix;document.getElementById(mode).src=id+'.png';document.getElementById(mode).alt=mode+',GreenSea,'+h+'m,'+f+'degree FOV';document.querySelector('a.full[data-mode="'+mode+'"]').href=id+'.png';document.querySelector('a.metadata[data-mode="'+mode+'"]').href=id+'.json';}}for(const id of ['height','fov','hidden'])document.getElementById(id).onchange=update;</script>`);
 	mkdirSync(work); mkdirSync(work + '/temp');
 	browser = await puppeteer.launch({executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe', headless: 'new', userDataDir: work, env: {...process.env, TEMP: work + '/temp', TMP: work + '/temp'}, args: ['--disable-gpu']});
 	const page = await browser.newPage(), errors = [];
@@ -105,13 +123,13 @@ try {
 		}
 		return result;
 	});
-	assert.equal(checks.length, 20);
+	assert.equal(checks.length, primaryFrames);
 	assert.ok(checks.every(c => c.sourceNamesMatch && c.sizes.every(s => s[0] === 2048 && s[1] === 1152)));
 	assert.deepEqual(errors, []);
 	const types = await command(run, 'typecheck', ['node_modules/typescript/bin/tsc', '-p', 'experiments/clean-horizon-profiles/jsconfig.json']);
 	assert.equal(types.code, 0, types.stdout + types.stderr);
-	run.write('verification.json', {rows, browserChecks: checks, errors, typecheck: 'passed', primaryFrames: 20, hiddenControls: 20, scope: 'Actual height/FOV/material/geometry/visibility and native image checks; no new reference accuracy or performance benchmark.'});
-	console.log(JSON.stringify({report: run.path + '/index.html', primaryFrames: 20}));
+	run.write('verification.json', {rows, browserChecks: checks, errors, typecheck: 'passed', primaryFrames, hiddenControls: primaryFrames, scope: 'Actual height/FOV/material/geometry/visibility and native image checks; no new reference accuracy or performance benchmark.'});
+	console.log(JSON.stringify({report: run.path + '/index.html', primaryFrames}));
 } catch (error) {
 	failure = String(error); run.write('failure.json', {failure}); console.error(error);
 } finally {

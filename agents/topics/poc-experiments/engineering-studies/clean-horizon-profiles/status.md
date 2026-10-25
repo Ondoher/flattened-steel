@@ -13,6 +13,16 @@ baseline/candidate comparison requirement. ARM appearance improvements do not
 compensate for a Bruneton regression. No new candidate has been evaluated under
 this newly recorded requirement.
 
+## Expanded GreenSea list - complete
+
+[Seven-height gallery](../../../../../tmp/experiments/clean-horizon-profiles/runs/00143-water-heights/index.html) and
+[owning details](scene-results.md#expanded-greensea-gallery-with100m-and2km) provide
+2000,100,50,40,30,20,10m in both modes and20/35degree FOVs.28primary images and
+28hidden controls are available.00141/00142 new2km captures and00143merged gallery
+are accepted.24primary/24hidden earlier images are reused unchanged. Actual state,
+material/geometry/image and28browser combinations/local types pass; four new
+primary frames inspected. Production remains unchanged.
+
 ## GreenSea50-10m series - complete
 
 [Five-height gallery](../../../../../tmp/experiments/clean-horizon-profiles/runs/00140-water-heights/index.html) and

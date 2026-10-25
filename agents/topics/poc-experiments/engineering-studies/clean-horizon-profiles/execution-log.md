@@ -1177,3 +1177,31 @@ feat: compare GreenSea ground material across low heights
 ```
 
 No push or standards-compliance claim.
+
+
+## Add100m and2km to GreenSea list -2026-10-25
+
+Owner requested100m/2km additions. Reused100m from00137 and lower heights from
+00140; rendered only2km in00141Flat/00142Globe, reusing00037's Globe field.
+Extended the existing report to authenticate/copy previously published PNG and
+metadata bytes into00143, retaining parent identities and original100m metadata
+IDs while normalizing filenames. All seven heights retain both FOVs/modes and
+GreenSea/ARM/back-two conditions. Accepted00143contains28primary and28hidden
+frames;24primary/24hidden frames are reused unchanged. Actual heights/cameras,
+material/profile/geometry/visibility, image and28browser combinations/local types
+pass. Four new2km primary images inspected; earlier inspections remain applicable.
+Existing atmospheric shoulder and projected texture repetition remain. No
+production/numerical algorithm, cache configuration, B1 claim or new investigation.
+
+Checkpoint adviser recommends the completed seven-height gallery extension.
+Preapproved local message:
+
+```text
+feat: extend GreenSea height comparison gallery
+
+- add verified 2 km Flat and Globe water-material captures
+- merge authenticated 100 m through 10 m image evidence
+- publish a seven-height gallery with retained presentation limits
+```
+
+No push or standards-compliance claim.
