@@ -22,8 +22,8 @@ export async function captureFlat(control){
   if(gl.getError()!==0||visibleObjects.length!==(control.objectsVisible?6:0)||!shader.includes('armAerosolColumn')||!shader.includes('armAerosolDensity'))throw Error('Flat capture proof failed');
   await G.flatRetain('flat-'+height+'.glsl',shader);scene._renderOperation();gl.finish();const dataUrl=scene.canvas.toDataURL('image/png');results.push({height,observation:app._publishedState.observation,state:app._publishedState,physicalHeight:mode.observerHeight,cameraPosition:scene.camera.position.toArray(),direction,viewport:{canvas:[scene.canvas.width,scene.canvas.height],composer:[composer.readBuffer.width,composer.readBuffer.height],sceneColor:[pass._material.uniforms.uSceneColorTexture.value.image.width,pass._material.uniforms.uSceneColorTexture.value.image.height],shaderViewport:Array.from(pass._material.uniforms.uViewportSizePixels.value)},visibleObjects,profile:atmosphere.profile,renderer,glError:gl.getError(),source:mode.geometry.resolveSourceRelativePosition({position:physical}),profileNumerics:algorithm.config.config.profile.numerical,meshes:app._endpointScene._meshes.map(m=>({name:m.name,visible:m.visible})),dataUrl});
   if(control.fovSweep){const{captureFov}=await import('./flat-fov-view.mjs');await captureFov(control);}
+  if(control.objectsStill){const{captureObjects}=await import('./object-view.mjs');await captureObjects({...control,objectCaptureHeight:height});}
  }
  if(control.extentTest){const{captureExtent}=await import('./flat-extent-view.mjs');await captureExtent(control);}
- if(control.objectsStill){const{captureObjects}=await import('./object-view.mjs');await captureObjects(control);}
  return results;
 }

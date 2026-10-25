@@ -1147,3 +1147,33 @@ feat: trial GreenSea ground material in clean-horizon views
 ```
 
 No push or standards-compliance claim. All reference image bytes remain unchanged.
+
+
+## GreenSea50m down to10m -2026-10-25
+
+Owner requested50m every10m down to10m. Kept both prior Flat/Globe modes and20/35
+FOVs, GreenSea/ARM inputs and only meshes5/6. Extended contained capture controls
+for height-prefixed artifacts and per-height publication. Replaced the app's
+preset-only height check only in the capture bundles with finite5-40000m checks;
+production source is unchanged. Each height remains inside the existing cache.
+Accepted00138Flat/00139Globe and00140gallery provide20primary2048x1152 images plus
+20hidden controls. Globe reused00037's field. Actual state/camera/material/geometry,
+PNG and visibility proofs,20browser combinations and local types pass. All20primary
+images visually inspected. Static material, repeated bands and photo-lighting
+limits remain. No new atmosphere/numerical algorithm, Globe cache, production
+update, reference accuracy, interactive benchmark or B1 score claim. Times318.9s,
+104.5s,18.8s are capture/report wall times. Prior evidence remains immutable;
+no next investigation selected.
+
+Checkpoint adviser recommends the completed contained height-series unit.
+Preapproved local message:
+
+```text
+feat: compare GreenSea ground material across low heights
+
+- support contained 10 to 50 meter observer-height captures
+- render matched Flat and Globe object-facing water-material series
+- add verified height gallery and retain geometry and model limits
+```
+
+No push or standards-compliance claim.

@@ -1163,3 +1163,39 @@ cache build or Bruneton score claim. Previous evidence remains immutable.
 Texture credit: Keith333, [Water - Batch of15Seamless Textures with normalmaps](https://opengameart.org/content/water-batch-of-15-seamless-textures-with-normalmaps),
 CC BY3.0. The original paired images are scaled/repeated and their normals used
 for lighting. The owner-supplied15-file texture library is preserved unchanged.
+
+
+## GreenSea elevation series50m down to10m
+
+[Five-height Flat/Globe gallery](../../../../../tmp/experiments/clean-horizon-profiles/runs/00140-water-heights/index.html) supplies the owner's50,40,30,20,10m
+sequence at both20/35degree vertical FOVs:20primary2048x1152 images plus20matching
+all-hidden object controls. The page selects elevation, FOV and object visibility;
+full PNGs and actual metadata remain directly accessible. All modes retain San
+Jose, the ARM reconstruction, GreenSea color/normal pair,100m tile width,0.6normal
+strength,20degree object-facing yaw, original ground/object transforms and the
+back two meshes5/6. The horizon pitch is level in Flat and adjusted to the true
+geometric limb at each Globe elevation. Existing source geometry/native exposure
+and localN1/globeN1-4 distinctions remain. This is an appearance series, not an
+isolated curvature test or a numerical algorithm improvement.
+
+The app's discrete elevation allow-list did not include these heights. Both
+contained bundles replace only that check with finite5-40000m acceptance; the
+production controls remain unchanged. Each requested height is within the existing
+cache domain.00138Flat/00139Globe are accepted; Globe authenticates and reuses
+00037's unchanged N4 field. Actual observer height, camera Y, FOV and horizon pitch
+are checked at every capture; height-specific names prevent overwriting evidence.
+The material is restored before the next elevation's ordinary scene preparation.
+
+00140 authenticates both parent manifests/artifacts and publishes the native PNG
+encodings without resizing or color edits. All40frames pass actual height/mode,
+profile/material identities, map attachment, unchanged ground vertices/indices,
+selected visibility, native dimensions and zero GL-error checks. Hidden controls
+retain camera/lux/object transforms and produce measurable object differences in
+all20pairs(34094-157642pixels change by more than one RGB byte). All20gallery
+height/FOV/visibility combinations decode correct images in a real browser, local
+source types pass, and all20primary images were visually inspected. Foreground
+wave patterns enlarge as the eye lowers; repeating texture bands and photographic
+lighting remain. No normal-only, interactive-performance or new reference-accuracy
+claim is made. Capture wall times:318.9s Flat,104.5s Globe,18.8s publication/checks.
+No new Globe cache, production update or Bruneton score claim; all prior evidence
+remains immutable. The earlier100m comparison remains00137.
