@@ -12,6 +12,10 @@ broader gray-band discrepancy. The latest [native PNG comparison](../../../../..
 adds matched pixel footprints and shows excess local sky-side brightening at2km.
 See [scene results](scene-results.md) for the pointwise uncertainty and scope.
 
+Latest owner request: [100m/5degree Flat and Globe with objects](../../../../../tmp/experiments/clean-horizon-profiles/runs/00126-objects-100m/index.html).
+[Scene results](scene-results.md#object-enabled100m5degree-views) own object-facing
+poses, narrow-FOV cropping, original-object preservation and verification.
+
 Latest images: [Combined5m/100m/500m FOV viewer](../../../../../tmp/experiments/clean-horizon-profiles/runs/00123-fov-heights/index.html)
 compares Flat/local Closest and Globe/distant noon at all seven perspective
 presets. [Scene results](scene-results.md#near-ground-fov-follow-up-at100m-and5m)

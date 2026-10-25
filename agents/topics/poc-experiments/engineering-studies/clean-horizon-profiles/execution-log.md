@@ -1047,3 +1047,30 @@ feat: extend clean-horizon FOV comparison near ground
 
 The checkpoint contains only contained helpers and current topic documents.
 No push, production change, sealed evidence mutation or standards-compliance claim.
+
+
+## Object-enabled pair -2026-10-25
+
+Owner selected100m/5degree and requested objects in both modes. Added an optional
+contained object capture path, leaving default no-object behavior intact. Prior
+Sun-facing views pointed away from all review objects; captured three object-edge
+headings and matching hidden controls without relocating/scaling any object.
+00124 Flat and00125 Globe use the same ARM model; Globe reuses00037 N4 fields.
+00126 verifies/publishes native2048x1152 PNGs. All six object-enabled compositions
+visually inspected; foreground cropping is inherent to the chosen narrow FOV.
+State/viewport/object/frustum/pixel/browser/type checks pass. No production,
+physical algorithm or B1 change, and no further run automatically selected.
+
+Checkpoint adviser recommends the completed object-visibility unit. Preapproved
+local message:
+
+```text
+feat: render clean-horizon object-facing pair
+
+- capture Flat and Globe 100m 5degree views with original objects enabled
+- add verified object-edge headings and matched hidden controls
+- document visible object effects and narrow-FOV cropping limits
+```
+
+Only contained helpers and current topic documents are included; no push,
+protected evidence mutation, production change or standards-compliance assertion.

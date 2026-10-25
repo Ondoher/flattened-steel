@@ -1046,3 +1046,33 @@ report,12.92s5m report and10.41s unified viewer. Respective retained artifacts a
 These are capture/report costs, not interactive frame benchmarks. No new Globe
 cache build, production update, numerical fix or Bruneton score claim. All earlier
 evidence remains immutable; no further investigation is automatically selected.
+
+
+## Object-enabled100m/5degree views
+
+[Object-facing comparison](../../../../../tmp/experiments/clean-horizon-profiles/runs/00126-objects-100m/index.html)
+provides the requested Flat/local Closest and Globe/distant noon images at100m,
+5degree vertical FOV, same ARM atmosphere and native2048x1152. Original review
+objects are enabled, without relocation or scaling. Previous Sun-facing headings
+looked away from the negative-Z object group, so both cameras turn toward it;
+Flat remains level and Globe centers its depressed horizon. Camera position,
+ground, clipping, medium, illumination, exposure and cache are retained.
+
+Three nearby/object-edge compositions are preserved: yaw-14/-4/35degrees from
+negative scene-Z. At5degrees the nearby boxes are larger than the vertical frame
+and therefore cropped; two headings leave different amounts of clear horizon.
+The distant-edge heading shows the very faint far box without enlarging it.
+The page has a framing selector and a matching hidden-object control. This is
+an app-appearance comparison with localN1 versus globeN1-4 and their existing
+source-geometry/native-adaptation differences, not isolated curvature validation.
+
+00124 Flat and00125 Globe captures are accepted; the existing00037 ARM N4 field
+is reused.00126 authenticates both parents and checks actual height/FOV/mode,
+profile, object flags/transforms, camera/viewport, zero GL errors, PNG contents,
+frustum intersection and a nonzero visible pixel effect versus the hidden controls.
+Nearby framings alter about0.74-0.93million pixels; the far box is much fainter
+(max8RGB bytes Flat and2Globe). All six object-enabled images were visually
+inspected. All six gallery control combinations decode correctly in a real
+browser, and local authored types pass. Images are copied from synchronous native
+PNG exports without resizing or color adjustment. No production update, new
+numerical fix or Bruneton score claim; earlier evidence remains immutable.

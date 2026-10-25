@@ -13,6 +13,16 @@ baseline/candidate comparison requirement. ARM appearance improvements do not
 compensate for a Bruneton regression. No new candidate has been evaluated under
 this newly recorded requirement.
 
+## Object-enabled100m/5degree pair complete
+
+[Object-facing images](../../../../../tmp/experiments/clean-horizon-profiles/runs/00126-objects-100m/index.html)
+and [owning conditions](scene-results.md#object-enabled100m5degree-views) provide
+both requested modes with the original objects enabled. Cameras turn toward the
+object group; horizon-centered100m/5degree framing and the ARM medium remain.
+Foreground objects are naturally cropped by the narrow view. Three compositions
+and matched hidden controls are retained;00124/00125/00126 are accepted with
+state/image/frustum/browser/type checks. Production is unchanged.
+
 ## Near-ground FOV comparisons complete
 
 [Unified5m/100m/500m viewer](../../../../../tmp/experiments/clean-horizon-profiles/runs/00123-fov-heights/index.html)
