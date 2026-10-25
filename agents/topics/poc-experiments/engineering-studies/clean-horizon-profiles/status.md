@@ -13,6 +13,16 @@ baseline/candidate comparison requirement. ARM appearance improvements do not
 compensate for a Bruneton regression. No new candidate has been evaluated under
 this newly recorded requirement.
 
+## Flat ground-extent test complete
+
+[Comparison page](../../../../../tmp/experiments/clean-horizon-profiles/runs/00115-flat-extent/index.html)
+and [owning findings](scene-results.md#flat-ground-extent-hypothesis-test) record
+accepted00114/00115. Extending ground width1800km to7200km while retaining the
+nearby mesh produces byte-identical50degree and5degree images. Farther camera
+clipping changes default color by at most one byte and introduces one thin line
+in the close-up where ground lies beyond the atmosphere boundary. It does not
+remove the broad shoulder. No production update or accepted fix is proposed.
+
 ## Requested500m comparison complete
 
 [Flat/local Closest and Globe/distant noon at500m](../../../../../tmp/experiments/clean-horizon-profiles/runs/00113-paired-500m/index.html)

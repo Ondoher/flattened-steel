@@ -963,3 +963,32 @@ feat: render clean-horizon 500m Flat and Globe pair
 ```
 
 No push; generated runs and earlier evidence remain immutable.
+
+
+## Ground extent-only follow-up -2026-10-25
+
+Owner authorized the proposed finite-ground test. Retained the original2048
+triangles and added an eight-triangle coplanar ring in the contained renderer;
+no production edits. Added a separate camera-clip control because the1200km
+far clip can hide a ground extension. Captured all three variants and return
+controls at50degree/5degree FOV in00114;00115 authenticates parents and factors,
+compares pixel bytes/actual shader endpoint traces and publishes six native PNGs.
+Baseline-return and previous00110 replay are exact. Extent-only is byte-identical,
+so it does not fix the broad shoulder. Extended-far adds one thin close-up line
+at the configured atmosphere boundary. Local types/browser/GL checks pass.
+No production, cache/profile or B1 changes; no accepted fix or follow-on selected.
+
+Checkpoint adviser recommends the completed negative diagnosis. Preapproved
+local checkpoint message:
+
+```text
+feat: test flat clean-horizon ground extent
+
+- add contained extent and far-clip diagnostic controls
+- compare matched default and close-up Flat renders
+- record unchanged shoulder behavior and the separate far-boundary line
+```
+
+Whole-worktree checkpoint remains limited to contained helpers and owning topic
+documents. No push, production edit, historical evidence mutation or standards
+compliance claim.

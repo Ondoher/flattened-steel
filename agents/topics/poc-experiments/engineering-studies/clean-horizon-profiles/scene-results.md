@@ -907,3 +907,47 @@ objects, copies PNGs byte-for-byte, verifies image content and browser decoding,
 and passes local types. No production update, accepted numerical fix, full flat
 radiance reference or new B1 result is claimed. Existing non-regression requirements
 continue to apply to any later accepted algorithm changes.
+
+
+## Flat ground-extent hypothesis test
+
+[Native image comparison and exact pixel metrics](../../../../../tmp/experiments/clean-horizon-profiles/runs/00115-flat-extent/index.html)
+complete the owner-requested extent test at San Jose500m, Flat/local Closest,
+same ARM profile and no review objects. New00114 renders a fresh baseline,
+extension-only, extension plus farther camera clip, and baseline-return at both
+50degree and5degree vertical FOV.00115 verifies and publishes the six comparison
+images; both runs are accepted. Production is unchanged.
+
+The existing1800km-wide plane and all2048 triangles remain intact. An eight-triangle
+coplanar ring increases width to7200km, borrowing the same ground material and
+shadow settings. Extent-only retains the1200km camera far clip. The separate far
+control increases that clip to4800km; physical atmosphere boundaries, cache,
+camera position/direction, illumination and exposure remain unchanged. Actual
+shader hit/endpoint/atmosphere-bound values are retained for five full-height
+pixel columns. The5degree views are matched diagnostic zooms, not app preset changes.
+
+**Result: increasing the ground extent alone does not change any image byte at
+either FOV.** At5degrees the center-column first ground hit moves from row583
+(about879km) to581(about1199km), yet atmospheric composition erases the visible
+surface difference. The broad gray-brown shoulder is unchanged. This rejects
+finite patch size as a sufficient explanation for that shoulder in this view.
+
+With the farther clip, the50degree image changes by at most one RGB byte.
+The5degree close-up changes one2048-pixel row(y578), by at most25RGB bytes;
+all other rows remain within one byte. This is a new thin line, not removal of
+the broad shoulder. Its center ground endpoint is about2638km away while the
+shader's atmosphere segment ends near1930km at the configured dome. The control
+therefore exposes a separate ground-beyond-atmosphere composition issue and is
+not proposed as an appearance fix. Row localization is derived from per-pixel
+maximum RGB-channel differences greater than one between the retained baseline
+and extended-far PNGs, without resampling.
+
+Fresh default baseline reproduces delivered00110 exactly; both baseline-return
+controls also reproduce exactly. Actual original vertex data/camera pose/lux
+remain protected, retained shaders/source/profile/lighting match, GL errors are
+zero, six gallery images decode at2048x1152, and local authored types pass.
+The original and extended default frames are visually equivalent; close-up
+baseline and farther-clip frames were inspected and the thin new line retained.
+No new cache, profile tuning, production change, accepted numerical fix or B1
+score claim. Atmosphere/source-field behavior and configured atmospheric boundary
+remain separate leads; this test does not establish which causes the shoulder.
