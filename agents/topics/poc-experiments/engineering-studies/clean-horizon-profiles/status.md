@@ -56,6 +56,17 @@ identical linear/display color after4x triangles. Small depth/coverage differenc
 exist but do not explain the continuous line. Near-limb radiance remains unvalidated;
 no production geometry change is promoted.
 
+## Actual analytic shader branch test complete
+
+[Actual-compiler findings](scene-results.md#actual-compiler-analytic-ground-intersection-test)
+and [image comparison](../../../../../tmp/experiments/clean-horizon-profiles/runs/00079-analytic-results/index.html)
+own the corrected target. Actual compiler GLSL at7800cache-anchor queries has
+hit differences only at exact tangency. In the live A/B, about294000ground paths
+per view are shortened with attenuation preserved. All2048sky-rim pixels at each
+height retain exactly their original linear/display color. The continuous rim
+and gray band remain. This tests emitted intersection arithmetic and live
+termination, not the cached field's cross-boundary interpolation. No fix promoted.
+
 ## Verification and next boundary
 
 All20 primary frames and two uncertainty frames were inspected at native size.

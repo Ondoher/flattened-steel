@@ -455,3 +455,78 @@ and all eight gallery images in a real browser. Resources/temp profiles are
 closed/removed. Pixel-center/noon/heading/FOV limits and subpixel precision remain
 explicit. Production, the profile, cache data and old evidence are unchanged;
 the refined mesh is a diagnostic rather than a promoted production change.
+
+## Actual compiler analytic ground-intersection test
+
+The owner clarified that the target was the shader's true-sphere ground-hit
+branch, rather than the meshes. The previous helper-sphere/mesh comparison did
+not exercise the cache compiler's actual emitted function bodies. This follow-up
+addresses that distinction explicitly.
+
+[Actual-branch comparison gallery](../../../../../tmp/experiments/clean-horizon-profiles/runs/00079-analytic-results/index.html)
+contains the original views, consistent analytic termination, a deliberately
+naive clipping control and unmodified horizon crops. At500m and2km San Jose noon,
+the continuous white rim and upper gray band remain. No production code changed.
+
+Run00076 executes the actual compiler common GLSL with its recorded
+anchored-radial/stable-factored policy. It calls representativePoint and
+incomingPhysicalDirection before rayBlockedByGround, groundBoundaryHit,
+atmosphereBranchLength, sphereRoots and firstPositiveRoot. This is actual GLSL
+on an RTX2060 through Chrome155/D3D11, compared with binary64 geometry using the
+same stored Float32 local cosine. It covers7800queries at all48 original cache
+heights plus500m and2000m, four solar indices, three azimuths and13 angular
+positions around each geometric limb.
+
+Ground-hit classifications differ in192queries, all at the requested exact
+tangent. None differ at any tested nonzero offset, including0.00001degrees.
+Outside0.001degrees, maximum branch-distance error is2.603m across all tested
+heights,0.052m at500m and0.123m at2km. Exact-tangent distance error can reach133m:
+the discriminant is poorly conditioned there. At surface contact the negative
+branch-length sentinel and first-positive-root selection have different intended
+semantics; a far root in that contact case is not counted as a wrong near root.
+The sphereRoots/firstPositiveRoot pipeline also agrees exactly with groundBoundaryHit
+for3684positive-height ground queries with matching classification; no matching
+sky query returns a positive ground root. This anchor probe does not validate
+every displaced transport point.
+
+Run00075 reuses the unchanged N48 N4 ARM noon field from00037. The live A/B uses
+the actual emitted geometry bodies, with token renaming for collision avoidance
+and live observer/ray anchor binding. The original instrumented float image is
+identical to the stock capture. Analytic termination clips paths to physical
+ground and aligns the scene endpoint when necessary so surface attenuation
+remains applied. Closer scene objects retain their own termination.
+
+| Height | Analytic ground endpoints | Scene paths shortened | Scene endpoints losing attenuation | Maximum change in2048sky-rim pixels |
+| --- | --- | --- | --- | --- |
+|500m|294114|294112|0|0linear RGB,0RGB bytes|
+|2km|292894|292888|0|0linear RGB,0RGB bytes|
+
+The center ground endpoint moves about27.6m/26.1m nearer at500m/2km, so the A/B
+really exercises the termination difference. The sky immediately above the limb
+retains exactly the original path lengths and radiance. Actual emitted
+rayBlockedByGround and groundBoundaryHit agree throughout the52224pixel horizon
+strip, and their hit masks agree with binary64 pixel-ray reconstruction.
+
+Whole-frame differences are not all zero:500m has a48-byte maximum at the isolated
+mesh/sphere coverage misses;2km changes by at most1byte. The diagnostic does not
+synthesize green ground where the mesh misses. These isolated pixels must not be
+confused with the unchanged continuous sky rim. A naive clip that leaves a farther
+scene endpoint can disable attenuation and cause a22-byte green change at2km;
+that control is not a valid correction.
+
+Conclusion: the tested intersection arithmetic and live termination inconsistency
+are not a sufficient explanation or correction for the continuous rim. This does
+not establish that the cached near-limb radiance is physically correct. Source-field
+values and interpolation across ground-crossing versus sky directions remain an
+open, separate hypothesis, along with the previously measured height/reference
+errors. Neither the N4 source field nor its angular stencils were changed here.
+
+The scene capture took96.6s including cache loading, two baseline views and14
+instrumented outputs; no N4 rebuild was performed. Run00079 rehashes all parent
+artifacts, verifies actual branch/attenuation flags and the baseline bridge, runs
+local source type checking and loads all10gallery images in a real browser.
+Run00077 preserves the first report attempt, which rejected the known favicon404
+alongside real browser errors; the corrected report accepts that exact favicon
+message while retaining shader/page/host failure checks. Owned browser processes
+and temporary profiles were closed/removed. There is no standards-compliance or
+production-promotion claim.

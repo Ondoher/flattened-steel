@@ -54,8 +54,8 @@ records retain sanitized endpoints and file identities, never authentication val
 Surface constraint branch mechanism/prediction: independent near-ground scattering
 and absorption could resolve the lidar near-field ambiguity. Public catalog
 inspection located the current E13 optical product instead of the retired C1
-surface stream. Downloaded three optical and three weather files. Preserved 1 µm
-and 10 µm impactor states separately. A later derivation restricted extinction to
+surface stream. Downloaded three optical and three weather files. Preserved 1 Ã‚Âµm
+and 10 Ã‚Âµm impactor states separately. A later derivation restricted extinction to
 simultaneous valid green scattering/absorption; it supersedes the earlier independently
 averaged diagnostic without modifying it. RH differences prevent a dry-to-ambient
 claim; density correction alone does not restore hygroscopic growth.
@@ -458,3 +458,68 @@ feat: test clean-horizon ground alignment
 Whole-worktree unit: seven experiment-source/owning-topic files, no generated
 binary/data, credentials or unrelated changes. Source types and00074 evidence/
 browser checks pass. Git supplies the resulting local commit hash; no push.
+
+
+## Authorized analytic-intersection consistency test
+
+The owner clarifies that the target is the solver's actual analytic sphere-hit
+branch, then explicitly requests this test. Previous mesh comparison/helper masks
+do not validate the cache's emitted intersection implementation or its agreement
+with live termination. Test emitted rayBlockedByGround, groundBoundaryHit,
+sphereRoots and atmosphereBranchLength under the actual anchored policy, using
+representativePoint/incomingPhysicalDirection and near-tangent queries at cache
+knots and observer heights. Compare against binary64 from the stored query inputs.
+Do not substitute an independently reimplemented shader formula for the target.
+
+Then extract the exact generated geometry function bodies, rename symbols only
+for collision avoidance, and use those functions in a contained live-view A/B.
+Compare unchanged stock view, naive analytic clipping and an endpoint-consistent
+variant that aligns the scene endpoint/attenuation decision when physical ground
+is nearer. Preserve foreground objects and label missing-mesh ground-color limits.
+Keep N48 field/profile/view/display fixed and reuse existing cache data. Verify
+actual ground flags, path lengths and attenuation applicability at the rim. No
+production change, arbitrary radius shift, full-field rebuild or optics retuning.
+
+Outcome:00075 scene A/B accepted in96.6s, unchanged N48 field reused;00076actual
+compiler hardware probe accepted with7800queries.00078report rehashes both parents,
+checks masks/actual branch flags/attenuation and identical baseline bridge, passes
+source types and verifies all10gallery images.00077failed solely because the
+report initially rejected the known favicon404; the corrected exact-message
+handling retains real shader/page/host checks. Both runs remain immutable.
+
+The consistent branch shortens294112/292888scene paths at500m/2km and retains
+attenuation for every scene endpoint. The2048sky rim pixels at each height are
+exactly unchanged in linear/display output. White and gray bands remain. Actual
+cache geometry disagreements with binary64 occur only at exact tangency; no
+nonzero-offset query disagrees. This negative result does not validate cached
+source radiance or angular/height interpolation near the ground/sky boundary.
+No additional cache build, profile tuning or production update was undertaken.
+The two isolated500m mesh misses still have changed pixels under analytic
+termination; those are not the continuous rim. Actual emitted function bodies
+and the runtime binding, rather than a substitute shader equation, were tested.
+
+The requested test is complete. A possible next owner-selected question is
+whether source-field interpolation mixes directions with different ground-hit
+branches. No follow-on experiment is automatically started.
+
+Final report00079adds an explicit derived check of the saved sphereRoots /
+firstPositiveRoot outputs:3684positive-height ground queries agree exactly with
+groundBoundaryHit, with no positive-root false hits for matching sky queries.
+It repeats report types/hash/browser checks successfully without rerendering or
+rebuilding the field.00078remains the earlier accepted report;00079is current.
+
+Checkpoint adviser: CHECKPOINT_RECOMMENDED. User's continuing independent-execution
+authorization preapproves the suggested local message:
+
+```text
+feat: test analytic ground termination for clean horizons
+
+- probe emitted compiler ground geometry across anchored ray queries
+- compare original and consistent live ground termination paths
+- retain the unchanged rim result and remaining cache-interpolation boundary
+```
+
+Whole-worktree checkpoint scope: nine experiment-source/owning-topic files, no
+production or generated-data changes. Local source types, actual GPU branch proof,
+endpoint-consistency checks and final gallery verification pass their stated
+bounds. No standards review/compliance claim or push. Git records the commit hash.

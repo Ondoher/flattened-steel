@@ -13,9 +13,11 @@ Owner-review follow-up00062 diagnoses bright/gray horizon bands. The authorized
 58/76-height test is complete in00072-height-results; the final scene-results.md
 section owns findings. Height lookup affects the band but is not a sufficient fix;
 the upper gray ray samples the1875-3125m interval. Direct ground/sphere alignment
-test00074 is also complete: isolated mask differences exist, but the continuous
-sky rim is unchanged after4x ground triangles. See the final scene-results.md
-section. Production is unchanged.
+test00074 covers mesh/helper alignment. The owner's clarified actual shader
+branch test is complete in00079-analytic-results: emitted compiler geometry and
+consistent live termination were exercised; the continuous rim is unchanged.
+Scene-results.md owns exact scope and remaining cache-boundary hypotheses.
+Production is unchanged.
 
 ## Minimal Reload Sources
 
