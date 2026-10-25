@@ -578,3 +578,71 @@ feat: render clean-horizon views at native resolution
 Seven-file whole-worktree unit; generated images/float data remain ignored.
 No unrelated or production edits, external publication or standards claim.
 Git supplies the local checkpoint identity after exact-file verification.
+
+## Owner-requested fine spherical libRadtran vertical trace
+
+The owner requests a fine above-horizon libRadtran trace against production.
+Use the atmosphere and views of the just-discussed ARM-informed500m/2km San Jose
+noon images; production algorithm refers to its live shader/cache path with these
+optics, not an unannounced return to the default Bruneton aerosol profile.
+Register95rays per height:87successive4096x2304central-column sky pixels through
+about2degrees, plus0.0025/0.005degree near-limb,0.6/1.2degree controls and2.5/3/4/5degree
+context. GPU query uses identical normalized camera coordinates; record actual
+Float32 elevation/relative azimuth for the independent solver. No invented smooth
+curve or RGB-only reference. Use native15 spectra, matched black ground/source/
+phase/SSA/density/molecules and fully spherical MYSTIC, no refraction/gases.
+
+Read actual native15 pathRadiance from the live GPU shader with its N4 field,
+normal30view intervals and diagnostic480intervals. Verify spectral/RGB projection
+and matching4096image pixels before interpreting references. libRadtran retains
+all scattering orders, so this comparison does not isolate an order-tail error.
+Run three independent100000photon seeds per query. Parallelize independent
+external cases using the individual tool directory parsed from each CLI stdout
+(no shared-directory discovery race)
+within the same owned run.12logical CPU cores and about13GiBfree RAM were measured;
+start with four concurrent cases, report observed cost. Preserve raw outputs,
+finite-noise intervals, selectable spectra/profile tables and actual color strips.
+Scene inputs/cache and production source remain unchanged. High-resolution point
+rays are the primary trace; finite-pixel support and Monte Carlo uncertainty must
+be stated rather than conflated with broad image gradients.
+
+Angular-registration recovery: initial GPU trace00083matches4Kpixel RGB to3.3e-6
+relative and spectral projection to3.2e-7, but the shader inverse-trig diagnostics
+show up to0.00385degree error near local-horizontal angles.00084reference cases
+are valid independent solutions at their explicitly recorded physical angles.
+Keep that fine grid, re-aim the GPU queries to those same physical angles using
+binary64 camera inversion, and return three local ray components rather than
+shader inverse angles. Compute actual angles on the host with atan2. This reuses
+all solver work and avoids claiming inaccurate diagnostics are exact directions.
+The corrected trace will not be labeled as the original4Kpixel centers;00083
+retains that separate original image/field consistency proof. Recheck actual
+angle agreement and native15-to-RGB projection before final comparison.
+
+GPU verification00088accepted: original queries match4096image RGB to3.3e-6,
+production native15-to-RGB projection to4.6e-7, and retargeted ray elevation /
+azimuth to2.7e-6 /1.6e-6degrees. Both30/480interval variants have no scene/ground
+endpoint above the limb.00087preserves a type-check child spawnEPERM attempt;
+00088repeats with child-process permission and passes types.00086contains the
+prebuilt Matplotlib/numpy plotting runtime, isolated to ignored output. No native
+helper was compiled or global Python installation changed.
+
+Single-seed preview00089was accepted from individually finalized raw solver cases.
+00090corrects its title encoding/plot layout and is the current early viewer; all
+spectra/data are identical. It passes source types and browser image/selection
+checks. Confidence is explicitly unestimated in this preview. Final means and
+pointwise Student intervals await all570cases in00084; do not call the preview
+three-seed verification. No reference case has been rerun for this correction.
+
+Intermediate checkpoint: adviser recommends preserving the functioning pipeline
+while00084continues. Continuing independent-execution preapproval covers:
+
+```text
+feat: add fine clean-horizon vertical trace pipeline
+
+- sample retargeted GPU spectra along the fine above-horizon trace
+- add recoverable spherical reference, plotting, and report tooling
+- publish a clearly provisional single-seed viewer pending full uncertainty results
+```
+
+This is a source/provisional-evidence checkpoint, not completion of the570-case
+three-seed comparison. Status retains that pending boundary. No push.

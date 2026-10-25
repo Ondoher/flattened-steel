@@ -20,7 +20,10 @@ Latest owner-requested larger native renders are complete in00082-resolution-vie
 2048/4096widths, verified input/output sizes and a full-width/1:1viewer. Profiles
 show a bright shoulder meeting ground, without an isolated sky-pixel spike;
 preview scale can emphasize the apparent line. Scene-results.md owns scope and
-remaining hypotheses. Production is unchanged.
+remaining hypotheses. Current follow-up is the fine spherical libRadtran trace:
+00084-vertical-ref is running570cases;00085is the corrected GPU trace,00088its
+verified proof,00090the single-seed preview. Finish references and final report;
+status.md owns continuation commands and claim limits. Production is unchanged.
 
 ## Minimal Reload Sources
 

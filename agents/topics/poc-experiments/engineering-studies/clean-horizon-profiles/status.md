@@ -80,6 +80,24 @@ The contained harness repair resizes the actual staged composer; production's
 resize lifecycle remains unchanged.00080is the retained partial-resize attempt;
 00081is the verified capture,00082the checked interactive viewer and report.
 
+## Fine vertical libRadtran trace in progress
+
+Owner-requested follow-up: compare the current ARM-informed500m/2km noon sky with
+fully spherical MYSTIC along95fine directions per height.00084-vertical-ref is
+running570native15 solver cases (three100000photon seeds per direction, four
+concurrent processes). Individual finalized cases are reusable if interrupted;
+trace-reference.mjs accepts a recovery run.00083is the image-matching GPU probe;
+00085retargets GPU queries to the exact reference directions after correcting
+inverse-trig diagnostics.00088validates GPU spectra/registration and types.
+
+[Early single-seed viewer](../../../../../tmp/experiments/clean-horizon-profiles/runs/00090-vertical-pilot/index.html)
+is available, with full CSV/spectra and actual common-exposure color samples.
+It has no Monte Carlo uncertainty estimate; the complete report must await the
+three-seed campaign. Native30and fine480view integration curves are included.
+Next: finish00084, run trace-report.mjs with00084/00085/00088/00086parents, inspect
+figures/confidence intervals and replace this progress entry with final findings.
+Production and all prior evidence remain unchanged.
+
 ## Verification and next boundary
 
 All20 primary frames and two uncertainty frames were inspected at native size.
