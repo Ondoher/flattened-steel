@@ -749,3 +749,52 @@ Whole-worktree checkpoint includes the seven new limb helpers, scene-capture
 integration and five owning documents. Evidence remains in immutable ignored
 runs00092-00095; production and earlier runs are unchanged. No external push or
 standards-compliance claim is made. Git records the resulting checkpoint identity.
+
+
+## Owner-requested matched native raster comparison
+
+The owner notes that the vector trace does not supply a comparable libRadtran
+raster for the visible bright horizon feature. Deliver matching near-limb native
+pixel strips at500m/2km noon with the same ARM optics, N48 N4 field, camera and
+display. Integrate radiance over camera pixel footprints before tone mapping;
+use nearest-neighbor enlargement and retain native PNGs, with no spline or color
+interpolation. Separate black-ground atmospheric path and common-surface hybrid.
+
+Camera-grid pilot00096 fails because installed parser lacks mc_sample_grid. The
+single default-pixel attempt00097 exits successfully but returns zero radiance;
+its accepted execution state is not scientific qualification. Do not use those
+zero spectra as evidence. Fall back to the known-working spherical point solver
+and explicit image-area Gauss quadrature. Target four actual central columns and
+96rows at4096x2304, with2x2 subpixels and4x4 checks in eight near-edge rows. The
+delivered strip uses the right two actual central columns, with no mirrored
+reference data. Four captured center columns support source-image checks. Each
+subray uses three seeds. New independent reference pixels
+are computed rather than interpolated from the previous trace; earlier evidence
+remains immutable and provides context. Keep source/provenance and performance
+measurements in the final report. No production changes or new cache build.
+
+
+Native capture00098 is accepted.00101 verifies actual center RGB within3.30e-6
+relative, unit pixel-area weights, and2x2 versus4x4 near-edge production path
+luminance within0.0871% /0.0175% at500m/2km. The direct persistent-WSL point
+runner pilot00099 accepts four positive native15 spectra.00100 is computing6144
+new reference cases with10000 photons per wavelength/subray and three seeds,
+including2x2 pixel quadrature and4x4 controls in eight near-edge rows. The final
+report is provisional until that batch and independent final checks complete.
+The two right-of-center columns are independent native footprints; no reflection
+or old angular interpolation supplies missing reference pixels.
+
+Checkpoint adviser recommends preserving the coherent intermediate pipeline.
+Preapproved local message:
+
+```text
+feat: add native clean-horizon raster reference pipeline
+
+- sample matched 4K camera pixels with explicit image-area quadrature
+- add GPU, source-image, and direct solver proof paths
+- preserve provisional raster reporting pending the full three-seed reference batch
+```
+
+Types, Python syntax parsing and whitespace checks pass. Final reference image
+appearance and report execution are still pending; no production change or
+standards-compliance result is claimed. No external push.

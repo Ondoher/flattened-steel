@@ -5,15 +5,15 @@ Focus: owner review of ARM-informed horizon appearance and its matched fine
 vertical spherical libRadtran comparison.
 
 Canonical entry: [Measured Clean Horizon Profiles](poc-experiments/engineering-studies/clean-horizon-profiles/README.md).
-All requested scenes and follow-up tests are complete. The latest accepted
-00095-limb-results combines260 directions and780 spherical reference cases:
-570 prior sky cases preserved unchanged plus210 across/below-limb cases.
-The opaque-ground step is supported by the reference with a common captured RGB
-surface: adjacent4Kpixel drops are27.49% versus production26.86% at500m, and6.56%
-versus6.60% at2km before display tone mapping. This is a controlled surface hybrid,
-not a reflective-ground libRadtran scene. Broad above-horizon gray-band errors
-remain separate. Scene-results.md owns findings and qualification limits.
-Production is unchanged. No further investigation is automatically selected.
+The owner authorized a matching native raster horizon comparison against
+libRadtran.00098 captures native4K pixel centers/subpixel quadrature;00101 accepts
+source-image and footprint checks.00100-raster-points is computing6144 independent
+MYSTIC subpixel cases for500m/2km, three seeds, 2x2 area quadrature plus4x4 controls.
+The intended raster is two actual central columns by96rows, enlarged only by
+nearest-neighbor copying. Compare atmosphere-only and common-surface hybrid
+separately; the prior SVG/trace alone does not settle the narrow bright feature.
+00095 preserves the earlier combined260-direction trace. Production is unchanged.
+Execution-log.md owns the selected continuation and pilot limitations.
 
 ## Minimal Reload Sources
 

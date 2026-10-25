@@ -4,6 +4,20 @@ Status: requested illustrative scene campaign complete, with reference limitatio
 The experiment remains selected for owner review, with no production promotion
 or automatic closure. Earlier M1 measured-profile qualification is inconclusive.
 
+## Selected native raster follow-up in progress
+
+The owner requested actual matching libRadtran pixel strips to assess the thin
+bright feature, independently of vector/color interpolation.00098 captures native
+4K centers and subpixel queries;00101 verifies center RGB within3.30e-6relative
+and2x2 versus4x4 edge path luminance within0.088% at500m /0.018% at2km.00100 is
+computing6144 new spherical point cases with three seeds per subray. The matched
+output will contain two actual native columns by96rows, with radiance averaged
+over each camera pixel before tone mapping, and exact nearest-neighbor enlargement.
+Atmosphere-only and common captured-surface hybrid remain separate. No reference
+appearance conclusion is drawn until the independent spectra are complete.
+00096 unavailable camera-grid and00097 zero camera-radiance pilots are retained;
+their process outcomes do not qualify a reference image. Production is unchanged.
+
 ## Current result
 
 [Scene results](scene-results.md) owns the current model, appearance, reference
