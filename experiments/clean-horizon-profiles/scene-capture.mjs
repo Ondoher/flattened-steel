@@ -11,6 +11,7 @@ import {PNG} from 'pngjs';
 import {createRun,checked,identity,root,source} from './io.mjs';
 import {physical} from '../elevated-horizon-validation/physics.mjs';
 import {LocationTimeController} from '../../src/flat32/LocationTimeController.js';
+import {FLAT32_FIELD_OF_VIEW_PRESETS} from '../../src/flat32/consts.js';
 import {createDistantSunSceneState} from '../../src/flat32/DistantSunSceneState.js';
 import {createProductionSharedCacheService,SHARED_PACKAGE_ROOT,SHARED_PACKAGE_REPORT} from '../../server/flat32/features/shared-cache/selection.js';
 import {ColorResetAltitudeHalfV1ColorDisplayModel} from '../../src/algorithm32/implementation/color-reset-altitude-half-v1/ColorResetAltitudeHalfV1ColorDisplayModel.js';
@@ -38,8 +39,9 @@ const views=heights.map(height=>({id:`${time}-${height}`,height,heading:0,pitch:
 const groundAlignment=process.argv[6]==='rim';if(groundAlignment)views.splice(0,views.length,...views.filter(v=>v.height===500||v.height===2000));
 const rasterTrace=process.argv[6]==='raster';
 const limbTrace=process.argv[6]==='limbtrace'||rasterTrace;
-const ownerStill=process.argv[6]==='still-500';
-const highResolution=['hires','limbtrace','raster','still-500'].includes(process.argv[6]);if(highResolution){const selectedViews=views.filter(v=>ownerStill?v.height===500:v.height===500||v.height===2000);views.splice(0,views.length,...selectedViews.flatMap(v=>(ownerStill?[2]:limbTrace?[4]:[2,4]).map(scale=>({...v,id:v.id+'-'+1024*scale,renderWidth:1024*scale,renderHeight:576*scale}))));}
+const fovSweep=process.argv[6]==='fov-500',ownerStill=process.argv[6]==='still-500'||fovSweep;
+const highResolution=['hires','limbtrace','raster','still-500','fov-500'].includes(process.argv[6]);if(highResolution){const selectedViews=views.filter(v=>ownerStill?v.height===500:v.height===500||v.height===2000);views.splice(0,views.length,...selectedViews.flatMap(v=>(ownerStill?[2]:limbTrace?[4]:[2,4]).map(scale=>({...v,id:v.id+'-'+1024*scale,renderWidth:1024*scale,renderHeight:576*scale}))));}
+if(fovSweep){const base=views[0];views.splice(0,views.length,...[...FLAT32_FIELD_OF_VIEW_PRESETS,{degrees:50,label:'Default return'}].map(item=>({...base,id:'noon-500-fov'+(item.label==='Default return'?'return-50':item.degrees),fov:item.degrees})));}
 const verticalTrace=process.argv[6]==='trace';if(verticalTrace)views.splice(0,views.length,...views.filter(v=>v.height===500||v.height===2000));
 const analyticGround=process.argv[6]==='analytic';if(analyticGround)views.splice(0,views.length,...views.filter(v=>v.height===500||v.height===2000));
 const diagnoseHorizon=process.argv[6]==='bands';if(diagnoseHorizon)views.splice(0,views.length,...views.filter(v=>v.height===500||v.height===2000));
@@ -100,7 +102,7 @@ try{
   if(highResolution){await page.setViewport({width:renderWidth,height:renderHeight,deviceScaleFactor:1});await page.evaluate(d=>globalThis['resizeHorizonScene'](d),{width:renderWidth,height:renderHeight});}
   run.progress('capture',view.id);const value=await page.evaluate(v=>globalThis['aerosolSceneView'](v),view),{capture,...facts}=value;
   const expectedObservation=controller.selectGlobeTime(controller.selectLocation(controller.start(),0),currentTime==='noon'?1:2).observation;
-  assert.equal(facts.observation.instant,expectedObservation.instant);assert.equal(facts.observerHeight.value,view.height);assert.equal(capture.facts.width,renderWidth);assert.equal(capture.facts.height,renderHeight);assert.equal(capture.facts.glError,0);if(ownerStill){assert.equal(capture.facts.state.reviewObjectsEnabled,false);assert.equal(capture.facts.state.modeKind,'spherical-distant');assert.equal(capture.facts.state.locationIndex,0);assert.equal(capture.facts.camera.fov,50);assert.equal(facts.visibleObjects.length,0);}
+  assert.equal(facts.observation.instant,expectedObservation.instant);assert.equal(facts.observerHeight.value,view.height);assert.equal(capture.facts.width,renderWidth);assert.equal(capture.facts.height,renderHeight);assert.equal(capture.facts.glError,0);if(ownerStill){assert.equal(capture.facts.state.reviewObjectsEnabled,false);assert.equal(capture.facts.state.modeKind,'spherical-distant');assert.equal(capture.facts.state.locationIndex,0);assert.equal(capture.facts.camera.fov,view.fov);assert.equal(capture.facts.state.cameraFieldOfViewDegrees,view.fov);assert.equal(facts.visibleObjects.length,0);}
   const native=flipRows(Buffer.from(capture.native,'base64'),renderWidth,renderHeight,4),hdr=flipRows(Buffer.from(capture.layers['0'],'base64'),renderWidth,renderHeight,16),floats=new Float32Array(hdr.buffer,hdr.byteOffset,hdr.length/4);
   const png=new PNG({width:renderWidth,height:renderHeight});png.data=native;run.write(view.id+'.png',PNG.sync.write(png));run.write(view.id+'-linear.f32.gz',gzipSync(hdr));
   const gain=display.displayGain({value:capture.facts.displayLux,units:'lux'});let maximumByteError=0;

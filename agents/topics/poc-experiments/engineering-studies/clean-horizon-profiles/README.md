@@ -12,6 +12,12 @@ broader gray-band discrepancy. The latest [native PNG comparison](../../../../..
 adds matched pixel footprints and shows excess local sky-side brightening at2km.
 See [scene results](scene-results.md) for the pointwise uncertainty and scope.
 
+Latest images: [FOV preset sweep at500m](../../../../../tmp/experiments/clean-horizon-profiles/runs/00118-fov-presets/index.html)
+compares Flat/local Closest and Globe/distant noon at120,90,50,35,20,5and2degrees.
+[Scene results](scene-results.md#field-of-view-preset-comparison) own controls,
+checks and presentation recommendations:5degrees for the clearest fade/edge
+comparison,20degrees for more context.
+
 Latest diagnosis: [Flat ground-extent controls](../../../../../tmp/experiments/clean-horizon-profiles/runs/00115-flat-extent/index.html)
 leave the broad shoulder unchanged. [Scene results](scene-results.md#flat-ground-extent-hypothesis-test)
 own the extent/clip separation, measured changes and limitations.

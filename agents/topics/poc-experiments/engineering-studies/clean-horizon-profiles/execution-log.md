@@ -992,3 +992,30 @@ feat: test flat clean-horizon ground extent
 Whole-worktree checkpoint remains limited to contained helpers and owning topic
 documents. No push, production edit, historical evidence mutation or standards
 compliance claim.
+
+
+## FOV preset follow-up -2026-10-25
+
+Owner requested testing current FOV presets after observing that narrower framing
+shows the desired Flat fade. Added contained FOV sweeps through the app's public
+setter:120/90/50/35/20/5/2degrees and a return50control at500m.00116 Flat and00117
+Globe preserve original ground/clip/medium/source/exposure and reuse the same
+Globe N4 field.00118 authenticates them and supplies an interactive14-image page.
+All checks pass; return50frames are exact, delivered50degree baseline matches
+exactly(Flat)/within one byte(Globe). All seven pairs visually inspected.5degree
+is the clearest fade-versus-edge demonstration;20degree retains scene context.
+No production/profile/cache or numerical fix, new B1 claim or further run selected.
+
+Checkpoint adviser recommends this completed presentation-comparison unit.
+Preapproved local message:
+
+```text
+feat: compare clean-horizon FOV presets
+
+- capture matched Flat and Globe views across all perspective presets
+- verify baseline return and native image integrity
+- publish framing guidance with fixed-physics comparison limits
+```
+
+Only contained capture/report helpers and current topic documents are included.
+No production changes, sealed evidence mutation, push or standards-compliance claim.

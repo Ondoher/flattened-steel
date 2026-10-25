@@ -951,3 +951,51 @@ baseline and farther-clip frames were inspected and the thin new line retained.
 No new cache, profile tuning, production change, accepted numerical fix or B1
 score claim. Atmosphere/source-field behavior and configured atmospheric boundary
 remain separate leads; this test does not establish which causes the shoulder.
+
+
+## Field-of-view preset comparison
+
+[Interactive preset comparison](../../../../../tmp/experiments/clean-horizon-profiles/runs/00118-fov-presets/index.html)
+provides all seven current perspective presets:120,90,50,35,20,5and2degrees
+vertical FOV. Each has a native2048x1152 Flat/local Closest and Globe/distant noon
+image at San Jose500m, same ARM atmosphere, horizon centered, no objects and
+original ground/clip. The dropdown opens at20degrees; show-all displays14images.
+Every image links to its native PNG.00116 Flat,00117 Globe and00118 comparison
+are accepted immutable runs.
+
+The sweep supports the owner's framing observation. At35/50degrees and wider,
+Flat's fade occupies a narrow screen band and appears more abrupt. At20degrees
+it is easier to distinguish the soft Flat transition from Globe's distinct edge
+while retaining surrounding context. The5degree pair shows this distinction most
+clearly: Flat gradually blends through the distant ground/sky colors while Globe
+retains a recognizable horizon.2degrees magnifies it further but discards much
+scene context. These are presentation recommendations from inspected images,
+not numerical acceptance thresholds or proof of physical correctness.
+
+No aerosol, cache, exposure, camera position/direction, ground or clipping changes
+are used to create the effect. A1degree band at image center spans about21.6pixels
+at50degrees,57.0at20degrees,230.3at5degrees and576.0at2degrees. This follows
+H*tan(0.5degree)/tan(verticalFov/2), and describes projection scale rather than a
+measured haze-width/convergence result. Renderers recompute every native frame;
+none is an enlarged crop or an interpolated image derived from another FOV.
+
+The Flat path uses the public app FOV setter and verifies actual camera/app state,
+fixed pose/far clip/lux/shader/original mesh, output sizes and no GL errors.
+Globe authenticates the existing00037 N4 field and retains matching packets,
+illumination/gain, observation, pose and output/input sizes. Native HDR/display
+replay stays within one RGB byte. All seven pairs were visually inspected;
+no missing objects, blank frames or broad black strips appeared. Globe's thin
+bright rim and the broad atmospheric color differences remain visible.
+
+00118 rehashes capture parents, checks profile/mode/height/FOV/object/pose and
+protected factors, image content/dimensions and interactive selector/show-all
+behavior in a real browser, and passes local types. Both return-to50 controls
+reproduce exactly. Prior delivered50degree Flat reproduces exactly and Globe
+within one RGB byte. Observed run elapsed times:94.79s Flat,80.43s Globe and14.05s
+report/verification, including run sealing. These are capture-run costs, not
+interactive shader frame benchmarks. No new Globe cache build was needed.
+
+Each mode retains its own horizon-centered pose, source geometry, localN1 versus
+globeN1-4 and native adaptation. This compares app appearance rather than isolating
+curvature or validating a physical atmosphere. Production settings, cache and
+Bruneton scores remain unchanged; no accepted algorithm fix is claimed.

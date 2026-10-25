@@ -13,6 +13,16 @@ baseline/candidate comparison requirement. ARM appearance improvements do not
 compensate for a Bruneton regression. No new candidate has been evaluated under
 this newly recorded requirement.
 
+## FOV preset sweep complete
+
+[Seven-preset Flat/Globe gallery](../../../../../tmp/experiments/clean-horizon-profiles/runs/00118-fov-presets/index.html)
+and [owning findings](scene-results.md#field-of-view-preset-comparison) provide
+14native2048x1152 images at San Jose500m with the same ARM profile and fixed
+physical settings.00116/00117 captures and00118 checks are accepted.5degrees
+best shows the soft Flat fade versus Globe's distinct horizon;20degrees retains
+more context. All current perspective presets are included, with exact baseline
+return and original50degree replay within one byte. Production is unchanged.
+
 ## Flat ground-extent test complete
 
 [Comparison page](../../../../../tmp/experiments/clean-horizon-profiles/runs/00115-flat-extent/index.html)
