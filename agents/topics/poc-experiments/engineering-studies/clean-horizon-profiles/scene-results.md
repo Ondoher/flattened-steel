@@ -530,3 +530,66 @@ alongside real browser errors; the corrected report accepts that exact favicon
 message while retaining shader/page/host failure checks. Owned browser processes
 and temporary profiles were closed/removed. There is no standards-compliance or
 production-promotion claim.
+
+## Larger native renders and preview-scale appearance
+
+The owner's magnified crop did not show a distinct sharp white stripe, prompting
+new native-resolution renders. [Large-image viewer](../../../../../tmp/experiments/clean-horizon-profiles/runs/00082-resolution-view/index.html)
+provides500m and2km noon at1024x576,2048x1152 and4096x2304, defaulting to a single
+full-width4096image. Select1:1to inspect pixels with scrolling. Direct original
+PNGs, exact unmodified angular-region crops, a420px preview and selectable row
+profiles are included. The larger images are freshly rendered, not upscaled.
+
+Run00081 retains the four new GPU images/raw Float32 composites. N48 N4 source
+field, ARM optics,50degree FOV, pose and illumination/display gain are unchanged
+from00075. Every frame records and checks actual canvas, both composer buffers,
+scene-color/depth/hit textures, capture viewport and shader viewport dimensions.
+The GPU PNG and CPU re-encoding of its raw composition agree within1RGB byte.
+The four-view run took102.8s, including source-field reuse, rendering and retention;
+no cache reconstruction was needed.
+
+An initial attempt00080resized the host canvas but left the separate active
+staged composer's depth/hit inputs at the old resolution. This produced repeated
+ground rows and is retained as a partial-resize diagnostic, not the accepted
+native comparison. The contained harness now explicitly resizes that active
+composer and verifies all dimensions after the completed frame. Production's
+resize lifecycle was not modified or validated by this harness repair.
+
+The enlarged crops refine our earlier description: the feature is a bright
+near-horizon shoulder ending against darker ground, rather than an isolated
+one-pixel white brightness spike in the inspected center-column profiles. The
+last8 original-resolution pixel spacings of sky have no isolated local encoded-
+luma peak at any of the three sizes. This does not remove the broad bright
+shoulder or the upper gray strip, and does not validate their physical accuracy.
+The sky/ground color step is present in the native pixels:
+
+| Height | Native width | Last sky RGB | First ground RGB | Encoded-luma drop at boundary |
+| --- | --- | --- | --- | --- |
+|500m|1024|234,233,237|179,212,229|27.29bytes|
+|500m|2048|234,233,237|185,215,231|23.72bytes|
+|500m|4096|234,233,237|189,217,232|21.37bytes|
+|2km|1024|219,220,232|202,216,232|6.48bytes|
+|2km|2048|220,221,232|205,217,232|6.05bytes|
+|2km|4096|221,221,232|206,218,232|5.33bytes|
+
+Encoded luma here is0.2126R+0.7152G+0.0722B of PNG bytes, a display-contrast
+quantity, not physical luminance. Higher resolution puts adjacent pixel centers
+closer to the actual limb, so these edge samples have different angular support.
+The decreasing jump is not a continuum convergence proof. A small preview can
+emphasize the shoulder/boundary's apparent thinness; we have not reproduced the
+owner's unknown browser zoom/filter and cannot attribute all appearance to it.
+The earlier phrase continuous white rim should not be read as proof of a distinct
+white one-pixel stripe in the source image.
+
+The viewer separately labels a4096-to1024reduction: average each4x4block of raw
+linear radiances, then apply the unchanged display transform. Versus the original
+1024native image, mean absolute RGB difference across the1024x40horizon strip is
+0.171/0.079bytes at500m/2km. Maxima are27/9bytes and are concentrated near the
+boundary, where pixel footprints/coverage matter. This is a spatial-sampling
+comparison, not a new physical reference or a claim to eliminate the artifact.
+
+Run00082 authenticates all parent artifacts, checks common optics/pose/gain and
+all dimensions, passes source types, and exercises24elevation/source/display
+combinations in a real browser. All8image/crop pairs decode;1:1and420px display
+widths are explicitly verified. Browser resources/temp profiles are closed.
+No production/profile/cache change or new reference qualification is claimed.

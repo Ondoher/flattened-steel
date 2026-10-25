@@ -54,8 +54,8 @@ records retain sanitized endpoints and file identities, never authentication val
 Surface constraint branch mechanism/prediction: independent near-ground scattering
 and absorption could resolve the lidar near-field ambiguity. Public catalog
 inspection located the current E13 optical product instead of the retired C1
-surface stream. Downloaded three optical and three weather files. Preserved 1 Ã‚Âµm
-and 10 Ã‚Âµm impactor states separately. A later derivation restricted extinction to
+surface stream. Downloaded three optical and three weather files. Preserved 1 ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Âµm
+and 10 ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Âµm impactor states separately. A later derivation restricted extinction to
 simultaneous valid green scattering/absorption; it supersedes the earlier independently
 averaged diagnostic without modifying it. RH differences prevent a dry-to-ambient
 claim; density correction alone does not restore hygroscopic growth.
@@ -523,3 +523,58 @@ Whole-worktree checkpoint scope: nine experiment-source/owning-topic files, no
 production or generated-data changes. Local source types, actual GPU branch proof,
 endpoint-consistency checks and final gallery verification pass their stated
 bounds. No standards review/compliance claim or push. Git records the commit hash.
+
+## Owner-requested larger native horizon renders
+
+The owner reports that magnifying an image does not reveal the thin sharp line
+seen in small previews and asks for larger rendered images. Render the same500m
+and2km noon views at2048x1152 and4096x2304, DPR1, identical50degree camera/pose,
+unchanged N48 ARM field/optics/lighting/display. Reuse00037; no N4 rebuild. Retain
+native GPU PNG plus raw float composition and check their display agreement.
+Build a new single-column gallery with fitted/1:1 modes and direct full-size PNGs.
+Compare the original1024image, true high-resolution renders, and explicitly
+labeled linear-radiance box reductions; avoid treating upscaling as a new render.
+Use numeric vertical profiles and actual pixel crops to distinguish a narrow
+rendered feature, a discontinuity and an apparent line enhanced by preview scale.
+Do not claim perceptual contrast illusion or physical correctness from one crop.
+Production and all earlier evidence remain unchanged.
+
+Recovery:00080produced larger canvases and valid HDR/display replay, but inspection
+found repeated ground rows at the old spacing. The application uses an active
+staged composer distinct from the host's composer; resizing only the host leaves
+scene depth/hit/color inputs at their old dimensions. Preserve00080 as a partial
+resize diagnostic, not the accepted native-resolution comparison. Explicitly
+resize the active composer (including its capture passes) in the contained
+harness, then assert post-frame color/depth/hit textures, both composer buffers,
+shader viewport and output canvas all match the requested dimensions. This is a
+harness repair only; production resize behavior is not changed or claimed fixed.
+
+Completion:00081accepted in102.8s with four verified native captures (two heights,
+2048x1152 and4096x2304). Source/display replay<=1RGB byte; pose/optics/gain equal
+the original1024frames.00082accepted: all parent hashes verified, dimensions
+checked, types passed,24viewer selections exercised and all8image/crop pairs
+decoded. Raw-radiance4x4box reduction is explicitly labeled as derived.
+
+Interpretation refinement: center sky profiles have no isolated one-pixel luma
+peak at any size. They show a broader bright shoulder adjacent to darker ground;
+the real boundary step remains and decreases as edge pixel centers approach the
+limb. Small previews can emphasize apparent sharpness; no claim is made about
+the owner's unknown resampling algorithm or physical correctness. Use the new
+full-width/1:1viewer before further diagnosis based on thumbnail appearance.
+No further algorithm investigation or production resize fix was undertaken.
+
+Checkpoint adviser recommends this coherent native-resolution evidence unit.
+Its suggested message is preapproved by the continuing independent-execution
+instruction:
+
+```text
+feat: render clean-horizon views at native resolution
+
+- resize the staged composer for verified 2048 and 4096 pixel captures
+- add a selectable full-width and 1:1 horizon inspection report
+- record the persistent shoulder and ground step without a promotion claim
+```
+
+Seven-file whole-worktree unit; generated images/float data remain ignored.
+No unrelated or production edits, external publication or standards claim.
+Git supplies the local checkpoint identity after exact-file verification.

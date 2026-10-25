@@ -67,6 +67,19 @@ height retain exactly their original linear/display color. The continuous rim
 and gray band remain. This tests emitted intersection arithmetic and live
 termination, not the cached field's cross-boundary interpolation. No fix promoted.
 
+## Larger native horizon images complete
+
+[Resolution findings](scene-results.md#larger-native-renders-and-preview-scale-appearance)
+and [full-width /1:1viewer](../../../../../tmp/experiments/clean-horizon-profiles/runs/00082-resolution-view/index.html)
+provide true2048x1152 and4096x2304noon renders at500m/2km, matching the original
+1024views. All color/depth/hit/viewport dimensions are verified. Enlarged crops
+show a bright shoulder and sky/ground step; sampled sky profiles have no separate
+isolated one-pixel luma peak. Small previews can emphasize its sharp appearance;
+the native transition and broad gray band remain. No physical-correctness claim.
+The contained harness repair resizes the actual staged composer; production's
+resize lifecycle remains unchanged.00080is the retained partial-resize attempt;
+00081is the verified capture,00082the checked interactive viewer and report.
+
 ## Verification and next boundary
 
 All20 primary frames and two uncertainty frames were inspected at native size.

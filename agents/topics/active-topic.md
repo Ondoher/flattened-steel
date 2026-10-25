@@ -16,8 +16,11 @@ the upper gray ray samples the1875-3125m interval. Direct ground/sphere alignmen
 test00074 covers mesh/helper alignment. The owner's clarified actual shader
 branch test is complete in00079-analytic-results: emitted compiler geometry and
 consistent live termination were exercised; the continuous rim is unchanged.
-Scene-results.md owns exact scope and remaining cache-boundary hypotheses.
-Production is unchanged.
+Latest owner-requested larger native renders are complete in00082-resolution-view:
+2048/4096widths, verified input/output sizes and a full-width/1:1viewer. Profiles
+show a bright shoulder meeting ground, without an isolated sky-pixel spike;
+preview scale can emphasize the apparent line. Scene-results.md owns scope and
+remaining hypotheses. Production is unchanged.
 
 ## Minimal Reload Sources
 
