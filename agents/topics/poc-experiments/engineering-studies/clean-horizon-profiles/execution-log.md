@@ -870,3 +870,68 @@ Whole-worktree scope is the final contained helpers/reporting and five owning
 current-state/report documents. Accepted00102/00105/00106 preserve the scientific
 result and checks; all earlier provisional/interrupted/pilot artifacts remain
 immutable. No production edit or external push. Git records the checkpoint identity.
+
+
+## Owner acceptance requirement: preserve Bruneton scores
+
+The owner requires all accepted changes to maintain or beat existing Bruneton
+scores. Recorded the criterion in design.md, with current-state links in status
+and active-topic. Future candidates freeze the production baseline and preserve
+the original paper-atmosphere/high-spectral configuration, reference/scoring and
+full time/interval coverage. Interval regressions cannot be hidden by a better
+aggregate or ARM improvement. Regressing exploratory trials may be retained as
+diagnostic evidence, but are not accepted fixes. This is an explicit owner
+requirement, not an inferred administrative gate. Documentation only; no new
+benchmark, numerical candidate, production update or claim of passing checks.
+
+
+## Owner-requested flat/local closest images
+
+The owner redirects the next deliverable to two images: same ARM-informed
+atmosphere, San Jose flat/local at Closest (Flat0),5m and100m, default50degree
+FOV, horizon centered, no scene objects. Ground remains. Render native2048x1152
+frames in the contained app harness; no production update or numerical fix is
+proposed. Retain the current compact localN1 default independently of globeN4.
+
+The flat compact path assumes exponential Mie columns and reconstruction factors.
+A contained material adapter preserves the frozen profile's actual piecewise
+height density and phase in CPU/source/cache/live sampling, exact flat path
+columns, and GPU normalization factors. Production files are bundled read-only
+with explicit transformations. Existing flat100km top is retained; the existing
+profile sampler clamps beyond its final supplied height. CPU exact columns are
+checked against65536-point independent midpoint integration. No source profile,
+Bruneton benchmark input or production algorithm is changed, and no claim of
+new B1 acceptance or full flat-atmosphere validation follows from these images.
+
+
+Completed pair00108: both native2048x1152 images visually inspected,5m/100m
+actual state,50degree FOV, horizon centered, no review objects, ground retained.
+00107 execution accepted before visual inspection found blank canvas exports;
+it remains immutable but is disqualified as image evidence. Fixed only capture
+timing: draw/export synchronously after the bridge returns, and reject blank
+or constant-color captures.00108 has1185/1466 RGB values and all nonblack pixels.
+
+Focused verifier00109 rehashes00108, confirms exact retained shader density/column
+functions on hardware WebGL2 against CPU exact columns, validates both images
+in a real browser, and passes local types. Errors are at most4.28e-8 density and
+1.14e-7 column (relative/floored); CPU exact versus independent65536-midpoint
+controls within2.05e-6. No production edits or new B1 claim; this is an owner
+requested profile render using current localN1, not an accepted algorithm fix.
+Current documents link the two images and retain the previous raster findings.
+
+
+Checkpoint adviser recommends this bounded image-delivery unit. Preapproved
+local message:
+
+```text
+feat: render flat clean-horizon closest image pair
+
+- preserve layered ARM columns and phase through the contained Flat/local path
+- capture and verify requested 5 m and 100 m horizon-centered stills
+- retain blank-export recovery and Bruneton non-regression boundaries
+```
+
+Whole-worktree scope includes five contained helpers and six owning documents,
+including the owner's previously recorded Bruneton non-regression criterion.
+No production files, old run artifacts or external repositories changed. No push
+or standards-compliance assertion. Git records the resulting local identity.

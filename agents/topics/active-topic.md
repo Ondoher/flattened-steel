@@ -5,13 +5,14 @@ Focus: owner review of ARM-informed horizon appearance and its matched fine
 vertical spherical libRadtran comparison.
 
 Canonical entry: [Measured Clean Horizon Profiles](poc-experiments/engineering-studies/clean-horizon-profiles/README.md).
-The matched native raster comparison is complete. Final00106-raster-assess shows
-new production/MYSTIC pixel-footprint PNGs at500m/2km, with6144 accepted reference
-cases and exact pixel-copy enlargement. Both have the pale shoulder and ground
-step; selected2km sky-side brightening is stronger in production, while500m small
-shoulder differences remain within uncertainty. The broad gray-band error persists.
-Scene-results.md owns quantitative findings and limits; no numerical cause or
-production fix is claimed. Earlier00104 is provisional and00095 the prior trace.
+The owner-requested San Jose Flat/local Closest image pair is complete in
+00108-flat-closest:5m and100m, default50degree FOV, horizon centered, no review
+objects, ground retained, same frozen ARM profile.00109 accepts physical column,
+GPU/image/browser/type checks. The contained flat adapter preserves layered
+profile sampling; app localN1 remains. Scene-results.md owns details and limits.
+Earlier00106 is the final matched native globe/MYSTIC raster assessment;00107
+blank exports are preserved but unusable. Every accepted future fix must maintain
+or beat existing Bruneton scores under design.md's owner requirement.
 Production is unchanged. No further investigation is automatically selected.
 
 ## Minimal Reload Sources

@@ -12,6 +12,10 @@ broader gray-band discrepancy. The latest [native PNG comparison](../../../../..
 adds matched pixel footprints and shows excess local sky-side brightening at2km.
 See [scene results](scene-results.md) for the pointwise uncertainty and scope.
 
+Latest owner-requested stills: [San Jose Flat/local Closest at5m and100m](../../../../../tmp/experiments/clean-horizon-profiles/runs/00108-flat-closest/index.html),
+horizon centered, default FOV and no review objects. [Scene results](scene-results.md#owner-requested-flatlocal-closest-images)
+own the contained flat-profile adapter and verification scope.
+
 ## Objective
 
 Render an explicitly ARM-informed low-aerosol reconstruction at San Jose noon and

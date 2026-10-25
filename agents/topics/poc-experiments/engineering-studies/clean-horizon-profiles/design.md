@@ -14,6 +14,27 @@ measured-atmosphere claim remains distinct from a renderable model with explicit
 assumptions. The current [scene plan](scene-plan.md) owns this follow-on sequence;
 the earlier [M1 results](results.md) retain their original qualification boundary.
 
+## Owner-directed non-regression requirement
+
+Every accepted change must maintain or improve the existing Bruneton comparison
+scores. Improvements for this ARM-informed atmosphere cannot compensate for a
+Bruneton regression. This is an explicit owner acceptance requirement.
+
+Before each candidate, freeze the current production Bruneton/B1 baseline and
+its existing scoring definitions. Recheck the full established time/interval
+matrix using the original paper-atmosphere setup, including its larger spectral
+configuration and unchanged reference data, ray selection and scoring. Maintain
+or improve each existing scored interval and aggregate; a better overall mean
+does not conceal a worse interval. Preserve baseline and candidate evidence.
+Do not change benchmark optics, exposure or scoring to manufacture a pass.
+
+Keep the ARM atmosphere fixed while diagnosing its rendering issues. Evaluate
+its reference agreement and appearance alongside Bruneton non-regression.
+Exploratory trials may reveal regressions and remain useful diagnostic evidence;
+they are not accepted fixes under this requirement. Report incomplete checks as
+incomplete rather than assuming unchanged scores. No new candidate or production
+update is authorized merely by recording this requirement.
+
 ## Isolation Boundary
 
 Authored experiment work remains below `experiments/clean-horizon-profiles/`. Generated output remains below `tmp/experiments/clean-horizon-profiles/`. Production and other experiment trees are read-only inputs unless their write scope is separately authorized.

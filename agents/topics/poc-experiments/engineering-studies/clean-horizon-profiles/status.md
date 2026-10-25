@@ -4,6 +4,26 @@ Status: requested illustrative scene campaign complete, with reference limitatio
 The experiment remains selected for owner review, with no production promotion
 or automatic closure. Earlier M1 measured-profile qualification is inconclusive.
 
+## Acceptance requirement for subsequent changes
+
+The owner requires every accepted change to maintain or beat the existing
+Bruneton scores. [Design](design.md#owner-directed-non-regression-requirement)
+owns the unchanged benchmark configuration, full time/interval coverage and
+baseline/candidate comparison requirement. ARM appearance improvements do not
+compensate for a Bruneton regression. No new candidate has been evaluated under
+this newly recorded requirement.
+
+## Requested flat/local image pair complete
+
+[Two-image page](../../../../../tmp/experiments/clean-horizon-profiles/runs/00108-flat-closest/index.html)
+and [owning details](scene-results.md#owner-requested-flatlocal-closest-images)
+provide San Jose Flat/local Closest at5m/100m, horizon centered,50degree FOV,
+objects hidden and ground retained, with the same ARM profile. Native2048x1152
+captures00108 and focused verifier00109 are accepted and visually checked. The
+contained flat adapter preserves the layered medium in column and lookup paths;
+current app localN1 is retained. No production update, accepted algorithm fix or
+new B1 result is claimed.00107's blank exports remain preserved but unusable.
+
 ## Matched native raster follow-up complete
 
 [Final PNG page and paired reading guide](../../../../../tmp/experiments/clean-horizon-profiles/runs/00106-raster-assess/index.html)

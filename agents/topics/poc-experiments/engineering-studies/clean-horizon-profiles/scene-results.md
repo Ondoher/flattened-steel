@@ -835,3 +835,44 @@ isolated solver CPU benchmark. Partial and resumed runs retain7.75/27.79MiB of
 hashed artifacts plus manifests; browser/report work is additional. More parallel
 workers reduce waiting without changing physics. No production profile, cache,
 shader, app setting or display policy changes. No further run is automatically selected.
+
+
+## Owner-requested flat/local closest images
+
+[Open the two requested images](../../../../../tmp/experiments/clean-horizon-profiles/runs/00108-flat-closest/index.html):
+[5m PNG](../../../../../tmp/experiments/clean-horizon-profiles/runs/00108-flat-closest/flat-5.png) and
+[100m PNG](../../../../../tmp/experiments/clean-horizon-profiles/runs/00108-flat-closest/flat-100.png).
+Both use San Jose, Flat/local, Closest (the app's Flat0 preset), default50degree
+vertical FOV, horizon centered and review objects disabled. Ground remains visible.
+The native frames are2048x1152. The source azimuth sets the horizontal heading;
+the Sun is naturally outside this horizon-centered closest view. The same frozen
+ARM model00029 supplies coefficients, vertical aerosol density, SSA and phase.
+
+The ordinary flat app uses compact localN1, rather than globeN4. To render the
+layered profile faithfully, the contained bundle substitutes that profile's density
+and exact piecewise-linear flat columns in CPU optical depth, GPU cache/source
+columns, normalization factors and live transport. The existing ArmAtmosphere
+provides the same conditional phase. No production source or asset changes.
+The normal flat100km top remains; the profile sampler retains its defined clamp
+beyond its last height (the retained aerosol endpoint is zero). The flat cache's
+original policy labels remain in app metadata; adaptation.json records the actual
+layered-column substitutions. This is a profile render, not promotion or a new
+Bruneton-score/algorithm-correctness claim.
+
+00108 verifies actual canvas/composer/scene-color dimensions, physical5m/100m
+states, location/time/mode/FOV/object flags, and zero GL error on the NVIDIA RTX2060.
+All pixels are nonblack, with1185/1466 distinct RGB values. Both images were
+visually inspected. Exact CPU columns agree with independent65536-midpoint
+integration within2.05e-6relative across the selected controls. Accepted00109
+rehashes the sealed capture, verifies both gallery images in a real browser, and
+runs the exact retained live-shader density/column functions on WebGL2 against
+the CPU values: maximum relative/floored error4.28e-8 for density and1.14e-7 for
+columns, with zero GL error. Local authored types pass.
+
+00107 is the preserved initial export attempt: rendering/state checks passed but
+visual inspection rejected its blank PNGs because capture occurred after an async
+bridge allowed the browser to clear its drawing buffer. It is not usable image
+evidence despite its execution-accepted manifest.00108 draws and exports
+synchronously and adds explicit pixel-content checks. Earlier runs remain immutable.
+No full independent flat-scene radiance reference or B1 rerun is claimed. The
+owner's Bruneton non-regression requirement remains binding on accepted fixes.

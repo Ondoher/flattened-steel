@@ -1,0 +1,26 @@
+import {Flat32Application} from '../../src/flat32/Flat32Application.js';
+import {LocationTimeController} from '../../src/flat32/LocationTimeController.js';
+import {loadBrightest2000StellarCatalogPackage} from '../../src/flat32/Brightest2000StellarCatalogPackageLoader.js';
+import {loadHumanVisionFilterPackage} from '../../src/flat32/HumanVisionFilterPackageLoader.js';
+import {registry} from '@polylith/core';
+
+/** Capture the ordinary app's flat/local N1 pairing using the contained ARM medium.
+ * @param {any} control Frozen model, observation and image configuration.
+ * @returns {Promise<any>} Images and actual physical/runtime witnesses.
+ */
+export async function captureFlat(control){
+ const G=/** @type {any} */(globalThis);G.armSceneModel=control.profile;await registry.start();const catalog=await loadBrightest2000StellarCatalogPackage(),vision=await loadHumanVisionFilterPackage();
+ const app=/** @type {any} */(new Flat32Application(document.getElementById('main-content'),{initialModeKind:'flat-local',initialFlatTimeIndex:0,localSunCachePolicy:'compact-v9-native15',reviewObjectsEnabled:false,cameraFieldOfViewDegrees:50,observerHeight:{value:5,units:'meters'},stellarCatalog:'brightest-2000',brightest2000StellarCatalogDefinition:catalog,scotopicLuminanceWeights:vision.scotopicLuminanceWeights}));
+ const ctl=new LocationTimeController(),selected=ctl.selectTime(ctl.selectLocation(ctl.start(),0),0);app._locationTimeController.start=()=>selected;app._locationTimeController.selectTime=()=>selected;G.proofApplication=app;G.flatCleanup=()=>app.dispose();
+ app.start();async function ready(height){const end=performance.now()+900000;while(performance.now()<end){const shell=document.querySelector('.flat32-shell'),s=shell?.getAttribute('data-flat32-state');if(['failed','atmosphere-failed'].includes(s))throw Error(shell?.textContent??s);if(s==='ready'&&app._publishedState?.observerHeight.value===height&&app._publishedState?.locationIndex===0)return;await new Promise(r=>setTimeout(r,100));}throw Error('Flat scene publication timeout');}
+ const frames=async()=>{for(let i=0;i<3;i++){app._sceneRuntime._renderFrame();await new Promise(r=>requestAnimationFrame(r));}app._sceneRuntime.renderer.getContext().finish();};const results=[];
+ for(const height of [5,100]){
+  await G.flatProgress('Prepare flat/local height '+height);if(height!==5)app.setObserverHeight({value:height,units:'meters'});await ready(height);const scene=app._sceneRuntime,mode=app._modeController.currentMode,algorithm=mode.algorithm32,atmosphere=algorithm.config.config.profile.models.atmosphere;
+  if(atmosphere.profile.id!==control.profile.id)throw Error('Flat medium profile differs');if(algorithm.config.config.profile.numerical.maximumScatteringOrder!==undefined&&algorithm.config.config.profile.numerical.maximumScatteringOrder!==1)throw Error('Unexpected local scattering order');
+  scene._configureViewport();const resources=G.flatPreparedResources.resources;resources.composer.setPixelRatio(1);resources.composer.setSize(control.width,control.height);app.setObjectsVisible(false);app.setFieldOfView(50);const physical=mode.geometry.mapObserverLocalScenePointToModelPosition({coordinates:scene.camera.position.toArray(),units:'scene-units'},{sceneScale:mode.sceneScale}),s=mode.geometry.resolveSourceRelativePosition({position:physical}).directionToSource,horizontal=Math.hypot(s[0],s[1]),direction=[s[0]/horizontal,0,-s[1]/horizontal];scene.camera.lookAt(scene.camera.position.x+direction[0],scene.camera.position.y,scene.camera.position.z+direction[2]);scene.camera.updateMatrixWorld(true);await frames();
+  const gl=scene.renderer.getContext(),debug=gl.getExtension('WEBGL_debug_renderer_info'),renderer=String(gl.getParameter(debug?debug.UNMASKED_RENDERER_WEBGL:gl.RENDERER)),visibleObjects=app._endpointScene._meshes.filter(m=>m.visible&&m.name.startsWith('flat32-review-object')).map(m=>m.name),composer=G.flatPreparedResources.resources.composer,pass=composer.passes.find(p=>p._material?.uniforms?.uColorResetTotalHorizontalIlluminanceLux),shader=pass?._material?.fragmentShader??'';
+  if(gl.getError()!==0||visibleObjects.length||!shader.includes('armAerosolColumn')||!shader.includes('armAerosolDensity'))throw Error('Flat capture proof failed');
+  await G.flatRetain('flat-'+height+'.glsl',shader);scene._renderOperation();gl.finish();const dataUrl=scene.canvas.toDataURL('image/png');results.push({height,observation:app._publishedState.observation,state:app._publishedState,physicalHeight:mode.observerHeight,cameraPosition:scene.camera.position.toArray(),direction,viewport:{canvas:[scene.canvas.width,scene.canvas.height],composer:[composer.readBuffer.width,composer.readBuffer.height],sceneColor:[pass._material.uniforms.uSceneColorTexture.value.image.width,pass._material.uniforms.uSceneColorTexture.value.image.height],shaderViewport:Array.from(pass._material.uniforms.uViewportSizePixels.value)},visibleObjects,profile:atmosphere.profile,renderer,glError:gl.getError(),source:mode.geometry.resolveSourceRelativePosition({position:physical}),profileNumerics:algorithm.config.config.profile.numerical,meshes:app._endpointScene._meshes.map(m=>({name:m.name,visible:m.visible})),dataUrl});
+ }
+ return results;
+}
