@@ -13,6 +13,17 @@ baseline/candidate comparison requirement. ARM appearance improvements do not
 compensate for a Bruneton regression. No new candidate has been evaluated under
 this newly recorded requirement.
 
+## Near-ground FOV comparisons complete
+
+[Unified5m/100m/500m viewer](../../../../../tmp/experiments/clean-horizon-profiles/runs/00123-fov-heights/index.html)
+and [owning results](scene-results.md#near-ground-fov-follow-up-at100m-and5m)
+provide all requested near-ground pairs across seven presets, with28new native
+frames and14reused500m frames.00119/00120 captures and00121/00122/00123 checks
+are accepted. All new return50controls and prior matching Flat frames reproduce
+exactly.100m retains a visible narrow-FOV fade;5m compresses it substantially.
+Height/FOV selectors label actual settings and link unmodified native PNGs.
+Production and B1 scores are unchanged; no accepted fix is claimed.
+
 ## FOV preset sweep complete
 
 [Seven-preset Flat/Globe gallery](../../../../../tmp/experiments/clean-horizon-profiles/runs/00118-fov-presets/index.html)

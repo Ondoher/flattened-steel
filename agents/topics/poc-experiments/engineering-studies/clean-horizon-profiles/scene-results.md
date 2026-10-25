@@ -999,3 +999,50 @@ Each mode retains its own horizon-centered pose, source geometry, localN1 versus
 globeN1-4 and native adaptation. This compares app appearance rather than isolating
 curvature or validating a physical atmosphere. Production settings, cache and
 Bruneton scores remain unchanged; no accepted algorithm fix is claimed.
+
+
+## Near-ground FOV follow-up at100m and5m
+
+[Combined height/FOV viewer](../../../../../tmp/experiments/clean-horizon-profiles/runs/00123-fov-heights/index.html)
+adds the requested100m and5m comparisons and retains the previous500m set.
+All seven perspective presets(120/90/50/35/20/5/2degrees) have Flat/local Closest
+and Globe/distant noon pairs. The viewer opens at100m/5degrees, labels the selected
+altitude explicitly, and links each unchanged native2048x1152 PNG and metadata.
+Separate complete galleries remain available at
+[100m](../../../../../tmp/experiments/clean-horizon-profiles/runs/00121-fov-presets/index.html) and
+[5m](../../../../../tmp/experiments/clean-horizon-profiles/runs/00122-fov-presets/index.html).
+The combined viewer links42primary images, including14reused500m frames.
+
+00119 captures both Flat heights with distinct height-qualified FOV filenames;
+00120 captures both Globe heights while authenticating/reusing the same00037
+ARM N4 field. Ground extent, camera clipping, atmospheric reconstruction, source
+configuration and native display policy remain unchanged. Within each height/mode,
+only FOV changes; camera position/direction and illumination/exposure stay fixed.
+Each mode continues to center its own horizon independently. Native adaptation
+may differ between heights, so screenshots alone are not calibrated cross-height
+radiance comparisons. LocalN1/globeN1-4 and source-geometry differences remain.
+
+Visually,100m still shows a soft Flat fade at5degrees and more clearly at2degrees.
+At5m that transition is much more compressed: both modes look sharply divided
+at ordinary framing, and even the narrowest current preset gives a less striking
+fade-versus-edge contrast than500m. The500m framing recommendation should not be
+treated as height-independent. All28new native frames were visually inspected;
+no blank frames, unexpected scene objects or broad black strips were found.
+The narrow ground/sky band and native color differences are retained.
+
+00121/00122 authenticate both capture runs, verify actual height/mode/FOV/pose,
+no-object state, viewport/input dimensions, profile, fixed factors, native image
+content, browser controls and local types. All four return-to50degree images match
+exactly. The new100m/5m Flat50degree frames also reproduce earlier00108 exactly,
+including5m after the100m sequence. No prior matching no-object native Globe
+baseline is claimed at these heights; those use the exact return controls.
+Globe HDR/display replay remains within one byte.00123 rehashes all three report
+parents, verifies all42linked image states/dimensions and tests all21height/FOV
+selector combinations in a real browser, with zero errors and passing types.
+
+Observed elapsed times, including sealing:129.43s Flat,119.01s Globe,13.06s100m
+report,12.92s5m report and10.41s unified viewer. Respective retained artifacts are
+200.76/229.90/5.34/5.18/0.51MiB; the two capture runs retain full raw/HDR evidence.
+These are capture/report costs, not interactive frame benchmarks. No new Globe
+cache build, production update, numerical fix or Bruneton score claim. All earlier
+evidence remains immutable; no further investigation is automatically selected.

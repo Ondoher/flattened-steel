@@ -1019,3 +1019,31 @@ feat: compare clean-horizon FOV presets
 
 Only contained capture/report helpers and current topic documents are included.
 No production changes, sealed evidence mutation, push or standards-compliance claim.
+
+
+## Near-ground FOV repeat -2026-10-25
+
+Owner requested the same seven-preset Flat/Globe comparisons at100m and5m.
+Generalized contained sweeps/reports to both heights; Flat retains every height's
+FOV frames instead of only the last height. Accepted00119/00120 capture28primary
+and four return frames, with native/HDR/state evidence.00121/00122 publish and
+verify each height;00123 links these and unchanged00118(500m) in one viewer.
+All42image states/dimensions and21selector combinations pass; all four new return
+controls and matching earlier Flat50frames are exact. No unmatched prior Globe
+replay is claimed. All28new primary images visually inspected.100m narrow views
+still show a Flat fade;5m compresses it, weakening the visible contrast with Globe.
+Production/cache/profile/Bruneton scores remain unchanged. No further run selected.
+
+Checkpoint adviser recommends this completed near-ground extension. Preapproved
+local message:
+
+```text
+feat: extend clean-horizon FOV comparison near ground
+
+- capture matched 5 m and 100 m Flat and Globe preset sweeps
+- add a unified multi-height native-image viewer
+- record height-dependent framing results and replay limits
+```
+
+The checkpoint contains only contained helpers and current topic documents.
+No push, production change, sealed evidence mutation or standards-compliance claim.

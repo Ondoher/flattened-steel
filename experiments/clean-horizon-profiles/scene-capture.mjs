@@ -39,9 +39,9 @@ const views=heights.map(height=>({id:`${time}-${height}`,height,heading:0,pitch:
 const groundAlignment=process.argv[6]==='rim';if(groundAlignment)views.splice(0,views.length,...views.filter(v=>v.height===500||v.height===2000));
 const rasterTrace=process.argv[6]==='raster';
 const limbTrace=process.argv[6]==='limbtrace'||rasterTrace;
-const fovSweep=process.argv[6]==='fov-500',ownerStill=process.argv[6]==='still-500'||fovSweep;
-const highResolution=['hires','limbtrace','raster','still-500','fov-500'].includes(process.argv[6]);if(highResolution){const selectedViews=views.filter(v=>ownerStill?v.height===500:v.height===500||v.height===2000);views.splice(0,views.length,...selectedViews.flatMap(v=>(ownerStill?[2]:limbTrace?[4]:[2,4]).map(scale=>({...v,id:v.id+'-'+1024*scale,renderWidth:1024*scale,renderHeight:576*scale}))));}
-if(fovSweep){const base=views[0];views.splice(0,views.length,...[...FLAT32_FIELD_OF_VIEW_PRESETS,{degrees:50,label:'Default return'}].map(item=>({...base,id:'noon-500-fov'+(item.label==='Default return'?'return-50':item.degrees),fov:item.degrees})));}
+const fovHeights=process.argv[6]==='fov-near'?[100,5]:[500],fovSweep=['fov-500','fov-near'].includes(process.argv[6]),ownerStill=process.argv[6]==='still-500'||fovSweep;
+const highResolution=['hires','limbtrace','raster','still-500','fov-500','fov-near'].includes(process.argv[6]);if(highResolution){const selectedViews=views.filter(v=>ownerStill?fovHeights.includes(v.height):v.height===500||v.height===2000);views.splice(0,views.length,...selectedViews.flatMap(v=>(ownerStill?[2]:limbTrace?[4]:[2,4]).map(scale=>({...v,id:v.id+'-'+1024*scale,renderWidth:1024*scale,renderHeight:576*scale}))));}
+if(fovSweep){const bases=fovHeights.map(height=>views.find(v=>v.height===height));assert.ok(bases.every(Boolean));views.splice(0,views.length,...bases.flatMap(base=>[...FLAT32_FIELD_OF_VIEW_PRESETS,{degrees:50,label:'Default return'}].map(item=>({...base,id:time+'-'+base.height+'-fov'+(item.label==='Default return'?'return-50':item.degrees),fov:item.degrees}))));}
 const verticalTrace=process.argv[6]==='trace';if(verticalTrace)views.splice(0,views.length,...views.filter(v=>v.height===500||v.height===2000));
 const analyticGround=process.argv[6]==='analytic';if(analyticGround)views.splice(0,views.length,...views.filter(v=>v.height===500||v.height===2000));
 const diagnoseHorizon=process.argv[6]==='bands';if(diagnoseHorizon)views.splice(0,views.length,...views.filter(v=>v.height===500||v.height===2000));
