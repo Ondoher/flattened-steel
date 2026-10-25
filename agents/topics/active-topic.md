@@ -5,15 +5,14 @@ Focus: owner review of ARM-informed horizon appearance and its matched fine
 vertical spherical libRadtran comparison.
 
 Canonical entry: [Measured Clean Horizon Profiles](poc-experiments/engineering-studies/clean-horizon-profiles/README.md).
-The owner-requested back-two-only100m/5degree pair is complete in00127-00129.
-00129-objects-100m shows Flat/local Closest and Globe/distant noon with only
-review objects5(distant cyan) and6(far orange); the four nearer objects are hidden.
-Same ARM atmosphere, original transforms, horizon-centered100m/5degree views and
-native2048x1152. Captures and visibility/frustum/pixel/browser/type checks pass.
-Scene-results.md owns current images, conditions and limits.00123 retains the
-no-object multi-height/FOV viewer. Accepted future fixes must maintain or beat
-Bruneton scores under design.md's requirement. Production is unchanged; no further
-investigation is automatically selected.
+The owner-requested wider back-two100m pair is complete in00130-00132.
+00132-objects-100m compares20degree and35degree FOVs for Flat/local Closest and
+Globe/distant noon, keeping only review objects5/6 visible with original transforms.
+Same ARM atmosphere, horizon-centered100m views and native2048x1152. Actual state,
+visibility/frustum/pixel/browser/type checks pass; four primary images inspected.
+Scene-results.md owns images, conditions and limits.00123 retains the no-object
+multi-height/FOV viewer. Accepted future fixes must maintain or beat Bruneton
+scores under design.md. Production is unchanged; no further investigation selected.
 
 ## Minimal Reload Sources
 

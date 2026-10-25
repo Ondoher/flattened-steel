@@ -13,6 +13,15 @@ baseline/candidate comparison requirement. ARM appearance improvements do not
 compensate for a Bruneton regression. No new candidate has been evaluated under
 this newly recorded requirement.
 
+## Wider back-two views - complete
+
+[20/35degree comparison](../../../../../tmp/experiments/clean-horizon-profiles/runs/00132-objects-100m/index.html) and
+[owning details](scene-results.md#wider-back-two-views-at100m) provide four native
+2048x1152 images at100m with only original objects5/6 visible, same ARM profile
+and heading. Both widths fit the cyan object fully.00130/00131 captures and00132
+publication are accepted; parent/state/pixel/browser/type checks pass and all
+four primary images were visually inspected. Production is unchanged.
+
 ## Back two objects only - complete
 
 [Latest100m/5degree pair](../../../../../tmp/experiments/clean-horizon-profiles/runs/00129-objects-100m/index.html)

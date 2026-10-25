@@ -12,9 +12,10 @@ broader gray-band discrepancy. The latest [native PNG comparison](../../../../..
 adds matched pixel footprints and shows excess local sky-side brightening at2km.
 See [scene results](scene-results.md) for the pointwise uncertainty and scope.
 
-Latest owner request: [100m/5degree pair with only the back two objects](../../../../../tmp/experiments/clean-horizon-profiles/runs/00129-objects-100m/index.html).
-[Scene results](scene-results.md#back-two-only100m5degree-views) own selected object
-visibility, unchanged transforms, framing and verification.
+Latest owner request: [Wider100m back-two comparison](../../../../../tmp/experiments/clean-horizon-profiles/runs/00132-objects-100m/index.html).
+20degree and35degree Flat/Globe views retain only the back two objects.
+[Scene results](scene-results.md#wider-back-two-views-at100m) own settings,
+observations and verification.
 
 Latest images: [Combined5m/100m/500m FOV viewer](../../../../../tmp/experiments/clean-horizon-profiles/runs/00123-fov-heights/index.html)
 compares Flat/local Closest and Globe/distant noon at all seven perspective

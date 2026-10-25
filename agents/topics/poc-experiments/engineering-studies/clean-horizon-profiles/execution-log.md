@@ -1101,3 +1101,16 @@ feat: render clean-horizon back-two object pair
 
 Only contained helpers and current topic documents are included; no push,
 production edit, protected evidence mutation or standards-compliance assertion.
+
+
+## Wider back-two FOVs -2026-10-25
+
+Owner found5degrees too tight. Selected20/35degree presets as two wider framings,
+retaining100m,20degree yaw, original objects5/6 and ARM optics. Added contained
+object-FOV controls; existing5degree paths remain supported.00130Flat/00131Globe
+captures and00132gallery are accepted. Globe reused00037's field. Full cyan box
+fits both widths; four primary images visually inspected. Actual state/visibility,
+frustum, hidden-control differences, native dimensions, parent hashes, browser
+selector combinations and local types pass. Source newline styles restored to
+baseline after captures, without semantic changes. No production/numerical change
+or Bruneton score claim. Prior evidence remains immutable. No follow-on selected.

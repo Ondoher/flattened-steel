@@ -1097,3 +1097,29 @@ inspected; the cyan object's upper part is cropped by the narrow frame. Browser
 image/control checks, zero GL error, immutable parent hashes and local types pass.
 Original objects were neither deleted from production nor moved/resized. No
 production or numerical change, new cache build or Bruneton score claim.
+
+
+## Wider back-two views at100m
+
+[20degree and35degree Flat/Globe comparison](../../../../../tmp/experiments/clean-horizon-profiles/runs/00132-objects-100m/index.html) widens the owner's
+previous5degree view while keeping the same ARM profile,100m height,20degree
+object-facing yaw, mode-specific horizon pitch, original transforms, ground,
+clipping, source and native exposure. Only review objects5/6 remain visible;
+nearer objects1-4 and their shadows remain hidden.20degrees fits the full cyan
+box with substantial sky/ground context;35degrees provides more surrounding space.
+The far object remains a faint bar in Flat and is much less visible in Globe.
+These remain localN1 versus globeN1-4 appearance views with different source
+geometry/adaptation, not an isolated curvature or numerical-accuracy comparison.
+
+00130Flat and00131Globe captures are accepted; the Globe reuses00037's N4 cache.
+00132 authenticates parents and publishes four native2048x1152 images plus their
+all-hidden controls without resampling or color edits. Actual metadata confirms
+requested FOV,100m height, selected visibility, original transforms, both retained
+meshes intersecting the frustum, zero GL errors and unchanged hidden-control
+camera/lux. Enabled objects affect157620/118559pixels at20degrees and49164/37407
+at35degrees(Flat/Globe,more than one RGB byte). All four primary images visually
+inspected. Four gallery FOV/visibility combinations decode correctly in a real
+browser, and local authored types pass. Globe capture took71.9seconds including
+reuse/publication/capture; this is not an interactive frame benchmark. No new
+Globe cache build, production change or Bruneton score claim. Prior evidence
+remains immutable.
