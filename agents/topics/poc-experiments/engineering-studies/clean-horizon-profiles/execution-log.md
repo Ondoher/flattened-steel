@@ -1114,3 +1114,36 @@ frustum, hidden-control differences, native dimensions, parent hashes, browser
 selector combinations and local types pass. Source newline styles restored to
 baseline after captures, without semantic changes. No production/numerical change
 or Bruneton score claim. Prior evidence remains immutable. No follow-on selected.
+
+
+## GreenSea material trial -2026-10-25
+
+Owner supplied reference texture files and selected GreenSea. Applied its color
+and normal pair only inside the contained capture, preserving ground geometry,
+atmosphere, field, native exposure and100m/20-35degree back-two framing. Selected
+100m tile width and0.6normal strength for a first appearance trial; original image
+aspect determines47.168m tile height. Kept Lambert lighting to isolate the surface
+texture trial from reflective-water work.00135Flat/00136Globe and00137report are
+accepted. Globe reused00037. All four primary images inspected: water detail is
+visible but repeated bands remain. Parent/map identities, attached maps, unchanged
+vertices/indices, actual state, original-ground pixel controls, eight browser
+combinations and local types pass. Upper clear sky is byte-identical in all eight
+frames. Normal-only image contribution and interactive frame cost were not measured.
+Source credit and static/photo-texture limits are in scene-results. Owner-supplied
+15-file reference library remains byte-for-byte unchanged. No production or
+atmospheric numerical update, new Globe cache or B1 score claim; no new investigation
+selected. Read-only search evidence00133/00134 is preserved, including failed Node
+HTTPS downloads and successful Python image inspection.
+
+Checkpoint adviser recommends preserving this contained material unit together
+with the owner-supplied reference images. Preapproved local message:
+
+```text
+feat: trial GreenSea ground material in clean-horizon views
+
+- add contained water-material capture and gallery controls
+- render matched Flat and Globe ground-material comparisons
+- verify geometry preservation, sky isolation, and texture attribution
+```
+
+No push or standards-compliance claim. All reference image bytes remain unchanged.

@@ -1123,3 +1123,43 @@ browser, and local authored types pass. Globe capture took71.9seconds including
 reuse/publication/capture; this is not an interactive frame benchmark. No new
 Globe cache build, production change or Bruneton score claim. Prior evidence
 remains immutable.
+
+
+## GreenSea static ground-material trial
+
+[GreenSea versus original ground](../../../../../tmp/experiments/clean-horizon-profiles/runs/00137-water-100m/index.html) implements the owner's requested
+GreenSea trial using their `references/textures/GreenSea_S.jpg` and `_N.jpg` pair.
+Both are2048x966. The original images remain unmodified; the contained renderer
+loads color as sRGB and normals as linear data, with repeated world-X/-Z UVs,
+100m-wide by47.168m-high tiles, normal strength0.6, mipmaps and16x anisotropy on
+the capture device. The normal convention is Three's default tangent-space
+convention; no authored convention was supplied or independently calibrated.
+The ground retains Lambert lighting, with white material tint replacing the
+green tint so the photograph supplies its color. Only UVs/material change:
+original ground positions, indices, surface termination and meshes remain.
+
+The four primary frames retain100m elevation,20/35degree FOVs,20degree yaw, only
+objects5/6, same ARM atmosphere, physical source, cache and native display.
+Water appears blue-green with visible wave detail. Regular repetition forms bands
+and converging patterns toward the horizon;100m is an illustrative tile scale,
+not a measured wave scale. The photo includes fixed lighting/perspective cues.
+This is static surface appearance: no displacement, animation, reflective-water
+material, new ground-reflection scattering field or physical-ocean claim.
+
+00135Flat and00136Globe captures are accepted, reusing00037's Globe N4 field.
+00137 authenticates both parents and the original00132 gallery, verifies matching
+camera/profile/object transforms/lux, exact map identities, attached color/normal
+maps, unchanged vertices/indices and zero GL errors. Against the original ground,
+all eight frames retain byte-identical pixels in the clear-sky upper fifth and
+change587776pixels by more than one byte in the lower quarter. This proves a
+visible surface effect; no isolated normal-only contribution was measured.
+Eight material/FOV/visibility gallery combinations decode in a real browser;
+local authored types pass and all four primary images were visually inspected.
+Images remain native2048x1152 with no resampling or post-color edits. Capture
+wall times were107.9s Flat,55.4s Globe and12.5s report; no interactive performance
+benchmark is claimed. No production or atmospheric numerical update, new Globe
+cache build or Bruneton score claim. Previous evidence remains immutable.
+
+Texture credit: Keith333, [Water - Batch of15Seamless Textures with normalmaps](https://opengameart.org/content/water-batch-of-15-seamless-textures-with-normalmaps),
+CC BY3.0. The original paired images are scaled/repeated and their normals used
+for lighting. The owner-supplied15-file texture library is preserved unchanged.

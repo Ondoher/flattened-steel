@@ -13,6 +13,16 @@ baseline/candidate comparison requirement. ARM appearance improvements do not
 compensate for a Bruneton regression. No new candidate has been evaluated under
 this newly recorded requirement.
 
+## GreenSea trial - complete
+
+[GreenSea material comparison](../../../../../tmp/experiments/clean-horizon-profiles/runs/00137-water-100m/index.html) and
+[owning details](scene-results.md#greensea-static-ground-material-trial) provide
+Flat/Globe20/35degree views at100m with the back two objects. Original/GreenSea
+and hidden-object controls are selectable.00135/00136/00137 are accepted; map,
+geometry/state, sky/ground pixels, browser and local type checks pass. Four primary
+images visually inspected. Visible tiling and static matte-water limits remain
+explicit. Production and atmospheric numerics are unchanged.
+
 ## Wider back-two views - complete
 
 [20/35degree comparison](../../../../../tmp/experiments/clean-horizon-profiles/runs/00132-objects-100m/index.html) and

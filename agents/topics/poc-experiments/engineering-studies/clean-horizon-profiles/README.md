@@ -12,10 +12,11 @@ broader gray-band discrepancy. The latest [native PNG comparison](../../../../..
 adds matched pixel footprints and shows excess local sky-side brightening at2km.
 See [scene results](scene-results.md) for the pointwise uncertainty and scope.
 
-Latest owner request: [Wider100m back-two comparison](../../../../../tmp/experiments/clean-horizon-profiles/runs/00132-objects-100m/index.html).
-20degree and35degree Flat/Globe views retain only the back two objects.
-[Scene results](scene-results.md#wider-back-two-views-at100m) own settings,
-observations and verification.
+Latest owner request: [GreenSea ground-material trial](../../../../../tmp/experiments/clean-horizon-profiles/runs/00137-water-100m/index.html).
+Flat/Globe20/35degree views at100m retain the back two objects and let the owner
+switch between GreenSea and the original green ground.
+[Scene results](scene-results.md#greensea-static-ground-material-trial) own the
+material parameters, observations, attribution and verification.
 
 Latest images: [Combined5m/100m/500m FOV viewer](../../../../../tmp/experiments/clean-horizon-profiles/runs/00123-fov-heights/index.html)
 compares Flat/local Closest and Globe/distant noon at all seven perspective

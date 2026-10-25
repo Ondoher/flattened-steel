@@ -5,14 +5,15 @@ Focus: owner review of ARM-informed horizon appearance and its matched fine
 vertical spherical libRadtran comparison.
 
 Canonical entry: [Measured Clean Horizon Profiles](poc-experiments/engineering-studies/clean-horizon-profiles/README.md).
-The owner-requested wider back-two100m pair is complete in00130-00132.
-00132-objects-100m compares20degree and35degree FOVs for Flat/local Closest and
-Globe/distant noon, keeping only review objects5/6 visible with original transforms.
-Same ARM atmosphere, horizon-centered100m views and native2048x1152. Actual state,
-visibility/frustum/pixel/browser/type checks pass; four primary images inspected.
-Scene-results.md owns images, conditions and limits.00123 retains the no-object
-multi-height/FOV viewer. Accepted future fixes must maintain or beat Bruneton
-scores under design.md. Production is unchanged; no further investigation selected.
+The owner-requested GreenSea static ground trial is complete in00135-00137.
+00137-water-100m compares GreenSea/original ground for Flat/local Closest and
+Globe/distant noon at100m,20/35degree FOVs, with only review objects5/6 visible.
+Same ARM atmosphere/cache, original ground geometry, native2048x1152. Map/state,
+geometry/pixel/browser/type checks pass; all four primary images inspected.
+Scene-results.md owns material scale, visible tiling, limits, source credits and
+verification.00132 retains earlier wider matte-ground views;00123 retains the
+no-object multi-height/FOV viewer. Production is unchanged; no further work selected.
+Accepted future numerical fixes must maintain or beat Bruneton scores per design.md.
 
 ## Minimal Reload Sources
 
