@@ -4,7 +4,9 @@ Status: all ten ARM-informed San Jose scene conditions are rendered, with matche
 Bruneton comparisons and targeted uncertainty images. Selected reference checks
 expose unresolved numerical errors, especially sunset500m. This is an illustrative
 reconstruction result; production is unchanged. The completed58/76-height test
-identifies height-lookup sensitivity but rejects it as a sufficient horizon fix. See [scene results](scene-results.md).
+identifies height-lookup sensitivity but rejects it as a sufficient horizon fix.
+The completed570-case fine spherical reference trace confirms broad physical
+structure and angle-dependent production errors. See [scene results](scene-results.md).
 
 ## Objective
 

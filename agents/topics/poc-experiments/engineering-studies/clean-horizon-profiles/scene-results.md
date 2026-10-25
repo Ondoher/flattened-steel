@@ -593,3 +593,92 @@ all dimensions, passes source types, and exercises24elevation/source/display
 combinations in a real browser. All8image/crop pairs decode;1:1and420px display
 widths are explicitly verified. Browser resources/temp profiles are closed.
 No production/profile/cache change or new reference qualification is claimed.
+
+## Fine vertical spherical libRadtran comparison
+
+The owner requested a finely resolved above-horizon reference trace against the
+production algorithm. [Final three-seed plots, spectra and CSVs](../../../../../tmp/experiments/clean-horizon-profiles/runs/00091-vertical-results/index.html)
+compare the current ARM-informed500m and2km San Jose noon atmosphere with fully
+spherical libRadtran/MYSTIC. Production here means the actual production GPU
+transport/cache shader with this experimental atmosphere, rather than a change
+back to the default Bruneton aerosols. The atmosphere and N48 N4 field are fixed.
+
+There are95directions per height: fine sampling through approximately2degrees
+above the true geometric limb, closer limb controls, and sparse context to5degrees.
+The original87image-row queries match the4096x2304central column. A corrected
+registration then retargets GPU queries to the exact physical reference angles;
+those retargeted queries are not claimed to remain exact image pixel centers.
+Reference inputs use their recorded angles rather than rounded nominal labels.
+Each reference direction has three independent100000photon seeds per native
+wavelength, yielding570complete native15 spectral cases. Source, phase/SSA,
+vertical aerosol table, molecular coefficients, black boundary and planet radii
+match; no refraction/gas absorption is added. All-orders MYSTIC remains distinct
+from N4 production. These are point rays, not finite-pixel averages or a ground
+surface render.
+
+| Height | Region above limb | Production luminance difference vs MYSTIC | MYSTIC Y and95% halfwidth (cd/m2) |
+| --- | --- | --- | --- |
+|500m|0.00278degrees|+3.87%|8212.9 +/-108.1|
+|500m|0.59642degrees|-5.01%|7555.4 +/-15.7|
+|500m|1.20272degrees|-8.06%|7395.2 +/-20.9|
+|2km|0.00420degrees|-5.49%|7384.1 +/-30.6|
+|2km|0.59805degrees|-4.07%|7394.6 +/-48.9|
+|2km|1.19671degrees|+14.54%|8582.6 +/-103.5|
+
+At500m the95-point error range is-8.16% to+3.90%; mean absolute relative Y error
+is5.90%. At2km it is-8.68% to+14.55%; mean absolute error is8.83%. These describe
+this directional trace, not a full-sky RMSE. Worst normalized spectral RMSE is
+9.64%/12.31% at500m/2km. Maximum reference Y95% halfwidth is1.51%/1.26% of its
+mean, well below the largest observed differences. Intervals use Student t(df2)
+from per-seed integrated luminances, preserving within-spectrum covariance.
+They are pointwise, not a simultaneous angular confidence band; common seeds
+across directions correlate the angular noise.
+
+Both solvers produce broad near-limb structure. At2km, within the sampled
+0to2.05degree region, the production brightness rise from its local minimum to
+maximum is50.6%, versus20.8% for MYSTIC. Sampled production maximum is near1.31degrees,
+while the sampled reference maximum is near1.50degrees. These are sampled extrema,
+not fitted peak positions or peak-angle confidence estimates. Around1.20degrees,
+production linear-RGB B/R is1.116 versus reference1.250: the excess is less blue
+and more neutral. The broad gray/bright band therefore has a physical-reference
+counterpart, but production exaggerates its brightness and neutrality.
+
+At500m the corresponding maximum/minimum ratio excess is25.6% in production
+versus11.1% in the reference; the brightening very close to the limb is real in
+both calculations, with a steeper production contrast. This above-limb trace
+does not independently validate the abrupt sky/green-ground pixel transition.
+It does not establish a separate one-pixel white stripe or eliminate effects
+from displaying the images at small preview size.
+
+Increasing only live view integration from30to480intervals changes Y by at most
+0.513% at500m and0.693% at2km. It does not remove the measured discrepancy. Raw
+spectral differences precede exposure/scaling. Missing orders above N4 alone also
+cannot explain the positive2km lobe: omitted scattering contributions are
+nonnegative. The result does not isolate cache interpolation, source construction,
+remaining geometry approximations or reference discretization as the cause.
+The negative500m differences can still contain an order-tail contribution.
+
+Verification: original GPU queries reproduce source4096image RGB to3.3e-6relative;
+spectral-to-production-RGB projection agrees to4.6e-7. After correcting an
+inverse-trig diagnostic, actual GPU/reference elevations agree within2.7e-6degrees
+and azimuths within1.6e-6degrees. Every retargeted ray has no scene/ground endpoint.
+The reference run is accepted with570successful cases. Final report00091rehashes
+all parent artifacts, reparses every raw spectrum, checks actual SZA/height/view/
+seed/photon/source-spectrum inputs, passes local source types and exercises both
+height selections with all six PNG figures loading in a real browser. PNG/SVG
+figures, common-exposure color samples, pointwise intervals and selectable CSV/
+JSON preserve the derivation. The512-layer reference export is retained from prior
+work; no new full layer/order-tail convergence or measured-profile qualification
+is claimed. Browser resources/temp profiles are closed.
+
+Evidence chain:00083original GPU probe;00084all three reference seeds;00085corrected
+GPU registration;00086isolated prebuilt plotting libraries;00088GPU proof;
+00090single-seed preview;00091final comparison.00087retains a sandbox-blocked
+child type-check attempt, retried successfully in00088.00089is the earlier preview
+with cosmetic title encoding repaired in00090. All earlier runs remain immutable.
+
+Cost: reference calculation/staging took1628.1s (27.1min) with four concurrent
+processes; sealing completed at1667.5s. Median individual case wall time was10.77s.
+The run retains25140hashed artifacts totaling774.8MiB, plus its6.5MiB manifest.
+Those are logical file sizes and observed wall times, not isolated solver CPU
+benchmarks. No new atmospheric cache was built. Production remains unchanged.

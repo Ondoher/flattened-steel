@@ -646,3 +646,41 @@ feat: add fine clean-horizon vertical trace pipeline
 
 This is a source/provisional-evidence checkpoint, not completion of the570-case
 three-seed comparison. Status retains that pending boundary. No push.
+
+Final comparison complete:00084accepted all570cases. Its1628.1s calculation/staging
+and1667.5s sealed duration retain25140hashed artifacts (774.8MiB plus6.5MiBmanifest).
+The first final-report invocation arrived before that manifest finished hashing;
+it allocated no run or evidence, and was simply rerun after sealing.00091accepted
+all parent/raw/input checks, source types and both six-figure gallery selections.
+No scientific case was repeated for that timing recovery.
+
+Final mean/error data are in00091comparison.json/profile.csv/spectra.csv and its
+PNG/SVG plots. Near the limb: production+3.87% at500m and-5.49% at2km. Around1.2deg:
+-8.06% /+14.54%. Reference maximum pointwise95%Y halfwidth1.51% /1.26%. Production
+view refinement changes at most0.513% /0.693%. The reference shows the broad2km
+rise too, but production amplifies it (sampled peak/trough rise50.6% vs20.8%) and
+makes it more neutral. This is not a ground-edge or full-profile qualification.
+No automatic new experiment or production change was selected.
+
+Intermediate local checkpoint71ec0750preserved the working source/provisional
+pipeline while the solver ran. The final report also adds explicit physical
+input checks and selectable trace-summary/feature metrics. Final owning documents
+replace the in-progress state; all earlier evidence stays intact.
+
+Final checkpoint adviser recommends this completed evidence/report unit. Its
+preapproved local message is:
+
+```text
+feat: report fine clean-horizon trace findings
+
+- finalize the three-seed spherical reference across 190 matched directions
+- validate physical inputs and publish final profile, spectra, and color metrics
+- document angle-dependent production error and retained qualification limits
+```
+
+Six-file whole-worktree unit: current topic/reporting and the final report runner.
+The final numerical data remain in immutable00091. A cosmetic range separator in
+the runner's JSON scope text is clarified to plain ASCII for later executions;
+no data/equation changes or sealed-artifact edits follow from that correction.
+No production edit, external publication or standards-compliance claim. Git
+records the resulting final local checkpoint identity.

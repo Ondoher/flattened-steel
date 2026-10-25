@@ -80,23 +80,25 @@ The contained harness repair resizes the actual staged composer; production's
 resize lifecycle remains unchanged.00080is the retained partial-resize attempt;
 00081is the verified capture,00082the checked interactive viewer and report.
 
-## Fine vertical libRadtran trace in progress
+## Fine vertical libRadtran trace complete
 
-Owner-requested follow-up: compare the current ARM-informed500m/2km noon sky with
-fully spherical MYSTIC along95fine directions per height.00084-vertical-ref is
-running570native15 solver cases (three100000photon seeds per direction, four
-concurrent processes). Individual finalized cases are reusable if interrupted;
-trace-reference.mjs accepts a recovery run.00083is the image-matching GPU probe;
-00085retargets GPU queries to the exact reference directions after correcting
-inverse-trig diagnostics.00088validates GPU spectra/registration and types.
+[Final trace findings](scene-results.md#fine-vertical-spherical-libradtran-comparison)
+and [three-seed profile/spectra viewer](../../../../../tmp/experiments/clean-horizon-profiles/runs/00091-vertical-results/index.html)
+own the completed570-case comparison:95directions at each of500m/2km, three
+independent100000photon seeds, same ARM-informed atmosphere and actual production
+GPU shader/cache path.00084reference and00091final checks are accepted.
 
-[Early single-seed viewer](../../../../../tmp/experiments/clean-horizon-profiles/runs/00090-vertical-pilot/index.html)
-is available, with full CSV/spectra and actual common-exposure color samples.
-It has no Monte Carlo uncertainty estimate; the complete report must await the
-three-seed campaign. Native30and fine480view integration curves are included.
-Next: finish00084, run trace-report.mjs with00084/00085/00088/00086parents, inspect
-figures/confidence intervals and replace this progress entry with final findings.
-Production and all prior evidence remain unchanged.
+The broad limb/gray-band structure occurs in MYSTIC too, but production exaggerates
+it. Around1.2degrees production is8.1%darker at500m and14.5%brighter at2km; closest
+limb samples are3.9%brighter /5.5%darker.30to480view intervals changes Y by at most
+0.51%/0.69%. Source-field/order/reference approximations remain unseparated; missing
+higher orders alone cannot account for a positive production error. This is a
+sky-above-limb trace, not ground-edge validation or a fully qualified atmosphere.
+
+00083/00085and00088retain image/spectral/angle proof;00086contains isolated plotting
+libraries.00090is the earlier explicitly provisional preview. All source spectra,
+pointwise uncertainty, color samples and CSVs are saved. No further run, cache
+build, profile tuning or production change is automatically selected.
 
 ## Verification and next boundary
 

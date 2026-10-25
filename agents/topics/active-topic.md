@@ -1,29 +1,18 @@
 # Active Topic
 
 Current active topic: poc-experiments/engineering-studies/clean-horizon-profiles.
-Focus: execute actual ARM-informed atmosphere scene comparisons for San Jose noon
-and sunset at 5 m, 100 m, 500 m, 2 km and 40 km, with matched Bruneton images.
+Focus: owner review of ARM-informed horizon appearance and its matched fine
+vertical spherical libRadtran comparison.
 
 Canonical entry: [Measured Clean Horizon Profiles](poc-experiments/engineering-studies/clean-horizon-profiles/README.md).
-All ten requested ARM-informed conditions and matched Bruneton views are rendered.
-The scene report records reference discrepancies and physical assumptions; these
-are illustrative images, not a fully validated measured-profile replacement.
-Final evidence verification00057 passes; scene-results.md is the current report.
-Owner-review follow-up00062 diagnoses bright/gray horizon bands. The authorized
-58/76-height test is complete in00072-height-results; the final scene-results.md
-section owns findings. Height lookup affects the band but is not a sufficient fix;
-the upper gray ray samples the1875-3125m interval. Direct ground/sphere alignment
-test00074 covers mesh/helper alignment. The owner's clarified actual shader
-branch test is complete in00079-analytic-results: emitted compiler geometry and
-consistent live termination were exercised; the continuous rim is unchanged.
-Latest owner-requested larger native renders are complete in00082-resolution-view:
-2048/4096widths, verified input/output sizes and a full-width/1:1viewer. Profiles
-show a bright shoulder meeting ground, without an isolated sky-pixel spike;
-preview scale can emphasize the apparent line. Scene-results.md owns scope and
-remaining hypotheses. Current follow-up is the fine spherical libRadtran trace:
-00084-vertical-ref is running570cases;00085is the corrected GPU trace,00088its
-verified proof,00090the single-seed preview. Finish references and final report;
-status.md owns continuation commands and claim limits. Production is unchanged.
+All requested noon/sunset scenes and follow-up horizon/height/geometry/resolution
+tests are complete. The latest570-case reference trace is accepted in00084;
+00091-vertical-results is the final three-seed profile, spectra and color viewer.
+The actual production GPU algorithm with the same ARM atmosphere differs by angle:
+around1.2degrees, Y is8.1%low at500m and14.5%high at2km. View-step refinement is
+small; the broad physical feature is exaggerated by production. Scene-results.md
+owns quantitative findings, uncertainty and remaining cause/qualification limits.
+Production is unchanged. No further investigation is automatically selected.
 
 ## Minimal Reload Sources
 
