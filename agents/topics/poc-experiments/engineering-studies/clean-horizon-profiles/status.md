@@ -13,6 +13,15 @@ baseline/candidate comparison requirement. ARM appearance improvements do not
 compensate for a Bruneton regression. No new candidate has been evaluated under
 this newly recorded requirement.
 
+## Back two objects only - complete
+
+[Latest100m/5degree pair](../../../../../tmp/experiments/clean-horizon-profiles/runs/00129-objects-100m/index.html)
+and [owning details](scene-results.md#back-two-only100m5degree-views) retain only
+the distant cyan/far orange objects, with the four nearer objects hidden. Both
+native2048x1152 modes use the same ARM atmosphere and original object transforms.
+00127/00128/00129 state, visibility, frustum, pixel, browser and type checks pass;
+both images visually inspected. Production remains unchanged.
+
 ## Object-enabled100m/5degree pair complete
 
 [Object-facing images](../../../../../tmp/experiments/clean-horizon-profiles/runs/00126-objects-100m/index.html)

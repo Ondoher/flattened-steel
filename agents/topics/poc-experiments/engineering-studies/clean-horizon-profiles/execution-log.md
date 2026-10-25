@@ -1074,3 +1074,30 @@ feat: render clean-horizon object-facing pair
 
 Only contained helpers and current topic documents are included; no push,
 protected evidence mutation, production change or standards-compliance assertion.
+
+
+## Back two objects only -2026-10-25
+
+Owner requested hiding nearer objects and retaining the back two. Added contained
+subset controls for review meshes5/6 and a20degree object-facing heading, without
+moving/resizing any object or changing100m/5degree framing/ARM optics. Near meshes
+are hidden before refreshing shadow maps. Accepted00127/00128 captures and00129
+report verify exactly two visible/in-frustum meshes, all nearer meshes hidden,
+unchanged object transforms/camera/lux in hidden controls, nativePNG dimensions,
+actual image differences, browser controls, zero GL errors and local types.
+Both primary images visually inspected. No production/profile/cache/numerical
+change, Bruneton score claim or follow-on automatically selected.
+
+Checkpoint adviser recommends the completed subset-visibility unit. Preapproved
+local message:
+
+```text
+feat: render clean-horizon back-two object pair
+
+- retain only the distant cyan and far orange review objects
+- capture matched Flat and Globe 100m object-facing views
+- verify visibility, frustum coverage, and hidden-control image effects
+```
+
+Only contained helpers and current topic documents are included; no push,
+production edit, protected evidence mutation or standards-compliance assertion.

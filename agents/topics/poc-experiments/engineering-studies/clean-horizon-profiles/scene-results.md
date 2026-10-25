@@ -1076,3 +1076,24 @@ inspected. All six gallery control combinations decode correctly in a real
 browser, and local authored types pass. Images are copied from synchronous native
 PNG exports without resizing or color adjustment. No production update, new
 numerical fix or Bruneton score claim; earlier evidence remains immutable.
+
+
+## Back-two-only100m/5degree views
+
+[Updated Flat/Globe pair](../../../../../tmp/experiments/clean-horizon-profiles/runs/00129-objects-100m/index.html)
+implements the owner's requested removal of the four nearer objects. Only review
+objects5(distant cyan) and6(far orange) are visible; objects1-4 and their shadow
+participation are hidden. All original transforms/sizes remain unchanged. Both
+cameras face the back pair at20degrees from negative scene-Z, retaining100m,
+5degree vertical FOV, horizon-centered pitch, same ARM profile, ground/clip,
+illumination/exposure and localN1/globeN1-4. Native PNGs are2048x1152.
+
+00127 Flat,00128 Globe and00129 publication/verification are accepted. Final
+frames record exactly the selected two visible meshes and both intersect each
+view's frustum; all nearer meshes are hidden. Matching all-hidden controls retain
+camera/lux/transforms and demonstrate actual pixel effects(954933Flat and714554
+Globe pixels change by more than one RGB byte). Both primary images were visually
+inspected; the cyan object's upper part is cropped by the narrow frame. Browser
+image/control checks, zero GL error, immutable parent hashes and local types pass.
+Original objects were neither deleted from production nor moved/resized. No
+production or numerical change, new cache build or Bruneton score claim.
