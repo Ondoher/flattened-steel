@@ -684,3 +684,68 @@ the runner's JSON scope text is clarified to plain ASCII for later executions;
 no data/equation changes or sealed-artifact edits follow from that correction.
 No production edit, external publication or standards-compliance claim. Git
 records the resulting final local checkpoint identity.
+
+## Owner-requested trace across both sides of the limb
+
+Extend the500m/2km San Jose noon trace below the geometric limb and combine it
+with the existing95above-limb directions per height. Preserve/reuse all570old
+reference cases, the ARM model and N48 N4 field. New rays:24successive4Kground
+pixels through about-0.55degrees, -1/-2degree context, five near-negative and
+three near-positive controls, and the first sky pixel:35new rays per height,
+three100000photon seeds each (210new cases). Actual GPU ray components define
+reference angles, avoiding the earlier inverse-trig diagnostic problem.
+
+Read actual4Kscene color/depth/hit inputs and separate path radiance, native15
+transmittance, unattenuated surface RGB and final composition. Retain stock mesh
+endpoints and a continuous analytic-sphere30/480interval diagnostic. Only actual
+pixel-center rays qualify the stock image comparison; subpixel stock queries
+hold nearest-pixel endpoints and cannot define an analytic limiting jump.
+
+The cached atmosphere has a black ground boundary, whereas the app composites a
+separate ThreeRGBgreen surface. Preserve the black boundary in libRadtran, so the
+new sky/path spectra remain compatible with previous evidence. Compare path-only
+spectra first. Then form a clearly labeled reference hybrid using the same captured
+unattenuated surface RGB and independently computed reference transmittance.
+This holds the surface illumination/color fixed without inventing a spectral
+reflectance or adding ground feedback that would invalidate the old sky samples.
+It is not a self-consistent libRadtran green-ground scene. Verify the reference
+layer/transmission interpretation before accepting that hybrid. No production
+change, cache build, profile tuning, old-run edit or rerun of old sky cases.
+
+
+Completion:00092 actual4K stock/analytic GPU capture is accepted;00093 completes
+all210 new MYSTIC cases in487.55s calculation/staging (500.98s sealed), preserving
+all570 earlier reference cases.00094 accepts independent exact-shell transmission,
+continuous-profile convergence, actual pixel/projection/composition checks.
+00095 is the accepted combined260-direction report with profile/spectra CSVs,
+common-exposure color strips and full-context/near-edge PNG/SVG plots. Actual
+pixel-center reference-hybrid drops are27.49%/6.56% at500m/2km versus production
+26.86%/6.60%. The ground step is independently supported; broad sky-band errors
+remain a separate result. No old case rerun, cache build or production change.
+
+Installed libRadtran lower-row layer-density interpretation was checked against
+its read-only aerosol/cloud reader source and recorded in00093. It confirms the
+existing export. Exact-shell versus continuous transmission differs by at most
+1.54e-6absolute; continuous numerical convergence below1e-9. Actual GPU/native
+image relative RGB agreement is within1.36e-6. Local authored types and both final
+browser gallery selections pass; edge500m and combined2km plots were visually
+inspected. Reference surface composition remains explicitly a hybrid using the
+same captured app RGB, with no invented spectral ground or reflective feedback.
+Owning current-state/report documents now record completion and the next boundary.
+
+
+Checkpoint adviser judges this a complete coherent across-limb evidence unit.
+Preapproved local checkpoint message:
+
+```text
+feat: trace clean horizon across the opaque ground boundary
+
+- capture actual 4K below-limb and near-edge production rays
+- add matched spherical reference and transmission validation
+- report combined ground-step agreement while retaining hybrid and sky-band limits
+```
+
+Whole-worktree checkpoint includes the seven new limb helpers, scene-capture
+integration and five owning documents. Evidence remains in immutable ignored
+runs00092-00095; production and earlier runs are unchanged. No external push or
+standards-compliance claim is made. Git records the resulting checkpoint identity.

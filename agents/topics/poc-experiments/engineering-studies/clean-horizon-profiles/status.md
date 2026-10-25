@@ -100,6 +100,20 @@ libraries.00090is the earlier explicitly provisional preview. All source spectra
 pointwise uncertainty, color samples and CSVs are saved. No further run, cache
 build, profile tuning or production change is automatically selected.
 
+## Across-limb combined trace complete
+
+[Combined findings](scene-results.md#combined-trace-across-the-opaque-ground-boundary)
+and [final viewer](../../../../../tmp/experiments/clean-horizon-profiles/runs/00095-limb-results/index.html)
+add210 successful reference cases below/across the limb while preserving the570
+old cases. The260-direction result supports a real opaque-ground radiance step.
+Across adjacent4Kpixels, the reference with the common captured RGB surface drops
+27.49% versus production26.86% at500m, and6.56% versus6.60% at2km, before display
+tone mapping. The reference surface composition is an explicitly labeled hybrid,
+not a reflective-ground libRadtran simulation. Broad above-horizon gray-band
+errors remain separate.00092-00095 capture/reference/proof/report are accepted;
+source types, physical inputs, immutable reuse and browser checks pass their
+stated bounds. Production is unchanged; no new investigation is selected.
+
 ## Verification and next boundary
 
 All20 primary frames and two uncertainty frames were inspected at native size.

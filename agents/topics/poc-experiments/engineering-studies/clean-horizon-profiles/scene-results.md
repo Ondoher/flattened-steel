@@ -682,3 +682,66 @@ processes; sealing completed at1667.5s. Median individual case wall time was10.7
 The run retains25140hashed artifacts totaling774.8MiB, plus its6.5MiB manifest.
 Those are logical file sizes and observed wall times, not isolated solver CPU
 benchmarks. No new atmospheric cache was built. Production remains unchanged.
+
+
+## Combined trace across the opaque-ground boundary
+
+The owner requested the missing below-limb trace, combined with the existing sky
+samples. [Combined profile, edge detail, spectra and color viewer](../../../../../tmp/experiments/clean-horizon-profiles/runs/00095-limb-results/index.html)
+is accepted. It preserves all190 previous direction rows and570 reference cases
+unchanged, adding35 directions per height and210 successful three-seed MYSTIC
+cases. The combined260 directions cover ground context to-2degrees and sky to
++5degrees at500m and2km, with paired controls down to approximately+/-0.00025degree
+from the geometric limb. These are point rays, not finite-pixel averages.
+
+The sharp boundary is distinct from the broad above-horizon gradient. Both the
+fully spherical reference and production show a substantial radiance drop when a
+ray first meets opaque ground. The below-limb ray loses the atmospheric path
+behind that surface. The broad gray-band disagreement remains above this edge;
+it is not an explanation for compressing a smooth gradient into the sharp step.
+
+The cache/reference boundary is black. The app adds a separately lit green RGB
+surface. To hold that input common, the report independently integrates the
+reference extinction along exact spherical shell paths, then forms
+`reference atmospheric path RGB + captured scene RGB * reference transmission RGB`.
+This is a controlled reference hybrid, not a self-consistent reflective green-ground
+libRadtran scene. No spectral ground reflectance or ground-light feedback is
+invented. Production uses the actual GPU path and the same captured surface input.
+
+| Height | Reference hybrid drop across adjacent4Kpixels | Actual production drop | Reference / production display-luma drop (byte scale) |
+| --- | --- | --- | --- |
+|500m|27.49%|26.86%|23.44 /21.37|
+|2km|6.56%|6.60%|4.91 /5.33|
+
+Percentage drops use linear-RGB luminance before display tone mapping, looking
+from the first sky pixel to the first ground pixel at approximately+/-0.011596degree.
+Physical spectral luminance is reported separately for the atmospheric path.
+At the closest paired controls, its black-boundary drop is31.07% in MYSTIC versus
+30.04% in production at500m, and7.48% versus7.56% at2km. With the common surface,
+linear-RGB drops become23.23% versus22.48%, and5.28% versus5.24%. These are finite
+separated samples, not an extrapolated exact-tangent limit. Paired three-seed
+95% uncertainty preserves cross-direction covariance.
+
+The reference therefore supports the existence and approximate contrast of the
+native ground/sky step. It does not qualify the entire atmosphere, resolve the
+broad gray-band error, or establish a separate isolated white-pixel stripe.
+N4 production versus all-orders MYSTIC and reference layer discretization remain
+explicit limitations. No production shader, profile, cache or display changed.
+
+Verification:00092 captures actual4096x2304 scene inputs and stock/analytic30/480
+interval paths.00093 adds the210 cases using unchanged authenticated optical
+inputs from00084. Installed libRadtran source confirms that its lower-row layer
+convention matches the existing export; no old reference correction is needed.
+00094 independently checks spherical extinction/transmission, GPU projection,
+surface composition and actual pixel agreement. GPU/image relative RGB error is
+at most1.36e-6; independent transmission convergence is below1e-9 absolute, with
+exported-layer versus continuous-profile differences below1.54e-6.00095 rehashes
+parents, reparses all new spectra, checks actual view/seed/height inputs, and
+passes local source types plus both gallery selections in a real browser. The
+edge and combined plots were visually inspected. Stock image claims use actual
+pixel centers; continuous subpixel comparisons use analytic sphere endpoints.
+
+Reference calculation/staging took487.55s (8.13min), with four concurrent solver
+processes; sealing completed at500.98s. No old sky case was rerun and no cache was
+rebuilt. All earlier runs remain immutable. Further investigation requires owner
+selection; the requested combined trace is complete.

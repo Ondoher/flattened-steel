@@ -5,13 +5,14 @@ Focus: owner review of ARM-informed horizon appearance and its matched fine
 vertical spherical libRadtran comparison.
 
 Canonical entry: [Measured Clean Horizon Profiles](poc-experiments/engineering-studies/clean-horizon-profiles/README.md).
-All requested noon/sunset scenes and follow-up horizon/height/geometry/resolution
-tests are complete. The latest570-case reference trace is accepted in00084;
-00091-vertical-results is the final three-seed profile, spectra and color viewer.
-The actual production GPU algorithm with the same ARM atmosphere differs by angle:
-around1.2degrees, Y is8.1%low at500m and14.5%high at2km. View-step refinement is
-small; the broad physical feature is exaggerated by production. Scene-results.md
-owns quantitative findings, uncertainty and remaining cause/qualification limits.
+All requested scenes and follow-up tests are complete. The latest accepted
+00095-limb-results combines260 directions and780 spherical reference cases:
+570 prior sky cases preserved unchanged plus210 across/below-limb cases.
+The opaque-ground step is supported by the reference with a common captured RGB
+surface: adjacent4Kpixel drops are27.49% versus production26.86% at500m, and6.56%
+versus6.60% at2km before display tone mapping. This is a controlled surface hybrid,
+not a reflective-ground libRadtran scene. Broad above-horizon gray-band errors
+remain separate. Scene-results.md owns findings and qualification limits.
 Production is unchanged. No further investigation is automatically selected.
 
 ## Minimal Reload Sources

@@ -6,7 +6,9 @@ expose unresolved numerical errors, especially sunset500m. This is an illustrati
 reconstruction result; production is unchanged. The completed58/76-height test
 identifies height-lookup sensitivity but rejects it as a sufficient horizon fix.
 The completed570-case fine spherical reference trace confirms broad physical
-structure and angle-dependent production errors. See [scene results](scene-results.md).
+structure and angle-dependent production errors. The combined780-case trace now
+also supports the sharp opaque-ground boundary contrast, separately from the
+broader gray-band discrepancy. See [scene results](scene-results.md).
 
 ## Objective
 
