@@ -13,16 +13,17 @@ baseline/candidate comparison requirement. ARM appearance improvements do not
 compensate for a Bruneton regression. No new candidate has been evaluated under
 this newly recorded requirement.
 
-## Requested flat/local image pair complete
+## Requested500m comparison complete
 
-[Two-image page](../../../../../tmp/experiments/clean-horizon-profiles/runs/00108-flat-closest/index.html)
-and [owning details](scene-results.md#owner-requested-flatlocal-closest-images)
-provide San Jose Flat/local Closest at5m/100m, horizon centered,50degree FOV,
-objects hidden and ground retained, with the same ARM profile. Native2048x1152
-captures00108 and focused verifier00109 are accepted and visually checked. The
-contained flat adapter preserves the layered medium in column and lookup paths;
-current app localN1 is retained. No production update, accepted algorithm fix or
-new B1 result is claimed.00107's blank exports remain preserved but unusable.
+[Flat/local Closest and Globe/distant noon at500m](../../../../../tmp/experiments/clean-horizon-profiles/runs/00113-paired-500m/index.html)
+and [owning details](scene-results.md#owner-requested-paired-views-at500m)
+provide both2048x1152 images: same ARM profile, San Jose,50degree FOV, horizon
+centered, objects hidden and ground retained.00110/00111 capture,00112 focused
+Flat proof and00113 pair/browser/type checks are accepted. Both were visually
+inspected. LocalN1 versus globeN1-4 and different source geometry/native exposure
+remain explicit; this is an appearance comparison, not an isolated curvature test.
+Earlier [Flat5m/100m](../../../../../tmp/experiments/clean-horizon-profiles/runs/00108-flat-closest/index.html)
+remain available. Production and B1 scores are unchanged; no accepted fix claimed.
 
 ## Matched native raster follow-up complete
 

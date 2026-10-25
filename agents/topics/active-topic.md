@@ -5,14 +5,13 @@ Focus: owner review of ARM-informed horizon appearance and its matched fine
 vertical spherical libRadtran comparison.
 
 Canonical entry: [Measured Clean Horizon Profiles](poc-experiments/engineering-studies/clean-horizon-profiles/README.md).
-The owner-requested San Jose Flat/local Closest image pair is complete in
-00108-flat-closest:5m and100m, default50degree FOV, horizon centered, no review
-objects, ground retained, same frozen ARM profile.00109 accepts physical column,
-GPU/image/browser/type checks. The contained flat adapter preserves layered
-profile sampling; app localN1 remains. Scene-results.md owns details and limits.
-Earlier00106 is the final matched native globe/MYSTIC raster assessment;00107
-blank exports are preserved but unusable. Every accepted future fix must maintain
-or beat existing Bruneton scores under design.md's owner requirement.
+The owner-requested500m pair is complete in00113-paired-500m: San Jose
+Flat/local Closest and Globe/distant noon, same ARM atmosphere,50degree FOV,
+horizon centered, no review objects, ground retained, native2048x1152.
+00110/00111 captures and00112/00113 proofs pass their stated checks. Scene-results.md
+owns details, mode/source/order differences and limits. Earlier00108 holds
+Flat5m/100m;00106 holds the final globe/MYSTIC raster assessment. Every accepted
+future fix must maintain or beat Bruneton scores under design.md's requirement.
 Production is unchanged. No further investigation is automatically selected.
 
 ## Minimal Reload Sources

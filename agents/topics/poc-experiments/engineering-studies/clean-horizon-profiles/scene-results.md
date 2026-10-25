@@ -876,3 +876,34 @@ evidence despite its execution-accepted manifest.00108 draws and exports
 synchronously and adds explicit pixel-content checks. Earlier runs remain immutable.
 No full independent flat-scene radiance reference or B1 rerun is claimed. The
 owner's Bruneton non-regression requirement remains binding on accepted fixes.
+
+
+## Owner-requested paired views at500m
+
+[Flat/local Closest and Globe/distant noon](../../../../../tmp/experiments/clean-horizon-profiles/runs/00113-paired-500m/index.html)
+provide the requested two native2048x1152 images at500m: same frozen ARM model,
+San Jose, default50degree vertical FOV, horizon centered, no review objects,
+ground retained. Flat uses horizontal pitch; Globe centers its actual depressed
+limb (about0.7184degree). Click each image for its unchanged full PNG.
+
+Flat00110 and Globe00111 are accepted and visually inspected. Flat retains a
+broader brown-gray shoulder; Globe has a sharper ground boundary with a thin
+bright rim. No scene object or broad black strip is visible. These compare the
+requested app modes: finite/local Closest illumination with localN1 versus
+distant/noon illumination with globeN1-4 and their native exposure. The difference
+is not an isolated measurement of curvature, scattering order or aerosol effects.
+
+The flat runner now accepts explicit height arguments while retaining5m/100m
+as its default. The Globe runner's contained still-500 mode hides objects and
+captures only500m at2048x1152. It authenticates and reuses the existing00037 ARM
+N4 field without rebuilding it. Actual canvas/composer/color/depth/hit sizes,
+state/location/time/height/FOV, physical height, hidden review meshes and zero GL
+error are checked. Globe native HDR/display replay differs by at most one byte.
+
+Focused00112 rehashes the Flat capture, checks its live density/column functions
+on hardware GPU, image decoding and local types. Final00113 rehashes both renders
+and that proof, checks matching profile,500m states, horizon poses and hidden
+objects, copies PNGs byte-for-byte, verifies image content and browser decoding,
+and passes local types. No production update, accepted numerical fix, full flat
+radiance reference or new B1 result is claimed. Existing non-regression requirements
+continue to apply to any later accepted algorithm changes.

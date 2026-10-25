@@ -29,7 +29,7 @@ export async function start(control){
  const state=createDistantSunSceneState({observation:selected.observation,observerHeight:{value:5,units:'meters'},observerUpDirection:[0,0,1]});
  requireValue(Math.abs(state.solarZenithDegrees-control.solarZenithDegrees)<1e-8,'Scene source differs from the measured noon source.');
  const catalog=await loadBrightest2000StellarCatalogPackage(),vision=await loadHumanVisionFilterPackage();
- const app=/** @type {any} */(new Flat32Application(document.getElementById('main-content'),{initialModeKind:'spherical-distant',reviewObjectsEnabled:true,cameraFieldOfViewDegrees:50,stellarCatalog:'brightest-2000',brightest2000StellarCatalogDefinition:catalog,scotopicLuminanceWeights:vision.scotopicLuminanceWeights,resolveDistantSunSceneCacheAsset:createDistantSunSceneCacheHttpResolver()}));
+ const app=/** @type {any} */(new Flat32Application(document.getElementById('main-content'),{initialModeKind:'spherical-distant',reviewObjectsEnabled:control.objectsVisible!==false,cameraFieldOfViewDegrees:50,stellarCatalog:'brightest-2000',brightest2000StellarCatalogDefinition:catalog,scotopicLuminanceWeights:vision.scotopicLuminanceWeights,resolveDistantSunSceneCacheAsset:createDistantSunSceneCacheHttpResolver()}));
  // Only this application instance starts at the registered observation; no UI transition or production source edit.
  app._locationTimeController.selectTime=()=>selected;
  let array,compute;
@@ -72,7 +72,7 @@ export async function start(control){
  await globalThis['aerosolRetain']('build.json',{reports,packetReports,coefficientReuse:control.reuseRoot??null,logicalCandidateAtlasBytes:array.byteLength,material:control.medium,displayLux:control.fixedLux,viewPathIntervals:30,viewPathDistribution:'production quadratic-near-observer-v1'});
  let sun=state.geometry.expressCelestialDirectionInScene(state.directionToSourceModel),horizontal=Math.hypot(sun[0],sun[2]);
  let measuredHeight=-1;
- 
+
  globalThis['aerosolSceneSetTime']=async(time)=>{
   selected=controller.selectGlobeTime(app._state,time==='noon'?1:2);app._transitionLocationTime(()=>selected);await ready(app._state.observerHeight.value);
   const active=app._modeController._activeRuntime._mode.lightSource.sharedCacheAttachment,current=active._controller._published;
@@ -104,7 +104,7 @@ export async function start(control){
   scene.camera.lookAt(scene.camera.position.x+d[0],scene.camera.position.y+d[1],scene.camera.position.z+d[2]);scene.camera.updateMatrixWorld(true);
   cancelAnimationFrame(scene._frameRequest);scene._frameRequest=null;scene._frameCadence='manual';for(let i=0;i<4;i++){scene._renderFrame();await frames();}gl.finish();
   requireValue(gl.getError()===gl.NO_ERROR&&scene.canvas.dataset.flat32RenderPath==='algorithm32','Invalid final scene render.');
-  const capture=await globalThis['twilightCapture']({layers:[0],resetHeading:true});return {capture,view,observation:app._publishedState.observation,observerHeight:app._publishedState.observerHeight,physicalHeight:app._modeController._activeRuntime._mode.observerHeight,cameraPosition:scene.camera.position.toArray(),direction:d,verticalFov:scene.camera.fov,aspect:scene.camera.aspect,fixedLux:alg.totalHorizontalIlluminance,exposureMultiplier:control.exposureMultiplier??1,physicalReceiverLight,receiverLightingRemeasuredAfterAtlasPublication:true,viewport:{width:scene.canvas.width,height:scene.canvas.height},dataset:{...scene.canvas.dataset},renderer,coefficientError,requiredBlocks:current.snapshot.requiredBlockIds,packetReports,frame:scene.canvas.dataset.flat32FrameCount};
+  const capture=await globalThis['twilightCapture']({layers:[0],resetHeading:true}),visibleObjects=app._endpointScene._meshes.filter(m=>m.visible&&m.name.startsWith('flat32-review-object')).map(m=>m.name);if(control.objectsVisible===false)requireValue(visibleObjects.length===0,'Review objects remain visible');return {capture,visibleObjects,view,observation:app._publishedState.observation,observerHeight:app._publishedState.observerHeight,physicalHeight:app._modeController._activeRuntime._mode.observerHeight,cameraPosition:scene.camera.position.toArray(),direction:d,verticalFov:scene.camera.fov,aspect:scene.camera.aspect,fixedLux:alg.totalHorizontalIlluminance,exposureMultiplier:control.exposureMultiplier??1,physicalReceiverLight,receiverLightingRemeasuredAfterAtlasPublication:true,viewport:{width:scene.canvas.width,height:scene.canvas.height},dataset:{...scene.canvas.dataset},renderer,coefficientError,requiredBlocks:current.snapshot.requiredBlockIds,packetReports,frame:scene.canvas.dataset.flat32FrameCount};
  };
  return {ready:true,renderer,medium:control.medium,coordinates:coordinates.length,slots:slots.length};
 }

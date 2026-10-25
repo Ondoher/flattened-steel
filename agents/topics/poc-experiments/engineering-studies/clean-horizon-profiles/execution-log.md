@@ -935,3 +935,31 @@ Whole-worktree scope includes five contained helpers and six owning documents,
 including the owner's previously recorded Bruneton non-regression criterion.
 No production files, old run artifacts or external repositories changed. No push
 or standards-compliance assertion. Git records the resulting local identity.
+
+
+## Owner-requested500m pair -2026-10-25
+
+Owner clarified both views as Flat/local Closest and Globe/distant noon at500m,
+same ARM atmosphere,50degree FOV, horizon centered, no review objects. Parameterized
+the contained Flat height list, added a one-frame no-object Globe still mode,
+and published verified byte-identical native PNG copies together in00113.
+Captures00110/00111, focused Flat proof00112 and pair proof00113 are accepted;
+actual source field reused from00037, no new Globe cache build. Both images were
+visually checked. Flat has a brown-gray shoulder; Globe has a sharp ground edge
+and thin bright rim. All checks remain bounded by differing geometry, source,
+localN1/globeN4 and native exposure. Production/B1 are unchanged, no new fix claimed.
+
+Checkpoint adviser recommends this bounded unit. The final scene-browser source
+retains its original CRLF style and removes whitespace on one blank line; the
+rendered semantics are unchanged. Local types and whitespace checks pass.
+Preapproved local message:
+
+```text
+feat: render clean-horizon 500m Flat and Globe pair
+
+- parameterize contained Flat/local capture at 500 meters
+- add a verified no-object Globe/distant still mode
+- publish paired native images with explicit comparison limits
+```
+
+No push; generated runs and earlier evidence remain immutable.
