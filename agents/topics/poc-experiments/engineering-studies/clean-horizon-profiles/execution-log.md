@@ -798,3 +798,75 @@ feat: add native clean-horizon raster reference pipeline
 Types, Python syntax parsing and whitespace checks pass. Final reference image
 appearance and report execution are still pending; no production change or
 standards-compliance result is claimed. No external push.
+
+
+Intermediate checkpoint905f129c preserves the working pipeline. During the long
+reference run, verified device availability supports more than four workers.
+To reduce waiting, stopped only the exact owned00100 Python batch after pausing
+its dispatch and allowing all live solver children to finish. No child was still
+writing when the parent terminated and the host sealed00100 as failed/interrupted
+(SIGTERM exit15); this is an intentional execution transition, not a scientific
+case failure.00102 authenticates/reuses1236 completed reading/raw artifacts from
+that immutable parent and computes only missing rays with eight workers. It also
+checks installed executable/data identity against the earlier batch. The1236 completed reading receipts are reused without rerun. Four raw outputs
+without a closed reading receipt are conservatively recomputed; the old and new
+raw files are byte-identical. Earlier artifacts are never overwritten. Per-case inputs, spectra and derivation remain saved.
+The report primary now explicitly uses stock shader endpoints and native scene
+buffers; analytic-sphere termination appears separately as a control.
+
+
+Early evidence: after all3072 height500m receipts closed,00103 authenticated and
+sealed that subset without changing the active parent102 or earlier100. Each
+raw/receipt artifact is individually pinned; the source batch's mutable progress
+file is not a data parent. Its final installed-data end check remains pending.
+00104 renders the provisional native2x96 PNGs, exact128x/4x copied enlargement,
+actual512x96 scene context, seed images and analytic-ground controls. Browser,
+source types, raw/deck/angle/image/projection checks pass. Visually both methods
+have a pale shoulder above the sharp boundary. Atmospheric RGB-proxy step35.6%
+versus35.4% (reference paired95% halfwidth1.3points); three-row sky rise1.10% versus
+0.66% +/-0.79points. Do not claim resolution of sub-percent shoulder differences.
+The final report will use complete sealed102; no new reference case was needed
+for this early view. User received its link while2km calculations continued.
+
+
+Completion:00102 accepts all6144 logical reference cases, with1236 authenticated
+reused receipts and4908 computed cases. Solver/data identities are unchanged,
+including comparison with the prior batch.00105 rehashes parents, reparses all
+spectra, verifies actual decks/angles/seed/photon/height/wavelengths and GPU/image
+projection, and composes native PNGs with matching image-area quadrature.00106 is
+the final two-height page and paired-feature assessment. All42 image files are
+byte-identical copies from00105; browser pixelated presentation and source types
+pass. All eight primary path/composite strips were visually inspected, as was
+actual native context. Raw/source/counter recovery derivations remain retained.
+
+The full raster confirms pale shoulders/ground steps in both methods. At2km
+production's final sky-pixel rise is0.519% versus reference0.094% +/-0.185points
+(4x4, pointwise95%). The3-row rise is1.597% versus0.402% +/-0.961points.2x2 has the
+same direction; shared seeds make this a consistency check rather than independent
+replication.500m shoulder differences remain unresolved. The broad2km gray band
+is still more pronounced in production. No isolated-spike/general-image/cause or
+full-profile qualification follows from the selected pointwise tests. Primary
+production retains stock endpoints, with analytic controls separate. Common
+surface composition remains explicitly hybrid.
+
+Partial/resumed reference wall times are631.19/1683.07s including sealing, about
+38.6min combined; no cache build or previous780 reference-case rerun. The final
+report and current-state documents record completion and the next owner boundary.
+No production update, additional investigation or standards-compliance claim.
+
+
+Final checkpoint adviser recommends the completed native-raster evidence unit,
+continuing905f129c. Preapproved local checkpoint message:
+
+```text
+feat: report native clean-horizon raster comparison
+
+- recover and complete the matched spherical pixel-footprint reference batch
+- verify native strips, quadrature, projection, and pixel-copy presentation
+- document excess 2 km sky-side brightening with retained uncertainty limits
+```
+
+Whole-worktree scope is the final contained helpers/reporting and five owning
+current-state/report documents. Accepted00102/00105/00106 preserve the scientific
+result and checks; all earlier provisional/interrupted/pilot artifacts remain
+immutable. No production edit or external push. Git records the checkpoint identity.

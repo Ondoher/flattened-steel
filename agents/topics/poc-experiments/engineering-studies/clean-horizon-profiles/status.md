@@ -4,19 +4,23 @@ Status: requested illustrative scene campaign complete, with reference limitatio
 The experiment remains selected for owner review, with no production promotion
 or automatic closure. Earlier M1 measured-profile qualification is inconclusive.
 
-## Selected native raster follow-up in progress
+## Matched native raster follow-up complete
 
-The owner requested actual matching libRadtran pixel strips to assess the thin
-bright feature, independently of vector/color interpolation.00098 captures native
-4K centers and subpixel queries;00101 verifies center RGB within3.30e-6relative
-and2x2 versus4x4 edge path luminance within0.088% at500m /0.018% at2km.00100 is
-computing6144 new spherical point cases with three seeds per subray. The matched
-output will contain two actual native columns by96rows, with radiance averaged
-over each camera pixel before tone mapping, and exact nearest-neighbor enlargement.
-Atmosphere-only and common captured-surface hybrid remain separate. No reference
-appearance conclusion is drawn until the independent spectra are complete.
-00096 unavailable camera-grid and00097 zero camera-radiance pilots are retained;
-their process outcomes do not qualify a reference image. Production is unchanged.
+[Final PNG page and paired reading guide](../../../../../tmp/experiments/clean-horizon-profiles/runs/00106-raster-assess/index.html)
+and [owning findings](scene-results.md#matched-native-raster-horizon-comparison)
+complete the requested comparison. New libRadtran pixel footprints match two actual
+native4K columns by96rows at500m/2km.6144 three-seed cases are accepted in00102;
+00105 validates raw spectra/inputs and composes the pixels,00106 adds both
+quadrature orders' paired metrics while preserving every image byte. Browser,
+local types, image/geometry/RGB and installed-tool checks pass their stated bounds.
+
+Both methods show the pale shoulder and ground step. Production's selected2km
+sky-side rise is stronger, with consistent2x2/4x4 results; the500m shoulder difference
+remains within uncertainty. Broader gray-band error persists. Pointwise intervals,
+N4/all-orders, reference discretization and common-surface-hybrid limits remain
+explicit. No numerical cause is isolated or production change promoted. Earlier
+provisional images and interrupted/pilot evidence remain immutable. No further
+investigation is automatically selected.
 
 ## Current result
 

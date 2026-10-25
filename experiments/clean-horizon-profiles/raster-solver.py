@@ -21,6 +21,9 @@ before={p.relative_to(data).as_posix():digest(p) for p in sorted(data.rglob('*')
 def save(p,obj):
     with p.open('x',encoding='utf-8') as f:json.dump(obj,f,allow_nan=False)
 save(run/'installed-before.json',{'executable':str(executable),'sha256':digest(executable),'dataFiles':before,'python':sys.version})
+if (run/'recovered-installation.json').exists():
+    old=json.loads((run/'recovered-installation.json').read_text())
+    assert old['dataFiles']==before and old['sha256']==digest(executable)
 started=time.monotonic()
 
 def solve(c):
@@ -47,13 +50,15 @@ def solve(c):
     save(work/'reading.json',result)
     return result
 
-results=[]
-with concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool:
-    futures={pool.submit(solve,c):c for c in registration['configs']}
+results=json.loads((run/'recovered-readings.json').read_text())
+recovered_count=len(results);recovered_ids={r['config']['id'] for r in results}
+concurrency=min(registration['concurrency'],os.cpu_count() or 1)
+with concurrent.futures.ThreadPoolExecutor(max_workers=concurrency) as pool:
+    futures={pool.submit(solve,c):c for c in registration['configs'] if c['id'] not in recovered_ids}
     for future in concurrent.futures.as_completed(futures):
         r=future.result();results.append(r)
-        if len(results)%32==0 or len(results)<=4:print(json.dumps({'completed':len(results),'total':len(futures),'seconds':time.monotonic()-started,'last':r['config']['id']}),flush=True)
+        if len(results)%32==0 or len(results)<=4:print(json.dumps({'completed':len(results),'total':len(registration['configs']),'seconds':time.monotonic()-started,'last':r['config']['id']}),flush=True)
 after={p.relative_to(data).as_posix():digest(p) for p in sorted(data.rglob('*')) if p.is_file()}
 assert before==after and digest(executable)==installation['expectedSha256']
 save(run/'readings.json',sorted(results,key=lambda r:r['config']['id']))
-save(run/'solver-verification.json',{'cases':len(results),'elapsedSeconds':time.monotonic()-started,'installedExecutableAndDataUnchanged':True,'photonsPerWavelengthPerRay':registration['photons'],'concurrency':4,'runtime':sys.version})
+save(run/'solver-verification.json',{'cases':len(results),'elapsedSeconds':time.monotonic()-started,'installedExecutableAndDataUnchanged':True,'photonsPerWavelengthPerRay':registration['photons'],'concurrency':concurrency,'recoveredCases':recovered_count,'computedCases':len(results)-recovered_count,'runtime':sys.version})

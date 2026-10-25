@@ -745,3 +745,93 @@ Reference calculation/staging took487.55s (8.13min), with four concurrent solver
 processes; sealing completed at500.98s. No old sky case was rerun and no cache was
 rebuilt. All earlier runs remain immutable. Further investigation requires owner
 selection; the requested combined trace is complete.
+
+
+## Matched native raster horizon comparison
+
+[Final native PNG comparison and reading guide](../../../../../tmp/experiments/clean-horizon-profiles/runs/00106-raster-assess/index.html)
+provides the missing independent raster comparison. Each method supplies two actual
+central camera columns (x2048/2049) by96rows (y1080-1175) of the same4096x2304,
+50degree San Jose noon view at500m and2km. This is a narrow horizon strip, not a
+full-sky reference image. Enlargement copies pixels128times horizontally and
+4times vertically, with pixelated browser display. No image-color interpolation,
+denoising or fitted exposure is added. The raw512x96 production context is also
+shown. All eight primary path/composite strips were visually inspected.
+
+Independent spherical MYSTIC reference rays are computed at the actual GPU-derived
+subpixel directions. Image-area2x2 Gauss integration happens before display mapping;
+eight edge rows additionally have4x4 controls. There are2048 unique subrays and
+6144 three-seed cases, each with10000 photons per native wavelength. Source/model,
+black-ground boundary, native15 channels and display are unchanged. The original
+N48 N4 field is reused; no cache is rebuilt. Native center samples reproduce the
+actual image within3.30e-6relative RGB, physical elevations match within1.82e-6degrees,
+and spectral/RGB projection within4.04e-7. Primary production strips retain stock
+shader endpoints and native scene buffers; exact-sphere termination is a separate
+control. Scene buffers retain their native sampling during atmospheric supersampling.
+
+The pale shoulder and ground step are present in both rasters. At2km, production
+also has a stronger small sky-side rise; it is not merely hidden by an SVG gradient.
+The wider production gray/bright band is more pronounced, consistent with the
+previous trace. Around1.2degrees in these pixels, production atmospheric linear-RGB
+luminance proxy is about7.8% below the reference at500m and14.3% above it at2km.
+These pixel-proxy values are distinct from the earlier physical CIE-Y trace metrics.
+
+| Height | Feature | Production change,4x4 pixels | MYSTIC change and paired95% halfwidth |
+| --- | --- | --- | --- |
+|500m|Final two sky rows|+0.302%|+0.219% +/-0.305percentage points|
+|500m|Three-row sky shoulder|+1.101%|+0.595% +/-0.830points|
+|500m|Sky to ground|-35.600%|-35.641% +/-1.279points|
+|2km|Final two sky rows|+0.519%|+0.094% +/-0.185points|
+|2km|Three-row sky shoulder|+1.597%|+0.402% +/-0.961points|
+|2km|Sky to ground|-9.402%|-8.801% +/-0.493points|
+
+Here4x4 means subpixel quadrature within each native pixel, not a different camera
+resolution. Changes use atmospheric-path linear-RGB luminance proxy before display
+mapping, averaging the two columns. The final sky pair is rows1150to1151; the
+three-row shoulder is1148to1151; ground begins at1152. Each reference seed supplies
+a paired row ratio, then the three ratios supply a mean and Student t(df2) interval.
+Shared seeds retain angular covariance and also correlate the2x2/4x4 results.
+Intervals are pointwise, not simultaneous confidence across the image; the finer
+sampling is a consistency check, not an independent replication. The2x2 results
+have the same direction: at2km final-sky rise0.519% versus0.091% +/-0.311points.
+Thus500m shoulder differences remain unresolved, while the selected2km pairs
+support a local production excess under these fixed inputs. They do not establish
+an isolated spike everywhere along the horizon or identify its numerical cause.
+
+Actual stock production2x2-to4x4 edge path changes are at most0.00190% /0.00136%
+at500m/2km. Reference mean changes are at most0.40% /0.12%, with Monte Carlo
+uncertainty retained. No full pixel/refraction/layer/scattering-tail convergence
+or observational atmosphere qualification is claimed. N4 versus all orders remains
+a material difference. Cache interpolation/source construction are unseparated.
+
+Atmosphere-only images are the independent black-boundary comparison. The green
+surface version remains a controlled hybrid: MYSTIC path plus the same captured
+app RGB surface times independently calculated spherical extinction/transmission.
+It does not add reflective-ground feedback. With the common surface,2x2 sky-ground
+proxy drops are26.86% production versus26.35% reference at500m, and6.60% versus6.29%
+at2km. Those composite means do not carry a new simultaneous uncertainty claim.
+
+Evidence:00098 native capture;00101 GPU/footprint proof;00099 direct point pilot;
+00100 intentionally stopped/sealed partial batch;00102 complete accepted reference;
+00103/00104 provisional completed500m subset/images;00105 final pixel composition,
+raw/deck/input/image/projection checks and gallery;00106 final assessment with
+both quadrature orders and byte-identical PNG copies. All6144 raw spectra are
+reparsed and view/height/seed/photon/wavelength inputs checked. Installed solver
+and data identities are unchanged. Final local source types and real-browser
+image decoding/pixelated presentation pass. Earlier runs remain immutable.
+
+The installed camera-grid pilot00096 rejects an unavailable parser option.00097
+exits successfully but returns zero camera radiance; it is explicitly unqualified,
+and none of its spectra supplies an image. Point quadrature uses the previously
+working spherical solver. The intentional concurrency transition reuses1236 closed
+reading receipts from00100 in00102;4908 more cases are computed. Four old raw outputs
+without closed receipts are conservatively recomputed and match byte for byte.
+No previous570/210 sky/limb reference case is rerun for this raster study.
+
+Cost: native capture108.25s; partial reference run631.19s including sealing;
+resumed complete batch1683.07s including sealing, with1627.98s calculation/validation
+in the resumed worker. Combined observed reference-run wall time is38.6min, not an
+isolated solver CPU benchmark. Partial and resumed runs retain7.75/27.79MiB of
+hashed artifacts plus manifests; browser/report work is additional. More parallel
+workers reduce waiting without changing physics. No production profile, cache,
+shader, app setting or display policy changes. No further run is automatically selected.

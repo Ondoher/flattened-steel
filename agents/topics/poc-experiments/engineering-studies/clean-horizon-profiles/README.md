@@ -8,7 +8,9 @@ identifies height-lookup sensitivity but rejects it as a sufficient horizon fix.
 The completed570-case fine spherical reference trace confirms broad physical
 structure and angle-dependent production errors. The combined780-case trace now
 also supports the sharp opaque-ground boundary contrast, separately from the
-broader gray-band discrepancy. See [scene results](scene-results.md).
+broader gray-band discrepancy. The latest [native PNG comparison](../../../../../tmp/experiments/clean-horizon-profiles/runs/00106-raster-assess/index.html)
+adds matched pixel footprints and shows excess local sky-side brightening at2km.
+See [scene results](scene-results.md) for the pointwise uncertainty and scope.
 
 ## Objective
 
