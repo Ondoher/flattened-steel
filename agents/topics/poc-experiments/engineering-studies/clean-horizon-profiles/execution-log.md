@@ -403,3 +403,58 @@ Whole-worktree inspection contains nine experiment-source/owning-topic files,
 no generated data/binaries, credentials or unrelated changes. Source types and
 run00072 scientific/browser/evidence checks pass. Git supplies the final commit
 identifier in the response. No push is authorized.
+
+
+## Owner-requested thin-rim geometry test
+
+The owner continues to suspect exact-sphere versus visual-ground mismatch in the
+thin white rim. Keep this separate from the broader gray-band result. The earlier
+sky-side clipping test did not fully characterize coverage/depth agreement at the
+edge itself. Reuse the original N48 ARM noon field,500m/2km and unchanged camera/
+lighting/display. Capture raster mesh hit/depth versus an analytic ground hit/root
+for exactly the same reconstructed pixel ray. Independently check analytic mask
+and roots in binary64. Render ground512x512 then1024x1024 (4x triangle count),
+with all physical/cache settings fixed. Compare the white rim and mismatch masks.
+No profile change or full-cache build is authorized by this narrow diagnostic.
+The ordinary live shader currently terminates from captured scene depth; it does
+not itself clip the final-view path at the exact sphere. Exact ground geometry is
+used by other physical/cache/CPU paths. Distinguish these paths in the report.
+
+
+## Direct ground-alignment result
+
+00073 completed the same-cache512/1024 ground captures in about57s.00074 verifies
+52,224horizon pixels per case, independent binary64 sphere hits, endpoint distances,
+2,048sky rim pixels per height, source types and eight browser-loaded images.
+All runs accepted; no physics cache rebuild or production write.
+
+A small mismatch is real: at500m the original mesh misses2isolated analytic-ground
+pixels and the refined mesh misses1; at2km both have0coverage differences. Median
+endpoint differences decrease12.77->3.01m and10.22->2.55m. Preserve near-tangent
+float/depth outliers rather than claiming exact coincidence. CPU/GPU sphere masks
+agree across the tested strip. Fourfold triangles leave all tested sky-rim linear
+and display values exactly unchanged. This falsifies the tested mismatch as the
+primary continuous-line explanation, while retaining isolated edge limitations.
+
+Clarify architecture: live view termination already uses captured mesh depth;
+exact sphere geometry is used elsewhere in CPU/cache transport. The line remains
+a finite-ground versus long-sky radiance-transition question; do not claim it is
+physically correct without an adjacent-pixel matched reference. Stop this bounded
+geometry test with its negative/qualified result; no blind radius tweaks, blurring,
+profile changes or automatic geometry promotion.
+
+
+Checkpoint adviser recommends preserving this bounded negative geometry result.
+The continuing independent-execution authorization preapproves its message:
+
+```text
+feat: test clean-horizon ground alignment
+
+- compare mesh and analytic-sphere hits at the thin horizon rim
+- verify ground refinement leaves the continuous sky rim unchanged
+- record isolated endpoint limits and the remaining radiance question
+```
+
+Whole-worktree unit: seven experiment-source/owning-topic files, no generated
+binary/data, credentials or unrelated changes. Source types and00074 evidence/
+browser checks pass. Git supplies the resulting local commit hash; no push.

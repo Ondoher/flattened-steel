@@ -46,6 +46,16 @@ The upper band's direct interpolation issue is1875-3125m, not the originally
 suspected0-1875m gap. Lower/upper lookup splits establish that localization.
 No height-only fix or production update is promoted.
 
+## Thin-rim ground alignment test complete
+
+[Ground-alignment findings](scene-results.md#thin-white-rim-ground-object-versus-exact-sphere-test)
+and [direct image/mask comparison](../../../../../tmp/experiments/clean-horizon-profiles/runs/00074-ground-alignment/index.html)
+own the endpoint test. Original/refined meshes disagree with the sphere at2/1
+isolated pixels at500m and0/0 at2km. The2,048sky rim pixels at each height have
+identical linear/display color after4x triangles. Small depth/coverage differences
+exist but do not explain the continuous line. Near-limb radiance remains unvalidated;
+no production geometry change is promoted.
+
 ## Verification and next boundary
 
 All20 primary frames and two uncertainty frames were inspected at native size.

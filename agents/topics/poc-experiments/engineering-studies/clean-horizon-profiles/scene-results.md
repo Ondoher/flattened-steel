@@ -392,3 +392,66 @@ angular reconstruction, remaining height transitions and order/reference mismatc
 are not isolated by this test. Do not choose a coarse grid solely for a favorable
 reference score. No further grid escalation, profile tuning, production promotion
 or automatic experiment closure is part of this completed hypothesis test.
+
+
+## Thin white rim: ground-object versus exact-sphere test
+
+The owner specifically suspects the thin, clean white line is an exact-sphere /
+visual-ground mismatch. This is separate from the broader gray-band height test.
+[Direct alignment comparison](../../../../../tmp/experiments/clean-horizon-profiles/runs/00074-ground-alignment/index.html)
+shows actual images and per-pixel masks for the original512x512 ground grid and
+1024x1024 grid, a fourfold increase from524,288 to2,097,152 triangles. The saved
+N48 ARM noon atmosphere/cache,500m/2km views, camera, exposure and lighting stay
+fixed. No atmosphere cache was rebuilt.
+
+The diagnostic compares the captured scene endpoint and an analytic sphere root
+for exactly the same reconstructed pixel ray. Binary64 reconstruction from the
+recorded camera independently checks the analytic hit mask. Both ground meshes
+use R=6360000m, zero lift, the same tangent-frame origin and +/-900km patch extent.
+This checks coverage and endpoint distances directly, rather than using the
+absence of a WebGL error or an above-band radiance test as a geometry proof.
+
+| Height | Ground segments per side | Mesh/sphere disagreement pixels | Median mesh-minus-sphere endpoint distance |
+| --- | --- | --- | --- |
+|500m|512|2|12.77m|
+|500m|1024|1|3.01m|
+|2km|512|0|10.22m|
+|2km|1024|0|2.55m|
+
+Counts cover52,224pixels in the1024x51 strip around each horizon. At500m the two
+original misses are isolated at(x109,y289) and(x914,y289); refinement removes the
+first, leaving the second. At2km there is no mask disagreement in this strip.
+GPU analytic and independent binary64 hit masks agree at every tested pixel.
+Distances are not exact: GPU float-root versus binary64 root differences reach
+8.96m at500m and3.62m at2km near tangency, and mesh distance outliers reach hundreds
+of meters near the most sensitive grazing rays. These are distinct from coverage.
+Do not describe the ground as perfectly coincident in all numerical quantities.
+
+The decisive rim check uses the two sky pixels immediately above the analytic
+boundary in every column:2,048pixels per height. All are classified as sky by both
+meshes and the sphere. After4x ground triangles their RGB bytes and linear RGB
+are exactly unchanged. The white rim persists. At the image center, row287 is sky
+and row288 is ground under both definitions and both mesh resolutions.
+
+Therefore a small coverage/depth mismatch exists, but does not explain the
+continuous white line in these cases. It can explain isolated edge specks and
+must not be conflated with the full-width rim. The previous blanket description
+of the geometry test was too broad; this direct measurement now states its scope.
+
+One architectural detail matters: the ordinary live-view shader currently ends
+paths at captured scene/ground-mesh depth. It does not independently clip final
+view rays at the exact sphere. Exact spherical ground is used by other physical,
+CPU and cache paths. At the visible boundary the live calculation switches from
+a finite ground-ended ray to a longer atmospheric ray without a scene endpoint.
+This test localizes the remaining white-line question to that radiance transition
+or its approximation; it does not prove that the sharp rim radiance is physical.
+A matched reference through the immediately adjacent pixel footprints would be
+the next radiometric check, separately from mesh coverage.
+
+Run00073 retains images, masks, float endpoints, mesh metadata and the unchanged
+cache provenance.00074 verifies parent artifact hashes, cameras, physical radii,
+mesh segment counts, independent hit geometry, rim-color comparison, local types
+and all eight gallery images in a real browser. Resources/temp profiles are
+closed/removed. Pixel-center/noon/heading/FOV limits and subpixel precision remain
+explicit. Production, the profile, cache data and old evidence are unchanged;
+the refined mesh is a diagnostic rather than a promoted production change.
