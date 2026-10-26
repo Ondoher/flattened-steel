@@ -5,6 +5,11 @@ Focus: owner review of ARM-informed horizon appearance and its matched fine
 vertical spherical libRadtran comparison.
 
 Canonical entry: [Measured Clean Horizon Profiles](poc-experiments/engineering-studies/clean-horizon-profiles/README.md).
+Selected35degree object-enabled Flat/Globe100m/2000m images are now exported to
+[gallery/ocean](../../gallery/ocean/README.md), with exact source hashes and credit.
+The latest accepted native Flat/Globe films were also copied unchanged into
+[gallery/videos](../../gallery/videos/README.md), with authenticated provenance.
+The gallery is an ignored personal-use folder; exports remain local.
 The owner-requested100m/2000m additions are complete in00141-00143.
 00143-water-heights provides2000,100,50,40,30,20,10m for Flat/Globe20/35degree
 views, same ARM/GreenSea inputs and original meshes5/6.28primary images plus

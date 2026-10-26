@@ -164,3 +164,6 @@ runs
 downloads/
 /.codex-tmp/
 /.codex-tmp/
+
+# Personal image and video gallery
+/gallery/

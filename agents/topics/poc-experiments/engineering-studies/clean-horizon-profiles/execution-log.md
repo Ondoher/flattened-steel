@@ -1205,3 +1205,80 @@ feat: extend GreenSea height comparison gallery
 ```
 
 No push or standards-compliance claim.
+
+
+## Selected ocean gallery export -2026-10-25
+
+Owner explicitly requested the new top-level gallery/ocean destination and four
+35degree object-enabled images: Flat/Globe at100m and2000m. Copied00143 PNG bytes
+without alteration, verified source manifest hashes, actual height/FOV/visibility,
+native dimensions and destination hashes. Added folder README with links/texture
+credit and provenance.json with complete capture metadata/source identities.
+The explicit owner request authorizes this export outside the experiment output
+root; no source run, image data, production implementation or reference asset was
+modified. No rerender or numerical/B1 claim. Task complete.
+
+Checkpoint adviser recommends this discrete asset export. Preapproved local message:
+
+```text
+feat: publish ocean horizon gallery assets
+
+- export verified Flat and Globe 100m and 2km ocean stills
+- retain provenance, source hashes, and actual render metadata
+- add texture attribution for the published gallery set
+```
+
+Local repository checkpoint only; no external publication or push.
+
+Checkpoint attempt could not stage the completed export: Git reported Permission
+denied writing .git/objects/3d/782aae95094c1e2dc9f2a8590e25ce8cb74d0c for the Globe2km
+PNG. Read-only inspection found filesystem deny entries on the object directory;
+no ACLs were changed. git status confirms the export remains unstaged and no new
+commit was created. All requested gallery files are present and hash-verified;
+only the local checkpoint remains incomplete.
+
+
+## Existing Flat/Globe videos exported -2026-10-25
+
+Owner requested the most recent Flat/Globe videos under gallery/videos. Searched
+repository MP4/WebM/MOV/MKV/M4V files and their owning delivery/status records.
+Selected accepted native Flat v5 final00781/qualification00783, recorded2026-10-11,
+and Globe production P3 full-film run2026-10-07T18-03-00-183Z-film-faa46587-29aa-4146-bfe4-8a87bd170cac,
+with full-film qualification and subsequent authenticated owner acceptance.
+Copied native originals as flat-4k.mp4(187274269bytes,90s) and globe-4k.mp4
+(434736195bytes,60s), both3840x2160/30fps AVC. Streaming copy and destination
+SHA-256 checks match the sealed source manifests. Source qualification results,
+acceptance parents and metadata were authenticated. No new full decode, encoding,
+rendering or source mutation. README/provenance retain scope, original paths,
+selected render-input/qualification/acceptance identities and sizes. These are
+existing observatory films, not GreenSea videos. No closed experiment resumed.
+The preceding Git object-directory permission failure is unchanged; no blind
+retry or filesystem ACL modification was attempted. Requested copies are complete;
+local checkpoint remains pending with the ocean export.
+
+Checkpoint adviser recommends preserving the combined image/video gallery once
+the concrete Git permission failure is resolved. Preapproved pending message:
+
+```text
+feat: publish ocean horizon image and video gallery
+
+- export verified Flat and Globe ocean stills with provenance
+- add authenticated 4K Flat and Globe video renders
+- record source identities, checksums, attribution, and render metadata
+```
+
+No commit or push was made; asset delivery is complete independently of that
+pending repository operation.
+
+## Personal gallery checkpoint scope -2026-10-26
+
+Owner accepted the combined gallery checkpoint message, then selected the entire
+gallery/ folder for personal use after reviewing the two videos' sizes and
+GitHub's regular-file limit. Added /gallery/ to root .gitignore. All image,
+video, README and provenance copies remain intact locally and are excluded from
+the checkpoint. Refreshed current topic records to describe this local scope.
+The checkpoint retains the accepted header and records the exports and ignore
+policy without adding the media to Git. All six media hashes and sizes matched
+their provenance during preparation; bootstrap formatting passed before these
+documentation and ignore-rule edits. No application code, source evidence or
+production behavior changed. No push is authorized.

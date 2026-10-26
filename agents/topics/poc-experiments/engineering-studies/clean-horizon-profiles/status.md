@@ -13,6 +13,27 @@ baseline/candidate comparison requirement. ARM appearance improvements do not
 compensate for a Bruneton regression. No new candidate has been evaluated under
 this newly recorded requirement.
 
+## Existing video gallery export - complete
+
+The owner-requested [gallery/videos](../../../../../gallery/videos/README.md)
+contains the latest accepted complete native films located in this repository:
+Flat v5 native00781(2026-10-11,4K,90s,30fps) and Globe production P3 The Hours
+(2026-10-07,4K,60s,30fps). Exact MP4 copies match their sealed source hashes;
+source qualification/acceptance and render-input identities are retained in
+provenance.json. These predate GreenSea. Original media/evidence are unchanged.
+The requested files are complete and available locally. The owner selected the
+entire gallery/ folder for personal use; root .gitignore excludes its images,
+videos, README files and provenance from Git. The execution log preserves the
+earlier Git permission failure and the subsequent scope decision.
+
+## Selected ocean gallery export - complete
+
+The owner-requested [gallery/ocean](../../../../../gallery/ocean/README.md) contains
+Flat/Globe100m and2000m images at35degree FOV with objects5/6 visible. All four
+PNG copies match00143's authenticated source hashes and native2048x1152 dimensions.
+The folder retains texture credit and full source metadata/provenance. Source
+runs are unchanged. No rendering or production changes were needed.
+
 ## Expanded GreenSea list - complete
 
 [Seven-height gallery](../../../../../tmp/experiments/clean-horizon-profiles/runs/00143-water-heights/index.html) and
