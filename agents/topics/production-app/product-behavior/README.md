@@ -1,10 +1,101 @@
 # Product Behavior
 
-Focus: Selected controls and explicit product backlog.
+Focus: Feature candidates for owner review, selected controls and explicit product backlog.
+
+The implemented Flat32 controls and behavior below belong to the integration
+test bed. Their applicability to the finished app requires a product decision
+under the [application roles](../README.md#application-roles-and-current-status).
+Retained implementation evidence does not select the finished app's UI or features.
+
+## Selected Production-App Behavior
+
+### Location Scope
+
+The owner selected one active location at a time on 2026-10-26. The app opens
+and displays one location; changing location replaces the active location.
+Simultaneous locations in separate in-app tabs, panes or comparison views are
+outside the product scope. This decision does not select the location picker,
+presets, arbitrary-coordinate support or the arrangement of views for that one
+location.
+
+### Workspace And UI Foundation
+
+The owner selected an app-owned workspace without MUI on 2026-10-26. Use an
+app-directed shell with the interactive scene as the main workspace. A compact
+toolbar exposes frequent actions; a collapsible setup panel holds less frequent
+configuration. The scene remains visible while users adjust either set of
+controls.
+
+For create-app, these choices correspond to MUI disabled and the app-directed
+shell. No replacement UI component library is selected. Exact controls, their
+grouping and placement, panel behavior on smaller
+screens, and any tabs within the panel remain to be designed. This decision does
+not select the pending Flat32 feature candidates. The owner subsequently
+authorized the [Flat shell scaffold](../../flat/README.md) using these choices.
+
+### Workspace Composition
+
+Flat uses one persistent application-owned workspace. Its scene area, toolbar
+and setup panel belong to that workspace. App-directed composition does not
+require installable pages or page switching.
+
+Features contribute through application-wide workspace interfaces with defined
+contracts. The workspace hosts those contributions without importing their
+private implementations or identifying concrete features in its own behavior.
+The contributing feature owns its implementation and lifecycle. For the first
+shader integration, the owner selected a page feature, as recorded in the
+[Flat implementation notes](../../flat/implementation-notes.md#first-shader-integration).
+The exact extension contract still needs definition before implementation.
+
+Reuse the page-management services supplied by create-app's tab and
+left-navigation options, including contribution registration, selection and
+controller-based mounting. Use those services behind Flat's custom workspace
+without adopting either ready-made navigation UI. The persistent workspace
+continues to own its layout and controls; exact contribution units and service
+adaptations remain to be defined.
+
+A separate create-app option for page management independent of a prescribed
+navigation UI remains a future tooling capability to consider, not a global
+skill change selected for implementation here.
+
+The existing generated page-based starter has not yet been aligned with this
+decision. Its existing management services are the starting point for reuse;
+the scaffold options below record what was generated.
+
+### Scaffold Capabilities
+
+The owner completed the create-app choices on 2026-10-26:
+
+| Capability | Selection |
+| --- | --- |
+| Application display name | Flat |
+| Application slug | flat |
+| Standalone, composed and configured mount | /flat |
+| Initial page | Workspace |
+| Database persistence | No |
+| Strict accessibility mode | No |
+| Localization | Yes |
+| App-owned server router | Yes |
+| Default page routing | Yes |
+| Localized Markdown | No |
+| Socket.IO | No |
+| Unit/UI testing | Yes |
+| Coverage reporting | No |
+
+Together with the selected app-directed shell, MUI disabled and the repository's
+[discoverable deployment posture](../README.md#deployment-posture), these values
+complete the create-app options. Localization applies to UI text; localized
+Markdown is not included. These shell choices do not select the pending product
+feature candidates. The owner authorized create-app to generate the shell with
+these options; the [Flat app entry](../../flat/README.md) owns scaffold status.
+
+## Retained Integration-Test-Bed Status
 
 Stage 11.1-11.3 and parts of 11.4-11.6 are implemented. Remaining interaction/migration/reconciliation work and 11.8 acceptance are owner-deferred. Compatible-clock animation is now owned by [Production MVP requirement M1](../mvp/requirements.md#m1--compatible-time-and-location-animation).
 
 ## Working Documents
+
+- [Flat32 feature review](flat32-feature-review.md) - Source-backed candidates for possible inclusion or adaptation; all decisions and MVP dispositions remain pending.
 
 - [Center on Sun](center-on-sun.md) - Aim the retained camera at the Sun in the published scene.
 

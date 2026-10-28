@@ -1,0 +1,10 @@
+{
+	"app.title": "Initial setup for a polylith project",
+	"app.pages.empty": "No pages registered",
+	"app.pages.not-found": "Page not found",
+	"app.navigation.label": "Application pages",
+	"app.navigation.collapse": "Collapse navigation",
+	"app.navigation.expand": "Expand navigation",
+	"app.navigation.open": "Open navigation",
+	"workspace.title": "Workspace"
+}

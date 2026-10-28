@@ -6,7 +6,11 @@ Related owners: [architecture-contracts](../../production-algorithm32/architectu
 
 ### 11. Integrate `flat32`
 
-Status: sufficient for immediate application use. Stage 9.6 is complete and
+Scope: retained integration-test-bed migration work under the
+[application roles](../README.md#application-roles-and-current-status). This plan
+does not build or authorize deployment of the finished production app.
+
+Status: sufficient for immediate integration testing. Stage 9.6 is complete and
 no longer blocks this work. Stages 11.1, 11.2, and 11.3 are complete; the
 implemented portions of 11.4 through 11.6 provide the current Flat32
 application behavior. The user has deferred every remaining Flat32 migration,

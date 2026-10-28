@@ -1,6 +1,8 @@
 # Measured Clean Horizon Profiles Experiment
 
-Status: all ten ARM-informed San Jose scene conditions are rendered, with matched
+Status: suspended by the owner on2026-10-26. Resume only after explicit owner
+selection; [status](status.md#suspension-and-resumption-boundary) owns the handoff.
+All ten ARM-informed San Jose scene conditions are rendered, with matched
 Bruneton comparisons and targeted uncertainty images. Selected reference checks
 expose unresolved numerical errors, especially sunset500m. This is an illustrative
 reconstruction result; production is unchanged. The completed58/76-height test

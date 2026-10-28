@@ -4,6 +4,11 @@ Focus: Application attachment, lifecycle, state, and asset delivery.
 
 Related owners: [product-behavior](../product-behavior/flat32-migration-inventory.md).
 
+Scope: this inventory describes the Flat32 integration test bed and its earlier
+Stage 11 migration. The [application roles](../README.md#application-roles-and-current-status)
+own the distinction from the finished deployable app. Existing owner maps and
+verification do not prescribe the finished application's source structure.
+
 ## Source And Local Baseline
 
 The application-behavior source inspected for this inventory is:

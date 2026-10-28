@@ -10,7 +10,8 @@
 		"*.d.ts",
 		"../../../src/algorithm32/**/*.d.ts",
 		"../../../src/flat32/**/*.d.ts",
-		"../../../server/flat32/**/*.d.ts"
+		"../../../server/flat32/**/*.d.ts",
+		"../../../server/common/**/*.d.ts"
 	],
 	"exclude": ["**/_tests/**", "../../../node_modules/**"]
 }

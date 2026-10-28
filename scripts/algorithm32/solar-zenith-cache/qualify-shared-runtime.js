@@ -1,12 +1,13 @@
 import {randomUUID, randomBytes} from 'node:crypto';
 import {createReadStream} from 'node:fs';
 import {stat} from 'node:fs/promises';
+import {Registry} from '@polylith/core';
 import {PolylithServer} from '@polylith/server';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import puppeteer from 'puppeteer';
 import express from 'express';
-import registerFlat32Routes from '../../../server/flat32-router.js';
+import registerFlat32Routes from '../../../server/flat32/index.js';
 import {rollup} from 'rollup';
 import {nodeResolve} from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
@@ -70,7 +71,8 @@ const profile = await files.directory(`${run}/browser-profile`);
 const sourcePath = 'scripts/algorithm32/solar-zenith-cache/DistantSunSharedRuntimeQualificationBrowser.js';
 const prefix = `/${randomBytes(18).toString('hex')}/`;
 const productionRouter = express();
-if (rollout) await registerFlat32Routes(null, productionRouter, {getRouterRoot: () => prefix.slice(0, -1)});
+if (rollout)
+	await registerFlat32Routes(null, productionRouter, {getRouterRoot: () => prefix.slice(0, -1)}, new Registry());
 const shared = await new SharedService(
 	await files.resolve(parent),
 	/** @type {DistantSunSolarInterpolationMethod} */ (solarInterpolation),
@@ -240,7 +242,24 @@ for (const name of [
 for (const source of [
 	'server/flat32/features/shared-cache/DistantSunSharedCachePackageService.js',
 	'server/flat32/features/shared-cache/selection.js',
-	'server/flat32-router.js',
+	'server/flat32/index.js',
+	'server/flat32/registry.js',
+	'server/flat32/services/routers.js',
+	'server/flat32/features/index.js',
+	'server/flat32/features/shared-cache/index.js',
+	'server/flat32/features/shared-cache/shared-cache.js',
+	'server/flat32/features/stellar-catalog/index.js',
+	'server/flat32/features/stellar-catalog/stellar-catalog.js',
+	'server/flat32/features/human-vision/index.js',
+	'server/flat32/features/human-vision/human-vision.js',
+	'server/flat32/common/LocalAssetPackage.js',
+	'server/flat32/routing/main-router.js',
+	'server/flat32/routing/HttpResponse.js',
+	'server/flat32/routing/shared-cache-router.js',
+	'server/flat32/routing/stellar-catalog-router.js',
+	'server/flat32/routing/human-vision-router.js',
+	'server/setup-deployment.js',
+	'package-lock.json',
 	'dist/flat32/shared-cache-worker.js',
 ]) {
 	const bytes = await files.read(source);

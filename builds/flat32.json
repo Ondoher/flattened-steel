@@ -4,7 +4,8 @@
 	"source": "src/flat32",
 	"index": "src/flat32/index.js",
 	"spec": "src/flat32/spec.js",
-	"router": "server/flat32-router.js",
+	"router": "server/flat32/index.js",
+	"routerRoot": "/flat32",
 	"template": {
 		"source": "src/flat32/templates/index.html",
 		"destination": "dist/flat32/index.html"

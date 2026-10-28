@@ -1,8 +1,6 @@
 import {registry} from '@polylith/core';
 import '@polylith/features';
 import '@polylith/config';
-import main from './main/main';
+import './main/main.jsx';
 
 await registry.start();
-
-main();

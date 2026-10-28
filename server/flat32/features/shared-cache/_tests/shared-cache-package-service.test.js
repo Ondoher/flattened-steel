@@ -6,7 +6,8 @@ import Service from '../DistantSunSharedCachePackageService.js';
 import express from 'express';
 import {existsSync} from 'node:fs';
 import {createHash, randomUUID} from 'node:crypto';
-import registerFlat32Routes from '../../../../flat32-router.js';
+import registerFlat32Routes from '../../../index.js';
+import {Registry} from '@polylith/core';
 import {
 	createProductionSharedCacheService,
 	SHARED_PACKAGE_ROOT,
@@ -90,7 +91,7 @@ test('production asset startup failures retain server diagnostics and return opa
 		process.env.FLAT32_HUMAN_VISION_FILTER_ROOT = missingRoot;
 		console.error = (...values) => diagnostics.push(values);
 		const app = express();
-		await registerFlat32Routes(app, app, {getRouterRoot: () => ''});
+		await registerFlat32Routes(app, app, {getRouterRoot: () => ''}, new Registry());
 		server = app.listen(0, '127.0.0.1');
 		await new Promise((resolve) => server.once('listening', resolve));
 		const origin = `http://127.0.0.1:${server.address().port}`;
@@ -129,7 +130,7 @@ test(
 	{skip: !existsSync(path.join(SHARED_PACKAGE_ROOT, 'package-set.json'))},
 	async () => {
 		const app = express();
-		await registerFlat32Routes(app, app, {getRouterRoot: () => ''});
+		await registerFlat32Routes(app, app, {getRouterRoot: () => ''}, new Registry());
 		const server = app.listen(0, '127.0.0.1');
 		await new Promise((resolve) => server.once('listening', resolve));
 		const origin = `http://127.0.0.1:${server.address().port}`;

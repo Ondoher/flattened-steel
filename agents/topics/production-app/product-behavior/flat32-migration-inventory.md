@@ -4,6 +4,11 @@ Focus: Selected controls and explicit product backlog.
 
 Related owners: [runtime-integration](../runtime-integration/flat32-migration-inventory.md).
 
+Scope: these classifications and migration outcomes describe the Flat32
+integration test bed. The [application roles](../README.md#application-roles-and-current-status)
+own the finished-app boundary; these controls and proposed interactions are not
+automatically selected product requirements.
+
 ## Behavior Classification
 
 ### Required in 11.2

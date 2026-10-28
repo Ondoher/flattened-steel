@@ -1,6 +1,11 @@
 # poc-flat32
 
-Explore application interactions and inspect appearance candidates before a product decision. Existing supported Flat32 implementation remains production-app. No active standalone integration prototype is allocated; no empty prototype project was created.
+Explore application interactions and inspect appearance candidates before a
+product decision. Existing Flat32 is the temporary JavaScript integration test
+bed described by [application roles](../production-app/README.md#application-roles-and-current-status).
+Its integration contracts and evidence remain under production-app/runtime-integration.
+These exploratory topics do not allocate another prototype or select the
+finished app's behavior.
 
 ## Focus Areas
 

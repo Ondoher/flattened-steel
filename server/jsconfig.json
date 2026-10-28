@@ -1,0 +1,18 @@
+{
+	"compilerOptions": {
+		"allowJs": true,
+		"maxNodeModuleJsDepth": 0,
+		"checkJs": true,
+		"noEmit": true,
+		"module": "NodeNext",
+		"moduleResolution": "NodeNext",
+		"target": "ES2022",
+		"types": ["node"],
+		"baseUrl": ".",
+		"paths": {"@polylith/core": ["./polylith-core.d.ts"]},
+		"skipLibCheck": true,
+		"strict": false
+	},
+	"include": ["**/*.js", "**/*.d.ts", "../src/flat32/types.d.ts", "../src/algorithm32/**/*.d.ts"],
+	"exclude": ["**/_tests/**", "**/spec.js", "../node_modules/**"]
+}

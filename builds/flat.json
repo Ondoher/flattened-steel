@@ -4,19 +4,13 @@
 	"source": "src/flat",
 	"index": "src/flat/index.js",
 	"spec": "src/flat/spec.js",
+	"testDest": "tests/flat",
+	"router": "server/flat/index.js",
+	"routerRoot": "/flat",
 	"template": {
 		"source": "src/flat/templates/index.html",
 		"destination": "dist/flat/index.html"
 	},
-	"testDest": "tests/flat",
-	"resources": [
-		{
-			"dest": "images",
-			"cwd": "images",
-			"glob": "**/*.{png,jpg,gif,svn}",
-			"keepNest": true
-		}
-	],
 	"css": [
 		{
 			"dest": "styles",
@@ -24,5 +18,9 @@
 			"glob": "**/*.css",
 			"keepNest": true
 		}
+	],
+	"features": [
+		"features/app",
+		"features/workspace"
 	]
 }

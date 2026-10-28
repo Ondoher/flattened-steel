@@ -77,6 +77,40 @@ Standards:
 
 - [server.md](../../../../../Users/gande/.codex/documentation/standards/server.md) - HTTP ingress, transport, filesystem service, and failure boundaries.
 
+### `app-flat-browser`
+
+Extends: none
+Standards:
+
+- [documentation.md](../../../../../Users/gande/.codex/documentation/standards/documentation.md) - Applies to Flat.
+- [project-foundation.md](../../../../../Users/gande/.codex/documentation/standards/project-foundation.md) - Applies to Flat.
+- [architecture.md](../../../../../Users/gande/.codex/documentation/standards/architecture.md) - Applies to Flat.
+- [code-conventions.md](../../../../../Users/gande/.codex/documentation/standards/code-conventions.md) - Applies to Flat.
+- [types.md](../../../../../Users/gande/.codex/documentation/standards/types.md) - Applies to Flat.
+- [jsdoc.md](../../../../../Users/gande/.codex/documentation/standards/jsdoc.md) - Applies to Flat.
+- [polylith.md](../../../../../Users/gande/.codex/documentation/standards/polylith.md) - Applies to Flat.
+- [react.md](../../../../../Users/gande/.codex/documentation/standards/react.md) - Applies to Flat.
+- [remvc.md](../../../../../Users/gande/.codex/documentation/standards/remvc.md) - Applies to Flat.
+- [app-shells.md](../../../../../Users/gande/.codex/documentation/standards/app-shells.md) - Applies to Flat.
+- [localization.md](../../../../../Users/gande/.codex/documentation/standards/localization.md) - Applies to Flat.
+- [testing.md](../../../../../Users/gande/.codex/documentation/standards/testing.md) - Applies to Flat.
+
+### `app-flat-server`
+
+Extends: none
+Standards:
+
+- [documentation.md](../../../../../Users/gande/.codex/documentation/standards/documentation.md) - Applies to Flat.
+- [project-foundation.md](../../../../../Users/gande/.codex/documentation/standards/project-foundation.md) - Applies to Flat.
+- [architecture.md](../../../../../Users/gande/.codex/documentation/standards/architecture.md) - Applies to Flat.
+- [code-conventions.md](../../../../../Users/gande/.codex/documentation/standards/code-conventions.md) - Applies to Flat.
+- [types.md](../../../../../Users/gande/.codex/documentation/standards/types.md) - Applies to Flat.
+- [jsdoc.md](../../../../../Users/gande/.codex/documentation/standards/jsdoc.md) - Applies to Flat.
+- [polylith.md](../../../../../Users/gande/.codex/documentation/standards/polylith.md) - Applies to Flat.
+- [localization.md](../../../../../Users/gande/.codex/documentation/standards/localization.md) - Applies to Flat.
+- [server.md](../../../../../Users/gande/.codex/documentation/standards/server.md) - Applies to Flat.
+- [testing.md](../../../../../Users/gande/.codex/documentation/standards/testing.md) - Applies to Flat.
+
 ## Folder Assignments
 
 - `.` - `build` - Root package, Polylith, build, and runner configuration.
@@ -87,9 +121,9 @@ Standards:
 - `archives/` - `base` - Immutable historical evidence; mapping never authorizes edits.
 - `src/` - `code` - Shared authored implementation and contracts.
 - `src/algorithm32/implementation/react-three/` - `react-library` - Production React and R3F bindings inside the standalone engine.
-- `src/flat/` - `react-application` - React Polylith application.
 - `src/flat32/` - `http-application` - Polylith application with imperative DOM and client HTTP package loading.
 - `server/` - `server` - Polylith router and filesystem-backed application services.
+- `server/flat32/` - `server` - App-owned integration-test-bed services, transport adapters, lifecycle and tests.
 - `server/flat32/data/` - `base` - Operational asset documentation and immutable scientific packages, not database entities.
 - `scripts/` - `code` - Offline tooling and independent scientific runners.
 - `scripts/algorithm32/solar-zenith-cache/` - `proof-tools` - Offline compiler and local HTTP browser proof hosts.
@@ -97,6 +131,8 @@ Standards:
 - `scripts/experiments/b1-directional-sky-radiance/` - `proof-tools` - Independent scoring and GPU HTTP proof host.
 - `scripts/experiments/algorithm32-frame-parity/` - `proof-tools` - Independent CPU/GPU frame comparison and HTTP proof hosts.
 - `experiments/` - `experiment` - Experiments retain types.md guidance and local type checking; deeper assignments may add standards but do not activate dedicated reviewers or audits.
+- `src/flat/` - `app-flat-browser` - Owning Flat browser source.
+- `server/flat/` - `app-flat-server` - Owning Flat server source.
 
 ## Repository Overlay
 

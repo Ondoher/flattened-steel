@@ -1,7 +1,18 @@
-# `flat32` Application Migration
+# `flat32` Integration Test Bed
+
+This temporary JavaScript application tests integration with the production
+Algorithm32 engine. It will not be deployed as the finished production app.
+[Application roles](../../agents/topics/production-app/README.md#application-roles-and-current-status)
+own the product boundary; the implementation and verification details below
+describe the integration host.
+
+The [server integration owner](../../agents/topics/production-app/runtime-integration/server-integration.md)
+records the current Polylith startup, independent server registry, feature-owned
+package services and HTTP adapters. The build mounts server/flat32/index.js at
+/flat32; repository deployment setup supplies the explicit installation registry.
 
 The strobing promotion's [release](../../agents/topics/production-algorithm32/caches/distant-sun-strobing-release.md)
-owns the deployed Native48/cubic/P2/FP32 selection, target qualification and
+owns the integration host's Native48/cubic/P2/FP32 selection, target qualification and
 compatible P9/linear rollback. P9 and Basic Bruneton remain explicit controls.
 
 This directory contains the runnable Stage 11 application and the completed
@@ -63,7 +74,7 @@ then resolves the latter through the document-relative
 is `/flat32/api/distant-sun-scene-cache`; returned immutable files live below
 `/flat32/scene-caches/`. The server validates the package report and catalog
 hash once, and the browser independently validates every selected manifest and
-payload. Set `FLAT32_DISTANT_SUN_CACHE_ROOT` to the deployed package-set root;
+payload. Set `FLAT32_DISTANT_SUN_CACHE_ROOT` to the locally served package-set root;
 local omission selects the qualified generated package set at
 `server/flat32/data/one-degree-bin-covered-runtime-packages-20260830-1`.
 

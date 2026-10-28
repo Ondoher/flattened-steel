@@ -1,21 +1,25 @@
 {
-    "apps": [
-        {
-            "name": "flat",
-            "filename": "flat.json",
-            "code": false,
-            "default": false
-        },
-        {
-            "name": "flat32",
-            "filename": "flat32.json",
-            "code": false,
-            "default": false
-        }
-    ],
-    "builds": "builds",
-    "dest": "dist",
-    "multiple": false,
-    "react": true,
-    "src": "src"
+	"apps": [
+		{
+			"name": "flat32",
+			"mount": "/flat32",
+			"filename": "flat32.json",
+			"code": false,
+			"default": false
+		},
+		{
+			"name": "flat",
+			"filename": "flat.json",
+			"default": false,
+			"mount": "/flat"
+		}
+	],
+	"deployment": {
+		"setup": "server/setup-deployment.js"
+	},
+	"builds": "builds",
+	"dest": "dist",
+	"multiple": true,
+	"react": true,
+	"src": "src"
 }

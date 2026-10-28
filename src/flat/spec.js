@@ -1,1 +1,11 @@
-import '@polylith/tests';
+import '../../karma-browser-setup.js';
+import './main/_tests/AppStartupSpec.js';
+import './services/_tests/AppContextSpec.js';
+import './services/_tests/IoSpec.js';
+import './services/_tests/AppPagesSpec.js';
+import './features/app/_tests/AppControllerSpec.js';
+import './features/app/_tests/AppViewSpec.js';
+import './features/app/_tests/AppShellSpec.js';
+import './features/workspace/_tests/PageFeatureSpec.js';
+import './services/_tests/LocalizeSpec.js';
+import './services/_tests/UrlSpec.js';

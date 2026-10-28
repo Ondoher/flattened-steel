@@ -2,9 +2,16 @@
 
 Focus: Application attachment, lifecycle, state, and asset delivery.
 
-The supported Flat32 application owns engine attachment, atomic replacement, asset resolution, and renderer integration. It is production work, not a POC based on its name.
+Flat32 exercises engine attachment, atomic replacement, asset resolution and
+renderer integration as the temporary JavaScript integration test bed. The
+[application roles](../README.md#application-roles-and-current-status) distinguish
+this host from the future deployable app and the production Algorithm32 engine.
+The documents below retain integration contracts and evidence; they do not
+establish the finished application's implementation or deployment.
 
 ## Working Documents
+
+- [Server integration](server-integration.md) - Current Polylith 1.3 deployment setup, app registry, feature routers, retained endpoints and verification limits.
 
 - [Production Ambient-Light Design](ambient-light-design.md)
 - [`flat32` Stage 11 Migration Inventory](flat32-migration-inventory.md)

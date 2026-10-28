@@ -1,6 +1,9 @@
 # ARM-Informed San Jose Scene Plan
 
-State: the requested10-condition image matrix and targeted uncertainty renders are
+State: execution suspended by the owner on2026-10-26; the retained sequence is
+inactive until owner-selected resumption under the
+[status](status.md#suspension-and-resumption-boundary). The requested10-condition
+image matrix and targeted uncertainty renders are
 complete under independent execution authorized on2026-10-24. S1 is complete;
 S2/S3 deliver pilot evidence and a functioning illustrative adapter, with the
 registered optical accuracy targets not fully met. S4 images and S5

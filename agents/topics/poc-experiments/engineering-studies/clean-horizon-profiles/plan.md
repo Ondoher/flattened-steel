@@ -1,9 +1,11 @@
 # Measured Clean Horizon Profiles Plan
 
-State: independent execution authorized on 2026-10-24; the bounded M1 investigation
+State: execution suspended by the owner on2026-10-26. The
+[status](status.md#suspension-and-resumption-boundary) owns resumption authority.
+The earlier independent execution was authorized on2026-10-24; the bounded M1 investigation
 concluded with partial/inconclusive input qualification. [Results](results.md)
 record the gate: no complete ambient profile qualified, so candidate M2 and M3–M4
-were not triggered. The experiment remains selected for owner review.
+were not triggered. The retained plan is inactive until owner-selected resumption.
 
 ## Outcome and baseline
 

@@ -1282,3 +1282,16 @@ policy without adding the media to Git. All six media hashes and sizes matched
 their provenance during preparation; bootstrap formatting passed before these
 documentation and ignore-rule edits. No application code, source evidence or
 production behavior changed. No push is authorized.
+
+## Owner-directed suspension -2026-10-26
+
+Owner suspended Clean Horizon Profiles while keeping the future production app
+discussion-only. Recorded the explicit suspension and focused resumption boundary
+in status.md, marked both retained plans and the entry inactive, and cleared the
+execution-topic selection. Latest accepted evidence remains00143-water-heights.
+Read-only inventory found144 terminal manifests (128accepted,16failed), no
+unsealed runs and no identifiable experiment-owned active processes. No runs,
+artifacts or processes were changed. Manifest/overlay inspection and recorded
+standards provenance identify no temporary configuration to restore; permanent
+experiment mapping and types.md remain. No production implementation, new design
+artifacts, promotion or commit is authorized by the suspension itself.

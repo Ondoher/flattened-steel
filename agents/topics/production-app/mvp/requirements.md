@@ -6,6 +6,12 @@ This document is the canonical owner for production work deliberately deferred
 from the current Algorithm32 compiler, benchmark, and release-closeout path but
 still required before the first MVP can be declared complete.
 
+The [application roles](../README.md#application-roles-and-current-status)
+distinguish the future deployable app from the Flat32 integration test bed.
+Flat32 can supply engine and integration evidence for these requirements; it is
+not the finished MVP deployment target. These requirements remain recorded and
+do not by themselves define the finished app's product experience.
+
 ## M1 — Compatible Time And Location Animation
 
 Both supported geometry/source families must animate time and location through

@@ -47,10 +47,8 @@ if ((await realpath(outputDirectory)) !== outputDirectory || (await lstat(output
 const sourceTargets = [
 	path.join(repositoryRoot, 'src', 'algorithm32'),
 	path.join(repositoryRoot, 'src', 'flat32'),
-	path.join(repositoryRoot, 'server', 'flat32', 'DistantSunSceneCachePackageService.js'),
-	path.join(repositoryRoot, 'server', 'flat32', 'StellarCatalogPackageService.js'),
-	path.join(repositoryRoot, 'server', 'flat32', 'HumanVisionFilterPackageService.js'),
-	path.join(repositoryRoot, 'server', 'flat32-router.js'),
+	path.join(repositoryRoot, 'server', 'flat32'),
+	path.join(repositoryRoot, 'server', 'setup-deployment.js'),
 ];
 const files = (await Promise.all(sourceTargets.map((target) => collectFiles(target, repositoryRoot)))).flat().sort();
 const forbiddenPatterns = [/scripts[\\/]extraterrestrial/iu, /tmp[\\/]extraterrestrial/iu, /poly-gc-react/iu];

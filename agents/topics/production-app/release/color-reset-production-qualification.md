@@ -56,8 +56,12 @@ or redistribution claims.
 
 ## Deployment Inventory
 
-Tracked deployment code comprises `src/algorithm32`, `src/flat32`, the Flat32
-router and package services, and the ordinary Flat32 build output. Runtime
+The qualified integration surface comprises `src/algorithm32`, `src/flat32`,
+the Flat32 router and package services, and the ordinary Flat32 build output.
+Under the [application roles](../README.md#application-roles-and-current-status),
+Flat32 remains a local integration test bed and will not be deployed as the
+finished app. This inventory retains the engineering qualification boundary;
+it is not the finished application's deployment manifest. Runtime
 must not import `experiments/extraterrestrial`, `tmp/extraterrestrial`, or the
 external comparison repository.
 

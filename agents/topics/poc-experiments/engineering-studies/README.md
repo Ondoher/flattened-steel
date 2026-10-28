@@ -28,12 +28,12 @@ Other lanes retain their own dispositions.
 - [Sky Cache Angular Quadrature Experiment](sky-angular-quadrature/README.md)
 - [Local-Sun Cache Reuse Experiment](local-sun-cache-reuse/README.md)
 - [Predictable Sky Accuracy Dials](sky-accuracy-dials/README.md)
-- [Point-Local Cache Builder Experiment](point-local-cache-builder/README.md)
+- Point-Local Cache Builder Experiment — closed and archived; resolve its retired paths through the [local archive locator](../../../../archive/README.md).
 - [Shared Cache Calculation Reuse Experiment](00000-shared-cache-calculation-reuse/README.md)
 - [Algorithm32 Cache Interface Design](cache-design.md)
 - [Closed Lanes And Unselected Studies](closed-lanes-and-candidates.md)
 - [Distant-Sun Cache Optimization Experiment](distant-sun-cache-optimization/README.md)
-- [Distant-Sun Recording Strobing Experiment](distant-sun-recording-strobing/README.md)
+- Distant-Sun Recording Strobing Experiment — closed and archived; resolve its retired paths through the [local archive locator](../../../../archive/README.md).
 - [Distant-Sun Shadow Animation Evidence Experiment](distant-sun-shadow-animation-evidence/README.md)
 - [Extraterrestrial Experiment Promotions](extraterrestrial-promotions.md)
 - [Retained Algorithm32 Experiment Definitions](retained-experiments.md)

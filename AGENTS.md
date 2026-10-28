@@ -208,6 +208,15 @@ must never alter or reopen them and must not import a contained experiment at
 runtime. `C:\dev\poly-gc-react` remains a read-only comparison surface and may
 not become a runtime dependency.
 
+Owner-authorized experiment archiving is a narrow exception to that comparison
+surface's read-only rule: selected experiment-owned legacy files and archive
+containers in `C:\dev\poly-gc-react` may be removed after their exact bytes are
+preserved in a fully verified new archive under `D:\flattened-steel\archive`.
+Preserve complete original ZIP-container bytes before removing an old ZIP, not
+only some extracted members. Keep externally consumed files in place and record
+their reconciliation follow-up. Dry runs remain read-only. This authorizes no
+unrelated application edits, blanket repository removal or runtime dependency.
+
 For contained experiment work, implementation and generated-output writes
 remain restricted to the source and output roots declared by that experiment's
 local instructions and design. For the active production promotion, ordinary

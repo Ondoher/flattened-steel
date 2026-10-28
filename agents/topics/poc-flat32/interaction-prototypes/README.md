@@ -2,7 +2,7 @@
 
 Focus: Unselected control and quality-selection interactions.
 
-Quality-selection interaction is retained as unselected prototype context, not a new production feature or an authorized experiment. Current Flat32 behavior remains in production-app.
+Quality-selection interaction is retained as unselected prototype context, not a new production feature or an authorized experiment. Current Flat32 integration-test-bed behavior is documented in production-app under its [application roles](../../production-app/README.md#application-roles-and-current-status).
 
 ## Working Documents
 

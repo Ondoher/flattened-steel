@@ -1,8 +1,57 @@
 # Measured Clean Horizon Profiles Experiment Status
 
-Status: requested illustrative scene campaign complete, with reference limitations.
-The experiment remains selected for owner review, with no production promotion
-or automatic closure. Earlier M1 measured-profile qualification is inconclusive.
+Status: suspended by the owner on2026-10-26. The requested illustrative scene
+campaign is complete, with reference limitations. No experiment execution or
+production promotion is selected. Earlier M1 measured-profile qualification is
+inconclusive. Resume only after explicit owner selection.
+
+## Suspension and resumption boundary
+
+Latest accepted milestone:00143-water-heights, the seven-height Flat/Globe gallery
+with20/35degree views and original objects5/6. Its manifest SHA-256 is
+`b4720378856242c6c1f6a2902a0efad6b5e8e456b532b5529530609857fb8875`.
+[Scene results](scene-results.md#expanded-greensea-gallery-with100m-and2km) own its
+conditions, derivation and verification; the linked sections below retain the
+earlier ARM-informed scene and spherical-reference findings and their limits.
+
+Source remains under experiments/clean-horizon-profiles/; all144 run directories
+remain under tmp/experiments/clean-horizon-profiles/runs/. Read-only suspension
+inventory found128 accepted and16 failed manifests, with none missing or
+nonterminal. No run was interrupted, reopened, modified or newly allocated.
+No identifiable experiment-owned runner, browser, server or encoder process was
+found by command-line inspection, so no process was terminated. Untagged processes
+were left untouched. Personal exports remain intact in ignored gallery/.
+
+Next unconsumed task: none queued. The owner must select this experiment and a
+specific follow-on before execution resumes. Preserve the inactive plans and all
+unresolved reference, reconstruction and numerical-accuracy limitations; no
+accepted numerical fix or production adoption is claimed. The Bruneton
+non-regression requirement below continues to govern any future accepted fix.
+
+For owner-selected resumption, reload root AGENTS.md, experiment AGENTS.md,
+README.md, design.md, scene-plan.md and this status, in that order. Then load only
+the scene-results sections and immutable parent artifacts needed for the selected
+task. Recheck current source, physical/profile/cache/display identities, tools,
+run allocation and real-path boundaries, applicable folder standards and parent
+hashes before reuse. Do not repeat completed downloads or builds without changed
+inputs. Preserve the complete derivation chain and write derivatives into new runs.
+
+Standards restoration: none required. Current manifest/overlay agree with the
+recorded permanent experiments/ -> experiment mapping (base plus types.md); no
+experiment-specific set, deeper assignment or temporary overlay exists. Nothing
+was removed or deactivated, and no temporary entries need reinstatement. Folder
+resolution for experiment, topic and representative production paths passed.
+The generated standards guide is refreshed during this handoff. Dedicated
+experiment reviewers and audits remain disabled; checkpoint monitoring stays
+active. No standards-compliance result is asserted.
+
+Handoff: the experiment remains inactive; [active topic](../../../active-topic.md)
+owns the current work selection. The future production app is discussion only,
+as far as this suspension is concerned. Later owner-authorized work is selected
+through the active topic; this handoff itself grants no implementation scope. Production
+topic-refresh and destination reviewer initialization apply before any later
+production implementation; no production reviewer startup is needed for this
+experiment suspension.
 
 ## Acceptance requirement for subsequent changes
 
@@ -272,7 +321,8 @@ Noon/sunset/noon and5m/40km/5m transitions match fresh-state captures within one
 Final verification00057 is accepted:11,060 artifacts rehashed, gallery modes and
 time filters checked in a real browser, local authored types passed. Earlier M1 evidence and failed attempts remain immutable.
 
-The owner may compare the gallery and choose any follow-on. No production cache,
+The owner may compare the gallery and explicitly select resumption and a follow-on.
+No production cache,
 profile or display changed; no promotion is proposed from unresolved accuracy.
 Do not repeat downloads or completed cache builds without changed inputs.
 [Execution log](execution-log.md) owns decisions and local checkpoints.

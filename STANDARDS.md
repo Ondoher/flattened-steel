@@ -10,10 +10,10 @@
 - Repository overlay: [`agents/topics/standards/overlay.md`](./agents/topics/standards/overlay.md)
 - Standards governance: [`documentation.md`](https://github.com/Ondoher/polylith-skills/blob/main/documentation/standards/documentation.md)
 - First normalized: `2026-09-11T23:19:47.480Z`
-- Repository standards configuration fingerprint: `sha256:7a813af0df3914dcb454b6698344559d3519440af4811c54d2f1f8bcc17ef7f4`
+- Repository standards configuration fingerprint: `sha256:a61b659a53b60c96d448f4d29337ea05f9712495ebc4d538808b2040ed98be9e`
 - Local standards overlay fingerprint: `sha256:5b28310018e8c1276d1c6b6dbfe3bc0c731c4a7f2f44b6d68b68fdf9e7b04dd9`
-- Selected canonical standards fingerprint: `sha256:903b801f67640b1c060ee503085aa7fa81cdd31b91f8d6f34dceccc21b5f2a8d`
-- Guide source fingerprint: `sha256:fe95bfd9de052a017564398175fa8bd4f34ce6f36f3ace8e1a7cf53f8ccbe4ff`
+- Selected canonical standards fingerprint: `sha256:cc89a9897f810d545786c729e656657bc6497d56f7e4532f71221c897765a05e`
+- Guide source fingerprint: `sha256:e99bd76c15ae7bfbc25da8d3751c0fd183fe534d0fb5720fb77e3b088c70ccd7`
 
 For each file, the longest matching folder assignment selects one named standards set. The set includes its inherited canonical standards, then matching folder-scoped overlay rules modify specific sections. This file is a readable projection only.
 
@@ -106,6 +106,42 @@ Adds:
 
 - [`server.md`](https://github.com/Ondoher/polylith-skills/blob/main/documentation/standards/server.md) — HTTP ingress, transport, filesystem service, and failure boundaries.
 
+### `app-flat-browser`
+
+Extends: `none`
+
+Adds:
+
+- [`documentation.md`](https://github.com/Ondoher/polylith-skills/blob/main/documentation/standards/documentation.md) — Applies to Flat.
+- [`project-foundation.md`](https://github.com/Ondoher/polylith-skills/blob/main/documentation/standards/project-foundation.md) — Applies to Flat.
+- [`architecture.md`](https://github.com/Ondoher/polylith-skills/blob/main/documentation/standards/architecture.md) — Applies to Flat.
+- [`code-conventions.md`](https://github.com/Ondoher/polylith-skills/blob/main/documentation/standards/code-conventions.md) — Applies to Flat.
+- [`types.md`](https://github.com/Ondoher/polylith-skills/blob/main/documentation/standards/types.md) — Applies to Flat.
+- [`jsdoc.md`](https://github.com/Ondoher/polylith-skills/blob/main/documentation/standards/jsdoc.md) — Applies to Flat.
+- [`polylith.md`](https://github.com/Ondoher/polylith-skills/blob/main/documentation/standards/polylith.md) — Applies to Flat.
+- [`react.md`](https://github.com/Ondoher/polylith-skills/blob/main/documentation/standards/react.md) — Applies to Flat.
+- [`remvc.md`](https://github.com/Ondoher/polylith-skills/blob/main/documentation/standards/remvc.md) — Applies to Flat.
+- [`app-shells.md`](https://github.com/Ondoher/polylith-skills/blob/main/documentation/standards/app-shells.md) — Applies to Flat.
+- [`localization.md`](https://github.com/Ondoher/polylith-skills/blob/main/documentation/standards/localization.md) — Applies to Flat.
+- [`testing.md`](https://github.com/Ondoher/polylith-skills/blob/main/documentation/standards/testing.md) — Applies to Flat.
+
+### `app-flat-server`
+
+Extends: `none`
+
+Adds:
+
+- [`documentation.md`](https://github.com/Ondoher/polylith-skills/blob/main/documentation/standards/documentation.md) — Applies to Flat.
+- [`project-foundation.md`](https://github.com/Ondoher/polylith-skills/blob/main/documentation/standards/project-foundation.md) — Applies to Flat.
+- [`architecture.md`](https://github.com/Ondoher/polylith-skills/blob/main/documentation/standards/architecture.md) — Applies to Flat.
+- [`code-conventions.md`](https://github.com/Ondoher/polylith-skills/blob/main/documentation/standards/code-conventions.md) — Applies to Flat.
+- [`types.md`](https://github.com/Ondoher/polylith-skills/blob/main/documentation/standards/types.md) — Applies to Flat.
+- [`jsdoc.md`](https://github.com/Ondoher/polylith-skills/blob/main/documentation/standards/jsdoc.md) — Applies to Flat.
+- [`polylith.md`](https://github.com/Ondoher/polylith-skills/blob/main/documentation/standards/polylith.md) — Applies to Flat.
+- [`localization.md`](https://github.com/Ondoher/polylith-skills/blob/main/documentation/standards/localization.md) — Applies to Flat.
+- [`server.md`](https://github.com/Ondoher/polylith-skills/blob/main/documentation/standards/server.md) — Applies to Flat.
+- [`testing.md`](https://github.com/Ondoher/polylith-skills/blob/main/documentation/standards/testing.md) — Applies to Flat.
+
 ## Folder assignments
 
 - `.` → `build` — Root package, Polylith, build, and runner configuration.
@@ -116,9 +152,9 @@ Adds:
 - `archives/` → `base` — Immutable historical evidence; mapping never authorizes edits.
 - `src/` → `code` — Shared authored implementation and contracts.
 - `src/algorithm32/implementation/react-three/` → `react-library` — Production React and R3F bindings inside the standalone engine.
-- `src/flat/` → `react-application` — React Polylith application.
 - `src/flat32/` → `http-application` — Polylith application with imperative DOM and client HTTP package loading.
 - `server/` → `server` — Polylith router and filesystem-backed application services.
+- `server/flat32/` → `server` — App-owned integration-test-bed services, transport adapters, lifecycle and tests.
 - `server/flat32/data/` → `base` — Operational asset documentation and immutable scientific packages, not database entities.
 - `scripts/` → `code` — Offline tooling and independent scientific runners.
 - `scripts/algorithm32/solar-zenith-cache/` → `proof-tools` — Offline compiler and local HTTP browser proof hosts.
@@ -126,6 +162,8 @@ Adds:
 - `scripts/experiments/b1-directional-sky-radiance/` → `proof-tools` — Independent scoring and GPU HTTP proof host.
 - `scripts/experiments/algorithm32-frame-parity/` → `proof-tools` — Independent CPU/GPU frame comparison and HTTP proof hosts.
 - `experiments/` → `experiment` — Experiments retain types.md guidance and local type checking; deeper assignments may add standards but do not activate dedicated reviewers or audits.
+- `src/flat/` → `app-flat-browser` — Owning Flat browser source.
+- `server/flat/` → `app-flat-server` — Owning Flat server source.
 
 ## Repository-wide additions and replacements
 
