@@ -8,8 +8,9 @@ import phrases from '../phrases/en-US.json';
  */
 export function parsePhraseJson(source) {
 	const value = JSON.parse(source);
-	if (!value || typeof value !== 'object' || Array.isArray(value))
+	if (!value || typeof value !== 'object' || Array.isArray(value)) {
 		throw new SyntaxError('Phrase JSON must contain an object.');
+	}
 	return value;
 }
 /**
@@ -21,16 +22,13 @@ export function parsePhraseJson(source) {
  * @returns {string} - Text with supported replacements applied.
  */
 export function replaceText(value, replacements = {}, escapeHtml = false) {
-	return String(value).replace(/%\{([^}]+)\}/g, (_, name) => {
+	return value.replace(/%\{([^}]+)\}/g, (_, name) => {
 		const replacement = replacements[name];
 		if (replacement === undefined) {
 			console.warn(`Missing replacement: ${name}`);
 			return '';
 		}
-		if (
-			(typeof replacement !== 'string' && typeof replacement !== 'number') ||
-			(typeof replacement === 'number' && !Number.isFinite(replacement))
-		) {
+		if (typeof replacement === 'number' && !Number.isFinite(replacement)) {
 			console.error(`Invalid replacement: ${name}`);
 			return '';
 		}
@@ -101,10 +99,14 @@ export class LocalizeService extends Service {
 		super('localize', registry);
 		this.implement(['start', 'supportsLocale', 'translate', 'replace']);
 	}
-	/** Call this method to initialize the loaded translator collection. */
+
+	/**
+	 * Call this method to initialize the loaded translator collection.
+	 */
 	start() {
 		this.translators = new Map([['en-US', createTranslator('en-US', phrases)]]);
 	}
+
 	/**
 	 * Call this method to determine whether a locale has loaded phrases.
 	 *
@@ -114,6 +116,7 @@ export class LocalizeService extends Service {
 	supportsLocale(locale) {
 		return this.translators.has(locale);
 	}
+
 	/**
 	 * Call this method to resolve a phrase through a loaded translator.
 	 *
@@ -132,6 +135,7 @@ export class LocalizeService extends Service {
 		}
 		return translator(key, replacements, cardinal, escapeHtml);
 	}
+
 	/**
 	 * Call this method to apply phrase-compatible replacements to controlled content.
 	 *

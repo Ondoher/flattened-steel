@@ -43,7 +43,9 @@ test('page routes follow relocated output and mount for static assets and deep-l
 				let stylesheet = await fetch(origin + mount + '/styles/app.css');
 				assert.equal(stylesheet.status, 200);
 				assert.equal(await stylesheet.text(), 'main { display: grid; }');
-				for (let api of ['/api', '/api/missing']) assert.equal((await fetch(origin + mount + api)).status, 404);
+				for (let api of ['/api', '/api/missing']) {
+					assert.equal((await fetch(origin + mount + api)).status, 404);
+				}
 				assert.equal(await (await fetch(origin + '/sibling')).text(), 'sibling');
 			} finally {
 				server.closeAllConnections();

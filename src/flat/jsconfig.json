@@ -5,6 +5,7 @@
 		"noEmit": true,
 		"module": "ESNext",
 		"moduleResolution": "Bundler",
+		"paths": {"@polylith/core": ["./polylith-core.d.ts"]},
 		"jsx": "react-jsx",
 		"resolveJsonModule": true,
 		"allowSyntheticDefaultImports": true,

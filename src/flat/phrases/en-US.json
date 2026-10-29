@@ -1,10 +1,21 @@
 {
-	"app.title": "Initial setup for a polylith project",
+	"app.title": "Flat",
 	"app.pages.empty": "No pages registered",
 	"app.pages.not-found": "Page not found",
 	"app.navigation.label": "Application pages",
 	"app.navigation.collapse": "Collapse navigation",
 	"app.navigation.expand": "Expand navigation",
 	"app.navigation.open": "Open navigation",
-	"workspace.title": "Workspace"
+	"workspace.title": "Workspace",
+	"workspace.view": "View %{number}",
+	"workspace.add-view": "Add second view",
+	"workspace.single-view": "Single view",
+	"workspace.configuration": "Configuration",
+	"workspace.close-view": "Close view",
+	"workspace.close": "Close",
+	"workspace.configuration-for": "Settings for",
+	"workspace.no-settings": "No settings available.",
+	"workspace.no-scene": "No scene selected.",
+	"workspace.choose-scene": "Choose a scene",
+	"workspace.scene-for": "Scene for %{view}"
 }

@@ -29,10 +29,9 @@ describe('app pages', () => {
 		expect(service.getBySlug('missing')).toBeNull();
 		expect(service.getDefault().id).toBe('one');
 	});
-	it('rejects invalid configuration', () => {
+	it('rejects conflicting URL slugs and multiple default pages', () => {
 		const service = new AppPagesService(new Registry());
 		service.start();
-		expect(() => service.add({})).toThrowError(/id/);
 		service.add({id: 'one', urlSlug: 'same', default: true});
 		expect(() => service.add({id: 'two', urlSlug: 'same'})).toThrowError(/Duplicate/);
 		expect(() => service.add({id: 'two', default: true})).toThrowError(/Multiple/);

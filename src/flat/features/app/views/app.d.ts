@@ -1,23 +1,24 @@
-/** Public registry contract implemented by the AppView application service. */
-interface AppView extends EventBus {
+/**
+ * Application presentation supplied through its controller.
+ */
+export interface AppView extends EventBus {
 	/**
-	 * Call this method to read the current application-shell presentation state.
-	 *
-	 * @returns - The getShellState operation result.
+	 * Call this method to release the owned controller update listener.
 	 */
-	getShellState(): AppShellState;
+	stop(): void;
+
 	/**
-	 * Call this method to request that the application select and mount a page.
+	 * Call this method to project canonical context and activated content through the owning controller.
 	 *
-	 * @param pageId - The pageId value required by this operation.
-	 * @returns - The requestPage operation result.
+	 * @returns - Application context and concrete shell presentation.
 	 */
-	requestPage(pageId: string): AppPageRecord | null;
+	getState(): AppPresentationState;
+
 	/**
-	 * Call this method to create the service-owned React presentation.
+	 * Call this method to create the root application presentation bound to this view.
 	 *
-	 * @param props - The props value required by this operation.
-	 * @returns - The getComponent operation result.
+	 * @param props - Optional presentation properties supplied by the executor.
+	 * @returns - Application root element with its initial view projection.
 	 */
-	getComponent(props?: Record<string, unknown>): import('react').ReactElement;
+	getComponent(props?: object): React.ReactElement;
 }

@@ -1,45 +1,86 @@
 import React, {Component} from 'react';
 import AppContext from '../common/AppContext.js';
-/** Root React boundary for generated application context and shell presentation. */
+
+/**
+ * Root presentation consuming only the owning application view.
+ *
+ * @extends {Component<AppRootProps, AppPresentationState>}
+ */
 export default class App extends Component {
 	/**
-	 * Creates the application context boundary.
+	 * Creates local presentation state without locating registry services.
 	 *
-	 * @param {object} props - React properties containing the application registry.
+	 * @param {AppRootProps} props - View-mediated state and capability.
 	 */
 	constructor(props) {
 		super(props);
-		this.registry = props.registry;
-		this.state = {context: this.registry.subscribe('app-context').get()};
-		this.onContextChanged = this.onContextChanged.bind(this);
+		this.state = props.initialState;
+		this._onStateChanged = this._onStateChanged.bind(this);
 	}
-	/** Called by React to subscribe to canonical application-context changes. */
-	componentDidMount() {
-		this.contextService = this.registry.subscribe('app-context');
-		this.contextListener = this.contextService.listen('changed', this.onContextChanged);
-	}
-	/** Called by React to remove the exact application-context listener. */
-	componentWillUnmount() {
-		this.contextService.unlisten('changed', this.contextListener);
-	}
+
 	/**
-	 * Called by the context service to install its latest defensive value.
-	 *
-	 * @param {AppContextValue} context - The next global context value.
+	 * Called by React to bind at the component's own runtime-ready boundary.
 	 */
-	onContextChanged(context) {
-		this.setState({context});
+	componentDidMount() {
+		this._attachView(this.props.appView);
 	}
+
 	/**
-	 * Call this method to render the application context and current shell.
+	 * Called by React to rebind only when the explicit presentation owner changes.
 	 *
-	 * @returns {React.ReactNode} - The application presentation.
+	 * @param {AppRootProps} previous - Previous owner identity.
+	 */
+	componentDidUpdate(previous) {
+		if (previous.appView !== this.props.appView) {
+			this._detachView();
+			this._attachView(this.props.appView);
+		}
+	}
+
+	/**
+	 * Called by React to remove the listener from its original owner.
+	 */
+	componentWillUnmount() {
+		this._detachView();
+	}
+
+	/**
+	 * Called at mount or owner replacement to attach one exact listener.
+	 *
+	 * @param {AppViewService} view - Owning presentation capability.
+	 */
+	_attachView(view) {
+		this._view = view;
+		this._stateListener = view.listen('state-changed', this._onStateChanged);
+		this._onStateChanged(view.getState());
+	}
+
+	/**
+	 * Called at replacement or unmount to release the original registration safely.
+	 */
+	_detachView() {
+		if (this._stateListener) {
+			this._view.unlisten('state-changed', this._stateListener);
+		}
+		this._stateListener = null;
+		this._view = null;
+	}
+
+	/**
+	 * Called by the application view to install a disposable projection.
+	 *
+	 * @param {AppPresentationState} state - Next context and presentation.
+	 */
+	_onStateChanged(state) {
+		this.setState(state);
+	}
+
+	/**
+	 * Call this method to render projected context and content without service calls.
+	 *
+	 * @returns {React.ReactNode} - Application presentation.
 	 */
 	render() {
-		return (
-			<AppContext.Provider value={this.state.context}>
-				{this.registry.subscribe('app-controller').getComponent()}
-			</AppContext.Provider>
-		);
+		return <AppContext.Provider value={this.state.context}>{this.state.presentation}</AppContext.Provider>;
 	}
 }

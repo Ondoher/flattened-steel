@@ -1,4 +1,4 @@
-import type {ComponentType} from 'react';
-/** AppShell React presentation component. */
-declare const AppShell: ComponentType<Record<string, unknown>>;
-export default AppShell;
+/**
+ * Small stateless application presentation wrapper.
+ */
+export default function AppShell(props: AppShellProps): React.ReactElement;

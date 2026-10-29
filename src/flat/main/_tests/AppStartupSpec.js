@@ -10,10 +10,13 @@ describe('application startup', () => {
 			await registry.start();
 			await Promise.resolve();
 		});
+		let workspace = document.querySelector('#main-content .workspace-shell');
+		act(() => registry.fire('ready'));
+		expect(document.querySelector('#main-content .workspace-shell')).toBe(workspace);
 		const context = registry.subscribe('app-context').get();
 		expect(context.registry).toBe(registry);
 		expect(registry.subscribe('app-view')).toBeTruthy();
-		expect(document.getElementById('main-content').textContent).toContain('Workspace');
+		expect(document.getElementById('main-content').textContent).toContain('No scene selected.');
 		act(() => registry.subscribe('app-context').fire('changed', context));
 		act(() => stopApplication());
 		act(() => stopApplication());

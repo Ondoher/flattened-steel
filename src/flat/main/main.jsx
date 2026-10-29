@@ -8,19 +8,22 @@ import '../services/io.js';
 
 import '../services/app-pages.js';
 import '../services/url.js';
-import App from './App.jsx';
 
 let root = null;
 
-/** Call this method to unmount the generated application presentation. */
+/**
+ * Call this method to unmount the generated application presentation.
+ */
 export function stopApplication() {
 	root?.unmount();
 	root = null;
+	registry.subscribe('app-controller')?.stop();
+	registry.subscribe('app-view')?.stop();
 }
 
 registry.listen('ready', () => {
-	const app = <App registry={registry} />;
-	const content = app;
-	root = createRoot(document.getElementById('main-content'));
+	registry.subscribe('app-controller').activate();
+	let content = registry.subscribe('app-view').getComponent();
+	root ??= createRoot(document.getElementById('main-content'));
 	root.render(<React.StrictMode>{content}</React.StrictMode>);
 });

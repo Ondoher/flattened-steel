@@ -17,10 +17,14 @@ export class AppRouter extends Service {
 		super('app-router', registry);
 		this.implement(['ready', 'routes']);
 	}
-	/** Call this method to register the router as the final route owner. */
+
+	/**
+	 * Call this method to register the router as the final route owner.
+	 */
 	ready() {
 		this.registry.subscribe('routers').setLast('app-router');
 	}
+
 	/**
 	 * Call this method to install static assets and the application catch-all route.
 	 *
@@ -33,7 +37,9 @@ export class AppRouter extends Service {
 		let base = `${application.getRouterRoot().replace(/\/$/, '')}/`;
 		router.use(express.static(path.dirname(indexFile), {index: false}));
 		router.get('*', async (request, response, next) => {
-			if (request.path === '/api' || request.path.startsWith('/api/')) return next();
+			if (request.path === '/api' || request.path.startsWith('/api/')) {
+				return next();
+			}
 			try {
 				let document = await readFile(indexFile, 'utf8');
 				let escapedBase = base.replaceAll('&', '&amp;').replaceAll('"', '&quot;');

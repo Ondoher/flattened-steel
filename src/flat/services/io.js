@@ -12,8 +12,16 @@ export class IoService extends Service {
 	 */
 	constructor(registry) {
 		super('io', registry);
-		this.implement(['request']);
+		this.implement(['ready', 'request']);
 	}
+
+	/**
+	 * Call this method after registry readiness to resolve the owning application context.
+	 */
+	ready() {
+		this.context = /** @type {AppContextServiceContract} */ (this.registry.subscribe('app-context'));
+	}
+
 	/**
 	 * Called by request handling to resolve an app-relative route below the document base.
 	 *
@@ -21,10 +29,12 @@ export class IoService extends Service {
 	 * @returns {string} - The resolved request URL.
 	 */
 	resolveUrl(url) {
-		const value = String(url);
-		if (/^[a-z][a-z\d+.-]*:/i.test(value) || value.startsWith('//')) return value;
-		return new URL(value.replace(/^\/+/, ''), document.baseURI).toString();
+		if (/^[a-z][a-z\d+.-]*:/i.test(url) || url.startsWith('//')) {
+			return url;
+		}
+		return new URL(url.replace(/^\/+/, ''), document.baseURI).toString();
 	}
+
 	/**
 	 * Call this method to issue an HTTP request with centrally owned headers.
 	 *
@@ -33,7 +43,7 @@ export class IoService extends Service {
 	 * @returns {Promise<Response | null>} - The response, or null after a transport failure.
 	 */
 	async request(url, options = {}) {
-		const locale = this.registry.subscribe('app-context')?.get?.().locale || 'en-US';
+		const locale = this.context.get().locale;
 		try {
 			return await fetch(this.resolveUrl(url), {
 				...options,

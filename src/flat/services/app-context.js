@@ -2,7 +2,7 @@ import {Service} from '@polylith/core';
 /**
  * Global application-context owner for registry, locale, localization, and accessibility state.
  *
- * @implements {AppContextService}
+ * @implements {AppContextServiceContract}
  */
 export class AppContextService extends Service {
 	/**
@@ -12,18 +12,33 @@ export class AppContextService extends Service {
 	 */
 	constructor(registry) {
 		super('app-context', registry);
-		this.implement(['start', 'get', 'setLocale']);
+		this.implement(['start', 'ready', 'get', 'setLocale']);
 	}
-	/** Call this method to initialize the context with generated feature flags. */
+
+	/**
+	 * Call this method to initialize the context with generated feature flags.
+	 */
 	start() {
 		this.value = {
 			registry: this.registry,
 			locale: 'en-US',
-			localize: this.registry.subscribe('localize'),
+			localize: null,
 			localizationEnabled: true,
 			accessibilityEnabled: false,
 		};
 	}
+
+	/**
+	 * Call this method at dependency readiness to resolve localization and publish a changed context.
+	 */
+	ready() {
+		let localize = this.registry.subscribe('localize') ?? null;
+		if (this.value.localize !== localize) {
+			this.value = {...this.value, localize};
+			this.fire('changed', this.get());
+		}
+	}
+
 	/**
 	 * Call this method to read a defensive application-context value.
 	 *
@@ -32,6 +47,7 @@ export class AppContextService extends Service {
 	get() {
 		return {...this.value};
 	}
+
 	/**
 	 * Call this method to replace the current locale when its phrases are loaded.
 	 *
@@ -43,7 +59,9 @@ export class AppContextService extends Service {
 			console.warn(`Locale is not loaded: ${locale}`);
 			return false;
 		}
-		if (locale === this.value.locale) return false;
+		if (locale === this.value.locale) {
+			return false;
+		}
 		this.value = {...this.value, locale};
 		this.fire('locale', locale);
 		this.fire('changed', this.get());

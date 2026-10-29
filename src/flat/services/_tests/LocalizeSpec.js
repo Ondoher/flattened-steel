@@ -57,11 +57,11 @@ describe('localization', () => {
 		expect(console.warn).toHaveBeenCalledWith('Missing replacement: name');
 	});
 
-	it('logs invalid replacement values and substitutes empty text', () => {
+	it('logs nonfinite numeric replacements and substitutes empty text', () => {
 		spyOn(console, 'error');
-		const translate = createTranslator('en-US', {message: '%{object}|%{infinite}'});
-		expect(translate('message', {object: {}, infinite: Infinity})).toBe('|');
-		expect(console.error).toHaveBeenCalledWith('Invalid replacement: object');
+		const translate = createTranslator('en-US', {message: '%{notANumber}|%{infinite}'});
+		expect(translate('message', {notANumber: NaN, infinite: Infinity})).toBe('|');
+		expect(console.error).toHaveBeenCalledWith('Invalid replacement: notANumber');
 		expect(console.error).toHaveBeenCalledWith('Invalid replacement: infinite');
 	});
 

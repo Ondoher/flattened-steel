@@ -1,21 +1,25 @@
-/** Public registry contract implemented by the RoutersService application service. */
+/**
+ * Public registry contract implemented by the RoutersService application service.
+ */
 export interface RoutersService extends EventBus {
 	/**
-	 * Call this method to register or update a page record.
+	 * Call this method to register an application router in mounting order.
 	 *
-	 * @param name - The name value required by this operation.
+	 * @param name - Registry service name of the router to mount.
 	 */
 	add(name: string): void;
+
 	/**
-	 * Call this method to invoke the setLast service operation.
+	 * Call this method to select the router mounted after every ordinary router.
 	 *
-	 * @param name - The name value required by this operation.
+	 * @param name - Registered router service that handles remaining requests last.
 	 */
 	setLast(name: string): void;
+
 	/**
-	 * Call this method to read the current service value.
+	 * Call this method to read router service names in mounting order.
 	 *
-	 * @returns - The get operation result.
+	 * @returns - Router service names, with the designated final router last.
 	 */
 	get(): string[];
 }

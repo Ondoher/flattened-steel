@@ -1,46 +1,43 @@
+import React from 'react';
 import {Registry, Service} from '@polylith/core';
 import {AppView} from '../views/app.js';
-
 class ControllerStub extends Service {
 	constructor(registry) {
 		super('app-controller', registry);
-		this.implement(['getShellState', 'requestPage']);
-		this.state = {activePageId: null, notFound: false, pageComponent: null, pages: []};
+		this.implement(['getState']);
+		this.state = {context: {locale: 'en-US'}, content: React.createElement('section', null, 'Provided content')};
 	}
-	getShellState() {
+
+	getState() {
 		return this.state;
 	}
-	requestPage(pageId) {
-		this.requested = pageId;
-		return {id: pageId};
-	}
 }
-
-describe('app view', () => {
-	it('projects controller state, relays events, and forwards selection intent', () => {
-		const registry = new Registry();
-		const controller = new ControllerStub(registry);
-		const view = new AppView(registry);
-		const changed = jasmine.createSpy('changed');
+describe('application view', () => {
+	it('chooses concrete root and shell presentation from controller facts', () => {
+		let registry = new Registry();
+		let controller = new ControllerStub(registry);
+		let view = new AppView(registry);
+		view.ready();
+		let projection = view.getState();
+		expect(projection.context).toBe(controller.state.context);
+		expect(projection.presentation.props.content).toBe(controller.state.content);
+		expect(view.getComponent().props.appView).toBe(view);
+		expect(view.getComponent().props.initialState.presentation.props.content).toBe(controller.state.content);
+		view.stop();
+	});
+	it('relays controller updates once after repeated readiness and detaches exactly', () => {
+		let registry = new Registry();
+		let controller = new ControllerStub(registry);
+		let view = new AppView(registry);
+		let changed = jasmine.createSpy('changed');
 		view.listen('state-changed', changed);
 		view.ready();
-		expect(view.getShellState()).toBe(controller.state);
-		expect(view.requestPage('home')).toEqual({id: 'home'});
-		expect(controller.requested).toBe('home');
-		controller.fire('state-changed', controller.state);
-		expect(changed).toHaveBeenCalledWith(controller.state);
 		view.ready();
 		controller.fire('state-changed', controller.state);
-		expect(changed).toHaveBeenCalledTimes(2);
-		const component = view.getComponent();
-		expect(component.props.appView).toBe(view);
-		expect(component.props.initialState).toBe(controller.state);
-		expect(component.props.title).toBe('app.title');
-		expect(component.props.titleLiteral).toBe('Initial setup for a polylith project');
-		expect(view.getComponent({className: 'custom'}).props.className).toBe('custom');
+		expect(changed).toHaveBeenCalledTimes(1);
+		view.stop();
 		view.stop();
 		controller.fire('state-changed', controller.state);
-		expect(changed).toHaveBeenCalledTimes(2);
-		view.stop();
+		expect(changed).toHaveBeenCalledTimes(1);
 	});
 });

@@ -1,16 +1,19 @@
-/** Public registry contract implemented by the AppContextService application service. */
-interface AppContextService extends EventBus {
+/**
+ * Public registry contract implemented by the AppContextService application service.
+ */
+export interface AppContextService extends EventBus {
 	/**
-	 * Call this method to read the current service value.
+	 * Call this method to read a defensive snapshot of the application context.
 	 *
-	 * @returns - The get operation result.
+	 * @returns - Current locale, presentation flags, registry, and localization capability.
 	 */
 	get(): AppContextValue;
+
 	/**
 	 * Call this method to replace the current application locale.
 	 *
-	 * @param locale - The locale value required by this operation.
-	 * @returns - The setLocale operation result.
+	 * @param locale - Locale with phrases already loaded by the localization service.
+	 * @returns - Whether the locale changed; false when it is already selected or unavailable.
 	 */
 	setLocale(locale: string): boolean;
 }

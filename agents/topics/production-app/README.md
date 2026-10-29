@@ -29,9 +29,13 @@ Flat's shell does not incorporate the test bed's product feature candidates.
 
 The owner-authorized [Flat shell](../flat/README.md) is generated, following the
 [server integration refactor](runtime-integration/server-integration.md) and
-Polylith upgrade. Current work is design discussion captured in
-[Flat implementation notes](../flat/implementation-notes.md), without an
-implementation plan or authorization to implement the discussed feature.
+Polylith upgrade. Current design discussion is gathered in the
+[initial Flat product description](../flat/product-description.md), with
+[implementation notes](../flat/implementation-notes.md) retaining technical
+context. The description is input for later refinement. The owner subsequently authorized
+and received the [first workspace pass](../flat/README.md#current-scope), covering
+the persistent frame and contribution interfaces only. Observation and scene
+feature implementation remain unselected for execution.
 The [Flat32 feature candidate inventory](product-behavior/flat32-feature-review.md)
 remains pending inclusion or adaptation review for the real application.
 That inventory selects no new product implementation, application name,

@@ -1,11 +1,16 @@
 import '../../karma-browser-setup.js';
 import './main/_tests/AppStartupSpec.js';
+import './main/_tests/AppSpec.js';
 import './services/_tests/AppContextSpec.js';
 import './services/_tests/IoSpec.js';
 import './services/_tests/AppPagesSpec.js';
 import './features/app/_tests/AppControllerSpec.js';
 import './features/app/_tests/AppViewSpec.js';
 import './features/app/_tests/AppShellSpec.js';
-import './features/workspace/_tests/PageFeatureSpec.js';
+import './features/workspace/_tests/WorkspaceModelSpec.js';
+import './features/workspace/_tests/WorkspaceControllerSpec.js';
+import './features/workspace/_tests/WorkspaceViewSpec.js';
+import './features/workspace/_tests/WorkspaceShellSpec.js';
+import './features/workspace/services/_tests/UiContributionsSpec.js';
 import './services/_tests/LocalizeSpec.js';
 import './services/_tests/UrlSpec.js';

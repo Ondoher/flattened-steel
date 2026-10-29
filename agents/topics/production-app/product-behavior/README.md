@@ -18,6 +18,26 @@ outside the product scope. This decision does not select the location picker,
 presets, arbitrary-coordinate support or the arrangement of views for that one
 location.
 
+### Views And Main-Frame Controls
+
+On 2026-10-28 the owner selected a workspace with an optional second view,
+supporting two views side by side when it is open. A second view is not required
+for ordinary use. Both views share the active location, date, and time. Camera
+direction, observer height, and field of view can be adjusted independently in
+each view. This retains the single-location scope; the specific content or page
+type of each view remains open.
+
+The main frame must provide a toolbar, location selection, date and time
+selection, height controls, FOV controls, and a configuration surface. The owner
+described configuration as a screen of some sort; its exact presentation and
+the arrangement of the controls are subjects of the current UX research.
+An animation button is a possible later addition, rather than a current
+requirement.
+
+The [main-frame UX research](../../flat/main-frame-ux-research.md) records
+advisory layout comparisons. Research recommendations are not accepted layout
+decisions or an implementation plan.
+
 ### Workspace And UI Foundation
 
 The owner selected an app-owned workspace without MUI on 2026-10-26. Use an
@@ -27,11 +47,42 @@ configuration. The scene remains visible while users adjust either set of
 controls.
 
 For create-app, these choices correspond to MUI disabled and the app-directed
-shell. No replacement UI component library is selected. Exact controls, their
-grouping and placement, panel behavior on smaller
+shell. No replacement UI component library is selected. The required controls
+are listed under [Views and main-frame controls](#views-and-main-frame-controls).
+Their detailed interactions, grouping and placement, panel behavior on smaller
 screens, and any tabs within the panel remain to be designed. This decision does
 not select the pending Flat32 feature candidates. The owner subsequently
 authorized the [Flat shell scaffold](../../flat/README.md) using these choices.
+
+### Visual Palette
+
+On 2026-10-29 the owner selected the following palette for the application
+frame and feature-provided controls:
+
+| Role                                          | Owner selection                                     |
+| --------------------------------------------- | --------------------------------------------------- |
+| Backgrounds                                   | `#121212` (B2)                                      |
+| Text                                          | `#F2F2F2` (W2)                                      |
+| Borders                                       | `#F2F2F2` (W2)                                      |
+| Selection, buttons, and other action controls | The light blue in the owner's supplied color swatch |
+
+The supplied swatch is the reference for the action color; this document does
+not assign an unmeasured hex value to it. The owner selected B2 + W2 from the
+color samples: the base background and text/border values above are settled.
+How the accent is applied to each control and hover, focus, pressed, and
+disabled treatments remain design details. This palette applies to the
+interface; atmospheric scene colors remain the renderer's responsibility.
+
+The palette is an owner decision and supersedes the UI research's earlier
+suggestion to compare dark and light frame palettes. It does not select exact
+spacing, typography, or control shapes.
+
+The owner selected CSS custom properties for the base colors, defined centrally
+in the application's base CSS file. Frame and feature styles use those shared
+definitions, following the same centralized color-theming approach as MUI CSS
+theming while the application remains independent of MUI. The
+[component proposal](../../flat/component-service-proposal.md#shared-presentation-building-blocks)
+records the stylesheet ownership.
 
 ### Workspace Composition
 
@@ -58,29 +109,30 @@ A separate create-app option for page management independent of a prescribed
 navigation UI remains a future tooling capability to consider, not a global
 skill change selected for implementation here.
 
-The existing generated page-based starter has not yet been aligned with this
-decision. Its existing management services are the starting point for reuse;
-the scaffold options below record what was generated.
+The [workspace first pass](../../flat/README.md#current-scope) now adapts the page
+catalog and controller/view machinery to independent view identities and
+contribution hosts. The scaffold options below record the original generation
+choices; the initial Workspace starter page has since been retired.
 
 ### Scaffold Capabilities
 
 The owner completed the create-app choices on 2026-10-26:
 
-| Capability | Selection |
-| --- | --- |
-| Application display name | Flat |
-| Application slug | flat |
-| Standalone, composed and configured mount | /flat |
-| Initial page | Workspace |
-| Database persistence | No |
-| Strict accessibility mode | No |
-| Localization | Yes |
-| App-owned server router | Yes |
-| Default page routing | Yes |
-| Localized Markdown | No |
-| Socket.IO | No |
-| Unit/UI testing | Yes |
-| Coverage reporting | No |
+| Capability                                | Selection |
+| ----------------------------------------- | --------- |
+| Application display name                  | Flat      |
+| Application slug                          | flat      |
+| Standalone, composed and configured mount | /flat     |
+| Initial page                              | Workspace |
+| Database persistence                      | No        |
+| Strict accessibility mode                 | No        |
+| Localization                              | Yes       |
+| App-owned server router                   | Yes       |
+| Default page routing                      | Yes       |
+| Localized Markdown                        | No        |
+| Socket.IO                                 | No        |
+| Unit/UI testing                           | Yes       |
+| Coverage reporting                        | No        |
 
 Together with the selected app-directed shell, MUI disabled and the repository's
 [discoverable deployment posture](../README.md#deployment-posture), these values
@@ -94,6 +146,10 @@ these options; the [Flat app entry](../../flat/README.md) owns scaffold status.
 Stage 11.1-11.3 and parts of 11.4-11.6 are implemented. Remaining interaction/migration/reconciliation work and 11.8 acceptance are owner-deferred. Compatible-clock animation is now owned by [Production MVP requirement M1](../mvp/requirements.md#m1--compatible-time-and-location-animation).
 
 ## Working Documents
+
+- [Initial Flat product description](../../flat/product-description.md) - Draft
+  product input for later refinement, based on owner decisions and clearly
+  identified advisory research.
 
 - [Flat32 feature review](flat32-feature-review.md) - Source-backed candidates for possible inclusion or adaptation; all decisions and MVP dispositions remain pending.
 

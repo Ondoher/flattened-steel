@@ -1,5 +1,19 @@
 :root {
-	font-family: Arial, Helvetica, sans-serif;
+	--app-color-background: #121212;
+	--app-color-text: #f2f2f2;
+	--app-color-border: #f2f2f2;
+	/* Visual approximation of the owner's swatch; exact source RGB is not recorded. */
+	--app-color-action: #abd3fa;
+	--app-color-on-action: var(--app-color-background);
+	--app-font-family: Arial, Helvetica, sans-serif;
+	--app-font-small: 0.875rem;
+	font-family: var(--app-font-family);
+	color: var(--app-color-text);
+	background: var(--app-color-background);
+	color-scheme: dark;
+}
+* {
+	box-sizing: border-box;
 }
 html,
 body,
@@ -8,23 +22,18 @@ body,
 	min-height: 100%;
 	margin: 0;
 }
-.app-shell {
-	display: grid;
-	grid-template-rows: auto minmax(0, 1fr);
-	height: 100vh;
-	overflow: hidden;
+body {
+	background: var(--app-color-background);
 }
-.app-shell > main,
-.app-shell-left-nav-body > main {
-	min-width: 0;
-	min-height: 0;
-	overflow: auto;
-	padding: 1rem;
+button,
+input,
+select {
+	font: inherit;
 }
-.app-shell-navigation {
-	padding-block: 0.5rem;
+:focus-visible {
+	outline: 2px solid var(--app-color-action);
+	outline-offset: 3px;
 }
-
 .screen-reader-only {
 	position: absolute;
 	width: 1px;

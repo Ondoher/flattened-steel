@@ -1,24 +1,38 @@
-/** Public registry contract implemented by the AppController application service. */
-interface AppController extends EventBus {
+/**
+ * Application-level activation and navigation capability.
+ */
+export interface AppController extends EventBus {
 	/**
-	 * Call this method to read the current application-shell presentation state.
-	 *
-	 * @returns - The getShellState operation result.
+	 * Call this method to activate the configured workspace and reconcile routing after registry readiness.
 	 */
-	getShellState(): AppShellState;
+	activate(): void;
+
 	/**
-	 * Call this method to request that the application select and mount a page.
-	 *
-	 * @param pageId - The pageId value required by this operation.
-	 * @param options - The options value required by this operation.
-	 * @returns - The requestPage operation result.
+	 * Call this method to release routing listeners and the activated workspace.
 	 */
-	requestPage(pageId: string, options?: {history?: 'push' | 'replace' | 'none'}): AppPageRecord | null;
+	stop(): void;
+
 	/**
-	 * Call this method to create the service-owned React presentation.
+	 * Call this method to select a registered page through the public workspace mounting capability.
 	 *
-	 * @param props - The props value required by this operation.
-	 * @returns - The getComponent operation result.
+	 * @param pageId - Registered page definition to select.
+	 * @param options - Optional target view and primary-view history behavior.
+	 * @returns - Selected page metadata, or null when no page is selected.
 	 */
-	getComponent(props?: Record<string, unknown>): import('react').ReactElement;
+	requestPage(pageId: string, options?: AppPageOptions): AppPageRecord | null;
+
+	/**
+	 * Call this method to read activated content and canonical application context without mounting.
+	 *
+	 * @returns - Current application context and activated feature content.
+	 */
+	getState(): AppState;
+
+	/**
+	 * Call this method to obtain application presentation through its owning view.
+	 *
+	 * @param props - Optional presentation properties supplied to the application view.
+	 * @returns - Application root element.
+	 */
+	getComponent(props?: object): React.ReactElement;
 }

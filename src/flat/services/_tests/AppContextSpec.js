@@ -2,6 +2,22 @@ import {Registry, Service} from '@polylith/core';
 import {AppContextService} from '../app-context.js';
 
 describe('app context', () => {
+	it('resolves localization in ready rather than start and publishes replacement only once', () => {
+		let registry = new Registry();
+		let localize = {translate: () => '', supportsLocale: () => true};
+		registry.register('localize', localize);
+		let lookup = spyOn(registry, 'subscribe').and.callThrough();
+		let service = new AppContextService(registry);
+		service.start();
+		expect(service.get().localize).toBeNull();
+		expect(lookup).not.toHaveBeenCalled();
+		let changed = jasmine.createSpy('changed');
+		service.listen('changed', changed);
+		service.ready();
+		service.ready();
+		expect(service.get().localize).toBe(localize);
+		expect(changed).toHaveBeenCalledTimes(1);
+	});
 	it('owns defensive locale and generated feature flags', () => {
 		const registry = new Registry();
 		const localize = {translate: () => '', supportsLocale: (locale) => locale === 'en-US'};
@@ -10,9 +26,11 @@ describe('app context', () => {
 				super('localize', registry);
 				this.implement(['translate', 'supportsLocale']);
 			}
+
 			translate(...args) {
 				return localize.translate(...args);
 			}
+
 			supportsLocale(locale) {
 				return localize.supportsLocale(locale);
 			}
@@ -20,6 +38,7 @@ describe('app context', () => {
 		new LocalizeStub();
 		const service = new AppContextService(registry);
 		service.start();
+		service.ready();
 		const value = service.get();
 		expect(value.locale).toBe('en-US');
 		expect(value.localize).toBe(registry.subscribe('localize'));
@@ -37,9 +56,11 @@ describe('app context', () => {
 				super('localize', registry);
 				this.implement(['translate', 'supportsLocale']);
 			}
+
 			translate(...args) {
 				return localize.translate(...args);
 			}
+
 			supportsLocale(locale) {
 				return localize.supportsLocale(locale);
 			}
@@ -47,6 +68,7 @@ describe('app context', () => {
 		new LocalizeStub();
 		const service = new AppContextService(registry);
 		service.start();
+		service.ready();
 		const listener = jasmine.createSpy('locale');
 		const changed = jasmine.createSpy('changed');
 		service.listen('locale', listener);

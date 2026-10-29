@@ -1,65 +1,63 @@
 import React from 'react';
 import {Service} from '@polylith/core';
 import AppShell from '../components/AppShell.jsx';
+import App from '../../../main/App.jsx';
+
 /**
- * View service that mediates between the application controller and React shell.
+ * Thin application presentation boundary around activated feature content.
  *
- * @implements {AppView}
+ * @implements {AppViewService}
  */
 export class AppView extends Service {
 	/**
-	 * Creates the application view service.
+	 * Creates the application view capability.
 	 *
-	 * @param {unknown} registry - The owning Polylith registry.
+	 * @param {unknown} registry - Optional isolated application registry.
 	 */
 	constructor(registry) {
 		super('app-view', registry);
-		this.implement(['ready', 'stop', 'getComponent', 'getShellState', 'requestPage']);
+		this.implement(['ready', 'stop', 'getState', 'getComponent']);
 	}
-	/** Call this method when the controller is ready for event mediation. */
+
+	/**
+	 * Call this method after dependency readiness to locate the owning controller.
+	 */
 	ready() {
 		this.stop();
 		this.controller = this.registry.subscribe('app-controller');
-		this.controllerStateChanged = (state) => this.fire('state-changed', state);
-		this.controllerStateListener = this.controller.listen('state-changed', this.controllerStateChanged);
+		this._stateListener = this.controller.listen('state-changed', () =>
+			this.fire('state-changed', this.getState()),
+		);
 	}
-	/** Call this method to remove the exact controller event listener. */
-	stop() {
-		if (this.controller && this.controllerStateListener)
-			this.controller.unlisten('state-changed', this.controllerStateListener);
-		this.controllerStateListener = null;
-	}
+
 	/**
-	 * Call this method to create the presentational application shell.
+	 * Call this method to remove the exact owned controller listener.
+	 */
+	stop() {
+		if (this._stateListener) {
+			this.controller.unlisten('state-changed', this._stateListener);
+		}
+		this._stateListener = null;
+	}
+
+	/**
+	 * Call this method to project controller state into the application presentation.
 	 *
-	 * @param {object} props - Shell properties.
-	 * @returns {React.ReactElement} - The application shell element.
+	 * @returns {AppPresentationState} - Context and concrete presentation, without a new canonical owner.
+	 */
+	getState() {
+		let state = this.controller.getState();
+		return {context: state.context, presentation: React.createElement(AppShell, {content: state.content})};
+	}
+
+	/**
+	 * Call this method to wrap activated content without locating or importing workspace internals.
+	 *
+	 * @param {object} props - Presentation properties.
+	 * @returns {React.ReactElement} - Minimal application boundary.
 	 */
 	getComponent(props = {}) {
-		return React.createElement(AppShell, {
-			...props,
-			appView: this,
-			initialState: this.getShellState(),
-			title: 'app.title',
-			titleLiteral: 'Initial setup for a polylith project',
-		});
-	}
-	/**
-	 * Call this method to read shell state owned by the controller.
-	 *
-	 * @returns {AppShellState} - The current shell state.
-	 */
-	getShellState() {
-		return this.controller.getShellState();
-	}
-	/**
-	 * Call this method to forward page-selection intent to the controller.
-	 *
-	 * @param {string} pageId - The requested page identifier.
-	 * @returns {AppPageRecord | null} - The selected page or no selection.
-	 */
-	requestPage(pageId) {
-		return this.controller.requestPage(pageId);
+		return React.createElement(App, {...props, appView: this, initialState: this.getState()});
 	}
 }
 new AppView();

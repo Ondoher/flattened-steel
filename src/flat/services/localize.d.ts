@@ -1,21 +1,24 @@
-/** Public registry contract implemented by the LocalizeService application service. */
+/**
+ * Public registry contract implemented by the LocalizeService application service.
+ */
 interface LocalizeService extends EventBus {
 	/**
-	 * Call this method to invoke the supportsLocale service operation.
+	 * Call this method to determine whether a locale has loaded phrase data.
 	 *
-	 * @param locale - The locale value required by this operation.
-	 * @returns - The supportsLocale operation result.
+	 * @param locale - Locale whose translator must already be loaded.
+	 * @returns - Whether the localization service can translate that locale.
 	 */
 	supportsLocale(locale: string): boolean;
+
 	/**
 	 * Call this method to resolve a phrase for the current locale.
 	 *
-	 * @param key - The key value required by this operation.
-	 * @param replacements - The replacements value required by this operation.
-	 * @param cardinal - The cardinal value required by this operation.
-	 * @param locale - The locale value required by this operation.
-	 * @param escapeHtml - The escapeHtml value required by this operation.
-	 * @returns - The translate operation result.
+	 * @param key - Phrase key in the selected locale's catalog.
+	 * @param replacements - Optional named values substituted into the phrase.
+	 * @param cardinal - Optional value selecting a locale-specific plural form.
+	 * @param locale - Optional loaded locale; defaults to en-US.
+	 * @param escapeHtml - Whether replacement markup is escaped; defaults to false.
+	 * @returns - Resolved phrase, or empty text after a failed lookup.
 	 */
 	translate(
 		key: string,
@@ -24,13 +27,14 @@ interface LocalizeService extends EventBus {
 		locale?: string,
 		escapeHtml?: boolean,
 	): string;
+
 	/**
-	 * Call this method to invoke the replace service operation.
+	 * Call this method to substitute named values into controlled phrase-compatible content.
 	 *
-	 * @param value - The value value required by this operation.
-	 * @param replacements - The replacements value required by this operation.
-	 * @param escapeHtml - The escapeHtml value required by this operation.
-	 * @returns - The replace operation result.
+	 * @param value - Controlled content containing named replacement placeholders.
+	 * @param replacements - Optional named values supplied to the placeholders.
+	 * @param escapeHtml - Whether replacement markup is escaped; defaults to false.
+	 * @returns - Content with the supplied replacement values applied.
 	 */
 	replace(value: string, replacements?: Record<string, string | number>, escapeHtml?: boolean): string;
 }

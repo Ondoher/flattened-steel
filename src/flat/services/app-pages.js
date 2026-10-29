@@ -14,24 +14,30 @@ export class AppPagesService extends Service {
 		super('app-pages', registry);
 		this.implement(['start', 'add', 'get', 'getById', 'getBySlug', 'getDefault']);
 	}
-	/** Call this method to initialize an empty page collection. */
+
+	/**
+	 * Call this method to initialize an empty page collection.
+	 */
 	start() {
 		this.pages = [];
 	}
+
 	/**
-	 * Call this method to register or update one validated page record.
+	 * Call this method to register or update one typed application page record.
 	 *
 	 * @param {AppPageRecord} page - The page metadata to install.
 	 * @returns {AppPageRecord} - A defensive copy of the installed record.
-	 * @throws {Error} - When identifiers, URL slugs, or default-page ownership conflict.
+	 * @throws {Error} - URL slugs or default-page ownership conflict.
 	 */
 	add(page) {
-		if (!page?.id) throw new Error('Page id is required');
 		const next = {order: 0, urlSlug: page.id, ...page};
 		const slugConflict = this.pages.find((item) => item.id !== next.id && item.urlSlug === next.urlSlug);
-		if (slugConflict) throw new Error(`Duplicate page URL slug: ${next.urlSlug}`);
-		if (next.default && this.pages.some((item) => item.id !== next.id && item.default))
+		if (slugConflict) {
+			throw new Error(`Duplicate page URL slug: ${next.urlSlug}`);
+		}
+		if (next.default && this.pages.some((item) => item.id !== next.id && item.default)) {
 			throw new Error('Multiple default pages');
+		}
 		const index = this.pages.findIndex((item) => item.id === next.id);
 		if (index < 0) {
 			this.pages.push(next);
@@ -43,16 +49,16 @@ export class AppPagesService extends Service {
 		this.fire('updated', this.get());
 		return this.getById(next.id);
 	}
+
 	/**
 	 * Call this method to read ordered defensive page records.
 	 *
 	 * @returns {AppPageRecord[]} - The registered pages.
 	 */
 	get() {
-		return this.pages
-			.map((item) => ({...item}))
-			.sort((a, b) => a.order - b.order || String(a.id).localeCompare(String(b.id)));
+		return this.pages.map((item) => ({...item})).sort((a, b) => a.order - b.order || a.id.localeCompare(b.id));
 	}
+
 	/**
 	 * Call this method to find a page by its identifier.
 	 *
@@ -63,6 +69,7 @@ export class AppPagesService extends Service {
 		const page = this.pages.find((item) => item.id === id);
 		return page ? {...page} : null;
 	}
+
 	/**
 	 * Call this method to find a page by its URL slug.
 	 *
@@ -73,6 +80,7 @@ export class AppPagesService extends Service {
 		const page = this.pages.find((item) => item.urlSlug === slug);
 		return page ? {...page} : null;
 	}
+
 	/**
 	 * Call this method to read the executor-selected default page.
 	 *

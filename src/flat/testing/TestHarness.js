@@ -5,9 +5,13 @@ import AppContext from '../common/AppContext.js';
 
 globalThis.IS_REACT_ACT_ENVIRONMENT = true;
 
-/** Browser component-test harness that owns React roots, context, and DOM interactions. */
+/**
+ * Browser component-test harness that owns React roots, context, and DOM interactions.
+ */
 export class TestHarness {
-	/** Creates an isolated component-test harness with the default application context. */
+	/**
+	 * Creates an isolated component-test harness with the default application context.
+	 */
 	constructor() {
 		this.props = {};
 		this.registry = new Registry();
@@ -54,7 +58,9 @@ export class TestHarness {
 		if (typeof registryOrServices?.subscribe === 'function') {
 			this.registry = registryOrServices;
 		} else {
-			for (const [name, service] of Object.entries(registryOrServices)) this.registry.register(name, service);
+			for (const [name, service] of Object.entries(registryOrServices)) {
+				this.registry.register(name, service);
+			}
 		}
 		this.context = {...this.context, registry: this.registry};
 		return this;
@@ -86,10 +92,13 @@ export class TestHarness {
 			this.container = document.createElement('div');
 			document.body.appendChild(this.container);
 		}
-		if (!this.root) this.root = createRoot(this.container);
+		if (!this.root) {
+			this.root = createRoot(this.container);
+		}
+		let context = {...this.context, registry: this.registry};
 		act(() => {
 			this.root.render(
-				<AppContext.Provider value={{...this.context, registry: this.registry}}>
+				<AppContext.Provider value={context}>
 					<Component {...this.renderProps} />
 				</AppContext.Provider>,
 			);
@@ -104,7 +113,9 @@ export class TestHarness {
 	 * @returns {object} - DOM queries and lifecycle operations.
 	 */
 	rerender(props = {}) {
-		if (!this.Component) throw new Error('Render a component before rerendering it.');
+		if (!this.Component) {
+			throw new Error('Render a component before rerendering it.');
+		}
 		return this.render(this.Component, {...this.renderProps, ...props});
 	}
 
@@ -149,9 +160,13 @@ export class TestHarness {
 		});
 	}
 
-	/** Call this method to unmount the current root and remove its DOM container. */
+	/**
+	 * Call this method to unmount the current root and remove its DOM container.
+	 */
 	unmount() {
-		if (!this.root) return;
+		if (!this.root) {
+			return;
+		}
 		act(() => this.root.unmount());
 		this.root = null;
 		this.container?.remove();

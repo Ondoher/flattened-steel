@@ -6,6 +6,7 @@ describe('HTTP service', () => {
 	let base;
 	let registry;
 	let service;
+	let context;
 
 	beforeEach(() => {
 		originalFetch = window.fetch;
@@ -16,13 +17,17 @@ describe('HTTP service', () => {
 		class AppContextStub extends Service {
 			constructor() {
 				super('app-context', registry);
+				this.implement(['get']);
+				this.locale = 'en-US';
 			}
+
 			get() {
-				return {locale: 'en-US'};
+				return {locale: this.locale};
 			}
 		}
-		new AppContextStub();
+		context = new AppContextStub();
 		service = new IoService(registry);
+		service.ready();
 	});
 
 	afterEach(() => {
@@ -49,6 +54,16 @@ describe('HTTP service', () => {
 		expect(window.fetch).toHaveBeenCalledWith('https://api.example.test/items', {
 			headers: {Accept: 'text/plain', 'Accept-Language': 'en-US'},
 		});
+	});
+
+	it('uses the current canonical locale for each request after readiness', async () => {
+		window.fetch = jasmine.createSpy('fetch').and.resolveTo({ok: true});
+		await service.request('/api/items');
+		context.locale = 'fr-CA';
+		await service.request('/api/items');
+		let requests = window.fetch.calls.allArgs();
+		expect(requests[0][1].headers['Accept-Language']).toBe('en-US');
+		expect(requests[1][1].headers['Accept-Language']).toBe('fr-CA');
 	});
 
 	it('logs transport failures and returns no response', async () => {

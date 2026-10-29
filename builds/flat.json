@@ -19,8 +19,5 @@
 			"keepNest": true
 		}
 	],
-	"features": [
-		"features/app",
-		"features/workspace"
-	]
+	"features": ["features/app", "features/workspace"]
 }
