@@ -17,6 +17,7 @@ Other lanes retain their own dispositions.
 
 ## Working Documents
 
+- [Flat Dome Cache Shape](flat-dome-cache-shape/README.md) - Active; initialized study of sample-to-dome-distance slices, scattering accuracy, storage, and valid transforms. No numerical run yet.
 - [Measured Clean Horizon Profiles](clean-horizon-profiles/README.md) - ARM-informed noon/sunset scenes at five heights delivered; sunset numerical/phase limits documented, no production promotion.
 - [Twilight Exposure](twilight-exposure/README.md) - Ended; accepted display response promoted to production.
 
