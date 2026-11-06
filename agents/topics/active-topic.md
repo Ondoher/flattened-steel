@@ -2,9 +2,26 @@
 
 Current active topic: production-app.
 Canonical entry: [Production app](production-app/README.md).
-Focus: completed the [workspace comps plan](flat/workspace-comps-implementation-plan.md)
-through the owner's independent-execution invocation. M1–M4 are complete. The
-[execution record](flat/workspace-comps-execution.md) owns current evidence,
+Focus: execute the owner's [elevation/time optimization plan](flat/control-update-optimization-plan.md)
+under independent-execution. The [execution record](flat/control-update-optimization-execution.md)
+owns current progress, decisions and evidence.
+Ordinary compatible edits should retain the scene, shader and rendering resources
+while refreshing necessary physical state and lighting. FOV performance is fine
+according to the owner; preserve its existing path. The plan starts with a warm
+update timing/allocation baseline and a safe engine publication/lease contract,
+then implementation and focused correctness/performance verification. M1 is
+complete and M2 is next; implementation, profiling, checks and local adviser-recommended
+checkpoints are authorized. Pushing and deployment are not.
+Engineering standards review remains inactive.
+
+The preceding startup-cache follow-up is implemented. The first view reuses the
+cache/context built before page/location selection; comparison has independent
+graphics resources. Preserve those uncommitted changes. The
+[Flat entry](flat/README.md#verification) owns its current evidence.
+
+The [workspace comps plan](flat/workspace-comps-implementation-plan.md) was
+completed through the owner's independent-execution invocation. M1–M4 are complete. The
+[execution record](flat/workspace-comps-execution.md) owns that milestone's evidence,
 decisions and local checkpoints. The app implements shared summaries, generic
 settings sections, independent Camera settings and shared-time toolbar/panel
 editors. 118 browser tests, 29 focused geometry tests and client/engine types pass.
@@ -129,6 +146,5 @@ shell and workspace separately.
 1. [Repository instructions](../../AGENTS.md).
 2. [Production app](production-app/README.md).
 3. [Flat shell](flat/README.md).
-4. [Workspace comps execution](flat/workspace-comps-execution.md).
-5. [Flat Earth time-input note](flat/flat-earth-time-input.md).
-6. [Current comp handoff](flat/configuration-toolbar-comps.md).
+4. [Elevation/time optimization plan](flat/control-update-optimization-plan.md).
+5. [Control optimization execution](flat/control-update-optimization-execution.md).

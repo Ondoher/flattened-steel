@@ -22,6 +22,11 @@ Device/local-time entry remains; time-zone lookup and animation UI are deferred.
 Engineering standards review remains cancelled. Local checkpoints are recorded
 in the execution record; nothing was pushed or deployed.
 
+The owner-requested [elevation/time optimization plan](control-update-optimization-plan.md)
+addresses repeated scene reconstruction during those edits. FOV performance is
+satisfactory and its existing path is preserved. The plan is saved for later
+execution; no optimization implementation or profiling has begun.
+
 ## Current Scope
 
 The owner-authorized first workspace pass is implemented on 2026-10-29. The
@@ -111,6 +116,19 @@ location/time changes to reuse compatible construction. Receiver measurement,
 color bindings, finite composed-output readback, and actual shader diagnostics
 are prepared before a frame becomes visible. The previous coherent frame stays
 visible during an update or failed candidate.
+
+Flat Earth now starts canonical cache construction during feature readiness,
+including on the empty `/flat/` route before a scene or location is selected.
+`FlatEarthGraphics` owns a detached canvas, renderer, backend and frame controller;
+the engine's cache-only `prepareCache` operation retains construction without
+staging or publishing a live frame. The first mounted Flat Earth view claims
+that exact canvas/context/cache through its controller and view. React owns the
+surface host and mounts the feature-owned canvas inside it. This avoids building
+an unused startup cache on a context that the actual view cannot reuse.
+Startup construction does not change shared location or time. A comparison view
+owns a separate context/cache. Repeated readiness does not start another warmup;
+feature stop releases an unclaimed startup context, and runtime disposal releases
+claimed resources. Context loss invalidates warming and retained resources.
 
 Each view owns its canvas, Three renderer/camera, backend, frame controller, and
 resize observer. Location changes cancel stale work; time changes coalesce to
@@ -255,6 +273,23 @@ The refine-design skill has not been run. The linked
 advisory beyond the explicitly selected requirements.
 
 ## Verification
+
+Startup-cache follow-up (2026-11-06): client/engine type checks, 119 browser tests
+and 15 focused frame-controller tests pass. The engine checks cover cache-only
+construction, exact reuse by a queued live frame, and cancellation/resource
+release during disposal or context loss. A real Chrome/WebGL check built one
+cache on the empty root route with no selected location, then verified that the
+first completed scene reused the exact canvas and cache entry. It also verified
+the requested observation, independent comparison contexts with shared time,
+and cache release on feature stop. The initial empty-route build took about
+15.5 seconds on this machine in that single run; this is an observation, not a
+performance guarantee. The [report](../../../.codex-tmp/flat-startup-cache/2026-11-06/report.json),
+[first-view capture](../../../.codex-tmp/flat-startup-cache/2026-11-06/first-view.png)
+and [comparison capture](../../../.codex-tmp/flat-startup-cache/2026-11-06/comparison.png)
+are retained with the proof runner and isolated build in the same evidence folder.
+The served test bundle wraps `warm()` only to observe resource identity; it adds
+no production diagnostics API. Earlier implementation evidence below remains
+historical evidence for its recorded source.
 
 The model-service correction is captured under
 `.codex-tmp/flat-model-services/2026-11-05/`, with its baseline, source hashes,

@@ -20,6 +20,7 @@ export class FlatEarthView extends Service {
 			'stop',
 			'getComponent',
 			'getState',
+			'getCanvas',
 			'attach',
 			'detach',
 			'retry',
@@ -137,6 +138,16 @@ export class FlatEarthView extends Service {
 	 */
 	attach(viewId, canvas) {
 		this.controller.attach(viewId, canvas);
+	}
+
+	/**
+	 * Call this method to provide the owning controller's retained graphics surface to presentation.
+	 *
+	 * @param {string} viewId - Exact mounted view identity.
+	 * @returns {HTMLCanvasElement} - Feature-owned canvas for the React-owned host.
+	 */
+	getCanvas(viewId) {
+		return this.controller.getCanvas(viewId);
 	}
 
 	/**

@@ -1,11 +1,13 @@
 import {act} from 'react';
 import {registry} from '@polylith/core';
+import {FlatEarthGraphics} from '../../features/flat-earth/runtime/FlatEarthGraphics.js';
 import {stopApplication} from '../main.jsx';
 import '../../features/app/index.js';
 import '../../features/workspace/index.js';
 
 describe('application startup', () => {
 	it('starts generated services and mounts the configured application root', async () => {
+		spyOn(FlatEarthGraphics.prototype, 'warm').and.resolveTo();
 		await act(async () => {
 			await registry.start();
 			await Promise.resolve();

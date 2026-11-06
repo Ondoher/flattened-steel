@@ -6,6 +6,7 @@
 	background: var(--app-color-background);
 }
 
+.flat-earth-surface,
 .flat-earth-canvas {
 	display: block;
 	width: 100%;

@@ -22,6 +22,33 @@ function settle() {
 }
 
 describe('Flat Earth camera controls', () => {
+	it('starts construction once before any page exists and releases an unclaimed startup context', async () => {
+		let resources = [];
+		let controller = new FlatEarthController(new Registry(), () => {
+			let graphics = {
+				canvas: document.createElement('canvas'),
+				warm: jasmine.createSpy('warm').and.resolveTo(),
+				dispose: jasmine.createSpy('dispose').and.resolveTo(),
+			};
+			resources.push(graphics);
+			return graphics;
+		});
+		controller.start();
+		controller._warmCache();
+		controller._warmCache();
+		expect(resources.length).toBe(1);
+		expect(resources[0].warm).toHaveBeenCalledTimes(1);
+		expect(controller.sessions.size).toBe(0);
+		controller.stop();
+		controller.stop();
+		expect(resources[0].dispose).toHaveBeenCalledTimes(1);
+		controller._warmCache();
+		expect(resources.length).toBe(2);
+		controller.stop();
+		expect(resources[1].dispose).toHaveBeenCalledTimes(1);
+		await settle();
+	});
+
 	it('matches Flat32 sensitivity/pitch limits, rotates only the locked view, and releases exact lock ownership', async () => {
 		let owner = null;
 		let original = Object.getOwnPropertyDescriptor(document, 'pointerLockElement');
@@ -177,7 +204,12 @@ describe('Flat Earth camera controls', () => {
 		workspace.start();
 		workspace.ready();
 		new FlatEarthTimeModel(registry).start();
-		let controller = new FlatEarthController(registry);
+		let graphics = {
+			canvas: document.createElement('canvas'),
+			warm: jasmine.createSpy('warm').and.resolveTo(),
+			dispose: jasmine.createSpy('dispose').and.resolveTo(),
+		};
+		let controller = new FlatEarthController(registry, () => graphics);
 		let view = new FlatEarthView(registry);
 		controller.start();
 		controller.ready();
@@ -185,6 +217,10 @@ describe('Flat Earth camera controls', () => {
 		try {
 			controller.mount({viewId: 'view-1'});
 			controller.mount({viewId: 'view-2'});
+			expect(graphics.warm).toHaveBeenCalledTimes(1);
+			expect(controller.getCanvas('view-1')).toBe(graphics.canvas);
+			expect(controller.getCanvas('view-2')).not.toBe(graphics.canvas);
+			expect(configuration.get().location).toBeUndefined();
 			configuration.setLocation({latitude: 37.33939, longitude: -121.89496});
 			configuration.setTimestamp(Date.parse('2024-06-20T23:08:48.339Z'));
 			let gesture = controller.beginTimeEdit('view-1');
@@ -214,6 +250,7 @@ describe('Flat Earth camera controls', () => {
 			expect(controller.getState('view-2').camera.observerHeightMeters).toBe(5);
 			let token = tools.get()[0].registrationId;
 			controller.ready();
+			expect(graphics.warm).toHaveBeenCalledTimes(1);
 			expect(tools.get().length).toBe(7);
 			expect(tools.get()[0].registrationId).not.toBe(token);
 			expect(controller.getState('view-1').camera.fieldOfViewDegrees).toBe(35);
@@ -223,6 +260,7 @@ describe('Flat Earth camera controls', () => {
 			expect(controller.mountContribution({contribution: tools.get()[0]}).props.viewId).toBe('view-1');
 		} finally {
 			controller.stop();
+			expect(graphics.dispose).toHaveBeenCalledTimes(1);
 			workspace.stop();
 			view.stop();
 			configuration.stop();

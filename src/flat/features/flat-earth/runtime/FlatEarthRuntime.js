@@ -1,13 +1,11 @@
 import {PointerLookController} from './PointerLookController.js';
 import DistanceMath from '../../../../algorithm32/math/DistanceMath.js';
-import {LocalSunFrameController} from '../../../../algorithm32/implementation/local-sun/cache/frames/LocalSunFrameController.js';
+import {FlatEarthGraphics} from './FlatEarthGraphics.js';
 import * as THREE from 'three';
 import {EffectComposer} from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import {RenderPass} from 'three/examples/jsm/postprocessing/RenderPass.js';
 import {Algorithm32} from '../../../../algorithm32/implementation/algorithm32/Algorithm32.js';
 import {Algorithm32Bindings} from '../../../../algorithm32/implementation/react-three/Algorithm32Bindings.js';
-import {ThreeCacheBackend} from '../../../../algorithm32/implementation/three-cache-backend/ThreeCacheBackend.js';
-import {LocalSunCompactProfileSelection} from '../../../../algorithm32/implementation/local-sun/cache/LocalSunCompactProfileSelection.js';
 import {ColorResetAltitudeHalfV1ColorDisplayModel} from '../../../../algorithm32/implementation/color-reset-altitude-half-v1/ColorResetAltitudeHalfV1ColorDisplayModel.js';
 import {DISPLAY_ADAPTATION_ILLUMINANCE_VALUE_KEY} from '../../../../algorithm32/implementation/color-reset-altitude-half-v1/consts.js';
 
@@ -25,8 +23,10 @@ export class FlatEarthRuntime {
 	 * @param {string} viewId - Exact mounted view identity.
 	 * @param {(error: Error) => void} onFailure - Owning session's failure observer.
 	 * @param {(change: FlatEarthCameraChange) => void} onCameraChange - Camera state accepted by the session.
+	 * @param {FlatEarthGraphicsResources} [graphics] - Startup context and cache transferred to this view.
 	 */
-	constructor(canvas, model, viewId, onFailure, onCameraChange) {
+	constructor(canvas, model, viewId, onFailure, onCameraChange, graphics = new FlatEarthGraphics(canvas)) {
+		this.graphics = graphics;
 		this.canvas = canvas;
 		this.model = model;
 		this.viewId = viewId;
@@ -37,9 +37,7 @@ export class FlatEarthRuntime {
 		this.disposed = false;
 		/** @type {SceneScale} */
 		this.sceneScale = {value: 1000, units: 'meters-per-scene-unit'};
-		this.renderer = new THREE.WebGLRenderer({canvas, antialias: false});
-		this.renderer.outputColorSpace = THREE.SRGBColorSpace;
-		this.renderer.toneMapping = THREE.NoToneMapping;
+		this.renderer = graphics.renderer;
 		this.renderer.setPixelRatio(window.devicePixelRatio);
 		this.camera = new THREE.PerspectiveCamera(camera.fieldOfViewDegrees, 1, 0.0001, 50000);
 		this.camera.position.set(0, camera.observerHeightMeters / this.sceneScale.value, 0);
@@ -56,11 +54,13 @@ export class FlatEarthRuntime {
 		);
 		/** @type {PreparedLocalSunFrame|null} */
 		this.active = null;
-		this.backend = new ThreeCacheBackend({THREE, renderer: this.renderer});
-		this.frames = new LocalSunFrameController({
-			backend: this.backend,
-			scheduler: {yieldControl: () => new Promise((resolve) => setTimeout(resolve, 0))},
-			stageFrame: (request) => this._stage(request),
+		this.backend = graphics.backend;
+		this.frames = graphics.frames;
+		graphics.stageFrame = (request) => this._stage(request);
+		void graphics.warm().catch((error) => {
+			if (!this.disposed) {
+				this.onFailure(error);
+			}
 		});
 		/** @type {Promise<void>|null} */
 		this.pending = null;
@@ -289,11 +289,11 @@ export class FlatEarthRuntime {
 	 */
 	async _prepare(observation, signal, observerHeight) {
 		signal.throwIfAborted();
-		let profile = new LocalSunCompactProfileSelection().create({
-			observation,
-			observerPosition: {coordinates: [0, 0, DistanceMath.toMeters(observerHeight)], units: 'meters'},
-			viewRayLimit: {value: 1926774, units: 'meters'},
-			maximumScatteringOrder: 4,
+		await this.graphics.warm();
+		signal.throwIfAborted();
+		let profile = FlatEarthGraphics.createProfile(observation, {
+			value: DistanceMath.toMeters(observerHeight),
+			units: 'meters',
 		});
 		let frame = await this.frames.prepareLocalFrame(
 			{
@@ -582,9 +582,7 @@ export class FlatEarthRuntime {
 					}
 				}
 			},
-			() => this.frames.whenReleased(),
-			() => this.backend.dispose(),
-			() => this.renderer.dispose(),
+			() => this.graphics.dispose(),
 		]) {
 			try {
 				await release();

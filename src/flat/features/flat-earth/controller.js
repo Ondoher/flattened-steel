@@ -1,5 +1,7 @@
 import {Service} from '@polylith/core';
 import {FlatEarthSession} from './FlatEarthSession.js';
+import {FlatEarthGraphics} from './runtime/FlatEarthGraphics.js';
+import {FlatEarthRuntime} from './runtime/FlatEarthRuntime.js';
 
 /**
  * Registers the page and coordinates independent scene sessions through shared application capabilities.
@@ -11,9 +13,11 @@ export class FlatEarthController extends Service {
 	 * Creates the Flat Earth feature capability.
 	 *
 	 * @param {unknown} registry - Owning application registry.
+	 * @param {FlatEarthGraphicsFactory} [createGraphics] - Internal owner of startup graphics construction.
 	 */
-	constructor(registry) {
+	constructor(registry, createGraphics = () => new FlatEarthGraphics()) {
 		super('flat-earth-controller', registry);
+		this.createGraphics = createGraphics;
 		this.implement([
 			'start',
 			'ready',
@@ -21,6 +25,7 @@ export class FlatEarthController extends Service {
 			'mount',
 			'unmount',
 			'getState',
+			'getCanvas',
 			'attach',
 			'detach',
 			'retry',
@@ -46,6 +51,11 @@ export class FlatEarthController extends Service {
 		this._workspaceListener = null;
 		/** @type {Map<string, number[]>} */
 		this._tools = new Map();
+		/** @type {Map<string, FlatEarthSurface>} */
+		this._surfaces = new Map();
+		/** @type {FlatEarthGraphicsResources|null} */
+		this._startupGraphics = null;
+		this._cacheStarted = false;
 	}
 
 	/**
@@ -100,6 +110,7 @@ export class FlatEarthController extends Service {
 			this._publishTime();
 		});
 		let pages = /** @type {AppPagesService} */ (this.registry.subscribe('app-pages'));
+		this._warmCache();
 		pages.add({
 			id: 'flat-earth',
 			label: 'flat-earth.title',
@@ -109,6 +120,27 @@ export class FlatEarthController extends Service {
 			controller: 'flat-earth-controller',
 		});
 		this._updateSessions();
+	}
+
+	/**
+	 * Called at feature readiness to begin cache construction independently of page selection and location entry.
+	 */
+	_warmCache() {
+		if (this._cacheStarted) {
+			return;
+		}
+		this._cacheStarted = true;
+		try {
+			let graphics = this.createGraphics();
+			this._startupGraphics = graphics;
+			void graphics.warm().catch((error) => {
+				if (!graphics.release) {
+					console.error('Flat Earth startup cache construction failed.', error);
+				}
+			});
+		} catch (error) {
+			console.error('Flat Earth startup graphics initialization failed.', error);
+		}
 	}
 
 	/**
@@ -130,7 +162,27 @@ export class FlatEarthController extends Service {
 	mount({viewId}) {
 		this.unmount(viewId);
 		this.model.open(viewId);
-		let session = new FlatEarthSession(viewId, this.model, (state) => this.fire('state-changed', {viewId, state}));
+		let graphics = this._startupGraphics;
+		this._startupGraphics = null;
+		let surface = {canvas: graphics?.canvas ?? document.createElement('canvas'), graphics};
+		this._surfaces.set(viewId, surface);
+		let session = new FlatEarthSession(
+			viewId,
+			this.model,
+			(state) => this.fire('state-changed', {viewId, state}),
+			(canvas, model, id, onFailure, onCameraChange) => {
+				let ownedGraphics = surface.graphics ?? new FlatEarthGraphics(canvas);
+				surface.graphics = null;
+				try {
+					return new FlatEarthRuntime(canvas, model, id, onFailure, onCameraChange, ownedGraphics);
+				} catch (error) {
+					void ownedGraphics
+						.dispose()
+						.catch((cleanupError) => console.error('Flat Earth graphics release failed.', cleanupError));
+					throw error;
+				}
+			},
+		);
 		this.sessions.set(viewId, session);
 		session.update(this.configuration.get());
 		this._registerTools(viewId);
@@ -225,6 +277,16 @@ export class FlatEarthController extends Service {
 	}
 
 	/**
+	 * Call this method to obtain the exact feature-owned canvas, retaining a startup cache's graphics context.
+	 *
+	 * @param {string} viewId - Exact mounted workspace view.
+	 * @returns {HTMLCanvasElement} - Surface mounted inside the React-owned scene host.
+	 */
+	getCanvas(viewId) {
+		return this._surfaces.get(viewId).canvas;
+	}
+
+	/**
 	 * Call this method to attach a mounted surface to its owning session.
 	 *
 	 * @param {string} viewId - Exact workspace view identity.
@@ -276,6 +338,13 @@ export class FlatEarthController extends Service {
 		if (session.canvas) {
 			session.detach(session.canvas);
 		}
+		let surface = this._surfaces.get(viewId);
+		this._surfaces.delete(viewId);
+		if (surface?.graphics) {
+			void surface.graphics
+				.dispose()
+				.catch((error) => console.error('Unused Flat Earth graphics release failed.', error));
+		}
 		this.model.close(viewId);
 	}
 
@@ -283,6 +352,13 @@ export class FlatEarthController extends Service {
 	 * Call this method to release feature subscriptions and every remaining view session.
 	 */
 	stop() {
+		if (this._startupGraphics) {
+			void this._startupGraphics
+				.dispose()
+				.catch((error) => console.error('Flat Earth startup graphics release failed.', error));
+			this._startupGraphics = null;
+		}
+		this._cacheStarted = false;
 		this.timeModel?.synchronize(true);
 		this.timeModel?.reset();
 		if (this._timeRegistration != null) {

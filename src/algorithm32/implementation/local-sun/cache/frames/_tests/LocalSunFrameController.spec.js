@@ -2,6 +2,60 @@ import {LocalSunFrameController} from '../LocalSunFrameController.js';
 import {LocalSunFrameTestSupport} from './LocalSunFrameTestSupport.js';
 
 describe('LocalSunFrameController complete publication and lease lifecycle', () => {
+	it('warms construction without a frame and lends the same field to a queued live request', async () => {
+		const backend = new LocalSunFrameTestSupport();
+		const stage = jasmine.createSpy('stage').and.callFake((request) => backend.stage(request));
+		const controller = new LocalSunFrameController({backend, stageFrame: stage});
+		const profile = LocalSunFrameTestSupport.createProfile();
+		await controller.prepareCache(profile);
+		expect(controller.active).toBeNull();
+		expect(stage).not.toHaveBeenCalled();
+		const submissions = backend.submissions;
+		expect(submissions).toBeGreaterThan(0);
+		const warming = controller.prepareCache(profile);
+		const pending = controller.prepareLocalFrame(LocalSunFrameTestSupport.request(profile));
+		await warming;
+		const frame = await pending;
+		expect(backend.submissions).toBe(submissions);
+		expect(stage).toHaveBeenCalledTimes(1);
+		controller.publishPreparedLocalFrame(frame);
+		controller.dispose();
+		await controller.whenReleased();
+		expect(backend.handles.size).toBe(0);
+	});
+
+	it('cancels in-flight warming on disposal and context loss without retaining late resources', async () => {
+		for (const transition of ['dispose', 'handleContextLoss']) {
+			const backend = new LocalSunFrameTestSupport();
+			let resume, started;
+			const gate = new Promise((resolve) => {
+				resume = resolve;
+			});
+			const beginning = new Promise((resolve) => {
+				started = resolve;
+			});
+			const controller = new LocalSunFrameController({
+				backend,
+				stageFrame: (request) => backend.stage(request),
+				scheduler: {
+					yieldControl: async () => {
+						started();
+						await gate;
+					},
+				},
+			});
+			const warming = controller.prepareCache(LocalSunFrameTestSupport.createProfile());
+			const rejected = expectAsync(warming).toBeRejected();
+			await beginning;
+			controller[transition]();
+			resume();
+			await rejected;
+			controller.dispose();
+			await controller.whenReleased();
+			expect(backend.handles.size).toBe(0);
+		}
+	});
+
 	it('preserves the published frame and releases candidate fields when spectral packing fails', async () => {
 		const backend = new LocalSunFrameTestSupport();
 		const controller = new LocalSunFrameController({

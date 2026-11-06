@@ -18,7 +18,7 @@ export default class FlatEarthPage extends Component {
 	constructor(props) {
 		super(props);
 		this.state = props.initialState;
-		this.canvas = React.createRef();
+		this.surface = React.createRef();
 		this._onStateChanged = this._onStateChanged.bind(this);
 		this._onRetry = this._onRetry.bind(this);
 	}
@@ -40,6 +40,7 @@ export default class FlatEarthPage extends Component {
 			this._detachView();
 			this._attachView();
 		}
+		this._canvas.setAttribute('aria-label', this._text('flat-earth.title'));
 	}
 
 	/**
@@ -57,7 +58,11 @@ export default class FlatEarthPage extends Component {
 		this._viewId = this.props.viewId;
 		this._listener = this._view.listen('state-changed', this._onStateChanged);
 		this.setState(this._view.getState(this._viewId));
-		this._view.attach(this._viewId, this.canvas.current);
+		this._canvas = this._view.getCanvas(this._viewId);
+		this._canvas.className = 'flat-earth-canvas';
+		this._canvas.setAttribute('aria-label', this._text('flat-earth.title'));
+		this.surface.current.appendChild(this._canvas);
+		this._view.attach(this._viewId, this._canvas);
 	}
 
 	/**
@@ -68,7 +73,8 @@ export default class FlatEarthPage extends Component {
 			this._view.unlisten('state-changed', this._listener);
 		}
 		this._listener = null;
-		this._view.detach(this._viewId, this.canvas.current);
+		this._view.detach(this._viewId, this._canvas);
+		this._canvas.remove();
 	}
 
 	/**
@@ -154,11 +160,10 @@ export default class FlatEarthPage extends Component {
 	 * @returns {React.ReactNode} - Independently owned scene surface.
 	 */
 	render() {
-		let title = this._text('flat-earth.title');
 		let status = this.state.status;
 		return (
 			<div className="flat-earth-page" data-view-id={this.props.viewId} data-scene-status={status}>
-				<canvas ref={this.canvas} className="flat-earth-canvas" aria-label={title} />
+				<div ref={this.surface} className="flat-earth-surface" />
 				{this._renderStatus()}
 				{this._renderLookHint()}
 			</div>

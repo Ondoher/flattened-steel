@@ -61,6 +61,12 @@ export class LocalSunFrameController {
 	 *
 	 * @type {number}
 	 */ _pendingOperations = 0;
+	/**
+	 * Cache-only jobs share the build tail but are independent of live-frame supersession.
+	 *
+	 * @type {Set<AbortController>}
+	 */
+	_warming = new Set();
 	/** Disposal completion, including the final cache borrower.
 	 *
 	 * @type {Promise<void>}
@@ -326,7 +332,7 @@ export class LocalSunFrameController {
 	 * AggregateError includes failed controller cleanup; report both construction and cleanup causes.
 	 *
 	 * @param {LocalSunCompactConstructionProfile} profile - Accepted canonical construction.
-	 * @param {LocalSunFrameRequest} request - Complete additional byte accounting.
+	 * @param {Pick<LocalSunFrameRequest, 'otherOwnedGpuBytes'>} request - Complete additional byte accounting.
 	 * @param {AbortSignal} signal - Current job cancellation.
 	 * @returns {Promise<LocalSunFrameCacheEntry>} - Completed retained resources.
 	 */
@@ -351,6 +357,7 @@ export class LocalSunFrameController {
 				signal,
 				otherOwnedGpuBytes: {value: request.otherOwnedGpuBytes.value + retained, units: 'bytes'},
 			});
+			signal.throwIfAborted();
 			if (!(cache instanceof LocalSunCompactCache)) throw new TypeError('Complete compact GPU cache required.');
 			const entry = {
 				key,
@@ -535,6 +542,42 @@ export class LocalSunFrameController {
 		return this._released;
 	}
 
+	/**
+	 * Call this method to retain canonical construction before any live observation frame is requested.
+	 * Construction shares the frame build queue and is reused by compatible later frames. It neither
+	 * stages nor publishes a frame. Cancellation, unavailable contexts and backend failures reject;
+	 * incomplete resources are released and callers may retry on a usable controller.
+	 *
+	 * @param {LocalSunFrameRequest['profile']} profile - Selected physical construction policy.
+	 * @param {AbortSignal} [signal] - Optional owner cancellation.
+	 * @returns {Promise<void>} - Completion after the canonical field is retained.
+	 */
+	prepareCache(profile, signal) {
+		this._assertUsable();
+		signal?.throwIfAborted();
+		const canonical = LocalSunCompactConstructionProfile.assert(profile).createCanonicalConstructionProfile();
+		const cancellation = new AbortController();
+		const abort = () => cancellation.abort(signal.reason);
+		signal?.addEventListener('abort', abort, {once: true});
+		this._warming.add(cancellation);
+		this._pendingOperations++;
+		const operation = this._tail.then(async () => {
+			this._assertUsable();
+			cancellation.signal.throwIfAborted();
+			await this._prepareEntry(canonical, {otherOwnedGpuBytes: {value: 0, units: 'bytes'}}, cancellation.signal);
+		});
+		this._tail = operation.then(
+			() => {},
+			() => {},
+		);
+		return operation.finally(() => {
+			signal?.removeEventListener('abort', abort);
+			this._warming.delete(cancellation);
+			this._pendingOperations--;
+			this._notifyReleased();
+		});
+	}
+
 	/** Call this method to stage an exact live frame; newer accepted requests supersede earlier preparations.
 	 * Unavailable controllers, already-aborted signals and invalid requests throw synchronously;
 	 * restore the controller or correct the request before retrying. Superseded-packet cleanup can
@@ -645,6 +688,9 @@ export class LocalSunFrameController {
 	 */
 	handleContextLoss() {
 		if (this._disposed || this._contextLost) return;
+		for (const cancellation of this._warming) {
+			cancellation.abort();
+		}
 		this._cancellation?.abort();
 		this._generation++;
 		this._contextLost = true;
@@ -692,6 +738,9 @@ export class LocalSunFrameController {
 	 */
 	dispose() {
 		if (this._disposed) return;
+		for (const cancellation of this._warming) {
+			cancellation.abort();
+		}
 		this._cancellation?.abort();
 		this._generation++;
 		this._disposed = true;

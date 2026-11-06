@@ -11,6 +11,14 @@ export interface FlatEarthController extends EventBus {
 	getState(viewId: string): FlatEarthSceneState;
 
 	/**
+	 * Call this method to obtain the retained graphics surface for a mounted view.
+	 *
+	 * @param viewId - Exact mounted view identity.
+	 * @returns - Feature-owned canvas for the React-owned host.
+	 */
+	getCanvas(viewId: string): HTMLCanvasElement;
+
+	/**
 	 * Call this method to relay attachment of one mounted scene surface.
 	 *
 	 * @param viewId - Exact workspace view identity.

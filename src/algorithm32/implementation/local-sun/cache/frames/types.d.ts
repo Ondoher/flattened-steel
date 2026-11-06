@@ -148,6 +148,15 @@ type LocalSunFramePublication = Readonly<{
 type LocalSunFrameRenderInstallation = () => void;
 /** Explicit source-owned complete-frame preparation and publication capability. */
 interface LocalSunFramePublicationController {
+	/**
+	 * Call this method to retain reusable canonical construction without staging a live frame.
+	 *
+	 * @param profile - Selected physical construction policy.
+	 * @param signal - Optional owner cancellation.
+	 * @returns - Completion after the canonical field is retained.
+	 */
+	prepareCache(profile: LocalSunCompactConstructionProfile, signal?: AbortSignal): Promise<void>;
+
 	/** Call this method to await disposal, pending cleanup and final valid cache borrower release. */ whenReleased(): Promise<void>;
 	/** Single displayed aggregate, or no available frame after loss. */ readonly active: PreparedLocalSunFrame | null;
 	/** Call this method to stage exact physical/receiver/shader state without replacing the displayed frame. */ prepareLocalFrame(

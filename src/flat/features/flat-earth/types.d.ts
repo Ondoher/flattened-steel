@@ -9,6 +9,30 @@ type FlatEarthViewService = import('./views/flat-earth.js').FlatEarthView;
 type FlatEarthControllerService = import('./controller.js').FlatEarthController;
 
 /**
+ * Feature-owned graphics context and canonical construction lifetime.
+ */
+type FlatEarthGraphicsResources = import('./runtime/FlatEarthGraphics.js').FlatEarthGraphics;
+
+/**
+ * Feature-internal startup resource constructor.
+ */
+type FlatEarthGraphicsFactory = () => FlatEarthGraphicsResources;
+
+/**
+ * Surface reserved for one view, with startup ownership transferred when its runtime attaches.
+ */
+type FlatEarthSurface = {
+	/**
+	 * Exact canvas retaining its original WebGL context.
+	 */
+	canvas: HTMLCanvasElement;
+	/**
+	 * Unclaimed startup resource, or null once the runtime owns disposal.
+	 */
+	graphics: FlatEarthGraphicsResources | null;
+};
+
+/**
  * One view's scene preparation and accepted observation.
  */
 type FlatEarthSceneState = {
