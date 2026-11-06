@@ -245,6 +245,27 @@ production integration must reconcile ground meshes/intersections, atmosphere
 paths, Sun attenuation, the separate star presentation surface, cache reuse,
 frame transactions, and lifecycle verification with the new physical owner.
 
+### Completed Three.js scene-render follow-up
+
+The owner requests a real cache-builder to atmosphere-shader to Three.js scene
+integration, producing outward/inward renders from one location near the rim.
+The final scene includes a finite ground object and atmosphere, without other
+visible objects. Both views consume the same complete cache and differ only
+by a 180-degree heading change. The owner requires the observer to remain
+inside the dome, delegates height/distance selection to make the edge legible,
+and keeps natural framing rather than the proposed telephoto view.
+
+The [scene-render plan](scene-render-plan.md) owns exact framing, material/source
+assumptions, code responsibilities, stages, verification, and resource estimates.
+It supersedes earlier provisional location/height proposals for this follow-up.
+The owner selected independent-execution and R1-R4 are complete. The
+[scene report](../../../../../tmp/experiments/flat-dome-cache-shape/runs/00053-r4-scene-report/index.html)
+contains both actual renders and verification. The integration succeeds, while
+the near-rim reference samples expose substantial approximation error. The
+status and execution record own its measurements and qualifications. This does
+not reopen the completed slice-count comparison or change its evidence, select
+another distance distribution, or promote experimental code into production.
+
 ## Open Questions
 
 The selected quadratic count study is complete. The [execution record](execution.md)
@@ -262,4 +283,5 @@ the fixed directional and spatial representation.
 - Would an owner-selected alternative distribution or later dense-uniform
   curve-fitting study improve the measured compromises?
 
-These are follow-up questions, not additional authorized execution milestones.
+These research questions remain deferred. The separately requested scene-render
+follow-up has its own plan and does not authorize those broader investigations.

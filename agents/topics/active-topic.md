@@ -2,11 +2,13 @@
 
 Current active topic: poc-experiments/engineering-studies/flat-dome-cache-shape.
 Canonical entry: [Flat Dome Cache Shape](poc-experiments/engineering-studies/flat-dome-cache-shape/README.md).
-Focus: discover an accurate, compact scattering-cache shape for the fixed
-North Pole-centered atmospheric dome. Investigate each atmospheric sample's
-Euclidean distance to the curved dome surface, the slice count needed with
-owner-selected quadratic spacing, valid transforms, and measured
-error/storage/build/lookup tradeoffs. Other distributions are deferred.
+Focus: completed live-cache to updated-shader to Three.js finite-ground scene
+integration, with opposite outward/inward renders from an inside-dome observer
+near the rim. The owner delegated height/distance selection and kept natural
+FOV. The [scene report](../../tmp/experiments/flat-dome-cache-shape/runs/00053-r4-scene-report/index.html)
+contains both renders and measured verification. Integration succeeds; near-rim
+probe errors reach 37.53%, so accuracy remains qualified. No numerical work is
+running. Other distributions and production promotion remain deferred.
 
 The experiment has a saved, second-agent-critiqued slice-count plan requiring
 accuracy tables and actual cache/probe/libRadtran color swatches across distances
@@ -14,8 +16,11 @@ and altitudes. The owner selected independent-execution, and M1-M4 are complete.
 The [corrected final report](../../tmp/experiments/flat-dome-cache-shape/runs/00041-m4-report/index.html)
 covers thirteen counts, development and held-out accuracy, repeated timing,
 memory, real three-method swatches, and reference limitations. Final verification
-is run 00042. The next focus is owner assessment and selection of any follow-up;
-no additional distribution search or production promotion is selected. The [execution
+is run 00042. The [scene-render follow-up plan](poc-experiments/engineering-studies/flat-dome-cache-shape/scene-render-plan.md)
+is complete, including its read-only plan critique and R1-R4 execution.
+The latest independent-execution invocation authorized the contained follow-up,
+including cache builds, renders, verification and scoped local checkpoints.
+Production promotion and alternate distributions remain unselected. The [execution
 record](poc-experiments/engineering-studies/flat-dome-cache-shape/execution.md)
 owns decisions and milestone evidence. The design owns
 requirements and hypotheses, the plan owns sequencing, and status owns current
@@ -45,5 +50,5 @@ not resumed by this topic selection.
 1. [Repository instructions](../../AGENTS.md).
 2. [Experiment entry](poc-experiments/engineering-studies/flat-dome-cache-shape/README.md).
 3. [Experiment design](poc-experiments/engineering-studies/flat-dome-cache-shape/design.md).
-4. [Experiment plan](poc-experiments/engineering-studies/flat-dome-cache-shape/plan.md).
+4. [Scene-render plan](poc-experiments/engineering-studies/flat-dome-cache-shape/scene-render-plan.md).
 5. [Experiment status](poc-experiments/engineering-studies/flat-dome-cache-shape/status.md).

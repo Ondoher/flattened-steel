@@ -10,7 +10,7 @@ const cie = readFileSync(
 	.trim()
 	.split(/\r?\n/)
 	.map((line) => line.split(',').map(Number));
-const weights = medium.wavelengths.map((center, channel) => {
+export const weights = medium.wavelengths.map((center, channel) => {
 	const lower = center - medium.widths[channel] / 2;
 	const upper = center + medium.widths[channel] / 2;
 	const sum = [0, 0, 0];

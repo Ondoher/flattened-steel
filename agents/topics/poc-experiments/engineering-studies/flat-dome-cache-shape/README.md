@@ -1,6 +1,6 @@
 # Flat Dome Cache Shape Experiment
 
-Status: M1-M4 complete; corrected final report and evidence verification published.
+Status: slice study and Three.js scene-render follow-up complete, with qualified near-rim accuracy.
 
 ## Objective
 
@@ -29,7 +29,9 @@ performance are the primary optimization variables among accurate candidates.
 ## Governing Documents
 
 - [Design](design.md)
-- [Plan](plan.md)
+- [Completed scene-render plan](scene-render-plan.md)
+- [Two-view scene report](../../../../../tmp/experiments/flat-dome-cache-shape/runs/00053-r4-scene-report/index.html)
+- [Completed slice-count plan](plan.md)
 - [Status](status.md)
 - [Execution record](execution.md)
 
@@ -51,10 +53,17 @@ performance are the primary optimization variables among accurate candidates.
 
 ## Current Focus
 
-Review the [corrected final report](../../../../../tmp/experiments/flat-dome-cache-shape/runs/00041-m4-report/index.html),
-which includes thirteen counts, real three-method swatches, held-out accuracy,
-measured storage, repeated build timing, and non-slice diagnostics. The
-[execution record](execution.md) owns decisions and verification limits. N12
-is a provisional balanced study configuration, not an accepted production
-cache or universal optimum. No subsequent study, production promotion,
-experiment closure, or alternative distribution has been selected.
+The completed [scene-render plan](scene-render-plan.md) implements a reusable
+complete cache, an updated atmosphere shader, and an actual Three.js finite-ground
+scene facing outward and inward from one inside-dome location. The owner delegated
+distance/height selection and kept natural FOV. The [scene report](../../../../../tmp/experiments/flat-dome-cache-shape/runs/00053-r4-scene-report/index.html)
+links both full-size renders, measured costs, verification and raw evidence.
+Integration works; the new near-rim rays expose up to 37.53% air-radiance error
+against the independent probe. This is a qualified experimental result, not a
+production accuracy claim. The [status](status.md) owns verification and next action.
+
+The completed [slice-study report](../../../../../tmp/experiments/flat-dome-cache-shape/runs/00041-m4-report/index.html)
+remains evidence, with qualifications in the [execution record](execution.md).
+N12 is a provisional study configuration, not an accepted production cache or
+universal optimum. Production promotion, experiment closure, and alternative
+distance distributions remain separate owner selections.

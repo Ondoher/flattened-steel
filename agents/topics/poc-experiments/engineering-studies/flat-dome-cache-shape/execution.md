@@ -1,6 +1,6 @@
 # Flat Dome Cache Shape Execution
 
-Status: M1-M4 complete under the owner's independent-execution invocation.
+Status: scene-render R1-R3 complete; final-size renders checked, R4 reporting in progress.
 
 The [plan](plan.md) owns milestones, measurements, count matrix, and report
 requirements. The [status](status.md) owns the next action. Local checkpoints
@@ -325,3 +325,181 @@ immutable run allocation and an independently verifiable physical coordinate.
 The final local checkpoint uses the adviser-preaccepted message
 `feat(experiments): complete flat dome cache slice study`; it contains this
 completed execution record. No push or production modification is included.
+
+## Scene-render follow-up planning
+
+The owner requested code that constructs a complete cache, supplies it to an
+updated atmosphere shader, and renders an actual Three.js scene in two opposite
+directions near the disk rim. A finite ground object is required; other visible
+objects are omitted. The owner stopped premature implementation and requested
+a plan. The initial two-degree/eye-height settings and later five-mile/100-m
+proposal were superseded by owner-delegated distance/height selection with an
+explicit inside-dome constraint. The owner retained natural FOV rather than
+the proposed telephoto framing.
+
+The [scene-render plan](scene-render-plan.md) owns the exact current settings,
+material/source assumptions, implementation sequence, estimates and evidence
+criteria. One separate agent completed the create-plan critique. Both findings
+were incorporated: explicit Native15 spectral ground endpoint normalization/
+composition, and an early small rim crop using final projection/pixel centers.
+There were no rejected suggestions and no added standards-review round.
+
+Only planning/continuity documents changed. No new run was allocated, numerical
+execution or implementation started, dependency installed, or Git write made.
+Prior independent-execution authority covered the completed count study and
+does not start this follow-up. Future execution begins at R1 if selected.
+
+## Scene-render execution
+
+The owner selected independent-execution of the saved scene-render plan. The
+existing experiment/source/output boundaries remain in force. Local checkpoints
+within this assigned work use the adviser's preaccepted messages; production
+changes and pushing remain outside scope.
+
+### R1 - Shared-context live cache
+
+Use the public `ShaderRuntimePass` constructor directly through a browser-bundle
+alias to its unchanged production source. Its public fragment/uniform boundary
+supports the new field without pretending the old slab compact-cache contract
+can represent it. Retain production camera reconstruction and pass ownership,
+derive experiment-owned cap/lookup/capture GLSL, and use Three-managed FP32
+textures throughout. The old rectangular/raycast-only ground and byte-packed
+distance input are replaced inside the experiment, not production.
+
+Accepted `00043-r1-three-cache` compares34 old/new physical rays against a fresh
+raw-WebGL N12 build. All four pure orders and all15 channels match exactly:
+maximum absolute/relative difference0. Cumulative retention's maximum relative
+rounding discrepancy is1.173e-7. The live3036-node middle-Sun field owns
+19,096,352 texture bytes including lookup tables; build/verification cache
+targets peak at76,221,728 bytes, excluding opaque driver/JS costs. This is
+camera-independent data, returned as a `DomeCacheResource` for direct consumption.
+
+Runs43/44's `constructionAndInspectionMilliseconds` label includes the later
+comparison-query preparation/readback, about85 seconds total. Preserve those
+original values but do not call them pure construction. The current builder
+records field construction/inspection and comparison queries separately and
+reuses R1 evidence rather than compiling/running redundant comparison queries
+for every subsequent scene session.
+
+### R2/R3 - Real ground, adapted shader, pilot and reference checks
+
+The scene has an actual Three `Mesh` covering the disk, clipped analytically
+in observer-local coordinates. Its one floating-point capture pass outputs
+physical hit distance, hit flag and spectral material identity. Both headings
+use that renderer input and the same cumulative texture. The updated atmosphere
+shader integrates analytic J1 plus cumulative J2-J4 exactly once, applies the
+spectral ground endpoint through wavelength-dependent transmission, then converts
+through the fixed CIE/linear-sRGB/exposure/transfer chain.
+
+The angular address/weight selection is hoisted out of the per-distance loop
+because view direction is constant along a ray. Lookup physics and quadrature
+are unchanged; this avoids repeating the98-direction search at every sample.
+Record it as a view-evaluation implementation change, not a new cache series.
+
+Accepted `00044-r3-three-pilot` supplies the320x180 pair and1280x64 crop at
+the final full-frame projection. Real ground draws, finite rim hit/miss, camera
+directions and sampled spectral outputs are retained. The outward rim is a
+sharp ground termination near the horizon, not a visible wall; the inward
+atmospheric band is brighter. Most sky is dark because the chosen camera is
+only about5m below the shallow cap and looks into vacuum above that local roof.
+No per-view exposure or framing adjustment is made.
+
+Accepted `00045-r2-scene-probe` independently samples16 new rays/all15 channels,
+1920 batches, with converged binary64 J1 and sampled J2-J4. Its GPU work took
+7.414s. Intrinsic N12 query errors are materially worse here: median17.63%,
+p95/max37.25%. Original broad-study accuracy does not qualify this near-rim pose.
+No count/distribution search is silently added to hide that limitation.
+
+Initial check `00046` fails because it compares cap exit at an ideal binary64
+camera direction with exit at the actual FP32 reconstructed camera direction.
+For the27.5-million-meter pilot horizon path, a small camera-direction rounding
+change moves the far exit by166.4m. At the actual measured GPU direction the
+independent solver differs by only0.66m. `00047` separates camera quantization
+from solver error, retains both, and applies the original solver error bound
+to like-for-like directions; it does not widen the bound or rewrite `00046`.
+
+Accepted `00048-r4-three-final` produces both1280x720 images from one completed
+cache. Camera-only height/FOV changes keep texture and shader identities;
+auxiliary outside-outward rays are vacuum and outside-inward rays enter the
+cap. The actual final views remain at45m,5km inside, level90-degree horizontal
+FOV. Zero-air/unit-transmission checks verify the declared ground spectrum.
+`00049` verifies actual fragments: zero display-code difference from the CPU
+color owner, maximum transmission error2.05e-7, maximum spectral ground
+composition discrepancy2.70e-9. New scene-air errors span3.11%-37.53% against
+the matched probe; these are approximation limits, not port/display errors.
+
+Final-source checks additionally record owned-resource counters after disposal,
+and reject undrawn/nonfinite pixels. A fresh final run retains that evidence;
+source formatting/type-only changes do not trigger the old full count/native
+campaigns. R4 completion and handoff are recorded below.
+
+### R4 - Final pair and qualified completion
+
+Canonical final run `00050-r4-three-final` renders the two unannotated 1280x720
+PNGs through the updated shader and real finite ground mesh. Both use one live
+N12 cache. Settings remain 5 km inside the rim, 45 m high, level camera, 90-degree
+horizontal FOV, fixed inward Sun and exposure 0.06. The camera is inside the
+49.95725 m local roof with 4.95700 m shortest clearance. The outward ground
+cutoff is distinguishable approximately 5.76 pixels below the horizon; it is
+not a large cliff or an opaque dome. The inward atmospheric band is brighter.
+Both actual images were inspected; no extra scene objects were introduced.
+
+`00050` reproduces both `00048` PNGs and assembled GLSL byte-for-byte. It records
+owned Three resources dropping from two geometries/three textures to zero/zero,
+explicit cache disposal and requested context loss. Camera height/FOV checks
+retain cache and shader identities; final rendering restores the selected pose.
+Node verification rejects undrawn/nonfinite pixels and checks actual ground
+participation. `00051-r2-scene-check` verifies the final source's geometry,
+transmission, spectral endpoint composition and display conversion against
+independent calculations and the existing new probe run. No additional native
+guide campaign or count/distribution sweep was needed.
+
+The [final scene report](../../../../../tmp/experiments/flat-dome-cache-shape/runs/00053-r4-scene-report/index.html)
+and its [summary](../../../../../tmp/experiments/flat-dome-cache-shape/runs/00053-r4-scene-report/summary.md)
+link the pair, settings, timing, raw pixel spectra, accuracy CSV and resource
+identities. Report `00052` remains immutable; `00053` corrects report text spacing
+without rerendering physics. The latter authenticates 1,259 parent files totaling
+86,453,084 bytes and verifies both native-size images in a browser without errors.
+Observed scene-run progress gaps are at most 25.015 s. Prior slice-study
+monitoring limitations remain in that study's evidence. Primary self-verification
+is not an independent audit or a standards-compliance result.
+
+Actual scene-air errors on the 16 matched rays range from 3.11% to 37.53%, with
+median 17.87%. Independent uncertainty is much smaller. The cause is not isolated
+to distance slice count; the present spatial/angular representation remains
+unqualified for this near-rim pose. Exact port parity, correct composition and
+successful integration do not resolve this accuracy limit. Keeping that measured
+qualification completes the plan's stated scope; silently retuning the cache
+would begin an unselected investigation. Ground is the frozen diagnostic spectral
+endpoint with no surface feedback into the absorbing-ground scattering solution.
+
+Run `00050` measured 10.592 s compilation, 7.643 s field construction/inspection,
+and 3.758 s camera/shader preparation plus auxiliary reuse controls. Outward/
+inward shader wall times were 0.546/0.297 s; totals with readback, PNG and checks
+were 1.642/1.319 s. Cache-owned retained textures total 18.212 MiB and cache/
+verification peak targets 72.691 MiB. These are synchronized workstation wall
+and owned-payload measurements, not isolated GPU timer results or full-process
+memory. Final frames use synchronized four-row GPU tiles at full projection.
+
+Local checkJS/types and all 47 experiment JavaScript/declaration files' Prettier/
+curly formatting pass. The final source differs from the sealed final run only
+in formatting its console summary; no physics or executable semantics changed.
+Current documentation links and Git whitespace are checked before checkpoint.
+Dedicated standards reviewers/audits remain disabled. No experimental unit-test
+tree was created. Exact native finite-cap oracle coverage, persistent cache
+packaging, app integration and broader accuracy/convergence studies remain
+explicitly deferred.
+
+Reproduce a fresh final pair with
+`node experiments/flat-dome-cache-shape/run-scene-render.mjs --final`.
+`run-scene-probe.mjs` supplies the independent scene rays;
+`run-scene-check.mjs --render-run <run-name>` verifies a selected rendering;
+`run-scene-report.mjs` publishes a new report from finalized matching inputs.
+All runners allocate new immutable runs. Do not reopen or overwrite saved ones.
+
+R1-R4 are complete with the stated accuracy qualification. No numerical process
+is running and no implementation blocker remains. Owner review is the next
+action; production promotion, further research and lifecycle closure remain
+separate selections. The adviser-preaccepted scoped local checkpoint uses
+`feat(experiments): render flat dome cache scene`. It excludes unrelated city,
+Flat topic, transfer and Prettier-ignore changes; no push is authorized.

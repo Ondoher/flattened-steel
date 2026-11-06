@@ -1,6 +1,29 @@
 # Flat Dome Cache Shape Experiment Status
 
-Status: M1-M4 complete; corrected report and final verification accepted.
+Status: scene-render R1-R4 complete, with qualified near-rim accuracy.
+
+## Current Focus
+
+The completed [scene-render plan](scene-render-plan.md) demonstrates a complete
+live cache, the updated atmosphere shader, and actual Three.js finite-ground
+rendering in two opposite directions from the same inside-dome observer. The
+[scene report](../../../../../tmp/experiments/flat-dome-cache-shape/runs/00053-r4-scene-report/index.html)
+links both 1280x720 PNGs, settings, timing and raw evidence. Canonical final run
+`00050` is verified by `00051`; `00053` verifies immutable artifacts and the
+rendered report. No numerical work is running. The experiment remains contained
+and open; no promotion or lifecycle closure was selected.
+
+The actual new near-rim rays expose a material accuracy limitation: N12 query
+errors reach 37.25%, and actual scene-air samples reach 37.53% against the matched
+independent probe. This is separate from exact Three/raw port parity and does
+not inherit the earlier broad-study 2% result. The report retains this
+qualification. No unselected count or distribution search was performed.
+
+The cache owns 18.212 MiB of resident textures (72.691 MiB peak construction/
+verification targets). Final compilation took 10.592 s; field construction and
+inspection took 7.643 s. Outward/inward tiled shader wall times were 0.546/0.297 s;
+totals including readback, PNG and checks were 1.642/1.319 s. These synchronized
+workstation measurements exclude opaque driver memory and do not establish FPS.
 
 ## Current Result
 
@@ -29,6 +52,27 @@ explicitly reported.
 
 ## Verification
 
+Scene run `00043` matches raw/Three builds exactly on 34 rays, all four orders
+and 15 channels. `00044` supplies the pilot pair and final-projection rim crop;
+`00045` supplies independent scene-ray probe batches. Initial failed check
+`00046` is preserved; `00047` separates ideal-camera direction quantization
+from intersection-solver error without widening the original solver bound.
+Final run `00050` reproduces both `00048` PNGs and GLSL byte-for-byte and records
+zero owned geometries/textures after disposal. `00051` confirms real ground
+hits, cap intervals, spectral composition, transmission and display conversion.
+Display discrepancy is zero code values. Height/FOV changes preserve cache and
+shader identities; vacuum/outside-entry controls pass. The visible cutoff agrees
+with the predicted rim; natural framing does not produce a large apparent cliff.
+Report `00053` authenticates 1,259 files (86,453,084 bytes), checks both images at
+native dimensions in the browser, and records observed progress intervals.
+
+Local scene-source types, Prettier/curly formatting, Git whitespace and current
+documentation links pass. Dedicated standards reviewers/audits remain disabled;
+no standards-compliance claim is made. Checkpoint-adviser monitoring remains
+active; the scoped checkpoint uses `feat(experiments): render flat dome cache scene`.
+
+### Prior slice-study verification
+
 Final `00042-m4-verification` is accepted. It verifies new/transitive immutable
 evidence and reuses exact unchanged manifest checks from `00036`. Current
 generated shaders match discovery/repeated timing; cached mirror values agree
@@ -46,9 +90,10 @@ the final adviser-recommended local checkpoint contains this completed state.
 
 ## Next Action
 
-Owner review of the results and color comparisons. Stronger directional
-convergence, other distance distributions, production integration, and experiment
-closure require separate selection. No further numerical work is running.
+Review the two renders and the qualified near-rim accuracy result with the owner.
+No required implementation work remains in the selected scene plan. Stronger
+directional/spatial convergence, other distance distributions, production
+integration, and experiment closure remain separate selections.
 Production, prior evidence, city data, and unrelated working changes remain
 outside this experiment checkpoint. Generated evidence remains under ignored
 `tmp/experiments/flat-dome-cache-shape/runs/`; never reopen sealed runs.
