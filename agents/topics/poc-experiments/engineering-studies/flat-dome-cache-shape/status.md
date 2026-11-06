@@ -1,115 +1,58 @@
 # Flat Dome Cache Shape Experiment Status
 
-Status: executing M1 under independent-execution; geometry proofs and the initial comparison contract are recorded.
+Status: executing M3; initial fields and independent development reference complete.
 
 ## Current State
 
-The topic, source root, ignored output root, and JavaScript type-check
-configuration are established. The [execution record](execution.md) owns current
-decisions and milestone reports. The design records the fixed-dome requirement,
-sample-to-dome Euclidean-distance coordinate hypothesis, selected quadratic spacing,
-coordinate/reuse risks, and direct-reference measurement strategy. No accepted
-cache shape or selected slice count exists. The implementation now includes
-stable cap geometry, valid-domain topology, immutable-run support, a frozen
-567-ray development matrix, and the first independently adapted probe source.
-The adapted probe has passed its first actual GPU/direct first-order pilot.
+The [execution record](execution.md) owns measured milestones, decisions,
+failures/recovery, and limitations. The [plan](plan.md) owns remaining work.
+The fixed North Pole-centered cap, sample-to-curved-surface Euclidean distance,
+and quadratic spacing are implemented inside this contained experiment.
+Production and earlier experiments remain read-only. No accepted production
+cache or final slice-count recommendation exists.
 
-The owner's coordinate clarification is incorporated in the design and plan:
-the added dimension measures each atmospheric sample's distance to the curved
-dome surface. The former disk-edge-distance wording is superseded. Coordinate
-sufficiency, inverse mapping, and slice spacing remain unverified hypotheses.
+The [M2 pilot report](../../../../../tmp/experiments/flat-dome-cache-shape/runs/00013-m2-pilot-report/index.html)
+contains actual cache/probe/libRadtran colors. Initial M3 six-count fields at
+three Sun offsets are complete. Development-only errors are retained in
+`00020-m3-dev-analysis`. Intermediate N6/N12/N24 and separate non-slice
+diagnostics precede freezing counts and evaluating held-out errors. No
+held-out accuracy has been inspected for tuning.
 
-Accuracy guides are owner-selected: the existing independent probe and
-libRadtran. The design records their distinct roles, required physical-match
-checks, independent adaptation of the probe, and uncertainty/coverage reporting.
-Cache size and build performance remain the primary optimization variables.
-The installed libRadtran version/help commands have run successfully. No
-libRadtran physical solve has completed yet. The independent GPU probe's first
-three-case, one-channel pilot is recorded in run 00004.
-
-The [slice-count plan](plan.md) now defines a fixed-distribution comparison,
-per-count accuracy/storage/build measurements, and matched color swatches from
-the new cache, independent probe, and libRadtran across physical sample
-distances and altitudes. Other distributions are deferred by the owner. The
-required read-only plan critique is complete. Its four suggestions were
-incorporated in the plan: valid-domain interpolation coverage, non-slice error
-diagnostics, guide applicability by observable/order, and development-only
-count tuning followed by frozen validation. No numerical count is accepted.
-
-The [dense-uniform curve-fitting follow-up](design.md#deferred-follow-up-fit-a-distribution-from-dense-uniform-slices)
-is recorded for later selection. It does not change the fixed quadratic
-distribution or add numerical work to the current plan.
-
-The preceding production task remains in its own topic. Its dome-boundary
-inspection is input to this experiment, not a production modification or an
-authorization to reopen retired Star work. The city-list addition and other
-preexisting working-tree changes remain separate from experiment source.
+The full native guide campaign is running in `00018-m3-lib-guide`. libRadtran
+is a local-height slab/collimated-source/all-orders guide, not finite-cap J4
+truth. The shared-physics check in `00019-m3-guide-proof` agrees within its
+stated sampling check. Exact native dome compatibility remains unestablished.
 
 ## Latest Verification
 
-- Scaffold helper `--check`: passed for `flat-dome-cache-shape`.
-- Folder resolver: the generated source paths retain the inherited
-  `experiment` set and types.md; no applicability changes were needed.
-- Git ignore check: generated-output probe path is ignored.
-- Local TypeScript check: passed for the scaffold configuration and ambient
-  declaration placeholder; this is not numerical verification.
-- No generated artifacts were placed beneath the source root.
-- Local links in the active-topic, experiment documents, and
-  source instructions resolve; the output root is empty and unallocated.
-- Git whitespace check: passed.
-- Authored experiment type check: passed after geometry/topology/probe-source changes.
-- `00001-m1-boundary`: accepted 190 analytic/coordinate checks; maximum
-  clearance roundtrip error 3.092281986027956e-11 meters. The preceding
-  `00000-m1-boundary` failed at sandbox-blocked WSL process launch; its completed
-  geometry results and failure are preserved unchanged.
-- `00002-m1-contract`: accepted 567 frozen physical cases, 98-direction
-  reflection-complete grid, topology coordinates, boundary support, and memory
-  forecast. This is not a scattering-accuracy or measured-build result.
-- `00004-m1-probe-pilot`: accepted actual RTX 2060 GPU execution, 24 batches
-  across three clearances. J1 relative differences from converged binary64
-  calculations were 0.063%, 0.228%, and 0.173%, within the declared uncertainty
-  check. Pure J2-J4 outputs were retained but are not yet a cache-accuracy result.
-  `00003` preserves the earlier sandbox-blocked Chrome launch.
-- One-pass second-agent plan critique completed; all four suggestions incorporated.
-- Type-check configuration: `experiments/flat-dome-cache-shape/jsconfig.json`.
-- Output root: `tmp/experiments/flat-dome-cache-shape/`.
-- Latest accepted run: `00004-m1-probe-pilot`.
+- Geometry: 190 checks; maximum distance roundtrip error 3.092281986027956e-11 m
+  (`00001`). Valid-row/boundary-support proofs and physical contract: `00002`.
+- Pilot cache fields and real three-method colors: `00008`, `00011`, `00012`,
+  `00013`. Failed runs and their diagnostics remain immutable.
+- All 18 initial M3 fields are finite/nonnegative (`00014`). Cumulative-only
+  retained lookup agrees with summed pure-order fields within 7e-7 relative.
+- Independent development probe: 61,200 batches, converged direct J1 plus
+  sampled J2-J4; raw sampled-J1 checks passed (`00017`).
+- Native shared-physics control: 45 channels pass the declared combined-sampling
+  check (`00016`, `00019`), with explicit limits on precision and geometry.
+- Local experiment type check passed after analysis/diagnostic updates.
+- Generated output remains under ignored `tmp/experiments/flat-dome-cache-shape/`.
+  New runs retain source snapshots, derivation, and recursive artifact hashes.
 
-## Standards Restoration Provenance
+## Standards and Checkpoints
 
-The source root inherits the permanent `experiments/` assignment to the
-`experiment` set: documentation.md, project-foundation.md, and types.md, with
-the matching repository overlays. The existing normalization marker records
-normalized status; the folder resolver parses the current manifest/overlay
-and resolves this source root successfully. No set definition, manifest
-assignment, overlay rule, or normalization marker was changed. No temporary
-standards configuration needs restoration at suspension or closure.
-
-Dedicated standards reviewers and independent audits are disabled by the
-repository contained-experiment policy. The topic transition does not activate
-those reviewers. Checkpoint-adviser monitoring remains active and independent.
-Local self-review, type checking after authored
-implementation, and the experiment's scientific/evidence checks remain owned
-by the primary agent; no standards-compliance result is claimed.
-
-The adviser recommends preserving the coherent scaffold as a separate
-checkpoint, excluding the earlier city change and unrelated working-tree
-changes. No commit was created as part of experiment initialization.
-
-## Run State
-
-Runs 00000 through 00004 are finalized below the declared output root. Later
-runs use strictly increasing local sequence numbers, suffixes of at most
-sixteen characters, and never reopen an earlier directory. Source snapshots
-are now retained with the source hashes in new runs.
-
-## Blockers
-
-None recorded.
+The source root retains the permanent experiment mapping, including types.md.
+No temporary standards configuration needs restoration. Dedicated standards
+reviewers and audits remain disabled; no standards-compliance result is claimed.
+Primary self-review, types, and scientific/evidence checks remain required.
+Checkpoint-adviser monitoring remains active. Local checkpoint `4b7be2d9`
+preserves M1's foundation. Unrelated city data and other preexisting changes
+remain excluded from experiment checkpoints.
 
 ## Next Action
 
-Complete the physical/reference pilot contract, then build the N=2/N=4
-working cache slice and obtain the first
-real three-method swatches. M1 remains open until reference/lookup controls are
-verified; no final slice recommendation or production change is claimed.
+Complete intermediate builds and non-slice controls, freeze provisional choices
+from development, evaluate held-out rays once, repeat useful build timings,
+and publish the full numeric/three-method swatch report. Preserve sealed runs;
+repair failures in new runs only. Other distributions and production integration
+remain deferred.

@@ -10,10 +10,11 @@ error/storage/build/lookup tradeoffs. Other distributions are deferred.
 
 The experiment has a saved, second-agent-critiqued slice-count plan requiring
 accuracy tables and actual cache/probe/libRadtran color swatches across distances
-and altitudes. The owner selected independent-execution of that plan. M1 is in
-progress: cap-coordinate checks, valid-row support, the 567-case benchmark, and
-storage forecasts are recorded in new immutable runs. Scattering comparisons
-and the final slice-count recommendation remain outstanding. The [execution
+and altitudes. The owner selected independent-execution of that plan. M2's
+three-method pilot is published. M3 has all six initial counts at three Sun
+positions and a completed independent development reference. Intermediate
+counts, non-slice diagnostics, held-out validation, repeated timings, and the
+final report remain. The full native guide campaign is running. The [execution
 record](poc-experiments/engineering-studies/flat-dome-cache-shape/execution.md)
 owns decisions and milestone evidence. The design owns
 requirements and hypotheses, the plan owns sequencing, and status owns current

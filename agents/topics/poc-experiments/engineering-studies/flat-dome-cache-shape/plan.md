@@ -1,6 +1,6 @@
 # Flat Dome Cache Shape: Slice-Count Study
 
-Status: execution selected; M1 in progress. The execution record and status own measured progress.
+Status: execution selected; M2 pilot published and M3 in progress. The execution record and status own measured progress.
 
 ## Outcome and Scope
 

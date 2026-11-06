@@ -33,7 +33,7 @@ vec2 edge(vec3 x,vec3 v){
   float t0=q==0.0?0.0:q/a,t1=q==0.0?0.0:c/q;
   float exit=max(0.0,max(t0,t1)*H);
   if(v.z<0.0){float ground=-x.z/v.z;vec2 hit=x.xy+ground*v.xy;
-   if(ground>=0.0&&ground<=exit&&length(hit)<=Rm)return vec2(ground,1);}
+   if(ground>=0.0&&ground<=exit)return vec2(ground,1);}
   return vec2(exit,0);
  }
  float r=length(x),b=dot(x,v),c=(r-R)*(r+R),d=b*b-c;
@@ -178,11 +178,12 @@ export async function executeGpu(shader, request) {
 					gl.uniform1f(gl.getUniformLocation(program, 'endDistance'), item.end);
 					gl.uniform1f(gl.getUniformLocation(program, 'sourceScale'), m.incidentScale);
 					gl.uniform1f(gl.getUniformLocation(program, 'referenceDistance'), m.referenceDistance);
+					gl.uniform1f(gl.getUniformLocation(program, 'guideTop'), m.topAltitude);
 					gl.uniform1i(gl.getUniformLocation(program, 'flatGeometry'), m.geometry === 'flat' ? 1 : 0);
 					gl.uniform1i(gl.getUniformLocation(program, 'finiteSource'), m.sourceKind === 'finite' ? 1 : 0);
 					gl.uniform1ui(
 						gl.getUniformLocation(program, 'firstSeed'),
-						(profile.seed + group * 4194304 + batch * paths) >>> 0,
+						(profile.seed + (group * profile.batches + batch) * paths) >>> 0,
 					);
 					gl.drawArrays(gl.TRIANGLES, 0, 3);
 					for (let attachment = 0; attachment < 4; attachment++) {
@@ -190,29 +191,18 @@ export async function executeGpu(shader, request) {
 						gl.readPixels(0, 0, 256, height, gl.RGBA, gl.FLOAT, pixels[attachment]);
 					}
 					if (gl.getError() !== gl.NO_ERROR || gl.isContextLost()) throw new Error('GPU context failed');
-					// 0..13 path metrics, followed by six bins of [total, preTotal, N1, N2, N3, N4, Rayleigh, Mie].
-					const sums = Array(62).fill(0);
+					// Pure-order moments only; the unchanged physical kernel remains cache-free.
+					const sums = Array(5).fill(0);
 					let maximumDepth = 0;
 					for (let i = 0; i < paths; i++) {
-						const p = pixels.map((a) => Array.from(a.subarray(i * 4, i * 4 + 4)));
-						if (p.flat().some((x) => !Number.isFinite(x) || x < 0))
-							throw new Error('Invalid path or safety cap reached');
-						const values = [...p[0], p[1][0], p[1][1], p[1][2], ...p[2], p[3][0], p[3][2], p[3][3]];
-						for (let k = 0; k < 14; k++) sums[k] += values[k];
-						maximumDepth = Math.max(maximumDepth, p[3][1]);
-						const bin = [1e4, 5e4, 1e5, 3e5, 1e6, Infinity].findIndex((edge) => p[1][3] < edge),
-							base = 14 + 8 * bin;
-						for (const [k, value] of [
-							p[0][0],
-							p[1][1],
-							p[0][1],
-							p[0][2],
-							p[0][3],
-							p[1][0],
-							p[2][0],
-							p[2][1],
-						].entries())
-							sums[base + k] += value;
+						const offset = i * 4;
+						for (let k = 0; k < 4; k++) {
+							const value = pixels[0][offset + k];
+							if (!Number.isFinite(value) || value < 0) throw new Error('Invalid reference path.');
+							sums[k] += value;
+						}
+						sums[4] += pixels[1][offset];
+						maximumDepth = Math.max(maximumDepth, pixels[3][offset + 1]);
 					}
 					await globalThis['retainBatch']({
 						profile: profile.name,

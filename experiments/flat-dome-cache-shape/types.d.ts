@@ -136,3 +136,36 @@ type SkyDirectRule = {
 	/** Quadrature abscissae. */ nodes: number[];
 	/** Positive integration weights. */ weights: number[];
 };
+
+/**
+ * Generated deterministic cache-construction and view-reconstruction shaders.
+ */
+type DomeShaderSources = {
+	/** Builds one pure higher-order source-function field. */ build: string;
+	/** Reconstructs first through fourth order radiance for common rays. */ view: string;
+};
+
+/**
+ * Explicit serializable physical inputs for actual GPU construction.
+ */
+type DomeGpuRequest = {
+	/** Deterministic build and query sources. */ shaders: DomeShaderSources;
+	/** Frozen angular direction count. */ directionCount: number;
+	/** Independent physical configurations and cold-field builds. */ datasets: {
+		/** Unique build/replicate label. */ label?: string;
+		/** Valid-domain position grid. */ layout: DomeTopology;
+		/** Common physical rays for reconstruction. */ cases: DomeCase[];
+	}[];
+};
+
+/**
+ * Physical color and one explicitly exposed display representation.
+ */
+type DomeColor = {
+	/** CIE1931 radiant XYZ integrated over the selected bins. */ xyz: number[];
+	/** Photopic luminance in cd m^-2. */ luminance: number;
+	/** Common-exposure linear sRGB. */ linear: number[];
+	/** Displayed eight-bit sRGB. */ rgb: number[];
+	/** CIELab under the fixed common D65 display white. */ lab: number[];
+	/** True when display clipping or gamut exclusion occurred. */ clipped: boolean;
+};

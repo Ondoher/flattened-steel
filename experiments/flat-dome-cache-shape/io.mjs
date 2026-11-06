@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
-import {existsSync, lstatSync, mkdirSync, readFileSync, readdirSync, realpathSync, writeFileSync, appendFileSync} from 'node:fs';
+import {existsSync, lstatSync, mkdirSync, readFileSync, readdirSync, realpathSync, renameSync, writeFileSync, appendFileSync} from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 
@@ -89,17 +89,34 @@ export function createRun(name, parents = []) {
 		mkdirSync(runs);
 	}
 	checked(runs, outputRoot);
-	let highest = -1;
-	for (const entry of readdirSync(runs)) {
-		assert.match(entry, /^\d{5}-[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/, 'Malformed run entry.');
-		assert.ok(entry.length <= 22);
-		checked(path.join(runs, entry), outputRoot);
-		highest = Math.max(highest, Number(entry.slice(0, 5)));
+	let id;
+	let root;
+	for (;;) {
+		let highest = -1;
+		for (const entry of readdirSync(runs)) {
+			assert.match(entry, /^\d{5}-[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/, 'Malformed run entry.');
+			assert.ok(entry.length <= 22);
+			checked(path.join(runs, entry), outputRoot);
+			highest = Math.max(highest, Number(entry.slice(0, 5)));
+		}
+		assert.ok(highest < 99999);
+		const sequence = String(highest + 1).padStart(5, '0');
+		const allocation = path.join(runs, `${sequence}-allocate`);
+		try {
+			mkdirSync(allocation);
+		} catch (error) {
+			if (error.code === 'EEXIST') {
+				continue;
+			}
+			throw error;
+		}
+		id = `${sequence}-${name}`;
+		root = path.join(runs, id);
+		checked(allocation, outputRoot);
+		assert.ok(path.dirname(root) === checked(runs, outputRoot));
+		renameSync(allocation, root);
+		break;
 	}
-	assert.ok(highest < 99999);
-	const id = `${String(highest + 1).padStart(5, '0')}-${name}`;
-	const root = path.join(runs, id);
-	mkdirSync(root);
 	checked(root, outputRoot);
 	let sealed = false;
 	const start = performance.now();

@@ -2,6 +2,9 @@ import {gauss} from './math.mjs';
 import {interval} from './geometry.mjs';
 import {medium} from './physical.mjs';
 
+/** Pure mathematical rules reused across wavelength evaluations, never physical-field values. */
+const rules = new Map();
+
 /**
  * Evaluates an exact exponential-altitude column over a finite straight segment.
  *
@@ -30,7 +33,10 @@ export function direct(item, channel, count = 128) {
 	if (length <= 0) {
 		return 0;
 	}
-	const rule = gauss(count);
+	if (!rules.has(count)) {
+		rules.set(count, gauss(count));
+	}
+	const rule = rules.get(count);
 	const source = [item.sourceRadius, 0, 4828032];
 	const br = medium.rayleigh[channel];
 	const bm = medium.mie[channel];
