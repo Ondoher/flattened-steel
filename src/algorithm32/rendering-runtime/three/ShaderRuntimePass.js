@@ -280,8 +280,14 @@ void main() {
 	 */
 	setSize(width, height) {
 		this._viewportSize = PixelMath.createPixelSize(width, height, 'ShaderRuntimePass.setSize viewport');
-		const viewportUniform = this._uniforms.uViewportSizePixels;
+		this._refreshViewportSize();
+	}
 
+	/**
+	 * Called after setup-binding refresh to retain the actual composer viewport as the runtime authority.
+	 */
+	_refreshViewportSize() {
+		const viewportUniform = this._uniforms.uViewportSizePixels;
 		if (viewportUniform) {
 			viewportUniform.value = PixelMath.pixelSizeToShaderValue(this._viewportSize);
 		}
@@ -303,6 +309,7 @@ void main() {
 
 		try {
 			this._refreshUniformValues?.();
+			this._refreshViewportSize();
 
 			if (this._uniforms.uSceneColorTexture) {
 				this._uniforms.uSceneColorTexture.value = readBuffer?.texture ?? null;

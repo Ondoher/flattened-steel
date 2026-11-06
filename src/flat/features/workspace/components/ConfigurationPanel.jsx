@@ -16,13 +16,54 @@ export default class ConfigurationPanel extends Component {
 		/** @type {React.RefObject<HTMLButtonElement>} */
 		this._closeButton = createRef();
 		this._onKeyDown = this._onKeyDown.bind(this);
+		this._root = createRef();
 	}
 
 	/**
 	 * Called by React to focus an explicitly opened settings surface.
 	 */
 	componentDidMount() {
-		this._closeButton.current?.focus();
+		this._opener =
+			document.activeElement instanceof HTMLButtonElement
+				? document.activeElement
+				: document.querySelector('[aria-controls="workspace-configuration"]');
+		this._focusRequest();
+	}
+
+	/**
+	 * Called by React to honor an explicit new focus intent without stealing focus on ordinary updates.
+	 *
+	 * @param {ConfigurationPanelProps} previous - Prior selected scope and request.
+	 */
+	componentDidUpdate(previous) {
+		if (previous.configuration.request !== this.props.configuration.request) {
+			if (!this._root.current?.contains(document.activeElement)) {
+				this._opener = document.activeElement;
+			}
+			this._focusRequest();
+		}
+	}
+
+	/**
+	 * Called by React to restore focus to the actual opener or stable workspace action.
+	 */
+	componentWillUnmount() {
+		let target = /** @type {HTMLElement} */ (
+			this._opener?.isConnected
+				? this._opener
+				: document.querySelector('[aria-controls="workspace-configuration"]')
+		);
+		target?.focus();
+	}
+
+	/**
+	 * Called after explicit settings navigation to focus a provider-advertised editor region.
+	 */
+	_focusRequest() {
+		let focus = this.props.configuration.focus;
+		let region = focus ? this._root.current?.querySelector(`[data-settings-focus="${CSS.escape(focus)}"]`) : null;
+		let target = region?.querySelector('input') ?? region ?? this._closeButton.current;
+		target?.focus();
 	}
 
 	/**
@@ -64,16 +105,21 @@ export default class ConfigurationPanel extends Component {
 	_renderScope() {
 		let {configuration, text, views} = this.props;
 		let scopeLabel = text('workspace.configuration-for');
-		let workspaceLabel = text('workspace.title');
+		let workspaceLabel = text('workspace.shared-settings');
 		let selectedTarget = configuration.target ?? '';
-		let options = views.map((view, index) => {
-			let label = text('workspace.view', {number: index + 1});
-			return (
-				<option key={view.id} value={view.id}>
-					{label}
-				</option>
-			);
-		});
+		let options = views
+			.filter((view) => (configuration.targets ?? [view.id]).includes(view.id))
+			.map((view) => {
+				let index = views.findIndex((item) => item.id === view.id);
+				let viewLabel = text('workspace.view', {number: index + 1});
+				let pageLabel = view.page ? text(view.page.label, {}, view.page.literalLabel) : '';
+				let label = pageLabel ? `${viewLabel} — ${pageLabel}` : viewLabel;
+				return (
+					<option key={view.id} value={view.id}>
+						{label}
+					</option>
+				);
+			});
 		return (
 			<label className="configuration-scope">
 				<span>{scopeLabel}</span>
@@ -82,6 +128,37 @@ export default class ConfigurationPanel extends Component {
 					{options}
 				</select>
 			</label>
+		);
+	}
+
+	/**
+	 * Called by panel rendering to expose registered section choices.
+	 *
+	 * @returns {React.ReactNode} - Generic section navigation.
+	 */
+	_renderSections() {
+		let {configuration, text} = this.props;
+		let label = text('workspace.settings-section');
+		let buttons = (configuration.sections ?? []).map((section) => {
+			let title = text(section.label ?? section.id, {}, section.id);
+			let selected = section.id === configuration.section;
+			return (
+				<button
+					key={section.registrationId}
+					type="button"
+					className="workspace-button"
+					data-section={section.id}
+					aria-pressed={selected}
+					onClick={this.props.onSelectSection}
+				>
+					{title}
+				</button>
+			);
+		});
+		return (
+			<nav className="configuration-sections" aria-label={label}>
+				{buttons}
+			</nav>
 		);
 	}
 
@@ -112,6 +189,7 @@ export default class ConfigurationPanel extends Component {
 	render() {
 		return (
 			<aside
+				ref={this._root}
 				id="workspace-configuration"
 				className="configuration-panel"
 				aria-labelledby="configuration-heading"
@@ -119,6 +197,7 @@ export default class ConfigurationPanel extends Component {
 			>
 				{this._renderHeader()}
 				{this._renderScope()}
+				{this._renderSections()}
 				{this._renderContent()}
 			</aside>
 		);

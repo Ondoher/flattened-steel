@@ -1,1 +1,11 @@
-module.exports = function(config) { config.set({frameworks: ['jasmine'], files: ['tests/flat/**/*.js'], reporters: ['spec'], client: {captureConsole: true}, browsers: ['ChromeHeadless'], singleRun: false, autoWatch: true, restartOnFileChange: true}); };
+const configureFlat = require('./karma.flat.conf.cjs');
+
+/**
+ * Call this function to watch Flat tests using the same application and component styles as the normal lane.
+ *
+ * @param {object} config - Karma configuration capability.
+ */
+module.exports = function (config) {
+	configureFlat(config);
+	config.set({singleRun: false, autoWatch: true, restartOnFileChange: true});
+};

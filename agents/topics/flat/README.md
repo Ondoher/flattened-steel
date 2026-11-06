@@ -5,6 +5,36 @@ Flat is the production application shell created through create-app on
 own the selected workspace behavior and scaffold options. Flat32 remains the
 separate integration test bed.
 
+The owner-requested [configuration and page-toolbar consultation](configuration-toolbar-research.md)
+is complete as standalone UX/UI research in the context of the full app. It
+recommends visible shared location/time, a coherent task-based inspector,
+independent camera controls, and contained responsive view headers. Current
+captures reveal overlap with comparison plus configuration at 1100px and
+horizontal overflow at 390px. These findings and proposed interaction changes
+remain advisory; no application changes or implementation plan were selected.
+The owner subsequently requested [UI designer comps](configuration-toolbar-comps.md).
+The latest four-state update adds a visible shared-time slider to each Flat Earth
+toolbar and a slider/numeric pair in shared Flat Earth time configuration. The
+earlier six-state family preserves the inline alternative and view-specific
+Camera settings route. Desktop/compact states received designer author inspection.
+The application remains unchanged; the plan below uses the current comps as its
+implementation target.
+
+The owner has now requested a saved
+[implementation plan](workspace-comps-implementation-plan.md) for the current
+summary-led frame and shared-time slider comps. It sequences contract/time
+semantics, a usable frame/settings slice, connected shared-time editors and
+responsive runtime verification. Execution is now authorized through independent-execution; the
+[execution record](workspace-comps-execution.md) owns current progress. The
+first desktop slice and111 browser tests pass; final interaction/responsive
+verification remains in progress.
+
+The owner selected a [Flat Earth degrees-from-closest time editor](flat-earth-time-input.md)
+as another way to set the shared timestamp for both views. The requested toolbar
+slider and dedicated shared configuration pane are now illustrated in the comps.
+Range/wrap, precision and draft behavior remain design decisions. The editor is
+not implemented.
+
 ## Current Scope
 
 The owner-authorized first workspace pass is implemented on 2026-10-29. The
@@ -17,7 +47,7 @@ view's identity is never reused, and stale close actions cannot affect its
 replacement.
 
 The generated Workspace starter page has been retired. Flat starts at /flat/
-without an installed/default scene. Registered scene definitions can later be
+without a default scene. Registered scene definitions can be
 selected independently in each view through the existing app-pages catalog.
 Unknown page URLs retain not-found presentation, and unknown APIs retain 404.
 The secondary view is in-memory workspace state rather than part of the URL.
@@ -60,8 +90,176 @@ the generated HTML after styles/app.css. Feature activation imports JavaScript
 only. Karma loads application and feature source stylesheets explicitly before
 the compiled browser tests.
 
-Observation/location/date/time UI, height/FOV controls, shader/cache integration,
-and animation are not implemented by this workspace pass. The
+The owner requires Flat's state-owning models to be implemented as registered
+services. WorkspaceModel, CityCatalog, LocationEditorModel, DateTimeEditorModel,
+and FlatEarthModel now extend Polylith Service and expose implemented methods.
+Their owning feature entries activate them, local state initializes in start(),
+and controllers resolve the capabilities in ready(). CityCatalog resolves HTTP
+in its own ready() and exposes loading status through a method. FlatEarthModel
+owns one camera record per view in the application's registry; session/runtime
+code uses scoped model methods, and closing a view releases its record. Date/time
+parsing/formatting utilities remain pure helpers. The
+[component proposal](component-service-proposal.md) owns this architecture.
+
+The owner-authorized Flat Earth base scene is implemented under
+src/flat/features/flat-earth. The controller registers the page through app-pages,
+consumes the public configuration capability, and owns a separate session per
+workspace view. FlatEarthView relays scoped state and canvas lifecycle intent;
+FlatEarthPage presents the canvas and localized waiting/preparing/failure/retry
+feedback. Its stylesheet continues to ship through the feature build descriptor.
+Select Flat Earth in either scene selector or open /flat/flat-earth directly;
+the root route retains its empty initial selection.
+
+Each FlatEarthSession uses the registered FlatEarthModel capability and owns one
+cancellable FlatEarthRuntime. The model service derives the exact engine observation from shared latitude/longitude
+and the animation clock's timestamp, with five-meter observer height and a
+50-degree field of view as independent per-view defaults. A missing location
+shows a configuration prompt instead of selecting a city implicitly.
+
+The runtime uses production Algorithm32 directly: the compact native15 local-Sun
+profile, N4 scattering, geometry-owned ground and source placement/lighting, and
+the accepted altitude-half Color model. LocalSunFrameController constructs the
+canonical GPU cache and lends it to complete live observation frames, allowing
+location/time changes to reuse compatible construction. Receiver measurement,
+color bindings, finite composed-output readback, and actual shader diagnostics
+are prepared before a frame becomes visible. The previous coherent frame stays
+visible during an update or failed candidate.
+
+Each view owns its canvas, Three renderer/camera, backend, frame controller, and
+resize observer. Location changes cancel stale work; time changes coalesce to
+the latest pending instant without starving the current preparation. Unmount,
+StrictMode lifecycle replay, and explicit retry release the exact canvas lifetime
+before another one attaches. Release retires frame/cache leases before the
+backend and renderer. Actual context or setup failures remain visible with Retry.
+There is no Flat32 or archived-runtime import, no server cache load, no new
+configuration controls, and no global animation loop owned by a scene view.
+The [component proposal](component-service-proposal.md#flat-earth-feature)
+owns the responsibility split and remaining feature work.
+
+The Flat32-equivalent camera controls now belong to the Flat Earth feature.
+Each session registers its own `view-tools` contribution: elevation presets
+5/100/500/2000/10000/40000 meters, vertical FOV presets
+120/90/50/35/20/5/2 degrees, and Center on Sun. Clicking the canvas enables
+pointer-lock mouse look; Escape releases it. Sensitivity is 0.7 and polar limits
+are 0.05 through pi minus 0.05, matching Flat32. The model retains each view's
+accepted orientation, FOV, and elevation across observation updates and Retry.
+Elevation changes stage a replacement physical frame while retaining the accepted
+height and image until publication. Mouse look and FOV redraw the retained frame
+through one coalesced on-demand animation-frame callback, without rebuilding the
+cache or introducing a second simulation clock. Presets are presentation choices;
+actual numeric/geometry constraints determine support. Closing a view releases its
+listeners, redraw request, and only its own native pointer lock. The workspace
+continues to consume generic contributions without importing this feature.
+
+The owner accepted the [global configuration architecture](component-service-proposal.md#global-configuration-and-shared-values)
+on 2026-11-05. The existing panel hosts a global configuration provider feature,
+with accepted shared values owned by a main configuration service and missing
+property defaults owned by consuming features. This supersedes the earlier
+shared-observation feature proposal. The global location editor and canonical
+location configuration are implemented. A first simple date/time pass is also
+implemented with browser-local entry formats. Time-zone resolution/conversion,
+other global properties, and scene consumers remain future work.
+The accepted [configuration provider contract](component-service-proposal.md#configuration-provider-contract)
+defines how feature services supply React content for the panel to mount.
+
+The provider lives under src/flat/features/global-configuration. Its controller
+registers one workspace-wide configuration contribution (viewId: null), delegates
+presentation to its own view, and owns registration/listener/loading cleanup.
+Open Configuration and select Workspace to use the date/time and location editors. The workspace
+host remains generic while Flat Earth consumes these shared capabilities.
+
+CityCatalog owns loading, JSON decoding, prepared matching fields, stable compound
+city identities, and whole-index ranking. Search supports city-name terms,
+country/admin codes, full administrative-area names, and accent/punctuation
+folding; exact names precede prefixes and substrings even when region filters
+are present. Every exact city-name match remains available; partial suggestions
+fill an eighteen-result list when there are fewer exact matches. Region names
+also appear in result labels, with codes as the fallback. The first panel mount loads the
+copied static city index through the deployment-aware HTTP service. Loaded data
+is retained across panel close/reopen. Its 154,694 source rows occupy 10,359,090
+bytes; exact copied bytes, original license, and provenance are under the
+feature's assets/data folder. The same source package supplies a compact lookup
+of 3,892 region names, with derivation/hash information in cities-source.json.
+The generated compact city and region JSON files are excluded from
+Prettier to preserve its bytes. No external city API or new server endpoint is
+used, and the source repository is not a runtime dependency.
+
+LocationEditorModel owns query/coordinate drafts and input feedback. Typing a
+query does not replace the accepted location. Picking a city commits its
+coordinates immediately; manual coordinates require Use coordinates. Empty
+fields remain incomplete, and nonfinite/out-of-range coordinates are rejected.
+The React CityPicker owns only transient menu/focus/keyboard state, including
+arrow navigation, Enter selection, and Escape dismissal. A catalog failure offers
+retry while manual entry remains available. Component CSS and data ship through
+the feature build descriptor.
+
+The app-level configuration model-service is src/flat/services/configuration.js,
+registered as configuration independently of the editor feature. Its public
+contract exposes get(), setLocation(), setDateTime(), and changed notifications.
+Each changed event supplies a defensive snapshot and the affected property names;
+controllers reset only the corresponding editor drafts. The canonical
+location uses latitude/longitude in degrees and optional city metadata. Missing
+location remains absent, leaving defaults to consumers. Accepted values survive
+panel and view-scope changes in memory, but are not persisted across app reload.
+Observer height remains per-view, separate from geographic coordinates.
+
+The app-wide DateField and TimeField components live under src/flat/components,
+with their prop contract in components/types and shared CSS in components/styles.
+They are controlled text inputs receiving labels, values, feedback, and callbacks;
+they import no feature, registry, locale, or time-zone logic. The app build copies
+and links their stylesheet, and both Karma lanes load the shared source styles.
+The feature-owned DateTimeEditor composes these controls in global configuration.
+
+Date/time entry follows the browser's default locale: numeric date order and
+separators, localized digits, and a 12- or 24-hour clock with local day-period
+labels. LocalDateTimeFormat under src/flat/models derives matching format hints,
+formatting, and parsing from Intl.DateTimeFormat parts. The phrase locale does
+not force date/time entry to US English. Gregorian years 1-9999 and minute
+precision remain the entry contract; the existing fixed-format helpers
+are canonical-text utilities rather than the entry format. UTC carriers inside
+the formatter preserve calendar/clock parts without interpreting a location or
+converting an observation instant.
+
+DateTimeEditorModel owns incomplete drafts and feedback. Use date and time (or
+Enter in the form) validates the pair and converts it to one timestamp using
+the device's current local time zone. The app-wide animation-loop service owns
+that `timestamp`: integer milliseconds since 1970-01-01T00:00:00Z. Configuration
+owns location and delegates timestamp reads/writes to the clock. There are no separately stored accepted date/time parts. Its public
+`setTimestamp` capability emits a changed snapshot with `['timestamp']`;
+consumers receive the same absolute instant regardless of display format.
+`LocalDateTime` helpers own device-local parts-to-timestamp conversion and
+presentation extraction. The view and editor derive local text from this value,
+including timestamp zero; location updates preserve it.
+
+Blank or invalid inputs leave the timestamp unchanged. AnimationLoopService
+startup reads the current device clock once and clears seconds/milliseconds to match minute entry
+precision and begins fixed. Accepted edits survive panel close/reopen; enabling
+live playback advances the shared timestamp and clean fields while preserving
+unfinished drafts. Reload initializes from the device clock again. Native JavaScript Date resolution
+currently applies at DST gaps and overlaps. Explicit ambiguity handling,
+location/IANA-zone conversion, and persistence are deferred by the owner. Browser
+format preferences are captured when the editor/view is created; reconciling a
+live locale change with an unfinished draft is not implemented.
+
+The global `animation-loop` capability lives under src/flat/services, not a
+feature. It adapts the archived runtime's solar/sidereal periods, shared speed,
+relative phase frames, and live/fixed playback to the current timestamp contract.
+Configuration is a time facade; no second canonical timestamp is stored there.
+The [clock architecture](component-service-proposal.md#shared-current-time-and-animation)
+owns the public API, default periods, reference provenance, timer lifetime, and
+phase meaning. Scheduling uses one monotonic-clock interval only during live
+playback after readiness; application shutdown releases it. No animation UI or
+shader consumer is added by this step.
+
+Further [city-search improvements](implementation-notes.md#deferred-city-search-improvements),
+including more fuzzy type-ahead matching and the related filter/sort proposals,
+are saved for later at the owner's request. No further search implementation is
+selected.
+
+Time-zone lookup/conversion, richer segmented date/time editing, additional scene
+content, and animation controls remain future work. The
+[date-field adaptation note](date-field-adaptation.md) records the simple first
+pass separately from the richer adaptation goals and open time-basis decisions. The
 [product description](product-description.md) remains input for later refinement,
 with the [component proposal](component-service-proposal.md) and
 [implementation notes](implementation-notes.md) retaining architecture context.
@@ -70,6 +268,193 @@ The refine-design skill has not been run. The linked
 advisory beyond the explicitly selected requirements.
 
 ## Verification
+
+The model-service correction is captured under
+`.codex-tmp/flat-model-services/2026-11-05/`, with its baseline, source hashes,
+isolated bundle, browser report, and image comparison. Client type checking,
+Flat test/build compilation, formatting/whitespace checks, and all 109 browser
+tests pass. Existing workspace, settings, and camera tests now use registered
+model capabilities; the added check covers independent records in one Flat Earth
+model service, defensive camera snapshots, exact close/reopen behavior, and
+preservation of another view. Existing app-registry isolation checks remain.
+Real Chrome/WebGL confirms all five model services are activated, along with
+Sun centering, all FOV presets, 100-meter/40-kilometer elevation publication,
+actual mouse look and Escape, independent comparison state, scoped cleanup,
+shared-time updates retaining camera values, and narrow layout. No browser or
+WebGL errors were recorded. Initial-scene and Sun-close-up captures are identical
+to the preceding camera-control run. Server and engine source are unchanged;
+their suites were not repeated. Independent standards review remains cancelled.
+
+The camera-control adaptation is captured under
+`.codex-tmp/flat-earth/2026-11-05/camera-controls/`, with source baseline,
+self-review hashes, isolated bundle, browser report, and inspected screenshots.
+Client type checking, Flat test/build compilation, formatting/whitespace checks,
+and all 108 Chrome browser tests pass. Tests cover matching pointer sensitivity
+and pitch limits, exact pointer-lock/Escape/listener cleanup, denied requests,
+pending versus accepted elevation, retained camera state, domain quantities,
+independent view contributions, repeated readiness, and exact token removal.
+Real Chrome/WebGL verifies Sun centering at two-degree FOV, every FOV preset,
+100-meter and 40-kilometer frame publication, actual mouse input, Escape release,
+independent comparison cameras, closing another view without releasing the
+primary lock, retained camera after a shared time change, and narrow layout
+without horizontal overflow. No browser/WebGL errors were recorded. The first
+Escape timeout and a timing-sensitive synthetic-mouse attempt remain preserved;
+the completed run uses actual browser mouse input and the explicit Escape
+handler. The existing development watcher picks up these feature changes.
+The production engine and server were unchanged by this camera step and their
+suites were not repeated; independent standards review remains cancelled.
+
+The base-scene integration is captured under
+`.codex-tmp/flat-earth/2026-11-05/base-scene/`, including its source baseline,
+isolated production bundle, graphics runner, report, and inspected screenshots.
+The isolated build avoids an already-running watcher with an older feature list
+replacing the bundle during verification. Client/engine type checking and the
+103-test browser suite pass. Real Chrome/WebGL renders the production scene,
+verifies that date/time and location changes alter actual canvas pixels, opens
+two independent views, closes the secondary view, and resizes the remaining view.
+The runtime preflights actual shader execution and finite floating-point output.
+A production renderer resize regression was reproduced before its fix; all eight
+ShaderRuntimePass specs and the complete 691-spec engine Node suite pass after
+correction. In the real browser, both views report the same exact rendered
+observation and their sampled sky channels have zero difference after splitting
+the viewport. No browser/WebGL errors were recorded. Desktop comparison captures
+were inspected. The existing development watcher was restarted with its original
+command to pick up the current feature list.
+These are integration checks, not a new scientific qualification or performance
+claim. Server code is unchanged; independent standards review remains cancelled.
+
+The shared clock adaptation is captured under
+`.codex-tmp/animation-loop/2026-11-05/`, including the pre-edit baseline and archive
+entry hashes, unchanged reference copies, and browser evidence. Client type
+checking, Flat build, formatting/whitespace checks, and all 99 browser tests pass.
+Added checks exercise solar/sidereal timing, a sidereal-defined speed, exact day
+cycles, fixed elapsed/angle poses, seeking and pause/resume, monotonic samples,
+real timer ticks without an explicit sample, repeated readiness/restart/stop,
+configuration delegation and listener cleanup, defensive frames, app-registry
+isolation, and preservation of unfinished editor drafts during playback.
+Served Chrome confirms the actual app still initializes, validates, accepts,
+and reopens local date/time in US, UK, German, and Japanese formats with no
+browser errors. The comparison archive SHA-256 remains unchanged. The unchanged
+server was not retested; its four tests passed in the preceding simple-date/time
+unit. Independent standards review remains cancelled.
+
+The timestamp follow-up is captured under
+`.codex-tmp/global-configuration/2026-11-05/timestamp/`. Client type checking,
+Flat build, formatting/whitespace checks, and all 89 browser tests pass. Checks
+cover canonical timestamp snapshots, exact change-property names, invalid
+numeric values, epoch zero through the mounted editor, local conversion, early
+years without 1900 coercion, atomic acceptance, and unrelated draft retention.
+A focused runner confirms known UTC results for the same wall time in Los
+Angeles, Tokyo, and Berlin, and verifies location/device-zone changes do not
+mutate an accepted timestamp. Served Chrome rechecks US, UK, German, and Japanese
+entry, validation, keyboard acceptance, and panel reopen with timestamp storage.
+No browser errors were recorded. The unchanged server was not retested in this
+unit; its four tests passed in the preceding simple-date/time unit. Independent
+standards review remains cancelled.
+
+The local-entry-format follow-up is captured under
+`.codex-tmp/global-configuration/2026-11-05/local-entry-formats/`. Client type
+checking, Flat build, formatting/whitespace checks, and all 87 browser tests pass.
+Tests cover ambiguous month/day order, punctuation, midnight/noon, missing or
+invalid day periods, localized digits, early years, and h11/h12/h23/h24 hour
+cycles. Served Chrome checks verify US, UK, German, and Japanese entry, hints,
+invalid-value retention, keyboard acceptance, and panel reopen. Desktop and
+narrow US screenshots were inspected; narrow layout has no horizontal overflow.
+No browser errors were recorded. The server is unchanged; its four tests passed
+in the preceding simple-date/time unit and were not rerun for this client change.
+Independent standards review remains cancelled.
+
+The local-defaults follow-up is captured under
+`.codex-tmp/global-configuration/2026-11-05/local-defaults/`. Client type checking,
+Flat build, formatting/whitespace checks, and all 83 browser tests pass. A mocked
+clock test verifies startup parts and retention of accepted edits. Served Chrome
+checks emulate America/Los_Angeles and Asia/Tokyo at one explicit instant near a
+UTC date boundary, confirming different correct local calendar/clock defaults,
+retained edits after clock advancement and panel reopen, and reseeding on full
+reload. No browser errors were recorded. This overrides the preceding simple
+pass's blank initial date/time policy. The server is unchanged; its four tests
+passed during that preceding unit and were not rerun for this startup-only change.
+
+The app-wide date/time unit is captured under
+`.codex-tmp/global-configuration/2026-11-05/simple-date-time/`, including its
+working-tree baseline, served runner, browser report, and inspected screenshots.
+Client type checking, Flat build, 82 browser tests, 4 server tests, formatting,
+and whitespace checks pass. The added checks cover real Gregorian/leap dates,
+early years without Date.UTC coercion, 24-hour bounds and midnight, partial
+input, atomic acceptance and defensive snapshots, per-property change events,
+independent location/date-time drafts, and panel remounts. The existing location
+UI test now targets its own form explicitly alongside the new date/time form.
+
+Served Chrome verifies fixed text formats, required/invalid feedback, leap-day
+and midnight acceptance, keyboard submission, preservation of unrelated drafts,
+accepted values after close/reopen, one global editor with two views, scope
+switches, the copied/linked shared stylesheet, and reachable narrow-window
+controls without horizontal overflow. No browser errors were recorded.
+Independent standards review remains cancelled. Location/time-zone conversion,
+persistence and shader integration were outside that earlier unit; local
+formatting is now implemented by the follow-up above.
+
+The San Jose search correction is captured under
+`.codex-tmp/global-configuration/2026-11-05/san-jose-search/`. The city existed in
+the index but was excluded by the eighteen-result cap, while full state names
+and punctuation did not match. The correction preserves every exact city-name
+match, indexes full region names, normalizes punctuation, and displays region
+names in options and accepted-location feedback. Client type checking, build,
+formatting/whitespace checks, and all 75 browser tests pass. A served Chrome run
+verifies all 45 exact San Jose matches, selecting the California entry beyond
+the previous cap, first-ranked California results for full-state/code queries,
+correct coordinates, panel reopen, and narrow layout with no browser errors.
+The four server tests passed during the preceding city-picker unit; the server
+is unchanged and those tests were not rerun for this search-only correction.
+The original city bytes and identities are unchanged. The new region-name asset
+retains provenance from the same cities.json package version.
+
+The initial city-picker unit is captured under
+`.codex-tmp/global-configuration/2026-11-05/city-picker/`. Its baseline preserves
+the prior uncommitted workspace, Flat Earth, title-only provider, and design state.
+Client type checking, Flat build, formatting/whitespace checks, 74 browser tests
+and 4 server tests pass. The nine added tests cover shared configuration updates
+and defensive snapshots, coordinate drafts and bounds, stable city identities,
+accent/code matching, late exact matches, loading reuse/retry/cancellation,
+provider/listener cleanup, and editor remount behavior.
+
+A served Chrome run uses the actual copied dataset and verifies on-demand loading,
+mouse and keyboard selection, accent matching, no-result feedback, unchanged
+accepted location during search, required/range errors, zero-coordinate acceptance,
+close/reopen without another download, workspace/view scopes, comparison, narrow
+layout, menu/panel Escape handling, and a simulated HTTP 503 followed by successful
+retry with manual coordinates available throughout. No unexpected browser errors
+were recorded; the injected 503 produces its expected resource console message.
+The earlier incorrect country-filter ranking capture is retained under
+ranking-before; the model regression and corrected served run pass. Runner,
+report, and inspected desktop/narrow screenshots are in the unit folder.
+Independent review remains cancelled; no full engine qualification or actual
+parent deployment was performed for this UI/data integration.
+
+The preceding global configuration title-only unit starts from the preserved working-tree
+baseline under `.codex-tmp/global-configuration/2026-11-05/baseline.json`, including
+the earlier uncommitted Flat Earth and design changes. Client type checking,
+Flat build, all 65 existing browser tests, formatting, and whitespace checks pass.
+A served Chrome run verifies the title-only content, workspace scope, exclusion
+from both view scopes, repeated close/reopen without duplication, Escape focus
+return, one contribution during comparison, copied/linked feature CSS, narrow
+layout without horizontal overflow, and refresh/reopen, with no browser errors.
+The same evidence folder retains the runner, report, and inspected screenshots.
+The server is unchanged; its four tests passed during the preceding Flat Earth
+unit and were not rerun for this browser-only addition. Independent review remains
+cancelled. No city dataset, input controls, or configuration data service is
+implemented by this unit.
+
+The Flat Earth placeholder unit starts from checkpoint a0c9fc15 and covers the new
+feature, Flat build registration, and two localization phrases. Client type
+checking, Flat build, formatting, all 65 existing browser tests, and 4 server tests
+pass. A served Chrome check verifies selection from the empty root, the localized
+page at /flat/flat-earth, direct refresh, two distinct view instances, optional
+view close/reopen, feature-owned CSS delivery, narrow-window overflow, and unknown
+route handling, with no browser errors. Screenshots and its report are under
+`.codex-tmp/flat-earth/2026-11-05/`. This is primary local verification;
+independent review remains cancelled. Shader and cache behavior are outside this
+placeholder unit.
 
 The owner's [local authoring rules](../standards/overlay.md) have been applied
 across all 71 JavaScript, JSX, and declaration files under src/flat and

@@ -17,7 +17,13 @@
 			"cwd": "styles",
 			"glob": "**/*.css",
 			"keepNest": true
+		},
+		{
+			"dest": "styles/components",
+			"cwd": "components/styles",
+			"glob": "**/*.css",
+			"keepNest": true
 		}
 	],
-	"features": ["features/app", "features/workspace"]
+	"features": ["features/app", "features/workspace", "features/flat-earth", "features/global-configuration"]
 }

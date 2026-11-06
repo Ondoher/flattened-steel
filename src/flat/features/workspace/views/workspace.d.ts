@@ -54,4 +54,20 @@ export interface WorkspaceView extends EventBus {
 	 * @returns - Workspace shell element bound to this view.
 	 */
 	getComponent(props?: object): React.ReactElement;
+
+	/**
+	 * Call this method to select a registered settings section.
+	 *
+	 * @param section - Contribution identity.
+	 */
+	selectConfigurationSection(section: string): void;
+
+	/**
+	 * Call this method to open settings without depending on provider implementation.
+	 *
+	 * @param target - Shared scope or exact view identity.
+	 * @param section - Optional registered section.
+	 * @param focus - Optional provider-owned focus intent.
+	 */
+	openConfiguration(target: string | null, section?: string | null, focus?: string | null): void;
 }

@@ -41,8 +41,29 @@ The main frame includes a toolbar and provides:
 - A way to open and close the optional second view.
 
 Users should be able to understand whether a control affects the shared
-observation or an individual view. The detailed input controls, units, ranges,
-initial values, and camera gestures still need definition.
+observation or an individual view. The first [location editor](README.md#current-scope)
+now supports city search and manual latitude/longitude in global configuration.
+Location starts unselected; date/time starts from the device-local clock. A simple app-wide date/time first
+pass is now available in global configuration, using the browser's local date
+and time entry formats. Internally, date and time are one timestamp owned by the app-wide animation-loop
+service; entry
+currently uses the device's local time zone. Explicit handling for ambiguous
+clock changes and location time zones is deferred. The shared clock supports
+fixed/live solar and sidereal animation; animation controls are still future work. Richer date/time behavior, height/FOV input details,
+and camera gestures still need definition.
+
+The first Flat Earth base scene now uses the selected shared location and current
+time, with a rendered atmosphere, horizon, and flat ground. A second view uses
+the same observation through an independently owned scene. The feature waits for
+a location rather than choosing one. Camera gestures and additional scene content
+remain future work.
+
+Flat Earth will also offer an [alternate time editor](flat-earth-time-input.md)
+using degrees from the Sun's closest approach to the selected location. Zero is
+closest approach; choosing an angle changes the same shared timestamp for both
+views. It will have a visible slider on the Flat Earth page toolbar and a
+slider/numeric pair in its own shared configuration pane. The date still supplies seasonal context. This is selected design intent;
+the editor is not implemented.
 
 Configuration covers less frequent adjustments. The existing product direction
 is a compact toolbar and collapsible setup panel, with the scene remaining
@@ -100,16 +121,19 @@ their content, controls, behavior, and state through defined interfaces. The
 workspace frame is itself owned by the workspace feature; application startup
 and navigation remain in the app feature.
 
-A shared observation feature would own location/date/time selection and its
-canonical state. A scene feature would own its rendering, camera behavior,
+The accepted [global configuration design](component-service-proposal.md#global-configuration-and-shared-values)
+provides an editor feature contributing to the configuration panel and a main
+configuration service owning shared location/date/time and other accepted global
+properties. Page features consume that public capability and supply their own
+defaults for absent properties. A scene feature owns its rendering, camera behavior,
 height/FOV controls, and settings for each open instance. Configuration can
 therefore contain contributions from several owners while looking like one
 coherent surface. Appearing in the main frame does not transfer a feature's
 behavior into the main app view.
 
 The [ownership notes](implementation-notes.md#main-app-and-feature-ownership)
-define the proposed split and remaining contract questions. Exact feature
-packaging is still open for discussion.
+define the proposed split and remaining contract questions. Detailed contracts and remaining feature
+packaging are still open for discussion.
 
 The separate [component and service proposal](component-service-proposal.md)
 describes possible React components and supporting classes. It is technical

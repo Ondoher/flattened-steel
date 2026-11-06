@@ -3,8 +3,32 @@
 These notes capture the current design discussion and can inform a later
 implementation plan. The owner subsequently authorized the first workspace pass,
 whose [current implementation and verification](README.md) are recorded separately.
-The observation and scene-feature sections remain design discussion; these notes
-do not independently authorize their implementation.
+The owner subsequently authorized the Flat Earth page, global configuration,
+localized date/time, and the global animation clock. The latest authorized step
+adds Flat32-equivalent per-view camera controls to the production Flat/local base
+scene, which uses current shared location and time. The [Flat entry](README.md#current-scope) owns implementation and
+verification. Additional viewing tools, scene content, and location/time-zone
+policies remain discussion; these notes do not independently authorize them.
+
+The owner subsequently clarified that state-owning models must be services.
+Flat now activates workspace, configuration-editing/catalog, and Flat Earth
+models as registered feature services. Controllers resolve them in ready();
+Flat Earth's model service scopes camera records by view identity. The
+[component proposal](component-service-proposal.md) owns the packaging decision.
+
+## Flat Earth Alternate Time Input
+
+The owner selected a [degrees-from-closest time input](flat-earth-time-input.md)
+for Flat Earth: a visible page-toolbar slider and a slider/numeric pair in a
+dedicated shared configuration pane. Zero means the Sun's closest approach to
+the selected location; before/after positions use the daily orbit. Changing it
+updates the shared timestamp for both views. The feature owns the alternate
+editor, while the app-wide current-time service owns accepted time. The
+[updated comps](configuration-toolbar-comps.md#shared-time-slider-update) show the
+shared scope separately from view-specific Camera settings. Date/wrap, precision
+and draft/acceptance behavior remain design questions. The owner-requested
+[implementation plan](workspace-comps-implementation-plan.md) now sequences the
+frame and editor work; execution has not begun.
 
 ## First Shader Integration
 
@@ -17,11 +41,29 @@ The feature should integrate the production Algorithm32 shader. Flat32 remains
 the separate integration test bed and a source of implementation reference; its
 existing controls and other features are not implicitly selected for Flat.
 
-Starting with Flat Earth does not select the globe for implementation or settle
-the initial location, time, scene contents, detailed control behavior, or cache
-configuration.
+The base integration now uses shared selected location and the current animation
+timestamp. It waits for a location, renders production compact native15/N4 sky and
+ground, and reuses canonical cache leases for updates. This does not select the
+globe or additional scene objects. The subsequent owner request explicitly adds
+Flat32 camera controls: pointer-lock mouse look, Center on Sun, and the same
+elevation/FOV presets. These belong to Flat Earth and contribute per-view tools
+through the generic workspace capability, retaining independent camera models.
 
 ## Main App Frame Research
+
+The follow-on [UI comps](configuration-toolbar-comps.md) now illustrate the
+research through a designer-authored summary family and inline-edit alternative.
+They are static review artifacts with documented inspection, not application
+implementation or an accepted new interaction policy.
+The owner identified the missing page-specific route. The current revision adds
+Page settings entries and explicit shared/view targeting, plus an illustrative
+View 2 configuration contribution, as recorded by the comp handoff.
+
+The owner's 2026-11-05 [configuration and page-toolbar consultation](configuration-toolbar-research.md)
+uses current full-app captures and standalone UX/UI researchers. It records
+advisory hierarchy, scope, commit/draft, toolbar, and responsive guidance plus
+observed containment defects. It does not select implementation or an accepted
+new layout; the earlier frame research remains supporting evidence.
 
 The owner's [view and control requirements](../production-app/product-behavior/README.md#views-and-main-frame-controls)
 now define the shared observation and independent view settings. The
@@ -66,15 +108,15 @@ standards, without specifying detailed APIs or an execution plan.
 | --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Main frame                        | Present the scene area, shared toolbar host, view containers, and configuration host; arrange them as available space changes.                                            | Provide content and controls through the hosts' public contracts.                                                                                                                                                       |
 | Optional second view              | Own the workspace's view identities, open/close and selection behavior, split layout, and configuration target. Obtain available page contributions through registration. | Supply a mountable view and release its resources when that view is removed.                                                                                                                                            |
-| Shared location, date, and time   | Host the shared controls and provide application-wide service access.                                                                                                     | A shared observation feature owns the canonical observation, selection UI, validation, and change notifications. Scene features consume its public interface.                                                           |
+| Shared location, date, and time   | Host the shared controls and provide application-wide service access.                                                                                                     | The main configuration service owns shared values; a global configuration feature supplies editing UI. Scene features consume the public data capability.                                                               |
 | Height, FOV, and camera direction | Provide a place for view-local tools and identify which view a contribution targets.                                                                                      | The relevant view feature owns the controls, supported values, camera behavior, and state for that view. Reusable camera controls could later be a shared capability; this does not move their behavior into the frame. |
 | Configuration                     | Open/close the configuration surface and present its application or view scope.                                                                                           | Each owner contributes its settings UI, meaning, validation, and changes. Workspace-specific preferences belong to the workspace feature.                                                                               |
 | Rendering and scene status        | Mount registered content and offer consistent places for contributed status.                                                                                              | Flat Earth owns its renderer adapter, shader/cache operations, preparation, cancellation, failures, retry behavior, and release. It reports status through a defined interface.                                         |
 | Common visual treatment           | Supply shared presentation conventions for contributed controls, labels, focus, and status.                                                                               | Use those conventions while keeping domain-specific behavior within the owning feature.                                                                                                                                 |
 
-The proposed observation feature is an application-wide service, not part of
-the main React view. There is one shared observation for the workspace. In
-contrast, each open view needs independent camera, height, and FOV state and an
+The accepted [global configuration architecture](component-service-proposal.md#global-configuration-and-shared-values)
+separates the editor feature from the main configuration service and consumer-owned
+defaults. Each open view retains independent camera, height, and FOV state and an
 independently owned rendering lifecycle, even if both views mount the same
 feature. A registered feature definition is not a single shared view instance.
 Whether compatible GPU/cache data can be reused is a separate engine/resource
@@ -108,14 +150,60 @@ shared-service feature:
 
 Workspace layout state is therefore owned by the workspace's model/controller,
 rather than being folded into a scene feature or made canonical in the main
-React view. Shared observation state stays with its proposed service owner;
+React view. Shared configuration stays with the main configuration service;
 per-view state stays with its view owner. Physical geometry and coordinate
 transforms remain engine responsibilities.
 
+## Localized Date Field Adaptation
+
+The owner requested a [date-field adaptation note](date-field-adaptation.md)
+based on transfer/Date.jsx and its supporting date helper/converter. The source
+is a model for compact localized date entry, rather than a package to integrate
+unchanged. The note owns the behavior to borrow, responsibility split,
+application-specific boundaries, and open date/time decisions. The simple
+app-wide fixed-format date/time controls are implemented; richer adaptation
+remains design work.
+
+The owner has no ready-made time field. The note records
+[time entry and location time](date-field-adaptation.md#next-design-work-time-entry-and-location-time)
+as follow-on design work beyond the simple first pass, including the possible use of the chosen location's
+time zone instead of device-local time. The choice and conversion behavior
+remain open.
+The proposed [unified lookup and optional override](date-field-adaptation.md#unified-location-lookup-and-optional-override)
+uses coordinates from either city selection or manual entry, with a possible
+time-zone picker for correcting the automatic result. Implementation and override
+lifetime remain unselected.
+
+The note also records [modmod reference code](date-field-adaptation.md#additional-reference-modmod-date-and-time-zone-code)
+for explicit-zone calendar conversion and locale date-format discovery, with
+its scope and known cache limitation. No conversion implementation is selected.
+
+## Deferred City Search Improvements
+
+Status: saved for later at the owner's request on 2026-11-05. No implementation
+or execution plan is selected.
+
+The owner wants to revisit city-search discoverability, including more fuzzy
+type-ahead matching. Matching behavior, tolerance, ranking, and any supporting
+library remain undecided. Preserve the distinction between search drafts and
+the accepted shared location when this work is revisited.
+
+Related advisory ideas from the discussion remain candidates for review:
+
+- Optional country and state/region filters to narrow ambiguous city names.
+- Readable country and region names in results.
+- Deterministic ordering within equal match ranks instead of dataset order.
+- A compact optional narrowing surface that preserves space for the scene.
+
+The [current search implementation and verification](README.md#current-scope)
+remain the baseline. The San Jose correction is implemented; the broader fuzzy
+matching, filtering, and sorting ideas above are deferred.
+
 ## Details Still Open
 
-The proposed ownership split still needs owner discussion. The exact
-contribution and shared-observation contracts, initial scene and observation,
+Global configuration ownership is accepted as described by the
+[component proposal](component-service-proposal.md#global-configuration-and-shared-values).
+The exact configuration contracts, initial scene and observation,
 renderer adapter, cache/profile selection, and loading, failure, and retry
 presentation are not yet selected. Coordination of two views during observation
 changes also remains open. These notes establish no milestones, execution

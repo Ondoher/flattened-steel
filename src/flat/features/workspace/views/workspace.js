@@ -24,6 +24,8 @@ export class WorkspaceView extends Service {
 			'closeView',
 			'toggleConfiguration',
 			'selectConfigurationTarget',
+			'selectConfigurationSection',
+			'openConfiguration',
 		]);
 	}
 
@@ -89,12 +91,25 @@ export class WorkspaceView extends Service {
 				page: state.pages.find((page) => page.id === view.pageId) ?? null,
 				component: state.pageContent.find((page) => page.viewId === view.id)?.component ?? null,
 				tools: this._content(state.contributions, 'view-tools', view.id),
+				secondaryTools: this._content(state.contributions, 'view-tools-secondary', view.id),
+				hasSettings: (state.availableContributions ?? []).some(
+					(record) => record.slot === 'configuration' && record.viewId === view.id,
+				),
+				settingsSelected:
+					state.workspace.configuration.open && state.workspace.configuration.target === view.id,
 				status: this._content(state.contributions, 'status', view.id),
 			})),
 			pages: state.pages,
 			toolbar: this._content(state.contributions, 'toolbar', null),
 			configuration: {
 				...state.workspace.configuration,
+				sections: (state.availableContributions ?? []).filter(
+					(record) =>
+						record.slot === 'configuration' && record.viewId === state.workspace.configuration.target,
+				),
+				targets: (state.availableContributions ?? [])
+					.filter((record) => record.slot === 'configuration')
+					.map((record) => record.viewId),
 				contributions: this._content(
 					state.contributions,
 					'configuration',
@@ -145,6 +160,23 @@ export class WorkspaceView extends Service {
 	 */
 	selectConfigurationTarget(viewId) {
 		this.controller.selectConfigurationTarget(viewId);
+	}
+	/**
+	 * Call this method to relay a registered section selection.
+	 *
+	 * @param {string} section - Provider identity.
+	 */
+	selectConfigurationSection(section) {
+		this.controller.selectConfigurationSection(section);
+	}
+
+	/**
+	 * Call this method to relay a generic page-settings opening intent.
+	 *
+	 * @param {string|null} target - Exact view identity or shared scope.
+	 */
+	openConfiguration(target) {
+		this.controller.openConfiguration(target);
 	}
 }
 new WorkspaceView();

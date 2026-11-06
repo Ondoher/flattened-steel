@@ -1,0 +1,14 @@
+{
+	"index": "index.js",
+	"resources": [
+		{"cwd": "assets/data", "glob": "**/*", "dest": "features/global-configuration/assets/data", "keepNest": true}
+	],
+	"css": [
+		{
+			"cwd": "styles",
+			"glob": "**/*.css",
+			"dest": "features/global-configuration/styles",
+			"keepNest": true
+		}
+	]
+}

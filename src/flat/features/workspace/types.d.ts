@@ -58,6 +58,19 @@ type WorkspaceViewRecord = {
  */
 type WorkspaceConfiguration = {
 	/**
+	 * Selected registered section, optional for older consumers.
+	 */
+	section?: string | null;
+	/**
+	 * Provider-owned editor focus key.
+	 */
+	focus?: string | null;
+	/**
+	 * Monotonic explicit settings-request identity.
+	 */
+	request?: number;
+
+	/**
 	 * Whether the nonmodal panel is open.
 	 */
 	open: boolean;
@@ -92,12 +105,17 @@ type WorkspaceSnapshot = {
  * - **"configuration"** - Workspace or view-scoped settings.
  * - **"status"** - Status presentation owned by one open view.
  */
-type UiContributionSlot = 'toolbar' | 'view-tools' | 'configuration' | 'status';
+type UiContributionSlot = 'toolbar' | 'view-tools' | 'view-tools-secondary' | 'configuration' | 'status';
 
 /**
  * Feature-owned contribution registration, without executable callbacks.
  */
 type UiContributionDefinition = {
+	/**
+	 * Localized configuration-section label.
+	 */
+	label?: string;
+
 	/**
 	 * Identity unique within its slot and scope.
 	 */
@@ -157,6 +175,19 @@ type MountedUiContribution = {
  */
 type WorkspaceViewport = WorkspaceViewRecord & {
 	/**
+	 * Secondary view toolbar row supplied by the page.
+	 */
+	secondaryTools?: MountedUiContribution[];
+	/**
+	 * Whether this view has a registered settings provider.
+	 */
+	hasSettings?: boolean;
+	/**
+	 * Whether this view's settings are open.
+	 */
+	settingsSelected?: boolean;
+
+	/**
 	 * Selected metadata, or no definition.
 	 */
 	page: AppPageRecord | null;
@@ -178,6 +209,15 @@ type WorkspaceViewport = WorkspaceViewRecord & {
  * Projected configuration panel state and content.
  */
 type WorkspaceConfigurationPresentation = WorkspaceConfiguration & {
+	/**
+	 * Registered sections for the current target.
+	 */
+	sections?: UiContributionRecord[];
+	/**
+	 * Populated configuration scopes.
+	 */
+	targets?: (string | null)[];
+
 	/**
 	 * Feature-owned settings for the selected scope.
 	 */
@@ -334,6 +374,11 @@ type WorkspaceToolbarProps = {
  */
 type WorkspaceProps = {
 	/**
+	 * Generic Page settings intent.
+	 */
+	onOpenSettings?: React.MouseEventHandler<HTMLButtonElement>;
+
+	/**
 	 * Localized text projection.
 	 */
 	text: WorkspaceText;
@@ -377,6 +422,11 @@ type ViewportFrameProps = Omit<WorkspaceProps, 'views'> & {
  * Configuration surface presentation and view-mediated actions.
  */
 type ConfigurationPanelProps = {
+	/**
+	 * Registered section selection intent.
+	 */
+	onSelectSection?: React.MouseEventHandler<HTMLButtonElement>;
+
 	/**
 	 * Localized text projection.
 	 */
@@ -428,6 +478,11 @@ type WorkspaceContributionContent = UiContributionRecord & {
  */
 type WorkspaceState = {
 	/**
+	 * Available contribution metadata, independent of mounted content.
+	 */
+	availableContributions?: UiContributionRecord[];
+
+	/**
 	 * Defensive canonical model snapshot.
 	 */
 	workspace: WorkspaceSnapshot;
@@ -444,3 +499,8 @@ type WorkspaceState = {
 	 */
 	contributions: WorkspaceContributionContent[];
 };
+
+/**
+ * Registered feature-owned WorkspaceModel capability.
+ */
+type WorkspaceModelService = import('./models/WorkspaceModel.js').WorkspaceModel;

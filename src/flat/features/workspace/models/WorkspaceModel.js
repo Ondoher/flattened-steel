@@ -1,14 +1,38 @@
+import {Service} from '@polylith/core';
+
 /**
  * Canonical in-memory composition of the workspace, independent of React and scene state.
+ *
+ * @implements {WorkspaceModelService}
  */
-export class WorkspaceModel {
+export class WorkspaceModel extends Service {
 	/**
-	 * Creates one empty primary view and closed workspace configuration.
+	 * Registers the feature-owned model capability in its application registry.
+	 *
+	 * @param {unknown} registry - Optional isolated application registry.
 	 */
-	constructor() {
+	constructor(registry) {
+		super('workspace-model', registry);
+		this.implement([
+			'start',
+			'getSnapshot',
+			'selectPage',
+			'addView',
+			'removeView',
+			'setNotFound',
+			'setConfigurationOpen',
+			'setConfigurationTarget',
+			'setConfigurationSection',
+		]);
+	}
+
+	/**
+	 * Call this method to initialize local model state before dependency readiness.
+	 */
+	start() {
 		this._nextViewNumber = 2;
 		this._views = [{id: 'view-1', pageId: null}];
-		this._configuration = {open: false, target: null};
+		this._configuration = {open: false, target: null, section: null, focus: null, request: 0};
 		this._notFound = false;
 	}
 
@@ -71,6 +95,7 @@ export class WorkspaceModel {
 		this._views.pop();
 		if (this._configuration.target === viewId) {
 			this._configuration.target = null;
+			this._configuration.section = null;
 		}
 		return true;
 	}
@@ -104,5 +129,19 @@ export class WorkspaceModel {
 			throw new Error(`Unknown configuration target: ${target}`);
 		}
 		this._configuration.target = target;
+		this._configuration.section = null;
+	}
+	/**
+	 * Call this method to select a provider section without changing accepted feature data.
+	 *
+	 * @param {string|null} section - Registered contribution identity.
+	 * @param {string|null} [focus] - Provider-owned focus key for an explicit opening request.
+	 */
+	setConfigurationSection(section, focus = null) {
+		this._configuration.section = section;
+		this._configuration.focus = focus;
+		this._configuration.request++;
 	}
 }
+
+new WorkspaceModel();

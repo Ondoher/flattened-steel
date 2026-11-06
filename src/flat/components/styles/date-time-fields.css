@@ -1,0 +1,38 @@
+.date-time-field {
+	display: grid;
+	grid-template-columns: auto minmax(0, 1fr);
+	align-content: start;
+	gap: 0.5rem;
+	min-width: 0;
+	font-size: var(--app-font-small);
+}
+
+.date-time-field-format {
+	justify-self: end;
+	font-size: 0.8em;
+}
+
+.date-time-field input {
+	grid-column: 1 / -1;
+	box-sizing: border-box;
+	width: 100%;
+	min-width: 0;
+	padding: 0.5rem;
+	border: 1px solid var(--app-color-border);
+	border-radius: 0.25rem;
+	background: var(--app-color-background);
+	color: var(--app-color-text);
+	font: inherit;
+}
+
+.date-time-field input:focus-visible {
+	outline: 2px solid var(--app-color-action);
+	outline-offset: 2px;
+}
+
+.date-time-field-error {
+	grid-column: 1 / -1;
+	margin: 0;
+	padding-inline-start: 0.5rem;
+	border-inline-start: 2px solid var(--app-color-action);
+}

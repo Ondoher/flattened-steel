@@ -1,0 +1,26 @@
+{
+	"dataset": "cities.json",
+	"packageVersion": "1.1.50",
+	"upstream": "https://github.com/lutangar/cities.json",
+	"source": "GeoNames Gazetteer",
+	"sourceUrl": "https://www.geonames.org/",
+	"derivation": "Existing SAT compact index: name/country/admin1 retained, numeric latitude/longitude rounded to five decimal places. Exact compact bytes copied without modification.",
+	"sourceFile": "C:/dev/poly-gc-react/src/sat/assets/data/cities.json",
+	"generatorReference": "C:/dev/poly-gc-react/scripts/sat/build-city-index.js",
+	"sha256": "b2bb934424e194afa60e8df24b229eaadd2001c1749e029ad853549445a92c7e",
+	"recordCount": 154694,
+	"licenseFile": "cities-LICENSE.txt",
+	"licenseEvidence": "The installed package LICENSE and README state CC BY 4.0; its package.json license field says CC-BY-3.0. Original LICENSE is included without modification.",
+	"copiedOn": "2026-11-05",
+	"latitudeUnit": "degrees, north positive",
+	"longitudeUnit": "degrees, east positive",
+	"administrativeAreas": {
+		"file": "admin1-names.json",
+		"packageVersion": "1.1.50",
+		"sourceFile": "C:\\dev\\poly-gc-react\\node_modules\\cities.json\\admin1.json",
+		"sourceSha256": "602a6e12fe4d68352b25b01470e45d26c5008abaf843a97801c029ad6cdf6e4e",
+		"derivation": "Map each package admin1.json code to its English region name; compact UTF-8 JSON.",
+		"sha256": "0bc986d453df6e398afe2daf2939aaaae54174b4b992dd6ab016d16d658755f5",
+		"recordCount": 3892
+	}
+}

@@ -1,5 +1,4 @@
 import {Service} from '@polylith/core';
-import {WorkspaceModel} from './models/WorkspaceModel.js';
 
 /**
  * Workspace workflow and registered feature-session owner.
@@ -24,6 +23,8 @@ export class WorkspaceController extends Service {
 			'closeView',
 			'toggleConfiguration',
 			'selectConfigurationTarget',
+			'selectConfigurationSection',
+			'openConfiguration',
 			'mount',
 			'unmount',
 			'mountPage',
@@ -36,7 +37,6 @@ export class WorkspaceController extends Service {
 	 * Call this method to initialize only local workspace state.
 	 */
 	start() {
-		this._workspace = new WorkspaceModel();
 		/** @type {Map<string, WorkspacePageSession>} */
 		this._pages = new Map();
 		/** @type {Map<number, WorkspaceContributionSession>} */
@@ -85,7 +85,9 @@ export class WorkspaceController extends Service {
 		}
 		return (
 			contribution.slot !== 'configuration' ||
-			(snapshot.configuration.open && contribution.viewId === snapshot.configuration.target)
+			(snapshot.configuration.open &&
+				contribution.viewId === snapshot.configuration.target &&
+				contribution.id === snapshot.configuration.section)
 		);
 	}
 
@@ -94,6 +96,13 @@ export class WorkspaceController extends Service {
 	 */
 	_syncContributions() {
 		let snapshot = this._workspace.getSnapshot();
+		let sections = this.contributions
+			.get()
+			.filter((record) => record.slot === 'configuration' && record.viewId === snapshot.configuration.target);
+		if (snapshot.configuration.open && !sections.some((record) => record.id === snapshot.configuration.section)) {
+			this._workspace.setConfigurationSection(sections[0]?.id ?? null);
+			snapshot = this._workspace.getSnapshot();
+		}
 		let visible = this.contributions.get().filter((record) => this._isVisible(record, snapshot));
 		let retained = new Set(visible.map((record) => record.registrationId));
 		for (let registrationId of this._contributions.keys()) {
@@ -133,6 +142,7 @@ export class WorkspaceController extends Service {
 	 */
 	ready() {
 		this.stop();
+		this._workspace = /** @type {WorkspaceModelService} */ (this.registry.subscribe('workspace-model'));
 		this.pages = this.registry.subscribe('app-pages');
 		this.contributions = this.registry.subscribe('ui-contributions');
 		this.view = this.registry.subscribe('workspace-view');
@@ -307,6 +317,41 @@ export class WorkspaceController extends Service {
 	}
 
 	/**
+	 * Call this method to select one registered settings section in the current scope.
+	 *
+	 * @param {string} section - Provider identity selected by presentation.
+	 */
+	selectConfigurationSection(section) {
+		let target = this._workspace.getSnapshot().configuration.target;
+		this.openConfiguration(target, section);
+	}
+
+	/**
+	 * Call this method to open registered settings through a feature-independent capability.
+	 *
+	 * @param {string|null} target - Open-view identity or shared settings.
+	 * @param {string|null} [section] - Registered section or first available section.
+	 * @param {string|null} [focus] - Provider-owned focus intent.
+	 */
+	openConfiguration(target, section = null, focus = null) {
+		let snapshot = this._workspace.getSnapshot();
+		if (target !== null && !snapshot.views.some((view) => view.id === target)) {
+			return;
+		}
+		let sections = this.contributions
+			.get()
+			.filter((record) => record.slot === 'configuration' && record.viewId === target);
+		let selected = sections.find((record) => record.id === section) ?? sections[0];
+		if (!selected) {
+			return;
+		}
+		this._workspace.setConfigurationTarget(target);
+		this._workspace.setConfigurationSection(selected.id, focus);
+		this._workspace.setConfigurationOpen(true);
+		this._emitState();
+	}
+
+	/**
 	 * Call this method to read canonical workspace facts and owned mount results for view projection.
 	 *
 	 * @returns {WorkspaceState} - Domain/session facts without React-facing host grouping.
@@ -314,6 +359,7 @@ export class WorkspaceController extends Service {
 	getState() {
 		return {
 			workspace: this._workspace.getSnapshot(),
+			availableContributions: this.contributions.get(),
 			pages: this.pages.get(),
 			pageContent: [...this._pages].map(([viewId, session]) => ({viewId, component: session.component})),
 			contributions: this.contributions.get().flatMap((record) => {

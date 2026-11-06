@@ -38,6 +38,17 @@ The [main-frame UX research](../../flat/main-frame-ux-research.md) records
 advisory layout comparisons. Research recommendations are not accepted layout
 decisions or an implementation plan.
 
+### Flat Earth Time Input
+
+The owner selected an alternate Flat Earth time editor on 2026-11-05: degrees
+from the Sun's closest approach to the selected location, with zero at closest
+approach and before/after orbit positions. Changing the angle updates the shared
+timestamp for both views. The owner requests a visible page-toolbar slider and
+a slider/numeric pair in a dedicated shared configuration pane. The feature owns the editor while the app-wide
+current-time service remains the timestamp owner. The
+[time-input note](../../flat/flat-earth-time-input.md) owns detailed UI, conversion,
+date/wrap and open editing decisions. This is design intent, not implementation.
+
 ### Workspace And UI Foundation
 
 The owner selected an app-owned workspace without MUI on 2026-10-26. Use an
@@ -45,6 +56,44 @@ app-directed shell with the interactive scene as the main workspace. A compact
 toolbar exposes frequent actions; a collapsible setup panel holds less frequent
 configuration. The scene remains visible while users adjust either set of
 controls.
+
+The owner accepted a global configuration editor feature on 2026-11-05. It
+contributes mountable presentation to the existing configuration panel, while a
+main configuration service owns location and exposes the shared animation-loop
+current-time capability. Page features read
+that public capability and supply their own defaults for absent properties.
+Shared current location/date/time apply to both views; defaults for height/FOV
+initialize view-owned settings without replacing existing independent values.
+The [configuration architecture](../../flat/component-service-proposal.md#global-configuration-and-shared-values)
+owns the technical responsibilities and contribution flow. This is a design
+decision; the provider now includes city search and manual-coordinate editing,
+with accepted location in configuration and one timestamp owned by the app-wide
+animation-loop service (integer milliseconds since the Unix epoch).
+The date/time fields are app-wide components using the browser's local date
+order, separators, digits, and 12/24-hour time convention. Entry converts using
+the device's local time zone for now; DST ambiguity policy, location-zone
+conversion, and richer editing remain future work. The
+[Flat entry](../../flat/README.md#current-scope) owns implementation status.
+The owner selected the current device-local date and time as startup defaults.
+Accepted edits remain shared and survive closing configuration; reopening the
+panel does not reset them to the current clock. The shared animation service
+starts fixed; enabling playback advances one timestamp and solar/sidereal cycle
+frames for all views. Animation controls remain future UI work.
+
+The Flat Earth base scene now consumes those shared location/time values. It
+renders production atmospheric sky and flat ground, supports two independently
+owned views, and updates when shared values change. Missing location prompts for
+configuration; preparation failures offer Retry. Flat Earth now contributes
+independent elevation/FOV presets, Center on Sun, and click-to-look camera input
+for each view, matching Flat32. Shared time/location remain global; animation
+controls remain future work. The [Flat entry](../../flat/README.md#current-scope)
+owns implementation scope and verification.
+
+Features supply configuration UI by registering a provider service that returns
+mountable React content when requested. The configuration panel hosts those
+contributions through the shared interface. The
+[provider contract](../../flat/component-service-proposal.md#configuration-provider-contract)
+owns the service, mounting, and presentation boundaries.
 
 For create-app, these choices correspond to MUI disabled and the app-directed
 shell. No replacement UI component library is selected. The required controls
@@ -162,15 +211,15 @@ Stage 11.1-11.3 and parts of 11.4-11.6 are implemented. Remaining interaction/mi
 
 - [40 km elevation](forty-km-elevation.md) - Current elevation coverage, package selection and served GPU verification.
 - [10 km elevation](ten-km-elevation.md) - Expanded elevation presets, fixed ground coverage and matching cache.
-- [On-demand rendering](on-demand-rendering.md) — Idle scenes draw no frames; camera, controls, publication and visibility changes resume drawing. Matched GPU output is pixel-identical to the previous renderer.
+- [On-demand rendering](on-demand-rendering.md) â€” Idle scenes draw no frames; camera, controls, publication and visibility changes resume drawing. Matched GPU output is pixel-identical to the previous renderer.
 - [Original Bruneton atmosphere](bruneton-atmosphere.md) - Current physical profile in both modes, retaining numerical corrections and full elevation support.
 - [H2400 atmosphere](h2400-atmosphere.md) - Superseded physical selection; preserved integration evidence.
 - [H2400 promotion plan](h2400-atmosphere-plan.md) ? Experiment closure and production integration.
-- [Zero-aerosol atmosphere](zero-aerosol-atmosphere.md) — Prior zero-aerosol selection and rollback evidence; current default is original Bruneton.
-- [Elevated horizon cache coverage](elevated-horizon-cache-coverage.md) — Exact-sunset black strip corrected by covering all solar bins through 2 km; old spectral bytes preserved and seven matched GPU views pass.
-- [Shared-cache transition allocation](shared-cache-transition-status.md) — Remove policy-only transition failures while retaining real GPU failure handling.
-- [Sky, scene and elevation controls execution](sky-scene-controls-execution.md) — Native controls and cache/scene-reusing elevations are implemented and locally qualified, with actual GPU comparisons and recovery checks. Standards sign-off awaits reviewer calibration.
-- [Flat32 sky, scene and elevation controls plan](sky-scene-controls-plan.md) — Selected M1-M4 functionality is complete; the production review dependency remains open. Video scenes are deferred.
+- [Zero-aerosol atmosphere](zero-aerosol-atmosphere.md) â€” Prior zero-aerosol selection and rollback evidence; current default is original Bruneton.
+- [Elevated horizon cache coverage](elevated-horizon-cache-coverage.md) â€” Exact-sunset black strip corrected by covering all solar bins through 2 km; old spectral bytes preserved and seven matched GPU views pass.
+- [Shared-cache transition allocation](shared-cache-transition-status.md) â€” Remove policy-only transition failures while retaining real GPU failure handling.
+- [Sky, scene and elevation controls execution](sky-scene-controls-execution.md) â€” Native controls and cache/scene-reusing elevations are implemented and locally qualified, with actual GPU comparisons and recovery checks. Standards sign-off awaits reviewer calibration.
+- [Flat32 sky, scene and elevation controls plan](sky-scene-controls-plan.md) â€” Selected M1-M4 functionality is complete; the production review dependency remains open. Video scenes are deferred.
 - [Algorithm32 Cache Interface Design](cache-design.md)
 - [`flat32` Stage 11 Migration Inventory](flat32-migration-inventory.md)
 - [Algorithm32 Production Implementation Plan](production-implementation-plan.md)

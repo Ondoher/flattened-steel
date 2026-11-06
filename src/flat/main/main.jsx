@@ -4,6 +4,8 @@ import {registry} from '@polylith/core';
 
 import '../services/localize.js';
 import '../services/app-context.js';
+import '../services/animation-loop.js';
+import '../services/configuration.js';
 import '../services/io.js';
 
 import '../services/app-pages.js';
@@ -19,6 +21,8 @@ export function stopApplication() {
 	root = null;
 	registry.subscribe('app-controller')?.stop();
 	registry.subscribe('app-view')?.stop();
+	registry.subscribe('configuration').stop();
+	registry.subscribe('animation-loop').stop();
 }
 
 registry.listen('ready', () => {

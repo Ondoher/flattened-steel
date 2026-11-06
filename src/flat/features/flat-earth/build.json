@@ -1,0 +1,11 @@
+{
+	"index": "index.js",
+	"css": [
+		{
+			"cwd": "styles",
+			"glob": "**/*.css",
+			"dest": "features/flat-earth/styles",
+			"keepNest": true
+		}
+	]
+}

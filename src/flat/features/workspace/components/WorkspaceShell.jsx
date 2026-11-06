@@ -28,6 +28,8 @@ export default class WorkspaceShell extends Component {
 		this._onSelectPage = this._onSelectPage.bind(this);
 		this._onSelectTarget = this._onSelectTarget.bind(this);
 		this._onCloseView = this._onCloseView.bind(this);
+		this._onOpenSettings = this._onOpenSettings.bind(this);
+		this._onSelectSection = this._onSelectSection.bind(this);
 	}
 
 	/**
@@ -147,6 +149,24 @@ export default class WorkspaceShell extends Component {
 	}
 
 	/**
+	 * Called by page chrome to open generic settings for the exact view.
+	 *
+	 * @param {React.MouseEvent<HTMLButtonElement>} event - Native page-settings intent.
+	 */
+	_onOpenSettings(event) {
+		this.props.workspaceView.openConfiguration(event.currentTarget.dataset.viewId);
+	}
+
+	/**
+	 * Called by section navigation to select its registered provider.
+	 *
+	 * @param {React.MouseEvent<HTMLButtonElement>} event - Native section-selection intent.
+	 */
+	_onSelectSection(event) {
+		this.props.workspaceView.selectConfigurationSection(event.currentTarget.dataset.section);
+	}
+
+	/**
 	 * Called by frame rendering to present shared chrome.
 	 *
 	 * @returns {React.ReactNode} - Workspace toolbar.
@@ -181,6 +201,7 @@ export default class WorkspaceShell extends Component {
 					notFound={this.state.notFound}
 					onSelectPage={this._onSelectPage}
 					onCloseView={this._onCloseView}
+					onOpenSettings={this._onOpenSettings}
 				/>
 			</main>
 		);
@@ -202,6 +223,7 @@ export default class WorkspaceShell extends Component {
 				views={this.state.views}
 				onClose={this._onToggleConfiguration}
 				onSelectTarget={this._onSelectTarget}
+				onSelectSection={this._onSelectSection}
 			/>
 		);
 	}

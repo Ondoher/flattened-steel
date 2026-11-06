@@ -263,6 +263,33 @@ describe('ShaderRuntimePass', /** Called by Jasmine to register the named test s
 		);
 	});
 
+	it('keeps resized viewport dimensions when a setup binding refresh contains the initial size', () => {
+		let uniforms = {uViewportSizePixels: {value: [1, 1]}};
+		let observed;
+		let pass = new ShaderRuntimePass({
+			THREE: createThreeDouble(),
+			sourceHash: 'resize-regression',
+			fragmentShaderSource: 'void main() {}',
+			viewportSize: pixelSize(1, 1),
+			uniforms,
+			refreshUniformValues: () => {
+				uniforms.uViewportSizePixels.value = [1, 1];
+			},
+		});
+		pass.setSize(640, 360);
+		pass.render(
+			{
+				render: () => {
+					observed = [...uniforms.uViewportSizePixels.value];
+				},
+			},
+			{},
+			{},
+		);
+		expect(observed).toEqual([640, 360]);
+		pass.dispose();
+	});
+
 	it('updates the sole viewport uniform representation and disposes owned resources', /** Called by Jasmine to exercise the named behavior. */ () => {
 		const sceneInputCapture = createSceneInputCaptureDouble();
 		const pass = new ShaderRuntimePass({

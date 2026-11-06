@@ -25,9 +25,7 @@ export default class WorkspaceToolbar extends Component {
 	 * @param {WorkspaceToolbarProps} previous - Previous presentation values.
 	 */
 	componentDidUpdate(previous) {
-		if (previous.configurationOpen && !this.props.configurationOpen) {
-			this._configurationButton.current?.focus();
-		} else if (previous.comparison && !this.props.comparison) {
+		if (previous.comparison && !this.props.comparison) {
 			this._comparisonButton.current?.focus();
 		}
 	}
@@ -57,7 +55,7 @@ export default class WorkspaceToolbar extends Component {
 				<button
 					ref={this._comparisonButton}
 					type="button"
-					className="workspace-button workspace-button-primary"
+					className="workspace-button"
 					aria-pressed={this.props.comparison}
 					onClick={this.props.onToggleComparison}
 				>

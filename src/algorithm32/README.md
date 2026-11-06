@@ -60,6 +60,10 @@ record is [retained in the local topic archive](../../archives/topics/retired-20
 software-renderer result establishes conformance only, not supported-hardware
 timing or resource budgets.
 
+The Three runtime retains the current composer viewport after refreshing caller
+bindings. A resize regression test covers an initial-size binding being refreshed
+after setSize, so subsequent frames continue using the actual viewport dimensions.
+
 The Three scene-color boundary uses a half-float renderer-linear sRGB target.
 Color retains the established production scene-display proxy and writes the
 Bruneton Figure-1 exponential result directly, matching the reference dome

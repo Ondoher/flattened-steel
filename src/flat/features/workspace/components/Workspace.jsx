@@ -27,6 +27,7 @@ export default class Workspace extends Component {
 					notFound={notFound}
 					onSelectPage={this.props.onSelectPage}
 					onCloseView={this.props.onCloseView}
+					onOpenSettings={this.props.onOpenSettings}
 				/>
 			);
 		});

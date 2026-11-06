@@ -2,7 +2,66 @@
 
 Current active topic: production-app.
 Canonical entry: [Production app](production-app/README.md).
-Focus: the owner-authorized [first workspace implementation](flat/README.md),
+Focus: executing the [workspace comps plan](flat/workspace-comps-implementation-plan.md)
+under the owner's independent-execution invocation. M1 is complete; M2/M3 have
+a working desktop slice; M4 remains pending. The
+[execution record](flat/workspace-comps-execution.md) owns decisions and current
+evidence:111 browser tests, passing client/engine types and the first real
+renderer/shared Time-pane capture with no browser errors. Next: local checkpoint,
+Camera label/panel refinements and complete interaction/responsive verification.
+The execution skill preapproves adviser-suggested local checkpoints; no publishing
+is selected. Refine-design, engineering review and experiments remain inactive.
+One timestamp stays canonical, with independent cameras. The time-input note and
+comp handoff remain design/reference context; execution choices are recorded in
+the execution record.
+
+The earlier city-picker implementation and San Jose search correction remain
+in place. The feature contributes city search, accepted-location
+feedback, and explicit manual coordinate editing in workspace-wide configuration.
+CityCatalog owns local data loading/search; LocationEditorModel owns drafts.
+The app-level configuration model-service independently owns the accepted location
+and changed notifications. Query edits do not mutate it; defaults remain with
+consuming features. The workspace host remains generic; Flat Earth now renders through the shared observation capability.
+The San Jose search follow-up now preserves all exact-name matches and supports
+full state/region names plus punctuation, with region names shown in labels.
+Client type checking, build, 75 browser tests, formatting, and focused served
+Chrome search checks pass; the unchanged server's four tests passed in the prior
+city-picker unit. Search baseline/report/screenshots are under
+.codex-tmp/global-configuration/2026-11-05/san-jose-search. The earlier city-picker
+baseline, report, and screenshots are
+under .codex-tmp/global-configuration/2026-11-05/city-picker. Accepted location is
+in memory only. Location-zone behavior, richer editing, further properties,
+and rendering consumers remain future work, with no automatic implementation selected by this handoff.
+The owner has saved [fuzzy city search and related discoverability ideas](flat/implementation-notes.md#deferred-city-search-improvements)
+for later. Keep that work deferred; no implementation is selected.
+The owner-requested [localized date-field adaptation note](flat/date-field-adaptation.md)
+captures the useful behavior from transfer/Date.jsx and its supporting files,
+the Flat ownership boundaries, and open date/time decisions. Its simple first
+pass is implemented; the richer editing and location/time-zone adaptation remain design work.
+The owner supplied no existing time-entry field; [time entry and location time](flat/date-field-adaptation.md#next-design-work-time-entry-and-location-time)
+record the follow-on design work beyond the simple first pass. Entering time in the chosen location's zone is an
+option to evaluate. Device-local entry-to-timestamp conversion is implemented;
+location-zone lookup and explicit ambiguity policy remain unselected.
+The date/time note also records a [unified coordinate lookup and optional zone picker](flat/date-field-adaptation.md#unified-location-lookup-and-optional-override),
+with manual override as a possible correction path. No package or picker
+implementation has been selected.
+
+The accepted [global configuration design](flat/component-service-proposal.md#global-configuration-and-shared-values)
+separates editor presentation from shared data. An editor feature contributes global settings presentation;
+a main configuration service owns shared accepted values and notifications.
+Page features consume that capability and supply defaults for absent properties;
+per-view settings remain with their own models. This replaces the earlier
+shared-observation feature proposal. The panel's accepted extension shape uses
+registered configuration provider services returning mountable React content,
+as described by the [provider contract](flat/component-service-proposal.md#configuration-provider-contract).
+The provider now uses the existing contribution mount/release contract. The
+location data capability and city/coordinate editor are now implemented;
+location-zone date/time behavior and further controls remain future work.
+
+The [Flat Earth base scene](flat/README.md) replaces the earlier placeholder;
+its current implementation and verification are owned by the focus above.
+
+The owner-authorized [first workspace implementation](flat/README.md) was
 completed and corrected for feature ownership with local verification on
 2026-10-29. Its model, controller/view, React frame, contribution service, styles,
 types, and tests belong to features/workspace. The app feature retains activation
@@ -14,8 +73,8 @@ The base stylesheet now contains shared CSS color variables for the selected
 #121212 background and #F2F2F2 text/borders; the blue action token is a
 provisional visual approximation pending an exact swatch RGB value.
 The [product description](flat/product-description.md) remains input for later
-refinement. Observation/location/date/time controls, height/FOV controls, and
-Flat Earth shader integration remain future feature work. The intended first
+refinement. Location/time-zone-aware controls and additional Flat Earth content
+remain future feature work. The intended first
 scene integration stays recorded in the [implementation notes](flat/implementation-notes.md).
 A focused [React/ReMVC self-review](flat/react-remvc-audit.md) reread both
 standards and corrected React/service boundaries, view projection, semantic
@@ -69,7 +128,6 @@ shell and workspace separately.
 1. [Repository instructions](../../AGENTS.md).
 2. [Production app](production-app/README.md).
 3. [Flat shell](flat/README.md).
-4. [Selected product behavior](production-app/product-behavior/README.md).
-5. [Initial Flat product description](flat/product-description.md).
-6. [Flat implementation notes](flat/implementation-notes.md).
-7. [Component and service proposal](flat/component-service-proposal.md).
+4. [Workspace comps implementation plan](flat/workspace-comps-implementation-plan.md).
+5. [Flat Earth time-input note](flat/flat-earth-time-input.md).
+6. [Current comp handoff](flat/configuration-toolbar-comps.md).

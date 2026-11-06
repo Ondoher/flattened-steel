@@ -79,4 +79,20 @@ export interface WorkspaceController extends EventBus {
 	 * @param viewId - Open-view identity, or null for workspace-wide configuration.
 	 */
 	selectConfigurationTarget(viewId: string | null): void;
+
+	/**
+	 * Call this method to select a registered settings section.
+	 *
+	 * @param section - Contribution identity.
+	 */
+	selectConfigurationSection(section: string): void;
+
+	/**
+	 * Call this method to open settings without depending on provider implementation.
+	 *
+	 * @param target - Shared scope or exact view identity.
+	 * @param section - Optional registered section.
+	 * @param focus - Optional provider-owned focus intent.
+	 */
+	openConfiguration(target: string | null, section?: string | null, focus?: string | null): void;
 }

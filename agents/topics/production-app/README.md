@@ -29,13 +29,15 @@ Flat's shell does not incorporate the test bed's product feature candidates.
 
 The owner-authorized [Flat shell](../flat/README.md) is generated, following the
 [server integration refactor](runtime-integration/server-integration.md) and
-Polylith upgrade. Current design discussion is gathered in the
-[initial Flat product description](../flat/product-description.md), with
-[implementation notes](../flat/implementation-notes.md) retaining technical
-context. The description is input for later refinement. The owner subsequently authorized
-and received the [first workspace pass](../flat/README.md#current-scope), covering
-the persistent frame and contribution interfaces only. Observation and scene
-feature implementation remain unselected for execution.
+Polylith upgrade. The persistent workspace now hosts a real production Flat
+Earth sky/ground scene, global city/coordinate and local-format date/time editors,
+and a shared timestamp/animation service. Flat Earth supplies independently
+scoped camera controls adapted from Flat32 through the generic view-tools
+capability. The [Flat entry](../flat/README.md#current-scope) owns current
+implementation and verification. The [product description](../flat/product-description.md)
+and [implementation notes](../flat/implementation-notes.md) remain input for later
+refinement; location/time-zone adaptation, further scene content, and animation
+controls remain future work.
 The [Flat32 feature candidate inventory](product-behavior/flat32-feature-review.md)
 remains pending inclusion or adaptation review for the real application.
 That inventory selects no new product implementation, application name,

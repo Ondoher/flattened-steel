@@ -78,6 +78,40 @@ export default class ViewportFrame extends Component {
 	}
 
 	/**
+	 * Called by header rendering to expose registered page settings without knowing the provider.
+	 *
+	 * @returns {React.ReactNode} - Settings shortcut when the view has contributions.
+	 */
+	_renderSettings() {
+		let {viewport, text} = this.props;
+		let label = text('workspace.page-settings');
+		let button = viewport.hasSettings ? (
+			<button
+				type="button"
+				className="workspace-button workspace-page-settings"
+				data-view-id={viewport.id}
+				aria-pressed={viewport.settingsSelected}
+				onClick={this.props.onOpenSettings}
+			>
+				{label}
+			</button>
+		) : null;
+		return button;
+	}
+
+	/**
+	 * Called by header rendering to present a second generic tool row.
+	 *
+	 * @returns {React.ReactNode} - Feature-owned secondary controls.
+	 */
+	_renderSecondaryTools() {
+		let tools = (this.props.viewport.secondaryTools ?? []).map((item) => (
+			<React.Fragment key={item.registrationId}>{item.component}</React.Fragment>
+		));
+		return <div className="viewport-secondary-tools">{tools}</div>;
+	}
+
+	/**
 	 * Called by frame rendering to present view identity, tools, and close intent.
 	 *
 	 * @returns {React.ReactNode} - Semantic view header.
@@ -104,8 +138,10 @@ export default class ViewportFrame extends Component {
 			<header className="viewport-header">
 				<h2 id={headingId}>{label}</h2>
 				{this._renderSceneSelector(label)}
-				{this._renderTools()}
+				{this._renderSettings()}
 				{closeButton}
+				{this._renderTools()}
+				{this._renderSecondaryTools()}
 			</header>
 		);
 	}

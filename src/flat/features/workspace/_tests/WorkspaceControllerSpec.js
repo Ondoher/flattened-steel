@@ -1,3 +1,4 @@
+import {WorkspaceModel} from '../models/WorkspaceModel.js';
 import React from 'react';
 import {Registry, Service} from '@polylith/core';
 import {AppPagesService} from '../../../services/app-pages.js';
@@ -49,6 +50,7 @@ class NavigationStub extends Service {
 }
 function setup() {
 	let registry = new Registry();
+	new WorkspaceModel(registry).start();
 	let pages = new AppPagesService(registry);
 	pages.start();
 	let contributions = new UiContributionsService(registry);

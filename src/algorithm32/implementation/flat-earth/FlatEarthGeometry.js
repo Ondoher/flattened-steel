@@ -57,8 +57,9 @@ export class FlatEarthGeometry {
 		if (
 			CanonicalValueHash.sha256Value(request.observation) !==
 			CanonicalValueHash.sha256Value(this._configuration.observation)
-		)
+		) {
 			throw new RangeError('Flat stellar observation must match configured geometry.');
+		}
 		return new FlatStellarGenerationShaderContributor(
 			this._configuration,
 			request.observation,
@@ -88,8 +89,9 @@ export class FlatEarthGeometry {
 			source = this._configuration.sourcePosition.coordinates;
 		const forward = VectorMath.normalize(request.forward),
 			halfAngle = AngleMath.toRadians(request.halfAngle);
-		if (!Number.isFinite(halfAngle) || halfAngle < 0 || halfAngle >= Math.PI / 2)
+		if (!Number.isFinite(halfAngle) || halfAngle < 0 || halfAngle >= Math.PI / 2) {
 			throw new RangeError('Supported perspective cone required.');
+		}
 		const x = origin[0] - source[0],
 			y = origin[1] - source[1],
 			radius = Math.hypot(x, y);
@@ -105,8 +107,9 @@ export class FlatEarthGeometry {
 		const maximumRadius = Math.sqrt(
 			Math.max(radius * radius, radius * radius + extent * extent + 2 * radius * extent * maximumCosine),
 		);
-		if (maximumRadius > DistanceMath.toMeters(request.coverageRadius))
+		if (maximumRadius > DistanceMath.toMeters(request.coverageRadius)) {
 			throw new RangeError('Requested perspective cone exits complete compact cache support.');
+		}
 		let direction = outward;
 		if (separation > halfAngle) {
 			const tangent = [outward[0] - forward[0] * cosine, outward[1] - forward[1] * cosine, -forward[2] * cosine];
@@ -181,6 +184,41 @@ export class FlatEarthGeometry {
 	 */
 	static resolveObservationInstant(request) {
 		return new FlatSynchronizer().calibrateToWorld().resolveObservationInstant(request);
+	}
+
+	/**
+	 * Call this method to find the closest daily occurrence around an accepted instant.
+	 *
+	 * @param {string} instant - Canonical UTC instant whose nearest occurrence is needed.
+	 * @param {FlatSynchronizationClosestPoint} location - Unit-bearing geographic location.
+	 * @returns {{closestInstant: string, angleDegrees: number}} - Closest occurrence and signed 24-hour offset.
+	 */
+	static describeClosestApproach(instant, location) {
+		let timestamp = new Date(instant).getTime();
+		let closest = Infinity;
+		let synchronizer = new FlatSynchronizer().calibrateToWorld();
+		for (let day = -2; day <= 2; day++) {
+			let dateBasis = new Date(timestamp + day * 86400000).toISOString();
+			let candidate = Date.parse(
+				synchronizer.resolveObservationInstant({dateBasis, location, kind: 'solar-noon'}),
+			);
+			if (Math.abs(candidate - timestamp) < Math.abs(closest - timestamp)) {
+				closest = candidate;
+			}
+		}
+		return {closestInstant: new Date(closest).toISOString(), angleDegrees: (timestamp - closest) / 240000};
+	}
+
+	/**
+	 * Call this method to resolve a signed daily angle against an explicit closest occurrence.
+	 *
+	 * @param {string} closestInstant - Geometry-resolved daily closest occurrence.
+	 * @param {Angle} angle - Signed angle before or after that occurrence.
+	 * @returns {string} - Canonical UTC instant with integer millisecond precision.
+	 */
+	static resolveClosestOffset(closestInstant, angle) {
+		AngleMath.assertAngle(angle, 'closest offset');
+		return new Date(Math.round(Date.parse(closestInstant) + AngleMath.toDegrees(angle) * 240000)).toISOString();
 	}
 
 	/**
@@ -413,7 +451,9 @@ export class FlatEarthGeometry {
 			const samePlacement = boundPositionMeters.every(
 				(value, index) => value === sourcePosition.coordinates[index],
 			);
-			if (sameObservation && samePlacement) return this._binding.placement;
+			if (sameObservation && samePlacement) {
+				return this._binding.placement;
+			}
 			throw new Error('FlatEarthGeometry light-source placement is already configured.');
 		}
 
@@ -489,12 +529,14 @@ export class FlatEarthGeometry {
 			typeof request.observation.instant !== 'string' ||
 			!Number.isFinite(instant.getTime()) ||
 			instant.toISOString() !== request.observation.instant
-		)
+		) {
 			throw new TypeError('Canonical exact UTC observation required.');
+		}
 		const latitude = AngleMath.toDegrees(request.observation.location.latitude);
 		const longitude = AngleMath.toDegrees(request.observation.location.longitude);
-		if (latitude < -90 || latitude > 90 || longitude < -180 || longitude > 180)
+		if (latitude < -90 || latitude > 90 || longitude < -180 || longitude > 180) {
 			throw new RangeError('Live observation location is outside geographic bounds.');
+		}
 		const facts = this._configuration;
 		const geometry = new FlatEarthGeometry({
 			observerPosition: request.receiverPosition,
@@ -567,8 +609,9 @@ export class FlatEarthGeometry {
 	 * @throws {Error} - The finite source has not been configured on this geometry.
 	 */
 	createCompactLocalSunCacheTopology(request) {
-		if (this._scatteringCacheGeometry === null)
+		if (this._scatteringCacheGeometry === null) {
 			throw new Error('Configure the finite source before creating compact topology.');
+		}
 		return this._scatteringCacheGeometry.createCompactLocalSunCacheTopology(request);
 	}
 
@@ -1237,8 +1280,9 @@ export class FlatEarthGeometry {
 	 * @throws {Error} - A finite source has not been configured.
 	 */
 	resolveCompactLocalSunCacheStencil(request) {
-		if (this._scatteringCacheGeometry === null)
+		if (this._scatteringCacheGeometry === null) {
 			throw new Error('Configure the finite source before compact reconstruction.');
+		}
 		return this._scatteringCacheGeometry.resolveCompactLocalSunCacheStencil(request);
 	}
 
@@ -1251,8 +1295,9 @@ export class FlatEarthGeometry {
 	 * @throws {Error} - A finite source has not been configured.
 	 */
 	resolveCompactLocalSunCacheNodePosition(request) {
-		if (this._scatteringCacheGeometry === null)
+		if (this._scatteringCacheGeometry === null) {
 			throw new Error('Configure the finite source before compact node placement.');
+		}
 		return this._scatteringCacheGeometry.resolveCompactLocalSunCacheNodePosition(request);
 	}
 
@@ -1275,8 +1320,9 @@ export class FlatEarthGeometry {
 	 * @throws {RangeError} - Pairing, support, direction or shortening is invalid.
 	 */
 	resolveCompactLocalSunCacheRay(request) {
-		if (!this._configuration || !this._scatteringCacheGeometry)
+		if (!this._configuration || !this._scatteringCacheGeometry) {
 			throw new RangeError('Configured finite source required for compact rays.');
+		}
 		return this._scatteringCacheGeometry.resolveCompactLocalSunCacheRay(request);
 	}
 

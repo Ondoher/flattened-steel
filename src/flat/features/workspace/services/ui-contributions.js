@@ -37,7 +37,7 @@ export class UiContributionsService extends Service {
 		if (definition.slot === 'toolbar' && viewId !== null) {
 			throw new TypeError('Shared toolbar contributions use workspace scope.');
 		}
-		if (['view-tools', 'status'].includes(definition.slot) && viewId === null) {
+		if (['view-tools', 'view-tools-secondary', 'status'].includes(definition.slot) && viewId === null) {
 			throw new TypeError('View tools and status require an open-view identity.');
 		}
 		let order = definition.order ?? 0;
@@ -53,9 +53,7 @@ export class UiContributionsService extends Service {
 		}
 		let registrationId = this._nextRegistration++;
 		this._records.set(registrationId, {
-			id: definition.id,
-			controller: definition.controller,
-			slot: definition.slot,
+			...definition,
 			viewId,
 			order,
 			registrationId,

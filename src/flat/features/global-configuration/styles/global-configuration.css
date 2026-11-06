@@ -1,0 +1,246 @@
+.global-configuration-panel h3 {
+	margin: 0;
+	font-size: 1rem;
+	font-weight: 500;
+}
+
+.global-configuration-panel,
+.location-editor,
+.city-picker,
+.location-coordinates,
+.location-coordinates label {
+	display: grid;
+	gap: 0.75rem;
+	min-width: 0;
+}
+
+.location-editor h4,
+.location-editor p {
+	margin: 0;
+}
+
+.location-editor h4 {
+	font-size: 1rem;
+	font-weight: 500;
+}
+
+.location-editor {
+	font-size: var(--app-font-small);
+	gap: 1rem;
+}
+
+.location-editor input,
+.location-editor button {
+	box-sizing: border-box;
+	width: 100%;
+	min-width: 0;
+	padding: 0.5rem;
+	border: 1px solid var(--app-color-border);
+	border-radius: 0.25rem;
+	color: var(--app-color-text);
+	background: var(--app-color-background);
+	font: inherit;
+}
+
+.location-editor button {
+	cursor: pointer;
+	border-color: var(--app-color-action);
+	color: var(--app-color-on-action);
+	background: var(--app-color-action);
+}
+
+.location-editor input:focus-visible,
+.location-editor button:focus-visible {
+	outline: 2px solid var(--app-color-action);
+	outline-offset: 2px;
+}
+
+.location-editor input:disabled {
+	opacity: 0.6;
+}
+
+.city-results {
+	display: grid;
+	max-height: 14rem;
+	margin: 0;
+	padding: 0;
+	overflow: auto;
+	list-style: none;
+	border: 1px solid var(--app-color-border);
+}
+
+.city-results li {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) auto;
+	gap: 0.75rem;
+	padding: 0.625rem 0.5rem;
+	cursor: pointer;
+}
+
+.city-results li[aria-selected='true'],
+.city-results li:hover {
+	color: var(--app-color-on-action);
+	background: var(--app-color-action);
+}
+
+.city-results span,
+.location-selection {
+	overflow-wrap: anywhere;
+}
+
+.city-result-detail {
+	font-size: 0.85em;
+}
+
+.city-catalog-status {
+	display: grid;
+	gap: 0.75rem;
+}
+
+.location-error {
+	padding-inline-start: 0.5rem;
+	border-inline-start: 2px solid var(--app-color-action);
+}
+
+.city-attribution a {
+	color: var(--app-color-action);
+}
+
+.date-time-editor {
+	display: grid;
+	gap: 0.75rem;
+	min-width: 0;
+	margin: 0;
+	padding-block-end: 1rem;
+	border-bottom: 1px solid var(--app-color-border);
+	font-size: var(--app-font-small);
+}
+
+.date-time-editor h4,
+.date-time-editor p {
+	margin: 0;
+}
+
+.date-time-editor h4 {
+	font-size: 1rem;
+	font-weight: 500;
+}
+
+.date-time-inputs {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 0.75rem;
+	min-width: 0;
+}
+
+.date-time-editor button {
+	padding: 0.5rem;
+	border: 1px solid var(--app-color-action);
+	border-radius: 0.25rem;
+	color: var(--app-color-on-action);
+	background: var(--app-color-action);
+	font: inherit;
+	cursor: pointer;
+}
+
+.date-time-editor button:focus-visible {
+	outline: 2px solid var(--app-color-action);
+	outline-offset: 2px;
+}
+
+.global-configuration-summary {
+	display: grid;
+	grid-template-columns: 304px 320px;
+	gap: 24px;
+	min-width: 0;
+}
+.global-summary-entry {
+	display: grid;
+	grid-template-rows: 16px 20px;
+	row-gap: 4px;
+	height: 52px;
+	padding: 6px 8px;
+	text-align: left;
+	border: 0;
+	border-radius: 0;
+	background: transparent;
+	color: var(--app-color-text);
+	min-width: 0;
+	cursor: pointer;
+}
+.global-summary-label {
+	display: flex;
+	justify-content: space-between;
+	gap: 8px;
+	font-size: 12px;
+	line-height: 16px;
+}
+.global-summary-label > span:last-child {
+	color: var(--app-color-action);
+}
+.global-summary-entry > strong {
+	font-size: 15px;
+	line-height: 20px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.global-configuration-panel {
+	gap: 24px;
+}
+.location-editor h4,
+.date-time-editor h4 {
+	font-weight: 700;
+	font-size: 16px;
+	line-height: 20px;
+}
+.date-time-editor {
+	border-top: 1px solid var(--app-color-border);
+	border-bottom: 0;
+	padding-top: 24px;
+}
+.location-editor input {
+	height: 36px;
+}
+.date-time-editor button,
+.location-editor button {
+	min-height: 34px;
+}
+@media (max-width: 1200px) {
+	.global-configuration-summary {
+		grid-template-columns: minmax(0, 280px) minmax(0, 300px);
+		gap: 20px;
+	}
+	.global-configuration-panel {
+		grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+		gap: 40px;
+	}
+	.date-time-editor {
+		border-top: 0;
+		padding-top: 0;
+	}
+	.date-time-selection {
+		font-size: 12px;
+	}
+}
+@media (max-width: 760px) {
+	.global-configuration-summary {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 16px;
+	}
+	.global-summary-entry > strong {
+		font-size: 14px;
+	}
+	.global-configuration-panel {
+		gap: 24px;
+	}
+	.date-time-inputs {
+		grid-template-columns: minmax(0, 1fr);
+	}
+}
+@media (max-width: 580px) {
+	.global-configuration-summary,
+	.global-configuration-panel {
+		grid-template-columns: minmax(0, 1fr);
+	}
+}
