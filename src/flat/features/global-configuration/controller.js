@@ -271,6 +271,7 @@ export class GlobalConfigurationController extends Service {
 			this._emitState();
 		}
 	}
+
 	/**
 	 * Call this method to open a provider-owned editor through generic settings navigation.
 	 *

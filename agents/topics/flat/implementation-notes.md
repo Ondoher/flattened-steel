@@ -26,9 +26,9 @@ updates the shared timestamp for both views. The feature owns the alternate
 editor, while the app-wide current-time service owns accepted time. The
 [updated comps](configuration-toolbar-comps.md#shared-time-slider-update) show the
 shared scope separately from view-specific Camera settings. Date/wrap, precision
-and draft/acceptance behavior remain design questions. The owner-requested
-[implementation plan](workspace-comps-implementation-plan.md) now sequences the
-frame and editor work; execution has not begun.
+and draft/acceptance choices are now recorded by the [time-input note](flat-earth-time-input.md).
+The [implementation plan](workspace-comps-implementation-plan.md) is complete;
+the [execution record](workspace-comps-execution.md) owns results and evidence.
 
 ## First Shader Integration
 

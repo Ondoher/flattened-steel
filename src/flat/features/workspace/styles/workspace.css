@@ -79,8 +79,9 @@
 	border-left: 1px solid var(--app-color-border);
 }
 .viewport-header {
+	height: 184px;
 	display: grid;
-	grid-template-columns: 44px 140px 116px minmax(0, 1fr) auto;
+	grid-template-columns: 44px 140px 120px minmax(0, 1fr);
 	grid-template-rows: 32px 12px 32px 8px 88px;
 	column-gap: 16px;
 	padding: 12px 16px 0;
@@ -107,6 +108,7 @@
 	height: 32px;
 }
 .workspace-page-settings {
+	margin-left: 4px;
 	grid-row: 1;
 	grid-column: 3;
 	width: 116px;
@@ -114,8 +116,9 @@
 	padding: 0 8px;
 }
 .workspace-close {
+	width: 108px;
 	grid-row: 1;
-	grid-column: 5;
+	grid-column: 4;
 	justify-self: end;
 	height: 32px;
 }
@@ -130,6 +133,7 @@
 	min-width: 0;
 }
 .viewport-header:has(.viewport-secondary-tools:empty) {
+	height: auto;
 	grid-template-rows: 32px;
 	padding-bottom: 12px;
 }
@@ -219,6 +223,7 @@
 @media (min-width: 1201px) {
 	.workspace-shell[data-configuration-open='false'] .workspace-views[data-view-count='1'] .viewport-header {
 		grid-template-columns: 44px 140px 124px minmax(0, 1fr);
+		height: 148px;
 		grid-template-rows: 60px 88px;
 		align-items: center;
 		padding: 0 20px;
@@ -424,4 +429,154 @@
 	.viewport-header:has(.viewport-secondary-tools:empty) {
 		grid-template-rows: auto;
 	}
+}
+
+.viewport-frame {
+	position: relative;
+}
+.viewport-frame + .viewport-frame {
+	border-left: 0;
+}
+.viewport-frame + .viewport-frame::before {
+	content: '';
+	position: absolute;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	width: 1px;
+	background: var(--app-color-border);
+	z-index: 2;
+	pointer-events: none;
+}
+.configuration-panel {
+	position: relative;
+	border-left: 0;
+}
+.configuration-panel::before {
+	content: '';
+	position: absolute;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	width: 1px;
+	background: var(--app-color-border);
+	z-index: 2;
+	pointer-events: none;
+}
+@media (max-width: 1200px) {
+	.configuration-panel {
+		border-top: 0;
+	}
+	.configuration-panel::before {
+		right: 0;
+		bottom: auto;
+		width: auto;
+		height: 1px;
+	}
+}
+@media (max-width: 760px) {
+	.viewport-frame + .viewport-frame {
+		border-top: 0;
+	}
+	.viewport-frame + .viewport-frame::before {
+		right: 0;
+		bottom: auto;
+		width: auto;
+		height: 1px;
+	}
+}
+@media (max-width: 580px) {
+	.viewport-header {
+		height: auto;
+	}
+	.workspace-close {
+		width: auto;
+	}
+}
+
+.workspace-actions .workspace-button:first-child[aria-pressed='false'] {
+	width: 144px;
+}
+.workspace-actions .workspace-button:first-child[aria-pressed='true'] {
+	width: 108px;
+	background: var(--app-color-background);
+	border-color: var(--app-color-border);
+	color: var(--app-color-text);
+}
+@media (max-width: 760px) {
+	.workspace-actions .workspace-button:first-child[aria-pressed] {
+		width: 156px;
+	}
+}
+@media (max-width: 580px) {
+	.workspace-actions .workspace-button:first-child[aria-pressed] {
+		width: auto;
+	}
+}
+
+.configuration-header {
+	align-items: flex-start;
+}
+.configuration-header h2 {
+	margin-top: 4px;
+}
+.configuration-header > .workspace-button {
+	width: 58px;
+	padding-inline: 0;
+}
+@media (max-width: 1200px) {
+	.configuration-header {
+		padding: 16px 20px 0;
+	}
+	.configuration-header h2 {
+		margin-top: 0;
+	}
+	.configuration-header > .workspace-button {
+		width: 66px;
+	}
+	.configuration-scope {
+		padding-top: 4px;
+	}
+}
+@media (max-width: 1000px) {
+	.workspace-views[data-view-count='2'] {
+		grid-template-columns: minmax(0, 1fr);
+		grid-template-rows: repeat(2, minmax(260px, 1fr));
+		overflow: auto;
+	}
+	.viewport-frame + .viewport-frame::before {
+		right: 0;
+		bottom: auto;
+		width: auto;
+		height: 1px;
+	}
+}
+@media (max-width: 760px) {
+	.configuration-header {
+		padding-inline: 16px;
+	}
+	.configuration-header h2 {
+		margin-top: 2px;
+	}
+	.configuration-scope {
+		padding-top: 8px;
+	}
+}
+@media (max-width: 580px) {
+	.configuration-scope {
+		padding-top: 8px;
+	}
+}
+@media (max-height: 780px) and (max-width: 760px) {
+	.workspace-shell {
+		height: auto;
+		min-height: 100dvh;
+	}
+	.workspace-shell[data-configuration-open='true'] .workspace-body {
+		grid-template-rows: minmax(300px, 1fr) 370px;
+	}
+}
+
+.viewport-tools {
+	container-type: inline-size;
 }

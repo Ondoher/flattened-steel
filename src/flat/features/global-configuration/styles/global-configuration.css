@@ -244,3 +244,24 @@
 		grid-template-columns: minmax(0, 1fr);
 	}
 }
+
+.location-coordinate-disclosure > summary {
+	cursor: pointer;
+	color: var(--app-color-action);
+	font-size: 13px;
+	line-height: 20px;
+	padding-block: 6px;
+}
+.location-coordinate-disclosure .location-coordinates {
+	margin-top: 12px;
+}
+
+.global-summary-label > span:first-child {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.city-attribution a {
+	color: var(--app-color-text);
+	text-decoration: underline;
+}

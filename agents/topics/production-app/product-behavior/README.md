@@ -47,7 +47,7 @@ timestamp for both views. The owner requests a visible page-toolbar slider and
 a slider/numeric pair in a dedicated shared configuration pane. The feature owns the editor while the app-wide
 current-time service remains the timestamp owner. The
 [time-input note](../../flat/flat-earth-time-input.md) owns detailed UI, conversion,
-date/wrap and open editing decisions. This is design intent, not implementation.
+date/wrap and open editing decisions. The [workspace comp execution](../../flat/workspace-comps-execution.md) records the implemented first pass and its verification.
 
 ### Workspace And UI Foundation
 

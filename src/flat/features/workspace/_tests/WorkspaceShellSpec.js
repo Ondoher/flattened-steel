@@ -1,4 +1,4 @@
-import React, {act} from 'react';
+﻿import React, {act} from 'react';
 import WorkspaceShell from '../components/WorkspaceShell.jsx';
 import {createTestHarness} from '../../../testing/TestHarness.js';
 const viewport = (id, pageId = null, component = null) => ({id, pageId, page: null, component, tools: [], status: []});
@@ -126,6 +126,38 @@ describe('workspace React frame', () => {
 		view.emit({...view.state, configuration: {open: false, target: null, contributions: []}});
 		expect(result.query('aside')).toBeNull();
 		expect(document.activeElement).toBe(result.query('button[aria-controls]'));
+	});
+
+	it('keeps focus in a requested editor while its input loads and releases the pending observer', async () => {
+		view.state.configuration = {
+			open: true,
+			target: null,
+			focus: 'editor',
+			request: 1,
+			contributions: [
+				{
+					registrationId: 1,
+					component: (
+						<div data-settings-focus="editor" tabIndex={-1}>
+							<input disabled />
+							<details>
+								<summary>Coordinates</summary>
+								<input />
+							</details>
+						</div>
+					),
+				},
+			],
+		};
+		result = harness.render(WorkspaceShell, {workspaceView: view, initialState: view.state});
+		expect(document.activeElement).toBe(result.query('[data-settings-focus]'));
+		let input = result.query('input');
+		act(() => {
+			input.disabled = false;
+		});
+		await Promise.resolve();
+		expect(document.activeElement).toBe(input);
+		harness.unmount();
 	});
 	it('updates routed failure presentation and removes its exact listener', () => {
 		result = harness.render(WorkspaceShell, {workspaceView: view, initialState: view.state});

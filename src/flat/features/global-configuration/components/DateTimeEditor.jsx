@@ -63,7 +63,13 @@ export default class DateTimeEditor extends Component {
 		let timeError = presentation.timeError ? text(presentation.timeError) : null;
 		let selection = presentation.accepted ?? text('global-configuration.date-time.none');
 		return (
-			<form className="date-time-editor" data-settings-focus="date-time" onSubmit={this._onSubmit} noValidate>
+			<form
+				className="date-time-editor"
+				data-settings-focus="date-time"
+				tabIndex={-1}
+				onSubmit={this._onSubmit}
+				noValidate
+			>
 				<h4>{title}</h4>
 				<p className="date-time-selection" role="status">
 					{selection}

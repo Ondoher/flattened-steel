@@ -150,6 +150,34 @@ describe('workspace controller', () => {
 		});
 	});
 	describe('contribution scope and cleanup', () => {
+		it('selects one registered section, falls back on removal, and preserves page lifetimes', () => {
+			state.pages.add({id: 'scene', controller: 'owner'});
+			state.controller.mountPage('scene');
+			let first = state.contributions.add({
+				id: 'location',
+				label: 'Location',
+				slot: 'configuration',
+				controller: 'owner',
+			});
+			let second = state.contributions.add({
+				id: 'time',
+				label: 'Time',
+				slot: 'configuration',
+				controller: 'owner',
+			});
+			state.controller.openConfiguration(null, 'time', 'degrees');
+			expect(state.owner.contributionMounts).toEqual([second]);
+			expect(state.controller.getState().workspace.configuration.focus).toBe('degrees');
+			state.controller.selectConfigurationSection('location');
+			expect(state.owner.contributionReleases).toEqual([second]);
+			expect(state.owner.contributionMounts).toEqual([second, first]);
+			state.contributions.remove(first);
+			expect(state.controller.getState().workspace.configuration.section).toBe('time');
+			expect(state.owner.mounts.length).toBe(1);
+			expect(state.owner.releases).toEqual([]);
+			state.controller.openConfiguration('closed', 'time');
+			expect(state.controller.getState().workspace.configuration.target).toBeNull();
+		});
 		it('mounts registered content without feature imports and releases exact registrations', () => {
 			let token = state.contributions.add({id: 'shared-control', slot: 'toolbar', controller: 'owner'});
 			expect(state.view.getShellState().toolbar[0].component.props.children).toBe('shared-control');

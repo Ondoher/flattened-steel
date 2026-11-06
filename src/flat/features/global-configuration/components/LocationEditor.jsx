@@ -155,8 +155,9 @@ export default class LocationEditor extends Component {
 		let title = text('global-configuration.location.title');
 		let disabled = !presentation.searchEnabled;
 		let attribution = text('global-configuration.cities.attribution');
+		let coordinateLabel = text('global-configuration.coordinates.disclosure');
 		return (
-			<div className="location-editor" data-settings-focus="location">
+			<div className="location-editor" data-settings-focus="location" tabIndex={-1}>
 				<h4>{title}</h4>
 				{this._renderSelection()}
 				<CityPicker
@@ -168,7 +169,10 @@ export default class LocationEditor extends Component {
 					onSelectCity={onSelectCity}
 				/>
 				{this._renderCatalogStatus()}
-				{this._renderCoordinates()}
+				<details className="location-coordinate-disclosure">
+					<summary>{coordinateLabel}</summary>
+					{this._renderCoordinates()}
+				</details>
 				<p className="city-attribution">
 					<a href="https://www.geonames.org/">{attribution}</a>
 				</p>

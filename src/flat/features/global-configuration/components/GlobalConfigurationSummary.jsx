@@ -108,7 +108,7 @@ export default class GlobalConfigurationSummary extends Component {
 		let location =
 			state.locationLabel ?? state.locationCoordinates ?? this._text('global-configuration.location.none');
 		let time = state.summaryTime ?? '';
-		let locationLabel = this._text('global-configuration.location.title');
+		let locationLabel = this._text('global-configuration.summary-location');
 		let timeLabel = this._text('global-configuration.summary-time');
 		let a = this._renderSummary(locationLabel, location, this._location);
 		let b = this._renderSummary(timeLabel, time, this._time);

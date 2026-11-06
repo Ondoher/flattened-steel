@@ -5,35 +5,22 @@ Flat is the production application shell created through create-app on
 own the selected workspace behavior and scaffold options. Flat32 remains the
 separate integration test bed.
 
-The owner-requested [configuration and page-toolbar consultation](configuration-toolbar-research.md)
-is complete as standalone UX/UI research in the context of the full app. It
-recommends visible shared location/time, a coherent task-based inspector,
-independent camera controls, and contained responsive view headers. Current
-captures reveal overlap with comparison plus configuration at 1100px and
-horizontal overflow at 390px. These findings and proposed interaction changes
-remain advisory; no application changes or implementation plan were selected.
-The owner subsequently requested [UI designer comps](configuration-toolbar-comps.md).
-The latest four-state update adds a visible shared-time slider to each Flat Earth
-toolbar and a slider/numeric pair in shared Flat Earth time configuration. The
-earlier six-state family preserves the inline alternative and view-specific
-Camera settings route. Desktop/compact states received designer author inspection.
-The application remains unchanged; the plan below uses the current comps as its
-implementation target.
+The [workspace comps implementation](workspace-comps-execution.md) is complete
+through the owner-authorized independent-execution run. The app now has shared
+accepted-value summaries, generic settings targets/sections, per-view Camera
+settings, and synchronized shared-time sliders plus precise numeric entry.
+The workspace remains generic; Flat Earth owns the alternate editor and a
+registered model-service, while the existing clock owns the shared timestamp.
 
-The owner has now requested a saved
-[implementation plan](workspace-comps-implementation-plan.md) for the current
-summary-led frame and shared-time slider comps. It sequences contract/time
-semantics, a usable frame/settings slice, connected shared-time editors and
-responsive runtime verification. Execution is now authorized through independent-execution; the
-[execution record](workspace-comps-execution.md) owns current progress. The
-first desktop slice and111 browser tests pass; final interaction/responsive
-verification remains in progress.
-
-The owner selected a [Flat Earth degrees-from-closest time editor](flat-earth-time-input.md)
-as another way to set the shared timestamp for both views. The requested toolbar
-slider and dedicated shared configuration pane are now illustrated in the comps.
-Range/wrap, precision and draft behavior remain design decisions. The editor is
-not implemented.
+The [time-input note](flat-earth-time-input.md) owns conversion/editing behavior.
+The [execution record](workspace-comps-execution.md) links the four real captures,
+matching geometry/token measurements, 118 passing browser tests, 29 focused engine
+tests, client/engine types and live interaction evidence. The original
+[research](configuration-toolbar-research.md) and
+[designer comps](configuration-toolbar-comps.md) remain reference artifacts.
+Device/local-time entry remains; time-zone lookup and animation UI are deferred.
+Engineering standards review remains cancelled. Local checkpoints are recorded
+in the execution record; nothing was pushed or deployed.
 
 ## Current Scope
 
@@ -92,7 +79,7 @@ the compiled browser tests.
 
 The owner requires Flat's state-owning models to be implemented as registered
 services. WorkspaceModel, CityCatalog, LocationEditorModel, DateTimeEditorModel,
-and FlatEarthModel now extend Polylith Service and expose implemented methods.
+FlatEarthModel and FlatEarthTimeModel extend Polylith Service and expose implemented methods.
 Their owning feature entries activate them, local state initializes in start(),
 and controllers resolve the capabilities in ready(). CityCatalog resolves HTTP
 in its own ready() and exposes loading status through a method. FlatEarthModel
@@ -176,10 +163,10 @@ are present. Every exact city-name match remains available; partial suggestions
 fill an eighteen-result list when there are fewer exact matches. Region names
 also appear in result labels, with codes as the fallback. The first panel mount loads the
 copied static city index through the deployment-aware HTTP service. Loaded data
-is retained across panel close/reopen. Its 154,694 source rows occupy 10,359,090
+is retained across panel close/reopen. Its 154, 694 source rows occupy 10, 359, 090
 bytes; exact copied bytes, original license, and provenance are under the
 feature's assets/data folder. The same source package supplies a compact lookup
-of 3,892 region names, with derivation/hash information in cities-source.json.
+of 3, 892 region names, with derivation/hash information in cities-source.json.
 The generated compact city and region JSON files are excluded from
 Prettier to preserve its bytes. No external city API or new server endpoint is
 used, and the source repository is not a runtime dependency.

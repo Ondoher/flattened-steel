@@ -21,7 +21,7 @@ export class FlatEarthTimeModel extends Service {
 	 * Call this method to initialize only editor-owned state.
 	 */
 	start() {
-		this.sequence = 0;
+		this.sequence ??= 0;
 		this.gesture = null;
 		this.reference = null;
 		this.draft = '';
@@ -68,7 +68,15 @@ export class FlatEarthTimeModel extends Service {
 		let described = this._describe(configuration);
 		let reference = this.reference ?? described?.closestInstant ?? null;
 		let angle = reference ? (configuration.timestamp - Date.parse(reference)) / 240000 : null;
-		let text = angle == null ? '' : `${angle >= 0 ? '+' : ''}${angle.toFixed(1)}`;
+		let text =
+			angle == null
+				? ''
+				: angle.toLocaleString('en-US', {
+						useGrouping: false,
+						minimumFractionDigits: 1,
+						maximumFractionDigits: 6,
+						signDisplay: 'always',
+					});
 		return {
 			angle,
 			closestInstant: reference,
@@ -159,7 +167,11 @@ export class FlatEarthTimeModel extends Service {
 			return null;
 		}
 		let angle = Number(this.draft.trim());
-		if (!this.draft.trim() || !Number.isFinite(angle) || Math.abs(angle) > 180) {
+		if (
+			!/^[+-]?(?:\d+(?:\.\d*)?|\.\d+)$/.test(this.draft.trim()) ||
+			!Number.isFinite(angle) ||
+			Math.abs(angle) > 180
+		) {
 			this.error = true;
 			return null;
 		}
@@ -178,6 +190,7 @@ export class FlatEarthTimeModel extends Service {
 	 * Call this method to discard the numeric draft while preserving accepted time.
 	 */
 	reset() {
+		this.draft = '';
 		this.dirty = false;
 		this.error = false;
 	}

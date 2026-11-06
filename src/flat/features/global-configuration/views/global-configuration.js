@@ -101,9 +101,7 @@ export class GlobalConfigurationView extends Service {
 			summaryTime:
 				state.timestamp == null
 					? ''
-					: new Intl.DateTimeFormat(undefined, {dateStyle: 'medium', timeStyle: 'medium'}).format(
-							state.timestamp,
-						),
+					: `${new Intl.DateTimeFormat(undefined, {dateStyle: 'medium'}).format(state.timestamp)} · ${new Intl.DateTimeFormat(undefined, {timeStyle: 'medium'}).format(state.timestamp)}`,
 			dateTime: {
 				editor: state.dateTimeEditor,
 				dateError: state.dateTimeEditor.dateError
@@ -193,6 +191,7 @@ export class GlobalConfigurationView extends Service {
 	applyDateTime() {
 		this.controller.applyDateTime();
 	}
+
 	/**
 	 * Call this method to select accepted-value toolbar summaries.
 	 *

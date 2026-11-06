@@ -432,3 +432,44 @@
 		font-size: 11px;
 	}
 }
+
+.flat-earth-camera-panel h3 {
+	font-size: 16px;
+	line-height: 20px;
+	margin: 0 0 18px;
+}
+.flat-earth-camera-panel .flat-earth-view-tools {
+	display: grid;
+	gap: 24px;
+}
+.flat-earth-camera-panel .flat-earth-view-tools label {
+	grid-template-columns: minmax(0, 1fr);
+	gap: 4px;
+}
+.flat-earth-camera-panel .flat-earth-view-tools select {
+	width: 100%;
+	height: 36px;
+}
+.flat-earth-camera-panel > p {
+	margin: 24px 0 0;
+	font-size: 12px;
+	line-height: 16px;
+}
+.flat-earth-camera-panel .flat-earth-center-sun {
+	display: none;
+}
+
+@media (min-width: 761px) and (max-width: 1200px) {
+	.flat-time-panel-content {
+		grid-template-columns: calc(50% - 16px) minmax(0, 1fr);
+	}
+}
+
+.flat-earth-view-tools {
+	gap: 16px;
+}
+@container (min-width:700px) {
+	.flat-earth-view-tools {
+		gap: 20px;
+	}
+}

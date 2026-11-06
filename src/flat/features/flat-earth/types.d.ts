@@ -219,7 +219,12 @@ type FlatEarthCameraChange = {
 /**
  * Mount properties for the feature's scoped camera toolbar contribution.
  */
-type FlatEarthViewToolsProps = FlatEarthPageProps;
+type FlatEarthViewToolsProps = FlatEarthPageProps & {
+	/**
+	 * Whether controls are presented in their configuration section.
+	 */
+	panel?: boolean;
+};
 
 /**
  * Retained Three perspective camera used by the private input adapter.

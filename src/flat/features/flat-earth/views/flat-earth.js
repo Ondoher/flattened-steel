@@ -157,6 +157,7 @@ export class FlatEarthView extends Service {
 	retry(viewId) {
 		this.controller.retry(viewId);
 	}
+
 	/**
 	 * Call this method to select shared time presentation for a panel or toolbar.
 	 *
@@ -175,7 +176,12 @@ export class FlatEarthView extends Service {
 	 * @returns {React.ReactElement} - Feature-owned Camera contribution.
 	 */
 	getCameraComponent(viewId) {
-		return this.getToolsComponent(viewId);
+		return React.createElement(FlatEarthViewTools, {
+			viewId,
+			sceneView: this,
+			initialState: this.getState(viewId),
+			panel: true,
+		});
 	}
 
 	/**
@@ -193,7 +199,7 @@ export class FlatEarthView extends Service {
 			resolvedTime:
 				timestamp == null
 					? ''
-					: new Intl.DateTimeFormat(undefined, {dateStyle: 'medium', timeStyle: 'medium'}).format(timestamp),
+					: `${new Intl.DateTimeFormat(undefined, {dateStyle: 'medium'}).format(timestamp)} · ${new Intl.DateTimeFormat(undefined, {timeStyle: 'medium'}).format(timestamp)}`,
 			dateBasis: facts.closestInstant
 				? new Intl.DateTimeFormat(undefined, {dateStyle: 'medium'}).format(new Date(facts.closestInstant))
 				: '',

@@ -63,7 +63,7 @@ using degrees from the Sun's closest approach to the selected location. Zero is
 closest approach; choosing an angle changes the same shared timestamp for both
 views. It will have a visible slider on the Flat Earth page toolbar and a
 slider/numeric pair in its own shared configuration pane. The date still supplies seasonal context. This is selected design intent;
-the editor is not implemented.
+the editor is implemented as recorded by the [execution handoff](workspace-comps-execution.md).
 
 Configuration covers less frequent adjustments. The existing product direction
 is a compact toolbar and collapsible setup panel, with the scene remaining

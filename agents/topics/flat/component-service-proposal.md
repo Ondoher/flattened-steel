@@ -121,6 +121,22 @@ mountContribution/unmountContribution contract and registers through
 ui-contributions. Its [current location-editor implementation](README.md#current-scope)
 uses the app-level configuration model-service without changing the workspace host.
 
+The workspace-comps implementation extends the existing catalog with optional
+localized section labels and a generic secondary view-tools row. Configuration
+uses a selected contribution id, separate from its registration lifetime token.
+`openConfiguration(target, section, focus)` opens a registered section; focus is
+a provider-owned editor key, not a workspace branch on feature names. The model
+owns target/section selection and fallback, the controller mounts only selected
+content, and the view projects available targets/sections and selected states.
+React owns focus and loading-to-input handoff with exact observer cleanup.
+
+Global configuration contributes accepted Location/time summaries and one shared
+editor section. Flat Earth contributes an app-lifetime shared Time section and
+Camera settings/tools for each mounted view. `FlatEarthTimeModel` is a registered
+feature model-service for draft/reference rules, independent of canvas sessions;
+the current-time service remains canonical. The
+[time-input note](flat-earth-time-input.md) owns the implemented edit policy.
+
 ## Global Configuration And Shared Values
 
 Status: owner-accepted architecture on 2026-11-05. The global configuration

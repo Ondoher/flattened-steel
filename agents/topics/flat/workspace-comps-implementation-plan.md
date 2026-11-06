@@ -1,8 +1,8 @@
 # Flat Workspace Comps Implementation Plan
 
-Status: executing under the owner's independent-execution invocation on2026-11-05.
-The [execution record](workspace-comps-execution.md) owns progress and decisions.
-M1 is complete; M2/M3 have a working desktop slice; M4 remains pending.
+Status: complete, executed under the owner's independent-execution invocation
+on 2026-11-05. The [execution record](workspace-comps-execution.md) owns milestone
+results, decisions, evidence and local checkpoints. M1–M4 are complete.
 
 ## Outcome And Scope
 
@@ -376,7 +376,6 @@ not a source standards review; no additional review round is needed.
 
 ## Current Resumption Point
 
-- M1 complete; M2/M3 working desktop slice; M4 pending.
-- Next: preserve the tested slice, refine Camera labels/configuration and verify
-  full interactions/responsive targets. See the execution record for evidence.
-- Execution is authorized; no experiment resumption or deployment is selected.
+- M1–M4 complete; no execution queue remains.
+- Read the execution record for completed checks, choices and checkpoints.
+- No experiment resumption, deployment or follow-on feature is selected.

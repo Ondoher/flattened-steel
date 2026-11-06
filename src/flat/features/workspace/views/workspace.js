@@ -161,6 +161,7 @@ export class WorkspaceView extends Service {
 	selectConfigurationTarget(viewId) {
 		this.controller.selectConfigurationTarget(viewId);
 	}
+
 	/**
 	 * Call this method to relay a registered section selection.
 	 *

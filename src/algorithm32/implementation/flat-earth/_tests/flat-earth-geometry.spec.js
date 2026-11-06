@@ -7,6 +7,38 @@ import {LocalSunLightSource} from '../../local-sun/LocalSunLightSource.js';
 import {FlatEarthGeometry} from '../FlatEarthGeometry.js';
 
 describe('FlatEarthGeometry', /** Called by Jasmine to register the named test suite. */ () => {
+	it('resolves fixed signed offsets from an explicit closest occurrence', () => {
+		const closest = '2024-06-20T20:08:48.339Z';
+		const fixtures = [
+			[-180, '2024-06-20T08:08:48.339Z'],
+			[-45, '2024-06-20T17:08:48.339Z'],
+			[0, closest],
+			[45, '2024-06-20T23:08:48.339Z'],
+			[180, '2024-06-21T08:08:48.339Z'],
+		];
+		for (const [angle, expected] of fixtures) {
+			expect(FlatEarthGeometry.resolveClosestOffset(closest, degrees(angle))).toBe(expected);
+		}
+	});
+
+	it('reads the nearest occurrence across UTC boundaries without using a startup phase', () => {
+		const location = {latitude: degrees(37.33939), longitude: degrees(-121.89496)};
+		expect(FlatEarthGeometry.describeClosestApproach('2024-06-20T23:08:48.339Z', location)).toEqual({
+			closestInstant: '2024-06-20T20:08:48.339Z',
+			angleDegrees: 45,
+		});
+		for (const instant of ['2024-06-20T00:01:00.000Z', '2024-12-31T23:59:00.000Z']) {
+			for (const longitude of [-180, 0, 180]) {
+				const state = FlatEarthGeometry.describeClosestApproach(instant, {
+					...location,
+					longitude: degrees(longitude),
+				});
+				expect(FlatEarthGeometry.resolveClosestOffset(state.closestInstant, degrees(state.angleDegrees))).toBe(
+					instant,
+				);
+			}
+		}
+	});
 	it('resolves flat observation instants through the public geometry class', /** Called by Jasmine to exercise the named behavior. */ () => {
 		const request = {
 			dateBasis: '2026-06-21T12:00:00.000Z',

@@ -48,6 +48,7 @@ export default class ConfigurationPanel extends Component {
 	 * Called by React to restore focus to the actual opener or stable workspace action.
 	 */
 	componentWillUnmount() {
+		this._focusObserver?.disconnect();
 		let target = /** @type {HTMLElement} */ (
 			this._opener?.isConnected
 				? this._opener
@@ -60,10 +61,40 @@ export default class ConfigurationPanel extends Component {
 	 * Called after explicit settings navigation to focus a provider-advertised editor region.
 	 */
 	_focusRequest() {
+		this._focusObserver?.disconnect();
 		let focus = this.props.configuration.focus;
 		let region = focus ? this._root.current?.querySelector(`[data-settings-focus="${CSS.escape(focus)}"]`) : null;
-		let target = region?.querySelector('input') ?? region ?? this._closeButton.current;
+		let input = region ? this._findInput(region) : null;
+		let target = input ?? region ?? this._closeButton.current;
 		target?.focus();
+		if (region && !input) {
+			this._focusObserver = new MutationObserver(() => {
+				let ready = this._findInput(region);
+				if (ready) {
+					if (region.contains(document.activeElement)) {
+						ready.focus();
+					}
+					this._focusObserver.disconnect();
+				}
+			});
+			this._focusObserver.observe(region, {
+				attributes: true,
+				attributeFilter: ['disabled'],
+				childList: true,
+				subtree: true,
+			});
+		}
+	}
+
+	/**
+	 * Called by explicit focus requests to skip hidden disclosure fields and loading inputs.
+	 *
+	 * @param {HTMLElement} region - Provider-owned focus region.
+	 * @returns {HTMLInputElement|undefined} - Visible enabled editor input, when available.
+	 */
+	_findInput(region) {
+		let inputs = /** @type {NodeListOf<HTMLInputElement>} */ (region.querySelectorAll('input:not([disabled])'));
+		return Array.from(inputs).find((input) => input.checkVisibility());
 	}
 
 	/**

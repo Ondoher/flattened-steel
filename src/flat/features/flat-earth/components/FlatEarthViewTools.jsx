@@ -162,7 +162,7 @@ export default class FlatEarthViewTools extends Component {
 	 *
 	 * @returns {React.ReactNode} - Scoped toolbar contribution.
 	 */
-	render() {
+	_renderControls() {
 		let camera = this.state.camera;
 		let height = camera.pendingHeightMeters ?? camera.observerHeightMeters;
 		let heightLabel = this._text('flat-earth.camera.height');
@@ -196,5 +196,26 @@ export default class FlatEarthViewTools extends Component {
 				</button>
 			</div>
 		);
+	}
+
+	/**
+	 * Call this method to present the same camera controls in a toolbar or settings section.
+	 *
+	 * @returns {React.ReactNode} - Scoped Camera presentation.
+	 */
+	render() {
+		let title = this._text('flat-earth.camera.title');
+		let scope = this._text('flat-earth.camera.scope');
+		let content = this._renderControls();
+		if (this.props.panel) {
+			content = (
+				<section className="flat-earth-camera-panel">
+					<h3>{title}</h3>
+					{content}
+					<p>{scope}</p>
+				</section>
+			);
+		}
+		return content;
 	}
 }

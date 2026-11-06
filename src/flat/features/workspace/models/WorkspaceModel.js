@@ -131,6 +131,7 @@ export class WorkspaceModel extends Service {
 		this._configuration.target = target;
 		this._configuration.section = null;
 	}
+
 	/**
 	 * Call this method to select a provider section without changing accepted feature data.
 	 *

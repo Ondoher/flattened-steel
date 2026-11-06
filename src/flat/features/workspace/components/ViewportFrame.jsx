@@ -122,7 +122,7 @@ export default class ViewportFrame extends Component {
 		let headingId = `heading-${viewport.id}`;
 		let closeButton = null;
 		if (number > 1) {
-			let closeLabel = text('workspace.close-view');
+			let closeLabel = text('workspace.close-view-number', {number});
 			closeButton = (
 				<button
 					type="button"

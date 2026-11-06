@@ -58,10 +58,13 @@ is author inspection, not independent acceptance or an application behavior test
 
 Current prototype, images, scene provenance and capture report live under
 `.codex-tmp/flat-ui-comps/2026-11-05/shared-time/`. Prior comp roots and images
-remain preserved. Application source is unchanged; no application suite was
-required for this static comp update. The later
-[implementation plan](workspace-comps-implementation-plan.md) now owns the
-proposed implementation sequence; execution has not begun.
+remain preserved. Comp authoring did not change application source or require
+an application suite. The later owner-authorized
+[implementation plan](workspace-comps-implementation-plan.md) has now been executed.
+
+The subsequent owner-authorized [implementation](workspace-comps-execution.md)
+is complete. Its actual application gallery, geometry measurements and behavior
+reports are separate from these preserved advisory design artifacts.
 
 ## Page-Specific Configuration
 
@@ -163,8 +166,9 @@ The earlier gallery, HTML/CSS/JavaScript comp artifacts, six PNGs, scene provena
 render helper/report, and inspection originals are under
 `.codex-tmp/flat-ui-comps/2026-11-05/page-settings/`. The original family remains in
 its parent folder. Durable design/inspection descriptions are linked above.
-Application source is unchanged; no application suite was repeated for static
+Comp authoring did not change application source; no suite was repeated for static
 design artifacts. Existing engineering review remains cancelled. No execution
 follows from the comp handoff. The later owner-requested
 [implementation plan](workspace-comps-implementation-plan.md) is the current
-implementation sequence; it has not been executed.
+implementation sequence; its [execution record](workspace-comps-execution.md)
+records completion.

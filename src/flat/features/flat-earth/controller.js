@@ -179,10 +179,10 @@ export class FlatEarthController extends Service {
 	 * @param {WorkspaceContributionMount} request - Exact released contribution identity.
 	 */
 	unmountContribution({contribution}) {
-		this.timeModel.end(
-			contribution.viewId ?? 'configuration',
-			this._gestureTokens?.get(contribution.viewId ?? 'configuration'),
-		);
+		if (contribution.id === 'flat-earth-time' || contribution.id === 'flat-earth-time-toolbar') {
+			let owner = contribution.viewId ?? 'configuration';
+			this.timeModel.end(owner, this._gestureTokens?.get(owner));
+		}
 	}
 
 	/**
@@ -264,6 +264,8 @@ export class FlatEarthController extends Service {
 			return;
 		}
 		this.sessions.delete(viewId);
+		this.timeModel.end(viewId, this._gestureTokens?.get(viewId));
+		this._gestureTokens?.delete(viewId);
 		let tokens = this._tools.get(viewId);
 		this._tools.delete(viewId);
 		if (tokens != null) {
@@ -281,6 +283,8 @@ export class FlatEarthController extends Service {
 	 * Call this method to release feature subscriptions and every remaining view session.
 	 */
 	stop() {
+		this.timeModel?.synchronize(true);
+		this.timeModel?.reset();
 		if (this._timeRegistration != null) {
 			this.contributions.remove(this._timeRegistration);
 		}
@@ -293,10 +297,12 @@ export class FlatEarthController extends Service {
 		this._listener = null;
 		this._timeRegistration = null;
 		this._workspaceListener = null;
+		this._gestureTokens?.clear();
 		for (let viewId of this.sessions.keys()) {
 			this.unmount(viewId);
 		}
 	}
+
 	/**
 	 * Call this method to read alternate time facts and generic shared-pane selection.
 	 *
@@ -326,6 +332,12 @@ export class FlatEarthController extends Service {
 	 * @returns {number} - Exact gesture token.
 	 */
 	beginTimeEdit(owner) {
+		if (owner !== 'configuration' && !this.sessions.has(owner)) {
+			return 0;
+		}
+		if (owner === 'configuration' && !this.getTimeState().selected) {
+			return 0;
+		}
 		this._gestureTokens ??= new Map();
 		let token = this.timeModel.begin(owner, this.configuration.get());
 		this._gestureTokens.set(owner, token);

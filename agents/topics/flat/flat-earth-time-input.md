@@ -1,134 +1,104 @@
 # Flat Earth Time: Degrees From Closest
 
-Status: owner-requested design discussion, 2026-11-05. This records implementation
-notes and UI intent, not an implementation plan, app change, or accepted comp.
+Status: implemented on 2026-11-05 through the owner-authorized
+[workspace comps plan](workspace-comps-implementation-plan.md). The
+[execution record](workspace-comps-execution.md) owns verification and decisions.
 
-## Selected Meaning And Placement
+## Meaning And Placement
 
-The owner wants an alternate Flat Earth time input expressed as **degrees from
-closest**. They confirmed that this means the Sun's angular position before or
-after its closest approach to the selected location, with zero degrees at closest
-approach. This is position around the daily orbit, not solar elevation, azimuth,
-or camera FOV.
+The owner selected an alternate time input for the Sun's daily orbit position
+before/after closest approach to the selected location, with 0° at closest. It
+is an alternate editor of the shared timestamp for both views, not elevation,
+azimuth, camera FOV, a per-view override or a second clock.
 
-The owner selected a separate configuration pane and now requests a visible
-slider on the Flat Earth page toolbar, plus a slider and numeric edit field in
-Flat Earth configuration. The [updated comps](configuration-toolbar-comps.md#shared-time-slider-update)
-show both surfaces for discussion.
+Each Flat Earth toolbar has a visible **Shared time** slider, signed angle,
+before/after legends, closest marker and **Time settings** entry. Shared
+configuration contains **Location and time** and **Flat Earth time** sections.
+The latter supplies the slider, numeric Degrees field, closest-reference
+explanation, date basis and resolved device date/time. Both toolbar entries show
+the same open state. Page settings targets the independent Camera section of
+the exact view instead.
 
-The feature-owned **Flat Earth time** pane shows the degrees input, its closest-
-approach reference, the relevant date basis, and the resolved date/time. The
-page-toolbar slider exposes that same angle and provides access to the pane. Both surfaces
-must use the same model-service operation and current value; they do not create
-two time owners. Keep camera and time controls recognizably grouped.
+Flat Earth contributes its editors through the generic configuration service;
+the workspace does not import or identify their implementations. The app-wide
+animation-loop service remains the accepted timestamp owner through configuration.
+The [provider contract](component-service-proposal.md#configuration-provider-contract)
+owns the extension boundary. Accepted location/time and camera values survive
+panel/section changes; numeric drafts belong to a registered editor model-service,
+independent of a canvas lifetime.
 
-A proposed signed presentation is zero at closest, negative before, positive
-after. The exact display range, precision, wrap convention and date-rollover
-behavior are not selected. A time-pane explanation can establish the reference;
-the toolbar should remain concise while retaining angle units and time meaning.
+## First-Pass Conversion And Editing Policy
 
-## Slider And Numeric Entry Working Proposal
+Independent execution selected the following reversible implementation policy
+from the comp's working proposals:
 
-The owner suggested a slider together with a numeric entry field. Treat these
-as two synchronized controls for one degrees-from-closest value, not separate
-settings. The full pair belongs in the dedicated Time pane; the page toolbar
-shows a slider, current angle readout, and Time settings entry.
+- Negative degrees precede closest; positive degrees follow it. The slider is
+  bounded at -180°/+180° with 0.1° steps; the toolbar rounds its compact readout to
+  one decimal. Numeric entry accepts signed dot-decimal degrees in that range
+  and retains useful precision up to canonical integer milliseconds. Its readout
+  uses one to six decimal places, so precise accepted input is not silently
+  displayed as a different one-decimal value. Labels use app localization;
+  richer locale-specific numeric syntax is not introduced in this first pass.
+- Choose the geometry-resolved closest occurrence nearest the accepted instant,
+  considering adjacent UTC dates. Freeze that reference for one pointer/key
+  gesture. Signed offsets use the production 24-hour daily orbit. The endpoints
+  are twelve hours before/after that chosen occurrence; dragging does not
+  automatically wrap. The date readout is the device-local date of that
+  reference, while resolved time is the accepted instant in device time.
+- Ordinary time changes and location changes recompute the nearest reference.
+  Location changes preserve the accepted timestamp. There is no retained angle
+  mode or promise to preserve both angle and instant when location changes.
+- Slider input seeks shared time through one controller operation. A valid
+  numeric draft is accepted on Enter or blur. Incomplete/invalid text remains
+  visible with feedback and does not seek; Escape restores the accepted
+  representation. Section changes retain unfinished model-owned drafts. A valid
+  blur can accept before navigation, consistent with the numeric acceptance rule.
+- A new slider gesture supersedes a numeric draft. An external location/time
+  update invalidates an active gesture; its late events cannot write. Numeric
+  text survives external updates and resolves against the current reference
+  on a fresh acceptance. View/panel removal ends only its control's gesture;
+  stopping the feature clears editor state and retains shared accepted time.
+- Missing location yields an unavailable angle and disabled range with a route
+  to Location editing, rather than invented coordinates or an accepted zero.
 
-A clearly marked zero reference makes closest approach easy to find. Under the
-proposed signed convention, the slider can show before and after on either side
-of zero. Its final endpoints, precision and wrap/day behavior remain open; the
-slider must not silently settle those domain choices.
+The controller seeks through the configuration/current-time capability. Existing
+scene sessions coalesce newer requests and retain coherent completed frames with
+per-view preparing/failure feedback. A requested angle is not a claim that every
+canvas has already completed that frame.
 
-Proposed interaction: slider movement requests shared-time changes for exploration;
-numeric entry supports precise angles. Typing an incomplete value must remain a
-draft rather than forcing a scene change or replacing the user's text. On valid
-numeric acceptance, the slider and shared date/time reflect that same angle.
-Changes from another time editor or playback update both controls, with deliberate
-handling of an active numeric draft.
+## Production Geometry Support
 
-Keep scene updates responsive by coalescing requests to the latest angle while
-preserving a coherent displayed frame. Requested angle and currently displayed
-result can differ during preparation; existing per-view update feedback must
-communicate that distinction. This proposes interaction behavior, not an
-implementation or measured performance result.
+[FlatEarthGeometry.resolveObservationInstant](../../../src/algorithm32/implementation/flat-earth/FlatEarthGeometry.js)
+already accepts a date basis, unit-bearing location and closest-angle policy.
+Its [contract](../../../src/algorithm32/implementation/flat-earth/types.d.ts)
+and [FlatSynchronizer](../../../src/algorithm32/implementation/flat-earth/synchronization/FlatSynchronizer.js)
+own seasonal/world synchronization. Positive angles follow the clockwise orbit;
+that resolver normalizes within its selected daily orbit. A signed editor cannot
+obtain day selection merely by passing a negative angle into that normalized API.
 
-## Existing Engine Support
+The additive public `describeClosestApproach` operation selects a nearby closest
+occurrence and derives its signed 24-hour offset. `resolveClosestOffset` converts
+a signed angle against that explicit occurrence to a canonical UTC instant.
+The app uses these public operations rather than a guessed local-noon formula
+or a private synchronization import. The existing
+[Flat32 controller](../../../src/flat32/LocationTimeController.js) remains read-only
+integration reference and is not a runtime dependency.
 
-Production [FlatEarthGeometry.resolveObservationInstant](../../../src/algorithm32/implementation/flat-earth/FlatEarthGeometry.js)
-already accepts the **closest-angle** policy with a date basis, geographic
-location, and unit-bearing angle. Its
-[request contract](../../../src/algorithm32/implementation/flat-earth/types.d.ts)
-describes a clockwise angle from closest approach. The
-[FlatSynchronizer](../../../src/algorithm32/implementation/flat-earth/synchronization/FlatSynchronizer.js)
-uses the date for seasonal state and the daily anchor, then converts angle and
-location into a canonical UTC instant. Positive angles follow the model's clockwise
-orbit convention. Angle wraps are normalized within that daily orbit.
+The date remains necessary for seasonal state. The app's animation-loop phase
+is startup-relative and is not relabelled as degrees from closest. The
+closest-angle readback follows geometry/location, not that startup epoch.
 
-[Flat32's location/time controller](../../../src/flat32/LocationTimeController.js)
-already uses that public production geometry resolver for its flat-time presets.
-This is read-only integration reference; Flat must not import the test bed.
-The app's feature-owned model-service can use the production capability directly.
-Do not replace geometry-owned conversion with a guessed local-noon calculation.
+The fixed San Jose sample uses37.33939°,-121.89496° and June 20, 2024:
+closest `2024-06-20T20:08:48.339Z`; +45° resolves to
+`2024-06-20T23:08:48.339Z`, displayed **Jun 20, 2024 ·4:08:48 PM** in device
+America/Los_Angeles. The execution evidence records properly spaced localized
+UI values, fixed signed-offset fixtures, day-boundary readback and actual edits.
 
-The date remains necessary: the angle alone does not supply seasonal state.
-A signed before/after editor needs explicit day selection around a wrap; simply
-passing a negative angle into the existing normalized orbit is not a complete
-policy for preserving the intended previous/next day. Resolved calendar/clock
-feedback should make that consequence clear.
+## Presentation And Further Work
 
-The app-wide animation loop's current phase is relative to its startup epoch.
-It is not automatically degrees from the Sun's closest approach. Closest-angle
-readback must use the physical observation's geometry/location reference rather
-than relabeling that animation phase.
-
-## Selected Shared-Time Ownership
-
-The owner explicitly selected **update shared time for both views**. Degrees from
-closest is another editor for the same canonical timestamp. The Flat Earth
-feature owns this interpretation/editor and resolves the angle through production
-geometry, then updates the main current-time capability. Ordinary date/time entry
-and both views continue to reflect that same instant. No per-view time override
-or second simulation clock is selected.
-
-Feature ownership does not make the time write view-local. Place the dedicated
-**Flat Earth time** pane in shared configuration and make its shared effect clear.
-The Flat Earth feature contributes that pane through the generic configuration
-interface; the global configuration editor does not import the page's controls.
-Per-view Camera settings remain independently scoped as before.
-
-The toolbar comp uses a distinct **Shared time** row with **Degrees from closest**,
-the current signed angle, a visible slider, and **Time settings**. The dedicated
-shared pane shows the synchronized slider/numeric pair, date basis, reference and
-resolved device date/time. Both toolbar entries highlight when that shared pane
-is open. Camera controls stay in their own rows; Page settings retains its
-view-specific target. The shared surface distinguishes **Location and time**
-from **Flat Earth time**. These are presentation proposals for the requested
-placements, not accepted breakpoints or an implemented provider.
-
-The angle readout and ordinary clock readout are two representations of one
-instant. Whichever editor changes it, both views and both readouts update. A page
-settings surface that promises all changes affect View 2 only must not present
-this shared-time control as an ordinary view-local option. Its shared target must
-be explicit in navigation and registration.
-
-## Further Interaction Decisions
-
-Define whether the angle is simply an alternate editing/readout representation
-or a retained input mode; changing representation should not silently move time.
-Choose the date/closest-approach occurrence used for a requested angle, signed
-wrap behavior, numeric precision, and explicit acceptance versus immediate
-adjustment. Keep unfinished angle drafts distinct from accepted time.
-
-When another time editor or playback changes the accepted instant, derive the
-current displayed angle from that instant and location. An unfinished draft needs
-the same deliberate update/retention treatment as other editors. Location changes
-also change the closest-approach reference; decide whether to preserve the instant
-or hold the angle, rather than implying both can remain unchanged.
-
-The [four-state slider comp update](configuration-toolbar-comps.md#shared-time-slider-update)
-shows the requested placements. Application source and configuration providers
-remain unchanged. The shared-time rule and existing
-[provider contract](component-service-proposal.md#configuration-provider-contract)
-remain the structural context. The owner-requested
-[implementation plan](workspace-comps-implementation-plan.md) now sequences this
-work; execution has not begun.
+The [comp handoff](configuration-toolbar-comps.md#shared-time-slider-update)
+retains the original design artifacts. The execution record links actual
+application images and measurements. The four assigned frame/header/scene/panel
+rectangles match the specification. Current device-local date/time entry remains
+unchanged; location time-zone lookup/override, explicit DST ambiguity, new time
+modes, playback UI and broader numeric localization remain future work.

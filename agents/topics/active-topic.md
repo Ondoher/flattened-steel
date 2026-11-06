@@ -2,18 +2,19 @@
 
 Current active topic: production-app.
 Canonical entry: [Production app](production-app/README.md).
-Focus: executing the [workspace comps plan](flat/workspace-comps-implementation-plan.md)
-under the owner's independent-execution invocation. M1 is complete; M2/M3 have
-a working desktop slice; M4 remains pending. The
-[execution record](flat/workspace-comps-execution.md) owns decisions and current
-evidence:111 browser tests, passing client/engine types and the first real
-renderer/shared Time-pane capture with no browser errors. Next: local checkpoint,
-Camera label/panel refinements and complete interaction/responsive verification.
-The execution skill preapproves adviser-suggested local checkpoints; no publishing
-is selected. Refine-design, engineering review and experiments remain inactive.
-One timestamp stays canonical, with independent cameras. The time-input note and
-comp handoff remain design/reference context; execution choices are recorded in
-the execution record.
+Focus: completed the [workspace comps plan](flat/workspace-comps-implementation-plan.md)
+through the owner's independent-execution invocation. M1–M4 are complete. The
+[execution record](flat/workspace-comps-execution.md) owns current evidence,
+decisions and local checkpoints. The app implements shared summaries, generic
+settings sections, independent Camera settings and shared-time toolbar/panel
+editors. 118 browser tests, 29 focused geometry tests and client/engine types pass.
+Four real captures match the specified frame/header/scene/panel rectangles, with
+no horizontal control overflow. Final editor checks cover precise entry, actual
+live ticks, stale pointer cancellation, no-canvas use, short-window reachability
+and accepted time surviving feature stop. The time-input note owns the first-pass
+editing policy. No required task remains; no next feature or experiment is
+automatically selected. Refine-design and engineering standards review remain
+inactive. Local checkpoints are authorized; nothing was published or deployed.
 
 The earlier city-picker implementation and San Jose search correction remain
 in place. The feature contributes city search, accepted-location
@@ -116,7 +117,7 @@ pass were explicitly authorized; further feature implementation and experiment
 resumption are not selected.
 
 Last experiment: poc-experiments/engineering-studies/clean-horizon-profiles,
-suspended by the owner on2026-10-26. Its
+suspended by the owner on 2026-10-26. Its
 [suspension and resumption boundary](poc-experiments/engineering-studies/clean-horizon-profiles/status.md#suspension-and-resumption-boundary)
 is retained as context, without an active execution queue. Resume only after
 explicit owner selection. No production promotion or new application work is
@@ -128,6 +129,6 @@ shell and workspace separately.
 1. [Repository instructions](../../AGENTS.md).
 2. [Production app](production-app/README.md).
 3. [Flat shell](flat/README.md).
-4. [Workspace comps implementation plan](flat/workspace-comps-implementation-plan.md).
+4. [Workspace comps execution](flat/workspace-comps-execution.md).
 5. [Flat Earth time-input note](flat/flat-earth-time-input.md).
 6. [Current comp handoff](flat/configuration-toolbar-comps.md).

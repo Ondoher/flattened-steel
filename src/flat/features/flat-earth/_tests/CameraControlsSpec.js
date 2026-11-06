@@ -185,6 +185,23 @@ describe('Flat Earth camera controls', () => {
 		try {
 			controller.mount({viewId: 'view-1'});
 			controller.mount({viewId: 'view-2'});
+			configuration.setLocation({latitude: 37.33939, longitude: -121.89496});
+			configuration.setTimestamp(Date.parse('2024-06-20T23:08:48.339Z'));
+			let gesture = controller.beginTimeEdit('view-1');
+			controller.unmountContribution({
+				contribution: tools
+					.get()
+					.find((item) => item.id === 'flat-earth-camera-settings' && item.viewId === 'view-1'),
+			});
+			controller.seekTime('view-1', gesture, 0);
+			expect(configuration.get().timestamp).toBe(Date.parse('2024-06-20T20:08:48.339Z'));
+			controller.unmountContribution({
+				contribution: tools
+					.get()
+					.find((item) => item.id === 'flat-earth-time-toolbar' && item.viewId === 'view-1'),
+			});
+			controller.seekTime('view-1', gesture, 90);
+			expect(configuration.get().timestamp).toBe(Date.parse('2024-06-20T20:08:48.339Z'));
 			expect(
 				tools
 					.get()
@@ -201,6 +218,7 @@ describe('Flat Earth camera controls', () => {
 			expect(tools.get()[0].registrationId).not.toBe(token);
 			expect(controller.getState('view-1').camera.fieldOfViewDegrees).toBe(35);
 			controller.unmount('view-2');
+			expect(controller.beginTimeEdit('view-2')).toBe(0);
 			expect(tools.get().length).toBe(4);
 			expect(controller.mountContribution({contribution: tools.get()[0]}).props.viewId).toBe('view-1');
 		} finally {
