@@ -828,14 +828,22 @@ export class Algorithm32 {
 	 * @returns {void} -
 	 */
 	_discardPreparedConfig(prepared) {
-		if (prepared.reference !== this._reference) {
-			prepared.reference.dispose();
+		const errors = [];
+		for (const [owner, installed] of [
+			[prepared.reference, this._reference],
+			[prepared.shaderBuilder, this._shaderBuilder],
+			[prepared.receiverEnvironmentLightController, this._receiverEnvironmentLightController],
+		]) {
+			if (owner !== installed) {
+				try {
+					owner.dispose();
+				} catch (error) {
+					errors.push(error);
+				}
+			}
 		}
-		if (prepared.shaderBuilder !== this._shaderBuilder) {
-			prepared.shaderBuilder.dispose();
-		}
-		if (prepared.receiverEnvironmentLightController !== this._receiverEnvironmentLightController) {
-			prepared.receiverEnvironmentLightController.dispose();
+		if (errors.length) {
+			throw new AggregateError(errors, 'Retired facade resource cleanup failed.');
 		}
 	}
 

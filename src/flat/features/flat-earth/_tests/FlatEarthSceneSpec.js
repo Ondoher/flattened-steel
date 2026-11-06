@@ -21,6 +21,76 @@ function configuration(timestamp, latitude = 0) {
 }
 
 describe('Flat Earth scene ownership', () => {
+	it('keeps displayed observation and accepted height aligned after post-commit retirement failure', async () => {
+		let calls = 0;
+		let factory = jasmine.createSpy('runtime').and.callFake(() => ({
+			prepare: async () => ({retirementErrors: ++calls === 2 ? [new Error('injected retired resource')] : []}),
+			dispose: async () => {},
+		}));
+		let session = createSession('view-1', () => {}, factory);
+		let canvas = document.createElement('canvas');
+		session.update(configuration(0));
+		session.attach(canvas);
+		await settle();
+		session.setObserverHeight({value: 100, units: 'meters'});
+		await settle();
+		expect(session.getState().camera.observerHeightMeters).toBe(100);
+		expect(session.getState().renderedObservation.instant).toBe('1970-01-01T00:00:00.000Z');
+		expect(session.getState().status).toBe('error');
+		expect(session.getState().error).toContain('injected retired resource');
+		session.update(configuration(1000));
+		await settle();
+		expect(session.getState().status).toBe('ready');
+		expect(session.getState().renderedObservation.instant).toBe('1970-01-01T00:00:01.000Z');
+		expect(factory).toHaveBeenCalledTimes(1);
+		session.detach(canvas);
+		await session.release;
+	});
+
+	it('publishes complete intermediate time progress and preserves the final height/time across invalidation', async () => {
+		let jobs = [];
+		let session = createSession(
+			'view-1',
+			() => {},
+			() => ({
+				prepare: (observation, signal, height) =>
+					new Promise((resolve) => jobs.push({observation, signal, height, resolve})),
+				dispose: async () => {},
+			}),
+		);
+		let canvas = document.createElement('canvas');
+		session.update(configuration(0));
+		session.attach(canvas);
+		await settle();
+		jobs[0].resolve();
+		await settle();
+		session.setObserverHeight({value: 100, units: 'meters'});
+		await settle();
+		session.update(configuration(1000));
+		session.update(configuration(2000));
+		expect(jobs[1].signal.aborted).toBeFalse();
+		jobs[1].resolve();
+		await settle();
+		expect(session.getState().renderedObservation.instant).toBe('1970-01-01T00:00:00.000Z');
+		expect(session.getState().status).toBe('preparing');
+		expect(jobs[2].observation.instant).toBe('1970-01-01T00:00:02.000Z');
+		expect(jobs[2].height.value).toBe(100);
+		session.setObserverHeight({value: 500, units: 'meters'});
+		session.update(configuration(3000));
+		expect(jobs[2].signal.aborted).toBeTrue();
+		jobs[2].resolve();
+		await settle();
+		expect(jobs[3].height.value).toBe(500);
+		expect(jobs[3].observation.instant).toBe('1970-01-01T00:00:03.000Z');
+		jobs[3].resolve();
+		await settle();
+		expect(session.getState().camera.observerHeightMeters).toBe(500);
+		expect(session.getState().renderedObservation.instant).toBe('1970-01-01T00:00:03.000Z');
+		expect(session.getState().status).toBe('ready');
+		session.detach(canvas);
+		await session.release;
+	});
+
 	it('uses the exact shared instant and unit-bearing coordinates without inventing an initial location', () => {
 		let first = createModel();
 		let second = createModel();

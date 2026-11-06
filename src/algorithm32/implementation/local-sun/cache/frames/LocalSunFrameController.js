@@ -463,13 +463,15 @@ export class LocalSunFrameController {
 	 * @param {LocalSunFrameRequest} request - Accepted live state.
 	 * @param {number} generation - Owned generation.
 	 * @param {AbortSignal} signal - Owned cancellation.
+	 * @param {LocalSunFrameCacheEntry|null} [retainedEntry] - Private accepted construction for an observation-only update.
 	 * @returns {Promise<PreparedLocalSunFrame>} - Unpublished complete candidate.
 	 */
 	async _prepare(request, generation, signal, retainedEntry = null) {
 		this._requireCurrent(generation, signal);
-		const canonical =
+		const canonical = /** @type {LocalSunCompactConstructionProfile} */ (
 			retainedEntry?.profile ??
-			LocalSunCompactConstructionProfile.assert(request.profile.createCanonicalConstructionProfile());
+				LocalSunCompactConstructionProfile.assert(request.profile.createCanonicalConstructionProfile())
+		);
 		const transform = this._resolveSupport(request, canonical);
 		let entry, lease, contents;
 		try {

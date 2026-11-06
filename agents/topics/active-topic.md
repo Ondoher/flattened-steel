@@ -2,23 +2,21 @@
 
 Current active topic: production-app.
 Canonical entry: [Production app](production-app/README.md).
-Focus: execute the owner's [elevation/time optimization plan](flat/control-update-optimization-plan.md)
-under independent-execution. The [execution record](flat/control-update-optimization-execution.md)
-owns current progress, decisions and evidence.
-Ordinary compatible edits should retain the scene, shader and rendering resources
-while refreshing necessary physical state and lighting. FOV performance is fine
-according to the owner; preserve its existing path. The plan starts with a warm
-update timing/allocation baseline and a safe engine publication/lease contract,
-then implementation and focused correctness/performance verification. M1/M2 are
-complete and M3 is next; the first live retained-scene slice cuts warm control
-latency by about 65% with matching physical/visual state. Implementation,
-profiling, checks and local adviser-recommended
-checkpoints are authorized. Pushing and deployment are not.
-Engineering standards review remains inactive.
+Focus: completed the owner's [elevation/time optimization plan](flat/control-update-optimization-plan.md)
+through independent-execution. The [execution record](flat/control-update-optimization-execution.md)
+owns decisions, milestone/final reports and evidence. Ordinary compatible edits
+retain the scene, shader, targets and canonical field while updating physical
+state and lighting. Warm elevation/time frame-proxy medians improved from about
+762/737 ms to 264/270 ms in the fixed local comparison. FOV's original path is
+preserved. M1–M3 are complete: types/build, 121 browser tests, affected engine
+specifications, numerical/visual comparisons and 12 live GPU lifecycle cases
+pass. No further work is automatically selected. Local adviser-recommended
+checkpoints are authorized; pushing/deployment and engineering standards review
+remain inactive.
 
-The preceding startup-cache follow-up is implemented. The first view reuses the
-cache/context built before page/location selection; comparison has independent
-graphics resources. Preserve those uncommitted changes. The
+The preceding startup-cache follow-up is implemented and checkpointed. The first
+view reuses the cache/context built before page/location selection; comparison
+has independent graphics resources. The
 [Flat entry](flat/README.md#verification) owns its current evidence.
 
 The [workspace comps plan](flat/workspace-comps-implementation-plan.md) was

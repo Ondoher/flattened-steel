@@ -188,6 +188,10 @@ export class FlatEarthSession {
 	 */
 	setObserverHeight(height) {
 		let accepted = this.model.resolveHeight(height);
+		let targetMeters = this.pendingHeight?.value ?? this.model.getCamera(this.viewId).observerHeightMeters;
+		if (accepted.value === targetMeters) {
+			return;
+		}
 		if (!this.state.observation || !this.runtime) {
 			this.model.acceptHeight(this.viewId, accepted);
 			this._emit();
@@ -263,7 +267,8 @@ export class FlatEarthSession {
 						this.state.error = null;
 						if (publication.retirementErrors.length) {
 							this.state.status = 'error';
-							this.state.error = 'The new scene was displayed, but previous resource cleanup failed.';
+							let details = publication.retirementErrors.map((error) => String(error)).join('; ');
+							this.state.error = `The new scene was displayed, but previous resource cleanup failed: ${details}`;
 						}
 						this._emit();
 					}

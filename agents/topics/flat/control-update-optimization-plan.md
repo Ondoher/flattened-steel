@@ -1,6 +1,6 @@
 # Flat Earth Elevation And Time Update Optimization
 
-Status: executing under the owner's independent-execution invocation on
+Status: complete under the owner's independent-execution invocation on
 2026-11-06. The [execution record](control-update-optimization-execution.md) owns
 milestone results, decisions and evidence. Local adviser-recommended checkpoints
 are authorized; pushing and deployment are not. Preserve the uncommitted
@@ -266,8 +266,8 @@ from the recorded next action rather than repeating completed milestones.
 Diagnose and retry only affected failures, retain prior results, and avoid blind
 whole-suite repeats. Estimates are guidance, not arbitrary stop/approval gates.
 
-Execution is now authorized and begins with M1's source/build baseline and
-measured trace. No extra owner decision is required for ordinary
+M1–M3 are complete; the execution record owns outcomes and final evidence.
+No extra owner decision was required for ordinary
 choices already covered by these milestones. No additional source reviews are
 requested; existing owner cancellation remains in force.
 

@@ -191,7 +191,7 @@ export class Algorithm32ShaderHandle {
 	 * structure or binding layout rejects without altering the installed scene or facade.
 	 *
 	 * @param {Algorithm32ObservationUpdateRequest} request - Candidate facade, paired cache and receiver light.
-	 * @returns {Algorithm32ObservationUpdate} - Publish/revert transaction with geometry uniform values.
+	 * @returns {Algorithm32ObservationUpdate} - Reversible facade/celestial publication.
 	 */
 	prepareObservationUpdate({profile, celestialSources, scatteringCache, receiverLight}) {
 		this._assertUsable();
@@ -221,22 +221,13 @@ export class Algorithm32ShaderHandle {
 				stellarAdaptationLuminance: measurement.stellarAdaptationLuminance.value,
 				receiverLightIdentity: measurement.identity,
 			};
-			/** @type {Record<string, unknown>} */
-			const bindings = {};
-			for (const contribution of assembly.contributions) {
-				for (const uniform of contribution.uniforms) {
-					if (uniform.valueKey.startsWith('geometry.') && Object.hasOwn(uniform, 'defaultValue')) {
-						bindings[uniform.valueKey] = uniform.defaultValue;
-					}
-				}
-			}
 			let previous = null;
 			let published = false;
+			let publishedGeneration = 0;
 			let disposed = false;
 			const generation = this._generation;
 			const previousBuild = this._buildResult;
 			return {
-				bindings,
 				publish: () => {
 					this._assertUsable();
 					if (
@@ -251,11 +242,15 @@ export class Algorithm32ShaderHandle {
 					this._facade._installPreparedConfig(prepared);
 					this._buildResult = {...previousBuild, modelVersion: prepared.version};
 					this._generation++;
+					publishedGeneration = this._generation;
 					published = true;
 					celestialUpdate?.publish();
 				},
 				revert: () => {
 					if (published && !disposed) {
+						if (publishedGeneration !== this._generation) {
+							throw new Error('A newer configuration prevents rollback of this observation.');
+						}
 						this._facade._installPreparedConfig(previous);
 						this._buildResult = previousBuild;
 						celestialUpdate?.revert();

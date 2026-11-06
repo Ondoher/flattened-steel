@@ -23,6 +23,15 @@ type LocalSunSceneLightingAdapterDefinition = Readonly<{
  */
 type LocalSunRetainedLightingMetadata = Record<string, unknown> & {
 	/**
+	 * Existing indirect-fill topology, which requires separate structural handling when enabled.
+	 */
+	endpointIndirectFill: {
+		/**
+		 * Whether this lighting result owns an additional fill policy.
+		 */
+		enabled: boolean;
+	};
+	/**
 	 * Current source-light topology.
 	 */
 	lightingPolicy: string;

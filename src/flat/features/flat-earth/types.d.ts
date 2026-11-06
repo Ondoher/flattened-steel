@@ -131,7 +131,7 @@ type FlatEarthRuntimeFactory = (
 ) => FlatEarthRuntimeCapability;
 
 /**
- * Complete prepared engine resources for one coherent frame.
+ * Retained rendering resources shared by prepared/displayed frame packets within one canvas lifetime.
  */
 type FlatEarthPreparedScene = {
 	/**
@@ -159,11 +159,11 @@ type FlatEarthPreparedScene = {
 	 */
 	handle: ShaderHandle | null;
 	/**
-	 * Frame-private camera retaining the current view pose.
+	 * Retained rendering camera synchronized from the current view pose.
 	 */
 	camera: import('three').PerspectiveCamera;
 	/**
-	 * Frame-specific production display model.
+	 * Retained production display model.
 	 */
 	color: FlatEarthColorModel;
 	/**
@@ -175,7 +175,7 @@ type FlatEarthPreparedScene = {
 	 */
 	scene: import('three').Scene;
 	/**
-	 * Frame-private composer and color target.
+	 * Retained composer and color targets, resized with the actual surface.
 	 */
 	composer: import('three/examples/jsm/postprocessing/EffectComposer.js').EffectComposer;
 	/**

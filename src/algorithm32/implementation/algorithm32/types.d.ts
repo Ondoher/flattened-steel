@@ -165,11 +165,6 @@ type Algorithm32ObservationUpdateRequest = Readonly<{
  */
 interface Algorithm32ObservationUpdate {
 	/**
-	 * Candidate geometry uniform defaults; camera bindings are updated by the camera owner.
-	 */
-	readonly bindings: Record<string, unknown>;
-
-	/**
 	 * Call this method at the complete frame installation boundary to publish the facade state.
 	 */
 	publish(): void;

@@ -325,22 +325,44 @@ export class FlatEarthRuntime {
 				signal,
 			);
 		}
-		signal.throwIfAborted();
-		if (this.disposed) {
-			throw new DOMException('Scene released.', 'AbortError');
-		}
-		let publication = this.frames.publishPreparedLocalFrame(frame, () => {
-			try {
-				frame.contents.sceneView?.publish();
-				frame.contents.renderFrame();
-			} catch (error) {
-				frame.contents.sceneView?.revert();
-				throw error;
+		try {
+			signal.throwIfAborted();
+			if (this.disposed) {
+				throw new DOMException('Scene released.', 'AbortError');
 			}
-		});
-		this.active = frame;
-		this.pointerLook.start();
-		return {retirementErrors: publication.retirementErrors};
+			let publication = this.frames.publishPreparedLocalFrame(frame, () => {
+				try {
+					frame.contents.sceneView?.publish();
+					frame.contents.renderFrame();
+				} catch (error) {
+					let errors = [error];
+					try {
+						frame.contents.sceneView?.revert();
+					} catch (rollbackError) {
+						errors.push(rollbackError);
+					}
+					try {
+						this.active?.contents.renderFrame();
+					} catch (renderError) {
+						errors.push(renderError);
+					}
+					if (errors.length > 1) {
+						throw new AggregateError(errors, 'Scene publication and recovery failed.');
+					}
+					throw error;
+				}
+			});
+			this.active = frame;
+			this.pointerLook.start();
+			return {retirementErrors: publication.retirementErrors};
+		} catch (error) {
+			try {
+				this.frames.cancelPreparation();
+			} catch (cleanupError) {
+				throw new AggregateError([error, cleanupError], 'Scene publication and candidate cleanup failed.');
+			}
+			throw error;
+		}
 	}
 
 	/**

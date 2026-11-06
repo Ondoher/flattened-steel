@@ -902,7 +902,11 @@ export class LocalSunSceneLightingAdapter {
 	 */
 	prepareSceneLightingUpdate(request, lighting) {
 		const metadata = /** @type {LocalSunRetainedLightingMetadata} */ (lighting.metadata);
-		if (metadata.lightingPolicy !== 'source-driven-flat-local-point-light' || lighting.lights.length !== 2) {
+		if (
+			metadata.lightingPolicy !== 'source-driven-flat-local-point-light' ||
+			lighting.lights.length !== 2 ||
+			metadata.endpointIndirectFill.enabled
+		) {
 			throw new Error('Retained local lighting requires the existing ambient/point topology.');
 		}
 		const [ambient, point] = /** @type {readonly LocalThreeLight[]} */ (lighting.lights);

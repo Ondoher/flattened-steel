@@ -299,7 +299,7 @@ interface ShaderHandle {
 	 * Call this method to prepare a compatible local observation without replacing the shader runtime.
 	 *
 	 * @param request - Physically paired candidate facade/cache/light state.
-	 * @returns - Reversible publication and candidate geometry bindings.
+	 * @returns - Reversible facade/celestial publication.
 	 */
 	prepareObservationUpdate(request: Algorithm32ObservationUpdateRequest): Algorithm32ObservationUpdate;
 

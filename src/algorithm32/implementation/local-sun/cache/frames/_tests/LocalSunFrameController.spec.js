@@ -1,8 +1,121 @@
 import {LocalSunFrameController} from '../LocalSunFrameController.js';
 import {LocalSunFrameTestSupport} from './LocalSunFrameTestSupport.js';
 import {LocalSunRuntimeCacheBinding} from '../LocalSunRuntimeCacheBinding.js';
+import {Algorithm32} from '../../../../algorithm32/Algorithm32.js';
+import {Algorithm32ShaderHandle} from '../../../../algorithm32/Algorithm32ShaderHandle.js';
+import {ColorResetAltitudeHalfV1ColorDisplayModel} from '../../../../color-reset-altitude-half-v1/ColorResetAltitudeHalfV1ColorDisplayModel.js';
 
 describe('LocalSunFrameController complete publication and lease lifecycle', () => {
+	it('publishes and rolls back retained facade facts without rebuilding its runtime', async () => {
+		const backend = new LocalSunFrameTestSupport();
+		const requests = [];
+		const controller = new LocalSunFrameController({
+			backend,
+			stageFrame: (request) => {
+				requests.push(request);
+				return backend.stage(request);
+			},
+			resolveViewRays: (profile) => LocalSunFrameTestSupport.request(profile).viewRays,
+		});
+		const first = await controller.prepareLocalFrame(
+			LocalSunFrameTestSupport.request(LocalSunFrameTestSupport.createProfile()),
+		);
+		controller.publishPreparedLocalFrame(first);
+		const algorithm = new Algorithm32({
+			profile: first.profile.createExecutionProfile(),
+			color: new ColorResetAltitudeHalfV1ColorDisplayModel(),
+		});
+		const binding = new LocalSunRuntimeCacheBinding(requests[0].cacheController.active);
+		const setup = {bindingValues: {}};
+		const assembly = algorithm._shaderBuilder.assembleRetainedUpdate({setup, config: algorithm.config}, binding);
+		const runtime = {dispose: jasmine.createSpy('dispose')};
+		const handle = new Algorithm32ShaderHandle({
+			facade: algorithm,
+			setup,
+			buildResult: {
+				modelVersion: algorithm.config.version,
+				setup,
+				assembly,
+				runtime,
+				scatteringCache: binding,
+				scatteringCacheController: binding,
+			},
+		});
+		const initial = algorithm.config;
+		const next = await controller.prepareLocalObservation({
+			observation: first.contents.celestialInputs.observation,
+			receiverPosition: {coordinates: [0, 0, 100], units: 'meters'},
+		});
+		let update = handle.prepareObservationUpdate({
+			profile: next.profile,
+			celestialSources: null,
+			scatteringCache: requests[1].cacheController.active,
+			receiverLight: next.contents.receiverLight,
+		});
+		expect(algorithm.config.version).toBe(initial.version);
+		update.publish();
+		expect(algorithm.config.config.profile.models.geometry.configuration.observerPosition.coordinates[2]).toBe(100);
+		expect(algorithm.receiverLight.identity).toBe(next.contents.receiverLight.identity);
+		update.revert();
+		update.dispose();
+		expect(algorithm.config.version).toBe(initial.version);
+		expect(algorithm.config.config.profile.models.geometry).toBe(first.profile.models.geometry);
+		expect(runtime.dispose).not.toHaveBeenCalled();
+		update = handle.prepareObservationUpdate({
+			profile: next.profile,
+			celestialSources: null,
+			scatteringCache: requests[1].cacheController.active,
+			receiverLight: next.contents.receiverLight,
+		});
+		update.publish();
+		const latest = handle.prepareObservationUpdate({
+			profile: next.profile,
+			celestialSources: null,
+			scatteringCache: requests[1].cacheController.active,
+			receiverLight: next.contents.receiverLight,
+		});
+		latest.publish();
+		expect(() => update.revert()).toThrowError(/newer configuration/);
+		update.dispose();
+		latest.dispose();
+		expect(algorithm.config.config.profile.models.geometry.configuration.observerPosition.coordinates[2]).toBe(100);
+		expect(runtime.dispose).not.toHaveBeenCalled();
+		handle.dispose();
+		algorithm.dispose();
+		controller.dispose();
+		await controller.whenReleased();
+		expect(runtime.dispose).toHaveBeenCalledTimes(1);
+		expect(backend.handles.size).toBe(0);
+	});
+
+	it('rejects mutated or cancelled observation candidates without retiring the displayed field', async () => {
+		const backend = new LocalSunFrameTestSupport();
+		const controller = new LocalSunFrameController({
+			backend,
+			stageFrame: (request) => backend.stage(request),
+			resolveViewRays: (profile) => LocalSunFrameTestSupport.request(profile).viewRays,
+		});
+		const first = await controller.prepareLocalFrame(
+			LocalSunFrameTestSupport.request(LocalSunFrameTestSupport.createProfile()),
+		);
+		controller.publishPreparedLocalFrame(first);
+		const live = {
+			observation: first.contents.celestialInputs.observation,
+			receiverPosition: {coordinates: [0, 0, 100], units: 'meters'},
+		};
+		const next = await controller.prepareLocalObservation(live);
+		next.profile.models.lightSource.configuration.position.coordinates[0] += 1;
+		expect(() => controller.publishPreparedLocalFrame(next)).toThrowError(/Compact physical facts changed/);
+		expect(controller.active).toBe(first);
+		const cancelled = new AbortController();
+		cancelled.abort();
+		expect(() => controller.prepareLocalObservation(live, cancelled.signal)).toThrow();
+		expect(controller.active).toBe(first);
+		controller.dispose();
+		await controller.whenReleased();
+		expect(backend.handles.size).toBe(0);
+	});
+
 	it('prepares owned observation/height updates and retains shader bindings across lease retirement', async () => {
 		const backend = new LocalSunFrameTestSupport();
 		const controller = new LocalSunFrameController({

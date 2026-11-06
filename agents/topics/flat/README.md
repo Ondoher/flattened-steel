@@ -22,10 +22,12 @@ Device/local-time entry remains; time-zone lookup and animation UI are deferred.
 Engineering standards review remains cancelled. Local checkpoints are recorded
 in the execution record; nothing was pushed or deployed.
 
-The owner-requested [elevation/time optimization plan](control-update-optimization-plan.md)
-addresses repeated scene reconstruction during those edits. FOV performance is
-satisfactory and its existing path is preserved. The plan is saved for later
-execution; no optimization implementation or profiling has begun.
+The owner-authorized [elevation/time optimization](control-update-optimization-execution.md)
+retains the scene, endpoint objects, facade/shader handle, composer/targets and
+compatible programs/cache across ordinary updates. Necessary geometry/source
+placement, Sun generation and receiver lighting still update coherently. FOV's
+existing projection/redraw path is preserved. The execution record owns its
+performance comparison, physical/visual equivalence and lifecycle evidence.
 
 ## Current Scope
 
@@ -112,10 +114,16 @@ The runtime uses production Algorithm32 directly: the compact native15 local-Sun
 profile, N4 scattering, geometry-owned ground and source placement/lighting, and
 the accepted altitude-half Color model. LocalSunFrameController constructs the
 canonical GPU cache and lends it to complete live observation frames, allowing
-location/time changes to reuse compatible construction. Receiver measurement,
-color bindings, finite composed-output readback, and actual shader diagnostics
-are prepared before a frame becomes visible. The previous coherent frame stays
-visible during an update or failed candidate.
+location/time changes to reuse compatible construction. Initial setup includes
+receiver measurement, color bindings, finite composed-output readback and actual
+shader diagnostics before publication. Ordinary height/time updates retain
+rendering resources and prepare only new physical facts, cache transforms and
+receiver light. Dome shape is supplied through live uniforms. The Sun generator
+rebinds exact geometry/source owners without replacing its programs. Candidate
+state installs together; a failed installation restores and redraws the previous
+frame and immediately releases the candidate. Post-commit retirement errors
+retain the new displayed observation/accepted height while reporting cleanup
+failure. Identical effective inputs do not repeat preparation.
 
 Flat Earth now starts canonical cache construction during feature readiness,
 including on the empty `/flat/` route before a scene or location is selected.
