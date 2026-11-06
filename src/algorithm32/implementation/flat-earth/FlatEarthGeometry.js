@@ -31,6 +31,21 @@ import {
  * @implements {StellarScreenPaletteGeometryCapability}
  */
 export class FlatEarthGeometry {
+	/**
+	 * Call this method to obtain the owner-derived placement/dome values that vary between live frames.
+	 *
+	 * @returns {Record<string, unknown>} - Geometry-owned uniform values, independent of camera matrices.
+	 */
+	createLiveShaderValues() {
+		this._assertConfigured();
+		const dome = this._configuration.observerCenteredDome;
+		return {
+			'geometry.sourceSubpoint': DistanceMath.toMetersPosition(this._configuration.sourceSubpoint),
+			'geometry.observerDomeCenter': dome ? DistanceMath.toMetersPosition(dome.sphereCenter) : [0, 0, 0],
+			'geometry.observerDomeRadius': dome ? DistanceMath.toMeters(dome.sphereRadius) : 0,
+		};
+	}
+
 	/** Flat finite-local-Sun celestial capability family. */
 	get celestialCapabilityFamily() {
 		return /** @type {const} */ ('flat-local-finite-sun-v1');

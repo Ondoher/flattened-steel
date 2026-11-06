@@ -94,6 +94,18 @@ export class FlatGeometryShaderContributor {
 			requires: ['runtime.initialState', 'runtime.depthTexture', 'runtime.sceneHitTexture'],
 			uniforms: [
 				ShaderContributions.createShaderUniformDeclaration(
+					'GEOMETRY_OBSERVER_DOME_CENTER_METERS',
+					'vec3',
+					'geometry.observerDomeCenter',
+					domeCenterMeters,
+				),
+				ShaderContributions.createShaderUniformDeclaration(
+					'GEOMETRY_OBSERVER_DOME_RADIUS_METERS',
+					'float',
+					'geometry.observerDomeRadius',
+					domeRadiusMeters,
+				),
+				ShaderContributions.createShaderUniformDeclaration(
 					'GEOMETRY_SOURCE_SUBPOINT_METERS',
 					'vec3',
 					'geometry.sourceSubpoint',
@@ -169,8 +181,7 @@ const vec3 GEOMETRY_OBSERVER_UP_DIRECTION = ${ShaderSource.formatVec3(frame.up)}
 const vec3 GEOMETRY_OBSERVER_RIGHT_DIRECTION = ${ShaderSource.formatVec3(frame.right)};
 const vec3 GEOMETRY_OBSERVER_FORWARD_DIRECTION = ${ShaderSource.formatVec3(frame.forward)};
 const bool GEOMETRY_OBSERVER_DOME_ENABLED = ${domeEnabled ? 'true' : 'false'};
-const vec3 GEOMETRY_OBSERVER_DOME_CENTER_METERS = ${ShaderSource.formatVec3(domeCenterMeters)};
-const float GEOMETRY_OBSERVER_DOME_RADIUS_METERS = ${ShaderSource.formatFloat(domeRadiusMeters)};`,
+`,
 				),
 				ShaderContributions.createShaderSourceBlock(
 					'geometry-reconstruct-helper',

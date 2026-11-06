@@ -9,8 +9,10 @@ Ordinary compatible edits should retain the scene, shader and rendering resource
 while refreshing necessary physical state and lighting. FOV performance is fine
 according to the owner; preserve its existing path. The plan starts with a warm
 update timing/allocation baseline and a safe engine publication/lease contract,
-then implementation and focused correctness/performance verification. M1 is
-complete and M2 is next; implementation, profiling, checks and local adviser-recommended
+then implementation and focused correctness/performance verification. M1/M2 are
+complete and M3 is next; the first live retained-scene slice cuts warm control
+latency by about 65% with matching physical/visual state. Implementation,
+profiling, checks and local adviser-recommended
 checkpoints are authorized. Pushing and deployment are not.
 Engineering standards review remains inactive.
 

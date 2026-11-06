@@ -1,7 +1,47 @@
 import {LocalSunFrameController} from '../LocalSunFrameController.js';
 import {LocalSunFrameTestSupport} from './LocalSunFrameTestSupport.js';
+import {LocalSunRuntimeCacheBinding} from '../LocalSunRuntimeCacheBinding.js';
 
 describe('LocalSunFrameController complete publication and lease lifecycle', () => {
+	it('prepares owned observation/height updates and retains shader bindings across lease retirement', async () => {
+		const backend = new LocalSunFrameTestSupport();
+		const controller = new LocalSunFrameController({
+			backend,
+			stageFrame: (request) => backend.stage(request),
+			resolveViewRays: (profile) => LocalSunFrameTestSupport.request(profile).viewRays,
+		});
+		const first = await controller.prepareLocalFrame(
+			LocalSunFrameTestSupport.request(LocalSunFrameTestSupport.createProfile()),
+		);
+		controller.publishPreparedLocalFrame(first);
+		const firstLease = first.borrowCache();
+		const binding = new LocalSunRuntimeCacheBinding(firstLease);
+		const submitted = backend.submissions;
+		const next = await controller.prepareLocalObservation({
+			observation: {
+				instant: '2024-12-14T18:27:41.487Z',
+				location: {latitude: {value: 0, units: 'degrees'}, longitude: {value: 0, units: 'degrees'}},
+			},
+			receiverPosition: {coordinates: [0, 0, 100], units: 'meters'},
+		});
+		expect(controller.active).toBe(first);
+		expect(next.profile.models.geometry.configuration.observerPosition.coordinates[2]).toBe(100);
+		expect(next.contents.celestialInputs.observation.instant).toBe('2024-12-14T18:27:41.487Z');
+		expect(next.constructionIdentity).toBe(first.constructionIdentity);
+		expect(backend.submissions).toBe(submitted);
+		controller.publishPreparedLocalFrame(next);
+		const nextLease = next.borrowCache();
+		binding.publish(nextLease);
+		firstLease.dispose();
+		expect(binding.getRuntimeBindings().bindings.length).toBe(7);
+		binding.dispose();
+		expect(nextLease.getRuntimeBindings().bindings.length).toBe(7);
+		nextLease.dispose();
+		controller.dispose();
+		await controller.whenReleased();
+		expect(backend.handles.size).toBe(0);
+	});
+
 	it('warms construction without a frame and lends the same field to a queued live request', async () => {
 		const backend = new LocalSunFrameTestSupport();
 		const stage = jasmine.createSpy('stage').and.callFake((request) => backend.stage(request));
@@ -231,7 +271,9 @@ describe('LocalSunFrameController complete publication and lease lifecycle', () 
 				 * @returns {Promise<LocalSunPreparedFrameContents>} - Virtual packet, with no numerical GPU claim.
 				 */
 				stageFrame: (request) => {
-					if (receiverFailure) throw new Error('receiver failure');
+					if (receiverFailure) {
+						throw new Error('receiver failure');
+					}
 					return backend.stage(request);
 				},
 			});
@@ -491,7 +533,9 @@ describe('LocalSunFrameController complete publication and lease lifecycle', () 
 						/** Release the virtual packet, then inject the selected retirement failure for the controller to report. */
 						dispose() {
 							contents.dispose();
-							if (fails) throw new Error('retirement failure');
+							if (fails) {
+								throw new Error('retirement failure');
+							}
 						},
 					};
 				},

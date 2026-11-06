@@ -220,6 +220,48 @@ void main() {
 		this.markDirty('configuration');
 	}
 
+	/**
+	 * Call this method to prepare new physical source/geometry owners on the retained finite-Sun generator.
+	 *
+	 * @param {Algorithm32ExecutionProfile} profile - Shader-compatible candidate model owners.
+	 * @returns {LocalSunFrameSceneLighting} - Reversible source/placement publication without new programs.
+	 */
+	prepareObservationUpdate(profile) {
+		const geometry = /** @type {GeometryModel & CelestialGeometryCapability} */ (profile.models.geometry);
+		const roster = profile.models.celestialSources;
+		const observation = profile.models.sourcePlacement.observation;
+		const source = roster.family === 'spherical-sun-stars-radial-v1' ? roster.sun : roster.localSun;
+		const placement = geometry.resolveCelestialPlacements({roster, observation})[0];
+		const previous = {
+			geometry: this._geometry,
+			roster: this._roster,
+			observation: this._observation,
+			source: this._source,
+			definition: this._definition,
+			placement: this._placement,
+		};
+		return {
+			publish: () => {
+				this._geometry = geometry;
+				this._roster = roster;
+				this._observation = observation;
+				this._source = source;
+				this._definition = source.celestialSourceDefinition;
+				this._placement = placement;
+				this.markDirty('configuration');
+			},
+			revert: () => {
+				this._geometry = previous.geometry;
+				this._roster = previous.roster;
+				this._observation = previous.observation;
+				this._source = previous.source;
+				this._definition = previous.definition;
+				this._placement = previous.placement;
+				this.markDirty('configuration');
+			},
+		};
+	}
+
 	/** Resolve screen placement, apparent scale, compact shape, and reuse identity. */
 	_projection(view) {
 		let modelCenter;
@@ -304,7 +346,9 @@ void main() {
 
 	/** Dispose one render target exactly once. */
 	_disposeTarget(target) {
-		if (!target || this._disposedTargets.has(target)) return;
+		if (!target || this._disposedTargets.has(target)) {
+			return;
+		}
 		this._disposedTargets.add(target);
 		target.dispose?.();
 		this._disposedTargetCount += 1;
@@ -322,7 +366,9 @@ void main() {
 			renderer.autoClear = false;
 			renderer.setRenderTarget(target);
 			const gl = renderer.getContext?.();
-			if (!gl?.clearBufferfv) throw new TypeError('Sun tile generation requires a WebGL2 renderer context.');
+			if (!gl?.clearBufferfv) {
+				throw new TypeError('Sun tile generation requires a WebGL2 renderer context.');
+			}
 			gl.clearBufferfv(gl.COLOR, 0, new Float32Array([0, 0, 0, 0]));
 			renderer.render(this._scene, this._drawCamera);
 			const retired = this._activeTarget;
@@ -405,26 +451,36 @@ void main() {
 	}
 
 	markDirty(reason) {
-		if (this._disposed) return;
+		if (this._disposed) {
+			return;
+		}
 		this._dirtyReason = reason;
 	}
 
 	async prepare(renderer) {
-		if (this._disposed) throw new Error('Cannot prepare a disposed Sun tile generation stage.');
-		if (typeof renderer.compileAsync === 'function') await renderer.compileAsync(this._scene, this._drawCamera);
-		else renderer.compile(this._scene, this._drawCamera);
+		if (this._disposed) {
+			throw new Error('Cannot prepare a disposed Sun tile generation stage.');
+		}
+		if (typeof renderer.compileAsync === 'function') {
+			await renderer.compileAsync(this._scene, this._drawCamera);
+		} else {
+			renderer.compile(this._scene, this._drawCamera);
+		}
 	}
 
 	setSize(width, height) {
 		const viewportSize = PixelMath.createPixelSize(width, height, 'Sun tile viewport');
-		if (viewportSize.width === this._viewportSize.width && viewportSize.height === this._viewportSize.height)
+		if (viewportSize.width === this._viewportSize.width && viewportSize.height === this._viewportSize.height) {
 			return;
+		}
 		this._viewportSize = viewportSize;
 		this.markDirty('view');
 	}
 
 	render(renderer) {
-		if (this._disposed || !this.enabled) return;
+		if (this._disposed || !this.enabled) {
+			return;
+		}
 		try {
 			const view = CelestialRenderViewSnapshot.capture(this._camera, this._viewportSize);
 			const projection = this._projection(view);
@@ -445,7 +501,9 @@ void main() {
 	}
 
 	handleContextLoss() {
-		if (this._disposed) return;
+		if (this._disposed) {
+			return;
+		}
 		this._contextLossCount += 1;
 		this._disposeTarget(this._activeTarget);
 		this._activeTarget = null;
@@ -454,7 +512,9 @@ void main() {
 	}
 
 	handleContextRestoration() {
-		if (this._disposed) return;
+		if (this._disposed) {
+			return;
+		}
 		this._zeroTexture.needsUpdate = true;
 		this._dirtyReason = 'context-restoration';
 	}
@@ -479,7 +539,9 @@ void main() {
 	}
 
 	dispose() {
-		if (this._disposed) return;
+		if (this._disposed) {
+			return;
+		}
 		this._disposed = true;
 		this.enabled = false;
 		this._disposeTarget(this._activeTarget);

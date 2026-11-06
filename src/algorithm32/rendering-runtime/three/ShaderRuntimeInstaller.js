@@ -149,24 +149,34 @@ export class ShaderRuntimeInstaller {
 		const uniformDeclarations = assembly.contributions.flatMap((contribution) => contribution.uniforms);
 		return () => {
 			const publication = cache?.getRuntimePublication?.();
-			if (!publication || publication.identity === identity) return;
+			if (!publication || publication.identity === identity) {
+				return;
+			}
 			/** Opaque cache texture destinations.
 			 *
 			 * @type {ShaderRuntimeUniformMap}
 			 */
 			const cacheUniforms = {};
-			for (const declaration of textureDeclarations)
+			for (const declaration of textureDeclarations) {
 				cacheUniforms[declaration.valueKey] = uniforms[declaration.name];
+			}
 			const assignments = Object.entries(publication.values).map(([key, value]) => {
 				const declaration = uniformDeclarations.find((item) => item.valueKey === key);
-				if (!key.startsWith('cache.') || !declaration)
+				if (!key.startsWith('cache.') || !declaration) {
 					throw new TypeError('Live cache publication has an undeclared uniform.');
+				}
 				return {uniform: uniforms[declaration.name], value: this._normalizeShaderUniformValue(key, value)};
 			});
 			backend.installRuntimeBindings({bindings: publication.bindings, uniforms: cacheUniforms});
 			const bound = new Set(publication.bindings.bindings.map((binding) => binding.valueKey));
-			for (const key of previousKeys) if (!bound.has(key)) cacheUniforms[key].value = null;
-			for (const assignment of assignments) assignment.uniform.value = assignment.value;
+			for (const key of previousKeys) {
+				if (!bound.has(key)) {
+					cacheUniforms[key].value = null;
+				}
+			}
+			for (const assignment of assignments) {
+				assignment.uniform.value = assignment.value;
+			}
 			previousKeys = bound;
 			identity = publication.identity;
 		};
@@ -524,7 +534,9 @@ export class ShaderRuntimeInstaller {
 	 */
 	_createStellarGenerationPass(request) {
 		const roster = this._model.celestialSources;
-		if (!roster?.stars) return null;
+		if (!roster?.stars) {
+			return null;
+		}
 		const source = /** @type {StellarPointSetCelestialSource & Partial<StellarScreenPaletteSource>} */ (
 			roster.stars
 		);
@@ -578,7 +590,9 @@ export class ShaderRuntimeInstaller {
 	/** Create the joint stellar-plus-Sun standard generation participant. */
 	_createCelestialGenerationPass(request) {
 		const roster = this._model.celestialSources;
-		if (roster == null) return null;
+		if (roster == null) {
+			return null;
+		}
 		const stellar = this._createStellarGenerationPass(request);
 		const sun = new SunDiskTileGenerationPass({
 			THREE: /** @type {typeof import('three')} */ (request.setup.THREE),
@@ -653,7 +667,9 @@ export class ShaderRuntimeInstaller {
 			const refreshUniformValues = () => {
 				refreshPreparedUniformValues();
 				refreshCachePublication();
-				if (!celestialGenerationPass) return;
+				if (!celestialGenerationPass) {
+					return;
+				}
 				const generatedValues = celestialGenerationPass.consumerBindingValues();
 				for (const contribution of assembly.contributions) {
 					for (const uniform of contribution.uniforms) {
@@ -704,8 +720,12 @@ export class ShaderRuntimeInstaller {
 				performanceMaxPendingQueries: request.setup.performanceMaxPendingQueries,
 			});
 			pass.enabled = false;
-			if (sceneInputCapture) sceneInputCapture.enabled = false;
-			if (celestialGenerationPass) celestialGenerationPass.enabled = false;
+			if (sceneInputCapture) {
+				sceneInputCapture.enabled = false;
+			}
+			if (celestialGenerationPass) {
+				celestialGenerationPass.enabled = false;
+			}
 
 			if (sceneInputCapture) {
 				composer.addPass(sceneInputCapture);
@@ -730,12 +750,17 @@ export class ShaderRuntimeInstaller {
 					await celestialGenerationPass?.prepare(renderer);
 					await pass.prepare(renderer);
 					refreshUniformValues();
-					if (sceneInputCapture) sceneInputCapture.enabled = true;
-					if (celestialGenerationPass) celestialGenerationPass.enabled = true;
+					if (sceneInputCapture) {
+						sceneInputCapture.enabled = true;
+					}
+					if (celestialGenerationPass) {
+						celestialGenerationPass.enabled = true;
+					}
 					pass.enabled = true;
 				},
 				celestialGenerationParticipant: celestialGenerationPass,
 				publishObservation: (observation) => celestialGenerationPass?.setObservation(observation),
+				prepareObservationUpdate: (profile) => celestialGenerationPass?.prepareObservationUpdate(profile),
 				/** Called by install to dispose. */ dispose: () => {
 					this._removeComposerPass(composer, pass);
 					pass.dispose();

@@ -24,5 +24,14 @@ export function createModel(registry = new Registry()) {
 export function createSession(viewId, onChange, factory) {
 	let model = createModel();
 	model.open(viewId);
-	return new FlatEarthSession(viewId, model, onChange, factory);
+	let createRuntime = factory
+		? (...args) => {
+				let runtime = factory(...args);
+				return {
+					...runtime,
+					prepare: async (...request) => (await runtime.prepare(...request)) ?? {retirementErrors: []},
+				};
+			}
+		: undefined;
+	return new FlatEarthSession(viewId, model, onChange, createRuntime);
 }

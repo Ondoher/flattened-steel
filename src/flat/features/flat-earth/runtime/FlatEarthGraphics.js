@@ -27,10 +27,13 @@ export class FlatEarthGraphics {
 		}
 		/** @type {LocalSunFrameStageFactory|null} */
 		this.stageFrame = null;
+		/** @type {((profile: LocalSunCompactConstructionProfile) => readonly LocalSunFrameSupportRay[])|null} */
+		this.resolveViewRays = null;
 		this.frames = new LocalSunFrameController({
 			backend: this.backend,
 			scheduler: {yieldControl: () => new Promise((resolve) => setTimeout(resolve, 0))},
 			stageFrame: (request) => this.stageFrame(request),
+			resolveViewRays: (profile) => this.resolveViewRays(profile),
 		});
 		this._onContextLost = (event) => {
 			event.preventDefault();

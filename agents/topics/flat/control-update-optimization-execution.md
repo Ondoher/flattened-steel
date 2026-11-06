@@ -1,16 +1,16 @@
 # Flat Earth Control Optimization Execution
 
-Status: M1 complete; entering M2 under the owner's independent-execution invocation on
+Status: M1 and M2 complete; entering M3 under the owner's independent-execution invocation on
 2026-11-06. The [plan](control-update-optimization-plan.md) owns scope and gates.
 Engineering standards review remains cancelled. Local checkpoints with adviser
 messages are preapproved; pushing and deployment are not authorized.
 
 ## Current State And Resumption
 
-M1 preserved 448 source files plus the dirty diff and an isolated build. No
-optimization source has changed yet. Next: implement the retained scene and
-engine-owned observation transaction described below, then demonstrate one
-height and one time update before expanding verification. Evidence root:
+M1 preserved 448 source files plus the dirty diff and an isolated build. M2 now
+retains scene/facade/shader/targets and passes the first full GPU comparison.
+Next: M3 pending-interaction, cancellation, failure/rollback, context recovery
+and final verification. Evidence root:
 `.codex-tmp/flat-control-optimization/2026-11-06-01/`.
 
 ## Decisions
@@ -48,6 +48,46 @@ height and one time update before expanding verification. Evidence root:
 
 ## Milestone Reports
 
+### M2 — Complete
+
+The [candidate report](../../../.codex-tmp/flat-control-optimization/2026-11-06-01/candidate-fast/report.json)
+and [comparison](../../../.codex-tmp/flat-control-optimization/2026-11-06-01/candidate-fast/comparison.json)
+show stable scene/composer/handle/targets with zero new compatible programs for
+height/time edits, including the first switch to 40 km. Warm frame-proxy medians
+are 262.6 ms for elevation (65.5% lower than 761.8 ms baseline) and 261.85 ms for
+time (64.5% lower than 736.7 ms). Two-view time is about 575 ms versus 1591 ms.
+These are small local sample sets, not frame-rate or physical-display guarantees.
+
+Across 20 corresponding frame snapshots, source/transform/observation values
+match exactly. GPU-derived lighting/adaptation has maximum relative difference
+5.22e-7, within the fixed 1e-6 tolerance. Three captures have maximum channel
+difference 1/255, affecting respectively 1, 20 and 6 of 3,520,000 channels.
+The remaining 30 readbacks per update are physical receiver sampling/reduction;
+the repeated diagnostic readback and scene preflight were removed from updates.
+
+Types, 119 Flat browser tests, 16 focused frame-controller tests, 93 facade/handle
+tests and 29 geometry tests pass. The source-local Sun generator now rebinds its
+physical source/geometry while retaining its programs; it was necessary to keep
+the existing visible Sun capability rather than dropping it from the update path.
+Two initial pilot failures (initial facade capture and an initially too-narrow
+celestial compatibility check) remain preserved in their separate pilot folders.
+Disposition: advance to M3. Failure/pending-interaction checks remain open.
+
+M2 pilot: `candidate-pilot3/progress.json` demonstrates stable handle/scene/target
+identities and zero program creation on ordinary height/time edits, including
+40 km. Warm latency is still roughly 0.4–0.5 seconds, above the fixed 50% target.
+Dominant remaining cost is repeated profile validation inside the candidate
+facade path. Source/direct/transform checks match; small diffuse differences are
+within the preselected GPU tolerance so far. Preserve this pilot separately.
+
+Authorized refinement: extract an engine-internal prepared-model constructor so
+the owned observation path can validate its newly derived compact profile once
+and build the facade snapshot directly. Retain public full configuration ingress
+checks and the frame controller's post-stage/publication mutation checks. The
+canonical profile is private to its cache entry and need not be revalidated as
+if newly supplied by an external caller on every observation derivation. This
+removes repeated work without an unchecked app bypass or numerical change.
+
 ### M1 — Complete
 
 [Baseline report](../../../.codex-tmp/flat-control-optimization/2026-11-06-01/baseline/report.json)
@@ -77,5 +117,8 @@ next; M3 has not begun. Estimates remain provisional until the first live slice.
 
 ## Verification And Checkpoints
 
-New optimization checks and checkpoints pending. Earlier startup-cache evidence
+Checkpoint `c9808d6b` preserves the startup-cache implementation and M1 baseline
+using adviser message `feat(flat): reuse startup graphics cache for first view`.
+The unrelated `.prettierignore` and `transfer/` changes remain outside commits.
+M2 checkpoint advice and M3 verification are next. Earlier startup-cache evidence
 is retained separately and is not a performance baseline for these edits.

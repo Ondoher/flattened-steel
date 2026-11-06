@@ -893,6 +893,63 @@ export class LocalSunSceneLightingAdapter {
 	}
 
 	/**
+	 * Call this method to stage new finite-source facts on retained ambient/point endpoint lights.
+	 * Directional shadows and indirect-fill topologies require their own structural setup.
+	 *
+	 * @param {LightSourceThreeLightingRequest} request - Candidate physical observer/source facts.
+	 * @param {LightSourceThreeLightingObjects} lighting - Existing source-owned ambient and point lights.
+	 * @returns {LocalSunFrameSceneLighting} - Reversible assignment-only lighting publication.
+	 */
+	prepareSceneLightingUpdate(request, lighting) {
+		const metadata = /** @type {LocalSunRetainedLightingMetadata} */ (lighting.metadata);
+		if (metadata.lightingPolicy !== 'source-driven-flat-local-point-light' || lighting.lights.length !== 2) {
+			throw new Error('Retained local lighting requires the existing ambient/point topology.');
+		}
+		const [ambient, point] = /** @type {readonly LocalThreeLight[]} */ (lighting.lights);
+		const facts = this._resolveEndpointLightingFacts(request);
+		const sourcePosition = request.sourcePosition;
+		const observerPosition = request.observerPosition;
+		const next = {
+			...metadata,
+			ambientLightScale: facts.ambientLightScale,
+			observerScaledAmbientIntensity: facts.ambientIntensity,
+			ambientIntensity: facts.ambientIntensity,
+			pointLightIntensity: facts.calibrationScalar * facts.endpointSceneIncidentScale,
+			observerIncidentScale: facts.observerIncidentScale,
+			endpointSceneIncidentScale: facts.endpointSceneIncidentScale,
+			falloffScale: facts.metadata.falloffScale,
+			distanceFromSource: facts.metadata.distanceFromSource,
+			safeDistance: facts.metadata.safeDistance,
+			sourcePosition,
+			observerPosition,
+			directionToSource: this._directionBetweenScenePoints(
+				observerPosition.coordinates,
+				sourcePosition.coordinates,
+			),
+			directionToSourceModel: facts.directLighting.directionToLight,
+		};
+		const previous = {...metadata};
+		const previousUserData = {...point.userData};
+		return {
+			publish: () => {
+				ambient.intensity = next.ambientIntensity;
+				point.intensity = next.pointLightIntensity;
+				point.position.set(...sourcePosition.coordinates);
+				point.userData.observerIncidentScale = facts.observerIncidentScale;
+				point.userData.endpointSceneIncidentScale = facts.endpointSceneIncidentScale;
+				Object.assign(metadata, next);
+			},
+			revert: () => {
+				ambient.intensity = Number(previous.ambientIntensity);
+				point.intensity = Number(previous.pointLightIntensity);
+				point.position.set(...previous.sourcePosition.coordinates);
+				Object.assign(point.userData, previousUserData);
+				Object.assign(metadata, previous);
+			},
+		};
+	}
+
+	/**
 	 * Call this method to configure an app-authored Three object tree for source shadows.
 	 *
 	 * @param {unknown} object - The Three object to configure.

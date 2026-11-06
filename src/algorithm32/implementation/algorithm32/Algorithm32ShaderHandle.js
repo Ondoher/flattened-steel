@@ -185,6 +185,96 @@ export class Algorithm32ShaderHandle {
 		this._renderer = renderer;
 	}
 
+	/**
+	 * Call this method to prepare a reversible observation update for an unchanged local shader program.
+	 * The frame controller must pair the candidate with the retained physical cache. Changed shader
+	 * structure or binding layout rejects without altering the installed scene or facade.
+	 *
+	 * @param {Algorithm32ObservationUpdateRequest} request - Candidate facade, paired cache and receiver light.
+	 * @returns {Algorithm32ObservationUpdate} - Publish/revert transaction with geometry uniform values.
+	 */
+	prepareObservationUpdate({profile, celestialSources, scatteringCache, receiverLight}) {
+		this._assertUsable();
+		let prepared = this._facade._prepareObservationConfig(profile, celestialSources);
+		try {
+			const assembly = prepared.shaderBuilder.assembleRetainedUpdate(
+				{setup: this._setup, config: prepared.snapshot},
+				scatteringCache,
+			);
+			const installed = this._buildResult.assembly;
+			if (
+				!installed ||
+				assembly.fragmentShaderSource !== installed.fragmentShaderSource ||
+				JSON.stringify(assembly.bindingRequirements) !== JSON.stringify(installed.bindingRequirements)
+			) {
+				throw new Error('Observation update changes shader structure; a new runtime is required.');
+			}
+			const measurement = prepared.receiverEnvironmentLightController.adoptPreparedMeasurement(receiverLight);
+			const celestialUpdate = this._buildResult.runtime?.prepareObservationUpdate?.(prepared.model.profile);
+			prepared = {
+				...prepared,
+				exposureModifier: prepared.localLightLevelCalculator.deriveExposureModifier(
+					measurement.totalHorizontalLuminanceProxy,
+				),
+				brightnessProxy: measurement.totalHorizontalLuminanceProxy.value,
+				totalHorizontalIlluminance: measurement.photopicTotalHorizontalIlluminance.value,
+				stellarAdaptationLuminance: measurement.stellarAdaptationLuminance.value,
+				receiverLightIdentity: measurement.identity,
+			};
+			/** @type {Record<string, unknown>} */
+			const bindings = {};
+			for (const contribution of assembly.contributions) {
+				for (const uniform of contribution.uniforms) {
+					if (uniform.valueKey.startsWith('geometry.') && Object.hasOwn(uniform, 'defaultValue')) {
+						bindings[uniform.valueKey] = uniform.defaultValue;
+					}
+				}
+			}
+			let previous = null;
+			let published = false;
+			let disposed = false;
+			const generation = this._generation;
+			const previousBuild = this._buildResult;
+			return {
+				bindings,
+				publish: () => {
+					this._assertUsable();
+					if (
+						disposed ||
+						published ||
+						generation !== this._generation ||
+						prepared.baseVersion !== this._facade._capturePreparedConfig().version
+					) {
+						throw new Error('Retained observation update is obsolete or already published.');
+					}
+					previous = this._facade._capturePreparedConfig();
+					this._facade._installPreparedConfig(prepared);
+					this._buildResult = {...previousBuild, modelVersion: prepared.version};
+					this._generation++;
+					published = true;
+					celestialUpdate?.publish();
+				},
+				revert: () => {
+					if (published && !disposed) {
+						this._facade._installPreparedConfig(previous);
+						this._buildResult = previousBuild;
+						celestialUpdate?.revert();
+						published = false;
+					}
+				},
+				dispose: () => {
+					if (!disposed) {
+						disposed = true;
+						this._facade._discardPreparedConfig(published ? previous : prepared);
+					}
+				},
+			};
+		} catch (error) {
+			this._facade._discardPreparedConfig(prepared);
+			throw error;
+		}
+	}
+
 	/** Call this method to measure a complete candidate receiver state without altering the visible facade.
 	 *
 	 * @param {Algorithm32ReceiverPreparationRequest} request - Candidate geometry, source, cache, and GPU capabilities.
@@ -202,8 +292,9 @@ export class Algorithm32ShaderHandle {
 		const calculator = new LocalLightLevelCalculator({lightSource: request.lightSource});
 		const roster = this._facade._model.celestialSources;
 		const candidateSource = /** @type {LightSourceModel & DistantSunCelestialSource} */ (request.lightSource);
-		if (roster?.family === 'spherical-sun-stars-radial-v1' && candidateSource.kind !== 'distant-uniform-sun')
+		if (roster?.family === 'spherical-sun-stars-radial-v1' && candidateSource.kind !== 'distant-uniform-sun') {
 			throw new RangeError('Distant receiver preparation requires its paired distant source.');
+		}
 		const candidateRoster =
 			roster?.family === 'spherical-sun-stars-radial-v1' ? {...roster, sun: candidateSource} : null;
 		const directLight = calculator.measureConfiguredReceiverDirectLight({
@@ -270,8 +361,9 @@ export class Algorithm32ShaderHandle {
 		this._assertUsable();
 		const buildResult = this._buildResult;
 		const scatteringCache = buildResult.scatteringCache;
-		if (!scatteringCache)
+		if (!scatteringCache) {
 			throw new Error('Receiver environment-light measurement requires an active scattering cache.');
+		}
 		const measurementModel = Object.create(this._facade._model);
 		Object.defineProperty(measurementModel, 'celestialSources', {value: null, enumerable: true});
 		const sampler = new ReceiverEnvironmentLightTransportSampler({
@@ -297,7 +389,9 @@ export class Algorithm32ShaderHandle {
 			sampleIncomingRadiance: sampleGpuRadiances,
 			reduceIncomingRadiance: (radiances) => reducer.reduce({radiances, signal}),
 		});
-		if (!diagnostics) return measurement;
+		if (!diagnostics) {
+			return measurement;
+		}
 		const gpuRadiances = await sampleGpuRadiances();
 		const resident = await residentPromise;
 		const basis = this._facade._model.spectral.basis;

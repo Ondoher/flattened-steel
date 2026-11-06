@@ -93,7 +93,11 @@ interface FlatEarthRuntimeCapability {
 	 * @param observerHeight - Requested physical elevation; defaults to the accepted model value.
 	 * @returns - Completion after coherent publication.
 	 */
-	prepare(observation: GeometryObservation, signal: AbortSignal, observerHeight?: Distance): Promise<void>;
+	prepare(
+		observation: GeometryObservation,
+		signal: AbortSignal,
+		observerHeight?: Distance,
+	): Promise<FlatEarthFramePublication>;
 
 	/**
 	 * Call this method to change framing on the retained camera without reconstructing the cache.
@@ -131,6 +135,30 @@ type FlatEarthRuntimeFactory = (
  */
 type FlatEarthPreparedScene = {
 	/**
+	 * Canonical construction/backend identity admitted by the engine owner.
+	 */
+	constructionIdentity: string;
+	/**
+	 * Number of prepared/displayed packet borrows retaining this scene.
+	 */
+	references: number;
+	/**
+	 * Exact currently installed live profile.
+	 */
+	profile: LocalSunCompactConstructionProfile;
+	/**
+	 * Stable non-owning shader binding over compatible per-packet leases.
+	 */
+	cacheBinding: import('../../../algorithm32/implementation/local-sun/cache/frames/LocalSunRuntimeCacheBinding.js').LocalSunRuntimeCacheBinding;
+	/**
+	 * Source-owned retained endpoint lighting.
+	 */
+	lighting: LightSourceThreeLightingObjects;
+	/**
+	 * Shader handle retained across ordinary observation updates.
+	 */
+	handle: ShaderHandle | null;
+	/**
 	 * Frame-private camera retaining the current view pose.
 	 */
 	camera: import('three').PerspectiveCamera;
@@ -155,6 +183,16 @@ type FlatEarthPreparedScene = {
 	 */
 	bindings: Algorithm32BindingValues;
 };
+
+/**
+ * A completed frame publication, with cleanup failures separated from installation failure.
+ */
+type FlatEarthFramePublication = Readonly<{
+	/**
+	 * Retirement failures after the new frame was successfully displayed and committed.
+	 */
+	retirementErrors: readonly unknown[];
+}>;
 
 /**
  * Registered feature model capability, owning independent camera records.

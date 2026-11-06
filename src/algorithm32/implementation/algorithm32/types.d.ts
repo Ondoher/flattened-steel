@@ -55,6 +55,32 @@ type Algorithm32PreparedConfig = {
 
 /** Facade operations used by one installed Algorithm32 shader handle. */
 interface Algorithm32ShaderHandleFacade {
+	/**
+	 * Prepare an owned local observation using the retained facade's presentation policy.
+	 *
+	 * @param profile - Engine-derived compact candidate.
+	 * @param celestialSources - Matching live celestial owners.
+	 * @returns - Complete unpublished facade state.
+	 */
+	_prepareObservationConfig(
+		profile: LocalSunCompactConstructionProfile,
+		celestialSources: CelestialSourceRoster | null,
+	): Algorithm32PreparedConfig;
+
+	/**
+	 * Capture complete current facade owners for a reversible retained update.
+	 *
+	 * @returns - Current complete facade state.
+	 */
+	_capturePreparedConfig(): Algorithm32PreparedConfig;
+
+	/**
+	 * Install checked prepared or rollback state without retiring previous owners.
+	 *
+	 * @param prepared - Complete facade state.
+	 */
+	_installPreparedConfig(prepared: Algorithm32PreparedConfig): void;
+
 	/** Call this method to adopt a fully prepared receiver state at the live scene publication boundary. */
 	_adoptPreparedReceiverLight(measurement: ReceiverEnvironmentLightMeasurement): void;
 	readonly _model: SharedModel;
@@ -111,6 +137,53 @@ type Algorithm32ShaderHandleState = {
 	/** Currently installed shader build result. */
 	readonly buildResult: ShaderBuildResult;
 };
+
+/**
+ * Physically paired local frame state supplied by its frame preparation owner.
+ */
+type Algorithm32ObservationUpdateRequest = Readonly<{
+	/**
+	 * Candidate engine-derived compact profile with unchanged physical policy.
+	 */
+	profile: LocalSunCompactConstructionProfile;
+	/**
+	 * Matching live celestial source roster.
+	 */
+	celestialSources: CelestialSourceRoster | null;
+	/**
+	 * Candidate lease of the retained physical field.
+	 */
+	scatteringCache: GpuScatteringCache;
+	/**
+	 * Complete receiver measurement matching the candidate observation.
+	 */
+	receiverLight: ReceiverEnvironmentLightMeasurement;
+}>;
+
+/**
+ * Checked retained-facade update; the complete frame owns disposal after commit or rejection.
+ */
+interface Algorithm32ObservationUpdate {
+	/**
+	 * Candidate geometry uniform defaults; camera bindings are updated by the camera owner.
+	 */
+	readonly bindings: Record<string, unknown>;
+
+	/**
+	 * Call this method at the complete frame installation boundary to publish the facade state.
+	 */
+	publish(): void;
+
+	/**
+	 * Call this method before controller commit to restore the previous complete facade state.
+	 */
+	revert(): void;
+
+	/**
+	 * Call this method to retire the uninstalled candidate or the preceding facade owners.
+	 */
+	dispose(): void;
+}
 /** Independent receiver-light preparation for an unpublished live scene. */
 type Algorithm32ReceiverPreparationRequest = {
 	/** Renderer library capability. */ THREE: unknown;

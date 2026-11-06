@@ -64,7 +64,9 @@ export class CelestialGenerationPass {
 	}
 
 	markDirty(reason) {
-		if (this._disposed) return;
+		if (this._disposed) {
+			return;
+		}
 		this._stellar?.markDirty(reason);
 		this._sun.markDirty(reason);
 	}
@@ -78,8 +80,23 @@ export class CelestialGenerationPass {
 		this._sun.setObservation(observation);
 	}
 
+	/**
+	 * Call this method to retain finite-Sun generation while replacing its exact physical frame owners.
+	 *
+	 * @param {Algorithm32ExecutionProfile} profile - Compatible local profile without stellar generation.
+	 * @returns {LocalSunFrameSceneLighting} - Reversible publication of the new Sun geometry/source.
+	 */
+	prepareObservationUpdate(profile) {
+		if (this._stellar) {
+			throw new Error('Retained local observation updates cannot replace stellar generation topology.');
+		}
+		return this._sun.prepareObservationUpdate(profile);
+	}
+
 	async prepare(renderer) {
-		if (this._disposed) throw new Error('Cannot prepare a disposed celestial generation pass.');
+		if (this._disposed) {
+			throw new Error('Cannot prepare a disposed celestial generation pass.');
+		}
 		await this._stellar?.prepare(renderer);
 		await this._sun.prepare(renderer);
 		this._stellar?.render(renderer);
@@ -95,19 +112,25 @@ export class CelestialGenerationPass {
 	}
 
 	render(renderer) {
-		if (this._disposed || !this.enabled) return;
+		if (this._disposed || !this.enabled) {
+			return;
+		}
 		this._stellar?.render(renderer);
 		this._sun.render(renderer);
 	}
 
 	handleContextLoss() {
-		if (this._disposed) return;
+		if (this._disposed) {
+			return;
+		}
 		this._stellar?.handleContextLoss();
 		this._sun.handleContextLoss();
 	}
 
 	handleContextRestoration() {
-		if (this._disposed) return;
+		if (this._disposed) {
+			return;
+		}
 		this._stellar?.handleContextRestoration();
 		this._sun.handleContextRestoration();
 	}
@@ -122,7 +145,9 @@ export class CelestialGenerationPass {
 	}
 
 	dispose() {
-		if (this._disposed) return;
+		if (this._disposed) {
+			return;
+		}
 		this._disposed = true;
 		this.enabled = false;
 		this._stellar?.dispose();

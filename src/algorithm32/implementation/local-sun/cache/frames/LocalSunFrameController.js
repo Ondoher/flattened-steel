@@ -81,7 +81,9 @@ export class LocalSunFrameController {
 	 * @returns {void} - No value.
 	 */
 	_notifyReleased() {
-		if (this._disposed && this._pendingOperations === 0 && this._entries.size === 0) this._resolveReleased();
+		if (this._disposed && this._pendingOperations === 0 && this._entries.size === 0) {
+			this._resolveReleased();
+		}
 	}
 
 	/** Called by lease retirement to dispose physical resources only after their final valid borrower releases.
@@ -112,7 +114,9 @@ export class LocalSunFrameController {
 	 * @returns {void} - No value.
 	 */
 	_retireFrame(record) {
-		if (record.retired) return;
+		if (record.retired) {
+			return;
+		}
 		record.retired = true;
 		this._records.delete(record.frame);
 		const errors = [];
@@ -134,7 +138,9 @@ export class LocalSunFrameController {
 				errors.push(error);
 			}
 		}
-		if (errors.length) throw new AggregateError(errors, 'Complete frame retirement failed.');
+		if (errors.length) {
+			throw new AggregateError(errors, 'Complete frame retirement failed.');
+		}
 	}
 
 	/** Called by lifecycle transitions to retire every selected packet before reporting cleanup errors.
@@ -144,7 +150,7 @@ export class LocalSunFrameController {
 	 * @returns {void} - No value.
 	 */
 	_retireRecords(includeActive, errors) {
-		for (const record of [...this._records.values()])
+		for (const record of [...this._records.values()]) {
 			if (includeActive || record.frame !== this._active) {
 				try {
 					this._retireFrame(record);
@@ -152,6 +158,7 @@ export class LocalSunFrameController {
 					errors.push(error);
 				}
 			}
+		}
 	}
 
 	/** Called by controller operations to reject disposed or unavailable rendering context.
@@ -160,8 +167,9 @@ export class LocalSunFrameController {
 	 * @returns {void} - No value.
 	 */
 	_assertUsable() {
-		if (this._disposed || this._contextLost)
+		if (this._disposed || this._contextLost) {
 			throw new Error('Local frame controller is disposed or context-unavailable.');
+		}
 	}
 
 	/** Called by stage boundaries to reject cancelled or superseded generations.
@@ -175,7 +183,9 @@ export class LocalSunFrameController {
 	_requireCurrent(generation, signal) {
 		this._assertUsable();
 		signal.throwIfAborted();
-		if (generation !== this._generation) throw new DOMException('Local frame was superseded.', 'AbortError');
+		if (generation !== this._generation) {
+			throw new DOMException('Local frame was superseded.', 'AbortError');
+		}
 	}
 
 	/** Called by request acceptance to validate and snapshot one complete physical support ray.
@@ -188,7 +198,9 @@ export class LocalSunFrameController {
 		DistanceMath.assertPosition(ray.origin, 'Frame ray origin');
 		const coordinates = DistanceMath.toMetersPosition(ray.origin);
 		const direction = GeometryDirections.directionTuple(ray.direction, 'Frame ray direction');
-		if (ray.length !== undefined) DistanceMath.assertDistance(ray.length, 'Frame ray length');
+		if (ray.length !== undefined) {
+			DistanceMath.assertDistance(ray.length, 'Frame ray length');
+		}
 		return {
 			origin: {
 				coordinates: [coordinates[0], coordinates[1], coordinates[2]],
@@ -209,15 +221,17 @@ export class LocalSunFrameController {
 	_acceptRequest(request) {
 		LocalSunCompactConstructionProfile.assert(request?.profile).createExecutionProfile();
 		const other = request.otherOwnedGpuBytes;
-		if (other?.units !== 'bytes' || !Number.isSafeInteger(other.value) || other.value < 0)
+		if (other?.units !== 'bytes' || !Number.isSafeInteger(other.value) || other.value < 0) {
 			throw new RangeError('Complete nonnegative additional GPU allocation accounting required.');
+		}
 		if (
 			typeof request.presentationIdentity !== 'string' ||
 			!request.presentationIdentity ||
 			!Array.isArray(request.viewRays) ||
 			request.viewRays.length === 0
-		)
+		) {
 			throw new TypeError('Exact presentation identity and complete physical view rays required.');
+		}
 		const profile = request.profile.createLiveProfile({
 			observation: request.profile.models.geometry.configuration.observation,
 			receiverPosition: request.profile.models.geometry.configuration.observerPosition,
@@ -284,10 +298,11 @@ export class LocalSunFrameController {
 				direction: ray.direction,
 				...(ray.length === undefined ? {} : {endDistance: ray.length}),
 			});
-			if (DistanceMath.toMeters(required.endDistance) > supported.length.value + 1e-7)
+			if (DistanceMath.toMeters(required.endDistance) > supported.length.value + 1e-7) {
 				throw new RangeError(
 					'Requested ordinary view segment exits complete cache support; replacement or explicit unsupported status required.',
 				);
+			}
 		}
 		return transform;
 	}
@@ -302,8 +317,9 @@ export class LocalSunFrameController {
 	 */
 	_acquire(entry, transform) {
 		this._assertUsable();
-		if (entry.retired || entry.disposed || entry.contextRevision !== this._contextRevision)
+		if (entry.retired || entry.disposed || entry.contextRevision !== this._contextRevision) {
 			throw new Error('Retired cache cannot acquire new borrowers.');
+		}
 		entry.borrowers++;
 		return new LocalSunFrameCache({
 			owner: entry.cache,
@@ -317,8 +333,9 @@ export class LocalSunFrameController {
 			},
 			/** Reject an unavailable context or disposed entry; the caller must discard the lease and restore a valid frame. */
 			validate: () => {
-				if (entry.disposed || entry.contextRevision !== this._contextRevision || this._contextLost)
+				if (entry.disposed || entry.contextRevision !== this._contextRevision || this._contextLost) {
 					throw new Error('Cache lease context is unavailable.');
+				}
 			},
 		});
 	}
@@ -358,7 +375,9 @@ export class LocalSunFrameController {
 				otherOwnedGpuBytes: {value: request.otherOwnedGpuBytes.value + retained, units: 'bytes'},
 			});
 			signal.throwIfAborted();
-			if (!(cache instanceof LocalSunCompactCache)) throw new TypeError('Complete compact GPU cache required.');
+			if (!(cache instanceof LocalSunCompactCache)) {
+				throw new TypeError('Complete compact GPU cache required.');
+			}
 			const entry = {
 				key,
 				profile,
@@ -397,26 +416,30 @@ export class LocalSunFrameController {
 			typeof contents.renderFrame !== 'function' ||
 			typeof contents.dispose !== 'function' ||
 			!contents.bindingValues
-		)
+		) {
 			throw new TypeError('Compiled/preflighted shader and complete owned frame operations required.');
+		}
 		for (const packet of [
 			contents.receiverLight?.directNormal,
 			contents.receiverLight?.directHorizontal,
 			contents.receiverLight?.diffuseHorizontal,
-		])
+		]) {
 			SpectralPacket.assert(packet, {
 				basis: request.profile.spectral.basis,
 				quantity: 'spectral-irradiance-density',
 				units: 'W m^-2 nm^-1',
 			});
+		}
 		if (
 			contents.receiverLight.identity !== identity &&
 			!contents.receiverLight.identity.startsWith(identity + ':basis-')
-		)
+		) {
 			throw new RangeError('Receiver measurement must identify the exact prepared frame.');
+		}
 		const adaptation = contents.receiverLight.stellarAdaptationLuminance;
-		if (adaptation?.units !== 'cd m^-2' || !Number.isFinite(adaptation.value) || adaptation.value < 0)
+		if (adaptation?.units !== 'cd m^-2' || !Number.isFinite(adaptation.value) || adaptation.value < 0) {
 			throw new RangeError('Finite nonnegative measured receiver adaptation required.');
+		}
 		const expected = {
 			observation: request.profile.models.geometry.configuration.observation,
 			sourcePosition: request.profile.models.lightSource.configuration.position,
@@ -425,8 +448,9 @@ export class LocalSunFrameController {
 			stellarAdaptationLuminance: contents.receiverLight.stellarAdaptationLuminance,
 			receiverLightIdentity: contents.receiverLight.identity,
 		};
-		if (CanonicalValueHash.sha256Value(contents.celestialInputs) !== CanonicalValueHash.sha256Value(expected))
+		if (CanonicalValueHash.sha256Value(contents.celestialInputs) !== CanonicalValueHash.sha256Value(expected)) {
 			throw new RangeError('Celestial inputs must match exact live placement and measured receiver state.');
+		}
 	}
 
 	/** Called by the serialized preparation tail to build a complete packet while keeping the displayed frame unchanged.
@@ -441,15 +465,15 @@ export class LocalSunFrameController {
 	 * @param {AbortSignal} signal - Owned cancellation.
 	 * @returns {Promise<PreparedLocalSunFrame>} - Unpublished complete candidate.
 	 */
-	async _prepare(request, generation, signal) {
+	async _prepare(request, generation, signal, retainedEntry = null) {
 		this._requireCurrent(generation, signal);
-		const canonical = LocalSunCompactConstructionProfile.assert(
-			request.profile.createCanonicalConstructionProfile(),
-		);
+		const canonical =
+			retainedEntry?.profile ??
+			LocalSunCompactConstructionProfile.assert(request.profile.createCanonicalConstructionProfile());
 		const transform = this._resolveSupport(request, canonical);
 		let entry, lease, contents;
 		try {
-			entry = await this._prepareEntry(canonical, request, signal);
+			entry = retainedEntry ?? (await this._prepareEntry(canonical, request, signal));
 			this._requireCurrent(generation, signal);
 			lease = this._acquire(entry, transform);
 			const identity = this._frameIdentity(request, generation, entry.key);
@@ -458,13 +482,16 @@ export class LocalSunFrameController {
 				cacheController: lease,
 				backend: this._configuration.backend,
 				identity,
+				constructionIdentity: entry.key,
+				transform,
 				signal,
 				otherOwnedGpuBytes: request.otherOwnedGpuBytes,
 			});
 			this._requireCurrent(generation, signal);
 			LocalSunCompactConstructionProfile.assert(request.profile);
-			if (identity !== this._frameIdentity(request, generation, entry.key))
+			if (identity !== this._frameIdentity(request, generation, entry.key)) {
 				throw new RangeError('Live request changed during frame preparation.');
+			}
 			this._validateContents(contents, request, identity);
 			const frame = {
 				generation,
@@ -480,8 +507,9 @@ export class LocalSunFrameController {
 				 * @returns {GpuScatteringCache} - Valid borrow retained until explicit disposal or context loss.
 				 */
 				borrowCache: () => {
-					if (this._active !== frame || !this._records.has(frame))
+					if (this._active !== frame || !this._records.has(frame)) {
 						throw new Error('Retired/unpublished frame cannot acquire borrowers.');
+					}
 					return this._acquire(entry, transform);
 				},
 			};
@@ -507,7 +535,9 @@ export class LocalSunFrameController {
 					errors.push(cleanupError);
 				}
 			}
-			if (errors.length > 1) throw new AggregateError(errors, 'Frame preparation and cleanup failed.');
+			if (errors.length > 1) {
+				throw new AggregateError(errors, 'Frame preparation and cleanup failed.');
+			}
 			throw error;
 		}
 	}
@@ -518,8 +548,9 @@ export class LocalSunFrameController {
 	 * @param {LocalSunFrameControllerConfiguration} configuration - Accepted owners.
 	 */
 	constructor(configuration) {
-		if (!configuration?.backend || typeof configuration.stageFrame !== 'function')
+		if (!configuration?.backend || typeof configuration.stageFrame !== 'function') {
 			throw new TypeError('GPU backend and complete frame staging owner required.');
+		}
 		this._configuration = {...configuration};
 		this._released = new Promise((resolve) => {
 			this._resolveReleased = resolve;
@@ -595,13 +626,53 @@ export class LocalSunFrameController {
 		this._assertUsable();
 		signal?.throwIfAborted();
 		const accepted = this._acceptRequest(request);
+		return this._queuePreparation(accepted, signal);
+	}
+
+	/**
+	 * Call this method to prepare new observation/receiver facts against the current canonical field.
+	 * The controller creates the owned live profile once. Physical policy and backend remain those
+	 * of the active frame; incompatible or unsupported physical inputs reject before publication.
+	 *
+	 * @param {LocalSunObservationUpdateRequest} request - Exact observation and receiver position.
+	 * @param {AbortSignal} [signal] - Optional owner cancellation.
+	 * @returns {Promise<PreparedLocalSunFrame>} - Complete unpublished candidate using retained construction.
+	 */
+	prepareLocalObservation(request, signal) {
+		this._assertUsable();
+		signal?.throwIfAborted();
+		const record = this._records.get(this._active);
+		if (!record || !this._configuration.resolveViewRays) {
+			throw new Error('An active local frame and geometry-owned view-ray resolver are required.');
+		}
+		const construction = /** @type {LocalSunCompactConstructionProfile} */ (record.entry.profile);
+		const profile = construction._createLiveProfile(structuredClone(request));
+		const accepted = {
+			...record.request,
+			profile,
+			viewRays: this._configuration.resolveViewRays(profile).map((ray) => this._copySupportRay(ray)),
+		};
+		return this._queuePreparation(accepted, signal, record.entry);
+	}
+
+	/**
+	 * Called by both preparation entry points to serialize work and retain exact cancellation ownership.
+	 *
+	 * @param {LocalSunFrameRequest} accepted - Controller-owned request.
+	 * @param {AbortSignal} [signal] - Optional owner cancellation.
+	 * @param {LocalSunFrameCacheEntry|null} [retainedEntry] - Active controller-owned construction.
+	 * @returns {Promise<PreparedLocalSunFrame>} - Complete unpublished packet.
+	 */
+	_queuePreparation(accepted, signal, retainedEntry = null) {
 		this._cancellation?.abort();
 		const cancellation = new AbortController();
 		this._cancellation = cancellation;
 		const generation = ++this._generation;
 		const errors = [];
 		this._retireRecords(false, errors);
-		if (errors.length) throw new AggregateError(errors, 'Superseded frame cleanup failed.');
+		if (errors.length) {
+			throw new AggregateError(errors, 'Superseded frame cleanup failed.');
+		}
 		/** Forward caller cancellation to the current frame candidate.
 		 *
 		 * @returns {void} - Candidate cancellation is signalled.
@@ -610,7 +681,7 @@ export class LocalSunFrameController {
 		signal?.addEventListener('abort', abort, {once: true});
 		this._pendingOperations++;
 		const operation = this._tail
-			.then(() => this._prepare(accepted, generation, cancellation.signal))
+			.then(() => this._prepare(accepted, generation, cancellation.signal, retainedEntry))
 			.finally(() => {
 				this._pendingOperations--;
 				this._notifyReleased();
@@ -638,24 +709,28 @@ export class LocalSunFrameController {
 	publishPreparedLocalFrame(frame, install) {
 		this._assertUsable();
 		const record = this._records.get(frame);
-		if (!record || record.retired) throw new RangeError('Unknown or retired local frame.');
+		if (!record || record.retired) {
+			throw new RangeError('Unknown or retired local frame.');
+		}
 		this._requireCurrent(frame.generation, this._cancellation.signal);
 		LocalSunCompactConstructionProfile.assert(frame.profile);
-		if (this._frameIdentity(record.request, frame.generation, frame.constructionIdentity) !== frame.identity)
+		if (this._frameIdentity(record.request, frame.generation, frame.constructionIdentity) !== frame.identity) {
 			throw new RangeError('Live frame facts changed after preparation.');
+		}
 		this._validateContents(frame.contents, record.request, frame.identity);
 		install?.();
 		const previous = this._active;
 		this._active = frame;
 		this._lastRequest = record.request;
 		const retirementErrors = [];
-		if (previous && previous !== frame)
+		if (previous && previous !== frame) {
 			try {
 				this._retireFrame(this._records.get(previous));
 			} catch (error) {
 				retirementErrors.push(error);
 			}
-		for (const entry of this._entries)
+		}
+		for (const entry of this._entries) {
 			if (entry !== record.entry) {
 				entry.retired = true;
 				try {
@@ -664,6 +739,7 @@ export class LocalSunFrameController {
 					retirementErrors.push(error);
 				}
 			}
+		}
 		return {frame, retirementErrors};
 	}
 
@@ -677,7 +753,9 @@ export class LocalSunFrameController {
 		this._generation++;
 		const errors = [];
 		this._retireRecords(false, errors);
-		if (errors.length) throw new AggregateError(errors, 'Cancelled frame cleanup failed.');
+		if (errors.length) {
+			throw new AggregateError(errors, 'Cancelled frame cleanup failed.');
+		}
 	}
 
 	/** Call this method to invalidate every GPU lease and withdraw the unrenderable lost-context frame.
@@ -687,7 +765,9 @@ export class LocalSunFrameController {
 	 * @returns {void} - No value.
 	 */
 	handleContextLoss() {
-		if (this._disposed || this._contextLost) return;
+		if (this._disposed || this._contextLost) {
+			return;
+		}
 		for (const cancellation of this._warming) {
 			cancellation.abort();
 		}
@@ -710,7 +790,9 @@ export class LocalSunFrameController {
 			}
 			this._entries.delete(entry);
 		}
-		if (errors.length) throw new AggregateError(errors, 'Lost-context cleanup failed.');
+		if (errors.length) {
+			throw new AggregateError(errors, 'Lost-context cleanup failed.');
+		}
 	}
 
 	/** Call this method to rebuild the last published complete request on an explicitly valid restored backend.
@@ -723,8 +805,9 @@ export class LocalSunFrameController {
 	 * @returns {Promise<PreparedLocalSunFrame|null>} - Complete unpublished restoration candidate, or no prior request.
 	 */
 	async restoreContext(backend) {
-		if (this._disposed || !this._contextLost || !backend)
+		if (this._disposed || !this._contextLost || !backend) {
 			throw new Error('Lost live context and valid restored backend required.');
+		}
 		this._configuration = {...this._configuration, backend};
 		this._contextLost = false;
 		return this._lastRequest ? this.prepareLocalFrame(this._lastRequest) : null;
@@ -737,7 +820,9 @@ export class LocalSunFrameController {
 	 * @returns {void} - No value.
 	 */
 	dispose() {
-		if (this._disposed) return;
+		if (this._disposed) {
+			return;
+		}
 		for (const cancellation of this._warming) {
 			cancellation.abort();
 		}
@@ -756,6 +841,8 @@ export class LocalSunFrameController {
 			}
 		}
 		this._notifyReleased();
-		if (errors.length) throw new AggregateError(errors, 'Frame owner disposal failed.');
+		if (errors.length) {
+			throw new AggregateError(errors, 'Frame owner disposal failed.');
+		}
 	}
 }

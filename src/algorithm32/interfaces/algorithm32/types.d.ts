@@ -295,6 +295,14 @@ type Algorithm32ReceiverMeasurementRequest = Readonly<{
 
 /** Control an installed Algorithm32 runtime shader integration. */
 interface ShaderHandle {
+	/**
+	 * Call this method to prepare a compatible local observation without replacing the shader runtime.
+	 *
+	 * @param request - Physically paired candidate facade/cache/light state.
+	 * @returns - Reversible publication and candidate geometry bindings.
+	 */
+	prepareObservationUpdate(request: Algorithm32ObservationUpdateRequest): Algorithm32ObservationUpdate;
+
 	/** Call this method to measure a complete candidate receiver state without publishing it. */
 	prepareReceiverEnvironmentLight(
 		request: Algorithm32ReceiverPreparationRequest,

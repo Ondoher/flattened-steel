@@ -102,6 +102,14 @@ type LocalSunFramePreflight = Readonly<{
 interface LocalSunFrameBackend extends CacheGpuBackend, CacheProbeReader {}
 /** Staging facts delivered to the renderer-owned preparation operation. */
 type LocalSunFrameStageRequest = Readonly<{
+	/**
+	 * Exact controller-owned canonical construction/backend identity.
+	 */
+	constructionIdentity: string;
+	/**
+	 * Admitted live-to-canonical mapping for this packet.
+	 */
+	transform: FlatLocalCacheTransformCapability;
 	/** Additional diagnostic cache accounting; it does not limit renderer-owned display allocations. */ otherOwnedGpuBytes: UnitValue<'bytes'>;
 	/** Genuine exact-state profile. */ profile: LocalSunCompactConstructionProfile;
 	/** Borrowed construction cache exposed as an ordinary controller. */ cacheController: CacheController;
@@ -113,6 +121,10 @@ type LocalSunFrameStageRequest = Readonly<{
 type LocalSunFrameStageFactory = (request: LocalSunFrameStageRequest) => Promise<LocalSunPreparedFrameContents>;
 /** Frame-controller dependencies with no application/default activation policy. */
 type LocalSunFrameControllerConfiguration = Readonly<{
+	/**
+	 * Resolve actual camera support for an internally derived observation update.
+	 */
+	resolveViewRays?: (profile: LocalSunCompactConstructionProfile) => readonly LocalSunFrameSupportRay[];
 	/** External current GPU backend and scalar receiver reduction. */ backend: LocalSunFrameBackend;
 	/** Explicit renderer-owned complete staging operation. */ stageFrame: LocalSunFrameStageFactory;
 	/** Optional bounded cache-build scheduler. */ scheduler?: CacheBuildScheduler;
@@ -149,6 +161,17 @@ type LocalSunFrameRenderInstallation = () => void;
 /** Explicit source-owned complete-frame preparation and publication capability. */
 interface LocalSunFramePublicationController {
 	/**
+	 * Call this method to prepare exact live facts using the current canonical construction.
+	 *
+	 * @param request - Observation and physical receiver position.
+	 * @param signal - Optional owner cancellation.
+	 * @returns - Complete unpublished candidate.
+	 */
+	prepareLocalObservation(
+		request: LocalSunObservationUpdateRequest,
+		signal?: AbortSignal,
+	): Promise<PreparedLocalSunFrame>;
+	/**
 	 * Call this method to retain reusable canonical construction without staging a live frame.
 	 *
 	 * @param profile - Selected physical construction policy.
@@ -174,3 +197,17 @@ interface LocalSunFramePublicationController {
 	): Promise<PreparedLocalSunFrame | null>;
 	/** Call this method to retire frames and allow final borrower-driven resource release. */ dispose(): void;
 }
+
+/**
+ * Raw observation/receiver update with no physical construction overrides.
+ */
+type LocalSunObservationUpdateRequest = Readonly<{
+	/**
+	 * Exact geographic observation and accepted instant.
+	 */
+	observation: GeometryObservation;
+	/**
+	 * Receiver point in the geometry's physical model frame.
+	 */
+	receiverPosition: Position;
+}>;

@@ -416,6 +416,28 @@ export class ShaderBuilder {
 	}
 
 	/**
+	 * Call this method to describe a candidate local runtime program without installing resources.
+	 * Existing ordinary build callers retain their full construction/publication behavior.
+	 *
+	 * @param {ShaderBuildRequest} request - Accepted candidate facade state and setup.
+	 * @param {GpuScatteringCache} cache - Candidate frame's physically paired cache lease.
+	 * @returns {ShaderAssemblyResult} - Complete source and binding declarations for compatibility comparison.
+	 */
+	assembleRetainedUpdate(request, cache) {
+		this._assertUsable();
+		const roster = this._model.celestialSources;
+		if (roster && (roster.family !== 'flat-local-finite-sun-v1' || roster.stars)) {
+			throw new Error('Retained local updates preserve the existing finite-Sun generation topology.');
+		}
+		return this._assemblyPreparer.assembleIfRequested(request, {
+			...EMPTY_SHADER_BUILD_CONTEXT,
+			automaticAssembly: true,
+			scatteringCache: cache,
+			mainRequiredSymbols: this._assemblyPreparer.mainRequiredShaderSymbols(roster != null),
+		});
+	}
+
+	/**
 	 * Call this method to retain a new accepted facade configuration snapshot.
 	 *
 	 * @param {ConfigSnapshot} config - The accepted configuration snapshot.

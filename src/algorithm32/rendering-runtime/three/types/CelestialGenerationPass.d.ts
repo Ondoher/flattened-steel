@@ -15,6 +15,14 @@ interface CelestialGenerationStellarChild extends StellarScreenPaletteGeneration
 
 /** Runtime methods required from the source-local Sun child of the celestial coordinator. */
 interface CelestialGenerationSunChild {
+	/**
+	 * Call this method to prepare a reversible change of retained physical frame owners.
+	 *
+	 * @param profile - Shader-compatible finite-Sun model profile.
+	 * @returns - Assignment-only source/placement transaction.
+	 */
+	prepareObservationUpdate(profile: Algorithm32ExecutionProfile): LocalSunFrameSceneLighting;
+
 	/** Call this method to update the matching accepted Sun placement. */
 	setObservation(observation: GeometryObservation): void;
 	readonly stages: readonly CelestialGenerationStageDescription[];

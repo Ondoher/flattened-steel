@@ -470,6 +470,18 @@ export class LocalSunLightSource {
 	}
 
 	/**
+	 * Call this method to prepare new source facts on retained ambient/point scene lights.
+	 *
+	 * @param {LightSourceThreeLightingRequest} request - Exact candidate placement and observer facts.
+	 * @param {LightSourceThreeLightingObjects} lighting - Source-owned retained lighting objects.
+	 * @returns {LocalSunFrameSceneLighting} - Reversible lighting publication without new objects.
+	 */
+	prepareSceneLightingUpdate(request, lighting) {
+		this._requireConfiguration('prepareSceneLightingUpdate');
+		return this._sceneLightingAdapter.prepareSceneLightingUpdate(request, lighting);
+	}
+
+	/**
 	 * Call this method to configure an app-authored Three object tree for source shadows.
 	 *
 	 * @param {unknown} object - The Three object to configure.

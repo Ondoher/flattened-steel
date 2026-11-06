@@ -303,10 +303,11 @@ export class Algorithm32 {
 				profile.models.groundBoundary !== null ||
 				JSON.stringify(profile.numerical) !== JSON.stringify(expected.numerical) ||
 				JSON.stringify(profile.models.sourcePlacement) !== JSON.stringify(expected.models.sourcePlacement)
-			)
+			) {
 				throw new RangeError(
 					'Compact runtime selection must retain its complete accepted profile and canonical placement.',
 				);
+			}
 		} else if (
 			profile.numerical?.sourcePathTransmittance?.kind !== undefined ||
 			profile.numerical?.viewPath?.kind !== undefined
@@ -602,7 +603,7 @@ export class Algorithm32 {
 		if ('profile' in acceptedConfig) {
 			profile = acceptedConfig.profile;
 			const placementSelection = profile.models.sourcePlacement;
-			if (profile.compactConstruction === undefined)
+			if (profile.compactConstruction === undefined) {
 				profile.models.geometry.configureLightSource({
 					lightSource: /** @type {LightSourceModel & GeometryConfigurableLightSource} */ (
 						profile.models.lightSource
@@ -613,8 +614,10 @@ export class Algorithm32 {
 						: {}),
 					domains: profile.domains,
 				});
-			if (profile.compactConstruction === undefined)
+			}
+			if (profile.compactConstruction === undefined) {
 				profile.models.geometry.configureExecutionDomains?.(profile.domains);
+			}
 		} else {
 			if (typeof acceptedConfig.geometry.configureLightSource !== 'function') {
 				throw new TypeError('Algorithm32 geometry must implement configureLightSource.');
@@ -657,6 +660,35 @@ export class Algorithm32 {
 			this._acceptExecutionProfile(profile);
 			acceptedConfig.geometry.configureExecutionDomains?.(profile.domains);
 		}
+		return this._createPreparedConfig(acceptedConfig, profile);
+	}
+
+	/**
+	 * Called by a retained local update to accept its owned compact profile once, preserving installed presentation policy.
+	 *
+	 * @param {LocalSunCompactConstructionProfile} profile - Engine-derived physical candidate.
+	 * @param {CelestialSourceRoster|null} celestialSources - Matching celestial placement owners.
+	 * @returns {Algorithm32PreparedConfig} - Complete unpublished facade snapshot.
+	 */
+	_prepareObservationConfig(profile, celestialSources) {
+		if (!('profile' in this._config)) {
+			throw new Error('Retained local updates require an explicit installed execution profile.');
+		}
+		const compact = LocalSunCompactConstructionProfile.assert(profile);
+		const execution = compact._createExecutionProfile(celestialSources);
+		const retained = /** @type {ExecutionProfileConfig} */ (this._config);
+		const config = this._copyConfig({...retained, profile: execution});
+		return this._createPreparedConfig(config, execution);
+	}
+
+	/**
+	 * Called after ingress validation to construct complete facade collaborators from accepted facts.
+	 *
+	 * @param {Algorithm32ResolvedConfig} acceptedConfig - Validated configuration and presentation policy.
+	 * @param {Algorithm32ExecutionProfile} profile - Paired accepted execution profile.
+	 * @returns {Algorithm32PreparedConfig} - Complete unpublished facade state.
+	 */
+	_createPreparedConfig(acceptedConfig, profile) {
 		const version = this._version + 1;
 		const model = new SharedModelImplementation({
 			version,
@@ -728,14 +760,56 @@ export class Algorithm32 {
 			throw new Error('Algorithm32 configuration replacement was superseded.');
 		}
 
-		const previousReference = this._reference;
-		const previousShaderBuilder = this._shaderBuilder;
+		const previous = this._model ? this._capturePreparedConfig() : null;
+		this._installPreparedConfig(prepared);
+		if (previous) {
+			this._discardPreparedConfig(previous);
+		}
+		return prepared.snapshot;
+	}
+
+	/**
+	 * Called by a retained update to preserve the exact previous facade owners until commit is final.
+	 *
+	 * @returns {Algorithm32PreparedConfig} - Current complete state, with original receiver/color facts.
+	 */
+	_capturePreparedConfig() {
+		return {
+			baseVersion: this._version,
+			version: this._version,
+			config: this._config,
+			model: this._model,
+			reference: this._reference,
+			localLightLevelCalculator: this._localLightLevelCalculator,
+			receiverEnvironmentLightController: this._receiverEnvironmentLightController,
+			exposureModifier: Number(this._colorRuntimeBindingValues['color.exposureModifier']),
+			brightnessProxy: Number(this._colorRuntimeBindingValues['color.brightnessProxy']),
+			totalHorizontalIlluminance: Number(
+				this._colorRuntimeBindingValues['color.totalHorizontalIlluminance.value'],
+			),
+			stellarAdaptationLuminance: Number(
+				this._colorRuntimeBindingValues['presentation.stellar.adaptationLuminanceCdM2'],
+			),
+			receiverLightIdentity: String(
+				this._colorRuntimeBindingValues['presentation.stellar.receiverLightIdentity'],
+			),
+			sourceBrightness: Number(this._colorRuntimeBindingValues['color.sceneLuminanceScale']),
+			shaderBuilder: this._shaderBuilder,
+			snapshot: {config: this._copyPublicConfig(this._config), version: this._version},
+		};
+	}
+
+	/**
+	 * Called at a checked publication or rollback boundary to install state without retiring its predecessor.
+	 *
+	 * @param {Algorithm32PreparedConfig} prepared - Complete prepared or preserved facade owners.
+	 */
+	_installPreparedConfig(prepared) {
 		this._version = prepared.version;
 		this._config = prepared.config;
 		this._model = prepared.model;
 		this._reference = prepared.reference;
 		this._localLightLevelCalculator = prepared.localLightLevelCalculator;
-		this._receiverEnvironmentLightController?.dispose();
 		this._receiverEnvironmentLightController = prepared.receiverEnvironmentLightController;
 		this._colorRuntimeBindingValues['color.exposureModifier'] = prepared.exposureModifier;
 		this._colorRuntimeBindingValues['color.brightnessProxy'] = prepared.brightnessProxy;
@@ -745,10 +819,6 @@ export class Algorithm32 {
 			prepared.stellarAdaptationLuminance;
 		this._colorRuntimeBindingValues['presentation.stellar.receiverLightIdentity'] = prepared.receiverLightIdentity;
 		this._shaderBuilder = prepared.shaderBuilder;
-		previousReference?.dispose();
-		previousShaderBuilder?.dispose();
-
-		return prepared.snapshot;
 	}
 
 	/**
@@ -1009,8 +1079,9 @@ export class Algorithm32 {
 	 */
 	setReceiverLightPresentationScale(scale) {
 		this._assertUsable();
-		if (!Number.isFinite(scale) || scale < 0 || scale > 1)
+		if (!Number.isFinite(scale) || scale < 0 || scale > 1) {
 			throw new RangeError('Receiver-light presentation scale must be finite and between 0 and 1.');
+		}
 		this._receiverLightPresentationScale = scale;
 	}
 

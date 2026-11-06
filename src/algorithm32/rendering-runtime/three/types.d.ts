@@ -326,6 +326,14 @@ type ShaderRuntimeComposer = {
 
 /** Type for an installed runtime shader artifact. */
 type ShaderRuntimeArtifact = {
+	/**
+	 * Prepare a reversible rebind of retained local celestial source/geometry owners.
+	 *
+	 * @param profile - Shader-compatible candidate model profile.
+	 * @returns - Reversible source transaction, or no operation when celestial generation is absent.
+	 */
+	prepareObservationUpdate?(profile: Algorithm32ExecutionProfile): LocalSunFrameSceneLighting | undefined;
+
 	/** Call this method to publish an accepted celestial observation without rebuilding the installed shader. */
 	publishObservation?(observation: GeometryObservation): void;
 	/**

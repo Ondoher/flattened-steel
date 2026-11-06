@@ -17,3 +17,17 @@ type LocalSunSceneLightingAdapterDefinition = Readonly<{
 	/** Normalized source configuration retained by reference. */
 	readonly configuration: LocalSunLightSourceConfiguration;
 }>;
+
+/**
+ * Mutable owner metadata for an existing ambient/point endpoint-lighting topology.
+ */
+type LocalSunRetainedLightingMetadata = Record<string, unknown> & {
+	/**
+	 * Current source-light topology.
+	 */
+	lightingPolicy: string;
+	/**
+	 * Current scene-space source position used for rollback.
+	 */
+	sourcePosition: ScenePosition;
+};

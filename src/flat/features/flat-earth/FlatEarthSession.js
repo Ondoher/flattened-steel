@@ -252,7 +252,7 @@ export class FlatEarthSession {
 				let cancellation = new AbortController();
 				this.cancellation = cancellation;
 				try {
-					await runtime.prepare(observation, cancellation.signal, height);
+					let publication = await runtime.prepare(observation, cancellation.signal, height);
 					if (runtime === this.runtime && !cancellation.signal.aborted) {
 						this.model.acceptHeight(this.viewId, height);
 						if (this.pendingHeight === height) {
@@ -261,6 +261,10 @@ export class FlatEarthSession {
 						this.state.renderedObservation = observation;
 						this.state.status = generation === this.generation ? 'ready' : 'preparing';
 						this.state.error = null;
+						if (publication.retirementErrors.length) {
+							this.state.status = 'error';
+							this.state.error = 'The new scene was displayed, but previous resource cleanup failed.';
+						}
 						this._emit();
 					}
 				} catch (error) {

@@ -1,6 +1,7 @@
 import {PointerLookController} from './PointerLookController.js';
 import DistanceMath from '../../../../algorithm32/math/DistanceMath.js';
 import {FlatEarthGraphics} from './FlatEarthGraphics.js';
+import {LocalSunRuntimeCacheBinding} from '../../../../algorithm32/implementation/local-sun/cache/frames/LocalSunRuntimeCacheBinding.js';
 import * as THREE from 'three';
 import {EffectComposer} from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import {RenderPass} from 'three/examples/jsm/postprocessing/RenderPass.js';
@@ -57,12 +58,23 @@ export class FlatEarthRuntime {
 		this.backend = graphics.backend;
 		this.frames = graphics.frames;
 		graphics.stageFrame = (request) => this._stage(request);
+		graphics.resolveViewRays = (profile) => [
+			this._support(
+				profile,
+				this._cameraAtHeight({
+					value: profile.models.geometry.configuration.observerPosition.coordinates[2],
+					units: 'meters',
+				}),
+			),
+		];
+		/** @type {FlatEarthPreparedScene|null} */
+		this._retained = null;
 		void graphics.warm().catch((error) => {
 			if (!this.disposed) {
 				this.onFailure(error);
 			}
 		});
-		/** @type {Promise<void>|null} */
+		/** @type {Promise<FlatEarthFramePublication>|null} */
 		this.pending = null;
 		/** @type {number|null} */
 		this._renderRequest = null;
@@ -264,7 +276,7 @@ export class FlatEarthRuntime {
 	 * @param {GeometryObservation} observation - Exact shared location and timestamp.
 	 * @param {AbortSignal} signal - Session update cancellation.
 	 * @param {Distance} [observerHeight] - Requested height, defaulting to the accepted model value.
-	 * @returns {Promise<void>} - Completion after atomic frame publication.
+	 * @returns {Promise<FlatEarthFramePublication>} - Complete publication and any post-commit cleanup errors.
 	 */
 	async prepare(
 		observation,
@@ -273,7 +285,7 @@ export class FlatEarthRuntime {
 	) {
 		this.pending = this._prepare(observation, signal, observerHeight);
 		try {
-			await this.pending;
+			return await this.pending;
 		} finally {
 			this.pending = null;
 		}
@@ -285,26 +297,34 @@ export class FlatEarthRuntime {
 	 * @param {GeometryObservation} observation - Exact requested observation.
 	 * @param {AbortSignal} signal - Cancellation checked before every publication.
 	 * @param {Distance} observerHeight - Exact requested elevation for this candidate.
-	 * @returns {Promise<void>} - Completion after publication or cleanup of a failed candidate.
+	 * @returns {Promise<FlatEarthFramePublication>} - Publication result after coherent installation.
 	 */
 	async _prepare(observation, signal, observerHeight) {
 		signal.throwIfAborted();
 		await this.graphics.warm();
 		signal.throwIfAborted();
-		let profile = FlatEarthGraphics.createProfile(observation, {
-			value: DistanceMath.toMeters(observerHeight),
-			units: 'meters',
-		});
-		let frame = await this.frames.prepareLocalFrame(
-			{
-				profile,
-				viewRays: [this._support(profile, this._cameraAtHeight(observerHeight))],
-				presentationIdentity: 'flat-earth-native15-altitude-half-v1',
-				// No additional cache payload is held outside the frame controller; display targets belong to this renderer.
-				otherOwnedGpuBytes: {value: 0, units: 'bytes'},
-			},
-			signal,
-		);
+		let frame;
+		if (this.active) {
+			frame = await this.frames.prepareLocalObservation(
+				{
+					observation,
+					receiverPosition: {coordinates: [0, 0, DistanceMath.toMeters(observerHeight)], units: 'meters'},
+				},
+				signal,
+			);
+		} else {
+			let profile = FlatEarthGraphics.createProfile(observation, observerHeight);
+			frame = await this.frames.prepareLocalFrame(
+				{
+					profile,
+					viewRays: [this._support(profile, this._cameraAtHeight(observerHeight))],
+					presentationIdentity: 'flat-earth-native15-altitude-half-v1',
+					// No additional cache payload is held outside the frame controller; display targets belong to this renderer.
+					otherOwnedGpuBytes: {value: 0, units: 'bytes'},
+				},
+				signal,
+			);
+		}
 		signal.throwIfAborted();
 		if (this.disposed) {
 			throw new DOMException('Scene released.', 'AbortError');
@@ -320,9 +340,7 @@ export class FlatEarthRuntime {
 		});
 		this.active = frame;
 		this.pointerLook.start();
-		if (publication.retirementErrors.length) {
-			throw new AggregateError(publication.retirementErrors, 'Previous scene release failed.');
-		}
+		return {retirementErrors: publication.retirementErrors};
 	}
 
 	/**
@@ -356,6 +374,9 @@ export class FlatEarthRuntime {
 	 * @returns {Promise<LocalSunPreparedFrameContents>} - Complete unpublished scene operation.
 	 */
 	async _stage(request) {
+		if (this._retained?.constructionIdentity === request.constructionIdentity) {
+			return this._stageUpdate(request);
+		}
 		let {profile, signal} = request;
 		let observation = profile.models.geometry.configuration.observation;
 		let geometry = /** @type {FlatEarthPhysicalGeometry} */ (profile.models.geometry);
@@ -364,8 +385,6 @@ export class FlatEarthRuntime {
 			value: geometry.configuration.observerPosition.coordinates[2],
 			units: 'meters',
 		});
-		let candidateHeight = camera.position.y;
-		let previousHeight = this.camera.position.y;
 		let color = new ColorResetAltitudeHalfV1ColorDisplayModel();
 		let algorithm = new Algorithm32({
 			profile: profile.createExecutionProfile({
@@ -387,7 +406,7 @@ export class FlatEarthRuntime {
 		let sourcePosition = geometry.mapModelPositionToObserverLocalScenePoint(source.configuration.position, {
 			sceneScale: this.sceneScale,
 		});
-		source.addSceneLighting({
+		let lighting = source.addSceneLighting({
 			sourceRelativePosition: geometry.resolveSourceRelativePosition({
 				position: geometry.configuration.observerPosition,
 			}),
@@ -411,7 +430,23 @@ export class FlatEarthRuntime {
 		let backend = this.backend;
 		let sceneDepthMax = geometry.resolveSceneDepthMax({camera, sceneScale: this.sceneScale});
 		let bindings = Algorithm32Bindings.create(THREE, sceneDepthMax);
-		let frame = {algorithm, scene, composer, bindings, color, camera};
+		Object.assign(bindings, this._liveBindings(request));
+		let cacheBinding = new LocalSunRuntimeCacheBinding(request.cacheController.active);
+		/** @type {FlatEarthPreparedScene} */
+		let frame = {
+			algorithm,
+			scene,
+			composer,
+			bindings,
+			color,
+			camera,
+			cacheBinding,
+			lighting,
+			profile,
+			constructionIdentity: request.constructionIdentity,
+			references: 1,
+			handle: null,
+		};
 		let staged = false;
 		try {
 			this._updateBindings(frame);
@@ -425,7 +460,7 @@ export class FlatEarthRuntime {
 				sceneDepthMax,
 				bindingValues: bindings,
 				cacheBackend: backend,
-				preparedScatteringCacheController: request.cacheController,
+				preparedScatteringCacheController: cacheBinding,
 				signal,
 				cacheBuildScheduler: {
 					yieldControl: async () => {
@@ -435,6 +470,7 @@ export class FlatEarthRuntime {
 					},
 				},
 			});
+			frame.handle = handle;
 			await handle.prepare(this.renderer);
 			let receiverLight = await handle.prepareReceiverEnvironmentLight({
 				THREE,
@@ -479,39 +515,8 @@ export class FlatEarthRuntime {
 			}
 			signal.throwIfAborted();
 			staged = true;
-			return {
-				shaderReady: true,
-				sceneView: {
-					publish: () => {
-						previousHeight = this.camera.position.y;
-						this.camera.position.y = candidateHeight;
-						this.camera.updateMatrixWorld(true);
-					},
-					revert: () => {
-						this.camera.position.y = previousHeight;
-						this.camera.updateMatrixWorld(true);
-					},
-				},
-				receiverLight,
-				bindingValues: bindings,
-				celestialInputs: {
-					observation,
-					sourcePosition: source.configuration.position,
-					receiverPosition: geometry.configuration.observerPosition,
-					sourceRadius: source.configuration.radius,
-					stellarAdaptationLuminance: receiverLight.stellarAdaptationLuminance,
-					receiverLightIdentity: receiverLight.identity,
-				},
-				renderFrame: () => {
-					camera.copy(this.camera);
-					this._support(profile, camera);
-					this._resizeFrame(frame);
-					this._updateBindings(frame);
-					composer.renderToScreen = true;
-					composer.render();
-				},
-				dispose: () => this._releaseFrame(frame),
-			};
+			this._retained = frame;
+			return this._frameContents(frame, request, receiverLight);
 		} finally {
 			if (!staged) {
 				this._releaseFrame(frame);
@@ -520,12 +525,195 @@ export class FlatEarthRuntime {
 	}
 
 	/**
-	 * Called when a candidate or displayed frame retires to release every owned resource.
+	 * Called by preparation to obtain only owner-derived live geometry and cache-transform bindings.
+	 *
+	 * @param {LocalSunFrameStageRequest} request - Exact candidate geometry and admitted transform.
+	 * @returns {Record<string, unknown>} - Non-camera values seeded on initial setup and updated at commit.
+	 */
+	_liveBindings(request) {
+		let geometry = /** @type {FlatEarthPhysicalGeometry} */ (request.profile.models.geometry);
+		let values = geometry.createLiveShaderValues();
+		for (let uniform of request.transform.createShaderUniforms()) {
+			values[uniform.valueKey] = uniform.defaultValue;
+		}
+		return values;
+	}
+
+	/**
+	 * Called for an ordinary observation/height edit to stage physical data without constructing scene resources.
+	 *
+	 * @param {LocalSunFrameStageRequest} request - Exact candidate profile, lease and cancellation.
+	 * @returns {Promise<LocalSunPreparedFrameContents>} - Reversible complete candidate borrowing retained resources.
+	 */
+	async _stageUpdate(request) {
+		let frame = this._retained;
+		frame.references++;
+		let update = null;
+		try {
+			let {profile, signal} = request;
+			let geometry = /** @type {FlatEarthPhysicalGeometry} */ (profile.models.geometry);
+			let source = /** @type {FlatEarthLocalSun} */ (profile.models.lightSource);
+			let observation = geometry.configuration.observation;
+			let receiverLight = await frame.handle.prepareReceiverEnvironmentLight({
+				THREE,
+				renderer: this.renderer,
+				backend: this.backend,
+				geometry,
+				lightSource: source,
+				observation,
+				scatteringCache: request.cacheController.active,
+				identity: request.identity,
+				signal,
+			});
+			signal.throwIfAborted();
+			update = frame.handle.prepareObservationUpdate({
+				profile,
+				celestialSources: {id: 'flat-earth-local-sun', family: 'flat-local-finite-sun-v1', localSun: source},
+				scatteringCache: request.cacheController.active,
+				receiverLight,
+			});
+			let sourcePosition = geometry.mapModelPositionToObserverLocalScenePoint(source.configuration.position, {
+				sceneScale: this.sceneScale,
+			});
+			let lightingUpdate = source.prepareSceneLightingUpdate(
+				{
+					THREE,
+					sourceRelativePosition: geometry.resolveSourceRelativePosition({
+						position: geometry.configuration.observerPosition,
+					}),
+					sourcePosition,
+					observerPosition: {
+						coordinates: [
+							0,
+							geometry.configuration.observerPosition.coordinates[2] / this.sceneScale.value,
+							0,
+						],
+						units: 'scene-units',
+					},
+				},
+				frame.lighting,
+			);
+			return this._frameContents(frame, request, receiverLight, update, lightingUpdate);
+		} catch (error) {
+			try {
+				update?.dispose();
+			} finally {
+				if (--frame.references === 0) {
+					this._releaseFrame(frame);
+				}
+			}
+			throw error;
+		}
+	}
+
+	/**
+	 * Called by both staging paths to give each packet its own transaction and retained-resource borrow.
+	 *
+	 * @param {FlatEarthPreparedScene} frame - Shared rendering aggregate.
+	 * @param {LocalSunFrameStageRequest} request - Exact immutable candidate facts.
+	 * @param {ReceiverEnvironmentLightMeasurement} receiverLight - Matching complete receiver measurement.
+	 * @param {Algorithm32ObservationUpdate|null} [update] - Reversible facade update, absent for first setup.
+	 * @param {LocalSunFrameSceneLighting|null} [lightingUpdate] - Reversible update of existing source lights.
+	 * @returns {LocalSunPreparedFrameContents} - Complete frame packet with independent release.
+	 */
+	_frameContents(frame, request, receiverLight, update = null, lightingUpdate = null) {
+		let {profile} = request;
+		let geometry = /** @type {FlatEarthPhysicalGeometry} */ (profile.models.geometry);
+		let source = /** @type {FlatEarthLocalSun} */ (profile.models.lightSource);
+		let height = geometry.configuration.observerPosition.coordinates[2] / this.sceneScale.value;
+		let values = this._liveBindings(request);
+		let previous = null;
+		let installing = false;
+		let released = false;
+		return {
+			shaderReady: true,
+			sceneView: {
+				publish: () => {
+					request.signal.throwIfAborted();
+					this._support(
+						profile,
+						this._cameraAtHeight({value: height * this.sceneScale.value, units: 'meters'}),
+					);
+					previous = {
+						profile: frame.profile,
+						height: this.camera.position.y,
+						cache: frame.cacheBinding.cache,
+						values: Object.fromEntries(Object.keys(values).map((key) => [key, frame.bindings[key]])),
+						depth: frame.bindings['geometry.sceneDepthMax'],
+					};
+					installing = true;
+					update?.publish();
+					frame.cacheBinding.publish(request.cacheController.active);
+					frame.profile = profile;
+					Object.assign(frame.bindings, values);
+					lightingUpdate?.publish();
+					this.camera.position.y = height;
+					this.camera.updateMatrixWorld(true);
+				},
+				revert: () => {
+					if (!installing) {
+						return;
+					}
+					update?.revert();
+					frame.cacheBinding.publish(previous.cache);
+					frame.profile = previous.profile;
+					Object.assign(frame.bindings, previous.values);
+					frame.bindings['geometry.sceneDepthMax'] = previous.depth;
+					lightingUpdate?.revert();
+					this.camera.position.y = previous.height;
+					this.camera.updateMatrixWorld(true);
+					installing = false;
+				},
+			},
+			receiverLight,
+			bindingValues: frame.bindings,
+			celestialInputs: {
+				observation: geometry.configuration.observation,
+				sourcePosition: source.configuration.position,
+				receiverPosition: geometry.configuration.observerPosition,
+				sourceRadius: source.configuration.radius,
+				stellarAdaptationLuminance: receiverLight.stellarAdaptationLuminance,
+				receiverLightIdentity: receiverLight.identity,
+			},
+			renderFrame: () => {
+				frame.camera.copy(this.camera);
+				this._support(frame.profile, frame.camera);
+				let activeGeometry = /** @type {FlatEarthPhysicalGeometry} */ (frame.profile.models.geometry);
+				frame.bindings['geometry.sceneDepthMax'] = activeGeometry.resolveSceneDepthMax({
+					camera: frame.camera,
+					sceneScale: this.sceneScale,
+				});
+				this._resizeFrame(frame);
+				this._updateBindings(frame);
+				frame.composer.renderToScreen = true;
+				frame.composer.render();
+			},
+			dispose: () => {
+				if (released) {
+					return;
+				}
+				released = true;
+				try {
+					update?.dispose();
+				} finally {
+					if (--frame.references === 0) {
+						this._releaseFrame(frame);
+					}
+				}
+			},
+		};
+	}
+
+	/**
+	 * Called when the final packet borrow retires to release every owned scene resource.
 	 *
 	 * @param {FlatEarthPreparedScene} frame - Retired complete or partial frame.
 	 * @returns {void} - All frame-local resources released; the frame controller owns its cache lease.
 	 */
 	_releaseFrame(frame) {
+		if (this._retained === frame) {
+			this._retained = null;
+		}
 		let errors = [];
 		for (let release of [
 			() => frame.algorithm.dispose(),

@@ -12,6 +12,15 @@ type ShaderBuilderDependencies = {
 
 /** Runtime shader-build coordination surface retained by the Algorithm32 facade. */
 interface ShaderBuildCoordinator {
+	/**
+	 * Call this method to compare a candidate local assembly without installing GPU resources.
+	 *
+	 * @param request - Candidate facade state and setup.
+	 * @param cache - Physically paired candidate field lease.
+	 * @returns - Complete candidate source and binding declarations.
+	 */
+	assembleRetainedUpdate(request: ShaderBuildRequest, cache: GpuScatteringCache): ShaderAssemblyResult;
+
 	/** Facade-owned shared model consumed by shader builds. */
 	readonly model: SharedModel;
 

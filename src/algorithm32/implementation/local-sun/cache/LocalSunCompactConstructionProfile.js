@@ -149,8 +149,9 @@ export class LocalSunCompactConstructionProfile {
 	 * @throws {RangeError} - Physical configuration, pairing, source support or seed controls are incompatible.
 	 */
 	constructor(definition) {
-		if (!definition || typeof definition !== 'object' || Array.isArray(definition))
+		if (!definition || typeof definition !== 'object' || Array.isArray(definition)) {
 			throw new TypeError('Complete compact construction profile inputs required.');
+		}
 		if (
 			Object.keys(definition).some(
 				(key) =>
@@ -164,33 +165,39 @@ export class LocalSunCompactConstructionProfile {
 						'maximumScatteringOrder',
 					].includes(key),
 			)
-		)
+		) {
 			throw new TypeError('Compact construction rejects unknown or inapplicable overrides.');
+		}
 		let {geometry, atmosphere, lightSource, topologyControls, provenanceIdentity} = definition;
 		let maximumScatteringOrder =
 			definition.maximumScatteringOrder ??
 			DEFAULT_NATIVE_NUMERICAL_PROFILE.cacheConstruction.maximumScatteringOrder;
-		if (![1, 2, 4].includes(maximumScatteringOrder))
+		if (![1, 2, 4].includes(maximumScatteringOrder)) {
 			throw new RangeError('Supported compact orders are N1, N2 and N4.');
+		}
 		this.id = 'local-sun-compact-v9-native15-n' + maximumScatteringOrder + '-v1';
 		if (
 			!(geometry instanceof FlatEarthGeometry) ||
 			!(atmosphere instanceof CanonicalAtmosphere) ||
 			!(lightSource instanceof LocalSunLightSource)
-		)
+		) {
 			throw new TypeError('Existing flat geometry, canonical atmosphere and local source owners required.');
-		if (definition.groundBoundary !== null)
+		}
+		if (definition.groundBoundary !== null) {
 			throw new RangeError('Compact candidate requires explicit black ground.');
-		if (typeof provenanceIdentity !== 'string' || !provenanceIdentity.trim())
+		}
+		if (typeof provenanceIdentity !== 'string' || !provenanceIdentity.trim()) {
 			throw new TypeError('Compact construction input provenance required.');
+		}
 		if (
 			!topologyControls ||
 			Object.keys(topologyControls).some(
 				(key) =>
 					!['coverageRadius', 'altitudes', 'bandRadii', 'boundaryExtinctionLengthMultiples'].includes(key),
 			)
-		)
+		) {
 			throw new TypeError('Explicit compact seed controls required; extinction is derived from the medium.');
+		}
 		this._topologyControls = {
 			coverageRadius: {...topologyControls.coverageRadius},
 			altitudes: topologyControls.altitudes.map((value) => ({...value})),
@@ -205,8 +212,9 @@ export class LocalSunCompactConstructionProfile {
 			quantity: SPECTRAL_QUANTITIES.IRRADIANCE_DENSITY,
 			units: SPECTRAL_UNITS.IRRADIANCE_DENSITY,
 		});
-		if (!source.distanceFalloff || packet.values.some((value) => value < 0))
+		if (!source.distanceFalloff || packet.values.some((value) => value < 0)) {
 			throw new RangeError('Compact candidate requires nonnegative inverse-square source input.');
+		}
 		DistanceMath.assertDistance(source.radius, 'Compact profile radius');
 		if (
 			geometry.resolveSourceRelativePosition({position: source.position}).distanceFromSource.value !== 0 ||
@@ -215,8 +223,9 @@ export class LocalSunCompactConstructionProfile {
 			DistanceMath.toMeters(geometry.configuration.localLightSourceHeight) -
 				DistanceMath.toMeters(source.radius) <=
 				DistanceMath.toMeters(geometry.configuration.topAltitude)
-		)
+		) {
 			throw new RangeError('Paired finite source entirely above slab required.');
+		}
 		DistanceMath.assertDistance(topologyControls.coverageRadius, 'Compact cylinder coverage');
 		let topology = geometry.createCompactLocalSunCacheTopology({
 			sourceHeight: geometry.configuration.localLightSourceHeight,
@@ -306,10 +315,12 @@ export class LocalSunCompactConstructionProfile {
 	 * @throws {RangeError} - Retained physical facts changed after construction.
 	 */
 	static assert(profile) {
-		if (!(profile instanceof LocalSunCompactConstructionProfile))
+		if (!(profile instanceof LocalSunCompactConstructionProfile)) {
 			throw new TypeError('Genuine compact cache-construction profile required.');
-		if (profile._currentIdentity() !== profile.contentHash)
+		}
+		if (profile._currentIdentity() !== profile.contentHash) {
 			throw new RangeError('Compact physical facts changed; replacement profile required.');
+		}
 		return profile;
 	}
 
@@ -320,6 +331,17 @@ export class LocalSunCompactConstructionProfile {
 	 */
 	createLiveProfile(request) {
 		LocalSunCompactConstructionProfile.assert(this);
+		return this._createLiveProfile(request);
+	}
+
+	/**
+	 * Called by the owning engine cache entry to derive a live profile from its private accepted construction.
+	 * Public callers use createLiveProfile, which revalidates externally retained construction facts.
+	 *
+	 * @param {LocalSunLiveProfileRequest} request - Exact owned observation and receiver.
+	 * @returns {LocalSunCompactConstructionProfile} - Newly constructed profile with its own complete identity.
+	 */
+	_createLiveProfile(request) {
 		const lightSource = new LocalSunLightSource(this.models.lightSource.configuration);
 		const geometry = this.models.geometry.createLocalFrameGeometry({
 			...request,
@@ -359,6 +381,16 @@ export class LocalSunCompactConstructionProfile {
 	 */
 	createExecutionProfile(celestialSources = null) {
 		LocalSunCompactConstructionProfile.assert(this);
+		return this._createExecutionProfile(celestialSources);
+	}
+
+	/**
+	 * Called immediately after compact validation to form the paired runtime profile without repeating the hash.
+	 *
+	 * @param {CelestialSourceRoster|null} celestialSources - Exact candidate celestial owners.
+	 * @returns {Algorithm32ExecutionProfile} - Paired execution facts.
+	 */
+	_createExecutionProfile(celestialSources) {
 		const roster = CelestialSourceRoster.accept({
 			roster: celestialSources,
 			geometry: this.models.geometry,
@@ -419,8 +451,9 @@ export class LocalSunCompactConstructionProfile {
 			other?.units !== 'bytes' ||
 			!Number.isSafeInteger(other.value) ||
 			other.value < 0
-		)
+		) {
 			throw new RangeError('Complete safe nonnegative owned-byte accounting required.');
+		}
 		let scatteringScalars = this.domains.scatteringDensityPacking.scalarCount;
 		let radianceScalars = this.domains.radiancePacking.scalarCount;
 		let phase = this.domains.incomingDirections.directionCount * this.domains.outgoingDirections.directionCount * 4;
@@ -428,7 +461,9 @@ export class LocalSunCompactConstructionProfile {
 		let construction =
 			order === 1 ? 2 * scatteringScalars * 4 : 3 * scatteringScalars * 4 + radianceScalars * 4 + phase;
 		let total = construction + retained * scatteringScalars * 4 + other.value;
-		if (!Number.isSafeInteger(total)) throw new RangeError('Safe allocation estimate required.');
+		if (!Number.isSafeInteger(total)) {
+			throw new RangeError('Safe allocation estimate required.');
+		}
 		let bytes = /** @type {const} */ ('bytes');
 		return {
 			scatteringFieldBytes: {value: scatteringScalars * 4, units: bytes},
