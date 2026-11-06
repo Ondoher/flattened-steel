@@ -39,7 +39,13 @@ export async function executeCandidate(request) {
 			throw new Error('Program allocation failed.');
 		}
 		programs.push(result);
-		for (const [kind, source] of [[gl.VERTEX_SHADER, '#version 300 es\nvoid main(){vec2 p=vec2((gl_VertexID<<1)&2,gl_VertexID&2);gl_Position=vec4(p*2.0-1.0,0,1);}'], [gl.FRAGMENT_SHADER, fragment]]) {
+		for (const [kind, source] of [
+			[
+				gl.VERTEX_SHADER,
+				'#version 300 es\nvoid main(){vec2 p=vec2((gl_VertexID<<1)&2,gl_VertexID&2);gl_Position=vec4(p*2.0-1.0,0,1);}',
+			],
+			[gl.FRAGMENT_SHADER, fragment],
+		]) {
 			const shader = gl.createShader(Number(kind));
 			shaders.push(shader);
 			gl.shaderSource(shader, String(source));
@@ -100,7 +106,9 @@ export async function executeCandidate(request) {
 		const compileStart = performance.now();
 		const build = program(request.shaders.build);
 		const view = program(request.shaders.view);
-		const sum = program('#version 300 es\nprecision highp float;uniform sampler2D a,b,c;out vec4 result;void main(){ivec2 p=ivec2(gl_FragCoord.xy);result=texelFetch(a,p,0)+texelFetch(b,p,0)+texelFetch(c,p,0);}');
+		const sum = program(
+			'#version 300 es\nprecision highp float;uniform sampler2D a,b,c;out vec4 result;void main(){ivec2 p=ivec2(gl_FragCoord.xy);result=texelFetch(a,p,0)+texelFetch(b,p,0)+texelFetch(c,p,0);}',
+		);
 		const compilationMilliseconds = performance.now() - compileStart;
 		for (const dataset of request.datasets) {
 			const started = performance.now();
@@ -108,8 +116,12 @@ export async function executeCandidate(request) {
 			const width = request.directionCount * 4;
 			const height = layout.nodes.length;
 			const positionValues = new Float32Array(layout.nodes.flatMap((node) => [...node.point, node.distance]));
-			const rowValues = new Float32Array(layout.rows.flatMap((row) => [row.offset, row.count, row.lower, row.upper]));
-			const queryValues = new Float32Array(dataset.cases.flatMap((item) => [...item.origin, item.entry, ...item.direction, item.end]));
+			const rowValues = new Float32Array(
+				layout.rows.flatMap((row) => [row.offset, row.count, row.lower, row.upper]),
+			);
+			const queryValues = new Float32Array(
+				dataset.cases.flatMap((item) => [...item.origin, item.entry, ...item.direction, item.end]),
+			);
 			const uploadStart = performance.now();
 			const positions = texture(1, height, positionValues);
 			const rows = texture(layout.betaCount, layout.altitudes.length, rowValues);
@@ -146,7 +158,12 @@ export async function executeCandidate(request) {
 						throw new Error('Construction draw failed or context was lost.');
 					}
 					if (first % 128 === 0) {
-						await globalThis['retainBuildProgress']({count: layout.count, order, completed: first, total: height});
+						await globalThis['retainBuildProgress']({
+							count: layout.count,
+							order,
+							completed: first,
+							total: height,
+						});
 						await new Promise((resolve) => setTimeout(resolve, 0));
 					}
 				}
@@ -164,7 +181,12 @@ export async function executeCandidate(request) {
 					if (!Number.isFinite(value)) {
 						nonfinite++;
 						if (firstInvalid.length < 8) {
-							firstInvalid.push({index: i, node: Math.floor(i / (width * 4)), point: layout.nodes[Math.floor(i / (width * 4))].point, value: String(value)});
+							firstInvalid.push({
+								index: i,
+								node: Math.floor(i / (width * 4)),
+								point: layout.nodes[Math.floor(i / (width * 4))].point,
+								value: String(value),
+							});
 						}
 					} else {
 						negative += Number(value < 0);
@@ -211,11 +233,23 @@ export async function executeCandidate(request) {
 			}
 			const queryError = gl.getError();
 			if (values.some((v) => v.some((x) => !Number.isFinite(x) || x < 0)) || queryError !== gl.NO_ERROR) {
-				const invalidQueries = values.map((v, order) => ({order: order + 1, invalid: Array.from(v).flatMap((x, i) => !Number.isFinite(x) || x < 0 ? [{index: i, caseId: dataset.cases[Math.floor(i / 16)].id, value: String(x)}] : []).slice(0, 12)}));
+				const invalidQueries = values.map((v, order) => ({
+					order: order + 1,
+					invalid: Array.from(v)
+						.flatMap((x, i) =>
+							!Number.isFinite(x) || x < 0
+								? [{index: i, caseId: dataset.cases[Math.floor(i / 16)].id, value: String(x)}]
+								: [],
+						)
+						.slice(0, 12),
+				}));
 				await globalThis['retainCandidateFailure']({queryError, fieldDiagnostics, invalidQueries});
 				throw new Error('Invalid physical query output.');
 			}
-			const results = dataset.cases.map((item, i) => ({id: item.id, orders: values.map((v) => Array.from(v.subarray(i * 16, i * 16 + 15)))}));
+			const results = dataset.cases.map((item, i) => ({
+				id: item.id,
+				orders: values.map((v) => Array.from(v.subarray(i * 16, i * 16 + 15))),
+			}));
 			const originalQueryMilliseconds = performance.now() - queryStart;
 			const retentionStart = performance.now();
 			bind(view, 'uSecond', cumulative, 2);
@@ -236,20 +270,42 @@ export async function executeCandidate(request) {
 				if (!Number.isFinite(actual)) {
 					throw new Error('Cumulative-only cache query is nonfinite.');
 				}
-				maximumCumulativeDifference = Math.max(maximumCumulativeDifference, Math.abs(actual - expected) / Math.max(1e-20, expected));
+				maximumCumulativeDifference = Math.max(
+					maximumCumulativeDifference,
+					Math.abs(actual - expected) / Math.max(1e-20, expected),
+				);
 			}
 			if (maximumCumulativeDifference > 1e-4 || gl.getError() !== gl.NO_ERROR) {
 				throw new Error(`Cumulative cache retention differs: ${maximumCumulativeDifference}.`);
 			}
 			const metadata = {
 				label: dataset.label,
-				count: layout.count, sourceRadius: layout.sourceRadius, nodes: height, boundarySupportNodes: layout.boundarySupportNodes,
+				count: layout.count,
+				sourceRadius: layout.sourceRadius,
+				nodes: height,
+				boundarySupportNodes: layout.boundarySupportNodes,
 				fieldDiagnostics,
-				width, height, compilationMilliseconds, uploadMilliseconds, orderMilliseconds, sumMilliseconds, buildMilliseconds, buildWallMilliseconds, inspectionMilliseconds,
-				queryMilliseconds: originalQueryMilliseconds, cumulativeValidationMilliseconds: performance.now() - retentionStart, maximumCumulativeDifference,
-				retainedFieldBytes: width * height * 16, verificationFieldBytes: 4 * width * height * 16,
+				width,
+				height,
+				compilationMilliseconds,
+				uploadMilliseconds,
+				orderMilliseconds,
+				sumMilliseconds,
+				buildMilliseconds,
+				buildWallMilliseconds,
+				inspectionMilliseconds,
+				queryMilliseconds: originalQueryMilliseconds,
+				cumulativeValidationMilliseconds: performance.now() - retentionStart,
+				maximumCumulativeDifference,
+				retainedFieldBytes: width * height * 16,
+				verificationFieldBytes: 4 * width * height * 16,
 				retainedCacheTextureBytes: width * height * 16 + positionValues.byteLength + rowValues.byteLength,
-				peakOwnedTextureBytes: 4 * width * height * 16 + positionValues.byteLength + rowValues.byteLength + queryValues.byteLength + targets.length * 4 * dataset.cases.length * 16,
+				peakOwnedTextureBytes:
+					4 * width * height * 16 +
+					positionValues.byteLength +
+					rowValues.byteLength +
+					queryValues.byteLength +
+					targets.length * 4 * dataset.cases.length * 16,
 				cpuTypedInputBytes: positionValues.byteLength + rowValues.byteLength + queryValues.byteLength,
 				cpuTypedInspectionBytes: width * height * 16,
 				limits: 'Owned texture payload measured from successful RGBA32F allocations; opaque driver/program allocations and JS object heap are not included.',
@@ -265,7 +321,13 @@ export async function executeCandidate(request) {
 			}
 			textures = [];
 		}
-		return {renderer, maxTextureSize, maxFragmentUniformVectors: gl.getParameter(gl.MAX_FRAGMENT_UNIFORM_VECTORS), compilationMilliseconds, summaries};
+		return {
+			renderer,
+			maxTextureSize,
+			maxFragmentUniformVectors: gl.getParameter(gl.MAX_FRAGMENT_UNIFORM_VECTORS),
+			compilationMilliseconds,
+			summaries,
+		};
 	} finally {
 		for (const item of textures) {
 			gl.deleteTexture(item);

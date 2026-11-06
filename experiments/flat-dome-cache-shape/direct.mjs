@@ -2,7 +2,9 @@ import {gauss} from './math.mjs';
 import {interval} from './geometry.mjs';
 import {medium} from './physical.mjs';
 
-/** Pure mathematical rules reused across wavelength evaluations, never physical-field values. */
+/**
+ * Pure mathematical rules reused across wavelength evaluations, never physical-field values.
+ */
 const rules = new Map();
 
 /**
@@ -15,8 +17,9 @@ const rules = new Map();
  * @returns {number} - Density-weighted length in meters.
  */
 export function column(altitude, vertical, distance, height) {
-	const exponent = vertical * distance / height;
-	const ratio = Math.abs(exponent) < 1e-8 ? 1 - exponent / 2 + exponent * exponent / 6 : -Math.expm1(-exponent) / exponent;
+	const exponent = (vertical * distance) / height;
+	const ratio =
+		Math.abs(exponent) < 1e-8 ? 1 - exponent / 2 + (exponent * exponent) / 6 : -Math.expm1(-exponent) / exponent;
 	return Math.exp(-Math.max(0, altitude) / height) * distance * ratio;
 }
 
@@ -53,11 +56,15 @@ export function direct(item, channel, count = 128) {
 		const sunLength = Math.min(distance, boundary.exit);
 		const tauSun = br * column(x[2], sun[2], sunLength, 8000) + bm * column(x[2], sun[2], sunLength, 1200);
 		const startAltitude = item.origin[2] + item.entry * item.direction[2];
-		const tauView = br * column(startAltitude, item.direction[2], local, 8000) + bm * column(startAltitude, item.direction[2], local, 1200);
+		const tauView =
+			br * column(startAltitude, item.direction[2], local, 8000) +
+			bm * column(startAltitude, item.direction[2], local, 1200);
 		const cosine = sun.reduce((sum, value, k) => sum + value * item.direction[k], 0);
-		const pr = 3 * (1 + cosine * cosine) / (16 * Math.PI);
+		const pr = (3 * (1 + cosine * cosine)) / (16 * Math.PI);
 		const g = 0.7;
-		const pm = 3 * (1 - g * g) * (1 + cosine * cosine) / (8 * Math.PI * (2 + g * g) * (1 + g * g - 2 * g * cosine) ** 1.5);
+		const pm =
+			(3 * (1 - g * g) * (1 + cosine * cosine)) /
+			(8 * Math.PI * (2 + g * g) * (1 + g * g - 2 * g * cosine) ** 1.5);
 		const density = br * Math.exp(-x[2] / 8000) * pr + 0.8 * bm * Math.exp(-x[2] / 1200) * pm;
 		const incident = medium.sourceIrradiance[channel] * (4800000 / distance) ** 2;
 		total += rule.weights[i] * (local + 1000) * logEnd * density * incident * Math.exp(-tauSun - tauView);

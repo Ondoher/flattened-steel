@@ -43,8 +43,12 @@ function capture(executable, args) {
 		const child = spawn(executable, args, {cwd: run.root, windowsHide: true, stdio: ['ignore', 'pipe', 'pipe']});
 		let stdout = '';
 		let stderr = '';
-		child.stdout.on('data', (bytes) => { stdout += bytes.toString(); });
-		child.stderr.on('data', (bytes) => { stderr += bytes.toString(); });
+		child.stdout.on('data', (bytes) => {
+			stdout += bytes.toString();
+		});
+		child.stderr.on('data', (bytes) => {
+			stderr += bytes.toString();
+		});
 		child.on('error', (error) => resolve({code: null, stdout, stderr, error: String(error)}));
 		child.on('close', (code) => resolve({code, stdout, stderr}));
 	});
@@ -52,9 +56,16 @@ function capture(executable, args) {
 
 try {
 	run.write('physical-input.json', {
-		geometry: {frame: 'fixed-north-pole-aeqd-z-up', diskRadius: {value: diskRadius, units: 'meters'}, apex: {value: apex, units: 'meters'}, centerZ, sphereRadius},
+		geometry: {
+			frame: 'fixed-north-pole-aeqd-z-up',
+			diskRadius: {value: diskRadius, units: 'meters'},
+			apex: {value: apex, units: 'meters'},
+			centerZ,
+			sphereRadius,
+		},
 		derivation: 'Recovered shallow-cap profile; radius=(pi*6371.0088)*1000; centerZ=(H^2-R^2)/(2H).',
-		coordinate: 'Shortest Euclidean distance to finite curved cap for interior samples; exterior classified independently.',
+		coordinate:
+			'Shortest Euclidean distance to finite curved cap for interior samples; exterior classified independently.',
 		distribution: 'd_i=(H-z)*(i/(N-1))^2; retain only reachable values and add counted valid-row boundary support.',
 		counts: [2, 4, 8, 16, 32, 64],
 		referenceScope: 'Boundary and coordinate proof only; not a scattering accuracy result.',
@@ -83,7 +94,13 @@ try {
 			near(`cap contains sample z=${z},fraction=${fraction}`, Math.min(capHeight(r) - z, 0), 0, 1e-7);
 		}
 	}
-	run.write('coordinate-proof.json', {checks, maximumRoundtripErrorMeters: Math.max(...coordinateErrors), elevatedRim, reflection: 'The two distances fix map radius and Sun radius up to y reflection; directional y must also reflect.'});
+	run.write('coordinate-proof.json', {
+		checks,
+		maximumRoundtripErrorMeters: Math.max(...coordinateErrors),
+		elevatedRim,
+		reflection:
+			'The two distances fix map radius and Sun radius up to y reflection; directional y must also reflect.',
+	});
 	run.progress('boundary', `${checks.length} analytic and coordinate checks passed.`);
 	const rows = [];
 	const a = diskRadius * 0.5;
@@ -103,22 +120,69 @@ try {
 					const d = low + fraction * (high - low);
 					assert.ok(effective[0] <= d + 1e-8 && effective.at(-1) >= d - 1e-8);
 				}
-				rows.push({z, beta, rho, count, low, high, nominalRetained: retained.length, effective: effective.length, supportAdded: effective.length - retained.length});
+				rows.push({
+					z,
+					beta,
+					rho,
+					count,
+					low,
+					high,
+					nominalRetained: retained.length,
+					effective: effective.length,
+					supportAdded: effective.length - retained.length,
+				});
 			}
 		}
 	}
-	run.write('row-support.json', {policy: 'Retain nominal globally quadratic nodes within each valid row and add deduplicated low/high boundary nodes. Count all support storage.', rows});
+	run.write('row-support.json', {
+		policy: 'Retain nominal globally quadratic nodes within each valid row and add deduplicated low/high boundary nodes. Count all support storage.',
+		rows,
+	});
 	run.progress('support', 'Coarse and fine slice rows have explicitly counted endpoint support.');
-	const installation = JSON.parse(readFileSync(path.join(repository, 'scripts/libradtran/installation.json'), 'utf8'));
-	const version = await capture(installation.wslExecutable, ['-d', installation.distribution, '-u', installation.user, '--exec', installation.executable, '-v']);
+	const installation = JSON.parse(
+		readFileSync(path.join(repository, 'scripts/libradtran/installation.json'), 'utf8'),
+	);
+	const version = await capture(installation.wslExecutable, [
+		'-d',
+		installation.distribution,
+		'-u',
+		installation.user,
+		'--exec',
+		installation.executable,
+		'-v',
+	]);
 	run.write('libradtran-version.json', version);
 	if (version.code === 0) {
-		const help = await capture(installation.wslExecutable, ['-d', installation.distribution, '-u', installation.user, '--exec', installation.executable, '-h']);
+		const help = await capture(installation.wslExecutable, [
+			'-d',
+			installation.distribution,
+			'-u',
+			installation.user,
+			'--exec',
+			installation.executable,
+			'-h',
+		]);
 		run.write('libradtran-help.txt', help.stdout + '\n' + help.stderr);
 	}
-	run.write('m1-report.md', `# M1 geometry slice\n\n${checks.length} checks passed. Maximum clearance roundtrip error: ${Math.max(...coordinateErrors)} meters. ${rows.length} slice-row cases checked.\n\nAdditional row endpoints are needed for coverage, including at coarse counts; they must be included in storage and build measurements. This is geometry evidence, not cache accuracy.\n\nlibRadtran version capture: code=${version.code}; error=${version.error ?? 'none'}. Exact dome/source compatibility remains to be established.\n`);
-	run.finish('accepted', {message: 'Physical coordinate and endpoint-support proof passed; solver capability capture is separately scoped.', checks: checks.length, supportCases: rows.length, versionAvailable: version.code === 0});
-	console.log(JSON.stringify({run: run.root, checks: checks.length, maximumCoordinateError: Math.max(...coordinateErrors), version}));
+	run.write(
+		'm1-report.md',
+		`# M1 geometry slice\n\n${checks.length} checks passed. Maximum clearance roundtrip error: ${Math.max(...coordinateErrors)} meters. ${rows.length} slice-row cases checked.\n\nAdditional row endpoints are needed for coverage, including at coarse counts; they must be included in storage and build measurements. This is geometry evidence, not cache accuracy.\n\nlibRadtran version capture: code=${version.code}; error=${version.error ?? 'none'}. Exact dome/source compatibility remains to be established.\n`,
+	);
+	run.finish('accepted', {
+		message:
+			'Physical coordinate and endpoint-support proof passed; solver capability capture is separately scoped.',
+		checks: checks.length,
+		supportCases: rows.length,
+		versionAvailable: version.code === 0,
+	});
+	console.log(
+		JSON.stringify({
+			run: run.root,
+			checks: checks.length,
+			maximumCoordinateError: Math.max(...coordinateErrors),
+			version,
+		}),
+	);
 } catch (error) {
 	run.write('failure.json', {error: String(error), stack: error.stack, checks});
 	run.finish('failed', {message: String(error)});

@@ -1,58 +1,54 @@
 # Flat Dome Cache Shape Experiment Status
 
-Status: executing M3; initial fields and independent development reference complete.
+Status: M1-M4 complete; corrected report and final verification accepted.
 
-## Current State
+## Current Result
 
-The [execution record](execution.md) owns measured milestones, decisions,
-failures/recovery, and limitations. The [plan](plan.md) owns remaining work.
-The fixed North Pole-centered cap, sample-to-curved-surface Euclidean distance,
-and quadratic spacing are implemented inside this contained experiment.
-Production and earlier experiments remain read-only. No accepted production
-cache or final slice-count recommendation exists.
+The [corrected final report](../../../../../tmp/experiments/flat-dome-cache-shape/runs/00041-m4-report/index.html)
+and [summary](../../../../../tmp/experiments/flat-dome-cache-shape/runs/00041-m4-report/summary.md)
+contain thirteen quadratic slice counts, full development/held-out comparisons,
+three fresh middle-Sun builds per count, measured memory, and real three-method
+colors across seven altitudes and three Sun positions. The [execution
+record](execution.md) owns decisions, measurements, recovery, and qualifications.
+The [plan](plan.md) is complete.
 
-The [M2 pilot report](../../../../../tmp/experiments/flat-dome-cache-shape/runs/00013-m2-pilot-report/index.html)
-contains actual cache/probe/libRadtran colors. Initial M3 six-count fields at
-three Sun offsets are complete. Development-only errors are retained in
-`00020-m3-dev-analysis`. Intermediate N6/N12/N24 and separate non-slice
-diagnostics precede freezing counts and evaluating held-out errors. No
-held-out accuracy has been inspected for tuning.
+N12 is a provisional balanced study configuration; N6 is the lower-cost
+comparison. This is a conditional result for the studied representation,
+not a production cache selection or a universal optimum. Angular sampling
+contributes to the residual error. Experimental directional resolution differs
+substantially from production; measured sizes/times cannot be transferred
+directly to production at its current resolution.
 
-The full native guide campaign is running in `00018-m3-lib-guide`. libRadtran
-is a local-height slab/collimated-source/all-orders guide, not finite-cap J4
-truth. The shared-physics check in `00019-m3-guide-proof` agrees within its
-stated sampling check. Exact native dome compatibility remains unestablished.
+Native guides are actual local-height slab/parallel-source/all-orders
+libRadtran calculations. They are not a finite-cap J4 oracle. Corrected run
+`00038` replaces 189 away-azimuth cases; merged spectra `00039` and the
+additional shared-physics proof `00040` support the final report. Preliminary
+reports `00035`/`00037` are superseded for native away-view columns and remain
+immutable. Missing native precision and historical monitoring gaps are
+explicitly reported.
 
-## Latest Verification
+## Verification
 
-- Geometry: 190 checks; maximum distance roundtrip error 3.092281986027956e-11 m
-  (`00001`). Valid-row/boundary-support proofs and physical contract: `00002`.
-- Pilot cache fields and real three-method colors: `00008`, `00011`, `00012`,
-  `00013`. Failed runs and their diagnostics remain immutable.
-- All 18 initial M3 fields are finite/nonnegative (`00014`). Cumulative-only
-  retained lookup agrees with summed pure-order fields within 7e-7 relative.
-- Independent development probe: 61,200 batches, converged direct J1 plus
-  sampled J2-J4; raw sampled-J1 checks passed (`00017`).
-- Native shared-physics control: 45 channels pass the declared combined-sampling
-  check (`00016`, `00019`), with explicit limits on precision and geometry.
-- Local experiment type check passed after analysis/diagnostic updates.
-- Generated output remains under ignored `tmp/experiments/flat-dome-cache-shape/`.
-  New runs retain source snapshots, derivation, and recursive artifact hashes.
+Final `00042-m4-verification` is accepted. It verifies new/transitive immutable
+evidence and reuses exact unchanged manifest checks from `00036`. Current
+generated shaders match discovery/repeated timing; cached mirror values agree
+exactly, cap rotations agree, and optimized reference-batch grouping preserves
+the retained observations. The final standalone HTML rendered without errors;
+filters and both exposures were exercised, and actual swatches inspected.
 
-## Standards and Checkpoints
-
-The source root retains the permanent experiment mapping, including types.md.
-No temporary standards configuration needs restoration. Dedicated standards
-reviewers and audits remain disabled; no standards-compliance result is claimed.
-Primary self-review, types, and scientific/evidence checks remain required.
-Checkpoint-adviser monitoring remains active. Local checkpoint `4b7be2d9`
-preserves M1's foundation. Unrelated city data and other preexisting changes
-remain excluded from experiment checkpoints.
+Local experiment types, repository Prettier/curly formatting, Python syntax,
+Git whitespace, and current documentation links pass. The source root retains
+its permanent experiment mapping; no temporary standards configuration needs
+restoration. Dedicated standards reviewers/audits remain disabled; no
+standards-compliance result is claimed. Checkpoint-adviser monitoring remains
+active. Checkpoints `4b7be2d9` and `dd6ced12` preserve earlier coherent units;
+the final adviser-recommended local checkpoint contains this completed state.
 
 ## Next Action
 
-Complete intermediate builds and non-slice controls, freeze provisional choices
-from development, evaluate held-out rays once, repeat useful build timings,
-and publish the full numeric/three-method swatch report. Preserve sealed runs;
-repair failures in new runs only. Other distributions and production integration
-remain deferred.
+Owner review of the results and color comparisons. Stronger directional
+convergence, other distance distributions, production integration, and experiment
+closure require separate selection. No further numerical work is running.
+Production, prior evidence, city data, and unrelated working changes remain
+outside this experiment checkpoint. Generated evidence remains under ignored
+`tmp/experiments/flat-dome-cache-shape/runs/`; never reopen sealed runs.

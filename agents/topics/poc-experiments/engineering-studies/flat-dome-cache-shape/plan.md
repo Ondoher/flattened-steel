@@ -1,6 +1,6 @@
 # Flat Dome Cache Shape: Slice-Count Study
 
-Status: execution selected; M2 pilot published and M3 in progress. The execution record and status own measured progress.
+Status: M1-M4 complete; final report and verification recorded in the owning execution/status documents. The execution record and status own measured progress.
 
 ## Outcome and Scope
 
@@ -24,6 +24,9 @@ placement are deferred. This study measures slice-count effects with the
 spacing formula held fixed; it does not search all possible cache shapes.
 
 ## Starting Point and Consequential Assumptions
+
+These starting-point bullets describe the pre-execution baseline. The status
+and execution record own the completed study and its measured evidence.
 
 - The isolated scaffold, folder mapping, empty ignored output root, and local
   type-check configuration exist. No physical result or cache candidate exists.
@@ -250,20 +253,20 @@ the affected reference cases; preserve their original evidence.
 
 Purpose: resolve the largest uncertainties before an expensive cache sweep.
 
-- [ ] Pin boundary/medium/source inputs and historical derivation identities.
-- [ ] Prove stable dome intersection, finite-disk ground, sample-to-dome distance
+- [x] Pin boundary/medium/source inputs and historical derivation identities.
+- [x] Prove stable dome intersection, finite-disk ground, sample-to-dome distance
   and inverse mapping, valid domain, outside intervals, and reflection handling.
-- [ ] Demonstrate lookup coverage after invalid-node omission, including coarse
+- [x] Demonstrate lookup coverage after invalid-node omission, including coarse
   counts, and define/count any required boundary support without rescaling
   the selected quadratic placement or hiding missing samples.
-- [ ] Identify the exact independent-probe entry point; specify its isolated
+- [x] Identify the exact independent-probe entry point; specify its isolated
   dome adaptation and reference-only convergence/uncertainty checks.
-- [ ] Inspect installed libRadtran capabilities and pin the solver/case decks
+- [x] Inspect installed libRadtran capabilities and pin the solver/case decks
   for exact matches and explicitly qualified guide/control comparisons. Do not
   install dependencies or modify the shared tool/old experiment as a shortcut.
-- [ ] Register guide applicability per observable, scattering order, spectrum,
+- [x] Register guide applicability per observable, scattering order, spectrum,
   and transmittance/radiance quantity; identify which results may support tiers.
-- [ ] Freeze count semantics, quadratic placement, physical and held-out cases,
+- [x] Freeze count semantics, quadratic placement, physical and held-out cases,
   stored quantities, J1 through J4 conventions, metrics, dark floor policy, display
   conversion, exposure, and swatch/report schema.
 
@@ -286,19 +289,19 @@ cost remains unknown until M2. These are planning estimates, not stop limits.
 
 Purpose: demonstrate the physical comparison and measure real cost early.
 
-- [ ] Implement the minimal dome-aware candidate and independent probe adaptation
+- [x] Implement the minimal dome-aware candidate and independent probe adaptation
   inside this experiment, with ambient types and self-verifying proof runners.
-- [ ] Use the existing libRadtran installation through an experiment-owned case
+- [x] Use the existing libRadtran installation through an experiment-owned case
   adapter. Keep all new generated solver inputs/outputs below this lane's run
   root; if the shared CLI owns a different output root, derive an isolated
   adapter here rather than editing it or losing the declared output boundary.
-- [ ] Implement real-path containment, monotonic run allocation, derivation
+- [x] Implement real-path containment, monotonic run allocation, derivation
   manifests, and append-only progress at transitions and every 30 seconds for
   operations expected to exceed one minute. Type-check authored code.
-- [ ] Build N=2 and N=4 with the same formula and a small, representative subset
+- [x] Build N=2 and N=4 with the same formula and a small, representative subset
   of altitudes, clearances, and directions; establish J1 and a higher-order
   comparison before extrapolating total cost.
-- [ ] Publish the first actual cache/probe/libRadtran swatch plate and numeric
+- [x] Publish the first actual cache/probe/libRadtran swatch plate and numeric
   table promptly, with uncertainty, match status, display settings, timings,
   memory, and any unfilled comparison cells visible.
 
@@ -323,24 +326,24 @@ and record that estimate before beginning the full matrix.
 
 Purpose: measure how much accuracy each extra slice buys at its actual cost.
 
-- [ ] Execute counts 2, 4, 8, 16, 32, and 64 with quadratic placement and frozen
+- [x] Execute counts 2, 4, 8, 16, 32, and 64 with quadratic placement and frozen
   controls. Cover the agreed altitudes and valid clearances, at least three
   representative Sun offsets, J1 through J4 and cumulative scattering, and development
   view/direction cases. Keep boundary and symmetry controls in the results.
-- [ ] Produce per-count numerical tables and three-method swatch plates as
+- [x] Produce per-count numerical tables and three-method swatch plates as
   results arrive. Reuse authenticated reference outputs across N.
-- [ ] Add intermediate counts around supported accuracy-tier crossings and
+- [x] Add intermediate counts around supported accuracy-tier crossings and
   the size/time/error tradeoff knee using development cases. A larger endpoint is an allowed follow-on
   when the data support it and actual allocation remains feasible.
-- [ ] Diagnose non-slice error floors in a separate small refinement series
+- [x] Diagnose non-slice error floors in a separate small refinement series
   before interpreting a plateau or threshold crossing.
-- [ ] Freeze the final count list and provisional recommendation, then evaluate
+- [x] Freeze the final count list and provisional recommendation, then evaluate
   the held-out matrix once across counts for the final per-count report. If
   validation changes the selection, disclose it and use fresh confirmation.
-- [ ] Measure repeat-build statistics for non-dominated and neighboring counts.
+- [x] Measure repeat-build statistics for non-dominated and neighboring counts.
   Investigate non-monotonic errors, packing discontinuities, reference noise,
   and GPU precision before interpreting apparent improvements.
-- [ ] Keep all unsuccessful/failed/interrupted runs immutable. Do not tune to
+- [x] Keep all unsuccessful/failed/interrupted runs immutable. Do not tune to
   held-out points or change display normalization to improve appearance.
 
 Deliverables: full count/physical-case CSV and JSON, reference provenance,
@@ -363,21 +366,21 @@ never silently omit the difficult regimes or change the accuracy question.
 
 Purpose: make the count decision assessable numerically and visually.
 
-- [ ] Produce a standalone HTML report with selectable numeric tables and real
+- [x] Produce a standalone HTML report with selectable numeric tables and real
   side-by-side swatches, plus a concise Markdown result summary and CSV/JSON.
   Save the generated HTML/images/data under a new finalized run and link from
   the owning status; retain reports from earlier milestones unchanged.
-- [ ] Provide a summary row per N: spacing formula, actual nodes/bytes, build
+- [x] Provide a summary row per N: spacing formula, actual nodes/bytes, build
   time and repeats, spectral/luminance/color errors, worst cases, uncertainty,
   reference match status, and links to its altitude/distance swatch panels.
-- [ ] Show storage and build-time tradeoffs against accuracy, the tested minimum
+- [x] Show storage and build-time tradeoffs against accuracy, the tested minimum
   for each supported tier, and recommended count(s) with residual risks.
   Present graphs only where they reveal those relationships; keep labels and
   numeric results in searchable text/tables rather than screenshotting prose.
-- [ ] Identify differences between probe and libRadtran, untriggered follow-ons,
+- [x] Identify differences between probe and libRadtran, untriggered follow-ons,
   unresolved cases, and whether more slices are still useful. The owner may
   prefer a measured color/size/build compromise over the automatic tier pick.
-- [ ] Verify final artifact identities, derivation, containment, progress/terminal
+- [x] Verify final artifact identities, derivation, containment, progress/terminal
   manifests, reproduction commands, local types, and durable resumption state.
 
 Completion: the report answers how many slices were tested, their accuracy and
@@ -431,8 +434,7 @@ followed by frozen held-out validation and fresh confirmation if selection
 changes. No suggestions were rejected, no distribution search was added, and
 no additional review round or numerical execution was requested.
 
-First executable step after execution is selected: pin the recovered dome,
-existing probe identity, and libRadtran solver/physical-case compatibility in
-M1, then freeze the common benchmark and color conversion. No implementation,
-physical run, dependency installation, Git write, or production change has been
-started by this planning request.
+The owner subsequently selected independent-execution. M1-M4 are complete;
+the execution record links the corrected final report and verification. No
+production integration, alternate distribution, or experiment closure is
+selected by completion of this plan.

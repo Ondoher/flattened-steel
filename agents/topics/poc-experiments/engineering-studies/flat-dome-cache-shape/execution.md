@@ -1,6 +1,6 @@
 # Flat Dome Cache Shape Execution
 
-Status: M2 pilot published; executing M3 under the owner's independent-execution invocation.
+Status: M1-M4 complete under the owner's independent-execution invocation.
 
 The [plan](plan.md) owns milestones, measurements, count matrix, and report
 requirements. The [status](status.md) owns the next action. Local checkpoints
@@ -155,7 +155,173 @@ larger than the cap probe's in some channels.
 
 ## Timing and Resumption
 
+### M3 refined counts, frozen selection, and validation
+
+Runs `00021` and `00026` add N5/N6/N9/N10/N11/N12/N24 without changing spacing
+or primary physical controls. The final development analysis is `00027`.
+N5 has5.492% p95 error, N6 has2.718%, N9 has2.459%, N10 has1.908%, N11
+has1.694%, and N12 has1.601%. N6 is the first tested development5% point
+estimate; N10 is the first2% point estimate. No primary count reaches1%.
+Conservative sums of per-band sampling half-widths move the2% descriptive
+crossing to N24; these sums are not simultaneous confidence guarantees.
+N6/N8's nearly equal p95 must not be interpreted as resolved statistical
+superiority. Their worst-case behavior differs, and the actual quadratic node
+sets are not nested when N changes.
+
+Separate N32/middle-Sun diagnostics are `00022` (path24→48), `00024`
+(angular8×12→12×16), and `00025` (source-distance rows17→33). Primary p95
+is1.310%; diagnostic p95 values are1.310%,0.840%,1.349%. This identifies an
+angular contribution to the plateau, not complete convergence or proof that
+more slices never help. Diagnostic fields do not replace the primary series.
+
+Run `00028-m3-selection` freezes all13 counts and provisional N12 balanced/
+N6 lower-cost choices before held-out evaluation. Run `00029` supplies the
+untouched144-ray probe, and `00030` evaluates it once. Selection does not
+change: N12 p95 is1.458%, maximum3.987%; N6 p95 is2.098%, maximum6.553%.
+No fresh confirmation is triggered because the development choices are kept.
+Other counts' held-out results are reported without retuning to their rankings.
+
+Run `00031-m3-optics` compares actual source/view attenuation shader output
+against independent binary64 cap intersections and exact columns on576 rays.
+Maximum absolute transmission discrepancies are9.0003e-6 and2.9664e-7.
+
+All567 native processes in `00018` completed physically;29 parsing cases
+failed due tiny signed roundoff or undefined native standard deviations.
+Run `00032-m3-guide-recover` derives all567 actual spectra without rerunning
+solvers. Seventeen spectra retain explicitly recorded signed roundoff before
+normalization below1e-12 of their own peak;16 have unavailable uncertainty
+channels, with overlap. These are labeled unresolved native precision, not
+assigned invented zero uncertainty. The original failed campaign is immutable.
+
+Read-only production metadata control `00034-m3-prod-control` records1049
+positions,1920 incoming/4374 outgoing directions, and275,299,560 bytes nominal
+single-FP32-field scalar payload. Experimental96 incoming/98 outgoing directions
+are substantially coarser. New position counts, packing, and finite-cap geometry
+also differ. Measured experimental sizes/times do not predict production at
+its directional resolution. The final report must show this qualification,
+position-node ratios, and any source-derived resolution-transfer estimates
+separately from measured allocations/builds.
+
+Run `00033-m3-timing` measures three fresh fields per count at the middle Sun
+offset with shared programs, after reference GPU jobs close. Timing at other
+Sun offsets remains a discovery observation, not a triplicate claim. Cold
+program compilation and first-query lazy work are separate, substantial costs;
+first-field warm-up remains visible in build ranges. Pure-field verification
+and inspection costs are retained separately from primary field construction.
+
+Local checkpoint `dd6ced12` preserves the working physical pilot and initial
+M3 measurement machinery under the adviser's preaccepted exact message.
+
+### Monitoring correction
+
+The older finalizer writes a terminal event before synchronous recursive
+hashing. The native campaign's large artifact tree makes that stage long and
+unmonitored after the terminal timestamp. Preserve its exact original evidence
+and report the gap. The current finalizer emits progress while hashing and
+only then writes its terminal event and matching progress hash. Do not rerun
+physical solvers or rewrite sealed progress merely to conceal the limitation.
+
+### Final native-view correction
+
+Final deck inspection found a second adapter issue: original away-low native
+cases used relative azimuth0 (sunward) rather than180 degrees. Sunward and
+zenith cases are unaffected, as are every cache/probe accuracy result, frozen
+selection, held-out result, timing, and attenuation comparison. Preliminary
+reports `00035`/`00037` are superseded for their away-ray native columns; keep
+them immutable and do not use those columns as the requested guide evidence.
+
+Run `00038-m3-lib-away` recomputes only the189 affected native cases. The adapter
+now derives unsigned relative azimuth from the actual view/source vectors,
+retains it in metadata, and asserts that the deck contains that value. It also
+preserves negligible signed roundoff and undefined uncertainty directly, using
+the same explicit policy as the earlier recovery. Merged artifact `00039`
+reuses the378 unaffected original spectra and replaces these189 cases.
+Matched all-orders slab/parallel proof `00040` checks three away rays across45
+channels; all pass the declared broad combined-sampling check. Its maximum
+per-channel point difference is31.18%, within broad native uncertainty; it
+does not establish sub-percent native precision.
+
+Run `00036-m4-verification` authenticated28,079 immutable files (5,002,306,574
+bytes), original/cold-timing build and view shader identities, angular weights/
+reflection, rotated cap intervals (maximum4.0745e-10 m difference), and exact
+cached mirror equality. It reports old monitoring gaps honestly. Replacement
+verification `00042` reuses still-valid sealed-parent checks through exact
+original manifest identities, verifies new native/reference/report artifacts
+and transitive parents, and reruns geometry/symmetry controls.
+
+### M4: final report and verification
+
+The [corrected standalone report](../../../../../tmp/experiments/flat-dome-cache-shape/runs/00041-m4-report/index.html)
+and [concise numerical summary](../../../../../tmp/experiments/flat-dome-cache-shape/runs/00041-m4-report/summary.md)
+are accepted run `00041`. Its [count CSV](../../../../../tmp/experiments/flat-dome-cache-shape/runs/00041-m4-report/summary.csv),
+all-row CSV/JSON, reference-compatibility CSV, and 78 actual PNG plates cover 13
+counts, three Sun offsets, seven altitudes, nine clearances, three views, and
+two common exposures. Filters expose common physical rows across counts,
+equal-area method swatches, RGB/clipping, slice strips, per-order errors,
+native precision limits, and raw spectra/XYZ/Lab. libRadtran remains an unmatched
+local-height slab/parallel-source/all-orders guide. The 144 held-out rays and
+nine boundary/mirror controls are cache/probe comparisons.
+
+N12 is a provisional balanced study configuration: development/held-out p 95
+spectral errors 1.601%/1.458%, maximum resident texture payload 19.387 MiB across
+source positions, and middle-Sun median build 6.303 s (6.261-6.403 s). N6 is the
+lower-cost comparison:2.718%/2.098%,10.488 MiB maximum,2.405 s median. N10 is the
+smallest tested development 2% point estimate; N24 is first under the conservative
+per-band allowance. These are descriptive tiers, not owner-selected requirements
+or simultaneous-confidence guarantees. N64 has 1.059% development p 95 and costs
+97.164 MiB/50.456 s median. The angular control improves the plateau; current
+fixed controls do not establish universal 1% accuracy. Higher-order relative
+errors and rare-event uncertainty remain larger than cumulative errors.
+
+Cold program compilation was 50.509 s and first query/lazy work 49.356 s, additional
+to field construction. The first N2 build has a 15.774 s cold outlier, retained
+in its range. Repeated-field timing took 591.822 s overall including compilation,
+query, inspection, serialization, and finalization. These are workstation wall
+times; external activity was not controlled. Experimental angular resolution
+differs substantially from production, so measured sizes/times cannot be
+transferred directly to production.
+
+Final verification `00042` freshly authenticates 10,066 files/1,732,659,682 bytes
+and reuses 27,829 unchanged file checks from `00036` through original manifest
+identities. It follows transitive experiment parents, matches currently generated
+build/view GLSL to discovery/timing, confirms exact cached mirror equality,
+and verifies rotated cap geometry. Ten retained-batch grouping checks confirm
+that the new linear-time probe reduction preserves the old batch order/grouping,
+removing its post-GPU quadratic filtering gap without rerunning numerical paths.
+Historical monitoring gaps remain recorded. Current hashing emits progress.
+Local types, source formatting, Python syntax, Git whitespace, actual HTML
+rendering/filters, and subjective swatch inspection pass. Dedicated standards
+reviews remain disabled; no standards-compliance claim is made.
+
+The selected plan is complete with qualified native coverage and a conditional
+count recommendation. Production integration, stronger angular convergence,
+other distance distributions, exact native dome support, and lifecycle closure
+remain separate owner selections. Data remain below
+`C:\dev\flattened-steel\tmp\experiments\flat-dome-cache-shape\runs`.
+
+### Reproduction
+
+Use the experiment's proof runners with existing Node/Chrome and installed
+WSL libRadtran. `run-candidate.mjs --sweep` performs the initial counts;
+`--sweep --counts 5,6,9,10,11,12,24` adds intermediate fields as a new run.
+`run-probe.mjs --all` supplies development, `run-development.mjs` analyzes
+accepted discovery runs, and `run-candidate.mjs --counts 32 --refine path`
+(or `angle`, `beta`) supplies separate non-slice diagnostics. Freeze with
+`run-selection.mjs` before `run-probe.mjs --validation` and
+`run-validation.mjs`. `run-lib.mjs --all` supplies actual native guide cases;
+the recovery runner is pinned to this campaign's original raw outputs.
+`run-candidate.mjs --timing --counts 2,4,5,6,8,9,10,11,12,16,24,32,64 --repeats 3`
+records representative repeated timing. `run-optics.mjs` and
+`run-production-control.mjs` supply auxiliary controls. `run-report.mjs`
+selects finalized evidence and publishes a new report; `run-verification.mjs`
+checks immutable report parents. Every runner creates a new monotonic run;
+commands do not overwrite an existing result.
+
 Measure stage and run elapsed times in generated manifests. Overall elapsed
 includes authoring, tools, solver/browser waits, verification, and recovery;
 it is not pure reasoning or GPU time. The first implementation slice establishes
 immutable run allocation and an independently verifiable physical coordinate.
+
+The final local checkpoint uses the adviser-preaccepted message
+`feat(experiments): complete flat dome cache slice study`; it contains this
+completed execution record. No push or production modification is included.

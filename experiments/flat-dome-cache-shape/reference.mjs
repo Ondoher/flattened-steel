@@ -1,6 +1,8 @@
 import {gauss} from './math.mjs';
 
-/** Generate a cache-free transport kernel; adapted from the existing independent probe, with an independently evaluated fixed-cap boundary and explicit fourth-order truncation. No candidate-cache code is called.
+/**
+ * Generate a cache-free transport kernel; adapted from the existing independent probe, with an independently evaluated fixed-cap boundary and explicit fourth-order truncation. No candidate-cache code is called.
+ *
  * @returns {string} Standalone GLSL, with physical inputs supplied exclusively as uniforms.
  */
 export function fragment() {
@@ -93,27 +95,38 @@ void main(){
 }`;
 }
 
-/** Stream compact moments from one owned browser/GPU job. Rejects unsupported hardware, invalid paths and safety-cap hits.
+/**
+ * Streams compact moments from one owned browser/GPU job.
  * Caller must retain batches, preserve failures, close the browser and respect the outer deadline.
- * @param {string} shader @param {HorizonReferenceRequest} request
- * @returns {Promise<HorizonReferenceExecution>} Actual hardware telemetry; rejects on shader/device/deadline failures.
+ *
+ * @param {string} shader - Independently generated reference kernel.
+ * @param {HorizonReferenceRequest} request - Physical groups, batches, paths, and seed namespace.
+ * @returns {Promise<HorizonReferenceExecution>} - Hardware and completion telemetry.
  */
 export async function executeGpu(shader, request) {
 	const start = performance.now(),
 		canvas = document.createElement('canvas'),
 		gl = canvas.getContext('webgl2', {powerPreference: 'high-performance', antialias: false});
-	if (!gl || !gl.getExtension('EXT_color_buffer_float')) throw new Error('Float WebGL2 required');
+	if (!gl || !gl.getExtension('EXT_color_buffer_float')) {
+		throw new Error('Float WebGL2 required');
+	}
 	const debug = gl.getExtension('WEBGL_debug_renderer_info'),
 		renderer = String(gl.getParameter(debug ? debug.UNMASKED_RENDERER_WEBGL : gl.RENDERER));
-	if (/swiftshader|software|llvmpipe/i.test(renderer)) throw new Error('Hardware GPU required');
+	if (/swiftshader|software|llvmpipe/i.test(renderer)) {
+		throw new Error('Hardware GPU required');
+	}
 	const program = gl.createProgram(),
 		frame = gl.createFramebuffer(),
 		textures = [],
 		shaders = [];
-	if (!program || !frame) throw new Error('GPU allocation failed');
+	if (!program || !frame) {
+		throw new Error('GPU allocation failed');
+	}
 	const paths = request.paths,
 		height = paths / 256;
-	if (!Number.isInteger(height)) throw new Error('Batch paths must be a multiple of 256');
+	if (!Number.isInteger(height)) {
+		throw new Error('Batch paths must be a multiple of 256');
+	}
 	let completed = 0;
 	try {
 		for (const [kind, source] of [
@@ -124,15 +137,21 @@ export async function executeGpu(shader, request) {
 			[gl.FRAGMENT_SHADER, shader],
 		]) {
 			const s = gl.createShader(Number(kind));
-			if (!s) throw new Error('Shader allocation failed');
+			if (!s) {
+				throw new Error('Shader allocation failed');
+			}
 			shaders.push(s);
 			gl.shaderSource(s, String(source));
 			gl.compileShader(s);
-			if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(String(gl.getShaderInfoLog(s)));
+			if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
+				throw new Error(String(gl.getShaderInfoLog(s)));
+			}
 			gl.attachShader(program, s);
 		}
 		gl.linkProgram(program);
-		if (!gl.getProgramParameter(program, gl.LINK_STATUS)) throw new Error(String(gl.getProgramInfoLog(program)));
+		if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+			throw new Error(String(gl.getProgramInfoLog(program)));
+		}
 		gl.useProgram(program);
 		gl.bindFramebuffer(gl.FRAMEBUFFER, frame);
 		for (let i = 0; i < 4; i++) {
@@ -145,17 +164,19 @@ export async function executeGpu(shader, request) {
 			gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0 + i, gl.TEXTURE_2D, texture, 0);
 		}
 		gl.drawBuffers([0, 1, 2, 3].map((i) => gl.COLOR_ATTACHMENT0 + i));
-		if (gl.checkFramebufferStatus(gl.FRAMEBUFFER) !== gl.FRAMEBUFFER_COMPLETE)
+		if (gl.checkFramebufferStatus(gl.FRAMEBUFFER) !== gl.FRAMEBUFFER_COMPLETE) {
 			throw new Error('Incomplete framebuffer');
+		}
 		gl.viewport(0, 0, 256, height);
 		const pixels = Array.from({length: 4}, () => new Float32Array(paths * 4));
 		for (const profile of request.profiles) {
 			gl.uniform1i(gl.getUniformLocation(program, 'quadrature'), profile.quadrature);
 			gl.uniform1i(gl.getUniformLocation(program, 'rouletteStart'), profile.roulette);
-			for (let batch = 0; batch < profile.batches; batch++)
+			for (let batch = 0; batch < profile.batches; batch++) {
 				for (let group = 0; group < request.groups.length; group++) {
-					if (performance.now() - start > request.maximumMilliseconds)
+					if (performance.now() - start > request.maximumMilliseconds) {
 						throw new Error('Reference GPU deadline');
+					}
 					const item = request.groups[group],
 						m = item.medium,
 						c = item.channel;
@@ -164,11 +185,12 @@ export async function executeGpu(shader, request) {
 						['viewing', item.direction],
 						['sunPosition', m.sourcePosition],
 						['sunDirection', m.sourceDirection],
-					])
+					]) {
 						gl.uniform3fv(
 							gl.getUniformLocation(program, String(name)),
 							Array.from(/** @type {readonly number[]} */ (value)),
 						);
+					}
 					gl.uniform4fv(gl.getUniformLocation(program, 'physical'), [
 						m.rayleigh[c],
 						m.mie[c],
@@ -190,7 +212,9 @@ export async function executeGpu(shader, request) {
 						gl.readBuffer(gl.COLOR_ATTACHMENT0 + attachment);
 						gl.readPixels(0, 0, 256, height, gl.RGBA, gl.FLOAT, pixels[attachment]);
 					}
-					if (gl.getError() !== gl.NO_ERROR || gl.isContextLost()) throw new Error('GPU context failed');
+					if (gl.getError() !== gl.NO_ERROR || gl.isContextLost()) {
+						throw new Error('GPU context failed');
+					}
 					// Pure-order moments only; the unchanged physical kernel remains cache-free.
 					const sums = Array(5).fill(0);
 					let maximumDepth = 0;
@@ -198,7 +222,9 @@ export async function executeGpu(shader, request) {
 						const offset = i * 4;
 						for (let k = 0; k < 4; k++) {
 							const value = pixels[0][offset + k];
-							if (!Number.isFinite(value) || value < 0) throw new Error('Invalid reference path.');
+							if (!Number.isFinite(value) || value < 0) {
+								throw new Error('Invalid reference path.');
+							}
 							sums[k] += value;
 						}
 						sums[4] += pixels[1][offset];
@@ -213,11 +239,16 @@ export async function executeGpu(shader, request) {
 					});
 					completed++;
 				}
+			}
 		}
 		return {renderer, milliseconds: performance.now() - start, completed};
 	} finally {
-		for (const s of shaders) gl.deleteShader(s);
-		for (const t of textures) gl.deleteTexture(t);
+		for (const s of shaders) {
+			gl.deleteShader(s);
+		}
+		for (const t of textures) {
+			gl.deleteTexture(t);
+		}
 		gl.deleteProgram(program);
 		gl.deleteFramebuffer(frame);
 		gl.getExtension('WEBGL_lose_context')?.loseContext();

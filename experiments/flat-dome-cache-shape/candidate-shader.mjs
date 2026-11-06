@@ -13,7 +13,11 @@ import {altitudes} from './topology.mjs';
 export function candidateShader(angular, pathRule, viewRule, betaCount = 17) {
 	const literal = (n) => Number(n).toExponential(16);
 	const floats = (values) => values.map(literal).join(',');
-	const packed = (values) => Array.from({length: 4}, (_, g) => `vec4(${Array.from({length: 4}, (_, k) => literal(values[g * 4 + k] ?? 0)).join(',')})`).join(',');
+	const packed = (values) =>
+		Array.from(
+			{length: 4},
+			(_, g) => `vec4(${Array.from({length: 4}, (_, k) => literal(values[g * 4 + k] ?? 0)).join(',')})`,
+		).join(',');
 	const common = `#version 300 es
 precision highp float;precision highp int;
 uniform sampler2D uPositions,uRows,uPrevious,uSecond,uThird,uFourth,uQueries;
@@ -98,7 +102,9 @@ vec4 angularSample(sampler2D field,vec3 p,vec3 v,int g){
  return weights.x*fieldSample(field,p,indices.x,g)+weights.y*fieldSample(field,p,indices.y,g)+weights.z*fieldSample(field,p,indices.z,g);
 }
 `;
-	const build = common + `
+	const build =
+		common +
+		`
 layout(location=0)out vec4 outputValue;
 const float P[${pathRule.nodes.length}]=float[${pathRule.nodes.length}](${floats(pathRule.nodes)});
 const float W[${pathRule.nodes.length}]=float[${pathRule.nodes.length}](${floats(pathRule.weights)});
@@ -118,7 +124,9 @@ void main(){
  outputValue=result/max(r+m,vec4(1e-30));
 }
 `;
-	const view = common + `
+	const view =
+		common +
+		`
 layout(location=0)out vec4 o1;layout(location=1)out vec4 o2;layout(location=2)out vec4 o3;layout(location=3)out vec4 o4;
 const float P[${viewRule.nodes.length}]=float[${viewRule.nodes.length}](${floats(viewRule.nodes)});
 const float W[${viewRule.nodes.length}]=float[${viewRule.nodes.length}](${floats(viewRule.weights)});

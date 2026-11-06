@@ -26,7 +26,9 @@ function checkedPath(candidate) {
 	let prefix = path.parse(absolute).root;
 	for (let component of absolute.slice(prefix.length).split(path.sep).filter(Boolean)) {
 		prefix = path.join(prefix, component);
-		if (lstatSync(prefix).isSymbolicLink()) throw new Error(`Linked path is unsupported: ${prefix}`);
+		if (lstatSync(prefix).isSymbolicLink()) {
+			throw new Error(`Linked path is unsupported: ${prefix}`);
+		}
 	}
 	return realpathSync(absolute);
 }
@@ -39,7 +41,9 @@ function checkedPath(candidate) {
  * @returns {string} - Linux path under the default WSL drive mount.
  */
 function linuxPath(absolute) {
-	if (!/^[A-Za-z]:[\\/]/.test(absolute)) throw new Error('A local Windows drive path is required.');
+	if (!/^[A-Za-z]:[\\/]/.test(absolute)) {
+		throw new Error('A local Windows drive path is required.');
+	}
 	return `/mnt/${absolute[0].toLowerCase()}${absolute.slice(2).replaceAll('\\', '/')}`;
 }
 
@@ -65,7 +69,9 @@ function identify(filename, relativePath) {
  */
 function readObject(filename) {
 	let value = JSON.parse(readFileSync(filename, 'utf8'));
-	if (!value || typeof value !== 'object' || Array.isArray(value)) throw new Error(`Expected object: ${filename}`);
+	if (!value || typeof value !== 'object' || Array.isArray(value)) {
+		throw new Error(`Expected object: ${filename}`);
+	}
 	return value;
 }
 
@@ -95,12 +101,16 @@ function readInstallation(filename) {
 	if (!installation.executable.startsWith('/') || !installation.dataDirectory.startsWith('/')) {
 		throw new Error('Executable and data directory must be absolute Linux paths.');
 	}
-	if (!/^[a-f0-9]{64}$/.test(installation.expectedSha256))
+	if (!/^[a-f0-9]{64}$/.test(installation.expectedSha256)) {
 		throw new Error('Expected executable SHA-256 is required.');
-	if (!/^[A-Za-z]:[\\/]/.test(installation.wslExecutable))
+	}
+	if (!/^[A-Za-z]:[\\/]/.test(installation.wslExecutable)) {
 		throw new Error('WSL launcher must be an absolute Windows drive path.');
+	}
 	checkedPath(installation.wslExecutable);
-	if (!lstatSync(installation.wslExecutable).isFile()) throw new Error('WSL launcher must be a regular file.');
+	if (!lstatSync(installation.wslExecutable).isFile()) {
+		throw new Error('WSL launcher must be a regular file.');
+	}
 	return installation;
 }
 
@@ -116,7 +126,9 @@ function readInstallation(filename) {
 function readCase(directory) {
 	let value = readObject(checkedPath(path.join(directory, 'case.json')));
 	for (let name of ['purpose', 'geometry', 'quantity', 'units']) {
-		if (typeof value[name] !== 'string' || !value[name].trim()) throw new Error(`Missing case metadata: ${name}`);
+		if (typeof value[name] !== 'string' || !value[name].trim()) {
+			throw new Error(`Missing case metadata: ${name}`);
+		}
 	}
 	if (
 		!Array.isArray(value.limitations) ||
@@ -127,7 +139,9 @@ function readCase(directory) {
 	let deck = new TextDecoder('utf-8', {fatal: true}).decode(
 		readFileSync(checkedPath(path.join(directory, 'input.inp'))),
 	);
-	if (!deck.trim() || deck.includes('\0')) throw new Error('input.inp must be nonempty UTF-8 text without NUL.');
+	if (!deck.trim() || deck.includes('\0')) {
+		throw new Error('input.inp must be nonempty UTF-8 text without NUL.');
+	}
 	return /** @type {LibradtranCase} */ (/** @type {unknown} */ (value));
 }
 
@@ -141,8 +155,9 @@ function readCase(directory) {
  */
 function parseOptions(argumentsList, repository) {
 	let command = argumentsList[0];
-	if (command !== 'doctor' && command !== 'smoke' && command !== 'run')
+	if (command !== 'doctor' && command !== 'smoke' && command !== 'run') {
 		throw new Error('Choose doctor, smoke or run.');
+	}
 	const options = new Map();
 	for (let index = 1; index < argumentsList.length; index += 2) {
 		let option = argumentsList[index];
@@ -152,10 +167,13 @@ function parseOptions(argumentsList, repository) {
 		}
 		options.set(option, value);
 	}
-	if ((command === 'run') !== options.has('--case')) throw new Error('Only run requires --case DIRECTORY.');
+	if ((command === 'run') !== options.has('--case')) {
+		throw new Error('Only run requires --case DIRECTORY.');
+	}
 	let timeoutSeconds = Number(options.get('--timeout-seconds') ?? 120);
-	if (!Number.isInteger(timeoutSeconds) || timeoutSeconds < 1)
+	if (!Number.isInteger(timeoutSeconds) || timeoutSeconds < 1) {
 		throw new Error('Timeout must be a positive integer in seconds.');
+	}
 	return {
 		command,
 		installationPath: checkedPath(
@@ -189,14 +207,20 @@ function copyBundle(source, destination) {
 		let origin = path.join(source, relative);
 		let target = path.join(destination, relative);
 		let info = lstatSync(origin);
-		if (info.isSymbolicLink()) throw new Error(`Linked case input: ${origin}`);
+		if (info.isSymbolicLink()) {
+			throw new Error(`Linked case input: ${origin}`);
+		}
 		if (info.isDirectory()) {
 			mkdirSync(target);
-			for (let name of readdirSync(origin).sort()) pending.push(path.join(relative, name));
+			for (let name of readdirSync(origin).sort()) {
+				pending.push(path.join(relative, name));
+			}
 		} else if (info.isFile()) {
 			copyFileSync(origin, target, constants.COPYFILE_EXCL);
 			entries.push(identify(target, `case/${relative.replaceAll('\\', '/')}`));
-		} else throw new Error(`Nonregular case input: ${origin}`);
+		} else {
+			throw new Error(`Nonregular case input: ${origin}`);
+		}
 	}
 	return entries;
 }
@@ -281,7 +305,9 @@ async function launch(request, runDirectory) {
 				reject(error);
 				return;
 			}
-			if (launchError) console.error(launchError);
+			if (launchError) {
+				console.error(launchError);
+			}
 			resolve(
 				code === 0 && !launchError && !cancelled && existsSync(path.join(runDirectory, 'manifest.json'))
 					? 0
@@ -309,8 +335,9 @@ async function main() {
 		return;
 	}
 	let repository = checkedPath(fileURLToPath(new URL('../../', import.meta.url)));
-	if (!existsSync(path.join(repository, '.git')) || !existsSync(path.join(repository, 'package.json')))
+	if (!existsSync(path.join(repository, '.git')) || !existsSync(path.join(repository, 'package.json'))) {
 		throw new Error('Repository identity is missing.');
+	}
 	const options = parseOptions(process.argv.slice(2), repository);
 	const installation = readInstallation(options.installationPath);
 	let caseMetadata = options.caseDirectory ? readCase(options.caseDirectory) : null;
@@ -319,13 +346,16 @@ async function main() {
 		!/^tmp\/experiments\/flat-dome-cache-shape\/runs\/\d{5}-[a-z0-9-]+$/.test(
 			path.relative(repository, parent).replaceAll('\\', '/'),
 		)
-	)
+	) {
 		throw new Error('Expected experiment run parent.');
+	}
 	let outputRoot = path.join(parent, 'tools');
-	if (options.caseDirectory && !path.relative(options.caseDirectory, outputRoot).startsWith('..'))
+	if (options.caseDirectory && !path.relative(options.caseDirectory, outputRoot).startsWith('..')) {
 		throw new Error('Case directory must not contain the output root.');
-	if (options.caseDirectory && path.relative(repository, options.caseDirectory).startsWith('..'))
+	}
+	if (options.caseDirectory && path.relative(repository, options.caseDirectory).startsWith('..')) {
 		throw new Error('Case bundle must be inside this repository.');
+	}
 	execFileSync(
 		'git',
 		['check-ignore', '--quiet', '--no-index', '--', 'tmp/experiments/flat-dome-cache-shape/probe'],
@@ -337,7 +367,9 @@ async function main() {
 	let prefix = repository;
 	for (let component of path.relative(repository, outputRoot).split(path.sep)) {
 		prefix = path.join(prefix, component);
-		if (!existsSync(prefix)) mkdirSync(prefix);
+		if (!existsSync(prefix)) {
+			mkdirSync(prefix);
+		}
 		checkedPath(prefix);
 	}
 	const runDirectory = path.join(outputRoot, `${new Date().toISOString().replaceAll(/[:.]/g, '-')}-${randomUUID()}`);

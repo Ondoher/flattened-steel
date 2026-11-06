@@ -10,11 +10,12 @@ error/storage/build/lookup tradeoffs. Other distributions are deferred.
 
 The experiment has a saved, second-agent-critiqued slice-count plan requiring
 accuracy tables and actual cache/probe/libRadtran color swatches across distances
-and altitudes. The owner selected independent-execution of that plan. M2's
-three-method pilot is published. M3 has all six initial counts at three Sun
-positions and a completed independent development reference. Intermediate
-counts, non-slice diagnostics, held-out validation, repeated timings, and the
-final report remain. The full native guide campaign is running. The [execution
+and altitudes. The owner selected independent-execution, and M1-M4 are complete.
+The [corrected final report](../../tmp/experiments/flat-dome-cache-shape/runs/00041-m4-report/index.html)
+covers thirteen counts, development and held-out accuracy, repeated timing,
+memory, real three-method swatches, and reference limitations. Final verification
+is run 00042. The next focus is owner assessment and selection of any follow-up;
+no additional distribution search or production promotion is selected. The [execution
 record](poc-experiments/engineering-studies/flat-dome-cache-shape/execution.md)
 owns decisions and milestone evidence. The design owns
 requirements and hypotheses, the plan owns sequencing, and status owns current

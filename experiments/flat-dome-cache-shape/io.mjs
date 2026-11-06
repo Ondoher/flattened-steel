@@ -1,6 +1,16 @@
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
-import {existsSync, lstatSync, mkdirSync, readFileSync, readdirSync, realpathSync, renameSync, writeFileSync, appendFileSync} from 'node:fs';
+import {
+	existsSync,
+	lstatSync,
+	mkdirSync,
+	readFileSync,
+	readdirSync,
+	realpathSync,
+	renameSync,
+	writeFileSync,
+	appendFileSync,
+} from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 
@@ -49,7 +59,11 @@ export function identity(relative) {
 	const filename = checked(path.join(repository, relative));
 	assert.ok(lstatSync(filename).isFile());
 	const bytes = readFileSync(filename);
-	return {path: relative.replaceAll('\\', '/'), bytes: bytes.length, sha256: createHash('sha256').update(bytes).digest('hex')};
+	return {
+		path: relative.replaceAll('\\', '/'),
+		bytes: bytes.length,
+		sha256: createHash('sha256').update(bytes).digest('hex'),
+	};
 }
 
 /**
@@ -126,15 +140,30 @@ export function createRun(name, parents = []) {
 		assert.ok(!sealed, 'Run is sealed.');
 		assert.ok(/^[a-zA-Z0-9][a-zA-Z0-9._-]*$/.test(filename), 'Artifact must be a direct run member.');
 		checked(root, outputRoot);
-		const bytes = Buffer.isBuffer(value) ? value : typeof value === 'string' ? value : JSON.stringify(value, null, 2) + '\n';
+		const bytes = Buffer.isBuffer(value)
+			? value
+			: typeof value === 'string'
+				? value
+				: JSON.stringify(value, null, 2) + '\n';
 		writeFileSync(path.join(root, filename), bytes, {flag: 'wx'});
 	};
 	/** @type {DomeRun['progress']} */
 	const progress = (phase, message, counts = {}) => {
 		assert.ok(!sealed);
-		appendFileSync(path.join(root, 'progress.jsonl'), JSON.stringify({timestamp: new Date().toISOString(), phase, message, ...counts}) + '\n');
+		appendFileSync(
+			path.join(root, 'progress.jsonl'),
+			JSON.stringify({timestamp: new Date().toISOString(), phase, message, ...counts}) + '\n',
+		);
 	};
-	write('started.json', {id, started: new Date().toISOString(), command: process.argv, node: process.version, platform: process.platform, sources, parents});
+	write('started.json', {
+		id,
+		started: new Date().toISOString(),
+		command: process.argv,
+		node: process.version,
+		platform: process.platform,
+		sources,
+		parents,
+	});
 	for (const source of sources) {
 		const name = source.path.slice('experiments/flat-dome-cache-shape/'.length).replaceAll('/', '__');
 		write(`source-${name}`, readFileSync(checked(path.join(repository, source.path), sourceRoot)));
@@ -146,14 +175,40 @@ export function createRun(name, parents = []) {
 	const finish = (state, summary) => {
 		assert.ok(!sealed);
 		clearInterval(heartbeat);
-		progress('terminal', String(summary?.message ?? state), {state});
-		/** @param {string} directory - Owned artifact directory. @returns {DomeFileIdentity[]} - Recursive identities. */
-		const collect = (directory) => readdirSync(checked(directory, outputRoot)).sort().flatMap((name) => {
-			const filename = checked(path.join(directory, name), outputRoot);
-			return lstatSync(filename).isDirectory() ? collect(filename) : [identity(path.relative(repository, filename))];
-		});
+		progress('finalize', 'Closing and hashing all owned evidence artifacts.');
+		let lastProgress = performance.now();
+		/**
+		 * Hashes closed artifacts recursively while retaining finalization progress.
+		 *
+		 * @param {string} directory - Owned artifact directory.
+		 * @returns {DomeFileIdentity[]} - Recursive byte identities.
+		 */
+		const collect = (directory) =>
+			readdirSync(checked(directory, outputRoot))
+				.sort()
+				.flatMap((name) => {
+					if (performance.now() - lastProgress > 25000) {
+						progress('finalize', 'Artifact hashing remains active.');
+						lastProgress = performance.now();
+					}
+					const filename = checked(path.join(directory, name), outputRoot);
+					return lstatSync(filename).isDirectory()
+						? collect(filename)
+						: [identity(path.relative(repository, filename))];
+				});
 		const artifacts = collect(root);
-		write('manifest.json', {id, state, completed: new Date().toISOString(), milliseconds: performance.now() - start, derivation: {parents, operation: name, sources}, artifacts, summary});
+		progress('terminal', String(summary?.message ?? state), {state});
+		const progressIndex = artifacts.findIndex((artifact) => artifact.path.endsWith('/progress.jsonl'));
+		artifacts[progressIndex] = identity(path.relative(repository, path.join(root, 'progress.jsonl')));
+		write('manifest.json', {
+			id,
+			state,
+			completed: new Date().toISOString(),
+			milliseconds: performance.now() - start,
+			derivation: {parents, operation: name, sources},
+			artifacts,
+			summary,
+		});
 		sealed = true;
 	};
 	return {id, root, write, progress, finish};

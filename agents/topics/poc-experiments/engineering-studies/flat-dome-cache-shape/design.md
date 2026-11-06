@@ -247,15 +247,19 @@ frame transactions, and lifecycle verification with the new physical owner.
 
 ## Open Questions
 
-- Which exact dome/medium/source configuration is the first deciding input?
-- Which exact independent-probe entry point and libRadtran solver cases cover
-  the new geometry, and which comparisons are limited to matched controls?
-- What stored scattering quantity and interpolation preserve accuracy with
-  the fewest valid nodes?
-- How many sample-to-dome-distance slices are needed with the selected
-  quadratic distribution in each physical regime? Alternative distributions
-  remain deferred.
-- Which source/map configurations require distinct fields versus a valid
-  transform or interpolated parameter dimension?
-- Which numerical tolerances and held-out reference cases support a defensible
-  accuracy/cost recommendation?
+The selected quadratic count study is complete. The [execution record](execution.md)
+and its final report own pinned physical inputs, guide applicability, measured
+count tradeoffs, validation, and limitations. The nonzero-source coordinate
+and boundary support work in the studied domain; the result is conditional on
+the fixed directional and spatial representation.
+
+- How should angular representation converge before a production adaptation,
+  and how do count/size/build tradeoffs transfer at production resolution?
+- Can a native solver provide an exact finite-cap/finite-source comparison,
+  rather than the explicitly qualified local slab/all-orders guides?
+- How should the unstudied map-center chart degeneracy and source-radius
+  changes be handled without assuming invalid translation symmetry?
+- Would an owner-selected alternative distribution or later dense-uniform
+  curve-fitting study improve the measured compromises?
+
+These are follow-up questions, not additional authorized execution milestones.

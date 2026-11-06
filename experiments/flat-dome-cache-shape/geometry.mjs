@@ -28,7 +28,10 @@ export function capHeight(radius) {
 	if (radius > diskRadius) {
 		return -Infinity;
 	}
-	return ((diskRadius - radius) * (diskRadius + radius)) / (Math.sqrt(sphereRadius * sphereRadius - radius * radius) - centerZ);
+	return (
+		((diskRadius - radius) * (diskRadius + radius)) /
+		(Math.sqrt(sphereRadius * sphereRadius - radius * radius) - centerZ)
+	);
 }
 
 /**

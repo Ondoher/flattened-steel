@@ -11,15 +11,23 @@ const {CANONICAL_SPECTRAL_CHANNELS} = await import(dataUrl.href);
  * Explicit normalized physical packet for the isolated comparison.
  */
 export const medium = {
-	geometry: 'flat', sourceKind: 'finite', radius: 6360000, topAltitude: apex,
-	rayleighHeight: 8000, mieHeight: 1200, albedo: 0.8, g: 0.7,
+	geometry: 'flat',
+	sourceKind: 'finite',
+	radius: 6360000,
+	topAltitude: apex,
+	rayleighHeight: 8000,
+	mieHeight: 1200,
+	albedo: 0.8,
+	g: 0.7,
 	wavelengths: CANONICAL_SPECTRAL_CHANNELS.map((c) => c.wavelength.value),
 	widths: CANONICAL_SPECTRAL_CHANNELS.map((c) => c.wavelengthBinWidth.value),
 	rayleigh: CANONICAL_SPECTRAL_CHANNELS.map((c) => 0.00000124062 * (c.wavelength.value / 1000) ** -4),
 	mie: CANONICAL_SPECTRAL_CHANNELS.map((c) => (0.04 / 1200) * (c.wavelength.value / 1000) ** -0.8),
 	sourceIrradiance: CANONICAL_SPECTRAL_CHANNELS.map((c) => c.sourceIrradiance.value),
-	sourcePosition: [diskRadius / 2, 0, 4828032], sourceDirection: [0, 0, 1],
-	referenceDistance: 4800000, incidentScale: 1,
+	sourcePosition: [diskRadius / 2, 0, 4828032],
+	sourceDirection: [0, 0, 1],
+	referenceDistance: 4800000,
+	incidentScale: 1,
 };
 
 /**
@@ -44,7 +52,7 @@ export function directions(resolution = 2) {
 	}
 	const samples = 32768;
 	for (let i = 0; i < samples; i++) {
-		const z = 1 - 2 * (i + 0.5) / samples;
+		const z = 1 - (2 * (i + 0.5)) / samples;
 		const phi = i * Math.PI * (3 - Math.sqrt(5));
 		const x = Math.sqrt(1 - z * z) * Math.cos(phi);
 		const y = Math.sqrt(1 - z * z) * Math.sin(phi);
@@ -58,10 +66,15 @@ export function directions(resolution = 2) {
 				index = j;
 			}
 		}
-		result[index].weight += 4 * Math.PI / samples;
+		result[index].weight += (4 * Math.PI) / samples;
 	}
 	for (const direction of result) {
-		direction.mirror = result.findIndex((other) => Math.abs(direction.vector[0] - other.vector[0]) < 1e-12 && Math.abs(direction.vector[1] + other.vector[1]) < 1e-12 && Math.abs(direction.vector[2] - other.vector[2]) < 1e-12);
+		direction.mirror = result.findIndex(
+			(other) =>
+				Math.abs(direction.vector[0] - other.vector[0]) < 1e-12 &&
+				Math.abs(direction.vector[1] + other.vector[1]) < 1e-12 &&
+				Math.abs(direction.vector[2] - other.vector[2]) < 1e-12,
+		);
 	}
 	for (let i = 0; i < result.length; i++) {
 		const other = result[result[i].mirror];
@@ -86,16 +99,20 @@ export function transportDirections(polar = 8, azimuthal = 12) {
 	for (let i = 0; i < polar; i++) {
 		const t = 3 * (2 * rule.nodes[i] - 1);
 		const mu = Math.sinh(t) / Math.sinh(3);
-		const weight = rule.weights[i] * 6 * Math.cosh(t) / Math.sinh(3) * 2 * Math.PI / azimuthal;
+		const weight = (((rule.weights[i] * 6 * Math.cosh(t)) / Math.sinh(3)) * 2 * Math.PI) / azimuthal;
 		for (let j = 0; j < azimuthal; j++) {
-			const phi = 2 * Math.PI * (j + 0.5) / azimuthal;
+			const phi = (2 * Math.PI * (j + 0.5)) / azimuthal;
 			const horizontal = Math.sqrt(1 - mu * mu);
-			result.push({vector: [horizontal * Math.cos(phi), horizontal * Math.sin(phi), mu], weight, mirror: i * azimuthal + azimuthal - 1 - j});
+			result.push({
+				vector: [horizontal * Math.cos(phi), horizontal * Math.sin(phi), mu],
+				weight,
+				mirror: i * azimuthal + azimuthal - 1 - j,
+			});
 		}
 	}
 	const sum = result.reduce((total, d) => total + d.weight, 0);
 	for (const d of result) {
-		d.weight *= 4 * Math.PI / sum;
+		d.weight *= (4 * Math.PI) / sum;
 	}
 	// Exact polar outgoing addresses have zero incoming weight, so they add no
 	// artificial point mass to the solid-angle integration.
@@ -126,11 +143,30 @@ export function cases(pilot = false) {
 				const sx = sourceRadius - origin[0];
 				const sy = -origin[1];
 				const length = Math.hypot(sx, sy);
-				for (const [label, elevation, sign] of /** @type {Array<[string, number, number]>} */ ([['away-low', 5, -1], ['sunward', 30, 1], ...pilot ? [] : [['zenith', 90, 1]]])) {
-					const e = elevation * Math.PI / 180;
-					const direction = [sign * Math.cos(e) * sx / length, sign * Math.cos(e) * sy / length, Math.sin(e)];
+				for (const [label, elevation, sign] of /** @type {Array<[string, number, number]>} */ ([
+					['away-low', 5, -1],
+					['sunward', 30, 1],
+					...(pilot ? [] : [['zenith', 90, 1]]),
+				])) {
+					const e = (elevation * Math.PI) / 180;
+					const direction = [
+						(sign * Math.cos(e) * sx) / length,
+						(sign * Math.cos(e) * sy) / length,
+						Math.sin(e),
+					];
 					const segment = interval(origin, direction);
-					result.push({id: `s${sourceFraction}-z${z}-d${fraction}-${label}`, sourceRadius, altitude: z, fraction, distance, origin, direction, entry: fraction === 0 ? 0 : segment.entry, end: fraction === 0 ? 0 : segment.exit, view: label});
+					result.push({
+						id: `s${sourceFraction}-z${z}-d${fraction}-${label}`,
+						sourceRadius,
+						altitude: z,
+						fraction,
+						distance,
+						origin,
+						direction,
+						entry: fraction === 0 ? 0 : segment.entry,
+						end: fraction === 0 ? 0 : segment.exit,
+						view: label,
+					});
 				}
 			}
 		}
@@ -156,11 +192,29 @@ export function validationCases() {
 				const origin = [r * Math.cos(theta), r * Math.sin(theta), z];
 				const horizontal = [sourceRadius - origin[0], -origin[1]];
 				const length = Math.hypot(...horizontal);
-				for (const [label, degrees, sign] of /** @type {Array<[string, number, number]>} */ ([['away', 7, -1], ['sunward', 37, 1]])) {
-					const elevation = degrees * Math.PI / 180;
-					const direction = [sign * horizontal[0] / length * Math.cos(elevation), sign * horizontal[1] / length * Math.cos(elevation), Math.sin(elevation)];
+				for (const [label, degrees, sign] of /** @type {Array<[string, number, number]>} */ ([
+					['away', 7, -1],
+					['sunward', 37, 1],
+				])) {
+					const elevation = (degrees * Math.PI) / 180;
+					const direction = [
+						((sign * horizontal[0]) / length) * Math.cos(elevation),
+						((sign * horizontal[1]) / length) * Math.cos(elevation),
+						Math.sin(elevation),
+					];
 					const segment = interval(origin, direction);
-					result.push({id: `validation-s${sourceFraction}-z${z}-d${fraction}-${label}`, sourceRadius, altitude: z, fraction, distance, origin, direction, entry: segment.entry, end: segment.exit, view: label});
+					result.push({
+						id: `validation-s${sourceFraction}-z${z}-d${fraction}-${label}`,
+						sourceRadius,
+						altitude: z,
+						fraction,
+						distance,
+						origin,
+						direction,
+						entry: segment.entry,
+						end: segment.exit,
+						view: label,
+					});
 				}
 			}
 		}
@@ -181,10 +235,43 @@ export function controlCases() {
 		const origin = [0, 0, apex + 500];
 		const direction = [0, 0, -1];
 		const segment = interval(origin, direction);
-		result.push({id: `control-entry-s${sourceFraction}`, sourceRadius, altitude: apex + 500, fraction: 0, distance: 500, origin, direction, entry: segment.entry, end: segment.exit, view: 'outside-down'});
-		result.push({id: `control-vacuum-s${sourceFraction}`, sourceRadius, altitude: 2, fraction: 0, distance: 0, origin: [diskRadius, 0, 2], direction: [1, 0, 0], entry: 0, end: 0, view: 'rim-outward-vacuum'});
-		const base = cases().find((item) => item.sourceRadius === sourceRadius && item.altitude === 1000 && item.fraction === 0.25 && item.view === 'sunward');
-		result.push({...base, id: `control-mirror-s${sourceFraction}`, origin: [base.origin[0], -base.origin[1], base.origin[2]], direction: [base.direction[0], -base.direction[1], base.direction[2]]});
+		result.push({
+			id: `control-entry-s${sourceFraction}`,
+			sourceRadius,
+			altitude: apex + 500,
+			fraction: 0,
+			distance: 500,
+			origin,
+			direction,
+			entry: segment.entry,
+			end: segment.exit,
+			view: 'outside-down',
+		});
+		result.push({
+			id: `control-vacuum-s${sourceFraction}`,
+			sourceRadius,
+			altitude: 2,
+			fraction: 0,
+			distance: 0,
+			origin: [diskRadius, 0, 2],
+			direction: [1, 0, 0],
+			entry: 0,
+			end: 0,
+			view: 'rim-outward-vacuum',
+		});
+		const base = cases().find(
+			(item) =>
+				item.sourceRadius === sourceRadius &&
+				item.altitude === 1000 &&
+				item.fraction === 0.25 &&
+				item.view === 'sunward',
+		);
+		result.push({
+			...base,
+			id: `control-mirror-s${sourceFraction}`,
+			origin: [base.origin[0], -base.origin[1], base.origin[2]],
+			direction: [base.direction[0], -base.direction[1], base.direction[2]],
+		});
 	}
 	return result;
 }

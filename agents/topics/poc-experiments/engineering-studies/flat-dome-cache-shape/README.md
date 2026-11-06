@@ -1,6 +1,6 @@
 # Flat Dome Cache Shape Experiment
 
-Status: M2 pilot published; executing M3 accuracy and performance measurements.
+Status: M1-M4 complete; corrected final report and evidence verification published.
 
 ## Objective
 
@@ -51,9 +51,10 @@ performance are the primary optimization variables among accurate candidates.
 
 ## Current Focus
 
-Compare the initial count sweep against the independent development reference,
-refine useful count crossings, diagnose other error floors, and freeze counts
-before held-out validation. The full native guide campaign is running. The
-[pilot swatches](../../../../../tmp/experiments/flat-dome-cache-shape/runs/00013-m2-pilot-report/index.html)
-are available; the final report remains pending. The design owns scientific
-decisions; the plan owns sequencing; status owns verification and next action.
+Review the [corrected final report](../../../../../tmp/experiments/flat-dome-cache-shape/runs/00041-m4-report/index.html),
+which includes thirteen counts, real three-method swatches, held-out accuracy,
+measured storage, repeated build timing, and non-slice diagnostics. The
+[execution record](execution.md) owns decisions and verification limits. N12
+is a provisional balanced study configuration, not an accepted production
+cache or universal optimum. No subsequent study, production promotion,
+experiment closure, or alternative distribution has been selected.

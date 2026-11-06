@@ -3,7 +3,10 @@ import {apex, clearance, radiusAt} from './geometry.mjs';
 /**
  * Frozen altitude support for the first count comparison, in meters.
  */
-export const altitudes = [0, 250, 500, 1000, 1500, 3000, 5000, 7000, 10000, 14000, 17000, 20000, 22500, 25000, 31250, 37500, 50000, 62500, 75000, 87500, 99000, 100000];
+export const altitudes = [
+	0, 250, 500, 1000, 1500, 3000, 5000, 7000, 10000, 14000, 17000, 20000, 22500, 25000, 31250, 37500, 50000, 62500,
+	75000, 87500, 99000, 100000,
+];
 
 /**
  * Computes the reachable source-distance and dome-distance row geometry.
@@ -39,7 +42,8 @@ export function position(altitude, distance, rho, sourceRadius) {
 		return [r, 0, altitude];
 	}
 	const x = (r * r + sourceRadius * sourceRadius - rho * rho) / (2 * sourceRadius);
-	const product = (sourceRadius + rho + r) * (-sourceRadius + rho + r) * (sourceRadius - rho + r) * (sourceRadius + rho - r);
+	const product =
+		(sourceRadius + rho + r) * (-sourceRadius + rho + r) * (sourceRadius - rho + r) * (sourceRadius + rho - r);
 	const y = Math.sqrt(Math.max(0, product)) / (2 * sourceRadius);
 	return [x, y, altitude];
 }
@@ -64,8 +68,12 @@ export function topology(count, sourceRadius, betaCount = 17, zNodes = altitudes
 		for (let j = 0; j < betaCount; j++) {
 			const beta = j / (betaCount - 1);
 			const row = bounds(z, beta, sourceRadius);
-			const nominal = Array.from({length: count}, (_, i) => (apex - z) * (i / (count - 1)) ** 2).filter((d) => d >= row.lower && d <= row.upper);
-			const distances = [...nominal, row.lower, row.upper].sort((a, b) => a - b).filter((d, i, all) => i === 0 || d - all[i - 1] > 1e-7);
+			const nominal = Array.from({length: count}, (_, i) => (apex - z) * (i / (count - 1)) ** 2).filter(
+				(d) => d >= row.lower && d <= row.upper,
+			);
+			const distances = [...nominal, row.lower, row.upper]
+				.sort((a, b) => a - b)
+				.filter((d, i, all) => i === 0 || d - all[i - 1] > 1e-7);
 			const point = distances.length === 1 ? position(z, distances[0], row.rho, sourceRadius) : null;
 			const key = point ? JSON.stringify([...point, distances[0]]) : null;
 			if (key && collapsed.has(key)) {

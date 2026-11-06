@@ -1,7 +1,10 @@
 import assert from 'node:assert/strict';
 
-/** Gauss-Legendre integration rule on [0,1]. Only mathematical rule nodes are retained.
- * @param {number} count @returns {SkyDirectRule}
+/**
+ * Computes Gauss-Legendre integration on [0,1], retaining only mathematical nodes.
+ *
+ * @param {number} count - Number of positive integration weights.
+ * @returns {SkyDirectRule} - Mathematical abscissae and weights.
  */
 export function gauss(count) {
 	assert.ok(Number.isInteger(count) && count >= 2 && count <= 256);
