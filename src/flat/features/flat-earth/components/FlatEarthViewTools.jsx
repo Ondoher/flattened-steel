@@ -1,3 +1,6 @@
+import Button from '../../../components/Button.jsx';
+import BaseSelect from '../../../components/BaseSelect.jsx';
+import Typography from '@mui/material/Typography';
 import React, {Component} from 'react';
 import AppContext from '../../../common/AppContext.js';
 import phrases from '../../../phrases/en-US.json';
@@ -83,22 +86,22 @@ export default class FlatEarthViewTools extends Component {
 	}
 
 	/**
-	 * Called by native selection to relay vertical framing intent.
+	 * Called by selection to relay vertical framing intent.
 	 *
-	 * @param {React.ChangeEvent<HTMLSelectElement>} event - Selected degree value.
+	 * @param {number} value - Selected vertical field of view.
 	 */
-	_onFieldOfView(event) {
-		this.props.sceneView.setFieldOfView(this.props.viewId, Number(event.currentTarget.value));
+	_onFieldOfView(value) {
+		this.props.sceneView.setFieldOfView(this.props.viewId, Number(value));
 	}
 
 	/**
-	 * Called by native selection to relay physical elevation intent.
+	 * Called by selection to relay physical elevation intent.
 	 *
-	 * @param {React.ChangeEvent<HTMLSelectElement>} event - Selected elevation in meters.
+	 * @param {number} value - Selected elevation in meters.
 	 */
-	_onHeight(event) {
+	_onHeight(value) {
 		this.props.sceneView.setObserverHeight(this.props.viewId, {
-			value: Number(event.currentTarget.value),
+			value: Number(value),
 			units: 'meters',
 		});
 	}
@@ -125,36 +128,41 @@ export default class FlatEarthViewTools extends Component {
 	}
 
 	/**
-	 * Called by list preparation to render one labeled choice.
+	 * Called by list preparation to resolve one labeled choice.
 	 *
-	 * @param {{value: number, label: string}} preset - Prepared option identity and phrase key.
-	 * @returns {React.ReactNode} - Stable keyed option.
+	 * @param {AppSelectOption} preset - Prepared option identity and phrase key.
+	 * @returns {AppSelectOption} - Controlled value and literal label.
 	 */
-	_renderOption(preset) {
-		let label = this._text(preset.label);
-		return (
-			<option key={preset.value} value={preset.value}>
-				{label}
-			</option>
-		);
+	_prepareOption(preset) {
+		return {value: preset.value, label: this._text(preset.label)};
 	}
 
 	/**
 	 * Called by rendering to prepare the complete framing option list before JSX.
 	 *
-	 * @returns {React.ReactNode[]} - Field-of-view choices.
+	 * @returns {AppSelectOption[]} - Field-of-view choices.
 	 */
 	_renderFieldOfViewOptions() {
-		return FIELD_OF_VIEW_PRESETS.map((preset) => this._renderOption(preset));
+		let options = FIELD_OF_VIEW_PRESETS.map((preset) => this._prepareOption(preset));
+		let value = this.state.camera.fieldOfViewDegrees;
+		if (!options.some((option) => option.value === value)) {
+			options.push({value, label: String(value) + '°'});
+		}
+		return options;
 	}
 
 	/**
 	 * Called by rendering to prepare the complete physical elevation option list before JSX.
 	 *
-	 * @returns {React.ReactNode[]} - Elevation choices.
+	 * @returns {AppSelectOption[]} - Elevation choices.
 	 */
 	_renderHeightOptions() {
-		return ELEVATION_PRESETS.map((preset) => this._renderOption(preset));
+		let options = ELEVATION_PRESETS.map((preset) => this._prepareOption(preset));
+		let value = this.state.camera.pendingHeightMeters ?? this.state.camera.observerHeightMeters;
+		if (!options.some((option) => option.value === value)) {
+			options.push({value, label: String(value) + ' m'});
+		}
+		return options;
 	}
 
 	/**
@@ -174,26 +182,26 @@ export default class FlatEarthViewTools extends Component {
 		let fieldsOfView = this._renderFieldOfViewOptions();
 		return (
 			<div className="flat-earth-view-tools">
-				<label>
-					{heightLabel}
-					<select className="flat-earth-height" value={height} onChange={this._onHeight}>
-						{heights}
-					</select>
-				</label>
-				<label>
-					{fovLabel}
-					<select
-						className="flat-earth-fov"
-						value={camera.fieldOfViewDegrees}
-						title={fovHint}
-						onChange={this._onFieldOfView}
-					>
-						{fieldsOfView}
-					</select>
-				</label>
-				<button type="button" className="flat-earth-center-sun" onClick={this._onSun} disabled={disabled}>
+				<BaseSelect
+					className="flat-earth-height flat-earth-height-control"
+					label={heightLabel}
+					value={height}
+					options={heights}
+					onChange={this._onHeight}
+					fullWidth={false}
+				/>
+				<BaseSelect
+					className="flat-earth-fov flat-earth-fov-control"
+					label={fovLabel}
+					value={camera.fieldOfViewDegrees}
+					title={fovHint}
+					options={fieldsOfView}
+					onChange={this._onFieldOfView}
+					fullWidth={false}
+				/>
+				<Button type="button" className="flat-earth-center-sun" onClick={this._onSun} disabled={disabled}>
 					{sunLabel}
-				</button>
+				</Button>
 			</div>
 		);
 	}
@@ -210,7 +218,9 @@ export default class FlatEarthViewTools extends Component {
 		if (this.props.panel) {
 			content = (
 				<section className="flat-earth-camera-panel">
-					<h3>{title}</h3>
+					<Typography component="h3" variant="subtitle1">
+						{title}
+					</Typography>
 					{content}
 					<p>{scope}</p>
 				</section>

@@ -37,25 +37,12 @@
 	align-items: center;
 }
 .workspace-button {
-	height: 34px;
-	padding: 0 12px;
-	border: 1px solid var(--app-color-border);
-	border-radius: 4px;
-	color: var(--app-color-text);
-	background: var(--app-color-background);
 	white-space: nowrap;
-	cursor: pointer;
-	font: inherit;
 }
 .workspace-actions .workspace-button:last-child {
 	width: 116px;
 }
-.workspace-button[aria-expanded='true'],
-.workspace-button[aria-pressed='true'] {
-	background: var(--app-color-action);
-	color: var(--app-color-on-action);
-	border-color: var(--app-color-action);
-}
+
 .workspace-body {
 	display: grid;
 	grid-template-columns: minmax(0, 1fr);
@@ -103,24 +90,18 @@
 	grid-column: 2;
 	min-width: 0;
 }
-.workspace-scene-choice select {
-	width: 140px;
-	height: 32px;
-}
+
 .workspace-page-settings {
 	margin-left: 4px;
 	grid-row: 1;
 	grid-column: 3;
 	width: 116px;
-	height: 32px;
-	padding: 0 8px;
 }
 .workspace-close {
 	width: 108px;
 	grid-row: 1;
 	grid-column: 4;
 	justify-self: end;
-	height: 32px;
 }
 .viewport-tools {
 	grid-row: 3;
@@ -134,7 +115,7 @@
 }
 .viewport-header:has(.viewport-secondary-tools:empty) {
 	height: auto;
-	grid-template-rows: 32px;
+	grid-template-rows: minmax(40px, auto);
 	padding-bottom: 12px;
 }
 .viewport-content {
@@ -154,16 +135,7 @@
 	padding: 24px;
 	text-align: center;
 }
-.workspace-scene-choice select,
-.configuration-scope select {
-	color: var(--app-color-text);
-	background: var(--app-color-background);
-	border: 1px solid var(--app-color-border);
-	border-radius: 4px;
-	padding: 0 8px;
-	font: inherit;
-	min-width: 0;
-}
+
 .configuration-panel {
 	display: grid;
 	grid-template-columns: minmax(0, 1fr);
@@ -196,10 +168,7 @@
 	line-height: 18px;
 	min-width: 0;
 }
-.configuration-scope select {
-	height: 36px;
-	width: 100%;
-}
+
 .configuration-sections {
 	display: flex;
 	gap: 8px;
@@ -270,7 +239,6 @@
 		grid-column: 2;
 		grid-row: 1;
 		display: grid;
-		grid-template-columns: 72px 288px;
 		align-content: center;
 		align-items: center;
 		gap: 8px;
@@ -281,9 +249,7 @@
 		grid-row: 2;
 		padding-top: 4px;
 	}
-	.configuration-sections .workspace-button {
-		height: 32px;
-	}
+
 	.configuration-content {
 		grid-column: 1/-1;
 		grid-row: 3;

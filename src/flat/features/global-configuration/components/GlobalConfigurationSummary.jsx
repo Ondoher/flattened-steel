@@ -1,3 +1,4 @@
+import Button from '../../../components/Button.jsx';
 import React, {Component} from 'react';
 import AppContext from '../../../common/AppContext.js';
 import phrases from '../../../phrases/en-US.json';
@@ -85,13 +86,13 @@ export default class GlobalConfigurationSummary extends Component {
 	_renderSummary(label, value, action) {
 		let edit = this._text('workspace.edit');
 		return (
-			<button type="button" className="global-summary-entry" onClick={action}>
+			<Button type="button" className="global-summary-entry" onClick={action}>
 				<span className="global-summary-label">
 					<span>{label}</span>
 					<span>{edit}</span>
 				</span>
 				<strong>{value}</strong>
-			</button>
+			</Button>
 		);
 	}
 

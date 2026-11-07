@@ -133,19 +133,20 @@ export default class WorkspaceShell extends Component {
 	/**
 	 * Called by a scene selector to report explicit target and definition.
 	 *
-	 * @param {React.ChangeEvent<HTMLSelectElement>} event - Native selection intent.
+	 * @param {string} pageId - Selected registered scene.
+	 * @param {string} viewId - Exact owning view identity.
 	 */
-	_onSelectPage(event) {
-		this.props.workspaceView.requestPage(event.currentTarget.value, event.currentTarget.dataset.viewId);
+	_onSelectPage(pageId, viewId) {
+		this.props.workspaceView.requestPage(pageId, viewId);
 	}
 
 	/**
 	 * Called by the configuration selector to report its scope.
 	 *
-	 * @param {React.ChangeEvent<HTMLSelectElement>} event - Native scope intent.
+	 * @param {string} value - Selected scope, or empty for shared settings.
 	 */
-	_onSelectTarget(event) {
-		this.props.workspaceView.selectConfigurationTarget(event.currentTarget.value || null);
+	_onSelectTarget(value) {
+		this.props.workspaceView.selectConfigurationTarget(value || null);
 	}
 
 	/**

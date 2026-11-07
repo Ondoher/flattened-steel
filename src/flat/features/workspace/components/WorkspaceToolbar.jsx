@@ -1,3 +1,5 @@
+import Typography from '@mui/material/Typography';
+import Button from '../../../components/Button.jsx';
 import React, {Component, createRef} from 'react';
 
 /**
@@ -52,17 +54,17 @@ export default class WorkspaceToolbar extends Component {
 		let configurationLabel = this.props.text('workspace.configuration');
 		return (
 			<div className="workspace-actions">
-				<button
-					ref={this._comparisonButton}
+				<Button
+					buttonRef={this._comparisonButton}
 					type="button"
 					className="workspace-button"
 					aria-pressed={this.props.comparison}
 					onClick={this.props.onToggleComparison}
 				>
 					{comparisonLabel}
-				</button>
-				<button
-					ref={this._configurationButton}
+				</Button>
+				<Button
+					buttonRef={this._configurationButton}
 					type="button"
 					className="workspace-button"
 					aria-expanded={this.props.configurationOpen}
@@ -70,7 +72,7 @@ export default class WorkspaceToolbar extends Component {
 					onClick={this.props.onToggleConfiguration}
 				>
 					{configurationLabel}
-				</button>
+				</Button>
 			</div>
 		);
 	}
@@ -84,7 +86,9 @@ export default class WorkspaceToolbar extends Component {
 		let title = this.props.text('app.title');
 		return (
 			<header className="workspace-toolbar">
-				<h1 className="workspace-brand">{title}</h1>
+				<Typography component="h1" variant="h6" className="workspace-brand">
+					{title}
+				</Typography>
 				{this._renderContributions()}
 				{this._renderActions()}
 			</header>

@@ -1,10 +1,12 @@
 # Component Refactor
 
-Status: M0 and M1 are implemented under the owner's independent-execution
-authorization. The MUI foundation and actual latitude/longitude form are in the
-app; final evidence and the local checkpoint are recorded in the
-[execution record](mui-migration-execution.md). M2 is complete; the owner has authorized M3 consumer migration. M4 remains deferred. The [saved migration plan](mui-migration-plan.md) owns the milestone
-sequence, evidence and completion requirements. Toolbar conversion follows it.
+Status: M0–M3 are implemented under the owner's independent-execution
+authorization. Shared MUI controls are used throughout the app's existing
+control positions and nonmodal configuration surfaces. The
+[execution record](mui-migration-execution.md) owns verification and scoped
+local checkpoints. M4 remains deferred. The [saved migration plan](mui-migration-plan.md)
+owns the milestone sequence and completion requirements. Toolbar conversion
+follows it.
 
 Focus: establish reusable controls for the Flat application, then use them to
 fit the Flat page controls into a single-line toolbar. These are controls and
@@ -14,21 +16,21 @@ control containers, not full-page components.
 
 The owner identified these common controls:
 
-| Control                     | Current implementation                                                   | Intended responsibility                                                |
-| --------------------------- | ------------------------------------------------------------------------ | ---------------------------------------------------------------------- |
-| Button                      | Native buttons repeated in feature presentation                          | Common button presentation and interaction                             |
-| Type ahead                  | Generic input, results popup and keyboard behavior are inside CityPicker | Reusable controlled type-ahead presentation                            |
-| Toolbar                     | WorkspaceToolbar is a workspace-specific host                            | Common toolbar container for composing controls                        |
-| Time                        | Shared TimeField already exists                                          | Reusable local-format time entry                                       |
-| Date                        | Shared DateField already exists                                          | Reusable local-format date entry                                       |
-| Slider                      | Native range input is embedded in FlatEarthTimeControls                  | Reusable slider presentation and interaction                           |
-| Text-and-arrow panel button | New requirement                                                          | Open and close a small interactive panel from a labeled toolbar button |
+| Control                     | Current implementation                                      | Intended responsibility                                                |
+| --------------------------- | ----------------------------------------------------------- | ---------------------------------------------------------------------- |
+| Button                      | Shared Button over maintained BaseButton                    | Common button presentation and interaction                             |
+| Type ahead                  | Shared TypeAhead; CityPicker supplies prepared city results | Reusable controlled type-ahead presentation                            |
+| Toolbar                     | Shared Toolbar available; existing workspace hosts retained | Common toolbar container for later toolbar conversion                  |
+| Time                        | Shared MUI TimeField                                        | Reusable local-format time entry                                       |
+| Date                        | Shared MUI DateField                                        | Reusable local-format date entry                                       |
+| Slider                      | Shared Slider used by FlatEarthTimeControls                 | Reusable slider presentation and interaction                           |
+| Text-and-arrow panel button | Shared PanelButton available; adoption deferred             | Open and close a small interactive panel from a labeled toolbar button |
 
-Common controls belong under `src/flat/components`. The panel button's final
-component name and decomposition into trigger/panel pieces are not yet chosen.
+Common controls belong under `src/flat/components`. PanelButton composes a
+shared Button trigger and a nonmodal MUI Popper/Paper surface.
 
 CityPicker is a configuration-specific control under the global-configuration
-feature. It should compose the common TypeAhead control, retaining city-specific
+feature. It composes the common TypeAhead control, retaining city-specific
 presentation and selection. CityCatalog continues to own city data and search.
 
 Shared controls receive prepared values, labels and callbacks. Domain rules,
@@ -78,7 +80,7 @@ records the independent findings incorporated into that contract.
 The owner selected MUI and create-app's maintained standard base controls as
 its foundation. M1 installed that catalog, preserving the existing harness and
 app lifecycle. Manual latitude/longitude inputs and their Apply action now use
-BaseTextInput and BaseButton. Other native consumers migrate in later milestones.
+BaseTextInput and BaseButton. M2/M3 migrated the remaining standard controls.
 
 Start the planned migration with the shared create-app/initialize-project base-component
 catalog and its declarations and behavioral specs. That catalog includes
@@ -90,8 +92,8 @@ when integrating the maintained sources.
 The owner accepts taking the maintained components wholesale when implementation
 is authorized, without a preliminary rewrite for local styling or type-contract
 preferences. The owner expects them to meet the standards; no completed review
-has established otherwise. M0/M1 execution is authorized and implemented; later milestones remain
-planned. The narrow context-default integration and concrete compatibility
+has established otherwise. M0–M3 are implemented; M4 remains planned.
+The narrow context-default integration and concrete compatibility
 adaptations are recorded in the execution record.
 
 The [base-control integration assessment](base-control-integration.md) records

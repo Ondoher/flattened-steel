@@ -51,6 +51,7 @@ body,
 .MuiFormLabel-root,
 .MuiInputBase-root,
 .MuiFormHelperText-root,
+.MuiAlert-root,
 .MuiMenuItem-root,
 .MuiAutocomplete-paper {
 	font-family: var(--app-font-family);

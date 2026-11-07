@@ -7,13 +7,13 @@ independent-execution skill; pushes/publication are not.
 
 ## Current State
 
-| Milestone | State | Evidence / next action |
-| --- | --- | --- |
-| M0: baseline and inventory | Complete | Preserved dirty baseline; 133 browser tests, client types and Flat build pass; 31-path maintained catalog inventoried |
+| Milestone                                | State    | Evidence / next action                                                                                                                                               |
+| ---------------------------------------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| M0: baseline and inventory               | Complete | Preserved dirty baseline; 133 browser tests, client types and Flat build pass; 31-path maintained catalog inventoried                                                |
 | M1: foundation and visible location form | Complete | 181 browser tests, client types, normal build and actual local/discovered app proof pass; task-scoped local checkpoint: feat(flat): establish MUI control foundation |
-| M2: shared controls | Complete | 199 browser tests, client types, normal build and actual interactive-panel proof pass |
-| M3: application migration | Pending M2 | Replace consumers in place and migrate non-toolbar settings surfaces |
-| M4 | Deferred | Outside the current M2–M3 authorization |
+| M2: shared controls                      | Complete | 199 browser tests, client types, normal build and actual interactive-panel proof pass                                                                                |
+| M3: application migration                | Complete | 202 working-tree browser tests, client types, normal build and actual local/discovered app/GPU checks pass                                                           |
+| M4                                       | Deferred | Outside the current M2–M3 authorization                                                                                                                              |
 
 Evidence root: `.codex-tmp/component-refactor/mui/run-20261107-01/`.
 M2–M3 baseline/evidence root: `.codex-tmp/component-refactor/mui/run-20261107-02/`.
@@ -82,9 +82,94 @@ packages are available. Engineering reviewers remain owner-cancelled.
   cancellation, letting MUI's unmount cleanup release document listeners. The
   controlled value and feature-owned time reference remain outside the widget.
 - D15: use MUI's editable-query mode to retain its clear action for an
-  unfinished search. Free-form Enter remains a query, never an accepted city;
-  only a prepared option reports selection. Verified query clear independently
+  unfinished search. Unmatched Enter remains a query; Enter with ranked results
+  selects the first prepared match, retaining the old picker behavior. Only a
+  prepared option reports selection. Verified query clear independently
   from selection and MUI's internal reset events.
+- D16: normalize select callbacks to values at the React boundary and carry the
+  exact view id explicitly. Keep DOM button refs through Button's buttonRef.
+  Extend the existing TestHarness with actual MUI-menu inspection/selection,
+  adapting native-markup assertions without bypassing the interaction.
+- D17: keep accepted custom elevation/FOV values represented in their select
+  lists, rather than showing an out-of-range MUI value. This does not restrict
+  valid camera values to presets or add domain state to presentation.
+- D18: migrate configuration to a nonmodal MUI Paper surface and the coordinate
+  disclosure to Accordion. Keep its mounted fields, owner-held drafts, scopes,
+  sections, existing layout and focus restoration. Current toolbar containers
+  and rows remain ordinary React hosts; Sun controls stay inline.
+- D19: keep M3's checkpoint independent of earlier uncommitted Sky, collapse,
+  stellar, engine and city-data features. Reconstruct only overlapping staged
+  files against the M2 commit; retain the full migrated pending features in the
+  working tree. Verify this isolated source snapshot through ordinary Polylith,
+  Karma and TypeScript commands before committing. No builder hooks or alternate
+  test framework are needed.
+
+## M3 Result and Verification
+
+Global configuration, workspace actions/selectors and Flat Earth's camera,
+retry and time controls now use the shared MUI layer in their existing positions.
+The settings host is nonmodal Paper, with Typography, MUI feedback and an
+Accordion for coordinate entry. No active feature JSX retains a native button,
+select, input, textarea, option or disclosure control. Semantic layout, links,
+canvas hosts and toolbar containers remain ordinary React markup by design.
+
+All 202 working-tree browser tests pass using `npm run test:ui:flat`, which calls
+the built-in `polylith test flat` builder and then the existing Karma runner.
+New consumer regressions prove numeric camera callbacks reach the exact view,
+custom values remain visible, and repeated slider keys retain one real model
+reference until gesture release. A real app check exposed MUI's Enter handling
+in editable-query mode; TypeAhead now selects the first prepared ranked result
+when Enter supplies the query string. Unmatched text remains an unaccepted query.
+The focused regression covers both cases.
+
+Final client types pass in 5.9 s; the normal repository build passes in 28.9 s.
+The full browser suite took 21.1 s including test build and Chrome startup.
+Existing build warnings about circular dependencies and ignored use-client
+directives remain. These are observed run timings, not controlled performance
+comparisons. The isolated proposed M3 source snapshot independently passes client
+types and all 190 applicable browser tests, using the ordinary CLI commands and
+existing configuration. Pending feature suites account for the different count.
+
+The actual app evidence exercises local hosting and discovered-source
+normalization/build/hosting through Polylith, including real GPU rendering:
+
+- City selection, invalid/valid coordinates and local date/time entry preserve
+  accepted state and existing validation ownership.
+- Two views retain independent elevation/FOV/sky values while sharing time.
+  Three 0.1° slider steps advance shared time by 72,000 ms with one frozen
+  reference; both rendered observations update.
+- Closing a MUI menu consumes the first Escape before the configuration host.
+  Collapse retains the existing mounted controls. These checks include earlier
+  pending features without promoting them into this checkpoint.
+- Runtime, canvas, retained frame, shader handle and theme identities stay the
+  same. Both scenarios report no page/console errors.
+- Fields measure 40 px with one MUI focus border; buttons measure 30.75 px.
+  Existing toolbar hosts remain HEADER elements, with zero PanelButton adoption.
+  The existing 1100 px settings layout has no horizontal shell/panel overflow.
+
+Captures:
+[settings](../../../.codex-tmp/component-refactor/mui/run-20261107-02/m3-app/discovered-settings.png),
+[time settings](../../../.codex-tmp/component-refactor/mui/run-20261107-02/m3-app/discovered-time-settings.png),
+[two views](../../../.codex-tmp/component-refactor/mui/run-20261107-02/m3-app/discovered-comparison.png),
+[narrow settings](../../../.codex-tmp/component-refactor/mui/run-20261107-02/m3-app/discovered-narrow-settings.png).
+The [aggregate proof](../../../.codex-tmp/component-refactor/mui/run-20261107-02/m3-app/result.json)
+combines retained local core assertions with a local layout follow-up and a
+complete discovered-source scenario. The original local attempt completed its
+core assertions but timed out at the final layout step because the script
+incorrectly assumed reopening settings resets the selected section. Its failure
+record remains intact and is linked by the aggregate; it is not presented as a
+wholly successful attempt. The corrected final run took 108.4 s and reused the
+completed local build/core evidence. Menu-transition timing corrections belong
+to the proof script. All browser profiles were deleted; only captures/results
+are retained.
+
+The checkpoint adviser recommends `feat(flat): migrate controls to shared MUI
+components`. The scoped checkpoint contains M3 adaptations of the committed app;
+earlier unrelated features and their overlapping migrated controls remain in the
+working tree. Engineering review remains cancelled; no standards-compliance
+claim is made. M4's broader final application/server/standards handoff, toolbar
+conversion, timezone work and rule promotion remain deferred. Nothing is pushed
+or published. Resume with owner selection of M4 or a separate toolbar task.
 
 ## M2 Result and Verification
 
@@ -112,6 +197,7 @@ The checkpoint adviser recommends `feat(flat): add shared MUI controls`.
 M3 continues with in-place consumers and non-toolbar settings surfaces; existing
 toolbar containers, rows and inline Sun-slider placement remain unchanged.
 Engineering review stays cancelled; no standards-compliance claim is made.
+Local M2 checkpoint: `714320bc`, `feat(flat): add shared MUI controls`.
 
 ## M1 Result and Verification
 
@@ -161,8 +247,9 @@ Date/Time and TypeAhead interactions remain the principal uncertainty.
 
 Engineering review remains owner-cancelled. The checkpoint adviser recommends
 `feat(flat): establish MUI control foundation`; its advice is retained with the
-run evidence. M2–M4, toolbar conversion, rule promotion, timezone work and broader
-responsive/product acceptance remain deferred. Resume with M2 in the saved plan.
+run evidence. At the M1 boundary, M2–M4 remained deferred; M2/M3 are now complete
+as recorded above. M4, toolbar conversion, rule promotion, timezone work and
+broader responsive/product acceptance remain deferred.
 Tests and UI evidence use the preserved working tree, including earlier
 uncommitted features. The local checkpoint contains M1 and its context/topic
 prerequisites; unrelated earlier work remains uncommitted. Find the checkpoint

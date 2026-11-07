@@ -27,6 +27,24 @@ type AppButtonProps = Omit<import('@mui/material/Button').ButtonProps, 'ref'> & 
 /**
  * Prepared option independent of any domain catalog.
  */
+type AppSelectOption = {
+	/**
+	 * Controlled scalar selection value.
+	 */
+	value: string | number;
+	/**
+	 * Prepared literal display label.
+	 */
+	label: string;
+	/**
+	 * Whether this choice can be selected.
+	 */
+	disabled?: boolean;
+};
+
+/**
+ * Prepared search option independent of any domain catalog.
+ */
 type TypeAheadOption = {
 	/**
 	 * Stable element or option identity supplied by the presentation owner.

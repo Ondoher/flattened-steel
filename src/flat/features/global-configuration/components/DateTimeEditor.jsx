@@ -1,3 +1,5 @@
+import Typography from '@mui/material/Typography';
+import Button from '../../../components/Button.jsx';
 import React, {Component} from 'react';
 import DateField from '../../../components/DateField.jsx';
 import TimeField from '../../../components/TimeField.jsx';
@@ -70,7 +72,9 @@ export default class DateTimeEditor extends Component {
 				onSubmit={this._onSubmit}
 				noValidate
 			>
-				<h4>{title}</h4>
+				<Typography component="h4" variant="subtitle1">
+					{title}
+				</Typography>
 				<p className="date-time-selection" role="status">
 					{selection}
 				</p>
@@ -92,7 +96,7 @@ export default class DateTimeEditor extends Component {
 						onChange={this._onTimeChange}
 					/>
 				</div>
-				<button type="submit">{applyLabel}</button>
+				<Button type="submit">{applyLabel}</Button>
 			</form>
 		);
 	}

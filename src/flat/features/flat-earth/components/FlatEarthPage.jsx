@@ -1,3 +1,4 @@
+import Button from '../../../components/Button.jsx';
 import React, {Component} from 'react';
 import AppContext from '../../../common/AppContext.js';
 import phrases from '../../../phrases/en-US.json';
@@ -124,9 +125,9 @@ export default class FlatEarthPage extends Component {
 		let details = error ? <p>{error}</p> : null;
 		let retry =
 			status === 'error' ? (
-				<button type="button" onClick={this._onRetry}>
+				<Button type="button" onClick={this._onRetry}>
 					{retryLabel}
-				</button>
+				</Button>
 			) : null;
 		return (
 			<div className="flat-earth-scene-status" role="status">

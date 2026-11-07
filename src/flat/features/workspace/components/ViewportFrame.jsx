@@ -1,3 +1,6 @@
+import Button from '../../../components/Button.jsx';
+import BaseSelect from '../../../components/BaseSelect.jsx';
+import Typography from '@mui/material/Typography';
 import React, {Component} from 'react';
 
 /**
@@ -6,6 +9,16 @@ import React, {Component} from 'react';
  * @extends {Component<ViewportFrameProps>}
  */
 export default class ViewportFrame extends Component {
+	/**
+	 * Creates the stable normalized scene-selection adapter.
+	 *
+	 * @param {ViewportFrameProps} props - Prepared viewport presentation.
+	 */
+	constructor(props) {
+		super(props);
+		this._onSelectPage = this._onSelectPage.bind(this);
+	}
+
 	/**
 	 * Called by frame rendering to project a page, empty host, or routed failure.
 	 *
@@ -23,19 +36,24 @@ export default class ViewportFrame extends Component {
 	/**
 	 * Called by the scene selector to render registered-scene options.
 	 *
-	 * @returns {React.ReactNode} - Options with stable page identities and localized labels.
+	 * @returns {AppSelectOption[]} - Options with stable page identities and localized labels.
 	 */
 	_renderSceneOptions() {
 		let {pages, text} = this.props;
-		let options = pages.map((page) => {
-			let pageLabel = text(page.label, {}, page.literalLabel ?? page.label);
-			return (
-				<option key={page.id} value={page.id}>
-					{pageLabel}
-				</option>
-			);
-		});
-		return options;
+		let options = pages.map((page) => ({
+			value: page.id,
+			label: text(page.label, {}, page.literalLabel ?? page.label),
+		}));
+		return [{value: '', label: text('workspace.choose-scene'), disabled: true}, ...options];
+	}
+
+	/**
+	 * Reports a normalized page value together with this host's exact view identity.
+	 *
+	 * @param {string} pageId - Selected registered page.
+	 */
+	_onSelectPage(pageId) {
+		this.props.onSelectPage(pageId, this.props.viewport.id);
 	}
 
 	/**
@@ -50,18 +68,20 @@ export default class ViewportFrame extends Component {
 		}
 		let {viewport, text} = this.props;
 		let sceneLabel = text('workspace.scene-for', {view: label});
-		let chooseSceneLabel = text('workspace.choose-scene');
 		let selectedPage = viewport.pageId ?? '';
+		let options = this._renderSceneOptions();
+		let selectProps = {displayEmpty: true};
 		return (
-			<label className="workspace-scene-choice">
-				<span className="screen-reader-only">{sceneLabel}</span>
-				<select value={selectedPage} data-view-id={viewport.id} onChange={this.props.onSelectPage}>
-					<option value="" disabled>
-						{chooseSceneLabel}
-					</option>
-					{this._renderSceneOptions()}
-				</select>
-			</label>
+			<BaseSelect
+				className="workspace-scene-choice"
+				label={sceneLabel}
+				value={selectedPage}
+				data-view-id={viewport.id}
+				options={options}
+				selectProps={selectProps}
+				onChange={this._onSelectPage}
+				fullWidth={false}
+			/>
 		);
 	}
 
@@ -86,7 +106,7 @@ export default class ViewportFrame extends Component {
 		let {viewport, text} = this.props;
 		let label = text('workspace.page-settings');
 		let button = viewport.hasSettings ? (
-			<button
+			<Button
 				type="button"
 				className="workspace-button workspace-page-settings"
 				data-view-id={viewport.id}
@@ -94,7 +114,7 @@ export default class ViewportFrame extends Component {
 				onClick={this.props.onOpenSettings}
 			>
 				{label}
-			</button>
+			</Button>
 		) : null;
 		return button;
 	}
@@ -124,19 +144,21 @@ export default class ViewportFrame extends Component {
 		if (number > 1) {
 			let closeLabel = text('workspace.close-view-number', {number});
 			closeButton = (
-				<button
+				<Button
 					type="button"
 					className="workspace-button workspace-close"
 					data-view-id={viewport.id}
 					onClick={this.props.onCloseView}
 				>
 					{closeLabel}
-				</button>
+				</Button>
 			);
 		}
 		return (
 			<header className="viewport-header">
-				<h2 id={headingId}>{label}</h2>
+				<Typography component="h2" variant="body2" id={headingId}>
+					{label}
+				</Typography>
 				{this._renderSceneSelector(label)}
 				{this._renderSettings()}
 				{closeButton}

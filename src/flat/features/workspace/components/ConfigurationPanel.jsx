@@ -1,3 +1,7 @@
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
+import BaseSelect from '../../../components/BaseSelect.jsx';
+import Button from '../../../components/Button.jsx';
 import React, {Component, createRef} from 'react';
 
 /**
@@ -16,6 +20,7 @@ export default class ConfigurationPanel extends Component {
 		/** @type {React.RefObject<HTMLButtonElement>} */
 		this._closeButton = createRef();
 		this._onKeyDown = this._onKeyDown.bind(this);
+		this._onScopeChange = this._onScopeChange.bind(this);
 		this._root = createRef();
 	}
 
@@ -120,10 +125,17 @@ export default class ConfigurationPanel extends Component {
 		let closeLabel = text('workspace.close');
 		return (
 			<header className="configuration-header">
-				<h2 id="configuration-heading">{title}</h2>
-				<button ref={this._closeButton} type="button" className="workspace-button" onClick={this.props.onClose}>
+				<Typography component="h2" variant="h6" id="configuration-heading">
+					{title}
+				</Typography>
+				<Button
+					buttonRef={this._closeButton}
+					type="button"
+					className="workspace-button"
+					onClick={this.props.onClose}
+				>
 					{closeLabel}
-				</button>
+				</Button>
 			</header>
 		);
 	}
@@ -134,32 +146,50 @@ export default class ConfigurationPanel extends Component {
 	 * @returns {React.ReactNode} - Explicit application or open-view target.
 	 */
 	_renderScope() {
-		let {configuration, text, views} = this.props;
-		let scopeLabel = text('workspace.configuration-for');
-		let workspaceLabel = text('workspace.shared-settings');
+		let {configuration, text} = this.props;
+		let label = text('workspace.configuration-for');
 		let selectedTarget = configuration.target ?? '';
+		let options = this._scopeOptions();
+		let selectProps = {displayEmpty: true};
+		return (
+			<div className="configuration-scope">
+				<BaseSelect
+					label={label}
+					value={selectedTarget}
+					options={options}
+					selectProps={selectProps}
+					onChange={this._onScopeChange}
+				/>
+			</div>
+		);
+	}
+
+	/**
+	 * Prepares registered workspace/view scope values before rendering.
+	 *
+	 * @returns {AppSelectOption[]} - Current supported scopes.
+	 */
+	_scopeOptions() {
+		let {configuration, text, views} = this.props;
 		let options = views
 			.filter((view) => (configuration.targets ?? [view.id]).includes(view.id))
 			.map((view) => {
 				let index = views.findIndex((item) => item.id === view.id);
 				let viewLabel = text('workspace.view', {number: index + 1});
 				let pageLabel = view.page ? text(view.page.label, {}, view.page.literalLabel) : '';
-				let label = pageLabel ? `${viewLabel} — ${pageLabel}` : viewLabel;
-				return (
-					<option key={view.id} value={view.id}>
-						{label}
-					</option>
-				);
+				let label = pageLabel ? viewLabel + ' — ' + pageLabel : viewLabel;
+				return {value: view.id, label};
 			});
-		return (
-			<label className="configuration-scope">
-				<span>{scopeLabel}</span>
-				<select value={selectedTarget} onChange={this.props.onSelectTarget}>
-					<option value="">{workspaceLabel}</option>
-					{options}
-				</select>
-			</label>
-		);
+		return [{value: '', label: text('workspace.shared-settings')}, ...options];
+	}
+
+	/**
+	 * Relays the selected scope value without passing a synthetic MUI event outward.
+	 *
+	 * @param {string} value - Selected scope or the empty workspace value.
+	 */
+	_onScopeChange(value) {
+		this.props.onSelectTarget(value);
 	}
 
 	/**
@@ -174,7 +204,7 @@ export default class ConfigurationPanel extends Component {
 			let title = text(section.label ?? section.id, {}, section.id);
 			let selected = section.id === configuration.section;
 			return (
-				<button
+				<Button
 					key={section.registrationId}
 					type="button"
 					className="workspace-button"
@@ -183,7 +213,7 @@ export default class ConfigurationPanel extends Component {
 					onClick={this.props.onSelectSection}
 				>
 					{title}
-				</button>
+				</Button>
 			);
 		});
 		return (
@@ -219,7 +249,10 @@ export default class ConfigurationPanel extends Component {
 	 */
 	render() {
 		return (
-			<aside
+			<Paper
+				component="aside"
+				elevation={0}
+				square
 				ref={this._root}
 				id="workspace-configuration"
 				className="configuration-panel"
@@ -230,7 +263,7 @@ export default class ConfigurationPanel extends Component {
 				{this._renderScope()}
 				{this._renderSections()}
 				{this._renderContent()}
-			</aside>
+			</Paper>
 		);
 	}
 }

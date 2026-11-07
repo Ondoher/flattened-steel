@@ -122,6 +122,29 @@ describe('shared MUI controls', () => {
 		expect(selected).not.toHaveBeenCalled();
 	});
 
+	it('selects the first prepared result when Enter follows typing, without accepting unmatched text', () => {
+		const selected = jasmine.createSpy('selected');
+		harness = createTestHarness();
+		const result = harness.render(TypeAhead, {
+			label: 'Find',
+			query: '',
+			options: [],
+			onQueryChange: jasmine.createSpy('query'),
+			onSelect: selected,
+		});
+		act(() => result.query('input').focus());
+		harness.input(result.query('input'), 'Second');
+		result.rerender({query: 'Second', options});
+		key(result.query('input'), 'Enter');
+		expect(selected).toHaveBeenCalledWith('b');
+		selected.calls.reset();
+		result.rerender({query: 'Unmatched', options: []});
+		harness.input(result.query('input'), 'Unmatched text');
+		result.rerender({query: 'Unmatched text'});
+		key(result.query('input'), 'Enter');
+		expect(selected).not.toHaveBeenCalled();
+	});
+
 	it('adapts city name/detail presentation and reports the catalog identity from keyboard selection', () => {
 		const selected = jasmine.createSpy('selected');
 		harness = createTestHarness();

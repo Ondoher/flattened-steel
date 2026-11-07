@@ -99,11 +99,8 @@ describe('workspace React frame', () => {
 		};
 		result = harness.render(WorkspaceShell, {workspaceView: view, initialState: view.state});
 		expect(result.query('header').textContent).toContain('Owned tool');
-		let second = result.queryAll('main select')[1];
-		act(() => {
-			second.value = 'two';
-			second.dispatchEvent(new Event('change', {bubbles: true}));
-		});
+		let second = result.queryAll('main [role="combobox"]')[1];
+		harness.select(second, 'two');
 		expect(view.actions).toEqual([{pageId: 'two', viewId: 'view-2'}]);
 	});
 	it('opens a nonmodal configuration host, relays scope, and restores focus after Escape', () => {
@@ -116,11 +113,8 @@ describe('workspace React frame', () => {
 		});
 		expect(result.query('aside')).toBeTruthy();
 		expect(document.activeElement).toBe(result.query('aside button'));
-		let target = result.query('aside select');
-		act(() => {
-			target.value = 'view-2';
-			target.dispatchEvent(new Event('change', {bubbles: true}));
-		});
+		let target = result.query('aside [role="combobox"]');
+		harness.select(target, 'view-2');
 		expect(view.actions).toContain({target: 'view-2'});
 		act(() => result.query('aside').dispatchEvent(new KeyboardEvent('keydown', {key: 'Escape', bubbles: true})));
 		view.emit({...view.state, configuration: {open: false, target: null, contributions: []}});
@@ -151,7 +145,7 @@ describe('workspace React frame', () => {
 		};
 		result = harness.render(WorkspaceShell, {workspaceView: view, initialState: view.state});
 		expect(document.activeElement).toBe(result.query('[data-settings-focus]'));
-		let input = result.query('input');
+		let input = result.query('[data-settings-focus] > input');
 		act(() => {
 			input.disabled = false;
 		});

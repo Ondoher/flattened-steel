@@ -28,30 +28,6 @@
 	gap: 1rem;
 }
 
-.city-catalog-status button {
-	box-sizing: border-box;
-	width: 100%;
-	min-width: 0;
-	padding: 0.5rem;
-	border: 1px solid var(--app-color-border);
-	border-radius: 0.25rem;
-	color: var(--app-color-text);
-	background: var(--app-color-background);
-	font: inherit;
-}
-
-.city-catalog-status button {
-	cursor: pointer;
-	border-color: var(--app-color-action);
-	color: var(--app-color-on-action);
-	background: var(--app-color-action);
-}
-
-.city-catalog-status button:focus-visible {
-	outline: 2px solid var(--app-color-action);
-	outline-offset: 2px;
-}
-
 .location-selection {
 	overflow-wrap: anywhere;
 }
@@ -63,11 +39,6 @@
 .city-catalog-status {
 	display: grid;
 	gap: 0.75rem;
-}
-
-.location-error {
-	padding-inline-start: 0.5rem;
-	border-inline-start: 2px solid var(--app-color-action);
 }
 
 .city-attribution a {
@@ -101,21 +72,6 @@
 	min-width: 0;
 }
 
-.date-time-editor button {
-	padding: 0.5rem;
-	border: 1px solid var(--app-color-action);
-	border-radius: 0.25rem;
-	color: var(--app-color-on-action);
-	background: var(--app-color-action);
-	font: inherit;
-	cursor: pointer;
-}
-
-.date-time-editor button:focus-visible {
-	outline: 2px solid var(--app-color-action);
-	outline-offset: 2px;
-}
-
 .global-configuration-summary {
 	display: grid;
 	grid-template-columns: 304px 320px;
@@ -124,17 +80,13 @@
 }
 .global-summary-entry {
 	display: grid;
+	justify-content: stretch;
 	grid-template-rows: 16px 20px;
 	row-gap: 4px;
 	height: 52px;
 	padding: 6px 8px;
 	text-align: left;
-	border: 0;
-	border-radius: 0;
-	background: transparent;
-	color: var(--app-color-text);
 	min-width: 0;
-	cursor: pointer;
 }
 .global-summary-label {
 	display: flex;
@@ -147,6 +99,7 @@
 	color: var(--app-color-action);
 }
 .global-summary-entry > strong {
+	color: var(--app-color-text);
 	font-size: 15px;
 	line-height: 20px;
 	white-space: nowrap;
@@ -167,9 +120,9 @@
 	border-bottom: 0;
 	padding-top: 24px;
 }
-.date-time-editor button,
-.city-catalog-status button {
-	min-height: 34px;
+.date-time-editor > .app-button,
+.city-catalog-status > .app-button {
+	width: 100%;
 }
 @media (max-width: 1200px) {
 	.global-configuration-summary {
@@ -210,18 +163,20 @@
 	}
 }
 
-.location-coordinate-disclosure > summary {
-	cursor: pointer;
+.location-coordinate-disclosure .MuiAccordionSummary-root {
+	min-height: 32px;
+	padding-inline: 0;
 	color: var(--app-color-action);
-	font-size: 13px;
-	line-height: 20px;
-	padding-block: 6px;
 }
-.location-coordinate-disclosure .location-coordinates {
-	margin-top: 12px;
+.location-coordinate-disclosure .MuiAccordionSummary-content {
+	margin-block: 6px;
+}
+.location-coordinate-disclosure .MuiAccordionDetails-root {
+	padding: 12px 0 0;
 }
 
 .global-summary-label > span:first-child {
+	color: var(--app-color-text);
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;

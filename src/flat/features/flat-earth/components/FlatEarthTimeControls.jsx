@@ -1,3 +1,8 @@
+import Slider from '../../../components/Slider.jsx';
+import BaseTextInput from '../../../components/BaseTextInput.jsx';
+import BaseFormMessage from '../../../components/BaseFormMessage.jsx';
+import Typography from '@mui/material/Typography';
+import Button from '../../../components/Button.jsx';
 import React, {Component} from 'react';
 import AppContext from '../../../common/AppContext.js';
 import phrases from '../../../phrases/en-US.json';
@@ -24,7 +29,6 @@ export default class FlatEarthTimeControls extends Component {
 		this._seek = this._seek.bind(this);
 		this._draft = this._draft.bind(this);
 		this._numericKey = this._numericKey.bind(this);
-		this._rangeKey = this._rangeKey.bind(this);
 		this._accept = this._accept.bind(this);
 		this._settings = this._settings.bind(this);
 		this._location = this._location.bind(this);
@@ -59,40 +63,29 @@ export default class FlatEarthTimeControls extends Component {
 	 * Called by pointer/key input to freeze one current reference.
 	 */
 	_begin() {
-		this._token = this.props.sceneView.beginTimeEdit(this.props.owner);
+		if (!this._token) {
+			this._token = this.props.sceneView.beginTimeEdit(this.props.owner);
+		}
 	}
 
 	/**
 	 * Called by pointer/key release or unmount to end only this gesture.
 	 */
 	_end() {
+		if (!this._token) {
+			return;
+		}
 		this.props.sceneView.endTimeEdit(this.props.owner, this._token);
 		this._token = 0;
 	}
 
 	/**
-	 * Called by native range keyboard input before its value changes.
+	 * Called by the shared slider to report a signed degree request.
 	 *
-	 * @param {React.KeyboardEvent<HTMLInputElement>} event - Native range gesture.
+	 * @param {number} value - Current scalar slider value.
 	 */
-	_rangeKey(event) {
-		if (
-			['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End'].includes(
-				event.key,
-			) &&
-			!this._token
-		) {
-			this._begin();
-		}
-	}
-
-	/**
-	 * Called by native range input to report a signed degree request.
-	 *
-	 * @param {React.ChangeEvent<HTMLInputElement>} event - Current native input value.
-	 */
-	_seek(event) {
-		this.props.sceneView.seekTime(this.props.owner, this._token, Number(event.currentTarget.value));
+	_seek(value) {
+		this.props.sceneView.seekTime(this.props.owner, this._token, value);
 	}
 
 	/**
@@ -157,7 +150,7 @@ export default class FlatEarthTimeControls extends Component {
 	}
 
 	/**
-	 * Called by rendering to present the native range and its closest reference.
+	 * Called by rendering to present the shared slider and its closest reference.
 	 *
 	 * @returns {React.ReactNode} - Shared slider with explicit zero and legends.
 	 */
@@ -175,23 +168,18 @@ export default class FlatEarthTimeControls extends Component {
 		return (
 			<div className="flat-time-slider">
 				<div className="flat-time-rail">
-					<input
+					<Slider
 						id={id}
-						type="range"
-						min="-180"
-						max="180"
-						step="0.1"
+						min={-180}
+						max={180}
+						step={0.1}
 						value={value}
 						disabled={disabled}
 						aria-label={name}
 						aria-valuetext={valueText}
 						aria-describedby={description}
-						onPointerDown={this._begin}
-						onPointerUp={this._end}
-						onPointerCancel={this._end}
-						onKeyDown={this._rangeKey}
-						onKeyUp={this._end}
-						onBlur={this._end}
+						onInteractionStart={this._begin}
+						onInteractionEnd={this._end}
 						onChange={this._seek}
 					/>
 					<span className="flat-time-zero" aria-hidden="true" />
@@ -226,14 +214,14 @@ export default class FlatEarthTimeControls extends Component {
 				<strong>{shared}</strong>
 				<span>{label}</span>
 				<strong className="flat-time-angle">{angle}</strong>
-				<button
+				<Button
 					type="button"
 					className="flat-time-settings"
 					aria-pressed={this.state.selected}
 					onClick={this._settings}
 				>
 					{settings}
-				</button>
+				</Button>
 			</div>
 		);
 	}
@@ -252,36 +240,37 @@ export default class FlatEarthTimeControls extends Component {
 		let device = this._text('flat-earth.time.device');
 		let reference = this._text('flat-earth.time.reference');
 		let error = this.state.error ? (
-			<p className="flat-time-error" role="alert">
+			<BaseFormMessage className="flat-time-error" type="error" role="alert">
 				{this._text('flat-earth.time.invalid')}
-			</p>
+			</BaseFormMessage>
 		) : null;
 		let unavailable =
 			this.state.angle === null ? (
-				<button type="button" className="flat-time-location" onClick={this._location}>
+				<Button type="button" className="flat-time-location" onClick={this._location}>
 					{this._text('flat-earth.time.choose-location')}
-				</button>
+				</Button>
 			) : null;
 		let disabled = this.state.angle === null;
 		return (
 			<div className="flat-time-panel-content">
 				<div className="flat-time-edit">
-					<h3>{title}</h3>
+					<Typography component="h3" variant="subtitle1">
+						{title}
+					</Typography>
 					<p className="flat-time-scope">{scope}</p>
 					{this._renderSlider()}
-					<label className="flat-time-numeric">
-						{degrees}
-						<input
-							type="text"
-							inputMode="decimal"
-							value={this.state.draft}
-							disabled={disabled}
-							aria-invalid={this.state.error}
-							onChange={this._draft}
-							onBlur={this._accept}
-							onKeyDown={this._numericKey}
-						/>
-					</label>
+					<BaseTextInput
+						className="flat-time-numeric"
+						label={degrees}
+						type="text"
+						value={this.state.draft}
+						disabled={disabled}
+						error={this.state.error}
+						slotProps={{htmlInput: {inputMode: 'decimal', 'aria-invalid': this.state.error}}}
+						onChange={this._draft}
+						onBlur={this._accept}
+						onKeyDown={this._numericKey}
+					/>
 					{error}
 					{unavailable}
 				</div>

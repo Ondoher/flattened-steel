@@ -1,5 +1,11 @@
+import BaseFormMessage from '../../../components/BaseFormMessage.jsx';
+import Typography from '@mui/material/Typography';
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import ExpandMore from '@mui/icons-material/ExpandMore';
 import React, {Component} from 'react';
-import BaseButton from '../../../components/BaseButton.jsx';
+import Button from '../../../components/Button.jsx';
 import BaseTextInput from '../../../components/BaseTextInput.jsx';
 import CityPicker from './CityPicker.jsx';
 
@@ -83,9 +89,9 @@ export default class LocationEditor extends Component {
 		if (presentation.canRetry) {
 			let label = text('global-configuration.cities.retry');
 			retry = (
-				<button type="button" onClick={onRetry}>
+				<Button type="button" onClick={onRetry}>
 					{label}
-				</button>
+				</Button>
 			);
 		}
 		return (
@@ -110,9 +116,9 @@ export default class LocationEditor extends Component {
 		if (presentation.coordinateError) {
 			let message = text(presentation.coordinateError);
 			error = (
-				<p className="location-error" role="alert">
+				<BaseFormMessage className="location-error" type="error" role="alert">
 					{message}
-				</p>
+				</BaseFormMessage>
 			);
 		}
 		return (
@@ -134,7 +140,7 @@ export default class LocationEditor extends Component {
 					onChange={this._onLongitude}
 				/>
 				{error}
-				<BaseButton type="submit" label={applyLabel} />
+				<Button type="submit" label={applyLabel} />
 			</form>
 		);
 	}
@@ -150,9 +156,12 @@ export default class LocationEditor extends Component {
 		let disabled = !presentation.searchEnabled;
 		let attribution = text('global-configuration.cities.attribution');
 		let coordinateLabel = text('global-configuration.coordinates.disclosure');
+		let expandIcon = <ExpandMore />;
 		return (
 			<div className="location-editor" data-settings-focus="location" tabIndex={-1}>
-				<h4>{title}</h4>
+				<Typography component="h4" variant="subtitle1">
+					{title}
+				</Typography>
 				{this._renderSelection()}
 				<CityPicker
 					query={presentation.editor.query}
@@ -163,10 +172,16 @@ export default class LocationEditor extends Component {
 					onSelectCity={onSelectCity}
 				/>
 				{this._renderCatalogStatus()}
-				<details className="location-coordinate-disclosure">
-					<summary>{coordinateLabel}</summary>
-					{this._renderCoordinates()}
-				</details>
+				<Accordion className="location-coordinate-disclosure" disableGutters square elevation={0}>
+					<AccordionSummary
+						id="coordinate-summary"
+						aria-controls="coordinate-details"
+						expandIcon={expandIcon}
+					>
+						<Typography variant="body2">{coordinateLabel}</Typography>
+					</AccordionSummary>
+					<AccordionDetails>{this._renderCoordinates()}</AccordionDetails>
+				</Accordion>
 				<p className="city-attribution">
 					<a href="https://www.geonames.org/">{attribution}</a>
 				</p>

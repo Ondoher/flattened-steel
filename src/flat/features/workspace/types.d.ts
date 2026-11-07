@@ -395,9 +395,12 @@ type WorkspaceProps = {
 	 */
 	notFound: boolean;
 	/**
-	 * Selection intent encoded by a native control.
+	 * Reports a registered page selection for an exact owning view.
+	 *
+	 * @param pageId - Selected registered page.
+	 * @param viewId - Owning view identity.
 	 */
-	onSelectPage: React.ChangeEventHandler<HTMLSelectElement>;
+	onSelectPage: (pageId: string, viewId: string) => void;
 	/**
 	 * Optional-view close intent.
 	 */
@@ -444,9 +447,11 @@ type ConfigurationPanelProps = {
 	 */
 	onClose: () => void;
 	/**
-	 * Scope selection intent encoded by a native control.
+	 * Reports a normalized scope selection.
+	 *
+	 * @param value - Scope identity, or empty for workspace settings.
 	 */
-	onSelectTarget: React.ChangeEventHandler<HTMLSelectElement>;
+	onSelectTarget: (value: string) => void;
 };
 
 /**

@@ -99,9 +99,12 @@ export default class BaseSelect extends Component {
 		const labelId = `${selectId}-label`;
 		const helperId = helperText ? `${selectId}-helper` : undefined;
 		const resolvedLabel = this.resolve(label);
+		const labelShrink = selectProps.displayEmpty ? true : undefined;
 		return (
 			<FormControl {...props} size={resolvedSize} variant={resolvedVariant} fullWidth={props.fullWidth ?? true}>
-				<InputLabel id={labelId}>{resolvedLabel}</InputLabel>
+				<InputLabel id={labelId} shrink={labelShrink}>
+					{resolvedLabel}
+				</InputLabel>
 				<MuiSelect
 					{...selectProps}
 					size={resolvedSize}

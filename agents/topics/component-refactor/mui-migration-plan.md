@@ -1,8 +1,8 @@
 # Flat MUI Migration and Shared Controls
 
-Status: M0/M1 implemented under independent-execution; see the
-[execution record](mui-migration-execution.md) for evidence and checkpoint.
-M2 is complete; M3 is authorized and next. M4 remains deferred.
+Status: M0–M3 implemented under independent-execution; see the
+[execution record](mui-migration-execution.md) for evidence and scoped checkpoints.
+M4 remains deferred pending owner selection.
 Owner direction recorded: 2026-11-07.
 
 ## Outcome and Authority
@@ -300,7 +300,8 @@ unchanged. Resolve only affected control contracts before moving on.
 
 ### M3 — Bottom-up Application Usage and Settings Migration
 
-State: authorized; next after the M2 checkpoint.
+State: complete. Consumer migrations, type/browser/build checks and actual
+local/discovered app evidence are recorded in the execution record.
 
 Purpose: get the application working through the completed MUI control layer.
 Forecast: 4–9 hours, refined from the first migrated feature.

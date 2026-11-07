@@ -163,6 +163,42 @@ export class TestHarness {
 	}
 
 	/**
+	 * Call this method to choose a rendered MUI select option through its real menu.
+	 *
+	 * @param {Element} element - The rendered combobox receiving the pointer gesture.
+	 * @param {string|number} value - Controlled option value to choose.
+	 */
+	select(element, value) {
+		let option = this.openSelect(element).find((item) => item.getAttribute('data-value') === String(value));
+		if (!option) {
+			throw new Error(`No rendered MUI option for ${value}.`);
+		}
+		this.click(option);
+	}
+
+	/**
+	 * Call this method to inspect the actual options in a rendered MUI menu.
+	 *
+	 * @param {Element} element - The rendered combobox receiving the pointer gesture.
+	 * @returns {Element[]} - Portalled menu options in their displayed order.
+	 */
+	openSelect(element) {
+		act(() => element.dispatchEvent(new MouseEvent('mousedown', {bubbles: true, button: 0})));
+		return Array.from(document.querySelectorAll('[role="option"]'));
+	}
+
+	/**
+	 * Call this method to send a keyboard phase through the rendered control.
+	 *
+	 * @param {Element} element - Target input or control.
+	 * @param {string} key - Keyboard key.
+	 * @param {string} [type] - Event phase, defaulting to keydown.
+	 */
+	key(element, key, type = 'keydown') {
+		act(() => element.dispatchEvent(new KeyboardEvent(type, {key, bubbles: true, cancelable: true})));
+	}
+
+	/**
 	 * Call this method to unmount the current root and remove its DOM container.
 	 */
 	unmount() {

@@ -48,8 +48,10 @@ export default class TypeAhead extends Component {
 	 * @param {TypeAheadOption|string|null} option - Chosen result, unaccepted query text, or clear.
 	 */
 	_onSelect(event, option) {
-		if (option && typeof option !== 'string') {
-			this.props.onSelect(option.id);
+		// MUI reports typed Enter as text even with a programmatic highlight.
+		let choice = typeof option === 'string' ? this.props.options[0] : option;
+		if (choice) {
+			this.props.onSelect(choice.id);
 		}
 	}
 
