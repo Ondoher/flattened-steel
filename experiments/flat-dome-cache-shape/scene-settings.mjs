@@ -8,7 +8,7 @@ import {weights, color} from './color.mjs';
  * @returns {Record<string, unknown>} - Complete physical and display settings.
  */
 export function sceneSettings() {
-	const origin = [diskRadius - 5000, 0, 45];
+	const origin = [diskRadius - 5000, 0, 20];
 	const desiredY = ((96 / 255 + 0.055) / 1.055) ** 2.4;
 	const sourceY = color(medium.sourceIrradiance).xyz[1];
 	const groundScalar = desiredY / (0.06 * sourceY);
@@ -19,7 +19,7 @@ export function sceneSettings() {
 		longitude: 90,
 		diskRadius,
 		distanceInside: 5000,
-		eyeHeight: 45,
+		eyeHeight: origin[2],
 		localCapHeight: capHeight(origin[0]),
 		capClearance: clearance(origin),
 		sourcePosition: [diskRadius / 2, 0, 4828032],

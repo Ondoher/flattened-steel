@@ -5,10 +5,13 @@ Canonical entry: [Flat Dome Cache Shape](poc-experiments/engineering-studies/fla
 Focus: completed live-cache to updated-shader to Three.js finite-ground scene
 integration, with opposite outward/inward renders from an inside-dome observer
 near the rim. The owner delegated height/distance selection and kept natural
-FOV. The [scene report](../../tmp/experiments/flat-dome-cache-shape/runs/00053-r4-scene-report/index.html)
-contains both renders and measured verification. Integration succeeds; near-rim
-probe errors reach 37.53%, so accuracy remains qualified. No numerical work is
-running. Other distributions and production promotion remain deferred.
+FOV. The owner lowered eye height to 20 m; run `00054` contains the latest
+[outward](../../tmp/experiments/flat-dome-cache-shape/runs/00054-r4-three-final/outward.png)
+and [inward](../../tmp/experiments/flat-dome-cache-shape/runs/00054-r4-three-final/inward.png)
+renders with local geometry/display/resource checks. The [scene report](../../tmp/experiments/flat-dome-cache-shape/runs/00053-r4-scene-report/index.html)
+retains the original 45 m result and its 37.53% near-rim probe error; that number
+does not qualify the new height. No numerical work is running. Other
+distributions and production promotion remain deferred.
 
 The experiment has a saved, second-agent-critiqued slice-count plan requiring
 accuracy tables and actual cache/probe/libRadtran color swatches across distances

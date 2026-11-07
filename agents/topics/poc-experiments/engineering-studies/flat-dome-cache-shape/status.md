@@ -4,22 +4,32 @@ Status: scene-render R1-R4 complete, with qualified near-rim accuracy.
 
 ## Current Focus
 
+The latest owner-selected camera height is 20 m. Run `00054-r4-three-final`
+contains the new [outward](../../../../../tmp/experiments/flat-dome-cache-shape/runs/00054-r4-three-final/outward.png)
+and [inward](../../../../../tmp/experiments/flat-dome-cache-shape/runs/00054-r4-three-final/inward.png)
+1280x720 renders. Location, closest-approach Sun, 90-degree FOV, common exposure
+and warm-gray ground are retained. The camera has 29.95575 m shortest dome
+clearance; the ground cutoff is approximately 2.56 pixels below the horizon.
+Local geometry, transmission, spectral composition, display and resource checks
+pass. No independent-probe accuracy campaign was repeated for the new height.
+
 The completed [scene-render plan](scene-render-plan.md) demonstrates a complete
 live cache, the updated atmosphere shader, and actual Three.js finite-ground
 rendering in two opposite directions from the same inside-dome observer. The
 [scene report](../../../../../tmp/experiments/flat-dome-cache-shape/runs/00053-r4-scene-report/index.html)
-links both 1280x720 PNGs, settings, timing and raw evidence. Canonical final run
-`00050` is verified by `00051`; `00053` verifies immutable artifacts and the
+links the original 45 m PNGs, settings, timing and raw evidence. That final run
+`00050` is verified by `00051`; `00053` verifies its immutable artifacts and the
 rendered report. No numerical work is running. The experiment remains contained
 and open; no promotion or lifecycle closure was selected.
 
-The actual new near-rim rays expose a material accuracy limitation: N12 query
+The original 45 m near-rim rays expose a material accuracy limitation: N12 query
 errors reach 37.25%, and actual scene-air samples reach 37.53% against the matched
 independent probe. This is separate from exact Three/raw port parity and does
 not inherit the earlier broad-study 2% result. The report retains this
 qualification. No unselected count or distribution search was performed.
+These original error numbers do not quantify the latest 20 m pose.
 
-The cache owns 18.212 MiB of resident textures (72.691 MiB peak construction/
+For the original 45 m run, the cache owns 18.212 MiB of resident textures (72.691 MiB peak construction/
 verification targets). Final compilation took 10.592 s; field construction and
 inspection took 7.643 s. Outward/inward tiled shader wall times were 0.546/0.297 s;
 totals including readback, PNG and checks were 1.642/1.319 s. These synchronized
@@ -51,6 +61,12 @@ immutable. Missing native precision and historical monitoring gaps are
 explicitly reported.
 
 ## Verification
+
+Latest render `00054` is accepted. Both views share one completed cache; local
+geometry/display/resource checks pass. Maximum transmission discrepancy is
+1.69e-6, maximum spectral composition discrepancy 2.36e-9, and display discrepancy
+zero code values. Both actual images were inspected. Source types/formatting
+pass. The earlier report and sealed runs remain unchanged.
 
 Scene run `00043` matches raw/Three builds exactly on 34 rays, all four orders
 and 15 channels. `00044` supplies the pilot pair and final-projection rim crop;

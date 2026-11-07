@@ -34,7 +34,7 @@ a natural FOV. Retain the earlier accepted 90-degree horizontal FOV. The
 | Parameter | Selected value and authority |
 | --- | --- |
 | Distance inside rim | 5,000 m along a radial ground line; agent selection under owner delegation |
-| Eye height | 45 m above ground; agent selection under owner delegation |
+| Eye height | 20 m above ground; subsequent explicit owner selection, superseding the original 45 m renders |
 | Latitude | Approximately 89.95503398 degrees south under the existing North Pole AEQD map |
 | Map-frame placement | Observer on positive X, equivalent to longitude 90 degrees east under the existing `[r sin(lon), r cos(lon)]` convention; frame convention, not a new lighting input |
 | Headings | Outward `+X`, then inward `-X`; yaw differs exactly 180 degrees, with unchanged roll/up |
@@ -65,8 +65,8 @@ illumination. The fixed contrasting endpoint makes the finite object visible
 without changing cache optics or adjusting either image independently.
 
 Under the pinned 100-km-apex cap, the local roof is approximately 49.95725 m,
-so the camera's shortest sample-to-dome clearance is approximately 4.95700 m.
-The rim is about 0.51565 degrees below the level outward view, roughly 5.76
+so the 20 m camera's shortest sample-to-dome clearance is approximately 29.95575 m.
+The rim is about 0.22918 degrees below the level outward view, roughly 2.56
 vertical pixels at the selected projection. A natural FOV cannot produce the
 large edge/horizon separation of the rejected telephoto proposal: the shallow
 dome constrains an interior camera's height/distance ratio. Make the actual
@@ -373,12 +373,17 @@ and the near-rim accuracy limitation.
 ## Execution Outcome
 
 R1-R4 are complete. The [scene report](../../../../../tmp/experiments/flat-dome-cache-shape/runs/00053-r4-scene-report/index.html)
-links the two actual 1280x720 renders from run `00050`, the independent checks in
+links the original 45 m 1280x720 renders from run `00050`, the independent checks in
 `00051`, timings, resource cleanup and authenticated artifacts. The selected
-inside-dome pose and natural FOV resolve a ground cutoff approximately six pixels
+original inside-dome pose and natural FOV resolve a ground cutoff approximately six pixels
 below the horizon. The shader consumes the completed live cache in Three.js.
 Near-rim air-radiance errors reach 37.53% against the independent probe; this
 qualified accuracy outcome does not inherit the earlier broad-study result.
 No extra count/distribution search or production promotion was performed.
 The [execution record](execution.md#scene-render-execution) owns decisions and
 recovery; the [status](status.md) owns current verification and next action.
+
+The subsequent owner-directed height adjustment to 20 m is complete in run
+`00054`, retaining closest-approach Sun, location, FOV and exposure. Its cutoff
+is about 2.56 pixels below the horizon. Local geometry/display/resource checks
+pass; the original 45 m probe-error number is not a new-height accuracy result.

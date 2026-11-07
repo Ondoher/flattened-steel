@@ -30,7 +30,8 @@ performance are the primary optimization variables among accurate candidates.
 
 - [Design](design.md)
 - [Completed scene-render plan](scene-render-plan.md)
-- [Two-view scene report](../../../../../tmp/experiments/flat-dome-cache-shape/runs/00053-r4-scene-report/index.html)
+- Latest 20 m renders: [outward](../../../../../tmp/experiments/flat-dome-cache-shape/runs/00054-r4-three-final/outward.png), [inward](../../../../../tmp/experiments/flat-dome-cache-shape/runs/00054-r4-three-final/inward.png)
+- [Original 45 m scene report](../../../../../tmp/experiments/flat-dome-cache-shape/runs/00053-r4-scene-report/index.html)
 - [Completed slice-count plan](plan.md)
 - [Status](status.md)
 - [Execution record](execution.md)
@@ -57,10 +58,12 @@ The completed [scene-render plan](scene-render-plan.md) implements a reusable
 complete cache, an updated atmosphere shader, and an actual Three.js finite-ground
 scene facing outward and inward from one inside-dome location. The owner delegated
 distance/height selection and kept natural FOV. The [scene report](../../../../../tmp/experiments/flat-dome-cache-shape/runs/00053-r4-scene-report/index.html)
-links both full-size renders, measured costs, verification and raw evidence.
-Integration works; the new near-rim rays expose up to 37.53% air-radiance error
-against the independent probe. This is a qualified experimental result, not a
-production accuracy claim. The [status](status.md) owns verification and next action.
+links the original 45 m renders, measured costs, verification and raw evidence.
+The owner subsequently lowered the camera to 20 m; run `00054` supplies that
+pair with geometry/display/resource checks. Integration works; the original
+45 m near-rim rays exposed up to 37.53% air-radiance error against the independent
+probe. This does not quantify the new height's accuracy. The [status](status.md)
+owns current verification and next action.
 
 The completed [slice-study report](../../../../../tmp/experiments/flat-dome-cache-shape/runs/00041-m4-report/index.html)
 remains evidence, with qualifications in the [execution record](execution.md).

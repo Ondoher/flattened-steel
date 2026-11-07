@@ -503,3 +503,38 @@ action; production promotion, further research and lifecycle closure remain
 separate selections. The adviser-preaccepted scoped local checkpoint uses
 `feat(experiments): render flat dome cache scene`. It excludes unrelated city,
 Flat topic, transfer and Prettier-ignore changes; no push is authorized.
+
+### Owner-directed 20 m render adjustment
+
+After inspecting the first pair, the owner requested closest-approach Sun and
+then a 20 m observer height. Inspection confirmed the existing source already
+has zero orbital degrees from closest: source and observer share the positive-X
+radial line. The Sun is about 25.77 degrees above the horizon on this orbit.
+No source-radius, Sun-height or exposure adjustment was made.
+
+Changed the default observer height from 45 m to 20 m and made camera-only
+base/height/FOV diagnostics derive their height from the request. The existing
+outside-observer controls stay at 60 m. Accepted run `00054-r4-three-final`
+builds one fresh camera-independent cache for the new rendering session and
+uses it for both full-size headings. The local cap remains 49.95725 m high,
+leaving 29.95575 m shortest clearance. The natural-FOV rim depression is now
+0.22918 degrees, about 2.56 pixels. Both actual PNGs were inspected: the outward
+blue atmospheric band is more visible, while most upper sky remains dark.
+
+The ground remains the fixed warm-gray diagnostic endpoint: zero-air RGB
+100,95,94 (#645F5E) at common exposure, before atmospheric attenuation. The
+owner asked about its appearance; no ground-color change was requested.
+
+The runner's independent geometry/column/display/composition checks pass,
+with zero display-code discrepancy, maximum transmission discrepancy 1.69e-6
+and composition discrepancy 2.36e-9. Owned textures/geometries are zero after
+disposal. Source types and formatting are checked. This small view adjustment
+does not repeat the independent probe campaign, pure-order comparison, native
+guides or full report. Report `00053` and its 37.53% error remain evidence for
+the original 45 m pose; do not report that error as the 20 m accuracy.
+
+The latest pair is linked from status and entry. Existing sealed runs are
+unchanged. No production files were edited; no numerical process is running.
+The adviser recommends the scoped local checkpoint
+`fix(experiments): lower flat dome scene camera`, preaccepted under the active
+independent-execution workflow. Unrelated changes stay excluded; no push.

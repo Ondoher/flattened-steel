@@ -312,10 +312,11 @@ export class DomeSceneRenderer {
 	 */
 	async cameraProof() {
 		const records = [];
+		const height = this.request.origin[2];
 		const variants = [
-			{name: 'base', height: 45, fov: 90, sign: 1},
-			{name: 'height', height: 46, fov: 90, sign: 1},
-			{name: 'fov', height: 45, fov: 80, sign: 1},
+			{name: 'base', height, fov: 90, sign: 1},
+			{name: 'height', height: height + 1, fov: 90, sign: 1},
+			{name: 'fov', height, fov: 80, sign: 1},
 			{name: 'outside-outward', height: 60, fov: 90, sign: 1},
 			{name: 'outside-inward', height: 60, fov: 90, sign: -1},
 		];
