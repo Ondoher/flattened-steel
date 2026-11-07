@@ -2,7 +2,7 @@
 
 Status: M0/M1 implemented under independent-execution; see the
 [execution record](mui-migration-execution.md) for evidence and checkpoint.
-M2–M4 are deferred.
+M2 is complete; M3 is authorized and next. M4 remains deferred.
 Owner direction recorded: 2026-11-07.
 
 ## Outcome and Authority
@@ -16,7 +16,7 @@ The original request established the migration plan. The owner's clarification
 separately authorized saving the defaults in the actual application context;
 that narrow source update is complete. M1 must use those existing context values
 when creating MUI controls and theme defaults. The owner subsequently authorized independent execution through M1, including
-the real latitude/longitude form. That skill preapproves the checkpoint
+the real latitude/longitude form, then independently authorized M2–M3. That skill preapproves the checkpoint
 adviser's suggested message and task-scoped local commits. Push, publication
 and global standards promotion are not authorized.
 The suspended dome-cache experiment remains suspended. Engineering standards
@@ -235,6 +235,8 @@ proof of default propagation.
 
 ### M2 — Agreed Shared and Configuration Controls
 
+State: complete; verification and the local checkpoint are in the execution record.
+
 Purpose: complete the control layer before replacing containing surfaces.
 Forecast: 4–10 hours; re-estimate Date/TypeAhead work using M1 findings.
 
@@ -297,6 +299,8 @@ separated from domain behavior. The owner-selected reference files remain
 unchanged. Resolve only affected control contracts before moving on.
 
 ### M3 — Bottom-up Application Usage and Settings Migration
+
+State: authorized; next after the M2 checkpoint.
 
 Purpose: get the application working through the completed MUI control layer.
 Forecast: 4–9 hours, refined from the first migrated feature.

@@ -50,7 +50,9 @@ body,
 .MuiTypography-root,
 .MuiFormLabel-root,
 .MuiInputBase-root,
-.MuiFormHelperText-root {
+.MuiFormHelperText-root,
+.MuiMenuItem-root,
+.MuiAutocomplete-paper {
 	font-family: var(--app-font-family);
 }
 html,
@@ -68,7 +70,18 @@ input:not(.MuiInputBase-input),
 select:not(.MuiNativeSelect-select) {
 	font: inherit;
 }
-:focus-visible {
+/* MUI controls own their focus presentation; retain this ring for native controls. */
+:focus-visible:not(
+	:where(
+		.MuiInputBase-input,
+		.MuiButtonBase-root,
+		.MuiSelect-select,
+		.MuiNativeSelect-select,
+		.MuiSwitchBase-input,
+		.MuiSlider-input,
+		.MuiSlider-thumb
+	)
+) {
 	outline: 2px solid var(--app-color-action);
 	outline-offset: 3px;
 }

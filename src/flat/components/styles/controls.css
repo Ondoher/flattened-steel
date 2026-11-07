@@ -1,0 +1,27 @@
+.app-button {
+	text-transform: none;
+}
+
+.app-panel-control {
+	display: inline-flex;
+	min-width: 0;
+}
+
+.app-panel-popper {
+	z-index: 1300;
+}
+
+.app-interactive-panel {
+	width: 320px;
+	max-width: calc(100vw - 32px);
+	margin-block: 6px;
+	padding: 16px;
+	border: 1px solid var(--app-color-border);
+}
+
+.app-button[aria-pressed='true'],
+.app-button[aria-expanded='true'] {
+	color: var(--app-color-on-action);
+	background: var(--app-color-action);
+	border-color: var(--app-color-action);
+}

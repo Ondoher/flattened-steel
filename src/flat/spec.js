@@ -27,4 +27,5 @@ import './components/_tests/FeedbackSpec.js';
 import './components/_tests/BaseDialogSpec.js';
 import './components/_tests/BaseTextSpec.js';
 import './components/_tests/ControlDefaultsSpec.js';
+import './components/_tests/SharedControlsSpec.js';
 import './services/_tests/ThemeSpec.js';

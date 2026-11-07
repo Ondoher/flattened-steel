@@ -3,6 +3,18 @@
  */
 type DateTimeFieldProps = {
 	/**
+	 * Explicit size, with application defaults inherited through the base when absent.
+	 */
+	size?: 'small' | 'medium';
+	/**
+	 * Explicit appearance, with application defaults inherited through the base when absent.
+	 */
+	variant?: 'outlined' | 'filled' | 'standard';
+	/**
+	 * Native input capability for caller-owned focus restoration.
+	 */
+	inputRef?: React.Ref<HTMLInputElement>;
+	/**
 	 * Unique input identity supplied by the owning presentation.
 	 */
 	id: string;
@@ -27,3 +39,8 @@ type DateTimeFieldProps = {
 	 */
 	onChange: (value: string) => void;
 };
+
+/**
+ * Common field presentation specialized by the Date/Time wrappers.
+ */
+type LocalDateTimeFieldProps = DateTimeFieldProps & {kind: 'date' | 'time'};

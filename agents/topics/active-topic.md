@@ -7,8 +7,9 @@ independent-execution authorization. The maintained catalog, stable theme/provid
 stack and actual shared-location coordinate form are integrated. Applicable
 bases consume AppContext controlSize small and controlVariant outlined; explicit
 supported props win. The execution record owns measured verification and the
-local checkpoint. Next implementation would be M2's agreed shared controls;
-execution past M1 is deferred.
+local checkpoints. M2's shared controls are complete and verified. The owner has
+authorized independent execution of M2–M3; continue with M3's consumers and
+non-toolbar settings surfaces in place. M4 remains deferred.
 
 Keep toolbar containers/layout and Sun-slider relocation deferred until the
 control migration is complete. Preserve earlier uncommitted stellar, shader,

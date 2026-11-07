@@ -1,4 +1,8 @@
 {
+	"controls.no-options": "No matches",
+	"controls.clear": "Clear",
+	"controls.open-options": "Show options",
+	"controls.close-options": "Hide options",
 	"common.close": "Close",
 	"app.title": "Flat",
 	"app.pages.empty": "No pages registered",

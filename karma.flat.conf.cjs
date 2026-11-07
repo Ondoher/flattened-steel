@@ -5,7 +5,7 @@ module.exports = function (config) {
 			'src/flat/styles/app.css',
 			'src/flat/components/**/*.css',
 			'src/flat/features/**/*.css',
-			'tests/flat/**/*.js',
+			{pattern: 'tests/flat/**/*.js', type: 'module'},
 		],
 		reporters: ['spec'],
 		client: {captureConsole: true},

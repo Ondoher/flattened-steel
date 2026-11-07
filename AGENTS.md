@@ -30,6 +30,13 @@ report missing review evidence honestly and never claim unearned compliance.
 Preserve prior evidence and perform
 appropriate verification without turning its historical identities into an allow-list.
 
+# Browser Automation Data
+
+Use disposable browser profiles for automated checks. Remove profile data,
+including cookies and caches, when the run ends or fails. Do not retain browser
+user-data directories as run evidence. Existing protected historical evidence
+remains governed by its preservation rules.
+
 # Contained Experiment Verification
 
 All existing and future contained experiments run without dedicated standards

@@ -28,7 +28,6 @@
 	gap: 1rem;
 }
 
-.city-picker input,
 .city-catalog-status button {
 	box-sizing: border-box;
 	width: 100%;
@@ -48,41 +47,11 @@
 	background: var(--app-color-action);
 }
 
-.city-picker input:focus-visible,
 .city-catalog-status button:focus-visible {
 	outline: 2px solid var(--app-color-action);
 	outline-offset: 2px;
 }
 
-.city-picker input:disabled {
-	opacity: 0.6;
-}
-
-.city-results {
-	display: grid;
-	max-height: 14rem;
-	margin: 0;
-	padding: 0;
-	overflow: auto;
-	list-style: none;
-	border: 1px solid var(--app-color-border);
-}
-
-.city-results li {
-	display: grid;
-	grid-template-columns: minmax(0, 1fr) auto;
-	gap: 0.75rem;
-	padding: 0.625rem 0.5rem;
-	cursor: pointer;
-}
-
-.city-results li[aria-selected='true'],
-.city-results li:hover {
-	color: var(--app-color-on-action);
-	background: var(--app-color-action);
-}
-
-.city-results span,
 .location-selection {
 	overflow-wrap: anywhere;
 }
@@ -198,9 +167,6 @@
 	border-bottom: 0;
 	padding-top: 24px;
 }
-.city-picker input {
-	height: 36px;
-}
 .date-time-editor button,
 .city-catalog-status button {
 	min-height: 34px;
@@ -263,4 +229,12 @@
 .city-attribution a {
 	color: var(--app-color-text);
 	text-decoration: underline;
+}
+
+.city-option-content {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) auto;
+	gap: 12px;
+	width: 100%;
+	min-width: 0;
 }

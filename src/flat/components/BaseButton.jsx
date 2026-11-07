@@ -33,7 +33,18 @@ export default class BaseButton extends Component {
 	 * @returns {React.ReactNode} - The button presentation.
 	 */
 	render() {
-		const {label, ariaLabel, localize, children, priority, selected = false, size, variant, ...props} = this.props;
+		const {
+			label,
+			ariaLabel,
+			localize,
+			children,
+			priority,
+			selected = false,
+			size,
+			variant,
+			buttonRef,
+			...props
+		} = this.props;
 		const resolvedSize = size !== undefined ? size : this.appContext.controlSize;
 		const resolvedVariant =
 			variant !== undefined
@@ -43,14 +54,20 @@ export default class BaseButton extends Component {
 						? 'contained'
 						: 'outlined'
 					: this.appContext.controlVariant;
+		const resolvedAriaLabel =
+			props['aria-label'] ??
+			(this.appContext.accessibilityEnabled && ariaLabel ? this.resolve(ariaLabel) : undefined);
+		const resolvedPressed =
+			props['aria-pressed'] ?? (this.appContext.accessibilityEnabled && selected ? 'true' : undefined);
 		return (
 			<Button
 				{...props}
+				ref={buttonRef}
 				type={props.type || 'button'}
 				size={resolvedSize}
 				variant={resolvedVariant}
-				aria-label={this.appContext.accessibilityEnabled && ariaLabel ? this.resolve(ariaLabel) : undefined}
-				aria-pressed={this.appContext.accessibilityEnabled && selected ? 'true' : undefined}
+				aria-label={resolvedAriaLabel}
+				aria-pressed={resolvedPressed}
 			>
 				{children ?? this.resolve(label)}
 			</Button>

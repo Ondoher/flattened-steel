@@ -3,7 +3,7 @@
 Status: M0 and M1 are implemented under the owner's independent-execution
 authorization. The MUI foundation and actual latitude/longitude form are in the
 app; final evidence and the local checkpoint are recorded in the
-[execution record](mui-migration-execution.md). M2–M4 remain deferred. The [saved migration plan](mui-migration-plan.md) owns the milestone
+[execution record](mui-migration-execution.md). M2 is complete; the owner has authorized M3 consumer migration. M4 remains deferred. The [saved migration plan](mui-migration-plan.md) owns the milestone
 sequence, evidence and completion requirements. Toolbar conversion follows it.
 
 Focus: establish reusable controls for the Flat application, then use them to
@@ -100,9 +100,10 @@ MUI wiring and phrase/test changes required for Flat. Its earlier suggested
 local-rule rewrite prerequisite has been withdrawn in accordance with the
 owner's wholesale-source acceptance.
 
-The current catalog does not supply TypeAhead, Toolbar, Slider, Date/Time fields
-or the text-and-arrow panel button. Those controls still need application
-integration using the appropriate MUI foundations and existing behavior.
+The maintained catalog does not supply TypeAhead, Toolbar, Slider, Date/Time
+fields or the text-and-arrow panel button. M2 implements those shared app
+controls on MUI, with CityPicker composition, inherited defaults, interaction
+checks and a real panel capture. M3 adopts the remaining consumers in place.
 
 For Date, the owner selected the transferred
 [Date.jsx](../../../transfer/Date.jsx) as the starting point to revisit. It

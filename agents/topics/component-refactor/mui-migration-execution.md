@@ -1,8 +1,8 @@
 # MUI Migration Execution
 
-Scope: owner-authorized independent execution through M1, including a real
-latitude/longitude configuration form. Later controls and toolbar conversion
-remain outside this execution. Local checkpoints are authorized under the
+Scope: owner-authorized independent execution of M0–M1, followed by the newly
+authorized M2–M3. Toolbar conversion and M4 remain outside this execution.
+Local checkpoints are authorized under the
 independent-execution skill; pushes/publication are not.
 
 ## Current State
@@ -11,9 +11,12 @@ independent-execution skill; pushes/publication are not.
 | --- | --- | --- |
 | M0: baseline and inventory | Complete | Preserved dirty baseline; 133 browser tests, client types and Flat build pass; 31-path maintained catalog inventoried |
 | M1: foundation and visible location form | Complete | 181 browser tests, client types, normal build and actual local/discovered app proof pass; task-scoped local checkpoint: feat(flat): establish MUI control foundation |
-| M2–M4 | Deferred | Outside the through-M1 authorization |
+| M2: shared controls | Complete | 199 browser tests, client types, normal build and actual interactive-panel proof pass |
+| M3: application migration | Pending M2 | Replace consumers in place and migrate non-toolbar settings surfaces |
+| M4 | Deferred | Outside the current M2–M3 authorization |
 
 Evidence root: `.codex-tmp/component-refactor/mui/run-20261107-01/`.
+M2–M3 baseline/evidence root: `.codex-tmp/component-refactor/mui/run-20261107-02/`.
 The [plan](mui-migration-plan.md) owns requirements and advancement criteria.
 HEAD at execution start: `7b2a888f`; baseline.patch and baseline-files preserve
 the pre-existing dirty work. The catalog still selects 31 files, with only
@@ -49,6 +52,66 @@ packages are available. Engineering reviewers remain owner-cancelled.
   compressing MUI inputs to 23 px despite correct size props. Remove that
   duplicate reset in favor of layered CssBaseline and apply the app's Arial
   family through supported CSS classes. Final fields are 40 px high.
+- D8: per the owner's follow-up, browser profiles are disposable. Remove this
+  run's saved profile and clean future profile directories in the runner's
+  finalizer. Retain the requested screenshots and measured verification results.
+- D9: exclude MUI's interactive slots from the legacy global focus-visible
+  outline so MUI owns its focus presentation. A focused-coordinate browser
+  check confirms no input outline, one blue 2 px MUI field border, and the
+  native city input's retained focus ring. Evidence is under
+  `.codex-tmp/component-refactor/mui/focus-fix/`; its browser profile was deleted.
+- D10: keep Date/Time as controlled local-format text entry with MUI fields and
+  helper feedback. Borrow the transferred field's presentation, without its
+  render-time state writes, normalization or application dependencies. Show
+  format hints below the field to fit the existing half-width settings columns;
+  preserve drafts/caret naturally rather than introducing unspecified editing.
+- D11: TypeAhead receives ranked options, controlled query and optional selected
+  option. Report query changes only for typing/clear, selection by stable id,
+  and consume the first Escape while its popup is open. CityPicker adapts city
+  presentation without acquiring lookup/domain ownership.
+- D12: shared Slider owns transient gesture cleanup and emits numeric values;
+  the Flat feature retains its frozen reference/token and shared-time seeking.
+  The new nonmodal PanelButton and common Toolbar are reusable controls only;
+  their adoption into current toolbar containers remains deferred.
+- D13: keep Polylith's built-in test generation and the existing Karma/Jasmine
+  execution lane. Load its generated bundle as an ES module: Popper's flattened
+  helper names otherwise overwrite browser globals under classic-script scope.
+  The watch lane inherits the same configuration. No runner/framework was added.
+- D14: a cancellation proof showed MUI's pointer drag could continue after
+  pointercancel. The shared Slider retires only its transient MUI widget on
+  cancellation, letting MUI's unmount cleanup release document listeners. The
+  controlled value and feature-owned time reference remain outside the widget.
+- D15: use MUI's editable-query mode to retain its clear action for an
+  unfinished search. Free-form Enter remains a query, never an accepted city;
+  only a prepared option reports selection. Verified query clear independently
+  from selection and MUI's internal reset events.
+
+## M2 Result and Verification
+
+The shared Button, TypeAhead, Slider, Toolbar, PanelButton and MUI Date/Time
+fields are implemented, with explicit declarations and inherited base defaults.
+CityPicker now composes TypeAhead while the catalog/model/controller/view keep
+their existing ownership. The transferred Date source remains unchanged.
+
+All 199 browser tests pass in the existing Polylith-built Karma/Jasmine lane.
+They cover normal pointer/keyboard operation, ranking and stable result identity,
+query-versus-selection/clear, literal labels, partial/invalid date/time drafts,
+alternate context defaults and overrides, interrupted slider cleanup and nested
+portalled interaction/focus behavior. Client types and the normal build pass.
+
+The [interactive panel capture](../../../.codex-tmp/component-refactor/mui/run-20261107-02/m2-interactive-panel.png)
+and [measured proof](../../../.codex-tmp/component-refactor/mui/run-20261107-02/m2-visual.json)
+show the implemented controls through the real app theme/provider stack. The
+isolated proof uses the installed Polylith builder and a temporary DOM mount,
+without adding a production demo route or gallery. The slider reaches 54° by
+pointer drag, a partial `11/` date remains untouched, and nested Escape first
+dismisses results then the panel. Fields measure 40 px and the trigger 30.75 px.
+The proof took 13.4 s including build/browser startup; its profile was deleted.
+
+The checkpoint adviser recommends `feat(flat): add shared MUI controls`.
+M3 continues with in-place consumers and non-toolbar settings surfaces; existing
+toolbar containers, rows and inline Sun-slider placement remain unchanged.
+Engineering review stays cancelled; no standards-compliance claim is made.
 
 ## M1 Result and Verification
 

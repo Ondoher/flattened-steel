@@ -1,197 +1,78 @@
-import React, {Component, createRef} from 'react';
+import React, {Component} from 'react';
+import TypeAhead from '../../../components/TypeAhead.jsx';
 
 /**
- * Controlled city-search presentation with local popup and keyboard-selection state.
+ * Adapts prepared city results to the shared control without owning city search.
  *
- * @extends {Component<CityPickerProps, CityPickerState>}
+ * @extends {Component<CityPickerProps>}
  */
 export default class CityPicker extends Component {
 	/**
-	 * Creates local menu state and stable named DOM handlers.
+	 * Creates the stable city-content renderer.
 	 *
 	 * @param {CityPickerProps} props - Prepared query/results and outward intents.
 	 */
 	constructor(props) {
 		super(props);
-		this.state = {open: false, activeId: null};
-		/** @type {React.RefObject<HTMLUListElement>} */
-		this._results = createRef();
-		this._onChange = this._onChange.bind(this);
-		this._onFocus = this._onFocus.bind(this);
-		this._onBlur = this._onBlur.bind(this);
-		this._onKeyDown = this._onKeyDown.bind(this);
-		this._onResultMouseDown = this._onResultMouseDown.bind(this);
-		this._onSelectResult = this._onSelectResult.bind(this);
-		this._scrollActiveResult = this._scrollActiveResult.bind(this);
+		this._renderOption = this._renderOption.bind(this);
 	}
 
 	/**
-	 * Called by the search input to report query text and reopen results.
+	 * Maps a prepared city into the generic option contract.
 	 *
-	 * @param {React.ChangeEvent<HTMLInputElement>} event - Search input change.
+	 * @param {CityMatchPresentation} match - Prepared catalog result.
+	 * @returns {TypeAheadOption} - Generic identity and presentation.
 	 */
-	_onChange(event) {
-		this.setState({open: true, activeId: null});
-		this.props.onQueryChange(event.currentTarget.value);
+	_toOption(match) {
+		return {id: match.id, label: match.name, detail: match.detail};
 	}
 
 	/**
-	 * Called by input focus to show the current search results.
-	 */
-	_onFocus() {
-		this.setState({open: true});
-	}
-
-	/**
-	 * Called by focus leaving the picker to dismiss its menu without a delayed timer.
+	 * Owns the city-specific option content and its styled region.
 	 *
-	 * @param {React.FocusEvent<HTMLDivElement>} event - Picker focus transition.
+	 * @param {TypeAheadOption} option - Prepared city presentation.
+	 * @returns {React.ReactNode} - Name and geographic detail.
 	 */
-	_onBlur(event) {
-		if (!event.currentTarget.contains(event.relatedTarget)) {
-			this.setState({open: false});
-		}
-	}
-
-	/**
-	 * Called by keyboard handling or rendering to resolve the currently highlighted result.
-	 *
-	 * @returns {number} - Active index, defaulting to the first current result.
-	 */
-	_activeIndex() {
-		let index = this.props.matches.findIndex((match) => match.id === this.state.activeId);
-		return Math.max(0, index);
-	}
-
-	/**
-	 * Called by the input to navigate results, commit a city, or dismiss only the picker.
-	 *
-	 * @param {React.KeyboardEvent<HTMLInputElement>} event - Keyboard intent.
-	 */
-	_onKeyDown(event) {
-		let matches = this.props.matches;
-		if (event.key === 'Escape' && this.state.open) {
-			event.preventDefault();
-			event.stopPropagation();
-			this.setState({open: false});
-			return;
-		}
-		if (!matches.length) {
-			return;
-		}
-		if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
-			event.preventDefault();
-			let direction = event.key === 'ArrowDown' ? 1 : -1;
-			let index = this.state.open ? (this._activeIndex() + direction + matches.length) % matches.length : 0;
-			this.setState({open: true, activeId: matches[index].id}, this._scrollActiveResult);
-		} else if (event.key === 'Enter' && this.state.open) {
-			event.preventDefault();
-			this.props.onSelectCity(matches[this._activeIndex()].id);
-			this.setState({open: false, activeId: null});
-		}
-	}
-
-	/**
-	 * Called after keyboard selection updates to keep the highlighted result visible in the scrolling list.
-	 */
-	_scrollActiveResult() {
-		this._results.current?.querySelector('[aria-selected="true"]')?.scrollIntoView({block: 'nearest'});
-	}
-
-	/**
-	 * Called by pointer selection to keep focus in the combobox until the choice is committed.
-	 *
-	 * @param {React.MouseEvent<HTMLLIElement>} event - Pointer press on a result.
-	 */
-	_onResultMouseDown(event) {
-		event.preventDefault();
-	}
-
-	/**
-	 * Called by a result click to report its stable identity.
-	 *
-	 * @param {React.MouseEvent<HTMLLIElement>} event - Result selection.
-	 */
-	_onSelectResult(event) {
-		this.props.onSelectCity(event.currentTarget.dataset.cityId);
-		this.setState({open: false, activeId: null});
-	}
-
-	/**
-	 * Called by result rendering to present one stable, prepared city option.
-	 *
-	 * @param {CityMatchPresentation} match - City result presentation.
-	 * @param {number} index - Current result position for combobox focus identification.
-	 * @returns {React.ReactNode} - City option.
-	 */
-	_renderResult(match, index) {
-		let selected = index === this._activeIndex();
-		let id = `global-city-result-${index}`;
+	_renderOption(option) {
 		return (
-			<li
-				key={match.id}
-				id={id}
-				role="option"
-				aria-selected={selected}
-				data-city-id={match.id}
-				onMouseDown={this._onResultMouseDown}
-				onClick={this._onSelectResult}
-			>
-				<span>{match.name}</span>
-				<span className="city-result-detail">{match.detail}</span>
-			</li>
+			<div className="city-option-content">
+				<span>{option.label}</span>
+				<span className="city-result-detail">{option.detail}</span>
+			</div>
 		);
 	}
 
 	/**
-	 * Called by rendering to prepare the repeated result elements outside their enclosing JSX.
+	 * Renders controlled city entry using existing catalog ranking and callbacks.
 	 *
-	 * @returns {React.ReactNode} - Result list, or no list while dismissed or empty.
-	 */
-	_renderResults() {
-		if (!this.state.open || this.props.disabled || !this.props.matches.length) {
-			return null;
-		}
-		let results = this.props.matches.map((match, index) => this._renderResult(match, index));
-		return (
-			<ul ref={this._results} id="global-city-results" className="city-results" role="listbox">
-				{results}
-			</ul>
-		);
-	}
-
-	/**
-	 * Call this method to render a labelled city combobox without model or registry access.
-	 *
-	 * @returns {React.ReactNode} - Search input and optional result list.
+	 * @returns {React.ReactNode} - Configuration-specific city control.
 	 */
 	render() {
-		let {query, disabled, text} = this.props;
+		let {query, matches, disabled, text, onQueryChange, onSelectCity} = this.props;
 		let label = text('global-configuration.city');
 		let placeholder = text('global-configuration.cities.placeholder');
-		let expanded = this.state.open && !disabled && this.props.matches.length > 0;
-		let controls = expanded ? 'global-city-results' : undefined;
-		let activeDescendant = expanded ? `global-city-result-${this._activeIndex()}` : undefined;
+		let noOptionsText = text('controls.no-options');
+		let clearText = text('controls.clear');
+		let openText = text('controls.open-options');
+		let closeText = text('controls.close-options');
+		let options = matches.map(this._toOption);
 		return (
-			<div className="city-picker" onBlur={this._onBlur}>
-				<label htmlFor="global-city-query">{label}</label>
-				<input
+			<div className="city-picker">
+				<TypeAhead
 					id="global-city-query"
-					type="search"
-					role="combobox"
-					autoComplete="off"
-					aria-autocomplete="list"
-					aria-expanded={expanded}
-					aria-controls={controls}
-					aria-activedescendant={activeDescendant}
-					value={query}
+					label={label}
+					query={query}
+					options={options}
 					disabled={disabled}
 					placeholder={placeholder}
-					onChange={this._onChange}
-					onFocus={this._onFocus}
-					onKeyDown={this._onKeyDown}
+					noOptionsText={noOptionsText}
+					clearText={clearText}
+					openText={openText}
+					closeText={closeText}
+					renderOption={this._renderOption}
+					onQueryChange={onQueryChange}
+					onSelect={onSelectCity}
 				/>
-				{this._renderResults()}
 			</div>
 		);
 	}
