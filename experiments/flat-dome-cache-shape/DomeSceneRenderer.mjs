@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import {FiniteGroundObject} from './FiniteGroundObject.mjs';
 import {createPass, floatTarget, checkDraw} from './three-pass.mjs';
 import {DomeCacheResource} from './DomeCacheResource.mjs';
+import {capHeight} from './geometry.mjs';
 
 /**
  * Runs actual Three scene capture and the existing production fullscreen runtime
@@ -313,12 +314,13 @@ export class DomeSceneRenderer {
 	async cameraProof() {
 		const records = [];
 		const height = this.request.origin[2];
+		const outsideHeight = capHeight(Math.hypot(...this.request.origin.slice(0, 2))) + 10;
 		const variants = [
 			{name: 'base', height, fov: 90, sign: 1},
 			{name: 'height', height: height + 1, fov: 90, sign: 1},
 			{name: 'fov', height, fov: 80, sign: 1},
-			{name: 'outside-outward', height: 60, fov: 90, sign: 1},
-			{name: 'outside-inward', height: 60, fov: 90, sign: -1},
+			{name: 'outside-outward', height: outsideHeight, fov: 90, sign: 1},
+			{name: 'outside-inward', height: outsideHeight, fov: 90, sign: -1},
 		];
 		for (const variant of variants) {
 			const started = performance.now();

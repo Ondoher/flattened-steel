@@ -26,33 +26,36 @@ experiment or changes its lifecycle status.
 
 ## Accepted Framing and Implementation Assumptions
 
-The owner delegated height and distance selection, required the observer to
-remain inside the dome, and rejected the proposed 5-degree zoom in favor of
-a natural FOV. Retain the earlier accepted 90-degree horizontal FOV. The
-5-mile/100-m proposal and earlier 88-degrees-south/2-m proposal are superseded.
+The initial R1-R4 near-rim study is complete and preserved in its execution
+evidence. The current owner-selected render is Union Glacier Camp at 50 m, with
+the Sun at closest approach, a level view toward its bearing, and one exactly
+opposite. Retain 90-degree horizontal FOV. This supersedes earlier near-rim
+framing for future renders without changing sealed evidence or the completed
+milestone history below.
 
 | Parameter | Selected value and authority |
 | --- | --- |
-| Distance inside rim | 5,000 m along a radial ground line; agent selection under owner delegation |
-| Eye height | 20 m above ground; subsequent explicit owner selection, superseding the original 45 m renders |
-| Latitude | Approximately 89.95503398 degrees south under the existing North Pole AEQD map |
-| Map-frame placement | Observer on positive X, equivalent to longitude 90 degrees east under the existing `[r sin(lon), r cos(lon)]` convention; frame convention, not a new lighting input |
-| Headings | Outward `+X`, then inward `-X`; yaw differs exactly 180 degrees, with unchanged roll/up |
+| Distance inside rim | 1,137,895.9504 m, derived from camp latitude using the existing North Pole AEQD map |
+| Eye height | 50 m above flat ground; explicit owner selection |
+| Latitude/longitude | Union Glacier Camp: -79.76667, -82.86667, from the existing city-catalog addition |
+| Map-frame placement | Actual map `[r sin(lon), r cos(lon)]`; rotate observer/source/rays together into the source-positive-X cache frame, recording actual map coordinates and the invertible rotation |
+| Headings | First toward the Sun's northward bearing, canonical `-X`, then opposite `+X`; yaw differs exactly 180 degrees, unchanged roll/up |
 | Pitch | Level, 0 degrees, retained from accepted defaults |
 | Horizontal FOV | 90 degrees, retained natural framing; derive vertical FOV from 16:9 aspect rather than assigning 90 degrees to Three's vertical-FOV property |
 | Final output | Two 1280x720 PNGs; no visible objects except finite ground and atmosphere |
-| Source | Same finite point Sun at `[R/2, 0, 4828032]` m as the middle study configuration; inward side, fixed for both views; no visible Sun mesh |
+| Source | Same finite point Sun orbit; canonical `[R/2, 0, 4828032]` m aligned with camp longitude at 0 degrees from closest; elevation about 28.56 degrees; fixed for both views, no visible Sun mesh |
 | Cache | N12 quadratic dome-distance slices, counted valid-row support, existing 22 altitude/17 source-distance rows, 96 incoming/98 stored outgoing addresses, Native15, orders J1-J4; starting implementation choice, not a production qualification |
 | Display | Existing CIE-to-sRGB conversion and common exposure 0.06; no per-view auto-exposure, white balance, or image fitting |
-| Ground appearance | Fixed unlit Native15 spectral scene endpoint using the existing source packet's spectral shape, normalized once to the CIE-Y luminance of sRGB gray96 under the common exposure; record its actual RGB rather than forcing exact channel neutrality |
+| Ground appearance | Owner-selected green for future renders: source spectral shape filtered by `0.08 + 0.92 * exp(-0.5 * ((wavelengthNm - 550) / 35)^2)`, normalized once to the prior gray96 CIE-Y luminance; zero-air sRGB approximately `#426B19` |
 
-Ground appearance is an explicit integration assumption, not an owner-selected
-albedo. Before rendering, derive and freeze a nonnegative 15-bin ground radiance
-packet: use `medium.sourceIrradiance` only as its normalized spectral shape,
+The owner selected green ground for future renderings after the original gray
+pair. This is a diagnostic appearance, not a measured physical albedo. Before
+rendering, derive and freeze a nonnegative 15-bin ground radiance packet: apply
+the table's green filter to `medium.sourceIrradiance` as its spectral shape,
 assign the endpoint spectral-radiance units, and apply one scalar normalization
 so the existing CIE conversion/common exposure produces the luminance of
 sRGB96. Record the equation, scalar, complete spectrum, actual RGB and hash.
-Do not fit this packet to either image or force exact neutral RGB channels.
+Do not fit this packet to either image. The original gray render evidence stays immutable.
 For ground hits, compose each bin as `Lair_i + Tview_i * Lground_i` before
 XYZ/RGB conversion; for background misses the endpoint is zero. The rendered
 ground supplies hit/distance/material identity, not an undefined conversion
@@ -64,15 +67,14 @@ into the cached scattering solution. Do not claim coupled physical ground
 illumination. The fixed contrasting endpoint makes the finite object visible
 without changing cache optics or adjusting either image independently.
 
-Under the pinned 100-km-apex cap, the local roof is approximately 49.95725 m,
-so the 20 m camera's shortest sample-to-dome clearance is approximately 29.95575 m.
-The rim is about 0.22918 degrees below the level outward view, roughly 2.56
-vertical pixels at the selected projection. A natural FOV cannot produce the
-large edge/horizon separation of the rejected telephoto proposal: the shallow
-dome constrains an interior camera's height/distance ratio. Make the actual
-ground termination distinguishable through its fixed material, correct shader
-composition, and native-resolution presentation; do not invent a wall, move
-the rim, raise the observer outside the dome, or zoom the final cameras.
+Under the pinned 100-km-apex cap, Union Glacier's local roof is approximately
+11,047.399 m and the 50 m camera's shortest clearance is approximately
+10,996.910 m. The camera stays level even though the Sun is elevated; it faces
+the Sun's horizontal bearing rather than pointing upward. This interior scene
+shows the atmosphere over substantial path lengths. The previous rim-distance
+and edge-pixel calculations remain in the execution record as historical
+render settings. Do not add a wall, move the disk boundary or change exposure
+between the two views.
 
 ## Starting Point and Reuse
 

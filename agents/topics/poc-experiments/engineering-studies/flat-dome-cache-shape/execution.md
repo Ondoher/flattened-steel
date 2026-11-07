@@ -538,3 +538,74 @@ unchanged. No production files were edited; no numerical process is running.
 The adviser recommends the scoped local checkpoint
 `fix(experiments): lower flat dome scene camera`, preaccepted under the active
 independent-execution workflow. Unrelated changes stay excluded; no push.
+
+### Green ground for future renderings
+
+The owner requested green instead of warm-gray ground going forward. The
+default scene endpoint now applies a fixed nonnegative Gaussian green filter
+(center 550 nm, sigma 35 nm, floor 0.08) to the source spectral shape, then
+normalizes to the original gray96 CIE-Y luminance at exposure 0.06. This gives
+zero-air RGB 66,107,25 (#426B19), retaining spectral transmission/composition
+and the same brightness reference. The equation and generated packet remain
+in every future render's settings; this is an authored diagnostic material,
+not a fitted physical surface or scattering-boundary change.
+
+Local types, formatting and the computed green endpoint are checked. No GPU
+render or cache rebuild is required for this future-default edit. Existing
+renders, reports, sealed runs and production source remain unchanged.
+
+### Union Glacier Camp, closest Sun, level opposite views at 50 m
+
+The owner requested a visible demonstration from Union Glacier Camp, with the
+Sun at closest approach, camera level toward the Sun's bearing, a second view
+behind it, and elevation 50 m. Used the existing catalog addition's coordinates
+(-79.76667, -82.86667), documented in
+`src/flat/features/global-configuration/assets/data/cities-source.json`.
+Height is above the experiment's flat ground, not surveyed camp altitude.
+The Sun's orbit radius/height, exposure 0.06, N12 cache layout, quadrature and
+90-degree horizontal FOV are retained. Green ground is now actually rendered.
+
+AEQD radius is R*(90-latitude)/180. Actual map observer coordinates are
+[-18731106.342972297, 2344148.7045384943, 50] m. Rotate the complete source/
+observer/view configuration into the canonical source-positive-X cache frame,
+using longitude-90 degrees, without moving the North Pole or atmospheric cap.
+The inverse rotation, actual map source/observer coordinates and formula are
+recorded in settings. This uses the cap's rigid rotation symmetry and does not
+translate the source-centered field. The Sun shares the observer's longitude
+at closest approach, 0 degrees; its altitude is 28.5606 degrees. The level
+Sunward heading is north (canonical -X), and the other heading south (+X).
+
+The camp is 1,137,895.9504 m inside the disk edge. Its roof is 11,047.3989 m high,
+leaving 10,996.9105 m shortest clearance. Replaced the renderer request's
+hardcoded 5 km ground mask with the actual configured rim distance. Outside
+controls now use local cap height plus 10 m, rather than assuming 60 m is
+outside everywhere. Camera base/height/FOV checks remain tied to the selected
+50 m observer. Both views retain a single completed live cache.
+
+Accepted run `00055-r4-three-final` renders Sunward first (inward.png), then
+exactly opposite (outward.png), both 1280x720. Visual inspection confirms a
+colored sky and green ground in both: the Sunward sky is brighter with a warm
+horizon, while the opposite sky is darker blue. Angular interpolation bands
+are visible in the Sunward view and remain an explicit limitation. The existing
+scene contract has no visible solar disk mesh; Sunward refers to bearing.
+
+Local independent geometry/column/composition/display checks pass. Maximum
+transmission discrepancy is 5.77e-7, spectral composition discrepancy 1.87e-9,
+and display discrepancy zero code values; there are no nonfinite/undrawn
+pixels. Ideal-camera versus GPU-direction far interval discrepancy is 30.071 m,
+with solver error checked separately at the same measured GPU direction.
+Owned resources drop to zero after disposal. Sunward/opposite frame totals
+including capture/readback/PNG/checks are 1.963/1.828 s on the recorded RTX2060.
+No independent-probe campaign or native guide was repeated for this pose, and
+previous near-rim error numbers do not quantify its accuracy.
+
+Types, formatting, current links, Git whitespace, immutable artifact hashes and
+recorded coordinate/heading identities are checked before handoff. Current
+source defaults match this scene. No production or city-data files were edited,
+and existing runs remain immutable. No numerical process is running.
+Final authentication checks all 221 run artifacts (15,785,574 bytes), verifies
+the actual-map/canonical rotation for observer and Sun, closest-approach phase,
+heading order and shared-cache identities. The adviser recommends
+`feat(experiments): render Union Glacier dome scene` for this scoped local
+checkpoint, preaccepted by the active execution workflow. Unrelated changes
+remain excluded; no push.

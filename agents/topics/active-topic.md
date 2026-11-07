@@ -2,16 +2,17 @@
 
 Current active topic: poc-experiments/engineering-studies/flat-dome-cache-shape.
 Canonical entry: [Flat Dome Cache Shape](poc-experiments/engineering-studies/flat-dome-cache-shape/README.md).
-Focus: completed live-cache to updated-shader to Three.js finite-ground scene
-integration, with opposite outward/inward renders from an inside-dome observer
-near the rim. The owner delegated height/distance selection and kept natural
-FOV. The owner lowered eye height to 20 m; run `00054` contains the latest
-[outward](../../tmp/experiments/flat-dome-cache-shape/runs/00054-r4-three-final/outward.png)
-and [inward](../../tmp/experiments/flat-dome-cache-shape/runs/00054-r4-three-final/inward.png)
-renders with local geometry/display/resource checks. The [scene report](../../tmp/experiments/flat-dome-cache-shape/runs/00053-r4-scene-report/index.html)
-retains the original 45 m result and its 37.53% near-rim probe error; that number
-does not qualify the new height. No numerical work is running. Other
-distributions and production promotion remain deferred.
+Focus: completed live-cache to updated-shader to Three.js integration, now
+rendered at Union Glacier Camp (-79.76667, -82.86667), 50 m height, level
+90-degree horizontal FOV, green ground and closest-approach Sun. Run `00055`
+contains the latest [toward-Sun](../../tmp/experiments/flat-dome-cache-shape/runs/00055-r4-three-final/inward.png)
+and [opposite](../../tmp/experiments/flat-dome-cache-shape/runs/00055-r4-three-final/outward.png)
+1280x720 views, with one shared completed cache and local geometry/display/
+resource checks. Sky colors are visible; Sunward angular banding remains visible.
+No independent-probe accuracy was measured for this pose. The [original scene
+report](../../tmp/experiments/flat-dome-cache-shape/runs/00053-r4-scene-report/index.html)
+retains the 45 m rim result and its accuracy limits. No numerical work is running.
+Other distributions and production promotion remain deferred.
 
 The experiment has a saved, second-agent-critiqued slice-count plan requiring
 accuracy tables and actual cache/probe/libRadtran color swatches across distances

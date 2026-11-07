@@ -4,36 +4,28 @@ Status: scene-render R1-R4 complete, with qualified near-rim accuracy.
 
 ## Current Focus
 
-The latest owner-selected camera height is 20 m. Run `00054-r4-three-final`
-contains the new [outward](../../../../../tmp/experiments/flat-dome-cache-shape/runs/00054-r4-three-final/outward.png)
-and [inward](../../../../../tmp/experiments/flat-dome-cache-shape/runs/00054-r4-three-final/inward.png)
-1280x720 renders. Location, closest-approach Sun, 90-degree FOV, common exposure
-and warm-gray ground are retained. The camera has 29.95575 m shortest dome
-clearance; the ground cutoff is approximately 2.56 pixels below the horizon.
-Local geometry, transmission, spectral composition, display and resource checks
-pass. No independent-probe accuracy campaign was repeated for the new height.
+The latest owner-selected scene is Union Glacier Camp at latitude -79.76667,
+longitude -82.86667, 50 m above the flat ground. Accepted run
+`00055-r4-three-final` supplies the [toward-Sun](../../../../../tmp/experiments/flat-dome-cache-shape/runs/00055-r4-three-final/inward.png)
+and [opposite](../../../../../tmp/experiments/flat-dome-cache-shape/runs/00055-r4-three-final/outward.png)
+1280x720 PNGs. Both cameras are level, with 90-degree horizontal FOV, green
+ground (#426B19 zero-air appearance), exposure 0.06 and one shared live N12 cache.
+The Sun stays on the same fixed study orbit, aligned with the camp longitude
+at closest approach (0 degrees), about 28.56 degrees above the horizon. The
+first view faces its northward bearing; the second is exactly 180 degrees away.
 
-The completed [scene-render plan](scene-render-plan.md) demonstrates a complete
-live cache, the updated atmosphere shader, and actual Three.js finite-ground
-rendering in two opposite directions from the same inside-dome observer. The
-[scene report](../../../../../tmp/experiments/flat-dome-cache-shape/runs/00053-r4-scene-report/index.html)
-links the original 45 m PNGs, settings, timing and raw evidence. That final run
-`00050` is verified by `00051`; `00053` verifies its immutable artifacts and the
-rendered report. No numerical work is running. The experiment remains contained
-and open; no promotion or lifecycle closure was selected.
+The camp is 1,137.896 km inside the disk rim. Local cap height is 11,047.399 m
+and shortest observer clearance 10,996.910 m. Sky colors are visible in both
+views, with a brighter Sunward sky and darker blue opposite. Visible angular
+banding in the Sunward image remains an approximation limitation. No fresh
+independent-probe or native-guide accuracy campaign was run for this pose.
 
-The original 45 m near-rim rays expose a material accuracy limitation: N12 query
-errors reach 37.25%, and actual scene-air samples reach 37.53% against the matched
-independent probe. This is separate from exact Three/raw port parity and does
-not inherit the earlier broad-study 2% result. The report retains this
-qualification. No unselected count or distribution search was performed.
-These original error numbers do not quantify the latest 20 m pose.
-
-For the original 45 m run, the cache owns 18.212 MiB of resident textures (72.691 MiB peak construction/
-verification targets). Final compilation took 10.592 s; field construction and
-inspection took 7.643 s. Outward/inward tiled shader wall times were 0.546/0.297 s;
-totals including readback, PNG and checks were 1.642/1.319 s. These synchronized
-workstation measurements exclude opaque driver memory and do not establish FPS.
+The original 45 m rim scene/report (runs `00050`/`00051`/`00053`) and later
+20 m gray-ground pair (`00054`) remain immutable. Their error measurements do
+not quantify Union Glacier accuracy. The [scene-render plan](scene-render-plan.md)
+owns current framing and the [execution record](execution.md) preserves changes
+and checks. The experiment remains contained and open; no numerical work is
+running, and production promotion or lifecycle closure was not selected.
 
 ## Current Result
 
@@ -62,9 +54,9 @@ explicitly reported.
 
 ## Verification
 
-Latest render `00054` is accepted. Both views share one completed cache; local
+Latest render `00055` is accepted. Both views share one completed cache; local
 geometry/display/resource checks pass. Maximum transmission discrepancy is
-1.69e-6, maximum spectral composition discrepancy 2.36e-9, and display discrepancy
+5.77e-7, maximum spectral composition discrepancy 1.87e-9, and display discrepancy
 zero code values. Both actual images were inspected. Source types/formatting
 pass. The earlier report and sealed runs remain unchanged.
 

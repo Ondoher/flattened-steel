@@ -255,6 +255,11 @@ by a 180-degree heading change. The owner requires the observer to remain
 inside the dome, delegates height/distance selection to make the edge legible,
 and keeps natural framing rather than the proposed telephoto view.
 
+The original near-rim framing is retained as completed evidence. The owner
+subsequently selected Union Glacier Camp at 50 m, closest-approach Sun, a level
+view toward its bearing and one exactly opposite, with green ground. This is
+a scene-setting change within the experiment, not a cache distribution search.
+
 The [scene-render plan](scene-render-plan.md) owns exact framing, material/source
 assumptions, code responsibilities, stages, verification, and resource estimates.
 It supersedes earlier provisional location/height proposals for this follow-up.

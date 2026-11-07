@@ -48,7 +48,7 @@ try {
 		groundRgb: /** @type {number[]} */ (settings.groundColor['rgb']),
 		origin: /** @type {number[]} */ (settings.origin),
 		diskRadius: Number(settings.diskRadius),
-		distanceInside: 5000,
+		distanceInside: Number(settings.distanceInside),
 		width: final ? 1280 : 320,
 		height: final ? 720 : 180,
 		final,

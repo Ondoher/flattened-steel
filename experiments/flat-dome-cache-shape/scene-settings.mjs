@@ -8,17 +8,37 @@ import {weights, color} from './color.mjs';
  * @returns {Record<string, unknown>} - Complete physical and display settings.
  */
 export function sceneSettings() {
-	const origin = [diskRadius - 5000, 0, 20];
+	const latitude = -79.76667;
+	const longitude = -82.86667;
+	const radius = (diskRadius * (90 - latitude)) / 180;
+	const origin = [radius, 0, 50];
+	const longitudeRadians = (longitude * Math.PI) / 180;
 	const desiredY = ((96 / 255 + 0.055) / 1.055) ** 2.4;
-	const sourceY = color(medium.sourceIrradiance).xyz[1];
+	const groundShape = medium.wavelengths.map(
+		(wavelength, channel) =>
+			medium.sourceIrradiance[channel] * (0.08 + 0.92 * Math.exp(-0.5 * ((wavelength - 550) / 35) ** 2)),
+	);
+	const sourceY = color(groundShape).xyz[1];
 	const groundScalar = desiredY / (0.06 * sourceY);
-	const groundSpectrum = medium.sourceIrradiance.map((value) => value * groundScalar);
+	const groundSpectrum = groundShape.map((value) => value * groundScalar);
 	return {
+		locationName: 'Union Glacier Camp',
 		origin,
-		latitude: 90 - (180 * origin[0]) / diskRadius,
-		longitude: 90,
+		latitude,
+		longitude,
+		mapOrigin: [radius * Math.sin(longitudeRadians), radius * Math.cos(longitudeRadians), origin[2]],
+		mapSourcePosition: [
+			(diskRadius / 2) * Math.sin(longitudeRadians),
+			(diskRadius / 2) * Math.cos(longitudeRadians),
+			4828032,
+		],
+		frameDerivation:
+			'AEQD radius = R * (90 - latitudeDegrees) / 180. Map axes [r*sin(longitude), r*cos(longitude), z]. Rotate observer, source and rays together by longitudeDegrees - 90 into the canonical source-positive-X cache frame; inverse rotation is 90 - longitudeDegrees. Fixed cap and disk are invariant under this rotation.',
+		degreesFromClosest: 0,
+		sunElevationDegrees: (Math.atan2(4828032 - origin[2], radius - diskRadius / 2) * 180) / Math.PI,
+		viewBearings: {towardSun: 0, awayFromSun: 180},
 		diskRadius,
-		distanceInside: 5000,
+		distanceInside: diskRadius - radius,
 		eyeHeight: origin[2],
 		localCapHeight: capHeight(origin[0]),
 		capClearance: clearance(origin),
@@ -35,7 +55,7 @@ export function sceneSettings() {
 		groundColor: color(groundSpectrum),
 		colorWeights: weights,
 		groundDerivation:
-			'G_i = sourceShape_i * inverseSRGB(96/255) / (exposure * CIE_Y(sourceShape)). G has authored spectral radiance units W m^-2 sr^-1 nm^-1, not physical surface albedo. Compose spectrally before display; no ground feedback into cache.',
+			'S_i = sourceShape_i * (0.08 + 0.92 * exp(-0.5 * ((wavelengthNm_i - 550) / 35)^2)); G_i = S_i * inverseSRGB(96/255) / (exposure * CIE_Y(S)). Green diagnostic endpoint, preserving prior gray96 luminance. G has authored spectral radiance units W m^-2 sr^-1 nm^-1, not physical surface albedo. Compose spectrally before display; no ground feedback into cache.',
 	};
 }
 

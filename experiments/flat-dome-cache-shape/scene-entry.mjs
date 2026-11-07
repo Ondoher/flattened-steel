@@ -32,8 +32,8 @@ async function execute(request) {
 		if (request.stage !== 'cache') {
 			scene = new DomeSceneRenderer(renderer, cache, request);
 			cameraControls = await scene.cameraProof();
-			frames.push(await scene.render('outward', 1, request.width, request.height));
 			frames.push(await scene.render('inward', -1, request.width, request.height));
+			frames.push(await scene.render('outward', 1, request.width, request.height));
 			if (request.stage === 'pilot') {
 				frames.push(await scene.render('rim-native-scale', 1, 1280, 720, 328, 64));
 			}
