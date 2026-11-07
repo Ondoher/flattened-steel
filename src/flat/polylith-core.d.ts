@@ -1,7 +1,32 @@
 /**
  * Existing runtime exports; the package does not currently ship event declarations.
  */
-export {registry, Registry, Service} from '../../node_modules/@polylith/core/index.js';
+export {registry, Registry} from '../../node_modules/@polylith/core/index.js';
+
+/**
+ * Registered service base supplied by the existing untyped runtime package.
+ */
+export class Service extends EventBus {
+	/**
+	 * Creates a named service in the supplied registry or the application registry.
+	 *
+	 * @param name - Service registration name.
+	 * @param registry - Optional owning registry.
+	 */
+	constructor(name: string, registry?: unknown);
+
+	/**
+	 * Registry selected by the runtime constructor.
+	 */
+	registry: typeof import('../../node_modules/@polylith/core/index.js').registry;
+
+	/**
+	 * Call this method to publish bound methods on the registered service object.
+	 *
+	 * @param names - Implemented public method names.
+	 */
+	implement(names: string[]): void;
+}
 
 /**
  * Actual event capability exposed by registered Polylith services.

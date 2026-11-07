@@ -1,6 +1,6 @@
 import {Service} from '@polylith/core';
 /**
- * Global application-context owner for registry, locale, localization, and accessibility state.
+ * Global application-context owner for registry, locale, feature flags and control defaults.
  *
  * @implements {AppContextServiceContract}
  */
@@ -16,15 +16,18 @@ export class AppContextService extends Service {
 	}
 
 	/**
-	 * Call this method to initialize the context with generated feature flags.
+	 * Call this method to initialize the context with feature flags and shared control defaults.
 	 */
 	start() {
+		/** @type {AppContextValue} */
 		this.value = {
 			registry: this.registry,
 			locale: 'en-US',
 			localize: null,
 			localizationEnabled: true,
 			accessibilityEnabled: false,
+			controlSize: 'small',
+			controlVariant: 'outlined',
 		};
 	}
 

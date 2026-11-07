@@ -1,9 +1,13 @@
 import React from 'react';
 import {createRoot} from 'react-dom/client';
 import {registry} from '@polylith/core';
+import CssBaseline from '@mui/material/CssBaseline';
+import StyledEngineProvider from '@mui/styled-engine/StyledEngineProvider';
+import {ThemeProvider} from '@mui/material/styles';
 
 import '../services/localize.js';
 import '../services/app-context.js';
+import '../services/theme.js';
 import '../services/animation-loop.js';
 import '../services/configuration.js';
 import '../services/io.js';
@@ -28,6 +32,17 @@ export function stopApplication() {
 registry.listen('ready', () => {
 	registry.subscribe('app-controller').activate();
 	let content = registry.subscribe('app-view').getComponent();
+	let themeOwner = /** @type {FlatThemeServiceContract} */ (registry.subscribe('theme'));
+	let theme = themeOwner.getTheme();
 	root ??= createRoot(document.getElementById('main-content'));
-	root.render(<React.StrictMode>{content}</React.StrictMode>);
+	root.render(
+		<React.StrictMode>
+			<StyledEngineProvider enableCssLayer>
+				<ThemeProvider theme={theme} defaultMode="dark" storageManager={null}>
+					<CssBaseline />
+					{content}
+				</ThemeProvider>
+			</StyledEngineProvider>
+		</React.StrictMode>,
+	);
 });

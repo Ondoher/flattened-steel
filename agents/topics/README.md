@@ -10,6 +10,8 @@ standards are selected only by affected folders through the
 - [production-app](production-app/README.md) — future deployable app decisions, integration contracts and Flat32 test-bed evidence, and release.
 - [pure-research](pure-research/README.md) — physical, numerical, perceptual, and source authority.
 
+- [Component Refactor](component-refactor/README.md) — reusable Flat controls and the later single-line page toolbar.
+
 [Active focus](active-topic.md) is the session reload contract.
 [Routing examples](context/routing.md), [open-work ownership](context/open-work-ownership.md),
 and the [archive index](context/topic-migration-archive-index.md) are discovery

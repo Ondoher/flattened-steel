@@ -1,31 +1,25 @@
 # Active Topic
 
-Current active topic: none. No execution topic is selected.
+Current active topic: component-refactor.
+Canonical entry: [Component Refactor](component-refactor/README.md).
+Focus: M0/M1 of the bottom-up MUI migration are complete under the owner's
+independent-execution authorization. The maintained catalog, stable theme/provider
+stack and actual shared-location coordinate form are integrated. Applicable
+bases consume AppContext controlSize small and controlVariant outlined; explicit
+supported props win. The execution record owns measured verification and the
+local checkpoint. Next implementation would be M2's agreed shared controls;
+execution past M1 is deferred.
 
-Last topic: poc-experiments/engineering-studies/flat-dome-cache-shape,
-**suspended by the owner on 2026-11-06** (America/Los_Angeles).
-Canonical retained entry: [Flat Dome Cache Shape](poc-experiments/engineering-studies/flat-dome-cache-shape/README.md).
-Focus: preserve the completed study and renders for a later owner-selected
-return. The owner accepts deferring this boundary work because its current
-importance is chiefly at the extremes. No experiment implementation, build,
-render, promotion or new production task is selected.
-
-The [suspension/resumption record](poc-experiments/engineering-studies/flat-dome-cache-shape/resumption.md)
-owns the reload boundary, outstanding angular convergence and production-cost
-questions, compatibility checks and standards-restoration outcome. The
-[status](poc-experiments/engineering-studies/flat-dome-cache-shape/status.md)
-owns retained results and verification. Latest run `00056` and all earlier
-sealed runs remain immutable; no process or unfinished run remains.
-
-The experiment's permanent folder mapping, including types.md, remains intact.
-There were no temporary lane rules to restore. Dedicated experiment reviewers
-and audits remain disabled; checkpoint-adviser monitoring stays active. No
-standards-compliance or production-acceptance claim is made. Select the next
-topic only from a new owner request. Production work requires its destination
-standards and reviewer lifecycle before implementation.
+Keep toolbar containers/layout and Sun-slider relocation deferred until the
+control migration is complete. Preserve earlier uncommitted stellar, shader,
+collapse, city and transfer work. The dome-cache experiment remains suspended;
+engineering reviews remain cancelled. The owner accepts maintained base sources
+wholesale, with narrow context and concrete compatibility adaptations. Promote
+the six local rules only after the Polylith skills review work is complete.
 
 ## Minimal Reload Sources
 
 1. [Repository instructions](../../AGENTS.md).
-2. [Last experiment resumption record](poc-experiments/engineering-studies/flat-dome-cache-shape/resumption.md).
-3. [Last experiment status](poc-experiments/engineering-studies/flat-dome-cache-shape/status.md).
+2. [Component Refactor entry](component-refactor/README.md).
+3. [MUI migration plan](component-refactor/mui-migration-plan.md).
+4. [MUI migration execution](component-refactor/mui-migration-execution.md).

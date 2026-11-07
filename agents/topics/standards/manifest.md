@@ -94,6 +94,8 @@ Standards:
 - [app-shells.md](../../../../../Users/gande/.codex/documentation/standards/app-shells.md) - Applies to Flat.
 - [localization.md](../../../../../Users/gande/.codex/documentation/standards/localization.md) - Applies to Flat.
 - [testing.md](../../../../../Users/gande/.codex/documentation/standards/testing.md) - Applies to Flat.
+- [mui.md](../../../../../Users/gande/.codex/documentation/standards/mui.md) - Applies to Flat.
+- [base-components.md](../../../../../Users/gande/.codex/documentation/standards/base-components.md) - Applies to Flat.
 
 ### `app-flat-server`
 

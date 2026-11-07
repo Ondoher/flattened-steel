@@ -21,6 +21,8 @@ export class TestHarness {
 			localize: null,
 			localizationEnabled: false,
 			accessibilityEnabled: false,
+			controlSize: 'small',
+			controlVariant: 'outlined',
 		};
 		this.container = null;
 		this.root = null;

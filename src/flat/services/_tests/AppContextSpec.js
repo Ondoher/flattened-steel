@@ -44,8 +44,14 @@ describe('app context', () => {
 		expect(value.localize).toBe(registry.subscribe('localize'));
 		expect(value.localizationEnabled).toBe(true);
 		expect(value.accessibilityEnabled).toBe(false);
+		expect(value.controlSize).toBe('small');
+		expect(value.controlVariant).toBe('outlined');
 		value.locale = 'changed';
+		value.controlSize = 'medium';
+		value.controlVariant = 'filled';
 		expect(service.get().locale).toBe('en-US');
+		expect(service.get().controlSize).toBe('small');
+		expect(service.get().controlVariant).toBe('outlined');
 	});
 
 	it('rejects unloaded locales and publishes a loaded locale change once', () => {
@@ -83,6 +89,8 @@ describe('app context', () => {
 		localize.supportsLocale = (locale) => locale === 'fr-CA';
 		expect(service.setLocale('fr-CA')).toBeTrue();
 		expect(service.get().locale).toBe('fr-CA');
+		expect(service.get().controlSize).toBe('small');
+		expect(service.get().controlVariant).toBe('outlined');
 		expect(listener).toHaveBeenCalledWith('fr-CA');
 		expect(changed).toHaveBeenCalledWith(service.get());
 	});

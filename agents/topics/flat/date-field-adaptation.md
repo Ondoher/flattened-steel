@@ -16,6 +16,14 @@ a compact, localization-aware date field. The source was written for a different
 application; its application-specific dependencies and policies do not define
 Flat's design. Preserve the transferred files as reference during adaptation.
 
+For the [component refactor](../component-refactor/README.md), the owner
+specifically identified this existing MUI date control as the starting point
+to revisit. Its MUI field, format adornment, feedback and editing interactions
+can inform that migration. Replace its original application-context and
+data-cache dependencies with Flat's existing ownership boundaries, and adapt
+its MUI properties to the selected version. The implemented DateField remains
+the current control until that migration is authorized and performed.
+
 The useful starting point is a date-value/editing model paired with a thin React
 input component. Borrow the interaction and separation of date parts from their
 display, adapting the implementation to Flat's existing React/ReMVC boundaries.
@@ -77,7 +85,7 @@ for every input edge case.
 | Date value/model                    | Represent a complete calendar date using locale-neutral year/month/day values and own calendar validity, including leap years and month lengths.                                                                      |
 | Date editing model                  | Own partial drafts, parsing, segment normalization, and incomplete/invalid feedback. Interpret an explicit format description supplied by the presentation boundary; do not locate localization or registry services. |
 | View and presentation-format helper | Use the canonical application locale to prepare date order, separators, display text, format hints, and localized feedback. Relay component intent to the controller.                                                 |
-| React date field                    | Render native compact controls, report editing/commit intent, and own DOM selection, caret, focus, and other transient presentation mechanics. Receive presentation through explicit properties and callbacks.        |
+| React date field                    | Render compact MUI controls, report editing/commit intent, and own DOM selection, caret, focus, and other transient presentation mechanics. Receive presentation through explicit properties and callbacks.           |
 | Global configuration controller     | Coordinate date editing and acceptance through the configuration owner, without absorbing parsing or calendar rules.                                                                                                  |
 | Main configuration model-service    | Expose animation-loop's accepted instant as integer Unix epoch milliseconds; own location. Pages consume its public capability; the editor does not become a second canonical owner.                                  |
 
@@ -93,9 +101,12 @@ owns how accepted shared values reach consuming features.
 
 ## Adaptation Boundaries
 
-Use Flat's native HTML and CSS-variable presentation. The source MUI field,
-OnboardingContext, data-cache, converter registry, and birth-date age/year rules
-are application-specific reference details, not selected dependencies or policy.
+The [MUI migration plan](../component-refactor/mui-migration-plan.md) selects
+compact MUI presentation, superseding this note's earlier native-HTML direction.
+Use the transferred MUI field as a starting point while preserving Flat's
+CSS-variable appearance and accepted entry behavior. OnboardingContext,
+data-cache, converter registry and birth-date age/year rules remain
+application-specific reference details, not selected dependencies or policy.
 Use Flat's canonical app context and localization contracts for UI phrases;
 entry conventions follow the browser's default locale independently.
 

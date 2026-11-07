@@ -5,6 +5,9 @@ Flat is the production application shell created through create-app on
 own the selected workspace behavior and scaffold options. Flat32 remains the
 separate integration test bed.
 
+The [Component Refactor topic](../component-refactor/README.md) owns the current
+shared-control cleanup and the later single-line Flat page toolbar direction.
+
 The [workspace comps implementation](workspace-comps-execution.md) is complete
 through the owner-authorized independent-execution run. The app now has shared
 accepted-value summaries, generic settings targets/sections, per-view Camera

@@ -1,4 +1,6 @@
 import React, {Component} from 'react';
+import BaseButton from '../../../components/BaseButton.jsx';
+import BaseTextInput from '../../../components/BaseTextInput.jsx';
 import CityPicker from './CityPicker.jsx';
 
 /**
@@ -115,32 +117,24 @@ export default class LocationEditor extends Component {
 		}
 		return (
 			<form className="location-coordinates" onSubmit={this._onSubmit} noValidate>
-				<label>
-					<span>{latitudeLabel}</span>
-					<input
-						name="latitude"
-						type="number"
-						min="-90"
-						max="90"
-						step="any"
-						value={presentation.editor.latitude}
-						onChange={this._onLatitude}
-					/>
-				</label>
-				<label>
-					<span>{longitudeLabel}</span>
-					<input
-						name="longitude"
-						type="number"
-						min="-180"
-						max="180"
-						step="any"
-						value={presentation.editor.longitude}
-						onChange={this._onLongitude}
-					/>
-				</label>
+				<BaseTextInput
+					label={latitudeLabel}
+					name="latitude"
+					type="number"
+					slotProps={{htmlInput: {min: -90, max: 90, step: 'any'}}}
+					value={presentation.editor.latitude}
+					onChange={this._onLatitude}
+				/>
+				<BaseTextInput
+					label={longitudeLabel}
+					name="longitude"
+					type="number"
+					slotProps={{htmlInput: {min: -180, max: 180, step: 'any'}}}
+					value={presentation.editor.longitude}
+					onChange={this._onLongitude}
+				/>
 				{error}
-				<button type="submit">{applyLabel}</button>
+				<BaseButton type="submit" label={applyLabel} />
 			</form>
 		);
 	}

@@ -73,6 +73,14 @@ type AppContextValue = {
 	 * Whether authored accessibility metadata should be added when native semantics are insufficient.
 	 */
 	accessibilityEnabled: boolean;
+	/**
+	 * Default size supplied when constructing MUI controls that support the size property.
+	 */
+	controlSize: 'small';
+	/**
+	 * Default appearance supplied when constructing MUI controls that support outlined presentation.
+	 */
+	controlVariant: 'outlined';
 };
 
 /**

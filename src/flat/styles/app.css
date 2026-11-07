@@ -1,9 +1,12 @@
 :root {
 	--app-color-background: #121212;
+	--app-color-background-channel: 18 18 18;
 	--app-color-text: #f2f2f2;
+	--app-color-text-channel: 242 242 242;
 	--app-color-border: #f2f2f2;
 	/* Visual approximation of the owner's swatch; exact source RGB is not recorded. */
 	--app-color-action: #abd3fa;
+	--app-color-action-channel: 171 211 250;
 	--app-color-on-action: var(--app-color-background);
 	--app-font-family: Arial, Helvetica, sans-serif;
 	--app-font-small: 0.875rem;
@@ -12,8 +15,43 @@
 	background: var(--app-color-background);
 	color-scheme: dark;
 }
-* {
-	box-sizing: border-box;
+
+/* Brand values stay in the application CSS; MUI consumes its semantic variables. */
+html.dark {
+	--mui-palette-background-default: var(--app-color-background);
+	--mui-palette-background-paper: var(--app-color-background);
+	--mui-palette-background-defaultChannel: var(--app-color-background-channel);
+	--mui-palette-background-paperChannel: var(--app-color-background-channel);
+	--mui-palette-text-primary: var(--app-color-text);
+	--mui-palette-text-secondary: rgb(var(--app-color-text-channel) / 0.75);
+	--mui-palette-text-primaryChannel: var(--app-color-text-channel);
+	--mui-palette-text-secondaryChannel: var(--app-color-text-channel);
+	--mui-palette-divider: var(--app-color-border);
+	--mui-palette-dividerChannel: var(--app-color-text-channel);
+	--mui-palette-common-onBackground: var(--app-color-text);
+	--mui-palette-common-onBackgroundChannel: var(--app-color-text-channel);
+	--mui-palette-primary-main: var(--app-color-action);
+	--mui-palette-primary-light: var(--app-color-action);
+	--mui-palette-primary-dark: var(--app-color-action);
+	--mui-palette-primary-mainChannel: var(--app-color-action-channel);
+	--mui-palette-primary-lightChannel: var(--app-color-action-channel);
+	--mui-palette-primary-darkChannel: var(--app-color-action-channel);
+	--mui-palette-primary-contrastText: var(--app-color-on-action);
+	--mui-palette-primary-contrastTextChannel: var(--app-color-background-channel);
+}
+
+/* MUI exposes no semantic variable for the resting outlined-field border. */
+html.dark .MuiOutlinedInput-root:not(.Mui-focused):not(.Mui-error):not(.Mui-disabled) .MuiOutlinedInput-notchedOutline {
+	border-color: var(--app-color-border);
+}
+/* CssBaseline owns sizing resets; an unlayered universal reset breaks MUI inputs. */
+body,
+.MuiButtonBase-root,
+.MuiTypography-root,
+.MuiFormLabel-root,
+.MuiInputBase-root,
+.MuiFormHelperText-root {
+	font-family: var(--app-font-family);
 }
 html,
 body,
@@ -25,9 +63,9 @@ body,
 body {
 	background: var(--app-color-background);
 }
-button,
-input,
-select {
+button:not(.MuiButtonBase-root),
+input:not(.MuiInputBase-input),
+select:not(.MuiNativeSelect-select) {
 	font: inherit;
 }
 :focus-visible {
