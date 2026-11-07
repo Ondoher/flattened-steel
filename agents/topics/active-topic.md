@@ -3,10 +3,10 @@
 Current active topic: poc-experiments/engineering-studies/flat-dome-cache-shape.
 Canonical entry: [Flat Dome Cache Shape](poc-experiments/engineering-studies/flat-dome-cache-shape/README.md).
 Focus: completed live-cache to updated-shader to Three.js integration, now
-rendered at Union Glacier Camp (-79.76667, -82.86667), 50 m height, level
-90-degree horizontal FOV, green ground and closest-approach Sun. Run `00055`
-contains the latest [toward-Sun](../../tmp/experiments/flat-dome-cache-shape/runs/00055-r4-three-final/inward.png)
-and [opposite](../../tmp/experiments/flat-dome-cache-shape/runs/00055-r4-three-final/outward.png)
+rendered at Union Glacier Camp (-79.76667, -82.86667), 5,000 m height, level
+90-degree horizontal FOV, green ground and closest-approach Sun. Run `00056`
+contains the latest [toward-Sun](../../tmp/experiments/flat-dome-cache-shape/runs/00056-r4-three-final/inward.png)
+and [opposite](../../tmp/experiments/flat-dome-cache-shape/runs/00056-r4-three-final/outward.png)
 1280x720 views, with one shared completed cache and local geometry/display/
 resource checks. Sky colors are visible; Sunward angular banding remains visible.
 No independent-probe accuracy was measured for this pose. The [original scene

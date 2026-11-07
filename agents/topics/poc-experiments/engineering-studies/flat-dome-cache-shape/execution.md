@@ -609,3 +609,35 @@ heading order and shared-cache identities. The adviser recommends
 `feat(experiments): render Union Glacier dome scene` for this scoped local
 checkpoint, preaccepted by the active execution workflow. Unrelated changes
 remain excluded; no push.
+
+### Union Glacier repeat at 5 km altitude
+
+The owner requested the same two scenes at 5 km camera altitude. Changed only
+the default observer height from 50 m to 5,000 m. Retained Union Glacier Camp
+coordinates, the closest-approach source position/orbit, level northward and
+southward headings, green spectral ground endpoint, exposure 0.06, 90-degree
+horizontal FOV, Native15 N12 cache layout and quadrature. Camera-dependent
+diagnostics derive their height from the request. This is 5 km above the
+experiment's flat ground, with shortest dome clearance 6,047.130 m; the Sun's
+elevation changes geometrically to 28.5359 degrees without moving the Sun.
+
+Accepted immutable run `00056-r4-three-final` supplies inward.png (toward the
+Sun's bearing) and outward.png (180 degrees away), both 1280x720, from one
+shared completed cache. Actual images were inspected. The ground is visibly
+veiled by scattering on the longer slant paths; sky and green ground remain
+visible. Existing angular banding remains an approximation limitation.
+
+Local independent geometry, columns, spectral composition and display checks
+pass: maximum transmission discrepancy 8.07e-8, composition discrepancy
+2.31e-9 and display discrepancy zero code values. No nonfinite/undrawn pixels;
+owned textures and geometries are zero after disposal. Both frame totals,
+including capture/readback/PNG/checks, were 1.633 and 1.408 s on the recorded
+hardware. Local source types/formatting and immutable artifact hashes are
+checked before handoff. No fresh probe or native accuracy campaign is claimed.
+Existing runs, production and unrelated changes remain unchanged. No numerical
+process is running.
+
+Final authentication verifies 221 artifacts (11,479,288 bytes) and matches all
+retained scene settings except height and its derived coordinates/geometry to
+run `00055`. The adviser recommends `feat(experiments): render Union Glacier at 5 km`
+as the preaccepted scoped local checkpoint. No push.

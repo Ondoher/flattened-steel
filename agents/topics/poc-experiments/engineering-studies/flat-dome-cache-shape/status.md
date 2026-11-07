@@ -5,23 +5,23 @@ Status: scene-render R1-R4 complete, with qualified near-rim accuracy.
 ## Current Focus
 
 The latest owner-selected scene is Union Glacier Camp at latitude -79.76667,
-longitude -82.86667, 50 m above the flat ground. Accepted run
-`00055-r4-three-final` supplies the [toward-Sun](../../../../../tmp/experiments/flat-dome-cache-shape/runs/00055-r4-three-final/inward.png)
-and [opposite](../../../../../tmp/experiments/flat-dome-cache-shape/runs/00055-r4-three-final/outward.png)
+longitude -82.86667, 5,000 m above the flat ground. Accepted run
+`00056-r4-three-final` supplies the [toward-Sun](../../../../../tmp/experiments/flat-dome-cache-shape/runs/00056-r4-three-final/inward.png)
+and [opposite](../../../../../tmp/experiments/flat-dome-cache-shape/runs/00056-r4-three-final/outward.png)
 1280x720 PNGs. Both cameras are level, with 90-degree horizontal FOV, green
 ground (#426B19 zero-air appearance), exposure 0.06 and one shared live N12 cache.
 The Sun stays on the same fixed study orbit, aligned with the camp longitude
-at closest approach (0 degrees), about 28.56 degrees above the horizon. The
+at closest approach (0 degrees), about 28.54 degrees above the horizon. The
 first view faces its northward bearing; the second is exactly 180 degrees away.
 
 The camp is 1,137.896 km inside the disk rim. Local cap height is 11,047.399 m
-and shortest observer clearance 10,996.910 m. Sky colors are visible in both
+and shortest observer clearance 6,047.130 m. Sky colors are visible in both
 views, with a brighter Sunward sky and darker blue opposite. Visible angular
 banding in the Sunward image remains an approximation limitation. No fresh
 independent-probe or native-guide accuracy campaign was run for this pose.
 
 The original 45 m rim scene/report (runs `00050`/`00051`/`00053`) and later
-20 m gray-ground pair (`00054`) remain immutable. Their error measurements do
+20 m gray-ground pair (`00054`) and 50 m Union Glacier pair (`00055`) remain immutable. Their error measurements do
 not quantify Union Glacier accuracy. The [scene-render plan](scene-render-plan.md)
 owns current framing and the [execution record](execution.md) preserves changes
 and checks. The experiment remains contained and open; no numerical work is
@@ -54,9 +54,9 @@ explicitly reported.
 
 ## Verification
 
-Latest render `00055` is accepted. Both views share one completed cache; local
+Latest render `00056` is accepted. Both views share one completed cache; local
 geometry/display/resource checks pass. Maximum transmission discrepancy is
-5.77e-7, maximum spectral composition discrepancy 1.87e-9, and display discrepancy
+8.07e-8, maximum spectral composition discrepancy 2.31e-9, and display discrepancy
 zero code values. Both actual images were inspected. Source types/formatting
 pass. The earlier report and sealed runs remain unchanged.
 

@@ -27,7 +27,7 @@ experiment or changes its lifecycle status.
 ## Accepted Framing and Implementation Assumptions
 
 The initial R1-R4 near-rim study is complete and preserved in its execution
-evidence. The current owner-selected render is Union Glacier Camp at 50 m, with
+evidence. The current owner-selected render is Union Glacier Camp at 5,000 m, with
 the Sun at closest approach, a level view toward its bearing, and one exactly
 opposite. Retain 90-degree horizontal FOV. This supersedes earlier near-rim
 framing for future renders without changing sealed evidence or the completed
@@ -36,14 +36,14 @@ milestone history below.
 | Parameter | Selected value and authority |
 | --- | --- |
 | Distance inside rim | 1,137,895.9504 m, derived from camp latitude using the existing North Pole AEQD map |
-| Eye height | 50 m above flat ground; explicit owner selection |
+| Eye height | 5,000 m above flat ground; explicit owner selection |
 | Latitude/longitude | Union Glacier Camp: -79.76667, -82.86667, from the existing city-catalog addition |
 | Map-frame placement | Actual map `[r sin(lon), r cos(lon)]`; rotate observer/source/rays together into the source-positive-X cache frame, recording actual map coordinates and the invertible rotation |
 | Headings | First toward the Sun's northward bearing, canonical `-X`, then opposite `+X`; yaw differs exactly 180 degrees, unchanged roll/up |
 | Pitch | Level, 0 degrees, retained from accepted defaults |
 | Horizontal FOV | 90 degrees, retained natural framing; derive vertical FOV from 16:9 aspect rather than assigning 90 degrees to Three's vertical-FOV property |
 | Final output | Two 1280x720 PNGs; no visible objects except finite ground and atmosphere |
-| Source | Same finite point Sun orbit; canonical `[R/2, 0, 4828032]` m aligned with camp longitude at 0 degrees from closest; elevation about 28.56 degrees; fixed for both views, no visible Sun mesh |
+| Source | Same finite point Sun orbit; canonical `[R/2, 0, 4828032]` m aligned with camp longitude at 0 degrees from closest; elevation about 28.54 degrees; fixed for both views, no visible Sun mesh |
 | Cache | N12 quadratic dome-distance slices, counted valid-row support, existing 22 altitude/17 source-distance rows, 96 incoming/98 stored outgoing addresses, Native15, orders J1-J4; starting implementation choice, not a production qualification |
 | Display | Existing CIE-to-sRGB conversion and common exposure 0.06; no per-view auto-exposure, white balance, or image fitting |
 | Ground appearance | Owner-selected green for future renders: source spectral shape filtered by `0.08 + 0.92 * exp(-0.5 * ((wavelengthNm - 550) / 35)^2)`, normalized once to the prior gray96 CIE-Y luminance; zero-air sRGB approximately `#426B19` |
@@ -68,8 +68,8 @@ illumination. The fixed contrasting endpoint makes the finite object visible
 without changing cache optics or adjusting either image independently.
 
 Under the pinned 100-km-apex cap, Union Glacier's local roof is approximately
-11,047.399 m and the 50 m camera's shortest clearance is approximately
-10,996.910 m. The camera stays level even though the Sun is elevated; it faces
+11,047.399 m and the 5,000 m camera's shortest clearance is approximately
+6,047.130 m. The camera stays level even though the Sun is elevated; it faces
 the Sun's horizontal bearing rather than pointing upward. This interior scene
 shows the atmosphere over substantial path lengths. The previous rim-distance
 and edge-pixel calculations remain in the execution record as historical

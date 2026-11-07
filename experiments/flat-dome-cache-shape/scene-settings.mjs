@@ -11,7 +11,7 @@ export function sceneSettings() {
 	const latitude = -79.76667;
 	const longitude = -82.86667;
 	const radius = (diskRadius * (90 - latitude)) / 180;
-	const origin = [radius, 0, 50];
+	const origin = [radius, 0, 5000];
 	const longitudeRadians = (longitude * Math.PI) / 180;
 	const desiredY = ((96 / 255 + 0.055) / 1.055) ** 2.4;
 	const groundShape = medium.wavelengths.map(

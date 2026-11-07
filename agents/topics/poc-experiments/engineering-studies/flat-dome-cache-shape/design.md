@@ -256,7 +256,7 @@ inside the dome, delegates height/distance selection to make the edge legible,
 and keeps natural framing rather than the proposed telephoto view.
 
 The original near-rim framing is retained as completed evidence. The owner
-subsequently selected Union Glacier Camp at 50 m, closest-approach Sun, a level
+subsequently selected Union Glacier Camp, now at 5,000 m, closest-approach Sun, a level
 view toward its bearing and one exactly opposite, with green ground. This is
 a scene-setting change within the experiment, not a cache distribution search.
 

@@ -30,7 +30,7 @@ performance are the primary optimization variables among accurate candidates.
 
 - [Design](design.md)
 - [Completed scene-render plan](scene-render-plan.md)
-- Latest Union Glacier Camp, 50 m, green-ground renders: [toward the Sun](../../../../../tmp/experiments/flat-dome-cache-shape/runs/00055-r4-three-final/inward.png), [opposite](../../../../../tmp/experiments/flat-dome-cache-shape/runs/00055-r4-three-final/outward.png)
+- Latest Union Glacier Camp, 5,000 m, green-ground renders: [toward the Sun](../../../../../tmp/experiments/flat-dome-cache-shape/runs/00056-r4-three-final/inward.png), [opposite](../../../../../tmp/experiments/flat-dome-cache-shape/runs/00056-r4-three-final/outward.png)
 - [Original 45 m scene report](../../../../../tmp/experiments/flat-dome-cache-shape/runs/00053-r4-scene-report/index.html)
 - [Completed slice-count plan](plan.md)
 - [Status](status.md)
@@ -59,8 +59,8 @@ complete cache, an updated atmosphere shader, and an actual Three.js finite-grou
 scene facing outward and inward from one inside-dome location. The owner delegated
 distance/height selection and kept natural FOV. The [scene report](../../../../../tmp/experiments/flat-dome-cache-shape/runs/00053-r4-scene-report/index.html)
 links the original 45 m renders, measured costs, verification and raw evidence.
-The latest owner-directed scene is Union Glacier Camp at 50 m, closest-approach
-Sun, level opposite headings and green ground. Run `00055` supplies that pair
+The latest owner-directed scene is Union Glacier Camp at 5,000 m, closest-approach
+Sun, level opposite headings and green ground. Run `00056` supplies that pair
 with geometry/display/resource checks; sky colors are visible, along with
 Sunward angular banding. The earlier 20 m rim pair remains in run `00054`.
 Integration works; the original
