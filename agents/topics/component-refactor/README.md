@@ -1,12 +1,11 @@
 # Component Refactor
 
-Status: M0–M3 are implemented under the owner's independent-execution
+Status: M0–M4 are complete under the owner's independent-execution
 authorization. Shared MUI controls are used throughout the app's existing
 control positions and nonmodal configuration surfaces. The
 [execution record](mui-migration-execution.md) owns verification and scoped
-local checkpoints. M4 remains deferred. The [saved migration plan](mui-migration-plan.md)
-owns the milestone sequence and completion requirements. Toolbar conversion
-follows it.
+local checkpoints. The [saved migration plan](mui-migration-plan.md) is complete.
+Toolbar conversion remains a separate follow-on task.
 
 Focus: establish reusable controls for the Flat application, then use them to
 fit the Flat page controls into a single-line toolbar. These are controls and
@@ -92,7 +91,7 @@ when integrating the maintained sources.
 The owner accepts taking the maintained components wholesale when implementation
 is authorized, without a preliminary rewrite for local styling or type-contract
 preferences. The owner expects them to meet the standards; no completed review
-has established otherwise. M0–M3 are implemented; M4 remains planned.
+has established otherwise. M0–M4 are complete without restarting engineering reviewers.
 The narrow context-default integration and concrete compatibility
 adaptations are recorded in the execution record.
 
@@ -148,6 +147,17 @@ separate from these six local additions.
 
 ## Flat Toolbar Direction
 
+The control migration is complete. This section owns the remaining-toolbar
+inventory; implementing it requires a separately selected task.
+
+| Existing host                  | Current controls                                                                   | Remaining conversion                                                                     |
+| ------------------------------ | ---------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| WorkspaceToolbar               | Shared location/time summaries and MUI app actions                                 | Decide use of the shared Toolbar container while retaining workspace ownership           |
+| ViewportFrame                  | MUI scene selector, page settings, collapse and close actions                      | Compose the selected single-line layout without changing view lifetimes                  |
+| FlatEarthViewTools             | MUI Sky, elevation, FOV and Center on Sun                                          | Fit feature controls into the chosen toolbar arrangement                                 |
+| FlatEarthTimeControls          | Shared inline Slider and settings shortcut; settings retains slider/numeric editor | Move the toolbar's Sun editor into shared PanelButton; retain shared timestamp ownership |
+| Shared Toolbar and PanelButton | Implemented and independently verified                                             | Adopt them into the chosen hosts; no new primitive is required                           |
+
 The owner wants all Flat page controls to fit on a single-line toolbar. The
 toolbar redesign follows cleanup of the common controls; it is not the first
 refactoring step.
@@ -170,7 +180,7 @@ details have not been accepted implicitly.
 - [Transferred MUI Date control](../../../transfer/Date.jsx): owner-selected
   starting point for date presentation and editing adaptation.
 - [CityPicker](../../../src/flat/features/global-configuration/components/CityPicker.jsx):
-  source of the generic type-ahead behavior to separate from city presentation.
+  configuration-specific city presentation over the shared TypeAhead control.
 - [WorkspaceToolbar](../../../src/flat/features/workspace/components/WorkspaceToolbar.jsx):
   workspace-specific composition and actions.
 - [FlatEarthViewTools](../../../src/flat/features/flat-earth/components/FlatEarthViewTools.jsx):

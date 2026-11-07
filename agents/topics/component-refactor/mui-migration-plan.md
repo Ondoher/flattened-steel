@@ -1,8 +1,8 @@
 # Flat MUI Migration and Shared Controls
 
-Status: M0–M3 implemented under independent-execution; see the
+Status: M0–M4 complete under independent-execution; see the
 [execution record](mui-migration-execution.md) for evidence and scoped checkpoints.
-M4 remains deferred pending owner selection.
+Toolbar conversion remains a separate follow-on task.
 Owner direction recorded: 2026-11-07.
 
 ## Outcome and Authority
@@ -339,6 +339,9 @@ settings surfaces and unchanged toolbar arrangement. Advance after migration
 regressions are fixed or bounded limitations are reported against the goal.
 
 ### M4 — Full Application Verification and Handoff
+
+State: complete. The execution record links reused checks, new nested-mount GPU
+and cleanup evidence, server/sibling smoke results and declared limitations.
 
 Purpose: demonstrate that the application works with the new control layer and
 prepare a clear boundary for the later toolbar work. Forecast: 2–5 hours.

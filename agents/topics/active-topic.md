@@ -2,15 +2,16 @@
 
 Current active topic: component-refactor.
 Canonical entry: [Component Refactor](component-refactor/README.md).
-Focus: M0–M3 of the bottom-up MUI migration are implemented under the owner's
+Focus: the bottom-up MUI migration, M0–M4, is complete under the owner's
 independent-execution authorization. Shared controls and their application
 consumers use MUI; configuration uses nonmodal MUI surfaces. Applicable bases
 consume AppContext controlSize small and controlVariant outlined; explicit
-supported props win. The execution record owns verification and scoped local
-checkpoints. M4 remains deferred pending owner selection.
+supported props win. The execution record owns verification, its limits and
+scoped local checkpoints. The entry document owns the remaining-toolbar
+inventory for a separately selected follow-on task.
 
-Keep toolbar containers/layout and Sun-slider relocation deferred until the
-control migration is complete. Preserve earlier uncommitted stellar, shader,
+Keep toolbar containers/layout and Sun-slider relocation deferred pending
+separate owner selection. Preserve earlier uncommitted stellar, shader,
 collapse, city and transfer work. The dome-cache experiment remains suspended;
 engineering reviews remain cancelled. The owner accepts maintained base sources
 wholesale, with narrow context and concrete compatibility adaptations. Promote

@@ -1,7 +1,7 @@
 # MUI Migration Execution
 
-Scope: owner-authorized independent execution of M0–M1, followed by the newly
-authorized M2–M3. Toolbar conversion and M4 remain outside this execution.
+Scope: owner-authorized independent execution of M0–M1, followed by M2–M3 and
+now the remaining M4 verification and handoff. Toolbar conversion remains separate.
 Local checkpoints are authorized under the
 independent-execution skill; pushes/publication are not.
 
@@ -13,10 +13,11 @@ independent-execution skill; pushes/publication are not.
 | M1: foundation and visible location form | Complete | 181 browser tests, client types, normal build and actual local/discovered app proof pass; task-scoped local checkpoint: feat(flat): establish MUI control foundation |
 | M2: shared controls                      | Complete | 199 browser tests, client types, normal build and actual interactive-panel proof pass                                                                                |
 | M3: application migration                | Complete | 202 working-tree browser tests, client types, normal build and actual local/discovered app/GPU checks pass                                                           |
-| M4                                       | Deferred | Outside the current M2–M3 authorization                                                                                                                              |
+| M4                                       | Complete | Remaining nested-mount GPU, recovery, cleanup, server, sibling-build and standards-guide checks pass; final handoff below                                            |
 
 Evidence root: `.codex-tmp/component-refactor/mui/run-20261107-01/`.
 M2–M3 baseline/evidence root: `.codex-tmp/component-refactor/mui/run-20261107-02/`.
+M4 baseline/evidence root: `.codex-tmp/component-refactor/mui/run-20261107-03/`.
 The [plan](mui-migration-plan.md) owns requirements and advancement criteria.
 HEAD at execution start: `7b2a888f`; baseline.patch and baseline-files preserve
 the pre-existing dirty work. The catalog still selects 31 files, with only
@@ -103,6 +104,77 @@ packages are available. Engineering reviewers remain owner-cancelled.
   working tree. Verify this isolated source snapshot through ordinary Polylith,
   Karma and TypeScript commands before committing. No builder hooks or alternate
   test framework are needed.
+- D20: M4 reuses the completed M3 type/build/202-test and local/discovered
+  workflows while their sources remain unchanged. Add targeted actual-app checks
+  for the remaining gesture/recovery, GPU mode/resource and mount/cleanup cases.
+  Recheck only evidence invalidated by a concrete fix. Server and sibling smoke
+  checks verify shared integration without converting Flat32 or reopening science.
+- D21: the final probe originally called nonexistent Registry.stop after all
+  core checks passed. Preserve that failed attempt; use the actual app/feature
+  controller stop methods for a focused cleanup follow-up. Do not change
+  production lifecycle APIs or rerun unchanged GPU assertions to fix the probe.
+
+## M4 Final Handoff
+
+The MUI migration is complete. No additional production source changes were
+needed during M4. Shared Button, TypeAhead, Slider, Date/Time, Toolbar and
+PanelButton are available; configuration-specific CityPicker composes TypeAhead.
+Active standard controls use the shared/MUI layer. Context owns small/outlined
+defaults with supported explicit overrides. Toolbar layout and Sun-popup adoption
+remain the separately selected follow-on described in the entry document's
+[remaining-toolbar inventory](README.md#flat-toolbar-direction).
+
+Verification is scoped to this migration and the preserved working tree:
+
+| Area                                                        | Result and evidence                                                                                                                                                                                                                                                                                                                                                                      |
+| ----------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Client types, complete UI suite and normal repository build | Reused unchanged M3 results: types pass, 202 browser tests pass, normal build passes. The isolated M3 commit source also passes types and 190 applicable tests. The M4 identity check covers 723 unchanged source/configuration paths.                                                                                                                                                   |
+| Shared controls/provider/defaults                           | Reused M1/M2 tests and real-provider proof for alternate context values, explicit overrides, nested recipients, pointer cancellation/blur/unmount, popup dismissal and focus.                                                                                                                                                                                                            |
+| Local and discoverable app workflows                        | Reused M3 local/discovered city, coordinate, date/time, shared seeking, two independent cameras, collapse and settings evidence.                                                                                                                                                                                                                                                         |
+| Nested discovered mount                                     | New `/tools/flat` build/host passes: all six CSS resources load below the correct base, selecting the page uses its mounted URL, deep-link response retains the correct base, and no failed HTTP responses or page/console errors occur.                                                                                                                                                 |
+| Drafts, focus and gesture cleanup                           | New actual-app proof retains a partial date across settings close/reopen, restores opener focus, and ends a shared-time keyboard gesture exactly once after window blur.                                                                                                                                                                                                                 |
+| GPU and cache preservation                                  | New height/FOV/time changes preserve runtime, canvas, retained frame, shader handle, existing programs and the physical cache. One cache is built before retry. Repeated Full/No-atmosphere/Shader-off switches add no preparations/cache builds and retain programs after the first direct-render use.                                                                                  |
+| Sky, stars and ground                                       | Actual captures show colored daytime sky, the authenticated 2,000-star source with both human filters enabled, visible stars with atmosphere off and dim green ground in atmosphere-off/direct modes. This is integration evidence, not new scientific qualification.                                                                                                                    |
+| Retry and close/reopen                                      | Injected recoverable graphics failure displays the shared MUI Retry button; clicking it renders successfully, disposes the failed runtime and releases its cache. A separate follow-up closes/reopens the second view during preparation, then app/feature lifecycle stops release every GPU owner. Retry intentionally replaces the graphics lifetime while retaining the React canvas. |
+| Visual density and comparison layout                        | Reused 40 px fields/30.75 px buttons, theme/focus and 1100 px layout captures; new geometry/capture confirms all four camera controls remain inside each 720 px comparison view. The captured second scene is deliberately still preparing for the cancellation check.                                                                                                                   |
+| Server and sibling integration                              | Existing server suite: 21/21 pass (11.7 s). Flat server suite: 5/5 pass (1.4 s), including asset authentication, retry and mounted routing. Explicit Flat32 build smoke passes (16.5 s); no Flat32 conversion.                                                                                                                                                                           |
+| Standards reference and formatting                          | Maintained guide check reports current; Flat's browser mapping includes MUI/base-components, and all six local overlays remain unchanged. Scoped formatting and Git whitespace checks pass. The generated guide remains unstaged.                                                                                                                                                        |
+
+New evidence lives in `.codex-tmp/component-refactor/mui/run-20261107-03/`:
+
+- [Aggregate app proof](../../../.codex-tmp/component-refactor/mui/run-20261107-03/app-proof.json)
+  links the retained core attempt and the successful cleanup follow-up. The core
+  attempt passed rendering/mode/resource/Retry checks but failed at the probe's
+  unsupported registry stop call; it is not relabeled as a successful full run.
+- [Day sky](../../../.codex-tmp/component-refactor/mui/run-20261107-03/full-day-sky.png),
+  [stars and dim ground](../../../.codex-tmp/component-refactor/mui/run-20261107-03/no-atmosphere-stars-ground.png),
+  [direct mode](../../../.codex-tmp/component-refactor/mui/run-20261107-03/shader-off-ground.png),
+  [recovered app](../../../.codex-tmp/component-refactor/mui/run-20261107-03/recovered-app.png)
+  and [comparison controls](../../../.codex-tmp/component-refactor/mui/run-20261107-03/comparison-control-layout.png)
+  were visually inspected. Atmosphere-off sampled ground RGB is (2,9,0), versus
+  daytime (74,153,57); these display values document visibility, not radiometry.
+- [Handoff identity/formatting record](../../../.codex-tmp/component-refactor/mui/run-20261107-03/handoff-verification.json)
+  and [guide check](../../../.codex-tmp/component-refactor/mui/run-20261107-03/standards-guide-physical.log)
+  retain evidence reuse and mapping provenance. The guide CLI was run through its
+  physical path because its Codex-home junction spelling bypasses its main guard.
+
+The first GPU attempt took 97.4 s including its build and the final probe error;
+the focused follow-up reused that build and took 70.6 s. These are command wall
+times including GPU/browser startup, not performance benchmarks or reasoning
+time. Both browser profiles were removed. No browser user data is retained.
+
+Local checkpoints: M1 `d375c058`, M2 `714320bc`, M3 `afda1c52`; the M4 adviser
+recommends `docs(flat): complete MUI migration handoff`, restricted to these four
+handoff documents. Earlier shader/star/collapse/city/engine/server work and its
+overlapping MUI adaptations remain uncommitted. The handoff evidence tests that
+preserved working tree; it does not silently promote those pending features.
+
+No material migration requirement remains open. External parent-repository
+deployment, published hosting, other browsers/devices and exhaustive responsive
+acceptance were not tested. Standards reviewers remain owner-cancelled; no
+standards-compliance claim is made. The dome-cache experiment stays suspended.
+Toolbar redesign, timezone/localization expansion, rule promotion and unrelated
+pending work remain outside this completed plan. Nothing was pushed or published.
 
 ## M3 Result and Verification
 
@@ -167,9 +239,9 @@ The checkpoint adviser recommends `feat(flat): migrate controls to shared MUI
 components`. The scoped checkpoint contains M3 adaptations of the committed app;
 earlier unrelated features and their overlapping migrated controls remain in the
 working tree. Engineering review remains cancelled; no standards-compliance
-claim is made. M4's broader final application/server/standards handoff, toolbar
+claim is made. M4 has since completed the remaining verification above. Toolbar
 conversion, timezone work and rule promotion remain deferred. Nothing is pushed
-or published. Resume with owner selection of M4 or a separate toolbar task.
+or published.
 
 ## M2 Result and Verification
 
@@ -194,7 +266,7 @@ dismisses results then the panel. Fields measure 40 px and the trigger 30.75 px.
 The proof took 13.4 s including build/browser startup; its profile was deleted.
 
 The checkpoint adviser recommends `feat(flat): add shared MUI controls`.
-M3 continues with in-place consumers and non-toolbar settings surfaces; existing
+M3 completed the in-place consumers and non-toolbar settings surfaces; existing
 toolbar containers, rows and inline Sun-slider placement remain unchanged.
 Engineering review stays cancelled; no standards-compliance claim is made.
 Local M2 checkpoint: `714320bc`, `feat(flat): add shared MUI controls`.
@@ -248,8 +320,8 @@ Date/Time and TypeAhead interactions remain the principal uncertainty.
 Engineering review remains owner-cancelled. The checkpoint adviser recommends
 `feat(flat): establish MUI control foundation`; its advice is retained with the
 run evidence. At the M1 boundary, M2–M4 remained deferred; M2/M3 are now complete
-as recorded above. M4, toolbar conversion, rule promotion, timezone work and
-broader responsive/product acceptance remain deferred.
+as recorded above, followed by M4. Toolbar conversion, rule promotion, timezone
+work and broader responsive/product acceptance remain deferred.
 Tests and UI evidence use the preserved working tree, including earlier
 uncommitted features. The local checkpoint contains M1 and its context/topic
 prerequisites; unrelated earlier work remains uncommitted. Find the checkpoint
