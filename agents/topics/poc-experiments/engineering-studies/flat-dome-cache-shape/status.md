@@ -1,10 +1,22 @@
 # Flat Dome Cache Shape Experiment Status
 
-Status: scene-render R1-R4 complete, with qualified near-rim accuracy.
+Status: suspended by the owner on 2026-11-06 (America/Los_Angeles).
+
+## Disposition
+
+The owner paused this experiment for later return, accepting deferral because
+the dome-boundary issue currently matters chiefly in extreme conditions. No
+further implementation, builds, renders, convergence campaigns or promotion
+are selected. Completed slice-study and scene-render milestones remain retained
+with their qualifications; suspension is not production acceptance.
+
+The [resumption record](resumption.md) owns the focused reload set, unresolved
+work and compatibility checks. Resumption requires a fresh owner selection.
+No subsequent execution topic was selected.
 
 ## Current Focus
 
-The latest owner-selected scene is Union Glacier Camp at latitude -79.76667,
+The last retained scene is Union Glacier Camp at latitude -79.76667,
 longitude -82.86667, 5,000 m above the flat ground. Accepted run
 `00056-r4-three-final` supplies the [toward-Sun](../../../../../tmp/experiments/flat-dome-cache-shape/runs/00056-r4-three-final/inward.png)
 and [opposite](../../../../../tmp/experiments/flat-dome-cache-shape/runs/00056-r4-three-final/outward.png)
@@ -24,8 +36,8 @@ The original 45 m rim scene/report (runs `00050`/`00051`/`00053`) and later
 20 m gray-ground pair (`00054`) and 50 m Union Glacier pair (`00055`) remain immutable. Their error measurements do
 not quantify Union Glacier accuracy. The [scene-render plan](scene-render-plan.md)
 owns current framing and the [execution record](execution.md) preserves changes
-and checks. The experiment remains contained and open; no numerical work is
-running, and production promotion or lifecycle closure was not selected.
+and checks. The experiment remains contained and suspended; no numerical work
+is running. Production promotion and final closure were not selected.
 
 ## Current Result
 
@@ -98,10 +110,27 @@ the final adviser-recommended local checkpoint contains this completed state.
 
 ## Next Action
 
-Review the two renders and the qualified near-rim accuracy result with the owner.
-No required implementation work remains in the selected scene plan. Stronger
-directional/spatial convergence, other distance distributions, production
-integration, and experiment closure remain separate selections.
+Remain suspended until the owner explicitly selects this experiment again.
+The next unconsumed technical issue is angular convergence before treating
+12 dome slices or the measured resource costs as production guidance. A faithful
+production-resolution size/build study and daily-time rotation integration remain
+unimplemented; other distance distributions and production adoption remain deferred.
 Production, prior evidence, city data, and unrelated working changes remain
 outside this experiment checkpoint. Generated evidence remains under ignored
 `tmp/experiments/flat-dome-cache-shape/runs/`; never reopen sealed runs.
+
+## Suspension Checks
+
+All 57 run directories have terminal manifests (47 accepted, 10 failed); no
+unfinished run was found. Scoped process inventory finds no owned process.
+Latest run `00056` records zero owned geometries/textures after disposal,
+cache disposal and requested context loss. No process needed termination.
+
+No temporary experiment-specific assignment or overlay was installed, so none
+requires restoration. The permanent `experiments/` mapping and `types.md` remain.
+Folder resolution validates experiment source, owning topic and production
+paths; production keeps its own broader rules. The maintained standards-guide
+generator reports `STANDARDS.md` current. No generated guide was manually edited.
+Dedicated experiment reviewers/audits remain disabled, with no compliance claim.
+No production destination was selected, so production reviewer refresh is not
+applicable. Checkpoint-adviser monitoring remains active.

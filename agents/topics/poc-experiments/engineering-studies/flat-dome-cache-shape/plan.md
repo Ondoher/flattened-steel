@@ -2,6 +2,9 @@
 
 Status: M1-M4 complete; final report and verification recorded in the owning execution/status documents. The execution record and status own measured progress.
 
+Lifecycle: experiment suspended on 2026-11-06. Completed items remain evidence;
+no further execution is selected. See [resumption](resumption.md).
+
 ## Outcome and Scope
 
 Determine how many sample-to-dome-distance slices the new cache needs, and

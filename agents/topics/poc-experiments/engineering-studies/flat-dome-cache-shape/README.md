@@ -1,6 +1,12 @@
 # Flat Dome Cache Shape Experiment
 
-Status: slice study and Three.js scene-render follow-up complete, with qualified near-rim accuracy.
+Status: suspended by the owner on 2026-11-06; completed study/render evidence retained, accuracy and production adoption unresolved.
+
+Execution is paused. The owner accepts deferring the dome-boundary work because
+it currently matters chiefly in extreme conditions. Resume only after a new
+owner selection; see the [resumption record](resumption.md). This is a priority
+decision, not production acceptance or a scientific claim that all boundary
+effects are negligible.
 
 ## Objective
 
@@ -34,6 +40,7 @@ performance are the primary optimization variables among accurate candidates.
 - [Original 45 m scene report](../../../../../tmp/experiments/flat-dome-cache-shape/runs/00053-r4-scene-report/index.html)
 - [Completed slice-count plan](plan.md)
 - [Status](status.md)
+- [Suspension and resumption record](resumption.md)
 - [Execution record](execution.md)
 
 ## Repository Surfaces

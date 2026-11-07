@@ -1,5 +1,8 @@
 # Flat Dome Cache Shape Experiment Design
 
+Lifecycle: suspended by owner selection on 2026-11-06. Requirements and evidence
+are preserved; [resumption](resumption.md) requires explicit owner selection.
+
 ## Objective
 
 Determine an accurate, compact scattering-cache representation for the fixed North Pole-centered atmospheric dome, including each atmospheric sample's Euclidean distance to the curved dome surface, slice spacing, interpolation, and valid transforms.

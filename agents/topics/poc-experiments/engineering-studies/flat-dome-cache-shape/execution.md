@@ -641,3 +641,35 @@ Final authentication verifies 221 artifacts (11,479,288 bytes) and matches all
 retained scene settings except height and its derived coordinates/geometry to
 run `00055`. The adviser recommends `feat(experiments): render Union Glacier at 5 km`
 as the preaccepted scoped local checkpoint. No push.
+
+## Owner-directed suspension, 2026-11-06
+
+The owner paused the experiment for a later return, accepting deferral because
+the boundary issue currently matters chiefly in extreme conditions. This is
+a priority decision, not production acceptance. The discussion established
+that N12 remains provisional at the experiment's much coarser angular sampling,
+and the observed 2.9-fold spatial-node difference does not establish production
+cost for adding a dimension. Daily-time rotation remains a follow-up. The
+[resumption record](resumption.md) owns these remaining questions and resume
+conditions; no new investigation is selected.
+
+Scoped process inventory finds no experiment process, and all 57 run folders
+have terminal manifests (47 accepted, 10 failed). Latest run 00056 confirms
+zero owned textures/geometries after disposal. No run was interrupted or edited,
+no evidence deleted, and no production source changed. There were no temporary
+lane-specific standards changes to restore. Folder resolution validates the
+permanent experiment/types mapping, owning topic and broader production rules.
+The maintained guide generator reports STANDARDS.md current; an initial
+formatter subprocess permission error was resolved using normal Windows
+process permissions. No standards reviewer or independent audit was started.
+
+Updated entry, status, design/plan lifecycle notices, local instructions and
+active topic. No next execution topic was selected; active-topic now records
+that explicit idle state. Owner selection is required before resuming.
+Checkpoint-adviser monitoring stays active; any scoped handoff checkpoint uses
+existing execution authorization, without resuming numerical work or pushing.
+
+The existing adviser recommends `docs(experiments): suspend flat dome cache shape study`
+for the scoped lifecycle checkpoint. Its message is preaccepted by existing
+execution authority. The checkpoint preserves the pause; it selects no new work.
+All 75 local documentation links and Git whitespace checks pass.

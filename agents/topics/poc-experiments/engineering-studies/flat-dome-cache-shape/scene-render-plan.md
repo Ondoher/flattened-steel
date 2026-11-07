@@ -2,6 +2,9 @@
 
 Status: R1-R4 complete through independent-execution; integration verified, near-rim accuracy qualified. One read-only plan critique is complete.
 
+Lifecycle: experiment suspended by the owner on 2026-11-06. Saved defaults and
+completed milestones do not authorize further runs. See [resumption](resumption.md).
+
 ## Outcome and Authority
 
 Implement an experiment-local path that **builds a complete dome cache, gives
