@@ -1,6 +1,6 @@
-import Button from '../../../components/Button.jsx';
 import BaseSelect from '../../../components/BaseSelect.jsx';
 import Typography from '@mui/material/Typography';
+import Button from '../../../components/Button.jsx';
 import React, {Component} from 'react';
 import AppContext from '../../../common/AppContext.js';
 import phrases from '../../../phrases/en-US.json';
@@ -26,6 +26,7 @@ export default class FlatEarthViewTools extends Component {
 		this._onFieldOfView = this._onFieldOfView.bind(this);
 		this._onHeight = this._onHeight.bind(this);
 		this._onSun = this._onSun.bind(this);
+		this._onSky = this._onSky.bind(this);
 	}
 
 	/**
@@ -114,6 +115,16 @@ export default class FlatEarthViewTools extends Component {
 	}
 
 	/**
+	 * Called by selection to report this view's sky composition intent.
+	 *
+	 * @param {string} value - Selected supported mode.
+	 */
+	_onSky(value) {
+		let mode = /** @type {FlatEarthSkyRenderMode} */ (value);
+		this.props.sceneView.setSkyRenderMode(this.props.viewId, mode);
+	}
+
+	/**
 	 * Called by rendering to resolve literal labels through presentation context.
 	 *
 	 * @param {string} key - Feature phrase key.
@@ -130,7 +141,7 @@ export default class FlatEarthViewTools extends Component {
 	/**
 	 * Called by list preparation to resolve one labeled choice.
 	 *
-	 * @param {AppSelectOption} preset - Prepared option identity and phrase key.
+	 * @param {FlatEarthControlOption} preset - Prepared option identity and phrase key.
 	 * @returns {AppSelectOption} - Controlled value and literal label.
 	 */
 	_prepareOption(preset) {
@@ -166,6 +177,43 @@ export default class FlatEarthViewTools extends Component {
 	}
 
 	/**
+	 * Called by sky rendering to prepare the supported choices before JSX.
+	 *
+	 * @returns {AppSelectOption[]} - Stable localized sky choices.
+	 */
+	_renderSkyOptions() {
+		/** @type {FlatEarthControlOption[]} */
+		let options = [
+			{value: 'full', label: 'flat-earth.shader.full'},
+			{value: 'no-atmosphere', label: 'flat-earth.shader.no-atmosphere'},
+			{value: 'shader-off', label: 'flat-earth.shader.off'},
+		];
+		return options.map((option) => this._prepareOption(option));
+	}
+
+	/**
+	 * Called by the toolbar and settings panel to present the view-owned shader choice.
+	 *
+	 * @returns {React.ReactNode} - Sky selector with its owned region wrapper.
+	 */
+	_renderSkyControl() {
+		let label = this._text('flat-earth.shader.label');
+		let hint = this._text('flat-earth.shader.hint');
+		let options = this._renderSkyOptions();
+		return (
+			<BaseSelect
+				className="flat-earth-sky flat-earth-shader-control"
+				label={label}
+				value={this.state.shader.mode}
+				title={hint}
+				options={options}
+				onChange={this._onSky}
+				fullWidth={false}
+			/>
+		);
+	}
+
+	/**
 	 * Call this method to present each view's accepted camera controls and any pending elevation.
 	 *
 	 * @returns {React.ReactNode} - Scoped toolbar contribution.
@@ -182,6 +230,7 @@ export default class FlatEarthViewTools extends Component {
 		let fieldsOfView = this._renderFieldOfViewOptions();
 		return (
 			<div className="flat-earth-view-tools">
+				{this._renderSkyControl()}
 				<BaseSelect
 					className="flat-earth-height flat-earth-height-control"
 					label={heightLabel}

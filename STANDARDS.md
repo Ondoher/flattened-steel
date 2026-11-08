@@ -10,10 +10,10 @@
 - Repository overlay: [`agents/topics/standards/overlay.md`](./agents/topics/standards/overlay.md)
 - Standards governance: [`documentation.md`](https://github.com/Ondoher/polylith-skills/blob/main/documentation/standards/documentation.md)
 - First normalized: `2026-09-11T23:19:47.480Z`
-- Repository standards configuration fingerprint: `sha256:19cd23bc133ba0d07f56fa754929758cf654304e5582f8f4ad6500d6224634d0`
+- Repository standards configuration fingerprint: `sha256:28ce9d31c70758f08e3cc3c4355c4674ba66e3fab722778027e40c7cb9f9776c`
 - Local standards overlay fingerprint: `sha256:efaaa388c5b82fd5fbab5aaf42db1d9ca11aaeb63b755fe7818f4ab7943307b0`
-- Selected canonical standards fingerprint: `sha256:cc89a9897f810d545786c729e656657bc6497d56f7e4532f71221c897765a05e`
-- Guide source fingerprint: `sha256:1383aaa8eaeabb4b440ed62748e68192063c4916548f365ae5b6246d5703d862`
+- Selected canonical standards fingerprint: `sha256:ec4c0a50489efcb3f231fec49052ba4237629207ba1d65bdfa509facc5080bc8`
+- Guide source fingerprint: `sha256:4b256fcb59d7a2aa1e2a8f6122963c759319035d040091e699c731c3437f1edc`
 
 For each file, the longest matching folder assignment selects one named standards set. The set includes its inherited canonical standards, then matching folder-scoped overlay rules modify specific sections. This file is a readable projection only.
 
@@ -124,6 +124,8 @@ Adds:
 - [`app-shells.md`](https://github.com/Ondoher/polylith-skills/blob/main/documentation/standards/app-shells.md) — Applies to Flat.
 - [`localization.md`](https://github.com/Ondoher/polylith-skills/blob/main/documentation/standards/localization.md) — Applies to Flat.
 - [`testing.md`](https://github.com/Ondoher/polylith-skills/blob/main/documentation/standards/testing.md) — Applies to Flat.
+- [`mui.md`](https://github.com/Ondoher/polylith-skills/blob/main/documentation/standards/mui.md) — Applies to Flat.
+- [`base-components.md`](https://github.com/Ondoher/polylith-skills/blob/main/documentation/standards/base-components.md) — Applies to Flat.
 
 ### `app-flat-server`
 

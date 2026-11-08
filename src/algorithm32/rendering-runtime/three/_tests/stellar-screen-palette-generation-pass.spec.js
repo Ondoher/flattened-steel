@@ -3,6 +3,8 @@ import {DistantSunLightSource, SphericalEarthGeometry, StellarPointSetSource} fr
 import {CelestialRenderViewSnapshot} from '../CelestialRenderViewSnapshot.js';
 import {ShaderRuntimeInstaller} from '../ShaderRuntimeInstaller.js';
 import {StellarScreenPaletteGenerationPass} from '../StellarScreenPaletteGenerationPass.js';
+import {LocalSunCompactProfileSelection} from '../../../implementation/local-sun/cache/LocalSunCompactProfileSelection.js';
+import {CelestialGenerationPass} from '../CelestialGenerationPass.js';
 
 const OBSERVATION = {
 	instant: '2024-06-21T06:26:03.503Z',
@@ -61,7 +63,9 @@ function createRendererDouble() {
 		render: () => {
 			renderer.renderCount += 1;
 			renderer.onRender?.(renderer.renderCount);
-			if (renderer.renderCount === renderer.throwOnRenderCount) throw new Error('injected stage failure');
+			if (renderer.renderCount === renderer.throwOnRenderCount) {
+				throw new Error('injected stage failure');
+			}
 		},
 		compileAsync: async () => {
 			renderer.compileCount += 1;
@@ -112,6 +116,91 @@ it('rebuilds when Color, filters, or receiver-light presentation compatibility c
 });
 
 describe('stellar screen-palette generation runtime pass', () => {
+	it('publishes and reverts local height/time/location updates without replacing source textures or programs', async () => {
+		const source = new StellarPointSetSource();
+		const createProfile = (observation, height) => {
+			const profile = new LocalSunCompactProfileSelection().create({
+				observation,
+				observerPosition: {coordinates: [0, 0, height], units: 'meters'},
+				viewRayLimit: {value: 1926774, units: 'meters'},
+				maximumScatteringOrder: 4,
+			});
+			return profile.createExecutionProfile({
+				id: 'test',
+				family: 'flat-local-finite-sun-v1',
+				localSun: profile.models.lightSource,
+				stars: source,
+			});
+		};
+		const initial = createProfile(OBSERVATION, 5);
+		const next = createProfile(
+			{
+				...OBSERVATION,
+				instant: '2024-06-21T08:26:03.503Z',
+				location: {latitude: {value: 20, units: 'degrees'}, longitude: {value: 10, units: 'degrees'}},
+			},
+			100,
+		);
+		const pass = new StellarScreenPaletteGenerationPass({
+			THREE,
+			source,
+			geometry: initial.models.geometry,
+			observation: OBSERVATION,
+			camera: createCamera(),
+			viewportSize: {width: 32, height: 20, units: 'pixels'},
+		});
+		const renderer = createRendererDouble();
+		await pass.prepare(renderer);
+		pass.render(renderer);
+		const first = pass.publicationState.active.id;
+		const textures = pass._sourceTextures;
+		const material = pass._pointMaterial;
+		const update = pass.prepareObservationUpdate(next);
+		expect(pass.publicationState.active.id).toBe(first);
+		update.publish();
+		expect(pass.bindingValues()['runtime.celestial.stellarPalette']).toBeNull();
+		pass.render(renderer);
+		expect(pass.publicationState.active.id).not.toBe(first);
+		expect(pass._geometry).toBe(next.models.geometry);
+		expect(pass._sourceTextures).toBe(textures);
+		expect(pass._pointMaterial).toBe(material);
+		expect(renderer.compileCount).toBe(2);
+		update.revert();
+		pass.render(renderer);
+		expect(pass.publicationState.active.id).toBe(first);
+		expect(pass._geometry).toBe(initial.models.geometry);
+		const changed = {
+			...next,
+			models: {...next.models, celestialSources: {...next.models.celestialSources, stars: null}},
+		};
+		expect(() => pass.prepareObservationUpdate(changed)).toThrowError(/same catalog/);
+		pass.dispose();
+		expect(pass.getDiagnostics().createdTargetCount).toBe(pass.getDiagnostics().disposedTargetCount);
+	});
+
+	it('coordinates reversible stellar and Sun updates and rejects incompatible stages before publishing either', () => {
+		const stars = {
+			prepareObservationUpdate: jasmine.createSpy('stars').and.returnValue({
+				publish: jasmine.createSpy('publishStars'),
+				revert: jasmine.createSpy('revertStars'),
+			}),
+		};
+		const sun = {
+			prepareObservationUpdate: jasmine
+				.createSpy('sun')
+				.and.returnValue({publish: jasmine.createSpy('publishSun'), revert: jasmine.createSpy('revertSun')}),
+		};
+		const pass = new CelestialGenerationPass({stellar: stars, sun});
+		const update = pass.prepareObservationUpdate({});
+		expect(stars.prepareObservationUpdate().publish).not.toHaveBeenCalled();
+		update.publish();
+		update.revert();
+		expect(stars.prepareObservationUpdate().publish).toHaveBeenCalledTimes(1);
+		expect(sun.prepareObservationUpdate().revert).toHaveBeenCalledTimes(1);
+		stars.prepareObservationUpdate.and.throwError('incompatible stages');
+		expect(() => pass.prepareObservationUpdate({})).toThrowError('incompatible stages');
+		expect(sun.prepareObservationUpdate().publish).toHaveBeenCalledTimes(1);
+	});
 	it('captures stable perspective identities and changes identity with the live view', () => {
 		const camera = createCamera();
 		const viewport = {width: 32, height: 20, units: 'pixels'};
@@ -151,7 +240,9 @@ describe('stellar screen-palette generation runtime pass', () => {
 		renderer.throwOnRenderCount = 4;
 		let activeDuringStaging = null;
 		renderer.onRender = (renderCount) => {
-			if (renderCount === 4) activeDuringStaging = pass.publicationState.active;
+			if (renderCount === 4) {
+				activeDuringStaging = pass.publicationState.active;
+			}
 		};
 		pass.render(renderer);
 		expect(activeDuringStaging).toBe(firstPublication);
@@ -201,7 +292,9 @@ describe('stellar screen-palette generation runtime pass', () => {
 		class FailingWebGLRenderTarget extends THREE.WebGLRenderTarget {
 			constructor(...parameters) {
 				allocationCount += 1;
-				if (allocationCount === 2) throw new Error('injected allocation failure');
+				if (allocationCount === 2) {
+					throw new Error('injected allocation failure');
+				}
 				super(...parameters);
 			}
 		}

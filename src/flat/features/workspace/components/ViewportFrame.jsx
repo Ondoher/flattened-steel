@@ -1,22 +1,31 @@
-import Button from '../../../components/Button.jsx';
 import BaseSelect from '../../../components/BaseSelect.jsx';
 import Typography from '@mui/material/Typography';
+import Button from '../../../components/Button.jsx';
 import React, {Component} from 'react';
 
 /**
  * Generic scene host, contributed controls, and status for one stable view identity.
  *
- * @extends {Component<ViewportFrameProps>}
+ * @extends {Component<ViewportFrameProps, ViewportFrameState>}
  */
 export default class ViewportFrame extends Component {
 	/**
-	 * Creates the stable normalized scene-selection adapter.
+	 * Creates independent transient control visibility for this mounted view.
 	 *
-	 * @param {ViewportFrameProps} props - Prepared viewport presentation.
+	 * @param {ViewportFrameProps} props - Generic workspace view presentation.
 	 */
 	constructor(props) {
 		super(props);
+		this.state = {controlsCollapsed: false};
+		this._onToggleControls = this._onToggleControls.bind(this);
 		this._onSelectPage = this._onSelectPage.bind(this);
+	}
+
+	/**
+	 * Called by the header button to toggle only this view's contributed control rows.
+	 */
+	_onToggleControls() {
+		this.setState((state) => ({controlsCollapsed: !state.controlsCollapsed}));
 	}
 
 	/**
@@ -91,10 +100,16 @@ export default class ViewportFrame extends Component {
 	 * @returns {React.ReactNode} - View tools region.
 	 */
 	_renderTools() {
+		let id = `viewport-tools-${this.props.viewport.id}`;
+		let hidden = this.state.controlsCollapsed;
 		let tools = this.props.viewport.tools.map((item) => (
 			<React.Fragment key={item.registrationId}>{item.component}</React.Fragment>
 		));
-		return <div className="viewport-tools">{tools}</div>;
+		return (
+			<div className="viewport-tools" id={id} hidden={hidden}>
+				{tools}
+			</div>
+		);
 	}
 
 	/**
@@ -125,21 +140,43 @@ export default class ViewportFrame extends Component {
 	 * @returns {React.ReactNode} - Feature-owned secondary controls.
 	 */
 	_renderSecondaryTools() {
+		let id = `viewport-secondary-tools-${this.props.viewport.id}`;
+		let hidden = this.state.controlsCollapsed;
 		let tools = (this.props.viewport.secondaryTools ?? []).map((item) => (
 			<React.Fragment key={item.registrationId}>{item.component}</React.Fragment>
 		));
-		return <div className="viewport-secondary-tools">{tools}</div>;
+		return (
+			<div className="viewport-secondary-tools" id={id} hidden={hidden}>
+				{tools}
+			</div>
+		);
 	}
 
 	/**
-	 * Called by frame rendering to present view identity, tools, and close intent.
+	 * Called by header rendering to expose control visibility and optional close intent.
 	 *
-	 * @returns {React.ReactNode} - Semantic view header.
+	 * @returns {React.ReactNode} - Header action region without feature-specific behavior.
 	 */
-	_renderHeader() {
+	_renderHeaderActions() {
 		let {viewport, number, text} = this.props;
-		let label = text('workspace.view', {number});
-		let headingId = `heading-${viewport.id}`;
+		let hasControls = viewport.tools.length > 0 || (viewport.secondaryTools?.length ?? 0) > 0;
+		let expanded = !this.state.controlsCollapsed;
+		let controls = `viewport-tools-${viewport.id} viewport-secondary-tools-${viewport.id}`;
+		let toggleLabel = text(expanded ? 'workspace.collapse-controls' : 'workspace.expand-controls');
+		let toggleGlyph = expanded ? '▴' : '▾';
+		let toggleButton = hasControls ? (
+			<Button
+				type="button"
+				className="workspace-button workspace-collapse-controls"
+				aria-expanded={expanded}
+				aria-controls={controls}
+				aria-label={toggleLabel}
+				title={toggleLabel}
+				onClick={this._onToggleControls}
+			>
+				{toggleGlyph}
+			</Button>
+		) : null;
 		let closeButton = null;
 		if (number > 1) {
 			let closeLabel = text('workspace.close-view-number', {number});
@@ -155,13 +192,30 @@ export default class ViewportFrame extends Component {
 			);
 		}
 		return (
+			<div className="viewport-header-actions">
+				{toggleButton}
+				{closeButton}
+			</div>
+		);
+	}
+
+	/**
+	 * Called by frame rendering to present view identity, tools, and close intent.
+	 *
+	 * @returns {React.ReactNode} - Semantic view header.
+	 */
+	_renderHeader() {
+		let {viewport, number, text} = this.props;
+		let label = text('workspace.view', {number});
+		let headingId = `heading-${viewport.id}`;
+		return (
 			<header className="viewport-header">
 				<Typography component="h2" variant="body2" id={headingId}>
 					{label}
 				</Typography>
 				{this._renderSceneSelector(label)}
 				{this._renderSettings()}
-				{closeButton}
+				{this._renderHeaderActions()}
 				{this._renderTools()}
 				{this._renderSecondaryTools()}
 			</header>
@@ -191,8 +245,14 @@ export default class ViewportFrame extends Component {
 	render() {
 		let {viewport} = this.props;
 		let headingId = `heading-${viewport.id}`;
+		let collapsed = this.state.controlsCollapsed;
 		return (
-			<section className="viewport-frame" aria-labelledby={headingId} data-view-id={viewport.id}>
+			<section
+				className="viewport-frame"
+				aria-labelledby={headingId}
+				data-view-id={viewport.id}
+				data-controls-collapsed={collapsed}
+			>
 				{this._renderHeader()}
 				{this._renderContent()}
 				{this._renderStatus()}

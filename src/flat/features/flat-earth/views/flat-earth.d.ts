@@ -19,6 +19,14 @@ export interface FlatEarthView extends EventBus {
 	getState(viewId: string): FlatEarthSceneState;
 
 	/**
+	 * Call this method to select one view's sky presentation through its owning boundary.
+	 *
+	 * @param viewId - Exact owning view.
+	 * @param mode - Supported composition selection.
+	 */
+	setSkyRenderMode(viewId: string, mode: FlatEarthSkyRenderMode): void;
+
+	/**
 	 * Call this method to obtain the controller's retained graphics surface for presentation.
 	 *
 	 * @param viewId - Exact mounted view identity.

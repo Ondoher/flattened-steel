@@ -23,5 +23,9 @@ test('main router starts generated services and installs every owned route', asy
 	await assert.rejects(() => mainRouter(null, router, {}), /shared registry/);
 	assert.equal(await mainRouter(null, router, application, sharedRegistry), true);
 	assert.equal(middleware.length, 1);
-	assert.deepEqual(routes, ['*']);
+	assert.deepEqual(routes, [
+		'/stellar-catalogs/brightest-2000-stellar-package-v1/*',
+		'/presentation-filters/human-vision-filter-package-v1/*',
+		'*',
+	]);
 });

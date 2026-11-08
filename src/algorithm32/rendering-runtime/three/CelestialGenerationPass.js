@@ -81,16 +81,24 @@ export class CelestialGenerationPass {
 	}
 
 	/**
-	 * Call this method to retain finite-Sun generation while replacing its exact physical frame owners.
+	 * Call this method to retain stellar and finite-Sun generation while replacing physical frame owners.
 	 *
-	 * @param {Algorithm32ExecutionProfile} profile - Compatible local profile without stellar generation.
-	 * @returns {LocalSunFrameSceneLighting} - Reversible publication of the new Sun geometry/source.
+	 * @param {Algorithm32ExecutionProfile} profile - Compatible local profile retaining celestial source topology.
+	 * @returns {LocalSunFrameSceneLighting} - Reversible celestial geometry and source publication.
 	 */
 	prepareObservationUpdate(profile) {
-		if (this._stellar) {
-			throw new Error('Retained local observation updates cannot replace stellar generation topology.');
-		}
-		return this._sun.prepareObservationUpdate(profile);
+		const stellar = this._stellar?.prepareObservationUpdate(profile);
+		const sun = this._sun.prepareObservationUpdate(profile);
+		return {
+			publish: () => {
+				stellar?.publish();
+				sun.publish();
+			},
+			revert: () => {
+				sun.revert();
+				stellar?.revert();
+			},
+		};
 	}
 
 	async prepare(renderer) {

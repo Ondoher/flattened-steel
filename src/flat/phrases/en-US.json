@@ -81,7 +81,7 @@
 	"workspace.settings-section": "Shared settings section",
 	"global-configuration.section": "Location and time",
 	"global-configuration.summary-time": "Date and time · Device time",
-	"flat-earth.camera.title": "Camera",
+	"flat-earth.camera.title": "Camera and sky",
 	"flat-earth.time.title": "Flat Earth time",
 	"flat-earth.time.shared": "Shared time",
 	"flat-earth.time.degrees-closest": "Degrees from closest",
@@ -100,6 +100,13 @@
 	"flat-earth.time.slider-name": "Shared time, degrees from closest",
 	"global-configuration.summary-location": "Location",
 	"global-configuration.coordinates.disclosure": "Enter coordinates",
-	"flat-earth.camera.scope": "Camera changes apply to this view only.",
-	"workspace.close-view-number": "Close View %{number}"
+	"flat-earth.camera.scope": "Camera and sky changes apply to this view only.",
+	"workspace.close-view-number": "Close View %{number}",
+	"flat-earth.shader.label": "Sky",
+	"flat-earth.shader.full": "Full",
+	"flat-earth.shader.no-atmosphere": "No atmosphere",
+	"flat-earth.shader.off": "Shader off",
+	"flat-earth.shader.hint": "Without atmosphere: Sun illumination 0%, disc brightness 100%. Shader off renders the scene directly.",
+	"workspace.collapse-controls": "Collapse controls",
+	"workspace.expand-controls": "Expand controls"
 }

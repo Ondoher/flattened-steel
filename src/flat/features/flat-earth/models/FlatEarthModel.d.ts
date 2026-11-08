@@ -35,6 +35,23 @@ export interface FlatEarthModel extends EventBus {
 	getCamera(viewId: string): FlatEarthCameraValues;
 
 	/**
+	 * Call this method to read one view's derived shader and Sun presentation policy.
+	 *
+	 * @param viewId - Exact mounted view identity.
+	 * @returns - Accepted mode and effective Sun multipliers.
+	 */
+	getShaderOptions(viewId: string): FlatEarthShaderOptions;
+
+	/**
+	 * Call this method to select a supported per-view sky composition.
+	 *
+	 * @param viewId - Exact mounted view identity.
+	 * @param mode - Supported composition selection.
+	 * @throws {RangeError} - The requested mode is not supported.
+	 */
+	setSkyRenderMode(viewId: string, mode: FlatEarthSkyRenderMode): void;
+
+	/**
 	 * Call this method to retain the accepted rendered camera orientation across scene updates and retry.
 	 *
 	 * @param viewId - Exact mounted view identity.

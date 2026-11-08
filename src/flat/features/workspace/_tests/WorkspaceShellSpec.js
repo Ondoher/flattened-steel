@@ -62,6 +62,42 @@ describe('workspace React frame', () => {
 		view = new ViewStub();
 	});
 	afterEach(() => harness.unmount());
+	it('collapses only the selected view control rows while preserving mounted scenes, drafts and the top row', () => {
+		let primary = {
+			...viewport('view-1', 'scene', <input aria-label="Scene draft" defaultValue="scene" />),
+			hasSettings: true,
+			tools: [{registrationId: 1, component: <input aria-label="Tool draft" defaultValue="tools" />}],
+			secondaryTools: [{registrationId: 2, component: <button>Time controls</button>}],
+		};
+		let secondary = {...primary, id: 'view-2'};
+		view.state = {...initial(), pages: [{id: 'scene', label: 'Scene'}], views: [primary, secondary]};
+		result = harness.render(WorkspaceShell, {workspaceView: view, initialState: view.state});
+		let frames = result.queryAll('.viewport-frame');
+		let first = frames[0];
+		let draft = first.querySelector('.viewport-tools input');
+		let scene = first.querySelector('.viewport-content input');
+		draft.value = 'edited';
+		let height = first.querySelector('.viewport-header').getBoundingClientRect().height;
+		let toggle = first.querySelector('.workspace-collapse-controls');
+		harness.click(toggle);
+		expect(toggle.getAttribute('aria-expanded')).toBe('false');
+		expect(first.querySelector('.viewport-tools').hidden).toBeTrue();
+		expect(first.querySelector('.viewport-secondary-tools').hidden).toBeTrue();
+		expect(first.querySelector('.viewport-tools').getBoundingClientRect().height).toBe(0);
+		expect(first.querySelector('.workspace-scene-choice [role="combobox"]').offsetHeight).toBeGreaterThan(0);
+		expect(first.querySelector('.workspace-page-settings').offsetHeight).toBeGreaterThan(0);
+		expect(first.querySelector('.viewport-header').getBoundingClientRect().height).toBeLessThan(height);
+		expect(frames[1].querySelector('.viewport-tools').hidden).toBeFalse();
+		expect(first.querySelector('.viewport-content input')).toBe(scene);
+		harness.click(toggle);
+		expect(toggle.getAttribute('aria-expanded')).toBe('true');
+		expect(first.querySelector('.viewport-tools input')).toBe(draft);
+		expect(draft.value).toBe('edited');
+		expect(first.querySelector('.viewport-secondary-tools').hidden).toBeFalse();
+		harness.click(toggle);
+		view.emit({...view.state, views: [primary]});
+		expect(result.query('.workspace-collapse-controls').getAttribute('aria-expanded')).toBe('false');
+	});
 	it('shows a usable empty workspace and relays comparison without inventing scene controls', () => {
 		result = harness.render(WorkspaceShell, {workspaceView: view, initialState: view.state});
 		expect(result.query('h1').textContent).toBe('Flat');

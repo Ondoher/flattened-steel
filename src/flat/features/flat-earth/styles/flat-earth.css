@@ -52,11 +52,7 @@
 
 .flat-earth-view-tools {
 	gap: 20px;
-	flex-wrap: nowrap;
-}
-
-.flat-earth-view-tools label:nth-child(2) {
-	grid-template-columns: 82px 68px;
+	flex-wrap: wrap;
 }
 
 .flat-earth-look-hint {
@@ -355,7 +351,9 @@
 .flat-earth-fov-control {
 	width: 158px;
 }
-
+.flat-earth-shader-control {
+	width: 176px;
+}
 .flat-earth-center-sun {
 	width: 124px;
 }

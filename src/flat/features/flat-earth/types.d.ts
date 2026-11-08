@@ -1,4 +1,34 @@
 /**
+ * Feature-owned authenticated catalog service.
+ */
+type FlatEarthStellarCatalogService = import('./models/StellarCatalog.js').StellarCatalog;
+
+/**
+ * Engine-owned immutable stellar source definition.
+ */
+type FlatEarthStellarSource =
+	import('../../../algorithm32/implementation/star-field/StellarPointSetSource.js').StellarPointSetSource;
+
+/**
+ * Existing Algorithm32 source-linear presentation capability.
+ */
+type FlatEarthStellarPresentation =
+	import('../../../algorithm32/implementation/presentation-filter/ViewPresentationFilterRegistry.js').ViewPresentationFilterRegistry;
+
+/**
+ * Shared immutable source and human presentation prepared as one application lifetime.
+ */
+type FlatEarthStellarResources = Readonly<{
+	source: FlatEarthStellarSource;
+	presentationFilters: FlatEarthStellarPresentation;
+}>;
+
+/**
+ * Untrusted stellar package payload descriptor, authenticated at the HTTP boundary.
+ */
+type FlatEarthStellarArtifact = {path: string; byteLength: number; sha256: string};
+
+/**
  * Public presentation capability owned by the Flat Earth view.
  */
 type FlatEarthViewService = import('./views/flat-earth.js').FlatEarthView;
@@ -37,6 +67,10 @@ type FlatEarthSurface = {
  */
 type FlatEarthSceneState = {
 	/**
+	 * Accepted per-view shader presentation and effective Sun multipliers.
+	 */
+	shader: FlatEarthShaderOptions;
+	/**
 	 * Scoped accepted camera values and pending interaction state.
 	 */
 	camera: FlatEarthCameraState;
@@ -64,6 +98,11 @@ type FlatEarthSceneState = {
 type FlatEarthStateChange = {viewId: string; state: FlatEarthSceneState};
 
 /**
+ * Session-owned preparation state without the model-owned camera and shader projections.
+ */
+type FlatEarthSceneLifecycleState = Omit<FlatEarthSceneState, 'camera' | 'shader'>;
+
+/**
  * Prepared values and owning presentation capability for the page.
  */
 type FlatEarthPageProps = {
@@ -85,6 +124,10 @@ type FlatEarthPageProps = {
  * Feature-private renderer lifecycle used by the session.
  */
 interface FlatEarthRuntimeCapability {
+	/**
+	 * Call this method to apply model-owned shader choices and redraw retained resources.
+	 */
+	refreshShaderOptions(): void;
 	/**
 	 * Call this method to prepare and publish an exact observation on the canvas.
 	 *
@@ -154,6 +197,14 @@ type FlatEarthPreparedScene = {
 	 * Source-owned retained endpoint lighting.
 	 */
 	lighting: LightSourceThreeLightingObjects;
+	/**
+	 * Retained neutral presentation-only fill, enabled when atmospheric rendering is disabled.
+	 */
+	ambientLight: import('three').AmbientLight;
+	/**
+	 * Physical source-light intensities captured before presentation scaling and refreshed at observation publication.
+	 */
+	sunLightIntensities: number[];
 	/**
 	 * Shader handle retained across ordinary observation updates.
 	 */
@@ -233,6 +284,54 @@ type FlatEarthProgramDiagnostics = {diagnostics?: {runnable?: boolean}};
 type FlatEarthCameraOrientation = [number, number, number, number];
 
 /**
+ * Supported per-view sky composition choices.
+ * - **"full"** - Physical atmosphere and Sun presentation.
+ * - **"no-atmosphere"** - Keep composition and the solar disc, bypass atmospheric view transport.
+ * - **"shader-off"** - Render the underlying Three scene directly.
+ */
+type FlatEarthSkyRenderMode = 'full' | 'no-atmosphere' | 'shader-off';
+
+/**
+ * Derived presentation settings for one view, independent of physical cache inputs.
+ */
+type FlatEarthShaderOptions = {
+	/**
+	 * Canonical selected presentation mode.
+	 */
+	mode: FlatEarthSkyRenderMode;
+	/**
+	 * Whether atmospheric view transport is enabled.
+	 */
+	atmosphereEnabled: boolean;
+	/**
+	 * Effective Sun illumination fraction, zero when atmosphere is disabled.
+	 */
+	sunIlluminationScale: number;
+	/**
+	 * Visible solar-disc brightness fraction, retained at one (100%).
+	 */
+	sunDiscBrightnessScale: number;
+	/**
+	 * Neutral scene fill reference, zero in Full; composed rendering compensates its existing display gain.
+	 */
+	ambientLightIntensity: number;
+};
+
+/**
+ * Localized native-select choice used by the feature controls.
+ */
+type FlatEarthControlOption = {
+	/**
+	 * Stable numeric camera value or supported shader mode.
+	 */
+	value: number | FlatEarthSkyRenderMode;
+	/**
+	 * Localization phrase key for the choice.
+	 */
+	label: string;
+};
+
+/**
  * Accepted per-view camera values, independent of shared time/location.
  */
 type FlatEarthCameraValues = {
@@ -292,3 +391,13 @@ type FlatEarthViewToolsProps = FlatEarthPageProps & {
  * Retained Three perspective camera used by the private input adapter.
  */
 type FlatEarthThreeCamera = import('three').PerspectiveCamera;
+
+/**
+ * Source-owned Three light used by the presentation adapter.
+ */
+type FlatEarthThreeLight = import('three').Light;
+
+/**
+ * Owning Three renderer used by the presentation adapter.
+ */
+type FlatEarthThreeRenderer = import('three').WebGLRenderer;

@@ -8,7 +8,7 @@ import {RenderPass} from 'three/examples/jsm/postprocessing/RenderPass.js';
 import {Algorithm32} from '../../../../algorithm32/implementation/algorithm32/Algorithm32.js';
 import {Algorithm32Bindings} from '../../../../algorithm32/implementation/react-three/Algorithm32Bindings.js';
 import {ColorResetAltitudeHalfV1ColorDisplayModel} from '../../../../algorithm32/implementation/color-reset-altitude-half-v1/ColorResetAltitudeHalfV1ColorDisplayModel.js';
-import {DISPLAY_ADAPTATION_ILLUMINANCE_VALUE_KEY} from '../../../../algorithm32/implementation/color-reset-altitude-half-v1/consts.js';
+import {FlatEarthShaderPresentation} from './FlatEarthShaderPresentation.js';
 
 /**
  * Owns one canvas and production Algorithm32 flat/local frame without importing the Flat32 test bed.
@@ -24,9 +24,23 @@ export class FlatEarthRuntime {
 	 * @param {string} viewId - Exact mounted view identity.
 	 * @param {(error: Error) => void} onFailure - Owning session's failure observer.
 	 * @param {(change: FlatEarthCameraChange) => void} onCameraChange - Camera state accepted by the session.
+	 * @param {FlatEarthStellarCatalogService} stellarCatalog - Shared authenticated source capability.
 	 * @param {FlatEarthGraphicsResources} [graphics] - Startup context and cache transferred to this view.
 	 */
-	constructor(canvas, model, viewId, onFailure, onCameraChange, graphics = new FlatEarthGraphics(canvas)) {
+	constructor(
+		canvas,
+		model,
+		viewId,
+		onFailure,
+		onCameraChange,
+		stellarCatalog,
+		graphics = new FlatEarthGraphics(canvas),
+	) {
+		this.stellarCatalog = stellarCatalog;
+		/** @type {FlatEarthStellarSource|null} */
+		this.stars = null;
+		/** @type {FlatEarthStellarPresentation|null} */
+		this.presentationFilters = null;
 		this.graphics = graphics;
 		this.canvas = canvas;
 		this.model = model;
@@ -155,6 +169,16 @@ export class FlatEarthRuntime {
 	}
 
 	/**
+	 * Call this method after a model selection to update retained presentation and request a redraw.
+	 */
+	refreshShaderOptions() {
+		if (this._retained) {
+			this._updateBindings(this._retained);
+		}
+		this._requestRender();
+	}
+
+	/**
 	 * Call this method to point at the Sun belonging to the displayed physical observation.
 	 */
 	centerOnSun() {
@@ -253,11 +277,7 @@ export class FlatEarthRuntime {
 			camera: frame.camera,
 			props: {config: frame.algorithm.config.config, sceneScale: this.sceneScale},
 		});
-		let color = frame.color;
-		frame.bindings[DISPLAY_ADAPTATION_ILLUMINANCE_VALUE_KEY] = color.displayAdaptationIlluminance(
-			frame.algorithm.totalHorizontalIlluminance,
-			{value: 0, units: 'meters'},
-		).value;
+		FlatEarthShaderPresentation.apply(frame, this.model.getShaderOptions(this.viewId));
 	}
 
 	/**
@@ -301,8 +321,10 @@ export class FlatEarthRuntime {
 	 */
 	async _prepare(observation, signal, observerHeight) {
 		signal.throwIfAborted();
-		await this.graphics.warm();
+		let [, stellar] = await Promise.all([this.graphics.warm(), this.stellarCatalog.load(signal)]);
 		signal.throwIfAborted();
+		this.stars = stellar.source;
+		this.presentationFilters = stellar.presentationFilters;
 		let frame;
 		if (this.active) {
 			frame = await this.frames.prepareLocalObservation(
@@ -407,17 +429,22 @@ export class FlatEarthRuntime {
 			value: geometry.configuration.observerPosition.coordinates[2],
 			units: 'meters',
 		});
-		let color = new ColorResetAltitudeHalfV1ColorDisplayModel();
+		let presentationFilterRegistry = this.presentationFilters;
+		let color = new ColorResetAltitudeHalfV1ColorDisplayModel({presentationFilterRegistry});
 		let algorithm = new Algorithm32({
 			profile: profile.createExecutionProfile({
 				id: 'flat-earth-local-sun',
 				family: 'flat-local-finite-sun-v1',
 				localSun: source,
+				stars: this.stars,
 			}),
 			color,
+			presentationFilterRegistry,
 		});
 		let scene = new THREE.Scene();
 		scene.background = new THREE.Color(0x000000);
+		let ambientLight = new THREE.AmbientLight(0xffffff, 0);
+		scene.add(ambientLight);
 		let endpoints = geometry.createThreeEndpointObjects({
 			sceneScale: this.sceneScale,
 			visualMaterialLighting: 'lambert',
@@ -464,6 +491,8 @@ export class FlatEarthRuntime {
 			camera,
 			cacheBinding,
 			lighting,
+			ambientLight,
+			sunLightIntensities: lighting.lights.map((light) => /** @type {FlatEarthThreeLight} */ (light).intensity),
 			profile,
 			constructionIdentity: request.constructionIdentity,
 			references: 1,
@@ -590,7 +619,12 @@ export class FlatEarthRuntime {
 			signal.throwIfAborted();
 			update = frame.handle.prepareObservationUpdate({
 				profile,
-				celestialSources: {id: 'flat-earth-local-sun', family: 'flat-local-finite-sun-v1', localSun: source},
+				celestialSources: {
+					id: 'flat-earth-local-sun',
+					family: 'flat-local-finite-sun-v1',
+					localSun: source,
+					stars: this.stars,
+				},
 				scatteringCache: request.cacheController.active,
 				receiverLight,
 			});
@@ -662,6 +696,7 @@ export class FlatEarthRuntime {
 						cache: frame.cacheBinding.cache,
 						values: Object.fromEntries(Object.keys(values).map((key) => [key, frame.bindings[key]])),
 						depth: frame.bindings['geometry.sceneDepthMax'],
+						sunLightIntensities: frame.sunLightIntensities,
 					};
 					installing = true;
 					update?.publish();
@@ -669,6 +704,11 @@ export class FlatEarthRuntime {
 					frame.profile = profile;
 					Object.assign(frame.bindings, values);
 					lightingUpdate?.publish();
+					if (lightingUpdate) {
+						frame.sunLightIntensities = frame.lighting.lights.map(
+							(light) => /** @type {FlatEarthThreeLight} */ (light).intensity,
+						);
+					}
 					this.camera.position.y = height;
 					this.camera.updateMatrixWorld(true);
 				},
@@ -682,6 +722,7 @@ export class FlatEarthRuntime {
 					Object.assign(frame.bindings, previous.values);
 					frame.bindings['geometry.sceneDepthMax'] = previous.depth;
 					lightingUpdate?.revert();
+					frame.sunLightIntensities = previous.sunLightIntensities;
 					this.camera.position.y = previous.height;
 					this.camera.updateMatrixWorld(true);
 					installing = false;
@@ -707,8 +748,7 @@ export class FlatEarthRuntime {
 				});
 				this._resizeFrame(frame);
 				this._updateBindings(frame);
-				frame.composer.renderToScreen = true;
-				frame.composer.render();
+				FlatEarthShaderPresentation.render(frame, this.renderer, this.model.getShaderOptions(this.viewId).mode);
 			},
 			dispose: () => {
 				if (released) {

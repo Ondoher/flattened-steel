@@ -20,6 +20,8 @@ export class FlatEarthModel extends Service {
 			'open',
 			'close',
 			'getCamera',
+			'getShaderOptions',
+			'setSkyRenderMode',
 			'setOrientation',
 			'setFieldOfView',
 			'resolveHeight',
@@ -34,6 +36,8 @@ export class FlatEarthModel extends Service {
 	start() {
 		/** @type {Map<string, FlatEarthCameraValues>} */
 		this.cameras = new Map();
+		/** @type {Map<string, FlatEarthSkyRenderMode>} */
+		this.skyModes = new Map();
 	}
 
 	/**
@@ -41,6 +45,7 @@ export class FlatEarthModel extends Service {
 	 */
 	stop() {
 		this.cameras?.clear();
+		this.skyModes?.clear();
 	}
 
 	/**
@@ -50,6 +55,7 @@ export class FlatEarthModel extends Service {
 	 */
 	open(viewId) {
 		this.cameras.set(viewId, {observerHeightMeters: 5, fieldOfViewDegrees: 50, orientation: [0, 0, 0, 1]});
+		this.skyModes.set(viewId, 'full');
 	}
 
 	/**
@@ -59,6 +65,40 @@ export class FlatEarthModel extends Service {
 	 */
 	close(viewId) {
 		this.cameras.delete(viewId);
+		this.skyModes.delete(viewId);
+	}
+
+	/**
+	 * Call this method to project one view's selected mode, Sun presentation and neutral ground-fill policy.
+	 *
+	 * @param {string} viewId - Exact mounted view identity.
+	 * @returns {FlatEarthShaderOptions} - Derived composition switches, Sun multipliers and ambient reference.
+	 */
+	getShaderOptions(viewId) {
+		this._camera(viewId);
+		let mode = this.skyModes.get(viewId);
+		return {
+			mode,
+			atmosphereEnabled: mode === 'full',
+			sunIlluminationScale: mode === 'full' ? 1 : 0,
+			sunDiscBrightnessScale: 1,
+			ambientLightIntensity: mode === 'full' ? 0 : 0.03,
+		};
+	}
+
+	/**
+	 * Call this method to select one view's presentation without changing physical cache inputs.
+	 *
+	 * @param {string} viewId - Exact mounted view identity.
+	 * @param {FlatEarthSkyRenderMode} mode - Supported presentation selection.
+	 * @throws {RangeError} - The requested mode is not supported.
+	 */
+	setSkyRenderMode(viewId, mode) {
+		this._camera(viewId);
+		if (!['full', 'no-atmosphere', 'shader-off'].includes(mode)) {
+			throw new RangeError('Unsupported Flat Earth sky render mode.');
+		}
+		this.skyModes.set(viewId, mode);
 	}
 
 	/**

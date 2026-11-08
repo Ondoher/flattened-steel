@@ -1,5 +1,4 @@
 import DistanceMath from '../../../algorithm32/math/DistanceMath.js';
-import {FlatEarthRuntime} from './runtime/FlatEarthRuntime.js';
 
 /**
  * Owns one view's cancellable preparation and renderer lifetime, independently of other open views.
@@ -11,20 +10,14 @@ export class FlatEarthSession {
 	 * @param {string} viewId - Exact workspace view identity.
 	 * @param {FlatEarthModelService} model - Registered camera and observation model capability.
 	 * @param {(state: FlatEarthSceneState) => void} onChange - Controller-owned state publication.
-	 * @param {FlatEarthRuntimeFactory} [createRuntime] - Internal renderer collaborator factory.
+	 * @param {FlatEarthRuntimeFactory} createRuntime - Controller-supplied renderer and service collaborators.
 	 */
-	constructor(
-		viewId,
-		model,
-		onChange,
-		createRuntime = (canvas, model, viewId, onFailure, onCameraChange) =>
-			new FlatEarthRuntime(canvas, model, viewId, onFailure, onCameraChange),
-	) {
+	constructor(viewId, model, onChange, createRuntime) {
 		this.viewId = viewId;
 		this.onChange = onChange;
 		this.createRuntime = createRuntime;
 		this.model = model;
-		/** @type {Omit<FlatEarthSceneState, 'camera'>} */
+		/** @type {FlatEarthSceneLifecycleState} */
 		this.state = {status: 'waiting', observation: null, renderedObservation: null, error: null};
 		this.canvas = null;
 		/** @type {FlatEarthRuntimeCapability|null} */
@@ -47,6 +40,7 @@ export class FlatEarthSession {
 	getState() {
 		return structuredClone({
 			...this.state,
+			shader: this.model.getShaderOptions(this.viewId),
 			camera: {
 				...this.model.getCamera(this.viewId),
 				pendingHeightMeters: this.pendingHeight ? DistanceMath.toMeters(this.pendingHeight) : null,
@@ -219,6 +213,31 @@ export class FlatEarthSession {
 			this._emit();
 		} catch (error) {
 			this.model.setFieldOfView(this.viewId, previous);
+			this._fail(error);
+		}
+	}
+
+	/**
+	 * Call this method to change this view's shader presentation without preparing a new observation.
+	 *
+	 * @param {FlatEarthSkyRenderMode} mode - Complete sky composition selection.
+	 */
+	setSkyRenderMode(mode) {
+		let previous = this.model.getShaderOptions(this.viewId).mode;
+		if (mode === previous) {
+			return;
+		}
+		this.model.setSkyRenderMode(this.viewId, mode);
+		try {
+			this.runtime?.refreshShaderOptions();
+			this._emit();
+		} catch (error) {
+			this.model.setSkyRenderMode(this.viewId, previous);
+			try {
+				this.runtime?.refreshShaderOptions();
+			} catch (restoreError) {
+				error = new AggregateError([error, restoreError], 'Could not apply or restore the sky presentation.');
+			}
 			this._fail(error);
 		}
 	}

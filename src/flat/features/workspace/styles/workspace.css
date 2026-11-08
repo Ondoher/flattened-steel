@@ -66,10 +66,10 @@
 	border-left: 1px solid var(--app-color-border);
 }
 .viewport-header {
-	height: 184px;
+	height: auto;
 	display: grid;
-	grid-template-columns: 44px 140px 120px minmax(0, 1fr);
-	grid-template-rows: 32px 12px 32px 8px 88px;
+	grid-template-columns: 44px 140px 120px minmax(0, 1fr) auto;
+	grid-template-rows: minmax(32px, auto) 12px minmax(32px, auto) 8px 88px;
 	column-gap: 16px;
 	padding: 12px 16px 0;
 	border-bottom: 1px solid var(--app-color-border);
@@ -102,6 +102,21 @@
 	grid-row: 1;
 	grid-column: 4;
 	justify-self: end;
+}
+.viewport-header-actions {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: flex-end;
+	gap: 8px;
+	grid-row: 1;
+	grid-column: 5;
+	justify-self: end;
+}
+.workspace-collapse-controls {
+	width: 32px;
+	min-width: 32px;
+	padding: 0;
 }
 .viewport-tools {
 	grid-row: 3;
@@ -191,9 +206,9 @@
 }
 @media (min-width: 1201px) {
 	.workspace-shell[data-configuration-open='false'] .workspace-views[data-view-count='1'] .viewport-header {
-		grid-template-columns: 44px 140px 124px minmax(0, 1fr);
-		height: 148px;
-		grid-template-rows: 60px 88px;
+		grid-template-columns: 44px 140px 124px minmax(0, 1fr) auto;
+		height: auto;
+		grid-template-rows: minmax(60px, auto) 88px;
 		align-items: center;
 		padding: 0 20px;
 		column-gap: 16px;
@@ -377,6 +392,10 @@
 		padding: 12px 16px;
 		gap: 12px;
 	}
+	.viewport-header-actions {
+		grid-column: 1/-1;
+		grid-row: 2;
+	}
 	.workspace-page-settings {
 		grid-column: 3;
 		width: auto;
@@ -545,4 +564,10 @@
 
 .viewport-tools {
 	container-type: inline-size;
+}
+
+.workspace-shell .workspace-views .viewport-frame[data-controls-collapsed='true'] > .viewport-header {
+	height: auto;
+	grid-template-rows: minmax(32px, auto);
+	padding: 12px 16px;
 }

@@ -7,9 +7,11 @@ control positions and nonmodal configuration surfaces. The
 local checkpoints. The [saved migration plan](mui-migration-plan.md) is complete.
 Toolbar conversion remains a separate follow-on task.
 
-Focus: establish reusable controls for the Flat application, then use them to
-fit the Flat page controls into a single-line toolbar. These are controls and
-control containers, not full-page components.
+Focus: the [toolbar refactor notes](toolbar-refactor.md) own the selected
+icon-only direction and seven MUI icons. Time uses AccessTime: the slider is
+alternate time entry. The [earlier review](toolbar-design-review.md) preserves
+preceding UX/UI advice and comps. Application implementation is unchanged.
+These are controls and control containers, not full-page components.
 
 ## Control Scope
 
@@ -128,7 +130,7 @@ from the maintained base controls to shared and configuration-specific controls,
 including Date, Time, TypeAhead and CityPicker. Toolbars, configuration surfaces
 and broader workspace chrome follow their contained controls. The single-line
 Flat toolbar redesign remains later work. The saved migration plan turns this
-direction into milestones; M0/M1 are implemented and later migration milestones remain deferred.
+direction into milestones; M0–M4 are now complete.
 
 During this plan, convert controls hosted by the current toolbars in place
 while preserving their containers, rows, grouping and layout. Build the common
@@ -149,6 +151,11 @@ separate from these six local additions.
 
 The control migration is complete. This section owns the remaining-toolbar
 inventory; implementing it requires a separately selected task.
+The [toolbar design review](toolbar-design-review.md) contains the requested
+standalone UX/UI advice and subsequent comps. The owner's newer icon-only
+direction supersedes their persistent value labels and combined compact panel;
+the [toolbar refactor notes](toolbar-refactor.md) own the selected icons and
+current direction.
 
 | Existing host                  | Current controls                                                                   | Remaining conversion                                                                     |
 | ------------------------------ | ---------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
@@ -162,16 +169,18 @@ The owner wants all Flat page controls to fit on a single-line toolbar. The
 toolbar redesign follows cleanup of the common controls; it is not the first
 refactoring step.
 
-Introduce a button with text and an arrow indicating whether its panel is open
-or closed. The button opens a small interactive panel containing working
-controls, rather than a tooltip or a list of menu commands. At least the Sun
-position slider will use this panel. In the current Flat feature this is the
-degrees-from-closest editor, which updates shared time for both views.
+The earlier text-and-arrow trigger is superseded by the owner's proposal for
+icon buttons opening choices. The user does not need persistent view, Sky,
+elevation or FOV readouts; common date/time already appears in the app bar.
+The selected clock icon opens an interactive panel for the degrees-from-closest
+alternate time editor, which updates shared time for both views. The existing shared popup
+controls remain implementation resources; no icon-trigger adaptation is
+implemented by this design discussion.
 
-Which other controls use panels, the exact toolbar grouping, arrow appearance,
-panel placement/dismissal, simultaneous-open behavior and narrow-screen handling
-remain to be discussed. The single-line toolbar is the design goal; those
-details have not been accepted implicitly.
+Toolbar grouping, dropdown affordances, panel placement/dismissal,
+simultaneous-open behavior and narrow-screen handling remain to be discussed.
+The single-line toolbar is the design goal; those details have not been
+accepted implicitly.
 
 ## Existing Implementation References
 
@@ -199,8 +208,13 @@ application's CSS variables while integrating the selected MUI foundation.
 Folder-mapped React/ReMVC and local authoring rules remain applicable; topics
 do not select standards.
 
-Earlier app changes remain uncommitted and must be preserved, including the
-stellar/human-presentation integration, shader modes, dim ground fill and
-per-view control collapse. Engineering standards review remains owner-cancelled;
+The owner requested a whole-repository checkpoint containing the toolbar
+notes/icons and the preceding stellar/human-presentation integration, shader
+modes, dim ground fill, per-view collapse, city update and transferred reference
+files. The application/configuration sources match M4's 723-file baseline;
+its type, browser, build and runtime evidence remains applicable. No new test
+suite was run solely for this checkpoint. Base-control text cleanup remains
+an owner-owned follow-up; toolbar implementation has not started.
+Engineering standards review remains owner-cancelled;
 the topic change does not restart it. Checkpoint-adviser monitoring remains
 active. The dome-cache experiment remains suspended.

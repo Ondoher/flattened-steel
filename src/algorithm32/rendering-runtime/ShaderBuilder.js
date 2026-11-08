@@ -426,8 +426,8 @@ export class ShaderBuilder {
 	assembleRetainedUpdate(request, cache) {
 		this._assertUsable();
 		const roster = this._model.celestialSources;
-		if (roster && (roster.family !== 'flat-local-finite-sun-v1' || roster.stars)) {
-			throw new Error('Retained local updates preserve the existing finite-Sun generation topology.');
+		if (roster && roster.family !== 'flat-local-finite-sun-v1') {
+			throw new Error('Retained local updates require the flat finite-Sun source family.');
 		}
 		return this._assemblyPreparer.assembleIfRequested(request, {
 			...EMPTY_SHADER_BUILD_CONTEXT,

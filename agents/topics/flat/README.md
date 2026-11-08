@@ -25,6 +25,28 @@ Device/local-time entry remains; time-zone lookup and animation UI are deferred.
 Engineering standards review remains cancelled. Local checkpoints are recorded
 in the execution record; nothing was pushed or deployed.
 
+The [shader-options implementation](shader-options.md) adds independent Sky
+choices to each Flat Earth toolbar and its Camera and sky settings section:
+Full, No atmosphere, and Shader off. Atmosphere-disabled modes set effective
+Sun illumination to 0% and retain disc brightness at 100%; Full restores physical
+lighting. No atmosphere keeps celestial/color composition; Shader off renders
+the underlying Three scene directly. The mode survives physical observation
+updates and renderer retry without changing the physical cache configuration.
+Atmosphere-disabled modes also provide a dim neutral ambient fill so the ground
+is visible; composed rendering compensates the existing display gain. Full
+removes that presentation fill.
+
+The [stellar integration](stars.md) adds Flat32's authenticated brightest-2,000
+catalog to Flat Earth through Flat-owned app-relative asset routing. Views share
+the immutable source and own separate GPU resources. Retained time, location,
+elevation and camera updates preserve scene/program lifetimes; Shader off omits
+shader-owned stars. The package remains private operational data.
+
+The stellar capability also enables Algorithm32's existing human presentation
+filters with Flat32's defaults and authenticated scotopic weights. Faint stars
+now appear mostly neutral; both views share the prepared source and filter
+registry while retaining their independent graphics resources.
+
 The owner-authorized [elevation/time optimization](control-update-optimization-execution.md)
 retains the scene, endpoint objects, facade/shader handle, composer/targets and
 compatible programs/cache across ordinary updates. Necessary geometry/source
@@ -75,6 +97,12 @@ exact registered lifetime. Feature presentation remains owned by its provider.
 Workspace data and presentation contracts are in the feature's types.d.ts;
 public service declarations remain beside their implementations. Common app
 context and page-catalog metadata stay in src/flat/common/types.d.ts.
+
+Each view header has a [collapse control](controls-collapse.md) that leaves its
+scene selector and Page settings visible while hiding both contributed tool
+rows. Hidden controls and the scene remain mounted, preserving drafts, selections
+and graphics lifetime. Collapse is transient presentation state, independent
+for each view; expanding restores the same controls.
 
 Base CSS variables in src/flat/styles/app.css define background #121212 and
 text/borders #F2F2F2. The action token currently uses #ABD3FA as an explicitly
@@ -147,8 +175,8 @@ the latest pending instant without starving the current preparation. Unmount,
 StrictMode lifecycle replay, and explicit retry release the exact canvas lifetime
 before another one attaches. Release retires frame/cache leases before the
 backend and renderer. Actual context or setup failures remain visible with Retry.
-There is no Flat32 or archived-runtime import, no server cache load, no new
-configuration controls, and no global animation loop owned by a scene view.
+There is no Flat32 or archived-runtime import, no server cache load,
+and no global animation loop owned by a scene view.
 The [component proposal](component-service-proposal.md#flat-earth-feature)
 owns the responsibility split and remaining feature work.
 
@@ -192,9 +220,13 @@ are present. Every exact city-name match remains available; partial suggestions
 fill an eighteen-result list when there are fewer exact matches. Region names
 also appear in result labels, with codes as the fallback. The first panel mount loads the
 copied static city index through the deployment-aware HTTP service. Loaded data
-is retained across panel close/reopen. Its 154, 694 source rows occupy 10, 359, 090
-bytes; exact copied bytes, original license, and provenance are under the
-feature's assets/data folder. The same source package supplies a compact lookup
+is retained across panel close/reopen. The index contains 154,695 rows, including
+the application-local Union Glacier Camp (AQ) addition at -79.76667, -82.86667.
+Original source records are preserved; the original license, source/current
+hashes, and addition provenance are under the feature's assets/data folder.
+Catalog checks verify partial/full-name and AQ-filtered camp searches, selected
+coordinates, metadata hashes, and preservation of every original record.
+The same source package supplies a compact lookup
 of 3, 892 region names, with derivation/hash information in cities-source.json.
 The generated compact city and region JSON files are excluded from
 Prettier to preserve its bytes. No external city API or new server endpoint is

@@ -166,7 +166,9 @@ export class StellarScreenPaletteGenerationPass {
 			uStellarSourceMembers: {value: this._sourceTextures.members},
 			uStellarSourceSpectra: {value: this._sourceTextures.spectra},
 		};
-		if (includeScreenIndex) uniforms.uStellarScreenIndex = {value: null};
+		if (includeScreenIndex) {
+			uniforms.uStellarScreenIndex = {value: null};
+		}
 		for (const uniform of this._geometryContribution.uniforms) {
 			let value = uniform.defaultValue;
 			if (uniform.type === 'mat4') {
@@ -202,6 +204,55 @@ export class StellarScreenPaletteGenerationPass {
 		this._observation = observation;
 		this._geometryContribution = contribution;
 		this.markDirty('configuration');
+	}
+
+	/**
+	 * Call this method to stage compatible physical owners without replacing source textures or programs.
+	 *
+	 * @param {Algorithm32ExecutionProfile} profile - Candidate physical geometry and unchanged stellar catalog.
+	 * @returns {LocalSunFrameSceneLighting} - Reversible geometry/observation publication.
+	 */
+	prepareObservationUpdate(profile) {
+		const geometry = /** @type {GeometryModel & StellarScreenPaletteGeometryCapability} */ (
+			profile.models.geometry
+		);
+		const observation = profile.models.sourcePlacement.observation;
+		const source = profile.models.celestialSources.stars;
+		if (
+			!source ||
+			source.describeCelestialSourceIdentity().definitionHash !==
+				this._sourceOwner.describeCelestialSourceIdentity().definitionHash
+		) {
+			throw new Error('A retained stellar update requires the same catalog.');
+		}
+		const stages = source.createStellarGenerationStages({geometry, observation});
+		const contribution = geometry.createStellarGenerationShaderContribution({observation});
+		const layout = (uniforms) => JSON.stringify(uniforms.map(({name, type}) => [name, type]));
+		if (
+			stages.length !== this._stages.length ||
+			stages.some((stage, index) => {
+				const installed = this._stages[index];
+				return (
+					stage.vertexShaderSource !== installed.vertexShaderSource ||
+					stage.fragmentShaderSource !== installed.fragmentShaderSource ||
+					stage.policyIdentity !== installed.policyIdentity
+				);
+			}) ||
+			layout(contribution.uniforms) !== layout(this._geometryContribution.uniforms)
+		) {
+			throw new Error('A retained stellar update cannot change shader structure or uniform layout.');
+		}
+		const previous = {geometry: this._geometry, observation: this._observation};
+		return {
+			publish: () => {
+				this._geometry = geometry;
+				this.setObservation(observation);
+			},
+			revert: () => {
+				this._geometry = previous.geometry;
+				this.setObservation(previous.observation);
+			},
+		};
 	}
 
 	/** Create the fixed point and fullscreen draw objects. */
@@ -290,7 +341,9 @@ export class StellarScreenPaletteGenerationPass {
 
 	/** Dispose one target at most once. */
 	_disposeTarget(target) {
-		if (!target || this._disposedTargets.has(target)) return;
+		if (!target || this._disposedTargets.has(target)) {
+			return;
+		}
 		this._disposedTargets.add(target);
 		target.dispose?.();
 		this._disposedTargetCount += 1;
@@ -298,7 +351,9 @@ export class StellarScreenPaletteGenerationPass {
 
 	/** Dispose both targets in one internal pair. */
 	_disposePair(pair) {
-		if (!pair) return;
+		if (!pair) {
+			return;
+		}
 		this._disposeTarget(pair.screenIndexTarget);
 		this._disposeTarget(pair.paletteTarget);
 	}
@@ -320,8 +375,11 @@ export class StellarScreenPaletteGenerationPass {
 		if (!gl?.clearBufferuiv || !gl?.clearBufferfv) {
 			throw new TypeError('Stellar generation requires a WebGL2 renderer context.');
 		}
-		if (integer) gl.clearBufferuiv(gl.COLOR, 0, new Uint32Array([0, 0, 0, 0]));
-		else gl.clearBufferfv(gl.COLOR, 0, new Float32Array([0, 0, 0, 0]));
+		if (integer) {
+			gl.clearBufferuiv(gl.COLOR, 0, new Uint32Array([0, 0, 0, 0]));
+		} else {
+			gl.clearBufferfv(gl.COLOR, 0, new Float32Array([0, 0, 0, 0]));
+		}
 		if (clearDepth) {
 			gl.clearDepth(1);
 			gl.clear(gl.DEPTH_BUFFER_BIT);
@@ -431,13 +489,17 @@ export class StellarScreenPaletteGenerationPass {
 
 	/** Mark active output unusable until a matching generation commits. */
 	markDirty(reason) {
-		if (this._disposed) return;
+		if (this._disposed) {
+			return;
+		}
 		this._dirtyReason = reason;
 	}
 
 	/** Compile both generation programs before first render. */
 	async prepare(renderer) {
-		if (this._disposed) throw new Error('Cannot prepare disposed stellar generation stages.');
+		if (this._disposed) {
+			throw new Error('Cannot prepare disposed stellar generation stages.');
+		}
 		if (typeof renderer.compileAsync === 'function') {
 			await renderer.compileAsync(this._pointScene, this._drawCamera);
 			await renderer.compileAsync(this._paletteScene, this._drawCamera);
@@ -450,15 +512,18 @@ export class StellarScreenPaletteGenerationPass {
 	/** Resize view-dependent outputs and make the active pair incompatible. */
 	setSize(width, height) {
 		const viewportSize = PixelMath.createPixelSize(width, height, 'Stellar generation viewport');
-		if (viewportSize.width === this._viewportSize.width && viewportSize.height === this._viewportSize.height)
+		if (viewportSize.width === this._viewportSize.width && viewportSize.height === this._viewportSize.height) {
 			return;
+		}
 		this._viewportSize = viewportSize;
 		this.markDirty('view');
 	}
 
 	/** Run generation before later composer passes whenever exact view compatibility is absent. */
 	render(renderer) {
-		if (this._disposed || !this.enabled) return;
+		if (this._disposed || !this.enabled) {
+			return;
+		}
 		try {
 			const view = CelestialRenderViewSnapshot.capture(this._camera, this._viewportSize);
 			const identity = this._sourceOwner.createStellarGenerationIdentity({
@@ -488,7 +553,9 @@ export class StellarScreenPaletteGenerationPass {
 
 	/** Invalidate all renderer handles after WebGL context loss. */
 	handleContextLoss() {
-		if (this._disposed) return;
+		if (this._disposed) {
+			return;
+		}
 		this._contextLossCount += 1;
 		this._disposePair(this._stagingPair);
 		this._disposePair(this._activePair);
@@ -501,7 +568,9 @@ export class StellarScreenPaletteGenerationPass {
 
 	/** Require normal regeneration after renderer context restoration. */
 	handleContextRestoration() {
-		if (this._disposed) return;
+		if (this._disposed) {
+			return;
+		}
 		this._sourceTextures.members.needsUpdate = true;
 		this._sourceTextures.spectra.needsUpdate = true;
 		this._zeroScreenIndexTexture.needsUpdate = true;
@@ -526,7 +595,9 @@ export class StellarScreenPaletteGenerationPass {
 
 	/** Dispose active, staging, input, program, and geometry resources exactly once. */
 	dispose() {
-		if (this._disposed) return;
+		if (this._disposed) {
+			return;
+		}
 		this._disposed = true;
 		this.enabled = false;
 		this._disposePair(this._stagingPair);

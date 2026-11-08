@@ -11,6 +11,7 @@ import {UiContributionsService} from '../../workspace/services/ui-contributions.
 import {AppPagesService} from '../../../services/app-pages.js';
 import {ConfigurationService} from '../../../services/configuration.js';
 import {AnimationLoopService} from '../../../services/animation-loop.js';
+import {StellarCatalog} from '../models/StellarCatalog.js';
 
 /**
  * Call this function to flush owned lifecycle continuations.
@@ -210,6 +211,7 @@ describe('Flat Earth camera controls', () => {
 			dispose: jasmine.createSpy('dispose').and.resolveTo(),
 		};
 		let controller = new FlatEarthController(registry, () => graphics);
+		new StellarCatalog(registry).start();
 		let view = new FlatEarthView(registry);
 		controller.start();
 		controller.ready();

@@ -45,3 +45,13 @@ type FlatSharedRegistry = import('@polylith/core').Registry;
  * Ordered router registration capability declared by its owning service.
  */
 type FlatRoutersService = import('../services/routers.js').RoutersService;
+
+/**
+ * Express router capability used at Flat's HTTP ingress only.
+ */
+type FlatExpressRouter = import('express').Router;
+
+/**
+ * Express response capability confined to Flat's HTTP ingress.
+ */
+type FlatExpressResponse = import('express').Response;

@@ -26,6 +26,7 @@ export class FlatEarthView extends Service {
 			'retry',
 			'getToolsComponent',
 			'setFieldOfView',
+			'setSkyRenderMode',
 			'setObserverHeight',
 			'centerOnSun',
 			'getTimeComponent',
@@ -99,6 +100,16 @@ export class FlatEarthView extends Service {
 	 */
 	setFieldOfView(viewId, degrees) {
 		this.controller.setFieldOfView(viewId, degrees);
+	}
+
+	/**
+	 * Call this method to relay one view's shader selection through the controller.
+	 *
+	 * @param {string} viewId - Exact owning view.
+	 * @param {FlatEarthSkyRenderMode} mode - Selected sky composition.
+	 */
+	setSkyRenderMode(viewId, mode) {
+		this.controller.setSkyRenderMode(viewId, mode);
 	}
 
 	/**

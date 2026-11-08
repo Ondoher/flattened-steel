@@ -1,5 +1,13 @@
 /** Runtime methods required from the optional stellar child of the celestial coordinator. */
 interface CelestialGenerationStellarChild extends StellarScreenPaletteGenerationPipelineParticipant {
+	/**
+	 * Call this method to stage compatible physical owners while retaining stellar resources.
+	 *
+	 * @param profile - Candidate geometry, observation and unchanged stellar source.
+	 * @returns - Reversible geometry and observation publication.
+	 */
+	prepareObservationUpdate(profile: Algorithm32ExecutionProfile): LocalSunFrameSceneLighting;
+
 	/** Call this method to update accepted observation uniforms without replacing stage programs. */
 	setObservation(observation: GeometryObservation): void;
 	/** Execute generation for the captured frame. */

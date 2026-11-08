@@ -6,3 +6,5 @@
 !scripts/
 !scripts/**
 experiments/extraterrestrial/
+src/flat/features/global-configuration/assets/data/cities.json
+src/flat/features/global-configuration/assets/data/admin1-names.json

@@ -395,7 +395,7 @@ type WorkspaceProps = {
 	 */
 	notFound: boolean;
 	/**
-	 * Reports a registered page selection for an exact owning view.
+	 * Registered-page selection for one exact view identity.
 	 *
 	 * @param pageId - Selected registered page.
 	 * @param viewId - Owning view identity.
@@ -419,6 +419,16 @@ type ViewportFrameProps = Omit<WorkspaceProps, 'views'> & {
 	 * One-based display position.
 	 */
 	number: number;
+};
+
+/**
+ * Transient visibility of one mounted view's contributed control rows.
+ */
+type ViewportFrameState = {
+	/**
+	 * Whether only the header's scene/settings/actions row is visible.
+	 */
+	controlsCollapsed: boolean;
 };
 
 /**
