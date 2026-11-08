@@ -82,7 +82,7 @@ export class FlatEarthModel extends Service {
 			atmosphereEnabled: mode === 'full',
 			sunIlluminationScale: mode === 'full' ? 1 : 0,
 			sunDiscBrightnessScale: 1,
-			ambientLightIntensity: mode === 'full' ? 0 : 0.03,
+			ambientLightIntensity: mode === 'full' ? 0 : mode === 'shader-off' ? 1 : 0.03,
 		};
 	}
 

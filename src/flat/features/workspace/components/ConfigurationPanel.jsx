@@ -172,18 +172,10 @@ export default class ConfigurationPanel extends Component {
 	 * @returns {AppSelectOption[]} - Current supported scopes.
 	 */
 	_scopeOptions() {
-		let {configuration, text, views} = this.props;
+		let {configuration, views} = this.props;
 		let options = views
 			.filter((view) => (configuration.targets ?? [view.id]).includes(view.id))
-			.map((view) => {
-				let index = views.findIndex((item) => item.id === view.id);
-				let viewLabel = text('workspace.view', {number: index + 1});
-				let pageLabel = view.page ? text(view.page.label) : '';
-				let label = pageLabel
-					? {phrase: 'workspace.view-page', replacements: {view: viewLabel, page: pageLabel}}
-					: {phrase: 'workspace.view', replacements: {number: index + 1}};
-				return {value: view.id, label};
-			});
+			.map((view) => ({value: view.id, label: view.page?.label ?? 'workspace.no-scene'}));
 		return [{value: '', label: 'workspace.shared-settings'}, ...options];
 	}
 

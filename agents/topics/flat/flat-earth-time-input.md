@@ -11,8 +11,8 @@ before/after closest approach to the selected location, with 0° at closest. It
 is an alternate editor of the shared timestamp for both views, not elevation,
 azimuth, camera FOV, a per-view override or a second clock.
 
-Each Flat Earth toolbar has a visible **Shared time** slider, signed angle,
-before/after legends, closest marker and **Time settings** entry. Shared
+Each Flat Earth toolbar's clock opens a **Shared time** popup with a slider,
+signed angle, before/after legends, closest marker and **Time settings** entry. Shared
 configuration contains **Location and time** and **Flat Earth time** sections.
 The latter supplies the slider, numeric Degrees field, closest-reference
 explanation, date basis and resolved device date/time. Both toolbar entries show
@@ -26,6 +26,27 @@ The [provider contract](component-service-proposal.md#configuration-provider-con
 owns the extension boundary. Accepted location/time and camera values survive
 panel/section changes; numeric drafts belong to a registered editor model-service,
 independent of a canvas lifetime.
+
+## Sun-position Snapping
+
+The toolbar popup and configuration slider use magnetic stops every 45° from
+−180° through +180°, including closest at 0°. Pointer/touch input snaps within
+2° of a stop and moves freely outside that radius. Keyboard steps remain 0.1°,
+and numeric entry retains its existing precision. This edits the same shared
+timestamp through the existing gesture/controller path.
+
+FlatEarthTimeControls owns the presentation policy. Its
+`SUN_POSITION_SNAP_INTERVAL_DEGREES` constant is 45; changing it to 15 generates
+the finer stop grid without changing the shared control or either editor's JSX.
+The interval and attraction radius are independent. The
+[shared Slider contract](../component-refactor/slider-snapping-assessment.md#shared-slider-contract)
+owns generic snapping behavior.
+
+Verification: client types, all 224 Flat browser tests and the normal production
+build pass. The feature regression exercises pointer input near every stop in
+both editor placements, verifies the owning view/token receives the snapped
+angle, and confirms free input between stops. Logs/results are under
+`.codex-tmp/sun-position-snapping/`. Scoped formatting and Git whitespace pass.
 
 ## First-Pass Conversion And Editing Policy
 

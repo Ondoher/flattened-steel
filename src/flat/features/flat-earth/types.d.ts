@@ -312,7 +312,7 @@ type FlatEarthShaderOptions = {
 	 */
 	sunDiscBrightnessScale: number;
 	/**
-	 * Neutral scene fill reference, zero in Full; composed rendering compensates its existing display gain.
+	 * Neutral fill: zero in Full, one in Shader off, and 0.03 in No atmosphere before display-gain compensation.
 	 */
 	ambientLightIntensity: number;
 };

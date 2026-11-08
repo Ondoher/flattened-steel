@@ -199,6 +199,17 @@ type AppSliderProps = {
 	 */
 	step?: number;
 	/**
+	 * Optional pointer/touch snap targets in slider-value units, within min/max.
+	 * Targets are read without mutation; the first supplied point wins an equal-distance tie.
+	 * Keyboard and native-input changes retain their ordinary precise values.
+	 */
+	snapPoints?: readonly number[];
+	/**
+	 * Inclusive attraction distance in slider-value units; absent, zero or negative disables snapping.
+	 * Values outside every target's radius pass through unchanged.
+	 */
+	snapRadius?: number;
+	/**
 	 * Whether interaction is disabled.
 	 */
 	disabled?: boolean;
@@ -225,7 +236,7 @@ type AppSliderProps = {
 	 */
 	onChange: (value: number) => void;
 	/**
-	 * Reports MUI's committed numeric value.
+	 * Reports the committed numeric value using the same snapping policy as onChange.
 	 *
 	 * @param value - Committed scalar value.
 	 */

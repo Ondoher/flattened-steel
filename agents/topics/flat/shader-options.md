@@ -9,12 +9,12 @@ atmospheric view transport disabled. Shader off directly renders the Three
 scene, bypassing atmosphere/celestial composition. Disc brightness remains
 configured at 100%; the bypass does not draw the shader-owned solar disc.
 
-Both atmosphere-disabled modes add a small neutral ambient fill so the ground
-remains visible. It is a retained, per-scene Three AmbientLight, separate from
-the physical Sun lights. The model supplies a reference intensity of 0.03;
-Full sets it to zero. No atmosphere divides this reference by the existing
+Both atmosphere-disabled modes use a retained, per-scene white Three
+AmbientLight, separate from the physical Sun lights. Shader off uses intensity
+1 for ordinary neutral, uniform scene lighting. No atmosphere keeps a dim
+reference intensity of 0.03; Full sets it to zero. No atmosphere divides its reference by the existing
 color model's display gain before scene capture, preventing zero-Sun night
-exposure from turning the fill white. Shader off uses the reference directly.
+exposure from turning the fill white. Shader off uses its intensity directly.
 This changes only the presentation light, preserving receiver measurements,
 display adaptation, star brightness, Sun illumination 0% and disc brightness 100%.
 The light remains installed in the scene across mode changes and physical
@@ -31,9 +31,18 @@ The first direct Three render compiles its screen-output material program;
 subsequent direct renders reuse it. Full/No atmosphere transitions compile none.
 Surface retry preserves the mode; closing the page releases it.
 
-## Current Ambient-fill Verification
+## Neutral Shader-off Lighting Verification
 
-All 133 Flat browser tests and client types pass. Existing shader-option tests
+The shader-off ambient intensity is now 1; its existing light color remains
+white (0xffffff). The model and presentation regression assertions verify this
+selection alongside unchanged No atmosphere compensation and zero fill in Full.
+Client types, all 218 Flat browser tests and the normal production build pass. Logs are under
+`.codex-tmp/flat-neutral-ambient/`. This is a presentation-only change; the
+earlier dim-fill GPU measurements below describe the prior 0.03 setting.
+
+## Retained Dim-fill Verification
+
+The earlier 0.03-fill implementation passed 133 Flat browser tests and client types. Existing shader-option tests
 now also cover the derived fill, composition-gain compensation and restoration
 of zero ambient in Full. Actual hardware-GPU
 [proof](../../../.codex-tmp/flat-ambient-fill/gpu-proof.json) and

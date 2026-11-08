@@ -112,6 +112,34 @@ export default class Slider extends Component {
 	}
 
 	/**
+	 * Resolves optional pointer attraction while retaining precise keyboard and native-input values.
+	 *
+	 * @param {Event|React.SyntheticEvent} event - MUI's original input or commit event.
+	 * @param {number} value - Scalar value proposed by MUI.
+	 * @returns {number} - Nearest in-range snap point within its radius, or the proposed value.
+	 */
+	_resolveValue(event, value) {
+		let {snapPoints = [], snapRadius = 0, min = 0, max = 100} = this.props;
+		let pointer = event.type.startsWith('pointer') || event.type.startsWith('touch');
+		if (!pointer || snapRadius <= 0) {
+			return value;
+		}
+		let resolved = value;
+		let nearestDistance = Infinity;
+		for (let point of snapPoints) {
+			if (point < min || point > max) {
+				continue;
+			}
+			let distance = Math.abs(value - point);
+			if (distance <= snapRadius && distance < nearestDistance) {
+				resolved = point;
+				nearestDistance = distance;
+			}
+		}
+		return resolved;
+	}
+
+	/**
 	 * Reports MUI's scalar numeric value after beginning its interaction.
 	 *
 	 * @param {Event} event - MUI slider event.
@@ -119,7 +147,8 @@ export default class Slider extends Component {
 	 */
 	_onChange(event, value) {
 		this._begin();
-		this.props.onChange(/** @type {number} */ (value));
+		let resolved = this._resolveValue(event, /** @type {number} */ (value));
+		this.props.onChange(resolved);
 	}
 
 	/**
@@ -129,7 +158,8 @@ export default class Slider extends Component {
 	 * @param {number|number[]} value - Scalar configured value.
 	 */
 	_onCommit(event, value) {
-		this.props.onCommit?.(/** @type {number} */ (value));
+		let resolved = this._resolveValue(event, /** @type {number} */ (value));
+		this.props.onCommit?.(resolved);
 		if (event.type !== 'keydown' && event.type !== 'keyup') {
 			this._end();
 		}
@@ -146,6 +176,8 @@ export default class Slider extends Component {
 			id,
 			size,
 			autoFocus,
+			snapPoints,
+			snapRadius,
 			onChange,
 			onCommit,
 			onInteractionStart,

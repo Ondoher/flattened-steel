@@ -26,6 +26,34 @@ function key(node, key, type = 'keydown') {
 	act(() => node.dispatchEvent(new KeyboardEvent(type, {key, bubbles: true, cancelable: true})));
 }
 
+/**
+ * Sends a pointer phase at a value on a real scalar MUI slider.
+ *
+ * @param {Element} root - Mounted MUI slider root.
+ * @param {string} type - Pointer phase.
+ * @param {number} value - Position in the slider's configured domain.
+ * @param {number} [min] - Slider lower bound.
+ * @param {number} [max] - Slider upper bound.
+ */
+function sliderPointer(root, type, value, min = 0, max = 100) {
+	const bounds = root.getBoundingClientRect();
+	const target = type === 'pointerdown' ? root : document;
+	act(() => {
+		target.dispatchEvent(
+			new PointerEvent(type, {
+				bubbles: true,
+				cancelable: true,
+				pointerId: 1,
+				pointerType: 'mouse',
+				button: 0,
+				buttons: type === 'pointerup' ? 0 : 1,
+				clientX: bounds.left + (bounds.width * (value - min)) / (max - min),
+				clientY: bounds.top,
+			}),
+		);
+	});
+}
+
 describe('shared MUI controls', () => {
 	let harness;
 	afterEach(() => harness?.unmount());
@@ -246,6 +274,148 @@ describe('shared MUI controls', () => {
 		expect(ended).toHaveBeenCalledTimes(1);
 	});
 
+	it('snaps a pointer drag near targets and commits the same controlled value', () => {
+		const changed = jasmine.createSpy('changed');
+		const committed = jasmine.createSpy('committed');
+		const ended = jasmine.createSpy('ended');
+		const points = Object.freeze([75, 50, 25]);
+		harness = createTestHarness();
+		const result = harness.render(Slider, {
+			value: 0,
+			step: 0.1,
+			snapPoints: points,
+			snapRadius: 2,
+			onChange: changed,
+			onCommit: committed,
+			onInteractionEnd: ended,
+		});
+		const root = result.query('.MuiSlider-root');
+		sliderPointer(root, 'pointerdown', 49.2);
+		expect(changed).toHaveBeenCalledWith(50);
+		result.rerender({value: 50});
+		sliderPointer(root, 'pointermove', 52.6);
+		expect(changed).toHaveBeenCalledWith(52.6);
+		result.rerender({value: 52.6});
+		sliderPointer(root, 'pointermove', 49.2);
+		result.rerender({value: 50});
+		sliderPointer(root, 'pointerup', 49.2);
+		expect(changed.calls.mostRecent().args).toEqual([50]);
+		expect(committed).toHaveBeenCalledOnceWith(50);
+		expect(result.query('input').valueAsNumber).toBe(50);
+		expect(ended).toHaveBeenCalledTimes(1);
+		expect(points).toEqual([75, 50, 25]);
+		expect(root.hasAttribute('snappoints')).toBeFalse();
+		expect(root.hasAttribute('snapradius')).toBeFalse();
+	});
+
+	it('lets repeated keyboard steps leave a snap point without attraction', () => {
+		const changed = jasmine.createSpy('changed');
+		const committed = jasmine.createSpy('committed');
+		const ended = jasmine.createSpy('ended');
+		harness = createTestHarness();
+		const result = harness.render(Slider, {
+			value: 0,
+			min: -180,
+			max: 180,
+			step: 0.1,
+			snapPoints: [0],
+			snapRadius: 2,
+			onChange: changed,
+			onCommit: committed,
+			onInteractionEnd: ended,
+		});
+		const input = result.query('input');
+		key(input, 'ArrowRight');
+		expect(changed.calls.mostRecent().args).toEqual([0.1]);
+		expect(committed.calls.mostRecent().args).toEqual([0.1]);
+		result.rerender({value: 0.1});
+		key(input, 'ArrowRight');
+		expect(changed.calls.mostRecent().args).toEqual([0.2]);
+		expect(committed.calls.mostRecent().args).toEqual([0.2]);
+		key(input, 'ArrowRight', 'keyup');
+		expect(ended).toHaveBeenCalledTimes(1);
+	});
+
+	it('snaps native touch input and normalizes its committed value', () => {
+		const changed = jasmine.createSpy('changed');
+		const committed = jasmine.createSpy('committed');
+		const ended = jasmine.createSpy('ended');
+		harness = createTestHarness();
+		const result = harness.render(Slider, {
+			value: 0,
+			step: 0.1,
+			snapPoints: [50],
+			snapRadius: 2,
+			onChange: changed,
+			onCommit: committed,
+			onInteractionEnd: ended,
+		});
+		const root = result.query('.MuiSlider-root');
+		const bounds = root.getBoundingClientRect();
+		const touch = new Touch({
+			identifier: 7,
+			target: root,
+			clientX: bounds.left + bounds.width * 0.492,
+			clientY: bounds.top,
+		});
+		act(() => {
+			root.dispatchEvent(
+				new TouchEvent('touchstart', {bubbles: true, touches: [touch], changedTouches: [touch]}),
+			);
+		});
+		expect(changed).toHaveBeenCalledWith(50);
+		result.rerender({value: 50});
+		act(() => document.dispatchEvent(new TouchEvent('touchend', {bubbles: true, changedTouches: [touch]})));
+		expect(committed).toHaveBeenCalledOnceWith(50);
+		expect(ended).toHaveBeenCalledTimes(1);
+	});
+
+	it('preserves externally controlled values and applies updated optional snap settings on input', () => {
+		const changed = jasmine.createSpy('changed');
+		harness = createTestHarness();
+		const result = harness.render(Slider, {
+			value: 50,
+			step: 0.1,
+			snapPoints: [50],
+			onChange: changed,
+		});
+		const root = result.query('.MuiSlider-root');
+		sliderPointer(root, 'pointerdown', 49);
+		sliderPointer(root, 'pointerup', 49);
+		expect(changed).toHaveBeenCalledWith(49);
+		result.rerender({value: 49, snapRadius: 2});
+		expect(result.query('input').valueAsNumber).toBe(49);
+		expect(changed.calls.count()).toBe(1);
+		result.rerender({snapPoints: [25, 75]});
+		sliderPointer(root, 'pointerdown', 74);
+		sliderPointer(root, 'pointerup', 74);
+		expect(changed.calls.mostRecent().args).toEqual([75]);
+		result.rerender({snapRadius: 0});
+		sliderPointer(root, 'pointerdown', 74);
+		sliderPointer(root, 'pointerup', 74);
+		expect(changed.calls.mostRecent().args).toEqual([74]);
+	});
+
+	it('includes the snap boundary and ignores targets outside the permitted slider domain', () => {
+		const changed = jasmine.createSpy('changed');
+		harness = createTestHarness();
+		const result = harness.render(Slider, {
+			value: 40,
+			min: 20,
+			max: 80,
+			snapPoints: [19, 22, 81],
+			snapRadius: 2,
+			onChange: changed,
+		});
+		const root = result.query('.MuiSlider-root');
+		sliderPointer(root, 'pointerdown', 20, 20, 80);
+		sliderPointer(root, 'pointerup', 20, 20, 80);
+		expect(changed.calls.mostRecent().args).toEqual([22]);
+		sliderPointer(root, 'pointerdown', 80, 20, 80);
+		sliderPointer(root, 'pointerup', 80, 20, 80);
+		expect(changed.calls.mostRecent().args).toEqual([80]);
+	});
+
 	it('consumes alternate context at the type-ahead and slider foundations and supports explicit overrides', () => {
 		harness = createTestHarness().withContext({controlSize: 'medium', controlVariant: 'filled'});
 		let result = harness.render(TypeAhead, {
@@ -292,6 +462,8 @@ describe('shared MUI controls', () => {
 		harness = createTestHarness();
 		const result = harness.render(Slider, {
 			value: 0,
+			snapPoints: [50],
+			snapRadius: 5,
 			onChange: changed,
 			onInteractionEnd: ended,
 			onInteractionCancel: cancelled,

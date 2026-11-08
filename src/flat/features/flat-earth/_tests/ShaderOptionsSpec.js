@@ -19,7 +19,7 @@ describe('Flat Earth shader options', () => {
 				atmosphereEnabled: false,
 				sunIlluminationScale: 0,
 				sunDiscBrightnessScale: 1,
-				ambientLightIntensity: 0.03,
+				ambientLightIntensity: mode === 'shader-off' ? 1 : 0.03,
 			});
 			expect(model.getShaderOptions('second').mode).toBe('full');
 		}
@@ -95,7 +95,7 @@ describe('Flat Earth shader options', () => {
 			expect(frame.bindings[SUN_DISC_BRIGHTNESS_SCALE_VALUE_KEY]).toBe(1);
 			expect(frame.bindings[DISPLAY_ADAPTATION_ILLUMINANCE_VALUE_KEY]).toBe(full ? 500 : 0);
 			expect(frame.algorithm.setReceiverLightPresentationScale).toHaveBeenCalledWith(full ? 1 : 0);
-			let expectedAmbient = full ? 0 : mode === 'no-atmosphere' ? 0.0003 : 0.03;
+			let expectedAmbient = full ? 0 : mode === 'no-atmosphere' ? 0.0003 : 1;
 			expect(frame.ambientLight.intensity).toBeCloseTo(expectedAmbient, 12);
 			if (mode === 'no-atmosphere') {
 				expect(frame.color.displayGain).toHaveBeenCalledWith({value: 0, units: 'lux'});

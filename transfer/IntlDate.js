@@ -39,20 +39,20 @@ export default class IntlDate {
 
     daysInMonth() {
         // assume the fewest days
-        var {year = 2001, month = 2} = this.value;
+        let {year = 2001, month = 2} = this.value;
 
         // setting the date to 0 wraps to the end of the previous month.
         // months are zero based, so to know the number of days in the given
         // month there is no need to subtract one, because we want to wrap to
         // the last day in this month.
-        var date = new Date(year, month, 0);
+        let date = new Date(year, month, 0);
 
         return date.getDate();
     }
 
     yearRange() {
-        var minimumAllowedAge = this.config.minimumAllowedAge || 18;
-        var maxYear = new Date().getFullYear() - minimumAllowedAge;
+        let minimumAllowedAge = this.config.minimumAllowedAge || 18;
+        let maxYear = new Date().getFullYear() - minimumAllowedAge;
 
         return {start: 1900, stop: maxYear};
     }
@@ -69,13 +69,13 @@ export default class IntlDate {
     }
 
     makeFormat() {
-        var formatParts = {
+        let formatParts = {
             month: 'MM',
             date: 'DD',
             year: 'YYYY',
         }
-        var { order, separator } = this;
-        var format = order.map(function(part) {
+        let { order, separator } = this;
+        let format = order.map(function(part) {
             return formatParts[part];
         })
 
@@ -83,14 +83,14 @@ export default class IntlDate {
     }
 
     makeSizes() {
-        var sizeParts = {
+        let sizeParts = {
             month: 2,
             date: 2,
             year: 4,
         }
 
-        var { order } = this;
-        var sizes = order.map(function(part) {
+        let { order } = this;
+        let sizes = order.map(function(part) {
             return sizeParts[part];
         })
 
@@ -100,13 +100,13 @@ export default class IntlDate {
     parseInput(value) {
         this.setData();
 
-        var { separator } = this;
-        var endSlash = value.endsWith(separator)
+        let { separator } = this;
+        let endSlash = value.endsWith(separator)
 
         // remove invalid characters
-        var chars = [...'0123456789'];
+        let chars = [...'0123456789'];
         chars.push(separator);
-        var valueChars = [...value];
+        let valueChars = [...value];
         valueChars = valueChars.filter(function(value) {
             return chars.includes(value);
         })
@@ -117,15 +117,15 @@ export default class IntlDate {
         }
 
         // get at most three segments of the given date, ignore the rest
-        var parts = valueChars.join('').split(separator);
+        let parts = valueChars.join('').split(separator);
         parts = parts.slice(0, 3);
 
         // constrain and expand all but the last segment
-        var partsCount = parts.length;
-        var lastPart = parts.pop();
-        var sizes = this.makeSizes();
+        let partsCount = parts.length;
+        let lastPart = parts.pop();
+        let sizes = this.makeSizes();
 
-        var formatted = parts.map(function(part, idx) {
+        let formatted = parts.map(function(part, idx) {
             part = part.slice(0, sizes[idx]);
             if (part.length < sizes[idx])
                 part = part.padStart(sizes[idx], '0');
@@ -145,11 +145,11 @@ export default class IntlDate {
 
         // put it all back together, remove a trailing separator when the number
         // of segments has been reached
-        var str = formatted.join(separator) + (value.endsWith(separator) && partsCount < 3 ? separator : '');
+        let str = formatted.join(separator) + (value.endsWith(separator) && partsCount < 3 ? separator : '');
 
         // add the trailing separator if needed
         this.parse(str);
-        var newParts = str.split(separator);
+        let newParts = str.split(separator);
         if (endSlash && !str.endsWith(separator) && newParts.length < 3) str += separator;
 
         return str;
@@ -158,9 +158,9 @@ export default class IntlDate {
     parse(value) {
         this.setData();
 
-        var { order, separator } = this;
+        let { order, separator } = this;
 
-        var parts = value.split(separator);
+        let parts = value.split(separator);
         parts = parts.slice(0, 3);
 
         parts.forEach(function(part, idx) {
@@ -178,13 +178,13 @@ export default class IntlDate {
             this.locale = this.localize.getLocale();
         }
 
-        var { order, separator } = this;
-        var sizes = this.makeSizes();
+        let { order, separator } = this;
+        let sizes = this.makeSizes();
 
         return order.reduceRight(function(str, name, idx) {
-            var value = this.value[name]
+            let value = this.value[name]
             if (value === 0 && str === '') return str;
-            var segment = idx !== 0 ? separator : '';
+            let segment = idx !== 0 ? separator : '';
             segment += String(value).padStart(sizes[idx], '0');
             str = segment + str;
 
@@ -197,10 +197,10 @@ export default class IntlDate {
     }
 
     getDate() {
-        var {year = 0, month = 0, date = 0} = this.value;
+        let {year = 0, month = 0, date = 0} = this.value;
         if (year === 0 && month === 0 && date === 0) return undefined;
         if (year === 0 || month === 0 || date === 0) return new Date(NaN);
-        var valueDate = new Date(Date.UTC(year, month - 1, date));
+        let valueDate = new Date(Date.UTC(year, month - 1, date));
 
         if (isNaN(valueDate.getTime())) return valueDate;
         if (valueDate.getUTCFullYear() !== year || (valueDate.getUTCMonth() + 1) !== month || valueDate.getUTCDate() !== date) return new Date(NaN);
@@ -209,11 +209,11 @@ export default class IntlDate {
     }
 
     getLongForm() {
-        var date = this.getDate();
-        var language = this.locale.split('-u-')[0];
+        let date = this.getDate();
+        let language = this.locale.split('-u-')[0];
 
         if (isNaN(date.getTime()) || date === undefined) return this.toString();
-        var options = { timeZone: 'UTC', year: 'numeric', month: 'long', day: 'numeric'};
+        let options = { timeZone: 'UTC', year: 'numeric', month: 'long', day: 'numeric'};
         return date.toLocaleDateString(language, options);
     }
 

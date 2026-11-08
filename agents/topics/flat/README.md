@@ -32,9 +32,9 @@ Sun illumination to 0% and retain disc brightness at 100%; Full restores physica
 lighting. No atmosphere keeps celestial/color composition; Shader off renders
 the underlying Three scene directly. The mode survives physical observation
 updates and renderer retry without changing the physical cache configuration.
-Atmosphere-disabled modes also provide a dim neutral ambient fill so the ground
-is visible; composed rendering compensates the existing display gain. Full
-removes that presentation fill.
+Shader off provides neutral white ambient lighting at intensity 1. No atmosphere
+retains its dim fill with display-gain compensation. Full removes the presentation
+fill and restores physical lighting.
 
 The [stellar integration](stars.md) adds Flat32's authenticated brightest-2,000
 catalog to Flat Earth through Flat-owned app-relative asset routing. Views share

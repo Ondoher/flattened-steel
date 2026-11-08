@@ -44,14 +44,13 @@ export default class ViewportFrame extends Component {
 	/**
 	 * Owns the scene command without identifying any concrete page feature.
 	 *
-	 * @param {string} view - Prepared accessible view name.
 	 * @returns {React.ReactNode} - Registered-scene icon menu, when pages exist.
 	 */
-	_renderSceneSelector(view) {
+	_renderSceneSelector() {
 		if (!this.props.pages.length) {
 			return null;
 		}
-		let label = {phrase: 'workspace.scene-for', replacements: {view}};
+		let label = 'workspace.choose-scene';
 		let icon = <PublicOutlined />;
 		let options = this._renderSceneOptions();
 		let value = this.props.viewport.pageId ?? '';
@@ -119,7 +118,7 @@ export default class ViewportFrame extends Component {
 		if (this.props.number === 1) {
 			return null;
 		}
-		let label = {phrase: 'workspace.close-view-number', replacements: {number: this.props.number}};
+		let label = 'workspace.close-view';
 		let icon = <Close />;
 		return (
 			<IconButton
@@ -155,7 +154,7 @@ export default class ViewportFrame extends Component {
 					{label}
 				</h2>
 				<Toolbar className="viewport-toolbar" role="toolbar" aria-label={label}>
-					{this._renderSceneSelector(label)}
+					{this._renderSceneSelector()}
 					{leadingDivider}
 					{this._renderTools()}
 					{settingsDivider}

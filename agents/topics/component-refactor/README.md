@@ -88,6 +88,13 @@ The owner identified these common controls:
 
 Common controls belong under `src/flat/components`.
 
+The shared Slider supports optional `snapPoints` and `snapRadius` for magnetic
+pointer/touch snapping, with precise keyboard movement and consistent commits.
+The [adaptation note](slider-snapping-assessment.md) owns the contract, upstream
+findings and verification. Flat Earth's
+[Sun-position editor](../flat/flat-earth-time-input.md#sun-position-snapping)
+supplies its own snap policy; other callers remain opt-in.
+
 ### Format-Hint Input
 
 The owner's transferred Date control is the source for the in-field format
@@ -260,6 +267,14 @@ ViewportFrame uses the shared Toolbar for scene, contributed feature controls
 and view settings. The optional-view Close action stays outside horizontal
 overflow. The accessible view heading is retained; collapse and second-row
 controls are removed.
+
+Numbered View labels are omitted from visible controls and tooltips. Scene
+choice uses the generic Choose a scene command; optional closure uses Close
+view. Configuration scope choices display the registered scene label without
+a View-number prefix. Hidden semantic headings retain distinct view names;
+scope values and action routing still use exact view identities.
+Label cleanup passes Flat types, all 224 existing browser tests, scoped formatting
+and the production build; evidence is under `.codex-tmp/remove-view-labels/`.
 
 FlatEarthViewTools contributes Sky, elevation, vertical FOV, the clock and
 Center on Sun. Controlled menus retain selected/custom/pending values. The

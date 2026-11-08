@@ -98,7 +98,52 @@ describe('Flat Earth shared MUI consumer controls', () => {
 		}
 		expect(view.endTimeEdit).toHaveBeenCalledTimes(1);
 	});
+
+	it('snaps the Sun-position slider every 45 degrees in both toolbar and configuration editors', () => {
+		for (const panel of [false, true]) {
+			const view = timeView();
+			const harness = createTestHarness().withLocale('en-US');
+			try {
+				const result = harness.render(FlatEarthTimeControls, {owner: 'view-1', sceneView: view, panel});
+				if (!panel) {
+					harness.click(result.query('.flat-time-clock'));
+				}
+				const root = result.queryDocument('.flat-time-slider .MuiSlider-root');
+				for (const target of [-180, -135, -90, -45, 0, 45, 90, 135, 180]) {
+					const nearby = target === 180 ? target - 1.5 : target + 1.5;
+					seekSlider(root, nearby);
+					expect(view.seekTime.calls.mostRecent().args).toEqual(['view-1', 7, target]);
+				}
+				seekSlider(root, 22.5);
+				expect(view.seekTime.calls.mostRecent().args).toEqual(['view-1', 7, 22.5]);
+			} finally {
+				harness.unmount();
+			}
+		}
+	});
 });
+
+/**
+ * Sends one native MUI pointer gesture at a signed Sun-position angle.
+ *
+ * @param {Element} root - Mounted slider root in either editor placement.
+ * @param {number} angle - Requested raw pointer angle.
+ */
+function seekSlider(root, angle) {
+	const bounds = root.getBoundingClientRect();
+	const coordinates = {
+		bubbles: true,
+		pointerId: 1,
+		pointerType: 'mouse',
+		button: 0,
+		clientX: bounds.left + (bounds.width * (angle + 180)) / 360,
+		clientY: bounds.top,
+	};
+	act(() => {
+		root.dispatchEvent(new PointerEvent('pointerdown', {...coordinates, buttons: 1}));
+		document.dispatchEvent(new PointerEvent('pointerup', {...coordinates, buttons: 0}));
+	});
+}
 
 /**
  * Creates an explicit time-view fixture for popup lifetime and navigation checks.

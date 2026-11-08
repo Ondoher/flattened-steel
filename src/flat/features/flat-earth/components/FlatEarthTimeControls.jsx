@@ -9,6 +9,26 @@ import React, {Component} from 'react';
 import AppContext from '../../../common/AppContext.js';
 
 /**
+ * Spacing of the alternate time editor's snap points; change to 15 for finer stops.
+ */
+const SUN_POSITION_SNAP_INTERVAL_DEGREES = 45;
+
+/**
+ * Attraction distance in degrees, preserving free movement between snap points.
+ */
+const SUN_POSITION_SNAP_RADIUS_DEGREES = 2;
+
+/**
+ * Shared immutable presentation targets across the complete signed angular range.
+ */
+const SUN_POSITION_SNAP_POINTS = Object.freeze(
+	Array.from(
+		{length: 360 / SUN_POSITION_SNAP_INTERVAL_DEGREES + 1},
+		(_, index) => -180 + index * SUN_POSITION_SNAP_INTERVAL_DEGREES,
+	),
+);
+
+/**
  * Presents shared time through the owning feature view, in a toolbar or configuration.
  *
  * @extends {Component<FlatEarthTimeProps, FlatEarthTimeControlState>}
@@ -265,6 +285,8 @@ export default class FlatEarthTimeControls extends Component {
 						min={-180}
 						max={180}
 						step={0.1}
+						snapPoints={SUN_POSITION_SNAP_POINTS}
+						snapRadius={SUN_POSITION_SNAP_RADIUS_DEGREES}
 						autoFocus={autoFocus}
 						value={value}
 						disabled={disabled}
