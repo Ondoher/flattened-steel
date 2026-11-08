@@ -163,6 +163,9 @@ describe('workspace React frame', () => {
 					component: (
 						<div data-settings-focus="editor" tabIndex={-1}>
 							<input disabled />
+							<div style={{visibility: 'hidden'}}>
+								<input />
+							</div>
 							<details>
 								<summary>Coordinates</summary>
 								<input />

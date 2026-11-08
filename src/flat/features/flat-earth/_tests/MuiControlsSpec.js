@@ -3,6 +3,9 @@ import FlatEarthTimeControls from '../components/FlatEarthTimeControls.jsx';
 import {FlatEarthTimeModel} from '../models/FlatEarthTimeModel.js';
 import {Registry} from '@polylith/core';
 import {createTestHarness} from '../../../testing/TestHarness.js';
+import {act} from 'react';
+import {createTranslator} from '../../../services/localize.js';
+import phrases from '../../../phrases/en-US.json';
 
 describe('Flat Earth shared MUI consumer controls', () => {
 	it('represents custom camera values and sends numeric changes to the exact view', async () => {
@@ -10,7 +13,7 @@ describe('Flat Earth shared MUI consumer controls', () => {
 			status: 'ready',
 			renderedObservation: {},
 			shader: {mode: 'full'},
-			camera: {observerHeightMeters: 321, pendingHeightMeters: null, fieldOfViewDegrees: 42},
+			camera: {observerHeightMeters: 5, pendingHeightMeters: 321, fieldOfViewDegrees: 42},
 		};
 		let view = {
 			...timeView(),
@@ -134,7 +137,7 @@ async function waitUntil(predicate) {
 		if (predicate()) {
 			return;
 		}
-		await new Promise((resolve) => setTimeout(resolve, 20));
+		await act(async () => new Promise((resolve) => setTimeout(resolve, 20)));
 	}
 	throw new Error('Expected popup transition did not complete.');
 }
@@ -186,7 +189,59 @@ describe('Flat Earth clock popup lifetime', () => {
 		harness.click(result.query('button'));
 		harness.click(result.queryDocument('.flat-time-settings'));
 		harness.unmount();
-		await new Promise((resolve) => setTimeout(resolve, 300));
+		await act(async () => new Promise((resolve) => setTimeout(resolve, 300)));
 		expect(view.openTimeSettings).not.toHaveBeenCalled();
+	});
+
+	it('cancels pending navigation if the clock reopens before its prior exit completes', async () => {
+		const view = timeView();
+		harness = createTestHarness().withLocale('en-US');
+		const result = harness.render(FlatEarthTimeControls, {owner: 'view-1', sceneView: view});
+		harness.click(result.query('button'));
+		harness.click(result.queryDocument('.flat-time-settings'));
+		harness.click(result.query('button'));
+		expect(result.queryDocument('.flat-time-popup')).toBeTruthy();
+		harness.click(result.queryDocument('.MuiBackdrop-root'));
+		await waitUntil(() => !result.queryDocument('[role="dialog"]'));
+		expect(view.openTimeSettings).not.toHaveBeenCalled();
+	});
+
+	it('releases the original owner and cancels pending navigation when the view changes', async () => {
+		const original = timeView();
+		const replacement = timeView();
+		harness = createTestHarness().withLocale('en-US');
+		const result = harness.render(FlatEarthTimeControls, {owner: 'view-1', sceneView: original});
+		harness.click(result.query('button'));
+		harness.key(result.queryDocument('input[type="range"]'), 'ArrowRight');
+		harness.click(result.queryDocument('.flat-time-settings'));
+		result.rerender({owner: 'view-2', sceneView: replacement});
+		await act(async () => new Promise((resolve) => setTimeout(resolve, 300)));
+		expect(original.endTimeEdit).toHaveBeenCalledOnceWith('view-1', 7);
+		expect(original.unlisten).toHaveBeenCalledOnceWith('time-changed', 1);
+		expect(original.openTimeSettings).not.toHaveBeenCalled();
+		expect(replacement.openTimeSettings).not.toHaveBeenCalled();
+		expect(result.queryDocument('.flat-time-popup')).toBeNull();
+		harness.click(result.query('button'));
+		harness.key(result.queryDocument('input[type="range"]'), 'ArrowRight');
+		expect(replacement.beginTimeEdit).toHaveBeenCalledOnceWith('view-2');
+	});
+
+	it('retains a bounded popup and readable slider with long translated copy', () => {
+		harness = createTestHarness();
+		const translations = {
+			...phrases,
+			'flat-earth.time.title': 'A substantially longer localized name for the shared time command',
+			'flat-earth.time.shared': 'A longer description of the time shared between application views',
+			'flat-earth.time.settings': 'Open the detailed shared-time configuration',
+			'flat-earth.time.degrees-closest': 'Degrees before or after the closest approach of the Sun',
+		};
+		harness.context.localize.translators.set('fr-CA', createTranslator('fr-CA', translations));
+		harness.withLocale('fr-CA');
+		const result = harness.render(FlatEarthTimeControls, {owner: 'view-1', sceneView: timeView()});
+		harness.click(result.query('button'));
+		const popup = result.queryDocument('.app-interactive-panel');
+		expect(popup.getBoundingClientRect().right).toBeLessThanOrEqual(window.innerWidth - 15);
+		expect(popup.scrollWidth).toBeLessThanOrEqual(popup.clientWidth + 1);
+		expect(result.queryDocument('.flat-time-slider').getBoundingClientRect().width).toBeGreaterThan(200);
 	});
 });

@@ -5,7 +5,8 @@ authorization. Shared MUI controls are used throughout the app's existing
 control positions and nonmodal configuration surfaces. The
 [execution record](mui-migration-execution.md) owns verification and scoped
 local checkpoints. The [saved migration plan](mui-migration-plan.md) is complete.
-Toolbar implementation is complete through M2, with final M3 verification next.
+Toolbar implementation is complete through M3. Types, 218 built-in browser tests,
+the normal production build and final actual-app checks pass.
 The [toolbar implementation plan](toolbar-implementation-plan.md) now owns its
 execution sequence and interaction defaults. The owner authorized independent
 execution; the [toolbar execution record](toolbar-implementation-execution.md)
@@ -15,7 +16,7 @@ Focus: the [toolbar refactor notes](toolbar-refactor.md) own the selected
 icon-only direction and seven MUI icons. Time uses AccessTime: the slider is
 alternate time entry. The [earlier review](toolbar-design-review.md) preserves
 preceding UX/UI advice and comps. The single-row toolbar is now implemented;
-final narrow-layout and lifecycle verification remains.
+narrow-layout and lifecycle verification is complete.
 These are controls and control containers, not full-page components.
 
 ## Localization Boundary
@@ -77,12 +78,13 @@ The owner identified these common controls:
 | --------------------------- | ----------------------------------------------------------- | ---------------------------------------------------------------------- |
 | Button                      | Shared Button over maintained BaseButton                    | Common button presentation and interaction                             |
 | Type ahead                  | Shared TypeAhead; CityPicker supplies prepared city results | Reusable controlled type-ahead presentation                            |
-| Toolbar                     | Shared Toolbar available; existing workspace hosts retained | Common toolbar container for later toolbar conversion                  |
+| Toolbar                     | Shared Toolbar used by ViewportFrame                        | Common single-row toolbar container                                    |
 | Time                        | Shared MUI TimeField                                        | Reusable local-format time entry                                       |
 | Date                        | Shared MUI DateField                                        | Reusable local-format date entry                                       |
 | Format-hint input           | Shared FormatHintInput over BaseTextInput                   | Generic text entry with a persistent expected-format adornment         |
 | Slider                      | Shared Slider used by FlatEarthTimeControls                 | Reusable slider presentation and interaction                           |
-| Text-and-arrow panel button | Shared PanelButton available; adoption deferred             | Open and close a small interactive panel from a labeled toolbar button |
+| Interactive panel button    | Shared PanelButton with text/arrow and icon triggers         | Open a small MUI-managed interactive popup                              |
+| Icon button and icon menu   | Shared IconButton and controlled IconMenuButton              | Named commands and selected choices                                    |
 
 Common controls belong under `src/flat/components`.
 
@@ -120,7 +122,7 @@ configuration input widths and existing Popover autofocus. Evidence is under
 ### Panel Button
 
 PanelButton composes a
-shared Button trigger and MUI Popover. Its transient anchor comes from the
+shared text or icon trigger and MUI Popover. Its transient anchor comes from the
 trigger's click event; visibility is derived from that anchor. MUI owns the
 Paper surface, backdrop dismissal, Escape handling, focus boundary and focus
 restoration. There are no control-owned element refs, DOM queries or manual
@@ -233,14 +235,13 @@ Theme/provider integration is enabling infrastructure at the application root;
 it does not require replacing the surrounding page components. Build upward
 from the maintained base controls to shared and configuration-specific controls,
 including Date, Time, TypeAhead and CityPicker. Toolbars, configuration surfaces
-and broader workspace chrome follow their contained controls. The single-line
-Flat toolbar redesign remains later work. The saved migration plan turns this
-direction into milestones; M0–M4 are now complete.
+and broader workspace chrome follow their contained controls. The saved migration plan records this sequence; M0–M4 are complete. The
+separately authorized toolbar plan adopts the shared controls into the compact
+view toolbar.
 
-During this plan, convert controls hosted by the current toolbars in place
-while preserving their containers, rows, grouping and layout. Build the common
-Toolbar and interactive panel-button controls, but adopt them into the actual
-toolbars and relocate the Sun slider only in the deferred toolbar conversion.
+The completed migration retained control positions. The toolbar implementation
+now supplies the single row and relocates the alternate time slider into its
+clock popup, retaining the configuration editor.
 
 ## Deferred Rule Promotion
 
@@ -254,38 +255,24 @@ separate from these six local additions.
 
 ## Flat Toolbar Direction
 
-The control migration is complete. This section owns the remaining-toolbar
-inventory; implementing it requires a separately selected task.
-The [toolbar design review](toolbar-design-review.md) contains the requested
-standalone UX/UI advice and subsequent comps. The owner's newer icon-only
-direction supersedes their persistent value labels and combined compact panel;
-the [toolbar refactor notes](toolbar-refactor.md) own the selected icons and
-current direction.
+The [toolbar refactor notes](toolbar-refactor.md) own the selected seven icons.
+ViewportFrame uses the shared Toolbar for scene, contributed feature controls
+and view settings. The optional-view Close action stays outside horizontal
+overflow. The accessible view heading is retained; collapse and second-row
+controls are removed.
 
-| Existing host                  | Current controls                                                                   | Remaining conversion                                                                     |
-| ------------------------------ | ---------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
-| WorkspaceToolbar               | Shared location/time summaries and MUI app actions                                 | Decide use of the shared Toolbar container while retaining workspace ownership           |
-| ViewportFrame                  | MUI scene selector, page settings, collapse and close actions                      | Compose the selected single-line layout without changing view lifetimes                  |
-| FlatEarthViewTools             | MUI Sky, elevation, FOV and Center on Sun                                          | Fit feature controls into the chosen toolbar arrangement                                 |
-| FlatEarthTimeControls          | Shared inline Slider and settings shortcut; settings retains slider/numeric editor | Move the toolbar's Sun editor into shared PanelButton; retain shared timestamp ownership |
-| Shared Toolbar and PanelButton | Implemented and independently verified                                             | Adopt them into the chosen hosts; no new primitive is required                           |
+FlatEarthViewTools contributes Sky, elevation, vertical FOV, the clock and
+Center on Sun. Controlled menus retain selected/custom/pending values. The
+clock opens FlatEarthTimeControls in PanelButton; configuration retains the
+full slider and numeric editor. Location and timestamp remain shared, while
+camera and Sky choices remain per view. Workspace identifies no Flat controls.
 
-The owner wants all Flat page controls to fit on a single-line toolbar. The
-toolbar redesign follows cleanup of the common controls; it is not the first
-refactoring step.
-
-The earlier text-and-arrow trigger is superseded by the owner's proposal for
-icon buttons opening choices. The user does not need persistent view, Sky,
-elevation or FOV readouts; common date/time already appears in the app bar.
-The selected clock icon opens an interactive panel for the degrees-from-closest
-alternate time editor, which updates shared time for both views. The existing shared popup
-controls remain implementation resources; no icon-trigger adaptation is
-implemented by this design discussion.
-
-Toolbar grouping, dropdown affordances, panel placement/dismissal,
-simultaneous-open behavior and narrow-screen handling remain to be discussed.
-The single-line toolbar is the design goal; those details have not been
-accepted implicitly.
+MUI owns popup modality, dismissal and focus restoration. Pending configuration
+navigation waits for transition/focus cleanup and is cancelled on reopening or
+owner removal. The missing-location clock offers location editing. Narrow
+views scroll the same command row; existing workspace stacking below 1000px
+is retained. Verification and its limits belong to the
+[toolbar execution record](toolbar-implementation-execution.md).
 
 ## Existing Implementation References
 
@@ -306,19 +293,13 @@ accepted implicitly.
 
 ## Continuity
 
-This entry owns requirements and decisions; the saved migration plan owns the
-implementation sequence. Keep the existing appearance and behavior as the
-baseline, including the current toolbar arrangement. Continue using the
-application's CSS variables while integrating the selected MUI foundation.
-Folder-mapped React/ReMVC and local authoring rules remain applicable; topics
-do not select standards.
+This entry owns current control contracts; the toolbar notes own icon direction,
+and the saved plans/execution records own milestones and evidence. Continue
+using AppContext defaults and the application's CSS-variable theme. Folder-mapped
+React/ReMVC and local authoring rules apply; topics do not select standards.
 
-The completed whole-repository checkpoint preserves the toolbar notes/icons,
-stellar/human-presentation integration, shader modes, dim ground fill, per-view
-collapse, city update and transferred reference files. Current uncommitted work
-contains the localization boundary and authored control cleanup described above;
-the earlier M4 source baseline does not cover these changes. Toolbar
-implementation has not started.
-Engineering standards review remains owner-cancelled;
-the topic change does not restart it. Checkpoint-adviser monitoring remains
-active. The dome-cache experiment remains suspended.
+The owner's localization-service edit is preserved. The transferred IntlDate
+parser adaptation and utility/model classification corrections remain deferred.
+Models are exclusively services. Engineering standards review remains
+owner-cancelled; checkpoint-adviser monitoring remains active. The dome-cache
+experiment remains suspended.

@@ -1,10 +1,10 @@
 # Flat Toolbar Refactor
 
-Status: owner-selected direction and icons, recorded 2026-11-07. These are
-concise refactor notes; application implementation has not started.
-The [implementation plan](toolbar-implementation-plan.md) owns the proposed
-milestones and fills the remaining interaction details as explicit planning
-defaults. Its creation does not authorize execution.
+Status: implemented and verified through M3 under the owner's independent-execution
+selection on 2026-11-08. The
+[implementation plan](toolbar-implementation-plan.md) owns milestones and
+interaction defaults; the [execution record](toolbar-implementation-execution.md)
+owns decisions, checks, captures and local checkpoints.
 
 ## Direction
 
@@ -31,7 +31,7 @@ are superseded by this direction.
 | ![View settings](assets/toolbar-icons/Tune.svg)              | View settings | `Tune`                | Open settings for this view.                   |
 
 These are the selected components from [MUI Material Icons](https://mui.com/material-ui/material-icons/).
-The previews above are documentation assets; implementation should use the MUI
+The previews above are documentation assets; implementation uses the MUI
 components.
 
 ## Time and Scope
@@ -54,9 +54,9 @@ Sun keeps its target icon so it is distinct from time entry.
   controls through the existing contribution interfaces.
 - Move the inline time slider into its popup; keep accepted timestamp ownership,
   gesture behavior and scene resources intact.
-- Final grouping, popup/dropdown details, collapse disposition and behavior at
-  narrower widths remain to be settled. These notes do not authorize those
-  implementation choices implicitly.
+- The authorized plan supplies grouping and native modal popup behavior. Collapse
+  is removed; narrow toolbars scroll horizontally with Close outside overflow.
+  Existing responsive workspace stacking remains unchanged.
 
 The [earlier review and comps](toolbar-design-review.md) remain exploratory
 references. This document owns the current toolbar direction and selected icons.

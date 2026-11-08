@@ -452,7 +452,11 @@
 	min-width: 0;
 	max-width: 100%;
 	overflow-x: auto;
+	scroll-padding-inline: 18px;
 	scrollbar-width: thin;
+}
+.viewport-toolbar button {
+	scroll-margin-inline: 18px;
 }
 .viewport-toolbar > * {
 	flex: 0 0 auto;

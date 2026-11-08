@@ -101,7 +101,7 @@ export default class ConfigurationPanel extends Component {
 	 */
 	_findInput(region) {
 		let inputs = /** @type {NodeListOf<HTMLInputElement>} */ (region.querySelectorAll('input:not([disabled])'));
-		return Array.from(inputs).find((input) => input.checkVisibility());
+		return Array.from(inputs).find((input) => input.checkVisibility({visibilityProperty: true}));
 	}
 
 	/**

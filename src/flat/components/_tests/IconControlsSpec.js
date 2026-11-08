@@ -51,4 +51,27 @@ describe('shared toolbar icon controls', () => {
 		expect(changed).toHaveBeenCalledOnceWith(5);
 		expect(result.query('button').getAttribute('aria-expanded')).toBe('false');
 	});
+
+	it('retains disabled choices and updates the selected item from its caller while open', () => {
+		harness = createTestHarness().withLocale('en-US');
+		const changed = jasmine.createSpy('changed');
+		const result = harness.render(IconMenuButton, {
+			label: 'flat-earth.shader.label',
+			icon: <AccessTime />,
+			value: 'full',
+			options: [
+				{value: 'full', label: 'flat-earth.shader.full'},
+				{value: 'shader-off', label: 'flat-earth.shader.off', disabled: true},
+			],
+			onChange: changed,
+		});
+		harness.click(result.query('button'));
+		const disabled = result.queryDocument('[data-value="shader-off"]');
+		expect(disabled.getAttribute('aria-disabled')).toBe('true');
+		harness.click(disabled);
+		expect(changed).not.toHaveBeenCalled();
+		result.rerender({value: 'shader-off'});
+		expect(disabled.getAttribute('aria-checked')).toBe('true');
+		expect(result.queryDocument('[data-value="full"]').getAttribute('aria-checked')).toBe('false');
+	});
 });

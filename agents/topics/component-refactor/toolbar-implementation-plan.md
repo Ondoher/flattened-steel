@@ -1,7 +1,7 @@
 # Flat Page Icon Toolbar Implementation
 
 Status: execution authorized through independent-execution on 2026-11-08;
-M1–M2 complete; M3 verification next. See the [execution record](toolbar-implementation-execution.md).
+M1–M3 complete and verified. See the [execution record](toolbar-implementation-execution.md).
 Owner request: 2026-11-08.
 
 ## Outcome And Starting Point
@@ -209,27 +209,27 @@ is required for these closely related host/feature changes.
 Purpose: verify appearance, lifetime safety and integration across the completed
 toolbar. Depends on M2; it is not another design or standards-review pipeline.
 
-- [ ] Exercise single view, two views, configuration open, no location, pending
+- [x] Exercise single view, two views, configuration open, no location, pending
       height, unsupported/custom presets, long translated labels and narrow widths.
       Start with 1440px single view, 1440px two views, 800px two views and a 360px
       window; record the actual per-view width rather than relying on window size.
-- [ ] Verify mouse and keyboard invocation, selected menu items, Escape/backdrop,
+- [x] Verify mouse and keyboard invocation, selected menu items, Escape/backdrop,
       slider keyboard/pointer cancellation, open-popup page replacement and closing
       a view mid-edit. Check exactly-once gesture release and listener cleanup.
-- [ ] Verify settings navigation after popup dismissal, nested interactive
+- [x] Verify settings navigation after popup dismissal, nested interactive
       content and semantic names; respect MUI focus/backdrop behavior. Cover pending
       navigation cancellation on owner change/reopening, and settings already open.
       Check disabled choices, native data-view-id routing, selected-choice semantics,
       long translated popup copy and no seek after dismissal starts.
-- [ ] Run Flat types, the existing browser suite and normal
+- [x] Run Flat types, the existing browser suite and normal
       `polylith build flat`. Reuse earlier results only if their source/contracts
       remain applicable; rerun affected checks after fixes.
-- [ ] Inspect actual rendered single/two-view and narrow appearances. Capture
+- [x] Inspect actual rendered single/two-view and narrow appearances. Capture
       only the useful final examples proving one-row composition, popup geometry,
       focus visibility and overflow; keep explanations and results in text.
-- [ ] Review removed CSS/props and source references for obsolete toolbar
+- [x] Review removed CSS/props and source references for obsolete toolbar
       remnants; preserve other shared consumers and owner edits.
-- [ ] Update the topic's current state, source contracts and execution record,
+- [x] Update the topic's current state, source contracts and execution record,
       and request the existing checkpoint adviser's milestone assessment. A commit
       requires its own authorization; there is no push/publication in this plan.
 

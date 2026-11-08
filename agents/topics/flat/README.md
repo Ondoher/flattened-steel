@@ -6,7 +6,7 @@ own the selected workspace behavior and scaffold options. Flat32 remains the
 separate integration test bed.
 
 The [Component Refactor topic](../component-refactor/README.md) owns the current
-shared-control cleanup and the later single-line Flat page toolbar direction.
+shared controls and the implemented single-line Flat page toolbar.
 
 The [workspace comps implementation](workspace-comps-execution.md) is complete
 through the owner-authorized independent-execution run. The app now has shared
@@ -98,17 +98,15 @@ Workspace data and presentation contracts are in the feature's types.d.ts;
 public service declarations remain beside their implementations. Common app
 context and page-catalog metadata stay in src/flat/common/types.d.ts.
 
-Each view header has a [collapse control](controls-collapse.md) that leaves its
-scene selector and Page settings visible while hiding both contributed tool
-rows. Hidden controls and the scene remain mounted, preserving drafts, selections
-and graphics lifetime. Collapse is transient presentation state, independent
-for each view; expanding restores the same controls.
+Each view uses the [single-row icon toolbar](../component-refactor/README.md#flat-toolbar-direction).
+That current contract supersedes the historical [collapse control](controls-collapse.md).
 
 Base CSS variables in src/flat/styles/app.css define background #121212 and
 text/borders #F2F2F2. The action token currently uses #ABD3FA as an explicitly
 provisional visual approximation of the owner's blue swatch; its exact source
 RGB is still unrecorded. Action fills use dark text for legibility. Component
-layout is feature-owned CSS, and no MUI dependency is introduced.
+layout is feature-owned CSS, with the shared MUI theme and controls described by
+the [Component Refactor topic](../component-refactor/README.md).
 Workspace styles are declared by features/workspace/build.json, copied to
 features/workspace/styles/workspace.css beneath the app output, and linked by
 the generated HTML after styles/app.css. Feature activation imports JavaScript

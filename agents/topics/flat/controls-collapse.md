@@ -1,6 +1,10 @@
 # Per-view Control Collapse
 
-Status: implemented and locally verified.
+Status: superseded by the [single-row icon toolbar](../component-refactor/toolbar-implementation-plan.md)
+on 2026-11-08. The collapse control, state and second-row styles are removed.
+The material below preserves historical implementation and verification evidence.
+
+## Historical Implementation
 
 The owner requested a collapse button that shows only the top view-control
 row. Each generic ViewportFrame now has a compact up/down triangle button,
