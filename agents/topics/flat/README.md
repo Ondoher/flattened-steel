@@ -54,6 +54,21 @@ placement, Sun generation and receiver lighting still update coherently. FOV's
 existing projection/redraw path is preserved. The execution record owns its
 performance comparison, physical/visual equivalence and lifecycle evidence.
 
+The [Sun-slider latency profile](sun-slider-performance.md) records the baseline
+pointer-to-scene cost and the owner-directed removal of repeated full-profile
+hash checks for engine-owned observation updates. It owns the comparative
+measurements and retained validation boundaries.
+
+The [owned-content validation audit](owned-content-validation-audit.md) identifies
+remaining repeated catalog scans, receiver-measurement reconstruction and
+frame/observation checks. It records real per-update call counts and distinguishes
+owned-content reuse from external-input, numerical and lifecycle boundaries.
+The [cleanup plan](owned-content-cleanup-plan.md) covers all findings in five
+milestones, from static catalog acceptance through integrated verification.
+All five milestones are complete under independent-execution. The
+[execution record](owned-content-cleanup-execution.md) owns the changes, boundary
+decisions, passing checks and measured performance, including timing variability.
+
 ## Current Scope
 
 The owner-authorized first workspace pass is implemented on 2026-10-29. The

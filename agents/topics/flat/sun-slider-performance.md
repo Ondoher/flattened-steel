@@ -4,6 +4,10 @@ Status: engine-owned observation updates no longer repeat full-profile hash
 checks. The owner requested this change on 2026-11-08; implementation and
 comparative verification are complete. The pre-change baseline is preserved below.
 
+The subsequent [owned-content cleanup](owned-content-cleanup-execution.md) is
+also complete and owns the latest implementation and measurements. This note
+preserves the original diagnosis and the isolated full-profile-check removal.
+
 The baseline slider's input handler is quick. Most delay occurred in the retained physical
 observation preparation path, especially synchronous construction-profile
 serialization/hashing. Receiver lighting is another significant cost. Scene,
@@ -57,12 +61,13 @@ no shader programs or replacement canonical cache entries. No pixel or
 receiver-radiance equivalence campaign was performed; the change removes pure
 integrity rescans and leaves the numerical preparation/sampling code unchanged.
 
-Current Full-mode runtime preparation is about 117 ms; remaining work includes
+After the isolated profile-check removal, Full-mode runtime preparation was
+about 117 ms; remaining work at that stage included
 about 52 ms constructing the live profile (including its initial identity),
 35 ms measuring receiver lighting, and other facade/publication work. This
 change does not remove initial identity construction or the 30 GPU readbacks.
 
-Current evidence is under `.codex-tmp/profile-hash-removal/`: `comparison.json`,
+Profile-check-removal evidence is under `.codex-tmp/profile-hash-removal/`: `comparison.json`,
 the current `report.json`, `gpu-profile` log/result, type/test/build logs and
 the preserved starting patch/HEAD. The GPU probe took 69.3 seconds including
 cold warm-ups, which are excluded from the latency medians. Disposable browser

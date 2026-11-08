@@ -1,6 +1,6 @@
 # Remove Repeated Validation Of Owned Rendering Content
 
-Status: executing under the owner's independent-execution request on 2026-11-08.
+Status: M1–M5 complete under the owner's independent-execution request on 2026-11-08.
 The [execution record](owned-content-cleanup-execution.md) owns progress and decisions. The
 [audit](owned-content-validation-audit.md) owns the findings and measured counts.
 
@@ -291,8 +291,9 @@ scripts and existing runtimes. Do not modify external repositories or archives.
 
 Engineering standards reviewers remain cancelled; no source review or audit
 pipeline is added. The primary owns self-review and local checks. Existing
-checkpoint-adviser monitoring remains active independently; this planning request
-does not authorize commits, pushes or deployment. The plan receives one read-only
+checkpoint-adviser monitoring remains active independently. The subsequent
+independent-execution invocation authorizes adviser-recommended local checkpoints;
+pushes and deployment remain outside that authority. The plan received one read-only
 second-agent critique under create-plan before handoff. It evaluates coverage,
 ownership, verification and proportionality, not standards compliance, and does
 not create an owner-approval pause or recurring milestone reviews.

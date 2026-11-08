@@ -9,6 +9,10 @@ collaborators, with source searches of Flat's remaining validation/hash calls.
 This is a focused audit, not an exhaustive repository inventory or a standards
 compliance result. Experiments and historical evidence were not modified.
 
+These findings describe the preserved pre-cleanup baseline. Every identified
+item is now resolved by the [cleanup execution](owned-content-cleanup-execution.md),
+which owns current implementation, verification and remaining-cost measurements.
+
 ## Measured Calls
 
 A real served app, MUI pointer interaction and GPU rendering exercised three
