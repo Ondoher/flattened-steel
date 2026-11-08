@@ -1,11 +1,11 @@
 import React from 'react';
 import BaseSelect from './BaseSelect.jsx';
 /**
- * Call this component to render BaseSelect with localization enabled.
+ * Presents a select using the base's shared localization boundary.
  *
  * @param {object} props - The component properties.
  * @returns {React.ReactElement} - The localized component presentation.
  */
 export default function Select(props) {
-	return <BaseSelect localize {...props} />;
+	return <BaseSelect {...props} />;
 }

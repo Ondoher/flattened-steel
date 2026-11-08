@@ -3,6 +3,10 @@
  */
 type DateTimeFieldProps = {
 	/**
+	 * Optional presentation class added to the date or time control.
+	 */
+	className?: string;
+	/**
 	 * Explicit size, with application defaults inherited through the base when absent.
 	 */
 	size?: 'small' | 'medium';
@@ -15,11 +19,15 @@ type DateTimeFieldProps = {
 	 */
 	inputRef?: React.Ref<HTMLInputElement>;
 	/**
+	 * Requests initial input focus when mounted, including inside a Popover.
+	 */
+	autoFocus?: boolean;
+	/**
 	 * Unique input identity supplied by the owning presentation.
 	 */
 	id: string;
 	/**
-	 * Literal display label, resolved by the caller when appropriate.
+	 * Phrase key translated by the field base.
 	 */
 	label: string;
 	/**
@@ -31,7 +39,7 @@ type DateTimeFieldProps = {
 	 */
 	format: string;
 	/**
-	 * Optional prepared validation message.
+	 * Optional validation phrase key translated by this control.
 	 */
 	error?: string | null;
 	/**
@@ -39,8 +47,3 @@ type DateTimeFieldProps = {
 	 */
 	onChange: (value: string) => void;
 };
-
-/**
- * Common field presentation specialized by the Date/Time wrappers.
- */
-type LocalDateTimeFieldProps = DateTimeFieldProps & {kind: 'date' | 'time'};

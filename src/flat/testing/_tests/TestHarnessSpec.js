@@ -60,7 +60,8 @@ describe('component TestHarness', () => {
 		const previous = createTestHarness().withService('example', {}).withContext({locale: 'fr-FR'});
 		harness = createTestHarness();
 		expect(harness.registry).not.toBe(previous.registry);
-		expect(harness.context.locale).toBe('en-US');
-		expect(harness.context.localize).toBeNull();
+		expect(harness.context.locale).toBe('disabled');
+		expect(harness.context.localize).not.toBe(previous.context.localize);
+		expect(harness.context.localize.translate('Hello %{name}', {name: 'Ada'})).toBe('Hello Ada');
 	});
 });

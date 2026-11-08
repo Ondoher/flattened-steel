@@ -28,11 +28,7 @@ const localize = {translate: (phrase) => phrases[phrase] ?? ''};
 class TextProbe extends React.Component {
 	static contextType = AppContext;
 	render() {
-		return (
-			<span>
-				{resolveComponentText(this.context, this.props.localize, this.props.value, this.props.fallback)}
-			</span>
-		);
+		return <span>{resolveComponentText(this.context, this.props.value)}</span>;
 	}
 }
 
@@ -40,13 +36,13 @@ describe('generated form controls', () => {
 	let harness;
 	afterEach(() => harness?.unmount());
 
-	it('keeps base text input literal and makes the concrete input localize', () => {
-		harness = createTestHarness().withContext({localize, localizationEnabled: true});
+	it('localizes both base and concrete text input through the same path', () => {
+		harness = createTestHarness().withContext({localize});
 		let result = harness.render(BaseTextInput, {label: 'name.label', helperText: 'name.helper'});
-		expect(result.container.textContent).toContain('name.label');
+		expect(result.container.textContent).toContain('Name');
 		result = result.rerender({});
 		harness.unmount();
-		harness = createTestHarness().withContext({localize, localizationEnabled: true});
+		harness = createTestHarness().withContext({localize});
 		result = harness.render(TextInput, {label: 'name.label', helperText: 'name.helper'});
 		expect(result.container.textContent).toContain('Name');
 		expect(result.container.querySelector('.MuiFormHelperText-root').textContent).toBe('Enter a name');
@@ -54,21 +50,21 @@ describe('generated form controls', () => {
 
 	it('reports text changes and adds authored aria only when accessibility is enabled', () => {
 		const changed = jasmine.createSpy('changed');
-		harness = createTestHarness().withContext({localize, localizationEnabled: true, accessibilityEnabled: false});
+		harness = createTestHarness().withContext({localize, accessibilityEnabled: false});
 		let result = harness.render(TextInput, {ariaLabel: 'name.aria', label: 'name.label', onChange: changed});
 		let input = result.query('input');
 		expect(input.getAttribute('aria-label')).toBeNull();
 		harness.input(input, 'Ada');
 		expect(changed).toHaveBeenCalled();
 		harness.unmount();
-		harness = createTestHarness().withContext({localize, localizationEnabled: true, accessibilityEnabled: true});
+		harness = createTestHarness().withContext({localize, accessibilityEnabled: true});
 		result = harness.render(TextInput, {ariaLabel: 'name.aria', label: 'name.label'});
 		input = result.query('input');
 		expect(input.getAttribute('aria-label')).toBe('Editable name');
 	});
 
 	it('renders localized concrete select options, helper wiring, disabled and error states', () => {
-		harness = createTestHarness().withContext({localize, localizationEnabled: true, accessibilityEnabled: true});
+		harness = createTestHarness().withContext({localize, accessibilityEnabled: true});
 		const result = harness.render(Select, {
 			label: 'mode.label',
 			helperText: 'mode.helper',
@@ -109,9 +105,8 @@ describe('generated form controls', () => {
 
 	it('wires localized checkbox helper text and reports boolean changes', () => {
 		const changed = jasmine.createSpy('changed');
-		harness = createTestHarness().withContext({localize, localizationEnabled: true, accessibilityEnabled: true});
+		harness = createTestHarness().withContext({localize, accessibilityEnabled: true});
 		const result = harness.render(BaseCheckbox, {
-			localize: true,
 			label: 'enabled.label',
 			helperText: 'enabled.helper',
 			onChange: changed,
@@ -126,9 +121,8 @@ describe('generated form controls', () => {
 
 	it('labels radio groups, localizes options, and reports selected values', () => {
 		const changed = jasmine.createSpy('changed');
-		harness = createTestHarness().withContext({localize, localizationEnabled: true, accessibilityEnabled: true});
+		harness = createTestHarness().withContext({localize, accessibilityEnabled: true});
 		const result = harness.render(BaseRadioButtons, {
-			localize: true,
 			label: 'choice.label',
 			helperText: 'mode.helper',
 			value: 'first',
@@ -145,15 +139,16 @@ describe('generated form controls', () => {
 		expect(changed.calls.mostRecent().args[0]).toBe('second');
 	});
 
-	it('covers component text fallbacks and an unavailable translation service', () => {
-		harness = createTestHarness();
-		let result = harness.render(TextProbe, {value: null, fallback: 'Fallback'});
-		expect(result.container.textContent).toBe('Fallback');
-		result = result.rerender({value: 42});
-		expect(result.container.textContent).toBe('42');
-		harness.unmount();
-		harness = createTestHarness().withContext({localizationEnabled: true, localize: null});
-		result = harness.render(TextProbe, {localize: true, value: 'missing'});
+	it('keeps missing phrases empty and preserves disabled-mode replacements', () => {
+		spyOn(console, 'warn');
+		harness = createTestHarness().withLocale('en-US');
+		let result = harness.render(TextProbe, {value: 'missing'});
+		expect(result.container.textContent).toBe('');
+		expect(console.warn).toHaveBeenCalledWith('Missing translation: missing');
+		harness.withLocale('disabled');
+		result.rerender({value: {phrase: 'Hello %{name}', replacements: {name: 'Ada'}}});
+		expect(result.container.textContent).toBe('Hello Ada');
+		result.rerender({value: undefined});
 		expect(result.container.textContent).toBe('');
 	});
 

@@ -48,13 +48,13 @@ export default class CityPicker extends Component {
 	 * @returns {React.ReactNode} - Configuration-specific city control.
 	 */
 	render() {
-		let {query, matches, disabled, text, onQueryChange, onSelectCity} = this.props;
-		let label = text('global-configuration.city');
-		let placeholder = text('global-configuration.cities.placeholder');
-		let noOptionsText = text('controls.no-options');
-		let clearText = text('controls.clear');
-		let openText = text('controls.open-options');
-		let closeText = text('controls.close-options');
+		let {query, matches, disabled, onQueryChange, onSelectCity} = this.props;
+		let label = 'global-configuration.city';
+		let placeholder = 'global-configuration.cities.placeholder';
+		let noOptionsText = 'controls.no-options';
+		let clearText = 'controls.clear';
+		let openText = 'controls.open-options';
+		let closeText = 'controls.close-options';
 		let options = matches.map(this._toOption);
 		return (
 			<div className="city-picker">

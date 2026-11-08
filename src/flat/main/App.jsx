@@ -16,6 +16,7 @@ export default class App extends Component {
 		super(props);
 		this.state = props.initialState;
 		this._onStateChanged = this._onStateChanged.bind(this);
+		this._updateDocumentTitle = this._updateDocumentTitle.bind(this);
 	}
 
 	/**
@@ -72,7 +73,15 @@ export default class App extends Component {
 	 * @param {AppPresentationState} state - Next context and presentation.
 	 */
 	_onStateChanged(state) {
-		this.setState(state);
+		this.setState(state, this._updateDocumentTitle);
+	}
+
+	/**
+	 * Updates the application document title after receiving the owning view's context.
+	 */
+	_updateDocumentTitle() {
+		let {localize, locale} = this.state.context;
+		document.title = localize.translate('app.title', {}, undefined, locale);
 	}
 
 	/**

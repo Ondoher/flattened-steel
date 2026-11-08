@@ -14,7 +14,14 @@ function presentation() {
 class ViewStub {
 	constructor(locale = 'en-US') {
 		this.registryLookup = jasmine.createSpy('registry lookup');
-		this.state = {context: {locale, registry: {subscribe: this.registryLookup}}, presentation: presentation()};
+		this.state = {
+			context: {
+				locale,
+				registry: {subscribe: this.registryLookup},
+				localize: {translate: (key, _replacements, _cardinal, currentLocale) => `${currentLocale}:${key}`},
+			},
+			presentation: presentation(),
+		};
 		this.listeners = new Map();
 		this.next = 0;
 	}
@@ -44,16 +51,23 @@ class ViewStub {
 }
 describe('application React root boundary', () => {
 	let harness;
+	let originalTitle;
 	beforeEach(() => {
+		originalTitle = document.title;
 		harness = createTestHarness();
 	});
-	afterEach(() => harness.unmount());
+	afterEach(() => {
+		harness.unmount();
+		document.title = originalTitle;
+	});
 	it('renders and updates context exclusively through its own view without registry access', () => {
 		let view = new ViewStub();
 		let result = harness.render(App, {appView: view, initialState: view.state});
 		expect(result.query('main').textContent).toBe('en-US');
+		expect(document.title).toBe('en-US:app.title');
 		view.emit('changed');
 		expect(result.query('main').textContent).toBe('changed');
+		expect(document.title).toBe('changed:app.title');
 		expect(view.registryLookup).not.toHaveBeenCalled();
 		harness.unmount();
 		expect(view.listeners.size).toBe(0);

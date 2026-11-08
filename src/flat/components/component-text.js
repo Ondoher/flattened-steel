@@ -1,20 +1,19 @@
 /**
- * Call this function to resolve a component's literal value or localized phrase.
+ * Resolves supplied UI text through the selected translator, including disabled mode.
  *
  * @param {AppContextValue} context - The current global application context.
- * @param {boolean} localize - Whether the supplied value is a phrase key.
- * @param {unknown} value - The literal value or phrase key to resolve.
- * @param {string} fallback - The value returned when no text was supplied.
+ * @param {LocalizedText} [value] - Phrase key and optional replacements.
  * @param {Record<string, string | number>} [replacements] - Phrase replacement values.
  * @param {number} [cardinal] - The plural-selection cardinal value.
+ * @param {boolean} [escapeHtml] - Whether replacement markup is escaped.
  * @returns {string} - The resolved display text.
  */
-export function resolveComponentText(context, localize, value, fallback = '', replacements, cardinal) {
+export function resolveComponentText(context, value, replacements, cardinal, escapeHtml = false) {
 	if (value === undefined || value === null || value === '') {
-		return fallback;
+		return '';
 	}
-	if (localize && context.localizationEnabled) {
-		return context.localize?.translate(String(value), replacements, cardinal, context.locale) ?? '';
+	if (typeof value === 'string') {
+		return context.localize.translate(value, replacements, cardinal, context.locale, escapeHtml);
 	}
-	return String(value);
+	return context.localize.translate(value.phrase, value.replacements, value.cardinal, context.locale, escapeHtml);
 }

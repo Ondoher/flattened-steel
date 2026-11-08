@@ -1,11 +1,11 @@
 import React from 'react';
 import BaseText from './BaseText.jsx';
 /**
- * Call this component to render text with localization enabled.
+ * Presents text using the base's shared localization boundary.
  *
  * @param {object} props - The text properties.
  * @returns {React.ReactElement} - The localized text presentation.
  */
 export default function Text(props) {
-	return <BaseText localize {...props} />;
+	return <BaseText {...props} />;
 }

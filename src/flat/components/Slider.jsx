@@ -142,10 +142,21 @@ export default class Slider extends Component {
 	 */
 	render() {
 		let context = /** @type {AppContextValue} */ (this.context);
-		let {id, size, onChange, onCommit, onInteractionStart, onInteractionEnd, onInteractionCancel, ...props} =
-			this.props;
+		let {
+			id,
+			size,
+			autoFocus,
+			onChange,
+			onCommit,
+			onInteractionStart,
+			onInteractionEnd,
+			onInteractionCancel,
+			...props
+		} = this.props;
 		let resolvedSize = size !== undefined ? size : context.controlSize;
-		let slotProps = {input: {id}};
+		// MUI 9's focus trap selects a declaratively marked descendant on popup entry.
+		let focusTarget = autoFocus ? '' : undefined;
+		let slotProps = {input: {id, autoFocus, 'data-mui-focusable': focusTarget}};
 		return (
 			<MuiSlider
 				key={this.state.generation}

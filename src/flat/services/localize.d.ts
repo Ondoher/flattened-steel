@@ -3,6 +3,13 @@
  */
 interface LocalizeService extends EventBus {
 	/**
+	 * Call this method to select the default translator used when no locale is supplied.
+	 *
+	 * @param locale - Loaded locale, or disabled for pass-through text and replacements.
+	 */
+	setLocale(locale: string): void;
+
+	/**
 	 * Call this method to determine whether a locale has loaded phrase data.
 	 *
 	 * @param locale - Locale whose translator must already be loaded.
@@ -16,7 +23,7 @@ interface LocalizeService extends EventBus {
 	 * @param key - Phrase key in the selected locale's catalog.
 	 * @param replacements - Optional named values substituted into the phrase.
 	 * @param cardinal - Optional value selecting a locale-specific plural form.
-	 * @param locale - Optional loaded locale; defaults to en-US.
+	 * @param locale - Optional loaded locale; defaults to the selected service locale.
 	 * @param escapeHtml - Whether replacement markup is escaped; defaults to false.
 	 * @returns - Resolved phrase, or empty text after a failed lookup.
 	 */

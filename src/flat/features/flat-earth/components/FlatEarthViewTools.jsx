@@ -1,9 +1,10 @@
 import BaseSelect from '../../../components/BaseSelect.jsx';
 import Typography from '@mui/material/Typography';
 import Button from '../../../components/Button.jsx';
+import IconMenuButton from '../../../components/IconMenuButton.jsx';
+import Brightness6Outlined from '@mui/icons-material/Brightness6Outlined';
 import React, {Component} from 'react';
 import AppContext from '../../../common/AppContext.js';
-import phrases from '../../../phrases/en-US.json';
 import {FIELD_OF_VIEW_PRESETS, ELEVATION_PRESETS} from '../camera-controls.js';
 
 /**
@@ -125,27 +126,24 @@ export default class FlatEarthViewTools extends Component {
 	}
 
 	/**
-	 * Called by rendering to resolve literal labels through presentation context.
+	 * Called by rendering to translate labels through presentation context.
 	 *
 	 * @param {string} key - Feature phrase key.
-	 * @returns {string} - Localized or configured literal text.
+	 * @returns {string} - Localized text from the selected translator.
 	 */
 	_text(key) {
 		let context = /** @type {AppContextValue} */ (this.context);
-		if (context.localizationEnabled) {
-			return context.localize?.translate(key, {}, undefined, context.locale) ?? '';
-		}
-		return phrases[key];
+		return context.localize.translate(key, {}, undefined, context.locale);
 	}
 
 	/**
 	 * Called by list preparation to resolve one labeled choice.
 	 *
 	 * @param {FlatEarthControlOption} preset - Prepared option identity and phrase key.
-	 * @returns {AppSelectOption} - Controlled value and literal label.
+	 * @returns {AppSelectOption} - Controlled value and phrase key.
 	 */
 	_prepareOption(preset) {
-		return {value: preset.value, label: this._text(preset.label)};
+		return {value: preset.value, label: preset.label};
 	}
 
 	/**
@@ -157,7 +155,7 @@ export default class FlatEarthViewTools extends Component {
 		let options = FIELD_OF_VIEW_PRESETS.map((preset) => this._prepareOption(preset));
 		let value = this.state.camera.fieldOfViewDegrees;
 		if (!options.some((option) => option.value === value)) {
-			options.push({value, label: String(value) + '°'});
+			options.push({value, label: {phrase: 'flat-earth.camera.angle-value', replacements: {value}}});
 		}
 		return options;
 	}
@@ -171,7 +169,7 @@ export default class FlatEarthViewTools extends Component {
 		let options = ELEVATION_PRESETS.map((preset) => this._prepareOption(preset));
 		let value = this.state.camera.pendingHeightMeters ?? this.state.camera.observerHeightMeters;
 		if (!options.some((option) => option.value === value)) {
-			options.push({value, label: String(value) + ' m'});
+			options.push({value, label: {phrase: 'flat-earth.camera.height-value', replacements: {value}}});
 		}
 		return options;
 	}
@@ -182,7 +180,9 @@ export default class FlatEarthViewTools extends Component {
 	 * @returns {AppSelectOption[]} - Stable localized sky choices.
 	 */
 	_renderSkyOptions() {
-		/** @type {FlatEarthControlOption[]} */
+		/**
+		 * @type {FlatEarthControlOption[]}
+		 */
 		let options = [
 			{value: 'full', label: 'flat-earth.shader.full'},
 			{value: 'no-atmosphere', label: 'flat-earth.shader.no-atmosphere'},
@@ -197,9 +197,22 @@ export default class FlatEarthViewTools extends Component {
 	 * @returns {React.ReactNode} - Sky selector with its owned region wrapper.
 	 */
 	_renderSkyControl() {
-		let label = this._text('flat-earth.shader.label');
+		let label = 'flat-earth.shader.label';
 		let hint = this._text('flat-earth.shader.hint');
 		let options = this._renderSkyOptions();
+		if (!this.props.panel) {
+			let icon = <Brightness6Outlined />;
+			return (
+				<IconMenuButton
+					className="flat-earth-sky flat-earth-shader-control"
+					label={label}
+					icon={icon}
+					value={this.state.shader.mode}
+					options={options}
+					onChange={this._onSky}
+				/>
+			);
+		}
 		return (
 			<BaseSelect
 				className="flat-earth-sky flat-earth-shader-control"
@@ -221,8 +234,8 @@ export default class FlatEarthViewTools extends Component {
 	_renderControls() {
 		let camera = this.state.camera;
 		let height = camera.pendingHeightMeters ?? camera.observerHeightMeters;
-		let heightLabel = this._text('flat-earth.camera.height');
-		let fovLabel = this._text('flat-earth.camera.fov');
+		let heightLabel = 'flat-earth.camera.height';
+		let fovLabel = 'flat-earth.camera.fov';
 		let fovHint = this._text('flat-earth.camera.fov.hint');
 		let sunLabel = this._text('flat-earth.camera.center-sun');
 		let disabled = !this.state.renderedObservation;

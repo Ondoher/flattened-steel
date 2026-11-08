@@ -2,6 +2,9 @@
 
 Status: owner-selected direction and icons, recorded 2026-11-07. These are
 concise refactor notes; application implementation has not started.
+The [implementation plan](toolbar-implementation-plan.md) owns the proposed
+milestones and fills the remaining interaction details as explicit planning
+defaults. Its creation does not authorize execution.
 
 ## Direction
 

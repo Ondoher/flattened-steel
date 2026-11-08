@@ -323,7 +323,7 @@ type WorkspaceContributionSession = MountedUiContribution & {
 /**
  * Presentation-only localization callback; enabled lookup failures remain empty.
  */
-type WorkspaceText = (key: string, replacements?: Record<string, string | number>, literal?: string) => string;
+type WorkspaceText = (key: string, replacements?: Record<string, string | number>) => string;
 
 /**
  * Shell boundary props, without model or unrelated service access.

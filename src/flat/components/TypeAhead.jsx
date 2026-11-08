@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import Autocomplete from '@mui/material/Autocomplete';
 import AppContext from '../common/AppContext.js';
 import BaseTextInput from './BaseTextInput.jsx';
+import {resolveComponentText} from './component-text.js';
 
 /**
  * Presents ranked results without acquiring search, query or accepted-value ownership.
@@ -128,7 +129,7 @@ export default class TypeAhead extends Component {
 	 * @returns {React.ReactElement} - Input with inherited field defaults.
 	 */
 	_renderInput(params) {
-		let {label, placeholder, size, variant, inputRef} = this.props;
+		let {label, placeholder, size, variant, inputRef, autoFocus} = this.props;
 		return (
 			<BaseTextInput
 				{...params}
@@ -137,6 +138,7 @@ export default class TypeAhead extends Component {
 				size={size}
 				variant={variant}
 				inputRef={inputRef}
+				autoFocus={autoFocus}
 			/>
 		);
 	}
@@ -144,15 +146,16 @@ export default class TypeAhead extends Component {
 	/**
 	 * Owns the option element while allowing domain-specific prepared content.
 	 *
-	 * @param {React.HTMLAttributes<HTMLLIElement> & {key?: React.Key}} attributes - MUI option behavior.
+	 * @param {TypeAheadOptionAttributes} attributes - MUI option behavior.
 	 * @param {TypeAheadOption} option - Prepared option.
 	 * @returns {React.ReactElement} - One interactive option.
 	 */
 	_renderOption(attributes, option) {
 		let {key, ...props} = attributes;
+		let optionKey = key ?? option.id;
 		let content = this.props.renderOption ? this.props.renderOption(option) : option.label;
 		return (
-			<li {...props} key={key ?? option.id} data-option-id={option.id}>
+			<li {...props} key={optionKey} data-option-id={option.id}>
 				{content}
 			</li>
 		);
@@ -179,6 +182,10 @@ export default class TypeAhead extends Component {
 		} = this.props;
 		let resolvedSize = size !== undefined ? size : context.controlSize;
 		let open = this.state.open && !disabled;
+		let emptyLabel = resolveComponentText(context, noOptionsText ?? 'controls.no-options');
+		let clearLabel = resolveComponentText(context, clearText ?? 'controls.clear');
+		let openLabel = resolveComponentText(context, openText ?? 'controls.open-options');
+		let closeLabel = resolveComponentText(context, closeText ?? 'controls.close-options');
 		return (
 			<Autocomplete
 				id={id}
@@ -193,10 +200,10 @@ export default class TypeAhead extends Component {
 				openOnFocus
 				autoHighlight
 				freeSolo
-				noOptionsText={noOptionsText}
-				clearText={clearText}
-				openText={openText}
-				closeText={closeText}
+				noOptionsText={emptyLabel}
+				clearText={clearLabel}
+				openText={openLabel}
+				closeText={closeLabel}
 				filterOptions={this._filterOptions}
 				getOptionLabel={this._optionLabel}
 				getOptionKey={this._optionKey}

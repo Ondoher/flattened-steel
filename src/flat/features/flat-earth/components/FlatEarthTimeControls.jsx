@@ -3,14 +3,15 @@ import BaseTextInput from '../../../components/BaseTextInput.jsx';
 import BaseFormMessage from '../../../components/BaseFormMessage.jsx';
 import Typography from '@mui/material/Typography';
 import Button from '../../../components/Button.jsx';
+import PanelButton from '../../../components/PanelButton.jsx';
+import AccessTime from '@mui/icons-material/AccessTime';
 import React, {Component} from 'react';
 import AppContext from '../../../common/AppContext.js';
-import phrases from '../../../phrases/en-US.json';
 
 /**
  * Presents shared time through the owning feature view, in a toolbar or configuration.
  *
- * @extends {Component<FlatEarthTimeProps, FlatEarthTimePresentation>}
+ * @extends {Component<FlatEarthTimeProps, FlatEarthTimeControlState>}
  */
 export default class FlatEarthTimeControls extends Component {
 	static contextType = AppContext;
@@ -22,7 +23,7 @@ export default class FlatEarthTimeControls extends Component {
 	 */
 	constructor(props) {
 		super(props);
-		this.state = props.sceneView.getTimeState();
+		this.state = {...props.sceneView.getTimeState(), closeRequest: 0};
 		this._changed = this._changed.bind(this);
 		this._begin = this._begin.bind(this);
 		this._end = this._end.bind(this);
@@ -32,21 +33,56 @@ export default class FlatEarthTimeControls extends Component {
 		this._accept = this._accept.bind(this);
 		this._settings = this._settings.bind(this);
 		this._location = this._location.bind(this);
+		this._renderPopup = this._renderPopup.bind(this);
+		this._popupChanged = this._popupChanged.bind(this);
+		this._afterPopupClosed = this._afterPopupClosed.bind(this);
 	}
 
 	/**
 	 * Called by React to attach only the owning view's presentation event.
 	 */
 	componentDidMount() {
-		this._listener = this.props.sceneView.listen('time-changed', this._changed);
-		this._changed(this.props.sceneView.getTimeState());
+		this._attachView();
+	}
+
+	/**
+	 * Releases the original edit owner and stale navigation when its explicit identity changes.
+	 *
+	 * @param {FlatEarthTimeProps} previous - Previous time-control owner.
+	 */
+	componentDidUpdate(previous) {
+		if (previous.sceneView !== this.props.sceneView || previous.owner !== this.props.owner) {
+			this._detachView();
+			this._pendingNavigation = null;
+			this._popupOpen = false;
+			this._attachView();
+			this.setState((state) => ({closeRequest: state.closeRequest + 1}));
+		}
 	}
 
 	/**
 	 * Called by React to release this control's exact listener and gesture.
 	 */
 	componentWillUnmount() {
-		this.props.sceneView.unlisten('time-changed', this._listener);
+		this._pendingNavigation = null;
+		this._detachView();
+	}
+
+	/**
+	 * Attaches the exact view and owner identities used by this mounted presentation.
+	 */
+	_attachView() {
+		this._view = this.props.sceneView;
+		this._owner = this.props.owner;
+		this._listener = this._view.listen('time-changed', this._changed);
+		this._changed(this._view.getTimeState());
+	}
+
+	/**
+	 * Releases the original subscription and any remaining feature edit token.
+	 */
+	_detachView() {
+		this._view.unlisten('time-changed', this._listener);
 		this._end();
 	}
 
@@ -64,7 +100,7 @@ export default class FlatEarthTimeControls extends Component {
 	 */
 	_begin() {
 		if (!this._token) {
-			this._token = this.props.sceneView.beginTimeEdit(this.props.owner);
+			this._token = this._view.beginTimeEdit(this._owner);
 		}
 	}
 
@@ -75,7 +111,7 @@ export default class FlatEarthTimeControls extends Component {
 		if (!this._token) {
 			return;
 		}
-		this.props.sceneView.endTimeEdit(this.props.owner, this._token);
+		this._view.endTimeEdit(this._owner, this._token);
 		this._token = 0;
 	}
 
@@ -85,7 +121,7 @@ export default class FlatEarthTimeControls extends Component {
 	 * @param {number} value - Current scalar slider value.
 	 */
 	_seek(value) {
-		this.props.sceneView.seekTime(this.props.owner, this._token, value);
+		this._view.seekTime(this._owner, this._token, value);
 	}
 
 	/**
@@ -125,14 +161,66 @@ export default class FlatEarthTimeControls extends Component {
 	 * Called by the toolbar shortcut to open the shared feature section.
 	 */
 	_settings() {
-		this.props.sceneView.openTimeSettings();
+		this._navigate('time');
 	}
 
 	/**
 	 * Called by unavailable-state presentation to open ordinary location editing.
 	 */
 	_location() {
-		this.props.sceneView.openLocationSettings();
+		this._navigate('location');
+	}
+
+	/**
+	 * Defers settings navigation until MUI has dismissed the popup and restored focus.
+	 *
+	 * @param {'time'|'location'} destination - Existing feature navigation intent.
+	 */
+	_navigate(destination) {
+		if (this.props.panel || !this._popupOpen) {
+			this._openSettings(destination);
+			return;
+		}
+		this._pendingNavigation = destination;
+		this.setState((state) => ({closeRequest: state.closeRequest + 1}));
+	}
+
+	/**
+	 * Reports the selected navigation through the owning view only.
+	 *
+	 * @param {'time'|'location'} destination - Existing settings destination.
+	 */
+	_openSettings(destination) {
+		if (destination === 'time') {
+			this._view.openTimeSettings();
+		} else {
+			this._view.openLocationSettings();
+		}
+	}
+
+	/**
+	 * Tracks transient visibility and invalidates stale navigation on reopening.
+	 *
+	 * @param {boolean} open - MUI popup visibility.
+	 */
+	_popupChanged(open) {
+		this._popupOpen = open;
+		if (open) {
+			this._pendingNavigation = null;
+		} else {
+			this._end();
+		}
+	}
+
+	/**
+	 * Delivers at most one navigation intent after MUI's exit transition.
+	 */
+	_afterPopupClosed() {
+		let destination = this._pendingNavigation;
+		this._pendingNavigation = null;
+		if (destination && !this._popupOpen) {
+			this._openSettings(destination);
+		}
 	}
 
 	/**
@@ -141,12 +229,9 @@ export default class FlatEarthTimeControls extends Component {
 	 * @param {string} key - Phrase key.
 	 * @returns {string} - Current localized label.
 	 */
-	_text(key) {
+	_text(key, replacements = {}) {
 		let context = /** @type {AppContextValue} */ (this.context);
-		if (context.localizationEnabled) {
-			return context.localize?.translate(key, {}, undefined, context.locale) ?? '';
-		}
-		return phrases[key];
+		return context.localize.translate(key, replacements, undefined, context.locale);
 	}
 
 	/**
@@ -162,9 +247,16 @@ export default class FlatEarthTimeControls extends Component {
 		let name = this._text('flat-earth.time.slider-name');
 		let before = this._text('flat-earth.time.before');
 		let after = this._text('flat-earth.time.after');
-		let closest = this._text('flat-earth.time.closest');
 		let scope = this._text('flat-earth.time.scope');
-		let valueText = `${Math.abs(value).toFixed(1)}° ${value < 0 ? before : after}`;
+		let valueText = this._text('flat-earth.time.value-direction', {
+			value: Math.abs(value).toFixed(1),
+			direction: value < 0 ? before : after,
+		});
+		let beforeLegend = this._text('flat-earth.time.before-legend');
+		let closestLegend = this._text('flat-earth.time.closest-legend');
+		let afterLegend = this._text('flat-earth.time.after-legend');
+		let descriptionText = this._text('flat-earth.time.slider-description', {scope, closest: closestLegend});
+		let autoFocus = !this.props.panel && !disabled;
 		return (
 			<div className="flat-time-slider">
 				<div className="flat-time-rail">
@@ -173,6 +265,7 @@ export default class FlatEarthTimeControls extends Component {
 						min={-180}
 						max={180}
 						step={0.1}
+						autoFocus={autoFocus}
 						value={value}
 						disabled={disabled}
 						aria-label={name}
@@ -185,12 +278,12 @@ export default class FlatEarthTimeControls extends Component {
 					<span className="flat-time-zero" aria-hidden="true" />
 				</div>
 				<div className="flat-time-legends">
-					<span>{before} −180°</span>
-					<span>0° · {closest}</span>
-					<span>{after} +180°</span>
+					<span>{beforeLegend}</span>
+					<span>{closestLegend}</span>
+					<span>{afterLegend}</span>
 				</div>
 				<span id={description} className="screen-reader-only">
-					{scope} 0° · {closest}
+					{descriptionText}
 				</span>
 			</div>
 		);
@@ -207,8 +300,10 @@ export default class FlatEarthTimeControls extends Component {
 		let settings = this._text('flat-earth.time.settings');
 		let angle =
 			this.state.angle == null
-				? '—'
-				: `${this.state.angle >= 0 ? '+' : ''}${Number(this.state.angle.toFixed(1))}°`;
+				? this._text('flat-earth.time.unavailable')
+				: this._text('flat-earth.time.angle-value', {
+						value: `${this.state.angle >= 0 ? '+' : ''}${Number(this.state.angle.toFixed(1))}`,
+					});
 		return (
 			<div className="flat-time-toolbar-heading">
 				<strong>{shared}</strong>
@@ -234,11 +329,12 @@ export default class FlatEarthTimeControls extends Component {
 	_renderPanel() {
 		let title = this._text('flat-earth.time.degrees-closest');
 		let scope = this._text('flat-earth.time.scope');
-		let degrees = this._text('flat-earth.time.degrees');
+		let degrees = 'flat-earth.time.degrees';
+		let inputSlots = {htmlInput: {inputMode: 'decimal', 'aria-invalid': this.state.error}};
 		let date = this._text('flat-earth.time.date-basis');
 		let resolved = this._text('flat-earth.time.resolved');
-		let device = this._text('flat-earth.time.device');
-		let reference = this._text('flat-earth.time.reference');
+		let reference = this._text('flat-earth.time.reference', {location: this.state.location});
+		let deviceZone = this._text('flat-earth.time.device-zone', {zone: this.state.deviceZone});
 		let error = this.state.error ? (
 			<BaseFormMessage className="flat-time-error" type="error" role="alert">
 				{this._text('flat-earth.time.invalid')}
@@ -266,7 +362,7 @@ export default class FlatEarthTimeControls extends Component {
 						value={this.state.draft}
 						disabled={disabled}
 						error={this.state.error}
-						slotProps={{htmlInput: {inputMode: 'decimal', 'aria-invalid': this.state.error}}}
+						slotProps={inputSlots}
 						onChange={this._draft}
 						onBlur={this._accept}
 						onKeyDown={this._numericKey}
@@ -282,15 +378,67 @@ export default class FlatEarthTimeControls extends Component {
 					<div className="flat-time-resolved">
 						<span>{resolved}</span>
 						<strong>{this.state.resolvedTime}</strong>
-						<p>
-							{device} · {this.state.deviceZone}
-						</p>
+						<p>{deviceZone}</p>
 					</div>
-					<p className="flat-time-reference">
-						{reference} {this.state.location}.
-					</p>
+					<p className="flat-time-reference">{reference}</p>
 				</div>
 			</div>
+		);
+	}
+
+	/**
+	 * Owns the toolbar popup, unmounting its slider immediately when dismissal starts.
+	 *
+	 * @param {boolean} open - MUI popup visibility.
+	 * @returns {React.ReactNode} - Shared-time editor or no active interaction while closed.
+	 */
+	_renderPopup(open) {
+		if (!open) {
+			return null;
+		}
+		let scope = this._text('flat-earth.time.scope');
+		let unavailable = null;
+		if (this.state.angle === null) {
+			let message = this._text('flat-earth.time.location-required');
+			let location = this._text('flat-earth.time.choose-location');
+			unavailable = (
+				<div className="flat-time-unavailable">
+					<p>{message}</p>
+					<Button autoFocus onClick={this._location}>
+						{location}
+					</Button>
+				</div>
+			);
+		}
+		return (
+			<div className="flat-time-popup">
+				{this._renderToolbarHeading()}
+				<p className="flat-time-scope">{scope}</p>
+				{this._renderSlider()}
+				{unavailable}
+			</div>
+		);
+	}
+
+	/**
+	 * Owns the named clock trigger and reuses the shared MUI popup lifecycle.
+	 *
+	 * @returns {React.ReactNode} - Icon-only shared-time command.
+	 */
+	_renderClock() {
+		let icon = <AccessTime />;
+		return (
+			<PanelButton
+				key={this.props.owner}
+				label="flat-earth.time.title"
+				icon={icon}
+				className="flat-time-clock"
+				closeRequest={this.state.closeRequest}
+				onOpenChange={this._popupChanged}
+				onClosed={this._afterPopupClosed}
+			>
+				{this._renderPopup}
+			</PanelButton>
 		);
 	}
 
@@ -300,14 +448,7 @@ export default class FlatEarthTimeControls extends Component {
 	 * @returns {React.ReactNode} - Feature-owned shared time surface.
 	 */
 	render() {
-		let content = this.props.panel ? (
-			this._renderPanel()
-		) : (
-			<React.Fragment>
-				{this._renderToolbarHeading()}
-				{this._renderSlider()}
-			</React.Fragment>
-		);
+		let content = this.props.panel ? this._renderPanel() : this._renderClock();
 		let className = this.props.panel ? 'flat-time-panel' : 'flat-time-toolbar';
 		return <section className={className}>{content}</section>;
 	}

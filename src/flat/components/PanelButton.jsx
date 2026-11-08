@@ -1,148 +1,165 @@
-import React, {Component, createRef} from 'react';
-import ClickAwayListener from '@mui/material/ClickAwayListener';
-import Popper from '@mui/material/Popper';
-import Paper from '@mui/material/Paper';
+import React, {Component} from 'react';
+import Popover from '@mui/material/Popover';
 import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUp from '@mui/icons-material/KeyboardArrowUp';
 import Button from './Button.jsx';
+import {IconButtonContent} from './IconButton.jsx';
+import AppContext from '../common/AppContext.js';
+import {resolveComponentText} from './component-text.js';
 
 let nextPanelId = 1;
 
 /**
- * Opens nonmodal interactive content without imposing application page/tool policy.
+ * Opens an anchored MUI Popover without owning the child content's domain state.
  *
  * @extends {Component<PanelButtonProps, PanelButtonState>}
  */
 export default class PanelButton extends Component {
+	static contextType = AppContext;
+
 	/**
-	 * Creates stable trigger/panel refs and transient visibility.
+	 * Creates transient anchor state and stable intent handlers.
 	 *
 	 * @param {PanelButtonProps} props - Prepared trigger and interactive content.
 	 */
 	constructor(props) {
 		super(props);
-		this.state = {open: false};
+		this.state = {anchorEl: null};
 		this._id = props.id ?? `interactive-panel-${nextPanelId++}`;
-		/** @type {React.RefObject<HTMLButtonElement>} */
-		this._trigger = createRef();
 		this._toggle = this._toggle.bind(this);
-		this._onClickAway = this._onClickAway.bind(this);
-		this._onKeyDown = this._onKeyDown.bind(this);
-		this._onPanelMount = this._onPanelMount.bind(this);
+		this._close = this._close.bind(this);
+		this._onExited = this._onExited.bind(this);
+	}
+
+	/**
+	 * Accepts declarative dismissal requests without exposing a component instance.
+	 *
+	 * @param {PanelButtonProps} previous - Previous owner request and enabled state.
+	 */
+	componentDidUpdate(previous) {
+		if (previous.closeRequest !== this.props.closeRequest || (!previous.disabled && this.props.disabled)) {
+			this._close();
+		}
 	}
 
 	/**
 	 * Toggles presentation and reports its visibility without owning child state.
+	 *
+	 * @param {React.MouseEvent<HTMLButtonElement>} event - Trigger providing MUI's anchor element.
 	 */
-	_toggle() {
-		let open = !this.state.open;
-		this.setState({open}, () => this.props.onOpenChange?.(open));
+	_toggle(event) {
+		let anchorEl = this.state.anchorEl ? null : event.currentTarget;
+		let open = Boolean(anchorEl);
+		this.setState({anchorEl}, () => this.props.onOpenChange?.(open));
 	}
 
 	/**
-	 * Dismisses the panel, restoring focus only for explicit keyboard dismissal.
-	 *
-	 * @param {boolean} restoreFocus - Whether the trigger should regain focus.
+	 * Accepts MUI's dismissal intent; MUI owns focus restoration and keyboard behavior.
 	 */
-	_close(restoreFocus) {
-		if (!this.state.open) {
+	_close() {
+		if (!this.state.anchorEl) {
 			return;
 		}
-		this.setState({open: false}, () => {
-			this.props.onOpenChange?.(false);
-			if (restoreFocus) {
-				this._trigger.current?.focus();
-			}
-		});
+		this.setState({anchorEl: null}, () => this.props.onOpenChange?.(false));
 	}
 
 	/**
-	 * Dismisses on click-away while preserving the user's newly chosen focus.
+	 * Reports completed MUI dismissal only while the popup remains closed.
 	 */
-	_onClickAway() {
-		this._close(false);
-	}
-
-	/**
-	 * Handles Escape after nested interactive controls have had their first opportunity.
-	 *
-	 * @param {React.KeyboardEvent<HTMLDivElement>} event - Bubbling panel keyboard intent.
-	 */
-	_onKeyDown(event) {
-		if (event.key === 'Escape' && !event.defaultPrevented && this.state.open) {
-			event.preventDefault();
-			event.stopPropagation();
-			this._close(true);
-		}
-	}
-
-	/**
-	 * Focuses the first enabled control after the portalled panel has actually mounted.
-	 *
-	 * @param {HTMLDivElement|null} node - Mounted panel content, or null on release.
-	 */
-	_onPanelMount(node) {
-		if (node) {
-			let first = /** @type {HTMLElement|null} */ (
-				node.querySelector('input:not([disabled]),button:not([disabled]),select:not([disabled]),[tabindex="0"]')
-			);
-			first?.focus();
+	_onExited() {
+		if (!this.state.anchorEl) {
+			this.props.onClosed?.();
 		}
 	}
 
 	/**
 	 * Owns the anchored panel's styled region and delegated child content.
 	 *
-	 * @returns {React.ReactNode} - Nonmodal panel mounted by MUI's portal.
+	 * @param {string} label - Command name already resolved by this control.
+	 * @returns {React.ReactNode} - MUI-managed popup surface and focus boundary.
 	 */
-	_renderPanel() {
-		let placement = this.props.placement ?? 'bottom-start';
+	_renderPanel(label) {
+		let open = Boolean(this.state.anchorEl);
+		/** @type {PanelButtonOrigin} */
+		let anchorOrigin = this.props.anchorOrigin ?? {vertical: 'bottom', horizontal: 'left'};
+		/** @type {PanelButtonOrigin} */
+		let transformOrigin = this.props.transformOrigin ?? {vertical: 'top', horizontal: 'left'};
+		let slotProps = {
+			paper: {id: this._id, className: 'app-interactive-panel', role: 'dialog', 'aria-label': label},
+			transition: {onExited: this._onExited},
+		};
+		let content = typeof this.props.children === 'function' ? this.props.children(open) : this.props.children;
 		return (
-			<Popper
-				open={this.state.open}
-				anchorEl={this._trigger.current}
-				placement={placement}
-				className="app-panel-popper"
+			<Popover
+				open={open}
+				anchorEl={this.state.anchorEl}
+				anchorOrigin={anchorOrigin}
+				transformOrigin={transformOrigin}
+				slotProps={slotProps}
+				onClose={this._close}
 			>
-				<Paper
-					ref={this._onPanelMount}
-					id={this._id}
-					className="app-interactive-panel"
-					role="dialog"
-					aria-label={this.props.label}
-				>
-					{this.props.children}
-				</Paper>
-			</Popper>
+				{content}
+			</Popover>
 		);
 	}
 
 	/**
-	 * Renders the compact trigger and its optional anchored interactive surface.
+	 * Renders the trigger with prepared open-state presentation and inherited control defaults.
 	 *
-	 * @returns {React.ReactNode} - Reusable panel control.
+	 * @param {string} text - Command name already resolved by this control.
+	 * @returns {React.ReactNode} - Button that anchors the interactive panel.
+	 */
+	_renderTrigger(text) {
+		let {icon, disabled, size, variant, className} = this.props;
+		let open = Boolean(this.state.anchorEl);
+		if (icon) {
+			return (
+				<IconButtonContent
+					text={text}
+					icon={icon}
+					disabled={disabled}
+					size={size}
+					variant={variant}
+					className={className}
+					tooltipSuppressed={open}
+					aria-expanded={open}
+					aria-controls={this._id}
+					aria-haspopup="dialog"
+					onClick={this._toggle}
+				/>
+			);
+		}
+		let arrow = open ? <KeyboardArrowUp /> : <KeyboardArrowDown />;
+		return (
+			<Button
+				className={className}
+				disabled={disabled}
+				size={size}
+				variant={variant}
+				aria-expanded={open}
+				aria-controls={this._id}
+				aria-haspopup="dialog"
+				endIcon={arrow}
+				onClick={this._toggle}
+			>
+				{text}
+			</Button>
+		);
+	}
+
+	/**
+	 * Composes the trigger and panel in the control-owned interaction region.
+	 *
+	 * @returns {React.ReactNode} - Reusable MUI Popover control.
 	 */
 	render() {
-		let {label, disabled, size, variant} = this.props;
-		let arrow = this.state.open ? <KeyboardArrowUp /> : <KeyboardArrowDown />;
+		let context = /** @type {AppContextValue} */ (this.context);
+		let text = resolveComponentText(context, this.props.label);
 		return (
-			<ClickAwayListener onClickAway={this._onClickAway}>
-				<div className="app-panel-control" onKeyDown={this._onKeyDown}>
-					<Button
-						buttonRef={this._trigger}
-						label={label}
-						disabled={disabled}
-						size={size}
-						variant={variant}
-						aria-expanded={this.state.open}
-						aria-controls={this._id}
-						aria-haspopup="dialog"
-						endIcon={arrow}
-						onClick={this._toggle}
-					/>
-					{this._renderPanel()}
-				</div>
-			</ClickAwayListener>
+			<div className="app-panel-control">
+				{this._renderTrigger(text)}
+				{this._renderPanel(text)}
+			</div>
 		);
 	}
 }

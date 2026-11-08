@@ -1,0 +1,8 @@
+.format-hint-input {
+	min-width: 0;
+}
+
+.format-hint-input .format-hint {
+	font-size: var(--app-font-small);
+	white-space: nowrap;
+}

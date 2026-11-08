@@ -116,7 +116,7 @@ describe('global configuration location workflow', () => {
 		await controller.retryCities();
 		controller.setQuery('London GB');
 		controller.selectCity(controller.getState().matches[0].id);
-		let harness = createTestHarness();
+		let harness = createTestHarness().withLocale('en-US');
 		try {
 			let props = {configurationView: view, initialState: view.getState()};
 			let result = harness.render(GlobalConfigurationPanel, props);
@@ -191,7 +191,7 @@ describe('global configuration location workflow', () => {
 
 	it('uses the shared controlled date/time fields and retains accepted values when the panel remounts', () => {
 		let {configuration, controller, view} = setup();
-		let harness = createTestHarness();
+		let harness = createTestHarness().withLocale('en-US');
 		try {
 			configuration.setTimestamp(0);
 			let initialTimestamp = configuration.get().timestamp;
@@ -202,11 +202,13 @@ describe('global configuration location workflow', () => {
 				configurationView: view,
 				initialState: view.getState(),
 			});
+			expect(result.query('#global-date').getBoundingClientRect().width).toBeGreaterThan(100);
+			expect(result.query('#global-time').getBoundingClientRect().width).toBeGreaterThan(100);
 			harness.input(result.query('#global-date'), '');
 			harness.input(result.query('#global-time'), '');
 			harness.click(result.query('.date-time-editor button[type="submit"]'));
-			expect(result.query('#global-date-error').textContent).toBe('Enter a date.');
-			expect(result.query('#global-time-error').textContent).toBe('Enter a time.');
+			expect(result.query('#global-date-helper-text').textContent).toBe('Enter a date.');
+			expect(result.query('#global-time-helper-text').textContent).toBe('Enter a time.');
 			harness.input(result.query('#global-date'), dateText);
 			harness.input(result.query('#global-time'), format.formatTime({hour: 23, minute: 59}));
 			expect(configuration.get().timestamp).toBe(initialTimestamp);

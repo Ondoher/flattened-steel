@@ -1,7 +1,6 @@
 import Button from '../../../components/Button.jsx';
 import React, {Component} from 'react';
 import AppContext from '../../../common/AppContext.js';
-import phrases from '../../../phrases/en-US.json';
 
 /**
  * Presents accepted shared values after the application's runtime-ready mount.
@@ -55,10 +54,7 @@ export default class GlobalConfigurationSummary extends Component {
 	 */
 	_text(key) {
 		let context = /** @type {AppContextValue} */ (this.context);
-		if (context.localizationEnabled) {
-			return context.localize?.translate(key, {}, undefined, context.locale) ?? '';
-		}
-		return phrases[key];
+		return context.localize.translate(key, {}, undefined, context.locale);
 	}
 
 	/**

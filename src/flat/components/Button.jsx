@@ -1,13 +1,19 @@
-import React from 'react';
+import React, {Component} from 'react';
 import BaseButton from './BaseButton.jsx';
 
 /**
  * Presents a product action using the base's context defaults and supported overrides.
  *
- * @param {AppButtonProps} props - Prepared action presentation.
- * @returns {React.ReactElement} - The shared button.
+ * @extends {Component<AppButtonProps>}
  */
-export default function Button(props) {
-	let className = ['app-button', props.className].filter(Boolean).join(' ');
-	return <BaseButton {...props} className={className} />;
+export default class Button extends Component {
+	/**
+	 * Composes the base control with the shared button's own class.
+	 *
+	 * @returns {React.ReactElement} - The shared button.
+	 */
+	render() {
+		let className = ['app-button', this.props.className].filter(Boolean).join(' ');
+		return <BaseButton {...this.props} className={className} />;
+	}
 }

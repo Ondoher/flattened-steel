@@ -1,7 +1,7 @@
-import type {ComponentType} from 'react';
+import {Component} from 'react';
 
 /**
  * Shared Button presentation contract.
  */
-declare const Button: ComponentType<AppButtonProps>;
+declare class Button extends Component<AppButtonProps> {}
 export default Button;

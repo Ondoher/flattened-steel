@@ -6,12 +6,66 @@ control positions and nonmodal configuration surfaces. The
 [execution record](mui-migration-execution.md) owns verification and scoped
 local checkpoints. The [saved migration plan](mui-migration-plan.md) is complete.
 Toolbar conversion remains a separate follow-on task.
+The [toolbar implementation plan](toolbar-implementation-plan.md) now owns its
+proposed execution sequence and interaction defaults; implementation is not yet
+authorized.
 
 Focus: the [toolbar refactor notes](toolbar-refactor.md) own the selected
 icon-only direction and seven MUI icons. Time uses AccessTime: the slider is
 alternate time entry. The [earlier review](toolbar-design-review.md) preserves
-preceding UX/UI advice and comps. Application implementation is unchanged.
+preceding UX/UI advice and comps. Toolbar implementation has not started.
 These are controls and control containers, not full-page components.
+
+## Localization Boundary
+
+All Flat UI copy uses the localization service selected by AppContext's locale.
+The application starts with `en-US`; explicitly selecting `disabled` uses the
+owner's pass-through translator through the same call path. AppContext selects
+the service default at readiness and before publishing locale changes.
+There is no `localizationEnabled` context flag, component `localize` switch,
+English fallback, direct component phrase-file lookup, or page `literalLabel`.
+Missing translations retain the service's warning-and-empty-text behavior.
+
+The owner's instruction supersedes the maintained catalog's literal-by-default
+base behavior for this app: both base and concrete controls always localize UI
+text. Label and helper props carry phrase keys, optionally using the shared
+`LocalizePhrase` shape for replacements and plurals. Composed React children
+contain text already translated by their owning presentation. Each string is
+translated once. BaseText/Text use `value` for the phrase or phrase descriptor;
+the redundant `phrase` alternative has been removed.
+
+City names, catalog details, machine values, user input drafts, and formatted
+dates/coordinates remain display data. They enter complete phrases as named
+replacements when combined with copy. TypeAhead localizes its chrome while
+retaining result data. Date/time feedback, placeholders, panel names, dynamic
+camera labels, time legends and the document title use the same boundary.
+
+Verification: Flat client types, all 208 built-in browser tests, and the normal
+`polylith build flat` production build pass. The bounded scan of all Flat JSX
+finds no literal UI copy or inline presentation computations. This is primary
+self-review, not a formal standards-review result. Evidence is under
+`.codex-tmp/component-refactor/localization-cleanup/`. Browser regression coverage
+includes translation exactly once, locale changes,
+disabled-mode replacements, missing phrases, select values, city data, date
+drafts and panel names. Disposable browser profiles are removed after runs.
+
+## React Control Cleanup
+
+The shared Button, Toolbar, DateField, TimeField, FormatHintInput, TypeAhead,
+Slider and PanelButton, plus configuration-specific CityPicker, were checked
+against the React standard and local JSX/render-helper rules. TypeAhead now
+precomputes its option key and uses a named ambient option-attributes type.
+FormatHintInput and PanelButton compose focused render helpers; each helper
+retains ownership of its region. Button, DateField and TimeField are classes;
+the date/time controls have stable native-event adapters. Tiny stateless
+wrappers such as Toolbar remain functions, as permitted by the standard.
+
+Verification: Flat client types and all 204 existing browser tests pass. A
+bounded JSX syntax check found no inline logic or authored inline styles in
+these nine controls. Evidence is under
+`.codex-tmp/component-refactor/react-controls/`. This is primary self-review,
+not a formal standards-review result. The localization task also applies the
+local JSX and documentation rules to the affected base controls.
 
 ## Control Scope
 
@@ -24,17 +78,66 @@ The owner identified these common controls:
 | Toolbar                     | Shared Toolbar available; existing workspace hosts retained | Common toolbar container for later toolbar conversion                  |
 | Time                        | Shared MUI TimeField                                        | Reusable local-format time entry                                       |
 | Date                        | Shared MUI DateField                                        | Reusable local-format date entry                                       |
+| Format-hint input           | Shared FormatHintInput over BaseTextInput                   | Generic text entry with a persistent expected-format adornment         |
 | Slider                      | Shared Slider used by FlatEarthTimeControls                 | Reusable slider presentation and interaction                           |
 | Text-and-arrow panel button | Shared PanelButton available; adoption deferred             | Open and close a small interactive panel from a labeled toolbar button |
 
-Common controls belong under `src/flat/components`. PanelButton composes a
-shared Button trigger and a nonmodal MUI Popper/Paper surface.
+Common controls belong under `src/flat/components`.
+
+### Format-Hint Input
+
+The owner's transferred Date control is the source for the in-field format
+adornment. Generic FormatHintInput builds on BaseTextInput and owns only the
+MUI InputAdornment, expected-format association and helper-text wiring. The
+format is display data; the control neither parses it nor constrains the input.
+Normal helper text and validation messages use BaseTextInput's existing helper
+slot, independently of the persistent format hint.
+
+DateField and TimeField build on FormatHintInput, adapting native change events
+to their existing string-draft callbacks and supplying validation phrases as
+helper text. The old LocalDateTimeField layer and its styles are removed.
+The configuration's date/time grid gives the in-field hints and entered values
+room by stacking fields when the available width cannot fit both.
+Parsing, calendar validity, draft ownership and explicit timestamp acceptance
+remain with the existing formatter/model/controller path. Segmented typing,
+automatic separators and blur normalization remain the separate adaptation goals
+in the [date-field note](../flat/date-field-adaptation.md).
+
+The owner identified two deferred corrections: the date parser must actually be
+adapted from the transferred IntlDate, and pure utilities currently classified
+as models must be reclassified. Models are exclusively services. The existing
+parser and utility placement do not fulfill those requirements; the toolbar
+plan preserves these follow-ons without expanding into their implementation.
+
+Verification: client types, all 209 built-in browser tests and the normal
+production build pass. Checks cover a non-date format, persistent in-field
+hints with independent helper errors, controlled drafts, explicit overrides,
+configuration input widths and existing Popover autofocus. Evidence is under
+`.codex-tmp/component-refactor/format-hint/`.
+
+### Panel Button
+
+PanelButton composes a
+shared Button trigger and MUI Popover. Its transient anchor comes from the
+trigger's click event; visibility is derived from that anchor. MUI owns the
+Paper surface, backdrop dismissal, Escape handling, focus boundary and focus
+restoration. There are no control-owned element refs, DOM queries or manual
+focus calls. Child fields can request initial focus through `autoFocus`.
+
+The owner selected Popover's modal interaction: an outside click dismisses the
+popup through its backdrop, rather than activating an underlying control.
+Popover `anchorOrigin` and `transformOrigin` replace the unused Popper
+`placement` prop; defaults attach the popup's top left to the trigger's bottom
+left. The obsolete Popper z-index style has been removed. Existing browser
+tests cover initial focus, Escape and backdrop dismissal, restoration to the
+trigger, nested type-ahead Escape ordering and portalled option selection.
+All 208 pass; evidence is under `.codex-tmp/component-refactor/popover/`.
 
 CityPicker is a configuration-specific control under the global-configuration
 feature. It composes the common TypeAhead control, retaining city-specific
 presentation and selection. CityCatalog continues to own city data and search.
 
-Shared controls receive prepared values, labels and callbacks. Domain rules,
+Shared controls receive prepared values, phrase keys and callbacks. Domain rules,
 configuration writes, registry lookup and orchestration stay with the existing
 models/services, controllers and owning views. Existing page/editor/workspace
 components compose these controls and retain their current responsibilities.
@@ -208,13 +311,12 @@ application's CSS variables while integrating the selected MUI foundation.
 Folder-mapped React/ReMVC and local authoring rules remain applicable; topics
 do not select standards.
 
-The owner requested a whole-repository checkpoint containing the toolbar
-notes/icons and the preceding stellar/human-presentation integration, shader
-modes, dim ground fill, per-view collapse, city update and transferred reference
-files. The application/configuration sources match M4's 723-file baseline;
-its type, browser, build and runtime evidence remains applicable. No new test
-suite was run solely for this checkpoint. Base-control text cleanup remains
-an owner-owned follow-up; toolbar implementation has not started.
+The completed whole-repository checkpoint preserves the toolbar notes/icons,
+stellar/human-presentation integration, shader modes, dim ground fill, per-view
+collapse, city update and transferred reference files. Current uncommitted work
+contains the localization boundary and authored control cleanup described above;
+the earlier M4 source baseline does not cover these changes. Toolbar
+implementation has not started.
 Engineering standards review remains owner-cancelled;
 the topic change does not restart it. Checkpoint-adviser monitoring remains
 active. The dome-cache experiment remains suspended.

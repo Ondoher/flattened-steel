@@ -11,7 +11,9 @@ import {resolveComponentText} from './component-text.js';
 
 let nextDialogId = 1;
 
-/** Generic MUI dialog building block with controller-style child actions and accessible announcements. */
+/**
+ * Generic MUI dialog building block with controller-style child actions and accessible announcements.
+ */
 export default class BaseDialog extends Component {
 	static contextType = AppContext;
 
@@ -34,6 +36,7 @@ export default class BaseDialog extends Component {
 		this.instanceId = nextDialogId++;
 		this.state = makeState(props.title, props.description, props.actions || []);
 		this.handleClose = this.handleClose.bind(this);
+		this._onActionClick = this._onActionClick.bind(this);
 	}
 
 	/**
@@ -48,14 +51,13 @@ export default class BaseDialog extends Component {
 	}
 
 	/**
-	 * Called by the dialog to resolve literal or localized display text.
+	 * Called by the dialog to translate configured display text.
 	 *
-	 * @param {unknown} value - The configured text value or phrase key.
-	 * @param {string} fallback - The text returned when the value is absent.
+	 * @param {LocalizedText} value - The phrase key and optional replacements.
 	 * @returns {string} - The resolved dialog text.
 	 */
-	resolve(value, fallback = '') {
-		return resolveComponentText(this.appContext, this.props.localize ?? false, value, fallback);
+	resolve(value) {
+		return resolveComponentText(this.appContext, value);
 	}
 
 	/**
@@ -79,7 +81,7 @@ export default class BaseDialog extends Component {
 	/**
 	 * Call this method to replace the displayed title.
 	 *
-	 * @param {unknown} value - The next literal value or phrase key.
+	 * @param {LocalizedText} value - The phrase key and optional replacements.
 	 */
 	setTitle(value) {
 		this.setState({title: value});
@@ -88,7 +90,7 @@ export default class BaseDialog extends Component {
 	/**
 	 * Call this method to replace the displayed description.
 	 *
-	 * @param {unknown} value - The next literal value or phrase key.
+	 * @param {LocalizedText} value - The phrase key and optional replacements.
 	 */
 	setDescription(value) {
 		this.setState({description: value});
@@ -109,13 +111,15 @@ export default class BaseDialog extends Component {
 	/**
 	 * Call this method to publish text through the dialog live region.
 	 *
-	 * @param {unknown} value - The announcement value or phrase key.
+	 * @param {LocalizedText} value - The phrase key and optional replacements.
 	 */
 	announce(value) {
 		this.setState({announcement: value});
 	}
 
-	/** Called by MUI or the close button to report close intent without owning the workflow. */
+	/**
+	 * Called by MUI or the close button to report close intent without owning the workflow.
+	 */
 	handleClose(_event, reason = 'closeButtonClick') {
 		this.props.onClose?.(reason);
 		this.props.onAction?.('close');
@@ -139,6 +143,16 @@ export default class BaseDialog extends Component {
 			this.props.onConfirm?.(action.id);
 		}
 		this.props.onAction?.(action.id);
+	}
+
+	/**
+	 * Relays a rendered action's stable identity to the configured intent handler.
+	 *
+	 * @param {React.MouseEvent<HTMLButtonElement>} event - Native action gesture.
+	 */
+	_onActionClick(event) {
+		const action = this.state.actions.find((item) => item.id === event.currentTarget.dataset.actionId);
+		this.handleAction(action, event);
 	}
 
 	/**
@@ -186,14 +200,10 @@ export default class BaseDialog extends Component {
 			this.props.closeButtonProps?.size !== undefined
 				? this.props.closeButtonProps.size
 				: this.appContext.controlSize;
-		const closeLabel = this.props.closeLabel ?? (this.props.localize ? 'common.close' : 'Close');
+		const closeLabel = this.props.closeLabel ?? 'common.close';
+		const label = this.appContext.accessibilityEnabled ? this.resolve(closeLabel) : undefined;
 		return (
-			<IconButton
-				size={resolvedSize}
-				type="button"
-				aria-label={this.appContext.accessibilityEnabled ? this.resolve(closeLabel) : undefined}
-				onClick={(event) => this.handleClose(event, 'closeButtonClick')}
-			>
+			<IconButton size={resolvedSize} type="button" aria-label={label} onClick={this.handleClose}>
 				<CloseIcon />
 			</IconButton>
 		);
@@ -221,18 +231,23 @@ export default class BaseDialog extends Component {
 						: 'outlined'
 					: this.appContext.controlVariant;
 		const pressed = this.appContext.accessibilityEnabled && action.pressable ? action.pressed === true : undefined;
+		const actionKey = action.id || `action-${index}`;
+		const nativeDisabled = !this.appContext.accessibilityEnabled && disabled;
+		const ariaDisabled = this.appContext.accessibilityEnabled && disabled ? 'true' : undefined;
+		const label = this.resolve(action.label);
 		return (
 			<Button
-				key={action.id || `action-${index}`}
+				key={actionKey}
+				data-action-id={action.id}
 				type="button"
 				size={resolvedSize}
 				variant={resolvedVariant}
-				disabled={!this.appContext.accessibilityEnabled && disabled}
-				aria-disabled={this.appContext.accessibilityEnabled && disabled ? 'true' : undefined}
+				disabled={nativeDisabled}
+				aria-disabled={ariaDisabled}
 				aria-pressed={pressed}
-				onClick={(event) => this.handleAction(action, event)}
+				onClick={this._onActionClick}
 			>
-				{this.resolve(action.label)}
+				{label}
 			</Button>
 		);
 	}
@@ -244,9 +259,11 @@ export default class BaseDialog extends Component {
 	 */
 	renderActions() {
 		const actions = normalizeActions(this.state.actions);
-		return actions.length ? (
-			<DialogActions>{actions.map((action, index) => this.renderAction(action, index))}</DialogActions>
-		) : null;
+		if (!actions.length) {
+			return null;
+		}
+		const buttons = actions.map((action, index) => this.renderAction(action, index));
+		return <DialogActions>{buttons}</DialogActions>;
 	}
 
 	/**
@@ -265,7 +282,6 @@ export default class BaseDialog extends Component {
 			onClose,
 			onCancel,
 			onConfirm,
-			localize,
 			resetToken,
 			showClose,
 			closeLabel,
@@ -278,28 +294,29 @@ export default class BaseDialog extends Component {
 		const resolvedDescription = this.resolve(this.state.description);
 		const resolvedTitleId = this.getTitleId();
 		const resolvedDescriptionId = this.getDescriptionId(resolvedDescription);
+		const labelledBy = this.appContext.accessibilityEnabled ? resolvedTitleId : undefined;
+		const describedBy = this.appContext.accessibilityEnabled ? resolvedDescriptionId : undefined;
+		const descriptionContent = resolvedDescription ? <p id={resolvedDescriptionId}>{resolvedDescription}</p> : null;
+		const announcementId = `dialog-${this.instanceId}-announcement`;
+		const live = this.appContext.accessibilityEnabled ? 'polite' : undefined;
 		return (
 			<Dialog
 				{...props}
 				open={open}
 				onClose={this.handleClose}
-				aria-labelledby={this.appContext.accessibilityEnabled ? resolvedTitleId : undefined}
-				aria-describedby={this.appContext.accessibilityEnabled ? resolvedDescriptionId : undefined}
+				aria-labelledby={labelledBy}
+				aria-describedby={describedBy}
 			>
 				<DialogTitle id={resolvedTitleId}>
 					{resolvedTitle}
 					{this.renderCloseButton()}
 				</DialogTitle>
 				<DialogContent>
-					{resolvedDescription ? <p id={resolvedDescriptionId}>{resolvedDescription}</p> : null}
+					{descriptionContent}
 					{this.renderChild()}
 				</DialogContent>
 				{this.renderActions()}
-				<div
-					id={`dialog-${this.instanceId}-announcement`}
-					className="screen-reader-only"
-					aria-live={this.appContext.accessibilityEnabled ? 'polite' : undefined}
-				>
+				<div id={announcementId} className="screen-reader-only" aria-live={live}>
 					{this.resolve(this.state.announcement)}
 				</div>
 			</Dialog>

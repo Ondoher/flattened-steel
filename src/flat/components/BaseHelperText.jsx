@@ -3,7 +3,9 @@ import FormHelperText from '@mui/material/FormHelperText';
 import AppContext from '../common/AppContext.js';
 import {resolveComponentText} from './component-text.js';
 
-/** MUI helper-text building block with optional accessible error semantics. */
+/**
+ * MUI helper-text building block with optional accessible error semantics.
+ */
 export default class BaseHelperText extends Component {
 	static contextType = AppContext;
 
@@ -22,19 +24,16 @@ export default class BaseHelperText extends Component {
 	 * @returns {React.ReactNode} - The helper text or no content.
 	 */
 	render() {
-		const {label, localize = false, children, status = 'normal', ...props} = this.props;
-		const content = children ?? resolveComponentText(this.appContext, localize, label);
+		const {label, children, status = 'normal', ...props} = this.props;
+		const content = children ?? resolveComponentText(this.appContext, label);
 		if (!content) {
 			return null;
 		}
 		const error = status === 'error' || props.error === true;
+		const role = this.appContext.accessibilityEnabled && error ? 'alert' : undefined;
+		const live = this.appContext.accessibilityEnabled ? (error ? 'assertive' : 'polite') : undefined;
 		return (
-			<FormHelperText
-				{...props}
-				error={error}
-				role={this.appContext.accessibilityEnabled && error ? 'alert' : undefined}
-				aria-live={this.appContext.accessibilityEnabled ? (error ? 'assertive' : 'polite') : undefined}
-			>
+			<FormHelperText {...props} error={error} role={role} aria-live={live}>
 				{content}
 			</FormHelperText>
 		);

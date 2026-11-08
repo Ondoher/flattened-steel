@@ -2,6 +2,7 @@ import React, {act} from 'react';
 import {createRoot} from 'react-dom/client';
 import {Registry} from '@polylith/core';
 import AppContext from '../common/AppContext.js';
+import {LocalizeService} from '../services/localize.js';
 
 globalThis.IS_REACT_ACT_ENVIRONMENT = true;
 
@@ -15,11 +16,13 @@ export class TestHarness {
 	constructor() {
 		this.props = {};
 		this.registry = new Registry();
+		const localize = new LocalizeService(this.registry);
+		localize.start();
+		localize.setLocale('disabled');
 		this.context = {
 			registry: this.registry,
-			locale: 'en-US',
-			localize: null,
-			localizationEnabled: false,
+			locale: 'disabled',
+			localize,
 			accessibilityEnabled: false,
 			controlSize: 'small',
 			controlVariant: 'outlined',
@@ -47,6 +50,18 @@ export class TestHarness {
 	 */
 	withContext(context = {}) {
 		this.context = {...this.context, ...context};
+		return this;
+	}
+
+	/**
+	 * Selects a real loaded translator for rendered application text.
+	 *
+	 * @param {string} locale - Translator locale, including disabled pass-through mode.
+	 * @returns {TestHarness} - This harness.
+	 */
+	withLocale(locale) {
+		this.context.localize.setLocale(locale);
+		this.context = {...this.context, locale};
 		return this;
 	}
 

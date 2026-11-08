@@ -3,7 +3,9 @@ import Button from '@mui/material/Button';
 import AppContext from '../common/AppContext.js';
 import {resolveComponentText} from './component-text.js';
 
-/** MUI button building block with opt-in localization and authored accessibility labels. */
+/**
+ * MUI button building block with localization and authored accessibility labels.
+ */
 export default class BaseButton extends Component {
 	static contextType = AppContext;
 
@@ -17,14 +19,13 @@ export default class BaseButton extends Component {
 	}
 
 	/**
-	 * Called by the component to resolve literal or localized display text.
+	 * Called by the component to translate configured display text.
 	 *
-	 * @param {unknown} value - The configured text value or phrase key.
-	 * @param {string} fallback - The text returned when the value is absent.
+	 * @param {LocalizedText} value - The phrase key and optional replacements.
 	 * @returns {string} - The resolved button text.
 	 */
-	resolve(value, fallback = '') {
-		return resolveComponentText(this.appContext, this.props.localize ?? false, value, fallback);
+	resolve(value) {
+		return resolveComponentText(this.appContext, value);
 	}
 
 	/**
@@ -33,18 +34,7 @@ export default class BaseButton extends Component {
 	 * @returns {React.ReactNode} - The button presentation.
 	 */
 	render() {
-		const {
-			label,
-			ariaLabel,
-			localize,
-			children,
-			priority,
-			selected = false,
-			size,
-			variant,
-			buttonRef,
-			...props
-		} = this.props;
+		const {label, ariaLabel, children, priority, selected = false, size, variant, buttonRef, ...props} = this.props;
 		const resolvedSize = size !== undefined ? size : this.appContext.controlSize;
 		const resolvedVariant =
 			variant !== undefined
@@ -59,17 +49,19 @@ export default class BaseButton extends Component {
 			(this.appContext.accessibilityEnabled && ariaLabel ? this.resolve(ariaLabel) : undefined);
 		const resolvedPressed =
 			props['aria-pressed'] ?? (this.appContext.accessibilityEnabled && selected ? 'true' : undefined);
+		const content = children ?? this.resolve(label);
+		const type = props.type || 'button';
 		return (
 			<Button
 				{...props}
 				ref={buttonRef}
-				type={props.type || 'button'}
+				type={type}
 				size={resolvedSize}
 				variant={resolvedVariant}
 				aria-label={resolvedAriaLabel}
 				aria-pressed={resolvedPressed}
 			>
-				{children ?? this.resolve(label)}
+				{content}
 			</Button>
 		);
 	}

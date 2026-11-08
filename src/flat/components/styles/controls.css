@@ -2,13 +2,43 @@
 	text-transform: none;
 }
 
+.app-icon-tooltip-host {
+	display: inline-flex;
+	flex: 0 0 auto;
+}
+
+.app-icon-button.MuiIconButton-root {
+	border: 1px solid transparent;
+	border-radius: 4px;
+	color: var(--app-color-text);
+}
+
+.app-icon-button--outlined.MuiIconButton-root {
+	border-color: var(--app-color-border);
+}
+
+.app-icon-button--contained.MuiIconButton-root,
+.app-icon-button[aria-expanded='true'].MuiIconButton-root {
+	color: var(--app-color-on-action);
+	background: var(--app-color-action);
+}
+
+.app-icon-button.Mui-disabled {
+	opacity: 0.4;
+}
+
+.app-icon-menu.MuiPaper-root {
+	max-width: calc(100vw - 32px);
+}
+
+.app-icon-menu .MuiMenuItem-root {
+	white-space: normal;
+	overflow-wrap: anywhere;
+}
+
 .app-panel-control {
 	display: inline-flex;
 	min-width: 0;
-}
-
-.app-panel-popper {
-	z-index: 1300;
 }
 
 .app-interactive-panel {

@@ -86,3 +86,13 @@ type FlatEarthTimeProps = {
 	 */
 	panel?: boolean;
 };
+
+/**
+ * Time presentation with a transient popup-close request; accepted time remains in services.
+ */
+type FlatEarthTimeControlState = FlatEarthTimePresentation & {
+	/**
+	 * Monotonic dismissal request for the mounted clock popup.
+	 */
+	closeRequest: number;
+};

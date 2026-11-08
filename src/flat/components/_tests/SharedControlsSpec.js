@@ -6,6 +6,7 @@ import Toolbar from '../Toolbar.jsx';
 import PanelButton from '../PanelButton.jsx';
 import DateField from '../DateField.jsx';
 import TimeField from '../TimeField.jsx';
+import FormatHintInput from '../FormatHintInput.jsx';
 import CityPicker from '../../features/global-configuration/components/CityPicker.jsx';
 import {createTestHarness} from '../../testing/TestHarness.js';
 
@@ -45,12 +46,12 @@ describe('shared MUI controls', () => {
 	});
 
 	for (const Field of [DateField, TimeField]) {
-		it(`${Field.name} preserves partial drafts, literal labels and field overrides`, () => {
+		it(`${Field.name} preserves partial drafts and presents the format inside the field`, () => {
 			const changed = jasmine.createSpy('changed');
-			harness = createTestHarness();
+			harness = createTestHarness().withLocale('en-US');
 			let result = harness.render(Field, {
 				id: 'local-entry',
-				label: 'Local entry',
+				label: 'global-configuration.date-time.date',
 				value: '12/',
 				format: 'MM/DD/YYYY',
 				onChange: changed,
@@ -62,9 +63,31 @@ describe('shared MUI controls', () => {
 			result.rerender({value: '12/3', size: 'medium', variant: 'filled'});
 			expect(result.query('input').value).toBe('12/3');
 			expect(result.query('.MuiFilledInput-root')).toBeTruthy();
-			expect(result.query('.date-time-field-format').textContent).toBe('MM/DD/YYYY');
+			expect(result.query('.MuiInputAdornment-root .format-hint').textContent).toBe('(MM/DD/YYYY)');
+			expect(result.query('.MuiFormHelperText-root')).toBeNull();
+			expect(result.query('input').getAttribute('aria-describedby')).toBe('local-entry-format');
 		});
 	}
+
+	it('supports a non-date format hint alongside the base input helper text', () => {
+		harness = createTestHarness().withLocale('en-US');
+		const changed = jasmine.createSpy('changed');
+		const onChange = (event) => changed(event.currentTarget.value);
+		const result = harness.render(FormatHintInput, {
+			id: 'identifier',
+			label: 'workspace.title',
+			format: 'AA-000',
+			value: 'AB-',
+			helperText: 'global-configuration.coordinates.required',
+			error: true,
+			onChange,
+		});
+		expect(result.query('.MuiInputAdornment-root').textContent).toBe('(AA-000)');
+		expect(result.query('[role="alert"]').textContent).toBe('Enter both latitude and longitude.');
+		expect(result.query('input').getAttribute('aria-describedby')).toBe('identifier-format identifier-helper-text');
+		harness.input(result.query('input'), 'AB-1');
+		expect(changed).toHaveBeenCalledWith('AB-1');
+	});
 
 	it('preserves supplied ranking and separates typing from pointer selection', () => {
 		const query = jasmine.createSpy('query'),
@@ -256,7 +279,9 @@ describe('shared MUI controls', () => {
 		});
 		expect(result.query('input').value).toBe('02/31/');
 		expect(result.query('input').getAttribute('aria-invalid')).toBe('true');
-		expect(result.query('input').getAttribute('aria-describedby')).toBe('invalid-date-format invalid-date-error');
+		expect(result.query('input').getAttribute('aria-describedby')).toBe(
+			'invalid-date-format invalid-date-helper-text',
+		);
 		expect(result.query('[role="alert"]').textContent).toBe('Invalid date');
 	});
 
@@ -333,31 +358,35 @@ describe('shared MUI controls', () => {
 		expect(result.query('.MuiToolbar-regular')).toBeTruthy();
 	});
 
-	it('opens a portalled interactive panel and restores trigger focus on Escape', () => {
+	it('opens a portalled interactive panel and restores trigger focus on Escape', async () => {
 		harness = createTestHarness();
 		const child = React.createElement(DateField, {
 			id: 'panel-date',
 			label: 'Date',
 			value: '12/',
 			format: 'MM/DD/YYYY',
+			autoFocus: true,
 			onChange: jasmine.createSpy('date'),
 		});
 		const result = harness.render(PanelButton, {label: 'Sun position', children: child});
 		const trigger = result.query('button');
+		act(() => trigger.focus());
 		harness.click(trigger);
 		expect(trigger.getAttribute('aria-expanded')).toBe('true');
 		expect(result.query('[role="dialog"]')).toBeNull();
 		expect(result.queryDocument('[role="dialog"] input')).toBe(document.activeElement);
 		expect(result.query('[data-testid="KeyboardArrowUpIcon"]')).toBeTruthy();
 		key(document.activeElement, 'Escape');
+		await waitForPanelClose(result);
 		expect(result.queryDocument('[role="dialog"]')).toBeNull();
 		expect(document.activeElement).toBe(trigger);
 	});
 
-	it('dismisses nested type-ahead results before closing the interactive panel', () => {
+	it('dismisses nested type-ahead results before closing the interactive panel', async () => {
 		harness = createTestHarness();
 		const child = React.createElement(TypeAhead, {
 			label: 'Find',
+			autoFocus: true,
 			query: '',
 			options,
 			onQueryChange: jasmine.createSpy('query'),
@@ -371,27 +400,32 @@ describe('shared MUI controls', () => {
 		expect(result.queryDocument('[role="listbox"]')).toBeNull();
 		expect(result.queryDocument('[role="dialog"]')).toBeTruthy();
 		key(input, 'Escape');
+		await waitForPanelClose(result);
 		expect(result.queryDocument('[role="dialog"]')).toBeNull();
 	});
 
-	it('keeps the new focus when click-away chooses another control', async () => {
+	it('dismisses on the MUI backdrop and restores focus without activating an outside control', async () => {
 		harness = createTestHarness();
+		const changed = jasmine.createSpy('visibility');
+		const outsideAction = jasmine.createSpy('outside action');
 		function Surface() {
 			return React.createElement(
 				'div',
 				null,
-				React.createElement(PanelButton, {label: 'Options', children: 'Details'}),
-				React.createElement(Button, {id: 'outside-action', label: 'Another action'}),
+				React.createElement(PanelButton, {label: 'Options', children: 'Details', onOpenChange: changed}),
+				React.createElement(Button, {id: 'outside-action', label: 'Another action', onClick: outsideAction}),
 			);
 		}
 		const result = harness.render(Surface);
-		harness.click(result.query('button'));
-		await new Promise((resolve) => setTimeout(resolve, 0));
-		const outside = result.query('#outside-action');
-		act(() => outside.focus());
-		harness.click(outside);
+		const trigger = result.query('button');
+		act(() => trigger.focus());
+		harness.click(trigger);
+		harness.click(result.queryDocument('.MuiBackdrop-root'));
+		await waitForPanelClose(result);
 		expect(result.queryDocument('[role="dialog"]')).toBeNull();
-		expect(document.activeElement).toBe(outside);
+		expect(document.activeElement).toBe(trigger);
+		expect(outsideAction).not.toHaveBeenCalled();
+		expect(changed.calls.allArgs()).toEqual([[true], [false]]);
 	});
 
 	it('keeps the parent panel open when selecting a portalled type-ahead result', async () => {
@@ -399,6 +433,7 @@ describe('shared MUI controls', () => {
 		harness = createTestHarness();
 		const child = React.createElement(TypeAhead, {
 			label: 'Find',
+			autoFocus: true,
 			query: '',
 			options,
 			onQueryChange: jasmine.createSpy('query'),
@@ -418,3 +453,19 @@ describe('shared MUI controls', () => {
 		expect(result.queryDocument('[role="dialog"]')).toBeTruthy();
 	});
 });
+
+/**
+ * Waits for MUI's exit transition to finish after a semantic close gesture.
+ *
+ * @param {object} result - Shared harness DOM queries.
+ * @returns {Promise<void>} - Completion after the popup leaves the document.
+ */
+async function waitForPanelClose(result) {
+	for (let attempt = 0; attempt < 100; attempt++) {
+		if (!result.queryDocument('[role="dialog"]')) {
+			return;
+		}
+		await act(async () => new Promise((resolve) => setTimeout(resolve, 20)));
+	}
+	throw new Error('The panel did not close after MUI dismissal.');
+}

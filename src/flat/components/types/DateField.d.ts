@@ -1,7 +1,7 @@
-import type {ComponentType} from 'react';
+import {Component} from 'react';
 
 /**
  * Shared DateField presentation contract.
  */
-declare const DateField: ComponentType<DateTimeFieldProps>;
+declare class DateField extends Component<DateTimeFieldProps> {}
 export default DateField;

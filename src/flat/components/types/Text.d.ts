@@ -1,4 +1,5 @@
-import type {ComponentType} from 'react';
-/** Text React presentation component. */
-declare const Text: ComponentType<Record<string, unknown>>;
+/**
+ * Concrete text presentation sharing the base's localization contract.
+ */
+declare const Text: typeof import('./BaseText').default;
 export default Text;

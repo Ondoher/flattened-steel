@@ -58,7 +58,7 @@ class ViewStub {
 describe('workspace React frame', () => {
 	let harness, view, result;
 	beforeEach(() => {
-		harness = createTestHarness();
+		harness = createTestHarness().withLocale('en-US');
 		view = new ViewStub();
 	});
 	afterEach(() => harness.unmount());
@@ -70,7 +70,7 @@ describe('workspace React frame', () => {
 			secondaryTools: [{registrationId: 2, component: <button>Time controls</button>}],
 		};
 		let secondary = {...primary, id: 'view-2'};
-		view.state = {...initial(), pages: [{id: 'scene', label: 'Scene'}], views: [primary, secondary]};
+		view.state = {...initial(), pages: [{id: 'scene', label: 'flat-earth.title'}], views: [primary, secondary]};
 		result = harness.render(WorkspaceShell, {workspaceView: view, initialState: view.state});
 		let frames = result.queryAll('.viewport-frame');
 		let first = frames[0];
@@ -128,8 +128,8 @@ describe('workspace React frame', () => {
 			...initial(),
 			toolbar: [{registrationId: 1, component: <button>Owned tool</button>}],
 			pages: [
-				{id: 'one', label: 'One'},
-				{id: 'two', label: 'Two'},
+				{id: 'one', label: 'flat-earth.title'},
+				{id: 'two', label: 'workspace.title'},
 			],
 			views: [viewport('view-1'), viewport('view-2')],
 		};
@@ -207,7 +207,7 @@ describe('workspace React frame', () => {
 		expect(replacement.unlistened).toBeTrue();
 	});
 	it('keeps enabled localization failures empty rather than falling back to literal labels', () => {
-		harness.withContext({localizationEnabled: true, localize: null});
+		harness.withContext({localize: {translate: () => ''}});
 		result = harness.render(WorkspaceShell, {workspaceView: view, initialState: view.state});
 		expect(result.query('h1').textContent).toBe('');
 	});

@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import AppContext from '../../../common/AppContext.js';
-import phrases from '../../../phrases/en-US.json';
 import WorkspaceToolbar from './WorkspaceToolbar.jsx';
 import Workspace from './Workspace.jsx';
 import ConfigurationPanel from './ConfigurationPanel.jsx';
@@ -94,17 +93,11 @@ export default class WorkspaceShell extends Component {
 	 *
 	 * @param {string} key - Flat phrase key.
 	 * @param {Record<string, string|number>} replacements - Named presentation values.
-	 * @param {string} [literal] - Label for localization-disabled presentation only.
 	 * @returns {string} - Localized text, or an empty failed lookup.
 	 */
-	_text(key, replacements = {}, literal) {
+	_text(key, replacements = {}) {
 		let context = /** @type {AppContextValue} */ (this.context);
-		if (context.localizationEnabled) {
-			return context.localize?.translate(key, replacements, undefined, context.locale) ?? '';
-		}
-		return String(literal ?? phrases[key] ?? '').replace(/%\{([^}]+)\}/g, (_match, name) =>
-			String(replacements[name] ?? ''),
-		);
+		return context.localize.translate(key, replacements, undefined, context.locale);
 	}
 
 	/**

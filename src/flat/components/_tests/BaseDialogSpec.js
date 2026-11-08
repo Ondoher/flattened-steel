@@ -63,14 +63,13 @@ describe('BaseDialog', () => {
 		closed = jasmine.createSpy('closed');
 		cancelled = jasmine.createSpy('cancelled');
 		confirmed = jasmine.createSpy('confirmed');
-		harness = createTestHarness().withContext({localize, localizationEnabled: true, accessibilityEnabled: true});
+		harness = createTestHarness().withContext({localize, accessibilityEnabled: true});
 	});
 	afterEach(() => harness?.unmount());
 
 	function render(props = {}) {
 		return harness.render(BaseDialog, {
 			open: true,
-			localize: true,
 			title: 'dialog.title',
 			description: 'dialog.description',
 			showClose: true,
@@ -242,7 +241,7 @@ describe('BaseDialog', () => {
 
 	it('covers default close intent and defensive action rendering fallbacks', () => {
 		const dialog = new BaseDialog({onClose: closed, onAction: pressed});
-		dialog.context = {accessibilityEnabled: false};
+		dialog.context = createTestHarness().context;
 		dialog.handleClose();
 		expect(closed).toHaveBeenCalledWith('closeButtonClick');
 		expect(pressed).toHaveBeenCalledWith('close');

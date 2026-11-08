@@ -20,9 +20,8 @@ describe('button and feedback components', () => {
 
 	it('localizes button content, maps priority, and reports activation', () => {
 		const clicked = jasmine.createSpy('clicked');
-		harness = createTestHarness().withContext({localize, localizationEnabled: true, accessibilityEnabled: true});
+		harness = createTestHarness().withContext({localize, accessibilityEnabled: true});
 		const result = harness.render(BaseButton, {
-			localize: true,
 			label: 'action.save',
 			ariaLabel: 'action.save.aria',
 			priority: 'primary',
@@ -52,16 +51,15 @@ describe('button and feedback components', () => {
 		expect(button.getAttribute('aria-label')).toBeNull();
 	});
 
-	it('keeps base button labels literal when localization is omitted', () => {
+	it('passes base button labels through the disabled translator', () => {
 		harness = createTestHarness();
 		const result = harness.render(BaseButton, {label: 'Literal label'});
 		expect(result.query('button').textContent).toBe('Literal label');
 	});
 
 	it('suppresses empty helper text and applies accessible error semantics only when enabled', () => {
-		harness = createTestHarness().withContext({localize, localizationEnabled: true, accessibilityEnabled: true});
+		harness = createTestHarness().withContext({localize, accessibilityEnabled: true});
 		let result = harness.render(BaseHelperText, {
-			localize: true,
 			label: 'helper.error',
 			status: 'error',
 			id: 'error-help',
@@ -75,8 +73,8 @@ describe('button and feedback components', () => {
 	});
 
 	it('renders form messages by severity and returns no output for empty content', () => {
-		harness = createTestHarness().withContext({localize, localizationEnabled: true});
-		let result = harness.render(BaseFormMessage, {localize: true, label: 'message.saved', type: 'success'});
+		harness = createTestHarness().withContext({localize});
+		let result = harness.render(BaseFormMessage, {label: 'message.saved', type: 'success'});
 		const alert = result.query('[role="alert"]');
 		expect(alert.textContent).toContain('Saved.');
 		expect(alert.className).toContain('MuiAlert-colorSuccess');

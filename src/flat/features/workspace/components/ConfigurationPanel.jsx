@@ -17,7 +17,9 @@ export default class ConfigurationPanel extends Component {
 	 */
 	constructor(props) {
 		super(props);
-		/** @type {React.RefObject<HTMLButtonElement>} */
+		/**
+		 * @type {React.RefObject<HTMLButtonElement>}
+		 */
 		this._closeButton = createRef();
 		this._onKeyDown = this._onKeyDown.bind(this);
 		this._onScopeChange = this._onScopeChange.bind(this);
@@ -147,7 +149,7 @@ export default class ConfigurationPanel extends Component {
 	 */
 	_renderScope() {
 		let {configuration, text} = this.props;
-		let label = text('workspace.configuration-for');
+		let label = 'workspace.configuration-for';
 		let selectedTarget = configuration.target ?? '';
 		let options = this._scopeOptions();
 		let selectProps = {displayEmpty: true};
@@ -176,11 +178,13 @@ export default class ConfigurationPanel extends Component {
 			.map((view) => {
 				let index = views.findIndex((item) => item.id === view.id);
 				let viewLabel = text('workspace.view', {number: index + 1});
-				let pageLabel = view.page ? text(view.page.label, {}, view.page.literalLabel) : '';
-				let label = pageLabel ? viewLabel + ' — ' + pageLabel : viewLabel;
+				let pageLabel = view.page ? text(view.page.label) : '';
+				let label = pageLabel
+					? {phrase: 'workspace.view-page', replacements: {view: viewLabel, page: pageLabel}}
+					: {phrase: 'workspace.view', replacements: {number: index + 1}};
 				return {value: view.id, label};
 			});
-		return [{value: '', label: text('workspace.shared-settings')}, ...options];
+		return [{value: '', label: 'workspace.shared-settings'}, ...options];
 	}
 
 	/**
@@ -201,7 +205,7 @@ export default class ConfigurationPanel extends Component {
 		let {configuration, text} = this.props;
 		let label = text('workspace.settings-section');
 		let buttons = (configuration.sections ?? []).map((section) => {
-			let title = text(section.label ?? section.id, {}, section.id);
+			let title = section.label ? text(section.label) : '';
 			let selected = section.id === configuration.section;
 			return (
 				<Button

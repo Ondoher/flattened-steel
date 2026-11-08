@@ -31,4 +31,6 @@ import './components/_tests/BaseDialogSpec.js';
 import './components/_tests/BaseTextSpec.js';
 import './components/_tests/ControlDefaultsSpec.js';
 import './components/_tests/SharedControlsSpec.js';
+import './components/_tests/IconControlsSpec.js';
+import './components/_tests/LocalizationBoundarySpec.js';
 import './services/_tests/ThemeSpec.js';

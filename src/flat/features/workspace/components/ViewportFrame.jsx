@@ -48,12 +48,12 @@ export default class ViewportFrame extends Component {
 	 * @returns {AppSelectOption[]} - Options with stable page identities and localized labels.
 	 */
 	_renderSceneOptions() {
-		let {pages, text} = this.props;
+		let {pages} = this.props;
 		let options = pages.map((page) => ({
 			value: page.id,
-			label: text(page.label, {}, page.literalLabel ?? page.label),
+			label: page.label,
 		}));
-		return [{value: '', label: text('workspace.choose-scene'), disabled: true}, ...options];
+		return [{value: '', label: 'workspace.choose-scene', disabled: true}, ...options];
 	}
 
 	/**
@@ -76,7 +76,7 @@ export default class ViewportFrame extends Component {
 			return null;
 		}
 		let {viewport, text} = this.props;
-		let sceneLabel = text('workspace.scene-for', {view: label});
+		let sceneLabel = {phrase: 'workspace.scene-for', replacements: {view: label}};
 		let selectedPage = viewport.pageId ?? '';
 		let options = this._renderSceneOptions();
 		let selectProps = {displayEmpty: true};

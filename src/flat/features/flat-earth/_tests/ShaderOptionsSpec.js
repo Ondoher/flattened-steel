@@ -144,7 +144,6 @@ describe('Flat Earth shader options', () => {
 
 	it('presents localized sky choices and relays the selected view identity through its owning view', () => {
 		let harness = new TestHarness().withContext({
-			localizationEnabled: true,
 			localize: {translate: (key) => `translated:${key}`},
 		});
 		let session = createSession('view', () => {});

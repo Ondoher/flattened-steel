@@ -19,12 +19,14 @@ export class AppContextService extends Service {
 	 * Call this method to initialize the context with feature flags and shared control defaults.
 	 */
 	start() {
-		/** @type {AppContextValue} */
+		let locale = 'en-US';
+		/**
+		 * @type {AppContextValue}
+		 */
 		this.value = {
 			registry: this.registry,
-			locale: 'en-US',
+			locale,
 			localize: null,
-			localizationEnabled: true,
 			accessibilityEnabled: false,
 			controlSize: 'small',
 			controlVariant: 'outlined',
@@ -32,12 +34,14 @@ export class AppContextService extends Service {
 	}
 
 	/**
-	 * Call this method at dependency readiness to resolve localization and publish a changed context.
+	 * Call this method at dependency readiness to select the shared translator before publishing context.
 	 */
 	ready() {
-		let localize = this.registry.subscribe('localize') ?? null;
+		let localize = /** @type {LocalizeService} */ (this.registry.subscribe('localize'));
+		let locale = this.value.locale;
 		if (this.value.localize !== localize) {
-			this.value = {...this.value, localize};
+			localize.setLocale(locale);
+			this.value = {...this.value, localize, locale};
 			this.fire('changed', this.get());
 		}
 	}
@@ -52,7 +56,7 @@ export class AppContextService extends Service {
 	}
 
 	/**
-	 * Call this method to replace the current locale when its phrases are loaded.
+	 * Call this method to select a loaded translator and publish its matching locale.
 	 *
 	 * @param {string} locale - The next locale.
 	 * @returns {boolean} - Whether the locale changed.
@@ -65,6 +69,7 @@ export class AppContextService extends Service {
 		if (locale === this.value.locale) {
 			return false;
 		}
+		this.value.localize.setLocale(locale);
 		this.value = {...this.value, locale};
 		this.fire('locale', locale);
 		this.fire('changed', this.get());

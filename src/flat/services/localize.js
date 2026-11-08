@@ -41,6 +41,28 @@ export function replaceText(value, replacements = {}, escapeHtml = false) {
 			: result;
 	});
 }
+
+
+export function createDisabledTranslator() {
+	/**
+	 * Call this function to resolve one phrase and its replacements.
+	 *
+	 * @param {string} key - The phrase key to resolve.
+	 * @param {Record<string, string | number>} replacements - Named replacement values.
+	 * @param {number} [cardinal] - The cardinal value used for plural selection.
+	 * @param {boolean} [escapeHtml] - Whether replacement markup characters are escaped.
+	 * @returns {string} - The resolved phrase, or empty text when it is unavailable or invalid.
+	 */
+	function translate(key, replacements = {}, _cardinal, escapeHtml = false) {
+		let value = key;
+
+		return replaceText(value, replacements, escapeHtml);
+	}
+	return translate;
+
+}
+
+
 /**
  * Call this function to create a translator for one locale and phrase collection.
  *
@@ -97,14 +119,24 @@ export class LocalizeService extends Service {
 	 */
 	constructor(registry) {
 		super('localize', registry);
-		this.implement(['start', 'supportsLocale', 'translate', 'replace']);
+		this.locale = 'en-US';
+		this.implement(['start', 'setLocale', 'supportsLocale', 'translate', 'replace']);
 	}
 
 	/**
 	 * Call this method to initialize the loaded translator collection.
 	 */
 	start() {
-		this.translators = new Map([['en-US', createTranslator('en-US', phrases)]]);
+		this.translators = new Map([['en-US', createTranslator('en-US', phrases)], ['disabled', createDisabledTranslator()]]);
+	}
+
+	/**
+	 * Call this method to set the default translator
+	 *
+	 * @param {string} locale
+	 */
+	setLocale(locale) {
+		this.locale = locale;
 	}
 
 	/**
@@ -127,7 +159,7 @@ export class LocalizeService extends Service {
 	 * @param {boolean} escapeHtml - Whether replacement markup is escaped.
 	 * @returns {string} - The resolved phrase.
 	 */
-	translate(key, replacements = {}, cardinal, locale = 'en-US', escapeHtml = false) {
+	translate(key, replacements = {}, cardinal, locale = this.locale, escapeHtml = false) {
 		const translator = this.translators.get(locale);
 		if (!translator) {
 			console.warn(`Locale is not loaded: ${locale}`);

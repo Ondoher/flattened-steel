@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import AppContext from '../../../common/AppContext.js';
-import phrases from '../../../phrases/en-US.json';
 import LocationEditor from './LocationEditor.jsx';
 import DateTimeEditor from './DateTimeEditor.jsx';
 
@@ -90,14 +89,11 @@ export default class GlobalConfigurationPanel extends Component {
 	 *
 	 * @param {string} key - Configuration phrase key.
 	 * @param {Record<string, string|number>} replacements - Named phrase values.
-	 * @returns {string} - Localized text or configured literal in localization-disabled mode.
+	 * @returns {string} - Localized text from the selected translator.
 	 */
 	_text(key, replacements = {}) {
 		let context = /** @type {AppContextValue} */ (this.context);
-		if (context.localizationEnabled) {
-			return context.localize?.translate(key, replacements, undefined, context.locale) ?? '';
-		}
-		return phrases[key].replace(/%\{([^}]+)\}/g, (_match, name) => String(replacements[name] ?? ''));
+		return context.localize.translate(key, replacements, undefined, context.locale);
 	}
 
 	/**

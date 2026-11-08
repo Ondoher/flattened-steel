@@ -8,7 +8,9 @@ import {resolveComponentText} from './component-text.js';
 
 let nextCheckboxId = 1;
 
-/** MUI checkbox building block with opt-in localization and accessibility metadata. */
+/**
+ * MUI checkbox building block with localization and accessibility metadata.
+ */
 export default class BaseCheckbox extends Component {
 	static contextType = AppContext;
 
@@ -29,17 +31,19 @@ export default class BaseCheckbox extends Component {
 	constructor(props) {
 		super(props);
 		this.fallbackId = `checkbox-${nextCheckboxId++}`;
+		this.handleChange = this.handleChange.bind(this);
 	}
+
 	/**
-	 * Called by the component to resolve literal or localized display text.
+	 * Called by the component to translate configured display text.
 	 *
-	 * @param {unknown} value - The configured text value or phrase key.
-	 * @param {string} fallback - The text returned when the value is absent.
+	 * @param {LocalizedText} value - The phrase key and optional replacements.
 	 * @returns {string} - The resolved checkbox text.
 	 */
-	resolve(value, fallback = '') {
-		return resolveComponentText(this.appContext, this.props.localize ?? false, value, fallback);
+	resolve(value) {
+		return resolveComponentText(this.appContext, value);
 	}
+
 	/**
 	 * Called by the MUI input when its checked state changes.
 	 *
@@ -48,6 +52,7 @@ export default class BaseCheckbox extends Component {
 	handleChange(event) {
 		this.props.onChange?.(event.target.checked, event);
 	}
+
 	/**
 	 * Called by the component to render the configured checkbox input.
 	 *
@@ -63,36 +68,41 @@ export default class BaseCheckbox extends Component {
 				: checkboxProps.size !== undefined
 					? checkboxProps.size
 					: this.appContext.controlSize;
+		const resolvedSlots = {
+			...checkboxProps.slotProps,
+			input: {
+				...checkboxProps.slotProps?.input,
+				...(this.appContext.accessibilityEnabled && helperId ? {'aria-describedby': helperId} : {}),
+				...(this.appContext.accessibilityEnabled && ariaLabel ? {'aria-label': this.resolve(ariaLabel)} : {}),
+			},
+		};
 		return (
 			<Checkbox
 				{...checkboxProps}
 				size={resolvedSize}
 				id={checkboxId}
 				checked={checked}
-				onChange={(event) => this.handleChange(event)}
-				slotProps={{
-					...checkboxProps.slotProps,
-					input: {
-						...checkboxProps.slotProps?.input,
-						...(this.appContext.accessibilityEnabled && helperId ? {'aria-describedby': helperId} : {}),
-						...(this.appContext.accessibilityEnabled && ariaLabel
-							? {'aria-label': this.resolve(ariaLabel)}
-							: {}),
-					},
-				}}
+				onChange={this.handleChange}
+				slotProps={resolvedSlots}
 			/>
 		);
 	}
-	/** Call this method to render the checkbox and its labels. */
+
+	/**
+	 * Call this method to render the checkbox and its labels.
+	 */
 	render() {
-		const {id, label, helperText, ariaLabel, localize, checked, onChange, checkboxProps, size, ...props} =
-			this.props;
+		const {id, label, helperText, ariaLabel, checked, onChange, checkboxProps, size, ...props} = this.props;
 		const checkboxId = id || this.fallbackId;
 		const helperId = helperText ? `${checkboxId}-helper` : undefined;
+		const fullWidth = props.fullWidth ?? true;
+		const labelText = this.resolve(label);
+		const checkbox = this.renderCheckbox(checkboxId, helperId);
+		const helper = helperText ? <FormHelperText id={helperId}>{this.resolve(helperText)}</FormHelperText> : null;
 		return (
-			<FormControl {...props} fullWidth={props.fullWidth ?? true}>
-				<FormControlLabel label={this.resolve(label)} control={this.renderCheckbox(checkboxId, helperId)} />
-				{helperText ? <FormHelperText id={helperId}>{this.resolve(helperText)}</FormHelperText> : null}
+			<FormControl {...props} fullWidth={fullWidth}>
+				<FormControlLabel label={labelText} control={checkbox} />
+				{helper}
 			</FormControl>
 		);
 	}

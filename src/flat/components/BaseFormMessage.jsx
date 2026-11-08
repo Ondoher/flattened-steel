@@ -3,7 +3,9 @@ import Alert from '@mui/material/Alert';
 import AppContext from '../common/AppContext.js';
 import {resolveComponentText} from './component-text.js';
 
-/** Form-level MUI feedback message with opt-in localization. */
+/**
+ * Form-level MUI feedback message with localization.
+ */
 export default class BaseFormMessage extends Component {
 	static contextType = AppContext;
 
@@ -22,13 +24,15 @@ export default class BaseFormMessage extends Component {
 	 * @returns {React.ReactNode} - The feedback message or no content.
 	 */
 	render() {
-		const {label, localize = false, children, type = 'info', ...props} = this.props;
-		const content = children ?? resolveComponentText(this.appContext, localize, label);
+		const {label, children, type = 'info', ...props} = this.props;
+		const content = children ?? resolveComponentText(this.appContext, label);
 		if (!content) {
 			return null;
 		}
+		const severity = props.severity || type;
+		const variant = props.variant || 'outlined';
 		return (
-			<Alert {...props} severity={props.severity || type} variant={props.variant || 'outlined'}>
+			<Alert {...props} severity={severity} variant={variant}>
 				{content}
 			</Alert>
 		);

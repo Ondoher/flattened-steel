@@ -58,11 +58,11 @@ export default class DateTimeEditor extends Component {
 	render() {
 		let {presentation, text} = this.props;
 		let title = text('global-configuration.date-time.title');
-		let dateLabel = text('global-configuration.date-time.date');
-		let timeLabel = text('global-configuration.date-time.time');
+		let dateLabel = 'global-configuration.date-time.date';
+		let timeLabel = 'global-configuration.date-time.time';
 		let applyLabel = text('global-configuration.date-time.apply');
-		let dateError = presentation.dateError ? text(presentation.dateError) : null;
-		let timeError = presentation.timeError ? text(presentation.timeError) : null;
+		let dateError = presentation.dateError;
+		let timeError = presentation.timeError;
 		let selection = presentation.accepted ?? text('global-configuration.date-time.none');
 		return (
 			<form

@@ -45,16 +45,24 @@ export class FlatEarthController extends Service {
 			'openTimeSettings',
 			'openLocationSettings',
 		]);
-		/** @type {Map<string, FlatEarthSession>} */
+		/**
+		 * @type {Map<string, FlatEarthSession>}
+		 */
 		this.sessions = new Map();
 		this._listener = null;
 		this._timeRegistration = null;
 		this._workspaceListener = null;
-		/** @type {Map<string, number[]>} */
+		/**
+		 * @type {Map<string, number[]>}
+		 */
 		this._tools = new Map();
-		/** @type {Map<string, FlatEarthSurface>} */
+		/**
+		 * @type {Map<string, FlatEarthSurface>}
+		 */
 		this._surfaces = new Map();
-		/** @type {FlatEarthGraphicsResources|null} */
+		/**
+		 * @type {FlatEarthGraphicsResources|null}
+		 */
 		this._startupGraphics = null;
 		this._cacheStarted = false;
 	}
@@ -118,7 +126,6 @@ export class FlatEarthController extends Service {
 		pages.add({
 			id: 'flat-earth',
 			label: 'flat-earth.title',
-			literalLabel: 'Flat Earth',
 			urlSlug: 'flat-earth',
 			order: 0,
 			controller: 'flat-earth-controller',

@@ -9,7 +9,9 @@ import {resolveComponentText} from './component-text.js';
 
 let nextSelectId = 1;
 
-/** MUI select building block with opt-in localization and accessibility metadata. */
+/**
+ * MUI select building block with localization and accessibility metadata.
+ */
 export default class BaseSelect extends Component {
 	static contextType = AppContext;
 
@@ -30,17 +32,19 @@ export default class BaseSelect extends Component {
 	constructor(props) {
 		super(props);
 		this.fallbackId = `select-${nextSelectId++}`;
+		this.handleChange = this.handleChange.bind(this);
 	}
+
 	/**
 	 * Called by the component to resolve display text.
 	 *
-	 * @param {unknown} value - The value or phrase key.
-	 * @param {string} fallback - The absent-value fallback.
+	 * @param {LocalizedText} value - The phrase key and optional replacements.
 	 * @returns {string} - The resolved text.
 	 */
-	resolve(value, fallback = '') {
-		return resolveComponentText(this.appContext, this.props.localize ?? false, value, fallback);
+	resolve(value) {
+		return resolveComponentText(this.appContext, value);
 	}
+
 	/**
 	 * Called by MUI when the selected value changes.
 	 *
@@ -50,6 +54,7 @@ export default class BaseSelect extends Component {
 	handleChange(event, child) {
 		this.props.onChange?.(event.target.value, event, child);
 	}
+
 	/**
 	 * Called by the select to render one native or MUI option.
 	 *
@@ -57,16 +62,19 @@ export default class BaseSelect extends Component {
 	 * @returns {React.ReactNode} - The rendered option.
 	 */
 	renderOption(option) {
-		return this.props.selectProps?.native ? (
+		const label = this.resolve(option.label);
+		const content = this.props.selectProps?.native ? (
 			<option key={option.value} value={option.value} disabled={option.disabled}>
-				{this.resolve(option.label)}
+				{label}
 			</option>
 		) : (
 			<MenuItem key={option.value} value={option.value} disabled={option.disabled}>
-				{this.resolve(option.label)}
+				{label}
 			</MenuItem>
 		);
+		return content;
 	}
+
 	/**
 	 * Call this method to render the configured select.
 	 *
@@ -78,7 +86,6 @@ export default class BaseSelect extends Component {
 			label,
 			helperText,
 			ariaLabel,
-			localize,
 			options = [],
 			onChange,
 			selectProps = {},
@@ -100,8 +107,13 @@ export default class BaseSelect extends Component {
 		const helperId = helperText ? `${selectId}-helper` : undefined;
 		const resolvedLabel = this.resolve(label);
 		const labelShrink = selectProps.displayEmpty ? true : undefined;
+		const fullWidth = props.fullWidth ?? true;
+		const describedBy = this.appContext.accessibilityEnabled ? helperId : undefined;
+		const ariaLabelText = this.appContext.accessibilityEnabled && ariaLabel ? this.resolve(ariaLabel) : undefined;
+		const renderedOptions = options.map((option) => this.renderOption(option));
+		const helper = helperText ? <FormHelperText id={helperId}>{this.resolve(helperText)}</FormHelperText> : null;
 		return (
-			<FormControl {...props} size={resolvedSize} variant={resolvedVariant} fullWidth={props.fullWidth ?? true}>
+			<FormControl {...props} size={resolvedSize} variant={resolvedVariant} fullWidth={fullWidth}>
 				<InputLabel id={labelId} shrink={labelShrink}>
 					{resolvedLabel}
 				</InputLabel>
@@ -113,13 +125,13 @@ export default class BaseSelect extends Component {
 					label={resolvedLabel}
 					labelId={labelId}
 					value={value}
-					onChange={(event, child) => this.handleChange(event, child)}
-					aria-describedby={this.appContext.accessibilityEnabled ? helperId : undefined}
-					aria-label={this.appContext.accessibilityEnabled && ariaLabel ? this.resolve(ariaLabel) : undefined}
+					onChange={this.handleChange}
+					aria-describedby={describedBy}
+					aria-label={ariaLabelText}
 				>
-					{options.map((option) => this.renderOption(option))}
+					{renderedOptions}
 				</MuiSelect>
-				{helperText ? <FormHelperText id={helperId}>{this.resolve(helperText)}</FormHelperText> : null}
+				{helper}
 			</FormControl>
 		);
 	}

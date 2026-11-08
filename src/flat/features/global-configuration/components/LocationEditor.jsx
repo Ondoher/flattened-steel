@@ -109,9 +109,11 @@ export default class LocationEditor extends Component {
 	 */
 	_renderCoordinates() {
 		let {presentation, text} = this.props;
-		let latitudeLabel = text('global-configuration.latitude');
-		let longitudeLabel = text('global-configuration.longitude');
-		let applyLabel = text('global-configuration.coordinates.apply');
+		let latitudeLabel = 'global-configuration.latitude';
+		let longitudeLabel = 'global-configuration.longitude';
+		let applyLabel = 'global-configuration.coordinates.apply';
+		let latitudeSlots = {htmlInput: {min: -90, max: 90, step: 'any'}};
+		let longitudeSlots = {htmlInput: {min: -180, max: 180, step: 'any'}};
 		let error = null;
 		if (presentation.coordinateError) {
 			let message = text(presentation.coordinateError);
@@ -127,7 +129,7 @@ export default class LocationEditor extends Component {
 					label={latitudeLabel}
 					name="latitude"
 					type="number"
-					slotProps={{htmlInput: {min: -90, max: 90, step: 'any'}}}
+					slotProps={latitudeSlots}
 					value={presentation.editor.latitude}
 					onChange={this._onLatitude}
 				/>
@@ -135,7 +137,7 @@ export default class LocationEditor extends Component {
 					label={longitudeLabel}
 					name="longitude"
 					type="number"
-					slotProps={{htmlInput: {min: -180, max: 180, step: 'any'}}}
+					slotProps={longitudeSlots}
 					value={presentation.editor.longitude}
 					onChange={this._onLongitude}
 				/>

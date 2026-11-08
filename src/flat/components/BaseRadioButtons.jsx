@@ -10,7 +10,9 @@ import {resolveComponentText} from './component-text.js';
 
 let nextRadioGroupId = 1;
 
-/** MUI radio-group building block with opt-in localization and accessibility metadata. */
+/**
+ * MUI radio-group building block with localization and accessibility metadata.
+ */
 export default class BaseRadioButtons extends Component {
 	static contextType = AppContext;
 
@@ -31,17 +33,19 @@ export default class BaseRadioButtons extends Component {
 	constructor(props) {
 		super(props);
 		this.fallbackId = `radio-group-${nextRadioGroupId++}`;
+		this.handleChange = this.handleChange.bind(this);
 	}
+
 	/**
 	 * Called by the component to resolve display text.
 	 *
-	 * @param {unknown} value - The value or phrase key.
-	 * @param {string} fallback - The absent-value fallback.
+	 * @param {LocalizedText} value - The phrase key and optional replacements.
 	 * @returns {string} - The resolved text.
 	 */
-	resolve(value, fallback = '') {
-		return resolveComponentText(this.appContext, this.props.localize ?? false, value, fallback);
+	resolve(value) {
+		return resolveComponentText(this.appContext, value);
 	}
+
 	/**
 	 * Called by MUI when the selected radio changes.
 	 *
@@ -50,6 +54,7 @@ export default class BaseRadioButtons extends Component {
 	handleChange(event) {
 		this.props.onChange?.(event.target.value, event);
 	}
+
 	/**
 	 * Called by the group to render one radio option.
 	 *
@@ -61,16 +66,18 @@ export default class BaseRadioButtons extends Component {
 		const resolvedSize =
 			size !== undefined ? size : radioProps.size !== undefined ? radioProps.size : this.appContext.controlSize;
 		const radio = <Radio {...radioProps} size={resolvedSize} />;
+		const label = this.resolve(option.label);
 		return (
 			<FormControlLabel
 				key={option.value}
 				value={option.value}
 				disabled={option.disabled}
 				control={radio}
-				label={this.resolve(option.label)}
+				label={label}
 			/>
 		);
 	}
+
 	/**
 	 * Call this method to render the configured radio group.
 	 *
@@ -82,7 +89,6 @@ export default class BaseRadioButtons extends Component {
 			label,
 			helperText,
 			ariaLabel,
-			localize,
 			options = [],
 			onChange,
 			value,
@@ -93,20 +99,27 @@ export default class BaseRadioButtons extends Component {
 		} = this.props;
 		const groupId = id || this.fallbackId;
 		const helperId = helperText ? `${groupId}-helper` : undefined;
+		const labelId = `${groupId}-label`;
+		const labelText = this.resolve(label);
+		const labelledBy = this.appContext.accessibilityEnabled ? labelId : undefined;
+		const describedBy = this.appContext.accessibilityEnabled ? helperId : undefined;
+		const ariaLabelText = this.appContext.accessibilityEnabled && ariaLabel ? this.resolve(ariaLabel) : undefined;
+		const renderedOptions = options.map((option) => this.renderOption(option));
+		const helper = helperText ? <FormHelperText id={helperId}>{this.resolve(helperText)}</FormHelperText> : null;
 		return (
 			<FormControl {...props}>
-				<FormLabel id={`${groupId}-label`}>{this.resolve(label)}</FormLabel>
+				<FormLabel id={labelId}>{labelText}</FormLabel>
 				<RadioGroup
 					value={value}
 					row={row}
-					onChange={(event) => this.handleChange(event)}
-					aria-labelledby={this.appContext.accessibilityEnabled ? `${groupId}-label` : undefined}
-					aria-describedby={this.appContext.accessibilityEnabled ? helperId : undefined}
-					aria-label={this.appContext.accessibilityEnabled && ariaLabel ? this.resolve(ariaLabel) : undefined}
+					onChange={this.handleChange}
+					aria-labelledby={labelledBy}
+					aria-describedby={describedBy}
+					aria-label={ariaLabelText}
 				>
-					{options.map((option) => this.renderOption(option))}
+					{renderedOptions}
 				</RadioGroup>
-				{helperText ? <FormHelperText id={helperId}>{this.resolve(helperText)}</FormHelperText> : null}
+				{helper}
 			</FormControl>
 		);
 	}

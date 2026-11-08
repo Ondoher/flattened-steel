@@ -3,13 +3,9 @@
  */
 type AppButtonProps = Omit<import('@mui/material/Button').ButtonProps, 'ref'> & {
 	/**
-	 * Prepared literal display label, or a phrase key when localization is enabled.
+	 * Phrase key with optional replacements; translated by the control.
 	 */
-	label?: string;
-	/**
-	 * Whether the button label is a localization phrase key.
-	 */
-	localize?: boolean;
+	label?: LocalizedText;
 	/**
 	 * Explicit action priority, applied only when variant is absent.
 	 */
@@ -33,9 +29,9 @@ type AppSelectOption = {
 	 */
 	value: string | number;
 	/**
-	 * Prepared literal display label.
+	 * Phrase key with optional replacements; translated by the control.
 	 */
-	label: string;
+	label: LocalizedText;
 	/**
 	 * Whether this choice can be selected.
 	 */
@@ -51,7 +47,7 @@ type TypeAheadOption = {
 	 */
 	id: string;
 	/**
-	 * Prepared literal display label, or a phrase key when localization is enabled.
+	 * Display label prepared by the caller; result data is not translated by this control.
 	 */
 	label: string;
 	/**
@@ -69,7 +65,7 @@ type TypeAheadProps = {
 	 */
 	id?: string;
 	/**
-	 * Prepared literal display label, or a phrase key when localization is enabled.
+	 * Phrase key translated by the control.
 	 */
 	label: string;
 	/**
@@ -121,6 +117,10 @@ type TypeAheadProps = {
 	 */
 	inputRef?: React.Ref<HTMLInputElement>;
 	/**
+	 * Requests initial input focus when this control is mounted in a popup.
+	 */
+	autoFocus?: boolean;
+	/**
 	 * Renders prepared option content inside the control-owned interactive option.
 	 *
 	 * @param option - Prepared result to present.
@@ -147,6 +147,11 @@ type TypeAheadProps = {
 type TypeAheadInputParams = import('@mui/material/Autocomplete').AutocompleteRenderInputParams;
 
 /**
+ * Native option behavior supplied by MUI, including its optional React key.
+ */
+type TypeAheadOptionAttributes = React.HTMLAttributes<HTMLLIElement> & {key?: React.Key};
+
+/**
  * Open state belongs to the control, independently of the query owner.
  */
 type TypeAheadState = {
@@ -165,6 +170,10 @@ type TypeAheadInputReason = import('@mui/material/Autocomplete').AutocompleteInp
  * Scalar controlled slider with explicit transient interaction boundaries.
  */
 type AppSliderProps = {
+	/**
+	 * Requests native input focus when mounted in a popup.
+	 */
+	autoFocus?: boolean;
 	/**
 	 * Stable element or option identity supplied by the presentation owner.
 	 */
@@ -251,21 +260,37 @@ type AppSliderState = {
 type AppToolbarProps = import('@mui/material/Toolbar').ToolbarProps;
 
 /**
- * A nonmodal anchored interactive panel, owned transiently by its trigger.
+ * An anchored interactive MUI Popover, owned transiently by its trigger.
  */
 type PanelButtonProps = {
+	/**
+	 * Optional icon-only trigger; absence retains the text-and-arrow presentation.
+	 */
+	icon?: React.ReactNode;
+	/**
+	 * Optional trigger presentation class.
+	 */
+	className?: string;
+	/**
+	 * Changing this request value asks the popup to close declaratively.
+	 */
+	closeRequest?: number;
+	/**
+	 * Called after MUI's exit transition while still closed, for deferred navigation.
+	 */
+	onClosed?: () => void;
 	/**
 	 * Stable element or option identity supplied by the presentation owner.
 	 */
 	id?: string;
 	/**
-	 * Prepared literal display label, or a phrase key when localization is enabled.
+	 * Phrase key and optional replacements for the trigger and popup name.
 	 */
-	label: string;
+	label: LocalizedText;
 	/**
 	 * Interactive content whose domain state remains owned by the caller.
 	 */
-	children: React.ReactNode;
+	children: React.ReactNode | ((open: boolean) => React.ReactNode);
 	/**
 	 * Whether interaction is disabled.
 	 */
@@ -279,9 +304,13 @@ type PanelButtonProps = {
 	 */
 	variant?: 'text' | 'outlined' | 'contained';
 	/**
-	 * Supported Popper placement relative to the trigger.
+	 * Point on the trigger used to anchor the Popover; defaults to bottom left.
 	 */
-	placement?: import('@mui/material/Popper').PopperProps['placement'];
+	anchorOrigin?: PanelButtonOrigin;
+	/**
+	 * Point on the popup attached to the anchor; defaults to top left.
+	 */
+	transformOrigin?: PanelButtonOrigin;
 	/**
 	 * Reports a change in this control's transient panel visibility.
 	 *
@@ -291,11 +320,16 @@ type PanelButtonProps = {
 };
 
 /**
- * Interactive-panel visibility; domain content remains outside this state.
+ * Positioning origin supported by MUI Popover.
+ */
+type PanelButtonOrigin = import('@mui/material/Popover').PopoverOrigin;
+
+/**
+ * Interactive-panel anchor; visibility is derived and domain content remains outside this state.
  */
 type PanelButtonState = {
 	/**
-	 * Whether this transient popup is open.
+	 * MUI positioning anchor supplied by the trigger's click event, or null when closed.
 	 */
-	open: boolean;
+	anchorEl: HTMLButtonElement | null;
 };

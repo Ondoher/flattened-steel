@@ -4,8 +4,18 @@ Status: design note requested by the owner on 2026-11-05. The simple app-wide
 fields and device-local startup defaults are implemented. The owner subsequently
 authorized browser-local entry formats and canonical timestamp storage; both
 are now implemented.
-Richer editing and location/time-zone behavior remain design work without an
-execution plan.
+The transferred control's in-field format adornment is adapted into the generic
+FormatHintInput, used by DateField and TimeField over BaseTextInput. Richer
+editing and location/time-zone behavior remain design work without an execution
+plan.
+
+The owner requires the date parsing and editing behavior to be based on the
+transferred IntlDate. The current substituted LocalDateTimeFormat parser does
+not satisfy that instruction. Correcting it is explicitly deferred; adapting
+the format adornment did not complete the requested IntlDate adaptation.
+Models are exclusively services; pure parsing/formatting/conversion utilities
+must not be classified as models. Their current naming/placement is a separate
+deferred correction, not a prerequisite for the toolbar implementation plan.
 
 ## Reference And Intent
 
@@ -18,11 +28,13 @@ Flat's design. Preserve the transferred files as reference during adaptation.
 
 For the [component refactor](../component-refactor/README.md), the owner
 specifically identified this existing MUI date control as the starting point
-to revisit. Its MUI field, format adornment, feedback and editing interactions
-can inform that migration. Replace its original application-context and
-data-cache dependencies with Flat's existing ownership boundaries, and adapt
-its MUI properties to the selected version. The implemented DateField remains
-the current control until that migration is authorized and performed.
+to revisit. Its MUI field, format adornment and feedback layout now inform the
+shared FormatHintInput. The hint appears at the input's end in an InputAdornment;
+feedback uses BaseTextInput's helper-text slot below. DateField and TimeField
+remain separate class controls over that general-purpose input. Flat's existing
+application context and ownership boundaries replace the source application's
+context/data-cache dependencies, and MUI slot properties replace the older
+InputProps API.
 
 The useful starting point is a date-value/editing model paired with a thin React
 input component. Borrow the interaction and separation of date parts from their
@@ -54,8 +66,9 @@ Both drafts must be valid before Use date and time accepts the pair. The current
 device-local date/time initializes shared values from one clock snapshot at app
 startup with seconds/milliseconds cleared, and accepted edits survive panel close/reopen in memory. Native Date resolution applies at DST gaps/overlaps for now; explicit ambiguity
 policy remains deferred by the owner. The components
-accept prepared labels, format hints, and feedback without subscribing to app
-context or services. There is no calendar popup or persistence.
+accept phrase keys, format hints and feedback through explicit props. The shared
+input uses application context for localization while BaseTextInput supplies
+the selected control defaults. There is no calendar popup or persistence.
 
 The transferred files remain unmodified reference material. Segmented typing,
 separator insertion, caret management, live locale-change reconciliation, and
@@ -69,7 +82,8 @@ clean fields refresh from the shared clock while unfinished drafts remain intact
 - Support incomplete input while the user is editing.
 - Insert separators and pad completed date segments.
 - Split pasted digits according to the active field format.
-- Show a compact expected-format hint beside the input.
+- Show a compact expected-format hint inside the input (implemented through
+  FormatHintInput).
 - Normalize the displayed value on blur and preserve a useful caret position
   during formatting.
 - Preserve the accepted calendar date when its display locale changes.

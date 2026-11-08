@@ -5,7 +5,9 @@ import {resolveComponentText} from './component-text.js';
 
 let nextTextInputId = 1;
 
-/** MUI text-input building block with opt-in localization and accessibility metadata. */
+/**
+ * MUI text-input building block with localization and accessibility metadata.
+ */
 export default class BaseTextInput extends Component {
 	static contextType = AppContext;
 
@@ -31,12 +33,11 @@ export default class BaseTextInput extends Component {
 	/**
 	 * Called by the component to resolve display text.
 	 *
-	 * @param {unknown} value - The value or phrase key.
-	 * @param {string} fallback - The absent-value fallback.
+	 * @param {LocalizedText} value - The phrase key and optional replacements.
 	 * @returns {string} - The resolved text.
 	 */
-	resolve(value, fallback = '') {
-		return resolveComponentText(this.appContext, this.props.localize ?? false, value, fallback);
+	resolve(value) {
+		return resolveComponentText(this.appContext, value);
 	}
 
 	/**
@@ -45,27 +46,31 @@ export default class BaseTextInput extends Component {
 	 * @returns {React.ReactNode} - The text-input presentation.
 	 */
 	render() {
-		const {id, label, helperText, ariaLabel, localize, slotProps, size, variant, ...props} = this.props;
+		const {id, label, helperText, ariaLabel, placeholder, slotProps, size, variant, ...props} = this.props;
 		const resolvedSize = size !== undefined ? size : this.appContext.controlSize;
 		const resolvedVariant = variant !== undefined ? variant : this.appContext.controlVariant;
 		const resolvedAriaLabel =
 			this.appContext.accessibilityEnabled && ariaLabel ? this.resolve(ariaLabel) : undefined;
+		const inputId = id || this.fallbackId;
+		const resolvedLabel = this.resolve(label);
+		const resolvedPlaceholder = this.resolve(placeholder);
+		const resolvedHelper = this.resolve(helperText) || undefined;
+		const fullWidth = props.fullWidth ?? true;
+		const resolvedSlots = {
+			...slotProps,
+			htmlInput: {...slotProps?.htmlInput, ...(resolvedAriaLabel ? {'aria-label': resolvedAriaLabel} : {})},
+		};
 		return (
 			<TextField
 				{...props}
 				size={resolvedSize}
 				variant={resolvedVariant}
-				id={id || this.fallbackId}
-				label={this.resolve(label)}
-				helperText={this.resolve(helperText) || undefined}
-				fullWidth={props.fullWidth ?? true}
-				slotProps={{
-					...slotProps,
-					htmlInput: {
-						...slotProps?.htmlInput,
-						...(resolvedAriaLabel ? {'aria-label': resolvedAriaLabel} : {}),
-					},
-				}}
+				id={inputId}
+				label={resolvedLabel}
+				placeholder={resolvedPlaceholder}
+				helperText={resolvedHelper}
+				fullWidth={fullWidth}
+				slotProps={resolvedSlots}
 			/>
 		);
 	}

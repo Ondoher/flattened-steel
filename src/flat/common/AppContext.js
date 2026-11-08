@@ -1,11 +1,12 @@
 import React from 'react';
 
-/** @type {AppContextValue} */
+/**
+ * @type {AppContextValue}
+ */
 const defaultContext = {
 	registry: null,
-	locale: 'en-US',
+	locale: 'disabled',
 	localize: null,
-	localizationEnabled: false,
 	accessibilityEnabled: false,
 	controlSize: 'small',
 	controlVariant: 'outlined',
