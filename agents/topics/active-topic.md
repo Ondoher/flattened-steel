@@ -2,13 +2,18 @@
 
 Current active topic: flat.
 Canonical entry: [Flat](flat/README.md).
-Focus: the owned-content cleanup is complete through M5 under independent-execution.
-The execution record owns implementation, decisions, numerical/image equivalence,
-705 passing engine tests, 224 app browser tests, twelve selected GPU cases,
-types/build checks and the measured timing variability. All identified redundant
-checks/reconstructions are removed from the owned path. The implementation
-checkpoint is 398173ad. Prior unrelated UI and owner-authored transfer edits
-remain preserved. No required cleanup work or verification remains.
+Focus: Spherical Earth M1 is complete: registered/selectable page, Flat-owned
+cache data/routes and module Worker, one real decoded block, safe shared
+transport ownership and standalone/nested-mount retry evidence. The page states
+that scene rendering is pending. M2-M4 are unstarted and outside the current
+execution authority. The execution record owns measured evidence and resumption.
+The time-zone/IntlDate design decisions remain in the date-field adaptation note:
+Temporal with a polyfill when needed, current-user locale formatting, and explicit
+locale/time-zone parser inputs rather than a `localize` dependency. Possible time
+parsing remains tentative. Those changes are outside the spherical feature plan.
+The owned-content cleanup remains complete; its execution record is linked
+from the Flat entry. The spherical execution record owns the M1 handoff; the
+whole-repository checkpoint for the preceding cleanup remains 263eb193.
 
 Shared MUI controls use AppContext small/outlined defaults; explicit supported
 props win. All UI copy uses the selected localization service, without
@@ -26,5 +31,5 @@ local authoring rules only after Polylith skills review work is complete.
 
 1. [Repository instructions](../../AGENTS.md).
 2. [Flat entry](flat/README.md).
-3. [Owned-content cleanup plan](flat/owned-content-cleanup-plan.md).
-4. [Owned-content cleanup execution](flat/owned-content-cleanup-execution.md).
+3. [Spherical Earth execution](flat/spherical-earth-implementation-execution.md).
+4. [Spherical Earth implementation plan](flat/spherical-earth-implementation-plan.md).

@@ -1,0 +1,4 @@
+{
+	"index": "index.js",
+	"css": [{"cwd": "styles", "glob": "**/*.css", "dest": "features/spherical-earth/styles", "keepNest": true}]
+}

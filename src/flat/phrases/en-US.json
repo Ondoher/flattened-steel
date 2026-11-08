@@ -121,5 +121,11 @@
 	"flat-earth.time.slider-description": "%{scope} %{closest}",
 	"flat-earth.time.unavailable": "—",
 	"flat-earth.time.angle-value": "%{value}°",
-	"flat-earth.time.device-zone": "Device time · %{zone}"
+	"flat-earth.time.device-zone": "Device time · %{zone}",
+	"spherical-earth.title": "Spherical Earth",
+	"spherical-earth.state.missing-location": "Choose a shared location to prepare the spherical cache.",
+	"spherical-earth.state.loading": "Preparing spherical cache metadata and a required block...",
+	"spherical-earth.state.cache-ready": "Spherical cache connection ready. Scene rendering follows in the next milestone.",
+	"spherical-earth.state.error": "The spherical cache could not be prepared. Check the deployed cache data and try again.",
+	"spherical-earth.retry": "Retry cache preparation"
 }

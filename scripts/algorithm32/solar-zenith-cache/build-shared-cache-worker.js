@@ -19,18 +19,28 @@ const output = fileURLToPath(new URL('../../../dist/flat32/shared-cache-worker.j
 try {
 	await files.resolve('dist/flat32/shared-cache-worker.js');
 } catch (error) {
-	if (error.code !== 'ENOENT') throw error;
+	if (error.code !== 'ENOENT') {
+		throw error;
+	}
 }
 const bundle = await rollup({
 	input,
 	plugins: [nodeResolve({browser: true})],
 	onwarn(warning) {
-		if (warning.code === 'CIRCULAR_DEPENDENCY') return;
+		if (warning.code === 'CIRCULAR_DEPENDENCY') {
+			return;
+		}
 		throw new Error(`Shared-cache Worker build warning: ${warning.message}`);
 	},
 });
 try {
 	await bundle.write({file: output, format: 'es', inlineDynamicImports: true});
+	await files.directory('dist/flat');
+	await bundle.write({
+		file: fileURLToPath(new URL('../../../dist/flat/shared-cache-worker.js', import.meta.url)),
+		format: 'es',
+		inlineDynamicImports: true,
+	});
 	console.log('Built pinned production shared-cache module Worker.');
 } finally {
 	await bundle.close();

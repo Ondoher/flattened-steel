@@ -8,11 +8,16 @@ The transferred control's in-field format adornment is adapted into the generic
 FormatHintInput, used by DateField and TimeField over BaseTextInput. Richer
 editing and location/time-zone behavior remain design work without an execution
 plan.
+The owner selected the [Temporal API policy](#selected-time-zone-api) on
+2026-11-08 for future time-zone conversion and the
+[current user locale](#selected-date-formatting-locale) for date formatting.
 
 The owner requires the date parsing and editing behavior to be based on the
-transferred IntlDate. The current substituted LocalDateTimeFormat parser does
-not satisfy that instruction. Correcting it is explicitly deferred; adapting
-the format adornment did not complete the requested IntlDate adaptation.
+transferred IntlDate. The [selected parser contract](#selected-date-parser)
+passes locale and time zone at construction instead of querying the `localize`
+service. The current substituted LocalDateTimeFormat parser does not satisfy
+that instruction. Implementation remains deferred; adapting the format
+adornment did not complete the requested IntlDate adaptation.
 Models are exclusively services; pure parsing/formatting/conversion utilities
 must not be classified as models. Their current naming/placement is a separate
 deferred correction, not a prerequisite for the toolbar implementation plan.
@@ -96,9 +101,10 @@ for every input edge case.
 
 | Owner                               | Purpose                                                                                                                                                                                                               |
 | ----------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Date value/model                    | Represent a complete calendar date using locale-neutral year/month/day values and own calendar validity, including leap years and month lengths.                                                                      |
-| Date editing model                  | Own partial drafts, parsing, segment normalization, and incomplete/invalid feedback. Interpret an explicit format description supplied by the presentation boundary; do not locate localization or registry services. |
-| View and presentation-format helper | Use the canonical application locale to prepare date order, separators, display text, format hints, and localized feedback. Relay component intent to the controller.                                                 |
+| Date value utility                  | Represent a complete calendar date using locale-neutral year/month/day values and own calendar validity, including leap years and month lengths.                                                                      |
+| IntlDate parser utility             | Parse and format date text using locale and time zone supplied at construction. Own date-segment interpretation and normalization without querying the localize service or registry. |
+| Date editing model-service          | Own partial drafts and incomplete/invalid feedback, delegating parsing to the configured IntlDate instance. |
+| View and presentation-format helper | Prepare display text and format hints using the current user's locale. Resolve UI phrase feedback through the app's localization contract and relay editing intent to the controller. |
 | React date field                    | Render compact MUI controls, report editing/commit intent, and own DOM selection, caret, focus, and other transient presentation mechanics. Receive presentation through explicit properties and callbacks.           |
 | Global configuration controller     | Coordinate date editing and acceptance through the configuration owner, without absorbing parsing or calendar rules.                                                                                                  |
 | Main configuration model-service    | Expose animation-loop's accepted instant as integer Unix epoch milliseconds; own location. Pages consume its public capability; the editor does not become a second canonical owner.                                  |
@@ -122,7 +128,9 @@ CSS-variable appearance and accepted entry behavior. OnboardingContext,
 data-cache, converter registry and birth-date age/year rules remain
 application-specific reference details, not selected dependencies or policy.
 Use Flat's canonical app context and localization contracts for UI phrases;
-entry conventions follow the browser's default locale independently.
+the selected date parser receives the current user's locale and the chosen
+time zone explicitly. The browser-default entry conventions above describe
+the existing first pass.
 
 Keep render side-effect free. Initialization, locale reconciliation, and parent
 value updates need explicit lifecycle handling. Define how accepted values flow
@@ -158,6 +166,50 @@ UTC-midnight timestamps for valid dates; Flat instead combines the entered date
 and clock time using the device's local time zone for now. A calendar popup,
 persistence, and location-zone semantics are not selected by this change.
 
+## Selected Time-Zone API
+
+Owner decision, 2026-11-08: use the Temporal API for time-zone-aware conversion.
+Use the native implementation when available and a polyfill when it is not.
+Both follow the same Temporal API contract. Localized input formatting/parsing
+remains separate from time-zone conversion, and the shared accepted value
+remains an epoch-millisecond timestamp.
+
+The specific polyfill package, coordinate-to-zone lookup, offered time bases,
+and DST disambiguation policy remain to be selected. Choosing Temporal does
+not select a geographic lookup source or resolve those product decisions.
+This is a design decision; implementation has not begun.
+
+## Selected Date Formatting Locale
+
+Owner decision, 2026-11-08: format dates using the user's current locale.
+Date order, separators and date format hints follow that locale. The selected
+location or time zone does not choose the formatting locale; it determines how
+the shared instant is interpreted as local calendar/clock values.
+
+A locale change changes date presentation while preserving the accepted
+timestamp. Reconciliation of an unfinished entry draft during that change
+remains an editing-policy question. The implemented browser-default formatting
+described above is the current first pass; this decision governs its adaptation.
+
+## Selected Date Parser
+
+Owner decision, 2026-11-08: adapt the transferred IntlDate as the date parser.
+Pass a time zone and locale when creating an instance. IntlDate must use those
+explicit inputs instead of subscribing to or querying the `localize` service.
+The caller owns obtaining the current user locale and the applicable time zone;
+the parser owns interpreting date text with that supplied context.
+
+This keeps parsing independent of registry/service discovery. UI phrases still
+use Flat's existing localization service, and time-zone conversion follows the
+selected Temporal policy. The exact constructor parameter layout and unfinished
+draft reconciliation remain implementation/design details. This records the
+parser direction; no parser code has been changed.
+
+Possible extension: add time parsing to IntlDate as well, sharing its explicitly
+supplied locale and time zone with date parsing. The owner identified this as a
+potential simpler follow-on. Time parsing is not yet committed scope; its
+editing, precision and acceptance behavior still need definition.
+
 ## Next Design Work: Time Entry And Location Time
 
 The owner supplied no existing time-entry field to adapt. The simple time field
@@ -189,8 +241,9 @@ Keep the time-entry draft separate from accepted shared configuration, following
 the same model/controller/view boundaries as the date field. If location time is
 selected, its zone identity and date-dependent conversion need an explicit
 contract; a display locale or an unexplained fixed offset is insufficient to
-describe that choice. No lookup source, library, default zone, or conversion
-policy is selected by this note.
+describe that choice. The selected Temporal API policy above supplies the
+conversion mechanism. Lookup source, polyfill package, default zone and
+instant-versus-wall-clock/DST policies remain open.
 
 ## Unified Location Lookup And Optional Override
 

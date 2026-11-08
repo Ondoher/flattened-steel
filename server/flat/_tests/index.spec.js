@@ -26,6 +26,8 @@ test('main router starts generated services and installs every owned route', asy
 	assert.deepEqual(routes, [
 		'/stellar-catalogs/brightest-2000-stellar-package-v1/*',
 		'/presentation-filters/human-vision-filter-package-v1/*',
+		'/api/distant-sun-scene-cache',
+		'/spherical-cache/*',
 		'*',
 	]);
 });

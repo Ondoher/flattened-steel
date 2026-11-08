@@ -150,6 +150,68 @@ type DistantSunSharedCacheBlockRequest = {
 	/** Independent subscriber cancellation. */
 	signal: AbortSignal;
 };
+/**
+ * Independently releasable application ownership of a shared transport.
+ */
+type DistantSunSharedCacheTransportBorrow = Readonly<{
+	/**
+	 * Borrowed packet preparation capability and bounded telemetry.
+	 */
+	transport: DistantSunSharedCachePacketSource & {
+		/**
+		 * Call this method to read current shared transport telemetry.
+		 *
+		 * @returns - Bounded counters and resource totals.
+		 */
+		diagnostics(): DistantSunSharedCacheTransportDiagnostics;
+	};
+	/**
+	 * Call this method after the application's consumers release their packet pins.
+	 */
+	release(): void;
+}>;
+
+/**
+ * Neutral shared-package asset descriptor returned at an application HTTP boundary.
+ */
+type DistantSunCacheAssetSelection = {
+	/**
+	 * Same-origin immutable package directory.
+	 */
+	rootUrl: string;
+	/**
+	 * Expected package content identity.
+	 */
+	packageSetIdentity: string;
+	/**
+	 * Authenticated external report identity.
+	 */
+	report: DistantSunSharedCacheFileIdentity;
+	/**
+	 * Selected solar reconstruction policy.
+	 */
+	solarInterpolation?: DistantSunSolarInterpolationMethod;
+	/**
+	 * Selected numerical mapping.
+	 */
+	scatteringAccuracy?: DistantSunScatteringAccuracyMethod;
+	/**
+	 * Historical optional measurement, never a device admission gate.
+	 */
+	transitionQualification?: DistantSunSharedCacheMemoryQualification;
+};
+
+/**
+ * Shared-package ready/dark response retaining the deployed wire protocol.
+ */
+type DistantSunCacheResolution = Readonly<{
+	schemaId: 'flat32-distant-sun-cache-resolution-v2';
+	cacheFormat: 'algorithm32-distant-sun-shared-block-v1';
+	requestedSolarZenithDegrees: number;
+	asset: DistantSunCacheAssetSelection;
+}> &
+	({status: 'ready'; representativeSolarZenithDegrees: number} | {status: 'dark'});
+
 /** Transport dependencies and idle retention policy. */
 type DistantSunSharedCacheTransportDefinition = {
 	/** Persistent preparation capability. */

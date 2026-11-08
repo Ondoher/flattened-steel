@@ -22,6 +22,12 @@ tests, client/engine types and live interaction evidence. The original
 [research](configuration-toolbar-research.md) and
 [designer comps](configuration-toolbar-comps.md) remain reference artifacts.
 Device/local-time entry remains; time-zone lookup and animation UI are deferred.
+Future time-zone conversion follows the
+[selected Temporal API policy](date-field-adaptation.md#selected-time-zone-api).
+The [date formatting decision](date-field-adaptation.md#selected-date-formatting-locale)
+uses the user's current locale independently of the selected zone.
+The [parser direction](date-field-adaptation.md#selected-date-parser) adapts
+IntlDate with explicit time-zone and locale inputs at construction.
 Engineering standards review remains cancelled. Local checkpoints are recorded
 in the execution record; nothing was pushed or deployed.
 
@@ -68,6 +74,17 @@ milestones, from static catalog acceptance through integrated verification.
 All five milestones are complete under independent-execution. The
 [execution record](owned-content-cleanup-execution.md) owns the changes, boundary
 decisions, passing checks and measured performance, including timing variability.
+
+The [Spherical Earth implementation plan](spherical-earth-implementation-plan.md)
+adds an independent observer-level spherical scene through existing page and
+contribution services, with Flat-owned shared-cache delivery and retained view
+updates. M1 is complete: the selectable page, independent cache routes/data and
+module Worker authenticate metadata and decode a required block. The page
+explicitly distinguishes cache readiness from scene rendering. The
+[execution record](spherical-earth-implementation-execution.md) owns verification,
+resource measurements and resumption. M2's actual scene remains unstarted. Shared
+location/time, independent cameras and eager Flat cache startup remain selected;
+this work does not depend on the pending time-zone/parser adaptation.
 
 ## Current Scope
 

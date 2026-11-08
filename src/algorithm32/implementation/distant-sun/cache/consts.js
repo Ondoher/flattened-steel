@@ -258,3 +258,8 @@ export const DISTANT_SUN_CPU_SECOND_ORDER_CACHE_OPTIONS = {
 	transportIntervalCount: DISTANT_SUN_CPU_TRANSPORT_INTERVAL_COUNT,
 	maximumScatteringOrder: 2,
 };
+
+/** Shared resolver wire identity, retaining its existing deployed protocol. */
+export const DISTANT_SUN_CACHE_RESOLUTION_SCHEMA_ID = 'flat32-distant-sun-cache-resolution-v2';
+/** Shared block package wire format. */
+export const DISTANT_SUN_SHARED_CACHE_FORMAT_ID = 'algorithm32-distant-sun-shared-block-v1';

@@ -11,6 +11,7 @@ import '../services/theme.js';
 import '../services/animation-loop.js';
 import '../services/configuration.js';
 import '../services/io.js';
+import '../services/distant-sun-cache.js';
 
 import '../services/app-pages.js';
 import '../services/url.js';
@@ -27,6 +28,8 @@ export function stopApplication() {
 	registry.subscribe('app-view')?.stop();
 	registry.subscribe('configuration').stop();
 	registry.subscribe('animation-loop').stop();
+	registry.subscribe('spherical-earth-controller').stop();
+	registry.subscribe('distant-sun-cache').stop();
 }
 
 registry.listen('ready', () => {

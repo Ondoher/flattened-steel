@@ -25,5 +25,11 @@
 			"keepNest": true
 		}
 	],
-	"features": ["features/app", "features/workspace", "features/flat-earth", "features/global-configuration"]
+	"features": [
+		"features/app",
+		"features/workspace",
+		"features/flat-earth",
+		"features/global-configuration",
+		"features/spherical-earth"
+	]
 }

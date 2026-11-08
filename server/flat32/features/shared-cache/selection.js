@@ -1,5 +1,5 @@
 import {fileURLToPath} from 'node:url';
-import DistantSunSharedCachePackageService from './DistantSunSharedCachePackageService.js';
+import DistantSunSharedCachePackageService from '../../../common/DistantSunSharedCachePackageService.js';
 
 /** Immutable package selected by the server deployment; selection never mutates package bytes. */
 export const SHARED_PACKAGE_IDENTITY = '1e35e0ce4b064690d48ff9639c4c7a1ad557e1eb752716c9f2105a3ac8354e4b';

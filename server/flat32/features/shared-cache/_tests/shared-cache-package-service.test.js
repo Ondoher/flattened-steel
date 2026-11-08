@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {test} from 'node:test';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
-import Service from '../DistantSunSharedCachePackageService.js';
+import Service from '../../../../common/DistantSunSharedCachePackageService.js';
 import express from 'express';
 import {existsSync} from 'node:fs';
 import {createHash, randomUUID} from 'node:crypto';
@@ -38,15 +38,18 @@ test('shared service authenticates graph, preserves the final illuminated bin, a
 	assert.equal(asset.byteLength, report.byteLength);
 	assert.equal(asset.bytes.byteLength, report.byteLength);
 	assert.equal(asset.contentType, 'application/json');
-	for (const value of [-1, 181, NaN, Infinity]) assert.throws(() => service.resolve(value, '/flat32/scene-caches/'));
+	for (const value of [-1, 181, NaN, Infinity]) {
+		assert.throws(() => service.resolve(value, '/flat32/scene-caches/'));
+	}
 	for (const suffix of [
 		'../package-set.json',
 		'%2e%2e/package-set.json',
 		'package-set.json:stream',
 		'unknown.json',
 		'/package-set.json',
-	])
+	]) {
 		await assert.rejects(service.resolveAsset(`${ready.asset.packageSetIdentity}/${suffix}`));
+	}
 	await assert.rejects(service.resolveAsset(`${'0'.repeat(64)}/package-set.json`));
 	await assert.rejects(service.load(report));
 });
@@ -64,9 +67,10 @@ test('shared service retains selected transition evidence without caller or resp
 	);
 });
 
-test('shared service rejects untrusted report bytes, oversized input, and external roots', async () => {
-	assert.throws(() => new Service(path.parse(repository).root));
-	assert.throws(
+test('shared service rejects untrusted report bytes, oversized input, and invalid artifact paths', async () => {
+	// Deployment roots may be external; individual declared artifacts remain confined to that root.
+	assert.doesNotThrow(() => new Service(path.parse(repository).root));
+	assert.doesNotThrow(
 		() => new Service(packageRoot, 'linear', {...SHARED_PACKAGE_TRANSITION_QUALIFICATION, maximumBytes: 859963393}),
 	);
 	await assert.rejects(new Service(packageRoot).load({...report, sha256: '0'.repeat(64)}));
@@ -114,10 +118,16 @@ test('production asset startup failures retain server diagnostics and return opa
 		assert.ok(diagnostics.every((values) => values[1] instanceof Error && values[1].message.includes(missingRoot)));
 	} finally {
 		console.error = previousConsoleError;
-		if (previousStellarRoot === undefined) delete process.env.FLAT32_STELLAR_CATALOG_ROOT;
-		else process.env.FLAT32_STELLAR_CATALOG_ROOT = previousStellarRoot;
-		if (previousHumanVisionRoot === undefined) delete process.env.FLAT32_HUMAN_VISION_FILTER_ROOT;
-		else process.env.FLAT32_HUMAN_VISION_FILTER_ROOT = previousHumanVisionRoot;
+		if (previousStellarRoot === undefined) {
+			delete process.env.FLAT32_STELLAR_CATALOG_ROOT;
+		} else {
+			process.env.FLAT32_STELLAR_CATALOG_ROOT = previousStellarRoot;
+		}
+		if (previousHumanVisionRoot === undefined) {
+			delete process.env.FLAT32_HUMAN_VISION_FILTER_ROOT;
+		} else {
+			process.env.FLAT32_HUMAN_VISION_FILTER_ROOT = previousHumanVisionRoot;
+		}
 		if (server) {
 			server.closeAllConnections();
 			await new Promise((resolve) => server.close(resolve));

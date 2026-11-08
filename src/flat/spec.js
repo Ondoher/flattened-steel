@@ -34,3 +34,6 @@ import './components/_tests/SharedControlsSpec.js';
 import './components/_tests/IconControlsSpec.js';
 import './components/_tests/LocalizationBoundarySpec.js';
 import './services/_tests/ThemeSpec.js';
+
+import './features/spherical-earth/_tests/SphericalEarthSpec.js';
+import './services/_tests/SharedCacheLifetimeSpec.js';

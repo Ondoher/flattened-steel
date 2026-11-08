@@ -16,6 +16,17 @@ models as registered feature services. Controllers resolve them in ready();
 Flat Earth's model service scopes camera records by view identity. The
 [component proposal](component-service-proposal.md) owns the packaging decision.
 
+## Spherical Earth Feature
+
+The owner requested a [Spherical Earth implementation plan](spherical-earth-implementation-plan.md).
+It owns the proposed sequence, boundaries and verification for an independent
+page using the existing production spherical/distant-Sun engine and deployed
+shared cache. The [execution record](spherical-earth-implementation-execution.md)
+owns the completed M1 cache-delivery slice and remaining rendering work. The
+workspace remains generic; the feature consumes shared location/time and will
+contribute its own view controls/settings in the later milestones.
+The pending time-zone and IntlDate decisions are a separate design concern.
+
 ## Flat Earth Alternate Time Input
 
 The owner selected a [degrees-from-closest time input](flat-earth-time-input.md)
@@ -163,6 +174,9 @@ unchanged. The note owns the behavior to borrow, responsibility split,
 application-specific boundaries, and open date/time decisions. The simple
 app-wide fixed-format date/time controls are implemented; richer adaptation
 remains design work.
+The [selected date parser](date-field-adaptation.md#selected-date-parser)
+is an adaptation of IntlDate with explicit time-zone and locale constructor
+inputs. The note owns that contract and the separation from the `localize` service.
 
 The owner has no ready-made time field. The note records
 [time entry and location time](date-field-adaptation.md#next-design-work-time-entry-and-location-time)
@@ -176,7 +190,10 @@ lifetime remain unselected.
 
 The note also records [modmod reference code](date-field-adaptation.md#additional-reference-modmod-date-and-time-zone-code)
 for explicit-zone calendar conversion and locale date-format discovery, with
-its scope and known cache limitation. No conversion implementation is selected.
+its scope and known cache limitation. The
+[selected time-zone API](date-field-adaptation.md#selected-time-zone-api)
+now owns the conversion direction; the reference helper is not the selected
+conversion engine. Implementation remains deferred.
 
 ## Deferred City Search Improvements
 

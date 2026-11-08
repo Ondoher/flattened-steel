@@ -171,3 +171,6 @@ downloads/
 
 # Personal image and video gallery
 /gallery/
+
+# Flat-owned immutable spherical cache deployment data
+/server/flat/data/distant-sun-shared/
