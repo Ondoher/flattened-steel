@@ -17,12 +17,12 @@ so both the facade and color model must receive the same configured registry.
 
 ## Ownership and deployment
 
-The feature's registered `flat-earth-stellar-catalog` model-service uses the
+The app-owned registered `stellar-catalog` service under `src/flat/services/` uses the
 app's `io` capability, authenticates payload lengths and SHA-256 hashes, then
 invokes the engine package adapter. It also authenticates Flat32's CIE-derived
 Native15 scotopic weight package before publishing the source and presentation
 registry together. One immutable CPU source and filter registry are shared across
-the application's views; each view owns its GPU resources. Loads share one
+both Earth features and the application's views; each view owns its GPU resources. Loads share one
 in-flight promise and completed source. Cancelling a view stops its wait without
 cancelling another view. Service stop prevents stale publication. Failed loads
 can be retried through the existing scene Retry action.
@@ -67,6 +67,9 @@ the Three scene directly, omitting shader-owned stars and disc. Existing
 physical sky brightness can mask stars in Full. Human presentation applies only
 to stars; scene lighting, the atmospheric cache and solar presentation retain
 their existing behavior.
+
+The [spherical execution record](spherical-earth-implementation-execution.md)
+owns the app-service promotion and current integration checks.
 
 ## Verification
 

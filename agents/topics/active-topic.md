@@ -2,11 +2,12 @@
 
 Current active topic: flat.
 Canonical entry: [Flat](flat/README.md).
-Focus: Spherical Earth M1 is complete: registered/selectable page, Flat-owned
-cache data/routes and module Worker, one real decoded block, safe shared
-transport ownership and standalone/nested-mount retry evidence. The page states
-that scene rendering is pending. M2-M4 are unstarted and outside the current
-execution authority. The execution record owns measured evidence and resumption.
+Focus: Spherical Earth M1-M3 are complete: real atmosphere, curved green ground,
+Sun/stars, independently scoped icon controls and retained scene/cache updates.
+The owner authorized independent execution of the rest of the plan. M4 is active:
+reference comparisons, GPU-completed timings, failure/context/lifetime checks and
+a separate-parent discoverable deployment. Current evidence lives under
+.codex-tmp/spherical-earth/m2-m4-20261108/ and the execution record.
 The time-zone/IntlDate design decisions remain in the date-field adaptation note:
 Temporal with a polyfill when needed, current-user locale formatting, and explicit
 locale/time-zone parser inputs rather than a `localize` dependency. Possible time

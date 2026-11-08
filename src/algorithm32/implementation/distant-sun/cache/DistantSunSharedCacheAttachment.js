@@ -17,6 +17,8 @@ export default class DistantSunSharedCacheAttachment {
 	_active = null;
 	/** Terminal state. */
 	_disposed = false;
+	/** @type {DistantSunSharedCacheFrame | undefined} */
+	_publishedFrame;
 
 	/** Creates one renderer-owned shared-cache attachment.
 	 *
@@ -40,10 +42,16 @@ export default class DistantSunSharedCacheAttachment {
 	 * @returns {Promise<DistantSunSharedCache>} - Stable shader-facing resource.
 	 */
 	async createScatteringCache(request = {}) {
-		if (this._disposed) throw new Error('Shared-cache attachment is disposed.');
-		if (this._active) return this._active;
+		if (this._disposed) {
+			throw new Error('Shared-cache attachment is disposed.');
+		}
+		if (this._active) {
+			return this._active;
+		}
 		const candidate = await this.prepareScene(this._initialScene, {}, request.signal);
-		if (!candidate) throw new Error('Shared-cache initial window could not be prepared.');
+		if (!candidate) {
+			throw new Error('Shared-cache initial window could not be prepared.');
+		}
 		this.publishPrepared(candidate.snapshot.generation);
 		return this._active;
 	}
@@ -56,7 +64,9 @@ export default class DistantSunSharedCacheAttachment {
 	 * @returns {Promise<DistantSunSharedCacheFrame | undefined>} - Borrowed complete candidate for lighting preparation.
 	 */
 	async prepareScene(sceneOrdinal, options = {}, signal) {
-		if (this._disposed) throw new Error('Shared-cache attachment is disposed.');
+		if (this._disposed) {
+			throw new Error('Shared-cache attachment is disposed.');
+		}
 		signal?.throwIfAborted();
 		const cancel = () => this._controller.cancelPreparation();
 		signal?.addEventListener('abort', cancel, {once: true});
@@ -80,14 +90,47 @@ export default class DistantSunSharedCacheAttachment {
 			!candidate ||
 			candidate.snapshot.generation !== generation ||
 			(candidate.atlas && !candidate.atlas.isCurrent())
-		)
+		) {
 			throw new Error('Shared-cache prepared publication was superseded or lost.');
+		}
 		const frame = this._controller.publishFrame();
-		if (!frame || frame.snapshot.generation !== generation)
+		if (!frame || frame.snapshot.generation !== generation) {
 			throw new Error('Shared-cache publication did not complete.');
-		if (this._active) this._active.publish(frame);
-		else this._active = new DistantSunSharedCache(this._backend, frame);
+		}
+		if (this._active) {
+			this._active.publish(frame);
+		} else {
+			this._active = new DistantSunSharedCache(this._backend, frame);
+		}
+		this._publishedFrame = frame;
 		return frame;
+	}
+
+	/**
+	 * Call this method to install a complete live frame before retiring the previous cache resources.
+	 * A throwing installer restores the prior facade; the caller restores its own scene facts.
+	 *
+	 * @param {number} generation - Exact prepared generation.
+	 * @param {() => void} install - Host installation and preflight rendering.
+	 * @returns {DistantSunSharedCachePublicationResult} - Committed frame and separate cleanup failures.
+	 */
+	installPrepared(generation, install) {
+		const candidate = this._controller.getPreparedFrame();
+		if (!this._active || !candidate || candidate.snapshot.generation !== generation) {
+			throw new Error('Shared installation was superseded or has no initial frame.');
+		}
+		const previous = this._publishedFrame;
+		const frame = this._controller.publishFrame((value) => {
+			this._active.publish(value);
+			try {
+				install();
+			} catch (error) {
+				this._active.publish(previous);
+				throw error;
+			}
+		});
+		this._publishedFrame = frame;
+		return {frame, retirementErrors: this._controller.getRetirementErrors()};
 	}
 
 	/** Call this method to set a declared preparation route.
@@ -120,7 +163,9 @@ export default class DistantSunSharedCacheAttachment {
 	 * @returns {void}
 	 */
 	dispose() {
-		if (this._disposed) return;
+		if (this._disposed) {
+			return;
+		}
 		this._disposed = true;
 		this._controller.dispose();
 		this._active?.dispose();

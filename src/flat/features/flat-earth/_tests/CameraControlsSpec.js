@@ -3,7 +3,7 @@ import {WorkspaceController} from '../../workspace/controller.js';
 import {FlatEarthTimeModel} from '../models/FlatEarthTimeModel.js';
 import {Registry} from '@polylith/core';
 import {PerspectiveCamera, Euler} from 'three';
-import {PointerLookController} from '../runtime/PointerLookController.js';
+import {PointerLookController} from '../../../common/PointerLookController.js';
 import {createModel, createSession} from './helpers.js';
 import {FlatEarthController} from '../controller.js';
 import {FlatEarthView} from '../views/flat-earth.js';
@@ -11,7 +11,7 @@ import {UiContributionsService} from '../../workspace/services/ui-contributions.
 import {AppPagesService} from '../../../services/app-pages.js';
 import {ConfigurationService} from '../../../services/configuration.js';
 import {AnimationLoopService} from '../../../services/animation-loop.js';
-import {StellarCatalog} from '../models/StellarCatalog.js';
+import {StellarCatalog} from '../../../services/stellar-catalog.js';
 
 /**
  * Call this function to flush owned lifecycle continuations.

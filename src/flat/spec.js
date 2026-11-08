@@ -22,7 +22,7 @@ import './features/flat-earth/_tests/FlatEarthSceneSpec.js';
 import './features/flat-earth/_tests/CameraControlsSpec.js';
 import './features/flat-earth/_tests/MuiControlsSpec.js';
 import './features/flat-earth/_tests/ShaderOptionsSpec.js';
-import './features/flat-earth/_tests/StellarCatalogSpec.js';
+import './services/_tests/StellarCatalogSpec.js';
 import './features/flat-earth/_tests/FlatEarthTimeSpec.js';
 import './testing/_tests/TestHarnessSpec.js';
 import './components/_tests/FormControlsSpec.js';

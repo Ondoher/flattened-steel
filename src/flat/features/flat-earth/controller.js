@@ -86,9 +86,7 @@ export class FlatEarthController extends Service {
 		this.view = /** @type {FlatEarthViewService} */ (this.registry.subscribe('flat-earth-view'));
 		this.configuration = /** @type {ConfigurationService} */ (this.registry.subscribe('configuration'));
 		this.model = /** @type {FlatEarthModelService} */ (this.registry.subscribe('flat-earth-model'));
-		this.stellarCatalog = /** @type {FlatEarthStellarCatalogService} */ (
-			this.registry.subscribe('flat-earth-stellar-catalog')
-		);
+		this.stellarCatalog = /** @type {StellarCatalogService} */ (this.registry.subscribe('stellar-catalog'));
 		for (let tokens of this._tools.values()) {
 			for (let token of tokens) {
 				this.contributions.remove(token);

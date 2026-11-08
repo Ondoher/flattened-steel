@@ -13,6 +13,22 @@ import {
  */
 export default class DistantSunSharedCacheController {
 	/**
+	 * Cleanup failures belonging to the last committed frame.
+	 *
+	 * @type {unknown[]}
+	 */
+	_retirementErrors = [];
+
+	/**
+	 * Call this method to inspect retirement failures separately from failed installation.
+	 *
+	 * @returns {readonly unknown[]} - Completed-publication cleanup failures.
+	 */
+	getRetirementErrors() {
+		return [...this._retirementErrors];
+	}
+
+	/**
 	 * Borrowed renderer, transport, and authenticated package capabilities.
 	 *
 	 * @type {DistantSunSharedCacheControllerDefinition}
@@ -118,8 +134,9 @@ export default class DistantSunSharedCacheController {
 		if (
 			definition.solarInterpolation !== undefined &&
 			!['linear', 'monotone-cubic'].includes(definition.solarInterpolation)
-		)
+		) {
 			throw new RangeError('Shared-cache solar interpolation is unsupported.');
+		}
 		this._definition = {
 			...definition,
 			routeQualification: structuredClone(definition.routeQualification),
@@ -127,11 +144,13 @@ export default class DistantSunSharedCacheController {
 		};
 		this._graph = definition.package.getGraph();
 		const accuracy = DistantSunScatteringAccuracy.accept(definition.scatteringAccuracy);
-		if (accuracy !== DistantSunScatteringAccuracy.accept(this._graph.configuration.scatteringAccuracy))
+		if (accuracy !== DistantSunScatteringAccuracy.accept(this._graph.configuration.scatteringAccuracy)) {
 			throw new RangeError('Shared-cache package and lookup scattering policies differ.');
+		}
 		this._metadata = new DistantSunSharedCacheMetadata(this._graph);
-		if (definition.solarInterpolation === 'monotone-cubic')
+		if (definition.solarInterpolation === 'monotone-cubic') {
 			this._support = new DistantSunSharedCacheSupport(this._graph);
+		}
 		const requiredLayers = Math.max(
 			...this._graph.scenes.map((_scene, ordinal) => this._requiredBlocks(ordinal).length),
 		);
@@ -142,8 +161,9 @@ export default class DistantSunSharedCacheController {
 			this._layers < 1 ||
 			this._layers >= DISTANT_SUN_SHARED_CACHE_UNAVAILABLE_ROW_ADDRESS ||
 			!Number.isSafeInteger(this._layers * DISTANT_SUN_SHARED_CACHE_PACKET_BYTES)
-		)
+		) {
 			throw new RangeError('Shared-cache layer policy is invalid.');
+		}
 		const bytes = this._layers * DISTANT_SUN_SHARED_CACHE_PACKET_BYTES;
 		if (
 			definition.routeQualification &&
@@ -157,8 +177,9 @@ export default class DistantSunSharedCacheController {
 				definition.routeQualification.blockIds.some(
 					(id) => !this._graph.blockIndex.blocks.some((block) => block.id === id),
 				))
-		)
+		) {
 			throw new RangeError('Shared-cache route qualification is incompatible with the selected atlas.');
+		}
 	}
 
 	/**
@@ -168,7 +189,17 @@ export default class DistantSunSharedCacheController {
 	 * @returns {void}
 	 */
 	_releaseMetadata(frame) {
-		for (const texture of frame?.metadataTextures ?? []) texture.dispose();
+		const errors = [];
+		for (const texture of frame?.metadataTextures ?? []) {
+			try {
+				texture.dispose();
+			} catch (error) {
+				errors.push(error);
+			}
+		}
+		if (errors.length) {
+			throw new AggregateError(errors, 'Shared cache metadata retirement failed.');
+		}
 	}
 
 	/**
@@ -183,7 +214,9 @@ export default class DistantSunSharedCacheController {
 		}
 		this._releaseMetadata(this._candidate);
 		this._candidate = undefined;
-		if (this._preparingAtlas && this._preparingAtlas !== this._atlas) this._preparingAtlas.dispose();
+		if (this._preparingAtlas && this._preparingAtlas !== this._atlas) {
+			this._preparingAtlas.dispose();
+		}
 		this._preparingAtlas = undefined;
 		this._atlas?.discardCandidate();
 	}
@@ -197,15 +230,19 @@ export default class DistantSunSharedCacheController {
 	 */
 	_window(ordinal, options) {
 		const ids = this._requiredBlocks(ordinal);
-		if (this._definition.routeQualification)
+		if (this._definition.routeQualification) {
 			ids.push(...this._definition.routeQualification.blockIds.filter((id) => !ids.includes(id)));
-		if (ids.length > this._layers) throw new RangeError('Shared-cache scene exceeds atlas capacity.');
+		}
+		if (ids.length > this._layers) {
+			throw new RangeError('Shared-cache scene exceeds atlas capacity.');
+		}
 		const routeIndex = options.routeIndex ?? this._route.indexOf(ordinal);
 		if (
 			options.routeIndex !== undefined &&
 			(!Number.isSafeInteger(routeIndex) || this._route[routeIndex] !== ordinal)
-		)
+		) {
 			throw new RangeError('Shared-cache route position does not identify the requested scene.');
+		}
 		const lookAhead = Math.min(108, Math.max(1, Math.ceil(Math.abs(options.velocityDegreesPerSecond ?? 1))));
 		let predicted = -1;
 		for (let offset = 1; offset <= lookAhead; offset += 1) {
@@ -213,17 +250,24 @@ export default class DistantSunSharedCacheController {
 				this._route.length && routeIndex >= 0
 					? this._route[routeIndex + offset]
 					: ordinal + this._direction * offset;
-			if (next === undefined || next < 0 || next > 108) break;
+			if (next === undefined || next < 0 || next > 108) {
+				break;
+			}
 			const union = [...new Set([...ids, ...this._requiredBlocks(next)])];
-			if (union.length > this._layers) break;
-			if (predicted < 0) predicted = next;
+			if (union.length > this._layers) {
+				break;
+			}
+			if (predicted < 0) {
+				predicted = next;
+			}
 			ids.splice(0, ids.length, ...union);
 		}
 		if (
 			this._definition.routeQualification &&
 			ids.some((id) => !this._definition.routeQualification.blockIds.includes(id))
-		)
+		) {
 			throw new RangeError('Shared-cache requested window is outside the qualified route.');
+		}
 		return {ids, predicted};
 	}
 
@@ -256,7 +300,9 @@ export default class DistantSunSharedCacheController {
 				[snapshot.altitudeLedgerTable, 'cache.sharedAltitudeLedger'],
 				[coordinates, 'cache.sharedCoordinateAddress'],
 			])) {
-				if (!table) continue;
+				if (!table) {
+					continue;
+				}
 				textures.push(
 					this._definition.backend.uploadImmutableTexture({
 						id: `${valueKey}:${snapshot.generation}`,
@@ -273,7 +319,9 @@ export default class DistantSunSharedCacheController {
 			}
 			return textures;
 		} catch (error) {
-			for (const texture of textures) texture.dispose();
+			for (const texture of textures) {
+				texture.dispose();
+			}
 			throw error;
 		}
 	}
@@ -285,20 +333,24 @@ export default class DistantSunSharedCacheController {
 	 * @returns {void}
 	 */
 	setRoute(sceneOrdinals) {
-		if (this._disposed) throw new Error('Shared-cache controller is disposed.');
+		if (this._disposed) {
+			throw new Error('Shared-cache controller is disposed.');
+		}
 		if (
 			!Array.isArray(sceneOrdinals) ||
 			sceneOrdinals.length > 10000 ||
 			sceneOrdinals.some((ordinal) => !Number.isSafeInteger(ordinal) || ordinal < 0 || ordinal > 108)
-		)
+		) {
 			throw new RangeError('Shared-cache route is invalid.');
+		}
 		if (this._definition.routeQualification) {
 			const ids = new Set(
 				sceneOrdinals.filter((ordinal) => ordinal <= 108).flatMap((ordinal) => this._requiredBlocks(ordinal)),
 			);
 			const qualified = this._definition.routeQualification.blockIds;
-			if (ids.size !== qualified.length || qualified.some((id) => !ids.has(id)))
+			if (ids.size !== qualified.length || qualified.some((id) => !ids.has(id))) {
 				throw new RangeError('Shared-cache route differs from its qualified block set.');
+			}
 		}
 		this._cancel();
 		this._generation += 1;
@@ -314,13 +366,16 @@ export default class DistantSunSharedCacheController {
 	 * @returns {Promise<boolean>} - Whether this request produced a complete frame candidate.
 	 */
 	async requestScene(sceneOrdinal, options = {}) {
-		if (this._disposed) throw new Error('Shared-cache controller is disposed.');
+		if (this._disposed) {
+			throw new Error('Shared-cache controller is disposed.');
+		}
 		if (
 			(sceneOrdinal !== null &&
 				(!Number.isSafeInteger(sceneOrdinal) || sceneOrdinal < 0 || sceneOrdinal > 108)) ||
 			(options.velocityDegreesPerSecond !== undefined && !Number.isFinite(options.velocityDegreesPerSecond))
-		)
+		) {
 			throw new RangeError('Shared-cache scene or velocity is invalid.');
+		}
 		this._cancel();
 		const generation = ++this._generation;
 		const cancellation = (this._cancellation = new AbortController());
@@ -330,8 +385,12 @@ export default class DistantSunSharedCacheController {
 		const delta =
 			options.velocityDegreesPerSecond ??
 			(sceneOrdinal === null ? 0 : this._lastRequested === undefined ? 1 : sceneOrdinal - this._lastRequested);
-		if (delta) this._direction = Math.sign(delta);
-		if (sceneOrdinal !== null) this._lastRequested = sceneOrdinal;
+		if (delta) {
+			this._direction = Math.sign(delta);
+		}
+		if (sceneOrdinal !== null) {
+			this._lastRequested = sceneOrdinal;
+		}
 		try {
 			if (sceneOrdinal === null) {
 				this._candidate = {
@@ -347,23 +406,29 @@ export default class DistantSunSharedCacheController {
 			}
 			const window = this._window(sceneOrdinal, options);
 			this._counters.predictedScene = window.predicted;
-			if (!this._atlas)
+			if (!this._atlas) {
 				this._atlas = new DistantSunSharedCacheAtlas(
 					this._definition.backend,
 					this._layers,
 					`shared-atlas:${generation}`,
 				);
-			if (!this._atlas.isCurrent()) this._atlas.resetAfterRestoration();
+			}
+			if (!this._atlas.isCurrent()) {
+				this._atlas.resetAfterRestoration();
+			}
 			let atlas = this._atlas;
 			const required = this._requiredBlocks(sceneOrdinal);
 			// Predictions must never force a transition allocation when the requested scene fits.
 			if (atlas.canFit(required)) {
-				while (!atlas.canFit(window.ids) && window.ids.length > required.length) window.ids.pop();
+				while (!atlas.canFit(window.ids) && window.ids.length > required.length) {
+					window.ids.pop();
+				}
 				if (
 					window.predicted >= 0 &&
 					this._requiredBlocks(window.predicted).some((id) => !window.ids.includes(id))
-				)
+				) {
 					this._counters.predictedScene = -1;
+				}
 			}
 			if (!atlas.canFit(window.ids)) {
 				// Preserve the visible atlas while attempting the replacement on the actual GPU.
@@ -406,18 +471,28 @@ export default class DistantSunSharedCacheController {
 				try {
 					signal.throwIfAborted();
 					const failed = results.find((result) => result.status === 'rejected');
-					if (failed?.status === 'rejected') throw failed.reason;
+					if (failed?.status === 'rejected') {
+						throw failed.reason;
+					}
 					for (let offset = 0; offset < results.length; offset += 1) {
 						const result = results[offset];
-						if (result.status !== 'fulfilled') continue;
+						if (result.status !== 'fulfilled') {
+							continue;
+						}
 						const block = this._graph.blockIndex.blocks.find((item) => item.id === needed[start + offset]);
-						if (atlas.install(block, result.value, reserved)) this._counters.uploads += 1;
-						else this._counters.reused += 1;
+						if (atlas.install(block, result.value, reserved)) {
+							this._counters.uploads += 1;
+						} else {
+							this._counters.reused += 1;
+						}
 						installed = offset + 1;
 					}
 				} catch (error) {
-					for (const result of results.slice(installed))
-						if (result.status === 'fulfilled') result.value.release();
+					for (const result of results.slice(installed)) {
+						if (result.status === 'fulfilled') {
+							result.value.release();
+						}
+					}
 					throw error;
 				}
 			}
@@ -468,10 +543,13 @@ export default class DistantSunSharedCacheController {
 	 * Call this method once at the frame boundary, then install the returned bindings and coherent light state before rendering.
 	 * A missing or invalid candidate holds the last publication; unavailable contexts return no renderable frame.
 	 *
+	 * @param {(frame: DistantSunSharedCacheFrame) => void} [install] - Reversible host installation before old resources retire.
 	 * @returns {DistantSunSharedCacheFrame | undefined} - Complete current frame, or no renderable publication.
 	 */
-	publishFrame() {
-		if (this._disposed) return undefined;
+	publishFrame(install) {
+		if (this._disposed) {
+			return undefined;
+		}
 		const candidate = this._candidate;
 		if (!candidate) {
 			this._counters.held += 1;
@@ -487,14 +565,46 @@ export default class DistantSunSharedCacheController {
 			candidate.predictedBlockIds,
 			`shared:${this._generation}`,
 		);
+		try {
+			install?.(candidate);
+		} catch (error) {
+			const previous = this._published;
+			if (previous?.atlas && previous.atlas === candidate.atlas) {
+				previous.atlas.protect(
+					previous.snapshot.requiredBlockIds,
+					previous.predictedBlockIds,
+					'shared:' + previous.snapshot.generation,
+				);
+			}
+			throw error;
+		}
 		const previous = this._published;
 		const oldAtlas = this._atlas;
 		this._published = candidate;
 		this._candidate = undefined;
 		this._preparingAtlas = undefined;
 		this._atlas = candidate.atlas;
-		this._releaseMetadata(previous);
-		if (oldAtlas && oldAtlas !== candidate.atlas) oldAtlas.dispose();
+		this._retirementErrors = [];
+		for (const release of [
+			() => this._releaseMetadata(previous),
+			() => {
+				if (oldAtlas && oldAtlas !== candidate.atlas) {
+					oldAtlas.dispose();
+				}
+			},
+		]) {
+			try {
+				release();
+			} catch (error) {
+				this._retirementErrors.push(error);
+			}
+		}
+		if (!install && this._retirementErrors.length) {
+			throw new AggregateError(
+				this._retirementErrors,
+				'Shared cache publication committed but retirement failed.',
+			);
+		}
 		this._counters.published += 1;
 		return candidate;
 	}
@@ -525,7 +635,9 @@ export default class DistantSunSharedCacheController {
 	 * @returns {void}
 	 */
 	dispose() {
-		if (this._disposed) return;
+		if (this._disposed) {
+			return;
+		}
 		this._disposed = true;
 		this._cancel();
 		this._generation += 1;

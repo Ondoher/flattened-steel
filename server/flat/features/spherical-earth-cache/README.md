@@ -42,6 +42,7 @@ The effective app mount owns:
 - `shared-cache-worker.js`
 
 The application I/O service and document base resolve these paths after direct
-page refresh or nested mounting. M1 authenticates the metadata graph and decodes
-one required block to prove delivery; full scene block selection/attachments and
-rendering are M2 work. A cache-ready page explicitly says rendering is pending.
+page refresh or nested mounting. The app service authenticates metadata once per accepted report/lifetime.
+Production scenes load complete required/interpolation support through independently
+owned GPU attachments. The retained one-block method is an explicit connection
+diagnostic; it does not represent complete scene readiness.

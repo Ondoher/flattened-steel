@@ -3,6 +3,15 @@
  */
 export interface DistantSunCacheService extends EventBus {
 	/**
+	 * Call this method to obtain authenticated metadata and shared transport for scene attachment.
+	 *
+	 * @param solarZenithDegrees - Physical solar angle.
+	 * @param signal - Independent subscriber lifetime.
+	 * @returns - Engine-owned renderer-independent selection.
+	 */
+	select(solarZenithDegrees: number, signal: AbortSignal): Promise<DistantSunSharedCacheSelection>;
+
+	/**
 	 * Call this method to authenticate metadata and decode a required block for the view's connection proof.
 	 *
 	 * @param solarZenithDegrees - Physical solar angle.

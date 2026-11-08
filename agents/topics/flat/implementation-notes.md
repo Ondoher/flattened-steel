@@ -22,9 +22,9 @@ The owner requested a [Spherical Earth implementation plan](spherical-earth-impl
 It owns the proposed sequence, boundaries and verification for an independent
 page using the existing production spherical/distant-Sun engine and deployed
 shared cache. The [execution record](spherical-earth-implementation-execution.md)
-owns the completed M1 cache-delivery slice and remaining rendering work. The
-workspace remains generic; the feature consumes shared location/time and will
-contribute its own view controls/settings in the later milestones.
+owns the completed cache, rendering and controls milestones and remaining
+verification. The
+workspace remains generic; the feature consumes shared location/time and contributes its own view controls/settings.
 The pending time-zone and IntlDate decisions are a separate design concern.
 
 ## Flat Earth Alternate Time Input

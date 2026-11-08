@@ -78,13 +78,13 @@ decisions, passing checks and measured performance, including timing variability
 The [Spherical Earth implementation plan](spherical-earth-implementation-plan.md)
 adds an independent observer-level spherical scene through existing page and
 contribution services, with Flat-owned shared-cache delivery and retained view
-updates. M1 is complete: the selectable page, independent cache routes/data and
-module Worker authenticate metadata and decode a required block. The page
-explicitly distinguishes cache readiness from scene rendering. The
-[execution record](spherical-earth-implementation-execution.md) owns verification,
-resource measurements and resumption. M2's actual scene remains unstarted. Shared
-location/time, independent cameras and eager Flat cache startup remain selected;
-this work does not depend on the pending time-zone/parser adaptation.
+updates. M1-M3 are complete: actual spherical atmosphere, curved green ground,
+Sun/stars, icon controls and retained updates work in single, two-spherical and
+mixed views. The [execution record](spherical-earth-implementation-execution.md)
+owns evidence, resource measurements and remaining M4 verification. The stellar
+catalog is now app-owned and shared by both Earth features. Shared location/time,
+independent cameras and eager Flat cache startup remain selected; this work does
+not depend on the pending time-zone/parser adaptation.
 
 ## Current Scope
 

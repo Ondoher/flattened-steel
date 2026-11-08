@@ -1,22 +1,22 @@
 import {Service} from '@polylith/core';
-import {createBrightest2000StellarCatalogDefinition} from '../../../../algorithm32/implementation/star-field/Brightest2000StellarCatalogPackage.js';
-import {StellarPointSetSource} from '../../../../algorithm32/implementation/star-field/StellarPointSetSource.js';
-import {ViewPresentationFilterRegistry} from '../../../../algorithm32/implementation/presentation-filter/ViewPresentationFilterRegistry.js';
+import {createBrightest2000StellarCatalogDefinition} from '../../algorithm32/implementation/star-field/Brightest2000StellarCatalogPackage.js';
+import {StellarPointSetSource} from '../../algorithm32/implementation/star-field/StellarPointSetSource.js';
+import {ViewPresentationFilterRegistry} from '../../algorithm32/implementation/presentation-filter/ViewPresentationFilterRegistry.js';
 
 /**
  * Owns the authenticated stellar catalog and Algorithm32 human presentation shared by application scenes.
  * Renderer resources remain independently owned by each view.
  *
- * @implements {FlatEarthStellarCatalogService}
+ * @implements {StellarCatalogService}
  */
 export class StellarCatalog extends Service {
 	/**
-	 * Registers the feature-owned catalog capability.
+	 * Registers the application-owned catalog capability.
 	 *
 	 * @param {unknown} registry - Owning application registry.
 	 */
 	constructor(registry) {
-		super('flat-earth-stellar-catalog', registry);
+		super('stellar-catalog', registry);
 		this.implement(['start', 'ready', 'stop', 'load']);
 	}
 
@@ -25,9 +25,9 @@ export class StellarCatalog extends Service {
 	 */
 	start() {
 		this.stop();
-		/** @type {FlatEarthStellarResources|null} */
+		/** @type {StellarResources|null} */
 		this.resources = null;
-		/** @type {Promise<FlatEarthStellarResources>|null} */
+		/** @type {Promise<StellarResources>|null} */
 		this.pending = null;
 		/** @type {AbortController|null} */
 		this.abort = null;
@@ -44,7 +44,7 @@ export class StellarCatalog extends Service {
 	 * Call this method to share a complete load or retry a failed one without cancelling another view's work.
 	 *
 	 * @param {AbortSignal} [signal] - Calling session's lifetime, independent of the shared request.
-	 * @returns {Promise<FlatEarthStellarResources>} - Authenticated source and existing human presentation filters.
+	 * @returns {Promise<StellarResources>} - Authenticated source and existing human presentation filters.
 	 */
 	async load(signal) {
 		signal?.throwIfAborted();
@@ -87,7 +87,7 @@ export class StellarCatalog extends Service {
 	 * Called by loading to decode only complete authenticated package bytes at the network boundary.
 	 *
 	 * @param {AbortSignal} signal - Shared request lifetime.
-	 * @returns {Promise<FlatEarthStellarResources>} - Catalog and human presentation, ready together.
+	 * @returns {Promise<StellarResources>} - Catalog and human presentation, ready together.
 	 */
 	async _load(signal) {
 		let [source, scotopicLuminanceWeights] = await Promise.all([
@@ -184,7 +184,7 @@ export class StellarCatalog extends Service {
 	 * Called by package decoding to confine manifest paths and authenticate an exact payload.
 	 *
 	 * @param {string} base - Application-relative package route.
-	 * @param {FlatEarthStellarArtifact} artifact - Untrusted manifest descriptor.
+	 * @param {StellarArtifact} artifact - Untrusted manifest descriptor.
 	 * @param {AbortSignal} signal - Shared request lifetime.
 	 * @returns {Promise<ArrayBuffer>} - Verified payload.
 	 */

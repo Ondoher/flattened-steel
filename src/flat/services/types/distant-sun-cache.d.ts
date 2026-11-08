@@ -42,3 +42,13 @@ type SphericalCachePackageFacts = {
  * App cache capability declared by its own service.
  */
 type DistantSunCacheService = import('../distant-sun-cache.js').DistantSunCacheService;
+
+/**
+ * App-owned selection result retaining a single accepted metadata graph.
+ */
+type SphericalCacheSelectionFacts = {
+	selection: DistantSunSharedCacheSelection;
+	graph: DistantSunSharedCachePackageGraph;
+	signal: AbortSignal;
+	identity: string;
+};

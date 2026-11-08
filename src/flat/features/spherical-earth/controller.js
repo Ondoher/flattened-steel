@@ -1,37 +1,59 @@
 import {Service} from '@polylith/core';
+import {SphericalEarthSession} from './SphericalEarthSession.js';
+import {SphericalEarthRuntime} from './runtime/SphericalEarthRuntime.js';
 
 /**
- * Independent page registration and view-scoped cache preparation workflow.
+ * Owns spherical page/contribution lifetimes and coordinates shared services.
  *
  * @implements {WorkspacePageController}
  */
 export class SphericalEarthController extends Service {
 	/**
-	 * Creates the spherical page coordinator.
+	 * Creates the feature without locating runtime dependencies.
 	 *
-	 * @param {unknown} registry - Owning application registry.
+	 * @param {unknown} registry - Application registry.
 	 */
 	constructor(registry) {
 		super('spherical-earth-controller', registry);
 		this.sessions = new Map();
-		this.implement(['ready', 'stop', 'mount', 'unmount', 'getState', 'retry']);
+		this.surfaces = new Map();
+		this.tokens = new Map();
+		this.listener = null;
+		this.implement([
+			'ready',
+			'stop',
+			'mount',
+			'unmount',
+			'getState',
+			'getCanvas',
+			'attach',
+			'detach',
+			'retry',
+			'setFieldOfView',
+			'setObserverHeight',
+			'setSkyRenderMode',
+			'centerOnSun',
+			'mountContribution',
+			'unmountContribution',
+		]);
 	}
 
 	/**
-	 * Call this method after startup to register the page and observe shared configuration.
+	 * Call this method to bind shared capabilities and register the page.
 	 */
 	ready() {
-		let mounted = [...this.sessions.keys()];
-		this.stop();
+		if (this.listener) {
+			this.configuration.unlisten('changed', this.listener);
+		}
 		this.model = /** @type {SphericalEarthModelService} */ (this.registry.subscribe('spherical-earth-model'));
 		this.view = /** @type {SphericalEarthViewService} */ (this.registry.subscribe('spherical-earth-view'));
 		this.cache = /** @type {DistantSunCacheService} */ (this.registry.subscribe('distant-sun-cache'));
+		this.stellar = /** @type {StellarCatalogService} */ (this.registry.subscribe('stellar-catalog'));
 		this.configuration = /** @type {ConfigurationService} */ (this.registry.subscribe('configuration'));
-		this.listener = this.configuration.listen('changed', () => {
-			for (let viewId of this.sessions.keys()) {
-				this.retry(viewId);
-			}
-		});
+		this.contributions = /** @type {WorkspaceUiContributionsService} */ (
+			this.registry.subscribe('ui-contributions')
+		);
+		this.listener = this.configuration.listen('changed', () => this._update());
 		/** @type {AppPagesService} */ (this.registry.subscribe('app-pages')).add({
 			id: 'spherical-earth',
 			label: 'spherical-earth.title',
@@ -39,101 +61,190 @@ export class SphericalEarthController extends Service {
 			order: 1,
 			controller: 'spherical-earth-controller',
 		});
-		for (let viewId of mounted) {
-			this.sessions.set(viewId, new AbortController());
-			this.retry(viewId);
+		this._update();
+	}
+
+	/**
+	 * Called by configuration changes to offer one shared snapshot to every view.
+	 */
+	_update() {
+		const configuration = this.configuration.get();
+		for (const session of this.sessions.values()) {
+			session.update(configuration);
 		}
 	}
 
 	/**
-	 * Call this method to start one independent mounted view.
+	 * Call this method to mount a separately owned session and controls.
 	 *
-	 * @param {WorkspacePageMount} request - Exact page/view identity.
-	 * @returns {React.ReactElement} - View-owned presentation.
+	 * @param {WorkspacePageMount} request - Exact view identity.
+	 * @returns {React.ReactElement} - Feature-owned presentation.
 	 */
 	mount({viewId}) {
 		this.unmount(viewId);
-		this.sessions.set(viewId, new AbortController());
-		this.retry(viewId);
+		this.model.open(viewId);
+		this.surfaces.set(viewId, document.createElement('canvas'));
+		const session = new SphericalEarthSession(
+			viewId,
+			this.model,
+			(state) => this.fire('state-changed', {viewId, state}),
+			(canvas, model, id, onFailure, onCameraChange) =>
+				new SphericalEarthRuntime(canvas, model, id, onFailure, onCameraChange, this.stellar, this.cache),
+		);
+		this.sessions.set(viewId, session);
+		session.update(this.configuration.get());
+		const definitions = [
+			{id: 'spherical-earth-camera', slot: 'view-tools'},
+			{id: 'spherical-earth-camera-settings', slot: 'configuration', label: 'spherical-earth.camera.title'},
+		];
+		this.tokens.set(
+			viewId,
+			definitions.map((definition) =>
+				this.contributions.add({...definition, controller: 'spherical-earth-controller', viewId}),
+			),
+		);
 		return this.view.getComponent(viewId);
 	}
 
 	/**
-	 * Called by workflow changes to publish only the current view state.
+	 * Call this method to select the scoped toolbar or settings presentation.
 	 *
-	 * @param {string} viewId - Exact owner.
-	 * @param {SphericalEarthPageState} state - Complete presentation projection.
+	 * @param {WorkspaceContributionMount} request - Exact mounted contribution.
+	 * @returns {React.ReactElement} - Feature-owned controls.
 	 */
-	_publish(viewId, state) {
-		this.model.set(viewId, state);
-		this.fire('state-changed', {viewId, state: this.model.get(viewId)});
+	mountContribution({contribution}) {
+		return contribution.slot === 'configuration'
+			? this.view.getCameraComponent(contribution.viewId)
+			: this.view.getToolsComponent(contribution.viewId);
 	}
 
 	/**
-	 * Call this method to prepare a view or retry failed data without cancelling another subscriber.
+	 * Call this method when a controls host retires; the page owns its camera lifetime.
 	 *
-	 * @param {string} viewId - Owning mounted view.
+	 * @param {WorkspaceContributionMount} _request - Retiring presentation identity.
 	 */
-	retry(viewId) {
-		let previous = this.sessions.get(viewId);
-		if (!previous) {
-			return;
-		}
-		previous.abort();
-		let abort = new AbortController();
-		this.sessions.set(viewId, abort);
-		let angle = this.model.getSolarZenith(this.configuration.get());
-		if (angle == null) {
-			this._publish(viewId, {status: 'missing-location', preparation: null});
-			return;
-		}
-		this._publish(viewId, {status: 'loading', preparation: null});
-		void this.cache
-			.prepare(angle, abort.signal)
-			.then((preparation) => {
-				if (!abort.signal.aborted && this.sessions.get(viewId) === abort) {
-					this._publish(viewId, {status: 'cache-ready', preparation});
-				}
-			})
-			.catch((error) => {
-				if (!abort.signal.aborted && this.sessions.get(viewId) === abort) {
-					console.error('Spherical cache preparation failed.', error);
-					this._publish(viewId, {status: 'error', preparation: null});
-				}
-			});
-	}
+	unmountContribution(_request) {}
 
 	/**
-	 * Call this method to read model-owned view state.
+	 * Call this method to read one session's current projection.
 	 *
 	 * @param {string} viewId - Exact owner.
-	 * @returns {SphericalEarthPageState} - Current presentation facts.
+	 * @returns {SphericalEarthSceneState} - Requested/displayed state.
 	 */
 	getState(viewId) {
-		return this.model.get(viewId);
+		return this.sessions.get(viewId).getState();
 	}
 
 	/**
-	 * Call this method to release only the specified view lifetime.
+	 * Call this method to obtain the feature-owned graphics surface.
 	 *
-	 * @param {string} viewId - Retiring view.
+	 * @param {string} viewId - Exact owner.
+	 * @returns {HTMLCanvasElement} - Surface mounted by presentation.
+	 */
+	getCanvas(viewId) {
+		return this.surfaces.get(viewId);
+	}
+
+	/**
+	 * Call this method to attach the exact mounted surface.
+	 *
+	 * @param {string} viewId - Exact owner.
+	 * @param {HTMLCanvasElement} canvas - Mounted surface.
+	 */
+	attach(viewId, canvas) {
+		this.sessions.get(viewId)?.attach(canvas);
+	}
+
+	/**
+	 * Call this method to detach only the original surface.
+	 *
+	 * @param {string} viewId - Exact owner.
+	 * @param {HTMLCanvasElement} canvas - Retiring surface.
+	 */
+	detach(viewId, canvas) {
+		this.sessions.get(viewId)?.detach(canvas);
+	}
+
+	/**
+	 * Call this method to retry one failed renderer lifetime.
+	 *
+	 * @param {string} viewId - Exact owner.
+	 */
+	retry(viewId) {
+		this.sessions.get(viewId)?.retry();
+	}
+
+	/**
+	 * Call this method to change framing without rebuilding scene resources.
+	 *
+	 * @param {string} viewId - Exact owner.
+	 * @param {number} degrees - Vertical field of view.
+	 */
+	setFieldOfView(viewId, degrees) {
+		this.sessions.get(viewId)?.setFieldOfView(degrees);
+	}
+
+	/**
+	 * Call this method to request a physical height update.
+	 *
+	 * @param {string} viewId - Exact owner.
+	 * @param {Distance} height - Physical elevation.
+	 */
+	setObserverHeight(viewId, height) {
+		this.sessions.get(viewId)?.setObserverHeight(height);
+	}
+
+	/**
+	 * Call this method to change view-only sky presentation.
+	 *
+	 * @param {string} viewId - Exact owner.
+	 * @param {SphericalEarthSkyRenderMode} mode - Sky selection.
+	 */
+	setSkyRenderMode(viewId, mode) {
+		this.sessions.get(viewId)?.setSkyRenderMode(mode);
+	}
+
+	/**
+	 * Call this method to aim only this view at its displayed Sun.
+	 *
+	 * @param {string} viewId - Exact owner.
+	 */
+	centerOnSun(viewId) {
+		this.sessions.get(viewId)?.centerOnSun();
+	}
+
+	/**
+	 * Call this method to release a page, contribution tokens and model record.
+	 *
+	 * @param {string} viewId - Exact retiring owner.
 	 */
 	unmount(viewId) {
-		this.sessions.get(viewId)?.abort();
+		const session = this.sessions.get(viewId);
+		if (!session) {
+			return;
+		}
 		this.sessions.delete(viewId);
-		this.model?.remove(viewId);
+		for (const token of this.tokens.get(viewId) ?? []) {
+			this.contributions.remove(token);
+		}
+		this.tokens.delete(viewId);
+		if (session.canvas) {
+			session.detach(session.canvas);
+		}
+		this.surfaces.delete(viewId);
+		this.model.close(viewId);
 	}
 
 	/**
-	 * Call this method to detach configuration and all exact view lifetimes.
+	 * Call this method to retire only this feature's subscriptions and sessions.
 	 */
 	stop() {
 		if (this.listener) {
 			this.configuration.unlisten('changed', this.listener);
 			this.listener = null;
 		}
-		for (let viewId of this.sessions.keys()) {
-			this.unmount(viewId);
+		for (const id of this.sessions.keys()) {
+			this.unmount(id);
 		}
 	}
 }

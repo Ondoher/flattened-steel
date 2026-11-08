@@ -8,8 +8,8 @@ export class PointerLookController {
 	 * Creates native input and Three controls for one retained camera.
 	 *
 	 * @param {HTMLCanvasElement} canvas - Pointer-lock owner surface.
-	 * @param {FlatEarthThreeCamera} camera - Camera rotated by actual mouse input.
-	 * @param {(status: FlatEarthCameraState['lookStatus']) => void} onStatus - Scoped interaction status.
+	 * @param {SceneLookCamera} camera - Camera rotated by actual mouse input.
+	 * @param {(status: SceneLookStatus) => void} onStatus - Scoped interaction status.
 	 * @param {() => void} onChange - Actual orientation-change callback.
 	 */
 	constructor(canvas, camera, onStatus, onChange) {

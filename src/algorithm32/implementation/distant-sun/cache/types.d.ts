@@ -1959,3 +1959,11 @@ type DistantSunSharedBlockWindow = {
  * changes atmosphere, incoming quadrature, direct N1 or final-view integration.
  */
 type DistantSunScatteringAccuracyMethod = 'legacy' | 'corrected60' | 'corrected60-sun035';
+
+/**
+ * Complete host installation with post-commit resource failures reported separately.
+ */
+type DistantSunSharedCachePublicationResult = Readonly<{
+	frame: DistantSunSharedCacheFrame;
+	retirementErrors: readonly unknown[];
+}>;

@@ -1,10 +1,95 @@
 # Spherical Earth Implementation Execution
 
-Status: M1 complete on 2026-11-08 under the owner's independent-execution request.
-M2-M4 remain unstarted and outside this invocation. The
-[plan](spherical-earth-implementation-plan.md) owns acceptance criteria.
+Status: M1-M3 complete; M4 verification is in progress under the owner's request
+of 2026-11-08 to independently execute the remainder of the saved
+[plan](spherical-earth-implementation-plan.md). Current scratch/evidence:
+.codex-tmp/spherical-earth/m2-m4-20261108/. M1 checkpoint: 3f9a1be5.
 
-## Completed Outcome
+## Current Position
+
+Spherical Earth renders the canonical atmosphere, shader Sun and brightest-2,000
+stars above curved green ground. Shared location/time drives both views. The
+feature contributes Sky, elevation, FOV and Center on Sun icon controls and its
+Camera/sky settings. Pointer look uses the promoted shared native adapter.
+Cameras, GPU resources and view lifetimes remain independent.
+
+The stellar catalog service, declaration, ambient types and tests are app-owned
+under src/flat/services/. Both Earth features resolve stellar-catalog; neither
+imports the other's implementation. Operational stellar/cache data remains
+ignored and unchanged. The existing Flat startup cache still warms eagerly.
+
+## M2-M3 Milestone Report
+
+Real installed-Chrome captures show day horizon/Sun, low-Sun sky, a dark source
+with stars, 40 km horizon curvature, two spherical views and a mixed workspace.
+The first complete scene loaded 29 selected blocks and 244,905,838 response bytes,
+including metadata; the full 734 MB package was not downloaded. The initial atlas
+is 519,561,216 bytes. Two spherical atlases plus the retained 293,819,992-byte Flat
+startup field total about 1.33 GB of known cache payload, excluding compositor,
+celestial, metadata and driver storage.
+
+Retained time edits preserve the scene, atmosphere program set and atlas.
+Six integration samples took 80-125 ms including automation/polling; these are
+not GPU-completion timings. The second isolated run independently confirms no
+new atmosphere programs or packet uploads across six ordinary time edits.
+The source, geometry and receiver measurements update coherently. At 40 km,
+view integration changes to 120 intervals through a binding; the scene is not
+rebuilt. Lower heights use 30 intervals. Warm GPU-completed measurements remain
+part of M4.
+
+Pure engine checks: 709 specifications pass. Flat: 230 browser tests pass after
+the retained-retry case; engine and Flat types pass. Server suites pass 21 plus
+7 cases. A targeted real GPU lane passes 10 selected cache/Worker/receiver/stellar
+cases; 26 unrelated cases were intentionally filtered. Normal production builds
+for Flat and the reference Flat32 app pass. No standards reviewers were started.
+The primary reread React/ReMVC/local authoring rules and owns self-review.
+
+### Consequential Decisions
+
+1. Adapt production spherical/source/cache APIs into a feature-owned rendering
+   aggregate, keeping the workspace generic. Reuse the same selected numerical,
+   exposure and human-star policies as the current reference.
+2. Add a bounded reversible host installer to shared cache publication. A failing
+   installer restores prior facade/protection; geometry, light, camera and prior
+   rendering restore together. Retired resources are released after successful
+   installation, and post-commit cleanup errors are distinct from failed commit.
+   Both new engine cases pass, and original callers preserve their API behavior.
+3. Retain the displayed scene during a retryable cache failure. A lost graphics
+   context triggers a fresh runtime after recovery; a usable context retries
+   preparation without discarding its last frame. The new session test passes.
+4. The first integration report retains a probe failure: its program-equality
+   assertion included the first Shader-off draw, which legitimately compiles a
+   standard Three output variant. Separate time-only sampling proves unchanged
+   atmosphere programs; the raw variant is created on first use, not each edit.
+5. Keep page-specific time editing Flat-owned. Spherical controls use global
+   date/time through the frame and do not duplicate degrees-from-closest.
+6. Preserve all historical/experimental source, the original operational inputs,
+   the suspended dome experiment and deferred timezone/parser work. Profiles are
+   disposable and removed after browser success/failure.
+
+### Current Evidence
+
+- [Initial day horizon](../../../.codex-tmp/spherical-earth/m2-m4-20261108/first-render/day-horizon.png)
+- [Initial Sun](../../../.codex-tmp/spherical-earth/m2-m4-20261108/first-render/day-sun.png)
+- [Sunset](../../../.codex-tmp/spherical-earth/m2-m4-20261108/integration/low-sun.png)
+- [Night](../../../.codex-tmp/spherical-earth/m2-m4-20261108/integration/night.png)
+- [40 km](../../../.codex-tmp/spherical-earth/m2-m4-20261108/integration-r2/40km-horizon.png)
+- [Two spherical views](../../../.codex-tmp/spherical-earth/m2-m4-20261108/integration-r2/two-spherical.png)
+- [Mixed views](../../../.codex-tmp/spherical-earth/m2-m4-20261108/integration-r2/mixed-views.png)
+- [Passing retained integration report](../../../.codex-tmp/spherical-earth/m2-m4-20261108/integration-r2/report.json)
+
+These captures were inspected as real rendering/interaction evidence. They do
+not establish numerical equivalence by themselves. M4 still owns matching
+reference comparisons, GPU-completed timings, boundary/failure/context/app-stop
+checks and real discovered-app deployment with a separate parent output root.
+No external publishing or push is authorized. Checkpoints cover the whole repo.
+
+## Historical M1 Report
+
+The following report records the M1-only state at checkpoint 3f9a1be5. Its
+placeholder/cache-ready presentation is superseded by the real render above.
+
+### Completed Outcome
 
 Spherical Earth registers through app-pages and mounts feature-owned class React
 presentation in either workspace view. Its controller, view and registered model
@@ -21,7 +106,7 @@ copied into Flat's ignored deployment directory. The
 owns staging, operational-root configuration, build commands and routes.
 No browser/server runtime import points into a Flat32 application implementation.
 
-## Decisions And Recovery
+### Decisions And Recovery
 
 1. Preserve the immutable production package as deployment input. It contains
    209 files, 95 encoded blocks and 734,130,872 bytes. Selected package/report
@@ -53,7 +138,7 @@ No browser/server runtime import points into a Flat32 application implementation
 7. The date/time design notes already present at baseline remain design-only.
    They belong in the whole-repository checkpoint together with this milestone.
 
-## Verification
+### Verification
 
 The maintained production build and pinned worker build pass. Flat client,
 server, engine and Flat32 type checks pass. Passing suites:
@@ -88,7 +173,7 @@ reviewers remain cancelled; no independent standards-compliance claim is made.
 Changed source formatting and Git whitespace diagnostics pass. No numerical
 requalification or heavy spherical rendering was run in M1.
 
-## Measured Delivery And Resources
+### Measured Delivery And Resources
 
 At 37.33939 N, -121.89496 E and 2024-06-20T19:00:00Z, the geometry selected solar
 zenith 20.2605937845 degrees. Metadata transfer was 3,098,407 bytes; the selected
@@ -115,7 +200,7 @@ plus that cache are approximately 2.37 GB, excluding render targets, other engin
 resources and driver overhead. These are estimates, not measured allocations or
 admission limits. M2/M4 must observe actual allocation/transition behavior.
 
-## Evidence And Captures
+### Evidence And Captures
 
 Scratch/baseline and command logs: .codex-tmp/spherical-earth/m1/. The saved baseline
 includes the pre-existing tracked diff and untracked plan. Useful current evidence:
@@ -132,7 +217,7 @@ Captures were visually inspected as page/cache status evidence; they are not
 spherical shader renders. Current command result files identify exact durations
 and exit codes. Earlier failed logs remain separate from passing final results.
 
-## Checkpoint And Resumption
+### Checkpoint And Resumption
 
 The M1 local checkpoint includes the whole repository state, including prior
 Temporal/user-locale/IntlDate design notes. Its exact identifier is reported in
@@ -141,7 +226,7 @@ The [whole-repository checkpoint advice](../../../.codex-tmp/spherical-earth/m1/
 recommends this completed unit. Advice is separate from standards review and test
 outcomes.
 
-Next authorized work ends here. On a later owner request, begin M2: promote the
+M1 checkpoint: 3f9a1be5. The owner has now authorized the remaining plan. Begin M2: promote the
 stellar capability to app ownership and assemble the real spherical geometry,
 curved ground, distant-Sun shader/cache attachment and stars with exact shared
 inputs. Reuse this deployment and ownership layer. Rendering controls, retained

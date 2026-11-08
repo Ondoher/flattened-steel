@@ -1,7 +1,7 @@
 import {Registry} from '@polylith/core';
-import {StellarCatalog} from '../models/StellarCatalog.js';
+import {StellarCatalog} from '../stellar-catalog.js';
 
-describe('Flat Earth stellar catalog', () => {
+describe('Application stellar catalog', () => {
 	it('shares in-flight source loading, cancels only the caller, and reuses the completed catalog', async () => {
 		let catalog = new StellarCatalog(new Registry());
 		catalog.start();

@@ -16,7 +16,7 @@ export class DistantSunCache extends Service {
 	 */
 	constructor(registry) {
 		super('distant-sun-cache', registry);
-		this.implement(['start', 'ready', 'stop', 'prepare', 'getDiagnostics']);
+		this.implement(['start', 'ready', 'stop', 'prepare', 'select', 'getDiagnostics']);
 		this.pending = null;
 		this.identity = null;
 		this.borrow = null;
@@ -82,14 +82,13 @@ export class DistantSunCache extends Service {
 	}
 
 	/**
-	 * Call this method to resolve cache metadata and decode one required block for the M1 connection proof.
-	 * This is cache readiness, not a complete rendered scene. A rejected/cancelled request publishes no result.
+	 * Called by scene selection to resolve metadata and borrow transport without decoding unrelated blocks.
 	 *
-	 * @param {number} solarZenithDegrees - Geometry-derived solar angle.
-	 * @param {AbortSignal} signal - Independent view lifetime.
-	 * @returns {Promise<SphericalCachePreparation>} - Actual selected-block and package facts.
+	 * @param {number} solarZenithDegrees - Physical solar angle.
+	 * @param {AbortSignal} signal - Independent subscriber lifetime.
+	 * @returns {Promise<SphericalCacheSelectionFacts>} - Authenticated private graph and public engine selection.
 	 */
-	async prepare(solarZenithDegrees, signal) {
+	async _selection(solarZenithDegrees, signal) {
 		let lifetime = this.abort;
 		lifetime.signal.throwIfAborted();
 		signal = AbortSignal.any([signal, lifetime.signal]);
@@ -121,36 +120,66 @@ export class DistantSunCache extends Service {
 				fetch: (url, options) => this._fetch(url, options),
 			}));
 		}
-		if (resolution.status === 'dark') {
-			return {
-				dark: true,
-				packageIdentity: resolution.asset.packageSetIdentity,
-				blockId: null,
-				packetBytes: 0,
-				requiredBlocks: 0,
-			};
+
+		return {
+			graph,
+			signal,
+			identity: resolution.asset.packageSetIdentity,
+			selection: {
+				package: source,
+				transport: this.borrow.transport,
+				sceneOrdinal: resolution.status === 'dark' ? null : resolution.representativeSolarZenithDegrees,
+				solarInterpolation: resolution.asset.solarInterpolation,
+				scatteringAccuracy: resolution.asset.scatteringAccuracy,
+			},
+		};
+	}
+
+	/**
+	 * Call this method to prepare the shared engine's metadata/transport capability for a complete scene.
+	 *
+	 * @param {number} solarZenithDegrees - Physical solar angle.
+	 * @param {AbortSignal} signal - Independent view cancellation.
+	 * @returns {Promise<DistantSunSharedCacheSelection>} - Renderer-independent package selection.
+	 */
+	async select(solarZenithDegrees, signal) {
+		return (await this._selection(solarZenithDegrees, signal)).selection;
+	}
+
+	/**
+	 * Call this diagnostic method to reproduce M1's one-block connection proof.
+	 *
+	 * @param {number} solarZenithDegrees - Physical solar angle.
+	 * @param {AbortSignal} signal - Independent subscriber lifetime.
+	 * @returns {Promise<SphericalCachePreparation>} - Selected proof block facts, separate from rendering.
+	 */
+	async prepare(solarZenithDegrees, signal) {
+		let facts = await this._selection(solarZenithDegrees, signal);
+		signal = facts.signal;
+		let {selection, graph, identity} = facts;
+		if (selection.sceneOrdinal === null) {
+			return {dark: true, packageIdentity: identity, blockId: null, packetBytes: 0, requiredBlocks: 0};
 		}
-		let scene = graph.scenes.find(
-			(candidate) => candidate.representativeSolarZenithDegrees === resolution.representativeSolarZenithDegrees,
+		const scene = graph.scenes.find(
+			(candidate) => candidate.representativeSolarZenithDegrees === selection.sceneOrdinal,
 		);
 		if (!scene) {
 			throw new RangeError('Spherical scene is absent from the authenticated package.');
 		}
-		let block = graph.blockIndex.blocks.find((candidate) => candidate.id === scene.requiredBlockIds[0]);
-		let lease = await this.borrow.transport.request({
-			url: source.getBlockUrl(block.id),
+		const block = graph.blockIndex.blocks.find((candidate) => candidate.id === scene.requiredBlockIds[0]);
+		const lease = await selection.transport.request({
+			url: selection.package.getBlockUrl(block.id),
 			block,
 			logicalToUniqueIndex: graph.logicalToUniqueIndex,
 			logicalToUniqueIndexSha256: graph.configuration.directionLayout.logicalToUniqueIndex.sha256,
-			pin: {kind: 'candidate', owner: 'spherical-earth-m1'},
+			pin: {kind: 'candidate', owner: 'spherical-connection-proof'},
 			signal,
 		});
 		try {
 			signal.throwIfAborted();
-			lifetime.signal.throwIfAborted();
 			return {
 				dark: false,
-				packageIdentity: resolution.asset.packageSetIdentity,
+				packageIdentity: identity,
 				blockId: block.id,
 				packetBytes: lease.packet.values.byteLength,
 				requiredBlocks: scene.requiredBlockIds.length,

@@ -1,80 +1,199 @@
 import {Service} from '@polylith/core';
-import {SphericalEarthGeometry} from '../../../../algorithm32/implementation/spherical-earth/SphericalEarthGeometry.js';
-import {DEFAULT_NATIVE_PRODUCTION_PROFILE} from '../../../../algorithm32/profiles/native-15/native-15-profile.js';
-import AngleMath from '../../../../algorithm32/math/AngleMath.js';
+import DistanceMath from '../../../../algorithm32/math/DistanceMath.js';
 
 /**
- * Per-view state and physical observation derivation for the spherical page.
+ * Owns the feature's independently scoped camera settings and maps shared configuration into engine observations.
  *
  * @implements {SphericalEarthModelService}
  */
 export class SphericalEarthModel extends Service {
 	/**
-	 * Creates the registered model-service.
+	 * Registers the feature's scoped canonical camera capability.
 	 *
-	 * @param {unknown} registry - Owning application registry.
+	 * @param {unknown} registry - Optional isolated application registry.
 	 */
 	constructor(registry) {
 		super('spherical-earth-model', registry);
-		this.states = new Map();
-		this.implement(['get', 'set', 'remove', 'getSolarZenith']);
+		this.implement([
+			'start',
+			'stop',
+			'open',
+			'close',
+			'getCamera',
+			'getShaderOptions',
+			'setSkyRenderMode',
+			'setOrientation',
+			'setFieldOfView',
+			'resolveHeight',
+			'acceptHeight',
+			'getObservation',
+		]);
 	}
 
 	/**
-	 * Call this method to read a defensive view state.
-	 *
-	 * @param {string} viewId - Owning view.
-	 * @returns {SphericalEarthPageState} - Current state or the unselected-location state.
+	 * Call this method to initialize this application's view records before readiness.
 	 */
-	get(viewId) {
-		return {...(this.states.get(viewId) ?? {status: 'missing-location', preparation: null})};
+	start() {
+		/** @type {Map<string, SphericalEarthCameraValues>} */
+		this.cameras = new Map();
+		/** @type {Map<string, SphericalEarthSkyRenderMode>} */
+		this.skyModes = new Map();
 	}
 
 	/**
-	 * Call this method to accept one view's current state.
-	 *
-	 * @param {string} viewId - Owning view.
-	 * @param {SphericalEarthPageState} state - Complete presentation facts.
+	 * Call this method to release all camera records when the application stops.
 	 */
-	set(viewId, state) {
-		this.states.set(viewId, {...state});
+	stop() {
+		this.cameras?.clear();
+		this.skyModes?.clear();
 	}
 
 	/**
-	 * Call this method to release a closed view's state.
+	 * Call this method to initialize independent camera defaults for a newly mounted view.
 	 *
-	 * @param {string} viewId - Retired view.
+	 * @param {string} viewId - Exact mounted view identity.
 	 */
-	remove(viewId) {
-		this.states.delete(viewId);
+	open(viewId) {
+		this.cameras.set(viewId, {observerHeightMeters: 5, fieldOfViewDegrees: 50, orientation: [0, 0, 0, 1]});
+		this.skyModes.set(viewId, 'full');
 	}
 
 	/**
-	 * Call this method to derive the spherical cache angle from shared accepted coordinates and time.
+	 * Call this method to release only the camera record belonging to the closed view.
 	 *
-	 * @param {ApplicationConfiguration} configuration - Shared accepted values.
-	 * @returns {number|null} - Solar zenith in degrees, or null until location/time exist.
+	 * @param {string} viewId - Exact released view identity.
 	 */
-	getSolarZenith({location, timestamp}) {
+	close(viewId) {
+		this.cameras.delete(viewId);
+		this.skyModes.delete(viewId);
+	}
+
+	/**
+	 * Call this method to project one view's selected mode, Sun presentation and neutral ground-fill policy.
+	 *
+	 * @param {string} viewId - Exact mounted view identity.
+	 * @returns {SphericalEarthShaderOptions} - Derived composition switches, Sun multipliers and ambient reference.
+	 */
+	getShaderOptions(viewId) {
+		this._camera(viewId);
+		let mode = this.skyModes.get(viewId);
+		return {
+			mode,
+			atmosphereEnabled: mode === 'full',
+			sunIlluminationScale: mode === 'full' ? 1 : 0,
+			sunDiscBrightnessScale: 1,
+			ambientLightIntensity: mode === 'full' ? 0 : mode === 'shader-off' ? 1 : 0.03,
+		};
+	}
+
+	/**
+	 * Call this method to select one view's presentation without changing physical cache inputs.
+	 *
+	 * @param {string} viewId - Exact mounted view identity.
+	 * @param {SphericalEarthSkyRenderMode} mode - Supported presentation selection.
+	 * @throws {RangeError} - The requested mode is not supported.
+	 */
+	setSkyRenderMode(viewId, mode) {
+		this._camera(viewId);
+		if (!['full', 'no-atmosphere', 'shader-off'].includes(mode)) {
+			throw new RangeError('Unsupported Spherical Earth sky render mode.');
+		}
+		this.skyModes.set(viewId, mode);
+	}
+
+	/**
+	 * Called by scoped operations to require an owned camera record.
+	 *
+	 * @param {string} viewId - Exact mounted view identity.
+	 * @param {string} viewId - Exact mounted view identity.
+	 * @returns {SphericalEarthCameraValues} - Canonical camera record.
+	 * @throws {Error} - The view has been released or never mounted.
+	 */
+	_camera(viewId) {
+		let camera = this.cameras.get(viewId);
+		if (!camera) {
+			throw new Error(`Unknown Spherical Earth view: ${viewId}`);
+		}
+		return camera;
+	}
+
+	/**
+	 * Call this method to read independent camera values for presentation.
+	 *
+	 * @param {string} viewId - Exact mounted view identity.
+	 * @returns {SphericalEarthCameraValues} - Accepted height, framing and orientation.
+	 */
+	getCamera(viewId) {
+		let camera = this._camera(viewId);
+		return {...camera, orientation: [...camera.orientation]};
+	}
+
+	/**
+	 * Call this method to retain the accepted rendered camera orientation across scene updates and retry.
+	 *
+	 * @param {string} viewId - Exact mounted view identity.
+	 * @param {SphericalEarthCameraOrientation} orientation - Renderer-produced unit quaternion.
+	 */
+	setOrientation(viewId, orientation) {
+		this._camera(viewId).orientation = [...orientation];
+	}
+
+	/**
+	 * Call this method to accept a perspective FOV without clamping or choosing a different projection.
+	 *
+	 * @param {string} viewId - Exact mounted view identity.
+	 * @param {number} degrees - Vertical field of view in degrees.
+	 * @throws {RangeError} - The angle is nonfinite or outside (0, 180).
+	 */
+	setFieldOfView(viewId, degrees) {
+		if (!Number.isFinite(degrees) || degrees <= 0 || degrees >= 180) {
+			throw new RangeError('Vertical FOV must be greater than zero and less than 180 degrees.');
+		}
+		this._camera(viewId).fieldOfViewDegrees = degrees;
+	}
+
+	/**
+	 * Call this method to normalize an elevation request before preparing its physical scene.
+	 *
+	 * @param {Distance} height - Requested distance above the flat ground.
+	 * @returns {Distance} - Independent nonnegative height in meters; engine geometry validates physical support.
+	 * @throws {RangeError} - Height is nonfinite or below ground.
+	 */
+	resolveHeight(height) {
+		let meters = DistanceMath.toMeters(height);
+		if (!Number.isFinite(meters) || meters < 0) {
+			throw new RangeError('Observer height must be finite and above ground.');
+		}
+		return {value: meters, units: 'meters'};
+	}
+
+	/**
+	 * Call this method after complete frame publication to accept the new elevation.
+	 *
+	 * @param {string} viewId - Exact mounted view identity.
+	 * @param {Distance} height - Height belonging to the successfully displayed frame.
+	 */
+	acceptHeight(viewId, height) {
+		this._camera(viewId).observerHeightMeters = this.resolveHeight(height).value;
+	}
+
+	/**
+	 * Call this method to derive an exact engine observation from shared location and current time.
+	 *
+	 * @param {ApplicationConfiguration} configuration - Current application configuration snapshot.
+	 * @returns {GeometryObservation|null} - Unit-bearing observation, or null until location/time are available.
+	 */
+	getObservation({location, timestamp}) {
 		if (!location || timestamp == null) {
 			return null;
 		}
-		let physical = DEFAULT_NATIVE_PRODUCTION_PROFILE.physical.geometry;
-		let geometry = new SphericalEarthGeometry({
-			bottomRadius: physical.bottomRadius,
-			topRadius: physical.topRadius,
-			observerHeight: {value: 5, units: 'meters'},
-			observerUpDirection: [0, 0, 1],
-			sceneFrame: {kind: 'observer-local'},
-		});
-		let state = geometry.resolveDistantSunSceneState({
+		return {
 			instant: new Date(timestamp).toISOString(),
 			location: {
 				latitude: {value: location.latitude, units: 'degrees'},
 				longitude: {value: location.longitude, units: 'degrees'},
 			},
-		});
-		return AngleMath.toDegrees(state.observerSolarZenith);
+		};
 	}
 }
 

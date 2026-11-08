@@ -1,4 +1,4 @@
-import {PointerLookController} from './PointerLookController.js';
+import {PointerLookController} from '../../../common/PointerLookController.js';
 import DistanceMath from '../../../../algorithm32/math/DistanceMath.js';
 import {FlatEarthGraphics} from './FlatEarthGraphics.js';
 import {LocalSunRuntimeCacheBinding} from '../../../../algorithm32/implementation/local-sun/cache/frames/LocalSunRuntimeCacheBinding.js';
@@ -25,7 +25,7 @@ export class FlatEarthRuntime {
 	 * @param {string} viewId - Exact mounted view identity.
 	 * @param {(error: Error) => void} onFailure - Owning session's failure observer.
 	 * @param {(change: FlatEarthCameraChange) => void} onCameraChange - Camera state accepted by the session.
-	 * @param {FlatEarthStellarCatalogService} stellarCatalog - Shared authenticated source capability.
+	 * @param {StellarCatalogService} stellarCatalog - Shared authenticated source capability.
 	 * @param {FlatEarthGraphicsResources} [graphics] - Startup context and cache transferred to this view.
 	 */
 	constructor(
@@ -38,9 +38,9 @@ export class FlatEarthRuntime {
 		graphics = new FlatEarthGraphics(canvas),
 	) {
 		this.stellarCatalog = stellarCatalog;
-		/** @type {FlatEarthStellarSource|null} */
+		/** @type {StellarSource|null} */
 		this.stars = null;
-		/** @type {FlatEarthStellarPresentation|null} */
+		/** @type {StellarPresentation|null} */
 		this.presentationFilters = null;
 		this.graphics = graphics;
 		this.canvas = canvas;

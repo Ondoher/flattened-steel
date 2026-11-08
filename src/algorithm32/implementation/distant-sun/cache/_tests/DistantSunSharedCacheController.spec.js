@@ -7,6 +7,43 @@ describe('Shared-cache residency and publication', () => {
 	let fixture;
 	afterEach(() => fixture?.controller.dispose());
 
+	it('installs the host before retiring old metadata and preserves the old publication on failure', async () => {
+		fixture = createFixture();
+		await fixture.controller.requestScene(0);
+		const first = fixture.controller.publishFrame();
+		await fixture.controller.requestScene(1);
+		const metadata = fixture.backend.liveMetadata;
+		expect(() =>
+			fixture.controller.publishFrame(() => {
+				expect(fixture.controller.diagnostics().sceneOrdinal).toBe(0);
+				expect(fixture.backend.liveMetadata).toBe(metadata);
+				throw new Error('host install failed');
+			}),
+		).toThrowError('host install failed');
+		fixture.controller.cancelPreparation();
+		expect(fixture.controller.publishFrame()).toBe(first);
+		await fixture.controller.requestScene(1);
+		fixture.controller.publishFrame(() => expect(fixture.controller.diagnostics().sceneOrdinal).toBe(0));
+		expect(fixture.controller.diagnostics().sceneOrdinal).toBe(1);
+		expect(fixture.controller.getRetirementErrors()).toEqual([]);
+	});
+
+	it('reports post-commit retirement failure separately while retaining the new frame', async () => {
+		fixture = createFixture();
+		await fixture.controller.requestScene(0);
+		const first = fixture.controller.publishFrame();
+		const dispose = first.metadataTextures[0].dispose;
+		spyOn(first.metadataTextures[0], 'dispose').and.callFake(() => {
+			dispose();
+			throw new Error('retired texture cleanup');
+		});
+		await fixture.controller.requestScene(1);
+		const next = fixture.controller.publishFrame(() => {});
+		expect(next.snapshot.sceneOrdinal).toBe(1);
+		expect(fixture.controller.diagnostics().sceneOrdinal).toBe(1);
+		expect(fixture.controller.getRetirementErrors().length).toBe(1);
+	});
+
 	it('rejects both legacy/focused package and lookup mismatches before allocation', /** Called by Jasmine to prove explicit package-policy pairing. */ () => {
 		fixture = createFixture();
 		expect(
@@ -81,7 +118,9 @@ describe('Shared-cache residency and publication', () => {
 		let previous;
 		for (const [routeIndex, ordinal] of route.entries()) {
 			expect(await fixture.controller.requestScene(ordinal, {routeIndex})).toBeTrue();
-			if (previous) expect(fixture.controller.diagnostics().sceneOrdinal).toBe(previous.snapshot.sceneOrdinal);
+			if (previous) {
+				expect(fixture.controller.diagnostics().sceneOrdinal).toBe(previous.snapshot.sceneOrdinal);
+			}
 			const frame = fixture.controller.publishFrame();
 			expect(frame.solarInterpolation).toBe('monotone-cubic');
 			expect(frame.snapshot.sceneOrdinal).toBe(ordinal);
@@ -346,8 +385,11 @@ describe('Shared-cache residency and publication', () => {
 				DistantSunSharedCachePackage.load({...request, report: {...request.report, byteLength: 3}}),
 			).toBeRejectedWithError(/length/u);
 		} finally {
-			if (previous) Object.defineProperty(globalThis, 'location', previous);
-			else delete globalThis.location;
+			if (previous) {
+				Object.defineProperty(globalThis, 'location', previous);
+			} else {
+				delete globalThis.location;
+			}
 		}
 	});
 });
@@ -355,12 +397,15 @@ describe('Shared-cache residency and publication', () => {
 /** Creates a deterministic independent coordinate oracle and resource-accounting capabilities. */
 function createFixture(transition = false, sliding = false, cubic = false, scatteringAccuracy = undefined) {
 	const blocks = [];
-	for (const base of cubic ? [0, 40] : [0, 48])
-		for (let altitude = 0; altitude < 48; altitude += 8)
+	for (const base of cubic ? [0, 40] : [0, 48]) {
+		for (let altitude = 0; altitude < 48; altitude += 8) {
 			for (let zenith = base; zenith < base + (sliding ? 40 : 24); zenith += 8) {
 				const coordinates = [];
-				for (let a = altitude; a < altitude + 8; a++)
-					for (let z = zenith; z < zenith + 8; z++) coordinates.push([a, z]);
+				for (let a = altitude; a < altitude + 8; a++) {
+					for (let z = zenith; z < zenith + 8; z++) {
+						coordinates.push([a, z]);
+					}
+				}
 				blocks.push({
 					id: `block:${altitude}:${zenith}`,
 					coordinates,
@@ -368,6 +413,8 @@ function createFixture(transition = false, sliding = false, cubic = false, scatt
 					decoded: {sha256: (blocks.length + 1).toString(16).padStart(64, '0')},
 				});
 			}
+		}
+	}
 	const scenes = Array.from({length: 109}, (_, ordinal) => {
 		const base = ordinal >= 50 ? 48 : sliding && ordinal <= 2 ? ordinal * 8 : 0;
 		const rowWidth = cubic ? 16 : 24;
@@ -380,7 +427,9 @@ function createFixture(transition = false, sliding = false, cubic = false, scatt
 				lastSolarZenithIndex: base + rowWidth - 1,
 				firstPackedRow: coordinates.length,
 			});
-			for (let z = base; z < base + rowWidth; z++) coordinates.push([altitude, z]);
+			for (let z = base; z < base + rowWidth; z++) {
+				coordinates.push([altitude, z]);
+			}
 		}
 		return {
 			coordinates,
@@ -400,12 +449,16 @@ function createFixture(transition = false, sliding = false, cubic = false, scatt
 	const fixture = {graph, activePins: 0, requests: 0, defer: false};
 	const pending = [];
 	fixture.resolvePending = () => {
-		for (const resolve of pending.splice(0)) resolve();
+		for (const resolve of pending.splice(0)) {
+			resolve();
+		}
 	};
 	const transport = {
 		request: async ({block}) => {
 			fixture.requests += 1;
-			if (fixture.defer) await new Promise((resolve) => pending.push(resolve));
+			if (fixture.defer) {
+				await new Promise((resolve) => pending.push(resolve));
+			}
 			fixture.activePins += 1;
 			let released = false;
 			return {
@@ -418,7 +471,9 @@ function createFixture(transition = false, sliding = false, cubic = false, scatt
 					storage: {format: 'RGBA32F', width: 648, height: 1728, layers: 1, xFastest: true, flipY: false},
 				},
 				repin: () => {
-					if (released) throw Error('Released pin');
+					if (released) {
+						throw Error('Released pin');
+					}
 				},
 				release: () => {
 					if (!released) {
@@ -440,14 +495,18 @@ function createFixture(transition = false, sliding = false, cubic = false, scatt
 		allocations: 0,
 		allocatePersistentArray: (request) => {
 			backend.allocations += 1;
-			if (backend.allocations === backend.failAtAllocation) throw new Error('GPU allocation failed');
+			if (backend.allocations === backend.failAtAllocation) {
+				throw new Error('GPU allocation failed');
+			}
 			backend.liveArrays += 1;
 			backend.maximumLiveArrays = Math.max(backend.maximumLiveArrays, backend.liveArrays);
 			const handle = {
 				...request,
 				runtimeBinding: {valueKey: request.valueKey},
 				dispose: () => {
-					if (states.delete(handle)) backend.liveArrays -= 1;
+					if (states.delete(handle)) {
+						backend.liveArrays -= 1;
+					}
 				},
 			};
 			states.set(handle, {generation: 1, unavailable: false, protectedLayers: [], layerIdentities: []});
@@ -459,10 +518,13 @@ function createFixture(transition = false, sliding = false, cubic = false, scatt
 		},
 		uploadPersistentArrayLayer: ({array, layer, identity}) => {
 			const state = states.get(array);
-			if (state.unavailable || state.protectedLayers.includes(layer))
+			if (state.unavailable || state.protectedLayers.includes(layer)) {
 				throw Error('Protected or unavailable slot');
+			}
 			backend.uploads += 1;
-			if (backend.uploads === backend.failAtUpload) throw Error('Injected upload failure');
+			if (backend.uploads === backend.failAtUpload) {
+				throw Error('Injected upload failure');
+			}
 			state.layerIdentities[layer] = identity;
 		},
 		uploadImmutableTexture: (request) => {

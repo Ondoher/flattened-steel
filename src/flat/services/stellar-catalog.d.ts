@@ -1,5 +1,5 @@
 /**
- * Registered feature-owned stellar source capability.
+ * Registered app-owned stellar source capability.
  */
 export interface StellarCatalog extends EventBus {
 	/**
@@ -8,5 +8,5 @@ export interface StellarCatalog extends EventBus {
 	 * @param signal - Optional caller lifetime; cancellation does not cancel another view.
 	 * @returns - Complete production source and Algorithm32 human presentation filters.
 	 */
-	load(signal?: AbortSignal): Promise<FlatEarthStellarResources>;
+	load(signal?: AbortSignal): Promise<StellarResources>;
 }
