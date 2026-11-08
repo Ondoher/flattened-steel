@@ -51,6 +51,34 @@ describe('ReceiverEnvironmentLightController', () => {
 		expect(controller.active.photopicTotalHorizontalIlluminance).toEqual({value: 683, units: 'lux'});
 	});
 
+	it('constructs the owned measurement once without dark publication or downstream packet scans', async () => {
+		let calculator = new LocalLightLevelCalculator();
+		let controller = new ReceiverEnvironmentLightController({calculator, directLight});
+		expect(controller.active).toBeNull();
+		let externalCombination = spyOn(calculator, 'combineReceiverLight').and.callThrough();
+		let internalCombination = spyOn(calculator, '_combineReceiverLight').and.callThrough();
+		let externalMedian = spyOn(calculator, 'measureMedianSkyLuminance').and.callThrough();
+		let measurement = await controller._buildOwned({
+			identity: 'owned-batch',
+			sampleIncomingRadiance: (directions) => directions.map(() => radiance(7)),
+			reduceIncomingRadiance: () => packet(SPECTRAL_QUANTITIES.IRRADIANCE_DENSITY, 3, 'owned-diffuse'),
+		});
+		expect(internalCombination).toHaveBeenCalledTimes(1);
+		expect(externalCombination).not.toHaveBeenCalled();
+		expect(externalMedian).not.toHaveBeenCalled();
+		expect(measurement.totalHorizontal.values).toEqual([4]);
+		expect(measurement.photopicTotalHorizontalIlluminance).toEqual({value: 4 * 683, units: 'lux'});
+		expect(controller.adoptPreparedMeasurement(measurement)).toBe(measurement);
+		expect(internalCombination).toHaveBeenCalledTimes(1);
+		let initialized = new ReceiverEnvironmentLightController({
+			calculator,
+			directLight,
+			initialMeasurement: measurement,
+		});
+		expect(initialized.active).toBe(measurement);
+		expect(internalCombination).toHaveBeenCalledTimes(1);
+	});
+
 	it('publishes only a complete additive batch, reuses identity, and retains the prior result on failure', async () => {
 		const controller = createController();
 		let calls = 0;

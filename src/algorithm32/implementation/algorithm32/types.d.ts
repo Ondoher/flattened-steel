@@ -60,11 +60,13 @@ interface Algorithm32ShaderHandleFacade {
 	 *
 	 * @param profile - Engine-derived compact candidate.
 	 * @param celestialSources - Matching live celestial owners.
+	 * @param receiverLight - Completed owned candidate measurement.
 	 * @returns - Complete unpublished facade state.
 	 */
 	_prepareObservationConfig(
 		profile: LocalSunCompactConstructionProfile,
 		celestialSources: CelestialSourceRoster | null,
+		receiverLight: ReceiverEnvironmentLightMeasurement,
 	): Algorithm32PreparedConfig;
 
 	/**

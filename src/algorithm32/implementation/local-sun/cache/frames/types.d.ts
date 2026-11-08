@@ -87,6 +87,11 @@ type LocalSunPreparedFrameContents = Readonly<{
 	/** Call this method to release shader/receiver/celestial candidate resources exactly once. */ dispose(): void;
 }>;
 
+/**
+ * Owned renderer operations paired with the physical facts by LocalSunFrameContents.
+ */
+type LocalSunOwnedFrameOperations = Omit<LocalSunPreparedFrameContents, 'receiverLight' | 'celestialInputs'>;
+
 /** Assignment-only lighting transaction coordinated with complete frame installation. */
 interface LocalSunFrameSceneLighting {
 	/** Call this method to publish the exact measured candidate lighting. */ publish(): void;
@@ -143,7 +148,16 @@ type PreparedLocalSunFrame = Readonly<{
 type LocalSunFrameRecord = {
 	/** Public complete frame. */ frame: PreparedLocalSunFrame;
 	/** Exact requested state for checks and restoration. */ request: LocalSunFrameRequest;
+	/**
+	 * Constructed aggregate with physical pairing owned by the engine staging adapter.
+	 */
+	ownedContents: boolean;
 	/** Sole cache entry retained by this frame's lease. */ entry: LocalSunFrameCacheEntry;
+	/**
+	 * Whether this controller constructed the observation profile against its retained cache entry.
+	 * These owned profiles use live-frame identity checks rather than repeated full-content hashing.
+	 */
+	ownedObservation: boolean;
 	/** Owned frame lease; disposal is idempotent across shader teardown. */ lease: GpuScatteringCache &
 		CacheController;
 	/** Frame retirement/disposal state. */ retired: boolean;

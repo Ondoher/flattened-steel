@@ -140,7 +140,12 @@ export class LocalLightLevelCalculator {
 		const directNormal = measuredDirect.directNormal;
 		const sourceCenterCosine = Math.max(0, measuredDirect.sourceCenterCosine);
 		const directHorizontal = /** @type {SpectralIrradiancePacket} */ (
-			SpectralMath.scaleSpectralPacket(directNormal, sourceCenterCosine, {
+			new SpectralPacket({
+				basis: directNormal.basis,
+				quantity: directNormal.quantity,
+				units: directNormal.units,
+				semantics: directNormal.semantics,
+				values: directNormal.values.map((value) => value * sourceCenterCosine),
 				provenanceIdentity: `receiver-direct-horizontal:${directNormal.contentHash}:source-center-cosine-${sourceCenterCosine}`,
 			})
 		);
@@ -148,9 +153,9 @@ export class LocalLightLevelCalculator {
 			directNormal,
 			directHorizontal,
 			sourceCenterCosine,
-			photopicDirectNormalIlluminance: this.measureDirectIrradiance(directNormal).photopicDirectIlluminance,
+			photopicDirectNormalIlluminance: this._measureDirectIrradiance(directNormal).photopicDirectIlluminance,
 			photopicDirectHorizontalIlluminance:
-				this.measureDirectIrradiance(directHorizontal).photopicDirectIlluminance,
+				this._measureDirectIrradiance(directHorizontal).photopicDirectIlluminance,
 		};
 	}
 
@@ -178,15 +183,6 @@ export class LocalLightLevelCalculator {
 			sameUnits: true,
 			sameSemantics: true,
 		});
-		const totalHorizontal = /** @type {SpectralIrradiancePacket} */ (
-			SpectralMath.addSpectralPackets(directHorizontal, diffuseHorizontal, {
-				provenanceIdentity: `receiver-total-horizontal:${directHorizontal.contentHash}:${diffuseHorizontal.contentHash}`,
-			})
-		);
-		const directNormalPhotopic = this.measureDirectIrradiance(directNormal);
-		const directHorizontalPhotopic = this.measureDirectIrradiance(directHorizontal);
-		const diffuseHorizontalPhotopic = this.measureDirectIrradiance(diffuseHorizontal);
-		const totalHorizontalPhotopic = this.measureDirectIrradiance(totalHorizontal);
 		const stellarAdaptationLuminance = request.stellarAdaptationLuminance ?? {value: 0, units: 'cd m^-2'};
 		if (
 			stellarAdaptationLuminance.units !== 'cd m^-2' ||
@@ -195,6 +191,32 @@ export class LocalLightLevelCalculator {
 		) {
 			throw new RangeError('Stellar adaptation luminance must be finite, nonnegative, and use cd m^-2.');
 		}
+		return this._combineReceiverLight(request);
+	}
+
+	/**
+	 * Called by accepted receiver builders to combine their component packets without repeating ingress validation.
+	 *
+	 * @param {ReceiverLightCombinationRequest} request - Paired engine-owned receiver inputs.
+	 * @returns {ReceiverEnvironmentLightMeasurement} - Complete immutable measurement.
+	 */
+	_combineReceiverLight(request) {
+		const {directNormal, directHorizontal, diffuseHorizontal} = request;
+		const totalHorizontal = /** @type {SpectralIrradiancePacket} */ (
+			new SpectralPacket({
+				basis: directHorizontal.basis,
+				quantity: directHorizontal.quantity,
+				units: directHorizontal.units,
+				semantics: directHorizontal.semantics,
+				values: directHorizontal.values.map((value, index) => value + diffuseHorizontal.values[index]),
+				provenanceIdentity: `receiver-total-horizontal:${directHorizontal.contentHash}:${diffuseHorizontal.contentHash}`,
+			})
+		);
+		const directNormalPhotopic = this._measureDirectIrradiance(directNormal);
+		const directHorizontalPhotopic = this._measureDirectIrradiance(directHorizontal);
+		const diffuseHorizontalPhotopic = this._measureDirectIrradiance(diffuseHorizontal);
+		const totalHorizontalPhotopic = this._measureDirectIrradiance(totalHorizontal);
+		const stellarAdaptationLuminance = request.stellarAdaptationLuminance ?? {value: 0, units: 'cd m^-2'};
 
 		return {
 			identity: request.identity,
@@ -216,15 +238,27 @@ export class LocalLightLevelCalculator {
 		if (!Array.isArray(radiances) || radiances.length === 0) {
 			throw new RangeError('Sky adaptation requires at least one spectral-radiance sample.');
 		}
+		for (const packet of radiances) {
+			SpectralPacket.assert(packet, {
+				quantity: SPECTRAL_QUANTITIES.RADIANCE_DENSITY,
+				units: SPECTRAL_UNITS.RADIANCE_DENSITY,
+			});
+			if (!packet.values.every((value) => Number.isFinite(value) && value >= 0)) {
+				throw new RangeError('Sky adaptation radiance must be finite and nonnegative.');
+			}
+		}
+		return this._measureMedianSkyLuminance(radiances);
+	}
+
+	/**
+	 * Called by owned receiver preparation to project and reduce its accepted transport batch.
+	 *
+	 * @param {readonly SpectralRadiancePacket[]} radiances - Owned finite nonnegative samples.
+	 * @returns {UnitValue<'cd m^-2'>} - Physical sky median.
+	 */
+	_measureMedianSkyLuminance(radiances) {
 		const luminances = radiances
-			.map((candidate) => {
-				const packet = SpectralPacket.assert(candidate, {
-					quantity: SPECTRAL_QUANTITIES.RADIANCE_DENSITY,
-					units: SPECTRAL_UNITS.RADIANCE_DENSITY,
-				});
-				if (!packet.values.every((value) => Number.isFinite(value) && value >= 0)) {
-					throw new RangeError('Sky adaptation radiance must be finite and nonnegative.');
-				}
+			.map((packet) => {
 				return packet.values.reduce((sum, value, channelIndex) => {
 					const channel = packet.basis.channels[channelIndex];
 					return (
@@ -459,8 +493,12 @@ export class LocalLightLevelCalculator {
 		}
 
 		const normalizedHeight = elevationRadians / angularRadiusRadians;
-		if (normalizedHeight >= 1) return 1;
-		if (normalizedHeight <= -1) return 0;
+		if (normalizedHeight >= 1) {
+			return 1;
+		}
+		if (normalizedHeight <= -1) {
+			return 0;
+		}
 		return (
 			(Math.acos(-normalizedHeight) + normalizedHeight * Math.sqrt(1 - normalizedHeight * normalizedHeight)) /
 			Math.PI
@@ -488,6 +526,17 @@ export class LocalLightLevelCalculator {
 			throw new RangeError('adaptingLuminanceFloor must be finite and nonnegative.');
 		}
 
+		return this._measureDirectIrradiance(packet, adaptingLuminanceFloor);
+	}
+
+	/**
+	 * Called by receiver reduction to project an engine-owned packet without repeating acceptance.
+	 *
+	 * @param {SpectralIrradiancePacket} packet - Accepted spectral irradiance.
+	 * @param {number} [adaptingLuminanceFloor] - Accepted nonnegative floor.
+	 * @returns {LocalDirectLightLevel} - Photopic projection.
+	 */
+	_measureDirectIrradiance(packet, adaptingLuminanceFloor = 0) {
 		const photopicIlluminanceLux = packet.values.reduce((sum, value, channelIndex) => {
 			const channel = packet.basis.channels[channelIndex];
 			return (

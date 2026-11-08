@@ -217,9 +217,33 @@ interface ReceiverEnvironmentCalculator {
 /** Dependencies owned by one receiver environment-light controller. */
 type ReceiverEnvironmentControllerConfiguration = {
 	/** Independent physical reduction capability. */ calculator: ReceiverEnvironmentCalculator;
-	/** Fixed direct-light measurement for this scene. */ directLight: ReceiverDirectLightMeasurement;
-	/** Complete observation identity. */ identity: string;
+	/**
+	 * Fixed direct spectra for this scene.
+	 */
+	directLight: ReceiverDirectSpectra;
+	/**
+	 * Initial direct-only publication identity; absent means pending until build.
+	 */
+	identity?: string;
+	/**
+	 * Complete engine-owned measurement consumed without rebuilding, when available.
+	 */
+	initialMeasurement?: ReceiverEnvironmentLightMeasurement | null;
 };
+
+/**
+ * Accepted direct components needed by the receiver measurement owner.
+ */
+type ReceiverDirectSpectra = Readonly<{
+	/**
+	 * Source-normal incident spectral irradiance.
+	 */
+	directNormal: SpectralIrradiancePacket;
+	/**
+	 * Horizontal projection of incident spectral irradiance.
+	 */
+	directHorizontal: SpectralIrradiancePacket;
+}>;
 
 /** Direct-normal result and source-center orientation at the configured receiver. */
 type ConfiguredDirectNormalMeasurement = {

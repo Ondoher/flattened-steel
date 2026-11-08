@@ -2,6 +2,7 @@ import {PointerLookController} from './PointerLookController.js';
 import DistanceMath from '../../../../algorithm32/math/DistanceMath.js';
 import {FlatEarthGraphics} from './FlatEarthGraphics.js';
 import {LocalSunRuntimeCacheBinding} from '../../../../algorithm32/implementation/local-sun/cache/frames/LocalSunRuntimeCacheBinding.js';
+import {LocalSunFrameContents} from '../../../../algorithm32/implementation/local-sun/cache/frames/LocalSunFrameContents.js';
 import * as THREE from 'three';
 import {EffectComposer} from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import {RenderPass} from 'three/examples/jsm/postprocessing/RenderPass.js';
@@ -675,13 +676,12 @@ export class FlatEarthRuntime {
 	_frameContents(frame, request, receiverLight, update = null, lightingUpdate = null) {
 		let {profile} = request;
 		let geometry = /** @type {FlatEarthPhysicalGeometry} */ (profile.models.geometry);
-		let source = /** @type {FlatEarthLocalSun} */ (profile.models.lightSource);
 		let height = geometry.configuration.observerPosition.coordinates[2] / this.sceneScale.value;
 		let values = this._liveBindings(request);
 		let previous = null;
 		let installing = false;
 		let released = false;
-		return {
+		return new LocalSunFrameContents(request, receiverLight, {
 			shaderReady: true,
 			sceneView: {
 				publish: () => {
@@ -728,16 +728,7 @@ export class FlatEarthRuntime {
 					installing = false;
 				},
 			},
-			receiverLight,
 			bindingValues: frame.bindings,
-			celestialInputs: {
-				observation: geometry.configuration.observation,
-				sourcePosition: source.configuration.position,
-				receiverPosition: geometry.configuration.observerPosition,
-				sourceRadius: source.configuration.radius,
-				stellarAdaptationLuminance: receiverLight.stellarAdaptationLuminance,
-				receiverLightIdentity: receiverLight.identity,
-			},
 			renderFrame: () => {
 				frame.camera.copy(this.camera);
 				this._support(frame.profile, frame.camera);
@@ -763,7 +754,7 @@ export class FlatEarthRuntime {
 					}
 				}
 			},
-		};
+		});
 	}
 
 	/**

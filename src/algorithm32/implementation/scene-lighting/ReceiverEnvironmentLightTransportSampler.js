@@ -26,9 +26,15 @@ export class ReceiverEnvironmentLightTransportSampler {
 
 	_normalizeUniform(type, value) {
 		const THREE = this._THREE;
-		if (type === 'mat4' && Array.isArray(value)) return new THREE.Matrix4().fromArray(value);
-		if ((type === 'vec2' || type === 'ivec2') && Array.isArray(value)) return new THREE.Vector2(...value);
-		if ((type === 'vec3' || type === 'ivec3') && Array.isArray(value)) return new THREE.Vector3(...value);
+		if (type === 'mat4' && Array.isArray(value)) {
+			return new THREE.Matrix4().fromArray(value);
+		}
+		if ((type === 'vec2' || type === 'ivec2') && Array.isArray(value)) {
+			return new THREE.Vector2(...value);
+		}
+		if ((type === 'vec3' || type === 'ivec3') && Array.isArray(value)) {
+			return new THREE.Vector3(...value);
+		}
 		return value;
 	}
 
@@ -85,8 +91,9 @@ export class ReceiverEnvironmentLightTransportSampler {
 
 	/** Execute the active cache transport and return one native radiance packet per fixed direction. */
 	async sample(request = {}) {
-		if (request.signal?.aborted)
+		if (request.signal?.aborted) {
 			throw new DOMException('Receiver environment-light transport was aborted.', 'AbortError');
+		}
 		const THREE = this._THREE;
 		const assembly = new ReceiverEnvironmentLightTransportShader().create({
 			model: this._model,
@@ -97,8 +104,9 @@ export class ReceiverEnvironmentLightTransportSampler {
 		const cacheUniforms = {};
 		for (const contribution of assembly.contributions) {
 			for (const texture of contribution.textures) {
-				if (texture.valueKey !== DIRECTION_TEXTURE_VALUE_KEY)
+				if (texture.valueKey !== DIRECTION_TEXTURE_VALUE_KEY) {
 					cacheUniforms[texture.valueKey] = uniforms[texture.name];
+				}
 			}
 		}
 		this._backend.installRuntimeBindings({bindings: this._cache.getRuntimeBindings(), uniforms: cacheUniforms});
@@ -120,7 +128,9 @@ export class ReceiverEnvironmentLightTransportSampler {
 				blending: THREE.NoBlending,
 			});
 		if (material.uniforms !== uniforms) {
-			for (const [name, uniform] of Object.entries(uniforms)) material.uniforms[name].value = uniform.value;
+			for (const [name, uniform] of Object.entries(uniforms)) {
+				material.uniforms[name].value = uniform.value;
+			}
 			uniforms = material.uniforms;
 		}
 		material.uniformsNeedUpdate = true;
@@ -160,8 +170,9 @@ export class ReceiverEnvironmentLightTransportSampler {
 			}
 			const pixels = new Float32Array(RECEIVER_ENVIRONMENT_LIGHT_QUADRATURE.length * 4);
 			for (let channelIndex = 0; channelIndex < this._model.spectral.basis.channelCount; channelIndex += 1) {
-				if (request.signal?.aborted)
+				if (request.signal?.aborted) {
 					throw new DOMException('Receiver environment-light transport was aborted.', 'AbortError');
+				}
 				uniforms.uReceiverEnvironmentOutputChannel.value = channelIndex;
 				this._renderer.setRenderTarget(target);
 				this._renderer.render(scene, camera);
@@ -174,14 +185,20 @@ export class ReceiverEnvironmentLightTransportSampler {
 					pixels,
 				);
 				for (let directionIndex = 0; directionIndex < values.length; directionIndex += 1) {
-					values[directionIndex][channelIndex] = pixels[directionIndex * 4];
+					const value = pixels[directionIndex * 4];
+					if (!Number.isFinite(value) || value < 0) {
+						throw new RangeError('Receiver transport radiance must be finite and nonnegative.');
+					}
+					values[directionIndex][channelIndex] = value;
 				}
 			}
 		} finally {
 			this._renderer.setRenderTarget(previousTarget);
 			target.dispose();
 			geometry.dispose();
-			if (!retained) material.dispose();
+			if (!retained) {
+				material.dispose();
+			}
 			directionTexture.dispose();
 		}
 		return values.map(

@@ -5,8 +5,25 @@ import {CacheBuildModules} from '../../../shader-assembly/cache-pass/CacheBuildM
 import {CUBED_SPHERE_W3_DIRECTION_DOMAIN_OWNER} from '../../../sampling-domains/direction/cubed-sphere/consts.js';
 import {LocalSunLightSource} from '../../local-sun/LocalSunLightSource.js';
 import {FlatEarthGeometry} from '../FlatEarthGeometry.js';
+import {CanonicalValueHash} from '../../../value-identity/CanonicalValueHash.js';
 
 describe('FlatEarthGeometry', /** Called by Jasmine to register the named test suite. */ () => {
+	it('trusts its paired observation reference while checking different external observations', () => {
+		let geometry = createGeometry();
+		let observation = geometry.configuration.observation;
+		let hash = spyOn(CanonicalValueHash, 'sha256Value').and.callThrough();
+		geometry.createStellarGenerationShaderContribution({observation});
+		expect(hash.calls.allArgs().filter(([value]) => value === observation)).toHaveSize(0);
+		let copied = structuredClone(observation);
+		geometry.createStellarGenerationShaderContribution({observation: copied});
+		expect(hash.calls.allArgs().filter(([value]) => value === copied)).toHaveSize(1);
+		expect(() =>
+			geometry.createStellarGenerationShaderContribution({
+				observation: {...copied, instant: '2026-01-01T00:00:00Z'},
+			}),
+		).toThrowError(/match configured geometry/);
+	});
+
 	it('resolves fixed signed offsets from an explicit closest occurrence', () => {
 		const closest = '2024-06-20T20:08:48.339Z';
 		const fixtures = [

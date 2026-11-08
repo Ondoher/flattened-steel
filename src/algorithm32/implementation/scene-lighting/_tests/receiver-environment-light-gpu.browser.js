@@ -129,12 +129,45 @@ function boundManufacturedCache(artifact) {
 }
 
 describe('Receiver environment-light GPU reduction', () => {
+	it('rejects incomplete and incompatible external batches before GPU work', async () => {
+		const reducer = new ReceiverEnvironmentLightGpuReducer({
+			backend: {capabilities: {scalarFormat: 'R32F', supportsArrayRenderTargets: true}},
+		});
+		await expectAsync(reducer.reduce({radiances: []})).toBeRejectedWithError(RangeError);
+		const basis = NATIVE_15_SPECTRAL_BASIS;
+		const packet = new SpectralPacket({
+			basis,
+			quantity: SPECTRAL_QUANTITIES.RADIANCE_DENSITY,
+			units: SPECTRAL_UNITS.RADIANCE_DENSITY,
+			values: Array(15).fill(1),
+			provenanceIdentity: 'external-batch-acceptance-native',
+		});
+		const other = new SpectralBasis({
+			id: 'other-external-basis',
+			semantics: basis.semantics,
+			channels: basis.channels.slice(0, 1),
+		});
+		const mismatch = new SpectralPacket({
+			basis: other,
+			quantity: SPECTRAL_QUANTITIES.RADIANCE_DENSITY,
+			units: SPECTRAL_UNITS.RADIANCE_DENSITY,
+			values: [1],
+			provenanceIdentity: 'external-batch-acceptance-other',
+		});
+		const radiances = Array(32).fill(packet);
+		radiances[31] = mismatch;
+		await expectAsync(reducer.reduce({radiances})).toBeRejectedWithError(/share one spectral basis/);
+		reducer.dispose();
+	});
+
 	it('matches the CPU irradiance reduction and restores backend ownership', async () => {
 		const canvas = document.createElement('canvas');
 		canvas.width = 2;
 		canvas.height = 2;
 		const context = canvas.getContext('webgl2', {antialias: false, depth: false, stencil: false});
-		if (!context) throw new Error('Receiver environment-light GPU proof requires WebGL2.');
+		if (!context) {
+			throw new Error('Receiver environment-light GPU proof requires WebGL2.');
+		}
 		const renderer = new THREE.WebGLRenderer({canvas, context});
 		renderer.setSize(32, 1, false);
 		const backend = new ThreeCacheBackend({THREE, renderer});
@@ -175,7 +208,9 @@ describe('Receiver environment-light GPU reduction', () => {
 			const retained = new ReceiverEnvironmentLightGpuReducer({backend, retainProgram: true});
 			const linked = spyOn(context, 'linkProgram').and.callThrough();
 			const concurrent = await Promise.all([retained.reduce({radiances}), retained.reduce({radiances})]);
-			for (const value of concurrent) expect(value.values[0]).toBeCloseTo(cpu.values[0], 5);
+			for (const value of concurrent) {
+				expect(value.values[0]).toBeCloseTo(cpu.values[0], 5);
+			}
 			expect(linked).toHaveBeenCalledTimes(1);
 			await retained.reduce({radiances});
 			expect(linked).toHaveBeenCalledTimes(1);
@@ -195,7 +230,9 @@ describe('Receiver environment-light GPU transport', () => {
 	it('matches the zero-extinction constant-density CPU oracle for spherical/distant and Flat/local geometry', async () => {
 		const canvas = document.createElement('canvas');
 		const context = canvas.getContext('webgl2', {antialias: false, depth: false, stencil: false});
-		if (!context) throw new Error('Receiver environment-light transport proof requires WebGL2.');
+		if (!context) {
+			throw new Error('Receiver environment-light transport proof requires WebGL2.');
+		}
 		const renderer = new THREE.WebGLRenderer({canvas, context});
 		renderer.setSize(32, 1, false);
 		const backend = new ThreeCacheBackend({THREE, renderer});

@@ -1,4 +1,5 @@
 import {CelestialSourceSupport} from '../../celestial-source-support/CelestialSourceSupport.js';
+import {CelestialSourceRoster} from '../../celestial-source-support/CelestialSourceRoster.js';
 import {NATIVE_15_SPECTRAL_BASIS} from '../../profiles/index.js';
 import {
 	SPECTRAL_QUANTITIES,
@@ -34,11 +35,13 @@ export class StellarPointSetSource {
 
 	/** Creates the reviewed production stellar source selected by its package. */
 	constructor(configuration = {}) {
-		const selected = configuration.catalogDefinition ?? {
-			catalog: STANDARD_STELLAR_CATALOG_IDENTITY,
-			photometryIdentity: STANDARD_STELLAR_PHOTOMETRY_IDENTITY,
-			members: STANDARD_STELLAR_MEMBER_DATA,
-		};
+		const selected = structuredClone(
+			configuration.catalogDefinition ?? {
+				catalog: STANDARD_STELLAR_CATALOG_IDENTITY,
+				photometryIdentity: STANDARD_STELLAR_PHOTOMETRY_IDENTITY,
+				members: STANDARD_STELLAR_MEMBER_DATA,
+			},
+		);
 		const members = selected.members.map(
 			/**
 			 * Called by Array.prototype.map to construct one typed stellar member.
@@ -78,6 +81,7 @@ export class StellarPointSetSource {
 					}
 				: {}),
 		};
+		CelestialSourceRoster._acceptOwnedStars(this, NATIVE_15_SPECTRAL_BASIS);
 		this._identity = CelestialSourceSupport.describeIdentity({
 			id: this._definition.id,
 			kind: this._definition.kind,

@@ -665,20 +665,22 @@ export class Algorithm32 {
 
 	/**
 	 * Called by a retained local update to accept its owned compact profile once, preserving installed presentation policy.
+	 * The frame controller constructs this profile; it must not be mutated by staging consumers.
+	 * External execution profiles retain full validation through ordinary configuration ingress.
 	 *
 	 * @param {LocalSunCompactConstructionProfile} profile - Engine-derived physical candidate.
 	 * @param {CelestialSourceRoster|null} celestialSources - Matching celestial placement owners.
+	 * @param {ReceiverEnvironmentLightMeasurement} receiverLight - Already completed candidate measurement.
 	 * @returns {Algorithm32PreparedConfig} - Complete unpublished facade snapshot.
 	 */
-	_prepareObservationConfig(profile, celestialSources) {
+	_prepareObservationConfig(profile, celestialSources, receiverLight) {
 		if (!('profile' in this._config)) {
 			throw new Error('Retained local updates require an explicit installed execution profile.');
 		}
-		const compact = LocalSunCompactConstructionProfile.assert(profile);
-		const execution = compact._createExecutionProfile(celestialSources);
+		const execution = profile._createExecutionProfile(celestialSources);
 		const retained = /** @type {ExecutionProfileConfig} */ (this._config);
 		const config = this._copyConfig({...retained, profile: execution});
-		return this._createPreparedConfig(config, execution);
+		return this._createPreparedConfig(config, execution, receiverLight);
 	}
 
 	/**
@@ -686,9 +688,10 @@ export class Algorithm32 {
 	 *
 	 * @param {Algorithm32ResolvedConfig} acceptedConfig - Validated configuration and presentation policy.
 	 * @param {Algorithm32ExecutionProfile} profile - Paired accepted execution profile.
+	 * @param {ReceiverEnvironmentLightMeasurement|null} [preparedReceiverLight] - Completed owned candidate, absent for initial setup.
 	 * @returns {Algorithm32PreparedConfig} - Complete unpublished facade state.
 	 */
-	_createPreparedConfig(acceptedConfig, profile) {
+	_createPreparedConfig(acceptedConfig, profile, preparedReceiverLight = null) {
 		const version = this._version + 1;
 		const model = new SharedModelImplementation({
 			version,
@@ -700,15 +703,18 @@ export class Algorithm32 {
 		const localLightLevelCalculator = new LocalLightLevelCalculator({
 			lightSource: profile.models.lightSource,
 		});
-		const directLight = localLightLevelCalculator.measureConfiguredReceiverDirectLight({
-			geometry: profile.models.geometry,
-			atmosphere: profile.models.atmosphere,
-			observation: profile.models.sourcePlacement.observation,
-			celestialSources: profile.models.celestialSources,
-		});
+		const directLight =
+			preparedReceiverLight ??
+			localLightLevelCalculator.measureConfiguredReceiverDirectLight({
+				geometry: profile.models.geometry,
+				atmosphere: profile.models.atmosphere,
+				observation: profile.models.sourcePlacement.observation,
+				celestialSources: profile.models.celestialSources,
+			});
 		const receiverEnvironmentLightController = new ReceiverEnvironmentLightController({
 			calculator: localLightLevelCalculator,
 			directLight,
+			initialMeasurement: preparedReceiverLight,
 			identity: `receiver-light:model-${version}:profile-${profile.contentHash}:diffuse-unmeasured`,
 		});
 		const receiverLight = /** @type {ReceiverEnvironmentLightMeasurement} */ (

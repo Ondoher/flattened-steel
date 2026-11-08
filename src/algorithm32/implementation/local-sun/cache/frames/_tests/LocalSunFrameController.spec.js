@@ -1,11 +1,70 @@
 import {LocalSunFrameController} from '../LocalSunFrameController.js';
+import {LocalSunFrameContents} from '../LocalSunFrameContents.js';
 import {LocalSunFrameTestSupport} from './LocalSunFrameTestSupport.js';
 import {LocalSunRuntimeCacheBinding} from '../LocalSunRuntimeCacheBinding.js';
 import {Algorithm32} from '../../../../algorithm32/Algorithm32.js';
 import {Algorithm32ShaderHandle} from '../../../../algorithm32/Algorithm32ShaderHandle.js';
 import {ColorResetAltitudeHalfV1ColorDisplayModel} from '../../../../color-reset-altitude-half-v1/ColorResetAltitudeHalfV1ColorDisplayModel.js';
+import {LocalSunCompactConstructionProfile} from '../../LocalSunCompactConstructionProfile.js';
 
 describe('LocalSunFrameController complete publication and lease lifecycle', () => {
+	it('publishes constructed owned contents with one identity and no repeated aggregate validation', async () => {
+		let backend = new LocalSunFrameTestSupport();
+		let controller = new LocalSunFrameController({
+			backend,
+			stageFrame: async (request) => {
+				let staged = await backend.stage(request);
+				return new LocalSunFrameContents(request, staged.receiverLight, staged);
+			},
+			resolveViewRays: (profile) => LocalSunFrameTestSupport.request(profile).viewRays,
+		});
+		let validation = spyOn(controller, '_validateContents').and.callThrough();
+		let identities = spyOn(controller, '_frameIdentity').and.callThrough();
+		let first = await controller.prepareLocalFrame(
+			LocalSunFrameTestSupport.request(LocalSunFrameTestSupport.createProfile()),
+		);
+		controller.publishPreparedLocalFrame(first);
+		identities.calls.reset();
+		let next = await controller.prepareLocalObservation({
+			observation: first.contents.celestialInputs.observation,
+			receiverPosition: {coordinates: [0, 0, 100], units: 'meters'},
+		});
+		controller.publishPreparedLocalFrame(next);
+		expect(controller.active).toBe(next);
+		expect(identities).toHaveBeenCalledTimes(1);
+		expect(validation).not.toHaveBeenCalled();
+		expect(next.contents.celestialInputs.receiverPosition.coordinates[2]).toBe(100);
+		await controller.dispose();
+	});
+
+	it('validates external stage output even when the observation profile was engine constructed', async () => {
+		let backend = new LocalSunFrameTestSupport();
+		let malformed = false;
+		let controller = new LocalSunFrameController({
+			backend,
+			stageFrame: async (request) => {
+				let contents = await backend.stage(request);
+				return malformed
+					? {...contents, celestialInputs: {...contents.celestialInputs, receiverLightIdentity: 'wrong'}}
+					: contents;
+			},
+			resolveViewRays: (profile) => LocalSunFrameTestSupport.request(profile).viewRays,
+		});
+		let first = await controller.prepareLocalFrame(
+			LocalSunFrameTestSupport.request(LocalSunFrameTestSupport.createProfile()),
+		);
+		controller.publishPreparedLocalFrame(first);
+		malformed = true;
+		await expectAsync(
+			controller.prepareLocalObservation({
+				observation: first.contents.celestialInputs.observation,
+				receiverPosition: {coordinates: [0, 0, 100], units: 'meters'},
+			}),
+		).toBeRejected();
+		expect(controller.active).toBe(first);
+		await controller.dispose();
+	});
+
 	it('publishes and rolls back retained facade facts without rebuilding its runtime', async () => {
 		const backend = new LocalSunFrameTestSupport();
 		const requests = [];
@@ -42,6 +101,7 @@ describe('LocalSunFrameController complete publication and lease lifecycle', () 
 			},
 		});
 		const initial = algorithm.config;
+		const profileValidation = spyOn(LocalSunCompactConstructionProfile, 'assert').and.callThrough();
 		const next = await controller.prepareLocalObservation({
 			observation: first.contents.celestialInputs.observation,
 			receiverPosition: {coordinates: [0, 0, 100], units: 'meters'},
@@ -80,6 +140,8 @@ describe('LocalSunFrameController complete publication and lease lifecycle', () 
 		latest.dispose();
 		expect(algorithm.config.config.profile.models.geometry.configuration.observerPosition.coordinates[2]).toBe(100);
 		expect(runtime.dispose).not.toHaveBeenCalled();
+		controller.publishPreparedLocalFrame(next);
+		expect(profileValidation).not.toHaveBeenCalled();
 		handle.dispose();
 		algorithm.dispose();
 		controller.dispose();
@@ -105,7 +167,7 @@ describe('LocalSunFrameController complete publication and lease lifecycle', () 
 		};
 		const next = await controller.prepareLocalObservation(live);
 		next.profile.models.lightSource.configuration.position.coordinates[0] += 1;
-		expect(() => controller.publishPreparedLocalFrame(next)).toThrowError(/Compact physical facts changed/);
+		expect(() => controller.publishPreparedLocalFrame(next)).toThrowError(/Live frame facts changed/);
 		expect(controller.active).toBe(first);
 		const cancelled = new AbortController();
 		cancelled.abort();

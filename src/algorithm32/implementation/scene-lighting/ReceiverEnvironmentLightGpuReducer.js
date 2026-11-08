@@ -37,7 +37,9 @@ export class ReceiverEnvironmentLightGpuReducer {
 	 * @returns {Promise<SpectralIrradiancePacket>} - GPU-reduced receiver irradiance.
 	 */
 	async reduce(request) {
-		if (this._disposed) throw new Error('Receiver environment-light GPU reducer is disposed.');
+		if (this._disposed) {
+			throw new Error('Receiver environment-light GPU reducer is disposed.');
+		}
 		request.signal?.throwIfAborted();
 		if (
 			!Array.isArray(request?.radiances) ||
@@ -47,24 +49,33 @@ export class ReceiverEnvironmentLightGpuReducer {
 				'Receiver environment-light GPU reduction requires one radiance per quadrature direction.',
 			);
 		}
-		const first = /** @type {SpectralRadiancePacket} */ (
-			SpectralPacket.assert(request.radiances[0], {
+		for (const packet of request.radiances) {
+			SpectralPacket.assert(packet, {
 				quantity: SPECTRAL_QUANTITIES.RADIANCE_DENSITY,
 				units: SPECTRAL_UNITS.RADIANCE_DENSITY,
-			})
-		);
-		const channelCount = first.basis.channelCount;
-		const packedValues = new Float32Array(request.radiances.length * channelCount);
-		for (const [directionIndex, candidate] of request.radiances.entries()) {
-			const radiance = /** @type {SpectralRadiancePacket} */ (
-				SpectralPacket.assert(candidate, {
-					quantity: SPECTRAL_QUANTITIES.RADIANCE_DENSITY,
-					units: SPECTRAL_UNITS.RADIANCE_DENSITY,
-				})
-			);
-			if (radiance.basis.contentHash !== first.basis.contentHash) {
+			});
+			if (packet.basis.contentHash !== request.radiances[0].basis.contentHash) {
 				throw new TypeError('Receiver environment-light GPU radiances must share one spectral basis.');
 			}
+		}
+		return this._reduce(request);
+	}
+
+	/**
+	 * Called by owned transport preparation to reduce accepted samples without rescanning metadata.
+	 *
+	 * @param {ReceiverEnvironmentLightGpuReductionRequest} request - Owned transport samples and cancellation.
+	 * @returns {Promise<SpectralIrradiancePacket>} - Newly computed diffuse irradiance.
+	 */
+	async _reduce(request) {
+		if (this._disposed) {
+			throw new Error('Receiver environment-light GPU reducer is disposed.');
+		}
+		request.signal?.throwIfAborted();
+		const first = request.radiances[0];
+		const channelCount = first.basis.channelCount;
+		const packedValues = new Float32Array(request.radiances.length * channelCount);
+		for (const [directionIndex, radiance] of request.radiances.entries()) {
 			for (let channelIndex = 0; channelIndex < channelCount; channelIndex += 1) {
 				packedValues[channelIndex * request.radiances.length + directionIndex] = radiance.values[channelIndex];
 			}
@@ -139,8 +150,11 @@ a32CacheOutput = irradiance * ${Math.PI / request.radiances.length};`,
 					throw new Error('Receiver reduction preparation was canceled.');
 				}
 				// Another first-use request may have retained the same GL program while compilation yielded.
-				if (this._program) candidate.dispose();
-				else this._program = candidate;
+				if (this._program) {
+					candidate.dispose();
+				} else {
+					this._program = candidate;
+				}
 			}
 			artifact = await executor.execute(plan, {
 				signal: request.signal,
@@ -148,15 +162,21 @@ a32CacheOutput = irradiance * ${Math.PI / request.radiances.length};`,
 				probes: [{field: FIELD_ID, coordinates}],
 			});
 			const probe = artifact.diagnostics.passes[0].probe;
-			if (!probe || probe.samples.length !== channelCount)
+			if (!probe || probe.samples.length !== channelCount) {
 				throw new Error('Receiver environment-light GPU reduction did not return its native channels.');
+			}
 			return /** @type {SpectralIrradiancePacket} */ (
 				new SpectralPacket({
 					basis: first.basis,
 					quantity: SPECTRAL_QUANTITIES.IRRADIANCE_DENSITY,
 					units: SPECTRAL_UNITS.IRRADIANCE_DENSITY,
 					semantics: first.semantics,
-					values: probe.samples.map((sample) => sample.value),
+					values: probe.samples.map((sample) => {
+						if (!Number.isFinite(sample.value) || sample.value < 0) {
+							throw new RangeError('Receiver GPU irradiance must be finite and nonnegative.');
+						}
+						return sample.value;
+					}),
 					provenanceIdentity: `receiver-environment-light-gpu:${packed.contentHash}`,
 				})
 			);

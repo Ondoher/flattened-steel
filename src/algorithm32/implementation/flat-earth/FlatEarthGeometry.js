@@ -70,8 +70,9 @@ export class FlatEarthGeometry {
 	createStellarGenerationShaderContribution(request) {
 		this._assertConfigured();
 		if (
+			request.observation !== this._configuration.observation &&
 			CanonicalValueHash.sha256Value(request.observation) !==
-			CanonicalValueHash.sha256Value(this._configuration.observation)
+				CanonicalValueHash.sha256Value(this._configuration.observation)
 		) {
 			throw new RangeError('Flat stellar observation must match configured geometry.');
 		}

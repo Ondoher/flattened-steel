@@ -240,6 +240,20 @@ type StellarPointSetSourceIdentityFacts = Readonly<{
 	readonly members: readonly StellarSourceMemberIdentityFacts[];
 }>;
 
+/**
+ * Facts accepted once from a constructed source that owns its nested inputs.
+ */
+type AcceptedStellarSourceFacts = Readonly<{
+	/**
+	 * Spectral interpretation accepted at source construction.
+	 */
+	basisIdentity: string;
+	/**
+	 * Immutable facts reused by roster acceptance and serialization.
+	 */
+	facts: StellarPointSetSourceIdentityFacts;
+}>;
+
 /** Canonical normalized definition facts accepted by shared celestial source support. */
 type CelestialSourceDefinitionIdentityFacts =
 	| DistantSunCelestialSourceIdentityFacts

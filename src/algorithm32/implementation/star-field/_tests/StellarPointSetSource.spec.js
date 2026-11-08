@@ -1,8 +1,47 @@
 import {NATIVE_15_SPECTRAL_BASIS} from '../../../profiles/index.js';
 import {CelestialSourceRoster} from '../../../celestial-source-support/CelestialSourceRoster.js';
 import {DistantSunLightSource, StellarPointSetSource} from '../../index.js';
+import {SpectralBasis} from '../../../spectral-values/index.js';
 
 describe('StellarPointSetSource', /** Called by Jasmine to register the named test suite. */ () => {
+	it('owns nested inputs and reuses accepted catalog facts across roster identities', () => {
+		let original = new StellarPointSetSource().celestialSourceDefinition;
+		let input = {
+			catalog: structuredClone(original.catalog),
+			photometryIdentity: 'owned-input-regression',
+			members: original.members.map((member) => ({
+				id: member.id,
+				direction: [...member.direction],
+				visualMagnitude: member.visualMagnitude,
+				values: [...member.spectralIrradiance.values],
+			})),
+		};
+		let stars = new StellarPointSetSource({catalogDefinition: input});
+		let roster = {
+			id: 'accepted-static-content',
+			family: 'spherical-sun-stars-radial-v1',
+			sun: new DistantSunLightSource({angularRadius: {value: 0.004, units: 'radians'}}),
+			stars,
+		};
+		let facts = CelestialSourceRoster.describeIdentity(roster, NATIVE_15_SPECTRAL_BASIS).stars;
+		input.catalog.epoch.instant = '2026-01-01T00:00:00Z';
+		input.members[0].direction[0] = 99;
+		input.members[0].values[0] = 99;
+		expect(stars.celestialSourceDefinition.catalog).toEqual(original.catalog);
+		expect(stars.celestialSourceDefinition.members[0].direction).toEqual(original.members[0].direction);
+		expect(stars.celestialSourceDefinition.members[0].spectralIrradiance.values).toEqual(
+			original.members[0].spectralIrradiance.values,
+		);
+		expect(CelestialSourceRoster.describeIdentity(roster, NATIVE_15_SPECTRAL_BASIS).stars).toBe(facts);
+		expect(() => new StellarPointSetSource({catalogDefinition: input})).toThrowError(/unit vector/);
+		let incompatibleBasis = new SpectralBasis({
+			id: 'incompatible-stellar-basis',
+			semantics: NATIVE_15_SPECTRAL_BASIS.semantics,
+			channels: NATIVE_15_SPECTRAL_BASIS.channels.slice(0, 1),
+		});
+		expect(() => CelestialSourceRoster._acceptOwnedStars(stars, incompatibleBasis)).toThrowError(/spectral basis/);
+	});
+
 	it('exposes the exact reviewed 500-member native-15 definition', /** Called by Jasmine to exercise the named behavior. */ () => {
 		const definition = new StellarPointSetSource().celestialSourceDefinition;
 

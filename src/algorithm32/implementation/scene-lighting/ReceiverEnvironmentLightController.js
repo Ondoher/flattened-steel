@@ -10,7 +10,7 @@ export class ReceiverEnvironmentLightController {
 	/**
 	 * @param {ReceiverEnvironmentControllerConfiguration} dependencies - Physical reduction owner and fixed direct state.
 	 */
-	constructor({calculator, directLight, identity}) {
+	constructor({calculator, directLight, identity, initialMeasurement}) {
 		if (typeof calculator?.measureEnvironmentIrradiance !== 'function') {
 			throw new TypeError('Receiver environment-light controller requires a lighting calculator.');
 		}
@@ -19,6 +19,13 @@ export class ReceiverEnvironmentLightController {
 		}
 		this._calculator = calculator;
 		this._directLight = directLight;
+		this._active = initialMeasurement ?? null;
+		if (initialMeasurement || identity === undefined) {
+			return;
+		}
+		if (typeof identity !== 'string' || identity.length === 0) {
+			throw new TypeError('Receiver environment-light identity must be a non-empty string.');
+		}
 		const diffuseHorizontal = /** @type {SpectralIrradiancePacket} */ (
 			SpectralMath.scaleSpectralPacket(directLight.directHorizontal, 0, {
 				provenanceIdentity: `receiver-diffuse-horizontal:unmeasured-dark:${directLight.directHorizontal.contentHash}`,
@@ -34,7 +41,7 @@ export class ReceiverEnvironmentLightController {
 	}
 
 	/** @type {ReceiverEnvironmentCalculator} */ _calculator;
-	/** @type {ReceiverDirectLightMeasurement} */ _directLight;
+	/** @type {ReceiverDirectSpectra} */ _directLight;
 	/** @type {ReceiverEnvironmentLightMeasurement | null} */ _active;
 	/** @type {string | null} */ _activeRequestIdentity = null;
 	/** @type {boolean} */ _disposed = false;
@@ -48,17 +55,13 @@ export class ReceiverEnvironmentLightController {
 	/** Call this method to adopt a complete independently prepared live-scene measurement.
 	 *
 	 * @param {ReceiverEnvironmentLightMeasurement} measurement - Complete native spectral light state.
-	 * @returns {ReceiverEnvironmentLightMeasurement} - Revalidated current measurement.
+	 * @returns {ReceiverEnvironmentLightMeasurement} - Exact completed measurement, consumed without mutation.
 	 */
 	adoptPreparedMeasurement(measurement) {
-		if (this._disposed) throw new Error('Receiver environment-light controller is disposed.');
-		const accepted = this._calculator.combineReceiverLight({
-			identity: measurement.identity,
-			directNormal: measurement.directNormal,
-			directHorizontal: measurement.directHorizontal,
-			diffuseHorizontal: measurement.diffuseHorizontal,
-			stellarAdaptationLuminance: measurement.stellarAdaptationLuminance,
-		});
+		if (this._disposed) {
+			throw new Error('Receiver environment-light controller is disposed.');
+		}
+		const accepted = measurement;
 		this._generation += 1;
 		this._activeRequestIdentity = null;
 		this._active = accepted;
@@ -78,35 +81,75 @@ export class ReceiverEnvironmentLightController {
 	 * @returns {Promise<ReceiverEnvironmentLightMeasurement>} - Published measurement.
 	 */
 	async build(request) {
-		if (this._disposed) throw new Error('Receiver environment-light controller is disposed.');
 		if (typeof request?.identity !== 'string' || request.identity.length === 0) {
 			throw new TypeError('Receiver environment-light build identity must be a non-empty string.');
 		}
-		if (typeof request.sampleIncomingRadiance !== 'function') {
+		if (typeof request?.sampleIncomingRadiance !== 'function') {
 			throw new TypeError('Receiver environment-light build requires sampleIncomingRadiance.');
 		}
-		if (this._activeRequestIdentity === request.identity)
+		return this._build(
+			{
+				...request,
+				sampleIncomingRadiance: async (directions) => {
+					let radiances = await request.sampleIncomingRadiance(directions);
+					if (!Array.isArray(radiances) || radiances.length !== directions.length) {
+						throw new RangeError(
+							'Receiver environment-light build must return one radiance per quadrature direction.',
+						);
+					}
+					return radiances;
+				},
+			},
+			this._calculator,
+		);
+	}
+
+	/**
+	 * Called by retained shader preparation to consume immutable engine sampler/calculator output.
+	 *
+	 * @param {ReceiverEnvironmentLightBuildRequest} request - Owned sampling and reduction operations.
+	 * @returns {Promise<ReceiverEnvironmentLightMeasurement>} - Complete owned publication.
+	 */
+	_buildOwned(request) {
+		const calculator = /** @type {LocalLightLevelCalculator} */ (this._calculator);
+		return this._build(request, {
+			measureEnvironmentIrradiance: (input) => calculator.measureEnvironmentIrradiance(input),
+			measureMedianSkyLuminance: (radiances) => calculator._measureMedianSkyLuminance(radiances),
+			combineReceiverLight: (input) => calculator._combineReceiverLight(input),
+		});
+	}
+
+	/**
+	 * Called by receiver build entry points to coordinate sampling with matching reduction capabilities.
+	 *
+	 * @param {ReceiverEnvironmentLightBuildRequest} request - Complete sampling request.
+	 * @param {ReceiverEnvironmentCalculator} calculator - Accepted consumer operations.
+	 * @returns {Promise<ReceiverEnvironmentLightMeasurement>} - Atomic completed measurement.
+	 */
+	async _build(request, calculator) {
+		if (this._disposed) {
+			throw new Error('Receiver environment-light controller is disposed.');
+		}
+		if (this._activeRequestIdentity === request.identity) {
 			return /** @type {ReceiverEnvironmentLightMeasurement} */ (this._active);
+		}
 		const generation = ++this._generation;
 		this._assertBuildCurrent(generation, request.signal);
 
 		const radiances = await request.sampleIncomingRadiance(RECEIVER_ENVIRONMENT_LIGHT_QUADRATURE);
 		this._assertBuildCurrent(generation, request.signal);
-		if (!Array.isArray(radiances) || radiances.length !== RECEIVER_ENVIRONMENT_LIGHT_QUADRATURE.length) {
-			throw new RangeError('Receiver environment-light build must return one radiance per quadrature direction.');
-		}
 		const diffuseHorizontal = request.reduceIncomingRadiance
 			? await request.reduceIncomingRadiance(radiances)
-			: this._calculator.measureEnvironmentIrradiance({
+			: calculator.measureEnvironmentIrradiance({
 					samples: radiances.map((spectralRadiance, index) => ({
 						spectralRadiance,
 						irradianceWeightSteradians:
 							RECEIVER_ENVIRONMENT_LIGHT_QUADRATURE[index].irradianceWeightSteradians,
 					})),
 				});
-		const stellarAdaptationLuminance = this._calculator.measureMedianSkyLuminance(radiances);
+		const stellarAdaptationLuminance = calculator.measureMedianSkyLuminance(radiances);
 		this._assertBuildCurrent(generation, request.signal);
-		const measurement = this._calculator.combineReceiverLight({
+		const measurement = calculator.combineReceiverLight({
 			identity: this._measurementIdentity(request.identity, diffuseHorizontal),
 			directNormal: this._directLight.directNormal,
 			directHorizontal: this._directLight.directHorizontal,
@@ -121,9 +164,6 @@ export class ReceiverEnvironmentLightController {
 
 	/** Derive a complete invalidation identity from every fixed and measured input. */
 	_measurementIdentity(identity, diffuseHorizontal) {
-		if (typeof identity !== 'string' || identity.length === 0) {
-			throw new TypeError('Receiver environment-light identity must be a non-empty string.');
-		}
 		return [
 			identity,
 			`basis-${this._directLight.directNormal.basis.contentHash}`,
@@ -141,7 +181,9 @@ export class ReceiverEnvironmentLightController {
 			error.name = 'AbortError';
 			throw error;
 		}
-		if (this._disposed) throw new Error('Receiver environment-light controller was disposed during build.');
+		if (this._disposed) {
+			throw new Error('Receiver environment-light controller was disposed during build.');
+		}
 		if (generation !== this._generation) {
 			throw new Error('Receiver environment-light build was superseded.');
 		}

@@ -195,7 +195,7 @@ export class Algorithm32ShaderHandle {
 	 */
 	prepareObservationUpdate({profile, celestialSources, scatteringCache, receiverLight}) {
 		this._assertUsable();
-		let prepared = this._facade._prepareObservationConfig(profile, celestialSources);
+		let prepared = this._facade._prepareObservationConfig(profile, celestialSources, receiverLight);
 		try {
 			const assembly = prepared.shaderBuilder.assembleRetainedUpdate(
 				{setup: this._setup, config: prepared.snapshot},
@@ -209,7 +209,7 @@ export class Algorithm32ShaderHandle {
 			) {
 				throw new Error('Observation update changes shader structure; a new runtime is required.');
 			}
-			const measurement = prepared.receiverEnvironmentLightController.adoptPreparedMeasurement(receiverLight);
+			const measurement = receiverLight;
 			const celestialUpdate = this._buildResult.runtime?.prepareObservationUpdate?.(prepared.model.profile);
 			prepared = {
 				...prepared,
@@ -310,7 +310,6 @@ export class Algorithm32ShaderHandle {
 		const controller = new ReceiverEnvironmentLightController({
 			calculator,
 			directLight,
-			identity: request.identity,
 		});
 		const sampler = new ReceiverEnvironmentLightTransportSampler({
 			THREE: request.THREE,
@@ -325,11 +324,11 @@ export class Algorithm32ShaderHandle {
 			retainProgram: true,
 		}));
 		try {
-			const measurement = await controller.build({
+			const measurement = await controller._buildOwned({
 				identity: request.identity,
 				signal: request.signal,
 				sampleIncomingRadiance: () => sampler.sample({signal: request.signal}),
-				reduceIncomingRadiance: (radiances) => reducer.reduce({radiances, signal: request.signal}),
+				reduceIncomingRadiance: (radiances) => reducer._reduce({radiances, signal: request.signal}),
 			});
 			this._assertUsable();
 			request.signal?.throwIfAborted();

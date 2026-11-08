@@ -9,6 +9,9 @@ const SHA256_PATTERN = /^sha256:[0-9a-f]{64}$/u;
 const EXPLICIT_UTC_OFFSET_PATTERN = /(?:Z|[+-]\d{2}:\d{2})$/u;
 const SUPPORTED_STELLAR_MEMBER_COUNTS = new Set([500, 2000]);
 
+/** @type {WeakMap<StellarPointSetCelestialSource, AcceptedStellarSourceFacts>} */
+const ownedStellarFacts = new WeakMap();
+
 /**
  * Called by roster validation to require one exact supported capability implementation.
  *
@@ -229,6 +232,24 @@ function acceptFiniteSun(source, basis) {
  * @returns {StellarPointSetSourceIdentityFacts} - Canonical stellar point-set facts.
  */
 function acceptStars(source, basis) {
+	let accepted = ownedStellarFacts.get(source);
+	if (accepted) {
+		if (accepted.basisIdentity !== basis.contentHash) {
+			throw new RangeError('Stellar catalog must match the active spectral basis.');
+		}
+		return accepted.facts;
+	}
+	return scanStars(source, basis);
+}
+
+/**
+ * Called by stellar acceptance to accept newly supplied content at its construction/provider boundary.
+ *
+ * @param {StellarPointSetCelestialSource} source - Newly supplied source.
+ * @param {SpectralBasis} basis - Required spectral interpretation.
+ * @returns {StellarPointSetSourceIdentityFacts} - Accepted static facts.
+ */
+function scanStars(source, basis) {
 	const definition = source.celestialSourceDefinition;
 	if (!Array.isArray(definition.members) || !SUPPORTED_STELLAR_MEMBER_COUNTS.has(definition.members.length)) {
 		throw new RangeError('Stellar point-set must contain exactly 500 or 2,000 members.');
@@ -326,7 +347,9 @@ function acceptCelestialSourceRoster(request) {
 			throw new RangeError('Flat finite celestial Sun must be the exact configured light source.');
 		}
 		acceptFiniteSun(localSun, request.basis);
-		if (roster.stars != null) acceptStars(roster.stars, request.basis);
+		if (roster.stars != null) {
+			acceptStars(roster.stars, request.basis);
+		}
 		return roster;
 	}
 	throw new RangeError('Algorithm32 celestial source roster family is not supported.');
@@ -358,6 +381,19 @@ function describeCelestialSourceRosterIdentity(roster, basis) {
 
 /** Celestial source-roster acceptance and canonical-identity methods. */
 export const CelestialSourceRoster = {
+	/**
+	 * Called by the stellar source constructor after it owns all definition inputs.
+	 * The definition and returned facts are immutable internal values thereafter.
+	 *
+	 * @param {StellarPointSetCelestialSource} source - Newly constructed source owner.
+	 * @param {SpectralBasis} basis - Source spectral interpretation.
+	 * @returns {void} - Accepted facts remain owned by this module.
+	 */
+	_acceptOwnedStars(source, basis) {
+		let facts = acceptStars(source, basis);
+		ownedStellarFacts.set(source, {basisIdentity: basis.contentHash, facts});
+	},
+
 	/** Call this method to accept a roster against configured model facts. */
 	accept: acceptCelestialSourceRoster,
 	/** Call this method to return canonical executable roster identity facts. */

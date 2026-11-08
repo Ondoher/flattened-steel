@@ -7,6 +7,7 @@ import {FlatLocalCacheTransform} from '../../../flat-earth/FlatLocalCacheTransfo
 import {LocalSunCompactConstructionProfile} from '../LocalSunCompactConstructionProfile.js';
 import {LocalSunCompactCache} from '../LocalSunCompactCache.js';
 import {LocalSunFrameCache} from './LocalSunFrameCache.js';
+import {LocalSunFrameContents} from './LocalSunFrameContents.js';
 
 /** Source-owned canonical cache leases and complete live-frame preparation/publication.
  *
@@ -453,7 +454,8 @@ export class LocalSunFrameController {
 		}
 	}
 
-	/** Called by the serialized preparation tail to build a complete packet while keeping the displayed frame unchanged.
+	/**
+	 * Called by the serialized preparation tail to build a complete packet while keeping the displayed frame unchanged.
 	 * Cancellation or supersession rejects with an abort reason; discard the obsolete candidate.
 	 * Unavailable controllers, invalid profiles, unsupported rays or changed live facts reject;
 	 * restore valid state or correct the request before retrying. Cache construction and complete-frame
@@ -490,11 +492,17 @@ export class LocalSunFrameController {
 				otherOwnedGpuBytes: request.otherOwnedGpuBytes,
 			});
 			this._requireCurrent(generation, signal);
-			LocalSunCompactConstructionProfile.assert(request.profile);
-			if (identity !== this._frameIdentity(request, generation, entry.key)) {
-				throw new RangeError('Live request changed during frame preparation.');
+			// Observation-only profiles were constructed and validated by this controller.
+			if (!retainedEntry) {
+				LocalSunCompactConstructionProfile.assert(request.profile);
 			}
-			this._validateContents(contents, request, identity);
+			let ownedContents = contents instanceof LocalSunFrameContents;
+			if (!ownedContents) {
+				if (identity !== this._frameIdentity(request, generation, entry.key)) {
+					throw new RangeError('Live request changed during frame preparation.');
+				}
+				this._validateContents(contents, request, identity);
+			}
 			const frame = {
 				generation,
 				constructionIdentity: entry.key,
@@ -515,7 +523,15 @@ export class LocalSunFrameController {
 					return this._acquire(entry, transform);
 				},
 			};
-			this._records.set(frame, {frame, request, entry, lease, retired: false});
+			this._records.set(frame, {
+				frame,
+				request,
+				entry,
+				lease,
+				ownedObservation: retainedEntry !== null,
+				ownedContents,
+				retired: false,
+			});
 			return frame;
 		} catch (error) {
 			const errors = [error];
@@ -697,9 +713,10 @@ export class LocalSunFrameController {
 		});
 	}
 
-	/** Call this method to replace the single complete active packet at a frame boundary.
+	/**
+	 * Call this method to replace the single complete active packet at a frame boundary.
 	 * No asynchronous component update occurs here; every consumer observes the same aggregate.
-	 * Unknown, retired, superseded, mutated or invalid complete packets and unavailable contexts throw
+	 * Unknown, retired, superseded or inconsistent live packets and unavailable contexts throw
 	 * before commit; discard the packet and prepare a valid replacement. Installation errors propagate
 	 * before controller commit; the installer must restore any partially installed renderer state.
 	 * Post-commit retirement failures are returned separately; report them without undoing the new frame.
@@ -715,11 +732,15 @@ export class LocalSunFrameController {
 			throw new RangeError('Unknown or retired local frame.');
 		}
 		this._requireCurrent(frame.generation, this._cancellation.signal);
-		LocalSunCompactConstructionProfile.assert(frame.profile);
-		if (this._frameIdentity(record.request, frame.generation, frame.constructionIdentity) !== frame.identity) {
-			throw new RangeError('Live frame facts changed after preparation.');
+		if (!record.ownedObservation) {
+			LocalSunCompactConstructionProfile.assert(frame.profile);
 		}
-		this._validateContents(frame.contents, record.request, frame.identity);
+		if (!record.ownedContents) {
+			if (this._frameIdentity(record.request, frame.generation, frame.constructionIdentity) !== frame.identity) {
+				throw new RangeError('Live frame facts changed after preparation.');
+			}
+			this._validateContents(frame.contents, record.request, frame.identity);
+		}
 		install?.();
 		const previous = this._active;
 		this._active = frame;
