@@ -422,16 +422,6 @@ type ViewportFrameProps = Omit<WorkspaceProps, 'views'> & {
 };
 
 /**
- * Transient visibility of one mounted view's contributed control rows.
- */
-type ViewportFrameState = {
-	/**
-	 * Whether only the header's scene/settings/actions row is visible.
-	 */
-	controlsCollapsed: boolean;
-};
-
-/**
  * Configuration surface presentation and view-mediated actions.
  */
 type ConfigurationPanelProps = {

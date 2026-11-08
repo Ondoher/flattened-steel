@@ -3,6 +3,11 @@ import Typography from '@mui/material/Typography';
 import Button from '../../../components/Button.jsx';
 import IconMenuButton from '../../../components/IconMenuButton.jsx';
 import Brightness6Outlined from '@mui/icons-material/Brightness6Outlined';
+import Height from '@mui/icons-material/Height';
+import ZoomOutMap from '@mui/icons-material/ZoomOutMap';
+import CenterFocusStrong from '@mui/icons-material/CenterFocusStrong';
+import IconButton from '../../../components/IconButton.jsx';
+import FlatEarthTimeControls from './FlatEarthTimeControls.jsx';
 import React, {Component} from 'react';
 import AppContext from '../../../common/AppContext.js';
 import {FIELD_OF_VIEW_PRESETS, ELEVATION_PRESETS} from '../camera-controls.js';
@@ -232,6 +237,9 @@ export default class FlatEarthViewTools extends Component {
 	 * @returns {React.ReactNode} - Scoped toolbar contribution.
 	 */
 	_renderControls() {
+		if (!this.props.panel) {
+			return this._renderToolbarControls();
+		}
 		let camera = this.state.camera;
 		let height = camera.pendingHeightMeters ?? camera.observerHeightMeters;
 		let heightLabel = 'flat-earth.camera.height';
@@ -264,6 +272,53 @@ export default class FlatEarthViewTools extends Component {
 				<Button type="button" className="flat-earth-center-sun" onClick={this._onSun} disabled={disabled}>
 					{sunLabel}
 				</Button>
+			</div>
+		);
+	}
+
+	/**
+	 * Owns the feature's ordered icon commands while workspace owns their placement.
+	 *
+	 * @returns {React.ReactNode} - Camera, shared-time and aiming actions for this view.
+	 */
+	_renderToolbarControls() {
+		let camera = this.state.camera;
+		let height = camera.pendingHeightMeters ?? camera.observerHeightMeters;
+		let heights = this._renderHeightOptions();
+		let fieldsOfView = this._renderFieldOfViewOptions();
+		let elevationIcon = <Height />;
+		let fovIcon = <ZoomOutMap />;
+		let sunIcon = <CenterFocusStrong />;
+		let disabled = !this.state.renderedObservation;
+		let fovHint = this._text('flat-earth.camera.fov.hint');
+		return (
+			<div className="flat-earth-view-tools flat-earth-toolbar-tools">
+				{this._renderSkyControl()}
+				<IconMenuButton
+					className="flat-earth-height flat-earth-height-control"
+					label="flat-earth.camera.height"
+					icon={elevationIcon}
+					value={height}
+					options={heights}
+					onChange={this._onHeight}
+				/>
+				<IconMenuButton
+					className="flat-earth-fov flat-earth-fov-control"
+					label="flat-earth.camera.fov"
+					icon={fovIcon}
+					value={camera.fieldOfViewDegrees}
+					options={fieldsOfView}
+					onChange={this._onFieldOfView}
+					aria-description={fovHint}
+				/>
+				<FlatEarthTimeControls sceneView={this.props.sceneView} owner={this.props.viewId} />
+				<IconButton
+					className="flat-earth-center-sun"
+					label="flat-earth.camera.center-sun"
+					icon={sunIcon}
+					onClick={this._onSun}
+					disabled={disabled}
+				/>
 			</div>
 		);
 	}

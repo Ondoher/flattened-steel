@@ -1,6 +1,6 @@
 # Flat Toolbar Implementation Execution
 
-Status: M1 complete; creating its advised checkpoint, then advancing to M2. The owner authorized the saved toolbar plan through
+Status: M2 complete; checkpoint and M3 verification next. The owner authorized the saved toolbar plan through
 independent-execution on 2026-11-08, including task-scoped local checkpoints with
 the adviser's preapproved messages. No push or publication is authorized.
 
@@ -8,7 +8,7 @@ the adviser's preapproved messages. No push or publication is authorized.
 
 - Plan: [toolbar implementation](toolbar-implementation-plan.md).
 - M1: complete. Types, 214 browser tests and the actual-app proof pass.
-- M2: next, after the M1 checkpoint.
+- M2: complete; 214 tests pass and both actual views have one seven-command row.
 - M3: not started.
 - Generated evidence: `.codex-tmp/component-refactor/toolbar-implementation/`.
 - Starting HEAD: `56bcae7e496da16297e62b11806669e438d4ee6e`.
@@ -68,9 +68,36 @@ Disposition: advance to M2 after final checks and the coherent local checkpoint.
 Measured actual-app proof including its build: 35.6 seconds; successful browser
 portion: 18.2 seconds. Earlier recoveries are recorded separately in the logs.
 
+### M2 — Complete Single-Row Composition
+
+ViewportFrame now composes generic scene/settings commands and feature-owned
+controls through the shared Toolbar. Its view heading remains accessible and
+the optional Close action stays outside the scroll region. Collapse state,
+second-row layout and obsolete toolbar widths are removed. Flat composes Sky,
+elevation, FOV, clock and Sun aiming together; its camera contribution now owns
+the time-token cleanup formerly attached to the secondary time registration.
+Configuration controls retain their existing presentation and scopes.
+
+Evidence: `m2-browser` passes 214 cases, including exact-view scene/settings
+routing, controlled numeric/custom choices and merged registration cleanup.
+`m2-two-view/proof.json` verifies seven commands in a single row for each real
+view and header height under 65px. Its preparation/cache-entry counters and
+shared timestamp stay unchanged when merely opening/dismissing the Sky menu;
+the same canvas is retained. The proof adds transparent call-count wrappers to
+the built bundle, without replacing runtime behavior. Its actual-app build/run
+took 44.3 seconds, with a 27.7-second browser portion.
+Captures: [single](../../../.codex-tmp/component-refactor/toolbar-implementation/m2/closed.png)
+and [two views](../../../.codex-tmp/component-refactor/toolbar-implementation/m2-two-view/two-views.png).
+These do not claim completed sky preparation.
+
+Disposition: advance to M3 for narrow/translated layouts, remaining lifecycle
+cases and final integration verification. No model, parser or rendering changes
+were needed.
+
 ## Checkpoints
 
-None created during this execution yet.
+- `d6f58b2b` — `feat(flat): add icon toolbar controls` (M1 and its preserved,
+  related shared-control foundation).
 
 ## Final Report
 

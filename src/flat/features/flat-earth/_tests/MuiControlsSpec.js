@@ -5,7 +5,7 @@ import {Registry} from '@polylith/core';
 import {createTestHarness} from '../../../testing/TestHarness.js';
 
 describe('Flat Earth shared MUI consumer controls', () => {
-	it('represents custom camera values and sends numeric changes to the exact view', () => {
+	it('represents custom camera values and sends numeric changes to the exact view', async () => {
 		let state = {
 			status: 'ready',
 			renderedObservation: {},
@@ -13,6 +13,7 @@ describe('Flat Earth shared MUI consumer controls', () => {
 			camera: {observerHeightMeters: 321, pendingHeightMeters: null, fieldOfViewDegrees: 42},
 		};
 		let view = {
+			...timeView(),
 			getState: () => state,
 			listen: () => 9,
 			unlisten: jasmine.createSpy('unlisten'),
@@ -23,10 +24,14 @@ describe('Flat Earth shared MUI consumer controls', () => {
 		let harness = createTestHarness().withLocale('en-US');
 		try {
 			let result = harness.render(FlatEarthViewTools, {viewId: 'view-2', sceneView: view, initialState: state});
-			expect(result.query('.flat-earth-height [role="combobox"]').textContent).toContain('321 m');
-			expect(result.query('.flat-earth-fov [role="combobox"]').textContent).toContain('42°');
-			harness.select(result.query('.flat-earth-height [role="combobox"]'), 100);
-			harness.select(result.query('.flat-earth-fov [role="combobox"]'), 35);
+			harness.click(result.query('.flat-earth-height'));
+			expect(result.queryDocument('[role="menuitemradio"][aria-checked="true"]').textContent).toContain('321 m');
+			harness.click(result.queryDocument('[data-value="100"]'));
+			await waitUntil(() => !result.queryDocument('[role="menu"]'));
+			harness.click(result.query('.flat-earth-fov'));
+			expect(result.queryDocument('[role="menuitemradio"][aria-checked="true"]').textContent).toContain('42°');
+			harness.click(result.queryDocument('[data-value="35"]'));
+			await waitUntil(() => !result.queryDocument('[role="menu"]'));
 			harness.click(result.query('.flat-earth-center-sun'));
 			expect(view.setObserverHeight).toHaveBeenCalledOnceWith('view-2', {value: 100, units: 'meters'});
 			expect(view.setFieldOfView).toHaveBeenCalledOnceWith('view-2', 35);

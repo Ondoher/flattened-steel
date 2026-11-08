@@ -18,6 +18,7 @@
 }
 
 .app-icon-button--contained.MuiIconButton-root,
+.app-icon-button[aria-pressed='true'].MuiIconButton-root,
 .app-icon-button[aria-expanded='true'].MuiIconButton-root {
 	color: var(--app-color-on-action);
 	background: var(--app-color-action);
@@ -34,6 +35,11 @@
 .app-icon-menu .MuiMenuItem-root {
 	white-space: normal;
 	overflow-wrap: anywhere;
+}
+
+.app-icon-menu .MuiMenuItem-root.Mui-selected {
+	background: var(--app-color-action);
+	color: var(--app-color-on-action);
 }
 
 .app-panel-control {

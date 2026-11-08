@@ -1,37 +1,175 @@
-import BaseSelect from '../../../components/BaseSelect.jsx';
-import Typography from '@mui/material/Typography';
-import Button from '../../../components/Button.jsx';
 import React, {Component} from 'react';
+import Divider from '@mui/material/Divider';
+import PublicOutlined from '@mui/icons-material/PublicOutlined';
+import Tune from '@mui/icons-material/Tune';
+import Close from '@mui/icons-material/Close';
+import Toolbar from '../../../components/Toolbar.jsx';
+import IconButton from '../../../components/IconButton.jsx';
+import IconMenuButton from '../../../components/IconMenuButton.jsx';
 
 /**
- * Generic scene host, contributed controls, and status for one stable view identity.
+ * Hosts a scene and a single generic toolbar without importing feature implementations.
  *
- * @extends {Component<ViewportFrameProps, ViewportFrameState>}
+ * @extends {Component<ViewportFrameProps>}
  */
 export default class ViewportFrame extends Component {
 	/**
-	 * Creates independent transient control visibility for this mounted view.
+	 * Creates a stable adapter for this exact view's registered-scene selection.
 	 *
-	 * @param {ViewportFrameProps} props - Generic workspace view presentation.
+	 * @param {ViewportFrameProps} props - Generic view identity and contributed presentation.
 	 */
 	constructor(props) {
 		super(props);
-		this.state = {controlsCollapsed: false};
-		this._onToggleControls = this._onToggleControls.bind(this);
 		this._onSelectPage = this._onSelectPage.bind(this);
 	}
 
 	/**
-	 * Called by the header button to toggle only this view's contributed control rows.
+	 * Reports scene-selection intent to the workspace owner.
+	 *
+	 * @param {string|number} pageId - Registered scene identity.
 	 */
-	_onToggleControls() {
-		this.setState((state) => ({controlsCollapsed: !state.controlsCollapsed}));
+	_onSelectPage(pageId) {
+		this.props.onSelectPage(String(pageId), this.props.viewport.id);
 	}
 
 	/**
-	 * Called by frame rendering to project a page, empty host, or routed failure.
+	 * Prepares scene choices with their registered phrase labels.
 	 *
-	 * @returns {React.ReactNode} - Content region with owner-rendered content or workspace empty state.
+	 * @returns {AppSelectOption[]} - Generic workspace page metadata.
+	 */
+	_renderSceneOptions() {
+		return this.props.pages.map((page) => ({value: page.id, label: page.label}));
+	}
+
+	/**
+	 * Owns the scene command without identifying any concrete page feature.
+	 *
+	 * @param {string} view - Prepared accessible view name.
+	 * @returns {React.ReactNode} - Registered-scene icon menu, when pages exist.
+	 */
+	_renderSceneSelector(view) {
+		if (!this.props.pages.length) {
+			return null;
+		}
+		let label = {phrase: 'workspace.scene-for', replacements: {view}};
+		let icon = <PublicOutlined />;
+		let options = this._renderSceneOptions();
+		let value = this.props.viewport.pageId ?? '';
+		return (
+			<IconMenuButton
+				className="workspace-scene-choice"
+				label={label}
+				icon={icon}
+				value={value}
+				options={options}
+				onChange={this._onSelectPage}
+			/>
+		);
+	}
+
+	/**
+	 * Owns feature control placement while retaining contribution lifetimes and identities.
+	 *
+	 * @returns {React.ReactNode} - Primary and legacy secondary contributions in one row.
+	 */
+	_renderTools() {
+		let primary = this.props.viewport.tools.map((item) => (
+			<React.Fragment key={item.registrationId}>{item.component}</React.Fragment>
+		));
+		let secondary = (this.props.viewport.secondaryTools ?? []).map((item) => (
+			<React.Fragment key={item.registrationId}>{item.component}</React.Fragment>
+		));
+		return (
+			<div className="viewport-tools">
+				{primary}
+				{secondary}
+			</div>
+		);
+	}
+
+	/**
+	 * Opens the workspace-owned configuration target for this exact view.
+	 *
+	 * @returns {React.ReactNode} - Settings action when providers exist.
+	 */
+	_renderSettings() {
+		let {viewport} = this.props;
+		if (!viewport.hasSettings) {
+			return null;
+		}
+		let icon = <Tune />;
+		return (
+			<IconButton
+				className="workspace-page-settings"
+				label="workspace.page-settings"
+				icon={icon}
+				data-view-id={viewport.id}
+				aria-pressed={viewport.settingsSelected}
+				onClick={this.props.onOpenSettings}
+			/>
+		);
+	}
+
+	/**
+	 * Keeps optional-view closure available outside the scrolling controls.
+	 *
+	 * @returns {React.ReactNode} - Secondary-view close action only.
+	 */
+	_renderCloseAction() {
+		if (this.props.number === 1) {
+			return null;
+		}
+		let label = {phrase: 'workspace.close-view-number', replacements: {number: this.props.number}};
+		let icon = <Close />;
+		return (
+			<IconButton
+				className="workspace-close"
+				label={label}
+				icon={icon}
+				data-view-id={this.props.viewport.id}
+				onClick={this.props.onCloseView}
+			/>
+		);
+	}
+
+	/**
+	 * Owns the single-row toolbar and visually hidden semantic view heading.
+	 *
+	 * @returns {React.ReactNode} - Generic view chrome with portalled popup controls.
+	 */
+	_renderHeader() {
+		let {viewport, number, text} = this.props;
+		let label = text('workspace.view', {number});
+		let headingId = `heading-${viewport.id}`;
+		let hasTools = viewport.tools.length > 0 || (viewport.secondaryTools?.length ?? 0) > 0;
+		let leadingDivider =
+			hasTools && this.props.pages.length ? (
+				<Divider orientation="vertical" flexItem className="viewport-toolbar-divider" />
+			) : null;
+		let settingsDivider = viewport.hasSettings ? (
+			<Divider orientation="vertical" flexItem className="viewport-toolbar-divider" />
+		) : null;
+		return (
+			<header className="viewport-header">
+				<h2 className="screen-reader-only" id={headingId}>
+					{label}
+				</h2>
+				<Toolbar className="viewport-toolbar" role="toolbar" aria-label={label}>
+					{this._renderSceneSelector(label)}
+					{leadingDivider}
+					{this._renderTools()}
+					{settingsDivider}
+					{this._renderSettings()}
+				</Toolbar>
+				{this._renderCloseAction()}
+			</header>
+		);
+	}
+
+	/**
+	 * Owns the content region while retaining the page's actual component instance.
+	 *
+	 * @returns {React.ReactNode} - Page content or generic empty/failure feedback.
 	 */
 	_renderContent() {
 		let content = this.props.viewport.component;
@@ -43,189 +181,9 @@ export default class ViewportFrame extends Component {
 	}
 
 	/**
-	 * Called by the scene selector to render registered-scene options.
+	 * Owns contributed status presentation separately from toolbar actions.
 	 *
-	 * @returns {AppSelectOption[]} - Options with stable page identities and localized labels.
-	 */
-	_renderSceneOptions() {
-		let {pages} = this.props;
-		let options = pages.map((page) => ({
-			value: page.id,
-			label: page.label,
-		}));
-		return [{value: '', label: 'workspace.choose-scene', disabled: true}, ...options];
-	}
-
-	/**
-	 * Reports a normalized page value together with this host's exact view identity.
-	 *
-	 * @param {string} pageId - Selected registered page.
-	 */
-	_onSelectPage(pageId) {
-		this.props.onSelectPage(pageId, this.props.viewport.id);
-	}
-
-	/**
-	 * Called by the header to render the controlled registered-scene selector.
-	 *
-	 * @param {string} label - Localized view name.
-	 * @returns {React.ReactNode} - Labelled selector or no control when no pages exist.
-	 */
-	_renderSceneSelector(label) {
-		if (!this.props.pages.length) {
-			return null;
-		}
-		let {viewport, text} = this.props;
-		let sceneLabel = {phrase: 'workspace.scene-for', replacements: {view: label}};
-		let selectedPage = viewport.pageId ?? '';
-		let options = this._renderSceneOptions();
-		let selectProps = {displayEmpty: true};
-		return (
-			<BaseSelect
-				className="workspace-scene-choice"
-				label={sceneLabel}
-				value={selectedPage}
-				data-view-id={viewport.id}
-				options={options}
-				selectProps={selectProps}
-				onChange={this._onSelectPage}
-				fullWidth={false}
-			/>
-		);
-	}
-
-	/**
-	 * Called by the header to present owner-rendered view tools.
-	 *
-	 * @returns {React.ReactNode} - View tools region.
-	 */
-	_renderTools() {
-		let id = `viewport-tools-${this.props.viewport.id}`;
-		let hidden = this.state.controlsCollapsed;
-		let tools = this.props.viewport.tools.map((item) => (
-			<React.Fragment key={item.registrationId}>{item.component}</React.Fragment>
-		));
-		return (
-			<div className="viewport-tools" id={id} hidden={hidden}>
-				{tools}
-			</div>
-		);
-	}
-
-	/**
-	 * Called by header rendering to expose registered page settings without knowing the provider.
-	 *
-	 * @returns {React.ReactNode} - Settings shortcut when the view has contributions.
-	 */
-	_renderSettings() {
-		let {viewport, text} = this.props;
-		let label = text('workspace.page-settings');
-		let button = viewport.hasSettings ? (
-			<Button
-				type="button"
-				className="workspace-button workspace-page-settings"
-				data-view-id={viewport.id}
-				aria-pressed={viewport.settingsSelected}
-				onClick={this.props.onOpenSettings}
-			>
-				{label}
-			</Button>
-		) : null;
-		return button;
-	}
-
-	/**
-	 * Called by header rendering to present a second generic tool row.
-	 *
-	 * @returns {React.ReactNode} - Feature-owned secondary controls.
-	 */
-	_renderSecondaryTools() {
-		let id = `viewport-secondary-tools-${this.props.viewport.id}`;
-		let hidden = this.state.controlsCollapsed;
-		let tools = (this.props.viewport.secondaryTools ?? []).map((item) => (
-			<React.Fragment key={item.registrationId}>{item.component}</React.Fragment>
-		));
-		return (
-			<div className="viewport-secondary-tools" id={id} hidden={hidden}>
-				{tools}
-			</div>
-		);
-	}
-
-	/**
-	 * Called by header rendering to expose control visibility and optional close intent.
-	 *
-	 * @returns {React.ReactNode} - Header action region without feature-specific behavior.
-	 */
-	_renderHeaderActions() {
-		let {viewport, number, text} = this.props;
-		let hasControls = viewport.tools.length > 0 || (viewport.secondaryTools?.length ?? 0) > 0;
-		let expanded = !this.state.controlsCollapsed;
-		let controls = `viewport-tools-${viewport.id} viewport-secondary-tools-${viewport.id}`;
-		let toggleLabel = text(expanded ? 'workspace.collapse-controls' : 'workspace.expand-controls');
-		let toggleGlyph = expanded ? '▴' : '▾';
-		let toggleButton = hasControls ? (
-			<Button
-				type="button"
-				className="workspace-button workspace-collapse-controls"
-				aria-expanded={expanded}
-				aria-controls={controls}
-				aria-label={toggleLabel}
-				title={toggleLabel}
-				onClick={this._onToggleControls}
-			>
-				{toggleGlyph}
-			</Button>
-		) : null;
-		let closeButton = null;
-		if (number > 1) {
-			let closeLabel = text('workspace.close-view-number', {number});
-			closeButton = (
-				<Button
-					type="button"
-					className="workspace-button workspace-close"
-					data-view-id={viewport.id}
-					onClick={this.props.onCloseView}
-				>
-					{closeLabel}
-				</Button>
-			);
-		}
-		return (
-			<div className="viewport-header-actions">
-				{toggleButton}
-				{closeButton}
-			</div>
-		);
-	}
-
-	/**
-	 * Called by frame rendering to present view identity, tools, and close intent.
-	 *
-	 * @returns {React.ReactNode} - Semantic view header.
-	 */
-	_renderHeader() {
-		let {viewport, number, text} = this.props;
-		let label = text('workspace.view', {number});
-		let headingId = `heading-${viewport.id}`;
-		return (
-			<header className="viewport-header">
-				<Typography component="h2" variant="body2" id={headingId}>
-					{label}
-				</Typography>
-				{this._renderSceneSelector(label)}
-				{this._renderSettings()}
-				{this._renderHeaderActions()}
-				{this._renderTools()}
-				{this._renderSecondaryTools()}
-			</header>
-		);
-	}
-
-	/**
-	 * Called by frame rendering to present owner-rendered view status.
-	 *
-	 * @returns {React.ReactNode} - Status region or no region when empty.
+	 * @returns {React.ReactNode} - Feature status, when present.
 	 */
 	_renderStatus() {
 		if (!this.props.viewport.status.length) {
@@ -238,21 +196,15 @@ export default class ViewportFrame extends Component {
 	}
 
 	/**
-	 * Call this method to render this view without mounting any feature itself.
+	 * Presents one stable scene host and its generic workspace chrome.
 	 *
-	 * @returns {React.ReactNode} - Named view host.
+	 * @returns {React.ReactNode} - Named workspace view.
 	 */
 	render() {
 		let {viewport} = this.props;
 		let headingId = `heading-${viewport.id}`;
-		let collapsed = this.state.controlsCollapsed;
 		return (
-			<section
-				className="viewport-frame"
-				aria-labelledby={headingId}
-				data-view-id={viewport.id}
-				data-controls-collapsed={collapsed}
-			>
+			<section className="viewport-frame" aria-labelledby={headingId} data-view-id={viewport.id}>
 				{this._renderHeader()}
 				{this._renderContent()}
 				{this._renderStatus()}

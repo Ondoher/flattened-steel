@@ -1,7 +1,7 @@
 # Flat Page Icon Toolbar Implementation
 
 Status: execution authorized through independent-execution on 2026-11-08;
-M1 in progress. See the [execution record](toolbar-implementation-execution.md).
+M1–M2 complete; M3 verification next. See the [execution record](toolbar-implementation-execution.md).
 Owner request: 2026-11-08.
 
 ## Outcome And Starting Point
@@ -118,29 +118,29 @@ contract, rather than treating that text as another phrase key.
 Purpose: prove the new trigger/choice controls and the largest interaction risk
 in the actual app before converting all the chrome.
 
-- [ ] First executable step: capture the current source/diff baseline and
+- [x] First executable step: capture the current source/diff baseline and
       source-bound control inventory. Confirm the saved icons and current public
       view callbacks; preserve unrelated owner edits.
-- [ ] Implement the shared icon control, menu control and PanelButton icon mode
+- [x] Implement the shared icon control, menu control and PanelButton icon mode
       over MUI. Localize copy exactly once; pass names to both Tooltip and the
       icon-only button's accessible label. Suppress hover tooltips while their
       popup is open, and do not expose duplicate live text.
-- [ ] Replace the real Sky select's toolbar presentation with its icon menu.
+- [x] Replace the real Sky select's toolbar presentation with its icon menu.
       Preserve configuration-mode selection and the existing per-view command.
-- [ ] Put the real alternate-time slider behind the clock icon, removing the
+- [x] Put the real alternate-time slider behind the clock icon, removing the
       simultaneous inline copy. Preserve the full configuration editor.
-- [ ] Add the unavailable-location explanation and location shortcut to this
+- [x] Add the unavailable-location explanation and location shortcut to this
       toolbar popup; retain clock access while only the slider is disabled.
-- [ ] Resolve gesture release on Escape, backdrop, pointer cancellation,
+- [x] Resolve gesture release on Escape, backdrop, pointer cancellation,
       disabling and unmount at both layers: stop the actual Slider interaction and
       its MUI drag listeners as well as ending the feature's edit token. Dismissal
       must prevent further seeks while the Popover exit transition is running.
-- [ ] Close the popup before handing focus to settings or location editing.
+- [x] Close the popup before handing focus to settings or location editing.
       Deliver one pending intent only after closure; cancel it on unmount, page
       replacement or reopening. Check configuration initially closed and already
       open using the existing configuration request/focus contract. Keep partial
       numeric editing in configuration intact.
-- [ ] Check named/bound handlers, calculations before JSX, region ownership,
+- [x] Check named/bound handlers, calculations before JSX, region ownership,
       ambient types, JSDoc format and CSS ownership against the applicable standards.
 
 Deliverables/evidence: working Sky and clock controls, focused extensions to the
@@ -168,23 +168,23 @@ package or service should be required.
 Purpose: compose the validated controls without coupling workspace to Flat.
 Depends on M1's interaction evidence.
 
-- [ ] Convert elevation/FOV to controlled icon menus and Center on Sun to its
+- [x] Convert elevation/FOV to controlled icon menus and Center on Sun to its
       direct icon action. Retain non-preset camera values as selected choices and
       existing pending/disabled behavior.
-- [ ] Compose Flat's toolbar controls, including the clock, as feature-owned
+- [x] Compose Flat's toolbar controls, including the clock, as feature-owned
       content in the proposed order. Remove its old secondary-row registration;
       keep configuration contributions and their existing scopes. Update cleanup
       currently keyed to `flat-earth-time-toolbar` so the merged contribution still
       retires the correct interaction/token once, including mid-edit view closure.
-- [ ] Convert workspace scene choice and settings to the selected icons through
+- [x] Convert workspace scene choice and settings to the selected icons through
       generic metadata/callbacks. Keep scene switching and configuration focus routed
       to the exact view. Keep the second-view close action with workspace.
-- [ ] Adopt the shared Toolbar in ViewportFrame, retaining semantically named
+- [x] Adopt the shared Toolbar in ViewportFrame, retaining semantically named
       contribution regions. Preserve generic slot compatibility where necessary
       without rendering a second row or identifying feature-specific controls.
-- [ ] Remove obsolete visible view headings, collapse controls and related
+- [x] Remove obsolete visible view headings, collapse controls and related
       state/styles. Keep accessible view names and optional-view close intent.
-- [ ] Implement horizontal overflow and persistent access to Close on narrow
+- [x] Implement horizontal overflow and persistent access to Close on narrow
       views. Ensure nested contribution wrappers shrink rather than widening their
       viewport. Keep identical command vocabulary/order in one- and two-view layouts.
 

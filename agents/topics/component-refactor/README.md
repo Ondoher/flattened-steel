@@ -5,15 +5,17 @@ authorization. Shared MUI controls are used throughout the app's existing
 control positions and nonmodal configuration surfaces. The
 [execution record](mui-migration-execution.md) owns verification and scoped
 local checkpoints. The [saved migration plan](mui-migration-plan.md) is complete.
-Toolbar conversion remains a separate follow-on task.
+Toolbar implementation is complete through M2, with final M3 verification next.
 The [toolbar implementation plan](toolbar-implementation-plan.md) now owns its
-proposed execution sequence and interaction defaults; implementation is not yet
-authorized.
+execution sequence and interaction defaults. The owner authorized independent
+execution; the [toolbar execution record](toolbar-implementation-execution.md)
+owns current progress and evidence.
 
 Focus: the [toolbar refactor notes](toolbar-refactor.md) own the selected
 icon-only direction and seven MUI icons. Time uses AccessTime: the slider is
 alternate time entry. The [earlier review](toolbar-design-review.md) preserves
-preceding UX/UI advice and comps. Toolbar implementation has not started.
+preceding UX/UI advice and comps. The single-row toolbar is now implemented;
+final narrow-layout and lifecycle verification remains.
 These are controls and control containers, not full-page components.
 
 ## Localization Boundary

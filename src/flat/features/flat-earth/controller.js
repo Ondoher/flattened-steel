@@ -216,7 +216,6 @@ export class FlatEarthController extends Service {
 	_registerTools(viewId) {
 		let definitions = [
 			{id: 'flat-earth-camera', slot: 'view-tools'},
-			{id: 'flat-earth-time-toolbar', slot: 'view-tools-secondary'},
 			{id: 'flat-earth-camera-settings', slot: 'configuration', label: 'flat-earth.camera.title'},
 		];
 		let tokens = definitions.map((definition) =>
@@ -235,9 +234,6 @@ export class FlatEarthController extends Service {
 		if (contribution.id === 'flat-earth-time') {
 			return this.view.getTimeComponent('configuration', true);
 		}
-		if (contribution.id === 'flat-earth-time-toolbar') {
-			return this.view.getTimeComponent(contribution.viewId, false);
-		}
 		if (contribution.id === 'flat-earth-camera-settings') {
 			return this.view.getCameraComponent(contribution.viewId);
 		}
@@ -250,9 +246,9 @@ export class FlatEarthController extends Service {
 	 * @param {WorkspaceContributionMount} request - Exact released contribution identity.
 	 */
 	unmountContribution({contribution}) {
-		if (contribution.id === 'flat-earth-time' || contribution.id === 'flat-earth-time-toolbar') {
+		if (contribution.id === 'flat-earth-time' || contribution.id === 'flat-earth-camera') {
 			let owner = contribution.viewId ?? 'configuration';
-			this.timeModel.end(owner, this._gestureTokens?.get(owner));
+			this.endTimeEdit(owner, this._gestureTokens?.get(owner));
 		}
 	}
 

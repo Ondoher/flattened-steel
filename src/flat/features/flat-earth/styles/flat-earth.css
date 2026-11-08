@@ -127,9 +127,6 @@
 .flat-time-slider {
 	min-width: 0;
 }
-.flat-time-toolbar .flat-time-slider {
-	margin-top: 6px;
-}
 .flat-time-rail {
 	position: relative;
 	height: 24px;
@@ -322,10 +319,6 @@
 		flex-wrap: wrap;
 		gap: 12px;
 	}
-	.flat-time-toolbar {
-		height: auto;
-		min-height: 88px;
-	}
 	.flat-time-toolbar-heading {
 		grid-template-columns: 88px 1fr auto;
 		row-gap: 6px;
@@ -378,22 +371,17 @@
 .flat-earth-view-tools {
 	gap: 16px;
 }
-@container (min-width:700px) {
-	.flat-earth-view-tools {
-		gap: 20px;
-	}
-}
 
-.flat-earth-height-control {
+.flat-earth-camera-panel .flat-earth-height-control {
 	width: 138px;
 }
-.flat-earth-fov-control {
+.flat-earth-camera-panel .flat-earth-fov-control {
 	width: 158px;
 }
-.flat-earth-shader-control {
+.flat-earth-camera-panel .flat-earth-shader-control {
 	width: 176px;
 }
-.flat-earth-center-sun {
+.flat-earth-camera-panel .flat-earth-center-sun {
 	width: 124px;
 }
 .flat-earth-camera-panel .MuiFormControl-root {
@@ -403,4 +391,22 @@
 	display: block;
 	margin: 0;
 	padding-block: 10px;
+}
+.flat-earth-toolbar-tools {
+	display: flex;
+	align-items: center;
+	flex-wrap: nowrap;
+	gap: 6px;
+	min-width: 0;
+}
+.flat-earth-toolbar-tools > * {
+	flex: 0 0 auto;
+}
+.flat-time-popup .flat-time-toolbar-heading > span {
+	grid-row: 2;
+	grid-column: 1;
+}
+.flat-time-popup .flat-time-settings {
+	grid-row: 2;
+	grid-column: 2;
 }

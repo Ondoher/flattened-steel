@@ -38,6 +38,10 @@ class ViewStub {
 		this.actions.push('comparison');
 	}
 
+	openConfiguration(viewId) {
+		this.actions.push({settings: viewId});
+	}
+
 	closeView(viewId) {
 		this.actions.push({close: viewId});
 	}
@@ -62,7 +66,7 @@ describe('workspace React frame', () => {
 		view = new ViewStub();
 	});
 	afterEach(() => harness.unmount());
-	it('collapses only the selected view control rows while preserving mounted scenes, drafts and the top row', () => {
+	it('composes both contribution slots in one row and preserves mounted scene and draft state', () => {
 		let primary = {
 			...viewport('view-1', 'scene', <input aria-label="Scene draft" defaultValue="scene" />),
 			hasSettings: true,
@@ -72,31 +76,19 @@ describe('workspace React frame', () => {
 		let secondary = {...primary, id: 'view-2'};
 		view.state = {...initial(), pages: [{id: 'scene', label: 'flat-earth.title'}], views: [primary, secondary]};
 		result = harness.render(WorkspaceShell, {workspaceView: view, initialState: view.state});
-		let frames = result.queryAll('.viewport-frame');
-		let first = frames[0];
-		let draft = first.querySelector('.viewport-tools input');
-		let scene = first.querySelector('.viewport-content input');
+		const first = result.query('.viewport-frame');
+		const draft = first.querySelector('.viewport-tools input');
+		const scene = first.querySelector('.viewport-content input');
 		draft.value = 'edited';
-		let height = first.querySelector('.viewport-header').getBoundingClientRect().height;
-		let toggle = first.querySelector('.workspace-collapse-controls');
-		harness.click(toggle);
-		expect(toggle.getAttribute('aria-expanded')).toBe('false');
-		expect(first.querySelector('.viewport-tools').hidden).toBeTrue();
-		expect(first.querySelector('.viewport-secondary-tools').hidden).toBeTrue();
-		expect(first.querySelector('.viewport-tools').getBoundingClientRect().height).toBe(0);
-		expect(first.querySelector('.workspace-scene-choice [role="combobox"]').offsetHeight).toBeGreaterThan(0);
-		expect(first.querySelector('.workspace-page-settings').offsetHeight).toBeGreaterThan(0);
-		expect(first.querySelector('.viewport-header').getBoundingClientRect().height).toBeLessThan(height);
-		expect(frames[1].querySelector('.viewport-tools').hidden).toBeFalse();
+		expect(first.querySelector('.workspace-collapse-controls')).toBeNull();
+		expect(first.querySelector('.viewport-toolbar').textContent).toContain('Time controls');
+		expect(first.querySelector('.viewport-header').getBoundingClientRect().height).toBeLessThan(65);
+		harness.click(first.querySelector('.workspace-page-settings'));
+		expect(view.actions).toContain({settings: 'view-1'});
+		view.emit({...view.state, views: [primary]});
 		expect(first.querySelector('.viewport-content input')).toBe(scene);
-		harness.click(toggle);
-		expect(toggle.getAttribute('aria-expanded')).toBe('true');
 		expect(first.querySelector('.viewport-tools input')).toBe(draft);
 		expect(draft.value).toBe('edited');
-		expect(first.querySelector('.viewport-secondary-tools').hidden).toBeFalse();
-		harness.click(toggle);
-		view.emit({...view.state, views: [primary]});
-		expect(result.query('.workspace-collapse-controls').getAttribute('aria-expanded')).toBe('false');
 	});
 	it('shows a usable empty workspace and relays comparison without inventing scene controls', () => {
 		result = harness.render(WorkspaceShell, {workspaceView: view, initialState: view.state});
@@ -135,8 +127,9 @@ describe('workspace React frame', () => {
 		};
 		result = harness.render(WorkspaceShell, {workspaceView: view, initialState: view.state});
 		expect(result.query('header').textContent).toContain('Owned tool');
-		let second = result.queryAll('main [role="combobox"]')[1];
-		harness.select(second, 'two');
+		let second = result.queryAll('main .workspace-scene-choice')[1];
+		harness.click(second);
+		harness.click(result.queryDocument('[role="menuitemradio"][data-value="two"]'));
 		expect(view.actions).toEqual([{pageId: 'two', viewId: 'view-2'}]);
 	});
 	it('opens a nonmodal configuration host, relays scope, and restores focus after Escape', () => {

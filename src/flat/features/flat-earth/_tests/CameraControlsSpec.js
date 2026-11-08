@@ -234,9 +234,7 @@ describe('Flat Earth camera controls', () => {
 			controller.seekTime('view-1', gesture, 0);
 			expect(configuration.get().timestamp).toBe(Date.parse('2024-06-20T20:08:48.339Z'));
 			controller.unmountContribution({
-				contribution: tools
-					.get()
-					.find((item) => item.id === 'flat-earth-time-toolbar' && item.viewId === 'view-1'),
+				contribution: tools.get().find((item) => item.id === 'flat-earth-camera' && item.viewId === 'view-1'),
 			});
 			controller.seekTime('view-1', gesture, 90);
 			expect(configuration.get().timestamp).toBe(Date.parse('2024-06-20T20:08:48.339Z'));
@@ -253,12 +251,12 @@ describe('Flat Earth camera controls', () => {
 			let token = tools.get()[0].registrationId;
 			controller.ready();
 			expect(graphics.warm).toHaveBeenCalledTimes(1);
-			expect(tools.get().length).toBe(7);
+			expect(tools.get().length).toBe(5);
 			expect(tools.get()[0].registrationId).not.toBe(token);
 			expect(controller.getState('view-1').camera.fieldOfViewDegrees).toBe(35);
 			controller.unmount('view-2');
 			expect(controller.beginTimeEdit('view-2')).toBe(0);
-			expect(tools.get().length).toBe(4);
+			expect(tools.get().length).toBe(3);
 			expect(controller.mountContribution({contribution: tools.get()[0]}).props.viewId).toBe('view-1');
 		} finally {
 			controller.stop();
