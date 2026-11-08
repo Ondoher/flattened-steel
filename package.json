@@ -132,7 +132,9 @@
 		"test:server:flat": "node --test --test-isolation=none server/flat/spec.js",
 		"test:flat": "npm run test:ui:flat && npm run test:server:flat",
 		"stage:flat:spherical-cache": "node scripts/algorithm32/stage-flat-spherical-cache.js",
-		"build:flat": "polylith build flat && npm run build:algorithm32:shared-worker"
+		"build:flat": "polylith build flat",
+		"typecheck:flat:build": "tsc -p scripts/algorithm32/solar-zenith-cache/worker-build-jsconfig.json",
+		"test:flat:build": "node --test scripts/algorithm32/solar-zenith-cache/shared-cache-worker-build.test.js"
 	},
 	"type": "module",
 	"overrides": {

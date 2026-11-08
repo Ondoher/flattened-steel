@@ -50,7 +50,9 @@ export default class DistantSunSharedCacheAttachment {
 		}
 		const candidate = await this.prepareScene(this._initialScene, {}, request.signal);
 		if (!candidate) {
-			throw new Error('Shared-cache initial window could not be prepared.');
+			throw new Error(
+				this._controller.diagnostics().lastError || 'Shared-cache initial window could not be prepared.',
+			);
 		}
 		this.publishPrepared(candidate.snapshot.generation);
 		return this._active;

@@ -16,6 +16,7 @@ export class SphericalEarthController extends Service {
 	constructor(registry) {
 		super('spherical-earth-controller', registry);
 		this.sessions = new Map();
+		this.release = Promise.resolve();
 		this.surfaces = new Map();
 		this.tokens = new Map();
 		this.listener = null;
@@ -231,12 +232,15 @@ export class SphericalEarthController extends Service {
 		if (session.canvas) {
 			session.detach(session.canvas);
 		}
+		this.release = Promise.all([this.release, session.release]).then(() => {});
 		this.surfaces.delete(viewId);
 		this.model.close(viewId);
 	}
 
 	/**
 	 * Call this method to retire only this feature's subscriptions and sessions.
+	 *
+	 * @returns {Promise<void>} - Completion after all removed sessions release their resources.
 	 */
 	stop() {
 		if (this.listener) {
@@ -246,6 +250,7 @@ export class SphericalEarthController extends Service {
 		for (const id of this.sessions.keys()) {
 			this.unmount(id);
 		}
+		return this.release;
 	}
 }
 

@@ -2,11 +2,12 @@
 
 Current active topic: flat.
 Canonical entry: [Flat](flat/README.md).
-Focus: Spherical Earth M1-M3 are complete: real atmosphere, curved green ground,
+Focus: Spherical Earth M1-M4 are complete: real atmosphere, curved green ground,
 Sun/stars, independently scoped icon controls and retained scene/cache updates.
-The owner authorized independent execution of the rest of the plan. M4 is active:
-reference comparisons, GPU-completed timings, failure/context/lifetime checks and
-a separate-parent discoverable deployment. Current evidence lives under
+Final shader comparisons, GPU-completed one/mixed/two-view timings, failure/context/
+lifetime checks and separate-parent discoverable deployment all pass. Live depth
+encoding and immediate context-loss retirement fix the issues found by those checks.
+Current evidence lives under
 .codex-tmp/spherical-earth/m2-m4-20261108/ and the execution record.
 The time-zone/IntlDate design decisions remain in the date-field adaptation note:
 Temporal with a polyfill when needed, current-user locale formatting, and explicit

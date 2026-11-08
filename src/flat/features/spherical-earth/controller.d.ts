@@ -3,6 +3,13 @@
  */
 export interface SphericalEarthController extends EventBus {
 	/**
+	 * Call this method to stop subscriptions and retire all current and removed sessions.
+	 *
+	 * @returns - Completion before shared providers can be released.
+	 */
+	stop(): Promise<void>;
+
+	/**
 	 * Call this method to read scoped scene preparation state.
 	 *
 	 * @param viewId - Exact workspace view identity.

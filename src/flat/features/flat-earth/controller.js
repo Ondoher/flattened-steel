@@ -49,6 +49,7 @@ export class FlatEarthController extends Service {
 		 * @type {Map<string, FlatEarthSession>}
 		 */
 		this.sessions = new Map();
+		this.release = Promise.resolve();
 		this._listener = null;
 		this._timeRegistration = null;
 		this._workspaceListener = null;
@@ -361,24 +362,29 @@ export class FlatEarthController extends Service {
 		if (session.canvas) {
 			session.detach(session.canvas);
 		}
+		this.release = Promise.all([this.release, session.release]).then(() => {});
 		let surface = this._surfaces.get(viewId);
 		this._surfaces.delete(viewId);
 		if (surface?.graphics) {
-			void surface.graphics
+			let release = surface.graphics
 				.dispose()
 				.catch((error) => console.error('Unused Flat Earth graphics release failed.', error));
+			this.release = Promise.all([this.release, release]).then(() => {});
 		}
 		this.model.close(viewId);
 	}
 
 	/**
 	 * Call this method to release feature subscriptions and every remaining view session.
+	 *
+	 * @returns {Promise<void>} - Completion after views and unused startup graphics retire.
 	 */
 	stop() {
 		if (this._startupGraphics) {
-			void this._startupGraphics
+			let release = this._startupGraphics
 				.dispose()
 				.catch((error) => console.error('Flat Earth startup graphics release failed.', error));
+			this.release = Promise.all([this.release, release]).then(() => {});
 			this._startupGraphics = null;
 		}
 		this._cacheStarted = false;
@@ -400,6 +406,7 @@ export class FlatEarthController extends Service {
 		for (let viewId of this.sessions.keys()) {
 			this.unmount(viewId);
 		}
+		return this.release;
 	}
 
 	/**

@@ -1,8 +1,9 @@
 # Spherical Earth Feature
 
-Status: M1-M3 completed on 2026-11-08 under the owner's independent-execution requests.
-M4 verification is in progress. The [execution record](spherical-earth-implementation-execution.md)
-owns completed deliverables, measured evidence and resumption.
+Status: M1-M4 completed on 2026-11-08 under the owner's independent-execution requests.
+The [execution record](spherical-earth-implementation-execution.md#final-m4-report)
+owns completed deliverables, final rendering comparisons, performance/lifetime
+evidence, consequential fixes and verification limits.
 The [Flat entry](README.md) owns current application behavior. The date/parser
 design decisions remain preserved and separate.
 
@@ -325,8 +326,8 @@ unfinished work, rather than a claim of release-wide scientific qualification.
 ## Execution, Checkpoints And Resumption
 
 The owner first authorized M1 and then authorized independent execution of the
-remaining M2-M4 on 2026-11-08. M1-M3 are complete. Continue M4 using the execution
-record's evidence, decisions, resource measurements and remaining verification.
+remaining M2-M4 on 2026-11-08. All milestones are complete. The execution record
+owns the final outcome, evidence, decisions, resource measurements and limits.
 
 Write generated evidence/helpers under unique run directories in
 `.codex-tmp/spherical-earth/`. Use JavaScript/Python helpers and existing runtimes.

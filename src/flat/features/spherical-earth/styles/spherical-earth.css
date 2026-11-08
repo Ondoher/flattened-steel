@@ -33,7 +33,7 @@
 	display: flex;
 	align-items: center;
 	flex-wrap: wrap;
-	gap: 0.5rem;
+	gap: 20px;
 }
 
 .spherical-earth-look-hint {
@@ -41,30 +41,25 @@
 	bottom: 0.75rem;
 	left: 0.75rem;
 	max-width: calc(100% - 1.5rem);
-	padding: 0.3rem 0.5rem;
-	border: 1px solid var(--app-color-border);
+	padding: 6px 8px;
+	margin: 0;
+	border: 0;
 	border-radius: 0.25rem;
 	background: var(--app-color-background);
 	color: var(--app-color-text);
-	font-size: var(--app-font-small);
-	pointer-events: none;
-}
-
-.spherical-earth-view-tools {
-	gap: 20px;
-	flex-wrap: wrap;
-}
-
-.spherical-earth-look-hint {
 	font-size: 12px;
 	line-height: 16px;
-	border: 0;
-	padding: 6px 8px;
-	margin: 0;
+	pointer-events: none;
 }
 
 .spherical-earth-toolbar-tools {
 	display: inline-flex;
 	flex-wrap: nowrap;
 	gap: 0.5rem;
+}
+
+.spherical-earth-camera-panel .spherical-earth-sky-control,
+.spherical-earth-camera-panel .spherical-earth-height-control,
+.spherical-earth-camera-panel .spherical-earth-fov-control {
+	min-width: 9rem;
 }

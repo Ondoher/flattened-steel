@@ -47,6 +47,8 @@ export class SphericalEarthRuntime {
 		this.cache = cache;
 		this.disposed = false;
 		this.contextLost = false;
+		/** @type {Promise<void>|null} */
+		this.release = null;
 		this.sceneScale = /** @type {SceneScale} */ ({value: 1000, units: 'meters-per-scene-unit'});
 		this.renderer = new THREE.WebGLRenderer({canvas, antialias: false});
 		this.renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -134,7 +136,7 @@ export class SphericalEarthRuntime {
 	 * Called by layout changes to resize only retained drawing targets.
 	 */
 	_resize() {
-		if (this.disposed) {
+		if (this.disposed || this.contextLost) {
 			return;
 		}
 		let {width, height} = this.canvas.getBoundingClientRect();
@@ -171,6 +173,11 @@ export class SphericalEarthRuntime {
 			camera: this.camera,
 			props: {config: frame.algorithm.config.config, sceneScale: this.sceneScale},
 		});
+		frame.bindings['geometry.sceneDepthMax'] = frame.geometry.resolveSceneDepthMax({
+			camera: this.camera,
+			sceneScale: this.sceneScale,
+			endpointScenePositions: frame.depthEndpoints,
+		});
 		frame.bindings['lightSource.direction'] = new THREE.Vector3(...frame.source.configuration.directionToLight);
 		frame.bindings['transport.pathIntervalCount'] =
 			DistanceMath.toMeters(frame.geometry.configuration.observerHeight) === 40000 ? 120 : 30;
@@ -181,7 +188,7 @@ export class SphericalEarthRuntime {
 	 * Called by scene publication and redraw to draw one complete observation.
 	 */
 	_render() {
-		if (!this.frame || this.disposed) {
+		if (!this.frame || this.disposed || this.contextLost) {
 			return;
 		}
 		this.camera.updateMatrixWorld(true);
@@ -198,7 +205,7 @@ export class SphericalEarthRuntime {
 	 * Called by camera/layout changes to coalesce on-demand redraws.
 	 */
 	_requestRender() {
-		if (this.renderRequest != null || !this.current || this.disposed) {
+		if (this.renderRequest != null || !this.current || this.disposed || this.contextLost) {
 			return;
 		}
 		this.renderRequest = requestAnimationFrame(() => {
@@ -251,6 +258,9 @@ export class SphericalEarthRuntime {
 		this.contextLost = true;
 		event.preventDefault();
 		this.onFailure(new Error('The graphics context was lost. Retry after recovery.'));
+		void this.dispose().catch((error) => {
+			console.error('Spherical Earth lost-context cleanup failed.', error);
+		});
 	}
 
 	/**
@@ -332,6 +342,7 @@ export class SphericalEarthRuntime {
 		for (let object of [...endpoints.visualObjects, ...endpoints.raycastObjects]) {
 			scene.add(/** @type {THREE.Object3D} */ (object));
 		}
+		let depthEndpoints = this._depthEndpoints(endpoints.visualObjects);
 		let direct = new THREE.DirectionalLight(0xffffff, 0),
 			diffuse = new THREE.HemisphereLight(0xffffff, 0, 0),
 			ambientLight = new THREE.AmbientLight(0xffffff, 0);
@@ -347,7 +358,11 @@ export class SphericalEarthRuntime {
 		let composer = new EffectComposer(this.renderer, target);
 		composer.addPass(new RenderPass(scene, this.camera));
 		this.camera.position.y = DistanceMath.toMeters(facts.height) / this.sceneScale.value;
-		let sceneDepthMax = geometry.resolveSceneDepthMax({camera: this.camera, sceneScale: this.sceneScale});
+		let sceneDepthMax = geometry.resolveSceneDepthMax({
+			camera: this.camera,
+			sceneScale: this.sceneScale,
+			endpointScenePositions: depthEndpoints,
+		});
 		let bindings = Algorithm32Bindings.create(THREE, sceneDepthMax);
 		this.frame = {
 			algorithm,
@@ -358,6 +373,7 @@ export class SphericalEarthRuntime {
 			color,
 			composer,
 			bindings,
+			depthEndpoints,
 			direct,
 			diffuse,
 			ambientLight,
@@ -497,6 +513,28 @@ export class SphericalEarthRuntime {
 	}
 
 	/**
+	 * Called once to retain the fixed ground's scene-space bounds for live depth encoding.
+	 *
+	 * @param {readonly unknown[]} objects - Geometry-owned visual endpoints.
+	 * @returns {ScenePosition[]} - Corners covering all visible ground through the supported horizon.
+	 */
+	_depthEndpoints(objects) {
+		/** @type {ScenePosition[]} */
+		let positions = [];
+		for (let object of objects) {
+			let bounds = new THREE.Box3().setFromObject(/** @type {THREE.Object3D} */ (object), true);
+			for (let x of [bounds.min.x, bounds.max.x]) {
+				for (let y of [bounds.min.y, bounds.max.y]) {
+					for (let z of [bounds.min.z, bounds.max.z]) {
+						positions.push({coordinates: [x, y, z], units: 'scene-units'});
+					}
+				}
+			}
+		}
+		return positions;
+	}
+
+	/**
 	 * Called by physical publication to bridge receiver spectra into the neutral Lambertian renderer lights.
 	 *
 	 * @param {UnitVector3} direction - Model-space direction to Sun.
@@ -586,11 +624,20 @@ export class SphericalEarthRuntime {
 	 *
 	 * @returns {Promise<void>} - Completed release.
 	 */
-	async dispose() {
-		if (this.disposed) {
-			return;
+	dispose() {
+		if (!this.release) {
+			this.disposed = true;
+			this.release = this._dispose();
 		}
-		this.disposed = true;
+		return this.release;
+	}
+
+	/**
+	 * Called once to retire resources before a lost context can restore obsolete native handles.
+	 *
+	 * @returns {Promise<void>} - Exact shared release completion.
+	 */
+	async _dispose() {
 		this.pointerLook.dispose();
 		this.resizeObserver.disconnect();
 		this.canvas.removeEventListener('webglcontextlost', this._onContextLost);

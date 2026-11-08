@@ -3,6 +3,7 @@ import {SphericalEarthModel} from '../models/spherical-earth-model.js';
 import {SphericalEarthController} from '../controller.js';
 import {SphericalEarthView} from '../views/spherical-earth.js';
 import {SphericalEarthSession} from '../SphericalEarthSession.js';
+import {SphericalEarthRuntime} from '../runtime/SphericalEarthRuntime.js';
 import {AppPagesService} from '../../../services/app-pages.js';
 import {UiContributionsService} from '../../workspace/services/ui-contributions.js';
 
@@ -44,6 +45,61 @@ function model() {
 }
 
 describe('Spherical Earth registered feature', () => {
+	it('waits for a removed session before allowing shared providers to stop', async () => {
+		const controller = new SphericalEarthController(new Registry());
+		let finish;
+		controller.model = {close: jasmine.createSpy('close')};
+		controller.sessions.set('one', {
+			canvas: null,
+			release: new Promise((resolve) => {
+				finish = resolve;
+			}),
+		});
+		controller.unmount('one');
+		let stopped = false;
+		const completion = controller.stop().then(() => {
+			stopped = true;
+		});
+		await settle();
+		expect(stopped).toBeFalse();
+		finish();
+		await completion;
+		expect(stopped).toBeTrue();
+		expect(controller.model.close).toHaveBeenCalledWith('one');
+	});
+
+	it('retires a lost context immediately and shares release completion with Retry', async () => {
+		const runtime = Object.create(SphericalEarthRuntime.prototype),
+			canvas = document.createElement('canvas'),
+			released = [];
+		let finish;
+		runtime.canvas = canvas;
+		runtime.release = null;
+		runtime.disposed = false;
+		runtime.pending = new Promise((resolve) => {
+			finish = resolve;
+		});
+		runtime.pointerLook = {dispose: () => released.push('pointer')};
+		runtime.resizeObserver = {disconnect: () => released.push('resize')};
+		runtime.renderRequest = null;
+		runtime._releaseFrame = () => released.push('frame');
+		runtime.backend = {dispose: () => released.push('backend')};
+		runtime.renderer = {dispose: () => released.push('renderer')};
+		runtime.onFailure = jasmine.createSpy('failure');
+		const event = new Event('webglcontextlost', {cancelable: true});
+		runtime._onContextLost(event);
+		expect(event.defaultPrevented).toBeTrue();
+		expect(runtime.disposed).toBeTrue();
+		expect(runtime.contextLost).toBeTrue();
+		expect(runtime.onFailure).toHaveBeenCalled();
+		expect(released).toEqual(['pointer', 'resize']);
+		const release = runtime.dispose();
+		expect(runtime.dispose()).toBe(release);
+		finish();
+		await release;
+		expect(released).toEqual(['pointer', 'resize', 'frame', 'backend', 'renderer']);
+	});
+
 	it('registers its page, independently scoped controls and missing-location presentation', () => {
 		const registry = new Registry(),
 			pages = new AppPagesService(registry);

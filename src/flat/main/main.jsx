@@ -21,17 +21,22 @@ let root = null;
 
 /**
  * Call this method to unmount the generated application presentation.
+ *
+ * @returns {Promise<void>} - Completion after scene consumers and shared providers stop.
  */
-export function stopApplication() {
+export async function stopApplication() {
 	root?.unmount();
 	root = null;
 	registry.subscribe('app-controller')?.stop();
+	await Promise.all([
+		registry.subscribe('flat-earth-controller').stop(),
+		registry.subscribe('spherical-earth-controller').stop(),
+	]);
 	registry.subscribe('app-view')?.stop();
-	registry.subscribe('configuration').stop();
-	registry.subscribe('animation-loop').stop();
-	registry.subscribe('spherical-earth-controller').stop();
 	registry.subscribe('distant-sun-cache').stop();
 	registry.subscribe('stellar-catalog').stop();
+	registry.subscribe('configuration').stop();
+	registry.subscribe('animation-loop').stop();
 }
 
 registry.listen('ready', () => {

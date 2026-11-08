@@ -3,6 +3,13 @@
  */
 export interface FlatEarthController extends EventBus {
 	/**
+	 * Call this method to stop subscriptions and retire all view and startup resources.
+	 *
+	 * @returns - Completion before shared providers can be released.
+	 */
+	stop(): Promise<void>;
+
+	/**
 	 * Call this method to read scoped scene preparation state.
 	 *
 	 * @param viewId - Exact workspace view identity.

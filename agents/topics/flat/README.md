@@ -78,10 +78,13 @@ decisions, passing checks and measured performance, including timing variability
 The [Spherical Earth implementation plan](spherical-earth-implementation-plan.md)
 adds an independent observer-level spherical scene through existing page and
 contribution services, with Flat-owned shared-cache delivery and retained view
-updates. M1-M3 are complete: actual spherical atmosphere, curved green ground,
+updates. M1-M4 are complete: actual spherical atmosphere, curved green ground,
 Sun/stars, icon controls and retained updates work in single, two-spherical and
 mixed views. The [execution record](spherical-earth-implementation-execution.md)
-owns evidence, resource measurements and remaining M4 verification. The stellar
+owns matched final shader comparisons, completed-frame timings, failure/context/
+shutdown verification and real standalone/discoverable build evidence. Live depth
+encoding includes fixed ground bounds and the current height. Native context loss
+retires obsolete resources before restoration; Retry awaits release. The stellar
 catalog is now app-owned and shared by both Earth features. Shared location/time,
 independent cameras and eager Flat cache startup remain selected; this work does
 not depend on the pending time-zone/parser adaptation.

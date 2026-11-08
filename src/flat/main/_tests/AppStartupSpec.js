@@ -20,7 +20,7 @@ describe('application startup', () => {
 		expect(registry.subscribe('app-view')).toBeTruthy();
 		expect(document.getElementById('main-content').textContent).toContain('No scene selected.');
 		act(() => registry.subscribe('app-context').fire('changed', context));
-		act(() => stopApplication());
-		act(() => stopApplication());
+		await act(() => stopApplication());
+		await act(() => stopApplication());
 	});
 });

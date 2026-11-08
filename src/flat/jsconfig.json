@@ -18,5 +18,5 @@
 		"strict": false
 	},
 	"include": ["**/*.js", "**/*.jsx", "**/*.d.ts", "../algorithm32/**/*.d.ts"],
-	"exclude": ["**/_tests/**", "testing/**", "spec.js", "../../node_modules/**"]
+	"exclude": ["**/_tests/**", "testing/**", "spec.js", "../../node_modules/**", "**/build.js"]
 }

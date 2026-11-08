@@ -1,10 +1,10 @@
 /**
- * Public presentation capability owned by the Flat Earth view.
+ * Public presentation capability owned by the Spherical Earth view.
  */
 type SphericalEarthViewService = import('./views/spherical-earth.js').SphericalEarthView;
 
 /**
- * Public controller capability for scoped Flat Earth sessions.
+ * Public controller capability for scoped Spherical Earth sessions.
  */
 type SphericalEarthControllerService = import('./controller.js').SphericalEarthController;
 
@@ -81,6 +81,7 @@ interface SphericalEarthRuntimeCapability {
 	 * Call this method to apply model-owned shader choices and redraw retained resources.
 	 */
 	refreshShaderOptions(): void;
+
 	/**
 	 * Call this method to prepare and publish an exact observation on the canvas.
 	 *
@@ -308,6 +309,11 @@ type SphericalEarthSun =
  * Retained renderer resources, with physical lights distinct from presentation fill.
  */
 type SphericalEarthPreparedScene = {
+	/**
+	 * Fixed ground bounds reused when updating live scene-depth encoding.
+	 */
+	depthEndpoints: ScenePosition[];
+
 	algorithm: import('../../../algorithm32/implementation/algorithm32/Algorithm32.js').Algorithm32;
 	geometry: SphericalEarthPhysicalGeometry;
 	source: SphericalEarthSun;
