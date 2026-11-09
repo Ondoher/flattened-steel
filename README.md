@@ -94,7 +94,7 @@ $$
 \begin{aligned}
 \delta={}&0.006918-0.399912\cos\gamma+0.070257\sin\gamma\\
 &-0.006758\cos2\gamma+0.000907\sin2\gamma\\
-&-0.002697\cos3\gamma+0.001480\sin3\gamma,\\[3pt]
+&-0.002697\cos3\gamma+0.001480\sin3\gamma,\\
 q={}&229.18\bigl(0.000075+0.001868\cos\gamma-0.032077\sin\gamma\\
 &\qquad-0.014615\cos2\gamma-0.040849\sin2\gamma\bigr).
 \end{aligned}
