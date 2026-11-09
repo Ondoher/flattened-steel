@@ -15,17 +15,19 @@ let config = JSON.parse(await readFile(new URL('../../polylith.json', import.met
 let development = JSON.parse(await readFile(new URL('../../polylith.development.json', import.meta.url), 'utf8'));
 
 describe('production application exposure', () => {
-	it('rejects the Flat32 development launcher in a production process', () => {
-		let result = spawnSync(process.execPath, ['scripts/flat32/development.js', 'serve', 'flat32'], {
-			cwd: repositoryRoot,
-			env: {...process.env, NODE_ENV: 'production'},
-			encoding: 'utf8',
-			windowsHide: true,
+	for (let environment of ['prod', 'production']) {
+		it(`rejects the Flat32 development launcher with NODE_ENV=${environment}`, () => {
+			let result = spawnSync(process.execPath, ['scripts/flat32/development.js', 'serve', 'flat32'], {
+				cwd: repositoryRoot,
+				env: {...process.env, NODE_ENV: environment},
+				encoding: 'utf8',
+				windowsHide: true,
+			});
+			assert.ifError(result.error);
+			assert.equal(result.status, 1);
+			assert.match(result.stderr, /Flat32 is a local integration test bed and cannot run in production/u);
 		});
-		assert.ifError(result.error);
-		assert.equal(result.status, 1);
-		assert.match(result.stderr, /Flat32 is a local integration test bed and cannot run in production/u);
-	});
+	}
 
 	it('publishes only Flat for standalone and parent discovery, with Flat32 explicitly local', async () => {
 		assert.deepEqual(

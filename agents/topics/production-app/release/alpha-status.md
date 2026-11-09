@@ -20,6 +20,9 @@ The [production catalog](../runtime-integration/flat32-production-exclusion.md)
 advertises only Flat and preserves Flat32 through explicit development commands.
 Standalone hosting restricts static serving to Flat's output. Parent deployments
 must remove any stale Flat32 output/registration they previously hosted.
+The host uses `NODE_ENV=prod`; the runbook follows that name. The base production
+catalog works with either `prod` or `production`, and the Flat32 development
+launcher rejects both values.
 
 The generic `npm run build` no longer invokes the Flat32-only worker builder.
 Flat's own Polylith feature generates its worker at the selected deployment

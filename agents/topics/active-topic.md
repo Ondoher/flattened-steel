@@ -48,6 +48,12 @@ production Flat build, local Flat32 test build and production-host HTTP smoke
 check pass. No remote host was changed; parent stale-output cleanup is a
 separate deployment concern recorded by the owning note.
 
+The host uses `NODE_ENV=prod`. The deployment runbook now uses that spelling;
+the base app catalog works with either `prod` or `production`. Flat32's explicit
+development launcher refuses both values. All four focused production-exposure
+tests, the launcher's type check and `NODE_ENV=prod` repository-wide build pass.
+Existing build warnings remain; no parent or remote configuration was changed.
+
 [F08](production-app/mvp/requirements.md#f08) remains a required scene-objects
 goal, with content options open in increasing complexity/decreasing priority:
 boxes, generated terrain, then geographic data with imagery and three LOD

@@ -243,7 +243,10 @@ by the current filesystem contract.
 ## 5. Build/start the alpha and check actual delivery
 
 Let the parent host perform its ordinary Polylith app build and restart with
-`NODE_ENV=production`. Flat's build generates its browser worker in the parent's
+`NODE_ENV=prod`, matching the host's environment name. The base app catalog
+advertises only Flat with either `prod` or `production`; no production-specific
+overlay is required. The Flat32 development launcher rejects both values.
+Flat's build generates its browser worker in the parent's
 selected deployment output. Cache activation must precede process startup;
 editing the selection module does not replace an already-loaded Node module.
 

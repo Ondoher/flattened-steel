@@ -38,11 +38,17 @@ npm run build:test:flat32
 The existing `test:ui:flat32` commands use those build/test commands. They invoke
 the installed Polylith CLI through the small
 [development entry](../../../../scripts/flat32/development.js), which selects
-the development environment and refuses `NODE_ENV=production`. Direct Flat32
+the development environment and refuses both `NODE_ENV=prod` (the host's
+environment name) and `NODE_ENV=production`. Production uses the base catalog;
+neither production environment needs its own overlay. Direct Flat32
 CLI use requires `NODE_ENV=development`; the base catalog excludes it.
 
 ## Verification
 
+- The host's `NODE_ENV=prod` is now verified with the repository-wide build.
+  All four focused production-exposure tests pass, including Flat32 launcher
+  refusal under both `prod` and `production`. The development entry's focused
+  type check passes. The build retains existing circular-dependency warnings.
 - All 24 repository/Flat32 server tests and all 7 Flat server tests pass.
 - New maintained regressions check standalone and actual Polylith discovery
   selection, production-launcher refusal, and HTTP exclusion with stale Flat32
