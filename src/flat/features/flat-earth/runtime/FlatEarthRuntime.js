@@ -4,7 +4,7 @@ import {FlatEarthGraphics} from './FlatEarthGraphics.js';
 import {LocalSunRuntimeCacheBinding} from '../../../../algorithm32/implementation/local-sun/cache/frames/LocalSunRuntimeCacheBinding.js';
 import {LocalSunFrameContents} from '../../../../algorithm32/implementation/local-sun/cache/frames/LocalSunFrameContents.js';
 import * as THREE from 'three';
-import {EffectComposer} from 'three/examples/jsm/postprocessing/EffectComposer.js';
+import {createSceneComposer} from '../../../common/scene-composer.js';
 import {RenderPass} from 'three/examples/jsm/postprocessing/RenderPass.js';
 import {Algorithm32} from '../../../../algorithm32/implementation/algorithm32/Algorithm32.js';
 import {Algorithm32Bindings} from '../../../../algorithm32/implementation/react-three/Algorithm32Bindings.js';
@@ -194,6 +194,32 @@ export class FlatEarthRuntime {
 		);
 		try {
 			this.camera.lookAt(...target.coordinates);
+			this.camera.updateMatrixWorld(true);
+			this._support(this.active.profile);
+			this._requestRender();
+			this._reportCamera();
+		} catch (error) {
+			this.camera.quaternion.fromArray(this.model.getCamera(this.viewId).orientation);
+			throw error;
+		}
+	}
+
+	/**
+	 * Call this method to aim at Polaris using the displayed frame's flat-dome star placement.
+	 */
+	centerOnPolaris() {
+		if (!this.active || this.disposed) {
+			return;
+		}
+		let geometry = /** @type {FlatEarthPhysicalGeometry} */ (this.active.profile.models.geometry);
+		let catalogDirection = this.stellarCatalog.getDirection('bsc-v50-hr-424');
+		let [east, north, up] = geometry.resolveStellarCatalogDirection(catalogDirection);
+		try {
+			this.camera.lookAt(
+				this.camera.position.x + east,
+				this.camera.position.y + up,
+				this.camera.position.z - north,
+			);
 			this.camera.updateMatrixWorld(true);
 			this._support(this.active.profile);
 			this._requestRender();
@@ -475,7 +501,7 @@ export class FlatEarthRuntime {
 			stencilBuffer: false,
 		});
 		target.texture.colorSpace = THREE.LinearSRGBColorSpace;
-		let composer = new EffectComposer(this.renderer, target);
+		let composer = createSceneComposer(this.renderer, target);
 		composer.addPass(new RenderPass(scene, camera));
 		let backend = this.backend;
 		let sceneDepthMax = geometry.resolveSceneDepthMax({camera, sceneScale: this.sceneScale});

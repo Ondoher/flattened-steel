@@ -23,6 +23,7 @@ export class SphericalEarthModel extends Service {
 			'getShaderOptions',
 			'setSkyRenderMode',
 			'setOrientation',
+			'toggleCompass',
 			'setFieldOfView',
 			'resolveHeight',
 			'acceptHeight',
@@ -54,7 +55,12 @@ export class SphericalEarthModel extends Service {
 	 * @param {string} viewId - Exact mounted view identity.
 	 */
 	open(viewId) {
-		this.cameras.set(viewId, {observerHeightMeters: 5, fieldOfViewDegrees: 50, orientation: [0, 0, 0, 1]});
+		this.cameras.set(viewId, {
+			observerHeightMeters: 5,
+			fieldOfViewDegrees: 50,
+			orientation: [0, 0, 0, 1],
+			compassVisible: false,
+		});
 		this.skyModes.set(viewId, 'full');
 	}
 
@@ -136,6 +142,16 @@ export class SphericalEarthModel extends Service {
 	 */
 	setOrientation(viewId, orientation) {
 		this._camera(viewId).orientation = [...orientation];
+	}
+
+	/**
+	 * Call this method to toggle only this view's directional ribbon.
+	 *
+	 * @param {string} viewId - Exact mounted view identity.
+	 */
+	toggleCompass(viewId) {
+		let camera = this._camera(viewId);
+		camera.compassVisible = !camera.compassVisible;
 	}
 
 	/**

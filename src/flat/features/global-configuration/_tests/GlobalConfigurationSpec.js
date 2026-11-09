@@ -71,6 +71,44 @@ function setup() {
 }
 
 describe('global configuration location workflow', () => {
+	it('sets both date and time to Now through the shared clock and clears unfinished drafts', () => {
+		const {configuration, controller, view, clock} = setup();
+		const harness = createTestHarness().withLocale('en-US');
+		const now = Date.parse('2026-11-08T19:23:45.678Z');
+		spyOn(Date, 'now').and.returnValue(now);
+		try {
+			configuration.setTimestamp(0);
+			configuration.setLocation({latitude: 37, longitude: -121});
+			const location = configuration.get().location;
+			controller.setDateTimeField('date', 'unfinished');
+			controller.setDateTimeField('time', 'invalid');
+			const result = harness.render(GlobalConfigurationPanel, {
+				configurationView: view,
+				initialState: view.getState(),
+			});
+			const button = result.query('.date-time-now');
+			expect(button.textContent).toBe('Now');
+			expect(button.type).toBe('button');
+			harness.click(button);
+			expect(configuration.get().timestamp).toBe(now);
+			expect(clock.getTimestamp()).toBe(now);
+			expect(configuration.get().location).toEqual(location);
+			expect(result.query('#global-date').value).toBe(controller.getState().dateTimeEditor.date);
+			expect(result.query('#global-time').value).toBe(controller.getState().dateTimeEditor.time);
+			expect(controller.getState().dateTimeEditor.dirty).toBeFalse();
+			controller.setDateTimeField('date', 'another draft');
+			harness.click(button);
+			expect(controller.getState().dateTimeEditor.dirty).toBeFalse();
+			expect(result.query('#global-date').value).not.toBe('another draft');
+		} finally {
+			harness.unmount();
+			controller.stop();
+			view.stop();
+			configuration.stop();
+			clock.stop();
+		}
+	});
+
 	it('commits selected cities, preserves accepted coordinates while searching, and rejects invalid manual edits', async () => {
 		let {configuration, controller, view, contributions} = setup();
 		await controller.retryCities();

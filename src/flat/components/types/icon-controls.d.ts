@@ -31,7 +31,7 @@ type AppIconButtonProps = Omit<IconButtonContentProps, 'text'> & {
 };
 
 /**
- * Caller-owned choices and selected value for a shared icon menu.
+ * Caller-owned choices for a shared selection or action icon menu.
  */
 type IconMenuButtonProps = Omit<AppIconButtonProps, 'onChange' | 'onClick'> & {
 	/**
@@ -39,9 +39,9 @@ type IconMenuButtonProps = Omit<AppIconButtonProps, 'onChange' | 'onClick'> & {
 	 */
 	options: AppSelectOption[];
 	/**
-	 * Current selected scalar identity, or empty when no choice is selected.
+	 * Current selected scalar identity. Omit for an action menu without persistent selection.
 	 */
-	value: string | number;
+	value?: string | number;
 	/**
 	 * Reports one selected scalar identity.
 	 */

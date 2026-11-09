@@ -17,7 +17,7 @@ export class StellarCatalog extends Service {
 	 */
 	constructor(registry) {
 		super('stellar-catalog', registry);
-		this.implement(['start', 'ready', 'stop', 'load']);
+		this.implement(['start', 'ready', 'stop', 'load', 'getDirection']);
 	}
 
 	/**
@@ -81,6 +81,20 @@ export class StellarCatalog extends Service {
 		} finally {
 			signal.removeEventListener('abort', cancel);
 		}
+	}
+
+	/**
+	 * Call this method to obtain one loaded catalog member's canonical J2000 direction.
+	 *
+	 * @param {string} memberId - Stable identifier in the authenticated catalog.
+	 * @returns {UnitVector3} - Independent catalog direction for geometry-owned placement.
+	 */
+	getDirection(memberId) {
+		let member = this.resources?.source.celestialSourceDefinition.members.find((item) => item.id === memberId);
+		if (!member) {
+			throw new Error(`Stellar catalog member is unavailable: ${memberId}`);
+		}
+		return [...member.direction];
 	}
 
 	/**

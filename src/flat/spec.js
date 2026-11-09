@@ -23,6 +23,7 @@ import './features/flat-earth/_tests/CameraControlsSpec.js';
 import './features/flat-earth/_tests/MuiControlsSpec.js';
 import './features/flat-earth/_tests/ShaderOptionsSpec.js';
 import './services/_tests/StellarCatalogSpec.js';
+import './services/_tests/CameraSyncSpec.js';
 import './features/flat-earth/_tests/FlatEarthTimeSpec.js';
 import './testing/_tests/TestHarnessSpec.js';
 import './components/_tests/FormControlsSpec.js';
@@ -32,6 +33,8 @@ import './components/_tests/BaseTextSpec.js';
 import './components/_tests/ControlDefaultsSpec.js';
 import './components/_tests/SharedControlsSpec.js';
 import './components/_tests/IconControlsSpec.js';
+import './components/_tests/DirectionRibbonSpec.js';
+import './components/_tests/SceneComposerSpec.js';
 import './components/_tests/LocalizationBoundarySpec.js';
 import './services/_tests/ThemeSpec.js';
 

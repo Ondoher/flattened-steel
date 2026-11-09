@@ -34,6 +34,87 @@ export class SphericalStellarGenerationShaderContributor {
 		return milliseconds / MILLISECONDS_PER_DAY + UNIX_EPOCH_JULIAN_DATE;
 	}
 
+	/**
+	 * Call this method to match stellarPrecessFk5J2000ToMeanOfDate below on the CPU.
+	 * The polynomial and rotation order are the same as the existing stellar-generation GLSL.
+	 *
+	 * @param {UnitVector3} direction - Canonical J2000 catalog direction.
+	 * @param {number} centuries - Julian centuries since J2000.
+	 * @returns {readonly [number, number]} - Mean-of-date right ascension and declination in radians.
+	 */
+	_precessDirection(direction, centuries) {
+		const length = Math.hypot(...direction);
+		const rightAscension = Math.atan2(direction[1], direction[0]);
+		const declination = Math.asin(Math.max(-1, Math.min(1, direction[2] / length)));
+		const squared = centuries * centuries,
+			cubed = squared * centuries,
+			fourth = cubed * centuries,
+			fifth = fourth * centuries;
+		const arcsecondsToRadians = Math.PI / (180 * 3600);
+		const zeta =
+			(2.650545 +
+				2306.083227 * centuries +
+				0.2988499 * squared +
+				0.01801828 * cubed -
+				0.000005971 * fourth -
+				0.0000003173 * fifth) *
+			arcsecondsToRadians;
+		const z =
+			(-2.650545 +
+				2306.077181 * centuries +
+				1.0927348 * squared +
+				0.01826837 * cubed -
+				0.000028596 * fourth -
+				0.0000002904 * fifth) *
+			arcsecondsToRadians;
+		const theta =
+			(2004.191903 * centuries -
+				0.4294934 * squared -
+				0.04182264 * cubed -
+				0.000007089 * fourth -
+				0.0000001274 * fifth) *
+			arcsecondsToRadians;
+		const shifted = rightAscension + zeta;
+		const rotatedSine = Math.cos(declination) * Math.sin(shifted);
+		const rotatedCosine =
+			Math.cos(theta) * Math.cos(declination) * Math.cos(shifted) - Math.sin(theta) * Math.sin(declination);
+		const rotatedUp =
+			Math.sin(theta) * Math.cos(declination) * Math.cos(shifted) + Math.cos(theta) * Math.sin(declination);
+		return [Math.atan2(rotatedSine, rotatedCosine) + z, Math.asin(Math.max(-1, Math.min(1, rotatedUp)))];
+	}
+
+	/**
+	 * Call this method to match stellarCatalogDirectionToLocalEnu below for camera targeting.
+	 * This uses the shader's mean-of-date precession and sidereal-time policy without rebuilding GPU resources.
+	 *
+	 * @param {UnitVector3} direction - Accepted canonical catalog direction.
+	 * @returns {UnitVector3} - Receiver-relative east/north/up direction.
+	 */
+	resolveDirection(direction) {
+		const julianDate = this._julianDate();
+		const zeroHoursJulianDate = Math.floor(julianDate - 0.5) + 0.5;
+		const days = zeroHoursJulianDate - 2_451_545;
+		const hours = (julianDate - zeroHoursJulianDate) * 24;
+		const centuries = (julianDate - 2_451_545) / 36_525;
+		const [rightAscension, declination] = this._precessDirection(direction, centuries);
+		const siderealHours =
+			6.697375 +
+			0.065707485828 * days +
+			1.0027379 * hours +
+			0.0854103 * centuries +
+			0.0000258 * centuries * centuries;
+		const latitude = AngleMath.toRadians(this._observation.location.latitude);
+		const longitude = AngleMath.toRadians(this._observation.location.longitude);
+		const hourAngle = ((siderealHours * Math.PI) / 12 + longitude - rightAscension) % (2 * Math.PI);
+		return [
+			-Math.cos(declination) * Math.sin(hourAngle),
+			Math.sin(declination) * Math.cos(latitude) -
+				Math.cos(declination) * Math.cos(hourAngle) * Math.sin(latitude),
+			Math.sin(declination) * Math.sin(latitude) +
+				Math.cos(declination) * Math.cos(hourAngle) * Math.cos(latitude),
+		];
+	}
+
 	/** @returns {StellarGenerationGeometryShaderContribution} - Complete geometry-owned shader operations. */
 	createContribution() {
 		const julianDate = this._julianDate();

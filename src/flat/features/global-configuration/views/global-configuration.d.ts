@@ -57,6 +57,11 @@ export interface GlobalConfigurationView extends EventBus {
 	applyDateTime(): void;
 
 	/**
+	 * Call this method to request the current instant for the shared application clock.
+	 */
+	setNow(): void;
+
+	/**
 	 * Call this method to load the city catalog or retry a failed load.
 	 *
 	 * @returns - Completion of the current loading workflow.

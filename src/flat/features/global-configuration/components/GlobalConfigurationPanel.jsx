@@ -28,6 +28,7 @@ export default class GlobalConfigurationPanel extends Component {
 		this._onRetry = this._onRetry.bind(this);
 		this._onDateTimeChange = this._onDateTimeChange.bind(this);
 		this._onApplyDateTime = this._onApplyDateTime.bind(this);
+		this._onNow = this._onNow.bind(this);
 	}
 
 	/**
@@ -156,6 +157,13 @@ export default class GlobalConfigurationPanel extends Component {
 	}
 
 	/**
+	 * Called by the Now button to request the current instant.
+	 */
+	_onNow() {
+		this.props.configurationView.setNow();
+	}
+
+	/**
 	 * Call this method to render global location settings and their shared configuration title.
 	 *
 	 * @returns {React.ReactNode} - Feature-owned settings content.
@@ -178,6 +186,7 @@ export default class GlobalConfigurationPanel extends Component {
 					text={this._text}
 					onChange={this._onDateTimeChange}
 					onApply={this._onApplyDateTime}
+					onNow={this._onNow}
 				/>
 			</section>
 		);

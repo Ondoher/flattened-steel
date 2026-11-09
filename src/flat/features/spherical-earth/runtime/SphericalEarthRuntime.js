@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import {EffectComposer} from 'three/examples/jsm/postprocessing/EffectComposer.js';
+import {createSceneComposer} from '../../../common/scene-composer.js';
 import {RenderPass} from 'three/examples/jsm/postprocessing/RenderPass.js';
 import {PointerLookController} from '../../../common/PointerLookController.js';
 import {Algorithm32} from '../../../../algorithm32/implementation/algorithm32/Algorithm32.js';
@@ -250,6 +250,20 @@ export class SphericalEarthRuntime {
 	}
 
 	/**
+	 * Call this method to aim at Polaris using the displayed frame's spherical star placement.
+	 */
+	centerOnPolaris() {
+		if (!this.current || !this.frame || this.disposed) {
+			return;
+		}
+		let catalogDirection = this.stellar.getDirection('bsc-v50-hr-424');
+		let [east, north, up] = this.frame.geometry.resolveStellarCatalogDirection(catalogDirection);
+		this.camera.lookAt(this.camera.position.x + east, this.camera.position.y + up, this.camera.position.z - north);
+		this._requestRender();
+		this._reportCamera();
+	}
+
+	/**
 	 * Called by the context to mark a recoverable renderer failure.
 	 *
 	 * @param {Event} event - Native context event.
@@ -355,7 +369,7 @@ export class SphericalEarthRuntime {
 			stencilBuffer: false,
 		});
 		target.texture.colorSpace = THREE.LinearSRGBColorSpace;
-		let composer = new EffectComposer(this.renderer, target);
+		let composer = createSceneComposer(this.renderer, target);
 		composer.addPass(new RenderPass(scene, this.camera));
 		this.camera.position.y = DistanceMath.toMeters(facts.height) / this.sceneScale.value;
 		let sceneDepthMax = geometry.resolveSceneDepthMax({

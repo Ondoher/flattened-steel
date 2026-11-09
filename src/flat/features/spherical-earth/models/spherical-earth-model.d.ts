@@ -52,6 +52,13 @@ export interface SphericalEarthModel extends EventBus {
 	setSkyRenderMode(viewId: string, mode: SphericalEarthSkyRenderMode): void;
 
 	/**
+	 * Call this method to toggle only this view's directional ribbon.
+	 *
+	 * @param viewId - Exact mounted view identity.
+	 */
+	toggleCompass(viewId: string): void;
+
+	/**
 	 * Call this method to retain the accepted rendered camera orientation across scene updates and retry.
 	 *
 	 * @param viewId - Exact mounted view identity.

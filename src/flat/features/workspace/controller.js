@@ -259,7 +259,8 @@ export class WorkspaceController extends Service {
 	}
 
 	/**
-	 * Call this method to add a fresh optional instance or close only the second view.
+	 * Call this method to open an unused registered page type, or close only the second view.
+	 * When no other page type is registered, the new instance uses the primary page type.
 	 */
 	toggleComparison() {
 		let views = this._workspace.getSnapshot().views;
@@ -269,8 +270,10 @@ export class WorkspaceController extends Service {
 		} else {
 			let viewport = this._workspace.addView();
 			if (views[0].pageId) {
+				let alternative = this.pages.get().find((page) => page.id !== views[0].pageId);
+				let pageId = alternative?.id ?? views[0].pageId;
 				try {
-					this.mountPage(views[0].pageId, viewport.id);
+					this.mountPage(pageId, viewport.id);
 				} catch (error) {
 					this._workspace.removeView(viewport.id);
 					this.contributions.removeForView(viewport.id);

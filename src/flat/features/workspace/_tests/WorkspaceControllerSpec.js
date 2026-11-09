@@ -100,9 +100,10 @@ describe('workspace controller', () => {
 		});
 		it('rolls back a failed optional mount and releases its partial lifetime', () => {
 			state.pages.add({id: 'scene', default: true, controller: 'owner'});
+			state.pages.add({id: 'alternative', controller: 'owner'});
 			state.controller.mountPage('scene');
 			let original = state.view.getShellState().views[0].component;
-			state.owner.failPageId = 'scene';
+			state.owner.failPageId = 'alternative';
 			expect(() => state.controller.toggleComparison()).toThrowError('mount failed');
 			expect(state.view.getShellState().views.length).toBe(1);
 			expect(state.view.getShellState().views[0].component).toBe(original);
@@ -113,6 +114,27 @@ describe('workspace controller', () => {
 			expect(state.view.getShellState().views[0].pageId).toBeNull();
 			expect(state.view.getShellState().views[0].component).toBeNull();
 			expect(state.controller.mount().props.workspaceView).toBe(state.view);
+		});
+		it('opens the inactive page type for either primary selection and recomputes it when comparison reopens', () => {
+			state.pages.add({id: 'first', default: true, controller: 'owner'});
+			state.pages.add({id: 'second', controller: 'owner'});
+			for (let primaryPageId of ['first', 'second']) {
+				state.controller.mountPage(primaryPageId);
+				let original = state.view.getShellState().views[0].component;
+				let alternativePageId = primaryPageId === 'first' ? 'second' : 'first';
+				state.controller.toggleComparison();
+				let views = state.view.getShellState().views;
+				expect(views.map((view) => view.pageId)).toEqual([primaryPageId, alternativePageId]);
+				expect(views[0].component).toBe(original);
+				let optionalViewId = views[1].id;
+				state.controller.toggleComparison();
+				state.controller.toggleComparison();
+				views = state.view.getShellState().views;
+				expect(views.map((view) => view.pageId)).toEqual([primaryPageId, alternativePageId]);
+				expect(views[0].component).toBe(original);
+				expect(views[1].id).not.toBe(optionalViewId);
+				state.controller.toggleComparison();
+			}
 		});
 		it('mounts independent instances and closes only the optional view', () => {
 			state.pages.add({id: 'scene', label: 'Scene', default: true, controller: 'owner'});

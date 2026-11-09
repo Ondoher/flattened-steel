@@ -29,6 +29,7 @@ export class GlobalConfigurationView extends Service {
 			'retryCities',
 			'setDateTimeField',
 			'applyDateTime',
+			'setNow',
 			'getSummaryComponent',
 			'openEditor',
 		]);
@@ -190,6 +191,13 @@ export class GlobalConfigurationView extends Service {
 	 */
 	applyDateTime() {
 		this.controller.applyDateTime();
+	}
+
+	/**
+	 * Call this method to request the current instant through the shared settings controller.
+	 */
+	setNow() {
+		this.controller.setNow();
 	}
 
 	/**

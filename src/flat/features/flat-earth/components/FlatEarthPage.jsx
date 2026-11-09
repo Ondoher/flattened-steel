@@ -1,3 +1,4 @@
+import DirectionRibbon from '../../../components/DirectionRibbon.jsx';
 import Button from '../../../components/Button.jsx';
 import React, {Component} from 'react';
 import AppContext from '../../../common/AppContext.js';
@@ -152,14 +153,34 @@ export default class FlatEarthPage extends Component {
 	}
 
 	/**
+	 * Owns the optional ribbon row above this feature's retained scene surface.
+	 *
+	 * @returns {React.ReactNode} - Empty or populated direction row without replacing the canvas.
+	 */
+	_renderDirectionRibbon() {
+		let ribbon = null;
+		if (this.state.camera.compassVisible) {
+			ribbon = <DirectionRibbon headingDegrees={this.state.camera.headingDegrees} />;
+		}
+		return <div className="flat-earth-direction-ribbon">{ribbon}</div>;
+	}
+
+	/**
 	 * Call this method to render the surface and prepared feedback without constructing renderer resources.
 	 *
 	 * @returns {React.ReactNode} - Independently owned scene surface.
 	 */
 	render() {
 		let status = this.state.status;
+		let compassVisible = Boolean(this.state.camera.compassVisible);
 		return (
-			<div className="flat-earth-page" data-view-id={this.props.viewId} data-scene-status={status}>
+			<div
+				className="flat-earth-page"
+				data-view-id={this.props.viewId}
+				data-scene-status={status}
+				data-compass-visible={compassVisible}
+			>
+				{this._renderDirectionRibbon()}
 				<div ref={this.surface} className="flat-earth-surface" />
 				{this._renderStatus()}
 				{this._renderLookHint()}

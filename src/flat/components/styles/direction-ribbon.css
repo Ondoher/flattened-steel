@@ -1,0 +1,35 @@
+.direction-ribbon {
+	position: relative;
+	height: 32px;
+	min-width: 0;
+	overflow: hidden;
+	background: var(--app-color-background);
+	color: var(--app-color-text);
+	border-bottom: 1px solid var(--app-color-border);
+	font-size: var(--app-font-small);
+	user-select: none;
+}
+
+.direction-ribbon-track {
+	position: relative;
+	height: 100%;
+	margin-inline: 1rem;
+}
+
+.direction-ribbon-label {
+	position: absolute;
+	top: 5px;
+	transform: translateX(-50%);
+	white-space: nowrap;
+}
+
+.direction-ribbon::after {
+	content: '';
+	position: absolute;
+	left: 50%;
+	bottom: 0;
+	width: 2px;
+	height: 6px;
+	transform: translateX(-50%);
+	background: var(--app-color-action);
+}

@@ -2,6 +2,16 @@ import {Registry} from '@polylith/core';
 import {StellarCatalog} from '../stellar-catalog.js';
 
 describe('Application stellar catalog', () => {
+	it('returns the loaded Polaris catalog direction without exposing its retained tuple', () => {
+		const catalog = new StellarCatalog(new Registry());
+		catalog.start();
+		const direction = [0.01, 0.01, 0.9999];
+		catalog.resources = {source: {celestialSourceDefinition: {members: [{id: 'bsc-v50-hr-424', direction}]}}};
+		const result = catalog.getDirection('bsc-v50-hr-424');
+		expect(result).toEqual(direction);
+		result[0] = 0.5;
+		expect(catalog.getDirection('bsc-v50-hr-424')).toEqual(direction);
+	});
 	it('shares in-flight source loading, cancels only the caller, and reuses the completed catalog', async () => {
 		let catalog = new StellarCatalog(new Registry());
 		catalog.start();

@@ -160,5 +160,19 @@
 	"spherical-earth.shader.off": "Shader off",
 	"spherical-earth.shader.hint": "Without atmosphere: Sun illumination 0%, disc brightness 100%. Shader off renders the scene directly.",
 	"spherical-earth.camera.angle-value": "%{value}°",
-	"spherical-earth.camera.height-value": "%{value} m"
+	"spherical-earth.camera.height-value": "%{value} m",
+	"camera.focus": "Focus on",
+	"camera.focus.sun": "Sun",
+	"camera.focus.polaris": "Polaris",
+	"global-configuration.date-time.now": "Now",
+	"camera.compass.toggle": "Directional ribbon",
+	"camera.compass.heading": "Direction: %{direction}",
+	"camera.compass.n": "N",
+	"camera.compass.ne": "NE",
+	"camera.compass.e": "E",
+	"camera.compass.se": "SE",
+	"camera.compass.s": "S",
+	"camera.compass.sw": "SW",
+	"camera.compass.w": "W",
+	"camera.compass.nw": "NW"
 }

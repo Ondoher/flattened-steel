@@ -27,6 +27,7 @@ export class GlobalConfigurationController extends Service {
 			'retryCities',
 			'setDateTimeField',
 			'applyDateTime',
+			'setNow',
 			'openEditor',
 		]);
 	}
@@ -266,6 +267,17 @@ export class GlobalConfigurationController extends Service {
 			this._emitState();
 			return;
 		}
+		this.dateTimeEditor.reset(timestamp);
+		if (!this.configuration.setTimestamp(timestamp)) {
+			this._emitState();
+		}
+	}
+
+	/**
+	 * Call this method to replace the date/time drafts and shared timestamp with the current instant.
+	 */
+	setNow() {
+		let timestamp = Date.now();
 		this.dateTimeEditor.reset(timestamp);
 		if (!this.configuration.setTimestamp(timestamp)) {
 			this._emitState();

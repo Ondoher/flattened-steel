@@ -56,7 +56,8 @@ export interface WorkspaceController extends EventBus {
 	clearPrimary(notFound?: boolean): void;
 
 	/**
-	 * Call this method to open a fresh optional view or close the existing comparison view.
+	 * Call this method to open an unused registered page type, or close the existing comparison view.
+	 * When no alternative is registered, the new instance uses the primary page type.
 	 */
 	toggleComparison(): void;
 

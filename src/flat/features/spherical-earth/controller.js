@@ -34,6 +34,8 @@ export class SphericalEarthController extends Service {
 			'setObserverHeight',
 			'setSkyRenderMode',
 			'centerOnSun',
+			'centerOnPolaris',
+			'toggleCompass',
 			'mountContribution',
 			'unmountContribution',
 		]);
@@ -212,6 +214,24 @@ export class SphericalEarthController extends Service {
 	 */
 	centerOnSun(viewId) {
 		this.sessions.get(viewId)?.centerOnSun();
+	}
+
+	/**
+	 * Call this method to relay a scoped aim-at-Polaris intent.
+	 *
+	 * @param {string} viewId - Exact owning view.
+	 */
+	centerOnPolaris(viewId) {
+		this.sessions.get(viewId)?.centerOnPolaris();
+	}
+
+	/**
+	 * Call this method to toggle this view's directional ribbon.
+	 *
+	 * @param {string} viewId - Exact owning view.
+	 */
+	toggleCompass(viewId) {
+		this.sessions.get(viewId)?.toggleCompass();
 	}
 
 	/**

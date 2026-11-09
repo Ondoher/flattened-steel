@@ -69,13 +69,16 @@ export default class IconMenuButton extends Component {
 		let context = /** @type {AppContextValue} */ (this.context);
 		let text = resolveComponentText(context, option.label);
 		let selected = this.props.value === option.value;
+		let hasSelection = this.props.value !== undefined;
+		let role = hasSelection ? 'menuitemradio' : 'menuitem';
+		let checked = hasSelection ? selected : undefined;
 		let value = String(option.value);
 		return (
 			<MenuItem
 				key={value}
 				data-value={value}
-				role="menuitemradio"
-				aria-checked={selected}
+				role={role}
+				aria-checked={checked}
 				selected={selected}
 				disabled={option.disabled}
 				onClick={this._select}

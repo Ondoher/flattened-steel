@@ -118,6 +118,7 @@ describe('Flat Earth scene ownership', () => {
 		snapshot.orientation[0] = 42;
 		expect(model.getCamera('view-1').orientation[0]).toBe(0);
 		expect(model.getCamera('view-2')).toEqual({
+			compassVisible: false,
 			observerHeightMeters: 5,
 			fieldOfViewDegrees: 50,
 			orientation: [0, 0, 0, 1],

@@ -50,6 +50,11 @@ export interface GlobalConfigurationController extends WorkspaceContributionCont
 	applyDateTime(): void;
 
 	/**
+	 * Call this method to replace date/time drafts and shared time with the current instant.
+	 */
+	setNow(): void;
+
+	/**
 	 * Call this method to load the city catalog or retry a failed load.
 	 *
 	 * @returns - Completion of the current loading workflow.

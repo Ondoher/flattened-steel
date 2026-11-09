@@ -81,6 +81,20 @@ export interface SphericalEarthView extends EventBus {
 	centerOnSun(viewId: string): void;
 
 	/**
+	 * Call this method to aim this view at Polaris in the displayed observation.
+	 *
+	 * @param viewId - Exact owning view.
+	 */
+	centerOnPolaris(viewId: string): void;
+
+	/**
+	 * Call this method to toggle the directional ribbon for this view.
+	 *
+	 * @param viewId - Exact owning view.
+	 */
+	toggleCompass(viewId: string): void;
+
+	/**
 	 * Call this method to provide scoped camera-tool presentation.
 	 *
 	 * @param viewId - Exact owning view.

@@ -40,6 +40,21 @@ describe('SphericalEarthGeometry', /** Called by Jasmine to register the named t
 		expectVectorCloseTo(geometry.expressCelestialDirectionInScene([0, 0, 1]), [0, 0, -1]);
 	});
 
+	it('places the J2000 catalog pole in local ENU at the J2000 epoch', () => {
+		for (const latitude of [-60, 0, 37, 90]) {
+			const observation = createObservation();
+			observation.instant = '2000-01-01T12:00:00.000Z';
+			observation.location.latitude.value = latitude;
+			const geometry = createGeometry({observation});
+			const direction = geometry.resolveStellarCatalogDirection([0, 0, 1]);
+			expectVectorCloseTo(direction, [
+				0,
+				Math.cos((latitude * Math.PI) / 180),
+				Math.sin((latitude * Math.PI) / 180),
+			]);
+		}
+	});
+
 	it('owns retained construction lookup and selected production source frames', /** Called by Jasmine to exercise the named behavior. */ () => {
 		const geometry = createGeometry({cacheAltitudeBinCount: 48});
 		const samplePosition = position([15, 0, 0]);

@@ -1,3 +1,4 @@
+import {getCameraHeading} from '../../common/camera-heading.js';
 import DistanceMath from '../../../algorithm32/math/DistanceMath.js';
 
 /**
@@ -38,11 +39,13 @@ export class SphericalEarthSession {
 	 * @returns {SphericalEarthSceneState} - Current requested and displayed observation identities.
 	 */
 	getState() {
+		let camera = this.model.getCamera(this.viewId);
 		return structuredClone({
 			...this.state,
 			shader: this.model.getShaderOptions(this.viewId),
 			camera: {
-				...this.model.getCamera(this.viewId),
+				...camera,
+				headingDegrees: getCameraHeading(camera.orientation),
 				pendingHeightMeters: this.pendingHeight ? DistanceMath.toMeters(this.pendingHeight) : null,
 				lookStatus: this.lookStatus,
 			},
@@ -260,6 +263,25 @@ export class SphericalEarthSession {
 		} catch (error) {
 			this._fail(error);
 		}
+	}
+
+	/**
+	 * Call this method to aim only this view at Polaris in its displayed observation.
+	 */
+	centerOnPolaris() {
+		try {
+			this.runtime?.centerOnPolaris();
+		} catch (error) {
+			this._fail(error);
+		}
+	}
+
+	/**
+	 * Call this method to toggle ribbon presentation without preparing another physical frame.
+	 */
+	toggleCompass() {
+		this.model.toggleCompass(this.viewId);
+		this._emit();
 	}
 
 	/**

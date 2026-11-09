@@ -11,7 +11,7 @@ its identifier is recorded by Git. Nothing was pushed or externally deployed.
 
 Spherical Earth renders the canonical atmosphere, shader Sun and brightest-2,000
 stars above curved green ground. Shared location/time drives both views. The
-feature contributes Sky, elevation, FOV and Center on Sun icon controls and its
+feature contributes Sky, elevation, FOV and the [Sun/Polaris focus menu](celestial-focus.md) and its
 Camera/sky settings. Pointer look uses the promoted shared native adapter.
 Cameras, GPU resources and view lifetimes remain independent.
 

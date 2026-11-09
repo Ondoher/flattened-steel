@@ -1,12 +1,12 @@
+import ExploreOutlined from '@mui/icons-material/ExploreOutlined';
+import IconButton from '../../../components/IconButton.jsx';
 import BaseSelect from '../../../components/BaseSelect.jsx';
 import Typography from '@mui/material/Typography';
-import Button from '../../../components/Button.jsx';
 import IconMenuButton from '../../../components/IconMenuButton.jsx';
 import Brightness6Outlined from '@mui/icons-material/Brightness6Outlined';
 import Height from '@mui/icons-material/Height';
 import ZoomOutMap from '@mui/icons-material/ZoomOutMap';
 import CenterFocusStrong from '@mui/icons-material/CenterFocusStrong';
-import IconButton from '../../../components/IconButton.jsx';
 import FlatEarthTimeControls from './FlatEarthTimeControls.jsx';
 import React, {Component} from 'react';
 import AppContext from '../../../common/AppContext.js';
@@ -31,7 +31,8 @@ export default class FlatEarthViewTools extends Component {
 		this._onStateChanged = this._onStateChanged.bind(this);
 		this._onFieldOfView = this._onFieldOfView.bind(this);
 		this._onHeight = this._onHeight.bind(this);
-		this._onSun = this._onSun.bind(this);
+		this._onFocus = this._onFocus.bind(this);
+		this._onCompass = this._onCompass.bind(this);
 		this._onSky = this._onSky.bind(this);
 	}
 
@@ -114,10 +115,23 @@ export default class FlatEarthViewTools extends Component {
 	}
 
 	/**
-	 * Called by the action button to relay aim-at-Sun intent.
+	 * Called by the focus menu to relay one scoped celestial target.
+	 *
+	 * @param {string} target - Selected focus action.
 	 */
-	_onSun() {
-		this.props.sceneView.centerOnSun(this.props.viewId);
+	_onFocus(target) {
+		if (target === 'polaris') {
+			this.props.sceneView.centerOnPolaris(this.props.viewId);
+		} else {
+			this.props.sceneView.centerOnSun(this.props.viewId);
+		}
+	}
+
+	/**
+	 * Called by the compass button to relay this view's ribbon visibility intent.
+	 */
+	_onCompass() {
+		this.props.sceneView.toggleCompass(this.props.viewId);
 	}
 
 	/**
@@ -245,8 +259,6 @@ export default class FlatEarthViewTools extends Component {
 		let heightLabel = 'flat-earth.camera.height';
 		let fovLabel = 'flat-earth.camera.fov';
 		let fovHint = this._text('flat-earth.camera.fov.hint');
-		let sunLabel = this._text('flat-earth.camera.center-sun');
-		let disabled = !this.state.renderedObservation;
 		let heights = this._renderHeightOptions();
 		let fieldsOfView = this._renderFieldOfViewOptions();
 		return (
@@ -269,10 +281,53 @@ export default class FlatEarthViewTools extends Component {
 					onChange={this._onFieldOfView}
 					fullWidth={false}
 				/>
-				<Button type="button" className="flat-earth-center-sun" onClick={this._onSun} disabled={disabled}>
-					{sunLabel}
-				</Button>
+				{this._renderFocusControl()}
 			</div>
+		);
+	}
+
+	/**
+	 * Owns the focus action menu without presenting a persistent camera target selection.
+	 *
+	 * @returns {React.ReactNode} - Scoped Sun and Polaris commands.
+	 */
+	_renderFocusControl() {
+		let icon = <CenterFocusStrong />;
+		let disabled = !this.state.renderedObservation;
+		let options = [
+			{value: 'sun', label: 'camera.focus.sun'},
+			{value: 'polaris', label: 'camera.focus.polaris'},
+		];
+		return (
+			<IconMenuButton
+				className="flat-earth-focus"
+				label="camera.focus"
+				icon={icon}
+				options={options}
+				onChange={this._onFocus}
+				disabled={disabled}
+			/>
+		);
+	}
+
+	/**
+	 * Owns this view's independent compass toggle and pressed-state presentation.
+	 *
+	 * @returns {React.ReactNode} - Named compass icon action.
+	 */
+	_renderCompassControl() {
+		let icon = <ExploreOutlined />;
+		let selected = Boolean(this.state.camera.compassVisible);
+		let disabled = !this.state.renderedObservation;
+		return (
+			<IconButton
+				className="flat-earth-compass"
+				label="camera.compass.toggle"
+				icon={icon}
+				aria-pressed={selected}
+				disabled={disabled}
+				onClick={this._onCompass}
+			/>
 		);
 	}
 
@@ -288,8 +343,6 @@ export default class FlatEarthViewTools extends Component {
 		let fieldsOfView = this._renderFieldOfViewOptions();
 		let elevationIcon = <Height />;
 		let fovIcon = <ZoomOutMap />;
-		let sunIcon = <CenterFocusStrong />;
-		let disabled = !this.state.renderedObservation;
 		let fovHint = this._text('flat-earth.camera.fov.hint');
 		return (
 			<div className="flat-earth-view-tools flat-earth-toolbar-tools">
@@ -312,13 +365,8 @@ export default class FlatEarthViewTools extends Component {
 					aria-description={fovHint}
 				/>
 				<FlatEarthTimeControls sceneView={this.props.sceneView} owner={this.props.viewId} />
-				<IconButton
-					className="flat-earth-center-sun"
-					label="flat-earth.camera.center-sun"
-					icon={sunIcon}
-					onClick={this._onSun}
-					disabled={disabled}
-				/>
+				{this._renderFocusControl()}
+				{this._renderCompassControl()}
 			</div>
 		);
 	}

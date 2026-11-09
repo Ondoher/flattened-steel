@@ -8,6 +8,30 @@ separate integration test bed.
 The [Component Refactor topic](../component-refactor/README.md) owns the current
 shared controls and the implemented single-line Flat page toolbar.
 
+The [Sync Window design](sync-window-design.md) records the owner's proposed
+single `camera-sync` service, participant callbacks, and `now`, `them`, `both`,
+and `off` modes.
+
+The [camera-sync service plan](camera-sync-service-plan.md) implements only
+`src/flat/services/camera-sync` and its public contract tests. M1-M2 are complete:
+Flat types, all 267 browser tests (26 service cases), formatting and the normal
+build pass. The service remains unconnected to production startup and Earth
+pages. The plan's final report owns evidence, decisions and deferred integration.
+
+Both Earth features now offer the [celestial focus menu](celestial-focus.md)
+with Sun and Polaris actions in their toolbar and Camera settings. Each action
+aims only the owning view using its displayed scene and the current catalog
+placement, then redraws retained resources.
+
+Each Earth toolbar also has an independent [directional ribbon toggle](directional-ribbon.md).
+Its compass icon shows or hides a cardinal/intercardinal heading tape directly
+below that toolbar, synchronized with mouse look and focus commands.
+
+The [scene resize correction](scene-resize.md) keeps camera projection,
+postprocessing targets and shader viewport sizes synchronized through layout
+changes. Device scaling is applied once, fixing inconsistent partial rendering
+when configuration, comparison views or ribbons change the canvas bounds.
+
 The [workspace comps implementation](workspace-comps-execution.md) is complete
 through the owner-authorized independent-execution run. The app now has shared
 accepted-value summaries, generic settings targets/sections, per-view Camera
@@ -106,7 +130,12 @@ selected independently in each view through the existing app-pages catalog.
 Unknown page URLs retain not-found presentation, and unknown APIs retain 404.
 The secondary view is in-memory workspace state rather than part of the URL.
 When a primary page is selected, opening comparison mounts a fresh instance of
-that definition; scene parameter initialization remains the feature's concern.
+the first registered page type that is not already open. Flat Earth therefore
+opens Spherical Earth beside it, and Spherical Earth opens Flat Earth. If no
+alternative is registered, comparison uses the primary page type. Closing and
+reopening comparison chooses again from the current selection, while preserving
+the primary view. Selection uses registered metadata without feature imports;
+scene parameter initialization remains the feature's concern.
 There is no persistence or resizable divider in this pass.
 
 The workspace implementation is owned by src/flat/features/workspace, including
@@ -303,7 +332,10 @@ converting an observation instant.
 
 DateTimeEditorModel owns incomplete drafts and feedback. Use date and time (or
 Enter in the form) validates the pair and converts it to one timestamp using
-the device's current local time zone. The app-wide animation-loop service owns
+the device's current local time zone. Now immediately sets the shared timestamp
+to the current instant and replaces both editor drafts, without applying an
+unfinished date or time. Its localized small outlined button sits beside Use
+date and time. The app-wide animation-loop service owns
 that `timestamp`: integer milliseconds since 1970-01-01T00:00:00Z. Configuration
 owns location and delegates timestamp reads/writes to the clock. There are no separately stored accepted date/time parts. Its public
 `setTimestamp` capability emits a changed snapshot with `['timestamp']`;

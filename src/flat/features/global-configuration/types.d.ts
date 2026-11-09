@@ -345,6 +345,11 @@ type DateTimeEditorProps = {
 	 * Requests explicit acceptance of the complete date/time pair.
 	 */
 	onApply: () => void;
+
+	/**
+	 * Requests the current instant for both date and time.
+	 */
+	onNow: () => void;
 };
 
 /**

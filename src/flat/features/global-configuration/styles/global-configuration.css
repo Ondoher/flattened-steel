@@ -72,6 +72,16 @@
 	min-width: 0;
 }
 
+.date-time-actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.75rem;
+}
+
+.date-time-actions > .app-button {
+	flex: 1;
+}
+
 .global-configuration-summary {
 	display: grid;
 	grid-template-columns: 304px 320px;

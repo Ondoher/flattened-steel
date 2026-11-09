@@ -1,4 +1,5 @@
 import FlatEarthViewTools from '../components/FlatEarthViewTools.jsx';
+import SphericalEarthViewTools from '../../spherical-earth/components/SphericalEarthViewTools.jsx';
 import FlatEarthTimeControls from '../components/FlatEarthTimeControls.jsx';
 import {FlatEarthTimeModel} from '../models/FlatEarthTimeModel.js';
 import {Registry} from '@polylith/core';
@@ -35,7 +36,8 @@ describe('Flat Earth shared MUI consumer controls', () => {
 			expect(result.queryDocument('[role="menuitemradio"][aria-checked="true"]').textContent).toContain('42°');
 			harness.click(result.queryDocument('[data-value="35"]'));
 			await waitUntil(() => !result.queryDocument('[role="menu"]'));
-			harness.click(result.query('.flat-earth-center-sun'));
+			harness.click(result.query('.flat-earth-focus'));
+			harness.click(result.queryDocument('[role="menuitem"][data-value="sun"]'));
 			expect(view.setObserverHeight).toHaveBeenCalledOnceWith('view-2', {value: 100, units: 'meters'});
 			expect(view.setFieldOfView).toHaveBeenCalledOnceWith('view-2', 35);
 			expect(view.centerOnSun).toHaveBeenCalledOnceWith('view-2');
@@ -43,6 +45,88 @@ describe('Flat Earth shared MUI consumer controls', () => {
 			harness.unmount();
 		}
 		expect(view.unlisten).toHaveBeenCalledWith('state-changed', 9);
+	});
+
+	it('provides an independently scoped pressed compass toggle on both toolbars', () => {
+		for (const [component, slug] of [
+			[FlatEarthViewTools, 'flat-earth'],
+			[SphericalEarthViewTools, 'spherical-earth'],
+		]) {
+			const state = {
+				status: 'ready',
+				renderedObservation: {},
+				shader: {mode: 'full'},
+				camera: {
+					observerHeightMeters: 5,
+					fieldOfViewDegrees: 50,
+					pendingHeightMeters: null,
+					compassVisible: true,
+				},
+			};
+			const view = {
+				...timeView(),
+				getState: () => state,
+				listen: () => 1,
+				unlisten: () => {},
+				toggleCompass: jasmine.createSpy('compass'),
+			};
+			const harness = createTestHarness().withLocale('en-US');
+			try {
+				const result = harness.render(component, {viewId: 'view-2', sceneView: view, initialState: state});
+				const button = result.query(`.${slug}-compass`);
+				expect(button.getAttribute('aria-pressed')).toBe('true');
+				expect(button.getAttribute('aria-label')).toBe('Directional ribbon');
+				harness.click(button);
+				expect(view.toggleCompass).toHaveBeenCalledOnceWith('view-2');
+			} finally {
+				harness.unmount();
+			}
+		}
+	});
+
+	it('offers repeatable scoped Sun and Polaris actions in both toolbars and settings', async () => {
+		for (const [component, slug] of [
+			[FlatEarthViewTools, 'flat-earth'],
+			[SphericalEarthViewTools, 'spherical-earth'],
+		]) {
+			for (const panel of [false, true]) {
+				const state = {
+					status: 'ready',
+					renderedObservation: {},
+					shader: {mode: 'full'},
+					camera: {observerHeightMeters: 5, pendingHeightMeters: null, fieldOfViewDegrees: 50},
+				};
+				const view = {
+					...timeView(),
+					getState: () => state,
+					listen: () => 1,
+					unlisten: () => {},
+					centerOnSun: jasmine.createSpy('sun'),
+					centerOnPolaris: jasmine.createSpy('polaris'),
+				};
+				const harness = createTestHarness().withLocale('en-US');
+				try {
+					const result = harness.render(component, {
+						viewId: 'view-2',
+						sceneView: view,
+						initialState: state,
+						panel,
+					});
+					for (const target of ['sun', 'polaris', 'polaris']) {
+						harness.click(result.query(`.${slug}-focus`));
+						const item = result.queryDocument(`[role="menuitem"][data-value="${target}"]`);
+						expect(item.textContent).toBe(target === 'sun' ? 'Sun' : 'Polaris');
+						expect(item.hasAttribute('aria-checked')).toBeFalse();
+						harness.click(item);
+						await waitUntil(() => !result.queryDocument('[role="menu"]'));
+					}
+					expect(view.centerOnSun).toHaveBeenCalledOnceWith('view-2');
+					expect(view.centerOnPolaris.calls.allArgs()).toEqual([['view-2'], ['view-2']]);
+				} finally {
+					harness.unmount();
+				}
+			}
+		}
 	});
 
 	it('keeps one real model reference through repeated slider keys and releases its token once', () => {

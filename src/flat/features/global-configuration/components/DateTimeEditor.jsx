@@ -51,6 +51,24 @@ export default class DateTimeEditor extends Component {
 	}
 
 	/**
+	 * Presents the explicit date/time acceptance and current-instant actions.
+	 *
+	 * @returns {React.ReactNode} - Localized date/time action row.
+	 */
+	_renderActions() {
+		let applyLabel = this.props.text('global-configuration.date-time.apply');
+		let nowLabel = this.props.text('global-configuration.date-time.now');
+		return (
+			<div className="date-time-actions">
+				<Button type="submit">{applyLabel}</Button>
+				<Button type="button" className="date-time-now" onClick={this.props.onNow}>
+					{nowLabel}
+				</Button>
+			</div>
+		);
+	}
+
+	/**
 	 * Call this method to present date/time drafts using the local date and time formats.
 	 *
 	 * @returns {React.ReactNode} - Global date/time editing region.
@@ -60,7 +78,6 @@ export default class DateTimeEditor extends Component {
 		let title = text('global-configuration.date-time.title');
 		let dateLabel = 'global-configuration.date-time.date';
 		let timeLabel = 'global-configuration.date-time.time';
-		let applyLabel = text('global-configuration.date-time.apply');
 		let dateError = presentation.dateError;
 		let timeError = presentation.timeError;
 		let selection = presentation.accepted ?? text('global-configuration.date-time.none');
@@ -96,7 +113,7 @@ export default class DateTimeEditor extends Component {
 						onChange={this._onTimeChange}
 					/>
 				</div>
-				<Button type="submit">{applyLabel}</Button>
+				{this._renderActions()}
 			</form>
 		);
 	}

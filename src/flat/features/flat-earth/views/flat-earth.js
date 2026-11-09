@@ -29,6 +29,8 @@ export class FlatEarthView extends Service {
 			'setSkyRenderMode',
 			'setObserverHeight',
 			'centerOnSun',
+			'centerOnPolaris',
+			'toggleCompass',
 			'getTimeComponent',
 			'getCameraComponent',
 			'getTimeState',
@@ -129,6 +131,24 @@ export class FlatEarthView extends Service {
 	 */
 	centerOnSun(viewId) {
 		this.controller.centerOnSun(viewId);
+	}
+
+	/**
+	 * Call this method to relay a scoped aim-at-Polaris intent.
+	 *
+	 * @param {string} viewId - Exact owning view.
+	 */
+	centerOnPolaris(viewId) {
+		this.controller.centerOnPolaris(viewId);
+	}
+
+	/**
+	 * Call this method to toggle this view's directional ribbon.
+	 *
+	 * @param {string} viewId - Exact owning view.
+	 */
+	toggleCompass(viewId) {
+		this.controller.toggleCompass(viewId);
 	}
 
 	/**

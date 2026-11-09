@@ -293,7 +293,9 @@ export class SphericalEarthGeometry {
 			const samePlacement = this._binding.placement.directionToLight.every(
 				(value, index) => value === directionToSource[index],
 			);
-			if (sameObservation && samePlacement) return this._binding.placement;
+			if (sameObservation && samePlacement) {
+				return this._binding.placement;
+			}
 			throw new Error('SphericalEarthGeometry light-source placement is already configured.');
 		}
 
@@ -353,10 +355,11 @@ export class SphericalEarthGeometry {
 		if (
 			JSON.stringify({...this._shapeConfiguration, observerHeight: undefined}) !==
 			JSON.stringify({...prepared._shapeConfiguration, observerHeight: undefined})
-		)
+		) {
 			throw new RangeError(
 				'Live shared-cache publication cannot change physical geometry or coordinate domains.',
 			);
+		}
 		const configuration = prepared._configuration;
 		const domain = new SphericalCelestialContributionDomain({
 			geometry: this,
@@ -401,6 +404,19 @@ export class SphericalEarthGeometry {
 	/** Spherical distant-Sun and stellar-point-set celestial capability family. */
 	get celestialCapabilityFamily() {
 		return SPHERICAL_CELESTIAL_CAPABILITY_FAMILY;
+	}
+
+	/**
+	 * Call this method to resolve the same catalog placement used by the spherical star shader.
+	 *
+	 * @param {UnitVector3} direction - Canonical J2000 catalog direction.
+	 * @returns {UnitVector3} - Receiver-relative east/north/up direction at the displayed observation.
+	 */
+	resolveStellarCatalogDirection(direction) {
+		return new SphericalStellarGenerationShaderContributor({
+			geometry: this._configuration,
+			observation: this._configuration.observation,
+		}).resolveDirection(direction);
 	}
 
 	/** @returns {StellarEpochRelativeTransformIdentity} - Accepted fixed-observation stellar transform. */

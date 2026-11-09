@@ -125,6 +125,11 @@ interface FlatEarthRuntimeCapability {
 	centerOnSun(): void;
 
 	/**
+	 * Call this method to aim at the displayed catalog position of Polaris.
+	 */
+	centerOnPolaris(): void;
+
+	/**
 	 * Call this method to cancel rendering and release owned GPU resources after pending work ends.
 	 *
 	 * @returns - Completion of renderer release.
@@ -306,6 +311,11 @@ type FlatEarthControlOption = {
  */
 type FlatEarthCameraValues = {
 	/**
+	 * Whether this view shows its directional ribbon.
+	 */
+	compassVisible: boolean;
+
+	/**
 	 * Actual accepted elevation in meters.
 	 */
 	observerHeightMeters: number;
@@ -323,6 +333,11 @@ type FlatEarthCameraValues = {
  * Camera projection including transient pointer-lock and pending elevation state.
  */
 type FlatEarthCameraState = FlatEarthCameraValues & {
+	/**
+	 * Current horizontal camera heading, clockwise degrees from north.
+	 */
+	headingDegrees: number;
+
 	/**
 	 * Requested elevation while a previous complete frame is still displayed.
 	 */
