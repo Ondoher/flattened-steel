@@ -54,15 +54,15 @@ instant is written, not where the objects are placed.
 
 Unless marked otherwise, angles in the equations are **radians**: $\pi$ radians
 is 180°. Lengths in one equation must use the same units. Sine and cosine turn
-angles into coordinate components; $\sqrt{x^2+y^2+z^2}$ is a vector's length.
+angles into coordinate components; $\sqrt{x^{2}+y^{2}+z^{2}}$ is a vector's length.
 Dividing a vector by its length keeps its direction and gives it length one.
 
 Both views ultimately need a direction $(e,n,u)$: east, north and up. From that
 direction, altitude $a$ and compass bearing $A$ are:
 
 $$
-a=\operatorname{atan2}\left(u,\sqrt{e^2+n^2}\right),\qquad
-A=\operatorname{atan2}(e,n)\pmod{2\pi}.
+a=\mathrm{atan2}\left(u,\sqrt{e^{2}+n^{2}}\right),\qquad
+A=\mathrm{atan2}(e,n)\pmod{2\pi}.
 $$
 
 Altitude is 0° at the local horizontal and 90° overhead. Bearing is 0° north,
@@ -100,14 +100,14 @@ q={}&229.18\bigl(0.000075+0.001868\cos\gamma-0.032077\sin\gamma\\
 \end{aligned}
 $$
 
-Let $t_0$ be that date's Greenwich apparent solar noon: UTC midnight plus
+Let $t_{0}$ be that date's Greenwich apparent solar noon: UTC midnight plus
 $(720-q)$ minutes. With time differences expressed in seconds, the subsolar
 coordinates are:
 
 $$
-\phi_s=\delta,\qquad
-\lambda_s=\operatorname{wrap}_{[-\pi,\pi)}
-\left(-2\pi\frac{t-t_0}{86400}\right).
+\phi_{s}=\delta,\qquad
+\lambda_{s}=\mathrm{wrap}_{[-\pi,\pi)}
+\left(-2\pi\frac{t-t_{0}}{86400}\right).
 $$
 
 Thus the Sun's subpoint moves westward once every 24 hours, while its latitude
@@ -129,14 +129,14 @@ rather than to one point. This choice fixes the model's geography.
 The current map scale is $R=6{,}360\,\text{km}$. A geographic point maps to:
 
 $$
-r(\phi)=R\left(\frac\pi2-\phi\right),\qquad
+r(\phi)=R\left(\frac{\pi}{2}-\phi\right),\qquad
 x=r\sin\lambda,\qquad y=r\cos\lambda.
 $$
 
 Apply this once to the observer $(\phi,\lambda)$ and once to the Sun's subpoint
-$(\phi_s,\lambda_s)$. The Sun's center is placed at the latter map coordinates
+$(\phi_{s},\lambda_{s})$. The Sun's center is placed at the latter map coordinates
 and a fixed height **$H=4{,}828.032\,\text{km}$** above the plane. Its physical
-radius is **$r_\odot=25.749504\,\text{km}$**. These are selected model parameters,
+radius is **$r_{\odot}=25.749504\,\text{km}$**. These are selected model parameters,
 not quantities recovered from the location entered by the user.
 
 Subtract the observer's map coordinates from the Sun's, giving $\Delta x$ and
@@ -147,7 +147,7 @@ $$
 e&=\Delta x\cos\lambda-\Delta y\sin\lambda,\\
 n&=-\Delta x\sin\lambda-\Delta y\cos\lambda,\\
 u&=H-h,\\
-d&=\sqrt{e^2+n^2+u^2}.
+d&=\sqrt{e^{2}+n^{2}+u^{2}}.
 \end{aligned}
 $$
 
@@ -156,7 +156,7 @@ altitude and bearing. This is ordinary perspective: the Sun looks lower as its
 horizontal distance grows. Its geometric angular radius is:
 
 $$
-\alpha_\odot=\arcsin\left(\frac{r_\odot}{d}\right).
+\alpha_{\odot}=\arcsin\left(\frac{r_{\odot}}{d}\right).
 $$
 
 The finite Sun therefore also looks smaller when farther away. For an observer
@@ -186,7 +186,7 @@ are parallel, and moving a few kilometers higher does not appreciably move its
 calculated direction. Its selected angular radius is **0.004675 radians**, about
 0.268°, giving an apparent diameter of about 0.536°.
 
-Let $\Delta\lambda=\lambda_s-\lambda$. Projecting the shared subsolar direction
+Let $\Delta\lambda=\lambda_{s}-\lambda$. Projecting the shared subsolar direction
 onto the observer's east, north and up axes gives:
 
 $$
@@ -211,7 +211,7 @@ switching the whole Sun on or off when its center crosses the horizon.
 
 The Globe clock menu selects sunrise, solar noon or sunset by changing the
 shared timestamp. Its sunrise/sunset condition is the upper edge meeting that
-geometric horizon: Sun-center altitude $a=-\beta-\alpha_\odot$. It uses the
+geometric horizon: Sun-center altitude $a=-\beta-\alpha_{\odot}$. It uses the
 requested view elevation and the selected device-local date; unavailable polar
 events remain unavailable. The [event calculation](src/flat/features/spherical-earth/solar-events.js)
 uses the same Sun placement above and adds no atmospheric-refraction correction.
@@ -242,11 +242,11 @@ brightness setting used to force a particular sunrise or sunset.
 Both views use the same 2,000-star selection from the Bright Star Catalogue,
 with J2000 mean-equatorial directions and stored spectral brightness values.
 **Right ascension** $\alpha$ is a star's angle around the celestial pole;
-**declination** $\delta_*$ is its angle north or south of the celestial equator.
+**declination** $\delta_{\ast}$ is its angle north or south of the celestial equator.
 The catalog direction is:
 
 $$
-\mathbf c=(\cos\delta_*\cos\alpha,\ \cos\delta_*\sin\alpha,\ \sin\delta_*).
+\mathbf{c}=(\cos\delta_{\ast}\cos\alpha,\ \cos\delta_{\ast}\sin\alpha,\ \sin\delta_{\ast}).
 $$
 
 Polaris is a catalog member, not a separate light fixed exactly on the pole.
@@ -269,19 +269,19 @@ rotation relative to the stars, rather than a 24-hour solar day. Let:
 
 $$
 \begin{aligned}
-J&=2440587.5+t_{\rm ms}/86400000,\\
-J_0&=\lfloor J-0.5\rfloor+0.5,\\
-D&=J_0-2451545,\qquad U=24(J-J_0),\\
+J&=2440587.5+t_{\mathrm{ms}}/86400000,\\
+J_{0}&=\lfloor J-0.5\rfloor+0.5,\\
+D&=J_{0}-2451545,\qquad U=24(J-J_{0}),\\
 T&=(J-2451545)/36525.
 \end{aligned}
 $$
 
-Here $t_{\rm ms}$ is milliseconds since the Unix epoch, $J$ is the Julian date,
+Here $t_{\mathrm{ms}}$ is milliseconds since the Unix epoch, $J$ is the Julian date,
 $U$ is UTC hours since midnight, and $T$ is centuries since J2000. The code uses:
 
 $$
-s_{\rm hours}=6.697375+0.065707485828D+1.0027379U
- +0.0854103T+0.0000258T^2.
+s_{\mathrm{hours}}=6.697375+0.065707485828D+1.0027379U
+ +0.0854103T+0.0000258T^{2}.
 $$
 
 Convert $s$ to radians by multiplying hours by $\pi/12$. The star's **hour
@@ -309,24 +309,24 @@ radians:
 
 $$
 \begin{aligned}
-\zeta={}&2.650545+2306.083227T+0.2988499T^2+0.01801828T^3\\
- &-0.000005971T^4-0.0000003173T^5,\\
-z={}&-2.650545+2306.077181T+1.0927348T^2+0.01826837T^3\\
- &-0.000028596T^4-0.0000002904T^5,\\
-\theta={}&2004.191903T-0.4294934T^2-0.04182264T^3\\
- &-0.000007089T^4-0.0000001274T^5.
+\zeta={}&2.650545+2306.083227T+0.2988499T^{2}+0.01801828T^{3}\\
+ &-0.000005971T^{4}-0.0000003173T^{5},\\
+z={}&-2.650545+2306.077181T+1.0927348T^{2}+0.01826837T^{3}\\
+ &-0.000028596T^{4}-0.0000002904T^{5},\\
+\theta={}&2004.191903T-0.4294934T^{2}-0.04182264T^{3}\\
+ &-0.000007089T^{4}-0.0000001274T^{5}.
 \end{aligned}
 $$
 
-With the catalog angles $\alpha,\delta_*$, form:
+With the catalog angles $\alpha,\delta_{\ast}$, form:
 
 $$
 \begin{aligned}
-a_p&=\cos\delta_*\sin(\alpha+\zeta),\\
-b_p&=\cos\theta\cos\delta_*\cos(\alpha+\zeta)-\sin\theta\sin\delta_*,\\
-c_p&=\sin\theta\cos\delta_*\cos(\alpha+\zeta)+\cos\theta\sin\delta_*,\\
-\alpha'&=\operatorname{atan2}(a_p,b_p)+z,\qquad
-\delta'=\arcsin(c_p).
+a_{p}&=\cos\delta_{\ast}\sin(\alpha+\zeta),\\
+b_{p}&=\cos\theta\cos\delta_{\ast}\cos(\alpha+\zeta)-\sin\theta\sin\delta_{\ast},\\
+c_{p}&=\sin\theta\cos\delta_{\ast}\cos(\alpha+\zeta)+\cos\theta\sin\delta_{\ast},\\
+\alpha'&=\mathrm{atan2}(a_{p},b_{p})+z,\qquad
+\delta'=\arcsin(c_{p}).
 \end{aligned}
 $$
 
@@ -347,12 +347,12 @@ longitude that rotates westward:
 
 $$
 \begin{aligned}
-\theta_*&=\frac\pi2-\delta_*,\\
-\omega(t)&=2\pi\frac{t-t_{\rm epoch}}{P}\pmod{2\pi},\\
-\lambda_*&=\alpha-\omega(t),\\
-x_*&=R\theta_*\sin\lambda_*,\qquad
-y_*=R\theta_*\cos\lambda_*,\\
-z_*&=\pi R\sqrt{\max\left(0,1-(\theta_*/\pi)^2\right)}.
+\theta_{\ast}&=\frac{\pi}{2}-\delta_{\ast},\\
+\omega(t)&=2\pi\frac{t-t_{\mathrm{epoch}}}{P}\pmod{2\pi},\\
+\lambda_{\ast}&=\alpha-\omega(t),\\
+x_{\ast}&=R\theta_{\ast}\sin\lambda_{\ast},\qquad
+y_{\ast}=R\theta_{\ast}\cos\lambda_{\ast},\\
+z_{\ast}&=\pi R\sqrt{\max\left(0,1-(\theta_{\ast}/\pi)^{2}\right)}.
 \end{aligned}
 $$
 
@@ -363,7 +363,7 @@ or automatically align the dome with it at J2000.
 
 Subtract the observer's projected position, rotate into local east/north using
 the same map rotation as for the flat Sun, subtract observer height from
-$z_*$, and normalize. Moving the observer therefore changes the apparent star
+$z_{\ast}$, and normalize. Moving the observer therefore changes the apparent star
 directions through this finite-dome construction. The dome's height is
 $\pi R\approx19{,}980\,\text{km}$ at the north celestial pole and zero at its rim.
 **This is the stellar placement surface, not a definition of the atmosphere's
@@ -389,9 +389,9 @@ in $\text{W}\,\text{m}^{-2}\,\text{nm}^{-1}$. Both Sun models start from the
 For the flat Sun, the unattenuated incident spectrum at distance $d$ is:
 
 $$
-E_{\rm source}(w)=E_{\rm ref}(w)
- \left(\frac{d_{\rm ref}}{\max(d,r_\odot)}\right)^2,
-\qquad d_{\rm ref}=4800\,\text{km}.
+E_{\mathrm{source}}(w)=E_{\mathrm{ref}}(w)
+ \left(\frac{d_{\mathrm{ref}}}{\max(d,r_{\odot})}\right)^{2},
+\qquad d_{\mathrm{ref}}=4800\,\text{km}.
 $$
 
 Here $w$ denotes wavelength. Doubling distance reduces incident energy to one
@@ -417,19 +417,19 @@ target because the models' atmospheric geometries differ.
 At the receiver, source obstruction and wavelength-dependent transmission give:
 
 $$
-E_{\rm direct,normal}(w)
- =E_{\rm source}(w)\,f_{\rm visible}\,\tau(w).
+E_{\mathrm{direct,normal}}(w)
+ =E_{\mathrm{source}}(w)\,f_{\mathrm{visible}}\,\tau(w).
 $$
 
-$f_{\rm visible}$ represents the visible disk support; $\tau$, between zero and
+$f_{\mathrm{visible}}$ represents the visible disk support; $\tau$, between zero and
 one, represents transmission along the source path. This names the atmosphere's
 input to the lighting calculation without describing its simulation. “Normal”
 means a receiving surface facing the Sun directly. For a horizontal surface,
 multiply by the Sun direction's upward component:
 
 $$
-E_{\rm direct,horizontal}(w)
- =E_{\rm direct,normal}(w)\max(0,u).
+E_{\mathrm{direct,horizontal}}(w)
+ =E_{\mathrm{direct,normal}}(w)\max(0,u).
 $$
 
 A low Sun delivers less direct light per square meter of horizontal ground even
@@ -449,12 +449,12 @@ per-pixel disk brightness and receiver illuminance are different quantities.
 ### Diffuse sky light and total illumination
 
 The sky also illuminates the ground from many directions. For a horizontal
-receiver, its spectral irradiance is the incoming sky radiance $L_{\rm sky}$
+receiver, its spectral irradiance is the incoming sky radiance $L_{\mathrm{sky}}$
 integrated over the upper hemisphere:
 
 $$
-E_{\rm diffuse}(w)=\int_{\rm upper\ sky}
- L_{\rm sky}(w,\mathbf d)\cos\theta\,d\Omega.
+E_{\mathrm{diffuse}}(w)=\int_{\text{upper sky}}
+ L_{\mathrm{sky}}(w,\mathbf{d})\cos\theta\,d\Omega.
 $$
 
 $\theta$ is the angle from up, and $d\Omega$ describes a small patch of sky.
@@ -462,9 +462,9 @@ The cosine discounts grazing light. The implementation approximates this with
 32 fixed, cosine-weighted directions, independent of where the camera looks:
 
 $$
-E_{\rm diffuse}(w)\approx\frac\pi{32}\sum_{i=1}^{32}L_{{\rm sky},i}(w),
+E_{\mathrm{diffuse}}(w)\approx\frac{\pi}{32}\sum_{i=1}^{32}L_{\mathrm{sky},i}(w),
 \qquad
-E_{\rm total}(w)=E_{\rm direct,horizontal}(w)+E_{\rm diffuse}(w).
+E_{\mathrm{total}}(w)=E_{\mathrm{direct,horizontal}}(w)+E_{\mathrm{diffuse}}(w).
 $$
 
 The cosine is already incorporated into the sample distribution, so it must
@@ -481,11 +481,11 @@ and [direct/diffuse combination](src/algorithm32/implementation/scene-lighting/L
 ### From energy to lux, ground color and screen brightness
 
 **Lux** weights arriving energy by the sensitivity of human daylight vision.
-For each spectral channel $i$, with center wavelength $w_i$ and width
-$\Delta w_i$, the code calculates:
+For each spectral channel $i$, with center wavelength $w_{i}$ and width
+$\Delta w_{i}$, the code calculates:
 
 $$
-E_v\approx683\sum_i E(w_i)V(w_i)\Delta w_i.
+E_{v}\approx683\sum_{i} E(w_{i})V(w_{i})\Delta w_{i}.
 $$
 
 $V$ is the CIE photopic sensitivity curve. This is why equal radiant energy in
@@ -495,12 +495,12 @@ are measured separately. [CPU spectral-to-lux calculation](src/algorithm32/imple
 For a matte surface, reflected radiance follows the Lambertian relation:
 
 $$
-L_{\rm surface}(w)=\frac{\rho(w)}\pi
- \left[E_{\rm direct,normal}(w)\max(0,\mathbf n\cdot\mathbf s)
- +E_{\rm diffuse,surface}(w)\right].
+L_{\mathrm{surface}}(w)=\frac{\rho(w)}{\pi}
+ \left[E_{\mathrm{direct,normal}}(w)\max(0,\mathbf{n}\cdot\mathbf{s})
+ +E_{\mathrm{diffuse,surface}}(w)\right].
 $$
 
-$\rho$ is reflectance, $\mathbf n$ is the surface normal and $\mathbf s$ points
+$\rho$ is reflectance, $\mathbf{n}$ is the surface normal and $\mathbf{s}$ points
 toward the Sun. A dot product measures alignment: one means facing the Sun,
 zero means edge-on. The ground material is green; its rendered brightness and
 tint come from the measured illumination. The renderer uses a neutral
