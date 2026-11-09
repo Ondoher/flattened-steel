@@ -1,7 +1,7 @@
 /**
  * Public scoped Flat Earth presentation capability.
  */
-export interface FlatEarthView extends EventBus {
+interface FlatEarthViewService extends EventBus {
 	/**
 	 * Call this method to obtain scoped feature-owned scene presentation.
 	 *
@@ -176,4 +176,20 @@ export interface FlatEarthView extends EventBus {
 	 * @returns - Camera presentation.
 	 */
 	getCameraComponent(viewId: string): React.ReactElement;
+
+	/**
+	 * Call this method to relay a synchronization action for the exact owning view.
+	 *
+	 * @param viewId - Mounted view identity.
+	 * @param mode - Requested action.
+	 */
+	syncCamera(viewId: string, mode: CameraSyncMode): void;
+
+	/**
+	 * Call this method to prepare localized text-only menu availability.
+	 *
+	 * @param viewId - Mounted view identity.
+	 * @returns - Prepared action choices.
+	 */
+	getSyncOptions(viewId: string): AppSelectOption[];
 }

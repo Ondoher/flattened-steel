@@ -31,6 +31,8 @@ export class FlatEarthView extends Service {
 			'centerOnSun',
 			'centerOnPolaris',
 			'toggleCompass',
+			'syncCamera',
+			'getSyncOptions',
 			'getTimeComponent',
 			'getCameraComponent',
 			'getTimeState',
@@ -149,6 +151,32 @@ export class FlatEarthView extends Service {
 	 */
 	toggleCompass(viewId) {
 		this.controller.toggleCompass(viewId);
+	}
+
+	/**
+	 * Call this method to relay a scoped sync-menu action through the owning controller.
+	 *
+	 * @param {string} viewId - Mounted view identity.
+	 * @param {CameraSyncMode} mode - Requested camera-sync action.
+	 */
+	syncCamera(viewId, mode) {
+		this.controller.syncCamera(viewId, mode);
+	}
+
+	/**
+	 * Call this method to prepare text-only menu availability from the scoped subscription projection.
+	 *
+	 * @param {string} viewId - Mounted view identity.
+	 * @returns {AppSelectOption[]} - Localized action phrases and eligibility.
+	 */
+	getSyncOptions(viewId) {
+		let {mode} = this.controller.getState(viewId).sync;
+		return [
+			{value: 'now', label: 'camera.sync.now', disabled: mode !== 'off'},
+			{value: 'them', label: 'camera.sync.them', disabled: mode !== 'off'},
+			{value: 'both', label: 'camera.sync.both', disabled: mode === 'both'},
+			{value: 'off', label: 'camera.sync.off'},
+		];
 	}
 
 	/**

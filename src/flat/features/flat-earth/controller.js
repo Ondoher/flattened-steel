@@ -1,3 +1,4 @@
+import {ViewCameraSyncReceiver} from '../../common/view-camera-sync-receiver.js';
 import {Service} from '@polylith/core';
 import {FlatEarthSession} from './FlatEarthSession.js';
 import {FlatEarthGraphics} from './runtime/FlatEarthGraphics.js';
@@ -35,6 +36,7 @@ export class FlatEarthController extends Service {
 			'centerOnSun',
 			'centerOnPolaris',
 			'toggleCompass',
+			'syncCamera',
 			'mountContribution',
 			'unmountContribution',
 			'getTimeState',
@@ -51,6 +53,9 @@ export class FlatEarthController extends Service {
 		 * @type {Map<string, FlatEarthSession>}
 		 */
 		this.sessions = new Map();
+		/** @type {Map<string, ViewCameraSyncReceiverService>} */
+		this._syncReceivers = new Map();
+		this._nextSyncReceiver = 1;
 		this.release = Promise.resolve();
 		this._listener = null;
 		this._timeRegistration = null;
@@ -81,6 +86,7 @@ export class FlatEarthController extends Service {
 	 * Call this method after readiness to register the page and subscribe to shared location/time.
 	 */
 	ready() {
+		this.cameraSync = /** @type {CameraSyncService} */ (this.registry.subscribe('camera-sync'));
 		if (this._listener) {
 			this.configuration.unlisten('changed', this._listener);
 		}
@@ -116,7 +122,10 @@ export class FlatEarthController extends Service {
 			order: 10,
 			label: 'flat-earth.time.title',
 		});
-		this._workspaceListener = this.workspace.listen('state-changed', () => this._publishTime());
+		this._workspaceListener = this.workspace.listen('state-changed', () => {
+			this._updateSyncAvailability();
+			this._publishTime();
+		});
 		this._listener = this.configuration.listen('changed', () => {
 			this.timeModel.synchronize(!this._writingTime);
 			this._updateSessions();
@@ -152,6 +161,54 @@ export class FlatEarthController extends Service {
 			});
 		} catch (error) {
 			console.error('Flat Earth startup graphics initialization failed.', error);
+		}
+	}
+
+	/**
+	 * Called by page mounting to bind one unique receiver to the exact session lifetime.
+	 *
+	 * @param {string} viewId - Mounted workspace identity.
+	 * @param {FlatEarthSession} session - Exact owning scene session.
+	 */
+	_registerSync(viewId, session) {
+		let name = `flat-earth-camera-sync-${viewId}-${this._nextSyncReceiver++}`;
+		new ViewCameraSyncReceiver({
+			name,
+			registry: this.registry,
+			coordinator: this.cameraSync,
+			onSynced: (mode) => session.setSyncMode(mode),
+			applyControls: (controls) => session.applyCameraControls(controls),
+		});
+		let receiver = /** @type {ViewCameraSyncReceiverService} */ (this.registry.subscribe(name));
+		this._syncReceivers.set(viewId, receiver);
+		session.onCameraControlsChanged = (controls) => receiver.publish(controls);
+		receiver.connect(session.getCameraControls());
+		this._updateSyncAvailability();
+	}
+
+	/**
+	 * Called by workspace transitions to project public workspace eligibility into existing sessions.
+	 */
+	_updateSyncAvailability() {
+		if (!this.sessions.size) {
+			return;
+		}
+		let views = this.workspace.getState().workspace.views;
+		let available = views.length === 2 && views.every((view) => view.pageId !== null);
+		for (let session of this.sessions.values()) {
+			session.setSyncAvailable(available);
+		}
+	}
+
+	/**
+	 * Call this method to relay an eligible toolbar action to this view's receiver.
+	 *
+	 * @param {string} viewId - Exact mounted view.
+	 * @param {CameraSyncMode} mode - Requested synchronization action.
+	 */
+	syncCamera(viewId, mode) {
+		if (this.sessions.get(viewId)?.getState().sync.available) {
+			this._syncReceivers.get(viewId)?.request(mode);
 		}
 	}
 
@@ -204,6 +261,7 @@ export class FlatEarthController extends Service {
 			},
 		);
 		this.sessions.set(viewId, session);
+		this._registerSync(viewId, session);
 		session.update(this.configuration.get());
 		this._registerTools(viewId);
 		return this.view.getComponent(viewId);
@@ -370,6 +428,9 @@ export class FlatEarthController extends Service {
 			return;
 		}
 		this.sessions.delete(viewId);
+		session.onCameraControlsChanged = null;
+		this._syncReceivers.get(viewId)?.retire();
+		this._syncReceivers.delete(viewId);
 		this.timeModel.end(viewId, this._gestureTokens?.get(viewId));
 		this._gestureTokens?.delete(viewId);
 		let tokens = this._tools.get(viewId);

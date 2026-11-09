@@ -149,3 +149,99 @@ type AppPageRecord = {
 	 */
 	controller: string;
 };
+
+/**
+ * Disposable per-view projection of coordinator notifications and workspace eligibility.
+ */
+type CameraSyncViewState = {
+	/**
+	 * Last subscription notification; now actions leave this value unchanged.
+	 */
+	mode: CameraSyncMode;
+
+	/**
+	 * Whether the workspace currently has two populated views.
+	 */
+	available: boolean;
+};
+
+/**
+ * Instance-specific receiver construction owned by a ready feature controller.
+ */
+type ViewCameraSyncReceiverOptions = {
+	/**
+	 * Unique registered name including the mounted view lifetime.
+	 */
+	name: string;
+
+	/**
+	 * Owning application registry, never the installation/master registry.
+	 */
+	registry: unknown;
+
+	/**
+	 * Application-local coordinator capability.
+	 */
+	coordinator: CameraSyncService;
+
+	/**
+	 * Notification delegated to the exact owning session.
+	 */
+	onSynced: (mode: CameraSyncMode) => void;
+
+	/**
+	 * Non-echoing camera operation delegated to the exact owning session.
+	 */
+	applyControls: (controls: CameraSyncControls) => Promise<Error | void>;
+};
+
+/**
+ * Owner-managed receiver capability, created after application readiness.
+ */
+interface ViewCameraSyncReceiverService extends CameraSyncReceiver {
+	/**
+	 * Call this method to join synchronization with the initial requested controls.
+	 *
+	 * @param controls - Initial orientation and elevation.
+	 */
+	connect(controls: CameraSyncControls): void;
+
+	/**
+	 * Call this method to report a user-origin change.
+	 *
+	 * @param controls - Latest requested controls.
+	 */
+	publish(controls: CameraSyncControls): void;
+
+	/**
+	 * Call this method to request a mode through the owning controller.
+	 *
+	 * @param mode - Requested action.
+	 */
+	request(mode: CameraSyncMode): void;
+
+	/**
+	 * Call this method to retire callbacks and unregister the receiver.
+	 */
+	retire(): void;
+}
+
+/**
+ * Completion shared by requests for the same pending physical height.
+ */
+type SceneHeightRequest = {
+	/**
+	 * Requested physical height in meters.
+	 */
+	heightMeters: number;
+
+	/**
+	 * Outcome settled by acceptance, supersession, failure or detachment.
+	 */
+	promise: Promise<Error | void>;
+
+	/**
+	 * Idempotent completion invoked before retiring the owned request.
+	 */
+	complete: (error?: Error) => void;
+};

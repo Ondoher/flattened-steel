@@ -35,7 +35,20 @@ export default class IconMenuButton extends Component {
 	 * @param {React.MouseEvent<HTMLButtonElement>} event - Native trigger gesture.
 	 */
 	_open(event) {
-		this.setState({anchorEl: event.currentTarget});
+		if (!this.props.disabled) {
+			this.setState({anchorEl: event.currentTarget});
+		}
+	}
+
+	/**
+	 * Called by React to close a menu whose trigger became unavailable.
+	 *
+	 * @param {IconMenuButtonProps} previous - Prior trigger availability.
+	 */
+	componentDidUpdate(previous) {
+		if (this.props.disabled && !previous.disabled && this.state.anchorEl) {
+			this._close();
+		}
 	}
 
 	/**
@@ -52,7 +65,7 @@ export default class IconMenuButton extends Component {
 	 */
 	_select(event) {
 		let option = this.props.options.find((item) => String(item.value) === event.currentTarget.dataset.value);
-		if (!option || option.disabled) {
+		if (this.props.disabled || !option || option.disabled) {
 			return;
 		}
 		this._close();
@@ -97,7 +110,7 @@ export default class IconMenuButton extends Component {
 		let context = /** @type {AppContextValue} */ (this.context);
 		let {label, icon, value, options, onChange, id, ...props} = this.props;
 		let text = resolveComponentText(context, label);
-		let open = Boolean(this.state.anchorEl);
+		let open = Boolean(this.state.anchorEl) && !this.props.disabled;
 		let controls = open ? this._id : undefined;
 		let items = options.map((option) => this._renderOption(option));
 		let slotProps = {list: {'aria-label': text}, paper: {className: 'app-icon-menu'}};
@@ -120,6 +133,7 @@ export default class IconMenuButton extends Component {
 					open={open}
 					anchorEl={this.state.anchorEl}
 					onClose={this._close}
+					disableRestoreFocus={Boolean(this.props.disabled)}
 					anchorOrigin={anchorOrigin}
 					transformOrigin={transformOrigin}
 					slotProps={slotProps}

@@ -1,7 +1,7 @@
 /**
  * Scoped spherical feature capability.
  */
-export interface SphericalEarthController extends EventBus {
+interface SphericalEarthControllerService extends EventBus {
 	/**
 	 * Call this method to stop subscriptions and retire all current and removed sessions.
 	 *
@@ -122,4 +122,12 @@ export interface SphericalEarthController extends EventBus {
 	 * @param request - Exact released contribution.
 	 */
 	unmountContribution(request: WorkspaceContributionMount): void;
+
+	/**
+	 * Call this method to relay a synchronization action for the exact owning view.
+	 *
+	 * @param viewId - Mounted view identity.
+	 * @param mode - Requested action.
+	 */
+	syncCamera(viewId: string, mode: CameraSyncMode): void;
 }

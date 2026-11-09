@@ -12,6 +12,7 @@ describe('Flat Earth shared MUI consumer controls', () => {
 	it('represents custom camera values and sends numeric changes to the exact view', async () => {
 		let state = {
 			status: 'ready',
+			sync: {mode: 'off', available: false},
 			renderedObservation: {},
 			shader: {mode: 'full'},
 			camera: {observerHeightMeters: 5, pendingHeightMeters: 321, fieldOfViewDegrees: 42},
@@ -54,6 +55,7 @@ describe('Flat Earth shared MUI consumer controls', () => {
 		]) {
 			const state = {
 				status: 'ready',
+				sync: {mode: 'off', available: false},
 				renderedObservation: {},
 				shader: {mode: 'full'},
 				camera: {
@@ -92,6 +94,7 @@ describe('Flat Earth shared MUI consumer controls', () => {
 			for (const panel of [false, true]) {
 				const state = {
 					status: 'ready',
+					sync: {mode: 'off', available: false},
 					renderedObservation: {},
 					shader: {mode: 'full'},
 					camera: {observerHeightMeters: 5, pendingHeightMeters: null, fieldOfViewDegrees: 50},
@@ -237,6 +240,7 @@ function seekSlider(root, angle) {
  */
 function timeView(angle = 0) {
 	return {
+		getSyncOptions: () => [],
 		getTimeState: () => ({
 			angle,
 			selected: false,

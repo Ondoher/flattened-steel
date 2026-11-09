@@ -1,9 +1,9 @@
 # Sync Window Design
 
-Status: owner-specified contract. The service-only implementation is complete
-under the separately authorized [execution plan](camera-sync-service-plan.md).
-Page, UI and production startup integration have not begun. This document owns
-behavior; the plan's final report owns implementation and verification evidence.
+Status: the service and both Earth-page integrations are implemented. This
+document owns behavior; the [UI execution report](camera-sync-ui-plan.md#m2-and-final-report)
+owns current implementation and verification evidence. The completed
+[service-only plan](camera-sync-service-plan.md) preserves the earlier stage.
 
 ## Ownership
 
@@ -13,10 +13,11 @@ Pages communicate through `camera-sync` rather than knowing the other page's
 implementation.
 
 The service implementation belongs in `src/flat/services/camera-sync.js`.
-The [service-only implementation plan](camera-sync-service-plan.md) excludes
-page, UI and production startup integration. Its public data types live in
-`src/flat/services/types.d.ts`, and its public capability is exported beside
-the implementation in `camera-sync.d.ts`.
+Its public data types and `CameraSyncService` interface live directly in
+`src/flat/services/types.d.ts`. The declarations are ambient, export no symbols
+and require no type-import bridge. Main activates the coordinator in the app's
+registry; each mounted Earth session owns a registered receiver adapter under
+`src/flat/common/` and retires it before disposing the session.
 
 The service owns participation, remembered controls and synchronization
 relationships. Its contract makes no assumptions about a UI, including whether
@@ -36,7 +37,7 @@ The mode is a named string union, shared by `sync` and `synced`:
 type CameraSyncMode = 'now' | 'them' | 'both' | 'off';
 ```
 
-When implemented, this type belongs in an ambient `.d.ts` file.
+This type is defined in the ambient service declarations.
 
 In this table, A is the caller of `sync` and B is the other participating page.
 
@@ -82,6 +83,32 @@ not part of the camera-sync service contract.
 
 - Disable `now` while there is a subscription.
 - Disable synchronization actions when there is only one open window.
+- The current UI direction is a two-state toolbar indicator: off, or this
+  window is synced. It reflects whether this window receives ongoing camera
+  updates, without distinguishing one-way from two-way synchronization.
+- With one-way synchronization, the following window shows synced and the
+  source window shows off. With two-way synchronization, both show synced.
+- Use MUI `SyncAltOutlined` as the toolbar icon. The button's selected/unselected treatment
+  indicates synced on/off; the icon itself stays unchanged. Do not swap between
+  separate off, one-way or two-way icons, or use overlapping compositions.
+- Place the sync button beside the compass button in each view's toolbar.
+- Use MUI ToggleButton's standard selected treatment with `color="primary"`
+  and the application's small control size. Unselected has the normal icon,
+  outlined border and transparent background. Selected has the primary-colored
+  icon and subtle primary-tinted background.
+- Clicking the button opens its menu without changing its selected state.
+  Each view updates its own button when its synchronization state changes,
+  through its receiver's `synced` notification and owning view/controller.
+  Selection is controlled by that state, not by the click or whether the menu
+  is open. MUI's selected treatment and pressed semantics follow the controlled
+  state.
+- Menu choices are text only and do not need individual action icons. The
+  earlier one-time-match icon candidates are no longer needed.
+- Menu text distinguishes Match now, Follow other view, Link both views and
+  Stop syncing. The service retains its four-mode contract.
+- `synced('them')` and `synced('both')` both show the synced state;
+  `synced('off')` shows off. `synced('now')` leaves the persistent indicator
+  unchanged because the one-time copy does not change subscriptions.
 - Do not offer `them` as an action while `both` is active.
 - Use `off` to cancel synchronization before choosing a different subscription
   arrangement.

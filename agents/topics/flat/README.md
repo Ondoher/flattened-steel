@@ -12,11 +12,13 @@ The [Sync Window design](sync-window-design.md) records the owner's proposed
 single `camera-sync` service, participant callbacks, and `now`, `them`, `both`,
 and `off` modes.
 
-The [camera-sync service plan](camera-sync-service-plan.md) implements only
-`src/flat/services/camera-sync` and its public contract tests. M1-M2 are complete:
-Flat types, all 267 browser tests (26 service cases), formatting and the normal
-build pass. The service remains unconnected to production startup and Earth
-pages. The plan's final report owns evidence, decisions and deferred integration.
+The [camera-sync UI execution report](camera-sync-ui-plan.md#m2-and-final-report)
+records completed application activation and both Earth-page integrations:
+the per-view SyncAlt button beside the compass, standard MUI selected treatment,
+text-only actions and camera direction/requested-elevation synchronization.
+It owns current verification, evidence, decisions and checkpoint disposition.
+The [service-only plan](camera-sync-service-plan.md) preserves the preceding
+isolated coordinator implementation and contract tests.
 
 Both Earth features now offer the [celestial focus menu](celestial-focus.md)
 with Sun and Polaris actions in their toolbar and Camera settings. Each action

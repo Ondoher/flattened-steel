@@ -1,17 +1,11 @@
 /**
- * Public presentation capability owned by the Spherical Earth view.
- */
-type SphericalEarthViewService = import('./views/spherical-earth.js').SphericalEarthView;
-
-/**
- * Public controller capability for scoped Spherical Earth sessions.
- */
-type SphericalEarthControllerService = import('./controller.js').SphericalEarthController;
-
-/**
  * One view's scene preparation and accepted observation.
  */
 type SphericalEarthSceneState = {
+	/**
+	 * Per-view synchronization notification and workspace availability.
+	 */
+	sync: CameraSyncViewState;
 	/**
 	 * Accepted per-view shader presentation and effective Sun multipliers.
 	 */
@@ -46,7 +40,7 @@ type SphericalEarthStateChange = {viewId: string; state: SphericalEarthSceneStat
 /**
  * Session-owned preparation state without the model-owned camera and shader projections.
  */
-type SphericalEarthSceneLifecycleState = Omit<SphericalEarthSceneState, 'camera' | 'shader'>;
+type SphericalEarthSceneLifecycleState = Omit<SphericalEarthSceneState, 'camera' | 'shader' | 'sync'>;
 
 /**
  * Prepared values and owning presentation capability for the page.
@@ -102,6 +96,13 @@ interface SphericalEarthRuntimeCapability {
 	 * @param degrees - Accepted vertical perspective FOV.
 	 */
 	setFieldOfView(degrees: number): void;
+
+	/**
+	 * Call this method to apply a received orientation without publishing a user-change callback.
+	 *
+	 * @param orientation - Requested local quaternion.
+	 */
+	setOrientation(orientation: CameraSyncOrientation): void;
 
 	/**
 	 * Call this method to aim the retained camera at the displayed source.

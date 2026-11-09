@@ -2,15 +2,24 @@
 
 Current active topic: flat.
 Canonical entry: [Flat](flat/README.md).
-Focus: camera-sync service-only M1-M2 are complete under independent execution.
-The implementation is src/flat/services/camera-sync.js; its public contract and
-26 new service tests pass. Flat types, all 267 browser tests, formatting and
-the normal build pass. The normal application does not import or activate it.
-flat/camera-sync-service-plan.md owns the final report, decisions, evidence and
-whole-repository checkpoint record. flat/sync-window-design.md owns behavior.
-There is no page/UI integration yet. FOV, debounce/coalescing and structured
-error codes remain deferred. Overlapping cameraChanged calls are allowed;
-returned errors are ignored. Engineering standards reviewers remain cancelled.
+Focus: camera-sync UI M1-M2 are complete under independent execution.
+flat/camera-sync-ui-plan.md owns the final report, evidence, decisions and
+whole-repository checkpoint record; flat/sync-window-design.md owns behavior.
+Both Earth toolbars offer text-only Match now, Follow other view, Link both
+views and Stop syncing through the unchanged app-local camera-sync service.
+The SyncAltOutlined button beside compass uses standard MUI selected treatment
+when this view receives updates. Menu opening does not toggle selection.
+Direction and requested elevation synchronize without echoes, including
+toolbar/settings changes; FOV and other page presentation stay independent.
+Scoped registered receivers retire before their session; overlapping callbacks
+preserve newer intent. All 281 browser tests, Flat types, formatting and the
+normal build pass. Real served-app mixed/same-type, pointer/keyboard, retained
+resource, concurrency/lifetime, failure/retry and configuration checks pass.
+Disposable browser profiles were removed. The report records local checkpoint
+disposition; no push or deployment is authorized.
+All new/touched declarations are ambient with no exports; CameraSyncService
+is directly in services/types.d.ts. FOV synchronization, debounce/coalescing and
+structured errors remain deferred. No follow-on implementation is selected.
 The Earth scene resize correction is complete. Both renderers apply
 device scaling once to physical drawing-buffer dimensions. Flat types, the
 normal build and all 240 browser tests pass, as do native layout checks at
@@ -68,3 +77,4 @@ local authoring rules only after Polylith skills review work is complete.
 5. [Scene resizing](flat/scene-resize.md).
 6. [Sync Window design](flat/sync-window-design.md).
 7. [Camera-sync service plan](flat/camera-sync-service-plan.md).
+8. [Camera-sync UI plan](flat/camera-sync-ui-plan.md).

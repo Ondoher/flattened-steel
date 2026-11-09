@@ -30,6 +30,12 @@ export class FlatEarthSession {
 		this.cancellation = null;
 		/** @type {Distance|null} */
 		this.pendingHeight = null;
+		/** @type {SceneHeightRequest|null} */
+		this._heightRequest = null;
+		/** @type {CameraSyncViewState} */
+		this.syncState = {mode: 'off', available: false};
+		/** @type {((controls: CameraSyncControls) => void)|null} */
+		this.onCameraControlsChanged = null;
 		this.lookStatus = /** @type {FlatEarthCameraState['lookStatus']} */ ('idle');
 	}
 
@@ -42,6 +48,7 @@ export class FlatEarthSession {
 		let camera = this.model.getCamera(this.viewId);
 		return structuredClone({
 			...this.state,
+			sync: {...this.syncState},
 			shader: this.model.getShaderOptions(this.viewId),
 			camera: {
 				...camera,
@@ -110,9 +117,14 @@ export class FlatEarthSession {
 					},
 					(change) => {
 						if (generation === this.mountGeneration && this.canvas === canvas) {
+							let previous = this.model.getCamera(this.viewId).orientation;
+							let changed = previous.some((value, index) => value !== change.orientation[index]);
 							this.model.setOrientation(this.viewId, change.orientation);
 							this.lookStatus = change.lookStatus;
 							this._emit();
+							if (changed) {
+								this.onCameraControlsChanged?.(this.getCameraControls());
+							}
 						}
 					},
 				);
@@ -132,6 +144,7 @@ export class FlatEarthSession {
 		if (this.canvas !== canvas) {
 			return;
 		}
+		this._settleHeight(new Error('Camera surface was detached.'));
 		this.mountGeneration++;
 		this.generation++;
 		this.cancellation?.abort();
@@ -157,6 +170,7 @@ export class FlatEarthSession {
 	 * @param {Error} error - Preparation or renderer failure.
 	 */
 	_fail(error) {
+		this._settleHeight(error);
 		this.cancellation?.abort();
 		this.state.status = 'error';
 		this.state.error = error.message;
@@ -184,16 +198,38 @@ export class FlatEarthSession {
 	 * @param {Distance} height - Requested height above ground.
 	 */
 	setObserverHeight(height) {
+		let previous = this.getCameraControls().observerHeightMeters;
+		void this._requestObserverHeight(height);
+		if (this.getCameraControls().observerHeightMeters !== previous) {
+			this.onCameraControlsChanged?.(this.getCameraControls());
+		}
+	}
+
+	/**
+	 * Called by height commands to reuse an identical pending request or schedule the latest physical height.
+	 *
+	 * @param {Distance} height - Requested observer height.
+	 * @returns {Promise<Error|void>} - Acceptance, supersession, failure or detachment outcome.
+	 */
+	_requestObserverHeight(height) {
 		let accepted = this.model.resolveHeight(height);
 		let targetMeters = this.pendingHeight?.value ?? this.model.getCamera(this.viewId).observerHeightMeters;
 		if (accepted.value === targetMeters) {
-			return;
+			return this._heightRequest?.promise ?? Promise.resolve();
 		}
+		this._settleHeight(new Error('Camera height request was superseded.'));
 		if (!this.state.observation || !this.runtime) {
 			this.model.acceptHeight(this.viewId, accepted);
 			this._emit();
-			return;
+			return Promise.resolve();
 		}
+		/** @type {(error?: Error) => void} */
+		let complete;
+		/** @type {Promise<Error|void>} */
+		let promise = new Promise((resolve) => {
+			complete = resolve;
+		});
+		this._heightRequest = {heightMeters: accepted.value, promise, complete};
 		this.pendingHeight = accepted;
 		this.generation++;
 		this.cancellation?.abort();
@@ -201,6 +237,7 @@ export class FlatEarthSession {
 		this.state.error = null;
 		this._emit();
 		void this._process();
+		return promise;
 	}
 
 	/**
@@ -276,6 +313,73 @@ export class FlatEarthSession {
 	}
 
 	/**
+	 * Called by height acceptance or retirement to settle the exact owned pending request.
+	 *
+	 * @param {Error} [error] - Failure or supersession; omission denotes acceptance.
+	 */
+	_settleHeight(error) {
+		let request = this._heightRequest;
+		this._heightRequest = null;
+		request?.complete(error);
+	}
+
+	/**
+	 * Call this method to read the latest requested synchronized controls, including pending height.
+	 *
+	 * @returns {CameraSyncControls} - Independent requested orientation and elevation.
+	 */
+	getCameraControls() {
+		let camera = this.model.getCamera(this.viewId);
+		return {
+			orientation: [...camera.orientation],
+			observerHeightMeters: this.pendingHeight?.value ?? camera.observerHeightMeters,
+		};
+	}
+
+	/**
+	 * Call this method to project a subscription notification without treating now as a persistent mode.
+	 *
+	 * @param {CameraSyncMode} mode - Coordinator notification.
+	 */
+	setSyncMode(mode) {
+		if (mode !== 'now' && mode !== this.syncState.mode) {
+			this.syncState.mode = mode;
+			this._emit();
+		}
+	}
+
+	/**
+	 * Call this method to project workspace availability without changing subscriptions.
+	 *
+	 * @param {boolean} available - Whether two populated workspace views exist.
+	 */
+	setSyncAvailable(available) {
+		if (available !== this.syncState.available) {
+			this.syncState.available = available;
+			this._emit();
+		}
+	}
+
+	/**
+	 * Call this method to apply received settings without publishing a camera update echo.
+	 *
+	 * @param {CameraSyncControls} controls - Latest requested orientation and height.
+	 * @returns {Promise<Error|void>} - Request outcome; newer calls can overlap this one.
+	 */
+	async applyCameraControls(controls) {
+		try {
+			let height = this.model.resolveHeight({value: controls.observerHeightMeters, units: 'meters'});
+			this.runtime?.setOrientation(controls.orientation);
+			this.model.setOrientation(this.viewId, [...controls.orientation]);
+			this._emit();
+			return await this._requestObserverHeight(height);
+		} catch (error) {
+			this._fail(error);
+			return error;
+		}
+	}
+
+	/**
 	 * Called by attachment and shared changes to run one serial latest-request preparation lane.
 	 *
 	 * @returns {Promise<void>} - Completion of the current queued work.
@@ -300,6 +404,9 @@ export class FlatEarthSession {
 					let publication = await runtime.prepare(observation, cancellation.signal, height);
 					if (runtime === this.runtime && !cancellation.signal.aborted) {
 						this.model.acceptHeight(this.viewId, height);
+						if (this._heightRequest?.heightMeters === height.value) {
+							this._settleHeight();
+						}
 						if (this.pendingHeight === height) {
 							this.pendingHeight = null;
 						}

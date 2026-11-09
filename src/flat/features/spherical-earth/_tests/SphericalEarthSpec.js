@@ -1,4 +1,5 @@
 import {Registry, Service} from '@polylith/core';
+import {CameraSync} from '../../../services/camera-sync.js';
 import {SphericalEarthModel} from '../models/spherical-earth-model.js';
 import {SphericalEarthController} from '../controller.js';
 import {SphericalEarthView} from '../views/spherical-earth.js';
@@ -109,6 +110,19 @@ describe('Spherical Earth registered feature', () => {
 		new Configuration(registry);
 		const state = new SphericalEarthModel(registry);
 		state.start();
+		new CameraSync(registry).start();
+		const workspace = registry.createServiceObject('workspace-controller');
+		workspace.implement({
+			getState: () => ({
+				workspace: {
+					views: [
+						{id: 'one', pageId: 'spherical-earth'},
+						{id: 'two', pageId: 'spherical-earth'},
+					],
+				},
+			}),
+		});
+		registry.register('workspace-controller', workspace);
 		const controller = new SphericalEarthController(registry),
 			view = new SphericalEarthView(registry);
 		controller.ready();

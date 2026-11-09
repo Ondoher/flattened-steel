@@ -170,6 +170,27 @@ export class FlatEarthRuntime {
 	}
 
 	/**
+	 * Call this method to apply a received orientation to retained resources without a user-change callback.
+	 *
+	 * @param {CameraSyncOrientation} orientation - Requested unit quaternion in local scene axes.
+	 */
+	setOrientation(orientation) {
+		let previous = this.camera.quaternion.clone();
+		try {
+			this.camera.quaternion.fromArray(orientation);
+			this.camera.updateMatrixWorld(true);
+			if (this.active) {
+				this._support(this.active.profile);
+			}
+			this._requestRender();
+		} catch (error) {
+			this.camera.quaternion.copy(previous);
+			this.camera.updateMatrixWorld(true);
+			throw error;
+		}
+	}
+
+	/**
 	 * Call this method after a model selection to update retained presentation and request a redraw.
 	 */
 	refreshShaderOptions() {

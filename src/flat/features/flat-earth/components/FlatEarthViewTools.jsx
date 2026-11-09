@@ -1,3 +1,4 @@
+import SyncAltOutlined from '@mui/icons-material/SyncAltOutlined';
 import ExploreOutlined from '@mui/icons-material/ExploreOutlined';
 import IconButton from '../../../components/IconButton.jsx';
 import BaseSelect from '../../../components/BaseSelect.jsx';
@@ -33,6 +34,7 @@ export default class FlatEarthViewTools extends Component {
 		this._onHeight = this._onHeight.bind(this);
 		this._onFocus = this._onFocus.bind(this);
 		this._onCompass = this._onCompass.bind(this);
+		this._onSync = this._onSync.bind(this);
 		this._onSky = this._onSky.bind(this);
 	}
 
@@ -332,6 +334,38 @@ export default class FlatEarthViewTools extends Component {
 	}
 
 	/**
+	 * Called by the text-only menu to relay a camera-sync action through the owning view.
+	 *
+	 * @param {CameraSyncMode} mode - Selected action.
+	 */
+	_onSync(mode) {
+		this._view.syncCamera(this._viewId, mode);
+	}
+
+	/**
+	 * Owns the controlled selected trigger; opening the menu does not change the subscription.
+	 *
+	 * @returns {React.ReactNode} - Localized camera-sync menu beside the compass.
+	 */
+	_renderSyncControl() {
+		let icon = <SyncAltOutlined />;
+		let selected = this.state.sync.mode === 'them' || this.state.sync.mode === 'both';
+		let disabled = !this.state.sync.available;
+		let options = this.props.sceneView.getSyncOptions(this.props.viewId);
+		return (
+			<IconMenuButton
+				className="flat-earth-sync"
+				label="camera.sync.label"
+				icon={icon}
+				selected={selected}
+				disabled={disabled}
+				options={options}
+				onChange={this._onSync}
+			/>
+		);
+	}
+
+	/**
 	 * Owns the feature's ordered icon commands while workspace owns their placement.
 	 *
 	 * @returns {React.ReactNode} - Camera, shared-time and aiming actions for this view.
@@ -367,6 +401,7 @@ export default class FlatEarthViewTools extends Component {
 				<FlatEarthTimeControls sceneView={this.props.sceneView} owner={this.props.viewId} />
 				{this._renderFocusControl()}
 				{this._renderCompassControl()}
+				{this._renderSyncControl()}
 			</div>
 		);
 	}

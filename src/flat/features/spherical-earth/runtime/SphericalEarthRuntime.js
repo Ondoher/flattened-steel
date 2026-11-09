@@ -230,6 +230,17 @@ export class SphericalEarthRuntime {
 	}
 
 	/**
+	 * Call this method to apply received orientation without reporting a new user change.
+	 *
+	 * @param {CameraSyncOrientation} orientation - Requested unit quaternion in local scene axes.
+	 */
+	setOrientation(orientation) {
+		this.camera.quaternion.fromArray(orientation);
+		this.camera.updateMatrixWorld(true);
+		this._requestRender();
+	}
+
+	/**
 	 * Call this method to redraw the model's selected sky presentation.
 	 */
 	refreshShaderOptions() {

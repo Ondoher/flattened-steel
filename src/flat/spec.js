@@ -24,6 +24,7 @@ import './features/flat-earth/_tests/MuiControlsSpec.js';
 import './features/flat-earth/_tests/ShaderOptionsSpec.js';
 import './services/_tests/StellarCatalogSpec.js';
 import './services/_tests/CameraSyncSpec.js';
+import './services/_tests/CameraSyncIntegrationSpec.js';
 import './features/flat-earth/_tests/FlatEarthTimeSpec.js';
 import './testing/_tests/TestHarnessSpec.js';
 import './components/_tests/FormControlsSpec.js';

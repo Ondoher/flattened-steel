@@ -1,6 +1,7 @@
 import React from 'react';
 import {createRoot} from 'react-dom/client';
 import {registry} from '@polylith/core';
+import {CameraSync} from '../services/camera-sync.js';
 import CssBaseline from '@mui/material/CssBaseline';
 import StyledEngineProvider from '@mui/styled-engine/StyledEngineProvider';
 import {ThemeProvider} from '@mui/material/styles';
@@ -17,6 +18,8 @@ import '../services/distant-sun-cache.js';
 import '../services/app-pages.js';
 import '../services/url.js';
 
+new CameraSync(registry);
+
 let root = null;
 
 /**
@@ -32,6 +35,7 @@ export async function stopApplication() {
 		registry.subscribe('flat-earth-controller').stop(),
 		registry.subscribe('spherical-earth-controller').stop(),
 	]);
+	registry.subscribe('camera-sync').stop();
 	registry.subscribe('app-view')?.stop();
 	registry.subscribe('distant-sun-cache').stop();
 	registry.subscribe('stellar-catalog').stop();

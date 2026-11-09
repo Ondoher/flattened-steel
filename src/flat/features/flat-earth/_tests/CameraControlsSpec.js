@@ -2,6 +2,7 @@ import {WorkspaceModel} from '../../workspace/models/WorkspaceModel.js';
 import {WorkspaceController} from '../../workspace/controller.js';
 import {FlatEarthTimeModel} from '../models/FlatEarthTimeModel.js';
 import {Registry} from '@polylith/core';
+import {CameraSync} from '../../../services/camera-sync.js';
 import {PerspectiveCamera, Euler} from 'three';
 import {PointerLookController} from '../../../common/PointerLookController.js';
 import {createModel, createSession} from './helpers.js';
@@ -210,6 +211,7 @@ describe('Flat Earth camera controls', () => {
 			warm: jasmine.createSpy('warm').and.resolveTo(),
 			dispose: jasmine.createSpy('dispose').and.resolveTo(),
 		};
+		new CameraSync(registry).start();
 		let controller = new FlatEarthController(registry, () => graphics);
 		new StellarCatalog(registry).start();
 		let view = new FlatEarthView(registry);

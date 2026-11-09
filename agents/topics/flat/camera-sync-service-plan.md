@@ -4,6 +4,12 @@ Status: M1-M2 implementation and verification complete on 2026-11-08 under the
 owner's independent-execution request. The final report below owns results and
 the checkpoint record. Page, UI and production startup integration are excluded.
 
+Successor: the [UI execution report](camera-sync-ui-plan.md#m2-and-final-report)
+now owns the completed application activation and Earth integrations. Its
+ambient `CameraSyncService` contract lives directly in `services/types.d.ts`;
+the adjacent declaration was removed to avoid shadowing the JavaScript module.
+The isolated service results below remain evidence for the preceding stage.
+
 ## Outcome and scope
 
 Implement the registered Polylith service named `camera-sync` in
@@ -56,8 +62,7 @@ dependencies, server changes, cache builds, renders or deployment tasks.
 | File | Purpose |
 | --- | --- |
 | `src/flat/services/camera-sync.js` | Service implementation, participant state, subscriptions, callbacks and cleanup. |
-| `src/flat/services/camera-sync.d.ts` | Public service capability and documented methods. |
-| `src/flat/services/types.d.ts` | Ambient public mode, handle, controls, orientation and receiver capability types, following the loaded canonical placement rules. |
+| `src/flat/services/types.d.ts` | Ambient public service capability, mode, handle, controls, orientation and receiver capability types. |
 | `src/flat/services/types/CameraSync.d.ts` | Implementation-private participant state, if needed. |
 | `src/flat/services/_tests/CameraSyncSpec.js` | Isolated-registry contract tests using instance-specific receiver services. |
 | `src/flat/spec.js` | Import the service spec into the maintained test lane only. |
@@ -206,13 +211,15 @@ changes or broaden into page integration to make a test pass.
 
 - The loaded canonical types standard places public data in the nearest
   ambient `types.d.ts`. Use `services/types.d.ts` rather than the earlier
-  draft's per-service ambient file. Keep the exported service declaration
-  beside its implementation; runtime JSDoc continues to avoid import expressions
-  per the owner's instruction.
+  draft's per-service ambient file. The service-stage declaration was adjacent
+  to its implementation; the UI successor moved it into the same included
+  `services/types.d.ts` to avoid module shadowing. Runtime JSDoc avoids import
+  expressions. Declaration files export no symbols.
 - Scratch/evidence root: `.codex-tmp/camera-sync/20261108-01/`.
-- The service declaration exports its capability; one ambient reference to that
-  exported interface preserves the owner's no-import-expression runtime JSDoc
-  rule. Public data remains ambient rather than duplicated in the module.
+- The owner's declaration correction supersedes the initially used exported
+  service-interface pattern: `CameraSyncService` became directly ambient with
+  no export or import-expression alias. It is now in `services/types.d.ts` after
+  the UI successor's import correction. Runtime JSDoc references it directly.
 - `start` is idempotent for an active lifetime. `stop` rejects new registrations,
   releases owned receiver registrations and cancels subscriptions; already
   invoked asynchronous work is not cancellable and is never awaited.
@@ -252,8 +259,10 @@ Evidence below `.codex-tmp/camera-sync/20261108-01/`:
 - [Baseline](../../../.codex-tmp/camera-sync/20261108-01/baseline.json)
   and `baseline.diff` preserve the preceding uncommitted whole-repository state.
 - [Types](../../../.codex-tmp/camera-sync/20261108-01/m1-types.result.json):
-  pass, 8.2 seconds. Production implementation/declarations were unchanged
-  after that check; subsequent edits added tests and documentation.
+  original pass, 8.2 seconds. After the owner's ambient-declaration correction,
+  [type checking passed again](../../../.codex-tmp/camera-sync/20261108-01/ambient-types.result.json)
+  in 6.1 seconds. `CameraSyncService` is directly ambient and the import-expression
+  alias is removed. Runtime behavior is unchanged by this declaration-only fix.
 - [Complete browser suite](../../../.codex-tmp/camera-sync/20261108-01/m2-tests.result.json):
   pass, 32.5 seconds; `m2-tests.log` retains individual case results.
 - [Normal build](../../../.codex-tmp/camera-sync/20261108-01/final-build.result.json):

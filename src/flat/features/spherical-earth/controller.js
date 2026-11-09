@@ -1,3 +1,4 @@
+import {ViewCameraSyncReceiver} from '../../common/view-camera-sync-receiver.js';
 import {Service} from '@polylith/core';
 import {SphericalEarthSession} from './SphericalEarthSession.js';
 import {SphericalEarthRuntime} from './runtime/SphericalEarthRuntime.js';
@@ -16,10 +17,14 @@ export class SphericalEarthController extends Service {
 	constructor(registry) {
 		super('spherical-earth-controller', registry);
 		this.sessions = new Map();
+		/** @type {Map<string, ViewCameraSyncReceiverService>} */
+		this._syncReceivers = new Map();
+		this._nextSyncReceiver = 1;
 		this.release = Promise.resolve();
 		this.surfaces = new Map();
 		this.tokens = new Map();
 		this.listener = null;
+		this.workspaceListener = null;
 		this.implement([
 			'ready',
 			'stop',
@@ -36,6 +41,7 @@ export class SphericalEarthController extends Service {
 			'centerOnSun',
 			'centerOnPolaris',
 			'toggleCompass',
+			'syncCamera',
 			'mountContribution',
 			'unmountContribution',
 		]);
@@ -45,9 +51,15 @@ export class SphericalEarthController extends Service {
 	 * Call this method to bind shared capabilities and register the page.
 	 */
 	ready() {
+		this.cameraSync = /** @type {CameraSyncService} */ (this.registry.subscribe('camera-sync'));
 		if (this.listener) {
 			this.configuration.unlisten('changed', this.listener);
 		}
+		if (this.workspaceListener) {
+			this.workspace.unlisten('state-changed', this.workspaceListener);
+		}
+		this.workspace = /** @type {WorkspaceControllerService} */ (this.registry.subscribe('workspace-controller'));
+		this.workspaceListener = this.workspace.listen('state-changed', () => this._updateSyncAvailability());
 		this.model = /** @type {SphericalEarthModelService} */ (this.registry.subscribe('spherical-earth-model'));
 		this.view = /** @type {SphericalEarthViewService} */ (this.registry.subscribe('spherical-earth-view'));
 		this.cache = /** @type {DistantSunCacheService} */ (this.registry.subscribe('distant-sun-cache'));
@@ -65,6 +77,54 @@ export class SphericalEarthController extends Service {
 			controller: 'spherical-earth-controller',
 		});
 		this._update();
+	}
+
+	/**
+	 * Called by page mounting to bind one unique receiver to the exact session lifetime.
+	 *
+	 * @param {string} viewId - Mounted workspace identity.
+	 * @param {SphericalEarthSession} session - Exact owning scene session.
+	 */
+	_registerSync(viewId, session) {
+		let name = `spherical-earth-camera-sync-${viewId}-${this._nextSyncReceiver++}`;
+		new ViewCameraSyncReceiver({
+			name,
+			registry: this.registry,
+			coordinator: this.cameraSync,
+			onSynced: (mode) => session.setSyncMode(mode),
+			applyControls: (controls) => session.applyCameraControls(controls),
+		});
+		let receiver = /** @type {ViewCameraSyncReceiverService} */ (this.registry.subscribe(name));
+		this._syncReceivers.set(viewId, receiver);
+		session.onCameraControlsChanged = (controls) => receiver.publish(controls);
+		receiver.connect(session.getCameraControls());
+		this._updateSyncAvailability();
+	}
+
+	/**
+	 * Called by workspace transitions to project public workspace eligibility into existing sessions.
+	 */
+	_updateSyncAvailability() {
+		if (!this.sessions.size) {
+			return;
+		}
+		let views = this.workspace.getState().workspace.views;
+		let available = views.length === 2 && views.every((view) => view.pageId !== null);
+		for (let session of this.sessions.values()) {
+			session.setSyncAvailable(available);
+		}
+	}
+
+	/**
+	 * Call this method to relay an eligible toolbar action to this view's receiver.
+	 *
+	 * @param {string} viewId - Exact mounted view.
+	 * @param {CameraSyncMode} mode - Requested synchronization action.
+	 */
+	syncCamera(viewId, mode) {
+		if (this.sessions.get(viewId)?.getState().sync.available) {
+			this._syncReceivers.get(viewId)?.request(mode);
+		}
 	}
 
 	/**
@@ -95,6 +155,7 @@ export class SphericalEarthController extends Service {
 				new SphericalEarthRuntime(canvas, model, id, onFailure, onCameraChange, this.stellar, this.cache),
 		);
 		this.sessions.set(viewId, session);
+		this._registerSync(viewId, session);
 		session.update(this.configuration.get());
 		const definitions = [
 			{id: 'spherical-earth-camera', slot: 'view-tools'},
@@ -245,6 +306,9 @@ export class SphericalEarthController extends Service {
 			return;
 		}
 		this.sessions.delete(viewId);
+		session.onCameraControlsChanged = null;
+		this._syncReceivers.get(viewId)?.retire();
+		this._syncReceivers.delete(viewId);
 		for (const token of this.tokens.get(viewId) ?? []) {
 			this.contributions.remove(token);
 		}
@@ -263,6 +327,10 @@ export class SphericalEarthController extends Service {
 	 * @returns {Promise<void>} - Completion after all removed sessions release their resources.
 	 */
 	stop() {
+		if (this.workspaceListener) {
+			this.workspace.unlisten('state-changed', this.workspaceListener);
+			this.workspaceListener = null;
+		}
 		if (this.listener) {
 			this.configuration.unlisten('changed', this.listener);
 			this.listener = null;

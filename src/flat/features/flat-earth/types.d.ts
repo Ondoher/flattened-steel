@@ -1,14 +1,4 @@
 /**
- * Public presentation capability owned by the Flat Earth view.
- */
-type FlatEarthViewService = import('./views/flat-earth.js').FlatEarthView;
-
-/**
- * Public controller capability for scoped Flat Earth sessions.
- */
-type FlatEarthControllerService = import('./controller.js').FlatEarthController;
-
-/**
  * Feature-owned graphics context and canonical construction lifetime.
  */
 type FlatEarthGraphicsResources = import('./runtime/FlatEarthGraphics.js').FlatEarthGraphics;
@@ -36,6 +26,10 @@ type FlatEarthSurface = {
  * One view's scene preparation and accepted observation.
  */
 type FlatEarthSceneState = {
+	/**
+	 * Per-view synchronization notification and workspace availability.
+	 */
+	sync: CameraSyncViewState;
 	/**
 	 * Accepted per-view shader presentation and effective Sun multipliers.
 	 */
@@ -70,7 +64,7 @@ type FlatEarthStateChange = {viewId: string; state: FlatEarthSceneState};
 /**
  * Session-owned preparation state without the model-owned camera and shader projections.
  */
-type FlatEarthSceneLifecycleState = Omit<FlatEarthSceneState, 'camera' | 'shader'>;
+type FlatEarthSceneLifecycleState = Omit<FlatEarthSceneState, 'camera' | 'shader' | 'sync'>;
 
 /**
  * Prepared values and owning presentation capability for the page.
@@ -118,6 +112,13 @@ interface FlatEarthRuntimeCapability {
 	 * @param degrees - Accepted vertical perspective FOV.
 	 */
 	setFieldOfView(degrees: number): void;
+
+	/**
+	 * Call this method to apply a received orientation without publishing a user-change callback.
+	 *
+	 * @param orientation - Requested local quaternion.
+	 */
+	setOrientation(orientation: CameraSyncOrientation): void;
 
 	/**
 	 * Call this method to aim the retained camera at the displayed source.

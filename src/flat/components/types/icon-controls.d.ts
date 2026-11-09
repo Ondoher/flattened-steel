@@ -1,4 +1,9 @@
 /**
+ * MUI-supported selected-trigger palette colors.
+ */
+type AppToggleButtonColor = import('@mui/material/ToggleButton').ToggleButtonProps['color'];
+
+/**
  * Prepared icon button presentation; strings here are already resolved display data.
  */
 type IconButtonContentProps = Omit<import('@mui/material/IconButton').IconButtonProps, 'children' | 'ref'> & {
@@ -18,6 +23,11 @@ type IconButtonContentProps = Omit<import('@mui/material/IconButton').IconButton
 	 * Suppresses hover/focus tooltip content while a compound popup is open.
 	 */
 	tooltipSuppressed?: boolean;
+
+	/**
+	 * Controlled selected treatment; when supplied the trigger uses MUI ToggleButton.
+	 */
+	selected?: boolean;
 };
 
 /**

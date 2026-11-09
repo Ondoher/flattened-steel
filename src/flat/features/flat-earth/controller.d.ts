@@ -1,7 +1,7 @@
 /**
  * Public scoped Flat Earth controller capability.
  */
-export interface FlatEarthController extends EventBus {
+interface FlatEarthControllerService extends EventBus {
 	/**
 	 * Call this method to stop subscriptions and retire all view and startup resources.
 	 *
@@ -180,4 +180,12 @@ export interface FlatEarthController extends EventBus {
 	 * @returns - Current derived time and draft facts.
 	 */
 	getTimeState(): FlatEarthTimeFacts;
+
+	/**
+	 * Call this method to relay a synchronization action for the exact owning view.
+	 *
+	 * @param viewId - Mounted view identity.
+	 * @param mode - Requested action.
+	 */
+	syncCamera(viewId: string, mode: CameraSyncMode): void;
 }

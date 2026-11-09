@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import MuiIconButton from '@mui/material/IconButton';
+import MuiToggleButton from '@mui/material/ToggleButton';
 import Tooltip from '@mui/material/Tooltip';
 import AppContext from '../common/AppContext.js';
 import {resolveComponentText} from './component-text.js';
@@ -19,18 +20,45 @@ export class IconButtonContent extends Component {
 	 */
 	render() {
 		let context = /** @type {AppContextValue} */ (this.context);
-		let {text, icon, tooltipSuppressed, size, variant, className, ...props} = this.props;
+		let {text, icon, tooltipSuppressed, size, variant, className, selected, color, onChange, ...props} = this.props;
 		let resolvedSize = size !== undefined ? size : context.controlSize;
 		let resolvedVariant = variant !== undefined ? variant : context.controlVariant;
 		let classes = ['app-icon-button', `app-icon-button--${resolvedVariant}`, className].filter(Boolean).join(' ');
 		let title = tooltipSuppressed ? '' : text;
+		/** @type {AppToggleButtonColor} */
+		let toggleColor = color === 'inherit' || color === 'default' ? 'standard' : (color ?? 'primary');
+		let button;
+		if (selected === undefined) {
+			button = (
+				<MuiIconButton
+					{...props}
+					onChange={onChange}
+					color={color}
+					size={resolvedSize}
+					className={classes}
+					aria-label={text}
+				>
+					{icon}
+				</MuiIconButton>
+			);
+		} else {
+			button = (
+				<MuiToggleButton
+					color={toggleColor}
+					{...props}
+					value="selected"
+					selected={selected}
+					size={resolvedSize}
+					className={classes}
+					aria-label={text}
+				>
+					{icon}
+				</MuiToggleButton>
+			);
+		}
 		return (
 			<Tooltip title={title} disableInteractive>
-				<span className="app-icon-tooltip-host">
-					<MuiIconButton {...props} size={resolvedSize} className={classes} aria-label={text}>
-						{icon}
-					</MuiIconButton>
-				</span>
+				<span className="app-icon-tooltip-host">{button}</span>
 			</Tooltip>
 		);
 	}
