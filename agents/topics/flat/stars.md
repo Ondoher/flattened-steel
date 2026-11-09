@@ -41,11 +41,13 @@ Manifest path validation and ordinary-file/root checks reject traversal and
 linked files/directories.
 
 The [operational data contract](../../../server/flat/data/README.md) owns the
-local-only locations, provenance, provisioning and `FLAT_STELLAR_CATALOG_ROOT` /
-`FLAT_HUMAN_VISION_ROOT` overrides. Flat32's bytes were copied and SHA-256 verified into Flat's own ignored
+locations, provenance, provisioning and `FLAT_STELLAR_CATALOG_ROOT` /
+`FLAT_HUMAN_VISION_ROOT` overrides. Flat32's bytes were copied and SHA-256 verified into Flat's own
 directory. Flat has no runtime import or data-directory dependency on Flat32.
-Catalog bytes remain absent from Git and generated public client assets.
-Independent deployments must provision both private operational packages.
+The owner selected Git tracking of Flat's catalog and human-vision packages,
+so app checkouts include their seven files. They remain server-served assets
+rather than inline browser-bundle content. Their source/redistribution status
+remains with the operational data contract and T13.
 
 ## Retained updates and shader modes
 

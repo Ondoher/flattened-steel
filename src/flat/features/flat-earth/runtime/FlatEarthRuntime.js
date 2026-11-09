@@ -10,6 +10,7 @@ import {Algorithm32} from '../../../../algorithm32/implementation/algorithm32/Al
 import {Algorithm32Bindings} from '../../../../algorithm32/implementation/react-three/Algorithm32Bindings.js';
 import {ColorResetAltitudeHalfV1ColorDisplayModel} from '../../../../algorithm32/implementation/color-reset-altitude-half-v1/ColorResetAltitudeHalfV1ColorDisplayModel.js';
 import {FlatEarthShaderPresentation} from './FlatEarthShaderPresentation.js';
+import {FlatEarthSceneLighting} from './FlatEarthSceneLighting.js';
 
 /**
  * Owns one canvas and production Algorithm32 flat/local frame without importing the Flat32 test bed.
@@ -503,15 +504,7 @@ export class FlatEarthRuntime {
 		let sourcePosition = geometry.mapModelPositionToObserverLocalScenePoint(source.configuration.position, {
 			sceneScale: this.sceneScale,
 		});
-		let lighting = source.addSceneLighting({
-			sourceRelativePosition: geometry.resolveSourceRelativePosition({
-				position: geometry.configuration.observerPosition,
-			}),
-			THREE,
-			scene,
-			sourcePosition,
-			observerPosition: {coordinates: [0, camera.position.y, 0], units: 'scene-units'},
-		});
+		let lighting = FlatEarthSceneLighting.create(scene);
 		let viewportSize = this._viewport();
 		let target = new THREE.WebGLRenderTarget(viewportSize.width, viewportSize.height, {
 			minFilter: THREE.LinearFilter,
@@ -583,6 +576,8 @@ export class FlatEarthRuntime {
 				signal,
 			});
 			handle.publishReceiverEnvironmentLight(receiverLight, observation);
+			FlatEarthSceneLighting.prepare(lighting, sourcePosition, receiverLight, color).publish();
+			frame.sunLightIntensities = lighting.lights.map((light) => light.intensity);
 			signal.throwIfAborted();
 			this._resizeFrame(frame);
 			this._updateBindings(frame);
@@ -679,23 +674,11 @@ export class FlatEarthRuntime {
 			let sourcePosition = geometry.mapModelPositionToObserverLocalScenePoint(source.configuration.position, {
 				sceneScale: this.sceneScale,
 			});
-			let lightingUpdate = source.prepareSceneLightingUpdate(
-				{
-					THREE,
-					sourceRelativePosition: geometry.resolveSourceRelativePosition({
-						position: geometry.configuration.observerPosition,
-					}),
-					sourcePosition,
-					observerPosition: {
-						coordinates: [
-							0,
-							geometry.configuration.observerPosition.coordinates[2] / this.sceneScale.value,
-							0,
-						],
-						units: 'scene-units',
-					},
-				},
+			let lightingUpdate = FlatEarthSceneLighting.prepare(
 				frame.lighting,
+				sourcePosition,
+				receiverLight,
+				frame.color,
 			);
 			return this._frameContents(frame, request, receiverLight, update, lightingUpdate);
 		} catch (error) {

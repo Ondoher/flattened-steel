@@ -50,7 +50,7 @@ ordered human filters, and zero WebGL errors. The review sheet is
 Engineering inspection finds a coherent daylight-to-dark chronology, exact
 108-degree cache transition, and one-pixel stellar presentation. The project
 owner accepts this complete cadence as the production engineering appearance
-target, closing C2. The approval does not broaden the M3 scientific-authority
+target, closing C2. The approval does not broaden the T11/T12 scientific-authority
 or redistribution claims.
 
 
@@ -96,13 +96,13 @@ or altered payloads fail closed before application construction.
 - [x] Record owner acceptance of the complete production appearance sequence.
 - [x] Defer the remaining applicable rows in the
   [project-wide research register](../../../../references/followup.md#missing-third-party-sources-or-canonical-registrations)
-  to [MVP requirement M3](../mvp/requirements.md#m3--color-reset-scientific-authority),
+  to [MVP authority/distribution goals T11–T13](../mvp/requirements.md#t11),
   preserving every claim limitation.
 - [x] Defer licenses and redistribution clearance for every selected
-  external-data payload and derivative to M3; retain each affected payload as
+  external-data payload and derivative to T13; retain each affected payload as
   local-only and exclude it from public artifacts until cleared.
 - [x] Re-run all engineering-release lanes after the final appearance decisions
-  are fixed, preserving the M3 authority and distribution restrictions.
+  are fixed, preserving the T11–T13 authority and distribution restrictions.
 
 The 2026-09-11 C6 rerun passed 641 Algorithm32 Node specs, 32 Algorithm32
 WebGL specs, 37 Flat32 full-cache specs, both type checks, the Flat32 build,
@@ -118,4 +118,4 @@ and the production Bruneton result is
 
 P9 engineering-release closure is complete on the pinned matrix. Scientific
 and numerical authority for the C4 rows and public redistribution clearance
-for the C5 payloads remain provisional through M3.
+for the C5 payloads remain provisional through T11–T13.

@@ -9,14 +9,17 @@ engineering qualification and integration-host evidence; finished-app deployment
 requires its own selected application and acceptance evidence.
 
 Start with the closeout ledger: C1, C2, C3, and C6 are complete, and C4 and C5
-are deferred to MVP M3. The P8/P9 engineering release is closed on the pinned
+are deferred to MVP goals T11–T13. The P8/P9 engineering release is closed on the pinned
 Windows, Chrome, and RTX 2060 matrix, and its completed execution plans are
 retired through the
 [archive index](../../context/completed-production-plan-archive-index.md).
 D1-D11 retain explicit owner-disposition states. Engineering closure does not
-authorize public redistribution of the payloads reserved for M3.
+authorize public redistribution of the payloads reserved for T13.
 
 ## Working Documents
+
+- [Current alpha scope and handoff](alpha-status.md) - Public discoverable-app intent, owner-managed hosting, current build readiness and operational-data provisioning.
+- [Cache deployment runbook](../../deploy/README.md) - Local GPU build from Git, completed-package transfer to Ubuntu, Flat activation and rollback.
 
 The distant-Sun shared-cache promotion is recorded by the current
 [runtime qualification](../../production-algorithm32/caches/shared-runtime-qualification.md).

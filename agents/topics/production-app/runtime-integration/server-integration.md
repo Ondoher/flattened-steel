@@ -16,8 +16,10 @@ posture is [discoverable](../README.md#deployment-posture).
 The Flat32 build selects server/flat32/index.js and retains the /flat32 mount.
 The app has an independent Registry in registry.js; installation services are
 attached under shared rather than merged into app-local services. No end-user
-application shell or new fallback route was added. Flat32 is the only registered
-test-bed app. The separate [Flat shell](../../flat/README.md) was subsequently
+application shell or new fallback route was added. Flat32 is registered only
+in the development overlay; the [production exclusion](flat32-production-exclusion.md)
+owns current selection and static-serving verification.
+The separate [Flat shell](../../flat/README.md) was subsequently
 generated under owner authorization and owns its own routing and verification.
 
 The app entry activates services/routers.js and features/index.js. Each package
@@ -38,7 +40,7 @@ the existing authenticated shared-cache reader and physical selection remain.
 
 The owner selected discoverable application posture on 2026-10-26. polylith.json
 uses multiple: true and the explicit apps array required by Polylith 1.3's
-discovery reader. It publishes the current test bed's /flat32 mount and retains
+discovery reader. It publishes only Flat at /flat and retains
 the repository-owned setup entry point. No discover roots are declared here;
 those belong to the separate parent repository.
 

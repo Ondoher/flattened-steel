@@ -3,7 +3,7 @@
 Status: Step 3.12 closed for profile propagation and the canonical GPU B1
 boundary. Complete direct-40 CPU reporting, the final source-fallback audit,
 and renewed stale native-N4 fixture qualification are deferred under
-[Production MVP requirement M2](../../production-app/mvp/requirements.md#m2--algorithm32-production-hardening).
+[MVP technical goals T04–T10](../../production-app/mvp/requirements.md#t04).
 
 ## Current Owner And Boundary
 

@@ -30,6 +30,7 @@ export class GlobalConfigurationView extends Service {
 			'setDateTimeField',
 			'applyDateTime',
 			'setNow',
+			'stepTime',
 			'getSummaryComponent',
 			'openEditor',
 		]);
@@ -198,6 +199,15 @@ export class GlobalConfigurationView extends Service {
 	 */
 	setNow() {
 		this.controller.setNow();
+	}
+
+	/**
+	 * Call this method to relay a signed shared-time step to the owning controller.
+	 *
+	 * @param {number} minutes - Signed elapsed minutes.
+	 */
+	stepTime(minutes) {
+		this.controller.stepTime(minutes);
 	}
 
 	/**

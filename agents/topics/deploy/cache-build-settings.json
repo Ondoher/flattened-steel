@@ -1,0 +1,6 @@
+{
+	"numericalPolicy": "anchored-radial",
+	"solarInterpolation": "monotone-cubic",
+	"scatteringAccuracy": "corrected60-sun035",
+	"maximumObserverAltitudeMeters": 40000
+}

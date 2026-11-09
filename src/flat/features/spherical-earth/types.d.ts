@@ -345,3 +345,64 @@ type SphericalEarthPreparedScene = {
 	sunLightIntensities: number[];
 	handle: ShaderHandle | null;
 };
+/**
+ * Shared-time event selected from the Globe clock menu.
+ * - **"sunrise"** - Sun's upper limb rising across the geometric ground horizon.
+ * - **"solar-noon"** - Sun's upper meridian passage.
+ * - **"sunset"** - Sun's upper limb setting across the geometric ground horizon.
+ */
+type SphericalSolarEventKind = 'sunrise' | 'solar-noon' | 'sunset';
+
+/**
+ * Epoch-millisecond event instants within the selected device-local date; absent events remain null.
+ */
+type SphericalSolarEventTimes = {
+	/**
+	 * First visible upper-limb sunrise, or null during dates without a crossing.
+	 */
+	sunrise: number | null;
+	/**
+	 * Upper meridian passage, independent of whether the Sun is visible.
+	 */
+	'solar-noon': number | null;
+	/**
+	 * Last visible upper-limb sunset, or null during dates without a crossing.
+	 */
+	sunset: number | null;
+};
+
+/**
+ * Calendar bounds and physical inputs for geometric solar-event calculation.
+ */
+type SphericalSolarEventRequest = {
+	/**
+	 * Inclusive device-local midnight as epoch milliseconds.
+	 */
+	dayStart: number;
+	/**
+	 * Exclusive next device-local midnight as epoch milliseconds, including daylight-saving transitions.
+	 */
+	dayEnd: number;
+	/**
+	 * Accepted geographic latitude in degrees north.
+	 */
+	latitude: number;
+	/**
+	 * Accepted geographic longitude in degrees east.
+	 */
+	longitude: number;
+	/**
+	 * Requested elevation above spherical ground in meters.
+	 */
+	observerHeightMeters: number;
+};
+
+/**
+ * Model-owned memoized events for one view's date, location and requested elevation.
+ */
+type SphericalSolarEventCacheEntry = SphericalSolarEventRequest & {
+	/**
+	 * Computed instants retained across orientation, FOV and same-day time changes.
+	 */
+	events: SphericalSolarEventTimes;
+};

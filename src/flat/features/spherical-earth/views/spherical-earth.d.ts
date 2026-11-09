@@ -3,6 +3,22 @@
  */
 interface SphericalEarthViewService extends EventBus {
 	/**
+	 * Call this method to prepare localized date-scoped clock menu actions.
+	 *
+	 * @param viewId - Exact mounted view.
+	 * @returns - Available and disabled solar-event choices.
+	 */
+	getTimeOptions(viewId: string): AppSelectOption[];
+
+	/**
+	 * Call this method to relay a solar-event selection to the shared clock workflow.
+	 *
+	 * @param viewId - Exact mounted view.
+	 * @param kind - Selected solar event.
+	 */
+	setSolarEvent(viewId: string, kind: SphericalSolarEventKind): void;
+
+	/**
 	 * Call this method to obtain scoped feature-owned scene presentation.
 	 *
 	 * @param viewId - Exact workspace view identity.

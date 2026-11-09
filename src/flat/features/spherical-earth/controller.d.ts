@@ -3,6 +3,22 @@
  */
 interface SphericalEarthControllerService extends EventBus {
 	/**
+	 * Call this method to obtain events for the selected date, shared location and requested view elevation.
+	 *
+	 * @param viewId - Exact mounted view.
+	 * @returns - Available event instants; absent events remain null.
+	 */
+	getSolarEvents(viewId: string): SphericalSolarEventTimes;
+
+	/**
+	 * Call this method to update the shared clock to an available solar event.
+	 *
+	 * @param viewId - Exact initiating view.
+	 * @param kind - Selected solar event.
+	 */
+	setSolarEvent(viewId: string, kind: SphericalSolarEventKind): void;
+
+	/**
 	 * Call this method to stop subscriptions and retire all current and removed sessions.
 	 *
 	 * @returns - Completion before shared providers can be released.

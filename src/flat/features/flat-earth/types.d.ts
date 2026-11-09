@@ -170,9 +170,9 @@ type FlatEarthPreparedScene = {
 	 */
 	cacheBinding: import('../../../algorithm32/implementation/local-sun/cache/frames/LocalSunRuntimeCacheBinding.js').LocalSunRuntimeCacheBinding;
 	/**
-	 * Source-owned retained endpoint lighting.
+	 * Receiver-measured retained endpoint lighting.
 	 */
-	lighting: LightSourceThreeLightingObjects;
+	lighting: FlatEarthMeasuredLights;
 	/**
 	 * Retained neutral presentation-only fill, enabled when atmospheric rendering is disabled.
 	 */
@@ -209,6 +209,16 @@ type FlatEarthPreparedScene = {
 	 * Common camera and display bindings.
 	 */
 	bindings: Algorithm32BindingValues;
+};
+
+/**
+ * Retained lights driven by the accepted atmospheric receiver measurement.
+ */
+type FlatEarthMeasuredLights = {
+	/**
+	 * Diffuse upper-hemisphere fill followed by the finite-Sun point light; no distance falloff is reapplied.
+	 */
+	lights: [import('three').HemisphereLight, import('three').PointLight];
 };
 
 /**

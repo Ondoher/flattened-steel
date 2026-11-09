@@ -150,9 +150,11 @@ those public entries; the narrow entry owns no numerical or lifecycle behavior.
   through explicit `compact-v9-native15` selection. Measured receiver lighting,
   finite-Sun and geometry-owned flat-star resources share the exact live frame.
   This does not permit private configuration mutation or implicit cross-pairing support.
-  Existing in-place time/location animation is deferred under
-  [Production MVP requirement M1](../../production-app/mvp/requirements.md#m1--compatible-time-and-location-animation)
-  and requires a separately accepted cache transform.
+  [Retained updates T01](../../production-app/mvp/requirements.md#t01) and
+  [atomic publication T02](../../production-app/mvp/requirements.md#t02) record
+  the implemented application capability. [Rebuild equivalence T03](../../production-app/mvp/requirements.md#t03)
+  and [animation cadence F07](../../production-app/mvp/requirements.md#f07)
+  retain their separate acceptance obligations.
 - Atmosphere behavior is externally implementable through the global
   `AtmosphereModel` interface. `CanonicalAtmosphere` is the standard public
   concrete implementation and belongs under

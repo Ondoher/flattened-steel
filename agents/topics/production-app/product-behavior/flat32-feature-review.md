@@ -49,7 +49,7 @@ presence does not imply that Flat32 provides an ordinary interactive UI for them
 | ID | Feature observed in Flat32 | Existing capability and source | Question for product review |
 | --- | --- | --- | --- |
 | F32-11 | Color and exposure behavior | Altitude-aware Color Reset default and explicit Basic Bruneton/P2/P9 controls selected at startup. [Bootstrap](../../../../src/flat32/Flat32Bootstrap.js), [selection contracts](../../../../src/flat32/Flat32ProductionSelections.js), [twilight behavior](twilight-exposure.md). | Which display behavior should be the default, and should users see alternatives? |
-| F32-12 | Stars and catalog selection | Configured stellar sources with brightest-500 or brightest-2,000 catalog selections and mode-specific support. [Bootstrap](../../../../src/flat32/Flat32Bootstrap.js), [selection contracts](../../../../src/flat32/Flat32ProductionSelections.js). | Include stars, which catalog and mode coverage are needed, and what assets can ship under MVP M3? |
+| F32-12 | Stars and catalog selection | Configured stellar sources with brightest-500 or brightest-2,000 catalog selections and mode-specific support. [Bootstrap](../../../../src/flat32/Flat32Bootstrap.js), [selection contracts](../../../../src/flat32/Flat32ProductionSelections.js). | Include stars, which catalog and mode coverage are needed, and what assets can ship under MVP goals T11–T13? |
 | F32-13 | Low-light stellar presentation | Startup choices for physical, chroma, mesopic or combined human presentation, using the supported filter configuration and required assets. [Bootstrap](../../../../src/flat32/Flat32Bootstrap.js), [selection contracts](../../../../src/flat32/Flat32ProductionSelections.js). | Select one presentation or expose a clearly explained comparison? |
 
 ## Interaction And Reliability Candidates
@@ -80,7 +80,7 @@ The [MVP requirements](../mvp/requirements.md) remain the canonical owner of
 efficient compatible time/location animation, engine hardening, and scientific
 authority/distribution clearance. This inventory neither closes nor expands
 those requirements. In particular, existing frame cadence options and discrete
-time controls do not establish completion of MVP M1's time/location animation.
+time controls do not establish completion of MVP animation goal F07's time/location animation.
 
 Future cache-quality profiles and per-mode saved-camera behavior remain proposals
 or deferred work in the [migration inventory](flat32-migration-inventory.md), not

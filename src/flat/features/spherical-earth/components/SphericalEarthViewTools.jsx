@@ -8,6 +8,7 @@ import Brightness6Outlined from '@mui/icons-material/Brightness6Outlined';
 import Height from '@mui/icons-material/Height';
 import ZoomOutMap from '@mui/icons-material/ZoomOutMap';
 import CenterFocusStrong from '@mui/icons-material/CenterFocusStrong';
+import AccessTime from '@mui/icons-material/AccessTime';
 import React, {Component} from 'react';
 import AppContext from '../../../common/AppContext.js';
 import {FIELD_OF_VIEW_PRESETS, ELEVATION_PRESETS} from '../camera-controls.js';
@@ -35,6 +36,37 @@ export default class SphericalEarthViewTools extends Component {
 		this._onCompass = this._onCompass.bind(this);
 		this._onSync = this._onSync.bind(this);
 		this._onSky = this._onSky.bind(this);
+		this._onTime = this._onTime.bind(this);
+	}
+
+	/**
+	 * Called by the clock menu to request a solar event through the owning view.
+	 *
+	 * @param {SphericalSolarEventKind} kind - Selected shared-time event.
+	 */
+	_onTime(kind) {
+		this.props.sceneView.setSolarEvent(this.props.viewId, kind);
+	}
+
+	/**
+	 * Owns the Globe's clock action menu beside the other feature controls.
+	 *
+	 * @returns {React.ReactNode} - Localized sunrise, solar-noon and sunset actions.
+	 */
+	_renderTimeControl() {
+		let icon = <AccessTime />;
+		let options = this.props.sceneView.getTimeOptions(this.props.viewId);
+		let disabled = options.every((option) => option.disabled);
+		return (
+			<IconMenuButton
+				className="spherical-earth-time"
+				label="spherical-earth.time.label"
+				icon={icon}
+				options={options}
+				disabled={disabled}
+				onChange={this._onTime}
+			/>
+		);
 	}
 
 	/**
@@ -397,6 +429,7 @@ export default class SphericalEarthViewTools extends Component {
 					onChange={this._onFieldOfView}
 					aria-description={fovHint}
 				/>
+				{this._renderTimeControl()}
 				{this._renderFocusControl()}
 				{this._renderCompassControl()}
 				{this._renderSyncControl()}

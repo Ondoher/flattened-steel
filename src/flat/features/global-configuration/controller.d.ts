@@ -55,6 +55,13 @@ export interface GlobalConfigurationController extends WorkspaceContributionCont
 	setNow(): void;
 
 	/**
+	 * Call this method to advance the accepted instant and reset date/time drafts.
+	 *
+	 * @param minutes - Signed elapsed minutes.
+	 */
+	stepTime(minutes: number): void;
+
+	/**
 	 * Call this method to load the city catalog or retry a failed load.
 	 *
 	 * @returns - Completion of the current loading workflow.

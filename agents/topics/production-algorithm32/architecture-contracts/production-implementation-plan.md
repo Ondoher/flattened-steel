@@ -120,4 +120,4 @@ retired experiment, regenerate its output, or treat it as current authority.
 
 **Status: deferred and relocated.** The single-strategy audit, retained CPU
 oracle boundary, standalone dependency check, and gate are now owned by
-[Production MVP requirement M2](../../production-app/mvp/requirements.md#m2--algorithm32-production-hardening).
+[MVP technical goals T04–T10](../../production-app/mvp/requirements.md#t04).

@@ -5,8 +5,35 @@ Flat is the production application shell created through create-app on
 own the selected workspace behavior and scaffold options. Flat32 remains the
 separate integration test bed.
 
+The [production app catalog](../production-app/runtime-integration/flat32-production-exclusion.md)
+excludes Flat32 from discovery and standalone production hosting. Explicit
+development commands retain local test-bed access.
+
+The repository's [main README](../../../README.md) explains the implemented
+Flat and Globe Sun/star placement and illumination equations for a general
+reader, with direct links to CPU calculations and shader code. It owns that
+public model explanation; this topic owns application work and status.
+Its [basic Flat model assumptions](../../../README.md#basic-flat-model-assumptions)
+collect Sun height/radius, map scale/latitude, shared time, the intended overhead
+ground-level sunlight calibration and stellar synchronization in one brief review
+table. The ground-level calibration remains an implementation/verification gap;
+the current source-distance normalization does not establish that match.
+The [calibration assessment](overhead-sun-calibration.md) records existing source
+support and preliminary CPU integration sensitivity. The owner deferred the
+calibration change; retain the current lighting until it is revisited.
+
+The [MVP goals](../production-app/mvp/requirements.md#current-goals) track selected
+features and technical acceptance individually. The list records completed
+capabilities separately from remaining release, research and distribution work;
+goal identifiers do not imply implementation phases.
+
 The [Component Refactor topic](../component-refactor/README.md) owns the current
 shared controls and the implemented single-line Flat page toolbar.
+The shared view selector is labeled **Choose mode**.
+
+The [solar-time controls](solar-time-controls.md) add Globe sunrise/solar-noon/
+sunset choices and shared date/time configuration buttons for ten-minute steps.
+The note owns event definitions, selected-date policy and verification evidence.
 
 The [Sync Window design](sync-window-design.md) records the owner's proposed
 single `camera-sync` service, participant callbacks, and `now`, `them`, `both`,
@@ -24,6 +51,10 @@ Both Earth features now offer the [celestial focus menu](celestial-focus.md)
 with Sun and Polaris actions in their toolbar and Camera settings. Each action
 aims only the owning view using its displayed scene and the current catalog
 placement, then redraws retained resources.
+
+The [ground-lighting correction](ground-lighting.md) connects Flat Earth's
+ground lights to the measured direct Sun and diffuse sky spectra, matching
+Flat32's conversion while preserving retained updates and presentation modes.
 
 Each Earth toolbar also has an independent [directional ribbon toggle](directional-ribbon.md).
 Its compass icon shows or hides a cardinal/intercardinal heading tape directly

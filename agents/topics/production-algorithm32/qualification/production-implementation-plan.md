@@ -10,26 +10,26 @@ The [distant-Sun strobing promotion](../caches/distant-sun-strobing-promotion-pl
 is the next selected production work. It owns the bounded cache/interpolation
 Bruneton qualification and separate color/recording checks; its
 [status](../caches/distant-sun-strobing-promotion-status.md) owns execution state.
-The broader deferred hardening scope below remains with MVP M2.
+The broader deferred hardening scope below remains with MVP technical goals T04–T10.
 
 ### 0. Establish the imported production baseline — implementation established; remaining evidence relocated
 
 - The source implementation has been copied into `src/algorithm32`; parity for
-  its retained physical behavior is part of M2 while current contracts replace
+  its retained physical behavior is part of MVP T03/T04 while current contracts replace
   retired boundary shapes directly.
 - The standalone Jasmine configuration and
   `npm run test:algorithm32` command are integrated and execute all
   current adjacent production specs. The outstanding import manifest,
   pinned-source parity, stable native-15 CPU outputs, dependency audit, and
   stale-fixture reconciliation are deferred under
-  [Production MVP requirement M2](../../production-app/mvp/requirements.md#m2--algorithm32-production-hardening).
+  [MVP technical goals T04–T10](../../production-app/mvp/requirements.md#t04).
 
 ### 15. Harden spherical/distant Algorithm32
 
 **Status: deferred and relocated.** Parity, continuity, lifecycle, dome sanity,
 sealed-boundary reproduction, resource measurement, and declared performance
 budgets are now owned by
-[Production MVP requirement M2](../../production-app/mvp/requirements.md#m2--algorithm32-production-hardening).
+[MVP technical goals T04–T10](../../production-app/mvp/requirements.md#t04).
 
 ## Verification Ladder
 
@@ -51,5 +51,5 @@ truth; external benchmarks retain that role.
 ## Follow-On Hardening Work
 
 This work is deferred and consolidated under
-[Production MVP requirement M2](../../production-app/mvp/requirements.md#m2--algorithm32-production-hardening).
+[MVP technical goals T04–T10](../../production-app/mvp/requirements.md#t04).
 The verification ladder above remains the definition consumed by that gate.

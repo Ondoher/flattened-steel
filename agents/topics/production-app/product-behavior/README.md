@@ -192,7 +192,7 @@ these options; the [Flat app entry](../../flat/README.md) owns scaffold status.
 
 ## Retained Integration-Test-Bed Status
 
-Stage 11.1-11.3 and parts of 11.4-11.6 are implemented. Remaining interaction/migration/reconciliation work and 11.8 acceptance are owner-deferred. Compatible-clock animation is now owned by [Production MVP requirement M1](../mvp/requirements.md#m1--compatible-time-and-location-animation).
+Stage 11.1-11.3 and parts of 11.4-11.6 are implemented. Remaining interaction/migration/reconciliation work and 11.8 acceptance are owner-deferred. Compatible-clock animation is now owned by [MVP animation goal F07](../mvp/requirements.md#f07).
 
 ## Working Documents
 

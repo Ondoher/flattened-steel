@@ -42,6 +42,8 @@ export class SphericalEarthController extends Service {
 			'centerOnPolaris',
 			'toggleCompass',
 			'syncCamera',
+			'getSolarEvents',
+			'setSolarEvent',
 			'mountContribution',
 			'unmountContribution',
 		]);
@@ -99,6 +101,34 @@ export class SphericalEarthController extends Service {
 		session.onCameraControlsChanged = (controls) => receiver.publish(controls);
 		receiver.connect(session.getCameraControls());
 		this._updateSyncAvailability();
+	}
+
+	/**
+	 * Call this method to read solar-event choices using accepted shared time and requested view height.
+	 *
+	 * @param {string} viewId - Exact mounted view.
+	 * @returns {SphericalSolarEventTimes} - Date-scoped shared-time actions.
+	 */
+	getSolarEvents(viewId) {
+		let camera = this.sessions.get(viewId).getState().camera;
+		return this.model.getSolarEvents(
+			viewId,
+			this.configuration.get(),
+			camera.pendingHeightMeters ?? camera.observerHeightMeters,
+		);
+	}
+
+	/**
+	 * Call this method to select an available Globe solar event on the shared application clock.
+	 *
+	 * @param {string} viewId - Exact initiating view.
+	 * @param {SphericalSolarEventKind} kind - Requested event; absent events leave time unchanged.
+	 */
+	setSolarEvent(viewId, kind) {
+		let timestamp = this.getSolarEvents(viewId)[kind];
+		if (timestamp != null) {
+			this.configuration.setTimestamp(timestamp);
+		}
 	}
 
 	/**

@@ -1,0 +1,135 @@
+{
+  "schemaId": "algorithm32-production-brightest-2000-stellar-package-v1",
+  "packageId": "brightest-2000-stellar-package-v1",
+  "memberCount": 2000,
+  "spectralChannelCount": 15,
+  "selection": "finite-j2000-position-and-vmag; ascending-vmag; ascending-hr-tiebreak; first-2000",
+  "selectionSha256": "6316eff663c7e41b27eb969f557ae32f9617f67e3dd40cd8cf396e1d306a1f3c",
+  "photometryPolicy": "pickles-bracketed-plus-photometry-constrained-red-proxy-v1",
+  "photometrySha256": "3bda4616b596fa72874a0dc47bade36bd2f079896d084e7af01297a4c5c43f48",
+  "coveredPolicyMemberCount": 1993,
+  "proxyMemberCount": 7,
+  "proxyMembers": [
+    {
+      "canonicalIndex": 514,
+      "memberId": "bsc-v50-hr-868",
+      "derivation": {
+        "kind": "oxygen-rich-type-matched-tilted-pickles",
+        "baseTemplateId": "ukm7iii",
+        "tiltExponent": 4.036377530920413,
+        "pivotNanometers": 550.1402599255,
+        "claimLimit": "M7IIIe continuum proxy; emission-line and variability detail unclaimed."
+      }
+    },
+    {
+      "canonicalIndex": 570,
+      "memberId": "bsc-v50-hr-8316",
+      "derivation": {
+        "kind": "oxygen-rich-type-matched-tilted-pickles",
+        "baseTemplateId": "ukm2i",
+        "tiltExponent": 2.767320080394792,
+        "pivotNanometers": 550.1402599255,
+        "claimLimit": "M2-Ia continuum proxy; variability detail unclaimed."
+      }
+    },
+    {
+      "canonicalIndex": 786,
+      "memberId": "bsc-v50-hr-1845",
+      "derivation": {
+        "kind": "oxygen-rich-type-matched-tilted-pickles",
+        "baseTemplateId": "ukm2i",
+        "tiltExponent": 1.3731460604612806,
+        "pivotNanometers": 550.1402599255,
+        "claimLimit": "M2Iab-Ib continuum proxy."
+      }
+    },
+    {
+      "canonicalIndex": 1292,
+      "memberId": "bsc-v50-hr-4163",
+      "derivation": {
+        "kind": "carbon-color-constrained-continuum-proxy",
+        "baseTemplateId": "ukm10iii",
+        "tiltExponent": 7.124501123015424,
+        "pivotNanometers": 550.1402599255,
+        "claimLimit": "C5II catalog-color proxy; carbon molecular bands unclaimed."
+      }
+    },
+    {
+      "canonicalIndex": 1442,
+      "memberId": "bsc-v50-hr-2289",
+      "derivation": {
+        "kind": "oxygen-rich-type-matched-tilted-pickles",
+        "baseTemplateId": "ukk4i",
+        "tiltExponent": 1.1921686450462379,
+        "pivotNanometers": 550.1402599255,
+        "claimLimit": "K5-M0Iab-Ib continuum proxy."
+      }
+    },
+    {
+      "canonicalIndex": 1594,
+      "memberId": "bsc-v50-hr-4846",
+      "derivation": {
+        "kind": "carbon-color-constrained-continuum-proxy",
+        "baseTemplateId": "ukm10iii",
+        "tiltExponent": 6.508246518020394,
+        "pivotNanometers": 550.1402599255,
+        "claimLimit": "C7I catalog-color proxy; carbon molecular bands unclaimed."
+      }
+    },
+    {
+      "canonicalIndex": 1709,
+      "memberId": "bsc-v50-hr-9004",
+      "derivation": {
+        "kind": "carbon-color-constrained-continuum-proxy",
+        "baseTemplateId": "ukm10iii",
+        "tiltExponent": 6.772941015615096,
+        "pivotNanometers": 550.1402599255,
+        "claimLimit": "C5II catalog-color proxy; carbon molecular bands unclaimed."
+      }
+    }
+  ],
+  "parents": {
+    "rosterRunId": "000047-cr6b-brightest-2000-catalog-proof",
+    "rosterArtifactSetSha256": "ce50de53045f1e6f0ef33dcdc2b935a7023d5e28095b3d5f13add4980c370c57",
+    "packetsRunId": "000055-cr6f-brightest-2000-spectral-materialization",
+    "packetsArtifactSetSha256": "a380716366661c7b9bddcd6b025bd1c111d9e60b8a03cde6445e6cd0a61649c4",
+    "runtimeRunId": "000057-cr6g-brightest-2000-runtime-capacity",
+    "runtimeArtifactSetSha256": "ae7224f0b85859a08d896f32b7be24c33472b9b3e034f07b365f96024af90627"
+  },
+  "artifacts": {
+    "roster": {
+      "path": "catalog-roster.json",
+      "byteLength": 1295829,
+      "sha256": "6316eff663c7e41b27eb969f557ae32f9617f67e3dd40cd8cf396e1d306a1f3c"
+    },
+    "packets": {
+      "path": "native15-packets.json",
+      "byteLength": 1957981,
+      "sha256": "3bda4616b596fa72874a0dc47bade36bd2f079896d084e7af01297a4c5c43f48"
+    },
+    "members": {
+      "path": "members-rgba32f.bin",
+      "byteLength": 32000,
+      "sha256": "14d72c452bbe8f794cce3cfd77634ae378842dedb3076c8f1a3f99de6811c4b2"
+    },
+    "spectra": {
+      "path": "spectra-r32f.bin",
+      "byteLength": 120000,
+      "sha256": "f52b44e1db1d01382fe48cb9967351b1a2f26d775237f7137416dbdb04a18128"
+    }
+  },
+  "runtime": {
+    "memberTexture": {
+      "format": "RGBA32F",
+      "width": 2000,
+      "height": 1
+    },
+    "spectraTexture": {
+      "format": "R32F",
+      "width": 2000,
+      "height": 15
+    },
+    "totalPayloadBytes": 152000
+  },
+  "redistribution": "local-only-pending-source-and-license-clearance"
+}

@@ -241,6 +241,7 @@ function seekSlider(root, angle) {
 function timeView(angle = 0) {
 	return {
 		getSyncOptions: () => [],
+		getTimeOptions: () => [],
 		getTimeState: () => ({
 			angle,
 			selected: false,

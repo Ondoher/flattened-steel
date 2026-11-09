@@ -19,6 +19,7 @@ import {NATIVE_48_POSITION_DOMAIN_OWNER} from '../../../../algorithm32/sampling-
 import DistanceMath from '../../../../algorithm32/math/DistanceMath.js';
 import AngleMath from '../../../../algorithm32/math/AngleMath.js';
 import {SphericalEarthShaderPresentation} from './SphericalEarthShaderPresentation.js';
+import {SphericalSolarEvents} from '../solar-events.js';
 
 /**
  * Retains one spherical scene and independently owned GPU attachment for a mounted view.
@@ -321,7 +322,7 @@ export class SphericalEarthRuntime {
 		signal.throwIfAborted();
 		let geometry = facts.geometry;
 		let source = new DistantSunLightSource({
-			angularRadius: {value: 0.004675, units: 'radians'},
+			angularRadius: {value: SphericalSolarEvents.angularRadiusRadians, units: 'radians'},
 			sharedCache: selection,
 		});
 		let color = new ColorResetAltitudeHalfV1ColorDisplayModel({

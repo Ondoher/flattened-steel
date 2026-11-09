@@ -1,13 +1,6 @@
 {
 	"apps": [
 		{
-			"name": "flat32",
-			"mount": "/flat32",
-			"filename": "flat32.json",
-			"code": false,
-			"default": false
-		},
-		{
 			"name": "flat",
 			"filename": "flat.json",
 			"default": false,
@@ -18,7 +11,7 @@
 		"setup": "server/setup-deployment.js"
 	},
 	"builds": "builds",
-	"dest": "dist",
+	"dest": "dist/flat",
 	"multiple": true,
 	"react": true,
 	"src": "src"

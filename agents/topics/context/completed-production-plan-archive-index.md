@@ -26,7 +26,7 @@ ignored archive can recover the tracked originals from Git history.
 | Flat32 one-degree cache hookup | [Shared runtime qualification](../production-algorithm32/caches/shared-runtime-qualification.md) and [release qualification](../production-app/release/color-reset-production-qualification.md) |
 | Production B1-B3 wiring | [Official experiment register](../../../references/experiments.md), [benchmark qualification](../poc-experiments/benchmarks/color-reset-production-qualification.md), and [release qualification](../production-app/release/color-reset-production-qualification.md) |
 | Color Reset P0-P9 | [Color/celestial current dataflow](../production-algorithm32/color-celestial/current-dataflow.md), [release qualification](../production-app/release/color-reset-production-qualification.md), and [promotion manifest](../production-algorithm32/qualification/color-reset-promotion-manifest.md) |
-| Deferred MVP gates | [M1-M3 requirements](../production-app/mvp/requirements.md) |
+| Deferred MVP gates | [MVP goals](../production-app/mvp/requirements.md) |
 
 ## Verified Original Identities
 

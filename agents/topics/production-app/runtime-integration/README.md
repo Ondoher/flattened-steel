@@ -11,6 +11,8 @@ establish the finished application's implementation or deployment.
 
 ## Working Documents
 
+- [Flat32 production exclusion](flat32-production-exclusion.md) - Production/discovery app selection, static-output isolation, local development commands and HTTP verification.
+
 - [Server integration](server-integration.md) - Current Polylith 1.3 deployment setup, app registry, feature routers, retained endpoints and verification limits.
 
 - [Production Ambient-Light Design](ambient-light-design.md)

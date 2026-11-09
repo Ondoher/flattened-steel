@@ -6,16 +6,16 @@ Related owners: [caches](../../production-algorithm32/caches/cache-design.md), [
 
 ## Deferred Follow-Up: Source-Relative Animation And In-Setup Reconfiguration
 
-Status: supporting design for
-[Production MVP requirement M1](../mvp/requirements.md#m1--compatible-time-and-location-animation).
-M1 owns scheduling and acceptance; this document retains the cache hypotheses
-and design constraints needed when that requirement resumes.
+Status: supporting design for [animation goal F07](../mvp/requirements.md#f07)
+and [rebuild-equivalence goal T03](../mvp/requirements.md#t03).
+[T01](../mvp/requirements.md#t01) records the implemented retained-update
+capability for both families. This document preserves the cache hypotheses
+and constraints relevant to remaining acceptance and owner-selected refinements.
 
-The future MVP stage must animate both supported source/geometry families
-without constructing a complete replacement facade and scene for every clock
-tick. Its enabling problem is a cache transform or equivalent reusable cache
-parameterization that preserves the accepted physical result across supported
-time/location changes.
+Both families must sustain the selected cadence without constructing a complete
+replacement facade, scene and cache for every compatible tick. The implemented
+reuse does not itself close independent rebuild equivalence or cadence
+acceptance. These are separate outcomes, not a future implementation phase.
 
 A finite local source approaches a distant source as direction variation,
 inverse-square variation, and angular extent across the atmosphere approach

@@ -1,5 +1,6 @@
 import {Service} from '@polylith/core';
 import DistanceMath from '../../../../algorithm32/math/DistanceMath.js';
+import {SphericalSolarEvents} from '../solar-events.js';
 
 /**
  * Owns the feature's independently scoped camera settings and maps shared configuration into engine observations.
@@ -28,6 +29,7 @@ export class SphericalEarthModel extends Service {
 			'resolveHeight',
 			'acceptHeight',
 			'getObservation',
+			'getSolarEvents',
 		]);
 	}
 
@@ -39,6 +41,8 @@ export class SphericalEarthModel extends Service {
 		this.cameras = new Map();
 		/** @type {Map<string, SphericalEarthSkyRenderMode>} */
 		this.skyModes = new Map();
+		/** @type {Map<string, SphericalSolarEventCacheEntry>} */
+		this.solarEvents = new Map();
 	}
 
 	/**
@@ -47,6 +51,7 @@ export class SphericalEarthModel extends Service {
 	stop() {
 		this.cameras?.clear();
 		this.skyModes?.clear();
+		this.solarEvents?.clear();
 	}
 
 	/**
@@ -72,6 +77,38 @@ export class SphericalEarthModel extends Service {
 	close(viewId) {
 		this.cameras.delete(viewId);
 		this.skyModes.delete(viewId);
+		this.solarEvents.delete(viewId);
+	}
+
+	/**
+	 * Call this method to obtain date/location/elevation events without recalculating them for camera movement.
+	 *
+	 * @param {string} viewId - Exact mounted view identity.
+	 * @param {ApplicationConfiguration} configuration - Accepted shared date and location.
+	 * @param {number} observerHeightMeters - Latest requested view elevation in meters.
+	 * @returns {SphericalSolarEventTimes} - Available event instants, or null entries before a location is selected.
+	 */
+	getSolarEvents(viewId, configuration, observerHeightMeters) {
+		if (!configuration.location || configuration.timestamp == null) {
+			return {sunrise: null, 'solar-noon': null, sunset: null};
+		}
+		let date = new Date(configuration.timestamp);
+		date.setHours(0, 0, 0, 0);
+		let dayStart = date.getTime();
+		date.setDate(date.getDate() + 1);
+		let request = {
+			dayStart,
+			dayEnd: date.getTime(),
+			latitude: configuration.location.latitude,
+			longitude: configuration.location.longitude,
+			observerHeightMeters,
+		};
+		let cached = this.solarEvents.get(viewId);
+		if (!cached || Object.keys(request).some((key) => request[key] !== cached[key])) {
+			cached = {...request, events: SphericalSolarEvents.calculate(request)};
+			this.solarEvents.set(viewId, cached);
+		}
+		return {...cached.events};
 	}
 
 	/**

@@ -350,6 +350,11 @@ type DateTimeEditorProps = {
 	 * Requests the current instant for both date and time.
 	 */
 	onNow: () => void;
+
+	/**
+	 * Requests a signed elapsed-minute step of accepted shared time.
+	 */
+	onStep: (minutes: number) => void;
 };
 
 /**

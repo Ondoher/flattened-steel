@@ -307,6 +307,7 @@ for (const scenario of [
 		assert.ok(hostPort > 0, 'The failure must occur after the local server began listening.');
 		assert.throws(() => process.kill(processId, 0), {code: 'ESRCH'});
 		assert.equal(getEventListeners(cancellation.signal, 'abort').length, 0);
+		await assert.rejects(files.resolve(`${runRoot}/chrome-profile`), {code: 'ENOENT'});
 		await assert.rejects(
 			new Promise((resolve, reject) => {
 				const connection = createConnection({host: '127.0.0.1', port: hostPort});

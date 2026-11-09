@@ -261,5 +261,5 @@ during migration.
 
 **Status: deferred and relocated.** The requirement, implementation boundary,
 and acceptance gate are now owned by
-[Production MVP requirement M1](../mvp/requirements.md#m1--compatible-time-and-location-animation).
+[MVP animation goal F07](../mvp/requirements.md#f07).
 This stage is no longer current product-behavior work.

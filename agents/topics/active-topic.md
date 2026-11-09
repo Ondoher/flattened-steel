@@ -1,80 +1,96 @@
 # Active Topic
 
-Current active topic: flat.
-Canonical entry: [Flat](flat/README.md).
-Focus: camera-sync UI M1-M2 are complete under independent execution.
-flat/camera-sync-ui-plan.md owns the final report, evidence, decisions and
-whole-repository checkpoint record; flat/sync-window-design.md owns behavior.
-Both Earth toolbars offer text-only Match now, Follow other view, Link both
-views and Stop syncing through the unchanged app-local camera-sync service.
-The SyncAltOutlined button beside compass uses standard MUI selected treatment
-when this view receives updates. Menu opening does not toggle selection.
-Direction and requested elevation synchronize without echoes, including
-toolbar/settings changes; FOV and other page presentation stay independent.
-Scoped registered receivers retire before their session; overlapping callbacks
-preserve newer intent. All 281 browser tests, Flat types, formatting and the
-normal build pass. Real served-app mixed/same-type, pointer/keyboard, retained
-resource, concurrency/lifetime, failure/retry and configuration checks pass.
-Disposable browser profiles were removed. The report records local checkpoint
-disposition; no push or deployment is authorized.
-All new/touched declarations are ambient with no exports; CameraSyncService
-is directly in services/types.d.ts. FOV synchronization, debounce/coalescing and
-structured errors remain deferred. No follow-on implementation is selected.
-The Earth scene resize correction is complete. Both renderers apply
-device scaling once to physical drawing-buffer dimensions. Flat types, the
-normal build and all 240 browser tests pass, as do native layout checks at
-100%, 125% and 200% scaling. See flat/scene-resize.md for diagnosis and evidence.
-Opening comparison now chooses the registered page type not already active:
-Flat beside Spherical, or Spherical beside Flat. Closing and reopening recomputes
-the choice without replacing the primary view. Flat types, the normal build and
-all 241 browser tests pass, including both selections, fresh comparison lifetimes and rollback
-of a failed alternative mount. The Flat entry owns this selection policy.
-Independent compass toggles and camera-synchronized directional ribbons
-are complete for both Earth toolbars. See flat/directional-ribbon.md. Flat types,
-239 browser tests, the normal production build and live layout/native-input checks
-pass. Evidence is under .codex-tmp/direction-ribbon/20261108/.
-The Sun/Polaris focus menu is implemented for both Earth views. The owning
-note is flat/celestial-focus.md. Menu tests, types, focused geometry tests and
-real browser aiming/GPU comparisons pass. Checkpoint disposition is recorded
-in the camera-sync service plan's final report.
-Global date/time settings also have a localized Now action beside Apply. It
-sets the shared clock to the current instant and replaces unfinished drafts.
-Flat types, normal build and all 235 browser tests pass; the regression covers
-both clock updates and draft replacement when the instant is unchanged.
-Spherical Earth M1-M4 are complete: real atmosphere, curved green ground,
-Sun/stars, independently scoped icon controls and retained scene/cache updates.
-Final shader comparisons, GPU-completed one/mixed/two-view timings, failure/context/
-lifetime checks and separate-parent discoverable deployment all pass. Live depth
-encoding and immediate context-loss retirement fix the issues found by those checks.
-Current evidence lives under
-.codex-tmp/spherical-earth/m2-m4-20261108/ and the execution record.
-The time-zone/IntlDate design decisions remain in the date-field adaptation note:
-Temporal with a polyfill when needed, current-user locale formatting, and explicit
-locale/time-zone parser inputs rather than a `localize` dependency. Possible time
-parsing remains tentative. Those changes are outside the spherical feature plan.
-The owned-content cleanup remains complete; its execution record is linked
-from the Flat entry. The spherical execution record owns the M1 handoff; the
-whole-repository checkpoint for the preceding cleanup remains 263eb193.
+Current active topic: deploy.
+Canonical entry: [Cache deployment runbook](deploy/README.md).
+Focus: local GPU cache generation from a Git checkout, transfer of only the
+completed package and build receipts, then activation at Flat's data root on
+Ubuntu. This replaces the proposed host-side generation workflow. The owner
+handles hosting and parent integration; no remote host was contacted.
 
-Shared MUI controls use AppContext small/outlined defaults; explicit supported
-props win. All UI copy uses the selected localization service, without
-localizationEnabled, localize switches or fallback text. PanelButton delegates
-its popup, dismissal and focus behavior to MUI Popover. The single-row toolbar
-preserves workspace-owned scene/settings/lifetimes and feature-owned controls.
+The runbook folder includes a compact tracked control-metadata seed, its
+producer/manifest, a Node deployment helper, tests and type-check configuration.
+It restores the formerly ignored compiler inputs, checks the local GPU, invokes
+the current 40 km/canonical production compiler, and installs/selects freshly
+generated identities on Ubuntu. The web host does not need Chrome or a GPU.
+Cache files remain generated and ignored; the seed contains metadata only.
+The owner selected Git tracking of Flat's seven stellar/vision package files
+(about 3.41 MB); their ignore rules are removed. Default app checkouts now carry
+them, and only the Globe cache needs a separate data build/copy. Original
+Flat32 copies, asset bytes/provenance and T13 clearance status are preserved.
+Compiler launcher backend selection is configurable and disposable generation
+profiles are cleaned up. Preserve all sealed generation runs and old packages.
 
-The owner deferred the transferred IntlDate parser adaptation and reclassification
-of utilities incorrectly called models. Models are exclusively services.
+Cache input fingerprints now cover selected settings, control metadata and
+conservative engine/generator/deployment source scope, excluding app UI, docs
+and tests. The build and fingerprint share cache-build-settings.json. `check`
+and `check --installed` work without Chrome; matching available local output
+skips GPU work in `build`, with `build --force` available. Transfer last-build.json
+with the package; activation persists installed-build.json for later checks.
+Receipts are separate from sealed runs and replaced atomically. Cheap checks
+read metadata and file lengths, not the full payload. Older packages remain
+usable but report unrecorded until an input receipt is available.
+
+Three helper tests pass on Windows and Ubuntu WSL2 (native Linux filesystem).
+Reuse/invalidation, force bypass, UI/docs exclusions, settings/control/engine
+changes and missing files are covered. Actual Windows/Ubuntu fingerprints agree.
+Local RTX 2060 hardware float-rendering preflight and real installed-package
+verification pass. Production inputs resolve to 109 scenes/5,847 rows/95 blocks.
+Deployment and compiler type checks pass. The full cache was not regenerated;
+Ubuntu GPU generation and remote deployment were not tested or selected.
+The [alpha handoff](production-app/release/alpha-status.md) links this runbook
+and retains operational-data/public-distribution concerns. Calibration and
+refraction remain deferred; current physical model behavior is unchanged.
+
+[Flat32 production exclusion](production-app/runtime-integration/flat32-production-exclusion.md)
+is implemented and locally verified. Production/discovery advertises only Flat;
+explicit development commands preserve Flat32. All 31 server tests, type checks,
+production Flat build, local Flat32 test build and production-host HTTP smoke
+check pass. No remote host was changed; parent stale-output cleanup is a
+separate deployment concern recorded by the owning note.
+
+[F08](production-app/mvp/requirements.md#f08) remains a required scene-objects
+goal, with content options open in increasing complexity/decreasing priority:
+boxes, generated terrain, then geographic data with imagery and three LOD
+levels. Historical terrain-source notes are linked. Open a contained experiment
+when the owner is ready to investigate; none has been started.
+
+The Globe sunrise/sunset investigation is concluded for now. Its
+[owner note](flat/solar-time-controls.md#horizon-timing-investigation) preserves
+the native San Jose reproduction and the decision to retain geometric
+upper-limb events. Refraction remains deferred. The shared view selector is
+now labeled "Choose mode".
+
+The previous task replaced broad MVP phases with independently trackable feature
+and technical goals. The canonical requirements.md now records F01–F07 and
+T01–T13 with outcome/acceptance, status, evidence/remaining work and actual
+dependencies. Stable IDs do not imply execution order. New owner-selected goals
+can be added using the next unused identifier; unselected ideas remain proposals.
+
+Existing MVP obligations remain intact. Former M1–M3 anchors redirect through
+an explicit mapping; current release/research/ownership routes use the goals.
+Six delivered app capabilities and retained-update/recovery goals are complete
+within their stated scope. Playback and numerical/release/research/distribution
+acceptance remain partial or open. This documentation update selects no next
+implementation, qualification campaign, deployment or experiment resumption.
+
+The Flat entry owns current application implementation and verification,
+including solar-event/ten-minute controls, camera synchronization, measured
+ground lighting and both scenes. Latest maintained browser result: 288 passing
+tests, with Flat types/build and native controls/layout verification recorded
+by their owning notes. The root README owns the public model equations.
+These task results do not constitute exact-MVP-build qualification.
+
 Engineering standards reviewers remain cancelled; checkpoint-adviser monitoring
-remains active. The dome-cache experiment remains suspended. Promote the six
-local authoring rules only after Polylith skills review work is complete.
+remains separate and active. Models are exclusively registered services; all
+.d.ts declarations are ambient and export no symbols. Local authoring-rule
+promotion remains deferred until Polylith skills review is complete. The
+dome-cache experiment remains suspended. Preserve pending implementation,
+documentation, immutable evidence and all unrelated working-tree changes.
 
 ## Minimal Reload Sources
 
 1. [Repository instructions](../../AGENTS.md).
-2. [Flat entry](flat/README.md).
-3. [Celestial focus menu](flat/celestial-focus.md).
-4. [Directional ribbon](flat/directional-ribbon.md).
-5. [Scene resizing](flat/scene-resize.md).
-6. [Sync Window design](flat/sync-window-design.md).
-7. [Camera-sync service plan](flat/camera-sync-service-plan.md).
-8. [Camera-sync UI plan](flat/camera-sync-ui-plan.md).
+2. [Deployment runbook](deploy/README.md).
+3. [Alpha scope and handoff](production-app/release/alpha-status.md).
+
+Load MVP goal details or other evidence only when further work requires it.

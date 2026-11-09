@@ -71,6 +71,35 @@ function setup() {
 }
 
 describe('global configuration location workflow', () => {
+	it('steps accepted shared time by ten minutes in either direction, crosses midnight and replaces unfinished drafts', () => {
+		const {configuration, controller, view, clock} = setup();
+		const harness = createTestHarness().withLocale('en-US');
+		const accepted = new Date(2026, 11, 31, 23, 55, 32, 123).getTime();
+		try {
+			configuration.setTimestamp(accepted);
+			configuration.setLocation({latitude: 37, longitude: -121});
+			controller.setDateTimeField('date', 'unfinished');
+			const result = harness.render(GlobalConfigurationPanel, {
+				configurationView: view,
+				initialState: view.getState(),
+			});
+			harness.click(result.query('.date-time-next'));
+			expect(configuration.get().timestamp).toBe(accepted + 600000);
+			expect(clock.getTimestamp()).toBe(accepted + 600000);
+			expect(new Date(configuration.get().timestamp).getFullYear()).toBe(2027);
+			expect(controller.getState().dateTimeEditor.dirty).toBeFalse();
+			expect(result.query('#global-date').value).not.toBe('unfinished');
+			harness.click(result.query('.date-time-previous'));
+			expect(configuration.get().timestamp).toBe(accepted);
+			expect(configuration.get().location.latitude).toBe(37);
+		} finally {
+			harness.unmount();
+			controller.stop();
+			view.stop();
+			configuration.stop();
+			clock.stop();
+		}
+	});
 	it('sets both date and time to Now through the shared clock and clears unfinished drafts', () => {
 		const {configuration, controller, view, clock} = setup();
 		const harness = createTestHarness().withLocale('en-US');

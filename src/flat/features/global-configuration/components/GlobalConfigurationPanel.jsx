@@ -29,6 +29,7 @@ export default class GlobalConfigurationPanel extends Component {
 		this._onDateTimeChange = this._onDateTimeChange.bind(this);
 		this._onApplyDateTime = this._onApplyDateTime.bind(this);
 		this._onNow = this._onNow.bind(this);
+		this._onStepTime = this._onStepTime.bind(this);
 	}
 
 	/**
@@ -164,6 +165,15 @@ export default class GlobalConfigurationPanel extends Component {
 	}
 
 	/**
+	 * Called by the date/time step buttons to change the accepted shared instant.
+	 *
+	 * @param {number} minutes - Signed elapsed minutes.
+	 */
+	_onStepTime(minutes) {
+		this.props.configurationView.stepTime(minutes);
+	}
+
+	/**
 	 * Call this method to render global location settings and their shared configuration title.
 	 *
 	 * @returns {React.ReactNode} - Feature-owned settings content.
@@ -187,6 +197,7 @@ export default class GlobalConfigurationPanel extends Component {
 					onChange={this._onDateTimeChange}
 					onApply={this._onApplyDateTime}
 					onNow={this._onNow}
+					onStep={this._onStepTime}
 				/>
 			</section>
 		);

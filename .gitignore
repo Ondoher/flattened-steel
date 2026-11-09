@@ -148,8 +148,6 @@ vite.config.ts.timestamp-*
 
 # Large generated Flat32 cache packages; keep the data contract documentation.
 /server/flat32/data/*
-/server/flat/data/brightest-2000-stellar-package-v1/
-/server/flat/data/human-vision-filter-package-v1/
 !/server/flat32/data/README.md
 
 # Generated Polylith browser-test bundles

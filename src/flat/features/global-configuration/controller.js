@@ -28,6 +28,7 @@ export class GlobalConfigurationController extends Service {
 			'setDateTimeField',
 			'applyDateTime',
 			'setNow',
+			'stepTime',
 			'openEditor',
 		]);
 	}
@@ -278,6 +279,23 @@ export class GlobalConfigurationController extends Service {
 	 */
 	setNow() {
 		let timestamp = Date.now();
+		this.dateTimeEditor.reset(timestamp);
+		if (!this.configuration.setTimestamp(timestamp)) {
+			this._emitState();
+		}
+	}
+
+	/**
+	 * Call this method to step the accepted shared instant and replace unfinished date/time drafts.
+	 *
+	 * @param {number} minutes - Signed elapsed minutes selected by the step buttons.
+	 */
+	stepTime(minutes) {
+		let accepted = this.configuration.get().timestamp;
+		if (accepted == null) {
+			return;
+		}
+		let timestamp = accepted + minutes * 60000;
 		this.dateTimeEditor.reset(timestamp);
 		if (!this.configuration.setTimestamp(timestamp)) {
 			this._emitState();

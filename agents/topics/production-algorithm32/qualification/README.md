@@ -15,9 +15,9 @@ the execution plan is retained through the
 The corrected official production B1 result passes its fixed ceiling at
 11.554013953257604. B2 and B3 are accepted from that corrected manifest, so
 independent release C1 is complete. The exact MVP build repeats this accepted
-ladder under M2.
+ladder under T10.
 Remaining engine hardening is deferred under
-[Production MVP requirement M2](../../production-app/mvp/requirements.md#m2--algorithm32-production-hardening).
+[MVP technical goals T04–T10](../../production-app/mvp/requirements.md#t04).
 
 ## Working Documents
 

@@ -11,8 +11,8 @@ and official experiment evidence belongs in [experiments.md](experiments.md).
 This section is the sole detailed ledger for Color Reset research status,
 evidence boundaries, source/provenance work, experiment registration work,
 open questions, and investigation order. Production
-[MVP requirement M3](../agents/topics/production-app/mvp/requirements.md#m3--color-reset-scientific-authority)
-owns the first-MVP completion gate for these rows and their C5 license and
+[MVP authority/distribution goals T11–T13](../agents/topics/production-app/mvp/requirements.md#t11)
+own the first-MVP completion requirements for these rows and their C5 license and
 redistribution decisions. Moving C4 and C5 changes scheduling only and does not
 accept, remove, or weaken any row or authorize public redistribution.
 

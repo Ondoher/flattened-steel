@@ -20,6 +20,22 @@ export default class DateTimeEditor extends Component {
 		this._onDateChange = this._onDateChange.bind(this);
 		this._onTimeChange = this._onTimeChange.bind(this);
 		this._onSubmit = this._onSubmit.bind(this);
+		this._onPrevious = this._onPrevious.bind(this);
+		this._onNext = this._onNext.bind(this);
+	}
+
+	/**
+	 * Called by the backward step button to subtract ten elapsed minutes.
+	 */
+	_onPrevious() {
+		this.props.onStep(-10);
+	}
+
+	/**
+	 * Called by the forward step button to add ten elapsed minutes.
+	 */
+	_onNext() {
+		this.props.onStep(10);
 	}
 
 	/**
@@ -58,11 +74,20 @@ export default class DateTimeEditor extends Component {
 	_renderActions() {
 		let applyLabel = this.props.text('global-configuration.date-time.apply');
 		let nowLabel = this.props.text('global-configuration.date-time.now');
+		let previousLabel = this.props.text('global-configuration.date-time.previous');
+		let nextLabel = this.props.text('global-configuration.date-time.next');
+		let stepDisabled = this.props.presentation.accepted == null;
 		return (
 			<div className="date-time-actions">
 				<Button type="submit">{applyLabel}</Button>
 				<Button type="button" className="date-time-now" onClick={this.props.onNow}>
 					{nowLabel}
+				</Button>
+				<Button type="button" className="date-time-previous" disabled={stepDisabled} onClick={this._onPrevious}>
+					{previousLabel}
+				</Button>
+				<Button type="button" className="date-time-next" disabled={stepDisabled} onClick={this._onNext}>
+					{nextLabel}
 				</Button>
 			</div>
 		);

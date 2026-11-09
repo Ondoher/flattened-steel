@@ -33,6 +33,8 @@ export class SphericalEarthView extends Service {
 			'toggleCompass',
 			'syncCamera',
 			'getSyncOptions',
+			'getTimeOptions',
+			'setSolarEvent',
 		]);
 		this._listener = null;
 	}
@@ -95,6 +97,33 @@ export class SphericalEarthView extends Service {
 	 */
 	setFieldOfView(viewId, degrees) {
 		this.controller.setFieldOfView(viewId, degrees);
+	}
+
+	/**
+	 * Call this method to prepare localized event availability for the Globe clock menu.
+	 *
+	 * @param {string} viewId - Exact mounted view.
+	 * @returns {AppSelectOption[]} - Text-only solar-event actions.
+	 */
+	getTimeOptions(viewId) {
+		let events = this.controller.getSolarEvents(viewId);
+		/** @type {SphericalSolarEventKind[]} */
+		let kinds = ['sunrise', 'solar-noon', 'sunset'];
+		return kinds.map((kind) => ({
+			value: kind,
+			label: events[kind] == null ? `spherical-earth.time.${kind}-unavailable` : `spherical-earth.time.${kind}`,
+			disabled: events[kind] == null,
+		}));
+	}
+
+	/**
+	 * Call this method to relay shared-time event selection to the owning controller.
+	 *
+	 * @param {string} viewId - Exact mounted view.
+	 * @param {SphericalSolarEventKind} kind - Selected solar event.
+	 */
+	setSolarEvent(viewId, kind) {
+		this.controller.setSolarEvent(viewId, kind);
 	}
 
 	/**
