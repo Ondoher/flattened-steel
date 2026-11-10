@@ -300,15 +300,13 @@ The current calculation uses UTC as its time input and does not add separate
 UT1 corrections, nutation, aberration, stellar proper motion or stellar parallax.
 These are limits of this implementation's position calculation.
 
-<details>
-
-<summary>The precession rotation, for readers checking the full calculation</summary>
+**The precession rotation, for readers checking the full calculation**
 
 Using the centuries $T$ defined above, the three angles below are first
 calculated in arcseconds, then multiplied by $\pi/(180\times3600)$ to obtain
 radians:
 
-```math
+$$
 \begin{aligned}
 \zeta={}&2.650545+2306.083227T+0.2988499T^{2}+0.01801828T^{3}\\
  &-0.000005971T^{4}-0.0000003173T^{5},\\
@@ -317,11 +315,11 @@ z={}&-2.650545+2306.077181T+1.0927348T^{2}+0.01826837T^{3}\\
 \theta={}&2004.191903T-0.4294934T^{2}-0.04182264T^{3}\\
  &-0.000007089T^{4}-0.0000001274T^{5}.
 \end{aligned}
-```
+$$
 
 With the catalog angles $\alpha,\delta_{\ast}$, form:
 
-```math
+$$
 \begin{aligned}
 a_{p}&=\cos\delta_{\ast}\sin(\alpha+\zeta),\\
 b_{p}&=\cos\theta\cos\delta_{\ast}\cos(\alpha+\zeta)-\sin\theta\sin\delta_{\ast},\\
@@ -329,13 +327,11 @@ c_{p}&=\sin\theta\cos\delta_{\ast}\cos(\alpha+\zeta)+\cos\theta\sin\delta_{\ast}
 \alpha'&=\mathrm{atan2}(a_{p},b_{p})+z,\qquad
 \delta'=\arcsin(c_{p}).
 \end{aligned}
-```
+$$
 
 The code wraps angular cycles and clamps inverse-trigonometric inputs against
 floating-point roundoff. This rotation changes the coordinate axes; it does
 not model an individual star's physical motion through space.
-
-</details>
 
 **Code:** [CPU precession and direction, `_precessDirection` and `resolveDirection`](src/algorithm32/implementation/spherical-earth/SphericalStellarGenerationShaderContributor.js#L45),
 and [matching shader precession, sidereal time and local direction](src/algorithm32/implementation/spherical-earth/SphericalStellarGenerationShaderContributor.js#L240).
